@@ -54,7 +54,6 @@ class TPopupOptions {
     this.onClosed,
     this.onVisibleChange,
     this.useSafeArea = false,
-    this.shrinkWrap = false,
   });
 
   /// 创建 [TPopupPlacement.bottom] 配置。
@@ -109,7 +108,6 @@ class TPopupOptions {
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
     bool useSafeArea = false,
-    bool shrinkWrap = false,
   }) => TPopupOptions(
     child: child,
     placement: TPopupPlacement.center,
@@ -125,7 +123,6 @@ class TPopupOptions {
     onClosed: onClosed,
     onVisibleChange: onVisibleChange,
     useSafeArea: useSafeArea,
-    shrinkWrap: shrinkWrap,
   );
 
   /// 创建 [TPopupPlacement.top] 配置。
@@ -301,11 +298,6 @@ class TPopupOptions {
   /// 也可以在 [child] 内使用 Flutter 原生 [SafeArea]，只约束内容而保留面板背景贴边。
   final bool useSafeArea;
 
-  /// 是否让居中浮层按内容尺寸自适应，默认 false，继续使用 240×240 默认尺寸。
-  ///
-  /// 仅 [TPopupPlacement.center] 生效；显式 [width] 或 [height] 时应保持为 false。
-  final bool shrinkWrap;
-
   /// 返回配置副本。
   ///
   /// 未传入的字段保持原值；对头部/关闭 builder 显式传入 `null` 表示隐藏该区域。
@@ -326,7 +318,6 @@ class TPopupOptions {
     Object? onClosed = _unset,
     Object? onVisibleChange = _unset,
     bool? useSafeArea,
-    bool? shrinkWrap,
   }) {
     return TPopupOptions(
       child: child ?? this.child,
@@ -365,7 +356,6 @@ class TPopupOptions {
           ? this.onVisibleChange
           : onVisibleChange as TPopupVisibleChangeCallback?,
       useSafeArea: useSafeArea ?? this.useSafeArea,
-      shrinkWrap: shrinkWrap ?? this.shrinkWrap,
     );
   }
 
@@ -390,7 +380,6 @@ class TPopupOptions {
       onClosed: onClosed,
       onVisibleChange: onVisibleChange,
       useSafeArea: useSafeArea,
-      shrinkWrap: isCenter && shrinkWrap,
     );
   }
 
@@ -442,9 +431,6 @@ class TPopupOptions {
         if (inset != null) {
           return 'inset is not valid for placement=center.';
         }
-        if (shrinkWrap && (width != null || height != null)) {
-          return 'width and height are not valid when shrinkWrap=true.';
-        }
         break;
     }
     if (placement != TPopupPlacement.bottom && headerBuilder != null) {
@@ -453,10 +439,6 @@ class TPopupOptions {
     }
     if (placement != TPopupPlacement.center && closeBuilder != null) {
       return 'closeBuilder only applies to placement=center '
-          '(got placement=$placement).';
-    }
-    if (placement != TPopupPlacement.center && shrinkWrap) {
-      return 'shrinkWrap only applies to placement=center '
           '(got placement=$placement).';
     }
     return null;

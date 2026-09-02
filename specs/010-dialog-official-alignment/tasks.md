@@ -5,6 +5,8 @@
 - [x] DONE 补齐 ThemeData 和样式测试至覆盖率门槛
 - [x] DONE 修正 Figma Demo 文案、状态说明、输入框、图片和操作区差异
 - [x] DONE 修复 Popup 240×240 固定尺寸导致 Dialog 压窄和输入框裁切
+- [x] DONE 三项及以上操作基于 `TDialogAction.role` 稳定排序，不再无条件倒序
+- [x] DONE 极小视口或自定义间距 token 下对 Dialog 宽高约束做非负保护
 - [x] DONE 补齐 22 场景逐项打开/关闭与关键视觉交互测试
 - [x] DONE 完成 22 场景 Example 矩阵和基础 Example 测试
 - [x] DONE 同步生成代码片段

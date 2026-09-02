@@ -151,7 +151,7 @@ class TPullDownRefreshTexts {
 | 触发阈值 | =50 | =50 | =`loadingBarHeight`(50) |
 | 最大下拉 | `maxBarHeight=80` | `80` | `maxBarHeight=80` |
 | 完成停留 | `successDuration=500`ms | 300ms | `successDuration=500ms` |
-| loading 尺寸 | 50rpx≈25px | 24px | `TLoadingSize.medium`（样式继承 Theme 子树） |
+| loading 尺寸 | 50rpx≈25px | 24px | `TLoading(size: 24)`（颜色等样式继承 Theme 子树） |
 
 > 说明：将默认 `extent/triggerDistance` 从 48 调整为官方 50，属**潜在视觉 breaking**（默认渲染高度变化），在 Spec 中明确标注。
 

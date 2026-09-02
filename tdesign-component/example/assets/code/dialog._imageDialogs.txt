@@ -1,5 +1,5 @@
 Widget _imageDialogs(BuildContext context) {
-    return _scenarios([
+    return _scenarios(context, [
       _trigger('图片置顶-带标题描述', () {
         _showImageDialog(
           context,

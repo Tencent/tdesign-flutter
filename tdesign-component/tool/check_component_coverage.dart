@@ -1,6 +1,8 @@
 import 'dart:io';
 
 const componentTargets = <String, List<String>>{
+  'action_sheet': ['lib/src/components/action_sheet/'],
+  'badge': ['lib/src/components/badge/'],
   'button': ['lib/src/components/button/'],
   'tag': ['lib/src/components/tag/'],
   'popover': ['lib/src/components/popover/'],
@@ -12,10 +14,19 @@ const componentTargets = <String, List<String>>{
   'icon': ['lib/src/components/icon/'],
   'input': ['lib/src/components/input/'],
   'link': ['lib/src/components/link/'],
+  'loading': ['lib/src/components/loading/'],
+  'message': ['lib/src/components/message/'],
   'notice_bar': ['lib/src/components/notice_bar/'],
   'popup': ['lib/src/components/popup/'],
   'radio': ['lib/src/components/radio/'],
   'rate': ['lib/src/components/rate/'],
+  'tabs': [
+    'lib/src/components/tabs/t_horizontal_tab_bar.dart',
+    'lib/src/components/tabs/t_tab.dart',
+    'lib/src/components/tabs/t_tab_bar.dart',
+    'lib/src/components/tabs/t_tab_bar_theme_data.dart',
+    'lib/src/components/tabs/t_tab_bar_view.dart',
+  ],
   'refresh': [
     'lib/src/components/refresh/t_pull_down_refresh.dart',
     'lib/src/components/refresh/t_pull_down_refresh_controller.dart',

@@ -1,0 +1,8 @@
+Widget _buildNumberButtonBadge(BuildContext context) => TBadge(
+    label: '8',
+    child: TButton(
+      size: TButtonSize.medium,
+      onPressed: () {},
+      child: const Text('按钮'),
+    ),
+  );

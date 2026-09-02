@@ -6,11 +6,12 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_radius.dart';
+import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../button/t_button.dart';
 import '../button/t_button_types.dart';
-import '../popup/t_popup.dart';
 import 't_dialog_theme_data.dart';
 
 export 't_confirm_dialog.dart';
@@ -71,12 +72,10 @@ class TDialogAction {
 
 /// 通用居中模态对话框。
 ///
-/// 组件负责面板内容和操作区；使用 [show] 时，路由、蒙层、动画和安全区
-/// 复用 [TPopup] 的居中浮层能力。
+/// 组件负责面板内容和操作区；使用 [show] 时，通过 Flutter 模态路由处理
+/// 蒙层、动画和安全区。
 class TDialog extends StatelessWidget {
   static const _defaultActionsPadding = EdgeInsets.fromLTRB(24, 24, 24, 24);
-  static const _textActionsPadding = EdgeInsets.only(top: 32);
-
   const TDialog({
     super.key,
     this.title,
@@ -105,6 +104,9 @@ class TDialog extends StatelessWidget {
   final Widget? content;
 
   /// 操作列表；1～2 个横向排列，更多操作纵向排列。
+  ///
+  /// 纵向排列时，[TDialogAction.role] 为 [TDialogActionRole.primary] 或
+  /// [TDialogActionRole.destructive] 的强调操作优先展示，同类操作保持声明顺序。
   final List<TDialogAction> actions;
 
   /// 完全自定义操作区。
@@ -143,7 +145,7 @@ class TDialog extends StatelessWidget {
   /// 操作之间的间距。
   final double actionSpacing;
 
-  /// 使用 Popup 的居中模态路由展示 Dialog。
+  /// 使用居中模态路由展示 Dialog。
   static Future<T?> show<T>(
     BuildContext context, {
     required Widget dialog,
@@ -151,25 +153,32 @@ class TDialog extends StatelessWidget {
     Color? barrierColor,
     bool useRootNavigator = true,
     bool useSafeArea = true,
-  }) async {
-    final materialBarrierColor = Theme.of(context).dialogTheme.barrierColor;
-    final handle = TPopup.show(
-      context,
-      useRootNavigator: useRootNavigator,
-      options: TPopupOptions.center(
-        child: dialog,
-        shrinkWrap: true,
-        radius: 0,
-        backgroundColor: Colors.transparent,
-        overlay: TPopupOverlayConfig(
-          showOverlay: true,
-          closeOnClick: barrierDismissible,
-          color: barrierColor ?? materialBarrierColor,
-        ),
-        useSafeArea: useSafeArea,
-      ),
+  }) {
+    final navigator = Navigator.of(context, rootNavigator: useRootNavigator);
+    final capturedThemes = InheritedTheme.capture(
+      from: context,
+      to: navigator.context,
     );
-    return (await handle.result) as T?;
+    final materialBarrierColor = Theme.of(context).dialogTheme.barrierColor;
+    return showGeneralDialog<T>(
+      context: context,
+      barrierDismissible: barrierDismissible,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierColor: barrierColor ?? materialBarrierColor ?? Colors.black54,
+      useRootNavigator: useRootNavigator,
+      transitionDuration: const Duration(milliseconds: 240),
+      pageBuilder: (routeContext, animation, secondaryAnimation) {
+        final centered = Center(child: dialog);
+        final content = useSafeArea ? SafeArea(child: centered) : centered;
+        return capturedThemes.wrap(content);
+      },
+      transitionBuilder: (routeContext, animation, secondaryAnimation, child) {
+        final progress = animation.status == AnimationStatus.reverse
+            ? Curves.easeOut.transform(animation.value)
+            : Curves.decelerate.transform(animation.value);
+        return Transform.scale(scale: progress, child: child);
+      },
+    );
   }
 
   @override
@@ -188,23 +197,31 @@ class TDialog extends StatelessWidget {
         shape ??
         extension?.shape ??
         material.shape ??
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(12));
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(token.radiusExtraLarge),
+        );
     final effectiveElevation =
         elevation ?? extension?.elevation ?? material.elevation ?? 0;
     final effectiveWidth = width ?? extension?.width ?? 311;
     final viewportHeight = MediaQuery.sizeOf(context).height;
-    final effectiveMaxHeight = math.min(
-      maxHeight ?? extension?.maxHeight ?? viewportHeight * 0.8,
-      viewportHeight - 32,
+    final effectiveMaxHeight = math.max(
+      0.0,
+      math.min(
+        maxHeight ?? extension?.maxHeight ?? viewportHeight * 0.8,
+        viewportHeight - token.spacer32,
+      ),
     );
-    final dialogWidth = math.min(
-      effectiveWidth,
-      MediaQuery.sizeOf(context).width - 32,
+    final dialogWidth = math.max(
+      0.0,
+      math.min(
+        effectiveWidth,
+        MediaQuery.sizeOf(context).width - token.spacer32,
+      ),
     );
     final effectiveContentPadding =
         contentPadding ??
         extension?.contentPadding ??
-        const EdgeInsets.fromLTRB(24, 24, 24, 0);
+        EdgeInsets.fromLTRB(token.spacer24, token.spacer24, token.spacer24, 0);
     final resolvedTitleStyle =
         extension?.titleTextStyle ??
         material.titleTextStyle ??
@@ -243,8 +260,13 @@ class TDialog extends StatelessWidget {
         actions.every((action) => action.variant == TButtonVariant.text);
     final effectiveActionsPadding =
         useTextActionLayout && actionsPadding == _defaultActionsPadding
-        ? _textActionsPadding
+        ? EdgeInsets.only(top: token.spacer32)
+        : actionsPadding == _defaultActionsPadding
+        ? EdgeInsets.all(token.spacer24)
         : actionsPadding;
+    final effectiveActionSpacing = actionSpacing == 12
+        ? token.spacer12
+        : actionSpacing;
 
     return Semantics(
       namesRoute: true,
@@ -281,7 +303,7 @@ class TDialog extends StatelessWidget {
                               child: title!,
                             ),
                           if (title != null && content != null)
-                            const SizedBox(height: 8),
+                            SizedBox(height: token.spacer8),
                           if (content != null)
                             DefaultTextStyle(
                               style: contentStyle,
@@ -299,7 +321,7 @@ class TDialog extends StatelessWidget {
                       padding: effectiveActionsPadding,
                       child: _DialogActions(
                         actions: actions,
-                        spacing: actionSpacing,
+                        spacing: effectiveActionSpacing,
                         textLayout: useTextActionLayout,
                         defaultStyle: extension?.actionButtonStyle,
                       ),
@@ -308,8 +330,8 @@ class TDialog extends StatelessWidget {
               ),
               if (showCloseButton)
                 PositionedDirectional(
-                  top: 8,
-                  end: 8,
+                  top: token.spacer8,
+                  end: token.spacer8,
                   child: IconButton(
                     tooltip: context.resource.close,
                     icon: Icon(TIcons.close, color: token.textColorPlaceholder),
@@ -339,7 +361,20 @@ class _DialogActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttons = actions
+    final orderedActions = actions.length > 2
+        ? <TDialogAction>[
+            ...actions.where(
+              (action) => action.role == TDialogActionRole.primary,
+            ),
+            ...actions.where(
+              (action) => action.role == TDialogActionRole.destructive,
+            ),
+            ...actions.where(
+              (action) => action.role == TDialogActionRole.normal,
+            ),
+          ]
+        : actions;
+    final buttons = orderedActions
         .map((action) {
           final (variant, colorScheme) = _resolveStyle(action);
           return TButton(
@@ -398,13 +433,12 @@ class _DialogActions extends StatelessWidget {
         ],
       );
     }
-    final verticalButtons = buttons.reversed.toList(growable: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        for (var index = 0; index < verticalButtons.length; index++) ...[
+        for (var index = 0; index < buttons.length; index++) ...[
           if (index > 0) SizedBox(height: spacing),
-          verticalButtons[index],
+          buttons[index],
         ],
       ],
     );

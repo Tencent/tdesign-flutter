@@ -310,7 +310,7 @@ void main() {
         MaterialApp(
           theme: theme,
           themeAnimationDuration: Duration.zero,
-          home: const Scaffold(body: TLoading(size: TLoadingSize.medium)),
+          home: const Scaffold(body: TLoading()),
         ),
       );
       final indicator = tester.widget<TCircleIndicator>(

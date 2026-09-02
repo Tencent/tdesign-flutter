@@ -1,11 +1,11 @@
 Widget _inputDialogs(BuildContext context) {
-    return _scenarios([
+    return _scenarios(context, [
       _trigger('输入类-无描述', () {
         TDialog.show<bool>(
           context,
           dialog: TDialog(
             title: const Text('带输入框对话框'),
-            content: _dialogInput(context, topPadding: 8),
+            content: _dialogInput(context, topPadding: context.tTheme.spacer8),
             actions: _actions(),
           ),
         );
@@ -18,7 +18,7 @@ Widget _inputDialogs(BuildContext context) {
             content: Column(
               children: [
                 const Text(_description),
-                const SizedBox(height: 16),
+                SizedBox(height: context.tTheme.spacer16),
                 _dialogInput(context),
               ],
             ),

@@ -1,5 +1,5 @@
 Widget _buttonDialogs(BuildContext context) {
-    return _scenarios([
+    return _scenarios(context, [
       _statusScenario(
         context,
         '文字按钮',

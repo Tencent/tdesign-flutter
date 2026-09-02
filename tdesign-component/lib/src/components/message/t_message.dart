@@ -6,26 +6,10 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
-import '../link/t_link.dart';
-import '../link/t_link_theme_data.dart';
-import '../link/t_link_types.dart';
 import 't_message_theme_data.dart';
-
-/// 消息中的链接配置
-class TMessageLink {
-  /// 创建消息链接
-  const TMessageLink({required this.name, this.uri, this.color});
-
-  /// 链接文案
-  final String name;
-
-  /// 链接地址
-  final Uri? uri;
-
-  /// 链接颜色
-  final Color? color;
-}
+import 't_message_types.dart';
 
 /// 跑马灯配置
 class TMessageMarquee {
@@ -50,41 +34,50 @@ class TMessageMarquee {
 final class TMessageHandle {
   TMessageHandle._();
 
-  OverlayEntry? _entry;
+  bool _isShowing = false;
+  void Function(_TMessageDismissCause cause)? _dismiss;
 
   /// 消息是否仍在 Overlay 中
-  bool get isShowing => _entry?.mounted == true;
+  bool get isShowing => _isShowing;
 
-  /// 立即移除消息
+  /// 立即移除消息；重复调用不会重复触发 `onDismissed`。
   void dismiss() {
-    final entry = _entry;
-    if (entry == null) {
-      return;
-    }
-    entry.remove();
-    _entry = null;
+    _dismiss?.call(_TMessageDismissCause.programmatic);
   }
 }
 
-/// 顶部消息组件
+final class _TMessageSlot {
+  TMessageHandle? handle;
+}
+
+enum _TMessageDismissCause { programmatic, replaced, widget, unmounted }
+
+/// 顶部消息组件。
+///
+/// 直接构造即渲染消息，并应作为 [Stack] 的子组件使用。页面内的展示与隐藏由父级
+/// Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 [onDismissed] 中同步
+/// 移除父级状态。全局 Overlay 消息使用 [TMessage.show]，并通过返回的
+/// [TMessageHandle] 关闭。
 class TMessage extends StatefulWidget {
+  static final Expando<_TMessageSlot> _defaultSlots = Expando<_TMessageSlot>(
+    'TMessage.defaultSlots',
+  );
+
   /// 创建消息组件
   const TMessage({
     super.key,
     this.content = '',
     this.duration = const Duration(seconds: 3),
-    this.visible = true,
     this.showIcon = true,
     this.icon,
-    this.link,
+    this.action,
     this.showCloseButton = false,
     this.closeButton,
     this.marquee,
     this.offset,
-    this.variant = TMessageVariant.info,
+    this.status = TMessageStatus.info,
     this.onCloseButtonPressed,
     this.onDurationEnd,
-    this.onLinkPressed,
     this.onDismissed,
     this.useSafeArea = true,
   });
@@ -92,11 +85,8 @@ class TMessage extends StatefulWidget {
   /// 通知内容
   final String content;
 
-  /// 自动关闭时长，null 表示不自动关闭
+  /// 自动关闭时长；必须为正数，null 表示不自动关闭。
   final Duration? duration;
-
-  /// 是否显示
-  final bool visible;
 
   /// 是否显示前置图标
   final bool showIcon;
@@ -104,8 +94,10 @@ class TMessage extends StatefulWidget {
   /// 自定义前置图标
   final Widget? icon;
 
-  /// 链接配置
-  final TMessageLink? link;
+  /// 消息尾部操作组件。
+  ///
+  /// 操作的外观与行为由组件自身负责，例如传入带 [VoidCallback] 的按钮或链接。
+  final Widget? action;
 
   /// 是否显示关闭按钮
   final bool showCloseButton;
@@ -124,8 +116,8 @@ class TMessage extends StatefulWidget {
   /// 是否避让系统安全区，默认为 true。
   final bool useSafeArea;
 
-  /// 消息语义色
-  final TMessageVariant variant;
+  /// 消息语义状态
+  final TMessageStatus status;
 
   /// 点击关闭按钮时触发
   final VoidCallback? onCloseButtonPressed;
@@ -133,68 +125,110 @@ class TMessage extends StatefulWidget {
   /// 自动展示时长结束且关闭动画完成时触发
   final VoidCallback? onDurationEnd;
 
-  /// 点击链接时触发
-  final VoidCallback? onLinkPressed;
-
-  /// 关闭动画完成时触发
+  /// 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发。
+  ///
+  /// 每次展示最多触发一次。
   final VoidCallback? onDismissed;
 
-  /// 在 Overlay 中显示消息并返回控制句柄
+  /// 在 Overlay 中显示消息并返回控制句柄。
+  ///
+  /// 未显式传入 [offset] 时，新消息会替换同一 Overlay 中上一条默认位置的消息；
+  /// 显式传入不同 [offset] 的消息可以同时展示。
   static TMessageHandle show({
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
     String content = '',
+
+    /// 自动关闭时长；必须为正数，null 表示不自动关闭。
     Duration? duration = const Duration(seconds: 3),
     bool showIcon = true,
     Widget? icon,
-    TMessageLink? link,
+    Widget? action,
     bool showCloseButton = false,
     Widget? closeButton,
     TMessageMarquee? marquee,
     Offset? offset,
-    TMessageVariant variant = TMessageVariant.info,
+    TMessageStatus status = TMessageStatus.info,
     VoidCallback? onCloseButtonPressed,
     VoidCallback? onDurationEnd,
-    VoidCallback? onLinkPressed,
     VoidCallback? onDismissed,
     bool useSafeArea = true,
   }) {
+    assert(
+      duration == null || duration > Duration.zero,
+      'duration 必须为正数；使用 null 表示不自动关闭。',
+    );
     final handle = TMessageHandle._();
+    final messageKey = GlobalKey<_TMessageState>();
     late OverlayEntry entry;
     final overlay = Overlay.of(context);
     final captured = InheritedTheme.capture(from: context, to: overlay.context);
+    final slot = offset == null
+        ? (_defaultSlots[overlay] ??= _TMessageSlot())
+        : null;
+    final previousHandle = slot?.handle;
 
-    void removeEntry() {
-      if (handle._entry == null) {
+    var dismissed = false;
+    late VoidCallback entryListener;
+
+    void dismissEntry(_TMessageDismissCause cause) {
+      if (dismissed) {
         return;
       }
-      handle.dismiss();
+      dismissed = true;
+      if (cause == _TMessageDismissCause.programmatic ||
+          cause == _TMessageDismissCause.replaced) {
+        messageKey.currentState?._cancelTasksForExternalDismiss();
+      }
+      entry.removeListener(entryListener);
+      handle
+        .._isShowing = false
+        .._dismiss = null;
+      if (slot?.handle == handle) {
+        slot?.handle = null;
+        _defaultSlots[overlay] = null;
+      }
+      if (cause != _TMessageDismissCause.unmounted) {
+        entry.remove();
+      }
       onDismissed?.call();
     }
 
     entry = OverlayEntry(
       builder: (context) => captured.wrap(
         TMessage(
+          key: messageKey,
           content: content,
           duration: duration,
           showIcon: showIcon,
           icon: icon,
-          link: link,
+          action: action,
           showCloseButton: showCloseButton,
           closeButton: closeButton,
           marquee: marquee,
           offset: offset,
-          variant: variant,
+          status: status,
           onCloseButtonPressed: onCloseButtonPressed,
           onDurationEnd: onDurationEnd,
-          onLinkPressed: onLinkPressed,
-          onDismissed: removeEntry,
+          onDismissed: () => dismissEntry(_TMessageDismissCause.widget),
           useSafeArea: useSafeArea,
         ),
       ),
     );
-    handle._entry = entry;
+    entryListener = () {
+      if (!entry.mounted) {
+        dismissEntry(_TMessageDismissCause.unmounted);
+      }
+    };
+    handle
+      .._isShowing = true
+      .._dismiss = dismissEntry;
+    if (slot case final currentSlot?) {
+      currentSlot.handle = handle;
+    }
+    entry.addListener(entryListener);
     overlay.insert(entry);
+    previousHandle?._dismiss?.call(_TMessageDismissCause.replaced);
     return handle;
   }
 
@@ -204,15 +238,12 @@ class TMessage extends StatefulWidget {
 
 class _TMessageState extends State<TMessage>
     with SingleTickerProviderStateMixin {
-  static const double _defaultTop = 80;
-  static const double _width = 343;
-  static const double _horizontalMargin = 16;
-
   late final AnimationController _animationController;
-  bool _isVisible = true;
+  bool _isPresented = true;
   bool _isAnimationRunning = false;
   bool _closing = false;
-  double _top = _defaultTop - 30;
+  bool _didAnimateIn = false;
+  double _top = 0;
   Timer? _durationTimer;
   Timer? _closeTimer;
   Timer? _marqueeDelayTimer;
@@ -224,15 +255,16 @@ class _TMessageState extends State<TMessage>
   EdgeInsets get _safePadding =>
       widget.useSafeArea ? MediaQuery.paddingOf(context) : EdgeInsets.zero;
 
-  double get _minimumLeft => math.max(_horizontalMargin, _safePadding.left);
+  double get _defaultTop => _safePadding.top + kToolbarHeight;
+
+  double get _minimumLeft => _safePadding.left;
 
   double get _maximumRight =>
-      MediaQuery.sizeOf(context).width -
-      math.max(_horizontalMargin, _safePadding.right);
+      MediaQuery.sizeOf(context).width - _safePadding.right;
 
   double get _effectiveWidth {
     final availableWidth = math.max(0.0, _maximumRight - _minimumLeft);
-    return math.min(_width, availableWidth);
+    return availableWidth;
   }
 
   double _safeTop(double desiredTop) {
@@ -248,9 +280,8 @@ class _TMessageState extends State<TMessage>
   }
 
   Offset get _effectiveOffset {
-    final configured = widget.offset ?? _theme.defaultOffset;
     final desired =
-        configured ??
+        widget.offset ??
         Offset(
           _minimumLeft + (_maximumRight - _minimumLeft - _effectiveWidth) / 2,
           _defaultTop,
@@ -268,17 +299,32 @@ class _TMessageState extends State<TMessage>
   @override
   void initState() {
     super.initState();
+    assert(
+      widget.duration == null || widget.duration! > Duration.zero,
+      'duration 必须为正数；使用 null 表示不自动关闭。',
+    );
     _animationController = AnimationController(
       vsync: this,
       duration: widget.marquee?.duration ?? const Duration(seconds: 10),
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        setState(() => _top = _effectiveOffset.dy);
+        setState(() {
+          _top = _effectiveOffset.dy;
+          _didAnimateIn = true;
+        });
       }
     });
     _scheduleDurationClose();
     _scheduleMarqueeStart();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_didAnimateIn) {
+      _top = _effectiveOffset.dy;
+    }
   }
 
   @override
@@ -296,11 +342,6 @@ class _TMessageState extends State<TMessage>
       _isAnimationRunning = false;
       _scheduleMarqueeStart();
     }
-    if (!oldWidget.visible && widget.visible) {
-      _closing = false;
-      _isVisible = true;
-      _scheduleDurationClose();
-    }
     if (oldWidget.offset != widget.offset ||
         oldWidget.useSafeArea != widget.useSafeArea) {
       _top = _effectiveOffset.dy;
@@ -316,16 +357,42 @@ class _TMessageState extends State<TMessage>
     super.dispose();
   }
 
+  void _cancelTasksForExternalDismiss() {
+    _closing = true;
+    _durationTimer?.cancel();
+    _closeTimer?.cancel();
+    _marqueeDelayTimer?.cancel();
+    _animationController.stop();
+    _isAnimationRunning = false;
+  }
+
   void _scheduleDurationClose() {
     _durationTimer?.cancel();
-    final duration = widget.duration;
-    if (duration != null && duration > Duration.zero) {
-      _durationTimer = Timer(duration, () => _close(durationEnded: true));
+    if (!_isPresented || _closing) {
+      return;
     }
+    final duration = widget.duration;
+    assert(
+      duration == null || duration > Duration.zero,
+      'duration 必须为正数；使用 null 表示不自动关闭。',
+    );
+    if (duration == null) {
+      return;
+    }
+    if (duration <= Duration.zero) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _close(durationEnded: true);
+      });
+      return;
+    }
+    _durationTimer = Timer(duration, () => _close(durationEnded: true));
   }
 
   void _scheduleMarqueeStart() {
     _marqueeDelayTimer?.cancel();
+    if (!_isPresented || _closing) {
+      return;
+    }
     final marquee = widget.marquee;
     if (marquee == null) {
       return;
@@ -339,7 +406,11 @@ class _TMessageState extends State<TMessage>
 
   void _startAnimation() {
     final marquee = widget.marquee;
-    if (!mounted || marquee == null || _isAnimationRunning || _closing) {
+    if (!mounted ||
+        !_isPresented ||
+        marquee == null ||
+        _isAnimationRunning ||
+        _closing) {
       return;
     }
     setState(() => _isAnimationRunning = true);
@@ -366,7 +437,7 @@ class _TMessageState extends State<TMessage>
       if (!mounted) {
         return;
       }
-      setState(() => _isVisible = false);
+      setState(() => _isPresented = false);
       if (durationEnded) {
         widget.onDurationEnd?.call();
       }
@@ -375,7 +446,9 @@ class _TMessageState extends State<TMessage>
   }
 
   Widget _buildText(BuildContext context) {
-    final style = TextStyle(color: context.tTheme.textColorPrimary);
+    final style = Theme.of(
+      context,
+    ).textTheme.bodyMedium?.copyWith(color: context.tTheme.textColorPrimary);
     if (widget.marquee == null) {
       return Align(
         alignment: Alignment.centerLeft,
@@ -398,21 +471,18 @@ class _TMessageState extends State<TMessage>
       end: Offset(-textPainter.width, 0),
     );
     return ClipRect(
-      child: SizedBox(
-        width: _calculateTextWidth(),
-        child: AnimatedBuilder(
-          animation: _animationController,
-          builder: (context, child) => Transform.translate(
-            offset: tween.evaluate(_animationController),
-            child: OverflowBox(
-              minWidth: 0,
-              maxWidth: double.infinity,
-              alignment: Alignment.centerLeft,
-              child: child,
-            ),
+      child: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) => Transform.translate(
+          offset: tween.evaluate(_animationController),
+          child: OverflowBox(
+            minWidth: 0,
+            maxWidth: double.infinity,
+            alignment: Alignment.centerLeft,
+            child: child,
           ),
-          child: Text(widget.content, style: style, maxLines: 1),
         ),
+        child: Text(widget.content, style: style, maxLines: 1),
       ),
     );
   }
@@ -421,44 +491,25 @@ class _TMessageState extends State<TMessage>
     if (widget.icon != null) {
       return widget.icon!;
     }
-    final (icon, color) = switch (widget.variant) {
-      TMessageVariant.info => (
+    final (icon, color) = switch (widget.status) {
+      TMessageStatus.info => (
         TIcons.error_circle_filled,
         context.tTheme.brandNormalColor,
       ),
-      TMessageVariant.success => (
+      TMessageStatus.success => (
         TIcons.check_circle_filled,
         context.tTheme.successNormalColor,
       ),
-      TMessageVariant.warning => (
+      TMessageStatus.warning => (
         TIcons.error_circle_filled,
         context.tTheme.warningNormalColor,
       ),
-      TMessageVariant.error => (
+      TMessageStatus.error => (
         TIcons.error_circle_filled,
         context.tTheme.errorNormalColor,
       ),
     };
-    return Icon(icon, color: color);
-  }
-
-  Widget _buildLink(BuildContext context) {
-    final link = widget.link!;
-    final linkWidget = TLink(
-      child: Text(link.name, maxLines: 1, overflow: TextOverflow.ellipsis),
-      colorScheme: TLinkColorScheme.primary,
-      size: TLinkSize.medium,
-      onPressed: widget.onLinkPressed,
-    );
-    if (link.color == null) {
-      return linkWidget;
-    }
-    return Theme(
-      data: Theme.of(
-        context,
-      ).mergeExtension(TLinkThemeData(textStyle: TextStyle(color: link.color))),
-      child: linkWidget,
-    );
+    return Icon(icon, color: color, size: 22);
   }
 
   Widget _buildCloseButton(BuildContext context) {
@@ -475,79 +526,67 @@ class _TMessageState extends State<TMessage>
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.visible) {
-      return const SizedBox.shrink();
-    }
     final offset = _effectiveOffset;
     final theme = _theme;
+    final backgroundColor =
+        theme.backgroundColor ?? context.tTheme.bgColorContainer;
+    final shape =
+        theme.shape ??
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
+        );
+    final content = SizedBox(
+      width: _effectiveWidth,
+      height: 48,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: [
+            if (widget.showIcon) ...[
+              SizedBox(width: 22, height: 22, child: _buildIcon(context)),
+              const SizedBox(width: 8),
+            ],
+            Expanded(child: _buildText(context)),
+            if (widget.action != null) ...[
+              const SizedBox(width: 8),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 96),
+                child: widget.action,
+              ),
+            ],
+            if (widget.showCloseButton || widget.closeButton != null) ...[
+              const SizedBox(width: 8),
+              SizedBox(
+                width: 22,
+                height: 22,
+                child: _buildCloseButton(context),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+    final message = theme.elevation == null
+        ? DecoratedBox(
+            decoration: ShapeDecoration(
+              color: backgroundColor,
+              shape: shape,
+              shadows: context.tTheme.shadowsBase ?? const [],
+            ),
+            child: Material(type: MaterialType.transparency, child: content),
+          )
+        : Material(
+            color: backgroundColor,
+            shape: shape,
+            elevation: theme.elevation!,
+            child: content,
+          );
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
       top: _safeTop(_top),
       left: offset.dx,
-      child: _isVisible
-          ? Material(
-              color: theme.backgroundColor ?? context.tTheme.bgColorContainer,
-              shape:
-                  theme.shape ??
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      context.tTheme.radiusDefault,
-                    ),
-                  ),
-              elevation: theme.elevation ?? 6,
-              child: SizedBox(
-                width: _effectiveWidth,
-                height: 48,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      if (widget.showIcon) ...[
-                        SizedBox(
-                          width: 20,
-                          height: 22,
-                          child: _buildIcon(context),
-                        ),
-                        const SizedBox(width: 10),
-                      ],
-                      Expanded(child: _buildText(context)),
-                      if (widget.link != null) ...[
-                        const SizedBox(width: 8),
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 96),
-                          child: _buildLink(context),
-                        ),
-                      ],
-                      if (widget.showCloseButton ||
-                          widget.closeButton != null) ...[
-                        const SizedBox(width: 8),
-                        SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: _buildCloseButton(context),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ),
-            )
-          : const SizedBox.shrink(),
+      child: _isPresented ? message : const SizedBox.shrink(),
     );
-  }
-
-  double _calculateTextWidth() {
-    var width = _effectiveWidth - 32;
-    if (widget.showIcon) {
-      width -= 30;
-    }
-    if (widget.link != null) {
-      width -= 104;
-    }
-    if (widget.showCloseButton || widget.closeButton != null) {
-      width -= 30;
-    }
-    return width;
   }
 }

@@ -16,7 +16,7 @@ class TDialogPage extends StatelessWidget {
       title: tTitle(context),
       desc: '用于显示重要提示或请求用户进行重要操作，一种打断当前操作的模态视图。',
       exampleCodeGroup: 'dialog',
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
       showTestModule: false,
       children: [
         ExampleModule(
@@ -43,11 +43,11 @@ class TDialogPage extends StatelessWidget {
     );
   }
 
-  Widget _scenarios(List<Widget> children) {
+  Widget _scenarios(BuildContext context, List<Widget> children) {
     return Column(
       children: [
         for (var index = 0; index < children.length; index++) ...[
-          if (index > 0) const SizedBox(height: 16),
+          if (index > 0) SizedBox(height: context.tTheme.spacer16),
           children[index],
         ],
       ],
@@ -86,7 +86,7 @@ class TDialogPage extends StatelessWidget {
 
   @ExampleCode(group: 'dialog')
   Widget _feedbackDialogs(BuildContext context) {
-    return _scenarios([
+    return _scenarios(context, [
       _trigger('反馈类-带标题', () {
         TDialog.show<void>(
           context,
@@ -126,7 +126,7 @@ class TDialogPage extends StatelessWidget {
 
   @ExampleCode(group: 'dialog')
   Widget _confirmDialogs(BuildContext context) {
-    return _scenarios([
+    return _scenarios(context, [
       _trigger('确认类-带标题', () {
         TDialog.show<bool>(
           context,
@@ -160,7 +160,7 @@ class TDialogPage extends StatelessWidget {
 
   @ExampleCode(group: 'dialog')
   Widget _buttonDialogs(BuildContext context) {
-    return _scenarios([
+    return _scenarios(context, [
       _statusScenario(
         context,
         '文字按钮',
@@ -251,7 +251,7 @@ class TDialogPage extends StatelessWidget {
           font: context.tTheme.fontBodyMedium,
           textColor: context.tTheme.textColorSecondary,
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: context.tTheme.spacer16),
         trigger,
       ],
     );
@@ -259,7 +259,7 @@ class TDialogPage extends StatelessWidget {
 
   Widget _verticalButtons(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(context.tTheme.spacer24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -269,7 +269,7 @@ class TDialogPage extends StatelessWidget {
             onPressed: () => Navigator.pop(context, true),
             child: const Text('确定'),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: context.tTheme.spacer12),
           TButton(
             variant: TButtonVariant.outline,
             onPressed: () => Navigator.pop(context, false),
@@ -282,7 +282,7 @@ class TDialogPage extends StatelessWidget {
 
   @ExampleCode(group: 'dialog')
   Widget _imageDialogs(BuildContext context) {
-    return _scenarios([
+    return _scenarios(context, [
       _trigger('图片置顶-带标题描述', () {
         _showImageDialog(
           context,
@@ -342,33 +342,33 @@ class TDialogPage extends StatelessWidget {
   }) {
     const image = Image(
       image: AssetImage('assets/img/image.png'),
+      // 设计稿图片视口高度，间距 token 不用于表达内容尺寸。
       height: 160,
       width: double.infinity,
       fit: BoxFit.cover,
     );
+    final token = context.tTheme;
     final title = showTitle
-        ? const Text(
+        ? TText(
             '对话框标题',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 18,
-              height: 26 / 18,
-              fontWeight: FontWeight.w600,
-            ),
+            font: token.fontTitleLarge,
+            textColor: token.textColorPrimary,
           )
         : null;
     final description = showContent
         ? const Text(_description, textAlign: TextAlign.center)
         : null;
     final textContent = Padding(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(token.spacer24),
       child: Column(
         children: [
           if (title != null) title,
-          if (title != null && description != null) const SizedBox(height: 8),
+          if (title != null && description != null)
+            SizedBox(height: token.spacer8),
           if (!imageOnTop) ...[
             image,
-            if (description != null) const SizedBox(height: 8),
+            if (description != null) SizedBox(height: token.spacer8),
           ],
           if (description != null) description,
         ],
@@ -391,13 +391,13 @@ class TDialogPage extends StatelessWidget {
 
   @ExampleCode(group: 'dialog')
   Widget _inputDialogs(BuildContext context) {
-    return _scenarios([
+    return _scenarios(context, [
       _trigger('输入类-无描述', () {
         TDialog.show<bool>(
           context,
           dialog: TDialog(
             title: const Text('带输入框对话框'),
-            content: _dialogInput(context, topPadding: 8),
+            content: _dialogInput(context, topPadding: context.tTheme.spacer8),
             actions: _actions(),
           ),
         );
@@ -410,7 +410,7 @@ class TDialogPage extends StatelessWidget {
             content: Column(
               children: [
                 const Text(_description),
-                const SizedBox(height: 16),
+                SizedBox(height: context.tTheme.spacer16),
                 _dialogInput(context),
               ],
             ),
@@ -429,9 +429,9 @@ class TDialogPage extends StatelessWidget {
         data: Theme.of(context).mergeExtension(
           TInputThemeData(
             clearButtonMode: TInputClearButtonMode.focused,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: token.spacer16,
+              vertical: token.spacer12,
             ),
             borderRadius: 4,
             backgroundColor: token.bgColorPage,

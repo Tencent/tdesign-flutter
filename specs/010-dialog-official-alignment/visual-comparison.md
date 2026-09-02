@@ -1,6 +1,6 @@
 # 运行截图比对
 
-基线：`tdesign-miniprogram@1.16.0`（`ae55fb050b7a9474c33752b45b71c741f37ed872`），统一使用 375dp 宽视口。Flutter 截图覆盖公开页面和带关闭按钮弹层的 light/dark；系统导航栏、宿主字体和原生输入控件属于平台合理差异。
+主基线：Figma `TDesign for mobile` 分支稿的 Dialog 页面（节点 `24386:5278`，由用户提供的分支设计链接进入），统一使用 375dp 宽移动端画板；`tdesign-miniprogram@1.16.0`（`ae55fb050b7a9474c33752b45b71c741f37ed872`）仅作为公开 Demo 结构的辅助证据。Flutter 截图覆盖公开页面和带关闭按钮弹层的 light/dark；系统导航栏与宿主字体属于平台合理差异。
 
 | 场景 | 小程序 | Flutter light | Flutter dark |
 | --- | --- | --- | --- |

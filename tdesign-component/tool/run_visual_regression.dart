@@ -18,6 +18,18 @@ class VisualTestSuite {
 
 const visualTestSuites = <VisualTestSuite>[
   VisualTestSuite(
+    'action_sheet',
+    'ActionSheet Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/action_sheet_page_golden_test.dart'],
+  ),
+  VisualTestSuite(
+    'badge',
+    'Badge Component',
+    workingDirectory: '.',
+    testFiles: ['test/components/badge/t_badge_golden_test.dart'],
+  ),
+  VisualTestSuite(
     'button',
     'Button Demo',
     workingDirectory: 'example',
@@ -71,6 +83,18 @@ const visualTestSuites = <VisualTestSuite>[
     'Link Demo',
     workingDirectory: 'example',
     testFiles: ['test/link_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'loading',
+    'Loading Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/loading_demo_golden_test.dart'],
+  ),
+  VisualTestSuite(
+    'message',
+    'Message Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/message_demo_golden_test.dart'],
   ),
   VisualTestSuite(
     'notice_bar',
@@ -143,6 +167,15 @@ const visualTestSuites = <VisualTestSuite>[
     'Rate Demo',
     workingDirectory: 'example',
     testFiles: ['test/rate_demo_golden_test.dart'],
+  ),
+  VisualTestSuite(
+    'tabs',
+    'Tabs Component',
+    workingDirectory: '.',
+    testFiles: [
+      'test/components/tabs/t_tab_golden_test.dart',
+      'test/components/navigation_components_golden_test.dart',
+    ],
   ),
   VisualTestSuite(
     'toast',

@@ -28,7 +28,7 @@ void main() {
   }
 
   group('TDialog 路由与结果', () {
-    testWidgets('通过 Popup 居中路由打开并返回 typed result', (tester) async {
+    testWidgets('通过居中模态路由打开并返回 typed result', (tester) async {
       bool? result;
       await tester.pumpWidget(
         app(
@@ -56,6 +56,17 @@ void main() {
       expect(find.byType(TDialog), findsOneWidget);
       expect(tester.getSize(find.byType(TDialog)).width, 311);
       expect(tester.getSize(find.byType(TDialog)).height, isNot(240));
+      expect(
+        find.ancestor(
+          of: find.byType(TDialog),
+          matching: find.byType(SafeArea),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        ModalRoute.of(tester.element(find.byType(TDialog)))?.transitionDuration,
+        const Duration(milliseconds: 240),
+      );
 
       await tester.tap(find.text('确认'));
       await tester.pumpAndSettle();
@@ -190,6 +201,26 @@ void main() {
             title: Text('多操作'),
             actions: [
               TDialogAction(child: Text('一')),
+              TDialogAction(child: Text('二'), role: TDialogActionRole.primary),
+              TDialogAction(child: Text('三')),
+            ],
+          ),
+        ),
+      );
+      final one = tester.getCenter(find.text('一'));
+      final two = tester.getCenter(find.text('二'));
+      final three = tester.getCenter(find.text('三'));
+      expect(two.dy, lessThan(one.dy));
+      expect(one.dy, lessThan(three.dy));
+    });
+
+    testWidgets('三个普通操作纵向排列时保持声明顺序', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TDialog(
+            title: Text('多操作'),
+            actions: [
+              TDialogAction(child: Text('一')),
               TDialogAction(child: Text('二')),
               TDialogAction(child: Text('三')),
             ],
@@ -199,8 +230,8 @@ void main() {
       final one = tester.getCenter(find.text('一'));
       final two = tester.getCenter(find.text('二'));
       final three = tester.getCenter(find.text('三'));
-      expect(three.dy, lessThan(two.dy));
-      expect(two.dy, lessThan(one.dy));
+      expect(one.dy, lessThan(two.dy));
+      expect(two.dy, lessThan(three.dy));
     });
 
     testWidgets('文字操作使用贴边 56dp Footer 和分隔线', (tester) async {
@@ -418,18 +449,20 @@ void main() {
           dialogTheme: extension,
         ),
       );
-      final material = tester.widget<Material>(
-        find.descendant(
-          of: find.byType(TDialog),
-          matching: find.byType(Material),
-        ),
-      );
+      final material = tester
+          .widgetList<Material>(
+            find.descendant(
+              of: find.byType(TDialog),
+              matching: find.byType(Material),
+            ),
+          )
+          .firstWhere((widget) => widget.shape is RoundedRectangleBorder);
       expect(material.color, Colors.blue);
       expect(material.elevation, 8);
       expect(tester.getSize(find.byType(TDialog)).width, 260);
     });
 
-    testWidgets('ThemeExtension 通过 Popup 路由保留', (tester) async {
+    testWidgets('ThemeExtension 通过模态路由保留', (tester) async {
       const extension = TDialogThemeData(backgroundColor: Colors.green);
       await tester.pumpWidget(
         app(
@@ -502,6 +535,104 @@ void main() {
       );
       expect(positioned.top, 8);
       expect(positioned.right, 8);
+    });
+
+    testWidgets('默认间距与圆角跟随 TDesign token', (tester) async {
+      final tokens = TThemeData.defaultData().copyWithTThemeData(
+        'dialog-token-test',
+        radiusMap: {'radiusExtraLarge': 20},
+        marginMap: {
+          'spacer8': 10,
+          'spacer12': 14,
+          'spacer24': 30,
+          'spacer32': 40,
+        },
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(tokens),
+          home: const Scaffold(
+            body: TDialog(
+              title: Text('Token 标题'),
+              content: Text('Token 内容'),
+              showCloseButton: true,
+              actions: [
+                TDialogAction(child: Text('取消'), variant: TButtonVariant.text),
+                TDialogAction(
+                  child: Text('确定'),
+                  role: TDialogActionRole.primary,
+                  variant: TButtonVariant.text,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      final scrollView = tester.widget<SingleChildScrollView>(
+        find.descendant(
+          of: find.byType(TDialog),
+          matching: find.byType(SingleChildScrollView),
+        ),
+      );
+      expect(scrollView.padding, const EdgeInsets.fromLTRB(30, 30, 30, 0));
+
+      final material = tester
+          .widgetList<Material>(
+            find.descendant(
+              of: find.byType(TDialog),
+              matching: find.byType(Material),
+            ),
+          )
+          .firstWhere((widget) => widget.shape is RoundedRectangleBorder);
+      expect(
+        material.shape,
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      );
+
+      final closePosition = tester.widget<Positioned>(
+        find.ancestor(
+          of: find.byType(IconButton),
+          matching: find.byType(Positioned),
+        ),
+      );
+      expect(closePosition.top, 10);
+      expect(closePosition.right, 10);
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is Padding &&
+              widget.padding == const EdgeInsets.only(top: 40),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('极小视口与自定义间距 token 不会生成负约束', (tester) async {
+      final tokens = TThemeData.defaultData().copyWithTThemeData(
+        'dialog-small-viewport-test',
+        marginMap: {'spacer32': 40},
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(tokens),
+          home: const MediaQuery(
+            data: MediaQueryData(size: Size(20, 20)),
+            child: Scaffold(body: TDialog(title: SizedBox.shrink())),
+          ),
+        ),
+      );
+
+      final constrainedBox = tester
+          .widgetList<ConstrainedBox>(
+            find.descendant(
+              of: find.byType(TDialog),
+              matching: find.byType(ConstrainedBox),
+            ),
+          )
+          .firstWhere((widget) => widget.constraints.maxWidth == 0);
+      expect(constrainedBox.constraints.maxHeight, 0);
+      expect(tester.takeException(), isNull);
     });
   });
 

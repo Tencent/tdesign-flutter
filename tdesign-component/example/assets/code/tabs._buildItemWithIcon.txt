@@ -1,14 +1,10 @@
 Widget _buildItemWithIcon(BuildContext context) {
-    var tabs = List.generate(3, (index) {
+    final tabs = List.generate(3, (index) {
       final text = '选项${index + 1}';
-      return TTab(
-        text: text,
-        icon: const Icon(TIcons.app, size: 18),
-      );
+      return TTab(text: text, icon: const Icon(TIcons.app, size: 18));
     });
-    return TTabsBar(
-      tabs: tabs,
-      controller: _demoController('icon', tabs.length),
-      indicator: _indicator(context),
+    return DefaultTabController(
+      length: tabs.length,
+      child: TTabsBar(tabs: tabs),
     );
   }
