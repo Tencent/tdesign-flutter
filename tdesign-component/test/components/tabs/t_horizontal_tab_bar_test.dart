@@ -1,5 +1,8 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart'
     hide TabPageSelector, TabPageSelectorIndicator;
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/tabs/t_horizontal_tab_bar.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -19,6 +22,26 @@ Future<void> expectBuildFlutterError(WidgetTester tester, Widget widget) async {
   }
   err ??= tester.takeException() as FlutterError?;
   expect(err, isA<FlutterError>());
+}
+
+Future<Color> readPixel(
+  GlobalKey boundaryKey, {
+  required int x,
+  required int y,
+}) async {
+  final boundary =
+      boundaryKey.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+  final image = await boundary.toImage(pixelRatio: 1);
+  final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+  final width = image.width;
+  image.dispose();
+  final offset = (y * width + x) * 4;
+  return Color.fromARGB(
+    data!.getUint8(offset + 3),
+    data.getUint8(offset),
+    data.getUint8(offset + 1),
+    data.getUint8(offset + 2),
+  );
 }
 
 void main() {
@@ -123,9 +146,7 @@ void main() {
       expect(find.byType(THorizontalTabBar), findsOneWidget);
     });
 
-    testWidgets('TabBarTheme 注入 indicator/indicatorSize/labelPadding', (
-      tester,
-    ) async {
+    testWidgets('显式参数不受 TabBarTheme 影响', (tester) async {
       final c = TabController(length: 3, vsync: const TestVSync());
       addTearDown(c.dispose);
       await tester.pumpWidget(
@@ -248,7 +269,7 @@ void main() {
       expect(find.byType(THorizontalTabBar), findsOneWidget);
     });
 
-    testWidgets('variant: capsule', (tester) async {
+    testWidgets('variant: tag', (tester) async {
       final c = TabController(length: 3, vsync: const TestVSync());
       addTearDown(c.dispose);
       await tester.pumpWidget(
@@ -256,7 +277,7 @@ void main() {
           THorizontalTabBar(
             tabs: buildTabs(3),
             controller: c,
-            variant: TTabsBarVariant.capsule,
+            variant: TTabsBarVariant.tag,
           ),
         ),
       );
@@ -272,8 +293,8 @@ void main() {
             tabs: buildTabs(3),
             controller: c,
             variant: TTabsBarVariant.card,
-            selectedBgColor: Colors.blue,
-            unSelectedBgColor: Colors.grey,
+            selectedTagBackgroundColor: Colors.blue,
+            tagBackgroundColor: Colors.grey,
             backgroundColor: Colors.white,
           ),
         ),
@@ -281,26 +302,39 @@ void main() {
       expect(find.byType(THorizontalTabBar), findsOneWidget);
     });
 
-    testWidgets('automaticIndicatorColorAdjustment: false', (tester) async {
-      final c = TabController(length: 3, vsync: const TestVSync());
+    testWidgets('默认指示器不受 Material 背景色影响', (tester) async {
+      final c = TabController(length: 1, vsync: const TestVSync());
       addTearDown(c.dispose);
+      final boundaryKey = GlobalKey();
       await tester.pumpWidget(
-        Material(
-          color: Colors.blue,
-          child: MaterialApp(
-            theme: ThemeData(extensions: [TThemeData.defaultData()]),
-            home: Scaffold(
-              body: THorizontalTabBar(
-                tabs: buildTabs(3),
-                controller: c,
-                indicatorColor: Colors.blue,
-                automaticIndicatorColorAdjustment: false,
+        MaterialApp(
+          theme: ThemeData(extensions: [TThemeData.defaultData()]),
+          home: Scaffold(
+            body: Center(
+              child: RepaintBoundary(
+                key: boundaryKey,
+                child: Material(
+                  color: Colors.blue,
+                  child: SizedBox(
+                    width: 120,
+                    height: 50,
+                    child: THorizontalTabBar(
+                      tabs: const [TTab(text: '选项')],
+                      controller: c,
+                      indicatorColor: Colors.blue,
+                      indicatorWeight: 4,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
         ),
       );
-      expect(find.byType(THorizontalTabBar), findsOneWidget);
+      final pixel = await tester.runAsync(
+        () => readPixel(boundaryKey, x: 60, y: 48),
+      );
+      expect(pixel?.toARGB32(), Colors.blue.toARGB32());
     });
   });
 
@@ -430,7 +464,7 @@ void main() {
           THorizontalTabBar(
             tabs: buildTabs(3),
             controller: c,
-            variant: TTabsBarVariant.filled,
+            variant: TTabsBarVariant.line,
           ),
         ),
       );
@@ -621,8 +655,8 @@ void main() {
             tabs: buildTabs(3),
             controller: c,
             variant: TTabsBarVariant.card,
-            selectedBgColor: Colors.blue,
-            unSelectedBgColor: Colors.grey,
+            selectedTagBackgroundColor: Colors.blue,
+            tagBackgroundColor: Colors.grey,
             backgroundColor: Colors.white,
           ),
         ),

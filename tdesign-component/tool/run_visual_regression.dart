@@ -157,6 +157,15 @@ const visualTestSuites = <VisualTestSuite>[
     testFiles: ['test/rate_demo_golden_test.dart'],
   ),
   VisualTestSuite(
+    'tabs',
+    'Tabs Component',
+    workingDirectory: '.',
+    testFiles: [
+      'test/components/tabs/t_tab_golden_test.dart',
+      'test/components/navigation_components_golden_test.dart',
+    ],
+  ),
+  VisualTestSuite(
     'toast',
     'Toast Demo',
     workingDirectory: 'example',
