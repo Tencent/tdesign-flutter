@@ -75,6 +75,19 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  Future<void> openBadgeList(WidgetTester tester) async {
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+    final trigger = find.widgetWithText(TButton, '带徽标列表型');
+    await tester.scrollUntilVisible(
+      trigger,
+      200,
+      scrollable: pageScrollable().first,
+    );
+    await tester.tap(trigger);
+    await tester.pumpAndSettle();
+  }
+
   Future<void> openScrollGrid(WidgetTester tester) async {
     await tester.pumpWidget(buildPage());
     await tester.pump();
@@ -288,6 +301,23 @@ void main() {
       expect(find.text(label), findsOneWidget);
     }
     expect(find.text('cancel'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('带徽标列表型对齐官方圆点与计数数据', (tester) async {
+    configurePhone(tester);
+
+    await openBadgeList(tester);
+
+    expect(find.byType(TBadge), findsNWidgets(4));
+    expect(find.text('8'), findsOneWidget);
+    expect(find.text('99'), findsOneWidget);
+    expect(find.text('99+'), findsOneWidget);
+    final badges = tester.widgetList<TBadge>(find.byType(TBadge)).toList();
+    expect(badges.first.variant, TBadgeVariant.dot);
+    expect(badges[1].offset, isNull);
+    expect(badges[2].offset, isNull);
+    expect(badges[3].offset, isNull);
     expect(tester.takeException(), isNull);
   });
 }

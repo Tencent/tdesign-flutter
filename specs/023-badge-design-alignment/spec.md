@@ -42,6 +42,10 @@
   - `variant` 只表达结构形态：`normal`、`dot`、`square`、`bubble`、左右 Ribbon、左右 Triangle。
 - 移除混入尺寸语义的 `TBadgeVariant.small`；调用方迁移到 `size`。
 - `size` 仅表达 `medium`、`large`，默认 `medium`；中尺寸使用 `fontMarkExtraSmall` 与 16px 行盒，大尺寸使用 `fontMarkSmall` 与 20px 行盒。
+- `dot` 默认直径为 8 逻辑像素，与官方移动端 `--td-badge-dot-size` 一致；显式
+  `BadgeThemeData.smallSize` 仍可覆盖。8px 只属于 `TBadge` 的内置视觉默认值；
+  `TThemeBuilder` 不投影 `smallSize`，原生 Material `Badge` 自然回退 Flutter 的
+  6px 默认值，不把 TDesign Badge 的尺寸扩散到原生组件。
 - `offset` 为逐实例位置偏移，解析顺序为实例 `offset` > 局部 `BadgeTheme.offset` > 全局 `ThemeData.badgeTheme.offset` > 默认值。
 - `border` 保留为正交的对比色描边能力，不再用于表达 Square。
 - `normal` 单字符呈圆形、多字符呈胶囊形；Square、Bubble 使用同一标签内容与可见性逻辑；Ribbon、Triangle 固定贴合被标记内容的左上或右上角。
@@ -65,3 +69,4 @@
 - [x] 所有形态在 1.0、1.5、2.0 文本缩放下无异常、裁切或溢出。
 - [x] Demo 契约测试覆盖完整页面，组件测试覆盖 API、主题、RTL 与边界。
 - [x] Flutter 3.32.0 与 latest 的非视觉测试和 analyze 通过；Flutter 3.32.0 Golden 通过。
+- [x] 默认 Dot 在独立与 child 锚定两条路径中均为 8×8 逻辑像素。

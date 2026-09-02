@@ -505,7 +505,6 @@ class TMaterialThemeBuilder {
           extensionData.fontMarkExtraSmall,
         )?.copyWith(color: extensionData.textColorAnti),
         largeSize: 16,
-        smallSize: 6,
         padding: const EdgeInsets.symmetric(horizontal: 4),
       ),
       filledButtonTheme: FilledButtonThemeData(style: buttonStyle),

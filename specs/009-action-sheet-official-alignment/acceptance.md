@@ -106,3 +106,23 @@
 - macOS 上不更新 Linux Golden：现有 10 项均出现 3.74%–5.39% 的整页文字与图标
   抗锯齿差异，包含未触及的基础列表路径；差异图未显示局部布局漂移。最终 Golden
   状态仍以 Flutter 3.32.0 Linux CI 为准。
+
+## 2026-09-03 列表徽标视觉修复复验
+
+- 列表徽标不再作为行内尾随内容；使用无测量的
+  `Row + Align + FractionalTranslation` 只预留徽标半宽，并将任意徽标 Widget
+  中心锚定标题右上角。
+- 标题使用弹性宽度与单行省略；220dp 窄屏下图标、长标题和徽标共存时
+  徽标中心仍等于标题右上角，且右边界不超出视口，覆盖 CodeBuddy 评审指出的边界。
+- 公开 Demo 对齐官方移动端场景：`Move` 圆点、`Mark as important` 8、
+  `Unsubscribe` 99、`Add to Tasks` 99+。
+- Flutter 3.32.0 与 3.47.0：ActionSheet/Badge 组件聚焦测试、Demo 9 项与
+  组件包 / Example 严格 analyze 均通过；示例代码生成检查通过。
+- Flutter 3.32.0 Linux：ActionSheet 全量组件测试 52 项通过，生产源码覆盖率
+  `382/390 = 97.95%`；Flutter 3.47.0 对应覆盖率为
+  `384/390 = 98.46%`。
+- CI 同款 Flutter 3.32.0 Linux：新增带徽标列表打开状态 light/dark Golden，
+  更新后不带 `--update-goldens` 复跑 2/2 通过；ActionSheet 全量 Golden
+  12/12 通过。
+- Android 16 物理手机：四个徽标均在标题右上角，与文本无行内挤压或重叠，
+  底部安全区与取消项正常。

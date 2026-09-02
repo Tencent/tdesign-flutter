@@ -46,8 +46,9 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
   默认项目宽度；仅滚动布局显式 `itemMinWidth` 可以扩大项目宽度并触发滚动。
 - `TActionSheetItem<T>` 只持有动作内容、状态与稳定业务值 `value`，不持有 `group`；
   选择动作只通过 `onSelected(item)` 回传，不暴露会随布局变化的全局索引。
-- `TActionSheetItem.badge` 是 Widget 槽位，不绑定具体 Badge 实现；`textStyle`
-  只控制标题，不作为图标颜色的第二来源。宫格尾部空位由布局直接占位，不允许
+- `TActionSheetItem.badge` 是 Widget 槽位，不绑定具体 Badge 实现；列表徽标中心锚定
+  标题右上角，宫格徽标中心锚定图标槽位右上角，不把徽标作为普通行内尾随内容。
+  `textStyle` 只控制标题，不作为图标颜色的第二来源。宫格尾部空位由布局直接占位，不允许
   以 `item=null` 表达。需要标题与图标同色时，调用方分别设置 `textStyle` 与
   `Icon.color`，Demo 状态项不得依赖隐式联动。
 - 删除 `showGroup`、`TActionSheetGroup` 与 `TActionSheetItem.group`；公开设计矩阵
@@ -78,6 +79,7 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
 - [x] Example 测试与 Golden 验证多行滚动 Demo 的默认可视容量和明暗视觉。
 - [x] Example 测试验证常规宫格与多行滚动宫格首屏数据和 Item 视觉指标一致。
 - [x] Flutter 3.32.0 Linux Golden 字体覆盖“腾、讯、档、箱、云、徽”且相关明暗快照无缺字方框。
+- [x] 列表徽标按标题右上角锚定，公开 Demo 的圆点与计数数据和官方移动端场景一致。
 - [x] Flutter 3.32.0 与 latest 均通过聚焦测试及严格 analyze。
 - [x] ActionSheet 生产源码 LCOV `LH/LF >= 95%`。
 - [x] 公开入口仅保留 `showList/showGrid`，旧分组 API 与分组字段完全移除。

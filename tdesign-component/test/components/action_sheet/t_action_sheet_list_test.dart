@@ -44,6 +44,61 @@ void main() {
     expect(find.byType(TActionSheetList<int>), findsOneWidget);
   });
 
+  testWidgets('徽标中心锚定标题右上角', (tester) async {
+    const badgeKey = ValueKey('custom-badge');
+    await tester.pumpWidget(
+      wrap(
+        const TActionSheetList(
+          showCancel: false,
+          items: [
+            TActionSheetItem(
+              value: 1,
+              label: '带徽标',
+              badge: SizedBox(key: badgeKey, width: 12, height: 6),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    final title = find.widgetWithText(TText, '带徽标');
+    final badge = find.byKey(badgeKey);
+    expect(tester.getCenter(badge), tester.getTopRight(title));
+  });
+
+  testWidgets('窄屏带图标长标题和徽标不溢出', (tester) async {
+    tester.view.physicalSize = const Size(220, 400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    const label = '这是一个需要在窄屏上省略的非常长的操作标题';
+    await tester.pumpWidget(
+      wrap(
+        const TActionSheetList(
+          showCancel: false,
+          items: [
+            TActionSheetItem(
+              value: 1,
+              label: label,
+              icon: Icon(Icons.star),
+              badge: TBadge(label: '99+'),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    expect(tester.takeException(), isNull);
+    final titleFinder = find.widgetWithText(TText, label);
+    final badgeFinder = find.byType(TBadge);
+    final title = tester.widget<TText>(titleFinder);
+    expect(title.maxLines, 1);
+    expect(title.overflow, TextOverflow.ellipsis);
+    expect(tester.getCenter(badgeFinder), tester.getTopRight(titleFinder));
+    expect(tester.getRect(badgeFinder).right, lessThanOrEqualTo(220));
+  });
+
   testWidgets('列表图标尺寸来自 Theme 而不是文本字号', (tester) async {
     await tester.pumpWidget(
       wrap(

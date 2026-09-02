@@ -134,7 +134,11 @@ class TActionSheetPage extends StatelessWidget {
   ];
 
   List<TActionSheetItem<String>> _badgeItems() => [
-    const TActionSheetItem(value: 'move', label: 'Move'),
+    const TActionSheetItem(
+      value: 'move',
+      label: 'Move',
+      badge: TBadge(variant: TBadgeVariant.dot),
+    ),
     const TActionSheetItem(
       value: 'important',
       label: 'Mark as important',
@@ -143,7 +147,7 @@ class TActionSheetPage extends StatelessWidget {
     const TActionSheetItem(
       value: 'unsubscribe',
       label: 'Unsubscribe',
-      badge: TBadge(variant: TBadgeVariant.dot),
+      badge: TBadge(label: '99'),
     ),
     const TActionSheetItem(
       value: 'tasks',

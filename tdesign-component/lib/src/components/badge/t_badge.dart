@@ -7,6 +7,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
+import 't_badge_defaults.dart';
 import 't_badge_theme_data.dart';
 
 // Badge 专有几何来自移动端设计规范；公共色彩、字体与圆角仍由主题 token 提供。
@@ -18,7 +19,7 @@ enum TBadgeVariant {
   /// 标准文本徽标；单字符呈圆形，多字符随内容扩展为胶囊形。
   normal,
 
-  /// 不显示文本的圆点徽标。
+  /// 不显示文本的圆点徽标，默认直径为 8 逻辑像素。
   dot,
 
   /// 小圆角方形文本徽标；多字符时随内容横向扩展为矩形。
@@ -111,7 +112,9 @@ class TBadge extends StatelessWidget {
         globalBadgeTheme?.textColor ??
         token.textColorAnti;
     final smallSize =
-        localBadgeTheme?.smallSize ?? globalBadgeTheme?.smallSize ?? 6.0;
+        localBadgeTheme?.smallSize ??
+        globalBadgeTheme?.smallSize ??
+        TBadgeDefaults.dotSize;
     final font = size == TBadgeSize.large
         ? token.fontMarkSmall
         : token.fontMarkExtraSmall;

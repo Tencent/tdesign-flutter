@@ -35,3 +35,20 @@
 
 - Golden 固定在 Flutter 3.32.0；latest 只验证行为与 analyze，避免把 SDK 字体栅格差异误判为视觉变更。
 - 未在 iOS 真机逐像素截图；跨平台风险由逻辑像素、Theme/Token、RTL、三档字体缩放与双 SDK 测试约束。
+
+## 2026-09-03 Dot 默认尺寸复验
+
+- 默认 Dot 直径由 6 调整为官方移动端规范的 8 逻辑像素；局部或显式全局
+  `BadgeThemeData.smallSize` 的覆盖顺序不变。
+- 独立 Dot、带 child Dot 和带描边 Dot 的 Widget 测试均锁定 8px。
+- Flutter 3.32.0 与 3.47.0 的 Badge 聚焦测试及严格 analyze 通过；
+  生产源码覆盖率 `171/172 = 99.42%`。
+- `TBadge` 使用内部 8px Dot 默认值；`TThemeBuilder.badgeTheme.smallSize`
+  保持为空，原生 Material Badge 自然回退 6px，主题基建测试锁定两者作用域隔离。
+- CI 同款 Flutter 3.32.0 Linux 中已更新 light/dark 2 张 Badge Golden，
+  并在同一容器无更新参数复跑 2/2 通过。
+- Flutter 3.32.0 Linux 与 3.47.0 的 Badge 集中式回归测试均 36 项通过，
+  生产源码覆盖率均为 `171/172 = 99.42%`，组件包严格 analyze 均为
+  0 issues；Flutter 3.32.0 Linux Badge Golden 2/2 通过。
+- `TThemeBuilder` 与原生 Material Badge 的作用域隔离断言已迁入集中式 CI
+  登记的 `t_badge_test.dart`，避免只在未调度的聚合 Theme 测试中生效。

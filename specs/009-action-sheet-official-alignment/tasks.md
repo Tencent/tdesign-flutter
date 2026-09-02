@@ -23,3 +23,5 @@
 - [x] DONE 移除 `showGrid.align` 的误导性作用域并锁定宫格居中契约
 - [x] DONE 将 Theme 宫格高度字段收敛为 `gridItemHeight`
 - [x] DONE 登记宫格布局与回调公开类型并重建 API 文档
+- [x] DONE 修正列表徽标右上角锚定并对齐公开 Demo 徽标数据
+- [x] DONE 补充列表徽标位置、窄屏溢出与真机视觉回归

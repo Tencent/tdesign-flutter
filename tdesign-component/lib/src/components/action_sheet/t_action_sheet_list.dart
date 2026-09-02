@@ -225,24 +225,40 @@ class TActionSheetList<T> extends StatelessWidget {
                         ),
                         SizedBox(width: context.tTheme.spacer8),
                       ],
-                      TText(
-                        item.label,
-                        font: context.tTheme.fontBodyLarge,
-                        textColor: item.disabled
-                            ? context
-                                  .tTheme
-                                  .textDisabledColor // 禁用状态下的文本颜色
-                            : context.tTheme.textColorPrimary, // 正常状态下的文本颜色
-                        style: item.textStyle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      Flexible(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Flexible(
+                              child: TText(
+                                item.label,
+                                font: context.tTheme.fontBodyLarge,
+                                textColor: item.disabled
+                                    ? context
+                                          .tTheme
+                                          .textDisabledColor // 禁用状态下的文本颜色
+                                    : context
+                                          .tTheme
+                                          .textColorPrimary, // 正常状态下的文本颜色
+                                style: item.textStyle,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (item.badge != null)
+                              Align(
+                                alignment: Alignment.topLeft,
+                                widthFactor: 0.5,
+                                heightFactor: 0.5,
+                                child: FractionalTranslation(
+                                  translation: const Offset(-0.5, -0.5),
+                                  child: item.badge!,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
-
-                      // TODO(#991): Position the badge at the item's top right.
-                      if (item.badge != null) ...[
-                        SizedBox(width: context.tTheme.spacer8),
-                        item.badge!,
-                      ],
                     ],
                   ),
                   if (item.subtitle != null && item.subtitle!.isNotEmpty) ...[

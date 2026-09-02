@@ -5,6 +5,10 @@
 - 将 `TBadgeVariant.small` 拆为独立 `TBadgeSize`，避免形态与尺寸双重所有权。
 - 继续复用 Material `Badge` 处理普通、圆点、方形和气泡的 child 锚定；角标使用 `Stack + CustomPainter` 按公开枚举指定的物理左右方位贴合内容边角。
 - 中/大尺寸从 `fontMarkExtraSmall`、`fontMarkSmall` 的字号和行高取得；颜色、文字样式、padding、alignment、offset 继续遵循实例、局部 Theme、显式全局 Theme、Token 的覆盖链。`TThemeBuilder` 自动投影给原生 Material Badge 的主题按来源识别，不通过数值相等启发式覆盖 TDesign 尺寸预设。
+- Dot 的内置直径从官方移动端徽标尺寸取得 8 逻辑像素，只作为 `TBadge` 的
+  内部语义默认值。仍允许局部或显式全局 `BadgeThemeData.smallSize` 覆盖；
+  `TThemeBuilder` 不投影 `smallSize`，由原生 Material `Badge` 自行回退 Flutter
+  默认值；不增加第二个公开尺寸参数，也不借用语义无关的间距 Token。
 - Demo 使用 `TCellGroup` 表达连续角标 Cell，builder 只展示可复制的组件组合。
 
 ## 影响范围
