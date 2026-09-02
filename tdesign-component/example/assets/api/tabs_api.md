@@ -20,7 +20,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | child | Widget? | - | 子widget |
-| enabled | bool | true | 是否可用，默认 true；`false` 即禁用 |
+| enabled | bool | true | 是否可用，默认 true。 设为 `false` 时使用禁用样式，并由 `TTabsBar` 阻止该项被选择。 Material `TabBar` 不识别此扩展字段；直接将 `TTab` 用作 Material `TabBar.tabs` 时只会呈现禁用样式，不会阻止其切换。 |
 | icon | Widget? | - | 图标 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | text | String? | - | 文字内容 |
