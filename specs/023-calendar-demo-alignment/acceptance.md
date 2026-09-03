@@ -10,10 +10,10 @@
 ## 验证证据
 
 - 合并最新 `develop` 后，Flutter 3.32.0 严格 `flutter analyze --fatal-infos --fatal-warnings` 无问题，56 项组件测试通过；共享 widget_test.dart 的 6 项冒烟测试通过，日历弹层标题/关闭断言已同步。
-- 各 PR 独立工作区使用已有 Flutter 3.32.0 Linux 镜像和离线 pub 缓存生成权威 Golden，随后无更新参数复跑通过；本组件 4 项 Demo 测试和 20 项 Demo Golden、2 项组件状态 Golden 通过。
+- 各 PR 独立工作区使用已有 Flutter 3.32.0 Linux 镜像和离线 pub 缓存生成权威 Golden，随后无更新参数复跑通过；本组件 6 项 Demo 测试和 18 项 Demo Golden、2 项组件状态 Golden 通过。
 - Golden 使用默认精确比较器；Figma 为人工视觉对照，不是 Figma 自动像素比较。拆分后的代表性打开态已复核。
 - 拆分前相同组件实现还通过 Flutter 3.47.0 analyze/功能验证；生产源码覆盖率为 `640/648 = 98.77%`。此项是此前集成验证的记录，不冒充拆分后重新测量。
-- 合并最新 `develop` 后，另以 Flutter 3.44.0 严格 analyze、40 项定向组件/调度测试和 10 项 example 测试复跑通过。
+- 合并最新 `develop` 后，另以 Flutter 3.44.0 严格 analyze、40 项定向组件/调度测试和 12 项 example 测试复跑通过。
 - 原 PR 已登记本组件的组件/Demo/覆盖率/视觉入口；Calendar Demo 与组件状态矩阵作为两个具名视觉套件进入 Flutter 3.32.0 Linux 调度。本次不引入其他两个组件的测试调度。远端 CI 与独立 CNB Review 以各自 PR/Issue 记录为准。
 
 ## 复现与限制
