@@ -45,3 +45,8 @@
 - Flutter 3.32.0、3.47.0 严格 analyze 和非视觉回归；生产代码 LH/LF >=95%。
 - 仅 Flutter 3.32.0 Linux 更新/比较 Golden，固定 375px、DPR 1、字体缩放 1、中文测试字体，覆盖完整页面与实际打开的各场景、light/dark。状态矩阵另设 420×180。
 - 更新后立即无更新参数复跑；系统字体、Android/iOS 真机不由 Linux Golden 证明。
+
+## API 收敛补充
+
+父级重建时，即使 value 与旧值相同，也必须校正被拒绝的滚轮选择；比较按当前模式、边界、步进归一化的值，父级接受新值时保持惯性滚动。
+共享滚轮字体只读取显式 TextTheme，否则使用当前 TDesign fontBodyLarge 字号和行高；不增加 Theme 或实例参数。

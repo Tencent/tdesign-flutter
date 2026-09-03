@@ -193,6 +193,47 @@ void main() {
     expect(value.year, isNot(2024));
   });
 
+  testWidgets('父级拒绝选择并用原值重建时恢复滚轮且可再次通知', (tester) async {
+    const value = TDateTimePickerValue(year: 2024, month: 6, day: 15);
+    var changes = 0;
+    late StateSetter rebuild;
+    await tester.pumpWidget(
+      wrap(
+        StatefulBuilder(
+          builder: (context, setState) {
+            rebuild = setState;
+            return TDateTimePicker(
+              value: value,
+              mode: DateTimePickerMode(dateMode: DateMode.monthDay),
+              onChanged: (_) => changes++,
+            );
+          },
+        ),
+      ),
+    );
+    for (var attempt = 0; attempt < 2; attempt++) {
+      await tester.drag(
+        find.byType(ListWheelScrollView).first,
+        const Offset(0, -40),
+      );
+      await tester.pumpAndSettle();
+      expect(changes, greaterThan(attempt));
+      rebuild(() {});
+      await tester.pumpAndSettle();
+      final wheel = tester.widget<DateTimePickerWheel>(
+        find.byType(DateTimePickerWheel),
+      );
+      expect(wheel.snapshot.current, DateTime(2024, 6, 15));
+      final scroll = tester.widget<ListWheelScrollView>(
+        find.byType(ListWheelScrollView).first,
+      );
+      expect(
+        (scroll.controller! as FixedExtentScrollController).selectedItem,
+        5,
+      );
+    }
+  });
+
   testWidgets('时间模式和禁用态', (tester) async {
     await tester.pumpWidget(
       wrap(

@@ -31,6 +31,9 @@ class TDateTimePicker extends StatefulWidget {
   }) : mode = mode ?? DateTimePickerMode(dateMode: DateMode.date);
 
   /// 受控选中值。
+  ///
+  /// 父级接受 [onChanged] 的结果后回传新值；若拒绝选择，使用原值重建，
+  /// 滚轮会恢复到按当前模式、边界和步进归一化后的值。
   final TDateTimePickerValue value;
 
   /// 滚轮列结构。
@@ -146,24 +149,18 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
     final showWeekChanged = oldWidget.showWeek != widget.showWeek;
     final renderLabelChanged = oldWidget.renderLabel != widget.renderLabel;
 
-    if (!modeChanged &&
-        !valueChanged &&
-        !rangeChanged &&
-        !stepsChanged &&
-        !showWeekChanged &&
-        !renderLabelChanged) {
-      return;
-    }
-
-    final controlledValueDiverged =
-        valueChanged && widget.value != _snapshot.toResult();
+    // value 未变化也可能是父级拒绝了滚轮结果。比较归一化后的可见列，
+    // 避免隐藏计算年、范围钳制或缺省字段造成误判。
+    final controlledValueDiverged = valueChanged
+        ? widget.value != _snapshot.toResult()
+        : _createSnapshot().toResult() != _snapshot.toResult();
     final configurationChanged =
         modeChanged ||
         rangeChanged ||
         stepsChanged ||
         showWeekChanged ||
         renderLabelChanged;
-    if (valueChanged && !controlledValueDiverged && !configurationChanged) {
+    if (!controlledValueDiverged && !configurationChanged) {
       // 父级接受滚轮刚发出的受控值时，内部 snapshot 已经是最新状态。
       // 保留当前 wheel 与 controller，避免每变一格都销毁并中断惯性滚动。
       return;

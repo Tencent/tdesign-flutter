@@ -36,3 +36,12 @@ flutter test --no-pub test/date_time_picker_demo_test.dart test/date_time_picker
 - 本 PR 独立登记 4 项共享消费测试，覆盖真实 TPicker/TDateTimePicker 的默认及自定义底色、渐隐颜色/方向/高度、高亮色和 IgnorePointer。共享原语注释与 Spec 明确不透明底色契约。
 - Flutter 3.32.0 Linux：严格 analyze 零问题，139 项组件测试、3 项调度器自测、5 项 Demo、20 项 Golden 通过，未更新基线。
 - 当前分支生产源码覆盖率重新测得 **669/689 = 97.10%**，通过 95% 门禁。此前 137 项记录包含 134 项组件与 3 项调度器测试，已修正口径。
+
+## API 收敛修复验证（2026-09-04）
+
+本轮 API 收敛验证：Flutter 3.32.0 Linux 与本机 Flutter 3.47.0 严格 analyze 零告警，144 项组件测试、11 项调度/覆盖率工具自测、5 项 Demo 功能测试通过；3.32 Linux 20 项 Golden 无更新参数通过，基线未改。生产代码覆盖率 670/690 = 97.10%。
+
+- 按 componentTestSuites 当前登记逐文件运行 flutter test --no-pub --coverage，再执行 dart run tool/check_component_coverage.dart date_time_picker。工具自测单独统计，不混入组件数。
+- 运行真实 Demo 功能测试和 run_visual_regression.dart 登记的 Golden；没有更新图片。Android/iOS 真机尚未验证。
+- 修复前真实消费测试在自定义 fontBodyLarge=19/27 时读到 Material 默认字号而失败，修复后两消费组件的 token 与显式子树 TextTheme 均通过。共享源码及测试在两个 PR 中相同。
+- 修复前父级拒绝后保留 2024-07-15 而非 2024-06-15；修复后重复选择、父级原值重建均回到正确月份，原有接受值连续惯性滚动回归通过。初次 Golden 命令误用不存在的组件文件，已改用仓库登记的 Demo Golden 入口完成验证。
