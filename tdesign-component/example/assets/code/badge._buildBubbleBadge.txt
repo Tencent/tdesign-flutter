@@ -1,12 +1,14 @@
-Widget _buildBubbleBadge(BuildContext context) {
-    return TBadge(
-      label: '1',
-      variant: TBadgeVariant.small,
-      child: Container(
-        child: const Icon(TIcons.shop),
-        decoration: BoxDecoration(
-            color: context.tTheme.bgColorComponent,
-            borderRadius: BorderRadius.circular(context.tTheme.radiusDefault)),
+Widget _buildBubbleBadge(BuildContext context) => TBadge(
+    label: '领取积分',
+    variant: TBadgeVariant.bubble,
+    child: Theme(
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TButtonThemeData(shape: TButtonShape.square)),
+      child: TButton(
+        size: TButtonSize.medium,
+        icon: const Icon(TIcons.shop),
+        onPressed: () {},
       ),
-    );
-  }
+    ),
+  );

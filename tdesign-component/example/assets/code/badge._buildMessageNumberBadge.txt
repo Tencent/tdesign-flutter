@@ -1,6 +1,0 @@
-Widget _buildMessageNumberBadge(BuildContext context) {
-    return TBadge(
-      label: '$num',
-      child: TText('消息', font: context.tTheme.fontBodyLarge),
-    );
-  }
