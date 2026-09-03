@@ -17,7 +17,7 @@ Upload 等既有 Golden 的字形选择与像素基线。
 `PickerGoldenCJK-Regular.otf` 仅补充 Picker 整页 Golden 新增且既有子集未覆盖的
 字形，字符清单见 `picker_demo_glyphs.txt`。独立加载可避免扩充共享字体改变既有组件的
 像素基线，子集 SHA-256 为
-`39f53858d5fccf2b9190e6063f7f23c21aee6d93f6abaea8d8d82d5a1fca20d5`。
+`83d2e4d3b8ae6282eeab5d8930466e082b29a3a88ac32f19da543ad1b547a107`。
 
 `RadioGoldenCJK-Regular.otf` 使用同一上游与子集参数，字符清单见
 `radio_glyphs.txt`，仅用于 Radio 整页 Golden。子集 SHA-256 为

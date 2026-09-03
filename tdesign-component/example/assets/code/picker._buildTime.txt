@@ -1,0 +1,2 @@
+Widget _buildTime(BuildContext context) =>
+      TCellGroup(cells: [_cell('time', '选择时间', _time, popupTitle: '选择时间')]);

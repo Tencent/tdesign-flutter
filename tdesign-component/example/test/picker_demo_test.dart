@@ -8,6 +8,46 @@ import 'picker_demo_test_spec.dart';
 void main() {
   registerDemoStructureTests(pickerDemoPageTestSpec);
 
+  testWidgets('picker drag drafts are cancelled or committed by the toolbar', (
+    tester,
+  ) async {
+    await pumpDemoPageAtPhoneViewport(
+      tester,
+      pickerDemoPageTestSpec,
+      ThemeMode.light,
+    );
+    final trigger = find.byKey(const ValueKey('picker-city-trigger'));
+    String note() => tester
+        .widgetList<Text>(
+          find.descendant(of: trigger, matching: find.byType(Text)),
+        )
+        .map((text) => text.data ?? '')
+        .join('|');
+    final initial = note();
+    await tester.tap(trigger);
+    await tester.pumpAndSettle();
+    await tester.drag(
+      find.byType(ListWheelScrollView).first,
+      const Offset(0, 80),
+    );
+    await tester.pumpAndSettle();
+    expect(note(), initial);
+    await tester.tap(find.text('取消'));
+    await tester.pumpAndSettle();
+    expect(note(), initial);
+    await tester.tap(trigger);
+    await tester.pumpAndSettle();
+    await tester.drag(
+      find.byType(ListWheelScrollView).first,
+      const Offset(0, 80),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('确定'));
+    await tester.pumpAndSettle();
+    expect(note(), isNot(initial));
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
+
   testWidgets('Picker Demo follows the official trigger order', (tester) async {
     await pumpFullDemoPage(tester, pickerDemoPageTestSpec, ThemeMode.light);
     final keys = ['city', 'time', 'area', 'title', 'without-title'];
@@ -30,7 +70,7 @@ void main() {
     expect(
       find.descendant(
         of: find.byType(TPopupHeader),
-        matching: find.text('选择城市'),
+        matching: find.text('选择地区'),
       ),
       findsOneWidget,
     );
@@ -48,7 +88,7 @@ void main() {
     expect(
       find.descendant(
         of: find.byType(TPopupHeader),
-        matching: find.text('选择城市'),
+        matching: find.text('选择地区'),
       ),
       findsNothing,
     );
@@ -68,7 +108,10 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(find.text('北京市'), findsWidgets);
+    expect(
+      find.descendant(of: trigger, matching: find.text('深圳市')),
+      findsOneWidget,
+    );
     await tester.tap(find.text('确定'));
     await tester.pumpAndSettle();
     expect(
