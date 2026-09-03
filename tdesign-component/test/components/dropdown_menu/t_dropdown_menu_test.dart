@@ -1763,70 +1763,218 @@ void main() {
       expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 0.001));
     });
 
-    testWidgets('auto placement can return during the same active drag', (
-      tester,
-    ) async {
-      final scrollController = ScrollController();
-      addTearDown(scrollController.dispose);
-      await tester.pumpWidget(
-        wrap(
-          SingleChildScrollView(
-            controller: scrollController,
-            child: Column(
-              children: [
-                const SizedBox(height: 400),
-                TDropdownMenu(
-                  animationDuration: Duration.zero,
-                  items: [item('拖动临界', panelHeight: 180)],
+    for (final dpr in <double>[1, 2, 3, 3.25]) {
+      for (final overscroll in <bool>[false, true]) {
+        testWidgets(
+          'auto placement can return during the same active drag at DPR $dpr '
+          '(overscroll: $overscroll)',
+          (tester) async {
+            tester.view.devicePixelRatio = dpr;
+            tester.view.physicalSize = const Size(800, 600) * dpr;
+            addTearDown(tester.view.resetDevicePixelRatio);
+            addTearDown(tester.view.resetPhysicalSize);
+            final scrollController = ScrollController();
+            addTearDown(scrollController.dispose);
+            var overscrollCount = 0;
+            await tester.pumpWidget(
+              wrap(
+                NotificationListener<OverscrollNotification>(
+                  onNotification: (_) {
+                    overscrollCount++;
+                    return false;
+                  },
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    child: Column(
+                      children: [
+                        // Isolate in-bounds placement flips from the separate
+                        // scenario that deliberately triggers platform stretch.
+                        SizedBox(height: overscroll ? 400 : 500),
+                        TDropdownMenu(
+                          animationDuration: Duration.zero,
+                          items: [item('拖动临界', panelHeight: 180)],
+                        ),
+                        const SizedBox(height: 600),
+                      ],
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 600),
-              ],
-            ),
-          ),
-        ),
-      );
-      scrollController.jumpTo(250);
-      await tester.pump();
-      await tester.tap(find.text('拖动临界'));
-      await tester.pumpAndSettle();
+              ),
+            );
+            final initialOffset = overscroll ? 250.0 : 350.5;
+            scrollController.jumpTo(initialOffset);
+            await tester.pump();
+            await tester.tap(find.text('拖动临界'));
+            await tester.pumpAndSettle();
 
-      final panelSurface = find.byKey(
-        const ValueKey<String>('t-dropdown-menu-panel-surface'),
-      );
-      var barRect = tester.getRect(find.byType(TDropdownMenu));
-      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 0.001));
+            final panelSurface = find.byKey(
+              const ValueKey<String>('t-dropdown-menu-panel-surface'),
+            );
+            final barrier = find.byKey(
+              const ValueKey<String>('t-dropdown-menu-overlay'),
+            );
+            final seam = find.byKey(
+              const ValueKey<String>('t-dropdown-menu-anchor-seam'),
+            );
+            void expectAnchored({bool? opensAbove}) {
+              if (!overscroll) {
+                expect(overscrollCount, 0);
+                expect(scrollController.position.outOfRange, isFalse);
+              }
+              final barRect = tester.getRect(find.byType(TDropdownMenu));
+              final panelRect = tester.getRect(panelSurface);
+              final barrierRect = tester.getRect(barrier);
+              final follower = tester.widget<CompositedTransformFollower>(
+                find.byType(CompositedTransformFollower),
+              );
+              final isAbove = follower.targetAnchor == Alignment.topLeft;
+              if (opensAbove != null) {
+                expect(isAbove, opensAbove);
+              }
+              final edge = isAbove ? barRect.top : barRect.bottom;
+              expect(
+                isAbove ? panelRect.bottom : panelRect.top,
+                closeTo(edge, 0.001),
+              );
+              expect(
+                isAbove ? barrierRect.bottom : barrierRect.top,
+                closeTo(edge, 0.001),
+              );
+              final seamRect = tester.getRect(seam);
+              expect(seamRect.top, lessThan(edge));
+              expect(seamRect.bottom, greaterThan(edge));
+            }
 
-      final gesture = await tester.startGesture(const Offset(20, 80));
-      for (var step = 0; step < 5; step++) {
-        await gesture.moveBy(const Offset(0, 52));
-        await tester.pump(const Duration(milliseconds: 16));
-        await tester.pump(const Duration(milliseconds: 16));
+            expect(
+              tester.getRect(find.byType(TDropdownMenu)).top,
+              closeTo(overscroll ? 150 : 149.5, 0.001),
+            );
+            expectAnchored(opensAbove: false);
+            final gesture = await tester.startGesture(const Offset(20, 80));
+            Future<void> moveBy(double dy) async {
+              await gesture.moveBy(Offset(0, dy));
+              // Placement may flip on the second frame, but both frames must
+              // stay attached. Do not settle away an active-drag separation.
+              for (var frame = 0; frame < 2; frame++) {
+                await tester.pump(const Duration(milliseconds: 16));
+                expectAnchored();
+              }
+            }
+
+            for (var step = 0; step < 5; step++) {
+              await moveBy(52.25);
+            }
+            expect(scrollController.offset, lessThan(initialOffset));
+            if (overscroll) {
+              expect(overscrollCount, greaterThan(0));
+            }
+            expectAnchored(opensAbove: true);
+            for (var step = 0; step < 4; step++) {
+              await moveBy(-52.25);
+            }
+            expectAnchored(opensAbove: false);
+
+            await gesture.up();
+            scrollController.jumpTo(initialOffset);
+            // The platform stretch can keep animating after scroll offset stops.
+            for (var frame = 0; frame < 30; frame++) {
+              await tester.pump(const Duration(milliseconds: 16));
+              expectAnchored(opensAbove: false);
+            }
+          },
+        );
       }
-      expect(scrollController.offset, lessThan(250));
-      barRect = tester.getRect(find.byType(TDropdownMenu));
-      // Flutter engines can round the actively dragged anchor by one logical
-      // pixel while preserving the exact above/below placement relationship.
-      expect(tester.getRect(panelSurface).bottom, closeTo(barRect.top, 1));
-      final seam = find.byKey(
-        const ValueKey<String>('t-dropdown-menu-anchor-seam'),
-      );
-      expect(tester.getRect(seam).bottom, greaterThan(barRect.top - 1));
+    }
 
-      for (var step = 0; step < 4; step++) {
-        await gesture.moveBy(const Offset(0, -52));
-        await tester.pump(const Duration(milliseconds: 16));
-        await tester.pump(const Duration(milliseconds: 16));
+    for (final quality in <FilterQuality?>[null, FilterQuality.medium]) {
+      for (final placement in [
+        TDropdownMenuPlacement.above,
+        TDropdownMenuPlacement.below,
+      ]) {
+        testWidgets(
+          'ancestor-only scale $quality keeps $placement panel anchored and tappable',
+          (tester) async {
+            tester.view.devicePixelRatio = 2.5;
+            tester.view.physicalSize = const Size(800, 600) * 2.5;
+            addTearDown(tester.view.resetDevicePixelRatio);
+            addTearDown(tester.view.resetPhysicalSize);
+            final scale = ValueNotifier<double>(1);
+            final controller = TDropdownMenuController();
+            addTearDown(scale.dispose);
+            addTearDown(controller.dispose);
+            var taps = 0;
+            await tester.pumpWidget(
+              wrap(
+                ValueListenableBuilder<double>(
+                  valueListenable: scale,
+                  // Keep the target subtree unchanged: only the ancestor repaints.
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 200),
+                      TDropdownMenu(
+                        controller: controller,
+                        placement: placement,
+                        animationDuration: Duration.zero,
+                        items: [
+                          TDropdownMenuItem(
+                            label: '滤镜锚点',
+                            panelBuilder: (context, panelController) =>
+                                SizedBox(
+                                  height: 80,
+                                  child: TextButton(
+                                    onPressed: () {
+                                      taps++;
+                                      panelController.close();
+                                    },
+                                    child: const Text('确认滤镜选项'),
+                                  ),
+                                ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  builder: (context, value, child) => Transform(
+                    alignment: Alignment.topLeft,
+                    transform: Matrix4.diagonal3Values(1, value, 1),
+                    filterQuality: quality,
+                    child: child,
+                  ),
+                ),
+              ),
+            );
+            await tester.tap(find.text('滤镜锚点'));
+            await tester.pumpAndSettle();
+            final panel = find.byKey(
+              const ValueKey<String>('t-dropdown-menu-panel-surface'),
+            );
+            for (final value in <double>[1.01, 1.08, 1.001, 1, 1.08]) {
+              scale.value = value;
+              await tester.pump(const Duration(milliseconds: 16));
+              expect(controller.isOpen, isTrue);
+              final barRect = tester.getRect(find.byType(TDropdownMenu));
+              final panelRect = tester.getRect(panel);
+              expect(
+                placement == TDropdownMenuPlacement.above
+                    ? panelRect.bottom
+                    : panelRect.top,
+                closeTo(
+                  placement == TDropdownMenuPlacement.above
+                      ? barRect.top
+                      : barRect.bottom,
+                  0.001,
+                ),
+              );
+            }
+            await tester.tap(find.text('确认滤镜选项'));
+            await tester.pumpAndSettle();
+            expect(taps, 1);
+            expect(controller.isOpen, isFalse);
+          },
+        );
       }
-      barRect = tester.getRect(find.byType(TDropdownMenu));
-      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 1));
-
-      await gesture.up();
-      scrollController.jumpTo(250);
-      await tester.pump();
-      await tester.pump();
-      barRect = tester.getRect(find.byType(TDropdownMenu));
-      expect(tester.getRect(panelSurface).top, closeTo(barRect.bottom, 1));
-    });
+    }
 
     testWidgets('auto placement re-evaluates the target panel height', (
       tester,

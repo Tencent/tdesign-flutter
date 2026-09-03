@@ -16,3 +16,9 @@
 - [x] DONE 完成 Flutter 3.32.0 与 latest analyze、组件/Demo 测试和覆盖率门禁
 - [x] DONE 完成真实运行时页面截图验收
 - [x] DONE 完成官方单选菜单点击展开态截图验收与最终 Review
+- [x] DONE 逐帧复现 0.927658px 偏差，定位为越界拉伸滤镜与 Follower 的变换差异，撤回“引擎舍入”判断
+- [x] DONE 拆清普通滚动与边界拉伸范围，恢复严格锚定断言并验证双 SDK / 多 DPR / 小数坐标
+- [x] DONE 修复边界拉伸仿射滤镜下的真实分离，保留页面拉伸与菜单打开行为，不新增 API
+- [x] DONE 双 SDK 验证 72 项组件测试、4 项 Demo 功能测试与严格 analyze，生产覆盖率 98.38%
+- [x] DONE 原有 6 张 Linux Golden 不变，新增明暗拉伸态 2 张并无更新参数复跑 8/8
+- [ ] TODO 真机独立验证非仿射 Impeller shader 路径；不从当前仿射测试和 Linux Golden 推断通过

@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
@@ -568,8 +570,9 @@ class _TDropdownMenuState extends State<TDropdownMenu>
         groupId: _tapRegionGroup,
         onTapOutside: _handleTapOutside,
         onTapUpOutside: _handleTapUpOutside,
-        child: CompositedTransformTarget(
+        child: _DropdownTransformTarget(
           link: _layerLink,
+          trackTransforms: _controller.isOpen,
           child: Container(
             key: _barKey,
             height: theme.barHeight ?? 48,
@@ -1279,5 +1282,113 @@ class _TDropdownMenuState extends State<TDropdownMenu>
         );
       },
     );
+  }
+}
+
+/// Reports affine transforms omitted by image-filter layers to the follower.
+/// The menu itself is still painted through the original ancestor filters.
+class _DropdownTransformTarget extends CompositedTransformTarget {
+  const _DropdownTransformTarget({
+    required super.link,
+    required super.child,
+    required this.trackTransforms,
+  });
+
+  final bool trackTransforms;
+
+  @override
+  RenderLeaderLayer createRenderObject(BuildContext context) {
+    return _DropdownRenderLeaderLayer(
+      link: link,
+      trackTransforms: trackTransforms,
+    );
+  }
+
+  @override
+  void updateRenderObject(
+    BuildContext context,
+    RenderLeaderLayer renderObject,
+  ) {
+    super.updateRenderObject(context, renderObject);
+    (renderObject as _DropdownRenderLeaderLayer).trackTransforms =
+        trackTransforms;
+  }
+}
+
+class _DropdownRenderLeaderLayer extends RenderLeaderLayer {
+  _DropdownRenderLeaderLayer({
+    required super.link,
+    required bool trackTransforms,
+  }) : _trackTransforms = trackTransforms;
+
+  bool _trackTransforms;
+  bool get trackTransforms => _trackTransforms;
+  set trackTransforms(bool value) {
+    if (_trackTransforms == value) {
+      return;
+    }
+    _trackTransforms = value;
+    markNeedsPaint();
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    layer ??= _DropdownLeaderLayer(link: link, target: this);
+    super.paint(context, offset);
+  }
+}
+
+class _DropdownLeaderLayer extends LeaderLayer {
+  _DropdownLeaderLayer({required super.link, required this.target});
+
+  final _DropdownRenderLeaderLayer target;
+  Matrix4? _correction;
+
+  @override
+  bool get alwaysNeedsAddToScene =>
+      target.trackTransforms || super.alwaysNeedsAddToScene;
+
+  @override
+  void addToScene(ui.SceneBuilder builder) {
+    _correction = null;
+    if (target.trackTransforms && target.attached) {
+      final ancestors = <ContainerLayer>[];
+      for (
+        var ancestor = parent;
+        ancestor != null;
+        ancestor = ancestor.parent
+      ) {
+        ancestors.add(ancestor);
+      }
+      final layerTransform = Matrix4.identity();
+      for (var index = ancestors.length - 1; index >= 0; index--) {
+        ancestors[index].applyTransform(
+          index == 0 ? this : ancestors[index - 1],
+          layerTransform,
+        );
+      }
+      super.applyTransform(null, layerTransform);
+
+      // An explicit root includes its view transform, matching the layer tree.
+      RenderObject root = target;
+      while (root.parent != null) {
+        root = root.parent!;
+      }
+      final renderTransform = target.getTransformTo(root);
+      if (!MatrixUtils.matrixEquals(layerTransform, renderTransform)) {
+        _correction = Matrix4.tryInvert(layerTransform)
+          ?..multiply(renderTransform);
+      }
+    }
+    super.addToScene(builder);
+  }
+
+  @override
+  void applyTransform(Layer? child, Matrix4 transform) {
+    super.applyTransform(child, transform);
+    final correction = _correction;
+    if (correction != null) {
+      transform.multiply(correction);
+    }
   }
 }
