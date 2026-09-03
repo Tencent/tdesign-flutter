@@ -9,6 +9,8 @@ import '../../theme/t_theme.dart';
 /// picker(多列滚轮): 中央高亮条与多列 Row 布局外壳
 ///
 /// 供 TPicker、DateTimePickerWheel 共用 UI 壳；列内容与联动逻辑由调用方提供。
+/// 外壳绘制当前 TThemeData 的 bgColorContainer 底色及同色边缘渐隐，
+/// 不透出父面板底色。渐隐高度取 spacer48，且不超过滚轮高度的一半。
 @internal
 class MultiWheelLayout extends StatelessWidget {
   const MultiWheelLayout({
