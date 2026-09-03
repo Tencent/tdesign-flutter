@@ -10,7 +10,9 @@ void main() {
     }
     return MaterialApp(
       theme: theme,
-      home: Scaffold(body: Align(alignment: Alignment.topCenter, child: child)),
+      home: Scaffold(
+        body: Align(alignment: Alignment.topCenter, child: child),
+      ),
     );
   }
 
@@ -19,6 +21,85 @@ void main() {
     TDropdownMenuOption(value: 'b', label: '选项 B', group: '第一组'),
     TDropdownMenuOption(value: 'c', label: '选项 C', disabled: true),
   ];
+
+  for (final columns in [1, 2, 3]) {
+    for (final direction in TextDirection.values) {
+      for (final gap in [12.0, 20.0]) {
+        testWidgets('equal columns $columns $direction gap=$gap', (
+          tester,
+        ) async {
+          final tokens = TThemeData.defaultData().copyWithTThemeData(
+            'dropdown-grid',
+            marginMap: {'spacer12': gap},
+          );
+          await tester.pumpWidget(
+            MaterialApp(
+              theme: TThemeBuilder.light(tokens),
+              builder: (_, child) => Directionality(
+                textDirection: direction,
+                child: child!,
+              ),
+              home: Scaffold(
+                body: Directionality(
+                  textDirection: direction,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: SizedBox(
+                      width: 375.5,
+                      child: TDropdownMenu(
+                        animationDuration: Duration.zero,
+                        items: [
+                          TDropdownMenuItem(
+                            label: 'grid',
+                            panelBuilder: (_, controller) =>
+                                TDropdownMultiSelectPanel<int>(
+                                  controller: controller,
+                                  columns: columns,
+                                  options: List.generate(
+                                    columns + 1,
+                                    (index) => TDropdownMenuOption(
+                                      value: index,
+                                      label: 'item $index',
+                                    ),
+                                  ),
+                                  values: const {},
+                                  onConfirm: (_) {},
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+          await tester.tap(find.text('grid'));
+          await tester.pumpAndSettle();
+          Rect chip(int index) => tester.getRect(
+            find
+                .ancestor(
+                  of: find.text('item $index'),
+                  matching: find.byType(InkWell),
+                )
+                .first,
+          );
+          final expectedWidth = (375.5 - 32 - (columns - 1) * gap) / columns;
+          for (var index = 0; index <= columns; index++) {
+            expect(chip(index).width, closeTo(expectedWidth, 0.001));
+          }
+          for (var index = 1; index < columns; index++) {
+            final actualGap = direction == TextDirection.ltr
+                ? chip(index).left - chip(index - 1).right
+                : chip(index - 1).left - chip(index).right;
+            expect(actualGap, closeTo(gap, 0.001));
+          }
+          expect(chip(columns).left, closeTo(chip(0).left, 0.001));
+          expect(chip(columns).top - chip(0).bottom, closeTo(gap, 0.001));
+        });
+      }
+    }
+  }
 
   test('option is an immutable generic value object', () {
     const option = TDropdownMenuOption<int>(

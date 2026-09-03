@@ -189,7 +189,7 @@ class TDropdownMenu extends StatefulWidget {
     this.showOverlay = true,
     this.closeOnOverlayTap = true,
     this.useRootOverlay = false,
-    this.animationDuration = const Duration(milliseconds: 200),
+    this.animationDuration,
     this.onOpened,
     this.onClosed,
   });
@@ -201,7 +201,12 @@ class TDropdownMenu extends StatefulWidget {
   final bool showOverlay;
   final bool closeOnOverlayTap;
   final bool useRootOverlay;
-  final Duration animationDuration;
+
+  /// 展开、关闭及切换动画时长。
+  ///
+  /// 未指定时使用 [TDropdownThemeData.animationDuration]，再回退到 200ms。
+  /// 显式值（包括 [Duration.zero]）优先于主题；系统禁用动画时始终使用零时长。
+  final Duration? animationDuration;
   final ValueChanged<int>? onOpened;
   final TDropdownMenuClosedCallback? onClosed;
 
@@ -258,9 +263,9 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     if (MediaQuery.maybeOf(context)?.disableAnimations ?? false) {
       return Duration.zero;
     }
-    return widget.animationDuration == const Duration(milliseconds: 200)
-        ? _theme.animationDuration ?? widget.animationDuration
-        : widget.animationDuration;
+    return widget.animationDuration ??
+        _theme.animationDuration ??
+        const Duration(milliseconds: 200);
   }
 
   void _resetAutoPlacement({
@@ -1207,6 +1212,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     _scheduleAutoPlacementCheck(above: above, below: below);
 
     Widget barrier() {
+      final overlayColor = theme.overlayColor ?? const Color(0x99000000);
       return TapRegion(
         groupId: _tapRegionGroup,
         child: Semantics(
@@ -1220,8 +1226,8 @@ class _TDropdownMenuState extends State<TDropdownMenu>
             child: ColoredBox(
               key: const ValueKey<String>('t-dropdown-menu-overlay'),
               color: widget.showOverlay
-                  ? (theme.overlayColor ?? Colors.black54).withValues(
-                      alpha: 0.6 * _animationController.value,
+                  ? overlayColor.withValues(
+                      alpha: overlayColor.a * _animationController.value,
                     )
                   : Colors.transparent,
             ),

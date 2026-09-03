@@ -142,6 +142,121 @@ void main() {
   });
 
   group('rendering and theme', () {
+    for (final instance in <Duration?>[
+      null,
+      Duration.zero,
+      const Duration(milliseconds: 200),
+      const Duration(milliseconds: 350),
+    ]) {
+      for (final themeDuration in <Duration?>[
+        null,
+        const Duration(milliseconds: 800),
+      ]) {
+        testWidgets(
+          'duration priority instance=$instance theme=$themeDuration',
+          (tester) async {
+            var opened = false;
+            await tester.pumpWidget(
+              wrap(
+                TDropdownMenu(
+                  animationDuration: instance,
+                  placement: TDropdownMenuPlacement.below,
+                  onOpened: (_) => opened = true,
+                  items: [item('duration')],
+                ),
+                dropdownTheme: TDropdownThemeData(
+                  animationDuration: themeDuration,
+                ),
+              ),
+            );
+            final expected =
+                instance ?? themeDuration ?? const Duration(milliseconds: 200);
+            expect(
+              tester
+                  .widget<AnimatedRotation>(find.byType(AnimatedRotation))
+                  .duration,
+              expected,
+            );
+            await tester.tap(find.text('duration'));
+            await tester.pump();
+            await tester.pump();
+            await tester.pump(expected);
+            await tester.pumpAndSettle();
+            expect(opened, isTrue);
+          },
+        );
+      }
+    }
+
+    testWidgets(
+      'system reduced motion overrides instance and theme durations',
+      (tester) async {
+        await tester.pumpWidget(
+          wrap(
+            MediaQuery(
+              data: const MediaQueryData(disableAnimations: true),
+              child: TDropdownMenu(
+                animationDuration: const Duration(milliseconds: 200),
+                items: [item('reduced')],
+              ),
+            ),
+            dropdownTheme: const TDropdownThemeData(
+              animationDuration: Duration(milliseconds: 800),
+            ),
+          ),
+        );
+        expect(
+          tester
+              .widget<AnimatedRotation>(find.byType(AnimatedRotation))
+              .duration,
+          Duration.zero,
+        );
+        await tester.tap(find.text('reduced'));
+        await tester.pumpAndSettle();
+        expect(find.text('reduced panel'), findsOneWidget);
+      },
+    );
+
+    for (final color in <Color?>[
+      null,
+      const Color(0x330000FF),
+      Colors.transparent,
+      Colors.red,
+    ]) {
+      testWidgets('overlay preserves alpha and RGB for $color', (tester) async {
+        await tester.pumpWidget(
+          wrap(
+            TDropdownMenu(
+              animationDuration: const Duration(milliseconds: 200),
+              items: [item('alpha')],
+            ),
+            dropdownTheme: TDropdownThemeData(overlayColor: color),
+          ),
+        );
+        final expected = color ?? const Color(0x99000000);
+        Color barrierColor() => tester
+            .widget<ColoredBox>(
+              find.byKey(const ValueKey<String>('t-dropdown-menu-overlay')),
+            )
+            .color;
+        await tester.tap(find.text('alpha'));
+        await tester.pump();
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(barrierColor().a, closeTo(expected.a * 0.5, 0.001));
+        await tester.pumpAndSettle();
+        expect(barrierColor().a, expected.a);
+        expect(barrierColor().r, expected.r);
+        expect(barrierColor().g, expected.g);
+        expect(barrierColor().b, expected.b);
+        await tester.tap(find.text('alpha'));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(barrierColor().a, closeTo(expected.a * 0.5, 0.001));
+        await tester.pumpAndSettle();
+      });
+    }
+
     testWidgets('default trigger follows the Figma token contract', (
       tester,
     ) async {
@@ -427,7 +542,10 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
       var align = tester.widget<Align>(
-        find.descendant(of: find.byKey(revealKey), matching: find.byType(Align)),
+        find.descendant(
+          of: find.byKey(revealKey),
+          matching: find.byType(Align),
+        ),
       );
       expect(align.alignment, AlignmentDirectional.topStart);
       expect(align.heightFactor, greaterThan(0));
@@ -435,7 +553,10 @@ void main() {
 
       await tester.pumpAndSettle();
       align = tester.widget<Align>(
-        find.descendant(of: find.byKey(revealKey), matching: find.byType(Align)),
+        find.descendant(
+          of: find.byKey(revealKey),
+          matching: find.byType(Align),
+        ),
       );
       expect(align.heightFactor, 1);
 
@@ -443,7 +564,10 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
       align = tester.widget<Align>(
-        find.descendant(of: find.byKey(revealKey), matching: find.byType(Align)),
+        find.descendant(
+          of: find.byKey(revealKey),
+          matching: find.byType(Align),
+        ),
       );
       expect(align.heightFactor, greaterThan(0));
       expect(align.heightFactor, lessThan(1));
@@ -464,7 +588,10 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
       align = tester.widget<Align>(
-        find.descendant(of: find.byKey(revealKey), matching: find.byType(Align)),
+        find.descendant(
+          of: find.byKey(revealKey),
+          matching: find.byType(Align),
+        ),
       );
       expect(align.alignment, AlignmentDirectional.bottomStart);
       expect(align.heightFactor, greaterThan(0));

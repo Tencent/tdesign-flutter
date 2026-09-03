@@ -87,8 +87,10 @@ class TDropdownSingleSelectPanel<T> extends StatelessWidget {
 
 /// 多选筛选面板。
 ///
-/// [values] 仅作为每次打开时的已提交值。选项点击只更新面板内部草稿，
+/// [values] 表示已提交值，每次打开时用于初始化草稿。选项点击只更新面板内部草稿，
 /// 点击确认后才通过 [onConfirm] 提交。
+/// 打开期间 [values] 变化时，尚未修改的草稿会同步；已有修改的草稿保留用户编辑。
+/// 未确认即关闭会丢弃草稿，再次打开时使用最新的 [values]。
 class TDropdownMultiSelectPanel<T> extends StatefulWidget {
   const TDropdownMultiSelectPanel({
     super.key,
@@ -220,26 +222,23 @@ class _TDropdownMultiSelectPanelState<T>
                 : context.tTheme.spacer12,
           ),
           child: Row(
-            children: List<Widget>.generate(columns, (column) {
+            children: List<Widget>.generate(columns * 2 - 1, (slot) {
+              if (slot.isOdd) {
+                return SizedBox(width: context.tTheme.spacer12);
+              }
+              final column = slot ~/ 2;
               if (column >= rowOptions.length) {
                 return const Expanded(child: SizedBox.shrink());
               }
               final option = rowOptions[column];
               final selected = _draft.contains(option.value);
               return Expanded(
-                child: Padding(
-                  padding: EdgeInsetsDirectional.only(
-                    end: column == widget.columns - 1
-                        ? 0
-                        : context.tTheme.spacer12,
-                  ),
-                  child: _DropdownOptionChip(
-                    label: option.label,
-                    selected: selected,
-                    disabled: option.disabled,
-                    theme: theme,
-                    onTap: option.disabled ? null : () => _toggle(option.value),
-                  ),
+                child: _DropdownOptionChip(
+                  label: option.label,
+                  selected: selected,
+                  disabled: option.disabled,
+                  theme: theme,
+                  onTap: option.disabled ? null : () => _toggle(option.value),
                 ),
               );
             }),

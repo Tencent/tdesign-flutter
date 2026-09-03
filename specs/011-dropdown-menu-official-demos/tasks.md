@@ -1,5 +1,8 @@
 # 实施任务
 
+- [x] DONE 修复多列等宽、遮罩透明度和动画时长优先级，补充草稿契约文档
+- [x] DONE 双版本组件/Demo/工具回归、严格 analyze、生产覆盖率与 Linux Golden 验证
+
 - [x] DONE 复核 CNB Review 与官方 Demo 缺口
 - [x] DONE 用现有 API 补齐官方单选、同栏 1/2/3 列和双禁用 Demo
 - [x] DONE 从公开页移除 Flutter 扩展分组与内部单元测试模块

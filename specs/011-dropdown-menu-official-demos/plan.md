@@ -15,16 +15,32 @@
 
 ## API 变化
 
-- 无新增、删除或签名变更。
+- 无新增或删除参数。实现审查后将 TDropdownMenu.animationDuration 从 Duration 改为 Duration?，默认 null 表示继承主题；内部唯一解析链为 instance ?? theme ?? 200ms。
 - `TDropdownMenuController` 继续只负责跨树打开/关闭命令；选中值由声明式 `value(s) + callback` 持有，PanelController 只关闭当前局部面板，三者没有第二完成源。
 - `placement`、`scrollable`、overlay 行为和 Theme 字段保留独立职责，不把 Figma 的 `active/disabled/checked` 组件属性新增为 Flutter 公共枚举。
 
 ## 风险与取舍
 
-- 默认视觉变化会更新 DropdownMenu Golden，但不改变公开 API 签名、选中状态所有权或事件时序，因此不属于 breaking change。
+- animationDuration 字段可空属于 breaking change：现有构造调用无需调整，直接读取该字段并当作 Duration 使用的代码需处理 null；若只需原始配置默认值可用 menu.animationDuration ?? const Duration(milliseconds: 200)，实际生效时长还受主题与系统减少动画设置影响。选中状态所有权、默认 200ms 和事件时序不变。
 - Flutter 扩展能力不进入公开 Demo，避免被误解为官方一对一场景。
 
 ## 验证策略
+
+### 本轮架构取舍
+
+- 不整体迁移 Overlay。Flutter 3.32.0 的 RawMenuAnchor 在祖先滚动时关闭菜单，不符合现有滚动跟随契约；OverlayPortal 可改善继承与销毁归属，但不能直接替代当前仿射滤镜修正，也不能证明非仿射 shader 对齐。三处已复现根因分别在网格、颜色与默认值解析，不在 Overlay 生命周期。
+- 多列改成 Expanded 选项之间插入 SizedBox，保留末行空列；不新增布局参数。
+- 遮罩先解析完整 Color，再按原 alpha 乘动画进度；保留唯一黑色 60% 默认，不伪借无关 token。
+- 补充 1/2/3 列、RTL、非整数宽度、末行、定制 spacer12、遮罩透明度与动画过程、实例/主题/内置时长及系统减少动画测试。仅更新多选展开态明暗 Golden。
+
+依据：小程序 ae55fb050b7a9474c33752b45b71c741f37ed872 的 dropdown-item.wxml 使用 repeat(columns, 1fr)，LESS 独立配置 grid-gap；保留本 Spec 已冻结的 Figma 尺寸与交互契约。Flutter 的 [Follower 文档](https://api.flutter.dev/flutter/widgets/CompositedTransformFollower-class.html) 与 [OverlayPortal 文档](https://api.flutter.dev/flutter/widgets/OverlayPortal-class.html) 分别说明合成锚定及 Portal 的继承/生命周期收益；本轮不是把 Portal 视为不合理，而是不将其与三个局部修复捆绑迁移。
+
+| 涉及 API | 状态源与优先级 | 处理 |
+| --- | --- | --- |
+| columns / spacer12 | columns 只控制列数，token 控制独立间距，Expanded 分配剩余宽度 | 保留 API，修复内部布局 |
+| overlayColor / showOverlay | 完整颜色由 Theme 指定，showOverlay 只控制可见性，动画乘原 alpha | 保留 API，不增加 opacity 参数 |
+| animationDuration | nullable 实例 > nullable Theme > 200ms；系统减少动画优先 | 修改实例字段空值契约，不增加第二默认源 |
+| values / onConfirm | 外部已提交值，内部草稿，确认提交；脏草稿不被外部更新覆盖 | 保留行为，补充 dartdoc |
 
 - 组件测试：全部 `test/components/dropdown_menu/`。
 - Example 测试：官方入口矩阵、单选展开、三列 348px 展开态与禁用。

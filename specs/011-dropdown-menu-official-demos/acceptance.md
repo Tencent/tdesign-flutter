@@ -1,5 +1,7 @@
 # 验收记录
 
+下方按阶段保留历史结果；当前实现审查修复与兼容性结论见末节。
+
 ## 验证环境
 
 - 分支：基于 `origin/develop` 的本地审查工作树
@@ -109,3 +111,25 @@
 - Flutter 3.32.0 Linux 与 Flutter 3.47.0：DropdownMenu 72 + Dialog 32 + 调度器工具 11，合计各 115/115；四组件 Demo 功能各 29/29；组件及 Example 严格 analyze 均 0 issues。
 - Flutter 3.32.0 Linux 无更新参数复跑共享该字体的 DropdownMenu、Dialog、ActionSheet、NoticeBar Golden，共 44/44，最终精确比较无差异。
 - 本轮解决合并冲突及其字体回归，没有新增公开 API；边界拉伸的非仿射 Impeller 真机验证限制仍保留。上述结果是合并后本地验证，推送后的远端 CI 和 CodeBuddy Review 需基于新 head 重新确认。
+
+## 2026-09-03 实现审查问题修复
+
+- 基线为 c5ef738d，本轮未提交或推送。上一轮仓库外测试复现三处缺陷：800px 测试视口中双列宽度 372/384px；自定义遮罩 alpha=0.2 被覆盖为 0.6；显式 200ms 被主题 800ms 覆盖。
+- 列间距从 Expanded 内移到等宽选项之间；继续使用 spacer12，保留末行空列。遮罩按完整 Color 的 alpha 乘动画进度，默认黑色 60% 不变。动画使用 nullable 实例 > Theme > 200ms，并保留系统减少动画的最高优先级。
+- 公开 API 兼容性：animationDuration 字段改为 Duration?，null 表示未指定。构造调用不变；直接读取并按非空 Duration 使用的代码需处理 null。该字段签名变化按 breaking 记录，具体迁移说明见 plan.md。没有新增参数或选择状态源；多选草稿行为不变，补充了外部值更新规则的 dartdoc。
+- 评估 Flutter 3.32.0 RawMenuAnchor、OverlayPortal 和 Follower 后保留原 Overlay 架构。未改变锚点、滚动跟随、单侧遮罩、关闭时序、焦点、仿射修正或 0.001 几何容差。
+
+| 验证 | Flutter 3.32.0 Linux | Flutter 3.47.0 macOS |
+| --- | --- | --- |
+| 组件功能测试 | 97/97 | 97/97 |
+| 回归调度器自测 | 11/11 | 11/11 |
+| Demo 功能测试 | 4/4 | 4/4 |
+| 组件与 Example 严格 analyze | 0 issues | 0 issues |
+| 生产源码 LH/LF | 970/986 = 98.38% | 970/986 = 98.38% |
+
+- 命令：组件目录执行 `flutter test --no-pub test/components/dropdown_menu test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart --coverage`，随后 `dart run tool/check_component_coverage.dart dropdown_menu`；Example 运行 `flutter test --no-pub test/dropdown_menu_page_test.dart`；两目录分别运行 `flutter analyze --no-pub --fatal-infos`。
+- 25 个新增组件用例覆盖 1/2/3 列、RTL/LTR、375.5px 非整数宽度、末行不足列数、默认/自定义 spacer12、实例/主题/内置动画优先级、减少动画，以及四种遮罩颜色的展开/收起 alpha 与完整 RGB。
+- Linux Golden 初次比较仅两张多选展开态失败：light 15335px（5.04%）、dark 15292px（5.02%）。人工检查实际图、旧图和差异图，变化仅为等宽选项及居中文字，面板高度、按钮、页面和遮罩不变。只更新这两张基线后，不带更新参数复跑 `test/dropdown_menu_page_golden_test.dart`：8/8，精确比较最终 diff=0，无新增容差，其余 6 张不变。
+- 测试隔离：Linux 使用 CI 同款 Flutter 3.32.0 镜像和独立快照，组件与 Example 分别恢复依赖；不混用 macOS/高 SDK 编译缓存。新用例继续放在已登记文件中，CI 入口及清单同步自测通过。
+- 本次没有重新进行真机操作或取得新的 Figma 截图；沿用已冻结设计契约。非仿射 Impeller shader 路径仍未独立验证，不能从仿射测试或 Linux Golden 推断通过。
+- 待推送时的用户日志：`fix(dropdown-menu): 修复多列选项宽度不一致`；`fix(dropdown-menu): 保留自定义遮罩透明度`；`breaking(dropdown-menu): animationDuration 改为可空以明确主题继承，修复显式时长覆盖优先级`。不手改自动生成 CHANGELOG，本轮不更新远端 PR。
