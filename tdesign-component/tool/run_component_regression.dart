@@ -24,6 +24,7 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/button/t_button_widget_test.dart',
   ]),
   ComponentTestSuite('date_time_picker', [
+    'test/components/picker/picker_consumers_theme_test.dart',
     'test/components/date_time_picker/t_date_time_picker_test.dart',
     'test/components/date_time_picker/t_date_time_picker_wheel_test.dart',
     'test/t_date_time_picker_test.dart',

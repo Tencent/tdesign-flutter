@@ -38,6 +38,9 @@
 
 ## 验收
 
+- 共用滚轮外壳自带当前子树 `bgColorContainer` 底色，不透出父面板背景；边缘渐隐使用相同底色至透明，高度取 `spacer48` 并限制在面板半高以内。定制面板色需通过当前子树 TDesign token 配置。
+- `picker_consumers_theme_test.dart` 在本 PR 的组件套件中登记，分别经 TPicker 与 TDateTimePicker 验证默认/定制 token 下的底色、渐隐颜色和方向、高度、高亮色及不拦截指针。两个 PR 可独立执行这组消费验证。
+
 - 独立面板的受控、禁用、边界、主题路径通过组件测试；Demo 验证完整实例顺序、初值、真实点击/拖动、取消与确认。
 - Flutter 3.32.0、3.47.0 严格 analyze 和非视觉回归；生产代码 LH/LF >=95%。
 - 仅 Flutter 3.32.0 Linux 更新/比较 Golden，固定 375px、DPR 1、字体缩放 1、中文测试字体，覆盖完整页面与实际打开的各场景、light/dark。状态矩阵另设 420×180。

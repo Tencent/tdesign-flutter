@@ -97,6 +97,26 @@ void main() {
     expect(wheel.snapshot.current, DateTime(2024, 2, 24));
   });
 
+  testWidgets('月日值与范围均无年份时使用 2000 并保留闰日', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        TDateTimePicker(
+          value: const TDateTimePickerValue(month: 2, day: 29),
+          mode: DateTimePickerMode(dateMode: DateMode.monthDay),
+          start: const TDateTimePickerValue(month: 2, day: 20),
+          end: const TDateTimePickerValue(month: 3, day: 10),
+          onChanged: (_) {},
+        ),
+      ),
+    );
+    final wheel = tester.widget<DateTimePickerWheel>(
+      find.byType(DateTimePickerWheel),
+    );
+    expect(wheel.snapshot.current, DateTime(2000, 2, 29));
+    expect(wheel.start, DateTime(2000, 2, 20));
+    expect(wheel.end, DateTime(2000, 3, 10));
+  });
+
   testWidgets('受控日期模式渲染、更新和回调', (tester) async {
     var value = const TDateTimePickerValue(year: 2024, month: 2, day: 29);
     var changed = 0;
