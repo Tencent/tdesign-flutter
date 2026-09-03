@@ -40,6 +40,8 @@ class TDropdownThemeData extends ThemeExtension<TDropdownThemeData> {
   final Color? disabledIconColor;
   final double? iconSize;
   final Color? panelBackgroundColor;
+
+  /// 遮罩颜色，包含透明度。未指定时为黑色 60%，动画按展开进度缩放透明度。
   final Color? overlayColor;
   final double? optionHeight;
   final EdgeInsetsGeometry? optionPadding;
@@ -52,6 +54,8 @@ class TDropdownThemeData extends ThemeExtension<TDropdownThemeData> {
   final BorderRadius? optionBorderRadius;
   final EdgeInsetsGeometry? actionAreaPadding;
   final double? actionGap;
+
+  /// 菜单未显式指定动画时长时使用的子树默认值，最终回退到 200ms。
   final Duration? animationDuration;
 
   TDropdownThemeData merge(TDropdownThemeData? other) {
