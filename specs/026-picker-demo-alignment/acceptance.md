@@ -45,3 +45,11 @@ flutter test --no-pub test/picker_demo_test.dart test/picker_demo_golden_test.da
 - 按 componentTestSuites 当前登记逐文件运行 flutter test --no-pub --coverage，再执行 dart run tool/check_component_coverage.dart picker。工具自测单独统计，不混入组件数。
 - 运行真实 Demo 功能测试和 run_visual_regression.dart 登记的 Golden；没有更新图片。Android/iOS 真机尚未验证。
 - 修复前真实消费测试在自定义 fontBodyLarge=19/27 时读到 Material 默认字号而失败，修复后两消费组件的 token 与显式子树 TextTheme 均通过。共享源码及测试在两个 PR 中相同。
+
+## develop 合并与视觉复核（2026-09-04）
+
+- 合入 develop `c6524c2c`。实际冲突为六个共享登记文件：两套 CI 功能测试入口、字体说明及组件/覆盖率/视觉调度清单；保留 Calendar 与 Picker 两边登记。组件生产源码没有冲突。
+- 复核既有 Figma 分支截图与 375×812 浅色/深色 Golden。默认面板高度 200、五项、行高 40；选中条宽 343、左右 16、圆角 6；列内容宽 311，三列时每列约 103.67；上下渐隐高 48。背景、高亮、普通/选中/禁用文字使用当前 TDesign 语义 token。没有发现需要改动生产样式或扩展 API 的问题。
+- Flutter 3.32.0 Linux 离线严格 analyze 通过；39 项组件测试、11 项调度/覆盖率自测、5 项 Demo 功能测试及 12 项 Golden 通过，未更新基线。Picker 生产覆盖率 336/342 = 98.25%。
+- Flutter 3.47.0 严格 analyze 通过；组件与工具测试合计 54 项通过，Picker/Calendar Demo 功能测试合计 11 项通过。
+- 此次视觉结论基于仓库已保存的 Figma 截图、源码与固定环境 Golden，未重新读取 Figma 节点属性，未新增 Android/iOS 真机验证；不声称跨平台逐像素一致。

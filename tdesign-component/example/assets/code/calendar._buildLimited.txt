@@ -1,0 +1,17 @@
+Widget _buildLimited(BuildContext context) => TCellGroup(
+    cells: [
+      TCell(
+        key: const ValueKey('calendar-limited-trigger'),
+        title: const TText('含不可选的日期'),
+        note: _dateNote(_limitedValue),
+        arrow: true,
+        onTap: () => _showCalendar(
+          variant: TCalendarVariant.single,
+          value: _limitedValue,
+          minDate: DateTime(2022, 2, 18),
+          maxDate: DateTime(2022, 3),
+          onConfirm: (value) => setState(() => _limitedValue = value),
+        ),
+      ),
+    ],
+  );

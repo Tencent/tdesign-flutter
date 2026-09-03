@@ -33,16 +33,14 @@ void main() {
   });
 
   group('TCalendarCellModel', () {
-    test('selectType 随 typeNotifier 更新', () {
+    test('selectType 是日期格快照状态', () {
       final cell = TCalendarCellModel(
         date: DateTime(2025, 6, 15),
-        typeNotifier: DateSelectTypeNotifier(DateSelectType.empty),
+        selectType: DateSelectType.empty,
         isLastDayOfMonth: false,
       );
 
       expect(cell.selectType, DateSelectType.empty);
-      cell.typeNotifier.setType(DateSelectType.selected);
-      expect(cell.selectType, DateSelectType.selected);
     });
   });
 }
