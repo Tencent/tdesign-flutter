@@ -65,11 +65,19 @@ class TCalendar extends StatefulWidget {
 
     /// 滚动锚点日期。
     this.anchorDate,
-  })  : assert(minDate == null || maxDate == null || minDate.isBefore(maxDate),
-            'minDate 必须早于 maxDate'),
-        minDate = minDate ?? _getDefaultMinDate(),
-        maxDate = maxDate ?? _getDefaultMaxDate(),
-        monthTitleBuilder = monthTitleBuilder ?? _defaultMonthTitleBuilder;
+  }) : assert(
+         firstDayOfWeek >= 0 && firstDayOfWeek <= 6,
+         'firstDayOfWeek 必须在 0 到 6 之间',
+       ),
+       assert(
+         minDate == null ||
+             maxDate == null ||
+             !_dateOnly(minDate).isAfter(_dateOnly(maxDate)),
+         'minDate 不能晚于 maxDate',
+       ),
+       minDate = minDate == null ? _getDefaultMinDate() : _dateOnly(minDate),
+       maxDate = maxDate == null ? _getDefaultMaxDate() : _dateOnly(maxDate),
+       monthTitleBuilder = monthTitleBuilder ?? _defaultMonthTitleBuilder;
 
   /// 第一天从星期几开始，0 = 周日，1 = 周一，…，6 = 周六。默认 0（周日）。
   final int firstDayOfWeek;
@@ -132,6 +140,8 @@ class TCalendar extends StatefulWidget {
   // ---------------------------------------------------------------------------
   static DateTime _getDefaultMinDate() => DateTime(1970, 1, 1);
   static DateTime _getDefaultMaxDate() => DateTime(2100, 12, 31);
+  static DateTime _dateOnly(DateTime date) =>
+      DateTime(date.year, date.month, date.day);
   static const double _kWeekdayHeight = 46.0;
 
   // ---------------------------------------------------------------------------
@@ -232,7 +242,8 @@ class _TCalendarState extends State<TCalendar> {
     final verticalGap = _style.verticalGap ?? context.tTheme.spacer8;
 
     final calendar = Container(
-      height: Theme.of(context).extension<TCalendarThemeData>()?.height ??
+      height:
+          Theme.of(context).extension<TCalendarThemeData>()?.height ??
           _calcInlineDefaultHeight(verticalGap),
       width: double.infinity,
       decoration: _style.decoration,
@@ -246,9 +257,7 @@ class _TCalendarState extends State<TCalendar> {
             weekdayHeight: _style.weekdayHeight,
             weekdayNames: weekdayNames,
           ),
-          Expanded(
-            child: _buildCalendarBody(verticalGap),
-          ),
+          Expanded(child: _buildCalendarBody(verticalGap)),
         ],
       ),
     );
@@ -368,13 +377,13 @@ class _TCalendarState extends State<TCalendar> {
 
   /// 内嵌模式下不传 `height` 时的默认高度。
   ///
-  /// 布局 = weekday(46) + monthTitle(22) + 5行(cellHeight + verticalGap) + bodyPadding*2
+  /// 布局 = weekday(46) + monthTitle(22) + 6行(cellHeight + verticalGap) + bodyPadding*2
   double _calcInlineDefaultHeight(double verticalGap) {
     const weekdayHeight = TCalendar._kWeekdayHeight;
     final monthTitleHeight = _style.monthTitleHeight;
     final cellHeight = _style.cellHeight;
     final bodyPadding = _style.bodyPadding ?? context.tTheme.spacer16;
-    const visibleRows = 5;
+    const visibleRows = 6;
     return weekdayHeight +
         monthTitleHeight +
         visibleRows * (cellHeight + verticalGap) +

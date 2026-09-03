@@ -1,0 +1,16 @@
+Widget _buildInline(BuildContext context) => Column(
+    children: [
+      Padding(
+        padding: EdgeInsets.all(context.tTheme.spacer16),
+        child: const TText('日历标题'),
+      ),
+      TCalendar(
+        key: const ValueKey('calendar-inline-panel'),
+        value: _inlineValue,
+        variant: TCalendarVariant.multiple,
+        minDate: _referenceDate,
+        maxDate: _referenceDate.add(const Duration(days: 180)),
+        onChanged: (value) => setState(() => _inlineValue = value),
+      ),
+    ],
+  );

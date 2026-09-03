@@ -23,6 +23,15 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/button/t_button_theme_test.dart',
     'test/components/button/t_button_widget_test.dart',
   ]),
+  ComponentTestSuite('calendar', [
+    'test/components/calendar/t_calendar_body_test.dart',
+    'test/components/calendar/t_calendar_cell_test.dart',
+    'test/components/calendar/t_calendar_theme_test.dart',
+    'test/components/calendar/t_calendar_widget_test.dart',
+    'test/t_calendar_lunar_test.dart',
+    'test/t_calendar_on_change_init_test.dart',
+    'test/t_calendar_test.dart',
+  ]),
   ComponentTestSuite('tag', [
     'test/components/tag/t_select_tag_test.dart',
     'test/components/tag/t_tag_test.dart',
