@@ -8,6 +8,7 @@ import 't_calendar_cell.dart';
 import 't_calendar_header.dart';
 import 't_calendar_style.dart';
 import 't_calendar_theme_data.dart';
+import 't_calendar_types.dart';
 
 export 't_calendar_cell.dart'
     show
@@ -16,7 +17,7 @@ export 't_calendar_cell.dart'
         TCalendarSubtitleBuilder,
         TCalendarCellBuilder,
         TCalendarMonthTitleBuilder;
-export 't_calendar_types.dart' show DateSelectType;
+export 't_calendar_types.dart' show DateSelectType, TCalendarFirstDayOfWeek;
 
 // ---------------------------------------------------------------------------
 // TCalendar — 纯日历组件
@@ -32,8 +33,8 @@ class TCalendar extends StatefulWidget {
     /// 受控选中日期。
     required this.value,
 
-    /// 每周起始日，0 表示周日，6 表示周六。
-    this.firstDayOfWeek = 0,
+    /// 每周从星期几开始，默认从星期日开始。
+    this.firstDayOfWeek = TCalendarFirstDayOfWeek.sunday,
 
     /// 最小可选日期。
     DateTime? minDate,
@@ -65,10 +66,6 @@ class TCalendar extends StatefulWidget {
     /// 滚动锚点日期。
     this.anchorDate,
   }) : assert(
-         firstDayOfWeek >= 0 && firstDayOfWeek <= 6,
-         'firstDayOfWeek 必须在 0 到 6 之间',
-       ),
-       assert(
          minDate == null ||
              maxDate == null ||
              !_dateOnly(minDate).isAfter(_dateOnly(maxDate)),
@@ -78,8 +75,8 @@ class TCalendar extends StatefulWidget {
        maxDate = maxDate == null ? _getDefaultMaxDate() : _dateOnly(maxDate),
        monthTitleBuilder = monthTitleBuilder ?? _defaultMonthTitleBuilder;
 
-  /// 第一天从星期几开始，0 = 周日，1 = 周一，…，6 = 周六。默认 0（周日）。
-  final int firstDayOfWeek;
+  /// 每周从星期几开始，默认从星期日开始。
+  final TCalendarFirstDayOfWeek firstDayOfWeek;
 
   /// 最小可选的日期，默认 1970-01-01
   final DateTime minDate;
@@ -249,7 +246,7 @@ class _TCalendarState extends State<TCalendar> {
       child: Column(
         children: [
           TCalendarHeader(
-            firstDayOfWeek: widget.firstDayOfWeek,
+            firstDayOfWeek: widget.firstDayOfWeek.index,
             weekdayGap: _style.weekdayGap ?? context.tTheme.spacer4,
             padding: _style.bodyPadding ?? context.tTheme.spacer16,
             weekdayStyle: _style.weekdayStyle,
@@ -274,7 +271,7 @@ class _TCalendarState extends State<TCalendar> {
   Widget _buildCalendarBody(double verticalGap) {
     return TCalendarBody(
       type: widget.variant,
-      firstDayOfWeek: widget.firstDayOfWeek,
+      firstDayOfWeek: widget.firstDayOfWeek.index,
       minDate: widget.minDate,
       maxDate: widget.maxDate,
       value: widget._value,

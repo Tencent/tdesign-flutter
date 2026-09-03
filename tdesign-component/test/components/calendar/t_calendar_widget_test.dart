@@ -93,7 +93,7 @@ void main() {
     testWidgets('firstDayOfWeek / height / min-max 参数可构建', (tester) async {
       await tester.pumpWidget(wrap(TCalendar(
         onChanged: (_) {},
-        firstDayOfWeek: 1,
+        firstDayOfWeek: TCalendarFirstDayOfWeek.monday,
         minDate: DateTime(2026, 1, 1),
         maxDate: DateTime(2026, 12, 31),
         value: [DateTime(2026, 6, 15)],
@@ -131,11 +131,13 @@ void main() {
       expect(find.text('31'), findsOneWidget);
     });
 
-    test('firstDayOfWeek 只接受 0 到 6', () {
+    test('firstDayOfWeek 使用星期枚举', () {
       expect(
-        () => TCalendar(firstDayOfWeek: 7, value: const [], onChanged: (_) {}),
-        throwsAssertionError,
+        TCalendar(firstDayOfWeek: TCalendarFirstDayOfWeek.monday, value: const [], onChanged: (_) {})
+            .firstDayOfWeek,
+        TCalendarFirstDayOfWeek.monday,
       );
+      expect(TCalendarFirstDayOfWeek.values, hasLength(7));
     });
 
     testWidgets('点击单元格触发 onChanged（single）', (tester) async {

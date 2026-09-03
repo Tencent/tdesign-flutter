@@ -16,7 +16,7 @@
 | value / onChanged | 必填选中列表；回调为空禁用；挂载不回调 | 唯一受控状态，保留 |
 | variant | single 默认，multiple/range 改变选择行为 | 已发布选择模式，不增加另一 type/status；命名历史债务不在本次重命名 |
 | minDate / maxDate | 默认 1970-01-01～2100-12-31，按自然日、允许单日范围 | 小程序默认今天～半年后；保留 Flutter 既有边界，不因 UI 修复改变用户数据范围 |
-| firstDayOfWeek | 0 默认，0～6 | 与小程序一致，断言合法值 |
+| firstDayOfWeek | `TCalendarFirstDayOfWeek.sunday` 默认 | 使用星期枚举，避免无效整数；枚举顺序与内部星期索引一致 |
 | anchorDate / animateTo | 可见月份定位 / 默认无动画 | 不拥有选择值；保留声明式定位 |
 | onMonthChanged | 可见月份通知 | 不重复选择通知；保留 |
 | cellBuilder / subtitleBuilder | 整格替换 / 默认日期下方内容；整格优先 | 用 builder 表达内容，不引入业务节日字段 |

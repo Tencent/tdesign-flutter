@@ -18,3 +18,14 @@ enum DateSelectType {
   /// 未选中且可选。
   empty,
 }
+
+/// 每周的起始日。
+enum TCalendarFirstDayOfWeek {
+  sunday,
+  monday,
+  tuesday,
+  wednesday,
+  thursday,
+  friday,
+  saturday,
+}
