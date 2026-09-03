@@ -2,11 +2,10 @@ Widget _buildLimited(BuildContext context) => TCellGroup(
     cells: [
       TCell(
         key: const ValueKey('calendar-limited-trigger'),
-        title: const TText('含不可选的日历'),
-        note: TText(_formatDates(_limitedValue)),
+        title: const TText('含不可选的日期'),
+        note: _dateNote(_limitedValue),
         arrow: true,
         onTap: () => _showCalendar(
-          title: '选择日期',
           variant: TCalendarVariant.single,
           value: _limitedValue,
           minDate: DateTime(2022, 2, 18),

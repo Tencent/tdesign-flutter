@@ -1,11 +1,10 @@
 Widget _buildRange(BuildContext context) => InkWell(
     key: const ValueKey('calendar-range-trigger'),
     onTap: () => _showCalendar(
-      title: '选择日期区间',
       variant: TCalendarVariant.range,
       value: _rangeValue,
-      minDate: DateTime(2024, 11),
-      maxDate: DateTime(2025),
+      minDate: DateTime(2022, 2),
+      maxDate: DateTime(2022, 4),
       onConfirm: (value) => setState(() => _rangeValue = value),
     ),
     child: Container(

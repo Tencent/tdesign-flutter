@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
+import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/iterable_ext.dart';
 import '../text/t_text.dart';
@@ -33,22 +34,19 @@ class TCalendarSubtitleContext {
 ///   return TText(text, style: TextStyle(fontSize: 9));
 /// },
 /// ```
-typedef TCalendarSubtitleBuilder = Widget? Function(
-  BuildContext context,
-  TCalendarSubtitleContext subtitleContext,
-);
+typedef TCalendarSubtitleBuilder =
+    Widget? Function(
+      BuildContext context,
+      TCalendarSubtitleContext subtitleContext,
+    );
 
 /// 整格自定义构建器；返回非 null 时该格由接入方完全绘制（含主数字与副标题）。
-typedef TCalendarCellBuilder = Widget? Function(
-  BuildContext context,
-  TCalendarCellModel cell,
-);
+typedef TCalendarCellBuilder =
+    Widget? Function(BuildContext context, TCalendarCellModel cell);
 
 /// 月标题构建器；[monthDate] 为当月 1 日。
-typedef TCalendarMonthTitleBuilder = Widget Function(
-  BuildContext context,
-  DateTime monthDate,
-);
+typedef TCalendarMonthTitleBuilder =
+    Widget Function(BuildContext context, DateTime monthDate);
 
 /// 单个日期格数据（只读，选中态通过 [typeNotifier] 更新）
 class TCalendarCellModel {
@@ -176,7 +174,8 @@ class _TCalendarCellState extends State<TCalendarCell> {
     final decoration = themedStyle.cellDecoration;
     final positionColor = _rangeBridgeColor(context, themedStyle, decoration);
 
-    final content = widget.cellBuilder?.call(context, cell) ??
+    final content =
+        widget.cellBuilder?.call(context, cell) ??
         _buildDefaultCell(context, cell, themedStyle);
 
     return GestureDetector(
@@ -258,17 +257,16 @@ class _TCalendarCellState extends State<TCalendarCell> {
 
     final subtitle = _buildSubtitle(context, cell, cellStyle);
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
+      alignment: Alignment.center,
       children: [
-        TText(
-          dayText,
-          style: dayTextStyle,
-        ),
+        Center(child: TText(dayText, style: dayTextStyle)),
         if (subtitle != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 2),
-            child: subtitle,
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: context.tTheme.spacer4,
+            child: Center(child: subtitle),
           ),
       ],
     );
@@ -281,10 +279,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
   ) {
     final subtitle = widget.subtitleBuilder?.call(
       context,
-      TCalendarSubtitleContext(
-        date: cell.date,
-        selectType: cell.selectType,
-      ),
+      TCalendarSubtitleContext(date: cell.date, selectType: cell.selectType),
     );
     if (subtitle == null) {
       return null;

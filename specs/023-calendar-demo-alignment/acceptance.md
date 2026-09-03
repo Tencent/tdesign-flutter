@@ -1,30 +1,28 @@
-# 验收记录
+# Calendar 验收记录（2026-09-04）
 
-## 固定基线
+## 分支与范围
 
-- Flutter：`origin/develop` `ccace5c61383dc2c4fd5392f41222e65b54d8010`
-- 小程序：`b60cdc8a1dce1f06dd45cb4e41eefd31c674e514`
-- 公开运行页：`https://tdesign.tencent.com/miniprogram/live/m2w/program/miniprogram/#!pages/calendar/calendar.html`
-- 截图视口：375×771 CSS px，DPR 2；已覆盖页面顶部与下半页 inline 日历入口。
+- 原 PR #1059，分支 `rss1102/style/calendar-demo-alignment`，在原 head `35b20b99` 上追加本组件改动，未合入其他组件 PR。
+- 本组件保持平铺、受控面板；Popup、标题、临时值、取消/确认由调用方组合。
+- Figma 分支 `4SdclZkcv5bPgX6pa8AsmI` 为视觉依据；已提交截图见 `evidence/figma-*.png`。小程序源码参考 `ae55fb050b7a9474c33752b45b71c741f37ed872`，API/default 对照见 `spec.md`。
+- 本 PR 不新增公开 API。
 
-## 验证命令
+## 验证证据
 
-- Flutter 3.32.0：`flutter analyze --no-pub --fatal-infos`，0 error / 0 warning。
-- Flutter 3.32.0：Calendar 7 个组件测试文件共 52 tests passed。
-- Flutter 3.32.0：`example/test/calendar_demo_test.dart`，4 tests passed。
-- Flutter 3.32.0 Linux：light/dark 两张 Golden 更新后立即无更新复跑，2 tests passed。
-- Calendar 生产代码覆盖率：`640/648 = 98.77%`。
-- Flutter 3.47.0：严格 analyze 与 Demo 测试通过；clean + pub get 后 Calendar 组件测试 52 tests passed。
-- 回归矩阵自测 11 tests passed；示例代码生成 `--check` 无漂移。
+- 拆分后本机 Flutter 3.32.0 严格 `flutter analyze --no-pub --fatal-infos` 无问题，53 项组件测试通过；共享 widget_test.dart 的 6 项冒烟测试通过，日历弹层标题/关闭断言已同步。
+- 各 PR 独立工作区使用已有 Flutter 3.32.0 Linux 镜像和离线 pub 缓存生成权威 Golden，随后无更新参数复跑通过；本组件 6 项 Demo 测试和 20 项 Golden 通过。
+- Golden 使用默认精确比较器；Figma 为人工视觉对照，不是 Figma 自动像素比较。拆分后的代表性打开态已复核。
+- 拆分前相同组件实现还通过 Flutter 3.47.0 analyze/功能验证；生产源码覆盖率为 `640/648 = 98.77%`。此项是此前集成验证的记录，不冒充拆分后重新测量。
+- 原 PR 已登记本组件的组件/Demo/覆盖率/视觉入口；本次不引入其他两个组件的测试调度。远端 CI 与独立 CNB Review 以各自 PR/Issue 记录为准。
 
-## 视觉结论
+## 复现与限制
 
-- 两组标题、九个可见实例、分组说明、触发器顺序和日期文案与小程序公开 Demo 一致。
-- Popup、标题、确认/取消、月份切换和逐实例本地化均由 Flutter 组合表达，没有复制小程序编排型 API。
-- 小程序运行截图见 `evidence/miniprogram-top.jpg` 与 `evidence/miniprogram-lower.jpg`；Flutter 权威基线见 `tdesign-component/example/test/goldens/calendar_page_{light,dark}.png`。
-- 截图复核发现并修复了六行月份最后一行被默认高度裁切的问题；修复后 2026 年 8 月的 30、31 日完整显示。
+```sh
+# tdesign-component
+flutter analyze --no-pub --fatal-infos
+flutter test --no-pub --exclude-tags golden test/components/calendar
+# example；Golden 使用 Flutter 3.32.0 Linux
+flutter test --no-pub test/calendar_demo_test.dart test/calendar_demo_golden_test.dart
+```
 
-## 未验证项
-
-- Android/iOS 系统字体的逐像素差异不由 Linux Golden 证明。
-- 小程序公开运行页当前截图为深色模式；Flutter 同时固定了 light/dark 两套基线。
+未进行 Android/iOS 真机触控与系统字体验收。没有安装新软件，依赖使用现有离线缓存。三个原 PR 分别推送、分别 Review。

@@ -11,6 +11,35 @@ void main() {
     );
   }
 
+  testWidgets('日期居中，副标题独立定位且继承选中颜色', (tester) async {
+    final model = TCalendarCellModel(
+      date: DateTime(2022, 2, 18),
+      typeNotifier: DateSelectTypeNotifier(DateSelectType.selected),
+      isLastDayOfMonth: false,
+    );
+    Widget cell({TCalendarSubtitleBuilder? subtitle}) => wrap(
+      TCalendarCell(
+        cell: model,
+        height: 60,
+        padding: 4,
+        rowIndex: 0,
+        colIndex: 0,
+        dateList: [model],
+        subtitleBuilder: subtitle,
+      ),
+    );
+    await tester.pumpWidget(cell());
+    final before = tester.getCenter(find.text('18'));
+    await tester.pumpWidget(cell(subtitle: (_, __) => const Text('¥60')));
+    expect(tester.getCenter(find.text('18')), before);
+    expect(
+      tester.getCenter(find.text('¥60')).dy,
+      greaterThan(tester.getCenter(find.text('18')).dy),
+    );
+    final style = DefaultTextStyle.of(tester.element(find.text('¥60'))).style;
+    expect(style.color, TThemeData.defaultData().textColorAnti);
+  });
+
   testWidgets('selection notifier rebuilds the cell and range bridge',
       (tester) async {
     final startNotifier = DateSelectTypeNotifier(DateSelectType.start);

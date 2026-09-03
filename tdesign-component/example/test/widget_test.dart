@@ -160,10 +160,10 @@ void main() {
     await tester.tap(find.byKey(triggerKey));
     await tester.pumpAndSettle();
 
-    expect(find.text('选择日期'), findsOneWidget);
+    expect(find.text('请选择日期'), findsOneWidget);
     expect(find.byType(TCalendar), findsWidgets);
 
-    await tester.tap(find.text('取消'));
+    await tester.tap(find.byTooltip('关闭'));
     await tester.pumpAndSettle();
   });
 

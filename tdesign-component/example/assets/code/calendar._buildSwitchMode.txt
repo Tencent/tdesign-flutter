@@ -3,10 +3,9 @@ Widget _buildSwitchMode(BuildContext context) => TCellGroup(
       TCell(
         key: const ValueKey('calendar-switch-trigger'),
         title: const TText('带翻页功能的日历'),
-        note: TText(_formatDates(_switchValue)),
+        note: _dateNote(_switchValue),
         arrow: true,
         onTap: () => _showCalendar(
-          title: '选择日期',
           variant: TCalendarVariant.single,
           value: _switchValue,
           minDate: DateTime(2022, 1, 10),

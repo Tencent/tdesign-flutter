@@ -3,10 +3,9 @@ Widget _buildMultiple(BuildContext context) => TCellGroup(
       TCell(
         key: const ValueKey('calendar-multiple-trigger'),
         title: const TText('多个选择日历'),
-        note: TText(_formatDates(_multipleValue)),
+        note: _dateNote(_multipleValue),
         arrow: true,
         onTap: () => _showCalendar(
-          title: '选择多个日期',
           variant: TCalendarVariant.multiple,
           value: _multipleValue,
           onConfirm: (value) => setState(() => _multipleValue = value),

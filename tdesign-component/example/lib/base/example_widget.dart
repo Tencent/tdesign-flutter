@@ -377,7 +377,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   Widget _buildCompactHeader() {
     return Container(
       width: double.infinity,
-      color: context.tTheme.bgColorPage,
+      color: widget.backgroundColor ?? context.tTheme.bgColorPage,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
