@@ -53,8 +53,11 @@ class PickerItemWidget extends StatelessWidget {
           final distance = (offset - index).abs();
           final selected = distance < 0.5;
           final baseStyle =
-              Theme.of(context).textTheme.bodyLarge ??
-              TextStyle(fontSize: theme.fontBodyLarge?.size ?? 16);
+              Theme.of(context).tExplicitTextTheme?.bodyLarge ??
+              TextStyle(
+                fontSize: theme.fontBodyLarge?.size ?? 16,
+                height: theme.fontBodyLarge?.height,
+              );
           return Center(
             child:
                 itemBuilder?.call(context, option, colIndex, index, distance) ??

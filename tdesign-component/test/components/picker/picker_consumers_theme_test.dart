@@ -5,6 +5,72 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
   for (final dateTime in [false, true]) {
+    for (final explicit in [false, true]) {
+      testWidgets(
+        '${dateTime ? 'DateTimePicker' : 'Picker'} typography respects tokens and explicit TextTheme $explicit',
+        (tester) async {
+          final tokens = TThemeData.defaultData().copyWithTThemeData(
+            'font-test',
+            fontMap: {'fontBodyLarge': Font(size: 19, lineHeight: 27)},
+          );
+          await tester.pumpWidget(
+            MaterialApp(
+              theme: ThemeData(extensions: [tokens]),
+              home: Builder(
+                builder: (context) => Theme(
+                  data: explicit
+                      ? Theme.of(context).copyWith(
+                          textTheme: Theme.of(context).textTheme.copyWith(
+                            bodyLarge: const TextStyle(
+                              fontSize: 21,
+                              height: 1.6,
+                              fontFamily: 'custom',
+                            ),
+                          ),
+                        )
+                      : Theme.of(context),
+                  child: Scaffold(
+                    body: SizedBox(
+                      width: 360,
+                      child: dateTime
+                          ? TDateTimePicker(
+                              value: const TDateTimePickerValue(
+                                year: 2024,
+                                month: 6,
+                                day: 15,
+                              ),
+                              onChanged: (_) {},
+                            )
+                          : TPicker(
+                              items: const TPickerColumns([
+                                [TPickerOption(label: 'A', value: 'a')],
+                              ]),
+                              value: const ['a'],
+                              onChanged: (_) {},
+                            ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+          final texts = tester.widgetList<TText>(
+            find.descendant(
+              of: find.byType(MultiWheelLayout),
+              matching: find.byType(TText),
+            ),
+          );
+          expect(texts, isNotEmpty);
+          for (final text in texts) {
+            expect(text.style?.fontSize, explicit ? 21 : 19);
+            expect(text.style?.height, explicit ? 1.6 : 27 / 19);
+            if (explicit) {
+              expect(text.style?.fontFamily, 'custom');
+            }
+          }
+        },
+      );
+    }
     for (final custom in [false, true]) {
       testWidgets(
         '${dateTime ? 'DateTimePicker' : 'Picker'} shell follows ${custom ? 'custom' : 'default'} tokens',

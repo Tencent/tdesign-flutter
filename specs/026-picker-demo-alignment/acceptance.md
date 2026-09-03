@@ -37,3 +37,11 @@ flutter test --no-pub test/picker_demo_test.dart test/picker_demo_golden_test.da
 - 外壳不透出父面板底色的契约已写入内部 dartdoc 与 Spec；不新增公开 API，不改变本轮运行行为。
 - Flutter 3.32.0 Linux：严格 analyze 零问题，35 项组件测试、3 项调度器自测、5 项 Demo、12 项 Golden 通过，未更新基线。
 - 当前分支生产源码覆盖率重新测得 **333/340 = 97.94%**，通过 95% 门禁。此前 34 项记录包含 31 项组件与 3 项调度器测试，已修正口径。
+
+## API 收敛修复验证（2026-09-04）
+
+本轮 API 收敛验证：Flutter 3.32.0 Linux 与本机 Flutter 3.47.0 严格 analyze 零告警，39 项组件测试、11 项调度/覆盖率工具自测、5 项 Demo 功能测试通过；3.32 Linux 12 项 Golden 无更新参数通过，基线未改。生产代码覆盖率 336/342 = 98.25%。
+
+- 按 componentTestSuites 当前登记逐文件运行 flutter test --no-pub --coverage，再执行 dart run tool/check_component_coverage.dart picker。工具自测单独统计，不混入组件数。
+- 运行真实 Demo 功能测试和 run_visual_regression.dart 登记的 Golden；没有更新图片。Android/iOS 真机尚未验证。
+- 修复前真实消费测试在自定义 fontBodyLarge=19/27 时读到 Material 默认字号而失败，修复后两消费组件的 token 与显式子树 TextTheme 均通过。共享源码及测试在两个 PR 中相同。
