@@ -2,25 +2,30 @@
 
 ## 验证环境
 
-- 分支：`rss1102/fix/pr-1036-design-alignment`（基于 PR #1036 head 的本地修复分支）
+- 本地分支：`rss1102/fix/pr-1036-design-alignment`
+- PR 分支：`rss1102/cnb-issue-67/fix/dialog-official-alignment`；当前已推送代码 head：`c345e5fbb915f2147c788ebdd5db437841f06ae4`，develop 基线：`ed6ac81deea5d831dabf21c2c5345c72d7dd7522`。
 - Flutter/Dart：Flutter 3.32.0 / Dart 3.8.0；Flutter 3.47.0 / Dart 3.13.0
 
 ## 自动化验证
 
+下表汇总当前已推送实现对应的最终验证结果；详细执行阶段见后文。本次 Review 后仅修正文档，没有重新执行 Flutter 测试，不将历史阶段计数当作最新结果。
+
+本次文档修订已使用 CI 同版本 typos 1.50.1 和仓库配置执行全仓拼写检查，并通过 `git diff --check`；远端检查状态仍以重新推送后的结果为准。
+
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter test --no-pub test/components/dialog/t_dialog_test.dart --coverage` | PASS，22 tests；LH/LF `225/230 = 97.83%` | Flutter 3.32.0；Dialog 尺寸、内容、操作区、显式值优先级、token、主题和路由契约 |
+| `flutter test --no-pub test/components/dialog/t_dialog_test.dart --coverage` | PASS，32 tests；LH/LF `252/256 = 98.44%` | Flutter 3.32.0；包含配色、关闭来源、PopScope 与路由契约 |
 | Popup 公共契约复核 | PASS，未新增或修改 Popup API | Dialog 使用独立标准模态路由，既有 Popup 240×240 默认契约保持不变 |
-| `flutter test --no-pub test/dialog_page_test.dart` | PASS，9 tests | 22 个入口结构契约、真实点击打开/关闭及关键组合交互 |
+| `flutter test --no-pub test/dialog_page_test.dart` | PASS，14 tests | Flutter 3.32.0；22 个入口、四方向蒙层关闭共 88 次及面板内点击不关闭 |
 | `flutter analyze --fatal-infos --no-pub` | PASS | Flutter 3.32.0，0 issues |
 | `dart run tool/generate_example_code.dart --check` | PASS | 生成代码片段与 Demo 源码同步 |
-| Flutter 3.47.0 Dialog 组件测试 | PASS，18 tests | 三操作稳定排序与极小视口保护追加前的合并结果；本轮未重跑 latest |
-| `flutter test --no-pub test/dialog_page_test.dart` | PASS，8 tests | Flutter 3.47.0 最终源码复验 |
+| Flutter 3.47.0 Dialog 组件测试 | PASS，32 tests | 配色与关闭来源实现复验；之后仅调整 Demo 蒙层配置 |
+| `flutter test --no-pub test/dialog_page_test.dart` | PASS，14 tests | Flutter 3.47.0 最终 Demo 源码复验 |
 | `flutter analyze --fatal-infos --no-pub` | PASS | Flutter 3.47.0，0 issues |
-| CNB 同款 Flutter 3.32.0 Linux `dialog_page_golden_test.dart` | PASS，12 tests | 更新 4 张过期基线后，不带 `--update-goldens` 复跑 12/12 通过 |
+| CNB 同款 Flutter 3.32.0 Linux `dialog_page_golden_test.dart` | PASS，22 tests | 2 张整页及 10 个打开态各明暗两张；最终 Demo 调整后不带 `--update-goldens` 精确复跑，差异 0% |
 | 回归调度器工具测试 | PASS，11 tests | Dialog 组件、覆盖率、Demo 功能和视觉回归登记同步 |
 
-## 人工验收
+## 交互与视觉验收
 
 - [x] 22 个入口通过真实 Widget 操作逐项打开并关闭；输入、图片、按钮顺序和返回结果有独立断言。
 - [x] 使用 375dp 视口完成小程序与 Flutter 页面、关键打开态截图对照，证据见 [visual-comparison.md](visual-comparison.md)。
@@ -28,7 +33,13 @@
 
 ## 未覆盖项与后续工作
 
-- 未执行移动真机触摸验收；本轮证据为 Flutter Widget 真实事件、Linux Golden 和桌面 Web 人工操作。
+- Android 16 真机已局部验收“确认类-带标题”的取消/确认配色。最终全部 22 个 Demo 的蒙层交互与关闭来源尚未完成完整真机复验；Widget 测试和覆盖率不能替代真机证据。
+- 2026-09-03 读取当前 head 的远端结果：CNB 8/8 通过；GitHub analyze、test、Golden 与各平台构建通过，但拼写检查失败、CLA 待处理，不能将整体 CI 标记为全绿。拼写失败唯一命中下方验收记录中的设备型号，已在本次文档修订中移除该非必要标识，远端结果需推送后重验。
+- 最新 [CodeBuddy Review](https://cnb.cool/tencent/tdesign/tdesign-flutter/-/pulls/125#comment-2095402176306794496) 未提出新的组件实现缺陷；PR 标题、正文与更新日志仍需补齐关闭结果参数及默认配色/排序变更。远端元数据更新待用户明确确认。
+
+## 历史阶段记录说明
+
+以下保留各阶段实际执行结果与当时的限制。“本轮”“当前”“未提交/推送”等均指所属阶段，不代表顶部所列最新 head；阶段计数也不代表最新测试总数。
 
 ## 2026-08-31 develop 同步复验
 
@@ -82,7 +93,7 @@
 - Flutter 3.32.0 组件测试与回归调度器自测合计 37/37；Dialog 生产源码覆盖率 `227/231 = 98.27%`，超过 95% 门禁；既有组件、Demo 与 Golden 调度清单仍覆盖本次修改的文件。示例生成器及 check 通过。
 - Flutter 3.32.0 与 3.47.0 全量 `flutter analyze --fatal-infos --no-pub` 均为 0 issues。
 - Flutter 3.32.0 Linux 首次精确比较：8 张既有打开态出现预期按钮差异（单个取消按钮 5016～5017px，约 1.65%；多按钮 21000px，约 6.90%），页面和文字按钮共 4 张不变；另外新增三个确认场景及垂直操作的明暗 8 张 Golden。检查旧图、实际图及差异图后更新，在同一容器不带 `--update-goldens` 复跑 20/20，最终精确比较无差异，未放宽容差。
-- 已在 Android 16 真机 25113PN0EC 安装并打开“确认类-带标题”，确认取消为浅色填充蓝字、确定为品牌色填充白字；此处仅为该场景真机验收，不代表完整跨端像素一致。
+- 已在 Android 16 真机安装并打开“确认类-带标题”，确认取消为浅色填充蓝字、确定为品牌色填充白字；此处仅为该场景真机验收，不代表完整跨端像素一致。
 - 默认视觉属于 breaking change；保留旧外观的迁移方式见 spec.md。尚未提交、推送或更新远端 PR。
 
 ## 关闭来源与蒙层交互补充验收

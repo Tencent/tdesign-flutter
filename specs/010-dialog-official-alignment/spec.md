@@ -59,10 +59,10 @@ Dialog 的核心弹层能力已存在，但默认顶边距和关闭按钮位置�
 - [x] Example 测试逐项打开并关闭 22 个入口，覆盖输入、文字按钮、图片、主操作顺序和返回结果。
 - [x] Dialog 生产源码 LCOV `LH/LF >= 95%`。
 - [x] Flutter 3.32.0 与 latest 的组件测试、Example 测试和严格 analyze 全部通过。
-- [x] Flutter 3.32 Linux 亮暗主题 12 个 Golden 在当前合并结果上稳定复跑；更新 4 张过期基线后，无 `--update-goldens` 复跑 12/12 通过。
+- [x] Flutter 3.32 Linux 亮暗主题 22 个 Golden（2 张整页及 10 个打开态各 2 张）在最终 Demo 调整后，无 `--update-goldens` 精确复跑 22/22 通过，未放宽容差。
 
 ## 兼容性判断
 
 - 普通操作未指定变体时，从描边默认配色调整为填充浅色配色；显式 `fill` 且未指定配色的普通操作同样采用浅色配色，属于默认视觉 breaking change。需要旧外观时显式设置 `variant: TButtonVariant.outline, colorScheme: TButtonColorScheme.defaultTheme`；文字、描边、幽灵变体与显式样式不变。
 - 关闭返回值为可选新增能力，默认值及既有 `Future<T?>` 不变，本项不引入 breaking change；不新增为 Dialog 特制的 Popup 开关；`actionsPadding` / `actionSpacing` 构造入口允许 `null` 表示未设置，公开 getter 仍保持非空。
-- 三项及以上且全为普通角色的操作，从原先无条件倒序改为保持声明顺序，属于用户可感知的默认行为调整；提交与 PR 标题应使用 `breaking(dialog)`。
+- 相对 develop 基线 `ed6ac81d`，三项及以上操作由声明顺序调整为主要/危险角色优先、普通角色随后，两组内部各自保持声明顺序。混合角色的默认显示顺序可能变化，属于 breaking change；全为普通角色时顺序不变，不应描述为“原先无条件倒序”。需要完全自定义展示顺序时使用既有 `actionsWidget`；不要仅为排序修改角色而同时改变配色语义。提交与 PR 标题应使用 `breaking(dialog)`。
