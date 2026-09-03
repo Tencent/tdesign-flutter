@@ -3,6 +3,7 @@ Widget _confirmDialogs(BuildContext context) {
       _trigger('确认类-带标题', () {
         TDialog.show<bool>(
           context,
+          barrierDismissible: true,
           dialog: TDialog(
             title: const Text('对话框标题'),
             content: const Text(_description),
@@ -13,6 +14,7 @@ Widget _confirmDialogs(BuildContext context) {
       _trigger('确认类-无标题', () {
         TDialog.show<bool>(
           context,
+          barrierDismissible: true,
           dialog: TDialog(
             content: const Text(_description),
             actions: _actions(destructive: true),
@@ -22,6 +24,7 @@ Widget _confirmDialogs(BuildContext context) {
       _trigger('确认类-纯标题', () {
         TDialog.show<bool>(
           context,
+          barrierDismissible: true,
           dialog: TDialog(
             title: const Text('对话框标题'),
             actions: _actions(primaryColorScheme: TButtonColorScheme.light),

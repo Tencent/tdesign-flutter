@@ -9,7 +9,7 @@
 | 范围 | 文件或模块 | 影响 |
 | --- | --- | --- |
 | 组件 | `t_dialog.dart` | 默认可见间距、文字操作区和多操作顺序 |
-| 路由 | Flutter `showGeneralDialog` | 居中自适应、主题捕获、SafeArea、遮罩与缩放动画；Popup 源码与公开 API 不变 |
+| 路由 | Flutter `RawDialogRoute` 私有子类 | 保留居中自适应、主题捕获、SafeArea、遮罩与缩放动画；在标准蒙层的 onDismiss 中用 maybePop 返回调用方指定的值；Popup 不变 |
 | 测试 | `test/components/dialog/` | 样式和 ThemeData 契约 |
 | 示例 | `example/lib/page/t_dialog_page.dart` | 22 场景公开矩阵 |
 | 示例测试 | `example/test/dialog_page_test.dart` | 入口和关键组合交互 |
@@ -17,8 +17,9 @@
 
 ## API 变化
 
+- 不新增按钮配色入口；修复 Dialog 的 normal role 默认映射，保留显式变体、配色与样式的覆盖优先级。普通基础操作通过 TButton 既有 `brandLightColor` / `brandNormalColor` token 渲染；不修改共享 TButton 的默认行为。
 - `TPopupOptions` 公开 API 无变化。
-- `TDialog` 公开 API 无变化。
+- `TDialog.show<T>` 增加 `T? barrierResult`；`TDialog` 与便捷层 `TConfirmDialog` 增加 `Object? closeButtonResult`，默认均为 null；保持按钮 result 和 Future 为唯一结果通道，不扩展业务状态或事件模型。
 
 ## 风险与取舍
 

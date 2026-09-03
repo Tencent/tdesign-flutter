@@ -51,7 +51,10 @@ class TDialogAction {
   /// 点击回调，在自动关闭前执行。
   final VoidCallback? onPressed;
 
-  /// 操作语义角色。
+  /// 操作语义角色，默认为 [TDialogActionRole.normal]。
+  ///
+  /// 未指定变体时使用填充按钮：普通操作采用浅色配色，主要操作采用品牌配色，
+  /// 危险操作采用危险配色。显式变体、配色和样式优先于角色默认值。
   final TDialogActionRole role;
 
   /// 点击后是否自动关闭。
@@ -60,10 +63,14 @@ class TDialogAction {
   /// 是否禁用。
   final bool disabled;
 
-  /// 显式按钮变体。
+  /// 显式按钮变体；未指定时使用 [TButtonVariant.fill]。
   final TButtonVariant? variant;
 
-  /// 显式按钮配色。
+  /// 显式按钮配色；未指定时由角色和最终变体解析。
+  ///
+  /// 普通操作的填充变体使用 [TButtonColorScheme.light]，其他变体使用
+  /// [TButtonColorScheme.defaultTheme]；主要和危险操作分别使用
+  /// [TButtonColorScheme.primary]、[TButtonColorScheme.danger]。
   final TButtonColorScheme? colorScheme;
 
   /// 显式按钮样式。
@@ -83,6 +90,7 @@ class TDialog extends StatelessWidget {
     this.actions = const <TDialogAction>[],
     this.actionsWidget,
     this.showCloseButton = false,
+    this.closeButtonResult,
     this.semanticLabel,
     this.backgroundColor,
     this.shape,
@@ -121,6 +129,13 @@ class TDialog extends StatelessWidget {
   /// 是否显示右上角关闭按钮。
   final bool showCloseButton;
 
+  /// 点击内置关闭按钮并成功关闭时的返回值，默认为 null。
+  ///
+  /// 类型应与 [show] 的泛型一致。可与 [TDialogAction.result] 和
+  /// [show] 的 `barrierResult` 配合，通过同一个 Future 区分关闭来源。
+  /// 不影响系统返回或业务调用 Navigator.pop 的返回值。
+  final Object? closeButtonResult;
+
   /// 无障碍语义标签。
   final String? semanticLabel;
 
@@ -157,10 +172,17 @@ class TDialog extends StatelessWidget {
   final double? _actionSpacing;
 
   /// 使用居中模态路由展示 Dialog。
+  ///
+  /// [barrierDismissible] 默认为 false，点击蒙层不会关闭。
+  /// 显式开启后，蒙层关闭成功时返回 [barrierResult]（默认 null）；
+  /// 操作按钮与内置关闭按钮分别返回各自配置的结果。
+  /// 蒙层与内置关闭按钮通过 Navigator.maybePop 关闭，遵守 PopScope。
+  /// 系统返回及未携带结果的 Navigator.pop 仍返回 null，不使用 [barrierResult]。
   static Future<T?> show<T>(
     BuildContext context, {
     required Widget dialog,
     bool barrierDismissible = false,
+    T? barrierResult,
     Color? barrierColor,
     bool useRootNavigator = true,
     bool useSafeArea = true,
@@ -171,24 +193,28 @@ class TDialog extends StatelessWidget {
       to: navigator.context,
     );
     final materialBarrierColor = Theme.of(context).dialogTheme.barrierColor;
-    return showGeneralDialog<T>(
-      context: context,
-      barrierDismissible: barrierDismissible,
-      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      barrierColor: barrierColor ?? materialBarrierColor ?? Colors.black54,
-      useRootNavigator: useRootNavigator,
-      transitionDuration: const Duration(milliseconds: 240),
-      pageBuilder: (routeContext, animation, secondaryAnimation) {
-        final centered = Center(child: dialog);
-        final content = useSafeArea ? SafeArea(child: centered) : centered;
-        return capturedThemes.wrap(content);
-      },
-      transitionBuilder: (routeContext, animation, secondaryAnimation, child) {
-        final progress = animation.status == AnimationStatus.reverse
-            ? Curves.easeOut.transform(animation.value)
-            : Curves.decelerate.transform(animation.value);
-        return Transform.scale(scale: progress, child: child);
-      },
+    return navigator.push<T>(
+      _DialogRoute<T>(
+        barrierDismissible: barrierDismissible,
+        barrierResult: barrierResult,
+        barrierLabel: MaterialLocalizations.of(
+          context,
+        ).modalBarrierDismissLabel,
+        barrierColor: barrierColor ?? materialBarrierColor ?? Colors.black54,
+        transitionDuration: const Duration(milliseconds: 240),
+        pageBuilder: (routeContext, animation, secondaryAnimation) {
+          final centered = Center(child: dialog);
+          final content = useSafeArea ? SafeArea(child: centered) : centered;
+          return capturedThemes.wrap(content);
+        },
+        transitionBuilder:
+            (routeContext, animation, secondaryAnimation, child) {
+              final progress = animation.status == AnimationStatus.reverse
+                  ? Curves.easeOut.transform(animation.value)
+                  : Curves.decelerate.transform(animation.value);
+              return Transform.scale(scale: progress, child: child);
+            },
+      ),
     );
   }
 
@@ -344,13 +370,60 @@ class TDialog extends StatelessWidget {
                   child: IconButton(
                     tooltip: context.resource.close,
                     icon: Icon(TIcons.close, color: token.textColorPlaceholder),
-                    onPressed: () => Navigator.maybePop(context),
+                    onPressed: () =>
+                        Navigator.maybePop(context, closeButtonResult),
                   ),
                 ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+// 保留标准模态路由的动画、命中测试和无障碍行为，仅为蒙层提供返回值。
+class _DialogRoute<T> extends RawDialogRoute<T> {
+  _DialogRoute({
+    required super.pageBuilder,
+    required super.barrierDismissible,
+    required super.barrierColor,
+    required super.barrierLabel,
+    required super.transitionDuration,
+    required super.transitionBuilder,
+    required this.barrierResult,
+  });
+
+  final T? barrierResult;
+
+  void _dismissBarrier() {
+    if (isCurrent) {
+      navigator?.maybePop<T>(barrierResult);
+    }
+  }
+
+  @override
+  Widget buildModalBarrier() {
+    final color = barrierColor;
+    if (color != null && color.a != 0 && !offstage) {
+      return AnimatedModalBarrier(
+        color: animation!.drive(
+          ColorTween(
+            begin: color.withValues(alpha: 0),
+            end: color,
+          ).chain(CurveTween(curve: barrierCurve)),
+        ),
+        dismissible: barrierDismissible,
+        onDismiss: _dismissBarrier,
+        semanticsLabel: barrierLabel,
+        barrierSemanticsDismissible: semanticsDismissible,
+      );
+    }
+    return ModalBarrier(
+      dismissible: barrierDismissible,
+      onDismiss: _dismissBarrier,
+      semanticsLabel: barrierLabel,
+      barrierSemanticsDismissible: semanticsDismissible,
     );
   }
 }
@@ -456,8 +529,10 @@ class _DialogActions extends StatelessWidget {
   (TButtonVariant, TButtonColorScheme) _resolveStyle(TDialogAction action) {
     return switch (action.role) {
       TDialogActionRole.normal => (
-        TButtonVariant.outline,
-        TButtonColorScheme.defaultTheme,
+        TButtonVariant.fill,
+        action.variant == null || action.variant == TButtonVariant.fill
+            ? TButtonColorScheme.light
+            : TButtonColorScheme.defaultTheme,
       ),
       TDialogActionRole.primary => (
         TButtonVariant.fill,

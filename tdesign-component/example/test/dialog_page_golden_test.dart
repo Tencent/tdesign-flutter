@@ -9,6 +9,11 @@ void main() {
   registerDemoGoldenTests(dialogDemoPageTestSpec);
 
   const openedScenarios = {
+    'command': '命令行操作',
+    'confirm': '确认类-带标题',
+    'confirm_danger': '确认类-无标题',
+    'confirm_light': '确认类-纯标题',
+    'vertical_actions': '垂直基础按钮',
     'input': '输入类-带描述',
     'image': '图片置顶-带标题描述',
     'text_actions': '文字按钮',

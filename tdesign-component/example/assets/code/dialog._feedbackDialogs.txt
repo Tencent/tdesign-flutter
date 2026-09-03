@@ -3,24 +3,28 @@ Widget _feedbackDialogs(BuildContext context) {
       _trigger('反馈类-带标题', () {
         TDialog.show<void>(
           context,
+          barrierDismissible: true,
           dialog: const TConfirmDialog(title: '对话框标题', content: _description),
         );
       }),
       _trigger('反馈类-无标题', () {
         TDialog.show<void>(
           context,
+          barrierDismissible: true,
           dialog: const TConfirmDialog(content: _description),
         );
       }),
       _trigger('反馈类-纯标题', () {
         TDialog.show<void>(
           context,
+          barrierDismissible: true,
           dialog: const TConfirmDialog(title: '对话框标题'),
         );
       }),
       _trigger('反馈类-内容超长', () {
         TDialog.show<void>(
           context,
+          barrierDismissible: true,
           dialog: TDialog(
             title: const Text('对话框标题'),
             maxHeight: 456,

@@ -4,6 +4,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
+enum _DialogCommandResult { confirm, cancel, overlay, closeButton }
+
 /// Dialog 弹窗示例页
 class TDialogPage extends StatelessWidget {
   const TDialogPage({super.key});
@@ -70,14 +72,14 @@ class TDialogPage extends StatelessWidget {
   List<TDialogAction> _actions({
     bool destructive = false,
     TButtonVariant? variant,
-    TButtonColorScheme primaryColorScheme = TButtonColorScheme.primary,
+    TButtonColorScheme? primaryColorScheme,
   }) => [
     TDialogAction(variant: variant, child: const Text('取消'), result: false),
     TDialogAction(
       child: Text(destructive ? '警示操作' : '确定'),
       result: true,
       variant: variant,
-      colorScheme: destructive ? TButtonColorScheme.danger : primaryColorScheme,
+      colorScheme: primaryColorScheme,
       role: destructive
           ? TDialogActionRole.destructive
           : TDialogActionRole.primary,
@@ -90,24 +92,28 @@ class TDialogPage extends StatelessWidget {
       _trigger('反馈类-带标题', () {
         TDialog.show<void>(
           context,
+          barrierDismissible: true,
           dialog: const TConfirmDialog(title: '对话框标题', content: _description),
         );
       }),
       _trigger('反馈类-无标题', () {
         TDialog.show<void>(
           context,
+          barrierDismissible: true,
           dialog: const TConfirmDialog(content: _description),
         );
       }),
       _trigger('反馈类-纯标题', () {
         TDialog.show<void>(
           context,
+          barrierDismissible: true,
           dialog: const TConfirmDialog(title: '对话框标题'),
         );
       }),
       _trigger('反馈类-内容超长', () {
         TDialog.show<void>(
           context,
+          barrierDismissible: true,
           dialog: TDialog(
             title: const Text('对话框标题'),
             maxHeight: 456,
@@ -130,6 +136,7 @@ class TDialogPage extends StatelessWidget {
       _trigger('确认类-带标题', () {
         TDialog.show<bool>(
           context,
+          barrierDismissible: true,
           dialog: TDialog(
             title: const Text('对话框标题'),
             content: const Text(_description),
@@ -140,6 +147,7 @@ class TDialogPage extends StatelessWidget {
       _trigger('确认类-无标题', () {
         TDialog.show<bool>(
           context,
+          barrierDismissible: true,
           dialog: TDialog(
             content: const Text(_description),
             actions: _actions(destructive: true),
@@ -149,6 +157,7 @@ class TDialogPage extends StatelessWidget {
       _trigger('确认类-纯标题', () {
         TDialog.show<bool>(
           context,
+          barrierDismissible: true,
           dialog: TDialog(
             title: const Text('对话框标题'),
             actions: _actions(primaryColorScheme: TButtonColorScheme.light),
@@ -167,6 +176,7 @@ class TDialogPage extends StatelessWidget {
         _trigger('文字按钮', () {
           TDialog.show<bool>(
             context,
+            barrierDismissible: true,
             dialog: TDialog(
               title: const Text('对话框标题'),
               content: const Text(_description),
@@ -181,6 +191,7 @@ class TDialogPage extends StatelessWidget {
         _trigger('水平基础按钮', () {
           TDialog.show<bool>(
             context,
+            barrierDismissible: true,
             dialog: TDialog(
               content: const Text(_description),
               actions: _actions(),
@@ -194,6 +205,7 @@ class TDialogPage extends StatelessWidget {
         _trigger('垂直基础按钮', () {
           TDialog.show<void>(
             context,
+            barrierDismissible: true,
             dialog: TDialog(
               title: const Text('对话框标题'),
               content: const Text(_description),
@@ -208,6 +220,7 @@ class TDialogPage extends StatelessWidget {
         _trigger('多按钮', () {
           TDialog.show<String>(
             context,
+            barrierDismissible: true,
             dialog: const TDialog(
               title: Text('对话框标题'),
               content: Text(_description),
@@ -230,6 +243,7 @@ class TDialogPage extends StatelessWidget {
         _trigger('带关闭按钮的对话框', () {
           TDialog.show<bool>(
             context,
+            barrierDismissible: true,
             dialog: TDialog(
               title: const Text('对话框标题'),
               content: const Text(_description),
@@ -271,7 +285,8 @@ class TDialogPage extends StatelessWidget {
           ),
           SizedBox(height: context.tTheme.spacer12),
           TButton(
-            variant: TButtonVariant.outline,
+            variant: TButtonVariant.fill,
+            colorScheme: TButtonColorScheme.light,
             onPressed: () => Navigator.pop(context, false),
             child: const Text('取消'),
           ),
@@ -376,6 +391,7 @@ class TDialogPage extends StatelessWidget {
     );
     TDialog.show<bool>(
       context,
+      barrierDismissible: true,
       dialog: TDialog(
         contentPadding: EdgeInsets.zero,
         content: Column(
@@ -395,6 +411,7 @@ class TDialogPage extends StatelessWidget {
       _trigger('输入类-无描述', () {
         TDialog.show<bool>(
           context,
+          barrierDismissible: true,
           dialog: TDialog(
             title: const Text('带输入框对话框'),
             content: _dialogInput(context, topPadding: context.tTheme.spacer8),
@@ -405,6 +422,7 @@ class TDialogPage extends StatelessWidget {
       _trigger('输入类-带描述', () {
         TDialog.show<bool>(
           context,
+          barrierDismissible: true,
           dialog: TDialog(
             title: const Text('带输入框对话框'),
             content: Column(
@@ -449,16 +467,39 @@ class TDialogPage extends StatelessWidget {
   @ExampleCode(group: 'dialog')
   Widget _commandDialog(BuildContext context) {
     return _trigger('命令行操作', () async {
-      final confirmed = await TDialog.show<bool>(
+      final result = await TDialog.show<_DialogCommandResult>(
         context,
         barrierDismissible: true,
-        dialog: TDialog(
-          title: const Text('弹窗标题'),
-          content: const Text('告知当前状态、信息和解决方法等内容。'),
-          actions: _actions(),
+        barrierResult: _DialogCommandResult.overlay,
+        dialog: const TDialog(
+          title: Text('弹窗标题'),
+          content: Text('告知当前状态、信息和解决方法等内容。'),
+          showCloseButton: true,
+          closeButtonResult: _DialogCommandResult.closeButton,
+          actions: [
+            TDialogAction(
+              child: Text('取消'),
+              result: _DialogCommandResult.cancel,
+            ),
+            TDialogAction(
+              child: Text('确定'),
+              role: TDialogActionRole.primary,
+              result: _DialogCommandResult.confirm,
+            ),
+          ],
         ),
       );
-      debugPrint(confirmed == true ? '点击了确定' : '点击了取消');
+      if (!context.mounted) {
+        return;
+      }
+      final message = switch (result) {
+        _DialogCommandResult.confirm => '点击了确定',
+        _DialogCommandResult.cancel => '点击了取消',
+        _DialogCommandResult.overlay => '点击蒙层关闭',
+        _DialogCommandResult.closeButton => '点击关闭按钮',
+        null => '返回或程序关闭',
+      };
+      TToast.showText(message, context: context);
     });
   }
 
@@ -467,6 +508,7 @@ class TDialogPage extends StatelessWidget {
     return _trigger('开放能力按钮', () async {
       final result = await TDialog.show<String>(
         context,
+        barrierDismissible: true,
         dialog: const TDialog(
           title: Text('弹窗标题'),
           content: Text('通过现有操作项组合业务能力，无需增加跨端专用参数。'),

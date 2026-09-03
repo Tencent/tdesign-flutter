@@ -34,6 +34,7 @@ const _scenarioLabels = [
 ];
 
 void main() {
+  tearDown(TToast.dismissAll);
   registerDemoStructureTests(dialogDemoPageTestSpec);
 
   void configureViewport(WidgetTester tester) {
@@ -60,6 +61,7 @@ void main() {
       300,
       scrollable: find.byType(Scrollable).first,
     );
+    await tester.pumpAndSettle();
     for (var attempt = 0; attempt < 5; attempt++) {
       final rect = tester.getRect(finder);
       if (rect.top >= 0 &&
@@ -78,6 +80,9 @@ void main() {
       final action = find.widgetWithText(TButton, label);
       if (action.evaluate().isNotEmpty) {
         await tester.tap(action.last);
+        await tester.pumpAndSettle();
+        // 命令调用会展示结果提示；等待提示退场后再操作下一项。
+        await tester.pump(const Duration(seconds: 2));
         await tester.pumpAndSettle();
         return;
       }
@@ -121,6 +126,96 @@ void main() {
       expect(find.byType(TDialog), findsNothing, reason: '$label 应关闭');
     }
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('命令调用点击面板四周蒙层关闭并提示来源', (tester) async {
+    configureViewport(tester);
+    tester.view.physicalSize = const Size(375, 812);
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+    for (final direction in ['left', 'right', 'top', 'bottom']) {
+      await openScenario(tester, '命令行操作');
+      final panel = tester.getRect(find.byType(TDialog));
+      final point = switch (direction) {
+        'left' => Offset(panel.left - 8, panel.center.dy),
+        'right' => Offset(panel.right + 8, panel.center.dy),
+        'top' => Offset(panel.center.dx, panel.top - 8),
+        _ => Offset(panel.center.dx, panel.bottom + 8),
+      };
+      await tester.tapAt(point);
+      await tester.pumpAndSettle();
+      expect(find.byType(TDialog), findsNothing, reason: direction);
+      expect(find.text('点击蒙层关闭'), findsOneWidget);
+      TToast.dismissAll();
+      await tester.pump();
+    }
+  });
+
+  testWidgets('全部 22 个示例显式开启蒙层关闭，面板内点击不关闭', (tester) async {
+    configureViewport(tester);
+    tester.view.physicalSize = const Size(375, 812);
+    for (final label in _scenarioLabels) {
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpWidget(buildPage());
+      await tester.pump();
+      for (final direction in ['left', 'right', 'top', 'bottom']) {
+        await openScenario(tester, label);
+        final panel = tester.getRect(find.byType(TDialog));
+        await tester.tapAt(Offset(panel.center.dx, panel.top + 8));
+        await tester.pumpAndSettle();
+        expect(
+          find.byType(TDialog),
+          findsOneWidget,
+          reason: '$label 面板内点击不应关闭',
+        );
+        final point = switch (direction) {
+          'left' => Offset(panel.left - 8, panel.center.dy),
+          'right' => Offset(panel.right + 8, panel.center.dy),
+          'top' => Offset(panel.center.dx, panel.top - 8),
+          _ => Offset(panel.center.dx, panel.bottom + 8),
+        };
+        await tester.tapAt(point);
+        await tester.pumpAndSettle();
+        expect(
+          find.byType(TDialog),
+          findsNothing,
+          reason: '$label $direction 蒙层应关闭',
+        );
+        TToast.dismissAll();
+        await tester.pumpAndSettle();
+      }
+    }
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('命令调用用同一个结果通道区分确认取消关闭按钮和返回', (tester) async {
+    configureViewport(tester);
+    tester.view.physicalSize = const Size(375, 812);
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+    for (final source in ['确定', '取消', '关闭按钮', '返回']) {
+      await openScenario(tester, '命令行操作');
+      if (source == '关闭按钮') {
+        await tester.tap(find.byIcon(TIcons.close));
+      } else if (source == '返回') {
+        await tester.binding.handlePopRoute();
+      } else {
+        await tester.tap(find.widgetWithText(TButton, source));
+      }
+      await tester.pumpAndSettle();
+      expect(find.byType(TDialog), findsNothing);
+      expect(
+        find.text(switch (source) {
+          '确定' => '点击了确定',
+          '取消' => '点击了取消',
+          '关闭按钮' => '点击关闭按钮',
+          _ => '返回或程序关闭',
+        }),
+        findsOneWidget,
+      );
+      TToast.dismissAll();
+      await tester.pump();
+    }
   });
 
   testWidgets('各类弹窗正文保持设计稿原文与标点', (tester) async {
@@ -214,6 +309,45 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('标准场景的次要操作从组件取得浅色默认值', (tester) async {
+    configureViewport(tester);
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+    for (final label in [
+      '确认类-带标题',
+      '确认类-无标题',
+      '确认类-纯标题',
+      '水平基础按钮',
+      '多按钮',
+      '带关闭按钮的对话框',
+    ]) {
+      await openScenario(tester, label);
+      final dialog = tester.widget<TDialog>(find.byType(TDialog));
+      for (final action in dialog.actions.where(
+        (action) => action.role == TDialogActionRole.normal,
+      )) {
+        expect(action.variant, isNull);
+        expect(action.colorScheme, isNull);
+      }
+      final buttons = tester.widgetList<TButton>(
+        find.descendant(
+          of: find.byType(TDialog),
+          matching: find.byType(TButton),
+        ),
+      );
+      for (final button in buttons.where(
+        (button) =>
+            (button.child as Text).data != '确定' &&
+            (button.child as Text).data != '警示操作' &&
+            (button.child as Text).data != '主要按钮',
+      )) {
+        expect(button.variant, TButtonVariant.fill, reason: label);
+        expect(button.colorScheme, TButtonColorScheme.light, reason: label);
+      }
+      await closeCurrentDialog(tester);
+    }
+  });
+
   testWidgets('确认类纯标题使用浅色确认按钮', (tester) async {
     configureViewport(tester);
     await tester.pumpWidget(buildPage());
@@ -235,6 +369,11 @@ void main() {
     final confirm = tester.getCenter(find.text('确定'));
     final cancel = tester.getCenter(find.text('取消'));
     expect(confirm.dy, lessThan(cancel.dy));
+    final cancelButton = tester.widget<TButton>(
+      find.widgetWithText(TButton, '取消'),
+    );
+    expect(cancelButton.variant, TButtonVariant.fill);
+    expect(cancelButton.colorScheme, TButtonColorScheme.light);
     expect(tester.takeException(), isNull);
   });
 }

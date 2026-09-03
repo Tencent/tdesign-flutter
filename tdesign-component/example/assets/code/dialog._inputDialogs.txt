@@ -3,6 +3,7 @@ Widget _inputDialogs(BuildContext context) {
       _trigger('输入类-无描述', () {
         TDialog.show<bool>(
           context,
+          barrierDismissible: true,
           dialog: TDialog(
             title: const Text('带输入框对话框'),
             content: _dialogInput(context, topPadding: context.tTheme.spacer8),
@@ -13,6 +14,7 @@ Widget _inputDialogs(BuildContext context) {
       _trigger('输入类-带描述', () {
         TDialog.show<bool>(
           context,
+          barrierDismissible: true,
           dialog: TDialog(
             title: const Text('带输入框对话框'),
             content: Column(

@@ -27,10 +27,14 @@ Dialog 的核心弹层能力已存在，但默认顶边距和关闭按钮位置�
 ### 最小配套
 
 - Dialog 使用 Flutter 标准模态路由承载居中自适应面板；不新增 Popup 公开 API，普通 Popup 的 240×240 默认契约保持不变。
-- Dialog 公开构造和展示 API 签名保持不变。
+- Dialog 保留现有构造与 `Future<T?>` 展示 API；仅增加可选的蒙层与关闭按钮返回值。
 
 ## 行为契约
 
+- `TDialog.show<T>` 增加可选 `T? barrierResult`，仅在 `barrierDismissible: true` 的蒙层关闭成功时返回；`TDialog` 与 `TConfirmDialog` 增加可选 `Object? closeButtonResult`，仅用于内置关闭图标。两者默认 `null`，按钮继续使用 `TDialogAction.result`；不新增关闭回调、Controller 或组件级业务结果枚举。
+- 显示仍由 Flutter 模态路由承载，蒙层使用标准 ModalBarrier/AnimatedModalBarrier；蒙层与内置关闭图标走所属 Navigator 的 `maybePop`，遵守 PopScope 拦截。操作按钮保留原有 Navigator.pop 行为；系统返回与业务 Navigator.pop 使用其原有结果，不误报为蒙层关闭。
+- 命令调用 Demo 用私有结果枚举展示确认、取消、蒙层与关闭按钮的区分，并显示实际关闭来源。测试必须从公开入口打开后点击面板四周的真实蒙层，验证默认 false、显式 true、面板内点击、Future 仅完成一次与阻止返回的路径；覆盖率不能替代这些交互证据。
+- Dialog Demo 全部 22 个入口均显式设置 `barrierDismissible: true`，包括反馈、确认、输入、图片及各种操作区，统一允许点击蒙层关闭；仅调整示例组合，组件全局默认 false 保持不变。
 - 默认 content padding 为 `EdgeInsets.fromLTRB(24, 24, 24, 0)`。
 - 默认圆角、内容留白、标题正文间距、关闭按钮偏移和操作区间距从对应 TDesign radius/spacer token 解析；实例参数与组件 Theme 仍保持更高优先级。
 - Dialog 路由面板按内容自适应，默认宽度为 311dp，不再继承 Popup 的 240×240 固定尺寸。
@@ -41,6 +45,8 @@ Dialog 的核心弹层能力已存在，但默认顶边距和关闭按钮位置�
 - “文字按钮”使用 32dp 顶间距、56dp 高的贴边文字操作区和 0.5dp 分隔线；基础按钮继续使用 24dp 操作区内边距。
 - 三个及以上操作按 `TDialogAction.role` 将主要与危险操作优先从上到下展示，同类操作保持声明顺序；未声明强调角色时不改变调用方顺序。确认类纯标题场景使用浅色确认按钮。
 - 贴边文字 Footer 仅用于 1～2 个文字操作；三个及以上文字操作使用带默认操作区内边距的纵向布局。
+- 普通基础操作由 Dialog 默认解析为 `fill + light`，主要与危险操作继续分别使用 `fill + primary`、`fill + danger`；显式 `text`、`outline`、`ghost` 的普通操作保留 `defaultTheme` 配色。实例 `colorScheme` 和 `style` 仍优先，不联动覆盖其他操作，不新增 API 或 Theme 选择器。颜色由 TButton 的现有 token/主题解析链提供。
+- Demo 标准操作不重复声明角色已经决定的配色；纯标题确认的浅色强调仍为显式场景选择。垂直两按钮的完全自定义操作区继续由调用方组合 TButton，并使用相同的浅色次要操作样式。
 - `actionsPadding` 和 `actionSpacing` 的显式实例值始终高于 token 默认值，即使数值与默认字面量相同也不得被覆盖。
 - “组件状态”内逐项展示文字按钮、水平基础按钮、垂直基础按钮、多按钮和关闭按钮说明，不以一个笼统说明替代。
 - 22 个官方场景均有独立可见触发入口；小程序 `openType` 通过 Flutter 既有 `TDialogAction` 自定义子项表达，不新增跨端专用 API。
@@ -57,5 +63,6 @@ Dialog 的核心弹层能力已存在，但默认顶边距和关闭按钮位置�
 
 ## 兼容性判断
 
-- `TDialog`、`TDialogAction` 与 `TPopupOptions` 不删除或新增公开能力，不新增为 Dialog 特制的 Popup 开关；`actionsPadding` / `actionSpacing` 构造入口允许 `null` 表示未设置，公开 getter 仍保持非空。
+- 普通操作未指定变体时，从描边默认配色调整为填充浅色配色；显式 `fill` 且未指定配色的普通操作同样采用浅色配色，属于默认视觉 breaking change。需要旧外观时显式设置 `variant: TButtonVariant.outline, colorScheme: TButtonColorScheme.defaultTheme`；文字、描边、幽灵变体与显式样式不变。
+- 关闭返回值为可选新增能力，默认值及既有 `Future<T?>` 不变，本项不引入 breaking change；不新增为 Dialog 特制的 Popup 开关；`actionsPadding` / `actionSpacing` 构造入口允许 `null` 表示未设置，公开 getter 仍保持非空。
 - 三项及以上且全为普通角色的操作，从原先无条件倒序改为保持声明顺序，属于用户可感知的默认行为调整；提交与 PR 标题应使用 `breaking(dialog)`。

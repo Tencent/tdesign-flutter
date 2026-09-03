@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+enum _Exit { confirm, cancel, overlay, closeButton, programmatic }
+
 void main() {
   ThemeData theme([TDialogThemeData? dialogTheme]) {
     final base = TThemeBuilder.light(TThemeData.defaultData());
@@ -96,6 +98,299 @@ void main() {
       await tester.tapAt(const Offset(5, 5));
       await tester.pumpAndSettle();
       expect(find.text('可关闭'), findsNothing);
+    });
+
+    testWidgets('各关闭来源保留 typed result 且 Future 只完成一次', (tester) async {
+      for (final source in [..._Exit.values, null]) {
+        final navigator = GlobalKey<NavigatorState>();
+        _Exit? result;
+        var completions = 0;
+        var presses = 0;
+        await tester.pumpWidget(
+          MaterialApp(
+            navigatorKey: navigator,
+            theme: theme(),
+            home: Builder(
+              builder: (context) => TButton(
+                child: const Text('打开'),
+                onPressed: () =>
+                    TDialog.show<_Exit>(
+                      context,
+                      barrierDismissible: true,
+                      barrierResult: _Exit.overlay,
+                      dialog: TDialog(
+                        title: const Text('来源'),
+                        showCloseButton: true,
+                        closeButtonResult: _Exit.closeButton,
+                        actions: [
+                          TDialogAction(
+                            child: const Text('确认'),
+                            result: _Exit.confirm,
+                            onPressed: () => presses++,
+                          ),
+                          TDialogAction(
+                            child: const Text('取消'),
+                            result: _Exit.cancel,
+                            onPressed: () => presses++,
+                          ),
+                        ],
+                      ),
+                    ).then((value) {
+                      result = value;
+                      completions++;
+                    }),
+              ),
+            ),
+          ),
+        );
+        await tester.tap(find.text('打开'));
+        await tester.pumpAndSettle();
+        // 面板内部的非按钮区域不是蒙层。
+        await tester.tap(find.text('来源'));
+        await tester.pump();
+        expect(completions, 0);
+        switch (source) {
+          case _Exit.confirm:
+            await tester.tap(find.text('确认'));
+          case _Exit.cancel:
+            await tester.tap(find.text('取消'));
+          case _Exit.overlay:
+            final panel = tester.getRect(find.byType(TDialog));
+            await tester.tapAt(Offset(panel.left - 8, panel.center.dy));
+          case _Exit.closeButton:
+            await tester.tap(find.byIcon(TIcons.close));
+          case _Exit.programmatic:
+            navigator.currentState!.pop(_Exit.programmatic);
+          case null:
+            await tester.binding.handlePopRoute();
+        }
+        await tester.pumpAndSettle();
+        expect(result, source);
+        expect(completions, 1);
+        expect(
+          presses,
+          source == _Exit.confirm || source == _Exit.cancel ? 1 : 0,
+        );
+        expect(find.byType(TDialog), findsNothing);
+        expect(find.text('打开'), findsOneWidget);
+      }
+    });
+
+    testWidgets('蒙层默认关闭策略和透明蒙层返回值', (tester) async {
+      for (final dismissible in [false, true]) {
+        var completions = 0;
+        String? result;
+        await tester.pumpWidget(
+          app(
+            Builder(
+              builder: (context) => TButton(
+                child: const Text('打开'),
+                onPressed: () =>
+                    TDialog.show<String>(
+                      context,
+                      barrierDismissible: dismissible,
+                      barrierColor: Colors.transparent,
+                      barrierResult: 'overlay',
+                      dialog: const TDialog(title: Text('透明蒙层')),
+                    ).then((value) {
+                      result = value;
+                      completions++;
+                    }),
+              ),
+            ),
+          ),
+        );
+        await tester.tap(find.text('打开'));
+        await tester.pumpAndSettle();
+        final panel = tester.getRect(find.byType(TDialog));
+        await tester.tapAt(Offset(panel.right + 8, panel.center.dy));
+        await tester.pumpAndSettle();
+        expect(completions, dismissible ? 1 : 0);
+        if (!dismissible) {
+          expect(find.byType(TDialog), findsOneWidget);
+          await tester.binding.handlePopRoute();
+          await tester.pumpAndSettle();
+        }
+        expect(completions, 1);
+        expect(result, dismissible ? 'overlay' : null);
+        await tester.pumpWidget(const SizedBox.shrink());
+      }
+    });
+
+    testWidgets('蒙层与关闭按钮遵守 PopScope，拒绝时不完成 Future', (tester) async {
+      final canPop = ValueNotifier(false);
+      addTearDown(canPop.dispose);
+      final attempts = <(bool, String?)>[];
+      var completions = 0;
+      String? result;
+      await tester.pumpWidget(
+        app(
+          Builder(
+            builder: (context) => TButton(
+              child: const Text('打开'),
+              onPressed: () =>
+                  TDialog.show<String>(
+                    context,
+                    barrierDismissible: true,
+                    barrierResult: 'overlay',
+                    dialog: ValueListenableBuilder<bool>(
+                      valueListenable: canPop,
+                      builder: (context, value, child) => PopScope<String>(
+                        canPop: value,
+                        onPopInvokedWithResult: (didPop, value) =>
+                            attempts.add((didPop, value)),
+                        child: const TDialog(
+                          title: Text('拦截'),
+                          showCloseButton: true,
+                          closeButtonResult: 'close',
+                        ),
+                      ),
+                    ),
+                  ).then((value) {
+                    result = value;
+                    completions++;
+                  }),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('打开'));
+      await tester.pumpAndSettle();
+      final panel = tester.getRect(find.byType(TDialog));
+      final point = Offset(panel.left - 8, panel.center.dy);
+      await tester.tapAt(point);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(TIcons.close));
+      await tester.pumpAndSettle();
+      expect(attempts, [(false, 'overlay'), (false, 'close')]);
+      expect(completions, 0);
+      canPop.value = true;
+      await tester.pump();
+      await tester.tapAt(point);
+      await tester.pumpAndSettle();
+      expect(attempts.last, (true, 'overlay'));
+      expect(completions, 1);
+      expect(result, 'overlay');
+    });
+
+    testWidgets('便捷弹窗透传关闭图标返回值，不触发确认回调', (tester) async {
+      var presses = 0;
+      _Exit? result;
+      await tester.pumpWidget(
+        app(
+          Builder(
+            builder: (context) => TButton(
+              child: const Text('打开'),
+              onPressed: () => TDialog.show<_Exit>(
+                context,
+                dialog: TConfirmDialog(
+                  title: '便捷',
+                  showCloseButton: true,
+                  closeButtonResult: _Exit.closeButton,
+                  onPressed: () => presses++,
+                ),
+              ).then((value) => result = value),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('打开'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(TIcons.close));
+      await tester.pumpAndSettle();
+      expect(result, _Exit.closeButton);
+      expect(presses, 0);
+    });
+
+    testWidgets('根与嵌套 Navigator 的蒙层只关闭所属 Dialog', (tester) async {
+      for (final useRoot in [false, true]) {
+        final root = GlobalKey<NavigatorState>();
+        final nested = GlobalKey<NavigatorState>();
+        String? result;
+        await tester.pumpWidget(
+          MaterialApp(
+            navigatorKey: root,
+            theme: theme(),
+            home: Navigator(
+              key: nested,
+              onGenerateRoute: (_) => MaterialPageRoute<void>(
+                builder: (context) => Scaffold(
+                  body: TButton(
+                    child: const Text('打开'),
+                    onPressed: () {
+                      TDialog.show<String>(
+                        context,
+                        useRootNavigator: useRoot,
+                        barrierDismissible: true,
+                        barrierResult: 'overlay',
+                        dialog: const TDialog(title: Text('嵌套')),
+                      ).then((value) => result = value);
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.tap(find.text('打开'));
+        await tester.pumpAndSettle();
+        expect(
+          Navigator.of(tester.element(find.byType(TDialog))),
+          useRoot ? root.currentState : nested.currentState,
+        );
+        final panel = tester.getRect(find.byType(TDialog));
+        await tester.tapAt(Offset(panel.left - 8, panel.center.dy));
+        await tester.pumpAndSettle();
+        expect(result, 'overlay');
+        expect(root.currentState!.canPop(), isFalse);
+        expect(nested.currentState!.canPop(), isFalse);
+        expect(find.text('打开'), findsOneWidget);
+      }
+    });
+
+    testWidgets('不自动关闭的操作不会提前完成或污染关闭结果', (tester) async {
+      var presses = 0;
+      var completions = 0;
+      String? result;
+      await tester.pumpWidget(
+        app(
+          Builder(
+            builder: (context) => TButton(
+              child: const Text('打开'),
+              onPressed: () =>
+                  TDialog.show<String>(
+                    context,
+                    dialog: TDialog(
+                      title: const Text('保持打开'),
+                      showCloseButton: true,
+                      closeButtonResult: 'close',
+                      actions: [
+                        TDialogAction(
+                          child: const Text('检查'),
+                          result: 'action',
+                          closeOnPressed: false,
+                          onPressed: () => presses++,
+                        ),
+                      ],
+                    ),
+                  ).then((value) {
+                    result = value;
+                    completions++;
+                  }),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('打开'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('检查'));
+      await tester.pumpAndSettle();
+      expect(presses, 1);
+      expect(completions, 0);
+      await tester.tap(find.byIcon(TIcons.close));
+      await tester.pumpAndSettle();
+      expect(result, 'close');
+      expect(completions, 1);
     });
 
     testWidgets('Popup handle close 可返回结果', (tester) async {
@@ -288,6 +583,61 @@ void main() {
       final firstButton = tester.getRect(find.widgetWithText(TButton, '一'));
       expect(firstButton.left, closeTo(dialog.left + 24, 0.01));
       expect(firstButton.right, closeTo(dialog.right - 24, 0.01));
+    });
+
+    testWidgets('普通操作默认浅色填充，显式其他变体保留默认配色', (tester) async {
+      for (final variant in [null, ...TButtonVariant.values]) {
+        await tester.pumpWidget(
+          app(
+            TDialog(
+              title: const Text('操作'),
+              actions: [
+                TDialogAction(child: const Text('取消'), variant: variant),
+              ],
+            ),
+          ),
+        );
+        final button = tester.widget<TButton>(find.byType(TButton));
+        expect(button.variant, variant ?? TButtonVariant.fill);
+        expect(
+          button.colorScheme,
+          variant == null || variant == TButtonVariant.fill
+              ? TButtonColorScheme.light
+              : TButtonColorScheme.defaultTheme,
+        );
+      }
+    });
+
+    testWidgets('各角色默认配色与显式配色覆盖互不干扰', (tester) async {
+      for (final role in TDialogActionRole.values) {
+        for (final scheme in [null, ...TButtonColorScheme.values]) {
+          await tester.pumpWidget(
+            app(
+              TDialog(
+                title: const Text('操作'),
+                actions: [
+                  TDialogAction(
+                    child: const Text('执行'),
+                    role: role,
+                    colorScheme: scheme,
+                  ),
+                ],
+              ),
+            ),
+          );
+          final button = tester.widget<TButton>(find.byType(TButton));
+          expect(button.variant, TButtonVariant.fill);
+          expect(
+            button.colorScheme,
+            scheme ??
+                switch (role) {
+                  TDialogActionRole.normal => TButtonColorScheme.light,
+                  TDialogActionRole.primary => TButtonColorScheme.primary,
+                  TDialogActionRole.destructive => TButtonColorScheme.danger,
+                },
+          );
+        }
+      }
     });
 
     testWidgets('操作角色、禁用与 closeOnPressed 生效', (tester) async {
@@ -539,6 +889,80 @@ void main() {
       );
       expect(material.color, Colors.purple);
       expect(material.elevation, 6);
+    });
+
+    testWidgets('浅色普通操作实际颜色跟随明暗主题与自定义 token', (tester) async {
+      final defaults = TThemeData.defaultData();
+      final custom = defaults.copyWithTThemeData(
+        'dialog-action-colors',
+        colorMap: {
+          'brandLightColor': Colors.amber,
+          'brandNormalColor': Colors.purple,
+        },
+      );
+      for (final tokens in [defaults, custom]) {
+        for (final data in [
+          TThemeBuilder.light(tokens),
+          TThemeBuilder.dark(tokens),
+        ]) {
+          await tester.pumpWidget(
+            MaterialApp(
+              theme: data,
+              home: const Scaffold(
+                body: TDialog(
+                  title: Text('颜色'),
+                  actions: [TDialogAction(child: Text('取消'))],
+                ),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          final button = find.byType(TButton);
+          final actualTokens = tester.element(button).tTheme;
+          final material = tester.widget<Material>(
+            find.descendant(of: button, matching: find.byType(Material)),
+          );
+          expect(material.color, actualTokens.brandLightColor);
+          expect(material.textStyle?.color, actualTokens.brandNormalColor);
+        }
+      }
+    });
+
+    testWidgets('普通操作保留实例和 Dialog Theme 按钮样式覆盖', (tester) async {
+      const themeStyle = ButtonStyle(
+        backgroundColor: WidgetStatePropertyAll(Colors.green),
+        foregroundColor: WidgetStatePropertyAll(Colors.white),
+      );
+      const instanceStyle = ButtonStyle(
+        backgroundColor: WidgetStatePropertyAll(Colors.orange),
+        foregroundColor: WidgetStatePropertyAll(Colors.black),
+      );
+      for (final explicit in [false, true]) {
+        await tester.pumpWidget(
+          app(
+            TDialog(
+              title: const Text('覆盖'),
+              actions: [
+                TDialogAction(
+                  child: const Text('取消'),
+                  style: explicit ? instanceStyle : null,
+                ),
+              ],
+            ),
+            dialogTheme: const TDialogThemeData(actionButtonStyle: themeStyle),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final button = find.byType(TButton);
+        final material = tester.widget<Material>(
+          find.descendant(of: button, matching: find.byType(Material)),
+        );
+        expect(material.color, explicit ? Colors.orange : Colors.green);
+        expect(
+          material.textStyle?.color,
+          explicit ? Colors.black : Colors.white,
+        );
+      }
     });
 
     testWidgets('默认内容顶边距与关闭按钮位置对齐官方基线', (tester) async {

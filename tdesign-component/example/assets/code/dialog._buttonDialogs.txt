@@ -6,6 +6,7 @@ Widget _buttonDialogs(BuildContext context) {
         _trigger('文字按钮', () {
           TDialog.show<bool>(
             context,
+            barrierDismissible: true,
             dialog: TDialog(
               title: const Text('对话框标题'),
               content: const Text(_description),
@@ -20,6 +21,7 @@ Widget _buttonDialogs(BuildContext context) {
         _trigger('水平基础按钮', () {
           TDialog.show<bool>(
             context,
+            barrierDismissible: true,
             dialog: TDialog(
               content: const Text(_description),
               actions: _actions(),
@@ -33,6 +35,7 @@ Widget _buttonDialogs(BuildContext context) {
         _trigger('垂直基础按钮', () {
           TDialog.show<void>(
             context,
+            barrierDismissible: true,
             dialog: TDialog(
               title: const Text('对话框标题'),
               content: const Text(_description),
@@ -47,6 +50,7 @@ Widget _buttonDialogs(BuildContext context) {
         _trigger('多按钮', () {
           TDialog.show<String>(
             context,
+            barrierDismissible: true,
             dialog: const TDialog(
               title: Text('对话框标题'),
               content: Text(_description),
@@ -69,6 +73,7 @@ Widget _buttonDialogs(BuildContext context) {
         _trigger('带关闭按钮的对话框', () {
           TDialog.show<bool>(
             context,
+            barrierDismissible: true,
             dialog: TDialog(
               title: const Text('对话框标题'),
               content: const Text(_description),
