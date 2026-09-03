@@ -16,6 +16,7 @@ class TConfirmDialog extends StatelessWidget {
     this.result = true,
     this.closeOnPressed = true,
     this.showCloseButton = false,
+    this.closeButtonResult,
     this.semanticLabel,
     this.backgroundColor,
     this.shape,
@@ -24,8 +25,10 @@ class TConfirmDialog extends StatelessWidget {
     this.maxHeight,
     this.contentPadding,
     this.buttonStyle,
-  }) : assert(content == null || contentWidget == null,
-            'content and contentWidget cannot be used together.');
+  }) : assert(
+         content == null || contentWidget == null,
+         'content and contentWidget cannot be used together.',
+       );
 
   final String? title;
   final String? content;
@@ -35,6 +38,9 @@ class TConfirmDialog extends StatelessWidget {
   final Object? result;
   final bool closeOnPressed;
   final bool showCloseButton;
+
+  /// 内置关闭按钮成功关闭时返回的值，默认 null；透传至 [TDialog.closeButtonResult]。
+  final Object? closeButtonResult;
   final String? semanticLabel;
   final Color? backgroundColor;
   final ShapeBorder? shape;
@@ -50,6 +56,7 @@ class TConfirmDialog extends StatelessWidget {
       title: title == null ? null : Text(title!),
       content: contentWidget ?? (content == null ? null : Text(content!)),
       showCloseButton: showCloseButton,
+      closeButtonResult: closeButtonResult,
       semanticLabel: semanticLabel ?? title,
       backgroundColor: backgroundColor,
       shape: shape,
@@ -64,7 +71,6 @@ class TConfirmDialog extends StatelessWidget {
           closeOnPressed: closeOnPressed,
           onPressed: onPressed,
           style: buttonStyle,
-          colorScheme: TButtonColorScheme.primary,
           child: Text(buttonText ?? context.resource.knew),
         ),
       ],

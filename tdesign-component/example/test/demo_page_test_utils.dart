@@ -234,10 +234,32 @@ ThemeData _withGoldenFonts(ThemeData theme, DemoPageTestSpec spec) {
     _goldenCjkFontFamily,
     if (spec.useAlignmentCjkFont) _alignmentCjkFontFamily,
   ];
-  return theme.copyWith(
+  final withFonts = theme.copyWith(
     textTheme: theme.textTheme.apply(fontFamilyFallback: fallback),
     primaryTextTheme: theme.primaryTextTheme.apply(
       fontFamilyFallback: fallback,
+    ),
+  );
+  if (spec.name != 'dialog') {
+    return withFonts;
+  }
+  final token = theme.extension<TThemeData>() ?? TThemeData.defaultData();
+  return withFonts.mergeExtension(
+    TDialogThemeData(
+      titleTextStyle: TextStyle(
+        fontFamily: _feedbackGoldenCjkFontFamily,
+        color: token.textColorPrimary,
+        fontSize: token.fontTitleLarge?.size ?? 18,
+        height: token.fontTitleLarge?.height ?? 26 / 18,
+        fontWeight: token.fontTitleLarge?.fontWeight ?? FontWeight.w600,
+      ),
+      contentTextStyle: TextStyle(
+        fontFamily: _feedbackGoldenCjkFontFamily,
+        color: token.textColorSecondary,
+        fontSize: token.fontBodyLarge?.size ?? 16,
+        height: token.fontBodyLarge?.height ?? 24 / 16,
+        fontWeight: token.fontBodyLarge?.fontWeight ?? FontWeight.w400,
+      ),
     ),
   );
 }

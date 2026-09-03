@@ -8,7 +8,7 @@ Golden 因宿主机缺少 CJK fallback 而把中文渲染成缺字符号。它�
 NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 `component_demo_glyphs.txt` 与 `feedback_demo_glyphs.txt`。独立加载可避免扩充共享
 字体改变既有组件的像素基线，子集 SHA-256 为
-`56e09a6c40646403c4095114abfea212ff7be9089803ce9687a0e2937c0876d1`。
+`7b39b695bd12fd77d798c5a4d24af0269c19f3c1f2d5706306eb33dc230e56f8`。
 
 `TDesignAlignmentCJK-Regular.otf` 是 Loading、Message、Popover、Popup 对齐测试
 新增文案的补充 fallback。它排在原字体之后，避免扩充原字体改变 Button、Checkbox、
@@ -28,9 +28,8 @@ Upload 等既有 Golden 的字形选择与像素基线。
 - 补充字符清单：`alignment_demo_glyphs.txt`
 - 许可证：SIL Open Font License 1.1，见 `OFL.txt`
 
-原字体经过子集化后已将 family/full/PostScript name 改为
-`TDesign Golden CJK` / `TDesign Golden CJK Regular` /
-`TDesignGoldenCJK-Regular`，不继续使用上游保留字体名。
+原字体经过子集化后按各测试字体用途设置独立 family/full/PostScript name
+（例如 feedback 子集使用 `TDesign Feedback Golden CJK`），不继续使用上游保留字体名。
 
 更新 Button、Divider、Fab、Icon、Link、Text、Form、Input、Rate、Search、Switch、
 Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后，更新原字符清单；
