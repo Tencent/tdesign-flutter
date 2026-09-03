@@ -8,6 +8,7 @@ const componentTargets = <String, List<String>>{
   'popover': ['lib/src/components/popover/'],
   'checkbox': ['lib/src/components/checkbox/'],
   'divider': ['lib/src/components/divider/'],
+  'dialog': ['lib/src/components/dialog/'],
   'dropdown_menu': ['lib/src/components/dropdown_menu/'],
   'fab': ['lib/src/components/fab/'],
   'form': ['lib/src/components/form/'],

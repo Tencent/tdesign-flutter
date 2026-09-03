@@ -37,6 +37,7 @@ const componentTestSuites = <ComponentTestSuite>[
   ComponentTestSuite('divider', [
     'test/components/divider/t_divider_test.dart',
   ]),
+  ComponentTestSuite('dialog', ['test/components/dialog/t_dialog_test.dart']),
   ComponentTestSuite('dropdown_menu', [
     'test/components/dropdown_menu/t_dropdown_item_test.dart',
     'test/components/dropdown_menu/t_dropdown_menu_test.dart',

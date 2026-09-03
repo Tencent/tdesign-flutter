@@ -99,3 +99,13 @@
 - Linux Golden 无更新参数复跑 8/8：既有 6 张基线未修改，新增浅色/深色正在拉伸的展开态各一张。使用独立组件场景保留公开 Demo 的弹性滚动物理配置；截图前断言滤镜拉伸仍活跃且严格贴边，避免 settle 掩盖分离。
 - 新基线已人工检查接缝、文字和图标；严格像素比较通过。非仿射 Impeller shader 及实际设备表现仍需独立验证。
 - 回归调度器、视觉清单与覆盖率工具自测 11/11 通过；现有测试文件已登记，新增场景随原组件套件执行，无需新增 CI 分支。
+
+## 2026-09-03 合并 develop 冲突复验
+
+- 合并 `origin/develop@09ec448d`（Dialog 改动），保留 DropdownMenu 锚定修复 `6c8eeabb`。8 个冲突文件涉及 CNB/GitHub 示例 CI 清单、组件/覆盖率/视觉调度登记及 feedback 测试字体；双方组件实现无冲突。
+- CI 和调度清单同时保留 Dialog、DropdownMenu；字体从已校验的 Noto Sans SC 2.004 原文件使用 fonttools 4.59.1 重新生成，双方原字体 cmap 均完整保留。
+- 首轮 Linux Golden 暴露 Dialog 页面说明“断”字缺失：develop 字体的缺字轮廓为空，旧基线留下空白；原分支字体保留可见缺字轮廓，合并时将其暴露为方框。补入“断”字而不隐藏缺字提示，不改变生产组件或 Demo 文案。新字体 SHA-256 见字体 README。
+- 检查真实图与差异图后，仅更新显示该说明的 Dialog 整页及三个确认场景明暗共 8 张 Golden；其他基线未改动，尤其 DropdownMenu 8 张基线全部不变。没有放宽比较容差。
+- Flutter 3.32.0 Linux 与 Flutter 3.47.0：DropdownMenu 72 + Dialog 32 + 调度器工具 11，合计各 115/115；四组件 Demo 功能各 29/29；组件及 Example 严格 analyze 均 0 issues。
+- Flutter 3.32.0 Linux 无更新参数复跑共享该字体的 DropdownMenu、Dialog、ActionSheet、NoticeBar Golden，共 44/44，最终精确比较无差异。
+- 本轮解决合并冲突及其字体回归，没有新增公开 API；边界拉伸的非仿射 Impeller 真机验证限制仍保留。上述结果是合并后本地验证，推送后的远端 CI 和 CodeBuddy Review 需基于新 head 重新确认。
