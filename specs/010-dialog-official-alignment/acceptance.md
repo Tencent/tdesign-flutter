@@ -35,7 +35,7 @@
 
 - Android 16 真机已局部验收“确认类-带标题”的取消/确认配色。最终全部 22 个 Demo 的蒙层交互与关闭来源尚未完成完整真机复验；Widget 测试和覆盖率不能替代真机证据。
 - 2026-09-03 读取当前 head 的远端结果：CNB 8/8 通过；GitHub analyze、test、Golden 与各平台构建通过，但拼写检查失败、CLA 待处理，不能将整体 CI 标记为全绿。拼写失败唯一命中下方验收记录中的设备型号，已在本次文档修订中移除该非必要标识，远端结果需推送后重验。
-- 最新 [CodeBuddy Review](https://cnb.cool/tencent/tdesign/tdesign-flutter/-/pulls/125#comment-2095402176306794496) 未提出新的组件实现缺陷；PR 标题、正文与更新日志仍需补齐关闭结果参数及默认配色/排序变更。远端元数据更新待用户明确确认。
+- 最新 [CodeBuddy Review](https://cnb.cool/tencent/tdesign/tdesign-flutter/-/pulls/125#comment-2095402176306794496) 未提出新的组件实现缺陷；CodeBuddy 已按当前源码同步 CNB PR 元数据，GitHub PR #1036 也已同步标题、正文与更新日志。
 
 ## 历史阶段记录说明
 
