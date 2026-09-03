@@ -37,6 +37,12 @@ const visualTestSuites = <VisualTestSuite>[
   ),
   VisualTestSuite(
     'calendar',
+    'Calendar States',
+    workingDirectory: '.',
+    testFiles: ['test/components/calendar/t_calendar_golden_test.dart'],
+  ),
+  VisualTestSuite(
+    'calendar',
     'Calendar Demo',
     workingDirectory: 'example',
     testFiles: ['test/calendar_demo_golden_test.dart'],

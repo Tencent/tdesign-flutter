@@ -1,15 +1,42 @@
-# Picker 公开 Demo 对齐
+# Picker 平铺滚轮与 Figma Demo 对齐
 
-## 目标与契约
+## 目标与设计契约
 
-- 按小程序 `b60cdc8a1dce1f06dd45cb4e41eefd31c674e514` 顺序覆盖城市、时间、地区、带标题和无标题选择器。
-- `TPickerColumns` 表达独立列，`TPickerLinked` 表达联动列；不再增加模糊数据入口。
-- `value + onChanged` 保持严格受控，`onChanged == null` 禁用；Popup、标题、按钮与确认草稿由 Flutter 组合。
-- 不复制小程序 `visible/usePopup/header/title/keys/defaultValue`，typed option 在数据边界完成转换。
-- 补齐 Demo、light/dark Golden、组件回归与覆盖率门禁。
+- Figma 节点 `24386:5250`，移动端展示01/02；两组三个基础行、两个标题样式行，共五个入口，各行留白。
+- 初值深圳市、2020 秋、广东 深圳 福田区；示例数据让选中项两侧可见完整候选，保留真实地区名称。长标签由组件单行省略处理。
+- 200px / 5 项 / 每项40px；选中条左右16px、圆角6px、列内容左右32px；文字16px、选中600，普通次级色，禁用色；上下48px渐隐。
+- 删除四档字号缩放、颜色混合和多重透明度；保留 Flutter ListWheelScrollView 的滚动、惯性、受控同步、无障碍和禁用项回退。
 
-## 验收标准
+## API 与状态所有权审查
 
-- 两组五个字段实例顺序与小程序公开 Demo 一致。
-- 标题/无标题 Popup 与取消/确认有功能断言。
-- 组件、Demo、Golden、覆盖率和 Flutter 双版本 analyze 通过。
+| API | 默认、空值与职责 | Flutter 判断 |
+|---|---|---|
+| items | required；TPickerColumns 为独立列，TPickerLinked 为树联动 | 两种结构职责不同；typed option 不复制 keys 字段别名 |
+| value / onChanged | required 每列值；空回调禁用 | 唯一受控状态，不增加 defaultValue/confirm |
+| onColumnScrollEnd | 某列停止滚动的通知，带当前快照 | 与值改变时机不同，不承担确认/完成；保留 |
+| itemBuilder | null 返回默认项；包含禁用项 | Widget 扩展覆盖默认内容；disabled 仍控制选择行为 |
+| TPickerOption | label、value、children、disabled | 数据/联动/单项禁用独立，不引入外部动态字段类型 |
+| TPickerValue | selectedOptions；values/labels 从选中项派生、indexes 给出位置 | 只读结果，不形成另一状态源 |
+| TPickerThemeData | height/itemCount；实例无重复尺寸入口 | 默认200/5，行高由二者计算，保留 |
+| TextTheme / TDesign token | 标准 bodyLarge 字体继承；颜色/渐隐/间距使用语义 token | 同时验证默认、暗色、定制字号；不增加状态配色枚举 |
+
+## 兼容性
+
+不新增公共 API。默认字体、渐隐和禁用项 itemBuilder 行为有可见修复；仍使用相同的受控与滚动契约。与 DateTimePicker 共用 MultiWheelLayout/PickerItemWidget，两个消费方均纳入回归。
+
+## 组件边界
+
+三个组件均为平铺、严格受控的面板。组件内部不创建 Popup、不显示弹层标题栏或确认按钮，不提供 visible/usePopup/autoClose/defaultValue。使用方自行组合 TPopup、标题、关闭、临时值与取消/确认；公开 Demo 的弹出效果只用于演示这种组合，不代表组件默认模式。
+
+## 参考与默认值判断
+
+- 视觉以用户提供的 Figma 分支 `4SdclZkcv5bPgX6pa8AsmI` 为准；页面壳采用 Flutter 导航栏，视口 375px。明色页面底色为设计稿 #F6F6F6，深色使用当前主题。
+- 小程序 API 实现参考 `ae55fb050b7a9474c33752b45b71c741f37ed872`，直接读取 `packages/components/calendar`、`picker`、`picker-item`、`date-time-picker` 的 props/实现/less。旧 PR 的小程序参考与截图保留为历史证据，不能替代本次 Figma 验收。
+- `ExamplePage.backgroundColor` 原来没有作用于 compact header，本次补齐现有参数语义，默认不传的其他页面不受影响。
+
+## 验收
+
+- 独立面板的受控、禁用、边界、主题路径通过组件测试；Demo 验证完整实例顺序、初值、真实点击/拖动、取消与确认。
+- Flutter 3.32.0、3.47.0 严格 analyze 和非视觉回归；生产代码 LH/LF >=95%。
+- 仅 Flutter 3.32.0 Linux 更新/比较 Golden，固定 375px、DPR 1、字体缩放 1、中文测试字体，覆盖完整页面与实际打开的各场景、light/dark。状态矩阵另设 420×180。
+- 更新后立即无更新参数复跑；系统字体、Android/iOS 真机不由 Linux Golden 证明。

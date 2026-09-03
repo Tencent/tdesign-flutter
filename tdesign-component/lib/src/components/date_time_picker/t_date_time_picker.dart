@@ -33,7 +33,7 @@ class TDateTimePicker extends StatefulWidget {
   /// 受控选中值。
   final TDateTimePickerValue value;
 
-  /// 滚轮列结构（必填）
+  /// 滚轮列结构。
   ///
   /// - **类型**：[DateTimePickerMode]，通过 [DateMode]、[TimeMode] 组合列
   /// - **默认**：未传时等价于 `DateTimePickerMode(dateMode: DateMode.date)`（年月日）
@@ -46,13 +46,13 @@ class TDateTimePicker extends StatefulWidget {
   /// - **回退**：返回 null 时使用内置默认文案（含国际化单位后缀）
   final DateTimePickerRenderLabel? renderLabel;
 
-  /// 可选范围下限
+  /// 可选范围下限。未指定时，年列最小值为初始选中年份减 10。
   ///
   /// - **类型**：[TDateTimePickerValue]，仅传当前 mode 涉及的字段即可
   /// - **语义**：超出范围的候选项会被裁剪；变更会触发列重建
   final TDateTimePickerValue? start;
 
-  /// 可选范围上限
+  /// 可选范围上限。未指定时，年列最大值为初始选中年份加 10。
   ///
   /// - **类型**：[TDateTimePickerValue]，仅传当前 mode 涉及的字段即可
   /// - **语义**：超出范围的候选项会被裁剪；变更会触发列重建

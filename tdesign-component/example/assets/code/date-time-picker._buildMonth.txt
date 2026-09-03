@@ -1,7 +1,2 @@
-Widget _buildMonth(BuildContext context) => _cell(
-    id: 'month',
-    title: '选择日期',
-    value: _month,
-    mode: DateTimePickerMode(dateMode: DateMode.month),
-    onConfirm: (value) => setState(() => _month = value),
-  );
+Widget _buildMonth(BuildContext context) =>
+      _cell('month', DateTimePickerMode(dateMode: DateMode.month));

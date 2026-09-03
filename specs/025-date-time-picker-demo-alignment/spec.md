@@ -1,21 +1,44 @@
-# DateTimePicker 公开 Demo 对齐
+# DateTimePicker 平铺滚轮与 Figma Demo 对齐
 
-## 目标
+## 目标与设计契约
 
-- 按小程序 `b60cdc8a1dce1f06dd45cb4e41eefd31c674e514` 的公开顺序覆盖年月日、年月、时分秒、时分、完整日期时间、步长和无 Popup。
-- 保持 `TDateTimePicker` 为纯滚轮、严格受控组件；Popup 与确认草稿由 Flutter 组合层持有。
-- Review 全量 API、默认值、重复入口与状态所有权，并补齐 Demo、Golden、组件回归和覆盖率证据。
+- Figma 节点 `24386:5248`，375×1340 Demo。类型依次为年月日、年月、月日、时分秒、时分、年月日时分秒、年月日带星期；样式为带标题、无标题，共九个入口。
+- 初始日期 2022-08-10、时间 12:50:23。调整步数与内嵌演示不再作为设计稿之外的公开块；步进、平铺使用继续由独立组件测试覆盖。
+- 完整六列示例用现有 renderLabel 省略年份单位，保留四位年份，避免窄屏出现 `2022…`；组件默认标签规则不变。
+- 滚轮与 Picker 共享 200px / 5项 / 40px、16px文字、选中600字重、边缘渐隐。Popup 标题/按钮/格式化结果均在 Demo 组合。
 
-## API 契约
+## API 与状态所有权审查
 
-- `value + onChanged` 是唯一受控路径；`onChanged == null` 禁用。
-- `DateTimePickerMode(dateMode:, timeMode:)` 以 typed 组合替代小程序字符串/数组 mode。
-- `DateTimePickerSteps`、`start`、`end` 和 `showWeek` 保持单一职责；未配置步长默认为 1。
-- `visible`、`usePopup`、`title`、按钮、`defaultValue` 和格式字符串属于小程序容器/动态数据契约，不复制到 Flutter 滚轮组件。
-- 保持年月日默认 mode，不改变既有默认行为。
+| API | 默认、空值与职责 | Flutter 判断 |
+|---|---|---|
+| value / onChanged | required partial typed value；空回调禁用；仅包含可见列的结果 | 唯一受控值，不增加 defaultValue 或 confirm 回调 |
+| mode | 默认年月日；dateMode 与 timeMode 至少指定一个 | typed 组合优于字符串数组；新增最小 DateMode.monthDay |
+| DateMode | year、month、date、monthDay | monthDay 不显示年份，结果 year=null；缺省计算年2000，允许2月29日；业务绑定年份时在接收回调后继续传 value.year |
+| TimeMode | hour、minute、second；null 无时间列 | 与日期列独立组合，保留 |
+| start / end | 未指定时年列范围为初始选中年±10，滚动年份时范围不漂移 | 与小程序当前时间±10不同；保留已发布边界，补齐 dartdoc |
+| steps | 各列缺省1 | 单一取值步进，保留，不复制未被设计使用的 filter |
+| showWeek | false；仅影响日列标签 | 与年月日示例分开演示，保留 |
+| renderLabel | 返回null使用本地化标签 | 只拥有显示，不改变值；不增加小程序 format 输出格式参数 |
+| TDateTimePickerValue | year/month/day/hour/minute/second；未包含列为null；toDateTime需fallback | typed 数据边界；不增加隐藏年份状态或控制器 |
+| TPickerThemeData | height / itemCount | 与 Picker 共用视觉默认，不存 mode、value、steps |
 
-## 验收标准
+## 兼容性
 
-- 页面按两组七个可见实例展示；第二组使用顺序编号 `02`，不复制小程序页面重复使用 `01` 的内容错误。
-- Popup 取消不提交、确定提交；inline 实例实时受控。
-- 组件测试、Demo 测试、light/dark Golden、覆盖率和双版本 analyze 通过。
+所有已有 mode、默认值、受控行为保持。新增 `DateMode.monthDay` 是本轮唯一公开能力扩展；依赖枚举穷尽 switch 的调用方需补充该分支，必须在变更说明中提示此源码兼容风险。选择器不新增标题、Popup、确认或取消 API。
+
+## 组件边界
+
+三个组件均为平铺、严格受控的面板。组件内部不创建 Popup、不显示弹层标题栏或确认按钮，不提供 visible/usePopup/autoClose/defaultValue。使用方自行组合 TPopup、标题、关闭、临时值与取消/确认；公开 Demo 的弹出效果只用于演示这种组合，不代表组件默认模式。
+
+## 参考与默认值判断
+
+- 视觉以用户提供的 Figma 分支 `4SdclZkcv5bPgX6pa8AsmI` 为准；页面壳采用 Flutter 导航栏，视口 375px。明色页面底色为设计稿 #F6F6F6，深色使用当前主题。
+- 小程序 API 实现参考 `ae55fb050b7a9474c33752b45b71c741f37ed872`，直接读取 `packages/components/calendar`、`picker`、`picker-item`、`date-time-picker` 的 props/实现/less。旧 PR 的小程序参考与截图保留为历史证据，不能替代本次 Figma 验收。
+- `ExamplePage.backgroundColor` 原来没有作用于 compact header，本次补齐现有参数语义，默认不传的其他页面不受影响。
+
+## 验收
+
+- 独立面板的受控、禁用、边界、主题路径通过组件测试；Demo 验证完整实例顺序、初值、真实点击/拖动、取消与确认。
+- Flutter 3.32.0、3.47.0 严格 analyze 和非视觉回归；生产代码 LH/LF >=95%。
+- 仅 Flutter 3.32.0 Linux 更新/比较 Golden，固定 375px、DPR 1、字体缩放 1、中文测试字体，覆盖完整页面与实际打开的各场景、light/dark。状态矩阵另设 420×180。
+- 更新后立即无更新参数复跑；系统字体、Android/iOS 真机不由 Linux Golden 证明。

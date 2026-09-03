@@ -3,12 +3,13 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
+import '../l10n/app_localizations.dart';
 
 /// TCalendar 演示。
 class TCalendarPage extends StatefulWidget {
   const TCalendarPage({super.key, this.referenceDate});
 
-  /// 用于初始化依赖当前日期的示例；测试可传入固定日期以稳定截图。
+  /// 内嵌示例的参考日期，默认使用设计稿中的 2023-03-10。
   final DateTime? referenceDate;
 
   @override
@@ -16,12 +17,16 @@ class TCalendarPage extends StatefulWidget {
 }
 
 class _TCalendarPageState extends State<TCalendarPage> {
-  List<DateTime> _singleValue = [];
-  List<DateTime> _multipleValue = [];
+  List<DateTime> _singleValue = [DateTime(2022, 2, 18)];
+  List<DateTime> _multipleValue = [
+    DateTime(2022, 2, 18),
+    DateTime(2022, 2, 20),
+    DateTime(2022, 2, 22),
+  ];
   List<DateTime> _describedSingleValue = [DateTime(2022, 2, 18)];
   List<DateTime> _describedMultipleValue = [DateTime(2022, 2, 18)];
-  List<DateTime> _switchValue = [DateTime(2022, 2, 27)];
-  List<DateTime> _rangeValue = [DateTime(2024, 12, 5), DateTime(2024, 12, 10)];
+  List<DateTime> _switchValue = [DateTime(2022, 2, 18)];
+  List<DateTime> _rangeValue = [DateTime(2022, 2, 19), DateTime(2022, 2, 21)];
   List<DateTime> _localizedValue = [DateTime(2022, 2, 18)];
   List<DateTime> _limitedValue = [DateTime(2022, 2, 18)];
   late final DateTime _referenceDate;
@@ -30,7 +35,7 @@ class _TCalendarPageState extends State<TCalendarPage> {
   @override
   void initState() {
     super.initState();
-    final now = widget.referenceDate ?? DateTime.now();
+    final now = widget.referenceDate ?? DateTime(2023, 3, 10);
     _referenceDate = DateTime(now.year, now.month, now.day);
     _inlineValue = [_referenceDate];
   }
@@ -42,6 +47,10 @@ class _TCalendarPageState extends State<TCalendarPage> {
       desc: '按照日历形式展示数据或日期的容器。',
       exampleCodeGroup: 'calendar',
       compactDemo: true,
+      // Figma Demo 页面底色；深色模式继续使用当前主题。
+      backgroundColor: Theme.of(context).brightness == Brightness.light
+          ? const Color(0xFFF6F6F6)
+          : context.tTheme.bgColorPage,
       showTestModule: false,
       children: [
         ExampleModule(
@@ -50,6 +59,7 @@ class _TCalendarPageState extends State<TCalendarPage> {
             ExampleItem(desc: '基础日历', builder: _buildSingle),
             ExampleItem(builder: _buildMultiple),
             ExampleItem(desc: '带单行描述的日历', builder: _buildDescribed),
+            ExampleItem(desc: '带双行描述的日历', builder: _buildDoubleDescribed),
             ExampleItem(desc: '带翻页功能的日历', builder: _buildSwitchMode),
             ExampleItem(desc: '可选择区间日期的日历', builder: _buildRange),
           ],
@@ -77,71 +87,132 @@ class _TCalendarPageState extends State<TCalendarPage> {
 
   String _formatDates(List<DateTime> dates) => dates.map(_formatDate).join('、');
 
+  Widget _dateNote(List<DateTime> dates) => ConstrainedBox(
+    constraints: const BoxConstraints(maxWidth: 170),
+    child: TText(
+      _formatDates(dates),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    ),
+  );
+
   void _showCalendar({
-    required String title,
     required TCalendarVariant variant,
     required List<DateTime> value,
     required ValueChanged<List<DateTime>> onConfirm,
     DateTime? minDate,
     DateTime? maxDate,
     TCalendarSubtitleBuilder? subtitleBuilder,
+    TCalendarCellBuilder? cellBuilder,
     bool showMonthSwitcher = false,
     bool localized = false,
   }) {
     var draft = List<DateTime>.of(value);
-    var anchor = draft.isEmpty ? minDate ?? _referenceDate : draft.first;
-    TPopup.show(
+    final start = minDate ?? DateTime(2022, 2);
+    final end = maxDate ?? DateTime(2022, 8);
+    var anchor = draft.isEmpty ? start : draft.first;
+    late TPopupHandle popup;
+    popup = TPopup.show(
       context,
       options: TPopupOptions.bottom(
-        height: MediaQuery.sizeOf(context).height * 0.78,
-        headerBuilder: (_, close) => TPopupHeader(
-          cancelButton: TToolbarPressable(
-            onTap: close,
-            child: TText(localized ? 'Cancel' : '取消'),
-          ),
-          title: TText(localized ? 'Select Date' : title),
-          confirmButton: TToolbarPressable(
-            onTap: () {
-              onConfirm(List<DateTime>.of(draft));
-              close();
-            },
-            child: TText(localized ? 'Confirm' : '确定'),
+        height: MediaQuery.sizeOf(context).height * 0.85,
+        headerBuilder: (_, close) => SizedBox(
+          height: TPopupHeader.headerHeight,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              TText(
+                localized ? 'Select Date' : '请选择日期',
+                font: context.tTheme.fontTitleLarge,
+              ),
+              Positioned(
+                right: context.tTheme.spacer8,
+                child: IconButton(
+                  tooltip: localized ? 'Close' : '关闭',
+                  onPressed: close,
+                  icon: const TIcon(TIcons.close),
+                ),
+              ),
+            ],
           ),
         ),
         child: StatefulBuilder(
           builder: (context, setPopupState) {
+            final first = DateTime(anchor.year, anchor.month);
+            final last = DateTime(anchor.year, anchor.month + 1, 0);
             final calendar = TCalendar(
               key: const ValueKey('calendar-popup-panel'),
               value: draft,
               variant: variant,
-              minDate: minDate,
-              maxDate: maxDate,
+              minDate: showMonthSwitcher && first.isAfter(start)
+                  ? first
+                  : start,
+              maxDate: showMonthSwitcher && last.isBefore(end) ? last : end,
               anchorDate: anchor,
-              animateTo: true,
               subtitleBuilder: subtitleBuilder,
-              monthTitleBuilder: localized
+              cellBuilder: cellBuilder,
+              monthTitleBuilder: showMonthSwitcher
+                  ? (_, __) => const SizedBox.shrink()
+                  : localized
                   ? (_, month) => TText(
                       '${_englishMonths[month.month - 1]} ${month.year}',
                     )
                   : null,
               onChanged: (next) => setPopupState(() => draft = next),
             );
-            final body = showMonthSwitcher
-                ? Column(
-                    children: [
-                      _CalendarMonthSwitcher(
-                        month: anchor,
-                        onChanged: (month) =>
-                            setPopupState(() => anchor = month),
+            final body = Material(
+              color: context.tTheme.bgColorContainer,
+              child: Column(
+                children: [
+                  if (showMonthSwitcher)
+                    _CalendarMonthSwitcher(
+                      month: anchor,
+                      minDate: start,
+                      maxDate: end,
+                      onChanged: (month) => setPopupState(() => anchor = month),
+                    ),
+                  Expanded(
+                    child: showMonthSwitcher
+                        ? Theme(
+                            data: Theme.of(context).mergeExtension(
+                              (Theme.of(
+                                        context,
+                                      ).extension<TCalendarThemeData>() ??
+                                      const TCalendarThemeData())
+                                  .copyWith(monthTitleHeight: 0),
+                            ),
+                            child: calendar,
+                          )
+                        : calendar,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(context.tTheme.spacer16),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: TButton(
+                        colorScheme: TButtonColorScheme.primary,
+                        size: TButtonSize.large,
+                        onPressed:
+                            draft.isEmpty ||
+                                (variant == TCalendarVariant.range &&
+                                    draft.length != 2)
+                            ? null
+                            : () {
+                                onConfirm(List<DateTime>.of(draft));
+                                popup.close();
+                              },
+                        child: Text(localized ? 'Confirm' : '确定'),
                       ),
-                      Expanded(child: calendar),
-                    ],
-                  )
-                : calendar;
+                    ),
+                  ),
+                ],
+              ),
+            );
             return localized
                 ? Localizations.override(
                     context: context,
                     locale: const Locale('en'),
+                    delegates: AppLocalizations.localizationsDelegates,
                     child: body,
                   )
                 : body;
@@ -157,10 +228,9 @@ class _TCalendarPageState extends State<TCalendarPage> {
       TCell(
         key: const ValueKey('calendar-single-trigger'),
         title: const TText('单个选择日历'),
-        note: TText(_formatDates(_singleValue)),
+        note: _dateNote(_singleValue),
         arrow: true,
         onTap: () => _showCalendar(
-          title: '选择日期',
           variant: TCalendarVariant.single,
           value: _singleValue,
           onConfirm: (value) => setState(() => _singleValue = value),
@@ -175,10 +245,9 @@ class _TCalendarPageState extends State<TCalendarPage> {
       TCell(
         key: const ValueKey('calendar-multiple-trigger'),
         title: const TText('多个选择日历'),
-        note: TText(_formatDates(_multipleValue)),
+        note: _dateNote(_multipleValue),
         arrow: true,
         onTap: () => _showCalendar(
-          title: '选择多个日期',
           variant: TCalendarVariant.multiple,
           value: _multipleValue,
           onConfirm: (value) => setState(() => _multipleValue = value),
@@ -188,55 +257,75 @@ class _TCalendarPageState extends State<TCalendarPage> {
   );
 
   @ExampleCode(group: 'calendar')
-  Widget _buildDescribed(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      TCellGroup(
-        cells: [
-          TCell(
-            key: const ValueKey('calendar-single-description-trigger'),
-            title: const TText('带单行描述的日历'),
-            note: TText(_formatDates(_describedSingleValue)),
-            arrow: true,
-            onTap: () => _showCalendar(
-              title: '选择日期',
-              variant: TCalendarVariant.single,
-              value: _describedSingleValue,
-              minDate: DateTime(2022, 2),
-              maxDate: DateTime(2022, 3, 15),
-              subtitleBuilder: (_, __) => const TText('¥60'),
-              onConfirm: (value) =>
-                  setState(() => _describedSingleValue = value),
-            ),
-          ),
-        ],
+  Widget _buildDescribed(BuildContext context) => TCellGroup(
+    cells: [
+      TCell(
+        key: const ValueKey('calendar-single-description-trigger'),
+        title: const TText('带单行描述的日历'),
+        note: _dateNote(_describedSingleValue),
+        arrow: true,
+        onTap: () => _showCalendar(
+          variant: TCalendarVariant.single,
+          value: _describedSingleValue,
+          minDate: DateTime(2022, 2),
+          maxDate: DateTime(2022, 3, 15),
+          subtitleBuilder: (_, __) => const Text('¥60'),
+          onConfirm: (value) => setState(() => _describedSingleValue = value),
+        ),
       ),
-      Padding(
-        padding: EdgeInsets.all(context.tTheme.spacer16),
-        child: const TText('带双行描述的日历'),
-      ),
-      TCellGroup(
-        cells: [
-          TCell(
-            key: const ValueKey('calendar-double-description-trigger'),
-            title: const TText('带双行描述的日历'),
-            note: TText(_formatDates(_describedMultipleValue)),
-            arrow: true,
-            onTap: () => _showCalendar(
-              title: '选择多个日期',
-              variant: TCalendarVariant.multiple,
-              value: _describedMultipleValue,
-              minDate: DateTime(2022, 2),
-              maxDate: DateTime(2022, 3, 15),
-              subtitleBuilder: (_, model) {
-                const holidays = {1: '初一', 2: '初二', 14: '情人节', 15: '元宵节'};
-                return TText(holidays[model.date.day] ?? '¥60');
-              },
-              onConfirm: (value) =>
-                  setState(() => _describedMultipleValue = value),
-            ),
-          ),
-        ],
+    ],
+  );
+
+  @ExampleCode(group: 'calendar')
+  Widget _buildDoubleDescribed(BuildContext context) => TCellGroup(
+    cells: [
+      TCell(
+        key: const ValueKey('calendar-double-description-trigger'),
+        title: const TText('带双行描述的日历'),
+        note: _dateNote(_describedMultipleValue),
+        arrow: true,
+        onTap: () => _showCalendar(
+          variant: TCalendarVariant.multiple,
+          value: _describedMultipleValue,
+          minDate: DateTime(2022, 2),
+          maxDate: DateTime(2022, 3, 15),
+          cellBuilder: (context, model) {
+            const holidays = {1: '初一', 2: '初二', 14: '情人节', 15: '元宵节'};
+            final selected = model.selectType == DateSelectType.selected;
+            final color = model.selectType == DateSelectType.disabled
+                ? context.tTheme.textDisabledColor
+                : selected
+                ? context.tTheme.textColorAnti
+                : context.tTheme.textColorSecondary;
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                TText(
+                  '${model.date.day}',
+                  font: context.tTheme.fontTitleMedium,
+                  textColor: color,
+                ),
+                Positioned(
+                  top: context.tTheme.spacer4,
+                  child: TText(
+                    holidays[model.date.day] ?? '',
+                    font: context.tTheme.fontBodyExtraSmall,
+                    textColor: color,
+                  ),
+                ),
+                Positioned(
+                  bottom: context.tTheme.spacer4,
+                  child: TText(
+                    '¥60',
+                    font: context.tTheme.fontBodyExtraSmall,
+                    textColor: color,
+                  ),
+                ),
+              ],
+            );
+          },
+          onConfirm: (value) => setState(() => _describedMultipleValue = value),
+        ),
       ),
     ],
   );
@@ -247,10 +336,9 @@ class _TCalendarPageState extends State<TCalendarPage> {
       TCell(
         key: const ValueKey('calendar-switch-trigger'),
         title: const TText('带翻页功能的日历'),
-        note: TText(_formatDates(_switchValue)),
+        note: _dateNote(_switchValue),
         arrow: true,
         onTap: () => _showCalendar(
-          title: '选择日期',
           variant: TCalendarVariant.single,
           value: _switchValue,
           minDate: DateTime(2022, 1, 10),
@@ -266,11 +354,10 @@ class _TCalendarPageState extends State<TCalendarPage> {
   Widget _buildRange(BuildContext context) => InkWell(
     key: const ValueKey('calendar-range-trigger'),
     onTap: () => _showCalendar(
-      title: '选择日期区间',
       variant: TCalendarVariant.range,
       value: _rangeValue,
-      minDate: DateTime(2024, 11),
-      maxDate: DateTime(2025),
+      minDate: DateTime(2022, 2),
+      maxDate: DateTime(2022, 4),
       onConfirm: (value) => setState(() => _rangeValue = value),
     ),
     child: Container(
@@ -303,10 +390,9 @@ class _TCalendarPageState extends State<TCalendarPage> {
       TCell(
         key: const ValueKey('calendar-localized-trigger'),
         title: const TText('国际化'),
-        note: TText(_formatDates(_localizedValue)),
+        note: _dateNote(_localizedValue),
         arrow: true,
         onTap: () => _showCalendar(
-          title: 'Select Date',
           variant: TCalendarVariant.single,
           value: _localizedValue,
           minDate: DateTime(2022, 2),
@@ -323,11 +409,10 @@ class _TCalendarPageState extends State<TCalendarPage> {
     cells: [
       TCell(
         key: const ValueKey('calendar-limited-trigger'),
-        title: const TText('含不可选的日历'),
-        note: TText(_formatDates(_limitedValue)),
+        title: const TText('含不可选的日期'),
+        note: _dateNote(_limitedValue),
         arrow: true,
         onTap: () => _showCalendar(
-          title: '选择日期',
           variant: TCalendarVariant.single,
           value: _limitedValue,
           minDate: DateTime(2022, 2, 18),
@@ -339,26 +424,54 @@ class _TCalendarPageState extends State<TCalendarPage> {
   );
 
   @ExampleCode(group: 'calendar')
-  Widget _buildInline(BuildContext context) => Column(
-    children: [
-      Padding(
-        padding: EdgeInsets.all(context.tTheme.spacer16),
-        child: const TText('日历标题'),
-      ),
-      TCalendar(
-        key: const ValueKey('calendar-inline-panel'),
-        value: _inlineValue,
-        variant: TCalendarVariant.multiple,
-        minDate: _referenceDate,
-        maxDate: _referenceDate.add(const Duration(days: 180)),
-        onChanged: (value) => setState(() => _inlineValue = value),
-      ),
-    ],
+  Widget _buildInline(BuildContext context) => ColoredBox(
+    color: context.tTheme.bgColorContainer,
+    child: Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(context.tTheme.spacer16),
+          child: TText('日历标题', font: context.tTheme.fontTitleLarge),
+        ),
+        TCalendar(
+          key: const ValueKey('calendar-inline-panel'),
+          value: _inlineValue,
+          variant: TCalendarVariant.multiple,
+          minDate: DateTime(_referenceDate.year, _referenceDate.month),
+          maxDate: DateTime(_referenceDate.year, _referenceDate.month + 2, 0),
+          onChanged: (value) => setState(() => _inlineValue = value),
+        ),
+        Padding(
+          padding: EdgeInsets.all(context.tTheme.spacer16),
+          child: SizedBox(
+            width: double.infinity,
+            child: TButton(
+              colorScheme: TButtonColorScheme.primary,
+              size: TButtonSize.large,
+              onPressed: _inlineValue.isEmpty
+                  ? null
+                  : () => TToast.showText(
+                      _formatDates(_inlineValue),
+                      context: context,
+                    ),
+              child: const Text('确定'),
+            ),
+          ),
+        ),
+      ],
+    ),
   );
 }
 
 class _CalendarMonthSwitcher extends StatelessWidget {
-  const _CalendarMonthSwitcher({required this.month, required this.onChanged});
+  const _CalendarMonthSwitcher({
+    required this.month,
+    required this.minDate,
+    required this.maxDate,
+    required this.onChanged,
+  });
+
+  final DateTime minDate;
+  final DateTime maxDate;
 
   final DateTime month;
   final ValueChanged<DateTime> onChanged;
@@ -369,8 +482,14 @@ class _CalendarMonthSwitcher extends StatelessWidget {
       children: [
         IconButton(
           tooltip: '上个月',
-          onPressed: () => onChanged(DateTime(month.year, month.month - 1)),
-          icon: const Icon(Icons.chevron_left),
+          onPressed:
+              DateTime(
+                month.year,
+                month.month,
+              ).isAfter(DateTime(minDate.year, minDate.month))
+              ? () => onChanged(DateTime(month.year, month.month - 1))
+              : null,
+          icon: const TIcon(TIcons.chevron_left),
         ),
         Expanded(
           child: TText(
@@ -380,8 +499,14 @@ class _CalendarMonthSwitcher extends StatelessWidget {
         ),
         IconButton(
           tooltip: '下个月',
-          onPressed: () => onChanged(DateTime(month.year, month.month + 1)),
-          icon: const Icon(Icons.chevron_right),
+          onPressed:
+              DateTime(
+                month.year,
+                month.month,
+              ).isBefore(DateTime(maxDate.year, maxDate.month))
+              ? () => onChanged(DateTime(month.year, month.month + 1))
+              : null,
+          icon: const TIcon(TIcons.chevron_right),
         ),
       ],
     );

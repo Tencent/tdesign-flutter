@@ -10,7 +10,6 @@ const pickerDemoPageTestSpec = DemoPageTestSpec(
     '用于一组预设数据中的选择。',
     '01 组件类型',
     '基础选择器',
-    '选择城市',
     '选择时间',
     '选择地区',
     '02 组件样式',

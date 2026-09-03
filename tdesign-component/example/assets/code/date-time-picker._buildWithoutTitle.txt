@@ -1,0 +1,6 @@
+Widget _buildWithoutTitle(BuildContext context) => _cell(
+    'without-title',
+    DateTimePickerMode(dateMode: DateMode.date),
+    title: '无标题时间选择器',
+    showTitle: false,
+  );

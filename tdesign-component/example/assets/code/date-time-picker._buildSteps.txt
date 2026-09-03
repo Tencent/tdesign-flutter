@@ -1,8 +1,0 @@
-Widget _buildSteps(BuildContext context) => _cell(
-    id: 'steps',
-    title: '选择时间',
-    value: _steps,
-    mode: DateTimePickerMode(timeMode: TimeMode.second),
-    steps: const DateTimePickerSteps(minute: 5),
-    onConfirm: (value) => setState(() => _steps = value),
-  );

@@ -19,7 +19,7 @@ Upload 等既有 Golden 的字形选择与像素基线。
 `PickerGoldenCJK-Regular.otf` 仅补充 Picker 整页 Golden 新增且既有子集未覆盖的
 字形，字符清单见 `picker_demo_glyphs.txt`。独立加载可避免扩充共享字体改变既有组件的
 像素基线，子集 SHA-256 为
-`39f53858d5fccf2b9190e6063f7f23c21aee6d93f6abaea8d8d82d5a1fca20d5`。
+`83d2e4d3b8ae6282eeab5d8930466e082b29a3a88ac32f19da543ad1b547a107`。
 
 `RadioGoldenCJK-Regular.otf` 使用同一上游与子集参数，字符清单见
 `radio_glyphs.txt`，仅用于 Radio 整页 Golden。子集 SHA-256 为
@@ -28,13 +28,13 @@ Upload 等既有 Golden 的字形选择与像素基线。
 `CalendarGoldenCJK-Regular.otf` 仅补充 Calendar 整页 Golden 新增且既有子集
 未覆盖的字形，字符清单见 `calendar_demo_glyphs.txt`。独立加载可避免扩充共享
 字体改变既有组件的像素基线，子集 SHA-256 为
-`a9e36e95299dd57b9624054ea5853730a0600baf344d64a637262d87f8c57fe3`，本次下载的
+`d9df3abeeda93b75f92a6e35d0bd73b9da67375cab820d6ac203b8fe4c649c0d`，所用
 上游源文件 SHA-256 为
 `734b20876d6a6777e4c30b627e8391695bbf545c0badf6c066138bebd1f0278a`。
 `DateTimePickerGoldenCJK-Regular.otf` 仅补充 DateTimePicker 整页 Golden
 新增且既有子集未覆盖的字形，字符清单见 `date_time_picker_demo_glyphs.txt`。
 独立加载可避免扩充共享字体改变既有组件的像素基线，子集 SHA-256 为
-`d0febc05862e22d0ae996763291f89d831b874cd5dcf0bcc31e98b7d55b3330b`。
+`e153909c12e6f88953746a1334d40eb91806a02ac263fb5997bf41710e87156c`。
 
 - 上游：Noto Sans SC 2.004 `NotoSansSC-Regular.otf`
 - 来源：`https://github.com/notofonts/noto-cjk/raw/Sans2.004/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf`
@@ -58,3 +58,7 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 更新 DateTimePicker 页面文案时，更新 DateTimePicker 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。
+
+本轮 Calendar / Picker / DateTimePicker 的补充字形由本机已有的
+`NotoSansSC-Regular.otf` 生成，未下载字体。字符清单只保留页面、弹出态中未被
+原字体和 Alignment 字体覆盖的字形，继续保留 .notdef 轮廓，以便发现缺字。

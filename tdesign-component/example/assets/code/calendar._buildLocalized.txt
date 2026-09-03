@@ -3,10 +3,9 @@ Widget _buildLocalized(BuildContext context) => TCellGroup(
       TCell(
         key: const ValueKey('calendar-localized-trigger'),
         title: const TText('国际化'),
-        note: TText(_formatDates(_localizedValue)),
+        note: _dateNote(_localizedValue),
         arrow: true,
         onTap: () => _showCalendar(
-          title: 'Select Date',
           variant: TCalendarVariant.single,
           value: _localizedValue,
           minDate: DateTime(2022, 2),

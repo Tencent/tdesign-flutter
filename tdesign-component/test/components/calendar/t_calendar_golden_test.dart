@@ -32,7 +32,7 @@ void main() {
           'goldens/t_calendar_states_${brightness.name}.png',
         ),
       );
-    });
+    }, tags: 'golden');
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/components/picker/picker_item.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
@@ -26,6 +27,58 @@ void main() {
       TPickerOption(label: 'Two', value: 2),
     ],
   ]);
+
+  testWidgets('滚轮统一字号并继承 TextTheme，禁用项可自定义内容', (tester) async {
+    final control = FixedExtentScrollController(initialItem: 2);
+    addTearDown(control.dispose);
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(
+          textTheme: const TextTheme(bodyLarge: TextStyle(fontSize: 19)),
+          extensions: [TThemeData.defaultData()],
+        ),
+        home: Column(
+          children: [
+            for (var index = 0; index < 5; index++)
+              SizedBox(
+                height: 40,
+                child: PickerItemWidget(
+                  fixedExtentScrollController: control,
+                  colIndex: 0,
+                  index: index,
+                  option: TPickerOption(label: 'item-$index', value: index),
+                  itemHeight: 40,
+                ),
+              ),
+            SizedBox(
+              height: 40,
+              child: PickerItemWidget(
+                fixedExtentScrollController: control,
+                colIndex: 0,
+                index: 5,
+                option: const TPickerOption(
+                  label: 'disabled',
+                  value: 5,
+                  disabled: true,
+                ),
+                disabled: true,
+                itemHeight: 40,
+                itemBuilder: (_, option, __, ___, ____) =>
+                    Text('custom-${option.label}'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    final labels = tester.widgetList<TText>(find.byType(TText)).toList();
+    expect(labels, hasLength(5));
+    expect(labels.map((label) => label.style!.fontSize), everyElement(19));
+    expect(labels[2].style!.fontWeight, FontWeight.w600);
+    expect(labels[1].style!.fontWeight, FontWeight.w400);
+    expect(labels[1].style!.color, TThemeData.defaultData().textColorSecondary);
+    expect(find.text('custom-disabled'), findsOneWidget);
+  });
 
   group('TPicker controlled behavior', () {
     testWidgets('renders controlled values and emits a complete snapshot', (
