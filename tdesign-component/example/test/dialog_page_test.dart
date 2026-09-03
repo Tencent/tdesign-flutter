@@ -123,6 +123,29 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('各类弹窗正文保持设计稿原文与标点', (tester) async {
+    configureViewport(tester);
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+
+    for (final label in [
+      '反馈类-带标题',
+      '确认类-带标题',
+      '输入类-带描述',
+      '图片置顶-带标题描述',
+      '文字按钮',
+    ]) {
+      await openScenario(tester, label);
+      expect(
+        find.text('告知当前状态、信息和解决方法，等内容。描述尽可能控制在三行内。'),
+        findsOneWidget,
+        reason: '$label 应使用设计稿正文，不自行润色或增删文字',
+      );
+      await closeCurrentDialog(tester);
+    }
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('开放能力按钮通过现有 TDialogAction 组合', (tester) async {
     configureViewport(tester);
     await tester.pumpWidget(buildPage());
