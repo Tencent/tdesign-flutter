@@ -193,6 +193,65 @@ void main() {
     expect(value.year, isNot(2024));
   });
 
+  testWidgets('月日模式保留计算年接受连续选择时保留滚轮', (tester) async {
+    var value = const TDateTimePickerValue(year: 2024, month: 3, day: 15);
+    var changes = 0;
+    await tester.pumpWidget(
+      wrap(
+        StatefulBuilder(
+          builder: (context, setState) => TDateTimePicker(
+            value: value,
+            mode: DateTimePickerMode(dateMode: DateMode.monthDay),
+            onChanged: (next) => setState(() {
+              value = TDateTimePickerValue(
+                year: 2024,
+                month: next.month,
+                day: next.day,
+              );
+              changes++;
+            }),
+          ),
+        ),
+      ),
+    );
+    final wheelState = tester.state(find.byType(DateTimePickerWheel));
+    await tester.fling(
+      find.byType(ListWheelScrollView).first,
+      const Offset(0, -160),
+      1000,
+    );
+    await tester.pumpAndSettle();
+    expect(tester.state(find.byType(DateTimePickerWheel)), same(wheelState));
+    expect(changes, greaterThan(1));
+    expect(value.year, 2024);
+    expect(value.month, greaterThan(3));
+  });
+
+  testWidgets('月日模式仅计算年变化时重建并同步完整日期', (tester) async {
+    Widget picker(int year) => wrap(
+      TDateTimePicker(
+        value: TDateTimePickerValue(year: year, month: 6, day: 15),
+        mode: DateTimePickerMode(dateMode: DateMode.monthDay),
+        onChanged: (_) {},
+      ),
+    );
+    await tester.pumpWidget(picker(2024));
+    final wheelState = tester.state(find.byType(DateTimePickerWheel));
+    await tester.pumpWidget(picker(2025));
+    await tester.pumpAndSettle();
+    expect(
+      tester.state(find.byType(DateTimePickerWheel)),
+      isNot(same(wheelState)),
+    );
+    expect(
+      tester
+          .widget<DateTimePickerWheel>(find.byType(DateTimePickerWheel))
+          .snapshot
+          .current,
+      DateTime(2025, 6, 15),
+    );
+  });
+
   testWidgets('父级拒绝选择并用原值重建时恢复滚轮且可再次通知', (tester) async {
     const value = TDateTimePickerValue(year: 2024, month: 6, day: 15);
     var changes = 0;

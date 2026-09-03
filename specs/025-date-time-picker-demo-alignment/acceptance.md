@@ -45,3 +45,10 @@ flutter test --no-pub test/date_time_picker_demo_test.dart test/date_time_picker
 - 运行真实 Demo 功能测试和 run_visual_regression.dart 登记的 Golden；没有更新图片。Android/iOS 真机尚未验证。
 - 修复前真实消费测试在自定义 fontBodyLarge=19/27 时读到 Material 默认字号而失败，修复后两消费组件的 token 与显式子树 TextTheme 均通过。共享源码及测试在两个 PR 中相同。
 - 修复前父级拒绝后保留 2024-07-15 而非 2024-06-15；修复后重复选择、父级原值重建均回到正确月份，原有接受值连续惯性滚动回归通过。初次 Golden 命令误用不存在的组件文件，已改用仓库登记的 Demo Golden 入口完成验证。
+
+## B1 月日接受值惯性回归（2026-09-04）
+
+- 修复前新增真实 fling 回归失败：保留 year=2024 接受结果后原 DateTimePickerWheelState 已销毁；修复后同一 State 保留且回调次数 >1。
+- 另验证只修改隐藏计算年 2024→2025 时滚轮重建、完整日期同步；原有拒绝原值恢复及普通年月日接受惯性回归继续通过。
+- Flutter 3.32.0 Linux 与本机 3.47.0 严格 analyze 零告警，146 项组件测试、11 项工具自测、5 项 Demo 测试通过。
+- Flutter 3.32.0 Linux 20 项 Demo Golden 无更新参数通过；生产覆盖率 668/688=97.09%。未新增 API，未改变图片基线；真机未测。

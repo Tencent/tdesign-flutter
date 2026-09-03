@@ -9,3 +9,7 @@
 ## API 收敛实现
 
 修复 didUpdateWidget 在 value 未变化时提前返回的问题，按当前模式和约束归一化比较；拒绝后重置 wheel 和通知去重状态，接受新值保留惯性滚动。共享字体实现复用 tExplicitTextTheme 和 fontBodyLarge。
+
+## 月日模式接受值的惯性修复
+
+统一比较 _createSnapshot().current 与 _snapshot.current，不再按 value 是否变化分别比较原始值和可见列。完整日期保留隐藏计算年：同年接受当前滚轮结果保持 controller，拒绝或实际计算年变化重建。无公开 API 变化。

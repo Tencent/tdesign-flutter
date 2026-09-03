@@ -142,18 +142,16 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
       oldWidget.mode.columns,
       widget.mode.columns,
     );
-    final valueChanged = oldWidget.value != widget.value;
     final rangeChanged =
         oldWidget.start != widget.start || oldWidget.end != widget.end;
     final stepsChanged = oldWidget.steps != widget.steps;
     final showWeekChanged = oldWidget.showWeek != widget.showWeek;
     final renderLabelChanged = oldWidget.renderLabel != widget.renderLabel;
 
-    // value 未变化也可能是父级拒绝了滚轮结果。比较归一化后的可见列，
-    // 避免隐藏计算年、范围钳制或缺省字段造成误判。
-    final controlledValueDiverged = valueChanged
-        ? widget.value != _snapshot.toResult()
-        : _createSnapshot().toResult() != _snapshot.toResult();
+    // 接受与拒绝都比较归一化后的完整日期，保留隐藏计算年的语义：
+    // 同年接受滚轮结果不重建，仅计算年变化也能同步更新。
+    final controlledValueDiverged =
+        _createSnapshot().current != _snapshot.current;
     final configurationChanged =
         modeChanged ||
         rangeChanged ||
