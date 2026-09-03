@@ -263,6 +263,33 @@ void main() {
       expect(cancel.right, lessThan(confirm.left));
     });
 
+    testWidgets('三个文字操作使用带内边距的纵向布局', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TDialog(
+            title: Text('文字多操作'),
+            actions: [
+              TDialogAction(child: Text('一'), variant: TButtonVariant.text),
+              TDialogAction(child: Text('二'), variant: TButtonVariant.text),
+              TDialogAction(child: Text('三'), variant: TButtonVariant.text),
+            ],
+          ),
+        ),
+      );
+
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is Padding && widget.padding == const EdgeInsets.all(24),
+        ),
+        findsOneWidget,
+      );
+      final dialog = tester.getRect(find.byType(TDialog));
+      final firstButton = tester.getRect(find.widgetWithText(TButton, '一'));
+      expect(firstButton.left, closeTo(dialog.left + 24, 0.01));
+      expect(firstButton.right, closeTo(dialog.right - 24, 0.01));
+    });
+
     testWidgets('操作角色、禁用与 closeOnPressed 生效', (tester) async {
       await tester.pumpWidget(
         app(
@@ -608,6 +635,46 @@ void main() {
       );
     });
 
+    testWidgets('显式间距不会被数值相同的 token 默认值覆盖', (tester) async {
+      final tokens = TThemeData.defaultData().copyWithTThemeData(
+        'dialog-explicit-spacing-test',
+        marginMap: {'spacer12': 14, 'spacer24': 30},
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(tokens),
+          home: const Scaffold(
+            body: TDialog(
+              title: Text('显式间距'),
+              actionsPadding: EdgeInsets.all(24),
+              actionSpacing: 12,
+              actions: [
+                TDialogAction(child: Text('取消')),
+                TDialogAction(
+                  child: Text('确定'),
+                  role: TDialogActionRole.primary,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is Padding && widget.padding == const EdgeInsets.all(24),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is SizedBox && widget.width == 12,
+        ),
+        findsOneWidget,
+      );
+    });
+
     testWidgets('极小视口与自定义间距 token 不会生成负约束', (tester) async {
       final tokens = TThemeData.defaultData().copyWithTThemeData(
         'dialog-small-viewport-test',
@@ -661,6 +728,11 @@ void main() {
     );
     await tester.tap(find.text('打开'));
     await tester.pumpAndSettle();
+    final confirmButton = tester.widget<TButton>(
+      find.ancestor(of: find.text('知道了'), matching: find.byType(TButton)),
+    );
+    expect(confirmButton.variant, TButtonVariant.fill);
+    expect(confirmButton.colorScheme, TButtonColorScheme.primary);
     await tester.tap(find.text('知道了'));
     await tester.pumpAndSettle();
     expect(called, isTrue);

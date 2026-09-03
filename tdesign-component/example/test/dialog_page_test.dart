@@ -5,6 +5,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/page/t_dialog_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
+import 'demo_page_test_utils.dart';
+import 'dialog_demo_test_spec.dart';
+
 const _scenarioLabels = [
   '反馈类-带标题',
   '反馈类-无标题',
@@ -31,6 +34,8 @@ const _scenarioLabels = [
 ];
 
 void main() {
+  registerDemoStructureTests(dialogDemoPageTestSpec);
+
   void configureViewport(WidgetTester tester) {
     tester.view.physicalSize = const Size(800, 1200);
     tester.view.devicePixelRatio = 1;

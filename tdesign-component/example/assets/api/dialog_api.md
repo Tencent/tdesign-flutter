@@ -23,8 +23,8 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | actions | List<TDialogAction> | const <TDialogAction>[] | 操作列表；1～2 个横向排列，更多操作纵向排列。 纵向排列时，`TDialogAction.role` 为 `TDialogActionRole.primary` 或 `TDialogActionRole.destructive` 的强调操作优先展示，同类操作保持声明顺序。 |
-| actionSpacing | double | 12 | 操作之间的间距。 |
-| actionsPadding | EdgeInsetsGeometry | _defaultActionsPadding | 操作区内边距。 全部操作显式使用 `TButtonVariant.text` 且未覆盖本字段时，自动使用 官方文字按钮 Footer 的 32dp 顶部间距，并保持按钮横向贴边。 |
+| actionSpacing | double? | - | 操作之间的间距。未设置时使用主题 token 默认值。 |
+| actionsPadding | EdgeInsetsGeometry? | - | 操作区内边距。未设置时使用主题 token 默认值。 |
 | actionsWidget | Widget? | - | 完全自定义操作区。 |
 | backgroundColor | Color? | - | 面板背景色。 |
 | content | Widget? | - | 内容槽位。 |

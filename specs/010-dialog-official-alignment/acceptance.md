@@ -9,15 +9,15 @@
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter test --no-pub test/components/dialog/t_dialog_test.dart --coverage` | PASS，20 tests；LH/LF `226/230 = 98.26%` | Flutter 3.32.0；Dialog 尺寸、内容、操作区、token、主题和路由契约 |
+| `flutter test --no-pub test/components/dialog/t_dialog_test.dart --coverage` | PASS，22 tests；LH/LF `225/230 = 97.83%` | Flutter 3.32.0；Dialog 尺寸、内容、操作区、显式值优先级、token、主题和路由契约 |
 | Popup 公共契约复核 | PASS，未新增或修改 Popup API | Dialog 使用独立标准模态路由，既有 Popup 240×240 默认契约保持不变 |
-| `flutter test --no-pub test/dialog_page_test.dart` | PASS，8 tests | 22 个入口真实点击打开/关闭及关键组合交互 |
+| `flutter test --no-pub test/dialog_page_test.dart` | PASS，9 tests | 22 个入口结构契约、真实点击打开/关闭及关键组合交互 |
 | `flutter analyze --fatal-infos --no-pub` | PASS | Flutter 3.32.0，0 issues |
 | `dart run tool/generate_example_code.dart --check` | PASS | 生成代码片段与 Demo 源码同步 |
 | Flutter 3.47.0 Dialog 组件测试 | PASS，18 tests | 三操作稳定排序与极小视口保护追加前的合并结果；本轮未重跑 latest |
 | `flutter test --no-pub test/dialog_page_test.dart` | PASS，8 tests | Flutter 3.47.0 最终源码复验 |
 | `flutter analyze --fatal-infos --no-pub` | PASS | Flutter 3.47.0，0 issues |
-| CNB 同款 Flutter 3.32.0 Linux `dialog_page_golden_test.dart` | 本轮未复跑；2026-09-01 历史结果 PASS，12 tests | 当前环境运行第三方 Docker 镜像并挂载源码未获授权；本轮仅人工检查既有 12 张基线 |
+| CNB 同款 Flutter 3.32.0 Linux `dialog_page_golden_test.dart` | PASS，12 tests | 更新 4 张过期基线后，不带 `--update-goldens` 复跑 12/12 通过 |
 | 回归调度器工具测试 | PASS，11 tests | Dialog 组件、覆盖率、Demo 功能和视觉回归登记同步 |
 
 ## 人工验收
@@ -58,3 +58,12 @@
 - Flutter 3.32.0：Dialog 20 tests、Dialog Demo 8 tests 与定向 analyze 全部通过；Dialog 生产源码覆盖率 `226/230 = 98.26%`。本轮追加修复前，Popup 聚焦契约合计 23 tests、回归调度器 11 tests 与严格全量 analyze 已通过。
 - Flutter 3.47.0：临时副本 clean + pub get 后 Dialog 18 tests、Dialog Demo 8 tests 与严格 analyze 全部通过。首次 Demo 运行因复制了 3.32 的 `ink_sparkle.frag` 缓存失败，清理 Example 缓存后复跑通过，确认不是源码回归。
 - 当前 12 张 Dialog Golden 已人工检查；本轮未获授权把源码临时副本挂载到第三方 CNB Docker 镜像，因此没有把 Linux Golden 历史结果冒充为当前合并结果。
+
+## 2026-09-03 CodeBuddy Review 修复复验
+
+- 去除 `TConfirmDialog` 对 primary role 与 primary colorScheme 的重复声明，确认按钮仍解析为 fill + primary。
+- 三个及以上文字操作改用带 24dp token 内边距的纵向布局；1～2 个文字操作继续使用贴边 Footer。
+- `actionsPadding` / `actionSpacing` 使用“是否显式传入”判断优先级，显式 24/12 不再被数值不同的自定义 token 覆盖。
+- Dialog Demo 接入共享结构测试，22 个公开入口数量契约进入实际测试路径。
+- Flutter 3.32.0：定向 analyze 0 issues，Dialog 22 tests，Dialog Demo 9 tests，Dialog 生产源码覆盖率 `225/230 = 97.83%`。
+- CNB 同款 Flutter 3.32.0 Linux：仅 4 张预期基线发生变化，更新后不带 `--update-goldens` 复跑 12/12 通过。

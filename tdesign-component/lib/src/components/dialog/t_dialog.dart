@@ -90,9 +90,15 @@ class TDialog extends StatelessWidget {
     this.width,
     this.maxHeight,
     this.contentPadding,
-    this.actionsPadding = _defaultActionsPadding,
-    this.actionSpacing = 12,
-  }) : assert(
+
+    /// 操作区内边距。未设置时使用主题 token 默认值。
+    EdgeInsetsGeometry? actionsPadding,
+
+    /// 操作之间的间距。未设置时使用主题 token 默认值。
+    double? actionSpacing,
+  }) : _actionsPadding = actionsPadding,
+       _actionSpacing = actionSpacing,
+       assert(
          actionsWidget == null || actions.length == 0,
          'actions and actionsWidget cannot be used together.',
        );
@@ -138,12 +144,17 @@ class TDialog extends StatelessWidget {
 
   /// 操作区内边距。
   ///
-  /// 全部操作显式使用 [TButtonVariant.text] 且未覆盖本字段时，自动使用
+  /// 1～2 个操作全部显式使用 [TButtonVariant.text] 且未覆盖本字段时，自动使用
   /// 官方文字按钮 Footer 的 32dp 顶部间距，并保持按钮横向贴边。
-  final EdgeInsetsGeometry actionsPadding;
+  EdgeInsetsGeometry get actionsPadding =>
+      _actionsPadding ?? _defaultActionsPadding;
+
+  final EdgeInsetsGeometry? _actionsPadding;
 
   /// 操作之间的间距。
-  final double actionSpacing;
+  double get actionSpacing => _actionSpacing ?? 12;
+
+  final double? _actionSpacing;
 
   /// 使用居中模态路由展示 Dialog。
   static Future<T?> show<T>(
@@ -256,17 +267,15 @@ class TDialog extends StatelessWidget {
           inheritedTextStyle?.fontFamilyFallback,
     );
     final useTextActionLayout =
+        actions.length <= 2 &&
         actions.isNotEmpty &&
         actions.every((action) => action.variant == TButtonVariant.text);
     final effectiveActionsPadding =
-        useTextActionLayout && actionsPadding == _defaultActionsPadding
-        ? EdgeInsets.only(top: token.spacer32)
-        : actionsPadding == _defaultActionsPadding
-        ? EdgeInsets.all(token.spacer24)
-        : actionsPadding;
-    final effectiveActionSpacing = actionSpacing == 12
-        ? token.spacer12
-        : actionSpacing;
+        _actionsPadding ??
+        (useTextActionLayout
+            ? EdgeInsets.only(top: token.spacer32)
+            : EdgeInsets.all(token.spacer24));
+    final effectiveActionSpacing = _actionSpacing ?? token.spacer12;
 
     return Semantics(
       namesRoute: true,

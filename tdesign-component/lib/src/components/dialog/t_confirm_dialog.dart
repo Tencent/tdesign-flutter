@@ -24,8 +24,10 @@ class TConfirmDialog extends StatelessWidget {
     this.maxHeight,
     this.contentPadding,
     this.buttonStyle,
-  }) : assert(content == null || contentWidget == null,
-            'content and contentWidget cannot be used together.');
+  }) : assert(
+         content == null || contentWidget == null,
+         'content and contentWidget cannot be used together.',
+       );
 
   final String? title;
   final String? content;
@@ -64,7 +66,6 @@ class TConfirmDialog extends StatelessWidget {
           closeOnPressed: closeOnPressed,
           onPressed: onPressed,
           style: buttonStyle,
-          colorScheme: TButtonColorScheme.primary,
           child: Text(buttonText ?? context.resource.knew),
         ),
       ],

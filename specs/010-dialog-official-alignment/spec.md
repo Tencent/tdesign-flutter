@@ -40,6 +40,8 @@ Dialog 的核心弹层能力已存在，但默认顶边距和关闭按钮位置�
 - 带图片场景使用 160dp 设计高度；输入场景复用 `TInput`，保留灰色输入壳、16dp 顶间距和清除能力，不使用原生透明 `TextField` 近似。
 - “文字按钮”使用 32dp 顶间距、56dp 高的贴边文字操作区和 0.5dp 分隔线；基础按钮继续使用 24dp 操作区内边距。
 - 三个及以上操作按 `TDialogAction.role` 将主要与危险操作优先从上到下展示，同类操作保持声明顺序；未声明强调角色时不改变调用方顺序。确认类纯标题场景使用浅色确认按钮。
+- 贴边文字 Footer 仅用于 1～2 个文字操作；三个及以上文字操作使用带默认操作区内边距的纵向布局。
+- `actionsPadding` 和 `actionSpacing` 的显式实例值始终高于 token 默认值，即使数值与默认字面量相同也不得被覆盖。
 - “组件状态”内逐项展示文字按钮、水平基础按钮、垂直基础按钮、多按钮和关闭按钮说明，不以一个笼统说明替代。
 - 22 个官方场景均有独立可见触发入口；小程序 `openType` 通过 Flutter 既有 `TDialogAction` 自定义子项表达，不新增跨端专用 API。
 - 公开页在“组件用法”后结束，不展示仅供内部验证的“单元测试”模块。
@@ -51,9 +53,9 @@ Dialog 的核心弹层能力已存在，但默认顶边距和关闭按钮位置�
 - [x] Example 测试逐项打开并关闭 22 个入口，覆盖输入、文字按钮、图片、主操作顺序和返回结果。
 - [x] Dialog 生产源码 LCOV `LH/LF >= 95%`。
 - [x] Flutter 3.32.0 与 latest 的组件测试、Example 测试和严格 analyze 全部通过。
-- [ ] Flutter 3.32 Linux 亮暗主题 12 个 Golden 在当前合并结果上稳定复跑；2026-09-01 基线历史复跑已通过，本轮因容器挂载授权限制未执行。
+- [x] Flutter 3.32 Linux 亮暗主题 12 个 Golden 在当前合并结果上稳定复跑；更新 4 张过期基线后，无 `--update-goldens` 复跑 12/12 通过。
 
 ## 兼容性判断
 
-- `TDialog`、`TDialogAction` 与 `TPopupOptions` 的公开签名不变，不新增为 Dialog 特制的 Popup 开关。
+- `TDialog`、`TDialogAction` 与 `TPopupOptions` 不删除或新增公开能力，不新增为 Dialog 特制的 Popup 开关；`actionsPadding` / `actionSpacing` 构造入口允许 `null` 表示未设置，公开 getter 仍保持非空。
 - 三项及以上且全为普通角色的操作，从原先无条件倒序改为保持声明顺序，属于用户可感知的默认行为调整；提交与 PR 标题应使用 `breaking(dialog)`。

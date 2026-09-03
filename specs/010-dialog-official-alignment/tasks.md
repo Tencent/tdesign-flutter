@@ -7,6 +7,10 @@
 - [x] DONE 修复 Popup 240×240 固定尺寸导致 Dialog 压窄和输入框裁切
 - [x] DONE 三项及以上操作基于 `TDialogAction.role` 稳定排序，不再无条件倒序
 - [x] DONE 极小视口或自定义间距 token 下对 Dialog 宽高约束做非负保护
+- [x] DONE 去除 `TConfirmDialog` 中 `role` 与 `colorScheme` 的重复默认源
+- [x] DONE 修复三个及以上文字操作的贴边 padding 与纵向布局不一致
+- [x] DONE 保证显式 `actionsPadding` / `actionSpacing` 不被数值相同的 token 默认值覆盖
+- [x] DONE Dialog Demo 接入共享结构测试，使 22 个公开入口数量契约真正执行
 - [x] DONE 补齐 22 场景逐项打开/关闭与关键视觉交互测试
 - [x] DONE 完成 22 场景 Example 矩阵和基础 Example 测试
 - [x] DONE 同步生成代码片段
