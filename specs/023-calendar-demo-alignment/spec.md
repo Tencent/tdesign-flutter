@@ -43,3 +43,7 @@
 - Flutter 3.32.0、3.47.0 严格 analyze 和非视觉回归；生产代码 LH/LF >=95%。
 - 仅 Flutter 3.32.0 Linux 更新/比较 Golden，固定 375px、DPR 1、字体缩放 1、中文测试字体，覆盖完整页面与实际打开的各场景、light/dark。状态矩阵另设 420×180。
 - 更新后立即无更新参数复跑；系统字体、Android/iOS 真机不由 Linux Golden 证明。
+
+## API 收敛补充
+
+日期格模型改为不可变快照，仅暴露 date/selectType/isLastDayOfMonth；删除可写 DateSelectTypeNotifier 和 typeNotifier。调用方通过 value/onChanged 更新选择；直接构造模型改传 selectType，属于 breaking API 收敛。variant 保留原名，仅表示选择模式，不新增同义入口。

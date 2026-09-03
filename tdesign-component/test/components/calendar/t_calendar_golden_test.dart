@@ -111,7 +111,7 @@ class _CellRow extends StatelessWidget {
       types.length,
       (index) => TCalendarCellModel(
         date: DateTime(2026, 6, days[index]),
-        typeNotifier: DateSelectTypeNotifier(types[index]),
+        selectType: types[index],
         isLastDayOfMonth: false,
       ),
     );

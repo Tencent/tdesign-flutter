@@ -27,3 +27,11 @@ flutter test --no-pub test/calendar_demo_test.dart test/calendar_demo_golden_tes
 ```
 
 未进行 Android/iOS 真机触控与系统字体验收。未安装新软件；Flutter 3.44.0 首次解析仅刷新共享 pub 缓存，随后各分支禁网验证。三个原 PR 分别推送、分别 Review。
+
+## API 收敛修复验证（2026-09-04）
+
+本轮 API 收敛验证：Flutter 3.32.0 Linux 与本机 Flutter 3.47.0 严格 analyze 零告警，53 项组件测试、11 项调度/覆盖率工具自测、6 项 Demo 功能测试通过；3.32 Linux 20 项 Golden 无更新参数通过，基线未改。生产代码覆盖率 627/636 = 98.58%。
+
+- 按 componentTestSuites 当前登记逐文件运行 flutter test --no-pub --coverage，再执行 dart run tool/check_component_coverage.dart calendar。工具自测单独统计，不混入组件数。
+- 运行真实 Demo 功能测试和 run_visual_regression.dart 登记的 Golden；没有更新图片。Android/iOS 真机尚未验证。
+- 日期格快照更新回归验证旧快照不变、新内容与区间连接重建。公开 notifier 删除为 breaking；构造迁移见 plan.md，builder 读取 selectType 保持。

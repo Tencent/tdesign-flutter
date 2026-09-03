@@ -14,7 +14,7 @@ void main() {
   testWidgets('日期居中，副标题独立定位且继承选中颜色', (tester) async {
     final model = TCalendarCellModel(
       date: DateTime(2022, 2, 18),
-      typeNotifier: DateSelectTypeNotifier(DateSelectType.selected),
+      selectType: DateSelectType.selected,
       isLastDayOfMonth: false,
     );
     Widget cell({TCalendarSubtitleBuilder? subtitle}) => wrap(
@@ -40,34 +40,42 @@ void main() {
     expect(style.color, TThemeData.defaultData().textColorAnti);
   });
 
-  testWidgets('selection notifier rebuilds the cell and range bridge',
-      (tester) async {
-    final startNotifier = DateSelectTypeNotifier(DateSelectType.start);
-    final endNotifier = DateSelectTypeNotifier(DateSelectType.end);
+  testWidgets('更新日期格快照后重建内容和区间连接，旧快照保持不变', (tester) async {
     final start = TCalendarCellModel(
       date: DateTime(2024, 1, 1),
-      typeNotifier: startNotifier,
+      selectType: DateSelectType.start,
       isLastDayOfMonth: false,
     );
     final end = TCalendarCellModel(
       date: DateTime(2024, 1, 2),
-      typeNotifier: endNotifier,
+      selectType: DateSelectType.end,
       isLastDayOfMonth: false,
     );
-    await tester.pumpWidget(wrap(TCalendarCell(
-      cell: start,
-      height: 48,
-      padding: 4,
-      rowIndex: 0,
-      colIndex: 0,
-      dateList: [start, end],
-    )));
-    expect(find.text('1'), findsOneWidget);
-
-    startNotifier.setType(DateSelectType.centre);
-    await tester.pump();
-    await tester.pump();
-    expect(start.selectType, DateSelectType.centre);
+    Widget build(TCalendarCellModel cell) => wrap(
+      TCalendarCell(
+        cell: cell,
+        height: 48,
+        padding: 4,
+        rowIndex: 0,
+        colIndex: 0,
+        dateList: [cell, end],
+        cellBuilder: (_, snapshot) => Text(snapshot.selectType.name),
+      ),
+    );
+    await tester.pumpWidget(build(start));
+    expect(find.text('start'), findsOneWidget);
+    final centre = TCalendarCellModel(
+      date: start.date,
+      selectType: DateSelectType.centre,
+      isLastDayOfMonth: false,
+    );
+    await tester.pumpWidget(build(centre));
+    expect(find.text('centre'), findsOneWidget);
+    expect(start.selectType, DateSelectType.start);
+    expect(
+      tester.widget<Container>(_rangeBridgeFinder()).color,
+      TThemeData.defaultData().brandLightColor,
+    );
   });
 
   testWidgets('selected cell uses token color, radius, size, and text style',
@@ -75,7 +83,7 @@ void main() {
     final token = TThemeData.defaultData();
     final selected = TCalendarCellModel(
       date: DateTime(2024, 1, 8),
-      typeNotifier: DateSelectTypeNotifier(DateSelectType.selected),
+      selectType: DateSelectType.selected,
       isLastDayOfMonth: false,
     );
 
@@ -108,7 +116,7 @@ void main() {
     final now = DateTime.now();
     final today = TCalendarCellModel(
       date: DateTime(now.year, now.month, now.day),
-      typeNotifier: DateSelectTypeNotifier(DateSelectType.selected),
+      selectType: DateSelectType.selected,
       isLastDayOfMonth: false,
     );
 
@@ -132,7 +140,7 @@ void main() {
     final token = TThemeData.defaultData();
     final selected = TCalendarCellModel(
       date: DateTime(2024, 1, 8),
-      typeNotifier: DateSelectTypeNotifier(DateSelectType.selected),
+      selectType: DateSelectType.selected,
       isLastDayOfMonth: false,
     );
 
@@ -169,7 +177,7 @@ void main() {
       (tester) async {
     final selected = TCalendarCellModel(
       date: DateTime(2024, 1, 8),
-      typeNotifier: DateSelectTypeNotifier(DateSelectType.selected),
+      selectType: DateSelectType.selected,
       isLastDayOfMonth: false,
     );
 
@@ -202,12 +210,12 @@ void main() {
     final token = TThemeData.defaultData();
     final start = TCalendarCellModel(
       date: DateTime(2024, 1, 1),
-      typeNotifier: DateSelectTypeNotifier(DateSelectType.start),
+      selectType: DateSelectType.start,
       isLastDayOfMonth: false,
     );
     final centre = TCalendarCellModel(
       date: DateTime(2024, 1, 2),
-      typeNotifier: DateSelectTypeNotifier(DateSelectType.centre),
+      selectType: DateSelectType.centre,
       isLastDayOfMonth: false,
     );
 

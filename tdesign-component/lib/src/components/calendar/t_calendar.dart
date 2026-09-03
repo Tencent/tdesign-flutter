@@ -12,7 +12,6 @@ import 't_calendar_theme_data.dart';
 export 't_calendar_cell.dart'
     show
         TCalendarCellModel,
-        DateSelectTypeNotifier,
         TCalendarSubtitleContext,
         TCalendarSubtitleBuilder,
         TCalendarCellBuilder,
@@ -88,7 +87,7 @@ class TCalendar extends StatefulWidget {
   /// 最大可选的日期，默认 2100-12-31
   final DateTime maxDate;
 
-  /// 日历的选择模式，决定点击日期后的选中行为：
+  /// 日历的选择模式（保留 variant 命名，不表示视觉变体），决定点击后的行为：
   /// - [TCalendarVariant.single]：单选，点击新日期取消旧选中
   /// - [TCalendarVariant.multiple]：多选，点击切换选中/取消
   /// - [TCalendarVariant.range]：区间选择，依次选起止日期
@@ -117,7 +116,7 @@ class TCalendar extends StatefulWidget {
 
   /// 整格自定义构建器；返回非 null 时替换该格默认布局（主数字 + 副标题均不渲染）。
   ///
-  /// 与 [subtitleBuilder] 互斥：需要只改副标题时请用 [subtitleBuilder]。
+  /// 返回非 null 时优先于 [subtitleBuilder]；返回 null 时使用默认日期格及副标题。
   final TCalendarCellBuilder? cellBuilder;
 
   /// 副标题构建器，在日期主数字下方渲染自定义内容。
@@ -315,7 +314,7 @@ class _TCalendarState extends State<TCalendar> {
     if (widget.onChanged == null) {
       return;
     }
-    final selectType = cell.typeNotifier.value;
+    final selectType = cell.selectType;
     final curDate = cell.date;
 
     if (selectType == DateSelectType.disabled) {

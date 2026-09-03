@@ -59,7 +59,7 @@
 | --- | --- | --- | --- |
 | date | DateTime | - | 当前日期。 |
 | isLastDayOfMonth | bool | - | 是否为当月最后一天。 |
-| typeNotifier | DateSelectTypeNotifier | - | 日期选择状态通知器。 |
+| selectType | DateSelectType | - | 当前格的选中、区间或禁用展示状态。 |
 
 
 ### TCalendarSubtitleContext

@@ -5,3 +5,7 @@
 3. 同步本组件的源码、Demo、dartdoc、Spec、行为测试、代码片段和 Golden。
 4. 在各自分支验证 analyze、组件和 Demo 行为；使用 Flutter 3.32.0 Linux 生成并无更新参数复跑权威 Golden。
 5. 推送原 PR，并单独在 CNB 使用组件 Review skill 审查。
+
+## API 收敛实现
+
+以 immutable TCalendarCellModel.selectType 替换 typeNotifier，删除公开 notifier 类型和无用监听生命周期。直接构造模型的调用方将 typeNotifier: DateSelectTypeNotifier(state) 改为 selectType: state；builder 读取 selectType 不变，修改选择改走 value/onChanged。variant 保留既有选择模式语义。
