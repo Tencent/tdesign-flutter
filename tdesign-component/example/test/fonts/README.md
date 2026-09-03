@@ -21,7 +21,7 @@ Upload 等既有 Golden 的字形选择与像素基线。
 `DateTimePickerGoldenCJK-Regular.otf` 仅补充 DateTimePicker 整页 Golden
 新增且既有子集未覆盖的字形，字符清单见 `date_time_picker_demo_glyphs.txt`。
 独立加载可避免扩充共享字体改变既有组件的像素基线，子集 SHA-256 为
-`d0febc05862e22d0ae996763291f89d831b874cd5dcf0bcc31e98b7d55b3330b`。
+`e153909c12e6f88953746a1334d40eb91806a02ac263fb5997bf41710e87156c`。
 
 - 上游：Noto Sans SC 2.004 `NotoSansSC-Regular.otf`
 - 来源：`https://github.com/notofonts/noto-cjk/raw/Sans2.004/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf`

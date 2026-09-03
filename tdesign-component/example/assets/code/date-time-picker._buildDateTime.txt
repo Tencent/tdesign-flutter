@@ -1,10 +1,4 @@
 Widget _buildDateTime(BuildContext context) => _cell(
-    id: 'date-time',
-    title: '选择日期时间',
-    value: _dateTime,
-    mode: DateTimePickerMode(
-      dateMode: DateMode.date,
-      timeMode: TimeMode.second,
-    ),
-    onConfirm: (value) => setState(() => _dateTime = value),
+    'date-time',
+    DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second),
   );

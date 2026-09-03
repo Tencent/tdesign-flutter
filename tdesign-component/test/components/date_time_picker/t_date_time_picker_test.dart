@@ -14,6 +14,72 @@ Widget wrap(Widget child) => MaterialApp(
     );
 
 void main() {
+  testWidgets('月日模式保留闰日且真实滚动只返回月日', (tester) async {
+    var value = const TDateTimePickerValue(month: 2, day: 29);
+    var changes = 0;
+    await tester.pumpWidget(
+      wrap(
+        StatefulBuilder(
+          builder: (context, setState) => TDateTimePicker(
+            value: value,
+            mode: DateTimePickerMode(dateMode: DateMode.monthDay),
+            onChanged: (next) => setState(() {
+              value = next;
+              changes++;
+            }),
+          ),
+        ),
+      ),
+    );
+    expect(find.byType(ListWheelScrollView), findsNWidgets(2));
+    var wheel = tester.widget<DateTimePickerWheel>(
+      find.byType(DateTimePickerWheel),
+    );
+    expect(wheel.snapshot.current, DateTime(2000, 2, 29));
+    await tester.drag(
+      find.byType(ListWheelScrollView).first,
+      const Offset(0, -40),
+    );
+    await tester.pumpAndSettle();
+    expect(changes, greaterThan(0));
+    expect(value.year, isNull);
+    expect(value.hour, isNull);
+    expect(value.month, 3);
+    expect(value.day, 29);
+    wheel = tester.widget<DateTimePickerWheel>(
+      find.byType(DateTimePickerWheel),
+    );
+    expect(wheel.snapshot.current, DateTime(2000, 3, 29));
+  });
+
+  testWidgets('月日模式在非闰年切到二月时钳制日期', (tester) async {
+    var value = const TDateTimePickerValue(year: 2023, month: 3, day: 31);
+    await tester.pumpWidget(
+      wrap(
+        StatefulBuilder(
+          builder: (context, setState) => TDateTimePicker(
+            value: value,
+            mode: DateTimePickerMode(dateMode: DateMode.monthDay),
+            onChanged: (next) => setState(
+              () => value = TDateTimePickerValue(
+                year: 2023,
+                month: next.month,
+                day: next.day,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.drag(
+      find.byType(ListWheelScrollView).first,
+      const Offset(0, 40),
+    );
+    await tester.pumpAndSettle();
+    expect(value.month, 2);
+    expect(value.day, 28);
+  });
+
   testWidgets('受控日期模式渲染、更新和回调', (tester) async {
     var value = const TDateTimePickerValue(year: 2024, month: 2, day: 29);
     var changed = 0;

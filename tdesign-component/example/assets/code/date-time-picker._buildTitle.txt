@@ -1,0 +1,5 @@
+Widget _buildTitle(BuildContext context) => _cell(
+    'title',
+    DateTimePickerMode(dateMode: DateMode.date),
+    title: '带标题时间选择器',
+  );
