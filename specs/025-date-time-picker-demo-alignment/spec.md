@@ -15,7 +15,7 @@
 | mode | 默认年月日；dateMode 与 timeMode 至少指定一个 | typed 组合优于字符串数组；新增最小 DateMode.monthDay |
 | DateMode | year、month、date、monthDay | monthDay 不显示年份，结果 year=null；缺省计算年2000，允许2月29日；业务绑定年份时在接收回调后继续传 value.year |
 | TimeMode | hour、minute、second；null 无时间列 | 与日期列独立组合，保留 |
-| start / end | 未指定时年列范围为初始选中年±10，滚动年份时范围不漂移 | 与小程序当前时间±10不同；保留已发布边界，补齐 dartdoc |
+| start / end | 未指定时年列范围为初始选中年±10，滚动年份时范围不漂移；monthDay 的无年份边界使用 value 的计算年，value 也无年份时使用2000 | 与小程序当前时间±10不同；保留已发布边界，避免显式计算年与 partial 边界落在不同年份 |
 | steps | 各列缺省1 | 单一取值步进，保留，不复制未被设计使用的 filter |
 | showWeek | false；仅影响日列标签 | 与年月日示例分开演示，保留 |
 | renderLabel | 返回null使用本地化标签 | 只拥有显示，不改变值；不增加小程序 format 输出格式参数 |

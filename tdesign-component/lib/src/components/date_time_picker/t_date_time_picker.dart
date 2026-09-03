@@ -50,12 +50,14 @@ class TDateTimePicker extends StatefulWidget {
   ///
   /// - **类型**：[TDateTimePickerValue]，仅传当前 mode 涉及的字段即可
   /// - **语义**：超出范围的候选项会被裁剪；变更会触发列重建
+  /// - **月日模式**：未传 year 时使用 [value] 的计算年，value 也未传 year 时使用 2000
   final TDateTimePickerValue? start;
 
   /// 可选范围上限。未指定时，年列最大值为初始选中年份加 10。
   ///
   /// - **类型**：[TDateTimePickerValue]，仅传当前 mode 涉及的字段即可
   /// - **语义**：超出范围的候选项会被裁剪；变更会触发列重建
+  /// - **月日模式**：未传 year 时使用 [value] 的计算年，value 也未传 year 时使用 2000
   final TDateTimePickerValue? end;
 
   /// 各列选项步进
@@ -105,8 +107,20 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
     );
   }
 
-  DateTime? _resolveBound(TDateTimePickerValue? bound) =>
-      bound?.toDateTime(fallback: kDateTimePickerDefaultFallback);
+  DateTime? _resolveBound(TDateTimePickerValue? bound) {
+    if (bound == null) {
+      return null;
+    }
+    final fallback =
+        widget.mode.dateMode == DateMode.monthDay && bound.year == null
+        ? DateTime(
+            widget.value.year ?? kDateTimePickerDefaultFallback.year,
+            kDateTimePickerDefaultFallback.month,
+            kDateTimePickerDefaultFallback.day,
+          )
+        : kDateTimePickerDefaultFallback;
+    return bound.toDateTime(fallback: fallback);
+  }
 
   DateTime _resolveValue() =>
       widget.value.toDateTime(fallback: kDateTimePickerDefaultFallback);
@@ -121,8 +135,10 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
   @override
   void didUpdateWidget(covariant TDateTimePicker oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final modeChanged =
-        !_listEqualInt(oldWidget.mode.columns, widget.mode.columns);
+    final modeChanged = !_listEqualInt(
+      oldWidget.mode.columns,
+      widget.mode.columns,
+    );
     final valueChanged = oldWidget.value != widget.value;
     final rangeChanged =
         oldWidget.start != widget.start || oldWidget.end != widget.end;
@@ -141,7 +157,8 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
 
     final controlledValueDiverged =
         valueChanged && widget.value != _snapshot.toResult();
-    final configurationChanged = modeChanged ||
+    final configurationChanged =
+        modeChanged ||
         rangeChanged ||
         stepsChanged ||
         showWeekChanged ||

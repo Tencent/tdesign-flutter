@@ -1,6 +1,0 @@
-Widget _buildRedPointIconBadge(BuildContext context) {
-    return const TBadge(
-      variant: TBadgeVariant.dot,
-      child: Icon(TIcons.notification),
-    );
-  }
