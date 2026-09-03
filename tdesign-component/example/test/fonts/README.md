@@ -31,6 +31,10 @@ Upload 等既有 Golden 的字形选择与像素基线。
 `a9e36e95299dd57b9624054ea5853730a0600baf344d64a637262d87f8c57fe3`，本次下载的
 上游源文件 SHA-256 为
 `734b20876d6a6777e4c30b627e8391695bbf545c0badf6c066138bebd1f0278a`。
+`DateTimePickerGoldenCJK-Regular.otf` 仅补充 DateTimePicker 整页 Golden
+新增且既有子集未覆盖的字形，字符清单见 `date_time_picker_demo_glyphs.txt`。
+独立加载可避免扩充共享字体改变既有组件的像素基线，子集 SHA-256 为
+`d0febc05862e22d0ae996763291f89d831b874cd5dcf0bcc31e98b7d55b3330b`。
 
 - 上游：Noto Sans SC 2.004 `NotoSansSC-Regular.otf`
 - 来源：`https://github.com/notofonts/noto-cjk/raw/Sans2.004/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf`
@@ -51,5 +55,6 @@ Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后�
 ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedback 字符清单。
 更新 Calendar 页面文案时，更新 Calendar 字符清单。
 更新 Picker 页面文案时，更新 Picker 字符清单。
+更新 DateTimePicker 页面文案时，更新 DateTimePicker 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。

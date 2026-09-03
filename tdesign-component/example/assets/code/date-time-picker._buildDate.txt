@@ -1,0 +1,8 @@
+Widget _buildDate(BuildContext context) => _cell(
+    id: 'date',
+    title: '选择日期',
+    value: _date,
+    mode: DateTimePickerMode(dateMode: DateMode.date),
+    showWeek: true,
+    onConfirm: (value) => setState(() => _date = value),
+  );
