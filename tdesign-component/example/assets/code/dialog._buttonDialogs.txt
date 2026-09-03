@@ -33,7 +33,7 @@ Widget _buttonDialogs(BuildContext context) {
         context,
         '垂直基础按钮',
         _trigger('垂直基础按钮', () {
-          TDialog.show<void>(
+          TDialog.show<bool>(
             context,
             barrierDismissible: true,
             dialog: TDialog(

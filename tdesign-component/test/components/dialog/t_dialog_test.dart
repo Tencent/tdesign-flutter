@@ -1027,6 +1027,9 @@ void main() {
         ),
       );
       expect(scrollView.padding, const EdgeInsets.fromLTRB(30, 30, 30, 0));
+      final dialog = tester.widget<TDialog>(find.byType(TDialog));
+      expect(dialog.actionsPadding, isNull);
+      expect(dialog.actionSpacing, isNull);
 
       final material = tester
           .widgetList<Material>(

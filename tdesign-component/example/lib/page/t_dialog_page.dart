@@ -90,21 +90,21 @@ class TDialogPage extends StatelessWidget {
   Widget _feedbackDialogs(BuildContext context) {
     return _scenarios(context, [
       _trigger('反馈类-带标题', () {
-        TDialog.show<void>(
+        TDialog.show<bool>(
           context,
           barrierDismissible: true,
           dialog: const TConfirmDialog(title: '对话框标题', content: _description),
         );
       }),
       _trigger('反馈类-无标题', () {
-        TDialog.show<void>(
+        TDialog.show<bool>(
           context,
           barrierDismissible: true,
           dialog: const TConfirmDialog(content: _description),
         );
       }),
       _trigger('反馈类-纯标题', () {
-        TDialog.show<void>(
+        TDialog.show<bool>(
           context,
           barrierDismissible: true,
           dialog: const TConfirmDialog(title: '对话框标题'),
@@ -203,7 +203,7 @@ class TDialogPage extends StatelessWidget {
         context,
         '垂直基础按钮',
         _trigger('垂直基础按钮', () {
-          TDialog.show<void>(
+          TDialog.show<bool>(
             context,
             barrierDismissible: true,
             dialog: TDialog(

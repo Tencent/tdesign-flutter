@@ -64,5 +64,5 @@ Dialog 的核心弹层能力已存在，但默认顶边距和关闭按钮位置�
 ## 兼容性判断
 
 - 普通操作未指定变体时，从描边默认配色调整为填充浅色配色；显式 `fill` 且未指定配色的普通操作同样采用浅色配色，属于默认视觉 breaking change。需要旧外观时显式设置 `variant: TButtonVariant.outline, colorScheme: TButtonColorScheme.defaultTheme`；文字、描边、幽灵变体与显式样式不变。
-- 关闭返回值为可选新增能力，默认值及既有 `Future<T?>` 不变，本项不引入 breaking change；不新增为 Dialog 特制的 Popup 开关；`actionsPadding` / `actionSpacing` 构造入口允许 `null` 表示未设置，公开 getter 仍保持非空。
+- 关闭返回值为可选新增能力，默认值及既有 `Future<T?>` 不变，本项不引入 breaking change；不新增为 Dialog 特制的 Popup 开关；`actionsPadding` / `actionSpacing` 构造入口与公开字段允许 `null` 表示未设置，渲染时解析当前主题 token。
 - 相对 develop 基线 `ed6ac81d`，三项及以上操作由声明顺序调整为主要/危险角色优先、普通角色随后，两组内部各自保持声明顺序。混合角色的默认显示顺序可能变化，属于 breaking change；全为普通角色时顺序不变，不应描述为“原先无条件倒序”。需要完全自定义展示顺序时使用既有 `actionsWidget`；不要仅为排序修改角色而同时改变配色语义。提交与 PR 标题应使用 `breaking(dialog)`。
