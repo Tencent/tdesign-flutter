@@ -1,0 +1,6 @@
+Widget _buildTitle(BuildContext context) => TCellGroup(
+    cells: [
+      _cell('title', '带标题选择器', _cities, popupTitle: '选择城市'),
+      _cell('without-title', '无标题选择器', _cities),
+    ],
+  );

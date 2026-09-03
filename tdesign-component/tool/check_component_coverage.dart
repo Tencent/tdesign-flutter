@@ -5,6 +5,7 @@ const componentTargets = <String, List<String>>{
   'badge': ['lib/src/components/badge/'],
   'button': ['lib/src/components/button/'],
   'calendar': ['lib/src/components/calendar/'],
+  'picker': ['lib/src/components/picker/'],
   'tag': ['lib/src/components/tag/'],
   'popover': ['lib/src/components/popover/'],
   'checkbox': ['lib/src/components/checkbox/'],

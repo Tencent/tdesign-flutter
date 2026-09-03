@@ -32,6 +32,12 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/t_calendar_on_change_init_test.dart',
     'test/t_calendar_test.dart',
   ]),
+  ComponentTestSuite('picker', [
+    'test/components/picker/t_picker_theme_test.dart',
+    'test/components/picker/t_picker_types_test.dart',
+    'test/components/picker/t_picker_widget_test.dart',
+    'test/components/picker/wheel_column_test.dart',
+  ]),
   ComponentTestSuite('tag', [
     'test/components/tag/t_select_tag_test.dart',
     'test/components/tag/t_tag_test.dart',
