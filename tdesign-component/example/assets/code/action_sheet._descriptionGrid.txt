@@ -1,0 +1,9 @@
+Widget _descriptionGrid(BuildContext context) => _trigger(
+    label: '带描述宫格型',
+    onPressed: () => TActionSheet.showGrid(
+      context,
+      subtitle: '动作面板描述文字',
+      items: _gridItems(context),
+      onSelected: (item) => _showSelection(context, item),
+    ),
+  );

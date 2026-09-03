@@ -10,6 +10,13 @@ class ComponentTestSuite {
 }
 
 const componentTestSuites = <ComponentTestSuite>[
+  ComponentTestSuite('action_sheet', [
+    'test/components/action_sheet/t_action_sheet_grid_test.dart',
+    'test/components/action_sheet/t_action_sheet_item_widget_test.dart',
+    'test/components/action_sheet/t_action_sheet_list_test.dart',
+    'test/components/action_sheet/t_action_sheet_test.dart',
+  ]),
+  ComponentTestSuite('badge', ['test/components/badge/t_badge_test.dart']),
   ComponentTestSuite('button', [
     'test/components/button/t_button_test.dart',
     'test/components/button/t_button_theme_priority_test.dart',
@@ -21,6 +28,7 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/picker/t_picker_types_test.dart',
     'test/components/picker/t_picker_widget_test.dart',
     'test/components/picker/wheel_column_test.dart',
+    'test/components/date_time_picker/t_date_time_picker_wheel_test.dart',
   ]),
   ComponentTestSuite('tag', [
     'test/components/tag/t_select_tag_test.dart',
@@ -36,6 +44,11 @@ const componentTestSuites = <ComponentTestSuite>[
   ComponentTestSuite('divider', [
     'test/components/divider/t_divider_test.dart',
   ]),
+  ComponentTestSuite('dialog', ['test/components/dialog/t_dialog_test.dart']),
+  ComponentTestSuite('dropdown_menu', [
+    'test/components/dropdown_menu/t_dropdown_item_test.dart',
+    'test/components/dropdown_menu/t_dropdown_menu_test.dart',
+  ]),
   ComponentTestSuite('fab', [
     'test/components/fab/t_fab_layout_test.dart',
     'test/components/fab/t_fab_test.dart',
@@ -44,6 +57,11 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/refresh/t_refresh_test.dart',
   ]),
   ComponentTestSuite('rate', ['test/components/rate/t_rate_test.dart']),
+  ComponentTestSuite('tabs', [
+    'test/components/tabs/t_horizontal_tab_bar_test.dart',
+    'test/components/tabs/t_tab_bar_test.dart',
+    'test/components/tabs/t_tab_test.dart',
+  ]),
   ComponentTestSuite('icon', ['test/components/icon/t_icon_test.dart']),
   ComponentTestSuite('link', [
     'test/components/link/t_link_resolve_test.dart',

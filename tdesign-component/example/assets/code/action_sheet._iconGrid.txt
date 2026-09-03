@@ -1,0 +1,8 @@
+Widget _iconGrid(BuildContext context) => _trigger(
+    label: '带图标宫格型',
+    onPressed: () => TActionSheet.showGrid(
+      context,
+      items: _iconGridItems(),
+      onSelected: (item) => _showSelection(context, item),
+    ),
+  );

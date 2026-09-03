@@ -1,37 +1,36 @@
 Widget _sorting(BuildContext context) {
-    var sort = 'default';
-    var status = 'all';
+    var product = 'all';
+    var sorter = 'default';
     return StatefulBuilder(
       builder: (context, setState) {
         return TDropdownMenu(
           items: [
             TDropdownMenuItem(
-              label: switch (sort) {
-                'price_asc' => '价格升序',
-                'sales' => '销量优先',
-                _ => '默认排序',
+              label: switch (product) {
+                'new' => '最新产品',
+                'hot' => '最火产品',
+                _ => '全部产品',
               },
               panelBuilder: (context, controller) =>
                   TDropdownSingleSelectPanel<String>(
-                controller: controller,
-                value: sort,
-                options: const [
-                  TDropdownMenuOption(value: 'default', label: '默认排序'),
-                  TDropdownMenuOption(value: 'price_asc', label: '价格从低到高'),
-                  TDropdownMenuOption(value: 'sales', label: '销量优先'),
-                ],
-                onChanged: (value) => setState(() => sort = value),
-              ),
+                    controller: controller,
+                    value: product,
+                    options: productOptions,
+                    onChanged: (value) => setState(() => product = value),
+                  ),
             ),
             TDropdownMenuItem(
-              label: status == 'all' ? '商品状态' : '已筛选状态',
+              label: sorter == 'default' ? '默认排序' : '价格从高到低',
               panelBuilder: (context, controller) =>
                   TDropdownSingleSelectPanel<String>(
-                controller: controller,
-                value: status,
-                options: statusOptions,
-                onChanged: (value) => setState(() => status = value),
-              ),
+                    controller: controller,
+                    value: sorter,
+                    options: const [
+                      TDropdownMenuOption(value: 'default', label: '默认排序'),
+                      TDropdownMenuOption(value: 'price', label: '价格从高到低'),
+                    ],
+                    onChanged: (value) => setState(() => sorter = value),
+                  ),
             ),
           ],
         );

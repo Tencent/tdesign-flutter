@@ -1,24 +1,35 @@
 Widget _buildItemWithLogo(BuildContext context) {
-    var tabs = [
-      const TTab(
-        text: '选项1',
-        icon: Icon(TIcons.app, size: 18),
-        badge: TBadge(variant: TBadgeVariant.dot),
+    const tabs = [
+      TTab(
+        child: TBadge(
+          variant: TBadgeVariant.dot,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(TIcons.app, size: 18),
+              SizedBox(width: 4),
+              Text('选项1'),
+            ],
+          ),
+        ),
       ),
-      const TTab(
-        text: '选项2',
-        icon: Icon(TIcons.app, size: 18),
-        badge: TBadge(label: '8'),
+      TTab(
+        child: TBadge(
+          label: '8',
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(TIcons.app, size: 18),
+              SizedBox(width: 4),
+              Text('选项2'),
+            ],
+          ),
+        ),
       ),
-      const TTab(
-        text: '选项3',
-        icon: Icon(TIcons.app, size: 18),
-        badge: TBadge(variant: TBadgeVariant.dot),
-      ),
+      TTab(text: '选项3', icon: Icon(TIcons.app, size: 18)),
     ];
-    return TTabsBar(
-      tabs: tabs,
-      controller: _demoController('logo', tabs.length),
-      indicator: _indicator(context),
+    return DefaultTabController(
+      length: tabs.length,
+      child: const TTabsBar(tabs: tabs),
     );
   }

@@ -9,8 +9,9 @@ void main() {
   setUpAll(() async {
     final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
       ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
-    final flutterBin =
-        File(Platform.resolvedExecutable).parent.parent.parent.parent.parent;
+    final flutterBin = File(
+      Platform.resolvedExecutable,
+    ).parent.parent.parent.parent.parent;
     final robotoFile = File(
       '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
     );
@@ -20,8 +21,9 @@ void main() {
   });
 
   for (final brightness in Brightness.values) {
-    testWidgets('navigation components ${brightness.name} visual matrix',
-        (tester) async {
+    testWidgets('navigation components ${brightness.name} visual matrix', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(460, 1180);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.resetPhysicalSize);
@@ -92,7 +94,7 @@ class _NavigationComponentsScene extends StatelessWidget {
                             TTab(text: 'Details'),
                             TTab(text: 'Settings'),
                           ],
-                          variant: TTabsBarVariant.filled,
+                          variant: TTabsBarVariant.line,
                         ),
                       ),
                       const SizedBox(height: 18),
