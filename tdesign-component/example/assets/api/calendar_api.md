@@ -7,7 +7,7 @@
 | anchorDate | DateTime? | - | 滚动锚点日期。 |
 | animateTo | bool | false | 锚点滚动是否使用动画。 |
 | cellBuilder | TCalendarCellBuilder? | - | 日期格构建器。 |
-| firstDayOfWeek | TCalendarFirstDayOfWeek | TCalendarFirstDayOfWeek.sunday | 每周起始日。 |
+| firstDayOfWeek | TCalendarFirstDayOfWeek | TCalendarFirstDayOfWeek.sunday | 每周从星期几开始，默认从星期日开始。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | maxDate | DateTime? | - | 最大可选日期。 |
 | minDate | DateTime? | - | 最小可选日期。 |
