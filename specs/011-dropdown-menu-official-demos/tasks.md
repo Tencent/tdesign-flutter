@@ -11,8 +11,8 @@
 - [x] DONE 复核现有公开 API、Controller、Theme 与滚动锚定实现
 - [x] DONE 在不新增 API 的前提下对齐触发项、单选项、多选项和紧凑 Demo
 - [x] DONE 合并 develop 并收敛 CI 清单与 Golden 字体冲突
-- [ ] TODO 补齐并通过 Figma 样式、三列展开态与 Token 回归测试
-- [ ] TODO 更新 Flutter 3.32.0 Linux Golden 并复跑
-- [ ] TODO 完成 Flutter 3.32.0 与 latest analyze、组件/Demo 测试和覆盖率门禁
+- [x] DONE 补齐并通过 Figma 样式、三列展开态与 Token 回归测试
+- [x] DONE 更新 Flutter 3.32.0 Linux Golden 并复跑
+- [x] DONE 完成 Flutter 3.32.0 与 latest analyze、组件/Demo 测试和覆盖率门禁
 - [x] DONE 完成真实运行时页面截图验收
 - [x] DONE 完成官方单选菜单点击展开态截图验收与最终 Review

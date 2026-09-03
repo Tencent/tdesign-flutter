@@ -44,7 +44,7 @@ DropdownMenu 的锚点、滚动跟随和自动方向能力已由现有实现覆�
 ## 验收标准
 
 - [x] 官方入口可见，单选展开与两个禁用入口有 Example 测试。
-- [ ] Figma 默认视觉、三列展开态和滚动锚定均有聚焦测试。
-- [ ] DropdownMenu 生产源码 LCOV `LH/LF >= 95%`。
-- [ ] Flutter 3.32.0 与 latest 的聚焦测试和严格 analyze 全部通过。
+- [x] Figma 默认视觉、三列展开态和滚动锚定均有聚焦测试。
+- [x] DropdownMenu 生产源码 LCOV `LH/LF >= 95%`。
+- [x] Flutter 3.32.0 与 latest 的聚焦测试和严格 analyze 全部通过。
 - [x] 未新增或删除公开 API；现有 API 的单一状态源和覆盖优先级已复核。
