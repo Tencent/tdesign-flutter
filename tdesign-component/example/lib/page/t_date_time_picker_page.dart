@@ -99,6 +99,9 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
+        height:
+            (Theme.of(context).extension<TPickerThemeData>()?.height ?? 200) +
+            TPopupHeader.headerHeight,
         headerBuilder: (_, close) => TPopupHeader(
           cancelButton: TToolbarPressable(
             onTap: close,

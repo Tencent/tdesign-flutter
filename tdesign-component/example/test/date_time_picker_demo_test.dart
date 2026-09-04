@@ -122,6 +122,7 @@ void main() {
     await tester.tap(trigger);
     await tester.pumpAndSettle();
     final panel = find.byKey(const ValueKey('date-time-picker-month-panel'));
+    expect(tester.getSize(panel).height, 200);
     tester.widget<TDateTimePicker>(panel).onChanged!(
       const TDateTimePickerValue(year: 2026, month: 8),
     );
