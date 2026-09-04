@@ -448,6 +448,29 @@ void main() {
         token.textColorPlaceholder,
       );
     });
+
+    testWidgets('does not apply the device top inset to option rows', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          MediaQuery(
+            data: const MediaQueryData(padding: EdgeInsets.only(top: 64)),
+            child: TCascader(
+              options: options,
+              value: const [],
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      final dividerBottom = tester.getBottomLeft(find.byType(Divider)).dy;
+      final firstOptionTop = tester
+          .getTopLeft(find.byKey(const ValueKey('cascader-gd')))
+          .dy;
+      expect(firstOptionTop, dividerBottom);
+    });
   });
 
   test('TCascaderThemeData copyWith and lerp', () {

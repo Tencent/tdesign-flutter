@@ -205,6 +205,7 @@ class _TCascaderState extends State<TCascader> {
                     _buildSubtitle(context),
                   Expanded(
                     child: ListView.builder(
+                      padding: EdgeInsets.zero,
                       itemCount: options.length,
                       itemBuilder: (context, index) =>
                           _buildOption(context, options[index], theme),

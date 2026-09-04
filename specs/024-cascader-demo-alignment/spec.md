@@ -26,6 +26,7 @@ Flutter Cascader 的公开 Demo 原先以常规能力分组，未覆盖小程序
 - 原始字段映射在创建 `TCascaderOption` 的边界完成。
 - 基础、tab、初始值、字段映射、次级标题和搜索在选中末级后提交并关闭；任意层示例由 Popup 关闭按钮提交当前草稿，点击蒙层不提交。
 - `TCascaderOption.children` 按 Flutter Widget 不可变配置约定使用；数据变化时替换 option/list，不支持原地变更。
+- 选项列表由组件固定为零 padding，不继承宿主 `MediaQuery` 安全区；弹层边界由组合层负责。
 - Popup 面板自身提供 Material 渲染上下文，使 TSearchBar 等 TD 子组件无需 Demo 额外包装。
 
 ## 验收标准

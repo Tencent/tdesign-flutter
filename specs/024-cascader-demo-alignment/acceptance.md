@@ -2,7 +2,7 @@
 
 ## 固定基线
 
-- Flutter：`origin/develop` `e5d890e4108d79afdd15fbf5c234d64668a5a5d3`
+- Flutter：`origin/develop` `f3e14c43626935dc87928753a902c68ce4494421`
 - 小程序：`b60cdc8a1dce1f06dd45cb4e41eefd31c674e514`
 - 公开运行页：`https://tdesign.tencent.com/miniprogram/live/m2w/program/miniprogram/#!pages/cascader/cascader.html`
 - 截图视口：375×771 CSS px，DPR 2。
@@ -18,7 +18,7 @@
 ## 验证结果
 
 - Flutter 3.32.0：`flutter analyze --no-pub --fatal-infos`，0 error / 0 warning。
-- Flutter 3.32.0：TCascader 组件回归 16 tests passed；Demo 功能 5 tests passed。
+- Flutter 3.32.0：TCascader 组件回归 17 tests passed；Demo 功能 5 tests passed。
 - Flutter 3.32.0 Linux：2 张关闭状态与 10 张打开状态 light/dark Golden 更新后立即无更新复跑，12 tests passed。
 - Cascader 生产代码覆盖率：`248/251 = 98.80%`。
 - Flutter 3.47.0：严格 analyze、TCascader 16 tests 与 Demo 5 tests passed。
@@ -30,7 +30,9 @@
 - 小程序截图见 `evidence/miniprogram-top.jpg`；Flutter 权威基线见 `tdesign-component/example/test/goldens/cascader_page_{light,dark}.png`。
 - TCascader 自身实现 step/tab 导航、活动层级次级标题、选项列表和 TDesign 默认样式；Popup、搜索和提交策略由 Flutter 组合完成。
 - 打开状态覆盖基础、tab、次级标题、任意层和搜索五种场景，并分别固定 light/dark 基线。
+- 已在连接设备上完成基础三级选择：弹层逐级切换、末级提交、自动关闭和 Cell 回显均符合交互契约。
+- 真机验证发现选项列表曾继承系统顶部安全区，造成导航分隔线下出现额外空白；组件现显式使用零列表内边距，并由非零安全区组件测试防止回归。
 
 ## 未验证项
 
-- Android/iOS 系统字体的逐像素差异不由 Linux Golden 证明。
+- 不同系统字体的逐像素差异不由 Linux Golden 证明。
