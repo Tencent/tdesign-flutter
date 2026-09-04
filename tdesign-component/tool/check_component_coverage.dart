@@ -1,48 +1,10 @@
 import 'dart:io';
 
-const componentTargets = <String, List<String>>{
-  'action_sheet': ['lib/src/components/action_sheet/'],
-  'badge': ['lib/src/components/badge/'],
-  'button': ['lib/src/components/button/'],
-  'picker': ['lib/src/components/picker/'],
-  'date_time_picker': ['lib/src/components/date_time_picker/'],
-  'calendar': ['lib/src/components/calendar/'],
-  'tag': ['lib/src/components/tag/'],
-  'popover': ['lib/src/components/popover/'],
-  'checkbox': ['lib/src/components/checkbox/'],
-  'divider': ['lib/src/components/divider/'],
-  'dialog': ['lib/src/components/dialog/'],
-  'dropdown_menu': ['lib/src/components/dropdown_menu/'],
-  'fab': ['lib/src/components/fab/'],
-  'form': ['lib/src/components/form/'],
-  'icon': ['lib/src/components/icon/'],
-  'input': ['lib/src/components/input/'],
-  'link': ['lib/src/components/link/'],
-  'loading': ['lib/src/components/loading/'],
-  'message': ['lib/src/components/message/'],
-  'notice_bar': ['lib/src/components/notice_bar/'],
-  'popup': ['lib/src/components/popup/'],
-  'radio': ['lib/src/components/radio/'],
-  'rate': ['lib/src/components/rate/'],
-  'tabs': [
-    'lib/src/components/tabs/t_horizontal_tab_bar.dart',
-    'lib/src/components/tabs/t_tab.dart',
-    'lib/src/components/tabs/t_tab_bar.dart',
-    'lib/src/components/tabs/t_tab_bar_theme_data.dart',
-    'lib/src/components/tabs/t_tab_bar_view.dart',
-  ],
-  'refresh': [
-    'lib/src/components/refresh/t_pull_down_refresh.dart',
-    'lib/src/components/refresh/t_pull_down_refresh_controller.dart',
-    'lib/src/components/refresh/t_pull_down_refresh_texts.dart',
-  ],
-  'search': ['lib/src/components/search/'],
-  'swipe_cell': ['lib/src/components/swipe_cell/'],
-  'switch': ['lib/src/components/switch/'],
-  'text': ['lib/src/components/text/'],
-  'textarea': ['lib/src/components/textarea/'],
-  'toast': ['lib/src/components/toast/'],
-  'upload': ['lib/src/components/upload/'],
+import 'component_test_manifest.dart';
+
+final componentTargets = <String, List<String>>{
+  for (final component in componentTestManifests)
+    component.name: component.coverageTargets,
 };
 
 class CoverageSummary {
