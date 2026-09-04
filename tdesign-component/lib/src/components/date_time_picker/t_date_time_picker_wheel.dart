@@ -29,8 +29,10 @@ class DateTimePickerWheel extends StatefulWidget {
     required this.height,
     required this.itemCount,
     required this.onChanged,
+    this.onScrollEnd,
   });
 
+  final VoidCallback? onScrollEnd;
   final DateTimePickerSnapshot snapshot;
   final DateTimePickerLabels labels;
   final DateTime? start;
@@ -179,6 +181,31 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
     widget.onChanged(next, next.toResult());
   }
 
+  void _notifyWhenIdle() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted ||
+          _controllers.any(
+            (controller) =>
+                controller.hasClients &&
+                controller.position.isScrollingNotifier.value,
+          )) {
+        return;
+      }
+      widget.onScrollEnd?.call();
+    });
+  }
+
+  bool _onScrollEnd(
+    ScrollNotification notification,
+    int column,
+    List<TPickerOption> options,
+  ) {
+    if (notification is ScrollEndNotification) {
+      _notifyWhenIdle();
+    }
+    return false;
+  }
+
   void _nudgeColumn(int col, int delta) {
     if (col < 0 || col >= _columns.length || _columns[col].isEmpty) {
       return;
@@ -190,6 +217,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
       return;
     }
     _onItemSelected(col, nextIdx, _columns[col]);
+    _notifyWhenIdle();
   }
 
   void _replaceColumn(int col, {required int syncValue}) {
@@ -324,6 +352,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
           disabled: false,
           scrollBehavior: _scrollBehavior,
           onItemSelected: _onItemSelected,
+          onScrollEnd: _onScrollEnd,
         ),
       ),
     );

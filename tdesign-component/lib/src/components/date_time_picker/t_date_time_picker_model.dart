@@ -10,7 +10,7 @@ import 't_date_time_picker_internal.dart';
 /// 滚轮列结构，由 [DateMode]、[TimeMode] 组合。
 ///
 /// 通过 `DateTimePickerMode(dateMode:, timeMode:)` 构造，至少传其一：
-/// - `dateMode`：日期段粒度（年 / 年月 / 年月日）；不传则不展示日期列
+/// - `dateMode`：日期段粒度（年 / 年月 / 年月日 / 月日）；不传则不展示日期列
 /// - `timeMode`：时间段粒度（时 / 时分 / 时分秒）；不传则不展示时间列
 @immutable
 class DateTimePickerMode {

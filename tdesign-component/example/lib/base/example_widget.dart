@@ -346,12 +346,9 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
                   TText(
                     '${moduleIndex + 1 < 10 ? '0' : ''}${moduleIndex + 1} '
                     '${module.title}',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: context.tTheme.textColorPrimary,
-                      fontSize: 18,
-                      height: 52 / 36,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    font: context.tTheme.fontTitleLarge,
+                    textColor: context.tTheme.textColorPrimary,
+                    style: Theme.of(context).tExplicitTextTheme?.titleLarge,
                   ),
                 if (item.desc.isNotEmpty)
                   Padding(
