@@ -1,12 +1,19 @@
 import 'dart:io';
 
 const componentTargets = <String, List<String>>{
+  'action_sheet': ['lib/src/components/action_sheet/'],
+  'badge': ['lib/src/components/badge/'],
   'button': ['lib/src/components/button/'],
   'cascader': ['lib/src/components/cascader/'],
+  'picker': ['lib/src/components/picker/'],
+  'date_time_picker': ['lib/src/components/date_time_picker/'],
+  'calendar': ['lib/src/components/calendar/'],
   'tag': ['lib/src/components/tag/'],
   'popover': ['lib/src/components/popover/'],
   'checkbox': ['lib/src/components/checkbox/'],
   'divider': ['lib/src/components/divider/'],
+  'dialog': ['lib/src/components/dialog/'],
+  'dropdown_menu': ['lib/src/components/dropdown_menu/'],
   'fab': ['lib/src/components/fab/'],
   'form': ['lib/src/components/form/'],
   'icon': ['lib/src/components/icon/'],
@@ -18,6 +25,13 @@ const componentTargets = <String, List<String>>{
   'popup': ['lib/src/components/popup/'],
   'radio': ['lib/src/components/radio/'],
   'rate': ['lib/src/components/rate/'],
+  'tabs': [
+    'lib/src/components/tabs/t_horizontal_tab_bar.dart',
+    'lib/src/components/tabs/t_tab.dart',
+    'lib/src/components/tabs/t_tab_bar.dart',
+    'lib/src/components/tabs/t_tab_bar_theme_data.dart',
+    'lib/src/components/tabs/t_tab_bar_view.dart',
+  ],
   'refresh': [
     'lib/src/components/refresh/t_pull_down_refresh.dart',
     'lib/src/components/refresh/t_pull_down_refresh_controller.dart',

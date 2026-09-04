@@ -1,0 +1,8 @@
+Widget _buildDotButtonBadge(BuildContext context) => TBadge(
+    variant: TBadgeVariant.dot,
+    child: TButton(
+      size: TButtonSize.medium,
+      onPressed: () {},
+      child: const Text('按钮'),
+    ),
+  );

@@ -61,6 +61,9 @@ class TPopupHeader extends StatelessWidget {
     // 标题内容由用户插槽决定样式，这里只做布局约束。
     return DefaultTextStyle.merge(
       style: TextStyle(
+        // 浮层可能没有 Material 祖先，标题不继承路由诊断下划线。
+        // 子标题 Widget 的显式 decoration 仍可覆盖此默认值。
+        decoration: TextDecoration.none,
         color: theme.textColorPrimary,
         fontSize: theme.fontTitleLarge?.size,
         fontWeight: FontWeight.w700,

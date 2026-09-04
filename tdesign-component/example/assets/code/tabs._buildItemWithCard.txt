@@ -1,0 +1,12 @@
+Widget _buildItemWithCard(BuildContext context) {
+    const tabs = [
+      TTab(text: '选项1'),
+      TTab(text: '选项2'),
+      TTab(text: '选项3'),
+      TTab(text: '选项4'),
+    ];
+    return const DefaultTabController(
+      length: 4,
+      child: TTabsBar(tabs: tabs, variant: TTabsBarVariant.card),
+    );
+  }

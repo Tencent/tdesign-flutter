@@ -18,6 +18,18 @@ class VisualTestSuite {
 
 const visualTestSuites = <VisualTestSuite>[
   VisualTestSuite(
+    'action_sheet',
+    'ActionSheet Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/action_sheet_page_golden_test.dart'],
+  ),
+  VisualTestSuite(
+    'badge',
+    'Badge Component',
+    workingDirectory: '.',
+    testFiles: ['test/components/badge/t_badge_golden_test.dart'],
+  ),
+  VisualTestSuite(
     'button',
     'Button Demo',
     workingDirectory: 'example',
@@ -28,6 +40,30 @@ const visualTestSuites = <VisualTestSuite>[
     'Cascader Demo',
     workingDirectory: 'example',
     testFiles: ['test/cascader_demo_golden_test.dart'],
+  ),
+  VisualTestSuite(
+    'picker',
+    'Picker Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/picker_demo_golden_test.dart'],
+  ),
+  VisualTestSuite(
+    'date_time_picker',
+    'DateTimePicker Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/date_time_picker_demo_golden_test.dart'],
+  ),
+  VisualTestSuite(
+    'calendar',
+    'Calendar States',
+    workingDirectory: '.',
+    testFiles: ['test/components/calendar/t_calendar_golden_test.dart'],
+  ),
+  VisualTestSuite(
+    'calendar',
+    'Calendar Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/calendar_demo_golden_test.dart'],
   ),
   VisualTestSuite(
     'tag',
@@ -53,6 +89,18 @@ const visualTestSuites = <VisualTestSuite>[
     'Divider Demo',
     workingDirectory: 'example',
     testFiles: ['test/divider_demo_test.dart'],
+  ),
+  VisualTestSuite(
+    'dialog',
+    'Dialog Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/dialog_page_golden_test.dart'],
+  ),
+  VisualTestSuite(
+    'dropdown_menu',
+    'DropdownMenu Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/dropdown_menu_page_golden_test.dart'],
   ),
   VisualTestSuite(
     'fab',
@@ -155,6 +203,15 @@ const visualTestSuites = <VisualTestSuite>[
     'Rate Demo',
     workingDirectory: 'example',
     testFiles: ['test/rate_demo_golden_test.dart'],
+  ),
+  VisualTestSuite(
+    'tabs',
+    'Tabs Component',
+    workingDirectory: '.',
+    testFiles: [
+      'test/components/tabs/t_tab_golden_test.dart',
+      'test/components/navigation_components_golden_test.dart',
+    ],
   ),
   VisualTestSuite(
     'toast',

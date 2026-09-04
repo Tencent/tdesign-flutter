@@ -31,9 +31,12 @@ class TDateTimePicker extends StatefulWidget {
   }) : mode = mode ?? DateTimePickerMode(dateMode: DateMode.date);
 
   /// 受控选中值。
+  ///
+  /// 父级接受 [onChanged] 的结果后重建并回传新值。滚动结束后父级未接受
+  /// 的候选值自动恢复为按当前模式、边界和步进归一化后的值。
   final TDateTimePickerValue value;
 
-  /// 滚轮列结构（必填）
+  /// 滚轮列结构。
   ///
   /// - **类型**：[DateTimePickerMode]，通过 [DateMode]、[TimeMode] 组合列
   /// - **默认**：未传时等价于 `DateTimePickerMode(dateMode: DateMode.date)`（年月日）
@@ -46,16 +49,18 @@ class TDateTimePicker extends StatefulWidget {
   /// - **回退**：返回 null 时使用内置默认文案（含国际化单位后缀）
   final DateTimePickerRenderLabel? renderLabel;
 
-  /// 可选范围下限
+  /// 可选范围下限。未指定时，年列最小值为初始选中年份减 10。
   ///
   /// - **类型**：[TDateTimePickerValue]，仅传当前 mode 涉及的字段即可
   /// - **语义**：超出范围的候选项会被裁剪；变更会触发列重建
+  /// - **月日模式**：未传 year 时使用 [value] 的计算年，value 也未传 year 时使用 2000
   final TDateTimePickerValue? start;
 
-  /// 可选范围上限
+  /// 可选范围上限。未指定时，年列最大值为初始选中年份加 10。
   ///
   /// - **类型**：[TDateTimePickerValue]，仅传当前 mode 涉及的字段即可
   /// - **语义**：超出范围的候选项会被裁剪；变更会触发列重建
+  /// - **月日模式**：未传 year 时使用 [value] 的计算年，value 也未传 year 时使用 2000
   final TDateTimePickerValue? end;
 
   /// 各列选项步进
@@ -105,8 +110,20 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
     );
   }
 
-  DateTime? _resolveBound(TDateTimePickerValue? bound) =>
-      bound?.toDateTime(fallback: kDateTimePickerDefaultFallback);
+  DateTime? _resolveBound(TDateTimePickerValue? bound) {
+    if (bound == null) {
+      return null;
+    }
+    final fallback =
+        widget.mode.dateMode == DateMode.monthDay && bound.year == null
+        ? DateTime(
+            widget.value.year ?? kDateTimePickerDefaultFallback.year,
+            kDateTimePickerDefaultFallback.month,
+            kDateTimePickerDefaultFallback.day,
+          )
+        : kDateTimePickerDefaultFallback;
+    return bound.toDateTime(fallback: fallback);
+  }
 
   DateTime _resolveValue() =>
       widget.value.toDateTime(fallback: kDateTimePickerDefaultFallback);
@@ -121,32 +138,27 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
   @override
   void didUpdateWidget(covariant TDateTimePicker oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final modeChanged =
-        !_listEqualInt(oldWidget.mode.columns, widget.mode.columns);
-    final valueChanged = oldWidget.value != widget.value;
+    final modeChanged = !_listEqualInt(
+      oldWidget.mode.columns,
+      widget.mode.columns,
+    );
     final rangeChanged =
         oldWidget.start != widget.start || oldWidget.end != widget.end;
     final stepsChanged = oldWidget.steps != widget.steps;
     final showWeekChanged = oldWidget.showWeek != widget.showWeek;
     final renderLabelChanged = oldWidget.renderLabel != widget.renderLabel;
 
-    if (!modeChanged &&
-        !valueChanged &&
-        !rangeChanged &&
-        !stepsChanged &&
-        !showWeekChanged &&
-        !renderLabelChanged) {
-      return;
-    }
-
+    // 接受与拒绝都比较归一化后的完整日期，保留隐藏计算年的语义：
+    // 同年接受滚轮结果不重建，仅计算年变化也能同步更新。
     final controlledValueDiverged =
-        valueChanged && widget.value != _snapshot.toResult();
-    final configurationChanged = modeChanged ||
+        _createSnapshot().current != _snapshot.current;
+    final configurationChanged =
+        modeChanged ||
         rangeChanged ||
         stepsChanged ||
         showWeekChanged ||
         renderLabelChanged;
-    if (valueChanged && !controlledValueDiverged && !configurationChanged) {
+    if (!controlledValueDiverged && !configurationChanged) {
       // 父级接受滚轮刚发出的受控值时，内部 snapshot 已经是最新状态。
       // 保留当前 wheel 与 controller，避免每变一格都销毁并中断惯性滚动。
       return;
@@ -182,6 +194,17 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
     }
     _lastNotifiedValue = result;
     widget.onChanged?.call(result);
+  }
+
+  void _handleScrollEnd() {
+    final controlled = _createSnapshot();
+    if (controlled.current == _snapshot.current) {
+      return;
+    }
+    setState(() {
+      _snapshot = controlled;
+      _resetWheel(clearLastNotified: true);
+    });
   }
 
   static bool _listEqualInt(List<dynamic> a, List<dynamic> b) {
@@ -229,6 +252,7 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
       height: pickerTheme?.height ?? 200,
       itemCount: pickerTheme?.itemCount ?? 5,
       onChanged: _handleWheelChanged,
+      onScrollEnd: _handleScrollEnd,
     );
     final isDisabled = widget.onChanged == null;
     return Semantics(

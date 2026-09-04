@@ -11,6 +11,8 @@ typedef TPickerItemBuilder = Widget? Function(
 );
 
 /// 选择器选项。
+///
+/// 选项及 [children] 按不可变数据使用；更新时创建新选项和新列表。
 @immutable
 class TPickerOption {
   const TPickerOption({
@@ -63,6 +65,8 @@ sealed class TPickerItems {
 }
 
 /// 互不联动的多列数据源。
+///
+/// [columns] 及每列列表不得原地修改；变更时传入新的数据源和列表。
 @immutable
 class TPickerColumns extends TPickerItems {
   const TPickerColumns(
@@ -94,6 +98,8 @@ class TPickerColumns extends TPickerItems {
 }
 
 /// 由 [TPickerOption.children] 描述层级关系的联动数据源。
+///
+/// [options] 及所有子选项列表不得原地修改；变更时创建新的数据源。
 @immutable
 class TPickerLinked extends TPickerItems {
   const TPickerLinked(
@@ -114,6 +120,9 @@ class TPickerLinked extends TPickerItems {
 }
 
 /// 各列当前选中项的只读快照。
+///
+/// 组件回调产生的列表不可修改。手工构造时，调用方须提供不可变列表；
+/// const 构造不会复制或冻结传入的 [selectedOptions] 和 [indexes]。
 @immutable
 class TPickerValue {
   const TPickerValue({

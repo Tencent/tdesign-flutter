@@ -1,11 +1,13 @@
 ---
 name: tdesign-flutter-general
-description: TDesign Flutter 仓库面向所有 AI 助手（通用 Codex / Cursor 等）的通用协作约定，重点给出「何时创建 Spec」与「何时写更新日志」的判断规则（含每次组件修改 / 简单外部改动 / 用户可感知行为的四种情况），以及 Flutter 3.32.0 与 latest 双版本兼容、组件 breaking change 分析、文档来源与注释规范、代码质量 / lint 零告警等平台无关约定。平台无关规范以 CONTRIBUTING.md / specs/README.md 为唯一事实来源，本文档只做面向 AI 的落地提炼；CNB 平台专属执行细则见 .agents/skills/tdesign-flutter-conventions/SKILL.md。
+description: TDesign Flutter 通用协作约定，适用于仓库开发和 PR 工作，涵盖 Spec、更新日志、公开契约、生成产物、双版本及 CI 登记。组件对齐由 Review skill 补充，CNB 平台限制见仓库协作说明。
 ---
 
 # TDesign Flutter 仓库通用协作约定（AI 版）
 
-本文档面向**所有**在本仓库工作的 AI 助手（通用 Codex / Cursor，以及 CNB 平台 NPC），提供平台无关的协作约定提炼。通用规范的**唯一事实来源**是 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) 与 [`specs/README.md`](../../../specs/README.md)，本文档只做面向 AI 的落地提炼，不重复维护权威内容；CNB 平台专属细则（分支命名 `cnb-issue-<issue.number>`、PR 不携带 Issue 编号等）见 `.agents/skills/tdesign-flutter-conventions/SKILL.md`。
+本文档面向**所有**在本仓库工作的 AI 助手（通用 Codex / Cursor，以及 CNB 平台 NPC），提供平台无关的协作约定提炼。通用规范的**唯一事实来源**是 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) 与 [`specs/README.md`](../../../specs/README.md)，本文只做面向 AI 的落地提炼。
+
+Skills 按职责补充规范：本 skill 管通用协作与 CI 登记；[`tdesign-component-align-review`](../tdesign-component-align-review/SKILL.md) 管 Demo、API、Theme 与验收证据。CNB 静态约定见 [`.cnb/CONTRIBUTING.md`](../../../.cnb/CONTRIBUTING.md)，按该文档的适用范围读取，不作为通用 skill 加载。遇到冲突先核对规范本体与用户当前要求，不通过叠加规则扩大任务范围。
 
 ## 一、何时创建 Spec / 何时写更新日志（核心判断规则）
 
@@ -18,15 +20,14 @@ description: TDesign Flutter 仓库面向所有 AI 助手（通用 Codex / Curso
 
 | 用户是否可感知 ↓ | 可感知 | 无感 |
 | --- | --- | --- |
-| 碰组件 / 公共契约（要 Spec） | **两者都要** | **只要 Spec**、不写日志（纯内部重构） |
-| 不碰组件（纯文档 / 依赖 / CI） | （罕见）只要日志 | **两者都不需要** |
+| 复杂需求 / 公共契约变更 / 组件重构 / 跨目录改动（需 Spec） | **两者都要** | **只要 Spec**、不写日志 |
+| 简单局部修复 / 文案 / 格式等（无需完整 Spec） | **只要日志** | **两者都不需要** |
 
 **最容易出错**：把"勾选「本条 PR 不需要纳入 Changelog」"等同于"不需要 Spec"——这是错误的。行为不变的纯内部重构（用户无感、不写日志）仍属于组件修改，**需要 Spec**（Review 结合实际改动判定，属于重构）。
 
-一句话记忆：**Spec 看"改动复不复杂 / 碰不碰公共契约"，更新日志看"用户感不感知得到"**。
-
 ## 二、提交 PR 与更新日志格式
 
+- PR 标题遵循 Conventional Commits：`type(scope): 描述`；分支及平台约定按 `AGENTS.md` 的入口读取。
 - PR 正文**完整保留 `.github/PULL_REQUEST_TEMPLATE.md` 原模板结构**（所有勾选项含未选 `[ ]`、所有 HTML 注释原样保留），只打勾 / 填写，不删减。
 - 更新日志条目遵循 Conventional Commits 的 commit type，与最终分组固定对应（完整见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md)）：
 
@@ -44,7 +45,7 @@ description: TDesign Flutter 仓库面向所有 AI 助手（通用 Codex / Curso
 
 ## 三、Spec 流程
 
-复杂需求 / 公共 API 变更 / 组件重构 / 跨目录改动，按 [`specs/README.md`](../../../specs/README.md) 创建 `specs/<编号>-<短名称>/`（spec / plan / tasks / acceptance）；提交代码须与 Spec 行为契约一致，方案变更先更新 Spec 再改代码。单行文案、格式调整、简单局部修复不要求。
+第一节判定需要 Spec 后，按 [`specs/README.md`](../../../specs/README.md) 创建或更新对应 `specs/<编号>-<短名称>/`（spec / plan / tasks / acceptance）；提交代码须与 Spec 行为契约一致，方案变更先更新 Spec 再改代码，并在 PR 附对应目录链接。
 
 ## 四、Flutter 双版本兼容
 
@@ -54,7 +55,6 @@ description: TDesign Flutter 仓库面向所有 AI 助手（通用 Codex / Curso
 
 - 改公开 API 签名 / 默认行为 / 删除能力 → breaking change，需重点提示并评估迁移策略。
 - 仅新增可选参数且不改变既有行为，通常不算 breaking；新增必填参数或改变默认值需谨慎。
-- 涉及公共 API 变更 / 组件重构时按规范创建 Spec。
 - 输出时明确：是 / 否 breaking change、影响范围、受影响 API、迁移建议。
 
 ## 六、文档来源与注释规范（注释即文档）
@@ -77,7 +77,7 @@ description: TDesign Flutter 仓库面向所有 AI 助手（通用 Codex / Curso
 2. **示例代码片段**：`dart run tool/generate_example_code.dart`，从带 `@ExampleCode` 注解的示例方法生成 `example/assets/code/*.txt`；CI 用 `--check` 校验片段与源码同步。改动示例方法时该产物会随之变化。
 3. **README 副本**：`node scripts/sync-readme.mjs`，把根目录 `README.md` / `README_zh_CN.md` 同步到 `tdesign-component/README*.md` 与 `tdesign-site/site/docs/getting-started.md`。改动根目录 README 时副本会随之同步。
 
-> 这些脚本由 CI 自动兜底，**不要把它们当作面向贡献者的提交要求**；若 AI 在改动相关源文件后需要产物立即可用或校验同步，可手动运行对应脚本，产物与源码一并提交即可。
+自动生成与本地验收不是同一件事：贡献者无需手工维护产物；组件对齐任务需要核对示例时，按 Review skill 校验生成片段，变化只能来自源文件，不能直接修改产物。
 
 ## 八、组件测试与 CI 回归门禁
 
@@ -85,14 +85,14 @@ description: TDesign Flutter 仓库面向所有 AI 助手（通用 Codex / Curso
 
 - 组件测试文件加入 `tool/run_component_regression.dart` 的 `componentTestSuites`；
 - 生产源码范围加入 `tool/check_component_coverage.dart` 的 `componentTargets`，手写生产 Dart 行覆盖率 `LH/LF >= 95%`；
-- Demo 结构与 Golden 测试加入 `tool/run_visual_regression.dart` 的 `visualTestSuites`；
+- Demo 结构、功能与交互测试登记到 GitHub / CNB 的双版本功能回归入口；纯 Golden 测试加入 `tool/run_visual_regression.dart` 的 `visualTestSuites`。执行环境与两类测试的分流要求见 Review skill 第 5 节；不得用视觉入口代替功能入口。
 - 运行调度器自测，确认三个清单同步且登记文件存在。
 
 测试文件存在、Golden 已提交或本地单独运行通过，不代表 CI 已执行；必须读取 CI 实际入口并确认测试已被调度。
 
 ## 九、代码质量 / lint 零告警
 
-提交前过 `flutter analyze`，目标 **0 error / 0 warning**。能用 `const` 必须 `const`、优先 `final`、避免 lambda 代替 tear-off、遵循 `directives_ordering`、统一单引号、优先集合字面量、用 `.isEmpty`/`.isNotEmpty` 判空、统一 `${param}` 插值，全部对齐 `tdesign-component/analysis_options.yaml`；CI 的 `.cnb.yml` 已加 analyze 兜底。
+提交前运行 `flutter analyze --fatal-infos`，要求无诊断问题。能用 `const` 必须 `const`、优先 `final`、避免 lambda 替代 tear-off，并遵循当前 `analysis_options.yaml`；CI 配置仅证明已设门禁，是否通过需读取实际运行结果。
 
 ## 回答风格
 
