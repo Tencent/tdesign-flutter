@@ -16,7 +16,7 @@
 | showWeek | bool | false | 日列是否在 label 后附加星期，默认 false - **生效范围**：仅 `DateTimeColumn.day` 列 - **变更语义**：变更会触发列重建 |
 | start | TDateTimePickerValue? | - | 可选范围下限。未指定时，年列最小值为初始选中年份减 10。 - **类型**：`TDateTimePickerValue`，仅传当前 mode 涉及的字段即可 - **语义**：超出范围的候选项会被裁剪；变更会触发列重建 - **月日模式**：未传 year 时使用 `value` 的计算年，value 也未传 year 时使用 2000 |
 | steps | DateTimePickerSteps? | - | 各列选项步进 - **类型**：`DateTimePickerSteps`；未配置的列步进为 1 - **变更语义**：变更会触发列重建，保留当前选中时刻（在合法范围内 clamp） |
-| value | TDateTimePickerValue | - | 受控选中值。 父级接受 `onChanged` 的结果后回传新值；若拒绝选择，使用原值重建， 滚轮会恢复到按当前模式、边界和步进归一化后的值。 |
+| value | TDateTimePickerValue | - | 受控选中值。 父级接受 `onChanged` 的结果后重建并回传新值。滚动结束后父级未接受 的候选值自动恢复为按当前模式、边界和步进归一化后的值。 |
 
 
 ### DateTimePickerMode
