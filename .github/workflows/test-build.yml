@@ -85,7 +85,7 @@ jobs:
 
       - name: Run example shared functional tests
         working-directory: ./tdesign-component/example
-        run: flutter test --no-pub --exclude-tags golden test/widget_test.dart test/action_sheet_page_test.dart test/badge_page_test.dart test/date_time_picker_demo_test.dart test/dialog_page_test.dart test/dropdown_menu_page_test.dart test/loading_demo_test.dart test/message_demo_test.dart test/notice_bar_page_test.dart test/popup_demo_test.dart test/popover_demo_test.dart test/popover_page_test.dart test/radio_page_test.dart test/rate_demo_test.dart test/tabs_page_test.dart test/tag_page_test.dart
+        run: flutter test --no-pub --exclude-tags golden test/widget_test.dart test/action_sheet_page_test.dart test/badge_page_test.dart test/calendar_demo_test.dart test/dialog_page_test.dart test/dropdown_menu_page_test.dart test/loading_demo_test.dart test/message_demo_test.dart test/notice_bar_page_test.dart test/picker_demo_test.dart test/popup_demo_test.dart test/popover_demo_test.dart test/popover_page_test.dart test/radio_page_test.dart test/rate_demo_test.dart test/tabs_page_test.dart test/tag_page_test.dart
 
   visual-regression:
     name: visual regression (flutter 3.32.0 linux)

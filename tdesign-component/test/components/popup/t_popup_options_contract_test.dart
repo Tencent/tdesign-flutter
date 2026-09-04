@@ -86,6 +86,39 @@ void main() {
     expect(find.text('确定'), findsOneWidget);
   });
 
+  testWidgets('Popup 标题清除诊断下划线并保留显式样式', (tester) async {
+    for (final explicit in [false, true]) {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: DefaultTextStyle(
+            style: const TextStyle(
+              color: Colors.red,
+              decoration: TextDecoration.underline,
+              decorationColor: Colors.yellow,
+              decorationStyle: TextDecorationStyle.double,
+            ),
+            child: td.TPopupHeader(
+              title: td.TText(
+                '标题',
+                style: explicit
+                    ? const TextStyle(decoration: TextDecoration.underline)
+                    : null,
+              ),
+            ),
+          ),
+        ),
+      );
+      final rich = find.descendant(
+        of: find.text('标题'),
+        matching: find.byType(RichText),
+      );
+      expect(
+        tester.widget<RichText>(rich).text.style?.decoration,
+        explicit ? TextDecoration.underline : TextDecoration.none,
+      );
+    }
+  });
+
   testWidgets('center 默认尺寸为 240 且不生成关闭区', (tester) async {
     const contentKey = ValueKey('center-default-content');
     await tester.pumpWidget(

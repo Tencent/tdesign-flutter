@@ -23,11 +23,28 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/button/t_button_theme_test.dart',
     'test/components/button/t_button_widget_test.dart',
   ]),
+  ComponentTestSuite('picker', [
+    'test/components/picker/picker_consumers_theme_test.dart',
+    'test/components/picker/t_picker_theme_test.dart',
+    'test/components/picker/t_picker_types_test.dart',
+    'test/components/picker/t_picker_widget_test.dart',
+    'test/components/picker/wheel_column_test.dart',
+    'test/components/date_time_picker/t_date_time_picker_wheel_test.dart',
+  ]),
   ComponentTestSuite('date_time_picker', [
     'test/components/picker/picker_consumers_theme_test.dart',
     'test/components/date_time_picker/t_date_time_picker_test.dart',
     'test/components/date_time_picker/t_date_time_picker_wheel_test.dart',
     'test/t_date_time_picker_test.dart',
+  ]),
+  ComponentTestSuite('calendar', [
+    'test/components/calendar/t_calendar_body_test.dart',
+    'test/components/calendar/t_calendar_cell_test.dart',
+    'test/components/calendar/t_calendar_theme_test.dart',
+    'test/components/calendar/t_calendar_widget_test.dart',
+    'test/t_calendar_lunar_test.dart',
+    'test/t_calendar_on_change_init_test.dart',
+    'test/t_calendar_test.dart',
   ]),
   ComponentTestSuite('tag', [
     'test/components/tag/t_select_tag_test.dart',

@@ -20,7 +20,7 @@ void main() {
     expect(names.toSet(), hasLength(names.length));
   });
 
-  test('every regression component owns one visual regression suite', () {
+  test('every regression component owns a visual regression suite', () {
     final componentSuites = componentTestSuites
         .map((suite) => suite.component)
         .toSet();
@@ -29,6 +29,5 @@ void main() {
         .toSet();
 
     expect(visualSuites, componentSuites);
-    expect(visualTestSuites, hasLength(componentSuites.length));
   });
 }

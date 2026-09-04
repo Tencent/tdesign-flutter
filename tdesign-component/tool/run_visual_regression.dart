@@ -36,10 +36,28 @@ const visualTestSuites = <VisualTestSuite>[
     testFiles: ['test/button_demo_test.dart'],
   ),
   VisualTestSuite(
+    'picker',
+    'Picker Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/picker_demo_golden_test.dart'],
+  ),
+  VisualTestSuite(
     'date_time_picker',
     'DateTimePicker Demo',
     workingDirectory: 'example',
     testFiles: ['test/date_time_picker_demo_golden_test.dart'],
+  ),
+  VisualTestSuite(
+    'calendar',
+    'Calendar States',
+    workingDirectory: '.',
+    testFiles: ['test/components/calendar/t_calendar_golden_test.dart'],
+  ),
+  VisualTestSuite(
+    'calendar',
+    'Calendar Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/calendar_demo_golden_test.dart'],
   ),
   VisualTestSuite(
     'tag',

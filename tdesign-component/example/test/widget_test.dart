@@ -148,21 +148,22 @@ void main() {
     );
     expect(pageScrollable, findsOneWidget);
     final pageScrollState = tester.state<ScrollableState>(pageScrollable);
+    const triggerKey = ValueKey('calendar-single-trigger');
     for (var offset = 0.0;
         offset <= pageScrollState.position.maxScrollExtent &&
-            find.text('单选日期').evaluate().isEmpty;
+            find.byKey(triggerKey).evaluate().isEmpty;
         offset += 300) {
       pageScrollState.position.jumpTo(offset);
       await tester.pump();
     }
-    expect(find.text('单选日期'), findsOneWidget);
-    await tester.tap(find.text('单选日期'));
+    expect(find.byKey(triggerKey), findsOneWidget);
+    await tester.tap(find.byKey(triggerKey));
     await tester.pumpAndSettle();
 
-    expect(find.text('选择日期'), findsOneWidget);
+    expect(find.text('请选择日期'), findsOneWidget);
     expect(find.byType(TCalendar), findsWidgets);
 
-    await tester.tap(find.text('取消'));
+    await tester.tap(find.byTooltip('关闭'));
     await tester.pumpAndSettle();
   });
 

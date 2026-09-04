@@ -27,7 +27,7 @@
 | LCOV 覆盖率（`lib/src/components/popover/`） | 通过 | LH=498, LF=516，96.51% |
 | Flutter 3.47.0：组件测试 + 视觉注册测试 | 通过 | 55 tests passed；定向 analyze 无问题 |
 | Flutter 3.47.0：Demo 结构 + 交互测试 | 通过 | 清理 Example 的跨 SDK shader 缓存后 7 tests passed；定向 analyze 无问题 |
-| 微信开发者工具：21 个公开展开态 | 通过 | RC 2.02.2607161、iPhone 12/13 (Pro)、390×844、DPR 3；21 张截图逐项检查 |
+| 微信开发者工具：21 个公开展开态 | 通过 | RC 2.02.2607161、iOS 模拟器、390×844、DPR 3；21 张截图逐项检查 |
 
 ## 已验证行为
 

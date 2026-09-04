@@ -1,0 +1,36 @@
+Widget _buildInline(BuildContext context) => ColoredBox(
+    color: context.tTheme.bgColorContainer,
+    child: Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(context.tTheme.spacer16),
+          child: TText('日历标题', font: context.tTheme.fontTitleLarge),
+        ),
+        TCalendar(
+          key: const ValueKey('calendar-inline-panel'),
+          value: _inlineValue,
+          variant: TCalendarVariant.multiple,
+          minDate: DateTime(_referenceDate.year, _referenceDate.month),
+          maxDate: DateTime(_referenceDate.year, _referenceDate.month + 2, 0),
+          onChanged: (value) => setState(() => _inlineValue = value),
+        ),
+        Padding(
+          padding: EdgeInsets.all(context.tTheme.spacer16),
+          child: SizedBox(
+            width: double.infinity,
+            child: TButton(
+              colorScheme: TButtonColorScheme.primary,
+              size: TButtonSize.large,
+              onPressed: _inlineValue.isEmpty
+                  ? null
+                  : () => TToast.showText(
+                      _formatDates(_inlineValue),
+                      context: context,
+                    ),
+              child: const Text('确定'),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
