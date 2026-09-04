@@ -57,6 +57,6 @@ TPickerThemeData 的 height 必须为有限正数、itemCount 必须大于零（
 
 ### 示例代码展示契约
 
-四个公开代码入口展示实际运行的 `_cell` 核心组合，包含触发 Cell、标签解析、Popup/Header、受控 Picker 草稿及确认/取消。数据、父级状态和差异配置通过参数传入，并在片段中明确说明初始值与完整源码入口；不宣称核心片段是独立应用。共用实现从源码生成，不扩增组件或 Example 框架 API。
+四个公开代码入口展示实际运行的 `_cell` 核心组合，包含触发 Cell、标签解析、Popup/Header、受控 Picker 草稿及确认/取消。数据、父级状态和差异配置通过参数传入，并在片段中明确说明初始值，不通过外部源码地址补充示例内容；不宣称核心片段是独立应用。共用实现从源码生成，不扩增组件或 Example 框架 API。
 
 代码面板必须通过真实打开验证；现有双版本 Demo 套件覆盖四个入口。Android 真机集成入口 `example/integration_test/picker_example_test.dart` 使用 Flutter SDK 自带 integration_test，验证实际应用路由、五个触发器的取消/确认和代码面板；它是需设备的手动验收入口，不计入普通 CI 已通过证据。

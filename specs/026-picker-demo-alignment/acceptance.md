@@ -88,9 +88,16 @@ flutter test --no-pub test/picker_demo_test.dart test/picker_demo_golden_test.da
 
 ### 示例代码面板与 Android 真机验收（2026-09-04）
 
-- 四个代码入口通过现有 methodName 展示实际 `_cell` 核心组合，包含 Cell 触发、标签解析、Popup/Header、Picker 草稿、取消/确认。片段注明数据、初始值、父级接入和当前分支完整源文件地址；它是核心片段，不是独立应用。远端地址在本地修改推送后才包含本轮实现。
+- 四个代码入口通过现有 methodName 展示实际 `_cell` 核心组合，包含 Cell 触发、标签解析、Popup/Header、Picker 草稿、取消/确认。片段注明参数、初始值和父级接入；它是核心片段，不是独立应用，不提供外部源码地址指引。
 - 新增代码面板 Widget 回归，实际打开四个入口读取渲染的 Markdown；沿用 picker_demo_test.dart 在 GitHub/CNB 的双版本登记。Flutter 3.32.0 与 3.47.0 各 10 项 Demo 回归通过，严格 analyze --fatal-infos 无诊断；生成器及 --check 通过。未改组件生产源码或公开 API，本轮无新增 breaking change。
 - 抽取时曾因 builder context 与 State.context 的主题层级差异造成标题文字 Golden 差异，已恢复原 State.context。Flutter 3.32.0 Linux 最终 10 项 Demo + 14 项 Golden 测试通过，18 张基线精确比较，差异 0，未更新基线或容差。
-- Android 16 真机（25113PN0EC，40302eeb）运行当前应用及集成测试通过：五个示例逐一滚动、取消、重开恢复、确认、重开保留；四个代码面板显示核心组合，实际向下滚动可看到 Popup 与确认逻辑；深色地区弹层亦检查滚轮高 200，浅色五个示例检查默认项高 40。浅/深色截图人工检查无高亮错位、黄色下划线或缺字；不等同于与 Figma 逐像素一致，也不是人工手指拖动的性能测量。
+- Android 16 真机运行当前应用及集成测试通过：五个示例逐一滚动、取消、重开恢复、确认、重开保留；四个代码面板显示核心组合，实际向下滚动可看到 Popup 与确认逻辑；深色地区弹层亦检查滚轮高 200，浅色五个示例检查默认项高 40。浅/深色截图人工检查无高亮错位、黄色下划线或缺字；不等同于与 Figma 逐像素一致，也不是人工手指拖动的性能测量。
 - 真机复跑：在 tdesign-component/example 执行 `flutter drive --driver=test_driver/picker_example.dart --target=integration_test/picker_example_test.dart -d <device-id>`。需要连接已授权设备；integration_test 来自 Flutter SDK，仅为开发依赖。截图写入 `build/picker-device-evidence/`，driver 返回 true 仅表示截图已保存，不代表自动视觉通过。手机测试恢复原主题设置。
 - 真机截图：picker-page.png、picker-area.png、picker-area-dark.png、picker-code.png、picker-code-composition.png（以上输出目录）。以上为本地验证结果，远端 CI 状态须在推送后独立确认。
+
+### CNB Review 建议修订
+
+- 保留四个代码入口共用实际 `_cell` 组合，不退回仅包含触发器的片段；输入数据与确认回调由方法参数显式提供。
+- 移除四个未展示的 `_buildBase/Time/Area/Title` 生成注解，由生成器清理无入口片段。移除示例中的外部源码地址指引，不扩增组件或 Example API。
+- 发布说明须记录 `breaking(picker): 父级未接收 onChanged 时滚轮停止后恢复受控值`；调用方应在 onChanged 中更新状态并回传 value，弹层组合先更新草稿，确认后再写入业务状态。
+- 本轮本地复验：Flutter 3.32.0 严格分析无诊断，10 项 Picker Demo 测试通过，包含四个代码面板；生成器 --check 与 git diff --check 通过。本轮仅改注解、示例说明与文档，未改变运行布局或更新 Golden。

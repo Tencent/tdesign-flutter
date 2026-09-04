@@ -79,7 +79,6 @@ void main() {
       expect(markdown.data, contains('StatefulBuilder'));
       expect(markdown.data, contains('return TCell('));
       expect(markdown.data, contains('onConfirm(List<Object?>.of(draft))'));
-      expect(markdown.data, contains('完整数据'));
       navigator.pop();
       await tester.pumpAndSettle();
     }

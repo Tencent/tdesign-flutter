@@ -32,7 +32,6 @@ void main() {
       expect(markdown.data, contains('TPopup.show'));
       expect(markdown.data, contains('StatefulBuilder'));
       expect(markdown.data, contains('onConfirm(List<Object?>.of(draft))'));
-      expect(markdown.data, contains('完整数据'));
       Navigator.of(tester.element(find.byType(Markdown))).pop();
       await tester.pumpAndSettle();
     }

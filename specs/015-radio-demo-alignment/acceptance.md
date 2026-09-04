@@ -33,7 +33,7 @@
 
 ## 小程序实际运行补充复核
 
-- 微信开发者工具 RC 2.02.2607161，基础库 3.17.1，iPhone 15 Pro Max 模拟器：横向示例为通栏容器，`spacer16` 位于白色容器内部；勾选样式使用 24px TDesign `check` 图标，默认选中态使用 24px TDesign `check-circle-filled` 图标；主标题和副标题默认最多显示 3 行、5 行。
+- 微信开发者工具 RC 2.02.2607161，基础库 3.17.1，iOS 模拟器：横向示例为通栏容器，`spacer16` 位于白色容器内部；勾选样式使用 24px TDesign `check` 图标，默认选中态使用 24px TDesign `check-circle-filled` 图标；主标题和副标题默认最多显示 3 行、5 行。
 - Android 16 真机（1220×2656）：横向示例已移除外部留白形成的卡片轮廓，并保持 token 驱动的内部间距。
 - Flutter 3.32 Widget 实测：small / medium / large 块级单行高度为 48 / 56 / 64dp；默认 medium 的 24dp 指示器与 56dp 块高对应小程序默认规格。
 - Flutter 3.32：Radio 组件与 Theme 契约测试通过，32 tests；此前 Linux 覆盖率采样为 242/249，97.19%。

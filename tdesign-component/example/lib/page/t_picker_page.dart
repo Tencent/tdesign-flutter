@@ -180,8 +180,6 @@ class _TPickerPageState extends State<TPickerPage> {
   /// 初始值 [2020, 'autumn']；地区为 TPickerLinked，初始值
   /// ['guangdong', 'shenzhen', 'futian']。带标题与无标题共用城市数据，
   /// popupTitle 分别传 '选择地区' 与 null。id 仅用于示例定位 Key。
-  /// 完整数据、State 和各示例实际调用见当前分支源码：
-  /// https://github.com/Tencent/tdesign-flutter/blob/rss1102/style/picker-demo-alignment/tdesign-component/example/lib/page/t_picker_page.dart
   @ExampleCode(group: 'picker')
   TCell _cell(
     BuildContext context,
@@ -290,7 +288,6 @@ class _TPickerPageState extends State<TPickerPage> {
     );
   }
 
-  @ExampleCode(group: 'picker')
   Widget _buildBase(BuildContext context) => TCellGroup(
     cells: [
       _cell(
@@ -305,7 +302,6 @@ class _TPickerPageState extends State<TPickerPage> {
     ],
   );
 
-  @ExampleCode(group: 'picker')
   Widget _buildTime(BuildContext context) => TCellGroup(
     cells: [
       _cell(
@@ -320,7 +316,6 @@ class _TPickerPageState extends State<TPickerPage> {
     ],
   );
 
-  @ExampleCode(group: 'picker')
   Widget _buildArea(BuildContext context) => TCellGroup(
     cells: [
       _cell(
@@ -335,7 +330,6 @@ class _TPickerPageState extends State<TPickerPage> {
     ],
   );
 
-  @ExampleCode(group: 'picker')
   Widget _buildTitle(BuildContext context) => Column(
     children: [
       TCellGroup(
