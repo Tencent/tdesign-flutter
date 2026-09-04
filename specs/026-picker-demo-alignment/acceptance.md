@@ -52,4 +52,5 @@ flutter test --no-pub test/picker_demo_test.dart test/picker_demo_golden_test.da
 - 复核既有 Figma 分支截图与 375×812 浅色/深色 Golden。默认面板高度 200、五项、行高 40；选中条宽 343、左右 16、圆角 6；列内容宽 311，三列时每列约 103.67；上下渐隐高 48。背景、高亮、普通/选中/禁用文字使用当前 TDesign 语义 token。没有发现需要改动生产样式或扩展 API 的问题。
 - Flutter 3.32.0 Linux 离线严格 analyze 通过；39 项组件测试、11 项调度/覆盖率自测、5 项 Demo 功能测试及 12 项 Golden 通过，未更新基线。Picker 生产覆盖率 336/342 = 98.25%。
 - Flutter 3.47.0 严格 analyze 通过；组件与工具测试合计 54 项通过，Picker/Calendar Demo 功能测试合计 11 项通过。
+- Android 真机（1220×2656，DPR 3.25，逻辑宽度约 375）已运行 Picker Demo；基础单列和弹层真实打开态可用。截图中滚轮高亮条、左右留白、白色面板、文字层级和边缘渐隐与 Figma 结构一致；未发现需要修改组件实现的主题或尺寸偏差。真机系统字体与底部安全区属于平台壳差异，未作为 Golden 基线调整。
 - 此次视觉结论基于仓库已保存的 Figma 截图、源码与固定环境 Golden，未重新读取 Figma 节点属性，未新增 Android/iOS 真机验证；不声称跨平台逐像素一致。
