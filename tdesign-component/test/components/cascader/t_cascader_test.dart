@@ -35,7 +35,7 @@ void main() {
   }
 
   group('TCascader controlled behavior', () {
-    testWidgets('provides its own Material surface for popup composition', (
+    testWidgets('provides its own TDesign surface for popup composition', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -55,7 +55,19 @@ void main() {
           of: find.byType(TCascader),
           matching: find.byType(Material),
         ),
-        findsWidgets,
+        findsNothing,
+      );
+      final surface = tester.widget<Container>(
+        find
+            .descendant(
+              of: find.byType(TCascader),
+              matching: find.byType(Container),
+            )
+            .first,
+      );
+      expect(
+        (surface.decoration as BoxDecoration).color,
+        TThemeData.defaultData().bgColorContainer,
       );
     });
 
@@ -144,13 +156,10 @@ void main() {
           ),
         ),
       );
-      final tile = tester.widget<ListTile>(
-        find.ancestor(
-          of: find.text('Disabled'),
-          matching: find.byType(ListTile),
-        ),
+      final tile = tester.widget<GestureDetector>(
+        find.byKey(const ValueKey('cascader-disabled')),
       );
-      expect(tile.enabled, isFalse);
+      expect(tile.onTap, isNull);
       await tester.tap(find.text('Disabled'), warnIfMissed: false);
       expect(changed, isFalse);
     });
@@ -184,10 +193,15 @@ void main() {
         ),
       );
 
-      final selectedTile = tester.widget<ListTile>(
-        find.byKey(const ValueKey('cascader-ns')),
+      final selectedSemantics = tester.widget<Semantics>(
+        find
+            .ancestor(
+              of: find.byKey(const ValueKey('cascader-ns')),
+              matching: find.byType(Semantics),
+            )
+            .first,
       );
-      expect(selectedTile.selected, isTrue);
+      expect(selectedSemantics.properties.selected, isTrue);
       final indicator = tester.widget<Icon>(find.byIcon(TIcons.check));
       expect(indicator.size, 24);
       expect(indicator.color, TThemeData.defaultData().brandNormalColor);
@@ -248,7 +262,7 @@ void main() {
       );
       expect(selectedText.style?.color, token.textColorPrimary);
       expect(selectedText.style?.color, isNot(token.brandNormalColor));
-      expect(selectedText.style?.fontWeight, FontWeight.w600);
+      expect(selectedText.style?.fontWeight, FontWeight.w400);
     });
 
     testWidgets('disabled theme style is applied', (tester) async {
@@ -330,36 +344,130 @@ void main() {
       );
     });
 
-    testWidgets('explicit ListTileTheme selectedColor remains available', (
+    testWidgets(
+      'implicit Material component defaults do not replace TD colors',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              listTileTheme: const ListTileThemeData(
+                selectedColor: Colors.green,
+              ),
+              extensions: [TThemeData.defaultData()],
+            ),
+            home: Scaffold(
+              body: TCascader(
+                options: options,
+                value: const ['gd', 'sz', 'ns'],
+                onChanged: (_) {},
+              ),
+            ),
+          ),
+        );
+
+        final selectedText = tester.widget<Text>(
+          find.descendant(
+            of: find.byKey(const ValueKey('cascader-ns')),
+            matching: find.text('Nanshan'),
+          ),
+        );
+        expect(
+          selectedText.style?.color,
+          TThemeData.defaultData().textColorPrimary,
+        );
+        expect(
+          tester.widget<Icon>(find.byIcon(TIcons.check)).color,
+          TThemeData.defaultData().brandNormalColor,
+        );
+      },
+    );
+
+    testWidgets('subtitle follows the internal active level', (tester) async {
+      var value = <Object?>[];
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TCascader(
+              options: options,
+              value: value,
+              subtitles: const ['Province', 'City', 'District'],
+              onChanged: (next) => setState(() => value = next),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Province'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('cascader-gd')));
+      await tester.pump();
+      expect(find.text('City'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('cascader-sz')));
+      await tester.pump();
+      expect(find.text('District'), findsOneWidget);
+
+      await tester.tap(find.text('Guangdong'));
+      await tester.pump();
+      expect(find.text('Province'), findsOneWidget);
+      expect(find.text('District'), findsNothing);
+    });
+
+    testWidgets('locks design-critical row and separator defaults', (
       tester,
     ) async {
+      final token = TThemeData.defaultData();
       await tester.pumpWidget(
         MaterialApp(
-          theme: ThemeData(
-            listTileTheme: const ListTileThemeData(selectedColor: Colors.green),
-            extensions: [TThemeData.defaultData()],
+          theme: TThemeBuilder.light(token).copyWith(
+            listTileTheme: const ListTileThemeData(
+              minVerticalPadding: 40,
+              iconColor: Colors.orange,
+            ),
           ),
           home: Scaffold(
             body: TCascader(
               options: options,
-              value: const ['gd', 'sz', 'ns'],
+              value: const [],
               onChanged: (_) {},
             ),
           ),
         ),
       );
 
-      final selectedText = tester.widget<Text>(
-        find.descendant(
-          of: find.byKey(const ValueKey('cascader-ns')),
-          matching: find.text('Nanshan'),
+      expect(
+        tester.getSize(find.byKey(const ValueKey('cascader-gd'))).height,
+        56,
+      );
+      expect(
+        tester.widget<Divider>(find.byType(Divider)).color,
+        token.componentStrokeColor,
+      );
+      expect(
+        tester.widget<Icon>(find.byIcon(TIcons.chevron_right).last).color,
+        token.textColorPlaceholder,
+      );
+    });
+
+    testWidgets('does not apply the device top inset to option rows', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          MediaQuery(
+            data: const MediaQueryData(padding: EdgeInsets.only(top: 64)),
+            child: TCascader(
+              options: options,
+              value: const [],
+              onChanged: (_) {},
+            ),
+          ),
         ),
       );
-      expect(selectedText.style?.color, Colors.green);
-      expect(
-        tester.widget<Icon>(find.byIcon(TIcons.check)).color,
-        Colors.green,
-      );
+
+      final dividerBottom = tester.getBottomLeft(find.byType(Divider)).dy;
+      final firstOptionTop = tester
+          .getTopLeft(find.byKey(const ValueKey('cascader-gd')))
+          .dy;
+      expect(firstOptionTop, dividerBottom);
     });
   });
 
