@@ -1,13 +1,13 @@
 ---
 name: tdesign-flutter-general
-description: TDesign Flutter 仓库面向所有 AI 助手（通用 Codex / Cursor 等）的通用协作约定，重点给出「何时创建 Spec」与「何时写更新日志」的判断规则（含每次组件修改 / 简单外部改动 / 用户可感知行为的四种情况），以及 Flutter 3.32.0 与 latest 双版本兼容、组件 breaking change 分析、文档来源与注释规范、代码质量 / lint 零告警等平台无关约定。平台无关规范以 CONTRIBUTING.md / specs/README.md 为唯一事实来源，本文档只做面向 AI 的落地提炼；CNB 平台专属执行细则见 .agents/skills/tdesign-flutter-conventions/SKILL.md。
+description: TDesign Flutter 通用协作约定，适用于仓库开发和 PR 工作，涵盖 Spec、更新日志、公开契约、生成产物、双版本及 CI 登记。组件对齐由 Review skill 补充，CNB 平台限制见仓库协作说明。
 ---
 
 # TDesign Flutter 仓库通用协作约定（AI 版）
 
-本文档面向**所有**在本仓库工作的 AI 助手（通用 Codex / Cursor，以及 CNB 平台 NPC），提供平台无关的协作约定提炼。通用规范的**唯一事实来源**是 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) 与 [`specs/README.md`](../../../specs/README.md)，本文档只做面向 AI 的落地提炼，不重复维护权威内容；CNB 平台专属细则（分支命名 `cnb-issue-<issue.number>`、PR 不携带 Issue 编号等）见 `.agents/skills/tdesign-flutter-conventions/SKILL.md`。
+本文档面向**所有**在本仓库工作的 AI 助手（通用 Codex / Cursor，以及 CNB 平台 NPC），提供平台无关的协作约定提炼。通用规范的**唯一事实来源**是 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) 与 [`specs/README.md`](../../../specs/README.md)，本文只做面向 AI 的落地提炼。
 
-Skills 按职责补充规范：本 skill 管通用协作与 CI 登记；[`tdesign-component-align-review`](../tdesign-component-align-review/SKILL.md) 管 Demo、API、Theme 与验收证据；[`tdesign-flutter-conventions`](../tdesign-flutter-conventions/SKILL.md) 仅管 CNB 分支及 Issue 差异。遇到冲突先核对规范本体与用户当前要求，不通过叠加规则扩大任务范围。
+Skills 按职责补充规范：本 skill 管通用协作与 CI 登记；[`tdesign-component-align-review`](../tdesign-component-align-review/SKILL.md) 管 Demo、API、Theme 与验收证据。CNB 静态约定见 [`.cnb/CONTRIBUTING.md`](../../../.cnb/CONTRIBUTING.md)，按该文档的适用范围读取，不作为通用 skill 加载。遇到冲突先核对规范本体与用户当前要求，不通过叠加规则扩大任务范围。
 
 ## 一、何时创建 Spec / 何时写更新日志（核心判断规则）
 
@@ -27,7 +27,7 @@ Skills 按职责补充规范：本 skill 管通用协作与 CI 登记；[`tdesig
 
 ## 二、提交 PR 与更新日志格式
 
-- PR 标题遵循 Conventional Commits：`type(scope): 描述`；平台 Issue 规则见 CNB skill，通用分支规则见 `AGENTS.md`。
+- PR 标题遵循 Conventional Commits：`type(scope): 描述`；分支及平台约定按 `AGENTS.md` 的入口读取。
 - PR 正文**完整保留 `.github/PULL_REQUEST_TEMPLATE.md` 原模板结构**（所有勾选项含未选 `[ ]`、所有 HTML 注释原样保留），只打勾 / 填写，不删减。
 - 更新日志条目遵循 Conventional Commits 的 commit type，与最终分组固定对应（完整见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md)）：
 
