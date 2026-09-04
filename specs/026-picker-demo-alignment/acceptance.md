@@ -101,3 +101,10 @@ flutter test --no-pub test/picker_demo_test.dart test/picker_demo_golden_test.da
 - 移除四个未展示的 `_buildBase/Time/Area/Title` 生成注解，由生成器清理无入口片段。移除示例中的外部源码地址指引，不扩增组件或 Example API。
 - 发布说明须记录 `breaking(picker): 父级未接收 onChanged 时滚轮停止后恢复受控值`；调用方应在 onChanged 中更新状态并回传 value，弹层组合先更新草稿，确认后再写入业务状态。
 - 本轮本地复验：Flutter 3.32.0 严格分析无诊断，10 项 Picker Demo 测试通过，包含四个代码面板；生成器 --check 与 git diff --check 通过。本轮仅改注解、示例说明与文档，未改变运行布局或更新 Golden。
+
+## 主题覆盖修复验证（2026-09-05）
+
+- Flutter 3.47：`flutter test test/components/picker`，43 项通过。
+- Flutter 3.47：`dart analyze --fatal-infos`，无诊断。
+- Flutter 3.32 隔离环境：Picker 与 DateTimePicker 登记测试共 182 项通过；Picker 生产代码覆盖率 97.51%。
+- Picker 与 DateTimePicker 深浅色 Demo Golden 共 34 项通过，原基线无变化。
