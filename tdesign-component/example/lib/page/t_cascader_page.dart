@@ -177,6 +177,13 @@ class _TCascaderPageState extends State<TCascaderPage> {
   /// sourceOptions。基础、tab、初始值、字段映射和次级标题在末级选择后提交并关闭；
   /// allowIntermediateSelection 仅用于“选择任意一项”，关闭按钮提交当前草稿；
   /// searchable 在 Popup 组合层提供搜索，命中末级后直接提交并关闭。
+  ///
+  /// 七个公开示例通过同一受控组合传入各自配置：基础示例使用默认 step；
+  /// 选项卡传 `variant: TCascaderVariant.tab`；初始值由父级 `_values` 提供；
+  /// 自定义 keys 先转换后传 `sourceOptions: _mappedOptions`；次级标题传
+  /// `subtitles`；任意层选择传 `allowIntermediateSelection: true`；搜索传
+  /// `searchable: true`。每个实例都通过
+  /// `onChanged: (next) => setState(() => _values[id] = next)` 回写受控值。
   @ExampleCode(group: 'cascader')
   TCell _cell(
     BuildContext context,

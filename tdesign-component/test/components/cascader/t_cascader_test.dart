@@ -417,13 +417,11 @@ void main() {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(
         MaterialApp(
-          theme: ThemeData(
-            dividerTheme: const DividerThemeData(),
+          theme: TThemeBuilder.light(token).copyWith(
             listTileTheme: const ListTileThemeData(
               minVerticalPadding: 40,
               iconColor: Colors.orange,
             ),
-            extensions: [token],
           ),
           home: Scaffold(
             body: TCascader(

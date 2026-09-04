@@ -198,7 +198,7 @@ class _TCascaderState extends State<TCascader> {
                     thickness: 1,
                     color:
                         theme?.dividerColor ??
-                        material.dividerTheme.color ??
+                        material.tExplicitDividerColor ??
                         context.tTheme.componentStrokeColor,
                   ),
                   if (_activeLevel < widget.subtitles.length)
