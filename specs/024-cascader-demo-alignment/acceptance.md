@@ -19,11 +19,14 @@
 
 - Flutter 3.32.0：`flutter analyze --no-pub --fatal-infos`，0 error / 0 warning。
 - Flutter 3.32.0：TCascader 组件回归 17 tests passed；Demo 功能 5 tests passed。
-- Flutter 3.32.0：TPopup 保留 Container 的背景、圆角与裁剪，并通过透明 Material
-  上下文承载 TSearchBar；Popup、ActionSheet 与 Cascader 聚焦回归通过。
+- Flutter 3.32.0：TPopup 保持 develop 的 Container 背景、圆角与裁剪；TSearchBar
+  仅在内部 TextField 边界提供透明 Material 上下文，Popup、ActionSheet、Search 与
+  Cascader 聚焦回归通过。
 - Flutter 3.32.0 Linux：2 张关闭状态与 10 张打开状态 light/dark Golden 更新后立即无更新复跑，12 tests passed。
 - Cascader 生产代码覆盖率：`248/251 = 98.80%`。
-- Flutter 3.47.0：严格 analyze、TCascader 17 tests、TPopup 46 tests 与 Demo 5 tests passed。
+- Search 生产代码覆盖率：`193/197 = 97.97%`。
+- Flutter 3.47.0：严格 analyze、TCascader 17 tests、TPopup 46 tests、
+  TSearchBar 无 Material 宿主回归与 Demo 5 tests passed。
 - 回归矩阵自测 11 tests passed；示例代码生成 `--check` 无漂移。
 
 ## 视觉结论

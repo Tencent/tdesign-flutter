@@ -35,16 +35,13 @@ class PopupShell extends StatelessWidget {
   }
 
   Widget _buildCenter(BuildContext context, double radius, Color background) {
-    final panel = Material(
-      type: MaterialType.transparency,
-      child: Container(
-        decoration: BoxDecoration(
-          color: background,
-          borderRadius: BorderRadius.circular(radius),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: options.child,
+    final panel = Container(
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(radius),
       ),
+      clipBehavior: Clip.antiAlias,
+      child: options.child,
     );
 
     if (options.closeBuilder != null) {
@@ -87,16 +84,10 @@ class PopupShell extends StatelessWidget {
             children: [Expanded(child: options.child)],
           );
 
-    return Material(
-      type: MaterialType.transparency,
-      child: Container(
-        decoration: BoxDecoration(
-          color: background,
-          borderRadius: borderRadius,
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: body,
-      ),
+    return Container(
+      decoration: BoxDecoration(color: background, borderRadius: borderRadius),
+      clipBehavior: Clip.antiAlias,
+      child: body,
     );
   }
 

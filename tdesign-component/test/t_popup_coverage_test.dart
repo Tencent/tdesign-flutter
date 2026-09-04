@@ -584,26 +584,6 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('弹层为依赖 Material 的子组件提供透明上下文', (tester) async {
-      await openPopup(
-        tester,
-        onPressed: () {
-          TPopup.show(
-            tester.element(find.text('open')),
-            options: const TPopupOptions(
-              placement: TPopupPlacement.bottom,
-              height: 120,
-              child: TextField(key: ValueKey('popup-text-field')),
-            ),
-          );
-        },
-      );
-      await tester.pumpAndSettle();
-
-      expect(find.byKey(const ValueKey('popup-text-field')), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    });
-
     testWidgets('center 自定义 radius 与 backgroundColor', (tester) async {
       await openPopup(
         tester,
