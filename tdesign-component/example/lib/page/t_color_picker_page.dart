@@ -109,10 +109,6 @@ class _TColorPickerPageState extends State<TColorPickerPage> {
       context,
       options: TPopupOptions.bottom(
         height: MediaQuery.sizeOf(context).height * 0.72,
-        titleWidget: null,
-        cancelBuilder: null,
-        confirmBuilder: null,
-        closeOnOverlayClick: true,
         child: StatefulBuilder(
           builder: (context, setPopupState) => TColorPicker(
             value: draft,
