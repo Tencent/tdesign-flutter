@@ -2,19 +2,23 @@ Widget _buildIconSimple(BuildContext context) {
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      child: const TText('带标题抽屉'),
+      size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
-      size: TButtonSize.large,
       onPressed: () {
         TDrawer(
           context,
+          placement: TDrawerPlacement.left,
           items: List.generate(
-              drawerItemLength,
-              (index) => TDrawerItem(
-                  title: '菜单${index + 1}', icon: const Icon(TIcons.app))),
+            8,
+            (index) => TDrawerItem(
+              title: '菜单${index + 1}',
+              icon: const TIcon(TIcons.app),
+            ),
+          ),
         ).show();
       },
+      child: const TText('带图标抽屉'),
     ),
   );
 }

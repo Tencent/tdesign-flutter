@@ -1,74 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+
 import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
-
-const drawerItemLength = 30;
 
 class TDrawerPage extends StatelessWidget {
   const TDrawerPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: context.tTheme.grayColor2,
-        child: ExamplePage(
-          title: tTitle(context),
-          desc: '用作一组平行关系页面/内容的切换器，相较于Tab，同屏可展示更多的选项数量。',
-          exampleCodeGroup: 'drawer',
-          navBarKey: navBarkey,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+    return ExamplePage(
+      title: tTitle(context),
+      desc: '用作一组平行关系页面或内容的切换器，相较于 Tab，同屏可展示更多选项。',
+      exampleCodeGroup: 'drawer',
+      navBarKey: navBarkey,
+      compactDemo: true,
+      showTestModule: false,
+      children: const [
+        ExampleModule(
+          title: '组件类型',
           children: [
-            ExampleModule(title: '组件类型', children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: '基础抽屉',
-                builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildBaseSimple);
-                },
-              ),
-              ExampleItem(
-                ignoreCode: true,
-                desc: '带图标抽屉',
-                builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildIconSimple);
-                },
-              ),
-            ]),
-            ExampleModule(title: '组件样式', children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: '带标题抽屉',
-                builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildTitleSimple);
-                },
-              ),
-              ExampleItem(
-                ignoreCode: true,
-                desc: '带底部插槽样式',
-                builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildBottomSimple);
-                },
-              ),
-            ]),
+            ExampleItem(desc: '基础抽屉', builder: _buildBaseSimple),
+            ExampleItem(desc: '带图标抽屉', builder: _buildIconSimple),
           ],
-          test: [
-            ExampleItem(
-              ignoreCode: true,
-              desc: '自定义背景色',
-              builder: (BuildContext context) {
-                return const CodeWrapper(builder: _buildColorSimple);
-              },
-            ),
-            ExampleItem(
-              ignoreCode: true,
-              desc: '使用 child 自定义内容',
-              builder: (BuildContext context) {
-                return const CodeWrapper(builder: _buildChildSimple);
-              },
-            ),
+        ),
+        ExampleModule(
+          title: '组件样式',
+          children: [
+            ExampleItem(desc: '右侧抽屉', builder: _buildRightSimple),
+            ExampleItem(desc: '带标题抽屉', builder: _buildTitleSimple),
+            ExampleItem(desc: '带底部操作抽屉', builder: _buildBottomSimple),
+            ExampleItem(desc: '无遮罩抽屉', builder: _buildNoOverlaySimple),
           ],
-        ));
+        ),
+      ],
+    );
   }
 }
 
@@ -77,20 +43,21 @@ Widget _buildBaseSimple(BuildContext context) {
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      child: const TText('基础抽屉'),
+      size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
-      size: TButtonSize.large,
       onPressed: () {
         TDrawer(
           context,
-          items: List.generate(drawerItemLength,
-              (index) => TDrawerItem(title: '菜单${index + 1}')),
-          onItemClick: (index, item) {
-            print('drawer item被点击，index：$index，title：${item.title}');
-          },
+          placement: TDrawerPlacement.left,
+          items: List.generate(
+            8,
+            (index) => TDrawerItem(title: '菜单${index + 1}'),
+          ),
+          onItemClick: (_, __) {},
         ).show();
       },
+      child: const TText('基础抽屉'),
     ),
   );
 }
@@ -100,19 +67,45 @@ Widget _buildIconSimple(BuildContext context) {
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      child: const TText('带标题抽屉'),
+      size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
+      onPressed: () {
+        TDrawer(
+          context,
+          placement: TDrawerPlacement.left,
+          items: List.generate(
+            8,
+            (index) => TDrawerItem(
+              title: '菜单${index + 1}',
+              icon: const TIcon(TIcons.app),
+            ),
+          ),
+        ).show();
+      },
+      child: const TText('带图标抽屉'),
+    ),
+  );
+}
+
+@ExampleCode(group: 'drawer')
+Widget _buildRightSimple(BuildContext context) {
+  return SizedBox(
+    width: double.infinity,
+    child: TButton(
       size: TButtonSize.large,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.primary,
       onPressed: () {
         TDrawer(
           context,
           items: List.generate(
-              drawerItemLength,
-              (index) => TDrawerItem(
-                  title: '菜单${index + 1}', icon: const Icon(TIcons.app))),
+            8,
+            (index) => TDrawerItem(title: '菜单${index + 1}'),
+          ),
         ).show();
       },
+      child: const TText('右侧抽屉'),
     ),
   );
 }
@@ -122,19 +115,21 @@ Widget _buildTitleSimple(BuildContext context) {
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      child: const TText('带图标抽屉'),
+      size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
-      size: TButtonSize.large,
       onPressed: () {
         TDrawer(
           context,
-          title: const TText('标题'),
           placement: TDrawerPlacement.left,
-          items: List.generate(drawerItemLength,
-              (index) => TDrawerItem(title: '菜单${index + 1}')),
+          title: const TText('标题'),
+          items: List.generate(
+            8,
+            (index) => TDrawerItem(title: '菜单${index + 1}'),
+          ),
         ).show();
       },
+      child: const TText('带标题抽屉'),
     ),
   );
 }
@@ -144,83 +139,57 @@ Widget _buildBottomSimple(BuildContext context) {
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      child: const TText('带底部插槽样式'),
+      size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
-      size: TButtonSize.large,
       onPressed: () {
         TDrawer(
           context,
           title: const TText('标题'),
-          placement: TDrawerPlacement.left,
-          items: List.generate(drawerItemLength,
-              (index) => TDrawerItem(title: '菜单${index + 1}')),
-          footer: SizedBox(
-            width: double.infinity,
-            child: TButton(
-              child: const TText('操作'),
-              variant: TButtonVariant.outline,
-              size: TButtonSize.large,
-              onPressed: () {},
+          items: List.generate(
+            8,
+            (index) => TDrawerItem(title: '菜单${index + 1}'),
+          ),
+          footer: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+            child: SizedBox(
+              width: double.infinity,
+              child: TButton(
+                size: TButtonSize.large,
+                variant: TButtonVariant.outline,
+                onPressed: () {},
+                child: const TText('操作'),
+              ),
             ),
           ),
         ).show();
       },
+      child: const TText('带底部操作抽屉'),
     ),
   );
 }
 
 @ExampleCode(group: 'drawer')
-Widget _buildColorSimple(BuildContext context) {
-  return Theme(
-    data: Theme.of(context).mergeExtension(
-      TDrawerThemeData(
-        backgroundColor: context.tTheme.bgColorSecondaryContainer,
-        itemBackgroundColor: context.tTheme.brandNormalColor,
-      ),
-    ),
-    child: Builder(
-      builder: (drawerContext) => SizedBox(
-        width: double.infinity,
-        child: TButton(
-          child: const TText('自定义背景色'),
-          variant: TButtonVariant.outline,
-          colorScheme: TButtonColorScheme.primary,
-          size: TButtonSize.large,
-          onPressed: () {
-            TDrawer(
-              drawerContext,
-              title: const TText('标题'),
-              placement: TDrawerPlacement.right,
-              items: List.generate(drawerItemLength,
-                  (index) => TDrawerItem(title: '菜单${index + 1}')),
-            ).show();
-          },
-        ),
-      ),
-    ),
-  );
-}
-
-@ExampleCode(group: 'drawer')
-Widget _buildChildSimple(BuildContext context) {
+Widget _buildNoOverlaySimple(BuildContext context) {
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      child: const TText('使用 child 自定义内容'),
+      size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
-      size: TButtonSize.large,
       onPressed: () {
-        TDrawer(
+        late TDrawerHandle handle;
+        handle = TDrawer(
           context,
-          title: const TText('标题'),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            child: const TText('这是通过 child 传入的自定义内容'),
+          showOverlay: false,
+          items: List.generate(
+            8,
+            (index) => TDrawerItem(title: '菜单${index + 1}'),
           ),
+          onItemClick: (_, __) => handle.close(),
         ).show();
       },
+      child: const TText('无遮罩抽屉'),
     ),
   );
 }

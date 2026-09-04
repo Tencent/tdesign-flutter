@@ -1,0 +1,53 @@
+# Drawer 设计与交互契约收敛
+
+## 背景
+
+当前 Flutter Drawer 公开 Demo 的“带图标”和“带标题”按钮文案与实际内容互换，基础示例使用 30 项且默认从右侧打开，与小程序公开 Demo 的左侧 8 项操作模式不一致。生产组件的列表正文、图标间距、标题与底部间距仍未对齐当前设计；Theme 同时保存边框和反馈开关，与实例状态重复。
+
+## 设计证据
+
+- Figma：`TDesign for mobile (Community)` Drawer 页面节点 `27361:21695`。
+- Figma 组件集合共 32 个变体，由 `showOverlay`、`placement = left | right`、`title`、`prefixIcon`、`footer` 五个二元属性组合而成。
+- 小程序 develop 公开 Demo：基础抽屉与带图标抽屉均从左侧打开，包含 8 个菜单项；`visible` 受控，分别监听 `item-click` 与 `overlay-click`。
+- 小程序当前样式：面板宽 280、标题内边距 24/16/8、菜单正文 Body Large、菜单内边距上 16 / 右 0 / 下 16 / 左 16、图标 24 且右间距 8、底部区底边距 20、分隔线从 16 开始。
+
+## 目标
+
+- 修正公开 Demo 文案和内容映射，并覆盖基础、图标、左右方向、标题、底部与无遮罩代表状态。
+- 保持 Flutter 命令式 `TDrawer(...).show()` 与声明式 `TDrawerWidget` 两条合理入口，不机械复制小程序 DOM/slot API。
+- 由实例唯一拥有 `placement`、蒙层开关、边框开关、末行边框和按压反馈；Theme 只保存具体颜色、尺寸、间距和文字样式。
+- 补齐 `onOverlayClick` 与 `destroyOnClose`，让公开操作语义可以直接表达。
+- 补齐组件、Demo、覆盖率与 Flutter 3.32 Linux light/dark Golden 门禁。
+
+## 非目标
+
+- 不把小程序 `visible` 复制成命令式对象的第二套状态；Flutter 继续通过 `TDrawerHandle` 管理浮层生命周期。
+- 不复制 `using-custom-navbar`、z-index、CSS class 或字符串图标。
+- 不改变 Popup 的公共契约。
+- 不手工维护 `CHANGELOG.md`。
+
+## 范围
+
+- `TDrawer`、`TDrawerWidget`、`TDrawerItem`、`TDrawerThemeData`。
+- Drawer 公开 Demo、生成 API/示例资产、组件与 Demo 测试、Golden、集中式回归清单。
+
+## 行为契约
+
+- `placement` 非空默认 `right`，Demo 的基础与图标示例显式使用小程序公开示例的 `left`；左右方向都必须有回归。
+- `showOverlay`、`closeOnOverlayClick` 非空默认 `true`；`onOverlayClick` 每次有效蒙层点击触发一次，是否关闭只由 `closeOnOverlayClick` 决定。
+- `destroyOnClose` 非空默认 `false` 并透传 Popup；`onClose` 在一次展示周期真正结束后触发。
+- `TDrawerWidget.hover`、`bordered`、`isShowLastBordered` 为实例状态，非空默认 `true`，Theme 不保存同义开关。
+- `bordered` 控制菜单项分隔线，不在列表四周额外绘制整圈边框；末项是否显示分隔线由 `isShowLastBordered` 决定。
+- 默认面板宽 280；正文使用 Body Large，菜单内边距为 `EdgeInsets.fromLTRB(16, 16, 0, 16)`；图标间距 8；标题内边距为 `EdgeInsets.fromLTRB(16, 24, 16, 8)`；底部区默认仅保留 20 底边距；分隔线缩进 16、厚度 0.5。
+- `child` 继续作为完全自定义内容并优先于 `items` / `title` / `footer`；`TDrawerItem.content` 仅替换该项正文，仍可与图标组合。
+- 实例具体字段优先于 `TDrawerThemeData`，Theme 具体字段优先于 TDesign Token 和设计内置值。
+
+## 验收标准
+
+- [x] 公开 Demo 的分组、按钮文案与构建内容一一对应，基础与图标示例为左侧 8 项。
+- [x] Demo 覆盖左右方向、标题、图标、底部和无遮罩代表状态，并通过真实打开、点击菜单、点击蒙层关闭测试。
+- [x] 组件测试覆盖蒙层回调、关闭策略、destroyOnClose、方向、句柄、Theme 优先级和设计尺寸。
+- [x] Drawer 手写生产源码覆盖率达到 95%。
+- [x] API 文档与公开示例代码生成检查通过。
+- [x] Flutter 3.32.0 与 latest 的组件、Demo 测试及全量 analyze 通过。
+- [x] Flutter 3.32.0 Linux 的 Demo 打开态与导航矩阵 light/dark Golden 通过。

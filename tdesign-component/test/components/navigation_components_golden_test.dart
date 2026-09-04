@@ -140,7 +140,7 @@ class _NavigationComponentsScene extends StatelessWidget {
                       ),
                       const SizedBox(height: 18),
                       const _SectionLabel('Drawer and SideBar'),
-                      SizedBox(
+                      const SizedBox(
                         height: 190,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -148,7 +148,7 @@ class _NavigationComponentsScene extends StatelessWidget {
                             Expanded(
                               child: TDrawerWidget(
                                 width: 190,
-                                title: const Text('Menu'),
+                                title: Text('Menu'),
                                 items: [
                                   TDrawerItem(title: 'Dashboard'),
                                   TDrawerItem(title: 'Messages'),
@@ -157,8 +157,8 @@ class _NavigationComponentsScene extends StatelessWidget {
                                 onItemClick: _ignoreDrawer,
                               ),
                             ),
-                            const SizedBox(width: 12),
-                            const SizedBox(
+                            SizedBox(width: 12),
+                            SizedBox(
                               width: 150,
                               child: TSideBar(
                                 value: 1,

@@ -32,6 +32,10 @@ Upload 等既有 Golden 的字形选择与像素基线。
 上游源文件 SHA-256 为
 `734b20876d6a6777e4c30b627e8391695bbf545c0badf6c066138bebd1f0278a`。
 
+`DrawerGoldenCJK-Regular.otf` 仅补充 Drawer 公开 Demo 文案，字符清单见
+`drawer_demo_glyphs.txt`，避免扩充共享字体影响既有 Golden；子集
+SHA-256 为 `821209c6afef5e0e8039487fad2d854f693b526e1ad28e4548f15ca0290da5f6`。
+
 - 上游：Noto Sans SC 2.004 `NotoSansSC-Regular.otf`
 - 来源：`https://github.com/notofonts/noto-cjk/raw/Sans2.004/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf`
 - 上游 SHA-256：`faa6c9df652116dde789d351359f3d7e5d2285a2b2a1f04a2d7244df706d5ea9`
@@ -51,5 +55,6 @@ Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后�
 ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedback 字符清单。
 更新 Picker 页面文案时，更新 Picker 字符清单。
 更新 Calendar 页面文案时，更新 Calendar 字符清单。
+更新 Drawer 页面文案时，更新 Drawer 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。

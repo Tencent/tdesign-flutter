@@ -1,4 +1,4 @@
-Widget _buildBaseSimple(BuildContext context) {
+Widget _buildNoOverlaySimple(BuildContext context) {
   return SizedBox(
     width: double.infinity,
     child: TButton(
@@ -6,17 +6,18 @@ Widget _buildBaseSimple(BuildContext context) {
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
       onPressed: () {
-        TDrawer(
+        late TDrawerHandle handle;
+        handle = TDrawer(
           context,
-          placement: TDrawerPlacement.left,
+          showOverlay: false,
           items: List.generate(
             8,
             (index) => TDrawerItem(title: '菜单${index + 1}'),
           ),
-          onItemClick: (_, __) {},
+          onItemClick: (_, __) => handle.close(),
         ).show();
       },
-      child: const TText('基础抽屉'),
+      child: const TText('无遮罩抽屉'),
     ),
   );
 }

@@ -38,7 +38,7 @@ void main() {
 
   group('TDrawerItem', () {
     test('默认构造', () {
-      final item = TDrawerItem();
+      const item = TDrawerItem();
       expect(item.title, null);
       expect(item.icon, null);
       expect(item.content, null);
@@ -47,7 +47,7 @@ void main() {
     test('带参数构造', () {
       const icon = Icon(Icons.add);
       const content = Text('自定义');
-      final item = TDrawerItem(title: '标题', icon: icon, content: content);
+      const item = TDrawerItem(title: '标题', icon: icon, content: content);
       expect(item.title, '标题');
       expect(item.icon, icon);
       expect(item.content, content);
@@ -59,30 +59,32 @@ void main() {
       const data = TDrawerThemeData();
       expect(data.width, null);
       expect(data.backgroundColor, null);
-      expect(data.bordered, null);
-      expect(data.isShowLastBordered, null);
-      expect(data.hover, null);
       expect(data.titleStyle, null);
+      expect(data.titlePadding, null);
       expect(data.itemTextStyle, null);
       expect(data.itemBackgroundColor, null);
       expect(data.itemPressedColor, null);
       expect(data.itemPadding, null);
+      expect(data.itemIconColor, null);
+      expect(data.itemIconSize, null);
+      expect(data.itemIconGap, null);
       expect(data.dividerColor, null);
+      expect(data.dividerIndent, null);
+      expect(data.dividerThickness, null);
+      expect(data.footerPadding, null);
     });
 
     test('带参数构造', () {
       const data = TDrawerThemeData(
         width: 300,
         backgroundColor: Colors.red,
-        bordered: false,
-        isShowLastBordered: false,
-        hover: false,
+        itemIconSize: 20,
+        itemIconGap: 4,
       );
       expect(data.width, 300);
       expect(data.backgroundColor, Colors.red);
-      expect(data.bordered, false);
-      expect(data.isShowLastBordered, false);
-      expect(data.hover, false);
+      expect(data.itemIconSize, 20);
+      expect(data.itemIconGap, 4);
     });
 
     test('copyWith', () {
@@ -90,70 +92,88 @@ void main() {
       final copied = data.copyWith(width: 320, backgroundColor: Colors.blue);
       expect(copied.width, 320);
       expect(copied.backgroundColor, Colors.blue);
-      expect(copied.bordered, null);
+      expect(copied.itemIconSize, null);
     });
 
     test('copyWith and lerp cover remaining fields', () {
       const base = TDrawerThemeData(
         width: 280,
-        drawerTop: 12,
         backgroundColor: Colors.red,
-        bordered: true,
-        isShowLastBordered: true,
-        hover: true,
         titleStyle: TextStyle(fontWeight: FontWeight.w500),
+        titlePadding: EdgeInsets.all(4),
         itemTextStyle: TextStyle(fontWeight: FontWeight.w400),
         itemBackgroundColor: Colors.black,
         itemPressedColor: Colors.grey,
         itemPadding: EdgeInsets.all(8),
+        itemIconColor: Colors.orange,
+        itemIconSize: 20,
+        itemIconGap: 4,
         dividerColor: Colors.white,
+        dividerIndent: 8,
+        dividerThickness: 1,
+        footerPadding: EdgeInsets.only(bottom: 12),
       );
       final copied = base.copyWith(
-        drawerTop: 24,
-        bordered: false,
-        hover: false,
         titleStyle: const TextStyle(fontWeight: FontWeight.w600),
+        titlePadding: const EdgeInsets.all(8),
         itemTextStyle: const TextStyle(fontWeight: FontWeight.w500),
         itemBackgroundColor: Colors.green,
         itemPressedColor: Colors.blue,
         itemPadding: const EdgeInsets.all(12),
+        itemIconColor: Colors.purple,
+        itemIconSize: 24,
+        itemIconGap: 8,
         dividerColor: Colors.yellow,
+        dividerIndent: 16,
+        dividerThickness: 2,
+        footerPadding: const EdgeInsets.only(bottom: 20),
       );
-      expect(copied.drawerTop, 24);
-      expect(copied.bordered, false);
-      expect(copied.hover, false);
       expect(copied.titleStyle?.fontWeight, FontWeight.w600);
+      expect(copied.titlePadding, const EdgeInsets.all(8));
       expect(copied.itemTextStyle?.fontWeight, FontWeight.w500);
       expect(copied.itemBackgroundColor, Colors.green);
       expect(copied.itemPressedColor, Colors.blue);
       expect(copied.itemPadding, const EdgeInsets.all(12));
+      expect(copied.itemIconColor, Colors.purple);
+      expect(copied.itemIconSize, 24);
+      expect(copied.itemIconGap, 8);
       expect(copied.dividerColor, Colors.yellow);
+      expect(copied.dividerIndent, 16);
+      expect(copied.dividerThickness, 2);
+      expect(copied.footerPadding, const EdgeInsets.only(bottom: 20));
 
       const other = TDrawerThemeData(
         width: 320,
-        drawerTop: 20,
         backgroundColor: Colors.blue,
-        bordered: false,
-        isShowLastBordered: false,
-        hover: false,
         titleStyle: TextStyle(fontWeight: FontWeight.w700),
+        titlePadding: EdgeInsets.all(12),
         itemTextStyle: TextStyle(fontWeight: FontWeight.w600),
         itemBackgroundColor: Colors.white,
         itemPressedColor: Colors.black,
         itemPadding: EdgeInsets.all(16),
+        itemIconColor: Colors.blue,
+        itemIconSize: 28,
+        itemIconGap: 12,
         dividerColor: Colors.black,
+        dividerIndent: 24,
+        dividerThickness: 3,
+        footerPadding: EdgeInsets.only(bottom: 28),
       );
       final lerped = base.lerp(other, 0.5);
       expect(lerped.width, 300);
-      expect(lerped.drawerTop, 16);
-      expect(lerped.bordered, false);
-      expect(lerped.hover, false);
       expect(lerped.titleStyle?.fontWeight, FontWeight.w600);
+      expect(lerped.titlePadding, const EdgeInsets.all(8));
       expect(lerped.itemTextStyle?.fontWeight, FontWeight.w500);
       expect(lerped.itemBackgroundColor, isNotNull);
       expect(lerped.itemPressedColor, isNotNull);
       expect(lerped.itemPadding, const EdgeInsets.all(12));
+      expect(lerped.itemIconColor, isNotNull);
+      expect(lerped.itemIconSize, 24);
+      expect(lerped.itemIconGap, 8);
       expect(lerped.dividerColor, isNotNull);
+      expect(lerped.dividerIndent, 16);
+      expect(lerped.dividerThickness, 2);
+      expect(lerped.footerPadding, const EdgeInsets.only(bottom: 20));
     });
 
     test('lerp', () {
@@ -212,7 +232,7 @@ void main() {
     testWidgets('使用 items 渲染列表项', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TDrawerWidget(
+          const TDrawerWidget(
             items: [
               TDrawerItem(title: '菜单1'),
               TDrawerItem(title: '菜单2'),
@@ -228,7 +248,7 @@ void main() {
       expect(find.byType(TCellGroup), findsNothing);
 
       final title = tester.widget<Text>(find.text('菜单1'));
-      expect(title.style?.fontSize, 14);
+      expect(title.style?.fontSize, 16);
       expect(title.style?.fontWeight, FontWeight.w400);
     });
 
@@ -236,7 +256,10 @@ void main() {
       const longTitle = '这是一个非常非常长的抽屉菜单标题用于验证不溢出';
       await tester.pumpWidget(
         wrapWithTheme(
-          TDrawerWidget(width: 120, items: [TDrawerItem(title: longTitle)]),
+          const TDrawerWidget(
+            width: 120,
+            items: [TDrawerItem(title: longTitle)],
+          ),
         ),
       );
       await tester.pumpAndSettle();
@@ -253,12 +276,12 @@ void main() {
       );
       final baseTheme = fullTheme();
       final globalTheme = baseTheme.copyWith(
-        textTheme: baseTheme.textTheme.copyWith(bodyMedium: globalStyle),
+        textTheme: baseTheme.textTheme.copyWith(bodyLarge: globalStyle),
       );
       await tester.pumpWidget(
         MaterialApp(
           theme: globalTheme,
-          home: Scaffold(
+          home: const Scaffold(
             body: TDrawerWidget(items: [TDrawerItem(title: '菜单1')]),
           ),
         ),
@@ -278,7 +301,7 @@ void main() {
           theme: globalTheme.mergeExtension(
             const TDrawerThemeData(itemTextStyle: drawerStyle),
           ),
-          home: Scaffold(
+          home: const Scaffold(
             body: TDrawerWidget(items: [TDrawerItem(title: '菜单1')]),
           ),
         ),
@@ -293,14 +316,143 @@ void main() {
     testWidgets('使用 title 渲染标题', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TDrawerWidget(
-            title: const Text('标题'),
+          const TDrawerWidget(
+            title: Text('标题'),
             items: [TDrawerItem(title: '菜单1')],
           ),
         ),
       );
       await tester.pumpAndSettle();
       expect(find.text('标题'), findsOneWidget);
+    });
+
+    testWidgets('默认标题、菜单、图标、分隔线和底部尺寸对齐设计', (tester) async {
+      const footerKey = Key('metrics-footer');
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TDrawerWidget(
+            title: Text('标题'),
+            items: [
+              TDrawerItem(title: '菜单1', icon: Icon(Icons.apps)),
+              TDrawerItem(title: '菜单2'),
+            ],
+            footer: Text('底部', key: footerKey),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final titlePadding = tester.widget<Padding>(
+        find
+            .ancestor(of: find.text('标题'), matching: find.byType(Padding))
+            .first,
+      );
+      expect(titlePadding.padding, const EdgeInsets.fromLTRB(16, 24, 16, 8));
+
+      final itemContainer = tester.widget<Container>(
+        find
+            .ancestor(of: find.text('菜单1'), matching: find.byType(Container))
+            .first,
+      );
+      expect(itemContainer.padding, const EdgeInsets.fromLTRB(16, 16, 0, 16));
+      final iconTheme = tester.widget<IconTheme>(
+        find
+            .ancestor(
+              of: find.byIcon(Icons.apps),
+              matching: find.byType(IconTheme),
+            )
+            .first,
+      );
+      expect(iconTheme.data.size, 24);
+      expect(iconTheme.data.color, TThemeData.defaultData().textColorPrimary);
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is SizedBox && widget.width == 8,
+        ),
+        findsOneWidget,
+      );
+
+      expect(find.byType(Divider), findsNWidgets(2));
+      final divider = tester.widget<Divider>(find.byType(Divider).first);
+      expect(divider.indent, 16);
+      expect(divider.thickness, 0.5);
+
+      final footerContainer = tester.widget<Container>(
+        find
+            .ancestor(
+              of: find.byKey(footerKey),
+              matching: find.byType(Container),
+            )
+            .first,
+      );
+      expect(footerContainer.padding, const EdgeInsets.only(bottom: 20));
+    });
+
+    testWidgets('bordered 和 isShowLastBordered 由组件实例控制', (tester) async {
+      const items = [TDrawerItem(title: '菜单1'), TDrawerItem(title: '菜单2')];
+      await tester.pumpWidget(
+        wrapWithTheme(const TDrawerWidget(items: items, bordered: false)),
+      );
+      expect(find.byType(Divider), findsNothing);
+
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TDrawerWidget(items: items, isShowLastBordered: false),
+        ),
+      );
+      expect(find.byType(Divider), findsOneWidget);
+    });
+
+    testWidgets('按压反馈可关闭且使用 Drawer Theme 色', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TDrawerWidget(
+            items: const [TDrawerItem(title: '菜单1')],
+            onItemClick: (_, __) {},
+          ),
+          drawerTheme: const TDrawerThemeData(
+            itemBackgroundColor: Colors.white,
+            itemPressedColor: Colors.purple,
+          ),
+        ),
+      );
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.text('菜单1')),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+      var itemContainer = tester.widget<Container>(
+        find
+            .ancestor(of: find.text('菜单1'), matching: find.byType(Container))
+            .first,
+      );
+      expect(itemContainer.color, Colors.purple);
+      await gesture.up();
+      await tester.pump();
+
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TDrawerWidget(
+            hover: false,
+            items: const [TDrawerItem(title: '菜单1')],
+            onItemClick: (_, __) {},
+          ),
+          drawerTheme: const TDrawerThemeData(
+            itemBackgroundColor: Colors.white,
+            itemPressedColor: Colors.purple,
+          ),
+        ),
+      );
+      final noFeedbackGesture = await tester.startGesture(
+        tester.getCenter(find.text('菜单1')),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+      itemContainer = tester.widget<Container>(
+        find
+            .ancestor(of: find.text('菜单1'), matching: find.byType(Container))
+            .first,
+      );
+      expect(itemContainer.color, Colors.white);
+      await noFeedbackGesture.up();
     });
 
     testWidgets('标题使用 Drawer ThemeData 且不继承外层调试前景色', (tester) async {
@@ -334,8 +486,8 @@ void main() {
       const footerKey = Key('footer');
       await tester.pumpWidget(
         wrapWithTheme(
-          TDrawerWidget(
-            footer: const Text('底部', key: footerKey),
+          const TDrawerWidget(
+            footer: Text('底部', key: footerKey),
             items: [TDrawerItem(title: '菜单1')],
           ),
         ),
@@ -348,8 +500,8 @@ void main() {
       const childKey = Key('child');
       await tester.pumpWidget(
         wrapWithTheme(
-          TDrawerWidget(
-            child: const Text('自定义', key: childKey),
+          const TDrawerWidget(
+            child: Text('自定义', key: childKey),
             items: [TDrawerItem(title: '菜单1')],
           ),
         ),
@@ -420,7 +572,7 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           TDrawerWidget(
-            items: [TDrawerItem(title: '菜单1')],
+            items: const [TDrawerItem(title: '菜单1')],
             onItemClick: (index, item) {
               clickedIndex = index;
               clickedItem = item;
@@ -437,6 +589,44 @@ void main() {
   });
 
   group('TDrawer', () {
+    testWidgets('公开参数默认值稳定', (tester) async {
+      late BuildContext drawerContext;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              drawerContext = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      final drawer = TDrawer(drawerContext);
+      expect(drawer.closeOnOverlayClick, isTrue);
+      expect(drawer.placement, TDrawerPlacement.right);
+      expect(drawer.showOverlay, isTrue);
+      expect(drawer.useSafeArea, isTrue);
+      expect(drawer.destroyOnClose, isFalse);
+    });
+
+    testWidgets('非法宽度和顶部距离会失败', (tester) async {
+      late BuildContext drawerContext;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              drawerContext = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      expect(() => TDrawer(drawerContext, width: 0), throwsAssertionError);
+      expect(() => TDrawer(drawerContext, drawerTop: -1), throwsAssertionError);
+    });
+
     testWidgets('show 方法打开抽屉', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
@@ -450,7 +640,7 @@ void main() {
                     TDrawer(
                       context,
                       title: const TText('标题'),
-                      items: [TDrawerItem(title: '菜单1')],
+                      items: [const TDrawerItem(title: '菜单1')],
                     ).show();
                   },
                 );
@@ -536,7 +726,7 @@ void main() {
                   onPressed: () {
                     final drawer = TDrawer(
                       context,
-                      items: [TDrawerItem(title: '菜单1')],
+                      items: [const TDrawerItem(title: '菜单1')],
                     );
                     drawerHandle = drawer.show();
                   },
@@ -569,7 +759,7 @@ void main() {
                   onPressed: () {
                     final drawer = TDrawer(
                       context,
-                      items: [TDrawerItem(title: '菜单1')],
+                      items: [const TDrawerItem(title: '菜单1')],
                     );
                     first ??= drawer.show();
                     second = drawer.show();
@@ -628,7 +818,10 @@ void main() {
                 return TButton(
                   child: const Text('打开'),
                   onPressed: () {
-                    TDrawer(context, items: [TDrawerItem(title: '菜单1')]).show();
+                    TDrawer(
+                      context,
+                      items: [const TDrawerItem(title: '菜单1')],
+                    ).show();
                   },
                 );
               },
@@ -657,7 +850,7 @@ void main() {
                     TDrawer(
                       context,
                       width: 250,
-                      items: [TDrawerItem(title: '菜单1')],
+                      items: [const TDrawerItem(title: '菜单1')],
                     ).show();
                   },
                 );
@@ -686,7 +879,7 @@ void main() {
                     TDrawer(
                       context,
                       placement: TDrawerPlacement.left,
-                      items: [TDrawerItem(title: '左抽屉')],
+                      items: [const TDrawerItem(title: '左抽屉')],
                     ).show();
                   },
                 );
@@ -698,6 +891,102 @@ void main() {
       await tester.tap(find.text('打开'));
       await tester.pumpAndSettle();
       expect(find.text('左抽屉'), findsOneWidget);
+      expect(tester.getTopLeft(find.byType(TDrawerWidget)).dx, 0);
+    });
+
+    testWidgets('默认 placement 从右侧打开', (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: fullTheme(),
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => TButton(
+                child: const Text('打开'),
+                onPressed: () => TDrawer(
+                  context,
+                  items: const [TDrawerItem(title: '右抽屉')],
+                ).show(),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('打开'));
+      await tester.pumpAndSettle();
+      expect(tester.getTopLeft(find.byType(TDrawerWidget)).dx, 95);
+      expect(tester.getSize(find.byType(TDrawerWidget)).width, 280);
+    });
+
+    testWidgets('点击蒙层会回调，但可配置为不关闭', (tester) async {
+      var overlayClicks = 0;
+      var closed = false;
+      TDrawerHandle? handle;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: fullTheme(),
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => TButton(
+                child: const Text('打开'),
+                onPressed: () {
+                  handle = TDrawer(
+                    context,
+                    closeOnOverlayClick: false,
+                    onOverlayClick: () => overlayClicks++,
+                    onClose: () => closed = true,
+                    items: const [TDrawerItem(title: '菜单1')],
+                  ).show();
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('打开'));
+      await tester.pumpAndSettle();
+      await tester.tapAt(const Offset(10, 10));
+      await tester.pumpAndSettle();
+      expect(overlayClicks, 1);
+      expect(closed, isFalse);
+      expect(handle?.isShowing, isTrue);
+      expect(find.text('菜单1'), findsOneWidget);
+
+      handle?.close();
+      await tester.pumpAndSettle();
+      expect(closed, isTrue);
+    });
+
+    testWidgets('destroyOnClose 关闭路由状态保留', (tester) async {
+      bool? maintainState;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: fullTheme(),
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => TButton(
+                child: const Text('打开'),
+                onPressed: () => TDrawer(
+                  context,
+                  destroyOnClose: true,
+                  child: Builder(
+                    builder: (context) {
+                      maintainState = ModalRoute.of(context)?.maintainState;
+                      return const Text('内容');
+                    },
+                  ),
+                ).show(),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('打开'));
+      await tester.pumpAndSettle();
+      expect(maintainState, isFalse);
     });
 
     testWidgets('showOverlay: false 不显示遮罩', (tester) async {
@@ -713,7 +1002,7 @@ void main() {
                     TDrawer(
                       context,
                       showOverlay: false,
-                      items: [TDrawerItem(title: '无遮罩')],
+                      items: [const TDrawerItem(title: '无遮罩')],
                     ).show();
                   },
                 );
@@ -743,7 +1032,7 @@ void main() {
                       onClose: () {
                         closed = true;
                       },
-                      items: [TDrawerItem(title: '菜单1')],
+                      items: [const TDrawerItem(title: '菜单1')],
                     ).show();
                   },
                 );

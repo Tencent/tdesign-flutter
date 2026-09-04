@@ -233,6 +233,35 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'drawer',
+    coverageTargets: ['lib/src/components/drawer/'],
+    componentTests: ['test/components/drawer/t_drawer_test.dart'],
+    exampleTests: ['test/drawer_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Drawer Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/navigation_components_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Drawer Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/drawer_demo_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Drawer Popup Consumer',
+        workingDirectory: '.',
+        testFiles: [
+          'test/components/theme/t_popup_consumers_golden_test.dart',
+        ],
+        arguments: [
+          '--plain-name',
+          'drawer keeps the shared Popup visual contract',
+        ],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'fab',
     coverageTargets: ['lib/src/components/fab/'],
     componentTests: [
