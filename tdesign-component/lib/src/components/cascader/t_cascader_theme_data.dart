@@ -26,7 +26,7 @@ class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
     /// 普通文案样式。
     this.textStyle,
 
-    /// 当前选中文案样式。
+    /// 当前活动导航文案样式。
     this.activeTextStyle,
 
     /// 禁用文案样式。
@@ -54,7 +54,7 @@ class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
   /// 普通文案样式。
   final TextStyle? textStyle;
 
-  /// 当前选中文案样式。
+  /// 当前活动导航文案样式。
   final TextStyle? activeTextStyle;
 
   /// 禁用文案样式。

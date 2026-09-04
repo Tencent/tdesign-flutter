@@ -1,2 +1,0 @@
-Widget _buildSearch(BuildContext context) =>
-      _trigger('search', searchable: true);

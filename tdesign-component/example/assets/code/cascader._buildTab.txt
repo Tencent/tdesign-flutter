@@ -1,2 +1,0 @@
-Widget _buildTab(BuildContext context) =>
-      _trigger('tab', variant: TCascaderVariant.tab);

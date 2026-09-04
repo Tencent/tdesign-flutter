@@ -229,7 +229,10 @@
       },
       "api": {
         "names": [
-          "TMultiCascader"
+          "TCascader",
+          "TCascaderOption",
+          "TCascaderThemeData",
+          "TCascaderVariant"
         ],
         "getComments": false
       }

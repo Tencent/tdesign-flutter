@@ -40,7 +40,7 @@ void main() {
       tester.widget<TCascader>(find.byType(TCascader)).variant,
       TCascaderVariant.step,
     );
-    await tester.tap(find.text('取消'));
+    await tester.tap(find.byIcon(TIcons.close));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const ValueKey('cascader-tab-trigger')));
@@ -49,7 +49,7 @@ void main() {
       tester.widget<TCascader>(find.byType(TCascader)).variant,
       TCascaderVariant.tab,
     );
-    await tester.tap(find.text('取消'));
+    await tester.tap(find.byIcon(TIcons.close));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const ValueKey('cascader-keys-trigger')));
@@ -65,19 +65,24 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('cascader-subtitle-trigger')));
     await tester.pumpAndSettle();
-    expect(
-      find.byKey(const ValueKey('cascader-level-subtitle')),
-      findsOneWidget,
-    );
+    expect(tester.widget<TCascader>(find.byType(TCascader)).subtitles, const [
+      '请选择省份',
+      '请选择城市',
+      '请选择区/县',
+    ]);
     expect(find.text('请选择省份'), findsOneWidget);
-    await tester.tap(find.text('取消'));
+    await tester.tap(find.byKey(const ValueKey('cascader-beijing')));
+    await tester.pump();
+    expect(find.text('请选择城市'), findsOneWidget);
+    await tester.tap(find.byIcon(TIcons.close));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const ValueKey('cascader-any-trigger')));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('广东省'));
+    await tester.tap(find.byKey(const ValueKey('cascader-guangdong')));
     await tester.pump();
-    await tester.tap(find.text('确定'));
+    expect(find.byType(TCascader), findsOneWidget);
+    await tester.tap(find.byIcon(TIcons.close));
     await tester.pumpAndSettle();
     expect(find.text('广东省'), findsOneWidget);
 
@@ -86,6 +91,29 @@ void main() {
     await tester.enterText(find.byType(TextField), '南山');
     await tester.pump();
     expect(find.text('广东省 / 深圳市 / 南山区'), findsOneWidget);
+    await tester.tap(find.text('广东省 / 深圳市 / 南山区'));
+    await tester.pumpAndSettle();
+    expect(find.byType(TCascader), findsNothing);
+    expect(find.text('广东省/深圳市/南山区'), findsOneWidget);
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
+
+  testWidgets('basic Cascader commits and closes after selecting a leaf', (
+    tester,
+  ) async {
+    await pumpFullDemoPage(tester, cascaderDemoPageTestSpec, ThemeMode.light);
+
+    await tester.tap(find.byKey(const ValueKey('cascader-base-trigger')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('cascader-beijing')));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('cascader-beijing-city')));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('cascader-dongcheng')));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(TCascader), findsNothing);
+    expect(find.text('北京市/北京市/东城区'), findsOneWidget);
     await disposeDemoPage(tester);
   }, tags: 'demo');
 }
