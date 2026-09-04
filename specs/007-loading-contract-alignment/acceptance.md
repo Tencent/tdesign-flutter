@@ -45,7 +45,7 @@
 ## 未覆盖项与后续工作
 
 - `t_loading.dart` line 92（`colorScheme?.primary` fallback）为既有边界分支，未覆盖（需构造显式非默认 ColorScheme 场景），不影响 ≥95% 门槛。
-- **真机像素表现仍未实测**：已有微信开发者工具 iPhone 12/13 模拟器截图与 Linux Golden，但不将其外推为真机 DPR 结论。
+- **真机像素表现仍未实测**：已有微信开发者工具 iOS 模拟器截图与 Linux Golden，但不将其外推为真机 DPR 结论。
 - `reverse` / `pause` / `delay`（后续迭代，官方发布版未公开对应 Demo）。
 - `attach`（仅 Vue 独有且发布版注释）。
 

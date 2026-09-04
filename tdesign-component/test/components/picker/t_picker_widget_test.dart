@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/components/picker/picker_item.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
@@ -27,7 +28,197 @@ void main() {
     ],
   ]);
 
+  testWidgets('滚轮统一字号并继承 TextTheme，禁用项可自定义内容', (tester) async {
+    final control = FixedExtentScrollController(initialItem: 2);
+    addTearDown(control.dispose);
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(
+          textTheme: const TextTheme(bodyLarge: TextStyle(fontSize: 19)),
+          extensions: [TThemeData.defaultData()],
+        ),
+        home: Column(
+          children: [
+            for (var index = 0; index < 5; index++)
+              SizedBox(
+                height: 40,
+                child: PickerItemWidget(
+                  fixedExtentScrollController: control,
+                  colIndex: 0,
+                  index: index,
+                  option: TPickerOption(label: 'item-$index', value: index),
+                  itemHeight: 40,
+                ),
+              ),
+            SizedBox(
+              height: 40,
+              child: PickerItemWidget(
+                fixedExtentScrollController: control,
+                colIndex: 0,
+                index: 5,
+                option: const TPickerOption(
+                  label: 'disabled',
+                  value: 5,
+                  disabled: true,
+                ),
+                disabled: true,
+                itemHeight: 40,
+                itemBuilder: (_, option, __, ___, ____) =>
+                    Text('custom-${option.label}'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    final labels = tester.widgetList<TText>(find.byType(TText)).toList();
+    expect(labels, hasLength(5));
+    expect(labels.map((label) => label.style!.fontSize), everyElement(19));
+    expect(labels[2].style!.fontWeight, FontWeight.w600);
+    expect(labels[1].style!.fontWeight, FontWeight.w400);
+    expect(labels[1].style!.color, TThemeData.defaultData().textColorSecondary);
+    expect(find.text('custom-disabled'), findsOneWidget);
+  });
+
   group('TPicker controlled behavior', () {
+    for (final linked in [false, true]) {
+      testWidgets(
+        'rejected value restores after scrolling without parent rebuild ($linked)',
+        (tester) async {
+          final options = List.generate(
+            12,
+            (index) => TPickerOption(
+              label: 'Item $index',
+              value: index,
+              children: [
+                TPickerOption(label: 'Child $index', value: 'child-$index'),
+              ],
+            ),
+          );
+          final changes = <TPickerValue>[];
+          var builds = 0;
+          await tester.pumpWidget(
+            wrap(
+              Builder(
+                builder: (_) {
+                  builds++;
+                  return TPicker(
+                    items: linked
+                        ? TPickerLinked(options)
+                        : TPickerColumns([options]),
+                    value: linked ? const [0, 'child-0'] : const [0],
+                    onChanged: changes.add,
+                  );
+                },
+              ),
+            ),
+          );
+          final wheel = find.byType(ListWheelScrollView).first;
+          await tester.fling(wheel, const Offset(0, -120), 1000);
+          await tester.pumpAndSettle();
+          expect(changes, isNotEmpty);
+          expect(() => changes.last.indexes.add(0), throwsUnsupportedError);
+          expect(() => changes.last.selectedOptions.clear(), throwsUnsupportedError);
+          expect(() => changes.last.values.clear(), throwsUnsupportedError);
+          expect(changes.last.values.first, isNot(0));
+          expect(builds, 1);
+          final controller =
+              tester.widget<ListWheelScrollView>(wheel).controller!
+                  as FixedExtentScrollController;
+          expect(controller.selectedItem, 0);
+          if (linked) {
+            final child =
+                tester
+                        .widget<ListWheelScrollView>(
+                          find.byType(ListWheelScrollView).last,
+                        )
+                        .controller!
+                    as FixedExtentScrollController;
+            expect(child.selectedItem, 0);
+            expect(find.text('Child 0'), findsOneWidget);
+          }
+          final notifications = changes.length;
+          await tester.pumpAndSettle();
+          expect(changes.length, notifications);
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
+    for (final column in [0, 1, 2]) {
+      testWidgets('linked column $column preserves drag and fling activity', (
+        tester,
+      ) async {
+        List<TPickerOption> options(int depth) => List.generate(
+          depth == column ? 30 : 2,
+          (index) => TPickerOption(
+            label: 'Column $depth item $index',
+            value: index,
+            children: depth == 2 ? const [] : options(depth + 1),
+          ),
+        );
+        final items = TPickerLinked(options(0));
+        var value = <Object?>[0, 0, 0];
+        await tester.pumpWidget(
+          wrap(
+            StatefulBuilder(
+              builder: (_, setState) => TPicker(
+                items: items,
+                value: value,
+                onChanged: (next) => setState(() => value = next.values),
+              ),
+            ),
+          ),
+        );
+        final wheel = find.byType(ListWheelScrollView).at(column);
+        final precedingControllers = tester
+            .widgetList<ListWheelScrollView>(find.byType(ListWheelScrollView))
+            .take(column)
+            .map((wheel) => wheel.controller)
+            .toList();
+        final controller =
+            tester.widget<ListWheelScrollView>(wheel).controller!
+                as FixedExtentScrollController;
+        final gesture = await tester.startGesture(tester.getCenter(wheel));
+        await gesture.moveBy(const Offset(0, -60));
+        await tester.pump();
+        expect(
+          tester.widget<ListWheelScrollView>(wheel).controller,
+          same(controller),
+        );
+        final firstValue = value[column] as int;
+        await gesture.moveBy(const Offset(0, -80));
+        await tester.pump();
+        expect(value[column] as int, greaterThan(firstValue));
+        expect(value.take(column), everyElement(0));
+        expect(value.skip(column + 1), everyElement(0));
+        await gesture.up();
+        await tester.pumpAndSettle();
+        await tester.fling(wheel, const Offset(0, -80), 1000);
+        await tester.pump(const Duration(milliseconds: 16));
+        expect(
+          tester.widget<ListWheelScrollView>(wheel).controller,
+          same(controller),
+        );
+        final releaseOffset = controller.offset;
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(controller.offset, greaterThan(releaseOffset));
+        await tester.pumpAndSettle();
+        expect(value.take(column), everyElement(0));
+        expect(value.skip(column + 1), everyElement(0));
+        for (var index = 0; index < column; index++) {
+          expect(
+            tester
+                .widget<ListWheelScrollView>(
+                  find.byType(ListWheelScrollView).at(index),
+                )
+                .controller,
+            same(precedingControllers[index]),
+          );
+        }
+        expect(tester.takeException(), isNull);
+      });
+    }
+
     testWidgets('renders controlled values and emits a complete snapshot', (
       tester,
     ) async {
