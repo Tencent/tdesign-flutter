@@ -81,6 +81,69 @@ void main() {
   });
 
   group('TPicker controlled behavior', () {
+    for (final linked in [false, true]) {
+      testWidgets(
+        'rejected value restores after scrolling without parent rebuild ($linked)',
+        (tester) async {
+          final options = List.generate(
+            12,
+            (index) => TPickerOption(
+              label: 'Item $index',
+              value: index,
+              children: [
+                TPickerOption(label: 'Child $index', value: 'child-$index'),
+              ],
+            ),
+          );
+          final changes = <TPickerValue>[];
+          var builds = 0;
+          await tester.pumpWidget(
+            wrap(
+              Builder(
+                builder: (_) {
+                  builds++;
+                  return TPicker(
+                    items: linked
+                        ? TPickerLinked(options)
+                        : TPickerColumns([options]),
+                    value: linked ? const [0, 'child-0'] : const [0],
+                    onChanged: changes.add,
+                  );
+                },
+              ),
+            ),
+          );
+          final wheel = find.byType(ListWheelScrollView).first;
+          await tester.fling(wheel, const Offset(0, -120), 1000);
+          await tester.pumpAndSettle();
+          expect(changes, isNotEmpty);
+          expect(() => changes.last.indexes.add(0), throwsUnsupportedError);
+          expect(() => changes.last.selectedOptions.clear(), throwsUnsupportedError);
+          expect(() => changes.last.values.clear(), throwsUnsupportedError);
+          expect(changes.last.values.first, isNot(0));
+          expect(builds, 1);
+          final controller =
+              tester.widget<ListWheelScrollView>(wheel).controller!
+                  as FixedExtentScrollController;
+          expect(controller.selectedItem, 0);
+          if (linked) {
+            final child =
+                tester
+                        .widget<ListWheelScrollView>(
+                          find.byType(ListWheelScrollView).last,
+                        )
+                        .controller!
+                    as FixedExtentScrollController;
+            expect(child.selectedItem, 0);
+            expect(find.text('Child 0'), findsOneWidget);
+          }
+          final notifications = changes.length;
+          await tester.pumpAndSettle();
+          expect(changes.length, notifications);
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
     for (final column in [0, 1, 2]) {
       testWidgets('linked column $column preserves drag and fling activity', (
         tester,

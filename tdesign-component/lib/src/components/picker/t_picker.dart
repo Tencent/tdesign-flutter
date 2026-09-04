@@ -33,16 +33,19 @@ class TPicker extends StatefulWidget {
     this.itemBuilder,
   });
 
-  /// 数据源。
+  /// 不可变数据源；更新选项时创建新的数据源与列表，不原地修改。
   final TPickerItems items;
 
-  /// 各列受控值。
+  /// 各列受控值。使用不可变列表，更新时提供新列表。
+  ///
+  /// 拖动期间可显示候选值；滚动结束后父级未接受 [onChanged] 的值时，
+  /// 恢复到此值。父级接受变化时，应通过重建回传新的值。
   final List<Object?> value;
 
   /// 值变化回调；为 null 时禁用。
   final ValueChanged<TPickerValue>? onChanged;
 
-  /// 某列滚动结束回调。
+  /// 某列滚动结束时的候选快照，不表示父级已接受该值。
   final void Function(int columnIndex, TPickerValue value)? onColumnScrollEnd;
 
   /// 自定义选项构建器。
@@ -94,17 +97,23 @@ class _TPickerState extends State<TPicker> {
         linkedValueAccepted ||
         (!acceptsPendingValue &&
             !listEquals(widget.value, _snapshot().values))) {
-      final previousControllers = _controllers;
-      _initialize(preserveThrough: preserveThrough);
-      final retiredControllers = previousControllers
-          .where((controller) => !_controllers.contains(controller))
-          .toList();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        for (final controller in retiredControllers) {
-          controller.dispose();
-        }
-      });
+      _resetColumns(preserveThrough: preserveThrough);
     }
+  }
+
+  void _resetColumns({int preserveThrough = -1}) {
+    final previousControllers = _controllers;
+    _initialize(preserveThrough: preserveThrough);
+    _pendingValue = null;
+    _pendingColumn = -1;
+    final retiredControllers = previousControllers
+        .where((controller) => !_controllers.contains(controller))
+        .toList();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      for (final controller in retiredControllers) {
+        controller.dispose();
+      }
+    });
   }
 
   @override
@@ -281,6 +290,19 @@ class _TPickerState extends State<TPicker> {
   ) {
     if (notification is ScrollEndNotification && _enabled) {
       widget.onColumnScrollEnd?.call(columnIndex, _snapshot());
+      // 等父级处理本帧的回调；未接受的候选值不能成为第二状态源。
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted ||
+            _pendingValue == null ||
+            _controllers.any(
+              (controller) =>
+                  controller.hasClients &&
+                  controller.position.isScrollingNotifier.value,
+            )) {
+          return;
+        }
+        setState(_resetColumns);
+      });
     }
     return false;
   }
