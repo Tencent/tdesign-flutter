@@ -1,7 +1,17 @@
 Widget _buildCircleBackTop(BuildContext context) {
-    return getCustomButton(
-      context,
-      '圆形返回顶部',
-      () => _showBackTop(TBackTopShape.circle),
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        TBackTop(onPressed: () {}),
+        TBackTop(colorScheme: TBackTopColorScheme.dark, onPressed: () {}),
+        TBackTop(showText: true, onPressed: () {}),
+        TBackTop(
+          showText: true,
+          colorScheme: TBackTopColorScheme.dark,
+          onPressed: () {},
+        ),
+      ],
     );
   }

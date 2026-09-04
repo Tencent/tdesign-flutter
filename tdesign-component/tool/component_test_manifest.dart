@@ -63,6 +63,28 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'backtop',
+    coverageTargets: ['lib/src/components/backtop/'],
+    componentTests: [
+      'test/components/backtop/t_backtop_test.dart',
+      'test/components/backtop/t_backtop_theme_test.dart',
+      'test/components/backtop/t_backtop_widget_test.dart',
+    ],
+    exampleTests: ['test/backtop_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'BackTop Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/navigation_components_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'BackTop Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/backtop_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'button',
     coverageTargets: ['lib/src/components/button/'],
     componentTests: [

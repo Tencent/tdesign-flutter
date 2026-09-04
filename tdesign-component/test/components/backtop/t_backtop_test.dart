@@ -17,10 +17,7 @@ void main() {
         extensions: [TThemeData.defaultData(), ...themeExtensions],
       ),
       home: Scaffold(
-        body: Stack(
-          fit: StackFit.expand,
-          children: [child],
-        ),
+        body: Stack(fit: StackFit.expand, children: [child]),
       ),
     );
   }
@@ -34,7 +31,9 @@ void main() {
           ListView(
             controller: controller,
             children: List.generate(
-                20, (i) => SizedBox(height: 200, child: Text('Item $i'))),
+              20,
+              (i) => SizedBox(height: 200, child: Text('Item $i')),
+            ),
           ),
           Positioned(right: 16, bottom: 32, child: child),
         ],
@@ -49,16 +48,14 @@ void main() {
     });
 
     testWidgets('半圆形渲染', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TBackTop(shape: TBackTopShape.halfCircle),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(const TBackTop(shape: TBackTopShape.halfCircle)),
+      );
       expect(find.byType(TBackTop), findsOneWidget);
     });
 
     testWidgets('showText 为 true 时显示文案', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TBackTop(showText: true),
-      ));
+      await tester.pumpWidget(wrapWithTheme(const TBackTop(showText: true)));
       // 默认中文环境下，应显示 "顶部"
       expect(find.text('顶部'), findsOneWidget);
       final text = tester.widget<Text>(find.text('顶部'));
@@ -71,53 +68,59 @@ void main() {
     });
 
     testWidgets('showText 为 false 时不显示文案', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TBackTop(showText: false),
-      ));
+      await tester.pumpWidget(wrapWithTheme(const TBackTop(showText: false)));
       expect(find.text('顶部'), findsNothing);
     });
 
     testWidgets('半圆形态 showText 显示返回+顶部', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TBackTop(shape: TBackTopShape.halfCircle, showText: true),
-      ));
-      expect(find.text('返回'), findsOneWidget);
-      expect(find.text('顶部'), findsOneWidget);
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const Align(
+            child: TBackTop(shape: TBackTopShape.halfCircle, showText: true),
+          ),
+        ),
+      );
+      expect(find.text('返回\n顶部'), findsOneWidget);
       expect(
-          tester.widget<Text>(find.text('返回')).overflow, TextOverflow.ellipsis);
-      expect(
-          tester.widget<Text>(find.text('顶部')).overflow, TextOverflow.ellipsis);
+        tester.widget<Text>(find.text('返回\n顶部')).overflow,
+        TextOverflow.ellipsis,
+      );
     });
   });
 
-  group('TBackTop 禁用态 (A类)', () {
-    testWidgets('onPressed: null 时 GestureDetector onTap 为 null',
-        (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TBackTop(onPressed: null),
-      ));
+  group('TBackTop 动作来源', () {
+    testWidgets('无 controller 和回调时不响应点击', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(const TBackTop(onPressed: null)));
       expect(find.byType(TBackTop), findsOneWidget);
-      // 禁用时 GestureDetector 仍存在（为 tooltip 服务），但 onTap 为 null
-      final gestureDetector =
-          tester.widget<GestureDetector>(find.byType(GestureDetector));
+      final gestureDetector = tester.widget<GestureDetector>(
+        find.byType(GestureDetector),
+      );
       expect(gestureDetector.onTap, null);
     });
 
-    testWidgets('onPressed: null 时 tooltip 仍可用', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TBackTop(onPressed: null, tooltip: '回顶'),
-      ));
-      expect(find.byType(Tooltip), findsOneWidget);
-      expect(find.byType(GestureDetector), findsOneWidget);
+    testWidgets('仅传 controller 时仍可点击回顶', (tester) async {
+      final controller = ScrollController(initialScrollOffset: 500);
+      await tester.pumpWidget(
+        wrapScrollable(TBackTop(controller: controller), controller),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<GestureDetector>(find.byType(GestureDetector)).onTap,
+        isNotNull,
+      );
+      await tester.tap(find.byType(TBackTop));
+      await tester.pumpAndSettle();
+      expect(controller.offset, lessThan(1));
+      controller.dispose();
     });
   });
 
   group('TBackTop onPressed 回调', () {
     testWidgets('onPressed 被触发', (tester) async {
       var called = false;
-      await tester.pumpWidget(wrapWithTheme(
-        TBackTop(onPressed: () => called = true),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(TBackTop(onPressed: () => called = true)),
+      );
       await tester.tap(find.byType(TBackTop));
       expect(called, true);
     });
@@ -126,13 +129,12 @@ void main() {
       final controller = ScrollController(initialScrollOffset: 500);
       var called = false;
 
-      await tester.pumpWidget(wrapScrollable(
-        TBackTop(
-          controller: controller,
-          onPressed: () => called = true,
+      await tester.pumpWidget(
+        wrapScrollable(
+          TBackTop(controller: controller, onPressed: () => called = true),
+          controller,
         ),
-        controller,
-      ));
+      );
 
       // 滚动到底部以验证回顶
       await tester.pumpAndSettle();
@@ -150,9 +152,9 @@ void main() {
 
     testWidgets('无 controller 时仅调 onPressed', (tester) async {
       var called = false;
-      await tester.pumpWidget(wrapWithTheme(
-        TBackTop(onPressed: () => called = true),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(TBackTop(onPressed: () => called = true)),
+      );
       await tester.tap(find.byType(TBackTop));
       await tester.pump();
       expect(called, true);
@@ -164,13 +166,12 @@ void main() {
       final controller = ScrollController(initialScrollOffset: 3000);
       var callCount = 0;
 
-      await tester.pumpWidget(wrapScrollable(
-        TBackTop(
-          controller: controller,
-          onPressed: () => callCount++,
+      await tester.pumpWidget(
+        wrapScrollable(
+          TBackTop(controller: controller, onPressed: () => callCount++),
+          controller,
         ),
-        controller,
-      ));
+      );
 
       await tester.pumpAndSettle();
 
@@ -197,13 +198,12 @@ void main() {
 
     testWidgets('设置 visibilityOffset 后未达到阈值时隐藏', (tester) async {
       final controller = ScrollController(initialScrollOffset: 50);
-      await tester.pumpWidget(wrapScrollable(
-        TBackTop(
-          controller: controller,
-          visibilityOffset: 100,
+      await tester.pumpWidget(
+        wrapScrollable(
+          TBackTop(controller: controller, visibilityOffset: 100),
+          controller,
         ),
-        controller,
-      ));
+      );
       await tester.pump();
       // 偏移 50 < 100，应隐藏
       expect(find.byType(GestureDetector), findsNothing);
@@ -212,13 +212,12 @@ void main() {
 
     testWidgets('达到阈值后显示', (tester) async {
       final controller = ScrollController(initialScrollOffset: 150);
-      await tester.pumpWidget(wrapScrollable(
-        TBackTop(
-          controller: controller,
-          visibilityOffset: 100,
+      await tester.pumpWidget(
+        wrapScrollable(
+          TBackTop(controller: controller, visibilityOffset: 100),
+          controller,
         ),
-        controller,
-      ));
+      );
       await tester.pump();
       expect(find.byType(TBackTop), findsOneWidget);
       controller.dispose();
@@ -226,13 +225,12 @@ void main() {
 
     testWidgets('阈值边界值：刚好等于阈值时显示', (tester) async {
       final controller = ScrollController(initialScrollOffset: 100);
-      await tester.pumpWidget(wrapScrollable(
-        TBackTop(
-          controller: controller,
-          visibilityOffset: 100,
+      await tester.pumpWidget(
+        wrapScrollable(
+          TBackTop(controller: controller, visibilityOffset: 100),
+          controller,
         ),
-        controller,
-      ));
+      );
       await tester.pump();
       expect(find.byType(TBackTop), findsOneWidget);
       controller.dispose();
@@ -240,13 +238,12 @@ void main() {
 
     testWidgets('滚动越过阈值后显示切换', (tester) async {
       final controller = ScrollController(initialScrollOffset: 0);
-      await tester.pumpWidget(wrapScrollable(
-        TBackTop(
-          controller: controller,
-          visibilityOffset: 100,
+      await tester.pumpWidget(
+        wrapScrollable(
+          TBackTop(controller: controller, visibilityOffset: 100),
+          controller,
         ),
-        controller,
-      ));
+      );
       await tester.pump();
       // 偏移 0，应隐藏
       expect(find.byType(GestureDetector), findsNothing);
@@ -268,12 +265,12 @@ void main() {
   group('TBackTop 主题颜色', () {
     testWidgets('裸 TThemeData 驱动默认背景和内容色', (tester) async {
       final token = TThemeData.defaultData();
-      await tester.pumpWidget(MaterialApp(
-        theme: ThemeData(
-          extensions: [token],
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(extensions: [token]),
+          home: const Scaffold(body: TBackTop(onPressed: _noop)),
         ),
-        home: const Scaffold(body: TBackTop(onPressed: _noop)),
-      ));
+      );
 
       final decoration = tester
           .widgetList<Container>(find.byType(Container))
@@ -289,14 +286,16 @@ void main() {
     });
 
     testWidgets('组件 Theme 颜色覆盖全局品牌色', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TBackTop(onPressed: _noop),
-        backTopTheme: const TBackTopThemeData(
-          backgroundColor: Colors.red,
-          borderColor: Colors.redAccent,
-          contentColor: Colors.white,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TBackTop(onPressed: _noop),
+          backTopTheme: const TBackTopThemeData(
+            backgroundColor: Colors.red,
+            borderColor: Colors.redAccent,
+            contentColor: Colors.white,
+          ),
         ),
-      ));
+      );
       final decoration = tester
           .widgetList<Container>(find.byType(Container))
           .map((container) => container.decoration)
@@ -305,23 +304,23 @@ void main() {
       expect(decoration.color, Colors.red);
       expect(decoration.border?.top.color, Colors.redAccent);
       expect(
-          tester.widget<Icon>(find.byIcon(TIcons.backtop)).color, Colors.white);
+        tester.widget<Icon>(find.byIcon(TIcons.backtop)).color,
+        Colors.white,
+      );
     });
   });
 
   group('TBackTop tooltip', () {
     testWidgets('自定义 tooltip 文案', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TBackTop(tooltip: '回到顶部', onPressed: null),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(const TBackTop(tooltip: '回到顶部', onPressed: null)),
+      );
       final tooltip = tester.widget<Tooltip>(find.byType(Tooltip));
       expect(tooltip.message, '回到顶部');
     });
 
     testWidgets('未传 tooltip 时使用 resource 默认文案', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TBackTop(onPressed: null),
-      ));
+      await tester.pumpWidget(wrapWithTheme(const TBackTop(onPressed: null)));
       final tooltip = tester.widget<Tooltip>(find.byType(Tooltip));
       // 默认中文：返回顶部
       expect(tooltip.message, '返回顶部');
@@ -331,96 +330,74 @@ void main() {
   group('TBackTopThemeData', () {
     test('默认构造全 null', () {
       const theme = TBackTopThemeData();
-      expect(theme.shape, null);
       expect(theme.backgroundColor, null);
       expect(theme.borderColor, null);
       expect(theme.contentColor, null);
-      expect(theme.defaultVisibilityOffset, null);
+      expect(theme.roundSize, null);
+      expect(theme.halfCircleHeight, null);
+      expect(theme.halfCircleMinWidth, null);
+      expect(theme.iconSize, null);
+      expect(theme.borderWidth, null);
+      expect(theme.halfCircleHorizontalPadding, null);
+      expect(theme.contentGap, null);
+      expect(theme.textStyle, null);
     });
 
     test('copyWith 部分覆盖', () {
-      const theme = TBackTopThemeData(
-        shape: TBackTopShape.circle,
-        defaultVisibilityOffset: 100,
-      );
-      final copied = theme.copyWith(shape: TBackTopShape.halfCircle);
-      expect(copied.shape, TBackTopShape.halfCircle);
-      expect(copied.defaultVisibilityOffset, 100);
+      const theme = TBackTopThemeData(roundSize: 48, iconSize: 20);
+      final copied = theme.copyWith(roundSize: 56);
+      expect(copied.roundSize, 56);
+      expect(copied.iconSize, 20);
     });
 
     test('copyWith 全量覆盖', () {
-      const theme = TBackTopThemeData(shape: TBackTopShape.circle);
+      const theme = TBackTopThemeData();
       final copied = theme.copyWith(
-        shape: TBackTopShape.halfCircle,
         backgroundColor: Colors.red,
-        defaultVisibilityOffset: 200,
+        halfCircleHeight: 44,
+        contentGap: 4,
       );
-      expect(copied.shape, TBackTopShape.halfCircle);
       expect(copied.backgroundColor, Colors.red);
-      expect(copied.defaultVisibilityOffset, 200);
+      expect(copied.halfCircleHeight, 44);
+      expect(copied.contentGap, 4);
     });
 
-    test('lerp t=0 取左值', () {
-      const a = TBackTopThemeData(
-        shape: TBackTopShape.circle,
-        defaultVisibilityOffset: 100,
-      );
-      const b = TBackTopThemeData(
-        shape: TBackTopShape.halfCircle,
-        defaultVisibilityOffset: 200,
-      );
-      final result = a.lerp(b, 0);
-      expect(result.shape, TBackTopShape.circle);
-      expect(result.defaultVisibilityOffset, 100);
-    });
-
-    test('lerp t=1 取右值', () {
-      const a = TBackTopThemeData(
-        shape: TBackTopShape.circle,
-        defaultVisibilityOffset: 100,
-      );
-      const b = TBackTopThemeData(
-        shape: TBackTopShape.halfCircle,
-        defaultVisibilityOffset: 200,
-      );
-      final result = a.lerp(b, 1);
-      expect(result.shape, TBackTopShape.halfCircle);
-      expect(result.defaultVisibilityOffset, 200);
+    test('lerp 空值按内置尺寸插值且双空保持空', () {
+      const a = TBackTopThemeData();
+      const b = TBackTopThemeData(roundSize: 56, iconSize: 24);
+      final result = a.lerp(b, 0.5);
+      expect(result.roundSize, 52);
+      expect(result.iconSize, 22);
+      expect(result.contentGap, null);
     });
 
     test('lerp 非同类返回自身', () {
-      const a = TBackTopThemeData(shape: TBackTopShape.circle);
+      const a = TBackTopThemeData(roundSize: 48);
       final result = a.lerp(null, 0.5);
-      expect(result.shape, TBackTopShape.circle);
+      expect(result.roundSize, 48);
     });
 
-    testWidgets('Theme 注入 shape 生效', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TBackTop(),
-        backTopTheme: const TBackTopThemeData(shape: TBackTopShape.halfCircle),
-      ));
-      expect(find.byType(TBackTop), findsOneWidget);
-    });
-
-    testWidgets('Theme 注入 defaultVisibilityOffset 生效', (tester) async {
-      final controller = ScrollController(initialScrollOffset: 0);
-      await tester.pumpWidget(wrapScrollable(
-        TBackTop(controller: controller),
-        controller,
-      ));
-      // 无 Theme 注入 visibilityOffset，默认始终可见
+    testWidgets('默认显隐阈值为 200', (tester) async {
+      final controller = ScrollController(initialScrollOffset: 199);
+      await tester.pumpWidget(
+        wrapScrollable(TBackTop(controller: controller), controller),
+      );
       await tester.pump();
-      expect(find.byType(TBackTop), findsOneWidget);
+      expect(find.byType(GestureDetector), findsNothing);
+      controller.jumpTo(200);
+      await tester.pump();
+      expect(find.byType(GestureDetector), findsOneWidget);
       controller.dispose();
     });
 
-    testWidgets('构造器 visibilityOffset 覆盖 Theme defaultVisibilityOffset',
-        (tester) async {
+    testWidgets('构造器 visibilityOffset 使用实例唯一状态源', (tester) async {
       final controller = ScrollController(initialScrollOffset: 0);
-      await tester.pumpWidget(wrapScrollable(
-        TBackTop(controller: controller, visibilityOffset: 50),
-        controller,
-      ));
+      await tester.pumpWidget(
+        wrapScrollable(
+          TBackTop(controller: controller, visibilityOffset: 50),
+          controller,
+        ),
+      );
       await tester.pump();
       // 偏移 0 < 50，应隐藏
       expect(find.byType(GestureDetector), findsNothing);
@@ -438,6 +415,15 @@ void main() {
     test('枚举值', () {
       expect(TBackTopShape.circle.index, 0);
       expect(TBackTopShape.halfCircle.index, 1);
+    });
+  });
+
+  group('TBackTopColorScheme 枚举', () {
+    test('枚举值', () {
+      expect(TBackTopColorScheme.values, [
+        TBackTopColorScheme.light,
+        TBackTopColorScheme.dark,
+      ]);
     });
   });
 
@@ -459,20 +445,79 @@ void main() {
     });
 
     testWidgets('Theme 颜色字段注入生效', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TBackTop(),
-        backTopTheme: const TBackTopThemeData(backgroundColor: Colors.red),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TBackTop(),
+          backTopTheme: const TBackTopThemeData(backgroundColor: Colors.red),
+        ),
+      );
       expect(find.byType(TBackTop), findsOneWidget);
     });
 
+    testWidgets('dark 圆形和半圆形使用各自设计 Token', (tester) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const Row(
+            children: [
+              TBackTop(colorScheme: TBackTopColorScheme.dark),
+              TBackTop(
+                shape: TBackTopShape.halfCircle,
+                colorScheme: TBackTopColorScheme.dark,
+              ),
+            ],
+          ),
+        ),
+      );
+      final decorations = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.decoration)
+          .whereType<BoxDecoration>()
+          .toList();
+      expect(decorations[0].color, token.grayColor13);
+      expect(decorations[1].color, token.grayColor14);
+      expect(
+        decorations.every(
+          (decoration) => decoration.border?.top.color == token.grayColor9,
+        ),
+        isTrue,
+      );
+    });
+
+    testWidgets('Theme 尺寸和文字样式字段生效', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const Align(
+            child: TBackTop(shape: TBackTopShape.halfCircle, showText: true),
+          ),
+          backTopTheme: const TBackTopThemeData(
+            halfCircleHeight: 44,
+            halfCircleMinWidth: 50,
+            iconSize: 24,
+            borderWidth: 1,
+            halfCircleHorizontalPadding: 10,
+            contentGap: 4,
+            textStyle: TextStyle(fontSize: 12),
+          ),
+        ),
+      );
+      final decoratedSizes = tester
+          .widgetList<Container>(find.byType(Container))
+          .where((container) => container.decoration is BoxDecoration)
+          .map((container) => tester.getSize(find.byWidget(container)));
+      expect(decoratedSizes.any((size) => size.height == 44), isTrue);
+      expect(tester.widget<Icon>(find.byIcon(TIcons.backtop)).size, 24);
+      expect(tester.widget<Text>(find.text('返回\n顶部')).style?.fontSize, 12);
+    });
+
     testWidgets('半圆形 + showText + Theme 注入', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TBackTop(shape: TBackTopShape.halfCircle, showText: true),
-        backTopTheme: const TBackTopThemeData(shape: TBackTopShape.halfCircle),
-      ));
-      expect(find.text('返回'), findsOneWidget);
-      expect(find.text('顶部'), findsOneWidget);
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TBackTop(shape: TBackTopShape.halfCircle, showText: true),
+          backTopTheme: const TBackTopThemeData(contentGap: 4),
+        ),
+      );
+      expect(find.text('返回\n顶部'), findsOneWidget);
     });
   });
 }
