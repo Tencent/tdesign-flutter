@@ -54,3 +54,9 @@ TPickerThemeData 的 height 必须为有限正数、itemCount 必须大于零（
 联动滚轮在父级接受 onChanged 回传值时，保留变更列及其前置列的滚动控制器和 Widget 身份，仅重建后续联动列，保证连续拖动和松手惯性不被受控回传中断。外部主动修改值或替换数据源仍同步到指定选项。语义信息随滚动更新，但不逐帧重建完整滚轮子树；不增加 API 或改变主题样式。
 
 滚轮字体仅接受显式 Material TextTheme 覆盖，默认字体字号和行高来自当前 TDesign fontBodyLarge；共享 DateTimePicker 同步验证。
+
+### 示例代码展示契约
+
+四个公开代码入口展示实际运行的 `_cell` 核心组合，包含触发 Cell、标签解析、Popup/Header、受控 Picker 草稿及确认/取消。数据、父级状态和差异配置通过参数传入，并在片段中明确说明初始值与完整源码入口；不宣称核心片段是独立应用。共用实现从源码生成，不扩增组件或 Example 框架 API。
+
+代码面板必须通过真实打开验证；现有双版本 Demo 套件覆盖四个入口。Android 真机集成入口 `example/integration_test/picker_example_test.dart` 使用 Flutter SDK 自带 integration_test，验证实际应用路由、五个触发器的取消/确认和代码面板；它是需设备的手动验收入口，不计入普通 CI 已通过证据。

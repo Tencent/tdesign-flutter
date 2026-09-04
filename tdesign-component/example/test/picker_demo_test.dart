@@ -1,12 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import 'package:tdesign_flutter_example/base/notification_center.dart';
 
 import 'demo_page_test_utils.dart';
 import 'picker_demo_test_spec.dart';
 
 void main() {
   registerDemoStructureTests(pickerDemoPageTestSpec);
+
+  testWidgets('all Picker code panels expose the live controlled composition', (
+    tester,
+  ) async {
+    await pumpDemoPageAtPhoneViewport(
+      tester,
+      pickerDemoPageTestSpec,
+      ThemeMode.light,
+    );
+    await tester.pumpAndSettle();
+    TNotification.postNotification('onApiVisibleChange', {'apiVisible': true});
+    await tester.pumpAndSettle();
+    for (var index = 0; index < 4; index++) {
+      final entry = find.text('code').at(index);
+      await tester.ensureVisible(entry);
+      await tester.tap(entry);
+      await tester.pumpAndSettle();
+      final markdown = tester.widget<Markdown>(find.byType(Markdown));
+      expect(markdown.data, contains('return TCell('));
+      expect(markdown.data, contains('TPopup.show'));
+      expect(markdown.data, contains('StatefulBuilder'));
+      expect(markdown.data, contains('onConfirm(List<Object?>.of(draft))'));
+      expect(markdown.data, contains('完整数据'));
+      Navigator.of(tester.element(find.byType(Markdown))).pop();
+      await tester.pumpAndSettle();
+    }
+    expect(tester.takeException(), isNull);
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
 
   for (final column in [0, 1, 2]) {
     testWidgets('area popup column $column keeps continuous drag and inertia', (

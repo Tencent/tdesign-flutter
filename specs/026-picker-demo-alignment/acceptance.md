@@ -85,3 +85,12 @@ flutter test --no-pub test/picker_demo_test.dart test/picker_demo_golden_test.da
 - TPopupHeader 默认标题样式清除路由缺省的黄色双下划线，保留子 Widget 显式装饰；移除 Demo 中 Material 包装。未新增公共 API 或硬编码状态颜色。
 - 修复版本在同一 Android 手机打开三列地区选择器，浅色/深色均确认标题无黄色下划线、选中条与选中文字居中。回归测试断言真实滚轮高 200、高亮条 343×40 且中心一致；Popup 测试同时验证默认无装饰与调用者显式下划线。
 - Flutter 3.32 与 3.47 的 6 项 Picker Demo 功能回归通过；3.32 Popup 契约测试 6 项通过，严格 analyze 无告警。Linux 3.32 的 10 张打开态 Golden 因修正总高而更新，2 张整页图不变；更新后全部 12 项 Golden 与 6 项功能测试精确复跑通过。
+
+### 示例代码面板与 Android 真机验收（2026-09-04）
+
+- 四个代码入口通过现有 methodName 展示实际 `_cell` 核心组合，包含 Cell 触发、标签解析、Popup/Header、Picker 草稿、取消/确认。片段注明数据、初始值、父级接入和当前分支完整源文件地址；它是核心片段，不是独立应用。远端地址在本地修改推送后才包含本轮实现。
+- 新增代码面板 Widget 回归，实际打开四个入口读取渲染的 Markdown；沿用 picker_demo_test.dart 在 GitHub/CNB 的双版本登记。Flutter 3.32.0 与 3.47.0 各 10 项 Demo 回归通过，严格 analyze --fatal-infos 无诊断；生成器及 --check 通过。未改组件生产源码或公开 API，本轮无新增 breaking change。
+- 抽取时曾因 builder context 与 State.context 的主题层级差异造成标题文字 Golden 差异，已恢复原 State.context。Flutter 3.32.0 Linux 最终 10 项 Demo + 14 项 Golden 测试通过，18 张基线精确比较，差异 0，未更新基线或容差。
+- Android 16 真机（25113PN0EC，40302eeb）运行当前应用及集成测试通过：五个示例逐一滚动、取消、重开恢复、确认、重开保留；四个代码面板显示核心组合，实际向下滚动可看到 Popup 与确认逻辑；深色地区弹层亦检查滚轮高 200，浅色五个示例检查默认项高 40。浅/深色截图人工检查无高亮错位、黄色下划线或缺字；不等同于与 Figma 逐像素一致，也不是人工手指拖动的性能测量。
+- 真机复跑：在 tdesign-component/example 执行 `flutter drive --driver=test_driver/picker_example.dart --target=integration_test/picker_example_test.dart -d <device-id>`。需要连接已授权设备；integration_test 来自 Flutter SDK，仅为开发依赖。截图写入 `build/picker-device-evidence/`，driver 返回 true 仅表示截图已保存，不代表自动视觉通过。手机测试恢复原主题设置。
+- 真机截图：picker-page.png、picker-area.png、picker-area-dark.png、picker-code.png、picker-code-composition.png（以上输出目录）。以上为本地验证结果，远端 CI 状态须在推送后独立确认。

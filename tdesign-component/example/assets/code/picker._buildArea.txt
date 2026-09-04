@@ -1,2 +1,13 @@
-Widget _buildArea(BuildContext context) =>
-      TCellGroup(cells: [_cell('area', '选择地区', _area, popupTitle: '选择地区')]);
+Widget _buildArea(BuildContext context) => TCellGroup(
+    cells: [
+      _cell(
+        this.context,
+        'area',
+        '选择地区',
+        _area,
+        value: _values['area']!,
+        onConfirm: (value) => setState(() => _values['area'] = value),
+        popupTitle: '选择地区',
+      ),
+    ],
+  );
