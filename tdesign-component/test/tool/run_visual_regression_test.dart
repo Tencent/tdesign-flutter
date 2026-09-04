@@ -22,7 +22,7 @@ void main() {
 
   test('every regression component owns a visual regression suite', () {
     final componentSuites = componentTestSuites
-        .map((suite) => suite.component)
+        .map((suite) => suite.name)
         .toSet();
     final visualSuites = visualTestSuites
         .map((suite) => suite.component)

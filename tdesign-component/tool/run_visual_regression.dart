@@ -1,224 +1,23 @@
 import 'dart:io';
 
+import 'component_test_manifest.dart';
+
 class VisualTestSuite {
-  const VisualTestSuite(
-    this.component,
-    this.name, {
-    required this.workingDirectory,
-    required this.testFiles,
-    this.arguments = const [],
-  });
+  const VisualTestSuite(this.component, this.manifest);
 
   final String component;
-  final String name;
-  final String workingDirectory;
-  final List<String> testFiles;
-  final List<String> arguments;
+  final VisualTestManifest manifest;
+
+  String get name => manifest.name;
+  String get workingDirectory => manifest.workingDirectory;
+  List<String> get testFiles => manifest.testFiles;
+  List<String> get arguments => manifest.arguments;
 }
 
-const visualTestSuites = <VisualTestSuite>[
-  VisualTestSuite(
-    'action_sheet',
-    'ActionSheet Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/action_sheet_page_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'badge',
-    'Badge Component',
-    workingDirectory: '.',
-    testFiles: ['test/components/badge/t_badge_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'button',
-    'Button Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/button_demo_test.dart'],
-  ),
-  VisualTestSuite(
-    'picker',
-    'Picker Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/picker_demo_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'date_time_picker',
-    'DateTimePicker Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/date_time_picker_demo_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'calendar',
-    'Calendar States',
-    workingDirectory: '.',
-    testFiles: ['test/components/calendar/t_calendar_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'calendar',
-    'Calendar Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/calendar_demo_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'tag',
-    'Tag Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/tag_page_test.dart'],
-    arguments: ['--exclude-tags', 'demo'],
-  ),
-  VisualTestSuite(
-    'popover',
-    'Popover Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/popover_demo_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'checkbox',
-    'Checkbox Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/checkbox_page_test.dart'],
-  ),
-  VisualTestSuite(
-    'divider',
-    'Divider Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/divider_demo_test.dart'],
-  ),
-  VisualTestSuite(
-    'dialog',
-    'Dialog Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/dialog_page_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'dropdown_menu',
-    'DropdownMenu Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/dropdown_menu_page_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'fab',
-    'Fab Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/fab_demo_test.dart'],
-  ),
-  VisualTestSuite(
-    'icon',
-    'Icon Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/icon_demo_test.dart'],
-  ),
-  VisualTestSuite(
-    'link',
-    'Link Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/link_demo_test.dart'],
-  ),
-  VisualTestSuite(
-    'loading',
-    'Loading Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/loading_demo_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'message',
-    'Message Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/message_demo_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'notice_bar',
-    'NoticeBar Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/notice_bar_page_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'popup',
-    'Popup Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/popup_demo_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'text',
-    'Text Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/text_demo_test.dart'],
-  ),
-  VisualTestSuite(
-    'form',
-    'Form Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/form_demo_test.dart'],
-  ),
-  VisualTestSuite(
-    'input',
-    'Input Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/input_demo_test.dart'],
-  ),
-  VisualTestSuite(
-    'radio',
-    'Radio Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/radio_page_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'search',
-    'Search Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/search_demo_test.dart'],
-  ),
-  VisualTestSuite(
-    'switch',
-    'Switch Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/switch_demo_test.dart'],
-  ),
-  VisualTestSuite(
-    'textarea',
-    'Textarea Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/textarea_demo_test.dart'],
-  ),
-  VisualTestSuite(
-    'upload',
-    'Upload Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/upload_demo_test.dart'],
-  ),
-  VisualTestSuite(
-    'refresh',
-    'PullDownRefresh Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/pull_down_refresh_demo_test.dart'],
-  ),
-  VisualTestSuite(
-    'rate',
-    'Rate Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/rate_demo_golden_test.dart'],
-  ),
-  VisualTestSuite(
-    'tabs',
-    'Tabs Component',
-    workingDirectory: '.',
-    testFiles: [
-      'test/components/tabs/t_tab_golden_test.dart',
-      'test/components/navigation_components_golden_test.dart',
-    ],
-  ),
-  VisualTestSuite(
-    'toast',
-    'Toast Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/toast_demo_test.dart'],
-  ),
-  VisualTestSuite(
-    'swipe_cell',
-    'SwipeCell Demo',
-    workingDirectory: 'example',
-    testFiles: ['test/swipe_cell_demo_test.dart'],
-  ),
+final visualTestSuites = [
+  for (final component in componentTestManifests)
+    for (final visualTest in component.visualTests)
+      VisualTestSuite(component.name, visualTest),
 ];
 
 Future<int> runVisualRegression() async {
