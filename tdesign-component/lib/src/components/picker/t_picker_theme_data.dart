@@ -37,7 +37,9 @@ class TPickerThemeData extends ThemeExtension<TPickerThemeData> {
       return this;
     }
     return TPickerThemeData(
-      height: lerpDouble(height, other.height, t),
+      height: height == null && other.height == null
+          ? null
+          : lerpDouble(height ?? 200, other.height ?? 200, t),
       itemCount: t < 0.5 ? itemCount : other.itemCount,
     );
   }

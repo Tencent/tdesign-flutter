@@ -52,3 +52,27 @@ flutter test --no-pub test/date_time_picker_demo_test.dart test/date_time_picker
 - 另验证只修改隐藏计算年 2024→2025 时滚轮重建、完整日期同步；原有拒绝原值恢复及普通年月日接受惯性回归继续通过。
 - Flutter 3.32.0 Linux 与本机 3.47.0 严格 analyze 零告警，146 项组件测试、11 项工具自测、5 项 Demo 测试通过。
 - Flutter 3.32.0 Linux 20 项 Demo Golden 无更新参数通过；生产覆盖率 668/688=97.09%。未新增 API，未改变图片基线；真机未测。
+
+## 2026-09-04 Review 收尾（本地）
+
+- 核心片段包含格式化实现、九种场景配置、初始值及 State/setState 接入说明；生成器 `--check` 通过。
+- 新增代码面板回归：固定 375px 手机视口，逐项滚动打开九个面板，核对面板 Markdown 实际加载当前生成资产；不增加 URL 禁用或文案规范断言。全页测试辅助壳反复换 model 不适用于本项，使用真实滚动路径避免该假阳性。
+- Flutter 3.32.0 和已安装 3.47.0：6 项 Demo 功能测试通过（包含原有取消、确认、拖动）；严格 analyze 无诊断。
+- Linux Flutter 3.32.0：首次比较 2 项整页通过、18 项打开态失败，旧基线仍为 182px 滚轮。核对实际图、旧图和仓库 Figma 证据后，同步已修复的 200px 滚轮打开态；未改变组件源码或放宽容差。更新后立即无更新参数复跑，20 项全部通过，严格像素比较差异为 0。
+- 共享测试保留在 Picker 与 DateTimePicker 各自套件中，以维持独立消费回归；未删除旧测试或扩增 API。
+- 本轮未执行 Android/iOS 真机或实时 Figma 测量；Widget 面板测试与 Linux Golden 不等于真机验收。
+- 生成的核心片段直接装入所声明的最小 State 宿主，Flutter 3.47.0 编译及确认回传烟测通过；临时宿主已移除，不维护第二份示例。
+
+## 2026-09-04 Typography verification
+
+- Live Figma Properties: 28591:37823 (section title) = Title/Large, PingFang SC Semibold, 18px/26px, weight 600; 39079:22146 (Cell title) = Body/Large, PingFang SC Regular, 16px/24px, weight 400.
+- Compact section titles now use fontTitleLarge instead of hardcoded 700/18/26, with explicit TextTheme.titleLarge overrides preserved. Cell typography remains unchanged.
+- Added final TextStyle assertions for section and Cell typography, plus custom TD token and explicit TextTheme inheritance tests. Flutter 3.32.0 Linux and 3.47.0: 14 functional tests passed each; strict analysis passed.
+- All 72 related Golden tests passed on Linux 3.32.0 without updates or tolerance changes. The test font did not produce a pixel difference for 600 versus 700; TextStyle assertions directly guard this contract.
+- Built and installed the corrected Android app and opened DateTimePicker on the connected phone. Platform glyphs are not claimed to be pixel-identical to PingFang SC.
+
+## 主题与受控回滚修复验证（2026-09-05）
+
+- Flutter 3.32 隔离环境：Picker 与 DateTimePicker 登记测试共 182 项通过；DateTimePicker 生产代码覆盖率 97.17%，Picker 97.51%。
+- Flutter 3.47：相关组件、日期算法及主题测试通过；`dart analyze --fatal-infos` 无诊断。
+- Picker 与 DateTimePicker 深浅色 Demo Golden 共 34 项通过，原基线无变化。

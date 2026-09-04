@@ -86,35 +86,34 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
     ],
   );
 
-  String _format(TDateTimePickerValue value, {bool showWeek = false}) {
-    String two(int? part) => part?.toString().padLeft(2, '0') ?? '';
-    final date = [
-      if (value.year != null) '${value.year}',
-      if (value.month != null) two(value.month),
-      if (value.day != null) two(value.day),
-    ].join('-');
-    final time = [
-      if (value.hour != null) two(value.hour),
-      if (value.minute != null) two(value.minute),
-      if (value.second != null) two(value.second),
-    ].join(':');
-    final result = [
-      if (date.isNotEmpty) date,
-      if (time.isNotEmpty) time,
-    ].join(' ');
-    if (!showWeek) {
-      return result;
-    }
-    final weekday = DateTime(value.year!, value.month!, value.day!).weekday;
-    return '$result 周${['一', '二', '三', '四', '五', '六', '日'][weekday - 1]}';
-  }
-
   /// 核心组合片段：调用方使用 [TCell] 作为触发器，用 [TPopup] 组合标题栏
   /// 与纯滚轮 [TDateTimePicker]。滚动只更新草稿，确认时再通过 [onConfirm]
   /// 写回调用方状态，取消不会提交。
   ///
-  /// [value] 和 [onConfirm] 由调用方状态持有；日期、时间和星期等场景只需
-  /// 调整 [mode]、[showWeek]，不需要给 TDateTimePicker 增加弹窗 API。
+  /// 核心片段省略应用壳；导入 flutter/material.dart 和
+  /// package:tdesign_flutter/tdesign_flutter.dart，在 StatefulWidget 的 State
+  /// 中放置本方法。父级持有已确认的值，例如：
+  /// ```dart
+  /// var selected = const TDateTimePickerValue(year: 2022, month: 8, day: 10);
+  /// // 在 build 中调用；取消保持 selected，确认后 setState 更新触发器文案。
+  /// _cell(context, 'date', DateTimePickerMode(dateMode: DateMode.date),
+  ///   value: selected, onConfirm: (next) => setState(() => selected = next));
+  /// ```
+  ///
+  /// 九个入口使用同一组合，按下列实际配置提供 id、mode 和初始 value：
+  /// - date：dateMode: DateMode.date；year: 2022, month: 8, day: 10。
+  /// - month：dateMode: DateMode.month；year: 2022, month: 8。
+  /// - month-day：dateMode: DateMode.monthDay；month: 8, day: 10，不传 year。
+  /// - second：timeMode: TimeMode.second；hour: 12, minute: 50, second: 23。
+  /// - minute：timeMode: TimeMode.minute；hour: 12, minute: 50。
+  /// - date-time：dateMode: DateMode.date, timeMode: TimeMode.second；
+  ///   year: 2022, month: 8, day: 10, hour: 12, minute: 50, second: 23。
+  /// - week：同 date，showWeek: true。
+  /// - title：同 date，title: '带标题时间选择器'。
+  /// - without-title：同 date，title: '无标题时间选择器', showTitle: false。
+  /// value 均构造为 TDateTimePickerValue；每个入口由父级单独持有选择值。
+  /// title 是触发器文案；弹层标题为“选择时间”，showTitle 控制其显示。
+  /// 不传的 showWeek 为 false、showTitle 为 true，title 为“选择时间”。
   @ExampleCode(group: 'date-time-picker')
   Widget _cell(
     BuildContext context,
@@ -126,6 +125,29 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
     bool showWeek = false,
     bool showTitle = true,
   }) {
+    String _format(TDateTimePickerValue value, {bool showWeek = false}) {
+      String two(int? part) => part?.toString().padLeft(2, '0') ?? '';
+      final date = [
+        if (value.year != null) '${value.year}',
+        if (value.month != null) two(value.month),
+        if (value.day != null) two(value.day),
+      ].join('-');
+      final time = [
+        if (value.hour != null) two(value.hour),
+        if (value.minute != null) two(value.minute),
+        if (value.second != null) two(value.second),
+      ].join(':');
+      final result = [
+        if (date.isNotEmpty) date,
+        if (time.isNotEmpty) time,
+      ].join(' ');
+      if (!showWeek) {
+        return result;
+      }
+      final weekday = DateTime(value.year!, value.month!, value.day!).weekday;
+      return '$result 周${['一', '二', '三', '四', '五', '六', '日'][weekday - 1]}';
+    }
+
     void showPicker() {
       var draft = value;
       TPopup.show(

@@ -32,8 +32,8 @@ class TDateTimePicker extends StatefulWidget {
 
   /// 受控选中值。
   ///
-  /// 父级接受 [onChanged] 的结果后回传新值；若拒绝选择，使用原值重建，
-  /// 滚轮会恢复到按当前模式、边界和步进归一化后的值。
+  /// 父级接受 [onChanged] 的结果后重建并回传新值。滚动结束后父级未接受
+  /// 的候选值自动恢复为按当前模式、边界和步进归一化后的值。
   final TDateTimePickerValue value;
 
   /// 滚轮列结构。
@@ -196,6 +196,17 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
     widget.onChanged?.call(result);
   }
 
+  void _handleScrollEnd() {
+    final controlled = _createSnapshot();
+    if (controlled.current == _snapshot.current) {
+      return;
+    }
+    setState(() {
+      _snapshot = controlled;
+      _resetWheel(clearLastNotified: true);
+    });
+  }
+
   static bool _listEqualInt(List<dynamic> a, List<dynamic> b) {
     if (identical(a, b)) {
       return true;
@@ -241,6 +252,7 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
       height: pickerTheme?.height ?? 200,
       itemCount: pickerTheme?.itemCount ?? 5,
       onChanged: _handleWheelChanged,
+      onScrollEnd: _handleScrollEnd,
     );
     final isDisabled = widget.onChanged == null;
     return Semantics(

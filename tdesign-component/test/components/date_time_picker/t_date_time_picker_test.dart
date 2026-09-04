@@ -252,6 +252,32 @@ void main() {
     );
   });
 
+  testWidgets('拒绝候选值无需父级重建且可再次通知', (tester) async {
+    final changes = <TDateTimePickerValue>[];
+    await tester.pumpWidget(
+      wrap(
+        TDateTimePicker(
+          value: const TDateTimePickerValue(year: 2024, month: 6, day: 15),
+          onChanged: changes.add,
+        ),
+      ),
+    );
+    final wheel = find.byType(ListWheelScrollView).first;
+    int selected() =>
+        (tester.widget<ListWheelScrollView>(wheel).controller!
+                as FixedExtentScrollController)
+            .selectedItem;
+    final initial = selected();
+    for (var attempt = 0; attempt < 2; attempt++) {
+      changes.clear();
+      await tester.fling(wheel, const Offset(0, -120), 1000);
+      await tester.pumpAndSettle();
+      expect(changes, isNotEmpty);
+      expect(selected(), initial);
+      expect(tester.takeException(), isNull);
+    }
+  });
+
   testWidgets('父级拒绝选择并用原值重建时恢复滚轮且可再次通知', (tester) async {
     const value = TDateTimePickerValue(year: 2024, month: 6, day: 15);
     var changes = 0;

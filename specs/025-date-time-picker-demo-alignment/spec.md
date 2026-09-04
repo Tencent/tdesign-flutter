@@ -52,3 +52,17 @@
 共享滚轮字体只读取显式 TextTheme，否则使用当前 TDesign fontBodyLarge 字号和行高；不增加 Theme 或实例参数。
 
 接受与拒绝路径统一比较归一化后的完整 current 日期，包括隐藏计算年；保留同一计算年接受选择不重建滚轮，仅计算年变化则必须重建。
+
+## 代码面板完整性补充
+
+九个入口共用核心片段，面板内说明每个场景的实际配置、初始值和父级 setState 接入；值格式化实现包含在实际生成的方法内，不依赖未展示的私有方法。组件公开 API 和运行布局不变。共享回归保留在各消费组件套件中，保证独立执行的覆盖。
+
+## 字重核对修正
+
+Figma 当前分支节点 28591:37823（02 组件样式）为 Title/Large，PingFang SC Semibold，18/26、600；节点 39079:22146（选择时间）为 Body/Large，16/24、400。compact Demo 分组标题由共享页面壳读取 fontTitleLarge，不另写 700；保留调用方显式 TextTheme.titleLarge 覆盖。普通 Cell 保持 fontBodyLarge，不在 DateTimePicker Demo 强制减重。共享壳改动涉及使用 compactDemo 的其他页面，需验证相应 Golden。
+
+## 主题与受控回滚补充
+
+默认选中字体使用 fontMarkLarge，普通字体使用 fontBodyLarge；显式 TextTheme、DefaultTextStyle 和 TTextThemeData 按文字主题优先级覆盖默认值。高度主题由未配置状态参与动画时以 200 插值，两端均未配置时保持 null。
+
+Picker 与 DateTimePicker 均在全部滚轮停止后恢复父级未接受的候选值；接受值不重建控制器，不中断惯性。公开 API 签名不变，DateTimePicker 不回传值时改为自动回滚，属于行为变化。
