@@ -81,63 +81,80 @@ void main() {
   });
 
   group('TPicker controlled behavior', () {
-    testWidgets('linked feedback preserves drag and fling activity', (
-      tester,
-    ) async {
-      final items = TPickerLinked(
-        List.generate(
-          30,
+    for (final column in [0, 1, 2]) {
+      testWidgets('linked column $column preserves drag and fling activity', (
+        tester,
+      ) async {
+        List<TPickerOption> options(int depth) => List.generate(
+          depth == column ? 30 : 2,
           (index) => TPickerOption(
-            label: 'Root $index',
+            label: 'Column $depth item $index',
             value: index,
-            children: [
-              TPickerOption(label: 'Child $index', value: 'child-$index'),
-            ],
+            children: depth == 2 ? const [] : options(depth + 1),
           ),
-        ),
-      );
-      var value = <Object?>[0, 'child-0'];
-      await tester.pumpWidget(
-        wrap(
-          StatefulBuilder(
-            builder: (_, setState) => TPicker(
-              items: items,
-              value: value,
-              onChanged: (next) => setState(() => value = next.values),
+        );
+        final items = TPickerLinked(options(0));
+        var value = <Object?>[0, 0, 0];
+        await tester.pumpWidget(
+          wrap(
+            StatefulBuilder(
+              builder: (_, setState) => TPicker(
+                items: items,
+                value: value,
+                onChanged: (next) => setState(() => value = next.values),
+              ),
             ),
           ),
-        ),
-      );
-      final wheel = find.byType(ListWheelScrollView).first;
-      final controller =
-          tester.widget<ListWheelScrollView>(wheel).controller!
-              as FixedExtentScrollController;
-      final gesture = await tester.startGesture(tester.getCenter(wheel));
-      await gesture.moveBy(const Offset(0, -60));
-      await tester.pump();
-      expect(
-        tester.widget<ListWheelScrollView>(wheel).controller,
-        same(controller),
-      );
-      final firstValue = value.first as int;
-      await gesture.moveBy(const Offset(0, -80));
-      await tester.pump();
-      expect(value.first as int, greaterThan(firstValue));
-      expect(value.last, 'child-${value.first}');
-      await gesture.up();
-      await tester.pumpAndSettle();
-      await tester.fling(wheel, const Offset(0, -80), 1000);
-      await tester.pump(const Duration(milliseconds: 16));
-      expect(
-        tester.widget<ListWheelScrollView>(wheel).controller,
-        same(controller),
-      );
-      final releaseOffset = controller.offset;
-      await tester.pump(const Duration(milliseconds: 100));
-      expect(controller.offset, greaterThan(releaseOffset));
-      await tester.pumpAndSettle();
-      expect(value.last, 'child-${value.first}');
-    });
+        );
+        final wheel = find.byType(ListWheelScrollView).at(column);
+        final precedingControllers = tester
+            .widgetList<ListWheelScrollView>(find.byType(ListWheelScrollView))
+            .take(column)
+            .map((wheel) => wheel.controller)
+            .toList();
+        final controller =
+            tester.widget<ListWheelScrollView>(wheel).controller!
+                as FixedExtentScrollController;
+        final gesture = await tester.startGesture(tester.getCenter(wheel));
+        await gesture.moveBy(const Offset(0, -60));
+        await tester.pump();
+        expect(
+          tester.widget<ListWheelScrollView>(wheel).controller,
+          same(controller),
+        );
+        final firstValue = value[column] as int;
+        await gesture.moveBy(const Offset(0, -80));
+        await tester.pump();
+        expect(value[column] as int, greaterThan(firstValue));
+        expect(value.take(column), everyElement(0));
+        expect(value.skip(column + 1), everyElement(0));
+        await gesture.up();
+        await tester.pumpAndSettle();
+        await tester.fling(wheel, const Offset(0, -80), 1000);
+        await tester.pump(const Duration(milliseconds: 16));
+        expect(
+          tester.widget<ListWheelScrollView>(wheel).controller,
+          same(controller),
+        );
+        final releaseOffset = controller.offset;
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(controller.offset, greaterThan(releaseOffset));
+        await tester.pumpAndSettle();
+        expect(value.take(column), everyElement(0));
+        expect(value.skip(column + 1), everyElement(0));
+        for (var index = 0; index < column; index++) {
+          expect(
+            tester
+                .widget<ListWheelScrollView>(
+                  find.byType(ListWheelScrollView).at(index),
+                )
+                .controller,
+            same(precedingControllers[index]),
+          );
+        }
+        expect(tester.takeException(), isNull);
+      });
+    }
 
     testWidgets('renders controlled values and emits a complete snapshot', (
       tester,

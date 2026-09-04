@@ -8,6 +8,75 @@ import 'picker_demo_test_spec.dart';
 void main() {
   registerDemoStructureTests(pickerDemoPageTestSpec);
 
+  for (final column in [0, 1, 2]) {
+    testWidgets('area popup column $column keeps continuous drag and inertia', (
+      tester,
+    ) async {
+      await pumpDemoPageAtPhoneViewport(
+        tester,
+        pickerDemoPageTestSpec,
+        ThemeMode.light,
+      );
+      final trigger = find.byKey(const ValueKey('picker-area-trigger'));
+      await tester.ensureVisible(trigger);
+      await tester.tap(trigger);
+      await tester.pumpAndSettle();
+      final panel = find.byKey(const ValueKey('picker-area-panel'));
+      final wheel = find.byType(ListWheelScrollView).at(column);
+      final controller =
+          tester.widget<ListWheelScrollView>(wheel).controller!
+              as FixedExtentScrollController;
+      final initial = List<Object?>.of(tester.widget<TPicker>(panel).value);
+      final gesture = await tester.startGesture(tester.getCenter(wheel));
+      await gesture.moveBy(const Offset(0, 30));
+      await tester.pump();
+      final firstOffset = controller.offset;
+      final firstValue = tester.widget<TPicker>(panel).value[column];
+      expect(firstValue, isNot(initial[column]));
+      await gesture.moveBy(const Offset(0, 40));
+      await tester.pump();
+      expect(
+        tester.widget<ListWheelScrollView>(wheel).controller,
+        same(controller),
+      );
+      expect(controller.offset, lessThan(firstOffset));
+      expect(tester.widget<TPicker>(panel).value[column], isNot(firstValue));
+      expect(
+        tester.widget<TPicker>(panel).value.take(column),
+        initial.take(column),
+      );
+      await gesture.up();
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('取消'));
+      await tester.pumpAndSettle();
+      await tester.tap(trigger);
+      await tester.pumpAndSettle();
+      expect(tester.widget<TPicker>(panel).value, initial);
+      final flingController =
+          tester.widget<ListWheelScrollView>(wheel).controller!
+              as FixedExtentScrollController;
+      await tester.fling(wheel, const Offset(0, 50), 600);
+      await tester.pump(const Duration(milliseconds: 16));
+      final releaseOffset = flingController.offset;
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(
+        tester.widget<ListWheelScrollView>(wheel).controller,
+        same(flingController),
+      );
+      expect(flingController.offset, lessThan(releaseOffset));
+      await tester.pumpAndSettle();
+      final draft = List<Object?>.of(tester.widget<TPicker>(panel).value);
+      expect(draft[column], isNot(initial[column]));
+      await tester.tap(find.text('确定'));
+      await tester.pumpAndSettle();
+      await tester.tap(trigger);
+      await tester.pumpAndSettle();
+      expect(tester.widget<TPicker>(panel).value, draft);
+      expect(tester.takeException(), isNull);
+      await disposeDemoPage(tester);
+    }, tags: 'demo');
+  }
+
   testWidgets('Picker popup preserves wheel height and centers selection', (
     tester,
   ) async {

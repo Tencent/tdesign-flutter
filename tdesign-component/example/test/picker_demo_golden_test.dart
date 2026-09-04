@@ -9,6 +9,35 @@ void main() {
   registerDemoGoldenTests(pickerDemoPageTestSpec);
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('picker linked changes ${mode.name} golden', (tester) async {
+      await pumpDemoPageAtPhoneViewport(tester, pickerDemoPageTestSpec, mode);
+      final trigger = find.byKey(const ValueKey('picker-area-trigger'));
+      await tester.ensureVisible(trigger);
+      await tester.tap(trigger);
+      await tester.pumpAndSettle();
+      final panel = find.byKey(const ValueKey('picker-area-panel'));
+      const expected = [
+        ['beijing', 'beijing', 'dongcheng'],
+        ['guangdong', 'dongguan', 'dongcheng'],
+        ['guangdong', 'shenzhen', 'nanshan'],
+      ];
+      for (final column in [2, 1, 0]) {
+        await tester.drag(
+          find.byType(ListWheelScrollView).at(column),
+          const Offset(0, 40),
+        );
+        await tester.pumpAndSettle();
+        expect(tester.widget<TPicker>(panel).value, expected[column]);
+        expect(tester.takeException(), isNull);
+        await expectLater(
+          find.byType(Overlay),
+          matchesGoldenFile(
+            'goldens/picker_area_changed_column_${column}_${mode.name}.png',
+          ),
+        );
+      }
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
     for (final id in ['city', 'time', 'area', 'title', 'without-title']) {
       testWidgets('picker $id ${mode.name} opened golden', (tester) async {
         await pumpDemoPageAtPhoneViewport(tester, pickerDemoPageTestSpec, mode);
