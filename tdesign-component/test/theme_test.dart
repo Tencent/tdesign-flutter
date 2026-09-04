@@ -306,7 +306,7 @@ void main() {
           ),
           home: const Scaffold(
             body: TLoading(
-              size: TLoadingSize.large,
+              size: 32,
               icon: TLoadingIcon.circle,
             ),
           ),
@@ -331,7 +331,7 @@ void main() {
             data: subtreeTheme,
             child: const Scaffold(
               body: TLoading(
-                size: TLoadingSize.medium,
+                size: 20,
                 icon: TLoadingIcon.circle,
               ),
             ),

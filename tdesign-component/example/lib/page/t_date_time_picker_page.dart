@@ -13,10 +13,14 @@ class TDateTimePickerPage extends StatefulWidget {
 
 class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
   TDateTimePickerValue _baseSelected = _kInlineValue;
-  TDateTimePickerValue _yearMonthSelected =
-      const TDateTimePickerValue(year: 2026, month: 5);
-  TDateTimePickerValue _timeSelected =
-      const TDateTimePickerValue(hour: 12, minute: 30);
+  TDateTimePickerValue _yearMonthSelected = const TDateTimePickerValue(
+    year: 2026,
+    month: 5,
+  );
+  TDateTimePickerValue _timeSelected = const TDateTimePickerValue(
+    hour: 12,
+    minute: 30,
+  );
   DateTime _calendarTimeSelected = DateTime(2026, 5, 15, 12, 30);
   TDateTimePickerValue? _rangeSelected;
   TDateTimePickerValue _weekSelected = _kInlineValue;
@@ -73,21 +77,25 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
       desc: '内嵌示例实时响应 onChanged；弹窗示例仅在点击确定后提交。',
       exampleCodeGroup: 'date-time-picker',
       children: [
-        ExampleModule(title: '内嵌用法', children: [
-          ExampleItem(desc: '实时变化（内嵌）', builder: _buildInline),
-        ]),
-        ExampleModule(title: '弹出层用法', children: [
-          ExampleItem(desc: '年月日选择器', builder: _buildBase),
-          ExampleItem(desc: '选择年月', builder: _buildYearMonth),
-          ExampleItem(desc: '选择时分', builder: _buildTime),
-          ExampleItem(desc: '日历 + 时间', builder: _buildCalendarTime),
-          ExampleItem(
-            desc:
-                '自定义选择范围（2025-06-10 09:30:00 ~ 2025-08-25 18:45:30）；月/日/时/分/秒在边界上下文收紧',
-            builder: _buildCustomRange,
-          ),
-          ExampleItem(desc: '年月日 + 星期', builder: _buildWeek),
-        ]),
+        ExampleModule(
+          title: '内嵌用法',
+          children: [ExampleItem(desc: '实时变化（内嵌）', builder: _buildInline)],
+        ),
+        ExampleModule(
+          title: '弹出层用法',
+          children: [
+            ExampleItem(desc: '年月日选择器', builder: _buildBase),
+            ExampleItem(desc: '选择年月', builder: _buildYearMonth),
+            ExampleItem(desc: '选择时分', builder: _buildTime),
+            ExampleItem(desc: '日历 + 时间', builder: _buildCalendarTime),
+            ExampleItem(
+              desc:
+                  '自定义选择范围（2025-06-10 09:30:00 ~ 2025-08-25 18:45:30）；月/日/时/分/秒在边界上下文收紧',
+              builder: _buildCustomRange,
+            ),
+            ExampleItem(desc: '年月日 + 星期', builder: _buildWeek),
+          ],
+        ),
       ],
     );
   }
@@ -143,7 +151,19 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
-        titleWidget: TText(title),
+        headerBuilder: (_, close) => TPopupHeader(
+          cancelButton: TextButton(onPressed: close, child: const TText('取消')),
+          title: TText(title),
+          confirmButton: TextButton(
+            onPressed: () {
+              if (mounted) {
+                onConfirm(draft);
+              }
+              close();
+            },
+            child: const TText('确定'),
+          ),
+        ),
         child: Material(
           color: context.tTheme.bgColorContainer,
           child: SafeArea(
@@ -165,11 +185,6 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
             ),
           ),
         ),
-        onVisibleChange: (visible, trigger) {
-          if (!visible && trigger == TPopupTrigger.confirm && mounted) {
-            onConfirm(draft);
-          }
-        },
       ),
     );
   }
@@ -302,7 +317,31 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
           context,
           options: TPopupOptions.bottom(
             height: MediaQuery.sizeOf(context).height,
-            titleWidget: const TText('选择日期和时间'),
+            headerBuilder: (_, close) => TPopupHeader(
+              cancelButton: TextButton(
+                onPressed: close,
+                child: const TText('取消'),
+              ),
+              title: const TText('选择日期和时间'),
+              confirmButton: TextButton(
+                onPressed: () {
+                  if (mounted && draftDate.isNotEmpty) {
+                    final date = draftDate.first;
+                    setState(() {
+                      _calendarTimeSelected = DateTime(
+                        date.year,
+                        date.month,
+                        date.day,
+                        draftTime.hour ?? _calendarTimeSelected.hour,
+                        draftTime.minute ?? _calendarTimeSelected.minute,
+                      );
+                    });
+                  }
+                  close();
+                },
+                child: const TText('确定'),
+              ),
+            ),
             child: StatefulBuilder(
               builder: (context, setPopupState) => Column(
                 key: const Key('calendar-time-popup'),
@@ -331,24 +370,6 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
                 ],
               ),
             ),
-            onVisibleChange: (visible, trigger) {
-              if (visible ||
-                  trigger != TPopupTrigger.confirm ||
-                  !mounted ||
-                  draftDate.isEmpty) {
-                return;
-              }
-              final date = draftDate.first;
-              setState(() {
-                _calendarTimeSelected = DateTime(
-                  date.year,
-                  date.month,
-                  date.day,
-                  draftTime.hour ?? _calendarTimeSelected.hour,
-                  draftTime.minute ?? _calendarTimeSelected.minute,
-                );
-              });
-            },
           ),
         );
       },

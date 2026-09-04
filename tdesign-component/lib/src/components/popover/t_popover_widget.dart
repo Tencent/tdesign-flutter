@@ -8,67 +8,21 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../text/t_text.dart';
 import 't_popover_theme_data.dart';
+import 't_popover_types.dart';
 
 const double _kDefaultPopoverMaxWidth = 300;
 const EdgeInsets _kDefaultPopoverPadding = EdgeInsets.all(12);
-
-/// 气泡弹层定位方向
-enum TPopoverPlacement {
-  /// 上左
-  topLeft,
-
-  /// 上
-  top,
-
-  /// 上右
-  topRight,
-
-  /// 右上
-  rightTop,
-
-  /// 右
-  right,
-
-  /// 右下
-  rightBottom,
-
-  /// 下右
-  bottomRight,
-
-  /// 下
-  bottom,
-
-  /// 下左
-  bottomLeft,
-
-  /// 左下
-  leftBottom,
-
-  /// 左
-  left,
-
-  /// 左上
-  leftTop,
-}
-
-/// 点击事件回调
-typedef TPopoverTapCallback = void Function(String? content);
-
-/// 长按事件回调
-typedef TPopoverLongPressCallback = void Function(String? content);
 
 /// 气泡弹层 Widget
 class TPopoverWidget extends StatefulWidget {
   const TPopoverWidget({
     super.key,
     required this.context,
-    this.content,
-    this.contentWidget,
+    required this.content,
     this.offset,
-    this.colorScheme,
-    this.placement,
+    this.colorScheme = TPopoverColorScheme.defaultTheme,
+    this.placement = TPopoverPlacement.top,
     this.showArrow,
     this.arrowSize,
     this.padding,
@@ -82,23 +36,17 @@ class TPopoverWidget extends StatefulWidget {
   /// 上下文
   final BuildContext context;
 
-  /// 显示内容
-  final String? content;
-
-  /// 自定义内容。
-  ///
-  /// 自定义 Widget 无法在首帧定位前可靠测量，使用时必须通过 [width]/[height]
-  /// 或组件主题提供确定尺寸。
-  final Widget? contentWidget;
+  /// 气泡内容。
+  final Widget content;
 
   /// 偏移
   final double? offset;
 
-  /// 弹出气泡主题
-  final TPopoverColorScheme? colorScheme;
+  /// 弹出气泡预设配色。
+  final TPopoverColorScheme colorScheme;
 
   /// 浮层出现位置
-  final TPopoverPlacement? placement;
+  final TPopoverPlacement placement;
 
   /// 是否显示浮层箭头
   final bool? showArrow;
@@ -116,10 +64,10 @@ class TPopoverWidget extends StatefulWidget {
   final double? height;
 
   /// 点击事件
-  final TPopoverTapCallback? onTap;
+  final VoidCallback? onTap;
 
   /// 长按事件
-  final TPopoverLongPressCallback? onLongTap;
+  final VoidCallback? onLongTap;
 
   /// 圆角
   final BorderRadius? radius;
@@ -131,6 +79,26 @@ class TPopoverWidget extends StatefulWidget {
 class _TPopoverWidgetState extends State<TPopoverWidget> {
   TPopoverPlacement _resolvedPlacement = TPopoverPlacement.top;
   Offset _arrowTranslation = Offset.zero;
+  bool _layoutReady = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _resolvedPlacement = widget.placement;
+  }
+
+  @override
+  void didUpdateWidget(TPopoverWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.placement != widget.placement ||
+        oldWidget.content != widget.content ||
+        oldWidget.width != widget.width ||
+        oldWidget.height != widget.height) {
+      _resolvedPlacement = widget.placement;
+      _arrowTranslation = Offset.zero;
+      _layoutReady = false;
+    }
+  }
 
   TPopoverThemeData get _theme =>
       Theme.of(context).extension<TPopoverThemeData>() ??
@@ -144,10 +112,6 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
 
   EdgeInsetsGeometry? get _effectivePadding => widget.padding ?? _theme.padding;
 
-  double? get _effectiveWidth => widget.width ?? _theme.minWidth;
-
-  double? get _effectiveHeight => widget.height ?? _theme.maxHeight;
-
   double get _effectiveMaxWidth => _theme.maxWidth ?? _kDefaultPopoverMaxWidth;
 
   EdgeInsetsGeometry get _resolvedPadding =>
@@ -159,21 +123,16 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
           ? null
           : BorderRadius.circular(_theme.borderRadius!));
 
+  TextStyle get _defaultContentTextStyle => TextStyle(
+    color: _color,
+    letterSpacing: 0,
+    fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
+    height: context.tTheme.fontBodyLarge?.height ?? 1.5,
+  );
+
   late Color _color;
 
   late Color _backgroundColor;
-
-  void _validateContentSizeContract() {
-    if (widget.contentWidget == null) {
-      return;
-    }
-    if (_effectiveWidth == null || _effectiveHeight == null) {
-      throw FlutterError(
-        'TPopover custom content requires a deterministic outer size. '
-        'Provide both width and height through TPopover or TPopoverThemeData.',
-      );
-    }
-  }
 
   /// 绘制箭头
   Widget _drawArrow() {
@@ -265,7 +224,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   /// 初始化主题
   void _initTheme() {
     switch (widget.colorScheme) {
-      case TPopoverColorScheme.info:
+      case TPopoverColorScheme.primary:
         _color = widget.context.tTheme.brandNormalColor;
         _backgroundColor = widget.context.tTheme.brandLightColor;
         break;
@@ -277,7 +236,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         _color = widget.context.tTheme.warningNormalColor;
         _backgroundColor = widget.context.tTheme.warningLightColor;
         break;
-      case TPopoverColorScheme.error:
+      case TPopoverColorScheme.danger:
         _color = widget.context.tTheme.errorNormalColor;
         _backgroundColor = widget.context.tTheme.errorLightColor;
         break;
@@ -285,7 +244,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         _color = widget.context.tTheme.grayColor14;
         _backgroundColor = widget.context.tTheme.whiteColor1;
         break;
-      default:
+      case TPopoverColorScheme.defaultTheme:
         _color = widget.context.tTheme.textColorAnti;
         _backgroundColor = widget.context.tTheme.grayColor14;
         break;
@@ -319,57 +278,6 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
       return null;
     }
     return renderObject.localToGlobal(Offset.zero);
-  }
-
-  /// 获取Y坐标
-  double _getOffsetTop(Offset? widgetLocalToGlobal) {
-    var widgetBounds = _getWidgetBounds(widget.context);
-    var dy = widgetLocalToGlobal?.dy ?? 0;
-    var arrowSize = _effectiveShowArrow ? _effectiveArrowSize : 0;
-    final popoverHeight = _resolvedPopoverSize().height;
-    switch (_resolvedPlacement) {
-      case TPopoverPlacement.bottomLeft:
-      case TPopoverPlacement.bottom:
-      case TPopoverPlacement.bottomRight:
-        return dy + (widgetBounds?.height ?? 0) + _effectiveOffset;
-      case TPopoverPlacement.rightTop:
-      case TPopoverPlacement.leftTop:
-        return dy;
-      case TPopoverPlacement.rightBottom:
-      case TPopoverPlacement.leftBottom:
-        return dy - (popoverHeight - (widgetBounds?.height ?? 0));
-      case TPopoverPlacement.right:
-      case TPopoverPlacement.left:
-        return dy - (popoverHeight - (widgetBounds?.height ?? 0)) / 2;
-      default:
-        return dy - popoverHeight - _effectiveOffset - arrowSize;
-    }
-  }
-
-  /// 获取X坐标
-  double _getOffsetLeft(Offset? widgetLocalToGlobal) {
-    var widgetBounds = _getWidgetBounds(widget.context);
-    var widgetWidth = widgetBounds?.width ?? 0;
-    final popoverWidth = _resolvedPopoverSize().width;
-    var dx = widgetLocalToGlobal?.dx ?? 0;
-    switch (_resolvedPlacement) {
-      case TPopoverPlacement.topLeft:
-      case TPopoverPlacement.bottomLeft:
-        return dx;
-      case TPopoverPlacement.topRight:
-      case TPopoverPlacement.bottomRight:
-        return dx + widgetWidth - popoverWidth;
-      case TPopoverPlacement.rightTop:
-      case TPopoverPlacement.right:
-      case TPopoverPlacement.rightBottom:
-        return dx + widgetWidth + _effectiveOffset;
-      case TPopoverPlacement.leftTop:
-      case TPopoverPlacement.left:
-      case TPopoverPlacement.leftBottom:
-        return dx - popoverWidth - _effectiveArrowSize - _effectiveOffset;
-      default:
-        return dx - (popoverWidth - widgetWidth) / 2;
-    }
   }
 
   /// 获取箭头Widget
@@ -442,18 +350,73 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     );
   }
 
-  /// 解析包含 padding 的弹层外框尺寸，供布局和定位共同使用。
-  Size _resolvedPopoverSize() {
-    if (widget.contentWidget != null) {
-      return Size(_effectiveWidth!, _effectiveHeight!);
+  Widget _getContainerWidget() {
+    final plainTextSize = _resolvedPlainTextSize();
+    final minWidth =
+        plainTextSize?.width ?? widget.width ?? _theme.minWidth ?? 0;
+    final maxWidth = plainTextSize?.width ?? widget.width ?? _effectiveMaxWidth;
+    final minHeight = plainTextSize?.height ?? widget.height ?? 0;
+    final maxHeight =
+        plainTextSize?.height ??
+        widget.height ??
+        _theme.maxHeight ??
+        double.infinity;
+    final content = widget.content;
+    final styledContent = content is Text
+        ? DefaultTextStyle.merge(
+            style: _defaultContentTextStyle,
+            child: content,
+          )
+        : content;
+    return Container(
+      key: const Key('t-popover-content'),
+      constraints: BoxConstraints(
+        minWidth: math.min(minWidth, maxWidth),
+        maxWidth: maxWidth,
+        minHeight: math.min(minHeight, maxHeight),
+        maxHeight: maxHeight,
+      ),
+      padding: _resolvedPadding,
+      decoration: BoxDecoration(
+        borderRadius:
+            _effectiveRadius ??
+            BorderRadius.circular(context.tTheme.radiusDefault),
+        color: _backgroundColor,
+        boxShadow: _theme.boxShadow ?? context.tTheme.shadowsTop ?? const [],
+      ),
+      child: styledContent,
+    );
+  }
+
+  Size? _resolvedPlainTextSize() {
+    final content = widget.content;
+    if (content is! Text ||
+        content.data == null ||
+        content.style != null ||
+        content.textSpan != null) {
+      return null;
     }
-    final textSize = _getTextSize();
-    final naturalWidth = textSize.width + _resolvedPadding.horizontal;
-    final maxWidth = _effectiveMaxWidth;
+    final contentMaxWidth =
+        (widget.width ?? _effectiveMaxWidth) - _resolvedPadding.horizontal;
+    final textPainter = TextPainter(
+      text: TextSpan(text: content.data, style: _defaultContentTextStyle),
+      locale: content.locale ?? Localizations.localeOf(context),
+      textDirection: content.textDirection ?? Directionality.of(context),
+      textAlign: content.textAlign ?? TextAlign.start,
+      maxLines: content.maxLines,
+      ellipsis: content.overflow == TextOverflow.ellipsis ? '\u2026' : null,
+      textScaler: content.textScaler ?? MediaQuery.textScalerOf(context),
+      textWidthBasis: content.textWidthBasis ?? TextWidthBasis.parent,
+      textHeightBehavior: content.textHeightBehavior,
+    )..layout(maxWidth: contentMaxWidth.clamp(0, double.infinity));
+    final naturalWidth = textPainter.width + _resolvedPadding.horizontal;
     final resolvedWidth =
         widget.width ??
-        math.min(maxWidth, math.max(_theme.minWidth ?? 0, naturalWidth));
-    final naturalHeight = textSize.height + _resolvedPadding.vertical;
+        math.min(
+          _effectiveMaxWidth,
+          math.max(_theme.minWidth ?? 0, naturalWidth),
+        );
+    final naturalHeight = textPainter.height + _resolvedPadding.vertical;
     final resolvedHeight =
         widget.height ??
         (_theme.maxHeight == null
@@ -463,54 +426,6 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
                 math.max(_resolvedPadding.vertical, _theme.maxHeight!),
               ));
     return Size(resolvedWidth, resolvedHeight);
-  }
-
-  /// 获取文本内容大小
-  Size _getTextSize() {
-    final font = context.tTheme.fontBodyLarge;
-    final contentMaxWidth =
-        (widget.width ?? _effectiveMaxWidth) - _resolvedPadding.horizontal;
-    var textPainter = TextPainter(
-      text: TextSpan(
-        text: widget.content,
-        style: TextStyle(
-          color: _color,
-          letterSpacing: 0,
-          fontSize: font?.size ?? 16,
-          height: font?.height ?? 1.5,
-        ),
-      ),
-      locale: Localizations.localeOf(context),
-      textDirection: Directionality.of(context),
-    )..layout(maxWidth: contentMaxWidth.clamp(0, double.infinity));
-    return textPainter.size;
-  }
-
-  Widget _getContainerWidget() {
-    final resolvedSize = _resolvedPopoverSize();
-    return Container(
-      width: resolvedSize.width,
-      height: resolvedSize.height,
-      padding: _resolvedPadding,
-      decoration: BoxDecoration(
-        borderRadius:
-            _effectiveRadius ??
-            BorderRadius.circular(context.tTheme.radiusDefault),
-        color: _backgroundColor,
-        boxShadow: _theme.boxShadow ?? context.tTheme.shadowsTop ?? const [],
-      ),
-      child: widget.contentWidget != null
-          ? widget.contentWidget!
-          : TText(
-              widget.content ?? '',
-              style: TextStyle(
-                color: _color,
-                letterSpacing: 0,
-                fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
-                height: context.tTheme.fontBodyLarge?.height ?? 1.5,
-              ),
-            ),
-    );
   }
 
   /// 获取子Widget
@@ -573,11 +488,16 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         _resolvedPlacement == TPopoverPlacement.left ||
         _resolvedPlacement == TPopoverPlacement.leftBottom ||
         _resolvedPlacement == TPopoverPlacement.leftTop) {
-      return Row(crossAxisAlignment: axis, children: children);
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: axis,
+        children: children,
+      );
     }
 
     /// 纵向布局
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: axis,
       verticalDirection: direction,
       children: children,
@@ -652,7 +572,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     return requested;
   }
 
-  double _arrowSafeInset(Size popoverSize) {
+  double _arrowSafeInset(Size popoverSize, TPopoverPlacement placement) {
     final radius =
         (_effectiveRadius ??
                 BorderRadius.circular(context.tTheme.radiusDefault))
@@ -663,17 +583,15 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
       radius.bottomLeft.x,
       radius.bottomRight.x,
     ].reduce(math.max);
-    final extent =
-        _isLeftPlacement(_resolvedPlacement) ||
-            _isRightPlacement(_resolvedPlacement)
+    final extent = _isLeftPlacement(placement) || _isRightPlacement(placement)
         ? popoverSize.height
         : popoverSize.width;
     return math.min(extent / 2, largestRadius + _effectiveArrowSize);
   }
 
-  double _baseArrowCenter(Size popoverSize) {
+  double _baseArrowCenter(Size popoverSize, TPopoverPlacement placement) {
     final edgeInset = _effectiveArrowSize * 2;
-    return switch (_resolvedPlacement) {
+    return switch (placement) {
       TPopoverPlacement.topLeft ||
       TPopoverPlacement.bottomLeft => edgeInset + 12,
       TPopoverPlacement.topRight ||
@@ -688,64 +606,85 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     };
   }
 
-  void _resolveArrowTranslation({
+  Offset _resolveArrowTranslation({
+    required TPopoverPlacement placement,
     required Rect anchorRect,
     required Size popoverSize,
     required double left,
     required double top,
   }) {
     if (!_effectiveShowArrow) {
-      _arrowTranslation = Offset.zero;
-      return;
+      return Offset.zero;
     }
     final horizontal =
-        _isLeftPlacement(_resolvedPlacement) ||
-        _isRightPlacement(_resolvedPlacement);
+        _isLeftPlacement(placement) || _isRightPlacement(placement);
     final extent = horizontal ? popoverSize.height : popoverSize.width;
     final desiredCenter = horizontal
         ? anchorRect.center.dy - top
         : anchorRect.center.dx - left;
-    final safeInset = _arrowSafeInset(popoverSize);
+    final safeInset = _arrowSafeInset(popoverSize, placement);
     final targetCenter = desiredCenter
         .clamp(safeInset, math.max(safeInset, extent - safeInset))
         .toDouble();
-    final translation = targetCenter - _baseArrowCenter(popoverSize);
-    _arrowTranslation = horizontal
-        ? Offset(0, translation)
-        : Offset(translation, 0);
+    final translation = targetCenter - _baseArrowCenter(popoverSize, placement);
+    return horizontal ? Offset(0, translation) : Offset(translation, 0);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    _initTheme();
-    _validateContentSizeContract();
-    if (widget.context case final Element element when !element.mounted) {
-      return const SizedBox.shrink();
-    }
-    var widgetLocalToGlobal = _getWidgetLocalToGlobal(widget.context);
+  double _rawTop({
+    required TPopoverPlacement placement,
+    required Rect anchorRect,
+    required Size popoverSize,
+    required double arrowSize,
+  }) {
+    return switch (placement) {
+      TPopoverPlacement.bottomLeft ||
+      TPopoverPlacement.bottom ||
+      TPopoverPlacement.bottomRight => anchorRect.bottom + _effectiveOffset,
+      TPopoverPlacement.rightTop || TPopoverPlacement.leftTop => anchorRect.top,
+      TPopoverPlacement.rightBottom ||
+      TPopoverPlacement.leftBottom => anchorRect.bottom - popoverSize.height,
+      TPopoverPlacement.right ||
+      TPopoverPlacement.left => anchorRect.center.dy - popoverSize.height / 2,
+      _ => anchorRect.top - popoverSize.height - _effectiveOffset - arrowSize,
+    };
+  }
 
-    final popoverSize = _resolvedPopoverSize();
-    final arrowSize = _effectiveShowArrow ? _effectiveArrowSize : 0;
-    _resolvedPlacement = widget.placement ?? TPopoverPlacement.top;
-    final isHorizontal =
-        _isLeftPlacement(_resolvedPlacement) ||
-        _isRightPlacement(_resolvedPlacement);
-    final totalWidth = popoverSize.width + (isHorizontal ? arrowSize : 0);
-    final totalHeight = popoverSize.height + (isHorizontal ? 0 : arrowSize);
-    final mediaQuery = MediaQuery.of(context);
-    final anchorBounds = _getWidgetBounds(widget.context);
-    final shouldClampToViewport =
-        widgetLocalToGlobal != null &&
-        anchorBounds != null &&
-        anchorBounds.width > 0 &&
-        anchorBounds.height > 0 &&
-        (anchorBounds.width < mediaQuery.size.width ||
-            anchorBounds.height < mediaQuery.size.height);
+  double _rawLeft({
+    required TPopoverPlacement placement,
+    required Rect anchorRect,
+    required Size popoverSize,
+    required double arrowSize,
+  }) {
+    return switch (placement) {
+      TPopoverPlacement.topLeft ||
+      TPopoverPlacement.bottomLeft => anchorRect.left,
+      TPopoverPlacement.topRight ||
+      TPopoverPlacement.bottomRight => anchorRect.right - popoverSize.width,
+      TPopoverPlacement.rightTop ||
+      TPopoverPlacement.right ||
+      TPopoverPlacement.rightBottom => anchorRect.right + _effectiveOffset,
+      TPopoverPlacement.leftTop ||
+      TPopoverPlacement.left ||
+      TPopoverPlacement.leftBottom =>
+        anchorRect.left - popoverSize.width - arrowSize - _effectiveOffset,
+      _ => anchorRect.center.dx - popoverSize.width / 2,
+    };
+  }
+
+  Offset _positionPopover(
+    Size overlaySize,
+    Size childSize,
+    Rect anchorRect,
+    MediaQueryData mediaQuery,
+  ) {
+    final arrowSize = _effectiveShowArrow ? _effectiveArrowSize : 0.0;
+    final requestedIsHorizontal =
+        _isLeftPlacement(widget.placement) ||
+        _isRightPlacement(widget.placement);
+    final popoverSize = requestedIsHorizontal
+        ? Size(math.max(0.0, childSize.width - arrowSize), childSize.height)
+        : Size(childSize.width, math.max(0.0, childSize.height - arrowSize));
     final minLeft = mediaQuery.padding.left;
-    final maxLeft = math.max(
-      minLeft,
-      mediaQuery.size.width - mediaQuery.padding.right - totalWidth,
-    );
     final minTop = mediaQuery.padding.top;
     final bottomInset = math.max(
       mediaQuery.padding.bottom,
@@ -754,55 +693,121 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     final viewport = Rect.fromLTRB(
       minLeft,
       minTop,
-      mediaQuery.size.width - mediaQuery.padding.right,
-      mediaQuery.size.height - bottomInset,
+      overlaySize.width - mediaQuery.padding.right,
+      overlaySize.height - bottomInset,
     );
-    if (shouldClampToViewport) {
-      final anchorRect = widgetLocalToGlobal & anchorBounds.size;
-      _resolvedPlacement = _resolvePlacement(
-        requested: _resolvedPlacement,
-        anchorRect: anchorRect,
-        viewport: viewport,
-        totalSize: Size(totalWidth, totalHeight),
-      );
-    }
+    final resolvedPlacement = _resolvePlacement(
+      requested: widget.placement,
+      anchorRect: anchorRect,
+      viewport: viewport,
+      totalSize: childSize,
+    );
+    final rawTop = _rawTop(
+      placement: resolvedPlacement,
+      anchorRect: anchorRect,
+      popoverSize: popoverSize,
+      arrowSize: arrowSize,
+    );
+    final rawLeft = _rawLeft(
+      placement: resolvedPlacement,
+      anchorRect: anchorRect,
+      popoverSize: popoverSize,
+      arrowSize: arrowSize,
+    );
+    final maxLeft = math.max(
+      minLeft,
+      overlaySize.width - mediaQuery.padding.right - childSize.width,
+    );
     final maxTop = math.max(
       minTop,
-      mediaQuery.size.height - bottomInset - totalHeight,
+      overlaySize.height - bottomInset - childSize.height,
     );
-    final rawTop = _getOffsetTop(widgetLocalToGlobal);
-    final rawLeft = _getOffsetLeft(widgetLocalToGlobal);
-    final top = !shouldClampToViewport
-        ? rawTop
-        : rawTop.clamp(minTop, maxTop).toDouble();
-    final left = !shouldClampToViewport
-        ? rawLeft
-        : rawLeft.clamp(minLeft, maxLeft).toDouble();
-    if (shouldClampToViewport) {
-      _resolveArrowTranslation(
-        anchorRect: widgetLocalToGlobal & anchorBounds.size,
-        popoverSize: popoverSize,
-        left: left,
-        top: top,
-      );
-    } else {
-      _arrowTranslation = Offset.zero;
+    final left = rawLeft.clamp(minLeft, maxLeft).toDouble();
+    final top = rawTop.clamp(minTop, maxTop).toDouble();
+    final arrowTranslation = _resolveArrowTranslation(
+      placement: resolvedPlacement,
+      anchorRect: anchorRect,
+      popoverSize: popoverSize,
+      left: left,
+      top: top,
+    );
+    _scheduleLayoutResult(resolvedPlacement, arrowTranslation);
+    return Offset(left, top);
+  }
+
+  void _scheduleLayoutResult(
+    TPopoverPlacement placement,
+    Offset arrowTranslation,
+  ) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      if (_layoutReady &&
+          _resolvedPlacement == placement &&
+          _arrowTranslation == arrowTranslation) {
+        return;
+      }
+      setState(() {
+        _layoutReady = true;
+        _resolvedPlacement = placement;
+        _arrowTranslation = arrowTranslation;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _initTheme();
+    if (widget.context case final Element element when !element.mounted) {
+      return const SizedBox.shrink();
     }
+    final anchorOffset = _getWidgetLocalToGlobal(widget.context) ?? Offset.zero;
+    final anchorBounds = _getWidgetBounds(widget.context) ?? Rect.zero;
+    final anchorRect = anchorOffset & anchorBounds.size;
+    final mediaQuery = MediaQuery.of(context);
     var popover = _getChild();
     if (widget.onTap != null || widget.onLongTap != null) {
       popover = GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: widget.onTap == null
-            ? null
-            : () => widget.onTap!.call(widget.content),
-        onLongPress: widget.onLongTap == null
-            ? null
-            : () => widget.onLongTap!.call(widget.content),
+        onTap: widget.onTap,
+        onLongPress: widget.onLongTap,
         child: popover,
       );
     }
-    return Stack(
-      children: [Positioned(top: top, left: left, child: popover)],
+    return IgnorePointer(
+      ignoring: !_layoutReady,
+      child: Opacity(
+        opacity: _layoutReady ? 1 : 0,
+        child: CustomSingleChildLayout(
+          delegate: _PopoverLayoutDelegate(
+            positionChild: (overlaySize, childSize) => _positionPopover(
+              overlaySize,
+              childSize,
+              anchorRect,
+              mediaQuery,
+            ),
+          ),
+          child: popover,
+        ),
+      ),
     );
   }
+}
+
+class _PopoverLayoutDelegate extends SingleChildLayoutDelegate {
+  const _PopoverLayoutDelegate({required this.positionChild});
+
+  final Offset Function(Size overlaySize, Size childSize) positionChild;
+
+  @override
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) =>
+      constraints.loosen();
+
+  @override
+  Offset getPositionForChild(Size size, Size childSize) =>
+      positionChild(size, childSize);
+
+  @override
+  bool shouldRelayout(_PopoverLayoutDelegate oldDelegate) => true;
 }

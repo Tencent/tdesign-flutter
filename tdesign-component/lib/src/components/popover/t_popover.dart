@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 't_popover_theme_data.dart';
+import 't_popover_types.dart';
 import 't_popover_widget.dart';
 
 class _PopoverAnchorLifecycle extends StatefulWidget {
@@ -69,15 +70,20 @@ class _PopoverAnchorLifecycleState extends State<_PopoverAnchorLifecycle> {
 class TPopover {
   /// 显示气泡弹层
   static Future<void> showPopover({
+    /// 触发元素的上下文，用于计算气泡锚点位置。
     required BuildContext context,
-    String? content,
-    Widget? contentWidget,
+
+    /// 气泡内容。
+    ///
+    /// 直接传入未设置样式的 [Text] 时使用气泡默认文字样式；组合内容应自行定义
+    /// 子组件样式和布局。
+    required Widget content,
 
     /// 弹层与触发元素的间距。
     double? offset,
 
-    /// 气泡语义色。
-    TPopoverColorScheme? colorScheme,
+    /// 气泡预设配色。
+    TPopoverColorScheme colorScheme = TPopoverColorScheme.defaultTheme,
 
     /// 点击气泡外部区域时是否关闭弹层。
     bool closeOnClickOutside = true,
@@ -86,7 +92,9 @@ class TPopover {
     ///
     /// 默认为 true，避免触发元素移动后气泡停留在旧坐标。
     bool closeOnScroll = true,
-    TPopoverPlacement? placement,
+
+    /// 浮层出现位置，默认为 [TPopoverPlacement.top]。
+    TPopoverPlacement placement = TPopoverPlacement.top,
 
     /// 是否显示气泡箭头。
     bool? showArrow,
@@ -99,17 +107,22 @@ class TPopover {
 
     /// 内容外框宽度（包含 padding）。
     ///
-    /// 使用 `contentWidget` 时必须同时提供 `width` 和 `height`，也可以由
-    /// [TPopoverThemeData] 提供对应尺寸。
+    /// 未设置时按 `content` 的实际布局宽度确定，并受组件主题尺寸约束。
     double? width,
 
     /// 内容外框高度（包含 padding）。
+    ///
+    /// 未设置时按 `content` 的实际布局高度确定，并受组件主题尺寸约束。
     double? height,
 
     /// 蒙层颜色。
     Color? overlayColor,
-    TPopoverTapCallback? onTap,
-    TPopoverLongPressCallback? onLongTap,
+
+    /// 点击气泡内容时触发。
+    VoidCallback? onTap,
+
+    /// 长按气泡内容时触发。
+    VoidCallback? onLongTap,
 
     /// 气泡圆角。
     BorderRadius? radius,
@@ -199,15 +212,14 @@ class TPopover {
           TPopoverWidget(
             context: context,
             content: content,
-            contentWidget: contentWidget,
             offset: offset ?? theme.offset,
-            colorScheme: colorScheme ?? theme.colorScheme,
+            colorScheme: colorScheme,
             placement: placement,
             showArrow: showArrow ?? theme.showArrow,
             arrowSize: arrowSize ?? theme.arrowSize,
             padding: padding ?? theme.padding,
-            width: width ?? (contentWidget == null ? null : theme.minWidth),
-            height: height ?? (contentWidget == null ? null : theme.maxHeight),
+            width: width,
+            height: height,
             onTap: onTap,
             onLongTap: onLongTap,
             radius:

@@ -69,7 +69,7 @@ class _ApiWidgetState extends State<ApiWidget> {
               data: Theme.of(context)
                   .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
               child: const TLoading(
-                size: TLoadingSize.large,
+                size: 32,
                 icon: TLoadingIcon.circle,
                 text: '加载中…',
               ),

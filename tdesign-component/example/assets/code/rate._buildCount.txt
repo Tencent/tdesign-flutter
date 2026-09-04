@@ -1,0 +1,4 @@
+Widget _buildCount(BuildContext context) => const TCell(
+    title: Text('自定义评分数量'),
+    note: _StatefulRate(initialValue: 2, count: 3),
+  );

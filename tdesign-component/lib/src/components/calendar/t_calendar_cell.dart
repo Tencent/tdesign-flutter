@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
+import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/iterable_ext.dart';
 import '../text/t_text.dart';
@@ -33,54 +34,40 @@ class TCalendarSubtitleContext {
 ///   return TText(text, style: TextStyle(fontSize: 9));
 /// },
 /// ```
-typedef TCalendarSubtitleBuilder = Widget? Function(
-  BuildContext context,
-  TCalendarSubtitleContext subtitleContext,
-);
+typedef TCalendarSubtitleBuilder =
+    Widget? Function(
+      BuildContext context,
+      TCalendarSubtitleContext subtitleContext,
+    );
 
 /// 整格自定义构建器；返回非 null 时该格由接入方完全绘制（含主数字与副标题）。
-typedef TCalendarCellBuilder = Widget? Function(
-  BuildContext context,
-  TCalendarCellModel cell,
-);
+typedef TCalendarCellBuilder =
+    Widget? Function(BuildContext context, TCalendarCellModel cell);
 
 /// 月标题构建器；[monthDate] 为当月 1 日。
-typedef TCalendarMonthTitleBuilder = Widget Function(
-  BuildContext context,
-  DateTime monthDate,
-);
+typedef TCalendarMonthTitleBuilder =
+    Widget Function(BuildContext context, DateTime monthDate);
 
-/// 单个日期格数据（只读，选中态通过 [typeNotifier] 更新）
+/// 单个日期格的不可变展示快照，由日历的受控 value 派生。
+///
+/// 自定义构建器通过 [selectType] 读取状态；选择更新由日历的 onChanged
+/// 通知调用方，再通过 value 重建，不直接修改日期格。
+@immutable
 class TCalendarCellModel {
-  TCalendarCellModel({
+  const TCalendarCellModel({
     required this.date,
-    required this.typeNotifier,
+    required this.selectType,
     required this.isLastDayOfMonth,
   });
 
   /// 当前日期。
   final DateTime date;
 
-  /// 日期选择状态通知器。
-  final DateSelectTypeNotifier typeNotifier;
+  /// 当前格的选中、区间或禁用展示状态。
+  final DateSelectType selectType;
 
   /// 是否为当月最后一天。
   final bool isLastDayOfMonth;
-
-  DateSelectType get selectType => typeNotifier.value;
-}
-
-class DateSelectTypeNotifier extends ChangeNotifier {
-  DateSelectType value = DateSelectType.empty;
-
-  DateSelectTypeNotifier(DateSelectType selectType) {
-    value = selectType;
-  }
-
-  void setType(DateSelectType type) {
-    value = type;
-    notifyListeners();
-  }
 }
 
 /// 单个日历日期格。
@@ -134,7 +121,6 @@ class _TCalendarCellState extends State<TCalendarCell> {
   void initState() {
     super.initState();
     _isToday = _checkIsToday();
-    widget.cell?.typeNotifier.addListener(_onSelectTypeChange);
   }
 
   @override
@@ -142,15 +128,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
     super.didUpdateWidget(oldWidget);
     if (widget.cell != oldWidget.cell) {
       _isToday = _checkIsToday();
-      oldWidget.cell?.typeNotifier.removeListener(_onSelectTypeChange);
-      widget.cell?.typeNotifier.addListener(_onSelectTypeChange);
     }
-  }
-
-  @override
-  void dispose() {
-    widget.cell?.typeNotifier.removeListener(_onSelectTypeChange);
-    super.dispose();
   }
 
   bool _checkIsToday() {
@@ -176,7 +154,8 @@ class _TCalendarCellState extends State<TCalendarCell> {
     final decoration = themedStyle.cellDecoration;
     final positionColor = _rangeBridgeColor(context, themedStyle, decoration);
 
-    final content = widget.cellBuilder?.call(context, cell) ??
+    final content =
+        widget.cellBuilder?.call(context, cell) ??
         _buildDefaultCell(context, cell, themedStyle);
 
     return GestureDetector(
@@ -205,15 +184,6 @@ class _TCalendarCellState extends State<TCalendarCell> {
         ],
       ),
     );
-  }
-
-  void _onSelectTypeChange() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    });
   }
 
   Color? _rangeBridgeColor(
@@ -258,17 +228,16 @@ class _TCalendarCellState extends State<TCalendarCell> {
 
     final subtitle = _buildSubtitle(context, cell, cellStyle);
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
+      alignment: Alignment.center,
       children: [
-        TText(
-          dayText,
-          style: dayTextStyle,
-        ),
+        Center(child: TText(dayText, style: dayTextStyle)),
         if (subtitle != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 2),
-            child: subtitle,
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: context.tTheme.spacer4,
+            child: Center(child: subtitle),
           ),
       ],
     );
@@ -281,10 +250,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
   ) {
     final subtitle = widget.subtitleBuilder?.call(
       context,
-      TCalendarSubtitleContext(
-        date: cell.date,
-        selectType: cell.selectType,
-      ),
+      TCalendarSubtitleContext(date: cell.date, selectType: cell.selectType),
     );
     if (subtitle == null) {
       return null;

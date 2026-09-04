@@ -10,11 +10,42 @@ class ComponentTestSuite {
 }
 
 const componentTestSuites = <ComponentTestSuite>[
+  ComponentTestSuite('action_sheet', [
+    'test/components/action_sheet/t_action_sheet_grid_test.dart',
+    'test/components/action_sheet/t_action_sheet_item_widget_test.dart',
+    'test/components/action_sheet/t_action_sheet_list_test.dart',
+    'test/components/action_sheet/t_action_sheet_test.dart',
+  ]),
+  ComponentTestSuite('badge', ['test/components/badge/t_badge_test.dart']),
   ComponentTestSuite('button', [
     'test/components/button/t_button_test.dart',
     'test/components/button/t_button_theme_priority_test.dart',
     'test/components/button/t_button_theme_test.dart',
     'test/components/button/t_button_widget_test.dart',
+  ]),
+  ComponentTestSuite('picker', [
+    'test/components/picker/picker_consumers_theme_test.dart',
+    'test/components/picker/t_picker_theme_test.dart',
+    'test/components/picker/t_picker_types_test.dart',
+    'test/components/picker/t_picker_widget_test.dart',
+    'test/components/picker/wheel_column_test.dart',
+    'test/components/date_time_picker/t_date_time_picker_wheel_test.dart',
+  ]),
+  ComponentTestSuite('calendar', [
+    'test/components/calendar/t_calendar_body_test.dart',
+    'test/components/calendar/t_calendar_cell_test.dart',
+    'test/components/calendar/t_calendar_theme_test.dart',
+    'test/components/calendar/t_calendar_widget_test.dart',
+    'test/t_calendar_lunar_test.dart',
+    'test/t_calendar_on_change_init_test.dart',
+    'test/t_calendar_test.dart',
+  ]),
+  ComponentTestSuite('tag', [
+    'test/components/tag/t_select_tag_test.dart',
+    'test/components/tag/t_tag_test.dart',
+  ]),
+  ComponentTestSuite('popover', [
+    'test/components/popover/t_popover_test.dart',
   ]),
   ComponentTestSuite('checkbox', [
     'test/components/checkbox/t_check_box_group_test.dart',
@@ -26,6 +57,11 @@ const componentTestSuites = <ComponentTestSuite>[
   ComponentTestSuite('divider', [
     'test/components/divider/t_divider_test.dart',
   ]),
+  ComponentTestSuite('dialog', ['test/components/dialog/t_dialog_test.dart']),
+  ComponentTestSuite('dropdown_menu', [
+    'test/components/dropdown_menu/t_dropdown_item_test.dart',
+    'test/components/dropdown_menu/t_dropdown_menu_test.dart',
+  ]),
   ComponentTestSuite('fab', [
     'test/components/fab/t_fab_layout_test.dart',
     'test/components/fab/t_fab_test.dart',
@@ -33,12 +69,38 @@ const componentTestSuites = <ComponentTestSuite>[
   ComponentTestSuite('refresh', [
     'test/components/refresh/t_refresh_test.dart',
   ]),
+  ComponentTestSuite('rate', ['test/components/rate/t_rate_test.dart']),
+  ComponentTestSuite('tabs', [
+    'test/components/tabs/t_horizontal_tab_bar_test.dart',
+    'test/components/tabs/t_tab_bar_test.dart',
+    'test/components/tabs/t_tab_test.dart',
+  ]),
   ComponentTestSuite('icon', ['test/components/icon/t_icon_test.dart']),
   ComponentTestSuite('link', [
     'test/components/link/t_link_resolve_test.dart',
     'test/components/link/t_link_test.dart',
     'test/components/link/t_link_theme_test.dart',
     'test/components/link/t_link_widget_test.dart',
+  ]),
+  ComponentTestSuite('loading', [
+    'test/components/loading/t_loading_test.dart',
+  ]),
+  ComponentTestSuite('message', [
+    'test/components/message/t_message_test.dart',
+  ]),
+  ComponentTestSuite('notice_bar', [
+    'test/components/notice_bar/t_notice_bar_test.dart',
+  ]),
+  ComponentTestSuite('popup', [
+    'test/components/popup/t_feedback_theme_data_test.dart',
+    'test/components/popup/t_popup_options_contract_test.dart',
+    'test/components/popup/t_popup_theme_test.dart',
+    'test/components/popup/t_popup_widget_test.dart',
+    'test/t_popup_coverage_test.dart',
+    'test/t_popup_layout_test.dart',
+    'test/t_popup_options_test.dart',
+    'test/t_popup_route_test.dart',
+    'test/t_popup_test.dart',
   ]),
   ComponentTestSuite('radio', [
     'test/components/radio/t_radio_test.dart',

@@ -7,7 +7,7 @@
 | anchorDate | DateTime? | - | 滚动锚点日期。 |
 | animateTo | bool | false | 锚点滚动是否使用动画。 |
 | cellBuilder | TCalendarCellBuilder? | - | 日期格构建器。 |
-| firstDayOfWeek | int | 0 | 每周起始日，0 表示周日，6 表示周六。 |
+| firstDayOfWeek | TCalendarFirstDayOfWeek | TCalendarFirstDayOfWeek.sunday | 每周从星期几开始，默认从星期日开始。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | maxDate | DateTime? | - | 最大可选日期。 |
 | minDate | DateTime? | - | 最小可选日期。 |
@@ -59,7 +59,7 @@
 | --- | --- | --- | --- |
 | date | DateTime | - | 当前日期。 |
 | isLastDayOfMonth | bool | - | 是否为当月最后一天。 |
-| typeNotifier | DateSelectTypeNotifier | - | 日期选择状态通知器。 |
+| selectType | DateSelectType | - | 当前格的选中、区间或禁用展示状态。 |
 
 
 ### TCalendarSubtitleContext

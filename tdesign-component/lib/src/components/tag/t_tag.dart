@@ -14,7 +14,8 @@ import 't_tag_types.dart';
 class TTag extends StatelessWidget {
   const TTag(
     this.text, {
-    this.colorScheme,
+    this.colorScheme = TTagColorScheme.defaultTheme,
+    this.variant = TTagVariant.dark,
     this.icon,
     this.size = TTagSize.medium,
     this.needCloseIcon = false,
@@ -27,8 +28,11 @@ class TTag extends StatelessWidget {
   /// 标签内容
   final String text;
 
-  /// 语义色
-  final TTagColorScheme? colorScheme;
+  /// 标签预设配色。
+  final TTagColorScheme colorScheme;
+
+  /// 绘制形态。
+  final TTagVariant variant;
 
   /// 图标内容，可随状态改变颜色
   final IconData? icon;
@@ -58,10 +62,10 @@ class TTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = _theme(context);
-    final resolvedColorScheme =
-        colorScheme ?? theme?.colorScheme ?? TTagColorScheme.defaultTheme;
-    final isOutline = theme?.isOutline ?? false;
-    final isLight = theme?.isLight ?? false;
+    final isOutline =
+        variant == TTagVariant.outline || variant == TTagVariant.lightOutline;
+    final isLight =
+        variant == TTagVariant.light || variant == TTagVariant.lightOutline;
     final shape = theme?.shape ?? TTagShape.square;
     final overflow = theme?.overflow;
 
@@ -76,7 +80,7 @@ class TTag extends StatelessWidget {
     // 计算样式颜色
     final colors = _resolveColors(
       context,
-      resolvedColorScheme,
+      colorScheme,
       isLight,
       isOutline,
       !enabled,
@@ -221,9 +225,7 @@ class TTag extends StatelessWidget {
               ? token.warningLightColor
               : Colors.transparent;
         } else {
-          textColor = isLight
-              ? token.warningNormalColor
-              : token.textColorAnti;
+          textColor = isLight ? token.warningNormalColor : token.textColorAnti;
           backgroundColor = isLight
               ? token.warningLightColor
               : token.warningNormalColor;

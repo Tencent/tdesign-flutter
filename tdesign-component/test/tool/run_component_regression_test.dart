@@ -25,4 +25,36 @@ void main() {
       }
     }
   });
+
+  test('GitHub and CNB example regression test lists stay in sync', () {
+    final githubWorkflow = File(
+      '../.github/workflows/test-build.yml',
+    ).readAsStringSync();
+    final cnbStages = File('../.cnb/.reusable-stages.yml').readAsStringSync();
+
+    final githubTests = _extractExampleRegressionTests(
+      githubWorkflow,
+      r'- name: Run example shared functional tests[\s\S]*?run: flutter test --no-pub ([^\n]+)',
+    );
+    final cnbTests = _extractExampleRegressionTests(
+      cnbStages,
+      r'\.example-regression-tests:[\s\S]*?flutter test --no-pub ([^\n]+)',
+    );
+
+    expect(githubTests, cnbTests);
+    expect(githubTests, contains('test/badge_page_test.dart'));
+    expect(githubTests, contains('test/notice_bar_page_test.dart'));
+    expect(githubTests, contains('test/tabs_page_test.dart'));
+  });
+}
+
+List<String> _extractExampleRegressionTests(String yaml, String pattern) {
+  final match = RegExp(pattern).firstMatch(yaml);
+  expect(match, isNotNull);
+  return match!
+      .group(1)!
+      .trim()
+      .split(RegExp(r'\s+'))
+      .where((argument) => argument.endsWith('_test.dart'))
+      .toList();
 }

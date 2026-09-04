@@ -14,7 +14,7 @@ Widget _buildCustomRadiusPopover(BuildContext context) {
                 context: popoverContext,
                 radius: BorderRadius.circular(16),
                 colorScheme: theme,
-                content: '弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容',
+                content: const Text('弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容'),
               );
             },
           );

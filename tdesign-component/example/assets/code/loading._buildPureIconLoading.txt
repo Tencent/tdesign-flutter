@@ -1,27 +1,28 @@
 /// 纯图标
     Widget _buildPureIconLoading(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        const TLoading(
-          size: TLoadingSize.small,
-          icon: TLoadingIcon.circle,
-        ),
-        const SizedBox(width: 36),
-        const TLoading(
-          size: TLoadingSize.small,
-          icon: TLoadingIcon.activity,
-        ),
-        const SizedBox(width: 36),
+        const TLoading(icon: TLoadingIcon.circle),
+        const SizedBox(width: 40),
+        const TLoading(icon: TLoadingIcon.activity),
+        const SizedBox(width: 40),
         Theme(
           data: Theme.of(context).mergeExtension(
-            TLoadingThemeData(
-              iconColor: context.tTheme.brandNormalColor,
-            ),
+            TLoadingThemeData(iconColor: context.tTheme.brandNormalColor),
+          ),
+          child: const TLoading(size: 40, icon: TLoadingIcon.point),
+        ),
+        const SizedBox(width: 40),
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            TLoadingThemeData(iconColor: context.tTheme.brandNormalColor),
           ),
           child: const TLoading(
-            size: TLoadingSize.small,
-            icon: TLoadingIcon.point,
+            customIcon: Image(
+              image: AssetImage('assets/img/loading-logo2.png'),
+              fit: BoxFit.contain,
+            ),
           ),
         ),
       ],

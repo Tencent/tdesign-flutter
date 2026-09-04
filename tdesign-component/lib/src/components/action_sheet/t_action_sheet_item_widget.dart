@@ -4,7 +4,6 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../badge/t_badge.dart';
 import '../text/t_text.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_theme_data.dart';
@@ -14,118 +13,83 @@ const actionSheetCancelButtonHeight = 48.0;
 
 /// 动作面板单个项目组件
 ///
-/// 在宫格/分组模式下渲染单个可点击项目，含图标、标签和角标。
-class TActionSheetItemWidget extends StatelessWidget {
+/// 在宫格模式下渲染单个可点击项目，含图标、标签和角标。
+class TActionSheetItemWidget<T> extends StatelessWidget {
   const TActionSheetItemWidget({
     super.key,
-    this.item,
-    required this.index,
-    this.onChanged,
+    required this.item,
+    this.onSelected,
   });
 
   /// 项目数据
-  final TActionSheetItem? item;
-
-  /// 项目索引
-  final int index;
+  final TActionSheetItem<T> item;
 
   /// 选择项目时的回调函数
-  final TActionSheetOnChanged? onChanged;
+  final TActionSheetOnSelected<T>? onSelected;
 
   @override
   Widget build(BuildContext context) {
-    if (item == null) {
-      return const SizedBox.shrink();
-    }
-    final actionSheetTheme =
-        Theme.of(context).extension<TActionSheetThemeData>();
+    final actionSheetTheme = Theme.of(
+      context,
+    ).extension<TActionSheetThemeData>();
     final iconSize = actionSheetTheme?.iconSize ?? 24;
     final iconExtent = actionSheetTheme?.gridIconExtent ?? 48;
-    final iconColor = item!.disabled
+    final iconColor = item.disabled
         ? context.tTheme.textDisabledColor
-        : (item!.textStyle?.color ??
-            actionSheetTheme?.iconColor ??
-            context.tTheme.textColorPrimary);
-    late ValueNotifier<List<double>> _offsetValue;
-    late GlobalKey _offsetKey;
-    if (item!.badge != null) {
-      _offsetValue = ValueNotifier(const [0.0, 0.0]);
-      _offsetKey = GlobalKey();
-    }
+        : (actionSheetTheme?.iconColor ?? context.tTheme.textColorPrimary);
     final content = GestureDetector(
-      onTap: item!.disabled
+      onTap: item.disabled
           ? null
           : () {
-              onChanged?.call(item!, index);
+              onSelected?.call(item);
               Navigator.maybePop(context);
             },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (item!.icon != null) ...[
+          if (item.icon != null) ...[
             Stack(
               clipBehavior: Clip.none,
               children: [
                 IconTheme(
-                  data: IconThemeData(
-                    color: iconColor,
-                    size: iconSize,
-                  ),
+                  data: IconThemeData(color: iconColor, size: iconSize),
                   child: SizedBox(
                     width: iconExtent,
                     height: iconExtent,
-                    child: Center(child: item!.icon!),
+                    child: Center(child: item.icon!),
                   ),
                 ),
-                if (item!.badge != null)
-                  ValueListenableBuilder(
-                    valueListenable: _offsetValue,
-                    builder: (context, value, child) {
-                      _setOffsetValue(_offsetKey, _offsetValue);
-                      return Positioned(
-                        key: _offsetKey,
-                        child: item!.badge!,
-                        right: value[0],
-                        top: value[1],
-                      );
-                    },
+                if (item.badge != null)
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: FractionalTranslation(
+                      translation: const Offset(0.5, -0.5),
+                      child: item.badge!,
+                    ),
                   ),
               ],
             ),
             SizedBox(height: context.tTheme.spacer8),
           ],
           TText(
-            item!.label,
+            item.label,
             font: context.tTheme.fontBodySmall,
             textColor: context.tTheme.textColorPrimary,
-            style: item!.textStyle,
+            style: item.textStyle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
     );
-    if (!item!.disabled) {
+    if (!item.disabled) {
       return content;
     }
     return Semantics(
       enabled: false,
       child: Opacity(opacity: 0.4, child: content),
     );
-  }
-
-  void _setOffsetValue(GlobalKey<State<StatefulWidget>> offsetKey,
-      ValueNotifier<List<double>> offsetValue) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final renderBox =
-          offsetKey.currentContext?.findRenderObject() as RenderBox;
-      final size = renderBox.size;
-      final right = -size.width / 2;
-      final top = -size.height / 2;
-      if (offsetValue.value[0] != right || offsetValue.value[1] != top) {
-        offsetValue.value = [right, top];
-      }
-    });
   }
 }
 
@@ -144,16 +108,20 @@ MainAxisAlignment getMainAxisAlignment(TActionSheetAlign align) {
 /// 构建取消按钮
 ///
 /// [showPagination] 是否显示分页（影响上方间距），
+/// [spacingColor] 取消按钮上方留白的颜色，默认为页面背景色。
 /// [cancelText] 取消按钮文本，[onCancel] 点击回调。
 Widget buildCancelButton(
   BuildContext context,
   bool showPagination,
   String? cancelText,
-  VoidCallback? onCancel,
-) {
-  return Padding(
+  VoidCallback? onCancel, {
+  Color? spacingColor,
+}) {
+  return Container(
+    color: spacingColor ?? context.tTheme.bgColorPage,
     padding: EdgeInsets.only(
-        top: showPagination ? context.tTheme.spacer16 : context.tTheme.spacer8),
+      top: showPagination ? context.tTheme.spacer16 : context.tTheme.spacer8,
+    ),
     child: GestureDetector(
       onTap: () {
         onCancel?.call();

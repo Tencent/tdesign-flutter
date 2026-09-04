@@ -1,0 +1,4 @@
+Widget _buildVertical(BuildContext context) => const Padding(
+    padding: EdgeInsets.all(16),
+    child: Center(child: _VerticalRate()),
+  );

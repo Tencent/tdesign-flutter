@@ -198,7 +198,9 @@
           "TTabsBar",
           "TTab",
           "TTabsBarView",
-          "TTabsBarIndicator"
+          "TTabsBarIndicator",
+          "TTabsBarThemeData",
+          "TTabsBarVariant"
         ],
         "getComments": false
       }
@@ -469,14 +471,15 @@
     {
       "slug": "badge",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/badge/t_badge.dart"
+        "type": "folder",
+        "path": "lib/src/components/badge"
       },
       "api": {
         "names": [
-          "TBadge"
+          "TBadge",
+          "TBadgeThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -695,7 +698,10 @@
           "TActionSheetItem",
           "TActionSheet",
           "TActionSheetThemeData",
-          "TActionSheetAlign"
+          "TActionSheetAlign",
+          "TActionSheetGridLayout",
+          "TActionSheetGridMode",
+          "TActionSheetOnSelected"
         ],
         "getComments": true
       }
@@ -772,7 +778,9 @@
       "api": {
         "names": [
           "TNoticeBar",
-          "TNoticeBarStyle"
+          "TNoticeBarTapTarget",
+          "TNoticeBarStatus",
+          "TNoticeBarThemeData"
         ],
         "getComments": true
       }
@@ -786,7 +794,8 @@
       "api": {
         "names": [
           "TPopover",
-          "TPopoverWidget"
+          "TPopoverColorScheme",
+          "TPopoverPlacement"
         ],
         "getComments": true
       }
@@ -800,8 +809,10 @@
       "api": {
         "names": [
           "TPopup",
+          "TPopupHeader",
           "TPopupOptions",
           "TPopupHandle",
+          "TPopupOverlayConfig",
           "TPopupPlacement",
           "TPopupTrigger"
         ],

@@ -1,0 +1,52 @@
+Widget _buildDoubleDescribed(BuildContext context) => TCellGroup(
+    cells: [
+      TCell(
+        key: const ValueKey('calendar-double-description-trigger'),
+        title: const TText('带双行描述的日历'),
+        note: _dateNote(_describedMultipleValue),
+        arrow: true,
+        onTap: () => _showCalendar(
+          variant: TCalendarVariant.multiple,
+          value: _describedMultipleValue,
+          minDate: DateTime(2022, 2),
+          maxDate: DateTime(2022, 3, 15),
+          cellBuilder: (context, model) {
+            const holidays = {1: '初一', 2: '初二', 14: '情人节', 15: '元宵节'};
+            final selected = model.selectType == DateSelectType.selected;
+            final color = model.selectType == DateSelectType.disabled
+                ? context.tTheme.textDisabledColor
+                : selected
+                ? context.tTheme.textColorAnti
+                : context.tTheme.textColorSecondary;
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                TText(
+                  '${model.date.day}',
+                  font: context.tTheme.fontTitleMedium,
+                  textColor: color,
+                ),
+                Positioned(
+                  top: context.tTheme.spacer4,
+                  child: TText(
+                    holidays[model.date.day] ?? '',
+                    font: context.tTheme.fontBodyExtraSmall,
+                    textColor: color,
+                  ),
+                ),
+                Positioned(
+                  bottom: context.tTheme.spacer4,
+                  child: TText(
+                    '¥60',
+                    font: context.tTheme.fontBodyExtraSmall,
+                    textColor: color,
+                  ),
+                ),
+              ],
+            );
+          },
+          onConfirm: (value) => setState(() => _describedMultipleValue = value),
+        ),
+      ),
+    ],
+  );

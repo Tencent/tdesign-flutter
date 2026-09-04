@@ -479,7 +479,7 @@ class _TPullDownRefreshHeader extends Header {
                     axis: Axis.horizontal,
                   ),
                 ),
-                child: TLoading(size: TLoadingSize.medium, text: text),
+                child: TLoading(size: 24, text: text),
               )
             : TText(
                 text,

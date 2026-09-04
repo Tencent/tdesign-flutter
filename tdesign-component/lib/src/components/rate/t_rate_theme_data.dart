@@ -17,9 +17,6 @@ class TRateThemeData extends ThemeExtension<TRateThemeData> {
     /// 图标间距。
     this.iconGap,
 
-    /// 是否显示评分文案。
-    this.showText,
-
     /// 文案宽度。
     this.textWidth,
 
@@ -29,7 +26,7 @@ class TRateThemeData extends ThemeExtension<TRateThemeData> {
     /// 文案样式。
     this.textStyle,
 
-    /// 半星选择浮层阴影。
+    /// 当前值提示与半星选择浮层阴影。
     this.overlayBoxShadow,
   });
 
@@ -45,9 +42,6 @@ class TRateThemeData extends ThemeExtension<TRateThemeData> {
   /// 图标间距。
   final double? iconGap;
 
-  /// 是否显示评分文案。
-  final bool? showText;
-
   /// 文案宽度。
   final double? textWidth;
 
@@ -57,7 +51,7 @@ class TRateThemeData extends ThemeExtension<TRateThemeData> {
   /// 文案样式。
   final TextStyle? textStyle;
 
-  /// 半星选择浮层阴影。
+  /// 当前值提示与半星选择浮层阴影。
   final List<BoxShadow>? overlayBoxShadow;
 
   @override
@@ -66,7 +60,6 @@ class TRateThemeData extends ThemeExtension<TRateThemeData> {
     Color? inactiveStarColor,
     double? iconSize,
     double? iconGap,
-    bool? showText,
     double? textWidth,
     double? textGap,
     TextStyle? textStyle,
@@ -77,7 +70,6 @@ class TRateThemeData extends ThemeExtension<TRateThemeData> {
       inactiveStarColor: inactiveStarColor ?? this.inactiveStarColor,
       iconSize: iconSize ?? this.iconSize,
       iconGap: iconGap ?? this.iconGap,
-      showText: showText ?? this.showText,
       textWidth: textWidth ?? this.textWidth,
       textGap: textGap ?? this.textGap,
       textStyle: textStyle ?? this.textStyle,
@@ -99,7 +91,6 @@ class TRateThemeData extends ThemeExtension<TRateThemeData> {
       ),
       iconSize: lerpDouble(iconSize, other.iconSize, t),
       iconGap: lerpDouble(iconGap, other.iconGap, t),
-      showText: t < 0.5 ? showText : other.showText,
       textWidth: lerpDouble(textWidth, other.textWidth, t),
       textGap: lerpDouble(textGap, other.textGap, t),
       textStyle: TextStyle.lerp(textStyle, other.textStyle, t),

@@ -94,9 +94,10 @@ class _PopupConsumerHostState extends State<_PopupConsumerHost> {
             context,
             subtitle: 'Choose an action',
             cancelText: 'Cancel',
-            items: [
-              TActionSheetItem(label: 'Take photo'),
+            items: const [
+              TActionSheetItem(value: 'camera', label: 'Take photo'),
               TActionSheetItem(
+                value: 'album',
                 label: 'Choose from album',
                 subtitle: 'JPG and PNG',
               ),

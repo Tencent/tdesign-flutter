@@ -18,25 +18,31 @@ void main() {
       expect(option.normalized().placement, option.placement);
       expect(option.copyWith(), isA<TPopupOptions>());
       expect(option.copyWith(width: 120, height: 80).width, 120);
-      expect(option.copyWith(backgroundColor: Colors.red).backgroundColor,
-          Colors.red);
-      expect(option.copyWith(showOverlay: false).closeOnOverlayClick, isFalse);
+      expect(
+        option.copyWith(backgroundColor: Colors.red).backgroundColor,
+        Colors.red,
+      );
+      expect(
+        option
+            .copyWith(overlay: const TPopupOverlayConfig(showOverlay: false))
+            .overlayConfig
+            .showOverlay,
+        isFalse,
+      );
     }
 
     final bottom = TPopupOptions.bottom(
       child: child,
-      titleWidget: const Text('标题'),
-      cancelBuilder: (context, close) => const Text('取消'),
-      confirmBuilder: (context, close) => const Text('确定'),
+      headerBuilder: (context, close) => const td.TPopupHeader(
+        cancelButton: Text('取消'),
+        title: Text('标题'),
+        confirmButton: Text('确定'),
+      ),
     );
-    expect(bottom.usesDefaultHeader, isTrue);
-    expect(bottom.useCustomHeader, isFalse);
-    expect(bottom.showCancelSlot, isTrue);
+    expect(bottom.headerBuilder, isNotNull);
 
     final center = TPopupOptions.center(child: child);
-    expect(center.usesDefaultClose, isTrue);
-    expect(center.useDefaultHeader, isFalse);
-    expect(center.showConfirmSlot, isFalse);
+    expect(center.closeBuilder, isNull);
   });
 
   test('PopupLayout covers each placement and safe area', () {
@@ -45,85 +51,115 @@ void main() {
       final layout = PopupLayout(placement: placement, width: 100, height: 80);
       expect(layout.alignment, isA<Alignment>());
       expect(layout.slideOffset(0.5), isA<Offset>());
-      expect(PopupLayout.safePaddingFor(placement, padding, true),
-          isA<EdgeInsets>());
-      expect(PopupLayout.safePaddingFor(placement, padding, false),
-          EdgeInsets.zero);
-      final positioned =
-          layout.wrapPositioned(child: const SizedBox(), safePadding: padding);
+      expect(
+        PopupLayout.safePaddingFor(placement, padding, true),
+        isA<EdgeInsets>(),
+      );
+      expect(
+        PopupLayout.safePaddingFor(placement, padding, false),
+        EdgeInsets.zero,
+      );
+      final positioned = layout.wrapPositioned(
+        child: const SizedBox(),
+        safePadding: padding,
+      );
       expect(positioned, isA<Widget>());
     }
   });
 
-  testWidgets('default bottom header actions keep single-line ellipsis',
-      (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      theme: td.TThemeBuilder.light(td.TThemeData.defaultData()),
-      home: Scaffold(
-        body: PopupHeader(
-          options: TPopupOptions.bottom(
-            child: const SizedBox(),
-            titleWidget: const Text('标题'),
+  testWidgets('TPopupHeader 组合取消、标题和确认内容', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: td.TThemeBuilder.light(td.TThemeData.defaultData()),
+        home: const Scaffold(
+          body: td.TPopupHeader(
+            cancelButton: Text('取消'),
+            title: Text('标题'),
+            confirmButton: Text('确定'),
           ),
-          onCloseWithTrigger: (_) {},
         ),
       ),
-    ));
-
-    final cancel = tester.widget<td.TText>(
-      find.byWidgetPredicate(
-        (widget) => widget is td.TText && widget.data == '取消',
-      ),
-    );
-    final confirm = tester.widget<td.TText>(
-      find.byWidgetPredicate(
-        (widget) => widget is td.TText && widget.data == '确定',
-      ),
     );
 
-    expect(cancel.maxLines, 1);
-    expect(cancel.overflow, TextOverflow.ellipsis);
-    expect(confirm.maxLines, 1);
-    expect(confirm.overflow, TextOverflow.ellipsis);
+    expect(find.text('取消'), findsOneWidget);
+    expect(find.text('标题'), findsOneWidget);
+    expect(find.text('确定'), findsOneWidget);
   });
 
-  testWidgets('center 默认尺寸为 240 且保留面板下方关闭区', (tester) async {
-    const contentKey = ValueKey('center-default-content');
-    await tester.pumpWidget(MaterialApp(
-      theme: td.TThemeBuilder.light(td.TThemeData.defaultData()),
-      home: Scaffold(
-        body: Center(
-          child: PopupShell(
-            options: TPopupOptions.center(
-              child: const SizedBox.expand(key: contentKey),
+  testWidgets('Popup 标题清除诊断下划线并保留显式样式', (tester) async {
+    for (final explicit in [false, true]) {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: DefaultTextStyle(
+            style: const TextStyle(
+              color: Colors.red,
+              decoration: TextDecoration.underline,
+              decorationColor: Colors.yellow,
+              decorationStyle: TextDecorationStyle.double,
             ),
-            onCloseWithTrigger: (_) {},
+            child: td.TPopupHeader(
+              title: td.TText(
+                '标题',
+                style: explicit
+                    ? const TextStyle(decoration: TextDecoration.underline)
+                    : null,
+              ),
+            ),
+          ),
+        ),
+      );
+      final rich = find.descendant(
+        of: find.text('标题'),
+        matching: find.byType(RichText),
+      );
+      expect(
+        tester.widget<RichText>(rich).text.style?.decoration,
+        explicit ? TextDecoration.underline : TextDecoration.none,
+      );
+    }
+  });
+
+  testWidgets('center 默认尺寸为 240 且不生成关闭区', (tester) async {
+    const contentKey = ValueKey('center-default-content');
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: td.TThemeBuilder.light(td.TThemeData.defaultData()),
+        home: Scaffold(
+          body: Center(
+            child: PopupShell(
+              options: TPopupOptions.center(
+                child: const SizedBox.expand(key: contentKey),
+              ),
+              onCloseWithTrigger: (_) {},
+            ),
           ),
         ),
       ),
-    ));
+    );
 
     expect(tester.getSize(find.byKey(contentKey)), const Size(240, 240));
-    expect(find.byIcon(td.TIcons.close_circle), findsOneWidget);
+    expect(find.byType(IconButton), findsNothing);
   });
 
   testWidgets('center 显式尺寸覆盖默认值', (tester) async {
     const contentKey = ValueKey('center-custom-content');
-    await tester.pumpWidget(MaterialApp(
-      theme: td.TThemeBuilder.light(td.TThemeData.defaultData()),
-      home: Scaffold(
-        body: Center(
-          child: PopupShell(
-            options: TPopupOptions.center(
-              width: 180,
-              height: 160,
-              child: const SizedBox.expand(key: contentKey),
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: td.TThemeBuilder.light(td.TThemeData.defaultData()),
+        home: Scaffold(
+          body: Center(
+            child: PopupShell(
+              options: TPopupOptions.center(
+                width: 180,
+                height: 160,
+                child: const SizedBox.expand(key: contentKey),
+              ),
+              onCloseWithTrigger: (_) {},
             ),
-            onCloseWithTrigger: (_) {},
           ),
         ),
       ),
-    ));
+    );
 
     expect(tester.getSize(find.byKey(contentKey)), const Size(180, 160));
   });

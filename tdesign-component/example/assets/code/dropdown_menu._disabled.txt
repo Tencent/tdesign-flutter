@@ -1,0 +1,16 @@
+Widget _disabled(BuildContext context) {
+    return TDropdownMenu(
+      items: [
+        TDropdownMenuItem(
+          label: '禁用菜单',
+          enabled: false,
+          panelBuilder: (context, controller) => const SizedBox.shrink(),
+        ),
+        TDropdownMenuItem(
+          label: '禁用菜单',
+          enabled: false,
+          panelBuilder: (context, controller) => const SizedBox.shrink(),
+        ),
+      ],
+    );
+  }

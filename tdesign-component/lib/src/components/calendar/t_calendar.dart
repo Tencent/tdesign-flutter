@@ -8,16 +8,16 @@ import 't_calendar_cell.dart';
 import 't_calendar_header.dart';
 import 't_calendar_style.dart';
 import 't_calendar_theme_data.dart';
+import 't_calendar_types.dart';
 
 export 't_calendar_cell.dart'
     show
         TCalendarCellModel,
-        DateSelectTypeNotifier,
         TCalendarSubtitleContext,
         TCalendarSubtitleBuilder,
         TCalendarCellBuilder,
         TCalendarMonthTitleBuilder;
-export 't_calendar_types.dart' show DateSelectType;
+export 't_calendar_types.dart' show DateSelectType, TCalendarFirstDayOfWeek;
 
 // ---------------------------------------------------------------------------
 // TCalendar — 纯日历组件
@@ -33,8 +33,8 @@ class TCalendar extends StatefulWidget {
     /// 受控选中日期。
     required this.value,
 
-    /// 每周起始日，0 表示周日，6 表示周六。
-    this.firstDayOfWeek = 0,
+    /// 每周从星期几开始，默认从星期日开始。
+    this.firstDayOfWeek = TCalendarFirstDayOfWeek.sunday,
 
     /// 最小可选日期。
     DateTime? minDate,
@@ -65,14 +65,18 @@ class TCalendar extends StatefulWidget {
 
     /// 滚动锚点日期。
     this.anchorDate,
-  })  : assert(minDate == null || maxDate == null || minDate.isBefore(maxDate),
-            'minDate 必须早于 maxDate'),
-        minDate = minDate ?? _getDefaultMinDate(),
-        maxDate = maxDate ?? _getDefaultMaxDate(),
-        monthTitleBuilder = monthTitleBuilder ?? _defaultMonthTitleBuilder;
+  }) : assert(
+         minDate == null ||
+             maxDate == null ||
+             !_dateOnly(minDate).isAfter(_dateOnly(maxDate)),
+         'minDate 不能晚于 maxDate',
+       ),
+       minDate = minDate == null ? _getDefaultMinDate() : _dateOnly(minDate),
+       maxDate = maxDate == null ? _getDefaultMaxDate() : _dateOnly(maxDate),
+       monthTitleBuilder = monthTitleBuilder ?? _defaultMonthTitleBuilder;
 
-  /// 第一天从星期几开始，0 = 周日，1 = 周一，…，6 = 周六。默认 0（周日）。
-  final int firstDayOfWeek;
+  /// 每周从星期几开始，默认从星期日开始。
+  final TCalendarFirstDayOfWeek firstDayOfWeek;
 
   /// 最小可选的日期，默认 1970-01-01
   final DateTime minDate;
@@ -80,7 +84,7 @@ class TCalendar extends StatefulWidget {
   /// 最大可选的日期，默认 2100-12-31
   final DateTime maxDate;
 
-  /// 日历的选择模式，决定点击日期后的选中行为：
+  /// 日历的选择模式（保留 variant 命名，不表示视觉变体），决定点击后的行为：
   /// - [TCalendarVariant.single]：单选，点击新日期取消旧选中
   /// - [TCalendarVariant.multiple]：多选，点击切换选中/取消
   /// - [TCalendarVariant.range]：区间选择，依次选起止日期
@@ -109,7 +113,7 @@ class TCalendar extends StatefulWidget {
 
   /// 整格自定义构建器；返回非 null 时替换该格默认布局（主数字 + 副标题均不渲染）。
   ///
-  /// 与 [subtitleBuilder] 互斥：需要只改副标题时请用 [subtitleBuilder]。
+  /// 返回非 null 时优先于 [subtitleBuilder]；返回 null 时使用默认日期格及副标题。
   final TCalendarCellBuilder? cellBuilder;
 
   /// 副标题构建器，在日期主数字下方渲染自定义内容。
@@ -132,6 +136,8 @@ class TCalendar extends StatefulWidget {
   // ---------------------------------------------------------------------------
   static DateTime _getDefaultMinDate() => DateTime(1970, 1, 1);
   static DateTime _getDefaultMaxDate() => DateTime(2100, 12, 31);
+  static DateTime _dateOnly(DateTime date) =>
+      DateTime(date.year, date.month, date.day);
   static const double _kWeekdayHeight = 46.0;
 
   // ---------------------------------------------------------------------------
@@ -232,23 +238,22 @@ class _TCalendarState extends State<TCalendar> {
     final verticalGap = _style.verticalGap ?? context.tTheme.spacer8;
 
     final calendar = Container(
-      height: Theme.of(context).extension<TCalendarThemeData>()?.height ??
+      height:
+          Theme.of(context).extension<TCalendarThemeData>()?.height ??
           _calcInlineDefaultHeight(verticalGap),
       width: double.infinity,
       decoration: _style.decoration,
       child: Column(
         children: [
           TCalendarHeader(
-            firstDayOfWeek: widget.firstDayOfWeek,
+            firstDayOfWeek: widget.firstDayOfWeek.index,
             weekdayGap: _style.weekdayGap ?? context.tTheme.spacer4,
             padding: _style.bodyPadding ?? context.tTheme.spacer16,
             weekdayStyle: _style.weekdayStyle,
             weekdayHeight: _style.weekdayHeight,
             weekdayNames: weekdayNames,
           ),
-          Expanded(
-            child: _buildCalendarBody(verticalGap),
-          ),
+          Expanded(child: _buildCalendarBody(verticalGap)),
         ],
       ),
     );
@@ -266,7 +271,7 @@ class _TCalendarState extends State<TCalendar> {
   Widget _buildCalendarBody(double verticalGap) {
     return TCalendarBody(
       type: widget.variant,
-      firstDayOfWeek: widget.firstDayOfWeek,
+      firstDayOfWeek: widget.firstDayOfWeek.index,
       minDate: widget.minDate,
       maxDate: widget.maxDate,
       value: widget._value,
@@ -306,7 +311,7 @@ class _TCalendarState extends State<TCalendar> {
     if (widget.onChanged == null) {
       return;
     }
-    final selectType = cell.typeNotifier.value;
+    final selectType = cell.selectType;
     final curDate = cell.date;
 
     if (selectType == DateSelectType.disabled) {
@@ -368,13 +373,13 @@ class _TCalendarState extends State<TCalendar> {
 
   /// 内嵌模式下不传 `height` 时的默认高度。
   ///
-  /// 布局 = weekday(46) + monthTitle(22) + 5行(cellHeight + verticalGap) + bodyPadding*2
+  /// 布局 = weekday(46) + monthTitle(22) + 6行(cellHeight + verticalGap) + bodyPadding*2
   double _calcInlineDefaultHeight(double verticalGap) {
     const weekdayHeight = TCalendar._kWeekdayHeight;
     final monthTitleHeight = _style.monthTitleHeight;
     final cellHeight = _style.cellHeight;
     final bodyPadding = _style.bodyPadding ?? context.tTheme.spacer16;
-    const visibleRows = 5;
+    const visibleRows = 6;
     return weekdayHeight +
         monthTitleHeight +
         visibleRows * (cellHeight + verticalGap) +

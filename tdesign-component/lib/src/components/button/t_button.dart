@@ -76,7 +76,9 @@ class TButton extends StatefulWidget {
   /// 变体（fill / outline / text / ghost），未传时使用 Theme [TButtonThemeData.defaultVariant]
   final TButtonVariant? variant;
 
-  /// 配色方案，未传时使用 Theme 默认解析
+  /// 配色方案；未传时使用 [TButtonColorScheme.defaultTheme]。
+  ///
+  /// Theme 提供具体颜色和样式，不选择组件的配色方案。
   final TButtonColorScheme? colorScheme;
 
   /// 图标（Widget 类型，IconData 需包裹为 `Icon(...)`）

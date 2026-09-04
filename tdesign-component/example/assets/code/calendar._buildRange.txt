@@ -1,7 +1,32 @@
-Widget _buildRange(BuildContext context) {
-    return TCalendar(
-      value: _rangeValue,
+Widget _buildRange(BuildContext context) => InkWell(
+    key: const ValueKey('calendar-range-trigger'),
+    onTap: () => _showCalendar(
       variant: TCalendarVariant.range,
-      onChanged: (value) => setState(() => _rangeValue = value),
-    );
-  }
+      value: _rangeValue,
+      minDate: DateTime(2022, 2),
+      maxDate: DateTime(2022, 4),
+      onConfirm: (value) => setState(() => _rangeValue = value),
+    ),
+    child: Container(
+      color: context.tTheme.bgColorContainer,
+      padding: EdgeInsets.all(context.tTheme.spacer16),
+      child: Row(
+        children: [
+          Expanded(
+            child: TText(
+              _formatDate(_rangeValue.isEmpty ? null : _rangeValue.first),
+              font: context.tTheme.fontTitleMedium,
+            ),
+          ),
+          TIcon(TIcons.swap_right, color: context.tTheme.textColorPlaceholder),
+          Expanded(
+            child: TText(
+              _formatDate(_rangeValue.length > 1 ? _rangeValue.last : null),
+              textAlign: TextAlign.end,
+              font: context.tTheme.fontTitleMedium,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );

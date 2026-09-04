@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../../util/context_extension.dart';
+import '../text/t_text.dart';
 import 't_rate_theme_data.dart';
 
 /// 自定义评分图标构建器。
@@ -24,10 +29,10 @@ class TRate extends StatefulWidget {
     /// 评分变更回调；为 null 时禁用。
     this.onChanged,
 
-    /// 开始交互时触发。
+    /// 开始交互时触发；同一次指针或语义交互只触发一次。
     this.onChangeStart,
 
-    /// 结束交互时触发。
+    /// 结束交互时触发；指针取消时以当前受控值结束。
     this.onChangeEnd,
 
     /// 评分项数量。
@@ -36,10 +41,18 @@ class TRate extends StatefulWidget {
     /// 是否允许半星。
     this.allowHalf = false,
 
+    /// 是否在整星点击、长按以及拖动评分时显示当前值提示。
+    ///
+    /// 默认为 true。半星点击的精确选择浮层不受此参数控制。
+    this.showValueIndicator = true,
+
     /// 自定义评分图标。
     this.icon,
 
-    /// 各评分对应的文案。
+    /// 各评分对应的辅助文案。
+    ///
+    /// 为 null 时不显示辅助文案；非 null 时显示。当当前评分
+    /// 没有对应文案时，显示本地化的“未评分”。
     this.texts,
   }) : assert(count > 0),
        assert(value >= 0 && value <= count);
@@ -50,10 +63,10 @@ class TRate extends StatefulWidget {
   /// 评分变更回调；为 null 时禁用。
   final ValueChanged<double>? onChanged;
 
-  /// 开始交互时触发。
+  /// 开始交互时触发；同一次指针或语义交互只触发一次。
   final ValueChanged<double>? onChangeStart;
 
-  /// 结束交互时触发。
+  /// 结束交互时触发；指针取消时以当前受控值结束。
   final ValueChanged<double>? onChangeEnd;
 
   /// 评分项数量。
@@ -62,10 +75,18 @@ class TRate extends StatefulWidget {
   /// 是否允许半星。
   final bool allowHalf;
 
+  /// 是否在整星点击、长按以及拖动评分时显示当前值提示。
+  ///
+  /// 默认为 true。半星点击的精确选择浮层不受此参数控制。
+  final bool showValueIndicator;
+
   /// 自定义评分图标。
   final TRateIconBuilder? icon;
 
-  /// 各评分对应的文案。
+  /// 各评分对应的辅助文案。
+  ///
+  /// 为 null 时不显示辅助文案；非 null 时显示。当当前评分
+  /// 没有对应文案时，显示本地化的“未评分”。
   final List<String>? texts;
 
   @override
@@ -74,10 +95,18 @@ class TRate extends StatefulWidget {
 
 class _TRateState extends State<TRate> {
   static const _halfChoiceKey = ValueKey<String>('t-rate-half-choice');
+  static const _valueIndicatorKey = ValueKey<String>('t-rate-value-indicator');
+  static const _valueIndicatorDuration = Duration(milliseconds: 300);
 
   double? _lastInteractionValue;
-  OverlayEntry? _halfChoiceEntry;
+  OverlayEntry? _valueIndicatorEntry;
+  Timer? _valueIndicatorTimer;
   double? _pendingHalfChoiceValue;
+  Offset _valueIndicatorPosition = Offset.zero;
+  double _valueIndicatorValue = 0;
+  double _valueIndicatorIconSize = 0;
+  bool _valueIndicatorShowsHalfChoices = false;
+  bool _interactionStarted = false;
 
   bool get _enabled => widget.onChanged != null;
   int get _effectiveCount => widget.count < 1 ? 1 : widget.count;
@@ -85,124 +114,245 @@ class _TRateState extends State<TRate> {
     if (!widget.value.isFinite) {
       return 0;
     }
-    return widget.value.clamp(0, _effectiveCount).toDouble();
+    final value = widget.value.clamp(0, _effectiveCount).toDouble();
+    return widget.allowHalf ? value : value.floorToDouble();
   }
 
   @override
   void didUpdateWidget(TRate oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.allowHalf != oldWidget.allowHalf || !_enabled) {
-      _dismissHalfChoice();
+      _dismissValueIndicator();
+      _resetInteraction();
+    } else if (!widget.showValueIndicator &&
+        oldWidget.showValueIndicator &&
+        !_valueIndicatorShowsHalfChoices) {
+      _dismissValueIndicator();
     }
   }
 
   @override
   void dispose() {
-    _dismissHalfChoice();
+    _dismissValueIndicator();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<TRateThemeData>();
-    final iconSize = theme?.iconSize ?? 24;
+    final material = Theme.of(context);
+    final theme = material.extension<TRateThemeData>();
+    final explicitColorScheme = material.tExplicitColorScheme;
+    final iconSize = theme?.iconSize ?? context.tTheme.spacer24;
     final iconGap = theme?.iconGap ?? context.tTheme.spacer8;
-    final showText = theme?.showText ?? false;
+    final texts = widget.texts;
+    final step = widget.allowHalf ? 0.5 : 1.0;
+    final increasedValue = (_effectiveValue + step)
+        .clamp(0, _effectiveCount)
+        .toDouble();
+    final decreasedValue = (_effectiveValue - step)
+        .clamp(0, _effectiveCount)
+        .toDouble();
 
     return Semantics(
+      slider: true,
       enabled: _enabled,
-      value: _effectiveValue.toString(),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTapDown: _enabled
-                ? (details) {
-                    _lastInteractionValue = _valueAt(
-                      details.localPosition.dx,
-                      iconSize,
-                      iconGap,
-                    );
-                    widget.onChangeStart?.call(_effectiveValue);
-                  }
-                : null,
-            onTapUp: _enabled
-                ? (details) {
-                    final next = _valueAt(
-                      details.localPosition.dx,
-                      iconSize,
-                      iconGap,
-                    );
-                    _lastInteractionValue = next;
-                    widget.onChanged?.call(next);
-                    if (widget.allowHalf) {
-                      _showHalfChoice(
-                        context,
-                        details.globalPosition,
-                        next.ceilToDouble(),
-                        iconSize,
-                      );
-                      _pendingHalfChoiceValue = next;
-                    } else {
-                      widget.onChangeEnd?.call(next);
-                    }
-                  }
-                : null,
-            onHorizontalDragStart: _enabled
-                ? (_) {
-                    _lastInteractionValue = _effectiveValue;
-                    widget.onChangeStart?.call(_effectiveValue);
-                  }
-                : null,
-            onHorizontalDragUpdate: _enabled
-                ? (details) {
-                    final next = _valueAt(
-                      details.localPosition.dx,
-                      iconSize,
-                      iconGap,
-                    );
-                    _lastInteractionValue = next;
-                    widget.onChanged?.call(next);
-                  }
-                : null,
-            onHorizontalDragEnd: _enabled
-                ? (_) => widget.onChangeEnd?.call(
-                    _lastInteractionValue ?? _effectiveValue,
-                  )
-                : null,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (var index = 0; index < _effectiveCount; index++) ...[
-                  _buildItem(context, index, iconSize, theme),
-                  if (index < _effectiveCount - 1) SizedBox(width: iconGap),
-                ],
-              ],
-            ),
-          ),
-          if (showText) ...[
-            SizedBox(width: theme?.textGap ?? context.tTheme.spacer16),
-            SizedBox(
-              width: theme?.textWidth,
-              child: Text(
-                _resolveText(),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style:
-                    theme?.textStyle ??
-                    TextStyle(
-                      color: _enabled
-                          ? context.tTheme.textColorPrimary
-                          : context.tTheme.textDisabledColor,
-                      fontSize: context.tTheme.fontBodyLarge?.size,
-                    ),
+      value: _semanticText(context, _effectiveValue),
+      increasedValue: _enabled && increasedValue != _effectiveValue
+          ? _semanticText(context, increasedValue)
+          : null,
+      decreasedValue: _enabled && decreasedValue != _effectiveValue
+          ? _semanticText(context, decreasedValue)
+          : null,
+      onIncrease: _enabled && increasedValue != _effectiveValue
+          ? () => _changeFromSemantics(increasedValue)
+          : null,
+      onDecrease: _enabled && decreasedValue != _effectiveValue
+          ? () => _changeFromSemantics(decreasedValue)
+          : null,
+      child: LayoutBuilder(
+        builder: (context, constraints) => Listener(
+          onPointerCancel: (_) {
+            _finishInteraction(_effectiveValue);
+            _dismissValueIndicator();
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTapDown: _enabled
+                    ? (details) {
+                        _lastInteractionValue = _valueAt(
+                          details.localPosition.dx,
+                          iconSize,
+                          iconGap,
+                          Directionality.of(context),
+                        );
+                      }
+                    : null,
+                onTapUp: _enabled
+                    ? (details) {
+                        final next = _valueAt(
+                          details.localPosition.dx,
+                          iconSize,
+                          iconGap,
+                          Directionality.of(context),
+                        );
+                        _lastInteractionValue = next;
+                        _startInteraction();
+                        widget.onChanged?.call(next);
+                        if (widget.allowHalf) {
+                          _showValueIndicator(
+                            context,
+                            globalPosition: details.globalPosition,
+                            localPosition: details.localPosition,
+                            value: next,
+                            iconSize: iconSize,
+                            iconGap: iconGap,
+                            showHalfChoices: true,
+                          );
+                          _pendingHalfChoiceValue = next;
+                        } else {
+                          if (widget.showValueIndicator) {
+                            _showValueIndicator(
+                              context,
+                              globalPosition: details.globalPosition,
+                              localPosition: details.localPosition,
+                              value: next,
+                              iconSize: iconSize,
+                              iconGap: iconGap,
+                              showHalfChoices: false,
+                            );
+                            _scheduleValueIndicatorDismissal();
+                          }
+                          _finishInteraction(next);
+                        }
+                      }
+                    : null,
+                onLongPressStart: _enabled
+                    ? (details) {
+                        _startInteraction();
+                        _updateContinuousInteraction(
+                          context,
+                          globalPosition: details.globalPosition,
+                          localPosition: details.localPosition,
+                          iconSize: iconSize,
+                          iconGap: iconGap,
+                        );
+                      }
+                    : null,
+                onLongPressMoveUpdate: _enabled
+                    ? (details) {
+                        _updateContinuousInteraction(
+                          context,
+                          globalPosition: details.globalPosition,
+                          localPosition: details.localPosition,
+                          iconSize: iconSize,
+                          iconGap: iconGap,
+                        );
+                      }
+                    : null,
+                onLongPressEnd: _enabled
+                    ? (_) {
+                        _dismissValueIndicator();
+                        _finishInteraction(
+                          _lastInteractionValue ?? _effectiveValue,
+                        );
+                      }
+                    : null,
+                onHorizontalDragStart: _enabled
+                    ? (_) {
+                        _lastInteractionValue = _effectiveValue;
+                        _startInteraction();
+                      }
+                    : null,
+                onHorizontalDragUpdate: _enabled
+                    ? (details) {
+                        _updateContinuousInteraction(
+                          context,
+                          globalPosition: details.globalPosition,
+                          localPosition: details.localPosition,
+                          iconSize: iconSize,
+                          iconGap: iconGap,
+                        );
+                      }
+                    : null,
+                onHorizontalDragEnd: _enabled
+                    ? (_) {
+                        _dismissValueIndicator();
+                        _finishInteraction(
+                          _lastInteractionValue ?? _effectiveValue,
+                        );
+                      }
+                    : null,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (var index = 0; index < _effectiveCount; index++) ...[
+                      _buildItem(context, index, iconSize, theme),
+                      if (index < _effectiveCount - 1) SizedBox(width: iconGap),
+                    ],
+                  ],
+                ),
               ),
-            ),
-          ],
-        ],
+              if (texts != null) ...[
+                SizedBox(width: theme?.textGap ?? context.tTheme.spacer16),
+                if (constraints.hasBoundedWidth)
+                  Flexible(
+                    child: SizedBox(
+                      width: theme?.textWidth,
+                      child: TText(
+                        _resolveText(context, texts: texts),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: _resolveTextStyle(
+                          context,
+                          theme,
+                          explicitColorScheme,
+                        ),
+                      ),
+                    ),
+                  )
+                else
+                  SizedBox(
+                    width: theme?.textWidth,
+                    child: TText(
+                      _resolveText(context, texts: texts),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: _resolveTextStyle(
+                        context,
+                        theme,
+                        explicitColorScheme,
+                      ),
+                    ),
+                  ),
+              ],
+            ],
+          ),
+        ),
       ),
     );
+  }
+
+  TextStyle _resolveTextStyle(
+    BuildContext context,
+    TRateThemeData? theme,
+    ColorScheme? explicitColorScheme,
+  ) {
+    final font = context.tTheme.fontBodyLarge;
+    final defaultStyle = TextStyle(
+      color: _enabled
+          ? explicitColorScheme?.onSurface ?? context.tTheme.textColorPrimary
+          : explicitColorScheme?.onSurface.withValues(alpha: 0.38) ??
+                context.tTheme.textDisabledColor,
+      fontSize: font?.size ?? 16,
+      height: font?.height ?? 1.5,
+      fontWeight: font?.fontWeight ?? FontWeight.w400,
+      leadingDistribution: TextLeadingDistribution.even,
+    );
+    return defaultStyle.merge(theme?.textStyle);
   }
 
   Widget _buildItem(
@@ -218,12 +368,11 @@ class _TRateState extends State<TRate> {
     final inactiveColor = _enabled
         ? (theme?.inactiveStarColor ?? context.tTheme.bgColorComponent)
         : context.tTheme.bgColorComponentDisabled;
-    final unselected =
-        widget.icon?.call(false) ??
-        Icon(TIcons.star_filled, size: iconSize, color: inactiveColor);
-    final selected =
-        widget.icon?.call(true) ??
-        Icon(TIcons.star_filled, size: iconSize, color: selectedColor);
+    final unselected = _buildIcon(false, iconSize, inactiveColor);
+    final selected = _buildIcon(true, iconSize, selectedColor);
+    final fillAlignment = Directionality.of(context) == TextDirection.rtl
+        ? Alignment.centerRight
+        : Alignment.centerLeft;
 
     return SizedBox.square(
       dimension: iconSize,
@@ -233,7 +382,7 @@ class _TRateState extends State<TRate> {
           if (fill > 0)
             ClipRect(
               child: Align(
-                alignment: Alignment.centerLeft,
+                alignment: fillAlignment,
                 widthFactor: fill,
                 child: SizedBox.square(dimension: iconSize, child: selected),
               ),
@@ -243,113 +392,259 @@ class _TRateState extends State<TRate> {
     );
   }
 
-  double _valueAt(double dx, double iconSize, double iconGap) {
+  Widget _buildIcon(bool filled, double iconSize, Color color) {
+    final icon = widget.icon?.call(filled);
+    if (icon == null) {
+      return Icon(TIcons.star_filled, size: iconSize, color: color);
+    }
+    return IconTheme.merge(
+      data: IconThemeData(size: iconSize, color: color),
+      child: icon,
+    );
+  }
+
+  double _valueAt(
+    double dx,
+    double iconSize,
+    double iconGap,
+    TextDirection textDirection,
+  ) {
     final itemExtent = iconSize + iconGap;
-    final clamped = dx.clamp(0, itemExtent * _effectiveCount - iconGap);
+    final width = itemExtent * _effectiveCount - iconGap;
+    final directionalDx = textDirection == TextDirection.rtl ? width - dx : dx;
+    if (directionalDx <= -(itemExtent + iconGap)) {
+      return 0;
+    }
+    final clamped = directionalDx.clamp(0, width);
     final index = (clamped / itemExtent).floor().clamp(0, _effectiveCount - 1);
     final local = clamped - index * itemExtent;
     final fraction = widget.allowHalf && local <= iconSize / 2 ? 0.5 : 1.0;
     return index + fraction;
   }
 
-  void _showHalfChoice(
-    BuildContext context,
-    Offset globalPosition,
-    double wholeValue,
-    double iconSize,
-  ) {
-    _dismissHalfChoice();
-    final overlay = Overlay.of(context, rootOverlay: true);
+  void _updateContinuousInteraction(
+    BuildContext context, {
+    required Offset globalPosition,
+    required Offset localPosition,
+    required double iconSize,
+    required double iconGap,
+  }) {
+    final next = _valueAt(
+      localPosition.dx,
+      iconSize,
+      iconGap,
+      Directionality.of(context),
+    );
+    _lastInteractionValue = next;
+    widget.onChanged?.call(next);
+    if (widget.showValueIndicator) {
+      _showValueIndicator(
+        context,
+        globalPosition: globalPosition,
+        localPosition: localPosition,
+        value: next,
+        iconSize: iconSize,
+        iconGap: iconGap,
+        showHalfChoices: false,
+      );
+    }
+  }
+
+  void _showValueIndicator(
+    BuildContext context, {
+    required Offset globalPosition,
+    required Offset localPosition,
+    required double value,
+    required double iconSize,
+    required double iconGap,
+    required bool showHalfChoices,
+  }) {
+    _valueIndicatorTimer?.cancel();
+    _valueIndicatorPosition = _valueIndicatorAnchor(
+      globalPosition: globalPosition,
+      localPosition: localPosition,
+      value: value,
+      iconSize: iconSize,
+      iconGap: iconGap,
+      textDirection: Directionality.of(context),
+    );
+    _valueIndicatorValue = value;
+    _valueIndicatorIconSize = iconSize;
+    _valueIndicatorShowsHalfChoices = showHalfChoices;
+
+    if (_valueIndicatorEntry != null) {
+      _valueIndicatorEntry!.markNeedsBuild();
+      return;
+    }
+
+    _valueIndicatorEntry = OverlayEntry(builder: _buildValueIndicatorOverlay);
+    Overlay.of(context, rootOverlay: true).insert(_valueIndicatorEntry!);
+  }
+
+  Offset _valueIndicatorAnchor({
+    required Offset globalPosition,
+    required Offset localPosition,
+    required double value,
+    required double iconSize,
+    required double iconGap,
+    required TextDirection textDirection,
+  }) {
+    final itemExtent = iconSize + iconGap;
+    final width = itemExtent * _effectiveCount - iconGap;
+    final index = value <= 0
+        ? 0
+        : (value.ceil() - 1).clamp(0, _effectiveCount - 1).toInt();
+    final centerX = textDirection == TextDirection.rtl
+        ? width - index * itemExtent - iconSize / 2
+        : index * itemExtent + iconSize / 2;
+    final wrapperOrigin = globalPosition - localPosition;
+    return wrapperOrigin + Offset(centerX, iconSize / 2);
+  }
+
+  Widget _buildValueIndicatorOverlay(BuildContext overlayContext) {
+    final context = this.context;
     final mediaQuery = MediaQuery.of(context);
     final material = Theme.of(context);
     final theme = material.extension<TRateThemeData>();
     final token = context.tTheme;
+    final iconSize = _valueIndicatorIconSize;
     final selectedColor = theme?.starColor ?? token.warningColor5;
     final inactiveColor = theme?.inactiveStarColor ?? token.bgColorComponent;
-    final popupWidth = iconSize * 2 + 40;
-    final popupHeight = iconSize + 36;
-    final left = (globalPosition.dx - popupWidth / 2)
-        .clamp(8.0, mediaQuery.size.width - popupWidth - 8.0)
+    final naturalPopupWidth = _valueIndicatorShowsHalfChoices
+        ? iconSize * 2 + token.spacer40
+        : iconSize + token.spacer24;
+    final popupHeight = iconSize + token.spacer32 + token.spacer4;
+    final horizontalInset = token.spacer8;
+    final popupWidth = naturalPopupWidth.clamp(
+      0.0,
+      (mediaQuery.size.width - horizontalInset * 2).clamp(0.0, double.infinity),
+    );
+    final maxLeft = (mediaQuery.size.width - popupWidth - horizontalInset)
+        .clamp(horizontalInset, double.infinity);
+    final left = (_valueIndicatorPosition.dx - popupWidth / 2)
+        .clamp(horizontalInset, maxLeft)
         .toDouble();
-    final preferredTop = globalPosition.dy - popupHeight - 12;
-    final top = preferredTop >= mediaQuery.padding.top
+    final preferredTop =
+        _valueIndicatorPosition.dy - popupHeight - token.spacer12;
+    final rawTop = preferredTop >= mediaQuery.padding.top
         ? preferredTop
-        : globalPosition.dy + 12;
+        : _valueIndicatorPosition.dy + token.spacer12;
+    final verticalInset = mediaQuery.padding.top + token.spacer8;
+    final maxTop =
+        (mediaQuery.size.height -
+                mediaQuery.padding.bottom -
+                popupHeight -
+                token.spacer8)
+            .clamp(verticalInset, double.infinity);
+    final top = rawTop.clamp(verticalInset, maxTop).toDouble();
 
-    _halfChoiceEntry = OverlayEntry(
-      builder: (overlayContext) => Stack(
-        children: [
+    Widget buildContent() {
+      final Widget choices;
+      if (_valueIndicatorShowsHalfChoices) {
+        final wholeValue = _valueIndicatorValue.ceilToDouble();
+        choices = Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildValueIndicatorItem(
+              overlayContext,
+              value: wholeValue - 0.5,
+              iconSize: iconSize,
+              isHalf: true,
+              selectedColor: selectedColor,
+              inactiveColor: inactiveColor,
+              onTap: () => _selectHalfChoice(wholeValue - 0.5),
+            ),
+            SizedBox(width: token.spacer4),
+            _buildValueIndicatorItem(
+              overlayContext,
+              value: wholeValue,
+              iconSize: iconSize,
+              isHalf: false,
+              selectedColor: selectedColor,
+              inactiveColor: inactiveColor,
+              onTap: () => _selectHalfChoice(wholeValue),
+            ),
+          ],
+        );
+      } else {
+        final value = _valueIndicatorValue;
+        choices = _buildValueIndicatorItem(
+          overlayContext,
+          value: value,
+          iconSize: iconSize,
+          isHalf: value != value.truncateToDouble(),
+          selectedColor: selectedColor,
+          inactiveColor: inactiveColor,
+        );
+      }
+      if (popupWidth == naturalPopupWidth) {
+        return choices;
+      }
+      return SizedBox(
+        width: (popupWidth - token.spacer8).clamp(0, double.infinity),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: choices,
+        ),
+      );
+    }
+
+    return Stack(
+      children: [
+        if (_valueIndicatorShowsHalfChoices)
           Positioned.fill(
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: _completeHalfChoice,
             ),
           ),
-          Positioned(
-            left: left,
-            top: top,
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
-                key: _halfChoiceKey,
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color:
-                      material.tExplicitColorScheme?.surface ??
-                      token.bgColorContainer,
-                  borderRadius: BorderRadius.circular(4),
-                  boxShadow:
-                      theme?.overlayBoxShadow ?? token.shadowsBase ?? const [],
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildHalfChoiceButton(
-                      overlayContext,
-                      value: wholeValue - 0.5,
-                      iconSize: iconSize,
-                      isHalf: true,
-                      selectedColor: selectedColor,
-                      inactiveColor: inactiveColor,
-                    ),
-                    const SizedBox(width: 4),
-                    _buildHalfChoiceButton(
-                      overlayContext,
-                      value: wholeValue,
-                      iconSize: iconSize,
-                      isHalf: false,
-                      selectedColor: selectedColor,
-                      inactiveColor: inactiveColor,
-                    ),
-                  ],
-                ),
+        Positioned(
+          left: left,
+          top: top,
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              key: _valueIndicatorShowsHalfChoices
+                  ? _halfChoiceKey
+                  : _valueIndicatorKey,
+              padding: EdgeInsets.all(token.spacer4),
+              decoration: BoxDecoration(
+                color:
+                    material.tExplicitColorScheme?.surface ??
+                    token.bgColorContainer,
+                borderRadius: BorderRadius.circular(token.radiusDefault),
+                boxShadow:
+                    theme?.overlayBoxShadow ?? token.shadowsBase ?? const [],
               ),
+              child: buildContent(),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
-    overlay.insert(_halfChoiceEntry!);
   }
 
-  Widget _buildHalfChoiceButton(
+  Widget _buildValueIndicatorItem(
     BuildContext context, {
     required double value,
     required double iconSize,
     required bool isHalf,
     required Color selectedColor,
     required Color inactiveColor,
+    VoidCallback? onTap,
   }) {
+    final token = context.tTheme;
+    final fillAlignment = Directionality.of(context) == TextDirection.rtl
+        ? Alignment.centerRight
+        : Alignment.centerLeft;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {
-        if (_pendingHalfChoiceValue != value) {
-          widget.onChanged?.call(value);
-        }
-        _completeHalfChoice(value);
-      },
+      onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+        padding: EdgeInsets.symmetric(
+          horizontal: token.spacer4,
+          vertical: token.spacer4 / 2,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -358,65 +653,120 @@ class _TRateState extends State<TRate> {
               child: Stack(
                 children: [
                   Positioned.fill(
-                    child: Icon(
-                      TIcons.star_filled,
-                      size: iconSize,
-                      color: inactiveColor,
-                    ),
+                    child: _buildIcon(false, iconSize, inactiveColor),
                   ),
                   if (isHalf)
                     ClipRect(
                       child: Align(
-                        alignment: Alignment.centerLeft,
+                        alignment: fillAlignment,
                         widthFactor: 0.5,
-                        child: Icon(
-                          TIcons.star_filled,
-                          size: iconSize,
-                          color: selectedColor,
+                        child: SizedBox.square(
+                          dimension: iconSize,
+                          child: _buildIcon(true, iconSize, selectedColor),
                         ),
                       ),
                     )
                   else
                     Positioned.fill(
-                      child: Icon(
-                        TIcons.star_filled,
-                        size: iconSize,
-                        color: selectedColor,
-                      ),
+                      child: _buildIcon(true, iconSize, selectedColor),
                     ),
                 ],
               ),
             ),
-            Text(value.toStringAsFixed(1)),
+            Text(
+              _formatValue(value),
+              style: TextStyle(fontSize: token.fontBodyMedium?.size),
+            ),
           ],
         ),
       ),
     );
   }
 
-  void _dismissHalfChoice() {
-    _halfChoiceEntry?.remove();
-    _halfChoiceEntry = null;
+  void _selectHalfChoice(double value) {
+    if (_pendingHalfChoiceValue != value) {
+      widget.onChanged?.call(value);
+    }
+    _completeHalfChoice(value);
+  }
+
+  void _scheduleValueIndicatorDismissal() {
+    _valueIndicatorTimer?.cancel();
+    _valueIndicatorTimer = Timer(
+      _valueIndicatorDuration,
+      _dismissValueIndicator,
+    );
+  }
+
+  void _dismissValueIndicator() {
+    _valueIndicatorTimer?.cancel();
+    _valueIndicatorTimer = null;
+    _valueIndicatorEntry?.remove();
+    _valueIndicatorEntry = null;
     _pendingHalfChoiceValue = null;
+    _valueIndicatorShowsHalfChoices = false;
   }
 
   void _completeHalfChoice([double? value]) {
     final completedValue = value ?? _pendingHalfChoiceValue;
-    _dismissHalfChoice();
+    _dismissValueIndicator();
     if (completedValue != null) {
-      widget.onChangeEnd?.call(completedValue);
+      _finishInteraction(completedValue);
     }
   }
 
-  String _resolveText() {
-    final texts = widget.texts;
-    final value = _effectiveValue;
-    if (value <= 0 || texts == null || texts.isEmpty) {
-      return value.toString();
+  void _startInteraction() {
+    if (_interactionStarted) {
+      return;
     }
-    final halfIndex = (value * 2).ceil() - 1;
-    final wholeIndex = value.ceil() - 1;
-    final index = texts.length >= _effectiveCount * 2 ? halfIndex : wholeIndex;
-    return index >= 0 && index < texts.length ? texts[index] : value.toString();
+    _interactionStarted = true;
+    widget.onChangeStart?.call(_effectiveValue);
   }
+
+  void _finishInteraction(double value) {
+    if (!_interactionStarted) {
+      return;
+    }
+    _resetInteraction();
+    widget.onChangeEnd?.call(value);
+  }
+
+  void _resetInteraction() {
+    _interactionStarted = false;
+    _lastInteractionValue = null;
+  }
+
+  void _changeFromSemantics(double next) {
+    widget.onChangeStart?.call(_effectiveValue);
+    widget.onChanged?.call(next);
+    widget.onChangeEnd?.call(next);
+  }
+
+  String _semanticText(BuildContext context, double value) {
+    final texts = widget.texts;
+    if (texts == null) {
+      return _formatValue(value);
+    }
+    final description = _resolveText(context, texts: texts, value: value);
+    return '${_formatValue(value)} $description';
+  }
+
+  String _resolveText(
+    BuildContext context, {
+    required List<String> texts,
+    double? value,
+  }) {
+    final effectiveValue = value ?? _effectiveValue;
+    if (effectiveValue <= 0) {
+      return context.resource.notRated;
+    }
+    final index = (effectiveValue - 1).floor();
+    return index >= 0 && index < texts.length
+        ? texts[index]
+        : context.resource.notRated;
+  }
+
+  String _formatValue(double value) => value == value.truncateToDouble()
+      ? value.toInt().toString()
+      : value.toString();
 }

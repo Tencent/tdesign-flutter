@@ -4,14 +4,14 @@ Widget _buildPopover(BuildContext context) {
       child: LayoutBuilder(
         builder: (popoverContext, constraints) {
           return TButton(
-            size: TButtonSize.medium,
+            size: TButtonSize.large,
             child: const Text('带箭头'),
             variant: TButtonVariant.outline,
             colorScheme: TButtonColorScheme.primary,
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
-                content: '弹出气泡内容',
+                content: const Text('弹出气泡内容'),
                 colorScheme: theme,
               );
             },
