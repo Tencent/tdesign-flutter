@@ -34,7 +34,13 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(
-          textTheme: const TextTheme(bodyLarge: TextStyle(fontSize: 19)),
+          textTheme: const TextTheme(
+            bodyLarge: TextStyle(
+              fontSize: 19,
+              fontWeight: FontWeight.w800,
+              color: Colors.pink,
+            ),
+          ),
           extensions: [TThemeData.defaultData()],
         ),
         home: Column(
@@ -74,9 +80,9 @@ void main() {
     final labels = tester.widgetList<TText>(find.byType(TText)).toList();
     expect(labels, hasLength(5));
     expect(labels.map((label) => label.style!.fontSize), everyElement(19));
-    expect(labels[2].style!.fontWeight, FontWeight.w600);
-    expect(labels[1].style!.fontWeight, FontWeight.w400);
-    expect(labels[1].style!.color, TThemeData.defaultData().textColorSecondary);
+    expect(labels[2].style!.fontWeight, FontWeight.w800);
+    expect(labels[1].style!.fontWeight, FontWeight.w800);
+    expect(labels[1].style!.color, Colors.pink);
     expect(find.text('custom-disabled'), findsOneWidget);
   });
 
@@ -118,7 +124,10 @@ void main() {
           await tester.pumpAndSettle();
           expect(changes, isNotEmpty);
           expect(() => changes.last.indexes.add(0), throwsUnsupportedError);
-          expect(() => changes.last.selectedOptions.clear(), throwsUnsupportedError);
+          expect(
+            () => changes.last.selectedOptions.clear(),
+            throwsUnsupportedError,
+          );
           expect(() => changes.last.values.clear(), throwsUnsupportedError);
           expect(changes.last.values.first, isNot(0));
           expect(builds, 1);

@@ -60,3 +60,7 @@ TPickerThemeData 的 height 必须为有限正数、itemCount 必须大于零（
 四个公开代码入口展示实际运行的 `_cell` 核心组合，包含触发 Cell、标签解析、Popup/Header、受控 Picker 草稿及确认/取消。数据、父级状态和差异配置通过参数传入，并在片段中明确说明初始值，不通过外部源码地址补充示例内容；不宣称核心片段是独立应用。共用实现从源码生成，不扩增组件或 Example 框架 API。
 
 代码面板必须通过真实打开验证；现有双版本 Demo 套件覆盖四个入口。Android 真机集成入口 `example/integration_test/picker_example_test.dart` 使用 Flutter SDK 自带 integration_test，验证实际应用路由、五个触发器的取消/确认和代码面板；它是需设备的手动验收入口，不计入普通 CI 已通过证据。
+
+## 主题覆盖修复
+
+选中字体默认使用 fontMarkLarge，普通项使用 fontBodyLarge。显式文字主题优先于组件默认值；仅修改字体回退列表时保留选中/禁用语义样式。高度未配置时按有效默认值 200 插值，两端均未配置时保留 null。公开 API 不增加字段。
