@@ -57,6 +57,7 @@ class _TPickerState extends State<TPicker> {
   late List<FixedExtentScrollController> _controllers;
   late List<GlobalKey<WheelColumnState>> _columnKeys;
   List<Object?>? _pendingValue;
+  int _pendingColumn = -1;
 
   bool get _enabled => widget.onChanged != null;
 
@@ -80,6 +81,10 @@ class _TPickerState extends State<TPicker> {
     super.didUpdateWidget(oldWidget);
     final acceptsPendingValue =
         _pendingValue != null && listEquals(widget.value, _pendingValue);
+    final preserveThrough =
+        acceptsPendingValue && oldWidget.items == widget.items
+        ? _pendingColumn
+        : -1;
     if (acceptsPendingValue) {
       _pendingValue = null;
     }
@@ -90,9 +95,12 @@ class _TPickerState extends State<TPicker> {
         (!acceptsPendingValue &&
             !listEquals(widget.value, _snapshot().values))) {
       final previousControllers = _controllers;
-      _initialize();
+      _initialize(preserveThrough: preserveThrough);
+      final retiredControllers = previousControllers
+          .where((controller) => !_controllers.contains(controller))
+          .toList();
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        for (final controller in previousControllers) {
+        for (final controller in retiredControllers) {
           controller.dispose();
         }
       });
@@ -107,12 +115,22 @@ class _TPickerState extends State<TPicker> {
     super.dispose();
   }
 
-  void _initialize() {
+  void _initialize({int preserveThrough = -1}) {
+    // 受控回传只更新后续联动列，保留当前手势和惯性所依附的滚动位置。
+    final retainedControllers = preserveThrough < 0
+        ? <FixedExtentScrollController>[]
+        : _controllers.take(preserveThrough + 1).toList();
+    final retainedKeys = preserveThrough < 0
+        ? <GlobalKey<WheelColumnState>>[]
+        : _columnKeys.take(preserveThrough + 1).toList();
     _columns = switch (widget.items) {
       TPickerColumns(:final columns) => columns,
       TPickerLinked(:final options) => _linkedColumns(options, widget.value),
     };
     _controllers = List.generate(_columns.length, (columnIndex) {
+      if (columnIndex < retainedControllers.length) {
+        return retainedControllers[columnIndex];
+      }
       final options = _columns[columnIndex];
       final requested = columnIndex < widget.value.length
           ? options.indexWhere(
@@ -123,7 +141,11 @@ class _TPickerState extends State<TPicker> {
         initialItem: requested >= 0 ? requested : _firstEnabledIndex(options),
       );
     });
-    _columnKeys = List.generate(_columns.length, (_) => GlobalKey());
+    _columnKeys = List.generate(
+      _columns.length,
+      (index) =>
+          index < retainedKeys.length ? retainedKeys[index] : GlobalKey(),
+    );
   }
 
   static List<List<TPickerOption>> _linkedColumns(
@@ -190,7 +212,21 @@ class _TPickerState extends State<TPicker> {
     }
     return ListenableBuilder(
       listenable: _controllers[columnIndex],
-      builder: (context, _) {
+      child: ExcludeSemantics(
+        child: WheelColumn(
+          key: _columnKeys[columnIndex],
+          colIndex: columnIndex,
+          options: options,
+          controller: _controllers[columnIndex],
+          itemHeight: _itemHeight,
+          disabled: !_enabled,
+          itemBuilder: widget.itemBuilder,
+          onItemSelected: _onItemSelected,
+          onAnimationComplete: _onItemSelected,
+          onScrollEnd: _onScrollEnd,
+        ),
+      ),
+      builder: (context, child) {
         final currentIndex = _selectedIndex(columnIndex);
         final previous = currentIndex > 0
             ? options[currentIndex - 1].label
@@ -212,20 +248,7 @@ class _TPickerState extends State<TPicker> {
               ? () => _columnKeys[columnIndex].currentState?.nudge(-1)
               : null,
           decreasedValue: previous ?? '',
-          child: ExcludeSemantics(
-            child: WheelColumn(
-              key: _columnKeys[columnIndex],
-              colIndex: columnIndex,
-              options: options,
-              controller: _controllers[columnIndex],
-              itemHeight: _itemHeight,
-              disabled: !_enabled,
-              itemBuilder: widget.itemBuilder,
-              onItemSelected: _onItemSelected,
-              onAnimationComplete: _onItemSelected,
-              onScrollEnd: _onScrollEnd,
-            ),
-          ),
+          child: child,
         );
       },
     );
@@ -246,6 +269,7 @@ class _TPickerState extends State<TPicker> {
       // 父级同步受控值时，滚轮的本帧位置尚未必然反映到 controller；
       // 标记该用户发起的快照，避免 didUpdateWidget 错误重建滚轮并中断拖动。
       _pendingValue = value.values;
+      _pendingColumn = columnIndex;
       widget.onChanged?.call(value);
     }
   }
