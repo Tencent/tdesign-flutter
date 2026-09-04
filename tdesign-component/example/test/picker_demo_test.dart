@@ -8,6 +8,44 @@ import 'picker_demo_test_spec.dart';
 void main() {
   registerDemoStructureTests(pickerDemoPageTestSpec);
 
+  testWidgets('Picker popup preserves wheel height and centers selection', (
+    tester,
+  ) async {
+    await pumpDemoPageAtPhoneViewport(
+      tester,
+      pickerDemoPageTestSpec,
+      ThemeMode.light,
+    );
+    await tester.tap(find.byKey(const ValueKey('picker-city-trigger')));
+    await tester.pumpAndSettle();
+    final wheel = find.byType(ListWheelScrollView);
+    expect(tester.getSize(wheel).height, 200);
+    expect(tester.widget<ListWheelScrollView>(wheel).itemExtent, 40);
+    final tokens = tester.element(wheel).tTheme;
+    final highlight = find.byWidgetPredicate(
+      (widget) =>
+          widget is Container &&
+          widget.decoration is BoxDecoration &&
+          (widget.decoration as BoxDecoration).color ==
+              tokens.bgColorSecondaryContainer,
+    );
+    expect(tester.getSize(highlight), const Size(343, 40));
+    expect(tester.getCenter(highlight).dy, tester.getCenter(wheel).dy);
+    final title = find.descendant(
+      of: find.byType(TPopupHeader),
+      matching: find.text('选择地区'),
+    );
+    final richTitle = find.descendant(
+      of: title,
+      matching: find.byType(RichText),
+    );
+    expect(
+      tester.widget<RichText>(richTitle).text.style?.decoration,
+      TextDecoration.none,
+    );
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
+
   testWidgets('picker drag drafts are cancelled or committed by the toolbar', (
     tester,
   ) async {

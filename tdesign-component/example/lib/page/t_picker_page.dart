@@ -201,6 +201,9 @@ class _TPickerPageState extends State<TPickerPage> {
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
+        height:
+            (Theme.of(context).extension<TPickerThemeData>()?.height ?? 200) +
+            TPopupHeader.headerHeight,
         headerBuilder: (_, close) => TPopupHeader(
           cancelButton: TToolbarPressable(
             onTap: close,
@@ -225,15 +228,12 @@ class _TPickerPageState extends State<TPickerPage> {
             ),
           ),
         ),
-        child: Material(
-          color: context.tTheme.bgColorContainer,
-          child: StatefulBuilder(
-            builder: (_, setPopupState) => TPicker(
-              key: ValueKey('picker-$id-panel'),
-              items: items,
-              value: draft,
-              onChanged: (value) => setPopupState(() => draft = value.values),
-            ),
+        child: StatefulBuilder(
+          builder: (_, setPopupState) => TPicker(
+            key: ValueKey('picker-$id-panel'),
+            items: items,
+            value: draft,
+            onChanged: (value) => setPopupState(() => draft = value.values),
           ),
         ),
       ),
