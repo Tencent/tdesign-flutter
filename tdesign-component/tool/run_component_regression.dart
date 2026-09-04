@@ -51,6 +51,9 @@ const componentTestSuites = <ComponentTestSuite>[
     'test/components/checkbox/t_check_box_group_test.dart',
     'test/components/checkbox/t_checkbox_test.dart',
   ]),
+  ComponentTestSuite('color_picker', [
+    'test/components/color_picker/t_color_picker_test.dart',
+  ]),
   ComponentTestSuite('divider', [
     'test/components/divider/t_divider_test.dart',
   ]),

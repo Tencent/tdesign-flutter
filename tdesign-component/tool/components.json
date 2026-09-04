@@ -526,6 +526,23 @@
       }
     },
     {
+      "slug": "color-picker",
+      "source": {
+        "type": "folder",
+        "path": "lib/src/components/color_picker"
+      },
+      "api": {
+        "names": [
+          "TColorPicker",
+          "TColorPickerThemeData",
+          "TColorPickerType",
+          "TColorPickerChangeTrigger",
+          "TColorPickerChangeContext"
+        ],
+        "getComments": false
+      }
+    },
+    {
       "slug": "empty",
       "source": {
         "type": "file",

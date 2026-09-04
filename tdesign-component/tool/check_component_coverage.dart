@@ -9,6 +9,7 @@ const componentTargets = <String, List<String>>{
   'tag': ['lib/src/components/tag/'],
   'popover': ['lib/src/components/popover/'],
   'checkbox': ['lib/src/components/checkbox/'],
+  'color_picker': ['lib/src/components/color_picker/'],
   'divider': ['lib/src/components/divider/'],
   'dialog': ['lib/src/components/dialog/'],
   'dropdown_menu': ['lib/src/components/dropdown_menu/'],

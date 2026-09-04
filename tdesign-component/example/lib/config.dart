@@ -19,6 +19,7 @@ import 'page/t_cascader_page.dart';
 import 'page/t_cell_page.dart';
 import 'page/t_checkbox_page.dart';
 import 'page/t_collapse_page.dart';
+import 'page/t_color_picker_page.dart';
 import 'page/t_date_time_picker_page.dart';
 import 'page/t_dialog_page.dart';
 import 'page/t_divider_page.dart';
@@ -144,6 +145,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         text: 'Cascader 级联选择',
         name: 'cascader',
         pageBuilder: _wrapInheritedTheme((context) => const TCascaderPage())),
+    ExamplePageModel(
+        text: 'ColorPicker 颜色选择器',
+        name: 'colorPicker',
+        pageBuilder:
+            _wrapInheritedTheme((context) => const TColorPickerPage())),
     ExamplePageModel(
         text: 'Checkbox 复选框',
         name: 'checkbox',

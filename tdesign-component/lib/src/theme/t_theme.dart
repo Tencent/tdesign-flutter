@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
+import '../components/color_picker/t_color_picker_theme_data.dart';
 import '../util/log.dart';
 import '../util/string_util.dart';
 import 'basic.dart';
@@ -563,6 +564,7 @@ class TMaterialThemeBuilder {
       const TCellThemeData(),
       const TCheckboxThemeData(),
       const TCollapseThemeData(),
+      const TColorPickerThemeData(),
       const TDrawerThemeData(),
       const TEmptyThemeData(),
       const TFooterThemeData(),

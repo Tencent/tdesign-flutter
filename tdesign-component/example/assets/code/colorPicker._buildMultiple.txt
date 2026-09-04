@@ -1,0 +1,9 @@
+Widget _buildMultiple(BuildContext context) => TColorPicker(
+        value: multipleValue,
+        type: TColorPickerType.multiple,
+        enableAlpha: true,
+        onChanged: (value, change) => setState(() => multipleValue = value),
+        onPaletteBarChange: (color) {
+          debugPrint('palette bar change: ${color.hex}');
+        },
+      );

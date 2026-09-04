@@ -73,6 +73,12 @@ const visualTestSuites = <VisualTestSuite>[
     testFiles: ['test/checkbox_page_test.dart'],
   ),
   VisualTestSuite(
+    'color_picker',
+    'ColorPicker Demo',
+    workingDirectory: 'example',
+    testFiles: ['test/color_picker_demo_test.dart'],
+  ),
+  VisualTestSuite(
     'divider',
     'Divider Demo',
     workingDirectory: 'example',
