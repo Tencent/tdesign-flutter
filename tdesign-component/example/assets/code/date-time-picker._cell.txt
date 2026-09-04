@@ -1,0 +1,78 @@
+/// 核心组合片段：调用方使用 [TCell] 作为触发器，用 [TPopup] 组合标题栏
+  /// 与纯滚轮 [TDateTimePicker]。滚动只更新草稿，确认时再通过 [onConfirm]
+  /// 写回调用方状态，取消不会提交。
+  ///
+  /// [value] 和 [onConfirm] 由调用方状态持有；日期、时间和星期等场景只需
+  /// 调整 [mode]、[showWeek]，不需要给 TDateTimePicker 增加弹窗 API。
+    Widget _cell(
+    BuildContext context,
+    String id,
+    DateTimePickerMode mode, {
+    required TDateTimePickerValue value,
+    required ValueChanged<TDateTimePickerValue> onConfirm,
+    String title = '选择时间',
+    bool showWeek = false,
+    bool showTitle = true,
+  }) {
+    void showPicker() {
+      var draft = value;
+      TPopup.show(
+        context,
+        options: TPopupOptions.bottom(
+          height:
+              (Theme.of(context).extension<TPickerThemeData>()?.height ?? 200) +
+              TPopupHeader.headerHeight,
+          headerBuilder: (_, close) => TPopupHeader(
+            cancelButton: TToolbarPressable(
+              onTap: close,
+              child: TText(
+                '取消',
+                font: context.tTheme.fontBodyLarge,
+                textColor: context.tTheme.textColorSecondary,
+              ),
+            ),
+            title: showTitle
+                ? TText('选择时间', font: context.tTheme.fontTitleLarge)
+                : null,
+            confirmButton: TToolbarPressable(
+              onTap: () {
+                onConfirm(draft);
+                close();
+              },
+              child: TText(
+                '确定',
+                font: context.tTheme.fontBodyLarge,
+                textColor: context.tTheme.brandNormalColor,
+              ),
+            ),
+          ),
+          child: StatefulBuilder(
+            builder: (_, setPopupState) => TDateTimePicker(
+              key: ValueKey('date-time-picker-$id-panel'),
+              value: draft,
+              mode: mode,
+              showWeek: showWeek,
+              // 六列并排时年份省略单位，避免 375px 窄屏省略年份数字。
+              renderLabel: id == 'date-time'
+                  ? (column, value) =>
+                        column == DateTimeColumn.year ? '$value' : null
+                  : null,
+              onChanged: (next) => setPopupState(() => draft = next),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return TCellGroup(
+      cells: [
+        TCell(
+          key: ValueKey('date-time-picker-$id-trigger'),
+          title: TText(title),
+          note: TText(_format(value, showWeek: showWeek)),
+          arrow: true,
+          onTap: showPicker,
+        ),
+      ],
+    );
+  }

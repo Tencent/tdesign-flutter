@@ -1,2 +1,0 @@
-Widget _buildMonthDay(BuildContext context) =>
-      _cell('month-day', DateTimePickerMode(dateMode: DateMode.monthDay));

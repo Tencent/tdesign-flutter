@@ -1,4 +1,0 @@
-Widget _buildDateTime(BuildContext context) => _cell(
-    'date-time',
-    DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second),
-  );

@@ -1,5 +1,0 @@
-Widget _buildWeek(BuildContext context) => _cell(
-    'week',
-    DateTimePickerMode(dateMode: DateMode.date),
-    showWeek: true,
-  );

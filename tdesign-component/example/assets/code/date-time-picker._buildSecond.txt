@@ -1,2 +1,0 @@
-Widget _buildSecond(BuildContext context) =>
-      _cell('second', DateTimePickerMode(timeMode: TimeMode.second));

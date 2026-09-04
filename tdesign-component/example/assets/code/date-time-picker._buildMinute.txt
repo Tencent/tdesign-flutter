@@ -1,2 +1,0 @@
-Widget _buildMinute(BuildContext context) =>
-      _cell('minute', DateTimePickerMode(timeMode: TimeMode.minute));
