@@ -37,8 +37,8 @@
 - `placement` 非空默认 `right`，Demo 的基础与图标示例显式使用小程序公开示例的 `left`；左右方向都必须有回归。
 - `showOverlay`、`closeOnOverlayClick` 非空默认 `true`；`onOverlayClick` 每次有效蒙层点击触发一次，是否关闭只由 `closeOnOverlayClick` 决定。
 - `destroyOnClose` 非空默认 `false` 并透传 Popup；`onClose` 在一次展示周期真正结束后触发。
-- `TDrawerWidget.hover`、`bordered`、`isShowLastBordered` 为实例状态，非空默认 `true`，Theme 不保存同义开关。
-- 命令式 `TDrawer.show()` 使用边框与按压反馈的默认行为；如需关闭 `hover` / `bordered` / `isShowLastBordered`，调用方应使用可组合的 `TDrawerWidget`。这是移除 Theme 同义行为字段后的明确 breaking 边界。
+- `TDrawerWidget.enableFeedback`、`bordered`、`isShowLastBordered` 为实例状态，非空默认 `true`，Theme 不保存同义开关。
+- 命令式 `TDrawer.show()` 使用边框与按压反馈的默认行为；如需关闭 `enableFeedback` / `bordered` / `isShowLastBordered`，调用方应使用可组合的 `TDrawerWidget`。这是移除 Theme 同义行为字段后的明确 breaking 边界。
 - `bordered` 控制菜单项分隔线，不在列表四周额外绘制整圈边框；末项是否显示分隔线由 `isShowLastBordered` 决定。
 - 默认面板宽 280；正文使用 Body Large，菜单内边距为 `EdgeInsets.fromLTRB(16, 16, 0, 16)`；图标间距 8；标题内边距为 `EdgeInsets.fromLTRB(16, 24, 16, 8)`；底部区默认仅保留 20 底边距；分隔线缩进 16、厚度 0.5。
 - `child` 继续作为完全自定义内容并优先于 `items` / `title` / `footer`；`TDrawerItem.content` 仅替换该项正文，仍可与图标组合。

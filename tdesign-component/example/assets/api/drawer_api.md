@@ -11,7 +11,7 @@
 | child | Widget? | - | 自定义内容，优先级高于`items`/`footer`/`title` |
 | closeOnOverlayClick | bool | true | 点击可见蒙层时是否关闭抽屉，默认 true。 |
 | destroyOnClose | bool | false | 关闭后是否销毁 Popup 路由内状态，默认 false。 |
-| drawerTop | double? | - | 距离顶部的距离 |
+| drawerTop | double? | - | 距离顶部的距离，默认 0；组件参数优先于默认值。 |
 | footer | Widget? | - | 抽屉的底部 |
 | items | List<TDrawerItem>? | - | 抽屉里的列表项 |
 | onClose | VoidCallback? | - | 当前展示周期真正结束时触发。 |
@@ -20,8 +20,8 @@
 | placement | TDrawerPlacement | TDrawerPlacement.right | 抽屉方向，默认 `TDrawerPlacement.right`。 |
 | showOverlay | bool | true | 是否显示可见遮罩层，默认 true。 |
 | title | Widget? | - | 抽屉的标题组件 |
-| useSafeArea | bool | true | 是否避让系统安全区域 |
-| width | double? | - | 宽度（优先级高于 ThemeData） |
+| useSafeArea | bool | true | 是否避让系统安全区域，默认 true。 |
+| width | double? | - | 宽度；优先级高于 ThemeData，默认使用 280。 |
 
 
 ### TDrawerHandle
@@ -61,17 +61,17 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 组件背景颜色 |
+| backgroundColor | Color? | - | 组件背景颜色；优先级高于 ThemeData 和默认值。 |
 | bordered | bool | true | 是否显示菜单项分隔线，默认 true。 |
 | child | Widget? | - | 自定义内容，优先级高于`items`/`footer`/`title` |
+| enableFeedback | bool | true | 点击时是否显示背景按压反馈，默认 true。 |
 | footer | Widget? | - | 抽屉的底部 |
-| hover | bool | true | 是否开启按压反馈，默认 true。 |
 | isShowLastBordered | bool | true | 是否显示最后一行分隔线，默认 true。 |
 | items | List<TDrawerItem>? | - | 抽屉里的列表项 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onItemClick | TDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 |
 | title | Widget? | - | 抽屉的标题组件 |
-| width | double? | - | 宽度 |
+| width | double? | - | 宽度；优先级高于 ThemeData，默认使用 280。 |
 
 
 ### TDrawerItem

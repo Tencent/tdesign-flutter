@@ -30,8 +30,10 @@
 | `showOverlay` / `closeOnOverlayClick` | 实例蒙层行为 | 保留并改为非空默认 |
 | `onOverlayClick` | 蒙层交互通知 | 新增；与是否关闭解耦 |
 | `destroyOnClose` | Popup 生命周期策略 | 新增并直接透传 |
-| `hover` / `bordered` / `isShowLastBordered` | Widget 实例状态 | 非空默认；从 Theme 移除同义开关 |
+| `enableFeedback` / `bordered` / `isShowLastBordered` | Widget 实例状态 | 非空默认；从 Theme 移除同义开关 |
 | `width` | 面板具体宽度 | 实例可覆盖 Theme，默认 280 |
+| `drawerTop` / `useSafeArea` | 实例布局与系统安全区 | 实例参数；Theme 不保存 |
+| `onClose` / `onItemClick` | 生命周期与菜单交互通知 | 保留；分别表示展示周期结束和菜单项点击 |
 | `title` / `footer` / `items` / `child` | Flutter Widget 组合内容 | 保留，不复制字符串 slot |
 | `TDrawerHandle` | 命令式浮层生命周期 | 保留，代替小程序 visible 的机械映射 |
 

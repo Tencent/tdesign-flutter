@@ -22,7 +22,7 @@ class TDrawerWidget extends StatelessWidget {
     this.title,
     this.onItemClick,
     this.width,
-    this.hover = true,
+    this.enableFeedback = true,
     this.backgroundColor,
     this.bordered = true,
     this.isShowLastBordered = true,
@@ -43,13 +43,13 @@ class TDrawerWidget extends StatelessWidget {
   /// 点击抽屉里的列表项触发
   final TDrawerItemClickCallback? onItemClick;
 
-  /// 宽度
+  /// 宽度；优先级高于 ThemeData，默认使用 280。
   final double? width;
 
-  /// 是否开启按压反馈，默认 true。
-  final bool hover;
+  /// 点击时是否显示背景按压反馈，默认 true。
+  final bool enableFeedback;
 
-  /// 组件背景颜色
+  /// 组件背景颜色；优先级高于 ThemeData 和默认值。
   final Color? backgroundColor;
 
   /// 是否显示菜单项分隔线，默认 true。
@@ -91,7 +91,7 @@ class TDrawerWidget extends StatelessWidget {
                     onTap: onItemClick == null
                         ? null
                         : () => onItemClick!(index, item),
-                    enableFeedback: hover,
+                    enableFeedback: enableFeedback,
                     textStyle: _itemTextStyle(context, drawerTheme),
                     backgroundColor:
                         drawerTheme?.itemBackgroundColor ??

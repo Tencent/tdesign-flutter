@@ -432,7 +432,7 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           TDrawerWidget(
-            hover: false,
+            enableFeedback: false,
             items: const [TDrawerItem(title: '菜单1')],
             onItemClick: (_, __) {},
           ),

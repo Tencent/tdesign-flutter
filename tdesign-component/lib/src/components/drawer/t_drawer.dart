@@ -71,13 +71,13 @@ class TDrawer {
   /// 点击抽屉里的列表项触发
   final TDrawerItemClickCallback? onItemClick;
 
-  /// 宽度（优先级高于 ThemeData）
+  /// 宽度；优先级高于 ThemeData，默认使用 280。
   final double? width;
 
-  /// 距离顶部的距离
+  /// 距离顶部的距离，默认 0；组件参数优先于默认值。
   final double? drawerTop;
 
-  /// 是否避让系统安全区域
+  /// 是否避让系统安全区域，默认 true。
   final bool useSafeArea;
 
   /// 关闭后是否销毁 Popup 路由内状态，默认 false。
