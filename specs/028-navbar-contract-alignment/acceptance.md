@@ -18,6 +18,7 @@
 | 双 SDK `flutter analyze` | 通过 | 3.32.0 与 3.47.0 的组件包和 Example 均 0 error / 0 warning |
 | 生成与构建 | 通过 | API 与示例片段生成检查、Web release、Android debug |
 | Android 16 最终真机 | 通过 | 设备集成 1/1；最终代码 Hot Restart、可见操作、普通 APK 持久安装 |
+| 公共 Demo 壳层隔离回归 | 2/2 通过 | ExamplePage 显式持有既有 Body Large / 500 标题视觉，Navbar 默认值变化不再污染其他组件 Golden |
 
 ## 人工验收
 
@@ -38,7 +39,9 @@
 
 - 设备：Xiaomi Android 16 设备，ADB `40302eeb`。
 - 最终 app/lib 代码通过 `flutter attach` 执行 uppercase `R`，返回 `Restarted application in 1,492ms`。
+- CNB 首轮 Flutter 3.32 全量视觉回归暴露公共 ExamplePage 壳层隐式继承 Navbar 新默认标题样式，造成多个无关组件 Golden 漂移；修复后再次在最终源码上执行 uppercase `R`，返回 `Restarted application in 1,246ms`。
 - 实际可见操作：从首页搜索进入 NavBar；点击“更多”；搜索框输入 `Navbar`；滚动检查居中/左对齐、普通/大标题与自定义品牌色；切换 light/dark。
+- 壳层隔离修复后的可见复验：重新搜索进入 Navbar、滚动到“组件样式”、切换 dark/light，并点击“更多”操作；最终停留在亮色 Navbar 页面。
 - 设备集成：`flutter test integration_test/navbar_example_test.dart -d 40302eeb`，1/1 通过，覆盖真实路由、操作反馈、搜索与主题切换。
 - 集成测试结束后重新执行 `flutter build apk --debug`，通过手机“USB 安装提示”点击“继续安装”，ADB 返回 `Success`；`pm path` 可读，冷启动 `.MainActivity` 后首页正常可交互并保留在手机上。
 - 截图：`/private/tmp/navbar-demo-final-dark-top.png`、`/private/tmp/navbar-demo-final-search.png`、`/private/tmp/navbar-demo-final-dark-styles.png`、`/private/tmp/navbar-demo-final-light-styles.png`、`/private/tmp/navbar-final-normal-apk-ready.png`。
