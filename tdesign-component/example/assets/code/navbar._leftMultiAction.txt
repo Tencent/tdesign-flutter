@@ -2,8 +2,8 @@ Widget _leftMultiAction(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
+        key: const Key('navbar-demo-left-multi-action'),
         title: titleText,
-        titleFontWeight: FontWeight.w600,
         useDefaultBack: true,
         leading: [
           TNavBarItem(

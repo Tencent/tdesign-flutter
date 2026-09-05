@@ -24,7 +24,7 @@ class TNavBar extends StatefulWidget implements PreferredSizeWidget {
     this.leading,
     this.actions,
     this.centerTitle = true,
-    this.useDefaultBack = true,
+    this.useDefaultBack = false,
     this.onBack,
     this.belowTitleWidget,
     this.flexibleSpace,
@@ -35,11 +35,11 @@ class TNavBar extends StatefulWidget implements PreferredSizeWidget {
     this.titleFontWeight,
     this.titleFontFamily,
     this.backgroundColor,
-    this.height,
+    this.height = 48,
     this.padding,
     this.titleMargin,
     this.opacity,
-    this.useBorderStyle,
+    this.useBorderStyle = false,
     this.border,
     this.boxShadow,
     this.useSafeArea = false,
@@ -60,7 +60,7 @@ class TNavBar extends StatefulWidget implements PreferredSizeWidget {
   /// 标题是否居中
   final bool centerTitle;
 
-  /// 是否使用默认的返回按钮
+  /// 是否使用默认的返回按钮，默认不显示
   final bool useDefaultBack;
 
   /// 返回事件；默认返回按钮点击时先触发该回调，再执行 Navigator.maybePop。
@@ -93,7 +93,7 @@ class TNavBar extends StatefulWidget implements PreferredSizeWidget {
   final Color? backgroundColor;
 
   /// 高度；作为 [PreferredSizeWidget.preferredSize] 的唯一高度来源
-  final double? height;
+  final double height;
 
   /// 内部填充
   final EdgeInsetsGeometry? padding;
@@ -105,7 +105,7 @@ class TNavBar extends StatefulWidget implements PreferredSizeWidget {
   final double? opacity;
 
   /// 是否使用边框模式
-  final bool? useBorderStyle;
+  final bool useBorderStyle;
 
   /// 操作项边框配置
   final TNavBarBorder? border;
@@ -124,7 +124,7 @@ class TNavBar extends StatefulWidget implements PreferredSizeWidget {
   State<StatefulWidget> createState() => _TNavBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(height ?? 48);
+  Size get preferredSize => Size.fromHeight(height);
 }
 
 class _TNavBarState extends State<TNavBar> {
@@ -149,7 +149,8 @@ class _TNavBarState extends State<TNavBar> {
       Theme.of(context).tExplicitColorScheme?.onSurface ??
       context.tTheme.textColorPrimary;
 
-  Font? get _effectiveTitleFont => widget.titleFont ?? _themeData.titleFont;
+  Font? get _effectiveTitleFont =>
+      widget.titleFont ?? _themeData.titleFont ?? context.tTheme.fontTitleLarge;
 
   FontWeight? get _effectiveTitleFontWeight =>
       widget.titleFontWeight ?? _themeData.titleFontWeight;
@@ -179,9 +180,6 @@ class _TNavBarState extends State<TNavBar> {
 
   double get _effectiveOpacity => widget.opacity ?? _themeData.opacity ?? 1.0;
 
-  bool get _effectiveUseBorderStyle =>
-      widget.useBorderStyle ?? _themeData.useBorderStyle ?? false;
-
   TNavBarBorder get _effectiveBorder =>
       widget.border ?? _themeData.border ?? const TNavBarBorder();
 
@@ -194,7 +192,7 @@ class _TNavBarState extends State<TNavBar> {
     var children = <Widget>[];
     for (var i = 0; i < items.length; i++) {
       children.add(items[i]);
-      if (_effectiveUseBorderStyle && i != items.length - 1) {
+      if (widget.useBorderStyle && i != items.length - 1) {
         children.add(
           Container(width: border.width, height: 16.0, color: borderColor),
         );
@@ -217,7 +215,7 @@ class _TNavBarState extends State<TNavBar> {
     var iconColor = _effectiveBackIconColor(context);
     return TNavBarItem(
       icon: TIcons.chevron_left,
-      iconSize: 28.0,
+      iconSize: 24.0,
       iconColor: iconColor,
       onTap: () {
         widget.onBack?.call();
@@ -236,7 +234,7 @@ class _TNavBarState extends State<TNavBar> {
       children: [
         if (isLeading && widget.useDefaultBack) backButton,
         if (children.isNotEmpty)
-          _effectiveUseBorderStyle
+          widget.useBorderStyle
               ? _addBorder(children)
               : Row(children: children, mainAxisSize: MainAxisSize.min),
       ],
@@ -248,25 +246,32 @@ class _TNavBarState extends State<TNavBar> {
     var titleColor = _effectiveTitleColor(context);
 
     final materialStyle = Theme.of(context).appBarTheme.titleTextStyle;
-    var titleFont = _effectiveTitleFont ?? context.tTheme.fontBodyLarge;
+    final titleFont = _effectiveTitleFont;
+    final usesDesignDefaultFont =
+        widget.titleFont == null && _themeData.titleFont == null;
+    final titleHeight =
+        materialStyle?.height ??
+        (usesDesignDefaultFont ? titleFont?.height : null);
 
     return _effectiveTitleFontFamily == null
         ? TextStyle(
             fontSize: materialStyle?.fontSize ?? titleFont?.size,
+            height: titleHeight,
             color: titleColor,
             fontWeight:
                 _effectiveTitleFontWeight ??
                 materialStyle?.fontWeight ??
-                FontWeight.w500,
+                titleFont?.fontWeight,
             decoration: TextDecoration.none,
           )
         : TextStyle(
             fontSize: materialStyle?.fontSize ?? titleFont?.size,
+            height: titleHeight,
             color: titleColor,
             fontWeight:
                 _effectiveTitleFontWeight ??
                 materialStyle?.fontWeight ??
-                FontWeight.w500,
+                titleFont?.fontWeight,
             decoration: TextDecoration.none,
             fontFamily: _effectiveTitleFontFamily!.fontFamily,
             package: 'tdesign_flutter',

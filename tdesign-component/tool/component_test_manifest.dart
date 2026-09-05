@@ -277,6 +277,30 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'navbar',
+    coverageTargets: ['lib/src/components/navbar/'],
+    componentTests: [
+      'test/components/navbar/t_nav_bar_test.dart',
+      'test/components/navbar/t_navbar_test.dart',
+    ],
+    exampleTests: ['test/navbar_page_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'NavBar Component',
+        workingDirectory: '.',
+        testFiles: [
+          'test/components/navbar/t_nav_bar_safe_area_golden_test.dart',
+          'test/components/navigation_components_golden_test.dart',
+        ],
+      ),
+      VisualTestManifest(
+        name: 'NavBar Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/navbar_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'tabs',
     coverageTargets: [
       'lib/src/components/tabs/t_horizontal_tab_bar.dart',
