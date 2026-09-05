@@ -24,11 +24,8 @@ class TStepsHorizontalItem extends StatelessWidget {
   /// 步骤条状态
   final TStepsStatus status;
 
-  /// 是否为简略模式
-  final bool simple;
-
-  /// 是否为只读模式（纯展示）
-  final bool readOnly;
+  /// 步骤条视觉形态。
+  final TStepsVariant variant;
 
   /// 点击回调。
   final VoidCallback? onTap;
@@ -40,8 +37,7 @@ class TStepsHorizontalItem extends StatelessWidget {
     required this.stepsCount,
     required this.activeIndex,
     required this.status,
-    required this.simple,
-    required this.readOnly,
+    required this.variant,
     this.onTap,
   });
 
@@ -105,12 +101,8 @@ class TStepsHorizontalItem extends StatelessWidget {
     }
 
     /// 传递了成功的icon图标, 已完成的step都需要显示
-    if (data.successIcon != null) {
-      stepsIconWidget = Icon(
-        data.successIcon,
-        color: stepsIconColor,
-        size: 22,
-      );
+    if (data.icon != null) {
+      stepsIconWidget = Icon(data.icon, color: stepsIconColor, size: 22);
 
       /// 传了图标则不用设置背景色
       shouldSetIconWidgetDecoration = false;
@@ -122,7 +114,7 @@ class TStepsHorizontalItem extends StatelessWidget {
       stepsNumberBgColor = theme.errorLightColor;
       stepsTitleColor = theme.errorNormalColor;
 
-      if (simple) {
+      if (variant != TStepsVariant.defaultTheme) {
         simpleStepsIconColor = theme.errorNormalColor;
       } else {
         shouldSetIconWidgetDecoration = data.errorIcon == null;
@@ -143,9 +135,9 @@ class TStepsHorizontalItem extends StatelessWidget {
     double iconContainerSize = 22;
 
     /// 简略步骤条
-    if (simple || readOnly) {
-      /// readOnly纯展示
-      if (readOnly) {
+    if (variant != TStepsVariant.defaultTheme) {
+      /// display 纯展示
+      if (variant == TStepsVariant.display) {
         simpleStepsIconColor = theme.brandNormalColor;
         stepsTitleColor = theme.textColorPrimary;
       }
@@ -156,12 +148,9 @@ class TStepsHorizontalItem extends StatelessWidget {
       var simpleDecoration = BoxDecoration(
         color: Colors.transparent,
         shape: BoxShape.circle,
-        border: Border.all(
-          color: simpleStepsIconColor,
-          width: 1,
-        ),
+        border: Border.all(color: simpleStepsIconColor, width: 1),
       );
-      if (activeIndex == index && !readOnly) {
+      if (activeIndex == index && variant != TStepsVariant.display) {
         simpleDecoration = BoxDecoration(
           color: simpleStepsIconColor,
           shape: BoxShape.circle,
@@ -170,10 +159,12 @@ class TStepsHorizontalItem extends StatelessWidget {
       iconWidgetDecoration = simpleDecoration;
     }
 
-    var leftLineColor = (activeIndex >= index || readOnly)
+    var leftLineColor =
+        (activeIndex >= index || variant == TStepsVariant.display)
         ? theme.brandNormalColor
         : theme.componentBorderColor;
-    var rightLineColor = (activeIndex > index || readOnly)
+    var rightLineColor =
+        (activeIndex > index || variant == TStepsVariant.display)
         ? theme.brandNormalColor
         : theme.componentBorderColor;
 
@@ -184,8 +175,11 @@ class TStepsHorizontalItem extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildLineWidget(context,
-                visible: index != 0, color: leftLineColor),
+            _buildLineWidget(
+              context,
+              visible: index != 0,
+              color: leftLineColor,
+            ),
             Container(
               width: iconContainerSize,
               height: iconContainerSize,
@@ -194,12 +188,15 @@ class TStepsHorizontalItem extends StatelessWidget {
               decoration: iconWidgetDecoration,
               child: stepsIconWidget,
             ),
-            _buildLineWidget(context,
-                visible: index != stepsCount - 1, color: rightLineColor),
+            _buildLineWidget(
+              context,
+              visible: index != stepsCount - 1,
+              color: rightLineColor,
+            ),
           ],
         ),
         _buildTitleWidget(context, stepsTitleColor),
-        _buildContentWidget(context)
+        _buildContentWidget(context),
       ],
     );
     return onTap == null
@@ -243,7 +240,7 @@ class TStepsHorizontalItem extends StatelessWidget {
       child: TText(
         title,
         style: TextStyle(
-          fontWeight: (activeIndex == index && !readOnly)
+          fontWeight: (activeIndex == index && variant != TStepsVariant.display)
               ? FontWeight.w600
               : FontWeight.w400,
           color: stepsTitleColor,
@@ -260,7 +257,8 @@ class TStepsHorizontalItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 4),
       alignment: Alignment.center,
-      child: data.customContent ??
+      child:
+          data.customContent ??
           TText(
             data.content ?? '',
             style: TextStyle(

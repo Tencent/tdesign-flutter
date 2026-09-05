@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 
 import 't_steps_horizontal.dart';
-import 't_steps_theme_data.dart';
 import 't_steps_vertical.dart';
 
 /// Steps步骤条数据类型
 class TStepsItemData {
-  TStepsItemData({
+  const TStepsItemData({
     this.title,
     this.content,
-    this.successIcon,
+    this.icon,
     this.errorIcon,
     this.customContent,
     this.customTitle,
   }) : assert(
-          title != null ||
-              customTitle != null ||
-              content != null ||
-              customContent != null,
-          'title, content, customContent needs at least one non-empty value',
-        );
+         title != null ||
+             customTitle != null ||
+             content != null ||
+             customContent != null,
+         'title, content, customContent needs at least one non-empty value',
+       );
 
   /// 标题
   final String? title;
@@ -27,8 +26,8 @@ class TStepsItemData {
   /// 内容
   final String? content;
 
-  /// 成功图标
-  final IconData? successIcon;
+  /// 步骤图标；未设置时使用数字或状态图标。
+  final IconData? icon;
 
   /// 失败图标
   final IconData? errorIcon;
@@ -49,26 +48,36 @@ enum TStepsDirection {
   vertical,
 }
 
+/// 步骤条视觉形态。
+enum TStepsVariant {
+  /// 默认的数字或图标步骤条。
+  defaultTheme,
+
+  /// 点状步骤条，状态仍由 [TSteps.value] 和 [TSteps.status] 决定。
+  dot,
+
+  /// 纯展示时间线，所有节点与连接线均使用完成态视觉。
+  display,
+}
+
 /// steps步骤条状态
 enum TStepsStatus {
-  /// 成功状态
-  success,
+  /// 当前步骤进行中。
+  process,
 
   /// 错误状态
   error,
 }
 
 /// Steps步骤条
-class TSteps extends StatefulWidget {
+class TSteps extends StatelessWidget {
   const TSteps({
     super.key,
     required this.steps,
     this.value = 0,
     this.direction = TStepsDirection.horizontal,
-    this.status = TStepsStatus.success,
-    this.simple,
-    this.readOnly,
-    this.verticalSelect,
+    this.status = TStepsStatus.process,
+    this.variant = TStepsVariant.defaultTheme,
     this.onChange,
   });
 
@@ -78,31 +87,20 @@ class TSteps extends StatefulWidget {
   /// 步骤条方向
   final TStepsDirection direction;
 
-  /// 步骤条当前激活的索引
+  /// 步骤条当前激活的索引；越界值会收敛到有效范围。
   final int value;
 
-  /// 步骤条状态。
+  /// 当前 [value] 对应步骤的状态。
   final TStepsStatus status;
 
-  /// 步骤条simple模式（优先级高于 ThemeData）
-  final bool? simple;
+  /// 步骤条视觉形态。
+  final TStepsVariant variant;
 
-  /// 步骤条readOnly模式（优先级高于 ThemeData）
-  final bool? readOnly;
-
-  /// 步骤条垂直自定义步骤条选择模式（优先级高于 ThemeData）
-  final bool? verticalSelect;
-
-  /// 用户选择步骤时触发；通过更新 [value] 实现受控模式。
+  /// 用户选择步骤时触发；为空时组件为只读，通过更新 [value] 实现受控模式。
+  ///
+  /// 垂直步骤条设置回调后会显示右侧箭头并允许选择。
   final ValueChanged<int>? onChange;
 
-  /// 子树级主题数据
-
-  @override
-  _TStepsState createState() => _TStepsState();
-}
-
-class _TStepsState extends State<TSteps> {
   int _clampActiveIndex(int index, int length) {
     if (index < 0) {
       return 0;
@@ -115,35 +113,23 @@ class _TStepsState extends State<TSteps> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<TStepsThemeData>();
-    final effectiveIndex = widget.value;
-    final effectiveSimple = widget.simple ?? theme?.simple ?? false;
-    final effectiveReadOnly = widget.readOnly ?? theme?.readOnly ?? false;
-    final effectiveVerticalSelect =
-        widget.verticalSelect ?? theme?.verticalSelect ?? false;
-
     /// 当前激活的step索引
-    final currentActiveIndex = _clampActiveIndex(
-      effectiveIndex,
-      widget.steps.length,
-    );
+    final currentActiveIndex = _clampActiveIndex(value, steps.length);
 
-    return widget.direction == TStepsDirection.horizontal
+    return direction == TStepsDirection.horizontal
         ? TStepsHorizontal(
-            steps: widget.steps,
+            steps: steps,
             activeIndex: currentActiveIndex,
-            status: widget.status,
-            simple: effectiveSimple,
-            readOnly: effectiveReadOnly,
-            onChange: widget.onChange)
+            status: status,
+            variant: variant,
+            onChange: onChange,
+          )
         : TStepsVertical(
-            steps: widget.steps,
+            steps: steps,
             activeIndex: currentActiveIndex,
-            status: widget.status,
-            simple: effectiveSimple,
-            readOnly: effectiveReadOnly,
-            verticalSelect: effectiveVerticalSelect,
-            onChange: widget.onChange,
+            status: status,
+            variant: variant,
+            onChange: onChange,
           );
   }
 }

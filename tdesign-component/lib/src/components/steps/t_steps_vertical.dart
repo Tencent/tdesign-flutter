@@ -14,14 +14,8 @@ class TStepsVertical extends StatelessWidget {
   /// 步骤条状态
   final TStepsStatus status;
 
-  /// 是否为简略模式
-  final bool simple;
-
-  /// 是否为只读模式（纯展示）
-  final bool readOnly;
-
-  /// 垂直模式下是否可点击选择
-  final bool verticalSelect;
+  /// 步骤条视觉形态。
+  final TStepsVariant variant;
 
   /// 选择步骤回调。
   final ValueChanged<int>? onChange;
@@ -31,9 +25,7 @@ class TStepsVertical extends StatelessWidget {
     required this.steps,
     required this.activeIndex,
     required this.status,
-    required this.simple,
-    required this.readOnly,
-    required this.verticalSelect,
+    required this.variant,
     this.onChange,
   });
 
@@ -47,11 +39,9 @@ class TStepsVertical extends StatelessWidget {
         stepsCount: stepsCount,
         activeIndex: activeIndex,
         status: status,
-        simple: simple,
-        readOnly: readOnly,
-        verticalSelect: verticalSelect,
-        onTap:
-            readOnly || !verticalSelect ? null : () => onChange?.call(item.key),
+        variant: variant,
+        selectable: onChange != null,
+        onTap: onChange == null ? null : () => onChange?.call(item.key),
       );
     }).toList();
 

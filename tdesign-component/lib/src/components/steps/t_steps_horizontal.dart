@@ -14,11 +14,8 @@ class TStepsHorizontal extends StatelessWidget {
   /// 步骤条状态
   final TStepsStatus status;
 
-  /// 是否为简略模式
-  final bool simple;
-
-  /// 是否为只读模式（纯展示）
-  final bool readOnly;
+  /// 步骤条视觉形态。
+  final TStepsVariant variant;
 
   /// 选择步骤回调。
   final ValueChanged<int>? onChange;
@@ -28,8 +25,7 @@ class TStepsHorizontal extends StatelessWidget {
     required this.steps,
     required this.activeIndex,
     required this.status,
-    required this.simple,
-    required this.readOnly,
+    required this.variant,
     this.onChange,
   });
 
@@ -46,9 +42,8 @@ class TStepsHorizontal extends StatelessWidget {
           stepsCount: stepsCount,
           activeIndex: activeIndex,
           status: status,
-          simple: simple,
-          readOnly: readOnly,
-          onTap: readOnly ? null : () => onChange?.call(item.key),
+          variant: variant,
+          onTap: onChange == null ? null : () => onChange?.call(item.key),
         ),
       );
     }).toList();

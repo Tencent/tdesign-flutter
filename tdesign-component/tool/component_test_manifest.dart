@@ -438,6 +438,28 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'steps',
+    coverageTargets: ['lib/src/components/steps/'],
+    componentTests: [
+      'test/components/steps/t_steps_test.dart',
+      'test/components/steps/t_steps_vertical_item_test.dart',
+      'test/components/steps/t_steps_widget_test.dart',
+    ],
+    exampleTests: ['test/steps_page_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Steps Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/steps_demo_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Steps shared navigation',
+        workingDirectory: '.',
+        testFiles: ['test/components/navigation_components_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'switch',
     coverageTargets: ['lib/src/components/switch/'],
     componentTests: [

@@ -586,7 +586,6 @@ class TMaterialThemeBuilder {
       const TSideBarThemeData(),
       const TSliderThemeData(),
       const TStepperThemeData(),
-      const TStepsThemeData(),
       const TSwipeCellThemeData(),
       const TSwiperThemeData(),
       const TSwitchThemeData(),

@@ -89,7 +89,8 @@ export 'src/components/loading/t_loading_controller.dart';
 export 'src/components/loading/t_loading_theme_data.dart'
     show TLoadingThemeData;
 export 'src/components/message/t_message.dart';
-export 'src/components/message/t_message_theme_data.dart' show TMessageThemeData;
+export 'src/components/message/t_message_theme_data.dart'
+    show TMessageThemeData;
 export 'src/components/message/t_message_types.dart' show TMessageStatus;
 export 'src/components/navbar/t_nav_bar.dart';
 export 'src/components/navbar/t_nav_bar_theme_data.dart'
@@ -154,7 +155,6 @@ export 'src/components/stepper/t_stepper.dart';
 export 'src/components/stepper/t_stepper_theme_data.dart'
     show TStepperThemeData;
 export 'src/components/steps/t_steps.dart';
-export 'src/components/steps/t_steps_theme_data.dart' show TStepsThemeData;
 export 'src/components/swipe_cell/t_swipe_cell.dart';
 export 'src/components/swipe_cell/t_swipe_cell_action.dart';
 export 'src/components/swipe_cell/t_swipe_cell_panel.dart';

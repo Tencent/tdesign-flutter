@@ -1,0 +1,8 @@
+/// Vertical Icon Steps 垂直图标步骤条
+    Widget _buildVerticalIcon(BuildContext context) {
+    return TSteps(
+      steps: _iconItems(),
+      value: 1,
+      direction: TStepsDirection.vertical,
+    );
+  }

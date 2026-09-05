@@ -167,7 +167,6 @@ void main() {
       expect(theme.extension<TSkeletonThemeData>(), isNull);
       expect(theme.extension<TSliderThemeData>(), isNotNull);
       expect(theme.extension<TStepperThemeData>(), isNotNull);
-      expect(theme.extension<TStepsThemeData>(), isNotNull);
       expect(theme.extension<TSwipeCellThemeData>(), isNotNull);
       expect(theme.extension<TSwiperThemeData>(), isNotNull);
       expect(theme.extension<TSwitchThemeData>(), isNotNull);
