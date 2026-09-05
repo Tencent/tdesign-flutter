@@ -241,6 +241,19 @@ void main() {
       expect(text.style?.fontWeight, token.fontTitleLarge?.fontWeight);
     });
 
+    testWidgets('显式 titleFont 保持调用方原有行高语义', (tester) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TNavBar(title: 'Explicit font', titleFont: token.fontBodyLarge),
+        ),
+      );
+
+      final text = tester.widget<Text>(find.text('Explicit font'));
+      expect(text.style?.fontSize, token.fontBodyLarge?.size);
+      expect(text.style?.height, isNull);
+    });
+
     testWidgets('自定义标题字体族写入 TextStyle', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(

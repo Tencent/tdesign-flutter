@@ -416,6 +416,13 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
     if (PlatformUtil.isWeb && !Navigator.canPop(context)) {
       return Container();
     }
+    leftBarItems.add(
+      TNavBarItem(
+        icon: TIcons.chevron_left,
+        iconSize: 28,
+        onTap: () => Navigator.maybePop(context),
+      ),
+    );
     if (showAction) {
       // Web 端和移动端都显示 API 按钮
       rightBarItems.add(
@@ -474,6 +481,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       // 污染所有其他组件的 Demo 与 Golden。
       titleFont: context.tTheme.fontBodyLarge,
       titleFontWeight: FontWeight.w500,
+      useDefaultBack: false,
       // ExamplePage 外层 SafeArea 已负责顶部避让。
       useSafeArea: false,
     );

@@ -34,6 +34,9 @@ void main() {
     final demoShell = tester.widget<TNavBar>(find.byType(TNavBar).first);
     expect(demoShell.titleFont, TThemeData.defaultData().fontBodyLarge);
     expect(demoShell.titleFontWeight, FontWeight.w500);
+    expect(demoShell.useDefaultBack, isFalse);
+    expect(demoShell.leading?.first.icon, TIcons.chevron_left);
+    expect(demoShell.leading?.first.iconSize, 28);
 
     expect(
       tester.getSize(find.byKey(const Key('navbar-demo-base'))).height,

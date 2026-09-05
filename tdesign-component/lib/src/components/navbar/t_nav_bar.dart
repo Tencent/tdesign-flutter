@@ -247,11 +247,16 @@ class _TNavBarState extends State<TNavBar> {
 
     final materialStyle = Theme.of(context).appBarTheme.titleTextStyle;
     final titleFont = _effectiveTitleFont;
+    final usesDesignDefaultFont =
+        widget.titleFont == null && _themeData.titleFont == null;
+    final titleHeight =
+        materialStyle?.height ??
+        (usesDesignDefaultFont ? titleFont?.height : null);
 
     return _effectiveTitleFontFamily == null
         ? TextStyle(
             fontSize: materialStyle?.fontSize ?? titleFont?.size,
-            height: materialStyle?.height ?? titleFont?.height,
+            height: titleHeight,
             color: titleColor,
             fontWeight:
                 _effectiveTitleFontWeight ??
@@ -261,7 +266,7 @@ class _TNavBarState extends State<TNavBar> {
           )
         : TextStyle(
             fontSize: materialStyle?.fontSize ?? titleFont?.size,
-            height: materialStyle?.height ?? titleFont?.height,
+            height: titleHeight,
             color: titleColor,
             fontWeight:
                 _effectiveTitleFontWeight ??
