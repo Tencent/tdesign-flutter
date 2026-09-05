@@ -19,9 +19,12 @@ enum TDrawerPlacement {
 class TDrawer {
   TDrawer(
     this.context, {
+    this.bordered = true,
     this.closeOnOverlayClick = true,
     this.footer,
     this.items,
+    this.enableFeedback = true,
+    this.isShowLastBordered = true,
     this.placement = TDrawerPlacement.right,
     this.showOverlay = true,
     this.title,
@@ -39,6 +42,9 @@ class TDrawer {
   /// 上下文
   final BuildContext context;
 
+  /// 是否显示菜单项分隔线，默认 true。
+  final bool bordered;
+
   /// 点击可见蒙层时是否关闭抽屉，默认 true。
   final bool closeOnOverlayClick;
 
@@ -47,6 +53,12 @@ class TDrawer {
 
   /// 抽屉里的列表项
   final List<TDrawerItem>? items;
+
+  /// 点击时是否显示背景按压反馈，默认 true。
+  final bool enableFeedback;
+
+  /// 是否显示最后一行分隔线，默认 true。
+  final bool isShowLastBordered;
 
   /// 自定义内容，优先级高于[items]/[footer]/[title]
   final Widget? child;
@@ -125,8 +137,11 @@ class TDrawer {
         child: Theme(
           data: Theme.of(context),
           child: TDrawerWidget(
+            bordered: bordered,
+            enableFeedback: enableFeedback,
             footer: footer,
             items: items,
+            isShowLastBordered: isShowLastBordered,
             child: child,
             title: title,
             onItemClick: onItemClick,

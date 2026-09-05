@@ -8,11 +8,14 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | context | BuildContext | - | 上下文 |
+| bordered | bool | true | 是否显示菜单项分隔线，默认 true。 |
 | child | Widget? | - | 自定义内容，优先级高于`items`/`footer`/`title` |
 | closeOnOverlayClick | bool | true | 点击可见蒙层时是否关闭抽屉，默认 true。 |
 | destroyOnClose | bool | false | 关闭后是否销毁 Popup 路由内状态，默认 false。 |
 | drawerTop | double? | - | 距离顶部的距离，默认 0；组件参数优先于默认值。 |
+| enableFeedback | bool | true | 点击时是否显示背景按压反馈，默认 true。 |
 | footer | Widget? | - | 抽屉的底部 |
+| isShowLastBordered | bool | true | 是否显示最后一行分隔线，默认 true。 |
 | items | List<TDrawerItem>? | - | 抽屉里的列表项 |
 | onClose | VoidCallback? | - | 当前展示周期真正结束时触发。 |
 | onItemClick | TDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 |

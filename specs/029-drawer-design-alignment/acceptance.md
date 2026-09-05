@@ -13,7 +13,7 @@
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
 | `flutter analyze --no-pub`（组件 + Example） | 通过 | Flutter 3.32.0 和 3.47.0 均为 0 issues |
-| `flutter test test/components/drawer/t_drawer_test.dart` | 通过 | 两个 SDK 均 43 项，覆盖视觉尺寸、Theme 优先级、蒙层、方向、Handle 和生命周期 |
+| `flutter test test/components/drawer/t_drawer_test.dart` | 通过 | Flutter 3.32.0 已通过 44 项，覆盖视觉尺寸、Theme 优先级、蒙层、方向、Handle 和生命周期；latest 的完整回归仍由 CNB 门禁执行 |
 | `flutter test test/drawer_demo_test.dart` | 通过 | 两个 SDK 均 5 项，覆盖 Figma 7 入口和真实打开/关闭 |
 | 覆盖率门禁 | 通过 | Drawer 生产源码 `LH/LF = 199/200 = 99.50%` |
 | 回归登记自测 | 通过 | 覆盖率/组件/Demo/Golden 调度器 13 项 |
@@ -30,7 +30,7 @@
 | `showOverlay` / `closeOnOverlayClick` | 实例蒙层行为 | 保留并改为非空默认 |
 | `onOverlayClick` | 蒙层交互通知 | 新增；与是否关闭解耦 |
 | `destroyOnClose` | Popup 生命周期策略 | 新增并直接透传 |
-| `enableFeedback` / `bordered` / `isShowLastBordered` | Widget 实例状态 | 非空默认；从 Theme 移除同义开关 |
+| `enableFeedback` / `bordered` / `isShowLastBordered` | `TDrawer` / `TDrawerWidget` 实例状态 | 非空默认；两条入口语义一致；从 Theme 移除同义开关 |
 | `width` | 面板具体宽度 | 实例可覆盖 Theme，默认 280 |
 | `drawerTop` / `useSafeArea` | 实例布局与系统安全区 | 实例参数；Theme 不保存 |
 | `onClose` / `onItemClick` | 生命周期与菜单交互通知 | 保留；分别表示展示周期结束和菜单项点击 |
@@ -60,4 +60,4 @@
 ## 未覆盖项与后续工作
 
 - iOS 未实机验证；Android 真机、Widget/Demo 测试与固定 Linux Golden 已形成三层证据。
-- latest 首轮测试曾因与 3.32 共用的 `ink_sparkle.frag` 缓存不兼容失败；在 3.47.0 clean + `pub get` 后组件 43 项 + Demo 5 项完整复跑通过，确认为 SDK 缓存边界而非源码回归。
+- latest 首轮测试曾因与 3.32 共用的 `ink_sparkle.frag` 缓存不兼容失败；在 3.47.0 clean + `pub get` 后组件回归 + Demo 5 项完整复跑通过，确认为 SDK 缓存边界而非源码回归。

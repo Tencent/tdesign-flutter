@@ -603,11 +603,44 @@ void main() {
       );
 
       final drawer = TDrawer(drawerContext);
+      expect(drawer.bordered, isTrue);
       expect(drawer.closeOnOverlayClick, isTrue);
+      expect(drawer.enableFeedback, isTrue);
+      expect(drawer.isShowLastBordered, isTrue);
       expect(drawer.placement, TDrawerPlacement.right);
       expect(drawer.showOverlay, isTrue);
       expect(drawer.useSafeArea, isTrue);
       expect(drawer.destroyOnClose, isFalse);
+    });
+
+    testWidgets('命令式入口透传实例交互开关', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: fullTheme(),
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => TButton(
+                child: const Text('打开'),
+                onPressed: () => TDrawer(
+                  context,
+                  bordered: false,
+                  enableFeedback: false,
+                  isShowLastBordered: false,
+                  items: const [TDrawerItem(title: '菜单1')],
+                ).show(),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('打开'));
+      await tester.pumpAndSettle();
+
+      final drawer = tester.widget<TDrawerWidget>(find.byType(TDrawerWidget));
+      expect(drawer.bordered, isFalse);
+      expect(drawer.enableFeedback, isFalse);
+      expect(drawer.isShowLastBordered, isFalse);
     });
 
     testWidgets('非法宽度和顶部距离会失败', (tester) async {
