@@ -21,16 +21,29 @@ void main() {
       await disposeDemoPage(tester);
     }, tags: 'golden');
 
-    testWidgets('drawer icon ${mode.name} opened golden', (tester) async {
-      await pumpDemoPageAtPhoneViewport(tester, drawerDemoPageTestSpec, mode);
-      await tester.tap(find.widgetWithText(TButton, '带图标抽屉'));
-      await tester.pumpAndSettle();
+    for (final entry in const {
+      'icon': '带图标抽屉',
+      'small_title': '小标题抽屉',
+      'large_title': '大标题抽屉',
+      'left': '左侧抽屉',
+      'right': '右侧抽屉',
+      'footer': '带底部插槽',
+    }.entries) {
+      testWidgets('drawer ${entry.key} ${mode.name} opened golden', (
+        tester,
+      ) async {
+        await pumpDemoPageAtPhoneViewport(tester, drawerDemoPageTestSpec, mode);
+        await tester.tap(find.widgetWithText(TButton, entry.value));
+        await tester.pumpAndSettle();
 
-      await expectLater(
-        find.byType(Overlay),
-        matchesGoldenFile('goldens/drawer_icon_opened_${mode.name}.png'),
-      );
-      await disposeDemoPage(tester);
-    }, tags: 'golden');
+        await expectLater(
+          find.byType(Overlay),
+          matchesGoldenFile(
+            'goldens/drawer_${entry.key}_opened_${mode.name}.png',
+          ),
+        );
+        await disposeDemoPage(tester);
+      }, tags: 'golden');
+    }
   }
 }

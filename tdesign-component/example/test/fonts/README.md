@@ -34,7 +34,7 @@ Upload 等既有 Golden 的字形选择与像素基线。
 
 `DrawerGoldenCJK-Regular.otf` 仅补充 Drawer 公开 Demo 文案，字符清单见
 `drawer_demo_glyphs.txt`，避免扩充共享字体影响既有 Golden；子集
-SHA-256 为 `821209c6afef5e0e8039487fad2d854f693b526e1ad28e4548f15ca0290da5f6`。
+SHA-256 为 `1638859b042d7df3056e1042e3ec56b248fc59cad9a88608d562093da7f060ba`。
 
 - 上游：Noto Sans SC 2.004 `NotoSansSC-Regular.otf`
 - 来源：`https://github.com/notofonts/noto-cjk/raw/Sans2.004/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf`

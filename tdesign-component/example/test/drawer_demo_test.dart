@@ -26,7 +26,7 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('公开 Demo 仅展示小程序主场景和必要变体', (tester) async {
+  testWidgets('公开 Demo 展示 Figma 的七个入口', (tester) async {
     await pumpDemoPageAtPhoneViewport(
       tester,
       drawerDemoPageTestSpec,
@@ -37,10 +37,11 @@ void main() {
     for (final label in const [
       '基础抽屉',
       '带图标抽屉',
+      '小标题抽屉',
+      '大标题抽屉',
+      '左侧抽屉',
       '右侧抽屉',
-      '带标题抽屉',
-      '带底部操作抽屉',
-      '无遮罩抽屉',
+      '带底部插槽',
     ]) {
       await tester.scrollUntilVisible(
         find.widgetWithText(TButton, label),
@@ -63,8 +64,8 @@ void main() {
     expect(drawer, findsOneWidget);
     expect(tester.getTopLeft(drawer).dx, 0);
     expect(tester.getSize(drawer).width, 280);
-    expect(find.text('菜单1'), findsOneWidget);
-    expect(find.text('菜单8'), findsOneWidget);
+    expect(find.text('菜单一'), findsOneWidget);
+    expect(find.text('菜单八'), findsOneWidget);
     expect(
       find.descendant(of: drawer, matching: find.byType(TIcon)),
       findsNothing,
@@ -90,38 +91,38 @@ void main() {
     );
   });
 
-  testWidgets('右侧、标题和底部操作变体可操作', (tester) async {
+  testWidgets('大小标题、左右方向和底部插槽均可操作', (tester) async {
     await pumpDemoPageAtPhoneViewport(
       tester,
       drawerDemoPageTestSpec,
       ThemeMode.light,
     );
-    await openDrawer(tester, '右侧抽屉');
-    expect(tester.getTopLeft(find.byType(TDrawerWidget)).dx, 95);
-    await tester.tapAt(const Offset(10, 400));
-    await tester.pumpAndSettle();
-
-    await openDrawer(tester, '带标题抽屉');
+    await openDrawer(tester, '小标题抽屉');
+    expect(tester.getTopLeft(find.byType(TDrawerWidget)).dx, 0);
     expect(find.text('标题'), findsOneWidget);
     await tester.tapAt(const Offset(360, 400));
     await tester.pumpAndSettle();
 
-    await openDrawer(tester, '带底部操作抽屉');
+    await openDrawer(tester, '大标题抽屉');
+    expect(find.text('标题'), findsOneWidget);
+    await tester.tapAt(const Offset(360, 400));
+    await tester.pumpAndSettle();
+
+    await openDrawer(tester, '左侧抽屉');
+    expect(tester.getTopLeft(find.byType(TDrawerWidget)).dx, 0);
+    await tester.tapAt(const Offset(360, 400));
+    await tester.pumpAndSettle();
+
+    await openDrawer(tester, '右侧抽屉');
+    expect(tester.getTopLeft(find.byType(TDrawerWidget)).dx, 95);
+    await tester.tapAt(const Offset(15, 400));
+    await tester.pumpAndSettle();
+
+    await openDrawer(tester, '带底部插槽');
+    expect(tester.getTopLeft(find.byType(TDrawerWidget)).dx, 0);
     expect(find.text('标题'), findsOneWidget);
     expect(find.widgetWithText(TButton, '操作'), findsOneWidget);
-  });
-
-  testWidgets('无遮罩抽屉可通过菜单项关闭', (tester) async {
-    await pumpDemoPageAtPhoneViewport(
-      tester,
-      drawerDemoPageTestSpec,
-      ThemeMode.light,
-    );
-    await openDrawer(tester, '无遮罩抽屉');
-    expect(find.byType(TDrawerWidget), findsOneWidget);
-
-    await tester.tap(find.text('菜单1'));
-    await tester.pumpAndSettle();
-    expect(find.byType(TDrawerWidget), findsNothing);
+    expect(find.text('菜单四'), findsNWidgets(2));
+    expect(find.text('菜单八'), findsNWidgets(2));
   });
 }

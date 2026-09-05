@@ -10,9 +10,9 @@ Widget _buildIconSimple(BuildContext context) {
           context,
           placement: TDrawerPlacement.left,
           items: List.generate(
-            8,
+            _menuLabels.length,
             (index) => TDrawerItem(
-              title: '菜单${index + 1}',
+              title: _menuLabels[index],
               icon: const TIcon(TIcons.app),
             ),
           ),

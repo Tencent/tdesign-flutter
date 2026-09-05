@@ -8,11 +8,9 @@ Widget _buildBottomSimple(BuildContext context) {
       onPressed: () {
         TDrawer(
           context,
+          placement: TDrawerPlacement.left,
           title: const TText('标题'),
-          items: List.generate(
-            8,
-            (index) => TDrawerItem(title: '菜单${index + 1}'),
-          ),
+          items: _footerItems(),
           footer: Padding(
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
             child: SizedBox(
@@ -27,7 +25,7 @@ Widget _buildBottomSimple(BuildContext context) {
           ),
         ).show();
       },
-      child: const TText('带底部操作抽屉'),
+      child: const TText('带底部插槽'),
     ),
   );
 }

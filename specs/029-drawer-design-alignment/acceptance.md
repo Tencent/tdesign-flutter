@@ -5,7 +5,7 @@
 - 分支：`rss1102/breaking/drawer-design-alignment`
 - 基线：`origin/develop`（创建工作树时为 `f3e14c43`）
 - Flutter/Dart：3.32.0 / 3.8.0；latest 3.47.0 / 3.13.0
-- Figma：Drawer 页面节点 `27361:21695`，组件集合 32 变体
+- 新 Figma 分支：Drawer 移动端展示节点 `24386:5238`，375 × 1024，公开 Demo 为 7 个入口
 - 小程序参考：develop 在线公开 Demo/API 与组件样式源码，Last Update 2026-08-24
 
 ## 自动化验证
@@ -14,11 +14,11 @@
 | --- | --- | --- |
 | `flutter analyze --no-pub`（组件 + Example） | 通过 | Flutter 3.32.0 和 3.47.0 均为 0 issues |
 | `flutter test test/components/drawer/t_drawer_test.dart` | 通过 | 两个 SDK 均 43 项，覆盖视觉尺寸、Theme 优先级、蒙层、方向、Handle 和生命周期 |
-| `flutter test test/drawer_demo_test.dart` | 通过 | 两个 SDK 均 6 项，覆盖六个公开场景和真实打开/关闭 |
+| `flutter test test/drawer_demo_test.dart` | 通过 | 两个 SDK 均 5 项，覆盖 Figma 7 入口和真实打开/关闭 |
 | 覆盖率门禁 | 通过 | Drawer 生产源码 `LH/LF = 199/200 = 99.50%` |
 | 回归登记自测 | 通过 | 覆盖率/组件/Demo/Golden 调度器 13 项 |
-| Linux Golden | 通过 | Flutter 3.32.0；Drawer 整页与基础/图标打开态 6 张，导航矩阵 2 张，Popup 消费者 1 张；无更新参数复跑通过 |
-| `dart run tool/generate_example_code.dart --check` | 通过 | 六个 Drawer 片段可独立阅读 |
+| Linux Golden | 通过 | Flutter 3.32.0；375 × 1024 整页 2 张 + 7 打开态 light/dark 14 张；无更新参数 16/16 复跑通过 |
+| `dart run tool/generate_example_code.dart --check` | 通过 | 5 个 Drawer 示例片段与源码同步 |
 | API 文档生成 | 通过 | Drawer、Handle、Placement、ThemeData、Widget 和 Item 已纳入 manifest |
 | `flutter build web --release` | 通过 | Flutter 3.32.0 Example Web release 构建 |
 
@@ -37,11 +37,11 @@
 
 ## 人工验收
 
-- [x] Figma 五维 32 变体属性已读取并检查总览
+- [x] 新 Figma 375 × 1024 Demo 的 7 个入口已逐项读取，大小标题、左右方向和底部插槽已放大人工检查
 - [x] 小程序公开 Demo、API 和样式源码已核对
 - [x] 官方网页内小程序预览已实际点击：基础抽屉从左打开、含 8 项；项点击仅通知而不自动关闭
-- [x] Flutter Demo light/dark 整页和打开态已逐张检查，无中文缺字
-- [ ] Android 真机待核对；本 PR 未将桌面/Web 交互等价冒充为真机证据
+- [x] Flutter Demo light/dark 整页和 7 个打开态已逐张检查；人工发现并修复了首轮字体子集中“二至八/插槽”缺字
+- [x] Android 16 真机（Xiaomi 25113PN0EC）已在代码更新后明确 Hot Restart，并可见逐项操作基础、图标、大小标题、左右方向与底部插槽
 
 ## 设计 Review 结论
 
@@ -52,10 +52,10 @@
 | 菜单项 | 16/0/16/16 内边距；Body Large | 16sp 正文，按压色使用 secondary-container token |
 | 图标 | 24，与正文间距 8 | 默认 IconTheme 统一尺寸/颜色，保留自定义 Widget |
 | 分隔线 | 左缩进 16，level-1 | 移除外框；`bordered` 真正控制项分隔线 |
-| 方向/标题/图标/底部/遮罩 | Figma 5 个二值维度，共 32 变体 | 公开 Demo 以 2 个小程序主场景 + 4 个 Flutter 必要变体收敛，不复制 32 个组合 |
+| 方向/标题/图标/底部/遮罩 | 新 Figma Demo 为 7 入口；小程序 develop 仅 4 场景且全部左侧 | 公开 Demo 优先对齐 Figma 7 入口，打开后操作语义对齐小程序，差异已显式记录 |
 | 生命周期 | 小程序 `visible` 受控，蒙层/项点击分开通知 | Flutter 保留命令式 `show/handle`，新增 `onOverlayClick` 和 `destroyOnClose`，不机械复制 `visible` |
 
 ## 未覆盖项与后续工作
 
-- 未进行 Android/iOS 真机验证；手势点击、蒙层和关闭语义已由 Widget/Demo 测试覆盖。
-- latest 首轮测试曾因与 3.32 共用的 `ink_sparkle.frag` 缓存不兼容失败；在 clean + `pub get` 后 43 + 6 项复跑通过，确认为 SDK 缓存边界而非源码回归。
+- iOS 未实机验证；Android 真机、Widget/Demo 测试与固定 Linux Golden 已形成三层证据。
+- latest 首轮测试曾因与 3.32 共用的 `ink_sparkle.frag` 缓存不兼容失败；在 3.47.0 clean + `pub get` 后组件 43 项 + Demo 5 项完整复跑通过，确认为 SDK 缓存边界而非源码回归。

@@ -9,10 +9,7 @@ Widget _buildBaseSimple(BuildContext context) {
         TDrawer(
           context,
           placement: TDrawerPlacement.left,
-          items: List.generate(
-            8,
-            (index) => TDrawerItem(title: '菜单${index + 1}'),
-          ),
+          items: _baseItems(),
           onItemClick: (_, __) {},
         ).show();
       },
