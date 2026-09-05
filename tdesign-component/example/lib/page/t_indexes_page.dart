@@ -117,30 +117,30 @@ class TIndexesPage extends StatelessWidget {
       backgroundColor: context.tTheme.bgColorContainer,
       showTestModule: false,
       children: const [
-          ExampleModule(
-            title: '组件类型',
-            children: [
-              ExampleItem(
-                desc: '索引类型',
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                builder: _buildLetterIndexes,
-              ),
-              ExampleItem(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                builder: _buildNumberIndexes,
-              ),
-            ],
-          ),
-          ExampleModule(
-            title: '组件样式',
-            children: [
-              ExampleItem(
-                desc: '其他索引列表样式',
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                builder: _buildCapsuleIndexes,
-              ),
-            ],
-          ),
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(
+              desc: '索引类型',
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              builder: _buildLetterIndexes,
+            ),
+            ExampleItem(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              builder: _buildNumberIndexes,
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: '组件样式',
+          children: [
+            ExampleItem(
+              desc: '其他索引列表样式',
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              builder: _buildCapsuleIndexes,
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -187,26 +187,12 @@ Widget _buildLetterIndexes(BuildContext context) {
 
 @ExampleCode(group: 'indexes')
 Widget _buildNumberIndexes(BuildContext context) {
-  return _buildNumberScenario(context, capsuleTheme: false);
-}
-
-@ExampleCode(group: 'indexes')
-Widget _buildCapsuleIndexes(BuildContext context) {
-  return _buildNumberScenario(context, capsuleTheme: true);
-}
-
-Widget _buildNumberScenario(
-  BuildContext context, {
-  required bool capsuleTheme,
-}) {
   const indexList = ['1', '3', '5', '7', '8', '10', '#'];
-  final scenario = capsuleTheme ? 'capsule' : 'number';
-  final label = capsuleTheme ? '胶囊索引' : '数字索引';
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      key: ValueKey('indexes-$scenario-trigger'),
-      child: TText(label),
+      key: const ValueKey('indexes-number-trigger'),
+      child: const TText('数字索引'),
       size: TButtonSize.large,
       colorScheme: TButtonColorScheme.primary,
       variant: TButtonVariant.outline,
@@ -216,9 +202,46 @@ Widget _buildNumberScenario(
           options: TPopupOptions.right(
             inset: const TPopupRightInset(top: 0),
             child: TIndexes(
-              key: ValueKey('indexes-$scenario-panel'),
+              key: const ValueKey('indexes-number-panel'),
               indexList: indexList,
-              capsuleTheme: capsuleTheme,
+              capsuleTheme: false,
+              builderContent: (context, index) {
+                return TCellGroup(
+                  cells: List.generate(
+                    5,
+                    (position) => TCell(title: TText('列表内容 ${position + 1}')),
+                  ),
+                );
+              },
+            ),
+            useSafeArea: false,
+          ),
+        );
+      },
+    ),
+  );
+}
+
+@ExampleCode(group: 'indexes')
+Widget _buildCapsuleIndexes(BuildContext context) {
+  const indexList = ['1', '3', '5', '7', '8', '10', '#'];
+  return SizedBox(
+    width: double.infinity,
+    child: TButton(
+      key: const ValueKey('indexes-capsule-trigger'),
+      child: const TText('胶囊索引'),
+      size: TButtonSize.large,
+      colorScheme: TButtonColorScheme.primary,
+      variant: TButtonVariant.outline,
+      onPressed: () {
+        TPopup.show(
+          context,
+          options: TPopupOptions.right(
+            inset: const TPopupRightInset(top: 0),
+            child: TIndexes(
+              key: const ValueKey('indexes-capsule-panel'),
+              indexList: indexList,
+              capsuleTheme: true,
               builderContent: (context, index) {
                 return TCellGroup(
                   cells: List.generate(

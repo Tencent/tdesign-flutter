@@ -1,3 +1,35 @@
 Widget _buildNumberIndexes(BuildContext context) {
-  return _buildNumberScenario(context, capsuleTheme: false);
+  const indexList = ['1', '3', '5', '7', '8', '10', '#'];
+  return SizedBox(
+    width: double.infinity,
+    child: TButton(
+      key: const ValueKey('indexes-number-trigger'),
+      child: const TText('数字索引'),
+      size: TButtonSize.large,
+      colorScheme: TButtonColorScheme.primary,
+      variant: TButtonVariant.outline,
+      onPressed: () {
+        TPopup.show(
+          context,
+          options: TPopupOptions.right(
+            inset: const TPopupRightInset(top: 0),
+            child: TIndexes(
+              key: const ValueKey('indexes-number-panel'),
+              indexList: indexList,
+              capsuleTheme: false,
+              builderContent: (context, index) {
+                return TCellGroup(
+                  cells: List.generate(
+                    5,
+                    (position) => TCell(title: TText('列表内容 ${position + 1}')),
+                  ),
+                );
+              },
+            ),
+            useSafeArea: false,
+          ),
+        );
+      },
+    ),
+  );
 }
