@@ -13,6 +13,7 @@ import '../../util/iterable_ext.dart';
 import '../text/t_text.dart';
 import 'sticky_header/sticky_header_widget.dart';
 import 't_indexes_anchor.dart';
+import 't_indexes_theme_data.dart';
 
 /// 索引
 class TIndexesList extends StatefulWidget {
@@ -23,7 +24,11 @@ class TIndexesList extends StatefulWidget {
     required this.activeIndex,
     required this.onSelect,
     this.builderIndex,
-  }) : super(key: key);
+  }) : assert(
+         indexListMaxHeight > 0 && indexListMaxHeight <= 1,
+         'indexListMaxHeight must be greater than 0 and no greater than 1.',
+       ),
+       super(key: key);
 
   /// 索引字符列表。不传默认 A-Z
   final List<String> indexList;
@@ -39,7 +44,7 @@ class TIndexesList extends StatefulWidget {
 
   /// 索引文本自定义构建，包括索引激活左侧提示
   final Widget Function(BuildContext context, String index, bool isActive)?
-      builderIndex;
+  builderIndex;
 
   @override
   State<TIndexesList> createState() => _TIndexesListState();
@@ -47,25 +52,33 @@ class TIndexesList extends StatefulWidget {
 
 class _TIndexesListState extends State<TIndexesList> {
   late Map<String, GlobalKey> _containerKeys;
-  final _indexSize = 20.0;
   Timer? _hideTipTimer;
   var _showTip = false;
 
   @override
   void initState() {
     super.initState();
+    assert(
+      widget.indexList.toSet().length == widget.indexList.length,
+      'indexList values must be unique.',
+    );
     _initContainerKeys();
   }
 
   void _initContainerKeys() {
-    _containerKeys =
-        widget.indexList.asMap().map((index, e) => MapEntry(e, GlobalKey()));
+    _containerKeys = widget.indexList.asMap().map(
+      (index, e) => MapEntry(e, GlobalKey()),
+    );
   }
 
   @override
   void didUpdateWidget(TIndexesList oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.indexList != oldWidget.indexList) {
+      assert(
+        widget.indexList.toSet().length == widget.indexList.length,
+        'indexList values must be unique.',
+      );
       _initContainerKeys();
     }
   }
@@ -78,8 +91,16 @@ class _TIndexesListState extends State<TIndexesList> {
 
   @override
   Widget build(BuildContext context) {
+    final theme =
+        Theme.of(context).extension<TIndexesThemeData>() ??
+        const TIndexesThemeData();
+    final indexSize = theme.indexItemSize ?? 20;
+    final indexSpacing = theme.indexItemSpacing ?? 2;
+    final tipSize = theme.tipSize ?? context.tTheme.spacer48;
+    final tipMaxWidth = theme.tipMaxWidth ?? 99;
+    final tipGap = theme.tipGap ?? context.tTheme.spacer16;
     return Positioned(
-      right: context.tTheme.spacer8,
+      right: theme.sidebarRight ?? context.tTheme.spacer8,
       top: 0,
       bottom: 0,
       child: Align(
@@ -103,80 +124,135 @@ class _TIndexesListState extends State<TIndexesList> {
                 builder: (context, value, child) {
                   return Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: widget.indexList.map(
-                      (e) {
-                        final isActive = value == e;
-                        if (widget.builderIndex != null) {
-                          return SizedBox(
-                            key: _containerKeys[e],
-                            width: _indexSize + context.tTheme.spacer8,
-                            height: _indexSize,
-                            child: Center(
-                              child: widget.builderIndex!(context, e, isActive),
+                    children: widget.indexList.map((e) {
+                      final isActive = value == e;
+                      if (widget.builderIndex != null) {
+                        return Semantics(
+                          button: true,
+                          selected: isActive,
+                          label: e,
+                          onTap: () => _selectIndex(e),
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              bottom: e == widget.indexList.last
+                                  ? 0
+                                  : indexSpacing,
                             ),
-                          );
-                        }
-                        return Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            if (_showTip && value == e)
-                              Positioned(
-                                top: -context.tTheme.spacer48 / 2 +
-                                    _indexSize / 2,
-                                left: -context.tTheme.spacer48,
-                                child: Container(
-                                  height: context.tTheme.spacer48,
-                                  width: context.tTheme.spacer48,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                        context.tTheme.radiusCircle),
-                                    color: context.tTheme.brandLightColor,
-                                  ),
-                                  child: Center(
-                                    child: TText(
-                                      e,
-                                      font: context.tTheme.fontTitleExtraLarge,
-                                      textColor:
-                                          context.tTheme.brandNormalColor,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            Container(
+                            child: SizedBox(
                               key: _containerKeys[e],
-                              width: _indexSize + context.tTheme.spacer8,
-                              height: _indexSize,
-                              alignment: Alignment.center,
-                              child: SizedBox(
-                                width: _indexSize,
-                                height: _indexSize,
-                                child: DecoratedBox(
-                                  decoration: isActive
-                                      ? BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              context.tTheme.radiusCircle),
-                                          color:
-                                              context.tTheme.brandNormalColor,
-                                        )
-                                      : const BoxDecoration(),
-                                  child: Center(
-                                    child: TText(
-                                      e,
-                                      font: isActive
-                                          ? context.tTheme.fontMarkSmall
-                                          : context.tTheme.fontLinkSmall,
-                                      textColor: isActive
-                                          ? context.tTheme.textColorAnti
-                                          : context.tTheme.textColorPrimary,
+                              width: indexSize + context.tTheme.spacer8,
+                              height: indexSize,
+                              child: OverflowBox(
+                                alignment: Alignment.centerRight,
+                                maxWidth: double.infinity,
+                                child: widget.builderIndex!(
+                                  context,
+                                  e,
+                                  isActive,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                      return Semantics(
+                        button: true,
+                        selected: isActive,
+                        label: e,
+                        onTap: () => _selectIndex(e),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            bottom: e == widget.indexList.last
+                                ? 0
+                                : indexSpacing,
+                          ),
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              if (_showTip && value == e)
+                                Positioned(
+                                  top: -tipSize / 2 + indexSize / 2,
+                                  right:
+                                      indexSize +
+                                      context.tTheme.spacer8 +
+                                      tipGap,
+                                  child: Container(
+                                    height: tipSize,
+                                    constraints: BoxConstraints(
+                                      minWidth: tipSize,
+                                      maxWidth: tipMaxWidth,
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: context.tTheme.spacer16,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                        context.tTheme.radiusCircle,
+                                      ),
+                                      color:
+                                          theme.tipBackgroundColor ??
+                                          context.tTheme.brandLightColor,
+                                    ),
+                                    child: Center(
+                                      child: TText(
+                                        e,
+                                        font:
+                                            theme.tipFont ??
+                                            context.tTheme.fontTitleExtraLarge,
+                                        textColor:
+                                            theme.tipColor ??
+                                            context.tTheme.brandNormalColor,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              Container(
+                                key: _containerKeys[e],
+                                width: indexSize + context.tTheme.spacer8,
+                                height: indexSize,
+                                alignment: Alignment.center,
+                                child: SizedBox(
+                                  width: indexSize,
+                                  height: indexSize,
+                                  child: DecoratedBox(
+                                    decoration: isActive
+                                        ? BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              context.tTheme.radiusCircle,
+                                            ),
+                                            color:
+                                                theme
+                                                    .activeIndexBackgroundColor ??
+                                                context.tTheme.brandNormalColor,
+                                          )
+                                        : const BoxDecoration(),
+                                    child: Center(
+                                      child: TText(
+                                        e,
+                                        font: isActive
+                                            ? theme.activeIndexFont ??
+                                                  context.tTheme.fontBodySmall
+                                            : theme.indexFont ??
+                                                  context.tTheme.fontBodySmall,
+                                        textColor: isActive
+                                            ? theme.activeIndexColor ??
+                                                  context.tTheme.textColorAnti
+                                            : theme.indexColor ??
+                                                  context
+                                                      .tTheme
+                                                      .textColorPrimary,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        );
-                      },
-                    ).toList(),
+                            ],
+                          ),
+                        ),
+                      );
+                    }).toList(),
                   );
                 },
               ),
@@ -189,12 +265,19 @@ class _TIndexesListState extends State<TIndexesList> {
 
   void _changeSelect(Offset globalPosition) {
     final newIndex = _fingerInsideContainer(globalPosition);
-    if (newIndex != null && newIndex != widget.activeIndex.value) {
-      final oldIndex = widget.activeIndex.value;
-      widget.activeIndex.value = newIndex;
-      _showTip = true;
-      widget.onSelect.call(newIndex, oldIndex);
+    if (newIndex != null) {
+      _selectIndex(newIndex);
     }
+  }
+
+  void _selectIndex(String newIndex) {
+    if (newIndex == widget.activeIndex.value) {
+      return;
+    }
+    final oldIndex = widget.activeIndex.value;
+    widget.activeIndex.value = newIndex;
+    _showTip = true;
+    widget.onSelect.call(newIndex, oldIndex);
   }
 
   String? _fingerInsideContainer(Offset globalPosition) {
@@ -203,8 +286,10 @@ class _TIndexesListState extends State<TIndexesList> {
           entry.value.currentContext?.findRenderObject() as RenderBox?;
       if (renderBox != null) {
         final localPosition = renderBox.globalToLocal(globalPosition);
-        final isIn =
-            renderBox.hitTest(BoxHitTestResult(), position: localPosition);
+        final isIn = renderBox.hitTest(
+          BoxHitTestResult(),
+          position: localPosition,
+        );
         if (isIn) {
           return entry.key;
         }
@@ -215,16 +300,13 @@ class _TIndexesListState extends State<TIndexesList> {
 
   void _hideTip() {
     _hideTipTimer?.cancel();
-    _hideTipTimer = Timer(
-      const Duration(seconds: 1),
-      () {
-        if (!mounted) {
-          return;
-        }
-        setState(() {
-          _showTip = false;
-        });
-      },
-    );
+    _hideTipTimer = Timer(const Duration(milliseconds: 300), () {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _showTip = false;
+      });
+    });
   }
 }

@@ -3,7 +3,8 @@ Widget _buildSimple(BuildContext context) {
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      child: const TText('基础用法'),
+      key: const ValueKey('indexes-basic-trigger'),
+      child: const TText('基础索引'),
       size: TButtonSize.large,
       colorScheme: TButtonColorScheme.primary,
       variant: TButtonVariant.outline,
@@ -13,11 +14,15 @@ Widget _buildSimple(BuildContext context) {
           options: TPopupOptions.right(
             inset: const TPopupRightInset(top: 0),
             child: TIndexes(
+              key: const ValueKey('indexes-basic-panel'),
               indexList: indexList,
+              initialIndex: 'B',
               builderContent: (context, index) {
-                final list = _list.firstWhere(
-                        (element) => element['index'] == index)['children']
-                    as List<String>;
+                final list =
+                    _list.firstWhere(
+                          (element) => element['index'] == index,
+                        )['children']
+                        as List<String>;
                 return TCellGroup(
                   cells: list.map((e) => TCell(title: TText(e))).toList(),
                 );

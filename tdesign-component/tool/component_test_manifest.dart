@@ -248,6 +248,22 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'indexes',
+    coverageTargets: ['lib/src/components/indexes/'],
+    componentTests: [
+      'test/components/indexes/sticky_header/sticky_header_test.dart',
+      'test/components/indexes/t_indexes_test.dart',
+    ],
+    exampleTests: ['test/indexes_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Indexes Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/indexes_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'refresh',
     coverageTargets: [
       'lib/src/components/refresh/t_pull_down_refresh.dart',

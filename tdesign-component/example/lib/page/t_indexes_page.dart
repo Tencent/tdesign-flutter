@@ -94,7 +94,7 @@ const _list = [
       '鸡西',
       '荆州',
       '江门',
-      '基隆'
+      '基隆',
     ],
   },
   {
@@ -109,41 +109,24 @@ class TIndexesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: context.tTheme.grayColor2,
-        child: ExamplePage(
-          title: tTitle(context),
-          desc: '用于页面中信息快速检索，可以根据目录中的页码快速找到所需的内容。',
-          exampleCodeGroup: 'indexes',
-          navBarKey: navBarkey,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          children: [
-            ExampleModule(title: '组件类型', children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: '基础索引类型',
-                builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildSimple);
-                },
-              ),
-            ]),
-            ExampleModule(title: '组件样式', children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: '其他索引类型',
-                builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildOther);
-                },
-              ),
-            ]),
-          ],
-          test: const [
-            ExampleItem(
-              ignoreCode: true,
-              desc: '自定义索引触发点击事件',
-              builder: _buildCustomIndexes,
-            )
-          ],
-        ));
+      color: context.tTheme.bgColorSecondaryContainer,
+      child: ExamplePage(
+        title: tTitle(context),
+        desc: '用于页面中信息快速检索，可以根据目录中的页码快速找到所需的内容。',
+        exampleCodeGroup: 'indexes',
+        navBarKey: navBarkey,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        children: const [
+          ExampleModule(
+            title: '组件类型',
+            children: [
+              ExampleItem(desc: '基础索引', builder: _buildSimple),
+              ExampleItem(desc: '自定义索引', builder: _buildCustomIndexes),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -153,7 +136,8 @@ Widget _buildSimple(BuildContext context) {
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      child: const TText('基础用法'),
+      key: const ValueKey('indexes-basic-trigger'),
+      child: const TText('基础索引'),
       size: TButtonSize.large,
       colorScheme: TButtonColorScheme.primary,
       variant: TButtonVariant.outline,
@@ -163,46 +147,15 @@ Widget _buildSimple(BuildContext context) {
           options: TPopupOptions.right(
             inset: const TPopupRightInset(top: 0),
             child: TIndexes(
+              key: const ValueKey('indexes-basic-panel'),
               indexList: indexList,
+              initialIndex: 'B',
               builderContent: (context, index) {
-                final list = _list.firstWhere(
-                        (element) => element['index'] == index)['children']
-                    as List<String>;
-                return TCellGroup(
-                  cells: list.map((e) => TCell(title: TText(e))).toList(),
-                );
-              },
-            ),
-            useSafeArea: false,
-          ),
-        );
-      },
-    ),
-  );
-}
-
-@ExampleCode(group: 'indexes')
-Widget _buildOther(BuildContext context) {
-  final indexList = _list.map((item) => item['index'] as String).toList();
-  return SizedBox(
-    width: double.infinity,
-    child: TButton(
-      child: const TText('胶囊索引'),
-      size: TButtonSize.large,
-      colorScheme: TButtonColorScheme.primary,
-      variant: TButtonVariant.outline,
-      onPressed: () {
-        TPopup.show(
-          context,
-          options: TPopupOptions.right(
-            inset: const TPopupRightInset(top: 0),
-            child: TIndexes(
-              indexList: indexList,
-              capsuleTheme: true,
-              builderContent: (context, index) {
-                final list = _list.firstWhere(
-                        (element) => element['index'] == index)['children']
-                    as List<String>;
+                final list =
+                    _list.firstWhere(
+                          (element) => element['index'] == index,
+                        )['children']
+                        as List<String>;
                 return TCellGroup(
                   cells: list.map((e) => TCell(title: TText(e))).toList(),
                 );
@@ -218,10 +171,11 @@ Widget _buildOther(BuildContext context) {
 
 @ExampleCode(group: 'indexes')
 Widget _buildCustomIndexes(BuildContext context) {
-  final indexList = _list.map((item) => item['index'] as String).toList();
+  const indexList = ['1', '3', '5', '7', '8', '10', '#'];
   return SizedBox(
     width: double.infinity,
     child: TButton(
+      key: const ValueKey('indexes-custom-trigger'),
       child: const TText('自定义索引'),
       size: TButtonSize.large,
       colorScheme: TButtonColorScheme.primary,
@@ -232,27 +186,15 @@ Widget _buildCustomIndexes(BuildContext context) {
           options: TPopupOptions.right(
             inset: const TPopupRightInset(top: 0),
             child: TIndexes(
+              key: const ValueKey('indexes-custom-panel'),
               indexList: indexList,
-              builderIndex: (context, index, isActive) {
-                return SizedBox(
-                  width: 64,
-                  height: 20,
-                  child: Center(
-                    child: TText(
-                      '自定义 $index',
-                      textColor: isActive
-                          ? context.tTheme.brandNormalColor
-                          : context.tTheme.textColorPrimary,
-                    ),
-                  ),
-                );
-              },
+              capsuleTheme: true,
               builderContent: (context, index) {
-                final list = _list.firstWhere(
-                        (element) => element['index'] == index)['children']
-                    as List<String>;
                 return TCellGroup(
-                  cells: list.map((e) => TCell(title: TText(e))).toList(),
+                  cells: List.generate(
+                    5,
+                    (position) => TCell(title: TText('列表内容 ${position + 1}')),
+                  ),
                 );
               },
             ),
