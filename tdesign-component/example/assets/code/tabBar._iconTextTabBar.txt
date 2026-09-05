@@ -1,0 +1,3 @@
+Widget _iconTextTabBar(BuildContext context) {
+    return const _DemoTabBar(type: TTabBarType.iconText);
+  }

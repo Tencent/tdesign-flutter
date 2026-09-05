@@ -13,19 +13,22 @@
 | dividerHeight | double? | - | 分割线高度（可选） |
 | dividerThickness | double? | - | 分割线厚度（可选） |
 | indicatorAnimation | TTabBarIndicatorAnimation | TTabBarIndicatorAnimation.none | 指示器动画类型 |
+| itemStyle | TTabBarItemStyle | TTabBarItemStyle.label | 单个标签项的选中样式。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| layout | TTabBarLayout | TTabBarLayout.vertical | 图标与文字的排列方式，仅影响 `TTabBarType.iconText`。 |
 | navigationTabs | List<TTabBarItemConfig> | - | tabs配置 |
-| needInkWell | bool? | - | 是否需要水波纹效果 |
+| needInkWell | bool | false | 是否需要水波纹效果 |
 | onChanged | ValueChanged<int>? | - | 选中项变化；null 时整栏禁用 |
 | placeholder | bool | true | 是否添加安全区域占位 |
 | selectedBgColor | Color? | - | 选中时背景颜色 |
-| showTopBorder | bool? | - | 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值，非胶囊型才生效） |
+| showTopBorder | bool | true | 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值，非胶囊型才生效） |
+| split | bool | false | 是否使用竖线分隔；`itemStyle` 为 `TTabBarItemStyle.label` 时不显示。 |
+| style | TTabBarStyle | TTabBarStyle.filled | 标签栏容器样式。 |
 | topBorder | BorderSide? | - | 上边线样式 |
+| type | TTabBarType | - | 标签栏内容类型。 |
 | unselectedBgColor | Color? | - | 未选中时背景颜色 |
 | useSafeArea | bool | true | 使用安全区域 |
-| useVerticalDivider | bool? | - | 是否使用竖线分隔（如果选项样式为 label，则强制为 false） |
 | value | int | - | 选中的 index |
-| variant | TTabBarVariant | - | 标签栏形态 |
 
 
 ### TTabBarBadgeConfig
@@ -90,20 +93,46 @@
 | value | String | - | 选项值 |
 
 
-### TTabBarVariant
+### TTabBarType
 #### 枚举值
 
 
 | 名称 | 说明 |
 | --- | --- |
-| text | 单层级纯文本标签栏 |
-| iconText | 文本加图标标签栏 |
-| icon | 纯图标标签栏 |
-| expansionPanel | 双层级纯文本标签栏 |
-| weakText | 弱选中纯文本标签栏 |
-| weakIcon | 弱选中纯图标标签栏 |
-| weakIconText | 弱选中文本加图标标签栏 |
-| capsule | 胶囊文本加图标标签栏 |
+| text | 纯文本标签栏。 |
+| iconText | 图标加文本标签栏。 |
+| icon | 纯图标标签栏。 |
+| doubleLayer | 带弹出菜单的双层级文本标签栏。 |
+
+
+### TTabBarItemStyle
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| normal | 仅改变前景色。 |
+| label | 使用浅色胶囊背景强调选中项。 |
+
+
+### TTabBarStyle
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| filled | 铺满父容器。 |
+| capsule | 带外边距、圆角和阴影的悬浮胶囊。 |
+
+
+### TTabBarLayout
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| vertical | 图标在文字上方。 |
+| horizontal | 图标在文字左侧。 |
 
 
 ### TTabBarIndicatorAnimation

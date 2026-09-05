@@ -1,0 +1,3 @@
+Widget _textTabBar(BuildContext context) {
+    return const _DemoTabBar(type: TTabBarType.text);
+  }

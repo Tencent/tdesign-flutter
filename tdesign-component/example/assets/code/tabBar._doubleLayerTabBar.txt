@@ -1,0 +1,3 @@
+Widget _doubleLayerTabBar(BuildContext context) {
+    return const _DemoTabBar(type: TTabBarType.doubleLayer);
+  }

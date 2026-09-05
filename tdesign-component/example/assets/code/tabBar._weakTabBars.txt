@@ -1,0 +1,22 @@
+Widget _weakTabBars(BuildContext context) {
+    return const _DemoStack(
+      children: [
+        _DemoTabBar(
+          type: TTabBarType.text,
+          itemStyle: TTabBarItemStyle.normal,
+          split: true,
+          showBadges: true,
+        ),
+        _DemoTabBar(
+          type: TTabBarType.icon,
+          itemStyle: TTabBarItemStyle.normal,
+          showBadges: true,
+        ),
+        _DemoTabBar(
+          type: TTabBarType.iconText,
+          itemStyle: TTabBarItemStyle.normal,
+          showBadges: true,
+        ),
+      ],
+    );
+  }

@@ -1,0 +1,7 @@
+Widget _customTabBar(BuildContext context) {
+    return const _DemoTabBar(
+      type: TTabBarType.icon,
+      itemStyle: TTabBarItemStyle.normal,
+      showTopBorder: false,
+    );
+  }
