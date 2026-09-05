@@ -1,73 +1,99 @@
 Widget _buildAnchorSideBar(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 80,
-          padding: const EdgeInsets.all(16),
-          child: SizedBox(
-            width: double.infinity,
-            child: TButton(
-              child: const Text('更新children'),
-              onPressed: () {
-                setState(() {
-                  final children = list
-                      .asMap()
-                      .entries
-                      .map((entry) => TSideBarItem(
-                            label: '变更${entry.key}',
-                            badge: entry.value.badge,
-                            value: entry.value.value,
-                            icon: entry.value.icon,
-                          ))
-                      .toList();
-                  list = children;
-                });
-              },
-            ),
-          ),
-        ),
-        Expanded(
-          child: Row(
-            children: [
-              SizedBox(
-                width: 106,
-                child: TSideBar(
-                  style: widget.style,
-                  value: currentValue,
-                  children: list,
-                  onChanged: handleSidebarChange,
+    final labels = List.filled(10, '选项');
+    final titles = List.filled(10, '标题');
+    final itemCounts = List.filled(10, 8);
+    final items = List.generate(
+      labels.length,
+      (index) => TSideBarItem(
+        label: labels[index],
+        value: index,
+        icon: widget.withIcons ? TIcons.app : null,
+        badge: switch (index) {
+          1 => const TBadge(variant: TBadgeVariant.dot),
+          2 => const TBadge(label: '8'),
+          _ => null,
+        },
+      ),
+    );
+
+    Widget buildSection(int sectionIndex) {
+      return KeyedSubtree(
+        key: sectionIndex == labels.length - 1 ? _lastSectionKey : null,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            KeyedSubtree(
+              key: ValueKey('sidebar-section-$sectionIndex'),
+              child: Container(
+                key: _headerKeys[sectionIndex],
+                height: 54,
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TText(
+                  titles[sectionIndex],
+                  font: context.tTheme.fontBodyLarge,
                 ),
               ),
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (mounted) {
-                        _syncTrailingExtent();
-                      }
-                    });
-                    return SingleChildScrollView(
-                      key: _contentViewportKey,
-                      controller: _demoScroller,
-                      child: Container(
-                        color: context.tTheme.bgColorContainer,
-                        child: Column(
-                          children: [
-                            for (var index = 0;
-                                index < _headerKeys.length;
-                                index++)
-                              getAnchorDemo(index),
-                            SizedBox(height: _trailingExtent),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+            ),
+            for (var index = 0; index < itemCounts[sectionIndex]; index++)
+              Container(
+                height: 80,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: context.tTheme.grayColor2),
+                  ),
                 ),
-              )
-            ],
+                child: Row(
+                  children: [
+                    const TImage(
+                      src: 'assets/img/empty.png',
+                      width: 48,
+                      height: 48,
+                    ),
+                    const SizedBox(width: 16),
+                    TText('标题', font: context.tTheme.fontBodyLarge),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      );
+    }
+
+    return Row(
+      children: [
+        TSideBar(
+          style: widget.style,
+          value: currentValue,
+          children: items,
+          onChanged: handleSidebarChange,
+        ),
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) {
+                  _syncTrailingExtent();
+                }
+              });
+              return SingleChildScrollView(
+                key: _contentViewportKey,
+                controller: _demoScroller,
+                child: Container(
+                  color: context.tTheme.bgColorContainer,
+                  child: Column(
+                    children: [
+                      for (var index = 0; index < labels.length; index++)
+                        buildSection(index),
+                      SizedBox(height: _trailingExtent),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
-        )
+        ),
       ],
     );
   }

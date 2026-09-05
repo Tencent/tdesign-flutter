@@ -1,27 +1,19 @@
-import 'dart:ui' show lerpDouble;
-
 import 'package:flutter/material.dart';
 
 /// 侧边栏样式
 enum TSideBarVariant {
-  /// 普通样式
-  normal,
+  /// 左侧品牌色指示线样式
+  line,
 
-  /// 轮廓样式
-  outline,
+  /// 选中项为圆角标签样式
+  tag,
 }
 
 /// 侧边栏组件 ThemeExtension
 ///
-/// 管理 TSideBar 的子树级默认样式（高度、内边距、选中/未选中颜色等）。
+/// 管理 TSideBar 的子树级视觉样式（内边距、选中/未选中颜色等）。
 /// 构造器参数优先级高于 ThemeData。
 class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
-  /// 默认样式（normal / outline）
-  final TSideBarVariant? style;
-
-  /// 默认高度
-  final double? height;
-
   /// 默认自定义文本框内边距
   final EdgeInsetsGeometry? contentPadding;
 
@@ -41,8 +33,6 @@ class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
   final Color? unSelectedBgColor;
 
   const TSideBarThemeData({
-    this.style,
-    this.height,
     this.contentPadding,
     this.selectedColor,
     this.unSelectedColor,
@@ -53,8 +43,6 @@ class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
 
   @override
   TSideBarThemeData copyWith({
-    TSideBarVariant? style,
-    double? height,
     EdgeInsetsGeometry? contentPadding,
     Color? selectedColor,
     Color? unSelectedColor,
@@ -63,8 +51,6 @@ class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
     Color? unSelectedBgColor,
   }) {
     return TSideBarThemeData(
-      style: style ?? this.style,
-      height: height ?? this.height,
       contentPadding: contentPadding ?? this.contentPadding,
       selectedColor: selectedColor ?? this.selectedColor,
       unSelectedColor: unSelectedColor ?? this.unSelectedColor,
@@ -80,17 +66,24 @@ class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
       return this;
     }
     return TSideBarThemeData(
-      style: t < 0.5 ? style : other.style,
-      height: lerpDouble(height, other.height, t),
-      contentPadding: EdgeInsets.lerp(
-          contentPadding as EdgeInsets?, other.contentPadding as EdgeInsets?, t),
+      contentPadding: EdgeInsetsGeometry.lerp(
+        contentPadding,
+        other.contentPadding,
+        t,
+      ),
       selectedColor: Color.lerp(selectedColor, other.selectedColor, t),
       unSelectedColor: Color.lerp(unSelectedColor, other.unSelectedColor, t),
-      selectedTextStyle:
-          TextStyle.lerp(selectedTextStyle, other.selectedTextStyle, t),
+      selectedTextStyle: TextStyle.lerp(
+        selectedTextStyle,
+        other.selectedTextStyle,
+        t,
+      ),
       selectedBgColor: Color.lerp(selectedBgColor, other.selectedBgColor, t),
-      unSelectedBgColor:
-          Color.lerp(unSelectedBgColor, other.unSelectedBgColor, t),
+      unSelectedBgColor: Color.lerp(
+        unSelectedBgColor,
+        other.unSelectedBgColor,
+        t,
+      ),
     );
   }
 }

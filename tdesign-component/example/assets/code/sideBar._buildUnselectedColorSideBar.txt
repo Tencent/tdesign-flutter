@@ -11,8 +11,10 @@ Widget _buildUnselectedColorSideBar(BuildContext context) {
             selectedBgColor: context.tTheme.brandLightColor,
             unSelectedColor: context.tTheme.textColorSecondary,
             unSelectedBgColor: context.tTheme.bgColorContainer,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 16,
+            ),
             onChanged: (value) => setState(() => _currentValue = value),
           ),
         ),

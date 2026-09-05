@@ -1,61 +1,96 @@
 Widget _buildCustomSideBar(BuildContext context) {
-    // 自定义样式
-    final list = <TSideBarItem>[];
-    final pages = <Widget>[];
-
-    for (var i = 0; i < _sections.length; i++) {
-      list.add(TSideBarItem(
-        label: _sections[i],
-        value: i,
-        textStyle: TextStyle(color: context.tTheme.textColorSecondary),
-      ));
-      pages.add(getPageDemo(context, i));
-    }
+    final labels = List.filled(10, '选项');
+    final titles = List.filled(10, '标题');
+    final itemCounts = List.filled(10, 8);
+    final items = List.generate(
+      labels.length,
+      (index) => TSideBarItem(
+        label: labels[index],
+        value: index,
+        badge: switch (index) {
+          1 => const TBadge(variant: TBadgeVariant.dot),
+          2 => const TBadge(label: '8'),
+          _ => null,
+        },
+      ),
+    );
 
     void setCurrentValue(int value) {
       _pageController.jumpToPage(value);
       if (currentValue != value) {
-        setState(() {
-          currentValue = value;
-        });
+        setState(() => currentValue = value);
       }
+    }
+
+    Widget buildPage(int pageIndex) {
+      return Container(
+        color: context.tTheme.bgColorContainer,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 54,
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TText(
+                titles[pageIndex],
+                font: context.tTheme.fontBodyLarge,
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: itemCounts[pageIndex],
+                itemBuilder: (_, index) => Container(
+                  height: 80,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: context.tTheme.grayColor2),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const TImage(
+                        src: 'assets/img/empty.png',
+                        width: 48,
+                        height: 48,
+                      ),
+                      const SizedBox(width: 16),
+                      TText('标题', font: context.tTheme.fontBodyLarge),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
     }
 
     return Row(
       children: [
-        SizedBox(
-          width: 116,
-          child: TSideBar(
-            style: TSideBarVariant.normal,
-            value: currentValue,
-            children: list
-                .map((ele) => TSideBarItem(
-                    label: ele.label,
-                    badge: ele.badge,
-                    value: ele.value,
-                    textStyle: ele.textStyle,
-                    icon: ele.icon))
-                .toList(),
-            selectedTextStyle: TextStyle(
-              color: context.tTheme.brandNormalColor,
-              fontWeight: FontWeight.w600,
-            ),
-            onChanged: setCurrentValue,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
-            selectedBgColor: context.tTheme.brandLightColor,
-            unSelectedBgColor: context.tTheme.bgColorContainer,
-            unSelectedColor: context.tTheme.textColorSecondary,
+        TSideBar(
+          style: TSideBarVariant.tag,
+          value: currentValue,
+          children: items,
+          selectedTextStyle: TextStyle(
+            color: context.tTheme.brandNormalColor,
+            fontWeight: FontWeight.w600,
           ),
+          selectedBgColor: context.tTheme.brandLightColor,
+          unSelectedColor: context.tTheme.textColorSecondary,
+          onChanged: setCurrentValue,
         ),
         Expanded(
-          child: PageView(
+          child: PageView.builder(
             controller: _pageController,
             scrollDirection: Axis.vertical,
-            children: pages,
             physics: const NeverScrollableScrollPhysics(),
+            itemCount: titles.length,
+            itemBuilder: (_, index) => buildPage(index),
           ),
-        )
+        ),
       ],
     );
   }
