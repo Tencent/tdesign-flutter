@@ -8,7 +8,7 @@ export 'src/components/avatar/t_avatar_theme_data.dart' show TAvatarThemeData;
 export 'src/components/avatar/t_avatar_types.dart';
 export 'src/components/backtop/t_backtop.dart';
 export 'src/components/backtop/t_backtop_theme_data.dart'
-    show TBackTopThemeData, TBackTopShape;
+    show TBackTopColorScheme, TBackTopShape, TBackTopThemeData;
 export 'src/components/badge/t_badge.dart';
 export 'src/components/badge/t_badge_theme_data.dart' show TBadgeThemeData;
 export 'src/components/button/t_button.dart';

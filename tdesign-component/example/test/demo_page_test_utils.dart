@@ -29,7 +29,6 @@ class DemoPageTestSpec {
     this.supplementalCjkFontPath,
     this.precacheAssetImages = const [],
     this.goldenAtPhoneViewport = false,
-    this.phoneViewportHeight = _initialPageHeight,
   }) : assert(
          (supplementalCjkFontFamily == null) ==
              (supplementalCjkFontPath == null),
@@ -47,7 +46,6 @@ class DemoPageTestSpec {
   final String? supplementalCjkFontPath;
   final List<String> precacheAssetImages;
   final bool goldenAtPhoneViewport;
-  final double phoneViewportHeight;
 }
 
 void registerDemoPageTests(DemoPageTestSpec spec) {
@@ -216,7 +214,7 @@ Future<void> pumpDemoPageAtPhoneViewport(
   DemoPageTestSpec spec,
   ThemeMode mode,
 ) async {
-  tester.view.physicalSize = Size(_pageWidth, spec.phoneViewportHeight);
+  tester.view.physicalSize = const Size(_pageWidth, _initialPageHeight);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.resetPhysicalSize);
   addTearDown(tester.view.resetDevicePixelRatio);

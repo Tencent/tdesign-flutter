@@ -16,6 +16,11 @@ NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 新增文案的补充 fallback。它排在原字体之后，避免扩充原字体改变 Button、Checkbox、
 Upload 等既有 Golden 的字形选择与像素基线。
 
+`BackTopGoldenCJK-Regular.otf` 仅补充 BackTop 公开说明中的“帮”，字符清单见
+`backtop_demo_glyphs.txt`。它作为 BackTop Demo 最后的专用 fallback，不改变其他页面
+或既有共享字体的像素基线，子集 SHA-256 为
+`44dc59fa4e3b84496d07c21e47af8679cec635b70af2e9561d9dbbfef444b42e`。
+
 `PickerGoldenCJK-Regular.otf` 仅补充 Picker 整页 Golden 新增且既有子集未覆盖的
 字形，字符清单见 `picker_demo_glyphs.txt`。独立加载可避免扩充共享字体改变既有组件的
 像素基线，子集 SHA-256 为
@@ -31,10 +36,6 @@ Upload 等既有 Golden 的字形选择与像素基线。
 `d9df3abeeda93b75f92a6e35d0bd73b9da67375cab820d6ac203b8fe4c649c0d`，本次下载的
 上游源文件 SHA-256 为
 `734b20876d6a6777e4c30b627e8391695bbf545c0badf6c066138bebd1f0278a`。
-
-`DrawerGoldenCJK-Regular.otf` 仅补充 Drawer 公开 Demo 文案，字符清单见
-`drawer_demo_glyphs.txt`，避免扩充共享字体影响既有 Golden；子集
-SHA-256 为 `1638859b042d7df3056e1042e3ec56b248fc59cad9a88608d562093da7f060ba`。
 
 - 上游：Noto Sans SC 2.004 `NotoSansSC-Regular.otf`
 - 来源：`https://github.com/notofonts/noto-cjk/raw/Sans2.004/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf`
@@ -55,6 +56,6 @@ Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后�
 ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedback 字符清单。
 更新 Picker 页面文案时，更新 Picker 字符清单。
 更新 Calendar 页面文案时，更新 Calendar 字符清单。
-更新 Drawer 页面文案时，更新 Drawer 字符清单。
+更新 BackTop 页面文案时，更新 BackTop 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。

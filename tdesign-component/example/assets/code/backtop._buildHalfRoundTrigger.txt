@@ -1,0 +1,13 @@
+Widget _buildHalfRoundTrigger(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        key: const Key('backtop-demo-half-round-trigger'),
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        size: TButtonSize.large,
+        onPressed: () => _selectShape(TBackTopShape.halfCircle),
+        child: const TText('半圆形返回顶部'),
+      ),
+    );
+  }

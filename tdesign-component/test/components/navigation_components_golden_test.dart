@@ -17,7 +17,13 @@ void main() {
     );
     final robotoFont = FontLoader('Roboto')
       ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView));
-    await Future.wait([iconFont.load(), robotoFont.load()]);
+    final cjkFont = FontLoader('TDesign Golden CJK')
+      ..addFont(
+        File(
+          'example/test/fonts/TDesignGoldenCJK-Regular.otf',
+        ).readAsBytes().then(ByteData.sublistView),
+      );
+    await Future.wait([iconFont.load(), robotoFont.load(), cjkFont.load()]);
   });
 
   for (final brightness in Brightness.values) {
@@ -55,8 +61,14 @@ class _NavigationComponentsScene extends StatelessWidget {
         ? TThemeBuilder.light(token)
         : TThemeBuilder.dark(token);
     final theme = baseTheme.copyWith(
-      textTheme: baseTheme.textTheme.apply(fontFamily: 'Roboto'),
-      primaryTextTheme: baseTheme.primaryTextTheme.apply(fontFamily: 'Roboto'),
+      textTheme: baseTheme.textTheme.apply(
+        fontFamily: 'Roboto',
+        fontFamilyFallback: const ['TDesign Golden CJK'],
+      ),
+      primaryTextTheme: baseTheme.primaryTextTheme.apply(
+        fontFamily: 'Roboto',
+        fontFamilyFallback: const ['TDesign Golden CJK'],
+      ),
     );
 
     return MaterialApp(
@@ -123,19 +135,55 @@ class _NavigationComponentsScene extends StatelessWidget {
                       ),
                       const SizedBox(height: 18),
                       const _SectionLabel('BackTop'),
-                      const Row(
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TBackTop(
-                            shape: TBackTopShape.circle,
-                            onPressed: _noop,
+                          Row(
+                            children: [
+                              TBackTop(onPressed: _noop),
+                              SizedBox(width: 12),
+                              TBackTop(
+                                colorScheme: TBackTopColorScheme.dark,
+                                onPressed: _noop,
+                              ),
+                              SizedBox(width: 12),
+                              TBackTop(showText: true, onPressed: _noop),
+                              SizedBox(width: 12),
+                              TBackTop(
+                                showText: true,
+                                colorScheme: TBackTopColorScheme.dark,
+                                onPressed: _noop,
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 20),
-                          TBackTop(
-                            shape: TBackTopShape.halfCircle,
-                            onPressed: _noop,
+                          SizedBox(height: 12),
+                          Row(
+                            children: [
+                              TBackTop(
+                                shape: TBackTopShape.halfCircle,
+                                onPressed: _noop,
+                              ),
+                              SizedBox(width: 12),
+                              TBackTop(
+                                shape: TBackTopShape.halfCircle,
+                                colorScheme: TBackTopColorScheme.dark,
+                                onPressed: _noop,
+                              ),
+                              SizedBox(width: 12),
+                              TBackTop(
+                                shape: TBackTopShape.halfCircle,
+                                showText: true,
+                                onPressed: _noop,
+                              ),
+                              SizedBox(width: 12),
+                              TBackTop(
+                                shape: TBackTopShape.halfCircle,
+                                showText: true,
+                                colorScheme: TBackTopColorScheme.dark,
+                                onPressed: _noop,
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 20),
-                          TBackTop(),
                         ],
                       ),
                       const SizedBox(height: 18),
