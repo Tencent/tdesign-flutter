@@ -1,3 +1,18 @@
 Widget _iconTabBar(BuildContext context) {
-    return const _DemoTabBar(type: TTabBarType.icon);
+    var value = 0;
+    return StatefulBuilder(
+      builder: (context, setState) => TTabBar(
+        type: TTabBarType.icon,
+        useSafeArea: false,
+        value: value,
+        onChanged: (newValue) => setState(() => value = newValue),
+        navigationTabs: List.generate(
+          4,
+          (index) => TTabBarItemConfig(
+            selectedIcon: Icon(_icons[index], size: 20),
+            unselectedIcon: Icon(_icons[index], size: 20),
+          ),
+        ),
+      ),
+    );
   }

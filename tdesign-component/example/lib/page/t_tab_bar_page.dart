@@ -7,6 +7,15 @@ import '../../base/example_widget.dart';
 class TTabBarPage extends StatelessWidget {
   const TTabBarPage({super.key});
 
+  static const _labels = ['首页', '应用', '聊天', '我的'];
+  static const _icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
+  static const _badges = [
+    TBadge(label: '16'),
+    TBadge(variant: TBadgeVariant.dot),
+    TBadge(label: 'New'),
+    TBadge(label: '···'),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -43,156 +52,202 @@ class TTabBarPage extends StatelessWidget {
 
   @ExampleCode(group: 'tabBar')
   Widget _textTabBar(BuildContext context) {
-    return const _DemoTabBar(type: TTabBarType.text);
+    var value = 0;
+    return StatefulBuilder(
+      builder: (context, setState) => TTabBar(
+        type: TTabBarType.text,
+        useSafeArea: false,
+        value: value,
+        onChanged: (newValue) {
+          setState(() => value = newValue);
+          TToast.showText('点击了 Item ${newValue + 1}', context: context);
+        },
+        navigationTabs: List.generate(
+          4,
+          (index) => TTabBarItemConfig(tabText: _labels[index]),
+        ),
+      ),
+    );
   }
 
   @ExampleCode(group: 'tabBar')
   Widget _iconTextTabBar(BuildContext context) {
-    return const _DemoTabBar(type: TTabBarType.iconText);
+    var value = 0;
+    return StatefulBuilder(
+      builder: (context, setState) => TTabBar(
+        type: TTabBarType.iconText,
+        useSafeArea: false,
+        value: value,
+        onChanged: (newValue) => setState(() => value = newValue),
+        navigationTabs: List.generate(
+          4,
+          (index) => TTabBarItemConfig(
+            tabText: _labels[index],
+            selectedIcon: Icon(_icons[index], size: 20),
+            unselectedIcon: Icon(_icons[index], size: 20),
+          ),
+        ),
+      ),
+    );
   }
 
   @ExampleCode(group: 'tabBar')
   Widget _iconTabBar(BuildContext context) {
-    return const _DemoTabBar(type: TTabBarType.icon);
+    var value = 0;
+    return StatefulBuilder(
+      builder: (context, setState) => TTabBar(
+        type: TTabBarType.icon,
+        useSafeArea: false,
+        value: value,
+        onChanged: (newValue) => setState(() => value = newValue),
+        navigationTabs: List.generate(
+          4,
+          (index) => TTabBarItemConfig(
+            selectedIcon: Icon(_icons[index], size: 20),
+            unselectedIcon: Icon(_icons[index], size: 20),
+          ),
+        ),
+      ),
+    );
   }
 
   @ExampleCode(group: 'tabBar')
   Widget _doubleLayerTabBar(BuildContext context) {
-    return const _DemoTabBar(type: TTabBarType.doubleLayer);
+    var value = 0;
+    return StatefulBuilder(
+      builder: (context, setState) => TTabBar(
+        type: TTabBarType.doubleLayer,
+        useSafeArea: false,
+        value: value,
+        onChanged: (newValue) => setState(() => value = newValue),
+        navigationTabs: List.generate(
+          4,
+          (index) => TTabBarItemConfig(
+            tabText: _labels[index],
+            popUpButtonConfig: index == 3
+                ? TTabBarPopUpBtnConfig(
+                    items: const [
+                      TTabBarMenuItem(value: '展开项一'),
+                      TTabBarMenuItem(value: '展开项二'),
+                      TTabBarMenuItem(value: '展开项三'),
+                    ],
+                    onChanged: (_) {},
+                  )
+                : null,
+          ),
+        ),
+      ),
+    );
   }
 
   @ExampleCode(group: 'tabBar')
   Widget _weakTabBars(BuildContext context) {
-    return const _DemoStack(
-      children: [
-        _DemoTabBar(
-          type: TTabBarType.text,
-          itemStyle: TTabBarItemStyle.normal,
-          split: true,
-          showBadges: true,
-        ),
-        _DemoTabBar(
-          type: TTabBarType.icon,
-          itemStyle: TTabBarItemStyle.normal,
-          showBadges: true,
-        ),
-        _DemoTabBar(
-          type: TTabBarType.iconText,
-          itemStyle: TTabBarItemStyle.normal,
-          showBadges: true,
-        ),
-      ],
+    final values = [0, 0, 0];
+    return StatefulBuilder(
+      builder: (context, setState) => Column(
+        children: [
+          TTabBar(
+            type: TTabBarType.text,
+            itemStyle: TTabBarItemStyle.normal,
+            split: true,
+            useSafeArea: false,
+            value: values[0],
+            onChanged: (value) => setState(() => values[0] = value),
+            navigationTabs: List.generate(
+              4,
+              (index) => TTabBarItemConfig(
+                tabText: _labels[index],
+                badgeConfig: TTabBarBadgeConfig(
+                  showBadge: true,
+                  tBadge: _badges[index],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          TTabBar(
+            type: TTabBarType.icon,
+            itemStyle: TTabBarItemStyle.normal,
+            useSafeArea: false,
+            value: values[1],
+            onChanged: (value) => setState(() => values[1] = value),
+            navigationTabs: List.generate(
+              4,
+              (index) => TTabBarItemConfig(
+                selectedIcon: Icon(_icons[index], size: 20),
+                unselectedIcon: Icon(_icons[index], size: 20),
+                badgeConfig: TTabBarBadgeConfig(
+                  showBadge: true,
+                  tBadge: _badges[index],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          TTabBar(
+            type: TTabBarType.iconText,
+            itemStyle: TTabBarItemStyle.normal,
+            useSafeArea: false,
+            value: values[2],
+            onChanged: (value) => setState(() => values[2] = value),
+            navigationTabs: List.generate(
+              4,
+              (index) => TTabBarItemConfig(
+                tabText: _labels[index],
+                selectedIcon: Icon(_icons[index], size: 20),
+                unselectedIcon: Icon(_icons[index], size: 20),
+                badgeConfig: TTabBarBadgeConfig(
+                  showBadge: true,
+                  tBadge: _badges[index],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   @ExampleCode(group: 'tabBar')
   Widget _capsuleTabBar(BuildContext context) {
-    return const _DemoTabBar(
-      type: TTabBarType.icon,
-      style: TTabBarStyle.capsule,
+    var value = 0;
+    return StatefulBuilder(
+      builder: (context, setState) => TTabBar(
+        type: TTabBarType.icon,
+        style: TTabBarStyle.capsule,
+        useSafeArea: false,
+        value: value,
+        onChanged: (newValue) => setState(() => value = newValue),
+        navigationTabs: List.generate(
+          4,
+          (index) => TTabBarItemConfig(
+            selectedIcon: Icon(_icons[index], size: 20),
+            unselectedIcon: Icon(_icons[index], size: 20),
+          ),
+        ),
+      ),
     );
   }
 
   @ExampleCode(group: 'tabBar')
   Widget _customTabBar(BuildContext context) {
-    return const _DemoTabBar(
-      type: TTabBarType.icon,
-      itemStyle: TTabBarItemStyle.normal,
-      showTopBorder: false,
+    var value = 0;
+    return StatefulBuilder(
+      builder: (context, setState) => TTabBar(
+        type: TTabBarType.icon,
+        itemStyle: TTabBarItemStyle.normal,
+        showTopBorder: false,
+        useSafeArea: false,
+        value: value,
+        onChanged: (newValue) => setState(() => value = newValue),
+        navigationTabs: List.generate(
+          4,
+          (index) => TTabBarItemConfig(
+            selectedIcon: Icon(_icons[index], size: 20),
+            unselectedIcon: Icon(_icons[index], size: 20),
+          ),
+        ),
+      ),
     );
   }
-}
-
-class _DemoStack extends StatelessWidget {
-  const _DemoStack({required this.children});
-
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        for (var index = 0; index < children.length; index++) ...[
-          children[index],
-          if (index != children.length - 1) const SizedBox(height: 16),
-        ],
-      ],
-    );
-  }
-}
-
-class _DemoTabBar extends StatefulWidget {
-  const _DemoTabBar({
-    this.type = TTabBarType.iconText,
-    this.itemStyle = TTabBarItemStyle.label,
-    this.style = TTabBarStyle.filled,
-    this.showBadges = false,
-    this.split = false,
-    this.showTopBorder = true,
-  });
-
-  final TTabBarType type;
-  final TTabBarItemStyle itemStyle;
-  final TTabBarStyle style;
-  final bool showBadges;
-  final bool split;
-  final bool showTopBorder;
-
-  @override
-  State<_DemoTabBar> createState() => _DemoTabBarState();
-}
-
-class _DemoTabBarState extends State<_DemoTabBar> {
-  var _value = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return TTabBar(
-      type: widget.type,
-      itemStyle: widget.itemStyle,
-      style: widget.style,
-      split: widget.split,
-      showTopBorder: widget.showTopBorder,
-      useSafeArea: false,
-      value: _value,
-      onChanged: (value) {
-        setState(() => _value = value);
-        TToast.showText('点击了 Item ${value + 1}', context: context);
-      },
-      navigationTabs: List.generate(4, _item),
-    );
-  }
-
-  TTabBarItemConfig _item(int index) {
-    final hasText = widget.type != TTabBarType.icon;
-    final hasIcon =
-        widget.type == TTabBarType.icon || widget.type == TTabBarType.iconText;
-    return TTabBarItemConfig(
-      tabText: hasText ? const ['首页', '应用', '聊天', '我的'][index] : null,
-      selectedIcon: hasIcon ? Icon(_icons[index], size: 20) : null,
-      unselectedIcon: hasIcon ? Icon(_icons[index], size: 20) : null,
-      badgeConfig: widget.showBadges
-          ? TTabBarBadgeConfig(showBadge: true, tBadge: _badges[index])
-          : null,
-      popUpButtonConfig: widget.type == TTabBarType.doubleLayer && index == 3
-          ? TTabBarPopUpBtnConfig(
-              items: const [
-                TTabBarMenuItem(value: '展开项一'),
-                TTabBarMenuItem(value: '展开项二'),
-                TTabBarMenuItem(value: '展开项三'),
-              ],
-              onChanged: (_) {},
-            )
-          : null,
-    );
-  }
-
-  static const _icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
-
-  static const _badges = [
-    TBadge(label: '16'),
-    TBadge(variant: TBadgeVariant.dot),
-    TBadge(label: 'New'),
-    TBadge(label: '···'),
-  ];
 }

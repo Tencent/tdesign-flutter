@@ -234,7 +234,7 @@ class TTabBar extends StatefulWidget {
            for (final item in navigationTabs) {
              if (item.tabText == null) {
                throw FlutterError(
-                 '[TTabBar] variant contains text, but not set tabText.',
+                 '[TTabBar] type contains text, but not set tabText.',
                );
              }
            }
@@ -243,7 +243,7 @@ class TTabBar extends StatefulWidget {
            for (final item in navigationTabs) {
              if (item.selectedIcon == null || item.unselectedIcon == null) {
                throw FlutterError(
-                 '[TTabBar] variant contains icon,'
+                 '[TTabBar] type contains icon,'
                  'but has no set icon.',
                );
              }
@@ -255,7 +255,7 @@ class TTabBar extends StatefulWidget {
                  item.selectedIcon == null ||
                  item.unselectedIcon == null) {
                throw FlutterError(
-                 '[TTabBar] variant contains iconText,'
+                 '[TTabBar] type contains iconText,'
                  'but not set tabText or icon.',
                );
              }

@@ -1,22 +1,66 @@
 Widget _weakTabBars(BuildContext context) {
-    return const _DemoStack(
-      children: [
-        _DemoTabBar(
-          type: TTabBarType.text,
-          itemStyle: TTabBarItemStyle.normal,
-          split: true,
-          showBadges: true,
-        ),
-        _DemoTabBar(
-          type: TTabBarType.icon,
-          itemStyle: TTabBarItemStyle.normal,
-          showBadges: true,
-        ),
-        _DemoTabBar(
-          type: TTabBarType.iconText,
-          itemStyle: TTabBarItemStyle.normal,
-          showBadges: true,
-        ),
-      ],
+    final values = [0, 0, 0];
+    return StatefulBuilder(
+      builder: (context, setState) => Column(
+        children: [
+          TTabBar(
+            type: TTabBarType.text,
+            itemStyle: TTabBarItemStyle.normal,
+            split: true,
+            useSafeArea: false,
+            value: values[0],
+            onChanged: (value) => setState(() => values[0] = value),
+            navigationTabs: List.generate(
+              4,
+              (index) => TTabBarItemConfig(
+                tabText: _labels[index],
+                badgeConfig: TTabBarBadgeConfig(
+                  showBadge: true,
+                  tBadge: _badges[index],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          TTabBar(
+            type: TTabBarType.icon,
+            itemStyle: TTabBarItemStyle.normal,
+            useSafeArea: false,
+            value: values[1],
+            onChanged: (value) => setState(() => values[1] = value),
+            navigationTabs: List.generate(
+              4,
+              (index) => TTabBarItemConfig(
+                selectedIcon: Icon(_icons[index], size: 20),
+                unselectedIcon: Icon(_icons[index], size: 20),
+                badgeConfig: TTabBarBadgeConfig(
+                  showBadge: true,
+                  tBadge: _badges[index],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          TTabBar(
+            type: TTabBarType.iconText,
+            itemStyle: TTabBarItemStyle.normal,
+            useSafeArea: false,
+            value: values[2],
+            onChanged: (value) => setState(() => values[2] = value),
+            navigationTabs: List.generate(
+              4,
+              (index) => TTabBarItemConfig(
+                tabText: _labels[index],
+                selectedIcon: Icon(_icons[index], size: 20),
+                unselectedIcon: Icon(_icons[index], size: 20),
+                badgeConfig: TTabBarBadgeConfig(
+                  showBadge: true,
+                  tBadge: _badges[index],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }

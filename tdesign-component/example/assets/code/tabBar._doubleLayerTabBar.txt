@@ -1,3 +1,27 @@
 Widget _doubleLayerTabBar(BuildContext context) {
-    return const _DemoTabBar(type: TTabBarType.doubleLayer);
+    var value = 0;
+    return StatefulBuilder(
+      builder: (context, setState) => TTabBar(
+        type: TTabBarType.doubleLayer,
+        useSafeArea: false,
+        value: value,
+        onChanged: (newValue) => setState(() => value = newValue),
+        navigationTabs: List.generate(
+          4,
+          (index) => TTabBarItemConfig(
+            tabText: _labels[index],
+            popUpButtonConfig: index == 3
+                ? TTabBarPopUpBtnConfig(
+                    items: const [
+                      TTabBarMenuItem(value: '展开项一'),
+                      TTabBarMenuItem(value: '展开项二'),
+                      TTabBarMenuItem(value: '展开项三'),
+                    ],
+                    onChanged: (_) {},
+                  )
+                : null,
+          ),
+        ),
+      ),
+    );
   }
