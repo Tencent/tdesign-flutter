@@ -1,4 +1,6 @@
 Widget _iconTextTabBar(BuildContext context) {
+    const labels = ['首页', '应用', '聊天', '我的'];
+    const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
     var value = 0;
     return StatefulBuilder(
       builder: (context, setState) => TTabBar(
@@ -9,9 +11,9 @@ Widget _iconTextTabBar(BuildContext context) {
         navigationTabs: List.generate(
           4,
           (index) => TTabBarItemConfig(
-            tabText: _labels[index],
-            selectedIcon: Icon(_icons[index], size: 20),
-            unselectedIcon: Icon(_icons[index], size: 20),
+            tabText: labels[index],
+            selectedIcon: Icon(icons[index], size: 20),
+            unselectedIcon: Icon(icons[index], size: 20),
           ),
         ),
       ),

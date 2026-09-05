@@ -1,4 +1,5 @@
 Widget _textTabBar(BuildContext context) {
+    const labels = ['首页', '应用', '聊天', '我的'];
     var value = 0;
     return StatefulBuilder(
       builder: (context, setState) => TTabBar(
@@ -11,7 +12,7 @@ Widget _textTabBar(BuildContext context) {
         },
         navigationTabs: List.generate(
           4,
-          (index) => TTabBarItemConfig(tabText: _labels[index]),
+          (index) => TTabBarItemConfig(tabText: labels[index]),
         ),
       ),
     );

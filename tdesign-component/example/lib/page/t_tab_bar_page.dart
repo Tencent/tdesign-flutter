@@ -7,15 +7,6 @@ import '../../base/example_widget.dart';
 class TTabBarPage extends StatelessWidget {
   const TTabBarPage({super.key});
 
-  static const _labels = ['首页', '应用', '聊天', '我的'];
-  static const _icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
-  static const _badges = [
-    TBadge(label: '16'),
-    TBadge(variant: TBadgeVariant.dot),
-    TBadge(label: 'New'),
-    TBadge(label: '···'),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -52,6 +43,7 @@ class TTabBarPage extends StatelessWidget {
 
   @ExampleCode(group: 'tabBar')
   Widget _textTabBar(BuildContext context) {
+    const labels = ['首页', '应用', '聊天', '我的'];
     var value = 0;
     return StatefulBuilder(
       builder: (context, setState) => TTabBar(
@@ -64,7 +56,7 @@ class TTabBarPage extends StatelessWidget {
         },
         navigationTabs: List.generate(
           4,
-          (index) => TTabBarItemConfig(tabText: _labels[index]),
+          (index) => TTabBarItemConfig(tabText: labels[index]),
         ),
       ),
     );
@@ -72,6 +64,8 @@ class TTabBarPage extends StatelessWidget {
 
   @ExampleCode(group: 'tabBar')
   Widget _iconTextTabBar(BuildContext context) {
+    const labels = ['首页', '应用', '聊天', '我的'];
+    const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
     var value = 0;
     return StatefulBuilder(
       builder: (context, setState) => TTabBar(
@@ -82,9 +76,9 @@ class TTabBarPage extends StatelessWidget {
         navigationTabs: List.generate(
           4,
           (index) => TTabBarItemConfig(
-            tabText: _labels[index],
-            selectedIcon: Icon(_icons[index], size: 20),
-            unselectedIcon: Icon(_icons[index], size: 20),
+            tabText: labels[index],
+            selectedIcon: Icon(icons[index], size: 20),
+            unselectedIcon: Icon(icons[index], size: 20),
           ),
         ),
       ),
@@ -93,6 +87,7 @@ class TTabBarPage extends StatelessWidget {
 
   @ExampleCode(group: 'tabBar')
   Widget _iconTabBar(BuildContext context) {
+    const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
     var value = 0;
     return StatefulBuilder(
       builder: (context, setState) => TTabBar(
@@ -103,8 +98,8 @@ class TTabBarPage extends StatelessWidget {
         navigationTabs: List.generate(
           4,
           (index) => TTabBarItemConfig(
-            selectedIcon: Icon(_icons[index], size: 20),
-            unselectedIcon: Icon(_icons[index], size: 20),
+            selectedIcon: Icon(icons[index], size: 20),
+            unselectedIcon: Icon(icons[index], size: 20),
           ),
         ),
       ),
@@ -113,6 +108,7 @@ class TTabBarPage extends StatelessWidget {
 
   @ExampleCode(group: 'tabBar')
   Widget _doubleLayerTabBar(BuildContext context) {
+    const labels = ['首页', '应用', '聊天', '我的'];
     var value = 0;
     return StatefulBuilder(
       builder: (context, setState) => TTabBar(
@@ -123,7 +119,7 @@ class TTabBarPage extends StatelessWidget {
         navigationTabs: List.generate(
           4,
           (index) => TTabBarItemConfig(
-            tabText: _labels[index],
+            tabText: labels[index],
             popUpButtonConfig: index == 3
                 ? TTabBarPopUpBtnConfig(
                     items: const [
@@ -142,6 +138,14 @@ class TTabBarPage extends StatelessWidget {
 
   @ExampleCode(group: 'tabBar')
   Widget _weakTabBars(BuildContext context) {
+    const labels = ['首页', '应用', '聊天', '我的'];
+    const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
+    const badges = [
+      TBadge(label: '16'),
+      TBadge(variant: TBadgeVariant.dot),
+      TBadge(label: 'New'),
+      TBadge(label: '···'),
+    ];
     final values = [0, 0, 0];
     return StatefulBuilder(
       builder: (context, setState) => Column(
@@ -156,10 +160,10 @@ class TTabBarPage extends StatelessWidget {
             navigationTabs: List.generate(
               4,
               (index) => TTabBarItemConfig(
-                tabText: _labels[index],
+                tabText: labels[index],
                 badgeConfig: TTabBarBadgeConfig(
                   showBadge: true,
-                  tBadge: _badges[index],
+                  tBadge: badges[index],
                 ),
               ),
             ),
@@ -174,11 +178,11 @@ class TTabBarPage extends StatelessWidget {
             navigationTabs: List.generate(
               4,
               (index) => TTabBarItemConfig(
-                selectedIcon: Icon(_icons[index], size: 20),
-                unselectedIcon: Icon(_icons[index], size: 20),
+                selectedIcon: Icon(icons[index], size: 20),
+                unselectedIcon: Icon(icons[index], size: 20),
                 badgeConfig: TTabBarBadgeConfig(
                   showBadge: true,
-                  tBadge: _badges[index],
+                  tBadge: badges[index],
                 ),
               ),
             ),
@@ -193,12 +197,12 @@ class TTabBarPage extends StatelessWidget {
             navigationTabs: List.generate(
               4,
               (index) => TTabBarItemConfig(
-                tabText: _labels[index],
-                selectedIcon: Icon(_icons[index], size: 20),
-                unselectedIcon: Icon(_icons[index], size: 20),
+                tabText: labels[index],
+                selectedIcon: Icon(icons[index], size: 20),
+                unselectedIcon: Icon(icons[index], size: 20),
                 badgeConfig: TTabBarBadgeConfig(
                   showBadge: true,
-                  tBadge: _badges[index],
+                  tBadge: badges[index],
                 ),
               ),
             ),
@@ -210,6 +214,7 @@ class TTabBarPage extends StatelessWidget {
 
   @ExampleCode(group: 'tabBar')
   Widget _capsuleTabBar(BuildContext context) {
+    const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
     var value = 0;
     return StatefulBuilder(
       builder: (context, setState) => TTabBar(
@@ -221,8 +226,8 @@ class TTabBarPage extends StatelessWidget {
         navigationTabs: List.generate(
           4,
           (index) => TTabBarItemConfig(
-            selectedIcon: Icon(_icons[index], size: 20),
-            unselectedIcon: Icon(_icons[index], size: 20),
+            selectedIcon: Icon(icons[index], size: 20),
+            unselectedIcon: Icon(icons[index], size: 20),
           ),
         ),
       ),
@@ -231,6 +236,7 @@ class TTabBarPage extends StatelessWidget {
 
   @ExampleCode(group: 'tabBar')
   Widget _customTabBar(BuildContext context) {
+    const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
     var value = 0;
     return StatefulBuilder(
       builder: (context, setState) => TTabBar(
@@ -243,8 +249,8 @@ class TTabBarPage extends StatelessWidget {
         navigationTabs: List.generate(
           4,
           (index) => TTabBarItemConfig(
-            selectedIcon: Icon(_icons[index], size: 20),
-            unselectedIcon: Icon(_icons[index], size: 20),
+            selectedIcon: Icon(icons[index], size: 20),
+            unselectedIcon: Icon(icons[index], size: 20),
           ),
         ),
       ),

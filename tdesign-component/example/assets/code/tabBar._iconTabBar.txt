@@ -1,4 +1,5 @@
 Widget _iconTabBar(BuildContext context) {
+    const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
     var value = 0;
     return StatefulBuilder(
       builder: (context, setState) => TTabBar(
@@ -9,8 +10,8 @@ Widget _iconTabBar(BuildContext context) {
         navigationTabs: List.generate(
           4,
           (index) => TTabBarItemConfig(
-            selectedIcon: Icon(_icons[index], size: 20),
-            unselectedIcon: Icon(_icons[index], size: 20),
+            selectedIcon: Icon(icons[index], size: 20),
+            unselectedIcon: Icon(icons[index], size: 20),
           ),
         ),
       ),

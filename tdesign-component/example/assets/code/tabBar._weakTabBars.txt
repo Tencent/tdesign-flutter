@@ -1,4 +1,12 @@
 Widget _weakTabBars(BuildContext context) {
+    const labels = ['首页', '应用', '聊天', '我的'];
+    const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
+    const badges = [
+      TBadge(label: '16'),
+      TBadge(variant: TBadgeVariant.dot),
+      TBadge(label: 'New'),
+      TBadge(label: '···'),
+    ];
     final values = [0, 0, 0];
     return StatefulBuilder(
       builder: (context, setState) => Column(
@@ -13,10 +21,10 @@ Widget _weakTabBars(BuildContext context) {
             navigationTabs: List.generate(
               4,
               (index) => TTabBarItemConfig(
-                tabText: _labels[index],
+                tabText: labels[index],
                 badgeConfig: TTabBarBadgeConfig(
                   showBadge: true,
-                  tBadge: _badges[index],
+                  tBadge: badges[index],
                 ),
               ),
             ),
@@ -31,11 +39,11 @@ Widget _weakTabBars(BuildContext context) {
             navigationTabs: List.generate(
               4,
               (index) => TTabBarItemConfig(
-                selectedIcon: Icon(_icons[index], size: 20),
-                unselectedIcon: Icon(_icons[index], size: 20),
+                selectedIcon: Icon(icons[index], size: 20),
+                unselectedIcon: Icon(icons[index], size: 20),
                 badgeConfig: TTabBarBadgeConfig(
                   showBadge: true,
-                  tBadge: _badges[index],
+                  tBadge: badges[index],
                 ),
               ),
             ),
@@ -50,12 +58,12 @@ Widget _weakTabBars(BuildContext context) {
             navigationTabs: List.generate(
               4,
               (index) => TTabBarItemConfig(
-                tabText: _labels[index],
-                selectedIcon: Icon(_icons[index], size: 20),
-                unselectedIcon: Icon(_icons[index], size: 20),
+                tabText: labels[index],
+                selectedIcon: Icon(icons[index], size: 20),
+                unselectedIcon: Icon(icons[index], size: 20),
                 badgeConfig: TTabBarBadgeConfig(
                   showBadge: true,
-                  tBadge: _badges[index],
+                  tBadge: badges[index],
                 ),
               ),
             ),

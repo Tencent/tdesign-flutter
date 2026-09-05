@@ -23,6 +23,9 @@ void main() {
       final snippet = File('assets/code/tabBar.$name.txt').readAsStringSync();
       expect(snippet, contains('TTabBar('), reason: name);
       expect(snippet, isNot(contains('_DemoTabBar')), reason: name);
+      expect(snippet, isNot(contains('_labels')), reason: name);
+      expect(snippet, isNot(contains('_icons')), reason: name);
+      expect(snippet, isNot(contains('_badges')), reason: name);
     }
   });
 }
