@@ -58,9 +58,6 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
   /// 透明度
   final double? opacity;
 
-  /// 是否使用边框模式
-  final bool? useBorderStyle;
-
   /// 操作项边框配置
   final TNavBarBorder? border;
 
@@ -77,7 +74,6 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
     this.padding,
     this.titleMargin,
     this.opacity,
-    this.useBorderStyle,
     this.border,
     this.boxShadow,
   });
@@ -93,7 +89,6 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
     EdgeInsetsGeometry? padding,
     double? titleMargin,
     double? opacity,
-    bool? useBorderStyle,
     TNavBarBorder? border,
     List<BoxShadow>? boxShadow,
   }) {
@@ -107,7 +102,6 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
       padding: padding ?? this.padding,
       titleMargin: titleMargin ?? this.titleMargin,
       opacity: opacity ?? this.opacity,
-      useBorderStyle: useBorderStyle ?? this.useBorderStyle,
       border: border ?? this.border,
       boxShadow: boxShadow ?? this.boxShadow,
     );
@@ -128,7 +122,6 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
       padding: t < 0.5 ? padding : other.padding,
       titleMargin: lerpDouble(titleMargin, other.titleMargin, t),
       opacity: lerpDouble(opacity, other.opacity, t),
-      useBorderStyle: t < 0.5 ? useBorderStyle : other.useBorderStyle,
       border: t < 0.5 ? border : other.border,
       boxShadow: t < 0.5 ? boxShadow : other.boxShadow,
     );
