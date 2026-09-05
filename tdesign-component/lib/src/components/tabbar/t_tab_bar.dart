@@ -41,31 +41,46 @@ const double _kPopupArrowGap = 4.0;
 /// 展开项弹窗距离视口边界的安全距离
 const double _kPopupViewportPadding = 8.0;
 
-/// 底部标签栏形态
-enum TTabBarVariant {
-  /// 单层级纯文本标签栏
+/// 底部标签栏内容类型。
+enum TTabBarType {
+  /// 纯文本标签栏。
   text,
 
-  /// 文本加图标标签栏
+  /// 图标加文本标签栏。
   iconText,
 
-  /// 纯图标标签栏
+  /// 纯图标标签栏。
   icon,
 
-  /// 双层级纯文本标签栏
-  expansionPanel,
+  /// 带弹出菜单的双层级文本标签栏。
+  doubleLayer,
+}
 
-  /// 弱选中纯文本标签栏
-  weakText,
+/// 单个标签项的选中样式。
+enum TTabBarItemStyle {
+  /// 仅改变前景色。
+  normal,
 
-  /// 弱选中纯图标标签栏
-  weakIcon,
+  /// 使用浅色胶囊背景强调选中项。
+  label,
+}
 
-  /// 弱选中文本加图标标签栏
-  weakIconText,
+/// 标签栏容器样式。
+enum TTabBarStyle {
+  /// 铺满父容器。
+  filled,
 
-  /// 胶囊文本加图标标签栏
+  /// 带外边距、圆角和阴影的悬浮胶囊。
   capsule,
+}
+
+/// 图标与文字的排列方式。
+enum TTabBarLayout {
+  /// 图标在文字上方。
+  vertical,
+
+  /// 图标在文字左侧。
+  horizontal,
 }
 
 /// 底部标签栏基本类型
@@ -84,23 +99,6 @@ enum _TTabBarBasicType {
 }
 
 /// 底部标签栏组件样式
-enum _TTabBarComponentType {
-  /// 普通样式
-  normal,
-
-  /// 带胶囊背景的item选中样式
-  label,
-}
-
-/// 底部标签栏选中背景样式
-enum _TTabBarSelectionType {
-  /// 填充样式
-  filled,
-
-  /// 胶囊样式
-  capsule,
-}
-
 /// 指示器动画类型
 enum TTabBarIndicatorAnimation {
   /// 无动画，瞬间切换
@@ -113,49 +111,24 @@ enum TTabBarIndicatorAnimation {
   elastic,
 }
 
-extension _TTabBarVariantResolve on TTabBarVariant {
+extension _TTabBarTypeResolve on TTabBarType {
   _TTabBarBasicType get basicType {
     switch (this) {
-      case TTabBarVariant.text:
-      case TTabBarVariant.weakText:
+      case TTabBarType.text:
         return _TTabBarBasicType.text;
-      case TTabBarVariant.iconText:
-      case TTabBarVariant.weakIconText:
-      case TTabBarVariant.capsule:
+      case TTabBarType.iconText:
         return _TTabBarBasicType.iconText;
-      case TTabBarVariant.icon:
-      case TTabBarVariant.weakIcon:
+      case TTabBarType.icon:
         return _TTabBarBasicType.icon;
-      case TTabBarVariant.expansionPanel:
+      case TTabBarType.doubleLayer:
         return _TTabBarBasicType.expansionPanel;
     }
-  }
-
-  _TTabBarComponentType get componentType {
-    switch (this) {
-      case TTabBarVariant.weakText:
-      case TTabBarVariant.weakIcon:
-      case TTabBarVariant.weakIconText:
-        return _TTabBarComponentType.normal;
-      case TTabBarVariant.text:
-      case TTabBarVariant.iconText:
-      case TTabBarVariant.icon:
-      case TTabBarVariant.expansionPanel:
-      case TTabBarVariant.capsule:
-        return _TTabBarComponentType.label;
-    }
-  }
-
-  _TTabBarSelectionType get selectionType {
-    return this == TTabBarVariant.capsule
-        ? _TTabBarSelectionType.capsule
-        : _TTabBarSelectionType.filled;
   }
 }
 
 /// 飘新配置
 class TTabBarBadgeConfig {
-  TTabBarBadgeConfig({
+  const TTabBarBadgeConfig({
     required this.showBadge,
     TBadge? tBadge,
     this.badgeTopOffset,
@@ -177,8 +150,8 @@ class TTabBarBadgeConfig {
 
 /// 单个 tab 配置
 class TTabBarItemConfig {
-  TTabBarItemConfig({
-    required this.onTap,
+  const TTabBarItemConfig({
+    this.onTap,
     this.selectedIcon,
     this.unselectedIcon,
     this.tabText,
@@ -188,17 +161,7 @@ class TTabBarItemConfig {
     this.popUpButtonConfig,
     this.onLongPress,
     this.allowMultipleTaps = false,
-  }) : assert(() {
-         if (badgeConfig?.showBadge ?? false) {
-           if (badgeConfig?.tBadge == null) {
-             throw FlutterError(
-               '[NavigationTab] if set showBadge = true, '
-               'you must set a tBadge instance',
-             );
-           }
-         }
-         return true;
-       }());
+  });
 
   /// 选中时图标
   final Widget? selectedIcon;
@@ -233,19 +196,22 @@ class TTabBarItemConfig {
 
 /// 底部标签栏
 ///
-/// 支持文本/图标/图文/展开面板四种基本类型，
-/// 普通和胶囊两种选中样式，填充和胶囊两种轮廓样式。
+/// 支持文本、图文、图标与双层级内容，并将选项样式、容器外形和图文布局
+/// 作为相互独立的配置。
 class TTabBar extends StatefulWidget {
   TTabBar({
     Key? key,
-    required this.variant,
+    required this.type,
     required this.navigationTabs,
+    this.itemStyle = TTabBarItemStyle.label,
+    this.style = TTabBarStyle.filled,
+    this.layout = TTabBarLayout.vertical,
     this.barHeight,
-    this.useVerticalDivider,
+    this.split = false,
     this.dividerHeight,
     this.dividerThickness,
     this.dividerColor,
-    this.showTopBorder,
+    this.showTopBorder = true,
     this.topBorder,
     this.useSafeArea = true,
     this.placeholder = true,
@@ -253,7 +219,7 @@ class TTabBar extends StatefulWidget {
     this.unselectedBgColor,
     this.backgroundColor,
     this.centerDistance,
-    this.needInkWell,
+    this.needInkWell = false,
     this.indicatorAnimation = TTabBarIndicatorAnimation.none,
     this.animationDuration,
     this.animationCurve,
@@ -263,12 +229,12 @@ class TTabBar extends StatefulWidget {
          if (navigationTabs.isEmpty) {
            throw FlutterError('[TTabBar] please set at least one tab!');
          }
-         final basicType = variant.basicType;
+         final basicType = type.basicType;
          if (basicType == _TTabBarBasicType.text) {
            for (final item in navigationTabs) {
              if (item.tabText == null) {
                throw FlutterError(
-                 '[TTabBar] variant contains text, but not set tabText.',
+                 '[TTabBar] type contains text, but not set tabText.',
                );
              }
            }
@@ -277,7 +243,7 @@ class TTabBar extends StatefulWidget {
            for (final item in navigationTabs) {
              if (item.selectedIcon == null || item.unselectedIcon == null) {
                throw FlutterError(
-                 '[TTabBar] variant contains icon,'
+                 '[TTabBar] type contains icon,'
                  'but has no set icon.',
                );
              }
@@ -289,7 +255,7 @@ class TTabBar extends StatefulWidget {
                  item.selectedIcon == null ||
                  item.unselectedIcon == null) {
                throw FlutterError(
-                 '[TTabBar] variant contains iconText,'
+                 '[TTabBar] type contains iconText,'
                  'but not set tabText or icon.',
                );
              }
@@ -304,14 +270,23 @@ class TTabBar extends StatefulWidget {
        }()),
        super(key: key);
 
-  /// 标签栏形态
-  final TTabBarVariant variant;
+  /// 标签栏内容类型。
+  final TTabBarType type;
 
-  _TTabBarBasicType get _basicType => variant.basicType;
+  /// 单个标签项的选中样式。
+  final TTabBarItemStyle itemStyle;
 
-  _TTabBarComponentType get _componentType => variant.componentType;
+  /// 标签栏容器样式。
+  final TTabBarStyle style;
 
-  _TTabBarSelectionType get _selectionType => variant.selectionType;
+  /// 图标与文字的排列方式，仅影响 [TTabBarType.iconText]。
+  final TTabBarLayout layout;
+
+  _TTabBarBasicType get _basicType => type.basicType;
+
+  TTabBarItemStyle get _componentType => itemStyle;
+
+  TTabBarStyle get _selectionType => style;
 
   /// tabs配置
   final List<TTabBarItemConfig> navigationTabs;
@@ -319,8 +294,8 @@ class TTabBar extends StatefulWidget {
   /// tab高度
   final double? barHeight;
 
-  /// 是否使用竖线分隔（如果选项样式为 label，则强制为 false）
-  final bool? useVerticalDivider;
+  /// 是否使用竖线分隔；[itemStyle] 为 [TTabBarItemStyle.label] 时不显示。
+  final bool split;
 
   /// 分割线高度（可选）
   final double? dividerHeight;
@@ -332,7 +307,7 @@ class TTabBar extends StatefulWidget {
   final Color? dividerColor;
 
   /// 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值，非胶囊型才生效）
-  final bool? showTopBorder;
+  final bool showTopBorder;
 
   /// 上边线样式
   final BorderSide? topBorder;
@@ -356,7 +331,7 @@ class TTabBar extends StatefulWidget {
   final double? centerDistance;
 
   /// 是否需要水波纹效果
-  final bool? needInkWell;
+  final bool needInkWell;
 
   /// 指示器动画类型
   final TTabBarIndicatorAnimation indicatorAnimation;
@@ -388,15 +363,10 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
   late Color? _effectiveUnselectedBgColor;
   late Color _effectiveBackgroundColor;
   late double _effectiveCenterDistance;
-  late bool _effectiveUseVerticalDivider;
   late double _effectiveDividerHeight;
   late double _effectiveDividerThickness;
   late Color _effectiveDividerColor;
-  late bool _effectiveShowTopBorder;
   late BorderSide? _effectiveTopBorder;
-  late bool _effectiveNeedInkWell;
-  late Duration _effectiveAnimationDuration;
-  late Curve _effectiveAnimationCurve;
 
   @override
   void initState() {
@@ -453,8 +423,6 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
         context.tTheme.bgColorContainer;
     _effectiveCenterDistance =
         widget.centerDistance ?? theme?.centerDistance ?? 0;
-    _effectiveUseVerticalDivider =
-        widget.useVerticalDivider ?? theme?.useVerticalDivider ?? false;
     _effectiveDividerHeight =
         widget.dividerHeight ?? theme?.dividerHeight ?? 32;
     _effectiveDividerThickness =
@@ -463,17 +431,9 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
         widget.dividerColor ??
         theme?.dividerColor ??
         context.tTheme.componentStrokeColor;
-    _effectiveShowTopBorder =
-        widget.showTopBorder ?? theme?.showTopBorder ?? true;
     _effectiveTopBorder = widget.topBorder ?? theme?.topBorder;
-    _effectiveNeedInkWell = widget.needInkWell ?? theme?.needInkWell ?? false;
-    _effectiveAnimationDuration =
-        widget.animationDuration ??
-        theme?.animationDuration ??
-        const Duration(milliseconds: 300);
-    _effectiveAnimationCurve =
-        widget.animationCurve ?? theme?.animationCurve ?? Curves.easeInOutCubic;
-    _animationController.duration = _effectiveAnimationDuration;
+    _animationController.duration =
+        widget.animationDuration ?? const Duration(milliseconds: 300);
   }
 
   @override
@@ -484,8 +444,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    var isCapsuleOutlineType =
-        widget._selectionType == _TTabBarSelectionType.capsule;
+    var isCapsuleOutlineType = widget._selectionType == TTabBarStyle.capsule;
     var safeAreaBottomHeight = MediaQuery.of(context).padding.bottom;
 
     return AnimatedBuilder(
@@ -514,7 +473,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
                 borderRadius: isCapsuleOutlineType
                     ? BorderRadius.circular(context.tTheme.radiusCircle)
                     : null,
-                border: _effectiveShowTopBorder && !isCapsuleOutlineType
+                border: widget.showTopBorder && !isCapsuleOutlineType
                     ? Border(
                         top:
                             _effectiveTopBorder ??
@@ -606,7 +565,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
         ).animate(
           CurvedAnimation(
             parent: _animationController,
-            curve: _effectiveAnimationCurve,
+            curve: widget.animationCurve ?? Curves.easeInOutCubic,
           ),
         );
 
@@ -617,7 +576,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
   /// 构建动画指示器
   Widget _buildAnimatedIndicator(BuildContext context, double itemWidth) {
     // 只有 label 样式才显示背景指示器
-    if (widget._componentType != _TTabBarComponentType.label) {
+    if (widget._componentType != TTabBarItemStyle.label) {
       return const SizedBox.shrink();
     }
 
@@ -747,6 +706,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
         basicType: widget._basicType,
         componentType: widget._componentType,
         selectionType: widget._selectionType,
+        layout: widget.layout,
         itemConfig: tabItemConfig,
         isSelected: index == _selectedIndex,
         itemHeight: _effectiveBarHeight,
@@ -755,7 +715,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
         selectedBgColor: _effectiveSelectedBgColor,
         unselectedBgColor: _effectiveUnselectedBgColor,
         centerDistance: _effectiveCenterDistance,
-        needInkWell: _effectiveNeedInkWell,
+        needInkWell: widget.needInkWell,
         showItemBackground:
             widget.indicatorAnimation == TTabBarIndicatorAnimation.none,
         onTap: () {
@@ -770,9 +730,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
 
   Widget _verticalDivider() {
     return Visibility(
-      visible:
-          widget._componentType != _TTabBarComponentType.label &&
-          (_effectiveUseVerticalDivider),
+      visible: widget._componentType != TTabBarItemStyle.label && widget.split,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: List.generate(widget.navigationTabs.length - 1, (index) {
@@ -797,6 +755,7 @@ class TTabBarItemWithBadge extends StatelessWidget {
     required this.basicType,
     required this.componentType,
     required this.selectionType,
+    required this.layout,
     required this.itemConfig,
     required this.isSelected,
     required this.itemHeight,
@@ -815,10 +774,13 @@ class TTabBarItemWithBadge extends StatelessWidget {
   final _TTabBarBasicType basicType;
 
   /// tab选中背景类型
-  final _TTabBarComponentType componentType;
+  final TTabBarItemStyle componentType;
 
   /// tab 选中背景类型
-  final _TTabBarSelectionType selectionType;
+  final TTabBarStyle selectionType;
+
+  /// 图标与文字的排列方式。
+  final TTabBarLayout layout;
 
   /// 单个tab的属性配置
   final TTabBarItemConfig itemConfig;
@@ -874,7 +836,7 @@ class TTabBarItemWithBadge extends StatelessWidget {
             // 只在无动画模式下显示 item 自身的背景
             if (showItemBackground && (isSelected || unselectedBgColor != null))
               Visibility(
-                visible: componentType == _TTabBarComponentType.label,
+                visible: componentType == TTabBarItemStyle.label,
                 child: Container(
                   /// 设计稿上 tab个数大于3时，左右边距为8，小于等于3时，左右边距为12
                   width: itemWidth - (tabsLength > 3 ? 16 : 24),
@@ -967,29 +929,41 @@ class TTabBarItemWithBadge extends StatelessWidget {
     if (basicType == _TTabBarBasicType.iconText) {
       var selectedIcon = itemConfig.selectedIcon;
       var unSelectedIcon = itemConfig.unselectedIcon;
-      child = Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          IconTheme(
-            data: IconThemeData(
-              color: isSelected
-                  ? context.tTheme.brandNormalColor
-                  : context.tTheme.textColorPrimary,
-            ),
-            child: isSelected ? selectedIcon! : unSelectedIcon!,
-          ),
-          if (centerDistance > 0) SizedBox(height: centerDistance),
-          itemConfig.tabText?.isNotEmpty ?? false
-              ? _textItem(
-                  context,
-                  itemConfig,
-                  isSelected,
-                  context.tTheme.fontBodyExtraSmall!,
-                )
-              : Container(),
-        ],
+      final icon = IconTheme(
+        data: IconThemeData(
+          color: isSelected
+              ? context.tTheme.brandNormalColor
+              : context.tTheme.textColorPrimary,
+        ),
+        child: isSelected ? selectedIcon! : unSelectedIcon!,
       );
+      final text = itemConfig.tabText?.isNotEmpty ?? false
+          ? _textItem(
+              context,
+              itemConfig,
+              isSelected,
+              context.tTheme.fontBodyExtraSmall!,
+            )
+          : const SizedBox.shrink();
+      child = layout == TTabBarLayout.horizontal
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                icon,
+                if (centerDistance > 0) SizedBox(width: centerDistance),
+                text,
+              ],
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                icon,
+                if (centerDistance > 0) SizedBox(height: centerDistance),
+                text,
+              ],
+            );
     }
 
     var top = badgeConfig?.badgeTopOffset ?? -2;
@@ -1028,8 +1002,8 @@ class TTabBarItemWithBadge extends StatelessWidget {
   _buildItem(BuildContext context) {
     var badgeConfig = itemConfig.badgeConfig;
     var isInOrOutCapsule =
-        componentType == _TTabBarComponentType.label ||
-        selectionType == _TTabBarSelectionType.capsule;
+        componentType == TTabBarItemStyle.label ||
+        selectionType == TTabBarStyle.capsule;
 
     // centerDistance > 0 时进一步压缩顶部内边距，为图标与文本的间距腾出空间
     final reduceTopPad =

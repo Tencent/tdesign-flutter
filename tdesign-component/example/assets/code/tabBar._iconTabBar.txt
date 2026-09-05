@@ -1,10 +1,9 @@
-Widget _capsuleTabBar(BuildContext context) {
+Widget _iconTabBar(BuildContext context) {
     const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
     var value = 0;
     return StatefulBuilder(
       builder: (context, setState) => TTabBar(
         type: TTabBarType.icon,
-        style: TTabBarStyle.capsule,
         useSafeArea: false,
         value: value,
         onChanged: (newValue) => setState(() => value = newValue),

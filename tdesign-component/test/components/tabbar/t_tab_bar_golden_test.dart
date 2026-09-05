@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -60,139 +63,200 @@ class _GoldenTabIconPainter extends CustomPainter {
 
 /// Visual regression coverage for the current v1 TTabBar API.
 void main() {
-  Widget wrapWithTheme(Widget child) {
+  setUpAll(() async {
+    final flutterBin = File(
+      Platform.resolvedExecutable,
+    ).parent.parent.parent.parent.parent;
+    final robotoFont = FontLoader('Roboto')
+      ..addFont(
+        File(
+          '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
+        ).readAsBytes().then(ByteData.sublistView),
+      );
+    await robotoFont.load();
+  });
+
+  Widget wrapWithTheme(Widget child, Brightness brightness) {
+    final token = TThemeData.defaultData();
+    final baseTheme = brightness == Brightness.light
+        ? TThemeBuilder.light(token)
+        : TThemeBuilder.dark(token);
+    final theme = baseTheme.copyWith(
+      textTheme: baseTheme.textTheme.apply(fontFamily: 'Roboto'),
+      primaryTextTheme: baseTheme.primaryTextTheme.apply(fontFamily: 'Roboto'),
+    );
     return MaterialApp(
-      theme: ThemeData(extensions: [
-        TThemeData.defaultData(),
-        const TTextThemeData(
-          textStyle: TextStyle(fontFamily: 'TCloudNumber'),
-        ),
-      ]),
-      home: Scaffold(backgroundColor: Colors.white, body: Center(child: child)),
+      theme: theme,
+      home: Scaffold(
+        backgroundColor: theme.colorScheme.surface,
+        body: Center(child: child),
+      ),
     );
   }
 
   List<TTabBarItemConfig> textTabs() => List.generate(
-        3,
-        (index) => TTabBarItemConfig(
-          tabText: ['1', '2', '3'][index],
-          onTap: () {},
-        ),
-      );
+    3,
+    (index) => TTabBarItemConfig(tabText: ['1', '2', '3'][index], onTap: () {}),
+  );
 
   List<TTabBarItemConfig> iconTextTabs() => [
-        TTabBarItemConfig(
-          tabText: '1',
-          selectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.circle),
-          unselectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.circle),
-          onTap: () {},
-        ),
-        TTabBarItemConfig(
-          tabText: '2',
-          selectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.roundedRect),
-          unselectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.roundedRect),
-          onTap: () {},
-        ),
-        TTabBarItemConfig(
-          tabText: '3',
-          selectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.diamond),
-          unselectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.diamond),
-          onTap: () {},
-        ),
-      ];
+    TTabBarItemConfig(
+      tabText: '1',
+      selectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.circle),
+      unselectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.circle),
+      onTap: () {},
+    ),
+    TTabBarItemConfig(
+      tabText: '2',
+      selectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.roundedRect),
+      unselectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.roundedRect),
+      onTap: () {},
+    ),
+    TTabBarItemConfig(
+      tabText: '3',
+      selectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.diamond),
+      unselectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.diamond),
+      onTap: () {},
+    ),
+  ];
 
   List<TTabBarItemConfig> iconTabs() => [
-        TTabBarItemConfig(
-          selectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.circle),
-          unselectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.circle),
-          onTap: () {},
-        ),
-        TTabBarItemConfig(
-          selectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.roundedRect),
-          unselectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.roundedRect),
-          onTap: () {},
-        ),
-      ];
+    TTabBarItemConfig(
+      selectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.circle),
+      unselectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.circle),
+      onTap: () {},
+    ),
+    TTabBarItemConfig(
+      selectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.roundedRect),
+      unselectedIcon: const _GoldenTabIcon(_GoldenTabIconShape.roundedRect),
+      onTap: () {},
+    ),
+  ];
 
   Future<void> expectTabBarGolden(
     WidgetTester tester, {
-    required TTabBarVariant variant,
+    required TTabBarType type,
     required List<TTabBarItemConfig> tabs,
     required String golden,
+    required Brightness brightness,
     int value = 0,
+    TTabBarItemStyle itemStyle = TTabBarItemStyle.label,
+    TTabBarStyle style = TTabBarStyle.filled,
+    TTabBarLayout layout = TTabBarLayout.vertical,
   }) async {
     tester.view.physicalSize = const Size(400, 120);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
 
-    await tester.pumpWidget(wrapWithTheme(
-      TTabBar(
-        variant: variant,
-        value: value,
-        navigationTabs: tabs,
-        onChanged: (_) {},
+    await tester.pumpWidget(
+      wrapWithTheme(
+        TTabBar(
+          type: type,
+          itemStyle: itemStyle,
+          style: style,
+          layout: layout,
+          value: value,
+          navigationTabs: tabs,
+          onChanged: (_) {},
+        ),
+        brightness,
       ),
-    ));
+    );
 
     await expectLater(find.byType(TTabBar), matchesGoldenFile(golden));
   }
 
   group('TTabBar visual regression', () {
-    testWidgets('text defaults to the first selected item', (tester) async {
-      await expectTabBarGolden(
-        tester,
-        variant: TTabBarVariant.text,
-        tabs: textTabs(),
-        golden: 'goldens/t_tab_bar_text_default.png',
-      );
-    });
+    for (final brightness in Brightness.values) {
+      final suffix = brightness.name;
 
-    testWidgets('text renders a non-first selected item', (tester) async {
-      await expectTabBarGolden(
+      testWidgets('text defaults to the first selected item $suffix', (
         tester,
-        variant: TTabBarVariant.text,
-        tabs: textTabs(),
-        value: 1,
-        golden: 'goldens/t_tab_bar_text_selected_1.png',
-      );
-    });
+      ) async {
+        await expectTabBarGolden(
+          tester,
+          type: TTabBarType.text,
+          tabs: textTabs(),
+          brightness: brightness,
+          golden: 'goldens/t_tab_bar_text_default_$suffix.png',
+        );
+      });
 
-    testWidgets('icon text renders selected and unselected icons',
-        (tester) async {
-      await expectTabBarGolden(
+      testWidgets('text renders a non-first selected item $suffix', (
         tester,
-        variant: TTabBarVariant.iconText,
-        tabs: iconTextTabs(),
-        golden: 'goldens/t_tab_bar_icon_text.png',
-      );
-    });
+      ) async {
+        await expectTabBarGolden(
+          tester,
+          type: TTabBarType.text,
+          tabs: textTabs(),
+          value: 1,
+          brightness: brightness,
+          golden: 'goldens/t_tab_bar_text_selected_1_$suffix.png',
+        );
+      });
 
-    testWidgets('icon renders selected and unselected icons', (tester) async {
-      await expectTabBarGolden(
+      testWidgets('icon text renders selected and unselected icons $suffix', (
         tester,
-        variant: TTabBarVariant.icon,
-        tabs: iconTabs(),
-        golden: 'goldens/t_tab_bar_icon.png',
-      );
-    });
+      ) async {
+        await expectTabBarGolden(
+          tester,
+          type: TTabBarType.iconText,
+          tabs: iconTextTabs(),
+          brightness: brightness,
+          golden: 'goldens/t_tab_bar_icon_text_$suffix.png',
+        );
+      });
 
-    testWidgets('weak text has no selected capsule background', (tester) async {
-      await expectTabBarGolden(
+      testWidgets('horizontal icon text follows the Figma layout $suffix', (
         tester,
-        variant: TTabBarVariant.weakText,
-        tabs: textTabs(),
-        golden: 'goldens/t_tab_bar_normal_style.png',
-      );
-    });
+      ) async {
+        await expectTabBarGolden(
+          tester,
+          type: TTabBarType.iconText,
+          layout: TTabBarLayout.horizontal,
+          tabs: iconTextTabs(),
+          brightness: brightness,
+          golden: 'goldens/t_tab_bar_icon_text_horizontal_$suffix.png',
+        );
+      });
 
-    testWidgets('capsule renders icon text within the rounded bar',
-        (tester) async {
-      await expectTabBarGolden(
+      testWidgets('icon renders selected and unselected icons $suffix', (
         tester,
-        variant: TTabBarVariant.capsule,
-        tabs: iconTextTabs(),
-        golden: 'goldens/t_tab_bar_capsule.png',
-      );
-    });
+      ) async {
+        await expectTabBarGolden(
+          tester,
+          type: TTabBarType.icon,
+          tabs: iconTabs(),
+          brightness: brightness,
+          golden: 'goldens/t_tab_bar_icon_$suffix.png',
+        );
+      });
+
+      testWidgets('normal text has no selected label background $suffix', (
+        tester,
+      ) async {
+        await expectTabBarGolden(
+          tester,
+          type: TTabBarType.text,
+          itemStyle: TTabBarItemStyle.normal,
+          tabs: textTabs(),
+          brightness: brightness,
+          golden: 'goldens/t_tab_bar_normal_style_$suffix.png',
+        );
+      });
+
+      testWidgets('capsule renders icon text within the rounded bar $suffix', (
+        tester,
+      ) async {
+        await expectTabBarGolden(
+          tester,
+          type: TTabBarType.iconText,
+          style: TTabBarStyle.capsule,
+          tabs: iconTextTabs(),
+          brightness: brightness,
+          golden: 'goldens/t_tab_bar_capsule_$suffix.png',
+        );
+      });
+    }
   });
 }

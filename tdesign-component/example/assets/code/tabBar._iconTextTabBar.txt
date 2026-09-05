@@ -1,16 +1,17 @@
-Widget _capsuleTabBar(BuildContext context) {
+Widget _iconTextTabBar(BuildContext context) {
+    const labels = ['首页', '应用', '聊天', '我的'];
     const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
     var value = 0;
     return StatefulBuilder(
       builder: (context, setState) => TTabBar(
-        type: TTabBarType.icon,
-        style: TTabBarStyle.capsule,
+        type: TTabBarType.iconText,
         useSafeArea: false,
         value: value,
         onChanged: (newValue) => setState(() => value = newValue),
         navigationTabs: List.generate(
           4,
           (index) => TTabBarItemConfig(
+            tabText: labels[index],
             selectedIcon: Icon(icons[index], size: 20),
             unselectedIcon: Icon(icons[index], size: 20),
           ),

@@ -100,7 +100,7 @@ class _NavigationComponentsScene extends StatelessWidget {
                       const SizedBox(height: 18),
                       const _SectionLabel('TabBar'),
                       TTabBar(
-                        variant: TTabBarVariant.iconText,
+                        type: TTabBarType.iconText,
                         value: 1,
                         useSafeArea: false,
                         placeholder: false,

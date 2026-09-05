@@ -1,0 +1,74 @@
+Widget _weakTabBars(BuildContext context) {
+    const labels = ['首页', '应用', '聊天', '我的'];
+    const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
+    const badges = [
+      TBadge(label: '16'),
+      TBadge(variant: TBadgeVariant.dot),
+      TBadge(label: 'New'),
+      TBadge(label: '···'),
+    ];
+    final values = [0, 0, 0];
+    return StatefulBuilder(
+      builder: (context, setState) => Column(
+        children: [
+          TTabBar(
+            type: TTabBarType.text,
+            itemStyle: TTabBarItemStyle.normal,
+            split: true,
+            useSafeArea: false,
+            value: values[0],
+            onChanged: (value) => setState(() => values[0] = value),
+            navigationTabs: List.generate(
+              4,
+              (index) => TTabBarItemConfig(
+                tabText: labels[index],
+                badgeConfig: TTabBarBadgeConfig(
+                  showBadge: true,
+                  tBadge: badges[index],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          TTabBar(
+            type: TTabBarType.icon,
+            itemStyle: TTabBarItemStyle.normal,
+            useSafeArea: false,
+            value: values[1],
+            onChanged: (value) => setState(() => values[1] = value),
+            navigationTabs: List.generate(
+              4,
+              (index) => TTabBarItemConfig(
+                selectedIcon: Icon(icons[index], size: 20),
+                unselectedIcon: Icon(icons[index], size: 20),
+                badgeConfig: TTabBarBadgeConfig(
+                  showBadge: true,
+                  tBadge: badges[index],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          TTabBar(
+            type: TTabBarType.iconText,
+            itemStyle: TTabBarItemStyle.normal,
+            useSafeArea: false,
+            value: values[2],
+            onChanged: (value) => setState(() => values[2] = value),
+            navigationTabs: List.generate(
+              4,
+              (index) => TTabBarItemConfig(
+                tabText: labels[index],
+                selectedIcon: Icon(icons[index], size: 20),
+                unselectedIcon: Icon(icons[index], size: 20),
+                badgeConfig: TTabBarBadgeConfig(
+                  showBadge: true,
+                  tBadge: badges[index],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }

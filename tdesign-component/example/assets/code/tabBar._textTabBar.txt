@@ -1,0 +1,19 @@
+Widget _textTabBar(BuildContext context) {
+    const labels = ['首页', '应用', '聊天', '我的'];
+    var value = 0;
+    return StatefulBuilder(
+      builder: (context, setState) => TTabBar(
+        type: TTabBarType.text,
+        useSafeArea: false,
+        value: value,
+        onChanged: (newValue) {
+          setState(() => value = newValue);
+          TToast.showText('点击了 Item ${newValue + 1}', context: context);
+        },
+        navigationTabs: List.generate(
+          4,
+          (index) => TTabBarItemConfig(tabText: labels[index]),
+        ),
+      ),
+    );
+  }
