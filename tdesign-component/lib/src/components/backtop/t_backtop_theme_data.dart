@@ -57,7 +57,10 @@ class TBackTopThemeData extends ThemeExtension<TBackTopThemeData> {
   /// 半圆形图标与文字间距，默认 2。
   final double? contentGap;
 
-  /// 文案样式；未设置字段回退 Mark Extra Small 字体和当前内容色。
+  /// 文案字体样式；未设置字段回退 Mark Extra Small 字体。
+  ///
+  /// 文字颜色与图标颜色统一由 [contentColor] 控制，传入样式中的 `color`
+  /// 不参与解析，避免同一内容色存在两个 Theme 状态源。
   final TextStyle? textStyle;
 
   const TBackTopThemeData({

@@ -28,9 +28,12 @@ void main() {
     const floatingKey = Key('backtop-demo-floating');
     expect(find.byKey(floatingKey).hitTestable(), findsNothing);
     final scrollable = find.byType(Scrollable).first;
-    await tester.drag(scrollable, const Offset(0, -500));
+    await tester.tap(find.byKey(const Key('backtop-demo-circle-trigger')));
     await tester.pumpAndSettle();
     expect(find.byKey(floatingKey).hitTestable(), findsOneWidget);
+    var backTop = tester.widget<TBackTop>(find.byKey(floatingKey));
+    expect(backTop.shape, TBackTopShape.circle);
+    expect(backTop.colorScheme, TBackTopColorScheme.light);
     await binding.takeScreenshot('backtop-visible-after-scroll');
 
     await tester.tap(find.byKey(floatingKey));
@@ -38,6 +41,16 @@ void main() {
     final position = tester.state<ScrollableState>(scrollable).position;
     expect(position.pixels, lessThan(1));
     expect(find.byKey(floatingKey).hitTestable(), findsNothing);
+
+    await tester.tap(find.byKey(const Key('backtop-demo-half-round-trigger')));
+    await tester.pumpAndSettle();
+    backTop = tester.widget<TBackTop>(find.byKey(floatingKey));
+    expect(backTop.shape, TBackTopShape.halfCircle);
+    expect(backTop.colorScheme, TBackTopColorScheme.dark);
+    expect(find.byKey(floatingKey).hitTestable(), findsOneWidget);
+    await binding.takeScreenshot('backtop-half-round-after-scroll');
+    await tester.tap(find.byKey(floatingKey));
+    await tester.pumpAndSettle();
 
     final provider = tester
         .element(find.byType(TBackTop).first)

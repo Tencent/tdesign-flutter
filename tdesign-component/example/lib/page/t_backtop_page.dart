@@ -13,6 +13,19 @@ class TBackTopPage extends StatefulWidget {
 
 class _TBackTopPageState extends State<TBackTopPage> {
   final ScrollController controller = ScrollController();
+  TBackTopShape shape = TBackTopShape.circle;
+
+  Future<void> _selectShape(TBackTopShape value) async {
+    setState(() => shape = value);
+    if (!controller.hasClients) {
+      return;
+    }
+    await controller.animateTo(
+      controller.position.maxScrollExtent.clamp(0, 1000),
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
 
   @override
   void dispose() {
@@ -33,13 +46,31 @@ class _TBackTopPageState extends State<TBackTopPage> {
         key: const Key('backtop-demo-floating'),
         controller: controller,
         showText: true,
+        shape: shape,
+        colorScheme: shape == TBackTopShape.circle
+            ? TBackTopColorScheme.light
+            : TBackTopColorScheme.dark,
       ),
       children: [
         ExampleModule(
           title: '组件类型',
           children: [
-            ExampleItem(desc: '圆形返回顶部', builder: _buildCircleBackTop),
-            ExampleItem(desc: '半圆形返回顶部', builder: _buildHalfCircleBackTop),
+            ExampleItem(
+              desc: '圆形返回顶部',
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              builder: _buildCircleTrigger,
+            ),
+            ExampleItem(
+              desc: '半圆形返回顶部',
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              builder: _buildHalfRoundTrigger,
+            ),
+            ExampleItem(
+              center: false,
+              ignoreCode: true,
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              builder: _buildSkeletonContent,
+            ),
           ],
         ),
       ],
@@ -47,88 +78,74 @@ class _TBackTopPageState extends State<TBackTopPage> {
   }
 
   @ExampleCode(group: 'backtop')
-  Widget _buildCircleBackTop(BuildContext context) {
-    return Wrap(
-      spacing: 16,
-      runSpacing: 16,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        TBackTop(onPressed: () {}),
-        TBackTop(colorScheme: TBackTopColorScheme.dark, onPressed: () {}),
-        TBackTop(showText: true, onPressed: () {}),
-        TBackTop(
-          showText: true,
-          colorScheme: TBackTopColorScheme.dark,
-          onPressed: () {},
-        ),
-      ],
+  Widget _buildCircleTrigger(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        key: const Key('backtop-demo-circle-trigger'),
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        size: TButtonSize.large,
+        onPressed: () => _selectShape(TBackTopShape.circle),
+        child: const TText('圆形返回顶部'),
+      ),
     );
   }
 
   @ExampleCode(group: 'backtop')
-  Widget _buildHalfCircleBackTop(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            TBackTop(shape: TBackTopShape.halfCircle, onPressed: () {}),
-            TBackTop(
-              shape: TBackTopShape.halfCircle,
-              colorScheme: TBackTopColorScheme.dark,
-              onPressed: () {},
-            ),
-            TBackTop(
-              shape: TBackTopShape.halfCircle,
-              showText: true,
-              onPressed: () {},
-            ),
-            TBackTop(
-              shape: TBackTopShape.halfCircle,
-              showText: true,
-              colorScheme: TBackTopColorScheme.dark,
-              onPressed: () {},
-            ),
-          ],
-        ),
-        const SizedBox(height: 32),
-        Wrap(
-          spacing: 16,
-          runSpacing: 24,
-          children: List.generate(
-            8,
-            (_) => Column(
+  Widget _buildHalfRoundTrigger(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        key: const Key('backtop-demo-half-round-trigger'),
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        size: TButtonSize.large,
+        onPressed: () => _selectShape(TBackTopShape.halfCircle),
+        child: const TText('半圆形返回顶部'),
+      ),
+    );
+  }
+
+  Widget _buildSkeletonContent(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final itemWidth = (constraints.maxWidth - 16) / 2;
+      return Wrap(
+        spacing: 16,
+        runSpacing: 24,
+        children: List.generate(
+          8,
+          (_) => SizedBox(
+            width: itemWidth,
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: 139,
-                  height: 139,
+                  width: itemWidth,
+                  height: itemWidth,
                   decoration: BoxDecoration(
                     color: context.tTheme.bgColorComponent,
-                    borderRadius: BorderRadius.circular(
-                      context.tTheme.radiusExtraLarge,
-                    ),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 const SizedBox(height: 10),
-                Container(
-                  width: 139,
-                  height: 16,
-                  decoration: BoxDecoration(
-                    color: context.tTheme.bgColorComponent,
-                    borderRadius: BorderRadius.circular(
-                      context.tTheme.radiusSmall,
-                    ),
-                  ),
-                ),
+                _buildSkeletonLine(context, itemWidth),
+                const SizedBox(height: 10),
+                _buildSkeletonLine(context, itemWidth * 0.61),
               ],
             ),
           ),
         ),
-      ],
-    );
-  }
+      );
+    },
+  );
+
+  Widget _buildSkeletonLine(BuildContext context, double width) => Container(
+    width: width,
+    height: 16,
+    decoration: BoxDecoration(
+      color: context.tTheme.bgColorComponent,
+      borderRadius: BorderRadius.circular(context.tTheme.radiusSmall),
+    ),
+  );
 }

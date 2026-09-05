@@ -260,6 +260,38 @@ void main() {
 
       controller.dispose();
     });
+
+    testWidgets('运行时替换 controller 和阈值后重新同步显隐', (tester) async {
+      final firstController = ScrollController(initialScrollOffset: 50);
+      final secondController = ScrollController(initialScrollOffset: 150);
+
+      await tester.pumpWidget(
+        wrapScrollable(
+          TBackTop(controller: firstController, visibilityOffset: 100),
+          firstController,
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(GestureDetector), findsNothing);
+
+      await tester.pumpWidget(
+        wrapScrollable(
+          TBackTop(controller: secondController, visibilityOffset: 120),
+          secondController,
+        ),
+      );
+      await tester.pumpAndSettle();
+      secondController.jumpTo(150);
+      await tester.pump();
+      expect(find.byType(GestureDetector), findsOneWidget);
+
+      secondController.jumpTo(0);
+      await tester.pump();
+      expect(find.byType(GestureDetector), findsNothing);
+
+      firstController.dispose();
+      secondController.dispose();
+    });
   });
 
   group('TBackTop 主题颜色', () {
@@ -377,6 +409,32 @@ void main() {
       expect(result.roundSize, 48);
     });
 
+    test('lerp 覆盖单边和双边颜色及文字样式', () {
+      const a = TBackTopThemeData(
+        backgroundColor: Colors.red,
+        borderColor: Colors.black,
+        textStyle: TextStyle(fontSize: 10),
+      );
+      const b = TBackTopThemeData(
+        borderColor: Colors.white,
+        contentColor: Colors.blue,
+      );
+
+      final beforeMidpoint = a.lerp(b, 0.25);
+      expect(beforeMidpoint.backgroundColor, Colors.red);
+      expect(beforeMidpoint.contentColor, isNull);
+      expect(
+        beforeMidpoint.borderColor,
+        Color.lerp(Colors.black, Colors.white, 0.25),
+      );
+      expect(beforeMidpoint.textStyle?.fontSize, 10);
+
+      final afterMidpoint = a.lerp(b, 0.75);
+      expect(afterMidpoint.backgroundColor, isNull);
+      expect(afterMidpoint.contentColor, Colors.blue);
+      expect(afterMidpoint.textStyle, isNotNull);
+    });
+
     testWidgets('默认显隐阈值为 200', (tester) async {
       final controller = ScrollController(initialScrollOffset: 199);
       await tester.pumpWidget(
@@ -482,6 +540,44 @@ void main() {
         ),
         isTrue,
       );
+      expect(
+        tester
+            .widgetList<Icon>(find.byIcon(TIcons.backtop))
+            .every((icon) => icon.color == token.whiteColor1),
+        isTrue,
+      );
+    });
+
+    testWidgets('dark 预设在系统深色主题下仍使用白色内容', (tester) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.dark(token),
+          home: const Scaffold(
+            body: Row(
+              children: [
+                TBackTop(colorScheme: TBackTopColorScheme.dark),
+                TBackTop(
+                  shape: TBackTopShape.halfCircle,
+                  colorScheme: TBackTopColorScheme.dark,
+                  showText: true,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        tester
+            .widgetList<Icon>(find.byIcon(TIcons.backtop))
+            .every((icon) => icon.color == token.whiteColor1),
+        isTrue,
+      );
+      expect(
+        tester.widget<TText>(find.byType(TText)).style?.color,
+        token.whiteColor1,
+      );
     });
 
     testWidgets('Theme 尺寸和文字样式字段生效', (tester) async {
@@ -508,6 +604,27 @@ void main() {
       expect(decoratedSizes.any((size) => size.height == 44), isTrue);
       expect(tester.widget<Icon>(find.byIcon(TIcons.backtop)).size, 24);
       expect(tester.widget<Text>(find.text('返回\n顶部')).style?.fontSize, 12);
+    });
+
+    testWidgets('contentColor 唯一控制图标和文字颜色', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TBackTop(showText: true),
+          backTopTheme: const TBackTopThemeData(
+            contentColor: Colors.green,
+            textStyle: TextStyle(color: Colors.red),
+          ),
+        ),
+      );
+
+      expect(
+        tester.widget<Icon>(find.byIcon(TIcons.backtop)).color,
+        Colors.green,
+      );
+      expect(
+        tester.widget<TText>(find.byType(TText)).style?.color,
+        Colors.green,
+      );
     });
 
     testWidgets('半圆形 + showText + Theme 注入', (tester) async {

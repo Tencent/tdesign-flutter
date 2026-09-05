@@ -185,9 +185,7 @@ class _TBackTopState extends State<TBackTop> {
               ? token.grayColor13
               : token.grayColor14
         : token.bgColorContainer;
-    final defaultContent = isDark
-        ? token.textColorAnti
-        : token.textColorPrimary;
+    final defaultContent = isDark ? token.whiteColor1 : token.textColorPrimary;
     return _BackTopVisualStyle(
       backgroundColor: theme.backgroundColor ?? defaultBackground,
       borderColor:
@@ -205,8 +203,9 @@ class _TBackTopState extends State<TBackTop> {
         fontSize: token.fontMarkExtraSmall?.size ?? 10,
         height: 1.2,
         fontWeight: token.fontMarkExtraSmall?.fontWeight ?? FontWeight.w600,
+      ).merge(theme.textStyle).copyWith(
         color: theme.contentColor ?? defaultContent,
-      ).merge(theme.textStyle),
+      ),
     );
   }
 

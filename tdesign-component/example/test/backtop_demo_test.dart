@@ -9,7 +9,7 @@ import 'demo_page_test_utils.dart';
 void main() {
   registerDemoStructureTests(backTopDemoPageTestSpec);
 
-  testWidgets('公开 Demo 覆盖 Figma 的 8 个设计状态', (tester) async {
+  testWidgets('公开 Demo 对齐小程序的形态选择与滚动模式', (tester) async {
     await pumpFullDemoPage(tester, backTopDemoPageTestSpec, ThemeMode.light);
 
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
@@ -19,50 +19,21 @@ void main() {
     expect(page.children.single.children.map((item) => item.desc), [
       '圆形返回顶部',
       '半圆形返回顶部',
+      '',
     ]);
 
-    final backTops = tester
-        .widgetList<TBackTop>(find.byType(TBackTop))
-        .toList();
-    expect(backTops, hasLength(9));
-    final previews = backTops.take(8).toList();
-    expect(previews.map((item) => item.shape), [
-      TBackTopShape.circle,
-      TBackTopShape.circle,
-      TBackTopShape.circle,
-      TBackTopShape.circle,
-      TBackTopShape.halfCircle,
-      TBackTopShape.halfCircle,
-      TBackTopShape.halfCircle,
-      TBackTopShape.halfCircle,
-    ]);
-    expect(previews.map((item) => item.colorScheme), [
-      TBackTopColorScheme.light,
-      TBackTopColorScheme.dark,
-      TBackTopColorScheme.light,
-      TBackTopColorScheme.dark,
-      TBackTopColorScheme.light,
-      TBackTopColorScheme.dark,
-      TBackTopColorScheme.light,
-      TBackTopColorScheme.dark,
-    ]);
-    expect(previews.map((item) => item.showText), [
-      false,
-      false,
-      true,
-      true,
-      false,
-      false,
-      true,
-      true,
-    ]);
-    expect(backTops.last.controller, isNotNull);
-    expect(backTops.last.visibilityOffset, 200);
+    expect(find.byType(TButton), findsNWidgets(2));
+    final backTop = tester.widget<TBackTop>(find.byType(TBackTop));
+    expect(backTop.controller, isNotNull);
+    expect(backTop.visibilityOffset, 200);
+    expect(backTop.shape, TBackTopShape.circle);
+    expect(backTop.colorScheme, TBackTopColorScheme.light);
+    expect(backTop.showText, isTrue);
 
     await disposeDemoPage(tester);
   }, tags: 'demo');
 
-  testWidgets('滚动超过阈值后点击悬浮实例回到顶部', (tester) async {
+  testWidgets('选择形态后滚动到内容区并可点击回顶', (tester) async {
     await pumpDemoPageAtPhoneViewport(
       tester,
       backTopDemoPageTestSpec,
@@ -77,15 +48,25 @@ void main() {
     final position = tester.state<ScrollableState>(scrollable.first).position;
     expect(position.maxScrollExtent, greaterThan(200));
 
-    await tester.drag(customScrollView, const Offset(0, -500));
+    await tester.tap(find.byKey(const Key('backtop-demo-half-round-trigger')));
     await tester.pumpAndSettle();
     expect(position.pixels, greaterThanOrEqualTo(200));
 
-    final floating = find.byType(TBackTop).last;
-    expect(tester.getSize(floating), const Size(48, 48));
+    final floating = find.byKey(const Key('backtop-demo-floating'));
+    var backTop = tester.widget<TBackTop>(floating);
+    expect(backTop.shape, TBackTopShape.halfCircle);
+    expect(backTop.colorScheme, TBackTopColorScheme.dark);
+    expect(tester.getSize(floating).height, 40);
     await tester.tap(floating);
     await tester.pumpAndSettle();
     expect(position.pixels, lessThan(1));
+
+    await tester.tap(find.byKey(const Key('backtop-demo-circle-trigger')));
+    await tester.pumpAndSettle();
+    backTop = tester.widget<TBackTop>(floating);
+    expect(backTop.shape, TBackTopShape.circle);
+    expect(backTop.colorScheme, TBackTopColorScheme.light);
+    expect(tester.getSize(floating), const Size(48, 48));
 
     await disposeDemoPage(tester);
   }, tags: 'demo');

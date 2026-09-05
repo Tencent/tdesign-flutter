@@ -29,7 +29,7 @@
 | halfCircleMinWidth | double? | - | 半圆形无文字时的最小宽度，默认 38。 |
 | iconSize | double? | - | 图标尺寸，默认 20。 |
 | roundSize | double? | - | 圆形宽高，默认 48。 |
-| textStyle | TextStyle? | - | 文案样式；未设置字段回退 Mark Extra Small 字体和当前内容色。 |
+| textStyle | TextStyle? | - | 文案字体样式；未设置字段回退 Mark Extra Small 字体。 文字颜色与图标颜色统一由 `contentColor` 控制，传入样式中的 `color` 不参与解析，避免同一内容色存在两个 Theme 状态源。 |
 
 
 ### TBackTopShape

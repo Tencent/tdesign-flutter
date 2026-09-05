@@ -7,8 +7,11 @@ const backTopDemoPageTestSpec = DemoPageTestSpec(
   name: 'backtop',
   title: 'BackTop 返回顶部',
   page: TBackTopPage(),
-  expectedTexts: ['01 组件类型', '圆形返回顶部', '半圆形返回顶部', '顶部', '返回\n顶部'],
+  expectedTexts: ['01 组件类型', '圆形返回顶部', '半圆形返回顶部'],
   componentType: TBackTop,
-  expectedComponentCount: 9,
+  expectedComponentCount: 1,
   useAlignmentCjkFont: true,
+  supplementalCjkFontFamily: 'TDesign BackTop Golden CJK',
+  supplementalCjkFontPath: 'test/fonts/BackTopGoldenCJK-Regular.otf',
+  goldenAtPhoneViewport: true,
 );

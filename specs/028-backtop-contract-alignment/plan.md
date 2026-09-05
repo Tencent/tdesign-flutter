@@ -6,7 +6,7 @@
 - 将显隐阈值收回实例并设为小程序公开契约的 200；通过首次帧后同步解决 Controller 尚未挂载时错误可见的问题。
 - 把 `onPressed` 改为完成通知：点击能力由 `controller` 或回调任一来源决定，Controller 动画完成后再通知。
 - 将 Figma 尺寸、间距、边框和文字样式集中到 `TBackTopThemeData`，默认颜色从 TDesign 语义 Token 解析。
-- Example 使用两个公开分组项同屏展示 8 个状态，并让页面悬浮实例绑定同一 ScrollController 验证真实回顶。
+- Example 按 Figma 与小程序 Demo 使用两个全宽按钮选择形态，并让单一页面悬浮实例绑定同一 `ScrollController`；按钮选择后以 300ms 动画滚动至最多 1000。
 
 ## 影响范围
 
@@ -14,7 +14,7 @@
 | --- | --- | --- |
 | 组件 | `lib/src/components/backtop/` | 状态所有权、深色预设、显隐与点击语义、视觉字段 |
 | 测试 | `test/components/backtop/`、集中式清单 | 行为、覆盖率、Theme 与导航矩阵 Golden |
-| 示例 | `example/lib/page/t_backtop_page.dart`、Demo 测试 | 8 状态矩阵、真实回顶、light/dark Golden |
+| 示例 | `example/lib/page/t_backtop_page.dart`、Demo 测试 | 两按钮选型、真实回顶、固定视口首屏与滚动态 light/dark Golden |
 | 文档 | dartdoc、Spec、生成 API/示例资产 | breaking 迁移与默认行为 |
 
 ## API 变化
@@ -36,7 +36,7 @@
 ## 验证策略
 
 - 单元测试：视觉解析、尺寸、点击完成顺序、防抖、Controller 切换和首次挂载显隐。
-- Demo 测试：完整滚动页面中的 8 个实例、分组顺序、关键参数和真实点击回顶。
+- Demo 测试：固定 `375 × 812` 页面中的按钮顺序、形态选择、300ms 滚动目标和真实点击回顶。
 - 覆盖率：BackTop 手写生产源码 `LH/LF >= 95%`。
 - 静态检查：Flutter 3.32.0 与 latest 定向 analyze。
-- 视觉验收：Flutter 3.32.0 Linux Demo light/dark Golden 与共享导航矩阵。
+- 视觉验收：Flutter 3.32.0 Linux Demo 首屏、圆形滚动态、半圆形滚动态的 light/dark 严格 Golden；组件 8 状态矩阵和共享导航矩阵另行冻结。

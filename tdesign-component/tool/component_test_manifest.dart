@@ -75,7 +75,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'BackTop Component',
         workingDirectory: '.',
-        testFiles: ['test/components/navigation_components_golden_test.dart'],
+        testFiles: [
+          'test/components/backtop/t_backtop_golden_test.dart',
+          'test/components/navigation_components_golden_test.dart',
+        ],
       ),
       VisualTestManifest(
         name: 'BackTop Demo',
