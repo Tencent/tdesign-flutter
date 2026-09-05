@@ -6,14 +6,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
-///
-/// TSideBarAnchorPage演示
-///
+/// SideBar 锚点与图标示例。
 class TSideBarAnchorPage extends StatefulWidget {
   const TSideBarAnchorPage({
     super.key,
     this.title = 'SideBar 锚点用法',
-    this.style = TSideBarVariant.normal,
+    this.style = TSideBarVariant.line,
     this.withIcons = false,
   });
 
@@ -22,19 +20,17 @@ class TSideBarAnchorPage extends StatefulWidget {
   final bool withIcons;
 
   @override
-  State<StatefulWidget> createState() {
-    return TSideBarAnchorPageState();
-  }
+  State<TSideBarAnchorPage> createState() => TSideBarAnchorPageState();
 }
 
 class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
   static const _anchorEdgeTolerance = 0.5;
+  static const _itemCount = 10;
 
-  var currentValue = 0;
+  var currentValue = 1;
   final _demoScroller = ScrollController();
   var _isProgrammaticScroll = false;
-  var list = <TSideBarItem>[];
-  final _headerKeys = List.generate(20, (_) => GlobalKey());
+  final _headerKeys = List.generate(_itemCount, (_) => GlobalKey());
   final _contentViewportKey = GlobalKey();
   final _lastSectionKey = GlobalKey();
   var _trailingExtent = 0.0;
@@ -42,36 +38,16 @@ class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
   @override
   void initState() {
     super.initState();
-
     _demoScroller.addListener(() {
-      if (_isProgrammaticScroll) {
-        return;
+      if (!_isProgrammaticScroll) {
+        _syncSelectionFromViewport();
       }
-      _syncSelectionFromViewport();
     });
-
-    for (var i = 0; i < 20; i++) {
-      list.add(TSideBarItem(
-        label: '选项$i',
-        value: i,
-        icon: widget.withIcons ? TIcons.app : null,
-      ));
-    }
-
-    list[1] = TSideBarItem(
-      label: list[1].label,
-      value: list[1].value,
-      icon: list[1].icon,
-      textStyle: list[1].textStyle,
-      badge: const TBadge(variant: TBadgeVariant.dot),
-    );
-    list[2] = TSideBarItem(
-      label: list[2].label,
-      value: list[2].value,
-      icon: list[2].icon,
-      textStyle: list[2].textStyle,
-      badge: const TBadge(label: '8'),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        handleSidebarChange(currentValue);
+      }
+    });
   }
 
   void _syncSelectionFromViewport() {
@@ -91,7 +67,6 @@ class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
     if (viewport == null || header == null || section == null) {
       return;
     }
-
     final headerTop = header.localToGlobal(Offset.zero).dy;
     final sectionBottom =
         section.localToGlobal(Offset.zero).dy + section.size.height;
@@ -107,7 +82,6 @@ class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
     if (viewport == null) {
       return currentValue;
     }
-
     final viewportTop = viewport.localToGlobal(Offset.zero).dy;
     var index = 0;
     for (var i = 1; i < _headerKeys.length; i++) {
@@ -123,35 +97,26 @@ class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
     return index;
   }
 
-  Future<void> _scrollToHeader(int index) async {
-    final context = _headerKeys[index].currentContext;
-    if (context == null) {
-      return;
-    }
-    await Scrollable.ensureVisible(
-      context,
-      alignment: 0,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
-  }
-
   Future<void> handleSidebarChange(int value) async {
     if (currentValue != value) {
       setState(() => currentValue = value);
     }
-
+    final targetContext = _headerKeys[value].currentContext;
+    if (targetContext == null) {
+      return;
+    }
     _isProgrammaticScroll = true;
     try {
-      await _scrollToHeader(value);
+      await Scrollable.ensureVisible(
+        targetContext,
+        alignment: 0,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
     } finally {
       if (mounted) {
         _isProgrammaticScroll = false;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) {
-            _syncSelectionFromViewport();
-          }
-        });
+        _syncSelectionFromViewport();
       }
     }
   }
@@ -168,141 +133,109 @@ class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
       title: widget.title,
       exampleCodeGroup: 'sideBar',
       showSingleChild: true,
-      singleChild: CodeWrapper(
-        isCenter: false,
-        builder: _buildAnchorSideBar,
-      ),
+      showTestModule: false,
+      singleChild: CodeWrapper(isCenter: false, builder: _buildAnchorSideBar),
     );
   }
 
   @ExampleCode(group: 'sideBar')
   Widget _buildAnchorSideBar(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 80,
-          padding: const EdgeInsets.all(16),
-          child: SizedBox(
-            width: double.infinity,
-            child: TButton(
-              child: const Text('更新children'),
-              onPressed: () {
-                setState(() {
-                  final children = list
-                      .asMap()
-                      .entries
-                      .map((entry) => TSideBarItem(
-                            label: '变更${entry.key}',
-                            badge: entry.value.badge,
-                            value: entry.value.value,
-                            icon: entry.value.icon,
-                          ))
-                      .toList();
-                  list = children;
-                });
-              },
+    final labels = List.filled(10, '选项');
+    final titles = List.filled(10, '标题');
+    final itemCounts = List.filled(10, 8);
+    final items = List.generate(
+      labels.length,
+      (index) => TSideBarItem(
+        label: labels[index],
+        value: index,
+        icon: widget.withIcons ? TIcons.app : null,
+        badge: switch (index) {
+          1 => const TBadge(variant: TBadgeVariant.dot),
+          2 => const TBadge(label: '8'),
+          _ => null,
+        },
+      ),
+    );
+
+    Widget buildSection(int sectionIndex) {
+      return KeyedSubtree(
+        key: sectionIndex == labels.length - 1 ? _lastSectionKey : null,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            KeyedSubtree(
+              key: ValueKey('sidebar-section-$sectionIndex'),
+              child: Container(
+                key: _headerKeys[sectionIndex],
+                height: 54,
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TText(
+                  titles[sectionIndex],
+                  font: context.tTheme.fontBodyLarge,
+                ),
+              ),
             ),
-          ),
+            for (var index = 0; index < itemCounts[sectionIndex]; index++)
+              Container(
+                height: 80,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: context.tTheme.grayColor2),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    const TImage(
+                      src: 'assets/img/empty.png',
+                      width: 48,
+                      height: 48,
+                    ),
+                    const SizedBox(width: 16),
+                    TText('标题', font: context.tTheme.fontBodyLarge),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      );
+    }
+
+    return Row(
+      children: [
+        TSideBar(
+          style: widget.style,
+          value: currentValue,
+          children: items,
+          onChanged: handleSidebarChange,
         ),
         Expanded(
-          child: Row(
-            children: [
-              SizedBox(
-                width: 106,
-                child: TSideBar(
-                  style: widget.style,
-                  value: currentValue,
-                  children: list,
-                  onChanged: handleSidebarChange,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) {
+                  _syncTrailingExtent();
+                }
+              });
+              return SingleChildScrollView(
+                key: _contentViewportKey,
+                controller: _demoScroller,
+                child: Container(
+                  color: context.tTheme.bgColorContainer,
+                  child: Column(
+                    children: [
+                      for (var index = 0; index < labels.length; index++)
+                        buildSection(index),
+                      SizedBox(height: _trailingExtent),
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (mounted) {
-                        _syncTrailingExtent();
-                      }
-                    });
-                    return SingleChildScrollView(
-                      key: _contentViewportKey,
-                      controller: _demoScroller,
-                      child: Container(
-                        color: context.tTheme.bgColorContainer,
-                        child: Column(
-                          children: [
-                            for (var index = 0;
-                                index < _headerKeys.length;
-                                index++)
-                              getAnchorDemo(index),
-                            SizedBox(height: _trailingExtent),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              )
-            ],
+              );
+            },
           ),
-        )
+        ),
       ],
-    );
-  }
-
-  Widget getAnchorDemo(int index) {
-    return KeyedSubtree(
-      key: index == _headerKeys.length - 1 ? _lastSectionKey : null,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: KeyedSubtree(
-              key: _headerKeys[index],
-              child: TText(
-                '标题$index',
-                style: const TextStyle(fontSize: 14),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: displayImageList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget displayImageList() {
-    return Column(
-      children: [
-        displayImageItem(),
-        const TDivider(),
-        displayImageItem(),
-        const TDivider(),
-        displayImageItem(),
-        const TDivider(),
-      ],
-    );
-  }
-
-  Widget displayImageItem() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        // spacing: 16,
-        children: [
-          TImage(
-            src: 'assets/img/empty.png',
-            variant: TImageVariant.roundedSquare,
-          ),
-          SizedBox(width: 16),
-          TText('标题', style: TextStyle(fontSize: 16))
-        ],
-      ),
     );
   }
 }

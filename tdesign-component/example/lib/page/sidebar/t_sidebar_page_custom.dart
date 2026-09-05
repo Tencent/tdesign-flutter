@@ -1,28 +1,20 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
-///
-/// TSideBarCustomPage演示
-///
+/// SideBar 标签样式示例。
 class TSideBarCustomPage extends StatefulWidget {
-  const TSideBarCustomPage({Key? key}) : super(key: key);
+  const TSideBarCustomPage({super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    return TSideBarCustomPageState();
-  }
+  State<TSideBarCustomPage> createState() => TSideBarCustomPageState();
 }
 
 class TSideBarCustomPageState extends State<TSideBarCustomPage> {
-  static const _sections = ['今日精选', '新鲜烘焙', '午后茶点', '轻食简餐', '限定活动', '会员心选'];
-
-  var currentValue = 0;
-  final _pageController = PageController();
+  var currentValue = 1;
+  final _pageController = PageController(initialPage: 1);
 
   @override
   void dispose() {
@@ -32,163 +24,110 @@ class TSideBarCustomPageState extends State<TSideBarCustomPage> {
 
   @override
   Widget build(BuildContext context) {
-    var current = buildWidget(context);
-    return current;
-  }
-
-  Widget buildWidget(BuildContext context) {
     return ExamplePage(
-        title: 'SideBar 自定义样式',
-        exampleCodeGroup: 'sideBar',
-        showSingleChild: true,
-        singleChild: CodeWrapper(
-          isCenter: false,
-          builder: _buildCustomSideBar,
-        ));
+      title: 'SideBar 自定义样式',
+      exampleCodeGroup: 'sideBar',
+      showSingleChild: true,
+      showTestModule: false,
+      singleChild: CodeWrapper(isCenter: false, builder: _buildCustomSideBar),
+    );
   }
 
   @ExampleCode(group: 'sideBar')
   Widget _buildCustomSideBar(BuildContext context) {
-    // 自定义样式
-    final list = <TSideBarItem>[];
-    final pages = <Widget>[];
-
-    for (var i = 0; i < _sections.length; i++) {
-      list.add(TSideBarItem(
-        label: _sections[i],
-        value: i,
-        textStyle: TextStyle(color: context.tTheme.textColorSecondary),
-      ));
-      pages.add(getPageDemo(context, i));
-    }
+    final labels = List.filled(10, '选项');
+    final titles = List.filled(10, '标题');
+    final itemCounts = List.filled(10, 8);
+    final items = List.generate(
+      labels.length,
+      (index) => TSideBarItem(
+        label: labels[index],
+        value: index,
+        badge: switch (index) {
+          1 => const TBadge(variant: TBadgeVariant.dot),
+          2 => const TBadge(label: '8'),
+          _ => null,
+        },
+      ),
+    );
 
     void setCurrentValue(int value) {
       _pageController.jumpToPage(value);
       if (currentValue != value) {
-        setState(() {
-          currentValue = value;
-        });
+        setState(() => currentValue = value);
       }
+    }
+
+    Widget buildPage(int pageIndex) {
+      return Container(
+        color: context.tTheme.bgColorContainer,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 54,
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TText(
+                titles[pageIndex],
+                font: context.tTheme.fontBodyLarge,
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: itemCounts[pageIndex],
+                itemBuilder: (_, index) => Container(
+                  height: 80,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: context.tTheme.grayColor2),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const TImage(
+                        src: 'assets/img/empty.png',
+                        width: 48,
+                        height: 48,
+                      ),
+                      const SizedBox(width: 16),
+                      TText('标题', font: context.tTheme.fontBodyLarge),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
     }
 
     return Row(
       children: [
-        SizedBox(
-          width: 116,
-          child: TSideBar(
-            style: TSideBarVariant.normal,
-            value: currentValue,
-            children: list
-                .map((ele) => TSideBarItem(
-                    label: ele.label,
-                    badge: ele.badge,
-                    value: ele.value,
-                    textStyle: ele.textStyle,
-                    icon: ele.icon))
-                .toList(),
-            selectedTextStyle: TextStyle(
-              color: context.tTheme.brandNormalColor,
-              fontWeight: FontWeight.w600,
-            ),
-            onChanged: setCurrentValue,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
-            selectedBgColor: context.tTheme.brandLightColor,
-            unSelectedBgColor: context.tTheme.bgColorContainer,
-            unSelectedColor: context.tTheme.textColorSecondary,
+        TSideBar(
+          style: TSideBarVariant.tag,
+          value: currentValue,
+          children: items,
+          selectedTextStyle: TextStyle(
+            color: context.tTheme.brandNormalColor,
+            fontWeight: FontWeight.w600,
           ),
+          selectedBgColor: context.tTheme.brandLightColor,
+          unSelectedColor: context.tTheme.textColorSecondary,
+          onChanged: setCurrentValue,
         ),
         Expanded(
-          child: PageView(
+          child: PageView.builder(
             controller: _pageController,
             scrollDirection: Axis.vertical,
-            children: pages,
             physics: const NeverScrollableScrollPhysics(),
+            itemCount: titles.length,
+            itemBuilder: (_, index) => buildPage(index),
           ),
-        )
-      ],
-    );
-  }
-
-  Widget getPageDemo(BuildContext context, int index) {
-    return Container(
-      color: context.tTheme.bgColorContainer,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: TText(
-              _sections[index],
-              font: context.tTheme.fontTitleMedium,
-            ),
-          ),
-          const SizedBox(height: 16),
-          displayImageList()
-        ],
-      ),
-    );
-  }
-
-  Widget getAnchorDemo(int index) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      // spacing: 16,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-          child: TText('标题$index', style: const TextStyle(fontSize: 14)),
         ),
-        const SizedBox(height: 16),
-        displayImageList()
       ],
-    );
-  }
-
-  Widget displayImageList() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        const horizontalPadding = 18.0;
-        const spacing = 12.0;
-        final contentWidth = constraints.maxWidth - horizontalPadding * 2;
-        final columnCount = max(1, ((contentWidth + spacing) / 84).floor());
-        final itemWidth =
-            (contentWidth - spacing * (columnCount - 1)) / columnCount;
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
-          child: Wrap(
-            spacing: spacing,
-            runSpacing: 16,
-            children: List.generate(
-              6,
-              (index) => displayImageItem('${index}最多六个字', itemWidth),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget displayImageItem(String title, double width) {
-    return SizedBox(
-      width: width,
-      child: Column(
-        children: [
-          TImage(
-            src: 'assets/img/empty.png',
-            variant: TImageVariant.roundedSquare,
-            width: min(72.0, width),
-            height: min(72.0, width),
-          ),
-          const SizedBox(height: 4),
-          TText(
-            title,
-            style: const TextStyle(fontSize: 12),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
     );
   }
 }

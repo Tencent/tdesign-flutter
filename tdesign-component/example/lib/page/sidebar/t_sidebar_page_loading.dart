@@ -54,10 +54,7 @@ class TSideBarLoadingPageState extends State<TSideBarLoadingPage> {
       title: 'SideBar 延迟加载',
       exampleCodeGroup: 'sideBar',
       showSingleChild: true,
-      singleChild: CodeWrapper(
-        isCenter: false,
-        builder: _buildLoadingSideBar,
-      ),
+      singleChild: CodeWrapper(isCenter: false, builder: _buildLoadingSideBar),
     );
   }
 
@@ -96,10 +93,7 @@ class TSideBarLoadingPageState extends State<TSideBarLoadingPage> {
                   alignment: Alignment.topLeft,
                   padding: const EdgeInsets.all(20),
                   child: _loading
-                      ? const TLoading(
-                          icon: TLoadingIcon.circle,
-                          size: 32,
-                        )
+                      ? const TLoading(icon: TLoadingIcon.circle, size: 32)
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

@@ -8,10 +8,7 @@ import '../../base/example_widget.dart';
 import 't_sidebar_page_anchor.dart';
 import 't_sidebar_page_custom.dart';
 import 't_sidebar_page_icon.dart';
-import 't_sidebar_page_loading.dart';
-import 't_sidebar_page_outline.dart';
 import 't_sidebar_page_pagination.dart';
-import 't_sidebar_page_unselected_color.dart';
 
 ///
 /// TSideBarPage演示
@@ -36,30 +33,35 @@ class TSideBarPageState extends State<TSideBarPage> {
     return ExamplePage(
       title: tTitle(),
       exampleCodeGroup: 'sideBar',
-      desc: '用于内容分类后的展示切换。',
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      desc: '用于信息分类后的展示切换或锚点，位于页面左侧。',
+      compactDemo: true,
+      showTestModule: false,
       children: [
-        ExampleModule(title: '组件类型', children: [
-          ExampleItem(
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(
               desc: '侧边导航用法',
               ignoreCode: true,
-              builder: _buildNavigatorSideBar),
-          ExampleItem(
+              builder: _buildNavigatorSideBar,
+            ),
+            ExampleItem(
               desc: '图标侧边导航',
               builder: _buildIconSideBar,
-              methodName: '_buildIconSideBar')
-        ]),
-        ExampleModule(title: '组件样式', children: [
-          ExampleItem(
-              desc: '侧边导航样式', ignoreCode: true, builder: _buildStyleSideBar),
-        ])
-      ],
-      test: [
-        ExampleItem(desc: '延迟加载', ignoreCode: true, builder: _loadingSideBar),
-        ExampleItem(
-            desc: '自定义未选中颜色',
-            ignoreCode: true,
-            builder: _unSelectedColorSideBar),
+              methodName: '_buildIconSideBar',
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: '组件样式',
+          children: [
+            ExampleItem(
+              desc: '侧边导航样式',
+              ignoreCode: true,
+              builder: _buildStyleSideBar,
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -89,30 +91,10 @@ class TSideBarPageState extends State<TSideBarPage> {
     return Column(
       children: [
         CodeWrapper(
-          builder: (_) => getCustomButton(context, '非通栏选项样式', 'SideBarOutline'),
-          methodName: '_buildOutlineSideBar',
-        ),
-        const SizedBox(height: 16),
-        CodeWrapper(
           builder: (_) => getCustomButton(context, '自定义样式', 'SideBarCustom'),
           methodName: '_buildCustomSideBar',
         ),
       ],
-    );
-  }
-
-  Widget _loadingSideBar(BuildContext context) {
-    return CodeWrapper(
-      builder: (_) => getCustomButton(context, '延迟加载', 'SideBarLoading'),
-      methodName: '_buildLoadingSideBar',
-    );
-  }
-
-  Widget _unSelectedColorSideBar(BuildContext context) {
-    return CodeWrapper(
-      builder: (_) =>
-          getCustomButton(context, '未选中颜色自定义', 'SideBarUnselectedColor'),
-      methodName: '_buildUnselectedColorSideBar',
     );
   }
 
@@ -146,21 +128,9 @@ class TSideBarPageState extends State<TSideBarPage> {
         title = 'SideBar 带图标';
         page = const TSideBarIconPage();
         break;
-      case 'SideBarOutline':
-        title = 'SideBar 非通栏选项样式';
-        page = const TSideBarOutlinePage();
-        break;
       case 'SideBarCustom':
         title = 'SideBar 自定义样式';
         page = const TSideBarCustomPage();
-        break;
-      case 'SideBarLoading':
-        title = 'SideBar 延迟加载';
-        page = const TSideBarLoadingPage();
-        break;
-      case 'SideBarUnselectedColor':
-        title = 'SideBar 自定义未选中颜色';
-        page = const TSideBarUnSelectedColorPage();
         break;
     }
     if (page == null) {
@@ -174,10 +144,7 @@ class TSideBarPageState extends State<TSideBarPage> {
     );
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => ExamplePageInheritedTheme(
-          model: model,
-          child: page!,
-        ),
+        builder: (_) => ExamplePageInheritedTheme(model: model, child: page!),
       ),
     );
   }

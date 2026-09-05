@@ -32,10 +32,7 @@ Widget _buildLoadingSideBar(BuildContext context) {
                   alignment: Alignment.topLeft,
                   padding: const EdgeInsets.all(20),
                   child: _loading
-                      ? const TLoading(
-                          icon: TLoadingIcon.circle,
-                          size: 32,
-                        )
+                      ? const TLoading(icon: TLoadingIcon.circle, size: 32)
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

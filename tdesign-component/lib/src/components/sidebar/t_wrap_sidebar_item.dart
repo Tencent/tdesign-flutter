@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
@@ -54,11 +55,18 @@ class TWrapSideBarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: style == TSideBarVariant.normal
-          ? renderNormalItem(context)
-          : renderOutlineItem(context),
+    return Semantics(
+      button: true,
+      selected: selected,
+      enabled: !disabled && onTap != null,
+      label: label,
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: disabled ? null : onTap,
+        child: style == TSideBarVariant.line
+            ? renderNormalItem(context)
+            : renderTagItem(context),
+      ),
     );
   }
 
@@ -72,47 +80,49 @@ class TWrapSideBarItem extends StatelessWidget {
           color: selected
               ? selectedBgColor ?? context.tTheme.bgColorContainer
               : unSelectedBgColor ??
-                  context
-                      .tTheme.bgColorSecondaryContainer, // coverage:ignore-line
+                    context
+                        .tTheme
+                        .bgColorSecondaryContainer, // coverage:ignore-line
           borderRadius: BorderRadius.only(
-            topRight:
-                Radius.circular(topAdjacent ? context.tTheme.radiusLarge : 0),
-            bottomRight: Radius.circular(
-                bottomAdjacent ? context.tTheme.radiusLarge : 0),
+            topRight: Radius.circular(topAdjacent ? 9 : 0),
+            bottomRight: Radius.circular(bottomAdjacent ? 9 : 0),
           ),
         ),
         child: Row(
           children: [
             renderPreLine(context),
             Expanded(
-                child: Padding(
-                    padding: contentPadding ?? const EdgeInsets.all(16),
-                    child: renderMainContent(context)))
+              child: Padding(
+                padding: contentPadding ?? const EdgeInsets.all(16),
+                child: renderMainContent(context),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget renderOutlineItem(BuildContext context) {
+  Widget renderTagItem(BuildContext context) {
     return ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: 56),
+      constraints: const BoxConstraints(minHeight: 56),
+      child: Container(
+        decoration: BoxDecoration(
+          color: unSelectedBgColor ?? context.tTheme.bgColorSecondaryContainer,
+        ),
+        padding: const EdgeInsets.all(8),
         child: Container(
           decoration: BoxDecoration(
-              color: unSelectedBgColor ??
-                  context.tTheme.bgColorSecondaryContainer),
-          padding: contentPadding ?? const EdgeInsets.all(8),
-          child: Container(
-            decoration: BoxDecoration(
-                color: selected && !disabled
-                    ? selectedBgColor ?? context.tTheme.bgColorContainer
-                    : null,
-                borderRadius:
-                    BorderRadius.circular(context.tTheme.radiusDefault)),
-            padding: contentPadding ?? const EdgeInsets.all(8),
-            child: renderMainContent(context),
+            color: selected && !disabled
+                ? selectedBgColor ?? context.tTheme.bgColorContainer
+                : null,
+            borderRadius: BorderRadius.circular(9),
           ),
-        ));
+          padding: contentPadding ?? const EdgeInsets.all(8),
+          child: renderMainContent(context),
+        ),
+      ),
+    );
   }
 
   Widget renderMainContent(BuildContext context) {
@@ -130,15 +140,8 @@ class TWrapSideBarItem extends StatelessWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 12),
-          child: content,
-        ),
-        Positioned(
-          top: -8,
-          right: -4,
-          child: badge!,
-        ),
+        Padding(padding: const EdgeInsets.only(right: 12), child: content),
+        Positioned(top: -8, right: -4, child: badge!),
       ],
     );
   }
@@ -146,9 +149,7 @@ class TWrapSideBarItem extends StatelessWidget {
   Widget renderPreLine(BuildContext context) {
     return Visibility(
       visible: !disabled && selected,
-      replacement: const SizedBox(
-        width: preLineWidth,
-      ),
+      replacement: const SizedBox(width: preLineWidth),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -156,11 +157,13 @@ class TWrapSideBarItem extends StatelessWidget {
             width: preLineWidth,
             height: 14,
             decoration: BoxDecoration(
-                color: selectedTextStyle != null
-                    ? selectedTextStyle?.color // coverage:ignore-line
-                    : (selectedColor ?? context.tTheme.brandNormalColor),
-                borderRadius: BorderRadius.circular(4)),
-          )
+              color: selectedTextStyle != null
+                  ? selectedTextStyle
+                        ?.color // coverage:ignore-line
+                  : (selectedColor ?? context.tTheme.brandNormalColor),
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
         ],
       ),
     );
@@ -190,15 +193,19 @@ class TWrapSideBarItem extends StatelessWidget {
   }
 
   Widget renderLabel(BuildContext context) {
+    final effectiveStyle = selected
+        ? selectedTextStyle ?? textStyle
+        : textStyle;
     return TText(
       label,
-      style: selectedTextStyle,
+      font: context.tTheme.fontBodyLarge,
+      style: effectiveStyle,
       fontWeight: selected && !disabled ? FontWeight.w600 : FontWeight.w400,
       textColor: disabled
           ? context.tTheme.textDisabledColor
           : selected
-              ? selectedColor ?? context.tTheme.brandNormalColor
-              : unSelectedColor ?? context.tTheme.textColorPrimary,
+          ? selectedColor ?? context.tTheme.brandNormalColor
+          : unSelectedColor ?? context.tTheme.textColorPrimary,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

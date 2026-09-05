@@ -44,13 +44,16 @@ class TSideBar extends StatefulWidget {
     this.height,
     this.contentPadding,
     this.selectedTextStyle,
-    this.style,
+    this.style = TSideBarVariant.line,
+    this.width = 103,
     this.loading = false,
     this.loadingWidget,
     this.selectedBgColor,
     this.unSelectedBgColor,
     this.unSelectedColor,
-  }) : super(key: key);
+  }) : assert(width > 0),
+       assert(height == null || height >= 0),
+       super(key: key);
 
   /// 当前选中项值。
   final int value;
@@ -70,10 +73,13 @@ class TSideBar extends StatefulWidget {
   /// 选中样式（优先级高于 ThemeData）。
   final TextStyle? selectedTextStyle;
 
-  /// 样式（优先级高于 ThemeData）。
-  final TSideBarVariant? style;
+  /// 展示样式；属于组件实例的结构状态，不从 Theme 读取。
+  final TSideBarVariant style;
 
-  /// 高度（优先级高于 ThemeData）。
+  /// 侧边栏宽度，默认 103。
+  final double width;
+
+  /// 高度；未设置时占满当前可用屏幕高度，不从 Theme 读取。
   final double? height;
 
   /// 自定义文本框内边距（优先级高于 ThemeData）。
@@ -215,76 +221,66 @@ class _TSideBarState extends State<TSideBar> {
   @override
   Widget build(BuildContext context) {
     final theme = _resolveTheme();
-    final effectiveStyle =
-        widget.style ?? theme.style ?? TSideBarVariant.normal;
     if (widget.loading) {
       if (widget.loadingWidget != null) {
         return widget.loadingWidget!;
       }
       return SizedBox(
-        width: MediaQuery.of(context).size.width,
+        width: widget.width,
+        height: widget.height ?? MediaQuery.of(context).size.height,
         child: const Align(
           child: TLoading(icon: TLoadingIcon.circle, size: 32),
         ),
       );
     }
 
-    final sideBar = ConstrainedBox(
-      constraints: BoxConstraints(
-        minWidth: 106,
-        maxHeight:
-            MediaQuery.of(context).size.height -
-            MediaQuery.of(context).padding.top,
-      ),
-      child: SizedBox(
-        height:
-            widget.height ?? theme.height ?? MediaQuery.of(context).size.height,
-        child: MediaQuery.removePadding(
-          context: context,
-          removeTop: true,
-          removeBottom: true,
-          child: ListView.builder(
-            physics: const ClampingScrollPhysics(),
-            itemCount: displayChildren.length,
-            controller: _scrollerController,
-            itemBuilder: (BuildContext context, int index) {
-              final ele = displayChildren[index];
-              return TWrapSideBarItem(
-                key: ele.key,
-                style: effectiveStyle,
-                value: ele.value,
-                icon: ele.icon,
-                disabled: ele.disabled ?? false,
-                label: ele.label ?? '',
-                badge: ele.badge,
-                textStyle: ele.textStyle,
-                selected: currentIndex == ele.index,
-                selectedColor: widget.selectedColor ?? theme.selectedColor,
-                unSelectedColor:
-                    widget.unSelectedColor ?? theme.unSelectedColor,
-                selectedTextStyle:
-                    widget.selectedTextStyle ?? theme.selectedTextStyle,
-                contentPadding: widget.contentPadding ?? theme.contentPadding,
-                topAdjacent:
-                    currentIndex != null && currentIndex! + 1 == ele.index,
-                bottomAdjacent:
-                    currentIndex != null && currentIndex! - 1 == ele.index,
-                selectedBgColor:
-                    widget.selectedBgColor ??
-                    theme.selectedBgColor ??
-                    context.tTheme.bgColorContainer,
-                unSelectedBgColor:
-                    widget.unSelectedBgColor ??
-                    theme.unSelectedBgColor ??
-                    context.tTheme.bgColorSecondaryContainer,
-                onTap: () {
-                  if (!(ele.disabled ?? false) && widget.onChanged != null) {
-                    onSelect(ele);
-                  }
-                },
-              );
-            },
-          ),
+    final sideBar = SizedBox(
+      width: widget.width,
+      height: widget.height ?? MediaQuery.of(context).size.height,
+      child: MediaQuery.removePadding(
+        context: context,
+        removeTop: true,
+        removeBottom: true,
+        child: ListView.builder(
+          physics: const ClampingScrollPhysics(),
+          itemCount: displayChildren.length,
+          controller: _scrollerController,
+          itemBuilder: (BuildContext context, int index) {
+            final ele = displayChildren[index];
+            return TWrapSideBarItem(
+              key: ele.key,
+              style: widget.style,
+              value: ele.value,
+              icon: ele.icon,
+              disabled: ele.disabled ?? false,
+              label: ele.label ?? '',
+              badge: ele.badge,
+              textStyle: ele.textStyle,
+              selected: currentIndex == ele.index,
+              selectedColor: widget.selectedColor ?? theme.selectedColor,
+              unSelectedColor: widget.unSelectedColor ?? theme.unSelectedColor,
+              selectedTextStyle:
+                  widget.selectedTextStyle ?? theme.selectedTextStyle,
+              contentPadding: widget.contentPadding ?? theme.contentPadding,
+              topAdjacent:
+                  currentIndex != null && currentIndex! + 1 == ele.index,
+              bottomAdjacent:
+                  currentIndex != null && currentIndex! - 1 == ele.index,
+              selectedBgColor:
+                  widget.selectedBgColor ??
+                  theme.selectedBgColor ??
+                  context.tTheme.bgColorContainer,
+              unSelectedBgColor:
+                  widget.unSelectedBgColor ??
+                  theme.unSelectedBgColor ??
+                  context.tTheme.bgColorSecondaryContainer,
+              onTap: () {
+                if (!(ele.disabled ?? false) && widget.onChanged != null) {
+                  onSelect(ele);
+                }
+              },
+            );
+          },
         ),
       ),
     );
