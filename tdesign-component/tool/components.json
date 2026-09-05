@@ -112,8 +112,10 @@
           "TDrawerHandle",
           "TDrawerPlacement",
           "TDrawerThemeData",
-          "TDrawerWidget",
           "TDrawerItem"
+        ],
+        "functions": [
+          "showTDrawer"
         ],
         "getComments": true
       }

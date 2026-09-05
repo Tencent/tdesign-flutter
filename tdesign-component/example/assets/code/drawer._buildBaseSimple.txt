@@ -6,12 +6,11 @@ Widget _buildBaseSimple(BuildContext context) {
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
       onPressed: () {
-        TDrawer(
+        showTDrawer(
           context,
           placement: TDrawerPlacement.left,
-          items: _baseItems(),
-          onItemClick: (_, __) {},
-        ).show();
+          drawer: TDrawer(items: _baseItems(), onItemClick: (_, __) {}),
+        );
       },
       child: const TText('基础抽屉'),
     ),

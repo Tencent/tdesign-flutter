@@ -8,6 +8,9 @@
 - [x] DONE 登记覆盖率和视觉回归门禁
 - [x] DONE 生成并检查 API 与示例代码资产
 - [x] DONE 执行 Flutter 3.32.0 与 latest 验证
-- [x] DONE 完成 Figma 人工对照、真机交互、明暗 Golden 与 API/Theme Review
+- [x] DONE 更新标题起始侧对齐后的明暗 Golden，并重新完成 Figma 人工对照
+- [x] DONE 修复 Theme 默认值插值语义并补充非法尺寸回归
+- [x] DONE 将 `TDrawer` 收敛为声明式 Widget，并拆分独立 `showTDrawer` 浮层入口
+- [x] DONE 为 API 工具补充通用顶层函数解析、独立文档表和完备性检查，并登记 `showTDrawer`
 - [x] DONE 提交、推送并更新独立 PR，关联 #1027 Drawer 条目
 - [ ] TODO 创建 CNB PR，触发并处理 CodeBuddy Review

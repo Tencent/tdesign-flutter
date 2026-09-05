@@ -66,12 +66,11 @@ Widget _buildBaseSimple(BuildContext context) {
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
       onPressed: () {
-        TDrawer(
+        showTDrawer(
           context,
           placement: TDrawerPlacement.left,
-          items: _baseItems(),
-          onItemClick: (_, __) {},
-        ).show();
+          drawer: TDrawer(items: _baseItems(), onItemClick: (_, __) {}),
+        );
       },
       child: const TText('基础抽屉'),
     ),
@@ -87,17 +86,19 @@ Widget _buildIconSimple(BuildContext context) {
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
       onPressed: () {
-        TDrawer(
+        showTDrawer(
           context,
           placement: TDrawerPlacement.left,
-          items: List.generate(
-            _menuLabels.length,
-            (index) => TDrawerItem(
-              title: _menuLabels[index],
-              icon: const TIcon(TIcons.app),
+          drawer: TDrawer(
+            items: List.generate(
+              _menuLabels.length,
+              (index) => TDrawerItem(
+                title: _menuLabels[index],
+                icon: const TIcon(TIcons.app),
+              ),
             ),
           ),
-        ).show();
+        );
       },
       child: const TText('带图标抽屉'),
     ),
@@ -115,12 +116,14 @@ Widget _buildTitleSimple(BuildContext context) {
           variant: TButtonVariant.outline,
           colorScheme: TButtonColorScheme.primary,
           onPressed: () {
-            TDrawer(
+            showTDrawer(
               context,
               placement: TDrawerPlacement.left,
-              title: TText('标题', font: context.tTheme.fontTitleLarge),
-              items: _baseItems(),
-            ).show();
+              drawer: TDrawer(
+                title: TText('标题', font: context.tTheme.fontTitleLarge),
+                items: _baseItems(),
+              ),
+            );
           },
           child: const TText('小标题抽屉'),
         ),
@@ -133,12 +136,14 @@ Widget _buildTitleSimple(BuildContext context) {
           variant: TButtonVariant.outline,
           colorScheme: TButtonColorScheme.primary,
           onPressed: () {
-            TDrawer(
+            showTDrawer(
               context,
               placement: TDrawerPlacement.left,
-              title: TText('标题', font: context.tTheme.fontHeadlineMedium),
-              items: _baseItems(),
-            ).show();
+              drawer: TDrawer(
+                title: TText('标题', font: context.tTheme.fontHeadlineMedium),
+                items: _baseItems(),
+              ),
+            );
           },
           child: const TText('大标题抽屉'),
         ),
@@ -158,11 +163,11 @@ Widget _buildPlacementSimple(BuildContext context) {
           variant: TButtonVariant.outline,
           colorScheme: TButtonColorScheme.primary,
           onPressed: () {
-            TDrawer(
+            showTDrawer(
               context,
               placement: TDrawerPlacement.left,
-              items: _baseItems(),
-            ).show();
+              drawer: TDrawer(items: _baseItems()),
+            );
           },
           child: const TText('左侧抽屉'),
         ),
@@ -175,11 +180,11 @@ Widget _buildPlacementSimple(BuildContext context) {
           variant: TButtonVariant.outline,
           colorScheme: TButtonColorScheme.primary,
           onPressed: () {
-            TDrawer(
+            showTDrawer(
               context,
               placement: TDrawerPlacement.right,
-              items: _baseItems(),
-            ).show();
+              drawer: TDrawer(items: _baseItems()),
+            );
           },
           child: const TText('右侧抽屉'),
         ),
@@ -197,24 +202,26 @@ Widget _buildBottomSimple(BuildContext context) {
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
       onPressed: () {
-        TDrawer(
+        showTDrawer(
           context,
           placement: TDrawerPlacement.left,
-          title: const TText('标题'),
-          items: _footerItems(),
-          footer: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-            child: SizedBox(
-              width: double.infinity,
-              child: TButton(
-                size: TButtonSize.large,
-                variant: TButtonVariant.outline,
-                onPressed: () {},
-                child: const TText('操作'),
+          drawer: TDrawer(
+            title: const TText('标题'),
+            items: _footerItems(),
+            footer: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+              child: SizedBox(
+                width: double.infinity,
+                child: TButton(
+                  size: TButtonSize.large,
+                  variant: TButtonVariant.outline,
+                  onPressed: () {},
+                  child: const TText('操作'),
+                ),
               ),
             ),
           ),
-        ).show();
+        );
       },
       child: const TText('带底部插槽'),
     ),

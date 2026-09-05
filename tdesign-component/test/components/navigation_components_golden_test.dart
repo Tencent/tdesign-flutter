@@ -194,7 +194,7 @@ class _NavigationComponentsScene extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Expanded(
-                              child: TDrawerWidget(
+                              child: TDrawer(
                                 width: 190,
                                 title: Text('Menu'),
                                 items: [

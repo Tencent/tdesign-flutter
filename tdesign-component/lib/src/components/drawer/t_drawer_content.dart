@@ -1,21 +1,13 @@
-import 'package:flutter/material.dart';
-
-import '../../theme/t_colors.dart';
-import '../../theme/t_fonts.dart';
-import '../../theme/t_theme.dart';
-import '../text/t_text.dart';
-import 't_drawer.dart';
-import 't_drawer_theme_data.dart';
+part of 't_drawer.dart';
 
 /// 点击抽屉列表项时的回调。
 ///
 /// [index] 是列表下标，[item] 是被点击的配置项。
 typedef TDrawerItemClickCallback = void Function(int index, TDrawerItem item);
 
-/// 抽屉内容组件，可用于 Scaffold 的 `drawer` 属性。
-class TDrawerWidget extends StatelessWidget {
-  const TDrawerWidget({
-    super.key,
+/// `TDrawer` 的内部内容布局。
+class _TDrawerContent extends StatelessWidget {
+  const _TDrawerContent({
     this.footer,
     this.items,
     this.child,
@@ -24,9 +16,9 @@ class TDrawerWidget extends StatelessWidget {
     this.width,
     this.enableFeedback = true,
     this.backgroundColor,
-    this.bordered = true,
-    this.isShowLastBordered = true,
-  });
+    this.showDivider = true,
+    this.showLastDivider = true,
+  }) : assert(width == null || width > 0);
 
   /// 抽屉的底部
   final Widget? footer;
@@ -53,10 +45,10 @@ class TDrawerWidget extends StatelessWidget {
   final Color? backgroundColor;
 
   /// 是否显示菜单项分隔线，默认 true。
-  final bool bordered;
+  final bool showDivider;
 
   /// 是否显示最后一行分隔线，默认 true。
-  final bool isShowLastBordered;
+  final bool showLastDivider;
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +67,12 @@ class TDrawerWidget extends StatelessWidget {
                 padding:
                     drawerTheme?.titlePadding ??
                     const EdgeInsets.fromLTRB(16, 24, 16, 8),
-                child: DefaultTextStyle(
-                  style: _titleTextStyle(context, drawerTheme),
-                  child: title!,
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: DefaultTextStyle(
+                    style: _titleTextStyle(context, drawerTheme),
+                    child: title!,
+                  ),
                 ),
               ),
             Expanded(
@@ -95,7 +90,7 @@ class TDrawerWidget extends StatelessWidget {
                     textStyle: _itemTextStyle(context, drawerTheme),
                     backgroundColor:
                         drawerTheme?.itemBackgroundColor ??
-                        context.tTheme.bgColorContainer,
+                        effectiveBackgroundColor,
                     pressedColor:
                         drawerTheme?.itemPressedColor ??
                         context.tTheme.bgColorSecondaryContainer,
@@ -113,9 +108,8 @@ class TDrawerWidget extends StatelessWidget {
                     dividerIndent: drawerTheme?.dividerIndent ?? 16,
                     dividerThickness: drawerTheme?.dividerThickness ?? 0.5,
                     showDivider:
-                        bordered &&
-                        (index < (items?.length ?? 0) - 1 ||
-                            isShowLastBordered),
+                        showDivider &&
+                        (index < (items?.length ?? 0) - 1 || showLastDivider),
                   );
                 },
               ),
@@ -304,6 +298,6 @@ class TDrawerItem {
   /// 每列图标
   final Widget? icon;
 
-  /// 完全自定义
+  /// 自定义菜单项正文，优先于 [title]；仍与 [icon]、菜单项间距和分隔线组合。
   final Widget? content;
 }

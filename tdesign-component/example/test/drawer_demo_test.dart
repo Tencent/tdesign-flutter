@@ -60,7 +60,7 @@ void main() {
     );
     await openDrawer(tester, '基础抽屉');
 
-    final drawer = find.byType(TDrawerWidget);
+    final drawer = find.byType(TDrawer);
     expect(drawer, findsOneWidget);
     expect(tester.getTopLeft(drawer).dx, 0);
     expect(tester.getSize(drawer).width, 280);
@@ -84,7 +84,7 @@ void main() {
     );
     await openDrawer(tester, '带图标抽屉');
 
-    final drawer = find.byType(TDrawerWidget);
+    final drawer = find.byType(TDrawer);
     expect(
       find.descendant(of: drawer, matching: find.byType(TIcon)),
       findsNWidgets(8),
@@ -98,7 +98,7 @@ void main() {
       ThemeMode.light,
     );
     await openDrawer(tester, '小标题抽屉');
-    expect(tester.getTopLeft(find.byType(TDrawerWidget)).dx, 0);
+    expect(tester.getTopLeft(find.byType(TDrawer)).dx, 0);
     expect(find.text('标题'), findsOneWidget);
     await tester.tapAt(const Offset(360, 400));
     await tester.pumpAndSettle();
@@ -109,17 +109,17 @@ void main() {
     await tester.pumpAndSettle();
 
     await openDrawer(tester, '左侧抽屉');
-    expect(tester.getTopLeft(find.byType(TDrawerWidget)).dx, 0);
+    expect(tester.getTopLeft(find.byType(TDrawer)).dx, 0);
     await tester.tapAt(const Offset(360, 400));
     await tester.pumpAndSettle();
 
     await openDrawer(tester, '右侧抽屉');
-    expect(tester.getTopLeft(find.byType(TDrawerWidget)).dx, 95);
+    expect(tester.getTopLeft(find.byType(TDrawer)).dx, 95);
     await tester.tapAt(const Offset(15, 400));
     await tester.pumpAndSettle();
 
     await openDrawer(tester, '带底部插槽');
-    expect(tester.getTopLeft(find.byType(TDrawerWidget)).dx, 0);
+    expect(tester.getTopLeft(find.byType(TDrawer)).dx, 0);
     expect(find.text('标题'), findsOneWidget);
     expect(find.widgetWithText(TButton, '操作'), findsOneWidget);
     expect(find.text('菜单四'), findsNWidgets(2));

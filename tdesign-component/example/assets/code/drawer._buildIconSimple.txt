@@ -6,17 +6,19 @@ Widget _buildIconSimple(BuildContext context) {
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
       onPressed: () {
-        TDrawer(
+        showTDrawer(
           context,
           placement: TDrawerPlacement.left,
-          items: List.generate(
-            _menuLabels.length,
-            (index) => TDrawerItem(
-              title: _menuLabels[index],
-              icon: const TIcon(TIcons.app),
+          drawer: TDrawer(
+            items: List.generate(
+              _menuLabels.length,
+              (index) => TDrawerItem(
+                title: _menuLabels[index],
+                icon: const TIcon(TIcons.app),
+              ),
             ),
           ),
-        ).show();
+        );
       },
       child: const TText('带图标抽屉'),
     ),

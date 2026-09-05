@@ -8,11 +8,11 @@ Widget _buildPlacementSimple(BuildContext context) {
           variant: TButtonVariant.outline,
           colorScheme: TButtonColorScheme.primary,
           onPressed: () {
-            TDrawer(
+            showTDrawer(
               context,
               placement: TDrawerPlacement.left,
-              items: _baseItems(),
-            ).show();
+              drawer: TDrawer(items: _baseItems()),
+            );
           },
           child: const TText('左侧抽屉'),
         ),
@@ -25,11 +25,11 @@ Widget _buildPlacementSimple(BuildContext context) {
           variant: TButtonVariant.outline,
           colorScheme: TButtonColorScheme.primary,
           onPressed: () {
-            TDrawer(
+            showTDrawer(
               context,
               placement: TDrawerPlacement.right,
-              items: _baseItems(),
-            ).show();
+              drawer: TDrawer(items: _baseItems()),
+            );
           },
           child: const TText('右侧抽屉'),
         ),

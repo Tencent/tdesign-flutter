@@ -8,12 +8,14 @@ Widget _buildTitleSimple(BuildContext context) {
           variant: TButtonVariant.outline,
           colorScheme: TButtonColorScheme.primary,
           onPressed: () {
-            TDrawer(
+            showTDrawer(
               context,
               placement: TDrawerPlacement.left,
-              title: TText('标题', font: context.tTheme.fontTitleLarge),
-              items: _baseItems(),
-            ).show();
+              drawer: TDrawer(
+                title: TText('标题', font: context.tTheme.fontTitleLarge),
+                items: _baseItems(),
+              ),
+            );
           },
           child: const TText('小标题抽屉'),
         ),
@@ -26,12 +28,14 @@ Widget _buildTitleSimple(BuildContext context) {
           variant: TButtonVariant.outline,
           colorScheme: TButtonColorScheme.primary,
           onPressed: () {
-            TDrawer(
+            showTDrawer(
               context,
               placement: TDrawerPlacement.left,
-              title: TText('标题', font: context.tTheme.fontHeadlineMedium),
-              items: _baseItems(),
-            ).show();
+              drawer: TDrawer(
+                title: TText('标题', font: context.tTheme.fontHeadlineMedium),
+                items: _baseItems(),
+              ),
+            );
           },
           child: const TText('大标题抽屉'),
         ),

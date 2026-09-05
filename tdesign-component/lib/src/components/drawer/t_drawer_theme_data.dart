@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 /// 抽屉组件 ThemeExtension。
 ///
-/// 只保存子树级具体视觉默认值。方向、蒙层、边框开关、末行边框和按压反馈
-/// 由组件实例唯一拥有；构造器具体视觉参数优先级高于 ThemeData。
+/// 只保存子树级具体视觉默认值。方向、蒙层与展示生命周期由 `showTDrawer`
+/// 负责；分隔线和按压反馈由组件实例负责；构造器具体视觉参数优先级高于 ThemeData。
 class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
   /// 默认宽度，默认 280。
   final double? width;
@@ -68,7 +68,11 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
     this.dividerIndent,
     this.dividerThickness,
     this.footerPadding,
-  });
+  }) : assert(width == null || width > 0),
+       assert(itemIconSize == null || itemIconSize >= 0),
+       assert(itemIconGap == null || itemIconGap >= 0),
+       assert(dividerIndent == null || dividerIndent >= 0),
+       assert(dividerThickness == null || dividerThickness >= 0);
 
   @override
   TDrawerThemeData copyWith({
@@ -113,33 +117,97 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
       return this;
     }
     return TDrawerThemeData(
-      width: lerpDouble(width, other.width, t),
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      titleStyle: TextStyle.lerp(titleStyle, other.titleStyle, t),
-      titlePadding: EdgeInsetsGeometry.lerp(
+      width: _lerpDoubleWithDefault(width, other.width, 280, t),
+      backgroundColor: _lerpColor(backgroundColor, other.backgroundColor, t),
+      titleStyle: _lerpTextStyle(titleStyle, other.titleStyle, t),
+      titlePadding: _lerpInsetsWithDefault(
         titlePadding,
         other.titlePadding,
+        const EdgeInsets.fromLTRB(16, 24, 16, 8),
         t,
       ),
-      itemTextStyle: TextStyle.lerp(itemTextStyle, other.itemTextStyle, t),
-      itemBackgroundColor: Color.lerp(
+      itemTextStyle: _lerpTextStyle(itemTextStyle, other.itemTextStyle, t),
+      itemBackgroundColor: _lerpColor(
         itemBackgroundColor,
         other.itemBackgroundColor,
         t,
       ),
-      itemPressedColor: Color.lerp(itemPressedColor, other.itemPressedColor, t),
-      itemPadding: EdgeInsetsGeometry.lerp(itemPadding, other.itemPadding, t),
-      itemIconColor: Color.lerp(itemIconColor, other.itemIconColor, t),
-      itemIconSize: lerpDouble(itemIconSize, other.itemIconSize, t),
-      itemIconGap: lerpDouble(itemIconGap, other.itemIconGap, t),
-      dividerColor: Color.lerp(dividerColor, other.dividerColor, t),
-      dividerIndent: lerpDouble(dividerIndent, other.dividerIndent, t),
-      dividerThickness: lerpDouble(dividerThickness, other.dividerThickness, t),
-      footerPadding: EdgeInsetsGeometry.lerp(
+      itemPressedColor: _lerpColor(itemPressedColor, other.itemPressedColor, t),
+      itemPadding: _lerpInsetsWithDefault(
+        itemPadding,
+        other.itemPadding,
+        const EdgeInsets.fromLTRB(16, 16, 0, 16),
+        t,
+      ),
+      itemIconColor: _lerpColor(itemIconColor, other.itemIconColor, t),
+      itemIconSize: _lerpDoubleWithDefault(
+        itemIconSize,
+        other.itemIconSize,
+        24,
+        t,
+      ),
+      itemIconGap: _lerpDoubleWithDefault(itemIconGap, other.itemIconGap, 8, t),
+      dividerColor: _lerpColor(dividerColor, other.dividerColor, t),
+      dividerIndent: _lerpDoubleWithDefault(
+        dividerIndent,
+        other.dividerIndent,
+        16,
+        t,
+      ),
+      dividerThickness: _lerpDoubleWithDefault(
+        dividerThickness,
+        other.dividerThickness,
+        0.5,
+        t,
+      ),
+      footerPadding: _lerpInsetsWithDefault(
         footerPadding,
         other.footerPadding,
+        const EdgeInsets.only(bottom: 20),
         t,
       ),
     );
+  }
+
+  static double? _lerpDoubleWithDefault(
+    double? begin,
+    double? end,
+    double defaultValue,
+    double t,
+  ) {
+    if (begin == null && end == null) {
+      return null;
+    }
+    return lerpDouble(begin ?? defaultValue, end ?? defaultValue, t);
+  }
+
+  static EdgeInsetsGeometry? _lerpInsetsWithDefault(
+    EdgeInsetsGeometry? begin,
+    EdgeInsetsGeometry? end,
+    EdgeInsetsGeometry defaultValue,
+    double t,
+  ) {
+    if (begin == null && end == null) {
+      return null;
+    }
+    return EdgeInsetsGeometry.lerp(
+      begin ?? defaultValue,
+      end ?? defaultValue,
+      t,
+    );
+  }
+
+  static Color? _lerpColor(Color? begin, Color? end, double t) {
+    if (begin == null || end == null) {
+      return t < 0.5 ? begin : end;
+    }
+    return Color.lerp(begin, end, t);
+  }
+
+  static TextStyle? _lerpTextStyle(TextStyle? begin, TextStyle? end, double t) {
+    if (begin == null || end == null) {
+      return t < 0.5 ? begin : end;
+    }
+    return TextStyle.lerp(begin, end, t);
   }
 }
