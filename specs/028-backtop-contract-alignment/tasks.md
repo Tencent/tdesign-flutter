@@ -8,4 +8,5 @@
 - [x] DONE 登记组件测试、覆盖率和视觉回归门禁
 - [x] DONE 生成并检查 API 与示例代码资产
 - [x] DONE 执行 Flutter 3.32.0 与 latest 验证
-- [x] DONE 完成最终 Review、提交、推送并创建独立 PR
+- [x] DONE Android 真机交互与普通 APK 持久安装验收
+- [ ] TODO 更新独立 GitHub PR 并完成 CNB CodeBuddy Review

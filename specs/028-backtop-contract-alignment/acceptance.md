@@ -21,6 +21,8 @@
 | `flutter build web --release` | PASS | Flutter 3.32.0，Web Demo 可构建 |
 | Linux `--update-goldens` 后无更新参数复跑 | PASS，4 tests | Flutter 3.32.0；导航矩阵与 Demo 各 light/dark，严格比较 |
 | 回归工具测试 | PASS，17 tests | 覆盖率、组件清单、视觉清单与代码片段生成器 |
+| Android 16 `flutter drive` | PASS，1 integration test | 真实 Example 路由、滚动显隐、点击回顶、light/dark 切换与 3 张截图 |
+| Android 16 普通 APK 安装 | PASS | `lib/main.dart` debug APK 经 `adb install --no-streaming -r -t` 返回 `Success`；包路径与运行进程均存在，测试结束后应用仍保留 |
 
 ## API 与实现收敛审查
 
@@ -41,12 +43,12 @@
 - [x] Figma 设计矩阵、尺寸、间距、边框与明暗 Token 已读取
 - [x] 小程序公开 Demo 的滚动输入、点击事件及默认阈值已读取
 - [x] Flutter Demo light/dark 4 张 Linux Golden 已逐张核对
-- [ ] Android 真机待核对
+- [x] Android 16 真机已完成滚动、显隐、点击回顶与明暗主题核对；3 张设备截图无缺字、裁切或错误状态
 
 ## 未覆盖项与后续工作
 
 - 浏览器连接器的安全策略拒绝访问本机 `127.0.0.1` Demo，因此没有把 Web
   实际浏览器点击冒充为已完成；Web release 构建、真实 Widget 滚动交互和 Linux
   Golden 已通过。
-- Android / iOS 真机触控与系统字体栅格仍由 PR Demo 阶段补充，不影响本次固定
-  Flutter 测试环境下的契约与像素回归结论。
+- iOS 真机未验证；移动端操作验收以 Android 16（Xiaomi 25113PN0EC）为准。
+- GitHub PR #1079 在真机验收前已创建；本记录明确纠正交付顺序。该 PR 仍需更新本轮提交，并在 CNB 独立创建镜像 PR、完成 CodeBuddy Review 后才可签收。

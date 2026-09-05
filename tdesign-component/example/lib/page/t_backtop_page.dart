@@ -29,7 +29,11 @@ class _TBackTopPageState extends State<TBackTopPage> {
       exampleCodeGroup: 'backtop',
       compactDemo: true,
       showTestModule: false,
-      floatingActionButton: TBackTop(controller: controller, showText: true),
+      floatingActionButton: TBackTop(
+        key: const Key('backtop-demo-floating'),
+        controller: controller,
+        showText: true,
+      ),
       children: [
         ExampleModule(
           title: '组件类型',
