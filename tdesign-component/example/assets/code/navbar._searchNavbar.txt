@@ -1,6 +1,6 @@
 Widget _searchNavbar(BuildContext context) {
     return TNavBar(
-      useDefaultBack: false,
+      key: const Key('navbar-demo-search'),
       centerTitle: false,
       titleMargin: 0,
       titleWidget: Theme(

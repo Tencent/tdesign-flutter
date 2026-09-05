@@ -1,7 +1,6 @@
 Widget _titleCenterNavbar(BuildContext context) {
     return TNavBar(
       title: titleText,
-      titleFontWeight: FontWeight.w600,
       useDefaultBack: true,
       actions: [
         TNavBarItem(

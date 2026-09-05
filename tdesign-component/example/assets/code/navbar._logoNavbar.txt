@@ -1,12 +1,12 @@
 Widget _logoNavbar(BuildContext context) {
     return TNavBar(
-      useDefaultBack: false,
+      key: const Key('navbar-demo-image'),
       centerTitle: false,
       titleMargin: 0,
       titleWidget: const TImage(
         src: 'assets/img/t_brand.png',
-        width: 120,
-        height: 32,
+        width: 87,
+        height: 24,
         variant: TImageVariant.fitWidth,
         fit: BoxFit.contain,
       ),

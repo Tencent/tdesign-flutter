@@ -12,7 +12,7 @@
 | boxShadow | List<BoxShadow>? | - | 底部阴影 |
 | centerTitle | bool | true | 标题是否居中 |
 | flexibleSpace | Widget? | - | 固定背景 Widget |
-| height | double? | - | 高度；作为 `PreferredSizeWidget.preferredSize` 的唯一高度来源 |
+| height | double | 48 | 高度；作为 `PreferredSizeWidget.preferredSize` 的唯一高度来源 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | leading | List<TNavBarItem>? | - | 左侧操作项（对齐 AppBar.leading） |
 | onBack | VoidCallback? | - | 返回事件；默认返回按钮点击时先触发该回调，再执行 Navigator.maybePop。 |
@@ -25,8 +25,8 @@
 | titleFontWeight | FontWeight? | - | 标题字体粗细 |
 | titleMargin | double? | - | 中间文案左右两边间距 |
 | titleWidget | Widget? | - | 标题控件，优先级高于 `title` 文案 |
-| useBorderStyle | bool? | - | 是否使用边框模式 |
-| useDefaultBack | bool | true | 是否使用默认的返回按钮 |
+| useBorderStyle | bool | false | 是否使用边框模式 |
+| useDefaultBack | bool | false | 是否使用默认的返回按钮，默认不显示 |
 | useSafeArea | bool | false | 是否避让顶部系统安全区。 默认为 false。仅当导航栏直接位于页面顶部且外层未处理安全区时开启。 开启后，安全区高度只计入实际渲染高度，不计入 `preferredSize`； `height` 始终表示导航栏内容高度。 |
 
 
