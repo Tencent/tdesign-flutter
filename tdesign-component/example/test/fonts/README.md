@@ -16,6 +16,12 @@ NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 新增文案的补充 fallback。它排在原字体之后，避免扩充原字体改变 Button、Checkbox、
 Upload 等既有 Golden 的字形选择与像素基线。
 
+`StepsGoldenCJK-Regular.otf` 仅补充 Steps 整页 Golden 所需字形，字符清单见
+`steps_demo_glyphs.txt`。子集 SHA-256 为
+`1c4a9391deda7834d5f3357e20d8bfcdd97be685e021ed31d2bde4166cdf9524`；源文件为
+Android 16 系统的开源 `NotoSansCJK-Regular.ttc` SC 字体面，SHA-256 为
+`3e7e5afaac2c6d872592d76abedac03a51c6f0fc42d11e311ff2816a6c368afe`。
+
 `PickerGoldenCJK-Regular.otf` 仅补充 Picker 整页 Golden 新增且既有子集未覆盖的
 字形，字符清单见 `picker_demo_glyphs.txt`。独立加载可避免扩充共享字体改变既有组件的
 像素基线，子集 SHA-256 为
@@ -51,5 +57,6 @@ Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后�
 ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedback 字符清单。
 更新 Picker 页面文案时，更新 Picker 字符清单。
 更新 Calendar 页面文案时，更新 Calendar 字符清单。
+更新 Steps 页面文案时，更新 Steps 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。

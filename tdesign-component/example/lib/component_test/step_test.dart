@@ -12,9 +12,7 @@ class StepTestApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Step Test',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: TestPage(),
     );
   }
@@ -29,9 +27,9 @@ class TestPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // 创建水平步骤条的数据
     var horizontalSteps = <TStepsItemData>[
-      TStepsItemData(title: 'Step 1', content: 'Horizontal Step 1'),
-      TStepsItemData(title: 'Step 2', content: 'Horizontal Step 2'),
-      TStepsItemData(title: 'Step 3', content: 'Horizontal Step 3'),
+      const TStepsItemData(title: 'Step 1', content: 'Horizontal Step 1'),
+      const TStepsItemData(title: 'Step 2', content: 'Horizontal Step 2'),
+      const TStepsItemData(title: 'Step 3', content: 'Horizontal Step 3'),
     ];
 
     // 创建垂直步骤条的数据
@@ -54,14 +52,12 @@ class TestPage extends StatelessWidget {
           ],
         ),
       ),
-      TStepsItemData(title: '2025-01-12', content: '今天是星期天'),
-      TStepsItemData(content: '今天是星期一'),
+      const TStepsItemData(title: '2025-01-12', content: '今天是星期天'),
+      const TStepsItemData(content: '今天是星期一'),
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const TText('TSteps Test Page'),
-      ),
+      appBar: AppBar(title: const TText('TSteps Test Page')),
       body: Form(
         key: _formKey,
         child: Column(
@@ -74,7 +70,7 @@ class TestPage extends StatelessWidget {
                   steps: horizontalSteps,
                   value: 1, // 设置当前激活的步骤索引
                   direction: TStepsDirection.horizontal, // 设置步骤条方向为水平
-                  status: TStepsStatus.success, // 设置步骤条状态
+                  status: TStepsStatus.process, // 设置步骤条状态
                 ),
               ),
             ),
@@ -86,7 +82,7 @@ class TestPage extends StatelessWidget {
                   steps: verticalSteps,
                   value: 1, // 设置当前激活的步骤索引
                   direction: TStepsDirection.vertical, // 设置步骤条方向为垂直
-                  status: TStepsStatus.success, // 设置步骤条状态
+                  status: TStepsStatus.process, // 设置步骤条状态
                 ),
               ),
             ),

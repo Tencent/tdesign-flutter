@@ -1,0 +1,21 @@
+/// Error 错误状态
+    Widget _buildErrorStates(BuildContext context) {
+    return Column(
+      children: [
+        TSteps(steps: _errorItems(), value: 1, status: TStepsStatus.error),
+        const SizedBox(height: 32),
+        TSteps(
+          steps: _iconItems(error: true),
+          value: 1,
+          status: TStepsStatus.error,
+        ),
+        const SizedBox(height: 32),
+        TSteps(
+          steps: _errorItems(),
+          value: 1,
+          status: TStepsStatus.error,
+          variant: TStepsVariant.dot,
+        ),
+      ],
+    );
+  }

@@ -24,14 +24,11 @@ class TStepsVerticalItem extends StatelessWidget {
   /// 步骤条状态
   final TStepsStatus status;
 
-  /// 是否为简略模式
-  final bool simple;
+  /// 步骤条视觉形态。
+  final TStepsVariant variant;
 
-  /// 是否为只读模式（纯展示）
-  final bool readOnly;
-
-  /// 垂直模式下是否可点击选择
-  final bool verticalSelect;
+  /// 垂直模式下是否可点击选择。
+  final bool selectable;
 
   /// item 标题组件插槽
   final Widget? titleWidget;
@@ -46,9 +43,8 @@ class TStepsVerticalItem extends StatelessWidget {
     required this.stepsCount,
     required this.activeIndex,
     required this.status,
-    required this.simple,
-    required this.readOnly,
-    required this.verticalSelect,
+    required this.variant,
+    required this.selectable,
     this.titleWidget,
     this.onTap,
   });
@@ -113,12 +109,8 @@ class TStepsVerticalItem extends StatelessWidget {
     }
 
     /// 传递了成功的 icon 图标, 已完成的 step 都需要显示
-    if (data.successIcon != null) {
-      stepsIconWidget = Icon(
-        data.successIcon,
-        color: stepsIconColor,
-        size: 22,
-      );
+    if (data.icon != null) {
+      stepsIconWidget = Icon(data.icon, color: stepsIconColor, size: 22);
 
       /// 传了图标则不用设置背景色
       shouldSetIconWidgetDecoration = false;
@@ -130,7 +122,7 @@ class TStepsVerticalItem extends StatelessWidget {
       stepsNumberBgColor = theme.errorLightColor;
       stepsTitleColor = theme.errorNormalColor;
 
-      if (simple) {
+      if (variant != TStepsVariant.defaultTheme) {
         simpleStepsIconColor = theme.errorNormalColor;
       } else {
         shouldSetIconWidgetDecoration = data.errorIcon == null;
@@ -154,9 +146,12 @@ class TStepsVerticalItem extends StatelessWidget {
     double iconMarginBottom = 8;
 
     /// 简略步骤条
-    if (simple || readOnly) {
-      /// readOnly纯展示
-      if (readOnly) {
+    if (variant != TStepsVariant.defaultTheme) {
+      final isDisplay = variant == TStepsVariant.display;
+      final isSelectableDot = variant == TStepsVariant.dot && selectable;
+
+      /// display 纯展示
+      if (isDisplay) {
         simpleStepsIconColor = theme.brandNormalColor;
         stepsTitleColor = theme.textColorPrimary;
       }
@@ -168,12 +163,12 @@ class TStepsVerticalItem extends StatelessWidget {
       var simpleDecoration = BoxDecoration(
         color: Colors.transparent,
         shape: BoxShape.circle,
-        border: Border.all(
-          color: simpleStepsIconColor,
-          width: 1,
-        ),
+        border: Border.all(color: simpleStepsIconColor, width: 1),
       );
-      if (activeIndex == index && !readOnly) {
+      final shouldFillDot =
+          isDisplay ||
+          (isSelectableDot ? activeIndex > index : activeIndex == index);
+      if (shouldFillDot) {
         simpleDecoration = BoxDecoration(
           color: simpleStepsIconColor,
           shape: BoxShape.circle,
@@ -206,7 +201,7 @@ class TStepsVerticalItem extends StatelessWidget {
                       decoration: iconWidgetDecoration,
                       child: stepsIconWidget,
                     ),
-                    _buildLineWidget(context)
+                    _buildLineWidget(context),
                   ],
                 ),
               ),
@@ -230,7 +225,9 @@ class TStepsVerticalItem extends StatelessWidget {
                             child: TText(
                               data.title!,
                               style: TextStyle(
-                                fontWeight: (activeIndex == index && !readOnly)
+                                fontWeight:
+                                    (activeIndex == index &&
+                                        variant != TStepsVariant.display)
                                     ? FontWeight.w600
                                     : FontWeight.w400,
                                 color: stepsTitleColor,
@@ -241,7 +238,7 @@ class TStepsVerticalItem extends StatelessWidget {
                               overflow: TextOverflow.visible,
                             ),
                           ),
-                          verticalSelect
+                          selectable
                               ? Icon(
                                   TIcons.chevron_right,
                                   color: theme.textColorPrimary,
@@ -251,10 +248,10 @@ class TStepsVerticalItem extends StatelessWidget {
                         ],
                       ),
                     ),
-                  _buildContentWidget(context)
+                  _buildContentWidget(context),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -276,7 +273,7 @@ class TStepsVerticalItem extends StatelessWidget {
         child: Container(
           width: 1,
           height: double.infinity,
-          color: (activeIndex > index || readOnly)
+          color: (activeIndex > index || variant == TStepsVariant.display)
               ? context.tTheme.brandNormalColor
               : context.tTheme.componentBorderColor,
         ),

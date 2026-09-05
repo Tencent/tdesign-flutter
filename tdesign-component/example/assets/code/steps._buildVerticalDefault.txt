@@ -1,0 +1,8 @@
+/// Vertical Default Steps 垂直默认步骤条
+    Widget _buildVerticalDefault(BuildContext context) {
+    return TSteps(
+      steps: _defaultItems(),
+      value: 1,
+      direction: TStepsDirection.vertical,
+    );
+  }

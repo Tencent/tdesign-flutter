@@ -1,0 +1,9 @@
+/// Vertical Dot Steps 垂直简略步骤条
+    Widget _buildVerticalDot(BuildContext context) {
+    return TSteps(
+      steps: _defaultItems(),
+      value: 1,
+      direction: TStepsDirection.vertical,
+      variant: TStepsVariant.dot,
+    );
+  }

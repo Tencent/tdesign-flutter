@@ -1,0 +1,23 @@
+/// Customize Steps Content 自定义步骤条内容
+    Widget _buildCustomContent(BuildContext context) {
+    return const TSteps(
+      steps: [
+        TStepsItemData(title: 'Finish', content: 'Customize content'),
+        TStepsItemData(
+          title: 'Process',
+          customContent: Padding(
+            padding: EdgeInsets.only(top: 4, bottom: 16),
+            child: TImage(
+              src: 'assets/img/image.png',
+              width: 280,
+              height: 100,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        TStepsItemData(title: 'Default', content: 'Customize content'),
+      ],
+      value: 1,
+      direction: TStepsDirection.vertical,
+    );
+  }
