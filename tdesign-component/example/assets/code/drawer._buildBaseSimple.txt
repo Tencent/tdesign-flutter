@@ -2,20 +2,18 @@ Widget _buildBaseSimple(BuildContext context) {
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      child: const TText('基础抽屉'),
+      size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
-      size: TButtonSize.large,
       onPressed: () {
         TDrawer(
           context,
-          items: List.generate(drawerItemLength,
-              (index) => TDrawerItem(title: '菜单${index + 1}')),
-          onItemClick: (index, item) {
-            print('drawer item被点击，index：$index，title：${item.title}');
-          },
+          placement: TDrawerPlacement.left,
+          items: _baseItems(),
+          onItemClick: (_, __) {},
         ).show();
       },
+      child: const TText('基础抽屉'),
     ),
   );
 }

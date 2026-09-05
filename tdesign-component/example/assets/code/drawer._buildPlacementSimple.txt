@@ -1,4 +1,4 @@
-Widget _buildTitleSimple(BuildContext context) {
+Widget _buildPlacementSimple(BuildContext context) {
   return Column(
     children: [
       SizedBox(
@@ -11,11 +11,10 @@ Widget _buildTitleSimple(BuildContext context) {
             TDrawer(
               context,
               placement: TDrawerPlacement.left,
-              title: TText('标题', font: context.tTheme.fontTitleLarge),
               items: _baseItems(),
             ).show();
           },
-          child: const TText('小标题抽屉'),
+          child: const TText('左侧抽屉'),
         ),
       ),
       const SizedBox(height: 16),
@@ -28,12 +27,11 @@ Widget _buildTitleSimple(BuildContext context) {
           onPressed: () {
             TDrawer(
               context,
-              placement: TDrawerPlacement.left,
-              title: TText('标题', font: context.tTheme.fontHeadlineMedium),
+              placement: TDrawerPlacement.right,
               items: _baseItems(),
             ).show();
           },
-          child: const TText('大标题抽屉'),
+          child: const TText('右侧抽屉'),
         ),
       ),
     ],

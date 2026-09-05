@@ -109,6 +109,9 @@
       "api": {
         "names": [
           "TDrawer",
+          "TDrawerHandle",
+          "TDrawerPlacement",
+          "TDrawerThemeData",
           "TDrawerWidget",
           "TDrawerItem"
         ],

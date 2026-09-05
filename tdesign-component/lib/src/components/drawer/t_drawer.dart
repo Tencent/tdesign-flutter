@@ -4,38 +4,49 @@ import '../popup/t_popup.dart';
 import 't_drawer_theme_data.dart';
 import 't_drawer_widget.dart';
 
-/// 抽屉方向
+/// 抽屉方向。
 enum TDrawerPlacement {
-  /// 从左侧滑出
+  /// 从左侧滑出。
   left,
 
-  /// 从右侧滑出
+  /// 从右侧滑出。
   right,
 }
 
-/// 抽屉组件
+/// 命令式抽屉组件。
+///
+/// 调用 [show] 打开抽屉，并使用返回的 [TDrawerHandle] 查询或关闭当前展示周期。
 class TDrawer {
   TDrawer(
     this.context, {
+    this.bordered = true,
     this.closeOnOverlayClick = true,
     this.footer,
     this.items,
+    this.enableFeedback = true,
+    this.isShowLastBordered = true,
     this.placement = TDrawerPlacement.right,
     this.showOverlay = true,
     this.title,
     this.onClose,
+    this.onOverlayClick,
     this.onItemClick,
     this.width,
     this.drawerTop,
     this.useSafeArea = true,
+    this.destroyOnClose = false,
     this.child,
-  });
+  }) : assert(width == null || width > 0),
+       assert(drawerTop == null || drawerTop >= 0);
 
   /// 上下文
   final BuildContext context;
 
-  /// 点击蒙层时是否关闭抽屉
-  final bool? closeOnOverlayClick;
+  /// 是否显示菜单项分隔线，默认 true。
+  final bool bordered;
+
+  /// 点击可见蒙层时是否关闭抽屉，默认 true。
+  final bool closeOnOverlayClick;
 
   /// 抽屉的底部
   final Widget? footer;
@@ -43,38 +54,53 @@ class TDrawer {
   /// 抽屉里的列表项
   final List<TDrawerItem>? items;
 
+  /// 点击时是否显示背景按压反馈，默认 true。
+  final bool enableFeedback;
+
+  /// 是否显示最后一行分隔线，默认 true。
+  final bool isShowLastBordered;
+
   /// 自定义内容，优先级高于[items]/[footer]/[title]
   final Widget? child;
 
-  /// 抽屉方向
-  final TDrawerPlacement? placement;
+  /// 抽屉方向，默认 [TDrawerPlacement.right]。
+  final TDrawerPlacement placement;
 
-  /// 是否显示遮罩层
-  final bool? showOverlay;
+  /// 是否显示可见遮罩层，默认 true。
+  final bool showOverlay;
 
   /// 抽屉的标题组件
   final Widget? title;
 
-  /// 关闭时触发
+  /// 当前展示周期真正结束时触发。
   final VoidCallback? onClose;
+
+  /// 点击可见蒙层时触发。
+  ///
+  /// 是否同时关闭由 [closeOnOverlayClick] 决定。
+  final VoidCallback? onOverlayClick;
 
   /// 点击抽屉里的列表项触发
   final TDrawerItemClickCallback? onItemClick;
 
-  /// 宽度（优先级高于 ThemeData）
+  /// 宽度；优先级高于 ThemeData，默认使用 280。
   final double? width;
 
-  /// 距离顶部的距离
+  /// 距离顶部的距离，默认 0；组件参数优先于默认值。
   final double? drawerTop;
 
-  /// 是否避让系统安全区域
+  /// 是否避让系统安全区域，默认 true。
   final bool useSafeArea;
+
+  /// 关闭后是否销毁 Popup 路由内状态，默认 false。
+  final bool destroyOnClose;
 
   TPopupHandle? _drawerHandle;
 
-  /// 从 ThemeData 解析有效值
+  /// 从 ThemeData 解析有效值。
   TDrawerThemeData _resolveTheme() {
-    final theme = Theme.of(context).extension<TDrawerThemeData>() ??
+    final theme =
+        Theme.of(context).extension<TDrawerThemeData>() ??
         const TDrawerThemeData();
     return theme;
   }
@@ -85,14 +111,13 @@ class TDrawer {
     }
 
     final theme = _resolveTheme();
-    final overlayEnabled = showOverlay ?? true;
-    final dismissible = overlayEnabled && (closeOnOverlayClick ?? true);
+    final overlayEnabled = showOverlay;
     final popupPlacement = placement == TDrawerPlacement.right
         ? TPopupPlacement.right
         : TPopupPlacement.left;
     final popupInset = placement == TDrawerPlacement.right
-        ? TPopupRightInset(top: drawerTop ?? theme.drawerTop ?? 0)
-        : TPopupLeftInset(top: drawerTop ?? theme.drawerTop ?? 0);
+        ? TPopupRightInset(top: drawerTop ?? 0)
+        : TPopupLeftInset(top: drawerTop ?? 0);
 
     _drawerHandle = TPopup.show(
       context,
@@ -102,16 +127,21 @@ class TDrawer {
         inset: popupInset,
         overlay: TPopupOverlayConfig(
           showOverlay: overlayEnabled,
-          closeOnClick: dismissible,
+          closeOnClick: closeOnOverlayClick,
           color: overlayEnabled ? null : Colors.transparent,
+          onClick: onOverlayClick,
         ),
+        destroyOnClose: destroyOnClose,
         useSafeArea: useSafeArea,
         onClosed: _deleteRouter,
         child: Theme(
           data: Theme.of(context),
           child: TDrawerWidget(
+            bordered: bordered,
+            enableFeedback: enableFeedback,
             footer: footer,
             items: items,
+            isShowLastBordered: isShowLastBordered,
             child: child,
             title: title,
             onItemClick: onItemClick,

@@ -128,9 +128,9 @@ class _PopupConsumerHostState extends State<_PopupConsumerHost> {
             placement: TDrawerPlacement.right,
             title: const Text('Menu'),
             items: [
-              TDrawerItem(title: 'Home'),
-              TDrawerItem(title: 'Settings'),
-              TDrawerItem(title: 'Help'),
+              const TDrawerItem(title: 'Home'),
+              const TDrawerItem(title: 'Settings'),
+              const TDrawerItem(title: 'Help'),
             ],
           ).show();
           break;
