@@ -87,12 +87,15 @@
     {
       "slug": "back-top",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/backtop/t_backtop.dart"
+        "type": "folder",
+        "path": "lib/src/components/backtop"
       },
       "api": {
         "names": [
-          "TBackTop"
+          "TBackTop",
+          "TBackTopThemeData",
+          "TBackTopShape",
+          "TBackTopColorScheme"
         ],
         "getComments": false
       }

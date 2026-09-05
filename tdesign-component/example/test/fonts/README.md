@@ -16,6 +16,11 @@ NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 新增文案的补充 fallback。它排在原字体之后，避免扩充原字体改变 Button、Checkbox、
 Upload 等既有 Golden 的字形选择与像素基线。
 
+`BackTopGoldenCJK-Regular.otf` 仅补充 BackTop 公开说明中的“帮”，字符清单见
+`backtop_demo_glyphs.txt`。它作为 BackTop Demo 最后的专用 fallback，不改变其他页面
+或既有共享字体的像素基线，子集 SHA-256 为
+`44dc59fa4e3b84496d07c21e47af8679cec635b70af2e9561d9dbbfef444b42e`。
+
 `PickerGoldenCJK-Regular.otf` 仅补充 Picker 整页 Golden 新增且既有子集未覆盖的
 字形，字符清单见 `picker_demo_glyphs.txt`。独立加载可避免扩充共享字体改变既有组件的
 像素基线，子集 SHA-256 为
@@ -51,5 +56,6 @@ Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后�
 ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedback 字符清单。
 更新 Picker 页面文案时，更新 Picker 字符清单。
 更新 Calendar 页面文案时，更新 Calendar 字符清单。
+更新 BackTop 页面文案时，更新 BackTop 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。

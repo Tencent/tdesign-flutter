@@ -9,40 +9,52 @@ import '../../util/context_extension.dart';
 import '../text/t_text.dart';
 import 't_backtop_theme_data.dart';
 
-/// 返回顶部组件
+/// 返回顶部组件。
 ///
-/// T2 自绘组件：`GestureDetector` + `Container` 双形态（`circle` / `halfCircle`）。
-/// - 监听 [controller] 偏移控制显隐，点击默认 `controller.animateTo(0)` 后触发 [onPressed]。
-/// - A 类禁用：[onPressed] 为 `null` 时不可点击。
-/// - L4 样式（[shape]、颜色、默认阈值等）→ [TBackTopThemeData]。
+/// 绑定 [controller] 后，滚动偏移达到 [visibilityOffset] 时显示；点击时先
+/// 动画回到顶部，再触发可选的 [onPressed] 完成通知。
 class TBackTop extends StatefulWidget {
   const TBackTop({
     Key? key,
     this.controller,
     this.onPressed,
     this.showText = false,
-    this.visibilityOffset,
+    this.visibilityOffset = 200,
     this.tooltip,
-    this.shape,
-  }) : super(key: key);
+    this.shape = TBackTopShape.circle,
+    this.colorScheme = TBackTopColorScheme.light,
+  }) : assert(visibilityOffset >= 0),
+       super(key: key);
 
-  /// 页面滚动的控制器
+  /// 页面滚动控制器。
+  ///
+  /// 未传时组件始终可见，点击只触发 [onPressed]；传入后组件监听滚动偏移并
+  /// 在点击时动画回到该滚动位置的最小边界。
   final ScrollController? controller;
 
-  /// 点击回调；`null` 表示禁用（A 类）
+  /// 回顶动画完成后的通知。
+  ///
+  /// `null` 不表示禁用；只要提供 [controller]，组件仍可点击并执行回顶。
   final VoidCallback? onPressed;
 
-  /// 是否展示文案（i18n 走 `context.resource`）
+  /// 是否显示设计内置文案。
+  ///
+  /// 圆形显示“顶部”，半圆形显示“返回/顶部”，文案来自当前资源代理。
   final bool showText;
 
-  /// 绑定 [controller] 时，偏移 ≥ 阈值才显示；未传时取 Theme `defaultVisibilityOffset`，Theme 也未配时始终可见
-  final double? visibilityOffset;
+  /// 绑定 [controller] 时的显示阈值，默认 200。
+  ///
+  /// 滚动偏移大于或等于该值时显示；未绑定 [controller] 时不参与显隐。
+  final double visibilityOffset;
 
-  /// 读屏 / `Tooltip` 提示；未传时可回退资源文案
+  /// 读屏和 Tooltip 提示；未传时使用当前资源代理的“返回顶部”。
   final String? tooltip;
 
-  /// 形状（circle / halfCircle）；未传时取 Theme `shape`
-  final TBackTopShape? shape;
+  /// 结构形态，默认 [TBackTopShape.circle]。
+  final TBackTopShape shape;
+
+  /// 预设配色，默认 [TBackTopColorScheme.light]。
+  final TBackTopColorScheme colorScheme;
 
   @override
   State<TBackTop> createState() => _TBackTopState();
@@ -50,146 +62,97 @@ class TBackTop extends StatefulWidget {
 
 class _TBackTopState extends State<TBackTop> {
   bool _isAnimating = false;
-  bool _isVisible = true;
-  bool _listenerAttached = false;
-  double? _lastVisibilityOffset;
-
-  Color _bgColor = Colors.transparent;
-  Color _borderColor = Colors.transparent;
-  Color _fontColor = Colors.transparent;
+  bool _isVisible = false;
 
   TBackTopThemeData get _themeData =>
       Theme.of(context).extension<TBackTopThemeData>() ??
       const TBackTopThemeData();
 
-  TBackTopShape get _effectiveShape =>
-      widget.shape ?? _themeData.shape ?? TBackTopShape.circle;
-
-  double? get _effectiveVisibilityOffset =>
-      widget.visibilityOffset ?? _themeData.defaultVisibilityOffset;
-
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _initColors();
-    _attachScrollListener();
-    _refreshVisibility();
-  }
-
-  void _attachScrollListener() {
-    if (_listenerAttached) {
-      return;
-    }
-    final offset = _effectiveVisibilityOffset;
-    if (offset != null && widget.controller != null) {
-      widget.controller!.addListener(_handleScroll);
-      _listenerAttached = true;
-      _lastVisibilityOffset = offset;
-      _updateVisibility(offset);
-    }
-  }
-
-  void _handleScroll() {
-    final offset = _effectiveVisibilityOffset;
-    if (offset != null && widget.controller != null) {
-      _updateVisibility(offset);
-    }
-  }
-
-  void _updateVisibility(double threshold) {
-    final controller = widget.controller;
-    if (controller == null || !controller.hasClients) {
-      return;
-    }
-    final shouldShow = controller.offset >= threshold;
-    if (shouldShow != _isVisible) {
-      setState(() {
-        _isVisible = shouldShow;
-      });
-    }
+    _isVisible = widget.controller == null;
+    _attachScrollListener(widget.controller);
+    _scheduleVisibilitySync();
   }
 
   @override
   void didUpdateWidget(covariant TBackTop oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      _detachScrollListener(oldWidget.controller);
+      _attachScrollListener(widget.controller);
+    }
     if (oldWidget.controller != widget.controller ||
         oldWidget.visibilityOffset != widget.visibilityOffset) {
-      // 解除旧监听，重新绑定
-      oldWidget.controller?.removeListener(_handleScroll);
-      _listenerAttached = false;
-      _attachScrollListener();
+      _syncVisibility();
+      _scheduleVisibilitySync();
     }
-    _refreshVisibility();
   }
 
   @override
   void dispose() {
-    widget.controller?.removeListener(_handleScroll);
+    _detachScrollListener(widget.controller);
     super.dispose();
   }
 
-  void _initColors() {
-    _bgColor = _themeData.backgroundColor ?? context.tTheme.bgColorContainer;
-    _borderColor =
-        _themeData.borderColor ?? context.tTheme.componentBorderColor;
-    _fontColor = _themeData.contentColor ?? context.tTheme.textColorPrimary;
+  void _attachScrollListener(ScrollController? controller) {
+    controller?.addListener(_syncVisibility);
   }
 
-  void _refreshVisibility() {
-    final offset = _effectiveVisibilityOffset;
-    if (offset != _lastVisibilityOffset) {
-      _lastVisibilityOffset = offset;
-    }
-    if (offset != null) {
-      _updateVisibility(offset);
+  void _detachScrollListener(ScrollController? controller) {
+    controller?.removeListener(_syncVisibility);
+  }
+
+  void _scheduleVisibilitySync() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _syncVisibility();
+      }
+    });
+  }
+
+  void _syncVisibility() {
+    final controller = widget.controller;
+    final shouldShow = controller == null
+        ? true
+        : controller.hasClients && controller.offset >= widget.visibilityOffset;
+    if (shouldShow != _isVisible && mounted) {
+      setState(() => _isVisible = shouldShow);
     }
   }
 
   String _resolveTooltip(BuildContext context) {
-    if (widget.tooltip != null) {
-      return widget.tooltip!;
-    }
-    // 使用 resource 中的 back + top 组合文案
-    return '${context.resource.back}${context.resource.top}';
+    return widget.tooltip ?? '${context.resource.back}${context.resource.top}';
   }
 
   @override
   Widget build(BuildContext context) {
-    // 内置可见性控制
-    if (_effectiveVisibilityOffset != null && !_isVisible) {
+    if (!_isVisible) {
       return const SizedBox.shrink();
     }
 
-    final isDisabled = widget.onPressed == null;
-
-    final child = _effectiveShape == TBackTopShape.circle
+    final hasAction = widget.controller != null || widget.onPressed != null;
+    final child = widget.shape == TBackTopShape.circle
         ? _buildCircleWidget(context)
         : _buildHalfCircleWidget(context);
 
-    // 始终包裹 Tooltip（含默认 resource 文案）以支持无障碍
     return Semantics(
-      enabled: !isDisabled,
+      button: true,
+      enabled: hasAction,
+      label: _resolveTooltip(context),
       child: Tooltip(
         message: _resolveTooltip(context),
         child: GestureDetector(
-          onTap: isDisabled ? null : _handleTap,
-          child: AnimatedOpacity(
-            opacity: isDisabled ? 0.4 : 1,
-            duration: const Duration(milliseconds: 150),
-            child: child,
-          ),
+          behavior: HitTestBehavior.opaque,
+          onTap: hasAction ? _handleTap : null,
+          child: child,
         ),
       ),
     );
   }
 
   Future<void> _handleTap() async {
-    // 防抖处理，防止短时间内重复触发
     if (_isAnimating) {
       return;
     }
@@ -199,32 +162,62 @@ class _TBackTopState extends State<TBackTop> {
       _isAnimating = true;
       try {
         await controller.animateTo(
-          0,
+          controller.position.minScrollExtent,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeIn,
         );
       } finally {
-        if (mounted) {
-          _isAnimating = false;
-        }
+        _isAnimating = false;
       }
     }
 
-    if (!mounted) {
-      return;
+    if (mounted) {
+      widget.onPressed?.call();
     }
-    widget.onPressed?.call();
+  }
+
+  _BackTopVisualStyle _resolveStyle(BuildContext context) {
+    final token = context.tTheme;
+    final theme = _themeData;
+    final isDark = widget.colorScheme == TBackTopColorScheme.dark;
+    final defaultBackground = isDark
+        ? widget.shape == TBackTopShape.circle
+              ? token.grayColor13
+              : token.grayColor14
+        : token.bgColorContainer;
+    final defaultContent = isDark ? token.whiteColor1 : token.textColorPrimary;
+    return _BackTopVisualStyle(
+      backgroundColor: theme.backgroundColor ?? defaultBackground,
+      borderColor:
+          theme.borderColor ??
+          (isDark ? token.grayColor9 : token.componentBorderColor),
+      contentColor: theme.contentColor ?? defaultContent,
+      roundSize: theme.roundSize ?? 48,
+      halfCircleHeight: theme.halfCircleHeight ?? 40,
+      halfCircleMinWidth: theme.halfCircleMinWidth ?? 38,
+      iconSize: theme.iconSize ?? 20,
+      borderWidth: theme.borderWidth ?? 0.5,
+      halfCircleHorizontalPadding: theme.halfCircleHorizontalPadding ?? 8,
+      contentGap: theme.contentGap ?? 2,
+      textStyle: TextStyle(
+        fontSize: token.fontMarkExtraSmall?.size ?? 10,
+        height: 1.2,
+        fontWeight: token.fontMarkExtraSmall?.fontWeight ?? FontWeight.w600,
+      ).merge(theme.textStyle).copyWith(
+        color: theme.contentColor ?? defaultContent,
+      ),
+    );
   }
 
   Widget _buildCircleWidget(BuildContext context) {
+    final style = _resolveStyle(context);
     return Container(
-      width: 48,
-      height: 48,
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+      width: style.roundSize,
+      height: style.roundSize,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(context.tTheme.radiusCircle),
-        border: Border.all(color: _borderColor, width: 0.5),
-        color: _bgColor,
+        border: Border.all(color: style.borderColor, width: style.borderWidth),
+        color: style.backgroundColor,
       ),
       child: Center(
         child: Column(
@@ -232,22 +225,16 @@ class _TBackTopState extends State<TBackTop> {
           children: [
             Icon(
               TIcons.backtop,
-              size: 20,
-              color: _fontColor,
+              size: style.iconSize,
+              color: style.contentColor,
             ),
-            Visibility(
-              visible: widget.showText,
-              child: TText(
+            if (widget.showText)
+              TText(
                 context.resource.top,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: context.tTheme.fontMarkExtraSmall?.size ?? 10,
-                  color: _fontColor,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: style.textStyle,
               ),
-            ),
           ],
         ),
       ),
@@ -255,18 +242,24 @@ class _TBackTopState extends State<TBackTop> {
   }
 
   Widget _buildHalfCircleWidget(BuildContext context) {
+    final style = _resolveStyle(context);
     return ConstrainedBox(
-      constraints: const BoxConstraints(minWidth: 38),
+      constraints: BoxConstraints(minWidth: style.halfCircleMinWidth),
       child: Container(
-        height: 40,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        height: style.halfCircleHeight,
+        padding: EdgeInsets.symmetric(
+          horizontal: style.halfCircleHorizontalPadding,
+        ),
         decoration: BoxDecoration(
-          color: _bgColor,
+          color: style.backgroundColor,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(context.tTheme.radiusCircle),
             bottomLeft: Radius.circular(context.tTheme.radiusCircle),
           ),
-          border: Border.all(color: _borderColor, width: 0.5),
+          border: Border.all(
+            color: style.borderColor,
+            width: style.borderWidth,
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -274,47 +267,50 @@ class _TBackTopState extends State<TBackTop> {
           children: [
             Icon(
               TIcons.backtop,
-              size: 22,
-              color: _fontColor,
+              size: style.iconSize,
+              color: style.contentColor,
             ),
-            const SizedBox(width: 2),
-            Visibility(
-              visible: widget.showText,
-              child: SizedBox(
-                height: 32,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TText(
-                      context.resource.back,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        height: 1.2,
-                        fontSize: context.tTheme.fontMarkExtraSmall?.size ?? 10,
-                        color: _fontColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    TText(
-                      context.resource.top,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        height: 1.2,
-                        fontSize: context.tTheme.fontMarkExtraSmall?.size ?? 10,
-                        color: _fontColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
+            if (widget.showText) ...[
+              SizedBox(width: style.contentGap),
+              TText(
+                '${context.resource.back}\n${context.resource.top}',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: style.textStyle,
               ),
-            ),
+            ],
           ],
         ),
       ),
     );
   }
+}
+
+class _BackTopVisualStyle {
+  const _BackTopVisualStyle({
+    required this.backgroundColor,
+    required this.borderColor,
+    required this.contentColor,
+    required this.roundSize,
+    required this.halfCircleHeight,
+    required this.halfCircleMinWidth,
+    required this.iconSize,
+    required this.borderWidth,
+    required this.halfCircleHorizontalPadding,
+    required this.contentGap,
+    required this.textStyle,
+  });
+
+  final Color backgroundColor;
+  final Color borderColor;
+  final Color contentColor;
+  final double roundSize;
+  final double halfCircleHeight;
+  final double halfCircleMinWidth;
+  final double iconSize;
+  final double borderWidth;
+  final double halfCircleHorizontalPadding;
+  final double contentGap;
+  final TextStyle textStyle;
 }
