@@ -9,6 +9,8 @@ const navbarDemoPageTestSpec = DemoPageTestSpec(
   page: TNavBarPage(),
   componentType: TNavBar,
   expectedComponentCount: 11,
+  supplementalCjkFontFamily: 'TDesign NavBar Golden CJK',
+  supplementalCjkFontPath: 'test/fonts/NavBarGoldenCJK-Regular.otf',
   expectedTexts: [
     '用于不同页面之间切换或者跳转，位于内容区的上方，系统状态栏的下方。',
     '01 组件类型',
