@@ -36,7 +36,7 @@
 
 ## 真机证据
 
-- 设备：Xiaomi 25113PN0EC，Android 16，ADB `40302eeb`。
+- 设备：Xiaomi Android 16 设备，ADB `40302eeb`。
 - 最终 app/lib 代码通过 `flutter attach` 执行 uppercase `R`，返回 `Restarted application in 1,492ms`。
 - 实际可见操作：从首页搜索进入 NavBar；点击“更多”；搜索框输入 `Navbar`；滚动检查居中/左对齐、普通/大标题与自定义品牌色；切换 light/dark。
 - 设备集成：`flutter test integration_test/navbar_example_test.dart -d 40302eeb`，1/1 通过，覆盖真实路由、操作反馈、搜索与主题切换。
