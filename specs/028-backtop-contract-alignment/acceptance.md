@@ -22,7 +22,9 @@
 | Linux `--update-goldens` 后无更新参数复跑 | PASS | Flutter 3.32.0；Demo 6 张、组件 8 状态矩阵 2 张及共享导航矩阵 2 张，严格比较 |
 | 回归工具测试 | PASS，17 tests | 覆盖率、组件清单、视觉清单与代码片段生成器 |
 | Android 16 `flutter test integration_test/backtop_example_test.dart -d 40302eeb` | PASS，1 test | 最终 Demo 的两按钮选型、真实滚动显隐、两种悬浮形态、点击回顶及 light/dark 切换 |
-| Android 16 普通 APK 安装 | PASS | 最终 `lib/main.dart` debug APK 经 `adb install --no-streaming -r -t` 返回 `Success`；包路径存在，Launcher 任务前台可见，测试结束后应用仍保留 |
+| Android 16 普通 APK 安装 | PASS | 最终 `lib/main.dart` debug APK 经 `adb install -r` 返回 `Success`；强制结束进程后由 Launcher 重新启动，包路径存在且应用仍保留 |
+| Android 16 半圆贴边复验 | PASS | 设备 `40302eeb` 上暗色半圆节点右边界为 `1220`，等于屏幕宽度 `1220`；点击后正常回顶并隐藏 |
+| Android 16 形态切换动画复验 | PASS | 设备 `40302eeb` 上按钮触发滚动时 BackTop 保持完整尺寸，不再出现 FAB 缩小后重新显示的闪烁 |
 
 ## API 与实现收敛审查
 
@@ -44,7 +46,7 @@
 - [x] 小程序公开 Demo 的两按钮选型、300ms / 1000 滚动、点击回顶及默认阈值已读取
 - [x] Flutter Demo 首屏 / 两种滚动态 light/dark 6 张 Linux Golden 与组件 8 状态矩阵 2 张已逐张核对
 - [x] Android 16 真机重新完成可见的两按钮选型、滚动显隐、两种悬浮形态、点击回顶与明暗主题核对
-- [x] 普通持久安装 App 中人工点击半圆形、回顶、主题切换和圆形，并逐张核对浅色半圆形与深色圆形截图
+- [x] 普通持久安装 App 中人工点击半圆形、回顶、主题切换和圆形，并确认圆形保留标准浮动间距、半圆形直边贴齐屏幕右边缘
 
 ## 未覆盖项与后续工作
 

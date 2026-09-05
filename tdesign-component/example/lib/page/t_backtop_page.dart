@@ -51,6 +51,10 @@ class _TBackTopPageState extends State<TBackTopPage> {
             ? TBackTopColorScheme.light
             : TBackTopColorScheme.dark,
       ),
+      floatingActionButtonLocation: shape == TBackTopShape.halfCircle
+          ? const _BackTopEdgeLocation()
+          : FloatingActionButtonLocation.endFloat,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
       children: [
         ExampleModule(
           title: '组件类型',
@@ -148,4 +152,23 @@ class _TBackTopPageState extends State<TBackTopPage> {
       borderRadius: BorderRadius.circular(context.tTheme.radiusSmall),
     ),
   );
+}
+
+/// 半圆形 BackTop 的直边属于贴屏结构，宿主只负责把组件放到屏幕右边缘。
+///
+/// 这里不改变组件的尺寸、颜色、边框或圆角；圆形仍使用 Scaffold 标准悬浮位置。
+class _BackTopEdgeLocation extends FloatingActionButtonLocation {
+  const _BackTopEdgeLocation();
+
+  @override
+  Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
+    final standardOffset = FloatingActionButtonLocation.endFloat.getOffset(
+      scaffoldGeometry,
+    );
+    return Offset(
+      scaffoldGeometry.scaffoldSize.width -
+          scaffoldGeometry.floatingActionButtonSize.width,
+      standardOffset.dy,
+    );
+  }
 }

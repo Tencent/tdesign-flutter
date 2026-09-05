@@ -15,6 +15,10 @@ void main() {
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
     expect(page.compactDemo, isTrue);
     expect(page.showTestModule, isFalse);
+    expect(
+      page.floatingActionButtonAnimator,
+      FloatingActionButtonAnimator.noAnimation,
+    );
     expect(page.children.map((module) => module.title), ['组件类型']);
     expect(page.children.single.children.map((item) => item.desc), [
       '圆形返回顶部',
@@ -57,6 +61,10 @@ void main() {
     expect(backTop.shape, TBackTopShape.halfCircle);
     expect(backTop.colorScheme, TBackTopColorScheme.dark);
     expect(tester.getSize(floating).height, 40);
+    expect(
+      tester.getTopRight(floating).dx,
+      moreOrLessEquals(tester.getSize(find.byType(Scaffold)).width),
+    );
     await tester.tap(floating);
     await tester.pumpAndSettle();
     expect(position.pixels, lessThan(1));
