@@ -108,36 +108,52 @@ class TIndexesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: context.tTheme.bgColorSecondaryContainer,
-      child: ExamplePage(
-        title: tTitle(context),
-        desc: '用于页面中信息快速检索，可以根据目录中的页码快速找到所需的内容。',
-        exampleCodeGroup: 'indexes',
-        navBarKey: navBarkey,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        children: const [
+    return ExamplePage(
+      title: tTitle(context),
+      desc: '用于页面中信息快速检索，可以根据目录中的页码快速找到所需的内容。',
+      exampleCodeGroup: 'indexes',
+      navBarKey: navBarkey,
+      compactDemo: true,
+      backgroundColor: context.tTheme.bgColorContainer,
+      showTestModule: false,
+      children: const [
           ExampleModule(
             title: '组件类型',
             children: [
-              ExampleItem(desc: '基础索引', builder: _buildSimple),
-              ExampleItem(desc: '自定义索引', builder: _buildCustomIndexes),
+              ExampleItem(
+                desc: '索引类型',
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                builder: _buildLetterIndexes,
+              ),
+              ExampleItem(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                builder: _buildNumberIndexes,
+              ),
             ],
           ),
-        ],
-      ),
+          ExampleModule(
+            title: '组件样式',
+            children: [
+              ExampleItem(
+                desc: '其他索引列表样式',
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                builder: _buildCapsuleIndexes,
+              ),
+            ],
+          ),
+      ],
     );
   }
 }
 
 @ExampleCode(group: 'indexes')
-Widget _buildSimple(BuildContext context) {
+Widget _buildLetterIndexes(BuildContext context) {
   final indexList = _list.map((item) => item['index'] as String).toList();
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      key: const ValueKey('indexes-basic-trigger'),
-      child: const TText('基础索引'),
+      key: const ValueKey('indexes-letter-trigger'),
+      child: const TText('字母索引'),
       size: TButtonSize.large,
       colorScheme: TButtonColorScheme.primary,
       variant: TButtonVariant.outline,
@@ -147,7 +163,7 @@ Widget _buildSimple(BuildContext context) {
           options: TPopupOptions.right(
             inset: const TPopupRightInset(top: 0),
             child: TIndexes(
-              key: const ValueKey('indexes-basic-panel'),
+              key: const ValueKey('indexes-letter-panel'),
               indexList: indexList,
               initialIndex: 'B',
               builderContent: (context, index) {
@@ -170,13 +186,27 @@ Widget _buildSimple(BuildContext context) {
 }
 
 @ExampleCode(group: 'indexes')
-Widget _buildCustomIndexes(BuildContext context) {
+Widget _buildNumberIndexes(BuildContext context) {
+  return _buildNumberScenario(context, capsuleTheme: false);
+}
+
+@ExampleCode(group: 'indexes')
+Widget _buildCapsuleIndexes(BuildContext context) {
+  return _buildNumberScenario(context, capsuleTheme: true);
+}
+
+Widget _buildNumberScenario(
+  BuildContext context, {
+  required bool capsuleTheme,
+}) {
   const indexList = ['1', '3', '5', '7', '8', '10', '#'];
+  final scenario = capsuleTheme ? 'capsule' : 'number';
+  final label = capsuleTheme ? '胶囊索引' : '数字索引';
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      key: const ValueKey('indexes-custom-trigger'),
-      child: const TText('自定义索引'),
+      key: ValueKey('indexes-$scenario-trigger'),
+      child: TText(label),
       size: TButtonSize.large,
       colorScheme: TButtonColorScheme.primary,
       variant: TButtonVariant.outline,
@@ -186,9 +216,9 @@ Widget _buildCustomIndexes(BuildContext context) {
           options: TPopupOptions.right(
             inset: const TPopupRightInset(top: 0),
             child: TIndexes(
-              key: const ValueKey('indexes-custom-panel'),
+              key: ValueKey('indexes-$scenario-panel'),
               indexList: indexList,
-              capsuleTheme: true,
+              capsuleTheme: capsuleTheme,
               builderContent: (context, index) {
                 return TCellGroup(
                   cells: List.generate(

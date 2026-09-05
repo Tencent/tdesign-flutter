@@ -1,0 +1,3 @@
+Widget _buildCapsuleIndexes(BuildContext context) {
+  return _buildNumberScenario(context, capsuleTheme: true);
+}

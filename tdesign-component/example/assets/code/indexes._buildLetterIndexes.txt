@@ -1,10 +1,10 @@
-Widget _buildCustomIndexes(BuildContext context) {
-  const indexList = ['1', '3', '5', '7', '8', '10', '#'];
+Widget _buildLetterIndexes(BuildContext context) {
+  final indexList = _list.map((item) => item['index'] as String).toList();
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      key: const ValueKey('indexes-custom-trigger'),
-      child: const TText('自定义索引'),
+      key: const ValueKey('indexes-letter-trigger'),
+      child: const TText('字母索引'),
       size: TButtonSize.large,
       colorScheme: TButtonColorScheme.primary,
       variant: TButtonVariant.outline,
@@ -14,15 +14,17 @@ Widget _buildCustomIndexes(BuildContext context) {
           options: TPopupOptions.right(
             inset: const TPopupRightInset(top: 0),
             child: TIndexes(
-              key: const ValueKey('indexes-custom-panel'),
+              key: const ValueKey('indexes-letter-panel'),
               indexList: indexList,
-              capsuleTheme: true,
+              initialIndex: 'B',
               builderContent: (context, index) {
+                final list =
+                    _list.firstWhere(
+                          (element) => element['index'] == index,
+                        )['children']
+                        as List<String>;
                 return TCellGroup(
-                  cells: List.generate(
-                    5,
-                    (position) => TCell(title: TText('列表内容 ${position + 1}')),
-                  ),
+                  cells: list.map((e) => TCell(title: TText(e))).toList(),
                 );
               },
             ),

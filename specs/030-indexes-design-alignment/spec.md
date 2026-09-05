@@ -2,15 +2,15 @@
 
 ## 目标
 
-- 对齐 Figma 24386:5246 的 Indexes 组件集：type(number/a-z) × theme(normal/capsule) × state(default/active)。
-- 公开 Demo 对齐小程序当前“基础索引 / 自定义索引”两项，并验证点击、连续拖动、吸顶与滚动联动。
+- 对齐新版 Figma 页面 24386:5239 的 375×812 移动端展示，以及组件集的 type(number/a-z) × theme(normal/capsule) × state(default/active)。
+- 公开 Demo 按新版 Figma 拆成“字母索引 / 数字索引 / 胶囊索引”三项，并验证点击、连续拖动、吸顶与滚动联动。
 - 组件继续采用 Flutter 的 ScrollController + builder 组合，不复制小程序只能驱动页面级滚动的限制。
 
 ## 跨端证据
 
 - Figma 页面组件集包含 8 个变体。字母与数字是数据形态，normal/capsule 是锚点视觉，default/active 是滚动派生状态。
 - 小程序 develop 源码 packages/components/indexes：侧栏项 20px、项间距 2px、右侧 8px；提示最小 48px、与侧栏间距 16px；普通/激活索引都使用 body-small；锚点内边距 4px/16px，激活时使用品牌色和 600 字重。
-- 小程序公开 Demo 的基础示例使用字母城市列表；自定义示例使用 1,3,5,7,8,10,#、完整索引和胶囊锚点。
+- 小程序 develop 公开 Demo 只有“基础用法 / 胶囊索引”两项：基础示例使用字母城市列表；胶囊示例使用 1,3,5,7,8,10,#、完整索引和胶囊锚点。新版 Figma 单独增加了普通“数字索引”，这是明显的跨端 Demo 差异；Flutter 按新版 Figma 展示三项，但交互继续以小程序为参考。
 
 ## API 与状态所有权
 
@@ -42,5 +42,5 @@
 
 - 组件、Demo、Theme 优先级及手势状态均有 Widget 测试；生产代码行/函数覆盖率均不低于 95%。
 - Flutter 3.32.0 与 latest 严格 analyze、非视觉测试通过。
-- Flutter 3.32.0 Linux 固定 375×812、DPR 1、文字缩放 1 生成并无更新参数复跑明暗 Demo/打开态 Golden。
+- Flutter 3.32.0 固定 375×812、DPR 1、文字缩放 1 生成并无更新参数复跑整页及三种打开态共 8 张明暗 Golden。
 - API 文档与示例代码片段由仓库脚本生成并检查。

@@ -13,11 +13,17 @@ void main() {
   ) async {
     await pumpFullDemoPage(tester, indexesDemoPageTestSpec, ThemeMode.light);
 
-    final basic = find.byKey(const ValueKey('indexes-basic-trigger'));
-    final custom = find.byKey(const ValueKey('indexes-custom-trigger'));
-    expect(tester.getTopLeft(basic).dy, lessThan(tester.getTopLeft(custom).dy));
-    expect(find.text('胶囊索引'), findsNothing);
-    expect(find.text('其他索引类型'), findsNothing);
+    final letter = find.byKey(const ValueKey('indexes-letter-trigger'));
+    final number = find.byKey(const ValueKey('indexes-number-trigger'));
+    final capsule = find.byKey(const ValueKey('indexes-capsule-trigger'));
+    expect(
+      tester.getTopLeft(letter).dy,
+      lessThan(tester.getTopLeft(number).dy),
+    );
+    expect(
+      tester.getTopLeft(number).dy,
+      lessThan(tester.getTopLeft(capsule).dy),
+    );
     await disposeDemoPage(tester);
   }, tags: 'demo');
 
@@ -30,9 +36,9 @@ void main() {
       ThemeMode.light,
     );
 
-    await tester.tap(find.byKey(const ValueKey('indexes-basic-trigger')));
+    await tester.tap(find.byKey(const ValueKey('indexes-letter-trigger')));
     await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey('indexes-basic-panel')), findsOneWidget);
+    expect(find.byKey(const ValueKey('indexes-letter-panel')), findsOneWidget);
     expect(find.text('北京'), findsOneWidget);
     expect(find.text('白银'), findsOneWidget);
 
@@ -47,19 +53,35 @@ void main() {
     await disposeDemoPage(tester);
   }, tags: 'demo');
 
-  testWidgets('Indexes custom scenario uses number and capsule variants', (
-    tester,
-  ) async {
+  testWidgets('Indexes number scenario uses normal anchors', (tester) async {
     await pumpDemoPageAtPhoneViewport(
       tester,
       indexesDemoPageTestSpec,
       ThemeMode.light,
     );
 
-    await tester.tap(find.byKey(const ValueKey('indexes-custom-trigger')));
+    await tester.tap(find.byKey(const ValueKey('indexes-number-trigger')));
     await tester.pumpAndSettle();
     final panel = tester.widget<TIndexes>(
-      find.byKey(const ValueKey('indexes-custom-panel')),
+      find.byKey(const ValueKey('indexes-number-panel')),
+    );
+    expect(panel.indexList, ['1', '3', '5', '7', '8', '10', '#']);
+    expect(panel.capsuleTheme, isFalse);
+    expect(find.text('列表内容 1'), findsWidgets);
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
+
+  testWidgets('Indexes capsule scenario uses capsule anchors', (tester) async {
+    await pumpDemoPageAtPhoneViewport(
+      tester,
+      indexesDemoPageTestSpec,
+      ThemeMode.light,
+    );
+
+    await tester.tap(find.byKey(const ValueKey('indexes-capsule-trigger')));
+    await tester.pumpAndSettle();
+    final panel = tester.widget<TIndexes>(
+      find.byKey(const ValueKey('indexes-capsule-panel')),
     );
     expect(panel.indexList, ['1', '3', '5', '7', '8', '10', '#']);
     expect(panel.capsuleTheme, isTrue);
