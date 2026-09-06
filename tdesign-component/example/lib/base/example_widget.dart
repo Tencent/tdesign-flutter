@@ -34,6 +34,8 @@ class ExamplePage extends StatefulWidget {
     this.singleChild,
     this.scrollController,
     this.floatingActionButton,
+    this.floatingActionButtonLocation,
+    this.floatingActionButtonAnimator,
     this.showTestModule = true,
   }) : assert(
          children.length > 0 || (showSingleChild && singleChild != null),
@@ -76,6 +78,12 @@ class ExamplePage extends StatefulWidget {
 
   /// 悬浮按钮
   final Widget? floatingActionButton;
+
+  /// 悬浮按钮的布局位置。
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
+
+  /// 悬浮按钮的位置过渡动画。
+  final FloatingActionButtonAnimator? floatingActionButtonAnimator;
 
   /// 是否在 debug 模式展示仅用于内部验证的单元测试模块。
   ///
@@ -230,6 +238,8 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
           widget.backgroundColor ??
           (widget.compactDemo ? context.tTheme.bgColorPage : null),
       floatingActionButton: widget.floatingActionButton,
+      floatingActionButtonLocation: widget.floatingActionButtonLocation,
+      floatingActionButtonAnimator: widget.floatingActionButtonAnimator,
       body: ScrollbarTheme(
         data: ScrollbarThemeData(
           trackVisibility: WidgetStateProperty.all(true),

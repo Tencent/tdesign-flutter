@@ -1,20 +1,27 @@
 Widget _buildIconSimple(BuildContext context) {
+  const menuLabels = ['菜单一', '菜单二', '菜单三', '菜单四', '菜单五', '菜单六', '菜单七', '菜单八'];
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      child: const TText('带标题抽屉'),
+      size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
-      size: TButtonSize.large,
       onPressed: () {
-        TDrawer(
+        showTDrawer(
           context,
-          items: List.generate(
-              drawerItemLength,
+          placement: TDrawerPlacement.left,
+          drawer: TDrawer(
+            items: List.generate(
+              menuLabels.length,
               (index) => TDrawerItem(
-                  title: '菜单${index + 1}', icon: const Icon(TIcons.app))),
-        ).show();
+                title: menuLabels[index],
+                icon: const TIcon(TIcons.app),
+              ),
+            ),
+          ),
+        );
       },
+      child: const TText('带图标抽屉'),
     ),
   );
 }
