@@ -229,6 +229,19 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'image_viewer',
+    coverageTargets: ['lib/src/components/image_viewer/'],
+    componentTests: ['test/components/image_viewer/t_image_viewer_test.dart'],
+    exampleTests: ['test/image_viewer_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'ImageViewer Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/image_viewer_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'dialog',
     coverageTargets: ['lib/src/components/dialog/'],
     componentTests: ['test/components/dialog/t_dialog_test.dart'],
@@ -276,9 +289,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Drawer Popup Consumer',
         workingDirectory: '.',
-        testFiles: [
-          'test/components/theme/t_popup_consumers_golden_test.dart',
-        ],
+        testFiles: ['test/components/theme/t_popup_consumers_golden_test.dart'],
         arguments: [
           '--plain-name',
           'drawer keeps the shared Popup visual contract',

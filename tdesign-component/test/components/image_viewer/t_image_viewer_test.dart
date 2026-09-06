@@ -40,46 +40,52 @@ void main() {
     testWidgets('显示初始页、标签和页码', (tester) async {
       await open(
         tester,
-        app(onShow: (context) {
-          TImageViewer.show(
-            context: context,
-            images: images,
-            labels: const ['A', 'B', 'C'],
-            initialIndex: 1,
-          );
-        }),
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+              labels: const ['A', 'B', 'C'],
+              initialIndex: 1,
+            );
+          },
+        ),
       );
 
       expect(find.byType(TSwiper), findsOneWidget);
       expect(find.text('B'), findsOneWidget);
-      expect(find.text('2 / 3'), findsOneWidget);
+      expect(find.text('2/3'), findsOneWidget);
     });
 
     testWidgets('默认页码样式来自全局 token', (tester) async {
       final token = TThemeData.defaultData();
       await open(
         tester,
-        app(onShow: (context) {
-          TImageViewer.show(context: context, images: images);
-        }),
+        app(
+          onShow: (context) {
+            TImageViewer.show(context: context, images: images);
+          },
+        ),
       );
 
-      final index = tester.widget<Text>(find.text('1 / 3'));
+      final index = tester.widget<Text>(find.text('1/3'));
       expect(index.style?.color, token.textColorAnti);
-      expect(index.style?.fontSize, token.fontBodyExtraSmall?.size);
+      expect(index.style?.fontSize, token.fontBodyMedium?.size);
     });
 
     testWidgets('关闭按钮通知并关闭 Dialog', (tester) async {
       var closed = false;
       await open(
         tester,
-        app(onShow: (context) {
-          TImageViewer.show(
-            context: context,
-            images: images,
-            onClose: () => closed = true,
-          );
-        }),
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+              onClose: () => closed = true,
+            );
+          },
+        ),
       );
 
       await tester.tap(find.byTooltip('Close'));
@@ -91,13 +97,15 @@ void main() {
     testWidgets('showClose=false 隐藏关闭按钮', (tester) async {
       await open(
         tester,
-        app(onShow: (context) {
-          TImageViewer.show(
-            context: context,
-            images: images,
-            showClose: false,
-          );
-        }),
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+              showClose: false,
+            );
+          },
+        ),
       );
       expect(find.byTooltip('Close'), findsNothing);
     });
@@ -106,33 +114,39 @@ void main() {
       int? deleted;
       await open(
         tester,
-        app(onShow: (context) {
-          TImageViewer.show(
-            context: context,
-            images: images,
-            initialIndex: 1,
-            showDelete: true,
-            onDelete: (index) => deleted = index,
-          );
-        }),
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+              initialIndex: 1,
+              showDelete: true,
+              onDelete: (index) => deleted = index,
+            );
+          },
+        ),
       );
 
       await tester.tap(find.byTooltip('Delete'));
       expect(deleted, 1);
       expect(
-          tester.widget<TSwiper>(find.byType(TSwiper)).children, hasLength(3));
+        tester.widget<TSwiper>(find.byType(TSwiper)).children,
+        hasLength(3),
+      );
     });
 
     testWidgets('没有 onDelete 时删除按钮禁用', (tester) async {
       await open(
         tester,
-        app(onShow: (context) {
-          TImageViewer.show(
-            context: context,
-            images: images,
-            showDelete: true,
-          );
-        }),
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+              showDelete: true,
+            );
+          },
+        ),
       );
       final button = find.ancestor(
         of: find.byTooltip('Delete'),
@@ -144,14 +158,16 @@ void main() {
     testWidgets('自定义导航栏槽位替代默认按钮', (tester) async {
       await open(
         tester,
-        app(onShow: (context) {
-          TImageViewer.show(
-            context: context,
-            images: images,
-            leadingBuilder: (_, index) => Text('L$index'),
-            trailingBuilder: (_, index) => Text('R$index'),
-          );
-        }),
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+              leadingBuilder: (_, index) => Text('L$index'),
+              trailingBuilder: (_, index) => Text('R$index'),
+            );
+          },
+        ),
       );
       expect(find.text('L0'), findsOneWidget);
       expect(find.text('R0'), findsOneWidget);
@@ -161,54 +177,208 @@ void main() {
     testWidgets('showIndex=false 且无标签时标题为空', (tester) async {
       await open(
         tester,
-        app(onShow: (context) {
-          TImageViewer.show(
-            context: context,
-            images: images,
-            showIndex: false,
-          );
-        }),
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+              showIndex: false,
+            );
+          },
+        ),
       );
-      expect(find.text('1 / 3'), findsNothing);
+      expect(find.text('1/3'), findsNothing);
     });
 
     testWidgets('滑动更新临时索引并通知外部', (tester) async {
       int? changed;
       await open(
         tester,
-        app(onShow: (context) {
-          TImageViewer.show(
-            context: context,
-            images: images,
-            onIndexChanged: (index) => changed = index,
-          );
-        }),
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+              onIndexChanged: (index) => changed = index,
+            );
+          },
+        ),
       );
       await tester.drag(find.byType(PageView), const Offset(-500, 0));
       await tester.pumpAndSettle();
       expect(changed, 1);
-      expect(find.text('2 / 3'), findsOneWidget);
+      expect(find.text('2/3'), findsOneWidget);
     });
 
-    testWidgets('图片点击和长按通知当前项', (tester) async {
+    testWidgets('单击图片通知当前项并统一关闭', (tester) async {
       int? tapped;
-      int? longPressed;
+      var closed = 0;
       await open(
         tester,
-        app(onShow: (context) {
-          TImageViewer.show(
-            context: context,
-            images: images,
-            onTap: (index) => tapped = index,
-            onLongPress: (index) => longPressed = index,
-          );
-        }),
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+              onTap: (index) => tapped = index,
+              onClose: () => closed++,
+            );
+          },
+        ),
       );
       final page = find.byKey(const ValueKey('image-viewer-page-0'));
       await tester.tap(page);
-      await tester.longPress(page);
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pumpAndSettle();
       expect(tapped, 0);
+      expect(closed, 1);
+      expect(find.byType(TSwiper), findsNothing);
+    });
+
+    testWidgets('onTap 主动关闭时不会继续退出宿主页', (tester) async {
+      final navigatorKey = GlobalKey<NavigatorState>();
+      await tester.pumpWidget(
+        MaterialApp(
+          navigatorKey: navigatorKey,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => TextButton(
+                onPressed: () {
+                  TImageViewer.show(
+                    context: context,
+                    images: images,
+                    onTap: (_) => navigatorKey.currentState?.pop(),
+                  );
+                },
+                child: const Text('show'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('show'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('image-viewer-page-0')));
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pumpAndSettle();
+
+      expect(find.text('show'), findsOneWidget);
+      expect(find.byType(TSwiper), findsNothing);
+    });
+
+    testWidgets('长按仅通知当前项且不关闭', (tester) async {
+      int? longPressed;
+      await open(
+        tester,
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+              onLongPress: (index) => longPressed = index,
+            );
+          },
+        ),
+      );
+      final page = find.byKey(const ValueKey('image-viewer-page-0'));
+      await tester.longPress(page);
       expect(longPressed, 0);
+      expect(find.byType(TSwiper), findsOneWidget);
+    });
+
+    testWidgets('双击在 1 倍与 2 倍之间切换且不关闭', (tester) async {
+      var tapped = 0;
+      await open(
+        tester,
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+              onTap: (_) => tapped++,
+            );
+          },
+        ),
+      );
+
+      final viewer = find.byType(InteractiveViewer);
+      final controller = tester
+          .widget<InteractiveViewer>(viewer)
+          .transformationController!;
+      await tester.tap(viewer);
+      await tester.pump(const Duration(milliseconds: 50));
+      await tester.tap(viewer);
+      await tester.pumpAndSettle();
+      expect(controller.value.getMaxScaleOnAxis(), closeTo(2, 0.001));
+      expect(tapped, 0);
+      expect(find.byType(TSwiper), findsOneWidget);
+
+      await tester.tap(viewer);
+      await tester.pump(const Duration(milliseconds: 50));
+      await tester.tap(viewer);
+      await tester.pumpAndSettle();
+      expect(controller.value.getMaxScaleOnAxis(), closeTo(1, 0.001));
+    });
+
+    testWidgets('双指缩放限制在最大 3 倍并锁定分页', (tester) async {
+      await open(
+        tester,
+        app(
+          onShow: (context) {
+            TImageViewer.show(context: context, images: images);
+          },
+        ),
+      );
+
+      final viewer = find.byType(InteractiveViewer);
+      final center = tester.getCenter(viewer);
+      final first = await tester.createGesture(pointer: 1);
+      final second = await tester.createGesture(pointer: 2);
+      await first.down(center - const Offset(10, 0));
+      await second.down(center + const Offset(10, 0));
+      await first.moveTo(center - const Offset(200, 0));
+      await second.moveTo(center + const Offset(200, 0));
+      await first.up();
+      await second.up();
+      await tester.pumpAndSettle();
+
+      final controller = tester
+          .widget<InteractiveViewer>(viewer)
+          .transformationController!;
+      expect(tester.widget<InteractiveViewer>(viewer).maxScale, 3);
+      expect(controller.value.getMaxScaleOnAxis(), inInclusiveRange(1.01, 3));
+      expect(
+        tester.widget<TSwiper>(find.byType(TSwiper)).physics,
+        isA<NeverScrollableScrollPhysics>(),
+      );
+    });
+
+    testWidgets('下拉超过阈值关闭，未超过时回弹', (tester) async {
+      var closed = 0;
+      await open(
+        tester,
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+              onClose: () => closed++,
+            );
+          },
+        ),
+      );
+      final page = find.byKey(const ValueKey('image-viewer-page-0'));
+
+      await tester.drag(page, const Offset(0, 40));
+      await tester.pumpAndSettle();
+      expect(find.byType(TSwiper), findsOneWidget);
+      expect(closed, 0);
+
+      await tester.drag(page, const Offset(0, 140));
+      await tester.pumpAndSettle();
+      expect(find.byType(TSwiper), findsNothing);
+      expect(closed, 1);
     });
 
     testWidgets('Theme 控制颜色、尺寸和文字样式', (tester) async {
@@ -235,7 +405,7 @@ void main() {
         ),
       );
       expect(tester.widget<Text>(find.text('A')).style?.fontSize, 18);
-      expect(tester.widget<Text>(find.text('1 / 3')).style?.fontSize, 14);
+      expect(tester.widget<Text>(find.text('1/3')).style?.fontSize, 14);
       final constrained = tester.widgetList<ConstrainedBox>(
         find.byType(ConstrainedBox),
       );
@@ -245,27 +415,33 @@ void main() {
     testWidgets('空标签不渲染标签文本', (tester) async {
       await open(
         tester,
-        app(onShow: (context) {
-          TImageViewer.show(
-            context: context,
-            images: images,
-            labels: const ['', '', ''],
-          );
-        }),
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+              labels: const ['', '', ''],
+            );
+          },
+        ),
       );
-      expect(find.text('1 / 3'), findsOneWidget);
+      expect(find.text('1/3'), findsOneWidget);
     });
   });
 
   group('contracts', () {
     testWidgets('拒绝空图片、越界索引和标签长度不匹配', (tester) async {
       late BuildContext context;
-      await tester.pumpWidget(MaterialApp(
-        home: Builder(builder: (value) {
-          context = value;
-          return const SizedBox.shrink();
-        }),
-      ));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (value) {
+              context = value;
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
       expect(
         () => TImageViewer.show(context: context, images: const []),
         throwsArgumentError,
