@@ -503,7 +503,7 @@ void main() {
               ),
               const TResult(
                 title: 'success result',
-                variant: TResultVariant.success,
+                status: TResultStatus.success,
               ),
               TLink(
                 colorScheme: TLinkColorScheme.warning,
@@ -517,7 +517,7 @@ void main() {
               ),
               const TResult(
                 title: 'warning result',
-                variant: TResultVariant.warning,
+                status: TResultStatus.warning,
               ),
               Builder(
                 builder: (context) {

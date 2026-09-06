@@ -3,14 +3,15 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
 import 't_result_theme_data.dart';
 
-/// 结果形态
-enum TResultVariant {
-  /// 默认结果状态。
-  defaultTheme,
+/// 结果状态。
+enum TResultStatus {
+  /// 默认信息状态。
+  info,
 
   /// 成功结果状态。
   success,
@@ -26,20 +27,20 @@ enum TResultVariant {
 class TResult extends StatelessWidget {
   const TResult({
     Key? key,
-    this.subtitle,
+    this.description,
     this.icon,
-    this.variant = TResultVariant.defaultTheme,
+    this.status = TResultStatus.info,
     this.title = '',
   }) : super(key: key);
 
-  /// 描述文本，用于提供额外信息
-  final String? subtitle;
+  /// 描述文本，用于提供额外信息；为空时不占布局空间。
+  final String? description;
 
   /// 图标组件，用于在结果中显示一个图标
   final Widget? icon;
 
-  /// 结果形态
-  final TResultVariant variant;
+  /// 当前结果状态，决定默认图标、颜色和无障碍语义，默认为 [TResultStatus.info]。
+  final TResultStatus status;
 
   /// 标题文本，显示结果的主要信息，默认标题为空字符串
   final String title;
@@ -53,63 +54,78 @@ class TResult extends StatelessWidget {
     final theme = _theme(context);
     final material = Theme.of(context).tExplicitColorScheme;
     final titleStyle = theme?.titleStyle;
-    var displayIcon = icon ?? _getDefaultIcon(context, variant);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(child: displayIcon),
-        if (title.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 17),
-            child: TText(
-              title,
-              textColor: material?.onSurface ?? context.tTheme.textColorPrimary,
-              font: context.tTheme.fontTitleExtraLarge,
-              style: titleStyle,
-            ),
-          ),
-        if (subtitle != null && subtitle!.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: TText(
-              subtitle!,
-              textColor:
-                  material?.onSurfaceVariant ??
-                  context.tTheme.textColorSecondary,
-              font: context.tTheme.fontTitleSmall,
-            ),
-          ),
-      ],
+    final displayIcon = icon ?? _getDefaultIcon(context, status);
+    final children = <Widget>[
+      KeyedSubtree(key: const ValueKey('result-icon'), child: displayIcon),
+      if (title.isNotEmpty)
+        TText(
+          title,
+          key: const ValueKey('result-title'),
+          textColor: material?.onSurface ?? context.tTheme.textColorPrimary,
+          font: titleStyle == null ? context.tTheme.fontTitleMedium : null,
+          style: titleStyle,
+          textAlign: TextAlign.center,
+        ),
+      if (description != null && description!.isNotEmpty)
+        TText(
+          description!,
+          key: const ValueKey('result-description'),
+          textColor:
+              material?.onSurfaceVariant ?? context.tTheme.textColorSecondary,
+          font: theme?.descriptionStyle == null
+              ? context.tTheme.fontBodyMedium
+              : null,
+          style: theme?.descriptionStyle,
+          textAlign: TextAlign.center,
+        ),
+    ];
+    return Semantics(
+      container: true,
+      label: 'result-${status.name}',
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (var index = 0; index < children.length; index++) ...[
+            if (index > 0)
+              SizedBox(
+                key: ValueKey('result-spacing-$index'),
+                height: context.tTheme.spacer12,
+              ),
+            children[index],
+          ],
+        ],
+      ),
     );
   }
 
   /// 根据形态返回对应的默认图标组件
-  Widget _getDefaultIcon(BuildContext context, TResultVariant variant) {
+  Widget _getDefaultIcon(BuildContext context, TResultStatus status) {
     final material = Theme.of(context).tExplicitColorScheme;
-    switch (variant) {
-      case TResultVariant.success:
+    final iconSize = _theme(context)?.iconSize ?? 80;
+    switch (status) {
+      case TResultStatus.success:
         return Icon(
           TIcons.check_circle,
           color: context.tTheme.successNormalColor,
-          size: 70,
+          size: iconSize,
         );
-      case TResultVariant.warning:
+      case TResultStatus.warning:
         return Icon(
           TIcons.error_circle,
           color: context.tTheme.warningNormalColor,
-          size: 70,
+          size: iconSize,
         );
-      case TResultVariant.error:
+      case TResultStatus.error:
         return Icon(
           TIcons.close_circle,
           color: material?.error ?? context.tTheme.errorNormalColor,
-          size: 70,
+          size: iconSize,
         );
-      default:
+      case TResultStatus.info:
         return Icon(
           TIcons.info_circle,
           color: material?.primary ?? context.tTheme.brandNormalColor,
-          size: 70,
+          size: iconSize,
         );
     }
   }
