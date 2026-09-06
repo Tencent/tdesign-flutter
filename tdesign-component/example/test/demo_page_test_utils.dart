@@ -56,7 +56,7 @@ void registerDemoPageTests(DemoPageTestSpec spec) {
 }
 
 void registerDemoStructureTests(DemoPageTestSpec spec) {
-  setUpAll(() => _loadGoldenFonts(spec));
+  setUpAll(() => loadDemoGoldenFonts(spec));
 
   testWidgets('${spec.name} Demo structure', (tester) async {
     await pumpFullDemoPage(tester, spec, ThemeMode.light);
@@ -81,7 +81,7 @@ void registerDemoStructureTests(DemoPageTestSpec spec) {
 }
 
 void registerDemoGoldenTests(DemoPageTestSpec spec) {
-  setUpAll(() => _loadGoldenFonts(spec));
+  setUpAll(() => loadDemoGoldenFonts(spec));
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('${spec.name} ${mode.name} Demo golden', (tester) async {
@@ -105,7 +105,7 @@ Future<void> disposeDemoPage(WidgetTester tester) async {
   await tester.pump(const Duration(seconds: 1));
 }
 
-Future<void> _loadGoldenFonts(DemoPageTestSpec spec) async {
+Future<void> loadDemoGoldenFonts(DemoPageTestSpec spec) async {
   final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
     ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
   final cupertinoIconFont =

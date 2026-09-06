@@ -37,6 +37,11 @@ Upload 等既有 Golden 的字形选择与像素基线。
 上游源文件 SHA-256 为
 `734b20876d6a6777e4c30b627e8391695bbf545c0badf6c066138bebd1f0278a`。
 
+`AvatarGoldenCJK-Regular.otf` 仅补充 Avatar 整页 Golden 所需字形，字符清单见
+`avatar_demo_glyphs.txt`。它作为 Avatar Demo 最后的专用 fallback，不改变其他页面
+或既有共享字体的像素基线，子集 SHA-256 为
+`f7a30185d3942c4cb698afb1e74002cc16eaddfcf70ae1ec0774f16e61f9392f`。
+
 - 上游：Noto Sans SC 2.004 `NotoSansSC-Regular.otf`
 - 来源：`https://github.com/notofonts/noto-cjk/raw/Sans2.004/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf`
 - 上游 SHA-256：`faa6c9df652116dde789d351359f3d7e5d2285a2b2a1f04a2d7244df706d5ea9`
@@ -58,5 +63,6 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 更新 Calendar 页面文案时，更新 Calendar 字符清单。
 更新 BackTop 页面文案时，更新 BackTop 字符清单。
 更新 Drawer 页面文案时，更新 Drawer 字符清单。
+更新 Avatar 页面文案时，更新 Avatar 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。

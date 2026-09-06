@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
@@ -16,11 +18,18 @@ class TAvatar extends StatelessWidget {
     this.image,
     this.child,
     this.size,
+    this.shape,
     this.variant,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.textStyle,
     this.fit = BoxFit.cover,
     this.onTap,
     super.key,
-  });
+  }) : assert(
+         shape == null || variant == null,
+         'shape and deprecated variant cannot be used together',
+       );
 
   /// 头像图片。
   final ImageProvider<Object>? image;
@@ -32,7 +41,20 @@ class TAvatar extends StatelessWidget {
   final TAvatarSize? size;
 
   /// 头像形状；未设置时依次读取 Theme 和圆形默认值。
+  final TAvatarShape? shape;
+
+  /// 头像形状的旧命名。
+  @Deprecated('Use shape instead. This property will be removed in 1.0.0.')
   final TAvatarVariant? variant;
+
+  /// 头像背景色，优先于 Theme。
+  final Color? backgroundColor;
+
+  /// 默认图标及字符内容的前景色，优先于 Theme。
+  final Color? foregroundColor;
+
+  /// 字符内容样式，优先于 Theme，并继承对应尺寸的默认字号和字重。
+  final TextStyle? textStyle;
 
   /// 图片填充方式。
   final BoxFit fit;
@@ -44,28 +66,60 @@ class TAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TAvatarThemeData>();
     final resolvedSize = size ?? theme?.size ?? TAvatarSize.medium;
-    final resolvedVariant = variant ?? theme?.variant ?? TAvatarVariant.circle;
+    final resolvedShape =
+        shape ??
+        _shapeFromVariant(variant) ??
+        theme?.shape ??
+        _shapeFromVariant(theme?.variant) ??
+        TAvatarShape.circle;
     final dimension = theme?.dimension ?? _dimensionFor(resolvedSize);
-    final radius = resolvedVariant == TAvatarVariant.circle
+    final radius = resolvedShape == TAvatarShape.circle
         ? dimension / 2
         : theme?.squareBorderRadius ?? context.tTheme.radiusDefault;
-    final content = child ??
+    final resolvedForegroundColor =
+        foregroundColor ??
+        textStyle?.color ??
+        theme?.foregroundColor ??
+        theme?.textStyle?.color ??
+        context.tTheme.brandNormalColor;
+    final resolvedTextStyle =
+        TextStyle(
+              fontSize: _fontSizeFor(resolvedSize),
+              height: 1,
+              fontWeight: FontWeight.w600,
+            )
+            .merge(theme?.textStyle)
+            .merge(textStyle)
+            .copyWith(color: resolvedForegroundColor);
+    final content =
+        child ??
         Icon(
           TIcons.user,
           size: theme?.iconSize ?? _iconSizeFor(resolvedSize),
-          color: theme?.foregroundColor ?? context.tTheme.brandNormalColor,
+          color: resolvedForegroundColor,
         );
 
     final avatar = ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: ColoredBox(
-        color: theme?.backgroundColor ?? context.tTheme.brandFocusColor,
+        color:
+            backgroundColor ??
+            theme?.backgroundColor ??
+            context.tTheme.brandFocusColor,
         child: SizedBox.square(
           dimension: dimension,
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Center(child: content),
+              Center(
+                child: DefaultTextStyle.merge(
+                  style: resolvedTextStyle,
+                  child: IconTheme.merge(
+                    data: IconThemeData(color: resolvedForegroundColor),
+                    child: content,
+                  ),
+                ),
+              ),
               if (image != null)
                 Image(
                   image: image!,
@@ -105,6 +159,25 @@ class TAvatar extends StatelessWidget {
         return 20;
     }
   }
+
+  double _fontSizeFor(TAvatarSize size) {
+    switch (size) {
+      case TAvatarSize.large:
+        return 20;
+      case TAvatarSize.medium:
+        return 16;
+      case TAvatarSize.small:
+        return 14;
+    }
+  }
+
+  TAvatarShape? _shapeFromVariant(TAvatarVariant? value) {
+    return switch (value) {
+      TAvatarVariant.circle => TAvatarShape.circle,
+      TAvatarVariant.square => TAvatarShape.square,
+      null => null,
+    };
+  }
 }
 
 /// 叠放头像组。
@@ -116,8 +189,13 @@ class TAvatarGroup extends StatelessWidget {
     this.maxCount,
     this.overflow,
     this.spacing,
+    this.dimension,
+    this.shape = TAvatarShape.circle,
+    this.cascading = TAvatarGroupCascading.rightUp,
     super.key,
-  }) : assert(maxCount == null || maxCount > 0);
+  }) : assert(maxCount == null || maxCount > 0),
+       assert(dimension == null || dimension > 0),
+       assert(spacing == null || spacing >= 0);
 
   /// 头像列表。
   final List<Widget> children;
@@ -130,6 +208,15 @@ class TAvatarGroup extends StatelessWidget {
 
   /// 相邻头像的重叠宽度。
   final double? spacing;
+
+  /// 头像组成员的外框边长；未设置时读取 Theme，默认 48。
+  final double? dimension;
+
+  /// 头像组成员外框形状。
+  final TAvatarShape shape;
+
+  /// 头像组成员的层叠方向。
+  final TAvatarGroupCascading cascading;
 
   @override
   Widget build(BuildContext context) {
@@ -144,25 +231,38 @@ class TAvatarGroup extends StatelessWidget {
     if (count < children.length && overflow != null) {
       visible.add(overflow!);
     }
-    final dimension = theme?.dimension ?? 48;
+    final resolvedDimension = dimension ?? theme?.dimension ?? 48;
     final overlap = spacing ?? theme?.groupSpacing ?? 8;
-    final step = dimension - overlap;
+    final step = resolvedDimension - overlap;
     final borderWidth = theme?.groupBorderWidth ?? 2;
-    final width = dimension + step * (visible.length - 1);
+    final width = resolvedDimension + step * (visible.length - 1);
+    final indexes = List.generate(visible.length, (index) => index);
+    final paintOrder = cascading == TAvatarGroupCascading.leftUp
+        ? indexes.reversed
+        : indexes;
 
     return SizedBox(
       width: width,
-      height: dimension,
+      height: resolvedDimension,
       child: Stack(
         children: [
-          for (var index = 0; index < visible.length; index++)
+          for (final index in paintOrder)
             PositionedDirectional(
               start: step * index,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
+                  shape: shape == TAvatarShape.circle
+                      ? BoxShape.circle
+                      : BoxShape.rectangle,
+                  borderRadius: shape == TAvatarShape.square
+                      ? BorderRadius.circular(
+                          theme?.squareBorderRadius ??
+                              context.tTheme.radiusDefault,
+                        )
+                      : null,
                   border: Border.all(
-                    color: theme?.groupBorderColor ??
+                    color:
+                        theme?.groupBorderColor ??
                         context.tTheme.bgColorContainer,
                     width: borderWidth,
                   ),
@@ -170,7 +270,7 @@ class TAvatarGroup extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.all(borderWidth),
                   child: SizedBox.square(
-                    dimension: dimension - borderWidth * 2,
+                    dimension: resolvedDimension - borderWidth * 2,
                     child: FittedBox(child: visible[index]),
                   ),
                 ),
