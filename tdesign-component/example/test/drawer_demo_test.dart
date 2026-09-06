@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import 'package:tdesign_flutter_example/base/example_widget.dart';
+import 'package:tdesign_flutter_example/base/notification_center.dart';
 
 import 'demo_page_test_utils.dart';
 import 'drawer_demo_test_spec.dart';
@@ -50,6 +55,57 @@ void main() {
       );
       expect(find.widgetWithText(TButton, label), findsOneWidget);
     }
+  });
+
+  testWidgets('所有 Drawer 查看代码入口展示自包含的当前实现', (tester) async {
+    await pumpDemoPageAtPhoneViewport(
+      tester,
+      drawerDemoPageTestSpec,
+      ThemeMode.light,
+    );
+
+    const entries = {
+      '基础抽屉': 'drawer._buildBaseSimple.txt',
+      '带图标抽屉': 'drawer._buildIconSimple.txt',
+      '小标题抽屉': 'drawer._buildTitleSimple.txt',
+      '左侧抽屉': 'drawer._buildPlacementSimple.txt',
+      '带底部插槽': 'drawer._buildBottomSimple.txt',
+    };
+    for (final entry in entries.entries) {
+      final trigger = find.widgetWithText(TButton, entry.key);
+      await tester.scrollUntilVisible(
+        trigger,
+        160,
+        scrollable: pageScrollable().first,
+      );
+      await tester.ensureVisible(trigger);
+      await tester.pumpAndSettle();
+
+      final source = await rootBundle.loadString('assets/code/${entry.value}');
+      expect(source.trim(), isNotEmpty);
+      expect(source, contains("'菜单一'"));
+      expect(source, isNot(contains('_baseItems')));
+      expect(source, isNot(contains('_footerItems')));
+      expect(source, isNot(contains('_menuLabels')));
+
+      TNotification.postNotification('onApiVisibleChange', {
+        'apiVisible': true,
+      });
+      await tester.pumpAndSettle();
+      final wrapper = find.ancestor(
+        of: trigger,
+        matching: find.byType(CodeWrapper),
+      );
+      await tester.tap(
+        find.descendant(of: wrapper, matching: find.text('code')),
+      );
+      await tester.pumpAndSettle();
+      final panel = find.byType(Markdown);
+      expect(tester.widget<Markdown>(panel).data, contains(source));
+      Navigator.of(tester.element(panel)).pop();
+      await tester.pumpAndSettle();
+    }
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('基础抽屉从左侧打开，宽 280 且展示 8 项', (tester) async {

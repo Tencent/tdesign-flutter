@@ -14,11 +14,11 @@
 | --- | --- | --- |
 | `flutter analyze --no-pub`（组件 + Example） | 通过 | Flutter 3.32.0 和 3.47.0 均为 0 issues |
 | `flutter test test/components/drawer/t_drawer_test.dart` | 通过 | Flutter 3.32.0 与 3.47.0 均通过 40 项，覆盖声明式 Scaffold、视觉尺寸、Theme 优先级与默认值插值、非法尺寸、蒙层、方向、Handle 和生命周期 |
-| `flutter test test/drawer_demo_test.dart` | 通过 | 两个 SDK 均 5 项，覆盖 Figma 7 入口和真实打开/关闭 |
+| `flutter test test/drawer_demo_test.dart` | 通过 | Flutter 3.32.0、3.47.0 及 3.32.0 Linux 均 6 项，覆盖 Figma 7 入口、真实打开/关闭和 5 个“查看代码”入口 |
 | 覆盖率门禁 | 通过 | Drawer 生产源码 `LH/LF = 212/213 = 99.53%` |
 | 回归登记自测 | 通过 | 覆盖率/组件/Demo/Golden 调度器 13 项 |
-| Linux Golden | 通过 | Flutter 3.32.0；375 × 1024 整页 2 张 + 7 打开态 light/dark 14 张通过；标题场景 6 张已按起始侧 16dp 对齐更新并在不带更新参数时复验通过 |
-| `dart run tool/generate_example_code.dart --check` | 通过 | 5 个 Drawer 示例片段与源码同步 |
+| Linux Golden | 通过 | Flutter 3.32.0；375 × 1024 整页 2 张 + 7 打开态 light/dark 14 张通过；共享 navigation light/dark 与 Popup Consumer 3 张已按标题起始侧对齐更新，19 张均在最终 Demo 源码上无更新参数复验通过 |
+| `dart run tool/generate_example_code.dart --check` | 通过 | 5 个 Drawer 示例片段与源码同步，所需菜单数据均来自实际 Demo 方法内部，不再引用面板外私有 helper |
 | API 文档生成 | 通过 | manifest 独立登记类型与顶层函数；`showTDrawer` 已生成返回类型、完整参数默认值和 dartdoc 表，真实源码完备性审计为 ERROR=0 / WARN=0 |
 | `flutter build web --release` | 通过 | Flutter 3.32.0 Example Web release 构建 |
 
@@ -44,7 +44,7 @@
 - [x] 小程序公开 Demo、API 和样式源码已核对
 - [x] 官方网页内小程序预览已实际点击：基础抽屉从左打开、含 8 项；项点击仅通知而不自动关闭
 - [x] Flutter Demo light/dark 整页和 7 个打开态已逐张检查；人工发现并修复了首轮字体子集中“二至八/插槽”缺字
-- [x] Android 16 Xiaomi 真机（设备 `40302eeb`）已覆盖安装 breaking API 版本 APK、强停旧进程后重启；标题实测位于起始侧 16dp，菜单项点击后抽屉仍存在、蒙层点击后抽屉消失，未发现本应用错误日志
+- [x] Android 16 Xiaomi 真机（设备 `40302eeb`）已覆盖安装最终 APK、强停旧进程后从 Launcher 重启；右侧抽屉实测 8 项，菜单项点击后 8 项仍存在、蒙层点击后归零并恢复 Demo 页面，未发现本应用错误日志
 
 ## 设计 Review 结论
 

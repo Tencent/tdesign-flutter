@@ -1,4 +1,17 @@
 Widget _buildTitleSimple(BuildContext context) {
+  final items = [
+    for (final label in const [
+      '菜单一',
+      '菜单二',
+      '菜单三',
+      '菜单四',
+      '菜单五',
+      '菜单六',
+      '菜单七',
+      '菜单八',
+    ])
+      TDrawerItem(title: label),
+  ];
   return Column(
     children: [
       SizedBox(
@@ -13,7 +26,7 @@ Widget _buildTitleSimple(BuildContext context) {
               placement: TDrawerPlacement.left,
               drawer: TDrawer(
                 title: TText('标题', font: context.tTheme.fontTitleLarge),
-                items: _baseItems(),
+                items: items,
               ),
             );
           },
@@ -33,7 +46,7 @@ Widget _buildTitleSimple(BuildContext context) {
               placement: TDrawerPlacement.left,
               drawer: TDrawer(
                 title: TText('标题', font: context.tTheme.fontHeadlineMedium),
-                items: _baseItems(),
+                items: items,
               ),
             );
           },

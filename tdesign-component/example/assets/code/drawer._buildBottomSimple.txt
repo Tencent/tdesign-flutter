@@ -1,4 +1,9 @@
 Widget _buildBottomSimple(BuildContext context) {
+  const menuLabels = ['菜单一', '菜单二', '菜单三', '菜单四', '菜单五', '菜单六', '菜单七', '菜单八'];
+  final items = [
+    for (final label in [...menuLabels, ...menuLabels.skip(3)])
+      TDrawerItem(title: label),
+  ];
   return SizedBox(
     width: double.infinity,
     child: TButton(
@@ -11,7 +16,7 @@ Widget _buildBottomSimple(BuildContext context) {
           placement: TDrawerPlacement.left,
           drawer: TDrawer(
             title: const TText('标题'),
-            items: _footerItems(),
+            items: items,
             footer: Padding(
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
               child: SizedBox(

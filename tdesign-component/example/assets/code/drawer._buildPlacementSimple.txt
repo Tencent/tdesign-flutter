@@ -1,4 +1,17 @@
 Widget _buildPlacementSimple(BuildContext context) {
+  final items = [
+    for (final label in const [
+      '菜单一',
+      '菜单二',
+      '菜单三',
+      '菜单四',
+      '菜单五',
+      '菜单六',
+      '菜单七',
+      '菜单八',
+    ])
+      TDrawerItem(title: label),
+  ];
   return Column(
     children: [
       SizedBox(
@@ -11,7 +24,7 @@ Widget _buildPlacementSimple(BuildContext context) {
             showTDrawer(
               context,
               placement: TDrawerPlacement.left,
-              drawer: TDrawer(items: _baseItems()),
+              drawer: TDrawer(items: items),
             );
           },
           child: const TText('左侧抽屉'),
@@ -28,7 +41,7 @@ Widget _buildPlacementSimple(BuildContext context) {
             showTDrawer(
               context,
               placement: TDrawerPlacement.right,
-              drawer: TDrawer(items: _baseItems()),
+              drawer: TDrawer(items: items),
             );
           },
           child: const TText('右侧抽屉'),

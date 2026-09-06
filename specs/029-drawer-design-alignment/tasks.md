@@ -12,5 +12,8 @@
 - [x] DONE 修复 Theme 默认值插值语义并补充非法尺寸回归
 - [x] DONE 将 `TDrawer` 收敛为声明式 Widget，并拆分独立 `showTDrawer` 浮层入口
 - [x] DONE 为 API 工具补充通用顶层函数解析、独立文档表和完备性检查，并登记 `showTDrawer`
-- [x] DONE 提交、推送并更新独立 PR，关联 #1027 Drawer 条目
-- [ ] TODO 创建 CNB PR，触发并处理 CodeBuddy Review
+- [x] DONE 让 5 个 Drawer“查看代码”片段包含必要菜单数据，并补充实际代码面板回归
+- [x] DONE 使用合并后的工具恢复 `showTDrawer` API 表，并修复最终标题对齐对应的 3 张共享 Linux Golden
+- [x] DONE 将跨仓库生成工具、autofix 最终 head 核验和共享 Golden 归因规则补充到仓库 skills
+- [x] DONE 提交、推送并更新独立 PR，不关联 Issue
+- [ ] TODO 在最终提交上触发并处理 CodeBuddy Review

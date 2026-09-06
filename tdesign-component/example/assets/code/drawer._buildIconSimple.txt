@@ -1,4 +1,5 @@
 Widget _buildIconSimple(BuildContext context) {
+  const menuLabels = ['菜单一', '菜单二', '菜单三', '菜单四', '菜单五', '菜单六', '菜单七', '菜单八'];
   return SizedBox(
     width: double.infinity,
     child: TButton(
@@ -11,9 +12,9 @@ Widget _buildIconSimple(BuildContext context) {
           placement: TDrawerPlacement.left,
           drawer: TDrawer(
             items: List.generate(
-              _menuLabels.length,
+              menuLabels.length,
               (index) => TDrawerItem(
-                title: _menuLabels[index],
+                title: menuLabels[index],
                 icon: const TIcon(TIcons.app),
               ),
             ),

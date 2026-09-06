@@ -61,6 +61,6 @@
 - [x] 组件测试覆盖蒙层回调、关闭策略、destroyOnClose、方向、句柄、Theme 优先级和设计尺寸。
 - [x] Theme 测试覆盖默认值到显式值的双向插值、两侧均为空及非法尺寸。
 - [x] Drawer 手写生产源码覆盖率达到 95%。
-- [x] API 文档与公开示例代码生成检查通过。
+- [x] API 文档与公开示例代码生成检查通过；5 个代码面板包含复现示例所需的数据和交互入口，不依赖未展示的私有 helper。
 - [x] Flutter 3.32.0 与 latest 的组件、Demo 测试及全量 analyze 通过。
-- [x] Flutter 3.32.0 Linux 的 375 × 1024 Demo 整页与 7 个打开态 light/dark Golden 通过。
+- [x] Flutter 3.32.0 Linux 的 375 × 1024 Demo 整页、7 个打开态 light/dark、共享 navigation light/dark 与 Popup Consumer Golden 均在最终源码上通过。

@@ -59,6 +59,19 @@ class TDrawerPage extends StatelessWidget {
 
 @ExampleCode(group: 'drawer')
 Widget _buildBaseSimple(BuildContext context) {
+  final items = [
+    for (final label in const [
+      '菜单一',
+      '菜单二',
+      '菜单三',
+      '菜单四',
+      '菜单五',
+      '菜单六',
+      '菜单七',
+      '菜单八',
+    ])
+      TDrawerItem(title: label),
+  ];
   return SizedBox(
     width: double.infinity,
     child: TButton(
@@ -69,7 +82,7 @@ Widget _buildBaseSimple(BuildContext context) {
         showTDrawer(
           context,
           placement: TDrawerPlacement.left,
-          drawer: TDrawer(items: _baseItems(), onItemClick: (_, __) {}),
+          drawer: TDrawer(items: items, onItemClick: (_, __) {}),
         );
       },
       child: const TText('基础抽屉'),
@@ -79,6 +92,7 @@ Widget _buildBaseSimple(BuildContext context) {
 
 @ExampleCode(group: 'drawer')
 Widget _buildIconSimple(BuildContext context) {
+  const menuLabels = ['菜单一', '菜单二', '菜单三', '菜单四', '菜单五', '菜单六', '菜单七', '菜单八'];
   return SizedBox(
     width: double.infinity,
     child: TButton(
@@ -91,9 +105,9 @@ Widget _buildIconSimple(BuildContext context) {
           placement: TDrawerPlacement.left,
           drawer: TDrawer(
             items: List.generate(
-              _menuLabels.length,
+              menuLabels.length,
               (index) => TDrawerItem(
-                title: _menuLabels[index],
+                title: menuLabels[index],
                 icon: const TIcon(TIcons.app),
               ),
             ),
@@ -107,6 +121,19 @@ Widget _buildIconSimple(BuildContext context) {
 
 @ExampleCode(group: 'drawer')
 Widget _buildTitleSimple(BuildContext context) {
+  final items = [
+    for (final label in const [
+      '菜单一',
+      '菜单二',
+      '菜单三',
+      '菜单四',
+      '菜单五',
+      '菜单六',
+      '菜单七',
+      '菜单八',
+    ])
+      TDrawerItem(title: label),
+  ];
   return Column(
     children: [
       SizedBox(
@@ -121,7 +148,7 @@ Widget _buildTitleSimple(BuildContext context) {
               placement: TDrawerPlacement.left,
               drawer: TDrawer(
                 title: TText('标题', font: context.tTheme.fontTitleLarge),
-                items: _baseItems(),
+                items: items,
               ),
             );
           },
@@ -141,7 +168,7 @@ Widget _buildTitleSimple(BuildContext context) {
               placement: TDrawerPlacement.left,
               drawer: TDrawer(
                 title: TText('标题', font: context.tTheme.fontHeadlineMedium),
-                items: _baseItems(),
+                items: items,
               ),
             );
           },
@@ -154,6 +181,19 @@ Widget _buildTitleSimple(BuildContext context) {
 
 @ExampleCode(group: 'drawer')
 Widget _buildPlacementSimple(BuildContext context) {
+  final items = [
+    for (final label in const [
+      '菜单一',
+      '菜单二',
+      '菜单三',
+      '菜单四',
+      '菜单五',
+      '菜单六',
+      '菜单七',
+      '菜单八',
+    ])
+      TDrawerItem(title: label),
+  ];
   return Column(
     children: [
       SizedBox(
@@ -166,7 +206,7 @@ Widget _buildPlacementSimple(BuildContext context) {
             showTDrawer(
               context,
               placement: TDrawerPlacement.left,
-              drawer: TDrawer(items: _baseItems()),
+              drawer: TDrawer(items: items),
             );
           },
           child: const TText('左侧抽屉'),
@@ -183,7 +223,7 @@ Widget _buildPlacementSimple(BuildContext context) {
             showTDrawer(
               context,
               placement: TDrawerPlacement.right,
-              drawer: TDrawer(items: _baseItems()),
+              drawer: TDrawer(items: items),
             );
           },
           child: const TText('右侧抽屉'),
@@ -195,6 +235,11 @@ Widget _buildPlacementSimple(BuildContext context) {
 
 @ExampleCode(group: 'drawer')
 Widget _buildBottomSimple(BuildContext context) {
+  const menuLabels = ['菜单一', '菜单二', '菜单三', '菜单四', '菜单五', '菜单六', '菜单七', '菜单八'];
+  final items = [
+    for (final label in [...menuLabels, ...menuLabels.skip(3)])
+      TDrawerItem(title: label),
+  ];
   return SizedBox(
     width: double.infinity,
     child: TButton(
@@ -207,7 +252,7 @@ Widget _buildBottomSimple(BuildContext context) {
           placement: TDrawerPlacement.left,
           drawer: TDrawer(
             title: const TText('标题'),
-            items: _footerItems(),
+            items: items,
             footer: Padding(
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
               child: SizedBox(
@@ -227,14 +272,3 @@ Widget _buildBottomSimple(BuildContext context) {
     ),
   );
 }
-
-const _menuLabels = ['菜单一', '菜单二', '菜单三', '菜单四', '菜单五', '菜单六', '菜单七', '菜单八'];
-
-List<TDrawerItem> _baseItems() => [
-  for (final label in _menuLabels) TDrawerItem(title: label),
-];
-
-List<TDrawerItem> _footerItems() => [
-  ..._baseItems(),
-  for (final label in _menuLabels.skip(3)) TDrawerItem(title: label),
-];

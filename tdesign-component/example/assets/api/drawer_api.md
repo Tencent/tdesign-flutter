@@ -62,6 +62,30 @@ TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer
 | title | String? | - | 每列标题 |
 
 
+### showTDrawer
+#### 顶层函数
+
+通过 Popup 展示一个 `TDrawer`。
+返回的 `TDrawerHandle` 可用于查询显示状态或主动关闭抽屉。
+
+返回类型：`TDrawerHandle`
+
+#### 参数
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | 用于查找承载抽屉浮层的 Navigator。 |
+| drawer | TDrawer | - | 只描述抽屉内容；方向、蒙层、顶部偏移和生命周期由本函数负责。 |
+| placement | TDrawerPlacement | TDrawerPlacement.right | 控制抽屉从左侧或右侧滑出，默认从右侧滑出。 |
+| showOverlay | bool | true | 控制是否显示蒙层，默认 true。 |
+| closeOnOverlayClick | bool | true | 控制点击蒙层时是否关闭抽屉，默认 true。 |
+| onOverlayClick | VoidCallback? | - | 在蒙层被点击时触发，不受是否自动关闭影响。 |
+| topInset | double? | - | 设置抽屉相对屏幕顶部的可选偏移，默认 0。 |
+| useSafeArea | bool | true | 控制浮层是否避让系统安全区域，默认 true。 |
+| destroyOnClose | bool | false | 控制关闭后是否立即销毁浮层路由，默认 false。 |
+| onClose | VoidCallback? | - | 在抽屉浮层关闭后触发。 |
+
+
 ### TDrawerPlacement
 #### 简介
 抽屉方向。
