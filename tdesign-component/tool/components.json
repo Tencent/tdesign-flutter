@@ -109,8 +109,13 @@
       "api": {
         "names": [
           "TDrawer",
-          "TDrawerWidget",
+          "TDrawerHandle",
+          "TDrawerPlacement",
+          "TDrawerThemeData",
           "TDrawerItem"
+        ],
+        "functions": [
+          "showTDrawer"
         ],
         "getComments": true
       }

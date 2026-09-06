@@ -57,5 +57,6 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 更新 Picker 页面文案时，更新 Picker 字符清单。
 更新 Calendar 页面文案时，更新 Calendar 字符清单。
 更新 BackTop 页面文案时，更新 BackTop 字符清单。
+更新 Drawer 页面文案时，更新 Drawer 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。

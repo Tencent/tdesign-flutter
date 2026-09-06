@@ -1,4 +1,4 @@
-Widget _buildTitleSimple(BuildContext context) {
+Widget _buildPlacementSimple(BuildContext context) {
   final items = [
     for (final label in const [
       '菜单一',
@@ -24,13 +24,10 @@ Widget _buildTitleSimple(BuildContext context) {
             showTDrawer(
               context,
               placement: TDrawerPlacement.left,
-              drawer: TDrawer(
-                title: TText('标题', font: context.tTheme.fontTitleLarge),
-                items: items,
-              ),
+              drawer: TDrawer(items: items),
             );
           },
-          child: const TText('小标题抽屉'),
+          child: const TText('左侧抽屉'),
         ),
       ),
       const SizedBox(height: 16),
@@ -43,14 +40,11 @@ Widget _buildTitleSimple(BuildContext context) {
           onPressed: () {
             showTDrawer(
               context,
-              placement: TDrawerPlacement.left,
-              drawer: TDrawer(
-                title: TText('标题', font: context.tTheme.fontHeadlineMedium),
-                items: items,
-              ),
+              placement: TDrawerPlacement.right,
+              drawer: TDrawer(items: items),
             );
           },
-          child: const TText('大标题抽屉'),
+          child: const TText('右侧抽屉'),
         ),
       ),
     ],
