@@ -11,6 +11,7 @@ Widget _buildAccordionCollapse(BuildContext context) {
           isExpanded: item.isExpanded,
           body: const Text(randomString),
           value: item.expandedValue,
+          disabled: item.disabled,
         );
       }).toList(),
     );

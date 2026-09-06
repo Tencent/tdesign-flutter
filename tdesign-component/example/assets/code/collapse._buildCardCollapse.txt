@@ -12,6 +12,7 @@ Widget _buildCardCollapse(BuildContext context) {
             return Text(item.headerValue);
           },
           isExpanded: item.isExpanded,
+          disabled: item.disabled,
           body: const Text(randomString),
         );
       }).toList(),

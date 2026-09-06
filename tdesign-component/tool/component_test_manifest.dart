@@ -217,6 +217,22 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'collapse',
+    coverageTargets: ['lib/src/components/collapse/'],
+    componentTests: [
+      'test/components/collapse/t_collapse_test.dart',
+      'test/components/collapse/t_collapse_misc_test.dart',
+    ],
+    exampleTests: ['test/collapse_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Collapse Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/collapse_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'divider',
     coverageTargets: ['lib/src/components/divider/'],
     componentTests: ['test/components/divider/t_divider_test.dart'],
