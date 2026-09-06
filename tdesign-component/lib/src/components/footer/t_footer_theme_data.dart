@@ -7,17 +7,11 @@ class TFooterThemeData extends ThemeExtension<TFooterThemeData> {
   /// 默认高度
   final double? height;
 
-  const TFooterThemeData({
-    this.height,
-  });
+  const TFooterThemeData({this.height});
 
   @override
-  TFooterThemeData copyWith({
-    double? height,
-  }) {
-    return TFooterThemeData(
-      height: height ?? this.height,
-    );
+  TFooterThemeData copyWith({double? height}) {
+    return TFooterThemeData(height: height ?? this.height);
   }
 
   @override
@@ -25,8 +19,6 @@ class TFooterThemeData extends ThemeExtension<TFooterThemeData> {
     if (other is! TFooterThemeData) {
       return this;
     }
-    return TFooterThemeData(
-      height: lerpDouble(height, other.height, t),
-    );
+    return TFooterThemeData(height: lerpDouble(height, other.height, t));
   }
 }

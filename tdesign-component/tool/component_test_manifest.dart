@@ -331,6 +331,19 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'footer',
+    coverageTargets: ['lib/src/components/footer/'],
+    componentTests: ['test/components/footer/t_footer_test.dart'],
+    exampleTests: ['test/footer_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Footer Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/footer_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'indexes',
     coverageTargets: ['lib/src/components/indexes/'],
     componentTests: [
