@@ -38,7 +38,7 @@ class _TImageViewerPageState extends State<TImageViewerPage> {
       },
       child: const TImage(
         src: 'https://tdesign.gtimg.com/site/avatar.jpg',
-        variant: TImageVariant.roundedSquare,
+        shape: TImageShape.roundedSquare, fit: BoxFit.cover,
       ),
     );
   }
@@ -63,7 +63,7 @@ class _TImageViewerPageState extends State<TImageViewerPage> {
           },
           child: TImage(
             src: urls[entry.key],
-            variant: TImageVariant.roundedSquare,
+            shape: TImageShape.roundedSquare, fit: BoxFit.cover,
           ),
         );
       }).toList(),

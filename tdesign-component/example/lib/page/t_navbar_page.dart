@@ -145,7 +145,6 @@ class TNavBarPage extends StatelessWidget {
         src: 'assets/img/t_brand.png',
         width: 120,
         height: 32,
-        variant: TImageVariant.fitWidth,
         fit: BoxFit.contain,
       ),
       actions: [

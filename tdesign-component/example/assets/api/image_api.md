@@ -11,7 +11,7 @@
 | errorWidget | Widget? | - | 默认错误占位内容。 |
 | excludeFromSemantics | bool | false | 是否从语义树排除图片。 |
 | filterQuality | FilterQuality | FilterQuality.low | 图片滤镜质量。 |
-| fit | BoxFit? | - | 图片适配方式；优先于 `variant` 的默认适配方式。 |
+| fit | BoxFit | BoxFit.fill | 图片适配方式。 |
 | frameBuilder | ImageFrameBuilder? | - | 图片帧构建器。 |
 | height | double? | - | 图片高度。 |
 | imageFile | File? | - | 本地图片文件；不能与 `src` 同时提供。 |
@@ -21,21 +21,17 @@
 | onTap | GestureTapCallback? | - | 点击回调；为空时不创建点击行为。 |
 | repeat | ImageRepeat | ImageRepeat.noRepeat | 图片重复方式。 |
 | semanticLabel | String? | - | 无障碍标签。 |
+| shape | TImageShape | TImageShape.square | 图片形状。 |
 | src | String? | - | 网络 URL 或 asset 路径；空字符串显示加载占位。 |
-| variant | TImageVariant | TImageVariant.roundedSquare | 图片裁剪形态。 |
 | width | double? | - | 图片宽度。 |
 
 
-### TImageVariant
+### TImageShape
 #### 枚举值
 
 
 | 名称 | 说明 |
 | --- | --- |
-| clip | 保持原始尺寸并裁剪。 |
-| fitHeight | 适应高度。 |
-| fitWidth | 适应宽度。 |
-| stretch | 拉伸填充。 |
-| square | 方形裁剪。 |
-| roundedSquare | 圆角方形裁剪。 |
-| circle | 圆形裁剪。 |
+| square | 方形。 |
+| roundedSquare | 圆角方形。 |
+| circle | 圆形。 |

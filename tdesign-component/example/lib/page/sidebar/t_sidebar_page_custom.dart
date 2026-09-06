@@ -176,7 +176,7 @@ class TSideBarCustomPageState extends State<TSideBarCustomPage> {
         children: [
           TImage(
             src: 'assets/img/empty.png',
-            variant: TImageVariant.roundedSquare,
+            shape: TImageShape.roundedSquare, fit: BoxFit.cover,
             width: min(72.0, width),
             height: min(72.0, width),
           ),

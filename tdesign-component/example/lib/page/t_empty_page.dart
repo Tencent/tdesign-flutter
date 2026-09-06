@@ -15,26 +15,27 @@ class _TEmptyPageState extends State<TEmptyPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tTitle(),
-        exampleCodeGroup: 'empty',
-        desc: '用于空状态时的占位提示。',
-        children: [
-          ExampleModule(title: '组件类型', children: [
+      title: tTitle(),
+      exampleCodeGroup: 'empty',
+      desc: '用于空状态时的占位提示。',
+      children: [
+        ExampleModule(
+          title: '组件类型',
+          children: [
             ExampleItem(desc: '图标空状态', builder: _iconEmpty),
             ExampleItem(desc: '自定义图标空状态', builder: _iconEmptyCustom),
             ExampleItem(desc: '自定义图片空状态', builder: _imageEmpty),
             ExampleItem(desc: '带操作空状态', builder: _operationEmpty),
             ExampleItem(desc: '自定义带操作空状态', builder: _operationCustomEmpty),
-          ]),
-        ]);
+          ],
+        ),
+      ],
+    );
   }
 
   @ExampleCode(group: 'empty')
   Widget _iconEmpty(BuildContext context) {
-    return const TEmpty(
-      variant: TEmptyVariant.plain,
-      emptyText: '描述文字',
-    );
+    return const TEmpty(variant: TEmptyVariant.plain, emptyText: '描述文字');
   }
 
   @ExampleCode(group: 'empty')
@@ -55,10 +56,7 @@ class _TEmptyPageState extends State<TEmptyPage> {
           color: context.tTheme.bgColorComponent,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const TImage(
-          src: 'assets/img/empty.png',
-          variant: TImageVariant.fitWidth,
-        ),
+        child: const TImage(src: 'assets/img/empty.png', fit: BoxFit.fitWidth),
       ),
     );
   }

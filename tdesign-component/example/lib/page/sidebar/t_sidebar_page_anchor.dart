@@ -297,7 +297,7 @@ class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
         children: [
           TImage(
             src: 'assets/img/empty.png',
-            variant: TImageVariant.roundedSquare,
+            shape: TImageShape.roundedSquare, fit: BoxFit.cover,
           ),
           SizedBox(width: 16),
           TText('标题', style: TextStyle(fontSize: 16))

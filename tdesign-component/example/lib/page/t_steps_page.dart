@@ -303,7 +303,7 @@ class _TStepsPageState extends State<TStepsPage> {
             margin: const EdgeInsets.only(bottom: 16, top: 4),
             child: const TImage(
               src: 'assets/img/image.png',
-              variant: TImageVariant.roundedSquare,
+              shape: TImageShape.roundedSquare, fit: BoxFit.cover,
             ),
           ),
         ),

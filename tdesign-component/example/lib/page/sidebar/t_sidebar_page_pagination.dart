@@ -186,7 +186,7 @@ class TSideBarPaginationPageState extends State<TSideBarPaginationPage> {
         children: [
           TImage(
             src: 'assets/img/empty.png',
-            variant: TImageVariant.roundedSquare,
+            shape: TImageShape.roundedSquare, fit: BoxFit.cover,
             width: imageSize,
             height: imageSize,
           ),

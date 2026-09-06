@@ -302,6 +302,24 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'image',
+    coverageTargets: ['lib/src/components/image/'],
+    componentTests: ['test/components/image/t_image_test.dart'],
+    exampleTests: ['test/image_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Image Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/image/t_image_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Image Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/image_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'refresh',
     coverageTargets: [
       'lib/src/components/refresh/t_pull_down_refresh.dart',

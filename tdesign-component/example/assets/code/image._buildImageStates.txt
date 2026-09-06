@@ -1,0 +1,40 @@
+Widget _buildImageStates(BuildContext context) {
+  return Column(
+    children: [
+      _demoRow([
+        _demoItem(
+          '加载默认提示',
+          const TImage(src: '', shape: TImageShape.roundedSquare),
+        ),
+        _demoItem(
+          '加载自定义提示',
+          const TImage(
+            src: '',
+            shape: TImageShape.roundedSquare,
+            loadingWidget: TLoading(size: 20, icon: TLoadingIcon.circle),
+          ),
+        ),
+        const SizedBox(width: 88),
+      ]),
+      const SizedBox(height: 32),
+      _demoRow([
+        _demoItem(
+          '失败默认提示',
+          const TImage(src: 'error', shape: TImageShape.roundedSquare),
+        ),
+        _demoItem(
+          '失败自定义提示',
+          TImage(
+            src: 'error',
+            shape: TImageShape.roundedSquare,
+            errorWidget: TText(
+              '加载失败',
+              font: context.tTheme.fontBodyExtraSmall,
+            ),
+          ),
+        ),
+        const SizedBox(width: 88),
+      ]),
+    ],
+  );
+}

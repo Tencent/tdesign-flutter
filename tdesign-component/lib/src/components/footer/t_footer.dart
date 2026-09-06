@@ -56,7 +56,7 @@ class TFooter extends StatelessWidget {
         break;
       case TFooterVariant.link:
         children = [
-          if (links.isNotEmpty) _renderLinks(context) else _renderText(context)
+          if (links.isNotEmpty) _renderLinks(context) else _renderText(context),
         ];
         break;
       case TFooterVariant.brand:
@@ -75,16 +75,15 @@ class TFooter extends StatelessWidget {
   }
 
   Widget _renderLogo() {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Padding(
-        padding: const EdgeInsets.only(top: 4, bottom: 4),
-        child: TImage(
-          src: logo,
-          variant: TImageVariant.fitWidth,
-          width: width,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 4, bottom: 4),
+          child: TImage(src: logo, fit: BoxFit.fitWidth, width: width),
         ),
-      )
-    ]);
+      ],
+    );
   }
 
   Widget _renderLinks(BuildContext context) {
@@ -101,8 +100,11 @@ class TFooter extends StatelessWidget {
                 decoration: index < (links.length - 1)
                     ? BoxDecoration(
                         border: Border(
-                            right: BorderSide(
-                                color: context.tTheme.textColorPlaceholder)))
+                          right: BorderSide(
+                            color: context.tTheme.textColorPlaceholder,
+                          ),
+                        ),
+                      )
                     : null,
                 padding: const EdgeInsets.symmetric(horizontal: 6),
                 child: link,
@@ -113,8 +115,9 @@ class TFooter extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 4),
           child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [Flexible(child: _renderText(context))]),
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Flexible(child: _renderText(context))],
+          ),
         ),
       ],
     );

@@ -1,0 +1,86 @@
+Widget _buildImageTypes(BuildContext context) {
+  const source = 'assets/img/image.png';
+  return Column(
+    children: [
+      _demoRow(const [
+        SizedBox(
+          width: 88,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TText('裁切'),
+              SizedBox(height: 16),
+              TImage(src: source, fit: BoxFit.cover),
+            ],
+          ),
+        ),
+        SizedBox(
+          width: 88,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TText('适应高'),
+              SizedBox(height: 16),
+              TImage(src: source, fit: BoxFit.fitHeight),
+            ],
+          ),
+        ),
+        SizedBox(
+          width: 88,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TText('拉伸'),
+              SizedBox(height: 16),
+              TImage(src: source),
+            ],
+          ),
+        ),
+      ]),
+      const SizedBox(height: 32),
+      _demoRow(const [
+        SizedBox(
+          width: 88,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TText('方形'),
+              SizedBox(height: 16),
+              TImage(src: source, fit: BoxFit.cover),
+            ],
+          ),
+        ),
+        SizedBox(
+          width: 88,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TText('圆角方形'),
+              SizedBox(height: 16),
+              TImage(
+                src: source,
+                fit: BoxFit.cover,
+                shape: TImageShape.roundedSquare,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          width: 88,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TText('圆形'),
+              SizedBox(height: 16),
+              TImage(
+                src: source,
+                fit: BoxFit.cover,
+                shape: TImageShape.circle,
+              ),
+            ],
+          ),
+        ),
+      ]),
+    ],
+  );
+}

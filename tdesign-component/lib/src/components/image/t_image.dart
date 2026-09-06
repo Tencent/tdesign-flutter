@@ -7,27 +7,15 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import 't_image_theme_data.dart';
 
-/// 图片裁剪形态。
-enum TImageVariant {
-  /// 保持原始尺寸并裁剪。
-  clip,
-
-  /// 适应高度。
-  fitHeight,
-
-  /// 适应宽度。
-  fitWidth,
-
-  /// 拉伸填充。
-  stretch,
-
-  /// 方形裁剪。
+/// 图片形状。
+enum TImageShape {
+  /// 方形。
   square,
 
-  /// 圆角方形裁剪。
+  /// 圆角方形。
   roundedSquare,
 
-  /// 圆形裁剪。
+  /// 圆形。
   circle,
 }
 
@@ -37,12 +25,12 @@ class TImage extends StatelessWidget {
     super.key,
     this.src,
     this.imageFile,
-    this.variant = TImageVariant.roundedSquare,
+    this.shape = TImageShape.square,
     this.errorWidget,
     this.loadingWidget,
     this.width,
     this.height,
-    this.fit,
+    this.fit = BoxFit.fill,
     this.frameBuilder,
     this.loadingBuilder,
     this.errorBuilder,
@@ -65,8 +53,8 @@ class TImage extends StatelessWidget {
   /// 本地图片文件；不能与 [src] 同时提供。
   final File? imageFile;
 
-  /// 图片裁剪形态。
-  final TImageVariant variant;
+  /// 图片形状。
+  final TImageShape shape;
 
   /// 默认错误占位内容。
   final Widget? errorWidget;
@@ -80,8 +68,8 @@ class TImage extends StatelessWidget {
   /// 图片高度。
   final double? height;
 
-  /// 图片适配方式；优先于 [variant] 的默认适配方式。
-  final BoxFit? fit;
+  /// 图片适配方式。
+  final BoxFit fit;
 
   /// 图片帧构建器。
   final ImageFrameBuilder? frameBuilder;
@@ -120,21 +108,15 @@ class TImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final resolvedWidth = width ?? 72;
     final resolvedHeight = height ?? 72;
-    final resolvedFit = fit ?? _defaultFit(variant);
     final theme = Theme.of(context).extension<TImageThemeData>();
     final image = _buildImage(
       context,
       theme,
       width: resolvedWidth,
       height: resolvedHeight,
-      fit: resolvedFit,
+      fit: fit,
     );
-    final clipped = _clip(
-      context,
-      image,
-      width: resolvedWidth,
-      height: resolvedHeight,
-    );
+    final clipped = _clip(context, image);
 
     if (onTap == null) {
       return clipped;
@@ -287,47 +269,17 @@ class TImage extends StatelessWidget {
     );
   }
 
-  Widget _clip(
-    BuildContext context,
-    Widget child, {
-    required double width,
-    required double height,
-  }) {
-    switch (variant) {
-      case TImageVariant.clip:
-      case TImageVariant.fitHeight:
-      case TImageVariant.fitWidth:
-      case TImageVariant.square:
+  Widget _clip(BuildContext context, Widget child) {
+    switch (shape) {
+      case TImageShape.square:
         return child;
-      case TImageVariant.stretch:
-        return ConstrainedBox(
-          constraints: BoxConstraints.tightFor(width: width, height: height),
-          child: child,
-        );
-      case TImageVariant.roundedSquare:
+      case TImageShape.roundedSquare:
         return ClipRRect(
           borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
           child: child,
         );
-      case TImageVariant.circle:
+      case TImageShape.circle:
         return ClipOval(child: child);
-    }
-  }
-
-  BoxFit _defaultFit(TImageVariant value) {
-    switch (value) {
-      case TImageVariant.clip:
-        return BoxFit.none;
-      case TImageVariant.fitHeight:
-        return BoxFit.fitHeight;
-      case TImageVariant.fitWidth:
-        return BoxFit.fitWidth;
-      case TImageVariant.stretch:
-        return BoxFit.fill;
-      case TImageVariant.square:
-      case TImageVariant.roundedSquare:
-      case TImageVariant.circle:
-        return BoxFit.cover;
     }
   }
 }
