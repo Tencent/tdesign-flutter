@@ -357,6 +357,19 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'time_counter',
+    coverageTargets: ['lib/src/components/time_counter/'],
+    componentTests: ['test/components/time_counter/t_time_counter_test.dart'],
+    exampleTests: ['test/time_counter_page_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'TimeCounter Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/time_counter_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'icon',
     coverageTargets: ['lib/src/components/icon/'],
     componentTests: ['test/components/icon/t_icon_test.dart'],

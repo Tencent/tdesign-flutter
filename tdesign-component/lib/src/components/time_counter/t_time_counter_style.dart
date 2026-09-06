@@ -5,7 +5,6 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
-import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_time_counter_types.dart';
 
@@ -82,55 +81,61 @@ class TTimeCounterStyle {
     bool? splitWithUnit,
   }) {
     timeFontFamily = context.tTheme.numberFontFamily;
-    late Font? font;
-    switch (size ?? TTimeCounterSize.medium) {
+    final effectiveSize = size ?? TTimeCounterSize.medium;
+    final effectiveTheme = theme ?? TTimeCounterVariant.defaultTheme;
+    final hasUnit = splitWithUnit ?? false;
+    late Font? defaultFont;
+    late Font? blockFont;
+    late Font? unitFont;
+    late double blockExtent;
+    late double unitSpace;
+    late double dotSpace;
+    switch (effectiveSize) {
       case TTimeCounterSize.small:
-        if (theme == TTimeCounterVariant.defaultTheme) {
-          timeWidth = timeHeight = null;
-          font = context.tTheme.fontBodyMedium;
-          timeFontSize = splitFontSize = font?.size ?? 14;
-          timeFontHeight =
-              splitFontHeight = font?.height ?? (22 / timeFontSize!);
-        } else {
-          timeWidth = timeHeight = 20;
-          font = context.tTheme.fontBodySmall;
-          timeFontSize = splitFontSize = font?.size ?? 12;
-          timeFontHeight = splitFontHeight = null;
-        }
-        space = context.tTheme.spacer4 / 2;
+        defaultFont = context.tTheme.fontBodyMedium;
+        blockFont = context.tTheme.fontBodySmall;
+        unitFont = context.tTheme.fontBodyExtraSmall;
+        blockExtent = 20;
+        unitSpace = 4;
+        dotSpace = 2;
         break;
       case TTimeCounterSize.medium:
-        if (theme == TTimeCounterVariant.defaultTheme) {
-          timeWidth = timeHeight = null;
-          font = context.tTheme.fontBodyLarge;
-          timeFontSize = splitFontSize = font?.size ?? 16;
-          timeFontHeight =
-              splitFontHeight = font?.height ?? (24 / timeFontSize!);
-        } else {
-          timeWidth = timeHeight = 24;
-          font = context.tTheme.fontBodyMedium;
-          timeFontSize = splitFontSize = font?.size ?? 14;
-          timeFontHeight = splitFontHeight = null;
-        }
-        space = context.tTheme.spacer8 / 2;
+        defaultFont = context.tTheme.fontBodyLarge;
+        blockFont = context.tTheme.fontBodyMedium;
+        unitFont = context.tTheme.fontBodySmall;
+        blockExtent = 24;
+        unitSpace = 5;
+        dotSpace = 3;
         break;
       case TTimeCounterSize.large:
-        if (theme == TTimeCounterVariant.defaultTheme) {
-          timeWidth = timeHeight = null;
-          font = context.tTheme.fontBodyExtraLarge;
-          timeFontSize = splitFontSize = font?.size ?? 18;
-          timeFontHeight =
-              splitFontHeight = font?.height ?? (26 / timeFontSize!);
-        } else {
-          timeWidth = timeHeight = 28;
-          font = context.tTheme.fontBodyLarge;
-          timeFontSize = splitFontSize = font?.size ?? 16;
-          timeFontHeight = splitFontHeight = null;
-        }
-        space = context.tTheme.spacer12 / 2;
+        defaultFont = context.tTheme.fontBodyExtraLarge;
+        blockFont = context.tTheme.fontBodyLarge;
+        unitFont = context.tTheme.fontBodyMedium;
+        blockExtent = 28;
+        unitSpace = 6;
+        dotSpace = 6;
     }
 
-    switch (theme ?? TTimeCounterVariant.defaultTheme) {
+    final timeFont = effectiveTheme == TTimeCounterVariant.defaultTheme
+        ? defaultFont
+        : blockFont;
+    final splitFont = hasUnit ? unitFont : defaultFont;
+    timeFontSize = timeFont?.size;
+    timeFontHeight = effectiveTheme == TTimeCounterVariant.defaultTheme
+        ? timeFont?.height
+        : null;
+    splitFontSize = splitFont?.size;
+    splitFontHeight = hasUnit ? splitFont?.height : timeFontHeight;
+    timeWidth = timeHeight = effectiveTheme == TTimeCounterVariant.defaultTheme
+        ? null
+        : blockExtent;
+    space = hasUnit
+        ? unitSpace
+        : effectiveTheme == TTimeCounterVariant.defaultTheme
+        ? 0
+        : dotSpace;
+
+    switch (effectiveTheme) {
       case TTimeCounterVariant.round:
         timeBox = BoxDecoration(
           shape: BoxShape.circle,
@@ -155,7 +160,7 @@ class TTimeCounterStyle {
         timeHeight = null;
     }
 
-    if (splitWithUnit ?? false) {
+    if (hasUnit) {
       splitColor = context.tTheme.textColorPrimary;
     }
   }
