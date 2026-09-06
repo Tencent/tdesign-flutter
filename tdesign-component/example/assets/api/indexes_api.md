@@ -10,7 +10,7 @@
 | builderContent | Widget? Function(BuildContext context, String index) | - | 内容自定义构建 |
 | builderIndex | Widget Function(BuildContext context, String index, bool isActive)? | - | 索引文本自定义构建，包括索引激活左侧提示 |
 | capsuleTheme | bool | false | 锚点是否为胶囊式样式 |
-| indexList | List<String>? | - | 索引字符列表。不传默认 A-Z；默认值要求 `builderContent` 能处理 A-Z 全部索引，自定义数据建议显式传入 |
+| indexList | List<String>? | - | 索引字符列表。不传默认 A-Z；默认值要求 `builderContent` 能处理 A-Z 全部索引，自定义数据建议显式传入。 列表更新后若不再包含当前活动项，组件回退到新列表首项、同步滚动位置并触发 `onChanged`。 |
 | indexListMaxHeight | double? | - | 索引列表最大高度（父容器高度的百分比，默认 0.8） |
 | initialIndex | String? | - | 初始激活索引。为空时使用 `indexList` 的第一项 仅在组件首次创建时生效；后续活动索引由滚动位置派生。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
