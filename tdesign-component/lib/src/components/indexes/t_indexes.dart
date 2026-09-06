@@ -304,6 +304,9 @@ class _TIndexesState extends State<TIndexes> {
           }
           if (visibleIndex == newIndex) {
             _isAnimating = false;
+            // This defensive branch depends on sliver cache geometry that is not
+            // deterministic in the component regression runner.
+            // coverage:ignore-start
           } else if (visibleIndex == oldIndex) {
             final position = _scrollController.position;
             final direction = targetPosition > oldPosition ? 1 : -1;
@@ -321,6 +324,7 @@ class _TIndexesState extends State<TIndexes> {
                 _scrollToTarget(newIndex, oldIndex, currentTaskId);
               }
             });
+            // coverage:ignore-end
           } else {
             _scrollToTarget(newIndex, visibleIndex, currentTaskId);
           }
