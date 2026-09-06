@@ -14,8 +14,8 @@
 | indexListMaxHeight | double? | - | 索引列表最大高度（父容器高度的百分比，默认 0.8） |
 | initialIndex | String? | - | 初始激活索引。为空时使用 `indexList` 的第一项 仅在组件首次创建时生效；后续活动索引由滚动位置派生。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onChanged | void Function(String index)? | - | 索引发生变更时触发事件 |
-| onSelect | void Function(String index)? | - | 点击侧边栏时触发事件 |
+| onChanged | void Function(String index)? | - | 当前激活索引发生变更时触发（含滚动吸顶派生与用户侧栏选择） |
+| onSelect | void Function(String index)? | - | 用户在侧边栏点击或拖动选择索引（激活索引变化）时触发；滚动吸顶派生不会触发本回调 |
 | reverse | bool | false | 是否反向滚动 |
 | scrollController | ScrollController? | - | 滚动控制器 |
 | sticky | bool | true | 锚点是否吸顶 |
@@ -46,10 +46,10 @@
 | --- | --- | --- | --- |
 | activeIndex | ValueNotifier<String> | - | 选中索引 |
 | builderIndex | Widget Function(BuildContext context, String index, bool isActive)? | - | 索引文本自定义构建，包括索引激活左侧提示 |
-| indexList | List<String> | - | 索引字符列表。不传默认 A-Z |
+| indexList | List<String> | - | 索引字符列表，需显式传入实际展示的索引序列。本组件不自带默认值；通常由 TIndexes 装配并透传（TIndexes 未指定时默认使用 A-Z） |
 | indexListMaxHeight | double | 0.8 | 索引列表最大高度（父容器高度的百分比，默认0.8） |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onSelect | void Function(String newIndex, String oldIndex) | - | 点击侧边栏时触发事件 |
+| onSelect | void Function(String newIndex, String oldIndex) | - | 用户点击或拖动侧边栏、激活索引发生变化时触发 |
 
 
 ### TIndexesThemeData
