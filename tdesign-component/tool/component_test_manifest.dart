@@ -229,6 +229,19 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'empty',
+    coverageTargets: ['lib/src/components/empty/'],
+    componentTests: ['test/components/empty/t_empty_test.dart'],
+    exampleTests: ['test/empty_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Empty Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/empty_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'dialog',
     coverageTargets: ['lib/src/components/dialog/'],
     componentTests: ['test/components/dialog/t_dialog_test.dart'],
