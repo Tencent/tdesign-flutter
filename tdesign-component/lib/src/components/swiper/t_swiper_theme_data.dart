@@ -12,6 +12,7 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
     this.paginationPlacement,
     this.paginationAlignment,
     this.paginationMargin,
+    this.borderRadius,
     this.activeColor,
     this.inactiveColor,
     this.dotSize,
@@ -21,7 +22,10 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
     this.fractionBackgroundColor,
     this.controlStyle,
     this.controlIconSize,
-  });
+  }) : assert(dotSize == null || dotSize > 0),
+       assert(activeDotExtent == null || activeDotExtent > 0),
+       assert(dotSpacing == null || dotSpacing >= 0),
+       assert(controlIconSize == null || controlIconSize > 0);
 
   /// 默认指示器形态。
   final TSwiperPaginationVariant? pagination;
@@ -37,6 +41,9 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
 
   /// 指示器外边距。
   final EdgeInsetsGeometry? paginationMargin;
+
+  /// 轮播内容圆角。
+  final BorderRadiusGeometry? borderRadius;
 
   /// 激活项颜色。
   final Color? activeColor;
@@ -72,6 +79,7 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
     TSwiperPaginationPlacement? paginationPlacement,
     AlignmentGeometry? paginationAlignment,
     EdgeInsetsGeometry? paginationMargin,
+    BorderRadiusGeometry? borderRadius,
     Color? activeColor,
     Color? inactiveColor,
     double? dotSize,
@@ -88,6 +96,7 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
       paginationPlacement: paginationPlacement ?? this.paginationPlacement,
       paginationAlignment: paginationAlignment ?? this.paginationAlignment,
       paginationMargin: paginationMargin ?? this.paginationMargin,
+      borderRadius: borderRadius ?? this.borderRadius,
       activeColor: activeColor ?? this.activeColor,
       inactiveColor: inactiveColor ?? this.inactiveColor,
       dotSize: dotSize ?? this.dotSize,
@@ -109,20 +118,33 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
     return TSwiperThemeData(
       pagination: t < 0.5 ? pagination : other.pagination,
       pageEffect: t < 0.5 ? pageEffect : other.pageEffect,
-      paginationPlacement:
-          t < 0.5 ? paginationPlacement : other.paginationPlacement,
+      paginationPlacement: t < 0.5
+          ? paginationPlacement
+          : other.paginationPlacement,
       paginationAlignment: AlignmentGeometry.lerp(
         paginationAlignment,
         other.paginationAlignment,
         t,
       ),
-      paginationMargin:
-          EdgeInsetsGeometry.lerp(paginationMargin, other.paginationMargin, t),
+      paginationMargin: EdgeInsetsGeometry.lerp(
+        paginationMargin,
+        other.paginationMargin,
+        t,
+      ),
+      borderRadius: BorderRadiusGeometry.lerp(
+        borderRadius,
+        other.borderRadius,
+        t,
+      ),
       activeColor: Color.lerp(activeColor, other.activeColor, t),
       inactiveColor: Color.lerp(inactiveColor, other.inactiveColor, t),
-      dotSize: _lerp(dotSize, other.dotSize, t),
-      activeDotExtent: _lerp(activeDotExtent, other.activeDotExtent, t),
-      dotSpacing: _lerp(dotSpacing, other.dotSpacing, t),
+      dotSize: _lerpNullableDouble(dotSize, other.dotSize, t),
+      activeDotExtent: _lerpNullableDouble(
+        activeDotExtent,
+        other.activeDotExtent,
+        t,
+      ),
+      dotSpacing: _lerpNullableDouble(dotSpacing, other.dotSpacing, t),
       fractionStyle: TextStyle.lerp(fractionStyle, other.fractionStyle, t),
       fractionBackgroundColor: Color.lerp(
         fractionBackgroundColor,
@@ -130,14 +152,18 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
         t,
       ),
       controlStyle: ButtonStyle.lerp(controlStyle, other.controlStyle, t),
-      controlIconSize: _lerp(controlIconSize, other.controlIconSize, t),
+      controlIconSize: _lerpNullableDouble(
+        controlIconSize,
+        other.controlIconSize,
+        t,
+      ),
     );
   }
 
-  double? _lerp(double? a, double? b, double t) {
-    if (a == null && b == null) {
-      return null;
+  double? _lerpNullableDouble(double? a, double? b, double t) {
+    if (a == null || b == null) {
+      return t < 0.5 ? a : b;
     }
-    return (a ?? 0) + ((b ?? 0) - (a ?? 0)) * t;
+    return a + (b - a) * t;
   }
 }

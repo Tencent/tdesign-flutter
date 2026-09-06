@@ -1,1 +1,17 @@
-Widget _buildDotsSwiper(BuildContext context) => _buildSwiper(context);
+Widget _buildDotsSwiper(BuildContext context) {
+    return TSwiper(
+      loop: true,
+      autoplay: false,
+      animationDuration: const Duration(milliseconds: 500),
+      autoplayInterval: const Duration(seconds: 5),
+      pagination: TSwiperPaginationVariant.dots,
+      children: List.generate(
+        5,
+        (index) => Image.asset(
+          index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
+          fit: BoxFit.cover,
+          semanticLabel: '图片 ${index + 1}',
+        ),
+      ),
+    );
+  }

@@ -1,4 +1,21 @@
-Widget _buildDotsBarSwiper(BuildContext context) => _buildSwiper(
-        context,
-        pagination: TSwiperPaginationVariant.dotsBar,
-      );
+Widget _buildDotsBarSwiper(BuildContext context) {
+    // 页面 State 持有：
+    // final _dotsBarController = TSwiperController(initialIndex: 1);
+    // 并在 State.dispose 中调用 _dotsBarController.dispose()。
+    return TSwiper(
+      controller: _dotsBarController,
+      loop: true,
+      autoplay: true,
+      animationDuration: const Duration(milliseconds: 500),
+      autoplayInterval: const Duration(seconds: 5),
+      pagination: TSwiperPaginationVariant.dotsBar,
+      children: List.generate(
+        4,
+        (index) => Image.asset(
+          index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
+          fit: BoxFit.cover,
+          semanticLabel: '图片 ${index + 1}',
+        ),
+      ),
+    );
+  }

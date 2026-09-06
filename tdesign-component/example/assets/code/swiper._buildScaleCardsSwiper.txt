@@ -1,5 +1,0 @@
-Widget _buildScaleCardsSwiper(BuildContext context) => _buildSwiper(
-        context,
-        pageEffect: TSwiperPageEffect.scaleAndFade,
-        viewportFraction: 0.86,
-      );

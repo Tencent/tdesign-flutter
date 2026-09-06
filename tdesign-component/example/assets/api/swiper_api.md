@@ -7,6 +7,8 @@ Controller 驱动的轮播组件。
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | allowImplicitScrolling | bool | false | 是否允许无障碍服务请求将未显示的页面滚动到可见区域。 |
+| animationCurve | Curve | Curves.easeInOut | 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画曲线。 |
+| animationDuration | Duration | kThemeAnimationDuration | 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画时长。 |
 | autoplay | bool | false | 是否自动播放。 |
 | autoplayInterval | Duration | const Duration(seconds: 3) | 自动播放每次页面稳定后重新等待的完整间隔，必须大于零。 |
 | children | List<Widget>? | - | 静态页面列表；与 `itemBuilder` 二选一，且不能为空。 |
@@ -56,6 +58,7 @@ Controller 驱动的轮播组件。
 | --- | --- | --- | --- |
 | activeColor | Color? | - | 激活项颜色。 |
 | activeDotExtent | double? | - | 长条激活项在滚动主轴上的长度。 |
+| borderRadius | BorderRadiusGeometry? | - | 轮播内容圆角。 |
 | controlIconSize | double? | - | 控制按钮图标尺寸。 |
 | controlStyle | ButtonStyle? | - | 控制按钮样式。 |
 | dotSize | double? | - | 圆点直径。 |
@@ -120,6 +123,7 @@ Controller 驱动的轮播组件。
 | --- | --- |
 | none | 无额外效果。 |
 | cardMargin | 卡片间距效果。 |
+| scale | 相邻卡片沿交叉轴缩放，当前页保持完整尺寸。 |
 | scaleAndFade | 缩放和透明度效果。 |
 
 

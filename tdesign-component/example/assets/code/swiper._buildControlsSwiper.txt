@@ -1,6 +1,21 @@
-Widget _buildControlsSwiper(BuildContext context) => _buildSwiper(
-        context,
-        pagination: TSwiperPaginationVariant.controls,
-        previousIcon: const Icon(Icons.arrow_back_rounded),
-        nextIcon: const Icon(Icons.arrow_forward_rounded),
-      );
+Widget _buildControlsSwiper(BuildContext context) {
+    // 页面 State 持有：
+    // final _controlsController = TSwiperController(initialIndex: 3);
+    // 并在 State.dispose 中调用 _controlsController.dispose()。
+    return TSwiper(
+      controller: _controlsController,
+      loop: false,
+      autoplay: true,
+      animationDuration: const Duration(milliseconds: 500),
+      autoplayInterval: const Duration(seconds: 5),
+      pagination: TSwiperPaginationVariant.controls,
+      children: List.generate(
+        4,
+        (index) => Image.asset(
+          index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
+          fit: BoxFit.cover,
+          semanticLabel: '图片 ${index + 1}',
+        ),
+      ),
+    );
+  }
