@@ -125,6 +125,19 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'progress',
+    coverageTargets: ['lib/src/components/progress/'],
+    componentTests: ['test/components/progress/t_progress_test.dart'],
+    exampleTests: ['test/progress_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Progress Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/progress_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'date_time_picker',
     coverageTargets: ['lib/src/components/date_time_picker/'],
     componentTests: [

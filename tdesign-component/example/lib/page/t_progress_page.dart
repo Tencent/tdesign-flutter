@@ -1,129 +1,99 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
 
-class TProgressPage extends StatefulWidget {
-  const TProgressPage({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() {
-    return _TProgressPageState();
-  }
-}
-
-class _TProgressPageState extends State<TProgressPage> {
-  Widget buttonLabel = const Text('开始');
-  double progressValue = 0.0;
-  double microProgressValue = 0.3;
-  Timer? _buttonTimer;
-  Timer? _microTimer;
-  bool _isProgressing = false;
-  bool _isMicroPlaying = false;
-
-  double value = 0.1;
-
-  bool isPlusOperation = true;
-
-  @override
-  void dispose() {
-    _buttonTimer?.cancel();
-    _microTimer?.cancel();
-    super.dispose();
-  }
+class TProgressPage extends StatelessWidget {
+  const TProgressPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tTitle(),
-      desc: '用于展示任务当前的进度',
+      title: tTitle(context),
+      desc: '用于展示任务当前的进度。',
       exampleCodeGroup: 'progress',
       padding: const EdgeInsets.all(16),
       children: [
-        ExampleModule(title: '组件类型', children: [
-          ExampleItem(desc: '线性进度条', builder: _buildRightLabelLinear),
-          ExampleItem(desc: '百分比内显', builder: _buildInsideLabelLinear),
-          ExampleItem(desc: '环形进度条', builder: _buildCircle),
-          ExampleItem(desc: '微型环形进度条', builder: _buildMicro),
-          ExampleItem(desc: '按钮进度条', builder: _buildButton),
-          ExampleItem(desc: '微型按钮进度条', builder: _buildMicroButton),
-        ]),
-        ExampleModule(title: '组件状态', children: [
-          ExampleItem(desc: '线性进度条', builder: _buildPrimary),
-          ExampleItem(builder: _buildWarning),
-          ExampleItem(builder: _buildDanger),
-          ExampleItem(builder: _buildSuccess),
-          ExampleItem(builder: _buildPrimaryInside),
-          ExampleItem(builder: _buildWarningInside),
-          ExampleItem(builder: _buildDangerInside),
-          ExampleItem(builder: _buildSuccessInside),
-          ExampleItem(desc: '环形进度条', builder: _buildCirclePrimary),
-          ExampleItem(builder: _buildCircleWarning),
-          ExampleItem(builder: _buildCircleDanger),
-          ExampleItem(builder: _buildCircleSuccess),
-        ])
-      ],
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          isPlusOperation ? TIcons.plus : TIcons.minus,
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(desc: 'Line 线性进度条', builder: _buildLinear),
+            ExampleItem(desc: 'Plump 百分比内显', builder: _buildPlump),
+            ExampleItem(desc: 'Circle 环形进度条', builder: _buildCircle),
+            ExampleItem(
+              desc: 'Micro Circle 微型环形进度条',
+              builder: _buildMicroCircle,
+            ),
+            ExampleItem(desc: 'Button 按钮进度', builder: _buildButton),
+            ExampleItem(
+              desc: 'Micro Button 微型按钮进度',
+              builder: _buildMicroButton,
+            ),
+          ],
         ),
-        onPressed: () {
-          setState(() {
-            // 加到1时为减，减到0时为加
-            value += isPlusOperation ? 0.05 : -0.05;
-            if (value >= 1) {
-              isPlusOperation = false;
-            }
-            if (value <= 0) {
-              isPlusOperation = true;
-            }
-          });
-        },
-      ),
+        ExampleModule(
+          title: '组件状态',
+          children: [
+            ExampleItem(desc: '线性进度条', builder: _buildLinearStatus),
+            ExampleItem(desc: '百分比内显进度条', builder: _buildPlumpStatus),
+            ExampleItem(desc: '环形进度条', builder: _buildCircleStatus),
+          ],
+        ),
+      ],
     );
   }
 
   @ExampleCode(group: 'progress')
-  Widget _buildRightLabelLinear(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.linear,
-      value: value,
-    );
+  Widget _buildLinear(BuildContext context) {
+    return TProgress(variant: TProgressVariant.linear, value: 0.8);
   }
 
   @ExampleCode(group: 'progress')
-  Widget _buildInsideLabelLinear(BuildContext context) {
-    return TProgress(variant: TProgressVariant.linear, value: value);
+  Widget _buildPlump(BuildContext context) {
+    return TProgress(variant: TProgressVariant.plump, value: 0.8);
   }
 
   @ExampleCode(group: 'progress')
   Widget _buildCircle(BuildContext context) {
-    return TProgress(variant: TProgressVariant.circular, value: value);
+    return TProgress(variant: TProgressVariant.circular, value: 0.3);
   }
 
   @ExampleCode(group: 'progress')
-  Widget _buildMicro(BuildContext context) {
-    return TProgress(variant: TProgressVariant.micro, value: value);
+  Widget _buildMicroCircle(BuildContext context) {
+    return TProgress(
+      variant: TProgressVariant.micro,
+      value: 0.3,
+      label: const SizedBox.shrink(),
+    );
   }
 
   @ExampleCode(group: 'progress')
   Widget _buildButton(BuildContext context) {
-    return TProgress(
-      key: const Key('progress-button'),
-      variant: TProgressVariant.button,
-      value: progressValue,
-      label: buttonLabel,
-      onTap: () {
-        TToast.showText('onTap 已触发', context: context);
-        _toggleProgress();
-      },
-      onLongPress: () {
-        TToast.showText(
-          'onLongPress 已触发，onTap 未触发',
-          context: context,
+    var value = 0.8;
+    return StatefulBuilder(
+      builder: (context, setState) {
+        void advance() {
+          setState(() => value = value >= 1 ? 0 : value + 0.1);
+        }
+
+        return Column(
+          children: [
+            TProgress(
+              key: const Key('progress-button-value'),
+              variant: TProgressVariant.button,
+              value: value,
+              onTap: advance,
+            ),
+            SizedBox(height: context.tTheme.spacer8),
+            TProgress(
+              key: const Key('progress-button-continue'),
+              variant: TProgressVariant.button,
+              value: value,
+              label: const Text('Continue'),
+              onTap: advance,
+            ),
+          ],
         );
       },
     );
@@ -131,169 +101,118 @@ class _TProgressPageState extends State<TProgressPage> {
 
   @ExampleCode(group: 'progress')
   Widget _buildMicroButton(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.micro,
-      value: microProgressValue,
-      label: Icon(
-        _isMicroPlaying ? Icons.pause : Icons.play_arrow,
-        color: context.tTheme.brandNormalColor,
-      ),
-      onTap: _toggleMicroProgress,
-    );
-  }
-
-  void _toggleProgress() {
-    if (_isProgressing) {
-      _buttonTimer?.cancel();
-      setState(() {
-        _isProgressing = false;
-        buttonLabel = const Text('继续');
-      });
-      return;
-    }
-
-    setState(() {
-      _isProgressing = true;
-      buttonLabel = const Text('进行中');
-    });
-    _buttonTimer?.cancel();
-    _buttonTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
-      if (!mounted) {
-        timer.cancel();
-        return;
-      }
-      setState(() {
-        progressValue += 0.01;
-        if (progressValue >= 1) {
-          progressValue = 1;
-          buttonLabel = const Text('完成');
-          _isProgressing = false;
-          timer.cancel();
-        } else {
-          buttonLabel = Text('${(progressValue * 100).round()}%');
-        }
-      });
-    });
-  }
-
-  void _toggleMicroProgress() {
-    if (_isMicroPlaying) {
-      _microTimer?.cancel();
-      setState(() => _isMicroPlaying = false);
-      return;
-    }
-
-    setState(() => _isMicroPlaying = true);
-    _microTimer?.cancel();
-    _microTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
-      if (!mounted) {
-        timer.cancel();
-        return;
-      }
-      setState(() {
-        microProgressValue += 0.01;
-        if (microProgressValue >= 1) {
-          microProgressValue = 0;
-          _isMicroPlaying = false;
-          timer.cancel();
-        }
-      });
-    });
-  }
-
-  @ExampleCode(group: 'progress')
-  Widget _buildPrimary(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.linear,
-      value: value,
+    var playing = false;
+    var value = 0.3;
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Row(
+          children: [
+            TProgress(
+              key: const Key('progress-micro-button'),
+              variant: TProgressVariant.micro,
+              value: value,
+              label: Icon(playing ? TIcons.pause : TIcons.play),
+              onTap: () {
+                setState(() {
+                  playing = !playing;
+                  value = playing ? 0.6 : 0.3;
+                });
+              },
+            ),
+            SizedBox(width: context.tTheme.spacer16),
+            TProgress(
+              variant: TProgressVariant.micro,
+              value: 1,
+              status: TProgressStatus.success,
+            ),
+            SizedBox(width: context.tTheme.spacer16),
+            TProgress(
+              variant: TProgressVariant.micro,
+              value: 0.3,
+              status: TProgressStatus.error,
+            ),
+          ],
+        );
+      },
     );
   }
 
   @ExampleCode(group: 'progress')
-  Widget _buildWarning(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.linear,
-      value: value,
+  Widget _buildLinearStatus(BuildContext context) {
+    return Column(
+      children: [
+        TProgress(variant: TProgressVariant.linear, value: 0.8),
+        const SizedBox(height: 12),
+        TProgress(
+          variant: TProgressVariant.linear,
+          value: 0.8,
+          status: TProgressStatus.warning,
+        ),
+        const SizedBox(height: 12),
+        TProgress(
+          variant: TProgressVariant.linear,
+          value: 0.8,
+          status: TProgressStatus.error,
+        ),
+        const SizedBox(height: 12),
+        TProgress(
+          variant: TProgressVariant.linear,
+          value: 0.8,
+          status: TProgressStatus.success,
+        ),
+      ],
     );
   }
 
   @ExampleCode(group: 'progress')
-  Widget _buildDanger(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.linear,
-      value: value,
+  Widget _buildPlumpStatus(BuildContext context) {
+    return Column(
+      children: [
+        TProgress(variant: TProgressVariant.plump, value: 0.8),
+        const SizedBox(height: 8),
+        TProgress(
+          variant: TProgressVariant.plump,
+          value: 0.8,
+          status: TProgressStatus.warning,
+        ),
+        const SizedBox(height: 8),
+        TProgress(
+          variant: TProgressVariant.plump,
+          value: 0.8,
+          status: TProgressStatus.error,
+        ),
+        const SizedBox(height: 8),
+        TProgress(
+          variant: TProgressVariant.plump,
+          value: 0.8,
+          status: TProgressStatus.success,
+        ),
+      ],
     );
   }
 
   @ExampleCode(group: 'progress')
-  Widget _buildSuccess(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.linear,
-      value: 1,
-    );
-  }
-
-  @ExampleCode(group: 'progress')
-  Widget _buildPrimaryInside(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.linear,
-      value: value,
-    );
-  }
-
-  @ExampleCode(group: 'progress')
-  Widget _buildWarningInside(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.linear,
-      value: value,
-    );
-  }
-
-  @ExampleCode(group: 'progress')
-  Widget _buildDangerInside(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.linear,
-      value: value,
-    );
-  }
-
-  @ExampleCode(group: 'progress')
-  Widget _buildSuccessInside(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.linear,
-      value: 1,
-    );
-  }
-
-  @ExampleCode(group: 'progress')
-  Widget _buildCirclePrimary(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.circular,
-      value: value,
-    );
-  }
-
-  @ExampleCode(group: 'progress')
-  Widget _buildCircleWarning(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.circular,
-      value: value,
-    );
-  }
-
-  @ExampleCode(group: 'progress')
-  Widget _buildCircleDanger(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.circular,
-      value: value,
-    );
-  }
-
-  @ExampleCode(group: 'progress')
-  Widget _buildCircleSuccess(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.circular,
-      value: 1,
+  Widget _buildCircleStatus(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        TProgress(variant: TProgressVariant.circular, value: 0.3),
+        TProgress(
+          variant: TProgressVariant.circular,
+          value: 0.3,
+          status: TProgressStatus.warning,
+        ),
+        TProgress(
+          variant: TProgressVariant.circular,
+          value: 0.3,
+          status: TProgressStatus.error,
+        ),
+        TProgress(
+          variant: TProgressVariant.circular,
+          value: 1,
+          status: TProgressStatus.success,
+        ),
+      ],
     );
   }
 }

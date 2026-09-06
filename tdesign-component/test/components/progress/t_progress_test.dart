@@ -638,4 +638,203 @@ void main() {
       expect(find.byType(TProgress), findsOneWidget);
     });
   });
+
+  group('TProgress 设计形态与状态', () {
+    testWidgets('初始声明值首帧直接呈现，后续更新再执行动画', (tester) async {
+      Widget build(double value) => wrapWithTheme(
+        SizedBox(
+          width: 200,
+          child: TProgress(variant: TProgressVariant.plump, value: value),
+        ),
+      );
+
+      await tester.pumpWidget(build(0.8));
+      expect(
+        tester.getSize(find.byKey(const ValueKey('progress-value'))).width,
+        160,
+      );
+
+      await tester.pumpWidget(build(0.2));
+      await tester.pump();
+      expect(
+        tester.getSize(find.byKey(const ValueKey('progress-value'))).width,
+        160,
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(
+        tester.getSize(find.byKey(const ValueKey('progress-value'))).width,
+        40,
+      );
+    });
+
+    testWidgets('linear 与 plump 使用各自默认粗细和标签位置', (tester) async {
+      Future<double> trackHeight(TProgressVariant variant) async {
+        await tester.pumpWidget(
+          wrapWithTheme(
+            SizedBox(
+              width: 200,
+              child: TProgress(variant: variant, value: 0.8),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        return tester
+            .getSize(find.byKey(const ValueKey('progress-track')))
+            .height;
+      }
+
+      expect(await trackHeight(TProgressVariant.linear), 4);
+      expect(await trackHeight(TProgressVariant.plump), 16);
+    });
+
+    testWidgets('四种状态解析语义颜色与默认标签', (tester) async {
+      final token = TThemeData.defaultData();
+      final expectedColors = <TProgressStatus, Color>{
+        TProgressStatus.primary: token.brandNormalColor,
+        TProgressStatus.warning: token.warningNormalColor,
+        TProgressStatus.error: token.errorNormalColor,
+        TProgressStatus.success: token.successNormalColor,
+      };
+
+      for (final entry in expectedColors.entries) {
+        await tester.pumpWidget(
+          wrapWithTheme(
+            SizedBox(
+              width: 200,
+              child: TProgress(
+                variant: TProgressVariant.linear,
+                value: 0.8,
+                status: entry.key,
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final value = tester.widget<Container>(
+          find.byKey(const ValueKey('progress-value')),
+        );
+        expect((value.decoration! as BoxDecoration).color, entry.value);
+        expect(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget is Semantics &&
+                widget.properties.label == 'progress-${entry.key.name}',
+          ),
+          findsOneWidget,
+        );
+        if (entry.key == TProgressStatus.primary) {
+          expect(find.text('80%'), findsOneWidget);
+        } else {
+          expect(
+            find.byKey(ValueKey('progress-${entry.key.name}')),
+            findsOneWidget,
+          );
+        }
+      }
+    });
+
+    testWidgets('Theme 显式颜色优先于 status 默认色', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(
+              variant: TProgressVariant.linear,
+              value: 0.8,
+              status: TProgressStatus.error,
+            ),
+          ),
+          progressTheme: const TProgressThemeData(color: Colors.purple),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final value = tester.widget<Container>(
+        find.byKey(const ValueKey('progress-value')),
+      );
+      expect((value.decoration! as BoxDecoration).color, Colors.purple);
+    });
+
+    testWidgets('轨道与进度值共享完整圆角', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(variant: TProgressVariant.linear, value: 0.8),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final track = tester.widget<Container>(
+        find.byKey(const ValueKey('progress-track')),
+      );
+      final value = tester.widget<Container>(
+        find.byKey(const ValueKey('progress-value')),
+      );
+      expect(
+        (track.decoration! as BoxDecoration).borderRadius,
+        (value.decoration! as BoxDecoration).borderRadius,
+      );
+    });
+
+    testWidgets('plump 不响应点击回调', (tester) async {
+      var taps = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(
+              variant: TProgressVariant.plump,
+              value: 0.8,
+              onTap: () => taps++,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(TProgress));
+      expect(taps, 0);
+    });
+
+    testWidgets('低进度 plump 将标签放在进度值外侧', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(variant: TProgressVariant.plump, value: 0.05),
+          ),
+        ),
+      );
+
+      expect(find.text('5%'), findsOneWidget);
+      expect(find.byKey(const ValueKey('progress-value')), findsOneWidget);
+    });
+
+    testWidgets('不确定态 button 与 micro 保留交互', (tester) async {
+      var buttonTaps = 0;
+      var microLongPresses = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Column(
+            children: [
+              TProgress(
+                variant: TProgressVariant.button,
+                onTap: () => buttonTaps++,
+              ),
+              TProgress(
+                variant: TProgressVariant.micro,
+                onLongPress: () => microLongPresses++,
+              ),
+            ],
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(TProgress).first);
+      await tester.longPress(find.byType(TProgress).last);
+      expect(buttonTaps, 1);
+      expect(microLongPresses, 1);
+    });
+  });
 }

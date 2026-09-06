@@ -1,0 +1,25 @@
+Widget _buildPlumpStatus(BuildContext context) {
+    return Column(
+      children: [
+        TProgress(variant: TProgressVariant.plump, value: 0.8),
+        const SizedBox(height: 8),
+        TProgress(
+          variant: TProgressVariant.plump,
+          value: 0.8,
+          status: TProgressStatus.warning,
+        ),
+        const SizedBox(height: 8),
+        TProgress(
+          variant: TProgressVariant.plump,
+          value: 0.8,
+          status: TProgressStatus.error,
+        ),
+        const SizedBox(height: 8),
+        TProgress(
+          variant: TProgressVariant.plump,
+          value: 0.8,
+          status: TProgressStatus.success,
+        ),
+      ],
+    );
+  }

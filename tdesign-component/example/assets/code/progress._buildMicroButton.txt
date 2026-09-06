@@ -1,11 +1,36 @@
 Widget _buildMicroButton(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.micro,
-      value: microProgressValue,
-      label: Icon(
-        _isMicroPlaying ? Icons.pause : Icons.play_arrow,
-        color: context.tTheme.brandNormalColor,
-      ),
-      onTap: _toggleMicroProgress,
+    var playing = false;
+    var value = 0.3;
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Row(
+          children: [
+            TProgress(
+              key: const Key('progress-micro-button'),
+              variant: TProgressVariant.micro,
+              value: value,
+              label: Icon(playing ? TIcons.pause : TIcons.play),
+              onTap: () {
+                setState(() {
+                  playing = !playing;
+                  value = playing ? 0.6 : 0.3;
+                });
+              },
+            ),
+            SizedBox(width: context.tTheme.spacer16),
+            TProgress(
+              variant: TProgressVariant.micro,
+              value: 1,
+              status: TProgressStatus.success,
+            ),
+            SizedBox(width: context.tTheme.spacer16),
+            TProgress(
+              variant: TProgressVariant.micro,
+              value: 0.3,
+              status: TProgressStatus.error,
+            ),
+          ],
+        );
+      },
     );
   }
