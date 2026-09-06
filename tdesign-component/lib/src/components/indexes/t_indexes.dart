@@ -304,6 +304,23 @@ class _TIndexesState extends State<TIndexes> {
           }
           if (visibleIndex == newIndex) {
             _isAnimating = false;
+          } else if (visibleIndex == oldIndex) {
+            final position = _scrollController.position;
+            final direction = targetPosition > oldPosition ? 1 : -1;
+            final nextOffset =
+                (position.pixels + direction * position.viewportDimension)
+                    .clamp(position.minScrollExtent, position.maxScrollExtent)
+                    .toDouble();
+            if (nextOffset == position.pixels) {
+              _isAnimating = false;
+              return;
+            }
+            _scrollController.jumpTo(nextOffset);
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted && currentTaskId == _scrollTaskId) {
+                _scrollToTarget(newIndex, oldIndex, currentTaskId);
+              }
+            });
           } else {
             _scrollToTarget(newIndex, visibleIndex, currentTaskId);
           }

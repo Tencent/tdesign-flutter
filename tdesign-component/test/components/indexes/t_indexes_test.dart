@@ -860,6 +860,58 @@ void main() {
       expect(list.activeIndex.value, 'H');
       controller.dispose();
     });
+
+    testWidgets('reverse 模式在最近锚点未推进时按视口继续定位', (tester) async {
+      final controller = ScrollController();
+      const indexes = ['A', 'B', 'C', 'D'];
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            height: 160,
+            width: 240,
+            child: TIndexes(
+              indexList: indexes,
+              reverse: true,
+              scrollController: controller,
+              builderContent: (context, index) =>
+                  SizedBox(height: 1000, child: Text('内容$index')),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('内容B'), findsNothing);
+      final dFinder = find.descendant(
+        of: find.byType(TIndexesList),
+        matching: find.text('D'),
+      );
+      await tester.tapAt(tester.getCenter(dFinder));
+      for (var i = 0; i < 32; i++) {
+        await tester.pump();
+      }
+
+      expect(find.text('内容D'), findsOneWidget);
+      final contentRect = tester.getRect(find.text('内容D'));
+      expect(contentRect.bottom, greaterThan(0));
+      expect(contentRect.top, lessThan(160));
+      final list = tester.widget<TIndexesList>(find.byType(TIndexesList));
+      expect(list.activeIndex.value, 'D');
+
+      final aFinder = find.descendant(
+        of: find.byType(TIndexesList),
+        matching: find.text('A'),
+      );
+      await tester.tapAt(tester.getCenter(aFinder));
+      for (var i = 0; i < 32; i++) {
+        await tester.pump();
+      }
+
+      final firstContentRect = tester.getRect(find.text('内容A'));
+      expect(firstContentRect.bottom, greaterThan(0));
+      expect(firstContentRect.top, lessThan(160));
+      expect(list.activeIndex.value, 'A');
+      controller.dispose();
+    });
   });
 
   group('TIndexesList 进阶交互', () {

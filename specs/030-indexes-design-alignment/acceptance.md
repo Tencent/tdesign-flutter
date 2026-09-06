@@ -32,3 +32,4 @@
 - TIndexesThemeData 的 nullable 插值不再把 null 当作 0 或透明值；tipSize 超过默认 99px 上限时有效 maxWidth 同步扩展，避免无效 BoxConstraints。
 - 字母示例生成片段已标明 `_list` 的“索引 -> 城市列表”结构和代表数据；生成器及 `--check` 通过。
 - Flutter 3.32.0：Indexes 组件与 sticky-header 共 67 项、Demo 5 项通过；组件与 Example analyze 零诊断；生产代码覆盖率 699/732 = 95.49%。合并 develop 后共享导航 light/dark Golden 已在固定 Flutter 3.32 Linux 容器重建、人工检查，并无更新参数严格复跑 2/2 通过。
+- 最新 head 补充 reverse 最近锚点未推进场景：当 `ensureVisible` 尚未构建更近锚点时按一个视口步进，抵达滚动边界仍无进展则结束任务，避免相同参数反复 post-frame 调度；Flutter 3.32.0 聚焦用例与 Indexes + sticky-header 68 项回归通过，相关源码与测试严格 analyze 零诊断。
