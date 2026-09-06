@@ -67,10 +67,10 @@ class TIndexes extends StatefulWidget {
   /// 滚动控制器
   final ScrollController? scrollController;
 
-  /// 索引发生变更时触发事件
+  /// 当前激活索引发生变更时触发（含滚动吸顶派生与用户侧栏选择）
   final void Function(String index)? onChanged;
 
-  /// 点击侧边栏时触发事件
+  /// 用户在侧边栏点击或拖动选择索引（激活索引变化）时触发；滚动吸顶派生不会触发本回调
   final void Function(String index)? onSelect;
 
   /// 内容自定义构建

@@ -31,7 +31,7 @@ class TIndexesList extends StatefulWidget {
        ),
        super(key: key);
 
-  /// 索引字符列表。不传默认 A-Z
+  /// 索引字符列表，需显式传入实际展示的索引序列。本组件不自带默认值；通常由 TIndexes 装配并透传（TIndexes 未指定时默认使用 A-Z）
   final List<String> indexList;
 
   /// 索引列表最大高度（父容器高度的百分比，默认0.8）
@@ -40,7 +40,7 @@ class TIndexesList extends StatefulWidget {
   /// 选中索引
   final ValueNotifier<String> activeIndex;
 
-  /// 点击侧边栏时触发事件
+  /// 用户点击或拖动侧边栏、激活索引发生变化时触发
   final void Function(String newIndex, String oldIndex) onSelect;
 
   /// 索引文本自定义构建，包括索引激活左侧提示
