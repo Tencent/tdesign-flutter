@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -97,7 +98,7 @@ class _TIndexesListState extends State<TIndexesList> {
     final indexSize = theme.indexItemSize ?? 20;
     final indexSpacing = theme.indexItemSpacing ?? 2;
     final tipSize = theme.tipSize ?? context.tTheme.spacer48;
-    final tipMaxWidth = theme.tipMaxWidth ?? 99;
+    final tipMaxWidth = max(theme.tipMaxWidth ?? 99, tipSize);
     final tipGap = theme.tipGap ?? context.tTheme.spacer16;
     return Positioned(
       right: theme.sidebarRight ?? context.tTheme.spacer8,

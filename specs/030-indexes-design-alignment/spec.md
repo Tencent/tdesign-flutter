@@ -16,7 +16,7 @@
 
 | API | 所有权判断 |
 |---|---|
-| indexList / builderContent | 数据与内容组合，由调用方提供；不增加动态 Map 配置 |
+| indexList / builderContent | 数据与内容组合，由调用方提供；不增加动态 Map 配置；动态列表移除当前项时回退首项并同步滚动与 onChanged |
 | initialIndex | 非受控首次位置；必须属于 indexList，后续更新不重置用户滚动 |
 | builderAnchor / builderIndex | Flutter Widget 扩展点，分别覆盖锚点和侧栏项 |
 | scrollController | 支持页面内嵌滚动容器，是 Flutter 原生能力 |
@@ -26,6 +26,8 @@
 | TIndexesThemeData | 只管理尺寸、颜色和字体；实例无重复视觉字段，组件参数优先问题不存在 |
 
 活动锚点由滚动视口派生，是单一状态源。本轮以 initialIndex 表达小程序 Demo 的初始 B，但不机械增加 current/defaultCurrent 双状态；需要定制索引显示时使用 builderIndex，需要外部驱动时使用 scrollController。
+
+`reverse` 仍是完整支持的滚动方向：初始定位、近端选择和未构建远端索引选择均须落入可见视口。ThemeExtension 的 nullable 字段表示继续使用当前子树 token；插值任一端为 null 时保持该回退语义，不从 0 或透明值开始插值。提示最小尺寸大于默认最大宽度时，有效最大宽度同步扩展，不能产生无效 BoxConstraints。
 
 ## 默认视觉契约
 

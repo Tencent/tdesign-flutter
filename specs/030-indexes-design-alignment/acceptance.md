@@ -22,4 +22,13 @@
 - GitHub PR：https://github.com/Tencent/tdesign-flutter/pull/1081；CNB PR：https://cnb.cool/tencent/tdesign/tdesign-flutter/-/pulls/147；Issue #1027 的 Indexes 条目已关联。
 - 首轮 CodeBuddy 指出数字/胶囊“查看代码”只有一行 `_buildNumberScenario(...)` 委托，属于阻塞问题；现已将两项完整实现分别内联并重新生成 35 行可复制片段。
 - 修复后的双版本 Example analyze、Demo 5/5、生成检查、真机 Hot Restart、人工数字/胶囊操作、设备集成 1/1 与普通 APK 重新构建/安装均通过。
-- 等待修复提交后的 GitHub/CNB CI 与 CodeBuddy 复审最终结果；iOS 真机不在本轮设备范围内。
+- `db002a3a` 的 GitHub/CNB CI 与 CodeBuddy 首轮复审均已完成；本次新增专项修复仍需在推送后接受新的远端 CI。iOS 真机不在本轮设备范围内。
+
+## 专项复审修复
+
+- CodeBuddy 基于 `db002a3a` 的专项复审未发现阻塞问题，并指出 reverse 定位、动态 indexList 降级、Theme nullable 插值、超大 tipSize 约束和字母代码片段数据说明五项边界。
+- 聚焦测试复现 `reverse: true + initialIndex` 的目标内容中心落到视口外（修复前为 -60.5），现改为通过当前 Scrollable 逐步确保近端与未构建远端锚点可见；初始 B、选择 C 和八段内容选择 H 均通过可见区域断言。
+- indexList 移除当前活动项时回退新列表首项、同步到最小滚动位置并发送一次 onChanged；initialIndex 继续只在首次创建时校验和生效。
+- TIndexesThemeData 的 nullable 插值不再把 null 当作 0 或透明值；tipSize 超过默认 99px 上限时有效 maxWidth 同步扩展，避免无效 BoxConstraints。
+- 字母示例生成片段已标明 `_list` 的“索引 -> 城市列表”结构和代表数据；生成器及 `--check` 通过。
+- Flutter 3.32.0：Indexes 组件与 sticky-header 共 67 项、Demo 5 项通过；组件与 Example analyze 零诊断；生产代码覆盖率 699/732 = 95.49%。合并 develop 后共享导航 light/dark Golden 已在固定 Flutter 3.32 Linux 容器重建、人工检查，并无更新参数严格复跑 2/2 通过。

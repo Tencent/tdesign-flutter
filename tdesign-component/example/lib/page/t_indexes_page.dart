@@ -146,6 +146,10 @@ class TIndexesPage extends StatelessWidget {
   }
 }
 
+/// 核心示例：`_list` 是页面级“索引 -> 城市列表”数据。
+///
+/// 数据结构示例：`{'index': 'A', 'children': ['阿坝', '阿拉善']}`；接入时可替换为
+/// 业务自己的索引及内容列表。
 @ExampleCode(group: 'indexes')
 Widget _buildLetterIndexes(BuildContext context) {
   final indexList = _list.map((item) => item['index'] as String).toList();

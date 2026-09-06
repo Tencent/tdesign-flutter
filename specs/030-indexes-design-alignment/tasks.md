@@ -11,3 +11,4 @@
 - [x] 完成双 Flutter 版本 analyze/test 与覆盖率门禁。
 - [x] 生成 API/示例产物。
 - [ ] 独立提交、推送并创建关联 #1027 的 PR。
+- [x] 修复 CodeBuddy 专项复审指出的 reverse、动态 indexList、Theme 插值与提示约束边界并完成回归。

@@ -39,7 +39,9 @@ class TIndexes extends StatefulWidget {
        ),
        super(key: key);
 
-  /// 索引字符列表。不传默认 A-Z；默认值要求 [builderContent] 能处理 A-Z 全部索引，自定义数据建议显式传入
+  /// 索引字符列表。不传默认 A-Z；默认值要求 [builderContent] 能处理 A-Z 全部索引，自定义数据建议显式传入。
+  ///
+  /// 列表更新后若不再包含当前活动项，组件回退到新列表首项、同步滚动位置并触发 [onChanged]。
   final List<String>? indexList;
 
   /// 初始激活索引。为空时使用 [indexList] 的第一项
@@ -156,17 +158,29 @@ class _TIndexesState extends State<TIndexes> {
         _indexList.toSet().length == _indexList.length,
         'indexList values must be unique.',
       );
-      assert(
-        widget.initialIndex == null || _indexList.contains(widget.initialIndex),
-        'initialIndex must be included in indexList.',
-      );
       final oldActiveIndex = _activeIndex;
+      final activeIndexWasRemoved = !_indexList.contains(oldActiveIndex.value);
       _activeIndex = ValueNotifier(
-        _indexList.contains(oldActiveIndex.value)
-            ? oldActiveIndex.value
-            : widget.initialIndex ?? _indexList.getOrNull(0) ?? '',
+        activeIndexWasRemoved
+            ? _indexList.getOrNull(0) ?? ''
+            : oldActiveIndex.value,
       );
       oldActiveIndex.dispose();
+      if (activeIndexWasRemoved && _activeIndex.value.isNotEmpty) {
+        _isAnimating = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) {
+            return;
+          }
+          if (_scrollController.hasClients) {
+            _scrollController.jumpTo(
+              _scrollController.position.minScrollExtent,
+            );
+          }
+          _isAnimating = false;
+          _notifyChange(_activeIndex.value);
+        });
+      }
     }
     if (widget.scrollController != oldWidget.scrollController) {
       if (_ownsScrollController) {
@@ -267,6 +281,36 @@ class _TIndexesState extends State<TIndexes> {
   void _scrollToTarget(String newIndex, String oldIndex, [int? taskId]) {
     final currentTaskId = taskId ?? ++_scrollTaskId;
     _isAnimating = true;
+
+    if (widget.reverse) {
+      final oldPosition = _indexList.indexOf(oldIndex);
+      final targetPosition = _indexList.indexOf(newIndex);
+      final step = targetPosition > oldPosition ? 1 : -1;
+      var visiblePosition = targetPosition;
+      while (visiblePosition != oldPosition &&
+          _anchorKeys[_indexList[visiblePosition]] == null) {
+        visiblePosition -= step;
+      }
+      final visibleIndex = _indexList[visiblePosition];
+      final anchorContext = _anchorKeys[visibleIndex];
+      if (anchorContext == null) {
+        _isAnimating = false; // coverage:ignore-line
+        return;
+      }
+      Scrollable.ensureVisible(anchorContext).then((value) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted || currentTaskId != _scrollTaskId) {
+            return;
+          }
+          if (visibleIndex == newIndex) {
+            _isAnimating = false;
+          } else {
+            _scrollToTarget(newIndex, visibleIndex, currentTaskId);
+          }
+        });
+      });
+      return;
+    }
 
     /// isUp: 是否（手指）向上滑动
     final isUp = _indexList.indexOf(newIndex) > _indexList.indexOf(oldIndex);

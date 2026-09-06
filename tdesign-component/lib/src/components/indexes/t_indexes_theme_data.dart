@@ -186,26 +186,34 @@ class TIndexesThemeData extends ThemeExtension<TIndexesThemeData> {
       return this;
     }
     return TIndexesThemeData(
-      indexListMaxHeight: lerpDouble(
+      indexListMaxHeight: _lerpNullableDouble(
         indexListMaxHeight,
         other.indexListMaxHeight,
         t,
       ),
-      sidebarRight: lerpDouble(sidebarRight, other.sidebarRight, t),
-      indexItemSize: lerpDouble(indexItemSize, other.indexItemSize, t),
-      indexItemSpacing: lerpDouble(indexItemSpacing, other.indexItemSpacing, t),
-      tipSize: lerpDouble(tipSize, other.tipSize, t),
-      tipMaxWidth: lerpDouble(tipMaxWidth, other.tipMaxWidth, t),
-      tipGap: lerpDouble(tipGap, other.tipGap, t),
-      indexColor: Color.lerp(indexColor, other.indexColor, t),
-      activeIndexColor: Color.lerp(activeIndexColor, other.activeIndexColor, t),
-      activeIndexBackgroundColor: Color.lerp(
+      sidebarRight: _lerpNullableDouble(sidebarRight, other.sidebarRight, t),
+      indexItemSize: _lerpNullableDouble(indexItemSize, other.indexItemSize, t),
+      indexItemSpacing: _lerpNullableDouble(
+        indexItemSpacing,
+        other.indexItemSpacing,
+        t,
+      ),
+      tipSize: _lerpNullableDouble(tipSize, other.tipSize, t),
+      tipMaxWidth: _lerpNullableDouble(tipMaxWidth, other.tipMaxWidth, t),
+      tipGap: _lerpNullableDouble(tipGap, other.tipGap, t),
+      indexColor: _lerpNullableColor(indexColor, other.indexColor, t),
+      activeIndexColor: _lerpNullableColor(
+        activeIndexColor,
+        other.activeIndexColor,
+        t,
+      ),
+      activeIndexBackgroundColor: _lerpNullableColor(
         activeIndexBackgroundColor,
         other.activeIndexBackgroundColor,
         t,
       ),
-      tipColor: Color.lerp(tipColor, other.tipColor, t),
-      tipBackgroundColor: Color.lerp(
+      tipColor: _lerpNullableColor(tipColor, other.tipColor, t),
+      tipBackgroundColor: _lerpNullableColor(
         tipBackgroundColor,
         other.tipBackgroundColor,
         t,
@@ -213,40 +221,54 @@ class TIndexesThemeData extends ThemeExtension<TIndexesThemeData> {
       indexFont: t < 0.5 ? indexFont : other.indexFont,
       activeIndexFont: t < 0.5 ? activeIndexFont : other.activeIndexFont,
       tipFont: t < 0.5 ? tipFont : other.tipFont,
-      anchorColor: Color.lerp(anchorColor, other.anchorColor, t),
-      activeAnchorColor: Color.lerp(
+      anchorColor: _lerpNullableColor(anchorColor, other.anchorColor, t),
+      activeAnchorColor: _lerpNullableColor(
         activeAnchorColor,
         other.activeAnchorColor,
         t,
       ),
-      anchorBackgroundColor: Color.lerp(
+      anchorBackgroundColor: _lerpNullableColor(
         anchorBackgroundColor,
         other.anchorBackgroundColor,
         t,
       ),
-      activeAnchorBackgroundColor: Color.lerp(
+      activeAnchorBackgroundColor: _lerpNullableColor(
         activeAnchorBackgroundColor,
         other.activeAnchorBackgroundColor,
         t,
       ),
-      anchorBorderColor: Color.lerp(
+      anchorBorderColor: _lerpNullableColor(
         anchorBorderColor,
         other.anchorBorderColor,
         t,
       ),
       anchorFont: t < 0.5 ? anchorFont : other.anchorFont,
       activeAnchorFont: t < 0.5 ? activeAnchorFont : other.activeAnchorFont,
-      anchorVerticalPadding: lerpDouble(
+      anchorVerticalPadding: _lerpNullableDouble(
         anchorVerticalPadding,
         other.anchorVerticalPadding,
         t,
       ),
-      anchorHorizontalPadding: lerpDouble(
+      anchorHorizontalPadding: _lerpNullableDouble(
         anchorHorizontalPadding,
         other.anchorHorizontalPadding,
         t,
       ),
-      capsuleMargin: lerpDouble(capsuleMargin, other.capsuleMargin, t),
+      capsuleMargin: _lerpNullableDouble(capsuleMargin, other.capsuleMargin, t),
     );
   }
+}
+
+double? _lerpNullableDouble(double? begin, double? end, double t) {
+  if (begin == null || end == null) {
+    return t < 0.5 ? begin : end;
+  }
+  return lerpDouble(begin, end, t);
+}
+
+Color? _lerpNullableColor(Color? begin, Color? end, double t) {
+  if (begin == null || end == null) {
+    return t < 0.5 ? begin : end;
+  }
+  return Color.lerp(begin, end, t);
 }

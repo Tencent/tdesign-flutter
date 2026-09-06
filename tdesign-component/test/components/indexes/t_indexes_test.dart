@@ -99,6 +99,26 @@ void main() {
       expect(lerped.tipGap, 18);
       expect(lerped.anchorVerticalPadding, 6);
     });
+
+    test('lerp 保留 nullable 字段的主题回退语义', () {
+      const fallback = TIndexesThemeData();
+      const explicit = TIndexesThemeData(
+        indexItemSize: 24,
+        activeIndexBackgroundColor: Colors.blue,
+      );
+
+      final beforeSwitch = fallback.lerp(explicit, 0.25);
+      expect(beforeSwitch.indexItemSize, isNull);
+      expect(beforeSwitch.activeIndexBackgroundColor, isNull);
+
+      final afterSwitch = fallback.lerp(explicit, 0.75);
+      expect(afterSwitch.indexItemSize, 24);
+      expect(afterSwitch.activeIndexBackgroundColor, Colors.blue);
+
+      final bothFallback = fallback.lerp(const TIndexesThemeData(), 0.5);
+      expect(bothFallback.indexItemSize, isNull);
+      expect(bothFallback.activeIndexBackgroundColor, isNull);
+    });
   });
 
   group('TIndexes 基础渲染', () {
@@ -227,7 +247,7 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           SizedBox(
-            height: 180,
+            height: 240,
             width: 240,
             child: TIndexes(
               indexList: const ['A', 'B', 'C'],
@@ -457,6 +477,40 @@ void main() {
       expect(tip, findsNothing);
     });
 
+    testWidgets('tipSize 超过默认最大宽度时保持有效约束', (tester) async {
+      final active = ValueNotifier<String>('A');
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            height: 300,
+            width: 260,
+            child: Stack(
+              children: [
+                TIndexesList(
+                  indexList: const ['A', 'B'],
+                  activeIndex: active,
+                  onSelect: (newIndex, oldIndex) {},
+                ),
+              ],
+            ),
+          ),
+          indexesTheme: const TIndexesThemeData(tipSize: 120),
+        ),
+      );
+
+      await tester.tap(find.text('B'));
+      await tester.pump();
+
+      final tip = find.byWidgetPredicate(
+        (widget) =>
+            widget is Container &&
+            widget.constraints?.minWidth == 120 &&
+            widget.constraints?.maxWidth == 120,
+      );
+      expect(tip, findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('侧栏语义支持逐项选择', (tester) async {
       final active = ValueNotifier<String>('A');
       await tester.pumpWidget(
@@ -673,6 +727,138 @@ void main() {
       );
       await tester.pump();
       expect(find.byType(TIndexes), findsOneWidget);
+    });
+
+    testWidgets('indexList 移除当前项时同步回退激活项和滚动位置', (tester) async {
+      final controller = ScrollController();
+      var indexes = const ['A', 'B', 'C'];
+      final changed = <String>[];
+      late StateSetter setState;
+
+      await tester.pumpWidget(
+        wrapWithTheme(
+          StatefulBuilder(
+            builder: (context, setter) {
+              setState = setter;
+              return SizedBox(
+                height: 180,
+                width: 240,
+                child: TIndexes(
+                  indexList: indexes,
+                  scrollController: controller,
+                  onChanged: changed.add,
+                  builderContent: (context, index) =>
+                      SizedBox(height: 220, child: Text('内容$index')),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+
+      final bFinder = find.descendant(
+        of: find.byType(TIndexesList),
+        matching: find.text('B'),
+      );
+      await tester.tapAt(tester.getCenter(bFinder));
+      await tester.pump();
+      await tester.pump();
+
+      setState(() => indexes = const ['A', 'C']);
+      await tester.pump();
+      await tester.pump();
+
+      final list = tester.widget<TIndexesList>(find.byType(TIndexesList));
+      expect(list.activeIndex.value, 'A');
+      expect(controller.offset, controller.position.minScrollExtent);
+      expect(changed, contains('A'));
+      controller.dispose();
+    });
+
+    testWidgets('reverse 模式支持 initialIndex 与侧栏选择定位', (tester) async {
+      final controller = ScrollController();
+      String? selected;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            height: 180,
+            width: 240,
+            child: TIndexes(
+              indexList: const ['A', 'B', 'C'],
+              initialIndex: 'B',
+              reverse: true,
+              scrollController: controller,
+              onSelect: (index) => selected = index,
+              builderContent: (context, index) =>
+                  SizedBox(height: 220, child: Text('内容$index')),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+
+      final list = tester.widget<TIndexesList>(find.byType(TIndexesList));
+      expect(list.activeIndex.value, 'B');
+      expect(
+        controller.offset,
+        greaterThan(controller.position.minScrollExtent),
+      );
+      expect(tester.getCenter(find.text('内容B')).dy, inInclusiveRange(0, 180));
+
+      final cFinder = find.descendant(
+        of: find.byType(TIndexesList),
+        matching: find.text('C'),
+      );
+      await tester.tapAt(tester.getCenter(cFinder));
+      await tester.pump();
+      await tester.pump();
+
+      expect(selected, 'C');
+      expect(list.activeIndex.value, 'C');
+      expect(
+        controller.offset,
+        greaterThan(controller.position.minScrollExtent),
+      );
+      expect(tester.getCenter(find.text('内容C')).dy, inInclusiveRange(0, 180));
+      controller.dispose();
+    });
+
+    testWidgets('reverse 模式可递进定位尚未构建的远端索引', (tester) async {
+      final controller = ScrollController();
+      const indexes = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            height: 240,
+            width: 240,
+            child: TIndexes(
+              indexList: indexes,
+              reverse: true,
+              scrollController: controller,
+              builderContent: (context, index) =>
+                  SizedBox(height: 220, child: Text('内容$index')),
+            ),
+          ),
+        ),
+      );
+
+      final hFinder = find.descendant(
+        of: find.byType(TIndexesList),
+        matching: find.text('H'),
+      );
+      await tester.tapAt(tester.getCenter(hFinder));
+      for (var i = 0; i < indexes.length + 2; i++) {
+        await tester.pump();
+      }
+
+      expect(find.text('内容H'), findsOneWidget);
+      expect(tester.getCenter(find.text('内容H')).dy, inInclusiveRange(0, 240));
+      final list = tester.widget<TIndexesList>(find.byType(TIndexesList));
+      expect(list.activeIndex.value, 'H');
+      controller.dispose();
     });
   });
 
