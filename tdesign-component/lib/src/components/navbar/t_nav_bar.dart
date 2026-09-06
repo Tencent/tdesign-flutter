@@ -249,13 +249,19 @@ class _TNavBarState extends State<TNavBar> {
     final titleFont = _effectiveTitleFont;
     final usesDesignDefaultFont =
         widget.titleFont == null && _themeData.titleFont == null;
+    // fontSize 优先级：显式 titleFont > Material AppBarTheme > Token。
+    // 仅未显式设置 titleFont（回退默认 Token）时 Material 才插在 Token 之前；
+    // 显式设置后由其 size 决定，避免 Material 反向覆盖构造器/Theme。
+    final titleFontSize = usesDesignDefaultFont
+        ? (materialStyle?.fontSize ?? titleFont?.size)
+        : titleFont?.size;
     final titleHeight =
         materialStyle?.height ??
         (usesDesignDefaultFont ? titleFont?.height : null);
 
     return _effectiveTitleFontFamily == null
         ? TextStyle(
-            fontSize: materialStyle?.fontSize ?? titleFont?.size,
+            fontSize: titleFontSize,
             height: titleHeight,
             color: titleColor,
             fontWeight:
@@ -265,7 +271,7 @@ class _TNavBarState extends State<TNavBar> {
             decoration: TextDecoration.none,
           )
         : TextStyle(
-            fontSize: materialStyle?.fontSize ?? titleFont?.size,
+            fontSize: titleFontSize,
             height: titleHeight,
             color: titleColor,
             fontWeight:

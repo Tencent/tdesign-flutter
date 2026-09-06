@@ -267,6 +267,57 @@ void main() {
       final text = tester.widget<Text>(find.text('Custom family'));
       expect(text.style?.fontFamily, 'packages/tdesign_flutter/Roboto');
     });
+
+    testWidgets('显式 titleFont 优先于 Material AppBarTheme 的 fontSize', (tester) async {
+      final token = TThemeData.defaultData();
+      Widget wrapWithMaterial(Widget child) {
+        final base = TThemeBuilder.light(token);
+        return MaterialApp(
+          theme: base.copyWith(
+            appBarTheme: const AppBarTheme(
+              titleTextStyle: TextStyle(fontSize: 40, height: 1.2),
+            ),
+          ),
+          home: Scaffold(body: child),
+        );
+      }
+
+      await tester.pumpWidget(
+        wrapWithMaterial(
+          TNavBar(title: 'Explicit wins', titleFont: token.fontBodyLarge),
+        ),
+      );
+
+      final text = tester.widget<Text>(find.text('Explicit wins'));
+      // 构造器 titleFont（Body Large）优先，Material 的 fontSize=40 不得反向覆盖。
+      expect(text.style?.fontSize, token.fontBodyLarge?.size);
+      expect(text.style?.fontSize, isNot(40));
+    });
+
+    testWidgets('未显式 titleFont 时 Material AppBarTheme fontSize 优先于默认 Token', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData();
+      Widget wrapWithMaterial(Widget child) {
+        final base = TThemeBuilder.light(token);
+        return MaterialApp(
+          theme: base.copyWith(
+            appBarTheme: const AppBarTheme(
+              titleTextStyle: TextStyle(fontSize: 40),
+            ),
+          ),
+          home: Scaffold(body: child),
+        );
+      }
+
+      await tester.pumpWidget(
+        wrapWithMaterial(const TNavBar(title: 'Material wins')),
+      );
+
+      final text = tester.widget<Text>(find.text('Material wins'));
+      // 默认回退 Title Large Token，但 Material fontSize 应插在 Token 之前。
+      expect(text.style?.fontSize, 40);
+    });
   });
 
   group('TNavBarThemeData', () {
