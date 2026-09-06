@@ -1,5 +1,3 @@
-# 保持旧版配置以兼容当前 Flutter 版本的 l10n 自动生成
-synthetic-package: false
 arb-dir: lib/l10n
 template-arb-file: app_en.arb
 output-localization-file: app_localizations.dart
