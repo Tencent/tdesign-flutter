@@ -130,7 +130,8 @@
         "names": [
           "TIndexes",
           "TIndexesAnchor",
-          "TIndexesList"
+          "TIndexesList",
+          "TIndexesThemeData"
         ],
         "getComments": true
       }
