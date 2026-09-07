@@ -21,7 +21,7 @@ void main() {
       expect(find.text('选项三'), findsOneWidget);
     });
 
-    testWidgets('outline 样式 / selectedColor / contentPadding / height', (
+    testWidgets('tag 样式 / selectedColor / contentPadding / height', (
       tester,
     ) async {
       await tester.pumpWidget(

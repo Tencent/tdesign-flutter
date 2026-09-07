@@ -143,7 +143,7 @@ void main() {
   });
 
   group('TSideBar 样式与 Theme', () {
-    testWidgets('normal 样式', (tester) async {
+    testWidgets('line 样式', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           TSideBar(
@@ -157,7 +157,7 @@ void main() {
       expect(find.byType(TSideBar), findsOneWidget);
     });
 
-    testWidgets('outline 样式', (tester) async {
+    testWidgets('tag 样式', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           TSideBar(
@@ -362,7 +362,7 @@ void main() {
   });
 
   group('TWrapSideBarItem 覆盖率补充', () {
-    testWidgets('normal 样式未选中且未指定 unSelectedBgColor', (tester) async {
+    testWidgets('line 样式未选中且未指定 unSelectedBgColor', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           const TWrapSideBarItem(
