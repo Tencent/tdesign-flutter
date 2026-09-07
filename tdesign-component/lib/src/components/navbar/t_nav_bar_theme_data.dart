@@ -113,17 +113,35 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
       return this;
     }
     return TNavBarThemeData(
-      titleColor: Color.lerp(titleColor, other.titleColor, t),
-      backIconColor: Color.lerp(backIconColor, other.backIconColor, t),
+      titleColor: _lerpNullableColor(titleColor, other.titleColor, t),
+      backIconColor: _lerpNullableColor(backIconColor, other.backIconColor, t),
       titleFont: t < 0.5 ? titleFont : other.titleFont,
       titleFontWeight: t < 0.5 ? titleFontWeight : other.titleFontWeight,
       titleFontFamily: t < 0.5 ? titleFontFamily : other.titleFontFamily,
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
+      backgroundColor: _lerpNullableColor(
+        backgroundColor,
+        other.backgroundColor,
+        t,
+      ),
       padding: t < 0.5 ? padding : other.padding,
-      titleMargin: lerpDouble(titleMargin, other.titleMargin, t),
-      opacity: lerpDouble(opacity, other.opacity, t),
+      titleMargin: _lerpNullableDouble(titleMargin, other.titleMargin, t),
+      opacity: _lerpNullableDouble(opacity, other.opacity, t),
       border: t < 0.5 ? border : other.border,
       boxShadow: t < 0.5 ? boxShadow : other.boxShadow,
     );
   }
+}
+
+double? _lerpNullableDouble(double? begin, double? end, double t) {
+  if (begin == null || end == null) {
+    return t < 0.5 ? begin : end;
+  }
+  return lerpDouble(begin, end, t);
+}
+
+Color? _lerpNullableColor(Color? begin, Color? end, double t) {
+  if (begin == null || end == null) {
+    return t < 0.5 ? begin : end;
+  }
+  return Color.lerp(begin, end, t);
 }

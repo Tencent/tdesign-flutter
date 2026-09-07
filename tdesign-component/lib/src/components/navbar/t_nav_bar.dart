@@ -149,15 +149,6 @@ class _TNavBarState extends State<TNavBar> {
       Theme.of(context).tExplicitColorScheme?.onSurface ??
       context.tTheme.textColorPrimary;
 
-  Font? get _effectiveTitleFont =>
-      widget.titleFont ?? _themeData.titleFont ?? context.tTheme.fontTitleLarge;
-
-  FontWeight? get _effectiveTitleFontWeight =>
-      widget.titleFontWeight ?? _themeData.titleFontWeight;
-
-  FontFamily? get _effectiveTitleFontFamily =>
-      widget.titleFontFamily ?? _themeData.titleFontFamily;
-
   Color get _effectiveBackgroundColor =>
       widget.backgroundColor ??
       _themeData.backgroundColor ??
@@ -246,42 +237,34 @@ class _TNavBarState extends State<TNavBar> {
     var titleColor = _effectiveTitleColor(context);
 
     final materialStyle = Theme.of(context).appBarTheme.titleTextStyle;
-    final titleFont = _effectiveTitleFont;
-    final usesDesignDefaultFont =
-        widget.titleFont == null && _themeData.titleFont == null;
-    // fontSize 优先级：显式 titleFont > Material AppBarTheme > Token。
-    // 仅未显式设置 titleFont（回退默认 Token）时 Material 才插在 Token 之前；
-    // 显式设置后由其 size 决定，避免 Material 反向覆盖构造器/Theme。
-    final titleFontSize = usesDesignDefaultFont
-        ? (materialStyle?.fontSize ?? titleFont?.size)
-        : titleFont?.size;
-    final titleHeight =
-        materialStyle?.height ??
-        (usesDesignDefaultFont ? titleFont?.height : null);
+    final configuredFont = widget.titleFont ?? _themeData.titleFont;
+    final tokenFont = context.tTheme.fontTitleLarge;
+    final configuredFamily =
+        widget.titleFontFamily ?? _themeData.titleFontFamily;
 
-    return _effectiveTitleFontFamily == null
-        ? TextStyle(
-            fontSize: titleFontSize,
-            height: titleHeight,
-            color: titleColor,
-            fontWeight:
-                _effectiveTitleFontWeight ??
-                materialStyle?.fontWeight ??
-                titleFont?.fontWeight,
-            decoration: TextDecoration.none,
-          )
-        : TextStyle(
-            fontSize: titleFontSize,
-            height: titleHeight,
-            color: titleColor,
-            fontWeight:
-                _effectiveTitleFontWeight ??
-                materialStyle?.fontWeight ??
-                titleFont?.fontWeight,
-            decoration: TextDecoration.none,
-            fontFamily: _effectiveTitleFontFamily!.fontFamily,
-            package: 'tdesign_flutter',
-          );
+    return TextStyle(
+      fontSize:
+          configuredFont?.size ?? materialStyle?.fontSize ?? tokenFont?.size,
+      // 显式 titleFont 延续既有语义，不额外施加 Font 中的行高；同时也不允许
+      // 低优先级 Material 样式反向覆盖。未显式配置时才由 Material/Token 提供行高。
+      height: configuredFont == null
+          ? (materialStyle?.height ?? tokenFont?.height)
+          : null,
+      color: titleColor,
+      fontWeight:
+          widget.titleFontWeight ??
+          _themeData.titleFontWeight ??
+          configuredFont?.fontWeight ??
+          materialStyle?.fontWeight ??
+          tokenFont?.fontWeight,
+      decoration: TextDecoration.none,
+      fontFamily: configuredFamily?.fontFamily ?? materialStyle?.fontFamily,
+      // Material TextStyle 已将 package 编码进 fontFamily；只有 TDesign 的
+      // FontFamily 配置需要在此传入 package。
+      package: configuredFamily == null
+          ? null
+          : (configuredFamily.package ?? 'tdesign_flutter'),
+    );
   }
 
   Widget _getTitleWidget(BuildContext context) {

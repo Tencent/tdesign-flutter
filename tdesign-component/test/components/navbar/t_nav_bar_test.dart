@@ -268,14 +268,20 @@ void main() {
       expect(text.style?.fontFamily, 'packages/tdesign_flutter/Roboto');
     });
 
-    testWidgets('显式 titleFont 优先于 Material AppBarTheme 的 fontSize', (tester) async {
+    testWidgets('显式 titleFont 的字号、行高和字重优先于 Material AppBarTheme', (
+      tester,
+    ) async {
       final token = TThemeData.defaultData();
       Widget wrapWithMaterial(Widget child) {
         final base = TThemeBuilder.light(token);
         return MaterialApp(
           theme: base.copyWith(
             appBarTheme: const AppBarTheme(
-              titleTextStyle: TextStyle(fontSize: 40, height: 1.2),
+              titleTextStyle: TextStyle(
+                fontSize: 40,
+                height: 1.2,
+                fontWeight: FontWeight.w900,
+              ),
             ),
           ),
           home: Scaffold(body: child),
@@ -292,6 +298,8 @@ void main() {
       // 构造器 titleFont（Body Large）优先，Material 的 fontSize=40 不得反向覆盖。
       expect(text.style?.fontSize, token.fontBodyLarge?.size);
       expect(text.style?.fontSize, isNot(40));
+      expect(text.style?.height, isNull);
+      expect(text.style?.fontWeight, token.fontBodyLarge?.fontWeight);
     });
 
     testWidgets('未显式 titleFont 时 Material AppBarTheme fontSize 优先于默认 Token', (
@@ -318,6 +326,27 @@ void main() {
       // 默认回退 Title Large Token，但 Material fontSize 应插在 Token 之前。
       expect(text.style?.fontSize, 40);
     });
+
+    testWidgets('Material AppBarTheme fontFamily 在未显式配置时生效', (tester) async {
+      final token = TThemeData.defaultData();
+      final base = TThemeBuilder.light(token);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: base.copyWith(
+            appBarTheme: const AppBarTheme(
+              titleTextStyle: TextStyle(
+                fontFamily: 'MaterialFamily',
+                package: 'material_fonts',
+              ),
+            ),
+          ),
+          home: const Scaffold(body: TNavBar(title: 'Material family')),
+        ),
+      );
+
+      final text = tester.widget<Text>(find.text('Material family'));
+      expect(text.style?.fontFamily, 'packages/material_fonts/MaterialFamily');
+    });
   });
 
   group('TNavBarThemeData', () {
@@ -335,10 +364,81 @@ void main() {
     });
 
     test('lerp', () {
-      const a = TNavBarThemeData(opacity: 1.0);
-      const b = TNavBarThemeData(opacity: 0.5);
+      const a = TNavBarThemeData(titleColor: Colors.black, opacity: 1.0);
+      const b = TNavBarThemeData(titleColor: Colors.white, opacity: 0.5);
       final result = a.lerp(b, 0.5);
       expect(result.opacity, 0.75);
+      expect(result.titleColor, Color.lerp(Colors.black, Colors.white, 0.5));
+    });
+
+    test('lerp 保留 nullable 字段的默认回退语义', () {
+      const defaults = TNavBarThemeData();
+      const explicit = TNavBarThemeData(
+        titleColor: Colors.red,
+        backgroundColor: Colors.blue,
+        titleMargin: 24,
+        opacity: 0.5,
+      );
+
+      final beforeMidpoint = defaults.lerp(explicit, 0.25);
+      expect(beforeMidpoint.titleColor, isNull);
+      expect(beforeMidpoint.backgroundColor, isNull);
+      expect(beforeMidpoint.titleMargin, isNull);
+      expect(beforeMidpoint.opacity, isNull);
+
+      final afterMidpoint = defaults.lerp(explicit, 0.75);
+      expect(afterMidpoint.titleColor, Colors.red);
+      expect(afterMidpoint.backgroundColor, Colors.blue);
+      expect(afterMidpoint.titleMargin, 24);
+      expect(afterMidpoint.opacity, 0.5);
+
+      final reverseBeforeMidpoint = explicit.lerp(defaults, 0.25);
+      expect(reverseBeforeMidpoint.titleColor, Colors.red);
+      expect(reverseBeforeMidpoint.titleMargin, 24);
+      final reverseAfterMidpoint = explicit.lerp(defaults, 0.75);
+      expect(reverseAfterMidpoint.titleColor, isNull);
+      expect(reverseAfterMidpoint.titleMargin, isNull);
+
+      final bothDefault = defaults.lerp(const TNavBarThemeData(), 0.5);
+      expect(bothDefault.titleColor, isNull);
+      expect(bothDefault.backgroundColor, isNull);
+      expect(bothDefault.titleMargin, isNull);
+      expect(bothDefault.opacity, isNull);
+    });
+
+    testWidgets('AnimatedTheme 切换不会把 null 回退插值成透明色', (tester) async {
+      final token = TThemeData.defaultData();
+      final baseTheme = TThemeBuilder.light(token);
+      var useExplicitTheme = false;
+      late StateSetter updateTheme;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, setState) {
+              updateTheme = setState;
+              final navBarTheme = useExplicitTheme
+                  ? const TNavBarThemeData(titleColor: Colors.red)
+                  : const TNavBarThemeData();
+              return AnimatedTheme(
+                data: baseTheme.mergeExtension(navBarTheme),
+                duration: const Duration(seconds: 1),
+                child: const Scaffold(body: TNavBar(title: 'Animated title')),
+              );
+            },
+          ),
+        ),
+      );
+
+      updateTheme(() => useExplicitTheme = true);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 250));
+      var text = tester.widget<Text>(find.text('Animated title'));
+      expect(text.style?.color, token.textColorPrimary);
+
+      await tester.pump(const Duration(milliseconds: 500));
+      text = tester.widget<Text>(find.text('Animated title'));
+      expect(text.style?.color, Colors.red);
     });
 
     test('lerp 非同类返回自身', () {
