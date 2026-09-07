@@ -114,7 +114,7 @@ class TStepsHorizontalItem extends StatelessWidget {
       stepsNumberBgColor = theme.errorLightColor;
       stepsTitleColor = theme.errorNormalColor;
 
-      if (variant != TStepsVariant.defaultTheme) {
+      if (variant != TStepsVariant.standard) {
         simpleStepsIconColor = theme.errorNormalColor;
       } else {
         shouldSetIconWidgetDecoration = data.errorIcon == null;
@@ -135,7 +135,7 @@ class TStepsHorizontalItem extends StatelessWidget {
     double iconContainerSize = 22;
 
     /// 简略步骤条
-    if (variant != TStepsVariant.defaultTheme) {
+    if (variant != TStepsVariant.standard) {
       /// display 纯展示
       if (variant == TStepsVariant.display) {
         simpleStepsIconColor = theme.brandNormalColor;

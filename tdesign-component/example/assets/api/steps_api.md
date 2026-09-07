@@ -10,7 +10,7 @@
 | status | TStepsStatus | TStepsStatus.process | 当前 `value` 对应步骤的状态。 |
 | steps | List<TStepsItemData> | - | 步骤条数据 |
 | value | int | 0 | 步骤条当前激活的索引；越界值会收敛到有效范围。 |
-| variant | TStepsVariant | TStepsVariant.defaultTheme | 步骤条视觉形态。 |
+| variant | TStepsVariant | TStepsVariant.standard | 步骤条视觉形态。 |
 
 
 ### TStepsItemData
@@ -42,7 +42,7 @@
 
 | 名称 | 说明 |
 | --- | --- |
-| defaultTheme | 默认的数字或图标步骤条。 |
+| standard | 标准的数字或图标步骤条。 |
 | dot | 点状步骤条，状态仍由 `TSteps.value` 和 `TSteps.status` 决定。 |
 | display | 纯展示时间线，所有节点与连接线均使用完成态视觉。 |
 

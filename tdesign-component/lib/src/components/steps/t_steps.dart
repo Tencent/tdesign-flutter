@@ -50,8 +50,8 @@ enum TStepsDirection {
 
 /// 步骤条视觉形态。
 enum TStepsVariant {
-  /// 默认的数字或图标步骤条。
-  defaultTheme,
+  /// 标准的数字或图标步骤条。
+  standard,
 
   /// 点状步骤条，状态仍由 [TSteps.value] 和 [TSteps.status] 决定。
   dot,
@@ -77,7 +77,7 @@ class TSteps extends StatelessWidget {
     this.value = 0,
     this.direction = TStepsDirection.horizontal,
     this.status = TStepsStatus.process,
-    this.variant = TStepsVariant.defaultTheme,
+    this.variant = TStepsVariant.standard,
     this.onChange,
   });
 

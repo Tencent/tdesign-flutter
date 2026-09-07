@@ -34,7 +34,7 @@
 
 - `value` 是唯一受控值；组件不内部回写，越界值仅在渲染时收敛。
 - `onChange` 是唯一交互/只读开关；垂直回调同时启用点击和右箭头，不再由 Theme 或第二个布尔值控制。
-- `variant` 只负责 `defaultTheme`、`dot`、`display` 视觉结构，`status` 只负责当前步骤的 `process/error` 业务状态。
+- `variant` 只负责 `standard`、`dot`、`display` 视觉结构，`status` 只负责当前步骤的 `process/error` 业务状态。
 - `customTitle/customContent` 明确覆盖字符串便利字段；`icon/errorIcon` 保持强类型 `IconData`。
 - 删除持有业务状态的 `TStepsThemeData`；颜色与字体使用 `context.tTheme` 语义 Token，固定节点/连线尺寸记录为组件设计常量。
 

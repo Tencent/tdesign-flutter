@@ -30,9 +30,6 @@ class TStepsVerticalItem extends StatelessWidget {
   /// 垂直模式下是否可点击选择。
   final bool selectable;
 
-  /// item 标题组件插槽
-  final Widget? titleWidget;
-
   /// 点击回调。
   final VoidCallback? onTap;
 
@@ -45,7 +42,6 @@ class TStepsVerticalItem extends StatelessWidget {
     required this.status,
     required this.variant,
     required this.selectable,
-    this.titleWidget,
     this.onTap,
   });
 
@@ -122,7 +118,7 @@ class TStepsVerticalItem extends StatelessWidget {
       stepsNumberBgColor = theme.errorLightColor;
       stepsTitleColor = theme.errorNormalColor;
 
-      if (variant != TStepsVariant.defaultTheme) {
+      if (variant != TStepsVariant.standard) {
         simpleStepsIconColor = theme.errorNormalColor;
       } else {
         shouldSetIconWidgetDecoration = data.errorIcon == null;
@@ -146,7 +142,7 @@ class TStepsVerticalItem extends StatelessWidget {
     double iconMarginBottom = 8;
 
     /// 简略步骤条
-    if (variant != TStepsVariant.defaultTheme) {
+    if (variant != TStepsVariant.standard) {
       final isDisplay = variant == TStepsVariant.display;
       final isSelectableDot = variant == TStepsVariant.dot && selectable;
 

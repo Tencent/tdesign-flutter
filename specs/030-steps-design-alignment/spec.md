@@ -8,7 +8,7 @@ Flutter Steps 的公开 Demo、状态命名及只读/可选择所有权与新版
 
 - `TSteps` 保持受控组件：`value` 由调用方持有，越界值只在渲染时收敛；点击通过 `onChange` 报告索引。
 - `onChange == null` 是唯一只读来源；垂直步骤条设置回调后显示右箭头并允许选择。
-- `variant` 是非空视觉结构状态：`defaultTheme`、`dot`、`display`。
+- `variant` 是非空视觉结构状态：`standard`、`dot`、`display`。
 - `status` 是当前 `value` 的业务状态：`process` 或 `error`。
 - `icon` 替换默认数字/完成图标；`customTitle`、`customContent` 分别优先于字符串便利字段。
 - `display` 为全完成态纯展示时间线；可选择垂直 `dot` 为已完成节点实心、当前节点空心。
@@ -31,5 +31,6 @@ Flutter Steps 的公开 Demo、状态命名及只读/可选择所有权与新版
 
 - `TStepsStatus.success` 改为 `process`。
 - `TStepsItemData.successIcon` 改为 `icon`。
+- `TStepsVariant.defaultTheme` 改为 `standard`，避免将视觉形态误表述为主题来源。
 - 移除 `TSteps.simple`、`readOnly`、`verticalSelect`，由 `variant` 与 `onChange` 表达。
 - 删除只持有上述业务状态的 `TStepsThemeData`。

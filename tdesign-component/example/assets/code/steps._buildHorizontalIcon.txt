@@ -1,4 +1,12 @@
 /// Horizontal Icon Steps 水平图标步骤条
     Widget _buildHorizontalIcon(BuildContext context) {
-    return TSteps(steps: _iconItems(), value: 1);
+    return const TSteps(
+      steps: [
+        TStepsItemData(title: 'Finish', content: 'Content', icon: TIcons.cart),
+        TStepsItemData(title: 'Process', content: 'Content', icon: TIcons.cart),
+        TStepsItemData(title: 'Default', content: 'Content', icon: TIcons.cart),
+        TStepsItemData(title: 'Default', content: 'Content', icon: TIcons.cart),
+      ],
+      value: 1,
+    );
   }

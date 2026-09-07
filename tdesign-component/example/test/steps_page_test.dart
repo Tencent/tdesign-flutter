@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -38,6 +39,28 @@ void main() {
     expect(find.text('选择了步骤 1'), findsOneWidget);
     await tester.pump(const Duration(seconds: 3));
     expect(tester.takeException(), isNull);
+    await disposeDemoPage(tester);
+  });
+
+  testWidgets('Steps 查看代码片段不依赖 Demo 私有成员', (tester) async {
+    await pumpFullDemoPage(tester, stepsDemoPageTestSpec, ThemeMode.light);
+
+    for (final name in const [
+      '_buildHorizontalDefault',
+      '_buildHorizontalIcon',
+      '_buildHorizontalDot',
+      '_buildVerticalDefault',
+      '_buildVerticalIcon',
+      '_buildVerticalDot',
+      '_buildErrorStates',
+    ]) {
+      final source = await rootBundle.loadString('assets/code/steps.$name.txt');
+      expect(source, contains('TStepsItemData'));
+      expect(source, isNot(contains('_defaultItems')));
+      expect(source, isNot(contains('_iconItems')));
+      expect(source, isNot(contains('_errorItems')));
+    }
+
     await disposeDemoPage(tester);
   });
 }

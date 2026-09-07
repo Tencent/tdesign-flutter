@@ -94,67 +94,59 @@ class _TStepsPageState extends State<TStepsPage> {
     );
   }
 
-  List<TStepsItemData> _defaultItems() => const [
-    TStepsItemData(title: 'Finish', content: 'Content'),
-    TStepsItemData(title: 'Process', content: 'Content'),
-    TStepsItemData(title: 'Default', content: 'Content'),
-    TStepsItemData(title: 'Default', content: 'Content'),
-  ];
-
-  List<TStepsItemData> _iconItems({bool error = false}) => [
-    const TStepsItemData(
-      title: 'Finish',
-      content: 'Content',
-      icon: TIcons.cart,
-    ),
-    TStepsItemData(
-      title: error ? 'Error' : 'Process',
-      content: 'Content',
-      icon: TIcons.cart,
-      errorIcon: TIcons.close_circle,
-    ),
-    const TStepsItemData(
-      title: 'Default',
-      content: 'Content',
-      icon: TIcons.cart,
-    ),
-    const TStepsItemData(
-      title: 'Default',
-      content: 'Content',
-      icon: TIcons.cart,
-    ),
-  ];
-
-  List<TStepsItemData> _errorItems() => const [
-    TStepsItemData(title: 'Finish', content: 'Content'),
-    TStepsItemData(title: 'Error', content: 'Content'),
-    TStepsItemData(title: 'Default', content: 'Content'),
-    TStepsItemData(title: 'Default', content: 'Content'),
-  ];
-
   /// Horizontal Default Steps 水平默认步骤条
   @ExampleCode(group: 'steps')
   Widget _buildHorizontalDefault(BuildContext context) {
-    return TSteps(steps: _defaultItems(), value: 1);
+    return const TSteps(
+      steps: [
+        TStepsItemData(title: 'Finish', content: 'Content'),
+        TStepsItemData(title: 'Process', content: 'Content'),
+        TStepsItemData(title: 'Default', content: 'Content'),
+        TStepsItemData(title: 'Default', content: 'Content'),
+      ],
+      value: 1,
+    );
   }
 
   /// Horizontal Icon Steps 水平图标步骤条
   @ExampleCode(group: 'steps')
   Widget _buildHorizontalIcon(BuildContext context) {
-    return TSteps(steps: _iconItems(), value: 1);
+    return const TSteps(
+      steps: [
+        TStepsItemData(title: 'Finish', content: 'Content', icon: TIcons.cart),
+        TStepsItemData(title: 'Process', content: 'Content', icon: TIcons.cart),
+        TStepsItemData(title: 'Default', content: 'Content', icon: TIcons.cart),
+        TStepsItemData(title: 'Default', content: 'Content', icon: TIcons.cart),
+      ],
+      value: 1,
+    );
   }
 
   /// Horizontal Dot Steps 水平简略步骤条
   @ExampleCode(group: 'steps')
   Widget _buildHorizontalDot(BuildContext context) {
-    return TSteps(steps: _defaultItems(), value: 1, variant: TStepsVariant.dot);
+    return const TSteps(
+      steps: [
+        TStepsItemData(title: 'Finish', content: 'Content'),
+        TStepsItemData(title: 'Process', content: 'Content'),
+        TStepsItemData(title: 'Default', content: 'Content'),
+        TStepsItemData(title: 'Default', content: 'Content'),
+      ],
+      value: 1,
+      variant: TStepsVariant.dot,
+    );
   }
 
   /// Vertical Default Steps 垂直默认步骤条
   @ExampleCode(group: 'steps')
   Widget _buildVerticalDefault(BuildContext context) {
-    return TSteps(
-      steps: _defaultItems(),
+    return const TSteps(
+      steps: [
+        TStepsItemData(title: 'Finish', content: 'Content'),
+        TStepsItemData(title: 'Process', content: 'Content'),
+        TStepsItemData(title: 'Default', content: 'Content'),
+        TStepsItemData(title: 'Default', content: 'Content'),
+      ],
       value: 1,
       direction: TStepsDirection.vertical,
     );
@@ -163,8 +155,13 @@ class _TStepsPageState extends State<TStepsPage> {
   /// Vertical Icon Steps 垂直图标步骤条
   @ExampleCode(group: 'steps')
   Widget _buildVerticalIcon(BuildContext context) {
-    return TSteps(
-      steps: _iconItems(),
+    return const TSteps(
+      steps: [
+        TStepsItemData(title: 'Finish', content: 'Content', icon: TIcons.cart),
+        TStepsItemData(title: 'Process', content: 'Content', icon: TIcons.cart),
+        TStepsItemData(title: 'Default', content: 'Content', icon: TIcons.cart),
+        TStepsItemData(title: 'Default', content: 'Content', icon: TIcons.cart),
+      ],
       value: 1,
       direction: TStepsDirection.vertical,
     );
@@ -173,8 +170,13 @@ class _TStepsPageState extends State<TStepsPage> {
   /// Vertical Dot Steps 垂直简略步骤条
   @ExampleCode(group: 'steps')
   Widget _buildVerticalDot(BuildContext context) {
-    return TSteps(
-      steps: _defaultItems(),
+    return const TSteps(
+      steps: [
+        TStepsItemData(title: 'Finish', content: 'Content'),
+        TStepsItemData(title: 'Process', content: 'Content'),
+        TStepsItemData(title: 'Default', content: 'Content'),
+        TStepsItemData(title: 'Default', content: 'Content'),
+      ],
       value: 1,
       direction: TStepsDirection.vertical,
       variant: TStepsVariant.dot,
@@ -209,18 +211,54 @@ class _TStepsPageState extends State<TStepsPage> {
   /// Error 错误状态
   @ExampleCode(group: 'steps')
   Widget _buildErrorStates(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
-        TSteps(steps: _errorItems(), value: 1, status: TStepsStatus.error),
-        const SizedBox(height: 32),
         TSteps(
-          steps: _iconItems(error: true),
+          steps: [
+            TStepsItemData(title: 'Finish', content: 'Content'),
+            TStepsItemData(title: 'Error', content: 'Content'),
+            TStepsItemData(title: 'Default', content: 'Content'),
+            TStepsItemData(title: 'Default', content: 'Content'),
+          ],
           value: 1,
           status: TStepsStatus.error,
         ),
-        const SizedBox(height: 32),
+        SizedBox(height: 32),
         TSteps(
-          steps: _errorItems(),
+          steps: [
+            TStepsItemData(
+              title: 'Finish',
+              content: 'Content',
+              icon: TIcons.cart,
+            ),
+            TStepsItemData(
+              title: 'Error',
+              content: 'Content',
+              icon: TIcons.cart,
+              errorIcon: TIcons.close_circle,
+            ),
+            TStepsItemData(
+              title: 'Default',
+              content: 'Content',
+              icon: TIcons.cart,
+            ),
+            TStepsItemData(
+              title: 'Default',
+              content: 'Content',
+              icon: TIcons.cart,
+            ),
+          ],
+          value: 1,
+          status: TStepsStatus.error,
+        ),
+        SizedBox(height: 32),
+        TSteps(
+          steps: [
+            TStepsItemData(title: 'Finish', content: 'Content'),
+            TStepsItemData(title: 'Error', content: 'Content'),
+            TStepsItemData(title: 'Default', content: 'Content'),
+            TStepsItemData(title: 'Default', content: 'Content'),
+          ],
           value: 1,
           status: TStepsStatus.error,
           variant: TStepsVariant.dot,

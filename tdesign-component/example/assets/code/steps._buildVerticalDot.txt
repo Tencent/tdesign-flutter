@@ -1,7 +1,12 @@
 /// Vertical Dot Steps 垂直简略步骤条
     Widget _buildVerticalDot(BuildContext context) {
-    return TSteps(
-      steps: _defaultItems(),
+    return const TSteps(
+      steps: [
+        TStepsItemData(title: 'Finish', content: 'Content'),
+        TStepsItemData(title: 'Process', content: 'Content'),
+        TStepsItemData(title: 'Default', content: 'Content'),
+        TStepsItemData(title: 'Default', content: 'Content'),
+      ],
       value: 1,
       direction: TStepsDirection.vertical,
       variant: TStepsVariant.dot,

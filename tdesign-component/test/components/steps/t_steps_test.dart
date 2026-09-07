@@ -53,7 +53,7 @@ void main() {
         TStepsDirection.vertical,
       ]);
       expect(TStepsVariant.values, [
-        TStepsVariant.defaultTheme,
+        TStepsVariant.standard,
         TStepsVariant.dot,
         TStepsVariant.display,
       ]);
