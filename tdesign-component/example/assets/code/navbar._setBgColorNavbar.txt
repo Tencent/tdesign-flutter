@@ -1,6 +1,6 @@
 Widget _setBgColorNavbar(BuildContext context) {
     return TNavBar(
-      title: titleText,
+      title: const Text(titleText),
       titleColor: Colors.white,
       backgroundColor: context.tTheme.brandNormalColor,
       titleFontWeight: FontWeight.w600,

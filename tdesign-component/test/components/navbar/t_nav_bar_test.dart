@@ -7,6 +7,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 覆盖：默认渲染、title/centerTitle、leading/actions、useDefaultBack/onBack、
 /// ThemeData 注入、禁用 callback、TNavBarItem、TNavBarBorder。
 void main() {
+  TextStyle effectiveTextStyle(WidgetTester tester, String text) {
+    final finder = find.text(text);
+    final textWidget = tester.widget<Text>(finder);
+    return DefaultTextStyle.of(
+      tester.element(finder),
+    ).style.merge(textWidget.style);
+  }
+
   Widget wrapWithTheme(Widget child, {TNavBarThemeData? navBarTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
     if (navBarTheme != null) {
@@ -20,7 +28,9 @@ void main() {
 
   group('TNavBar 基础渲染', () {
     testWidgets('默认渲染（标题居中、默认无返回）', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(const TNavBar(title: '页面标题')));
+      await tester.pumpWidget(
+        wrapWithTheme(const TNavBar(title: Text('页面标题'))),
+      );
       expect(find.byType(TNavBar), findsOneWidget);
       expect(find.text('页面标题'), findsOneWidget);
       expect(find.byIcon(TIcons.chevron_left), findsNothing);
@@ -28,22 +38,20 @@ void main() {
 
     testWidgets('标题居中', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(const TNavBar(title: '居中标题', centerTitle: true)),
+        wrapWithTheme(const TNavBar(title: Text('居中标题'), centerTitle: true)),
       );
       expect(find.text('居中标题'), findsOneWidget);
     });
 
     testWidgets('标题左对齐', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(const TNavBar(title: '左对齐', centerTitle: false)),
+        wrapWithTheme(const TNavBar(title: Text('左对齐'), centerTitle: false)),
       );
       expect(find.text('左对齐'), findsOneWidget);
     });
 
-    testWidgets('titleWidget 替代 title', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(const TNavBar(title: '忽略', titleWidget: Text('自定义'))),
-      );
+    testWidgets('title 支持自定义 Widget', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(const TNavBar(title: Text('自定义'))));
       expect(find.text('自定义'), findsOneWidget);
       expect(find.text('忽略'), findsNothing);
     });
@@ -53,8 +61,8 @@ void main() {
     testWidgets('leading 操作项渲染', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TNavBar(
-            title: '标题',
+          const TNavBar(
+            title: Text('标题'),
             useDefaultBack: false,
             leading: [TNavBarItem(icon: TIcons.close, iconSize: 24)],
           ),
@@ -67,8 +75,8 @@ void main() {
     testWidgets('actions 操作项渲染', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TNavBar(
-            title: '标题',
+          const TNavBar(
+            title: Text('标题'),
             useDefaultBack: false,
             actions: [
               TNavBarItem(icon: TIcons.home, iconSize: 24),
@@ -83,7 +91,7 @@ void main() {
 
     testWidgets('useDefaultBack 为 true 时显示返回图标', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(const TNavBar(title: '标题', useDefaultBack: true)),
+        wrapWithTheme(const TNavBar(title: Text('标题'), useDefaultBack: true)),
       );
       expect(find.byIcon(TIcons.chevron_left), findsOneWidget);
     });
@@ -91,7 +99,7 @@ void main() {
     testWidgets('默认返回图标在完整主题下保持主文本色且不呈禁用态', (tester) async {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(
-        wrapWithTheme(const TNavBar(title: '标题', useDefaultBack: true)),
+        wrapWithTheme(const TNavBar(title: Text('标题'), useDefaultBack: true)),
       );
 
       final backIcon = tester.widget<Icon>(find.byIcon(TIcons.chevron_left));
@@ -102,7 +110,7 @@ void main() {
 
     testWidgets('useDefaultBack 为 false 时不显示返回图标', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(const TNavBar(title: '标题', useDefaultBack: false)),
+        wrapWithTheme(const TNavBar(title: Text('标题'), useDefaultBack: false)),
       );
       expect(find.byIcon(TIcons.chevron_left), findsNothing);
     });
@@ -114,7 +122,7 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           TNavBar(
-            title: '标题',
+            title: const Text('标题'),
             useDefaultBack: true,
             onBack: () => called = true,
           ),
@@ -124,6 +132,39 @@ void main() {
       final backFinder = find.byIcon(TIcons.chevron_left);
       await tester.tap(backFinder);
       expect(called, true);
+    });
+
+    testWidgets('提供 onBack 时拦截默认 maybePop', (tester) async {
+      var called = false;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          routes: {
+            '/': (_) => Builder(
+              builder: (context) => TextButton(
+                onPressed: () => Navigator.of(context).pushNamed('/detail'),
+                child: const Text('open'),
+              ),
+            ),
+            '/detail': (_) => Scaffold(
+              appBar: TNavBar(
+                title: const Text('标题'),
+                useDefaultBack: true,
+                onBack: () => called = true,
+              ),
+            ),
+          },
+        ),
+      );
+
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(TIcons.chevron_left));
+      await tester.pumpAndSettle();
+
+      expect(called, true);
+      expect(find.text('标题'), findsOneWidget);
+      expect(find.text('open'), findsNothing);
     });
 
     testWidgets('onBack: null 时默认返回上一级', (tester) async {
@@ -139,7 +180,7 @@ void main() {
             ),
             '/detail': (_) => const Scaffold(
               appBar: TNavBar(
-                title: '标题',
+                title: Text('标题'),
                 useDefaultBack: true,
                 useSafeArea: true,
                 onBack: null,
@@ -165,21 +206,25 @@ void main() {
   group('TNavBar L4 样式', () {
     testWidgets('自定义 height', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(const TNavBar(title: '标题', height: 56)),
+        wrapWithTheme(const TNavBar(title: Text('标题'), height: 56)),
       );
       expect(find.byType(TNavBar), findsOneWidget);
     });
 
     testWidgets('自定义 backgroundColor', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(const TNavBar(title: '标题', backgroundColor: Colors.blue)),
+        wrapWithTheme(
+          const TNavBar(title: Text('标题'), backgroundColor: Colors.blue),
+        ),
       );
       expect(find.byType(TNavBar), findsOneWidget);
     });
 
     testWidgets('自定义 titleColor', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(const TNavBar(title: '彩色标题', titleColor: Colors.red)),
+        wrapWithTheme(
+          const TNavBar(title: Text('彩色标题'), titleColor: Colors.red),
+        ),
       );
       expect(find.text('彩色标题'), findsOneWidget);
     });
@@ -188,7 +233,7 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TNavBar(
-            title: '标题',
+            title: Text('标题'),
             backIconColor: Colors.red,
             useDefaultBack: true,
           ),
@@ -202,7 +247,7 @@ void main() {
     testWidgets('Theme backIconColor 覆盖默认返回图标颜色', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TNavBar(title: '标题', useDefaultBack: true),
+          const TNavBar(title: Text('标题'), useDefaultBack: true),
           navBarTheme: const TNavBarThemeData(backIconColor: Colors.green),
         ),
       );
@@ -214,8 +259,8 @@ void main() {
     testWidgets('border 边框模式', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TNavBar(
-            title: '边框',
+          const TNavBar(
+            title: Text('边框'),
             useDefaultBack: false,
             useBorderStyle: true,
             leading: [TNavBarItem(icon: TIcons.close, iconSize: 24)],
@@ -232,40 +277,43 @@ void main() {
     testWidgets('默认标题使用 Title Large 语义 Token', (tester) async {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(
-        wrapWithTheme(const TNavBar(title: 'Title Large')),
+        wrapWithTheme(const TNavBar(title: Text('Title Large'))),
       );
 
-      final text = tester.widget<Text>(find.text('Title Large'));
-      expect(text.style?.fontSize, token.fontTitleLarge?.size);
-      expect(text.style?.height, token.fontTitleLarge?.height);
-      expect(text.style?.fontWeight, token.fontTitleLarge?.fontWeight);
+      final style = effectiveTextStyle(tester, 'Title Large');
+      expect(style.fontSize, token.fontTitleLarge?.size);
+      expect(style.height, token.fontTitleLarge?.height);
+      expect(style.fontWeight, token.fontTitleLarge?.fontWeight);
     });
 
-    testWidgets('显式 titleFont 保持调用方原有行高语义', (tester) async {
+    testWidgets('显式 titleFont 不注入 Font 的行高', (tester) async {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(
         wrapWithTheme(
-          TNavBar(title: 'Explicit font', titleFont: token.fontBodyLarge),
+          TNavBar(
+            title: const Text('Explicit font'),
+            titleFont: token.fontBodyLarge,
+          ),
         ),
       );
 
-      final text = tester.widget<Text>(find.text('Explicit font'));
-      expect(text.style?.fontSize, token.fontBodyLarge?.size);
-      expect(text.style?.height, isNull);
+      final style = effectiveTextStyle(tester, 'Explicit font');
+      expect(style.fontSize, token.fontBodyLarge?.size);
+      expect(style.height, isNot(token.fontBodyLarge?.height));
     });
 
     testWidgets('自定义标题字体族写入 TextStyle', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           TNavBar(
-            title: 'Custom family',
+            title: const Text('Custom family'),
             titleFontFamily: FontFamily(fontFamily: 'Roboto'),
           ),
         ),
       );
 
-      final text = tester.widget<Text>(find.text('Custom family'));
-      expect(text.style?.fontFamily, 'packages/tdesign_flutter/Roboto');
+      final style = effectiveTextStyle(tester, 'Custom family');
+      expect(style.fontFamily, 'packages/tdesign_flutter/Roboto');
     });
 
     testWidgets('显式 titleFont 的字号、行高和字重优先于 Material AppBarTheme', (
@@ -290,16 +338,19 @@ void main() {
 
       await tester.pumpWidget(
         wrapWithMaterial(
-          TNavBar(title: 'Explicit wins', titleFont: token.fontBodyLarge),
+          TNavBar(
+            title: const Text('Explicit wins'),
+            titleFont: token.fontBodyLarge,
+          ),
         ),
       );
 
-      final text = tester.widget<Text>(find.text('Explicit wins'));
+      final style = effectiveTextStyle(tester, 'Explicit wins');
       // 构造器 titleFont（Body Large）优先，Material 的 fontSize=40 不得反向覆盖。
-      expect(text.style?.fontSize, token.fontBodyLarge?.size);
-      expect(text.style?.fontSize, isNot(40));
-      expect(text.style?.height, isNull);
-      expect(text.style?.fontWeight, token.fontBodyLarge?.fontWeight);
+      expect(style.fontSize, token.fontBodyLarge?.size);
+      expect(style.fontSize, isNot(40));
+      expect(style.height, isNot(3));
+      expect(style.fontWeight, token.fontBodyLarge?.fontWeight);
     });
 
     testWidgets('未显式 titleFont 时 Material AppBarTheme fontSize 优先于默认 Token', (
@@ -319,12 +370,12 @@ void main() {
       }
 
       await tester.pumpWidget(
-        wrapWithMaterial(const TNavBar(title: 'Material wins')),
+        wrapWithMaterial(const TNavBar(title: Text('Material wins'))),
       );
 
-      final text = tester.widget<Text>(find.text('Material wins'));
+      final style = effectiveTextStyle(tester, 'Material wins');
       // 默认回退 Title Large Token，但 Material fontSize 应插在 Token 之前。
-      expect(text.style?.fontSize, 40);
+      expect(style.fontSize, 40);
     });
 
     testWidgets('Material AppBarTheme fontFamily 在未显式配置时生效', (tester) async {
@@ -340,12 +391,12 @@ void main() {
               ),
             ),
           ),
-          home: const Scaffold(body: TNavBar(title: 'Material family')),
+          home: const Scaffold(body: TNavBar(title: Text('Material family'))),
         ),
       );
 
-      final text = tester.widget<Text>(find.text('Material family'));
-      expect(text.style?.fontFamily, 'packages/material_fonts/MaterialFamily');
+      final style = effectiveTextStyle(tester, 'Material family');
+      expect(style.fontFamily, 'packages/material_fonts/MaterialFamily');
     });
   });
 
@@ -361,6 +412,27 @@ void main() {
       const theme = TNavBarThemeData(opacity: 1.0);
       final copied = theme.copyWith(opacity: 0.5);
       expect(copied.opacity, 0.5);
+    });
+
+    test('copyWith 可显式清除 nullable 字段', () {
+      const theme = TNavBarThemeData(
+        titleColor: Colors.red,
+        opacity: 1.0,
+        border: TNavBarBorder(color: Colors.blue),
+        boxShadow: [BoxShadow(color: Colors.black)],
+      );
+
+      final copied = theme.copyWith(
+        titleColor: null,
+        opacity: null,
+        border: null,
+        boxShadow: null,
+      );
+
+      expect(copied.titleColor, isNull);
+      expect(copied.opacity, isNull);
+      expect(copied.border, isNull);
+      expect(copied.boxShadow, isNull);
     });
 
     test('lerp', () {
@@ -423,7 +495,9 @@ void main() {
               return AnimatedTheme(
                 data: baseTheme.mergeExtension(navBarTheme),
                 duration: const Duration(seconds: 1),
-                child: const Scaffold(body: TNavBar(title: 'Animated title')),
+                child: const Scaffold(
+                  body: TNavBar(title: Text('Animated title')),
+                ),
               );
             },
           ),
@@ -433,12 +507,12 @@ void main() {
       updateTheme(() => useExplicitTheme = true);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 250));
-      var text = tester.widget<Text>(find.text('Animated title'));
-      expect(text.style?.color, token.textColorPrimary);
+      var style = effectiveTextStyle(tester, 'Animated title');
+      expect(style.color, token.textColorPrimary);
 
       await tester.pump(const Duration(milliseconds: 500));
-      text = tester.widget<Text>(find.text('Animated title'));
-      expect(text.style?.color, Colors.red);
+      style = effectiveTextStyle(tester, 'Animated title');
+      expect(style.color, Colors.red);
     });
 
     test('lerp 非同类返回自身', () {
@@ -450,7 +524,7 @@ void main() {
     testWidgets('Theme 不承载 height，构造器 height 同步 preferredSize 与实际高度', (
       tester,
     ) async {
-      const navBar = TNavBar(title: '标题', height: 64);
+      const navBar = TNavBar(title: Text('标题'), height: 64);
       await tester.pumpWidget(wrapWithTheme(navBar));
       expect(navBar.preferredSize.height, 64);
       expect(tester.getSize(find.byType(TNavBar)).height, 64);
@@ -472,7 +546,7 @@ void main() {
     }
 
     testWidgets('standalone 默认不加入顶部安全区', (tester) async {
-      const navBar = TNavBar(title: '安全区');
+      const navBar = TNavBar(title: Text('安全区'));
       await tester.pumpWidget(safeAreaHost(child: navBar));
 
       expect(navBar.preferredSize.height, 48);
@@ -481,7 +555,7 @@ void main() {
     });
 
     testWidgets('useSafeArea=true 将顶部安全区加入实际高度', (tester) async {
-      const navBar = TNavBar(title: '开启安全区', useSafeArea: true);
+      const navBar = TNavBar(title: Text('开启安全区'), useSafeArea: true);
       await tester.pumpWidget(safeAreaHost(child: navBar));
 
       expect(navBar.preferredSize.height, 48);
@@ -490,7 +564,11 @@ void main() {
     });
 
     testWidgets('自定义 height 不包含顶部安全区', (tester) async {
-      const navBar = TNavBar(title: '自定义高度', height: 64, useSafeArea: true);
+      const navBar = TNavBar(
+        title: Text('自定义高度'),
+        height: 64,
+        useSafeArea: true,
+      );
       await tester.pumpWidget(safeAreaHost(child: navBar));
 
       expect(navBar.preferredSize.height, 64);
@@ -498,7 +576,7 @@ void main() {
     });
 
     testWidgets('Scaffold.appBar 只计算一次顶部安全区', (tester) async {
-      const navBar = TNavBar(title: 'AppBar 安全区', useSafeArea: true);
+      const navBar = TNavBar(title: Text('AppBar 安全区'), useSafeArea: true);
       final bodyKey = GlobalKey();
       await tester.pumpWidget(
         MediaQuery(
@@ -524,13 +602,13 @@ void main() {
 
   group('TNavBarItem', () {
     test('默认 iconSize 为 24', () {
-      final item = TNavBarItem(icon: TIcons.home);
+      const item = TNavBarItem(icon: TIcons.home);
       expect(item.iconSize, 24.0);
       expect(item.icon, TIcons.home);
     });
 
     test('onTap: null 禁用', () {
-      final item = TNavBarItem(icon: TIcons.home, onTap: null);
+      const item = TNavBarItem(icon: TIcons.home, onTap: null);
       expect(item.onTap, null);
     });
 
@@ -539,7 +617,7 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           TNavBar(
-            title: '标题',
+            title: const Text('标题'),
             useDefaultBack: false,
             actions: [
               TNavBarItem(
@@ -559,8 +637,8 @@ void main() {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(
         wrapWithTheme(
-          TNavBar(
-            title: '标题',
+          const TNavBar(
+            title: Text('标题'),
             useDefaultBack: false,
             actions: [TNavBarItem(icon: TIcons.home, iconSize: 24)],
           ),
@@ -575,9 +653,9 @@ void main() {
     testWidgets('onTap: null 的自定义操作项使用禁用透明度', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TNavBar(
-            title: '标题',
-            actions: [TNavBarItem(customWidget: const Text('禁用操作'))],
+          const TNavBar(
+            title: Text('标题'),
+            actions: [TNavBarItem(customWidget: Text('禁用操作'))],
           ),
         ),
       );
@@ -612,7 +690,7 @@ void main() {
   group('TNavBar 覆盖率补充', () {
     test('preferredSize 自定义 height', () {
       // 覆盖 111-112（preferredSize getter）
-      const navBar = TNavBar(title: 'test', height: 60);
+      const navBar = TNavBar(title: Text('test'), height: 60);
       expect(navBar.preferredSize.height, 60);
     });
 
@@ -620,7 +698,7 @@ void main() {
       // 覆盖 284-286（belowTitleWidget 非空 → Column 渲染）
       await tester.pumpWidget(
         wrapWithTheme(
-          const TNavBar(title: 'below', belowTitleWidget: Text('下方内容')),
+          const TNavBar(title: Text('below'), belowTitleWidget: Text('下方内容')),
         ),
       );
       expect(find.text('下方内容'), findsOneWidget);
@@ -631,7 +709,7 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           TNavBar(
-            title: 'flex',
+            title: const Text('flex'),
             flexibleSpace: Container(color: Colors.blue),
           ),
         ),

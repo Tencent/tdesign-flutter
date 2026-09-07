@@ -43,8 +43,10 @@ NavBar 需要同时对照新版 Figma 的 H5/Flutter 专属移动画板、小程
 - `useDefaultBack` 默认 `false`；只有显式开启时才渲染默认返回按钮。
 - `height` 为非空 `double`，默认 48，同时作为 `preferredSize.height` 和内容高度的唯一来源。
 - `useBorderStyle` 为非空实例结构状态，默认 `false`；Theme 不保存该布尔选择器。
-- `centerTitle`、`leading`、`actions`、`titleWidget` 与 `belowTitleWidget` 继续由当前实例拥有。
-- 默认返回图标为 24；点击时先通知 `onBack`，再执行 `Navigator.maybePop`。
+- `centerTitle`、`leading`、`actions`、`title` 与 `belowTitleWidget` 继续由当前实例拥有。
+- 标题入口收敛为与 `AppBar.title` 一致的单一 `Widget? title`；文本标题使用 `Text`，不再同时暴露 `String? title` 与 `Widget? titleWidget`。
+- 默认返回图标为 24；未提供 `onBack` 时执行 `Navigator.maybePop`。提供 `onBack` 时由调用方完全接管返回行为，可自行决定是否 pop。
+- `TNavBar` 不持有可变状态，使用 `StatelessWidget`；`TNavBarItem` 只描述操作项数据，具体 Widget 构建由 `TNavBar` 私有实现负责。
 
 ### Theme 与样式优先级
 
@@ -52,6 +54,7 @@ NavBar 需要同时对照新版 Figma 的 H5/Flutter 专属移动画板、小程
 - `titleColor`、`backIconColor`、`titleFont`、`titleFontWeight`、`titleFontFamily`、`backgroundColor`、`padding`、`titleMargin`、`opacity`、`border`、`boxShadow` 仍可由 `TNavBarThemeData` 提供子树默认值。
 - 解析优先级为构造器 > `TNavBarThemeData` > Material `AppBarTheme`（对应字段）> TDesign 语义 Token。
 - `TNavBarBorder` 只定义边框的颜色、宽度、圆角与内边距，不决定是否启用边框模式。
+- `TNavBarThemeData.copyWith` 区分参数未传与显式 `null`，允许清除任一 nullable 子树默认值。
 
 ### Demo
 
@@ -65,13 +68,17 @@ NavBar 需要同时对照新版 Figma 的 H5/Flutter 专属移动画板、小程
 - `useDefaultBack` 默认值由 `true` 改为 `false`，属于默认行为变化。
 - `height` 从 `double?` 收敛为 `double`；显式传 `null` 的调用需要删除该参数。
 - `useBorderStyle` 从 `bool?` 收敛为 `bool`，并从 `TNavBarThemeData` 移除；依赖 Theme 开启结构模式的调用需要迁移到实例。
+- `title` 从 `String?` 改为 `Widget?`，并移除 `titleWidget`；文本调用迁移为 `title: Text('...')`，自定义标题直接迁移到 `title`。
+- 提供 `onBack` 后不再自动执行 `Navigator.maybePop`；仍需自动返回的调用方应在回调中自行调用 pop，或不提供 `onBack`。
+- 移除仅服务组件内部渲染的 `TBarItemAction` 与 `TNavBarItem.toWidget`；操作回调改用 Flutter 标准 `VoidCallback`。
 
 ## 验收标准
 
 - [x] Demo 的结构、顺序、尺寸和操作与 Figma H5/Flutter 画板一致。
 - [x] Figma 与小程序的宿主胶囊、系统栏及示例差异已明确记录。
 - [x] 组件与 Demo 行为测试通过，生产源码行覆盖率不低于 95%。
-- [x] Flutter 3.32.0 Linux 的组件、Demo 和共享导航 light/dark 严格 Golden 通过并逐张人工核对。
-- [x] Flutter 3.32.0 与 latest 全量 analyze 0 error / 0 warning，并完成必要构建。
-- [x] Android 16 真机在最终代码 Hot Restart 后完成滚动、按钮回调、搜索输入和明暗主题操作；普通 APK 持久安装可从 Launcher 启动。
+- [ ] Flutter 3.32.0 Linux 的组件、Demo 和共享导航 light/dark 严格 Golden 通过并逐张人工核对。
+- [x] Flutter 3.32.0 与 latest 全量 analyze 0 error / 0 warning。
+- [ ] 双版本完成必要构建。
+- [ ] Android 16 真机在最终代码 Hot Restart 后完成滚动、按钮回调、搜索输入和明暗主题操作；普通 APK 持久安装可从 Launcher 启动。
 - [ ] 独立 GitHub / CNB PR、Issue #1027 NavBar 条目与 CodeBuddy Review 全部闭环。

@@ -85,8 +85,8 @@ void main() {
     );
     expect(search.actions, hasLength(2));
     expect(image.actions, hasLength(2));
-    expect(image.titleWidget, isA<TImage>());
-    final logo = image.titleWidget! as TImage;
+    expect(image.title, isA<TImage>());
+    final logo = image.title! as TImage;
     expect(logo.width, 87);
     expect(logo.height, 24);
 

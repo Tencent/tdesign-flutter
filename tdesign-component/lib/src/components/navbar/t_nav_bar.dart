@@ -8,19 +8,15 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_nav_bar_theme_data.dart';
 
-/// NavBar 操作项回调类型
-typedef TBarItemAction = void Function();
-
 /// NavBar 组件
 ///
 /// Material AppBar 薄包装（NavigationToolbar 实现）。
 /// - A 类禁用：操作项 `onTap: null`。
 /// - L4 样式（标题颜色/字体、背景、内边距等）→ [TNavBarThemeData]。
-class TNavBar extends StatefulWidget implements PreferredSizeWidget {
+class TNavBar extends StatelessWidget implements PreferredSizeWidget {
   const TNavBar({
     Key? key,
     this.title,
-    this.titleWidget,
     this.leading,
     this.actions,
     this.centerTitle = true,
@@ -45,11 +41,10 @@ class TNavBar extends StatefulWidget implements PreferredSizeWidget {
     this.useSafeArea = false,
   }) : super(key: key);
 
-  /// 标题文案
-  final String? title;
-
-  /// 标题控件，优先级高于 [title] 文案
-  final Widget? titleWidget;
+  /// 标题控件。
+  ///
+  /// 文本标题可传入 [Text]，用法与 [AppBar.title] 一致。
+  final Widget? title;
 
   /// 左侧操作项（对齐 AppBar.leading）
   final List<TNavBarItem>? leading;
@@ -63,7 +58,10 @@ class TNavBar extends StatefulWidget implements PreferredSizeWidget {
   /// 是否使用默认的返回按钮，默认不显示
   final bool useDefaultBack;
 
-  /// 返回事件；默认返回按钮点击时先触发该回调，再执行 Navigator.maybePop。
+  /// 返回事件。
+  ///
+  /// 提供该回调时，由调用方完全接管返回行为；未提供时，默认返回按钮会执行
+  /// [Navigator.maybePop]。
   final VoidCallback? onBack;
 
   /// NavBar 下方的 Widget
@@ -121,69 +119,65 @@ class TNavBar extends StatefulWidget implements PreferredSizeWidget {
   final bool useSafeArea;
 
   @override
-  State<StatefulWidget> createState() => _TNavBarState();
-
-  @override
   Size get preferredSize => Size.fromHeight(height);
-}
 
-class _TNavBarState extends State<TNavBar> {
-  TNavBarThemeData get _themeData =>
+  TNavBarThemeData _themeData(BuildContext context) =>
       Theme.of(context).extension<TNavBarThemeData>() ??
       const TNavBarThemeData();
 
   // ---- ThemeData 取值辅助（构造器优先 > Theme > 默认） ----
 
   Color _effectiveTitleColor(BuildContext context) =>
-      widget.titleColor ??
-      _themeData.titleColor ??
+      titleColor ??
+      _themeData(context).titleColor ??
       Theme.of(context).appBarTheme.foregroundColor ??
       Theme.of(context).tExplicitColorScheme?.onSurface ??
       context.tTheme.textColorPrimary;
 
   Color _effectiveBackIconColor(BuildContext context) =>
-      widget.backIconColor ??
-      _themeData.backIconColor ??
+      backIconColor ??
+      _themeData(context).backIconColor ??
       Theme.of(context).appBarTheme.iconTheme?.color ??
       Theme.of(context).appBarTheme.foregroundColor ??
       Theme.of(context).tExplicitColorScheme?.onSurface ??
       context.tTheme.textColorPrimary;
 
-  Color get _effectiveBackgroundColor =>
-      widget.backgroundColor ??
-      _themeData.backgroundColor ??
+  Color _effectiveBackgroundColor(BuildContext context) =>
+      backgroundColor ??
+      _themeData(context).backgroundColor ??
       Theme.of(context).appBarTheme.backgroundColor ??
       Theme.of(context).tExplicitColorScheme?.surface ??
       context.tTheme.bgColorContainer;
 
-  double get _effectiveHeight => widget.preferredSize.height;
+  double get _effectiveHeight => preferredSize.height;
 
-  EdgeInsetsGeometry get _effectivePadding =>
-      widget.padding ??
-      _themeData.padding ??
+  EdgeInsetsGeometry _effectivePadding(BuildContext context) =>
+      padding ??
+      _themeData(context).padding ??
       EdgeInsets.symmetric(
         horizontal: context.tTheme.spacer16,
         vertical: context.tTheme.spacer4,
       );
 
-  double get _effectiveTitleMargin =>
-      widget.titleMargin ?? _themeData.titleMargin ?? 16;
+  double _effectiveTitleMargin(BuildContext context) =>
+      titleMargin ?? _themeData(context).titleMargin ?? 16;
 
-  double get _effectiveOpacity => widget.opacity ?? _themeData.opacity ?? 1.0;
+  double _effectiveOpacity(BuildContext context) =>
+      opacity ?? _themeData(context).opacity ?? 1.0;
 
-  TNavBarBorder get _effectiveBorder =>
-      widget.border ?? _themeData.border ?? const TNavBarBorder();
+  TNavBarBorder _effectiveBorder(BuildContext context) =>
+      border ?? _themeData(context).border ?? const TNavBarBorder();
 
-  List<BoxShadow>? get _effectiveBoxShadow =>
-      widget.boxShadow ?? _themeData.boxShadow;
+  List<BoxShadow>? _effectiveBoxShadow(BuildContext context) =>
+      boxShadow ?? _themeData(context).boxShadow;
 
-  Widget _addBorder(List<Widget> items) {
-    var border = _effectiveBorder;
+  Widget _addBorder(BuildContext context, List<Widget> items) {
+    var border = _effectiveBorder(context);
     var borderColor = border.color ?? context.tTheme.componentStrokeColor;
     var children = <Widget>[];
     for (var i = 0; i < items.length; i++) {
       children.add(items[i]);
-      if (widget.useBorderStyle && i != items.length - 1) {
+      if (useBorderStyle && i != items.length - 1) {
         children.add(
           Container(width: border.width, height: 16.0, color: borderColor),
         );
@@ -202,31 +196,69 @@ class _TNavBarState extends State<TNavBar> {
     );
   }
 
-  Widget get backButton {
+  Widget _buildBackButton(BuildContext context) {
     var iconColor = _effectiveBackIconColor(context);
-    return TNavBarItem(
+    final item = TNavBarItem(
       icon: TIcons.chevron_left,
       iconSize: 24.0,
       iconColor: iconColor,
       onTap: () {
-        widget.onBack?.call();
-        Navigator.maybePop(context);
+        if (onBack != null) {
+          onBack!();
+        } else {
+          Navigator.maybePop(context);
+        }
       },
-    ).toWidget(context);
+    );
+    return _buildItem(context, item, isLeading: true);
   }
 
-  Widget _buildTitleBarItems(bool isLeading) {
-    var barItems = (isLeading ? widget.leading : widget.actions) ?? [];
+  Widget _buildItem(
+    BuildContext context,
+    TNavBarItem item, {
+    required bool isLeading,
+  }) {
+    final isDisabled = item.onTap == null;
+    final child = GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: item.onTap,
+      child: Padding(
+        padding:
+            item.padding ??
+            (isLeading
+                ? EdgeInsets.only(right: context.tTheme.spacer8)
+                : EdgeInsets.only(left: context.tTheme.spacer8)),
+        child:
+            item.customWidget ??
+            Icon(
+              item.icon,
+              size: item.iconSize,
+              color: isDisabled
+                  ? context.tTheme.textDisabledColor
+                  : item.iconColor,
+            ),
+      ),
+    );
+    return Semantics(
+      enabled: !isDisabled,
+      child: isDisabled && item.customWidget != null
+          ? Opacity(opacity: 0.4, child: child)
+          : child,
+    );
+  }
+
+  Widget _buildTitleBarItems(BuildContext context, bool isLeading) {
+    var barItems = (isLeading ? leading : actions) ?? [];
     var children = barItems
-        .map((e) => e.toWidget(context, isLeading: isLeading))
+        .map((item) => _buildItem(context, item, isLeading: isLeading))
         .toList();
 
     return Row(
       children: [
-        if (isLeading && widget.useDefaultBack) backButton,
+        if (isLeading && useDefaultBack) _buildBackButton(context),
         if (children.isNotEmpty)
-          widget.useBorderStyle
-              ? _addBorder(children)
+          useBorderStyle
+              ? _addBorder(context, children)
               : Row(children: children, mainAxisSize: MainAxisSize.min),
       ],
       mainAxisSize: MainAxisSize.min,
@@ -237,10 +269,10 @@ class _TNavBarState extends State<TNavBar> {
     var titleColor = _effectiveTitleColor(context);
 
     final materialStyle = Theme.of(context).appBarTheme.titleTextStyle;
-    final configuredFont = widget.titleFont ?? _themeData.titleFont;
+    final configuredFont = titleFont ?? _themeData(context).titleFont;
     final tokenFont = context.tTheme.fontTitleLarge;
     final configuredFamily =
-        widget.titleFontFamily ?? _themeData.titleFontFamily;
+        titleFontFamily ?? _themeData(context).titleFontFamily;
 
     return TextStyle(
       fontSize:
@@ -252,8 +284,8 @@ class _TNavBarState extends State<TNavBar> {
           : null,
       color: titleColor,
       fontWeight:
-          widget.titleFontWeight ??
-          _themeData.titleFontWeight ??
+          titleFontWeight ??
+          _themeData(context).titleFontWeight ??
           configuredFont?.fontWeight ??
           materialStyle?.fontWeight ??
           tokenFont?.fontWeight,
@@ -268,28 +300,27 @@ class _TNavBarState extends State<TNavBar> {
   }
 
   Widget _getTitleWidget(BuildContext context) {
-    return widget.titleWidget ??
-        Text(
-          widget.title ?? '',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: _getTitleStyle(context),
-        );
+    return DefaultTextStyle.merge(
+      style: _getTitleStyle(context),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      child: title ?? const SizedBox.shrink(),
+    );
   }
 
-  Widget _getNavbarChild() {
+  Widget _getNavbarChild(BuildContext context) {
     final Widget toolbar = NavigationToolbar(
-      leading: _buildTitleBarItems(true),
+      leading: _buildTitleBarItems(context, true),
       middle: _getTitleWidget(context),
-      trailing: _buildTitleBarItems(false),
-      middleSpacing: _effectiveTitleMargin,
-      centerMiddle: widget.centerTitle,
+      trailing: _buildTitleBarItems(context, false),
+      middleSpacing: _effectiveTitleMargin(context),
+      centerMiddle: centerTitle,
     );
-    if (widget.belowTitleWidget == null) {
+    if (belowTitleWidget == null) {
       return toolbar;
     }
     var children = <Widget>[Expanded(child: toolbar)];
-    children.add(widget.belowTitleWidget as Widget);
+    children.add(belowTitleWidget!);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: children,
@@ -298,28 +329,28 @@ class _TNavBarState extends State<TNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    var _backgroundColor = _effectiveBackgroundColor;
-    if (_backgroundColor != Colors.transparent) {
-      _backgroundColor = _backgroundColor.withValues(alpha: _effectiveOpacity);
+    var effectiveBackgroundColor = _effectiveBackgroundColor(context);
+    if (effectiveBackgroundColor != Colors.transparent) {
+      effectiveBackgroundColor = effectiveBackgroundColor.withValues(
+        alpha: _effectiveOpacity(context),
+      );
     }
 
-    final paddingTop = widget.useSafeArea
-        ? MediaQuery.paddingOf(context).top
-        : 0.0;
-    var padding = _effectivePadding;
+    final paddingTop = useSafeArea ? MediaQuery.paddingOf(context).top : 0.0;
+    var effectivePadding = _effectivePadding(context);
     Widget appBar = Container(
       height: _effectiveHeight + paddingTop,
-      padding: padding.add(EdgeInsets.only(top: paddingTop)),
+      padding: effectivePadding.add(EdgeInsets.only(top: paddingTop)),
       decoration: BoxDecoration(
-        color: _backgroundColor,
-        boxShadow: _effectiveBoxShadow,
+        color: effectiveBackgroundColor,
+        boxShadow: _effectiveBoxShadow(context),
       ),
-      child: _getNavbarChild(),
+      child: _getNavbarChild(context),
     );
-    if (widget.flexibleSpace != null) {
+    if (flexibleSpace != null) {
       appBar = Stack(
         fit: StackFit.passthrough,
-        children: <Widget>[widget.flexibleSpace!, appBar],
+        children: <Widget>[flexibleSpace!, appBar],
       );
     }
 
@@ -336,7 +367,7 @@ class TNavBarItem {
   final Color? iconColor;
 
   /// 点击回调；`null` 表示禁用
-  final TBarItemAction? onTap;
+  final VoidCallback? onTap;
 
   /// 图标尺寸
   final double? iconSize;
@@ -347,7 +378,7 @@ class TNavBarItem {
   /// 自定义组件，优先级高于 icon，可以是任意 Widget
   final Widget? customWidget;
 
-  TNavBarItem({
+  const TNavBarItem({
     this.icon,
     this.iconColor,
     this.onTap,
@@ -355,32 +386,4 @@ class TNavBarItem {
     this.padding,
     this.customWidget,
   });
-
-  Widget toWidget(BuildContext context, {bool isLeading = true}) {
-    final isDisabled = onTap == null;
-    final item = GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onTap,
-      child: Padding(
-        padding:
-            padding ??
-            (isLeading
-                ? EdgeInsets.only(right: context.tTheme.spacer8)
-                : EdgeInsets.only(left: context.tTheme.spacer8)),
-        child:
-            customWidget ??
-            Icon(
-              icon,
-              size: iconSize,
-              color: isDisabled ? context.tTheme.textDisabledColor : iconColor,
-            ),
-      ),
-    );
-    return Semantics(
-      enabled: !isDisabled,
-      child: isDisabled && customWidget != null
-          ? Opacity(opacity: 0.4, child: item)
-          : item,
-    );
-  }
 }

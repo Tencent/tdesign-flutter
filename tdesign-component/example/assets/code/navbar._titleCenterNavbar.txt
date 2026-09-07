@@ -1,6 +1,6 @@
 Widget _titleCenterNavbar(BuildContext context) {
     return TNavBar(
-      title: titleText,
+      title: const Text(titleText),
       useDefaultBack: true,
       actions: [
         TNavBarItem(

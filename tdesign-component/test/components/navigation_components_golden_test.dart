@@ -88,8 +88,8 @@ class _NavigationComponentsScene extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const _SectionLabel('NavBar'),
-                      TNavBar(
-                        title: 'Page title',
+                      const TNavBar(
+                        title: Text('Page title'),
                         useDefaultBack: true,
                         actions: [
                           TNavBarItem(icon: TIcons.home, onTap: _noop),

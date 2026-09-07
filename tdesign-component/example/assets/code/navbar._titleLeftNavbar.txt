@@ -2,7 +2,7 @@ Widget _titleLeftNavbar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
-        title: titleText,
+        title: const Text(titleText),
         centerTitle: false,
         titleMargin: 0,
         useDefaultBack: true,

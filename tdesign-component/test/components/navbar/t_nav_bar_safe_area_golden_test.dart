@@ -53,11 +53,11 @@ void main() {
                   child: Column(
                     children: [
                       TNavBar(
-                        title: 'Embedded default',
+                        title: const Text('Embedded default'),
                         backgroundColor: context.tTheme.bgColorContainer,
                       ),
                       TNavBar(
-                        title: 'Top-level opt-in',
+                        title: const Text('Top-level opt-in'),
                         useSafeArea: true,
                         backgroundColor:
                             context.tTheme.bgColorSecondaryContainer,

@@ -15,16 +15,15 @@
 | height | double | 48 | 高度；作为 `PreferredSizeWidget.preferredSize` 的唯一高度来源 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | leading | List<TNavBarItem>? | - | 左侧操作项（对齐 AppBar.leading） |
-| onBack | VoidCallback? | - | 返回事件；默认返回按钮点击时先触发该回调，再执行 Navigator.maybePop。 |
+| onBack | VoidCallback? | - | 返回事件。 提供该回调时，由调用方完全接管返回行为；未提供时，默认返回按钮会执行 `Navigator.maybePop`。 |
 | opacity | double? | - | 透明度 |
 | padding | EdgeInsetsGeometry? | - | 内部填充 |
-| title | String? | - | 标题文案 |
+| title | Widget? | - | 标题控件。 文本标题可传入 `Text`，用法与 `AppBar.title` 一致。 |
 | titleColor | Color? | - | 标题颜色 |
 | titleFont | Font? | - | 标题字体尺寸 |
 | titleFontFamily | FontFamily? | - | 标题字体样式 |
 | titleFontWeight | FontWeight? | - | 标题字体粗细 |
 | titleMargin | double? | - | 中间文案左右两边间距 |
-| titleWidget | Widget? | - | 标题控件，优先级高于 `title` 文案 |
 | useBorderStyle | bool | false | 是否使用边框模式 |
 | useDefaultBack | bool | false | 是否使用默认的返回按钮，默认不显示 |
 | useSafeArea | bool | false | 是否避让顶部系统安全区。 默认为 false。仅当导航栏直接位于页面顶部且外层未处理安全区时开启。 开启后，安全区高度只计入实际渲染高度，不计入 `preferredSize`； `height` 始终表示导航栏内容高度。 |
@@ -39,13 +38,5 @@
 | icon | IconData? | - | 图标 |
 | iconColor | Color? | - | 图标颜色 |
 | iconSize | double? | 24.0 | 图标尺寸 |
-| onTap | TBarItemAction? | - | 点击回调；`null` 表示禁用 |
+| onTap | VoidCallback? | - | 点击回调；`null` 表示禁用 |
 | padding | EdgeInsetsGeometry? | - | 内部填充 |
-
-
-### TBarItemAction
-#### 类型定义
-
-```dart
-typedef TBarItemAction = void Function();
-```

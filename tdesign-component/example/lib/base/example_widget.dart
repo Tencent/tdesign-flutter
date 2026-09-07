@@ -484,7 +484,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
 
     return TNavBar(
       key: widget.navBarKey,
-      title: widget.title,
+      title: Text(widget.title),
       leading: leftBarItems,
       actions: rightBarItems,
       // ExamplePage 的公共壳层自行持有标题视觉，避免组件默认值调整时

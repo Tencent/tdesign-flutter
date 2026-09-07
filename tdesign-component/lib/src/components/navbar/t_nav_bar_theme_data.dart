@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../theme/basic.dart';
 
+const _unset = Object();
+
 /// NavBar 边框配置（迁入 ThemeData）
 class TNavBarBorder {
   /// 边框宽度
@@ -78,32 +80,56 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
     this.boxShadow,
   });
 
+  /// 返回只替换指定字段的新主题。
+  ///
+  /// 省略参数会保留原值；显式传入 `null` 会清除对应配置，使组件继续回退到
+  /// Material Theme 或 TDesign Token。
   @override
   TNavBarThemeData copyWith({
-    Color? titleColor,
-    Color? backIconColor,
-    Font? titleFont,
-    FontWeight? titleFontWeight,
-    FontFamily? titleFontFamily,
-    Color? backgroundColor,
-    EdgeInsetsGeometry? padding,
-    double? titleMargin,
-    double? opacity,
-    TNavBarBorder? border,
-    List<BoxShadow>? boxShadow,
+    Object? titleColor = _unset,
+    Object? backIconColor = _unset,
+    Object? titleFont = _unset,
+    Object? titleFontWeight = _unset,
+    Object? titleFontFamily = _unset,
+    Object? backgroundColor = _unset,
+    Object? padding = _unset,
+    Object? titleMargin = _unset,
+    Object? opacity = _unset,
+    Object? border = _unset,
+    Object? boxShadow = _unset,
   }) {
     return TNavBarThemeData(
-      titleColor: titleColor ?? this.titleColor,
-      backIconColor: backIconColor ?? this.backIconColor,
-      titleFont: titleFont ?? this.titleFont,
-      titleFontWeight: titleFontWeight ?? this.titleFontWeight,
-      titleFontFamily: titleFontFamily ?? this.titleFontFamily,
-      backgroundColor: backgroundColor ?? this.backgroundColor,
-      padding: padding ?? this.padding,
-      titleMargin: titleMargin ?? this.titleMargin,
-      opacity: opacity ?? this.opacity,
-      border: border ?? this.border,
-      boxShadow: boxShadow ?? this.boxShadow,
+      titleColor: identical(titleColor, _unset)
+          ? this.titleColor
+          : titleColor as Color?,
+      backIconColor: identical(backIconColor, _unset)
+          ? this.backIconColor
+          : backIconColor as Color?,
+      titleFont: identical(titleFont, _unset)
+          ? this.titleFont
+          : titleFont as Font?,
+      titleFontWeight: identical(titleFontWeight, _unset)
+          ? this.titleFontWeight
+          : titleFontWeight as FontWeight?,
+      titleFontFamily: identical(titleFontFamily, _unset)
+          ? this.titleFontFamily
+          : titleFontFamily as FontFamily?,
+      backgroundColor: identical(backgroundColor, _unset)
+          ? this.backgroundColor
+          : backgroundColor as Color?,
+      padding: identical(padding, _unset)
+          ? this.padding
+          : padding as EdgeInsetsGeometry?,
+      titleMargin: identical(titleMargin, _unset)
+          ? this.titleMargin
+          : titleMargin as double?,
+      opacity: identical(opacity, _unset) ? this.opacity : opacity as double?,
+      border: identical(border, _unset)
+          ? this.border
+          : border as TNavBarBorder?,
+      boxShadow: identical(boxShadow, _unset)
+          ? this.boxShadow
+          : boxShadow as List<BoxShadow>?,
     );
   }
 
