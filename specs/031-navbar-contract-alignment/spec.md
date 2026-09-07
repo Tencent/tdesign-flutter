@@ -77,8 +77,8 @@ NavBar 需要同时对照新版 Figma 的 H5/Flutter 专属移动画板、小程
 - [x] Demo 的结构、顺序、尺寸和操作与 Figma H5/Flutter 画板一致。
 - [x] Figma 与小程序的宿主胶囊、系统栏及示例差异已明确记录。
 - [x] 组件与 Demo 行为测试通过，生产源码行覆盖率不低于 95%。
-- [ ] Flutter 3.32.0 Linux 的组件、Demo 和共享导航 light/dark 严格 Golden 通过并逐张人工核对。
+- [x] Flutter 3.32.0 Linux 的组件、Demo 和共享导航 light/dark 严格 Golden 通过并逐张人工核对。
 - [x] Flutter 3.32.0 与 latest 全量 analyze 0 error / 0 warning。
-- [ ] 双版本完成必要构建。
-- [ ] Android 16 真机在最终代码 Hot Restart 后完成滚动、按钮回调、搜索输入和明暗主题操作；普通 APK 持久安装可从 Launcher 启动。
+- [x] 双版本完成必要构建。
+- [x] Android 16 真机在最终代码 Hot Restart 后完成滚动、按钮回调、搜索输入和明暗主题操作；普通 APK 持久安装可从 Launcher 启动。
 - [ ] 独立 GitHub / CNB PR、Issue #1027 NavBar 条目与 CodeBuddy Review 全部闭环。

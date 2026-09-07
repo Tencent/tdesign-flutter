@@ -12,8 +12,8 @@
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| 组件行为与覆盖率 | 55/55 通过 | `TNavBar` / `TNavBarThemeData` 生产 LH/LF = 174/178 = 97.75% |
-| Demo 行为 | 4/4 通过 | 安全区、Figma H5 组合、图片尺寸、搜索与操作反馈，以及 Material 主题污染隔离 |
+| 定向组件回归与覆盖率 | 73/73 通过 | Navbar 行为、Theme 优先级与 `TNavBarThemeData` 回归；`TNavBar` / `TNavBarThemeData` 生产 LH/LF = 174/178 = 97.75% |
+| Demo 独立行为 | 3/3 通过 | 安全区、Figma H5 组合、图片尺寸、搜索与操作反馈，以及 Material 主题污染隔离 |
 | 严格 Golden | 16/16 通过 | Flutter 3.32 Linux：Navbar 组件 2、Demo 2、共享 ActionSheet 回归 12；更新后均无 `--update-goldens` 复跑 |
 | 双 SDK `flutter analyze` | 通过 | 3.32.0 与 3.47.0 的组件包和 Example 均 0 error / 0 warning |
 | 生成与构建 | 通过 | API 与示例片段生成检查、Web release、Android debug |
