@@ -77,23 +77,75 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
       return this;
     }
     return TTabBarThemeData(
-      barHeight: lerpDouble(barHeight, other.barHeight, t),
-      selectedBgColor: Color.lerp(selectedBgColor, other.selectedBgColor, t),
-      unselectedBgColor: Color.lerp(
+      barHeight: _lerpDoubleWithDefault(barHeight, other.barHeight, 56, t),
+      selectedBgColor: _lerpOptionalColor(
+        selectedBgColor,
+        other.selectedBgColor,
+        t,
+      ),
+      unselectedBgColor: _lerpOptionalColor(
         unselectedBgColor,
         other.unselectedBgColor,
         t,
       ),
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      centerDistance: lerpDouble(centerDistance, other.centerDistance, t),
-      dividerHeight: lerpDouble(dividerHeight, other.dividerHeight, t),
-      dividerThickness: lerpDouble(dividerThickness, other.dividerThickness, t),
-      dividerColor: Color.lerp(dividerColor, other.dividerColor, t),
-      topBorder: BorderSide.lerp(
-        topBorder ?? BorderSide.none,
-        other.topBorder ?? BorderSide.none,
+      backgroundColor: _lerpOptionalColor(
+        backgroundColor,
+        other.backgroundColor,
         t,
       ),
+      centerDistance: _lerpDoubleWithDefault(
+        centerDistance,
+        other.centerDistance,
+        0,
+        t,
+      ),
+      dividerHeight: _lerpDoubleWithDefault(
+        dividerHeight,
+        other.dividerHeight,
+        32,
+        t,
+      ),
+      dividerThickness: _lerpDoubleWithDefault(
+        dividerThickness,
+        other.dividerThickness,
+        0.5,
+        t,
+      ),
+      dividerColor: _lerpOptionalColor(dividerColor, other.dividerColor, t),
+      topBorder: _lerpOptionalBorderSide(topBorder, other.topBorder, t),
     );
+  }
+
+  static double? _lerpDoubleWithDefault(
+    double? a,
+    double? b,
+    double defaultValue,
+    double t,
+  ) {
+    if (a == null && b == null) {
+      return null;
+    }
+    return lerpDouble(a ?? defaultValue, b ?? defaultValue, t);
+  }
+
+  // null delegates to the lower-priority TDesign token. That token is only
+  // available from BuildContext, so interpolating it as transparent here would
+  // create a false style override during an animated theme transition.
+  static Color? _lerpOptionalColor(Color? a, Color? b, double t) {
+    if (a == null || b == null) {
+      return t < 0.5 ? a : b;
+    }
+    return Color.lerp(a, b, t);
+  }
+
+  static BorderSide? _lerpOptionalBorderSide(
+    BorderSide? a,
+    BorderSide? b,
+    double t,
+  ) {
+    if (a == null || b == null) {
+      return t < 0.5 ? a : b;
+    }
+    return BorderSide.lerp(a, b, t);
   }
 }

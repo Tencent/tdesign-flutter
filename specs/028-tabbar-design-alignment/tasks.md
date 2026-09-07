@@ -2,6 +2,7 @@
 
 - [x] DONE 冻结 Figma、小程序与当前 Flutter 差异
 - [x] DONE 定义四条独立公开契约与 Theme 所有权
+- [x] DONE 修复 ThemeExtension nullable 字段插值的默认值与样式污染
 - [x] DONE 实现组件 API、布局与视觉收敛
 - [x] DONE 按 Figma 移动端展示画板重建公开 Demo
 - [x] DONE 补充组件、Demo 与明暗 Golden 测试

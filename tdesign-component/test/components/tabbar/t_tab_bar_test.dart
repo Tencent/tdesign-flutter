@@ -76,6 +76,39 @@ void main() {
       expect(copied.centerDistance, 4);
       expect(copied.dividerHeight, 32);
     });
+
+    test('lerp keeps runtime defaults and does not synthesize overrides', () {
+      const defaults = TTabBarThemeData();
+      const custom = TTabBarThemeData(
+        barHeight: 64,
+        selectedBgColor: Colors.red,
+        centerDistance: 8,
+        dividerHeight: 40,
+        dividerThickness: 1.5,
+        topBorder: BorderSide(color: Colors.blue, width: 2),
+      );
+
+      final early = defaults.lerp(custom, 0.25);
+      expect(early.barHeight, 58);
+      expect(early.centerDistance, 2);
+      expect(early.dividerHeight, 34);
+      expect(early.dividerThickness, 0.75);
+      expect(early.selectedBgColor, isNull);
+      expect(early.topBorder, isNull);
+
+      final late = defaults.lerp(custom, 0.75);
+      expect(late.barHeight, 62);
+      expect(late.selectedBgColor, Colors.red);
+      expect(late.topBorder, const BorderSide(color: Colors.blue, width: 2));
+
+      final empty = defaults.lerp(const TTabBarThemeData(), 0.5);
+      expect(empty.barHeight, isNull);
+      expect(empty.centerDistance, isNull);
+      expect(empty.dividerHeight, isNull);
+      expect(empty.dividerThickness, isNull);
+      expect(empty.selectedBgColor, isNull);
+      expect(empty.topBorder, isNull);
+    });
   });
 
   group('TTabBar config classes', () {

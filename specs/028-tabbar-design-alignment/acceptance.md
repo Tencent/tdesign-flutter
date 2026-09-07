@@ -1,5 +1,17 @@
 # 验收记录
 
+## 2026-09-08 develop 同步与主题复审
+
+- 已合并 `origin/develop@3d5ed773`，保留公共 ExamplePage 的导航标题样式隔离，
+  同时保留 TabBar 页面独立 `navBarTitle`。
+- 修复 `TTabBarThemeData.lerp`：高度、间距和分割线尺寸从实际内置默认值插值；
+  nullable 颜色和边线不再生成透明色或 `BorderSide.none` 高优先级覆盖。
+- Flutter 3.32.0 `flutter analyze --fatal-infos` 通过；组件测试 17/17、集中回归
+  清单自测 13/13 通过；生产源码覆盖率 510/527 = 96.77%。
+- macOS 上公开 Demo 结构测试通过；整页 Golden 因 develop 的公共导航标题样式变更
+  出现 4.72% 预期差异。权威基线只在 Flutter 3.32.0 Linux 更新，等待本轮 CI
+  产出 Linux failure artifact 后核对并提交。
+
 ## 设计核对
 
 - Figma 固定节点：`28591:35219`。

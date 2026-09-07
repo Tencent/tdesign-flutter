@@ -49,6 +49,8 @@ Layout 维度。
 - `split` 仅在 Normal 选项样式中绘制分隔线。
 - 颜色和字体默认值来自 `TThemeData`；实例参数优先于 `TTabBarThemeData`，
   Theme 优先于全局 Token。
+- Theme 动画中 nullable 尺寸按运行时内置默认值插值；nullable 颜色与边线保持
+  “未覆盖”语义，不得插值出透明色或 `BorderSide.none` 污染低优先级 Token。
 
 ## 验收标准
 
