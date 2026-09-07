@@ -21,7 +21,7 @@ void main() {
     final sideBar = tester.widget<TSideBar>(find.byType(TSideBar));
     expect(sideBar.width, 103);
     expect(sideBar.value, 1);
-    expect(sideBar.style, TSideBarVariant.line);
+    expect(sideBar.variant, TSideBarVariant.line);
     expect(sideBar.children, hasLength(10));
     expect(sideBar.children[1].badge?.variant, TBadgeVariant.dot);
     expect(sideBar.children[2].badge?.label, '8');

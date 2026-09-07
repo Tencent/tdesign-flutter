@@ -11,12 +11,12 @@ class TSideBarAnchorPage extends StatefulWidget {
   const TSideBarAnchorPage({
     super.key,
     this.title = 'SideBar 锚点用法',
-    this.style = TSideBarVariant.line,
+    this.variant = TSideBarVariant.line,
     this.withIcons = false,
   });
 
   final String title;
-  final TSideBarVariant style;
+  final TSideBarVariant variant;
   final bool withIcons;
 
   @override
@@ -205,7 +205,7 @@ class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
     return Row(
       children: [
         TSideBar(
-          style: widget.style,
+          variant: widget.variant,
           value: currentValue,
           children: items,
           onChanged: handleSidebarChange,

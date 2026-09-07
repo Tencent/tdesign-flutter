@@ -107,7 +107,7 @@ class TSideBarCustomPageState extends State<TSideBarCustomPage> {
     return Row(
       children: [
         TSideBar(
-          style: TSideBarVariant.tag,
+          variant: TSideBarVariant.tag,
           value: currentValue,
           children: items,
           selectedTextStyle: TextStyle(

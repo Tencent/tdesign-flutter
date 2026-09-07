@@ -7,7 +7,7 @@ Flutter SideBar 的公开 Demo、结构状态所有权和默认宽度与新版 F
 ## 行为契约
 
 - `TSideBar` 继续是受控组件：`value` 由调用方持有，点击可用项仅通过 `onChanged` 报告值。
-- `style` 为非空实例结构状态，枚举值为 `line`、`tag`，默认 `line`。
+- `variant` 为非空实例结构状态，枚举值为 `line`、`tag`，默认 `line`。
 - `width` 为非空实例布局参数，默认 103dp；`height` 保持可空实例参数，空值占满当前屏幕高度。
 - `TSideBarThemeData` 只持有可继承的颜色、文字和间距视觉值，不持有 `style`、`width`、`height`。
 - 每项提供可访问的 label、selected、enabled 语义；disabled 项不触发回调。
@@ -29,6 +29,6 @@ Flutter SideBar 的公开 Demo、结构状态所有权和默认宽度与新版 F
 ## Breaking change
 
 - `TSideBarVariant.normal` 改为 `line`，`outline` 改为 `tag`。
-- `TSideBar.style` 从可空改为非空，默认 `line`。
+- `TSideBar.style` 重命名为非空的 `variant`，默认 `line`。
 - `TSideBarThemeData.style`、`height` 被移除。
 - `TSideBar` 默认宽度从依赖父约束/最小 106dp 收敛为固定 103dp，并新增 `width` 覆盖入口。

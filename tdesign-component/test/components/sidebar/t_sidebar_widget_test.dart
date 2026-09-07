@@ -28,7 +28,7 @@ void main() {
         wrap(
           TSideBar(
             value: 1,
-            style: TSideBarVariant.tag,
+            variant: TSideBarVariant.tag,
             selectedColor: Colors.red,
             unSelectedColor: Colors.grey,
             contentPadding: const EdgeInsets.all(8),

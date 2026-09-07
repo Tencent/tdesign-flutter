@@ -11,7 +11,7 @@ class TSideBarOutlinePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const TSideBarAnchorPage(
       title: 'SideBar 非通栏选项样式',
-      style: TSideBarVariant.tag,
+      variant: TSideBarVariant.tag,
     );
   }
 }

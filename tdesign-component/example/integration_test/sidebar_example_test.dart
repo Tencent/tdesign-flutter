@@ -58,7 +58,7 @@ void main() {
     unawaited(navigator.pushNamed('SideBarCustom'));
     await tester.pumpAndSettle();
     expect(
-      tester.widget<TSideBar>(find.byType(TSideBar)).style,
+      tester.widget<TSideBar>(find.byType(TSideBar)).variant,
       TSideBarVariant.tag,
     );
     await tester.tap(find.text('选项').at(3));

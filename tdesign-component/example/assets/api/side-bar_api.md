@@ -14,10 +14,10 @@
 | selectedBgColor | Color? | - | 选择的背景颜色（优先级高于 ThemeData）。 |
 | selectedColor | Color? | - | 选中值后颜色（优先级高于 ThemeData）。 |
 | selectedTextStyle | TextStyle? | - | 选中样式（优先级高于 ThemeData）。 |
-| style | TSideBarVariant | TSideBarVariant.line | 展示样式；属于组件实例的结构状态，不从 Theme 读取。 |
 | unSelectedBgColor | Color? | - | 未选择的背景颜色（优先级高于 ThemeData）。 |
 | unSelectedColor | Color? | - | 未选中颜色（优先级高于 ThemeData）。 |
 | value | int | - | 当前选中项值。 |
+| variant | TSideBarVariant | TSideBarVariant.line | 展示变体；属于组件实例的结构状态，不从 Theme 读取。 |
 | width | double | 103 | 侧边栏宽度，默认 103。 |
 
 

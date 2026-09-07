@@ -44,7 +44,7 @@ class TSideBar extends StatefulWidget {
     this.height,
     this.contentPadding,
     this.selectedTextStyle,
-    this.style = TSideBarVariant.line,
+    this.variant = TSideBarVariant.line,
     this.width = 103,
     this.loading = false,
     this.loadingWidget,
@@ -73,8 +73,8 @@ class TSideBar extends StatefulWidget {
   /// 选中样式（优先级高于 ThemeData）。
   final TextStyle? selectedTextStyle;
 
-  /// 展示样式；属于组件实例的结构状态，不从 Theme 读取。
-  final TSideBarVariant style;
+  /// 展示变体；属于组件实例的结构状态，不从 Theme 读取。
+  final TSideBarVariant variant;
 
   /// 侧边栏宽度，默认 103。
   final double width;
@@ -249,7 +249,7 @@ class _TSideBarState extends State<TSideBar> {
             final ele = displayChildren[index];
             return TWrapSideBarItem(
               key: ele.key,
-              style: widget.style,
+              variant: widget.variant,
               value: ele.value,
               icon: ele.icon,
               disabled: ele.disabled ?? false,
@@ -274,11 +274,7 @@ class _TSideBarState extends State<TSideBar> {
                   widget.unSelectedBgColor ??
                   theme.unSelectedBgColor ??
                   context.tTheme.bgColorSecondaryContainer,
-              onTap: () {
-                if (!(ele.disabled ?? false) && widget.onChanged != null) {
-                  onSelect(ele);
-                }
-              },
+              onTap: widget.onChanged == null ? null : () => onSelect(ele),
             );
           },
         ),

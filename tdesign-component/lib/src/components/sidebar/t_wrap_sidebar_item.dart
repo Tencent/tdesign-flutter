@@ -30,7 +30,7 @@ class TWrapSideBarItem extends StatelessWidget {
     this.selectedBgColor,
     this.unSelectedBgColor,
     this.unSelectedColor,
-    required this.style,
+    required this.variant,
   }) : super(key: key);
 
   final TBadge? badge;
@@ -49,7 +49,7 @@ class TWrapSideBarItem extends StatelessWidget {
   final bool topAdjacent;
   final bool bottomAdjacent;
   final VoidCallback? onTap;
-  final TSideBarVariant style;
+  final TSideBarVariant variant;
 
   static const preLineWidth = 3.0;
 
@@ -63,7 +63,7 @@ class TWrapSideBarItem extends StatelessWidget {
       excludeSemantics: true,
       child: GestureDetector(
         onTap: disabled ? null : onTap,
-        child: style == TSideBarVariant.line
+        child: variant == TSideBarVariant.line
             ? renderNormalItem(context)
             : renderTagItem(context),
       ),

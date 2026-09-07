@@ -148,7 +148,7 @@ void main() {
         wrapWithTheme(
           TSideBar(
             value: 0,
-            style: TSideBarVariant.line,
+            variant: TSideBarVariant.line,
             children: buildItems(),
             onChanged: (_) {},
           ),
@@ -162,7 +162,7 @@ void main() {
         wrapWithTheme(
           TSideBar(
             value: 0,
-            style: TSideBarVariant.tag,
+            variant: TSideBarVariant.tag,
             children: buildItems(),
             onChanged: (_) {},
           ),
@@ -186,7 +186,7 @@ void main() {
         ),
       );
       final sideBar = tester.widget<TSideBar>(find.byType(TSideBar));
-      expect(sideBar.style, TSideBarVariant.line);
+      expect(sideBar.variant, TSideBarVariant.line);
       expect(sideBar.width, 103);
     });
 
@@ -326,6 +326,12 @@ void main() {
         find.byType(AnimatedOpacity),
       );
       expect(opacity.opacity, 0.4);
+      final item = tester.widget<Semantics>(
+        find.byWidgetPredicate(
+          (widget) => widget is Semantics && widget.properties.label == '选项1',
+        ),
+      );
+      expect(item.properties.enabled, isFalse);
     });
   });
 
@@ -360,7 +366,7 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TWrapSideBarItem(
-            style: TSideBarVariant.line,
+            variant: TSideBarVariant.line,
             label: '短',
             value: 1,
             disabled: false,
@@ -374,7 +380,7 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TWrapSideBarItem(
-            style: TSideBarVariant.line,
+            variant: TSideBarVariant.line,
             label: '默认',
             value: 1,
             disabled: false,
@@ -392,7 +398,7 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TWrapSideBarItem(
-            style: TSideBarVariant.line,
+            variant: TSideBarVariant.line,
             label: '选',
             value: 2,
             selected: true,
@@ -409,7 +415,7 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TWrapSideBarItem(
-            style: TSideBarVariant.line,
+            variant: TSideBarVariant.line,
             label: '自定义',
             value: 3,
             disabled: false,
@@ -425,7 +431,7 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TWrapSideBarItem(
-            style: TSideBarVariant.line,
+            variant: TSideBarVariant.line,
             label: '短',
             value: 3,
             disabled: false,
@@ -446,7 +452,7 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TWrapSideBarItem(
-            style: TSideBarVariant.line,
+            variant: TSideBarVariant.line,
             label: '很长很长的标签内容xxx',
             value: 4,
             disabled: false,
@@ -467,7 +473,7 @@ void main() {
             child: SizedBox(
               width: 120,
               child: TWrapSideBarItem(
-                style: TSideBarVariant.line,
+                variant: TSideBarVariant.line,
                 label: '这是一个非常非常长的侧边栏标题',
                 value: 5,
                 disabled: false,

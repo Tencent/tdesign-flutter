@@ -12,7 +12,7 @@
 | 项目 | 结果 | 证据 |
 | --- | --- | --- |
 | 组件行为 | 43/43 通过 | 受控回写、禁用、loading、line/tag、语义和 Theme 优先级 |
-| 生产覆盖率 | 通过 | SideBar 生产源码 LH/LF = 232/232 = 100% |
+| 生产覆盖率 | 通过 | SideBar 生产源码 LH/LF = 230/230 = 100% |
 | Demo 行为 | 8/8 通过 | 10 项数据、Badge、锚点双向同步、末项、文本缩放与公开入口 |
 | 严格 Golden | 6/6 通过 | Flutter 3.32 Linux：入口、锚点、tag 各 light/dark；更新后无 `--update-goldens` 复跑 |
 | 双 SDK | 通过 | Flutter 3.32.0 / 3.47.0 组件包与 Example analyze 均 0 error / 0 warning；功能测试通过 |
@@ -30,11 +30,11 @@
 ## API / Theme Review
 
 - `value/onChanged` 是唯一受控状态源；不复制小程序 `defaultValue` 或动态事件对象。
-- `style` 为非空实例结构状态（`line` / `tag`）；`width`、`height` 也是实例布局契约，Theme 不持有结构选择器或尺寸状态。
+- `variant` 为非空实例结构状态（`line` / `tag`）；`width`、`height` 也是实例布局契约，Theme 不持有结构选择器或尺寸状态。
 - `TSideBarThemeData` 只保留颜色、文字样式和内边距；优先级为实例视觉参数 > ThemeExtension > TDesign 语义 Token。
 - disabled 同时落到不可点击行为与 `Semantics.enabled=false`；选中态写入逐项语义。
 - 默认标签使用 Body Large Token；103dp 宽度、3×14 指示线和 9dp 圆角均有组件测试与 Golden 证据。
-- Breaking 范围已记录：枚举 `normal/outline` 改为 `line/tag`，移除 Theme `style/height`，新增 103dp `width`，默认宽度行为变化。
+- Breaking 范围已记录：实例 `style` 重命名为 `variant`、枚举 `normal/outline` 改为 `line/tag`，移除 Theme `style/height`，新增 103dp `width`，默认宽度行为变化。
 
 ## 真机证据
 
