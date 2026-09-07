@@ -8,7 +8,7 @@ export 'src/components/avatar/t_avatar_theme_data.dart' show TAvatarThemeData;
 export 'src/components/avatar/t_avatar_types.dart';
 export 'src/components/backtop/t_backtop.dart';
 export 'src/components/backtop/t_backtop_theme_data.dart'
-    show TBackTopThemeData, TBackTopShape;
+    show TBackTopColorScheme, TBackTopShape, TBackTopThemeData;
 export 'src/components/badge/t_badge.dart';
 export 'src/components/badge/t_badge_theme_data.dart' show TBadgeThemeData;
 export 'src/components/button/t_button.dart';
@@ -47,8 +47,6 @@ export 'src/components/divider/t_divider_theme_data.dart'
     show TDividerThemeData;
 export 'src/components/drawer/t_drawer.dart';
 export 'src/components/drawer/t_drawer_theme_data.dart' show TDrawerThemeData;
-export 'src/components/drawer/t_drawer_widget.dart'
-    show TDrawerWidget, TDrawerItem, TDrawerItemClickCallback;
 export 'src/components/dropdown_menu/t_dropdown_item.dart';
 export 'src/components/dropdown_menu/t_dropdown_menu.dart';
 export 'src/components/dropdown_menu/t_dropdown_theme_data.dart'
