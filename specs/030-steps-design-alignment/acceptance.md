@@ -1,5 +1,15 @@
 # 验收记录
 
+## 2026-09-08 develop 同步复审
+
+- 已合并 `origin/develop@3d5ed773`；组件 API、状态所有权与 Token 路径无新增冲突，
+  未发现实例默认样式向 Theme 或其他组件泄漏。
+- Flutter 3.32.0 `flutter analyze --fatal-infos` 通过；组件测试 23/23、集中回归
+  清单自测 13/13 通过；生产源码覆盖率 226/233 = 97.00%。
+- macOS 上公开 Demo 结构测试通过；整页 Golden 因 develop 的公共导航标题样式变更
+  出现 light 4.72%、dark 4.69% 的预期差异。权威基线只在 Flutter 3.32.0 Linux
+  更新，等待本轮 CI 产出 Linux failure artifact 后核对并提交。
+
 ## 环境
 
 - 分支：`rss1102/breaking/steps-design-alignment`
