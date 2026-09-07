@@ -6,11 +6,11 @@ import 'package:tdesign_flutter_example/page/t_navbar_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
 void main() {
-  Widget buildPage() {
+  Widget buildPage({ThemeData? theme}) {
     return ChangeNotifierProvider(
       create: (_) => ThemeModeProvider(),
       child: MaterialApp(
-        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        theme: theme ?? TThemeBuilder.light(TThemeData.defaultData()),
         home: const MediaQuery(
           data: MediaQueryData(
             size: Size(375, 812),
@@ -67,6 +67,26 @@ void main() {
     expect(renderedBackTitle.style?.fontSize, 16);
     expect(renderedBackTitle.style?.height, 1.5);
     expect(renderedBackTitle.style?.fontWeight, FontWeight.w400);
+  });
+
+  testWidgets('公共 Demo 壳层标题行高不受 Material bodyMedium 污染', (tester) async {
+    final theme = TThemeBuilder.light(TThemeData.defaultData());
+    await tester.pumpWidget(
+      buildPage(
+        theme: theme.copyWith(
+          textTheme: theme.textTheme.copyWith(
+            bodyMedium: const TextStyle(height: 3),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final demoShell = tester.widget<TNavBar>(find.byType(TNavBar).first);
+    final demoShellTitle = demoShell.title! as Text;
+    expect(demoShellTitle.style?.fontSize, 16);
+    expect(demoShellTitle.style?.height, closeTo(22 / 14, 0.001));
+    expect(demoShellTitle.style?.fontWeight, FontWeight.w500);
   });
 
   testWidgets('Navbar Demo 对齐 Figma H5 组合、图片尺寸与搜索交互', (tester) async {

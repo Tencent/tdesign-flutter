@@ -18,8 +18,8 @@
 | onBack | VoidCallback? | - | 返回事件。 提供该回调时，由调用方完全接管返回行为；未提供时，默认返回按钮会执行 `Navigator.maybePop`。 |
 | opacity | double? | - | 透明度 |
 | padding | EdgeInsetsGeometry? | - | 内部填充 |
-| title | Widget? | - | 标题控件。 文本标题可传入 `Text`，用法与 `AppBar.title` 一致。 |
-| titleColor | Color? | - | 标题颜色 |
+| title | Widget? | - | 标题控件。 文本标题可传入 `Text`，用法与 `AppBar.title` 一致。 标题自身的显式文本样式优先于 NavBar 提供的默认标题样式；例如 `TText` 默认会解析正文颜色，如需使用 `titleColor`，请通过 `TText.textColor` 传入相同颜色，或改用未显式设置颜色的 `Text`。 |
+| titleColor | Color? | - | 标题的默认颜色。 仅在 `title` 未自行提供前景色时生效。标题 Widget 自身的显式颜色优先； `TText` 会解析默认正文色，因此使用 `TText` 时可通过 `TText.textColor` 明确传入所需颜色。 |
 | titleMargin | double? | - | 中间文案左右两边间距 |
 | useBorderStyle | bool | false | 是否使用边框模式 |
 | useDefaultBack | bool | false | 是否使用默认的返回按钮，默认不显示 |

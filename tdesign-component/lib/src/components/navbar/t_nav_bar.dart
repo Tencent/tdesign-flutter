@@ -40,6 +40,9 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
   /// 标题控件。
   ///
   /// 文本标题可传入 [Text]，用法与 [AppBar.title] 一致。
+  /// 标题自身的显式文本样式优先于 NavBar 提供的默认标题样式；例如 `TText`
+  /// 默认会解析正文颜色，如需使用 `titleColor`，请通过 `TText.textColor`
+  /// 传入相同颜色，或改用未显式设置颜色的 [Text]。
   final Widget? title;
 
   /// 左侧操作项（对齐 AppBar.leading）
@@ -68,7 +71,11 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   // ---- L4 样式（可覆盖 ThemeData 默认值） ----
 
-  /// 标题颜色
+  /// 标题的默认颜色。
+  ///
+  /// 仅在 [title] 未自行提供前景色时生效。标题 Widget 自身的显式颜色优先；
+  /// `TText` 会解析默认正文色，因此使用 `TText` 时可通过 `TText.textColor`
+  /// 明确传入所需颜色。
   final Color? titleColor;
 
   /// 左边返回图标颜色

@@ -421,6 +421,9 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   Widget _buildNavBar() {
     var leftBarItems = <TNavBarItem>[];
     var rightBarItems = <TNavBarItem>[];
+    // 保留公共页面壳既有的 22/14 行高度量，同时避免继承可被宿主覆盖的
+    // Material bodyMedium，进而污染所有复用 ExamplePage 的组件 Golden。
+    final titleLineHeight = context.tTheme.fontBodyMedium?.height ?? 22 / 14;
 
     // web端示例页不展示标题栏
     if (PlatformUtil.isWeb && !Navigator.canPop(context)) {
@@ -488,7 +491,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
         widget.title,
         style: TextStyle(
           fontSize: 16,
-          height: Theme.of(context).textTheme.bodyMedium?.height,
+          height: titleLineHeight,
           fontWeight: FontWeight.w500,
         ),
       ),
