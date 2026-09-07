@@ -286,39 +286,7 @@ void main() {
       expect(style.fontWeight, token.fontTitleLarge?.fontWeight);
     });
 
-    testWidgets('显式 titleFont 不注入 Font 的行高', (tester) async {
-      final token = TThemeData.defaultData();
-      await tester.pumpWidget(
-        wrapWithTheme(
-          TNavBar(
-            title: const Text('Explicit font'),
-            titleFont: token.fontBodyLarge,
-          ),
-        ),
-      );
-
-      final style = effectiveTextStyle(tester, 'Explicit font');
-      expect(style.fontSize, token.fontBodyLarge?.size);
-      expect(style.height, isNot(token.fontBodyLarge?.height));
-    });
-
-    testWidgets('自定义标题字体族写入 TextStyle', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(
-          TNavBar(
-            title: const Text('Custom family'),
-            titleFontFamily: FontFamily(fontFamily: 'Roboto'),
-          ),
-        ),
-      );
-
-      final style = effectiveTextStyle(tester, 'Custom family');
-      expect(style.fontFamily, 'packages/tdesign_flutter/Roboto');
-    });
-
-    testWidgets('显式 titleFont 的字号、行高和字重优先于 Material AppBarTheme', (
-      tester,
-    ) async {
+    testWidgets('标题 Widget 自身样式覆盖默认标题样式', (tester) async {
       final token = TThemeData.defaultData();
       Widget wrapWithMaterial(Widget child) {
         final base = TThemeBuilder.light(token);
@@ -338,22 +306,26 @@ void main() {
 
       await tester.pumpWidget(
         wrapWithMaterial(
-          TNavBar(
-            title: const Text('Explicit wins'),
-            titleFont: token.fontBodyLarge,
+          const TNavBar(
+            title: Text(
+              'Explicit wins',
+              style: TextStyle(
+                fontSize: 16,
+                height: 1.5,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ),
         ),
       );
 
       final style = effectiveTextStyle(tester, 'Explicit wins');
-      // 构造器 titleFont（Body Large）优先，Material 的 fontSize=40 不得反向覆盖。
-      expect(style.fontSize, token.fontBodyLarge?.size);
-      expect(style.fontSize, isNot(40));
-      expect(style.height, isNot(3));
-      expect(style.fontWeight, token.fontBodyLarge?.fontWeight);
+      expect(style.fontSize, 16);
+      expect(style.height, 1.5);
+      expect(style.fontWeight, FontWeight.w400);
     });
 
-    testWidgets('未显式 titleFont 时 Material AppBarTheme fontSize 优先于默认 Token', (
+    testWidgets('Material AppBarTheme fontSize 优先于默认 Token', (
       tester,
     ) async {
       final token = TThemeData.defaultData();

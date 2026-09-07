@@ -2,8 +2,6 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
-import '../../theme/basic.dart';
-
 const _unset = Object();
 
 /// NavBar 边框配置（迁入 ThemeData）
@@ -30,7 +28,7 @@ class TNavBarBorder {
 
 /// NavBar 组件 ThemeExtension
 ///
-/// 管理 TNavBar 的子树级默认样式（标题颜色/字体、背景、内边距、阴影、边框等）。
+/// 管理 TNavBar 的子树级默认样式（标题颜色、背景、内边距、阴影、边框等）。
 /// 构造器参数优先级高于 ThemeData。高度属于 PreferredSizeWidget 契约，只能通过 TNavBar.height 设置。
 class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
   /// 标题颜色
@@ -38,15 +36,6 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
 
   /// 返回图标颜色
   final Color? backIconColor;
-
-  /// 标题字体尺寸
-  final Font? titleFont;
-
-  /// 标题字体粗细
-  final FontWeight? titleFontWeight;
-
-  /// 标题字体样式
-  final FontFamily? titleFontFamily;
 
   /// 背景颜色
   final Color? backgroundColor;
@@ -69,9 +58,6 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
   const TNavBarThemeData({
     this.titleColor,
     this.backIconColor,
-    this.titleFont,
-    this.titleFontWeight,
-    this.titleFontFamily,
     this.backgroundColor,
     this.padding,
     this.titleMargin,
@@ -88,9 +74,6 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
   TNavBarThemeData copyWith({
     Object? titleColor = _unset,
     Object? backIconColor = _unset,
-    Object? titleFont = _unset,
-    Object? titleFontWeight = _unset,
-    Object? titleFontFamily = _unset,
     Object? backgroundColor = _unset,
     Object? padding = _unset,
     Object? titleMargin = _unset,
@@ -105,15 +88,6 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
       backIconColor: identical(backIconColor, _unset)
           ? this.backIconColor
           : backIconColor as Color?,
-      titleFont: identical(titleFont, _unset)
-          ? this.titleFont
-          : titleFont as Font?,
-      titleFontWeight: identical(titleFontWeight, _unset)
-          ? this.titleFontWeight
-          : titleFontWeight as FontWeight?,
-      titleFontFamily: identical(titleFontFamily, _unset)
-          ? this.titleFontFamily
-          : titleFontFamily as FontFamily?,
       backgroundColor: identical(backgroundColor, _unset)
           ? this.backgroundColor
           : backgroundColor as Color?,
@@ -141,9 +115,6 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
     return TNavBarThemeData(
       titleColor: _lerpNullableColor(titleColor, other.titleColor, t),
       backIconColor: _lerpNullableColor(backIconColor, other.backIconColor, t),
-      titleFont: t < 0.5 ? titleFont : other.titleFont,
-      titleFontWeight: t < 0.5 ? titleFontWeight : other.titleFontWeight,
-      titleFontFamily: t < 0.5 ? titleFontFamily : other.titleFontFamily,
       backgroundColor: _lerpNullableColor(
         backgroundColor,
         other.backgroundColor,

@@ -20,9 +20,6 @@
 | padding | EdgeInsetsGeometry? | - | 内部填充 |
 | title | Widget? | - | 标题控件。 文本标题可传入 `Text`，用法与 `AppBar.title` 一致。 |
 | titleColor | Color? | - | 标题颜色 |
-| titleFont | Font? | - | 标题字体尺寸 |
-| titleFontFamily | FontFamily? | - | 标题字体样式 |
-| titleFontWeight | FontWeight? | - | 标题字体粗细 |
 | titleMargin | double? | - | 中间文案左右两边间距 |
 | useBorderStyle | bool | false | 是否使用边框模式 |
 | useDefaultBack | bool | false | 是否使用默认的返回按钮，默认不显示 |

@@ -51,7 +51,7 @@ NavBar 需要同时对照新版 Figma 的 H5/Flutter 专属移动画板、小程
 ### Theme 与样式优先级
 
 - 标题字体默认回退 TDesign Title Large（18/26/600），不再回退 Body Large。
-- `titleColor`、`backIconColor`、`titleFont`、`titleFontWeight`、`titleFontFamily`、`backgroundColor`、`padding`、`titleMargin`、`opacity`、`border`、`boxShadow` 仍可由 `TNavBarThemeData` 提供子树默认值。
+- `titleColor`、`backIconColor`、`backgroundColor`、`padding`、`titleMargin`、`opacity`、`border`、`boxShadow` 仍可由 `TNavBarThemeData` 提供子树默认值；标题字体和字重由传入的 `title` Widget 自身样式控制。
 - 解析优先级为构造器 > `TNavBarThemeData` > Material `AppBarTheme`（对应字段）> TDesign 语义 Token。
 - `TNavBarBorder` 只定义边框的颜色、宽度、圆角与内边距，不决定是否启用边框模式。
 - `TNavBarThemeData.copyWith` 区分参数未传与显式 `null`，允许清除任一 nullable 子树默认值。

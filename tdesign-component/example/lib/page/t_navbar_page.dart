@@ -234,7 +234,7 @@ class TNavBarPage extends StatelessWidget {
       child: TNavBar(
         key: const Key('navbar-demo-custom-height'),
         height: 80,
-        title: const Text('返回'),
+        title: const Text('返回', style: TextStyle(fontSize: 16, height: 1.5)),
         titleColor: context.tTheme.textColorPrimary,
         belowTitleWidget: SizedBox(
           height: 36,
@@ -244,7 +244,6 @@ class TNavBarPage extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        titleFont: Font(size: 16, lineHeight: 24),
         centerTitle: false,
         titleMargin: 8,
         useDefaultBack: false,
@@ -274,10 +273,12 @@ class TNavBarPage extends StatelessWidget {
   @ExampleCode(group: 'navbar')
   Widget _setBgColorNavbar(BuildContext context) {
     return TNavBar(
-      title: const Text(titleText),
+      title: const Text(
+        titleText,
+        style: TextStyle(fontWeight: FontWeight.w600),
+      ),
       titleColor: Colors.white,
       backgroundColor: context.tTheme.brandNormalColor,
-      titleFontWeight: FontWeight.w600,
       useDefaultBack: false,
       leading: [
         TNavBarItem(

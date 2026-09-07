@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
-import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
@@ -12,7 +11,7 @@ import 't_nav_bar_theme_data.dart';
 ///
 /// Material AppBar 薄包装（NavigationToolbar 实现）。
 /// - A 类禁用：操作项 `onTap: null`。
-/// - L4 样式（标题颜色/字体、背景、内边距等）→ [TNavBarThemeData]。
+/// - L4 样式（标题颜色、背景、内边距等）→ [TNavBarThemeData]。
 class TNavBar extends StatelessWidget implements PreferredSizeWidget {
   const TNavBar({
     Key? key,
@@ -27,9 +26,6 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
     // L4 样式参数（可覆盖 Theme）
     this.titleColor,
     this.backIconColor,
-    this.titleFont,
-    this.titleFontWeight,
-    this.titleFontFamily,
     this.backgroundColor,
     this.height = 48,
     this.padding,
@@ -77,15 +73,6 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// 左边返回图标颜色
   final Color? backIconColor;
-
-  /// 标题字体尺寸
-  final Font? titleFont;
-
-  /// 标题字体粗细
-  final FontWeight? titleFontWeight;
-
-  /// 标题字体样式
-  final FontFamily? titleFontFamily;
 
   /// 背景颜色
   final Color? backgroundColor;
@@ -269,33 +256,16 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
     var titleColor = _effectiveTitleColor(context);
 
     final materialStyle = Theme.of(context).appBarTheme.titleTextStyle;
-    final configuredFont = titleFont ?? _themeData(context).titleFont;
     final tokenFont = context.tTheme.fontTitleLarge;
-    final configuredFamily =
-        titleFontFamily ?? _themeData(context).titleFontFamily;
 
     return TextStyle(
-      fontSize:
-          configuredFont?.size ?? materialStyle?.fontSize ?? tokenFont?.size,
-      // 显式 titleFont 延续既有语义，不额外施加 Font 中的行高；同时也不允许
-      // 低优先级 Material 样式反向覆盖。未显式配置时才由 Material/Token 提供行高。
-      height: configuredFont == null
-          ? (materialStyle?.height ?? tokenFont?.height)
-          : null,
+      fontSize: materialStyle?.fontSize ?? tokenFont?.size,
+      height: materialStyle?.height ?? tokenFont?.height,
       color: titleColor,
-      fontWeight:
-          titleFontWeight ??
-          _themeData(context).titleFontWeight ??
-          configuredFont?.fontWeight ??
-          materialStyle?.fontWeight ??
-          tokenFont?.fontWeight,
+      fontWeight: materialStyle?.fontWeight ?? tokenFont?.fontWeight,
       decoration: TextDecoration.none,
-      fontFamily: configuredFamily?.fontFamily ?? materialStyle?.fontFamily,
-      // Material TextStyle 已将 package 编码进 fontFamily；只有 TDesign 的
-      // FontFamily 配置需要在此传入 package。
-      package: configuredFamily == null
-          ? null
-          : (configuredFamily.package ?? 'tdesign_flutter'),
+      fontFamily: materialStyle?.fontFamily,
+      package: null,
     );
   }
 
