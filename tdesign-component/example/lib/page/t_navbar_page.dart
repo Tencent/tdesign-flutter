@@ -29,16 +29,16 @@ class TNavBarPage extends StatelessWidget {
             ExampleItem(desc: '带图片导航栏', builder: _logoNavbar),
           ],
         ),
-        ExampleModule(title: '组件样式', children: [
-          ExampleItem(desc: '标题对齐', builder: _titleCenterNavbar),
-          ExampleItem(builder: _titleLeftNavbar),
-          ExampleItem(desc: '标题尺寸', builder: _titleNormalNavbar),
-          ExampleItem(builder: _titleBelowNavbar),
-          ExampleItem(desc: '自定义颜色', builder: _setBgColorNavbar),
-        ]),
-        ExampleModule(title: '其他', children: [
-          ExampleItem(desc: '底部阴影', builder: _shadowNavbar),
-        ]),
+        ExampleModule(
+          title: '组件样式',
+          children: [
+            ExampleItem(desc: '标题对齐', builder: _titleCenterNavbar),
+            ExampleItem(builder: _titleLeftNavbar),
+            ExampleItem(desc: '标题尺寸', builder: _titleNormalNavbar),
+            ExampleItem(builder: _titleBelowNavbar),
+            ExampleItem(desc: '自定义颜色', builder: _setBgColorNavbar),
+          ],
+        ),
       ],
     );
   }
@@ -47,8 +47,7 @@ class TNavBarPage extends StatelessWidget {
   Widget _baseH5Navbar(BuildContext context) {
     return const TNavBar(
       key: Key('navbar-demo-base'),
-      titleFontWeight: FontWeight.w600,
-      title: titleText,
+      title: Text(titleText),
       useDefaultBack: true,
     );
   }
@@ -58,8 +57,8 @@ class TNavBarPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
-        title: titleText,
-        titleFontWeight: FontWeight.w600,
+        key: const Key('navbar-demo-left-multi-action'),
+        title: const Text(titleText),
         useDefaultBack: true,
         leading: [
           TNavBarItem(
@@ -84,8 +83,8 @@ class TNavBarPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
-        title: titleText,
-        titleFontWeight: FontWeight.w600,
+        key: const Key('navbar-demo-right-multi-action'),
+        title: const Text(titleText),
         useDefaultBack: true,
         actions: [
           TNavBarItem(
@@ -106,10 +105,10 @@ class TNavBarPage extends StatelessWidget {
   @ExampleCode(group: 'navbar')
   Widget _searchNavbar(BuildContext context) {
     return TNavBar(
-      useDefaultBack: false,
+      key: const Key('navbar-demo-search'),
       centerTitle: false,
       titleMargin: 0,
-      titleWidget: Theme(
+      title: Theme(
         data: Theme.of(context).mergeExtension(
           const TSearchBarThemeData(variant: TSearchBarVariant.round),
         ),
@@ -138,13 +137,13 @@ class TNavBarPage extends StatelessWidget {
   @ExampleCode(group: 'navbar')
   Widget _logoNavbar(BuildContext context) {
     return TNavBar(
-      useDefaultBack: false,
+      key: const Key('navbar-demo-image'),
       centerTitle: false,
       titleMargin: 0,
-      titleWidget: const TImage(
+      title: const TImage(
         src: 'assets/img/t_brand.png',
-        width: 120,
-        height: 32,
+        width: 87,
+        height: 24,
         variant: TImageVariant.fitWidth,
         fit: BoxFit.contain,
       ),
@@ -166,8 +165,7 @@ class TNavBarPage extends StatelessWidget {
   @ExampleCode(group: 'navbar')
   Widget _titleCenterNavbar(BuildContext context) {
     return TNavBar(
-      title: titleText,
-      titleFontWeight: FontWeight.w600,
+      title: const Text(titleText),
       useDefaultBack: true,
       actions: [
         TNavBarItem(
@@ -189,8 +187,7 @@ class TNavBarPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
-        title: titleText,
-        titleFontWeight: FontWeight.w600,
+        title: const Text(titleText),
         centerTitle: false,
         titleMargin: 0,
         useDefaultBack: true,
@@ -213,8 +210,7 @@ class TNavBarPage extends StatelessWidget {
   @ExampleCode(group: 'navbar')
   Widget _titleNormalNavbar(BuildContext context) {
     return TNavBar(
-      title: titleText,
-      titleFontWeight: FontWeight.w600,
+      title: const Text(titleText),
       useDefaultBack: true,
       actions: [
         TNavBarItem(
@@ -238,8 +234,7 @@ class TNavBarPage extends StatelessWidget {
       child: TNavBar(
         key: const Key('navbar-demo-custom-height'),
         height: 80,
-        title: '返回',
-        titleColor: context.tTheme.textColorPrimary,
+        title: TText('返回', font: context.tTheme.fontBodyLarge),
         belowTitleWidget: SizedBox(
           height: 36,
           child: TText(
@@ -248,7 +243,6 @@ class TNavBarPage extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        titleFont: Font(size: 16, lineHeight: 24),
         centerTitle: false,
         titleMargin: 8,
         useDefaultBack: false,
@@ -278,10 +272,12 @@ class TNavBarPage extends StatelessWidget {
   @ExampleCode(group: 'navbar')
   Widget _setBgColorNavbar(BuildContext context) {
     return TNavBar(
-      title: titleText,
+      title: const Text(
+        titleText,
+        style: TextStyle(fontWeight: FontWeight.w600),
+      ),
       titleColor: Colors.white,
       backgroundColor: context.tTheme.brandNormalColor,
-      titleFontWeight: FontWeight.w600,
       useDefaultBack: false,
       leading: [
         TNavBarItem(
@@ -303,22 +299,6 @@ class TNavBarPage extends StatelessWidget {
           iconSize: 24,
           iconColor: Colors.white,
           onTap: () => _showAction(context, '更多'),
-        ),
-      ],
-    );
-  }
-
-  @ExampleCode(group: 'navbar')
-  Widget _shadowNavbar(BuildContext context) {
-    return TNavBar(
-      titleFontWeight: FontWeight.w600,
-      title: titleText,
-      useDefaultBack: true,
-      boxShadow: [
-        BoxShadow(
-          blurRadius: 4,
-          offset: const Offset(0, 4),
-          color: context.tTheme.componentBorderColor,
         ),
       ],
     );

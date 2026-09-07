@@ -95,7 +95,7 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
       // opacity: 0,
       centerTitle: false,
       titleMargin: 0,
-      titleWidget: Theme(
+      title: Theme(
         data: Theme.of(context).mergeExtension(
           const TSearchBarThemeData(variant: TSearchBarVariant.round),
         ),
