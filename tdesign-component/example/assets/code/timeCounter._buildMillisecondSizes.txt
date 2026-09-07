@@ -1,0 +1,26 @@
+Widget _buildMillisecondSizes(BuildContext context) {
+  return const Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      TTimeCounter(
+        time: 96 * 60 * 1000,
+        format: 'HH:mm:ss:SSS',
+        showMillisecond: true,
+        size: TTimeCounterSize.small,
+      ),
+      SizedBox(height: 24),
+      TTimeCounter(
+        time: 96 * 60 * 1000,
+        format: 'HH:mm:ss:SSS',
+        showMillisecond: true,
+      ),
+      SizedBox(height: 24),
+      TTimeCounter(
+        time: 96 * 60 * 1000,
+        format: 'HH:mm:ss:SSS',
+        showMillisecond: true,
+        size: TTimeCounterSize.large,
+      ),
+    ],
+  );
+}

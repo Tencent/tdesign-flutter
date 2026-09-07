@@ -13,19 +13,17 @@ import 't_time_counter_theme_data.dart';
 import 't_time_counter_types.dart';
 
 final RegExp _timeReg = RegExp(r'D+|H+|m+|s+|S+');
+final RegExp _formatReg = RegExp(
+  r'^(?:D+|H+|m+|s+|S+)(?:\S(?:D+|H+|m+|s+|S+))*\S?$',
+);
 
 /// 自定义计时内容构建器。
 typedef TTimeCounterBuilder = Widget Function(int time);
 
 String _toDigits(int n, int l) => n.toString().padLeft(l, '0');
 
-String _getMark(String format, String? type) {
-  var part = format.split(type ?? '')[1];
-  if (part.isEmpty) {
-    return '';
-  }
-  return part.split('')[0];
-}
+String _getMark(String format, RegExpMatch match) =>
+    match.end < format.length ? format.substring(match.end, match.end + 1) : '';
 
 /// 计时组件
 class TTimeCounter extends StatefulWidget {
@@ -45,13 +43,16 @@ class TTimeCounter extends StatefulWidget {
     this.controller,
   }) : assert(time >= 0, 'time must not be negative');
 
-  /// 是否自动开始倒计时
+  /// 是否自动开始计时，默认为 true。
   final bool autoStart;
 
   /// 自定义计时内容；为空时使用标准数字块。
   final TTimeCounterBuilder? content;
 
-  /// 时间格式，DD-日，HH-时，mm-分，ss-秒，SSS-毫秒（分隔符必须为长度为1的非空格的字符）
+  /// 时间格式，D-日、H-时、m-分、s-秒、S-毫秒。
+  ///
+  /// 每段可重复字符控制最小位数，相邻时间段之间仅允许一个非空白分隔符；
+  /// 最后一段后可追加一个单位字符。例如 `HH:mm:ss`、`mmmm分sss秒`。
   final String format;
 
   /// 是否显示毫秒；优先于组件 Theme。
@@ -69,20 +70,20 @@ class TTimeCounter extends StatefulWidget {
   /// 必需；计时时长，单位毫秒
   final int time;
 
-  /// 时间变化时触发回调
+  /// 时间变化时按有效绘制帧触发回调，回调值为当前毫秒数。
   final ValueChanged<int>? onChanged;
 
-  /// 计时结束时触发回调
+  /// 计时自然到达终点时触发一次回调。
   final VoidCallback? onFinish;
 
-  /// 计时方向，默认倒计时
+  /// 计时方向，默认倒计时。
   final TTimeCounterDirection direction;
 
   /// 控制器，可控制开始/暂停/继续/重置
   final TTimeCounterController? controller;
 
   @override
-  _TTimeCounterState createState() => _TTimeCounterState();
+  State<TTimeCounter> createState() => _TTimeCounterState();
 }
 
 class _TTimeCounterState extends State<TTimeCounter>
@@ -97,10 +98,12 @@ class _TTimeCounterState extends State<TTimeCounter>
   int _time = 0;
   int _tempMilliseconds = 0;
   int _maxTime = 0;
+  bool _finished = false;
 
   @override
   void initState() {
     super.initState();
+    _validateConfiguration();
     resetTimer(widget.time, false);
     widget.controller?.addListener(_onControllerChanged);
   }
@@ -136,12 +139,35 @@ class _TTimeCounterState extends State<TTimeCounter>
   @override
   void didUpdateWidget(TTimeCounter oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.time != oldWidget.time || widget.format != oldWidget.format) {
+      _validateConfiguration();
+    }
     if (widget.controller != oldWidget.controller) {
       oldWidget.controller?.removeListener(_onControllerChanged);
       widget.controller?.addListener(_onControllerChanged);
     }
-    if (widget.time != oldWidget.time) {
+    if (widget.time != oldWidget.time ||
+        widget.direction != oldWidget.direction) {
       resetTimer(widget.time, false);
+    } else if (widget.autoStart != oldWidget.autoStart) {
+      if (widget.autoStart) {
+        startTimer();
+      } else {
+        pauseTimer();
+      }
+    }
+  }
+
+  void _validateConfiguration() {
+    if (widget.time < 0) {
+      throw ArgumentError.value(widget.time, 'time', 'must not be negative');
+    }
+    if (!_formatReg.hasMatch(widget.format)) {
+      throw ArgumentError.value(
+        widget.format,
+        'format',
+        'has invalid structure',
+      );
     }
   }
 
@@ -157,31 +183,51 @@ class _TTimeCounterState extends State<TTimeCounter>
     if (_ticker?.isActive == true) {
       return;
     }
+    if (!_canRun) {
+      _finish();
+      return;
+    }
     _tempMilliseconds = 0;
     _ticker ??= createTicker((Duration elapsed) {
       if (!mounted) {
         return;
       }
-      if ((widget.direction == TTimeCounterDirection.down && _time > 0) ||
-          widget.direction == TTimeCounterDirection.up && _time < _maxTime) {
-        setState(() {
-          if (widget.direction == TTimeCounterDirection.down) {
-            _time =
-                max(_time - (elapsed.inMilliseconds - _tempMilliseconds), 0);
-          } else {
-            _time = min(
-                _time + (elapsed.inMilliseconds - _tempMilliseconds), _maxTime);
-          }
-        });
-        _tempMilliseconds = elapsed.inMilliseconds;
-        widget.onChanged?.call(_time);
-      } else {
-        pauseTimer();
-        widget.onFinish?.call();
+      final delta = elapsed.inMilliseconds - _tempMilliseconds;
+      _tempMilliseconds = elapsed.inMilliseconds;
+      final previous = _time;
+      final next = widget.direction == TTimeCounterDirection.down
+          ? max(previous - delta, 0)
+          : min(previous + delta, _maxTime);
+      final shouldRender =
+          _effectiveMillisecond ||
+          next == 0 ||
+          next == _maxTime ||
+          next ~/ Duration.millisecondsPerSecond !=
+              previous ~/ Duration.millisecondsPerSecond;
+      _time = next;
+      if (next != previous) {
+        widget.onChanged?.call(next);
       }
-      setState(() {});
+      if (shouldRender && next != previous) {
+        setState(() {});
+      }
+      if (!_canRun) {
+        _finish();
+      }
     });
     _ticker!.start();
+  }
+
+  bool get _canRun => widget.direction == TTimeCounterDirection.down
+      ? _time > 0
+      : _time < _maxTime;
+
+  void _finish() {
+    pauseTimer();
+    if (!_finished) {
+      _finished = true;
+      widget.onFinish?.call();
+    }
   }
 
   /// 暂停
@@ -197,6 +243,7 @@ class _TTimeCounterState extends State<TTimeCounter>
   /// 重置计时
   void resetTimer([int? time, bool update = true]) {
     _ticker?.stop();
+    _finished = false;
     if (widget.direction == TTimeCounterDirection.down) {
       _time = time ?? widget.time;
     } else {
@@ -208,7 +255,7 @@ class _TTimeCounterState extends State<TTimeCounter>
         setState(() {});
       }
     }
-    if (widget.autoStart) {
+    if (widget.autoStart && _canRun) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         if (!mounted) {
           return;
@@ -241,14 +288,20 @@ class _TTimeCounterState extends State<TTimeCounter>
   Widget build(BuildContext context) {
     if (widget.content == null) {
       return Row(
-          mainAxisSize: MainAxisSize.min, children: _buildTimeWidget(context));
+        mainAxisSize: MainAxisSize.min,
+        children: _buildTimeWidget(context),
+      );
     }
     return widget.content!(_time);
   }
 
   List<Widget> _buildTimeWidget(BuildContext context) {
-    final format = _effectiveMillisecond
-        ? '${widget.format.replaceAll(RegExp(r':S+$'), '')}:SSS'
+    final format =
+        _effectiveMillisecond &&
+            !_timeReg
+                .allMatches(widget.format)
+                .any((match) => match.group(0)?.startsWith('S') ?? false)
+        ? '${widget.format}:SSS'
         : widget.format;
     final matches = _timeReg.allMatches(format);
     final timeMap = _getTimeMap(matches.map((e) => e.group(0) ?? '').toList());
@@ -259,17 +312,14 @@ class _TTimeCounterState extends State<TTimeCounter>
             timeMap[timeType] ?? '0',
             _effectiveSplitWithUnit
                 ? timeUnitMap[timeType[0]] ?? ''
-                : _getMark(format, timeType),
+                : _getMark(format, match),
           );
         })
         .expand((element) => element)
         .toList();
   }
 
-  List<Widget> _buildTextWidget(
-    String time,
-    String split,
-  ) {
+  List<Widget> _buildTextWidget(String time, String split) {
     final children = <Widget>[
       Container(
         width: _style.timeWidth,

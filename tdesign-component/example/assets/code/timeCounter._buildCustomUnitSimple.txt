@@ -1,6 +1,36 @@
-TTimeCounter _buildCustomUnitSimple(BuildContext context) {
-  return const TTimeCounter(
-    time: 60 * 60 * 1000,
-    splitWithUnit: true,
+Widget _buildCustomUnitSimple(BuildContext context) {
+  return TTimeCounter(
+    time: 96 * 60 * 1000,
+    content: (time) {
+      final duration = Duration(milliseconds: time);
+      String twoDigits(int value) => value.toString().padLeft(2, '0');
+      final countStyle = TextStyle(
+        color: context.tTheme.errorNormalColor,
+        fontSize: 18,
+        height: 24 / 18,
+        fontFamily: context.tTheme.numberFontFamily?.fontFamily,
+        package: context.tTheme.numberFontFamily?.package,
+      );
+      final unitStyle = TextStyle(
+        color: context.tTheme.textColorPrimary,
+        fontSize: 10,
+        height: 16 / 10,
+      );
+      Widget unit(String value) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5),
+        child: TText(value, style: unitStyle),
+      );
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TText(twoDigits(duration.inHours), style: countStyle),
+          unit('时'),
+          TText(twoDigits(duration.inMinutes.remainder(60)), style: countStyle),
+          unit('分'),
+          TText(twoDigits(duration.inSeconds.remainder(60)), style: countStyle),
+          unit('秒'),
+        ],
+      );
+    },
   );
 }

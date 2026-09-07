@@ -545,4 +545,143 @@ void main() {
       expect(style, isNotNull);
     });
   });
+
+  group('TTimeCounter 计时契约', () {
+    testWidgets('默认、点分隔和单位分隔使用各自尺寸与间距', (tester) async {
+      late BuildContext context;
+      await tester.pumpWidget(wrapWithTheme(
+        Builder(builder: (value) {
+          context = value;
+          return const SizedBox();
+        }),
+      ));
+
+      final plain = TTimeCounterStyle.generateStyle(context);
+      final dots = TTimeCounterStyle.generateStyle(
+        context,
+        theme: TTimeCounterVariant.round,
+      );
+      final units = TTimeCounterStyle.generateStyle(
+        context,
+        theme: TTimeCounterVariant.round,
+        splitWithUnit: true,
+      );
+      expect(plain.space, 0);
+      expect(plain.timeFontSize, 16);
+      expect(plain.splitFontSize, 16);
+      expect(dots.space, 3);
+      expect(dots.timeFontSize, 14);
+      expect(dots.splitFontSize, 16);
+      expect(units.space, 5);
+      expect(units.timeFontSize, 14);
+      expect(units.splitFontSize, 12);
+    });
+
+    testWidgets('秒级和毫秒模式均保留有效帧通知契约', (tester) async {
+      final secondChanges = <int>[];
+      await tester.pumpWidget(
+        wrapWithTheme(TTimeCounter(time: 5000, onChanged: secondChanges.add)),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(secondChanges, hasLength(2));
+
+      final millisecondChanges = <int>[];
+      await tester.pumpWidget(wrapWithTheme(TTimeCounter(
+        time: 5000,
+        showMillisecond: true,
+        onChanged: millisecondChanges.add,
+      )));
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(millisecondChanges, hasLength(3));
+    });
+
+    testWidgets('动态 autoStart 开始和暂停当前计时', (tester) async {
+      var autoStart = false;
+      late StateSetter update;
+      await tester.pumpWidget(wrapWithTheme(
+        StatefulBuilder(builder: (context, setState) {
+          update = setState;
+          return TTimeCounter(time: 5000, autoStart: autoStart);
+        }),
+      ));
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('05'), findsOneWidget);
+
+      update(() => autoStart = true);
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('04'), findsOneWidget);
+
+      update(() => autoStart = false);
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('04'), findsOneWidget);
+    });
+
+    testWidgets('动态 direction 按新方向重置并正向计时', (tester) async {
+      var direction = TTimeCounterDirection.down;
+      late StateSetter update;
+      await tester.pumpWidget(wrapWithTheme(
+        StatefulBuilder(builder: (context, setState) {
+          update = setState;
+          return TTimeCounter(
+            time: 5000,
+            autoStart: false,
+            direction: direction,
+          );
+        }),
+      ));
+      expect(find.text('05'), findsOneWidget);
+
+      update(() => direction = TTimeCounterDirection.up);
+      await tester.pump();
+      expect(find.text('00'), findsNWidgets(3));
+    });
+
+    testWidgets('终点完成幂等且初始零值不自动完成', (tester) async {
+      var finishes = 0;
+      final controller = TTimeCounterController();
+      await tester.pumpWidget(wrapWithTheme(TTimeCounter(
+        time: 0,
+        controller: controller,
+        onFinish: () => finishes++,
+      )));
+      await tester.pump();
+      expect(finishes, 0);
+
+      controller.start();
+      await tester.pump();
+      controller.start();
+      await tester.pump();
+      expect(finishes, 1);
+    });
+
+    testWidgets('已有毫秒段不会重复追加且尾随单位可以解析', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(
+        const TTimeCounter(
+          time: 61500,
+          autoStart: false,
+          showMillisecond: true,
+          format: 'mm分ss秒SSS毫',
+        ),
+      ));
+      expect(find.text('01'), findsNWidgets(2));
+      expect(find.text('500'), findsOneWidget);
+      expect(find.text('分'), findsOneWidget);
+      expect(find.text('秒'), findsOneWidget);
+      expect(find.text('毫'), findsOneWidget);
+    });
+
+    testWidgets('无效 format 和负 reset 被拒绝', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(
+        const TTimeCounter(time: 1000, autoStart: false, format: 'HH::mm'),
+      ));
+      expect(tester.takeException(), isArgumentError);
+      expect(() => TTimeCounterController().reset(-1), throwsArgumentError);
+    });
+  });
 }
