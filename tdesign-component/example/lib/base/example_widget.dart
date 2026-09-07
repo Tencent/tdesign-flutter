@@ -421,11 +421,21 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   Widget _buildNavBar() {
     var leftBarItems = <TNavBarItem>[];
     var rightBarItems = <TNavBarItem>[];
+    // 保留公共页面壳既有的 22/14 行高度量，同时避免继承可被宿主覆盖的
+    // Material bodyMedium，进而污染所有复用 ExamplePage 的组件 Golden。
+    final titleLineHeight = context.tTheme.fontBodyMedium?.height ?? 22 / 14;
 
     // web端示例页不展示标题栏
     if (PlatformUtil.isWeb && !Navigator.canPop(context)) {
       return Container();
     }
+    leftBarItems.add(
+      TNavBarItem(
+        icon: TIcons.chevron_left,
+        iconSize: 28,
+        onTap: () => Navigator.maybePop(context),
+      ),
+    );
     if (showAction) {
       // Web 端和移动端都显示 API 按钮
       rightBarItems.add(
@@ -477,9 +487,19 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
 
     return TNavBar(
       key: widget.navBarKey,
-      title: widget.title,
+      title: Text(
+        widget.title,
+        style: TextStyle(
+          fontSize: 16,
+          height: titleLineHeight,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
       leading: leftBarItems,
       actions: rightBarItems,
+      // ExamplePage 的公共壳层自行持有标题视觉，避免组件默认值调整时
+      // 污染所有其他组件的 Demo 与 Golden。
+      useDefaultBack: false,
       // ExamplePage 外层 SafeArea 已负责顶部避让。
       useSafeArea: false,
     );

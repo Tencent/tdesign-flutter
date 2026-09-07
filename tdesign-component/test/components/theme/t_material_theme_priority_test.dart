@@ -447,7 +447,7 @@ void main() {
               TLink(child: const Text('link'), onPressed: () {}),
               const TTag('tag'),
               const TResult(title: 'result'),
-              const TNavBar(title: 'navbar', useDefaultBack: false),
+              const TNavBar(title: Text('navbar'), useDefaultBack: false),
               const TCell(title: Text('cell')),
             ],
           ),
@@ -464,10 +464,7 @@ void main() {
       tester.widget<Icon>(find.byIcon(TIcons.info_circle)).color,
       customScheme.primary,
     );
-    expect(
-      tester.widget<Text>(find.text('navbar')).style?.color,
-      customScheme.onSurface,
-    );
+    expect(effectiveTextStyle(tester, 'navbar').color, customScheme.onSurface);
     final cellTextStyle = tester
         .widgetList<DefaultTextStyle>(
           find.descendant(
