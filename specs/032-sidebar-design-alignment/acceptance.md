@@ -14,7 +14,7 @@
 | 组件行为 | 43/43 通过 | 受控回写、禁用、loading、line/tag、语义和 Theme 优先级 |
 | 生产覆盖率 | 通过 | SideBar 生产源码 LH/LF = 230/230 = 100% |
 | Demo 行为 | 8/8 通过 | 10 项数据、Badge、锚点双向同步、末项、文本缩放与公开入口 |
-| 严格 Golden | 6/6 通过 | Flutter 3.32 Linux：入口、锚点、tag 各 light/dark；更新后无 `--update-goldens` 复跑 |
+| 严格 Golden | 8/8 通过 | Flutter 3.32 Linux：入口、锚点、tag 与共享导航矩阵各 light/dark；更新后无 `--update-goldens` 复跑 |
 | 双 SDK | 通过 | Flutter 3.32.0 / 3.47.0 组件包与 Example analyze 均 0 error / 0 warning；功能测试通过 |
 | 构建 | 通过 | 两个 SDK 的 Web release 与 Android debug 均成功 |
 | 生成产物 | 通过 | API 与示例片段已生成，`generate_example_code.dart --check` 通过 |
@@ -25,7 +25,7 @@
 - [x] 读取新版 Figma 移动画板 `28591:34071`（375×667），核对 103dp 左栏、10 项、默认第二项、Badge 位置和右侧纵向图文行。
 - [x] 读取小程序 develop 的 SideBar 组件与公开 Demo，保留受控切换、锚点同步和禁用项操作模式。
 - [x] 明确记录重大跨端差异：小程序为 5 项 + 64dp 圆图三列宫格；新版 Figma 为约 10 项 + 48dp 圆角方图纵向列表。Flutter 公开详情按用户指定优先对齐新版 Figma。
-- [x] 逐张检查 6 个最终 Golden；独立 CJK 子集无缺字方框，长页无裁切，light/dark 状态和结构一致。
+- [x] 逐张检查 8 个最终 Golden；独立 CJK 子集无缺字方框，长页无裁切，light/dark 状态和结构一致，共享导航矩阵只变更 SideBar 区域。
 
 ## API / Theme Review
 
