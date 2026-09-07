@@ -234,7 +234,7 @@ class TNavBarPage extends StatelessWidget {
       child: TNavBar(
         key: const Key('navbar-demo-custom-height'),
         height: 80,
-        title: const Text('返回', style: TextStyle(fontSize: 16, height: 1.5)),
+        title: TText('返回', font: context.tTheme.fontBodyLarge),
         titleColor: context.tTheme.textColorPrimary,
         belowTitleWidget: SizedBox(
           height: 36,

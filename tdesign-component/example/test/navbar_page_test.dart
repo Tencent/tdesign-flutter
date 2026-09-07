@@ -35,6 +35,10 @@ void main() {
     expect(demoShell.useDefaultBack, isFalse);
     expect(demoShell.leading?.first.icon, TIcons.chevron_left);
     expect(demoShell.leading?.first.iconSize, 28);
+    final demoShellTitle = demoShell.title! as Text;
+    expect(demoShellTitle.style?.fontSize, 16);
+    expect(demoShellTitle.style?.height, closeTo(22 / 14, 0.001));
+    expect(demoShellTitle.style?.fontWeight, FontWeight.w500);
 
     expect(
       tester.getSize(find.byKey(const Key('navbar-demo-base'))).height,
@@ -50,6 +54,19 @@ void main() {
       tester.getSize(find.byKey(const Key('navbar-demo-custom-height'))).height,
       80,
     );
+    final customHeight = tester.widget<TNavBar>(
+      find.byKey(const Key('navbar-demo-custom-height')),
+    );
+    expect(customHeight.title, isA<TText>());
+    final renderedBackTitle = tester.widget<Text>(
+      find.descendant(
+        of: find.byKey(const Key('navbar-demo-custom-height')),
+        matching: find.text('返回'),
+      ),
+    );
+    expect(renderedBackTitle.style?.fontSize, 16);
+    expect(renderedBackTitle.style?.height, 1.5);
+    expect(renderedBackTitle.style?.fontWeight, FontWeight.w400);
   });
 
   testWidgets('Navbar Demo 对齐 Figma H5 组合、图片尺寸与搜索交互', (tester) async {

@@ -486,9 +486,9 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       key: widget.navBarKey,
       title: Text(
         widget.title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 16,
-          height: 1.5,
+          height: Theme.of(context).textTheme.bodyMedium?.height,
           fontWeight: FontWeight.w500,
         ),
       ),
