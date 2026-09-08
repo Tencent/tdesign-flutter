@@ -789,6 +789,8 @@
       "api": {
         "names": [
           "TPopover",
+          "TPopoverAnchor",
+          "TPopoverController",
           "TPopoverColorScheme",
           "TPopoverPlacement"
         ],
