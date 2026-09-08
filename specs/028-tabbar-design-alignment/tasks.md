@@ -1,7 +1,7 @@
 # 实施任务
 
 - [x] DONE 冻结 Figma、小程序与当前 Flutter 差异
-- [x] DONE 定义四条独立公开契约与 Theme 所有权
+- [x] DONE 定义三条独立公开契约与 Theme 所有权
 - [x] DONE 修复 ThemeExtension nullable 字段插值的默认值与样式污染
 - [x] DONE 实现组件 API、布局与视觉收敛
 - [x] DONE 按 Figma 移动端展示画板重建公开 Demo
@@ -13,4 +13,7 @@
 - [x] DONE 处理上一轮 CodeBuddy Review 反馈
 - [x] DONE 修复逐字段主题、弹层继承、背景遮盖、动画中断和内部导出
 - [x] DONE 补充 Demo State、七个真实代码面板和核心片段编译回归
+- [x] DONE 复核 Figma Layout 语义，删除无完整实现依据的 `layout` 草案 API
+- [x] DONE 收敛水波纹点击识别器、回调文档与单次通知回归
+- [x] DONE 撤回仅服务 TabBar 的公共 `ExamplePage.navBarTitle` 扩展
 - [ ] TODO 本轮修复推送后，检查新 head CI 并完成新一轮 CNB Review

@@ -24,7 +24,6 @@ class _TTabBarPageState extends State<TTabBarPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: 'TabBar 底部标签栏',
-      navBarTitle: 'TabBar',
       desc: '用于在不同功能模块之间进行快速切换，位于页面底部。',
       exampleCodeGroup: 'tabBar',
       compactDemo: true,

@@ -15,7 +15,6 @@
 | indicatorAnimation | TTabBarIndicatorAnimation | TTabBarIndicatorAnimation.none | 指示器动画类型 |
 | itemStyle | TTabBarItemStyle | TTabBarItemStyle.label | 单个标签项的选中样式。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| layout | TTabBarLayout | TTabBarLayout.vertical | 图标与文字的排列方式，仅影响 `TTabBarType.iconText`。 |
 | navigationTabs | List<TTabBarItemConfig> | - | tabs配置 |
 | needInkWell | bool | false | 是否需要水波纹效果 |
 | onChanged | ValueChanged<int>? | - | 选中项变化；null 时整栏禁用 |
@@ -47,10 +46,10 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| allowMultipleTaps | bool | false | onTap 方法允许点击多次 |
+| allowMultipleTaps | bool | false | 是否允许重复点击当前选中项时再次调用 `onTap`，默认为 false。 该字段不影响点击未选中项，也不会让 `TTabBar.onChanged` 重复通知当前值。 |
 | badgeConfig | TTabBarBadgeConfig? | - | 消息配置 |
 | onLongPress | GestureLongPressCallback? | - | 长按事件 |
-| onTap | GestureTapCallback? | - | tab点击事件 |
+| onTap | GestureTapCallback? | - | 标签项被选中时的附加点击回调。 点击未选中项时，在 `TTabBar.onChanged` 之前调用；重复点击当前选中项时， 仅当 `allowMultipleTaps` 为 true 才调用。整栏禁用时不会调用。 |
 | popUpButtonConfig | TTabBarPopUpBtnConfig? | - | 弹窗配置 |
 | selectedIcon | Widget? | - | 选中时图标 |
 | selectTabTextStyle | TextStyle? | - | 选中时的文字样式，按字段覆盖继承主题与内置默认值。 |
@@ -123,16 +122,6 @@
 | --- | --- |
 | filled | 铺满父容器。 |
 | capsule | 带外边距、圆角和阴影的悬浮胶囊。 |
-
-
-### TTabBarLayout
-#### 枚举值
-
-
-| 名称 | 说明 |
-| --- | --- |
-| vertical | 图标在文字上方。 |
-| horizontal | 图标在文字左侧。 |
 
 
 ### TTabBarIndicatorAnimation

@@ -75,15 +75,6 @@ enum TTabBarStyle {
   capsule,
 }
 
-/// 图标与文字的排列方式。
-enum TTabBarLayout {
-  /// 图标在文字上方。
-  vertical,
-
-  /// 图标在文字左侧。
-  horizontal,
-}
-
 /// 底部标签栏基本类型
 enum _TTabBarBasicType {
   /// 单层级纯文本标签栏
@@ -179,7 +170,10 @@ class TTabBarItemConfig {
   /// 未选中时的文字样式，按字段覆盖继承主题与内置默认值。
   final TextStyle? unselectTabTextStyle;
 
-  /// tab点击事件
+  /// 标签项被选中时的附加点击回调。
+  ///
+  /// 点击未选中项时，在 [TTabBar.onChanged] 之前调用；重复点击当前选中项时，
+  /// 仅当 [allowMultipleTaps] 为 true 才调用。整栏禁用时不会调用。
   final GestureTapCallback? onTap;
 
   /// 消息配置
@@ -188,7 +182,9 @@ class TTabBarItemConfig {
   /// 弹窗配置
   final TTabBarPopUpBtnConfig? popUpButtonConfig;
 
-  /// onTap 方法允许点击多次
+  /// 是否允许重复点击当前选中项时再次调用 [onTap]，默认为 false。
+  ///
+  /// 该字段不影响点击未选中项，也不会让 [TTabBar.onChanged] 重复通知当前值。
   final bool allowMultipleTaps;
 
   /// 长按事件
@@ -197,8 +193,7 @@ class TTabBarItemConfig {
 
 /// 底部标签栏
 ///
-/// 支持文本、图文、图标与双层级内容，并将选项样式、容器外形和图文布局
-/// 作为相互独立的配置。
+/// 支持文本、图文、图标与双层级内容，并将选项样式与容器外形作为独立配置。
 class TTabBar extends StatefulWidget {
   TTabBar({
     Key? key,
@@ -206,7 +201,6 @@ class TTabBar extends StatefulWidget {
     required this.navigationTabs,
     this.itemStyle = TTabBarItemStyle.label,
     this.style = TTabBarStyle.filled,
-    this.layout = TTabBarLayout.vertical,
     this.barHeight,
     this.split = false,
     this.dividerHeight,
@@ -279,9 +273,6 @@ class TTabBar extends StatefulWidget {
 
   /// 标签栏容器样式。
   final TTabBarStyle style;
-
-  /// 图标与文字的排列方式，仅影响 [TTabBarType.iconText]。
-  final TTabBarLayout layout;
 
   _TTabBarBasicType get _basicType => type.basicType;
 
@@ -698,7 +689,6 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
         basicType: widget._basicType,
         componentType: widget._componentType,
         selectionType: widget._selectionType,
-        layout: widget.layout,
         itemConfig: tabItemConfig,
         isSelected: index == _selectedIndex,
         itemHeight: _effectiveBarHeight,
@@ -747,7 +737,6 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     required this.basicType,
     required this.componentType,
     required this.selectionType,
-    required this.layout,
     required this.itemConfig,
     required this.isSelected,
     required this.itemHeight,
@@ -770,9 +759,6 @@ class _TTabBarItemWithBadge extends StatelessWidget {
 
   /// tab 选中背景类型
   final TTabBarStyle selectionType;
-
-  /// 图标与文字的排列方式。
-  final TTabBarLayout layout;
 
   /// 单个tab的属性配置
   final TTabBarItemConfig itemConfig;
@@ -814,7 +800,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => handleTap(context),
+      onTap: needInkWell ? null : () => handleTap(context),
       onLongPress: () {
         onLongPress?.call();
       },
@@ -937,25 +923,15 @@ class _TTabBarItemWithBadge extends StatelessWidget {
               context.tTheme.fontBodyExtraSmall!,
             )
           : const SizedBox.shrink();
-      child = layout == TTabBarLayout.horizontal
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                icon,
-                if (centerDistance > 0) SizedBox(width: centerDistance),
-                text,
-              ],
-            )
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                icon,
-                if (centerDistance > 0) SizedBox(height: centerDistance),
-                text,
-              ],
-            );
+      child = Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          icon,
+          if (centerDistance > 0) SizedBox(height: centerDistance),
+          text,
+        ],
+      );
     }
 
     var top = badgeConfig?.badgeTopOffset ?? -2;

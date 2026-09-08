@@ -15,10 +15,31 @@
 - Linux 3.32.0：组件明暗 14/14 原基线通过；整页明暗初始选中项变动约 1.00%，新增滚动后菜单展开明暗两张。四张 Demo 基线更新后严格复跑，无像素容差。菜单锚点通过几何断言与实际图检查。
 - 本轮未重新进行 Android/iOS 真机逐像素核对，不能将代码/Golden 验证等同于与设计稿逐像素完全一致；新 head 远端 CI 与 CNB Review 待推送后核验。
 
+## 2026-09-08 Layout 语义复核
+
+- Google Chrome 中直接核对 Figma 子节点 `26951:13385`（normal-horizontal）与
+  `26951:13389`（normal-vertical）：前者的普通项仍是图标在上，后者的普通项为
+  图标在左，证明节点名描述整栏方向而不是内部图文方向。
+- 小程序当前实现没有 Layout 属性：普通图文项固定纵向排列，双层级入口仅在菜单
+  文案左侧加入 `view-list` 图标。Flutter 删除 `TTabBarLayout/layout` 草案，避免用
+  局部 Row/Column 假装实现整栏方向。
+- 水波纹路径只由内部 `InkWell` 接收 tap，普通路径只由外层 `GestureDetector`
+  接收 tap；新增一次手势只触发一次 item `onTap` 和一次 `onChanged` 的回归。
+- `onTap` 与 `allowMultipleTaps` dartdoc 明确选中变化、重复点击、禁用和通知边界。
+- 撤回仅供 TabBar 使用的 `ExamplePage.navBarTitle`；页面壳继续使用既有单标题契约，
+  不把页面展示差异扩散为共享 API。
+- Flutter 3.32.0 与 3.47.0：TabBar 组件测试各 21/21、Demo 测试各 5/5；
+  组件包与 Example 包严格 analyze 均零问题。TabBar 生产覆盖率
+  `513/525 = 97.71%`，回归清单登记自测 5/5，示例片段生成检查通过。
+- Flutter 3.32.0 Linux：删除两张误建模的横排基线后，组件明暗 Golden 12/12
+  原基线通过；撤回共享导航标题 API 只改变页面壳标题，四张 Demo 基线核图后更新，
+  随即在无更新参数下严格复跑 4/4，无像素容差。
+- 本轮没有重新进行 Android/iOS 最终版本逐项操作，因此不把代码、Widget 测试或
+  Linux Golden 宣称为移动设备逐像素完全一致；新 head CI 与 CNB Review 仍以推送后为准。
+
 ## 2026-09-08 develop 同步与主题复审
 
-- 已合并 `origin/develop@3d5ed773`，保留公共 ExamplePage 的导航标题样式隔离，
-  同时保留 TabBar 页面独立 `navBarTitle`。
+- 已合并 `origin/develop@3d5ed773`，保留公共 ExamplePage 的导航标题样式隔离。
 - 修复 `TTabBarThemeData.lerp`：高度、间距和分割线尺寸从实际内置默认值插值；
   nullable 颜色和边线不再生成透明色或 `BorderSide.none` 高优先级覆盖。
 - Flutter 3.32.0 `flutter analyze --fatal-infos` 通过；组件测试 17/17、集中回归
@@ -32,8 +53,8 @@
 - Figma 固定节点：`28591:35219`。
 - 小程序公开参考：`components/tab-bar?tab=demo` 与
   `Tencent/tdesign-miniprogram/packages/components/tab-bar`。
-- 新 Figma 相比小程序明确新增 Horizontal/Vertical 展示轴；记录该差异并由
-  Flutter 独立 `layout` 参数表达。
+- Figma 的 Horizontal/Vertical 是整栏方向轴；当前 Flutter PR 未实现完整纵向
+  TabBar，不能用普通项内部 Row/Column 冒充该能力。
 - 公开 Demo 以节点内 `TabBar 底部标签栏 移动端展示` 画板为准，而不是右侧组件
   资产展板：3 个分组、9 个示例、固定首页/应用/聊天/我的四项。
 
@@ -43,7 +64,7 @@
   完成；随后按用户要求改用桌面可见的 iPhone 16 Pro Simulator 继续逐轮验证。
 - 最终 Demo 在 Simulator 大写 `R`（588ms、527ms）后打开页面，实际点击纯文本第二项、
   打开并选择双层级菜单、滚动检查弱选中三行/悬浮胶囊/自定义，并切换真实暗色主题。
-- Figma 人工对照确认顶部 `TabBar`、正文标题与说明、3 个分组、9 个示例、四项文案、
+- Figma 人工对照确认正文标题与说明、3 个分组、9 个示例、四项文案、
   徽标类型、胶囊和自定义行一致；组件资产中的 Horizontal/Vertical 由独立组件测试覆盖。
 - Flutter 3.32.0 Linux 离线固定环境：组件明暗 Golden 14/14、Demo 整页明暗
   Golden 2/2，更新后立即去掉 `--update-goldens` 精确复跑 16/16；人工看片发现并

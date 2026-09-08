@@ -142,7 +142,6 @@ void main() {
     int value = 0,
     TTabBarItemStyle itemStyle = TTabBarItemStyle.label,
     TTabBarStyle style = TTabBarStyle.filled,
-    TTabBarLayout layout = TTabBarLayout.vertical,
   }) async {
     tester.view.physicalSize = const Size(400, 120);
     tester.view.devicePixelRatio = 1.0;
@@ -154,7 +153,6 @@ void main() {
           type: type,
           itemStyle: itemStyle,
           style: style,
-          layout: layout,
           value: value,
           navigationTabs: tabs,
           onChanged: (_) {},
@@ -204,19 +202,6 @@ void main() {
           tabs: iconTextTabs(),
           brightness: brightness,
           golden: 'goldens/t_tab_bar_icon_text_$suffix.png',
-        );
-      });
-
-      testWidgets('horizontal icon text follows the Figma layout $suffix', (
-        tester,
-      ) async {
-        await expectTabBarGolden(
-          tester,
-          type: TTabBarType.iconText,
-          layout: TTabBarLayout.horizontal,
-          tabs: iconTextTabs(),
-          brightness: brightness,
-          golden: 'goldens/t_tab_bar_icon_text_horizontal_$suffix.png',
         );
       });
 

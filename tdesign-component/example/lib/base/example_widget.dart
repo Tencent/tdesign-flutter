@@ -23,7 +23,6 @@ class ExamplePage extends StatefulWidget {
     Key? key,
     this.navBarKey,
     required this.title,
-    this.navBarTitle,
     this.desc = '',
     this.children = const [],
     this.padding,
@@ -46,9 +45,6 @@ class ExamplePage extends StatefulWidget {
 
   /// 标题
   final String title;
-
-  /// 顶部导航标题；为空时与正文标题一致。
-  final String? navBarTitle;
 
   /// 如果封装的children无法满足需求，可以自定义子控件
   final bool showSingleChild;
@@ -492,7 +488,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
     return TNavBar(
       key: widget.navBarKey,
       title: Text(
-        widget.navBarTitle ?? widget.title,
+        widget.title,
         style: TextStyle(
           fontSize: 16,
           height: titleLineHeight,

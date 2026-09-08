@@ -112,11 +112,10 @@ void main() {
   });
 
   group('TTabBar config classes', () {
-    test('content, item style, bar style and layout are independent', () {
+    test('content type, item style and bar style are independent', () {
       expect(TTabBarType.values, hasLength(4));
       expect(TTabBarItemStyle.values, hasLength(2));
       expect(TTabBarStyle.values, hasLength(2));
-      expect(TTabBarLayout.values, hasLength(2));
       expect(
         TTabBarIndicatorAnimation.values,
         contains(TTabBarIndicatorAnimation.elastic),
@@ -389,24 +388,24 @@ void main() {
       }
     });
 
-    testWidgets('iconText supports horizontal and vertical layouts', (
+    testWidgets('iconText keeps the bottom-bar icon above its text', (
       tester,
     ) async {
-      for (final layout in TTabBarLayout.values) {
-        await tester.pumpWidget(
-          wrapWithTheme(
-            TTabBar(
-              type: TTabBarType.iconText,
-              layout: layout,
-              centerDistance: 4,
-              value: 0,
-              navigationTabs: iconTextTabs(),
-              onChanged: (_) {},
-            ),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.iconText,
+            centerDistance: 4,
+            value: 0,
+            navigationTabs: iconTextTabs(),
+            onChanged: (_) {},
           ),
-        );
-        expect(find.byType(TTabBar), findsOneWidget);
-      }
+        ),
+      );
+
+      final firstIcon = tester.getCenter(find.byIcon(Icons.home));
+      final firstText = tester.getCenter(find.text('标签1'));
+      expect(firstIcon.dy, lessThan(firstText.dy));
     });
 
     testWidgets('updates value with none, linear and elastic animations', (
@@ -552,6 +551,33 @@ void main() {
       );
 
       expect(find.byType(TBadge), findsOneWidget);
+    });
+
+    testWidgets('ink well routes one tap through one selection callback', (
+      tester,
+    ) async {
+      var itemTapCount = 0;
+      var changedCount = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.text,
+            value: 0,
+            needInkWell: true,
+            navigationTabs: [
+              const TTabBarItemConfig(tabText: '标签1'),
+              TTabBarItemConfig(tabText: '标签2', onTap: () => itemTapCount++),
+            ],
+            onChanged: (_) => changedCount++,
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('标签2'));
+      await tester.pump();
+
+      expect(itemTapCount, 1);
+      expect(changedCount, 1);
     });
 
     test('asserts invalid current API inputs', () {
