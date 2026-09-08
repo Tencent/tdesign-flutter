@@ -36,7 +36,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | allowMultipleTaps | bool | false | 是否允许重复点击当前选中项时再次调用 `onTap`，默认为 false。 该字段不影响点击未选中项，也不会让 `TTabBar.onChanged` 重复通知当前值。 |
-| badge | TBadge? | - | 展示在标签内容右上角的徽标；为空时不显示。 徽标内容和样式由 `TBadge` 配置，`TBadge.offset` 可用于逐项调整默认锚点。 TabBar 内容会作为徽标锚点，因此传入的 `TBadge.child` 必须为空； `TBadge.onTap` 会作为标签项点击链中的附加回调执行。 |
+| badge | TBadge? | - | 展示在标签内容右上角的徽标；为空时不显示。 徽标内容和样式由 `TBadge` 配置，`TBadge.offset` 可用于逐项调整默认锚点。 TabBar 内容会作为徽标锚点，因此传入的 `TBadge.child` 必须为空； `TBadge.onTap` 会作为标签项点击链中的附加回调执行，遵循相同的 `allowMultipleTaps` 门控：未选中项会调用，重复点击当前选中项仅在 `allowMultipleTaps` 为 true 时调用，整栏禁用时不会调用。 |
 | onLongPress | GestureLongPressCallback? | - | 长按事件 |
 | onTap | GestureTapCallback? | - | 标签项被选中时的附加点击回调。 点击未选中项时，在 `TTabBar.onChanged` 之前调用；重复点击当前选中项时， 仅当 `allowMultipleTaps` 为 true 才调用。整栏禁用时不会调用。 |
 | popUpButtonConfig | TTabBarPopUpBtnConfig? | - | 弹窗配置 |

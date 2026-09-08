@@ -158,7 +158,9 @@ class TTabBarItemConfig {
   ///
   /// 徽标内容和样式由 [TBadge] 配置，[TBadge.offset] 可用于逐项调整默认锚点。
   /// TabBar 内容会作为徽标锚点，因此传入的 [TBadge.child] 必须为空；
-  /// [TBadge.onTap] 会作为标签项点击链中的附加回调执行。
+  /// [TBadge.onTap] 会作为标签项点击链中的附加回调执行，遵循相同的
+  /// [allowMultipleTaps] 门控：未选中项会调用，重复点击当前选中项仅在
+  /// [allowMultipleTaps] 为 true 时调用，整栏禁用时不会调用。
   final TBadge? badge;
 
   /// 弹窗配置
@@ -989,7 +991,9 @@ class _TTabBarItemWithBadge extends StatelessWidget {
   }
 
   void handleTap(BuildContext context) {
-    itemConfig.badge?.onTap?.call();
+    if (!isSelected || itemConfig.allowMultipleTaps) {
+      itemConfig.badge?.onTap?.call();
+    }
     onTap.call();
 
     var popUpButtonConfig = itemConfig.popUpButtonConfig;

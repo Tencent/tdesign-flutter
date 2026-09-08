@@ -34,6 +34,17 @@
   不带更新参数、无像素容差严格复跑：组件 Golden 12/12、Demo Golden 4/4
   全部通过。移动设备与远端证据以后续验证结果为准。
 
+## 2026-09-08 徽标点击门控复审
+
+- `TBadge.onTap` 作为标签项点击链中的附加回调，沿用 `allowMultipleTaps` 门控：
+  未选中项调用，重复点击当前选中项仅在 `allowMultipleTaps: true` 时调用，
+  TabBar 禁用时不调用；因此不会与 `TTabBarItemConfig.onTap` 产生不一致的重复点击语义。
+- 迁移映射保持明确：`showBadge: false` → `badge: null`，`tBadge` → `badge`，
+  `badgeTopOffset` / `badgeRightOffset` → `TBadge.offset`；徽标内容由 TabBar
+  作为 `TBadge.child` 锚点管理。
+- 新增 `needInkWell: true` 下的受控状态回归，覆盖选中、未选中、重复点击及
+  `allowMultipleTaps` 差异；组件测试当前 24/24 通过。
+
 ## 2026-09-08 补充复审与修复
 
 本节为本轮结果；下方真机、构建及首轮检查是历史记录，不替代本轮证据。

@@ -632,6 +632,55 @@ void main() {
       expect(changedValue, 1);
     });
 
+    testWidgets('badge onTap follows allowMultipleTaps with InkWell', (
+      tester,
+    ) async {
+      var badgeTaps = 0;
+      var changedCount = 0;
+      var selectedIndex = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          StatefulBuilder(
+            builder: (context, setState) => TTabBar(
+              type: TTabBarType.text,
+              value: selectedIndex,
+              needInkWell: true,
+              navigationTabs: [
+                TTabBarItemConfig(
+                  tabText: '首页',
+                  badge: TBadge(label: '1', onTap: () => badgeTaps++),
+                ),
+                TTabBarItemConfig(
+                  tabText: '消息',
+                  allowMultipleTaps: true,
+                  badge: TBadge(label: '2', onTap: () => badgeTaps++),
+                ),
+              ],
+              onChanged: (index) {
+                changedCount++;
+                setState(() => selectedIndex = index);
+              },
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('首页'));
+      await tester.pump();
+      expect(badgeTaps, 0);
+      expect(changedCount, 0);
+
+      await tester.tap(find.text('消息'));
+      await tester.pump();
+      expect(badgeTaps, 1);
+      expect(changedCount, 1);
+
+      await tester.tap(find.text('消息'));
+      await tester.pump();
+      expect(badgeTaps, 2);
+      expect(changedCount, 1);
+    });
+
     testWidgets('ink well routes one tap through one selection callback', (
       tester,
     ) async {
