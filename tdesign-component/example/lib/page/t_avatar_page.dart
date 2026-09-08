@@ -141,6 +141,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
       children: [
         const SizedBox(
           child: Stack(
+            clipBehavior: Clip.none,
             alignment: Alignment.bottomLeft,
             children: [
               TAvatar(
@@ -148,9 +149,12 @@ class _TAvatarPageState extends State<TAvatarPage> {
                 image: AssetImage('assets/img/t_avatar_1.png'),
               ),
               Positioned(
-                child: TBadge(variant: TBadgeVariant.dot),
-                right: 0,
-                top: 0,
+                right: -4,
+                top: -4,
+                child: BadgeTheme(
+                  data: BadgeThemeData(smallSize: 10),
+                  child: TBadge(variant: TBadgeVariant.dot),
+                ),
               ),
             ],
           ),
@@ -158,6 +162,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
         const SizedBox(width: 32),
         SizedBox(
           child: Stack(
+            clipBehavior: Clip.none,
             alignment: Alignment.bottomLeft,
             children: [
               TAvatar(
@@ -166,17 +171,18 @@ class _TAvatarPageState extends State<TAvatarPage> {
                 foregroundColor: context.tTheme.whiteColor1,
                 child: const Text('A'),
               ),
-              const Positioned(child: TBadge(label: '8'), right: 0, top: 0),
+              const Positioned(child: TBadge(label: '8'), right: -4, top: -4),
             ],
           ),
         ),
         const SizedBox(width: 32),
         const SizedBox(
           child: Stack(
+            clipBehavior: Clip.none,
             alignment: Alignment.bottomLeft,
             children: [
               TAvatar(size: TAvatarSize.medium),
-              Positioned(child: TBadge(label: '12'), right: 0, top: 0),
+              Positioned(child: TBadge(label: '12'), right: -4, top: -4),
             ],
           ),
         ),
