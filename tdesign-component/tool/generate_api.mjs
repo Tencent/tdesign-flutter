@@ -26,6 +26,19 @@ for (const component of manifest.components) {
     throw new Error(`${component.slug}: missing ${component.source.type} ${sourcePath}`);
   }
 
+  const typeNames = component.api.names;
+  const functionNames = component.api.functions ?? [];
+  if (!Array.isArray(typeNames) || !Array.isArray(functionNames)) {
+    throw new Error(`${component.slug}: api.names and api.functions must be arrays`);
+  }
+  const declarationNames = [...typeNames, ...functionNames];
+  if (declarationNames.length === 0 || declarationNames.some((name) => typeof name !== 'string' || name.length === 0)) {
+    throw new Error(`${component.slug}: API declaration names must be non-empty strings`);
+  }
+  if (new Set(declarationNames).size !== declarationNames.length) {
+    throw new Error(`${component.slug}: duplicate API declaration name`);
+  }
+
   const args = [
     'run',
     'tdesign_flutter_tools:main',
@@ -33,7 +46,7 @@ for (const component of manifest.components) {
     `--${component.source.type}`,
     sourcePath,
     '--name',
-    component.api.names.join(','),
+    declarationNames.join(','),
     '--folder-name',
     component.slug,
     '--output',

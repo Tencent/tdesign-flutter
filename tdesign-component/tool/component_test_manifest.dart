@@ -63,6 +63,31 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'backtop',
+    coverageTargets: ['lib/src/components/backtop/'],
+    componentTests: [
+      'test/components/backtop/t_backtop_test.dart',
+      'test/components/backtop/t_backtop_theme_test.dart',
+      'test/components/backtop/t_backtop_widget_test.dart',
+    ],
+    exampleTests: ['test/backtop_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'BackTop Component',
+        workingDirectory: '.',
+        testFiles: [
+          'test/components/backtop/t_backtop_golden_test.dart',
+          'test/components/navigation_components_golden_test.dart',
+        ],
+      ),
+      VisualTestManifest(
+        name: 'BackTop Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/backtop_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'button',
     coverageTargets: ['lib/src/components/button/'],
     componentTests: [
@@ -246,6 +271,35 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'drawer',
+    coverageTargets: ['lib/src/components/drawer/'],
+    componentTests: ['test/components/drawer/t_drawer_test.dart'],
+    exampleTests: ['test/drawer_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Drawer Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/navigation_components_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Drawer Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/drawer_demo_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Drawer Popup Consumer',
+        workingDirectory: '.',
+        testFiles: [
+          'test/components/theme/t_popup_consumers_golden_test.dart',
+        ],
+        arguments: [
+          '--plain-name',
+          'drawer keeps the shared Popup visual contract',
+        ],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'fab',
     coverageTargets: ['lib/src/components/fab/'],
     componentTests: [
@@ -257,6 +311,22 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Fab Demo',
         workingDirectory: 'example',
         testFiles: ['test/fab_demo_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'indexes',
+    coverageTargets: ['lib/src/components/indexes/'],
+    componentTests: [
+      'test/components/indexes/sticky_header/sticky_header_test.dart',
+      'test/components/indexes/t_indexes_test.dart',
+    ],
+    exampleTests: ['test/indexes_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Indexes Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/indexes_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -286,6 +356,30 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Rate Demo',
         workingDirectory: 'example',
         testFiles: ['test/rate_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'navbar',
+    coverageTargets: ['lib/src/components/navbar/'],
+    componentTests: [
+      'test/components/navbar/t_nav_bar_test.dart',
+      'test/components/navbar/t_navbar_test.dart',
+    ],
+    exampleTests: ['test/navbar_page_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'NavBar Component',
+        workingDirectory: '.',
+        testFiles: [
+          'test/components/navbar/t_nav_bar_safe_area_golden_test.dart',
+          'test/components/navigation_components_golden_test.dart',
+        ],
+      ),
+      VisualTestManifest(
+        name: 'NavBar Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/navbar_demo_golden_test.dart'],
       ),
     ],
   ),
