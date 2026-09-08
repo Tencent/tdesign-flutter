@@ -157,10 +157,10 @@ class TWrapSideBarItem extends StatelessWidget {
             width: preLineWidth,
             height: 14,
             decoration: BoxDecoration(
-              color: selectedTextStyle != null
-                  ? selectedTextStyle
-                        ?.color // coverage:ignore-line
-                  : (selectedColor ?? context.tTheme.brandNormalColor),
+              color:
+                  selectedTextStyle?.color ??
+                  selectedColor ??
+                  context.tTheme.brandNormalColor,
               borderRadius: BorderRadius.circular(4),
             ),
           ),
@@ -178,7 +178,7 @@ class TWrapSideBarItem extends StatelessWidget {
         return unSelectedColor ?? context.tTheme.textColorPrimary;
       }
       if (selectedTextStyle?.color != null) {
-        return selectedTextStyle!.color!; // coverage:ignore-line
+        return selectedTextStyle!.color!;
       }
       return selectedColor ?? context.tTheme.brandNormalColor;
     }();

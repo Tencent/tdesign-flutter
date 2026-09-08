@@ -1,5 +1,25 @@
 # 验收记录
 
+## 2026-09-08 移除数据项 key（本地验证）
+
+- 删除 `TSideBarItem` 构造器未保存、未使用的 `key` 参数，保留 `TSideBar` 与内部渲染 Widget 的 Key。仓库调用点无传入该参数的情况，默认渲染和滚动机制未修改。
+- 此项属于 breaking API 变更：已有调用方删除 `TSideBarItem(key: ...)` 中的 `key:`；`value` 仍用于选中项匹配，不替代 Flutter Widget Key。
+- API 文档由源码重新生成：只移除 `TSideBarItem` 表格的 `key`，`TSideBar.key` 保留。
+- Flutter 3.32.0 / 3.47.0 重新验证：组件测试各 75/75、Demo 各 8/8，组件包与 Example 严格 analyze 均无诊断；生产覆盖率 237/237 = 100%。3.32 Demo 首次遇到旧字体缓存缺失，备份旧 build 后重建测试资源，复跑通过。
+- 本次仅删除无效参数，未修改视觉或 Golden；真机与远端验证状态仍见下文，不沿用旧结果宣称完成。
+
+## 2026-09-08 选中颜色回退修复（本地验证）
+
+- 范围：修复仅配置 `selectedTextStyle.fontSize` 时指示线颜色为空；按字段合并实例与组件 Theme，选中文字、图标和指示线遵循同一颜色优先级。无 API 签名变更；默认视觉不变。
+- 新增 32 个矩阵用例，覆盖 8 组颜色配置 × M2/M3 × light/dark；修复前复现 24 个失败，修复后组件 75/75 通过。测试验证最终颜色、字号、字重及 3×14dp 指示线尺寸。
+- Flutter 3.32.0 / 3.47.0：组件 75/75、Demo 8/8，组件包与 Example 严格 analyze 无诊断；SideBar 生产覆盖率 237/237 = 100%。回归调度清单自测 8/8。
+- Flutter 3.32.0 Linux：共享导航 2 张、SideBar Demo 6 张严格 Golden 全部通过，未更新基线。首次复跑遇到构建缓存内图标字体资源缺失，隔离副本重新解析依赖后通过。
+- 公开 API 注释已同步，并通过生成器更新 `side-bar_api.md`，没有手工修改生成文档。
+- 重新查看 Figma `28591:34071`：默认选中指示线与选中文字为品牌色；本次只核对该修复范围，不代表整页视觉差异全部消除。
+- 真机验证未完成：新增默认样式与仅改字号的 light/dark 并排截图场景，但 Android 安装返回 `INSTALL_FAILED_USER_RESTRICTED`，当前修改未能在设备上运行。旧截图不能作为本次修复证据，需用户允许安装后重跑。
+
+以下为此前版本的历史验收记录，不代表本次修改已通过远端 CI、CodeBuddy 或真机验收。
+
 ## 环境
 
 - 分支：`rss1102/breaking/sidebar-design-alignment`

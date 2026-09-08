@@ -64,13 +64,14 @@ class TSideBar extends StatefulWidget {
   /// 选中值变化回调；为 null 时禁用整栏。
   final ValueChanged<int>? onChanged;
 
-  /// 选中值后颜色（优先级高于 ThemeData）。
+  /// 选中文字、图标与指示线颜色；优先于组件 Theme，同层 selectedTextStyle.color 优先。
   final Color? selectedColor;
 
   /// 未选中颜色（优先级高于 ThemeData）。
   final Color? unSelectedColor;
 
-  /// 选中样式（优先级高于 ThemeData）。
+  /// 选中文字样式；按 TextStyle.merge 合并组件 Theme，实例显式字段优先。
+  /// 未指定颜色时依次回退实例 selectedColor、组件 Theme 的文字颜色与 selectedColor、品牌色 Token。
   final TextStyle? selectedTextStyle;
 
   /// 展示变体；属于组件实例的结构状态，不从 Theme 读取。
@@ -221,6 +222,14 @@ class _TSideBarState extends State<TSideBar> {
   @override
   Widget build(BuildContext context) {
     final theme = _resolveTheme();
+    final selectedColor =
+        widget.selectedTextStyle?.color ??
+        widget.selectedColor ??
+        theme.selectedTextStyle?.color ??
+        theme.selectedColor;
+    final selectedTextStyle = theme.selectedTextStyle == null
+        ? widget.selectedTextStyle
+        : theme.selectedTextStyle!.merge(widget.selectedTextStyle);
     if (widget.loading) {
       if (widget.loadingWidget != null) {
         return widget.loadingWidget!;
@@ -257,10 +266,11 @@ class _TSideBarState extends State<TSideBar> {
               badge: ele.badge,
               textStyle: ele.textStyle,
               selected: currentIndex == ele.index,
-              selectedColor: widget.selectedColor ?? theme.selectedColor,
+              selectedColor: selectedColor,
               unSelectedColor: widget.unSelectedColor ?? theme.unSelectedColor,
-              selectedTextStyle:
-                  widget.selectedTextStyle ?? theme.selectedTextStyle,
+              selectedTextStyle: selectedTextStyle?.copyWith(
+                color: selectedColor,
+              ),
               contentPadding: widget.contentPadding ?? theme.contentPadding,
               topAdjacent:
                   currentIndex != null && currentIndex! + 1 == ele.index,

@@ -22,6 +22,11 @@ void main() {
 
     unawaited(navigator.pushNamed('SideBarAnchor'));
     await tester.pumpAndSettle();
+    final provider = tester
+        .element(find.byType(TSideBar))
+        .read<ThemeModeProvider>();
+    provider.themeMode = ThemeMode.light;
+    await tester.pumpAndSettle();
     await binding.convertFlutterSurfaceToImage();
     await tester.pumpAndSettle();
     await binding.takeScreenshot('sidebar-anchor-light');
@@ -31,9 +36,6 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.widget<TSideBar>(find.byType(TSideBar)).value, 2);
 
-    final provider = tester
-        .element(find.byType(TSideBar))
-        .read<ThemeModeProvider>();
     provider.themeMode = ThemeMode.dark;
     await tester.pumpAndSettle();
     await binding.takeScreenshot('sidebar-anchor-dark');
@@ -65,5 +67,64 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.widget<TSideBar>(find.byType(TSideBar)).value, 3);
     expect(tester.takeException(), isNull);
+
+    navigator.pop();
+    await tester.pumpAndSettle();
+    unawaited(
+      navigator.push(
+        MaterialPageRoute<void>(
+          builder: (context) {
+            return Scaffold(
+              appBar: AppBar(title: const Text('SideBar 字号回退回归')),
+              body: Row(
+                children: [
+                  for (final fontSize in <double?>[null, 18])
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Text(fontSize == null ? '默认样式' : '仅 fontSize: 18'),
+                          Expanded(
+                            child: TSideBar(
+                              value: 1,
+                              selectedTextStyle: fontSize == null
+                                  ? null
+                                  : TextStyle(fontSize: fontSize),
+                              onChanged: (_) {},
+                              children: List.generate(
+                                5,
+                                (index) =>
+                                    TSideBarItem(value: index, label: '选项'),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+    for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+      provider.themeMode = mode;
+      await tester.pumpAndSettle();
+      final indicators = find.byWidgetPredicate(
+        (widget) =>
+            widget is Container &&
+            widget.constraints?.minWidth == 3 &&
+            widget.constraints?.minHeight == 14,
+      );
+      expect(indicators, findsNWidgets(2));
+      for (final indicator in tester.widgetList<Container>(indicators)) {
+        expect(
+          (indicator.decoration! as BoxDecoration).color,
+          tester.element(find.byType(TSideBar).first).tTheme.brandNormalColor,
+        );
+      }
+      await binding.takeScreenshot('sidebar-fontsize-${mode.name}');
+      expect(tester.takeException(), isNull);
+    }
   });
 }

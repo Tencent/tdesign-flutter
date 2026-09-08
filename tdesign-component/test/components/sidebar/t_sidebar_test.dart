@@ -6,11 +6,22 @@ import 'package:tdesign_flutter/src/components/sidebar/t_wrap_sidebar_item.dart'
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  Widget wrapWithTheme(Widget child, {TSideBarThemeData? sideBarTheme}) {
+  Widget wrapWithTheme(
+    Widget child, {
+    TSideBarThemeData? sideBarTheme,
+    bool useMaterial3 = true,
+    Brightness brightness = Brightness.light,
+  }) {
+    final token = TThemeData.defaultData();
     return MaterialApp(
       theme: ThemeData(
+        useMaterial3: useMaterial3,
+        brightness: brightness,
         extensions: [
-          TThemeData.defaultData(),
+          if (brightness == Brightness.dark)
+            token.dark ?? token
+          else
+            token.light,
           if (sideBarTheme != null) sideBarTheme,
         ],
       ),
@@ -143,6 +154,135 @@ void main() {
   });
 
   group('TSideBar 样式与 Theme', () {
+    final colorCases =
+        <
+          String,
+          ({
+            TextStyle? style,
+            Color? color,
+            TSideBarThemeData? theme,
+            Color? expected,
+          })
+        >{
+          '默认颜色': (style: null, color: null, theme: null, expected: null),
+          '仅实例字号回退 Token': (
+            style: const TextStyle(fontSize: 18),
+            color: null,
+            theme: null,
+            expected: null,
+          ),
+          '仅 Theme 字号回退 Token': (
+            style: null,
+            color: null,
+            theme: const TSideBarThemeData(
+              selectedTextStyle: TextStyle(fontSize: 18),
+            ),
+            expected: null,
+          ),
+          '实例字号保留 Theme 颜色': (
+            style: const TextStyle(fontSize: 18),
+            color: null,
+            theme: const TSideBarThemeData(
+              selectedTextStyle: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            expected: Colors.red,
+          ),
+          '无文字颜色回退 selectedColor': (
+            style: const TextStyle(fontSize: 18),
+            color: Colors.green,
+            theme: null,
+            expected: Colors.green,
+          ),
+          '实例颜色覆盖 Theme 文字颜色': (
+            style: null,
+            color: Colors.green,
+            theme: const TSideBarThemeData(
+              selectedTextStyle: TextStyle(color: Colors.red, fontSize: 18),
+            ),
+            expected: Colors.green,
+          ),
+          '同层文字颜色优先': (
+            style: const TextStyle(fontSize: 18, color: Colors.purple),
+            color: Colors.green,
+            theme: const TSideBarThemeData(selectedColor: Colors.red),
+            expected: Colors.purple,
+          ),
+          'Theme 字号回退 Theme 颜色': (
+            style: null,
+            color: null,
+            theme: const TSideBarThemeData(
+              selectedColor: Colors.red,
+              selectedTextStyle: TextStyle(fontSize: 18),
+            ),
+            expected: Colors.red,
+          ),
+        };
+    for (final entry in colorCases.entries) {
+      for (final useMaterial3 in [false, true]) {
+        for (final brightness in Brightness.values) {
+          testWidgets('${entry.key} M3=$useMaterial3 $brightness', (
+            tester,
+          ) async {
+            final data = entry.value;
+            await tester.pumpWidget(
+              wrapWithTheme(
+                TSideBar(
+                  value: 0,
+                  selectedTextStyle: data.style,
+                  selectedColor: data.color,
+                  onChanged: (_) {},
+                  children: const [
+                    TSideBarItem(value: 0, label: '选中', icon: Icons.star),
+                  ],
+                ),
+                sideBarTheme: data.theme,
+                useMaterial3: useMaterial3,
+                brightness: brightness,
+              ),
+            );
+            final expectedColor =
+                data.expected ??
+                tester.element(find.byType(TSideBar)).tTheme.brandNormalColor;
+            final indicator = find.byWidgetPredicate(
+              (widget) =>
+                  widget is Container &&
+                  widget.constraints?.minWidth == 3 &&
+                  widget.constraints?.minHeight == 14,
+            );
+            expect(indicator, findsOneWidget);
+            final decoration =
+                tester.widget<Container>(indicator).decoration!
+                    as BoxDecoration;
+            expect(decoration.color, expectedColor);
+            expect(tester.getSize(indicator), const Size(3, 14));
+            expect(decoration.borderRadius, BorderRadius.circular(4));
+            expect(
+              tester.widget<Icon>(find.byIcon(Icons.star)).color,
+              expectedColor,
+            );
+            final label = tester.widget<Text>(find.text('选中'));
+            expect(label.style!.color, expectedColor);
+            expect(
+              label.style!.fontSize,
+              data.style?.fontSize ??
+                  data.theme?.selectedTextStyle?.fontSize ??
+                  16,
+            );
+            expect(
+              label.style!.fontWeight,
+              data.style?.fontWeight ??
+                  data.theme?.selectedTextStyle?.fontWeight ??
+                  FontWeight.w600,
+            );
+            expect(tester.takeException(), isNull);
+          });
+        }
+      }
+    }
+
     testWidgets('line 样式', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(

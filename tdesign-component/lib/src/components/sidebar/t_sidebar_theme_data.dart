@@ -17,13 +17,13 @@ class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
   /// 默认自定义文本框内边距
   final EdgeInsetsGeometry? contentPadding;
 
-  /// 默认选中颜色
+  /// 默认选中文字、图标与指示线颜色；同层 selectedTextStyle.color 优先，实例显式颜色可覆盖。
   final Color? selectedColor;
 
   /// 默认未选中颜色
   final Color? unSelectedColor;
 
-  /// 默认选中文字样式
+  /// 默认选中文字样式；实例 selectedTextStyle 按 TextStyle.merge 合并，未指定的字段保留此处配置。
   final TextStyle? selectedTextStyle;
 
   /// 默认选中背景颜色

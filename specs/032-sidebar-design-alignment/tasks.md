@@ -2,6 +2,7 @@
 
 - [x] 完成新版 Figma / 小程序 develop / Flutter 三方差异输出
 - [x] 收敛组件公开契约与 Theme 所有权
+- [x] 移除 `TSideBarItem` 无效 `key` 参数，保留 Widget Key 并记录 breaking 迁移
 - [x] 收敛公开 Demo 与代码片段
 - [x] 完成组件、Demo、覆盖率和严格 light/dark Golden
 - [x] 完成 Flutter 3.32.0 / latest analyze 与构建
