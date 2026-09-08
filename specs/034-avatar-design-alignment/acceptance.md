@@ -21,7 +21,8 @@
 | 集中回归登记自测 | 通过 | coverage/component/example/visual 文件与 runner 登记完整 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例片段与源码同步 |
 | `node tool/generate_api.mjs --dry-run` | 通过 | Avatar API 配置包含 TAvatar 与 TAvatarGroup |
-| Linux Flutter 3.32 `flutter test --no-pub test/avatar_demo_golden_test.dart` | 2/2 通过 | 更新前 light 0.32% / dark 0.34% 预期差异；检查实际图并更新后，不带更新参数严格复跑通过 |
+| Linux Flutter 3.32 `flutter test --no-pub test/avatar_demo_golden_test.dart` | 2/2 通过 | 初次对齐更新前 light 0.32% / dark 0.34%；徽标尺寸与位置修复后两张均为 0.17%、786px 预期差异。逐像素检查 CI 实际图且仅更新 Avatar 基线后，不带更新参数严格复跑通过 |
+| Linux Flutter 3.32 `dart run tool/run_visual_regression.dart` | 通过 | CI 全量视觉矩阵严格复跑通过；同时同步本 PR 替换共享头像资源后受影响的 SwipeCell dark 基线（0.17%、675px），未修改 SwipeCell 组件或布局 |
 
 以上组件测试、Demo 测试、双版本静态分析、示例生成检查与 Linux Golden 均在合并最新 `origin/develop` 后复跑通过。
 
