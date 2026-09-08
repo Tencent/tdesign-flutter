@@ -64,6 +64,7 @@ void main() {
     await tester.tap(find.byKey(const Key('popover-menu-复制')));
     await tester.pump();
     expect(find.text('已选择复制'), findsOneWidget);
+    expect(find.byKey(const Key('t-popover-content')), findsNothing);
   });
 
   testWidgets('主题背景与尺寸约束在 Demo 中可观察', (tester) async {

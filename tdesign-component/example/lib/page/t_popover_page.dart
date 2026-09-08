@@ -17,6 +17,7 @@ class TPopoverPage extends StatefulWidget {
 }
 
 class _TPopoverPage extends State<TPopoverPage> {
+  final _interactivePopoverController = TPopoverController();
   TPopoverColorScheme theme = TPopoverColorScheme.light;
   String _eventStatus = '点击或长按气泡后查看结果';
   String _customContentStatus = '尚未选择菜单项';
@@ -346,47 +347,47 @@ class _TPopoverPage extends State<TPopoverPage> {
 
   @ExampleCode(group: 'popover')
   Widget _buildInteractiveContentPopover(BuildContext context) {
+    void selectAction(String action) {
+      setState(() => _customContentStatus = '已选择$action');
+      _interactivePopoverController.close();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        LayoutBuilder(
-          builder: (popoverContext, constraints) {
+        TPopoverAnchor(
+          controller: _interactivePopoverController,
+          width: 180,
+          height: 104,
+          padding: EdgeInsets.zero,
+          placement: TPopoverPlacement.bottom,
+          content: Column(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  key: const Key('popover-menu-复制'),
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => selectAction('复制'),
+                  child: const Center(child: TText('复制')),
+                ),
+              ),
+              const TDivider(),
+              Expanded(
+                child: GestureDetector(
+                  key: const Key('popover-menu-分享'),
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => selectAction('分享'),
+                  child: const Center(child: TText('分享')),
+                ),
+              ),
+            ],
+          ),
+          builder: (popoverContext, controller, child) {
             return TButton(
               key: const Key('popover-interactive-trigger'),
               variant: TButtonVariant.outline,
               colorScheme: TButtonColorScheme.primary,
-              onPressed: () {
-                TPopover.showPopover(
-                  context: popoverContext,
-                  width: 180,
-                  height: 104,
-                  padding: EdgeInsets.zero,
-                  placement: TPopoverPlacement.bottom,
-                  content: Column(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          key: const Key('popover-menu-复制'),
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () =>
-                              setState(() => _customContentStatus = '已选择复制'),
-                          child: const Center(child: TText('复制')),
-                        ),
-                      ),
-                      const TDivider(),
-                      Expanded(
-                        child: GestureDetector(
-                          key: const Key('popover-menu-分享'),
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () =>
-                              setState(() => _customContentStatus = '已选择分享'),
-                          child: const Center(child: TText('分享')),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+              onPressed: controller.open,
               child: const Text('打开操作菜单'),
             );
           },

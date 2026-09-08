@@ -637,8 +637,212 @@ void main() {
   });
 
   // ============================================================
-  // showPopover 静态方法
+  // Anchor 受控模式
   // ============================================================
+  group('TPopoverAnchor 和 TPopoverController', () {
+    testWidgets('controller 展开前必须绑定 Anchor，Anchor 展开时必须存在 Overlay', (
+      tester,
+    ) async {
+      final unboundController = TPopoverController();
+      expect(unboundController.close, returnsNormally);
+      expect(unboundController.open, throwsAssertionError);
+
+      final boundController = TPopoverController();
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: TPopoverAnchor(
+            controller: boundController,
+            content: const Text('无 Overlay'),
+            builder: (context, controller, child) {
+              expect(TPopoverController.maybeOf(context), same(controller));
+              return const SizedBox(width: 40, height: 40);
+            },
+          ),
+        ),
+      );
+
+      expect(boundController.open, throwsFlutterError);
+      expect(boundController.isOpen, isFalse);
+    });
+
+    testWidgets('controller 展开、关闭和 isOpen 由 Anchor 生命周期统一管理', (tester) async {
+      final controller = TPopoverController();
+      var openCount = 0;
+      var closeCount = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Center(
+            child: TPopoverAnchor(
+              controller: controller,
+              content: const Text('受控气泡'),
+              onOpen: () => openCount++,
+              onClose: () => closeCount++,
+              builder: (context, controller, child) {
+                return TextButton(
+                  key: const Key('controlled-anchor'),
+                  onPressed: controller.open,
+                  child: Text(controller.isOpen ? '已展开' : '展开'),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+
+      expect(controller.isOpen, isFalse);
+      await tester.tap(find.byKey(const Key('controlled-anchor')));
+      await tester.pump();
+
+      expect(controller.isOpen, isTrue);
+      expect(find.text('已展开'), findsOneWidget);
+      expect(find.text('受控气泡'), findsOneWidget);
+      expect(openCount, 1);
+
+      controller.open();
+      await tester.pump();
+      expect(find.text('受控气泡'), findsOneWidget);
+      expect(openCount, 1);
+
+      controller.close();
+      controller.close();
+      await tester.pump();
+
+      expect(controller.isOpen, isFalse);
+      expect(find.text('展开'), findsOneWidget);
+      expect(find.text('受控气泡'), findsNothing);
+      expect(closeCount, 1);
+    });
+
+    testWidgets('未传入 controller 时 builder 仍可展开并在自然关闭后更新状态', (tester) async {
+      late TPopoverController localController;
+      var contentCloseCount = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Center(
+            child: TPopoverAnchor(
+              content: Builder(
+                builder: (context) => TextButton(
+                  key: const Key('close-from-content'),
+                  onPressed: () {
+                    contentCloseCount++;
+                    TPopoverController.maybeOf(context)!.close();
+                  },
+                  child: const Text('内部控制器'),
+                ),
+              ),
+              builder: (context, controller, child) {
+                localController = controller;
+                return TextButton(
+                  onPressed: controller.open,
+                  child: const Text('打开内部控制器'),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('打开内部控制器'));
+      await tester.pumpAndSettle();
+      expect(localController.isOpen, isTrue);
+      expect(find.text('内部控制器'), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('close-from-content')));
+      await tester.pump();
+      expect(contentCloseCount, 1);
+      expect(localController.isOpen, isFalse);
+      expect(find.text('内部控制器'), findsNothing);
+
+      await tester.tap(find.text('打开内部控制器'));
+      await tester.pump();
+      expect(localController.isOpen, isTrue);
+
+      await tester.tapAt(const Offset(10, 10));
+      await tester.pump();
+      expect(localController.isOpen, isFalse);
+      expect(find.text('内部控制器'), findsNothing);
+    });
+
+    testWidgets('替换 controller 保留当前展开状态并把控制权交给新 controller', (tester) async {
+      final firstController = TPopoverController();
+      final secondController = TPopoverController();
+      TPopoverController? observedController;
+
+      Widget buildAnchor(TPopoverController controller) {
+        return wrapWithTheme(
+          Center(
+            child: TPopoverAnchor(
+              controller: controller,
+              content: Builder(
+                builder: (context) => TextButton(
+                  key: const Key('observe-switched-controller'),
+                  onPressed: () {
+                    observedController = TPopoverController.maybeOf(context);
+                  },
+                  child: const Text('切换控制器'),
+                ),
+              ),
+              builder: (context, controller, child) => TextButton(
+                onPressed: controller.open,
+                child: const Text('打开切换气泡'),
+              ),
+            ),
+          ),
+        );
+      }
+
+      await tester.pumpWidget(buildAnchor(firstController));
+      await tester.tap(find.text('打开切换气泡'));
+      await tester.pump();
+      expect(firstController.isOpen, isTrue);
+
+      await tester.pumpWidget(buildAnchor(secondController));
+      await tester.pump();
+      await tester.pump();
+      expect(firstController.isOpen, isFalse);
+      expect(secondController.isOpen, isTrue);
+      expect(find.text('切换控制器'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('observe-switched-controller')));
+      expect(observedController, same(secondController));
+
+      secondController.close();
+      await tester.pump();
+      expect(secondController.isOpen, isFalse);
+      expect(find.text('切换控制器'), findsNothing);
+    });
+
+    testWidgets('Anchor 移除时关闭气泡并解除 controller 绑定', (tester) async {
+      final controller = TPopoverController();
+      var closeCount = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TPopoverAnchor(
+            controller: controller,
+            content: const Text('销毁关闭'),
+            onClose: () => closeCount++,
+            builder: (context, controller, child) => TextButton(
+              onPressed: controller.open,
+              child: const Text('打开后销毁'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('打开后销毁'));
+      await tester.pump();
+      expect(controller.isOpen, isTrue);
+
+      await tester.pumpWidget(
+        wrapWithTheme(const SizedBox(key: Key('replacement'))),
+      );
+      await tester.pump();
+      expect(controller.isOpen, isFalse);
+      expect(find.text('销毁关闭'), findsNothing);
+      expect(closeCount, 1);
+    });
+  });
+
   group('TPopover.showPopover', () {
     testWidgets('省略 placement 时默认显示在锚点上方', (tester) async {
       late BuildContext anchorContext;
