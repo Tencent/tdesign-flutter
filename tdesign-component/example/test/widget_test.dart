@@ -61,6 +61,62 @@ void main() {
     expect(moduleTitle.style?.fontWeight, FontWeight.w700);
   });
 
+  testWidgets(
+    'compact module titles follow TD tokens and explicit text theme',
+    (tester) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'compact-title',
+        fontMap: {
+          'fontTitleLarge': Font(
+            size: 20,
+            lineHeight: 28,
+            fontWeight: FontWeight.w500,
+          ),
+        },
+      );
+      for (final explicit in [false, true]) {
+        final base = TThemeBuilder.light(token);
+        await tester.pumpWidget(
+          ChangeNotifierProvider(
+            create: (_) => ThemeModeProvider(),
+            child: MaterialApp(
+              theme: explicit
+                  ? base.copyWith(
+                      textTheme: const TextTheme(
+                        titleLarge: TextStyle(
+                          fontSize: 22,
+                          height: 1.5,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    )
+                  : base,
+              home: ExamplePage(
+                title: 'Title',
+                exampleCodeGroup: 'test',
+                compactDemo: true,
+                showTestModule: false,
+                children: const [
+                  ExampleModule(
+                    title: 'Module',
+                    children: [
+                      ExampleItem(ignoreCode: true, builder: _emptyExample),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final style = tester.widget<Text>(find.text('01 Module')).style!;
+        expect(style.fontSize, explicit ? 22 : 20);
+        expect(style.height, explicit ? 1.5 : 1.4);
+        expect(style.fontWeight, explicit ? FontWeight.w400 : FontWeight.w500);
+      }
+    },
+  );
+
   testWidgets('单元测试模块仅在 debug 模式按开关展示', (tester) async {
     Widget buildPage({required bool showTestModule}) {
       return ChangeNotifierProvider(

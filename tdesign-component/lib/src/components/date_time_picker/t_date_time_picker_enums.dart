@@ -16,6 +16,11 @@ enum DateMode {
 
   /// 年 + 月 + 日。
   date,
+
+  /// 月 + 日，不显示年份。缺省年份按 2000 年计算，允许选择 2 月 29 日。
+  /// 可通过受控值的 year 指定计算年；回调的 year 仍为 null。
+  /// 若业务绑定特定年份，接收回调后应继续在 value 中传入该年份。
+  monthDay,
 }
 
 /// 时间段粒度，用于 `DateTimePickerMode` 的 `TimeMode` 参数。

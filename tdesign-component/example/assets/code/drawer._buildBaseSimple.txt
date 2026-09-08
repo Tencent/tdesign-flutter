@@ -1,21 +1,31 @@
 Widget _buildBaseSimple(BuildContext context) {
+  final items = [
+    for (final label in const [
+      '菜单一',
+      '菜单二',
+      '菜单三',
+      '菜单四',
+      '菜单五',
+      '菜单六',
+      '菜单七',
+      '菜单八',
+    ])
+      TDrawerItem(title: label),
+  ];
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      child: const TText('基础抽屉'),
+      size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
-      size: TButtonSize.large,
       onPressed: () {
-        TDrawer(
+        showTDrawer(
           context,
-          items: List.generate(drawerItemLength,
-              (index) => TDrawerItem(title: '菜单${index + 1}')),
-          onItemClick: (index, item) {
-            print('drawer item被点击，index：$index，title：${item.title}');
-          },
-        ).show();
+          placement: TDrawerPlacement.left,
+          drawer: TDrawer(items: items, onItemClick: (_, __) {}),
+        );
       },
+      child: const TText('基础抽屉'),
     ),
   );
 }

@@ -1,20 +1,58 @@
 Widget _buildTitleSimple(BuildContext context) {
-  return SizedBox(
-    width: double.infinity,
-    child: TButton(
-      child: const TText('带图标抽屉'),
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
-      size: TButtonSize.large,
-      onPressed: () {
-        TDrawer(
-          context,
-          title: const TText('标题'),
-          placement: TDrawerPlacement.left,
-          items: List.generate(drawerItemLength,
-              (index) => TDrawerItem(title: '菜单${index + 1}')),
-        ).show();
-      },
-    ),
+  final items = [
+    for (final label in const [
+      '菜单一',
+      '菜单二',
+      '菜单三',
+      '菜单四',
+      '菜单五',
+      '菜单六',
+      '菜单七',
+      '菜单八',
+    ])
+      TDrawerItem(title: label),
+  ];
+  return Column(
+    children: [
+      SizedBox(
+        width: double.infinity,
+        child: TButton(
+          size: TButtonSize.large,
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () {
+            showTDrawer(
+              context,
+              placement: TDrawerPlacement.left,
+              drawer: TDrawer(
+                title: TText('标题', font: context.tTheme.fontTitleLarge),
+                items: items,
+              ),
+            );
+          },
+          child: const TText('小标题抽屉'),
+        ),
+      ),
+      const SizedBox(height: 16),
+      SizedBox(
+        width: double.infinity,
+        child: TButton(
+          size: TButtonSize.large,
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () {
+            showTDrawer(
+              context,
+              placement: TDrawerPlacement.left,
+              drawer: TDrawer(
+                title: TText('标题', font: context.tTheme.fontHeadlineMedium),
+                items: items,
+              ),
+            );
+          },
+          child: const TText('大标题抽屉'),
+        ),
+      ),
+    ],
   );
 }

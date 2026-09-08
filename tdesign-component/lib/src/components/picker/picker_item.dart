@@ -4,6 +4,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
+import '../text/t_text_theme_data.dart';
 import 't_picker_types.dart';
 
 /// 选择器的子项组件（包内复用，不对外暴露）
@@ -52,12 +53,64 @@ class PickerItemWidget extends StatelessWidget {
               : fixedExtentScrollController.initialItem.toDouble();
           final distance = (offset - index).abs();
           final selected = distance < 0.5;
-          final baseStyle =
-              Theme.of(context).tExplicitTextTheme?.bodyLarge ??
+          final font = selected && !disabled
+              ? theme.fontMarkLarge
+              : theme.fontBodyLarge;
+          final material = Theme.of(context);
+          final explicit = material.tExplicitTextTheme?.bodyLarge;
+          // 字体回退列表等局部配置会使 Flutter 返回完整 TextStyle。
+          // 普通正文的自动补全值不能抹去滚轮的选中/禁用语义。
+          final typographyOnly =
+              explicit != null &&
+              explicit.fontSize == theme.fontBodyLarge?.size &&
+              explicit.height == theme.fontBodyLarge?.height &&
+              explicit.fontWeight == theme.fontBodyLarge?.fontWeight &&
+              explicit.color == material.colorScheme.onSurface;
+          final textTheme = material.extension<TTextThemeData>();
+          final themeFont = textTheme?.font;
+          final inherited = context.tExplicitDefaultTextStyle;
+          final defaultStyle =
+              inherited == material.textTheme.bodyMedium ||
+                  (inherited?.debugLabel?.contains('fallback style;') ?? false)
+              ? null
+              : inherited;
+          // 状态样式是默认值；调用方的文字主题仍有更高优先级。
+          final style =
               TextStyle(
-                fontSize: theme.fontBodyLarge?.size ?? 16,
-                height: theme.fontBodyLarge?.height,
-              );
+                    fontSize: font?.size ?? 16,
+                    height: font?.height,
+                    fontWeight: font?.fontWeight,
+                    color: disabled
+                        ? theme.textDisabledColor
+                        : selected
+                        ? theme.textColorPrimary
+                        : theme.textColorSecondary,
+                  )
+                  .merge(
+                    typographyOnly
+                        ? explicit.copyWith(
+                            fontSize: font?.size,
+                            height: font?.height,
+                            fontWeight: font?.fontWeight,
+                            color: disabled
+                                ? theme.textDisabledColor
+                                : selected
+                                ? theme.textColorPrimary
+                                : theme.textColorSecondary,
+                          )
+                        : explicit,
+                  )
+                  .merge(defaultStyle)
+                  .merge(
+                    themeFont == null
+                        ? null
+                        : TextStyle(
+                            fontSize: themeFont.size,
+                            height: themeFont.height,
+                            fontWeight: themeFont.fontWeight,
+                          ),
+                  )
+                  .merge(textTheme?.textStyle);
           return Center(
             child:
                 itemBuilder?.call(context, option, colIndex, index, distance) ??
@@ -65,16 +118,7 @@ class PickerItemWidget extends StatelessWidget {
                   option.label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: baseStyle.copyWith(
-                    fontWeight: selected && !disabled
-                        ? FontWeight.w600
-                        : FontWeight.w400,
-                    color: disabled
-                        ? theme.textDisabledColor
-                        : selected
-                        ? theme.textColorPrimary
-                        : theme.textColorSecondary,
-                  ),
+                  style: style,
                 ),
           );
         },

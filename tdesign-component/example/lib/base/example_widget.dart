@@ -34,6 +34,8 @@ class ExamplePage extends StatefulWidget {
     this.singleChild,
     this.scrollController,
     this.floatingActionButton,
+    this.floatingActionButtonLocation,
+    this.floatingActionButtonAnimator,
     this.showTestModule = true,
   }) : assert(
          children.length > 0 || (showSingleChild && singleChild != null),
@@ -76,6 +78,12 @@ class ExamplePage extends StatefulWidget {
 
   /// 悬浮按钮
   final Widget? floatingActionButton;
+
+  /// 悬浮按钮的布局位置。
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
+
+  /// 悬浮按钮的位置过渡动画。
+  final FloatingActionButtonAnimator? floatingActionButtonAnimator;
 
   /// 是否在 debug 模式展示仅用于内部验证的单元测试模块。
   ///
@@ -230,6 +238,8 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
           widget.backgroundColor ??
           (widget.compactDemo ? context.tTheme.bgColorPage : null),
       floatingActionButton: widget.floatingActionButton,
+      floatingActionButtonLocation: widget.floatingActionButtonLocation,
+      floatingActionButtonAnimator: widget.floatingActionButtonAnimator,
       body: ScrollbarTheme(
         data: ScrollbarThemeData(
           trackVisibility: WidgetStateProperty.all(true),
@@ -346,12 +356,9 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
                   TText(
                     '${moduleIndex + 1 < 10 ? '0' : ''}${moduleIndex + 1} '
                     '${module.title}',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: context.tTheme.textColorPrimary,
-                      fontSize: 18,
-                      height: 52 / 36,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    font: context.tTheme.fontTitleLarge,
+                    textColor: context.tTheme.textColorPrimary,
+                    style: Theme.of(context).tExplicitTextTheme?.titleLarge,
                   ),
                 if (item.desc.isNotEmpty)
                   Padding(
@@ -414,11 +421,21 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   Widget _buildNavBar() {
     var leftBarItems = <TNavBarItem>[];
     var rightBarItems = <TNavBarItem>[];
+    // 保留公共页面壳既有的 22/14 行高度量，同时避免继承可被宿主覆盖的
+    // Material bodyMedium，进而污染所有复用 ExamplePage 的组件 Golden。
+    final titleLineHeight = context.tTheme.fontBodyMedium?.height ?? 22 / 14;
 
     // web端示例页不展示标题栏
     if (PlatformUtil.isWeb && !Navigator.canPop(context)) {
       return Container();
     }
+    leftBarItems.add(
+      TNavBarItem(
+        icon: TIcons.chevron_left,
+        iconSize: 28,
+        onTap: () => Navigator.maybePop(context),
+      ),
+    );
     if (showAction) {
       // Web 端和移动端都显示 API 按钮
       rightBarItems.add(
@@ -470,9 +487,19 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
 
     return TNavBar(
       key: widget.navBarKey,
-      title: widget.title,
+      title: Text(
+        widget.title,
+        style: TextStyle(
+          fontSize: 16,
+          height: titleLineHeight,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
       leading: leftBarItems,
       actions: rightBarItems,
+      // ExamplePage 的公共壳层自行持有标题视觉，避免组件默认值调整时
+      // 污染所有其他组件的 Demo 与 Golden。
+      useDefaultBack: false,
       // ExamplePage 外层 SafeArea 已负责顶部避让。
       useSafeArea: false,
     );
@@ -842,16 +869,17 @@ ${codeString}
   }
 
   Future<String> loadCodeString() async {
-    var codeString;
-    var assetsPath = _getCodeAssetsPath();
-    if (assetsPath.isNotEmpty) {
-      try {
-        codeString = await rootBundle.loadString(assetsPath);
-      } catch (e) {
-        debugPrint('$e');
-      }
+    final assetsPath = _getCodeAssetsPath();
+    if (assetsPath.isEmpty) {
+      return '';
     }
-    return codeString;
+    try {
+      return await rootBundle.loadString(assetsPath);
+    } catch (error) {
+      debugPrint('Failed to load example code asset $assetsPath: $error');
+      // 让代码面板走“暂无演示代码”分支，而不是将 null 强制解包导致页面异常。
+      return '';
+    }
   }
 }
 

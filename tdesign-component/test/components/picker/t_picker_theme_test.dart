@@ -4,6 +4,18 @@ import 'package:tdesign_flutter/src/components/picker/t_picker_theme_data.dart';
 
 /// TPickerThemeData 纯函数覆盖（copyWith / lerp），用于提升覆盖率。
 void main() {
+  test(
+    'unset height interpolates from its effective default in both directions',
+    () {
+      const unset = TPickerThemeData();
+      const custom = TPickerThemeData(height: 240);
+      for (final t in [0.0, 0.1, 0.5, 1.0]) {
+        expect(unset.lerp(custom, t).height, 200 + 40 * t);
+        expect(custom.lerp(unset, t).height, 240 - 40 * t);
+        expect(unset.lerp(unset, t).height, isNull);
+      }
+    },
+  );
   group('TPickerThemeData 纯函数', () {
     test('rejects invalid viewport dimensions', () {
       for (final height in [
