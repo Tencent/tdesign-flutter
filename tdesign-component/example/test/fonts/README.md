@@ -51,6 +51,11 @@ SHA-256 为 `59c5bebba9bf720005fb977a94b9c150b0b8e8c2698c1dca3a66d9f0d7cd9722`�
 上游源文件 SHA-256 为
 `734b20876d6a6777e4c30b627e8391695bbf545c0badf6c066138bebd1f0278a`。
 
+`AvatarGoldenCJK-Regular.otf` 仅补充 Avatar 整页 Golden 所需字形，字符清单见
+`avatar_demo_glyphs.txt`。它作为 Avatar Demo 最后的专用 fallback，不改变其他页面
+或既有共享字体的像素基线，子集 SHA-256 为
+`f7a30185d3942c4cb698afb1e74002cc16eaddfcf70ae1ec0774f16e61f9392f`。
+
 `TabBarGoldenCJK-Regular.otf` 仅用于 TabBar 整页明暗 Golden，字符清单见
 `tab_bar_demo_glyphs.txt`。它在 Android 真机热重启、逐项操作及 Figma 人工核对
 完成后才生成，不改变其他页面的字体回退和既有快照。
@@ -107,6 +112,7 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 更新 Indexes 页面或城市数据时，更新 Indexes 字符清单。
 更新 BackTop 页面文案时，更新 BackTop 字符清单。
 更新 Drawer 页面文案时，更新 Drawer 字符清单。
+更新 Avatar 页面文案时，更新 Avatar 字符清单。
 更新 Navbar 页面文案时，更新 Navbar 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。
