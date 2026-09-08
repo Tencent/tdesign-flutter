@@ -309,7 +309,7 @@ class _TSliderPageState extends State<TSliderPage> {
                   child: SizedBox(
                     width: 48,
                     height: 200,
-                    child: RotatedBox(quarterTurns: 3, child: slider),
+                    child: RotatedBox(quarterTurns: 1, child: slider),
                   ),
                 ),
                 if (showMarks)
@@ -321,19 +321,19 @@ class _TSliderPageState extends State<TSliderPage> {
                       key: marksKey,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
-                        TText('100'),
-                        TText('80'),
-                        TText('60'),
-                        TText('40'),
-                        TText('20'),
                         TText('0'),
+                        TText('20'),
+                        TText('40'),
+                        TText('60'),
+                        TText('80'),
+                        TText('100'),
                       ],
                     ),
                   ),
                 if (thumbLabel != null && normalizedValue != null)
                   Positioned(
                     left: 58,
-                    top: 16 + (1 - normalizedValue) * 152,
+                    top: 16 + normalizedValue * 152,
                     child: TText(thumbLabel, key: labelKey),
                   ),
               ],

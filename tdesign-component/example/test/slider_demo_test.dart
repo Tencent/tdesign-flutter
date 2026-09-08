@@ -135,15 +135,24 @@ void main() {
       'slider-vertical-capsule',
       'slider-vertical-capsule-scale-range',
     ]) {
-      expect(
+      final rotated = tester.widget<RotatedBox>(
         find.ancestor(
           of: find.byKey(ValueKey(key)),
           matching: find.byType(RotatedBox),
         ),
-        findsOneWidget,
-        reason: key,
       );
+      expect(rotated.quarterTurns, 1, reason: key);
     }
+    final scaleLabels = tester
+        .widgetList<TText>(
+          find.descendant(
+            of: find.byKey(const ValueKey('slider-vertical-scale-labels')),
+            matching: find.byType(TText),
+          ),
+        )
+        .map((text) => text.data)
+        .toList();
+    expect(scaleLabels, orderedEquals(['0', '20', '40', '60', '80', '100']));
     for (final key in [
       'slider-vertical-label',
       'slider-vertical-scale-labels',

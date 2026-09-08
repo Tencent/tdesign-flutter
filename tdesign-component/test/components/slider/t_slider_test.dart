@@ -68,6 +68,10 @@ void main() {
 
       final theme = SliderTheme.of(tester.element(find.byType(Slider)));
       expect(theme.activeTrackColor, TThemeData.defaultData().brandNormalColor);
+      expect(
+        theme.inactiveTrackColor,
+        TThemeData.defaultData().bgColorComponentHover,
+      );
       expect(theme.thumbColor, TThemeData.defaultData().textColorAnti);
       expect(
         theme.disabledActiveTrackColor,

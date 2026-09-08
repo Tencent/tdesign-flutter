@@ -14,14 +14,14 @@ SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
   final colorScheme = material.tExplicitColorScheme;
   final token = context.tTheme;
   final brand = token.brandNormalColor;
-  final component = token.bgColorComponent;
+  final inactiveTrack = token.bgColorComponentHover;
   final disabledComponent = token.bgColorComponentDisabled;
   final disabledBrand = token.brandDisabledColor;
   final thumb = colorScheme?.primary ?? token.textColorAnti;
   final disabledThumb = colorScheme == null
       ? token.textColorAnti
       : colorScheme.onSurface.withValues(alpha: 0.38);
-  final thumbBorder = colorScheme?.outline ?? token.componentBorderColor;
+  final thumbBorder = colorScheme?.outline ?? token.grayColor1;
   final disabledThumbBorder =
       colorScheme?.outlineVariant ?? token.bgColorComponentDisabled;
 
@@ -31,7 +31,7 @@ SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
     inactiveTrackColor:
         inherited.inactiveTrackColor ??
         colorScheme?.surfaceContainerHighest ??
-        component,
+        inactiveTrack,
     secondaryActiveTrackColor:
         inherited.secondaryActiveTrackColor ??
         colorScheme?.primary.withValues(alpha: 0.54) ??
@@ -53,7 +53,7 @@ SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
     inactiveTickMarkColor:
         inherited.inactiveTickMarkColor ??
         colorScheme?.surfaceContainerHighest ??
-        component,
+        inactiveTrack,
     disabledActiveTickMarkColor:
         inherited.disabledActiveTickMarkColor ??
         colorScheme?.primary.withValues(alpha: 0.38) ??
