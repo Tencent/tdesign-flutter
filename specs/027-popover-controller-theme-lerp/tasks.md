@@ -6,4 +6,4 @@
 - [x] DONE 更新交互 Demo、API 文档和生成片段
 - [x] DONE 补充组件、Demo 与插值回归测试
 - [x] DONE 执行双版本 analyze、测试、覆盖率和 Linux Golden
-- [ ] TODO 创建并核对 GitHub PR
+- [x] DONE 创建并核对 GitHub PR #1099

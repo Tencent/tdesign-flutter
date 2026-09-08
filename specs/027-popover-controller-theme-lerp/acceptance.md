@@ -2,8 +2,9 @@
 
 ## 验证环境
 
-- 基线：`origin/develop` `a841e3dd`
+- 基线：`origin/develop` `682c563d`
 - 分支：`rss1102/feat/popover-controller-theme-lerp`
+- PR：[#1099](https://github.com/Tencent/tdesign-flutter/pull/1099)
 - Flutter：3.32.0、3.47.0
 
 ## 自动化验证
