@@ -174,6 +174,15 @@ Future<void> _loadGoldenFonts(DemoPageTestSpec spec) async {
       ),
     );
   }
+  if (spec.supplementalCjkFontFamily case final family?) {
+    final supplementalCjkFont = FontLoader(family)
+      ..addFont(
+        File(
+          spec.supplementalCjkFontPath!,
+        ).readAsBytes().then(ByteData.sublistView),
+      );
+    loaders.add(supplementalCjkFont.load());
+  }
   await Future.wait(loaders);
 }
 

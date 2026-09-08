@@ -634,6 +634,25 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'stepper',
+    coverageTargets: ['lib/src/components/stepper/'],
+    componentTests: [
+      'test/components/stepper/t_stepper_test.dart',
+      'test/components/stepper/t_stepper_contract_test.dart',
+    ],
+    exampleTests: ['test/stepper_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Stepper Demo and component',
+        workingDirectory: 'example',
+        testFiles: [
+          'test/stepper_demo_golden_test.dart',
+          '../test/components/stepper/t_stepper_golden_test.dart',
+        ],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'switch',
     coverageTargets: ['lib/src/components/switch/'],
     componentTests: [
