@@ -17,9 +17,11 @@
 
 - `TCascaderOption` 比小程序动态 `keys` 更符合 Dart typed model；转换应位于业务数据进入组件的边界。
 - `value + onChanged`、`onChanged == null` 禁用、`variant` 形态所有权均已收敛，无重复公开入口。
+- 分支点击必须等待父级回写后推进层级；相对旧版“组件先推进”的行为属于 breaking
+  change，PR 标题与更新日志需明确迁移方式。
 - `subtitles` 只提供按内部活动层级读取的文案，不公开 `activeLevel`，不会形成第二套状态源。
 - Popup、标题、搜索框、过滤结果和提交策略通过现有 Flutter 组件组合，不新增平台弹层 API。
-- 保留既有 tab 默认值；基础 Demo 显式使用 step，在不破坏兼容性的前提下对齐可见效果。
+- 保留既有 tab 默认值；基础 Demo 显式使用 step，该默认值保持兼容。
 
 ## 验证结果
 

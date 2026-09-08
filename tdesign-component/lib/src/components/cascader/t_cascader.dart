@@ -59,6 +59,8 @@ class TCascader extends StatefulWidget {
     required this.value,
 
     /// 选中路径变化回调；为 null 时禁用。
+    ///
+    /// 分支点击只发出候选路径；调用方需回写 [value]，组件才会推进活动层级。
     this.onChanged,
 
     /// 导航展示形态。
@@ -81,6 +83,8 @@ class TCascader extends StatefulWidget {
   final List<Object?> value;
 
   /// 选中路径变化回调；为 null 时禁用。
+  ///
+  /// 分支点击只发出候选路径；调用方需回写 [value]，组件才会推进活动层级。
   final ValueChanged<List<Object?>>? onChanged;
 
   /// 导航展示形态。

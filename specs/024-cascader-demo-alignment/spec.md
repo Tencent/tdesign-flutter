@@ -20,7 +20,7 @@ Flutter Cascader 的公开 Demo 原先以常规能力分组，未覆盖小程序
 
 ## 行为契约
 
-- `value + onChanged` 继续构成严格受控路径；`onChanged == null` 是整体禁用入口。
+- `value + onChanged` 构成严格受控路径；`onChanged == null` 是整体禁用入口。
 - 分支点击只发出候选路径；父级尚未回写或拒绝候选值时，面板不提前切换层级。
 - `variant` 唯一表达 step / tab 导航形态。
 - `subtitles` 是按内部活动层级读取的不可变内容配置，不让调用方控制活动层级。
@@ -39,6 +39,13 @@ Flutter Cascader 的公开 Demo 原先以常规能力分组，未覆盖小程序
   Material 自动注入的 `DefaultTextStyle` 不得被当成调用方显式覆盖。
 - TSearchBar 自身提供 TextField 所需的 Material 渲染上下文，使其无需 Demo 额外包装，
   同时不向 Popup 的其他子组件注入 Material 默认视觉。
+
+## 兼容性
+
+- 分支点击从“先在组件内部推进层级，再通知调用方”调整为“调用方回写 `value` 后推进”，
+  修正了受控值被拒绝时 UI 仍变化的问题。依赖旧即时推进行为的调用方需要在
+  `onChanged` 中接收并回写候选路径，因此属于默认交互行为的 breaking change。
+- `variant` 仍默认 `TCascaderVariant.tab`，平铺面板仍默认高 360，未改变既有默认值。
 
 ## 验收标准
 

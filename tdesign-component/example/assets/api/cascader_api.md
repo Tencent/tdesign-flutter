@@ -5,7 +5,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onChanged | ValueChanged<List<Object?>>? | - | 选中路径变化回调；为 null 时禁用。 |
+| onChanged | ValueChanged<List<Object?>>? | - | 选中路径变化回调；为 null 时禁用。 分支点击只发出候选路径；调用方需回写 `value`，组件才会推进活动层级。 |
 | options | List<TCascaderOption> | - | 根选项列表。 |
 | placeholder | String | '请选择' | 未选择层级的占位文案。 |
 | subtitles | List<String> | const [] | 各层级的次级标题。 组件按内部活动层级读取对应内容，因此调用方无需持有或控制层级状态； 列表没有对应层级或对应内容为空时不显示次级标题。 |
