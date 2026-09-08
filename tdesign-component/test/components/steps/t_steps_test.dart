@@ -88,6 +88,26 @@ void main() {
     expect(tester.widget<Text>(find.text('自定义标题')).style?.color, Colors.orange);
   });
 
+  testWidgets('垂直可选择步骤的自定义标题与纯内容项保留右箭头', (tester) async {
+    int? selected;
+    await tester.pumpWidget(
+      wrap(
+        TSteps(
+          direction: TStepsDirection.vertical,
+          steps: const [
+            TStepsItemData(customTitle: Text('自定义标题')),
+            TStepsItemData(content: '仅内容'),
+          ],
+          onChange: (value) => selected = value,
+        ),
+      ),
+    );
+
+    expect(find.byIcon(TIcons.chevron_right), findsNWidgets(2));
+    await tester.tap(find.text('自定义标题'));
+    expect(selected, 0);
+  });
+
   testWidgets('display 横纵节点都为实心且不受 value/status 影响', (tester) async {
     for (final direction in TStepsDirection.values) {
       await tester.pumpWidget(

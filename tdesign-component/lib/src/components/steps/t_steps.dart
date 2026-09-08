@@ -17,7 +17,7 @@ class TStepsItemData {
              customTitle != null ||
              content != null ||
              customContent != null,
-         'title, content, customContent needs at least one non-empty value',
+         'title, customTitle, content, or customContent must be provided',
        );
 
   /// 标题

@@ -1,5 +1,21 @@
 # 验收记录
 
+## 2026-09-08 最新 develop 同步与公开契约复审
+
+- 已合并 `origin/develop@d2ff7a0a`，保留 Cascader、SideBar 与 Popover 的新增
+  Demo、主题及回归登记；Steps 分支不再落后 develop。
+- 修复垂直可选择步骤使用 `customTitle` 或仅提供 `content` 时缺少右箭头的
+  问题；字符串标题与自定义标题现在共用标题行和间距，`onChange` 仍是唯一
+  可选择来源。
+- 重写 Steps 站点文档，删除不可编译的 `activeIndex`、`successIcon`、`simple`、
+  `readOnly`、`verticalSelect`、`TStepsStatus.success` 旧用法，补充受控、
+  自定义内容、错误态、纯展示及 breaking change 迁移说明。
+- Flutter 3.32.0：Steps/Text 组件测试 38/38、Steps Demo 3/3 通过，严格
+  analyze 零问题；组件路由、Example 与站点文档契约检查通过。
+- 合并后的共享导航 Golden 同时包含 Steps 与 SideBar 变更，不能选择任一旧
+  二进制基线冒充组合结果。当前先保留 develop 基线；固定 Linux + Flutter
+  3.32.0 的组合基线仍需在允许挂载仓库的可信环境中重新生成并严格复跑。
+
 ## 2026-09-08 补充复审与修复
 
 本节为本轮结果；下方真机、构建及首轮检查是历史记录，不替代本轮证据。

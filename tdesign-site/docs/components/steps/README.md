@@ -1,14 +1,11 @@
 ---
 title: Steps 步骤条
 description: 用于任务步骤展示或任务进度展示。
-spline: base
+spline: navigation
 isComponent: true
 ---
 
-<span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
-
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -16,739 +13,208 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_steps_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_steps_page.dart)
+完整示例见 [t_steps_page.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/t_steps_page.dart)。
 
-### 1 水平默认步骤条
+### 基础步骤条
 
-水平默认步骤条1
-            
+`direction` 控制水平或垂直布局，默认使用水平布局。
+
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildBasicHSteps1(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(title: 'Steps1', content: 'Content1'),
-        TStepsItemData(title: 'Steps2', content: 'Content2'),
-      ],
-    );
-  }</pre>
+  <pre slot="Dart" lang="dart">
+const TSteps(
+  value: 1,
+  steps: [
+    TStepsItemData(title: '已完成', content: '辅助信息'),
+    TStepsItemData(title: '进行中', content: '辅助信息'),
+    TStepsItemData(title: '未完成', content: '辅助信息'),
+  ],
+)</pre>
 
 </td-code-block>
-                                  
 
-水平默认步骤条2
-            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildBasicHSteps2(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(title: 'Steps1', content: 'Content1'),
-        TStepsItemData(title: 'Steps2', content: 'Content2'),
-        TStepsItemData(title: 'Steps3', content: 'Content3'),
-      ],
-      // 水平方向
-      direction: TStepsDirection.horizontal,
-      activeIndex: 1,
-    );
-  }</pre>
+  <pre slot="Dart" lang="dart">
+const TSteps(
+  value: 1,
+  direction: TStepsDirection.vertical,
+  steps: [
+    TStepsItemData(title: '已完成', content: '辅助信息'),
+    TStepsItemData(title: '进行中', content: '辅助信息'),
+    TStepsItemData(title: '未完成', content: '辅助信息'),
+  ],
+)</pre>
 
 </td-code-block>
-                                  
 
-水平默认步骤条3
-            
+### 图标与点状步骤条
+
+通过 `icon` 自定义步骤图标；`variant: TStepsVariant.dot` 显示点状步骤条。
+
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildBasicHSteps3(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(title: 'Steps1', content: 'Content1'),
-        TStepsItemData(title: 'Steps2', content: 'Content2'),
-        TStepsItemData(title: 'Steps3', content: 'Content3'),
-        TStepsItemData(title: 'Steps4', content: 'Content4'),
-      ],
-      // 水平方向
-      direction: TStepsDirection.horizontal,
-      activeIndex: 1,
-    );
-  }</pre>
+  <pre slot="Dart" lang="dart">
+const TSteps(
+  value: 1,
+  steps: [
+    TStepsItemData(title: '已完成', icon: TIcons.cart),
+    TStepsItemData(title: '进行中', icon: TIcons.cart),
+    TStepsItemData(title: '未完成', icon: TIcons.cart),
+  ],
+)</pre>
 
 </td-code-block>
-                                  
-### 1 水平图标步骤条
 
-水平图标步骤条1
-            
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildHIconSteps1(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(
-          title: 'Steps1',
-          content: 'Content1',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Steps2',
-          content: 'Content2',
-          successIcon: TIcons.cart,
-        ),
-      ],
-      // 水平方向
-      direction: TStepsDirection.horizontal,
-      activeIndex: 0,
-    );
-  }</pre>
+  <pre slot="Dart" lang="dart">
+const TSteps(
+  value: 1,
+  variant: TStepsVariant.dot,
+  steps: [
+    TStepsItemData(title: '已完成'),
+    TStepsItemData(title: '进行中'),
+    TStepsItemData(title: '未完成'),
+  ],
+)</pre>
 
 </td-code-block>
-                                  
 
-水平图标步骤条2
-            
+### 错误状态
+
+`status` 描述当前 `value` 对应步骤的状态。
+
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildHIconSteps2(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(
-          title: 'Steps1',
-          content: 'Content1',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Steps2',
-          content: 'Content2',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Steps3',
-          content: 'Content3',
-          successIcon: TIcons.cart,
-        ),
-      ],
-      // 水平方向
-      direction: TStepsDirection.horizontal,
-      activeIndex: 1,
-    );
-  }</pre>
+  <pre slot="Dart" lang="dart">
+const TSteps(
+  value: 1,
+  status: TStepsStatus.error,
+  steps: [
+    TStepsItemData(title: '已完成'),
+    TStepsItemData(title: '错误', errorIcon: TIcons.close_circle),
+    TStepsItemData(title: '未完成'),
+  ],
+)</pre>
 
 </td-code-block>
-                                  
 
-水平图标步骤条3
-            
+### 受控选择
+
+`TSteps` 是受控组件。调用方持有 `value`，并在 `onChange` 中更新它；不传
+`onChange` 时组件只读。垂直步骤条可选择时会在每个步骤右侧显示箭头。
+
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildHIconSteps3(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(
-          title: 'Steps1',
-          content: 'Content1',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Steps2',
-          content: 'Content2',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Steps3',
-          content: 'Content3',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Steps4',
-          content: 'Content4',
-          successIcon: TIcons.cart,
-        ),
-      ],
-      // 水平方向
-      direction: TStepsDirection.horizontal,
-      activeIndex: 1,
-    );
-  }</pre>
+  <pre slot="Dart" lang="dart">
+int _selectedStep = 2;
+
+Widget build(BuildContext context) {
+  return TSteps(
+    value: _selectedStep,
+    direction: TStepsDirection.vertical,
+    variant: TStepsVariant.dot,
+    steps: const [
+      TStepsItemData(title: '已完成步骤'),
+      TStepsItemData(title: '已完成步骤'),
+      TStepsItemData(title: '当前步骤'),
+    ],
+    onChange: (index) {
+      setState(() => _selectedStep = index);
+    },
+  );
+}</pre>
 
 </td-code-block>
-                                  
-### 1 水平简略步骤条
 
-水平简略步骤条1
-            
+### 自定义标题与内容
+
+`customTitle` 和 `customContent` 分别优先于 `title` 和 `content`。
+
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildSimpleHSteps1(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(title: 'Steps1', content: 'Content1'),
-        TStepsItemData(title: 'Steps2', content: 'Content2'),
-      ],
-      // 水平方向
-      direction: TStepsDirection.horizontal,
-      activeIndex: 0,
-      // 简略模式
-      simple: true,
-    );
-  }</pre>
+  <pre slot="Dart" lang="dart">
+const TSteps(
+  value: 1,
+  direction: TStepsDirection.vertical,
+  steps: [
+    TStepsItemData(title: '已完成', content: '辅助信息'),
+    TStepsItemData(
+      customTitle: Text('自定义标题'),
+      customContent: Padding(
+        padding: EdgeInsets.only(top: 4),
+        child: Text('自定义内容'),
+      ),
+    ),
+  ],
+)</pre>
 
 </td-code-block>
-                                  
 
-水平简略步骤条2
-            
+### 纯展示步骤条
+
+`display` 形态的节点和已完成连线始终使用品牌色，不受 `value` 和 `status`
+影响。省略 `onChange` 即为纯展示用法。
+
 <td-code-block panel="Dart">
 
-  <pre slot="Dart" lang="javascript">
-  Widget _buildSimpleHSteps2(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(title: 'Steps1', content: 'Content1'),
-        TStepsItemData(title: 'Steps2', content: 'Content2'),
-        TStepsItemData(title: 'Steps3', content: 'Content3'),
-      ],
-      // 水平方向
-      direction: TStepsDirection.horizontal,
-      activeIndex: 1,
-      // 简略模式
-      simple: true,
-    );
-  }</pre>
+  <pre slot="Dart" lang="dart">
+const TSteps(
+  direction: TStepsDirection.vertical,
+  variant: TStepsVariant.display,
+  steps: [
+    TStepsItemData(title: '步骤展示', content: '可自定义此处内容'),
+    TStepsItemData(title: '步骤展示', content: '可自定义此处内容'),
+    TStepsItemData(title: '步骤展示', content: '可自定义此处内容'),
+  ],
+)</pre>
 
 </td-code-block>
-                                  
-
-水平简略步骤条3
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildSimpleHSteps3(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(title: 'Steps1', content: 'Content1'),
-        TStepsItemData(title: 'Steps2', content: 'Content2'),
-        TStepsItemData(title: 'Steps3', content: 'Content3'),
-        TStepsItemData(title: 'Steps4', content: 'Content4'),
-      ],
-      // 水平方向
-      direction: TStepsDirection.horizontal,
-      activeIndex: 1,
-      // 简略模式
-      simple: true,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 水平错误状态步骤条
-
-水平错误状态基本步骤条
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildHErrorSteps1(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(title: 'Steps1', content: 'Content1'),
-        TStepsItemData(title: 'Error', content: 'Content2'),
-        TStepsItemData(title: 'Steps3', content: 'Content3'),
-        TStepsItemData(title: 'Steps4', content: 'Content4'),
-      ],
-      // 水平方向
-      direction: TStepsDirection.horizontal,
-      activeIndex: 1,
-      // 错误状态
-      status: TStepsStatus.error,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-水平错误状态图标步骤条
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildHErrorSteps2(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(
-          title: 'Steps1',
-          content: 'Content1',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Error',
-          content: 'Content2',
-          successIcon: TIcons.cart,
-          errorIcon: TIcons.close_circle,
-        ),
-        TStepsItemData(
-          title: 'Steps3',
-          content: 'Content3',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Steps4',
-          content: 'Content4',
-          successIcon: TIcons.cart,
-        ),
-      ],
-      // 水平方向
-      direction: TStepsDirection.horizontal,
-      activeIndex: 1,
-      // 错误状态
-      status: TStepsStatus.error,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-水平错误状态简略步骤条
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildHErrorSteps3(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(
-          title: 'Steps1',
-          content: 'Content1',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Error',
-          content: 'Content2',
-          successIcon: TIcons.cart,
-          errorIcon: TIcons.close_circle,
-        ),
-        TStepsItemData(
-          title: 'Steps3',
-          content: 'Content3',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Steps4',
-          content: 'Content4',
-          successIcon: TIcons.cart,
-        ),
-      ],
-      // 水平方向
-      direction: TStepsDirection.horizontal,
-      activeIndex: 1,
-      // 错误状态
-      status: TStepsStatus.error,
-      // 简略模式
-      simple: true,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 垂直步骤条
-
-垂直默认步骤条
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildVBasicSteps(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(title: 'Finish', content: 'Customize content'),
-        TStepsItemData(title: 'Process', content: 'Customize content'),
-        TStepsItemData(title: 'Default', content: 'Customize content'),
-        TStepsItemData(title: 'Default', content: 'Customize content'),
-      ],
-      // 垂直方向
-      direction: TStepsDirection.vertical,
-      activeIndex: 1,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-垂直图标步骤条
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildVIconSteps(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(
-          title: 'Finish',
-          content: 'Customize content',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Process',
-          content: 'Customize content',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Default',
-          content: 'Customize content',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Default',
-          content: 'Customize content',
-          successIcon: TIcons.cart,
-        ),
-      ],
-      // 垂直方向
-      direction: TStepsDirection.vertical,
-      activeIndex: 1,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-垂直简略步骤条
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildVSimpleSteps(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(
-          title: 'Finish',
-          content: 'Customize content',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Process',
-          content: 'Customize content',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-            title: 'Default',
-            content: 'Customize content',
-            successIcon: TIcons.cart),
-        TStepsItemData(
-          title: 'Default',
-          content: 'Customize content',
-          successIcon: TIcons.cart,
-        ),
-      ],
-      // 垂直方向
-      direction: TStepsDirection.vertical,
-      activeIndex: 1,
-      // 简略模式
-      simple: true,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-垂直错误状态基本步骤条
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildVErrorBasicSteps(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(title: 'Finish', content: 'Customize content'),
-        TStepsItemData(title: 'Process', content: 'Customize content'),
-        TStepsItemData(title: 'Default', content: 'Customize content'),
-        TStepsItemData(title: 'Default', content: 'Customize content'),
-      ],
-      // 垂直方向
-      direction: TStepsDirection.vertical,
-      activeIndex: 1,
-      // 错误状态
-      status: TStepsStatus.error,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-垂直错误状态图标步骤条
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildVErrorIconSteps(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(
-          title: 'Finish',
-          content: 'Customize content',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Process',
-          content: 'Customize content',
-          successIcon: TIcons.cart,
-          errorIcon: TIcons.close_circle,
-        ),
-        TStepsItemData(
-          title: 'Default',
-          content: 'Customize content',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Default',
-          content: 'Customize content',
-          successIcon: TIcons.cart,
-        ),
-      ],
-      // 垂直方向
-      direction: TStepsDirection.vertical,
-      activeIndex: 1,
-      // 错误状态
-      status: TStepsStatus.error,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-垂直错误状态简略步骤条
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildVErrorSimpleSteps(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(
-          title: 'Finish',
-          content: 'Customize content',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Process',
-          content: 'Customize content',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Default',
-          content: 'Customize content',
-          successIcon: TIcons.cart,
-        ),
-        TStepsItemData(
-          title: 'Default',
-          content: 'Customize content',
-          successIcon: TIcons.cart,
-        ),
-      ],
-      // 垂直方向
-      direction: TStepsDirection.vertical,
-      activeIndex: 1,
-      // 简略模式
-      simple: true,
-      // 错误状态
-      status: TStepsStatus.error,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-垂直自定义标题基本步骤条
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildVCustomTitleBaseSteps(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(title: 'Finish', content: 'Customize content'),
-        TStepsItemData(
-          title: 'Process',
-          content: 'Customize content',
-          customTitle: const TText(
-            '这是一个很长很长的自定义标题，可以自动换行的一个标题内容',
-            softWrap: true,
-            maxLines: 2,
-            overflow: TextOverflow.visible,
-          ),
-        ),
-        TStepsItemData(title: 'Default', content: 'Customize content'),
-        TStepsItemData(title: 'Default', content: 'Customize content'),
-      ],
-      // 垂直方向
-      direction: TStepsDirection.vertical,
-      activeIndex: 1,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-垂直自定义内容基本步骤条
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildVCustomContentBaseSteps(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(title: 'Finish', content: 'Customize content'),
-        TStepsItemData(
-          title: '这是一个很长很长很长很长的文字，他是用来展示这个步骤的标题',
-          content: 'Customize content',
-          customContent: Container(
-            margin: const EdgeInsets.only(bottom: 16, top: 4),
-            child: const TImage(
-              assetUrl: 'assets/img/image.png',
-              type: TImageType.roundedSquare,
-            ),
-          ),
-        ),
-        TStepsItemData(title: 'Default', content: 'Customize content'),
-        TStepsItemData(title: 'Default', content: 'Customize content'),
-      ],
-      // 垂直方向
-      direction: TStepsDirection.vertical,
-      activeIndex: 1,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 Extension 步骤条
-
-Read-only Steps 纯展示水平步骤条
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildHReadOnlySteps(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(title: 'Finish', content: 'content'),
-        TStepsItemData(title: 'Process', content: 'content'),
-        TStepsItemData(title: 'Default', content: 'content'),
-        TStepsItemData(title: 'Default', content: 'content'),
-      ],
-      // 只读模式
-      readOnly: true,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-Read-only Steps 纯展示垂直步骤条
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildVReadOnlySteps(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(title: 'Finish', content: 'Customize content'),
-        TStepsItemData(title: 'Process', content: 'Customize content'),
-        TStepsItemData(title: 'Default', content: 'Customize content'),
-        TStepsItemData(title: 'Default', content: 'Customize content'),
-      ],
-      // 垂直方向
-      direction: TStepsDirection.vertical,
-      activeIndex: 0,
-      // 只读模式
-      readOnly: true,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-Vertical Customize Steps 垂直自定义步骤条
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildVCustomizeSteps(BuildContext context) {
-    return TSteps(
-      steps: [
-        TStepsItemData(title: 'Selected'),
-        TStepsItemData(title: 'Selected'),
-        TStepsItemData(title: 'Selected'),
-        TStepsItemData(title: 'Please Selected'),
-      ],
-      // 垂直方向
-      direction: TStepsDirection.vertical,
-      // 简略模式
-      simple: true,
-      activeIndex: 3,
-      // 步骤条垂直自定义步骤条选择模式
-      verticalSelect: true,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
 
 ## API
+
 ### TSteps
-#### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| activeIndex | int | 0 | 步骤条当前激活的索引 |
-| direction | TStepsDirection | TStepsDirection.horizontal | 步骤条方向 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| readOnly | bool | false | 步骤条readOnly模式 |
-| simple | bool | false | 步骤条simple模式 |
-| status | TStepsStatus | TStepsStatus.success | 步骤条状态 |
-| steps | List<TStepsItemData> | - | 步骤条数据 |
-| verticalSelect | bool | false | 步骤条垂直自定义步骤条选择模式 |
-
+| steps | `List<TStepsItemData>` | - | 步骤数据，必填 |
+| value | `int` | `0` | 当前激活索引；越界值仅在渲染时收敛到有效范围 |
+| direction | `TStepsDirection` | `horizontal` | 水平或垂直方向 |
+| status | `TStepsStatus` | `process` | 当前步骤的进行中或错误状态 |
+| variant | `TStepsVariant` | `standard` | 标准、点状或纯展示视觉形态 |
+| onChange | `ValueChanged&lt;int&gt;?` | - | 选择步骤时触发；为空时只读 |
 
 ### TStepsItemData
-#### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| content | String? | - | 内容 |
-| customContent | Widget? | - | 自定义内容 |
-| customTitle | Widget? | - | 自定义标题 |
-| errorIcon | IconData? | - | 失败图标 |
-| successIcon | IconData? | - | 成功图标 |
-| title | String? | - | 标题 |
+| title | `String?` | - | 标题 |
+| content | `String?` | - | 辅助内容 |
+| icon | `IconData?` | - | 自定义步骤图标 |
+| errorIcon | `IconData?` | - | 当前步骤处于错误状态时使用的图标 |
+| customTitle | `Widget?` | - | 自定义标题，优先于 `title` |
+| customContent | `Widget?` | - | 自定义内容，优先于 `content` |
 
+`title`、`customTitle`、`content`、`customContent` 至少提供一个。
 
-### TStepsDirection
-#### 枚举值
+### 枚举
 
-
-| 名称 | 说明 |
+| 枚举 | 可选值 |
 | --- | --- |
-| horizontal | - |
-| vertical | - |
+| `TStepsDirection` | `horizontal`、`vertical` |
+| `TStepsStatus` | `process`、`error` |
+| `TStepsVariant` | `standard`、`dot`、`display` |
 
+## Breaking Change 迁移
 
-### TStepsStatus
-#### 枚举值
-
-
-| 名称 | 说明 |
+| 旧 API | 新 API |
 | --- | --- |
-| success | - |
-| error | - |
-
-
-  
+| `activeIndex` | `value` |
+| `TStepsStatus.success` | `TStepsStatus.process` |
+| `successIcon` | `icon` |
+| `simple: true` | `variant: TStepsVariant.dot` |
+| `readOnly` | 省略 `onChange` |
+| `verticalSelect: true` | 提供 `onChange` |
+| `TStepsVariant.defaultTheme` | `TStepsVariant.standard` |
+| `TStepsThemeData` 中的业务开关 | 分别使用 `variant` 与 `onChange` |

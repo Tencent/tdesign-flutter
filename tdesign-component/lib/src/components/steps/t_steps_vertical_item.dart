@@ -213,41 +213,47 @@ class TStepsVerticalItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (data.customTitle != null)
-                    data.customTitle!
-                  else if (data.title != null && data.title!.isNotEmpty)
+                  if (data.customTitle != null ||
+                      (data.title != null && data.title!.isNotEmpty) ||
+                      selectable)
                     Container(
                       margin: const EdgeInsets.only(bottom: 4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: TText(
-                              data.title!,
-                              style: TTextResolve.resolve(
-                                context: context,
-                                defaults: TextStyle(
-                                  fontWeight:
-                                      (activeIndex == index &&
-                                          variant != TStepsVariant.display)
-                                      ? FontWeight.w600
-                                      : FontWeight.w400,
-                                  color: stepsTitleColor,
-                                  fontSize: theme.fontBodyMedium?.size ?? 14,
-                                  height: 1.2,
-                                ),
-                              ),
-                              softWrap: true,
-                              overflow: TextOverflow.visible,
-                            ),
+                            child:
+                                data.customTitle ??
+                                (data.title != null && data.title!.isNotEmpty
+                                    ? TText(
+                                        data.title!,
+                                        style: TTextResolve.resolve(
+                                          context: context,
+                                          defaults: TextStyle(
+                                            fontWeight:
+                                                (activeIndex == index &&
+                                                    variant !=
+                                                        TStepsVariant.display)
+                                                ? FontWeight.w600
+                                                : FontWeight.w400,
+                                            color: stepsTitleColor,
+                                            fontSize:
+                                                theme.fontBodyMedium?.size ??
+                                                14,
+                                            height: 1.2,
+                                          ),
+                                        ),
+                                        softWrap: true,
+                                        overflow: TextOverflow.visible,
+                                      )
+                                    : const SizedBox.shrink()),
                           ),
-                          selectable
-                              ? Icon(
-                                  TIcons.chevron_right,
-                                  color: theme.textColorPrimary,
-                                  size: 16,
-                                )
-                              : Container(),
+                          if (selectable)
+                            Icon(
+                              TIcons.chevron_right,
+                              color: theme.textColorPrimary,
+                              size: 16,
+                            ),
                         ],
                       ),
                     ),

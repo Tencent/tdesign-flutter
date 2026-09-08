@@ -229,34 +229,32 @@ class TStepsHorizontalItem extends StatelessWidget {
 
   /// 构建标题组件
   Widget _buildTitleWidget(BuildContext context, Color stepsTitleColor) {
-    if (data.customTitle != null) {
-      return data.customTitle!;
-    }
-
     final title = data.title ?? '';
-    if (title.isEmpty) {
+    if (data.customTitle == null && title.isEmpty) {
       return const SizedBox.shrink();
     }
 
     return Container(
       margin: const EdgeInsets.only(top: 8),
       alignment: Alignment.center,
-      child: TText(
-        title,
-        style: TTextResolve.resolve(
-          context: context,
-          defaults: TextStyle(
-            fontWeight:
-                (activeIndex == index && variant != TStepsVariant.display)
-                ? FontWeight.w600
-                : FontWeight.w400,
-            color: stepsTitleColor,
-            fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
+      child:
+          data.customTitle ??
+          TText(
+            title,
+            style: TTextResolve.resolve(
+              context: context,
+              defaults: TextStyle(
+                fontWeight:
+                    (activeIndex == index && variant != TStepsVariant.display)
+                    ? FontWeight.w600
+                    : FontWeight.w400,
+                color: stepsTitleColor,
+                fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
+              ),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-        ),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
     );
   }
 
