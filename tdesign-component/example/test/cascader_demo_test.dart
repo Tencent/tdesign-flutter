@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -7,6 +8,19 @@ import 'demo_page_test_utils.dart';
 
 void main() {
   registerDemoStructureTests(cascaderDemoPageTestSpec);
+
+  test(
+    'Cascader code panel contains initial value and key conversion',
+    () async {
+      final source = await rootBundle.loadString(
+        'assets/code/cascader._cell.txt',
+      );
+      expect(source, contains("'name': '北京市'"));
+      expect(source, contains("label: item['name']! as String"));
+      expect(source, contains("'tianjin-city'"));
+      expect(source, contains('useInitialValue && value.isEmpty'));
+    },
+  );
 
   testWidgets('Cascader Demo follows the official trigger order', (
     tester,

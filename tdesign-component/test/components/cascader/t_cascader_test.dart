@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -116,6 +117,62 @@ void main() {
       expect(find.text('Disabled'), findsOneWidget);
     });
 
+    testWidgets('does not advance until the controlled value is accepted', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(TCascader(options: options, value: const [], onChanged: (_) {})),
+      );
+
+      await tester.tap(find.byKey(const ValueKey('cascader-gd')));
+      await tester.pump();
+
+      expect(find.byKey(const ValueKey('cascader-gd')), findsOneWidget);
+      expect(find.text('Shenzhen'), findsNothing);
+    });
+
+    testWidgets('supports keyboard activation and excludes disabled options', (
+      tester,
+    ) async {
+      var value = <Object?>[];
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TCascader(
+              options: options,
+              value: value,
+              onChanged: (next) => setState(() => value = next),
+            ),
+          ),
+        ),
+      );
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+      await tester.pump();
+      expect(value, ['gd']);
+
+      value = const [];
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TCascader(
+              options: options,
+              value: value,
+              onChanged: (next) => setState(() => value = next),
+            ),
+          ),
+        ),
+      );
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.sendKeyEvent(LogicalKeyboardKey.space);
+      await tester.pump();
+      expect(value, ['gd']);
+    });
+
     testWidgets('onChanged null disables all interaction', (tester) async {
       await tester.pumpWidget(
         wrap(const TCascader(options: options, value: [])),
@@ -193,15 +250,15 @@ void main() {
         ),
       );
 
-      final selectedSemantics = tester.widget<Semantics>(
-        find
-            .ancestor(
+      final selectedSemantics = tester
+          .widgetList<Semantics>(
+            find.ancestor(
               of: find.byKey(const ValueKey('cascader-ns')),
               matching: find.byType(Semantics),
-            )
-            .first,
-      );
-      expect(selectedSemantics.properties.selected, isTrue);
+            ),
+          )
+          .where((semantics) => semantics.properties.selected == true);
+      expect(selectedSemantics, isNotEmpty);
       final indicator = tester.widget<Icon>(find.byIcon(TIcons.check));
       expect(indicator.size, 24);
       expect(indicator.color, TThemeData.defaultData().brandNormalColor);
@@ -284,6 +341,99 @@ void main() {
   });
 
   group('TCascader variants and theme', () {
+    testWidgets('filters diagnostic DefaultTextStyle without a Material host', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Align(
+            alignment: Alignment.topLeft,
+            child: TCascader(
+              options: options,
+              value: const [],
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      final text = tester.widget<Text>(find.text('Guangdong'));
+      expect(text.style?.decoration, isNot(TextDecoration.underline));
+      expect(text.style?.fontSize, 16);
+    });
+
+    testWidgets('preserves component text and local icon subtree themes', (
+      tester,
+    ) async {
+      final base = TThemeBuilder.light(TThemeData.defaultData());
+      final theme = base
+          .mergeExtension(
+            const TTextThemeData(textStyle: TextStyle(fontSize: 21)),
+          )
+          .mergeExtension(const TIconThemeData(size: 30));
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: Scaffold(
+            body: IconTheme(
+              data: const IconThemeData(color: Colors.pink),
+              child: TCascader(
+                options: options,
+                value: const [],
+                onChanged: (_) {},
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(tester.widget<Text>(find.text('Guangdong')).style?.fontSize, 21);
+      final arrow = tester.widget<Icon>(find.byIcon(TIcons.chevron_right).last);
+      expect(arrow.color, Colors.pink);
+      expect(arrow.size, 22);
+    });
+
+    testWidgets('applies Material text and active colors by relevant field', (
+      tester,
+    ) async {
+      final base = TThemeBuilder.light(TThemeData.defaultData());
+      final originalBodyLarge = base.textTheme.bodyLarge!;
+      final theme = base.copyWith(
+        colorScheme: base.colorScheme.copyWith(
+          primary: Colors.pink,
+          onSurface: Colors.brown,
+        ),
+        textTheme: base.textTheme.copyWith(
+          bodyLarge: originalBodyLarge.copyWith(fontSize: 21),
+          bodySmall: base.textTheme.bodySmall?.copyWith(fontSize: 19),
+        ),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: Scaffold(
+            body: TCascader(
+              options: options,
+              value: const [],
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      final option = tester.widget<Text>(find.text('Guangdong'));
+      expect(option.style?.fontSize, 21);
+      expect(option.style?.color, Colors.brown);
+      final active = tester.widget<Text>(find.text('请选择'));
+      expect(active.style?.color, Colors.pink);
+      final decoration = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.decoration)
+          .whereType<BoxDecoration>()
+          .firstWhere((item) => item.border != null);
+      expect((decoration.border! as Border).bottom.color, Colors.pink);
+    });
     testWidgets('step variant renders vertical navigation', (tester) async {
       await tester.pumpWidget(
         wrap(
@@ -323,6 +473,20 @@ void main() {
       );
       expect(find.text('Next'), findsOneWidget);
       expect(tester.widget<Text>(find.text('Next')).style?.color, active.color);
+      await tester.tap(find.text('Guangdong'));
+      await tester.pump();
+      expect(
+        tester
+            .widget<Text>(
+              find.descendant(
+                of: find.byKey(const ValueKey('cascader-gd')),
+                matching: find.text('Guangdong'),
+              ),
+            )
+            .style
+            ?.color,
+        active.color,
+      );
       expect(tester.getSize(find.byType(TCascader)).height, 280);
     });
 
@@ -410,6 +574,49 @@ void main() {
       expect(find.text('Province'), findsOneWidget);
       expect(find.text('District'), findsNothing);
     });
+
+    testWidgets('omits an empty subtitle like the public mini-program demo', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TCascader(
+            options: options,
+            value: const [],
+            subtitles: const [''],
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      expect(find.byKey(const ValueKey('cascader-subtitle')), findsNothing);
+    });
+
+    testWidgets(
+      'uses the effective default height during theme interpolation',
+      (tester) async {
+        final interpolated = const TCascaderThemeData().lerp(
+          const TCascaderThemeData(height: 400),
+          0.5,
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: TThemeBuilder.light(
+              TThemeData.defaultData(),
+            ).copyWith(extensions: [TThemeData.defaultData(), interpolated]),
+            home: Scaffold(
+              body: TCascader(
+                options: options,
+                value: const [],
+                onChanged: (_) {},
+              ),
+            ),
+          ),
+        );
+
+        expect(tester.getSize(find.byType(TCascader)).height, 380);
+      },
+    );
 
     testWidgets('locks design-critical row and separator defaults', (
       tester,
@@ -505,6 +712,34 @@ void main() {
     expect(
       base.lerp(other, 0.5).indicatorColor,
       Color.lerp(Colors.red, Colors.blue, 0.5),
+    );
+    expect(
+      const TCascaderThemeData()
+          .lerp(const TCascaderThemeData(height: 400), 0.5)
+          .height,
+      380,
+    );
+    expect(
+      const TCascaderThemeData(
+        height: 400,
+      ).lerp(const TCascaderThemeData(), 0.5).height,
+      380,
+    );
+    expect(
+      const TCascaderThemeData().lerp(const TCascaderThemeData(), 0.5).height,
+      isNull,
+    );
+    expect(
+      const TCascaderThemeData(
+        backgroundColor: Colors.red,
+      ).lerp(const TCascaderThemeData(), 0.25).backgroundColor,
+      Colors.red,
+    );
+    expect(
+      const TCascaderThemeData(
+        backgroundColor: Colors.red,
+      ).lerp(const TCascaderThemeData(), 0.75).backgroundColor,
+      isNull,
     );
   });
 }

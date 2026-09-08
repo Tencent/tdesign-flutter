@@ -9,6 +9,12 @@
 
 ## API Review 结论
 
+- 默认值来源复核：step 44、圆点 8、箭头 22、次级标题顶部 20、左右 16
+  直接对应小程序样式与设计矩阵；选项文案使用小程序 Radio 的 body-large，
+  step 与次级标题使用 body-medium，颜色和分隔线继续使用 TDesign Token。
+  Flutter 平铺面板高度 360 与小程序 Popup 内容高度 78vh 职责不同，保留 360，
+  但 Theme 插值按 360 的运行时有效默认值计算。
+
 - `TCascaderOption` 比小程序动态 `keys` 更符合 Dart typed model；转换应位于业务数据进入组件的边界。
 - `value + onChanged`、`onChanged == null` 禁用、`variant` 形态所有权均已收敛，无重复公开入口。
 - `subtitles` 只提供按内部活动层级读取的文案，不公开 `activeLevel`，不会形成第二套状态源。
@@ -17,19 +23,23 @@
 
 ## 验证结果
 
-- Flutter 3.32.0：`flutter analyze --no-pub --fatal-infos`，0 error / 0 warning。
-- Flutter 3.32.0：TCascader 组件回归 18 tests passed；Demo 功能 5 tests passed。
+- Flutter 3.32.0：组件包及 Demo 工程 `flutter analyze --no-pub`，均为 0 error / 0 warning。
+- Flutter 3.32.0：TCascader 组件回归 24 tests passed；与 Search、TText、共享主题
+  组合回归 54 tests passed；Demo 功能 6 tests passed。
 - Flutter 3.32.0：TPopup 保持 develop 的 Container 背景、圆角与裁剪；TSearchBar
   仅在内部 TextField 边界提供透明 Material 上下文，Popup、ActionSheet、Search 与
   Cascader 聚焦回归通过。
-- Flutter 3.32.0 Linux：2 张关闭状态与 10 张打开状态 light/dark Golden 更新后立即无更新复跑，12 tests passed。
-- Cascader 生产代码覆盖率：`248/251 = 98.80%`。
+- Flutter 3.32.0 Linux：按小程序 Radio body-large 修正 TCascader 局部主题污染后，
+  2 张关闭状态基线保持不变，10 张打开状态 light/dark Golden 更新后立即严格复跑，
+  12 tests passed；同一容器中 PR 原始 head 的旧基线 12 tests passed，排除了容器字体差异。
+- Cascader 生产代码覆盖率：`308/315 = 97.78%`。
 - Search 生产代码覆盖率：`193/197 = 97.97%`。
 - TCascader 分隔线只接受显式 Material 覆盖，TThemeBuilder 投影的默认值不会覆盖
   TDesign `componentStrokeColor`；公开代码片段列明七个示例的受控状态和差异配置。
-- Flutter 3.47.0：严格 analyze、TCascader 17 tests、TPopup 46 tests、
-  TSearchBar 无 Material 宿主回归与 Demo 5 tests passed。
-- 回归矩阵自测 11 tests passed；示例代码生成 `--check` 无漂移。
+- Flutter 3.47.0：组件包及 Demo 工程严格 analyze 通过；TCascader、Search、TText、
+  共享主题组合回归 54 tests passed，Demo 6 tests passed。
+- 回归、覆盖率及 Golden 清单自测 13 tests passed；API 文档重新生成，示例代码生成
+  `--check` 无漂移。
 
 ## 视觉结论
 
