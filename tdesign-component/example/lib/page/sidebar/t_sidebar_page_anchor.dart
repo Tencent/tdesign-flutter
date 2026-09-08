@@ -30,6 +30,7 @@ class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
   var currentValue = 1;
   final _demoScroller = ScrollController();
   var _isProgrammaticScroll = false;
+  var _programmaticScrollGeneration = 0;
   final _headerKeys = List.generate(_itemCount, (_) => GlobalKey());
   final _contentViewportKey = GlobalKey();
   final _lastSectionKey = GlobalKey();
@@ -98,6 +99,7 @@ class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
   }
 
   Future<void> handleSidebarChange(int value) async {
+    final generation = ++_programmaticScrollGeneration;
     if (currentValue != value) {
       setState(() => currentValue = value);
     }
@@ -114,7 +116,7 @@ class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
         curve: Curves.easeInOut,
       );
     } finally {
-      if (mounted) {
+      if (mounted && generation == _programmaticScrollGeneration) {
         _isProgrammaticScroll = false;
         _syncSelectionFromViewport();
       }

@@ -42,13 +42,16 @@ class TSideBarPageState extends State<TSideBarPage> {
           children: [
             ExampleItem(
               desc: '侧边导航用法',
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               ignoreCode: true,
               builder: _buildNavigatorSideBar,
             ),
             ExampleItem(
               desc: '图标侧边导航',
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               builder: _buildIconSideBar,
-              methodName: '_buildIconSideBar',
+              // 图标示例复用锚点页面的真实组件实现；这里不能指向仅负责跳转的按钮方法。
+              methodName: '_buildAnchorSideBar',
             ),
           ],
         ),
@@ -57,6 +60,7 @@ class TSideBarPageState extends State<TSideBarPage> {
           children: [
             ExampleItem(
               desc: '侧边导航样式',
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               ignoreCode: true,
               builder: _buildStyleSideBar,
             ),

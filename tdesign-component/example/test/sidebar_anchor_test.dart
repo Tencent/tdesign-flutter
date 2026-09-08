@@ -94,6 +94,36 @@ void main() {
     }
   });
 
+  testWidgets('快速连续点击时最后一次选择保持生效', (tester) async {
+    await tester.pumpWidget(buildPage());
+    await tester.pumpAndSettle();
+
+    final pageState = tester.state<TSideBarAnchorPageState>(
+      find.byType(TSideBarAnchorPage),
+    );
+    final scrolls = <Future<void>>[];
+
+    scrolls.add(pageState.handleSidebarChange(2));
+    await tester.pump(const Duration(milliseconds: 80));
+    scrolls.add(pageState.handleSidebarChange(5));
+    await tester.pump(const Duration(milliseconds: 80));
+    scrolls.add(pageState.handleSidebarChange(3));
+
+    expect(pageState.currentValue, 3);
+    await tester.pump(const Duration(milliseconds: 80));
+    expect(pageState.currentValue, 3);
+    await tester.pumpAndSettle();
+    await Future.wait(scrolls);
+
+    expect(pageState.currentValue, 3);
+    final viewport = tester.getRect(find.byType(SingleChildScrollView));
+    final title = tester.getTopLeft(
+      find.byKey(const ValueKey('sidebar-section-3')),
+    );
+    expect(title.dy, closeTo(viewport.top, 1));
+    expectSelectionMatchesViewport(tester);
+  });
+
   testWidgets('tag 变体使用相同的标题锚点语义', (tester) async {
     await tester.pumpWidget(
       buildPage(page: const TSideBarAnchorPage(variant: TSideBarVariant.tag)),
