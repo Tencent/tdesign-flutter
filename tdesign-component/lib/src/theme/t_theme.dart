@@ -107,8 +107,11 @@ extension TThemeContextExtension on BuildContext {
   TextStyle? get tExplicitDefaultTextStyle {
     final material = Theme.of(this);
     final inherited = DefaultTextStyle.of(this).style;
-    if (material.tExplicitTextTheme != null) {
-      return inherited;
+    if (inherited.debugLabel?.contains(
+          'fallback style; consider putting your text in a Material',
+        ) ??
+        false) {
+      return null;
     }
     final implicitStyles = <TextStyle?>[
       material.textTheme.displayLarge,

@@ -275,8 +275,8 @@ class _TPopoverPage extends State<TPopoverPage> {
               padding: const EdgeInsets.all(0),
               colorScheme: theme,
               width: 150,
-              height: 146,
               content: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(

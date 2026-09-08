@@ -106,6 +106,49 @@ void main() {
     expect(instance.color, Colors.blue);
   });
 
+  testWidgets('显式 TextTheme 不重复合并 Material 自动 DefaultTextStyle', (
+    tester,
+  ) async {
+    final token = TThemeData.defaultData();
+    final base = TThemeBuilder.light(token);
+    final context = await pumpContext(
+      tester,
+      theme: base.copyWith(
+        textTheme: base.textTheme.copyWith(
+          bodyLarge: base.textTheme.bodyLarge?.copyWith(fontSize: 21),
+        ),
+      ),
+    );
+
+    expect(
+      DefaultTextStyle.of(context).style,
+      Theme.of(context).textTheme.bodyMedium,
+    );
+    final resolved = TTextResolve.resolve(context: context);
+    expect(resolved.fontSize, 21);
+  });
+
+  testWidgets('局部显式 DefaultTextStyle 继续覆盖 TextTheme', (tester) async {
+    final token = TThemeData.defaultData();
+    final base = TThemeBuilder.light(token);
+    final context = await pumpContext(
+      tester,
+      theme: base.copyWith(
+        textTheme: base.textTheme.copyWith(
+          bodyLarge: base.textTheme.bodyLarge?.copyWith(fontSize: 21),
+        ),
+      ),
+      wrap: (child) => DefaultTextStyle(
+        style: const TextStyle(fontSize: 23, color: Colors.purple),
+        child: child,
+      ),
+    );
+
+    final resolved = TTextResolve.resolve(context: context);
+    expect(resolved.fontSize, 23);
+    expect(resolved.color, Colors.purple);
+  });
+
   test('裸 TTextSpan 不生成样式并继承父 Span', () {
     expect(TTextResolve.resolveSpan(), isNull);
   });
