@@ -30,6 +30,9 @@ void main() {
     expect(steps[10].indicator, TStepsIndicator.dot);
     expect(steps[10].onChange, isNotNull);
     expect(steps[10].value, 3);
+    expect(find.text('已完成步骤'), findsNWidgets(3));
+    expect(find.text('当前步骤'), findsOneWidget);
+    expect(find.text('未完成步骤'), findsNothing);
     expect(steps[11].indicator, TStepsIndicator.dot);
     expect(steps[11].onChange, isNull);
     expect(steps[11].direction, TStepsDirection.vertical);
@@ -40,6 +43,9 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(tester.widget<TSteps>(find.byType(TSteps).at(10)).value, 0);
+    expect(find.text('已完成步骤'), findsNothing);
+    expect(find.text('当前步骤'), findsOneWidget);
+    expect(find.text('未完成步骤'), findsNWidgets(3));
     expect(find.text('选择了步骤 1'), findsOneWidget);
     await tester.pump(const Duration(seconds: 3));
     expect(tester.takeException(), isNull);

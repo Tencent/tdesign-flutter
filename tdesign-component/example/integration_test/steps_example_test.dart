@@ -38,10 +38,16 @@ void main() {
     var steps = tester.widgetList<TSteps>(find.byType(TSteps)).toList();
     final selectable = steps.firstWhere((item) => item.onChange != null);
     expect(selectable.value, 3);
+    expect(find.text('已完成步骤'), findsNWidgets(3));
+    expect(find.text('当前步骤'), findsOneWidget);
+    expect(find.text('未完成步骤'), findsNothing);
     await tester.tap(find.text('已完成步骤').first);
     await tester.pumpAndSettle();
     steps = tester.widgetList<TSteps>(find.byType(TSteps)).toList();
     expect(steps.firstWhere((item) => item.onChange != null).value, 0);
+    expect(find.text('已完成步骤'), findsNothing);
+    expect(find.text('当前步骤'), findsOneWidget);
+    expect(find.text('未完成步骤'), findsNWidgets(3));
     expect(steps.last.onChange, isNull);
     expect(steps.last.indicator, TStepsIndicator.dot);
 

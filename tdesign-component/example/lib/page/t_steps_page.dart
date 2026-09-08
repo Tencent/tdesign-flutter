@@ -285,12 +285,16 @@ class _TStepsPageState extends State<TStepsPage> {
   @ExampleCode(group: 'steps')
   Widget _buildVerticalSelectable(BuildContext context) {
     return TSteps.selectable(
-      steps: const [
-        TStepsItemData(title: '已完成步骤'),
-        TStepsItemData(title: '已完成步骤'),
-        TStepsItemData(title: '已完成步骤'),
-        TStepsItemData(title: '当前步骤'),
-      ],
+      steps: List.generate(
+        4,
+        (index) => TStepsItemData(
+          title: index < _selectedStep
+              ? '已完成步骤'
+              : index == _selectedStep
+              ? '当前步骤'
+              : '未完成步骤',
+        ),
+      ),
       value: _selectedStep,
       onChange: (index) {
         setState(() => _selectedStep = index);
