@@ -1,5 +1,18 @@
 # 验收记录
 
+## 2026-09-08 最终 develop 同步
+
+- 已合并最新 `origin/develop@a841e3dd`。唯一文本冲突位于
+  `example/test/fonts/README.md`，合并后同时保留 Cascader 与 TabBar 的字体清单及
+  更新说明，不改变两者测试契约。
+- 合并后重新执行 Flutter 3.32.0 与 3.47.0：TabBar 组件测试各 21/21、公开 Demo
+  测试各 5/5；组件包与 Example 包 `flutter analyze --fatal-infos` 均零问题。
+- Flutter 3.32.0 生产代码覆盖率 `513/525 = 97.71%`，回归清单自测 5/5，示例
+  代码生成检查通过。
+- Flutter 3.32.0 Linux 在无更新参数、无像素容差下复跑：组件明暗 Golden 12/12、
+  Demo 明暗 Golden 4/4 全部通过。
+- 最终远端 CI 与 CNB Review 以本节变更推送后的 head 为准。
+
 ## 2026-09-08 补充复审与修复
 
 本节为本轮结果；下方真机、构建及首轮检查是历史记录，不替代本轮证据。
