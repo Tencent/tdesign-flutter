@@ -3,6 +3,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  void expectThumbBorders(
+    SliderThemeData theme, {
+    required Color borderColor,
+    required Color disabledBorderColor,
+  }) {
+    final dynamic thumbShape = theme.thumbShape;
+    final dynamic rangeThumbShape = theme.rangeThumbShape;
+    expect(thumbShape.borderColor, borderColor);
+    expect(thumbShape.disabledBorderColor, disabledBorderColor);
+    expect(rangeThumbShape.borderColor, borderColor);
+    expect(rangeThumbShape.disabledBorderColor, disabledBorderColor);
+  }
+
   Widget wrap(Widget child, {TSliderThemeData? sliderTheme}) {
     return MaterialApp(
       theme: ThemeData(
@@ -81,6 +94,35 @@ void main() {
         theme.disabledInactiveTrackColor,
         TThemeData.defaultData().bgColorComponentDisabled,
       );
+      expectThumbBorders(
+        theme,
+        borderColor: TThemeData.defaultData().grayColor1,
+        disabledBorderColor:
+            TThemeData.defaultData().bgColorComponentDisabled,
+      );
+    });
+
+    testWidgets('uses dark TDesign token colors without Material pollution', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData();
+      final darkToken = token.dark ?? token;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.dark(token),
+          home: const Scaffold(body: TSlider(value: 0.5)),
+        ),
+      );
+
+      final theme = SliderTheme.of(tester.element(find.byType(Slider)));
+      expect(theme.activeTrackColor, darkToken.brandNormalColor);
+      expect(theme.inactiveTrackColor, darkToken.bgColorComponentHover);
+      expect(theme.thumbColor, darkToken.textColorAnti);
+      expectThumbBorders(
+        theme,
+        borderColor: darkToken.grayColor1,
+        disabledBorderColor: darkToken.bgColorComponentDisabled,
+      );
     });
 
     testWidgets('preserves local SliderTheme color and label overrides', (
@@ -135,6 +177,11 @@ void main() {
       expect(theme.activeTrackColor, scheme.primary);
       expect(theme.inactiveTrackColor, scheme.surfaceContainerHighest);
       expect(theme.thumbColor, scheme.primary);
+      expectThumbBorders(
+        theme,
+        borderColor: scheme.outline,
+        disabledBorderColor: scheme.outlineVariant,
+      );
     });
 
     testWidgets('Theme decoration wraps the slider', (tester) async {
