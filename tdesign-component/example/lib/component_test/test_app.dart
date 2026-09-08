@@ -124,10 +124,11 @@ TTabBar _buildTabBar() {
   var iconSize = 39 * 60 / 98;
   var textSize = 8.0;
   return TTabBar(
-    variant: TTabBarVariant.weakIconText,
+    type: TTabBarType.iconText,
+    itemStyle: TTabBarItemStyle.normal,
     value: 0,
     onChanged: (_) {},
-    useVerticalDivider: false,
+    split: false,
     barHeight: 98 * 60 / 98,
     navigationTabs: [
       TTabBarItemConfig(

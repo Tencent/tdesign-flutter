@@ -365,6 +365,24 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'tab_bar',
+    coverageTargets: ['lib/src/components/tabbar/'],
+    componentTests: ['test/components/tabbar/t_tab_bar_test.dart'],
+    exampleTests: ['test/tab_bar_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'TabBar Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/tabbar/t_tab_bar_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'TabBar Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/tab_bar_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'navbar',
     coverageTargets: ['lib/src/components/navbar/'],
     componentTests: [
