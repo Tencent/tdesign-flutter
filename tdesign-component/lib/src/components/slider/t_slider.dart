@@ -8,46 +8,90 @@ import 't_slider_theme.dart';
 /// Formats the value shown above a slider thumb.
 typedef TSliderThumbFormatter = String Function(double value);
 
-ShowValueIndicator _showValueIndicatorFor(int? divisions) => divisions == null
-    ? ShowValueIndicator.onlyForContinuous
-    : ShowValueIndicator.onlyForDiscrete;
-
 SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
   final inherited = SliderTheme.of(context);
+  final material = Theme.of(context);
+  final colorScheme = material.tExplicitColorScheme;
   final token = context.tTheme;
   final brand = token.brandNormalColor;
   final component = token.bgColorComponent;
-  final disabled = token.bgColorComponentDisabled;
+  final disabledComponent = token.bgColorComponentDisabled;
+  final disabledBrand = token.brandDisabledColor;
+  final thumb = colorScheme?.primary ?? token.textColorAnti;
+  final disabledThumb = colorScheme == null
+      ? token.textColorAnti
+      : colorScheme.onSurface.withValues(alpha: 0.38);
+  final thumbBorder = colorScheme?.outline ?? token.componentBorderColor;
+  final disabledThumbBorder =
+      colorScheme?.outlineVariant ?? token.bgColorComponentDisabled;
 
   return inherited.copyWith(
-    activeTrackColor: inherited.activeTrackColor ?? brand,
-    inactiveTrackColor: inherited.inactiveTrackColor ?? component,
+    activeTrackColor:
+        inherited.activeTrackColor ?? colorScheme?.primary ?? brand,
+    inactiveTrackColor:
+        inherited.inactiveTrackColor ??
+        colorScheme?.surfaceContainerHighest ??
+        component,
     secondaryActiveTrackColor:
-        inherited.secondaryActiveTrackColor ?? brand.withAlpha(0x8a),
-    disabledActiveTrackColor: inherited.disabledActiveTrackColor ?? disabled,
+        inherited.secondaryActiveTrackColor ??
+        colorScheme?.primary.withValues(alpha: 0.54) ??
+        brand.withAlpha(0x8a),
+    disabledActiveTrackColor:
+        inherited.disabledActiveTrackColor ??
+        colorScheme?.primary.withValues(alpha: 0.38) ??
+        disabledBrand,
     disabledInactiveTrackColor:
-        inherited.disabledInactiveTrackColor ?? disabled,
+        inherited.disabledInactiveTrackColor ??
+        colorScheme?.onSurface.withValues(alpha: 0.12) ??
+        disabledComponent,
     disabledSecondaryActiveTrackColor:
-        inherited.disabledSecondaryActiveTrackColor ?? disabled,
-    activeTickMarkColor: inherited.activeTickMarkColor ?? brand,
-    inactiveTickMarkColor: inherited.inactiveTickMarkColor ?? component,
+        inherited.disabledSecondaryActiveTrackColor ??
+        colorScheme?.primary.withValues(alpha: 0.38) ??
+        disabledBrand,
+    activeTickMarkColor:
+        inherited.activeTickMarkColor ?? colorScheme?.primary ?? brand,
+    inactiveTickMarkColor:
+        inherited.inactiveTickMarkColor ??
+        colorScheme?.surfaceContainerHighest ??
+        component,
     disabledActiveTickMarkColor:
-        inherited.disabledActiveTickMarkColor ?? disabled,
+        inherited.disabledActiveTickMarkColor ??
+        colorScheme?.primary.withValues(alpha: 0.38) ??
+        disabledBrand,
     disabledInactiveTickMarkColor:
-        inherited.disabledInactiveTickMarkColor ?? disabled,
-    thumbColor: inherited.thumbColor ?? brand,
-    disabledThumbColor: inherited.disabledThumbColor ?? disabled,
-    overlayColor: inherited.overlayColor ?? brand.withAlpha(0x1f),
-    valueIndicatorColor: inherited.valueIndicatorColor ?? brand,
-    valueIndicatorStrokeColor: inherited.valueIndicatorStrokeColor ?? brand,
+        inherited.disabledInactiveTickMarkColor ??
+        colorScheme?.onSurface.withValues(alpha: 0.12) ??
+        disabledComponent,
+    thumbColor: inherited.thumbColor ?? thumb,
+    disabledThumbColor: inherited.disabledThumbColor ?? disabledThumb,
+    thumbShape:
+        inherited.thumbShape ??
+        _TDesignSliderThumbShape(
+          borderColor: thumbBorder,
+          disabledBorderColor: disabledThumbBorder,
+        ),
+    rangeThumbShape:
+        inherited.rangeThumbShape ??
+        _TDesignRangeSliderThumbShape(
+          borderColor: thumbBorder,
+          disabledBorderColor: disabledThumbBorder,
+        ),
+    overlayColor:
+        inherited.overlayColor ??
+        colorScheme?.primary.withValues(alpha: 0.12) ??
+        brand.withAlpha(0x1f),
+    valueIndicatorColor:
+        inherited.valueIndicatorColor ?? colorScheme?.primary ?? brand,
+    valueIndicatorStrokeColor:
+        inherited.valueIndicatorStrokeColor ?? colorScheme?.primary ?? brand,
     valueIndicatorTextStyle:
         inherited.valueIndicatorTextStyle ??
         TextStyle(
-          color: token.textColorAnti,
-          fontSize: token.fontBodyLarge?.size,
-          height: token.fontBodyLarge?.height,
-          fontWeight: token.fontBodyLarge?.fontWeight,
-        ).merge(Theme.of(context).tExplicitTextTheme?.bodyLarge),
+          color: colorScheme?.onSurface ?? token.textColorPrimary,
+          fontSize: token.fontBodyMedium?.size,
+          height: token.fontBodyMedium?.height,
+          fontWeight: token.fontBodyMedium?.fontWeight,
+        ).merge(material.tExplicitTextTheme?.bodyMedium),
   );
 }
 
@@ -77,7 +121,7 @@ class TSlider extends StatelessWidget {
     /// 离散刻度数；null 表示连续。
     this.divisions,
 
-    /// 是否显示拇指上方数值。
+    /// 是否持续显示拇指上方数值。
     this.showThumbValue = false,
 
     /// 拇指上方数值格式化回调。
@@ -114,7 +158,7 @@ class TSlider extends StatelessWidget {
   /// 离散刻度数；null 表示连续。
   final int? divisions;
 
-  /// 是否显示拇指上方数值。
+  /// 是否持续显示拇指上方数值。
   final bool showThumbValue;
 
   /// 拇指上方数值格式化回调。
@@ -128,6 +172,9 @@ class TSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final label = showThumbValue
+        ? (thumbFormatter?.call(value) ?? value.toStringAsFixed(2))
+        : null;
     final slider = Slider(
       value: value,
       onChanged: onChanged,
@@ -136,18 +183,22 @@ class TSlider extends StatelessWidget {
       min: min,
       max: max,
       divisions: divisions,
-      label: showThumbValue
-          ? (thumbFormatter?.call(value) ?? value.toStringAsFixed(2))
-          : null,
+      label: label,
     );
-    final sliderTheme = _sliderThemeWithTokenFallback(context).copyWith(
-      showValueIndicator:
-          showThumbValue ? _showValueIndicatorFor(divisions) : null,
+    final baseTheme = _sliderThemeWithTokenFallback(context);
+    final sliderTheme = baseTheme.copyWith(
+      showValueIndicator: showThumbValue ? ShowValueIndicator.never : null,
+      thumbShape: label == null
+          ? baseTheme.thumbShape
+          : _LabeledSliderThumbShape(base: baseTheme.thumbShape!, label: label),
     );
     final decoration = Theme.of(
       context,
     ).extension<TSliderThemeData>()?.decoration;
     final themedSlider = SliderTheme(data: sliderTheme, child: slider);
+    final sliderContent = showThumbValue
+        ? Padding(padding: const EdgeInsets.only(top: 20), child: themedSlider)
+        : themedSlider;
     final safeDivisions = divisions != null && divisions! > 0
         ? divisions
         : null;
@@ -157,9 +208,9 @@ class TSlider extends StatelessWidget {
             max: max,
             divisions: safeDivisions,
             formatter: scaleFormatter,
-            slider: themedSlider,
+            slider: sliderContent,
           )
-        : themedSlider;
+        : sliderContent;
     return decoration == null
         ? content
         : DecoratedBox(decoration: decoration, child: content);
@@ -192,7 +243,7 @@ class TRangeSlider extends StatelessWidget {
     /// 离散刻度数；null 表示连续。
     this.divisions,
 
-    /// 是否显示拇指上方数值。
+    /// 是否持续显示拇指上方数值。
     this.showThumbValue = false,
 
     /// 拇指上方数值格式化回调。
@@ -228,7 +279,7 @@ class TRangeSlider extends StatelessWidget {
   /// 离散刻度数；null 表示连续。
   final int? divisions;
 
-  /// 是否显示拇指上方数值。
+  /// 是否持续显示拇指上方数值。
   final bool showThumbValue;
 
   /// 拇指上方数值格式化回调。
@@ -242,6 +293,13 @@ class TRangeSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    assert(value.start >= min && value.end <= max);
+    final labels = showThumbValue
+        ? RangeLabels(
+            thumbFormatter?.call(value.start) ?? value.start.toStringAsFixed(2),
+            thumbFormatter?.call(value.end) ?? value.end.toStringAsFixed(2),
+          )
+        : null;
     final slider = RangeSlider(
       values: value,
       onChanged: onChanged,
@@ -250,22 +308,25 @@ class TRangeSlider extends StatelessWidget {
       min: min,
       max: max,
       divisions: divisions,
-      labels: showThumbValue
-          ? RangeLabels(
-              thumbFormatter?.call(value.start) ??
-                  value.start.toStringAsFixed(2),
-              thumbFormatter?.call(value.end) ?? value.end.toStringAsFixed(2),
-            )
-          : null,
+      labels: labels,
     );
-    final sliderTheme = _sliderThemeWithTokenFallback(context).copyWith(
-      showValueIndicator:
-          showThumbValue ? _showValueIndicatorFor(divisions) : null,
+    final baseTheme = _sliderThemeWithTokenFallback(context);
+    final sliderTheme = baseTheme.copyWith(
+      showValueIndicator: showThumbValue ? ShowValueIndicator.never : null,
+      rangeThumbShape: labels == null
+          ? baseTheme.rangeThumbShape
+          : _LabeledRangeSliderThumbShape(
+              base: baseTheme.rangeThumbShape!,
+              labels: labels,
+            ),
     );
     final decoration = Theme.of(
       context,
     ).extension<TSliderThemeData>()?.decoration;
     final themedSlider = SliderTheme(data: sliderTheme, child: slider);
+    final sliderContent = showThumbValue
+        ? Padding(padding: const EdgeInsets.only(top: 20), child: themedSlider)
+        : themedSlider;
     final safeDivisions = divisions != null && divisions! > 0
         ? divisions
         : null;
@@ -275,13 +336,241 @@ class TRangeSlider extends StatelessWidget {
             max: max,
             divisions: safeDivisions,
             formatter: scaleFormatter,
-            slider: themedSlider,
+            slider: sliderContent,
           )
-        : themedSlider;
+        : sliderContent;
     return decoration == null
         ? content
         : DecoratedBox(decoration: decoration, child: content);
   }
+}
+
+class _TDesignSliderThumbShape extends SliderComponentShape {
+  const _TDesignSliderThumbShape({
+    required this.borderColor,
+    required this.disabledBorderColor,
+  });
+
+  final Color borderColor;
+  final Color disabledBorderColor;
+
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
+      const Size.fromRadius(10);
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
+    _paintTDesignThumb(
+      context.canvas,
+      center,
+      enableAnimation: enableAnimation,
+      activationAnimation: activationAnimation,
+      sliderTheme: sliderTheme,
+      borderColor: borderColor,
+      disabledBorderColor: disabledBorderColor,
+    );
+  }
+}
+
+class _TDesignRangeSliderThumbShape extends RangeSliderThumbShape {
+  const _TDesignRangeSliderThumbShape({
+    required this.borderColor,
+    required this.disabledBorderColor,
+  });
+
+  final Color borderColor;
+  final Color disabledBorderColor;
+
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
+      const Size.fromRadius(10);
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    bool isDiscrete = false,
+    bool isEnabled = false,
+    bool isOnTop = false,
+    TextDirection textDirection = TextDirection.ltr,
+    required SliderThemeData sliderTheme,
+    Thumb thumb = Thumb.start,
+    bool isPressed = false,
+  }) {
+    _paintTDesignThumb(
+      context.canvas,
+      center,
+      enableAnimation: enableAnimation,
+      activationAnimation: activationAnimation,
+      sliderTheme: sliderTheme,
+      borderColor: borderColor,
+      disabledBorderColor: disabledBorderColor,
+    );
+  }
+}
+
+void _paintTDesignThumb(
+  Canvas canvas,
+  Offset center, {
+  required Animation<double> enableAnimation,
+  required Animation<double> activationAnimation,
+  required SliderThemeData sliderTheme,
+  required Color borderColor,
+  required Color disabledBorderColor,
+}) {
+  const radius = 10.0;
+  final fill = Color.lerp(
+    sliderTheme.disabledThumbColor,
+    sliderTheme.thumbColor,
+    enableAnimation.value,
+  )!;
+  final border = Color.lerp(
+    disabledBorderColor,
+    borderColor,
+    enableAnimation.value,
+  )!;
+  final path = Path()..addOval(Rect.fromCircle(center: center, radius: radius));
+  canvas.drawShadow(
+    path,
+    Colors.black,
+    1 + 2 * activationAnimation.value,
+    true,
+  );
+  canvas.drawCircle(center, radius, Paint()..color = fill);
+  canvas.drawCircle(
+    center,
+    radius,
+    Paint()
+      ..color = border
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1,
+  );
+}
+
+class _LabeledSliderThumbShape extends SliderComponentShape {
+  const _LabeledSliderThumbShape({required this.base, required this.label});
+
+  final SliderComponentShape base;
+  final String label;
+
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
+      base.getPreferredSize(isEnabled, isDiscrete);
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
+    base.paint(
+      context,
+      center,
+      activationAnimation: activationAnimation,
+      enableAnimation: enableAnimation,
+      isDiscrete: isDiscrete,
+      labelPainter: labelPainter,
+      parentBox: parentBox,
+      sliderTheme: sliderTheme,
+      textDirection: textDirection,
+      value: value,
+      textScaleFactor: textScaleFactor,
+      sizeWithOverflow: sizeWithOverflow,
+    );
+    _paintThumbLabel(context.canvas, center, label, sliderTheme, textDirection);
+  }
+}
+
+class _LabeledRangeSliderThumbShape extends RangeSliderThumbShape {
+  const _LabeledRangeSliderThumbShape({
+    required this.base,
+    required this.labels,
+  });
+
+  final RangeSliderThumbShape base;
+  final RangeLabels labels;
+
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
+      base.getPreferredSize(isEnabled, isDiscrete);
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    bool isDiscrete = false,
+    bool isEnabled = false,
+    bool isOnTop = false,
+    TextDirection textDirection = TextDirection.ltr,
+    required SliderThemeData sliderTheme,
+    Thumb thumb = Thumb.start,
+    bool isPressed = false,
+  }) {
+    base.paint(
+      context,
+      center,
+      activationAnimation: activationAnimation,
+      enableAnimation: enableAnimation,
+      isDiscrete: isDiscrete,
+      isEnabled: isEnabled,
+      isOnTop: isOnTop,
+      textDirection: textDirection,
+      sliderTheme: sliderTheme,
+      thumb: thumb,
+      isPressed: isPressed,
+    );
+    _paintThumbLabel(
+      context.canvas,
+      center,
+      thumb == Thumb.start ? labels.start : labels.end,
+      sliderTheme,
+      textDirection,
+    );
+  }
+}
+
+void _paintThumbLabel(
+  Canvas canvas,
+  Offset center,
+  String label,
+  SliderThemeData sliderTheme,
+  TextDirection textDirection,
+) {
+  final painter = TextPainter(
+    text: TextSpan(text: label, style: sliderTheme.valueIndicatorTextStyle),
+    textDirection: textDirection,
+    maxLines: 1,
+  )..layout();
+  painter.paint(
+    canvas,
+    Offset(center.dx - painter.width / 2, center.dy - painter.height - 16),
+  );
 }
 
 class _SliderWithScaleLabels extends StatelessWidget {

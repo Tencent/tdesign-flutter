@@ -582,6 +582,11 @@ const componentTestManifests = <ComponentTestManifest>[
     exampleTests: ['test/slider_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
+        name: 'Slider Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/slider/t_slider_golden_test.dart'],
+      ),
+      VisualTestManifest(
         name: 'Slider Demo',
         workingDirectory: 'example',
         testFiles: ['test/slider_demo_golden_test.dart'],

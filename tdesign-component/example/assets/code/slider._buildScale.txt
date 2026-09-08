@@ -1,12 +1,32 @@
-Widget _buildScale(BuildContext context) => _panel(
-    TSlider(
-      key: const ValueKey('slider-scale'),
-      value: _scale,
-      min: 0,
-      max: 100,
-      divisions: 5,
-      showScaleValue: true,
-      scaleFormatter: _integer,
-      onChanged: (value) => setState(() => _scale = value),
-    ),
-  );
+Widget _buildScale(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _panel(
+          TSlider(
+            key: const ValueKey('slider-scale'),
+            value: _scale,
+            min: 0,
+            max: 100,
+            divisions: 5,
+            showScaleValue: true,
+            scaleFormatter: _integer,
+            onChanged: (value) => setState(() => _scale = value),
+          ),
+        ),
+        _subsection(context, '带刻度双游标滑块'),
+        _panel(
+          TRangeSlider(
+            key: const ValueKey('slider-scale-range'),
+            value: _scaleRange,
+            min: 0,
+            max: 100,
+            divisions: 5,
+            showScaleValue: true,
+            scaleFormatter: _integer,
+            onChanged: (value) => setState(() => _scaleRange = value),
+          ),
+        ),
+      ],
+    );
+  }
