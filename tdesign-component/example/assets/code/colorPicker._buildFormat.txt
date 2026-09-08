@@ -1,0 +1,14 @@
+Widget _buildFormat(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (final line in _formatLines) _buildFormatLine(line),
+          const SizedBox(height: 8),
+          TColorPicker(
+            value: formatValue,
+            type: TColorPickerType.multiple,
+            enableAlpha: true,
+            format: curFormat,
+            onChanged: (value, change) => setState(() => formatValue = value),
+          ),
+        ],
+      );

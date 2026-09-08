@@ -235,6 +235,24 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'color_picker',
+    coverageTargets: ['lib/src/components/color_picker/'],
+    componentTests: ['test/components/color_picker/t_color_picker_test.dart'],
+    exampleTests: ['test/color_picker_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'ColorPicker Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/color_picker/t_color_picker_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'ColorPicker Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/color_picker_demo_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'divider',
     coverageTargets: ['lib/src/components/divider/'],
     componentTests: ['test/components/divider/t_divider_test.dart'],

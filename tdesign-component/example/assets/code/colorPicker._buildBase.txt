@@ -1,0 +1,4 @@
+Widget _buildBase(BuildContext context) => TColorPicker(
+        value: baseValue,
+        onChanged: (value, change) => setState(() => baseValue = value),
+      );

@@ -123,13 +123,20 @@ spline: explain
   </div>
 </section>
 
-<h3>输入<em class="tag">16</em></h3>
+<h3>输入<em class="tag">17</em></h3>
 <section class="image-group">
   <div class="image-wrapper">
     <a class="item" href="/flutter/components/calendar">
       <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-calendar.png" />
       <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-calendar-dark.png" />
       <p class="name">Calendar 日历</p>
+    </a>
+  </div>
+  <div class="image-wrapper">
+    <a class="item" href="/flutter/components/color-picker">
+      <img class="__light__" src="https://tdesign.gtimg.com/site/mobile/doc-colorpicker.png" />
+      <img class="__dark__" src="https://tdesign.gtimg.com/site/mobile/doc-colorpicker-dark.png" />
+      <p class="name">ColorPicker 颜色选择器</p>
     </a>
   </div>
   <div class="image-wrapper">
