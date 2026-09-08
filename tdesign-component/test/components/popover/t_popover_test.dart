@@ -714,6 +714,42 @@ void main() {
       expect(closeCount, 1);
     });
 
+    testWidgets('系统返回键关闭 Anchor 并仅通知一次', (tester) async {
+      final controller = TPopoverController();
+      var closeCount = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Center(
+            child: TPopoverAnchor(
+              controller: controller,
+              content: const Text('返回键关闭'),
+              onClose: () => closeCount++,
+              builder: (context, controller, child) => TextButton(
+                onPressed: controller.open,
+                child: const Text('打开返回键气泡'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('打开返回键气泡'));
+      await tester.pump();
+      expect(controller.isOpen, isTrue);
+      expect(find.text('返回键关闭'), findsOneWidget);
+
+      await tester.binding.handlePopRoute();
+      await tester.pump();
+
+      expect(controller.isOpen, isFalse);
+      expect(find.text('返回键关闭'), findsNothing);
+      expect(closeCount, 1);
+
+      controller.close();
+      await tester.pump();
+      expect(closeCount, 1);
+    });
+
     testWidgets('未传入 controller 时 builder 仍可展开并在自然关闭后更新状态', (tester) async {
       late TPopoverController localController;
       var contentCloseCount = 0;
@@ -1068,6 +1104,36 @@ void main() {
 
       await tester.tapAt(const Offset(10, 10));
       await tester.pump();
+      expect(completed, isTrue);
+    });
+
+    testWidgets('系统返回键关闭并完成 showPopover Future', (tester) async {
+      late BuildContext ctx;
+      var completed = false;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              ctx = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      unawaited(
+        TPopover.showPopover(
+          context: ctx,
+          content: const Text('返回键完成 Future'),
+        ).then((_) => completed = true),
+      );
+      await tester.pump();
+      expect(completed, isFalse);
+
+      await tester.binding.handlePopRoute();
+      await tester.pump();
+
+      expect(find.text('返回键完成 Future'), findsNothing);
       expect(completed, isTrue);
     });
 

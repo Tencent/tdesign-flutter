@@ -39,6 +39,9 @@
 `TPopoverAnchor` 声明气泡内容、位置和视觉配置，`TPopoverController` 只负责
 `open`、`close` 和 `isOpen`。简单的一次性展示仍可使用
 `TPopover.showPopover`。
+气泡展开时会读取当前的内容、位置、视觉配置和关闭策略；展开期间更新这些
+配置不会刷新已显示的浮层，关闭后再次展开时生效。`builder` 和 `child` 仍按
+普通 Widget 树的更新规则重建。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

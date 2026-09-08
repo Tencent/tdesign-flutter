@@ -51,6 +51,9 @@
 - `showPopover` 不新增 Controller 参数，所有已有调用不需迁移。
 - `TPopoverAnchor` 声明锚点 builder、content 及与 `showPopover` 同语义的
   位置、尺寸、主题覆盖和关闭策略。
+- Anchor 展开时读取 content、位置、视觉配置和关闭策略；展开期间更新这些
+  配置不刷新已显示的浮层，关闭后再次展开时生效。builder 与 child 仍按普通
+  Widget 树的规则重建。
 - `controller.open()` 展开其绑定 Anchor；重复展开无副作用。
 - `controller.close()` 关闭其绑定 Anchor；未绑定或重复关闭无副作用。
 - `controller.isOpen` 反映当前 Anchor 的 Overlay 展开状态。
@@ -66,7 +69,7 @@
 
 ## 验收标准
 
-- [x] Controller 展开、关闭、重复操作、自然关闭和替换路径均有测试。
+- [x] Controller 展开、关闭、重复操作、自然关闭、系统返回和替换路径均有测试。
 - [x] `showPopover` 原调用无需迁移，返回类型保持 `Future<void>`。
 - [x] 公开自定义内容 Demo 使用 Anchor 受控模式，每个选项选择后关闭气泡并展示 Toast。
 - [x] nullable 与双显式 Theme 插值有字段级测试。
