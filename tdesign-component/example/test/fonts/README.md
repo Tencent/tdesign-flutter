@@ -37,6 +37,16 @@ Upload 等既有 Golden 的字形选择与像素基线。
 上游源文件 SHA-256 为
 `734b20876d6a6777e4c30b627e8391695bbf545c0badf6c066138bebd1f0278a`。
 
+`TabBarGoldenCJK-Regular.otf` 仅用于 TabBar 整页明暗 Golden，字符清单见
+`tab_bar_demo_glyphs.txt`。它在 Android 真机热重启、逐项操作及 Figma 人工核对
+完成后才生成，不改变其他页面的字体回退和既有快照。
+
+- 上游：Android 16 真机 `/system/fonts/NotoSansCJK-Regular.ttc` 的 SC 字体面（index 2）
+- 上游 SHA-256：`3e7e5afaac2c6d872592d76abedac03a51c6f0fc42d11e311ff2816a6c368afe`
+- 子集工具：fonttools 4.59.1
+- 子集 SHA-256：`77e2e93df0b403af5ddd7411b6472ada58a93fcade6b87a34c26fe422f698c70`
+- 许可证：SIL Open Font License 1.1，见 `OFL.txt`
+
 `SideBarGoldenCJK-Regular.otf` 仅补充 SideBar 整页 Golden 的公开标题、说明与
 入口文案，字符清单见 `sidebar_demo_glyphs.txt`。它作为独立 fallback 加载，避免
 扩充共享字体后改变其他组件既有基线；上游与本文其余子集相同，子集工具为
@@ -62,10 +72,7 @@ HarfBuzz 11.4.5，子集 SHA-256 为
 - 来源：`https://github.com/notofonts/noto-cjk/raw/Sans2.004/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf`
 - 上游 SHA-256：`faa6c9df652116dde789d351359f3d7e5d2285a2b2a1f04a2d7244df706d5ea9`
 - 子集工具：fonttools 4.59.1
-- 原子集 SHA-256：`2c4215bf330a1f6ba7da5c2be3eb1502e270d466c99852801e11164d946c690d`
-- 字符清单：`component_demo_glyphs.txt`
-- 补充子集 SHA-256：`2c7a2ea904b3c082910f3929ca81ed543af3fe2897add8ef19a9b4cd518a5b8b`
-- 补充字符清单：`alignment_demo_glyphs.txt`
+- 子集 SHA-256：`77e2e93df0b403af5ddd7411b6472ada58a93fcade6b87a34c26fe422f698c70`
 - 许可证：SIL Open Font License 1.1，见 `OFL.txt`
 
 原字体经过子集化后按各测试字体用途设置独立 family/full/PostScript name
@@ -77,7 +84,8 @@ Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后�
 ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedback 字符清单。
 更新 Picker 页面文案时，更新 Picker 字符清单。
 更新 Calendar 页面文案时，更新 Calendar 字符清单。
-更新 SideBar 页面文案时，更新 SideBar 字符清单。
+ 更新 TabBar 页面文案时，更新 TabBar 字符清单。
+ 更新 SideBar 页面文案时，更新 SideBar 字符清单。
 更新 Cascader 页面文案时，更新 Cascader 字符清单。
 更新 Indexes 页面或城市数据时，更新 Indexes 字符清单。
 更新 BackTop 页面文案时，更新 BackTop 字符清单。

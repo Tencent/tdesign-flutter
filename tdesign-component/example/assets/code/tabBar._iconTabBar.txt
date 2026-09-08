@@ -1,14 +1,13 @@
 /// 核心片段：导入 material.dart 和 tdesign_flutter.dart。
-  /// 在 StatefulWidget 的 State 中声明 `int _capsuleValue = 0;`，
+  /// 在 StatefulWidget 的 State 中声明 `int _iconValue = 0;`，
   /// 从 build 调用本方法；状态由 State 持有并通过 setState 重建。
-    Widget _capsuleTabBar(BuildContext context) {
+    Widget _iconTabBar(BuildContext context) {
     const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
     return TTabBar(
       type: TTabBarType.icon,
-      style: TTabBarStyle.capsule,
       useSafeArea: false,
-      value: _capsuleValue,
-      onChanged: (newValue) => setState(() => _capsuleValue = newValue),
+      value: _iconValue,
+      onChanged: (newValue) => setState(() => _iconValue = newValue),
       navigationTabs: List.generate(
         4,
         (index) => TTabBarItemConfig(
