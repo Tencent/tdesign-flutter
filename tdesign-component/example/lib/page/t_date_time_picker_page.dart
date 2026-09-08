@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
+import '../annotation/example_code.dart';
+import '../base/example_widget.dart';
 
 class TDateTimePickerPage extends StatefulWidget {
   const TDateTimePickerPage({super.key});
@@ -12,455 +12,278 @@ class TDateTimePickerPage extends StatefulWidget {
 }
 
 class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
-  TDateTimePickerValue _baseSelected = _kInlineValue;
-  TDateTimePickerValue _yearMonthSelected = const TDateTimePickerValue(
-    year: 2026,
-    month: 5,
-  );
-  TDateTimePickerValue _timeSelected = const TDateTimePickerValue(
-    hour: 12,
-    minute: 30,
-  );
-  DateTime _calendarTimeSelected = DateTime(2026, 5, 15, 12, 30);
-  TDateTimePickerValue? _rangeSelected;
-  TDateTimePickerValue _weekSelected = _kInlineValue;
-  final ValueNotifier<TDateTimePickerValue?> _inlineSelectedNotifier =
-      ValueNotifier<TDateTimePickerValue?>(null);
-
-  /// 内嵌滚轮的受控值。
-  static const _kInlineValue = TDateTimePickerValue(
-    year: 2026,
-    month: 5,
-    day: 15,
-    hour: 12,
-    minute: 30,
-  );
-
-  /// 自定义范围 demo：start/end 须含完整年月日时分秒，各级在边界日按时序收紧。
-  static const _kRangeStart = TDateTimePickerValue(
-    year: 2025,
-    month: 2,
-    day: 10,
-    hour: 9,
-    minute: 30,
-    second: 0,
-  );
-
-  static const _kRangeEnd = TDateTimePickerValue(
-    year: 2028,
-    month: 8,
-    day: 25,
-    hour: 18,
-    minute: 45,
-    second: 30,
-  );
-
-  static const _kRangeInitial = TDateTimePickerValue(
-    year: 2025,
-    month: 7,
-    day: 15,
-    hour: 12,
-    minute: 0,
-    second: 0,
-  );
+  static const _date = TDateTimePickerValue(year: 2022, month: 8, day: 10);
+  final _values = <String, TDateTimePickerValue>{
+    'date': _date,
+    'month': const TDateTimePickerValue(year: 2022, month: 8),
+    'month-day': const TDateTimePickerValue(month: 8, day: 10),
+    'second': const TDateTimePickerValue(hour: 12, minute: 50, second: 23),
+    'minute': const TDateTimePickerValue(hour: 12, minute: 50),
+    'date-time': const TDateTimePickerValue(
+      year: 2022,
+      month: 8,
+      day: 10,
+      hour: 12,
+      minute: 50,
+      second: 23,
+    ),
+    'week': _date,
+    'title': _date,
+    'without-title': _date,
+  };
 
   @override
-  void dispose() {
-    _inlineSelectedNotifier.dispose();
-    super.dispose();
-  }
+  Widget build(BuildContext context) => ExamplePage(
+    title: tTitle(),
+    desc: '用于选择一个时间点或者一个时间段。',
+    exampleCodeGroup: 'date-time-picker',
+    compactDemo: true,
+    // Figma Demo 页面底色；深色模式继续使用当前主题。
+    backgroundColor: Theme.of(context).brightness == Brightness.light
+        ? const Color(0xFFF6F6F6)
+        : context.tTheme.bgColorPage,
+    showTestModule: false,
+    children: [
+      ExampleModule(
+        title: '组件类型',
+        children: [
+          ExampleItem(desc: '年月日选择器', builder: _buildDate, methodName: '_cell'),
+          ExampleItem(desc: '年月选择器', builder: _buildMonth, methodName: '_cell'),
+          ExampleItem(
+            desc: '月日选择器',
+            builder: _buildMonthDay,
+            methodName: '_cell',
+          ),
+          ExampleItem(
+            desc: '时分秒选择器',
+            builder: _buildSecond,
+            methodName: '_cell',
+          ),
+          ExampleItem(
+            desc: '时分选择器',
+            builder: _buildMinute,
+            methodName: '_cell',
+          ),
+          ExampleItem(
+            desc: '年月日时分秒选择器',
+            builder: _buildDateTime,
+            methodName: '_cell',
+          ),
+          ExampleItem(
+            desc: '年月日带星期选择器',
+            builder: _buildWeek,
+            methodName: '_cell',
+          ),
+        ],
+      ),
+      ExampleModule(
+        title: '组件样式',
+        children: [
+          ExampleItem(desc: '是否带标题', builder: _buildTitle, methodName: '_cell'),
+          ExampleItem(builder: _buildWithoutTitle, methodName: '_cell'),
+        ],
+      ),
+    ],
+  );
 
-  @override
-  Widget build(BuildContext context) {
-    return ExamplePage(
-      title: tTitle(),
-      desc: '内嵌示例实时响应 onChanged；弹窗示例仅在点击确定后提交。',
-      exampleCodeGroup: 'date-time-picker',
-      children: [
-        ExampleModule(
-          title: '内嵌用法',
-          children: [ExampleItem(desc: '实时变化（内嵌）', builder: _buildInline)],
-        ),
-        ExampleModule(
-          title: '弹出层用法',
-          children: [
-            ExampleItem(desc: '年月日选择器', builder: _buildBase),
-            ExampleItem(desc: '选择年月', builder: _buildYearMonth),
-            ExampleItem(desc: '选择时分', builder: _buildTime),
-            ExampleItem(desc: '日历 + 时间', builder: _buildCalendarTime),
-            ExampleItem(
-              desc:
-                  '自定义选择范围（2025-06-10 09:30:00 ~ 2025-08-25 18:45:30）；月/日/时/分/秒在边界上下文收紧',
-              builder: _buildCustomRange,
+  /// 核心组合片段：调用方使用 [TCell] 作为触发器，用 [TPopup] 组合标题栏
+  /// 与纯滚轮 [TDateTimePicker]。滚动只更新草稿，确认时再通过 [onConfirm]
+  /// 写回调用方状态，取消不会提交。
+  ///
+  /// 核心片段省略应用壳；导入 flutter/material.dart 和
+  /// package:tdesign_flutter/tdesign_flutter.dart，在 StatefulWidget 的 State
+  /// 中放置本方法。父级持有已确认的值，例如：
+  /// ```dart
+  /// var selected = const TDateTimePickerValue(year: 2022, month: 8, day: 10);
+  /// // 在 build 中调用；取消保持 selected，确认后 setState 更新触发器文案。
+  /// _cell(context, 'date', DateTimePickerMode(dateMode: DateMode.date),
+  ///   value: selected, onConfirm: (next) => setState(() => selected = next));
+  /// ```
+  ///
+  /// 九个入口使用同一组合，按下列实际配置提供 id、mode 和初始 value：
+  /// - date：dateMode: DateMode.date；year: 2022, month: 8, day: 10。
+  /// - month：dateMode: DateMode.month；year: 2022, month: 8。
+  /// - month-day：dateMode: DateMode.monthDay；month: 8, day: 10，不传 year。
+  /// - second：timeMode: TimeMode.second；hour: 12, minute: 50, second: 23。
+  /// - minute：timeMode: TimeMode.minute；hour: 12, minute: 50。
+  /// - date-time：dateMode: DateMode.date, timeMode: TimeMode.second；
+  ///   year: 2022, month: 8, day: 10, hour: 12, minute: 50, second: 23。
+  /// - week：同 date，showWeek: true。
+  /// - title：同 date，title: '带标题时间选择器'。
+  /// - without-title：同 date，title: '无标题时间选择器', showTitle: false。
+  /// value 均构造为 TDateTimePickerValue；每个入口由父级单独持有选择值。
+  /// title 是触发器文案；弹层标题为“选择时间”，showTitle 控制其显示。
+  /// 不传的 showWeek 为 false、showTitle 为 true，title 为“选择时间”。
+  @ExampleCode(group: 'date-time-picker')
+  Widget _cell(
+    BuildContext context,
+    String id,
+    DateTimePickerMode mode, {
+    required TDateTimePickerValue value,
+    required ValueChanged<TDateTimePickerValue> onConfirm,
+    String title = '选择时间',
+    bool showWeek = false,
+    bool showTitle = true,
+  }) {
+    String _format(TDateTimePickerValue value, {bool showWeek = false}) {
+      String two(int? part) => part?.toString().padLeft(2, '0') ?? '';
+      final date = [
+        if (value.year != null) '${value.year}',
+        if (value.month != null) two(value.month),
+        if (value.day != null) two(value.day),
+      ].join('-');
+      final time = [
+        if (value.hour != null) two(value.hour),
+        if (value.minute != null) two(value.minute),
+        if (value.second != null) two(value.second),
+      ].join(':');
+      final result = [
+        if (date.isNotEmpty) date,
+        if (time.isNotEmpty) time,
+      ].join(' ');
+      if (!showWeek) {
+        return result;
+      }
+      final weekday = DateTime(value.year!, value.month!, value.day!).weekday;
+      return '$result 周${['一', '二', '三', '四', '五', '六', '日'][weekday - 1]}';
+    }
+
+    void showPicker() {
+      var draft = value;
+      TPopup.show(
+        context,
+        options: TPopupOptions.bottom(
+          height:
+              (Theme.of(context).extension<TPickerThemeData>()?.height ?? 200) +
+              TPopupHeader.headerHeight,
+          headerBuilder: (_, close) => TPopupHeader(
+            cancelButton: TToolbarPressable(
+              onTap: close,
+              child: TText(
+                '取消',
+                font: context.tTheme.fontBodyLarge,
+                textColor: context.tTheme.textColorSecondary,
+              ),
             ),
-            ExampleItem(desc: '年月日 + 星期', builder: _buildWeek),
-          ],
+            title: showTitle
+                ? TText('选择时间', font: context.tTheme.fontTitleLarge)
+                : null,
+            confirmButton: TToolbarPressable(
+              onTap: () {
+                onConfirm(draft);
+                close();
+              },
+              child: TText(
+                '确定',
+                font: context.tTheme.fontBodyLarge,
+                textColor: context.tTheme.brandNormalColor,
+              ),
+            ),
+          ),
+          child: StatefulBuilder(
+            builder: (_, setPopupState) => TDateTimePicker(
+              key: ValueKey('date-time-picker-$id-panel'),
+              value: draft,
+              mode: mode,
+              showWeek: showWeek,
+              // 六列并排时年份省略单位，避免 375px 窄屏省略年份数字。
+              renderLabel: id == 'date-time'
+                  ? (column, value) =>
+                        column == DateTimeColumn.year ? '$value' : null
+                  : null,
+              onChanged: (next) => setPopupState(() => draft = next),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return TCellGroup(
+      cells: [
+        TCell(
+          key: ValueKey('date-time-picker-$id-trigger'),
+          title: TText(title),
+          note: TText(_format(value, showWeek: showWeek)),
+          arrow: true,
+          onTap: showPicker,
         ),
       ],
     );
   }
 
-  @ExampleCode(group: 'date-time-picker')
-  Widget _buildInline(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      decoration: BoxDecoration(
-        color: context.tTheme.bgColorContainer,
-        borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-            child: ValueListenableBuilder<TDateTimePickerValue?>(
-              valueListenable: _inlineSelectedNotifier,
-              builder: (context, selected, _) => TText(
-                '当前选择：${_formatResult(selected)}',
-                textColor: context.tTheme.textColorSecondary,
-              ),
-            ),
-          ),
-          TDateTimePicker(
-            mode: DateTimePickerMode(
-              dateMode: DateMode.date,
-              timeMode: TimeMode.minute,
-            ),
-            value: _kInlineValue,
-            onChanged: (result) => _inlineSelectedNotifier.value = result,
-          ),
-        ],
-      ),
-    );
-  }
+  Widget _buildDate(BuildContext context) => _cell(
+    context,
+    'date',
+    DateTimePickerMode(dateMode: DateMode.date),
+    value: _values['date']!,
+    onConfirm: (value) => setState(() => _values['date'] = value),
+  );
 
-  /// 弹窗承载滚轮，滚动只更新草稿，点击确定后才提交到页面状态。
-  void _showPickerPopup(
-    BuildContext context, {
-    required String title,
-    required TDateTimePickerValue value,
-    required DateTimePickerMode mode,
-    TDateTimePickerValue? start,
-    TDateTimePickerValue? end,
-    DateTimePickerSteps? steps,
-    bool showWeek = false,
-    DateTimePickerRenderLabel? renderLabel,
-    required ValueChanged<TDateTimePickerValue> onConfirm,
-  }) {
-    var draft = value;
-    TPopup.show(
-      context,
-      options: TPopupOptions.bottom(
-        headerBuilder: (_, close) => TPopupHeader(
-          cancelButton: TextButton(onPressed: close, child: const TText('取消')),
-          title: TText(title),
-          confirmButton: TextButton(
-            onPressed: () {
-              if (mounted) {
-                onConfirm(draft);
-              }
-              close();
-            },
-            child: const TText('确定'),
-          ),
-        ),
-        child: Material(
-          color: context.tTheme.bgColorContainer,
-          child: SafeArea(
-            top: false,
-            child: StatefulBuilder(
-              builder: (context, setPopupState) => TDateTimePicker(
-                key: const Key('date-time-picker-popup-wheel'),
-                mode: mode,
-                value: draft,
-                start: start,
-                end: end,
-                steps: steps,
-                showWeek: showWeek,
-                renderLabel: renderLabel,
-                onChanged: (value) {
-                  setPopupState(() => draft = value);
-                },
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  Widget _buildMonth(BuildContext context) => _cell(
+    context,
+    'month',
+    DateTimePickerMode(dateMode: DateMode.month),
+    value: _values['month']!,
+    onConfirm: (value) => setState(() => _values['month'] = value),
+  );
 
-  /// 将 TDateTimePicker.onChanged 返回的 partial 值格式化为展示文案。
-  ///
-  /// 仅拼接非 null 字段；无需 [TDateTimePickerValue.toDateTime]。
-  String _formatResult(TDateTimePickerValue? v) {
-    if (v == null) {
-      return '请选择';
-    }
-    final parts = <String>[];
+  Widget _buildMonthDay(BuildContext context) => _cell(
+    context,
+    'month-day',
+    DateTimePickerMode(dateMode: DateMode.monthDay),
+    value: _values['month-day']!,
+    onConfirm: (value) => setState(() => _values['month-day'] = value),
+  );
 
-    final dateParts = <String>[];
-    if (v.year != null) {
-      dateParts.add('${v.year}');
-    }
-    if (v.month != null) {
-      dateParts.add(v.month.toString().padLeft(2, '0'));
-    }
-    if (v.day != null) {
-      dateParts.add(v.day.toString().padLeft(2, '0'));
-    }
-    if (dateParts.isNotEmpty) {
-      parts.add(dateParts.join('-'));
-    }
+  Widget _buildSecond(BuildContext context) => _cell(
+    context,
+    'second',
+    DateTimePickerMode(timeMode: TimeMode.second),
+    value: _values['second']!,
+    onConfirm: (value) => setState(() => _values['second'] = value),
+  );
 
-    final timeParts = <String>[];
-    if (v.hour != null) {
-      timeParts.add(v.hour.toString().padLeft(2, '0'));
-    }
-    if (v.minute != null) {
-      timeParts.add(v.minute.toString().padLeft(2, '0'));
-    }
-    if (v.second != null) {
-      timeParts.add(v.second.toString().padLeft(2, '0'));
-    }
-    if (timeParts.isNotEmpty) {
-      parts.add(timeParts.join(':'));
-    }
+  Widget _buildMinute(BuildContext context) => _cell(
+    context,
+    'minute',
+    DateTimePickerMode(timeMode: TimeMode.minute),
+    value: _values['minute']!,
+    onConfirm: (value) => setState(() => _values['minute'] = value),
+  );
 
-    return parts.join(' ');
-  }
+  Widget _buildDateTime(BuildContext context) => _cell(
+    context,
+    'date-time',
+    DateTimePickerMode(dateMode: DateMode.date, timeMode: TimeMode.second),
+    value: _values['date-time']!,
+    onConfirm: (value) => setState(() => _values['date-time'] = value),
+  );
 
-  // ========== Demo: base ==========
+  Widget _buildWeek(BuildContext context) => _cell(
+    context,
+    'week',
+    DateTimePickerMode(dateMode: DateMode.date),
+    value: _values['week']!,
+    onConfirm: (value) => setState(() => _values['week'] = value),
+    showWeek: true,
+  );
 
-  @ExampleCode(group: 'date-time-picker')
-  Widget _buildBase(BuildContext context) {
-    return TCell(
-      key: const Key('date-time-picker-base-trigger'),
-      title: const Text('年月日选择器'),
-      note: Text(_formatResult(_baseSelected)),
-      arrow: true,
-      onTap: () {
-        _showPickerPopup(
-          context,
-          title: '选择日期',
-          mode: DateTimePickerMode(dateMode: DateMode.date),
-          value: _baseSelected,
-          onConfirm: (result) => setState(() => _baseSelected = result),
-        );
-      },
-    );
-  }
+  Widget _buildTitle(BuildContext context) => _cell(
+    context,
+    'title',
+    DateTimePickerMode(dateMode: DateMode.date),
+    value: _values['title']!,
+    onConfirm: (value) => setState(() => _values['title'] = value),
+    title: '带标题时间选择器',
+  );
 
-  // ========== Demo: year-month ==========
-
-  @ExampleCode(group: 'date-time-picker')
-  Widget _buildYearMonth(BuildContext context) {
-    return TCell(
-      key: const Key('date-time-picker-year-month-trigger'),
-      title: const Text('选择年月'),
-      note: Text(_formatResult(_yearMonthSelected)),
-      arrow: true,
-      onTap: () {
-        _showPickerPopup(
-          context,
-          title: '选择年月',
-          mode: DateTimePickerMode(dateMode: DateMode.month),
-          value: _yearMonthSelected,
-          onConfirm: (result) => setState(() => _yearMonthSelected = result),
-        );
-      },
-    );
-  }
-
-  // ========== Demo: time ==========
-
-  @ExampleCode(group: 'date-time-picker')
-  Widget _buildTime(BuildContext context) {
-    return TCell(
-      key: const Key('date-time-picker-time-trigger'),
-      title: const Text('选择时分'),
-      note: Text(_formatResult(_timeSelected)),
-      arrow: true,
-      onTap: () {
-        _showPickerPopup(
-          context,
-          title: '选择时间',
-          mode: DateTimePickerMode(timeMode: TimeMode.minute),
-          value: _timeSelected,
-          onConfirm: (result) => setState(() => _timeSelected = result),
-        );
-      },
-    );
-  }
-
-  // ========== Demo: calendar + time ==========
-
-  @ExampleCode(group: 'date-time-picker')
-  Widget _buildCalendarTime(BuildContext context) {
-    return TCell(
-      key: const Key('calendar-time-trigger'),
-      title: const Text('日历 + 时间'),
-      note: Text(_formatDateTime(_calendarTimeSelected)),
-      arrow: true,
-      onTap: () {
-        var draftDate = [
-          DateTime(
-            _calendarTimeSelected.year,
-            _calendarTimeSelected.month,
-            _calendarTimeSelected.day,
-          ),
-        ];
-        var draftTime = TDateTimePickerValue(
-          hour: _calendarTimeSelected.hour,
-          minute: _calendarTimeSelected.minute,
-        );
-        TPopup.show(
-          context,
-          options: TPopupOptions.bottom(
-            height: MediaQuery.sizeOf(context).height,
-            headerBuilder: (_, close) => TPopupHeader(
-              cancelButton: TextButton(
-                onPressed: close,
-                child: const TText('取消'),
-              ),
-              title: const TText('选择日期和时间'),
-              confirmButton: TextButton(
-                onPressed: () {
-                  if (mounted && draftDate.isNotEmpty) {
-                    final date = draftDate.first;
-                    setState(() {
-                      _calendarTimeSelected = DateTime(
-                        date.year,
-                        date.month,
-                        date.day,
-                        draftTime.hour ?? _calendarTimeSelected.hour,
-                        draftTime.minute ?? _calendarTimeSelected.minute,
-                      );
-                    });
-                  }
-                  close();
-                },
-                child: const TText('确定'),
-              ),
-            ),
-            child: StatefulBuilder(
-              builder: (context, setPopupState) => Column(
-                key: const Key('calendar-time-popup'),
-                children: [
-                  Expanded(
-                    child: TCalendar(
-                      key: const Key('calendar-time-calendar'),
-                      value: draftDate,
-                      anchorDate: draftDate.first,
-                      onChanged: (value) {
-                        setPopupState(() {
-                          draftDate = List<DateTime>.of(value);
-                        });
-                      },
-                    ),
-                  ),
-                  const TDivider(),
-                  TDateTimePicker(
-                    key: const Key('calendar-time-wheel'),
-                    mode: DateTimePickerMode(timeMode: TimeMode.minute),
-                    value: draftTime,
-                    onChanged: (value) {
-                      setPopupState(() => draftTime = value);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  String _formatDateTime(DateTime value) {
-    String twoDigits(int part) => part.toString().padLeft(2, '0');
-    return '${value.year}-${twoDigits(value.month)}-${twoDigits(value.day)} '
-        '${twoDigits(value.hour)}:${twoDigits(value.minute)}';
-  }
-
-  // ========== Demo: custom-range ==========
-
-  @ExampleCode(group: 'date-time-picker')
-  Widget _buildCustomRange(BuildContext context) {
-    return TCell(
-      key: const Key('date-time-picker-range-trigger'),
-      title: const Text('自定义选择范围'),
-      note: Text(_formatResult(_rangeSelected)),
-      arrow: true,
-      onTap: () {
-        _showPickerPopup(
-          context,
-          title: '选择日期和时间',
-          mode: DateTimePickerMode(
-            dateMode: DateMode.date,
-            timeMode: TimeMode.second,
-          ),
-          start: _kRangeStart,
-          end: _kRangeEnd,
-          value: _rangeSelected ?? _kRangeInitial,
-          onConfirm: (result) => setState(() => _rangeSelected = result),
-        );
-      },
-    );
-  }
-
-  // ========== Demo: week ==========
-
-  @ExampleCode(group: 'date-time-picker')
-  Widget _buildWeek(BuildContext context) {
-    return TCell(
-      key: const Key('date-time-picker-week-trigger'),
-      title: const Text('年月日 + 星期'),
-      note: Text(_formatWeekResult(context, _weekSelected)),
-      arrow: true,
-      onTap: () {
-        _showPickerPopup(
-          context,
-          title: '选择日期',
-          mode: DateTimePickerMode(dateMode: DateMode.date),
-          showWeek: true,
-          value: _weekSelected,
-          onConfirm: (result) => setState(() => _weekSelected = result),
-        );
-      },
-    );
-  }
-
-  /// dateTimePicker: 星期由 [TDateTimePickerValue.toDateTime] 派生（weekday 1=周一…7=周日）。
-  String _formatWeekResult(BuildContext context, TDateTimePickerValue? v) {
-    if (v == null) {
-      return '请选择';
-    }
-    final base = _formatResult(v);
-    final week = _weekdayLabel(
-      context,
-      v.toDateTime(fallback: DateTime(2000, 1, 1)).weekday,
-    );
-    return '$base $week';
-  }
-
-  String _weekdayLabel(BuildContext context, int weekday) {
-    final r = TResourceManager.instance.delegate(context);
-    String compose(String shortName) {
-      if (shortName.length == 1 && r.weeksLabel.isNotEmpty) {
-        return '${r.weeksLabel}$shortName';
-      }
-      return shortName;
-    }
-
-    final names = [
-      r.monday,
-      r.tuesday,
-      r.wednesday,
-      r.thursday,
-      r.friday,
-      r.saturday,
-      r.sunday,
-    ];
-    return compose(names[weekday - 1]);
-  }
+  Widget _buildWithoutTitle(BuildContext context) => _cell(
+    context,
+    'without-title',
+    DateTimePickerMode(dateMode: DateMode.date),
+    value: _values['without-title']!,
+    onConfirm: (value) => setState(() => _values['without-title'] = value),
+    title: '无标题时间选择器',
+    showTitle: false,
+  );
 }

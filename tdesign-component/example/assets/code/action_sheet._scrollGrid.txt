@@ -1,0 +1,9 @@
+Widget _scrollGrid(BuildContext context) => _trigger(
+    label: '多行滚动宫格型',
+    onPressed: () => TActionSheet.showGrid(
+      context,
+      items: _scrollGridItems(context),
+      layout: const TActionSheetGridLayout.scroll(count: 8, rows: 2),
+      onSelected: (item) => _showSelection(context, item),
+    ),
+  );

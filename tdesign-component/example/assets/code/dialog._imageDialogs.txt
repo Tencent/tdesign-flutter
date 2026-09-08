@@ -1,0 +1,52 @@
+Widget _imageDialogs(BuildContext context) {
+    return _scenarios(context, [
+      _trigger('图片置顶-带标题描述', () {
+        _showImageDialog(
+          context,
+          imageOnTop: true,
+          showTitle: true,
+          showContent: true,
+        );
+      }),
+      _trigger('图片置顶-无标题', () {
+        _showImageDialog(
+          context,
+          imageOnTop: true,
+          showTitle: false,
+          showContent: true,
+        );
+      }),
+      _trigger('图片置顶-纯标题', () {
+        _showImageDialog(
+          context,
+          imageOnTop: true,
+          showTitle: true,
+          showContent: false,
+        );
+      }),
+      _trigger('图片置顶-纯图片', () {
+        _showImageDialog(
+          context,
+          imageOnTop: true,
+          showTitle: false,
+          showContent: false,
+        );
+      }),
+      _trigger('图片居中-带标题描述', () {
+        _showImageDialog(
+          context,
+          imageOnTop: false,
+          showTitle: true,
+          showContent: true,
+        );
+      }),
+      _trigger('图片居中-纯标题', () {
+        _showImageDialog(
+          context,
+          imageOnTop: false,
+          showTitle: true,
+          showContent: false,
+        );
+      }),
+    ]);
+  }

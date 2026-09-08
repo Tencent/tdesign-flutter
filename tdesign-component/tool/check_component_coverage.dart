@@ -1,35 +1,10 @@
 import 'dart:io';
 
-const componentTargets = <String, List<String>>{
-  'button': ['lib/src/components/button/'],
-  'tag': ['lib/src/components/tag/'],
-  'popover': ['lib/src/components/popover/'],
-  'checkbox': ['lib/src/components/checkbox/'],
-  'divider': ['lib/src/components/divider/'],
-  'fab': ['lib/src/components/fab/'],
-  'form': ['lib/src/components/form/'],
-  'icon': ['lib/src/components/icon/'],
-  'input': ['lib/src/components/input/'],
-  'link': ['lib/src/components/link/'],
-  'loading': ['lib/src/components/loading/'],
-  'message': ['lib/src/components/message/'],
-  'notice_bar': ['lib/src/components/notice_bar/'],
-  'popup': ['lib/src/components/popup/'],
-  'radio': ['lib/src/components/radio/'],
-  'rate': ['lib/src/components/rate/'],
-  'refresh': [
-    'lib/src/components/refresh/t_pull_down_refresh.dart',
-    'lib/src/components/refresh/t_pull_down_refresh_controller.dart',
-    'lib/src/components/refresh/t_pull_down_refresh_texts.dart',
-  ],
-  'search': ['lib/src/components/search/'],
-  'swipe_cell': ['lib/src/components/swipe_cell/'],
-  'switch': ['lib/src/components/switch/'],
-  'stepper': ['lib/src/components/stepper/'],
-  'text': ['lib/src/components/text/'],
-  'textarea': ['lib/src/components/textarea/'],
-  'toast': ['lib/src/components/toast/'],
-  'upload': ['lib/src/components/upload/'],
+import 'component_test_manifest.dart';
+
+final componentTargets = <String, List<String>>{
+  for (final component in componentTestManifests)
+    component.name: component.coverageTargets,
 };
 
 class CoverageSummary {

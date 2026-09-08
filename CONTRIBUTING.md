@@ -99,21 +99,25 @@ dart run tool/generate_example_code.dart --check
 
 ## 组件测试与 CI 回归门禁
 
-新增组件或为既有组件新增测试时，测试文件不会因为放入 `test/` 目录就自动进入集中式 CI 回归。贡献者须同步维护以下三个清单：
+新增组件或为既有组件新增测试时，测试文件不会因为放入 `test/` 目录就自动进入集中式 CI 回归。贡献者只需在 `tdesign-component/tool/component_test_manifest.dart` 的 `componentTestManifests` 数组中维护该组件的一条记录：
 
-1. **组件测试**：在 `tdesign-component/tool/run_component_regression.dart` 的 `componentTestSuites` 中登记组件名及测试文件。CI 会按组件运行这些测试并生成覆盖率。
-2. **生产源码覆盖率**：在 `tdesign-component/tool/check_component_coverage.dart` 的 `componentTargets` 中登记该组件的生产源码目录或文件。手写生产 Dart 行覆盖率须达到 `LH/LF >= 95%`。
-3. **Demo 与 Golden**：新增或修改 Demo 结构测试、明暗 Golden 时，在 `tdesign-component/tool/run_visual_regression.dart` 的 `visualTestSuites` 中登记对应测试文件。
+1. **组件测试**：`componentTests` 声明按组件执行并生成覆盖率的测试文件。
+2. **生产源码覆盖率**：`coverageTargets` 声明纳入覆盖率统计的生产源码目录或文件；手写生产 Dart 行覆盖率须达到 `LH/LF >= 95%`。
+3. **Demo 功能测试**：`exampleTests` 声明在 `example` 工程执行且不包含 Golden 的共享功能测试。
+4. **Demo 与 Golden**：`visualTests` 可以声明一个或多个视觉回归 suite，并分别保留工作目录、测试文件和附加参数。
+
+不归属单个组件的 Example smoke test 放在同文件的 `sharedExampleTests`。GitHub 与 CNB 只调用公共 runner，不直接维护测试文件长列表。
 
 登记后在 `tdesign-component` 目录执行：
 
 ```bash
 flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
 dart run tool/run_component_regression.dart
+dart run tool/run_example_regression.dart
 dart run tool/run_visual_regression.dart
 ```
 
-调度器自测会检查组件测试清单、覆盖率目标和视觉回归清单是否同步，以及登记的测试文件是否存在。CI job 成功仅代表清单中已登记的测试通过；测试文件存在、Golden 已提交或本地单独运行通过，均不能替代 CI 回归登记。
+调度器自测会检查组件名唯一、各类测试能力完整、登记文件存在，以及 GitHub/CNB 使用公共 runner。CI job 成功仅代表数组中已登记的测试通过；测试文件存在、Golden 已提交或本地单独运行通过，均不能替代 CI 回归登记。
 
 ## 贡献指南
 

@@ -1,0 +1,27 @@
+# 实施任务
+
+- [x] DONE 根据最新 Review 修正相对 develop 的排序兼容性说明，更新最终测试/Golden 汇总并分离历史阶段记录
+- [x] DONE 同步 GitHub/CNB PR 标题、正文和更新日志：新增关闭结果参数、普通操作默认配色及混合角色排序变化
+- [x] DONE 按用户补充要求，将全部 22 个 Dialog Demo 统一显式开启蒙层关闭，并将四方向回归扩展至全部入口
+- [x] DONE 按用户确认，为三个确认类 Demo 显式开启蒙层关闭，补四周蒙层与面板内点击回归；组件默认值不变
+- [x] DONE 补齐蒙层与关闭图标返回值、真实 Demo 蒙层触摸与关闭来源测试，确认所反馈场景沿用默认禁止蒙层关闭；本轮真机复验限制见 acceptance.md
+- [x] DONE 修复普通操作默认配色，补默认/显式覆盖/token/明暗主题与 Demo 回归，并更新 Linux Golden
+- [x] DONE 重新读取官方小程序 Demo 与样式基线
+- [x] DONE 修正默认顶边距与关闭按钮偏移
+- [x] DONE 补齐 ThemeData 和样式测试至覆盖率门槛
+- [x] DONE 修正 Figma Demo 文案、状态说明、输入框、图片和操作区差异
+- [x] DONE 修复 Popup 240×240 固定尺寸导致 Dialog 压窄和输入框裁切
+- [x] DONE 三项及以上操作基于 `TDialogAction.role` 稳定提升主要/危险操作；全为普通角色时保持声明顺序
+- [x] DONE 极小视口或自定义间距 token 下对 Dialog 宽高约束做非负保护
+- [x] DONE 去除 `TConfirmDialog` 中 `role` 与 `colorScheme` 的重复默认源
+- [x] DONE 修复三个及以上文字操作的贴边 padding 与纵向布局不一致
+- [x] DONE 保证显式 `actionsPadding` / `actionSpacing` 不被数值相同的 token 默认值覆盖
+- [x] DONE Dialog Demo 接入共享结构测试，使 22 个公开入口数量契约真正执行
+- [x] DONE 补齐 22 场景逐项打开/关闭与关键视觉交互测试
+- [x] DONE 完成 22 场景 Example 矩阵和基础 Example 测试
+- [x] DONE 同步生成代码片段
+- [x] DONE 完成双 Flutter 版本与严格 analyze
+- [x] DONE 完成真实运行时页面与关键打开态截图验收
+- [x] DONE 完成 22 个入口的自动连续交互验收与关键场景真实浏览器验收
+- [x] DONE 完成 Flutter 3.32 Linux 亮暗主题 22 个 Golden 精确复跑
+- [x] DONE 完成当前已推送代码的 CodeBuddy Review；尚未完成的 PR 元数据修订见上方待办

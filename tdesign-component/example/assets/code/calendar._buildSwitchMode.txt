@@ -1,0 +1,18 @@
+Widget _buildSwitchMode(BuildContext context) => TCellGroup(
+    cells: [
+      TCell(
+        key: const ValueKey('calendar-switch-trigger'),
+        title: const TText('带翻页功能的日历'),
+        note: _dateNote(_switchValue),
+        arrow: true,
+        onTap: () => _showCalendar(
+          variant: TCalendarVariant.single,
+          value: _switchValue,
+          minDate: DateTime(2022, 1, 10),
+          maxDate: DateTime(2027, 11, 27),
+          showMonthSwitcher: true,
+          onConfirm: (value) => setState(() => _switchValue = value),
+        ),
+      ),
+    ],
+  );

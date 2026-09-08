@@ -1,0 +1,10 @@
+Widget _descriptionList(BuildContext context) => _trigger(
+    label: '带描述列表型',
+    onPressed: () => TActionSheet.showList(
+      context,
+      cancelText: 'cancel',
+      subtitle: 'Email Settings',
+      items: _textItems(),
+      onSelected: (item) => _showSelection(context, item),
+    ),
+  );

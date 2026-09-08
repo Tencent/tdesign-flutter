@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 
 /// TabsBar 形态枚举。
 enum TTabsBarVariant {
-  /// 填充样式
-  filled,
+  /// 底部指示器样式。
+  line,
 
-  /// 胶囊样式
-  capsule,
+  /// 胶囊标签样式。
+  tag,
 
-  /// 卡片
+  /// 卡片样式。
   card,
 }
 
@@ -27,10 +27,15 @@ class TTabsBarThemeData extends ThemeExtension<TTabsBarThemeData> {
   /// 未选中标签文字样式。
   final TextStyle? unselectedLabelStyle;
 
+  /// 禁用标签文字和图标样式。
+  final TextStyle? disabledLabelStyle;
+
   /// 标签内容边距。
   final EdgeInsetsGeometry? labelPadding;
 
-  /// 默认指示器；为空时不展示。
+  /// 组件主题指示器；非空时覆盖内置形态指示器。
+  ///
+  /// 为空时 Line 使用 TDesign 默认指示器，Tag 与 Card 不展示指示器。
   final Decoration? indicator;
 
   /// 分割线颜色。
@@ -39,22 +44,23 @@ class TTabsBarThemeData extends ThemeExtension<TTabsBarThemeData> {
   /// 分割线高度；小于等于 0 时不展示。
   final double? dividerHeight;
 
-  /// capsule 形态下的选中背景色。
-  final Color? selectedBgColor;
+  /// Tag 形态下的选中背景色。
+  final Color? selectedTagBackgroundColor;
 
-  /// capsule 形态下的未选中背景色。
-  final Color? unSelectedBgColor;
+  /// Tag 形态下的默认背景色。
+  final Color? tagBackgroundColor;
 
   const TTabsBarThemeData({
     this.backgroundColor,
     this.labelStyle,
     this.unselectedLabelStyle,
+    this.disabledLabelStyle,
     this.labelPadding,
     this.indicator,
     this.dividerColor,
     this.dividerHeight,
-    this.selectedBgColor,
-    this.unSelectedBgColor,
+    this.selectedTagBackgroundColor,
+    this.tagBackgroundColor,
   });
 
   @override
@@ -62,23 +68,26 @@ class TTabsBarThemeData extends ThemeExtension<TTabsBarThemeData> {
     Color? backgroundColor,
     TextStyle? labelStyle,
     TextStyle? unselectedLabelStyle,
+    TextStyle? disabledLabelStyle,
     EdgeInsetsGeometry? labelPadding,
     Decoration? indicator,
     Color? dividerColor,
     double? dividerHeight,
-    Color? selectedBgColor,
-    Color? unSelectedBgColor,
+    Color? selectedTagBackgroundColor,
+    Color? tagBackgroundColor,
   }) {
     return TTabsBarThemeData(
       backgroundColor: backgroundColor ?? this.backgroundColor,
       labelStyle: labelStyle ?? this.labelStyle,
       unselectedLabelStyle: unselectedLabelStyle ?? this.unselectedLabelStyle,
+      disabledLabelStyle: disabledLabelStyle ?? this.disabledLabelStyle,
       labelPadding: labelPadding ?? this.labelPadding,
       indicator: indicator ?? this.indicator,
       dividerColor: dividerColor ?? this.dividerColor,
       dividerHeight: dividerHeight ?? this.dividerHeight,
-      selectedBgColor: selectedBgColor ?? this.selectedBgColor,
-      unSelectedBgColor: unSelectedBgColor ?? this.unSelectedBgColor,
+      selectedTagBackgroundColor:
+          selectedTagBackgroundColor ?? this.selectedTagBackgroundColor,
+      tagBackgroundColor: tagBackgroundColor ?? this.tagBackgroundColor,
     );
   }
 
@@ -89,16 +98,35 @@ class TTabsBarThemeData extends ThemeExtension<TTabsBarThemeData> {
     }
     return TTabsBarThemeData(
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      labelStyle: t < 0.5 ? labelStyle : other.labelStyle,
-      unselectedLabelStyle:
-          t < 0.5 ? unselectedLabelStyle : other.unselectedLabelStyle,
-      labelPadding: t < 0.5 ? labelPadding : other.labelPadding,
-      indicator: t < 0.5 ? indicator : other.indicator,
+      labelStyle: TextStyle.lerp(labelStyle, other.labelStyle, t),
+      unselectedLabelStyle: TextStyle.lerp(
+        unselectedLabelStyle,
+        other.unselectedLabelStyle,
+        t,
+      ),
+      disabledLabelStyle: TextStyle.lerp(
+        disabledLabelStyle,
+        other.disabledLabelStyle,
+        t,
+      ),
+      labelPadding: EdgeInsetsGeometry.lerp(
+        labelPadding,
+        other.labelPadding,
+        t,
+      ),
+      indicator: Decoration.lerp(indicator, other.indicator, t),
       dividerColor: Color.lerp(dividerColor, other.dividerColor, t),
       dividerHeight: lerpDouble(dividerHeight, other.dividerHeight, t),
-      selectedBgColor: Color.lerp(selectedBgColor, other.selectedBgColor, t),
-      unSelectedBgColor:
-          Color.lerp(unSelectedBgColor, other.unSelectedBgColor, t),
+      selectedTagBackgroundColor: Color.lerp(
+        selectedTagBackgroundColor,
+        other.selectedTagBackgroundColor,
+        t,
+      ),
+      tagBackgroundColor: Color.lerp(
+        tagBackgroundColor,
+        other.tagBackgroundColor,
+        t,
+      ),
     );
   }
 }

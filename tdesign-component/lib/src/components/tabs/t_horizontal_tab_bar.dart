@@ -19,6 +19,9 @@ import 't_tab_bar_theme_data.dart';
 
 const double _kTabHeight = 46.0;
 const double _kStartOffset = 52.0;
+const double _kTabIconSize = 18.0;
+const double _kTagHeight = 32.0;
+const double _kTagHorizontalPadding = 8.0;
 
 class _TabStyle extends AnimatedWidget {
   const _TabStyle({
@@ -41,14 +44,12 @@ class _TabStyle extends AnimatedWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tabBarTheme = TabBarTheme.of(context);
     final animation = listenable as Animation<double>;
 
     // To enable TextStyle.lerp(style1, style2, value), both styles must have
     // the same value of inherit. Force that to be inherit=true here.
     final defaultStyle =
         (labelStyle ??
-                tabBarTheme.labelStyle ??
                 TextStyle(
                   height: context.tTheme.fontBodyMedium?.height ?? 1.57,
                   fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
@@ -56,7 +57,6 @@ class _TabStyle extends AnimatedWidget {
             .copyWith(inherit: true);
     final defaultUnselectedStyle =
         (unselectedLabelStyle ??
-                tabBarTheme.unselectedLabelStyle ??
                 labelStyle ??
                 TextStyle(
                   height: context.tTheme.fontBodyMedium?.height ?? 1.57,
@@ -72,13 +72,9 @@ class _TabStyle extends AnimatedWidget {
           )!;
 
     final selectedColor =
-        labelColor ??
-        tabBarTheme.labelColor ??
-        labelStyle?.color ??
-        context.tTheme.brandNormalColor;
+        labelColor ?? labelStyle?.color ?? context.tTheme.brandNormalColor;
     final unselectedColor =
         unselectedLabelColor ??
-        tabBarTheme.unselectedLabelColor ??
         unselectedLabelStyle?.color ??
         context.tTheme.textColorPrimary;
 
@@ -88,8 +84,8 @@ class _TabStyle extends AnimatedWidget {
 
     return DefaultTextStyle(
       style: textStyle.copyWith(color: color),
-      child: IconTheme.merge(
-        data: IconThemeData(size: 24.0, color: color),
+      child: IconTheme(
+        data: IconThemeData(size: _kTabIconSize, color: color),
         child: child,
       ),
     );
@@ -100,7 +96,7 @@ class _TabStyle extends AnimatedWidget {
 ///
 /// 使用外部 [controller]，或从 [DefaultTabController] 取得选中和动画状态。
 class THorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
-  /// Creates a material design tab bar.
+  /// 创建 TDesign 风格的水平标签栏。
   ///
   /// The [tabs] argument must not be null and its length must match the [controller]'s
   /// [TabController.length].
@@ -112,7 +108,7 @@ class THorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   ///
   /// The [indicatorPadding] parameter defaults to [EdgeInsets.zero], and must not be null.
   ///
-  /// If [indicator] is not null or provided from [TabBarTheme],
+  /// If [indicator] is not null,
   /// then [indicatorWeight], [indicatorPadding], and [indicatorColor] are ignored.
   const THorizontalTabBar({
     Key? key,
@@ -121,7 +117,6 @@ class THorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
     this.isScrollable = false,
     this.padding,
     this.indicatorColor,
-    this.automaticIndicatorColorAdjustment = true,
     this.indicatorWeight = 2.0,
     this.indicatorPadding = EdgeInsets.zero,
     this.indicator,
@@ -139,8 +134,8 @@ class THorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
     this.physics,
     this.variant,
     this.backgroundColor,
-    this.selectedBgColor,
-    this.unSelectedBgColor,
+    this.selectedTagBackgroundColor,
+    this.tagBackgroundColor,
     this.tabAlignment,
   }) : assert(indicator != null || (indicatorWeight > 0.0)),
        super(key: key);
@@ -173,10 +168,9 @@ class THorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
 
   /// The color of the line that appears below the selected tab.
   ///
-  /// If this parameter is null, then the value of the Theme's indicatorColor
-  /// property is used.
+  /// If this parameter is null, the TDesign brand color is used.
   ///
-  /// If [indicator] is specified or provided from [TabBarTheme],
+  /// If [indicator] is specified,
   /// this property is ignored.
   final Color? indicatorColor;
 
@@ -185,13 +179,12 @@ class THorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// The value of this parameter must be greater than zero and its default
   /// value is 2.0.
   ///
-  /// If [indicator] is specified or provided from [TabBarTheme],
+  /// If [indicator] is specified,
   /// this property is ignored.
   final double indicatorWeight;
 
   /// Padding for indicator.
-  /// This property will now no longer be ignored even if indicator is declared
-  /// or provided by [TabBarTheme]
+  /// This property is not ignored when [indicator] is declared.
   ///
   /// For [isScrollable] tab bars, specifying [kTabLabelPadding] will align
   /// the indicator with the tab's text for [Tab] widgets and all but the
@@ -202,7 +195,7 @@ class THorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
 
   /// Defines the appearance of the selected tab indicator.
   ///
-  /// If [indicator] is specified or provided from [TabBarTheme],
+  /// If [indicator] is specified,
   /// the [indicatorColor], and [indicatorWeight] properties are ignored.
   ///
   /// The default, underline-style, selected tab indicator can be defined with
@@ -214,13 +207,6 @@ class THorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// [TabBarIndicatorSize.label], then the tab's bounds are only as wide as
   /// the tab widget itself.
   final Decoration? indicator;
-
-  /// Whether this tab bar should automatically adjust the [indicatorColor].
-  ///
-  /// If [automaticIndicatorColorAdjustment] is true,
-  /// then the [indicatorColor] will be automatically adjusted to [Colors.white]
-  /// when the [indicatorColor] is same as [Material.color] of the [Material] parent widget.
-  final bool automaticIndicatorColorAdjustment;
 
   /// Defines how the selected tab indicator's size is computed.
   ///
@@ -332,11 +318,11 @@ class THorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// tabBar背景色
   final Color? backgroundColor;
 
-  /// 被选中背景色
-  final Color? selectedBgColor;
+  /// Tag 形态下的选中背景色。
+  final Color? selectedTagBackgroundColor;
 
-  /// 未选中背景色
-  final Color? unSelectedBgColor;
+  /// Tag 形态下的默认背景色。
+  final Color? tagBackgroundColor;
 
   /// Tab 对齐方式
   final TabAlignment? tabAlignment;
@@ -570,37 +556,11 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
     if (widget.indicator != null) {
       return widget.indicator!;
     }
-    final tabBarTheme = TabBarTheme.of(context);
-    if (tabBarTheme.indicator != null) {
-      return tabBarTheme.indicator!;
-    }
-
-    var color =
-        widget.indicatorColor ??
-        tabBarTheme.indicatorColor ??
-        Theme.of(context).tExplicitColorScheme?.primary ??
-        context.tTheme.brandNormalColor;
-    // Flutter TabBar defaults try to avoid having indicatorColor match the
-    // primaryColor. However, it's possible that the tab bar is on a
-    // Material that isn't the primaryColor. In that case, if the indicator
-    // color ends up matching the material's color, then this overrides it.
-    // When that happens, automatic transitions of the theme will likely look
-    // ugly as the indicator color suddenly snaps to white at one end, but it's
-    // not clear how to avoid that any further.
-    //
-    // The material's color might be null (if it's a transparency). In that case
-    // there's no good way for us to find out what the color is so we don't.
-    //
-    // TODO(#992): Remove automatic adjustment to white color indicator with a
-    // better long-term solution.
-    // https://github.com/flutter/flutter/pull/68171#pullrequestreview-517753917
-    if (widget.automaticIndicatorColorAdjustment &&
-        color.toARGB32() == Material.of(context).color?.toARGB32()) {
-      color = Colors.white;
-    }
-
     return UnderlineTabIndicator(
-      borderSide: BorderSide(width: widget.indicatorWeight, color: color),
+      borderSide: BorderSide(
+        width: widget.indicatorWeight,
+        color: widget.indicatorColor ?? context.tTheme.brandNormalColor,
+      ),
     );
   }
 
@@ -637,8 +597,7 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
         : _IndicatorPainter(
             controller: _controller!,
             indicator: _indicator,
-            indicatorSize:
-                widget.indicatorSize ?? TabBarTheme.of(context).indicatorSize,
+            indicatorSize: widget.indicatorSize ?? TabBarIndicatorSize.tab,
             indicatorPadding: widget.indicatorPadding,
             tabKeys: _tabKeys,
             old: _indicatorPainter,
@@ -826,19 +785,19 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
   }
 
   BoxDecoration? _getContentDecorateInner(int index) {
-    if (widget.variant == TTabsBarVariant.capsule) {
+    if (widget.variant == TTabsBarVariant.tag) {
       return BoxDecoration(
         color: index == _currentIndex
-            ? (widget.selectedBgColor ?? context.tTheme.brandColor1)
-            : (widget.unSelectedBgColor ?? context.tTheme.grayColor1),
-        borderRadius: BorderRadius.circular(32),
+            ? (widget.selectedTagBackgroundColor ?? context.tTheme.brandColor1)
+            : (widget.tagBackgroundColor ?? context.tTheme.grayColor1),
+        borderRadius: BorderRadius.circular(_kTagHeight / 2),
       );
     }
     return null;
   }
 
   BoxDecoration? _getContentDecorateOuter(int index) {
-    if (widget.variant == TTabsBarVariant.capsule) {
+    if (widget.variant == TTabsBarVariant.tag) {
       return BoxDecoration(
         color: widget.backgroundColor ?? context.tTheme.bgColorContainer,
       );
@@ -906,9 +865,7 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
 
   @override
   Widget build(BuildContext context) {
-    final tabBarTheme = TabBarTheme.of(context);
-    final effectiveTabAlignment =
-        widget.tabAlignment ?? tabBarTheme.tabAlignment ?? _defaults;
+    final effectiveTabAlignment = widget.tabAlignment ?? _defaults;
     assert(_debugTabAlignmentIsValid(effectiveTabAlignment));
     assert(debugCheckHasMaterialLocalizations(context));
     assert(() {
@@ -927,9 +884,9 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
 
     final wrappedTabs = List<Widget>.generate(widget.tabs.length, (int index) {
       // tab.size=20;
-      EdgeInsetsGeometry? capsuleDefaultPadding;
-      if (widget.variant == TTabsBarVariant.capsule) {
-        capsuleDefaultPadding = const EdgeInsets.all(4);
+      EdgeInsetsGeometry? tagDefaultPadding;
+      if (widget.variant == TTabsBarVariant.tag) {
+        tagDefaultPadding = const EdgeInsets.all(4);
       }
       return Container(
         color: _getBackgroundColor(index),
@@ -939,13 +896,23 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
             heightFactor: 1.0,
             child: Padding(
               padding:
-                  widget.labelPadding ??
-                  capsuleDefaultPadding ??
-                  tabBarTheme.labelPadding ??
-                  kTabLabelPadding,
+                  widget.labelPadding ?? tagDefaultPadding ?? kTabLabelPadding,
               child: KeyedSubtree(
                 key: _tabKeys[index],
                 child: Container(
+                  width:
+                      widget.variant == TTabsBarVariant.tag &&
+                          !widget.isScrollable
+                      ? double.infinity
+                      : null,
+                  height: widget.variant == TTabsBarVariant.tag
+                      ? _kTagHeight
+                      : null,
+                  padding: widget.variant == TTabsBarVariant.tag
+                      ? const EdgeInsets.symmetric(
+                          horizontal: _kTagHorizontalPadding,
+                        )
+                      : null,
                   decoration: _getContentDecorateInner(index),
                   child: widget.tabs[index],
                 ),
@@ -1018,33 +985,31 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
     // the same share of the tab bar's overall width.
     final tabCount = widget.tabs.length;
     for (var index = 0; index < tabCount; index += 1) {
-      wrappedTabs[index] = Opacity(
-        opacity: widget.tabs[index].enabled ? 1.0 : 0.4,
-        child: IgnorePointer(
-          ignoring: !widget.tabs[index].enabled,
-          child: InkWell(
-            mouseCursor: widget.mouseCursor ?? SystemMouseCursors.click,
-            onTap: () {
-              _handleTap(index);
-            },
-            enableFeedback: widget.enableFeedback ?? true,
-            overlayColor: widget.overlayColor,
-            child: Container(
-              padding: widget.variant == TTabsBarVariant.filled
-                  ? EdgeInsets.only(bottom: widget.indicatorWeight)
-                  : EdgeInsets.zero,
-              child: Stack(
-                children: <Widget>[
-                  wrappedTabs[index],
-                  Semantics(
-                    selected: index == _currentIndex,
-                    label: localizations.tabLabel(
-                      tabIndex: index + 1,
-                      tabCount: tabCount,
-                    ),
+      wrappedTabs[index] = IgnorePointer(
+        ignoring: !widget.tabs[index].enabled,
+        child: InkWell(
+          mouseCursor: widget.mouseCursor ?? SystemMouseCursors.click,
+          onTap: () {
+            _handleTap(index);
+          },
+          enableFeedback: widget.enableFeedback ?? true,
+          overlayColor: widget.overlayColor,
+          child: Container(
+            padding: widget.variant == TTabsBarVariant.line
+                ? EdgeInsets.only(bottom: widget.indicatorWeight)
+                : EdgeInsets.zero,
+            child: Stack(
+              children: <Widget>[
+                wrappedTabs[index],
+                Semantics(
+                  selected: index == _currentIndex,
+                  enabled: widget.tabs[index].enabled,
+                  label: localizations.tabLabel(
+                    tabIndex: index + 1,
+                    tabCount: tabCount,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -1642,8 +1607,7 @@ class TabPageSelector extends StatelessWidget {
   /// The indicator circle's fill color for selected pages and border color
   /// for all indicator circles.
   ///
-  /// If this parameter is null, then the indicator is filled with the theme's
-  /// [ColorScheme.secondary].
+  /// If this parameter is null, the TDesign brand color is used.
   final Color? selectedColor;
 
   Widget _buildTabIndicator(
@@ -1687,10 +1651,7 @@ class TabPageSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fixColor = color ?? Colors.transparent;
-    final fixSelectedColor =
-        selectedColor ??
-        Theme.of(context).tExplicitColorScheme?.secondary ??
-        context.tTheme.brandNormalColor;
+    final fixSelectedColor = selectedColor ?? context.tTheme.brandNormalColor;
     final selectedColorTween = ColorTween(
       begin: fixColor,
       end: fixSelectedColor,

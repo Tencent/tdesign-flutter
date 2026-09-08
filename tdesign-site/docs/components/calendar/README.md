@@ -146,7 +146,7 @@ Widget _buildLunar(BuildContext context) {
 | --- | --- | --- | --- |
 | date | DateTime | - | - |
 | isLastDayOfMonth | bool | - | - |
-| typeNotifier | DateSelectTypeNotifier | - | - |
+| selectType | DateSelectType | - | 当前格的选中、区间或禁用展示状态。 |
 
 
 ### TCalendarSubtitleContext

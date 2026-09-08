@@ -10,86 +10,115 @@ void main() {
     TActionSheetThemeData? actionSheetTheme,
   }) {
     return MaterialApp(
-      theme: ThemeData(extensions: [
-        TThemeData.defaultData(),
-        if (actionSheetTheme != null) actionSheetTheme,
-      ]),
+      theme: ThemeData(
+        extensions: [
+          TThemeData.defaultData(),
+          if (actionSheetTheme != null) actionSheetTheme,
+        ],
+      ),
       home: Scaffold(body: child),
     );
   }
 
   group('TActionSheetItemWidget', () {
-    testWidgets('item=null 渲染空', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TActionSheetItemWidget(item: null, index: 0),
-      ));
-      expect(find.byType(TActionSheetItemWidget), findsOneWidget);
-    });
-
     testWidgets('基础渲染 label + icon', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TActionSheetItemWidget(
-          item: TActionSheetItem(
-            label: '测试',
-            icon: const Icon(Icons.add),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TActionSheetItemWidget(
+            item: TActionSheetItem(
+              value: 'test',
+              label: '测试',
+              icon: Icon(Icons.add),
+            ),
           ),
-          index: 0,
         ),
-      ));
+      );
       expect(find.text('测试'), findsOneWidget);
       expect(find.byIcon(Icons.add), findsOneWidget);
     });
 
     testWidgets('disabled 时 onTap 为 null', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TActionSheetItemWidget(
-          item: TActionSheetItem(label: '禁用', disabled: true),
-          index: 0,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TActionSheetItemWidget(
+            item: TActionSheetItem(
+              value: 'disabled',
+              label: '禁用',
+              disabled: true,
+            ),
+          ),
         ),
-      ));
+      );
       expect(find.text('禁用'), findsOneWidget);
     });
 
     testWidgets('badge 渲染', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TActionSheetItemWidget(
-          item: TActionSheetItem(
-            label: '带角标',
-            icon: const Icon(Icons.star),
-            badge: const TBadge(label: '3'),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TActionSheetItemWidget(
+            item: TActionSheetItem(
+              value: 'badge',
+              label: '带角标',
+              icon: Icon(Icons.star),
+              badge: TBadge(label: '3'),
+            ),
           ),
-          index: 0,
         ),
-      ));
+      );
       await tester.pump();
       expect(find.text('带角标'), findsOneWidget);
     });
 
-    testWidgets('点击触发 onChanged', (tester) async {
-      var changed = -1;
-      await tester.pumpWidget(wrapWithTheme(
-        TActionSheetItemWidget(
-          item: TActionSheetItem(label: '点击'),
-          index: 2,
-          onChanged: (item, index) => changed = index,
+    testWidgets('badge 接受任意 Widget 且无需帧后测量', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TActionSheetItemWidget(
+            item: TActionSheetItem(
+              value: 'custom-badge',
+              label: '自定义角标',
+              icon: Icon(Icons.star),
+              badge: SizedBox(key: Key('custom-badge'), width: 12, height: 6),
+            ),
+          ),
         ),
-      ));
+      );
+
+      expect(find.byKey(const Key('custom-badge')), findsOneWidget);
+      expect(
+        tester.getCenter(find.byKey(const Key('custom-badge'))),
+        tester.getTopRight(find.byType(Stack).first),
+      );
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('点击触发 onSelected 并返回业务值', (tester) async {
+      String? selected;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TActionSheetItemWidget(
+            item: const TActionSheetItem(value: 'tap', label: '点击'),
+            onSelected: (item) => selected = item.value,
+          ),
+        ),
+      );
       await tester.tap(find.text('点击'));
       await tester.pumpAndSettle();
-      expect(changed, 2);
+      expect(selected, 'tap');
     });
 
     testWidgets('默认图标字形和宫格槽位尺寸分离', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        TActionSheetItemWidget(
-          item: TActionSheetItem(
-            label: '样式',
-            icon: const Icon(Icons.star),
-            textStyle: const TextStyle(fontSize: 12),
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TActionSheetItemWidget(
+            item: TActionSheetItem(
+              value: 'style',
+              label: '样式',
+              icon: Icon(Icons.star),
+              textStyle: TextStyle(fontSize: 12),
+            ),
           ),
-          index: 0,
         ),
-      ));
+      );
       expect(find.text('样式'), findsOneWidget);
       final iconTheme = tester.widget<IconTheme>(find.byType(IconTheme).last);
       expect(iconTheme.data.size, 24);
@@ -105,12 +134,12 @@ void main() {
     testWidgets('Theme 控制默认字形、槽位和颜色', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TActionSheetItemWidget(
+          const TActionSheetItemWidget(
             item: TActionSheetItem(
+              value: 'icon',
               label: '图标',
-              icon: const Icon(Icons.star),
+              icon: Icon(Icons.star),
             ),
-            index: 0,
           ),
           actionSheetTheme: const TActionSheetThemeData(
             iconSize: 32,
@@ -132,15 +161,36 @@ void main() {
       );
     });
 
+    testWidgets('标题 textStyle 不作为图标颜色来源', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TActionSheetItemWidget(
+            item: TActionSheetItem(
+              value: 'separate-style',
+              label: '独立样式',
+              icon: Icon(Icons.star),
+              textStyle: TextStyle(color: Colors.red),
+            ),
+          ),
+          actionSheetTheme: const TActionSheetThemeData(
+            iconColor: Colors.purple,
+          ),
+        ),
+      );
+
+      final iconTheme = tester.widget<IconTheme>(find.byType(IconTheme).last);
+      expect(iconTheme.data.color, Colors.purple);
+    });
+
     testWidgets('自定义 icon Widget 的显式尺寸和颜色不被 Theme 覆盖', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TActionSheetItemWidget(
+          const TActionSheetItemWidget(
             item: TActionSheetItem(
+              value: 'custom-icon',
               label: '自定义图标',
-              icon: const Icon(Icons.star, size: 18, color: Colors.green),
+              icon: Icon(Icons.star, size: 18, color: Colors.green),
             ),
-            index: 0,
           ),
           actionSheetTheme: const TActionSheetThemeData(
             iconSize: 32,
@@ -158,40 +208,66 @@ void main() {
 
   group('getMainAxisAlignment', () {
     test('各 align 值', () {
-      expect(getMainAxisAlignment(TActionSheetAlign.left),
-          MainAxisAlignment.start);
       expect(
-          getMainAxisAlignment(TActionSheetAlign.right), MainAxisAlignment.end);
-      expect(getMainAxisAlignment(TActionSheetAlign.center),
-          MainAxisAlignment.center);
+        getMainAxisAlignment(TActionSheetAlign.left),
+        MainAxisAlignment.start,
+      );
+      expect(
+        getMainAxisAlignment(TActionSheetAlign.right),
+        MainAxisAlignment.end,
+      );
+      expect(
+        getMainAxisAlignment(TActionSheetAlign.center),
+        MainAxisAlignment.center,
+      );
     });
   });
 
   group('buildCancelButton', () {
     testWidgets('showPagination=true', (tester) async {
       late BuildContext ctx;
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          ctx = context;
-          return const SizedBox();
-        }),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              ctx = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
       await tester.pumpAndSettle();
       final widget = buildCancelButton(ctx, true, '取消', () {});
+      final divider = widget as Container;
+      expect(divider.color, TThemeData.defaultData().bgColorPage);
+      expect(
+        (divider.padding! as EdgeInsets).top,
+        TThemeData.defaultData().spacer16,
+      );
       await tester.pumpWidget(wrapWithTheme(widget));
       expect(find.text('取消'), findsOneWidget);
     });
 
     testWidgets('showPagination=false + cancelText=null', (tester) async {
       late BuildContext ctx;
-      await tester.pumpWidget(wrapWithTheme(
-        Builder(builder: (context) {
-          ctx = context;
-          return const SizedBox();
-        }),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              ctx = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
       await tester.pumpAndSettle();
       final widget = buildCancelButton(ctx, false, null, null);
+      final divider = widget as Container;
+      expect(divider.color, TThemeData.defaultData().bgColorPage);
+      expect(
+        (divider.padding! as EdgeInsets).top,
+        TThemeData.defaultData().spacer8,
+      );
       await tester.pumpWidget(wrapWithTheme(widget));
       expect(find.byType(GestureDetector), findsOneWidget);
     });

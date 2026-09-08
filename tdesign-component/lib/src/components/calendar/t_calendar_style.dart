@@ -98,7 +98,7 @@ class TCalendarStyle {
         fontSize: context.tTheme.fontTitleMedium?.size,
         height: context.tTheme.fontTitleMedium?.height,
         fontWeight: context.tTheme.fontTitleMedium?.fontWeight,
-        color: context.tTheme.textColorPrimary,
+        color: context.tTheme.textColorSecondary,
       ),
       todayDayStyle: TextStyle(
         fontSize: context.tTheme.fontTitleMedium?.size,
@@ -119,7 +119,7 @@ class TCalendarStyle {
       fontSize: context.tTheme.fontTitleMedium?.size,
       height: context.tTheme.fontTitleMedium?.height,
       fontWeight: context.tTheme.fontTitleMedium?.fontWeight,
-      color: context.tTheme.textColorPrimary,
+      color: context.tTheme.textColorSecondary,
     );
     final defaultTodayStyle =
         defaultDayStyle.copyWith(color: context.tTheme.brandNormalColor);

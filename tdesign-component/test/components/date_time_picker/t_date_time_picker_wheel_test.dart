@@ -69,7 +69,7 @@ void main() {
           tester.widget<TText>(_pickerTextFinder('2024年').first);
       expect(selectedText.style?.color, token.textColorPrimary);
       expect(selectedText.style?.fontSize, token.fontBodyLarge?.size);
-      expect(selectedText.style?.fontWeight, FontWeight.w700);
+      expect(selectedText.style?.fontWeight, FontWeight.w600);
     });
 
     testWidgets('仅时间列（时/分/秒）渲染', (tester) async {

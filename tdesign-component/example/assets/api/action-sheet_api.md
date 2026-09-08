@@ -6,13 +6,13 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| badge | TBadge? | - | 角标 |
+| badge | Widget? | - | 角标槽位。 列表模式下跟随标题展示；宫格模式下仅在 `icon` 非空时展示在图标右上角。 |
 | disabled | bool | false | 是否禁用 |
-| group | String? | - | 分组，用于带描述多行滚动宫格 仅分组动作面板使用；未配置时该项目不会进入任何分组 |
 | icon | Widget? | - | 图标槽位；调用方拥有其背景、形状和显式尺寸。 未显式设置尺寸或颜色的 `Icon` 会继承 `TActionSheetThemeData`。 |
 | label | String | - | 标题 |
-| subtitle | String? | - | 描述信息 |
+| subtitle | String? | - | 列表模式下的描述信息；宫格模式不展示。 |
 | textStyle | TextStyle? | - | 标题样式 |
+| value | T | - | 稳定的业务值 |
 
 
 ### TActionSheet
@@ -30,46 +30,18 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | context | BuildContext | - | 用于查找承载弹层的 Navigator。 |
-| items | List<TActionSheetItem> | - | 宫格中的动作项目。 |
-| align | TActionSheetAlign? | - | 项目对齐方式。 |
+| items | List<TActionSheetItem<T>> | - | 宫格中的动作项目。 |
+| layout | TActionSheetGridLayout | const TActionSheetGridLayout.fixed() | 普通、分页或横向滚动宫格布局。 |
 | cancelText | String? | - | 取消按钮文字。 |
-| subtitle | String? | - | 面板副标题。 |
+| subtitle | String? | - | 面板副标题；为 null 或空字符串时不展示。 |
 | showCancel | bool | true | 是否显示取消按钮。 |
 | showOverlay | bool | true | 是否显示蒙层。 |
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭。 |
 | useSafeArea | bool | true | 是否避让系统安全区。 |
-| showPagination | bool | false | 是否显示分页指示器。 |
-| scrollable | bool | false | 是否允许滚动。 |
-| count | int? | - | 每页项目数。 |
-| rows | int? | - | 宫格行数。 |
-| itemHeight | double? | - | 项目高度。 |
-| itemMinWidth | double? | - | 项目最小宽度。 |
+| itemHeight | double? | - | 宫格项目高度。 |
 | onCancel | VoidCallback? | - | 点击取消时回调。 |
 | onClosed | VoidCallback? | - | 面板关闭后回调。 |
-| onChanged | TActionSheetOnChanged? | - | 点击动作时回调。 |
-
-
-##### TActionSheet.showGroup
-
-显示分组动作面板
-
-返回类型：`TPopupHandle`
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | 用于查找承载弹层的 Navigator。 |
-| items | List<TActionSheetItem> | - | 分组中的动作项目。 |
-| align | TActionSheetAlign? | - | 项目对齐方式。 |
-| cancelText | String? | - | 取消按钮文字。 |
-| showCancel | bool | true | 是否显示取消按钮。 |
-| showOverlay | bool | true | 是否显示蒙层。 |
-| closeOnOverlayClick | bool | true | 点击蒙层是否关闭。 |
-| useSafeArea | bool | true | 是否避让系统安全区。 |
-| itemHeight | double? | - | 项目高度。 |
-| itemMinWidth | double? | - | 项目最小宽度。 |
-| onCancel | VoidCallback? | - | 点击取消时回调。 |
-| onClosed | VoidCallback? | - | 面板关闭后回调。 |
-| onChanged | TActionSheetOnChanged? | - | 点击动作时回调。 |
+| onSelected | TActionSheetOnSelected<T>? | - | 点击动作时回调。 |
 
 
 ##### TActionSheet.showList
@@ -81,54 +53,84 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | context | BuildContext | - | 用于查找承载弹层的 Navigator。 |
-| items | List<TActionSheetItem> | - | 列表中的动作项目。 |
-| align | TActionSheetAlign? | - | 项目文字对齐方式。 |
+| items | List<TActionSheetItem<T>> | - | 列表中的动作项目。 |
+| align | TActionSheetAlign | TActionSheetAlign.center | 项目文字对齐方式。 |
 | cancelText | String? | - | 取消按钮文字。 |
-| subtitle | String? | - | 面板副标题。 |
+| subtitle | String? | - | 面板副标题；为 null 或空字符串时不展示。 |
 | showCancel | bool | true | 是否显示取消按钮。 |
 | showOverlay | bool | true | 是否显示蒙层。 |
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭。 |
 | useSafeArea | bool | true | 是否避让系统安全区。 |
 | onCancel | VoidCallback? | - | 点击取消时回调。 |
 | onClosed | VoidCallback? | - | 面板关闭后回调。 |
-| onChanged | TActionSheetOnChanged? | - | 点击动作时回调。 |
+| onSelected | TActionSheetOnSelected<T>? | - | 点击动作时回调。 |
 
 
 ### TActionSheetThemeData
 #### 简介
-TActionSheet 组件级 ThemeExtension
-
-#### 静态方法
-
-##### TActionSheetThemeData.lerpDouble
-
-返回类型：`double?`
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| a | double? | - | - |
-| b | double? | - | - |
-| t | double | - | - |
-
+TActionSheet 组件级视觉 ThemeExtension
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | barrierColor | Color? | - | 蒙层颜色 |
-| count | int? | - | 宫格列数 |
-| defaultAlign | TActionSheetAlign? | - | 默认对齐 |
-| gridIconExtent | double? | - | 宫格和分组布局的图标槽位尺寸。 |
+| gridIconExtent | double? | - | 宫格布局的图标槽位尺寸。 |
+| gridItemHeight | double? | - | 宫格项目高度 |
 | iconColor | Color? | - | 默认图标颜色。 |
 | iconSize | double? | - | 默认图标字形尺寸；同时作为列表图标槽位尺寸。 |
-| itemHeight | double? | - | 项高度 |
-| itemMinWidth | double? | - | 项最小宽度 |
 | panelRadius | double? | - | 面板圆角 |
-| rows | int? | - | 宫格行数 |
+
+
+### TActionSheetGridLayout
+#### 简介
+动作面板宫格布局
+使用 `TActionSheetGridLayout.fixed`、`TActionSheetGridLayout.paged` 或
+`TActionSheetGridLayout.scroll` 创建互斥的布局配置。
+
+#### 工厂构造方法
+
+##### TActionSheetGridLayout.fixed
+
+普通固定宫格
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| count | int | - | 一个可视面板期望容纳的项目数 |
+| rows | int | - | 行数 |
+
+
+##### TActionSheetGridLayout.paged
+
+整页切换并显示分页指示器的宫格
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| count | int | - | 一个可视面板期望容纳的项目数 |
+| rows | int | - | 行数 |
+
+
+##### TActionSheetGridLayout.scroll
+
+可连续横向滚动的宫格
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| count | int | - | 一个可视面板期望容纳的项目数 |
+| rows | int | - | 行数 |
+| itemMinWidth | double? | - | - |
+
+#### 公开属性
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| count | int | - | 一个可视面板期望容纳的项目数 |
+| mode | TActionSheetGridMode | - | 布局模式 |
+| rows | int | - | 行数 |
 
 
 ### TActionSheetAlign
 #### 简介
-动作面板内容对齐方式
+动作面板列表内容对齐方式
 #### 枚举值
 
 
@@ -137,3 +139,26 @@ TActionSheet 组件级 ThemeExtension
 | center | 居中对齐 |
 | left | 左对齐 |
 | right | 右对齐 |
+
+
+### TActionSheetGridMode
+#### 简介
+宫格布局模式
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| fixed | 固定宫格 |
+| paged | 分页宫格 |
+| scroll | 横向滚动宫格 |
+
+
+### TActionSheetOnSelected
+#### 简介
+选择动作面板项目时触发
+#### 类型定义
+
+```dart
+typedef TActionSheetOnSelected = void Function(TActionSheetItem<T> item);
+```

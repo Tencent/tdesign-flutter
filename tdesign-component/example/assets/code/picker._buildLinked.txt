@@ -1,7 +1,0 @@
-Widget _buildLinked(BuildContext context) {
-    return TPicker(
-      items: _linked,
-      value: _linkedValue,
-      onChanged: (value) => setState(() => _linkedValue = value.values),
-    );
-  }
