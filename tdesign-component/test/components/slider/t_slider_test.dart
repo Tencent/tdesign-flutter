@@ -79,16 +79,24 @@ void main() {
       );
     });
 
-    testWidgets('preserves local SliderTheme color overrides', (tester) async {
+    testWidgets('preserves local SliderTheme color and label overrides', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(
             extensions: [TThemeData.defaultData()],
-            sliderTheme: const SliderThemeData(activeTrackColor: Colors.red),
+            sliderTheme: const SliderThemeData(
+              activeTrackColor: Colors.red,
+              valueIndicatorTextStyle: TextStyle(color: Colors.teal),
+            ),
           ),
           home: const Scaffold(
             body: Center(
-              child: SizedBox(width: 320, child: TSlider(value: 0.5)),
+              child: SizedBox(
+                width: 320,
+                child: TSlider(value: 0.5, showThumbValue: true),
+              ),
             ),
           ),
         ),
@@ -97,6 +105,7 @@ void main() {
       final theme = SliderTheme.of(tester.element(find.byType(Slider)));
       expect(theme.activeTrackColor, Colors.red);
       expect(theme.thumbColor, TThemeData.defaultData().textColorAnti);
+      expect(theme.valueIndicatorTextStyle?.color, Colors.teal);
     });
 
     testWidgets('explicit ColorScheme takes priority over TDesign tokens', (

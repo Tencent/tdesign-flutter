@@ -10,7 +10,7 @@
 - `value + onChanged` 遵循 Flutter 受控模式，`onChanged == null` 表示禁用，不引入 `defaultValue`。
 - 数值和刻度由 `showThumbValue` / `showScaleValue` 与 formatter 负责；`showThumbValue` 持续显示拇指数值，非零起点沿用 `min/max/divisions`。
 - 垂直方向由 `RotatedBox` 组合，胶囊外观由 `SliderTheme` 组合；二者不新增与 Flutter 框架重复的 API。
-- 视觉字段按局部 `SliderTheme` > 显式 `ColorScheme` > TDesign token 解析；token 默认提供白色描边 thumb、品牌色轨道和区分前后轨道的禁用色。
+- 视觉字段按局部 `SliderTheme` > 显式 `ColorScheme` > TDesign token 解析；token 默认提供白色描边 thumb、品牌色轨道、区分前后轨道的禁用色，并以禁用文字 token 绘制禁用态常驻数值。
 
 ## 行为契约
 

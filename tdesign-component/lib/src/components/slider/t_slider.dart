@@ -95,6 +95,17 @@ SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
   );
 }
 
+Color _disabledThumbLabelColor(BuildContext context) {
+  final inheritedColor = SliderTheme.of(context).valueIndicatorTextStyle?.color;
+  if (inheritedColor != null) {
+    return inheritedColor.withValues(alpha: 0.38);
+  }
+  return Theme.of(
+        context,
+      ).tExplicitColorScheme?.onSurface.withValues(alpha: 0.38) ??
+      context.tTheme.textDisabledColor;
+}
+
 /// 基于 Material [Slider] 的严格受控单值滑块。
 class TSlider extends StatelessWidget {
   const TSlider({
@@ -190,7 +201,11 @@ class TSlider extends StatelessWidget {
       showValueIndicator: showThumbValue ? ShowValueIndicator.never : null,
       thumbShape: label == null
           ? baseTheme.thumbShape
-          : _LabeledSliderThumbShape(base: baseTheme.thumbShape!, label: label),
+          : _LabeledSliderThumbShape(
+              base: baseTheme.thumbShape!,
+              label: label,
+              disabledLabelColor: _disabledThumbLabelColor(context),
+            ),
     );
     final decoration = Theme.of(
       context,
@@ -318,6 +333,7 @@ class TRangeSlider extends StatelessWidget {
           : _LabeledRangeSliderThumbShape(
               base: baseTheme.rangeThumbShape!,
               labels: labels,
+              disabledLabelColor: _disabledThumbLabelColor(context),
             ),
     );
     final decoration = Theme.of(
@@ -463,10 +479,15 @@ void _paintTDesignThumb(
 }
 
 class _LabeledSliderThumbShape extends SliderComponentShape {
-  const _LabeledSliderThumbShape({required this.base, required this.label});
+  const _LabeledSliderThumbShape({
+    required this.base,
+    required this.label,
+    required this.disabledLabelColor,
+  });
 
   final SliderComponentShape base;
   final String label;
+  final Color disabledLabelColor;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
@@ -501,7 +522,15 @@ class _LabeledSliderThumbShape extends SliderComponentShape {
       textScaleFactor: textScaleFactor,
       sizeWithOverflow: sizeWithOverflow,
     );
-    _paintThumbLabel(context.canvas, center, label, sliderTheme, textDirection);
+    _paintThumbLabel(
+      context.canvas,
+      center,
+      label,
+      sliderTheme,
+      textDirection,
+      enableAnimation: enableAnimation,
+      disabledColor: disabledLabelColor,
+    );
   }
 }
 
@@ -509,10 +538,12 @@ class _LabeledRangeSliderThumbShape extends RangeSliderThumbShape {
   const _LabeledRangeSliderThumbShape({
     required this.base,
     required this.labels,
+    required this.disabledLabelColor,
   });
 
   final RangeSliderThumbShape base;
   final RangeLabels labels;
+  final Color disabledLabelColor;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
@@ -551,6 +582,8 @@ class _LabeledRangeSliderThumbShape extends RangeSliderThumbShape {
       thumb == Thumb.start ? labels.start : labels.end,
       sliderTheme,
       textDirection,
+      enableAnimation: enableAnimation,
+      disabledColor: disabledLabelColor,
     );
   }
 }
@@ -560,10 +593,21 @@ void _paintThumbLabel(
   Offset center,
   String label,
   SliderThemeData sliderTheme,
-  TextDirection textDirection,
-) {
+  TextDirection textDirection, {
+  required Animation<double> enableAnimation,
+  required Color disabledColor,
+}) {
+  final enabledStyle = sliderTheme.valueIndicatorTextStyle!;
+  final textColor = Color.lerp(
+    disabledColor,
+    enabledStyle.color ?? disabledColor,
+    enableAnimation.value,
+  );
   final painter = TextPainter(
-    text: TextSpan(text: label, style: sliderTheme.valueIndicatorTextStyle),
+    text: TextSpan(
+      text: label,
+      style: enabledStyle.copyWith(color: textColor),
+    ),
     textDirection: textDirection,
     maxLines: 1,
   )..layout();
