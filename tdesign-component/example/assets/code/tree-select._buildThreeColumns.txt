@@ -1,6 +1,9 @@
-Widget _buildThreeColumns(BuildContext context) => TTreeSelect(
-    key: const ValueKey('tree-select-three-columns'),
-    options: _threeColumnOptions,
-    value: _threeColumn,
-    onChanged: (value) => setState(() => _threeColumn = value),
-  );
+Widget _buildThreeColumns(BuildContext context) {
+    // 第三级数据自然生成第三列，无需额外指定列数。
+    return TTreeSelect(
+      key: const ValueKey('tree-select-three-columns'),
+      options: _threeColumnOptions,
+      value: _threeColumn,
+      onChanged: (value) => setState(() => _threeColumn = value),
+    );
+  }

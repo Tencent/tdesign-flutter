@@ -1,7 +1,10 @@
-Widget _buildMultiple(BuildContext context) => TTreeSelect(
-    key: const ValueKey('tree-select-multiple'),
-    options: _basicOptions,
-    value: _multiple,
-    multiple: true,
-    onChanged: (value) => setState(() => _multiple = value),
-  );
+Widget _buildMultiple(BuildContext context) {
+    // 多选仍使用从根节点到叶子节点的完整路径。
+    return TTreeSelect(
+      key: const ValueKey('tree-select-multiple'),
+      options: _basicOptions,
+      value: _multiple,
+      multiple: true,
+      onChanged: (value) => setState(() => _multiple = value),
+    );
+  }

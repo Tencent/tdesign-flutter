@@ -9,9 +9,9 @@ import '../text/t_text.dart';
 import 't_tree_select_theme_data.dart';
 
 const _kTreeSelectHeight = 336.0;
-const _kRootColumnWidth = 106.0;
+const _kRootColumnWidth = 103.0;
 const _kIntermediateColumnWidth = 103.0;
-const _kLeafColumnMinWidth = 184.0;
+const _kLeafColumnMinWidth = 169.0;
 const _kItemHeight = 56.0;
 const _kOutwardCornerRadius = 9.0;
 

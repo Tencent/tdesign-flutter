@@ -1,6 +1,8 @@
-import 'dart:ui' show lerpDouble;
-
 import 'package:flutter/material.dart';
+
+const _kDefaultHeight = 336.0;
+const _kDefaultRootColumnWidth = 103.0;
+const _kDefaultItemHeight = 56.0;
 
 /// TTreeSelect 组件级 ThemeExtension。
 class TTreeSelectThemeData extends ThemeExtension<TTreeSelectThemeData> {
@@ -111,24 +113,98 @@ class TTreeSelectThemeData extends ThemeExtension<TTreeSelectThemeData> {
       return this;
     }
     return TTreeSelectThemeData(
-      height: lerpDouble(height, other.height, t),
-      rootColumnWidth: lerpDouble(rootColumnWidth, other.rootColumnWidth, t),
-      columnWidth: lerpDouble(columnWidth, other.columnWidth, t),
-      itemHeight: lerpDouble(itemHeight, other.itemHeight, t),
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      rootBackgroundColor:
-          Color.lerp(rootBackgroundColor, other.rootBackgroundColor, t),
-      selectedBackgroundColor: Color.lerp(
+      height: _lerpDoubleWithDefault(height, other.height, t, _kDefaultHeight),
+      rootColumnWidth: _lerpDoubleWithDefault(
+        rootColumnWidth,
+        other.rootColumnWidth,
+        t,
+        _kDefaultRootColumnWidth,
+      ),
+      columnWidth: _lerpNullable(
+        columnWidth,
+        other.columnWidth,
+        t,
+        _lerpDouble,
+      ),
+      itemHeight: _lerpDoubleWithDefault(
+        itemHeight,
+        other.itemHeight,
+        t,
+        _kDefaultItemHeight,
+      ),
+      backgroundColor: _lerpNullable(
+        backgroundColor,
+        other.backgroundColor,
+        t,
+        _lerpColor,
+      ),
+      rootBackgroundColor: _lerpNullable(
+        rootBackgroundColor,
+        other.rootBackgroundColor,
+        t,
+        _lerpColor,
+      ),
+      selectedBackgroundColor: _lerpNullable(
         selectedBackgroundColor,
         other.selectedBackgroundColor,
         t,
+        _lerpColor,
       ),
-      textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
-      selectedTextStyle:
-          TextStyle.lerp(selectedTextStyle, other.selectedTextStyle, t),
-      disabledTextStyle:
-          TextStyle.lerp(disabledTextStyle, other.disabledTextStyle, t),
-      indicatorColor: Color.lerp(indicatorColor, other.indicatorColor, t),
+      textStyle: _lerpNullable(textStyle, other.textStyle, t, _lerpTextStyle),
+      selectedTextStyle: _lerpNullable(
+        selectedTextStyle,
+        other.selectedTextStyle,
+        t,
+        _lerpTextStyle,
+      ),
+      disabledTextStyle: _lerpNullable(
+        disabledTextStyle,
+        other.disabledTextStyle,
+        t,
+        _lerpTextStyle,
+      ),
+      indicatorColor: _lerpNullable(
+        indicatorColor,
+        other.indicatorColor,
+        t,
+        _lerpColor,
+      ),
     );
   }
+}
+
+T? _lerpNullable<T>(
+  T? begin,
+  T? end,
+  double t,
+  T Function(T begin, T end, double t) lerp,
+) {
+  if (begin == null || end == null) {
+    return t < 0.5 ? begin : end;
+  }
+  return lerp(begin, end, t);
+}
+
+double _lerpDouble(double begin, double end, double t) {
+  return begin * (1 - t) + end * t;
+}
+
+double? _lerpDoubleWithDefault(
+  double? begin,
+  double? end,
+  double t,
+  double defaultValue,
+) {
+  if (begin == null && end == null) {
+    return null;
+  }
+  return _lerpDouble(begin ?? defaultValue, end ?? defaultValue, t);
+}
+
+Color _lerpColor(Color begin, Color end, double t) {
+  return Color.lerp(begin, end, t)!;
+}
+
+TextStyle _lerpTextStyle(TextStyle begin, TextStyle end, double t) {
+  return TextStyle.lerp(begin, end, t)!;
 }

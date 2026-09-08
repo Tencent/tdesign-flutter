@@ -1,6 +1,9 @@
-Widget _buildSingle(BuildContext context) => TTreeSelect(
-    key: const ValueKey('tree-select-single'),
-    options: _basicOptions,
-    value: _single,
-    onChanged: (value) => setState(() => _single = value),
-  );
+Widget _buildSingle(BuildContext context) {
+    // 页面持有完整路径，选择后使用回调值重建受控组件。
+    return TTreeSelect(
+      key: const ValueKey('tree-select-single'),
+      options: _basicOptions,
+      value: _single,
+      onChanged: (value) => setState(() => _single = value),
+    );
+  }
