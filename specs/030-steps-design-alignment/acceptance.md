@@ -75,8 +75,13 @@
 - 水平/垂直默认、图标、点状及自定义内容完整；错误态包含默认、图标、点状三种。
 - 垂直可选择默认前三项实心、当前项空心；纯展示四项均实心且无箭头。
 - 独立 Steps CJK 子集消除 Linux 缺字方框；深色仅改变语义颜色，不改变结构。
-- 共享导航 Golden 在 macOS 的全画布字体抗锯齿差异未被误更新，保留 Linux 权威基线。
+- 合并含 TabBar #1085 的 `develop@1de424cb` 后，GitHub Actions 在本分支
+  `dac8ca16` 的 Flutter 3.32.0 Linux 任务仅产出共享导航 light/dark 两张差异图；
+  人工检查确认 TabBar 新 API 渲染保持不变，差异来自 Steps 标题/内容布局向上收敛
+  2px 及其后续内容等量上移。基线采用该任务 artifact 的 `testImage`，未使用 macOS
+  抗锯齿结果；更新后仍需由下一轮 Linux CI 严格复跑确认差异为零。
 
 ## 待完成（当前）
 
-- GitHub #1084 / CNB #151 已存在；本轮新 head 的远端 CI 与 CodeBuddy Review 待推送后核验。
+- GitHub #1084 / CNB #151 已存在；`dac8ca16` 的双版本 analyze 已通过，Linux
+  Golden 按最新 artifact 修正；完整 CI 与 CodeBuddy Review 待下一次推送后核验。
