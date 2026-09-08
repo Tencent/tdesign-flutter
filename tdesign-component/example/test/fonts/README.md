@@ -47,6 +47,11 @@ Upload 等既有 Golden 的字形选择与像素基线。
 - 子集 SHA-256：`77e2e93df0b403af5ddd7411b6472ada58a93fcade6b87a34c26fe422f698c70`
 - 许可证：SIL Open Font License 1.1，见 `OFL.txt`
 
+`SideBarGoldenCJK-Regular.otf` 仅补充 SideBar 整页 Golden 的公开标题、说明与
+入口文案，字符清单见 `sidebar_demo_glyphs.txt`。它作为独立 fallback 加载，避免
+扩充共享字体后改变其他组件既有基线；上游与本文其余子集相同，子集工具为
+HarfBuzz 11.4.5，子集 SHA-256 为
+`490f5cfd79e21292f96c3f07ae6a512650de9bbe0cb78d6eebc0e30ca8f461e0`。
 `CascaderGoldenCJK-Regular.otf` 仅补充 Cascader 整页 Golden 新增且既有子集
 未覆盖的字形，字符清单见 `cascader_demo_glyphs.txt`。独立加载可避免扩充共享
 字体改变既有组件的像素基线，子集 SHA-256 为
@@ -79,7 +84,8 @@ Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后�
 ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedback 字符清单。
 更新 Picker 页面文案时，更新 Picker 字符清单。
 更新 Calendar 页面文案时，更新 Calendar 字符清单。
-更新 TabBar 页面文案时，更新 TabBar 字符清单。
+ 更新 TabBar 页面文案时，更新 TabBar 字符清单。
+ 更新 SideBar 页面文案时，更新 SideBar 字符清单。
 更新 Cascader 页面文案时，更新 Cascader 字符清单。
 更新 Indexes 页面或城市数据时，更新 Indexes 字符清单。
 更新 BackTop 页面文案时，更新 BackTop 字符清单。
