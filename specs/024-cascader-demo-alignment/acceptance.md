@@ -30,8 +30,9 @@
   仅在内部 TextField 边界提供透明 Material 上下文，Popup、ActionSheet、Search 与
   Cascader 聚焦回归通过。
 - Flutter 3.32.0 Linux：按小程序 Radio body-large 修正 TCascader 局部主题污染后，
-  2 张关闭状态基线保持不变，10 张打开状态 light/dark Golden 更新后立即严格复跑，
-  12 tests passed；同一容器中 PR 原始 head 的旧基线 12 tests passed，排除了容器字体差异。
+  2 张关闭状态基线保持不变，10 张打开状态 light/dark Golden 更新；组件级 2 张
+  light/dark 基线同步活动导航品牌色，并登记到统一视觉回归入口。最终 14 tests passed；
+  同一容器中 PR 原始 head 的旧 Demo 基线 12 tests passed，排除了容器字体差异。
 - Cascader 生产代码覆盖率：`308/315 = 97.78%`。
 - Search 生产代码覆盖率：`193/197 = 97.97%`。
 - TCascader 分隔线只接受显式 Material 覆盖，TThemeBuilder 投影的默认值不会覆盖
