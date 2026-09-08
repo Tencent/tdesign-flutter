@@ -105,6 +105,24 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'cascader',
+    coverageTargets: ['lib/src/components/cascader/'],
+    componentTests: ['test/components/cascader/t_cascader_test.dart'],
+    exampleTests: ['test/cascader_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Cascader Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/cascader/t_cascader_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Cascader Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/cascader_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'picker',
     coverageTargets: ['lib/src/components/picker/'],
     componentTests: [

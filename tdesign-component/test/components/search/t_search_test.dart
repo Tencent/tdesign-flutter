@@ -29,6 +29,21 @@ void main() {
   }
 
   group('TSearchBar behavior', () {
+    testWidgets('provides the TextField material context internally', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: const TSearchBar(hintText: '搜索'),
+        ),
+      );
+
+      expect(find.byType(TSearchBar), findsOneWidget);
+      expect(find.byType(TextField), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('supports controlled and initial text', (tester) async {
       final controller = TextEditingController(text: 'controlled');
       addTearDown(controller.dispose);
