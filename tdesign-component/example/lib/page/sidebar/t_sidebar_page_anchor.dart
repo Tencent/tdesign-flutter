@@ -142,6 +142,8 @@ class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
 
   @ExampleCode(group: 'sideBar')
   Widget _buildAnchorSideBar(BuildContext context) {
+    // 接入说明：currentValue、handleSidebarChange 与滚动控制器由页面状态持有；
+    // 此处展示 TSideBar 与内容列表的核心组装，接入时需自行维护 value/onChanged 联动。
     final labels = List.filled(10, '选项');
     final titles = List.filled(10, '标题');
     final itemCounts = List.filled(10, 8);

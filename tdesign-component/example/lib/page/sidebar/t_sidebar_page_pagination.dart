@@ -38,6 +38,8 @@ class TSideBarPaginationPageState extends State<TSideBarPaginationPage> {
 
   @ExampleCode(group: 'sideBar')
   Widget _buildPaginationSideBar(BuildContext context) {
+    // 接入说明：currentValue、setCurrentValue 与 PageController 由页面状态持有；
+    // 此处展示 TSideBar 与 PageView 的核心组装，接入时需自行维护 value/onChanged 联动。
     final labels = List.filled(10, '选项');
     final titles = List.filled(10, '标题');
     final itemCounts = List.filled(10, 8);
@@ -92,7 +94,7 @@ class TSideBarPaginationPageState extends State<TSideBarPaginationPage> {
                     children: [
                       const TImage(
                         src: 'assets/img/empty.png',
-                        variant: TImageVariant.circle,
+                        variant: TImageVariant.roundedSquare,
                         width: 48,
                         height: 48,
                       ),
