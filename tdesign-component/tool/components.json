@@ -187,7 +187,6 @@
       "api": {
         "names": [
           "TTabBar",
-          "TTabBarBadgeConfig",
           "TTabBarItemConfig",
           "TTabBarPopUpBtnConfig",
           "TTabBarPopUpShapeConfig",

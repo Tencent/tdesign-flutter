@@ -30,7 +30,10 @@
   不产生额外迁移成本。未来若需要纵向 TabBar，应单独设计改变整栏轴向、尺寸、
   分隔线和选项分布的完整契约。
 - breaking：`useVerticalDivider` 更名为 `split`。
-- `TTabBarBadgeConfig`、`TTabBarItemConfig` 支持 const；逐项 `onTap` 改为可选。
+- breaking：删除重复封装显隐和定位的 `TTabBarBadgeConfig`；
+  `TTabBarItemConfig.badge` 直接接收可空 `TBadge`，`null` 表示不显示，偏移使用
+  `TBadge.offset`。
+- `TTabBarItemConfig` 支持 const；逐项 `onTap` 改为可选。
 - breaking：Theme 移除行为/结构字段，由实例参数拥有。
 
 ## 风险与取舍

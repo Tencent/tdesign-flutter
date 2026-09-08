@@ -118,28 +118,6 @@ extension _TTabBarTypeResolve on TTabBarType {
   }
 }
 
-/// 飘新配置
-class TTabBarBadgeConfig {
-  const TTabBarBadgeConfig({
-    required this.showBadge,
-    TBadge? tBadge,
-    this.badgeTopOffset,
-    this.badgeRightOffset,
-  }) : tBadge = tBadge ?? const TBadge(variant: TBadgeVariant.dot);
-
-  /// 是否展示消息
-  final bool showBadge;
-
-  /// 消息样式（未设置但 showBadge 为 true，则默认使用红点）
-  final TBadge? tBadge;
-
-  /// 消息顶部偏移量
-  final double? badgeTopOffset;
-
-  /// 消息右侧偏移量
-  final double? badgeRightOffset;
-}
-
 /// 单个 tab 配置
 class TTabBarItemConfig {
   const TTabBarItemConfig({
@@ -149,7 +127,7 @@ class TTabBarItemConfig {
     this.tabText,
     this.selectTabTextStyle,
     this.unselectTabTextStyle,
-    this.badgeConfig,
+    this.badge,
     this.popUpButtonConfig,
     this.onLongPress,
     this.allowMultipleTaps = false,
@@ -176,8 +154,12 @@ class TTabBarItemConfig {
   /// 仅当 [allowMultipleTaps] 为 true 才调用。整栏禁用时不会调用。
   final GestureTapCallback? onTap;
 
-  /// 消息配置
-  final TTabBarBadgeConfig? badgeConfig;
+  /// 展示在标签内容右上角的徽标；为空时不显示。
+  ///
+  /// 徽标内容和样式由 [TBadge] 配置，[TBadge.offset] 可用于逐项调整默认锚点。
+  /// TabBar 内容会作为徽标锚点，因此传入的 [TBadge.child] 必须为空；
+  /// [TBadge.onTap] 会作为标签项点击链中的附加回调执行。
+  final TBadge? badge;
 
   /// 弹窗配置
   final TTabBarPopUpBtnConfig? popUpButtonConfig;
@@ -838,20 +820,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     );
   }
 
-  Widget _badge(TTabBarBadgeConfig? badgeConfig) {
-    if (badgeConfig?.showBadge ?? false) {
-      if (badgeConfig?.tBadge != null) {
-        return badgeConfig!.tBadge!;
-      }
-    }
-    return Container();
-  }
-
-  Widget _constructItem(
-    BuildContext context,
-    TTabBarBadgeConfig? badgeConfig,
-    bool isInOrOutCapsule,
-  ) {
+  Widget _constructItem(BuildContext context, bool isInOrOutCapsule) {
     Widget child = Container();
     if (basicType == _TTabBarBasicType.text) {
       child = _textItem(
@@ -934,17 +903,23 @@ class _TTabBarItemWithBadge extends StatelessWidget {
       );
     }
 
-    var top = badgeConfig?.badgeTopOffset ?? -2;
-    var right = badgeConfig?.badgeRightOffset ?? -10;
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        child,
-        Visibility(
-          visible: badgeConfig?.showBadge ?? false,
-          child: Positioned(top: top, right: right, child: _badge(badgeConfig)),
-        ),
-      ],
+    final badge = itemConfig.badge;
+    if (badge == null) {
+      return child;
+    }
+    assert(
+      badge.child == null,
+      '[TTabBarItemConfig] badge.child is managed by TTabBar.',
+    );
+    return TBadge(
+      key: badge.key,
+      label: badge.label,
+      variant: badge.variant,
+      size: badge.size,
+      border: badge.border,
+      showZero: badge.showZero,
+      offset: badge.offset,
+      child: child,
     );
   }
 
@@ -974,7 +949,6 @@ class _TTabBarItemWithBadge extends StatelessWidget {
   }
 
   _buildItem(BuildContext context) {
-    var badgeConfig = itemConfig.badgeConfig;
     var isInOrOutCapsule =
         componentType == TTabBarItemStyle.label ||
         selectionType == TTabBarStyle.capsule;
@@ -994,7 +968,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
       alignment: Alignment.center,
       padding: itemPadding,
       color: Colors.transparent,
-      child: _constructItem(context, badgeConfig, isInOrOutCapsule),
+      child: _constructItem(context, isInOrOutCapsule),
     );
 
     if (!needInkWell) {
@@ -1015,6 +989,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
   }
 
   void handleTap(BuildContext context) {
+    itemConfig.badge?.onTap?.call();
     onTap.call();
 
     var popUpButtonConfig = itemConfig.popUpButtonConfig;

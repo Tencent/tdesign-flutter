@@ -192,6 +192,12 @@ class _TTabBarPageState extends State<TTabBarPage> {
       TBadge(label: 'New'),
       TBadge(label: '···'),
     ];
+    const textBadges = [
+      TBadge(label: '16', offset: Offset(16, -8)),
+      TBadge(variant: TBadgeVariant.dot, offset: Offset(16, -8)),
+      TBadge(label: 'New', offset: Offset(16, -8)),
+      TBadge(label: '···', offset: Offset(16, -8)),
+    ];
     return Column(
       children: [
         TTabBar(
@@ -205,10 +211,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
             4,
             (index) => TTabBarItemConfig(
               tabText: labels[index],
-              badgeConfig: TTabBarBadgeConfig(
-                showBadge: true,
-                tBadge: badges[index],
-              ),
+              badge: textBadges[index],
             ),
           ),
         ),
@@ -224,10 +227,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
             (index) => TTabBarItemConfig(
               selectedIcon: Icon(icons[index], size: 20),
               unselectedIcon: Icon(icons[index], size: 20),
-              badgeConfig: TTabBarBadgeConfig(
-                showBadge: true,
-                tBadge: badges[index],
-              ),
+              badge: badges[index],
             ),
           ),
         ),
@@ -244,10 +244,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
               tabText: labels[index],
               selectedIcon: Icon(icons[index], size: 20),
               unselectedIcon: Icon(icons[index], size: 20),
-              badgeConfig: TTabBarBadgeConfig(
-                showBadge: true,
-                tBadge: badges[index],
-              ),
+              badge: badges[index],
             ),
           ),
         ),

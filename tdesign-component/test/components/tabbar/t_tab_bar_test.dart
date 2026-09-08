@@ -122,10 +122,10 @@ void main() {
       );
     });
 
-    test('badge and popup configs keep constructor data', () {
-      const badge = TTabBarBadgeConfig(showBadge: true);
-      expect(badge.showBadge, isTrue);
-      expect(badge.tBadge, isA<TBadge>());
+    test('item badge and popup config keep constructor data', () {
+      const tabBadge = TBadge(variant: TBadgeVariant.dot);
+      const tabItem = TTabBarItemConfig(tabText: '消息', badge: tabBadge);
+      expect(tabItem.badge, same(tabBadge));
 
       const item = TTabBarMenuItem(value: '更多');
       final popup = TTabBarPopUpBtnConfig(
@@ -555,7 +555,7 @@ void main() {
       expect(selected, '选项A');
     });
 
-    testWidgets('badge offsets and ink well render on iconText items', (
+    testWidgets('badge uses its own offset and anchors to iconText content', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -570,12 +570,7 @@ void main() {
                 tabText: '消息',
                 selectedIcon: const Icon(Icons.mail),
                 unselectedIcon: const Icon(Icons.mail_outline),
-                badgeConfig: const TTabBarBadgeConfig(
-                  showBadge: true,
-                  tBadge: TBadge(label: '9'),
-                  badgeTopOffset: 1,
-                  badgeRightOffset: 2,
-                ),
+                badge: const TBadge(label: '9', offset: Offset(2, 1)),
                 onTap: () {},
               ),
               TTabBarItemConfig(
@@ -591,6 +586,50 @@ void main() {
       );
 
       expect(find.byType(TBadge), findsOneWidget);
+      final badge = tester.widget<TBadge>(find.byType(TBadge));
+      expect(badge.offset, const Offset(2, 1));
+      expect(badge.child, isNotNull);
+      final badgeCenter = tester.getCenter(find.text('9'));
+      final iconCenter = tester.getCenter(find.byIcon(Icons.mail));
+      expect(badgeCenter.dx, greaterThan(iconCenter.dx));
+      expect(badgeCenter.dy, lessThan(iconCenter.dy));
+    });
+
+    testWidgets('badge inherits theme offset without blocking item taps', (
+      tester,
+    ) async {
+      var badgeTaps = 0;
+      var changedValue = -1;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            badgeTheme: const BadgeThemeData(offset: Offset(7, 9)),
+            extensions: [TThemeData.defaultData()],
+          ),
+          home: Scaffold(
+            body: TTabBar(
+              type: TTabBarType.text,
+              value: 0,
+              navigationTabs: [
+                const TTabBarItemConfig(tabText: '首页'),
+                TTabBarItemConfig(
+                  tabText: '消息',
+                  badge: TBadge(label: '1', onTap: () => badgeTaps++),
+                ),
+              ],
+              onChanged: (value) => changedValue = value,
+            ),
+          ),
+        ),
+      );
+
+      final materialBadge = tester.widget<Badge>(find.byType(Badge));
+      expect(materialBadge.offset, const Offset(7, 9));
+
+      await tester.tap(find.text('消息'));
+      await tester.pump();
+      expect(badgeTaps, 1);
+      expect(changedValue, 1);
     });
 
     testWidgets('ink well routes one tap through one selection callback', (

@@ -13,6 +13,27 @@
   Demo 明暗 Golden 4/4 全部通过。
 - 最终远端 CI 与 CNB Review 以本节变更推送后的 head 为准。
 
+## 2026-09-08 徽标契约收敛
+
+- 删除 `TTabBarBadgeConfig` 及其重复的 `showBadge`、`badgeTopOffset`、
+  `badgeRightOffset`；`TTabBarItemConfig.badge` 直接接收可空 `TBadge`，由 `null`
+  唯一表达隐藏，逐项位置使用 `TBadge.offset`。
+- TabBar 将标签内容作为 `TBadge.child` 的实际锚点，徽标不再依赖统一的
+  `top: -2 / right: -10` 绝对位置。纯文本公开示例使用独立 offset，图标与图文
+  示例使用徽标默认锚点，对应小程序公开 Demo 的配置差异。
+- 已同步公开 Demo、生成代码片段、API manifest 与 API 文档；聚焦组件测试验证
+  徽标保留自身 offset 且位于图标右上方，并验证 BadgeTheme offset 仍按主题优先级
+  生效、徽标回调不会阻断 TabBar 选中回调。
+- Flutter 3.32.0 与 3.47.0：TabBar 组件测试各 23/23、公开 Demo 测试各 5/5；
+  组件包与 Example 包严格 analyze 均零问题。Flutter 3.32.0 生产覆盖率
+  `511/522 = 97.89%`。
+- 在 Google Chrome 打开的固定 Figma 节点与本轮实际渲染图之间人工核对：纯文本
+  徽标改为右上锚定，不再与文字同高或遮挡；图标、图文继续使用 TBadge 默认锚点。
+  本地 macOS Golden 仅用于生成走查图，未写回权威基线。
+- Flutter 3.32.0 Linux 已核对并更新受影响的四张 Demo 明暗/菜单展开基线，随后
+  不带更新参数、无像素容差严格复跑：组件 Golden 12/12、Demo Golden 4/4
+  全部通过。移动设备与远端证据以后续验证结果为准。
+
 ## 2026-09-08 补充复审与修复
 
 本节为本轮结果；下方真机、构建及首轮检查是历史记录，不替代本轮证据。
