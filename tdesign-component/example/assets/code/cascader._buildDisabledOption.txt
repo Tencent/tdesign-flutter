@@ -1,7 +1,0 @@
-Widget _buildDisabledOption(BuildContext context) {
-    return TCascader(
-      options: _optionsWithDisabled,
-      value: _disabledOptionValue,
-      onChanged: (value) => setState(() => _disabledOptionValue = value),
-    );
-  }

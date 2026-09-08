@@ -47,6 +47,11 @@ Upload 等既有 Golden 的字形选择与像素基线。
 - 子集 SHA-256：`77e2e93df0b403af5ddd7411b6472ada58a93fcade6b87a34c26fe422f698c70`
 - 许可证：SIL Open Font License 1.1，见 `OFL.txt`
 
+`CascaderGoldenCJK-Regular.otf` 仅补充 Cascader 整页 Golden 新增且既有子集
+未覆盖的字形，字符清单见 `cascader_demo_glyphs.txt`。独立加载可避免扩充共享
+字体改变既有组件的像素基线，子集 SHA-256 为
+`8bdb3ff2e9b33a303bce6b1d6d00ab951f7a27cb34b9626fd60805cff1ca8efa`。
+
 `IndexesGoldenCJK-Regular.otf` 仅补充 Indexes 城市列表和公开 Demo 文案，字符清单见
 `indexes_demo_glyphs.txt`。它使用相同上游与子集参数，并设置独立 family，避免改变
 其他组件现有 Golden 的字体回退结果。子集 SHA-256 为
@@ -75,6 +80,7 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 更新 Picker 页面文案时，更新 Picker 字符清单。
 更新 Calendar 页面文案时，更新 Calendar 字符清单。
 更新 TabBar 页面文案时，更新 TabBar 字符清单。
+更新 Cascader 页面文案时，更新 Cascader 字符清单。
 更新 Indexes 页面或城市数据时，更新 Indexes 字符清单。
 更新 BackTop 页面文案时，更新 BackTop 字符清单。
 更新 Drawer 页面文案时，更新 Drawer 字符清单。
