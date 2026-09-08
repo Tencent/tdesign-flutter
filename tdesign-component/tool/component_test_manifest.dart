@@ -105,6 +105,24 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'cascader',
+    coverageTargets: ['lib/src/components/cascader/'],
+    componentTests: ['test/components/cascader/t_cascader_test.dart'],
+    exampleTests: ['test/cascader_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Cascader Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/cascader/t_cascader_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Cascader Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/cascader_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'picker',
     coverageTargets: ['lib/src/components/picker/'],
     componentTests: [
@@ -548,6 +566,32 @@ const componentTestManifests = <ComponentTestManifest>[
       ),
       VisualTestManifest(
         name: 'Steps shared navigation',
+        workingDirectory: '.',
+        testFiles: ['test/components/navigation_components_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'sidebar',
+    coverageTargets: ['lib/src/components/sidebar/'],
+    componentTests: [
+      'test/components/sidebar/t_sidebar_test.dart',
+      'test/components/sidebar/t_sidebar_theme_test.dart',
+      'test/components/sidebar/t_sidebar_widget_test.dart',
+    ],
+    exampleTests: [
+      'test/sidebar_anchor_test.dart',
+      'test/sidebar_demo_test.dart',
+      'test/sidebar_page_test.dart',
+    ],
+    visualTests: [
+      VisualTestManifest(
+        name: 'SideBar Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/sidebar_demo_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'SideBar shared navigation',
         workingDirectory: '.',
         testFiles: ['test/components/navigation_components_golden_test.dart'],
       ),

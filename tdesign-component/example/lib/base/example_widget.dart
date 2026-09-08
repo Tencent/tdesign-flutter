@@ -869,16 +869,17 @@ ${codeString}
   }
 
   Future<String> loadCodeString() async {
-    var codeString;
-    var assetsPath = _getCodeAssetsPath();
-    if (assetsPath.isNotEmpty) {
-      try {
-        codeString = await rootBundle.loadString(assetsPath);
-      } catch (e) {
-        debugPrint('$e');
-      }
+    final assetsPath = _getCodeAssetsPath();
+    if (assetsPath.isEmpty) {
+      return '';
     }
-    return codeString;
+    try {
+      return await rootBundle.loadString(assetsPath);
+    } catch (error) {
+      debugPrint('Failed to load example code asset $assetsPath: $error');
+      // 让代码面板走“暂无演示代码”分支，而不是将 null 强制解包导致页面异常。
+      return '';
+    }
   }
 }
 

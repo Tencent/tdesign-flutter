@@ -43,6 +43,16 @@ Android 16 系统的开源 `NotoSansCJK-Regular.ttc` SC 字体面，SHA-256 为
 上游源文件 SHA-256 为
 `734b20876d6a6777e4c30b627e8391695bbf545c0badf6c066138bebd1f0278a`。
 
+`SideBarGoldenCJK-Regular.otf` 仅补充 SideBar 整页 Golden 的公开标题、说明与
+入口文案，字符清单见 `sidebar_demo_glyphs.txt`。它作为独立 fallback 加载，避免
+扩充共享字体后改变其他组件既有基线；上游与本文其余子集相同，子集工具为
+HarfBuzz 11.4.5，子集 SHA-256 为
+`490f5cfd79e21292f96c3f07ae6a512650de9bbe0cb78d6eebc0e30ca8f461e0`。
+`CascaderGoldenCJK-Regular.otf` 仅补充 Cascader 整页 Golden 新增且既有子集
+未覆盖的字形，字符清单见 `cascader_demo_glyphs.txt`。独立加载可避免扩充共享
+字体改变既有组件的像素基线，子集 SHA-256 为
+`8bdb3ff2e9b33a303bce6b1d6d00ab951f7a27cb34b9626fd60805cff1ca8efa`。
+
 `IndexesGoldenCJK-Regular.otf` 仅补充 Indexes 城市列表和公开 Demo 文案，字符清单见
 `indexes_demo_glyphs.txt`。它使用相同上游与子集参数，并设置独立 family，避免改变
 其他组件现有 Golden 的字体回退结果。子集 SHA-256 为
@@ -74,6 +84,8 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 更新 Picker 页面文案时，更新 Picker 字符清单。
 更新 Calendar 页面文案时，更新 Calendar 字符清单。
 更新 Steps 页面文案时，更新 Steps 字符清单。
+更新 SideBar 页面文案时，更新 SideBar 字符清单。
+更新 Cascader 页面文案时，更新 Cascader 字符清单。
 更新 Indexes 页面或城市数据时，更新 Indexes 字符清单。
 更新 BackTop 页面文案时，更新 BackTop 字符清单。
 更新 Drawer 页面文案时，更新 Drawer 字符清单。
