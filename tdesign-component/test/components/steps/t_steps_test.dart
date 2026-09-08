@@ -20,6 +20,104 @@ void main() {
     );
   }
 
+  testWidgets('横纵文字继承显式主题，局部字号不改写状态颜色', (tester) async {
+    final token = TThemeData.defaultData();
+    for (final direction in TStepsDirection.values) {
+      for (final materialTheme in [false, true]) {
+        final theme = TThemeBuilder.light(token);
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: materialTheme
+                ? theme.copyWith(
+                    textTheme: const TextTheme(
+                      bodyLarge: TextStyle(fontSize: 21),
+                    ),
+                  )
+                : theme.mergeExtension(
+                    const TTextThemeData(textStyle: TextStyle(fontSize: 21)),
+                  ),
+            home: Scaffold(
+              body: TSteps(
+                direction: direction,
+                steps: buildSteps(3),
+                value: 1,
+                status: TStepsStatus.error,
+              ),
+            ),
+          ),
+        );
+        expect(tester.widget<Text>(find.text('步骤1')).style?.fontSize, 21);
+        expect(tester.widget<Text>(find.text('步骤2')).style?.fontSize, 21);
+        expect(
+          tester.widget<Text>(find.text('步骤1')).style?.color,
+          token.textColorPrimary,
+        );
+        expect(
+          tester.widget<Text>(find.text('步骤2')).style?.color,
+          token.errorNormalColor,
+        );
+        expect(
+          tester.widget<Text>(find.text('步骤3')).style?.color,
+          token.textColorPlaceholder,
+        );
+        expect(tester.widget<Text>(find.text('内容1')).style?.fontSize, 21);
+        expect(tester.takeException(), isNull);
+      }
+    }
+  });
+
+  testWidgets('显式文字颜色生效且 customTitle 保持实例优先', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+          const TTextThemeData(textStyle: TextStyle(color: Colors.purple)),
+        ),
+        home: const Scaffold(
+          body: TSteps(
+            steps: [
+              TStepsItemData(title: '普通标题'),
+              TStepsItemData(
+                customTitle: TText('自定义标题', textColor: Colors.orange),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    expect(tester.widget<Text>(find.text('普通标题')).style?.color, Colors.purple);
+    expect(tester.widget<Text>(find.text('自定义标题')).style?.color, Colors.orange);
+  });
+
+  testWidgets('display 横纵节点都为实心且不受 value/status 影响', (tester) async {
+    for (final direction in TStepsDirection.values) {
+      await tester.pumpWidget(
+        wrap(
+          TSteps(
+            direction: direction,
+            variant: TStepsVariant.display,
+            status: TStepsStatus.error,
+            value: 1,
+            steps: buildSteps(3),
+          ),
+        ),
+      );
+      final dots = tester
+          .widgetList<Container>(find.byType(Container))
+          .where(
+            (item) =>
+                item.decoration is BoxDecoration &&
+                (item.decoration! as BoxDecoration).shape == BoxShape.circle,
+          )
+          .toList();
+      expect(dots, hasLength(3));
+      for (final dot in dots) {
+        final decoration = dot.decoration! as BoxDecoration;
+        expect(decoration.color, TThemeData.defaultData().brandNormalColor);
+        expect(decoration.border, isNull);
+      }
+    }
+  });
+
   group('TStepsItemData', () {
     test('文本、图标与自定义内容构造', () {
       const customTitle = Text('自定义标题');

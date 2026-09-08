@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
+import 'package:tdesign_flutter_example/base/notification_center.dart';
 
 import 'demo_page_test_utils.dart';
 import 'steps_demo_test_spec.dart';
@@ -42,23 +45,35 @@ void main() {
     await disposeDemoPage(tester);
   });
 
-  testWidgets('Steps 查看代码片段不依赖 Demo 私有成员', (tester) async {
+  testWidgets('Steps 所有代码入口展示对应的实际生成片段', (tester) async {
     await pumpFullDemoPage(tester, stepsDemoPageTestSpec, ThemeMode.light);
-
-    for (final name in const [
+    const names = [
       '_buildHorizontalDefault',
       '_buildHorizontalIcon',
       '_buildHorizontalDot',
       '_buildVerticalDefault',
       '_buildVerticalIcon',
       '_buildVerticalDot',
+      '_buildCustomContent',
       '_buildErrorStates',
-    ]) {
+      '_buildVerticalSelectable',
+      '_buildDisplaySteps',
+    ];
+    TNotification.postNotification('onApiVisibleChange', {'apiVisible': true});
+    await tester.pumpAndSettle();
+    expect(find.byType(CodeWrapper), findsNWidgets(names.length));
+    for (var index = 0; index < names.length; index++) {
+      final name = names[index];
       final source = await rootBundle.loadString('assets/code/steps.$name.txt');
-      expect(source, contains('TStepsItemData'));
-      expect(source, isNot(contains('_defaultItems')));
-      expect(source, isNot(contains('_iconItems')));
-      expect(source, isNot(contains('_errorItems')));
+      final wrapper = find.byType(CodeWrapper).at(index);
+      await tester.tap(
+        find.descendant(of: wrapper, matching: find.text('code')),
+      );
+      await tester.pumpAndSettle();
+      final panel = find.byType(Markdown);
+      expect(tester.widget<Markdown>(panel).data, contains(source));
+      Navigator.of(tester.element(panel)).pop();
+      await tester.pumpAndSettle();
     }
 
     await disposeDemoPage(tester);

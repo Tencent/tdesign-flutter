@@ -7,9 +7,9 @@
 | direction | TStepsDirection | TStepsDirection.horizontal | 步骤条方向 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onChange | ValueChanged<int>? | - | 用户选择步骤时触发；为空时组件为只读，通过更新 `value` 实现受控模式。 垂直步骤条设置回调后会显示右侧箭头并允许选择。 |
-| status | TStepsStatus | TStepsStatus.process | 当前 `value` 对应步骤的状态。 |
+| status | TStepsStatus | TStepsStatus.process | 当前 `value` 对应步骤的状态；display 形态忽略此值。 |
 | steps | List<TStepsItemData> | - | 步骤条数据 |
-| value | int | 0 | 步骤条当前激活的索引；越界值会收敛到有效范围。 |
+| value | int | 0 | 步骤条当前激活的索引；越界值会收敛到有效范围，display 形态忽略此值。 |
 | variant | TStepsVariant | TStepsVariant.standard | 步骤条视觉形态。 |
 
 
@@ -44,7 +44,7 @@
 | --- | --- |
 | standard | 标准的数字或图标步骤条。 |
 | dot | 点状步骤条，状态仍由 `TSteps.value` 和 `TSteps.status` 决定。 |
-| display | 纯展示时间线，所有节点与连接线均使用完成态视觉。 |
+| display | 横向与纵向均显示实心节点及完成态连线，不受 value/status 影响。 是否可选择仍由 `TSteps.onChange` 决定。 |
 
 
 ### TStepsStatus

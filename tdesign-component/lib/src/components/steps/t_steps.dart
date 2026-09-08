@@ -56,7 +56,9 @@ enum TStepsVariant {
   /// 点状步骤条，状态仍由 [TSteps.value] 和 [TSteps.status] 决定。
   dot,
 
-  /// 纯展示时间线，所有节点与连接线均使用完成态视觉。
+  /// 横向与纵向均显示实心节点及完成态连线，不受 value/status 影响。
+  ///
+  /// 是否可选择仍由 [TSteps.onChange] 决定。
   display,
 }
 
@@ -87,10 +89,10 @@ class TSteps extends StatelessWidget {
   /// 步骤条方向
   final TStepsDirection direction;
 
-  /// 步骤条当前激活的索引；越界值会收敛到有效范围。
+  /// 步骤条当前激活的索引；越界值会收敛到有效范围，display 形态忽略此值。
   final int value;
 
-  /// 当前 [value] 对应步骤的状态。
+  /// 当前 [value] 对应步骤的状态；display 形态忽略此值。
   final TStepsStatus status;
 
   /// 步骤条视觉形态。

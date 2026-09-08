@@ -13,7 +13,6 @@ class TStepsPage extends StatefulWidget {
 
 class _TStepsPageState extends State<TStepsPage> {
   static const _itemPadding = EdgeInsets.symmetric(horizontal: 16);
-
   int _selectedStep = 3;
 
   @override
@@ -32,36 +31,43 @@ class _TStepsPageState extends State<TStepsPage> {
               desc: 'Horizontal Default Steps 水平默认步骤条',
               padding: _itemPadding,
               builder: _buildHorizontalDefault,
+              methodName: '_buildHorizontalDefault',
             ),
             ExampleItem(
               desc: 'Horizontal Icon Steps 水平图标步骤条',
               padding: _itemPadding,
               builder: _buildHorizontalIcon,
+              methodName: '_buildHorizontalIcon',
             ),
             ExampleItem(
               desc: 'Horizontal Dot Steps 水平简略步骤条',
               padding: _itemPadding,
               builder: _buildHorizontalDot,
+              methodName: '_buildHorizontalDot',
             ),
             ExampleItem(
               desc: 'Vertical Default Steps 垂直默认步骤条',
               padding: _itemPadding,
               builder: _buildVerticalDefault,
+              methodName: '_buildVerticalDefault',
             ),
             ExampleItem(
               desc: 'Vertical Icon Steps 垂直图标步骤条',
               padding: _itemPadding,
               builder: _buildVerticalIcon,
+              methodName: '_buildVerticalIcon',
             ),
             ExampleItem(
               desc: 'Vertical Dot Steps 垂直简略步骤条',
               padding: _itemPadding,
               builder: _buildVerticalDot,
+              methodName: '_buildVerticalDot',
             ),
             ExampleItem(
               desc: 'Customize Steps Content 自定义步骤条内容',
               padding: _itemPadding,
               builder: _buildCustomContent,
+              methodName: '_buildCustomContent',
             ),
           ],
         ),
@@ -72,6 +78,7 @@ class _TStepsPageState extends State<TStepsPage> {
               desc: 'Error 错误状态',
               padding: _itemPadding,
               builder: _buildErrorStates,
+              methodName: '_buildErrorStates',
             ),
           ],
         ),
@@ -82,11 +89,13 @@ class _TStepsPageState extends State<TStepsPage> {
               desc: 'Vertical Customize Steps 垂直自定义步骤条',
               padding: _itemPadding,
               builder: _buildVerticalSelectable,
+              methodName: '_buildVerticalSelectable',
             ),
             ExampleItem(
               desc: 'Read-only Steps 纯展示步骤条',
               padding: _itemPadding,
               builder: _buildDisplaySteps,
+              methodName: '_buildDisplaySteps',
             ),
           ],
         ),
@@ -268,6 +277,11 @@ class _TStepsPageState extends State<TStepsPage> {
   }
 
   /// Vertical Customize Steps 垂直自定义步骤条
+  ///
+  /// 核心片段：导入 Flutter material.dart 和 tdesign_flutter.dart，
+  /// 将此方法放在 StatefulWidget 的 State 中，由 build 调用。
+  /// State 声明 `int _selectedStep = 3;` 保存当前步骤；
+  /// 不在 build 中重新初始化，回调通过 setState 更新受控值。
   @ExampleCode(group: 'steps')
   Widget _buildVerticalSelectable(BuildContext context) {
     return TSteps(

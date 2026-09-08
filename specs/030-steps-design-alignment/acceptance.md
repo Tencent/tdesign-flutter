@@ -1,5 +1,20 @@
 # 验收记录
 
+## 2026-09-08 补充复审与修复
+
+本节为本轮结果；下方真机、构建及首轮检查是历史记录，不替代本轮证据。
+
+- 基于 PR head `79eff997` 修复；重新核对 `develop@3d5ed773` 未变化。
+- 修复横纵标题、内容和序号文字将默认值作为实例 style 传入的问题。内置 defaults 低于显式 TextTheme、DefaultTextStyle、TTextThemeData；只改字体族/字号不覆盖状态色，实例自定义 Widget 仍优先。
+- 新字段级解析仅对组合 defaults 生效；内部 `TTextThemeSource` 只读取原有投影快照，不导出、不持有新状态。无 defaults 的 TText 及其他组件维持原路径；试验性全局主题和共享消费者改动已撤回。
+- display 横纵均为全实心节点，忽略 value/status，交互仍只看 onChange。
+- 10 个公开代码入口逐个实际打开并与生成片段匹配；受控示例补充 State 初始字段和接入说明。10 份实际生成片段在最小宿主中编译/渲染，受控选择与反馈操作通过；临时拼接测试不作为独立示例实现提交。
+- Flutter 3.32.0 全部非视觉组件测试 2074/2074；3.47.0 Steps/Text/工具测试 73/73，Demo 与片段编译 13/13；两版本严格 analyze 零问题。
+- 生产覆盖率：Steps 238/239 = 99.58%，Text 219/222 = 98.65%。
+- Linux 3.32.0：Steps 整页与共享导航明暗 4 张基线更新后严格复跑。自动 Material 行高不再覆盖默认值，整页 375×3067 → 375×3055；共享导航仅 Steps 区域减少 2px，后续内容顺移。对照实际图/基线图，未见缺字、裁切或状态缺失。未设像素容差，复跑 diff 为 0。
+- 保留原路径的 Text/Button/ActionSheet 18 项结构与视觉测试通过，无需修改其基线。
+- 本轮未重新进行 Android/iOS 真机逐像素核对；不能将代码/Golden 验证等同于与设计稿逐像素完全一致。最新远端 CI 与 CNB Review 以推送后的结果为准。
+
 ## 2026-09-08 develop 同步复审
 
 - 已合并 `origin/develop@3d5ed773`；组件 API、状态所有权与 Token 路径无新增冲突，
@@ -46,6 +61,6 @@
 - 独立 Steps CJK 子集消除 Linux 缺字方框；深色仅改变语义颜色，不改变结构。
 - 共享导航 Golden 在 macOS 的全画布字体抗锯齿差异未被误更新，保留 Linux 权威基线。
 
-## 待完成
+## 待完成（当前）
 
-- 独立 GitHub/CNB PR、Issue #1027 Steps 条目关联及 CodeBuddy Review。
+- GitHub #1084 / CNB #151 已存在；本轮新 head 的远端 CI 与 CodeBuddy Review 待推送后核验。

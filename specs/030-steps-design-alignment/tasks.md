@@ -8,5 +8,7 @@
 - [x] 生成并严格复跑 light/dark Golden，逐张人工检查
 - [x] 完成 Flutter 3.32.0 / latest analyze、测试与构建
 - [x] 完成 Android 真机集成测试与持久安装
-- [ ] 创建独立 GitHub/CNB PR并关联 #1027 对应条目
-- [ ] 完成 CodeBuddy Review 并处理反馈
+- [x] 已创建 GitHub #1084 / CNB #151；PR 描述关联 GitHub #1027
+- [x] 处理上一轮 CodeBuddy Review 反馈
+- [x] 补充逐字段主题、双轴 display、实际代码面板和核心片段编译回归
+- [ ] 本轮修复推送后，检查新 head CI 并完成新一轮 CNB Review

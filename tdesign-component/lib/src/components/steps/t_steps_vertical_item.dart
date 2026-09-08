@@ -5,6 +5,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
+import '../text/t_text_resolve.dart';
 import 't_steps.dart';
 
 /// Steps步骤条，垂直步骤item
@@ -92,10 +93,13 @@ class TStepsVerticalItem extends StatelessWidget {
     /// 步骤条icon图标组件，默认为索引文字
     Widget? stepsIconWidget = Text(
       (index + 1).toString(),
-      style: TextStyle(
-        color: stepsNumberTextColor,
-        fontWeight: FontWeight.w400,
-        fontSize: theme.fontBodyMedium?.size ?? 14,
+      style: TTextResolve.resolve(
+        context: context,
+        defaults: TextStyle(
+          color: stepsNumberTextColor,
+          fontWeight: FontWeight.w400,
+          fontSize: theme.fontBodyMedium?.size ?? 14,
+        ),
       ),
     );
 
@@ -220,15 +224,18 @@ class TStepsVerticalItem extends StatelessWidget {
                           Expanded(
                             child: TText(
                               data.title!,
-                              style: TextStyle(
-                                fontWeight:
-                                    (activeIndex == index &&
-                                        variant != TStepsVariant.display)
-                                    ? FontWeight.w600
-                                    : FontWeight.w400,
-                                color: stepsTitleColor,
-                                fontSize: theme.fontBodyMedium?.size ?? 14,
-                                height: 1.2,
+                              style: TTextResolve.resolve(
+                                context: context,
+                                defaults: TextStyle(
+                                  fontWeight:
+                                      (activeIndex == index &&
+                                          variant != TStepsVariant.display)
+                                      ? FontWeight.w600
+                                      : FontWeight.w400,
+                                  color: stepsTitleColor,
+                                  fontSize: theme.fontBodyMedium?.size ?? 14,
+                                  height: 1.2,
+                                ),
                               ),
                               softWrap: true,
                               overflow: TextOverflow.visible,
@@ -287,10 +294,13 @@ class TStepsVerticalItem extends StatelessWidget {
         else if (data.content != null && data.content!.isNotEmpty)
           TText(
             data.content!,
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              color: context.tTheme.textColorPlaceholder,
-              fontSize: context.tTheme.fontBodySmall?.size ?? 12,
+            style: TTextResolve.resolve(
+              context: context,
+              defaults: TextStyle(
+                fontWeight: FontWeight.w400,
+                color: context.tTheme.textColorPlaceholder,
+                fontSize: context.tTheme.fontBodySmall?.size ?? 12,
+              ),
             ),
           ),
       ],

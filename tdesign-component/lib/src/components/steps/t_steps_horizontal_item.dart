@@ -5,6 +5,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
+import '../text/t_text_resolve.dart';
 import 't_steps.dart';
 
 /// Steps步骤条，水平步骤item
@@ -88,10 +89,13 @@ class TStepsHorizontalItem extends StatelessWidget {
     /// 步骤条icon图标组件，默认为索引文字
     Widget? stepsIconWidget = Text(
       (index + 1).toString(),
-      style: TextStyle(
-        color: stepsNumberTextColor,
-        fontWeight: FontWeight.w400,
-        fontSize: theme.fontBodyMedium?.size ?? 14,
+      style: TTextResolve.resolve(
+        context: context,
+        defaults: TextStyle(
+          color: stepsNumberTextColor,
+          fontWeight: FontWeight.w400,
+          fontSize: theme.fontBodyMedium?.size ?? 14,
+        ),
       ),
     );
 
@@ -150,7 +154,7 @@ class TStepsHorizontalItem extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(color: simpleStepsIconColor, width: 1),
       );
-      if (activeIndex == index && variant != TStepsVariant.display) {
+      if (variant == TStepsVariant.display || activeIndex == index) {
         simpleDecoration = BoxDecoration(
           color: simpleStepsIconColor,
           shape: BoxShape.circle,
@@ -239,12 +243,16 @@ class TStepsHorizontalItem extends StatelessWidget {
       alignment: Alignment.center,
       child: TText(
         title,
-        style: TextStyle(
-          fontWeight: (activeIndex == index && variant != TStepsVariant.display)
-              ? FontWeight.w600
-              : FontWeight.w400,
-          color: stepsTitleColor,
-          fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
+        style: TTextResolve.resolve(
+          context: context,
+          defaults: TextStyle(
+            fontWeight:
+                (activeIndex == index && variant != TStepsVariant.display)
+                ? FontWeight.w600
+                : FontWeight.w400,
+            color: stepsTitleColor,
+            fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
+          ),
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -261,10 +269,13 @@ class TStepsHorizontalItem extends StatelessWidget {
           data.customContent ??
           TText(
             data.content ?? '',
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              color: context.tTheme.textColorPlaceholder,
-              fontSize: context.tTheme.fontBodySmall?.size ?? 12,
+            style: TTextResolve.resolve(
+              context: context,
+              defaults: TextStyle(
+                fontWeight: FontWeight.w400,
+                color: context.tTheme.textColorPlaceholder,
+                fontSize: context.tTheme.fontBodySmall?.size ?? 12,
+              ),
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
