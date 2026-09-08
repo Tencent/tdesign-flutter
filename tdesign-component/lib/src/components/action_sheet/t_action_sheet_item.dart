@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
-import '../badge/t_badge.dart';
 import 't_action_sheet_theme_data.dart';
 
 /// 动作面板项目
-class TActionSheetItem {
-  TActionSheetItem({
+class TActionSheetItem<T> {
+  const TActionSheetItem({
+    required this.value,
     required this.label,
     this.textStyle,
     this.icon,
     this.badge,
     this.subtitle,
     this.disabled = false,
-    this.group,
   });
+
+  /// 稳定的业务值
+  final T value;
 
   /// 标题
   final String label;
@@ -26,16 +28,14 @@ class TActionSheetItem {
   /// 未显式设置尺寸或颜色的 [Icon] 会继承 [TActionSheetThemeData]。
   final Widget? icon;
 
-  /// 角标
-  final TBadge? badge;
+  /// 角标槽位。
+  ///
+  /// 列表模式下跟随标题展示；宫格模式下仅在 [icon] 非空时展示在图标右上角。
+  final Widget? badge;
 
   /// 是否禁用
   final bool disabled;
 
-  /// 分组，用于带描述多行滚动宫格
-  /// 仅分组动作面板使用；未配置时该项目不会进入任何分组
-  final String? group;
-
-  /// 描述信息
+  /// 列表模式下的描述信息；宫格模式不展示。
   final String? subtitle;
 }

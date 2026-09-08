@@ -503,13 +503,13 @@ void main() {
       expect(heightAfter, greaterThan(heightBefore));
     });
 
-    testWidgets('firstDayOfWeek = 1（周一开始）正常渲染', (tester) async {
+    testWidgets('firstDayOfWeek = monday（周一开始）正常渲染', (tester) async {
       await tester.pumpWidget(
         _buildTestApp(
           TCalendar(
             variant: TCalendarVariant.single,
             value: const [],
-            firstDayOfWeek: 1,
+            firstDayOfWeek: TCalendarFirstDayOfWeek.monday,
             minDate: _day(2024, 6, 1),
             maxDate: _day(2024, 6, 30),
             onChanged: (_) {},
@@ -570,14 +570,16 @@ class _RuntimeWeekStartHarness extends StatefulWidget {
 }
 
 class _RuntimeWeekStartHarnessState extends State<_RuntimeWeekStartHarness> {
-  int _firstDayOfWeek = 0;
+  TCalendarFirstDayOfWeek _firstDayOfWeek = TCalendarFirstDayOfWeek.sunday;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         TextButton(
-          onPressed: () => setState(() => _firstDayOfWeek = 1),
+          onPressed: () => setState(
+            () => _firstDayOfWeek = TCalendarFirstDayOfWeek.monday,
+          ),
           child: const Text('切到周一'),
         ),
         Expanded(

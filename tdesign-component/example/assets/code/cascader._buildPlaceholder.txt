@@ -1,8 +1,0 @@
-Widget _buildPlaceholder(BuildContext context) {
-    return TCascader(
-      options: _options,
-      value: _placeholderValue,
-      placeholder: '请选择下一级',
-      onChanged: (value) => setState(() => _placeholderValue = value),
-    );
-  }

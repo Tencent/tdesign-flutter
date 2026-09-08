@@ -1,0 +1,4 @@
+Widget _buildDotIconBadge(BuildContext context) => const TBadge(
+    variant: TBadgeVariant.dot,
+    child: Icon(TIcons.notification),
+  );

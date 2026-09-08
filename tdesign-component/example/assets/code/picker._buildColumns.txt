@@ -1,7 +1,0 @@
-Widget _buildColumns(BuildContext context) {
-    return TPicker(
-      items: _columns,
-      value: _columnValue,
-      onChanged: (value) => setState(() => _columnValue = value.values),
-    );
-  }

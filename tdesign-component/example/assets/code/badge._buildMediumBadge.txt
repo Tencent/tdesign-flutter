@@ -1,6 +1,5 @@
-Widget _buildMediumBadge(BuildContext context) {
-    return TBadge(
-      label: '$num',
-      child: const TAvatar(size: TAvatarSize.medium),
-    );
-  }
+Widget _buildMediumBadge(BuildContext context) => const TBadge(
+    label: '8',
+    size: TBadgeSize.medium,
+    child: TAvatar(size: TAvatarSize.medium),
+  );

@@ -87,12 +87,15 @@
     {
       "slug": "back-top",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/backtop/t_backtop.dart"
+        "type": "folder",
+        "path": "lib/src/components/backtop"
       },
       "api": {
         "names": [
-          "TBackTop"
+          "TBackTop",
+          "TBackTopThemeData",
+          "TBackTopShape",
+          "TBackTopColorScheme"
         ],
         "getComments": false
       }
@@ -106,8 +109,13 @@
       "api": {
         "names": [
           "TDrawer",
-          "TDrawerWidget",
+          "TDrawerHandle",
+          "TDrawerPlacement",
+          "TDrawerThemeData",
           "TDrawerItem"
+        ],
+        "functions": [
+          "showTDrawer"
         ],
         "getComments": true
       }
@@ -122,7 +130,8 @@
         "names": [
           "TIndexes",
           "TIndexesAnchor",
-          "TIndexesList"
+          "TIndexesList",
+          "TIndexesThemeData"
         ],
         "getComments": true
       }
@@ -198,7 +207,9 @@
           "TTabsBar",
           "TTab",
           "TTabsBarView",
-          "TTabsBarIndicator"
+          "TTabsBarIndicator",
+          "TTabsBarThemeData",
+          "TTabsBarVariant"
         ],
         "getComments": false
       }
@@ -227,7 +238,10 @@
       },
       "api": {
         "names": [
-          "TMultiCascader"
+          "TCascader",
+          "TCascaderOption",
+          "TCascaderThemeData",
+          "TCascaderVariant"
         ],
         "getComments": false
       }
@@ -469,14 +483,15 @@
     {
       "slug": "badge",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/badge/t_badge.dart"
+        "type": "folder",
+        "path": "lib/src/components/badge"
       },
       "api": {
         "names": [
-          "TBadge"
+          "TBadge",
+          "TBadgeThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -678,7 +693,10 @@
           "TActionSheetItem",
           "TActionSheet",
           "TActionSheetThemeData",
-          "TActionSheetAlign"
+          "TActionSheetAlign",
+          "TActionSheetGridLayout",
+          "TActionSheetGridMode",
+          "TActionSheetOnSelected"
         ],
         "getComments": true
       }

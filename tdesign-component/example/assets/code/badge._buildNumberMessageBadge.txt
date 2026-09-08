@@ -1,0 +1,4 @@
+Widget _buildNumberMessageBadge(BuildContext context) => TBadge(
+    label: '8',
+    child: TText('消息', font: context.tTheme.fontBodyLarge),
+  );

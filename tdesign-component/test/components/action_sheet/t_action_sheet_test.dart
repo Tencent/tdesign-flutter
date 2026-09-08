@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/action_sheet/t_action_sheet_grid.dart';
-import 'package:tdesign_flutter/src/components/action_sheet/t_action_sheet_group.dart';
 import 'package:tdesign_flutter/src/components/action_sheet/t_action_sheet_list.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -24,36 +23,95 @@ void main() {
     return key.currentContext!;
   }
 
-  List<TActionSheetItem> items() => [
-    TActionSheetItem(label: '拍照'),
-    TActionSheetItem(label: '相册'),
+  List<TActionSheetItem<String>> items() => const [
+    TActionSheetItem(value: 'camera', label: '拍照'),
+    TActionSheetItem(value: 'album', label: '相册'),
   ];
 
   group('TActionSheet 命令式入口', () {
     testWidgets('showList 返回句柄并在选择后关闭', (tester) async {
       final context = await pumpHost(tester);
-      TActionSheetItem? selected;
-      var selectedIndex = -1;
+      TActionSheetItem<String>? selected;
 
       final handle = TActionSheet.showList(
         context,
         items: items(),
-        onChanged: (item, index) {
-          selected = item;
-          selectedIndex = index;
-        },
+        onSelected: (item) => selected = item,
       );
       await tester.pumpAndSettle();
 
       expect(handle.isShowing, isTrue);
-      expect(find.byType(TActionSheetList), findsOneWidget);
+      expect(find.byType(TActionSheetList<String>), findsOneWidget);
       expect(find.text('拍照'), findsOneWidget);
 
       await tester.tap(find.text('相册'));
       await tester.pumpAndSettle();
       expect(selected?.label, '相册');
-      expect(selectedIndex, 1);
+      expect(selected?.value, 'album');
       expect(handle.isShowing, isFalse);
+    });
+
+    testWidgets('列表弹层按内容自适应高度', (tester) async {
+      final context = await pumpHost(tester);
+      final basicHandle = TActionSheet.showList(
+        context,
+        items: List.generate(
+          4,
+          (index) => TActionSheetItem(value: index, label: '选项 $index'),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(tester.getSize(find.byType(TActionSheetList<int>)).height, 280);
+      basicHandle.close();
+      await tester.pumpAndSettle();
+
+      final describedHandle = TActionSheet.showList(
+        context,
+        subtitle: 'Email Settings',
+        items: List.generate(
+          4,
+          (index) => TActionSheetItem(value: index, label: '选项 $index'),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(tester.getSize(find.byType(TActionSheetList<int>)).height, 326);
+      describedHandle.close();
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('空面板副标题与未设置的高度语义一致', (tester) async {
+      final context = await pumpHost(tester);
+      final listWithoutSubtitle = TActionSheetList.preferredPopupHeight(
+        context,
+        items: items(),
+        subtitle: null,
+        showCancel: true,
+      );
+      final listWithEmptySubtitle = TActionSheetList.preferredPopupHeight(
+        context,
+        items: items(),
+        subtitle: '',
+        showCancel: true,
+      );
+      final gridWithoutSubtitle = TActionSheetGrid.preferredPopupHeight(
+        context,
+        subtitle: null,
+        layout: const TActionSheetGridLayout.fixed(),
+        itemHeight: 96,
+        showCancel: true,
+      );
+      final gridWithEmptySubtitle = TActionSheetGrid.preferredPopupHeight(
+        context,
+        subtitle: '',
+        layout: const TActionSheetGridLayout.fixed(),
+        itemHeight: 96,
+        showCancel: true,
+      );
+
+      expect(listWithEmptySubtitle, listWithoutSubtitle);
+      expect(gridWithEmptySubtitle, gridWithoutSubtitle);
     });
 
     testWidgets('关闭动画期间重复点击不会重复回调或弹出宿主页', (tester) async {
@@ -62,7 +120,7 @@ void main() {
       TActionSheet.showList(
         context,
         items: items(),
-        onChanged: (_, __) => changedCount++,
+        onSelected: (_) => changedCount++,
       );
       await tester.pumpAndSettle();
 
@@ -88,8 +146,12 @@ void main() {
       final handle = TActionSheet.showList(
         context,
         items: [
-          TActionSheetItem(label: longLabel),
-          TActionSheetItem(label: '带描述', subtitle: '辅助说明'),
+          const TActionSheetItem(value: 'long', label: longLabel),
+          const TActionSheetItem(
+            value: 'described',
+            label: '带描述',
+            subtitle: '辅助说明',
+          ),
         ],
       );
       await tester.pumpAndSettle();
@@ -102,7 +164,7 @@ void main() {
       final shell = tester
           .widgetList<Container>(
             find.ancestor(
-              of: find.byType(TActionSheetList),
+              of: find.byType(TActionSheetList<String>),
               matching: find.byType(Container),
             ),
           )
@@ -121,7 +183,7 @@ void main() {
       final listContainer = tester
           .widgetList<Container>(
             find.descendant(
-              of: find.byType(TActionSheetList),
+              of: find.byType(TActionSheetList<String>),
               matching: find.byType(Container),
             ),
           )
@@ -141,7 +203,7 @@ void main() {
 
       final itemContainers = tester.widgetList<Container>(
         find.descendant(
-          of: find.byType(TActionSheetList),
+          of: find.byType(TActionSheetList<String>),
           matching: find.byType(Container),
         ),
       );
@@ -158,8 +220,8 @@ void main() {
       expect(
         itemContainers.any(
           (container) =>
-              container.constraints?.minHeight == 78 &&
-              container.constraints?.maxHeight == 78 &&
+              container.constraints?.minHeight == 84 &&
+              container.constraints?.maxHeight == 84 &&
               container.decoration is BoxDecoration &&
               (container.decoration! as BoxDecoration).border != null,
         ),
@@ -193,35 +255,48 @@ void main() {
       expect(textBox.width, lessThanOrEqualTo(160));
     });
 
-    testWidgets('showGrid 传递分页和尺寸配置', (tester) async {
+    testWidgets('showGrid 传递互斥分页布局和 Theme 宫格视觉尺寸', (tester) async {
       final context = await pumpHost(
         tester,
-        theme: const TActionSheetThemeData(
-          defaultAlign: TActionSheetAlign.left,
-          count: 4,
-          rows: 1,
-          itemHeight: 88,
-          itemMinWidth: 72,
-        ),
+        theme: const TActionSheetThemeData(gridItemHeight: 88),
       );
 
       final handle = TActionSheet.showGrid(
         context,
         items: items(),
-        showPagination: true,
+        layout: const TActionSheetGridLayout.paged(count: 4, rows: 1),
       );
       await tester.pumpAndSettle();
 
-      final grid = tester.widget<TActionSheetGrid>(
-        find.byType(TActionSheetGrid),
+      final grid = tester.widget<TActionSheetGrid<String>>(
+        find.byType(TActionSheetGrid<String>),
       );
-      expect(grid.align, TActionSheetAlign.left);
-      expect(grid.count, 4);
-      expect(grid.rows, 1);
+      expect(grid.layout.mode, TActionSheetGridMode.paged);
+      expect(grid.layout.count, 4);
+      expect(grid.layout.rows, 1);
       expect(grid.itemHeight, 88);
-      expect(grid.itemMinWidth, 72);
-      expect(grid.showPagination, isTrue);
       expect(grid.useSafeArea, isFalse);
+
+      handle.close();
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('showGrid 未配置 itemMinWidth 时保持自适应宽度', (tester) async {
+      final context = await pumpHost(tester);
+
+      final handle = TActionSheet.showGrid(
+        context,
+        items: items(),
+        layout: const TActionSheetGridLayout.scroll(),
+      );
+      await tester.pumpAndSettle();
+
+      final grid = tester.widget<TActionSheetGrid<String>>(
+        find.byType(TActionSheetGrid<String>),
+      );
+      expect(grid.layout.count, 8);
+      expect(grid.layout.rows, 2);
+      expect(grid.layout.itemMinWidth, isNull);
 
       handle.close();
       await tester.pumpAndSettle();
@@ -234,14 +309,14 @@ void main() {
         subtitle: '选择分享方式',
         items: List.generate(
           6,
-          (index) => TActionSheetItem(label: '分享方式 $index'),
+          (index) => TActionSheetItem(value: index, label: '分享方式 $index'),
         ),
       );
       await tester.pumpAndSettle();
 
       final positioned = tester.widgetList<Positioned>(
         find.ancestor(
-          of: find.byType(TActionSheetGrid),
+          of: find.byType(TActionSheetGrid<int>),
           matching: find.byType(Positioned),
         ),
       );
@@ -263,7 +338,7 @@ void main() {
         subtitle: '选择分享方式',
         items: List.generate(
           6,
-          (index) => TActionSheetItem(label: '分享方式 $index'),
+          (index) => TActionSheetItem(value: index, label: '分享方式 $index'),
         ),
       );
       await tester.pumpAndSettle();
@@ -271,31 +346,6 @@ void main() {
       final grid = tester.widget<GridView>(find.byType(GridView));
       expect(grid.physics, isA<AlwaysScrollableScrollPhysics>());
       expect(tester.takeException(), isNull);
-
-      handle.close();
-      await tester.pumpAndSettle();
-    });
-
-    testWidgets('showGroup 渲染分组内容', (tester) async {
-      final context = await pumpHost(tester);
-      final handle = TActionSheet.showGroup(
-        context,
-        items: [
-          TActionSheetItem(label: '编辑', group: '常用'),
-          TActionSheetItem(label: '删除', group: '危险'),
-        ],
-      );
-      await tester.pumpAndSettle();
-
-      expect(find.byType(TActionSheetGroup), findsOneWidget);
-      expect(find.text('常用'), findsOneWidget);
-      expect(find.text('危险'), findsOneWidget);
-      expect(
-        tester
-            .widget<TActionSheetGroup>(find.byType(TActionSheetGroup))
-            .useSafeArea,
-        isFalse,
-      );
 
       handle.close();
       await tester.pumpAndSettle();
@@ -328,7 +378,7 @@ void main() {
         showOverlay: false,
         closeOnOverlayClick: false,
         useSafeArea: false,
-        scrollable: true,
+        layout: const TActionSheetGridLayout.scroll(),
         onClosed: () => closed = true,
       );
       await tester.pumpAndSettle();
@@ -363,13 +413,15 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         tester
-            .widget<TActionSheetList>(find.byType(TActionSheetList))
+            .widget<TActionSheetList<String>>(
+              find.byType(TActionSheetList<String>),
+            )
             .useSafeArea,
         isFalse,
       );
       final safePositioned = tester.widgetList<Positioned>(
         find.ancestor(
-          of: find.byType(TActionSheetList),
+          of: find.byType(TActionSheetList<String>),
           matching: find.byType(Positioned),
         ),
       );
@@ -386,13 +438,15 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         tester
-            .widget<TActionSheetList>(find.byType(TActionSheetList))
+            .widget<TActionSheetList<String>>(
+              find.byType(TActionSheetList<String>),
+            )
             .useSafeArea,
         isFalse,
       );
       final unsafePositioned = tester.widgetList<Positioned>(
         find.ancestor(
-          of: find.byType(TActionSheetList),
+          of: find.byType(TActionSheetList<String>),
           matching: find.byType(Positioned),
         ),
       );
@@ -407,7 +461,7 @@ void main() {
         context,
         items: List.generate(
           20,
-          (index) => TActionSheetItem(label: '选项 $index'),
+          (index) => TActionSheetItem(value: index, label: '选项 $index'),
         ),
         showCancel: false,
       );
@@ -419,56 +473,33 @@ void main() {
       handle.close();
       await tester.pumpAndSettle();
     });
-
-    testWidgets('多分组在小屏下可滚动且不溢出', (tester) async {
-      final context = await pumpHost(tester);
-      final handle = TActionSheet.showGroup(
-        context,
-        items: List.generate(
-          12,
-          (index) => TActionSheetItem(label: '选项 $index', group: '分组 $index'),
-        ),
-        showCancel: false,
-      );
-      await tester.pumpAndSettle();
-
-      expect(tester.takeException(), isNull);
-      final listView = tester.widget<ListView>(find.byType(ListView).first);
-      expect(listView.scrollDirection, Axis.vertical);
-      expect(listView.physics, isNot(const NeverScrollableScrollPhysics()));
-      handle.close();
-      await tester.pumpAndSettle();
-    });
   });
 
   group('TActionSheetThemeData', () {
-    test('merge/copyWith/lerp 保留视觉布局字段', () {
+    test('merge/copyWith/lerp 只处理视觉字段', () {
       const base = TActionSheetThemeData(
-        defaultAlign: TActionSheetAlign.left,
-        itemHeight: 80,
-        count: 4,
+        gridItemHeight: 80,
         barrierColor: Colors.black,
         iconSize: 24,
         iconColor: Colors.blue,
       );
       const override = TActionSheetThemeData(
-        itemHeight: 96,
+        gridItemHeight: 96,
         panelRadius: 12,
         gridIconExtent: 56,
         iconColor: Colors.red,
       );
 
       final merged = base.merge(override);
-      expect(merged.defaultAlign, TActionSheetAlign.left);
-      expect(merged.itemHeight, 96);
+      expect(merged.gridItemHeight, 96);
       expect(merged.panelRadius, 12);
       expect(merged.iconSize, 24);
       expect(merged.gridIconExtent, 56);
       expect(merged.iconColor, Colors.red);
 
-      final copied = merged.copyWith(rows: 3);
-      expect(copied.rows, 3);
-      expect(copied.count, 4);
+      final copied = merged.copyWith(iconSize: 32);
+      expect(copied.iconSize, 32);
+      expect(copied.gridItemHeight, 96);
 
       final lerped = base.lerp(override, 0.75);
       expect(lerped.panelRadius, 9);

@@ -1,20 +1,39 @@
 Widget _multiple(BuildContext context) {
-    var selected = <String>{'phone'};
+    var singleColumn = <String>{'option-1'};
+    var doubleColumn = <String>{'option-1'};
+    var tripleColumn = <String>{'option-1'};
     return StatefulBuilder(
       builder: (context, setState) {
+        TDropdownMenuItem menuItem(
+          String label,
+          int columns,
+          Set<String> selected,
+          ValueChanged<Set<String>> onConfirm,
+        ) {
+          return TDropdownMenuItem(
+            label: label,
+            panelBuilder: (context, controller) =>
+                TDropdownMultiSelectPanel<String>(
+                  controller: controller,
+                  options: categoryOptions,
+                  values: selected,
+                  columns: columns,
+                  onConfirm: onConfirm,
+                ),
+          );
+        }
+
         return TDropdownMenu(
           items: [
-            TDropdownMenuItem(
-              label: selected.isEmpty ? '全部分类' : '已选 ${selected.length} 项',
-              panelBuilder: (context, controller) =>
-                  TDropdownMultiSelectPanel<String>(
-                controller: controller,
-                options: categoryOptions,
-                values: selected,
-                columns: 3,
-                onConfirm: (values) => setState(() => selected = values),
-              ),
-            ),
+            menuItem('单列多选', 1, singleColumn, (values) {
+              setState(() => singleColumn = values);
+            }),
+            menuItem('双列多选', 2, doubleColumn, (values) {
+              setState(() => doubleColumn = values);
+            }),
+            menuItem('三列多选', 3, tripleColumn, (values) {
+              setState(() => tripleColumn = values);
+            }),
           ],
         );
       },

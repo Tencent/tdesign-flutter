@@ -1,29 +1,38 @@
 Widget _buildBottomSimple(BuildContext context) {
+  const menuLabels = ['菜单一', '菜单二', '菜单三', '菜单四', '菜单五', '菜单六', '菜单七', '菜单八'];
+  final items = [
+    for (final label in [...menuLabels, ...menuLabels.skip(3)])
+      TDrawerItem(title: label),
+  ];
   return SizedBox(
     width: double.infinity,
     child: TButton(
-      child: const TText('带底部插槽样式'),
+      size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
-      size: TButtonSize.large,
       onPressed: () {
-        TDrawer(
+        showTDrawer(
           context,
-          title: const TText('标题'),
           placement: TDrawerPlacement.left,
-          items: List.generate(drawerItemLength,
-              (index) => TDrawerItem(title: '菜单${index + 1}')),
-          footer: SizedBox(
-            width: double.infinity,
-            child: TButton(
-              child: const TText('操作'),
-              variant: TButtonVariant.outline,
-              size: TButtonSize.large,
-              onPressed: () {},
+          drawer: TDrawer(
+            title: const TText('标题'),
+            items: items,
+            footer: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+              child: SizedBox(
+                width: double.infinity,
+                child: TButton(
+                  size: TButtonSize.large,
+                  variant: TButtonVariant.outline,
+                  onPressed: () {},
+                  child: const TText('操作'),
+                ),
+              ),
             ),
           ),
-        ).show();
+        );
       },
+      child: const TText('带底部插槽'),
     ),
   );
 }

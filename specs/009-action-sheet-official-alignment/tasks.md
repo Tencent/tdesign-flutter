@@ -1,0 +1,27 @@
+# 实施任务
+
+- [x] DONE 读取官方小程序 Demo 并明确验收边界
+- [x] DONE 对齐描述项高度与颜色 token
+- [x] DONE 补充样式回归测试
+- [x] DONE 保留并生成 13 个 Example 场景代码片段
+- [x] DONE 统一 `count` / `rows` 在默认、分页和滚动宫格中的容量与密度语义
+- [x] DONE 修正滚动宫格按总数据分行导致的初始项目顺序
+- [x] DONE 补充 `8 / 2`、`10 / 2`、显式最小宽度和非法组合测试
+- [x] DONE 在 Flutter 3.32.0 Linux 更新并复跑多行滚动宫格 light/dark Golden
+- [x] DONE 统一常规宫格与多行滚动宫格首屏数据并锁定 Item 视觉一致性
+- [x] DONE 补齐 Golden 字体缺失字形并重生成受影响的明暗快照
+- [x] DONE 统一宫格布局路径的回调索引换算，并补充 `itemMinWidth` 旧默认值迁移说明
+- [x] DONE 删除 Group 能力并新增互斥 `TActionSheetGridLayout`
+- [x] DONE 收紧 Badge 槽位、Item 非空状态与图标样式所有权
+- [x] DONE 将 Item/回调/Theme 所有权迁移到无兼容的新契约
+- [x] DONE 迁移 13 个 Demo、站点文档和 ActionSheet 全部测试
+- [x] DONE 完成新 API 的双版本、Golden、覆盖率与真机验证
+- [x] DONE 完成双 Flutter 版本、覆盖率与代码生成检查
+- [x] DONE 完成真实运行时页面与列表弹层截图验收
+- [ ] TODO 完成全部入口的真机连续交互验收
+- [x] DONE 完成最终 Review
+- [x] DONE 移除 `showGrid.align` 的误导性作用域并锁定宫格居中契约
+- [x] DONE 将 Theme 宫格高度字段收敛为 `gridItemHeight`
+- [x] DONE 登记宫格布局与回调公开类型并重建 API 文档
+- [x] DONE 修正列表徽标右上角锚定并对齐公开 Demo 徽标数据
+- [x] DONE 补充列表徽标位置、窄屏溢出与真机视觉回归

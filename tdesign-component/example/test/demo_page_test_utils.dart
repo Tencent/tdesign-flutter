@@ -28,6 +28,8 @@ class DemoPageTestSpec {
     this.supplementalCjkFontFamily,
     this.supplementalCjkFontPath,
     this.precacheAssetImages = const [],
+    this.goldenAtPhoneViewport = false,
+    this.phoneViewportHeight = _initialPageHeight,
   }) : assert(
          (supplementalCjkFontFamily == null) ==
              (supplementalCjkFontPath == null),
@@ -44,6 +46,8 @@ class DemoPageTestSpec {
   final String? supplementalCjkFontFamily;
   final String? supplementalCjkFontPath;
   final List<String> precacheAssetImages;
+  final bool goldenAtPhoneViewport;
+  final double phoneViewportHeight;
 }
 
 void registerDemoPageTests(DemoPageTestSpec spec) {
@@ -81,7 +85,11 @@ void registerDemoGoldenTests(DemoPageTestSpec spec) {
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('${spec.name} ${mode.name} Demo golden', (tester) async {
-      await pumpFullDemoPage(tester, spec, mode);
+      if (spec.goldenAtPhoneViewport) {
+        await pumpDemoPageAtPhoneViewport(tester, spec, mode);
+      } else {
+        await pumpFullDemoPage(tester, spec, mode);
+      }
 
       await expectLater(
         find.byKey(ValueKey('${spec.name}-demo-page')),
@@ -208,7 +216,7 @@ Future<void> pumpDemoPageAtPhoneViewport(
   DemoPageTestSpec spec,
   ThemeMode mode,
 ) async {
-  tester.view.physicalSize = const Size(_pageWidth, _initialPageHeight);
+  tester.view.physicalSize = Size(_pageWidth, spec.phoneViewportHeight);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.resetPhysicalSize);
   addTearDown(tester.view.resetDevicePixelRatio);
@@ -251,10 +259,32 @@ ThemeData _withGoldenFonts(ThemeData theme, DemoPageTestSpec spec) {
     if (spec.useAlignmentCjkFont) _alignmentCjkFontFamily,
     if (spec.supplementalCjkFontFamily case final family?) family,
   ];
-  return theme.copyWith(
+  final withFonts = theme.copyWith(
     textTheme: theme.textTheme.apply(fontFamilyFallback: fallback),
     primaryTextTheme: theme.primaryTextTheme.apply(
       fontFamilyFallback: fallback,
+    ),
+  );
+  if (spec.name != 'dialog') {
+    return withFonts;
+  }
+  final token = theme.extension<TThemeData>() ?? TThemeData.defaultData();
+  return withFonts.mergeExtension(
+    TDialogThemeData(
+      titleTextStyle: TextStyle(
+        fontFamily: _feedbackGoldenCjkFontFamily,
+        color: token.textColorPrimary,
+        fontSize: token.fontTitleLarge?.size ?? 18,
+        height: token.fontTitleLarge?.height ?? 26 / 18,
+        fontWeight: token.fontTitleLarge?.fontWeight ?? FontWeight.w600,
+      ),
+      contentTextStyle: TextStyle(
+        fontFamily: _feedbackGoldenCjkFontFamily,
+        color: token.textColorSecondary,
+        fontSize: token.fontBodyLarge?.size ?? 16,
+        height: token.fontBodyLarge?.height ?? 24 / 16,
+        fontWeight: token.fontBodyLarge?.fontWeight ?? FontWeight.w400,
+      ),
     ),
   );
 }
