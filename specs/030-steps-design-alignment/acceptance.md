@@ -1,5 +1,14 @@
 # 验收记录
 
+## 2026-09-09 命名构造收敛
+
+- 移除未命名 `TSteps(...)` 与同时混合指示器/使用模式的 `TStepsVariant`。
+- `TSteps.progress` 可选 `onChange` 只启用点击，横纵 `dot` 保持相同进度视觉；`TSteps.selectable` 固定垂直点状、必填回调并显示右箭头；`TSteps.display` 不接收进度、状态或交互参数。
+- 公开 Demo、站点文档、生成 API、组件和交互测试同步到新契约。
+- Flutter 3.32.0 与 3.47.0 组件测试均为 28/28、Demo 测试均为 3/3，组件和 Example 严格 analyze 零问题；3.32.0 生产源码覆盖率 245/246 = 99.59%，生成片段 `--check` 通过。
+- 已合并 `origin/develop@335b30bc`；合并后的 Flutter 3.32.0 analyze、Steps 组件测试 28/28、Demo 测试 3/3 通过。macOS 本地共享导航 Golden 差异 light 2.71% / dark 2.67%，未覆盖 Linux 权威基线。
+- Xiaomi Android 16 真机集成测试 1/1 通过，普通 Example 再次安装并核对浅色、深色、滚动、选择与 Toast；选择后受控 `value` 正确更新。当前 Demo 的步骤标题为静态数据，点击后不会像小程序 Demo 一样随索引切换“已完成 / 当前 / 未完成”文案，留给本轮针对性 Review 判断是否应作为 Demo 对齐问题修正。
+
 ## 2026-09-08 最新 develop 同步与公开契约复审
 
 - 已合并 `origin/develop@d2ff7a0a`，保留 Cascader、SideBar 与 Popover 的新增

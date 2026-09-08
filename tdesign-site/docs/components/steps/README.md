@@ -22,7 +22,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="dart">
-const TSteps(
+const TSteps.progress(
   value: 1,
   steps: [
     TStepsItemData(title: '已完成', content: '辅助信息'),
@@ -36,7 +36,7 @@ const TSteps(
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="dart">
-const TSteps(
+const TSteps.progress(
   value: 1,
   direction: TStepsDirection.vertical,
   steps: [
@@ -50,12 +50,12 @@ const TSteps(
 
 ### 图标与点状步骤条
 
-通过 `icon` 自定义步骤图标；`variant: TStepsVariant.dot` 显示点状步骤条。
+通过 `icon` 自定义步骤图标；`indicator: TStepsIndicator.dot` 显示点状步骤条。
 
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="dart">
-const TSteps(
+const TSteps.progress(
   value: 1,
   steps: [
     TStepsItemData(title: '已完成', icon: TIcons.cart),
@@ -69,9 +69,9 @@ const TSteps(
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="dart">
-const TSteps(
+const TSteps.progress(
   value: 1,
-  variant: TStepsVariant.dot,
+  indicator: TStepsIndicator.dot,
   steps: [
     TStepsItemData(title: '已完成'),
     TStepsItemData(title: '进行中'),
@@ -88,7 +88,7 @@ const TSteps(
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="dart">
-const TSteps(
+const TSteps.progress(
   value: 1,
   status: TStepsStatus.error,
   steps: [
@@ -102,8 +102,9 @@ const TSteps(
 
 ### 受控选择
 
-`TSteps` 是受控组件。调用方持有 `value`，并在 `onChange` 中更新它；不传
-`onChange` 时组件只读。垂直步骤条可选择时会在每个步骤右侧显示箭头。
+`TSteps.selectable` 是垂直受控选择组件。调用方持有 `value`，并在
+`onChange` 中更新它。它固定使用点状指示器和右侧箭头，已完成节点实心，
+当前节点空心。
 
 <td-code-block panel="Dart">
 
@@ -111,10 +112,8 @@ const TSteps(
 int _selectedStep = 2;
 
 Widget build(BuildContext context) {
-  return TSteps(
+  return TSteps.selectable(
     value: _selectedStep,
-    direction: TStepsDirection.vertical,
-    variant: TStepsVariant.dot,
     steps: const [
       TStepsItemData(title: '已完成步骤'),
       TStepsItemData(title: '已完成步骤'),
@@ -135,7 +134,7 @@ Widget build(BuildContext context) {
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="dart">
-const TSteps(
+const TSteps.progress(
   value: 1,
   direction: TStepsDirection.vertical,
   steps: [
@@ -154,15 +153,14 @@ const TSteps(
 
 ### 纯展示步骤条
 
-`display` 形态的节点和已完成连线始终使用品牌色，不受 `value` 和 `status`
-影响。省略 `onChange` 即为纯展示用法。
+`TSteps.display` 的节点和连线始终使用完成态品牌色，不接收 `value`、
+`status` 或 `onChange`。
 
 <td-code-block panel="Dart">
 
   <pre slot="Dart" lang="dart">
-const TSteps(
+const TSteps.display(
   direction: TStepsDirection.vertical,
-  variant: TStepsVariant.display,
   steps: [
     TStepsItemData(title: '步骤展示', content: '可自定义此处内容'),
     TStepsItemData(title: '步骤展示', content: '可自定义此处内容'),
@@ -174,7 +172,7 @@ const TSteps(
 
 ## API
 
-### TSteps
+### TSteps.progress
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
@@ -182,8 +180,23 @@ const TSteps(
 | value | `int` | `0` | 当前激活索引；越界值仅在渲染时收敛到有效范围 |
 | direction | `TStepsDirection` | `horizontal` | 水平或垂直方向 |
 | status | `TStepsStatus` | `process` | 当前步骤的进行中或错误状态 |
-| variant | `TStepsVariant` | `standard` | 标准、点状或纯展示视觉形态 |
-| onChange | `ValueChanged&lt;int&gt;?` | - | 选择步骤时触发；为空时只读 |
+| indicator | `TStepsIndicator` | `standard` | 标准或点状指示器 |
+| onChange | `ValueChanged&lt;int&gt;?` | - | 选择步骤时触发；为空时只读，非空时不改变指示器视觉 |
+
+### TSteps.selectable
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| steps | `List<TStepsItemData>` | - | 步骤数据，必填 |
+| value | `int` | - | 当前选中索引，必填 |
+| onChange | `ValueChanged&lt;int&gt;` | - | 选择步骤时触发，必填 |
+
+### TSteps.display
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| steps | `List<TStepsItemData>` | - | 步骤数据，必填 |
+| direction | `TStepsDirection` | `vertical` | 水平或垂直方向 |
 
 ### TStepsItemData
 
@@ -204,7 +217,7 @@ const TSteps(
 | --- | --- |
 | `TStepsDirection` | `horizontal`、`vertical` |
 | `TStepsStatus` | `process`、`error` |
-| `TStepsVariant` | `standard`、`dot`、`display` |
+| `TStepsIndicator` | `standard`、`dot` |
 
 ## Breaking Change 迁移
 
@@ -213,8 +226,10 @@ const TSteps(
 | `activeIndex` | `value` |
 | `TStepsStatus.success` | `TStepsStatus.process` |
 | `successIcon` | `icon` |
-| `simple: true` | `variant: TStepsVariant.dot` |
-| `readOnly` | 省略 `onChange` |
-| `verticalSelect: true` | 提供 `onChange` |
-| `TStepsVariant.defaultTheme` | `TStepsVariant.standard` |
-| `TStepsThemeData` 中的业务开关 | 分别使用 `variant` 与 `onChange` |
+| `TSteps(...)` | 进度用 `TSteps.progress(...)`，垂直选择用 `TSteps.selectable(...)`，纯展示用 `TSteps.display(...)` |
+| `simple: true` | `TSteps.progress(indicator: TStepsIndicator.dot)` |
+| `readOnly` | 使用 `TSteps.progress` 并省略 `onChange` |
+| `verticalSelect: true` | `TSteps.selectable(...)` |
+| `TStepsVariant.defaultTheme` / `TStepsVariant.dot` | `TStepsIndicator.standard` / `TStepsIndicator.dot` |
+| `TStepsVariant.display` | `TSteps.display(...)` |
+| `TStepsThemeData` 中的业务开关 | 改用对应的命名构造 |

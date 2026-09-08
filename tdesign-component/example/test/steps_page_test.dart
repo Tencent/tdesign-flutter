@@ -18,7 +18,7 @@ void main() {
     final steps = tester.widgetList<TSteps>(find.byType(TSteps)).toList();
     expect(steps, hasLength(12));
     expect(steps[0].direction, TStepsDirection.horizontal);
-    expect(steps[2].variant, TStepsVariant.dot);
+    expect(steps[2].indicator, TStepsIndicator.dot);
     expect(steps[4].steps.every((item) => item.icon != null), isTrue);
     expect(steps[6].steps[1].customContent, isNotNull);
     expect(
@@ -27,11 +27,12 @@ void main() {
     );
 
     expect(steps[10].direction, TStepsDirection.vertical);
-    expect(steps[10].variant, TStepsVariant.dot);
+    expect(steps[10].indicator, TStepsIndicator.dot);
     expect(steps[10].onChange, isNotNull);
     expect(steps[10].value, 3);
-    expect(steps[11].variant, TStepsVariant.display);
+    expect(steps[11].indicator, TStepsIndicator.dot);
     expect(steps[11].onChange, isNull);
+    expect(steps[11].direction, TStepsDirection.vertical);
 
     final selectable = find.byType(TSteps).at(10);
     await tester.tap(

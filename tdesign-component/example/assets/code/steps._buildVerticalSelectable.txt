@@ -5,15 +5,13 @@
   /// State 声明 `int _selectedStep = 3;` 保存当前步骤；
   /// 不在 build 中重新初始化，回调通过 setState 更新受控值。
     Widget _buildVerticalSelectable(BuildContext context) {
-    return TSteps(
+    return TSteps.selectable(
       steps: const [
         TStepsItemData(title: '已完成步骤'),
         TStepsItemData(title: '已完成步骤'),
         TStepsItemData(title: '已完成步骤'),
         TStepsItemData(title: '当前步骤'),
       ],
-      direction: TStepsDirection.vertical,
-      variant: TStepsVariant.dot,
       value: _selectedStep,
       onChange: (index) {
         setState(() => _selectedStep = index);

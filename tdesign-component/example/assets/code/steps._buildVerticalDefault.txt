@@ -1,6 +1,6 @@
 /// Vertical Default Steps 垂直默认步骤条
     Widget _buildVerticalDefault(BuildContext context) {
-    return const TSteps(
+    return const TSteps.progress(
       steps: [
         TStepsItemData(title: 'Finish', content: 'Content'),
         TStepsItemData(title: 'Process', content: 'Content'),

@@ -13,9 +13,9 @@
 | 分组 | 组件类型、组件状态、特殊类型 | 基础、布局、类型、状态、只读、自定义 | 六个模块 | 三组及 Figma 顺序 |
 | 组件类型 | 水平/垂直默认、图标、点状及自定义内容 | 水平/垂直、默认/点状、自定义内容 | 缺完整垂直图标 | 补齐七个例子 |
 | 错误状态 | 默认、图标、点状 | 错误态示例 | 仅图标错误态 | 同屏三种错误态 |
-| 垂直可选择 | 已完成实心、当前空心、右箭头 | 点击事件更新 current | 独立 `verticalSelect` 状态 | `onChange` 驱动可选择与箭头，节点视觉对齐 Figma |
-| 纯展示 | 四个蓝色实心节点与连线 | readonly 禁止点击 | `readOnly` 与 Theme 重复持有 | `variant.display` + 无回调 |
-| 状态所有权 | 结构与交互分离 | props/event | Theme 与实例重复持有业务状态 | `value/status/variant/onChange` 单一职责 |
+| 垂直可选择 | 已完成实心、当前空心、右箭头 | 点击事件更新 current | 独立 `verticalSelect` 状态 | `TSteps.selectable` 固定垂直点状结构与必填回调 |
+| 纯展示 | 四个蓝色实心节点与连线 | readonly 禁止点击 | `readOnly` 与 Theme 重复持有 | `TSteps.display` 不公开进度和交互参数 |
+| 状态所有权 | 结构与交互分离 | props/event | Theme 与实例重复持有业务状态 | 命名构造分离 progress/selectable/display，`indicator` 只管指示器 |
 
 ## 已记录的平台差异
 

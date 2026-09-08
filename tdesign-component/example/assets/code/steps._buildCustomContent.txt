@@ -1,6 +1,6 @@
 /// Customize Steps Content 自定义步骤条内容
     Widget _buildCustomContent(BuildContext context) {
-    return const TSteps(
+    return const TSteps.progress(
       steps: [
         TStepsItemData(title: 'Finish', content: 'Customize content'),
         TStepsItemData(

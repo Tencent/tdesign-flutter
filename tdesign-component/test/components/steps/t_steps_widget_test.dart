@@ -13,7 +13,9 @@ void main() {
 
   group('TSteps widget 级用例', () {
     testWidgets('横向 process 可构建', (tester) async {
-      await tester.pumpWidget(wrap(TSteps(steps: baseSteps, value: 1)));
+      await tester.pumpWidget(
+        wrap(TSteps.progress(steps: baseSteps, value: 1)),
+      );
       expect(find.byType(TSteps), findsOneWidget);
       expect(find.text('步骤一'), findsOneWidget);
     });
@@ -23,7 +25,7 @@ void main() {
       const longContent = '这是一个非常非常非常长的步骤内容用于验证不会撑高布局';
       await tester.pumpWidget(
         wrap(
-          const TSteps(
+          const TSteps.progress(
             steps: [
               TStepsItemData(title: longTitle, content: longContent),
               TStepsItemData(title: '步骤二', content: '描述二'),
@@ -45,11 +47,11 @@ void main() {
     testWidgets('纵向 error dot 可构建', (tester) async {
       await tester.pumpWidget(
         wrap(
-          TSteps(
+          TSteps.progress(
             steps: baseSteps,
             direction: TStepsDirection.vertical,
             status: TStepsStatus.error,
-            variant: TStepsVariant.dot,
+            indicator: TStepsIndicator.dot,
             value: 2,
           ),
         ),
@@ -60,7 +62,7 @@ void main() {
     testWidgets('customTitle / customContent 可构建', (tester) async {
       await tester.pumpWidget(
         wrap(
-          const TSteps(
+          const TSteps.progress(
             steps: [
               TStepsItemData(customTitle: Text('自定义标题')),
               TStepsItemData(customContent: Text('自定义内容')),
@@ -74,7 +76,9 @@ void main() {
     });
 
     testWidgets('value 越界被 clamp', (tester) async {
-      await tester.pumpWidget(wrap(TSteps(steps: baseSteps, value: 99)));
+      await tester.pumpWidget(
+        wrap(TSteps.progress(steps: baseSteps, value: 99)),
+      );
       expect(find.byType(TSteps), findsOneWidget);
     });
   });

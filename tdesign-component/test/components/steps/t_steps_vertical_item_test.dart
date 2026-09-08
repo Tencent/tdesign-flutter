@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/steps/t_steps.dart';
+import 'package:tdesign_flutter/src/components/steps/t_steps_mode.dart';
 import 'package:tdesign_flutter/src/components/steps/t_steps_vertical_item.dart';
 import 'package:tdesign_flutter/src/theme/t_theme.dart';
 
@@ -30,8 +31,8 @@ void main() {
             stepsCount: 2,
             activeIndex: 0,
             status: TStepsStatus.process,
-            variant: TStepsVariant.standard,
-            selectable: false,
+            indicator: TStepsIndicator.standard,
+            mode: TStepsMode.progress,
           ),
         ),
       );
@@ -47,8 +48,8 @@ void main() {
             stepsCount: 1,
             activeIndex: 0,
             status: TStepsStatus.error,
-            variant: TStepsVariant.standard,
-            selectable: false,
+            indicator: TStepsIndicator.standard,
+            mode: TStepsMode.progress,
           ),
         ),
       );
@@ -64,8 +65,8 @@ void main() {
             stepsCount: 1,
             activeIndex: 0,
             status: TStepsStatus.error,
-            variant: TStepsVariant.standard,
-            selectable: false,
+            indicator: TStepsIndicator.standard,
+            mode: TStepsMode.progress,
           ),
         ),
       );
@@ -81,8 +82,8 @@ void main() {
             stepsCount: 1,
             activeIndex: 0,
             status: TStepsStatus.process,
-            variant: TStepsVariant.dot,
-            selectable: false,
+            indicator: TStepsIndicator.dot,
+            mode: TStepsMode.progress,
           ),
         ),
       );
@@ -100,8 +101,8 @@ void main() {
                 stepsCount: 2,
                 activeIndex: 1,
                 status: TStepsStatus.process,
-                variant: TStepsVariant.dot,
-                selectable: true,
+                indicator: TStepsIndicator.dot,
+                mode: TStepsMode.selectable,
               ),
               TStepsVerticalItem(
                 data: baseData,
@@ -109,8 +110,8 @@ void main() {
                 stepsCount: 2,
                 activeIndex: 1,
                 status: TStepsStatus.process,
-                variant: TStepsVariant.dot,
-                selectable: true,
+                indicator: TStepsIndicator.dot,
+                mode: TStepsMode.selectable,
               ),
             ],
           ),
@@ -141,8 +142,8 @@ void main() {
             stepsCount: 2,
             activeIndex: 0,
             status: TStepsStatus.process,
-            variant: TStepsVariant.display,
-            selectable: false,
+            indicator: TStepsIndicator.dot,
+            mode: TStepsMode.display,
           ),
         ),
       );
@@ -173,8 +174,8 @@ void main() {
               stepsCount: 2,
               activeIndex: 0,
               status: TStepsStatus.process,
-              variant: TStepsVariant.standard,
-              selectable: true,
+              indicator: TStepsIndicator.standard,
+              mode: TStepsMode.selectable,
             ),
           ),
         ),

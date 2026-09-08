@@ -2,7 +2,7 @@
     Widget _buildErrorStates(BuildContext context) {
     return const Column(
       children: [
-        TSteps(
+        TSteps.progress(
           steps: [
             TStepsItemData(title: 'Finish', content: 'Content'),
             TStepsItemData(title: 'Error', content: 'Content'),
@@ -13,7 +13,7 @@
           status: TStepsStatus.error,
         ),
         SizedBox(height: 32),
-        TSteps(
+        TSteps.progress(
           steps: [
             TStepsItemData(
               title: 'Finish',
@@ -41,7 +41,7 @@
           status: TStepsStatus.error,
         ),
         SizedBox(height: 32),
-        TSteps(
+        TSteps.progress(
           steps: [
             TStepsItemData(title: 'Finish', content: 'Content'),
             TStepsItemData(title: 'Error', content: 'Content'),
@@ -50,7 +50,7 @@
           ],
           value: 1,
           status: TStepsStatus.error,
-          variant: TStepsVariant.dot,
+          indicator: TStepsIndicator.dot,
         ),
       ],
     );

@@ -125,7 +125,7 @@ class _NavigationComponentsScene extends StatelessWidget {
                       ),
                       const SizedBox(height: 18),
                       const _SectionLabel('Steps'),
-                      const TSteps(
+                      const TSteps.progress(
                         value: 1,
                         steps: [
                           TStepsItemData(title: 'Done', content: 'Complete'),

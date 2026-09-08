@@ -7,6 +7,7 @@ import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
 import 't_steps.dart';
+import 't_steps_mode.dart';
 
 /// Steps步骤条，水平步骤item
 class TStepsHorizontalItem extends StatelessWidget {
@@ -25,8 +26,11 @@ class TStepsHorizontalItem extends StatelessWidget {
   /// 步骤条状态
   final TStepsStatus status;
 
-  /// 步骤条视觉形态。
-  final TStepsVariant variant;
+  /// 步骤条指示器样式。
+  final TStepsIndicator indicator;
+
+  /// 根组件已解析的使用模式。
+  final TStepsMode mode;
 
   /// 点击回调。
   final VoidCallback? onTap;
@@ -38,7 +42,8 @@ class TStepsHorizontalItem extends StatelessWidget {
     required this.stepsCount,
     required this.activeIndex,
     required this.status,
-    required this.variant,
+    required this.indicator,
+    required this.mode,
     this.onTap,
   });
 
@@ -118,7 +123,7 @@ class TStepsHorizontalItem extends StatelessWidget {
       stepsNumberBgColor = theme.errorLightColor;
       stepsTitleColor = theme.errorNormalColor;
 
-      if (variant != TStepsVariant.standard) {
+      if (indicator != TStepsIndicator.standard) {
         simpleStepsIconColor = theme.errorNormalColor;
       } else {
         shouldSetIconWidgetDecoration = data.errorIcon == null;
@@ -139,9 +144,9 @@ class TStepsHorizontalItem extends StatelessWidget {
     double iconContainerSize = 22;
 
     /// 简略步骤条
-    if (variant != TStepsVariant.standard) {
+    if (indicator != TStepsIndicator.standard) {
       /// display 纯展示
-      if (variant == TStepsVariant.display) {
+      if (mode == TStepsMode.display) {
         simpleStepsIconColor = theme.brandNormalColor;
         stepsTitleColor = theme.textColorPrimary;
       }
@@ -154,7 +159,7 @@ class TStepsHorizontalItem extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(color: simpleStepsIconColor, width: 1),
       );
-      if (variant == TStepsVariant.display || activeIndex == index) {
+      if (mode == TStepsMode.display || activeIndex == index) {
         simpleDecoration = BoxDecoration(
           color: simpleStepsIconColor,
           shape: BoxShape.circle,
@@ -163,12 +168,10 @@ class TStepsHorizontalItem extends StatelessWidget {
       iconWidgetDecoration = simpleDecoration;
     }
 
-    var leftLineColor =
-        (activeIndex >= index || variant == TStepsVariant.display)
+    var leftLineColor = (activeIndex >= index || mode == TStepsMode.display)
         ? theme.brandNormalColor
         : theme.componentBorderColor;
-    var rightLineColor =
-        (activeIndex > index || variant == TStepsVariant.display)
+    var rightLineColor = (activeIndex > index || mode == TStepsMode.display)
         ? theme.brandNormalColor
         : theme.componentBorderColor;
 
@@ -244,8 +247,7 @@ class TStepsHorizontalItem extends StatelessWidget {
             style: TTextResolve.resolve(
               context: context,
               defaults: TextStyle(
-                fontWeight:
-                    (activeIndex == index && variant != TStepsVariant.display)
+                fontWeight: (activeIndex == index && mode != TStepsMode.display)
                     ? FontWeight.w600
                     : FontWeight.w400,
                 color: stepsTitleColor,

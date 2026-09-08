@@ -7,6 +7,7 @@ import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
 import 't_steps.dart';
+import 't_steps_mode.dart';
 
 /// Steps步骤条，垂直步骤item
 class TStepsVerticalItem extends StatelessWidget {
@@ -25,11 +26,11 @@ class TStepsVerticalItem extends StatelessWidget {
   /// 步骤条状态
   final TStepsStatus status;
 
-  /// 步骤条视觉形态。
-  final TStepsVariant variant;
+  /// 步骤条指示器样式。
+  final TStepsIndicator indicator;
 
-  /// 垂直模式下是否可点击选择。
-  final bool selectable;
+  /// 根组件已解析的使用模式。
+  final TStepsMode mode;
 
   /// 点击回调。
   final VoidCallback? onTap;
@@ -41,8 +42,8 @@ class TStepsVerticalItem extends StatelessWidget {
     required this.stepsCount,
     required this.activeIndex,
     required this.status,
-    required this.variant,
-    required this.selectable,
+    required this.indicator,
+    required this.mode,
     this.onTap,
   });
 
@@ -122,7 +123,7 @@ class TStepsVerticalItem extends StatelessWidget {
       stepsNumberBgColor = theme.errorLightColor;
       stepsTitleColor = theme.errorNormalColor;
 
-      if (variant != TStepsVariant.standard) {
+      if (indicator != TStepsIndicator.standard) {
         simpleStepsIconColor = theme.errorNormalColor;
       } else {
         shouldSetIconWidgetDecoration = data.errorIcon == null;
@@ -146,12 +147,9 @@ class TStepsVerticalItem extends StatelessWidget {
     double iconMarginBottom = 8;
 
     /// 简略步骤条
-    if (variant != TStepsVariant.standard) {
-      final isDisplay = variant == TStepsVariant.display;
-      final isSelectableDot = variant == TStepsVariant.dot && selectable;
-
+    if (indicator != TStepsIndicator.standard) {
       /// display 纯展示
-      if (isDisplay) {
+      if (mode == TStepsMode.display) {
         simpleStepsIconColor = theme.brandNormalColor;
         stepsTitleColor = theme.textColorPrimary;
       }
@@ -166,8 +164,10 @@ class TStepsVerticalItem extends StatelessWidget {
         border: Border.all(color: simpleStepsIconColor, width: 1),
       );
       final shouldFillDot =
-          isDisplay ||
-          (isSelectableDot ? activeIndex > index : activeIndex == index);
+          mode == TStepsMode.display ||
+          (mode == TStepsMode.selectable
+              ? activeIndex > index
+              : activeIndex == index);
       if (shouldFillDot) {
         simpleDecoration = BoxDecoration(
           color: simpleStepsIconColor,
@@ -215,7 +215,7 @@ class TStepsVerticalItem extends StatelessWidget {
                 children: [
                   if (data.customTitle != null ||
                       (data.title != null && data.title!.isNotEmpty) ||
-                      selectable)
+                      mode == TStepsMode.selectable)
                     Container(
                       margin: const EdgeInsets.only(bottom: 4),
                       child: Row(
@@ -232,8 +232,7 @@ class TStepsVerticalItem extends StatelessWidget {
                                           defaults: TextStyle(
                                             fontWeight:
                                                 (activeIndex == index &&
-                                                    variant !=
-                                                        TStepsVariant.display)
+                                                    mode != TStepsMode.display)
                                                 ? FontWeight.w600
                                                 : FontWeight.w400,
                                             color: stepsTitleColor,
@@ -248,7 +247,7 @@ class TStepsVerticalItem extends StatelessWidget {
                                       )
                                     : const SizedBox.shrink()),
                           ),
-                          if (selectable)
+                          if (mode == TStepsMode.selectable)
                             Icon(
                               TIcons.chevron_right,
                               color: theme.textColorPrimary,
@@ -282,7 +281,7 @@ class TStepsVerticalItem extends StatelessWidget {
         child: Container(
           width: 1,
           height: double.infinity,
-          color: (activeIndex > index || variant == TStepsVariant.display)
+          color: (activeIndex > index || mode == TStepsMode.display)
               ? context.tTheme.brandNormalColor
               : context.tTheme.componentBorderColor,
         ),

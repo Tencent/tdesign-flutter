@@ -42,12 +42,8 @@ void main() {
     await tester.pumpAndSettle();
     steps = tester.widgetList<TSteps>(find.byType(TSteps)).toList();
     expect(steps.firstWhere((item) => item.onChange != null).value, 0);
-    expect(
-      steps
-          .firstWhere((item) => item.variant == TStepsVariant.display)
-          .onChange,
-      isNull,
-    );
+    expect(steps.last.onChange, isNull);
+    expect(steps.last.indicator, TStepsIndicator.dot);
 
     final provider = tester
         .element(find.byType(TSteps).first)

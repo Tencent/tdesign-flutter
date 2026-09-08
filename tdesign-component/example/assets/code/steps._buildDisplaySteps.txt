@@ -1,6 +1,6 @@
 /// Read-only Steps 纯展示步骤条
     Widget _buildDisplaySteps(BuildContext context) {
-    return const TSteps(
+    return const TSteps.display(
       steps: [
         TStepsItemData(title: '步骤展示', content: '可自定义此处内容'),
         TStepsItemData(title: '步骤展示', content: '可自定义此处内容'),
@@ -8,6 +8,5 @@
         TStepsItemData(title: '步骤展示', content: '可自定义此处内容'),
       ],
       direction: TStepsDirection.vertical,
-      variant: TStepsVariant.display,
     );
   }

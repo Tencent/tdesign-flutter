@@ -11,4 +11,5 @@
 - [x] 已创建 GitHub #1084 / CNB #151；PR 描述关联 GitHub #1027
 - [x] 处理上一轮 CodeBuddy Review 反馈
 - [x] 补充逐字段主题、双轴 display、实际代码面板和核心片段编译回归
+- [x] 用命名构造分离 progress/selectable/display，移除无效参数组合与 onChange 视觉耦合
 - [ ] 本轮修复推送后，检查新 head CI 并完成新一轮 CNB Review

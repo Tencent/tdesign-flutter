@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/steps/t_steps_horizontal_item.dart';
+import 'package:tdesign_flutter/src/components/steps/t_steps_mode.dart';
 import 'package:tdesign_flutter/src/components/steps/t_steps_vertical_item.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -37,7 +38,7 @@ void main() {
                     const TTextThemeData(textStyle: TextStyle(fontSize: 21)),
                   ),
             home: Scaffold(
-              body: TSteps(
+              body: TSteps.progress(
                 direction: direction,
                 steps: buildSteps(3),
                 value: 1,
@@ -73,7 +74,7 @@ void main() {
           const TTextThemeData(textStyle: TextStyle(color: Colors.purple)),
         ),
         home: const Scaffold(
-          body: TSteps(
+          body: TSteps.progress(
             steps: [
               TStepsItemData(title: '普通标题'),
               TStepsItemData(
@@ -92,12 +93,12 @@ void main() {
     int? selected;
     await tester.pumpWidget(
       wrap(
-        TSteps(
-          direction: TStepsDirection.vertical,
+        TSteps.selectable(
           steps: const [
             TStepsItemData(customTitle: Text('自定义标题')),
             TStepsItemData(content: '仅内容'),
           ],
+          value: 0,
           onChange: (value) => selected = value,
         ),
       ),
@@ -111,15 +112,7 @@ void main() {
   testWidgets('display 横纵节点都为实心且不受 value/status 影响', (tester) async {
     for (final direction in TStepsDirection.values) {
       await tester.pumpWidget(
-        wrap(
-          TSteps(
-            direction: direction,
-            variant: TStepsVariant.display,
-            status: TStepsStatus.error,
-            value: 1,
-            steps: buildSteps(3),
-          ),
-        ),
+        wrap(TSteps.display(direction: direction, steps: buildSteps(3))),
       );
       final dots = tester
           .widgetList<Container>(find.byType(Container))
@@ -170,10 +163,9 @@ void main() {
         TStepsDirection.horizontal,
         TStepsDirection.vertical,
       ]);
-      expect(TStepsVariant.values, [
-        TStepsVariant.standard,
-        TStepsVariant.dot,
-        TStepsVariant.display,
+      expect(TStepsIndicator.values, [
+        TStepsIndicator.standard,
+        TStepsIndicator.dot,
       ]);
       expect(TStepsStatus.values, [TStepsStatus.process, TStepsStatus.error]);
     });
@@ -181,17 +173,24 @@ void main() {
 
   group('TSteps 渲染与状态', () {
     testWidgets('水平与垂直方向渲染', (tester) async {
-      await tester.pumpWidget(wrap(TSteps(steps: buildSteps(3))));
+      await tester.pumpWidget(wrap(TSteps.progress(steps: buildSteps(3))));
       expect(find.byType(TStepsHorizontalItem), findsNWidgets(3));
 
       await tester.pumpWidget(
-        wrap(TSteps(steps: buildSteps(3), direction: TStepsDirection.vertical)),
+        wrap(
+          TSteps.progress(
+            steps: buildSteps(3),
+            direction: TStepsDirection.vertical,
+          ),
+        ),
       );
       expect(find.byType(TStepsVerticalItem), findsNWidgets(3));
     });
 
     testWidgets('value 更新同步当前步骤并收敛越界值', (tester) async {
-      await tester.pumpWidget(wrap(TSteps(steps: buildSteps(3), value: -1)));
+      await tester.pumpWidget(
+        wrap(TSteps.progress(steps: buildSteps(3), value: -1)),
+      );
       expect(
         tester
             .widget<TStepsHorizontalItem>(
@@ -201,7 +200,9 @@ void main() {
         0,
       );
 
-      await tester.pumpWidget(wrap(TSteps(steps: buildSteps(3), value: 9)));
+      await tester.pumpWidget(
+        wrap(TSteps.progress(steps: buildSteps(3), value: 9)),
+      );
       expect(
         tester
             .widget<TStepsHorizontalItem>(
@@ -213,18 +214,18 @@ void main() {
     });
 
     testWidgets('空数据安全渲染', (tester) async {
-      await tester.pumpWidget(wrap(const TSteps(steps: [])));
+      await tester.pumpWidget(wrap(const TSteps.progress(steps: [])));
       expect(find.byType(TSteps), findsOneWidget);
       expect(find.byType(TStepsHorizontalItem), findsNothing);
     });
 
-    testWidgets('process、error、dot 与 display 透传给 item', (tester) async {
+    testWidgets('进度状态、指示器与 display 模式透传给 item', (tester) async {
       await tester.pumpWidget(
         wrap(
-          TSteps(
+          TSteps.progress(
             steps: buildSteps(2),
             status: TStepsStatus.error,
-            variant: TStepsVariant.dot,
+            indicator: TStepsIndicator.dot,
           ),
         ),
       );
@@ -232,14 +233,13 @@ void main() {
         find.byType(TStepsHorizontalItem).first,
       );
       expect(item.status, TStepsStatus.error);
-      expect(item.variant, TStepsVariant.dot);
+      expect(item.indicator, TStepsIndicator.dot);
 
       await tester.pumpWidget(
         wrap(
-          TSteps(
+          TSteps.display(
             steps: buildSteps(2),
             direction: TStepsDirection.vertical,
-            variant: TStepsVariant.display,
           ),
         ),
       );
@@ -247,13 +247,13 @@ void main() {
         find.byType(TStepsVerticalItem).first,
       );
       expect(verticalItem.status, TStepsStatus.process);
-      expect(verticalItem.variant, TStepsVariant.display);
+      expect(verticalItem.mode, TStepsMode.display);
     });
 
     testWidgets('图标、错误图标和自定义区域可渲染', (tester) async {
       await tester.pumpWidget(
         wrap(
-          const TSteps(
+          const TSteps.progress(
             steps: [
               TStepsItemData(icon: Icons.shopping_cart, title: '图标'),
               TStepsItemData(
@@ -281,7 +281,10 @@ void main() {
       int? selected;
       await tester.pumpWidget(
         wrap(
-          TSteps(steps: buildSteps(3), onChange: (value) => selected = value),
+          TSteps.progress(
+            steps: buildSteps(3),
+            onChange: (value) => selected = value,
+          ),
         ),
       );
 
@@ -298,7 +301,7 @@ void main() {
     });
 
     testWidgets('无 onChange 时步骤不可点击', (tester) async {
-      await tester.pumpWidget(wrap(TSteps(steps: buildSteps(2))));
+      await tester.pumpWidget(wrap(TSteps.progress(steps: buildSteps(2))));
       expect(
         tester
             .widget<TStepsHorizontalItem>(
@@ -313,10 +316,9 @@ void main() {
       int? selected;
       await tester.pumpWidget(
         wrap(
-          TSteps(
+          TSteps.selectable(
             steps: buildSteps(3),
-            direction: TStepsDirection.vertical,
-            variant: TStepsVariant.dot,
+            value: 0,
             onChange: (value) => selected = value,
           ),
         ),
@@ -325,9 +327,56 @@ void main() {
       final firstItem = tester.widget<TStepsVerticalItem>(
         find.byType(TStepsVerticalItem).first,
       );
-      expect(firstItem.selectable, isTrue);
+      expect(firstItem.mode, TStepsMode.selectable);
       await tester.tap(find.text('步骤3'));
       expect(selected, 2);
+    });
+
+    testWidgets('progress onChange 只启用点击，横纵 dot 保持进度视觉', (tester) async {
+      for (final direction in TStepsDirection.values) {
+        int? selected;
+        await tester.pumpWidget(
+          wrap(
+            TSteps.progress(
+              steps: buildSteps(3),
+              value: 1,
+              direction: direction,
+              indicator: TStepsIndicator.dot,
+              onChange: (value) => selected = value,
+            ),
+          ),
+        );
+
+        if (direction == TStepsDirection.vertical) {
+          final items = tester
+              .widgetList<TStepsVerticalItem>(find.byType(TStepsVerticalItem))
+              .toList();
+          expect(
+            items.every((item) => item.mode == TStepsMode.progress),
+            isTrue,
+          );
+          expect(find.byIcon(TIcons.chevron_right), findsNothing);
+        }
+
+        await tester.tap(find.text('步骤3'));
+        expect(selected, 2);
+
+        final dotDecorations = tester
+            .widgetList<Container>(find.byType(Container))
+            .map((item) => item.decoration)
+            .whereType<BoxDecoration>()
+            .where((decoration) => decoration.shape == BoxShape.circle)
+            .toList();
+        expect(dotDecorations, hasLength(3));
+        expect(dotDecorations[0].color, Colors.transparent);
+        expect(dotDecorations[0].border, isNotNull);
+        expect(
+          dotDecorations[1].color,
+          TThemeData.defaultData().brandNormalColor,
+        );
+        expect(dotDecorations[2].color, Colors.transparent);
+        expect(dotDecorations[2].border, isNotNull);
+      }
     });
   });
 }
