@@ -1,8 +1,0 @@
-Widget _buildBase(BuildContext context) => _row([
-    TStepper(
-      key: const ValueKey('stepper-base'),
-      value: _base,
-      variant: TStepperVariant.filled,
-      onChanged: (value) => setState(() => _base = value),
-    ),
-  ]);

@@ -81,6 +81,7 @@ const componentTestSuites = <ComponentTestSuite>[
   ]),
   ComponentTestSuite('stepper', [
     'test/components/stepper/t_stepper_test.dart',
+    'test/components/stepper/t_stepper_contract_test.dart',
   ]),
   ComponentTestSuite('upload', ['test/components/upload/t_upload_test.dart']),
   ComponentTestSuite('form', ['test/components/form/t_form_test.dart']),

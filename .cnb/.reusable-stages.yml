@@ -24,7 +24,7 @@
 
 .regression-tool-tests:
   name: flutter test (regression tooling)
-  script: cd tdesign-component && flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
+  script: cd tdesign-component && flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart test/tool/generate_example_code_test.dart
 
 # Example 页面共享功能回归，双 Flutter 版本共用；不包含 Golden。
 .example-regression-tests:

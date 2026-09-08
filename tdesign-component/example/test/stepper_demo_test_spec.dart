@@ -1,3 +1,4 @@
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/page/t_stepper_page.dart';
 
 import 'demo_page_test_utils.dart';
@@ -6,6 +7,8 @@ const stepperDemoPageTestSpec = DemoPageTestSpec(
   name: 'stepper',
   title: 'Stepper 步进器',
   page: TStepperPage(),
+  componentType: TStepper,
+  expectedComponentCount: 10,
   expectedTexts: [
     '用于数量的增减。',
     '01 组件类型',

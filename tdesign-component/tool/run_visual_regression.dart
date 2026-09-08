@@ -128,9 +128,12 @@ const visualTestSuites = <VisualTestSuite>[
   ),
   VisualTestSuite(
     'stepper',
-    'Stepper Demo',
+    'Stepper Demo and component',
     workingDirectory: 'example',
-    testFiles: ['test/stepper_demo_golden_test.dart'],
+    testFiles: [
+      'test/stepper_demo_golden_test.dart',
+      '../test/components/stepper/t_stepper_golden_test.dart',
+    ],
   ),
   VisualTestSuite(
     'textarea',
