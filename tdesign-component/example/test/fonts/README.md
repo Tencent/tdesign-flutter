@@ -16,6 +16,12 @@ NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 新增文案的补充 fallback。它排在原字体之后，避免扩充原字体改变 Button、Checkbox、
 Upload 等既有 Golden 的字形选择与像素基线。
 
+`StepsGoldenCJK-Regular.otf` 仅补充 Steps 整页 Golden 所需字形，字符清单见
+`steps_demo_glyphs.txt`。子集 SHA-256 为
+`1c4a9391deda7834d5f3357e20d8bfcdd97be685e021ed31d2bde4166cdf9524`；源文件为
+Android 16 系统的开源 `NotoSansCJK-Regular.ttc` SC 字体面，SHA-256 为
+`3e7e5afaac2c6d872592d76abedac03a51c6f0fc42d11e311ff2816a6c368afe`。
+
 `SliderGoldenCJK-Regular.otf` 仅补充 Slider 整页 Golden 新增且既有子集未覆盖的
 字形，字符清单见 `slider_demo_glyphs.txt`，不会改变既有组件的字形选择。子集
 SHA-256 为 `59c5bebba9bf720005fb977a94b9c150b0b8e8c2698c1dca3a66d9f0d7cd9722`。
@@ -89,8 +95,9 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 更新 Slider 页面文案时，更新 Slider 字符清单。
 更新 Picker 页面文案时，更新 Picker 字符清单。
 更新 Calendar 页面文案时，更新 Calendar 字符清单。
- 更新 TabBar 页面文案时，更新 TabBar 字符清单。
- 更新 SideBar 页面文案时，更新 SideBar 字符清单。
+更新 Steps 页面文案时，更新 Steps 字符清单。
+更新 SideBar 页面文案时，更新 SideBar 字符清单。
+更新 TabBar 页面文案时，更新 TabBar 字符清单。
 更新 Cascader 页面文案时，更新 Cascader 字符清单。
 更新 Indexes 页面或城市数据时，更新 Indexes 字符清单。
 更新 BackTop 页面文案时，更新 BackTop 字符清单。
