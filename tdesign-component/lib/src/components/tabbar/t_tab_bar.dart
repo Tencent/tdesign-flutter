@@ -9,6 +9,7 @@ import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
 import '../text/t_text.dart';
+import '../text/t_text_resolve.dart';
 import 't_tab_bar_theme_data.dart';
 
 /// 展开项 向下箭头宽
@@ -172,10 +173,10 @@ class TTabBarItemConfig {
   /// tab 文本
   final String? tabText;
 
-  /// 文本已选择样式 basicType为text时必填
+  /// 选中时的文字样式，按字段覆盖继承主题与内置默认值。
   final TextStyle? selectTabTextStyle;
 
-  /// 文本未选择样式 basicType为text时必填
+  /// 未选中时的文字样式，按字段覆盖继承主题与内置默认值。
   final TextStyle? unselectTabTextStyle;
 
   /// tab点击事件
@@ -380,16 +381,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
     );
 
     // 初始化动画（初始位置）
-    _animation =
-        Tween<double>(
-          begin: _selectedIndex.toDouble(),
-          end: _selectedIndex.toDouble(),
-        ).animate(
-          CurvedAnimation(
-            parent: _animationController,
-            curve: Curves.easeInOutCubic,
-          ),
-        );
+    _animation = AlwaysStoppedAnimation(_selectedIndex.toDouble());
   }
 
   @override
@@ -398,6 +390,9 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
     _resolveEffectiveValues();
     if (widget.value != _selectedIndex) {
       _animateToIndex(widget.value);
+    } else if (widget.indicatorAnimation != oldWidget.indicatorAnimation) {
+      _animationController.stop();
+      _animation = AlwaysStoppedAnimation(_selectedIndex.toDouble());
     }
   }
 
@@ -549,25 +544,22 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
 
   /// 动画切换到指定索引
   void _animateToIndex(int index) {
-    final oldIndex = _selectedIndex;
+    final start = _animation?.value ?? _selectedIndex.toDouble();
     _selectedIndex = index;
+    _animationController.stop();
 
     if (widget.indicatorAnimation == TTabBarIndicatorAnimation.none) {
       // 无动画，直接切换
+      _animation = AlwaysStoppedAnimation(index.toDouble());
       return;
     }
 
     // 创建新的动画
-    _animation =
-        Tween<double>(
-          begin: oldIndex.toDouble(),
-          end: index.toDouble(),
-        ).animate(
-          CurvedAnimation(
-            parent: _animationController,
-            curve: widget.animationCurve ?? Curves.easeInOutCubic,
-          ),
-        );
+    _animation = _animationController.drive(
+      Tween<double>(begin: start, end: index.toDouble()).chain(
+        CurveTween(curve: widget.animationCurve ?? Curves.easeInOutCubic),
+      ),
+    );
 
     // 播放动画
     _animationController.forward(from: 0.0);
@@ -702,7 +694,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
             ? 1
             : (widget._basicType == _TTabBarBasicType.iconText ? 5 : 7),
       ),
-      child: TTabBarItemWithBadge(
+      child: _TTabBarItemWithBadge(
         basicType: widget._basicType,
         componentType: widget._componentType,
         selectionType: widget._selectionType,
@@ -749,8 +741,8 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
 }
 
 /// 带徽标的底部标签栏单项
-class TTabBarItemWithBadge extends StatelessWidget {
-  const TTabBarItemWithBadge({
+class _TTabBarItemWithBadge extends StatelessWidget {
+  const _TTabBarItemWithBadge({
     Key? key,
     required this.basicType,
     required this.componentType,
@@ -988,14 +980,20 @@ class TTabBarItemWithBadge extends StatelessWidget {
   ) {
     return TText(
       config.tabText ?? '',
-      font: font,
-      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-      style: isSelected
-          ? config.selectTabTextStyle
-          : config.unselectTabTextStyle,
-      textColor: isSelected
-          ? context.tTheme.brandNormalColor
-          : context.tTheme.textColorPrimary,
+      style: TTextResolve.resolve(
+        context: context,
+        defaults: TextStyle(
+          fontSize: font.size,
+          height: font.height,
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          color: isSelected
+              ? context.tTheme.brandNormalColor
+              : context.tTheme.textColorPrimary,
+        ),
+        style: isSelected
+            ? config.selectTabTextStyle
+            : config.unselectTabTextStyle,
+      ),
     );
   }
 
@@ -1045,20 +1043,26 @@ class TTabBarItemWithBadge extends StatelessWidget {
 
     var popUpButtonConfig = itemConfig.popUpButtonConfig;
     if (popUpButtonConfig != null) {
-      Navigator.push(
-        context,
-        PopRoute(
+      final navigator = Navigator.of(context);
+      final capturedThemes = InheritedTheme.capture(
+        from: context,
+        to: navigator.context,
+      );
+      navigator.push<void>(
+        _TabBarPopupRoute(
           barrierLabel: MaterialLocalizations.of(
             context,
           ).modalBarrierDismissLabel,
-          child: PopupDialog(
-            itemWidth - _kDefaultMenuItemWidthShrink,
-            btnContext: context,
-            config: popUpButtonConfig.popUpDialogConfig,
-            items: popUpButtonConfig.items,
-            onClickMenu: (value) {
-              popUpButtonConfig.onChanged(value);
-            },
+          child: capturedThemes.wrap(
+            _TabBarPopupDialog(
+              itemWidth - _kDefaultMenuItemWidthShrink,
+              btnContext: context,
+              config: popUpButtonConfig.popUpDialogConfig,
+              items: popUpButtonConfig.items,
+              onClickMenu: (value) {
+                popUpButtonConfig.onChanged(value);
+              },
+            ),
           ),
         ),
       );
@@ -1150,7 +1154,6 @@ class TTabBarMenuItem extends StatelessWidget {
     return Container(
       constraints: const BoxConstraints(minHeight: _kMenuItemMinHeight),
       decoration: BoxDecoration(
-        color: context.tTheme.bgColorContainer,
         borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
       ),
       alignment: alignment,
@@ -1158,9 +1161,12 @@ class TTabBarMenuItem extends StatelessWidget {
           itemWidget ??
           TText(
             value,
-            style: TextStyle(
-              fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
-              fontWeight: FontWeight.w400,
+            style: TTextResolve.resolve(
+              context: context,
+              defaults: TextStyle(
+                fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
     );
@@ -1168,14 +1174,14 @@ class TTabBarMenuItem extends StatelessWidget {
 }
 
 /// 弹出菜单路由
-class PopRoute extends PopupRoute {
+class _TabBarPopupRoute extends PopupRoute<void> {
   /// 子内容
-  Widget child;
+  final Widget child;
 
   /// 弹窗屏障无障碍文案
   final String? _barrierLabel;
 
-  PopRoute({required this.child, String? barrierLabel})
+  _TabBarPopupRoute({required this.child, String? barrierLabel})
     : _barrierLabel = barrierLabel;
 
   @override
@@ -1201,7 +1207,7 @@ class PopRoute extends PopupRoute {
 }
 
 /// 弹出菜单对话框
-class PopupDialog extends StatefulWidget {
+class _TabBarPopupDialog extends StatefulWidget {
   /// 按钮context
   final BuildContext btnContext;
 
@@ -1217,7 +1223,7 @@ class PopupDialog extends StatefulWidget {
   /// 默认弹窗宽度
   final double defaultPopUpWidth;
 
-  const PopupDialog(
+  const _TabBarPopupDialog(
     this.defaultPopUpWidth, {
     Key? key,
     required this.btnContext,
@@ -1227,10 +1233,10 @@ class PopupDialog extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  PopupDialogState createState() => PopupDialogState();
+  _TabBarPopupDialogState createState() => _TabBarPopupDialogState();
 }
 
-class PopupDialogState extends State<PopupDialog> {
+class _TabBarPopupDialogState extends State<_TabBarPopupDialog> {
   RenderBox? button;
   RenderBox? overlay;
   RelativeRect? position;
@@ -1328,7 +1334,7 @@ class PopupDialogState extends State<PopupDialog> {
                     (widget.config?.arrowHeight ?? _kArrowHeight),
                 decoration: BoxDecoration(boxShadow: context.tTheme.shadowsTop),
                 child: CustomPaint(
-                  painter: PanelWithDownArrow(
+                  painter: _TabBarPanelPainter(
                     config: widget.config,
                     backgroundColor:
                         widget.config?.backgroundColor ??
@@ -1375,14 +1381,14 @@ class PopupDialogState extends State<PopupDialog> {
 }
 
 /// 带下箭头的展开panel
-class PanelWithDownArrow extends CustomPainter {
+class _TabBarPanelPainter extends CustomPainter {
   /// 弹出面板形状配置
-  TTabBarPopUpShapeConfig? config;
+  final TTabBarPopUpShapeConfig? config;
 
   /// 背景颜色
-  Color backgroundColor;
+  final Color backgroundColor;
 
-  PanelWithDownArrow({this.config, required this.backgroundColor});
+  _TabBarPanelPainter({this.config, required this.backgroundColor});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -1423,7 +1429,8 @@ class PanelWithDownArrow extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+  bool shouldRepaint(covariant _TabBarPanelPainter oldDelegate) {
+    return oldDelegate.backgroundColor != backgroundColor ||
+        oldDelegate.config != config;
   }
 }

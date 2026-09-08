@@ -1,5 +1,12 @@
 # 实施方案
 
+## 本轮补充修复
+
+- 内部文字 defaults 低于调用方主题，字段来源解析与 Steps 共享；无 defaults 的既有消费者保持原路径。
+- PopupRoute 捕获调用子树主题，面板统一绘制背景；内部路由、状态、画笔与徽标适配类不再公开导出。
+- 同步无动画与动画切换状态，中断动画从当前进度开始；Demo 受控状态由页面 State 持有。
+- 逐个验证七个真实代码面板、核心片段编译及滚动后的菜单锚点，增加菜单展开明暗 Golden。
+
 ## 技术方案
 
 - 用 `TTabBarType`、`TTabBarItemStyle`、`TTabBarStyle`、`TTabBarLayout`
@@ -8,7 +15,7 @@
 - 保留受控 `value/onChanged`，让禁用状态只由 `onChanged` 决定。
 - 将 `TTabBarThemeData` 收敛到高度、颜色、间距、边线等视觉默认值；移除
   split、顶部边线开关、水波纹和动画策略。
-- 按 Figma 重建三列 3/4/5 项 Demo，并为可交互示例保留本地受控状态。
+- 按移动端画板重建三个分组、九个四项 TabBar 实例，并为可交互示例保留页面受控状态。
 
 ## API 变化
 

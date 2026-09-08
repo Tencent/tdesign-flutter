@@ -138,24 +138,189 @@ void main() {
       expect(popup.popUpDialogConfig?.popUpWidth, 120);
     });
 
-    testWidgets('popup menu item uses global typography and surface tokens', (
-      tester,
-    ) async {
-      final token = TThemeData.defaultData();
-      await tester.pumpWidget(
-        wrapWithTheme(const TTabBarMenuItem(value: '更多')),
-      );
+    testWidgets(
+      'popup menu item uses typography without covering panel color',
+      (tester) async {
+        final token = TThemeData.defaultData();
+        await tester.pumpWidget(
+          wrapWithTheme(const TTabBarMenuItem(value: '更多')),
+        );
 
-      final text = tester.widget<Text>(find.text('更多'));
-      expect(text.style?.fontSize, token.fontBodyLarge?.size);
+        final text = tester.widget<Text>(find.text('更多'));
+        expect(text.style?.fontSize, token.fontBodyLarge?.size);
 
-      final container = tester.widget<Container>(find.byType(Container).first);
-      final decoration = container.decoration! as BoxDecoration;
-      expect(decoration.color, token.bgColorContainer);
-    });
+        final container = tester.widget<Container>(
+          find.byType(Container).first,
+        );
+        final decoration = container.decoration! as BoxDecoration;
+        expect(decoration.color, isNull);
+      },
+    );
   });
 
   group('TTabBar widget', () {
+    testWidgets('文字主题按字段覆盖默认值，单项样式优先', (tester) async {
+      final token = TThemeData.defaultData();
+      for (final materialTheme in [false, true]) {
+        final base = TThemeBuilder.light(token);
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: materialTheme
+                ? base.copyWith(
+                    textTheme: const TextTheme(
+                      bodyLarge: TextStyle(fontSize: 21),
+                    ),
+                  )
+                : base.mergeExtension(
+                    const TTextThemeData(textStyle: TextStyle(fontSize: 21)),
+                  ),
+            home: Scaffold(
+              body: TTabBar(
+                type: TTabBarType.text,
+                value: 0,
+                useSafeArea: false,
+                onChanged: (_) {},
+                navigationTabs: const [
+                  TTabBarItemConfig(tabText: '默认选中'),
+                  TTabBarItemConfig(tabText: '默认未选'),
+                  TTabBarItemConfig(
+                    tabText: '局部覆盖',
+                    unselectTabTextStyle: TextStyle(
+                      fontSize: 24,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        final selected = tester.widget<Text>(find.text('默认选中')).style!;
+        final unselected = tester.widget<Text>(find.text('默认未选')).style!;
+        final custom = tester.widget<Text>(find.text('局部覆盖')).style!;
+        expect(selected.fontSize, 21);
+        expect(selected.color, token.brandNormalColor);
+        expect(unselected.fontSize, 21);
+        expect(unselected.color, token.textColorPrimary);
+        expect(custom.fontSize, 24);
+        expect(custom.color, Colors.orange);
+      }
+    });
+
+    testWidgets('二级菜单继承局部主题且背景配置不被菜单行覆盖', (tester) async {
+      final localToken = TThemeData.defaultData().copyWithTThemeData(
+        'popup-local',
+        colorMap: {'bgColorContainer': Colors.purple},
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(
+            body: Theme(
+              data: TThemeBuilder.light(localToken).mergeExtension(
+                const TTextThemeData(textStyle: TextStyle(fontSize: 21)),
+              ),
+              child: TTabBar(
+                type: TTabBarType.doubleLayer,
+                value: 0,
+                useSafeArea: false,
+                onChanged: (_) {},
+                navigationTabs: [
+                  TTabBarItemConfig(
+                    tabText: '菜单入口',
+                    popUpButtonConfig: TTabBarPopUpBtnConfig(
+                      items: const [TTabBarMenuItem(value: '菜单项')],
+                      onChanged: (_) {},
+                      popUpDialogConfig: TTabBarPopUpShapeConfig(
+                        backgroundColor: Colors.orange,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('菜单入口'));
+      await tester.pumpAndSettle();
+      final menu = find.byType(TTabBarMenuItem);
+      expect(tester.element(menu).tTheme.bgColorContainer, Colors.purple);
+      expect(tester.widget<Text>(find.text('菜单项')).style?.fontSize, 21);
+      final row = tester.widget<Container>(
+        find.descendant(of: menu, matching: find.byType(Container)).first,
+      );
+      expect((row.decoration! as BoxDecoration).color, isNull);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('动画配置切换保持指示器与受控值同步', (tester) async {
+      var value = 0;
+      var animation = TTabBarIndicatorAnimation.none;
+      late StateSetter update;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          StatefulBuilder(
+            builder: (context, setState) {
+              update = setState;
+              return TTabBar(
+                type: TTabBarType.text,
+                value: value,
+                useSafeArea: false,
+                indicatorAnimation: animation,
+                onChanged: (next) => setState(() => value = next),
+                navigationTabs: textTabs(),
+              );
+            },
+          ),
+        ),
+      );
+      Finder indicator() => find
+          .descendant(
+            of: find.byType(TTabBar),
+            matching: find.byWidgetPredicate(
+              (widget) => widget is Positioned && widget.left != null,
+            ),
+          )
+          .first;
+      await tester.tap(find.text('标签3'));
+      await tester.pumpAndSettle();
+      for (final mode in [
+        TTabBarIndicatorAnimation.linear,
+        TTabBarIndicatorAnimation.elastic,
+      ]) {
+        update(() => animation = mode);
+        await tester.pumpAndSettle();
+        expect(
+          tester.getCenter(indicator()).dx,
+          closeTo(tester.getCenter(find.text('标签3')).dx, 2),
+        );
+      }
+      update(() => animation = TTabBarIndicatorAnimation.none);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('标签2'));
+      await tester.pumpAndSettle();
+      update(() => animation = TTabBarIndicatorAnimation.linear);
+      await tester.pumpAndSettle();
+      expect(
+        tester.getCenter(indicator()).dx,
+        closeTo(tester.getCenter(find.text('标签2')).dx, 2),
+      );
+
+      update(() => value = 2);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      final before = tester.getTopLeft(indicator()).dx;
+      update(() => value = 0);
+      await tester.pump();
+      expect(tester.getTopLeft(indicator()).dx, closeTo(before, 0.01));
+      await tester.pumpAndSettle();
+      expect(
+        tester.getCenter(indicator()).dx,
+        closeTo(tester.getCenter(find.text('标签1')).dx, 2),
+      );
+    });
+
     testWidgets('renders text variant and emits onChanged', (tester) async {
       var changed = -1;
       var tapped = false;

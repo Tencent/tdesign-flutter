@@ -42,6 +42,7 @@ Layout 维度。
 - `layout` 仅表达图标与文字排列：`vertical`、`horizontal`；纯文本、纯图标和
   双层级类型不因该值改变语义。
 - `value` 是唯一选中状态；`onChanged == null` 时整栏只读并禁用交互。
+- `indicatorAnimation` 在 none、linear、elastic 间切换时始终与当前 value 对齐；动画中再次切换值从当前位置继续。
 - 每项 `onTap` 是选中变化时的附加动作；重复点击仅在
   `allowMultipleTaps == true` 时调用。
 - `itemStyle == label` 时选中项显示品牌浅色背景；`normal` 只改变前景色。
@@ -51,6 +52,12 @@ Layout 维度。
   Theme 优先于全局 Token。
 - Theme 动画中 nullable 尺寸按运行时内置默认值插值；nullable 颜色与边线保持
   “未覆盖”语义，不得插值出透明色或 `BorderSide.none` 污染低优先级 Token。
+- 内置文字样式使用共享解析器的低优先级 defaults；显式 TTextThemeData、DefaultTextStyle、TextTheme 按字段覆盖，单项 TextStyle 最高优先。
+- 二级菜单通过 InheritedTheme 捕获触发处的局部 Theme；菜单背景配置同时作用于面板和菜单行，不被内部容器背景遮挡。
+- 路由、弹层 Widget、State、绘制器及带徽标的内部单项均为私有实现，不再从包入口公开；使用者通过 TTabBar 和菜单配置组合，属于 breaking 迁移。
+- 双层级 Demo 初始选中“我的”，菜单内容为“基本信息 / 个人主页 / 设置”，选择后反馈所选内容。
+- 所有 Demo 的受控值由页面 State 持有，代码面板和主题重建不重置选择。核心片段写明状态字段、初始值与 build 接入方式，并由实际 Demo 源码生成。
+- 组合文字解析通过内部只读投影视图辨认 Material 自动补全；不移动共享主题类、不改变无 defaults 的既有 TText 路径。共享消费者无需迁移 API。
 
 ## 验收标准
 
@@ -59,5 +66,5 @@ Layout 维度。
 - [x] Normal/Label、Filled/Capsule、split、badge 和 doubleLayer 各自独立。
 - [x] 明暗主题均不使用硬编码业务颜色。
 - [x] 组件测试、Demo 测试、Flutter 3.32 Linux 明暗 Golden、双版本 analyze/test 通过。
-- [x] 当前最终 Demo 已在 iOS Simulator 热重启、逐项操作和明暗主题核对；按维护者
-  确认先以模拟器证据推送和发起 CNB Review，Android 真机最终版验证作为 PR 后补证据。
+- [x] 首轮 Demo 已在 iOS Simulator 热重启、逐项操作和明暗主题核对；维护者确认可先以模拟器证据推送。
+- [ ] 本轮补充修复后的最终版本重新进行移动设备逐项视觉操作核对；不以首轮设备证据或本轮 Golden 冒充。

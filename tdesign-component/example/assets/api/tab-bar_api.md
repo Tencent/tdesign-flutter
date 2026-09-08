@@ -53,10 +53,10 @@
 | onTap | GestureTapCallback? | - | tab点击事件 |
 | popUpButtonConfig | TTabBarPopUpBtnConfig? | - | 弹窗配置 |
 | selectedIcon | Widget? | - | 选中时图标 |
-| selectTabTextStyle | TextStyle? | - | 文本已选择样式 basicType为text时必填 |
+| selectTabTextStyle | TextStyle? | - | 选中时的文字样式，按字段覆盖继承主题与内置默认值。 |
 | tabText | String? | - | tab 文本 |
 | unselectedIcon | Widget? | - | 未选中时图标 |
-| unselectTabTextStyle | TextStyle? | - | 文本未选择样式 basicType为text时必填 |
+| unselectTabTextStyle | TextStyle? | - | 未选中时的文字样式，按字段覆盖继承主题与内置默认值。 |
 
 
 ### TTabBarPopUpBtnConfig

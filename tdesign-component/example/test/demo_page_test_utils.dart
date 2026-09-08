@@ -175,10 +175,12 @@ Future<void> pumpFullDemoPage(
   ThemeMode mode,
 ) async {
   var height = _initialPageHeight;
+  // 调整视口时保留页面与 model，避免丢失 ExamplePage 初始化的代码分组。
+  final page = _buildPage(spec, mode);
   for (var attempt = 0; attempt < 4; attempt++) {
     tester.view.physicalSize = Size(_pageWidth, height);
     tester.view.devicePixelRatio = 1;
-    await tester.pumpWidget(_buildPage(spec, mode));
+    await tester.pumpWidget(page);
     await tester.pump();
     if (attempt == 0 && spec.precacheAssetImages.isNotEmpty) {
       final context = tester.element(find.byType(MaterialApp));

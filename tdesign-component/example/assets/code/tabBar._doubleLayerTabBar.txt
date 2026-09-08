@@ -1,27 +1,28 @@
-Widget _doubleLayerTabBar(BuildContext context) {
+/// 核心片段：导入 material.dart 和 tdesign_flutter.dart。
+  /// 在 StatefulWidget 的 State 中声明 `int _doubleLayerValue = 3;`，
+  /// 从 build 调用本方法；状态由 State 持有并通过 setState 重建。
+    Widget _doubleLayerTabBar(BuildContext context) {
     const labels = ['首页', '应用', '聊天', '我的'];
-    var value = 0;
-    return StatefulBuilder(
-      builder: (context, setState) => TTabBar(
-        type: TTabBarType.doubleLayer,
-        useSafeArea: false,
-        value: value,
-        onChanged: (newValue) => setState(() => value = newValue),
-        navigationTabs: List.generate(
-          4,
-          (index) => TTabBarItemConfig(
-            tabText: labels[index],
-            popUpButtonConfig: index == 3
-                ? TTabBarPopUpBtnConfig(
-                    items: const [
-                      TTabBarMenuItem(value: '展开项一'),
-                      TTabBarMenuItem(value: '展开项二'),
-                      TTabBarMenuItem(value: '展开项三'),
-                    ],
-                    onChanged: (_) {},
-                  )
-                : null,
-          ),
+    return TTabBar(
+      type: TTabBarType.doubleLayer,
+      useSafeArea: false,
+      value: _doubleLayerValue,
+      onChanged: (newValue) => setState(() => _doubleLayerValue = newValue),
+      navigationTabs: List.generate(
+        4,
+        (index) => TTabBarItemConfig(
+          tabText: labels[index],
+          popUpButtonConfig: index == 3
+              ? TTabBarPopUpBtnConfig(
+                  items: const [
+                    TTabBarMenuItem(value: '基本信息'),
+                    TTabBarMenuItem(value: '个人主页'),
+                    TTabBarMenuItem(value: '设置'),
+                  ],
+                  onChanged: (item) =>
+                      TToast.showText('选择了$item', context: context),
+                )
+              : null,
         ),
       ),
     );
