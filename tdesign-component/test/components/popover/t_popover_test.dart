@@ -1396,5 +1396,78 @@ void main() {
         Colors.blue,
       );
     });
+
+    test('TPopoverThemeData lerp 保留 nullable fallback 语义', () {
+      const fallback = TPopoverThemeData();
+      const explicit = TPopoverThemeData(
+        backgroundColor: Colors.black,
+        padding: EdgeInsets.all(20),
+        minWidth: 80,
+        maxWidth: 240,
+        maxHeight: 160,
+        borderRadius: 12,
+        barrierColor: Colors.black54,
+        arrowSize: 10,
+        showArrow: false,
+        offset: 6,
+        boxShadow: [BoxShadow(color: Colors.black)],
+      );
+
+      final beforeMidpoint = fallback.lerp(explicit, 0.25);
+      expect(beforeMidpoint.backgroundColor, isNull);
+      expect(beforeMidpoint.padding, isNull);
+      expect(beforeMidpoint.minWidth, isNull);
+      expect(beforeMidpoint.maxWidth, isNull);
+      expect(beforeMidpoint.maxHeight, isNull);
+      expect(beforeMidpoint.borderRadius, isNull);
+      expect(beforeMidpoint.barrierColor, isNull);
+      expect(beforeMidpoint.arrowSize, isNull);
+      expect(beforeMidpoint.showArrow, isNull);
+      expect(beforeMidpoint.offset, isNull);
+      expect(beforeMidpoint.boxShadow, isNull);
+
+      final afterMidpoint = fallback.lerp(explicit, 0.75);
+      expect(afterMidpoint.backgroundColor, Colors.black);
+      expect(afterMidpoint.padding, const EdgeInsets.all(20));
+      expect(afterMidpoint.minWidth, 80);
+      expect(afterMidpoint.maxWidth, 240);
+      expect(afterMidpoint.maxHeight, 160);
+      expect(afterMidpoint.borderRadius, 12);
+      expect(afterMidpoint.barrierColor, Colors.black54);
+      expect(afterMidpoint.arrowSize, 10);
+      expect(afterMidpoint.showArrow, isFalse);
+      expect(afterMidpoint.offset, 6);
+      expect(afterMidpoint.boxShadow, explicit.boxShadow);
+
+      final reverse = explicit.lerp(fallback, 0.75);
+      expect(reverse.backgroundColor, isNull);
+      expect(reverse.padding, isNull);
+      expect(reverse.maxWidth, isNull);
+      expect(reverse.arrowSize, isNull);
+    });
+
+    test('TPopoverThemeData lerp 连续插值两侧显式值', () {
+      const start = TPopoverThemeData(
+        backgroundColor: Colors.black,
+        padding: EdgeInsets.all(8),
+        maxWidth: 100,
+        arrowSize: 4,
+      );
+      const end = TPopoverThemeData(
+        backgroundColor: Colors.white,
+        padding: EdgeInsets.all(16),
+        maxWidth: 200,
+        arrowSize: 12,
+      );
+
+      final midpoint = start.lerp(end, 0.5);
+      expect(
+        midpoint.backgroundColor,
+        Color.lerp(Colors.black, Colors.white, 0.5),
+      );
+      expect(midpoint.padding, const EdgeInsets.all(12));
+      expect(midpoint.maxWidth, 150);
+      expect(midpoint.arrowSize, 8);
+    });
   });
 }

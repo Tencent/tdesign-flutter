@@ -105,13 +105,28 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
       return this;
     }
     return TPopoverThemeData(
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
+      backgroundColor: _lerpNullable(
+        backgroundColor,
+        other.backgroundColor,
+        t,
+        (a, b, value) => Color.lerp(a, b, value)!,
+      ),
+      padding: _lerpNullable(
+        padding,
+        other.padding,
+        t,
+        (a, b, value) => EdgeInsetsGeometry.lerp(a, b, value)!,
+      ),
       minWidth: lerpDouble(minWidth, other.minWidth, t),
       maxWidth: lerpDouble(maxWidth, other.maxWidth, t),
       maxHeight: lerpDouble(maxHeight, other.maxHeight, t),
       borderRadius: lerpDouble(borderRadius, other.borderRadius, t),
-      barrierColor: Color.lerp(barrierColor, other.barrierColor, t),
+      barrierColor: _lerpNullable(
+        barrierColor,
+        other.barrierColor,
+        t,
+        (a, b, value) => Color.lerp(a, b, value)!,
+      ),
       arrowSize: lerpDouble(arrowSize, other.arrowSize, t),
       showArrow: t < 0.5 ? showArrow : other.showArrow,
       offset: lerpDouble(offset, other.offset, t),
@@ -129,9 +144,20 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
     /// 插值进度。
     double t,
   ) {
-    if (a == null && b == null) {
-      return null;
+    return _lerpNullable(a, b, t, (a, b, value) {
+      return a * (1.0 - value) + b * value;
+    });
+  }
+
+  static T? _lerpNullable<T>(
+    T? a,
+    T? b,
+    double t,
+    T Function(T a, T b, double t) lerp,
+  ) {
+    if (a == null || b == null) {
+      return t < 0.5 ? a : b;
     }
-    return (a ?? 0.0) * (1.0 - t) + (b ?? 0.0) * t;
+    return lerp(a, b, t);
   }
 }
