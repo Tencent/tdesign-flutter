@@ -22,6 +22,13 @@
 - Flutter 3.47.0（latest）：TreeSelect 组件与生成器测试 18 项、Demo 测试 7 项全部通过；
   组件包和 example 包 `flutter analyze` 均为 `No issues found`。
 - 组件生产代码覆盖率：`286/288 = 99.31%`，高于 95% 门槛。
+- 路径契约收敛后，Flutter 3.32.0 的 TreeSelect 组件测试 16 项全部通过，
+  组件包 `flutter analyze --fatal-infos` 为 `No issues found`；生产代码覆盖率为
+  `309/311 = 99.36%`。
+- iPhone 16（iOS 18.2 模拟器）真实点击通过：单选切换分支并选择叶子、多选新增
+  与取消叶子均正确更新；本轮仅增加契约文档和 debug 校验，不涉及视觉变化，未更新 Golden。
+- API 生成配置已登记真实公开类型 `TTreeSelectOption`，生成文档同时包含选项值唯一性、
+  完整路径、单选数量和重复路径约束。
 - `dart run tool/generate_example_code.dart --check` 通过。
 - Linux `amd64` + Flutter 3.32.0 重新生成明暗两张 Demo Golden，并在同一容器
   去掉 `--update-goldens` 复跑，2 项全部通过。

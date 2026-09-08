@@ -373,6 +373,55 @@ void main() {
     expect(changed, isFalse);
   });
 
+  testWidgets('single mode rejects more than one controlled path in debug',
+      (tester) async {
+    await tester.pumpWidget(wrap(const TTreeSelect(
+      options: options,
+      value: [
+        ['fruit', 'apple'],
+        ['fruit', 'banana'],
+      ],
+      onChanged: _ignore,
+    )));
+
+    final exception = tester.takeException();
+    expect(exception, isA<AssertionError>());
+    expect(exception.toString(), contains('at most one path'));
+  });
+
+  testWidgets('duplicate sibling option values are rejected in debug',
+      (tester) async {
+    await tester.pumpWidget(wrap(const TTreeSelect(
+      options: [
+        TTreeSelectOption(label: 'First', value: 'duplicate'),
+        TTreeSelectOption(label: 'Second', value: 'duplicate'),
+      ],
+      value: [],
+      onChanged: _ignore,
+    )));
+
+    final exception = tester.takeException();
+    expect(exception, isA<AssertionError>());
+    expect(exception.toString(), contains('unique among siblings'));
+  });
+
+  testWidgets('duplicate controlled paths are rejected in debug',
+      (tester) async {
+    await tester.pumpWidget(wrap(const TTreeSelect(
+      options: options,
+      value: [
+        ['fruit', 'apple'],
+        ['fruit', 'apple'],
+      ],
+      multiple: true,
+      onChanged: _ignore,
+    )));
+
+    final exception = tester.takeException();
+    expect(exception, isA<AssertionError>());
+    expect(exception.toString(), contains('duplicate paths'));
+  });
+
   testWidgets('theme controls dimensions, colors, and text styles',
       (tester) async {
     const selectedStyle = TextStyle(color: Colors.red);

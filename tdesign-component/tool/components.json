@@ -443,7 +443,7 @@
       "api": {
         "names": [
           "TTreeSelect",
-          "TSelectOption"
+          "TTreeSelectOption"
         ],
         "getComments": false
       }

@@ -13,7 +13,7 @@ class TTreeSelectThemeData extends ThemeExtension<TTreeSelectThemeData> {
     /// 根列宽度。
     this.rootColumnWidth,
 
-    /// 子列宽度。
+    /// 所有非根列的固定宽度；为 null 时由组件按可用宽度自动布局。
     this.columnWidth,
 
     /// 单项最小高度。
@@ -47,7 +47,9 @@ class TTreeSelectThemeData extends ThemeExtension<TTreeSelectThemeData> {
   /// 根列宽度。
   final double? rootColumnWidth;
 
-  /// 子列宽度。
+  /// 所有非根列的固定宽度；为 null 时由组件按可用宽度自动布局。
+  ///
+  /// 设置后每个非根列均使用该宽度，面板总宽度超过可用宽度时可横向滚动。
   final double? columnWidth;
 
   /// 单项最小高度。

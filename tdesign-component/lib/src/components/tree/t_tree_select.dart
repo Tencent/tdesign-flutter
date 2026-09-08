@@ -22,7 +22,7 @@ class TTreeSelectOption {
     /// 展示文案。
     required this.label,
 
-    /// 业务值。
+    /// 业务值；同一层级的选项必须保持唯一。
     required this.value,
 
     /// 子选项。
@@ -35,7 +35,9 @@ class TTreeSelectOption {
   /// 展示文案。
   final String label;
 
-  /// 业务值。
+  /// 业务值；同一层级的选项必须保持唯一。
+  ///
+  /// 值可为 null，但同一层级最多只能有一个 null 值。
   final Object? value;
 
   /// 子选项。
@@ -56,13 +58,16 @@ class TTreeSelect extends StatefulWidget {
     /// 根选项。
     required this.options,
 
-    /// 受控选中路径。
+    /// 受控选中路径；每一项应为从根到叶子的完整 [TTreeSelectOption.value] 路径。
+    /// 单选模式最多传入一条，多选模式可传入多条且不得重复。
     required this.value,
 
     /// 选中路径变化回调；为 null 时禁用。
     this.onChanged,
 
     /// 是否允许选择多个叶子节点。
+    ///
+    /// 为 false 时，[value] 最多包含一条路径。
     this.multiple = false,
   });
 
@@ -70,12 +75,18 @@ class TTreeSelect extends StatefulWidget {
   final List<TTreeSelectOption> options;
 
   /// 受控选中路径。
+  ///
+  /// 每一项应为从根到叶子的完整 [TTreeSelectOption.value] 路径。
+  /// 暂时无法在 [options] 中解析到叶子的路径不会显示选中态。
+  /// 组件会回退到首个可用分支。单选模式最多传入一条，多选模式可传入多条且不得重复。
   final List<List<Object?>> value;
 
   /// 选中路径变化回调；为 null 时禁用。
   final ValueChanged<List<List<Object?>>>? onChanged;
 
   /// 是否允许选择多个叶子节点。
+  ///
+  /// 为 false 时，[value] 最多包含一条路径。
   final bool multiple;
 
   @override
@@ -191,6 +202,7 @@ class _TTreeSelectState extends State<TTreeSelect> {
 
   @override
   Widget build(BuildContext context) {
+    assert(_debugCheckConfiguration());
     final theme = Theme.of(context).extension<TTreeSelectThemeData>();
     final columns = _visibleColumns();
     final panel = LayoutBuilder(
@@ -230,6 +242,36 @@ class _TTreeSelectState extends State<TTreeSelect> {
         child: AbsorbPointer(absorbing: !_enabled, child: panel),
       ),
     );
+  }
+
+  bool _debugCheckConfiguration() {
+    assert(
+      widget.multiple || widget.value.length <= 1,
+      'TTreeSelect.value must contain at most one path when multiple is false.',
+    );
+    for (var index = 0; index < widget.value.length; index++) {
+      for (var previous = 0; previous < index; previous++) {
+        assert(
+          !listEquals(widget.value[previous], widget.value[index]),
+          'TTreeSelect.value must not contain duplicate paths.',
+        );
+      }
+    }
+
+    void checkUniqueValues(List<TTreeSelectOption> options) {
+      final values = <Object?>{};
+      for (final option in options) {
+        assert(
+          values.add(option.value),
+          'TTreeSelectOption.value must be unique among siblings. '
+          'Duplicate value: ${option.value}.',
+        );
+        checkUniqueValues(option.children);
+      }
+    }
+
+    checkUniqueValues(widget.options);
+    return true;
   }
 
   List<double> _resolveColumnWidths(
