@@ -33,16 +33,19 @@ class TPicker extends StatefulWidget {
     this.itemBuilder,
   });
 
-  /// 数据源。
+  /// 不可变数据源；更新选项时创建新的数据源与列表，不原地修改。
   final TPickerItems items;
 
-  /// 各列受控值。
+  /// 各列受控值。使用不可变列表，更新时提供新列表。
+  ///
+  /// 拖动期间可显示候选值；滚动结束后父级未接受 [onChanged] 的值时，
+  /// 恢复到此值。父级接受变化时，应通过重建回传新的值。
   final List<Object?> value;
 
   /// 值变化回调；为 null 时禁用。
   final ValueChanged<TPickerValue>? onChanged;
 
-  /// 某列滚动结束回调。
+  /// 某列滚动结束时的候选快照，不表示父级已接受该值。
   final void Function(int columnIndex, TPickerValue value)? onColumnScrollEnd;
 
   /// 自定义选项构建器。
@@ -57,6 +60,7 @@ class _TPickerState extends State<TPicker> {
   late List<FixedExtentScrollController> _controllers;
   late List<GlobalKey<WheelColumnState>> _columnKeys;
   List<Object?>? _pendingValue;
+  int _pendingColumn = -1;
 
   bool get _enabled => widget.onChanged != null;
 
@@ -80,6 +84,10 @@ class _TPickerState extends State<TPicker> {
     super.didUpdateWidget(oldWidget);
     final acceptsPendingValue =
         _pendingValue != null && listEquals(widget.value, _pendingValue);
+    final preserveThrough =
+        acceptsPendingValue && oldWidget.items == widget.items
+        ? _pendingColumn
+        : -1;
     if (acceptsPendingValue) {
       _pendingValue = null;
     }
@@ -89,14 +97,23 @@ class _TPickerState extends State<TPicker> {
         linkedValueAccepted ||
         (!acceptsPendingValue &&
             !listEquals(widget.value, _snapshot().values))) {
-      final previousControllers = _controllers;
-      _initialize();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        for (final controller in previousControllers) {
-          controller.dispose();
-        }
-      });
+      _resetColumns(preserveThrough: preserveThrough);
     }
+  }
+
+  void _resetColumns({int preserveThrough = -1}) {
+    final previousControllers = _controllers;
+    _initialize(preserveThrough: preserveThrough);
+    _pendingValue = null;
+    _pendingColumn = -1;
+    final retiredControllers = previousControllers
+        .where((controller) => !_controllers.contains(controller))
+        .toList();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      for (final controller in retiredControllers) {
+        controller.dispose();
+      }
+    });
   }
 
   @override
@@ -107,12 +124,22 @@ class _TPickerState extends State<TPicker> {
     super.dispose();
   }
 
-  void _initialize() {
+  void _initialize({int preserveThrough = -1}) {
+    // 受控回传只更新后续联动列，保留当前手势和惯性所依附的滚动位置。
+    final retainedControllers = preserveThrough < 0
+        ? <FixedExtentScrollController>[]
+        : _controllers.take(preserveThrough + 1).toList();
+    final retainedKeys = preserveThrough < 0
+        ? <GlobalKey<WheelColumnState>>[]
+        : _columnKeys.take(preserveThrough + 1).toList();
     _columns = switch (widget.items) {
       TPickerColumns(:final columns) => columns,
       TPickerLinked(:final options) => _linkedColumns(options, widget.value),
     };
     _controllers = List.generate(_columns.length, (columnIndex) {
+      if (columnIndex < retainedControllers.length) {
+        return retainedControllers[columnIndex];
+      }
       final options = _columns[columnIndex];
       final requested = columnIndex < widget.value.length
           ? options.indexWhere(
@@ -123,7 +150,11 @@ class _TPickerState extends State<TPicker> {
         initialItem: requested >= 0 ? requested : _firstEnabledIndex(options),
       );
     });
-    _columnKeys = List.generate(_columns.length, (_) => GlobalKey());
+    _columnKeys = List.generate(
+      _columns.length,
+      (index) =>
+          index < retainedKeys.length ? retainedKeys[index] : GlobalKey(),
+    );
   }
 
   static List<List<TPickerOption>> _linkedColumns(
@@ -190,7 +221,21 @@ class _TPickerState extends State<TPicker> {
     }
     return ListenableBuilder(
       listenable: _controllers[columnIndex],
-      builder: (context, _) {
+      child: ExcludeSemantics(
+        child: WheelColumn(
+          key: _columnKeys[columnIndex],
+          colIndex: columnIndex,
+          options: options,
+          controller: _controllers[columnIndex],
+          itemHeight: _itemHeight,
+          disabled: !_enabled,
+          itemBuilder: widget.itemBuilder,
+          onItemSelected: _onItemSelected,
+          onAnimationComplete: _onItemSelected,
+          onScrollEnd: _onScrollEnd,
+        ),
+      ),
+      builder: (context, child) {
         final currentIndex = _selectedIndex(columnIndex);
         final previous = currentIndex > 0
             ? options[currentIndex - 1].label
@@ -212,20 +257,7 @@ class _TPickerState extends State<TPicker> {
               ? () => _columnKeys[columnIndex].currentState?.nudge(-1)
               : null,
           decreasedValue: previous ?? '',
-          child: ExcludeSemantics(
-            child: WheelColumn(
-              key: _columnKeys[columnIndex],
-              colIndex: columnIndex,
-              options: options,
-              controller: _controllers[columnIndex],
-              itemHeight: _itemHeight,
-              disabled: !_enabled,
-              itemBuilder: widget.itemBuilder,
-              onItemSelected: _onItemSelected,
-              onAnimationComplete: _onItemSelected,
-              onScrollEnd: _onScrollEnd,
-            ),
-          ),
+          child: child,
         );
       },
     );
@@ -246,6 +278,7 @@ class _TPickerState extends State<TPicker> {
       // 父级同步受控值时，滚轮的本帧位置尚未必然反映到 controller；
       // 标记该用户发起的快照，避免 didUpdateWidget 错误重建滚轮并中断拖动。
       _pendingValue = value.values;
+      _pendingColumn = columnIndex;
       widget.onChanged?.call(value);
     }
   }
@@ -257,6 +290,19 @@ class _TPickerState extends State<TPicker> {
   ) {
     if (notification is ScrollEndNotification && _enabled) {
       widget.onColumnScrollEnd?.call(columnIndex, _snapshot());
+      // 等父级处理本帧的回调；未接受的候选值不能成为第二状态源。
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted ||
+            _pendingValue == null ||
+            _controllers.any(
+              (controller) =>
+                  controller.hasClients &&
+                  controller.position.isScrollingNotifier.value,
+            )) {
+          return;
+        }
+        setState(_resetColumns);
+      });
     }
     return false;
   }

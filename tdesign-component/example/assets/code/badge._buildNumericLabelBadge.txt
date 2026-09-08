@@ -1,6 +1,0 @@
-Widget _buildNumericLabelBadge(BuildContext context) {
-    return const TBadge(
-      label: '8888',
-      child: Icon(TIcons.notification),
-    );
-  }

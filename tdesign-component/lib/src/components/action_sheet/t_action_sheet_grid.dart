@@ -6,9 +6,6 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
-import '../../util/iterable_ext.dart';
-import '../../util/list_ext.dart';
-import '../badge/t_badge.dart';
 import '../text/t_text.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_item_widget.dart';
@@ -18,23 +15,17 @@ import 't_action_sheet_types.dart';
 ///
 /// 以宫格布局展示可选项，支持分页和横向滚动。
 /// 通常不直接使用，由 `TActionSheet.showGrid` 创建。
-class TActionSheetGrid extends StatefulWidget {
+class TActionSheetGrid<T> extends StatefulWidget {
   static const paginationIndicatorExtent = 8.0;
 
   /// 动作面板的项目列表
-  final List<TActionSheetItem> items;
+  final List<TActionSheetItem<T>> items;
 
   /// 描述文本
   final String? subtitle;
 
-  /// 对齐方式
-  final TActionSheetAlign align;
-
-  /// 每页显示的项目数
-  final int count;
-
-  /// 显示的行数
-  final int rows;
+  /// 普通、分页或横向滚动宫格布局
+  final TActionSheetGridLayout layout;
 
   /// 取消按钮的文本
   final String? cancelText;
@@ -42,23 +33,14 @@ class TActionSheetGrid extends StatefulWidget {
   /// 是否显示取消按钮
   final bool showCancel;
 
-  /// 是否显示分页
-  final bool showPagination;
-
-  /// 是否可以横向滚动
-  final bool scrollable;
-
   /// 取消按钮的回调函数
   final VoidCallback? onCancel;
 
   /// 选择项目时的回调函数
-  final TActionSheetOnChanged? onChanged;
+  final TActionSheetOnSelected<T>? onSelected;
 
   /// 项目的行高
   final double itemHeight;
-
-  /// 项目的最小宽度
-  final double itemMinWidth;
 
   /// 是否使用安全区域
   final bool useSafeArea;
@@ -67,49 +49,45 @@ class TActionSheetGrid extends StatefulWidget {
     super.key,
     required this.items,
     this.subtitle,
-    this.align = TActionSheetAlign.center,
-    this.count = 8,
-    this.rows = 2,
+    this.layout = const TActionSheetGridLayout.fixed(),
     this.cancelText,
     this.showCancel = true,
-    this.showPagination = false,
-    this.scrollable = false,
     this.onCancel,
-    this.onChanged,
+    this.onSelected,
     this.itemHeight = 96.0,
-    this.itemMinWidth = 80.0,
     this.useSafeArea = true,
   });
 
   static double preferredPopupHeight(
     BuildContext context, {
     required String? subtitle,
-    required int rows,
+    required TActionSheetGridLayout layout,
     required double itemHeight,
-    required bool showPagination,
     required bool showCancel,
   }) {
     final token = context.tTheme;
-    var height = token.spacer8 + rows * itemHeight;
-    if (subtitle != null) {
+    final showPagination = layout.mode == TActionSheetGridMode.paged;
+    var height = token.spacer8 + layout.rows * itemHeight;
+    if (subtitle?.isNotEmpty ?? false) {
       final font = token.fontBodyMedium;
-      final painter = TextPainter(
-        text: TextSpan(
-          text: subtitle,
-          style: TextStyle(
-            fontSize: font?.size,
-            height: font?.height,
-            fontWeight: font?.fontWeight,
-          ),
-        ),
-        textDirection: Directionality.of(context),
-        textScaler: MediaQuery.textScalerOf(context),
-      )..layout(
-          maxWidth: math.max(
-            0,
-            MediaQuery.sizeOf(context).width - token.spacer16 * 2,
-          ),
-        );
+      final painter =
+          TextPainter(
+            text: TextSpan(
+              text: subtitle,
+              style: TextStyle(
+                fontSize: font?.size,
+                height: font?.height,
+                fontWeight: font?.fontWeight,
+              ),
+            ),
+            textDirection: Directionality.of(context),
+            textScaler: MediaQuery.textScalerOf(context),
+          )..layout(
+            maxWidth: math.max(
+              0,
+              MediaQuery.sizeOf(context).width - token.spacer16 * 2,
+            ),
+          );
       height += token.spacer4 + painter.height;
       painter.dispose();
     }
@@ -125,10 +103,10 @@ class TActionSheetGrid extends StatefulWidget {
   }
 
   @override
-  _TActionSheetGridState createState() => _TActionSheetGridState();
+  State<TActionSheetGrid<T>> createState() => _TActionSheetGridState<T>();
 }
 
-class _TActionSheetGridState extends State<TActionSheetGrid> {
+class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
   int currentPage = 0;
 
   @override
@@ -150,17 +128,15 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(height: context.tTheme.spacer8),
-          if (widget.subtitle != null) _buildDescription(context),
-          Flexible(
-            fit: FlexFit.loose,
-            child: _buildGridContent(context),
-          ),
+          if (widget.subtitle?.isNotEmpty ?? false) _buildDescription(context),
+          Flexible(fit: FlexFit.loose, child: _buildGridContent(context)),
           if (widget.showCancel)
             buildCancelButton(
               context,
-              widget.showPagination,
+              widget.layout.mode == TActionSheetGridMode.paged,
               widget.cancelText,
               widget.onCancel,
+              spacingColor: context.tTheme.bgColorContainer,
             ),
         ],
       ),
@@ -168,21 +144,17 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
   }
 
   Widget _buildGridContent(BuildContext context) {
-    if (!widget.showPagination) {
-      return widget.scrollable
-          ? _buildScrollGrid(context)
-          : _buildGrid(context);
-    }
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Flexible(
-          fit: FlexFit.loose,
-          child: _buildPaginationGrid(context),
-        ),
-        _buildPaginationDots(context),
-      ],
-    );
+    return switch (widget.layout.mode) {
+      TActionSheetGridMode.fixed => _buildGrid(context),
+      TActionSheetGridMode.scroll => _buildScrollGrid(context),
+      TActionSheetGridMode.paged => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(fit: FlexFit.loose, child: _buildPaginationGrid(context)),
+          _buildPaginationDots(context),
+        ],
+      ),
+    };
   }
 
   Widget _buildDescription(BuildContext context) {
@@ -192,49 +164,41 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
         right: context.tTheme.spacer16,
         top: context.tTheme.spacer4,
       ),
-      child: Row(
-        mainAxisAlignment: getMainAxisAlignment(widget.align),
-        children: [
-          Flexible(
-            child: TText(
-              widget.subtitle!,
-              font: context.tTheme.fontBodyMedium,
-              textAlign: switch (widget.align) {
-                TActionSheetAlign.left => TextAlign.left,
-                TActionSheetAlign.right => TextAlign.right,
-                TActionSheetAlign.center => TextAlign.center,
-              },
-              textColor: context.tTheme.textColorPlaceholder,
-            ),
-          ),
-        ],
+      child: Center(
+        child: TText(
+          widget.subtitle!,
+          font: context.tTheme.fontBodyMedium,
+          textAlign: TextAlign.center,
+          textColor: context.tTheme.textColorPlaceholder,
+        ),
       ),
     );
   }
 
   Widget _gridWrap(Widget child) {
-    return SizedBox(height: widget.rows * widget.itemHeight, child: child);
+    return SizedBox(
+      height: widget.layout.rows * widget.itemHeight,
+      child: child,
+    );
   }
 
   Widget _buildPaginationGrid(BuildContext context) {
     return _gridWrap(
       PageView.builder(
-        itemCount: (widget.items.length / widget.count).ceil(),
+        itemCount: (widget.items.length / widget.layout.count).ceil(),
         // 当页面改变时更新当前页码
-        onPageChanged: widget.showPagination
-            ? (index) {
-                setState(() {
-                  currentPage = index;
-                });
-              }
-            : null,
+        onPageChanged: (index) {
+          setState(() {
+            currentPage = index;
+          });
+        },
         itemBuilder: (context, pageIndex) {
           // 获取当前页面的项目
           final pageItems = widget.items
-              .skip(pageIndex * widget.count)
-              .take(widget.count)
+              .skip(pageIndex * widget.layout.count)
+              .take(widget.layout.count)
               .toList();
-          return _buildGrid(context, items: pageItems, pageIndex: pageIndex);
+          return _buildGrid(context, items: pageItems);
         },
       ),
     );
@@ -244,42 +208,60 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
     if (widget.items.isEmpty) {
       return _gridWrap(const SizedBox.shrink());
     }
-    final chunks = widget.items.chunk(
-      (widget.items.length / widget.rows).ceil(),
-    );
-    final itemCount = chunks.first.length;
+    final columnsPerPanel = widget.layout.count ~/ widget.layout.rows;
+    final panelCount = (widget.items.length / widget.layout.count).ceil();
     return _gridWrap(
-      ListView.builder(
-        itemCount: itemCount,
-        padding: EdgeInsets.zero,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, col) {
-          return Column(
-            children: List.generate(chunks.length, (row) {
-              final index = itemCount * row + col;
+      LayoutBuilder(
+        builder: (context, constraints) {
+          final availableWidth = constraints.maxWidth.isFinite
+              ? constraints.maxWidth
+              : MediaQuery.sizeOf(context).width;
+          final fittedItemWidth = availableWidth / columnsPerPanel;
+          final itemWidth = math.max(
+            fittedItemWidth,
+            widget.layout.itemMinWidth ?? 0,
+          );
+          final panelWidth = itemWidth * columnsPerPanel;
+          return ListView.builder(
+            itemCount: panelCount,
+            padding: EdgeInsets.zero,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, panel) {
               return SizedBox(
-                width: widget.itemMinWidth,
-                height: widget.itemHeight,
-                child: TActionSheetItemWidget(
-                  item: chunks[row].getOrNull(col),
-                  index: index,
-                  onChanged: widget.onChanged,
+                width: panelWidth,
+                child: Column(
+                  children: List.generate(widget.layout.rows, (row) {
+                    return Row(
+                      children: List.generate(columnsPerPanel, (column) {
+                        final index =
+                            panel * widget.layout.count +
+                            row * columnsPerPanel +
+                            column;
+                        return SizedBox(
+                          width: itemWidth,
+                          height: widget.itemHeight,
+                          child: index < widget.items.length
+                              ? TActionSheetItemWidget<T>(
+                                  item: widget.items[index],
+                                  onSelected: widget.onSelected,
+                                )
+                              : const SizedBox.shrink(),
+                        );
+                      }),
+                    );
+                  }),
                 ),
               );
-            }),
+            },
           );
         },
       ),
     );
   }
 
-  Widget _buildGrid(
-    BuildContext context, {
-    List<TActionSheetItem>? items,
-    int pageIndex = 0,
-  }) {
+  Widget _buildGrid(BuildContext context, {List<TActionSheetItem<T>>? items}) {
     // 计算每行的项目数
-    final itemsPerRow = widget.count ~/ widget.rows;
+    final itemsPerRow = widget.layout.count ~/ widget.layout.rows;
     return _gridWrap(
       LayoutBuilder(
         builder: (context, constraints) {
@@ -288,8 +270,8 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
               : MediaQuery.sizeOf(context).width;
           final childAspectRatio = width / itemsPerRow / widget.itemHeight;
           final needsVerticalScroll =
-              (items ?? widget.items).length > widget.count ||
-              constraints.maxHeight < widget.rows * widget.itemHeight;
+              (items ?? widget.items).length > widget.layout.count ||
+              constraints.maxHeight < widget.layout.rows * widget.itemHeight;
           return GridView.builder(
             physics: needsVerticalScroll
                 ? const AlwaysScrollableScrollPhysics()
@@ -302,10 +284,9 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
             ),
             itemBuilder: (context, index) {
               final item = (items ?? widget.items)[index];
-              return TActionSheetItemWidget(
+              return TActionSheetItemWidget<T>(
                 item: item,
-                index: pageIndex * widget.count + index,
-                onChanged: widget.onChanged,
+                onSelected: widget.onSelected,
               );
             },
           );
@@ -317,21 +298,22 @@ class _TActionSheetGridState extends State<TActionSheetGrid> {
   Widget _buildPaginationDots(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate((widget.items.length / widget.count).ceil(), (
-        index,
-      ) {
-        return Container(
-          margin: EdgeInsets.symmetric(horizontal: context.tTheme.spacer4),
-          width: TActionSheetGrid.paginationIndicatorExtent,
-          height: TActionSheetGrid.paginationIndicatorExtent,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: currentPage == index
-                ? context.tTheme.brandNormalColor
-                : context.tTheme.bgColorSecondaryContainerActive,
-          ),
-        );
-      }),
+      children: List.generate(
+        (widget.items.length / widget.layout.count).ceil(),
+        (index) {
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: context.tTheme.spacer4),
+            width: TActionSheetGrid.paginationIndicatorExtent,
+            height: TActionSheetGrid.paginationIndicatorExtent,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: currentPage == index
+                  ? context.tTheme.brandNormalColor
+                  : context.tTheme.textDisabledColor,
+            ),
+          );
+        },
+      ),
     );
   }
 }

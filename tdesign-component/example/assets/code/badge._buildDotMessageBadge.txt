@@ -1,0 +1,4 @@
+Widget _buildDotMessageBadge(BuildContext context) => TBadge(
+    variant: TBadgeVariant.dot,
+    child: TText('消息', font: context.tTheme.fontBodyLarge),
+  );

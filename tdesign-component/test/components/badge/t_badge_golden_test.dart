@@ -7,8 +7,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
   setUpAll(() async {
-    final flutterBin =
-        File(Platform.resolvedExecutable).parent.parent.parent.parent.parent;
+    final flutterBin = File(
+      Platform.resolvedExecutable,
+    ).parent.parent.parent.parent.parent;
     final robotoFile = File(
       '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
     );
@@ -19,7 +20,7 @@ void main() {
 
   for (final brightness in Brightness.values) {
     testWidgets('TBadge ${brightness.name} visual matrix', (tester) async {
-      tester.view.physicalSize = const Size(360, 220);
+      tester.view.physicalSize = const Size(420, 620);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.resetPhysicalSize);
 
@@ -47,9 +48,13 @@ class _BadgeScene extends StatelessWidget {
     final theme = baseTheme.copyWith(
       textTheme: baseTheme.textTheme.apply(fontFamily: 'Roboto'),
       primaryTextTheme: baseTheme.primaryTextTheme.apply(fontFamily: 'Roboto'),
+      // Golden 为固定字体而复制 BadgeTheme；复制后属于显式主题，因此同时锁定
+      // TDesign Dot 的 8px 视觉。默认回退路径由 t_badge_test.dart 单独覆盖。
       badgeTheme: baseTheme.badgeTheme.copyWith(
-        textStyle:
-            baseTheme.badgeTheme.textStyle?.copyWith(fontFamily: 'Roboto'),
+        smallSize: 8,
+        textStyle: baseTheme.badgeTheme.textStyle?.copyWith(
+          fontFamily: 'Roboto',
+        ),
       ),
     );
 
@@ -62,56 +67,72 @@ class _BadgeScene extends StatelessWidget {
             child: ColoredBox(
               color: theme.colorScheme.surface,
               child: const SizedBox(
-                width: 320,
-                height: 180,
+                width: 380,
+                height: 540,
                 child: Padding(
                   padding: EdgeInsets.all(24),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          TBadge(label: '8'),
-                          SizedBox(width: 24),
-                          TBadge(label: '99+'),
-                          SizedBox(width: 24),
-                          TBadge(label: '8', variant: TBadgeVariant.small),
-                          SizedBox(width: 24),
-                          TBadge(variant: TBadgeVariant.dot),
-                          SizedBox(width: 24),
-                          TBadge(label: '8', border: true),
-                        ],
+                      _VariantRow(
+                        name: 'normal',
+                        badge: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TBadge(label: '8'),
+                            SizedBox(width: 12),
+                            TBadge(label: '99+'),
+                          ],
+                        ),
                       ),
-                      SizedBox(height: 32),
-                      Row(
-                        children: [
-                          TBadge(
-                            label: '8',
-                            child: _BadgeTarget(label: 'A'),
-                          ),
-                          SizedBox(width: 32),
-                          TBadge(
-                            variant: TBadgeVariant.dot,
-                            child: _BadgeTarget(label: 'B'),
-                          ),
-                          SizedBox(width: 32),
-                          TBadge(
-                            label: '0',
-                            showZero: false,
-                            child: _BadgeTarget(label: 'C'),
-                          ),
-                          SizedBox(width: 32),
-                          BadgeTheme(
-                            data: BadgeThemeData(
-                              alignment: AlignmentDirectional.bottomStart,
-                              offset: Offset(2, 2),
-                            ),
-                            child: TBadge(
-                              label: '8',
-                              child: _BadgeTarget(label: 'D'),
-                            ),
-                          ),
-                        ],
+                      _VariantRow(
+                        name: 'dot',
+                        badge: TBadge(variant: TBadgeVariant.dot),
+                      ),
+                      _VariantRow(
+                        name: 'square',
+                        badge: TBadge(
+                          label: '8',
+                          variant: TBadgeVariant.square,
+                        ),
+                      ),
+                      _VariantRow(
+                        name: 'bubble',
+                        badge: TBadge(
+                          label: 'NEW',
+                          variant: TBadgeVariant.bubble,
+                        ),
+                      ),
+                      _VariantRow(
+                        name: 'ribbonLeft',
+                        badge: TBadge(
+                          label: 'NEW',
+                          variant: TBadgeVariant.ribbonLeft,
+                          child: _BadgeTarget(label: 'A'),
+                        ),
+                      ),
+                      _VariantRow(
+                        name: 'ribbonRight',
+                        badge: TBadge(
+                          label: 'NEW',
+                          variant: TBadgeVariant.ribbonRight,
+                          child: _BadgeTarget(label: 'B'),
+                        ),
+                      ),
+                      _VariantRow(
+                        name: 'triangleLeft',
+                        badge: TBadge(
+                          label: 'NEW',
+                          variant: TBadgeVariant.triangleLeft,
+                          child: _BadgeTarget(label: 'C'),
+                        ),
+                      ),
+                      _VariantRow(
+                        name: 'triangleRight',
+                        badge: TBadge(
+                          label: 'NEW',
+                          variant: TBadgeVariant.triangleRight,
+                          child: _BadgeTarget(label: 'D'),
+                        ),
                       ),
                     ],
                   ),
@@ -120,6 +141,29 @@ class _BadgeScene extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _VariantRow extends StatelessWidget {
+  const _VariantRow({required this.name, required this.badge});
+
+  final String name;
+  final Widget badge;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 54,
+      child: Row(
+        children: [
+          SizedBox(
+            width: 140,
+            child: Text(name, style: const TextStyle(fontFamily: 'Roboto')),
+          ),
+          Expanded(child: Center(child: badge)),
+        ],
       ),
     );
   }

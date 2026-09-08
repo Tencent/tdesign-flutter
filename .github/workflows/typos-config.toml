@@ -3,6 +3,7 @@ default.check-filename = true
 [default.extend-words]
 "BA" = "BA"
 "PA" = "PA"
+"heping" = "heping"
 
 [files]
 extend-exclude = ["project.pbxproj"]

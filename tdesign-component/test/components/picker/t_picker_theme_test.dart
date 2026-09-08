@@ -4,11 +4,36 @@ import 'package:tdesign_flutter/src/components/picker/t_picker_theme_data.dart';
 
 /// TPickerThemeData 纯函数覆盖（copyWith / lerp），用于提升覆盖率。
 void main() {
+  test(
+    'unset height interpolates from its effective default in both directions',
+    () {
+      const unset = TPickerThemeData();
+      const custom = TPickerThemeData(height: 240);
+      for (final t in [0.0, 0.1, 0.5, 1.0]) {
+        expect(unset.lerp(custom, t).height, 200 + 40 * t);
+        expect(custom.lerp(unset, t).height, 240 - 40 * t);
+        expect(unset.lerp(unset, t).height, isNull);
+      }
+    },
+  );
   group('TPickerThemeData 纯函数', () {
-    const theme = TPickerThemeData(
-      height: 200,
-      itemCount: 5,
-    );
+    test('rejects invalid viewport dimensions', () {
+      for (final height in [
+        0.0,
+        -1.0,
+        double.infinity,
+        double.negativeInfinity,
+        double.nan,
+      ]) {
+        expect(() => TPickerThemeData(height: height), throwsAssertionError);
+      }
+      for (final count in [0, -1]) {
+        expect(() => TPickerThemeData(itemCount: count), throwsAssertionError);
+      }
+      expect(const TPickerThemeData().height, isNull);
+      expect(const TPickerThemeData().itemCount, isNull);
+    });
+    const theme = TPickerThemeData(height: 200, itemCount: 5);
 
     test('copyWith 覆盖字段', () {
       final copied = theme.copyWith(height: 300, itemCount: 7);

@@ -1,0 +1,8 @@
+Widget _badgeGrid(BuildContext context) => _trigger(
+    label: '带徽标宫格型',
+    onPressed: () => TActionSheet.showGrid(
+      context,
+      items: _badgeGridItems(context),
+      onSelected: (item) => _showSelection(context, item),
+    ),
+  );

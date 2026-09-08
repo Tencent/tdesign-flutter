@@ -539,7 +539,7 @@ class _TCalendarBodyState extends State<TCalendarBody> {
       }
       daysInMonth.add(TCalendarCellModel(
         date: date,
-        typeNotifier: DateSelectTypeNotifier(selectType),
+        selectType: selectType,
         isLastDayOfMonth: daysInMonthCount == day,
       ));
     }

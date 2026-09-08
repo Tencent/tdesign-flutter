@@ -109,6 +109,10 @@ List<DateTimeColumn> _expand(DateMode? date, TimeMode? time) {
         ..add(DateTimeColumn.year)
         ..add(DateTimeColumn.month)
         ..add(DateTimeColumn.day);
+    case DateMode.monthDay:
+      cols
+        ..add(DateTimeColumn.month)
+        ..add(DateTimeColumn.day);
     case null:
       break;
   }

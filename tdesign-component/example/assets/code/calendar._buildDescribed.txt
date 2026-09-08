@@ -1,0 +1,18 @@
+Widget _buildDescribed(BuildContext context) => TCellGroup(
+    cells: [
+      TCell(
+        key: const ValueKey('calendar-single-description-trigger'),
+        title: const TText('带单行描述的日历'),
+        note: _dateNote(_describedSingleValue),
+        arrow: true,
+        onTap: () => _showCalendar(
+          variant: TCalendarVariant.single,
+          value: _describedSingleValue,
+          minDate: DateTime(2022, 2),
+          maxDate: DateTime(2022, 3, 15),
+          subtitleBuilder: (_, __) => const Text('¥60'),
+          onConfirm: (value) => setState(() => _describedSingleValue = value),
+        ),
+      ),
+    ],
+  );

@@ -1,23 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 't_action_sheet_types.dart';
-
-/// TActionSheet 组件级 ThemeExtension
+/// TActionSheet 组件级视觉 ThemeExtension
 class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
-  /// 默认对齐
-  final TActionSheetAlign? defaultAlign;
-
-  /// 项高度
-  final double? itemHeight;
-
-  /// 项最小宽度
-  final double? itemMinWidth;
-
-  /// 宫格列数
-  final int? count;
-
-  /// 宫格行数
-  final int? rows;
+  /// 宫格项目高度
+  final double? gridItemHeight;
 
   /// 蒙层颜色
   final Color? barrierColor;
@@ -28,18 +14,14 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
   /// 默认图标字形尺寸；同时作为列表图标槽位尺寸。
   final double? iconSize;
 
-  /// 宫格和分组布局的图标槽位尺寸。
+  /// 宫格布局的图标槽位尺寸。
   final double? gridIconExtent;
 
   /// 默认图标颜色。
   final Color? iconColor;
 
   const TActionSheetThemeData({
-    this.defaultAlign,
-    this.itemHeight,
-    this.itemMinWidth,
-    this.count,
-    this.rows,
+    this.gridItemHeight,
     this.barrierColor,
     this.panelRadius,
     this.iconSize,
@@ -52,11 +34,7 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
       return this;
     }
     return TActionSheetThemeData(
-      defaultAlign: other.defaultAlign ?? defaultAlign,
-      itemHeight: other.itemHeight ?? itemHeight,
-      itemMinWidth: other.itemMinWidth ?? itemMinWidth,
-      count: other.count ?? count,
-      rows: other.rows ?? rows,
+      gridItemHeight: other.gridItemHeight ?? gridItemHeight,
       barrierColor: other.barrierColor ?? barrierColor,
       panelRadius: other.panelRadius ?? panelRadius,
       iconSize: other.iconSize ?? iconSize,
@@ -67,11 +45,7 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
 
   @override
   TActionSheetThemeData copyWith({
-    TActionSheetAlign? defaultAlign,
-    double? itemHeight,
-    double? itemMinWidth,
-    int? count,
-    int? rows,
+    double? gridItemHeight,
     Color? barrierColor,
     double? panelRadius,
     double? iconSize,
@@ -79,11 +53,7 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
     Color? iconColor,
   }) {
     return TActionSheetThemeData(
-      defaultAlign: defaultAlign ?? this.defaultAlign,
-      itemHeight: itemHeight ?? this.itemHeight,
-      itemMinWidth: itemMinWidth ?? this.itemMinWidth,
-      count: count ?? this.count,
-      rows: rows ?? this.rows,
+      gridItemHeight: gridItemHeight ?? this.gridItemHeight,
       barrierColor: barrierColor ?? this.barrierColor,
       panelRadius: panelRadius ?? this.panelRadius,
       iconSize: iconSize ?? this.iconSize,
@@ -94,25 +64,23 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
 
   @override
   TActionSheetThemeData lerp(
-      ThemeExtension<TActionSheetThemeData>? other, double t) {
+    ThemeExtension<TActionSheetThemeData>? other,
+    double t,
+  ) {
     if (other is! TActionSheetThemeData) {
       return this;
     }
     return TActionSheetThemeData(
-      defaultAlign: t < 0.5 ? defaultAlign : other.defaultAlign,
-      itemHeight: lerpDouble(itemHeight, other.itemHeight, t),
-      itemMinWidth: lerpDouble(itemMinWidth, other.itemMinWidth, t),
-      count: t < 0.5 ? count : other.count,
-      rows: t < 0.5 ? rows : other.rows,
+      gridItemHeight: _lerpDouble(gridItemHeight, other.gridItemHeight, t),
       barrierColor: Color.lerp(barrierColor, other.barrierColor, t),
-      panelRadius: lerpDouble(panelRadius, other.panelRadius, t),
-      iconSize: lerpDouble(iconSize, other.iconSize, t),
-      gridIconExtent: lerpDouble(gridIconExtent, other.gridIconExtent, t),
+      panelRadius: _lerpDouble(panelRadius, other.panelRadius, t),
+      iconSize: _lerpDouble(iconSize, other.iconSize, t),
+      gridIconExtent: _lerpDouble(gridIconExtent, other.gridIconExtent, t),
       iconColor: Color.lerp(iconColor, other.iconColor, t),
     );
   }
 
-  static double? lerpDouble(double? a, double? b, double t) {
+  static double? _lerpDouble(double? a, double? b, double t) {
     if (a == null && b == null) {
       return null;
     }

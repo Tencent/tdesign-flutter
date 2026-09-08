@@ -9,19 +9,27 @@ void main() {
   setUpAll(() async {
     final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
       ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
-    final flutterBin =
-        File(Platform.resolvedExecutable).parent.parent.parent.parent.parent;
+    final flutterBin = File(
+      Platform.resolvedExecutable,
+    ).parent.parent.parent.parent.parent;
     final robotoFile = File(
       '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
     );
     final robotoFont = FontLoader('Roboto')
       ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView));
-    await Future.wait([iconFont.load(), robotoFont.load()]);
+    final cjkFont = FontLoader('TDesign Golden CJK')
+      ..addFont(
+        File(
+          'example/test/fonts/TDesignGoldenCJK-Regular.otf',
+        ).readAsBytes().then(ByteData.sublistView),
+      );
+    await Future.wait([iconFont.load(), robotoFont.load(), cjkFont.load()]);
   });
 
   for (final brightness in Brightness.values) {
-    testWidgets('navigation components ${brightness.name} visual matrix',
-        (tester) async {
+    testWidgets('navigation components ${brightness.name} visual matrix', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(460, 1180);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.resetPhysicalSize);
@@ -53,8 +61,14 @@ class _NavigationComponentsScene extends StatelessWidget {
         ? TThemeBuilder.light(token)
         : TThemeBuilder.dark(token);
     final theme = baseTheme.copyWith(
-      textTheme: baseTheme.textTheme.apply(fontFamily: 'Roboto'),
-      primaryTextTheme: baseTheme.primaryTextTheme.apply(fontFamily: 'Roboto'),
+      textTheme: baseTheme.textTheme.apply(
+        fontFamily: 'Roboto',
+        fontFamilyFallback: const ['TDesign Golden CJK'],
+      ),
+      primaryTextTheme: baseTheme.primaryTextTheme.apply(
+        fontFamily: 'Roboto',
+        fontFamilyFallback: const ['TDesign Golden CJK'],
+      ),
     );
 
     return MaterialApp(
@@ -74,8 +88,8 @@ class _NavigationComponentsScene extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const _SectionLabel('NavBar'),
-                      TNavBar(
-                        title: 'Page title',
+                      const TNavBar(
+                        title: Text('Page title'),
                         useDefaultBack: true,
                         actions: [
                           TNavBarItem(icon: TIcons.home, onTap: _noop),
@@ -92,13 +106,13 @@ class _NavigationComponentsScene extends StatelessWidget {
                             TTab(text: 'Details'),
                             TTab(text: 'Settings'),
                           ],
-                          variant: TTabsBarVariant.filled,
+                          variant: TTabsBarVariant.line,
                         ),
                       ),
                       const SizedBox(height: 18),
                       const _SectionLabel('TabBar'),
                       TTabBar(
-                        variant: TTabBarVariant.iconText,
+                        type: TTabBarType.iconText,
                         value: 1,
                         useSafeArea: false,
                         placeholder: false,
@@ -111,7 +125,7 @@ class _NavigationComponentsScene extends StatelessWidget {
                       ),
                       const SizedBox(height: 18),
                       const _SectionLabel('Steps'),
-                      TSteps(
+                      const TSteps.progress(
                         value: 1,
                         steps: [
                           TStepsItemData(title: 'Done', content: 'Complete'),
@@ -121,32 +135,68 @@ class _NavigationComponentsScene extends StatelessWidget {
                       ),
                       const SizedBox(height: 18),
                       const _SectionLabel('BackTop'),
-                      const Row(
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TBackTop(
-                            shape: TBackTopShape.circle,
-                            onPressed: _noop,
+                          Row(
+                            children: [
+                              TBackTop(onPressed: _noop),
+                              SizedBox(width: 12),
+                              TBackTop(
+                                colorScheme: TBackTopColorScheme.dark,
+                                onPressed: _noop,
+                              ),
+                              SizedBox(width: 12),
+                              TBackTop(showText: true, onPressed: _noop),
+                              SizedBox(width: 12),
+                              TBackTop(
+                                showText: true,
+                                colorScheme: TBackTopColorScheme.dark,
+                                onPressed: _noop,
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 20),
-                          TBackTop(
-                            shape: TBackTopShape.halfCircle,
-                            onPressed: _noop,
+                          SizedBox(height: 12),
+                          Row(
+                            children: [
+                              TBackTop(
+                                shape: TBackTopShape.halfCircle,
+                                onPressed: _noop,
+                              ),
+                              SizedBox(width: 12),
+                              TBackTop(
+                                shape: TBackTopShape.halfCircle,
+                                colorScheme: TBackTopColorScheme.dark,
+                                onPressed: _noop,
+                              ),
+                              SizedBox(width: 12),
+                              TBackTop(
+                                shape: TBackTopShape.halfCircle,
+                                showText: true,
+                                onPressed: _noop,
+                              ),
+                              SizedBox(width: 12),
+                              TBackTop(
+                                shape: TBackTopShape.halfCircle,
+                                showText: true,
+                                colorScheme: TBackTopColorScheme.dark,
+                                onPressed: _noop,
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 20),
-                          TBackTop(),
                         ],
                       ),
                       const SizedBox(height: 18),
                       const _SectionLabel('Drawer and SideBar'),
-                      SizedBox(
+                      const SizedBox(
                         height: 190,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Expanded(
-                              child: TDrawerWidget(
+                              child: TDrawer(
                                 width: 190,
-                                title: const Text('Menu'),
+                                title: Text('Menu'),
                                 items: [
                                   TDrawerItem(title: 'Dashboard'),
                                   TDrawerItem(title: 'Messages'),
@@ -155,8 +205,8 @@ class _NavigationComponentsScene extends StatelessWidget {
                                 onItemClick: _ignoreDrawer,
                               ),
                             ),
-                            const SizedBox(width: 12),
-                            const SizedBox(
+                            SizedBox(width: 12),
+                            SizedBox(
                               width: 150,
                               child: TSideBar(
                                 value: 1,

@@ -1,0 +1,18 @@
+Widget _buildLocalized(BuildContext context) => TCellGroup(
+    cells: [
+      TCell(
+        key: const ValueKey('calendar-localized-trigger'),
+        title: const TText('国际化'),
+        note: _dateNote(_localizedValue),
+        arrow: true,
+        onTap: () => _showCalendar(
+          variant: TCalendarVariant.single,
+          value: _localizedValue,
+          minDate: DateTime(2022, 2),
+          maxDate: DateTime(2022, 3, 15),
+          localized: true,
+          onConfirm: (value) => setState(() => _localizedValue = value),
+        ),
+      ),
+    ],
+  );

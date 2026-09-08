@@ -6,7 +6,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| animationDuration | Duration | const Duration(milliseconds: 200) | - |
+| animationDuration | Duration? | - | 展开、关闭及切换动画时长。 未指定时使用 `TDropdownThemeData.animationDuration`，再回退到 200ms。 显式值（包括 `Duration.zero`）优先于主题；系统禁用动画时始终使用零时长。 |
 | closeOnOverlayTap | bool | true | - |
 | controller | TDropdownMenuController? | - | - |
 | items | List<TDropdownMenuItem> | - | - |

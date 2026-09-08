@@ -1,8 +1,10 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_text_theme_source.dart';
 import '../../theme/t_theme.dart';
 import 't_text.dart' show TText, TTextSpan;
 import 't_text_theme_data.dart';
@@ -14,9 +16,13 @@ class TTextResolve {
   /// 解析 [TText] 最终样式。
   ///
   /// 优先级：实例 style > 实例便利参数 > TTextThemeData >
-  /// DefaultTextStyle > Material TextTheme > TDesign Token。
+  /// DefaultTextStyle > Material TextTheme > 组合组件 defaults > TDesign Token。
+  ///
+  /// [defaults] 仅供组合组件提供内置文字样式，不代表调用方显式覆盖。
+  /// 调用方的部分主题配置只替换对应字段，未配置字段仍使用组件默认值。
   static TextStyle resolve({
     required BuildContext context,
+    TextStyle? defaults,
     TextStyle? style,
     Font? font,
     FontWeight? fontWeight,
@@ -38,8 +44,17 @@ class TTextResolve {
       resolved,
       _fontStyle(tokenFont).copyWith(color: token.textColorPrimary),
     );
-    resolved = _merge(resolved, material.tExplicitTextTheme?.bodyLarge);
-    final defaultTextStyle = context.tExplicitDefaultTextStyle;
+    resolved = _merge(resolved, defaults);
+    // 既有 TText 调用保留原有解析；组合组件 defaults 使用字段级来源解析。
+    resolved = _merge(
+      resolved,
+      defaults == null
+          ? material.tExplicitTextTheme?.bodyLarge
+          : _explicitMaterialTextStyle(material),
+    );
+    final defaultTextStyle = defaults == null
+        ? context.tExplicitDefaultTextStyle
+        : _explicitDefaultTextStyle(context);
     if (!_isMaterialFallbackStyle(defaultTextStyle)) {
       resolved = _merge(resolved, defaultTextStyle);
     }
@@ -88,6 +103,144 @@ class TTextResolve {
       return style;
     }
     return style == null ? explicit : explicit.merge(style);
+  }
+
+  static TextStyle? _explicitMaterialTextStyle(ThemeData material) {
+    final projection = material.extensions.values
+        .whereType<TTextThemeSource>()
+        .firstOrNull;
+    final base =
+        projection?.textTheme ??
+        ThemeData(
+          brightness: material.brightness,
+          colorScheme: material.colorScheme,
+          useMaterial3: material.useMaterial3,
+        ).textTheme;
+    final typography = material.useMaterial3
+        ? Typography.material2021(platform: material.platform)
+        : Typography.material2014(platform: material.platform);
+    return _styleDifference(
+      material.textTheme.bodyLarge,
+      typography.englishLike.merge(base).bodyLarge,
+    );
+  }
+
+  static TextStyle? _explicitDefaultTextStyle(BuildContext context) {
+    final material = Theme.of(context);
+    final inherited = DefaultTextStyle.of(context).style;
+    final implicitStyles = <TextStyle?>[
+      material.textTheme.displayLarge,
+      material.textTheme.displayMedium,
+      material.textTheme.displaySmall,
+      material.textTheme.headlineLarge,
+      material.textTheme.headlineMedium,
+      material.textTheme.headlineSmall,
+      material.textTheme.titleLarge,
+      material.textTheme.titleMedium,
+      material.textTheme.titleSmall,
+      material.textTheme.bodyLarge,
+      material.textTheme.bodyMedium,
+      material.textTheme.bodySmall,
+      material.textTheme.labelLarge,
+      material.textTheme.labelMedium,
+      material.textTheme.labelSmall,
+    ];
+    if (implicitStyles.contains(inherited)) {
+      return null;
+    }
+    TextStyle? materialDefault;
+    TextStyle? ancestorStyle;
+    context.visitAncestorElements((element) {
+      final widget = element.widget;
+      if (widget is DefaultTextStyle) {
+        ancestorStyle = widget.style;
+        if (implicitStyles.contains(widget.style)) {
+          materialDefault = widget.style;
+          return false;
+        }
+      }
+      if (widget is AnimatedDefaultTextStyle &&
+          implicitStyles.contains(widget.style)) {
+        materialDefault = ancestorStyle;
+        return false;
+      }
+      return true;
+    });
+    // DefaultTextStyle.merge 同样会携带 Material 的补全字段。
+    return _styleDifference(inherited, materialDefault);
+  }
+
+  static TextStyle? _styleDifference(TextStyle? value, TextStyle? defaults) {
+    if (value == null ||
+        defaults == null ||
+        (!value.inherit && defaults.inherit)) {
+      return value;
+    }
+    const equality = ListEquality<Object?>();
+    final result = TextStyle(
+      color: value.color == defaults.color ? null : value.color,
+      backgroundColor: value.backgroundColor == defaults.backgroundColor
+          ? null
+          : value.backgroundColor,
+      fontFamily: value.fontFamily == defaults.fontFamily
+          ? null
+          : value.fontFamily,
+      fontSize: value.fontSize == defaults.fontSize ? null : value.fontSize,
+      fontWeight: value.fontWeight == defaults.fontWeight
+          ? null
+          : value.fontWeight,
+      fontStyle: value.fontStyle == defaults.fontStyle ? null : value.fontStyle,
+      letterSpacing: value.letterSpacing == defaults.letterSpacing
+          ? null
+          : value.letterSpacing,
+      wordSpacing: value.wordSpacing == defaults.wordSpacing
+          ? null
+          : value.wordSpacing,
+      textBaseline: value.textBaseline == defaults.textBaseline
+          ? null
+          : value.textBaseline,
+      height: value.height == defaults.height ? null : value.height,
+      leadingDistribution:
+          value.leadingDistribution == defaults.leadingDistribution
+          ? null
+          : value.leadingDistribution,
+      locale: value.locale == defaults.locale ? null : value.locale,
+      foreground: value.foreground == defaults.foreground
+          ? null
+          : value.foreground,
+      background: value.background == defaults.background
+          ? null
+          : value.background,
+      decoration: value.decoration == defaults.decoration
+          ? null
+          : value.decoration,
+      decorationColor: value.decorationColor == defaults.decorationColor
+          ? null
+          : value.decorationColor,
+      decorationStyle: value.decorationStyle == defaults.decorationStyle
+          ? null
+          : value.decorationStyle,
+      decorationThickness:
+          value.decorationThickness == defaults.decorationThickness
+          ? null
+          : value.decorationThickness,
+      overflow: value.overflow == defaults.overflow ? null : value.overflow,
+      fontFamilyFallback:
+          equality.equals(value.fontFamilyFallback, defaults.fontFamilyFallback)
+          ? null
+          : value.fontFamilyFallback,
+      shadows: equality.equals(value.shadows, defaults.shadows)
+          ? null
+          : value.shadows,
+      fontFeatures: equality.equals(value.fontFeatures, defaults.fontFeatures)
+          ? null
+          : value.fontFeatures,
+      fontVariations:
+          equality.equals(value.fontVariations, defaults.fontVariations)
+          ? null
+          : value.fontVariations,
+    );
+    return result == const TextStyle() ? null : result;
   }
 
   static TextStyle _merge(TextStyle base, TextStyle? override) {

@@ -8,7 +8,7 @@ export 'src/components/avatar/t_avatar_theme_data.dart' show TAvatarThemeData;
 export 'src/components/avatar/t_avatar_types.dart';
 export 'src/components/backtop/t_backtop.dart';
 export 'src/components/backtop/t_backtop_theme_data.dart'
-    show TBackTopThemeData, TBackTopShape;
+    show TBackTopColorScheme, TBackTopShape, TBackTopThemeData;
 export 'src/components/badge/t_badge.dart';
 export 'src/components/badge/t_badge_theme_data.dart' show TBadgeThemeData;
 export 'src/components/button/t_button.dart';
@@ -47,8 +47,6 @@ export 'src/components/divider/t_divider_theme_data.dart'
     show TDividerThemeData;
 export 'src/components/drawer/t_drawer.dart';
 export 'src/components/drawer/t_drawer_theme_data.dart' show TDrawerThemeData;
-export 'src/components/drawer/t_drawer_widget.dart'
-    show TDrawerWidget, TDrawerItem, TDrawerItemClickCallback;
 export 'src/components/dropdown_menu/t_dropdown_item.dart';
 export 'src/components/dropdown_menu/t_dropdown_menu.dart';
 export 'src/components/dropdown_menu/t_dropdown_theme_data.dart'
@@ -89,7 +87,8 @@ export 'src/components/loading/t_loading_controller.dart';
 export 'src/components/loading/t_loading_theme_data.dart'
     show TLoadingThemeData;
 export 'src/components/message/t_message.dart';
-export 'src/components/message/t_message_theme_data.dart' show TMessageThemeData;
+export 'src/components/message/t_message_theme_data.dart'
+    show TMessageThemeData;
 export 'src/components/message/t_message_types.dart' show TMessageStatus;
 export 'src/components/navbar/t_nav_bar.dart';
 export 'src/components/navbar/t_nav_bar_theme_data.dart'
@@ -154,7 +153,6 @@ export 'src/components/stepper/t_stepper.dart';
 export 'src/components/stepper/t_stepper_theme_data.dart'
     show TStepperThemeData;
 export 'src/components/steps/t_steps.dart';
-export 'src/components/steps/t_steps_theme_data.dart' show TStepsThemeData;
 export 'src/components/swipe_cell/t_swipe_cell.dart';
 export 'src/components/swipe_cell/t_swipe_cell_action.dart';
 export 'src/components/swipe_cell/t_swipe_cell_panel.dart';

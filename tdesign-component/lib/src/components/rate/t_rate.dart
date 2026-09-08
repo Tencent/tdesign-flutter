@@ -10,6 +10,7 @@ import '../../theme/t_shadows.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
+import '../text/t_text.dart';
 import 't_rate_theme_data.dart';
 
 /// 自定义评分图标构建器。
@@ -176,6 +177,7 @@ class _TRateState extends State<TRate> {
           },
           child: Row(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
@@ -300,7 +302,7 @@ class _TRateState extends State<TRate> {
                   Flexible(
                     child: SizedBox(
                       width: theme?.textWidth,
-                      child: Text(
+                      child: TText(
                         _resolveText(context, texts: texts),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -315,7 +317,7 @@ class _TRateState extends State<TRate> {
                 else
                   SizedBox(
                     width: theme?.textWidth,
-                    child: Text(
+                    child: TText(
                       _resolveText(context, texts: texts),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -339,15 +341,18 @@ class _TRateState extends State<TRate> {
     TRateThemeData? theme,
     ColorScheme? explicitColorScheme,
   ) {
-    return theme?.textStyle ??
-        TextStyle(
-          color: _enabled
-              ? explicitColorScheme?.onSurface ??
-                    context.tTheme.textColorPrimary
-              : explicitColorScheme?.onSurface.withValues(alpha: 0.38) ??
-                    context.tTheme.textDisabledColor,
-          fontSize: context.tTheme.fontBodyLarge?.size,
-        );
+    final font = context.tTheme.fontBodyLarge;
+    final defaultStyle = TextStyle(
+      color: _enabled
+          ? explicitColorScheme?.onSurface ?? context.tTheme.textColorPrimary
+          : explicitColorScheme?.onSurface.withValues(alpha: 0.38) ??
+                context.tTheme.textDisabledColor,
+      fontSize: font?.size ?? 16,
+      height: font?.height ?? 1.5,
+      fontWeight: font?.fontWeight ?? FontWeight.w400,
+      leadingDistribution: TextLeadingDistribution.even,
+    );
+    return defaultStyle.merge(theme?.textStyle);
   }
 
   Widget _buildItem(

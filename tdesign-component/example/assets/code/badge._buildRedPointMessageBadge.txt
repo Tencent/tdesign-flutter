@@ -1,9 +1,0 @@
-Widget _buildRedPointMessageBadge(BuildContext context) {
-    return TBadge(
-      variant: TBadgeVariant.dot,
-      child: TText(
-        '消息',
-        font: context.tTheme.fontBodyLarge,
-      ),
-    );
-  }
