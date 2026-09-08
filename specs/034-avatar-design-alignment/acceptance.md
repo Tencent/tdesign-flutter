@@ -4,6 +4,7 @@
 
 - 分支：`rss1102/feat/avatar-design-alignment`
 - 修复基线：PR #1090 原 head `ee9266bd`
+- 合并基线：`origin/develop` `6433854a`
 - Flutter/Dart：Flutter 3.32.0 / Dart 3.8.0；Flutter 3.47.0 / Dart 3.13.0；Golden 使用 Linux Flutter 3.32.0
 
 ## 自动化验证
@@ -21,6 +22,8 @@
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例片段与源码同步 |
 | `node tool/generate_api.mjs --dry-run` | 通过 | Avatar API 配置包含 TAvatar 与 TAvatarGroup |
 | Linux Flutter 3.32 `flutter test --no-pub test/avatar_demo_golden_test.dart` | 2/2 通过 | 更新前 light 0.32% / dark 0.34% 预期差异；检查实际图并更新后，不带更新参数严格复跑通过 |
+
+以上组件测试、Demo 测试、双版本静态分析、示例生成检查与 Linux Golden 均在合并最新 `origin/develop` 后复跑通过。
 
 ## 人工验收
 
