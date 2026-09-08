@@ -16,7 +16,7 @@
 | `flutter test test/avatar_demo_test.dart` | 4/4 通过 | Flutter 3.32.0，example 工程；含徽标尺寸与右上角越界锚点回归 |
 | `flutter analyze --no-pub` | 通过 | Flutter 3.47.0，0 issues |
 | `flutter test --no-pub test/components/avatar/t_avatar_test.dart` | 32/32 通过 | Flutter 3.47.0 |
-| `flutter test --no-pub test/avatar_demo_test.dart` | 3/3 通过 | Flutter 3.47.0，example 工程 |
+| `flutter test test/avatar_demo_test.dart` | 4/4 通过 | Flutter 3.47.0，example 工程；新增徽标几何回归复跑通过 |
 | `flutter test --coverage --no-pub test/components/avatar/t_avatar_test.dart` | 通过 | Avatar 生产代码 LH/LF = 196/201 = 97.51% |
 | 集中回归登记自测 | 通过 | coverage/component/example/visual 文件与 runner 登记完整 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例片段与源码同步 |
