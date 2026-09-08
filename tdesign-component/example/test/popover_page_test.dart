@@ -6,6 +6,8 @@ import 'package:tdesign_flutter_example/page/t_popover_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
 void main() {
+  tearDown(TToast.dismissAll);
+
   Widget buildPage() {
     return ChangeNotifierProvider(
       create: (_) => ThemeModeProvider(),
@@ -39,7 +41,7 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('事件回调和自定义内容展示真实状态变化', (tester) async {
+  testWidgets('事件回调展示真实状态变化', (tester) async {
     configurePhone(tester);
     await showPage(tester);
 
@@ -54,17 +56,27 @@ void main() {
     await tester.longPress(find.text('点击或长按我'));
     await tester.pump();
     expect(find.text('onLongTap：点击或长按我'), findsOneWidget);
+  });
 
-    await tester.tapAt(const Offset(8, 80));
-    await tester.pumpAndSettle();
-    final menuTrigger = find.byKey(const Key('popover-interactive-trigger'));
-    await reveal(tester, menuTrigger);
-    await tester.tap(menuTrigger);
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('popover-menu-复制')));
-    await tester.pump();
-    expect(find.text('已选择复制'), findsOneWidget);
-    expect(find.byKey(const Key('t-popover-content')), findsNothing);
+  testWidgets('公开自定义内容每个选项显示 Toast 并关闭', (tester) async {
+    configurePhone(tester);
+    await showPage(tester);
+
+    final trigger = find.byKey(const Key('popover-custom-content-trigger'));
+    await reveal(tester, trigger);
+    for (var index = 1; index <= 3; index++) {
+      await tester.tap(trigger);
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('t-popover-content')), findsOneWidget);
+      await tester.tap(find.byKey(Key('popover-custom-option-$index')));
+      await tester.pump();
+
+      expect(find.byKey(const Key('t-popover-content')), findsNothing);
+      expect(find.text('已选择：选项$index'), findsOneWidget);
+      TToast.dismissAll();
+      await tester.pump();
+    }
   });
 
   testWidgets('主题背景与尺寸约束在 Demo 中可观察', (tester) async {

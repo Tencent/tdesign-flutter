@@ -68,7 +68,7 @@
 
 - [x] Controller 展开、关闭、重复操作、自然关闭和替换路径均有测试。
 - [x] `showPopover` 原调用无需迁移，返回类型保持 `Future<void>`。
-- [x] 交互内容 Demo 使用 Anchor 受控模式，在选择后更新状态并关闭气泡。
+- [x] 公开自定义内容 Demo 使用 Anchor 受控模式，每个选项选择后关闭气泡并展示 Toast。
 - [x] nullable 与双显式 Theme 插值有字段级测试。
 - [x] API 文档、示例片段和 Spec 与最终实现一致。
 - [x] Flutter 3.32.0 与 latest 的 analyze、功能测试和覆盖率门禁通过。
