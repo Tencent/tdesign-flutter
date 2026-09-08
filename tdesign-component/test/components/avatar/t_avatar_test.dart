@@ -291,10 +291,10 @@ void main() {
       expect(tester.getSize(find.byType(TAvatarGroup)), const Size(80, 44));
     });
 
-    testWidgets('cascading 控制左右成员的绘制层级', (tester) async {
+    testWidgets('cascading 以 start/end 控制成员绘制层级', (tester) async {
       expect(
         const TAvatarGroup(children: []).cascading,
-        TAvatarGroupCascading.rightUp,
+        TAvatarGroupCascading.endUp,
       );
       const firstKey = ValueKey('first');
       const secondKey = ValueKey('second');
@@ -321,19 +321,83 @@ void main() {
             .map((positioned) => (positioned as PositionedDirectional).child)
             .map((decorated) => (decorated as DecoratedBox).child)
             .map((padding) => (padding as Padding).child)
+            .map((clip) => (clip as ClipRRect).child)
             .map((box) => (box as SizedBox).child)
             .map((fitted) => (fitted as FittedBox).child?.key)
             .toList();
       }
 
-      expect(await stackKeys(TAvatarGroupCascading.leftUp), [
+      expect(await stackKeys(TAvatarGroupCascading.startUp), [
         secondKey,
         firstKey,
       ]);
-      expect(await stackKeys(TAvatarGroupCascading.rightUp), [
+      expect(await stackKeys(TAvatarGroupCascading.endUp), [
         firstKey,
         secondKey,
       ]);
+    });
+
+    testWidgets('成员 shape 同时控制组外框和最终裁剪', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TAvatarGroup(
+            children: [
+              TAvatar(shape: TAvatarShape.circle),
+              TAvatar(shape: TAvatarShape.square),
+            ],
+          ),
+        ),
+      );
+
+      final decorations = tester
+          .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+          .map((widget) => widget.decoration)
+          .whereType<BoxDecoration>()
+          .where((decoration) => decoration.border != null)
+          .toList();
+      expect(decorations.map((decoration) => decoration.shape), [
+        BoxShape.circle,
+        BoxShape.rectangle,
+      ]);
+      expect(decorations.last.borderRadius, BorderRadius.circular(6));
+
+      final memberClips = tester
+          .widgetList<ClipRRect>(
+            find.descendant(
+              of: find.byType(TAvatarGroup),
+              matching: find.byType(ClipRRect),
+            ),
+          )
+          .where((clip) => clip.child is SizedBox)
+          .toList();
+      expect(memberClips, hasLength(2));
+      expect(memberClips[0].borderRadius, BorderRadius.circular(22));
+      expect(memberClips[1].borderRadius, BorderRadius.circular(4));
+    });
+
+    testWidgets('极小尺寸会收敛到安全约束', (tester) async {
+      await tester.pumpWidget(
+        app(const TAvatarGroup(dimension: 1, children: [TAvatar(), TAvatar()])),
+      );
+      expect(tester.takeException(), isNull);
+      expect(tester.getSize(find.byType(TAvatarGroup)), const Size(1, 1));
+    });
+
+    testWidgets('Theme 超范围值会收敛到安全约束', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TAvatarGroup(
+            key: ValueKey('invalid-theme'),
+            children: [TAvatar(), TAvatar()],
+          ),
+          avatarTheme: const TAvatarThemeData(
+            groupSpacing: 100,
+            groupBorderWidth: 100,
+          ),
+        ),
+      );
+      expect(tester.takeException(), isNull);
+      expect(tester.getSize(find.byType(TAvatarGroup)), const Size(48, 48));
     });
   });
 
@@ -417,6 +481,64 @@ void main() {
       expect(first.lerp(null, 0.5), same(first));
     });
 
+    test('lerp 从空配置按有效默认值插值且不从透明色渐变', () {
+      const empty = TAvatarThemeData();
+      const explicit = TAvatarThemeData(
+        dimension: 80,
+        iconSize: 40,
+        squareBorderRadius: 10,
+        backgroundColor: Colors.red,
+        textStyle: TextStyle(fontSize: 20),
+        groupSpacing: 16,
+        groupBorderWidth: 4,
+      );
+
+      final middle = empty.lerp(explicit, 0.5);
+      expect(middle.dimension, 64);
+      expect(middle.iconSize, 32);
+      expect(middle.squareBorderRadius, 8);
+      expect(middle.textStyle?.fontSize, 18);
+      expect(middle.groupSpacing, 12);
+      expect(middle.groupBorderWidth, 3);
+      expect(empty.lerp(explicit, 0.25).backgroundColor, isNull);
+      expect(middle.backgroundColor, Colors.red);
+      expect(explicit.lerp(empty, 0.25).backgroundColor, Colors.red);
+      expect(explicit.lerp(empty, 0.5).backgroundColor, isNull);
+    });
+
+    test('lerp 双方均为空时继续交给组件默认值解析', () {
+      final middle = const TAvatarThemeData().lerp(
+        const TAvatarThemeData(),
+        0.5,
+      );
+      expect(middle.dimension, isNull);
+      expect(middle.iconSize, isNull);
+      expect(middle.squareBorderRadius, isNull);
+      expect(middle.backgroundColor, isNull);
+      expect(middle.foregroundColor, isNull);
+      expect(middle.textStyle, isNull);
+      expect(middle.groupSpacing, isNull);
+      expect(middle.groupBorderWidth, isNull);
+      expect(middle.groupBorderColor, isNull);
+    });
+
+    testWidgets('ThemeData 动画中点使用有效默认尺寸', (tester) async {
+      final baseTheme = TThemeBuilder.light(TThemeData.defaultData());
+      final beginTheme = baseTheme.mergeExtension(const TAvatarThemeData());
+      final endTheme = baseTheme.mergeExtension(
+        const TAvatarThemeData(dimension: 80),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData.lerp(beginTheme, endTheme, 0.5),
+          home: const Scaffold(body: TAvatar()),
+        ),
+      );
+
+      expect(tester.getSize(find.byType(TAvatar)), const Size.square(64));
+    });
+
     test('TAvatarGroup 拒绝非正 maxCount', () {
       expect(
         () => TAvatarGroup(children: const [], maxCount: 0),
@@ -428,6 +550,18 @@ void main() {
       );
       expect(
         () => TAvatarGroup(children: const [], spacing: -1),
+        throwsAssertionError,
+      );
+      expect(
+        () => TAvatarGroup(children: const [], dimension: 44, spacing: 100),
+        throwsAssertionError,
+      );
+      expect(
+        () => TAvatarGroup(children: const [], dimension: double.infinity),
+        throwsAssertionError,
+      );
+      expect(
+        () => TAvatarThemeData(dimension: 44, groupBorderWidth: 23),
         throwsAssertionError,
       );
     });

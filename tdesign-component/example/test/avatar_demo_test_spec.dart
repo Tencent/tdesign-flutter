@@ -18,7 +18,7 @@ const avatarDemoPageTestSpec = DemoPageTestSpec(
     '纯展示的头像组',
     '带操作的头像组',
     '03 组件尺寸',
-    '+2',
+    '+5',
   ],
   componentType: TAvatar,
   expectedComponentCount: 30,

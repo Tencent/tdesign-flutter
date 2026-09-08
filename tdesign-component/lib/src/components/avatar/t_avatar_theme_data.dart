@@ -4,6 +4,7 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
+import 't_avatar_defaults.dart';
 import 't_avatar_types.dart';
 
 /// 头像组件级 ThemeExtension。
@@ -23,7 +24,32 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
     this.groupSpacing,
     this.groupBorderWidth,
     this.groupBorderColor,
-  });
+  }) : assert(
+         dimension == null || (dimension > 0 && dimension != double.infinity),
+       ),
+       assert(
+         iconSize == null || (iconSize >= 0 && iconSize != double.infinity),
+       ),
+       assert(
+         squareBorderRadius == null ||
+             (squareBorderRadius >= 0 && squareBorderRadius != double.infinity),
+       ),
+       assert(
+         groupSpacing == null ||
+             (groupSpacing >= 0 && groupSpacing != double.infinity),
+       ),
+       assert(
+         groupBorderWidth == null ||
+             (groupBorderWidth >= 0 && groupBorderWidth != double.infinity),
+       ),
+       assert(
+         dimension == null || groupSpacing == null || groupSpacing <= dimension,
+       ),
+       assert(
+         dimension == null ||
+             groupBorderWidth == null ||
+             groupBorderWidth * 2 <= dimension,
+       );
 
   /// 默认头像尺寸档位。
   final TAvatarSize? size;
@@ -102,19 +128,96 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
       size: t < 0.5 ? size : other.size,
       shape: t < 0.5 ? shape : other.shape,
       variant: t < 0.5 ? variant : other.variant,
-      dimension: lerpDouble(dimension, other.dimension, t),
-      iconSize: lerpDouble(iconSize, other.iconSize, t),
-      squareBorderRadius: lerpDouble(
+      dimension: _lerpNullableDouble(
+        dimension,
+        other.dimension,
+        t,
+        TAvatarDefaults.dimensionFor(size ?? TAvatarSize.medium),
+        TAvatarDefaults.dimensionFor(other.size ?? TAvatarSize.medium),
+      ),
+      iconSize: _lerpNullableDouble(
+        iconSize,
+        other.iconSize,
+        t,
+        TAvatarDefaults.iconSizeFor(size ?? TAvatarSize.medium),
+        TAvatarDefaults.iconSizeFor(other.size ?? TAvatarSize.medium),
+      ),
+      squareBorderRadius: _lerpNullableDouble(
         squareBorderRadius,
         other.squareBorderRadius,
         t,
+        TAvatarDefaults.squareBorderRadius,
+        TAvatarDefaults.squareBorderRadius,
       ),
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      foregroundColor: Color.lerp(foregroundColor, other.foregroundColor, t),
-      textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
-      groupSpacing: lerpDouble(groupSpacing, other.groupSpacing, t),
-      groupBorderWidth: lerpDouble(groupBorderWidth, other.groupBorderWidth, t),
-      groupBorderColor: Color.lerp(groupBorderColor, other.groupBorderColor, t),
+      backgroundColor: _lerpTokenColor(
+        backgroundColor,
+        other.backgroundColor,
+        t,
+      ),
+      foregroundColor: _lerpTokenColor(
+        foregroundColor,
+        other.foregroundColor,
+        t,
+      ),
+      textStyle: _lerpNullableTextStyle(
+        textStyle,
+        other.textStyle,
+        t,
+        TAvatarDefaults.textStyleFor(size ?? TAvatarSize.medium),
+        TAvatarDefaults.textStyleFor(other.size ?? TAvatarSize.medium),
+      ),
+      groupSpacing: _lerpNullableDouble(
+        groupSpacing,
+        other.groupSpacing,
+        t,
+        TAvatarDefaults.groupSpacing,
+        TAvatarDefaults.groupSpacing,
+      ),
+      groupBorderWidth: _lerpNullableDouble(
+        groupBorderWidth,
+        other.groupBorderWidth,
+        t,
+        TAvatarDefaults.groupBorderWidth,
+        TAvatarDefaults.groupBorderWidth,
+      ),
+      groupBorderColor: _lerpTokenColor(
+        groupBorderColor,
+        other.groupBorderColor,
+        t,
+      ),
     );
   }
+}
+
+double? _lerpNullableDouble(
+  double? begin,
+  double? end,
+  double t,
+  double defaultBegin,
+  double defaultEnd,
+) {
+  if (begin == null && end == null) {
+    return null;
+  }
+  return lerpDouble(begin ?? defaultBegin, end ?? defaultEnd, t);
+}
+
+Color? _lerpTokenColor(Color? begin, Color? end, double t) {
+  if (begin == null || end == null) {
+    return t < 0.5 ? begin : end;
+  }
+  return Color.lerp(begin, end, t);
+}
+
+TextStyle? _lerpNullableTextStyle(
+  TextStyle? begin,
+  TextStyle? end,
+  double t,
+  TextStyle defaultBegin,
+  TextStyle defaultEnd,
+) {
+  if (begin == null && end == null) {
+    return null;
+  }
+  return TextStyle.lerp(begin ?? defaultBegin, end ?? defaultEnd, t);
 }

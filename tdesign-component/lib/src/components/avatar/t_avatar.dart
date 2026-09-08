@@ -6,6 +6,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 import '../../theme/t_colors.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
+import 't_avatar_defaults.dart';
 import 't_avatar_theme_data.dart';
 import 't_avatar_types.dart';
 
@@ -68,11 +69,12 @@ class TAvatar extends StatelessWidget {
     final resolvedSize = size ?? theme?.size ?? TAvatarSize.medium;
     final resolvedShape =
         shape ??
-        _shapeFromVariant(variant) ??
+        _avatarShapeFromVariant(variant) ??
         theme?.shape ??
-        _shapeFromVariant(theme?.variant) ??
+        _avatarShapeFromVariant(theme?.variant) ??
         TAvatarShape.circle;
-    final dimension = theme?.dimension ?? _dimensionFor(resolvedSize);
+    final dimension =
+        theme?.dimension ?? TAvatarDefaults.dimensionFor(resolvedSize);
     final radius = resolvedShape == TAvatarShape.circle
         ? dimension / 2
         : theme?.squareBorderRadius ?? context.tTheme.radiusDefault;
@@ -84,7 +86,7 @@ class TAvatar extends StatelessWidget {
         context.tTheme.brandNormalColor;
     final resolvedTextStyle =
         TextStyle(
-              fontSize: _fontSizeFor(resolvedSize),
+              fontSize: TAvatarDefaults.fontSizeFor(resolvedSize),
               height: 1,
               fontWeight: FontWeight.w600,
             )
@@ -95,7 +97,7 @@ class TAvatar extends StatelessWidget {
         child ??
         Icon(
           TIcons.user,
-          size: theme?.iconSize ?? _iconSizeFor(resolvedSize),
+          size: theme?.iconSize ?? TAvatarDefaults.iconSizeFor(resolvedSize),
           color: resolvedForegroundColor,
         );
 
@@ -137,52 +139,13 @@ class TAvatar extends StatelessWidget {
     }
     return GestureDetector(onTap: onTap, child: avatar);
   }
-
-  double _dimensionFor(TAvatarSize size) {
-    switch (size) {
-      case TAvatarSize.large:
-        return 64;
-      case TAvatarSize.medium:
-        return 48;
-      case TAvatarSize.small:
-        return 40;
-    }
-  }
-
-  double _iconSizeFor(TAvatarSize size) {
-    switch (size) {
-      case TAvatarSize.large:
-        return 32;
-      case TAvatarSize.medium:
-        return 24;
-      case TAvatarSize.small:
-        return 20;
-    }
-  }
-
-  double _fontSizeFor(TAvatarSize size) {
-    switch (size) {
-      case TAvatarSize.large:
-        return 20;
-      case TAvatarSize.medium:
-        return 16;
-      case TAvatarSize.small:
-        return 14;
-    }
-  }
-
-  TAvatarShape? _shapeFromVariant(TAvatarVariant? value) {
-    return switch (value) {
-      TAvatarVariant.circle => TAvatarShape.circle,
-      TAvatarVariant.square => TAvatarShape.square,
-      null => null,
-    };
-  }
 }
 
 /// 叠放头像组。
 ///
 /// 头像组只负责布局，不解析图片来源或缓存成员状态。
+/// 当成员是 [TAvatar] 时，其 [TAvatar.shape] 同时决定成员外框与裁剪形状；
+/// 其他 Widget 使用组件 Theme 中的形状或圆形默认值。
 class TAvatarGroup extends StatelessWidget {
   const TAvatarGroup({
     required this.children,
@@ -190,12 +153,17 @@ class TAvatarGroup extends StatelessWidget {
     this.overflow,
     this.spacing,
     this.dimension,
-    this.shape = TAvatarShape.circle,
-    this.cascading = TAvatarGroupCascading.rightUp,
+    this.cascading = TAvatarGroupCascading.endUp,
     super.key,
   }) : assert(maxCount == null || maxCount > 0),
-       assert(dimension == null || dimension > 0),
-       assert(spacing == null || spacing >= 0);
+       assert(
+         dimension == null || (dimension > 0 && dimension != double.infinity),
+       ),
+       assert(spacing == null || (spacing >= 0 && spacing != double.infinity)),
+       assert(
+         dimension == null || spacing == null || spacing <= dimension,
+         'spacing cannot be greater than dimension',
+       );
 
   /// 头像列表。
   final List<Widget> children;
@@ -206,16 +174,13 @@ class TAvatarGroup extends StatelessWidget {
   /// 发生截断时显示在末尾的内容。
   final Widget? overflow;
 
-  /// 相邻头像的重叠宽度。
+  /// 相邻头像的重叠宽度；有效范围为 0 到成员外框边长。
   final double? spacing;
 
   /// 头像组成员的外框边长；未设置时读取 Theme，默认 48。
   final double? dimension;
 
-  /// 头像组成员外框形状。
-  final TAvatarShape shape;
-
-  /// 头像组成员的层叠方向。
+  /// 头像组成员的层叠方向，使用 start/end 语义并跟随文字方向。
   final TAvatarGroupCascading cascading;
 
   @override
@@ -231,13 +196,28 @@ class TAvatarGroup extends StatelessWidget {
     if (count < children.length && overflow != null) {
       visible.add(overflow!);
     }
-    final resolvedDimension = dimension ?? theme?.dimension ?? 48;
-    final overlap = spacing ?? theme?.groupSpacing ?? 8;
+    final requestedDimension =
+        dimension ?? theme?.dimension ?? TAvatarDefaults.mediumDimension;
+    final resolvedDimension =
+        requestedDimension.isFinite && requestedDimension > 0
+        ? requestedDimension
+        : TAvatarDefaults.mediumDimension;
+    final requestedOverlap =
+        spacing ?? theme?.groupSpacing ?? TAvatarDefaults.groupSpacing;
+    final overlap = requestedOverlap.isFinite
+        ? requestedOverlap.clamp(0, resolvedDimension).toDouble()
+        : TAvatarDefaults.groupSpacing.clamp(0, resolvedDimension).toDouble();
     final step = resolvedDimension - overlap;
-    final borderWidth = theme?.groupBorderWidth ?? 2;
+    final requestedBorderWidth =
+        theme?.groupBorderWidth ?? TAvatarDefaults.groupBorderWidth;
+    final borderWidth = requestedBorderWidth.isFinite
+        ? requestedBorderWidth.clamp(0, resolvedDimension / 2).toDouble()
+        : TAvatarDefaults.groupBorderWidth
+              .clamp(0, resolvedDimension / 2)
+              .toDouble();
     final width = resolvedDimension + step * (visible.length - 1);
     final indexes = List.generate(visible.length, (index) => index);
-    final paintOrder = cascading == TAvatarGroupCascading.leftUp
+    final paintOrder = cascading == TAvatarGroupCascading.startUp
         ? indexes.reversed
         : indexes;
 
@@ -249,35 +229,75 @@ class TAvatarGroup extends StatelessWidget {
           for (final index in paintOrder)
             PositionedDirectional(
               start: step * index,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  shape: shape == TAvatarShape.circle
-                      ? BoxShape.circle
-                      : BoxShape.rectangle,
-                  borderRadius: shape == TAvatarShape.square
-                      ? BorderRadius.circular(
-                          theme?.squareBorderRadius ??
-                              context.tTheme.radiusDefault,
-                        )
-                      : null,
-                  border: Border.all(
-                    color:
-                        theme?.groupBorderColor ??
-                        context.tTheme.bgColorContainer,
-                    width: borderWidth,
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(borderWidth),
-                  child: SizedBox.square(
-                    dimension: resolvedDimension - borderWidth * 2,
-                    child: FittedBox(child: visible[index]),
-                  ),
-                ),
+              child: _buildMember(
+                context,
+                visible[index],
+                theme,
+                resolvedDimension,
+                borderWidth,
               ),
             ),
         ],
       ),
     );
   }
+
+  Widget _buildMember(
+    BuildContext context,
+    Widget child,
+    TAvatarThemeData? theme,
+    double resolvedDimension,
+    double borderWidth,
+  ) {
+    final shape = _shapeForChild(child, theme);
+    final squareRadius =
+        theme?.squareBorderRadius ?? context.tTheme.radiusDefault;
+    final innerDimension = resolvedDimension - borderWidth * 2;
+    final innerRadius = shape == TAvatarShape.circle
+        ? innerDimension / 2
+        : (squareRadius - borderWidth).clamp(0, innerDimension / 2).toDouble();
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        shape: shape == TAvatarShape.circle
+            ? BoxShape.circle
+            : BoxShape.rectangle,
+        borderRadius: shape == TAvatarShape.square
+            ? BorderRadius.circular(squareRadius)
+            : null,
+        border: Border.all(
+          color: theme?.groupBorderColor ?? context.tTheme.bgColorContainer,
+          width: borderWidth,
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(borderWidth),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(innerRadius),
+          child: SizedBox.square(
+            dimension: innerDimension,
+            child: FittedBox(child: child),
+          ),
+        ),
+      ),
+    );
+  }
+
+  TAvatarShape _shapeForChild(Widget child, TAvatarThemeData? theme) {
+    if (child is TAvatar) {
+      return child.shape ??
+          _avatarShapeFromVariant(child.variant) ??
+          theme?.shape ??
+          _avatarShapeFromVariant(theme?.variant) ??
+          TAvatarShape.circle;
+    }
+    return theme?.shape ??
+        _avatarShapeFromVariant(theme?.variant) ??
+        TAvatarShape.circle;
+  }
 }
+
+TAvatarShape? _avatarShapeFromVariant(TAvatarVariant? value) => switch (value) {
+  TAvatarVariant.circle => TAvatarShape.circle,
+  TAvatarVariant.square => TAvatarShape.square,
+  null => null,
+};

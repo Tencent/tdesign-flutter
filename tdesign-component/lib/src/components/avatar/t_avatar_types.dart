@@ -30,9 +30,9 @@ enum TAvatarVariant {
 
 /// 头像组的层叠方向。
 enum TAvatarGroupCascading {
-  /// 左侧头像位于上层。
-  leftUp,
+  /// 起始侧头像位于上层。
+  startUp,
 
-  /// 右侧头像位于上层。
-  rightUp,
+  /// 结束侧头像位于上层。
+  endUp,
 }

@@ -189,9 +189,9 @@ class _TAvatarPageState extends State<TAvatarPage> {
   Widget _buildDisplayAvatar(BuildContext context) {
     return const TAvatarGroup(
       dimension: 44,
-      cascading: TAvatarGroupCascading.leftUp,
+      cascading: TAvatarGroupCascading.startUp,
       maxCount: 5,
-      overflow: TAvatar(child: Text('+2')),
+      overflow: TAvatar(child: Text('+5')),
       children: [
         TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),
         TAvatar(image: AssetImage('assets/img/t_avatar_2.png')),
@@ -199,7 +199,6 @@ class _TAvatarPageState extends State<TAvatarPage> {
         TAvatar(image: AssetImage('assets/img/t_avatar_4.png')),
         TAvatar(image: AssetImage('assets/img/t_avatar_5.png')),
         TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),
-        TAvatar(image: AssetImage('assets/img/t_avatar_2.png')),
       ],
     );
   }
@@ -209,7 +208,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
   Widget _buildOperationAvatar(BuildContext context) {
     return TAvatarGroup(
       dimension: 44,
-      cascading: TAvatarGroupCascading.rightUp,
+      cascading: TAvatarGroupCascading.endUp,
       children: [
         const TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),
         const TAvatar(image: AssetImage('assets/img/t_avatar_2.png')),
@@ -227,41 +226,34 @@ class _TAvatarPageState extends State<TAvatarPage> {
   /// 组件尺寸
   @ExampleCode(group: 'avatar')
   Widget _buildSizeAvatar(BuildContext context) {
-    return const Column(
+    Widget avatarRow(TAvatarSize size) {
+      return Row(
+        children: [
+          TAvatar(
+            size: size,
+            image: const AssetImage('assets/img/t_avatar_1.png'),
+          ),
+          const SizedBox(width: 32),
+          TAvatar(
+            size: size,
+            backgroundColor: context.tTheme.brandNormalColor,
+            foregroundColor: context.tTheme.whiteColor1,
+            child: const Text('A'),
+          ),
+          const SizedBox(width: 32),
+          TAvatar(size: size),
+        ],
+      );
+    }
+
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _AvatarSizeRow(size: TAvatarSize.large),
-        SizedBox(height: 24),
-        _AvatarSizeRow(size: TAvatarSize.medium),
-        SizedBox(height: 24),
-        _AvatarSizeRow(size: TAvatarSize.small),
-      ],
-    );
-  }
-}
-
-class _AvatarSizeRow extends StatelessWidget {
-  const _AvatarSizeRow({required this.size});
-
-  final TAvatarSize size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        TAvatar(
-          size: size,
-          image: const AssetImage('assets/img/t_avatar_1.png'),
-        ),
-        const SizedBox(width: 32),
-        TAvatar(
-          size: size,
-          backgroundColor: context.tTheme.brandNormalColor,
-          foregroundColor: context.tTheme.whiteColor1,
-          child: const Text('A'),
-        ),
-        const SizedBox(width: 32),
-        TAvatar(size: size),
+        avatarRow(TAvatarSize.large),
+        const SizedBox(height: 24),
+        avatarRow(TAvatarSize.medium),
+        const SizedBox(height: 24),
+        avatarRow(TAvatarSize.small),
       ],
     );
   }

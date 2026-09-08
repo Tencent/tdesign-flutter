@@ -2,7 +2,7 @@
 
 ## 技术方案
 
-新增 `TAvatarShape` 作为主形状 API，保留 `TAvatarVariant` 兼容层；组件内部统一解析实例、Theme 和默认值。通过 `DefaultTextStyle` 与 `IconTheme` 为任意字符/图标 child 提供可继承样式。头像组保持接收任意 Widget，仅增加布局所需的边长、形状和绘制层级参数，不接管成员数据。
+新增 `TAvatarShape` 作为主形状 API，保留 `TAvatarVariant` 兼容层；组件内部统一解析实例、Theme 和默认值。通过 `DefaultTextStyle` 与 `IconTheme` 为任意字符/图标 child 提供可继承样式。头像组保持接收任意 Widget，仅增加布局所需的边长和方向感知绘制层级参数，不接管成员数据；成员为 `TAvatar` 时由成员形状决定外框，其他 Widget 使用 Theme 或圆形默认值。
 
 ## 影响范围
 
@@ -16,14 +16,16 @@
 ## API 变化
 
 - 新增 `TAvatar.shape`、`backgroundColor`、`foregroundColor`、`textStyle`。
-- 新增 `TAvatarGroup.dimension`、`shape`、`cascading`。
+- 新增 `TAvatarGroup.dimension`、`cascading`；不增加与成员 `shape` 重复且容易产生双重形状的组级 API。
 - 新增 `TAvatarShape`、`TAvatarGroupCascading`。
 - `TAvatar.variant` 与 `TAvatarThemeData.variant` 标记弃用但继续兼容。
 
 ## 风险与取舍
 
 - 保留旧 API 和既有右侧成员在上层的默认行为，避免立即 breaking；纯展示 Demo 显式选择左侧在上。同时禁止新旧形状参数并用，消除优先级歧义。
-- 头像组不强制 children 类型，维持 Flutter 组合能力；因此组的 shape 只描述外框，成员内容仍由调用方负责。
+- 头像组不强制 children 类型，维持 Flutter 组合能力；组会安全裁剪成员外框，但不会覆盖 `TAvatar` 自身的形状选择。
+- 层叠枚举使用 `startUp` / `endUp`，与 `PositionedDirectional` 的布局方向保持同一语义。
+- Theme 数值从空值过渡到显式值时按组件有效默认值插值；运行时 token 颜色无法脱离 `BuildContext` 求值，单边配置采用离散切换以避免透明色闪烁。
 - Golden 仅在固定 Linux + Flutter 3.32 环境更新，避免宿主差异污染基线。
 
 ## 验证策略

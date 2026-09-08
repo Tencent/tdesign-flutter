@@ -1,13 +1,33 @@
 /// 组件尺寸
     Widget _buildSizeAvatar(BuildContext context) {
-    return const Column(
+    Widget avatarRow(TAvatarSize size) {
+      return Row(
+        children: [
+          TAvatar(
+            size: size,
+            image: const AssetImage('assets/img/t_avatar_1.png'),
+          ),
+          const SizedBox(width: 32),
+          TAvatar(
+            size: size,
+            backgroundColor: context.tTheme.brandNormalColor,
+            foregroundColor: context.tTheme.whiteColor1,
+            child: const Text('A'),
+          ),
+          const SizedBox(width: 32),
+          TAvatar(size: size),
+        ],
+      );
+    }
+
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _AvatarSizeRow(size: TAvatarSize.large),
-        SizedBox(height: 24),
-        _AvatarSizeRow(size: TAvatarSize.medium),
-        SizedBox(height: 24),
-        _AvatarSizeRow(size: TAvatarSize.small),
+        avatarRow(TAvatarSize.large),
+        const SizedBox(height: 24),
+        avatarRow(TAvatarSize.medium),
+        const SizedBox(height: 24),
+        avatarRow(TAvatarSize.small),
       ],
     );
   }
