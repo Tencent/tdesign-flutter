@@ -3,11 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/page/sidebar/t_sidebar_page_anchor.dart';
-import 'package:tdesign_flutter_example/page/sidebar/t_sidebar_page_outline.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
 void main() {
   const anchorEdgeTolerance = 0.5;
+  const itemCount = 10;
 
   Widget buildPage({Widget? page, double textScaleFactor = 1}) {
     return ChangeNotifierProvider(
@@ -25,8 +25,10 @@ void main() {
   int expectedValue(WidgetTester tester) {
     final viewport = tester.getRect(find.byType(SingleChildScrollView));
     var expectedValue = 0;
-    for (var index = 1; index < 20; index++) {
-      if (tester.getTopLeft(find.text('标题$index')).dy <=
+    for (var index = 1; index < itemCount; index++) {
+      if (tester
+              .getTopLeft(find.byKey(ValueKey('sidebar-section-$index')))
+              .dy <=
           viewport.top + anchorEdgeTolerance) {
         expectedValue = index;
       }
@@ -49,7 +51,7 @@ void main() {
     for (final offset in [
       const Offset(0, -360),
       const Offset(0, -720),
-      const Offset(0, -1200)
+      const Offset(0, -1200),
     ]) {
       await tester.drag(content, offset);
       await tester.pumpAndSettle();
@@ -64,7 +66,7 @@ void main() {
     final pageState = tester.state<TSideBarAnchorPageState>(
       find.byType(TSideBarAnchorPage),
     );
-    for (final index in [6, 10, 19]) {
+    for (final index in [2, 5, 9]) {
       final scroll = pageState.handleSidebarChange(index);
       await tester.pumpAndSettle();
       await scroll;
@@ -74,30 +76,58 @@ void main() {
       expect(sideBarState.currentValue, index);
 
       final viewport = tester.getRect(find.byType(SingleChildScrollView));
-      final title = tester.getTopLeft(find.text('标题$index'));
+      final title = tester.getTopLeft(
+        find.byKey(ValueKey('sidebar-section-$index')),
+      );
       expect(title.dy, closeTo(viewport.top, 1));
       expectSelectionMatchesViewport(tester);
 
-      if (index == 19) {
-        final scrollable = tester.state<ScrollableState>(
-          find.descendant(
-            of: find.byType(SingleChildScrollView),
-            matching: find.byType(Scrollable),
-          ),
-        );
-        final offset = scrollable.position.pixels;
+      if (index == 9) {
         await tester.drag(
           find.byType(SingleChildScrollView),
           const Offset(0, -240),
         );
         await tester.pumpAndSettle();
-        expect(scrollable.position.pixels, closeTo(offset, 0.5));
+        expect(sideBarState.currentValue, 9);
+        expectSelectionMatchesViewport(tester);
       }
     }
   });
 
-  testWidgets('非通栏选项使用相同的标题锚点语义', (tester) async {
-    await tester.pumpWidget(buildPage(page: const TSideBarOutlinePage()));
+  testWidgets('快速连续点击时最后一次选择保持生效', (tester) async {
+    await tester.pumpWidget(buildPage());
+    await tester.pumpAndSettle();
+
+    final pageState = tester.state<TSideBarAnchorPageState>(
+      find.byType(TSideBarAnchorPage),
+    );
+    final scrolls = <Future<void>>[];
+
+    scrolls.add(pageState.handleSidebarChange(2));
+    await tester.pump(const Duration(milliseconds: 80));
+    scrolls.add(pageState.handleSidebarChange(5));
+    await tester.pump(const Duration(milliseconds: 80));
+    scrolls.add(pageState.handleSidebarChange(3));
+
+    expect(pageState.currentValue, 3);
+    await tester.pump(const Duration(milliseconds: 80));
+    expect(pageState.currentValue, 3);
+    await tester.pumpAndSettle();
+    await Future.wait(scrolls);
+
+    expect(pageState.currentValue, 3);
+    final viewport = tester.getRect(find.byType(SingleChildScrollView));
+    final title = tester.getTopLeft(
+      find.byKey(const ValueKey('sidebar-section-3')),
+    );
+    expect(title.dy, closeTo(viewport.top, 1));
+    expectSelectionMatchesViewport(tester);
+  });
+
+  testWidgets('tag 变体使用相同的标题锚点语义', (tester) async {
+    await tester.pumpWidget(
+      buildPage(page: const TSideBarAnchorPage(variant: TSideBarVariant.tag)),
+    );
     await tester.pumpAndSettle();
 
     final content = find.byType(SingleChildScrollView);
@@ -118,7 +148,7 @@ void main() {
     expectSelectionMatchesViewport(tester);
   });
 
-  testWidgets('更新 children 和较大文本缩放不影响锚点同步', (tester) async {
+  testWidgets('较大文本缩放不影响锚点同步', (tester) async {
     tester.view.physicalSize = const Size(360, 800);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -132,20 +162,18 @@ void main() {
     await tester.pumpAndSettle();
     expectSelectionMatchesViewport(tester);
 
-    await tester.tap(find.text('更新children'));
-    await tester.pumpAndSettle();
-    expectSelectionMatchesViewport(tester);
-
     final pageState = tester.state<TSideBarAnchorPageState>(
       find.byType(TSideBarAnchorPage),
     );
-    final scroll = pageState.handleSidebarChange(19);
+    final scroll = pageState.handleSidebarChange(9);
     await tester.pumpAndSettle();
     await scroll;
     await tester.pump();
 
     final viewport = tester.getRect(find.byType(SingleChildScrollView));
-    final title = tester.getTopLeft(find.text('标题19'));
+    final title = tester.getTopLeft(
+      find.byKey(const ValueKey('sidebar-section-9')),
+    );
     expect(title.dy, closeTo(viewport.top, 1));
     expectSelectionMatchesViewport(tester);
   });
