@@ -732,10 +732,11 @@ class _CodeWrapperState extends State<CodeWrapper> {
     if (widget.isCenter) {
       child = Center(child: child);
     }
-    if (apiVisible) {
-      child = Stack(
-        children: [
-          child,
+    return Stack(
+      fit: StackFit.passthrough,
+      children: [
+        child,
+        if (apiVisible)
           Positioned(
             top: 0,
             bottom: 0,
@@ -750,10 +751,8 @@ class _CodeWrapperState extends State<CodeWrapper> {
               ),
             ),
           ),
-        ],
-      );
-    }
-    return child;
+      ],
+    );
   }
 
   String _getCodeAssetsPath() {

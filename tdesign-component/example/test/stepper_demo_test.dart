@@ -159,9 +159,16 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
+      final base = find.byKey(const ValueKey('stepper-base'));
+      await tester.tap(
+        find.descendant(of: base, matching: find.bySemanticsLabel('增加')),
+      );
+      await tester.pump();
+      expect(tester.widget<TStepper>(base).value, 4);
       await tester.tap(find.byIcon(TIcons.code));
       await tester.pumpAndSettle();
       expect(find.text('code'), findsNWidgets(5));
+      expect(tester.widget<TStepper>(base).value, 4);
       const names = [
         'StepperBaseExample',
         'StepperBoundsExample',
@@ -180,6 +187,7 @@ void main() {
         Navigator.of(tester.element(find.byType(Markdown))).pop();
         await tester.pumpAndSettle();
       }
+      expect(tester.widget<TStepper>(base).value, 4);
       await disposeDemoPage(tester);
     },
     tags: 'demo',
