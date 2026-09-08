@@ -1,7 +1,7 @@
 # 验收记录
 
 - Flutter 原 PR 基线：`6a69569c104f6576fd6b39253eedbe48faa2b75c`
-- 当前 `develop` 基线：`origin/develop`（合并时领先原 PR 23 个提交）
+- 当前 `develop` 基线：`6433854a142a5ca7ee528aba9a1a8e7d72bea3ca`
 - 小程序基线：`b60cdc8a1dce1f06dd45cb4e41eefd31c674e514`
 - 公开运行页：`https://tdesign.tencent.com/miniprogram/live/m2w/program/miniprogram/#!pages/tree-select/tree-select.html`
 - Figma 文件：`TDesign for mobile`，页面 `TreeSelect 树形选择器`。
@@ -13,15 +13,24 @@
 
 ## 验证结果
 
-- 本地 merge commit：`bad8fea4`，完成目标分支与 `origin/develop` 的冲突整合。
-- Flutter 3.32.0：TreeSelect 组件测试 13 项、Demo 测试 6 项、集中测试清单工具
-  13 项全部通过；`flutter analyze` 为 `No issues found`。
-- Flutter 3.47.0（latest）：TreeSelect 组件测试 13 项、Demo 测试 6 项全部通过；
-  `flutter analyze` 为 `No issues found`。
+- 最新本地 merge commit：`c9beb6f3`，完成目标分支与 `origin/develop` 的冲突整合；
+  字体说明同时保留 TreeSelect 与 Stepper，并补齐 TreeSelect 上游来源与子集工具版本。
+- 三个场景已改为页面真实使用的独立示例 Widget；生成片段包含 imports、完整 options、
+  受控 value 与 `onChanged/setState`，不再依赖页面私有成员。
+- Flutter 3.32.0：TreeSelect 组件与生成器测试 18 项、Demo 测试 7 项全部通过；
+  组件包和 example 包 `flutter analyze` 均为 `No issues found`。
+- Flutter 3.47.0（latest）：TreeSelect 组件与生成器测试 18 项、Demo 测试 7 项全部通过；
+  组件包和 example 包 `flutter analyze` 均为 `No issues found`。
 - 组件生产代码覆盖率：`286/288 = 99.31%`，高于 95% 门槛。
 - `dart run tool/generate_example_code.dart --check` 通过。
 - Linux `amd64` + Flutter 3.32.0 重新生成明暗两张 Demo Golden，并在同一容器
   去掉 `--update-goldens` 复跑，2 项全部通过。
+- 合并最新 develop 后再次在固定 Linux `amd64` + Flutter 3.32.0 容器中仅比较
+  明暗 Golden，2 项全部通过，未更新基线。
+- 本地 Flutter Web 页面真实点击通过：单选切换到 `广东省 / 云浮市`、多选新增
+  `广东省 / 深圳市`、三列切换到 `广东省 / 深圳市 / 盐田区`，服务端无异常输出。
+- “查看代码”仅在非 Web 端展示；Widget 级真实入口点击已逐个打开三个底部面板，
+  并核对面板内容与对应生成片段完全一致。
 - TreeSelect 专用字体子集已覆盖页面可见文案，人工查看明暗 Golden 无缺字符号；
   子集 SHA-256 为
   `1cbb5418c4cd91a103deb2a28f68dacb1e895a6efcb8f2f5e8198d67d38ac7ca`。
