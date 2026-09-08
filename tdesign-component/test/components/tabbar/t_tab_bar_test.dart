@@ -515,6 +515,46 @@ void main() {
       expect(selected, '选项B');
     });
 
+    testWidgets('ink well routes double-layer popup through one tap chain', (
+      tester,
+    ) async {
+      var itemTapCount = 0;
+      var changedCount = 0;
+      String? selected;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.doubleLayer,
+            value: 0,
+            needInkWell: true,
+            navigationTabs: [
+              const TTabBarItemConfig(tabText: '普通'),
+              TTabBarItemConfig(
+                tabText: '更多',
+                onTap: () => itemTapCount++,
+                popUpButtonConfig: TTabBarPopUpBtnConfig(
+                  items: const [TTabBarMenuItem(value: '选项A')],
+                  onChanged: (value) => selected = value,
+                ),
+              ),
+            ],
+            onChanged: (_) => changedCount++,
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('更多'));
+      await tester.pumpAndSettle();
+
+      expect(itemTapCount, 1);
+      expect(changedCount, 1);
+      expect(find.text('选项A'), findsOneWidget);
+
+      await tester.tap(find.text('选项A'));
+      await tester.pumpAndSettle();
+      expect(selected, '选项A');
+    });
+
     testWidgets('badge offsets and ink well render on iconText items', (
       tester,
     ) async {
