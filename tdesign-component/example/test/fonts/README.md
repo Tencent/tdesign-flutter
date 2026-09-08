@@ -16,6 +16,10 @@ NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 新增文案的补充 fallback。它排在原字体之后，避免扩充原字体改变 Button、Checkbox、
 Upload 等既有 Golden 的字形选择与像素基线。
 
+`SliderGoldenCJK-Regular.otf` 仅补充 Slider 整页 Golden 新增且既有子集未覆盖的
+字形，字符清单见 `slider_demo_glyphs.txt`，不会改变既有组件的字形选择。子集
+SHA-256 为 `59c5bebba9bf720005fb977a94b9c150b0b8e8c2698c1dca3a66d9f0d7cd9722`。
+
 `BackTopGoldenCJK-Regular.otf` 仅补充 BackTop 公开说明中的“帮”，字符清单见
 `backtop_demo_glyphs.txt`。它作为 BackTop Demo 最后的专用 fallback，不改变其他页面
 或既有共享字体的像素基线，子集 SHA-256 为
@@ -82,6 +86,7 @@ HarfBuzz 11.4.5，子集 SHA-256 为
 Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后，更新原字符清单；
 更新 Loading、Message、Popover 或 Popup 页面文案时，更新补充字符清单；更新
 ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedback 字符清单。
+更新 Slider 页面文案时，更新 Slider 字符清单。
 更新 Picker 页面文案时，更新 Picker 字符清单。
 更新 Calendar 页面文案时，更新 Calendar 字符清单。
  更新 TabBar 页面文案时，更新 TabBar 字符清单。
