@@ -12,10 +12,8 @@ import '../icon/t_icon.dart';
 import '../icon/t_icon_theme_data.dart';
 import '../text/t_text.dart';
 import '../text/t_text_theme_data.dart';
+import 't_cascader_defaults.dart';
 import 't_cascader_theme_data.dart';
-
-// TCascader 是平铺面板；小程序的 78vh 属于外层 Popup，不是面板默认值。
-const double _defaultCascaderHeight = 360;
 
 /// 级联选项。
 ///
@@ -184,7 +182,7 @@ class _TCascaderState extends State<TCascader> {
         child: AbsorbPointer(
           absorbing: !_enabled,
           child: SizedBox(
-            height: theme?.height ?? _defaultCascaderHeight,
+            height: theme?.height ?? defaultCascaderHeight,
             child: Container(
               decoration: BoxDecoration(
                 color: backgroundColor,

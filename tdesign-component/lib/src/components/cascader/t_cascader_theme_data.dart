@@ -2,7 +2,7 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
-const double _defaultCascaderHeight = 360;
+import 't_cascader_defaults.dart';
 
 /// 级联导航展示形态。
 enum TCascaderVariant {
@@ -105,8 +105,8 @@ class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
       height: height == null && other.height == null
           ? null
           : lerpDouble(
-              height ?? _defaultCascaderHeight,
-              other.height ?? _defaultCascaderHeight,
+              height ?? defaultCascaderHeight,
+              other.height ?? defaultCascaderHeight,
               t,
             ),
       backgroundColor: _lerpNullableOverride(
