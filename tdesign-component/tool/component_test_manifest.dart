@@ -679,6 +679,19 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'tree_select',
+    coverageTargets: ['lib/src/components/tree/'],
+    componentTests: ['test/components/tree/t_tree_select_test.dart'],
+    exampleTests: ['test/tree_select_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'TreeSelect Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/tree_select_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'upload',
     coverageTargets: ['lib/src/components/upload/'],
     componentTests: ['test/components/upload/t_upload_test.dart'],

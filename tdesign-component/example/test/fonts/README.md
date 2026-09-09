@@ -16,6 +16,12 @@ NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 新增文案的补充 fallback。它排在原字体之后，避免扩充原字体改变 Button、Checkbox、
 Upload 等既有 Golden 的字形选择与像素基线。
 
+`TreeSelectGoldenCJK-Regular.otf` 仅补充 TreeSelect 整页 Golden 新增且既有子集
+未覆盖的字形，字符清单见 `tree_select_demo_glyphs.txt`，不会改变既有组件基线。
+它使用 Noto Sans SC 2.004 `NotoSansSC-Regular.otf`，来源与本文下方记录一致；
+子集工具为 fonttools 4.59.1，子集 SHA-256 为
+`1cbb5418c4cd91a103deb2a28f68dacb1e895a6efcb8f2f5e8198d67d38ac7ca`。
+
 `StepperGoldenCJK-Regular.otf` 仅补充 Stepper 整页 Golden 的“步”字，字符清单见
 `stepper_demo_glyphs.txt`，不会改变既有组件的字形选择。子集 SHA-256 为
 `6df8e74aa398c55ff2140025fd79c31300653bc02ddf31d35ec94f9c5ae3d0d0`。
@@ -101,6 +107,7 @@ HarfBuzz 11.4.5，子集 SHA-256 为
 Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后，更新原字符清单；
 更新 Loading、Message、Popover 或 Popup 页面文案时，更新补充字符清单；更新
 ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedback 字符清单。
+更新 TreeSelect 页面文案时，更新 TreeSelect 字符清单。
 更新 Stepper 页面文案时，更新 Stepper 字符清单。
 更新 Slider 页面文案时，更新 Slider 字符清单。
 更新 Picker 页面文案时，更新 Picker 字符清单。
