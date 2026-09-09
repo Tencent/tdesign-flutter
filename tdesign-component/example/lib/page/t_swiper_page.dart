@@ -54,7 +54,7 @@ class _TSwiperPageState extends State<TSwiperPage> {
         ),
         ExampleModule(
           title: '组件样式',
-          children: [_item('垂直模式', _buildVerticalSwiper, height: 420)],
+          children: [_item('垂直模式', _buildVerticalSwiper, height: null)],
         ),
       ],
     );
@@ -63,16 +63,18 @@ class _TSwiperPageState extends State<TSwiperPage> {
   ExampleItem _item(
     String description,
     WidgetBuilder builder, {
-    double height = 192,
+    double? height = 192,
     EdgeInsetsGeometry padding = const EdgeInsets.symmetric(horizontal: 16),
   }) {
     return ExampleItem(
       desc: description,
       padding: padding,
-      builder: (context) => SizedBox(
-        height: height,
-        child: CodeWrapper(builder: builder),
-      ),
+      builder: (context) {
+        final content = CodeWrapper(builder: builder);
+        return height == null
+            ? content
+            : SizedBox(height: height, child: content);
+      },
     );
   }
 
