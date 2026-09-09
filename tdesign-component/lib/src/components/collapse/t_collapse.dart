@@ -48,7 +48,11 @@ class TCollapse<T extends Object> extends StatefulWidget {
   /// 折叠面板列表的阴影
   final double? elevation;
 
-  /// 手风琴模式下当前展开面板的 value
+  /// 手风琴模式下当前展开面板的 value。
+  ///
+  /// 在 [TCollapseMode.accordion] 模式下，展开状态唯一由此值与
+  /// [TCollapsePanel.value] 的匹配结果决定，面板的 [TCollapsePanel.isExpanded]
+  /// 不生效。
   final T? value;
 
   /// 手风琴模式下 value 变更回调

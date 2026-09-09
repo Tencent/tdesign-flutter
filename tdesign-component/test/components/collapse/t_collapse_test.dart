@@ -256,6 +256,34 @@ void main() {
       expect(panelCrossFadeState(tester, 1), CrossFadeState.showSecond);
     });
 
+    testWidgets('accordion 模式由 value 唯一决定展开状态', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TCollapse<String>(
+            mode: TCollapseMode.accordion,
+            value: 'v2',
+            children: [
+              buildPanel(
+                title: '面板1',
+                bodyText: '内容1',
+                value: 'v1',
+                isExpanded: true,
+              ),
+              buildPanel(
+                title: '面板2',
+                bodyText: '内容2',
+                value: 'v2',
+                isExpanded: false,
+              ),
+            ],
+          ),
+        ),
+      );
+
+      expect(panelCrossFadeState(tester, 0), CrossFadeState.showFirst);
+      expect(panelCrossFadeState(tester, 1), CrossFadeState.showSecond);
+    });
+
     testWidgets('accordion 模式 onChanged 回调被调用', (tester) async {
       String? changedValue;
 

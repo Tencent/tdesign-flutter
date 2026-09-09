@@ -157,7 +157,6 @@ class TCollapsePageState extends State<TCollapsePage> {
           headerBuilder: (BuildContext context, bool isExpanded) {
             return Text(item.headerValue);
           },
-          isExpanded: item.isExpanded,
           body: const Text(randomString),
           value: item.expandedValue,
           disabled: item.disabled,
