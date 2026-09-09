@@ -32,6 +32,19 @@ const sharedExampleTests = ['test/widget_test.dart'];
 
 const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(
+    name: 'avatar',
+    coverageTargets: ['lib/src/components/avatar/'],
+    componentTests: ['test/components/avatar/t_avatar_test.dart'],
+    exampleTests: ['test/avatar_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Avatar Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/avatar_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'action_sheet',
     coverageTargets: ['lib/src/components/action_sheet/'],
     componentTests: [
@@ -101,6 +114,24 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Button Demo',
         workingDirectory: 'example',
         testFiles: ['test/button_demo_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'cascader',
+    coverageTargets: ['lib/src/components/cascader/'],
+    componentTests: ['test/components/cascader/t_cascader_test.dart'],
+    exampleTests: ['test/cascader_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Cascader Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/cascader/t_cascader_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Cascader Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/cascader_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -292,9 +323,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Drawer Popup Consumer',
         workingDirectory: '.',
-        testFiles: [
-          'test/components/theme/t_popup_consumers_golden_test.dart',
-        ],
+        testFiles: ['test/components/theme/t_popup_consumers_golden_test.dart'],
         arguments: [
           '--plain-name',
           'drawer keeps the shared Popup visual contract',
@@ -314,6 +343,22 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Fab Demo',
         workingDirectory: 'example',
         testFiles: ['test/fab_demo_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'indexes',
+    coverageTargets: ['lib/src/components/indexes/'],
+    componentTests: [
+      'test/components/indexes/sticky_header/sticky_header_test.dart',
+      'test/components/indexes/t_indexes_test.dart',
+    ],
+    exampleTests: ['test/indexes_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Indexes Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/indexes_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -343,6 +388,48 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Rate Demo',
         workingDirectory: 'example',
         testFiles: ['test/rate_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'tab_bar',
+    coverageTargets: ['lib/src/components/tabbar/'],
+    componentTests: ['test/components/tabbar/t_tab_bar_test.dart'],
+    exampleTests: ['test/tab_bar_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'TabBar Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/tabbar/t_tab_bar_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'TabBar Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/tab_bar_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'navbar',
+    coverageTargets: ['lib/src/components/navbar/'],
+    componentTests: [
+      'test/components/navbar/t_nav_bar_test.dart',
+      'test/components/navbar/t_navbar_test.dart',
+    ],
+    exampleTests: ['test/navbar_page_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'NavBar Component',
+        workingDirectory: '.',
+        testFiles: [
+          'test/components/navbar/t_nav_bar_safe_area_golden_test.dart',
+          'test/components/navigation_components_golden_test.dart',
+        ],
+      ),
+      VisualTestManifest(
+        name: 'NavBar Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/navbar_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -504,6 +591,91 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Search Demo',
         workingDirectory: 'example',
         testFiles: ['test/search_demo_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'steps',
+    coverageTargets: ['lib/src/components/steps/'],
+    componentTests: [
+      'test/components/steps/t_steps_test.dart',
+      'test/components/steps/t_steps_vertical_item_test.dart',
+      'test/components/steps/t_steps_widget_test.dart',
+    ],
+    exampleTests: ['test/steps_page_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Steps Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/steps_demo_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Steps shared navigation',
+        workingDirectory: '.',
+        testFiles: ['test/components/navigation_components_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'sidebar',
+    coverageTargets: ['lib/src/components/sidebar/'],
+    componentTests: [
+      'test/components/sidebar/t_sidebar_test.dart',
+      'test/components/sidebar/t_sidebar_theme_test.dart',
+      'test/components/sidebar/t_sidebar_widget_test.dart',
+    ],
+    exampleTests: [
+      'test/sidebar_anchor_test.dart',
+      'test/sidebar_demo_test.dart',
+      'test/sidebar_page_test.dart',
+    ],
+    visualTests: [
+      VisualTestManifest(
+        name: 'SideBar Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/sidebar_demo_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'SideBar shared navigation',
+        workingDirectory: '.',
+        testFiles: ['test/components/navigation_components_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'slider',
+    coverageTargets: ['lib/src/components/slider/'],
+    componentTests: ['test/components/slider/t_slider_test.dart'],
+    exampleTests: ['test/slider_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Slider Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/slider/t_slider_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Slider Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/slider_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'stepper',
+    coverageTargets: ['lib/src/components/stepper/'],
+    componentTests: [
+      'test/components/stepper/t_stepper_test.dart',
+      'test/components/stepper/t_stepper_contract_test.dart',
+    ],
+    exampleTests: ['test/stepper_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Stepper Demo and component',
+        workingDirectory: 'example',
+        testFiles: [
+          'test/stepper_demo_golden_test.dart',
+          '../test/components/stepper/t_stepper_golden_test.dart',
+        ],
       ),
     ],
   ),

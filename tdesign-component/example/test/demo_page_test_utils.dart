@@ -15,6 +15,11 @@ const _goldenCjkFontFamily = 'TDesign Golden CJK';
 const _feedbackGoldenCjkFontFamily = 'TDesign Feedback Golden CJK';
 const _alignmentCjkFontFamily = 'TDesign Alignment CJK';
 
+// A test file can register several DemoPageTestSpec values that share the
+// same fonts. FontLoader only needs to load a family once; keeping the Future
+// also prevents overlapping registrations on Flutter 3.32 Linux.
+final _goldenFontLoads = <String, Future<void>>{};
+
 class DemoPageTestSpec {
   const DemoPageTestSpec({
     required this.name,
@@ -56,7 +61,7 @@ void registerDemoPageTests(DemoPageTestSpec spec) {
 }
 
 void registerDemoStructureTests(DemoPageTestSpec spec) {
-  setUpAll(() => _loadGoldenFonts(spec));
+  setUpAll(() => loadDemoGoldenFonts(spec));
 
   testWidgets('${spec.name} Demo structure', (tester) async {
     await pumpFullDemoPage(tester, spec, ThemeMode.light);
@@ -81,7 +86,7 @@ void registerDemoStructureTests(DemoPageTestSpec spec) {
 }
 
 void registerDemoGoldenTests(DemoPageTestSpec spec) {
-  setUpAll(() => _loadGoldenFonts(spec));
+  setUpAll(() => loadDemoGoldenFonts(spec));
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('${spec.name} ${mode.name} Demo golden', (tester) async {
@@ -105,68 +110,81 @@ Future<void> disposeDemoPage(WidgetTester tester) async {
   await tester.pump(const Duration(seconds: 1));
 }
 
-Future<void> _loadGoldenFonts(DemoPageTestSpec spec) async {
-  final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
-    ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
-  final cupertinoIconFont =
-      FontLoader('packages/cupertino_icons/CupertinoIcons')..addFont(
-        rootBundle.load('packages/cupertino_icons/assets/CupertinoIcons.ttf'),
-      );
+Future<void> loadDemoGoldenFonts(DemoPageTestSpec spec) async {
   final flutterBin = File(
     Platform.resolvedExecutable,
   ).parent.parent.parent.parent.parent;
-  final robotoFont = FontLoader('Roboto')
-    ..addFont(
-      File(
+  final loaders = <Future<void>>[
+    _loadGoldenFont(
+      'packages/tdesign_flutter_icons/TIcons',
+      () => rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'),
+    ),
+    _loadGoldenFont(
+      'packages/cupertino_icons/CupertinoIcons',
+      () => rootBundle.load(
+        'packages/cupertino_icons/assets/CupertinoIcons.ttf',
+      ),
+    ),
+    _loadGoldenFont(
+      'Roboto',
+      () => File(
         '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
       ).readAsBytes().then(ByteData.sublistView),
-    );
-  final cjkFont = FontLoader(_goldenCjkFontFamily)
-    ..addFont(
-      File(
+    ),
+    _loadGoldenFont(
+      _goldenCjkFontFamily,
+      () => File(
         'test/fonts/TDesignGoldenCJK-Regular.otf',
       ).readAsBytes().then(ByteData.sublistView),
-    );
-  final loaders = <Future<void>>[
-    iconFont.load(),
-    cupertinoIconFont.load(),
-    robotoFont.load(),
-    cjkFont.load(),
+    ),
   ];
   if (spec.useFeedbackGoldenFont) {
-    final materialIconsFont = FontLoader('MaterialIcons')
-      ..addFont(
-        File(
+    loaders.addAll([
+      _loadGoldenFont(
+        'MaterialIcons',
+        () => File(
           '${flutterBin.path}/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
         ).readAsBytes().then(ByteData.sublistView),
-      );
-    final feedbackCjkFont = FontLoader(_feedbackGoldenCjkFontFamily)
-      ..addFont(
-        File(
+      ),
+      _loadGoldenFont(
+        _feedbackGoldenCjkFontFamily,
+        () => File(
           'test/fonts/TDesignFeedbackGoldenCJK-Regular.otf',
         ).readAsBytes().then(ByteData.sublistView),
-      );
-    loaders.addAll([materialIconsFont.load(), feedbackCjkFont.load()]);
+      ),
+    ]);
   }
   if (spec.useAlignmentCjkFont) {
-    final alignmentCjkFont = FontLoader(_alignmentCjkFontFamily)
-      ..addFont(
-        File(
+    loaders.add(
+      _loadGoldenFont(
+        _alignmentCjkFontFamily,
+        () => File(
           'test/fonts/TDesignAlignmentCJK-Regular.otf',
         ).readAsBytes().then(ByteData.sublistView),
-      );
-    loaders.add(alignmentCjkFont.load());
+      ),
+    );
   }
   if (spec.supplementalCjkFontFamily case final family?) {
-    final supplementalCjkFont = FontLoader(family)
-      ..addFont(
-        File(
+    loaders.add(
+      _loadGoldenFont(
+        family,
+        () => File(
           spec.supplementalCjkFontPath!,
         ).readAsBytes().then(ByteData.sublistView),
-      );
-    loaders.add(supplementalCjkFont.load());
+      ),
+    );
   }
   await Future.wait(loaders);
+}
+
+Future<void> _loadGoldenFont(
+  String family,
+  Future<ByteData> Function() bytes,
+) {
+  return _goldenFontLoads.putIfAbsent(
+    family,
+    () => (FontLoader(family)..addFont(bytes())).load(),
+  );
 }
 
 Future<void> pumpFullDemoPage(
@@ -175,10 +193,12 @@ Future<void> pumpFullDemoPage(
   ThemeMode mode,
 ) async {
   var height = _initialPageHeight;
+  // 调整视口时保留页面与 model，避免丢失 ExamplePage 初始化的代码分组。
+  final page = _buildPage(spec, mode);
   for (var attempt = 0; attempt < 4; attempt++) {
     tester.view.physicalSize = Size(_pageWidth, height);
     tester.view.devicePixelRatio = 1;
-    await tester.pumpWidget(_buildPage(spec, mode));
+    await tester.pumpWidget(page);
     await tester.pump();
     if (attempt == 0 && spec.precacheAssetImages.isNotEmpty) {
       final context = tester.element(find.byType(MaterialApp));
