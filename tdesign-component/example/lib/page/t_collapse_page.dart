@@ -21,8 +21,6 @@ class TCollapsePageState extends State<TCollapsePage> {
       generateItems(1, expanded: 0);
   final List<CollapseDataItem> _topPlacementData =
       generateItems(1, expanded: 0);
-  final List<CollapseDataItem> _accordionData = generateItems(4);
-  String? _accordionValue = '0';
 
   @override
   Widget build(BuildContext context) {
@@ -148,20 +146,26 @@ class TCollapsePageState extends State<TCollapsePage> {
 
   @ExampleCode(group: 'collapse')
   Widget _buildAccordionCollapse(BuildContext context) {
-    return TCollapse<String>(
-      mode: TCollapseMode.accordion,
-      value: _accordionValue,
-      onChanged: (value) => setState(() => _accordionValue = value),
-      children: _accordionData.map((CollapseDataItem item) {
-        return TCollapsePanel(
-          headerBuilder: (BuildContext context, bool isExpanded) {
-            return Text(item.headerValue);
-          },
-          body: const Text(randomString),
-          value: item.expandedValue,
-          disabled: item.disabled,
+    final values = List.generate(4, (index) => '$index');
+    String? value = '0';
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return TCollapse<String>(
+          mode: TCollapseMode.accordion,
+          value: value,
+          onChanged: (nextValue) => setState(() => value = nextValue),
+          children: values.map((panelValue) {
+            return TCollapsePanel(
+              headerBuilder: (context, isExpanded) {
+                return const Text('折叠面板标题');
+              },
+              body: const Text('此处可自定义内容'),
+              value: panelValue,
+              disabled: panelValue == '3',
+            );
+          }).toList(),
         );
-      }).toList(),
+      },
     );
   }
 }

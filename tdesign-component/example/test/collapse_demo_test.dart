@@ -18,6 +18,8 @@ const collapseDemoSpec = DemoPageTestSpec(
     '卡片折叠面板',
   ],
   componentType: TCollapse,
+  supplementalCjkFontFamily: 'TDesign Collapse Golden CJK',
+  supplementalCjkFontPath: 'test/fonts/CollapseGoldenCJK-Regular.otf',
 );
 
 void main() {
@@ -32,19 +34,26 @@ void main() {
         ['基础折叠面板', '向上展开', '带操作说明', '手风琴式']);
 
     final context = tester.element(find.byType(ExamplePage));
-    TCollapse buildItem(int module, int item) =>
-        page.children[module].children[item].builder(context) as TCollapse;
+    Widget buildItem(int module, int item) =>
+        page.children[module].children[item].builder(context);
 
-    expect(buildItem(0, 0).children.single.isExpanded, isTrue);
-    expect(buildItem(0, 1).children.single.placement,
+    expect((buildItem(0, 0) as TCollapse).children.single.isExpanded, isTrue);
+    expect((buildItem(0, 1) as TCollapse).children.single.placement,
         TCollapsePlacement.top);
-    expect(buildItem(0, 2).children.single.expandIconTextBuilder,
-        isNotNull);
+    expect((buildItem(0, 2) as TCollapse)
+        .children.single.expandIconTextBuilder, isNotNull);
     final accordion = buildItem(0, 3);
-    expect(accordion.mode, TCollapseMode.accordion);
-    expect(accordion.value, '0');
-    expect(accordion.children.last.disabled, isTrue);
-    final card = buildItem(1, 0);
+    expect(accordion, isA<StatefulBuilder>());
+    final accordionCollapse = tester.widget<TCollapse>(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is TCollapse && widget.mode == TCollapseMode.accordion,
+      ),
+    );
+    expect(accordionCollapse.mode, TCollapseMode.accordion);
+    expect(accordionCollapse.value, '0');
+    expect(accordionCollapse.children.last.disabled, isTrue);
+    final card = buildItem(1, 0) as TCollapse;
     expect(card.variant, TCollapseVariant.card);
     expect(card.children.last.isExpanded, isTrue);
     expect(card.children.last.disabled, isTrue);

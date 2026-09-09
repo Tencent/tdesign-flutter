@@ -45,7 +45,7 @@ class TCollapsePanel<T extends Object> {
   /// 折叠面板是否展开。
   ///
   /// 仅在 [TCollapseMode.multiple] 模式下作为展开状态来源；
-  /// [TCollapseMode.accordion] 模式由父级 [TCollapse.value] 唯一决定。
+  /// [TCollapseMode.accordion] 模式由父级 `TCollapse.value` 唯一决定。
   final bool isExpanded;
 
   /// 是否禁用面板交互。

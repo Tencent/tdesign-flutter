@@ -21,6 +21,11 @@ Upload 等既有 Golden 的字形选择与像素基线。
 或既有共享字体的像素基线，子集 SHA-256 为
 `44dc59fa4e3b84496d07c21e47af8679cec635b70af2e9561d9dbbfef444b42e`。
 
+`CollapseGoldenCJK-Regular.otf` 仅补充 Collapse 整页 Golden 新增且既有子集未覆盖的
+字形，字符清单见 `collapse_demo_glyphs.txt`。独立加载可避免扩充共享字体改变既有
+组件的像素基线，子集 SHA-256 为
+`e8f9a14d26d2342b00d379f65e969c5b4b03e44ab9d8ae5bff372b885a729ac2`。
+
 `PickerGoldenCJK-Regular.otf` 仅补充 Picker 整页 Golden 新增且既有子集未覆盖的
 字形，字符清单见 `picker_demo_glyphs.txt`。独立加载可避免扩充共享字体改变既有组件的
 像素基线，子集 SHA-256 为
