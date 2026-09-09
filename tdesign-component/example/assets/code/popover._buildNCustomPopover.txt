@@ -1,53 +1,62 @@
 Widget _buildNCustomPopover(BuildContext context) {
+    void selectOption(String option) {
+      _customContentPopoverController.close();
+      TToast.showText('已选择：$option', context: context);
+    }
+
     final textStyle = TextStyle(
       color: theme == TPopoverColorScheme.light
           ? context.tTheme.fontGyColor1
           : context.tTheme.fontWhColor1,
     );
     final dividerColor = textStyle.color;
-    return LayoutBuilder(
-      builder: (popoverContext, constrains) {
+    return TPopoverAnchor(
+      controller: _customContentPopoverController,
+      padding: EdgeInsets.zero,
+      colorScheme: theme,
+      width: 150,
+      height: 146,
+      content: Column(
+        children: [
+          GestureDetector(
+            key: const Key('popover-custom-option-1'),
+            behavior: HitTestBehavior.opaque,
+            onTap: () => selectOption('选项1'),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+              child: TText('选项1', style: textStyle),
+            ),
+          ),
+          Container(height: 1, color: dividerColor),
+          GestureDetector(
+            key: const Key('popover-custom-option-2'),
+            behavior: HitTestBehavior.opaque,
+            onTap: () => selectOption('选项2'),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+              child: TText('选项2', style: textStyle),
+            ),
+          ),
+          Container(height: 1, color: dividerColor),
+          GestureDetector(
+            key: const Key('popover-custom-option-3'),
+            behavior: HitTestBehavior.opaque,
+            onTap: () => selectOption('选项3'),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+              child: TText('选项3', style: textStyle),
+            ),
+          ),
+        ],
+      ),
+      builder: (popoverContext, controller, child) {
         return TButton(
+          key: const Key('popover-custom-content-trigger'),
           size: TButtonSize.large,
           child: const Text('自定义内容'),
           variant: TButtonVariant.outline,
           colorScheme: TButtonColorScheme.primary,
-          onPressed: () {
-            TPopover.showPopover(
-              context: popoverContext,
-              padding: const EdgeInsets.all(0),
-              colorScheme: theme,
-              width: 150,
-              height: 146,
-              content: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 24,
-                    ),
-                    child: TText('选项1', style: textStyle),
-                  ),
-                  Container(height: 1, color: dividerColor),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 24,
-                    ),
-                    child: TText('选项2', style: textStyle),
-                  ),
-                  Container(height: 1, color: dividerColor),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 24,
-                    ),
-                    child: TText('选项3', style: textStyle),
-                  ),
-                ],
-              ),
-            );
-          },
+          onPressed: controller.open,
         );
       },
     );

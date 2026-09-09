@@ -1,0 +1,25 @@
+/// Vertical Customize Steps 垂直自定义步骤条
+  ///
+  /// 核心片段：导入 Flutter material.dart 和 tdesign_flutter.dart，
+  /// 将此方法放在 StatefulWidget 的 State 中，由 build 调用。
+  /// State 声明 `int _selectedStep = 3;` 保存当前步骤；
+  /// 不在 build 中重新初始化，回调通过 setState 更新受控值。
+    Widget _buildVerticalSelectable(BuildContext context) {
+    return TSteps.selectable(
+      steps: List.generate(
+        4,
+        (index) => TStepsItemData(
+          title: index < _selectedStep
+              ? '已完成步骤'
+              : index == _selectedStep
+              ? '当前步骤'
+              : '未完成步骤',
+        ),
+      ),
+      value: _selectedStep,
+      onChange: (index) {
+        setState(() => _selectedStep = index);
+        TToast.showText('选择了步骤 ${index + 1}', context: context);
+      },
+    );
+  }

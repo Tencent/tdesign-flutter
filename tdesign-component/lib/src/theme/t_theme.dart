@@ -11,6 +11,7 @@ import 't_colors.dart';
 import 't_component_theme_data.dart';
 import 't_default_theme.dart';
 import 't_fonts.dart';
+import 't_text_theme_source.dart';
 
 bool _tTextThemeEquivalent(TextTheme left, TextTheme right) {
   TextStyle? normalize(TextStyle? style) =>
@@ -315,7 +316,8 @@ extension TMaterialProjectionExtension on ThemeData {
 }
 
 class _TMaterialProjectionThemeData
-    extends ThemeExtension<_TMaterialProjectionThemeData> {
+    extends ThemeExtension<_TMaterialProjectionThemeData>
+    implements TTextThemeSource {
   const _TMaterialProjectionThemeData({
     required this.colorScheme,
     required this.textTheme,
@@ -328,6 +330,7 @@ class _TMaterialProjectionThemeData
   });
 
   final ColorScheme colorScheme;
+  @override
   final TextTheme textTheme;
   final IconThemeData iconTheme;
   final DividerThemeData dividerTheme;
@@ -586,7 +589,6 @@ class TMaterialThemeBuilder {
       const TSideBarThemeData(),
       const TSliderThemeData(),
       const TStepperThemeData(),
-      const TStepsThemeData(),
       const TSwipeCellThemeData(),
       const TSwiperThemeData(),
       const TSwitchThemeData(),
