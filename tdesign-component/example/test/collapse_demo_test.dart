@@ -12,7 +12,6 @@ const collapseDemoSpec = DemoPageTestSpec(
   page: TCollapsePage(),
   expectedTexts: [
     '基础折叠面板',
-    '向上展开',
     '带操作说明',
     '手风琴式',
     '卡片折叠面板',
@@ -31,18 +30,16 @@ void main() {
     expect(page.children.map((module) => module.title),
         ['组件类型', '组件样式']);
     expect(page.children[0].children.map((item) => item.desc),
-        ['基础折叠面板', '向上展开', '带操作说明', '手风琴式']);
+        ['基础折叠面板', '带操作说明', '手风琴式']);
 
     final context = tester.element(find.byType(ExamplePage));
     Widget buildItem(int module, int item) =>
         page.children[module].children[item].builder(context);
 
     expect((buildItem(0, 0) as TCollapse).children.single.isExpanded, isTrue);
-    expect((buildItem(0, 1) as TCollapse).children.single.placement,
-        TCollapsePlacement.top);
-    expect((buildItem(0, 2) as TCollapse)
+    expect((buildItem(0, 1) as TCollapse)
         .children.single.expandIconTextBuilder, isNotNull);
-    final accordion = buildItem(0, 3);
+    final accordion = buildItem(0, 2);
     expect(accordion, isA<StatefulBuilder>());
     final accordionCollapse = tester.widget<TCollapse>(
       find.byWidgetPredicate(

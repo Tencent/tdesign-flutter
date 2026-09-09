@@ -19,8 +19,6 @@ class TCollapsePageState extends State<TCollapsePage> {
   final List<CollapseDataItem> _cardStyleData = generateItems(4, expanded: 3);
   final List<CollapseDataItem> _blockStyleWithOpText =
       generateItems(1, expanded: 0);
-  final List<CollapseDataItem> _topPlacementData =
-      generateItems(1, expanded: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +31,6 @@ class TCollapsePageState extends State<TCollapsePage> {
             ExampleItem(
               desc: '基础折叠面板',
               builder: _buildBasicCollapse,
-            ),
-            ExampleItem(
-              desc: '向上展开',
-              builder: _buildTopPlacementCollapse,
             ),
             ExampleItem(
               desc: '带操作说明',
@@ -117,28 +111,6 @@ class TCollapsePageState extends State<TCollapsePage> {
           },
           isExpanded: item.isExpanded,
           disabled: item.disabled,
-          body: const Text(randomString),
-        );
-      }).toList(),
-    );
-  }
-
-  @ExampleCode(group: 'collapse')
-  Widget _buildTopPlacementCollapse(BuildContext context) {
-    return TCollapse(
-      onExpansionChanged: (int index, bool isExpanded) {
-        setState(() {
-          _topPlacementData[index].isExpanded = !isExpanded;
-        });
-      },
-      children: _topPlacementData.map((CollapseDataItem item) {
-        return TCollapsePanel(
-          headerBuilder: (BuildContext context, bool isExpanded) {
-            return Text(item.headerValue);
-          },
-          isExpanded: item.isExpanded,
-          disabled: item.disabled,
-          placement: TCollapsePlacement.top,
           body: const Text(randomString),
         );
       }).toList(),
