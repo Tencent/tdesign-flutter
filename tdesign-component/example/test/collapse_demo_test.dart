@@ -10,13 +10,8 @@ const collapseDemoSpec = DemoPageTestSpec(
   name: 'collapse',
   title: 'Collapse 折叠面板',
   page: TCollapsePage(),
-  expectedTexts: [
-    '基础折叠面板',
-    '带操作说明',
-    '手风琴式',
-    '卡片折叠面板',
-  ],
-  componentType: TCollapse,
+  expectedTexts: ['基础折叠面板', '带操作说明', '手风琴式', '卡片折叠面板'],
+  componentType: TCollapse<String>,
   useMaterialIcons: true,
   supplementalCjkFontFamily: 'TDesign Collapse Golden CJK',
   supplementalCjkFontPath: 'test/fonts/CollapseGoldenCJK-Regular.otf',
@@ -28,20 +23,25 @@ void main() {
   testWidgets('实例顺序和初始状态与设计稿一致', (tester) async {
     await pumpFullDemoPage(tester, collapseDemoSpec, ThemeMode.light);
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
-    expect(page.children.map((module) => module.title),
-        ['组件类型', '组件样式']);
-    expect(page.children[0].children.map((item) => item.desc),
-        ['基础折叠面板', '带操作说明', '手风琴式']);
+    expect(page.showTestModule, isFalse);
+    expect(page.children.map((module) => module.title), ['组件类型', '组件样式']);
+    expect(page.children[0].children.map((item) => item.desc), [
+      '基础折叠面板',
+      '带操作说明',
+      '手风琴式',
+    ]);
 
     final context = tester.element(find.byType(ExamplePage));
     Widget buildItem(int module, int item) =>
         page.children[module].children[item].builder(context);
 
-    expect((buildItem(0, 0) as TCollapse).children.single.isExpanded, isTrue);
-    expect((buildItem(0, 1) as TCollapse)
-        .children.single.expandIconTextBuilder, isNotNull);
+    expect((buildItem(0, 0) as TCollapse).value, ['basic']);
+    expect(
+      (buildItem(0, 1) as TCollapse).children.single.trailingBuilder,
+      isNotNull,
+    );
     final accordion = buildItem(0, 2);
-    expect(accordion, isA<StatefulBuilder>());
+    expect(accordion, isA<TCollapse<String>>());
     final accordionCollapse = tester.widget<TCollapse>(
       find.byWidgetPredicate(
         (widget) =>
@@ -49,20 +49,24 @@ void main() {
       ),
     );
     expect(accordionCollapse.mode, TCollapseMode.accordion);
-    expect(accordionCollapse.value, '0');
+    expect(accordionCollapse.value, ['0']);
+    expect(accordionCollapse.children, hasLength(3));
     expect(
       accordionCollapse.children.first.body,
       isA<Text>().having((text) => text.data, 'data', randomString),
     );
-    expect(accordionCollapse.children.every((panel) => !panel.disabled),
-        isTrue);
+    expect(
+      accordionCollapse.children.every((panel) => !panel.disabled),
+      isTrue,
+    );
     final card = buildItem(1, 0) as TCollapse;
     expect(card.variant, TCollapseVariant.card);
-    expect(card.children.last.isExpanded, isTrue);
+    expect(card.children, hasLength(3));
+    expect(card.value, ['card-0']);
     expect(card.children.every((panel) => !panel.disabled), isTrue);
   }, tags: 'demo');
 
-  testWidgets('手风琴最后一项可以点击展开', (tester) async {
+  testWidgets('手风琴状态不被其他组更新重置', (tester) async {
     await pumpFullDemoPage(tester, collapseDemoSpec, ThemeMode.light);
     final accordion = find.byWidgetPredicate(
       (widget) => widget is TCollapse && widget.mode == TCollapseMode.accordion,
@@ -75,37 +79,47 @@ void main() {
     await tester.tap(headers.last);
     await tester.pumpAndSettle();
 
-    expect(tester.widget<TCollapse<String>>(accordion).value, '3');
-  }, tags: 'demo');
+    expect(tester.widget<TCollapse<String>>(accordion).value, ['2']);
 
-  testWidgets('卡片最后一项可以点击收起', (tester) async {
-    await pumpFullDemoPage(tester, collapseDemoSpec, ThemeMode.light);
     final card = find.byWidgetPredicate(
-      (widget) => widget is TCollapse && widget.variant == TCollapseVariant.card,
+      (widget) =>
+          widget is TCollapse && widget.variant == TCollapseVariant.card,
     );
-    final headers = find.descendant(
+    final cardHeaders = find.descendant(
       of: card,
       matching: find.text('折叠面板标题'),
     );
-
-    await tester.ensureVisible(headers.last);
-    await tester.tap(headers.last);
+    await tester.ensureVisible(cardHeaders.at(1));
+    await tester.tap(cardHeaders.at(1));
     await tester.pumpAndSettle();
 
-    expect(tester.widget<TCollapse>(card).children.last.isExpanded, isFalse);
+    expect(tester.widget<TCollapse<String>>(accordion).value, ['2']);
+    expect(tester.widget<TCollapse<String>>(card).value, ['card-0', 'card-1']);
+  }, tags: 'demo');
+
+  testWidgets('卡片第一项可以点击收起', (tester) async {
+    await pumpFullDemoPage(tester, collapseDemoSpec, ThemeMode.light);
+    final card = find.byWidgetPredicate(
+      (widget) =>
+          widget is TCollapse && widget.variant == TCollapseVariant.card,
+    );
+    final headers = find.descendant(of: card, matching: find.text('折叠面板标题'));
+
+    await tester.ensureVisible(headers.first);
+    await tester.tap(headers.first);
+    await tester.pumpAndSettle();
+
+    expect(tester.widget<TCollapse>(card).value, isEmpty);
   }, tags: 'demo');
 
   testWidgets('基础面板点击后收起内容', (tester) async {
     await pumpFullDemoPage(tester, collapseDemoSpec, ThemeMode.light);
-    final collapse = find.byType(TCollapse).first;
-    expect(tester.widget<TCollapse>(collapse).children.single.isExpanded,
-        isTrue);
-    await tester.tap(find.descendant(
-      of: collapse,
-      matching: find.text('折叠面板标题'),
-    ));
+    final collapse = find.byType(TCollapse<String>).first;
+    expect(tester.widget<TCollapse<String>>(collapse).value, ['basic']);
+    await tester.tap(
+      find.descendant(of: collapse, matching: find.text('折叠面板标题')),
+    );
     await tester.pumpAndSettle();
-    expect(tester.widget<TCollapse>(collapse).children.single.isExpanded,
-        isFalse);
+    expect(tester.widget<TCollapse<String>>(collapse).value, isEmpty);
   }, tags: 'demo');
 }
