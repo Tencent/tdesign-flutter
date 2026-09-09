@@ -2,6 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+@immutable
+class _EqualValueWithDifferentHashCode {
+  const _EqualValueWithDifferentHashCode(this.id, this.hashCode);
+
+  final String id;
+
+  @override
+  final int hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    return other is _EqualValueWithDifferentHashCode && other.id == id;
+  }
+}
+
 void main() {
   const options = [
     TTreeSelectOption(
@@ -395,6 +410,66 @@ void main() {
       options: [
         TTreeSelectOption(label: 'First', value: 'duplicate'),
         TTreeSelectOption(label: 'Second', value: 'duplicate'),
+      ],
+      value: [],
+      onChanged: _ignore,
+    )));
+
+    final exception = tester.takeException();
+    expect(exception, isA<AssertionError>());
+    expect(exception.toString(), contains('unique among siblings'));
+  });
+
+  testWidgets('sibling uniqueness uses the same equality as path matching',
+      (tester) async {
+    await tester.pumpWidget(wrap(const TTreeSelect(
+      options: [
+        TTreeSelectOption(
+          label: 'First',
+          value: _EqualValueWithDifferentHashCode('duplicate', 1),
+        ),
+        TTreeSelectOption(
+          label: 'Second',
+          value: _EqualValueWithDifferentHashCode('duplicate', 2),
+        ),
+      ],
+      value: [],
+      onChanged: _ignore,
+    )));
+
+    final exception = tester.takeException();
+    expect(exception, isA<AssertionError>());
+    expect(exception.toString(), contains('unique among siblings'));
+  });
+
+  testWidgets('duplicate null sibling option values are rejected in debug',
+      (tester) async {
+    await tester.pumpWidget(wrap(const TTreeSelect(
+      options: [
+        TTreeSelectOption(label: 'First', value: null),
+        TTreeSelectOption(label: 'Second', value: null),
+      ],
+      value: [],
+      onChanged: _ignore,
+    )));
+
+    final exception = tester.takeException();
+    expect(exception, isA<AssertionError>());
+    expect(exception.toString(), contains('unique among siblings'));
+  });
+
+  testWidgets('duplicate nested sibling values are rejected in debug',
+      (tester) async {
+    await tester.pumpWidget(wrap(const TTreeSelect(
+      options: [
+        TTreeSelectOption(
+          label: 'Root',
+          value: 'root',
+          children: [
+            TTreeSelectOption(label: 'First', value: 'duplicate'),
+            TTreeSelectOption(label: 'Second', value: 'duplicate'),
+          ],
+        ),
       ],
       value: [],
       onChanged: _ignore,

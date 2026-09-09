@@ -259,13 +259,14 @@ class _TTreeSelectState extends State<TTreeSelect> {
     }
 
     void checkUniqueValues(List<TTreeSelectOption> options) {
-      final values = <Object?>{};
+      final values = <Object?>[];
       for (final option in options) {
         assert(
-          values.add(option.value),
+          !values.any((value) => value == option.value),
           'TTreeSelectOption.value must be unique among siblings. '
           'Duplicate value: ${option.value}.',
         );
+        values.add(option.value);
         checkUniqueValues(option.children);
       }
     }

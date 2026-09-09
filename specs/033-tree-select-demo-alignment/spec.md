@@ -8,7 +8,8 @@
 ## API Review
 
 - `TTreeSelectOption` 以不可变递归节点表达任意深度，不增加小程序 keys 映射层。
-- 同一层级的 `TTreeSelectOption.value` 必须唯一，debug 模式拒绝歧义配置。
+- 同一层级的 `TTreeSelectOption.value` 必须按 `==` 语义保持唯一，debug 模式拒绝歧义配置；
+  校验不依赖业务值的 `hashCode`，与路径解析和选中比较保持一致。
 - `value` 使用根到叶的完整路径列表；单选和多选共享同一稳定值类型，`multiple` 只改变选择数量。
 - 单选模式 debug 校验最多一条路径；暂时无法解析到叶子的受控路径不显示选中态，并回退到首个可用分支。
 - `value + onChanged` 为严格受控模式，空 callback 表达禁用，不引入 `defaultValue`。
