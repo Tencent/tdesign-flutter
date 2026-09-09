@@ -14,7 +14,7 @@ class TFooterPage extends StatelessWidget {
       exampleCodeGroup: 'footer',
       children: const [
         ExampleModule(
-          title: '01 类型',
+          title: '类型',
           children: [
             ExampleItem(desc: '基础页脚', builder: _buildFooter),
             ExampleItem(desc: '基础加链接页脚', builder: _buildSingleLinkFooter),

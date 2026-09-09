@@ -28,7 +28,7 @@ void main() {
   testWidgets('公开实例顺序与组合数量符合设计稿', (tester) async {
     await pumpFullDemoPage(tester, footerDemoSpec, ThemeMode.light);
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
-    expect(page.children.single.title, '01 类型');
+    expect(page.children.single.title, '类型');
     expect(page.children.single.children.map((item) => item.desc),
         ['基础页脚', '基础加链接页脚', '品牌页脚']);
     final footers = tester.widgetList<TFooter>(find.byType(TFooter)).toList();

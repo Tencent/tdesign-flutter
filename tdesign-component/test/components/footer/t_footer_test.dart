@@ -47,6 +47,29 @@ void main() {
     );
   });
 
+  testWidgets('link content keeps its intrinsic width in the footer', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      app(
+        TFooter(
+          links: [
+            TLink(child: const Text('底部链接'), onPressed: () {}),
+          ],
+          text: '版权信息',
+        ),
+      ),
+    );
+    expect(find.text('底部链接'), findsOneWidget);
+    expect(
+      find.ancestor(
+        of: find.text('底部链接'),
+        matching: find.byType(IntrinsicWidth),
+      ),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('logo takes precedence over links and text', (tester) async {
     await tester.pumpWidget(
       app(

@@ -65,7 +65,7 @@ class TFooter extends StatelessWidget {
               for (var index = 0; index < links.length; index++) ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: links[index],
+                  child: IntrinsicWidth(child: links[index]),
                 ),
                 if (index < links.length - 1)
                   SizedBox(
