@@ -5,23 +5,28 @@ import 'package:flutter/material.dart';
 
 import 't_collapse_types.dart';
 
-/// 根据折叠状态构建面板操作文字的回调。
-typedef TCollapseIconTextBuilder =
-    String Function(BuildContext context, bool isExpanded);
+/// 根据折叠状态构建面板头部区域内容的回调。
+typedef TCollapsePanelBuilder =
+    Widget Function(BuildContext context, bool isExpanded);
+
+Widget _defaultExpandIconBuilder(BuildContext context, bool isExpanded) {
+  return Icon(isExpanded ? Icons.expand_less : Icons.expand_more);
+}
 
 /// 折叠面板配置。
 class TCollapsePanel<T extends Object> {
   const TCollapsePanel({
+    required this.value,
     required this.headerBuilder,
     required this.body,
     this.bodyHeight,
     this.key,
-    this.isExpanded = false,
     this.disabled = false,
     this.placement = TCollapsePlacement.bottom,
     this.semanticsLabel,
-    this.expandIconTextBuilder,
-    this.value,
+    this.leadingBuilder,
+    this.trailingBuilder,
+    this.expandIconBuilder = _defaultExpandIconBuilder,
     this.backgroundColor,
   }) : assert(
          bodyHeight == null || (bodyHeight > 0 && bodyHeight < double.infinity),
@@ -42,9 +47,6 @@ class TCollapsePanel<T extends Object> {
   /// 适用于 [ListView] 等需要有界高度的内容；为空时由内容自然决定高度。
   final double? bodyHeight;
 
-  /// 折叠面板是否展开。
-  final bool isExpanded;
-
   /// 是否禁用面板交互。
   final bool disabled;
 
@@ -57,9 +59,22 @@ class TCollapsePanel<T extends Object> {
   /// 折叠面板的背景色。
   final Color? backgroundColor;
 
-  /// 手风琴模式下用于标识面板的值。
-  final T? value;
+  /// 面板唯一标识，用于匹配父级 `TCollapse.value` 中的展开值。
+  final T value;
 
-  /// 展开图标旁的说明文案构建器。
-  final TCollapseIconTextBuilder? expandIconTextBuilder;
+  /// 构建标题左侧区域。
+  ///
+  /// 返回的 Widget 会继承组件解析出的文字和图标主题。
+  final TCollapsePanelBuilder? leadingBuilder;
+
+  /// 构建标题右侧、展开图标之前的操作区域。
+  ///
+  /// 可根据 builder 收到的 `isExpanded` 显示“展开/收起”等文案或任意 Widget。
+  final TCollapsePanelBuilder? trailingBuilder;
+
+  /// 构建展开图标。
+  ///
+  /// 省略时使用 TDesign 默认箭头；显式传入 null 时隐藏箭头；传入 builder
+  /// 时以其返回的 Widget 替换默认箭头。Widget 会继承组件解析出的图标主题。
+  final TCollapsePanelBuilder? expandIconBuilder;
 }
