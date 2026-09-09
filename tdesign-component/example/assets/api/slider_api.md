@@ -13,7 +13,7 @@
 | onChangeStart | ValueChanged<double>? | - | 开始拖动时触发。 |
 | scaleFormatter | TSliderThumbFormatter? | - | 刻度值格式化回调。 |
 | showScaleValue | bool | false | 是否显示刻度值。 |
-| showThumbValue | bool | false | 是否显示拇指上方数值。 |
+| showThumbValue | bool | false | 是否持续显示拇指上方数值。 |
 | thumbFormatter | TSliderThumbFormatter? | - | 拇指上方数值格式化回调。 |
 | value | double | - | 受控滑块值。 |
 
@@ -32,7 +32,7 @@
 | onChangeStart | ValueChanged<RangeValues>? | - | 开始拖动时触发。 |
 | scaleFormatter | TSliderThumbFormatter? | - | 刻度值格式化回调。 |
 | showScaleValue | bool | false | 是否显示刻度值。 |
-| showThumbValue | bool | false | 是否显示拇指上方数值。 |
+| showThumbValue | bool | false | 是否持续显示拇指上方数值。 |
 | thumbFormatter | TSliderThumbFormatter? | - | 拇指上方数值格式化回调。 |
 | value | RangeValues | - | 受控范围值。 |
 

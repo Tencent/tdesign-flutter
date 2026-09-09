@@ -1,0 +1,19 @@
+/// 核心片段：导入 material.dart 和 tdesign_flutter.dart。
+  /// 在 StatefulWidget 的 State 中声明 `int _textValue = 0;`，
+  /// 从 build 调用本方法；状态由 State 持有并通过 setState 重建。
+    Widget _textTabBar(BuildContext context) {
+    const labels = ['首页', '应用', '聊天', '我的'];
+    return TTabBar(
+      type: TTabBarType.text,
+      useSafeArea: false,
+      value: _textValue,
+      onChanged: (newValue) {
+        setState(() => _textValue = newValue);
+        TToast.showText('点击了 Item ${newValue + 1}', context: context);
+      },
+      navigationTabs: List.generate(
+        4,
+        (index) => TTabBarItemConfig(tabText: labels[index]),
+      ),
+    );
+  }

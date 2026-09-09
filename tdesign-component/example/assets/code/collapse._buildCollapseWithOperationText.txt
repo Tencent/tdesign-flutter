@@ -1,21 +1,20 @@
-Widget _buildCollapseWithOperationText(BuildContext context) {
-    return TCollapse(
-      onExpansionChanged: (int index, bool isExpanded) {
-        setState(() {
-          _blockStyleWithOpText[index].isExpanded = !isExpanded;
-        });
-      },
-      children: _blockStyleWithOpText.map((CollapseDataItem item) {
-        return TCollapsePanel(
-          headerBuilder: (BuildContext context, bool isExpanded) {
-            return Text(item.headerValue);
-          },
-          expandIconTextBuilder: (BuildContext context, bool isExpanded) {
-            return isExpanded ? '收起' : '展开';
-          },
-          isExpanded: item.isExpanded,
+/// 核心片段：导入 material.dart 和 tdesign_flutter.dart，并放入
+  /// StatefulWidget 的 State。`_operationValue` 是由 State 持有的展开值列表，
+  /// 初始包含唯一面板值；`onChanged` 通过 `setState` 写回完整列表，
+  /// `trailingBuilder` 根据展开状态显示操作文案。`randomString` 是页面级常量，
+  /// 仅作为面板正文示例。
+    Widget _buildCollapseWithOperationText(BuildContext context) {
+    return TCollapse<String>(
+      value: _operationValue,
+      onChanged: (value) => setState(() => _operationValue = value),
+      children: [
+        TCollapsePanel<String>(
+          value: 'operation',
+          headerBuilder: (context, isExpanded) => const Text('折叠面板标题'),
+          trailingBuilder: (context, isExpanded) =>
+              Text(isExpanded ? '收起' : '展开'),
           body: const Text(randomString),
-        );
-      }).toList(),
+        ),
+      ],
     );
   }

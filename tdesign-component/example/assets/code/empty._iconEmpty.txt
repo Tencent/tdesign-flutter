@@ -1,6 +1,3 @@
 Widget _iconEmpty(BuildContext context) {
-    return const TEmpty(
-      variant: TEmptyVariant.plain,
-      emptyText: '描述文字',
-    );
+    return const TEmpty(emptyText: '描述文字');
   }

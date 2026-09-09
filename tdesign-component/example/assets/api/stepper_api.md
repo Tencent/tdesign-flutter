@@ -9,7 +9,7 @@
 | min | num | 0 | 最小值，必须小于或等于 `max`。 |
 | onChanged | ValueChanged<num>? | - | 数值变化请求。 点击按钮、提交有效输入或输入框失焦时触发；一次操作最多触发一次。 为 null 时整组禁用。 |
 | size | TStepperSize? | - | 组件尺寸。 为空时依次使用 `TStepperThemeData.size` 和 `TStepperSize.medium`。 |
-| step | num | 1 | 加减按钮使用的步长，必须大于 0。 输入提交不要求是步长的整数倍，但会限制在 `min` 与 `max` 之间。 |
+| step | num | 1 | 加减按钮使用的步长，必须大于 0。 输入提交不要求是步长的整数倍，但会限制在 `min` 与 `max` 之间。 编辑时以合法输入草稿作为步进起点，并据此判断按钮是否达到边界。 |
 | value | num | - | 唯一受控数值，必须位于 `min` 与 `max` 之间。 父组件需要在 `onChanged` 后以新值重建组件，否则输入内容会恢复。 |
 | variant | TStepperVariant? | - | 组件形态。 为空时依次使用 `TStepperThemeData.variant` 和 `TStepperVariant.normal`。 |
 

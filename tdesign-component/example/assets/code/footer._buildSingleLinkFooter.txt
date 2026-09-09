@@ -1,16 +1,20 @@
 Widget _buildSingleLinkFooter(BuildContext context) {
-    return TFooter(
-      TFooterVariant.link,
-      links: [
-        TLink(
-          child: const Text('底部链接'),
-          colorScheme: TLinkColorScheme.primary,
-          suffixIcon: const Icon(TIcons.jump),
-          onPressed: () {
-            print('点击了链接');
-          },
-        ),
-      ],
-      text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
-    );
-  }
+  TLink link(String text) => TLink(
+    child: Text(text),
+    colorScheme: TLinkColorScheme.primary,
+    onPressed: () {},
+  );
+  return Column(
+    children: [
+      TFooter(
+        links: [link('底部链接')],
+        text: 'Copyright © 2021-2031 TD.All Rights Reserved.',
+      ),
+      const SizedBox(height: 24),
+      TFooter(
+        links: [link('底部链接'), link('底部链接')],
+        text: 'Copyright © 2021-2031 TD.All Rights Reserved.',
+      ),
+    ],
+  );
+}

@@ -130,7 +130,8 @@
         "names": [
           "TIndexes",
           "TIndexesAnchor",
-          "TIndexesList"
+          "TIndexesList",
+          "TIndexesThemeData"
         ],
         "getComments": true
       }
@@ -186,7 +187,6 @@
       "api": {
         "names": [
           "TTabBar",
-          "TTabBarBadgeConfig",
           "TTabBarItemConfig",
           "TTabBarPopUpBtnConfig",
           "TTabBarPopUpShapeConfig",
@@ -237,7 +237,10 @@
       },
       "api": {
         "names": [
-          "TMultiCascader"
+          "TCascader",
+          "TCascaderOption",
+          "TCascaderThemeData",
+          "TCascaderVariant"
         ],
         "getComments": false
       }
@@ -440,7 +443,7 @@
       "api": {
         "names": [
           "TTreeSelect",
-          "TSelectOption"
+          "TTreeSelectOption"
         ],
         "getComments": false
       }
@@ -471,7 +474,8 @@
       },
       "api": {
         "names": [
-          "TAvatar"
+          "TAvatar",
+          "TAvatarGroup"
         ],
         "getComments": false
       }
@@ -553,10 +557,7 @@
         "path": "lib/src/components/footer/t_footer.dart"
       },
       "api": {
-        "names": [
-          "TFooter",
-          "TFooterType"
-        ],
+        "names": ["TFooter"],
         "getComments": false
       }
     },
@@ -785,6 +786,8 @@
       "api": {
         "names": [
           "TPopover",
+          "TPopoverAnchor",
+          "TPopoverController",
           "TPopoverColorScheme",
           "TPopoverPlacement"
         ],
