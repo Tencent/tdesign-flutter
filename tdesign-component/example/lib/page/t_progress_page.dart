@@ -18,18 +18,12 @@ class TProgressPage extends StatelessWidget {
         ExampleModule(
           title: '组件类型',
           children: [
-            ExampleItem(desc: 'Line 线性进度条', builder: _buildLinear),
-            ExampleItem(desc: 'Plump 百分比内显', builder: _buildPlump),
-            ExampleItem(desc: 'Circle 环形进度条', builder: _buildCircle),
-            ExampleItem(
-              desc: 'Micro Circle 微型环形进度条',
-              builder: _buildMicroCircle,
-            ),
-            ExampleItem(desc: 'Button 按钮进度', builder: _buildButton),
-            ExampleItem(
-              desc: 'Micro Button 微型按钮进度',
-              builder: _buildMicroButton,
-            ),
+            ExampleItem(desc: '线性进度条', builder: _buildLinear),
+            ExampleItem(desc: '百分比内显', builder: _buildPlump),
+            ExampleItem(desc: '环形进度条', builder: _buildCircle),
+            ExampleItem(desc: '微型环形进度条', builder: _buildMicroCircle),
+            ExampleItem(desc: '带操作图片预览', builder: _buildButton),
+            ExampleItem(desc: '微型按钮进度条', builder: _buildMicroButton),
           ],
         ),
         ExampleModule(
@@ -61,39 +55,21 @@ class TProgressPage extends StatelessWidget {
 
   @ExampleCode(group: 'progress')
   Widget _buildMicroCircle(BuildContext context) {
-    return TProgress(
-      variant: TProgressVariant.micro,
-      value: 0.3,
-      label: const SizedBox.shrink(),
-    );
+    return TProgress(variant: TProgressVariant.microCircular, value: 0.3);
   }
 
   @ExampleCode(group: 'progress')
   Widget _buildButton(BuildContext context) {
-    var value = 0.8;
+    var value = 0.0;
     return StatefulBuilder(
       builder: (context, setState) {
-        void advance() {
-          setState(() => value = value >= 1 ? 0 : value + 0.1);
-        }
-
-        return Column(
-          children: [
-            TProgress(
-              key: const Key('progress-button-value'),
-              variant: TProgressVariant.button,
-              value: value,
-              onTap: advance,
-            ),
-            SizedBox(height: context.tTheme.spacer8),
-            TProgress(
-              key: const Key('progress-button-continue'),
-              variant: TProgressVariant.button,
-              value: value,
-              label: const Text('Continue'),
-              onTap: advance,
-            ),
-          ],
+        return TProgress(
+          key: const Key('progress-button'),
+          variant: TProgressVariant.button,
+          value: value,
+          label: Text(value == 0 ? '开始' : '${(value * 100).round()}%'),
+          semanticsLabel: '上传进度',
+          onTap: () => setState(() => value = value == 0 ? 0.8 : 0),
         );
       },
     );
@@ -109,27 +85,16 @@ class TProgressPage extends StatelessWidget {
           children: [
             TProgress(
               key: const Key('progress-micro-button'),
-              variant: TProgressVariant.micro,
+              variant: TProgressVariant.microButton,
               value: value,
               label: Icon(playing ? TIcons.pause : TIcons.play),
+              semanticsLabel: '播放进度',
               onTap: () {
                 setState(() {
                   playing = !playing;
                   value = playing ? 0.6 : 0.3;
                 });
               },
-            ),
-            SizedBox(width: context.tTheme.spacer16),
-            TProgress(
-              variant: TProgressVariant.micro,
-              value: 1,
-              status: TProgressStatus.success,
-            ),
-            SizedBox(width: context.tTheme.spacer16),
-            TProgress(
-              variant: TProgressVariant.micro,
-              value: 0.3,
-              status: TProgressStatus.error,
             ),
           ],
         );
@@ -160,6 +125,17 @@ class TProgressPage extends StatelessWidget {
           value: 0.8,
           status: TProgressStatus.success,
         ),
+        const SizedBox(height: 12),
+        TProgress(
+          variant: TProgressVariant.linear,
+          value: 0.8,
+          gradient: LinearGradient(
+            colors: [
+              context.tTheme.brandNormalColor,
+              context.tTheme.successNormalColor,
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -169,6 +145,12 @@ class TProgressPage extends StatelessWidget {
     return Column(
       children: [
         TProgress(variant: TProgressVariant.plump, value: 0.8),
+        const SizedBox(height: 8),
+        TProgress(
+          variant: TProgressVariant.plump,
+          value: 1,
+          status: TProgressStatus.success,
+        ),
         const SizedBox(height: 8),
         TProgress(
           variant: TProgressVariant.plump,
@@ -185,7 +167,12 @@ class TProgressPage extends StatelessWidget {
         TProgress(
           variant: TProgressVariant.plump,
           value: 0.8,
-          status: TProgressStatus.success,
+          gradient: LinearGradient(
+            colors: [
+              context.tTheme.brandNormalColor,
+              context.tTheme.successNormalColor,
+            ],
+          ),
         ),
       ],
     );

@@ -12,26 +12,37 @@ void main() {
     await pumpFullDemoPage(tester, progressDemoPageTestSpec, ThemeMode.light);
 
     final progress = tester.widgetList<TProgress>(find.byType(TProgress));
-    expect(progress, hasLength(21));
+    expect(progress, hasLength(20));
     expect(
       progress.where((item) => item.variant == TProgressVariant.linear),
-      hasLength(5),
+      hasLength(6),
     );
     expect(
       progress.where((item) => item.variant == TProgressVariant.plump),
-      hasLength(5),
+      hasLength(6),
     );
     expect(
       progress.where((item) => item.variant == TProgressVariant.circular),
       hasLength(5),
     );
     expect(
-      progress.where((item) => item.variant == TProgressVariant.micro),
-      hasLength(4),
+      progress.where((item) => item.variant == TProgressVariant.microCircular),
+      hasLength(1),
     );
     expect(
       progress.where((item) => item.variant == TProgressVariant.button),
-      hasLength(2),
+      hasLength(1),
+    );
+    expect(
+      progress.where((item) => item.variant == TProgressVariant.microButton),
+      hasLength(1),
+    );
+    expect(progress.where((item) => item.gradient != null), hasLength(2));
+    expect(
+      progress
+          .where((item) => item.status == TProgressStatus.success)
+          .map((item) => item.value),
+      contains(1),
     );
     for (final status in TProgressStatus.values) {
       expect(
@@ -42,12 +53,12 @@ void main() {
     }
   });
 
-  testWidgets('按钮进度点击后从 80% 推进到 90%', (tester) async {
+  testWidgets('按钮进度点击后从开始推进到 80%', (tester) async {
     await pumpFullDemoPage(tester, progressDemoPageTestSpec, ThemeMode.light);
 
-    final button = find.byKey(const Key('progress-button-value'));
+    final button = find.byKey(const Key('progress-button'));
     expect(
-      find.descendant(of: button, matching: find.text('80%')),
+      find.descendant(of: button, matching: find.text('开始')),
       findsOneWidget,
     );
     await tester.ensureVisible(button);
@@ -55,7 +66,7 @@ void main() {
     await tester.tap(button);
     await tester.pump(const Duration(milliseconds: 400));
     expect(
-      find.descendant(of: button, matching: find.text('90%')),
+      find.descendant(of: button, matching: find.text('80%')),
       findsOneWidget,
     );
   });

@@ -20,6 +20,17 @@ Widget _buildLinearStatus(BuildContext context) {
           value: 0.8,
           status: TProgressStatus.success,
         ),
+        const SizedBox(height: 12),
+        TProgress(
+          variant: TProgressVariant.linear,
+          value: 0.8,
+          gradient: LinearGradient(
+            colors: [
+              context.tTheme.brandNormalColor,
+              context.tTheme.successNormalColor,
+            ],
+          ),
+        ),
       ],
     );
   }

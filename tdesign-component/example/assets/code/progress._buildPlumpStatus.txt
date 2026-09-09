@@ -5,6 +5,12 @@ Widget _buildPlumpStatus(BuildContext context) {
         const SizedBox(height: 8),
         TProgress(
           variant: TProgressVariant.plump,
+          value: 1,
+          status: TProgressStatus.success,
+        ),
+        const SizedBox(height: 8),
+        TProgress(
+          variant: TProgressVariant.plump,
           value: 0.8,
           status: TProgressStatus.warning,
         ),
@@ -18,7 +24,12 @@ Widget _buildPlumpStatus(BuildContext context) {
         TProgress(
           variant: TProgressVariant.plump,
           value: 0.8,
-          status: TProgressStatus.success,
+          gradient: LinearGradient(
+            colors: [
+              context.tTheme.brandNormalColor,
+              context.tTheme.successNormalColor,
+            ],
+          ),
         ),
       ],
     );

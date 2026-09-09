@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -87,7 +88,7 @@ void main() {
     });
   });
 
-  group('TProgress variant 四档', () {
+  group('TProgress variant 六档', () {
     testWidgets('variant: linear 渲染', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
@@ -112,9 +113,11 @@ void main() {
       expect(find.byType(TProgress), findsOneWidget);
     });
 
-    testWidgets('variant: micro 渲染', (tester) async {
+    testWidgets('variant: microCircular 渲染', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(TProgress(variant: TProgressVariant.micro, value: 0.3)),
+        wrapWithTheme(
+          TProgress(variant: TProgressVariant.microCircular, value: 0.3),
+        ),
       );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
@@ -132,6 +135,20 @@ void main() {
       );
       await tester.pump();
       expect(find.byType(TProgress), findsOneWidget);
+    });
+
+    testWidgets('variant: plump 与 microButton 渲染', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Column(
+            children: [
+              TProgress(variant: TProgressVariant.plump, value: 0.5),
+              TProgress(variant: TProgressVariant.microButton, value: 0.5),
+            ],
+          ),
+        ),
+      );
+      expect(find.byType(TProgress), findsNWidgets(2));
     });
   });
 
@@ -157,12 +174,12 @@ void main() {
       expect(taps, 1);
     });
 
-    testWidgets('micro variant 支持点击', (tester) async {
+    testWidgets('microButton variant 支持点击', (tester) async {
       var taps = 0;
       await tester.pumpWidget(
         wrapWithTheme(
           TProgress(
-            variant: TProgressVariant.micro,
+            variant: TProgressVariant.microButton,
             value: 0.5,
             onTap: () => taps++,
           ),
@@ -199,12 +216,12 @@ void main() {
       expect(taps, 0);
     });
 
-    testWidgets('micro variant 仅提供 onLongPress 时仍可长按', (tester) async {
+    testWidgets('microButton 仅提供 onLongPress 时仍可长按', (tester) async {
       var longPresses = 0;
       await tester.pumpWidget(
         wrapWithTheme(
           TProgress(
-            variant: TProgressVariant.micro,
+            variant: TProgressVariant.microButton,
             value: 0.5,
             onLongPress: () => longPresses++,
           ),
@@ -272,46 +289,17 @@ void main() {
       expect(find.text('0%'), findsWidgets);
     });
 
-    testWidgets('labelPosition: left 渲染', (tester) async {
+    testWidgets('显式空 label 隐藏自动标签', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           SizedBox(
             width: 300,
-            child: TProgress(variant: TProgressVariant.linear, value: 0.5),
+            child: TProgress(
+              variant: TProgressVariant.linear,
+              value: 0.5,
+              label: const SizedBox.shrink(),
+            ),
           ),
-          progressTheme: const TProgressThemeData(
-            progressLabelPosition: TProgressLabelPosition.left,
-          ),
-        ),
-      );
-      await tester.pump();
-      expect(find.byType(TProgress), findsOneWidget);
-    });
-
-    testWidgets('labelPosition: right 渲染', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(
-          SizedBox(
-            width: 300,
-            child: TProgress(variant: TProgressVariant.linear, value: 0.5),
-          ),
-          progressTheme: const TProgressThemeData(
-            progressLabelPosition: TProgressLabelPosition.right,
-          ),
-        ),
-      );
-      await tester.pump();
-      expect(find.byType(TProgress), findsOneWidget);
-    });
-
-    testWidgets('showLabel: false 隐藏标签', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(
-          SizedBox(
-            width: 300,
-            child: TProgress(variant: TProgressVariant.linear, value: 0.5),
-          ),
-          progressTheme: const TProgressThemeData(showLabel: false),
         ),
       );
       await tester.pump();
@@ -404,26 +392,6 @@ void main() {
       expect(find.byType(TProgress), findsOneWidget);
     });
 
-    testWidgets('实例 label 与 Theme 位置配合渲染', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(
-          SizedBox(
-            width: 300,
-            child: TProgress(
-              variant: TProgressVariant.linear,
-              value: 0.5,
-              label: const Text('加载中'),
-            ),
-          ),
-          progressTheme: const TProgressThemeData(
-            progressLabelPosition: TProgressLabelPosition.left,
-          ),
-        ),
-      );
-      await tester.pump();
-      expect(find.text('加载中'), findsOneWidget);
-    });
-
     testWidgets('Theme.animationDuration 覆盖动画时长', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
@@ -440,30 +408,13 @@ void main() {
       expect(find.byType(TProgress), findsOneWidget);
     });
 
-    testWidgets('Theme.fallbackLinearWidth 解决横向无界布局', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: TProgress(variant: TProgressVariant.linear, value: 0.5),
-          ),
-          progressTheme: const TProgressThemeData(fallbackLinearWidth: 180),
-        ),
-      );
-      await tester.pump();
-
-      expect(tester.takeException(), isNull);
-      expect(tester.getSize(find.byType(TProgress)).width, 180);
-    });
-
-    testWidgets('有界布局忽略 fallbackLinearWidth 并保持父级宽度', (tester) async {
+    testWidgets('有界布局保持父级宽度', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           SizedBox(
             width: 300,
             child: TProgress(variant: TProgressVariant.linear, value: 0.5),
           ),
-          progressTheme: const TProgressThemeData(fallbackLinearWidth: 180),
         ),
       );
       await tester.pump();
@@ -498,14 +449,12 @@ void main() {
         color: Colors.red,
         circleRadius: 100,
         indeterminateLinearSegmentFraction: 0.4,
-        fallbackLinearWidth: 180,
       );
       final copied = theme.copyWith(strokeWidth: 10);
       expect(copied.strokeWidth, 10);
       expect(copied.color, Colors.red);
       expect(copied.circleRadius, 100);
       expect(copied.indeterminateLinearSegmentFraction, 0.4);
-      expect(copied.fallbackLinearWidth, 180);
     });
 
     test('copyWith 不覆盖时保持原值', () {
@@ -529,13 +478,6 @@ void main() {
       const b = TProgressThemeData(strokeWidth: 30);
       final result = a.lerp(b, 0.5);
       expect(result.strokeWidth, 20);
-    });
-
-    test('lerp fallbackLinearWidth 插值', () {
-      const a = TProgressThemeData(fallbackLinearWidth: 100);
-      const b = TProgressThemeData(fallbackLinearWidth: 300);
-      final result = a.lerp(b, 0.5);
-      expect(result.fallbackLinearWidth, 200);
     });
 
     test('lerp animationDuration 插值', () {
@@ -619,9 +561,11 @@ void main() {
       expect(find.byType(TProgress), findsOneWidget);
     });
 
-    testWidgets('micro variant 不显示百分比文字', (tester) async {
+    testWidgets('microCircular variant 不显示百分比文字', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(TProgress(variant: TProgressVariant.micro, value: 0.5)),
+        wrapWithTheme(
+          TProgress(variant: TProgressVariant.microCircular, value: 0.5),
+        ),
       );
       await tester.pump();
       // micro 类型不显示自动文字
@@ -690,7 +634,7 @@ void main() {
     testWidgets('四种状态解析语义颜色与默认标签', (tester) async {
       final token = TThemeData.defaultData();
       final expectedColors = <TProgressStatus, Color>{
-        TProgressStatus.primary: token.brandNormalColor,
+        TProgressStatus.normal: token.brandNormalColor,
         TProgressStatus.warning: token.warningNormalColor,
         TProgressStatus.error: token.errorNormalColor,
         TProgressStatus.success: token.successNormalColor,
@@ -716,13 +660,11 @@ void main() {
         expect((value.decoration! as BoxDecoration).color, entry.value);
         expect(
           find.byWidgetPredicate(
-            (widget) =>
-                widget is Semantics &&
-                widget.properties.label == 'progress-${entry.key.name}',
+            (widget) => widget is Semantics && widget.properties.value == '80%',
           ),
           findsOneWidget,
         );
-        if (entry.key == TProgressStatus.primary) {
+        if (entry.key == TProgressStatus.normal) {
           expect(find.text('80%'), findsOneWidget);
         } else {
           expect(
@@ -753,6 +695,94 @@ void main() {
         find.byKey(const ValueKey('progress-value')),
       );
       expect((value.decoration! as BoxDecoration).color, Colors.purple);
+    });
+
+    testWidgets('实例 gradient 优先并完整传递到线性填充', (tester) async {
+      const gradient = LinearGradient(colors: [Colors.blue, Colors.green]);
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(
+              variant: TProgressVariant.linear,
+              value: 0.8,
+              status: TProgressStatus.error,
+              gradient: gradient,
+            ),
+          ),
+          progressTheme: const TProgressThemeData(color: Colors.purple),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final value = tester.widget<Container>(
+        find.byKey(const ValueKey('progress-value')),
+      );
+      final decoration = value.decoration! as BoxDecoration;
+      expect(decoration.gradient, gradient);
+      expect(decoration.color, isNull);
+    });
+
+    test('gradient 拒绝不支持的环形形态', () {
+      expect(
+        () => TProgress(
+          variant: TProgressVariant.circular,
+          value: 0.5,
+          gradient: const LinearGradient(colors: [Colors.blue, Colors.green]),
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    testWidgets('microButton 提供 44px 触控区和按钮语义', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TProgress(
+            variant: TProgressVariant.microButton,
+            value: 0.3,
+            semanticsLabel: '播放进度',
+            onTap: () {},
+          ),
+        ),
+      );
+
+      expect(
+        tester.getSize(
+          find.byKey(const ValueKey('progress-micro-button-hit-target')),
+        ),
+        const Size.square(44),
+      );
+      final semantics = tester.getSemantics(find.byType(TProgress));
+      expect(semantics.label, '播放进度');
+      // Flutter 3.32 does not expose SemanticsNode.flagsCollection yet.
+      // ignore: deprecated_member_use
+      expect(semantics.hasFlag(SemanticsFlag.isButton), isTrue);
+      expect(
+        semantics.getSemanticsData().hasAction(SemanticsAction.tap),
+        isTrue,
+      );
+    });
+
+    testWidgets('microCircular 保持只读且不暴露内部状态名称', (tester) async {
+      var taps = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TProgress(
+            variant: TProgressVariant.microCircular,
+            value: 0.3,
+            status: TProgressStatus.warning,
+            onTap: () => taps++,
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(TProgress));
+      expect(taps, 0);
+      final semantics = tester.getSemantics(find.byType(TProgress));
+      expect(semantics.label, isNot(contains('progress-warning')));
+      // Flutter 3.32 does not expose SemanticsNode.flagsCollection yet.
+      // ignore: deprecated_member_use
+      expect(semantics.hasFlag(SemanticsFlag.isButton), isFalse);
     });
 
     testWidgets('轨道与进度值共享完整圆角', (tester) async {
@@ -811,7 +841,7 @@ void main() {
       expect(find.byKey(const ValueKey('progress-value')), findsOneWidget);
     });
 
-    testWidgets('不确定态 button 与 micro 保留交互', (tester) async {
+    testWidgets('不确定态 button 与 microButton 保留交互', (tester) async {
       var buttonTaps = 0;
       var microLongPresses = 0;
       await tester.pumpWidget(
@@ -823,7 +853,7 @@ void main() {
                 onTap: () => buttonTaps++,
               ),
               TProgress(
-                variant: TProgressVariant.micro,
+                variant: TProgressVariant.microButton,
                 onLongPress: () => microLongPresses++,
               ),
             ],

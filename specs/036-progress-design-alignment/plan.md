@@ -2,9 +2,11 @@
 
 ## 技术方案
 
-- 在 `TProgressVariant` 增加 `plump`，由形态决定默认 label 布局；保留 Theme 的 `progressLabelPosition` 作为历史显式覆盖。
-- 增加 `TProgressStatus` 与可选 `status` 参数，内部统一解析默认颜色、图标和无障碍语义。
-- 继续使用 `TProgressThemeData` 承载颜色、尺寸、圆角与动画；解析顺序为 Theme / Flutter 显式视觉字段优先，再落到状态语义 token。
+- 将公开形态一次收敛为 `linear`、`plump`、`circular`、`microCircular`、`button`、`microButton`；形态唯一决定结构、默认尺寸、标签布局和交互边界。
+- 增加 `TProgressStatus` 与可选 `status` 参数，内部统一解析默认颜色和图标；常规状态命名为 `normal`，不以色相名称冒充状态。
+- 删除 `TProgressLabelPosition` 及 Theme 中的标签位置、显示开关、标签宽度/对齐和无界兜底宽度等历史兼容字段。
+- 继续使用 `TProgressThemeData` 承载颜色、尺寸、圆角与动画；增加逐实例 `LinearGradient` 完整填充样式，解析顺序为实例渐变、Theme / Flutter 显式视觉字段、状态语义 token。
+- 对齐 Flutter 的 `semanticsLabel` / `semanticsValue`，交互形态补充按钮语义与 44px 触控区域。
 - Demo 状态仅由页面持有，按钮操作通过 `setState` 推进，不把 Timer 或 Controller 泄漏到组件 API。
 
 ## 影响范围
@@ -19,14 +21,17 @@
 ## API 变化
 
 - 新增 `TProgressVariant.plump`。
-- 新增 `TProgressStatus` 和可选 `status`，默认 `primary`。
+- 新增 `TProgressStatus` 和可选 `status`，默认 `normal`。
+- `micro` 替换为语义明确的 `microCircular` 与 `microButton`。
+- 新增逐实例 `gradient`、`semanticsLabel` 与 `semanticsValue`。
+- 删除 `TProgressLabelPosition`、`progressLabelPosition`、`showLabel`、`labelWidgetWidth`、`labelWidgetAlignment` 和 `fallbackLinearWidth`。
 - `linear` 的默认标签位置由 inside 调整为 right；需要旧内显效果时迁移到 `plump`，属于 breaking change。
 - 不新增颜色、尺寸或 Controller 的重复入口。
 
 ## 风险与取舍
 
-- 保留 Theme 的 `progressLabelPosition` 仅用于已发布定制兼容；新代码应优先选择 variant。
-- 微型按钮复用 `micro + label + onTap`，其结构仍是微型圆环，不额外增加可由现有组合表达的 variant。
+- 不保留历史兼容分支；迁移必须显式选择新的 variant 或传入 label。
+- 微型环形和微型按钮分别建模，避免由 label / callback 是否存在隐式改变组件职责。
 - 状态色与状态图标由同一 status 派生，避免 Demo 手工包 Theme 后失去语义。
 
 ## 验证策略

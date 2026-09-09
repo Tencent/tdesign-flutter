@@ -1,28 +1,14 @@
 Widget _buildButton(BuildContext context) {
-    var value = 0.8;
+    var value = 0.0;
     return StatefulBuilder(
       builder: (context, setState) {
-        void advance() {
-          setState(() => value = value >= 1 ? 0 : value + 0.1);
-        }
-
-        return Column(
-          children: [
-            TProgress(
-              key: const Key('progress-button-value'),
-              variant: TProgressVariant.button,
-              value: value,
-              onTap: advance,
-            ),
-            SizedBox(height: context.tTheme.spacer8),
-            TProgress(
-              key: const Key('progress-button-continue'),
-              variant: TProgressVariant.button,
-              value: value,
-              label: const Text('Continue'),
-              onTap: advance,
-            ),
-          ],
+        return TProgress(
+          key: const Key('progress-button'),
+          variant: TProgressVariant.button,
+          value: value,
+          label: Text(value == 0 ? '开始' : '${(value * 100).round()}%'),
+          semanticsLabel: '上传进度',
+          onTap: () => setState(() => value = value == 0 ? 0.8 : 0),
         );
       },
     );
