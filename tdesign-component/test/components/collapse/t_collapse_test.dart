@@ -2,102 +2,106 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// TCollapse Widget 测试
+/// TCollapse Widget 测试。
 ///
-/// 覆盖 mode 两档（multiple/accordion）、展开/折叠交互、
-/// onExpansionChanged/onChanged 回调、TCollapsePanel 参数、
-/// Theme 注入、边界情况。
+/// 覆盖统一 value/onChanged 状态、multiple/accordion、组级与单项禁用、
+/// Header 扩展点、Theme、布局和契约断言。
 void main() {
-  /// 用 TTheme 包裹以提供基础 Token
   Widget wrapWithTheme(Widget child, {TCollapseThemeData? collapseTheme}) {
-    final themeExtensions = <ThemeExtension>[
-      if (collapseTheme != null) collapseTheme,
-    ];
-    // 注意：必须通过 MaterialApp.theme 传递 extensions
     return MaterialApp(
       theme: ThemeData(
-        extensions: [TThemeData.defaultData(), ...themeExtensions],
+        extensions: [
+          TThemeData.defaultData(),
+          if (collapseTheme != null) collapseTheme,
+        ],
       ),
-      // 常规用例放在滚动页面中；有界 Scaffold.body 另有回归测试覆盖。
       home: Scaffold(body: SingleChildScrollView(child: child)),
     );
   }
 
-  /// 读取第 index 个面板对应 AnimatedCrossFade 的折叠状态
-  /// （TCollapse 折叠时 body 仍以 opacity:0 形式保留在树中，
-  /// 故不能靠 find.text(...).findsNothing 判断，应检查 crossFadeState）
   CrossFadeState panelCrossFadeState(WidgetTester tester, int index) {
-    final crossFades = tester.widgetList<AnimatedCrossFade>(
-      find.byType(AnimatedCrossFade),
-    );
-    return crossFades.elementAt(index).crossFadeState;
+    return tester
+        .widgetList<AnimatedCrossFade>(find.byType(AnimatedCrossFade))
+        .elementAt(index)
+        .crossFadeState;
   }
 
-  /// 构建一个简单的面板
   TCollapsePanel<String> buildPanel({
+    required String value,
     required String title,
     required String bodyText,
-    bool isExpanded = false,
-    String? value,
-    TCollapseIconTextBuilder? expandIconTextBuilder,
     bool disabled = false,
     TCollapsePlacement placement = TCollapsePlacement.bottom,
     Key? key,
     String? semanticsLabel,
     Widget? body,
     double? bodyHeight,
+    TCollapsePanelBuilder? leadingBuilder,
+    TCollapsePanelBuilder? trailingBuilder,
+    TCollapsePanelBuilder? expandIconBuilder = defaultExpandIconBuilder,
   }) {
-    return TCollapsePanel(
+    return TCollapsePanel<String>(
       key: key,
+      value: value,
       headerBuilder: (context, expanded) => Text(title),
       body: body ?? Text(bodyText),
       bodyHeight: bodyHeight,
-      isExpanded: isExpanded,
-      value: value,
-      expandIconTextBuilder: expandIconTextBuilder,
       disabled: disabled,
       placement: placement,
       semanticsLabel: semanticsLabel,
+      leadingBuilder: leadingBuilder,
+      trailingBuilder: trailingBuilder,
+      expandIconBuilder: expandIconBuilder,
     );
   }
 
   group('TCollapse 基础渲染', () {
-    testWidgets('multiple 模式渲染单个面板', (tester) async {
+    testWidgets('multiple 模式按 value 渲染多个面板', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TCollapse(
-            children: [buildPanel(title: '标题1', bodyText: '内容1')],
-          ),
-        ),
-      );
-      expect(find.byType(TCollapse<String>), findsOneWidget);
-      expect(find.text('标题1'), findsOneWidget);
-    });
-
-    testWidgets('multiple 模式渲染多个面板', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(
-          TCollapse(
+          TCollapse<String>(
+            value: const ['a'],
             children: [
-              buildPanel(title: '标题A', bodyText: '内容A'),
-              buildPanel(title: '标题B', bodyText: '内容B'),
+              buildPanel(value: 'a', title: '标题A', bodyText: '内容A'),
+              buildPanel(value: 'b', title: '标题B', bodyText: '内容B'),
             ],
           ),
         ),
       );
-      expect(find.text('标题A'), findsOneWidget);
-      expect(find.text('标题B'), findsOneWidget);
+
+      expect(find.byType(TCollapse<String>), findsOneWidget);
+      expect(panelCrossFadeState(tester, 0), CrossFadeState.showSecond);
+      expect(panelCrossFadeState(tester, 1), CrossFadeState.showFirst);
+    });
+
+    testWidgets('accordion 模式按列表中的唯一 value 渲染', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TCollapse<String>(
+            mode: TCollapseMode.accordion,
+            value: const ['b'],
+            children: [
+              buildPanel(value: 'a', title: '标题A', bodyText: '内容A'),
+              buildPanel(value: 'b', title: '标题B', bodyText: '内容B'),
+            ],
+          ),
+        ),
+      );
+
+      expect(panelCrossFadeState(tester, 0), CrossFadeState.showFirst);
+      expect(panelCrossFadeState(tester, 1), CrossFadeState.showSecond);
     });
 
     testWidgets('bodyHeight 为滚动内容提供有界高度', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TCollapse(
+          TCollapse<String>(
+            value: const ['list'],
             children: [
               buildPanel(
+                value: 'list',
                 title: '列表',
                 bodyText: '',
-                isExpanded: true,
                 bodyHeight: 120,
                 body: ListView(children: const [Text('第一项'), Text('第二项')]),
               ),
@@ -119,241 +123,271 @@ void main() {
       expect(constrainedBody.height, 120);
     });
 
-    testWidgets('accordion 模式渲染', (tester) async {
+    testWidgets('短内容与标题保持左对齐', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TCollapse(
-            mode: TCollapseMode.accordion,
-            value: 'v1',
-            children: [
-              buildPanel(title: '面板1', bodyText: '内容1', value: 'v1'),
-              buildPanel(title: '面板2', bodyText: '内容2', value: 'v2'),
-            ],
+          TCollapse<String>(
+            value: const ['a'],
+            children: [buildPanel(value: 'a', title: '标题', bodyText: '短内容')],
           ),
         ),
       );
-      expect(find.byType(TCollapse<String>), findsOneWidget);
-      expect(find.text('面板1'), findsOneWidget);
-      expect(find.text('面板2'), findsOneWidget);
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.getTopLeft(find.text('短内容')).dx,
+        tester.getTopLeft(find.text('标题')).dx,
+      );
     });
   });
 
-  group('TCollapse 展开折叠交互', () {
-    testWidgets('multiple 模式点击展开面板', (tester) async {
-      // multiple 模式为受控组件：点击仅通过 onExpansionChanged 通知当前状态，
-      // 由父级取反后回写 isExpanded 完成展开/折叠。
-      var expanded = false;
+  group('TCollapse 统一受控交互', () {
+    testWidgets('multiple 模式返回添加后的完整列表', (tester) async {
+      var value = ['a'];
+      late List<String> callbackValue;
       await tester.pumpWidget(
         wrapWithTheme(
           StatefulBuilder(
-            builder: (context, setState) {
-              return TCollapse(
-                onExpansionChanged: (index, isExpanded) =>
-                    setState(() => expanded = !isExpanded),
-                children: [
-                  buildPanel(
-                    title: '标题',
-                    bodyText: '展开内容',
-                    isExpanded: expanded,
-                  ),
-                ],
-              );
-            },
+            builder: (context, setState) => TCollapse<String>(
+              value: value,
+              onChanged: (next) {
+                callbackValue = next;
+                setState(() => value = next);
+              },
+              children: [
+                buildPanel(value: 'a', title: '标题A', bodyText: '内容A'),
+                buildPanel(value: 'b', title: '标题B', bodyText: '内容B'),
+              ],
+            ),
           ),
         ),
       );
-      // 初始折叠，内容不可见（AnimatedCrossFade 处于 showFirst）
-      expect(panelCrossFadeState(tester, 0), CrossFadeState.showFirst);
 
-      // 点击标题展开
-      await tester.tap(find.text('标题'));
+      await tester.tap(find.text('标题B'));
       await tester.pumpAndSettle();
 
-      // 展开后 crossFade 处于 showSecond
-      expect(panelCrossFadeState(tester, 0), CrossFadeState.showSecond);
+      expect(value, ['a', 'b']);
+      expect(panelCrossFadeState(tester, 1), CrossFadeState.showSecond);
+      expect(() => callbackValue.add('c'), throwsUnsupportedError);
     });
 
-    testWidgets('multiple 模式点击折叠已展开面板', (tester) async {
-      var expanded = true;
+    testWidgets('multiple 模式返回移除后的完整列表', (tester) async {
+      var value = ['a', 'b'];
       await tester.pumpWidget(
         wrapWithTheme(
           StatefulBuilder(
-            builder: (context, setState) {
-              return TCollapse(
-                onExpansionChanged: (index, isExpanded) =>
-                    setState(() => expanded = !isExpanded),
-                children: [
-                  buildPanel(
-                    title: '标题',
-                    bodyText: '展开内容',
-                    isExpanded: expanded,
-                  ),
-                ],
-              );
-            },
+            builder: (context, setState) => TCollapse<String>(
+              value: value,
+              onChanged: (next) => setState(() => value = next),
+              children: [
+                buildPanel(value: 'a', title: '标题A', bodyText: '内容A'),
+                buildPanel(value: 'b', title: '标题B', bodyText: '内容B'),
+              ],
+            ),
           ),
         ),
       );
-      // 初始展开
-      expect(panelCrossFadeState(tester, 0), CrossFadeState.showSecond);
 
-      // 点击标题折叠
-      await tester.tap(find.text('标题'));
+      await tester.tap(find.text('标题A'));
       await tester.pumpAndSettle();
 
-      // 折叠后 crossFade 处于 showFirst
+      expect(value, ['b']);
       expect(panelCrossFadeState(tester, 0), CrossFadeState.showFirst);
     });
 
-    testWidgets('onExpansionChanged 回调被调用', (tester) async {
-      int? calledIndex;
-      bool? calledIsExpanded;
-
-      await tester.pumpWidget(
-        wrapWithTheme(
-          TCollapse(
-            children: [buildPanel(title: '标题', bodyText: '内容')],
-            onExpansionChanged: (index, isExpanded) {
-              calledIndex = index;
-              calledIsExpanded = isExpanded;
-            },
-          ),
-        ),
-      );
-
-      await tester.tap(find.text('标题'));
-      await tester.pumpAndSettle();
-
-      expect(calledIndex, 0);
-      expect(calledIsExpanded, false); // 点击时是折叠状态，回调传 false
-    });
-
-    testWidgets('accordion 模式切换面板', (tester) async {
-      var value = 'v1';
+    testWidgets('accordion 模式切换和收起时返回完整列表', (tester) async {
+      var value = ['a'];
       await tester.pumpWidget(
         wrapWithTheme(
           StatefulBuilder(
             builder: (context, setState) => TCollapse<String>(
               mode: TCollapseMode.accordion,
               value: value,
-              onChanged: (next) => setState(() => value = next ?? ''),
+              onChanged: (next) => setState(() => value = next),
               children: [
-                buildPanel(title: '面板1', bodyText: '内容1', value: 'v1'),
-                buildPanel(title: '面板2', bodyText: '内容2', value: 'v2'),
+                buildPanel(value: 'a', title: '标题A', bodyText: '内容A'),
+                buildPanel(value: 'b', title: '标题B', bodyText: '内容B'),
               ],
             ),
           ),
         ),
       );
-      expect(panelCrossFadeState(tester, 0), CrossFadeState.showSecond);
-      expect(panelCrossFadeState(tester, 1), CrossFadeState.showFirst);
 
-      await tester.tap(find.text('面板2'));
+      await tester.tap(find.text('标题B'));
       await tester.pumpAndSettle();
+      expect(value, ['b']);
 
-      expect(value, 'v2');
-      expect(panelCrossFadeState(tester, 0), CrossFadeState.showFirst);
-      expect(panelCrossFadeState(tester, 1), CrossFadeState.showSecond);
+      await tester.tap(find.text('标题B'));
+      await tester.pumpAndSettle();
+      expect(value, isEmpty);
     });
 
-    testWidgets('accordion 模式 onChanged 回调被调用', (tester) async {
-      String? changedValue;
-
+    testWidgets('未回写 value 时视图保持受控值', (tester) async {
+      List<String>? nextValue;
       await tester.pumpWidget(
-        StatefulBuilder(
-          builder: (context, setState) => wrapWithTheme(
-            TCollapse(
-              mode: TCollapseMode.accordion,
-              value: changedValue,
-              onChanged: (val) {
-                setState(() => changedValue = val);
-              },
-              children: [
-                buildPanel(title: '面板1', bodyText: '内容1', value: 'v1'),
-                buildPanel(title: '面板2', bodyText: '内容2', value: 'v2'),
-              ],
-            ),
+        wrapWithTheme(
+          TCollapse<String>(
+            value: const ['a'],
+            onChanged: (next) => nextValue = next,
+            children: [
+              buildPanel(value: 'a', title: '标题A', bodyText: '内容A'),
+              buildPanel(value: 'b', title: '标题B', bodyText: '内容B'),
+            ],
           ),
         ),
       );
 
-      await tester.tap(find.text('面板1'));
+      await tester.tap(find.text('标题B'));
       await tester.pumpAndSettle();
 
-      expect(changedValue, 'v1');
+      expect(nextValue, ['a', 'b']);
+      expect(panelCrossFadeState(tester, 0), CrossFadeState.showSecond);
+      expect(panelCrossFadeState(tester, 1), CrossFadeState.showFirst);
     });
   });
 
-  group('TCollapsePanel 参数', () {
-    testWidgets('expandIconTextBuilder 自定义展开文案', (tester) async {
+  group('TCollapsePanel Header 扩展点', () {
+    testWidgets('leadingBuilder 和 trailingBuilder 收到展开状态', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TCollapse(
+          TCollapse<String>(
+            value: const ['a'],
+            onChanged: (_) {},
             children: [
               buildPanel(
+                value: 'a',
                 title: '标题',
                 bodyText: '内容',
-                expandIconTextBuilder: (context, isExpanded) =>
-                    isExpanded ? '收起' : '展开',
+                leadingBuilder: (context, expanded) =>
+                    Text(expanded ? '左开' : '左关'),
+                trailingBuilder: (context, expanded) =>
+                    Text(expanded ? '收起' : '展开'),
               ),
             ],
           ),
         ),
       );
+
+      expect(find.text('左开'), findsOneWidget);
+      expect(find.text('收起'), findsOneWidget);
+      expect(
+        DefaultTextStyle.of(tester.element(find.text('收起'))).style.fontSize,
+        TThemeData.defaultData().fontBodyMedium?.size,
+      );
+    });
+
+    testWidgets('trailingBuilder 随受控状态更新', (tester) async {
+      var value = ['a'];
+      await tester.pumpWidget(
+        wrapWithTheme(
+          StatefulBuilder(
+            builder: (context, setState) => TCollapse<String>(
+              value: value,
+              onChanged: (next) => setState(() => value = next),
+              children: [
+                buildPanel(
+                  value: 'a',
+                  title: '标题',
+                  bodyText: '内容',
+                  trailingBuilder: (context, expanded) =>
+                      Text(expanded ? '收起' : '展开'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('收起'));
+      await tester.pumpAndSettle();
       expect(find.text('展开'), findsOneWidget);
     });
 
-    testWidgets('expandIconTextBuilder 展开后文案变为收起', (tester) async {
+    testWidgets('默认、隐藏和自定义展开图标三态', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TCollapse(
+          TCollapse<String>(
+            value: const [],
+            onChanged: (_) {},
             children: [
+              buildPanel(value: 'default', title: '默认', bodyText: '内容'),
               buildPanel(
-                title: '标题',
+                value: 'hidden',
+                title: '隐藏',
                 bodyText: '内容',
-                isExpanded: true,
-                expandIconTextBuilder: (context, isExpanded) =>
-                    isExpanded ? '收起' : '展开',
+                expandIconBuilder: null,
+              ),
+              buildPanel(
+                value: 'custom',
+                title: '自定义',
+                bodyText: '内容',
+                expandIconBuilder: (context, expanded) =>
+                    const Icon(Icons.add, key: ValueKey('custom-icon')),
               ),
             ],
           ),
         ),
       );
-      expect(find.text('收起'), findsOneWidget);
+
+      expect(find.byIcon(Icons.expand_more), findsOneWidget);
+      expect(find.byKey(const ValueKey('custom-icon')), findsOneWidget);
+      final hiddenHeader = find.ancestor(
+        of: find.text('隐藏'),
+        matching: find.byType(InkWell),
+      );
+      expect(
+        find.descendant(of: hiddenHeader, matching: find.byType(Icon)),
+        findsNothing,
+      );
+    });
+
+    testWidgets('隐藏图标但保留 trailing 时提供尾部间距', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TCollapse<String>(
+            value: const [],
+            onChanged: (_) {},
+            children: [
+              buildPanel(
+                value: 'a',
+                title: '标题',
+                bodyText: '内容',
+                trailingBuilder: (context, expanded) => const Text('操作'),
+                expandIconBuilder: null,
+              ),
+            ],
+          ),
+        ),
+      );
+
+      expect(find.text('操作'), findsOneWidget);
+      expect(find.byType(Icon), findsNothing);
+      expect(find.byType(SizedBox), findsWidgets);
     });
 
     testWidgets('backgroundColor 自定义面板背景色', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           TCollapse<String>(
+            value: const [],
             children: [
               TCollapsePanel<String>(
+                value: 'a',
                 headerBuilder: (context, expanded) => const Text('标题'),
                 body: const Text('内容'),
-                backgroundColor: Colors.blue.shade100,
+                backgroundColor: Colors.blue,
               ),
             ],
           ),
         ),
       );
-      expect(find.byType(TCollapse<String>), findsOneWidget);
-    });
 
-    testWidgets('多个面板初始混合展开状态', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(
-          TCollapse(
-            children: [
-              buildPanel(title: '面板1', bodyText: '内容1', isExpanded: true),
-              buildPanel(title: '面板2', bodyText: '内容2', isExpanded: false),
-              buildPanel(title: '面板3', bodyText: '内容3', isExpanded: true),
-            ],
-          ),
-        ),
+      expect(
+        tester
+            .widgetList<Material>(find.byType(Material))
+            .any((material) => material.color == Colors.blue),
+        isTrue,
       );
-      expect(find.text('内容1'), findsOneWidget);
-      expect(panelCrossFadeState(tester, 1), CrossFadeState.showFirst);
-      expect(find.text('内容3'), findsOneWidget);
     });
   });
 
@@ -362,101 +396,40 @@ void main() {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(
         wrapWithTheme(
-          TCollapse(
-            children: [buildPanel(title: '标题', bodyText: '内容')],
+          TCollapse<String>(
+            value: const [],
+            onChanged: (_) {},
+            children: [
+              TCollapsePanel<String>(
+                value: 'a',
+                headerBuilder: (context, expanded) => const Text('标题'),
+                body: const Text('内容'),
+              ),
+            ],
           ),
         ),
       );
+
       expect(
-        tester.widget<Icon>(find.byIcon(Icons.expand_more)).color,
+        IconTheme.of(tester.element(find.byIcon(Icons.expand_more))).color,
         token.textColorPlaceholder,
       );
     });
 
-    testWidgets('TCollapseThemeData.variant=card 渲染卡片风格', (tester) async {
+    testWidgets('Theme 和实例 variant 按优先级解析', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TCollapse(
-            children: [
-              buildPanel(title: '标题1', bodyText: '内容1'),
-              buildPanel(title: '标题2', bodyText: '内容2'),
-              buildPanel(title: '标题3', bodyText: '内容3'),
-            ],
-          ),
-          collapseTheme: const TCollapseThemeData(
-            variant: TCollapseVariant.card,
-          ),
-        ),
-      );
-      final materials = tester.widgetList<Material>(
-        find.descendant(
-          of: find.byType(TCollapse<String>),
-          matching: find.byType(Material),
-        ),
-      );
-      expect(
-        materials.any((material) => material.borderRadius != null),
-        isTrue,
-      );
-    });
-
-    testWidgets('TCollapseThemeData.variant=block（默认）无圆角 Material', (
-      tester,
-    ) async {
-      await tester.pumpWidget(
-        wrapWithTheme(
-          TCollapse(
-            children: [buildPanel(title: '标题', bodyText: '内容')],
-          ),
-        ),
-      );
-      final materials = tester.widgetList<Material>(
-        find.descendant(
-          of: find.byType(TCollapse<String>),
-          matching: find.byType(Material),
-        ),
-      );
-      expect(
-        materials.any((material) => material.borderRadius != null),
-        isFalse,
-      );
-    });
-
-    testWidgets('TCollapseThemeData.backgroundColor 覆盖面板背景色', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(
-          TCollapse(
-            children: [buildPanel(title: '标题', bodyText: '内容')],
-          ),
-          collapseTheme: const TCollapseThemeData(
-            backgroundColor: Colors.green,
-          ),
-        ),
-      );
-      final materials = tester.widgetList<Material>(
-        find.descendant(
-          of: find.byType(TCollapse<String>),
-          matching: find.byType(Material),
-        ),
-      );
-      expect(
-        materials.any((material) => material.color == Colors.green),
-        isTrue,
-      );
-    });
-
-    testWidgets('实例 variant 优先于 Theme variant', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(
-          TCollapse(
+          TCollapse<String>(
+            value: const [],
             variant: TCollapseVariant.block,
-            children: [buildPanel(title: '标题', bodyText: '内容')],
+            children: [buildPanel(value: 'a', title: '标题', bodyText: '内容')],
           ),
           collapseTheme: const TCollapseThemeData(
             variant: TCollapseVariant.card,
           ),
         ),
       );
+
       final materials = tester.widgetList<Material>(
         find.descendant(
           of: find.byType(TCollapse<String>),
@@ -469,7 +442,7 @@ void main() {
       );
     });
 
-    testWidgets('文字、图标、分隔线、内容间距和卡片形态可由 Theme 控制', (tester) async {
+    testWidgets('Theme card、样式、间距和圆角生效', (tester) async {
       const theme = TCollapseThemeData(
         variant: TCollapseVariant.card,
         headerTextStyle: TextStyle(color: Colors.red),
@@ -482,14 +455,21 @@ void main() {
       );
       await tester.pumpWidget(
         wrapWithTheme(
-          TCollapse(
+          TCollapse<String>(
+            value: const ['a'],
+            onChanged: (_) {},
             children: [
-              buildPanel(title: '主题标题', bodyText: '主题内容', isExpanded: true),
+              TCollapsePanel<String>(
+                value: 'a',
+                headerBuilder: (context, expanded) => const Text('主题标题'),
+                body: const Text('主题内容'),
+              ),
             ],
           ),
           collapseTheme: theme,
         ),
       );
+
       expect(
         DefaultTextStyle.of(tester.element(find.text('主题标题'))).style.color,
         Colors.red,
@@ -499,7 +479,7 @@ void main() {
         Colors.blue,
       );
       expect(
-        tester.widget<Icon>(find.byIcon(Icons.expand_less)).color,
+        IconTheme.of(tester.element(find.byIcon(Icons.expand_less))).color,
         Colors.purple,
       );
       expect(
@@ -519,7 +499,7 @@ void main() {
       expect(card.borderRadius, theme.cardBorderRadius);
     });
 
-    test('TCollapseThemeData.copyWith 正确合并', () {
+    test('TCollapseThemeData copyWith 和 lerp', () {
       const base = TCollapseThemeData(
         variant: TCollapseVariant.card,
         elevation: 2,
@@ -528,131 +508,116 @@ void main() {
       expect(merged.variant, TCollapseVariant.card);
       expect(merged.elevation, 2);
       expect(merged.backgroundColor, Colors.red);
-      final all = base.copyWith(
-        variant: TCollapseVariant.block,
-        animationDuration: const Duration(milliseconds: 500),
-        elevation: 6,
-      );
-      expect(all.variant, TCollapseVariant.block);
-      expect(all.animationDuration, const Duration(milliseconds: 500));
-      expect(all.elevation, 6);
-    });
 
-    test('TCollapseThemeData.lerp 插值正确', () {
-      const a = TCollapseThemeData(
-        elevation: 0,
+      const other = TCollapseThemeData(
         variant: TCollapseVariant.block,
-      );
-      const b = TCollapseThemeData(
         elevation: 4,
-        variant: TCollapseVariant.card,
       );
-      final mid = a.lerp(b, 0.5);
-      expect(mid.elevation, 4); // t<0.5 取 a，t>=0.5 取 b，0.5 取 b
-      expect(a.lerp(null, 0.5), same(a));
+      expect(base.lerp(other, 0.5).elevation, 4);
+      expect(base.lerp(null, 0.5), same(base));
     });
   });
 
-  group('TCollapse 边界情况', () {
-    testWidgets('可直接放在 Scaffold.body 的有界布局中', (tester) async {
+  group('TCollapse 禁用、语义与边界', () {
+    testWidgets('onChanged 为 null 时整组禁用并使用禁用视觉', (tester) async {
+      final semantics = tester.ensureSemantics();
       await tester.pumpWidget(
-        MaterialApp(
-          theme: ThemeData(extensions: [TThemeData.defaultData()]),
-          home: Scaffold(
-            body: TCollapse(
-              onExpansionChanged: (_, __) {},
-              children: [buildPanel(title: '标题', bodyText: '内容')],
+        wrapWithTheme(
+          TCollapse<String>(
+            value: const [],
+            children: [
+              buildPanel(
+                value: 'a',
+                title: '组级禁用',
+                bodyText: '内容',
+                semanticsLabel: '组级禁用',
+                trailingBuilder: (context, expanded) => const Text('操作'),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('组级禁用'));
+      await tester.pumpAndSettle();
+      expect(panelCrossFadeState(tester, 0), CrossFadeState.showFirst);
+      final semanticsWidget = tester.widget<Semantics>(
+        find.ancestor(
+          of: find.text('组级禁用'),
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is Semantics && widget.properties.expanded != null,
+          ),
+        ),
+      );
+      expect(semanticsWidget.properties.enabled, isFalse);
+      expect(semanticsWidget.properties.onTap, isNull);
+      expect(
+        DefaultTextStyle.of(tester.element(find.text('组级禁用'))).style.color,
+        TThemeData.defaultData().textDisabledColor,
+      );
+      expect(
+        DefaultTextStyle.of(tester.element(find.text('操作'))).style.color,
+        TThemeData.defaultData().textDisabledColor,
+      );
+      semantics.dispose();
+    });
+
+    testWidgets('Panel disabled 只禁用当前项', (tester) async {
+      var value = <String>[];
+      await tester.pumpWidget(
+        wrapWithTheme(
+          StatefulBuilder(
+            builder: (context, setState) => TCollapse<String>(
+              value: value,
+              onChanged: (next) => setState(() => value = next),
+              children: [
+                buildPanel(
+                  value: 'disabled',
+                  title: '禁用项',
+                  bodyText: '内容',
+                  disabled: true,
+                ),
+                buildPanel(value: 'enabled', title: '可用项', bodyText: '内容'),
+              ],
             ),
           ),
         ),
       );
-      expect(tester.takeException(), isNull);
-      expect(find.text('标题'), findsOneWidget);
-    });
 
-    testWidgets('标题语义包含展开状态', (tester) async {
-      final semantics = tester.ensureSemantics();
-      await tester.pumpWidget(
-        wrapWithTheme(
-          TCollapse(
-            onExpansionChanged: (_, __) {},
-            children: [
-              buildPanel(title: '标题', bodyText: '内容', semanticsLabel: '标题'),
-            ],
-          ),
-        ),
-      );
-      final headerSemantics = find.ancestor(
-        of: find.text('标题'),
-        matching: find.byWidgetPredicate(
-          (widget) => widget is Semantics && widget.properties.expanded != null,
-        ),
-      );
-      final semanticsWidget = tester.widget<Semantics>(headerSemantics);
-      expect(semanticsWidget.properties.label, '标题');
-      expect(semanticsWidget.properties.expanded, isFalse);
-      expect(semanticsWidget.properties.onTap, isNotNull);
-      semantics.dispose();
-    });
+      await tester.tap(find.text('禁用项'));
+      await tester.pumpAndSettle();
+      expect(value, isEmpty);
 
-    testWidgets('禁用面板不响应点击并暴露禁用语义', (tester) async {
-      var callbackCount = 0;
-      final semantics = tester.ensureSemantics();
-      await tester.pumpWidget(
-        wrapWithTheme(
-          TCollapse(
-            onExpansionChanged: (_, __) => callbackCount += 1,
-            children: [
-              buildPanel(title: '禁用标题', bodyText: '内容', disabled: true),
-            ],
-          ),
-        ),
-      );
-      await tester.tap(find.text('禁用标题'));
-      expect(callbackCount, 0);
-      final disabledSemantics = find.ancestor(
-        of: find.text('禁用标题'),
-        matching: find.byWidgetPredicate(
-          (widget) =>
-              widget is Semantics && widget.properties.enabled == false,
-        ),
-      );
-      final semanticsWidget = tester.widget<Semantics>(disabledSemantics);
-      expect(semanticsWidget.properties.enabled, isFalse);
-      expect(semanticsWidget.properties.onTap, isNull);
-      expect(
-        DefaultTextStyle.of(tester.element(find.text('禁用标题'))).style.color,
-        TThemeData.defaultData().textDisabledColor,
-      );
-      expect(
-        tester.widget<Icon>(find.byIcon(Icons.expand_more)).color,
-        TThemeData.defaultData().textDisabledColor,
-      );
-      semantics.dispose();
+      await tester.tap(find.text('可用项'));
+      await tester.pumpAndSettle();
+      expect(value, ['enabled']);
     });
 
     testWidgets('top placement 在标题上方展开内容', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TCollapse(
+          TCollapse<String>(
+            value: const ['a'],
             children: [
               buildPanel(
+                value: 'a',
                 title: '标题',
                 bodyText: '内容',
-                isExpanded: true,
                 placement: TCollapsePlacement.top,
               ),
             ],
           ),
         ),
       );
+
       expect(
         tester.getTopLeft(find.text('内容')).dy,
         lessThan(tester.getTopLeft(find.text('标题')).dy),
       );
     });
 
-    testWidgets('320 宽度和 2 倍字体下长文本不溢出', (tester) async {
+    testWidgets('窄屏和大字体下 Header 扩展点不溢出', (tester) async {
       tester.view.physicalSize = const Size(320, 800);
       tester.view.devicePixelRatio = 1;
       tester.platformDispatcher.textScaleFactorTestValue = 2;
@@ -663,32 +628,33 @@ void main() {
       });
       await tester.pumpWidget(
         wrapWithTheme(
-          TCollapse(
-            onExpansionChanged: (_, __) {},
+          TCollapse<String>(
+            value: const ['a'],
+            onChanged: (_) {},
             children: [
               buildPanel(
+                value: 'a',
                 title: '这是一个用于验证窄屏和大字体布局的很长标题',
                 bodyText: '这是较长的折叠内容，用于验证内容可以自然换行。',
-                isExpanded: true,
-                expandIconTextBuilder: (_, __) => '收起',
+                trailingBuilder: (context, expanded) => const Text('收起'),
               ),
             ],
           ),
         ),
       );
+
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('面板 key 在重排后保留 body 状态', (tester) async {
+    testWidgets('面板默认 value key 在重排后保留 body 状态', (tester) async {
       var reversed = false;
       late StateSetter setState;
 
       TCollapsePanel<String> statefulPanel(String id) {
-        return TCollapsePanel(
-          key: ValueKey(id),
+        return TCollapsePanel<String>(
+          value: id,
           headerBuilder: (_, __) => Text('标题$id'),
           body: _StatefulPanelBody(id: id),
-          isExpanded: true,
         );
       }
 
@@ -698,147 +664,101 @@ void main() {
             builder: (context, setter) {
               setState = setter;
               final panels = [statefulPanel('A'), statefulPanel('B')];
-              return TCollapse(
+              return TCollapse<String>(
+                value: const ['A', 'B'],
                 children: reversed ? panels.reversed.toList() : panels,
               );
             },
           ),
         ),
       );
+
       await tester.tap(find.text('A:0'));
       await tester.pump();
       expect(find.text('A:1'), findsOneWidget);
-
       setState(() => reversed = true);
       await tester.pump();
       expect(find.text('A:1'), findsOneWidget);
       expect(find.text('B:0'), findsOneWidget);
     });
 
-    testWidgets('空 children 列表不崩溃', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(const TCollapse<String>(children: [])),
-      );
-      expect(find.byType(TCollapse<String>), findsOneWidget);
-    });
-
-    testWidgets('animationDuration 自定义动画时长', (tester) async {
+    testWidgets('空列表、动画时长和 elevation 可渲染', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TCollapse(
-            animationDuration: const Duration(milliseconds: 100),
-            children: [buildPanel(title: '标题', bodyText: '内容')],
-          ),
-        ),
-      );
-      expect(find.byType(TCollapse<String>), findsOneWidget);
-    });
-
-    testWidgets('elevation 参数渲染', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(
-          TCollapse(
+          const TCollapse<String>(
+            value: [],
+            animationDuration: Duration(milliseconds: 100),
             elevation: 4,
-            children: [buildPanel(title: '标题', bodyText: '内容')],
+            children: [],
           ),
         ),
       );
-      expect(find.byType(TCollapse<String>), findsOneWidget);
-    });
 
-    testWidgets('accordion 模式初始 value 为 null 时不展开任何面板', (tester) async {
-      await tester.pumpWidget(
-        wrapWithTheme(
-          TCollapse(
-            mode: TCollapseMode.accordion,
-            children: [
-              buildPanel(title: '面板1', bodyText: '内容1', value: 'v1'),
-              buildPanel(title: '面板2', bodyText: '内容2', value: 'v2'),
-            ],
-          ),
-        ),
-      );
-      expect(panelCrossFadeState(tester, 0), CrossFadeState.showFirst);
-      expect(panelCrossFadeState(tester, 1), CrossFadeState.showFirst);
+      expect(tester.takeException(), isNull);
+      expect(find.byType(TCollapse<String>), findsOneWidget);
     });
   });
 
-  // ============================================================
-  // 覆盖率补充
-  // ============================================================
-  group('TCollapse 覆盖率补充', () {
-    testWidgets('accordion + value 断言', (tester) async {
-      // 覆盖 101/103（_allPanelsHaveValue / _allPanelsHaveDistinctValues 断言）
+  group('TCollapse 契约断言', () {
+    testWidgets('重复 Panel value 被拒绝', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TCollapse(
-            mode: TCollapseMode.accordion,
-            value: 'v1',
+          TCollapse<String>(
+            value: const [],
             children: [
-              buildPanel(title: '面板1', bodyText: '内容1', value: 'v1'),
-              buildPanel(title: '面板2', bodyText: '内容2', value: 'v2'),
+              buildPanel(value: 'a', title: 'A', bodyText: '内容'),
+              buildPanel(value: 'a', title: 'B', bodyText: '内容'),
             ],
-            onChanged: (_) {},
           ),
         ),
       );
-      await tester.pumpAndSettle();
-      expect(find.byType(TCollapse<String>), findsOneWidget);
+      expect(tester.takeException(), isAssertionError);
     });
 
-    testWidgets('mode 从 accordion 变为 multiple', (tester) async {
-      // 覆盖 106-107（didUpdateWidget 中 mode != accordion → _searchPanelByValue）
-      var mode = TCollapseMode.accordion;
-      late StateSetter setState;
+    testWidgets('重复展开 value 被拒绝', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          StatefulBuilder(
-            builder: (context, setter) {
-              setState = setter;
-              return TCollapse(
-                mode: mode,
-                value: 'v1',
-                children: [
-                  buildPanel(title: '面板1', bodyText: '内容1', value: 'v1'),
-                  buildPanel(title: '面板2', bodyText: '内容2', value: 'v2'),
-                ],
-                onChanged: (_) {},
-              );
-            },
+          TCollapse<String>(
+            value: const ['a', 'a'],
+            children: [buildPanel(value: 'a', title: 'A', bodyText: '内容')],
           ),
         ),
       );
-      setState(() => mode = TCollapseMode.multiple);
-      await tester.pumpAndSettle();
-      expect(find.byType(TCollapse<String>), findsOneWidget);
+      expect(tester.takeException(), isAssertionError);
     });
 
-    testWidgets('accordion 只通知被点击面板并等待 value 回写', (tester) async {
-      final changes = <String>[];
+    testWidgets('不存在的展开 value 被拒绝', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TCollapse(
-            mode: TCollapseMode.accordion,
-            value: 'v1',
-            onExpansionChanged: (index, isExpanded) {
-              changes.add('$index:$isExpanded');
-            },
-            children: [
-              buildPanel(title: '面板A', bodyText: '内容A', value: 'v1'),
-              buildPanel(title: '面板B', bodyText: '内容B', value: 'v2'),
-            ],
-            onChanged: (_) {},
+          TCollapse<String>(
+            value: const ['missing'],
+            children: [buildPanel(value: 'a', title: 'A', bodyText: '内容')],
           ),
         ),
       );
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('面板B'));
-      await tester.pumpAndSettle();
-      expect(changes, ['1:false']);
-      expect(panelCrossFadeState(tester, 0), CrossFadeState.showSecond);
-      expect(panelCrossFadeState(tester, 1), CrossFadeState.showFirst);
+      expect(tester.takeException(), isAssertionError);
+    });
+
+    testWidgets('accordion 多个展开 value 被拒绝', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TCollapse<String>(
+            mode: TCollapseMode.accordion,
+            value: const ['a', 'b'],
+            children: [
+              buildPanel(value: 'a', title: 'A', bodyText: '内容'),
+              buildPanel(value: 'b', title: 'B', bodyText: '内容'),
+            ],
+          ),
+        ),
+      );
+      expect(tester.takeException(), isAssertionError);
     });
   });
+}
+
+Widget defaultExpandIconBuilder(BuildContext context, bool isExpanded) {
+  return Icon(isExpanded ? Icons.expand_less : Icons.expand_more);
 }
 
 class _StatefulPanelBody extends StatefulWidget {
