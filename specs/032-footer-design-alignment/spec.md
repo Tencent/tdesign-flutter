@@ -2,7 +2,7 @@
 
 ## 证据与目标
 
-- Figma Footer `24386:5267`；小程序 `origin/develop@cc2384cc5`。
+- Figma Footer `24386:5265`；小程序 `origin/develop@cc2384cc5`。
 - Demo 收敛为基础、链接、品牌三组；链接组含单链接与双链接，品牌组含两个设计实例。
 - 删除与内容重复的必填 `variant`，改用 Flutter Widget 组合 Logo 与链接。
 
