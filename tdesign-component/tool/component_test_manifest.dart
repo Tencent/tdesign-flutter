@@ -32,6 +32,19 @@ const sharedExampleTests = ['test/widget_test.dart'];
 
 const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(
+    name: 'avatar',
+    coverageTargets: ['lib/src/components/avatar/'],
+    componentTests: ['test/components/avatar/t_avatar_test.dart'],
+    exampleTests: ['test/avatar_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Avatar Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/avatar_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'action_sheet',
     coverageTargets: ['lib/src/components/action_sheet/'],
     componentTests: [

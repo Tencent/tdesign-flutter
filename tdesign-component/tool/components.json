@@ -474,7 +474,8 @@
       },
       "api": {
         "names": [
-          "TAvatar"
+          "TAvatar",
+          "TAvatarGroup"
         ],
         "getComments": false
       }

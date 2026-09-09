@@ -1,11 +1,16 @@
 /// 带操作的头像组
     Widget _buildOperationAvatar(BuildContext context) {
     return TAvatarGroup(
+      dimension: 44,
+      cascading: TAvatarGroupCascading.endUp,
       children: [
         const TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),
         const TAvatar(image: AssetImage('assets/img/t_avatar_2.png')),
+        const TAvatar(image: AssetImage('assets/img/t_avatar_3.png')),
+        const TAvatar(image: AssetImage('assets/img/t_avatar_4.png')),
+        const TAvatar(image: AssetImage('assets/img/t_avatar_5.png')),
         TAvatar(
-          child: const Icon(Icons.add),
+          child: const Icon(TIcons.user_add),
           onTap: () => TToast.showText('点击了操作', context: context),
         ),
       ],

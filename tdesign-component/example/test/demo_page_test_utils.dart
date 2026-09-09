@@ -61,7 +61,7 @@ void registerDemoPageTests(DemoPageTestSpec spec) {
 }
 
 void registerDemoStructureTests(DemoPageTestSpec spec) {
-  setUpAll(() => _loadGoldenFonts(spec));
+  setUpAll(() => loadDemoGoldenFonts(spec));
 
   testWidgets('${spec.name} Demo structure', (tester) async {
     await pumpFullDemoPage(tester, spec, ThemeMode.light);
@@ -86,7 +86,7 @@ void registerDemoStructureTests(DemoPageTestSpec spec) {
 }
 
 void registerDemoGoldenTests(DemoPageTestSpec spec) {
-  setUpAll(() => _loadGoldenFonts(spec));
+  setUpAll(() => loadDemoGoldenFonts(spec));
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('${spec.name} ${mode.name} Demo golden', (tester) async {
@@ -110,7 +110,7 @@ Future<void> disposeDemoPage(WidgetTester tester) async {
   await tester.pump(const Duration(seconds: 1));
 }
 
-Future<void> _loadGoldenFonts(DemoPageTestSpec spec) async {
+Future<void> loadDemoGoldenFonts(DemoPageTestSpec spec) async {
   final flutterBin = File(
     Platform.resolvedExecutable,
   ).parent.parent.parent.parent.parent;
@@ -173,15 +173,6 @@ Future<void> _loadGoldenFonts(DemoPageTestSpec spec) async {
         ).readAsBytes().then(ByteData.sublistView),
       ),
     );
-  }
-  if (spec.supplementalCjkFontFamily case final family?) {
-    final supplementalCjkFont = FontLoader(family)
-      ..addFont(
-        File(
-          spec.supplementalCjkFontPath!,
-        ).readAsBytes().then(ByteData.sublistView),
-      );
-    loaders.add(supplementalCjkFont.load());
   }
   await Future.wait(loaders);
 }
