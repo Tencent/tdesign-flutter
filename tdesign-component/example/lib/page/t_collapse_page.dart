@@ -29,7 +29,7 @@ class TCollapsePageState extends State<TCollapsePage> {
         exampleCodeGroup: 'collapse',
         desc: '可以折叠/展开的内容区域。',
         children: [
-          ExampleModule(title: '01 组件类型', children: [
+          ExampleModule(title: '组件类型', children: [
             ExampleItem(
               desc: '基础折叠面板',
               builder: _buildBasicCollapse,
@@ -45,9 +45,10 @@ class TCollapsePageState extends State<TCollapsePage> {
             ExampleItem(
               desc: '手风琴式',
               builder: _buildAccordionCollapse,
+              center: false,
             ),
           ]),
-          ExampleModule(title: '02 组件样式', children: [
+          ExampleModule(title: '组件样式', children: [
             ExampleItem(
               desc: '卡片折叠面板',
               builder: _buildCardCollapse,

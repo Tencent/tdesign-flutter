@@ -29,7 +29,7 @@ void main() {
     await pumpFullDemoPage(tester, collapseDemoSpec, ThemeMode.light);
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
     expect(page.children.map((module) => module.title),
-        ['01 组件类型', '02 组件样式']);
+        ['组件类型', '组件样式']);
     expect(page.children[0].children.map((item) => item.desc),
         ['基础折叠面板', '向上展开', '带操作说明', '手风琴式']);
 
