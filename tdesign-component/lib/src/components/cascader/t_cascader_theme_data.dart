@@ -2,6 +2,8 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
+import 't_cascader_defaults.dart';
+
 /// 级联导航展示形态。
 enum TCascaderVariant {
   /// 纵向步骤导航。
@@ -26,7 +28,7 @@ class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
     /// 普通文案样式。
     this.textStyle,
 
-    /// 当前选中文案样式。
+    /// 当前活动导航及已选选项文案样式。
     this.activeTextStyle,
 
     /// 禁用文案样式。
@@ -54,7 +56,7 @@ class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
   /// 普通文案样式。
   final TextStyle? textStyle;
 
-  /// 当前选中文案样式。
+  /// 当前活动导航及已选选项文案样式。
   final TextStyle? activeTextStyle;
 
   /// 禁用文案样式。
@@ -100,27 +102,73 @@ class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
       return this;
     }
     return TCascaderThemeData(
-      height: lerpDouble(height, other.height, t),
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      borderRadius: lerpDouble(borderRadius, other.borderRadius, t),
-      textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
-      activeTextStyle: TextStyle.lerp(
+      height: height == null && other.height == null
+          ? null
+          : lerpDouble(
+              height ?? defaultCascaderHeight,
+              other.height ?? defaultCascaderHeight,
+              t,
+            ),
+      backgroundColor: _lerpNullableOverride(
+        backgroundColor,
+        other.backgroundColor,
+        t,
+        Color.lerp,
+      ),
+      borderRadius: _lerpNullableOverride(
+        borderRadius,
+        other.borderRadius,
+        t,
+        lerpDouble,
+      ),
+      textStyle: _lerpNullableOverride(
+        textStyle,
+        other.textStyle,
+        t,
+        TextStyle.lerp,
+      ),
+      activeTextStyle: _lerpNullableOverride(
         activeTextStyle,
         other.activeTextStyle,
         t,
+        TextStyle.lerp,
       ),
-      disabledTextStyle: TextStyle.lerp(
+      disabledTextStyle: _lerpNullableOverride(
         disabledTextStyle,
         other.disabledTextStyle,
         t,
+        TextStyle.lerp,
       ),
-      indicatorColor: Color.lerp(indicatorColor, other.indicatorColor, t),
-      navigationPadding: EdgeInsetsGeometry.lerp(
+      indicatorColor: _lerpNullableOverride(
+        indicatorColor,
+        other.indicatorColor,
+        t,
+        Color.lerp,
+      ),
+      navigationPadding: _lerpNullableOverride(
         navigationPadding,
         other.navigationPadding,
         t,
+        EdgeInsetsGeometry.lerp,
       ),
-      dividerColor: Color.lerp(dividerColor, other.dividerColor, t),
+      dividerColor: _lerpNullableOverride(
+        dividerColor,
+        other.dividerColor,
+        t,
+        Color.lerp,
+      ),
     );
   }
+}
+
+T? _lerpNullableOverride<T>(
+  T? from,
+  T? to,
+  double t,
+  T? Function(T?, T?, double) lerp,
+) {
+  if (from == null || to == null) {
+    return t < 0.5 ? from : to;
+  }
+  return lerp(from, to, t);
 }

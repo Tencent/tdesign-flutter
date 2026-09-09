@@ -1,17 +1,16 @@
-Widget _buildCardCollapse(BuildContext context) {
-    return TCollapse(
+/// 核心片段：导入 material.dart 和 tdesign_flutter.dart，并放入
+  /// StatefulWidget 的 State。`_cardValue` 是由 State 持有的展开值列表，
+  /// 初始仅包含三项中的首项；`onChanged` 通过 `setState` 写回完整列表。
+  /// `randomString` 是页面级常量，仅作为面板正文示例。
+    Widget _buildCardCollapse(BuildContext context) {
+    return TCollapse<String>(
       variant: TCollapseVariant.card,
-      onExpansionChanged: (int index, bool isExpanded) {
-        setState(() {
-          _cardStyleData[index].isExpanded = !isExpanded;
-        });
-      },
-      children: _cardStyleData.map((CollapseDataItem item) {
-        return TCollapsePanel(
-          headerBuilder: (BuildContext context, bool isExpanded) {
-            return Text(item.headerValue);
-          },
-          isExpanded: item.isExpanded,
+      value: _cardValue,
+      onChanged: (value) => setState(() => _cardValue = value),
+      children: List.generate(3, (index) {
+        return TCollapsePanel<String>(
+          value: 'card-$index',
+          headerBuilder: (context, isExpanded) => const Text('折叠面板标题'),
           body: const Text(randomString),
         );
       }).toList(),

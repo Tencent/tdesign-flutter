@@ -2,6 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+@immutable
+class _EqualValueWithDifferentHashCode {
+  const _EqualValueWithDifferentHashCode(this.id, this.hashCode);
+
+  final String id;
+
+  @override
+  final int hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    return other is _EqualValueWithDifferentHashCode && other.id == id;
+  }
+}
+
 void main() {
   const options = [
     TTreeSelectOption(
@@ -207,7 +222,7 @@ void main() {
     expect(find.text('Apple'), findsOneWidget);
   });
 
-  testWidgets('default visual style matches develop tree select layout',
+  testWidgets('default visual style matches the TreeSelect design layout',
       (tester) async {
     final token = TThemeData.defaultData();
     await tester.pumpWidget(wrap(const Align(
@@ -229,8 +244,8 @@ void main() {
       find.byWidgetPredicate(
         (widget) =>
             widget is Container &&
-            widget.constraints?.minWidth == 106 &&
-            widget.constraints?.maxWidth == 106 &&
+            widget.constraints?.minWidth == 103 &&
+            widget.constraints?.maxWidth == 103 &&
             widget.color == token.bgColorSecondaryContainer,
       ),
       findsOneWidget,
@@ -239,8 +254,8 @@ void main() {
       find.byWidgetPredicate(
         (widget) =>
             widget is Container &&
-            widget.constraints?.minWidth == 269 &&
-            widget.constraints?.maxWidth == 269 &&
+            widget.constraints?.minWidth == 272 &&
+            widget.constraints?.maxWidth == 272 &&
             widget.color == token.bgColorContainer,
       ),
       findsOneWidget,
@@ -295,26 +310,17 @@ void main() {
       find.byWidgetPredicate(
         (widget) =>
             widget is Container &&
-            widget.constraints?.minWidth == 106 &&
-            widget.constraints?.maxWidth == 106,
-      ),
-      findsOneWidget,
-    );
-    expect(
-      find.byWidgetPredicate(
-        (widget) =>
-            widget is Container &&
             widget.constraints?.minWidth == 103 &&
             widget.constraints?.maxWidth == 103,
       ),
-      findsNWidgets(2),
+      findsNWidgets(3),
     );
     expect(
       find.byWidgetPredicate(
         (widget) =>
             widget is Container &&
-            widget.constraints?.minWidth == 184 &&
-            widget.constraints?.maxWidth == 184,
+            widget.constraints?.minWidth == 169 &&
+            widget.constraints?.maxWidth == 169,
       ),
       findsOneWidget,
     );
@@ -380,6 +386,115 @@ void main() {
     )));
     await tester.tap(find.text('Disabled'));
     expect(changed, isFalse);
+  });
+
+  testWidgets('single mode rejects more than one controlled path in debug',
+      (tester) async {
+    await tester.pumpWidget(wrap(const TTreeSelect(
+      options: options,
+      value: [
+        ['fruit', 'apple'],
+        ['fruit', 'banana'],
+      ],
+      onChanged: _ignore,
+    )));
+
+    final exception = tester.takeException();
+    expect(exception, isA<AssertionError>());
+    expect(exception.toString(), contains('at most one path'));
+  });
+
+  testWidgets('duplicate sibling option values are rejected in debug',
+      (tester) async {
+    await tester.pumpWidget(wrap(const TTreeSelect(
+      options: [
+        TTreeSelectOption(label: 'First', value: 'duplicate'),
+        TTreeSelectOption(label: 'Second', value: 'duplicate'),
+      ],
+      value: [],
+      onChanged: _ignore,
+    )));
+
+    final exception = tester.takeException();
+    expect(exception, isA<AssertionError>());
+    expect(exception.toString(), contains('unique among siblings'));
+  });
+
+  testWidgets('sibling uniqueness uses the same equality as path matching',
+      (tester) async {
+    await tester.pumpWidget(wrap(const TTreeSelect(
+      options: [
+        TTreeSelectOption(
+          label: 'First',
+          value: _EqualValueWithDifferentHashCode('duplicate', 1),
+        ),
+        TTreeSelectOption(
+          label: 'Second',
+          value: _EqualValueWithDifferentHashCode('duplicate', 2),
+        ),
+      ],
+      value: [],
+      onChanged: _ignore,
+    )));
+
+    final exception = tester.takeException();
+    expect(exception, isA<AssertionError>());
+    expect(exception.toString(), contains('unique among siblings'));
+  });
+
+  testWidgets('duplicate null sibling option values are rejected in debug',
+      (tester) async {
+    await tester.pumpWidget(wrap(const TTreeSelect(
+      options: [
+        TTreeSelectOption(label: 'First', value: null),
+        TTreeSelectOption(label: 'Second', value: null),
+      ],
+      value: [],
+      onChanged: _ignore,
+    )));
+
+    final exception = tester.takeException();
+    expect(exception, isA<AssertionError>());
+    expect(exception.toString(), contains('unique among siblings'));
+  });
+
+  testWidgets('duplicate nested sibling values are rejected in debug',
+      (tester) async {
+    await tester.pumpWidget(wrap(const TTreeSelect(
+      options: [
+        TTreeSelectOption(
+          label: 'Root',
+          value: 'root',
+          children: [
+            TTreeSelectOption(label: 'First', value: 'duplicate'),
+            TTreeSelectOption(label: 'Second', value: 'duplicate'),
+          ],
+        ),
+      ],
+      value: [],
+      onChanged: _ignore,
+    )));
+
+    final exception = tester.takeException();
+    expect(exception, isA<AssertionError>());
+    expect(exception.toString(), contains('unique among siblings'));
+  });
+
+  testWidgets('duplicate controlled paths are rejected in debug',
+      (tester) async {
+    await tester.pumpWidget(wrap(const TTreeSelect(
+      options: options,
+      value: [
+        ['fruit', 'apple'],
+        ['fruit', 'apple'],
+      ],
+      multiple: true,
+      onChanged: _ignore,
+    )));
+
+    final exception = tester.takeException();
+    expect(exception, isA<AssertionError>());
+    expect(exception.toString(), contains('duplicate paths'));
   });
 
   testWidgets('theme controls dimensions, colors, and text styles',
@@ -473,6 +588,17 @@ void main() {
     expect(base.copyWith(height: 320).height, 320);
     expect(base.lerp(null, 0.5), same(base));
     expect(base.lerp(other, 0.5).height, 350);
+
+    const fallback = TTreeSelectThemeData();
+    expect(fallback.lerp(fallback, 0.5).height, isNull);
+    expect(fallback.lerp(base, 0).height, 336);
+    expect(fallback.lerp(base, 0.5).height, 318);
+    expect(fallback.lerp(base, 1).height, 300);
+    expect(base.lerp(fallback, 0).height, 300);
+    expect(base.lerp(fallback, 0.5).height, 318);
+    expect(base.lerp(fallback, 1).height, 336);
+    expect(fallback.lerp(base, 0.49).backgroundColor, isNull);
+    expect(fallback.lerp(base, 0.5).backgroundColor, Colors.white);
   });
 }
 

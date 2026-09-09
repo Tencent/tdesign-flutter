@@ -7,8 +7,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
   setUpAll(() async {
-    final flutterBin =
-        File(Platform.resolvedExecutable).parent.parent.parent.parent.parent;
+    final flutterBin = File(
+      Platform.resolvedExecutable,
+    ).parent.parent.parent.parent.parent;
     final robotoFile = File(
       '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
     );
@@ -19,7 +20,13 @@ void main() {
     );
     final materialIconsFont = FontLoader('MaterialIcons')
       ..addFont(materialIconsFile.readAsBytes().then(ByteData.sublistView));
-    await Future.wait([robotoFont.load(), materialIconsFont.load()]);
+    final tdesignIconsFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
+      ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
+    await Future.wait([
+      robotoFont.load(),
+      materialIconsFont.load(),
+      tdesignIconsFont.load(),
+    ]);
   });
 
   for (final brightness in Brightness.values) {
@@ -67,27 +74,21 @@ class _ImageStateScene extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _ImageState(label: 'Loading', image: TImage(src: '')),
+                    _ImageState(label: 'Loading', image: TImage()),
                     SizedBox(width: 16),
                     _ImageState(
                       label: 'Custom',
-                      image: TImage(
-                        src: '',
-                        loadingWidget: Icon(Icons.sync, size: 22),
-                      ),
+                      image: TImage(loadingWidget: Icon(Icons.sync, size: 22)),
                     ),
                     SizedBox(width: 16),
                     _ImageState(
                       label: 'Failed',
-                      image: TImage(src: 'missing-image.png'),
+                      image: TImage(src: ''),
                     ),
                     SizedBox(width: 16),
                     _ImageState(
                       label: 'Custom',
-                      image: TImage(
-                        src: 'missing-image.png',
-                        errorWidget: Text('Error'),
-                      ),
+                      image: TImage(src: '', errorWidget: Text('Error')),
                     ),
                   ],
                 ),
@@ -101,10 +102,7 @@ class _ImageStateScene extends StatelessWidget {
 }
 
 class _ImageState extends StatelessWidget {
-  const _ImageState({
-    required this.label,
-    required this.image,
-  });
+  const _ImageState({required this.label, required this.image});
 
   final String label;
   final Widget image;

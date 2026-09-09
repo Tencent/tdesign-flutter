@@ -1,0 +1,12 @@
+/// Horizontal Default Steps 水平默认步骤条
+    Widget _buildHorizontalDefault(BuildContext context) {
+    return const TSteps.progress(
+      steps: [
+        TStepsItemData(title: 'Finish', content: 'Content'),
+        TStepsItemData(title: 'Process', content: 'Content'),
+        TStepsItemData(title: 'Default', content: 'Content'),
+        TStepsItemData(title: 'Default', content: 'Content'),
+      ],
+      value: 1,
+    );
+  }
