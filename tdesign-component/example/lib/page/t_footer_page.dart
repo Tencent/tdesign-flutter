@@ -35,7 +35,6 @@ Widget _buildFooter(BuildContext context) {
 Widget _buildSingleLinkFooter(BuildContext context) {
   TLink link(String text) => TLink(
     child: Text(text),
-    underline: true,
     colorScheme: TLinkColorScheme.primary,
     onPressed: () {},
   );

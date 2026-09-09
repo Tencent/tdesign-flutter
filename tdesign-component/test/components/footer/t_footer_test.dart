@@ -24,11 +24,6 @@ void main() {
     expect(find.text('链接一'), findsOneWidget);
     expect(find.text('链接二'), findsOneWidget);
     expect(find.text('版权信息'), findsOneWidget);
-    final containers = tester.widgetList<Container>(find.byType(Container));
-    expect(
-      containers.any((widget) => widget.decoration is BoxDecoration),
-      isTrue,
-    );
   });
 
   testWidgets('single link has no divider', (tester) async {
@@ -37,6 +32,19 @@ void main() {
     );
     expect(find.text('唯一链接'), findsOneWidget);
     expect(find.text('版权信息'), findsOneWidget);
+  });
+
+  testWidgets('multiple links use a 22 pixel divider', (tester) async {
+    await tester.pumpWidget(
+      app(const TFooter(links: [Text('链接一'), Text('链接二')], text: '版权信息')),
+    );
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is SizedBox && widget.width == 1 && widget.height == 22,
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('logo takes precedence over links and text', (tester) async {

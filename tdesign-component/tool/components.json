@@ -557,10 +557,7 @@
         "path": "lib/src/components/footer/t_footer.dart"
       },
       "api": {
-        "names": [
-          "TFooter",
-          "TFooterType"
-        ],
+        "names": ["TFooter"],
         "getComments": false
       }
     },

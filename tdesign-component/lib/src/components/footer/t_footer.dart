@@ -61,22 +61,22 @@ class TFooter extends StatelessWidget {
           padding: const EdgeInsets.only(top: 4, bottom: 4),
           child: Wrap(
             alignment: WrapAlignment.center,
-            children: List.generate(links.length, (index) {
-              final link = links[index];
-              return Container(
-                decoration: index < (links.length - 1)
-                    ? BoxDecoration(
-                        border: Border(
-                          right: BorderSide(
-                            color: context.tTheme.textColorPlaceholder,
-                          ),
-                        ),
-                      )
-                    : null,
-                padding: const EdgeInsets.symmetric(horizontal: 6),
-                child: link,
-              );
-            }).toList(),
+            children: [
+              for (var index = 0; index < links.length; index++) ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: links[index],
+                ),
+                if (index < links.length - 1)
+                  SizedBox(
+                    width: 1,
+                    height: 22,
+                    child: ColoredBox(
+                      color: context.tTheme.textColorPlaceholder,
+                    ),
+                  ),
+              ],
+            ],
           ),
         ),
         Padding(
