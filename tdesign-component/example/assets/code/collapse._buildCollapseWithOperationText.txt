@@ -14,7 +14,6 @@ Widget _buildCollapseWithOperationText(BuildContext context) {
             return isExpanded ? '收起' : '展开';
           },
           isExpanded: item.isExpanded,
-          disabled: item.disabled,
           body: const Text(randomString),
         );
       }).toList(),

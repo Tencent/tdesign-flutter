@@ -14,7 +14,6 @@ Widget _buildAccordionCollapse(BuildContext context) {
               },
               body: const Text(randomString),
               value: panelValue,
-              disabled: panelValue == '3',
             );
           }).toList(),
         );

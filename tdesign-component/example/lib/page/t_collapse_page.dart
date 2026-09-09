@@ -89,7 +89,6 @@ class TCollapsePageState extends State<TCollapsePage> {
             return Text(item.headerValue);
           },
           isExpanded: item.isExpanded,
-          disabled: item.disabled,
           body: const Text(randomString),
         );
       }).toList(),
@@ -113,7 +112,6 @@ class TCollapsePageState extends State<TCollapsePage> {
             return isExpanded ? '收起' : '展开';
           },
           isExpanded: item.isExpanded,
-          disabled: item.disabled,
           body: const Text(randomString),
         );
       }).toList(),
@@ -137,7 +135,6 @@ class TCollapsePageState extends State<TCollapsePage> {
               },
               body: const Text(randomString),
               value: panelValue,
-              disabled: panelValue == '3',
             );
           }).toList(),
         );
@@ -155,7 +152,6 @@ class CollapseDataItem {
   final String expandedValue;
   final String headerValue;
   bool isExpanded;
-  bool get disabled => expandedValue == '3';
 }
 
 List<CollapseDataItem> generateItems(int numOfItems, {int? expanded}) {
