@@ -1,6 +1,15 @@
 Widget _buildBrandFooter(BuildContext context) {
-    return const TFooter(
-      TFooterVariant.brand,
-      logo: 'assets/img/t_brand.png',
-    );
-  }
+  const logo = TImage(
+    src: 'assets/img/t_brand.png',
+    width: 104,
+    height: 24,
+    fit: BoxFit.contain,
+  );
+  return const Column(
+    children: [
+      TFooter(logo: logo),
+      SizedBox(height: 24),
+      TFooter(logo: logo),
+    ],
+  );
+}
