@@ -4,53 +4,30 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
-import '../button/t_button.dart';
-import '../button/t_button_types.dart';
 import '../text/t_text.dart';
 import 't_empty_theme_data.dart';
-
-/// 空态形态
-enum TEmptyVariant {
-  /// 仅展示空态内容。
-  plain,
-
-  /// 展示空态内容和操作入口。
-  operation,
-}
 
 /// 用于空数据、网络异常和操作引导的空状态组件。
 class TEmpty extends StatelessWidget {
   const TEmpty({
-    this.variant = TEmptyVariant.plain,
     this.icon = TIcons.info_circle_filled,
     this.image,
     this.emptyText,
-    this.operationText,
-    this.onPressed,
-    this.customOperationWidget,
+    this.operation,
     Key? key,
   }) : super(key: key);
 
-  /// 空态形态
-  final TEmptyVariant variant;
-
-  /// 图标
+  /// 默认图标；[image] 非空时不显示。
   final IconData? icon;
 
-  /// 展示图片
+  /// 自定义图片或插画；优先于 [icon]。
   final Widget? image;
 
-  /// 描述文字
+  /// 描述文字。
   final String? emptyText;
 
-  /// 操作按钮文案
-  final String? operationText;
-
-  /// 点击事件
-  final VoidCallback? onPressed;
-
-  /// 自定义操作按钮
-  final Widget? customOperationWidget;
+  /// 描述下方的操作内容，通常为按钮。
+  final Widget? operation;
 
   /// 从 Theme 子树读取 L4 默认值
   TEmptyThemeData? _theme(BuildContext context) =>
@@ -61,8 +38,6 @@ class TEmpty extends StatelessWidget {
     final theme = _theme(context);
     final emptyTextColor = theme?.emptyTextColor;
     final emptyTextFont = theme?.emptyTextFont;
-    final operationTheme = theme?.operationTheme ?? TButtonColorScheme.primary;
-
     return Container(
       alignment: Alignment.center,
       child: Column(
@@ -81,17 +56,8 @@ class TEmpty extends StatelessWidget {
             font: emptyTextFont ?? context.tTheme.fontBodyMedium,
             textColor: emptyTextColor ?? context.tTheme.textColorPlaceholder,
           ),
-          (variant == TEmptyVariant.operation)
-              ? customOperationWidget ??
-                  Padding(
-                      padding: const EdgeInsets.only(top: 32),
-                      child: TButton(
-                        child: Text(operationText ?? ''),
-                        size: TButtonSize.large,
-                        colorScheme: operationTheme,
-                        onPressed: onPressed,
-                      ))
-              : Container()
+          if (operation != null)
+            Padding(padding: const EdgeInsets.only(top: 32), child: operation),
         ],
       ),
     );
