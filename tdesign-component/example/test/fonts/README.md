@@ -98,6 +98,11 @@ HarfBuzz 11.4.5，子集 SHA-256 为
 `42ac590f847bba78e4854d1db40fe9bc4cfe537a003273e1f43b0ad1d3db557c`，上游字体和
 子集参数与本文件下方记录一致。
 
+`ImageGoldenCJK-Regular.otf` 仅补充 Image 整页 Golden 缺少的字形，字符清单见
+`image_demo_glyphs.txt`。它使用独立 family，避免扩充共享字体改变其他组件基线；
+子集 SHA-256 为
+`ba8c31342f34f0d1ca0ceb62e3f50c7de2169e6330f7c2b398993a9a0eff2ba5`。
+
 - 上游：Noto Sans SC 2.004 `NotoSansSC-Regular.otf`
 - 来源：`https://github.com/notofonts/noto-cjk/raw/Sans2.004/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf`
 - 上游 SHA-256：`faa6c9df652116dde789d351359f3d7e5d2285a2b2a1f04a2d7244df706d5ea9`
@@ -126,5 +131,6 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 更新 Drawer 页面文案时，更新 Drawer 字符清单。
 更新 Avatar 页面文案时，更新 Avatar 字符清单。
 更新 Navbar 页面文案时，更新 Navbar 字符清单。
+更新 Image 页面文案时，更新 Image 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。

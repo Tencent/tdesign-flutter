@@ -29,11 +29,21 @@ void main() {
     await pumpFullDemoPage(tester, footerDemoSpec, ThemeMode.light);
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
     expect(page.children.single.title, '类型');
-    expect(page.children.single.children.map((item) => item.desc),
-        ['基础页脚', '基础加链接页脚', '品牌页脚']);
+    expect(page.children.single.children.map((item) => item.desc), [
+      '基础页脚',
+      '基础加链接页脚',
+      '品牌页脚',
+    ]);
     final footers = tester.widgetList<TFooter>(find.byType(TFooter)).toList();
     expect(footers.where((footer) => footer.links.isNotEmpty), hasLength(2));
-    expect(footers.where((footer) => footer.logo != null), hasLength(2));
+    final brandFooters = footers.where((footer) => footer.logo != null);
+    expect(brandFooters, hasLength(2));
+    expect(
+      brandFooters.every(
+        (footer) => (footer.logo! as TImage).shape == TImageShape.square,
+      ),
+      isTrue,
+    );
   }, tags: 'demo');
 
   testWidgets('三个公开链接都可点击且不会重复通知', (tester) async {

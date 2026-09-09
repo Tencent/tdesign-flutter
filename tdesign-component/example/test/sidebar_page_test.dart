@@ -49,9 +49,10 @@ void main() {
     final images = tester.widgetList<TImage>(find.byType(TImage));
     expect(images, isNotEmpty);
     expect(
-      images.every((image) => image.variant == TImageVariant.roundedSquare),
+      images.every((image) => image.shape == TImageShape.roundedSquare),
       isTrue,
     );
+    expect(images.every((image) => image.fit == BoxFit.cover), isTrue);
     expect(images.every((image) => image.width == 48), isTrue);
     expect(images.every((image) => image.height == 48), isTrue);
   });

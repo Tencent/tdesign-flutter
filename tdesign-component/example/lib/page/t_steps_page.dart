@@ -207,6 +207,7 @@ class _TStepsPageState extends State<TStepsPage> {
               width: 280,
               height: 100,
               fit: BoxFit.cover,
+              shape: TImageShape.roundedSquare,
             ),
           ),
         ),

@@ -20,7 +20,8 @@ void main() {
     expect(steps[0].direction, TStepsDirection.horizontal);
     expect(steps[2].indicator, TStepsIndicator.dot);
     expect(steps[4].steps.every((item) => item.icon != null), isTrue);
-    expect(steps[6].steps[1].customContent, isNotNull);
+    final customContent = steps[6].steps[1].customContent! as Padding;
+    expect((customContent.child! as TImage).shape, TImageShape.roundedSquare);
     expect(
       steps.sublist(7, 10).every((item) => item.status == TStepsStatus.error),
       isTrue,
