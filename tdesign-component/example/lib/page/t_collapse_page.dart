@@ -26,6 +26,9 @@ class TCollapsePageState extends State<TCollapsePage> {
         title: tTitle(),
         exampleCodeGroup: 'collapse',
         desc: '可以折叠/展开的内容区域。',
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? const Color(0xFFF6F6F6)
+            : context.tTheme.bgColorPage,
         children: [
           ExampleModule(title: '组件类型', children: [
             ExampleItem(
@@ -132,7 +135,7 @@ class TCollapsePageState extends State<TCollapsePage> {
               headerBuilder: (context, isExpanded) {
                 return const Text('折叠面板标题');
               },
-              body: const Text('此处可自定义内容'),
+              body: const Text(randomString),
               value: panelValue,
               disabled: panelValue == '3',
             );

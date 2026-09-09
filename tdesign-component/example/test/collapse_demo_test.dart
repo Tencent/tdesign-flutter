@@ -8,7 +8,7 @@ import 'demo_page_test_utils.dart';
 
 const collapseDemoSpec = DemoPageTestSpec(
   name: 'collapse',
-  title: 'Collapse',
+  title: 'Collapse 折叠面板',
   page: TCollapsePage(),
   expectedTexts: [
     '基础折叠面板',
@@ -17,6 +17,7 @@ const collapseDemoSpec = DemoPageTestSpec(
     '卡片折叠面板',
   ],
   componentType: TCollapse,
+  useMaterialIcons: true,
   supplementalCjkFontFamily: 'TDesign Collapse Golden CJK',
   supplementalCjkFontPath: 'test/fonts/CollapseGoldenCJK-Regular.otf',
 );
@@ -49,6 +50,10 @@ void main() {
     );
     expect(accordionCollapse.mode, TCollapseMode.accordion);
     expect(accordionCollapse.value, '0');
+    expect(
+      accordionCollapse.children.first.body,
+      isA<Text>().having((text) => text.data, 'data', randomString),
+    );
     expect(accordionCollapse.children.last.disabled, isTrue);
     final card = buildItem(1, 0) as TCollapse;
     expect(card.variant, TCollapseVariant.card);

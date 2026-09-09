@@ -28,6 +28,7 @@ class DemoPageTestSpec {
     required this.expectedTexts,
     this.componentType,
     this.expectedComponentCount,
+    this.useMaterialIcons = false,
     this.useFeedbackGoldenFont = false,
     this.useAlignmentCjkFont = false,
     this.supplementalCjkFontFamily,
@@ -46,6 +47,7 @@ class DemoPageTestSpec {
   final List<String> expectedTexts;
   final Type? componentType;
   final int? expectedComponentCount;
+  final bool useMaterialIcons;
   final bool useFeedbackGoldenFont;
   final bool useAlignmentCjkFont;
   final String? supplementalCjkFontFamily;
@@ -138,21 +140,25 @@ Future<void> loadDemoGoldenFonts(DemoPageTestSpec spec) async {
       ).readAsBytes().then(ByteData.sublistView),
     ),
   ];
-  if (spec.useFeedbackGoldenFont) {
-    loaders.addAll([
+  if (spec.useMaterialIcons || spec.useFeedbackGoldenFont) {
+    loaders.add(
       _loadGoldenFont(
         'MaterialIcons',
         () => File(
           '${flutterBin.path}/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
         ).readAsBytes().then(ByteData.sublistView),
       ),
+    );
+  }
+  if (spec.useFeedbackGoldenFont) {
+    loaders.add(
       _loadGoldenFont(
         _feedbackGoldenCjkFontFamily,
         () => File(
           'test/fonts/TDesignFeedbackGoldenCJK-Regular.otf',
         ).readAsBytes().then(ByteData.sublistView),
       ),
-    ]);
+    );
   }
   if (spec.useAlignmentCjkFont) {
     loaders.add(

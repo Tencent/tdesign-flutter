@@ -12,7 +12,7 @@ Widget _buildAccordionCollapse(BuildContext context) {
               headerBuilder: (context, isExpanded) {
                 return const Text('折叠面板标题');
               },
-              body: const Text('此处可自定义内容'),
+              body: const Text(randomString),
               value: panelValue,
               disabled: panelValue == '3',
             );
