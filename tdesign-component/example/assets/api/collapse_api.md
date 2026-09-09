@@ -13,5 +13,5 @@
 | mode | TCollapseMode | TCollapseMode.multiple | 折叠面板模式 |
 | onChanged | ValueChanged<T?>? | - | 手风琴模式下 value 变更回调 |
 | onExpansionChanged | ExpansionPanelCallback? | - | 折叠面板列表的回调函数； 回调时，入参为当前点击的折叠面板的索引 index 和是否展开的状态 isExpanded |
-| value | T? | - | 手风琴模式下当前展开面板的 value |
+| value | T? | - | 手风琴模式下当前展开面板的 value。 在 `TCollapseMode.accordion` 模式下，展开状态唯一由此值与 `TCollapsePanel.value` 的匹配结果决定，面板的 `TCollapsePanel.isExpanded` 不生效。 |
 | variant | TCollapseVariant? | - | 折叠面板视觉形态。未设置时从 `TCollapseThemeData.variant` 读取。 |
