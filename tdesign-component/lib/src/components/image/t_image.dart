@@ -35,6 +35,8 @@ class TImage extends StatelessWidget {
     this.frameBuilder,
     this.loadingBuilder,
     this.errorBuilder,
+    this.onLoad,
+    this.onError,
     this.semanticLabel,
     this.excludeFromSemantics = false,
     this.cacheWidth,
@@ -76,14 +78,28 @@ class TImage extends StatelessWidget {
   /// 图片适配方式，默认为 [BoxFit.fill]。
   final BoxFit fit;
 
-  /// 图片帧构建器。
+  /// 图片帧 UI 构建器；不用于触发加载成功副作用。
   final ImageFrameBuilder? frameBuilder;
 
-  /// 网络图片加载进度构建器；非空时接管网络图片加载过程的渲染。
+  /// 网络图片的增量加载进度构建器。
+  ///
+  /// 仅透传给 [Image.network]；asset 和 [imageFile] 的首帧 UI 使用 [frameBuilder]。
   final ImageLoadingBuilder? loadingBuilder;
 
-  /// 图片错误构建器；非空时优先于 [errorWidget]。
+  /// 图片错误 UI 构建器；非空时优先于 [errorWidget]。
+  ///
+  /// 不用于执行错误上报等副作用；错误事件使用 [onError]。
   final ImageErrorWidgetBuilder? errorBuilder;
+
+  /// 图片首帧加载成功后的回调。
+  ///
+  /// 每个图片来源生命周期只触发一次；动画图片的后续帧不重复触发。
+  final VoidCallback? onLoad;
+
+  /// 图片加载失败后的回调。
+  ///
+  /// 每个图片来源生命周期只触发一次，并接收原始错误与堆栈。
+  final ImageErrorListener? onError;
 
   /// 无障碍标签。
   final String? semanticLabel;
@@ -111,6 +127,14 @@ class TImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return _TImageLifecycle(image: this);
+  }
+
+  Widget _buildContent(
+    BuildContext context, {
+    required ImageFrameBuilder? effectiveFrameBuilder,
+    required ImageErrorWidgetBuilder effectiveErrorBuilder,
+  }) {
     final resolvedWidth = width ?? 72;
     final resolvedHeight = height ?? 72;
     final theme = Theme.of(context).extension<TImageThemeData>();
@@ -120,6 +144,8 @@ class TImage extends StatelessWidget {
       width: resolvedWidth,
       height: resolvedHeight,
       fit: fit,
+      effectiveFrameBuilder: effectiveFrameBuilder,
+      effectiveErrorBuilder: effectiveErrorBuilder,
     );
     final clipped = _clip(context, image);
 
@@ -135,15 +161,9 @@ class TImage extends StatelessWidget {
     required double width,
     required double height,
     required BoxFit fit,
+    required ImageFrameBuilder? effectiveFrameBuilder,
+    required ImageErrorWidgetBuilder effectiveErrorBuilder,
   }) {
-    final fallbackErrorBuilder =
-        errorBuilder ??
-        (_, __, ___) => _placeholder(
-          context,
-          errorWidget ?? const Icon(TIcons.close, size: 22),
-          width: width,
-          height: height,
-        );
     final color = theme?.color;
     final colorBlendMode = theme?.colorBlendMode;
     final centerSlice = theme?.centerSlice;
@@ -156,8 +176,8 @@ class TImage extends StatelessWidget {
         width: width,
         height: height,
         fit: fit,
-        frameBuilder: frameBuilder,
-        errorBuilder: fallbackErrorBuilder,
+        frameBuilder: effectiveFrameBuilder,
+        errorBuilder: effectiveErrorBuilder,
         semanticLabel: semanticLabel,
         excludeFromSemantics: excludeFromSemantics,
         color: color,
@@ -184,7 +204,7 @@ class TImage extends StatelessWidget {
       );
     }
     if (value.isEmpty) {
-      return fallbackErrorBuilder(
+      return effectiveErrorBuilder(
         context,
         ArgumentError.value(value, 'src', 'must not be empty'),
         StackTrace.empty,
@@ -201,7 +221,7 @@ class TImage extends StatelessWidget {
         width: width,
         height: height,
         fit: fit,
-        frameBuilder: frameBuilder,
+        frameBuilder: effectiveFrameBuilder,
         loadingBuilder:
             loadingBuilder ??
             (context, child, progress) => progress == null
@@ -212,7 +232,7 @@ class TImage extends StatelessWidget {
                     width: width,
                     height: height,
                   ),
-        errorBuilder: fallbackErrorBuilder,
+        errorBuilder: effectiveErrorBuilder,
         semanticLabel: semanticLabel,
         excludeFromSemantics: excludeFromSemantics,
         color: color,
@@ -234,8 +254,8 @@ class TImage extends StatelessWidget {
       width: width,
       height: height,
       fit: fit,
-      frameBuilder: frameBuilder,
-      errorBuilder: fallbackErrorBuilder,
+      frameBuilder: effectiveFrameBuilder,
+      errorBuilder: effectiveErrorBuilder,
       semanticLabel: semanticLabel,
       excludeFromSemantics: excludeFromSemantics,
       color: color,
@@ -285,5 +305,106 @@ class TImage extends StatelessWidget {
       case TImageShape.circle:
         return ClipOval(child: child);
     }
+  }
+}
+
+class _TImageLifecycle extends StatefulWidget {
+  const _TImageLifecycle({required this.image});
+
+  final TImage image;
+
+  @override
+  State<_TImageLifecycle> createState() => _TImageLifecycleState();
+}
+
+class _TImageLifecycleState extends State<_TImageLifecycle> {
+  var _generation = 0;
+  var _terminalEventObserved = false;
+
+  @override
+  void didUpdateWidget(covariant _TImageLifecycle oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_sourceIdentity(oldWidget.image) != _sourceIdentity(widget.image)) {
+      _generation++;
+      _terminalEventObserved = false;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final image = widget.image;
+    return image._buildContent(
+      context,
+      effectiveFrameBuilder: _buildFrame,
+      effectiveErrorBuilder: _buildError,
+    );
+  }
+
+  Widget _buildFrame(
+    BuildContext context,
+    Widget child,
+    int? frame,
+    bool wasSynchronouslyLoaded,
+  ) {
+    if (frame != null) {
+      _scheduleTerminalEvent(widget.image.onLoad);
+    }
+    return widget.image.frameBuilder?.call(
+          context,
+          child,
+          frame,
+          wasSynchronouslyLoaded,
+        ) ??
+        child;
+  }
+
+  Widget _buildError(
+    BuildContext context,
+    Object error,
+    StackTrace? stackTrace,
+  ) {
+    final onError = widget.image.onError;
+    _scheduleTerminalEvent(
+      onError == null ? null : () => onError(error, stackTrace),
+    );
+    return widget.image.errorBuilder?.call(context, error, stackTrace) ??
+        widget.image._placeholder(
+          context,
+          widget.image.errorWidget ?? const Icon(TIcons.close, size: 22),
+          width: widget.image.width ?? 72,
+          height: widget.image.height ?? 72,
+        );
+  }
+
+  void _scheduleTerminalEvent(VoidCallback? callback) {
+    if (_terminalEventObserved) {
+      return;
+    }
+    _terminalEventObserved = true;
+    if (callback == null) {
+      return;
+    }
+    final generation = _generation;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || generation != _generation) {
+        return;
+      }
+      callback();
+    });
+  }
+
+  Object? _sourceIdentity(TImage image) {
+    if (image.imageFile != null) {
+      return (
+        'file',
+        image.imageFile!.path,
+        image.cacheWidth,
+        image.cacheHeight,
+      );
+    }
+    if (image.src != null) {
+      return ('src', image.src, image.cacheWidth, image.cacheHeight);
+    }
+    return null;
   }
 }

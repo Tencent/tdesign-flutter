@@ -315,6 +315,80 @@ void main() {
     );
   });
 
+  testWidgets('onLoad fires once on the first image frame', (tester) async {
+    var loads = 0;
+    var frameBuilds = 0;
+
+    Widget image(String src) => TImage(
+      src: src,
+      onLoad: () => loads++,
+      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+        frameBuilds++;
+        return child;
+      },
+    );
+
+    await tester.pumpWidget(app(image('first.png')));
+    final rawImage = tester.widget<Image>(find.byType(Image));
+    rawImage.frameBuilder!(
+      tester.element(find.byType(Image)),
+      const Text('image'),
+      0,
+      true,
+    );
+    await tester.pump();
+
+    expect(loads, 1);
+    expect(frameBuilds, greaterThan(0));
+
+    await tester.pump();
+    expect(loads, 1);
+  });
+
+  testWidgets('onError notifies once and errorBuilder only renders UI', (
+    tester,
+  ) async {
+    var errors = 0;
+    var errorBuilds = 0;
+    Object? lastError;
+
+    Widget failedImage() => TImage(
+      src: '',
+      onError: (error, stackTrace) {
+        errors++;
+        lastError = error;
+      },
+      errorBuilder: (context, error, stackTrace) {
+        errorBuilds++;
+        return const Text('failed');
+      },
+    );
+
+    await tester.pumpWidget(app(failedImage()));
+    expect(find.text('failed'), findsOneWidget);
+    expect(errors, 1);
+    expect(errorBuilds, 1);
+    expect(lastError, isA<ArgumentError>());
+
+    await tester.pumpWidget(app(failedImage()));
+    expect(errors, 1);
+    expect(errorBuilds, 2);
+
+    await tester.pumpWidget(
+      app(
+        TImage(
+          onLoad: () => fail('missing source must not load'),
+          onError: (error, stackTrace) => fail('missing source must not fail'),
+        ),
+      ),
+    );
+    expect(errors, 1);
+
+    await tester.pumpWidget(app(failedImage()));
+    expect(errors, 2);
+    expect(errorBuilds, 3);
+  });
+
   test(
     'source contract allows loading state and rejects conflicting sources',
     () {

@@ -16,11 +16,11 @@ class TImagePage extends StatelessWidget {
       showTestModule: false,
       children: const [
         ExampleModule(
-          title: '01 组件类型',
+          title: '组件类型',
           children: [ExampleItem(ignoreCode: true, builder: _buildImageTypes)],
         ),
         ExampleModule(
-          title: '02 组件状态',
+          title: '组件状态',
           children: [ExampleItem(ignoreCode: true, builder: _buildImageStates)],
         ),
       ],

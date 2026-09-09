@@ -35,7 +35,7 @@ void main() {
   testWidgets('公开分组与十个实例符合设计稿', (tester) async {
     await pumpFullDemoPage(tester, imageDemoSpec, ThemeMode.light);
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
-    expect(page.children.map((module) => module.title), ['01 组件类型', '02 组件状态']);
+    expect(page.children.map((module) => module.title), ['组件类型', '组件状态']);
     final images = tester.widgetList<TImage>(find.byType(TImage)).toList();
     expect(images.map((image) => image.fit).take(3), [
       BoxFit.cover,

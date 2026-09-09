@@ -5,3 +5,4 @@
 - [x] 补 Demo/Golden 与回归登记
 - [x] 双版本验证和覆盖率
 - [x] 完成验收报告
+- [x] 拆分 builder 渲染与 onLoad/onError 事件契约并完成回归
