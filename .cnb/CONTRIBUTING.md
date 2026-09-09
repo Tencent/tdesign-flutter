@@ -19,6 +19,14 @@
 - Issue 主阵地为 GitHub，需要的 `close #xx` 只在 GitHub 对应 PR 关联真实 GitHub Issue。
 - 自查项按实际完成情况勾选，不编造链接或完成状态。
 
+## GitHub 源码与 CNB 审查边界
+
+- 代码修复、合并最新 `develop`、提交和推送统一以 GitHub 仓库及其 PR 源分支为准；不要把 CNB 仓库地址当作代码推送目标。
+- CNB 用于查看对应 MR、运行 CI 和发起 CodeBuddy 定向 Review。Review 与 CI 必须以 GitHub 最新推送提交为准，不能以 CNB 页面缓存或旧提交推断结果。
+- 推送后应确认 GitHub 远端源分支已指向预期提交，再触发或更新 CNB Review；Review 重点应覆盖本次改动涉及的 API、Theme、Demo、交互、Golden 和双 Flutter 版本 CI。
+- CNB CI 失败时先读取实际失败日志，区分源码问题、测试基线问题和平台/环境问题；修复后继续从 GitHub 推送新提交，再重新触发验证。
+- CNB 的鉴权或仓库权限不足时，不通过改推 CNB 地址绕过；保留 GitHub 推送结果，并明确记录 CNB Review/CI 尚未基于该提交完成。
+
 ## 执行方式的归属
 
 登录与鉴权、调用 `@codebuddy review`、触发任务和轮询结果等操作流程由 CNB 平台配置或本机工具 skill 维护，不放入本项目协作说明。执行时读取上述仓库约定；本文不授予创建、修改或发布 PR 的权限。

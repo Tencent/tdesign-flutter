@@ -7,7 +7,9 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 import '../../theme/t_colors.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
+import 't_stepper_defaults.dart';
 import 't_stepper_theme_data.dart';
+import 't_stepper_theme_interpolation.dart';
 import 't_stepper_types.dart';
 
 export 't_stepper_types.dart';
@@ -43,6 +45,7 @@ class TStepper extends StatefulWidget {
     /// 加减按钮使用的步长，必须大于 0。
     ///
     /// 输入提交不要求是步长的整数倍，但会限制在 [min] 与 [max] 之间。
+    /// 编辑时以合法输入草稿作为步进起点，并据此判断按钮是否达到边界。
     this.step = 1,
 
     /// 组件尺寸。
@@ -75,6 +78,8 @@ class TStepper extends StatefulWidget {
   final num max;
 
   /// 加减按钮使用的正数步长；直接输入不要求是步长的整数倍。
+  ///
+  /// 编辑时合法草稿同时决定步进起点与按钮的边界状态。
   final num step;
 
   /// 组件尺寸；为空时依次使用组件主题和 [TStepperSize.medium]。
@@ -93,6 +98,9 @@ class _TStepperState extends State<TStepper> {
   bool _editing = false;
 
   bool get _disabled => widget.onChanged == null;
+  num get _stepBase => _editing
+      ? num.tryParse(_textController.text) ?? widget.value
+      : widget.value;
   num get _effectiveMin => widget.min.isNaN ? 0 : widget.min;
   num get _effectiveMax {
     final min = _effectiveMin;
@@ -127,8 +135,8 @@ class _TStepperState extends State<TStepper> {
   @override
   Widget build(BuildContext context) {
     final style = _StepperStyle.resolve(context, widget);
-    final canDecrease = !_disabled && widget.value > _effectiveMin;
-    final canIncrease = !_disabled && widget.value < _effectiveMax;
+    final canDecrease = !_disabled && _stepBase > _effectiveMin;
+    final canIncrease = !_disabled && _stepBase < _effectiveMax;
     final spacing = style.variant == TStepperVariant.outline
         ? 0.0
         : style.spacing;
@@ -232,7 +240,7 @@ class _TStepperState extends State<TStepper> {
                       : oldValue;
                 }),
               ],
-              onChanged: (_) => _editing = true,
+              onChanged: (_) => setState(() => _editing = true),
               onSubmitted: (_) => _submitDraft(unfocus: true),
               onTapOutside: (_) => _submitDraft(unfocus: true),
             ),
@@ -249,15 +257,14 @@ class _TStepperState extends State<TStepper> {
   }
 
   void _stepBy(num delta) {
-    final draft = num.tryParse(_textController.text);
-    final base = _editing && draft != null ? draft : widget.value;
+    final base = _stepBase;
     _requestChange(_normalizeStepResult(base + delta, base), unfocus: true);
   }
 
   void _submitDraft({required bool unfocus}) {
     final parsed = num.tryParse(_textController.text);
     if (parsed == null) {
-      _editing = false;
+      setState(() => _editing = false);
       _setText(widget.value);
       if (unfocus) {
         _focusNode.unfocus();
@@ -269,7 +276,7 @@ class _TStepperState extends State<TStepper> {
 
   void _requestChange(num next, {required bool unfocus}) {
     final clamped = next.clamp(_effectiveMin, _effectiveMax);
-    _editing = false;
+    setState(() => _editing = false);
     if (unfocus) {
       _focusNode.unfocus();
     }
@@ -417,6 +424,38 @@ class _StepperButton extends StatelessWidget {
 }
 
 class _StepperStyle {
+  static _StepperStyle _lerp(_StepperStyle a, _StepperStyle b, double t) {
+    return _StepperStyle(
+      variant: t < 0.5 ? a.variant : b.variant,
+      controlSize: a.controlSize + (b.controlSize - a.controlSize) * t,
+      inputWidth: a.inputWidth + (b.inputWidth - a.inputWidth) * t,
+      iconSize: a.iconSize + (b.iconSize - a.iconSize) * t,
+      spacing: a.spacing + (b.spacing - a.spacing) * t,
+      borderWidth: a.borderWidth + (b.borderWidth - a.borderWidth) * t,
+      borderRadius: BorderRadius.lerp(a.borderRadius, b.borderRadius, t)!,
+      foregroundColor: Color.lerp(a.foregroundColor, b.foregroundColor, t)!,
+      disabledForegroundColor: Color.lerp(
+        a.disabledForegroundColor,
+        b.disabledForegroundColor,
+        t,
+      )!,
+      iconColor: Color.lerp(a.iconColor, b.iconColor, t)!,
+      backgroundColor: Color.lerp(a.backgroundColor, b.backgroundColor, t)!,
+      disabledBackgroundColor: Color.lerp(
+        a.disabledBackgroundColor,
+        b.disabledBackgroundColor,
+        t,
+      )!,
+      borderColor: Color.lerp(a.borderColor, b.borderColor, t)!,
+      textStyle: TextStyle.lerp(a.textStyle, b.textStyle, t)!,
+      disabledTextStyle: TextStyle.lerp(
+        a.disabledTextStyle,
+        b.disabledTextStyle,
+        t,
+      )!,
+    );
+  }
+
   const _StepperStyle({
     required this.variant,
     required this.controlSize,
@@ -452,32 +491,31 @@ class _StepperStyle {
   final TextStyle disabledTextStyle;
 
   static _StepperStyle resolve(BuildContext context, TStepper widget) {
+    return _resolveTheme(
+      context,
+      widget,
+      Theme.of(context).extension<TStepperThemeData>(),
+    );
+  }
+
+  static _StepperStyle _resolveTheme(
+    BuildContext context,
+    TStepper widget,
+    TStepperThemeData? componentTheme,
+  ) {
+    if (componentTheme is StepperThemeInterpolation) {
+      return _lerp(
+        _resolveTheme(context, widget, componentTheme.begin),
+        _resolveTheme(context, widget, componentTheme.end),
+        componentTheme.progress,
+      );
+    }
     final materialTheme = Theme.of(context);
-    final componentTheme = materialTheme.extension<TStepperThemeData>();
     final token = context.tTheme;
     final size = widget.size ?? componentTheme?.size ?? TStepperSize.medium;
     final variant =
         widget.variant ?? componentTheme?.variant ?? TStepperVariant.normal;
-    final geometry = switch (size) {
-      TStepperSize.small => const (
-        controlSize: 20.0,
-        inputWidth: 34.0,
-        iconSize: 12.0,
-        fontSize: 10.0,
-      ),
-      TStepperSize.medium => const (
-        controlSize: 24.0,
-        inputWidth: 38.0,
-        iconSize: 16.0,
-        fontSize: 12.0,
-      ),
-      TStepperSize.large => const (
-        controlSize: 26.0,
-        inputWidth: 45.0,
-        iconSize: 20.0,
-        fontSize: 16.0,
-      ),
-    };
+    final geometry = stepperGeometry(size);
     final defaultTextStyle = context.tExplicitDefaultTextStyle;
     final materialTextStyle =
         materialTheme.tExplicitTextTheme?.bodySmall ?? const TextStyle();
@@ -512,11 +550,11 @@ class _StepperStyle {
       controlSize: componentTheme?.controlSize ?? geometry.controlSize,
       inputWidth: componentTheme?.inputWidth ?? geometry.inputWidth,
       iconSize: componentTheme?.iconSize ?? geometry.iconSize,
-      spacing: componentTheme?.spacing ?? 4,
+      spacing: componentTheme?.spacing ?? stepperSpacing,
       borderRadius:
           componentTheme?.borderRadius ??
           BorderRadius.circular(token.radiusSmall),
-      borderWidth: componentTheme?.borderWidth ?? 1,
+      borderWidth: componentTheme?.borderWidth ?? stepperBorderWidth,
       foregroundColor: foregroundColor,
       disabledForegroundColor: disabledForegroundColor,
       iconColor:

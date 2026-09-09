@@ -11,6 +11,7 @@
 - Chrome Flutter Web：实际进入 `#image?showAction=1`，逐一点击六个类型和四个状态实例；页面无状态跳变、无导航、无点击错误，符合小程序公开 Demo 的纯展示交互。Widget 测试进一步模拟加载、失败、成功各点击一次，`onTap` 恰好触发 3 次；未传回调时无手势节点。
 - Android 16 真机：实际进入 `image?showAction=1`，确认页面框架自动生成 `01`/`02` 序号；移除 Demo 模块标题中的重复序号后，真机标题与设计稿一致为“01 组件类型”“02 组件状态”。
 - 事件契约：`onLoad` 只在首个成功图片帧通知一次；`onError` 与 `errorBuilder` 的事件/渲染职责解耦，同一来源 rebuild 不重复通知，无来源不通知，来源变更后重置。
+- 合并 GitHub `develop@e70654b7` 后：保留上游最新 Empty/Footer/Navbar/Sidebar/Steps Demo 结构并完成 `TImageVariant` 迁移；Flutter 3.32.0 与 3.47.0 的 TImage 14 项测试及 Image/Sidebar/Navbar Demo 聚焦测试均通过，组件库和 Example 严格分析无问题，覆盖率仍为 `131/131 = 100%`，Linux Flutter 3.32.0 的组件与 Demo 明暗 Golden 均以无更新模式各 2 项通过。
 
 ## 小程序 API / Flutter API 对照
 

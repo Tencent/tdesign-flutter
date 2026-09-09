@@ -1,0 +1,21 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+/// 在已配置 TDesign 主题的应用中使用 `StepperDisabledExample()`。
+class StepperDisabledExample extends StatelessWidget {
+  const StepperDisabledExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        TStepper(
+          key: ValueKey('stepper-disabled'),
+          value: 0,
+          variant: TStepperVariant.filled,
+        ),
+      ],
+    );
+  }
+}
