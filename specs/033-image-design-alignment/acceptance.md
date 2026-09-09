@@ -12,6 +12,7 @@
 - Android 16 真机：实际进入 `image?showAction=1`，确认页面框架自动生成 `01`/`02` 序号；移除 Demo 模块标题中的重复序号后，真机标题与设计稿一致为“01 组件类型”“02 组件状态”。
 - 事件契约：`onLoad` 只在首个成功图片帧通知一次；`onError` 与 `errorBuilder` 的事件/渲染职责解耦，同一来源 rebuild 不重复通知，无来源不通知，来源变更后重置。
 - 合并 GitHub `develop@e70654b7` 后：保留上游最新 Empty/Footer/Navbar/Sidebar/Steps Demo 结构并完成 `TImageVariant` 迁移；Flutter 3.32.0 与 3.47.0 的 TImage 14 项测试及 Image/Sidebar/Navbar Demo 聚焦测试均通过，组件库和 Example 严格分析无问题，覆盖率仍为 `131/131 = 100%`，Linux Flutter 3.32.0 的组件与 Demo 明暗 Golden 均以无更新模式各 2 项通过。
+- 完整 Linux Flutter 3.32.0 视觉回归发现两个依赖旧默认圆角的下游 Demo：Footer 两个透明 Logo 共差异 32px，按 Figma 无裁剪语义显式使用 `square` 并采用该次 CI 实际图更新明暗 Golden；Steps 自定义内容图四角差异 55/56px，按 Figma 6px 圆角显式使用 `roundedSquare` 并保留原 Golden。两个 Demo 均补充 shape 参数断言；修复后 Flutter 3.32.0 与 3.47.0 的 Footer/Steps Demo 测试各 6 项通过，3.32.0 Example 严格分析及示例代码生成校验通过。远端完整视觉回归以修复推送后的 CI 为准。
 
 ## 小程序 API / Flutter API 对照
 

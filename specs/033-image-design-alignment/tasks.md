@@ -6,3 +6,4 @@
 - [x] 双版本验证和覆盖率
 - [x] 完成验收报告
 - [x] 拆分 builder 渲染与 onLoad/onError 事件契约并完成回归
+- [x] 修复 Footer/Steps 对旧默认 shape 的隐式依赖并补下游回归
