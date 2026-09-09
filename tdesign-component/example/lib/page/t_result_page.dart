@@ -93,7 +93,7 @@ class TResultPage extends StatelessWidget {
                 body: SafeArea(
                   child: Column(
                     children: [
-                      const TNavBar(title: 'Result'),
+                      const TNavBar(title: TText('Result')),
                       const Expanded(
                         child: Center(
                           child: TResult(
