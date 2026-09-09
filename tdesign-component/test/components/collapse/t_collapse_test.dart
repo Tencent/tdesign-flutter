@@ -119,6 +119,28 @@ void main() {
       expect(constrainedBody.height, 120);
     });
 
+    testWidgets('短内容与标题保持左对齐', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TCollapse(
+            children: [
+              buildPanel(
+                title: '标题',
+                bodyText: '短内容',
+                isExpanded: true,
+              ),
+            ],
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.getTopLeft(find.text('短内容')).dx,
+        tester.getTopLeft(find.text('标题')).dx,
+      );
+    });
+
     testWidgets('accordion 模式渲染', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(

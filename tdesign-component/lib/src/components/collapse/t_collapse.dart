@@ -317,6 +317,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       firstChild: const SizedBox.shrink(),
       secondChild: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: child.placement == TCollapsePlacement.top
             ? [content, divider]
             : [divider, content],
