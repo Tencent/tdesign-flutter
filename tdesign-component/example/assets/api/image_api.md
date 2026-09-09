@@ -7,23 +7,23 @@
 | alignment | AlignmentGeometry | Alignment.center | 图片对齐方式。 |
 | cacheHeight | int? | - | 解码缓存高度。 |
 | cacheWidth | int? | - | 解码缓存宽度。 |
-| errorBuilder | ImageErrorWidgetBuilder? | - | 图片错误构建器。 |
-| errorWidget | Widget? | - | 默认错误占位内容。 |
+| errorBuilder | ImageErrorWidgetBuilder? | - | 图片错误构建器；非空时优先于 `errorWidget`。 |
+| errorWidget | Widget? | - | 默认错误占位内容；`errorBuilder` 非空时由其接管错误渲染。 |
 | excludeFromSemantics | bool | false | 是否从语义树排除图片。 |
 | filterQuality | FilterQuality | FilterQuality.low | 图片滤镜质量。 |
-| fit | BoxFit | BoxFit.fill | 图片适配方式。 |
+| fit | BoxFit | BoxFit.fill | 图片适配方式，默认为 `BoxFit.fill`。 |
 | frameBuilder | ImageFrameBuilder? | - | 图片帧构建器。 |
-| height | double? | - | 图片高度。 |
+| height | double? | - | 图片高度，未指定时为 72。 |
 | imageFile | File? | - | 本地图片文件；不能与 `src` 同时提供。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| loadingBuilder | ImageLoadingBuilder? | - | 网络图片加载进度构建器。 |
-| loadingWidget | Widget? | - | 默认加载占位内容。 |
+| loadingBuilder | ImageLoadingBuilder? | - | 网络图片加载进度构建器；非空时接管网络图片加载过程的渲染。 |
+| loadingWidget | Widget? | - | 默认加载占位内容。 `src` 为 null 时直接显示；网络图片加载时仅在 `loadingBuilder` 为空时显示。 |
 | onTap | GestureTapCallback? | - | 点击回调；为空时不创建点击行为。 |
 | repeat | ImageRepeat | ImageRepeat.noRepeat | 图片重复方式。 |
 | semanticLabel | String? | - | 无障碍标签。 |
-| shape | TImageShape | TImageShape.square | 图片形状。 |
-| src | String? | - | 网络 URL 或 asset 路径；空字符串显示加载占位。 |
-| width | double? | - | 图片宽度。 |
+| shape | TImageShape | TImageShape.square | 图片形状，默认为 `TImageShape.square`。 |
+| src | String? | - | 网络 URL 或 asset 路径。 为 null 时显示加载占位；空字符串显示失败占位。 |
+| width | double? | - | 图片宽度，未指定时为 72。 |
 
 
 ### TImageShape

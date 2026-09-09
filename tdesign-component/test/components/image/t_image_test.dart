@@ -84,18 +84,15 @@ void main() {
     );
   });
 
-  testWidgets('empty source renders stable default and custom loading states', (
-    tester,
-  ) async {
-    await tester.pumpWidget(app(const TImage(src: '')));
+  testWidgets('missing source loads while empty source fails', (tester) async {
+    await tester.pumpWidget(app(const TImage()));
     expect(find.byType(Image), findsNothing);
-    expect(find.byIcon(Icons.more_horiz), findsOneWidget);
+    expect(find.byIcon(TIcons.ellipsis), findsOneWidget);
     expect(tester.getSize(find.byType(TImage)), const Size(72, 72));
 
     await tester.pumpWidget(
       app(
         const TImage(
-          src: '',
           width: 96,
           height: 64,
           loadingWidget: Text('custom loading'),
@@ -104,6 +101,14 @@ void main() {
     );
     expect(find.text('custom loading'), findsOneWidget);
     expect(tester.getSize(find.byType(TImage)), const Size(96, 64));
+
+    await tester.pumpWidget(app(const TImage(src: '')));
+    expect(find.byIcon(TIcons.close), findsOneWidget);
+
+    await tester.pumpWidget(
+      app(const TImage(src: '', errorWidget: Text('custom error'))),
+    );
+    expect(find.text('custom error'), findsOneWidget);
   });
 
   testWidgets('failed rounded image keeps resolved bounds and clipping', (
@@ -283,13 +288,22 @@ void main() {
     expect(provider.height, 80);
   });
 
-  testWidgets('onTap is the interaction switch', (tester) async {
+  testWidgets('onTap owns interaction for loading, failed, and image states', (
+    tester,
+  ) async {
     var taps = 0;
+
+    await tester.pumpWidget(app(TImage(onTap: () => taps++)));
+    await tester.tap(find.byType(TImage));
+
+    await tester.pumpWidget(app(TImage(src: '', onTap: () => taps++)));
+    await tester.tap(find.byType(TImage));
+
     await tester.pumpWidget(
       app(TImage(src: 'assets/image.png', onTap: () => taps++)),
     );
     await tester.tap(find.byType(TImage));
-    expect(taps, 1);
+    expect(taps, 3);
 
     await tester.pumpWidget(app(const TImage(src: 'assets/image.png')));
     expect(
@@ -301,13 +315,16 @@ void main() {
     );
   });
 
-  test('source contract rejects missing or conflicting sources', () {
-    expect(TImage.new, throwsAssertionError);
-    expect(
-      () => TImage(src: 'asset.png', imageFile: File('file.png')),
-      throwsAssertionError,
-    );
-  });
+  test(
+    'source contract allows loading state and rejects conflicting sources',
+    () {
+      expect(TImage.new, returnsNormally);
+      expect(
+        () => TImage(src: 'asset.png', imageFile: File('file.png')),
+        throwsAssertionError,
+      );
+    },
+  );
 
   test('theme data copyWith and lerp cover all value categories', () {
     const a = TImageThemeData(

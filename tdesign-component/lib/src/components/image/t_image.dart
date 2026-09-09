@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_radius.dart';
@@ -43,41 +44,45 @@ class TImage extends StatelessWidget {
     this.repeat = ImageRepeat.noRepeat,
     this.onTap,
   }) : assert(
-         (src == null) != (imageFile == null),
-         'Exactly one of src or imageFile must be provided',
+         src == null || imageFile == null,
+         'src and imageFile cannot be provided at the same time',
        );
 
-  /// 网络 URL 或 asset 路径；空字符串显示加载占位。
+  /// 网络 URL 或 asset 路径。
+  ///
+  /// 为 null 时显示加载占位；空字符串显示失败占位。
   final String? src;
 
   /// 本地图片文件；不能与 [src] 同时提供。
   final File? imageFile;
 
-  /// 图片形状。
+  /// 图片形状，默认为 [TImageShape.square]。
   final TImageShape shape;
 
-  /// 默认错误占位内容。
+  /// 默认错误占位内容；[errorBuilder] 非空时由其接管错误渲染。
   final Widget? errorWidget;
 
   /// 默认加载占位内容。
+  ///
+  /// [src] 为 null 时直接显示；网络图片加载时仅在 [loadingBuilder] 为空时显示。
   final Widget? loadingWidget;
 
-  /// 图片宽度。
+  /// 图片宽度，未指定时为 72。
   final double? width;
 
-  /// 图片高度。
+  /// 图片高度，未指定时为 72。
   final double? height;
 
-  /// 图片适配方式。
+  /// 图片适配方式，默认为 [BoxFit.fill]。
   final BoxFit fit;
 
   /// 图片帧构建器。
   final ImageFrameBuilder? frameBuilder;
 
-  /// 网络图片加载进度构建器。
+  /// 网络图片加载进度构建器；非空时接管网络图片加载过程的渲染。
   final ImageLoadingBuilder? loadingBuilder;
 
-  /// 图片错误构建器。
+  /// 图片错误构建器；非空时优先于 [errorWidget]。
   final ImageErrorWidgetBuilder? errorBuilder;
 
   /// 无障碍标签。
@@ -135,7 +140,7 @@ class TImage extends StatelessWidget {
         errorBuilder ??
         (_, __, ___) => _placeholder(
           context,
-          errorWidget ?? const Icon(Icons.broken_image_outlined),
+          errorWidget ?? const Icon(TIcons.close, size: 22),
           width: width,
           height: height,
         );
@@ -173,17 +178,16 @@ class TImage extends StatelessWidget {
     if (value == null) {
       return _placeholder(
         context,
-        loadingWidget ?? const Icon(Icons.more_horiz),
+        loadingWidget ?? const Icon(TIcons.ellipsis, size: 22),
         width: width,
         height: height,
       );
     }
     if (value.isEmpty) {
-      return _placeholder(
+      return fallbackErrorBuilder(
         context,
-        loadingWidget ?? const Icon(Icons.more_horiz),
-        width: width,
-        height: height,
+        ArgumentError.value(value, 'src', 'must not be empty'),
+        StackTrace.empty,
       );
     }
     final uri = Uri.tryParse(value);
@@ -204,7 +208,7 @@ class TImage extends StatelessWidget {
                 ? child
                 : _placeholder(
                     context,
-                    loadingWidget ?? const Icon(Icons.more_horiz),
+                    loadingWidget ?? const Icon(TIcons.ellipsis, size: 22),
                     width: width,
                     height: height,
                   ),

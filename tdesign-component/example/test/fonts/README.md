@@ -37,6 +37,11 @@ Upload 等既有 Golden 的字形选择与像素基线。
 上游源文件 SHA-256 为
 `734b20876d6a6777e4c30b627e8391695bbf545c0badf6c066138bebd1f0278a`。
 
+`ImageGoldenCJK-Regular.otf` 仅补充 Image 整页 Golden 缺少的字形，字符清单见
+`image_demo_glyphs.txt`。它使用独立 family，避免扩充共享字体改变其他组件基线；
+子集 SHA-256 为
+`ba8c31342f34f0d1ca0ceb62e3f50c7de2169e6330f7c2b398993a9a0eff2ba5`。
+
 - 上游：Noto Sans SC 2.004 `NotoSansSC-Regular.otf`
 - 来源：`https://github.com/notofonts/noto-cjk/raw/Sans2.004/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf`
 - 上游 SHA-256：`faa6c9df652116dde789d351359f3d7e5d2285a2b2a1f04a2d7244df706d5ea9`
