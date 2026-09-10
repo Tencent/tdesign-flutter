@@ -1,0 +1,3 @@
+Widget _buildMicroCircle(BuildContext context) {
+    return TProgress(variant: TProgressVariant.microCircular, value: 0.3);
+  }
