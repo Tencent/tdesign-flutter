@@ -20,7 +20,7 @@
 ## 行为契约
 
 - `variant` 只选择四种内置结构；`TSkeleton.custom` / `layout` 是自定义结构的唯一入口。
-- `animation` 为 null 时静态展示，`gradient` 与 `flashed` 分别使用扫光和闪烁动画；`delay` 只控制首次可见时间。
+- `animation` 为 null 时静态展示，`gradient` 使用 1.5s 线性扫光，`flashed` 使用 2s 线性往返关键帧，中点透明度为 0.3 并同步切换到闪烁背景色；`delay` 只控制首次可见时间。
 - 默认文本块高 16dp、头像 48dp、图片 72dp；图片与宫格图片使用 6dp 圆角。
 - 默认多行间距为 8dp，文本首行内部间距为 16dp；默认占位色使用 secondary-container token。
 - 块级显式样式优先于 `TSkeletonThemeData`，组件 Theme 优先于 TDesign token。

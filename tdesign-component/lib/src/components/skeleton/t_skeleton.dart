@@ -234,16 +234,28 @@ class _TSkeletonState extends State<TSkeleton> with TickerProviderStateMixin {
           TSkeletonBlockShape.circle => (block.height ?? block.width ?? 0) / 2,
           TSkeletonBlockShape.rectangle => 0,
         };
+    final blockColor = block.isSpacer
+        ? Colors.transparent
+        : block.style.color ??
+              theme?.blockColor ??
+              context.tTheme.bgColorSecondaryContainer;
+    final flashedProgress = widget.animation == TSkeletonAnimation.flashed
+        ? ((1 - _animation!.value) / (1 - _flashedOpacity)).clamp(0.0, 1.0)
+        : 0.0;
+    final color =
+        widget.animation == TSkeletonAnimation.flashed && !block.isSpacer
+        ? Color.lerp(
+            blockColor,
+            context.tTheme.componentStrokeColor.withValues(alpha: .3),
+            flashedProgress,
+          )
+        : blockColor;
     Widget child = Container(
       width: block.width,
       height: block.height,
       margin: block.margin,
       decoration: BoxDecoration(
-        color: block.isSpacer
-            ? Colors.transparent
-            : block.style.color ??
-                  theme?.blockColor ??
-                  context.tTheme.bgColorSecondaryContainer,
+        color: color,
         borderRadius: BorderRadius.circular(radius),
       ),
     );

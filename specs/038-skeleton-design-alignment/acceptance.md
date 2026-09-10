@@ -5,14 +5,14 @@
 - 分支：`rss1102/feat/skeleton-design-alignment`
 - 基线：已合入 `origin/develop@031b1a06`
 - 设计：TDesign for mobile，Figma Skeleton 页面 `24386:5273`
-- 小程序参考：`Tencent/tdesign-miniprogram@cc2384cc`
+- 小程序参考：`Tencent/tdesign-miniprogram@faaa4bbe4`
 - Flutter/Dart：Flutter 3.32.0 与 Flutter 3.47.0
 
 ## 自动化验证
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter test test/components/skeleton/t_skeleton_test.dart` | 15/15 通过 | Flutter 3.32.0、Flutter 3.47.0 |
+| `flutter test test/components/skeleton/t_skeleton_test.dart` | 16/16 通过 | Flutter 3.32.0、Flutter 3.47.0；覆盖闪烁动画 0s / 1s / 2s 关键帧 |
 | `flutter test test/skeleton_demo_test.dart` | 3/3 通过 | Flutter 3.32.0、Flutter 3.47.0 |
 | `flutter test test/skeleton_demo_golden_test.dart` | 2/2 通过 | Linux amd64、Flutter 3.32.0，生成后无更新复验 |
 | `flutter analyze --fatal-infos lib test` | 0 error / 0 warning | Flutter 3.32.0、Flutter 3.47.0 |
@@ -24,6 +24,7 @@
 ## 人工验收
 
 - [x] 在 Web Demo 中定位“02 组件动效”，观察渐变与闪烁动画；间隔 450ms 的同一区域截图编码长度分别为 10642/11069 bytes，内容发生变化，两类动画均持续运行。
+- [x] 在 Android 真机 `25113PN0EC` 运行并停留在“02 组件动效”，录制 4s 画面观察闪烁动画完整往返两个周期。
 - [x] 核对浅色、深色完整页面 Golden：375×1887，中文字体正常，无缺字方框。
 
 ## 未覆盖项与后续工作

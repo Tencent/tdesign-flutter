@@ -364,6 +364,41 @@ void main() {
       expect(find.byType(Opacity), findsNothing);
     });
 
+    testWidgets('flashed animation matches its midpoint keyframe', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TSkeleton(animation: TSkeletonAnimation.flashed),
+          skeletonTheme: const TSkeletonThemeData(blockColor: Colors.red),
+        ),
+      );
+
+      final initialOpacity = tester.widget<Opacity>(find.byType(Opacity).first);
+      final initialColor = decorations(tester).first.color;
+      expect(initialOpacity.opacity, 1);
+      expect(initialColor?.toARGB32(), Colors.red.toARGB32());
+
+      await tester.pump(const Duration(seconds: 1));
+
+      final midpointOpacity = tester.widget<Opacity>(
+        find.byType(Opacity).first,
+      );
+      expect(midpointOpacity.opacity, closeTo(.3, .001));
+      expect(
+        decorations(tester).first.color,
+        TThemeData.defaultData().componentStrokeColor.withValues(alpha: .3),
+      );
+
+      await tester.pump(const Duration(seconds: 1));
+
+      final completedOpacity = tester.widget<Opacity>(
+        find.byType(Opacity).first,
+      );
+      expect(completedOpacity.opacity, closeTo(1, .001));
+      expect(decorations(tester).first.color, initialColor);
+    });
+
     testWidgets('cancels pending delay when disposed', (tester) async {
       await tester.pumpWidget(
         wrap(const TSkeleton(delay: Duration(seconds: 1))),
