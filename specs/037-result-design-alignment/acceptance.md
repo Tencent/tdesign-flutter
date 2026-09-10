@@ -15,7 +15,7 @@
 | `flutter test test/components/result/t_result_test.dart test/components/theme/t_material_theme_priority_test.dart` | 36/36 通过 | Flutter 3.32.0、3.47.0；覆盖默认图标尺寸参与 Theme 插值 |
 | `flutter test test/result_demo_test.dart` | 3/3 通过 | Flutter 3.32.0、3.47.0；含页面示例进入与返回、自定义插图比例和公开 Demo 结构 |
 | `flutter test --coverage test/components/result/t_result_test.dart` | 通过 | Result 生产代码 LH/LF 62/63，98.41% |
-| `flutter test --update-goldens test/result_demo_golden_test.dart` 后无更新复验 | 2/2 通过 | 固定 Linux amd64、Flutter 3.32.0，light/dark |
+| CNB 同镜像 `docker.cnb.cool/liweijie0812/docker/flutter-3.32.0` 中执行 `flutter test --update-goldens test/result_demo_golden_test.dart`，随后无更新参数复验 | 2/2 通过 | Linux amd64、Flutter 3.32.0；light/dark 基线可在 CI 同环境复现 |
 | `flutter analyze --fatal-infos lib test` | 0 issues | 组件与 example，Flutter 3.32.0、3.47.0 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 四个代码面板均直接来自公开 Demo 源码 |
 | 覆盖率、组件、视觉清单三项自测试 | 13/13 通过 | Result 已登记完整三层验证入口 |
