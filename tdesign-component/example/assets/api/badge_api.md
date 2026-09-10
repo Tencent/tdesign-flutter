@@ -11,7 +11,7 @@
 | child | Widget? | - | 被徽标标记的内容；为空时徽标可独立展示。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | label | String? | '0' | 徽标实际展示的短文本，例如 `8`、`99+` 或 `NEW`。 文本形态下为 null 时隐藏徽标；`TBadgeVariant.dot` 不读取该字段。 |
-| offset | Offset? | - | 相对默认锚点的逐实例位置偏移；未设置时读取 `BadgeThemeData.offset`。 |
+| offset | Offset? | - | 相对默认锚点的逐实例位置偏移；未设置时读取 `BadgeThemeData.offset`， 普通右上角徽标最终回退为中心点与内容顶边对齐的 TDesign 内置位置。 |
 | onTap | GestureTapCallback? | - | 点击徽标及其 `child` 时触发；为空时不创建点击语义。 |
 | showZero | bool | true | `label` 恰好为字符串 `0` 时是否显示徽标，默认为 true。 `TBadgeVariant.dot` 始终显示，不受该字段影响。 |
 | size | TBadgeSize | TBadgeSize.medium | 徽标的预设尺寸，默认为 `TBadgeSize.medium`。 |
