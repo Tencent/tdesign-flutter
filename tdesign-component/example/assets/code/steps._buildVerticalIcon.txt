@@ -1,0 +1,13 @@
+/// Vertical Icon Steps 垂直图标步骤条
+    Widget _buildVerticalIcon(BuildContext context) {
+    return const TSteps.progress(
+      steps: [
+        TStepsItemData(title: 'Finish', content: 'Content', icon: TIcons.cart),
+        TStepsItemData(title: 'Process', content: 'Content', icon: TIcons.cart),
+        TStepsItemData(title: 'Default', content: 'Content', icon: TIcons.cart),
+        TStepsItemData(title: 'Default', content: 'Content', icon: TIcons.cart),
+      ],
+      value: 1,
+      direction: TStepsDirection.vertical,
+    );
+  }

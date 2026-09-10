@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 
 import 't_swiper_types.dart';
 
+const _defaultDotSize = 6.0;
+const _defaultActiveDotExtent = 20.0;
+const _defaultDotSpacing = 5.0;
+const _defaultControlIconSize = 18.0;
+
 /// 轮播组件级 ThemeExtension。
 ///
-/// 保存页面效果、指示器和切换按钮的视觉默认值。
+/// 保存指示器、内容圆角和切换按钮的视觉默认值。
 class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
   const TSwiperThemeData({
-    this.pagination,
-    this.pageEffect,
-    this.paginationPlacement,
     this.paginationAlignment,
     this.paginationMargin,
+    this.borderRadius,
     this.activeColor,
     this.inactiveColor,
     this.dotSize,
@@ -21,22 +24,19 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
     this.fractionBackgroundColor,
     this.controlStyle,
     this.controlIconSize,
-  });
-
-  /// 默认指示器形态。
-  final TSwiperPaginationVariant? pagination;
-
-  /// 默认页面切换效果。
-  final TSwiperPageEffect? pageEffect;
-
-  /// 默认指示器位置。
-  final TSwiperPaginationPlacement? paginationPlacement;
+  }) : assert(dotSize == null || dotSize > 0),
+       assert(activeDotExtent == null || activeDotExtent > 0),
+       assert(dotSpacing == null || dotSpacing >= 0),
+       assert(controlIconSize == null || controlIconSize > 0);
 
   /// 默认指示器对齐方式。
   final AlignmentGeometry? paginationAlignment;
 
   /// 指示器外边距。
   final EdgeInsetsGeometry? paginationMargin;
+
+  /// 轮播内容圆角。
+  final BorderRadiusGeometry? borderRadius;
 
   /// 激活项颜色。
   final Color? activeColor;
@@ -67,11 +67,9 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
 
   @override
   TSwiperThemeData copyWith({
-    TSwiperPaginationVariant? pagination,
-    TSwiperPageEffect? pageEffect,
-    TSwiperPaginationPlacement? paginationPlacement,
     AlignmentGeometry? paginationAlignment,
     EdgeInsetsGeometry? paginationMargin,
+    BorderRadiusGeometry? borderRadius,
     Color? activeColor,
     Color? inactiveColor,
     double? dotSize,
@@ -83,11 +81,9 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
     double? controlIconSize,
   }) {
     return TSwiperThemeData(
-      pagination: pagination ?? this.pagination,
-      pageEffect: pageEffect ?? this.pageEffect,
-      paginationPlacement: paginationPlacement ?? this.paginationPlacement,
       paginationAlignment: paginationAlignment ?? this.paginationAlignment,
       paginationMargin: paginationMargin ?? this.paginationMargin,
+      borderRadius: borderRadius ?? this.borderRadius,
       activeColor: activeColor ?? this.activeColor,
       inactiveColor: inactiveColor ?? this.inactiveColor,
       dotSize: dotSize ?? this.dotSize,
@@ -107,22 +103,36 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
       return this;
     }
     return TSwiperThemeData(
-      pagination: t < 0.5 ? pagination : other.pagination,
-      pageEffect: t < 0.5 ? pageEffect : other.pageEffect,
-      paginationPlacement:
-          t < 0.5 ? paginationPlacement : other.paginationPlacement,
       paginationAlignment: AlignmentGeometry.lerp(
         paginationAlignment,
         other.paginationAlignment,
         t,
       ),
-      paginationMargin:
-          EdgeInsetsGeometry.lerp(paginationMargin, other.paginationMargin, t),
+      paginationMargin: EdgeInsetsGeometry.lerp(
+        paginationMargin,
+        other.paginationMargin,
+        t,
+      ),
+      borderRadius: BorderRadiusGeometry.lerp(
+        borderRadius,
+        other.borderRadius,
+        t,
+      ),
       activeColor: Color.lerp(activeColor, other.activeColor, t),
       inactiveColor: Color.lerp(inactiveColor, other.inactiveColor, t),
-      dotSize: _lerp(dotSize, other.dotSize, t),
-      activeDotExtent: _lerp(activeDotExtent, other.activeDotExtent, t),
-      dotSpacing: _lerp(dotSpacing, other.dotSpacing, t),
+      dotSize: _lerpNullableDouble(dotSize, other.dotSize, t, _defaultDotSize),
+      activeDotExtent: _lerpNullableDouble(
+        activeDotExtent,
+        other.activeDotExtent,
+        t,
+        _defaultActiveDotExtent,
+      ),
+      dotSpacing: _lerpNullableDouble(
+        dotSpacing,
+        other.dotSpacing,
+        t,
+        _defaultDotSpacing,
+      ),
       fractionStyle: TextStyle.lerp(fractionStyle, other.fractionStyle, t),
       fractionBackgroundColor: Color.lerp(
         fractionBackgroundColor,
@@ -130,14 +140,25 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
         t,
       ),
       controlStyle: ButtonStyle.lerp(controlStyle, other.controlStyle, t),
-      controlIconSize: _lerp(controlIconSize, other.controlIconSize, t),
+      controlIconSize: _lerpNullableDouble(
+        controlIconSize,
+        other.controlIconSize,
+        t,
+        _defaultControlIconSize,
+      ),
     );
   }
 
-  double? _lerp(double? a, double? b, double t) {
+  double? _lerpNullableDouble(
+    double? a,
+    double? b,
+    double t,
+    double defaultValue,
+  ) {
     if (a == null && b == null) {
       return null;
     }
-    return (a ?? 0) + ((b ?? 0) - (a ?? 0)) * t;
+    return (a ?? defaultValue) +
+        ((b ?? defaultValue) - (a ?? defaultValue)) * t;
   }
 }

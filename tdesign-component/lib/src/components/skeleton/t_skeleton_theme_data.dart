@@ -9,7 +9,8 @@ class TSkeletonThemeData extends ThemeExtension<TSkeletonThemeData> {
     this.highlightColor,
     this.borderRadius,
     this.rowSpacing,
-  });
+  }) : assert(borderRadius == null || borderRadius >= 0),
+       assert(rowSpacing == null || rowSpacing >= 0);
 
   /// 占位块背景色。
   final Color? blockColor;
@@ -46,15 +47,15 @@ class TSkeletonThemeData extends ThemeExtension<TSkeletonThemeData> {
     return TSkeletonThemeData(
       blockColor: Color.lerp(blockColor, other.blockColor, t),
       highlightColor: Color.lerp(highlightColor, other.highlightColor, t),
-      borderRadius: _lerpDouble(borderRadius, other.borderRadius, t),
-      rowSpacing: _lerpDouble(rowSpacing, other.rowSpacing, t),
+      borderRadius: _lerpNullableDouble(borderRadius, other.borderRadius, t),
+      rowSpacing: _lerpNullableDouble(rowSpacing, other.rowSpacing, t),
     );
   }
 
-  double? _lerpDouble(double? a, double? b, double t) {
-    if (a == null && b == null) {
-      return null;
+  double? _lerpNullableDouble(double? a, double? b, double t) {
+    if (a == null || b == null) {
+      return t < .5 ? a : b;
     }
-    return (a ?? 0) + ((b ?? 0) - (a ?? 0)) * t;
+    return a + (b - a) * t;
   }
 }

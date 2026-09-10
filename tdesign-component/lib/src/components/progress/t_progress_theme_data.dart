@@ -2,8 +2,6 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
-import 't_progress.dart' show TProgressLabelPosition;
-
 /// 进度条组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树的默认样式。
@@ -24,18 +22,6 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
   /// 环形进度条半径
   final double? circleRadius;
 
-  /// 是否显示标签
-  final bool? showLabel;
-
-  /// 自定义标签宽度
-  final double? labelWidgetWidth;
-
-  /// 自定义标签对齐方式
-  final Alignment? labelWidgetAlignment;
-
-  /// 标签显示位置
-  final TProgressLabelPosition? progressLabelPosition;
-
   /// 动画持续时间
   final Duration? animationDuration;
 
@@ -48,28 +34,17 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
   /// 不确定环形进度弧占整圈的比例。
   final double? indeterminateCircularValue;
 
-  /// 线性和按钮进度条处于横向无界布局时使用的兜底宽度。
-  ///
-  /// 未设置时使用当前 MediaQuery 的视口宽度；有界布局不使用该字段。
-  final double? fallbackLinearWidth;
-
   const TProgressThemeData({
     this.strokeWidth,
     this.color,
     this.backgroundColor,
     this.linearBorderRadius,
     this.circleRadius,
-    this.showLabel,
-    this.labelWidgetWidth,
-    this.labelWidgetAlignment,
-    this.progressLabelPosition,
     this.animationDuration,
     this.indeterminateAnimationDuration,
     this.indeterminateLinearSegmentFraction,
     this.indeterminateCircularValue,
-    this.fallbackLinearWidth,
-  }) : assert(fallbackLinearWidth == null || fallbackLinearWidth > 0),
-       assert(
+  }) : assert(
          indeterminateLinearSegmentFraction == null ||
              (indeterminateLinearSegmentFraction > 0 &&
                  indeterminateLinearSegmentFraction <= 1),
@@ -86,15 +61,10 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
     Color? backgroundColor,
     BorderRadiusGeometry? linearBorderRadius,
     double? circleRadius,
-    bool? showLabel,
-    double? labelWidgetWidth,
-    Alignment? labelWidgetAlignment,
-    TProgressLabelPosition? progressLabelPosition,
     Duration? animationDuration,
     Duration? indeterminateAnimationDuration,
     double? indeterminateLinearSegmentFraction,
     double? indeterminateCircularValue,
-    double? fallbackLinearWidth,
   }) {
     return TProgressThemeData(
       strokeWidth: strokeWidth ?? this.strokeWidth,
@@ -102,11 +72,6 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
       backgroundColor: backgroundColor ?? this.backgroundColor,
       linearBorderRadius: linearBorderRadius ?? this.linearBorderRadius,
       circleRadius: circleRadius ?? this.circleRadius,
-      showLabel: showLabel ?? this.showLabel,
-      labelWidgetWidth: labelWidgetWidth ?? this.labelWidgetWidth,
-      labelWidgetAlignment: labelWidgetAlignment ?? this.labelWidgetAlignment,
-      progressLabelPosition:
-          progressLabelPosition ?? this.progressLabelPosition,
       animationDuration: animationDuration ?? this.animationDuration,
       indeterminateAnimationDuration:
           indeterminateAnimationDuration ?? this.indeterminateAnimationDuration,
@@ -115,7 +80,6 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
           this.indeterminateLinearSegmentFraction,
       indeterminateCircularValue:
           indeterminateCircularValue ?? this.indeterminateCircularValue,
-      fallbackLinearWidth: fallbackLinearWidth ?? this.fallbackLinearWidth,
     );
   }
 
@@ -134,14 +98,6 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
         t,
       ),
       circleRadius: lerpDouble(circleRadius, other.circleRadius, t),
-      showLabel: t < 0.5 ? showLabel : other.showLabel,
-      labelWidgetWidth: lerpDouble(labelWidgetWidth, other.labelWidgetWidth, t),
-      labelWidgetAlignment: t < 0.5
-          ? labelWidgetAlignment
-          : other.labelWidgetAlignment,
-      progressLabelPosition: t < 0.5
-          ? progressLabelPosition
-          : other.progressLabelPosition,
       animationDuration: lerpDuration(
         animationDuration,
         other.animationDuration,
@@ -160,11 +116,6 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
       indeterminateCircularValue: lerpDouble(
         indeterminateCircularValue,
         other.indeterminateCircularValue,
-        t,
-      ),
-      fallbackLinearWidth: lerpDouble(
-        fallbackLinearWidth,
-        other.fallbackLinearWidth,
         t,
       ),
     );

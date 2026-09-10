@@ -1,17 +1,21 @@
 /// 字符头像
     Widget _buildTextAvatar(BuildContext context) {
-    return const Row(
+    return Row(
       // spacing: 32,
       children: [
         TAvatar(
           size: TAvatarSize.medium,
-          child: Text('A'),
+          backgroundColor: context.tTheme.brandNormalColor,
+          foregroundColor: context.tTheme.whiteColor1,
+          child: const Text('A'),
         ),
-        SizedBox(width: 32),
+        const SizedBox(width: 32),
         TAvatar(
           size: TAvatarSize.medium,
-          variant: TAvatarVariant.square,
-          child: Text('A'),
+          shape: TAvatarShape.square,
+          backgroundColor: context.tTheme.brandNormalColor,
+          foregroundColor: context.tTheme.whiteColor1,
+          child: const Text('A'),
         ),
       ],
     );
