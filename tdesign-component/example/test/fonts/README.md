@@ -67,6 +67,11 @@ SHA-256 为 `59c5bebba9bf720005fb977a94b9c150b0b8e8c2698c1dca3a66d9f0d7cd9722`�
 最后的专用 fallback，不改变其他页面或既有共享字体的像素基线，子集 SHA-256 为
 `0d9bc1e3573e19a40ac0777bf1799418a32eb3ab3f79a52e510e015bd1afbc93`。
 
+`ProgressGoldenCJK-Regular.otf` 仅补充 Progress 整页 Golden 的“百、微、型、始”字，字符清单见
+`progress_glyphs.txt`；它作为 Progress Demo 最后的专用 fallback，不改变其他页面
+或既有共享像素基线，子集 SHA-256 为
+`8f6894a9e05cf085047bbb10b48e18c0f3461d831a8af1c6ef7befb88890acc0`。
+
 `AvatarGoldenCJK-Regular.otf` 仅补充 Avatar 整页 Golden 所需字形，字符清单见
 `avatar_demo_glyphs.txt`。它作为 Avatar Demo 最后的专用 fallback，不改变其他页面
 或既有共享字体的像素基线，子集 SHA-256 为
@@ -135,6 +140,7 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 更新 BackTop 页面文案时，更新 BackTop 字符清单。
 更新 Drawer 页面文案时，更新 Drawer 字符清单。
 更新 Skeleton 页面文案时，更新 Skeleton 字符清单。
+更新 Progress 页面文案时，更新 Progress 字符清单。
 更新 Avatar 页面文案时，更新 Avatar 字符清单。
 更新 Navbar 页面文案时，更新 Navbar 字符清单。
 更新 Image 页面文案时，更新 Image 字符清单。
