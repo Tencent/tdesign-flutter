@@ -449,6 +449,19 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'result',
+    coverageTargets: ['lib/src/components/result/'],
+    componentTests: ['test/components/result/t_result_test.dart'],
+    exampleTests: ['test/result_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Result Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/result_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'tab_bar',
     coverageTargets: ['lib/src/components/tabbar/'],
     componentTests: ['test/components/tabbar/t_tab_bar_test.dart'],
