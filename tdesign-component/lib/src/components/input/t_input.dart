@@ -648,7 +648,7 @@ class _TInputShellState extends State<_TInputShell> {
                         : context.tTheme.textDisabledColor,
                     child: widget.prefix!,
                   ),
-                  const SizedBox(width: _inputIconGap),
+                  SizedBox(width: context.tTheme.spacer16),
                 ],
                 Expanded(child: widget.editor),
                 if (clearButton != null) ...[
@@ -660,7 +660,7 @@ class _TInputShellState extends State<_TInputShell> {
                   passwordButton,
                 ],
                 if (widget.suffix != null) ...[
-                  const SizedBox(width: _inputIconGap),
+                  SizedBox(width: context.tTheme.spacer16),
                   _TInputSlot(
                     color: widget.enabled
                         ? context.tTheme.textColorPlaceholder
@@ -682,7 +682,6 @@ class _TInputShellState extends State<_TInputShell> {
 }
 
 const double _inputIconSize = 24;
-const double _inputIconGap = 8;
 
 class _TInputSlot extends StatelessWidget {
   const _TInputSlot({required this.child, required this.color});
