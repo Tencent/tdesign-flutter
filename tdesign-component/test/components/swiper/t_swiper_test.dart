@@ -413,19 +413,19 @@ void main() {
             controller: controller,
             autoplay: true,
             loop: true,
-            autoplayInterval: const Duration(milliseconds: 100),
+            autoplayInterval: const Duration(seconds: 1),
             pagination: TSwiperPaginationVariant.none,
             children: pages,
           ),
         ),
       );
 
-      await tester.pump(const Duration(milliseconds: 80));
+      await tester.pump(const Duration(milliseconds: 300));
       controller.jumpTo(1);
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 30));
+      await tester.pump(const Duration(milliseconds: 400));
       expect(controller.index, 1);
-      await tester.pump(const Duration(milliseconds: 80));
+      await tester.pump(const Duration(milliseconds: 700));
       await tester.pumpAndSettle();
       expect(controller.index, 2);
     });
@@ -438,7 +438,7 @@ void main() {
           TSwiper(
             controller: controller,
             autoplay: true,
-            autoplayInterval: const Duration(milliseconds: 100),
+            autoplayInterval: const Duration(seconds: 1),
             pagination: TSwiperPaginationVariant.none,
             children: pages,
           ),
@@ -449,14 +449,14 @@ void main() {
         tester.getCenter(find.byType(PageView)),
       );
       await gesture.moveBy(const Offset(-1, 0));
-      await tester.pump(const Duration(milliseconds: 120));
+      await tester.pump(const Duration(milliseconds: 1200));
       expect(controller.index, 0);
 
       await gesture.up();
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 80));
+      await tester.pumpAndSettle();
+      await tester.pump(const Duration(milliseconds: 400));
       expect(controller.index, 0);
-      await tester.pump(const Duration(milliseconds: 30));
+      await tester.pump(const Duration(milliseconds: 700));
       await tester.pumpAndSettle();
       expect(controller.index, 1);
     });
@@ -923,7 +923,7 @@ void main() {
       expect(value.fractionStyle?.fontSize, 12);
     });
 
-    test('nullable 数值不从零插值并拒绝无效视觉值', () {
+    test('nullable 数值按运行时默认值平滑插值并拒绝无效视觉值', () {
       const defaults = TSwiperThemeData();
       const explicit = TSwiperThemeData(
         dotSize: 8,
@@ -931,10 +931,16 @@ void main() {
         dotSpacing: 5,
         controlIconSize: 18,
       );
-      expect(defaults.lerp(explicit, 0.49).dotSize, isNull);
-      expect(defaults.lerp(explicit, 0.5).dotSize, 8);
-      expect(explicit.lerp(defaults, 0.49).dotSize, 8);
-      expect(explicit.lerp(defaults, 0.5).dotSize, isNull);
+      expect(defaults.lerp(explicit, 0).dotSize, 6);
+      expect(defaults.lerp(explicit, 0.5).dotSize, 7);
+      expect(defaults.lerp(explicit, 1).dotSize, 8);
+      expect(explicit.lerp(defaults, 0).dotSize, 8);
+      expect(explicit.lerp(defaults, 0.5).dotSize, 7);
+      expect(explicit.lerp(defaults, 1).dotSize, 6);
+      expect(defaults.lerp(defaults, 0.5).dotSize, isNull);
+      expect(defaults.lerp(explicit, 0.5).activeDotExtent, 20);
+      expect(defaults.lerp(explicit, 0.5).dotSpacing, 5);
+      expect(defaults.lerp(explicit, 0.5).controlIconSize, 18);
       expect(() => TSwiperThemeData(dotSize: -1), throwsAssertionError);
       expect(() => TSwiperThemeData(activeDotExtent: -1), throwsAssertionError);
       expect(() => TSwiperThemeData(dotSpacing: -1), throwsAssertionError);

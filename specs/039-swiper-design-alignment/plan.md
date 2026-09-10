@@ -10,6 +10,7 @@
 ## 风险控制
 
 - `animationDuration` 保持现有默认值；新增可选 API 不构成 breaking change。
+- 删除 `TSwiperThemeData.pagination/pageEffect/paginationPlacement` 属于 breaking change；更新日志明确迁移到 `TSwiper` 同名实例参数，不保留会继续制造第二状态源的兼容别名。
 - Controller 单次显式参数优先，避免组件配置改变已有显式调用。
 - 固定 Linux Flutter 3.32.0 生成 Golden，latest 不写回像素基线。
 - Flutter latest 若自动改写分析配置，验证后恢复，不带入 PR。

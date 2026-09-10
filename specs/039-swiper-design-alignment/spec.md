@@ -20,17 +20,18 @@
 5. Swiper 内容默认按 TDesign 大圆角裁剪；外置分页不被内容裁剪。
 6. 默认覆盖式 dots/dots-bar 使用反色前景；卡片 Demo 显式使用品牌色导航。
 7. 公开 Demo 仅保留目标六个条目；额外扩展能力留在组件测试，不作为公开 Demo 混入。
+8. controls 使用 Flutter 工程默认视觉尺寸：圆形背景 32dp、图标 18dp，并由 `IconButton` 保留 48dp 触控区域；该值不冒充 Figma 精确标注，可由组件 Theme 覆盖。
 
 ## API 收敛
 
 - 保留 `children` / `itemBuilder` 二选一、`TSwiperController`、`onChanged`、分页与页面效果等现有 Flutter 契约。
 - 新增 `animationDuration`、`animationCurve`，分别表达实例级运动时长和曲线；Controller 的同名命令参数只作为单次覆盖，不形成第二状态源。
 - 不新增 `current`、`changeSource`、`imageLoad`、`list` 或字符串 easing；受控/命令式状态由 Controller 管理，图片事件由子 Widget 管理，曲线使用 Flutter `Curve`。
+- 从 `TSwiperThemeData` 删除已发布的 `pagination`、`pageEffect`、`paginationPlacement` 行为字段，避免 Theme 与实例形成两个状态源。调用方分别迁移到 `TSwiper` 的同名实例参数；这是编译期 breaking change，不保留兼容别名。
 
 ## 非目标
 
 - 不复制小程序原生 swiper 的平台专属属性。
-- 不删除已发布的 Flutter 扩展 API。
 - 不把页面状态或交互开关放入 ThemeExtension。
 
 ## 验收标准

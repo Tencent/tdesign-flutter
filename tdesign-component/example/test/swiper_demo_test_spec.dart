@@ -23,6 +23,7 @@ const swiperDemoPageTestSpec = DemoPageTestSpec(
   componentType: TSwiper,
   expectedComponentCount: 7,
   useAlignmentCjkFont: true,
+  useMaterialIcons: true,
   supplementalCjkFontFamily: 'Swiper Golden CJK',
   supplementalCjkFontPath: 'test/fonts/SwiperGoldenCJK-Regular.otf',
   precacheAssetImages: ['assets/img/swiper1.png', 'assets/img/swiper2.png'],

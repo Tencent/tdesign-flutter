@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 
 import 't_swiper_types.dart';
 
+const _defaultDotSize = 6.0;
+const _defaultActiveDotExtent = 20.0;
+const _defaultDotSpacing = 5.0;
+const _defaultControlIconSize = 18.0;
+
 /// 轮播组件级 ThemeExtension。
 ///
 /// 保存指示器、内容圆角和切换按钮的视觉默认值。
@@ -115,13 +120,19 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
       ),
       activeColor: Color.lerp(activeColor, other.activeColor, t),
       inactiveColor: Color.lerp(inactiveColor, other.inactiveColor, t),
-      dotSize: _lerpNullableDouble(dotSize, other.dotSize, t),
+      dotSize: _lerpNullableDouble(dotSize, other.dotSize, t, _defaultDotSize),
       activeDotExtent: _lerpNullableDouble(
         activeDotExtent,
         other.activeDotExtent,
         t,
+        _defaultActiveDotExtent,
       ),
-      dotSpacing: _lerpNullableDouble(dotSpacing, other.dotSpacing, t),
+      dotSpacing: _lerpNullableDouble(
+        dotSpacing,
+        other.dotSpacing,
+        t,
+        _defaultDotSpacing,
+      ),
       fractionStyle: TextStyle.lerp(fractionStyle, other.fractionStyle, t),
       fractionBackgroundColor: Color.lerp(
         fractionBackgroundColor,
@@ -133,14 +144,21 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
         controlIconSize,
         other.controlIconSize,
         t,
+        _defaultControlIconSize,
       ),
     );
   }
 
-  double? _lerpNullableDouble(double? a, double? b, double t) {
-    if (a == null || b == null) {
-      return t < 0.5 ? a : b;
+  double? _lerpNullableDouble(
+    double? a,
+    double? b,
+    double t,
+    double defaultValue,
+  ) {
+    if (a == null && b == null) {
+      return null;
     }
-    return a + (b - a) * t;
+    return (a ?? defaultValue) +
+        ((b ?? defaultValue) - (a ?? defaultValue)) * t;
   }
 }
