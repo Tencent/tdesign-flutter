@@ -19,7 +19,7 @@
 | showDelete | bool | false | 控制删除按钮是否显示。 |
 | showIndex | bool | true | 控制当前页码是否显示。 |
 | loop | bool | false | 控制是否循环切换图片。 |
-| autoplay | bool | false | 控制是否自动切换图片。 |
+| autoplay | bool | false | 控制是否自动切换图片；图片放大时暂停，还原后恢复。 |
 | autoplayInterval | Duration | const Duration(seconds: 3) | 设置自动切换图片的时间间隔。 |
 | barrierDismissible | bool | true | 控制点击弹窗外区域时是否关闭预览。 |
 | onIndexChanged | ValueChanged<int>? | - | 在当前图片索引变化时触发。 |
