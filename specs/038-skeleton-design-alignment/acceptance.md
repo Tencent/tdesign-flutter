@@ -3,8 +3,8 @@
 ## 验证环境
 
 - 分支：`rss1102/feat/skeleton-design-alignment`
-- 基线：`origin/develop@2ed620b9`
-- 设计：TDesign for mobile，Skeleton 相邻节点 `24386:5273`
+- 基线：已合入 `origin/develop@031b1a06`
+- 设计：TDesign for mobile，Figma Skeleton 页面 `24386:5273`
 - 小程序参考：`Tencent/tdesign-miniprogram@cc2384cc`
 - Flutter/Dart：Flutter 3.32.0 与 Flutter 3.47.0
 
@@ -28,5 +28,5 @@
 
 ## 未覆盖项与后续工作
 
-- Figma 直连页面需要登录，本次以相邻移动端 Skeleton 节点、公开小程序 Demo/源码与仓库 Token 为交叉证据；未宣称无法读取的 Figma 内部标注已完成逐像素核验。
+- 使用已登录的 Google Chrome 核对 Figma Skeleton 页面结构，并以公开小程序 Demo/源码、仓库 Token 和 Linux Golden 交叉验证；Flutter Golden 为像素门禁，不把跨渲染引擎结果表述为 Figma 自动像素差分。
 - 本次不增加、删除或改签公开 API，不构成 breaking change。
