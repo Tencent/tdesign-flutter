@@ -42,17 +42,30 @@ void main() {
 
     final entry = find.byKey(const Key('result-page-example'));
     await tester.ensureVisible(entry);
+    final entryButton = tester.widget<TButton>(entry);
+    expect(entryButton.size, TButtonSize.large);
+    expect(entryButton.variant, TButtonVariant.outline);
+    expect(entryButton.colorScheme, TButtonColorScheme.primary);
+    final entryRect = tester.getRect(entry);
+    expect(entryRect.left, 16);
+    expect(entryRect.right, tester.view.physicalSize.width - 16);
+    expect(entryRect.height, 48);
     await tester.tap(entry);
     await tester.pumpAndSettle();
 
     expect(find.byType(TNavBar), findsOneWidget);
-    expect(find.byKey(const Key('result-page-back')), findsOneWidget);
+    final back = find.byKey(const Key('result-page-back'));
+    expect(back, findsOneWidget);
+    final backButton = tester.widget<TButton>(back);
+    expect(backButton.size, TButtonSize.large);
+    expect(backButton.variant, TButtonVariant.outline);
+    expect(backButton.colorScheme, TButtonColorScheme.primary);
     final result = tester.widget<TResult>(find.byType(TResult));
     expect(result.status, TResultStatus.success);
     expect(result.title, '成功状态');
     expect(result.description, '描述文字');
 
-    await tester.tap(find.byKey(const Key('result-page-back')));
+    await tester.tap(back);
     await tester.pumpAndSettle();
     expect(find.text('01 组件类型'), findsOneWidget);
     expect(find.byKey(const Key('result-page-example')), findsOneWidget);

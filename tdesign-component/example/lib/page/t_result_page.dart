@@ -81,48 +81,55 @@ class TResultPage extends StatelessWidget {
 
   @ExampleCode(group: 'result')
   Widget _buildPageExample(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: TButton(
-        key: const ValueKey('result-page-example'),
-        variant: TButtonVariant.outline,
-        child: const Text('页面示例'),
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (context) => Scaffold(
-                body: SafeArea(
-                  child: Column(
-                    children: [
-                      const TNavBar(title: TText('Result')),
-                      const Expanded(
-                        child: Center(
-                          child: TResult(
-                            status: TResultStatus.success,
-                            title: '成功状态',
-                            description: '描述文字',
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+      child: SizedBox(
+        width: double.infinity,
+        child: TButton(
+          key: const ValueKey('result-page-example'),
+          size: TButtonSize.large,
+          variant: TButtonVariant.outline,
+          colorScheme: TButtonColorScheme.primary,
+          child: const Text('页面示例'),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (context) => Scaffold(
+                  body: SafeArea(
+                    child: Column(
+                      children: [
+                        const TNavBar(title: TText('Result')),
+                        const Expanded(
+                          child: Center(
+                            child: TResult(
+                              status: TResultStatus.success,
+                              title: '成功状态',
+                              description: '描述文字',
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: TButton(
-                            key: const ValueKey('result-page-back'),
-                            variant: TButtonVariant.outline,
-                            child: const Text('返回'),
-                            onPressed: () => Navigator.of(context).pop(),
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: TButton(
+                              key: const ValueKey('result-page-back'),
+                              size: TButtonSize.large,
+                              variant: TButtonVariant.outline,
+                              colorScheme: TButtonColorScheme.primary,
+                              child: const Text('返回'),
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
