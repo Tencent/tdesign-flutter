@@ -73,9 +73,9 @@ class TProgressPage extends StatelessWidget {
             if (!context.mounted) {
               return;
             }
-            setState(() => value = (value + 0.1).clamp(0, 0.8));
+            setState(() => value = (value + 0.01).clamp(0, 0.8));
             if (value < 0.8) {
-              await Future<void>.delayed(const Duration(milliseconds: 400));
+              await Future<void>.delayed(const Duration(milliseconds: 30));
             }
           }
           advancing = false;

@@ -50,7 +50,7 @@ void main() {
     return progress;
   }
 
-  testWidgets('按钮进度条点击后自动逐步增加到 80%', (tester) async {
+  testWidgets('按钮进度条点击后按 1% 自动增加到 80%', (tester) async {
     configurePhone(tester);
     final progress = await showButtonProgress(tester);
 
@@ -61,17 +61,17 @@ void main() {
     await tester.tap(progress);
     await tester.pump();
     expect(
-      find.descendant(of: progress, matching: find.text('10%')),
+      find.descendant(of: progress, matching: find.text('1%')),
       findsOneWidget,
     );
-    for (var percent = 20; percent <= 80; percent += 10) {
-      await tester.pump(const Duration(milliseconds: 400));
-      expect(
-        find.descendant(of: progress, matching: find.text('$percent%')),
-        findsOneWidget,
-      );
+    for (var percent = 2; percent <= 80; percent++) {
+      await tester.pump(const Duration(milliseconds: 30));
     }
-    await tester.pump(const Duration(milliseconds: 400));
+    expect(
+      find.descendant(of: progress, matching: find.text('80%')),
+      findsOneWidget,
+    );
+    await tester.pump(const Duration(milliseconds: 300));
   });
 
   testWidgets('微型按钮点击切换播放状态与进度', (tester) async {
