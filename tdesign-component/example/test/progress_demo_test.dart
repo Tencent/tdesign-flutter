@@ -53,7 +53,7 @@ void main() {
     }
   });
 
-  testWidgets('单个按钮进度从开始状态逐步推进', (tester) async {
+  testWidgets('单个按钮进度点击后自动推进到 80%', (tester) async {
     await pumpFullDemoPage(tester, progressDemoPageTestSpec, ThemeMode.light);
 
     final button = find.byKey(const Key('progress-button'));
@@ -64,17 +64,19 @@ void main() {
     await tester.ensureVisible(button);
     await tester.pumpAndSettle();
     await tester.tap(button);
-    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pump();
     expect(
       find.descendant(of: button, matching: find.text('10%')),
       findsOneWidget,
     );
-    await tester.tap(button);
+    for (var percent = 20; percent <= 80; percent += 10) {
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(
+        find.descendant(of: button, matching: find.text('$percent%')),
+        findsOneWidget,
+      );
+    }
     await tester.pump(const Duration(milliseconds: 400));
-    expect(
-      find.descendant(of: button, matching: find.text('20%')),
-      findsOneWidget,
-    );
   });
 
   testWidgets('微型按钮点击后切换播放状态并推进圆环', (tester) async {

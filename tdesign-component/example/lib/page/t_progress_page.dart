@@ -61,10 +61,24 @@ class TProgressPage extends StatelessWidget {
   @ExampleCode(group: 'progress')
   Widget _buildButton(BuildContext context) {
     var value = 0.0;
+    var advancing = false;
     return StatefulBuilder(
       builder: (context, setState) {
-        void advance() {
-          setState(() => value = (value + 0.1).clamp(0, 1));
+        Future<void> advance() async {
+          if (advancing || value >= 0.8) {
+            return;
+          }
+          advancing = true;
+          while (value < 0.8) {
+            if (!context.mounted) {
+              return;
+            }
+            setState(() => value = (value + 0.1).clamp(0, 0.8));
+            if (value < 0.8) {
+              await Future<void>.delayed(const Duration(milliseconds: 400));
+            }
+          }
+          advancing = false;
         }
 
         return Column(
