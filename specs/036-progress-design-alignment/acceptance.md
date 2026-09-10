@@ -3,9 +3,9 @@
 ## 验证环境
 
 - PR 源分支：`rss1102/feat/progress-design-alignment`
-- 本地修复分支：`review/pr-1092`
-- 基线：`origin/develop@2ed620b9`
-- 设计：Figma `28600:38670`
+- 本地修复分支：`rss1102/work/pr1092-progress`
+- 基线：已合入 `origin/develop@031b1a06`
+- 设计：Figma 页面 `24386:5271`，移动端 frame `28600:38672`
 - 小程序参考：`Tencent/tdesign-miniprogram@cc2384cc`
 - Flutter/Dart：Flutter 3.32.0、Flutter 3.47.0（latest）
 
@@ -38,7 +38,7 @@
 | 验证 | 结果 | 备注 |
 | --- | --- | --- |
 | Progress 组件测试 | 52/52 通过 | Flutter 3.32.0、3.47.0 |
-| Progress Demo 功能测试 | 4/4 通过 | Flutter 3.32.0、3.47.0；公开矩阵共 20 个实例 |
+| Progress Demo 功能测试 | 2/2 通过 | Flutter 3.32.0、3.47.0；验证按钮和微型按钮的真实状态切换，公开矩阵共 20 个实例 |
 | 生产代码覆盖率 | 482/485，99.38% | 高于 LH/LF 95% 门禁 |
 | 严格 analyze | 0 issues | 组件与 Example；Flutter 3.32.0、3.47.0 |
 | Linux Golden | 2/2 通过 | Flutter 3.32.0 amd64；更新后无更新参数精确复跑 |
