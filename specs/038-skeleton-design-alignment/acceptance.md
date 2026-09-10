@@ -15,6 +15,7 @@
 | `flutter test test/components/skeleton/t_skeleton_test.dart` | 16/16 通过 | Flutter 3.32.0、Flutter 3.47.0；覆盖闪烁动画 0s / 1s / 2s 关键帧 |
 | `flutter test test/skeleton_demo_test.dart` | 3/3 通过 | Flutter 3.32.0、Flutter 3.47.0 |
 | `flutter test test/skeleton_demo_golden_test.dart` | 2/2 通过 | Linux amd64、Flutter 3.32.0，生成后无更新复验 |
+| `flutter test test/pull_down_refresh_demo_test.dart --tags golden` | 2/2 通过 | Linux amd64、Flutter 3.32.0；同步 Skeleton 默认占位色的下游基线后无更新复验 |
 | `flutter analyze --fatal-infos lib test` | 0 error / 0 warning | Flutter 3.32.0、Flutter 3.47.0 |
 | `flutter analyze --fatal-infos lib test`（example） | 0 error / 0 warning | Flutter 3.32.0、Flutter 3.47.0 |
 | `flutter test --coverage test/components/skeleton/t_skeleton_test.dart` | 135/135，100.00% | Skeleton 生产目录 LH/LF |

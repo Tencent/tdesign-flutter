@@ -125,6 +125,8 @@ HarfBuzz 11.4.5，子集 SHA-256 为
 
 更新 Button、Divider、Fab、Icon、Link、Text、Form、Input、Rate、Search、Switch、
 Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后，更新原字符清单；
+Skeleton 默认占位色等共享视觉契约变化时，同时复验并按需更新使用 Skeleton 的
+PullDownRefresh Demo 明暗基线。
 更新 Loading、Message、Popover 或 Popup 页面文案时，更新补充字符清单；更新
 ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedback 字符清单。
 更新 TreeSelect 页面文案时，更新 TreeSelect 字符清单。
