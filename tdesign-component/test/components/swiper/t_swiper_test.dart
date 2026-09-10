@@ -611,6 +611,51 @@ void main() {
       expect(verticalPagination.left, greaterThanOrEqualTo(verticalPage.right));
     });
 
+    testWidgets('outside 切换按钮保留外部区域并可驱动翻页', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TSwiper(
+            pagination: TSwiperPaginationVariant.controls,
+            paginationPlacement: TSwiperPaginationPlacement.outside,
+            children: pages,
+          ),
+        ),
+      );
+
+      final page = tester.getRect(find.byType(PageView));
+      final controls = tester.getRect(find.byType(IconButton).first);
+      expect(controls.top, greaterThanOrEqualTo(page.bottom));
+
+      await tester.tap(find.byTooltip('Next page'));
+      await tester.pumpAndSettle();
+      expect(find.text('page-1'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('竖向 fraction 在窄空间与自定义主题下保持可布局', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TSwiper(
+            scrollDirection: Axis.vertical,
+            pagination: TSwiperPaginationVariant.fraction,
+            children: pages,
+          ),
+          size: const Size(72, 120),
+          swiperTheme: const TSwiperThemeData(
+            paginationMargin: EdgeInsets.all(4),
+            fractionStyle: TextStyle(fontSize: 14),
+            fractionBackgroundColor: Colors.black,
+          ),
+        ),
+      );
+
+      final page = tester.getRect(find.byType(PageView));
+      final fraction = tester.getRect(find.text('1/3'));
+      expect(fraction.center.dx, greaterThan(page.center.dx));
+      expect(fraction.width, lessThan(page.width));
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('placement 仅由实例 API 控制', (tester) async {
       await tester.pumpWidget(
         app(

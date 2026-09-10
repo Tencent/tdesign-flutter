@@ -18,11 +18,11 @@
 
 | 门禁 | 结果 |
 | --- | --- |
-| Flutter 3.32.0 组件测试 | 39/39 通过，含 fraction 紧凑宽度、controls 居中及深浅主题默认对比色回归 |
+| Flutter 3.32.0 组件测试 | 41/41 通过，含 fraction 紧凑宽度、controls 居中及深浅主题默认对比色回归 |
 | Flutter 3.32.0 Demo 测试 | 4/4 通过，含横向 fling、controls、卡片和垂直参数交互 |
 | Flutter 3.32.0 analyze | 组件与 example 均 0 error / 0 warning |
-| Flutter latest 3.47.0 | clean + pub get 后组件 39/39、Demo 4/4、两工程 analyze 通过 |
-| 生产代码覆盖率 | `427/441 = 96.83%` |
+| Flutter latest 3.47.0 | clean + pub get 后组件 41/41、Demo 4/4、两工程 analyze 通过 |
+| 生产代码覆盖率 | `428/442 = 96.83%` |
 | 回归清单自检 | component / Demo / visual 三组清单测试 13/13 通过 |
 | Linux Golden | `linux/amd64`、Flutter 3.32.0，浅色/深色 2/2 无更新复跑通过 |
 | Golden 人工检查 | 补齐 Material Icons 与专用 CJK 字体后重新生成；两张全页图的 controls 为真实箭头，深色页面也保持灰底白箭头可见，“画”字正常，无缺字、溢出或异常裁剪 |

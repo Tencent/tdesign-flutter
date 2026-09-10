@@ -197,7 +197,7 @@ class _TSwiperPageState extends State<TSwiperPage> {
   @ExampleCode(group: 'swiper')
   Widget _buildVerticalSwiper(BuildContext context) {
     // 页面 State 持有并更新以下字段：
-    // final _verticalController = TSwiperController(initialIndex: 1);
+    // final _verticalController = TSwiperController();
     // bool _verticalAutoplay = true;
     // double _verticalInterval = 5000;
     // double _verticalAnimationDuration = 500;

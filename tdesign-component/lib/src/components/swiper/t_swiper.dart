@@ -170,7 +170,8 @@ class TSwiper extends StatefulWidget {
   /// 指示器位置；为空时默认为覆盖在轮播内容上。
   final TSwiperPaginationPlacement? paginationPlacement;
 
-  /// 指示器对齐；横向默认底部居中，竖向默认右侧居中。
+  /// 指示器对齐；切换按钮默认居中，其他横向指示器默认底部居中，
+  /// 其他竖向指示器默认右侧居中。
   ///
   /// 覆盖模式下控制指示器在轮播内容中的位置；外置模式下控制指示器
   /// 在下方或右侧外部区域内的对齐。

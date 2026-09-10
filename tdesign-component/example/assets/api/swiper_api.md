@@ -25,7 +25,7 @@ Controller 驱动的轮播组件。
 | pageEffect | TSwiperPageEffect? | - | 页面视觉效果；为空时默认为 `TSwiperPageEffect.none`。 |
 | pageSnapping | bool | true | 页面停止滚动时是否自动对齐到整页。 |
 | pagination | TSwiperPaginationVariant? | - | 指示器形态；为空时默认为 `TSwiperPaginationVariant.dots`。 |
-| paginationAlignment | AlignmentGeometry? | - | 指示器对齐；横向默认底部居中，竖向默认右侧居中。 覆盖模式下控制指示器在轮播内容中的位置；外置模式下控制指示器 在下方或右侧外部区域内的对齐。 |
+| paginationAlignment | AlignmentGeometry? | - | 指示器对齐；切换按钮默认居中，其他横向指示器默认底部居中， 其他竖向指示器默认右侧居中。 覆盖模式下控制指示器在轮播内容中的位置；外置模式下控制指示器 在下方或右侧外部区域内的对齐。 |
 | paginationItemBuilder | TSwiperPaginationItemBuilder? | - | 自定义 dots 和 dotsBar 的单个标记。 组件仍负责排列、间距、选中语义和业务下标更新。 |
 | paginationPlacement | TSwiperPaginationPlacement? | - | 指示器位置；为空时默认为覆盖在轮播内容上。 |
 | physics | ScrollPhysics? | - | 页面视图使用的滚动物理效果。 未指定时使用 `PageView` 的默认物理效果。 |
