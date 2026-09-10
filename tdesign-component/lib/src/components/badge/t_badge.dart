@@ -13,11 +13,19 @@ import 't_badge_theme_data.dart';
 // Badge 专有几何来自移动端设计规范；公共色彩、字体与圆角仍由主题 token 提供。
 const _badgeSquareRadius = 2.0;
 const _badgeBubbleSharpRadius = 1.0;
+// Material Badge 会在文字徽标的 offset 后追加 Offset(0, 8) 兼容补偿。
+// 校正其方向性水平位置并抵消纵向补偿，使徽标中心落在内容右上角。
+Offset _badgeTopOffset(TextDirection direction) =>
+    Offset(direction == TextDirection.ltr ? 7 : -7, -8);
+const _badgeCustomTopOffset = Offset(0, -8);
 
 /// 徽标的结构形态；尺寸与描边分别由 [TBadge.size]、[TBadge.border] 控制。
 enum TBadgeVariant {
   /// 标准文本徽标；单字符呈圆形，多字符随内容扩展为胶囊形。
   normal,
+
+  /// 自定义文本徽标；默认以标签左边对齐内容右边向左 16px，且中线对齐内容顶边。
+  custom,
 
   /// 不显示文本的圆点徽标，默认直径为 8 逻辑像素。
   dot,
@@ -85,7 +93,11 @@ class TBadge extends StatelessWidget {
   /// [TBadgeVariant.dot] 始终显示，不受该字段影响。
   final bool showZero;
 
-  /// 相对默认锚点的逐实例位置偏移；未设置时读取 [BadgeThemeData.offset]。
+  /// 相对默认锚点的逐实例位置偏移；未设置时读取 [BadgeThemeData.offset]，
+  /// 最终回退为当前 [variant] 的 TDesign 内置位置。
+  ///
+  /// 普通右上角徽标默认以中心点对齐内容右上角；自定义文本徽标默认以
+  /// 标签左边对齐内容右边向左 16px，并使标签中线对齐内容顶边。
   final Offset? offset;
 
   /// 被徽标标记的内容；为空时徽标可独立展示。
@@ -138,7 +150,7 @@ class TBadge extends StatelessWidget {
         globalBadgeTheme?.padding ??
         (size == TBadgeSize.large ? largePadding : mediumPadding);
     final alignment = localBadgeTheme?.alignment ?? globalBadgeTheme?.alignment;
-    final effectiveOffset =
+    final resolvedOffset =
         offset ?? localBadgeTheme?.offset ?? globalBadgeTheme?.offset;
     final visible =
         variant == TBadgeVariant.dot ||
@@ -183,7 +195,7 @@ class TBadge extends StatelessWidget {
         borderColor: borderColor,
         borderWidth: borderWidth,
         dimension: effectiveLargeSize * 2,
-        offset: effectiveOffset ?? Offset.zero,
+        offset: resolvedOffset ?? Offset.zero,
       );
       final result = Stack(
         clipBehavior: Clip.none,
@@ -227,10 +239,13 @@ class TBadge extends StatelessWidget {
         variant == TBadgeVariant.square ||
         variant == TBadgeVariant.bubble;
     final effectiveLabel = badgeLabel;
+    final defaultOffset = variant == TBadgeVariant.custom
+        ? _badgeCustomTopOffset
+        : _badgeTopOffset(Directionality.of(context));
     final badge = Badge(
       isLabelVisible: visible,
       alignment: alignment,
-      offset: effectiveOffset,
+      offset: resolvedOffset ?? defaultOffset,
       backgroundColor: usesCustomLabel ? Colors.transparent : backgroundColor,
       textColor: textColor,
       textStyle: textStyle,
