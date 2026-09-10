@@ -35,6 +35,8 @@ class TTabsPage extends StatelessWidget {
         ExampleModule(
           title: '组件样式',
           children: [
+            ExampleItem(desc: '选项卡尺寸', builder: _buildItemWithSizeSmall),
+            ExampleItem(builder: _buildItemWithSizeLarge),
             ExampleItem(desc: '选项卡样式', builder: _buildItemWithLine),
             ExampleItem(builder: _buildItemWithTag),
             ExampleItem(builder: _buildItemWithCard),
@@ -164,13 +166,14 @@ class TTabsPage extends StatelessWidget {
 
   @ExampleCode(group: 'tabs')
   Widget _buildItemWithContent(BuildContext context) {
-    return const SizedBox(
+    final contentColor = context.tTheme.textColorPlaceholder;
+    return SizedBox(
       height: 168,
       child: DefaultTabController(
         length: 3,
         child: Column(
           children: [
-            TTabsBar(
+            const TTabsBar(
               tabs: [
                 TTab(text: '选项'),
                 TTab(text: '选项'),
@@ -180,9 +183,9 @@ class TTabsPage extends StatelessWidget {
             Expanded(
               child: TTabsBarView(
                 children: [
-                  Center(child: TText('内容区 1')),
-                  Center(child: TText('内容区 2')),
-                  Center(child: TText('内容区 3')),
+                  Center(child: TText('内容区 1', textColor: contentColor)),
+                  Center(child: TText('内容区 2', textColor: contentColor)),
+                  Center(child: TText('内容区 3', textColor: contentColor)),
                 ],
               ),
             ),
@@ -200,6 +203,31 @@ class TTabsPage extends StatelessWidget {
       TTab(text: '禁用', enabled: false),
     ];
     return const DefaultTabController(length: 3, child: TTabsBar(tabs: tabs));
+  }
+
+  @ExampleCode(group: 'tabs')
+  Widget _buildItemWithSizeSmall(BuildContext context) {
+    const tabs = [
+      TTab(text: '小尺寸'),
+      TTab(text: '选项2'),
+      TTab(text: '选项3'),
+      TTab(text: '选项4'),
+    ];
+    return const DefaultTabController(length: 4, child: TTabsBar(tabs: tabs));
+  }
+
+  @ExampleCode(group: 'tabs')
+  Widget _buildItemWithSizeLarge(BuildContext context) {
+    const tabs = [
+      TTab(text: '大尺寸'),
+      TTab(text: '选项2'),
+      TTab(text: '选项3'),
+      TTab(text: '选项4'),
+    ];
+    return const DefaultTabController(
+      length: 4,
+      child: TTabsBar(tabs: tabs, size: TTabsBarSize.large),
+    );
   }
 
   @ExampleCode(group: 'tabs')

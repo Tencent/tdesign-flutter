@@ -1,11 +1,12 @@
 Widget _buildItemWithContent(BuildContext context) {
-    return const SizedBox(
+    final contentColor = context.tTheme.textColorPlaceholder;
+    return SizedBox(
       height: 168,
       child: DefaultTabController(
         length: 3,
         child: Column(
           children: [
-            TTabsBar(
+            const TTabsBar(
               tabs: [
                 TTab(text: '选项'),
                 TTab(text: '选项'),
@@ -15,9 +16,9 @@ Widget _buildItemWithContent(BuildContext context) {
             Expanded(
               child: TTabsBarView(
                 children: [
-                  Center(child: TText('内容区 1')),
-                  Center(child: TText('内容区 2')),
-                  Center(child: TText('内容区 3')),
+                  Center(child: TText('内容区 1', textColor: contentColor)),
+                  Center(child: TText('内容区 2', textColor: contentColor)),
+                  Center(child: TText('内容区 3', textColor: contentColor)),
                 ],
               ),
             ),
