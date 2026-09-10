@@ -837,14 +837,20 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
   }
 
   Widget _buildButtonActiveContainer(double progressWidth) {
+    final defaultGradient = LinearGradient(
+      colors: [
+        _effectiveColor,
+        Color.alphaBlend(
+          context.tTheme.fontWhColor1.withValues(alpha: 0.3),
+          _effectiveColor,
+        ),
+      ],
+    );
     return Container(
       key: const ValueKey('progress-value'),
       height: widget.strokeWidth,
       width: progressWidth,
-      decoration: BoxDecoration(
-        color: widget.gradient == null ? _effectiveColor : null,
-        gradient: widget.gradient,
-      ),
+      decoration: BoxDecoration(gradient: widget.gradient ?? defaultGradient),
     );
   }
 

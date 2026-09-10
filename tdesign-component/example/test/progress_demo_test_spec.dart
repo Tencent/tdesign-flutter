@@ -21,7 +21,7 @@ const progressDemoPageTestSpec = DemoPageTestSpec(
     '环形进度条',
   ],
   componentType: TProgress,
-  expectedComponentCount: 20,
+  expectedComponentCount: 21,
   useAlignmentCjkFont: true,
   supplementalCjkFontFamily: 'Noto Sans SC',
   supplementalCjkFontPath: 'test/fonts/ProgressGoldenCJK-Regular.otf',

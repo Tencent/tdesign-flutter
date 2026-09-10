@@ -60,16 +60,32 @@ class TProgressPage extends StatelessWidget {
 
   @ExampleCode(group: 'progress')
   Widget _buildButton(BuildContext context) {
-    var value = 0.0;
+    var value = 0.8;
     return StatefulBuilder(
       builder: (context, setState) {
-        return TProgress(
-          key: const Key('progress-button'),
-          variant: TProgressVariant.button,
-          value: value,
-          label: Text(value == 0 ? '开始' : '${(value * 100).round()}%'),
-          semanticsLabel: '上传进度',
-          onTap: () => setState(() => value = value == 0 ? 0.8 : 0),
+        void advance() {
+          setState(() => value = value >= 1 ? 0 : value + 0.1);
+        }
+
+        return Column(
+          children: [
+            TProgress(
+              key: const Key('progress-button-value'),
+              variant: TProgressVariant.button,
+              value: value,
+              semanticsLabel: '上传进度',
+              onTap: advance,
+            ),
+            SizedBox(height: context.tTheme.spacer8),
+            TProgress(
+              key: const Key('progress-button-continue'),
+              variant: TProgressVariant.button,
+              value: value,
+              label: const Text('Continue'),
+              semanticsLabel: '继续操作进度',
+              onTap: advance,
+            ),
+          ],
         );
       },
     );

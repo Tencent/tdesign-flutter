@@ -55,3 +55,10 @@
 
 - 本轮像素证据是 Flutter 3.32.0 Linux Golden 的仓库基线精确比较；Figma 用于人工核对矩阵、文案、形态和状态，不声称 Figma 渲染与 Flutter 截图逐像素同源。
 - 小程序仅作为公开效果与 API 语义参考，Flutter 未机械复制其 props/events。
+
+## Button 设计稿遗漏修复
+
+- 恢复设计稿中同时展示的两个 `button` 实例：默认 `80%` 标签与自定义 `Continue` 标签，两者共享真实进度推进。
+- 品牌色轨道、已完成区的对比渐变、高度与圆角均由 `TProgressVariant.button` 本体绘制；Demo 只传入 `value` / `label` / 交互回调。
+- Flutter 3.32.0：组件测试 53/53、Demo 页测试 2/2、完整 Demo 回归 4/4 通过；组件与 Example 定向 analyze 零问题。
+- Linux amd64 Flutter 3.32.0：light/dark Golden 在确认只增加第二条 Button 及组件本体渐变后更新，无更新参数精确复跑 2/2 通过。

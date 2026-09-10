@@ -137,6 +137,39 @@ void main() {
       expect(find.byType(TProgress), findsOneWidget);
     });
 
+    testWidgets('button 默认由组件绘制品牌轨道和对比渐变', (tester) async {
+      final tokens = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(variant: TProgressVariant.button, value: 0.8),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final track = tester.widget<Container>(
+        find.byKey(const ValueKey('progress-track')),
+      );
+      final active = tester.widget<Container>(
+        find.byKey(const ValueKey('progress-value')),
+      );
+      final trackDecoration = track.decoration! as BoxDecoration;
+      final activeDecoration = active.decoration! as BoxDecoration;
+      final activeGradient = activeDecoration.gradient! as LinearGradient;
+
+      expect(trackDecoration.color, tokens.brandNormalColor);
+      expect(activeGradient.colors.first, tokens.brandNormalColor);
+      expect(
+        activeGradient.colors.last,
+        Color.alphaBlend(
+          tokens.fontWhColor1.withValues(alpha: 0.3),
+          tokens.brandNormalColor,
+        ),
+      );
+    });
+
     testWidgets('variant: plump 与 microButton 渲染', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
