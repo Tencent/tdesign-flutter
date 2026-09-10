@@ -1,8 +1,5 @@
 Widget _buildForm(BuildContext context) {
     final horizontal = _layout == TFormLayout.horizontal;
-    final trailingContentAlignment = horizontal
-        ? TFormItemContentAlignment.end
-        : null;
     return Theme(
       data: Theme.of(context).mergeExtension(
         TFormThemeData(
@@ -61,24 +58,14 @@ Widget _buildForm(BuildContext context) {
               onChanged: (value) => setState(() => _gender = value),
               validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
               builder: (context, value, onChanged, errorText) => TFormItem(
+                key: const ValueKey('form-gender-item'),
                 label: '性别',
-                child: Theme(
-                  data: Theme.of(context).mergeExtension(
-                    TRadioThemeData(insetSpacing: context.tTheme.spacer4),
-                  ),
-                  child: TRadioGroup<String>(
-                    value: value,
-                    options: const [
-                      TRadioOption(value: 'man', label: '男'),
-                      TRadioOption(value: 'women', label: '女'),
-                      TRadioOption(value: 'secret', label: '保密'),
-                    ],
-                    direction: Axis.horizontal,
-                    columns: 3,
-                    showDivider: false,
-                    onChanged: _disabled ? null : onChanged,
-                  ),
-                ),
+                verticalAlignment: horizontal
+                    ? TFormItemVerticalAlignment.center
+                    : null,
+                child: horizontal
+                    ? _buildGenderGroup(context, value, onChanged)
+                    : _buildCompactGenderGroup(context, value, onChanged),
               ),
             ),
             TFormField<String>(
@@ -97,8 +84,8 @@ Widget _buildForm(BuildContext context) {
                       ? null
                       : () => _showDatePicker(context, onChanged),
                   child: TFormItem(
+                    key: const ValueKey('form-birth-item'),
                     label: '生日',
-                    contentAlignment: trailingContentAlignment,
                     extra: _buildArrow(context),
                     child: _buildSelectionValue(context, value, '请输入生日'),
                   ),
@@ -121,8 +108,8 @@ Widget _buildForm(BuildContext context) {
                       ? null
                       : () => _showRegionPicker(context, onChanged),
                   child: TFormItem(
+                    key: const ValueKey('form-place-item'),
                     label: '籍贯',
-                    contentAlignment: trailingContentAlignment,
                     extra: _buildArrow(context),
                     child: _buildSelectionValue(context, value, '请选择籍贯'),
                   ),
@@ -134,8 +121,8 @@ Widget _buildForm(BuildContext context) {
               value: _age,
               onChanged: (value) => setState(() => _age = value),
               builder: (context, value, onChanged, errorText) => TFormItem(
+                key: const ValueKey('form-age-item'),
                 label: '年限',
-                contentAlignment: trailingContentAlignment,
                 child: TStepper(
                   value: value,
                   variant: TStepperVariant.filled,
@@ -149,8 +136,8 @@ Widget _buildForm(BuildContext context) {
               onChanged: (value) => setState(() => _description = value),
               validator: (value) => (value ?? 0) > 3 ? null : '分数过低会影响整体评价',
               builder: (context, value, onChanged, errorText) => TFormItem(
+                key: const ValueKey('form-description-item'),
                 label: '自我评价',
-                contentAlignment: trailingContentAlignment,
                 child: TRate(
                   value: value,
                   allowHalf: true,
@@ -205,7 +192,7 @@ Widget _buildForm(BuildContext context) {
                 ),
               ),
             ),
-            _buildButtons(horizontal),
+            _buildButtons(),
           ],
         ),
       ),
