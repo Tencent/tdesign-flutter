@@ -18,14 +18,14 @@
 
 | 门禁 | 结果 |
 | --- | --- |
-| Flutter 3.32.0 组件测试 | 37/37 通过 |
+| Flutter 3.32.0 组件测试 | 38/38 通过，含 controls 深浅主题默认对比色回归 |
 | Flutter 3.32.0 Demo 测试 | 4/4 通过，含横向 fling、controls、卡片和垂直参数交互 |
 | Flutter 3.32.0 analyze | 组件与 example 均 0 error / 0 warning |
-| Flutter latest 3.47.0 | clean + pub get 后组件 37/37、Demo 4/4、两工程 analyze 通过 |
-| 生产代码覆盖率 | `433/448 = 96.65%` |
+| Flutter latest 3.47.0 | clean + pub get 后组件 38/38、Demo 4/4、两工程 analyze 通过 |
+| 生产代码覆盖率 | `427/441 = 96.83%` |
 | 回归清单自检 | component / Demo / visual 三组清单测试 13/13 通过 |
 | Linux Golden | `linux/amd64`、Flutter 3.32.0，浅色/深色 2/2 无更新复跑通过 |
-| Golden 人工检查 | 补齐 Material Icons 与专用 CJK 字体后重新生成；两张全页图的 controls 为真实箭头、“画”字正常，无缺字、溢出或异常裁剪 |
+| Golden 人工检查 | 补齐 Material Icons 与专用 CJK 字体后重新生成；两张全页图的 controls 为真实箭头，深色页面也保持灰底白箭头可见，“画”字正常，无缺字、溢出或异常裁剪 |
 | Web 操作验收 | controls 上一页实际切换；垂直 autoplay 开关由“开”切为“关”；interval 与 duration 滑块均实际拖动并更新位置 |
 
 浏览器自动化使用桌面鼠标，Flutter Web 默认 ScrollBehavior 不把鼠标拖拽当作移动端触控拖拽，因此横向 touch 手势以 widget 的真实 fling 测试验收；Web 端仍以 controls 完成真实页面切换，不把鼠标拖拽失败记作组件缺陷。

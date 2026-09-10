@@ -800,9 +800,9 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
               ? Icons.keyboard_arrow_down
               : Icons.keyboard_arrow_up);
     final fallbackStyle = IconButton.styleFrom(
-      backgroundColor: context.tTheme.textColorPlaceholder,
+      backgroundColor: context.tTheme.fontGyColor3,
       foregroundColor: context.tTheme.textColorAnti,
-      disabledBackgroundColor: context.tTheme.textColorPlaceholder.withValues(
+      disabledBackgroundColor: context.tTheme.fontGyColor3.withValues(
         alpha: 0.35,
       ),
       disabledForegroundColor: context.tTheme.textColorAnti.withValues(

@@ -8,9 +8,13 @@ void main() {
   Widget app(
     Widget child, {
     TSwiperThemeData? swiperTheme,
+    Brightness brightness = Brightness.light,
     Size size = const Size(320, 200),
   }) {
-    var theme = TThemeBuilder.light(TThemeData.defaultData());
+    final tokens = TThemeData.defaultData();
+    var theme = brightness == Brightness.light
+        ? TThemeBuilder.light(tokens)
+        : TThemeBuilder.dark(tokens);
     if (swiperTheme != null) {
       theme = theme.mergeExtension(swiperTheme);
     }
@@ -718,6 +722,32 @@ void main() {
       await tester.tap(find.byKey(const ValueKey('next')));
       await tester.pumpAndSettle();
       expect(controller.index, 1);
+    });
+
+    testWidgets('controls 默认颜色在深浅主题下均保持内容对比度', (tester) async {
+      for (final brightness in Brightness.values) {
+        await tester.pumpWidget(
+          app(
+            const TSwiper(
+              loop: true,
+              pagination: TSwiperPaginationVariant.controls,
+              children: pages,
+            ),
+            brightness: brightness,
+          ),
+        );
+
+        final button = tester.widget<IconButton>(find.byType(IconButton).first);
+        final state = <WidgetState>{};
+        expect(
+          button.style?.backgroundColor?.resolve(state),
+          TThemeData.defaultData().fontGyColor3,
+        );
+        expect(
+          button.style?.foregroundColor?.resolve(state),
+          TThemeData.defaultData().textColorAnti,
+        );
+      }
     });
 
     testWidgets('横竖四种 pagination 组成无溢出的视觉矩阵', (tester) async {
