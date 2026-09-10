@@ -37,14 +37,14 @@
 
 | 验证 | 结果 | 备注 |
 | --- | --- | --- |
-| Progress 组件测试 | 52/52 通过 | Flutter 3.32.0、3.47.0 |
-| Progress Demo 功能测试 | 2/2 通过 | Flutter 3.32.0、3.47.0；验证按钮和微型按钮的真实状态切换，公开矩阵共 20 个实例 |
+| Progress 组件测试 | 53/53 通过 | Flutter 3.32.0、3.47.0 |
+| Progress Demo 功能测试 | 6/6 通过 | Flutter 3.32.0、3.47.0；验证单个按钮和微型按钮的真实状态切换，公开矩阵共 20 个实例 |
 | 生产代码覆盖率 | 482/485，99.38% | 高于 LH/LF 95% 门禁 |
 | 严格 analyze | 0 issues | 组件与 Example；Flutter 3.32.0、3.47.0 |
 | Linux Golden | 2/2 通过 | Flutter 3.32.0 amd64；更新后无更新参数精确复跑 |
 | 回归清单工具自测 | 13/13 通过 | coverage、component、visual manifest |
 | 生成器与站点契约 | 通过 | 示例代码 check；57 份 API 生成仅 Progress 有差异；56 个站点路由契约通过 |
-| Web 实际操作 | 通过 | 点击按钮：`开始/0%` → `80%`；点击微型按钮：`30%` → `60%` |
+| Web 实际操作 | 通过 | 点击按钮：`开始/0%` → `10%`；点击微型按钮：`30%` → `60%` |
 
 - API 已直接收敛，不提供旧名称兼容：`primary` → `normal`，`micro` 拆为
   `microCircular` / `microButton`，并删除可推翻形态语义的历史 Theme 字段。
@@ -58,7 +58,7 @@
 
 ## Button 设计稿遗漏修复
 
-- 恢复设计稿中同时展示的两个 `button` 实例：默认 `80%` 标签与自定义 `Continue` 标签，两者共享真实进度推进。
+- 公开 Demo 仅保留一个 `button` 实例：初始显示“开始”，每次点击按 10% 步长增加进度并显示百分比。右侧组件设计稿的 `Continue` 仅说明自定义 `label` 能力，不增加为公开 Demo 实例。
 - 品牌色轨道、已完成区的对比渐变、高度与圆角均由 `TProgressVariant.button` 本体绘制；Demo 只传入 `value` / `label` / 交互回调。
 - Flutter 3.32.0：组件测试 53/53、Demo 页测试 2/2、完整 Demo 回归 4/4 通过；组件与 Example 定向 analyze 零问题。
-- Linux amd64 Flutter 3.32.0：light/dark Golden 在确认只增加第二条 Button 及组件本体渐变后更新，无更新参数精确复跑 2/2 通过。
+- Linux amd64 Flutter 3.32.0：light/dark Golden 按单个 Button 的“开始”初始态与组件本体渐变更新，无更新参数精确复跑 2/2 通过。

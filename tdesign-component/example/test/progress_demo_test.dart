@@ -12,7 +12,7 @@ void main() {
     await pumpFullDemoPage(tester, progressDemoPageTestSpec, ThemeMode.light);
 
     final progress = tester.widgetList<TProgress>(find.byType(TProgress));
-    expect(progress, hasLength(21));
+    expect(progress, hasLength(20));
     expect(
       progress.where((item) => item.variant == TProgressVariant.linear),
       hasLength(6),
@@ -31,7 +31,7 @@ void main() {
     );
     expect(
       progress.where((item) => item.variant == TProgressVariant.button),
-      hasLength(2),
+      hasLength(1),
     );
     expect(
       progress.where((item) => item.variant == TProgressVariant.microButton),
@@ -53,17 +53,12 @@ void main() {
     }
   });
 
-  testWidgets('按钮进度展示百分比与 Continue 并同步推进', (tester) async {
+  testWidgets('单个按钮进度从开始状态逐步推进', (tester) async {
     await pumpFullDemoPage(tester, progressDemoPageTestSpec, ThemeMode.light);
 
-    final button = find.byKey(const Key('progress-button-value'));
-    final continueButton = find.byKey(const Key('progress-button-continue'));
+    final button = find.byKey(const Key('progress-button'));
     expect(
-      find.descendant(of: button, matching: find.text('80%')),
-      findsOneWidget,
-    );
-    expect(
-      find.descendant(of: continueButton, matching: find.text('Continue')),
+      find.descendant(of: button, matching: find.text('开始')),
       findsOneWidget,
     );
     await tester.ensureVisible(button);
@@ -71,11 +66,13 @@ void main() {
     await tester.tap(button);
     await tester.pump(const Duration(milliseconds: 400));
     expect(
-      find.descendant(of: button, matching: find.text('90%')),
+      find.descendant(of: button, matching: find.text('10%')),
       findsOneWidget,
     );
+    await tester.tap(button);
+    await tester.pump(const Duration(milliseconds: 400));
     expect(
-      find.descendant(of: continueButton, matching: find.text('Continue')),
+      find.descendant(of: button, matching: find.text('20%')),
       findsOneWidget,
     );
   });

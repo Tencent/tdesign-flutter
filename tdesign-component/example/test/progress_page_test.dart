@@ -44,33 +44,30 @@ void main() {
   Future<Finder> showButtonProgress(WidgetTester tester) async {
     await tester.pumpWidget(buildPage());
     await tester.pump();
-    final progress = find.byKey(const Key('progress-button-value'));
+    final progress = find.byKey(const Key('progress-button'));
     await Scrollable.ensureVisible(tester.element(progress), alignment: 0.5);
     await tester.pumpAndSettle();
     return progress;
   }
 
-  testWidgets('按钮进度条展示百分比与自定义文案并可真实推进', (tester) async {
+  testWidgets('按钮进度条从开始状态逐步增加', (tester) async {
     configurePhone(tester);
     final progress = await showButtonProgress(tester);
-    final continueProgress = find.byKey(const Key('progress-button-continue'));
 
     expect(
-      find.descendant(of: progress, matching: find.text('80%')),
-      findsOneWidget,
-    );
-    expect(
-      find.descendant(of: continueProgress, matching: find.text('Continue')),
+      find.descendant(of: progress, matching: find.text('开始')),
       findsOneWidget,
     );
     await tester.tap(progress);
     await tester.pumpAndSettle();
     expect(
-      find.descendant(of: progress, matching: find.text('90%')),
+      find.descendant(of: progress, matching: find.text('10%')),
       findsOneWidget,
     );
+    await tester.tap(progress);
+    await tester.pumpAndSettle();
     expect(
-      find.descendant(of: continueProgress, matching: find.text('Continue')),
+      find.descendant(of: progress, matching: find.text('20%')),
       findsOneWidget,
     );
   });
