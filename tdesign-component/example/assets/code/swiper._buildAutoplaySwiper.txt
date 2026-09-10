@@ -1,4 +1,0 @@
-Widget _buildAutoplaySwiper(BuildContext context) => _buildSwiper(
-        context,
-        autoplay: true,
-      );

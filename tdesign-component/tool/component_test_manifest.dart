@@ -530,6 +530,19 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'swiper',
+    coverageTargets: ['lib/src/components/swiper/'],
+    componentTests: ['test/components/swiper/t_swiper_test.dart'],
+    exampleTests: ['test/swiper_page_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Swiper Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/swiper_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'skeleton',
     coverageTargets: ['lib/src/components/skeleton/'],
     componentTests: ['test/components/skeleton/t_skeleton_test.dart'],
