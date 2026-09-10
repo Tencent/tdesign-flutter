@@ -355,6 +355,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
   @ExampleCode(group: 'input')
   Widget _buildLabel(BuildContext context) => const TFormItem(
     label: '标签超长时最多十个字',
+    verticalAlignment: TFormItemVerticalAlignment.center,
     child: TInput(borderless: true, hintText: '请输入文字'),
   );
 
@@ -372,6 +373,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         TFormItem(
           label: '标签文字',
           errorText: '错误提示',
+          verticalAlignment: TFormItemVerticalAlignment.center,
           child: Theme(
             data: Theme.of(context).mergeExtension(
               TInputThemeData(clearIconColor: token.errorNormalColor),

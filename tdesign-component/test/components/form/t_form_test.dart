@@ -1497,6 +1497,9 @@ void main() {
       expect(resolvedErrorStyle?.color, errorStyle.color);
       expect(resolvedErrorStyle?.fontSize, token.fontBodySmall?.size);
       expect(resolvedErrorStyle?.height, token.fontBodySmall?.height);
+      final labelStyle = tester.widget<Text>(find.text('Name')).style;
+      expect(labelStyle?.fontSize, token.fontBodyMedium?.size);
+      expect(labelStyle?.height, token.fontBodyMedium?.height);
       final container = tester.widget<Container>(find.byType(Container).first);
       expect(container.color, Colors.yellow);
       expect(find.byType(Column), findsWidgets);
@@ -1704,7 +1707,7 @@ void main() {
       final fieldRect = tester.getRect(find.byKey(fieldKey));
       final extraRect = tester.getRect(find.byKey(extraKey));
       expect(extraRect.left, fieldRect.right);
-      expect(extraRect.center.dy, closeTo(fieldRect.center.dy - 16, 0.01));
+      expect(extraRect.center.dy, closeTo(fieldRect.center.dy - 15, 0.01));
       expect(extraRect.right, 384);
     });
 
