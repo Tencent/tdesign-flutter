@@ -107,16 +107,20 @@ void main() {
   });
 
   group('布局与形态', () {
-    testWidgets('文字标签使用 TText 收紧单行外侧行高并均分 leading', (tester) async {
+    testWidgets('文字标签使用 10/16 Mark Token 并在 16px 行盒内居中', (tester) async {
       await tester.pumpWidget(app(const TBadge(label: '8')));
 
-      final label = tester.widget<TText>(find.widgetWithText(TText, '8'));
+      final labelFinder = find.widgetWithText(TText, '8');
+      final label = tester.widget<TText>(labelFinder);
       expect(label.style?.fontSize, token.fontMarkExtraSmall?.size);
       expect(label.style?.height, token.fontMarkExtraSmall?.height);
       expect(label.style?.fontWeight, token.fontMarkExtraSmall?.fontWeight);
       expect(label.style?.leadingDistribution, TextLeadingDistribution.even);
-      expect(label.textHeightBehavior?.applyHeightToFirstAscent, isFalse);
-      expect(label.textHeightBehavior?.applyHeightToLastDescent, isFalse);
+      expect(tester.getSize(find.byType(Badge)).height, 16);
+      expect(
+        badgeOf(tester).padding,
+        const EdgeInsets.symmetric(horizontal: 4),
+      );
     });
 
     testWidgets('显式 leadingDistribution 保持 BadgeTheme 配置', (tester) async {
@@ -140,7 +144,7 @@ void main() {
       );
     });
 
-    testWidgets('单字符与多字符标签在文本缩放后仍由徽标容器居中', (tester) async {
+    testWidgets('单字符与多字符标签在文本缩放后保持视觉居中', (tester) async {
       const key8 = Key('badge-8');
       const key12 = Key('badge-12');
       const key99Plus = Key('badge-99-plus');
@@ -251,9 +255,16 @@ void main() {
         ),
       );
 
-      final labelCenter = tester.getCenter(find.text('8'));
+      final badgeContainer = find.descendant(
+        of: find.byType(Badge),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is Container && widget.decoration is ShapeDecoration,
+        ),
+      );
+      final badgeCenter = tester.getCenter(badgeContainer);
       final childTopRight = tester.getTopRight(find.byKey(childKey));
-      expect(labelCenter, childTopRight);
+      expect(badgeCenter, childTopRight);
     });
 
     testWidgets('自定义徽标无需 offset 即使用设计稿默认锚点', (tester) async {
@@ -650,6 +661,45 @@ void main() {
       expect(badge.padding, const EdgeInsets.symmetric(horizontal: 4));
       expect(badge.textStyle?.fontSize, token.fontMarkExtraSmall?.size);
       expect(badge.textStyle?.height, token.fontMarkExtraSmall?.height);
+    });
+
+    testWidgets('iOS 本地化 TextTheme 不覆盖 Badge Mark Token', (tester) async {
+      final baseTheme = TThemeBuilder.light(
+        token,
+      ).copyWith(platform: TargetPlatform.iOS);
+      final theme = ThemeData.localize(
+        baseTheme,
+        Typography.material2021(platform: TargetPlatform.iOS).dense,
+      );
+      await tester.pumpWidget(app(const TBadge(label: '16'), theme: theme));
+
+      final badge = badgeOf(tester);
+      final label = find.widgetWithText(TText, '16');
+      expect(badge.textStyle?.fontSize, token.fontMarkExtraSmall?.size);
+      expect(badge.textStyle?.height, token.fontMarkExtraSmall?.height);
+      expect(
+        tester.getCenter(label).dy,
+        tester.getCenter(find.byType(Badge)).dy,
+      );
+      expect(tester.getSize(find.byType(Badge)).height, 16);
+    });
+
+    testWidgets('iOS 显式 TextTheme 仍可覆盖 Badge Mark Token', (tester) async {
+      const labelStyle = TextStyle(fontSize: 15, height: 1.1);
+      final baseTheme = TThemeBuilder.light(token).copyWith(
+        platform: TargetPlatform.iOS,
+      );
+      final explicitTheme = baseTheme.copyWith(
+        textTheme: baseTheme.textTheme.copyWith(labelSmall: labelStyle),
+      );
+      final theme = ThemeData.localize(
+        explicitTheme,
+        Typography.material2021(platform: TargetPlatform.iOS).dense,
+      );
+      await tester.pumpWidget(app(const TBadge(label: '16'), theme: theme));
+
+      expect(badgeOf(tester).textStyle?.fontSize, labelStyle.fontSize);
+      expect(badgeOf(tester).textStyle?.height, labelStyle.height);
     });
 
     testWidgets('裸 TThemeData 仍兜底颜色和基础尺寸', (tester) async {
