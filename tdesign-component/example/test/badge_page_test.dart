@@ -48,7 +48,7 @@ void main() {
     expect(page.showTestModule, isFalse);
   });
 
-  testWidgets('设计稿形态、尺寸、偏移和中尺寸按钮均进入公开 Demo', (tester) async {
+  testWidgets('设计稿形态、尺寸、偏移和按钮规格均进入公开 Demo', (tester) async {
     await tester.pumpWidget(buildPage());
     await tester.pump();
 
@@ -82,8 +82,21 @@ void main() {
     await pumpItem(0, 2);
     expect(
       tester.widget<TBadge>(find.byType(TBadge)).offset,
-      const Offset(-16, 0),
+      const Offset(0, -8),
     );
+    expect(
+      tester.widget<TButton>(find.byType(TButton)).size,
+      TButtonSize.large,
+    );
+    final badgeContainer = find.descendant(
+      of: find.byType(Badge),
+      matching: find.byType(Container),
+    );
+    final badgeRect = tester.getRect(badgeContainer);
+    final buttonRect = tester.getRect(find.byType(TButton));
+    expect(buttonRect.size, const Size.square(48));
+    expect(badgeRect.left, buttonRect.right - 16);
+    expect(badgeRect.center.dy, buttonRect.top);
 
     for (final (itemIndex, variants) in [
       (0, [TBadgeVariant.normal]),

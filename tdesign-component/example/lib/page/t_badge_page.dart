@@ -132,13 +132,15 @@ class TBadgePage extends StatelessWidget {
   @ExampleCode(group: 'badge')
   Widget _buildCustomBadge(BuildContext context) => TBadge(
     label: 'NEW',
-    offset: const Offset(-16, 0),
+    // Material Badge 已按 16px 行盒从内容右侧回退；这里只抵消其额外的
+    // 8px 纵向兼容补偿，使自定义徽标中线与按钮顶边对齐。
+    offset: const Offset(0, -8),
     child: Theme(
       data: Theme.of(
         context,
       ).mergeExtension(const TButtonThemeData(shape: TButtonShape.square)),
       child: TButton(
-        size: TButtonSize.medium,
+        size: TButtonSize.large,
         icon: const Icon(TIcons.notification),
         onPressed: () {},
       ),

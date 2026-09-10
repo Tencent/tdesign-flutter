@@ -240,6 +240,22 @@ void main() {
       expect(badgeOf(tester).offset, const Offset(7, 9));
     });
 
+    testWidgets('普通右上角徽标中心默认与内容顶部和右侧对齐', (tester) async {
+      const childKey = Key('badge-child');
+      await tester.pumpWidget(
+        app(
+          const TBadge(
+            label: '8',
+            child: SizedBox.square(key: childKey, dimension: 40),
+          ),
+        ),
+      );
+
+      final labelCenter = tester.getCenter(find.text('8'));
+      final childTopRight = tester.getTopRight(find.byKey(childKey));
+      expect(labelCenter, childTopRight);
+    });
+
     testWidgets('square 与 bubble 使用各自结构形态', (tester) async {
       await tester.pumpWidget(
         app(
