@@ -1658,23 +1658,63 @@ void main() {
   // 交互态验证
   // ============================================================
   group('TButton 交互态', () {
-    testWidgets('disabled 时前景色为禁用色', (tester) async {
+    testWidgets('disabled 状态使用语义 Token', (tester) async {
+      final token = TThemeData.defaultData();
+      const cases = <(TButtonVariant, TButtonColorScheme)>[
+        (TButtonVariant.fill, TButtonColorScheme.primary),
+        (TButtonVariant.fill, TButtonColorScheme.light),
+        (TButtonVariant.outline, TButtonColorScheme.primary),
+        (TButtonVariant.text, TButtonColorScheme.primary),
+      ];
+
+      for (final (variant, scheme) in cases) {
+        await tester.pumpWidget(
+          wrapWithTheme(
+            TButton(
+              child: Text('${variant.name}-${scheme.name}'),
+              variant: variant,
+              colorScheme: scheme,
+              onPressed: null,
+            ),
+          ),
+        );
+
+        final button = tester.widget<ElevatedButton>(
+          find.byType(ElevatedButton),
+        );
+        final foreground = button.style?.foregroundColor?.resolve({
+          WidgetState.disabled,
+        });
+        expect(
+          foreground,
+          variant == TButtonVariant.fill && scheme == TButtonColorScheme.primary
+              ? token.textColorAnti
+              : token.brandDisabledColor,
+        );
+        if (variant == TButtonVariant.outline) {
+          expect(
+            button.style?.side?.resolve({WidgetState.disabled})?.color,
+            token.brandDisabledColor,
+          );
+        }
+      }
+    });
+
+    testWidgets('light outline 使用品牌浅色背景 Token', (tester) async {
+      final token = TThemeData.defaultData();
       await tester.pumpWidget(
         wrapWithTheme(
-          const TButton(
-            child: Text('禁用态'),
-            variant: TButtonVariant.fill,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: null,
+          TButton(
+            child: const Text('浅色描边'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.light,
+            onPressed: () {},
           ),
         ),
       );
 
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      final fgColorResolver = button.style?.foregroundColor;
-      final fgColor = fgColorResolver?.resolve({WidgetState.disabled});
-      // disabled 态前景色应与系统默认禁用文本色一致
-      expect(fgColor, isNotNull);
+      expect(button.style?.backgroundColor?.resolve({}), token.brandLightColor);
     });
 
     testWidgets('enabled fill 按钮背景色为非透明', (tester) async {
