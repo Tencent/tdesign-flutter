@@ -3,8 +3,8 @@
 ## 验证环境
 
 - 分支：`rss1102/feat/swiper-design-alignment`
-- Flutter 基线：`origin/develop@2ed620b9`
-- 移动端设计：Swiper 相邻节点候选 `24386:5274`，登录限制下不宣称读取内部标注
+- Flutter 基线：已合入 `origin/develop@031b1a06`
+- 移动端设计：Figma `24386:5274`，使用已登录的 Google Chrome 核对页面结构与视觉
 - 小程序参考：`Tencent/tdesign-miniprogram@cc2384cc`
 
 ## 基线
@@ -32,7 +32,7 @@
 
 ## 歧义决策
 
-- 设计链接未提供 Swiper 直达节点；按相邻编号记录 `24386:5274` 候选，但 Figma 登录限制下不宣称读取内部像素标注。可核验项以公开小程序 Demo、源码和同源图片为准。
+- Figma 页面按 `24386:5274` 核对；组件结构、同源图片、卡片露出比例、反色导航与垂直参数区域由组件和公开 Demo 的真实布局实现，Demo 未叠加额外装饰模拟组件效果。
 - 小程序 `current` 没有映射为第二份状态；Flutter 使用 `TSwiperController.initialIndex/index` 管理受控状态，避免 Widget 参数和 Controller 竞争。
 - 小程序字符串 easing 没有照搬；公开 API 使用 Flutter `Curve`，`animationDuration` 与 `animationCurve` 同时供 autoplay、内置 controls 和 Controller 默认继承。
 - 小程序图片 `load` / 点击事件没有上移到 Swiper；Flutter 子 Widget 自己持有图片加载与点击语义。
