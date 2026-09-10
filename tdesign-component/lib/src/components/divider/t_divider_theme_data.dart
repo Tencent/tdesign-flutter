@@ -13,7 +13,7 @@ class TDividerThemeData extends ThemeExtension<TDividerThemeData> {
   /// 线粗：横线 = 高度，竖线 = 宽度（默认 0.5）
   final double? thickness;
 
-  /// 外边距。未设置时，水平分割线使用上下 10dp，垂直分割线使用左右 8dp。
+  /// 外边距。未设置时，水平分割线使用上下 10dp，垂直分割线使用左右 16dp。
   final EdgeInsetsGeometry? margin;
 
   /// 线与中间内容之间的间距，默认左右各使用 `spacer12`（12dp）。
