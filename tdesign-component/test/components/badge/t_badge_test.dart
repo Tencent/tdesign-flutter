@@ -256,6 +256,43 @@ void main() {
       expect(labelCenter, childTopRight);
     });
 
+    testWidgets('自定义徽标无需 offset 即使用设计稿默认锚点', (tester) async {
+      const childKey = Key('custom-badge-child');
+      await tester.pumpWidget(
+        app(
+          const TBadge(
+            label: 'NEW',
+            variant: TBadgeVariant.custom,
+            child: SizedBox.square(key: childKey, dimension: 48),
+          ),
+        ),
+      );
+
+      final badgeContainer = find.descendant(
+        of: find.byType(Badge),
+        matching: find.byType(Container),
+      );
+      final badgeRect = tester.getRect(badgeContainer);
+      final childRect = tester.getRect(find.byKey(childKey));
+      expect(badgeRect.left, childRect.right - 16);
+      expect(badgeRect.center.dy, childRect.top);
+    });
+
+    testWidgets('自定义徽标仍允许实例 offset 覆盖默认位置', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TBadge(
+            label: 'NEW',
+            variant: TBadgeVariant.custom,
+            offset: Offset(3, 4),
+            child: SizedBox.square(dimension: 48),
+          ),
+        ),
+      );
+
+      expect(badgeOf(tester).offset, const Offset(3, 4));
+    });
+
     testWidgets('square 与 bubble 使用各自结构形态', (tester) async {
       await tester.pumpWidget(
         app(

@@ -80,10 +80,9 @@ void main() {
     );
 
     await pumpItem(0, 2);
-    expect(
-      tester.widget<TBadge>(find.byType(TBadge)).offset,
-      const Offset(0, -8),
-    );
+    final customBadge = tester.widget<TBadge>(find.byType(TBadge));
+    expect(customBadge.variant, TBadgeVariant.custom);
+    expect(customBadge.offset, isNull);
     expect(
       tester.widget<TButton>(find.byType(TButton)).size,
       TButtonSize.large,

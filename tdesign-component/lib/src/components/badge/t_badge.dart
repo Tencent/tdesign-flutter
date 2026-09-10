@@ -17,11 +17,15 @@ const _badgeBubbleSharpRadius = 1.0;
 // 校正其方向性水平位置并抵消纵向补偿，使徽标中心落在内容右上角。
 Offset _badgeTopOffset(TextDirection direction) =>
     Offset(direction == TextDirection.ltr ? 7 : -7, -8);
+const _badgeCustomTopOffset = Offset(0, -8);
 
 /// 徽标的结构形态；尺寸与描边分别由 [TBadge.size]、[TBadge.border] 控制。
 enum TBadgeVariant {
   /// 标准文本徽标；单字符呈圆形，多字符随内容扩展为胶囊形。
   normal,
+
+  /// 自定义文本徽标；默认以标签左边对齐内容右边向左 16px，且中线对齐内容顶边。
+  custom,
 
   /// 不显示文本的圆点徽标，默认直径为 8 逻辑像素。
   dot,
@@ -90,7 +94,10 @@ class TBadge extends StatelessWidget {
   final bool showZero;
 
   /// 相对默认锚点的逐实例位置偏移；未设置时读取 [BadgeThemeData.offset]，
-  /// 普通右上角徽标最终回退为中心点与内容顶边对齐的 TDesign 内置位置。
+  /// 最终回退为当前 [variant] 的 TDesign 内置位置。
+  ///
+  /// 普通右上角徽标默认以中心点对齐内容右上角；自定义文本徽标默认以
+  /// 标签左边对齐内容右边向左 16px，并使标签中线对齐内容顶边。
   final Offset? offset;
 
   /// 被徽标标记的内容；为空时徽标可独立展示。
@@ -232,10 +239,13 @@ class TBadge extends StatelessWidget {
         variant == TBadgeVariant.square ||
         variant == TBadgeVariant.bubble;
     final effectiveLabel = badgeLabel;
+    final defaultOffset = variant == TBadgeVariant.custom
+        ? _badgeCustomTopOffset
+        : _badgeTopOffset(Directionality.of(context));
     final badge = Badge(
       isLabelVisible: visible,
       alignment: alignment,
-      offset: resolvedOffset ?? _badgeTopOffset(Directionality.of(context)),
+      offset: resolvedOffset ?? defaultOffset,
       backgroundColor: usesCustomLabel ? Colors.transparent : backgroundColor,
       textColor: textColor,
       textStyle: textStyle,
