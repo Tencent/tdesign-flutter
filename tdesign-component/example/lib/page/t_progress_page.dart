@@ -3,6 +3,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../annotation/example_code.dart';
 import '../base/example_widget.dart';
+import 'progress/progress_examples.dart';
 
 class TProgressPage extends StatelessWidget {
   const TProgressPage({super.key});
@@ -22,7 +23,7 @@ class TProgressPage extends StatelessWidget {
             ExampleItem(desc: '百分比内显', builder: _buildPlump),
             ExampleItem(desc: '环形进度条', builder: _buildCircle),
             ExampleItem(desc: '微型环形进度条', builder: _buildMicroCircle),
-            ExampleItem(desc: '带操作图片预览', builder: _buildButton),
+            ExampleItem(desc: '带操作按钮', builder: _buildButton),
             ExampleItem(desc: '微型按钮进度条', builder: _buildMicroButton),
           ],
         ),
@@ -58,70 +59,12 @@ class TProgressPage extends StatelessWidget {
     return TProgress(variant: TProgressVariant.microCircular, value: 0.3);
   }
 
-  @ExampleCode(group: 'progress')
   Widget _buildButton(BuildContext context) {
-    var value = 0.0;
-    var advancing = false;
-    return StatefulBuilder(
-      builder: (context, setState) {
-        Future<void> advance() async {
-          if (advancing || value >= 0.8) {
-            return;
-          }
-          advancing = true;
-          while (value < 0.8) {
-            if (!context.mounted) {
-              return;
-            }
-            setState(() => value = (value + 0.01).clamp(0, 0.8));
-            if (value < 0.8) {
-              await Future<void>.delayed(const Duration(milliseconds: 30));
-            }
-          }
-          advancing = false;
-        }
-
-        return Column(
-          children: [
-            TProgress(
-              key: const Key('progress-button'),
-              variant: TProgressVariant.button,
-              value: value,
-              label: Text(value == 0 ? '开始' : '${(value * 100).round()}%'),
-              semanticsLabel: '上传进度',
-              onTap: advance,
-            ),
-          ],
-        );
-      },
-    );
+    return const ProgressButtonExample();
   }
 
-  @ExampleCode(group: 'progress')
   Widget _buildMicroButton(BuildContext context) {
-    var playing = false;
-    var value = 0.3;
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return Row(
-          children: [
-            TProgress(
-              key: const Key('progress-micro-button'),
-              variant: TProgressVariant.microButton,
-              value: value,
-              label: Icon(playing ? TIcons.pause : TIcons.play),
-              semanticsLabel: '播放进度',
-              onTap: () {
-                setState(() {
-                  playing = !playing;
-                  value = playing ? 0.6 : 0.3;
-                });
-              },
-            ),
-          ],
-        );
-      },
-    );
+    return const ProgressMicroButtonExample();
   }
 
   @ExampleCode(group: 'progress')

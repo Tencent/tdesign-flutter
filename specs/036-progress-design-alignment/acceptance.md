@@ -21,25 +21,22 @@
 | `dart run tool/generate_example_code.dart --check` | 通过 | 代码面板来自公开 Demo 源码 |
 | 三项组件回归清单自测试 | 13/13 通过 | coverage、component、visual manifest |
 
-## 历史人工验收（`9ad88559`，不作为修复后结论）
-
-- [x] 在 Flutter 3.32.0 Web Demo 打开 Progress 页面，按钮进度操作前为 `80%`；点击一次后按钮和 Continue 同步为 `90%`，可访问性 value 同步更新。
-- [x] 人工检查固定 Linux light/dark Golden：六类形态、四种状态、圆角、标题文案、状态图标和 CJK 字体均可辨识。
-
 ## 本轮 Review 发现并纳入修复
 
 - 设计稿基础区为 6 个实例，原 Demo 实际渲染 9 个；状态区缺少 linear/plump 渐变行。
 - `micro` 同时承担只读微型环形与可交互微型按钮，且交互区域只有 16px。
 - Theme 的历史 `progressLabelPosition` 可以推翻 linear/plump 的形态语义。
 - `primary` 是调色名称而不是任务状态；无障碍标签直接输出内部枚举名称。
+- Button Demo 的方法局部状态会在父级重建时归零，并允许重复点击启动并发推进。
+- 非 normal 状态丢失百分比，且 Material `ColorScheme.primary` 会越过 `status` 语义 token 改写默认色。
 
 ## 本轮修复后验证
 
 | 验证 | 结果 | 备注 |
 | --- | --- | --- |
-| Progress 组件测试 | 53/53 通过 | Flutter 3.32.0、3.47.0 |
-| Progress Demo 功能测试 | 6/6 通过 | Flutter 3.32.0、3.47.0；验证单个按钮和微型按钮的真实状态切换，公开矩阵共 20 个实例 |
-| 生产代码覆盖率 | 482/485，99.38% | 高于 LH/LF 95% 门禁 |
+| Progress 组件测试 | 55/55 通过 | Flutter 3.32.0、3.47.0 |
+| Progress Demo 功能测试 | 5/5 通过 | Flutter 3.32.0、3.47.0；验证父级重建、重复点击、单个按钮和微型按钮，公开矩阵共 20 个实例 |
+| 生产代码覆盖率 | 488/490，99.59% | 高于 LH/LF 95% 门禁 |
 | 严格 analyze | 0 issues | 组件与 Example；Flutter 3.32.0、3.47.0 |
 | Linux Golden | 2/2 通过 | Flutter 3.32.0 amd64；更新后无更新参数精确复跑 |
 | 回归清单工具自测 | 13/13 通过 | coverage、component、visual manifest |
@@ -50,6 +47,8 @@
   `microCircular` / `microButton`，并删除可推翻形态语义的历史 Theme 字段。
 - 微型按钮视觉圆环保持 16px，透明命中区扩大到 44×44；按钮和只读环形的语义角色分离。
 - `gradient` 覆盖 linear、plump、button，优先级高于 Theme 和状态默认色；环形传入渐变会断言失败。
+- Button Demo 由独立 `StatefulWidget` 持有进度和计时器；父级重建不会重置进度，推进中重复点击不会启动并发任务。
+- warning、error、success 的默认标签同时保留状态图标和百分比；填充色按组件 Theme、ProgressIndicatorTheme、`status` token 依次解析。
 
 ## 验证边界
 
@@ -60,5 +59,5 @@
 
 - 公开 Demo 仅保留一个 `button` 实例：初始显示“开始”，点击一次后按 1% 自动连续增加至 80% 并显示百分比。右侧组件设计稿的 `Continue` 仅说明自定义 `label` 能力，不增加为公开 Demo 实例。
 - 品牌色轨道、已完成区的对比渐变、高度与圆角均由 `TProgressVariant.button` 本体绘制；Demo 只传入 `value` / `label` / 交互回调。
-- Flutter 3.32.0：组件测试 53/53、Demo 页测试 2/2、完整 Demo 回归 4/4 通过；组件与 Example 定向 analyze 零问题。
+- Flutter 3.32.0 与 3.47.0：组件测试 55/55、完整 Demo 回归 5/5 通过；组件与 Example 严格 analyze 零问题。
 - Linux amd64 Flutter 3.32.0：light/dark Golden 按单个 Button 的“开始”初始态与组件本体渐变更新，无更新参数精确复跑 2/2 通过。

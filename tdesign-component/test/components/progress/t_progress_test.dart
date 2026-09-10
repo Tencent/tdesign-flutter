@@ -9,14 +9,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// label 位置、Theme 各字段、copyWith/lerp、边界情况。
 void main() {
   /// 用 TTheme 包裹以提供基础 Token
-  Widget wrapWithTheme(Widget child, {TProgressThemeData? progressTheme}) {
+  Widget wrapWithTheme(
+    Widget child, {
+    TProgressThemeData? progressTheme,
+    ThemeData? materialTheme,
+  }) {
     final themeExtensions = <ThemeExtension>[
       if (progressTheme != null) progressTheme,
     ];
     // 注意：必须通过 MaterialApp.theme 传递 extensions，
     // 用外层 Theme 包 MaterialApp 会被 MaterialApp 默认 ThemeData.light() 覆盖，导致 extension 丢失。
     return MaterialApp(
-      theme: ThemeData(
+      theme: (materialTheme ?? ThemeData()).copyWith(
         extensions: [TThemeData.defaultData(), ...themeExtensions],
       ),
       home: Scaffold(body: child),
@@ -697,9 +701,8 @@ void main() {
           ),
           findsOneWidget,
         );
-        if (entry.key == TProgressStatus.normal) {
-          expect(find.text('80%'), findsOneWidget);
-        } else {
+        expect(find.text('80%'), findsOneWidget);
+        if (entry.key != TProgressStatus.normal) {
           expect(
             find.byKey(ValueKey('progress-${entry.key.name}')),
             findsOneWidget,
@@ -728,6 +731,58 @@ void main() {
         find.byKey(const ValueKey('progress-value')),
       );
       expect((value.decoration! as BoxDecoration).color, Colors.purple);
+    });
+
+    testWidgets('Material ColorScheme primary 不覆盖 status 语义色', (tester) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(variant: TProgressVariant.linear, value: 0.8),
+          ),
+          materialTheme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final value = tester.widget<Container>(
+        find.byKey(const ValueKey('progress-value')),
+      );
+      expect(
+        (value.decoration! as BoxDecoration).color,
+        token.brandNormalColor,
+      );
+    });
+
+    testWidgets('Material ProgressIndicatorTheme 显式颜色优先于 status', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          SizedBox(
+            width: 200,
+            child: TProgress(
+              variant: TProgressVariant.linear,
+              value: 0.8,
+              status: TProgressStatus.error,
+            ),
+          ),
+          materialTheme: ThemeData(
+            progressIndicatorTheme: const ProgressIndicatorThemeData(
+              color: Colors.teal,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final value = tester.widget<Container>(
+        find.byKey(const ValueKey('progress-value')),
+      );
+      expect((value.decoration! as BoxDecoration).color, Colors.teal);
     });
 
     testWidgets('实例 gradient 优先并完整传递到线性填充', (tester) async {

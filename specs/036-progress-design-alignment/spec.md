@@ -27,13 +27,13 @@
 - `value` 仍以 0～1 表示，超出范围时收敛到边界，null 表示不确定进度。
 - `linear` 默认在右侧显示百分比；`plump` 在进度条内部显示百分比。
 - `status` 是状态的唯一实例入口；Theme 只提供具体视觉覆盖，不持有状态选择器。
-- warning、error、success 在未传自定义 label 时展示对应状态图标；normal 展示百分比。
+- warning、error、success 在未传自定义 label 时展示对应状态图标和百分比；normal 展示百分比。
 - `microCircular` 是只读紧凑环形进度；`microButton` 与 `button` 是可交互形态，只有它们响应 `onTap` / `onLongPress`。
 - `microButton` 的可见圆环保持 16px，同时提供至少 44px 的触控区域和按钮语义。
 - `button` 默认由组件绘制品牌色轨道和高对比已完成渐变；Demo 仅展示一个实例，初始显示“开始”，点击一次后自动按 1% 连续增加至 80% 并显示百分比，不在外层补背景。
 - `gradient` 是逐实例完整填充样式，仅用于 linear、plump、button；显式渐变优先于 Theme、Material 主题和 status 默认色。
 - `semanticsLabel` / `semanticsValue` 对齐 Flutter ProgressIndicator 的无障碍命名，不输出内部枚举名称。
-- 实例状态默认色低于显式组件 Theme / Flutter ProgressIndicatorTheme 的颜色覆盖。
+- 填充颜色优先级为实例渐变、组件 Theme、Flutter ProgressIndicatorTheme、`status` 语义 token。Material `ColorScheme.primary` 不覆盖 `status` 语义。
 
 ## 验收标准
 

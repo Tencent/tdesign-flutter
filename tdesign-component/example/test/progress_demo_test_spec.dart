@@ -13,7 +13,7 @@ const progressDemoPageTestSpec = DemoPageTestSpec(
     '百分比内显',
     '环形进度条',
     '微型环形进度条',
-    '带操作图片预览',
+    '带操作按钮',
     '微型按钮进度条',
     '02 组件状态',
     '线性进度条',

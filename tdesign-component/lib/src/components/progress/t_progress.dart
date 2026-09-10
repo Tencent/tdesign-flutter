@@ -73,14 +73,15 @@ class TProgress extends StatelessWidget {
   /// 进度值；确定模式限制在 0 到 1，null 表示不确定进度。
   final double? value;
 
-  /// 当前任务状态，决定默认颜色和状态图标，默认为 [TProgressStatus.normal]。
+  /// 当前任务状态，决定默认颜色和状态标签，默认为 [TProgressStatus.normal]。
   ///
   /// 显式的组件 Theme 或 Flutter ProgressIndicatorTheme 颜色仍可覆盖状态默认色。
   final TProgressStatus status;
 
   /// 进度条标签。
   ///
-  /// 未指定时，常规状态显示百分比，warning、error、success 显示状态图标；
+  /// 未指定时，常规状态显示百分比，warning、error、success 显示
+  /// 状态图标和百分比；
   /// [TProgressVariant.microCircular] 默认不显示标签。
   final Widget? label;
 
@@ -139,10 +140,7 @@ class TProgress extends StatelessWidget {
         theme?.linearBorderRadius ?? defaultValues.linearBorderRadius;
     final circleRadius = theme?.circleRadius ?? defaultValues.circleRadius;
     final color =
-        theme?.color ??
-        materialProgress.color ??
-        (status == TProgressStatus.normal ? colorScheme?.primary : null) ??
-        _statusColor(context, status);
+        theme?.color ?? materialProgress.color ?? _statusColor(context, status);
     final animationDuration =
         theme?.animationDuration ?? const Duration(milliseconds: 300);
     final indeterminateAnimationDuration =
@@ -386,7 +384,16 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
       TProgressStatus.success => TIcons.check_circle,
     };
     if (statusIcon != null) {
-      return Icon(statusIcon, key: ValueKey('progress-${widget.status.name}'));
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(statusIcon, key: ValueKey('progress-${widget.status.name}')),
+          if (widget.value != null) ...[
+            const SizedBox(width: 4),
+            Text('${(widget.value! * 100).round()}%'),
+          ],
+        ],
+      );
     }
     final showAutoText = widget.value != null;
 

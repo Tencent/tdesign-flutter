@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/page/progress/progress_examples.dart';
 
 import 'demo_page_test_utils.dart';
 import 'progress_demo_test_spec.dart';
@@ -77,6 +78,56 @@ void main() {
       findsOneWidget,
     );
     await tester.pump(const Duration(milliseconds: 300));
+  });
+
+  testWidgets('按钮进度在父级重建时保持状态且忽略重复点击', (tester) async {
+    late StateSetter rebuildParent;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: SizedBox(
+              width: 300,
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  rebuildParent = setState;
+                  return const ProgressButtonExample();
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final button = find.byKey(const Key('progress-button'));
+    await tester.tap(button);
+    await tester.pump(const Duration(milliseconds: 270));
+    expect(
+      find.descendant(of: button, matching: find.text('10%')),
+      findsOneWidget,
+    );
+
+    rebuildParent(() {});
+    await tester.pump();
+    expect(
+      find.descendant(of: button, matching: find.text('10%')),
+      findsOneWidget,
+    );
+
+    await tester.tap(button);
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(
+      find.descendant(of: button, matching: find.text('20%')),
+      findsOneWidget,
+    );
+
+    await tester.pump(const Duration(milliseconds: 1800));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(
+      find.descendant(of: button, matching: find.text('80%')),
+      findsOneWidget,
+    );
   });
 
   testWidgets('微型按钮点击后切换播放状态并推进圆环', (tester) async {
