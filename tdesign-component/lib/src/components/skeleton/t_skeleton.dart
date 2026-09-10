@@ -37,10 +37,11 @@ enum TSkeletonVariant {
 class TSkeleton extends StatefulWidget {
   const TSkeleton({
     super.key,
-    this.variant = TSkeletonVariant.text,
+    TSkeletonVariant variant = TSkeletonVariant.text,
     this.animation,
     this.delay = Duration.zero,
-  }) : layout = null;
+  }) : variant = variant,
+       layout = null;
 
   /// 使用自定义行列布局创建骨架屏。
   const TSkeleton.custom({
@@ -141,47 +142,57 @@ class _TSkeletonState extends State<TSkeleton> with TickerProviderStateMixin {
     }
   }
 
-  TSkeletonLayout _effectiveLayout(BuildContext context) =>
-      widget.layout ??
-      switch (widget.variant!) {
-        TSkeletonVariant.avatar => const TSkeletonLayout(
-          rows: [
-            [TSkeletonBlock.circle()],
-          ],
-        ),
-        TSkeletonVariant.image => TSkeletonLayout(
-          rows: [
-            [
-              TSkeletonBlock(
-                width: 72,
-                height: 72,
-                flex: null,
-                style: TSkeletonBlockStyle(
-                  borderRadius: context.tTheme.radiusDefault,
-                ),
+  TSkeletonLayout _effectiveLayout(BuildContext context) {
+    final layout = widget.layout;
+    if (layout != null) {
+      return layout;
+    }
+
+    final variant = widget.variant;
+    if (variant == null) {
+      throw StateError('TSkeleton requires either a variant or a layout.');
+    }
+
+    return switch (variant) {
+      TSkeletonVariant.avatar => const TSkeletonLayout(
+        rows: [
+          [TSkeletonBlock.circle()],
+        ],
+      ),
+      TSkeletonVariant.image => TSkeletonLayout(
+        rows: [
+          [
+            TSkeletonBlock(
+              width: 72,
+              height: 72,
+              flex: null,
+              style: TSkeletonBlockStyle(
+                borderRadius: context.tTheme.radiusDefault,
               ),
-            ],
+            ),
           ],
-        ),
-        TSkeletonVariant.text => const TSkeletonLayout(
-          rows: [
-            [
-              TSkeletonBlock.line(flex: 24),
-              TSkeletonBlock.spacer(width: 16),
-              TSkeletonBlock.line(flex: 76),
-            ],
-            [TSkeletonBlock.line()],
+        ],
+      ),
+      TSkeletonVariant.text => const TSkeletonLayout(
+        rows: [
+          [
+            TSkeletonBlock.line(flex: 24),
+            TSkeletonBlock.spacer(width: 16),
+            TSkeletonBlock.line(flex: 76),
           ],
-        ),
-        TSkeletonVariant.paragraph => const TSkeletonLayout(
-          rows: [
-            [TSkeletonBlock.line()],
-            [TSkeletonBlock.line()],
-            [TSkeletonBlock.line()],
-            [TSkeletonBlock.line(flex: 55), TSkeletonBlock.spacer(flex: 45)],
-          ],
-        ),
-      };
+          [TSkeletonBlock.line()],
+        ],
+      ),
+      TSkeletonVariant.paragraph => const TSkeletonLayout(
+        rows: [
+          [TSkeletonBlock.line()],
+          [TSkeletonBlock.line()],
+          [TSkeletonBlock.line()],
+          [TSkeletonBlock.line(flex: 55), TSkeletonBlock.spacer(flex: 45)],
+        ],
+      ),
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,7 +203,7 @@ class _TSkeletonState extends State<TSkeleton> with TickerProviderStateMixin {
     final layout = _effectiveLayout(context);
     final theme = Theme.of(context).extension<TSkeletonThemeData>();
     final rowSpacing =
-        layout.rowSpacing ?? theme?.rowSpacing ?? context.tTheme.spacer8;
+        layout.rowSpacing ?? theme?.rowSpacing ?? context.tTheme.spacer16;
     final rows = <Widget>[];
     for (final row in layout.rows) {
       rows.add(

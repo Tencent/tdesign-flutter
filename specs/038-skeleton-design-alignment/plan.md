@@ -2,7 +2,7 @@
 
 ## 技术方案
 
-- 默认多行间距改用 `spacer8`，块颜色改用 `bgColorSecondaryContainer`。
+- 默认多行间距使用设计稿标注的 `spacer16`，块颜色改用 `bgColorSecondaryContainer`。
 - 图片预设和组合示例使用 `radiusDefault`，文本块继续使用 `radiusSmall`，图文卡片继续使用 `radiusExtraLarge`。
 - nullable Theme 数值仅在两端均显式配置时连续插值；一端未配置时在中点切换来源，不再产生 0 圆角或 0 间距。
 - 公开 Demo 使用准确说明和“骨架屏类型 / 组件动效”分组，所有组合使用 TDesign token。

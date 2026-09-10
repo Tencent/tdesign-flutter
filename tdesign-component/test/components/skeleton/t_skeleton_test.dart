@@ -22,6 +22,16 @@ void main() {
       .toList();
 
   group('TSkeleton preset layouts', () {
+    test('constructors encode exclusive preset and custom layout sources', () {
+      const preset = TSkeleton();
+      const custom = TSkeleton.custom(layout: TSkeletonLayout(rows: []));
+
+      expect(preset.variant, TSkeletonVariant.text);
+      expect(preset.layout, isNull);
+      expect(custom.variant, isNull);
+      expect(custom.layout, isNotNull);
+    });
+
     testWidgets('renders every preset with its expected block count', (
       tester,
     ) async {
@@ -68,7 +78,7 @@ void main() {
       expect(first.width, closeTo(72.96, 0.01));
       expect(second.width, closeTo(231.04, 0.01));
       expect(second.left - first.right, 16);
-      expect(third.top - first.top, 24);
+      expect(third.top - first.top, 32);
     });
 
     testWidgets('image uses 72dp geometry and the default radius token', (
@@ -258,21 +268,21 @@ void main() {
       expect(decorations(tester).first.color, token.bgColorSecondaryContainer);
     });
 
-    testWidgets('row spacing follows a customized spacer8 token', (
+    testWidgets('row spacing follows a customized spacer16 token', (
       tester,
     ) async {
       final token = TThemeData.defaultData();
-      final originalSpacing = token.spacerMap['spacer8'];
+      final originalSpacing = token.spacerMap['spacer16'];
       void restoreTokens() {
         if (originalSpacing == null) {
-          token.spacerMap.remove('spacer8');
+          token.spacerMap.remove('spacer16');
         } else {
-          token.spacerMap['spacer8'] = originalSpacing;
+          token.spacerMap['spacer16'] = originalSpacing;
         }
       }
 
       addTearDown(restoreTokens);
-      token.spacerMap['spacer8'] = 10;
+      token.spacerMap['spacer16'] = 18;
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(extensions: [token]),
@@ -289,7 +299,7 @@ void main() {
       expect(blocks, findsNWidgets(3));
       expect(
         tester.getRect(blocks.at(2)).top - tester.getRect(blocks.at(0)).top,
-        26,
+        34,
       );
       restoreTokens();
     });
