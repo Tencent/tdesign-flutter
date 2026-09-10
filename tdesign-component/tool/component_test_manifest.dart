@@ -530,6 +530,19 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'skeleton',
+    coverageTargets: ['lib/src/components/skeleton/'],
+    componentTests: ['test/components/skeleton/t_skeleton_test.dart'],
+    exampleTests: ['test/skeleton_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Skeleton Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/skeleton_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'icon',
     coverageTargets: ['lib/src/components/icon/'],
     componentTests: ['test/components/icon/t_icon_test.dart'],
