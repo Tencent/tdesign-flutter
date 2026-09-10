@@ -38,4 +38,4 @@
 - 小程序图片 `load` / 点击事件没有上移到 Swiper；Flutter 子 Widget 自己持有图片加载与点击语义。
 - cards 的 `126/192` 邻项高度比例实现为交叉轴 scale，不缩放滚动主轴，避免改变 PageView 布局和手势命中区。
 - 保持既有 `autoplay=false`、`loop=false` 默认值，只在公开场景显式启用，避免设计对齐造成默认行为 breaking change。
-- 已发布 Theme 中的分页形态/页面效果字段为兼容性保留；本次仅新增视觉字段 `borderRadius`，不继续把实例交互状态扩入 Theme。
+- `pagination`、`paginationPlacement`、`pageEffect` 仅由 `TSwiper` 实例 API 持有；`TSwiperThemeData` 只保留颜色、尺寸、间距、圆角和文字/按钮样式等视觉字段，不保留历史行为字段。

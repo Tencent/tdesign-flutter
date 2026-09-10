@@ -164,10 +164,10 @@ class TSwiper extends StatefulWidget {
   /// 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画曲线。
   final Curve animationCurve;
 
-  /// 指示器形态；为空时从组件主题解析，最终默认为 [TSwiperPaginationVariant.dots]。
+  /// 指示器形态；为空时默认为 [TSwiperPaginationVariant.dots]。
   final TSwiperPaginationVariant? pagination;
 
-  /// 指示器位置；为空时从组件主题解析，最终默认为覆盖在轮播内容上。
+  /// 指示器位置；为空时默认为覆盖在轮播内容上。
   final TSwiperPaginationPlacement? paginationPlacement;
 
   /// 指示器对齐；横向默认底部居中，竖向默认右侧居中。
@@ -191,7 +191,7 @@ class TSwiper extends StatefulWidget {
   /// 仅替换图标内容；点击热区、禁用状态、Tooltip 和切页行为仍由组件管理。
   final Widget? nextIcon;
 
-  /// 页面视觉效果；为空时从组件主题解析。
+  /// 页面视觉效果；为空时默认为 [TSwiperPageEffect.none]。
   final TSwiperPageEffect? pageEffect;
 
   /// 每个页面占视口主轴的比例，必须大于零。
@@ -536,14 +536,10 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TSwiperThemeData>();
-    final pagination =
-        widget.pagination ?? theme?.pagination ?? TSwiperPaginationVariant.dots;
+    final pagination = widget.pagination ?? TSwiperPaginationVariant.dots;
     final paginationPlacement =
-        widget.paginationPlacement ??
-        theme?.paginationPlacement ??
-        TSwiperPaginationPlacement.overlay;
-    final effect =
-        widget.pageEffect ?? theme?.pageEffect ?? TSwiperPageEffect.none;
+        widget.paginationPlacement ?? TSwiperPaginationPlacement.overlay;
+    final effect = widget.pageEffect ?? TSwiperPageEffect.none;
     final alignment =
         widget.paginationAlignment ??
         theme?.paginationAlignment ??

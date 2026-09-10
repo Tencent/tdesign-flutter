@@ -574,23 +574,13 @@ void main() {
       expect(verticalPagination.left, greaterThanOrEqualTo(verticalPage.right));
     });
 
-    testWidgets('实例 placement 覆盖主题默认值', (tester) async {
-      const theme = TSwiperThemeData(
-        paginationPlacement: TSwiperPaginationPlacement.outside,
-      );
-      await tester.pumpWidget(
-        app(const TSwiper(children: pages), swiperTheme: theme),
-      );
-      expect(find.byType(Flex), findsWidgets);
-      expect(tester.getSize(find.byType(PageView)).height, lessThan(200));
-
+    testWidgets('placement 仅由实例 API 控制', (tester) async {
       await tester.pumpWidget(
         app(
           const TSwiper(
             paginationPlacement: TSwiperPaginationPlacement.overlay,
             children: pages,
           ),
-          swiperTheme: theme,
         ),
       );
       expect(tester.getSize(find.byType(PageView)), const Size(320, 200));
@@ -840,8 +830,7 @@ void main() {
       expect(
         transforms.any((transform) {
           final matrix = transform.transform.storage;
-          return matrix[0] == 1 &&
-              (matrix[5] - 126 / 192).abs() < 0.000001;
+          return matrix[0] == 1 && (matrix[5] - 126 / 192).abs() < 0.000001;
         }),
         isTrue,
       );
@@ -888,9 +877,6 @@ void main() {
 
   group('TSwiperThemeData', () {
     const a = TSwiperThemeData(
-      pagination: TSwiperPaginationVariant.dots,
-      pageEffect: TSwiperPageEffect.none,
-      paginationPlacement: TSwiperPaginationPlacement.overlay,
       paginationAlignment: Alignment.bottomLeft,
       paginationMargin: EdgeInsets.all(2),
       borderRadius: BorderRadius.all(Radius.circular(2)),
@@ -905,9 +891,6 @@ void main() {
       controlIconSize: 12,
     );
     const b = TSwiperThemeData(
-      pagination: TSwiperPaginationVariant.fraction,
-      pageEffect: TSwiperPageEffect.scaleAndFade,
-      paginationPlacement: TSwiperPaginationPlacement.outside,
       paginationAlignment: Alignment.topRight,
       paginationMargin: EdgeInsets.all(6),
       borderRadius: BorderRadius.all(Radius.circular(6)),
@@ -927,12 +910,10 @@ void main() {
         activeDotExtent: 18,
         controlIconSize: 16,
         paginationAlignment: Alignment.center,
-        paginationPlacement: TSwiperPaginationPlacement.outside,
       );
       expect(copied.activeDotExtent, 18);
       expect(copied.controlIconSize, 16);
       expect(copied.paginationAlignment, Alignment.center);
-      expect(copied.paginationPlacement, TSwiperPaginationPlacement.outside);
 
       final value = a.lerp(b, 0.5);
       expect(value.activeDotExtent, 15);
@@ -940,7 +921,6 @@ void main() {
       expect(value.paginationAlignment, Alignment.center);
       expect(value.borderRadius, const BorderRadius.all(Radius.circular(4)));
       expect(value.fractionStyle?.fontSize, 12);
-      expect(value.paginationPlacement, TSwiperPaginationPlacement.outside);
     });
 
     test('nullable 数值不从零插值并拒绝无效视觉值', () {

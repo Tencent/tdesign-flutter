@@ -4,12 +4,9 @@ import 't_swiper_types.dart';
 
 /// 轮播组件级 ThemeExtension。
 ///
-/// 保存页面效果、指示器和切换按钮的视觉默认值。
+/// 保存指示器、内容圆角和切换按钮的视觉默认值。
 class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
   const TSwiperThemeData({
-    this.pagination,
-    this.pageEffect,
-    this.paginationPlacement,
     this.paginationAlignment,
     this.paginationMargin,
     this.borderRadius,
@@ -26,15 +23,6 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
        assert(activeDotExtent == null || activeDotExtent > 0),
        assert(dotSpacing == null || dotSpacing >= 0),
        assert(controlIconSize == null || controlIconSize > 0);
-
-  /// 默认指示器形态。
-  final TSwiperPaginationVariant? pagination;
-
-  /// 默认页面切换效果。
-  final TSwiperPageEffect? pageEffect;
-
-  /// 默认指示器位置。
-  final TSwiperPaginationPlacement? paginationPlacement;
 
   /// 默认指示器对齐方式。
   final AlignmentGeometry? paginationAlignment;
@@ -74,9 +62,6 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
 
   @override
   TSwiperThemeData copyWith({
-    TSwiperPaginationVariant? pagination,
-    TSwiperPageEffect? pageEffect,
-    TSwiperPaginationPlacement? paginationPlacement,
     AlignmentGeometry? paginationAlignment,
     EdgeInsetsGeometry? paginationMargin,
     BorderRadiusGeometry? borderRadius,
@@ -91,9 +76,6 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
     double? controlIconSize,
   }) {
     return TSwiperThemeData(
-      pagination: pagination ?? this.pagination,
-      pageEffect: pageEffect ?? this.pageEffect,
-      paginationPlacement: paginationPlacement ?? this.paginationPlacement,
       paginationAlignment: paginationAlignment ?? this.paginationAlignment,
       paginationMargin: paginationMargin ?? this.paginationMargin,
       borderRadius: borderRadius ?? this.borderRadius,
@@ -116,11 +98,6 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
       return this;
     }
     return TSwiperThemeData(
-      pagination: t < 0.5 ? pagination : other.pagination,
-      pageEffect: t < 0.5 ? pageEffect : other.pageEffect,
-      paginationPlacement: t < 0.5
-          ? paginationPlacement
-          : other.paginationPlacement,
       paginationAlignment: AlignmentGeometry.lerp(
         paginationAlignment,
         other.paginationAlignment,
