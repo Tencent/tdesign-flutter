@@ -40,8 +40,6 @@ void main() {
           const TProgressThemeData(
             color: Color(0xFF0052D9),
             backgroundColor: Color(0xFFE7E7E7),
-            fallbackLinearWidth: 180,
-            showLabel: false,
           ),
         );
     await tester.pumpWidget(
@@ -131,7 +129,11 @@ class _ProgressMatrix extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            TProgress(variant: TProgressVariant.linear, value: 0.6),
+            TProgress(
+              variant: TProgressVariant.linear,
+              value: 0.6,
+              label: const SizedBox.shrink(),
+            ),
             const SizedBox(height: 24),
             const Text(
               'Unbounded fallback',
@@ -145,7 +147,11 @@ class _ProgressMatrix extends StatelessWidget {
             const SizedBox(height: 12),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: TProgress(variant: TProgressVariant.linear, value: 0.4),
+              child: TProgress(
+                variant: TProgressVariant.linear,
+                value: 0.4,
+                label: const SizedBox.shrink(),
+              ),
             ),
           ],
         ),
