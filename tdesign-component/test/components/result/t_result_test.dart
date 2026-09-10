@@ -141,6 +141,7 @@ void main() {
       final title = resultTextWidget(tester, '主题样式');
       expect(title.style?.fontSize, 24);
       expect(title.style?.color, Colors.red);
+      expect(title.font, TThemeData.defaultData().fontTitleMedium);
     });
 
     testWidgets('Theme 无 titleStyle 时正常渲染', (tester) async {
@@ -163,7 +164,7 @@ void main() {
       final description = resultTextWidget(tester, '描述样式');
       expect(description.style?.fontSize, 13);
       expect(description.style?.color, Colors.purple);
-      expect(description.font, isNull);
+      expect(description.font, TThemeData.defaultData().fontBodyMedium);
     });
 
     testWidgets('内容间距跟随 spacer12 token', (tester) async {
@@ -249,6 +250,18 @@ void main() {
       expect(result.titleStyle?.fontSize, closeTo(15, 0.01));
       expect(result.descriptionStyle?.fontSize, closeTo(15, 0.01));
     });
+
+    test('lerp iconSize 使用运行时默认尺寸', () {
+      const defaults = TResultThemeData();
+      const custom = TResultThemeData(iconSize: 64);
+
+      expect(defaults.lerp(custom, 0.5).iconSize, 72);
+      expect(
+        const TResultThemeData(iconSize: 80).lerp(defaults, 0.5).iconSize,
+        80,
+      );
+      expect(defaults.lerp(const TResultThemeData(), 0.5).iconSize, isNull);
+    });
   });
 
   group('TResult 边界情况', () {
@@ -282,9 +295,7 @@ void main() {
 
       expect(
         find.byWidgetPredicate(
-          (widget) =>
-              widget is Semantics &&
-              widget.properties.label == 'result-success',
+          (widget) => widget is Semantics && widget.properties.label == '成功结果',
         ),
         findsOneWidget,
       );

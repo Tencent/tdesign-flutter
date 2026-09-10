@@ -38,7 +38,7 @@ class TResultThemeData extends ThemeExtension<TResultThemeData> {
       return this;
     }
     return TResultThemeData(
-      iconSize: lerpDouble(iconSize, other.iconSize, t),
+      iconSize: _lerpIconSize(iconSize, other.iconSize, t),
       titleStyle: TextStyle.lerp(titleStyle, other.titleStyle, t),
       descriptionStyle: TextStyle.lerp(
         descriptionStyle,
@@ -46,5 +46,12 @@ class TResultThemeData extends ThemeExtension<TResultThemeData> {
         t,
       ),
     );
+  }
+
+  static double? _lerpIconSize(double? begin, double? end, double t) {
+    if (begin == null && end == null) {
+      return null;
+    }
+    return lerpDouble(begin ?? 80, end ?? 80, t);
   }
 }

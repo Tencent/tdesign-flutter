@@ -12,8 +12,8 @@
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter test test/components/result/t_result_test.dart test/components/theme/t_material_theme_priority_test.dart` | 35/35 通过 | Flutter 3.32.0、3.47.0 |
-| `flutter test test/result_demo_test.dart` | 3/3 通过 | Flutter 3.32.0、3.47.0；含页面示例进入与返回 |
+| `flutter test test/components/result/t_result_test.dart test/components/theme/t_material_theme_priority_test.dart` | 36/36 通过 | Flutter 3.32.0、3.47.0；覆盖默认图标尺寸参与 Theme 插值 |
+| `flutter test test/result_demo_test.dart` | 3/3 通过 | Flutter 3.32.0、3.47.0；含页面示例进入与返回、自定义插图比例和公开 Demo 结构 |
 | `flutter test --coverage test/components/result/t_result_test.dart` | 通过 | Result 生产代码 LH/LF 62/63，98.41% |
 | `flutter test --update-goldens test/result_demo_golden_test.dart` 后无更新复验 | 2/2 通过 | 固定 Linux amd64、Flutter 3.32.0，light/dark |
 | `flutter analyze --fatal-infos lib test` | 0 issues | 组件与 example，Flutter 3.32.0、3.47.0 |
@@ -23,7 +23,7 @@
 ## 人工验收
 
 - [x] 在 Flutter 3.47.0 Web Demo 打开 Result 页面，核对四种状态、带描述及自定义结果；点击“页面示例”进入成功结果操作页，再点击“返回”回到 Demo。
-- [x] 人工检查固定 Linux light/dark Golden：80dp 状态图标、标题/描述层级、12dp 内容间距、自定义结果和页面示例入口均清晰，无缺字或溢出。
+- [x] 人工检查固定 Linux light/dark Golden：80dp 状态图标、标题/描述层级、12dp 内容间距、自定义插图保持原比例、页面示例入口均清晰，且无内部测试区块、缺字或溢出。
 
 ## 未覆盖项与后续工作
 

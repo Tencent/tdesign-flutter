@@ -11,6 +11,9 @@ void main() {
   testWidgets('公开 Demo 展示完整状态、描述与自定义结果', (tester) async {
     await pumpFullDemoPage(tester, resultDemoPageTestSpec, ThemeMode.light);
 
+    expect(find.text('02 单元测试'), findsNothing);
+    expect(find.textContaining('未在示例稿中体现'), findsNothing);
+
     final results = tester.widgetList<TResult>(find.byType(TResult)).toList();
     expect(results, hasLength(9));
     expect(results.take(4).map((result) => result.status), [
@@ -29,6 +32,9 @@ void main() {
     );
     expect(results.last.icon, isA<Image>());
     expect(results.last.title, '自定义结果');
+    final image = results.last.icon! as Image;
+    expect(image.height, 80);
+    expect(image.width, isNull);
   });
 
   testWidgets('页面示例可进入并通过返回按钮退出', (tester) async {

@@ -62,7 +62,7 @@ class TResult extends StatelessWidget {
           title,
           key: const ValueKey('result-title'),
           textColor: material?.onSurface ?? context.tTheme.textColorPrimary,
-          font: titleStyle == null ? context.tTheme.fontTitleMedium : null,
+          font: context.tTheme.fontTitleMedium,
           style: titleStyle,
           textAlign: TextAlign.center,
         ),
@@ -72,16 +72,14 @@ class TResult extends StatelessWidget {
           key: const ValueKey('result-description'),
           textColor:
               material?.onSurfaceVariant ?? context.tTheme.textColorSecondary,
-          font: theme?.descriptionStyle == null
-              ? context.tTheme.fontBodyMedium
-              : null,
+          font: context.tTheme.fontBodyMedium,
           style: theme?.descriptionStyle,
           textAlign: TextAlign.center,
         ),
     ];
     return Semantics(
       container: true,
-      label: 'result-${status.name}',
+      label: _statusSemanticsLabel(status),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -96,6 +94,15 @@ class TResult extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _statusSemanticsLabel(TResultStatus status) {
+    return switch (status) {
+      TResultStatus.info => '默认结果',
+      TResultStatus.success => '成功结果',
+      TResultStatus.warning => '警告结果',
+      TResultStatus.error => '错误结果',
+    };
   }
 
   /// 根据形态返回对应的默认图标组件

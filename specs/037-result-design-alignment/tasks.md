@@ -8,4 +8,5 @@
 - [x] DONE 功能验证后生成并复验 Golden
 - [x] DONE 执行双版本、覆盖率和严格 analyze
 - [x] DONE 最终执行页面示例进入与返回操作
+- [x] DONE 修复 Review 发现的 Theme 插值、字段级样式、无障碍语义与 Demo 插图比例问题
 - [x] DONE 单提交、创建独立 PR、更新 Issue #1027 正文

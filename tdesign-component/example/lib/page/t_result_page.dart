@@ -13,6 +13,7 @@ class TResultPage extends StatelessWidget {
       title: 'Result 结果',
       desc: '用于反馈不同结果的展示。',
       exampleCodeGroup: 'result',
+      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',
@@ -72,7 +73,7 @@ class TResultPage extends StatelessWidget {
   @ExampleCode(group: 'result')
   Widget _buildCustomResult(BuildContext context) {
     return TResult(
-      icon: Image.asset('assets/img/illustration.png', width: 80, height: 80),
+      icon: Image.asset('assets/img/illustration.png', height: 80),
       title: '自定义结果',
       description: '描述文字',
     );
