@@ -468,6 +468,9 @@ void main() {
 
       expect(tester.getSize(find.byIcon(Icons.search)), const Size(24, 24));
       expect(tester.getSize(find.byIcon(Icons.info)), const Size(24, 24));
+      final prefixRight = tester.getTopRight(find.byIcon(Icons.search)).dx;
+      final editorLeft = tester.getTopLeft(find.byType(EditableText)).dx;
+      expect(editorLeft - prefixRight, TThemeData.defaultData().spacer16);
       final inputShell = find
           .descendant(
             of: find.byType(TInput),
