@@ -6,7 +6,7 @@ Widget _buildDotsSwiper(BuildContext context) {
       autoplayInterval: const Duration(seconds: 5),
       pagination: TSwiperPaginationVariant.dots,
       children: List.generate(
-        5,
+        6,
         (index) => Image.asset(
           index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
           fit: BoxFit.cover,

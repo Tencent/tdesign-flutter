@@ -20,7 +20,7 @@ Widget _buildVerticalSwiper(BuildContext context) {
             pagination: TSwiperPaginationVariant.dotsBar,
             scrollDirection: Axis.vertical,
             children: List.generate(
-              4,
+              6,
               (index) => Image.asset(
                 index.isEven
                     ? 'assets/img/swiper1.png'

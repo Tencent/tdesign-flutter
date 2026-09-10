@@ -55,7 +55,7 @@ void main() {
             !candidate.autoplay,
       ),
     );
-    expect(swiper.children, hasLength(5));
+    expect(swiper.children, hasLength(6));
     expect(swiper.autoplay, isFalse);
     expect(swiper.loop, isTrue);
     expect(swiper.animationDuration, const Duration(milliseconds: 500));
@@ -81,7 +81,8 @@ void main() {
       ),
     );
     expect(swiper.autoplay, isTrue);
-    expect(swiper.controller?.index, 1);
+    expect(swiper.controller, isNull);
+    expect(swiper.children, hasLength(6));
 
     await scrollTo(tester, find.text('分式（fraction）'));
     swiper = tester.widget<TSwiper>(
@@ -90,7 +91,8 @@ void main() {
             candidate.pagination == TSwiperPaginationVariant.fraction,
       ),
     );
-    expect(swiper.controller?.index, 2);
+    expect(swiper.controller, isNull);
+    expect(swiper.children, hasLength(6));
     expect(swiper.paginationAlignment, Alignment.bottomRight);
 
     await scrollTo(tester, find.text('切换按钮（controls）'));
@@ -100,9 +102,9 @@ void main() {
             candidate.pagination == TSwiperPaginationVariant.controls,
       ),
     );
-    expect(swiper.children, hasLength(4));
+    expect(swiper.children, hasLength(6));
     expect(swiper.loop, isFalse);
-    expect(swiper.controller?.index, 3);
+    expect(swiper.controller, isNull);
 
     await scrollTo(tester, find.text('卡片式（cards）'));
     await scrollTo(tester, find.text('02 组件样式'));
@@ -130,7 +132,7 @@ void main() {
     expect(
       tester
           .widget<Semantics>(
-            find.descendant(of: dots, matching: find.bySemanticsLabel('2 / 5')),
+            find.descendant(of: dots, matching: find.bySemanticsLabel('2 / 6')),
           )
           .properties
           .selected,
@@ -144,18 +146,18 @@ void main() {
     final pageView = tester.widget<PageView>(
       find.descendant(of: controls, matching: find.byType(PageView)),
     );
-    expect(pageView.controller?.page, 3);
+    expect(pageView.controller?.page, 0);
     final buttons = tester.widgetList<IconButton>(
       find.descendant(of: controls, matching: find.byType(IconButton)),
     );
-    expect(buttons.first.onPressed, isNotNull);
-    expect(buttons.last.onPressed, isNull);
+    expect(buttons.first.onPressed, isNull);
+    expect(buttons.last.onPressed, isNotNull);
     await tester.tap(
-      find.descendant(of: controls, matching: find.byType(IconButton)).first,
+      find.descendant(of: controls, matching: find.byType(IconButton)).last,
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
-    expect(pageView.controller?.page, 2);
+    expect(pageView.controller?.page, 1);
   });
 
   testWidgets('卡片双模式和垂直参数面板使用受控交互', (tester) async {

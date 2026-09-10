@@ -12,10 +12,7 @@ class TSwiperPage extends StatefulWidget {
 }
 
 class _TSwiperPageState extends State<TSwiperPage> {
-  final _dotsBarController = TSwiperController(initialIndex: 1);
-  final _fractionController = TSwiperController(initialIndex: 2);
-  final _controlsController = TSwiperController(initialIndex: 3);
-  final _verticalController = TSwiperController(initialIndex: 1);
+  final _verticalController = TSwiperController();
 
   bool _verticalAutoplay = true;
   double _verticalInterval = 5000;
@@ -23,9 +20,6 @@ class _TSwiperPageState extends State<TSwiperPage> {
 
   @override
   void dispose() {
-    _dotsBarController.dispose();
-    _fractionController.dispose();
-    _controlsController.dispose();
     _verticalController.dispose();
     super.dispose();
   }
@@ -87,7 +81,7 @@ class _TSwiperPageState extends State<TSwiperPage> {
       autoplayInterval: const Duration(seconds: 5),
       pagination: TSwiperPaginationVariant.dots,
       children: List.generate(
-        5,
+        6,
         (index) => Image.asset(
           index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
           fit: BoxFit.cover,
@@ -99,18 +93,14 @@ class _TSwiperPageState extends State<TSwiperPage> {
 
   @ExampleCode(group: 'swiper')
   Widget _buildDotsBarSwiper(BuildContext context) {
-    // 页面 State 持有：
-    // final _dotsBarController = TSwiperController(initialIndex: 1);
-    // 并在 State.dispose 中调用 _dotsBarController.dispose()。
     return TSwiper(
-      controller: _dotsBarController,
       loop: true,
       autoplay: true,
       animationDuration: const Duration(milliseconds: 500),
       autoplayInterval: const Duration(seconds: 5),
       pagination: TSwiperPaginationVariant.dotsBar,
       children: List.generate(
-        4,
+        6,
         (index) => Image.asset(
           index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
           fit: BoxFit.cover,
@@ -122,11 +112,7 @@ class _TSwiperPageState extends State<TSwiperPage> {
 
   @ExampleCode(group: 'swiper')
   Widget _buildFractionSwiper(BuildContext context) {
-    // 页面 State 持有：
-    // final _fractionController = TSwiperController(initialIndex: 2);
-    // 并在 State.dispose 中调用 _fractionController.dispose()。
     return TSwiper(
-      controller: _fractionController,
       loop: true,
       autoplay: true,
       animationDuration: const Duration(milliseconds: 500),
@@ -134,7 +120,7 @@ class _TSwiperPageState extends State<TSwiperPage> {
       pagination: TSwiperPaginationVariant.fraction,
       paginationAlignment: Alignment.bottomRight,
       children: List.generate(
-        5,
+        6,
         (index) => Image.asset(
           index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
           fit: BoxFit.cover,
@@ -146,18 +132,14 @@ class _TSwiperPageState extends State<TSwiperPage> {
 
   @ExampleCode(group: 'swiper')
   Widget _buildControlsSwiper(BuildContext context) {
-    // 页面 State 持有：
-    // final _controlsController = TSwiperController(initialIndex: 3);
-    // 并在 State.dispose 中调用 _controlsController.dispose()。
     return TSwiper(
-      controller: _controlsController,
       loop: false,
       autoplay: true,
       animationDuration: const Duration(milliseconds: 500),
       autoplayInterval: const Duration(seconds: 5),
       pagination: TSwiperPaginationVariant.controls,
       children: List.generate(
-        4,
+        6,
         (index) => Image.asset(
           index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
           fit: BoxFit.cover,
@@ -175,7 +157,7 @@ class _TSwiperPageState extends State<TSwiperPage> {
       activeColor: context.tTheme.brandNormalColor,
       inactiveColor: context.tTheme.bgColorComponent,
     );
-    List<Widget> buildImages() => List.generate(5, (index) {
+    List<Widget> buildImages() => List.generate(6, (index) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(context.tTheme.radiusLarge),
         child: Image.asset(
@@ -235,7 +217,7 @@ class _TSwiperPageState extends State<TSwiperPage> {
             pagination: TSwiperPaginationVariant.dotsBar,
             scrollDirection: Axis.vertical,
             children: List.generate(
-              4,
+              6,
               (index) => Image.asset(
                 index.isEven
                     ? 'assets/img/swiper1.png'

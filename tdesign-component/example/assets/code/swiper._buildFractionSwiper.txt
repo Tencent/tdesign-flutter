@@ -1,9 +1,5 @@
 Widget _buildFractionSwiper(BuildContext context) {
-    // 页面 State 持有：
-    // final _fractionController = TSwiperController(initialIndex: 2);
-    // 并在 State.dispose 中调用 _fractionController.dispose()。
     return TSwiper(
-      controller: _fractionController,
       loop: true,
       autoplay: true,
       animationDuration: const Duration(milliseconds: 500),
@@ -11,7 +7,7 @@ Widget _buildFractionSwiper(BuildContext context) {
       pagination: TSwiperPaginationVariant.fraction,
       paginationAlignment: Alignment.bottomRight,
       children: List.generate(
-        5,
+        6,
         (index) => Image.asset(
           index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
           fit: BoxFit.cover,

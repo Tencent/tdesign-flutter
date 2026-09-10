@@ -543,7 +543,9 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
     final alignment =
         widget.paginationAlignment ??
         theme?.paginationAlignment ??
-        (widget.scrollDirection == Axis.horizontal
+        (pagination == TSwiperPaginationVariant.controls
+            ? Alignment.center
+            : widget.scrollDirection == Axis.horizontal
             ? Alignment.bottomCenter
             : Alignment.centerRight);
     final pageView = ClipRRect(
@@ -770,6 +772,7 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Center(
+            widthFactor: 1,
             child: Text(
               '${_index + 1}/$_count',
               style: defaultStyle.merge(theme?.fractionStyle),

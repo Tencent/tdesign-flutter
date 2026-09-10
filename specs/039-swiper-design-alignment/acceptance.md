@@ -11,17 +11,17 @@
 
 | 命令 | 结果 |
 | --- | --- |
-| `flutter test test/components/swiper/t_swiper_test.dart` | Flutter 3.32.0，38/38 通过 |
+| `flutter test test/components/swiper/t_swiper_test.dart` | Flutter 3.32.0，39/39 通过 |
 | `flutter test test/swiper_page_test.dart` | Flutter 3.32.0，4/4 通过 |
 
 ## 最终自动化与人工验收
 
 | 门禁 | 结果 |
 | --- | --- |
-| Flutter 3.32.0 组件测试 | 38/38 通过，含 controls 深浅主题默认对比色回归 |
+| Flutter 3.32.0 组件测试 | 39/39 通过，含 fraction 紧凑宽度、controls 居中及深浅主题默认对比色回归 |
 | Flutter 3.32.0 Demo 测试 | 4/4 通过，含横向 fling、controls、卡片和垂直参数交互 |
 | Flutter 3.32.0 analyze | 组件与 example 均 0 error / 0 warning |
-| Flutter latest 3.47.0 | clean + pub get 后组件 38/38、Demo 4/4、两工程 analyze 通过 |
+| Flutter latest 3.47.0 | clean + pub get 后组件 39/39、Demo 4/4、两工程 analyze 通过 |
 | 生产代码覆盖率 | `427/441 = 96.83%` |
 | 回归清单自检 | component / Demo / visual 三组清单测试 13/13 通过 |
 | Linux Golden | `linux/amd64`、Flutter 3.32.0，浅色/深色 2/2 无更新复跑通过 |
@@ -41,3 +41,5 @@
 - `pagination`、`paginationPlacement`、`pageEffect` 仅由 `TSwiper` 实例 API 持有；`TSwiperThemeData` 只保留颜色、尺寸、间距、圆角和文字/按钮样式等视觉字段，不保留历史行为字段。
 - 删除 Theme 中上述三个已发布行为字段属于 breaking change；调用方迁移到 `TSwiper` 的同名实例参数，不保留兼容别名。
 - controls 的圆形背景 32dp、图标 18dp 是 Flutter 工程默认视觉值，`IconButton` 实际触控区域保持 48dp；该值不作为 Figma 精确标注，可由 `TSwiperThemeData.controlStyle/controlIconSize` 覆盖。
+- Figma `28600:39098` 中各类型使用六张内容并从第一页开始；fraction 是右下角紧凑胶囊，controls 位于图片左右两侧垂直居中。对应布局由组件默认实现负责，Demo 未添加外层样式补丁。
+- Flutter 3.32 Linux 首次严格 Golden 比较确认 light/dark 均为预期布局变化（22.58%，分别 215159px / 215136px）；人工检查实际图后仅更新 Swiper 两张基线，并在同一环境无 `--update-goldens` 精确复跑 2/2 通过。

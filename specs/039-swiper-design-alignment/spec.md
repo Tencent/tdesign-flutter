@@ -21,6 +21,7 @@
 6. 默认覆盖式 dots/dots-bar 使用反色前景；卡片 Demo 显式使用品牌色导航。
 7. 公开 Demo 仅保留目标六个条目；额外扩展能力留在组件测试，不作为公开 Demo 混入。
 8. controls 使用 Flutter 工程默认视觉尺寸：圆形背景 32dp、图标 18dp，并由 `IconButton` 保留 48dp 触控区域；该值不冒充 Figma 精确标注，可由组件 Theme 覆盖。
+9. 公开 Demo 的六张轮播内容均从第一页开始；fraction 保持右下角紧凑胶囊，controls 默认在内容左右两侧垂直居中，不由 Demo 外层样式修正。
 
 ## API 收敛
 

@@ -541,6 +541,39 @@ void main() {
         tester.widget<Align>(find.byType(Align)).alignment,
         Alignment.centerRight,
       );
+
+      await tester.pumpWidget(
+        app(
+          const TSwiper(
+            pagination: TSwiperPaginationVariant.controls,
+            children: pages,
+          ),
+        ),
+      );
+      expect(
+        tester
+            .widgetList<Align>(find.byType(Align))
+            .map((align) => align.alignment),
+        contains(Alignment.center),
+      );
+    });
+
+    testWidgets('fraction 保持右下角内容宽度而不横向拉伸', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TSwiper(
+            pagination: TSwiperPaginationVariant.fraction,
+            paginationAlignment: Alignment.bottomRight,
+            children: pages,
+          ),
+        ),
+      );
+
+      expect(tester.getSize(find.text('1/3')).width, lessThan(40));
+      expect(
+        tester.getSize(find.byType(DecoratedBox).last).width,
+        lessThan(60),
+      );
     });
 
     testWidgets('outside 横向放在下方且竖向放在右侧', (tester) async {
