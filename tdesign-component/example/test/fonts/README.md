@@ -62,10 +62,10 @@ SHA-256 为 `59c5bebba9bf720005fb977a94b9c150b0b8e8c2698c1dca3a66d9f0d7cd9722`�
 上游源文件 SHA-256 为
 `734b20876d6a6777e4c30b627e8391695bbf545c0badf6c066138bebd1f0278a`。
 
-`ProgressGoldenCJK-Regular.otf` 仅补充 Progress 整页 Golden 的“百、微、型”字，字符清单见
+`ProgressGoldenCJK-Regular.otf` 仅补充 Progress 整页 Golden 的“百、微、型、始”字，字符清单见
 `progress_glyphs.txt`；它作为 Progress Demo 最后的专用 fallback，不改变其他页面
 或既有共享像素基线，子集 SHA-256 为
-`39b20c717909bd262cc2fa13672ea995a24e30d6d0d06d6f4c6a063ab46c71ae`。
+`8f6894a9e05cf085047bbb10b48e18c0f3461d831a8af1c6ef7befb88890acc0`。
 
 `AvatarGoldenCJK-Regular.otf` 仅补充 Avatar 整页 Golden 所需字形，字符清单见
 `avatar_demo_glyphs.txt`。它作为 Avatar Demo 最后的专用 fallback，不改变其他页面
