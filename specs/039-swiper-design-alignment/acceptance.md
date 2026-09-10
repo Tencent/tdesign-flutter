@@ -11,8 +11,8 @@
 
 | 命令 | 结果 |
 | --- | --- |
-| `flutter test test/components/swiper/t_swiper_test.dart` | Flutter 3.32.0，33/33 通过 |
-| `flutter test test/swiper_page_test.dart` | Flutter 3.32.0，2/2 通过 |
+| `flutter test test/components/swiper/t_swiper_test.dart` | Flutter 3.32.0，38/38 通过 |
+| `flutter test test/swiper_page_test.dart` | Flutter 3.32.0，4/4 通过 |
 
 ## 最终自动化与人工验收
 
