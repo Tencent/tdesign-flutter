@@ -3,7 +3,7 @@
 ## 验证环境
 
 - 分支：`rss1102/feat/result-design-alignment`
-- 基线：`origin/develop@2ed620b9`
+- 基线：已合入 `origin/develop@031b1a06`
 - 设计：Figma `24386:5272`，移动端 frame `28600:38952`，组件集 `26577:6004`
 - 小程序参考：`Tencent/tdesign-miniprogram@cc2384cc`
 - Flutter/Dart：Flutter 3.32.0、Flutter 3.47.0（latest）
