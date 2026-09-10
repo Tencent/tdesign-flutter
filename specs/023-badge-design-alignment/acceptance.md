@@ -44,6 +44,7 @@
 - 修复版 debug APK 已重新构建并安装到 Android 16 真机，Dot、Number、Circle、Square 的右上角位置已向上移动 4 逻辑像素；自定义徽标改用设计稿的 48px 方形按钮，并校正为徽标中线与按钮顶边对齐。
 - 自定义徽标几何回归按 Figma 节点 `27741:30841` 验证：公开 Demo 使用 `TBadgeVariant.custom` 且不传 `offset`；按钮为 48×48，徽标容器左边位于按钮右边 -16px，徽标中线与按钮顶边同 Y；520dpi 真机中分别对应 156×156、52px 与 0px 纵向差。
 - `offset` API 保留，组件测试同时覆盖实例值覆盖自定义形态默认位置。
+- Linux Golden 首轮确认 Badge 自身 light/dark 均通过；TabBar Demo 与 Tabs Component 因引用 TBadge 而产生预期位置差异，已使用同一 Flutter 3.32 Linux CI 产出的 6 张 test image 更新依赖基线，差异仅位于徽标区域。
 
 ## 2026-09-03 Dot 默认尺寸复验
 
