@@ -27,7 +27,7 @@ class TImageViewer {
   /// [showDelete] 控制删除按钮是否显示。
   /// [showIndex] 控制当前页码是否显示。
   /// [loop] 控制是否循环切换图片。
-  /// [autoplay] 控制是否自动切换图片。
+  /// [autoplay] 控制是否自动切换图片；图片放大时暂停，还原后恢复。
   /// [autoplayInterval] 设置自动切换图片的时间间隔。
   /// [barrierDismissible] 控制点击弹窗外区域时是否关闭预览。
   /// [onIndexChanged] 在当前图片索引变化时触发。
@@ -148,18 +148,32 @@ class _TImageViewerView extends StatefulWidget {
   State<_TImageViewerView> createState() => _TImageViewerViewState();
 }
 
-class _TImageViewerViewState extends State<_TImageViewerView> {
+class _TImageViewerViewState extends State<_TImageViewerView>
+    with SingleTickerProviderStateMixin {
   static const _dismissThreshold = 96.0;
+  static const _motionDuration = Duration(milliseconds: 200);
 
   late int _index = widget.initialIndex;
   var _dragOffset = 0.0;
   var _isZoomed = false;
+  late final AnimationController _dragController;
+  Animation<double>? _dragAnimation;
   late final TSwiperController _swiperController = TSwiperController(
     initialIndex: widget.initialIndex,
   );
 
   @override
+  void initState() {
+    super.initState();
+    _dragController = AnimationController(
+      vsync: this,
+      duration: _motionDuration,
+    )..addListener(_updateDragOffset);
+  }
+
+  @override
   void dispose() {
+    _dragController.dispose();
     _swiperController.dispose();
     super.dispose();
   }
@@ -181,6 +195,7 @@ class _TImageViewerViewState extends State<_TImageViewerView> {
           fit: StackFit.expand,
           children: [
             Transform.translate(
+              key: const ValueKey('image-viewer-drag-transform'),
               offset: Offset(0, _dragOffset),
               child: Padding(
                 padding: EdgeInsets.only(
@@ -190,7 +205,7 @@ class _TImageViewerViewState extends State<_TImageViewerView> {
                   controller: _swiperController,
                   onChanged: _changeIndex,
                   loop: widget.loop,
-                  autoplay: widget.autoplay,
+                  autoplay: widget.autoplay && !_isZoomed,
                   autoplayInterval: widget.autoplayInterval,
                   pagination: TSwiperPaginationVariant.none,
                   physics: _isZoomed
@@ -232,7 +247,9 @@ class _TImageViewerViewState extends State<_TImageViewerView> {
                   padding: EdgeInsets.symmetric(
                     horizontal: context.tTheme.spacer8,
                   ),
-                  color: theme?.appBarBackgroundColor ?? Colors.black,
+                  color:
+                      theme?.appBarBackgroundColor ??
+                      context.tTheme.fontGyColor1.withValues(alpha: 1),
                   child: Row(
                     children: [
                       SizedBox(
@@ -263,9 +280,10 @@ class _TImageViewerViewState extends State<_TImageViewerView> {
     if (_isZoomed || details.delta.dy <= 0 && _dragOffset <= 0) {
       return;
     }
-    setState(
-      () => _dragOffset = (_dragOffset + details.delta.dy).clamp(0, 240),
-    );
+    _dragController.stop();
+    setState(() {
+      _dragOffset = (_dragOffset + details.delta.dy).clamp(0, 240);
+    });
   }
 
   void _handleVerticalDragEnd(DragEndDetails details) {
@@ -277,7 +295,17 @@ class _TImageViewerViewState extends State<_TImageViewerView> {
       Navigator.of(context).pop();
       return;
     }
-    setState(() => _dragOffset = 0);
+    _dragAnimation = Tween<double>(begin: _dragOffset, end: 0).animate(
+      CurvedAnimation(parent: _dragController, curve: Curves.easeOutCubic),
+    );
+    _dragController.forward(from: 0);
+  }
+
+  void _updateDragOffset() {
+    final value = _dragAnimation?.value;
+    if (value != null) {
+      setState(() => _dragOffset = value);
+    }
   }
 
   void _changeIndex(int index) {
@@ -326,12 +354,8 @@ class _TImageViewerViewState extends State<_TImageViewerView> {
     return IconButton(
       tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
       onPressed: () => Navigator.of(context).pop(),
-      constraints: const BoxConstraints.tightFor(width: 40, height: 40),
-      padding: const EdgeInsets.all(8),
-      icon: Icon(
-        TIcons.close,
-        color: theme?.iconColor ?? context.tTheme.textColorAnti,
-      ),
+      style: _actionStyle(context, theme, enabled: true),
+      icon: const Icon(TIcons.close),
     );
   }
 
@@ -344,12 +368,42 @@ class _TImageViewerViewState extends State<_TImageViewerView> {
       onPressed: widget.onDelete == null
           ? null
           : () => widget.onDelete!(_index),
-      constraints: const BoxConstraints.tightFor(width: 40, height: 40),
-      padding: const EdgeInsets.all(8),
-      icon: Icon(
-        TIcons.delete,
-        color: theme?.iconColor ?? context.tTheme.textColorAnti,
-      ),
+      style: _actionStyle(context, theme, enabled: widget.onDelete != null),
+      icon: const Icon(TIcons.delete),
+    );
+  }
+
+  ButtonStyle _actionStyle(
+    BuildContext context,
+    TImageViewerThemeData? theme, {
+    required bool enabled,
+  }) {
+    final color = theme?.iconColor ?? context.tTheme.textColorAnti;
+    final disabledColor =
+        theme?.iconColor?.withValues(alpha: 0.38) ??
+        context.tTheme.fontWhColor4;
+    return ButtonStyle(
+      foregroundColor: WidgetStatePropertyAll(enabled ? color : disabledColor),
+      backgroundColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
+      overlayColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.pressed)) {
+          return context.tTheme.fontWhColor4;
+        }
+        if (states.contains(WidgetState.hovered) ||
+            states.contains(WidgetState.focused)) {
+          return context.tTheme.fontWhColor3;
+        }
+        return Colors.transparent;
+      }),
+      surfaceTintColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
+      shadowColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
+      elevation: const WidgetStatePropertyAll<double>(0),
+      minimumSize: const WidgetStatePropertyAll(Size.square(40)),
+      maximumSize: const WidgetStatePropertyAll(Size.square(40)),
+      padding: const WidgetStatePropertyAll(EdgeInsets.all(8)),
+      iconSize: const WidgetStatePropertyAll(24),
+      shape: const WidgetStatePropertyAll(CircleBorder()),
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }
 }
@@ -380,15 +434,29 @@ class _TImageViewerPage extends StatefulWidget {
   State<_TImageViewerPage> createState() => _TImageViewerPageState();
 }
 
-class _TImageViewerPageState extends State<_TImageViewerPage> {
+class _TImageViewerPageState extends State<_TImageViewerPage>
+    with SingleTickerProviderStateMixin {
   static const _doubleTapScale = 2.0;
   static const _maxScale = 3.0;
+  static const _motionDuration = Duration(milliseconds: 200);
 
   final _transformationController = TransformationController();
+  late final AnimationController _animationController;
+  Animation<Matrix4>? _transformAnimation;
   Offset? _doubleTapPosition;
 
   @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: _motionDuration,
+    )..addListener(_updateTransform);
+  }
+
+  @override
   void dispose() {
+    _animationController.dispose();
     _transformationController.dispose();
     super.dispose();
   }
@@ -431,29 +499,47 @@ class _TImageViewerPageState extends State<_TImageViewerPage> {
       _transformationController.value.getMaxScaleOnAxis() > 1.001;
 
   void _handleDoubleTap() {
-    if (_isZoomed) {
-      _transformationController.value = Matrix4.identity();
-    } else {
-      final position = _doubleTapPosition ?? Offset.zero;
-      _transformationController.value = Matrix4(
-        _doubleTapScale,
-        0,
-        0,
-        0,
-        0,
-        _doubleTapScale,
-        0,
-        0,
-        0,
-        0,
-        1,
-        0,
-        -position.dx * (_doubleTapScale - 1),
-        -position.dy * (_doubleTapScale - 1),
-        0,
-        1,
-      );
+    final target = _isZoomed
+        ? Matrix4.identity()
+        : _scaledTransform(_doubleTapPosition ?? Offset.zero);
+    _transformAnimation =
+        Matrix4Tween(
+          begin: _transformationController.value,
+          end: target,
+        ).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
+    _animationController.forward(from: 0);
+  }
+
+  Matrix4 _scaledTransform(Offset position) => Matrix4(
+    _doubleTapScale,
+    0,
+    0,
+    0,
+    0,
+    _doubleTapScale,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    -position.dx * (_doubleTapScale - 1),
+    -position.dy * (_doubleTapScale - 1),
+    0,
+    1,
+  );
+
+  void _updateTransform() {
+    final value = _transformAnimation?.value;
+    if (value == null) {
+      return;
     }
+    _transformationController.value = value;
     _notifyZoomChanged();
     setState(() {});
   }

@@ -3,7 +3,7 @@
 ## 验证环境
 
 - 分支：`rss1102/feat/image-viewer-design-alignment`
-- 基线：`origin/develop@2ed620b9`
+- 基线：`origin/develop@12e5a2792`
 - 设计：Figma `24386:5270`
 - 小程序参考：`Tencent/tdesign-miniprogram@cc2384cc`
 - Flutter/Dart：3.32.0 / 3.8.0；3.47.0 / 3.13.0
@@ -12,12 +12,12 @@
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter test test/components/image_viewer/t_image_viewer_test.dart` | 20/20 通过 | Flutter 3.32.0、3.47.0 |
+| `flutter test test/components/image_viewer/t_image_viewer_test.dart` | 21/21 通过 | Flutter 3.32.0；覆盖缩放暂停自动轮播、平滑动效及导航操作状态 |
 | `flutter test test/image_viewer_demo_test.dart` | 4/4 通过 | Flutter 3.32.0，Example 包 |
 | `flutter test test/image_viewer_demo_golden_test.dart` | 4/4 通过 | 固定 Linux Flutter 3.32.0；生成后无更新复验 |
-| `flutter analyze --fatal-infos` | 通过，0 error / 0 warning | Flutter 3.32.0、3.47.0 |
+| `flutter analyze --fatal-infos` | 通过，0 error / 0 warning | Flutter 3.32.0，全组件包 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例代码片段与源码一致 |
-| 组件生产代码覆盖率 | LH/LF = 186/187，99.47% | `t_image_viewer.dart` 与 Theme |
+| 组件生产代码覆盖率 | 待 CI 重新统计 | 本轮增加动画与状态分支，旧的 186/187 数据不再沿用 |
 
 ## 人工验收
 
@@ -28,3 +28,4 @@
 
 - 浏览器自动化的拖拽会先进入图片位移并回弹，未把它作为下拉关闭的人工通过证据；该行为以 Flutter Widget 手势测试验收。
 - macOS 原生 Golden 与固定 Linux 基线存在字体栅格差异；Golden 仅在仓库约定的 Linux Flutter 3.32.0 环境生成和比对。
+- 本轮 Flutter 3.47.0 依赖解析受 `pub.dev` TLS 错误阻断；`--no-pub` 不能复用 3.32.0 生成的 SDK 路径，因此合并后代码仍需在 latest CI 复验。

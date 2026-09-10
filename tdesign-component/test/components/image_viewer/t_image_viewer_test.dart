@@ -309,6 +309,9 @@ void main() {
       await tester.tap(viewer);
       await tester.pump(const Duration(milliseconds: 50));
       await tester.tap(viewer);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(controller.value.getMaxScaleOnAxis(), inExclusiveRange(1, 2));
       await tester.pumpAndSettle();
       expect(controller.value.getMaxScaleOnAxis(), closeTo(2, 0.001));
       expect(tapped, 0);
@@ -326,7 +329,12 @@ void main() {
         tester,
         app(
           onShow: (context) {
-            TImageViewer.show(context: context, images: images);
+            TImageViewer.show(
+              context: context,
+              images: images,
+              autoplay: true,
+              autoplayInterval: const Duration(hours: 1),
+            );
           },
         ),
       );
@@ -352,6 +360,18 @@ void main() {
         tester.widget<TSwiper>(find.byType(TSwiper)).physics,
         isA<NeverScrollableScrollPhysics>(),
       );
+      expect(tester.widget<TSwiper>(find.byType(TSwiper)).autoplay, isFalse);
+
+      await tester.tap(viewer);
+      await tester.pump(const Duration(milliseconds: 50));
+      await tester.tap(viewer);
+      await tester.pumpAndSettle();
+      expect(controller.value.getMaxScaleOnAxis(), closeTo(1, 0.001));
+      expect(tester.widget<TSwiper>(find.byType(TSwiper)).autoplay, isTrue);
+      expect(
+        tester.widget<TSwiper>(find.byType(TSwiper)).physics,
+        isA<PageScrollPhysics>(),
+      );
     });
 
     testWidgets('下拉超过阈值关闭，未超过时回弹', (tester) async {
@@ -371,6 +391,15 @@ void main() {
       final page = find.byKey(const ValueKey('image-viewer-page-0'));
 
       await tester.drag(page, const Offset(0, 40));
+      await tester.pump(const Duration(milliseconds: 100));
+      final transform = tester.widget<Transform>(
+        find.byKey(const ValueKey('image-viewer-drag-transform')),
+      );
+      expect(
+        transform.transform.getTranslation().y > 0 &&
+            transform.transform.getTranslation().y < 40,
+        isTrue,
+      );
       await tester.pumpAndSettle();
       expect(find.byType(TSwiper), findsOneWidget);
       expect(closed, 0);
@@ -410,6 +439,41 @@ void main() {
         find.byType(ConstrainedBox),
       );
       expect(constrained.any((box) => box.constraints.maxWidth == 120), isTrue);
+    });
+
+    testWidgets('导航操作样式由 TDesign token 控制且禁用态可辨识', (tester) async {
+      final token = TThemeData.defaultData();
+      await open(
+        tester,
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+              showDelete: true,
+            );
+          },
+        ),
+      );
+
+      final buttons = tester.widgetList<IconButton>(find.byType(IconButton));
+      final close = buttons.singleWhere((button) => button.tooltip == 'Close');
+      final delete = buttons.singleWhere(
+        (button) => button.tooltip == 'Delete',
+      );
+      expect(
+        close.style?.foregroundColor?.resolve(const {}),
+        token.textColorAnti,
+      );
+      expect(
+        delete.style?.foregroundColor?.resolve(const {WidgetState.disabled}),
+        token.fontWhColor4,
+      );
+      expect(
+        close.style?.overlayColor?.resolve(const {WidgetState.pressed}),
+        token.fontWhColor4,
+      );
+      expect(close.style?.shape?.resolve(const {}), isA<CircleBorder>());
     });
 
     testWidgets('空标签不渲染标签文本', (tester) async {
