@@ -1,6 +1,8 @@
 # 实施任务
 
 - [x] DONE 明确需求、设计节点和跨端参考边界
+- [x] DONE 逐项核对小程序公开能力并记录 Flutter 等价表达
+- [x] DONE 删除与展示 Future 重复的 onClose 回调并覆盖全部关闭路径
 - [x] DONE 完成组件实现
 - [x] DONE 补充组件与 Demo 功能测试
 - [x] DONE 更新示例、API 文档和代码片段

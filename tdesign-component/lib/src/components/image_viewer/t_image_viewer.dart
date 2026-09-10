@@ -29,11 +29,9 @@ class TImageViewer {
   /// [loop] 控制是否循环切换图片。
   /// [autoplay] 控制是否自动切换图片；图片放大时暂停，还原后恢复。
   /// [autoplayInterval] 设置自动切换图片的时间间隔。
-  /// [barrierDismissible] 控制点击弹窗外区域时是否关闭预览。
   /// [onIndexChanged] 在当前图片索引变化时触发。
-  /// [onClose] 在预览通过按钮、点击图片、下拉手势、系统返回或蒙层关闭后触发一次。
   /// [onDelete] 在点击删除按钮时触发，仅通知当前索引。
-  /// [onTap] 在点击当前图片、关闭预览前触发。
+  /// [onTap] 在点击当前全屏预览区、关闭预览前触发。
   /// [onLongPress] 在长按当前图片时触发。
   /// [leadingBuilder] 构建导航栏起始区域。
   /// [trailingBuilder] 构建导航栏末尾区域。
@@ -48,9 +46,7 @@ class TImageViewer {
     bool loop = false,
     bool autoplay = false,
     Duration autoplayInterval = const Duration(seconds: 3),
-    bool barrierDismissible = true,
     ValueChanged<int>? onIndexChanged,
-    VoidCallback? onClose,
     ValueChanged<int>? onDelete,
     ValueChanged<int>? onTap,
     ValueChanged<int>? onLongPress,
@@ -82,11 +78,10 @@ class TImageViewer {
         'must be positive',
       );
     }
-    final theme = Theme.of(context).extension<TImageViewerThemeData>();
     return showDialog<void>(
       context: context,
-      barrierDismissible: barrierDismissible,
-      barrierColor: theme?.barrierColor ?? context.tTheme.fontGyColor1,
+      barrierDismissible: false,
+      barrierColor: Colors.transparent,
       useSafeArea: false,
       builder: (context) => _TImageViewerView(
         images: images,
@@ -105,7 +100,7 @@ class TImageViewer {
         leadingBuilder: leadingBuilder,
         trailingBuilder: trailingBuilder,
       ),
-    ).whenComplete(() => onClose?.call());
+    );
   }
 }
 

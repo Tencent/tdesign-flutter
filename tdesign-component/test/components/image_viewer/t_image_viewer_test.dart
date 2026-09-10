@@ -73,8 +73,8 @@ void main() {
       expect(index.style?.fontSize, token.fontBodyMedium?.size);
     });
 
-    testWidgets('关闭按钮通知并关闭 Dialog', (tester) async {
-      var closed = false;
+    testWidgets('关闭按钮完成展示 Future 并关闭 Dialog', (tester) async {
+      var completed = 0;
       await open(
         tester,
         app(
@@ -82,15 +82,14 @@ void main() {
             TImageViewer.show(
               context: context,
               images: images,
-              onClose: () => closed = true,
-            );
+            ).then((_) => completed++);
           },
         ),
       );
 
       await tester.tap(find.byTooltip('Close'));
       await tester.pumpAndSettle();
-      expect(closed, isTrue);
+      expect(completed, 1);
       expect(find.byType(TSwiper), findsNothing);
     });
 
@@ -210,9 +209,9 @@ void main() {
       expect(find.text('2/3'), findsOneWidget);
     });
 
-    testWidgets('单击图片通知当前项并统一关闭', (tester) async {
+    testWidgets('单击全屏预览区通知当前项并统一关闭', (tester) async {
       int? tapped;
-      var closed = 0;
+      var completed = 0;
       await open(
         tester,
         app(
@@ -221,17 +220,17 @@ void main() {
               context: context,
               images: images,
               onTap: (index) => tapped = index,
-              onClose: () => closed++,
-            );
+            ).then((_) => completed++);
           },
         ),
       );
       final page = find.byKey(const ValueKey('image-viewer-page-0'));
-      await tester.tap(page);
+      final previewRect = tester.getRect(page);
+      await tester.tapAt(previewRect.bottomRight - const Offset(8, 8));
       await tester.pump(const Duration(milliseconds: 400));
       await tester.pumpAndSettle();
       expect(tapped, 0);
-      expect(closed, 1);
+      expect(completed, 1);
       expect(find.byType(TSwiper), findsNothing);
     });
 
@@ -264,6 +263,27 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('show'), findsOneWidget);
+      expect(find.byType(TSwiper), findsNothing);
+    });
+
+    testWidgets('系统返回只完成一次展示 Future', (tester) async {
+      var completed = 0;
+      await open(
+        tester,
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+            ).then((_) => completed++);
+          },
+        ),
+      );
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      expect(completed, 1);
       expect(find.byType(TSwiper), findsNothing);
     });
 
@@ -375,7 +395,7 @@ void main() {
     });
 
     testWidgets('下拉超过阈值关闭，未超过时回弹', (tester) async {
-      var closed = 0;
+      var completed = 0;
       await open(
         tester,
         app(
@@ -383,8 +403,7 @@ void main() {
             TImageViewer.show(
               context: context,
               images: images,
-              onClose: () => closed++,
-            );
+            ).then((_) => completed++);
           },
         ),
       );
@@ -402,12 +421,12 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.byType(TSwiper), findsOneWidget);
-      expect(closed, 0);
+      expect(completed, 0);
 
       await tester.drag(page, const Offset(0, 140));
       await tester.pumpAndSettle();
       expect(find.byType(TSwiper), findsNothing);
-      expect(closed, 1);
+      expect(completed, 1);
     });
 
     testWidgets('Theme 控制颜色、尺寸和文字样式', (tester) async {
@@ -420,7 +439,6 @@ void main() {
             iconColor: Colors.green,
             labelStyle: TextStyle(fontSize: 18),
             indexStyle: TextStyle(fontSize: 14),
-            barrierColor: Colors.black,
             viewerWidth: 120,
             viewerHeight: 80,
           ),
@@ -544,7 +562,6 @@ void main() {
       iconColor: Colors.green,
       labelStyle: TextStyle(fontSize: 10),
       indexStyle: TextStyle(fontSize: 11),
-      barrierColor: Colors.black,
       viewerWidth: 100,
       viewerHeight: 200,
     );
@@ -554,7 +571,6 @@ void main() {
       iconColor: Colors.yellow,
       labelStyle: TextStyle(fontSize: 20),
       indexStyle: TextStyle(fontSize: 21),
-      barrierColor: Colors.white,
       viewerWidth: 200,
       viewerHeight: 400,
     );
@@ -566,7 +582,6 @@ void main() {
       expect(unchanged.iconColor, a.iconColor);
       expect(unchanged.labelStyle, a.labelStyle);
       expect(unchanged.indexStyle, a.indexStyle);
-      expect(unchanged.barrierColor, a.barrierColor);
       expect(unchanged.viewerWidth, a.viewerWidth);
       expect(unchanged.viewerHeight, a.viewerHeight);
       final value = a.copyWith(
@@ -575,7 +590,6 @@ void main() {
         iconColor: Colors.blue,
         labelStyle: const TextStyle(fontSize: 12),
         indexStyle: const TextStyle(fontSize: 13),
-        barrierColor: Colors.yellow,
         viewerWidth: 120,
         viewerHeight: 220,
       );
@@ -584,7 +598,6 @@ void main() {
       expect(value.iconColor, Colors.blue);
       expect(value.labelStyle?.fontSize, 12);
       expect(value.indexStyle?.fontSize, 13);
-      expect(value.barrierColor, Colors.yellow);
       expect(value.viewerWidth, 120);
       expect(value.viewerHeight, 220);
     });
@@ -596,7 +609,6 @@ void main() {
       expect(value.iconColor, isNotNull);
       expect(value.labelStyle?.fontSize, 15);
       expect(value.indexStyle?.fontSize, 16);
-      expect(value.barrierColor, isNotNull);
       expect(value.viewerWidth, 150);
       expect(value.viewerHeight, 300);
       expect(a.lerp(null, 0.5), same(a));

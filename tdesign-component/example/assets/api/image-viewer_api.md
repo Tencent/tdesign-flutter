@@ -21,11 +21,9 @@
 | loop | bool | false | 控制是否循环切换图片。 |
 | autoplay | bool | false | 控制是否自动切换图片；图片放大时暂停，还原后恢复。 |
 | autoplayInterval | Duration | const Duration(seconds: 3) | 设置自动切换图片的时间间隔。 |
-| barrierDismissible | bool | true | 控制点击弹窗外区域时是否关闭预览。 |
 | onIndexChanged | ValueChanged<int>? | - | 在当前图片索引变化时触发。 |
-| onClose | VoidCallback? | - | 在预览通过按钮、点击图片、下拉手势、系统返回或蒙层关闭后触发一次。 |
 | onDelete | ValueChanged<int>? | - | 在点击删除按钮时触发，仅通知当前索引。 |
-| onTap | ValueChanged<int>? | - | 在点击当前图片、关闭预览前触发。 |
+| onTap | ValueChanged<int>? | - | 在点击当前全屏预览区、关闭预览前触发。 |
 | onLongPress | ValueChanged<int>? | - | 在长按当前图片时触发。 |
 | leadingBuilder | TImageViewerItemBuilder? | - | 构建导航栏起始区域。 |
 | trailingBuilder | TImageViewerItemBuilder? | - | 构建导航栏末尾区域。 |
