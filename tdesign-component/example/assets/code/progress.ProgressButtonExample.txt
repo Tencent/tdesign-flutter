@@ -1,0 +1,54 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class ProgressButtonExample extends StatefulWidget {
+  const ProgressButtonExample({super.key});
+
+  @override
+  State<ProgressButtonExample> createState() => _ProgressButtonExampleState();
+}
+
+class _ProgressButtonExampleState extends State<ProgressButtonExample> {
+  static const _target = 0.8;
+  static const _step = 0.01;
+  static const _stepDuration = Duration(milliseconds: 30);
+
+  double _value = 0;
+  Timer? _timer;
+
+  bool get _advancing => _timer?.isActive ?? false;
+
+  void _advance() {
+    if (_advancing || _value >= _target) {
+      return;
+    }
+    _increaseValue();
+    _timer = Timer.periodic(_stepDuration, (_) => _increaseValue());
+  }
+
+  void _increaseValue() {
+    setState(() => _value = (_value + _step).clamp(0, _target));
+    if (_value >= _target) {
+      _timer?.cancel();
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TProgress(
+      key: const Key('progress-button'),
+      variant: TProgressVariant.button,
+      value: _value,
+      label: Text(_value == 0 ? '开始' : '${(_value * 100).round()}%'),
+      semanticsLabel: '上传进度',
+      onTap: _advance,
+    );
+  }
+}
