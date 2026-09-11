@@ -13,27 +13,6 @@ import 't_default_theme.dart';
 import 't_fonts.dart';
 import 't_text_theme_source.dart';
 
-bool _tTextThemeEquivalent(TextTheme left, TextTheme right) {
-  TextStyle? normalize(TextStyle? style) =>
-      style?.copyWith(debugLabel: 'normalized');
-
-  return normalize(left.displayLarge) == normalize(right.displayLarge) &&
-      normalize(left.displayMedium) == normalize(right.displayMedium) &&
-      normalize(left.displaySmall) == normalize(right.displaySmall) &&
-      normalize(left.headlineLarge) == normalize(right.headlineLarge) &&
-      normalize(left.headlineMedium) == normalize(right.headlineMedium) &&
-      normalize(left.headlineSmall) == normalize(right.headlineSmall) &&
-      normalize(left.titleLarge) == normalize(right.titleLarge) &&
-      normalize(left.titleMedium) == normalize(right.titleMedium) &&
-      normalize(left.titleSmall) == normalize(right.titleSmall) &&
-      normalize(left.bodyLarge) == normalize(right.bodyLarge) &&
-      normalize(left.bodyMedium) == normalize(right.bodyMedium) &&
-      normalize(left.bodySmall) == normalize(right.bodySmall) &&
-      normalize(left.labelLarge) == normalize(right.labelLarge) &&
-      normalize(left.labelMedium) == normalize(right.labelMedium) &&
-      normalize(left.labelSmall) == normalize(right.labelSmall);
-}
-
 bool _tTextStyleTypographyEquivalent(TextStyle? left, TextStyle? right) {
   if (left == null || right == null) {
     return left == right;
@@ -218,30 +197,34 @@ extension TExplicitMaterialThemeExtension on ThemeData {
   TextTheme? get tExplicitTextTheme {
     final projection = extension<_TMaterialProjectionThemeData>();
     if (projection != null &&
-        _tTextThemeEquivalent(
-          textTheme,
-          _tLocalizedTextTheme(projection.textTheme),
-        )) {
+        _tLocalizedTextThemes(
+          projection.textTheme,
+        ).any((theme) => _tTextThemeTypographyEquivalent(textTheme, theme))) {
       return null;
     }
-    return _tTextThemeTypographyEquivalent(
-          textTheme,
-          _tLocalizedTextTheme(
-            ThemeData(
-              brightness: brightness,
-              useMaterial3: useMaterial3,
-            ).textTheme,
-          ),
-        )
+    final implicitTextTheme = ThemeData(
+      brightness: brightness,
+      useMaterial3: useMaterial3,
+    ).textTheme;
+    return _tLocalizedTextThemes(
+          implicitTextTheme,
+        ).any((theme) => _tTextThemeTypographyEquivalent(textTheme, theme))
         ? null
         : textTheme;
   }
 
-  TextTheme _tLocalizedTextTheme(TextTheme base) {
+  Iterable<TextTheme> _tLocalizedTextThemes(TextTheme base) {
     final typography = useMaterial3
         ? Typography.material2021(platform: platform)
         : Typography.material2014(platform: platform);
-    return typography.englishLike.merge(base);
+    // ThemeData.localize 会按当前语言的 ScriptCategory 合并字体几何：
+    // 中文使用 dense，英文使用 englishLike，部分语言使用 tall。
+    // ThemeData 本身不保存 ScriptCategory，因此需要排除全部三种本地化投影。
+    return [
+      typography.englishLike.merge(base),
+      typography.dense.merge(base),
+      typography.tall.merge(base),
+    ];
   }
 
   IconThemeData? get tExplicitIconTheme {

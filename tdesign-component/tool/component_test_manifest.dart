@@ -302,6 +302,19 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'image_viewer',
+    coverageTargets: ['lib/src/components/image_viewer/'],
+    componentTests: ['test/components/image_viewer/t_image_viewer_test.dart'],
+    exampleTests: ['test/image_viewer_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'ImageViewer Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/image_viewer_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'dialog',
     coverageTargets: ['lib/src/components/dialog/'],
     componentTests: ['test/components/dialog/t_dialog_test.dart'],
@@ -449,6 +462,19 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'result',
+    coverageTargets: ['lib/src/components/result/'],
+    componentTests: ['test/components/result/t_result_test.dart'],
+    exampleTests: ['test/result_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Result Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/result_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'tab_bar',
     coverageTargets: ['lib/src/components/tabbar/'],
     componentTests: ['test/components/tabbar/t_tab_bar_test.dart'],
@@ -513,6 +539,32 @@ const componentTestManifests = <ComponentTestManifest>[
           'test/components/tabs/t_tab_golden_test.dart',
           'test/components/navigation_components_golden_test.dart',
         ],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'swiper',
+    coverageTargets: ['lib/src/components/swiper/'],
+    componentTests: ['test/components/swiper/t_swiper_test.dart'],
+    exampleTests: ['test/swiper_page_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Swiper Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/swiper_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'skeleton',
+    coverageTargets: ['lib/src/components/skeleton/'],
+    componentTests: ['test/components/skeleton/t_skeleton_test.dart'],
+    exampleTests: ['test/skeleton_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Skeleton Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/skeleton_demo_golden_test.dart'],
       ),
     ],
   ),
