@@ -82,6 +82,17 @@ class _TTagPageState extends State<TTagPage> {
                   );
                 }),
             ExampleItem(
+                desc: '超长省略文本标签',
+                ignoreCode: true,
+                builder: (context) {
+                  return Row(
+                    children: [
+                      SizedBox(width: context.tTheme.spacer16),
+                      CodeWrapper(builder: _buildLongTextTag),
+                    ],
+                  );
+                }),
+            ExampleItem(
                 desc: '可关闭的标签',
                 ignoreCode: true,
                 builder: (context) {
@@ -147,6 +158,7 @@ class _TTagPageState extends State<TTagPage> {
           ]),
           ExampleModule(title: '可选标签', children: [
             ExampleItem(desc: '默认形态', builder: _buildSelectDefault),
+            ExampleItem(desc: '描边形态', builder: _buildSelectOutline),
             ExampleItem(desc: '不同语义色', builder: _buildSelectColorSchemes),
             ExampleItem(desc: '禁用状态', builder: _buildSelectDisabled),
           ]),
@@ -231,6 +243,16 @@ class _TTagPageState extends State<TTagPage> {
   Widget _buildIconOutlineTag(BuildContext context) {
     return const TTag('标签文字',
         icon: TIcons.discount, variant: TTagVariant.outline);
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildLongTextTag(BuildContext context) {
+    return Theme(
+      data: Theme.of(context)
+          .mergeExtension(const TTagThemeData(fixedWidth: 130)),
+      child: const TTag('超长省略文本标签超长省略文本标签',
+          variant: TTagVariant.light),
+    );
   }
 
   @ExampleCode(group: 'tag')
@@ -386,6 +408,25 @@ class _TTagPageState extends State<TTagPage> {
             value: _selected3,
             onChanged: (v) => setState(() => _selected3 = v)),
       ],
+    );
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildSelectOutline(BuildContext context) {
+    const labels = ['标签一', '标签二', '标签三'];
+    var selectedValues = [false, true, false];
+    return StatefulBuilder(
+      builder: (context, setState) => Wrap(
+        spacing: context.tTheme.spacer8,
+        children: List.generate(labels.length, (index) {
+          return TSelectTag(
+            labels[index],
+            value: selectedValues[index],
+            variant: TTagVariant.outline,
+            onChanged: (value) => setState(() => selectedValues[index] = value),
+          );
+        }),
+      ),
     );
   }
 
