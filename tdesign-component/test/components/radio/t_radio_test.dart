@@ -165,7 +165,7 @@ void main() {
   });
 
   group('TRadio v1 视觉参数', () {
-    testWidgets('块级单行内容使用 56 高度且分割线从正文起点开始', (tester) async {
+    testWidgets('块级单行内容使用 56 高度且分割线与正文左侧对齐', (tester) async {
       await tester.pumpWidget(
         wrap(
           SizedBox(
@@ -194,8 +194,78 @@ void main() {
       );
 
       expect(tester.getSize(gesture).height, 56);
-      expect(tester.getTopLeft(dividerLine).dx, 48);
+      expect(
+        tester.getTopLeft(dividerLine).dx,
+        tester.getTopLeft(find.text('单选')).dx,
+      );
       expect(tester.getSize(dividerLine).height, 0.5);
+      final dividerBackground = find.ancestor(
+        of: find.byType(TDivider),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is ColoredBox &&
+              widget.color == TThemeData.defaultData().bgColorContainer,
+        ),
+      );
+      expect(dividerBackground, findsOneWidget);
+      expect(tester.getSize(dividerBackground).width, 320);
+    });
+
+    testWidgets('卡片文案在边框内居中且上下各使用 spacer16', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            width: 320,
+            child: Column(
+              children: [
+                TRadio<String>(
+                  key: const ValueKey('title-card'),
+                  value: 'a',
+                  groupValue: 'a',
+                  title: '横向卡片',
+                  cardMode: true,
+                  onChanged: (_) {},
+                ),
+                TRadio<String>(
+                  key: const ValueKey('subtitle-card'),
+                  value: 'b',
+                  groupValue: 'a',
+                  title: '纵向卡片',
+                  subTitle: '描述信息',
+                  cardMode: true,
+                  onChanged: (_) {},
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      for (final key in const ['title-card', 'subtitle-card']) {
+        final radio = find.byKey(ValueKey(key));
+        final tile = find.descendant(
+          of: radio,
+          matching: find.byWidgetPredicate(
+            (widget) => widget.runtimeType.toString() == 'TSelectionCard',
+          ),
+        );
+        final content = find.descendant(of: radio, matching: find.byType(Row));
+        expect(tester.getCenter(content).dy, tester.getCenter(tile).dy);
+      }
+
+      final titleCard = find.byKey(const ValueKey('title-card'));
+      final title = find.descendant(of: titleCard, matching: find.text('横向卡片'));
+      final tile = find.descendant(
+        of: titleCard,
+        matching: find.byWidgetPredicate(
+          (widget) => widget.runtimeType.toString() == 'TSelectionCard',
+        ),
+      );
+      expect(tester.getTopLeft(title).dy - tester.getTopLeft(tile).dy, 16);
+      expect(
+        tester.getBottomRight(tile).dy - tester.getBottomRight(title).dy,
+        16,
+      );
     });
 
     testWidgets('带副标题时指示器始终与主标题行居中对齐', (tester) async {
@@ -549,6 +619,7 @@ void main() {
                 onChanged: (_) {},
               ),
               const TRadio<String>(value: 'b', groupValue: 'b', title: '禁用选中'),
+              const TRadio<String>(value: 'c', groupValue: 'b', title: '禁用未选'),
             ],
           ),
         ),
@@ -561,8 +632,13 @@ void main() {
       final subTitle = tester.widget<Text>(find.text('描述信息'));
       final disabledTitle = tester.widget<Text>(find.text('禁用选中'));
 
-      expect(painters.single.selected, isFalse);
-      expect(painters.single.color, token.componentBorderColor);
+      expect(painters, hasLength(2));
+      expect(painters.first.selected, isFalse);
+      expect(painters.first.color, token.componentBorderColor);
+      expect(painters.first.backgroundColor, isNull);
+      expect(painters.last.selected, isFalse);
+      expect(painters.last.color, token.componentBorderColor);
+      expect(painters.last.backgroundColor, token.bgColorComponentDisabled);
       expect(disabledIcon.color, token.brandDisabledColor);
       expect(subTitle.style?.color, token.textColorSecondary);
       expect(disabledTitle.style?.color, token.textDisabledColor);

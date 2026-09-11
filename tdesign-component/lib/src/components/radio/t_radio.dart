@@ -208,7 +208,7 @@ class TRadio<T> extends StatelessWidget {
               ? EdgeInsets.symmetric(
                   horizontal: theme?.insetSpacing ?? context.tTheme.spacer16,
                   vertical: cardMode
-                      ? context.tTheme.spacer8
+                      ? _cardContentVerticalPadding(context)
                       : _contentVerticalPadding(context, titleStyle),
                 )
               : EdgeInsets.zero,
@@ -281,11 +281,14 @@ class TRadio<T> extends StatelessWidget {
     final start = contentDirection == TContentDirection.right
         ? insetSpacing + _indicatorSize(context) + contentSpacing
         : insetSpacing;
-    return Theme(
-      data: theme.mergeExtension(dividerTheme),
-      child: Padding(
-        padding: EdgeInsetsDirectional.only(start: start),
-        child: const TDivider(),
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: Theme(
+        data: theme.mergeExtension(dividerTheme),
+        child: Padding(
+          padding: EdgeInsetsDirectional.only(start: start),
+          child: const TDivider(),
+        ),
       ),
     );
   }
@@ -310,6 +313,11 @@ class TRadio<T> extends StatelessWidget {
               _titleLineHeight(_resolveSubTitleStyle(context))
         : titleHeight;
     return contentHeight + context.tTheme.spacer16 * 2;
+  }
+
+  double _cardContentVerticalPadding(BuildContext context) {
+    final borderWidth = context.tTheme.spacer4 * 3 / 8;
+    return math.max(0, context.tTheme.spacer16 - borderWidth);
   }
 
   double _titleLineHeight(TextStyle titleStyle) =>
@@ -351,10 +359,12 @@ class TRadio<T> extends StatelessWidget {
       if (_disabled) WidgetState.disabled,
     };
     final color = _disabled
-        ? (theme?.disableColor ??
-              materialTheme.fillColor?.resolve(states) ??
-              colorScheme?.onSurface.withValues(alpha: 0.38) ??
-              context.tTheme.brandDisabledColor)
+        ? _selected
+              ? (theme?.disableColor ??
+                    materialTheme.fillColor?.resolve(states) ??
+                    colorScheme?.onSurface.withValues(alpha: 0.38) ??
+                    context.tTheme.brandDisabledColor)
+              : (theme?.disableColor ?? context.tTheme.componentBorderColor)
         : _selected
         ? (theme?.selectColor ??
               materialTheme.fillColor?.resolve(states) ??
@@ -383,6 +393,9 @@ class TRadio<T> extends StatelessWidget {
                 selected: _selected,
                 color: color,
                 iconType: iconType,
+                backgroundColor: _disabled && !_selected
+                    ? context.tTheme.bgColorComponentDisabled
+                    : null,
               ),
             ),
     );
@@ -455,11 +468,13 @@ class _TRadioIndicatorPainter extends CustomPainter {
     required this.selected,
     required this.color,
     required this.iconType,
+    this.backgroundColor,
   });
 
   final bool selected;
   final Color color;
   final TRadioIconType iconType;
+  final Color? backgroundColor;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -473,6 +488,16 @@ class _TRadioIndicatorPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
       ..style = PaintingStyle.stroke;
+    if (backgroundColor case final backgroundColor?) {
+      canvas.drawCircle(
+        center,
+        outerRadius,
+        Paint()
+          ..isAntiAlias = true
+          ..color = backgroundColor
+          ..style = PaintingStyle.fill,
+      );
+    }
     switch (iconType) {
       case TRadioIconType.dot:
         canvas.drawCircle(center, outerRadius, paint);
@@ -491,6 +516,7 @@ class _TRadioIndicatorPainter extends CustomPainter {
   bool shouldRepaint(covariant _TRadioIndicatorPainter oldDelegate) {
     return selected != oldDelegate.selected ||
         color != oldDelegate.color ||
+        backgroundColor != oldDelegate.backgroundColor ||
         iconType != oldDelegate.iconType;
   }
 }

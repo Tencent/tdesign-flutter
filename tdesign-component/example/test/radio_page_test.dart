@@ -169,6 +169,62 @@ void main() {
     );
   });
 
+  testWidgets('横向单选框上下留白为 spacer16 且不叠加外层留白', (tester) async {
+    tester.view.physicalSize = const Size(375, 2600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(buildPage(ThemeMode.light));
+    await tester.pump();
+
+    final layout = find.byKey(const ValueKey('radio-horizontal-layout'));
+    final firstTitle = find
+        .descendant(of: layout, matching: find.text('单选标题'))
+        .first;
+    expect(tester.getTopLeft(firstTitle).dy - tester.getTopLeft(layout).dy, 16);
+    expect(
+      tester.getBottomRight(layout).dy - tester.getBottomRight(firstTitle).dy,
+      16,
+    );
+  });
+
+  testWidgets('纵向与横向卡片文案均在边框内垂直居中', (tester) async {
+    tester.view.physicalSize = const Size(375, 2600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(buildPage(ThemeMode.light));
+    await tester.pump();
+
+    final scrollable = find.descendant(
+      of: find.byType(CustomScrollView),
+      matching: find.byType(Scrollable),
+    );
+    for (final key in const [
+      'radio-vertical-card-layout',
+      'radio-horizontal-card-layout',
+    ]) {
+      final group = find.byKey(ValueKey(key));
+      await tester.scrollUntilVisible(group, 500, scrollable: scrollable);
+      await tester.pump();
+      final card = find
+          .descendant(
+            of: group,
+            matching: find.byWidgetPredicate(
+              (widget) => widget.runtimeType.toString() == 'TSelectionCard',
+            ),
+          )
+          .first;
+      final content = find.descendant(of: card, matching: find.byType(Row));
+      expect(
+        tester.getCenter(content).dy,
+        closeTo(tester.getCenter(card).dy, 0.01),
+      );
+    }
+  });
+
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('Radio Demo ${mode.name} 使用副标题语义色', (tester) async {
       tester.view.physicalSize = const Size(375, 2600);
