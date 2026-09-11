@@ -20,6 +20,7 @@
 | scrollController | ScrollController? | - | 滚动控制器 |
 | sticky | bool | true | 锚点是否吸顶 |
 | stickyOffset | double | 0 | 锚点吸顶时与顶部的距离 |
+| useSafeArea | bool | true | 是否避让系统安全区 |
 
 
 ### TIndexesAnchor
