@@ -104,8 +104,9 @@ class _TRadioPageState extends State<TRadioPage> {
   @ExampleCode(group: 'radio')
   Widget _horizontalRadios(BuildContext context) {
     return Container(
+      key: const ValueKey('radio-horizontal-layout'),
       color: context.tTheme.bgColorContainer,
-      padding: EdgeInsets.all(context.tTheme.spacer16),
+      padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
       child: Theme(
         data: Theme.of(
           context,
@@ -200,6 +201,7 @@ class _TRadioPageState extends State<TRadioPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TRadioGroup<int>(
+          key: const ValueKey('radio-vertical-card-layout'),
           value: _verticalSpecialCardValue,
           options: _specialVerticalOptions,
           cardMode: true,
@@ -218,6 +220,7 @@ class _TRadioPageState extends State<TRadioPage> {
           child: TText('横向卡片单选框', textColor: context.tTheme.textColorSecondary),
         ),
         TRadioGroup<int>(
+          key: const ValueKey('radio-horizontal-card-layout'),
           value: _horizontalCardValue,
           options: _specialHorizontalOptions,
           direction: Axis.horizontal,

@@ -1,7 +1,8 @@
 Widget _horizontalRadios(BuildContext context) {
     return Container(
+      key: const ValueKey('radio-horizontal-layout'),
       color: context.tTheme.bgColorContainer,
-      padding: EdgeInsets.all(context.tTheme.spacer16),
+      padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
       child: Theme(
         data: Theme.of(
           context,

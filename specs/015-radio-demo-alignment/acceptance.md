@@ -39,3 +39,21 @@
 - Flutter 3.32：Radio 组件与 Theme 契约测试通过，32 tests；此前 Linux 覆盖率采样为 242/249，97.19%。
 - Linux Flutter 3.32：Radio 页面 light / dark Golden 共 2 tests 通过；默认纵向项显示分割线，横向 Demo 显式关闭，卡片模式不显示。
 - `flutter analyze`：通过，0 issues。
+
+## 设计走查修复复验（2026-09-11）
+
+- 基线：`origin/develop@044122f61`，分支 `rss1102/fix/radio-design-details`。
+- 分割线根因：实际线条坐标已经从正文起点绘制，但左侧透明缩进透出 `bgColorPage`，其颜色与线条接近，真机视觉仍呈通栏；改为由 `bgColorContainer` 承接整条分割线行后，实际线条与可见像素都从正文起点开始。
+- 横向 Demo 移除外层重复的垂直 `spacer16`，上下间距仅由 Radio 自身提供，最终均为 16dp。
+- 未选中且禁用的指示器使用 `componentBorderColor` 描边与 `bgColorComponentDisabled` 填充；浅色默认值分别为 `#DCDCDC` 与 `#EEEEEE`。
+- 纵向与横向卡片扣除 1.5dp 描边占用后使用 token 计算内容 padding，外边框至文案上下均为 16dp，内容中心与卡片中心一致。
+
+| 门禁 | 结果 |
+| --- | --- |
+| Flutter 3.32.0 组件测试 | 34/34 通过，含可见分割线背景、禁用未选双色和卡片 16dp 回归 |
+| Flutter 3.32.0 Demo 测试 | 6/6 通过，含横向上下间距和两类卡片居中 |
+| Flutter 3.32.0 analyze | 组件与 example 均 0 issues |
+| Flutter 3.47.0 | 组件 34/34、Demo 6/6，组件与 example analyze 均 0 issues |
+| 生产代码覆盖率 | `t_radio.dart` 247/255，96.86% |
+| Linux Golden | Flutter 3.32.0，浅色/深色更新后无更新模式 2/2 通过，并人工检查分割线、禁用态和卡片区域 |
+| Android 真机 | Android 16、1220×2656；最终 APK 覆盖安装后分段检查顶部、禁用态和两类卡片，四项修复均可见 |
