@@ -5,10 +5,7 @@ spline: base
 isComponent: true
 ---
 
-<span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
-
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -16,296 +13,58 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_result_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_result_page.dart)
+[查看完整示例](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/t_result_page.dart)
 
-### 1 组件类型
+### 基础结果
 
-基础结果
+通过 `status` 设置成功、失败、警告或默认信息状态。
 
-          
-<td-code-block panel="Dart">
+```dart
+const TResult(
+  status: TResultStatus.success,
+  title: '成功状态',
+)
+```
 
-  <pre slot="Dart" lang="javascript">
-  TResult _buildBasicResultSuccess(BuildContext context) {
-    return const TResult(
-      title: '成功状态',
-      theme: TResultTheme.success,
-    );
-  }</pre>
+### 带描述结果
 
-</td-code-block>
-                
+```dart
+const TResult(
+  status: TResultStatus.error,
+  title: '失败状态',
+  description: '描述文字',
+)
+```
 
-          
-<td-code-block panel="Dart">
+### 自定义结果
 
-  <pre slot="Dart" lang="javascript">
-  TResult _buildBasicResultError(BuildContext context) {
-    return const TResult(
-      title: '失败状态',
-      theme: TResultTheme.error,
-    );
-  }</pre>
+传入 `icon` 时将完整替换状态对应的默认图标，图标尺寸和样式由调用方控制。
 
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TResult _buildBasicResultWarning(BuildContext context) {
-    return const TResult(
-      title: '警示状态',
-      theme: TResultTheme.warning,
-    );
-  }</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TResult _buildBasicResultDefault(BuildContext context) {
-    return const TResult(
-      title: '默认状态',
-      theme: TResultTheme.defaultTheme,
-    );
-  }</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TResult _buildBasicResultSuccess(BuildContext context) {
-    return const TResult(
-      title: '成功状态',
-      theme: TResultTheme.success,
-    );
-  }</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TResult _buildBasicResultError(BuildContext context) {
-    return const TResult(
-      title: '失败状态',
-      theme: TResultTheme.error,
-    );
-  }</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TResult _buildBasicResultWarning(BuildContext context) {
-    return const TResult(
-      title: '警示状态',
-      theme: TResultTheme.warning,
-    );
-  }</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TResult _buildBasicResultDefault(BuildContext context) {
-    return const TResult(
-      title: '默认状态',
-      theme: TResultTheme.defaultTheme,
-    );
-  }</pre>
-
-</td-code-block>
-                
-
-带描述的结果
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TResult _buildResultWithDescriptionSuccess(BuildContext context) {
-    return const TResult(
-      title: '成功状态',
-      theme: TResultTheme.success,
-      description: '描述文字',
-    );
-  }</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TResult _buildResultWithDescriptionError(BuildContext context) {
-    return const TResult(
-      title: '失败状态',
-      theme: TResultTheme.error,
-      description: '描述文字',
-    );
-  }</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TResult _buildResultWithDescriptionWarning(BuildContext context) {
-    return const TResult(
-      title: '警示状态',
-      theme: TResultTheme.warning,
-      description: '描述文字',
-    );
-  }</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TResult _buildResultWithDescriptionDefault(BuildContext context) {
-    return const TResult(
-      title: '默认状态',
-      theme: TResultTheme.defaultTheme,
-      description: '描述文字',
-    );
-  }</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TResult _buildResultWithDescriptionSuccess(BuildContext context) {
-    return const TResult(
-      title: '成功状态',
-      theme: TResultTheme.success,
-      description: '描述文字',
-    );
-  }</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TResult _buildResultWithDescriptionError(BuildContext context) {
-    return const TResult(
-      title: '失败状态',
-      theme: TResultTheme.error,
-      description: '描述文字',
-    );
-  }</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TResult _buildResultWithDescriptionWarning(BuildContext context) {
-    return const TResult(
-      title: '警示状态',
-      theme: TResultTheme.warning,
-      description: '描述文字',
-    );
-  }</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TResult _buildResultWithDescriptionDefault(BuildContext context) {
-    return const TResult(
-      title: '默认状态',
-      theme: TResultTheme.defaultTheme,
-      description: '描述文字',
-    );
-  }</pre>
-
-</td-code-block>
-                
-
-自定义结果
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  TResult _buildCustomResultContent(BuildContext context) {
-    return TResult(
-      title: '自定义结果',
-      icon: Image.asset('assets/img/illustration.png'),
-      description: '描述文字',
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-页面示例
-      
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
-
-</td-code-block>
-                
-
+```dart
+TResult(
+  icon: Image.asset('assets/img/illustration.png', height: 80),
+  title: '自定义结果',
+  description: '描述文字',
+)
+```
 
 ## API
+
 ### TResult
-#### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| description | String? | - | 描述文本，用于提供额外信息 |
-| icon | Widget? | - | 图标组件，用于在结果中显示一个图标 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| theme | TResultTheme | TResultTheme.defaultTheme | 主题样式，默认主题样式为defaultTheme |
-| title | String | '' | 标题文本，显示结果的主要信息，默认标题为空字符串 |
-| titleStyle | TextStyle? | - | 自定义字体样式，用于设置标题文本的样式 |
+| description | String? | - | 描述文本；为空时不占布局空间 |
+| icon | Widget? | - | 自定义图标；传入后替换默认状态图标 |
+| key | Key? | - | 组件标识 |
+| status | TResultStatus | TResultStatus.info | 当前结果状态，决定默认图标、颜色和无障碍语义 |
+| title | String | '' | 标题文本；为空时不占布局空间 |
 
-
-### TResultTheme
-#### 枚举值
-
+### TResultStatus
 
 | 名称 | 说明 |
 | --- | --- |
-| defaultTheme | - |
-| success | - |
-| warning | - |
-| error | - |
-
-
-  
+| info | 默认信息状态 |
+| success | 成功结果状态 |
+| warning | 警告结果状态 |
+| error | 错误结果状态 |

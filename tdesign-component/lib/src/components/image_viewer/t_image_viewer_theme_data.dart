@@ -19,9 +19,6 @@ class TImageViewerThemeData extends ThemeExtension<TImageViewerThemeData> {
   /// 页码文字样式
   final TextStyle? indexStyle;
 
-  /// 蒙层颜色
-  final Color? barrierColor;
-
   /// 预览区默认宽度
   final double? viewerWidth;
 
@@ -34,7 +31,6 @@ class TImageViewerThemeData extends ThemeExtension<TImageViewerThemeData> {
     this.iconColor,
     this.labelStyle,
     this.indexStyle,
-    this.barrierColor,
     this.viewerWidth,
     this.viewerHeight,
   });
@@ -46,7 +42,6 @@ class TImageViewerThemeData extends ThemeExtension<TImageViewerThemeData> {
     Color? iconColor,
     TextStyle? labelStyle,
     TextStyle? indexStyle,
-    Color? barrierColor,
     double? viewerWidth,
     double? viewerHeight,
   }) {
@@ -57,7 +52,6 @@ class TImageViewerThemeData extends ThemeExtension<TImageViewerThemeData> {
       iconColor: iconColor ?? this.iconColor,
       labelStyle: labelStyle ?? this.labelStyle,
       indexStyle: indexStyle ?? this.indexStyle,
-      barrierColor: barrierColor ?? this.barrierColor,
       viewerWidth: viewerWidth ?? this.viewerWidth,
       viewerHeight: viewerHeight ?? this.viewerHeight,
     );
@@ -65,18 +59,22 @@ class TImageViewerThemeData extends ThemeExtension<TImageViewerThemeData> {
 
   @override
   TImageViewerThemeData lerp(
-      ThemeExtension<TImageViewerThemeData>? other, double t) {
+    ThemeExtension<TImageViewerThemeData>? other,
+    double t,
+  ) {
     if (other is! TImageViewerThemeData) {
       return this;
     }
     return TImageViewerThemeData(
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      appBarBackgroundColor:
-          Color.lerp(appBarBackgroundColor, other.appBarBackgroundColor, t),
+      appBarBackgroundColor: Color.lerp(
+        appBarBackgroundColor,
+        other.appBarBackgroundColor,
+        t,
+      ),
       iconColor: Color.lerp(iconColor, other.iconColor, t),
       labelStyle: TextStyle.lerp(labelStyle, other.labelStyle, t),
       indexStyle: TextStyle.lerp(indexStyle, other.indexStyle, t),
-      barrierColor: Color.lerp(barrierColor, other.barrierColor, t),
       viewerWidth: lerpDouble(viewerWidth, other.viewerWidth, t),
       viewerHeight: lerpDouble(viewerHeight, other.viewerHeight, t),
     );

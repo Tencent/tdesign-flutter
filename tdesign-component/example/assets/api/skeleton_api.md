@@ -21,7 +21,7 @@
 | animation | TSkeletonAnimation? | - | 动画效果；为 null 时保持静态。 |
 | delay | Duration | Duration.zero | 骨架屏的延迟显示时间，用于避免短请求产生闪烁。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| variant | TSkeletonVariant? | TSkeletonVariant.text | 预设形态；自定义布局时为空。 |
+| variant | TSkeletonVariant | TSkeletonVariant.text | 预设形态；自定义布局时为空。 |
 
 #### 公开属性
 

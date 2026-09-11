@@ -4,241 +4,277 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/example_code.dart';
 
-class TSwiperPage extends StatelessWidget {
+class TSwiperPage extends StatefulWidget {
   const TSwiperPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ExamplePage(
-      title: tTitle(context),
-      exampleCodeGroup: 'swiper',
-      children: [
-        ExampleModule(
-          title: '组件类型',
-          children: [
-            _item('点状', _buildDotsSwiper),
-            _item('点条状', _buildDotsBarSwiper),
-            _item('分式', _buildFractionSwiper),
-            _item('切换按钮', _buildControlsSwiper),
-            _item('外置分页', _buildOutsidePaginationSwiper),
-            _item('自定义标记', _buildCustomMarkersSwiper),
-          ],
-        ),
-        ExampleModule(
-          title: '页面效果',
-          children: [
-            _item('卡片间距', _buildCardsSwiper),
-            _item('缩放与淡化', _buildScaleCardsSwiper),
-            _item('竖向轮播', _buildVerticalSwiper),
-          ],
-        ),
-        ExampleModule(
-          title: '交互能力',
-          children: [
-            _item('自动播放', _buildAutoplaySwiper),
-            _item('外部控制', _buildControllerSwiper),
-          ],
-        ),
-      ],
-    );
-  }
-
-  ExampleItem _item(String description, WidgetBuilder builder) {
-    return ExampleItem(
-      desc: description,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      builder: (context) => SizedBox(
-        height: 200,
-        child: CodeWrapper(builder: builder),
-      ),
-    );
-  }
-
-  Widget _buildSwiper(
-    BuildContext context, {
-    TSwiperPaginationVariant pagination = TSwiperPaginationVariant.dots,
-    TSwiperPageEffect pageEffect = TSwiperPageEffect.none,
-    Axis scrollDirection = Axis.horizontal,
-    bool autoplay = false,
-    double viewportFraction = 1,
-    TSwiperPaginationPlacement paginationPlacement =
-        TSwiperPaginationPlacement.overlay,
-    TSwiperPaginationItemBuilder? paginationItemBuilder,
-    Widget? previousIcon,
-    Widget? nextIcon,
-  }) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(context.tTheme.radiusLarge),
-      child: TSwiper(
-        loop: true,
-        autoplay: autoplay,
-        pagination: pagination,
-        paginationPlacement: paginationPlacement,
-        paginationItemBuilder: paginationItemBuilder,
-        previousIcon: previousIcon,
-        nextIcon: nextIcon,
-        pageEffect: pageEffect,
-        viewportFraction: viewportFraction,
-        scrollDirection: scrollDirection,
-        children: const [
-          _SwiperImage(0, 'assets/img/image.png'),
-          _SwiperImage(1, 'assets/img/t_avatar_1.png'),
-          _SwiperImage(2, 'assets/img/t_avatar_2.png'),
-        ],
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'swiper')
-  Widget _buildDotsSwiper(BuildContext context) => _buildSwiper(context);
-
-  @ExampleCode(group: 'swiper')
-  Widget _buildDotsBarSwiper(BuildContext context) => _buildSwiper(
-        context,
-        pagination: TSwiperPaginationVariant.dotsBar,
-      );
-
-  @ExampleCode(group: 'swiper')
-  Widget _buildFractionSwiper(BuildContext context) => _buildSwiper(
-        context,
-        pagination: TSwiperPaginationVariant.fraction,
-      );
-
-  @ExampleCode(group: 'swiper')
-  Widget _buildControlsSwiper(BuildContext context) => _buildSwiper(
-        context,
-        pagination: TSwiperPaginationVariant.controls,
-        previousIcon: const Icon(Icons.arrow_back_rounded),
-        nextIcon: const Icon(Icons.arrow_forward_rounded),
-      );
-
-  @ExampleCode(group: 'swiper')
-  Widget _buildOutsidePaginationSwiper(BuildContext context) => _buildSwiper(
-        context,
-        paginationPlacement: TSwiperPaginationPlacement.outside,
-      );
-
-  @ExampleCode(group: 'swiper')
-  Widget _buildCustomMarkersSwiper(BuildContext context) => _buildSwiper(
-        context,
-        pagination: TSwiperPaginationVariant.dots,
-        paginationItemBuilder: (context, details) => AnimatedContainer(
-          duration: const Duration(milliseconds: 100),
-          width: details.isActive ? 20 : 6,
-          height: 6,
-          decoration: BoxDecoration(
-            color: details.isActive
-                ? context.tTheme.brandNormalColor
-                : context.tTheme.bgColorComponentHover,
-            borderRadius: BorderRadius.circular(3),
-          ),
-        ),
-      );
-
-  @ExampleCode(group: 'swiper')
-  Widget _buildCardsSwiper(BuildContext context) => _buildSwiper(
-        context,
-        pageEffect: TSwiperPageEffect.cardMargin,
-        viewportFraction: 0.86,
-      );
-
-  @ExampleCode(group: 'swiper')
-  Widget _buildScaleCardsSwiper(BuildContext context) => _buildSwiper(
-        context,
-        pageEffect: TSwiperPageEffect.scaleAndFade,
-        viewportFraction: 0.86,
-      );
-
-  @ExampleCode(group: 'swiper')
-  Widget _buildVerticalSwiper(BuildContext context) => _buildSwiper(
-        context,
-        pagination: TSwiperPaginationVariant.controls,
-        scrollDirection: Axis.vertical,
-      );
-
-  @ExampleCode(group: 'swiper')
-  Widget _buildAutoplaySwiper(BuildContext context) => _buildSwiper(
-        context,
-        autoplay: true,
-      );
-
-  @ExampleCode(group: 'swiper')
-  Widget _buildControllerSwiper(BuildContext context) =>
-      const _ControlledSwiperExample();
+  State<TSwiperPage> createState() => _TSwiperPageState();
 }
 
-class _SwiperImage extends StatelessWidget {
-  const _SwiperImage(this.index, this.asset);
+class _TSwiperPageState extends State<TSwiperPage> {
+  final _verticalController = TSwiperController();
 
-  final int index;
-  final String asset;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Image.asset(asset, fit: BoxFit.cover),
-        Positioned(
-          top: 12,
-          left: 12,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: context.tTheme.textColorPrimary.withValues(alpha: 0.7),
-              borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              child: Text(
-                'index: $index',
-                style: TextStyle(color: context.tTheme.textColorAnti),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ControlledSwiperExample extends StatefulWidget {
-  const _ControlledSwiperExample();
-
-  @override
-  State<_ControlledSwiperExample> createState() =>
-      _ControlledSwiperExampleState();
-}
-
-class _ControlledSwiperExampleState extends State<_ControlledSwiperExample> {
-  final _controller = TSwiperController();
+  bool _verticalAutoplay = true;
+  double _verticalInterval = 5000;
+  double _verticalAnimationDuration = 500;
 
   @override
   void dispose() {
-    _controller.dispose();
+    _verticalController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    return ExamplePage(
+      title: tTitle(),
+      desc: '用于循环轮播一组图片或内容，也可以滑动进行切换，轮播动效时间可以设置。',
+      exampleCodeGroup: 'swiper',
+      children: [
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            _item('点状（dots）', _buildDotsSwiper),
+            _item('点条状（dots-bar）', _buildDotsBarSwiper),
+            _item('分式（fraction）', _buildFractionSwiper),
+            _item('切换按钮（controls）', _buildControlsSwiper),
+            _item(
+              '卡片式（cards）',
+              _buildCardsSwiper,
+              height: 462,
+              padding: EdgeInsets.zero,
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: '组件样式',
+          children: [_item('垂直模式', _buildVerticalSwiper, height: null)],
+        ),
+      ],
+    );
+  }
+
+  ExampleItem _item(
+    String description,
+    WidgetBuilder builder, {
+    double? height = 192,
+    EdgeInsetsGeometry padding = const EdgeInsets.symmetric(horizontal: 16),
+  }) {
+    return ExampleItem(
+      desc: description,
+      padding: padding,
+      builder: (context) {
+        final content = CodeWrapper(builder: builder);
+        return height == null
+            ? content
+            : SizedBox(height: height, child: content);
+      },
+    );
+  }
+
+  @ExampleCode(group: 'swiper')
+  Widget _buildDotsSwiper(BuildContext context) {
+    return TSwiper(
+      loop: true,
+      autoplay: false,
+      animationDuration: const Duration(milliseconds: 500),
+      autoplayInterval: const Duration(seconds: 5),
+      pagination: TSwiperPaginationVariant.dots,
+      children: List.generate(
+        6,
+        (index) => Image.asset(
+          index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
+          fit: BoxFit.cover,
+          semanticLabel: '图片 ${index + 1}',
+        ),
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'swiper')
+  Widget _buildDotsBarSwiper(BuildContext context) {
+    return TSwiper(
+      loop: true,
+      autoplay: true,
+      animationDuration: const Duration(milliseconds: 500),
+      autoplayInterval: const Duration(seconds: 5),
+      pagination: TSwiperPaginationVariant.dotsBar,
+      children: List.generate(
+        6,
+        (index) => Image.asset(
+          index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
+          fit: BoxFit.cover,
+          semanticLabel: '图片 ${index + 1}',
+        ),
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'swiper')
+  Widget _buildFractionSwiper(BuildContext context) {
+    return TSwiper(
+      loop: true,
+      autoplay: true,
+      animationDuration: const Duration(milliseconds: 500),
+      autoplayInterval: const Duration(seconds: 5),
+      pagination: TSwiperPaginationVariant.fraction,
+      paginationAlignment: Alignment.bottomRight,
+      children: List.generate(
+        6,
+        (index) => Image.asset(
+          index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
+          fit: BoxFit.cover,
+          semanticLabel: '图片 ${index + 1}',
+        ),
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'swiper')
+  Widget _buildControlsSwiper(BuildContext context) {
+    return TSwiper(
+      loop: false,
+      autoplay: true,
+      animationDuration: const Duration(milliseconds: 500),
+      autoplayInterval: const Duration(seconds: 5),
+      pagination: TSwiperPaginationVariant.controls,
+      children: List.generate(
+        6,
+        (index) => Image.asset(
+          index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
+          fit: BoxFit.cover,
+          semanticLabel: '图片 ${index + 1}',
+        ),
+      ),
+    );
+  }
+
+  @ExampleCode(group: 'swiper')
+  Widget _buildCardsSwiper(BuildContext context) {
+    final cardTheme = TSwiperThemeData(
+      borderRadius: BorderRadius.zero,
+      paginationMargin: const EdgeInsets.only(top: 12),
+      activeColor: context.tTheme.brandNormalColor,
+      inactiveColor: context.tTheme.bgColorComponent,
+    );
+    List<Widget> buildImages() => List.generate(6, (index) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(context.tTheme.radiusLarge),
+        child: Image.asset(
+          index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
+          fit: BoxFit.cover,
+          semanticLabel: '图片 ${index + 1}',
+        ),
+      );
+    });
+    Widget buildCard(TSwiperPageEffect effect) {
+      return SizedBox(
+        height: 210,
+        child: Theme(
+          data: Theme.of(context).mergeExtension(cardTheme),
+          child: TSwiper(
+            loop: true,
+            autoplay: false,
+            pagination: TSwiperPaginationVariant.dots,
+            paginationPlacement: TSwiperPaginationPlacement.outside,
+            pageEffect: effect,
+            viewportFraction: 0.82,
+            children: buildImages(),
+          ),
+        ),
+      );
+    }
+
     return Column(
       children: [
-        Expanded(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(context.tTheme.radiusLarge),
-            child: TSwiper(
-              controller: _controller,
-              loop: true,
-              children: const [
-                _SwiperImage(0, 'assets/img/image.png'),
-                _SwiperImage(1, 'assets/img/t_avatar_1.png'),
-                _SwiperImage(2, 'assets/img/t_avatar_2.png'),
-              ],
+        buildCard(TSwiperPageEffect.cardMargin),
+        const SizedBox(height: 42),
+        buildCard(TSwiperPageEffect.scale),
+      ],
+    );
+  }
+
+  @ExampleCode(group: 'swiper')
+  Widget _buildVerticalSwiper(BuildContext context) {
+    // 页面 State 持有并更新以下字段：
+    // final _verticalController = TSwiperController();
+    // bool _verticalAutoplay = true;
+    // double _verticalInterval = 5000;
+    // double _verticalAnimationDuration = 500;
+    // 并在 State.dispose 中调用 _verticalController.dispose()。
+    return Column(
+      children: [
+        SizedBox(
+          height: 192,
+          child: TSwiper(
+            controller: _verticalController,
+            loop: true,
+            autoplay: _verticalAutoplay,
+            autoplayInterval: Duration(milliseconds: _verticalInterval.round()),
+            animationDuration: Duration(
+              milliseconds: _verticalAnimationDuration.round(),
+            ),
+            pagination: TSwiperPaginationVariant.dotsBar,
+            scrollDirection: Axis.vertical,
+            children: List.generate(
+              6,
+              (index) => Image.asset(
+                index.isEven
+                    ? 'assets/img/swiper1.png'
+                    : 'assets/img/swiper2.png',
+                fit: BoxFit.cover,
+                semanticLabel: '图片 ${index + 1}',
+              ),
             ),
           ),
         ),
-        TextButton(
-          onPressed: _controller.next,
-          child: const Text('下一页'),
+        const SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const TText('自动播放'),
+            Row(
+              children: [
+                TSwitch(
+                  value: _verticalAutoplay,
+                  onChanged: (value) {
+                    setState(() => _verticalAutoplay = value);
+                  },
+                ),
+                const SizedBox(width: 8),
+                TText(_verticalAutoplay ? '开' : '关'),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: TText('自动播放间隔时间（单位毫秒）'),
+        ),
+        TSlider(
+          value: _verticalInterval,
+          min: 1000,
+          max: 5000,
+          divisions: 8,
+          showThumbValue: true,
+          thumbFormatter: (value) => value.round().toString(),
+          onChanged: (value) => setState(() => _verticalInterval = value),
+        ),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: TText('动画持续时间（单位毫秒）'),
+        ),
+        TSlider(
+          value: _verticalAnimationDuration,
+          min: 200,
+          max: 2000,
+          divisions: 18,
+          showThumbValue: true,
+          thumbFormatter: (value) => value.round().toString(),
+          onChanged: (value) {
+            setState(() => _verticalAnimationDuration = value);
+          },
         ),
       ],
     );
