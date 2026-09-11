@@ -6,6 +6,7 @@
 - 移除全屏内容覆盖后无法生效的 `barrierDismissible` 与 `barrierColor`；预览区单击承担小程序 overlay 点击的等价关闭能力。
 - 每个预览页内部使用 `InteractiveViewer` 管理缩放和平移，用 `TransformationController` 实现双击缩放。
 - 预览层统一管理当前缩放状态、下拉位移和关闭通知；缩放大于 1 倍时锁定 `TSwiper`，避免平移与切页冲突。
+- 路由进场使用 100ms `easeOutCubic`，退场使用 100ms `easeInCubic`；关闭时预览层在当前位置轻微缩小，下拉关闭还会同步将已产生的纵向位移继动画到屏幕底部，不增加公开动效配置。
 - Demo 使用本地确定性图片和两个块级描边 `TButton`，基础示例展示页码，操作示例展示关闭与删除。
 
 ## 影响范围

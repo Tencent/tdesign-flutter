@@ -80,11 +80,20 @@ class TImageViewer {
         'must be positive',
       );
     }
-    return showDialog<void>(
+    final navigator = Navigator.of(context, rootNavigator: true);
+    late final _TImageViewerRoute route;
+    route = _TImageViewerRoute(
       context: context,
+      themes: InheritedTheme.capture(from: context, to: navigator.context),
       barrierDismissible: false,
       barrierColor: Colors.transparent,
       useSafeArea: false,
+      animationStyle: const AnimationStyle(
+        duration: _TImageViewerViewState._motionDuration,
+        reverseDuration: _TImageViewerViewState._motionDuration,
+        curve: Curves.easeOutCubic,
+        reverseCurve: Curves.easeInCubic,
+      ),
       builder: (context) => _TImageViewerView(
         images: images,
         labels: labels,
@@ -99,10 +108,69 @@ class TImageViewer {
         onDelete: onDelete,
         onTap: onTap,
         onLongPress: onLongPress,
+        onDragDismiss: route.dismissFromDrag,
         leadingBuilder: leadingBuilder,
         trailingBuilder: trailingBuilder,
       ),
     );
+    return navigator.push<void>(route);
+  }
+}
+
+class _TImageViewerRoute extends DialogRoute<void> {
+  static const _dismissScale = 0.96;
+
+  _TImageViewerRoute({
+    required super.context,
+    required super.builder,
+    required super.themes,
+    required super.barrierColor,
+    required super.barrierDismissible,
+    required super.useSafeArea,
+    required super.animationStyle,
+  });
+
+  @override
+  bool get allowSnapshotting => false;
+
+  double? _dragDismissOffset;
+
+  void dismissFromDrag(double offset) {
+    _dragDismissOffset = offset;
+    navigator?.pop();
+  }
+
+  @override
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    final transitioned = super.buildTransitions(
+      context,
+      animation,
+      secondaryAnimation,
+      child,
+    );
+    Widget result = ScaleTransition(
+      key: const ValueKey('image-viewer-dismiss-scale'),
+      scale: Tween<double>(begin: _dismissScale, end: 1).animate(animation),
+      child: transitioned,
+    );
+    final dragDismissOffset = _dragDismissOffset;
+    if (dragDismissOffset != null) {
+      final height = MediaQuery.sizeOf(context).height;
+      result = SlideTransition(
+        key: const ValueKey('image-viewer-dismiss-transform'),
+        position: Tween<Offset>(
+          begin: Offset(0, (height - dragDismissOffset) / height),
+          end: Offset.zero,
+        ).animate(animation),
+        child: result,
+      );
+    }
+    return result;
   }
 }
 
@@ -116,6 +184,7 @@ class _TImageViewerView extends StatefulWidget {
     required this.loop,
     required this.autoplay,
     required this.autoplayInterval,
+    required this.onDragDismiss,
     this.labels,
     this.onIndexChanged,
     this.onDelete,
@@ -134,6 +203,7 @@ class _TImageViewerView extends StatefulWidget {
   final bool loop;
   final bool autoplay;
   final Duration autoplayInterval;
+  final ValueChanged<double> onDragDismiss;
   final ValueChanged<int>? onIndexChanged;
   final ValueChanged<int>? onDelete;
   final ValueChanged<int>? onTap;
@@ -148,7 +218,7 @@ class _TImageViewerView extends StatefulWidget {
 class _TImageViewerViewState extends State<_TImageViewerView>
     with SingleTickerProviderStateMixin {
   static const _dismissThreshold = 96.0;
-  static const _motionDuration = Duration(milliseconds: 200);
+  static const _motionDuration = Duration(milliseconds: 100);
 
   late int _index = widget.initialIndex;
   var _dragOffset = 0.0;
@@ -290,7 +360,7 @@ class _TImageViewerViewState extends State<_TImageViewerView>
     }
     if (_dragOffset >= _dismissThreshold ||
         details.primaryVelocity != null && details.primaryVelocity! > 700) {
-      Navigator.of(context).pop();
+      widget.onDragDismiss(_dragOffset);
       return;
     }
     _dragAnimation = Tween<double>(begin: _dragOffset, end: 0).animate(

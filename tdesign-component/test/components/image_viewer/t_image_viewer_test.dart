@@ -113,6 +113,13 @@ void main() {
       );
 
       await tester.tap(find.byTooltip('Close'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      final dismissScale = tester.widget<ScaleTransition>(
+        find.byKey(const ValueKey('image-viewer-dismiss-scale')),
+      );
+      expect(dismissScale.scale.value, closeTo(0.96, 0.001));
+      expect(find.byType(TSwiper), findsOneWidget);
       await tester.pumpAndSettle();
       expect(completed, 1);
       expect(find.byType(TSwiper), findsNothing);
@@ -383,7 +390,7 @@ void main() {
           .widget<InteractiveViewer>(viewer)
           .transformationController!;
       await tester.tap(viewer);
-      await tester.pump(const Duration(milliseconds: 50));
+      await tester.pump(const Duration(milliseconds: 90));
       await tester.tap(viewer);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
@@ -485,6 +492,13 @@ void main() {
       expect(completed, 0);
 
       await tester.drag(page, const Offset(0, 140));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      final dismissingTransform = tester.widget<SlideTransition>(
+        find.byKey(const ValueKey('image-viewer-dismiss-transform')),
+      );
+      expect(dismissingTransform.position.value.dy, greaterThan(0));
+      expect(find.byType(TSwiper), findsOneWidget);
       await tester.pumpAndSettle();
       expect(find.byType(TSwiper), findsNothing);
       expect(completed, 1);
