@@ -12,7 +12,6 @@ TDesign Flutter 从 `0.2.0` 版本开始，正常情况下，每月初发一个�
 
 ## 自定义主题
 - 自定义主题用法请参考：https://tdesign.tencent.com/flutter/getting-started#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98
-- 如果自定义主题未生效，请检查是否设置：`TTheme.needMultiTheme(true);`
 - 在启动即修改主题颜色，完整示例代码请参考：https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/component_test/test_app.dart
 - 在应用使用中切换主题颜色，示例代码请参考 example 的 `main.dart` 和 `home.dart`：https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/main.dart
 - 转换完整代码：https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/shell/theme/css2JsonTheme.dart
