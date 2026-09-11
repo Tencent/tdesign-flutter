@@ -62,12 +62,85 @@ void main() {
     );
     expect(find.text('底部链接'), findsOneWidget);
     expect(
-      find.ancestor(
-        of: find.text('底部链接'),
-        matching: find.byType(IntrinsicWidth),
+      tester.renderObject<RenderBox>(find.text('底部链接')).size.width,
+      57.0,
+    );
+  });
+
+  testWidgets('single link stays on one line and stays centered', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(375, 700);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      app(
+        TFooter(
+          links: [TLink(child: const Text('底部链接'), onPressed: () {})],
+          text: '版权信息',
+        ),
+      ),
+    );
+    final linkBox = tester.renderObject<RenderBox>(find.text('底部链接'));
+    expect(
+      linkBox.size.height,
+      lessThan(30),
+      reason: '最外层收缩包围盒内链接被压缩会逐字换行，行高应保持在单行高度',
+    );
+    expect(tester.getCenter(find.byType(Wrap)).dx, closeTo(187.5, 0.1));
+  });
+
+  testWidgets('multiple links stay on one line with a divider', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(375, 700);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      app(
+        TFooter(
+          links: [
+            TLink(child: const Text('底部链接'), onPressed: () {}),
+            TLink(child: const Text('底部链接'), onPressed: () {}),
+          ],
+          text: '版权信息',
+        ),
+      ),
+    );
+    for (final element in find.text('底部链接').evaluate()) {
+      expect((element.renderObject! as RenderBox).size.height, lessThan(30));
+    }
+    expect(tester.getCenter(find.byType(Wrap)).dx, closeTo(187.5, 0.1));
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is SizedBox && widget.width == 1 && widget.height == 22,
       ),
       findsOneWidget,
     );
+  });
+
+  testWidgets('links wrap as a group when the footer is wide but short', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(160, 700);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      app(
+        TFooter(
+          links: [
+            TLink(child: const Text('底部链接'), onPressed: () {}),
+            TLink(child: const Text('底部链接'), onPressed: () {}),
+          ],
+          text: '版权信息',
+        ),
+      ),
+    );
+    for (final element in find.text('底部链接').evaluate()) {
+      expect((element.renderObject! as RenderBox).size.height, lessThan(30));
+    }
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('logo takes precedence over links and text', (tester) async {

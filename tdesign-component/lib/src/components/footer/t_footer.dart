@@ -22,22 +22,14 @@ class TFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TFooterThemeData>();
-    final children = logo != null
-        ? <Widget>[_renderLogo()]
-        : <Widget>[
-            if (links.isNotEmpty)
-              _renderLinks(context)
-            else
-              _renderText(context),
-          ];
-
     return Container(
       height: theme?.height,
       alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: children,
-      ),
+      child: logo != null
+          ? _renderLogo()
+          : links.isNotEmpty
+          ? _renderLinks(context)
+          : _renderText(context),
     );
   }
 
@@ -55,18 +47,18 @@ class TFooter extends StatelessWidget {
 
   Widget _renderLinks(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 4),
           child: Wrap(
             alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            runSpacing: 4,
+            spacing: 12,
             children: [
               for (var index = 0; index < links.length; index++) ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: IntrinsicWidth(child: links[index]),
-                ),
+                links[index],
                 if (index < links.length - 1)
                   SizedBox(
                     width: 1,
@@ -81,10 +73,7 @@ class TFooter extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [Flexible(child: _renderText(context))],
-          ),
+          child: _renderText(context),
         ),
       ],
     );
