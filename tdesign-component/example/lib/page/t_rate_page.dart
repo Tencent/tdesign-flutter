@@ -39,7 +39,7 @@ class TRatePage extends StatelessWidget {
         title: '组件样式',
         children: [
           ExampleItem(desc: '评分大小', builder: _buildSize, center: false),
-          ExampleItem(desc: '设置评分颜色', builder: _buildColor, center: false),
+          ExampleItem(desc: '评分风格', builder: _buildColor, center: false),
         ],
       ),
       ExampleModule(
@@ -140,6 +140,7 @@ class TRatePage extends StatelessWidget {
           child: const _StatefulRate(initialValue: 3),
         ),
       ),
+      SizedBox(height: context.tTheme.spacer16),
       TCell(
         title: const Text('小尺寸 20'),
         note: Theme(
@@ -167,18 +168,19 @@ class TRatePage extends StatelessWidget {
           child: const _StatefulRate(initialValue: 3, allowHalf: true),
         ),
       ),
+      SizedBox(height: context.tTheme.spacer16),
       TCell(
         title: const Text('线描评分'),
         note: Theme(
-          data: Theme.of(
-            context,
-          ).mergeExtension(const TRateThemeData(starColor: Color(0xFF00A870))),
+          data: Theme.of(context).mergeExtension(
+            TRateThemeData(starColor: context.tTheme.warningColor5),
+          ),
           child: _StatefulRate(
             initialValue: 3,
             icon: (filled) => Icon(
               filled ? TIcons.star_filled : TIcons.star,
               color: filled
-                  ? const Color(0xFF00A870)
+                  ? context.tTheme.warningColor5
                   : context.tTheme.bgColorComponent,
             ),
           ),
@@ -188,9 +190,11 @@ class TRatePage extends StatelessWidget {
   );
 
   @ExampleCode(group: 'rate')
-  Widget _buildVertical(BuildContext context) => const Padding(
-    padding: EdgeInsets.all(16),
-    child: Center(child: _VerticalRate()),
+  Widget _buildVertical(BuildContext context) => Container(
+    key: const ValueKey('rate-vertical-container'),
+    padding: EdgeInsets.all(context.tTheme.spacer16),
+    color: context.tTheme.bgColorContainer,
+    child: const Center(child: _VerticalRate()),
   );
 }
 
@@ -270,7 +274,7 @@ class _VerticalRate extends StatefulWidget {
 }
 
 class _VerticalRateState extends State<_VerticalRate> {
-  static const _texts = ['非常糟糕', '有些糟糕', '可以尝试', '可以前往', '推荐前往'];
+  static const _texts = ['非常糟糕', '有些糟糕', '可以尝试', '服务很棒', '推荐前往'];
   double value = 4;
 
   @override

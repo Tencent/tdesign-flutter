@@ -119,6 +119,11 @@ HarfBuzz 11.4.5，子集 SHA-256 为
 子集 SHA-256 为
 `ba8c31342f34f0d1ca0ceb62e3f50c7de2169e6330f7c2b398993a9a0eff2ba5`。
 
+`RateGoldenCJK-Regular.otf` 仅补充 Rate 竖向描述“服务很棒”所需字形，字符清单见
+`rate_demo_glyphs.txt`。它作为 Rate Demo 最后的专用 fallback，不改变其他页面或
+既有共享字体的像素基线；使用 HarfBuzz 11.4.5 生成，子集 SHA-256 为
+`ba2f7a0b21ed4df2a6b24f8c44bec1d6b183ed28fce76131f89cf8ed93d54e91`。
+
 - 上游：Noto Sans SC 2.004 `NotoSansSC-Regular.otf`
 - 来源：`https://github.com/notofonts/noto-cjk/raw/Sans2.004/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf`
 - 上游 SHA-256：`faa6c9df652116dde789d351359f3d7e5d2285a2b2a1f04a2d7244df706d5ea9`
@@ -153,5 +158,6 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 更新 Avatar 页面文案时，更新 Avatar 字符清单。
 更新 Navbar 页面文案时，更新 Navbar 字符清单。
 更新 Image 页面文案时，更新 Image 字符清单。
+更新 Rate 页面文案时，更新 Rate 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。

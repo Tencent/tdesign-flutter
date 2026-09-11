@@ -342,10 +342,15 @@ class _TRateState extends State<TRate> {
     ColorScheme? explicitColorScheme,
   ) {
     final font = context.tTheme.fontBodyLarge;
+    final disabledTextColor = context.tTheme.textDisabledColor;
+    final explicitOnSurface = explicitColorScheme?.onSurface;
     final defaultStyle = TextStyle(
       color: _enabled
-          ? explicitColorScheme?.onSurface ?? context.tTheme.textColorPrimary
-          : explicitColorScheme?.onSurface.withValues(alpha: 0.38) ??
+          ? _effectiveValue <= 0
+                ? explicitOnSurface?.withValues(alpha: disabledTextColor.a) ??
+                      disabledTextColor
+                : explicitOnSurface ?? context.tTheme.textColorPrimary
+          : explicitOnSurface?.withValues(alpha: 0.38) ??
                 context.tTheme.textDisabledColor,
       fontSize: font?.size ?? 16,
       height: font?.height ?? 1.5,

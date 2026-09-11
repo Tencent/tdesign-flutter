@@ -758,6 +758,56 @@ void main() {
       },
     );
 
+    testWidgets('enabled unrated text follows the disabled text token', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData();
+
+      await tester.pumpWidget(
+        wrap(
+          const TRate(
+            value: 0,
+            texts: ['bad', 'ok', 'good', 'great', 'best'],
+            onChanged: _noop,
+          ),
+          token: token,
+        ),
+      );
+
+      expect(token.textDisabledColor, const Color(0x42000000));
+      expect(
+        tester.widget<Text>(find.text('未评分')).style?.color,
+        token.textDisabledColor,
+      );
+    });
+
+    testWidgets(
+      'enabled unrated text keeps explicit onSurface hue and token opacity',
+      (tester) async {
+        final token = TThemeData.defaultData();
+        final colorScheme = ColorScheme.fromSeed(
+          seedColor: Colors.teal,
+        ).copyWith(onSurface: Colors.purple);
+
+        await tester.pumpWidget(
+          wrap(
+            const TRate(
+              value: 0,
+              texts: ['bad', 'ok', 'good', 'great', 'best'],
+              onChanged: _noop,
+            ),
+            token: token,
+            colorScheme: colorScheme,
+          ),
+        );
+
+        expect(
+          tester.widget<Text>(find.text('未评分')).style?.color,
+          Colors.purple.withValues(alpha: token.textDisabledColor.a),
+        );
+      },
+    );
+
     testWidgets('disabled text color follows the TDesign token', (
       tester,
     ) async {
