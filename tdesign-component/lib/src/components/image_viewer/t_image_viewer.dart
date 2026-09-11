@@ -255,90 +255,88 @@ class _TImageViewerViewState extends State<_TImageViewerView>
           context.tTheme.fontGyColor1,
           context.tTheme.bgColorContainer,
         );
-    return PopScope(
-      child: Material(
-        color: backgroundColor,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Transform.translate(
-              key: const ValueKey('image-viewer-drag-transform'),
-              offset: Offset(0, _dragOffset),
-              child: Padding(
-                padding: EdgeInsets.only(
-                  top: MediaQuery.paddingOf(context).top + appBarHeight,
+    return Material(
+      color: backgroundColor,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Transform.translate(
+            key: const ValueKey('image-viewer-drag-transform'),
+            offset: Offset(0, _dragOffset),
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: MediaQuery.paddingOf(context).top + appBarHeight,
+              ),
+              child: TSwiper(
+                controller: _swiperController,
+                onChanged: _changeIndex,
+                loop: widget.loop,
+                autoplay: widget.autoplay && !_isZoomed,
+                autoplayInterval: widget.autoplayInterval,
+                pagination: TSwiperPaginationVariant.none,
+                physics: _isZoomed
+                    ? const NeverScrollableScrollPhysics()
+                    : const PageScrollPhysics(),
+                children: [
+                  for (var index = 0; index < widget.images.length; index++)
+                    _TImageViewerPage(
+                      key: ValueKey('image-viewer-page-$index'),
+                      image: widget.images[index],
+                      maxWidth: theme?.viewerWidth ?? double.infinity,
+                      maxHeight: theme?.viewerHeight ?? double.infinity,
+                      onTap: () {
+                        final route = ModalRoute.of(context);
+                        widget.onTap?.call(index);
+                        if (mounted && route?.isCurrent == true) {
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      onLongPress: () => widget.onLongPress?.call(index),
+                      onZoomChanged: (zoomed) {
+                        if (_isZoomed != zoomed) {
+                          setState(() => _isZoomed = zoomed);
+                        }
+                      },
+                      onVerticalDragUpdate: _handleVerticalDragUpdate,
+                      onVerticalDragEnd: _handleVerticalDragEnd,
+                    ),
+                ],
+              ),
+            ),
+          ),
+          SafeArea(
+            bottom: false,
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                height: appBarHeight,
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.tTheme.spacer8,
                 ),
-                child: TSwiper(
-                  controller: _swiperController,
-                  onChanged: _changeIndex,
-                  loop: widget.loop,
-                  autoplay: widget.autoplay && !_isZoomed,
-                  autoplayInterval: widget.autoplayInterval,
-                  pagination: TSwiperPaginationVariant.none,
-                  physics: _isZoomed
-                      ? const NeverScrollableScrollPhysics()
-                      : const PageScrollPhysics(),
+                color:
+                    theme?.appBarBackgroundColor ??
+                    context.tTheme.fontGyColor1.withValues(alpha: 1),
+                child: Row(
                   children: [
-                    for (var index = 0; index < widget.images.length; index++)
-                      _TImageViewerPage(
-                        key: ValueKey('image-viewer-page-$index'),
-                        image: widget.images[index],
-                        maxWidth: theme?.viewerWidth ?? double.infinity,
-                        maxHeight: theme?.viewerHeight ?? double.infinity,
-                        onTap: () {
-                          final route = ModalRoute.of(context);
-                          widget.onTap?.call(index);
-                          if (mounted && route?.isCurrent == true) {
-                            Navigator.of(context).pop();
-                          }
-                        },
-                        onLongPress: () => widget.onLongPress?.call(index),
-                        onZoomChanged: (zoomed) {
-                          if (_isZoomed != zoomed) {
-                            setState(() => _isZoomed = zoomed);
-                          }
-                        },
-                        onVerticalDragUpdate: _handleVerticalDragUpdate,
-                        onVerticalDragEnd: _handleVerticalDragEnd,
-                      ),
+                    SizedBox(
+                      width: actionSize,
+                      child:
+                          widget.leadingBuilder?.call(context, _index) ??
+                          _buildClose(context, theme),
+                    ),
+                    Expanded(child: _buildTitle(context, theme)),
+                    SizedBox(
+                      width: actionSize,
+                      child:
+                          widget.trailingBuilder?.call(context, _index) ??
+                          _buildDelete(context, theme),
+                    ),
                   ],
                 ),
               ),
             ),
-            SafeArea(
-              bottom: false,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  height: appBarHeight,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: context.tTheme.spacer8,
-                  ),
-                  color:
-                      theme?.appBarBackgroundColor ??
-                      context.tTheme.fontGyColor1.withValues(alpha: 1),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: actionSize,
-                        child:
-                            widget.leadingBuilder?.call(context, _index) ??
-                            _buildClose(context, theme),
-                      ),
-                      Expanded(child: _buildTitle(context, theme)),
-                      SizedBox(
-                        width: actionSize,
-                        child:
-                            widget.trailingBuilder?.call(context, _index) ??
-                            _buildDelete(context, theme),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

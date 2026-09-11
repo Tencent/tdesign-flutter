@@ -36,6 +36,20 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  Future<void> expectDismissMotion(WidgetTester tester) async {
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+    final dismissScale = tester.widget<ScaleTransition>(
+      find.byKey(const ValueKey('image-viewer-dismiss-scale')),
+    );
+    expect(dismissScale.scale.value, inExclusiveRange(0.96, 1));
+    expect(find.byType(TSwiper), findsOneWidget);
+    await tester.pump(const Duration(milliseconds: 50));
+    expect(dismissScale.scale.value, closeTo(0.96, 0.001));
+    expect(find.byType(TSwiper), findsOneWidget);
+    await tester.pumpAndSettle();
+  }
+
   group('TImageViewer.show', () {
     testWidgets('显示初始页、标签和页码', (tester) async {
       await open(
@@ -113,17 +127,7 @@ void main() {
       );
 
       await tester.tap(find.byTooltip('Close'));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 50));
-      final dismissScale = tester.widget<ScaleTransition>(
-        find.byKey(const ValueKey('image-viewer-dismiss-scale')),
-      );
-      expect(dismissScale.scale.value, inExclusiveRange(0.96, 1));
-      expect(find.byType(TSwiper), findsOneWidget);
-      await tester.pump(const Duration(milliseconds: 50));
-      expect(dismissScale.scale.value, closeTo(0.96, 0.001));
-      expect(find.byType(TSwiper), findsOneWidget);
-      await tester.pumpAndSettle();
+      await expectDismissMotion(tester);
       expect(completed, 1);
       expect(find.byType(TSwiper), findsNothing);
     });
@@ -153,7 +157,7 @@ void main() {
       await tester.tap(find.text('show'));
       await tester.pumpAndSettle();
       navigatorKey.currentState!.pop();
-      await tester.pumpAndSettle();
+      await expectDismissMotion(tester);
 
       expect(completed, 1);
       expect(find.byType(TSwiper), findsNothing);
@@ -293,8 +297,8 @@ void main() {
       final page = find.byKey(const ValueKey('image-viewer-page-0'));
       final previewRect = tester.getRect(page);
       await tester.tapAt(previewRect.bottomRight - const Offset(8, 8));
-      await tester.pump(const Duration(milliseconds: 400));
-      await tester.pumpAndSettle();
+      await tester.pump(const Duration(milliseconds: 300));
+      await expectDismissMotion(tester);
       expect(tapped, 0);
       expect(completed, 1);
       expect(find.byType(TSwiper), findsNothing);
@@ -347,7 +351,7 @@ void main() {
       );
 
       await tester.binding.handlePopRoute();
-      await tester.pumpAndSettle();
+      await expectDismissMotion(tester);
 
       expect(completed, 1);
       expect(find.byType(TSwiper), findsNothing);
@@ -513,6 +517,41 @@ void main() {
       );
       expect(find.byType(TSwiper), findsOneWidget);
       await tester.pumpAndSettle();
+      expect(find.byType(TSwiper), findsNothing);
+      expect(completed, 1);
+    });
+
+    testWidgets('快速下滑未超过距离阈值也会关闭', (tester) async {
+      var completed = 0;
+      await open(
+        tester,
+        app(
+          onShow: (context) {
+            TImageViewer.show(
+              context: context,
+              images: images,
+            ).then((_) => completed++);
+          },
+        ),
+      );
+      final page = find.byKey(const ValueKey('image-viewer-page-0'));
+
+      await tester.fling(
+        page,
+        const Offset(0, 60),
+        2000,
+        initialOffset: const Offset(0, 20),
+        initialOffsetDelay: const Duration(milliseconds: 1),
+      );
+      final dragTransform = tester.widget<Transform>(
+        find.byKey(const ValueKey('image-viewer-drag-transform')),
+      );
+      expect(
+        dragTransform.transform.getTranslation().y,
+        inExclusiveRange(0, 96),
+      );
+      await expectDismissMotion(tester);
+
       expect(find.byType(TSwiper), findsNothing);
       expect(completed, 1);
     });

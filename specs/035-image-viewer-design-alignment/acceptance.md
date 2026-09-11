@@ -13,12 +13,12 @@
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter test test/components/image_viewer/t_image_viewer_test.dart --coverage` | 24/24 通过 | Flutter 3.32.0；图片失败占位实际渲染为 24×24 且位于操作栏下方，放大后横向平移不切换相邻页 |
+| `flutter test test/components/image_viewer/t_image_viewer_test.dart --coverage` | 25/25 通过 | Flutter 3.32.0；图片失败占位实际渲染为 24×24 且位于操作栏下方，放大后横向平移不切换相邻页，快速下滑的速度关闭分支已覆盖 |
 | `flutter test test/image_viewer_demo_test.dart` | 4/4 通过 | Flutter 3.32.0，Example 包 |
 | `flutter test test/image_viewer_demo_golden_test.dart` | 4/4 通过 | 固定 Linux Flutter 3.32.0；生成后无更新复验 |
 | `flutter analyze --fatal-infos` | 通过，0 error / 0 warning | Flutter 3.32.0，全组件包；移除无效蒙层 API 后复验 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例代码片段与源码一致 |
-| `dart run tool/check_component_coverage.dart image_viewer` | 224/228，98.25% | 本地 LCOV 经 `componentProductionSource` 过滤后的 ImageViewer 生产源码口径，超过 95% 门禁 |
+| `dart run tool/check_component_coverage.dart image_viewer` | 241/246，97.97% | 本地 LCOV 经 `componentProductionSource` 过滤后的 ImageViewer 生产源码口径，超过 95% 门禁 |
 
 推送后由远端 CI 在 Flutter 3.32.0 与 latest 上执行严格 analyze、组件与示例功能测试；本表的本地命令不冒充 latest 本地执行证据。
 
