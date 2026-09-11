@@ -57,7 +57,7 @@ void main() {
       );
       expect(find.byType(TDivider), findsOneWidget);
       expect(tester.getSize(find.byType(TDivider)).height, 14);
-      expect(tester.getSize(find.byType(TDivider)).width, 16.5);
+      expect(tester.getSize(find.byType(TDivider)).width, 32.5);
     });
 
     testWidgets('竖线 + child 时 child 不渲染', (tester) async {
