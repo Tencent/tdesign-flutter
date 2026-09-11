@@ -110,11 +110,19 @@ class _TFormPageState extends State<TFormPage> {
               children: [
                 Expanded(
                   child: TButton(
+                    key: const ValueKey('form-layout-horizontal'),
                     size: TButtonSize.small,
                     variant: TButtonVariant.fill,
                     colorScheme: _layout == TFormLayout.horizontal
                         ? TButtonColorScheme.light
                         : TButtonColorScheme.defaultTheme,
+                    style: _layout == TFormLayout.horizontal
+                        ? null
+                        : ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                              context.tTheme.bgColorSecondaryContainer,
+                            ),
+                          ),
                     onPressed: () =>
                         setState(() => _layout = TFormLayout.horizontal),
                     child: const TText('水平排布'),
@@ -123,11 +131,19 @@ class _TFormPageState extends State<TFormPage> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: TButton(
+                    key: const ValueKey('form-layout-vertical'),
                     size: TButtonSize.small,
                     variant: TButtonVariant.fill,
                     colorScheme: _layout == TFormLayout.vertical
                         ? TButtonColorScheme.light
                         : TButtonColorScheme.defaultTheme,
+                    style: _layout == TFormLayout.vertical
+                        ? null
+                        : ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                              context.tTheme.bgColorSecondaryContainer,
+                            ),
+                          ),
                     onPressed: () =>
                         setState(() => _layout = TFormLayout.vertical),
                     child: const TText('竖直排布'),
@@ -139,9 +155,17 @@ class _TFormPageState extends State<TFormPage> {
         ),
         TCell(
           title: const TText('禁用态'),
-          note: TSwitch(
-            value: _disabled,
-            onChanged: (value) => setState(() => _disabled = value),
+          note: Theme(
+            data: Theme.of(context).mergeExtension(
+              TSwitchThemeData(
+                trackOffColor: context.tTheme.componentBorderColor,
+              ),
+            ),
+            child: TSwitch(
+              key: const ValueKey('form-disabled-switch'),
+              value: _disabled,
+              onChanged: (value) => setState(() => _disabled = value),
+            ),
           ),
         ),
         const SizedBox(height: 12),
@@ -153,9 +177,6 @@ class _TFormPageState extends State<TFormPage> {
   @ExampleCode(group: 'form')
   Widget _buildForm(BuildContext context) {
     final horizontal = _layout == TFormLayout.horizontal;
-    final trailingContentAlignment = horizontal
-        ? TFormItemContentAlignment.end
-        : null;
     return Theme(
       data: Theme.of(context).mergeExtension(
         TFormThemeData(
@@ -214,24 +235,14 @@ class _TFormPageState extends State<TFormPage> {
               onChanged: (value) => setState(() => _gender = value),
               validator: (value) => value?.isNotEmpty == true ? null : '不能为空',
               builder: (context, value, onChanged, errorText) => TFormItem(
+                key: const ValueKey('form-gender-item'),
                 label: '性别',
-                child: Theme(
-                  data: Theme.of(context).mergeExtension(
-                    TRadioThemeData(insetSpacing: context.tTheme.spacer4),
-                  ),
-                  child: TRadioGroup<String>(
-                    value: value,
-                    options: const [
-                      TRadioOption(value: 'man', label: '男'),
-                      TRadioOption(value: 'women', label: '女'),
-                      TRadioOption(value: 'secret', label: '保密'),
-                    ],
-                    direction: Axis.horizontal,
-                    columns: 3,
-                    showDivider: false,
-                    onChanged: _disabled ? null : onChanged,
-                  ),
-                ),
+                verticalAlignment: horizontal
+                    ? TFormItemVerticalAlignment.center
+                    : null,
+                child: horizontal
+                    ? _buildGenderGroup(context, value, onChanged)
+                    : _buildCompactGenderGroup(context, value, onChanged),
               ),
             ),
             TFormField<String>(
@@ -250,8 +261,8 @@ class _TFormPageState extends State<TFormPage> {
                       ? null
                       : () => _showDatePicker(context, onChanged),
                   child: TFormItem(
+                    key: const ValueKey('form-birth-item'),
                     label: '生日',
-                    contentAlignment: trailingContentAlignment,
                     extra: _buildArrow(context),
                     child: _buildSelectionValue(context, value, '请输入生日'),
                   ),
@@ -274,8 +285,8 @@ class _TFormPageState extends State<TFormPage> {
                       ? null
                       : () => _showRegionPicker(context, onChanged),
                   child: TFormItem(
+                    key: const ValueKey('form-place-item'),
                     label: '籍贯',
-                    contentAlignment: trailingContentAlignment,
                     extra: _buildArrow(context),
                     child: _buildSelectionValue(context, value, '请选择籍贯'),
                   ),
@@ -287,8 +298,8 @@ class _TFormPageState extends State<TFormPage> {
               value: _age,
               onChanged: (value) => setState(() => _age = value),
               builder: (context, value, onChanged, errorText) => TFormItem(
+                key: const ValueKey('form-age-item'),
                 label: '年限',
-                contentAlignment: trailingContentAlignment,
                 child: TStepper(
                   value: value,
                   variant: TStepperVariant.filled,
@@ -302,8 +313,8 @@ class _TFormPageState extends State<TFormPage> {
               onChanged: (value) => setState(() => _description = value),
               validator: (value) => (value ?? 0) > 3 ? null : '分数过低会影响整体评价',
               builder: (context, value, onChanged, errorText) => TFormItem(
+                key: const ValueKey('form-description-item'),
                 label: '自我评价',
-                contentAlignment: trailingContentAlignment,
                 child: TRate(
                   value: value,
                   allowHalf: true,
@@ -358,7 +369,7 @@ class _TFormPageState extends State<TFormPage> {
                 ),
               ),
             ),
-            _buildButtons(horizontal),
+            _buildButtons(),
           ],
         ),
       ),
@@ -391,7 +402,7 @@ class _TFormPageState extends State<TFormPage> {
     );
   }
 
-  Widget _buildButtons(bool horizontal) {
+  Widget _buildButtons() {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -404,25 +415,99 @@ class _TFormPageState extends State<TFormPage> {
         children: [
           Expanded(
             child: TButton(
+              key: const ValueKey('form-reset-button'),
               size: TButtonSize.large,
               variant: TButtonVariant.fill,
-              colorScheme: horizontal
-                  ? TButtonColorScheme.primary
-                  : TButtonColorScheme.light,
-              onPressed: _disabled ? null : _formController.submit,
-              child: const TText('提交'),
+              colorScheme: TButtonColorScheme.light,
+              onPressed: _disabled ? null : _reset,
+              child: const TText('重置'),
             ),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: TButton(
+              key: const ValueKey('form-submit-button'),
               size: TButtonSize.large,
               variant: TButtonVariant.fill,
-              colorScheme: TButtonColorScheme.defaultTheme,
-              onPressed: _disabled ? null : _reset,
-              child: const TText('重置'),
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: _disabled ? null : _formController.submit,
+              child: const TText('提交'),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGenderGroup(
+    BuildContext context,
+    String value,
+    ValueChanged<String>? onChanged,
+  ) {
+    return Theme(
+      data: Theme.of(
+        context,
+      ).mergeExtension(TRadioThemeData(insetSpacing: context.tTheme.spacer4)),
+      child: TRadioGroup<String>(
+        value: value,
+        options: const [
+          TRadioOption(value: 'man', label: '男'),
+          TRadioOption(value: 'women', label: '女'),
+          TRadioOption(value: 'secret', label: '保密'),
+        ],
+        direction: Axis.horizontal,
+        columns: 3,
+        showDivider: false,
+        onChanged: _disabled ? null : onChanged,
+      ),
+    );
+  }
+
+  Widget _buildCompactGenderGroup(
+    BuildContext context,
+    String value,
+    ValueChanged<String>? onChanged,
+  ) {
+    const options = [
+      TRadioOption(value: 'man', label: '男'),
+      TRadioOption(value: 'women', label: '女'),
+      TRadioOption(value: 'secret', label: '保密'),
+    ];
+    return Theme(
+      data: Theme.of(
+        context,
+      ).copyWith(materialTapTargetSize: MaterialTapTargetSize.shrinkWrap),
+      child: Row(
+        key: const ValueKey('form-vertical-gender-options'),
+        children: [
+          for (final option in options)
+            Expanded(
+              child: Semantics(
+                label: option.label,
+                checked: value == option.value,
+                inMutuallyExclusiveGroup: true,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: _disabled || onChanged == null
+                      ? null
+                      : () => onChanged(option.value),
+                  child: Row(
+                    children: [
+                      ExcludeSemantics(
+                        child: TRadio<String>(
+                          value: option.value,
+                          groupValue: value,
+                          onChanged: _disabled ? null : onChanged,
+                          showDivider: false,
+                        ),
+                      ),
+                      SizedBox(width: context.tTheme.spacer8),
+                      TText(option.label),
+                    ],
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
