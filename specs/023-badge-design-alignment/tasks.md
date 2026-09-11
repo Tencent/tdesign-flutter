@@ -9,3 +9,4 @@
 - [x] DONE 完成源码差异与真机 Review
 - [x] DONE 修正默认 Dot 直径并复跑共享 Badge 测试与 Golden
 - [x] DONE 隔离 TBadge 8px Dot 默认值并移除 Material Badge smallSize 投影
+- [x] DONE 增加自定义徽标默认锚点并保留 offset 覆盖能力

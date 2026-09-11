@@ -290,6 +290,13 @@ ThemeData _withGoldenFonts(ThemeData theme, DemoPageTestSpec spec) {
     primaryTextTheme: theme.primaryTextTheme.apply(
       fontFamilyFallback: fallback,
     ),
+    // Golden 字体只用于稳定跨平台字形，不能把全局 labelSmall 的 12/20
+    // 误当成 TBadge 的显式尺寸覆盖；Badge 仍应保留自己的 10/16 Token。
+    badgeTheme: theme.badgeTheme.copyWith(
+      textStyle: theme.badgeTheme.textStyle?.copyWith(
+        fontFamilyFallback: fallback,
+      ),
+    ),
   );
   if (spec.name != 'dialog') {
     return withFonts;
