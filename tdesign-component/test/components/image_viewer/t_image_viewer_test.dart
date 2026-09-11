@@ -114,10 +114,13 @@ void main() {
 
       await tester.tap(find.byTooltip('Close'));
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 50));
       final dismissScale = tester.widget<ScaleTransition>(
         find.byKey(const ValueKey('image-viewer-dismiss-scale')),
       );
+      expect(dismissScale.scale.value, inExclusiveRange(0.96, 1));
+      expect(find.byType(TSwiper), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 50));
       expect(dismissScale.scale.value, closeTo(0.96, 0.001));
       expect(find.byType(TSwiper), findsOneWidget);
       await tester.pumpAndSettle();
@@ -497,7 +500,17 @@ void main() {
       final dismissingTransform = tester.widget<SlideTransition>(
         find.byKey(const ValueKey('image-viewer-dismiss-transform')),
       );
-      expect(dismissingTransform.position.value.dy, greaterThan(0));
+      final dragTransform = tester.widget<Transform>(
+        find.byKey(const ValueKey('image-viewer-drag-transform')),
+      );
+      final dragOffset = dragTransform.transform.getTranslation().y;
+      final viewportHeight = MediaQuery.sizeOf(
+        tester.element(find.byType(TSwiper)),
+      ).height;
+      expect(
+        dismissingTransform.position.value.dy,
+        closeTo((viewportHeight - dragOffset) / viewportHeight, 0.001),
+      );
       expect(find.byType(TSwiper), findsOneWidget);
       await tester.pumpAndSettle();
       expect(find.byType(TSwiper), findsNothing);

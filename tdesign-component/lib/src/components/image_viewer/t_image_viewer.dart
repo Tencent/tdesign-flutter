@@ -90,7 +90,6 @@ class TImageViewer {
       useSafeArea: false,
       animationStyle: const AnimationStyle(
         duration: _TImageViewerViewState._motionDuration,
-        reverseDuration: _TImageViewerViewState._motionDuration,
         curve: Curves.easeOutCubic,
         reverseCurve: Curves.easeInCubic,
       ),
