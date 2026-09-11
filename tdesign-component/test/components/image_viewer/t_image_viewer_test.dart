@@ -84,12 +84,18 @@ void main() {
         ),
       );
 
-      final placeholder = tester.widget<Icon>(
-        find.byKey(const ValueKey('image-viewer-error-placeholder')).first,
-      );
+      final placeholderFinder = find
+          .byKey(const ValueKey('image-viewer-error-placeholder'))
+          .first;
+      final placeholder = tester.widget<Icon>(placeholderFinder);
       expect(placeholder.icon, TIcons.close);
       expect(placeholder.size, token.spacer24);
       expect(placeholder.color, token.textColorAnti);
+      expect(tester.getSize(placeholderFinder), Size.square(token.spacer24));
+      expect(
+        tester.getTopLeft(placeholderFinder).dy,
+        greaterThanOrEqualTo(token.spacer48),
+      );
     });
 
     testWidgets('关闭按钮完成展示 Future 并关闭 Dialog', (tester) async {

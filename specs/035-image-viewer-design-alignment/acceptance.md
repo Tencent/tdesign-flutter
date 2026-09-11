@@ -13,7 +13,7 @@
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter test test/components/image_viewer/t_image_viewer_test.dart --coverage` | 24/24 通过 | Flutter 3.32.0；新增图片失败占位及放大后横向平移不切换相邻页的验证 |
+| `flutter test test/components/image_viewer/t_image_viewer_test.dart --coverage` | 24/24 通过 | Flutter 3.32.0；图片失败占位实际渲染为 24×24 且位于操作栏下方，放大后横向平移不切换相邻页 |
 | `flutter test test/image_viewer_demo_test.dart` | 4/4 通过 | Flutter 3.32.0，Example 包 |
 | `flutter test test/image_viewer_demo_golden_test.dart` | 4/4 通过 | 固定 Linux Flutter 3.32.0；生成后无更新复验 |
 | `flutter analyze --fatal-infos` | 通过，0 error / 0 warning | Flutter 3.32.0，全组件包；移除无效蒙层 API 后复验 |
