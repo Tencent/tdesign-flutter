@@ -25,3 +25,5 @@
 - [x] DONE 更新 Example 和 API dartdoc
 - [x] DONE 执行 Flutter 3.32.0/latest 验证并记录结果
 - [x] DONE 完成 Review
+- [x] DONE 将 Textarea 内部标题默认改为横排，并补齐显式竖排样式
+- [x] DONE 移除 Textarea Demo 中设计稿不存在的按字符权重限制场景

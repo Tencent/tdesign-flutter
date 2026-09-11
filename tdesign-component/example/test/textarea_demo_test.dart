@@ -9,8 +9,16 @@ void main() {
       name: 'textarea',
       title: 'Textarea 多行文本框',
       page: TTextareaPage(),
-      expectedTexts: ['01 组件类型', '02 组件状态', '03 组件样式', '04 特殊样式'],
+      expectedTexts: [
+        '01 组件类型',
+        '带标题多行文本框',
+        '02 组件状态',
+        '03 组件样式',
+        '竖排样式',
+        '04 特殊样式',
+      ],
       componentType: TTextarea,
+      expectedComponentCount: 8,
     ),
   );
 }

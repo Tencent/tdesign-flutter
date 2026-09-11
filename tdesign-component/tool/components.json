@@ -429,7 +429,8 @@
       },
       "api": {
         "names": [
-          "TTextarea"
+          "TTextarea",
+          "TTextareaLayout"
         ],
         "getComments": true
       }
