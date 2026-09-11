@@ -29,7 +29,7 @@
 | 组件 | 小程序分组 / 实例 | Flutter Example | 结果 |
 | --- | --- | --- | --- |
 | Input | 3 组：组件类型 5、组件状态 2、组件样式 5 | 3 组、共 12 个同序实例 | 完整 |
-| Textarea | 4 组：组件类型 5、组件状态 1、组件样式 1、特殊样式 1 | 4 组、共 8 个同序实例 | 完整 |
+| Textarea | 4 组：组件类型 4、组件状态 1、组件样式 2、特殊样式 1 | 4 组、共 8 个同序实例 | 完整 |
 | Form | 1 组；横向/竖向切换、禁用态、9 个字段和提交/重置 | 同一组场景及字段矩阵 | 完整 |
 
 - Demo 页面只编排分组、场景容器、业务插槽和明确的定制场景；输入壳层、字段行、提示/错误文字和 Textarea 内部视觉由组件实现。状态 Demo 的红色清除图标与小程序一致，由局部组件 Theme 显式定制，不改变 `TInput` 的默认清除图标颜色。
@@ -69,3 +69,14 @@ docker run --rm --platform linux/amd64 \
 ```
 
 更新后必须在同一容器去掉 `--update-goldens` 再运行一次，确认 Linux 0% 比较通过。
+
+## Textarea 布局补充验收（2026-09-11）
+
+- 基线：`develop@044122f61d78ce1c122b8f66b38742b13554dcf4`
+- 分支：`rss1102/fix/textarea-demo-alignment`
+- Flutter 3.32.0：Textarea 13 项组件测试全部通过，组件包与 Example `flutter analyze --fatal-infos` 无问题。
+- Flutter 3.47.0：Textarea 13 项组件测试全部通过，组件包与 Example `flutter analyze` 无问题。
+- Textarea 生产源码覆盖率：`101/101 = 100.00%`。
+- 示例代码生成校验通过；公开 API 文档已登记并生成 `TTextareaLayout`。
+- Flutter 3.32.0 Linux 固定环境中更新浅色/深色 Textarea 页面 Golden，随后无更新参数复跑通过（0% 像素差异）。
+- Android 真机 `40302eeb`（Android 16，1220×2656）已完成 debug APK 构建与安装；最终页面截图因设备锁屏未完成。
