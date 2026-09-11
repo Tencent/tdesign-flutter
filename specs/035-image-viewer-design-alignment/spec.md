@@ -24,7 +24,7 @@ Flutter 不机械复制小程序的属性名称和受控组件模型，但覆盖
 | 小程序能力 | Flutter 等价表达 |
 | --- | --- |
 | `images`、`initial-index` | `images`、`initialIndex` |
-| `visible`、`default-visible` | `TImageViewer.show` 的 Route/Future 生命周期 |
+| `visible`、`default-visible` | `TImageViewer.show` 打开 Route；调用方通过 `Navigator.pop` 主动关闭，返回的 `Future<void>` 通知关闭完成 |
 | `show-index` | `showIndex` |
 | `close-btn`、`delete-btn` 及对应插槽 | `showClose`、`showDelete`、`leadingBuilder`、`trailingBuilder` |
 | `change`、`close`、`delete` | `onIndexChanged`、`TImageViewer.show` 返回的 `Future<void>`、`onDelete` |
@@ -34,7 +34,7 @@ Flutter 不机械复制小程序的属性名称和受控组件模型，但覆盖
 | `image-props` | 图片来源、缓存和解码由 `ImageProvider` 配置；预览组件固定使用适合全屏查看的 `BoxFit.contain`，长按业务由 `onLongPress` 承担 |
 | `using-custom-navbar` | Flutter 通过 `SafeArea` 自动适配系统状态栏，无需业务开关 |
 
-小程序 `close` 事件中的 trigger、`imageProps` 的逐字段透传，以及 `visible` 的受控/非受控双入口不作为 Flutter 公共 API 逐项复制：关闭完成由 `TImageViewer.show` 返回的单一 `Future<void>` 通知，点击来源已有 `onTap`；图片预览保持统一的 `contain` 语义，来源、缓存和解码交给 `ImageProvider`；展示生命周期由 Route 管理。这样保留用户可见能力，同时避免重复状态源和仅服务底层实现的配置透传。
+小程序 `close` 事件中的 trigger、`imageProps` 的逐字段透传，以及 `visible` 的受控/非受控双入口不作为 Flutter 公共 API 逐项复制：调用方通过 `TImageViewer.show` 打开 Route，需要外部主动关闭时使用所持有的 `NavigatorState.pop`，Route 关闭后由单一 `Future<void>` 通知完成；点击来源已有 `onTap`。图片预览保持统一的 `contain` 语义，来源、缓存和解码交给 `ImageProvider`。这样覆盖外部打开、外部关闭和关闭完成通知，同时避免再引入一套可与 Navigator 冲突的布尔状态源。
 
 ## 范围
 

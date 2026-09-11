@@ -6,6 +6,8 @@
 ##### TImageViewer.show
 
 显示全屏图片预览。
+调用方需要主动关闭时，可通过持有的 `NavigatorState` 调用
+`NavigatorState.pop`；返回的 Future 会在路由关闭后完成一次。
 
 返回类型：`Future<void>`
 

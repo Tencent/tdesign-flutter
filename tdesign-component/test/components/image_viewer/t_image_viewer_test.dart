@@ -93,6 +93,37 @@ void main() {
       expect(find.byType(TSwiper), findsNothing);
     });
 
+    testWidgets('调用方可通过 Navigator 主动关闭并完成展示 Future', (tester) async {
+      final navigatorKey = GlobalKey<NavigatorState>();
+      var completed = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          navigatorKey: navigatorKey,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => TextButton(
+                onPressed: () {
+                  TImageViewer.show(
+                    context: context,
+                    images: images,
+                  ).then((_) => completed++);
+                },
+                child: const Text('show'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('show'));
+      await tester.pumpAndSettle();
+      navigatorKey.currentState!.pop();
+      await tester.pumpAndSettle();
+
+      expect(completed, 1);
+      expect(find.byType(TSwiper), findsNothing);
+    });
+
     testWidgets('showClose=false 隐藏关闭按钮', (tester) async {
       await open(
         tester,

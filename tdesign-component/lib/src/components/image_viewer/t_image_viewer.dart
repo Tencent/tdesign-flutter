@@ -20,6 +20,8 @@ class TImageViewer {
   /// 显示全屏图片预览。
   ///
   /// [context] 用于展示预览弹窗。
+  /// 调用方需要主动关闭时，可通过持有的 [NavigatorState] 调用
+  /// [NavigatorState.pop]；返回的 Future 会在路由关闭后完成一次。
   /// [images] 是待预览的图片列表，不能为空。
   /// [labels] 是与图片一一对应的标签文案。
   /// [initialIndex] 设置初始展示的图片索引。
