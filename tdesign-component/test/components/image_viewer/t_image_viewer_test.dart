@@ -73,6 +73,25 @@ void main() {
       expect(index.style?.fontSize, token.fontBodyMedium?.size);
     });
 
+    testWidgets('图片加载失败时显示 TDesign 错误占位', (tester) async {
+      final token = TThemeData.defaultData();
+      await open(
+        tester,
+        app(
+          onShow: (context) {
+            TImageViewer.show(context: context, images: images);
+          },
+        ),
+      );
+
+      final placeholder = tester.widget<Icon>(
+        find.byKey(const ValueKey('image-viewer-error-placeholder')).first,
+      );
+      expect(placeholder.icon, TIcons.close);
+      expect(placeholder.size, token.spacer24);
+      expect(placeholder.color, token.textColorAnti);
+    });
+
     testWidgets('关闭按钮完成展示 Future 并关闭 Dialog', (tester) async {
       var completed = 0;
       await open(
@@ -413,6 +432,11 @@ void main() {
       );
       expect(tester.widget<TSwiper>(find.byType(TSwiper)).autoplay, isFalse);
 
+      await tester.drag(viewer, const Offset(-300, 0));
+      await tester.pumpAndSettle();
+      expect(find.text('1/3'), findsOneWidget);
+      expect(controller.value.getMaxScaleOnAxis(), greaterThan(1));
+
       await tester.tap(viewer);
       await tester.pump(const Duration(milliseconds: 50));
       await tester.tap(viewer);
@@ -522,6 +546,15 @@ void main() {
         close.style?.overlayColor?.resolve(const {WidgetState.pressed}),
         token.fontWhColor4,
       );
+      expect(
+        close.style?.minimumSize?.resolve(const {}),
+        Size.square(token.spacer40),
+      );
+      expect(
+        close.style?.padding?.resolve(const {}),
+        EdgeInsets.all(token.spacer8),
+      );
+      expect(close.style?.iconSize?.resolve(const {}), token.spacer24);
       expect(close.style?.shape?.resolve(const {}), isA<CircleBorder>());
     });
 

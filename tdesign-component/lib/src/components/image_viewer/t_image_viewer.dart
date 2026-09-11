@@ -179,6 +179,7 @@ class _TImageViewerViewState extends State<_TImageViewerView>
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TImageViewerThemeData>();
     final appBarHeight = context.tTheme.spacer48;
+    final actionSize = context.tTheme.spacer40;
     final backgroundColor =
         theme?.backgroundColor ??
         Color.alphaBlend(
@@ -250,14 +251,14 @@ class _TImageViewerViewState extends State<_TImageViewerView>
                   child: Row(
                     children: [
                       SizedBox(
-                        width: 40,
+                        width: actionSize,
                         child:
                             widget.leadingBuilder?.call(context, _index) ??
                             _buildClose(context, theme),
                       ),
                       Expanded(child: _buildTitle(context, theme)),
                       SizedBox(
-                        width: 40,
+                        width: actionSize,
                         child:
                             widget.trailingBuilder?.call(context, _index) ??
                             _buildDelete(context, theme),
@@ -395,10 +396,10 @@ class _TImageViewerViewState extends State<_TImageViewerView>
       surfaceTintColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       shadowColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       elevation: const WidgetStatePropertyAll<double>(0),
-      minimumSize: const WidgetStatePropertyAll(Size.square(40)),
-      maximumSize: const WidgetStatePropertyAll(Size.square(40)),
-      padding: const WidgetStatePropertyAll(EdgeInsets.all(8)),
-      iconSize: const WidgetStatePropertyAll(24),
+      minimumSize: WidgetStatePropertyAll(Size.square(context.tTheme.spacer40)),
+      maximumSize: WidgetStatePropertyAll(Size.square(context.tTheme.spacer40)),
+      padding: WidgetStatePropertyAll(EdgeInsets.all(context.tTheme.spacer8)),
+      iconSize: WidgetStatePropertyAll(context.tTheme.spacer24),
       shape: const WidgetStatePropertyAll(CircleBorder()),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
@@ -484,7 +485,12 @@ class _TImageViewerPageState extends State<_TImageViewerPage>
             child: Image(
               image: widget.image,
               fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+              errorBuilder: (_, __, ___) => Icon(
+                TIcons.close,
+                key: const ValueKey('image-viewer-error-placeholder'),
+                size: context.tTheme.spacer24,
+                color: context.tTheme.textColorAnti,
+              ),
             ),
           ),
         ),

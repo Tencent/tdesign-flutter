@@ -13,19 +13,19 @@
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter test test/components/image_viewer/t_image_viewer_test.dart --coverage` | 23/23 通过 | Flutter 3.32.0；覆盖按钮、全屏预览区、下拉、系统返回和调用方 `Navigator.pop` 完成单一 Future，以及缩放、动效和导航状态 |
+| `flutter test test/components/image_viewer/t_image_viewer_test.dart --coverage` | 24/24 通过 | Flutter 3.32.0；新增图片失败占位及放大后横向平移不切换相邻页的验证 |
 | `flutter test test/image_viewer_demo_test.dart` | 4/4 通过 | Flutter 3.32.0，Example 包 |
 | `flutter test test/image_viewer_demo_golden_test.dart` | 4/4 通过 | 固定 Linux Flutter 3.32.0；生成后无更新复验 |
 | `flutter analyze --fatal-infos` | 通过，0 error / 0 warning | Flutter 3.32.0，全组件包；移除无效蒙层 API 后复验 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例代码片段与源码一致 |
-| `dart run tool/check_component_coverage.dart image_viewer` | 217/221，98.19% | 本地 LCOV 经 `componentProductionSource` 过滤后的 ImageViewer 生产源码口径，超过 95% 门禁 |
+| `dart run tool/check_component_coverage.dart image_viewer` | 224/228，98.25% | 本地 LCOV 经 `componentProductionSource` 过滤后的 ImageViewer 生产源码口径，超过 95% 门禁 |
 
 推送后由远端 CI 在 Flutter 3.32.0 与 latest 上执行严格 analyze、组件与示例功能测试；本表的本地命令不冒充 latest 本地执行证据。
 
 ## 人工验收
 
 - [x] 浏览器真实操作：点击“带操作图片预览”打开面板，核对关闭/`1/2`/删除操作栏与图片布局，再点击关闭返回 Demo。
-- [x] 双击 1x/2x、双指缩放 1～3x、横向切图、下拉阈值关闭由真实指针 Widget 测试覆盖。
+- [x] 双击 1x/2x、双指缩放 1～3x、放大后横向平移不切换相邻页、横向切图和下拉阈值关闭由真实指针 Widget 测试覆盖。
 
 ## 小程序能力核对
 
