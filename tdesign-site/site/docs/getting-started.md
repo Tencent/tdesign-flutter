@@ -144,9 +144,6 @@ MaterialApp(
 3. **应用**：将主题 JSON 加载进 `TTheme`，美观的自定义主题就设置完成了。
 
 ```dart
-// 开启多套主题功能
-TTheme.needMultiTheme();
-
 var jsonString = await rootBundle.loadString('assets/theme.json');
 var _themeData = TThemeData.fromJson('green', jsonString);
 // ...
@@ -164,8 +161,6 @@ MaterialApp(
 通过"主题生成器"生成的主题配置文件，默认支持暗色模式相关色值。
 
 ```dart
-// 开启多套主题功能
-TTheme.needMultiTheme();
 // ...
 // MaterialApp 中设置三个属性如下，如果有自定义主题属性，可以通过 copyWith() 方法修改。
 // 注：主题切换需要业务自己实现，比如使用 Provider，具体可参考 tdesign-flutter/tdesign-component/example/lib/component_test/dark_test.dart

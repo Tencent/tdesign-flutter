@@ -101,8 +101,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   var themeJsonString = await rootBundle.loadString('assets/theme.json');
-  /// 开启多套主题功能
-  TTheme.needMultiTheme(true);
   /// 默认浅色主题,xxxDark为深色主题
   themeData = TThemeData.fromJson('red', themeJsonString, darkName: 'redDark') ??
       TTheme.defaultData();
