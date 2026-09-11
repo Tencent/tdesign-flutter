@@ -168,16 +168,26 @@ class TBadge extends StatelessWidget {
     final isDot = variant == TBadgeVariant.dot;
     final isCorner = _isCornerVariant(variant);
     final text = label ?? '';
-    final textLabel = TText(
-      text,
-      style: textStyle.copyWith(
-        color: textColor,
-        leadingDistribution:
-            textStyle.leadingDistribution ?? TextLeadingDistribution.even,
-      ),
-      textHeightBehavior: const TextHeightBehavior(
-        applyHeightToFirstAscent: false,
-        applyHeightToLastDescent: false,
+    final textLineHeight = switch ((textStyle.fontSize, textStyle.height)) {
+      (final double fontSize, final double height) =>
+        MediaQuery.textScalerOf(context).scale(fontSize) * height,
+      _ => effectiveLargeSize,
+    };
+    final textLabel = SizedBox(
+      height: textLineHeight,
+      child: Center(
+        child: TText(
+          text,
+          style: textStyle.copyWith(
+            color: textColor,
+            leadingDistribution:
+                textStyle.leadingDistribution ?? TextLeadingDistribution.even,
+          ),
+          textHeightBehavior: const TextHeightBehavior(
+            applyHeightToFirstAscent: false,
+            applyHeightToLastDescent: false,
+          ),
+        ),
       ),
     );
     final borderColor =
