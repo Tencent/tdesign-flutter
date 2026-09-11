@@ -37,6 +37,7 @@ void main() {
   }
 
   Future<void> expectDismissMotion(WidgetTester tester) async {
+    // 点击关闭的路径需要先完成手势帧并启动路由反向动画，再采样退场动效。
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 50));
     final dismissScale = tester.widget<ScaleTransition>(
@@ -329,6 +330,8 @@ void main() {
       await tester.tap(find.text('show'));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('image-viewer-page-0')));
+      // onTap 已由业务主动 pop；这里只验证组件不会再次 pop 宿主页，
+      // 因此不复用用于校验组件退场动画的 expectDismissMotion。
       await tester.pump(const Duration(milliseconds: 400));
       await tester.pumpAndSettle();
 
