@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
+import 'package:tdesign_flutter_example/base/notification_center.dart';
 import 'package:tdesign_flutter_example/page/t_tag_page.dart';
 
 import 'demo_page_test_utils.dart';
@@ -74,7 +78,57 @@ void main() {
     await tester.pump();
     expect(tester.widget<TSelectTag>(firstOutlineTag).value, isTrue);
 
+    TNotification.postNotification('onApiVisibleChange', {'apiVisible': true});
+    await tester.pumpAndSettle();
+    expect(tester.widget<TSelectTag>(firstOutlineTag).value, isTrue);
+    TNotification.postNotification('onApiVisibleChange', {'apiVisible': false});
+    await tester.pumpAndSettle();
+
     expect(tester.takeException(), isNull);
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
+
+  testWidgets('Tag 新增示例代码入口展示对应的生成片段', (tester) async {
+    await pumpFullDemoPage(tester, _tagSpec, ThemeMode.light);
+
+    const longText = '超长省略文本标签超长省略文本标签';
+    final longWrapper = find
+        .ancestor(
+          of: find.widgetWithText(TTag, longText),
+          matching: find.byType(CodeWrapper),
+        )
+        .first;
+    final outlineWrapper = find
+        .ancestor(
+          of: find.byWidgetPredicate((widget) =>
+              widget is TSelectTag &&
+              widget.text == '标签一' &&
+              widget.variant == TTagVariant.outline),
+          matching: find.byType(CodeWrapper),
+        )
+        .first;
+
+    TNotification.postNotification('onApiVisibleChange', {'apiVisible': true});
+    await tester.pumpAndSettle();
+
+    final entries = [
+      (wrapper: longWrapper, asset: 'assets/code/tag._buildLongTextTag.txt'),
+      (
+        wrapper: outlineWrapper,
+        asset: 'assets/code/tag.TagSelectOutlineExample.txt'
+      ),
+    ];
+    for (final entry in entries) {
+      final source = await rootBundle.loadString(entry.asset);
+      await tester.tap(
+          find.descendant(of: entry.wrapper, matching: find.text('code')));
+      await tester.pumpAndSettle();
+      final panel = find.byType(Markdown);
+      expect(tester.widget<Markdown>(panel).data, contains(source));
+      Navigator.of(tester.element(panel)).pop();
+      await tester.pumpAndSettle();
+    }
+
     await disposeDemoPage(tester);
   }, tags: 'demo');
 }

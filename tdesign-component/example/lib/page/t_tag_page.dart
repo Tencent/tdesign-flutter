@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+
 import '../../base/example_widget.dart';
 import '../annotation/example_code.dart';
+import 'tag/tag_select_outline_example.dart';
 
 class TTagPage extends StatefulWidget {
   const TTagPage({Key? key}) : super(key: key);
@@ -88,7 +90,9 @@ class _TTagPageState extends State<TTagPage> {
                   return Row(
                     children: [
                       SizedBox(width: context.tTheme.spacer16),
-                      CodeWrapper(builder: _buildLongTextTag),
+                      CodeWrapper(
+                          builder: _buildLongTextTag,
+                          methodName: '_buildLongTextTag'),
                     ],
                   );
                 }),
@@ -158,7 +162,10 @@ class _TTagPageState extends State<TTagPage> {
           ]),
           ExampleModule(title: '可选标签', children: [
             ExampleItem(desc: '默认形态', builder: _buildSelectDefault),
-            ExampleItem(desc: '描边形态', builder: _buildSelectOutline),
+            ExampleItem(
+                desc: '描边形态',
+                methodName: 'TagSelectOutlineExample',
+                builder: (_) => const TagSelectOutlineExample()),
             ExampleItem(desc: '不同语义色', builder: _buildSelectColorSchemes),
             ExampleItem(desc: '禁用状态', builder: _buildSelectDisabled),
           ]),
@@ -408,25 +415,6 @@ class _TTagPageState extends State<TTagPage> {
             value: _selected3,
             onChanged: (v) => setState(() => _selected3 = v)),
       ],
-    );
-  }
-
-  @ExampleCode(group: 'tag')
-  Widget _buildSelectOutline(BuildContext context) {
-    const labels = ['标签一', '标签二', '标签三'];
-    var selectedValues = [false, true, false];
-    return StatefulBuilder(
-      builder: (context, setState) => Wrap(
-        spacing: context.tTheme.spacer8,
-        children: List.generate(labels.length, (index) {
-          return TSelectTag(
-            labels[index],
-            value: selectedValues[index],
-            variant: TTagVariant.outline,
-            onChanged: (value) => setState(() => selectedValues[index] = value),
-          );
-        }),
-      ),
     );
   }
 
