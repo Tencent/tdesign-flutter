@@ -10,6 +10,7 @@
 | isScrollable | bool | false | 是否横向滚动。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onTap | ValueChanged<int>? | - | 点击事件 |
+| size | TTabsBarSize | TTabsBarSize.small | 选项卡文字尺寸，默认为 `TTabsBarSize.small`。 |
 | tabs | List<TTab> | - | tab数组 |
 | variant | TTabsBarVariant | TTabsBarVariant.line | 选项卡结构形态，默认为 `TTabsBarVariant.line`。 |
 
@@ -73,3 +74,13 @@
 | line | 底部指示器样式。 |
 | tag | 胶囊标签样式。 |
 | card | 卡片样式。 |
+
+
+### TTabsBarSize
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| small | 小尺寸，使用 14px 字体 Token。 |
+| large | 大尺寸，使用 16px 字体 Token。 |

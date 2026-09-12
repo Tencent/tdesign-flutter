@@ -7,6 +7,15 @@ import 't_horizontal_tab_bar.dart';
 import 't_tab.dart';
 import 't_tab_bar_theme_data.dart';
 
+/// 选项卡文字尺寸。
+enum TTabsBarSize {
+  /// 小尺寸，使用 14px 字体 Token。
+  small,
+
+  /// 大尺寸，使用 16px 字体 Token。
+  large,
+}
+
 /// 标签栏
 ///
 /// 支持滚动、指示器自定义，以及 Line、Tag、Card 三种 TDesign 形态。
@@ -19,6 +28,7 @@ class TTabsBar extends StatelessWidget {
     this.isScrollable = false,
     this.indicator,
     this.onTap,
+    this.size = TTabsBarSize.small,
     this.variant = TTabsBarVariant.line,
   }) : super(key: key);
 
@@ -44,6 +54,9 @@ class TTabsBar extends StatelessWidget {
 
   /// 点击事件
   final ValueChanged<int>? onTap;
+
+  /// 选项卡文字尺寸，默认为 [TTabsBarSize.small]。
+  final TTabsBarSize size;
 
   /// 选项卡结构形态，默认为 [TTabsBarVariant.line]。
   final TTabsBarVariant variant;
@@ -119,7 +132,9 @@ class TTabsBar extends StatelessWidget {
   }
 
   TextStyle _getUnSelectLabelStyle(BuildContext context) {
-    final tokenFont = context.tTheme.fontBodyMedium;
+    final tokenFont = size == TTabsBarSize.large
+        ? context.tTheme.fontBodyLarge
+        : context.tTheme.fontBodyMedium;
     final inheritedStyle = Theme.of(context).textTheme.bodyMedium;
     return TextStyle(
       fontSize: tokenFont?.size,
@@ -134,7 +149,9 @@ class TTabsBar extends StatelessWidget {
   }
 
   TextStyle _getLabelStyle(BuildContext context) {
-    final tokenFont = context.tTheme.fontBodyMedium;
+    final tokenFont = size == TTabsBarSize.large
+        ? context.tTheme.fontBodyLarge
+        : context.tTheme.fontBodyMedium;
     final inheritedStyle = Theme.of(context).textTheme.bodyMedium;
     return TextStyle(
       fontSize: tokenFont?.size,

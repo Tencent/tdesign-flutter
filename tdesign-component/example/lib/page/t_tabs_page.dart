@@ -35,9 +35,10 @@ class TTabsPage extends StatelessWidget {
         ExampleModule(
           title: '组件样式',
           children: [
+            ExampleItem(desc: '选项卡尺寸', builder: _buildItemWithSizeSmall),
+            ExampleItem(builder: _buildItemWithSizeLarge),
             ExampleItem(desc: '选项卡样式', builder: _buildItemWithLine),
             ExampleItem(builder: _buildItemWithTag),
-            ExampleItem(builder: _buildItemWithCard),
           ],
         ),
       ],
@@ -65,7 +66,7 @@ class TTabsPage extends StatelessWidget {
         tabs: [
           TTab(text: '选项'),
           TTab(text: '选项'),
-          TTab(text: '上限六个字'),
+          TTab(text: '上限六个文字'),
         ],
       ),
     );
@@ -96,7 +97,7 @@ class TTabsPage extends StatelessWidget {
           TTab(text: '选项'),
           TTab(text: '选项'),
           TTab(text: '选项'),
-          TTab(text: '上限三'),
+          TTab(text: '上限四字'),
         ],
       ),
     );
@@ -106,19 +107,16 @@ class TTabsPage extends StatelessWidget {
   Widget _buildItemWithSpace(BuildContext context) {
     return DefaultTabController(
       length: 6,
-      child: TTabsBar(
-        isScrollable: true,
-        tabs: List.generate(6, (_) => const TTab(text: '选项')),
-      ),
+      child: TTabsBar(tabs: List.generate(6, (_) => const TTab(text: '选项'))),
     );
   }
 
   @ExampleCode(group: 'tabs')
   Widget _buildItemWithIcon(BuildContext context) {
-    final tabs = List.generate(3, (index) {
-      final text = '选项${index + 1}';
-      return TTab(text: text, icon: const Icon(TIcons.app, size: 18));
-    });
+    final tabs = List.generate(
+      3,
+      (_) => const TTab(text: '选项', icon: Icon(TIcons.app, size: 18)),
+    );
     return DefaultTabController(
       length: tabs.length,
       child: TTabsBar(tabs: tabs),
@@ -136,7 +134,7 @@ class TTabsPage extends StatelessWidget {
             children: [
               Icon(TIcons.app, size: 18),
               SizedBox(width: 4),
-              Text('选项1'),
+              Text('选项'),
             ],
           ),
         ),
@@ -149,12 +147,12 @@ class TTabsPage extends StatelessWidget {
             children: [
               Icon(TIcons.app, size: 18),
               SizedBox(width: 4),
-              Text('选项2'),
+              Text('选项'),
             ],
           ),
         ),
       ),
-      TTab(text: '选项3', icon: Icon(TIcons.app, size: 18)),
+      TTab(text: '选项', icon: Icon(TIcons.app, size: 18)),
     ];
     return DefaultTabController(
       length: tabs.length,
@@ -164,25 +162,28 @@ class TTabsPage extends StatelessWidget {
 
   @ExampleCode(group: 'tabs')
   Widget _buildItemWithContent(BuildContext context) {
-    return const SizedBox(
+    final contentColor = context.tTheme.textColorPlaceholder;
+    return SizedBox(
       height: 168,
       child: DefaultTabController(
-        length: 3,
+        length: 4,
         child: Column(
           children: [
-            TTabsBar(
+            const TTabsBar(
               tabs: [
-                TTab(text: '选项'),
-                TTab(text: '选项'),
-                TTab(text: '上限六个字'),
+                TTab(text: '选项一'),
+                TTab(text: '选项二'),
+                TTab(text: '选项三'),
+                TTab(text: '选项四'),
               ],
             ),
             Expanded(
               child: TTabsBarView(
                 children: [
-                  Center(child: TText('内容区 1')),
-                  Center(child: TText('内容区 2')),
-                  Center(child: TText('内容区 3')),
+                  Center(child: TText('内容区', textColor: contentColor)),
+                  Center(child: TText('内容区', textColor: contentColor)),
+                  Center(child: TText('内容区', textColor: contentColor)),
+                  Center(child: TText('内容区', textColor: contentColor)),
                 ],
               ),
             ),
@@ -203,12 +204,37 @@ class TTabsPage extends StatelessWidget {
   }
 
   @ExampleCode(group: 'tabs')
+  Widget _buildItemWithSizeSmall(BuildContext context) {
+    const tabs = [
+      TTab(text: '小尺寸'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+    ];
+    return const DefaultTabController(length: 4, child: TTabsBar(tabs: tabs));
+  }
+
+  @ExampleCode(group: 'tabs')
+  Widget _buildItemWithSizeLarge(BuildContext context) {
+    const tabs = [
+      TTab(text: '大尺寸'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+    ];
+    return const DefaultTabController(
+      length: 4,
+      child: TTabsBar(tabs: tabs, size: TTabsBarSize.large),
+    );
+  }
+
+  @ExampleCode(group: 'tabs')
   Widget _buildItemWithLine(BuildContext context) {
     const tabs = [
-      TTab(text: '选项1'),
-      TTab(text: '选项2'),
-      TTab(text: '选项3'),
-      TTab(text: '选项4'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
     ];
     return const DefaultTabController(length: 4, child: TTabsBar(tabs: tabs));
   }
@@ -216,28 +242,14 @@ class TTabsPage extends StatelessWidget {
   @ExampleCode(group: 'tabs')
   Widget _buildItemWithTag(BuildContext context) {
     const tabs = [
-      TTab(text: '选项1'),
-      TTab(text: '选项2'),
-      TTab(text: '选项3'),
-      TTab(text: '选项4'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
     ];
     return const DefaultTabController(
       length: 4,
       child: TTabsBar(tabs: tabs, variant: TTabsBarVariant.tag),
-    );
-  }
-
-  @ExampleCode(group: 'tabs')
-  Widget _buildItemWithCard(BuildContext context) {
-    const tabs = [
-      TTab(text: '选项1'),
-      TTab(text: '选项2'),
-      TTab(text: '选项3'),
-      TTab(text: '选项4'),
-    ];
-    return const DefaultTabController(
-      length: 4,
-      child: TTabsBar(tabs: tabs, variant: TTabsBarVariant.card),
     );
   }
 }
