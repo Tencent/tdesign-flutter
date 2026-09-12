@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_base.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/page/t_search_bar_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
@@ -39,7 +40,37 @@ void main() {
     expect(find.text('获取焦点后显示取消按钮'), findsOneWidget);
     expect(find.text('搜索框形状'), findsOneWidget);
     expect(find.text('默认状态其他对齐方式'), findsOneWidget);
+    expect(find.text('03 组件状态'), findsNothing);
     expect(find.byType(TSearchBar), findsNWidgets(8));
+
+    final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
+    expect(page.children.map((module) => module.title), ['组件类型', '组件样式']);
+    expect(page.children.last.children.map((item) => item.desc), [
+      '搜索框形状',
+      '默认状态其他对齐方式',
+    ]);
+
+    final searchBars = tester.widgetList<TSearchBar>(find.byType(TSearchBar));
+    expect(
+      searchBars.where((searchBar) => searchBar.hintText == '最多输入10个汉字'),
+      hasLength(1),
+    );
+    expect(
+      searchBars
+          .singleWhere((searchBar) => searchBar.onActionPressed != null)
+          .textAlignment,
+      isNull,
+    );
+    expect(
+      searchBars.where((searchBar) => searchBar.hintText == '最多输入10个字符（汉字算两个）'),
+      hasLength(1),
+    );
+    expect(
+      searchBars.where(
+        (searchBar) => searchBar.textAlignment == TSearchBarAlignment.center,
+      ),
+      hasLength(1),
+    );
 
     for (final element in find.byType(TSearchBar).evaluate()) {
       expect(tester.getSize(find.byWidget(element.widget)).height, 40);

@@ -2,11 +2,11 @@ Widget _buildMaxLength(BuildContext context) {
     return const Column(
       children: [
         _SearchDemoSurface(
-          child: TSearchBar(hintText: '最大输入10个字符', maxLength: 10),
+          child: TSearchBar(hintText: '最多输入10个汉字', maxLength: 10),
         ),
         SizedBox(height: 16),
         _SearchDemoSurface(
-          child: TSearchBar(hintText: '最大输入10个字符，汉字算两个', maxCharacter: 10),
+          child: TSearchBar(hintText: '最多输入10个字符（汉字算两个）', maxCharacter: 10),
         ),
       ],
     );
