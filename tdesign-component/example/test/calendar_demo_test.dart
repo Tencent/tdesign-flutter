@@ -114,6 +114,12 @@ void main() {
     expect(find.text('滚动控制'), findsNothing);
     expect(find.text('单元测试'), findsNothing);
 
+    final inlineCalendar = tester.widget<TCalendar>(
+      find.byKey(const ValueKey('calendar-inline-panel')),
+    );
+    expect(inlineCalendar.minDate, DateTime(2021, 3));
+    expect(inlineCalendar.maxDate, DateTime(2030, 3, 2));
+
     await disposeDemoPage(tester);
   }, tags: 'demo');
 

@@ -21,8 +21,8 @@ Widget _buildDoubleDescribed(BuildContext context) => TCellGroup(
             };
             final selected = model.selectType == DateSelectType.selected;
             final disabled = model.selectType == DateSelectType.disabled;
-            final holidayLabel = model.date.year == 2023 &&
-                    model.date.month == 3
+            final holidayLabel =
+                model.date.year == 2023 && model.date.month == 3
                 ? holidays[model.date.day]
                 : null;
             final holiday = holidayLabel != null;

@@ -300,8 +300,8 @@ class _TCalendarPageState extends State<TCalendarPage> {
             };
             final selected = model.selectType == DateSelectType.selected;
             final disabled = model.selectType == DateSelectType.disabled;
-            final holidayLabel = model.date.year == 2023 &&
-                    model.date.month == 3
+            final holidayLabel =
+                model.date.year == 2023 && model.date.month == 3
                 ? holidays[model.date.day]
                 : null;
             final holiday = holidayLabel != null;
@@ -456,8 +456,8 @@ class _TCalendarPageState extends State<TCalendarPage> {
           key: const ValueKey('calendar-inline-panel'),
           value: _inlineValue,
           variant: TCalendarVariant.multiple,
-          minDate: DateTime(_referenceDate.year, _referenceDate.month),
-          maxDate: DateTime(_referenceDate.year, _referenceDate.month + 2, 0),
+          minDate: DateTime(2021, 3),
+          maxDate: DateTime(2030, 3, 2),
           onChanged: (value) => setState(() => _inlineValue = value),
         ),
         Padding(
