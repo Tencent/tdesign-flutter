@@ -457,12 +457,19 @@ void main() {
       expect(find.text('7/10'), findsNothing);
     });
 
-    testWidgets('prefix and suffix icons use the 24dp input icon size', (
+    testWidgets('prefix and suffix use their intended token spacing', (
       tester,
     ) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'input-slot-spacing',
+        marginMap: {'spacer8': 10, 'spacer16': 20},
+      );
       await tester.pumpWidget(
-        wrap(
-          const TInput(prefix: Icon(Icons.search), suffix: Icon(Icons.info)),
+        MaterialApp(
+          theme: TThemeBuilder.light(token),
+          home: const Scaffold(
+            body: TInput(prefix: Icon(Icons.search), suffix: Icon(Icons.info)),
+          ),
         ),
       );
 
@@ -470,7 +477,10 @@ void main() {
       expect(tester.getSize(find.byIcon(Icons.info)), const Size(24, 24));
       final prefixRight = tester.getTopRight(find.byIcon(Icons.search)).dx;
       final editorLeft = tester.getTopLeft(find.byType(EditableText)).dx;
-      expect(editorLeft - prefixRight, TThemeData.defaultData().spacer16);
+      final editorRight = tester.getTopRight(find.byType(EditableText)).dx;
+      final suffixLeft = tester.getTopLeft(find.byIcon(Icons.info)).dx;
+      expect(editorLeft - prefixRight, token.spacer16);
+      expect(suffixLeft - editorRight, token.spacer8);
       final inputShell = find
           .descendant(
             of: find.byType(TInput),
@@ -490,7 +500,7 @@ void main() {
             )
             .data
             .color,
-        TThemeData.defaultData().textColorPrimary,
+        token.textColorPrimary,
       );
       expect(
         tester
@@ -504,7 +514,7 @@ void main() {
             )
             .data
             .color,
-        TThemeData.defaultData().textColorPlaceholder,
+        token.textColorPlaceholder,
       );
     });
   });

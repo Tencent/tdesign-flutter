@@ -660,7 +660,7 @@ class _TInputShellState extends State<_TInputShell> {
                   passwordButton,
                 ],
                 if (widget.suffix != null) ...[
-                  SizedBox(width: context.tTheme.spacer16),
+                  SizedBox(width: context.tTheme.spacer8),
                   _TInputSlot(
                     color: widget.enabled
                         ? context.tTheme.textColorPlaceholder

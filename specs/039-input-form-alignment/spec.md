@@ -7,7 +7,10 @@
 ## 行为契约
 
 - 横向 `TFormItem` 标签使用 `fontBodyLarge`，纵向标签使用 `fontBodyMedium`。
-- `TInput` 前后图标与编辑区间距使用 `spacer16`。
+- `TInput` 左侧仅图标前缀与编辑区使用 `spacer16`；尾部插槽继续使用
+  `spacer8`，避免改变单位文字、验证码图片和复合操作区的既有间距。
+- 手机号验证码操作区保留文字左侧的 1dp 垂直分割线，分割线与文字间距为
+  16dp。
 - Form 默认垂直对齐仍为 start；需要居中的错误态和超长标签 Demo 显式设置 center。
 - Theme 显式样式继续覆盖默认 Token。
 
