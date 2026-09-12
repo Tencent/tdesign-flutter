@@ -13,6 +13,7 @@ class TTimeCounterPage extends StatelessWidget {
       title: tTitle(context),
       desc: '用于实时展示倒计时数值。',
       exampleCodeGroup: 'timeCounter',
+      showTestModule: false,
       children: const [
         ExampleModule(
           title: '组件类型',
@@ -47,11 +48,7 @@ Widget _buildSimple(BuildContext context) {
 
 @ExampleCode(group: 'timeCounter')
 Widget _buildMillisecondSimple(BuildContext context) {
-  return const TTimeCounter(
-    time: 96 * 60 * 1000,
-    format: 'HH:mm:ss:SSS',
-    showMillisecond: true,
-  );
+  return const TTimeCounter(time: 96 * 60 * 1000, format: 'HH:mm:ss:SSS');
 }
 
 @ExampleCode(group: 'timeCounter')
@@ -81,39 +78,10 @@ Widget _buildUnitSimple(BuildContext context) {
 
 @ExampleCode(group: 'timeCounter')
 Widget _buildCustomUnitSimple(BuildContext context) {
-  return TTimeCounter(
+  return const TTimeCounter(
     time: 96 * 60 * 1000,
-    content: (time) {
-      final duration = Duration(milliseconds: time);
-      String twoDigits(int value) => value.toString().padLeft(2, '0');
-      final countStyle = TextStyle(
-        color: context.tTheme.errorNormalColor,
-        fontSize: 18,
-        height: 24 / 18,
-        fontFamily: context.tTheme.numberFontFamily?.fontFamily,
-        package: context.tTheme.numberFontFamily?.package,
-      );
-      final unitStyle = TextStyle(
-        color: context.tTheme.textColorPrimary,
-        fontSize: 10,
-        height: 16 / 10,
-      );
-      Widget unit(String value) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
-        child: TText(value, style: unitStyle),
-      );
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TText(twoDigits(duration.inHours), style: countStyle),
-          unit('时'),
-          TText(twoDigits(duration.inMinutes.remainder(60)), style: countStyle),
-          unit('分'),
-          TText(twoDigits(duration.inSeconds.remainder(60)), style: countStyle),
-          unit('秒'),
-        ],
-      );
-    },
+    variant: TTimeCounterVariant.highlight,
+    splitWithUnit: true,
   );
 }
 
@@ -139,20 +107,14 @@ Widget _buildMillisecondSizes(BuildContext context) {
       TTimeCounter(
         time: 96 * 60 * 1000,
         format: 'HH:mm:ss:SSS',
-        showMillisecond: true,
         size: TTimeCounterSize.small,
       ),
       SizedBox(height: 24),
-      TTimeCounter(
-        time: 96 * 60 * 1000,
-        format: 'HH:mm:ss:SSS',
-        showMillisecond: true,
-      ),
+      TTimeCounter(time: 96 * 60 * 1000, format: 'HH:mm:ss:SSS'),
       SizedBox(height: 24),
       TTimeCounter(
         time: 96 * 60 * 1000,
         format: 'HH:mm:ss:SSS',
-        showMillisecond: true,
         size: TTimeCounterSize.large,
       ),
     ],

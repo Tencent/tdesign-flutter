@@ -1,33 +1,10 @@
-import 'package:flutter/material.dart';
+part of 't_time_counter.dart';
 
-import '../../theme/basic.dart' show Font, FontFamily;
-import '../../theme/t_colors.dart';
-import '../../theme/t_font_family.dart';
-import '../../theme/t_fonts.dart';
-import '../../theme/t_radius.dart';
-import '../../theme/t_theme.dart';
-import 't_time_counter_types.dart';
+// Figma CountDown highlight variant uses an 18dp number in a 24dp line box.
+const _highlightLineHeight = 24.0;
 
 /// 计时组件样式
-class TTimeCounterStyle {
-  TTimeCounterStyle({
-    this.timeWidth,
-    this.timeHeight,
-    this.timePadding,
-    this.timeMargin,
-    this.timeBox,
-    this.timeFontFamily,
-    this.timeFontSize,
-    this.timeFontHeight,
-    this.timeFontWeight,
-    this.timeColor,
-    this.splitFontSize,
-    this.splitFontHeight,
-    this.splitFontWeight,
-    this.splitColor,
-    this.space,
-  });
-
+class _TTimeCounterStyle {
   /// 时间容器宽度
   double? timeWidth;
 
@@ -74,15 +51,15 @@ class TTimeCounterStyle {
   double? space;
 
   /// 生成默认样式
-  TTimeCounterStyle.generateStyle(
+  _TTimeCounterStyle.generateStyle(
     BuildContext context, {
     TTimeCounterSize? size,
-    TTimeCounterVariant? theme,
+    TTimeCounterVariant? variant,
     bool? splitWithUnit,
   }) {
     timeFontFamily = context.tTheme.numberFontFamily;
     final effectiveSize = size ?? TTimeCounterSize.medium;
-    final effectiveTheme = theme ?? TTimeCounterVariant.defaultTheme;
+    final effectiveVariant = variant ?? TTimeCounterVariant.plain;
     final hasUnit = splitWithUnit ?? false;
     late Font? defaultFont;
     late Font? blockFont;
@@ -116,26 +93,38 @@ class TTimeCounterStyle {
         dotSpace = 6;
     }
 
-    final timeFont = effectiveTheme == TTimeCounterVariant.defaultTheme
-        ? defaultFont
-        : blockFont;
-    final splitFont = hasUnit ? unitFont : defaultFont;
+    final timeFont = switch (effectiveVariant) {
+      TTimeCounterVariant.plain => defaultFont,
+      TTimeCounterVariant.highlight => context.tTheme.fontBodyExtraLarge,
+      TTimeCounterVariant.round || TTimeCounterVariant.square => blockFont,
+    };
+    final splitFont = hasUnit
+        ? effectiveVariant == TTimeCounterVariant.highlight
+              ? context.tTheme.fontBodyExtraSmall
+              : unitFont
+        : defaultFont;
     timeFontSize = timeFont?.size;
-    timeFontHeight = effectiveTheme == TTimeCounterVariant.defaultTheme
-        ? timeFont?.height
-        : null;
+    timeFontWeight = timeFont?.fontWeight;
+    timeFontHeight = switch (effectiveVariant) {
+      TTimeCounterVariant.plain => timeFont?.height,
+      TTimeCounterVariant.highlight =>
+        timeFont?.size == null ? null : _highlightLineHeight / timeFont!.size,
+      TTimeCounterVariant.round || TTimeCounterVariant.square => null,
+    };
     splitFontSize = splitFont?.size;
+    splitFontWeight = splitFont?.fontWeight;
     splitFontHeight = hasUnit ? splitFont?.height : timeFontHeight;
-    timeWidth = timeHeight = effectiveTheme == TTimeCounterVariant.defaultTheme
-        ? null
-        : blockExtent;
+    final hasBlock =
+        effectiveVariant == TTimeCounterVariant.round ||
+        effectiveVariant == TTimeCounterVariant.square;
+    timeWidth = timeHeight = hasBlock ? blockExtent : null;
     space = hasUnit
         ? unitSpace
-        : effectiveTheme == TTimeCounterVariant.defaultTheme
+        : !hasBlock
         ? 0
         : dotSpace;
 
-    switch (effectiveTheme) {
+    switch (effectiveVariant) {
       case TTimeCounterVariant.round:
         timeBox = BoxDecoration(
           shape: BoxShape.circle,
@@ -153,11 +142,19 @@ class TTimeCounterStyle {
         timeColor = context.tTheme.textColorAnti;
         splitColor = context.tTheme.errorNormalColor;
         break;
-      case TTimeCounterVariant.defaultTheme:
+      case TTimeCounterVariant.plain:
         timeBox = null;
         timeColor = splitColor = context.tTheme.textColorPrimary;
         timeWidth = null;
         timeHeight = null;
+        break;
+      case TTimeCounterVariant.highlight:
+        timeBox = null;
+        timeColor = context.tTheme.errorNormalColor;
+        splitColor = context.tTheme.textColorPrimary;
+        timeWidth = null;
+        timeHeight = null;
+        break;
     }
 
     if (hasUnit) {

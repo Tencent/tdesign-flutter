@@ -22,10 +22,12 @@ void main() {
     expect(counters, hasLength(21));
     expect(counters.every((counter) => counter.time == 96 * 60 * 1000), isTrue);
     expect(counters[1].format, 'HH:mm:ss:SSS');
-    expect(counters[1].showMillisecond, isTrue);
     expect(counters[4].variant, TTimeCounterVariant.round);
     expect(counters[4].splitWithUnit, isTrue);
-    expect(counters[5].content, isNotNull);
+    expect(counters[5].variant, TTimeCounterVariant.highlight);
+    expect(counters[5].splitWithUnit, isTrue);
+    expect(counters[5].content, isNull);
+    expect(find.text('03 单元测试'), findsNothing);
 
     for (var group = 0; group < 5; group++) {
       final offset = 6 + group * 3;
@@ -55,7 +57,7 @@ void main() {
     );
   });
 
-  testWidgets('公开倒计时真实跨秒更新且无底色单位保持自定义层级', (tester) async {
+  testWidgets('公开倒计时真实跨秒更新且无底色单位由标准形态渲染', (tester) async {
     await pumpFullDemoPage(
       tester,
       timeCounterDemoPageTestSpec,

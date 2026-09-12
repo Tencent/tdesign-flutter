@@ -5,20 +5,14 @@ Widget _buildMillisecondSizes(BuildContext context) {
       TTimeCounter(
         time: 96 * 60 * 1000,
         format: 'HH:mm:ss:SSS',
-        showMillisecond: true,
         size: TTimeCounterSize.small,
       ),
       SizedBox(height: 24),
-      TTimeCounter(
-        time: 96 * 60 * 1000,
-        format: 'HH:mm:ss:SSS',
-        showMillisecond: true,
-      ),
+      TTimeCounter(time: 96 * 60 * 1000, format: 'HH:mm:ss:SSS'),
       SizedBox(height: 24),
       TTimeCounter(
         time: 96 * 60 * 1000,
         format: 'HH:mm:ss:SSS',
-        showMillisecond: true,
         size: TTimeCounterSize.large,
       ),
     ],

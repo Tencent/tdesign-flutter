@@ -519,7 +519,11 @@
         "names": [
           "TTimeCounter",
           "TTimeCounterController",
-          "TTimeCounterStyle"
+          "TTimeCounterThemeData",
+          "TTimeCounterDirection",
+          "TTimeCounterSize",
+          "TTimeCounterVariant",
+          "TTimeCounterBuilder"
         ],
         "getComments": true
       }
