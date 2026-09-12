@@ -145,7 +145,10 @@ class TCheckbox extends StatelessWidget {
                     EdgeInsets.symmetric(
                       horizontal:
                           theme?.insetSpacing ?? context.tTheme.spacer16,
-                      vertical: context.tTheme.spacer8,
+                      vertical: cardMode
+                          ? context.tTheme.spacer16 -
+                                selectionCardBorderWidth(context)
+                          : context.tTheme.spacer8,
                     ))
               : EdgeInsets.zero,
           decoration: cardMode
@@ -162,7 +165,9 @@ class TCheckbox extends StatelessWidget {
             mainAxisAlignment: hasContent
                 ? MainAxisAlignment.start
                 : MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: hasContent
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
             children: contentDirection == TContentDirection.right
                 ? children
                 : children.reversed.toList(),
@@ -201,7 +206,13 @@ class TCheckbox extends StatelessWidget {
           ),
           if (showDivider && !cardMode)
             Padding(
-              padding: EdgeInsets.only(left: context.tTheme.spacer16),
+              padding: EdgeInsetsDirectional.only(
+                start: contentDirection == TContentDirection.right && hasContent
+                    ? (theme?.insetSpacing ?? context.tTheme.spacer16) +
+                          _indicatorSize(context) +
+                          (theme?.spacing ?? context.tTheme.spacer8)
+                    : theme?.insetSpacing ?? context.tTheme.spacer16,
+              ),
               child: Theme(
                 data: Theme.of(context).mergeExtension(
                   const TDividerThemeData(margin: EdgeInsets.zero),
@@ -303,6 +314,34 @@ class TCheckbox extends StatelessWidget {
               colorScheme?.outline ??
               context.tTheme.componentBorderColor);
     final indicatorSize = _indicatorSize(context);
+    if (_disabled &&
+        !selected &&
+        !indeterminate &&
+        variant != TCheckboxVariant.check) {
+      final fillColor = materialTheme.fillColor?.resolve(states);
+      final materialSide = materialTheme.side;
+      final resolvedMaterialSide = materialSide is WidgetStateBorderSide
+          ? materialSide.resolve(states)
+          : materialSide;
+      final borderColor =
+          theme?.disableColor ??
+          resolvedMaterialSide?.color ??
+          context.tTheme.componentBorderColor;
+      return Container(
+        width: indicatorSize,
+        height: indicatorSize,
+        decoration: BoxDecoration(
+          color: fillColor ?? context.tTheme.bgColorComponentDisabled,
+          border: Border.all(color: borderColor),
+          shape: variant == TCheckboxVariant.circle
+              ? BoxShape.circle
+              : BoxShape.rectangle,
+          borderRadius: variant == TCheckboxVariant.square
+              ? BorderRadius.circular(context.tTheme.radiusSmall)
+              : null,
+        ),
+      );
+    }
     return SizedBox(
       width: indicatorSize,
       height: indicatorSize,
