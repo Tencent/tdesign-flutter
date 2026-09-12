@@ -11,6 +11,28 @@ void main() {
     );
   }
 
+  testWidgets('普通日期数字使用 Gy1 90% 主文字色', (tester) async {
+    final normal = TCalendarCellModel(
+      date: DateTime(2024, 1, 8),
+      selectType: DateSelectType.empty,
+      isLastDayOfMonth: false,
+    );
+
+    await tester.pumpWidget(wrap(TCalendarCell(
+      cell: normal,
+      height: 48,
+      padding: 4,
+      rowIndex: 0,
+      colIndex: 0,
+      dateList: [normal],
+    )));
+
+    expect(
+      tester.widget<TText>(_calendarTextFinder('8')).style?.color,
+      TThemeData.defaultData().textColorPrimary,
+    );
+  });
+
   testWidgets('日期居中，副标题独立定位且继承选中颜色', (tester) async {
     final model = TCalendarCellModel(
       date: DateTime(2022, 2, 18),

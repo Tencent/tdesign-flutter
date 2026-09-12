@@ -58,8 +58,10 @@ void main() {
     await pumpFullDemoPage(tester, calendarDemoPageTestSpec, ThemeMode.light);
     await tester.tap(find.byKey(const ValueKey('calendar-switch-trigger')));
     await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('上个月'));
-    await tester.pumpAndSettle();
+    for (var i = 0; i < 11; i++) {
+      await tester.tap(find.byTooltip('上个月'));
+      await tester.pumpAndSettle();
+    }
     expect(
       tester
           .widget<IconButton>(
@@ -74,8 +76,8 @@ void main() {
     final calendar = tester.widget<TCalendar>(
       find.byKey(const ValueKey('calendar-popup-panel')),
     );
-    expect(calendar.minDate, DateTime(2022, 1, 10));
-    expect(calendar.maxDate, DateTime(2022, 1, 31));
+    expect(calendar.minDate, DateTime(2021, 3));
+    expect(calendar.maxDate, DateTime(2021, 3, 31));
     expect(calendar.value, [DateTime(2022, 2, 18)]);
     await tester.tap(find.byTooltip('下个月'));
     await tester.pumpAndSettle();
@@ -83,7 +85,7 @@ void main() {
       tester
           .widget<TCalendar>(find.byKey(const ValueKey('calendar-popup-panel')))
           .maxDate,
-      DateTime(2022, 2, 28),
+      DateTime(2021, 4, 30),
     );
     await disposeDemoPage(tester);
   }, tags: 'demo');
@@ -171,10 +173,63 @@ void main() {
     final limited = tester.widget<TCalendar>(
       find.byKey(const ValueKey('calendar-popup-panel')),
     );
-    expect(limited.minDate, DateTime(2022, 2, 18));
-    expect(limited.maxDate, DateTime(2022, 3));
+    expect(limited.minDate, DateTime(2021, 3));
+    expect(limited.maxDate, DateTime(2030, 3, 2));
     await tester.tap(find.byTooltip('关闭'));
     await tester.pumpAndSettle();
+
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
+
+  testWidgets('Calendar 双行描述按日期语义区分文字颜色', (tester) async {
+    await pumpDemoPageAtPhoneViewport(
+      tester,
+      calendarDemoPageTestSpec,
+      ThemeMode.light,
+    );
+    await tester.tap(
+      find.byKey(const ValueKey('calendar-double-description-trigger')),
+    );
+    await tester.pumpAndSettle();
+
+    Finder dateCell(int day) => find.byWidgetPredicate(
+      (widget) =>
+          widget is TCalendarCell &&
+          widget.cell?.date == DateTime(2023, 3, day),
+    );
+    final normalDay = tester.widget<TText>(
+      find.descendant(
+        of: dateCell(7),
+        matching: find.widgetWithText(TText, '7'),
+      ),
+    );
+    final holidayCell = find.ancestor(
+      of: find.widgetWithText(TText, "Women's"),
+      matching: find.byType(TCalendarCell),
+    );
+    final holidayDay = tester.widget<TText>(
+      find.descendant(
+        of: holidayCell,
+        matching: find.widgetWithText(TText, '8'),
+      ),
+    );
+    final selectedDay = tester.widget<TText>(
+      find.descendant(
+        of: dateCell(10),
+        matching: find.widgetWithText(TText, '10'),
+      ),
+    );
+    final prices = tester
+        .widgetList<TText>(find.widgetWithText(TText, '¥60'))
+        .map((text) => text.textColor)
+        .toList();
+    final token = TThemeData.defaultData();
+    expect(normalDay.textColor, token.textColorPrimary);
+    expect(holidayDay.textColor, token.errorNormalColor);
+    expect(selectedDay.textColor, token.textColorAnti);
+    expect(prices, contains(token.textColorPlaceholder));
+    expect(prices, contains(token.textColorAnti));
+    expect(prices, isNot(contains(token.errorNormalColor)));
 
     await disposeDemoPage(tester);
   }, tags: 'demo');

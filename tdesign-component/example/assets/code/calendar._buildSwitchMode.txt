@@ -8,8 +8,8 @@ Widget _buildSwitchMode(BuildContext context) => TCellGroup(
         onTap: () => _showCalendar(
           variant: TCalendarVariant.single,
           value: _switchValue,
-          minDate: DateTime(2022, 1, 10),
-          maxDate: DateTime(2027, 11, 27),
+          minDate: DateTime(2021, 3),
+          maxDate: DateTime(2030, 3, 2),
           showMonthSwitcher: true,
           onConfirm: (value) => setState(() => _switchValue = value),
         ),

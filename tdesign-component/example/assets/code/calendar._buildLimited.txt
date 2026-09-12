@@ -8,8 +8,8 @@ Widget _buildLimited(BuildContext context) => TCellGroup(
         onTap: () => _showCalendar(
           variant: TCalendarVariant.single,
           value: _limitedValue,
-          minDate: DateTime(2022, 2, 18),
-          maxDate: DateTime(2022, 3),
+          minDate: DateTime(2021, 3),
+          maxDate: DateTime(2030, 3, 2),
           onConfirm: (value) => setState(() => _limitedValue = value),
         ),
       ),
