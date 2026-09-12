@@ -3,18 +3,18 @@
 ## 验证环境
 
 - 分支：`rss1102/fix/checkbox-design-details`
-- 基线：`origin/develop@c2f9ef5e8`
+- 基线：`origin/develop@bd3574220`
 - Flutter/Dart：Flutter 3.32.0（FVM）
 
 ## 自动化验证
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter test --no-pub test/components/checkbox/t_checkbox_test.dart test/components/checkbox/t_check_box_group_test.dart` | 通过 | 45 tests |
 | `flutter test --no-pub --exclude-tags demo --coverage test/components/checkbox/t_check_box_group_test.dart test/components/checkbox/t_checkbox_test.dart` | 通过 | 46 tests；含默认与自定义禁用颜色 token 路径 |
 | `dart run tool/check_component_coverage.dart checkbox` | 通过 | 348/361，96.40% |
 | `flutter test --no-pub --exclude-tags golden test/checkbox_page_test.dart` | 通过 | 1 test |
 | `Flutter 3.32.0 Linux: flutter test --no-pub test/checkbox_page_test.dart` | 通过 | Light/Dark Golden；禁用未选描边为 `#DCDCDC` |
+| `Flutter 3.32.0 Linux: dart run tool/run_visual_regression.dart` | 通过 | 变基后先确认仅 Button/Swiper Light 需要合成上游视觉与 Gy4 修正，定向更新后全量复跑通过 |
 | `flutter analyze --fatal-infos` | 通过 | 0 issues |
 | `flutter build apk --debug` | 通过 | Android Debug APK |
 | `Flutter 3.44.9: flutter test --no-pub test/components/checkbox/t_checkbox_test.dart test/components/checkbox/t_check_box_group_test.dart` | 通过 | 46 tests |
