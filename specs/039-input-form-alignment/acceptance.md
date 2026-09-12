@@ -2,7 +2,7 @@
 
 ## 验证环境
 
-- 基线：`origin/develop@bd3574220`
+- 基线：`origin/develop@480353bc2`
 - 低版本：Flutter 3.32.0 / Dart 3.8.0
 - 最新稳定版：Flutter 3.44.9 / Dart 3.12.2
 - Golden：Linux amd64 / Flutter 3.32.0
