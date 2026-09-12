@@ -3,8 +3,8 @@ Widget _buildRange(BuildContext context) => InkWell(
     onTap: () => _showCalendar(
       variant: TCalendarVariant.range,
       value: _rangeValue,
-      minDate: DateTime(2022, 2),
-      maxDate: DateTime(2022, 4),
+      minDate: DateTime(2021, 3),
+      maxDate: DateTime(2030, 3, 2),
       onConfirm: (value) => setState(() => _rangeValue = value),
     ),
     child: Container(
