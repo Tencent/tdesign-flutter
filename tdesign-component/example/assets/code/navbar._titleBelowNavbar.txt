@@ -4,8 +4,7 @@ Widget _titleBelowNavbar(BuildContext context) {
       child: TNavBar(
         key: const Key('navbar-demo-custom-height'),
         height: 80,
-        title: '返回',
-        titleColor: context.tTheme.textColorPrimary,
+        title: TText('返回', font: context.tTheme.fontBodyLarge),
         belowTitleWidget: SizedBox(
           height: 36,
           child: TText(
@@ -14,7 +13,6 @@ Widget _titleBelowNavbar(BuildContext context) {
             fontWeight: FontWeight.w600,
           ),
         ),
-        titleFont: Font(size: 16, lineHeight: 24),
         centerTitle: false,
         titleMargin: 8,
         useDefaultBack: false,

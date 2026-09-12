@@ -1,0 +1,23 @@
+Widget _buildCircleStatus(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        TProgress(variant: TProgressVariant.circular, value: 0.3),
+        TProgress(
+          variant: TProgressVariant.circular,
+          value: 0.3,
+          status: TProgressStatus.warning,
+        ),
+        TProgress(
+          variant: TProgressVariant.circular,
+          value: 0.3,
+          status: TProgressStatus.error,
+        ),
+        TProgress(
+          variant: TProgressVariant.circular,
+          value: 1,
+          status: TProgressStatus.success,
+        ),
+      ],
+    );
+  }

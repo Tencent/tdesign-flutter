@@ -13,30 +13,21 @@
 | dividerHeight | double? | - | 分割线高度（可选） |
 | dividerThickness | double? | - | 分割线厚度（可选） |
 | indicatorAnimation | TTabBarIndicatorAnimation | TTabBarIndicatorAnimation.none | 指示器动画类型 |
+| itemStyle | TTabBarItemStyle | TTabBarItemStyle.label | 单个标签项的选中样式。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | navigationTabs | List<TTabBarItemConfig> | - | tabs配置 |
-| needInkWell | bool? | - | 是否需要水波纹效果 |
+| needInkWell | bool | false | 是否需要水波纹效果 |
 | onChanged | ValueChanged<int>? | - | 选中项变化；null 时整栏禁用 |
 | placeholder | bool | true | 是否添加安全区域占位 |
 | selectedBgColor | Color? | - | 选中时背景颜色 |
-| showTopBorder | bool? | - | 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值，非胶囊型才生效） |
+| showTopBorder | bool | true | 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值，非胶囊型才生效） |
+| split | bool | false | 是否使用竖线分隔；`itemStyle` 为 `TTabBarItemStyle.label` 时不显示。 |
+| style | TTabBarStyle | TTabBarStyle.filled | 标签栏容器样式。 |
 | topBorder | BorderSide? | - | 上边线样式 |
+| type | TTabBarType | - | 标签栏内容类型。 |
 | unselectedBgColor | Color? | - | 未选中时背景颜色 |
 | useSafeArea | bool | true | 使用安全区域 |
-| useVerticalDivider | bool? | - | 是否使用竖线分隔（如果选项样式为 label，则强制为 false） |
 | value | int | - | 选中的 index |
-| variant | TTabBarVariant | - | 标签栏形态 |
-
-
-### TTabBarBadgeConfig
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| badgeRightOffset | double? | - | 消息右侧偏移量 |
-| badgeTopOffset | double? | - | 消息顶部偏移量 |
-| showBadge | bool | - | 是否展示消息 |
-| tBadge | TBadge? | - | 消息样式（未设置但 showBadge 为 true，则默认使用红点） |
 
 
 ### TTabBarItemConfig
@@ -44,16 +35,16 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| allowMultipleTaps | bool | false | onTap 方法允许点击多次 |
-| badgeConfig | TTabBarBadgeConfig? | - | 消息配置 |
+| allowMultipleTaps | bool | false | 是否允许重复点击当前选中项时再次调用 `onTap`，默认为 false。 该字段不影响点击未选中项，也不会让 `TTabBar.onChanged` 重复通知当前值。 |
+| badge | TBadge? | - | 展示在标签内容右上角的徽标；为空时不显示。 徽标内容和样式由 `TBadge` 配置，`TBadge.offset` 可用于逐项调整默认锚点。 TabBar 内容会作为徽标锚点，因此传入的 `TBadge.child` 必须为空； `TBadge.onTap` 会作为标签项点击链中的附加回调执行，遵循相同的 `allowMultipleTaps` 门控：未选中项会调用，重复点击当前选中项仅在 `allowMultipleTaps` 为 true 时调用，整栏禁用时不会调用。 |
 | onLongPress | GestureLongPressCallback? | - | 长按事件 |
-| onTap | GestureTapCallback? | - | tab点击事件 |
+| onTap | GestureTapCallback? | - | 标签项被选中时的附加点击回调。 点击未选中项时，在 `TTabBar.onChanged` 之前调用；重复点击当前选中项时， 仅当 `allowMultipleTaps` 为 true 才调用。整栏禁用时不会调用。 |
 | popUpButtonConfig | TTabBarPopUpBtnConfig? | - | 弹窗配置 |
 | selectedIcon | Widget? | - | 选中时图标 |
-| selectTabTextStyle | TextStyle? | - | 文本已选择样式 basicType为text时必填 |
+| selectTabTextStyle | TextStyle? | - | 选中时的文字样式，按字段覆盖继承主题与内置默认值。 |
 | tabText | String? | - | tab 文本 |
 | unselectedIcon | Widget? | - | 未选中时图标 |
-| unselectTabTextStyle | TextStyle? | - | 文本未选择样式 basicType为text时必填 |
+| unselectTabTextStyle | TextStyle? | - | 未选中时的文字样式，按字段覆盖继承主题与内置默认值。 |
 
 
 ### TTabBarPopUpBtnConfig
@@ -90,20 +81,36 @@
 | value | String | - | 选项值 |
 
 
-### TTabBarVariant
+### TTabBarType
 #### 枚举值
 
 
 | 名称 | 说明 |
 | --- | --- |
-| text | 单层级纯文本标签栏 |
-| iconText | 文本加图标标签栏 |
-| icon | 纯图标标签栏 |
-| expansionPanel | 双层级纯文本标签栏 |
-| weakText | 弱选中纯文本标签栏 |
-| weakIcon | 弱选中纯图标标签栏 |
-| weakIconText | 弱选中文本加图标标签栏 |
-| capsule | 胶囊文本加图标标签栏 |
+| text | 纯文本标签栏。 |
+| iconText | 图标加文本标签栏。 |
+| icon | 纯图标标签栏。 |
+| doubleLayer | 带弹出菜单的双层级文本标签栏。 |
+
+
+### TTabBarItemStyle
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| normal | 仅改变前景色。 |
+| label | 使用浅色胶囊背景强调选中项。 |
+
+
+### TTabBarStyle
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| filled | 铺满父容器。 |
+| capsule | 带外边距、圆角和阴影的悬浮胶囊。 |
 
 
 ### TTabBarIndicatorAnimation

@@ -69,6 +69,42 @@ void demo() {}
     expect(createGenerator().run(check: true).isUpToDate, isTrue);
   });
 
+  test('standalone widget includes imports and only its associated State', () {
+    writeSource('stateful', '''
+import 'package:flutter/material.dart';
+import '../annotation/example_code.dart';
+
+@ExampleCode(group: 'counter')
+class Counter extends StatefulWidget {
+  const Counter({super.key});
+  @override
+  State<Counter> createState() => _CounterState();
+}
+class _CounterState extends State<Counter> {
+  int value = 3;
+  @override
+  Widget build(BuildContext context) => TextButton(
+    onPressed: () => setState(() => value++),
+    child: Text(value.toString()),
+  );
+}
+class _OtherState extends State<Other> {}
+''');
+    createGenerator().run();
+    final snippet = File(
+      '${outputDirectory.path}/counter.Counter.txt',
+    ).readAsStringSync();
+    expect(snippet, startsWith("import 'package:flutter/material.dart';"));
+    expect(snippet, contains('class Counter extends StatefulWidget'));
+    expect(snippet, contains('class _CounterState extends State<Counter>'));
+    expect(snippet, contains('int value = 3;'));
+    expect(snippet, contains('setState(() => value++)'));
+    expect(snippet, isNot(contains('_OtherState')));
+    expect(snippet, isNot(contains('example_code.dart')));
+    expect(snippet, isNot(contains('@ExampleCode')));
+    expect(createGenerator().run(check: true).isUpToDate, isTrue);
+  });
+
   test('verbose mode reports changes and writes files correctly', () {
     writeSource('examples', '''
 @ExampleCode(group: 'button')

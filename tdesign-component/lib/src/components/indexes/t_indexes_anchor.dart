@@ -6,6 +6,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
+import 't_indexes_theme_data.dart';
 
 /// 索引锚点
 class TIndexesAnchor extends StatelessWidget {
@@ -32,10 +33,17 @@ class TIndexesAnchor extends StatelessWidget {
 
   /// 索引锚点构建
   final Widget? Function(
-      BuildContext context, String index, bool isPinnedToTop)? builderAnchor;
+    BuildContext context,
+    String index,
+    bool isPinnedToTop,
+  )?
+  builderAnchor;
 
   @override
   Widget build(BuildContext context) {
+    final theme =
+        Theme.of(context).extension<TIndexesThemeData>() ??
+        const TIndexesThemeData();
     return ValueListenableBuilder(
       valueListenable: activeIndex,
       builder: (context, value, child) {
@@ -44,35 +52,49 @@ class TIndexesAnchor extends StatelessWidget {
         return customAnchor ??
             Container(
               padding: EdgeInsets.symmetric(
-                  vertical: context.tTheme.spacer4,
-                  horizontal: context.tTheme.spacer16),
+                vertical: theme.anchorVerticalPadding ?? context.tTheme.spacer4,
+                horizontal:
+                    theme.anchorHorizontalPadding ?? context.tTheme.spacer16,
+              ),
               margin: capsuleTheme
-                  ? EdgeInsets.symmetric(horizontal: context.tTheme.spacer8)
+                  ? EdgeInsets.symmetric(
+                      horizontal: theme.capsuleMargin ?? context.tTheme.spacer8,
+                    )
                   : null,
               decoration: BoxDecoration(
                 color: isPinned
-                    ? context.tTheme.bgColorContainer
-                    : context.tTheme.bgColorSecondaryContainer,
+                    ? theme.activeAnchorBackgroundColor ??
+                          context.tTheme.bgColorContainer
+                    : theme.anchorBackgroundColor ??
+                          context.tTheme.bgColorSecondaryContainer,
                 borderRadius: capsuleTheme
                     ? BorderRadius.circular(context.tTheme.radiusCircle)
                     : null,
                 border: isPinned
                     ? capsuleTheme
-                        ? Border.all(color: context.tTheme.componentStrokeColor)
-                        : Border(
-                            bottom: BorderSide(
-                                color: context.tTheme.componentStrokeColor,
-                                width: 0.5))
+                          ? Border.all(
+                              color:
+                                  theme.anchorBorderColor ??
+                                  context.tTheme.componentStrokeColor,
+                            )
+                          : Border(
+                              bottom: BorderSide(
+                                color:
+                                    theme.anchorBorderColor ??
+                                    context.tTheme.componentStrokeColor,
+                                width: 0.5,
+                              ),
+                            )
                     : null,
               ),
               child: TText(
                 text,
                 font: isPinned
-                    ? context.tTheme.fontMarkMedium
-                    : context.tTheme.fontTitleSmall,
+                    ? theme.activeAnchorFont ?? context.tTheme.fontMarkMedium
+                    : theme.anchorFont ?? context.tTheme.fontBodyMedium,
                 textColor: isPinned
-                    ? context.tTheme.brandNormalColor
-                    : context.tTheme.textColorPrimary,
+                    ? theme.activeAnchorColor ?? context.tTheme.brandNormalColor
+                    : theme.anchorColor ?? context.tTheme.textColorPrimary,
               ),
             );
       },

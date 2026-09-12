@@ -5,10 +5,7 @@ import 'page/sidebar/t_sidebar_page.dart';
 import 'page/sidebar/t_sidebar_page_anchor.dart';
 import 'page/sidebar/t_sidebar_page_custom.dart';
 import 'page/sidebar/t_sidebar_page_icon.dart';
-import 'page/sidebar/t_sidebar_page_loading.dart';
-import 'page/sidebar/t_sidebar_page_outline.dart';
 import 'page/sidebar/t_sidebar_page_pagination.dart';
-import 'page/sidebar/t_sidebar_page_unselected_color.dart';
 import 'page/t_action_sheet_page.dart';
 import 'page/t_avatar_page.dart';
 import 'page/t_backtop_page.dart';
@@ -335,23 +332,8 @@ List<ExamplePageModel> sideBarExamplePage = [
       name: 'SideBarIcon',
       pageBuilder: _wrapInheritedTheme((context) => const TSideBarIconPage())),
   ExamplePageModel(
-      text: 'SideBar 非通栏选项样式',
-      name: 'SideBarOutline',
-      pageBuilder:
-          _wrapInheritedTheme((context) => const TSideBarOutlinePage())),
-  ExamplePageModel(
       text: 'SideBar 自定义样式',
       name: 'SideBarCustom',
       pageBuilder:
-          _wrapInheritedTheme((context) => const TSideBarCustomPage())),
-  ExamplePageModel(
-      text: 'SideBar 延迟加载',
-      name: 'SideBarLoading',
-      pageBuilder:
-          _wrapInheritedTheme((context) => const TSideBarLoadingPage())),
-  ExamplePageModel(
-      text: 'SideBar 自定义未选中颜色',
-      name: 'SideBarUnselectedColor',
-      pageBuilder:
-          _wrapInheritedTheme((context) => const TSideBarUnSelectedColorPage()))
+          _wrapInheritedTheme((context) => const TSideBarCustomPage()))
 ];

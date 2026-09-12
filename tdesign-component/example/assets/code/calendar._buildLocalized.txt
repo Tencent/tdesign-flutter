@@ -8,8 +8,8 @@ Widget _buildLocalized(BuildContext context) => TCellGroup(
         onTap: () => _showCalendar(
           variant: TCalendarVariant.single,
           value: _localizedValue,
-          minDate: DateTime(2022, 2),
-          maxDate: DateTime(2022, 3, 15),
+          minDate: DateTime(2021, 3),
+          maxDate: DateTime(2030, 3, 2),
           localized: true,
           onConfirm: (value) => setState(() => _localizedValue = value),
         ),

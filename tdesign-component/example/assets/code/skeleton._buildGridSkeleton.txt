@@ -1,13 +1,23 @@
 Widget _buildGridSkeleton(BuildContext context) {
     return Row(
-      // spacing: 16,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(5, (index) {
-        return const TSkeleton.custom(
-          layout: TSkeletonLayout(rows: [
-            [TSkeletonBlock.rectangle(width: 48, height: 48, flex: null)],
-            [TSkeletonBlock.line(width: 48, flex: null)],
-          ]),
+        return TSkeleton.custom(
+          layout: TSkeletonLayout(
+            rows: [
+              [
+                TSkeletonBlock(
+                  width: 48,
+                  height: 48,
+                  flex: null,
+                  style: TSkeletonBlockStyle(
+                    borderRadius: context.tTheme.radiusDefault,
+                  ),
+                ),
+              ],
+              const [TSkeletonBlock.line(width: 48, flex: null)],
+            ],
+          ),
         );
       }),
     );

@@ -248,50 +248,55 @@ class _TSearchBarState extends State<TSearchBar> {
                     ),
                     const SizedBox(width: _kIconGap),
                     Expanded(
-                      child: TextField(
-                        controller: _controller,
-                        focusNode: _focusNode,
-                        autofocus: widget.autofocus,
-                        enabled: widget.enabled,
-                        readOnly: widget.readOnly,
-                        onChanged: widget.onChanged,
-                        onSubmitted: widget.onSubmitted,
-                        keyboardType: widget.inputType,
-                        textInputAction: widget.inputAction,
-                        inputFormatters: [
-                          ...?widget.inputFormatters,
-                          if (widget.maxCharacter != null)
-                            _SearchMaxCharacterFormatter(widget.maxCharacter!),
-                        ],
-                        maxLength: widget.maxLength,
-                        buildCounter:
-                            (
-                              _, {
-                              required currentLength,
-                              required isFocused,
-                              required maxLength,
-                            }) => null,
-                        cursorColor: token.brandNormalColor,
-                        cursorHeight: theme?.cursorHeight,
-                        textAlignVertical: TextAlignVertical.center,
-                        textAlign:
-                            effectiveAlignment == TSearchBarAlignment.center
-                            ? TextAlign.center
-                            : TextAlign.left,
-                        style: textStyle,
-                        decoration: InputDecoration(
-                          hintText: widget.hintText,
-                          hintStyle: hintStyle,
-                          hintMaxLines: 1,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          isCollapsed: true,
-                          contentPadding: EdgeInsets.zero,
+                      child: Material(
+                        type: MaterialType.transparency,
+                        child: TextField(
+                          controller: _controller,
+                          focusNode: _focusNode,
+                          autofocus: widget.autofocus,
+                          enabled: widget.enabled,
+                          readOnly: widget.readOnly,
+                          onChanged: widget.onChanged,
+                          onSubmitted: widget.onSubmitted,
+                          keyboardType: widget.inputType,
+                          textInputAction: widget.inputAction,
+                          inputFormatters: [
+                            ...?widget.inputFormatters,
+                            if (widget.maxCharacter != null)
+                              _SearchMaxCharacterFormatter(
+                                widget.maxCharacter!,
+                              ),
+                          ],
+                          maxLength: widget.maxLength,
+                          buildCounter:
+                              (
+                                _, {
+                                required currentLength,
+                                required isFocused,
+                                required maxLength,
+                              }) => null,
+                          cursorColor: token.brandNormalColor,
+                          cursorHeight: theme?.cursorHeight,
+                          textAlignVertical: TextAlignVertical.center,
+                          textAlign:
+                              effectiveAlignment == TSearchBarAlignment.center
+                              ? TextAlign.center
+                              : TextAlign.left,
+                          style: textStyle,
+                          decoration: InputDecoration(
+                            hintText: widget.hintText,
+                            hintStyle: hintStyle,
+                            hintMaxLines: 1,
+                            border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            isCollapsed: true,
+                            contentPadding: EdgeInsets.zero,
+                          ),
+                          maxLines: 1,
+                          cursorOpacityAnimates: false,
                         ),
-                        maxLines: 1,
-                        cursorOpacityAnimates: false,
                       ),
                     ),
                     if (_showClear)

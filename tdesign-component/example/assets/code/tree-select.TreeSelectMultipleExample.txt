@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+/// 在已配置 TDesign 主题的应用中使用 `TreeSelectMultipleExample()`。
+class TreeSelectMultipleExample extends StatefulWidget {
+  const TreeSelectMultipleExample({super.key});
+
+  @override
+  State<TreeSelectMultipleExample> createState() =>
+      _TreeSelectMultipleExampleState();
+}
+
+class _TreeSelectMultipleExampleState extends State<TreeSelectMultipleExample> {
+  static const _options = [
+    TTreeSelectOption(
+      label: '甘肃省',
+      value: 'gansu',
+      children: [TTreeSelectOption(label: '兰州市', value: 'lanzhou')],
+    ),
+    TTreeSelectOption(
+      label: '广东省',
+      value: 'guangdong',
+      children: [
+        TTreeSelectOption(label: '汕头市', value: 'shantou'),
+        TTreeSelectOption(label: '汕尾市', value: 'shanwei'),
+        TTreeSelectOption(label: '韶关市', value: 'shaoguan'),
+        TTreeSelectOption(label: '深圳市', value: 'shenzhen'),
+        TTreeSelectOption(label: '阳江市', value: 'yangjiang'),
+        TTreeSelectOption(label: '云浮市', value: 'yunfu'),
+      ],
+    ),
+    TTreeSelectOption(
+      label: '贵州省',
+      value: 'guizhou',
+      children: [TTreeSelectOption(label: '贵阳市', value: 'guiyang')],
+    ),
+    TTreeSelectOption(
+      label: '海南省',
+      value: 'hainan',
+      children: [TTreeSelectOption(label: '海口市', value: 'haikou')],
+    ),
+    TTreeSelectOption(
+      label: '河北省',
+      value: 'hebei',
+      children: [TTreeSelectOption(label: '石家庄市', value: 'shijiazhuang')],
+    ),
+    TTreeSelectOption(
+      label: '黑龙江省',
+      value: 'heilongjiang',
+      children: [TTreeSelectOption(label: '哈尔滨市', value: 'haerbin')],
+    ),
+  ];
+
+  List<List<Object?>> _value = const [
+    ['guangdong', 'shanwei'],
+  ];
+
+  @override
+  Widget build(BuildContext context) => TTreeSelect(
+    key: const ValueKey('tree-select-multiple'),
+    options: _options,
+    value: _value,
+    multiple: true,
+    onChanged: (value) => setState(() => _value = value),
+  );
+}

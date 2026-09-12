@@ -3,6 +3,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  void expectThumbBorders(
+    SliderThemeData theme, {
+    required Color borderColor,
+    required Color disabledBorderColor,
+  }) {
+    final dynamic thumbShape = theme.thumbShape;
+    final dynamic rangeThumbShape = theme.rangeThumbShape;
+    expect(thumbShape.borderColor, borderColor);
+    expect(thumbShape.disabledBorderColor, disabledBorderColor);
+    expect(rangeThumbShape.borderColor, borderColor);
+    expect(rangeThumbShape.disabledBorderColor, disabledBorderColor);
+  }
+
   Widget wrap(Widget child, {TSliderThemeData? sliderTheme}) {
     return MaterialApp(
       theme: ThemeData(
@@ -12,25 +25,32 @@ void main() {
         ],
         sliderTheme: const SliderThemeData(trackHeight: 6),
       ),
-      home: Scaffold(body: Center(child: SizedBox(width: 320, child: child))),
+      home: Scaffold(
+        body: Center(child: SizedBox(width: 320, child: child)),
+      ),
     );
   }
 
   group('TSlider v1 behavior', () {
-    testWidgets('forwards controlled value, bounds, divisions and callbacks',
-        (tester) async {
+    testWidgets('forwards controlled value, bounds, divisions and callbacks', (
+      tester,
+    ) async {
       double? changed;
       double? started;
       double? ended;
-      await tester.pumpWidget(wrap(TSlider(
-        value: 40,
-        min: 0,
-        max: 100,
-        divisions: 10,
-        onChanged: (value) => changed = value,
-        onChangeStart: (value) => started = value,
-        onChangeEnd: (value) => ended = value,
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TSlider(
+            value: 40,
+            min: 0,
+            max: 100,
+            divisions: 10,
+            onChanged: (value) => changed = value,
+            onChangeStart: (value) => started = value,
+            onChangeEnd: (value) => ended = value,
+          ),
+        ),
+      );
 
       final slider = tester.widget<Slider>(find.byType(Slider));
       expect(slider.value, 40);
@@ -38,7 +58,9 @@ void main() {
       expect(slider.max, 100);
       expect(slider.divisions, 10);
       expect(
-          SliderTheme.of(tester.element(find.byType(Slider))).trackHeight, 6);
+        SliderTheme.of(tester.element(find.byType(Slider))).trackHeight,
+        6,
+      );
 
       await tester.drag(find.byType(Slider), const Offset(80, 0));
       await tester.pumpAndSettle();
@@ -52,100 +74,191 @@ void main() {
       expect(tester.widget<Slider>(find.byType(Slider)).onChanged, isNull);
     });
 
-    testWidgets('uses TDesign token colors when SliderTheme is unspecified',
-        (tester) async {
+    testWidgets('uses TDesign token colors when SliderTheme is unspecified', (
+      tester,
+    ) async {
       await tester.pumpWidget(wrap(const TSlider(value: 0.5)));
 
       final theme = SliderTheme.of(tester.element(find.byType(Slider)));
       expect(theme.activeTrackColor, TThemeData.defaultData().brandNormalColor);
-      expect(theme.thumbColor, TThemeData.defaultData().brandNormalColor);
+      expect(
+        theme.inactiveTrackColor,
+        TThemeData.defaultData().bgColorComponentHover,
+      );
+      expect(theme.thumbColor, TThemeData.defaultData().textColorAnti);
+      expect(
+        theme.disabledActiveTrackColor,
+        TThemeData.defaultData().brandDisabledColor,
+      );
+      expect(
+        theme.disabledInactiveTrackColor,
+        TThemeData.defaultData().bgColorComponentDisabled,
+      );
+      expectThumbBorders(
+        theme,
+        borderColor: TThemeData.defaultData().grayColor1,
+        disabledBorderColor:
+            TThemeData.defaultData().bgColorComponentDisabled,
+      );
     });
 
-    testWidgets('preserves local SliderTheme color overrides', (tester) async {
+    testWidgets('uses dark TDesign token colors without Material pollution', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData();
+      final darkToken = token.dark ?? token;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.dark(token),
+          home: const Scaffold(body: TSlider(value: 0.5)),
+        ),
+      );
+
+      final theme = SliderTheme.of(tester.element(find.byType(Slider)));
+      expect(theme.activeTrackColor, darkToken.brandNormalColor);
+      expect(theme.inactiveTrackColor, darkToken.bgColorComponentHover);
+      expect(theme.thumbColor, darkToken.textColorAnti);
+      expectThumbBorders(
+        theme,
+        borderColor: darkToken.grayColor1,
+        disabledBorderColor: darkToken.bgColorComponentDisabled,
+      );
+    });
+
+    testWidgets('preserves local SliderTheme color and label overrides', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(
             extensions: [TThemeData.defaultData()],
             sliderTheme: const SliderThemeData(
               activeTrackColor: Colors.red,
+              valueIndicatorTextStyle: TextStyle(color: Colors.teal),
             ),
           ),
           home: const Scaffold(
-            body:
-                Center(child: SizedBox(width: 320, child: TSlider(value: 0.5))),
+            body: Center(
+              child: SizedBox(
+                width: 320,
+                child: TSlider(value: 0.5, showThumbValue: true),
+              ),
+            ),
           ),
         ),
       );
 
       final theme = SliderTheme.of(tester.element(find.byType(Slider)));
       expect(theme.activeTrackColor, Colors.red);
-      expect(theme.thumbColor, TThemeData.defaultData().brandNormalColor);
+      expect(theme.thumbColor, TThemeData.defaultData().textColorAnti);
+      expect(theme.valueIndicatorTextStyle?.color, Colors.teal);
+    });
+
+    testWidgets('explicit ColorScheme takes priority over TDesign tokens', (
+      tester,
+    ) async {
+      const scheme = ColorScheme.light(
+        primary: Colors.purple,
+        onSurface: Colors.orange,
+        surfaceContainerHighest: Colors.green,
+        outline: Colors.brown,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            colorScheme: scheme,
+            extensions: [TThemeData.defaultData()],
+          ),
+          home: const Scaffold(body: TSlider(value: 0.5)),
+        ),
+      );
+
+      final theme = SliderTheme.of(tester.element(find.byType(Slider)));
+      expect(theme.activeTrackColor, scheme.primary);
+      expect(theme.inactiveTrackColor, scheme.surfaceContainerHighest);
+      expect(theme.thumbColor, scheme.primary);
+      expectThumbBorders(
+        theme,
+        borderColor: scheme.outline,
+        disabledBorderColor: scheme.outlineVariant,
+      );
     });
 
     testWidgets('Theme decoration wraps the slider', (tester) async {
-      await tester.pumpWidget(wrap(
-        const TSlider(value: 0.5),
-        sliderTheme: const TSliderThemeData(
-          decoration: BoxDecoration(color: Colors.red),
+      await tester.pumpWidget(
+        wrap(
+          const TSlider(value: 0.5),
+          sliderTheme: const TSliderThemeData(
+            decoration: BoxDecoration(color: Colors.red),
+          ),
         ),
-      ));
+      );
       expect(find.byType(DecoratedBox), findsOneWidget);
     });
 
-    testWidgets('showThumbValue forwards formatted label and value indicator',
-        (tester) async {
-      await tester.pumpWidget(wrap(TSlider(
-        value: 40,
-        min: 0,
-        max: 100,
-        showThumbValue: true,
-        thumbFormatter: (value) => '${value.toInt()}%',
-      )));
+    testWidgets('showThumbValue keeps formatted label visible at rest', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TSlider(
+            value: 40,
+            min: 0,
+            max: 100,
+            showThumbValue: true,
+            thumbFormatter: (value) => '${value.toInt()}%',
+          ),
+        ),
+      );
 
       final slider = tester.widget<Slider>(find.byType(Slider));
       expect(slider.label, '40%');
       expect(
         SliderTheme.of(tester.element(find.byType(Slider))).showValueIndicator,
-        ShowValueIndicator.onlyForContinuous,
+        ShowValueIndicator.never,
       );
     });
 
-    testWidgets('discrete slider uses the discrete value indicator',
-        (tester) async {
-      await tester.pumpWidget(wrap(const TSlider(
-        value: 0.4,
-        divisions: 5,
-        showThumbValue: true,
-      )));
+    testWidgets('discrete slider keeps the Material value indicator hidden', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(const TSlider(value: 0.4, divisions: 5, showThumbValue: true)),
+      );
 
       expect(
         SliderTheme.of(tester.element(find.byType(Slider))).showValueIndicator,
-        ShowValueIndicator.onlyForDiscrete,
+        ShowValueIndicator.never,
       );
     });
 
-    testWidgets('showScaleValue renders formatted scale labels',
-        (tester) async {
-      await tester.pumpWidget(wrap(TSlider(
-        value: 40,
-        min: 0,
-        max: 100,
-        divisions: 4,
-        showScaleValue: true,
-        scaleFormatter: (value) => '${value.toInt()}%',
-      )));
+    testWidgets('showScaleValue renders formatted scale labels', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TSlider(
+            value: 40,
+            min: 0,
+            max: 100,
+            divisions: 4,
+            showScaleValue: true,
+            scaleFormatter: (value) => '${value.toInt()}%',
+          ),
+        ),
+      );
 
       expect(find.text('0%'), findsOneWidget);
       expect(find.text('50%'), findsOneWidget);
       expect(find.text('100%'), findsOneWidget);
     });
 
-    testWidgets('showThumbValue defaults to two decimal places',
-        (tester) async {
-      await tester.pumpWidget(wrap(const TSlider(
-        value: 0.4,
-        showThumbValue: true,
-      )));
+    testWidgets('showThumbValue defaults to two decimal places', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(const TSlider(value: 0.4, showThumbValue: true)),
+      );
 
       expect(tester.widget<Slider>(find.byType(Slider)).label, '0.40');
     });
@@ -162,20 +275,25 @@ void main() {
   });
 
   group('TRangeSlider v1 behavior', () {
-    testWidgets('forwards controlled range and lifecycle callbacks',
-        (tester) async {
+    testWidgets('forwards controlled range and lifecycle callbacks', (
+      tester,
+    ) async {
       RangeValues? changed;
       RangeValues? started;
       RangeValues? ended;
-      await tester.pumpWidget(wrap(TRangeSlider(
-        value: const RangeValues(20, 60),
-        min: 0,
-        max: 100,
-        divisions: 10,
-        onChanged: (value) => changed = value,
-        onChangeStart: (value) => started = value,
-        onChangeEnd: (value) => ended = value,
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TRangeSlider(
+            value: const RangeValues(20, 60),
+            min: 0,
+            max: 100,
+            divisions: 10,
+            onChanged: (value) => changed = value,
+            onChangeStart: (value) => started = value,
+            onChangeEnd: (value) => ended = value,
+          ),
+        ),
+      );
 
       final slider = tester.widget<RangeSlider>(find.byType(RangeSlider));
       expect(slider.values, const RangeValues(20, 60));
@@ -192,14 +310,17 @@ void main() {
       expect(ended, isNotNull);
     });
 
-    testWidgets('onChanged null disables and decoration wraps range slider',
-        (tester) async {
-      await tester.pumpWidget(wrap(
-        const TRangeSlider(value: RangeValues(0.2, 0.8)),
-        sliderTheme: const TSliderThemeData(
-          decoration: BoxDecoration(color: Colors.blue),
+    testWidgets('onChanged null disables and decoration wraps range slider', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TRangeSlider(value: RangeValues(0.2, 0.8)),
+          sliderTheme: const TSliderThemeData(
+            decoration: BoxDecoration(color: Colors.blue),
+          ),
         ),
-      ));
+      );
       expect(
         tester.widget<RangeSlider>(find.byType(RangeSlider)).onChanged,
         isNull,
@@ -207,62 +328,84 @@ void main() {
       expect(find.byType(DecoratedBox), findsOneWidget);
     });
 
-    testWidgets('showThumbValue forwards formatted range labels',
-        (tester) async {
-      await tester.pumpWidget(wrap(TRangeSlider(
-        value: const RangeValues(20, 60),
-        min: 0,
-        max: 100,
-        showThumbValue: true,
-        thumbFormatter: (value) => '${value.toInt()}%',
-      )));
+    testWidgets('showThumbValue keeps formatted range labels visible at rest', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TRangeSlider(
+            value: const RangeValues(20, 60),
+            min: 0,
+            max: 100,
+            showThumbValue: true,
+            thumbFormatter: (value) => '${value.toInt()}%',
+          ),
+        ),
+      );
 
       final slider = tester.widget<RangeSlider>(find.byType(RangeSlider));
       expect(slider.labels, const RangeLabels('20%', '60%'));
       expect(
-        SliderTheme.of(tester.element(find.byType(RangeSlider)))
-            .showValueIndicator,
-        ShowValueIndicator.onlyForContinuous,
+        SliderTheme.of(
+          tester.element(find.byType(RangeSlider)),
+        ).showValueIndicator,
+        ShowValueIndicator.never,
       );
     });
 
-    testWidgets('discrete range slider uses the discrete value indicator',
-        (tester) async {
-      await tester.pumpWidget(wrap(const TRangeSlider(
-        value: RangeValues(0.2, 0.6),
-        divisions: 5,
-        showThumbValue: true,
-      )));
+    testWidgets('discrete range keeps the Material value indicator hidden', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TRangeSlider(
+            value: RangeValues(0.2, 0.6),
+            divisions: 5,
+            showThumbValue: true,
+          ),
+        ),
+      );
 
       expect(
-        SliderTheme.of(tester.element(find.byType(RangeSlider)))
-            .showValueIndicator,
-        ShowValueIndicator.onlyForDiscrete,
+        SliderTheme.of(
+          tester.element(find.byType(RangeSlider)),
+        ).showValueIndicator,
+        ShowValueIndicator.never,
       );
     });
 
-    testWidgets('showScaleValue renders formatted range scale labels',
-        (tester) async {
-      await tester.pumpWidget(wrap(TRangeSlider(
-        value: const RangeValues(20, 60),
-        min: 0,
-        max: 100,
-        divisions: 4,
-        showScaleValue: true,
-        scaleFormatter: (value) => '${value.toInt()}%',
-      )));
+    testWidgets('showScaleValue renders formatted range scale labels', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TRangeSlider(
+            value: const RangeValues(20, 60),
+            min: 0,
+            max: 100,
+            divisions: 4,
+            showScaleValue: true,
+            scaleFormatter: (value) => '${value.toInt()}%',
+          ),
+        ),
+      );
 
       expect(find.text('0%'), findsOneWidget);
       expect(find.text('50%'), findsOneWidget);
       expect(find.text('100%'), findsOneWidget);
     });
 
-    testWidgets('range showThumbValue defaults to two decimal places',
-        (tester) async {
-      await tester.pumpWidget(wrap(const TRangeSlider(
-        value: RangeValues(0.2, 0.6),
-        showThumbValue: true,
-      )));
+    testWidgets('range showThumbValue defaults to two decimal places', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TRangeSlider(
+            value: RangeValues(0.2, 0.6),
+            showThumbValue: true,
+          ),
+        ),
+      );
 
       expect(
         tester.widget<RangeSlider>(find.byType(RangeSlider)).labels,
@@ -272,36 +415,34 @@ void main() {
 
     test('rejects invalid bounds and divisions', () {
       expect(
-        () => TRangeSlider(
-          value: const RangeValues(0.2, 0.8),
-          min: 1,
-          max: 1,
-        ),
+        () => TRangeSlider(value: const RangeValues(0.2, 0.8), min: 1, max: 1),
         throwsAssertionError,
       );
       expect(
-        () => TRangeSlider(
-          value: const RangeValues(0.2, 0.8),
-          divisions: 0,
-        ),
+        () => TRangeSlider(value: const RangeValues(0.2, 0.8), divisions: 0),
         throwsAssertionError,
       );
+    });
+
+    testWidgets('rejects a controlled range outside min and max', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(const TRangeSlider(value: RangeValues(-0.1, 0.8))),
+      );
+      expect(tester.takeException(), isAssertionError);
     });
   });
 
   test('TSliderThemeData copyWith and lerp', () {
-    const base = TSliderThemeData(
-      decoration: BoxDecoration(color: Colors.red),
-    );
+    const base = TSliderThemeData(decoration: BoxDecoration(color: Colors.red));
     const other = TSliderThemeData(
       decoration: BoxDecoration(color: Colors.blue),
     );
     expect(base.copyWith().decoration, base.decoration);
     expect(
       base
-          .copyWith(
-            decoration: const BoxDecoration(color: Colors.green),
-          )
+          .copyWith(decoration: const BoxDecoration(color: Colors.green))
           .decoration,
       const BoxDecoration(color: Colors.green),
     );

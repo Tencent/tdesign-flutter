@@ -1,0 +1,12 @@
+Widget _buildNonZero(BuildContext context) => _panel(
+    TSlider(
+      key: const ValueKey('slider-non-zero'),
+      value: _nonZero,
+      min: 20,
+      max: 100,
+      divisions: 4,
+      showScaleValue: true,
+      scaleFormatter: _integer,
+      onChanged: (value) => setState(() => _nonZero = value),
+    ),
+  );

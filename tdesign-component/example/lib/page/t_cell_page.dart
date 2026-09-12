@@ -172,7 +172,7 @@ class TCellPage extends StatelessWidget {
           TCell(
             image: const TImage(
               src: 'assets/img/t_avatar_1.png',
-              variant: TImageVariant.circle,
+              shape: TImageShape.circle, fit: BoxFit.cover,
               width: 48,
               height: 48,
             ),
@@ -184,7 +184,7 @@ class TCellPage extends StatelessWidget {
           TCell(
             image: const TImage(
               src: 'assets/img/t_avatar_1.png',
-              variant: TImageVariant.circle,
+              shape: TImageShape.circle, fit: BoxFit.cover,
               width: 48,
               height: 48,
             ),

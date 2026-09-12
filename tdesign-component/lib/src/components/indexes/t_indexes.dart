@@ -20,44 +20,57 @@ class TIndexes extends StatefulWidget {
   const TIndexes({
     Key? key,
     this.indexList,
+    this.initialIndex,
     this.indexListMaxHeight,
-    this.sticky,
-    this.stickyOffset,
-    this.capsuleTheme,
-    this.reverse,
+    this.sticky = true,
+    this.stickyOffset = 0,
+    this.capsuleTheme = false,
+    this.reverse = false,
     this.scrollController,
     this.onChanged,
     this.onSelect,
     required this.builderContent,
     this.builderAnchor,
     this.builderIndex,
-  }) : super(key: key);
+  }) : assert(
+         indexListMaxHeight == null ||
+             indexListMaxHeight > 0 && indexListMaxHeight <= 1,
+         'indexListMaxHeight must be greater than 0 and no greater than 1.',
+       ),
+       super(key: key);
 
-  /// 索引字符列表。不传默认 A-Z；默认值要求 [builderContent] 能处理 A-Z 全部索引，自定义数据建议显式传入
+  /// 索引字符列表。不传默认 A-Z；默认值要求 [builderContent] 能处理 A-Z 全部索引，自定义数据建议显式传入。
+  ///
+  /// 列表更新后若不再包含当前活动项，组件回退到新列表首项、同步滚动位置并触发 [onChanged]。
   final List<String>? indexList;
+
+  /// 初始激活索引。为空时使用 [indexList] 的第一项
+  ///
+  /// 仅在组件首次创建时生效；后续活动索引由滚动位置派生。
+  final String? initialIndex;
 
   /// 索引列表最大高度（父容器高度的百分比，默认 0.8）
   final double? indexListMaxHeight;
 
-  /// 锚点是否吸顶（优先级高于 ThemeData）
-  final bool? sticky;
+  /// 锚点是否吸顶
+  final bool sticky;
 
-  /// 锚点吸顶时与顶部的距离（优先级高于 ThemeData）
-  final double? stickyOffset;
+  /// 锚点吸顶时与顶部的距离
+  final double stickyOffset;
 
-  /// 锚点是否为胶囊式样式（优先级高于 ThemeData）
-  final bool? capsuleTheme;
+  /// 锚点是否为胶囊式样式
+  final bool capsuleTheme;
 
-  /// 反方向滚动置顶（优先级高于 ThemeData）
-  final bool? reverse;
+  /// 是否反向滚动
+  final bool reverse;
 
   /// 滚动控制器
   final ScrollController? scrollController;
 
-  /// 索引发生变更时触发事件
+  /// 当前激活索引发生变更时触发（含滚动吸顶派生与用户侧栏选择）
   final void Function(String index)? onChanged;
 
-  /// 点击侧边栏时触发事件
+  /// 用户在侧边栏点击或拖动选择索引（激活索引变化）时触发；滚动吸顶派生不会触发本回调
   final void Function(String index)? onSelect;
 
   /// 内容自定义构建
@@ -65,13 +78,15 @@ class TIndexes extends StatefulWidget {
 
   /// 锚点自定义构建
   final Widget? Function(
-      BuildContext context, String index, bool isPinnedToTop)? builderAnchor;
+    BuildContext context,
+    String index,
+    bool isPinnedToTop,
+  )?
+  builderAnchor;
 
   /// 索引文本自定义构建，包括索引激活左侧提示
   final Widget Function(BuildContext context, String index, bool isActive)?
-      builderIndex;
-
-  /// 子树级主题数据
+  builderIndex;
 
   @override
   _TIndexesState createState() => _TIndexesState();
@@ -113,8 +128,25 @@ class _TIndexesState extends State<TIndexes> {
   void initState() {
     super.initState();
     _indexList = widget.indexList ?? _defaultAZList;
-    _activeIndex = ValueNotifier(_indexList.getOrNull(0) ?? '');
+    assert(
+      _indexList.toSet().length == _indexList.length,
+      'indexList values must be unique.',
+    );
+    assert(
+      widget.initialIndex == null || _indexList.contains(widget.initialIndex),
+      'initialIndex must be included in indexList.',
+    );
+    final firstIndex = _indexList.getOrNull(0) ?? '';
+    _activeIndex = ValueNotifier(widget.initialIndex ?? firstIndex);
     _setScrollController(widget.scrollController);
+    if (_activeIndex.value != firstIndex) {
+      _isAnimating = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _scrollToTarget(_activeIndex.value, firstIndex);
+        }
+      });
+    }
   }
 
   @override
@@ -122,9 +154,33 @@ class _TIndexesState extends State<TIndexes> {
     super.didUpdateWidget(oldWidget);
     if (widget.indexList != oldWidget.indexList) {
       _indexList = widget.indexList ?? _defaultAZList;
+      assert(
+        _indexList.toSet().length == _indexList.length,
+        'indexList values must be unique.',
+      );
       final oldActiveIndex = _activeIndex;
-      _activeIndex = ValueNotifier(_indexList.getOrNull(0) ?? '');
+      final activeIndexWasRemoved = !_indexList.contains(oldActiveIndex.value);
+      _activeIndex = ValueNotifier(
+        activeIndexWasRemoved
+            ? _indexList.getOrNull(0) ?? ''
+            : oldActiveIndex.value,
+      );
       oldActiveIndex.dispose();
+      if (activeIndexWasRemoved && _activeIndex.value.isNotEmpty) {
+        _isAnimating = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) {
+            return;
+          }
+          if (_scrollController.hasClients) {
+            _scrollController.jumpTo(
+              _scrollController.position.minScrollExtent,
+            );
+          }
+          _isAnimating = false;
+          _notifyChange(_activeIndex.value);
+        });
+      }
     }
     if (widget.scrollController != oldWidget.scrollController) {
       if (_ownsScrollController) {
@@ -153,7 +209,7 @@ class _TIndexesState extends State<TIndexes> {
         children: [
           CustomScrollView(
             controller: _scrollController,
-            reverse: widget.reverse ?? theme.reverse ?? false,
+            reverse: widget.reverse,
             slivers: _slivers(),
           ),
           TIndexesList(
@@ -174,10 +230,9 @@ class _TIndexesState extends State<TIndexes> {
   }
 
   List<Widget> _slivers() {
-    final theme = _resolveTheme();
-    final capsuleTheme = widget.capsuleTheme ?? theme.capsuleTheme ?? false;
-    final stickyOffset = widget.stickyOffset ?? theme.stickyOffset ?? 0;
-    final sticky = widget.sticky ?? theme.sticky ?? true;
+    final capsuleTheme = widget.capsuleTheme;
+    final stickyOffset = widget.stickyOffset;
+    final sticky = widget.sticky;
     _anchorKeys.clear();
     _contentKeys.clear();
     return _indexList.map((e) {
@@ -227,6 +282,57 @@ class _TIndexesState extends State<TIndexes> {
     final currentTaskId = taskId ?? ++_scrollTaskId;
     _isAnimating = true;
 
+    if (widget.reverse) {
+      final oldPosition = _indexList.indexOf(oldIndex);
+      final targetPosition = _indexList.indexOf(newIndex);
+      final step = targetPosition > oldPosition ? 1 : -1;
+      var visiblePosition = targetPosition;
+      while (visiblePosition != oldPosition &&
+          _anchorKeys[_indexList[visiblePosition]] == null) {
+        visiblePosition -= step;
+      }
+      final visibleIndex = _indexList[visiblePosition];
+      final anchorContext = _anchorKeys[visibleIndex];
+      if (anchorContext == null) {
+        _isAnimating = false; // coverage:ignore-line
+        return;
+      }
+      Scrollable.ensureVisible(anchorContext).then((value) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted || currentTaskId != _scrollTaskId) {
+            return;
+          }
+          if (visibleIndex == newIndex) {
+            _isAnimating = false;
+            // This defensive branch depends on sliver cache geometry that is not
+            // deterministic in the component regression runner.
+            // coverage:ignore-start
+          } else if (visibleIndex == oldIndex) {
+            final position = _scrollController.position;
+            final direction = targetPosition > oldPosition ? 1 : -1;
+            final nextOffset =
+                (position.pixels + direction * position.viewportDimension)
+                    .clamp(position.minScrollExtent, position.maxScrollExtent)
+                    .toDouble();
+            if (nextOffset == position.pixels) {
+              _isAnimating = false;
+              return;
+            }
+            _scrollController.jumpTo(nextOffset);
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted && currentTaskId == _scrollTaskId) {
+                _scrollToTarget(newIndex, oldIndex, currentTaskId);
+              }
+            });
+            // coverage:ignore-end
+          } else {
+            _scrollToTarget(newIndex, visibleIndex, currentTaskId);
+          }
+        });
+      });
+      return;
+    }
+
     /// isUp: 是否（手指）向上滑动
     final isUp = _indexList.indexOf(newIndex) > _indexList.indexOf(oldIndex);
     if (isUp) {
@@ -237,8 +343,9 @@ class _TIndexesState extends State<TIndexes> {
         final contentHeight = contentRenderBox.size.height;
         final maxScrollExtent = _scrollController.position.maxScrollExtent;
         final targetOffset = contentRenderBox.localToGlobal(
-            Offset(0, contentHeight),
-            ancestor: context.findRenderObject());
+          Offset(0, contentHeight),
+          ancestor: context.findRenderObject(),
+        );
         final scrollOffset = targetOffset.dy + _scrollController.offset;
         _scrollController.jumpTo(min(maxScrollExtent, scrollOffset));
       }

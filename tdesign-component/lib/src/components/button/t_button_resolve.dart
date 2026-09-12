@@ -286,7 +286,7 @@ class TButtonResolve {
       foregroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
           return colorScheme?.onSurface.withValues(alpha: 0.38) ??
-              tTheme.textDisabledColor;
+              _disabledFillForegroundColor(scheme, tTheme);
         }
         return fg;
       }),
@@ -327,12 +327,14 @@ class TButtonResolve {
           return colorScheme?.onSurface.withValues(alpha: 0.08) ??
               tTheme.bgColorContainerActive;
         }
-        return Colors.transparent;
+        return colorScheme == null && scheme == TButtonColorScheme.light
+            ? tTheme.brandLightColor
+            : Colors.transparent;
       }),
       foregroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
           return colorScheme?.onSurface.withValues(alpha: 0.38) ??
-              tTheme.textDisabledColor;
+              _disabledNonFillForegroundColor(scheme, tTheme);
         }
         return fg;
       }),
@@ -341,7 +343,9 @@ class TButtonResolve {
           return BorderSide(
             color:
                 colorScheme?.onSurface.withValues(alpha: 0.12) ??
-                tTheme.componentBorderColor.withValues(alpha: 0.4),
+                (scheme == TButtonColorScheme.primary
+                    ? tTheme.brandDisabledColor
+                    : tTheme.componentBorderColor.withValues(alpha: 0.4)),
             width: 1,
           );
         }
@@ -384,7 +388,7 @@ class TButtonResolve {
       foregroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
           return colorScheme?.onSurface.withValues(alpha: 0.38) ??
-              tTheme.textDisabledColor;
+              _disabledNonFillForegroundColor(scheme, tTheme);
         }
         return fg;
       }),
@@ -552,6 +556,30 @@ class TButtonResolve {
       TButtonColorScheme.danger => tTheme.errorDisabledColor,
       TButtonColorScheme.light => tTheme.brandLightColor,
       TButtonColorScheme.defaultTheme => tTheme.bgColorComponentDisabled,
+    };
+  }
+
+  static Color _disabledFillForegroundColor(
+    TButtonColorScheme scheme,
+    TThemeData tTheme,
+  ) {
+    return switch (scheme) {
+      TButtonColorScheme.primary => tTheme.textColorAnti,
+      TButtonColorScheme.light => tTheme.brandDisabledColor,
+      TButtonColorScheme.danger ||
+      TButtonColorScheme.defaultTheme => tTheme.textDisabledColor,
+    };
+  }
+
+  static Color _disabledNonFillForegroundColor(
+    TButtonColorScheme scheme,
+    TThemeData tTheme,
+  ) {
+    return switch (scheme) {
+      TButtonColorScheme.primary ||
+      TButtonColorScheme.light => tTheme.brandDisabledColor,
+      TButtonColorScheme.danger ||
+      TButtonColorScheme.defaultTheme => tTheme.textDisabledColor,
     };
   }
 

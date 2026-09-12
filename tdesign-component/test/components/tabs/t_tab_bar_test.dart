@@ -77,6 +77,24 @@ void main() {
   });
 
   group('TTabsBar', () {
+    testWidgets('small and large sizes use typography tokens', (tester) async {
+      final token = TThemeData.defaultData();
+      for (final size in TTabsBarSize.values) {
+        await tester.pumpWidget(
+          wrapWithTheme(TTabsBar(tabs: tabs(), size: size)),
+        );
+        final tabBar = tester.widget<THorizontalTabBar>(
+          find.byType(THorizontalTabBar),
+        );
+        final font = size == TTabsBarSize.large
+            ? token.fontBodyLarge
+            : token.fontBodyMedium;
+        expect(tabBar.labelStyle?.fontSize, font?.size);
+        expect(tabBar.labelStyle?.height, font?.height);
+        expect(tabBar.unselectedLabelStyle?.fontSize, font?.size);
+      }
+    });
+
     testWidgets('default labels inherit ThemeData bodyMedium font family', (
       tester,
     ) async {

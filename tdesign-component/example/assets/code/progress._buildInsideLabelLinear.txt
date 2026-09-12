@@ -1,3 +1,0 @@
-Widget _buildInsideLabelLinear(BuildContext context) {
-    return TProgress(variant: TProgressVariant.linear, value: value);
-  }

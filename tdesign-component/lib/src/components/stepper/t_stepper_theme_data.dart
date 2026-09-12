@@ -1,7 +1,6 @@
-import 'dart:ui' show lerpDouble;
-
 import 'package:flutter/material.dart';
 
+import 't_stepper_theme_interpolation.dart';
 import 't_stepper_types.dart';
 
 /// `TStepper` 的组件级主题。
@@ -65,11 +64,11 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
     /// 在继承 DefaultTextStyle 和 ThemeData.textTheme 后合并；非空字段可覆盖
     /// 默认字号、行高及 [foregroundColor]。
     this.textStyle,
-  })  : assert(inputWidth == null || inputWidth > 0),
-        assert(controlSize == null || controlSize > 0),
-        assert(iconSize == null || iconSize > 0),
-        assert(spacing == null || spacing >= 0),
-        assert(borderWidth == null || borderWidth >= 0);
+  }) : assert(inputWidth == null || inputWidth > 0),
+       assert(controlSize == null || controlSize > 0),
+       assert(iconSize == null || iconSize > 0),
+       assert(spacing == null || spacing >= 0),
+       assert(borderWidth == null || borderWidth >= 0);
 
   /// 默认尺寸；为空时使用中尺寸。
   final TStepperSize? size;
@@ -150,34 +149,20 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
     );
   }
 
+  /// 插值保留未指定字段的继承语义，由组件结合当前实例尺寸与主题解析。
+  ///
+  /// 两端均未指定的字段仍为 null；端点返回原始配置。
   @override
   TStepperThemeData lerp(ThemeExtension<TStepperThemeData>? other, double t) {
     if (other is! TStepperThemeData) {
       return this;
     }
-    return TStepperThemeData(
-      size: t < 0.5 ? size : other.size,
-      variant: t < 0.5 ? variant : other.variant,
-      inputWidth: lerpDouble(inputWidth, other.inputWidth, t),
-      controlSize: lerpDouble(controlSize, other.controlSize, t),
-      iconSize: lerpDouble(iconSize, other.iconSize, t),
-      spacing: lerpDouble(spacing, other.spacing, t),
-      borderRadius: BorderRadius.lerp(borderRadius, other.borderRadius, t),
-      borderWidth: lerpDouble(borderWidth, other.borderWidth, t),
-      foregroundColor: Color.lerp(foregroundColor, other.foregroundColor, t),
-      disabledForegroundColor: Color.lerp(
-        disabledForegroundColor,
-        other.disabledForegroundColor,
-        t,
-      ),
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      disabledBackgroundColor: Color.lerp(
-        disabledBackgroundColor,
-        other.disabledBackgroundColor,
-        t,
-      ),
-      borderColor: Color.lerp(borderColor, other.borderColor, t),
-      textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
-    );
+    if (t == 0) {
+      return this;
+    }
+    if (t == 1) {
+      return other;
+    }
+    return StepperThemeInterpolation(this, other, t);
   }
 }

@@ -1,0 +1,38 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+/// 在已配置 TDesign 主题的应用中使用 `StepperBoundsExample()`。
+class StepperBoundsExample extends StatefulWidget {
+  const StepperBoundsExample({super.key});
+
+  @override
+  State<StepperBoundsExample> createState() => _StepperBoundsExampleState();
+}
+
+class _StepperBoundsExampleState extends State<StepperBoundsExample> {
+  num _minimum = 0;
+  num _maximum = 999;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        TStepper(
+          key: const ValueKey('stepper-minimum'),
+          value: _minimum,
+          variant: TStepperVariant.filled,
+          onChanged: (value) => setState(() => _minimum = value),
+        ),
+        const SizedBox(width: 32),
+        TStepper(
+          key: const ValueKey('stepper-maximum'),
+          value: _maximum,
+          max: 999,
+          variant: TStepperVariant.filled,
+          onChanged: (value) => setState(() => _maximum = value),
+        ),
+      ],
+    );
+  }
+}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 't_steps.dart';
 import 't_steps_horizontal_item.dart';
+import 't_steps_mode.dart';
 
 /// Steps步骤条，水平步骤
 class TStepsHorizontal extends StatelessWidget {
@@ -14,11 +15,11 @@ class TStepsHorizontal extends StatelessWidget {
   /// 步骤条状态
   final TStepsStatus status;
 
-  /// 是否为简略模式
-  final bool simple;
+  /// 步骤条指示器样式。
+  final TStepsIndicator indicator;
 
-  /// 是否为只读模式（纯展示）
-  final bool readOnly;
+  /// 根组件已解析的使用模式。
+  final TStepsMode mode;
 
   /// 选择步骤回调。
   final ValueChanged<int>? onChange;
@@ -28,8 +29,8 @@ class TStepsHorizontal extends StatelessWidget {
     required this.steps,
     required this.activeIndex,
     required this.status,
-    required this.simple,
-    required this.readOnly,
+    required this.indicator,
+    required this.mode,
     this.onChange,
   });
 
@@ -46,9 +47,9 @@ class TStepsHorizontal extends StatelessWidget {
           stepsCount: stepsCount,
           activeIndex: activeIndex,
           status: status,
-          simple: simple,
-          readOnly: readOnly,
-          onTap: readOnly ? null : () => onChange?.call(item.key),
+          indicator: indicator,
+          mode: mode,
+          onTap: onChange == null ? null : () => onChange?.call(item.key),
         ),
       );
     }).toList();

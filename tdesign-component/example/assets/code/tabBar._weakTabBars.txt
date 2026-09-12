@@ -1,0 +1,71 @@
+/// 核心片段：导入 material.dart 和 tdesign_flutter.dart。
+  /// 在 StatefulWidget 的 State 中声明 `final _weakValues = [0, 0, 0];`，
+  /// 从 build 调用本方法；状态由 State 持有并通过 setState 重建。
+    Widget _weakTabBars(BuildContext context) {
+    const labels = ['首页', '应用', '聊天', '我的'];
+    const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
+    const badges = [
+      TBadge(label: '16'),
+      TBadge(variant: TBadgeVariant.dot),
+      TBadge(label: 'New'),
+      TBadge(label: '···'),
+    ];
+    const textBadges = [
+      TBadge(label: '16', offset: Offset(16, -8)),
+      TBadge(variant: TBadgeVariant.dot, offset: Offset(16, -8)),
+      TBadge(label: 'New', offset: Offset(16, -8)),
+      TBadge(label: '···', offset: Offset(16, -8)),
+    ];
+    return Column(
+      children: [
+        TTabBar(
+          type: TTabBarType.text,
+          itemStyle: TTabBarItemStyle.normal,
+          split: true,
+          useSafeArea: false,
+          value: _weakValues[0],
+          onChanged: (value) => setState(() => _weakValues[0] = value),
+          navigationTabs: List.generate(
+            4,
+            (index) => TTabBarItemConfig(
+              tabText: labels[index],
+              badge: textBadges[index],
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        TTabBar(
+          type: TTabBarType.icon,
+          itemStyle: TTabBarItemStyle.normal,
+          useSafeArea: false,
+          value: _weakValues[1],
+          onChanged: (value) => setState(() => _weakValues[1] = value),
+          navigationTabs: List.generate(
+            4,
+            (index) => TTabBarItemConfig(
+              selectedIcon: Icon(icons[index], size: 20),
+              unselectedIcon: Icon(icons[index], size: 20),
+              badge: badges[index],
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        TTabBar(
+          type: TTabBarType.iconText,
+          itemStyle: TTabBarItemStyle.normal,
+          useSafeArea: false,
+          value: _weakValues[2],
+          onChanged: (value) => setState(() => _weakValues[2] = value),
+          navigationTabs: List.generate(
+            4,
+            (index) => TTabBarItemConfig(
+              tabText: labels[index],
+              selectedIcon: Icon(icons[index], size: 20),
+              unselectedIcon: Icon(icons[index], size: 20),
+              badge: badges[index],
+            ),
+          ),
+        ),
+      ],
+    );
+  }

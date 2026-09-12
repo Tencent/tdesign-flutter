@@ -1,9 +1,6 @@
-import 'dart:ui' show lerpDouble;
-
 import 'package:flutter/material.dart';
 
 import '../../theme/basic.dart' show Font;
-import '../button/t_button_types.dart';
 
 /// 空态组件级 ThemeExtension
 class TEmptyThemeData extends ThemeExtension<TEmptyThemeData> {
@@ -13,25 +10,13 @@ class TEmptyThemeData extends ThemeExtension<TEmptyThemeData> {
   /// 描述文字字号
   final Font? emptyTextFont;
 
-  /// 操作按钮语义色
-  final TButtonColorScheme? operationTheme;
-
-  const TEmptyThemeData({
-    this.emptyTextColor,
-    this.emptyTextFont,
-    this.operationTheme,
-  });
+  const TEmptyThemeData({this.emptyTextColor, this.emptyTextFont});
 
   @override
-  TEmptyThemeData copyWith({
-    Color? emptyTextColor,
-    Font? emptyTextFont,
-    TButtonColorScheme? operationTheme,
-  }) {
+  TEmptyThemeData copyWith({Color? emptyTextColor, Font? emptyTextFont}) {
     return TEmptyThemeData(
       emptyTextColor: emptyTextColor ?? this.emptyTextColor,
       emptyTextFont: emptyTextFont ?? this.emptyTextFont,
-      operationTheme: operationTheme ?? this.operationTheme,
     );
   }
 
@@ -43,7 +28,6 @@ class TEmptyThemeData extends ThemeExtension<TEmptyThemeData> {
     return TEmptyThemeData(
       emptyTextColor: Color.lerp(emptyTextColor, other.emptyTextColor, t),
       emptyTextFont: t < 0.5 ? emptyTextFont : other.emptyTextFont,
-      operationTheme: t < 0.5 ? operationTheme : other.operationTheme,
     );
   }
 }

@@ -1,38 +1,49 @@
 Widget _buildCellSkeleton(BuildContext context) {
-    return const Column(
-      // spacing: 16,
+    return Column(
       children: <Widget>[
         Row(
-          // spacing: 12,
           children: <Widget>[
-            TSkeleton(variant: TSkeletonVariant.avatar),
-            SizedBox(width: 12),
-            Expanded(
+            const TSkeleton(variant: TSkeletonVariant.avatar),
+            SizedBox(width: context.tTheme.spacer12),
+            const Expanded(
               child: TSkeleton.custom(
-                layout: TSkeletonLayout(rows: [
-                  [TSkeletonBlock.line(), TSkeletonBlock.spacer(flex: 1)],
-                  [TSkeletonBlock.line()]
-                ]),
+                layout: TSkeletonLayout(
+                  rows: [
+                    [TSkeletonBlock.line(), TSkeletonBlock.spacer(flex: 1)],
+                    [TSkeletonBlock.line()],
+                  ],
+                ),
               ),
             ),
           ],
         ),
-        SizedBox(height: 16),
+        SizedBox(height: context.tTheme.spacer16),
         Row(
-          // spacing: 12,
           children: <Widget>[
             TSkeleton.custom(
-              layout: TSkeletonLayout(rows: [
-                [TSkeletonBlock.rectangle(width: 48, height: 48)]
-              ]),
+              layout: TSkeletonLayout(
+                rows: [
+                  [
+                    TSkeletonBlock(
+                      width: 48,
+                      height: 48,
+                      style: TSkeletonBlockStyle(
+                        borderRadius: context.tTheme.radiusDefault,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
-            SizedBox(width: 12),
-            Expanded(
+            SizedBox(width: context.tTheme.spacer12),
+            const Expanded(
               child: TSkeleton.custom(
-                layout: TSkeletonLayout(rows: [
-                  [TSkeletonBlock.line(), TSkeletonBlock.spacer(flex: 1)],
-                  [TSkeletonBlock.line()]
-                ]),
+                layout: TSkeletonLayout(
+                  rows: [
+                    [TSkeletonBlock.line(), TSkeletonBlock.spacer(flex: 1)],
+                    [TSkeletonBlock.line()],
+                  ],
+                ),
               ),
             ),
           ],

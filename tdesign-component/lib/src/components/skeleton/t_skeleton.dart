@@ -37,10 +37,11 @@ enum TSkeletonVariant {
 class TSkeleton extends StatefulWidget {
   const TSkeleton({
     super.key,
-    this.variant = TSkeletonVariant.text,
+    TSkeletonVariant variant = TSkeletonVariant.text,
     this.animation,
     this.delay = Duration.zero,
-  }) : layout = null;
+  }) : variant = variant,
+       layout = null;
 
   /// 使用自定义行列布局创建骨架屏。
   const TSkeleton.custom({
@@ -48,8 +49,8 @@ class TSkeleton extends StatefulWidget {
     required TSkeletonLayout layout,
     this.animation,
     this.delay = Duration.zero,
-  })  : layout = layout,
-        variant = null;
+  }) : layout = layout,
+       variant = null;
 
   /// 预设形态；自定义布局时为空。
   final TSkeletonVariant? variant;
@@ -111,10 +112,14 @@ class _TSkeletonState extends State<TSkeleton> with TickerProviderStateMixin {
       ..addListener(_handleAnimationTick)
       ..repeat(reverse: widget.animation == TSkeletonAnimation.flashed);
     _animation = switch (widget.animation!) {
-      TSkeletonAnimation.gradient =>
-        Tween<double>(begin: -1, end: 1).animate(_controller!),
-      TSkeletonAnimation.flashed =>
-        Tween<double>(begin: 1, end: _flashedOpacity).animate(_controller!),
+      TSkeletonAnimation.gradient => Tween<double>(
+        begin: -1,
+        end: 1,
+      ).animate(_controller!),
+      TSkeletonAnimation.flashed => Tween<double>(
+        begin: 1,
+        end: _flashedOpacity,
+      ).animate(_controller!),
     };
   }
 
@@ -137,38 +142,57 @@ class _TSkeletonState extends State<TSkeleton> with TickerProviderStateMixin {
     }
   }
 
-  TSkeletonLayout get _effectiveLayout =>
-      widget.layout ??
-      switch (widget.variant!) {
-        TSkeletonVariant.avatar => const TSkeletonLayout(
-            rows: [
-              [TSkeletonBlock.circle()]
-            ],
-          ),
-        TSkeletonVariant.image => const TSkeletonLayout(
-            rows: [
-              [TSkeletonBlock.rectangle(width: 72, height: 72, flex: null)],
-            ],
-          ),
-        TSkeletonVariant.text => const TSkeletonLayout(
-            rows: [
-              [
-                TSkeletonBlock.line(flex: 24),
-                TSkeletonBlock.spacer(width: 16),
-                TSkeletonBlock.line(flex: 76),
-              ],
-              [TSkeletonBlock.line()],
-            ],
-          ),
-        TSkeletonVariant.paragraph => const TSkeletonLayout(
-            rows: [
-              [TSkeletonBlock.line()],
-              [TSkeletonBlock.line()],
-              [TSkeletonBlock.line()],
-              [TSkeletonBlock.line(flex: 55), TSkeletonBlock.spacer(flex: 45)],
-            ],
-          ),
-      };
+  TSkeletonLayout _effectiveLayout(BuildContext context) {
+    final layout = widget.layout;
+    if (layout != null) {
+      return layout;
+    }
+
+    final variant = widget.variant;
+    if (variant == null) {
+      throw StateError('TSkeleton requires either a variant or a layout.');
+    }
+
+    return switch (variant) {
+      TSkeletonVariant.avatar => const TSkeletonLayout(
+        rows: [
+          [TSkeletonBlock.circle()],
+        ],
+      ),
+      TSkeletonVariant.image => TSkeletonLayout(
+        rows: [
+          [
+            TSkeletonBlock(
+              width: 72,
+              height: 72,
+              flex: null,
+              style: TSkeletonBlockStyle(
+                borderRadius: context.tTheme.radiusDefault,
+              ),
+            ),
+          ],
+        ],
+      ),
+      TSkeletonVariant.text => const TSkeletonLayout(
+        rows: [
+          [
+            TSkeletonBlock.line(flex: 24),
+            TSkeletonBlock.spacer(width: 16),
+            TSkeletonBlock.line(flex: 76),
+          ],
+          [TSkeletonBlock.line()],
+        ],
+      ),
+      TSkeletonVariant.paragraph => const TSkeletonLayout(
+        rows: [
+          [TSkeletonBlock.line()],
+          [TSkeletonBlock.line()],
+          [TSkeletonBlock.line()],
+          [TSkeletonBlock.line(flex: 55), TSkeletonBlock.spacer(flex: 45)],
+        ],
+      ),
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +200,7 @@ class _TSkeletonState extends State<TSkeleton> with TickerProviderStateMixin {
       return const SizedBox.shrink();
     }
 
-    final layout = _effectiveLayout;
+    final layout = _effectiveLayout(context);
     final theme = Theme.of(context).extension<TSkeletonThemeData>();
     final rowSpacing =
         layout.rowSpacing ?? theme?.rowSpacing ?? context.tTheme.spacer16;
@@ -213,23 +237,36 @@ class _TSkeletonState extends State<TSkeleton> with TickerProviderStateMixin {
     TSkeletonThemeData? theme, {
     bool allowFlex = true,
   }) {
-    final radius = block.style.borderRadius ??
+    final radius =
+        block.style.borderRadius ??
         switch (block.style.shape) {
           TSkeletonBlockShape.rounded =>
             theme?.borderRadius ?? context.tTheme.radiusSmall,
           TSkeletonBlockShape.circle => (block.height ?? block.width ?? 0) / 2,
           TSkeletonBlockShape.rectangle => 0,
         };
+    final blockColor = block.isSpacer
+        ? Colors.transparent
+        : block.style.color ??
+              theme?.blockColor ??
+              context.tTheme.bgColorSecondaryContainer;
+    final flashedProgress = widget.animation == TSkeletonAnimation.flashed
+        ? ((1 - _animation!.value) / (1 - _flashedOpacity)).clamp(0.0, 1.0)
+        : 0.0;
+    final color =
+        widget.animation == TSkeletonAnimation.flashed && !block.isSpacer
+        ? Color.lerp(
+            blockColor,
+            context.tTheme.componentStrokeColor.withValues(alpha: .3),
+            flashedProgress,
+          )
+        : blockColor;
     Widget child = Container(
       width: block.width,
       height: block.height,
       margin: block.margin,
       decoration: BoxDecoration(
-        color: block.isSpacer
-            ? Colors.transparent
-            : block.style.color ??
-                theme?.blockColor ??
-                context.tTheme.bgColorComponent,
+        color: color,
         borderRadius: BorderRadius.circular(radius),
       ),
     );
@@ -237,21 +274,24 @@ class _TSkeletonState extends State<TSkeleton> with TickerProviderStateMixin {
     if (!block.isSpacer && widget.animation == TSkeletonAnimation.gradient) {
       child = ShaderMask(
         blendMode: BlendMode.srcATop,
-        shaderCallback: (bounds) => LinearGradient(
-          colors: [
-            Colors.transparent,
-            theme?.highlightColor ??
-                context.tTheme.bgColorSecondaryContainerActive,
-            Colors.transparent,
-          ],
-          begin: const Alignment(-1, -0.268),
-          end: const Alignment(1, 0.268),
-        ).createShader(Rect.fromLTWH(
-          bounds.width * _animation!.value,
-          0,
-          bounds.width,
-          bounds.height,
-        )),
+        shaderCallback: (bounds) =>
+            LinearGradient(
+              colors: [
+                Colors.transparent,
+                theme?.highlightColor ??
+                    context.tTheme.bgColorSecondaryContainerActive,
+                Colors.transparent,
+              ],
+              begin: const Alignment(-1, -0.268),
+              end: const Alignment(1, 0.268),
+            ).createShader(
+              Rect.fromLTWH(
+                bounds.width * _animation!.value,
+                0,
+                bounds.width,
+                bounds.height,
+              ),
+            ),
         child: child,
       );
     } else if (!block.isSpacer &&

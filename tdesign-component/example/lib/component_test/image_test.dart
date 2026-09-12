@@ -45,7 +45,6 @@ class TestPage extends StatelessWidget {
 
             const TImage(
               src: 'assets/img/image.png',
-              variant: TImageVariant.fitHeight,
               fit: BoxFit.fitHeight,
             ),
           ],

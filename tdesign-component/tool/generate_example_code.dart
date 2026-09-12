@@ -126,17 +126,25 @@ class _ExampleCodeCollector extends RecursiveAstVisitor<void> {
 
   late File _file;
   late String _source;
+  late CompilationUnit _unit;
 
   void collect(File file) {
     _file = file;
     _source = file.readAsStringSync();
-    parseString(content: _source, path: file.path).unit.accept(this);
+    _unit = parseString(content: _source, path: file.path).unit;
+    _unit.accept(this);
   }
 
   void throwIfInvalid() {
     if (_errors.isNotEmpty) {
       throw StateError(_errors.join('\n'));
     }
+  }
+
+  @override
+  void visitClassDeclaration(ClassDeclaration node) {
+    _collect(node, node.name.lexeme);
+    super.visitClassDeclaration(node);
   }
 
   @override
@@ -170,13 +178,32 @@ class _ExampleCodeCollector extends RecursiveAstVisitor<void> {
     }
     if (group == null || !_groupPattern.hasMatch(group)) {
       _errors.add(
-          '${_file.path}: $methodName must declare a literal, non-empty '
-          '$_annotationName group containing only letters, digits, "_" or "-".');
+        '${_file.path}: $methodName must declare a literal, non-empty '
+        '$_annotationName group containing only letters, digits, "_" or "-".',
+      );
       return;
     }
 
     final fileName = '$group.$methodName.txt';
-    final source = _sourceWithoutMarker(node, annotation);
+    var source = _sourceWithoutMarker(node, annotation);
+    if (node is ClassDeclaration) {
+      final imports = _unit.directives.whereType<ImportDirective>().where(
+        (directive) =>
+            !(directive.uri.stringValue?.endsWith('example_code.dart') ??
+                false),
+      );
+      final states = _unit.declarations.whereType<ClassDeclaration>().where(
+        (declaration) =>
+            declaration.extendsClause?.superclass.toSource() ==
+            'State<${node.name.lexeme}>',
+      );
+      source = [
+        if (imports.isNotEmpty)
+          imports.map((item) => item.toSource()).join('\n'),
+        source,
+        for (final state in states) _source.substring(state.offset, state.end),
+      ].join('\n\n');
+    }
     if (outputs.containsKey(fileName)) {
       _errors.add('${_file.path}: duplicate generated snippet $fileName.');
       return;

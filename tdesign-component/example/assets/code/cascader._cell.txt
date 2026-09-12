@@ -1,0 +1,270 @@
+/// 核心组合片段：放入调用方 StatefulWidget，导入 flutter/material.dart 和
+  /// tdesign_flutter/tdesign_flutter.dart。value 是父级持有的已提交路径，
+  /// onChanged 用 setState 保存新路径；TCascader 本身保持平铺和严格受控。
+  ///
+  /// 默认数据覆盖省/市/区三级；自定义字段在本方法中转换为 TCascaderOption。
+  /// 基础、tab、初始值、字段映射和次级标题在末级选择后提交并关闭；
+  /// allowIntermediateSelection 仅用于“选择任意一项”，关闭按钮提交当前草稿；
+  /// searchable 在 Popup 组合层提供搜索，命中末级后直接提交并关闭。
+  ///
+  /// 七个公开示例通过同一受控组合传入各自配置：基础示例使用默认 step；
+  /// 选项卡传 `variant: TCascaderVariant.tab`；初始值由 `useInitialValue` 配置；
+  /// 自定义 keys 由 `mapCustomKeys` 在数据进入组件时转换；次级标题传
+  /// `subtitles`；任意层选择传 `allowIntermediateSelection: true`；搜索传
+  /// `searchable: true`。每个实例都通过
+  /// `onChanged: (next) => setState(() => _values[id] = next)` 回写受控值。
+    TCell _cell(
+    BuildContext context,
+    String id, {
+    required List<Object?> value,
+    required ValueChanged<List<Object?>> onChanged,
+    bool mapCustomKeys = false,
+    bool useInitialValue = false,
+    TCascaderVariant variant = TCascaderVariant.step,
+    List<String> subtitles = const [],
+    bool allowIntermediateSelection = false,
+    bool searchable = false,
+  }) {
+    const defaultOptions = [
+      TCascaderOption(
+        label: '北京市',
+        value: 'beijing',
+        children: [
+          TCascaderOption(
+            label: '北京市',
+            value: 'beijing-city',
+            children: [
+              TCascaderOption(label: '东城区', value: 'dongcheng'),
+              TCascaderOption(label: '西城区', value: 'xicheng'),
+              TCascaderOption(label: '朝阳区', value: 'chaoyang'),
+            ],
+          ),
+        ],
+      ),
+      TCascaderOption(
+        label: '天津市',
+        value: 'tianjin',
+        children: [
+          TCascaderOption(
+            label: '天津市',
+            value: 'tianjin-city',
+            children: [
+              TCascaderOption(label: '和平区', value: 'peace-district'),
+              TCascaderOption(label: '蓟州区', value: 'jizhou'),
+            ],
+          ),
+        ],
+      ),
+      TCascaderOption(
+        label: '广东省',
+        value: 'guangdong',
+        children: [
+          TCascaderOption(
+            label: '深圳市',
+            value: 'shenzhen',
+            children: [
+              TCascaderOption(label: '南山区', value: 'nanshan'),
+              TCascaderOption(label: '福田区', value: 'futian'),
+            ],
+          ),
+        ],
+      ),
+    ];
+    const rawOptions = <Map<String, Object?>>[
+      {
+        'name': '北京市',
+        'id': 'beijing',
+        'sub': <Map<String, Object?>>[
+          {
+            'name': '北京市',
+            'id': 'beijing-city',
+            'sub': <Map<String, Object?>>[
+              {'name': '东城区', 'id': 'dongcheng'},
+            ],
+          },
+        ],
+      },
+      {
+        'name': '天津市',
+        'id': 'tianjin',
+        'sub': <Map<String, Object?>>[
+          {
+            'name': '天津市',
+            'id': 'tianjin-city',
+            'sub': <Map<String, Object?>>[
+              {'name': '蓟州区', 'id': 'jizhou'},
+            ],
+          },
+        ],
+      },
+    ];
+
+    List<TCascaderOption> convertOptions(List<Map<String, Object?>> items) {
+      return items
+          .map(
+            (item) => TCascaderOption(
+              label: item['name']! as String,
+              value: item['id'],
+              children: convertOptions(
+                (item['sub'] as List<Map<String, Object?>>?) ?? const [],
+              ),
+            ),
+          )
+          .toList(growable: false);
+    }
+
+    final options = mapCustomKeys ? convertOptions(rawOptions) : defaultOptions;
+    const initialValue = <Object?>['tianjin', 'tianjin-city', 'jizhou'];
+    final effectiveValue = useInitialValue && value.isEmpty
+        ? initialValue
+        : value;
+
+    List<String> labelsFor(List<Object?> selectedValue) {
+      final labels = <String>[];
+      var current = options;
+      for (final item in selectedValue) {
+        final index = current.indexWhere((option) => option.value == item);
+        if (index < 0) {
+          break;
+        }
+        labels.add(current[index].label);
+        current = current[index].children;
+      }
+      return labels;
+    }
+
+    bool isComplete(List<Object?> selectedValue) {
+      var current = options;
+      for (var index = 0; index < selectedValue.length; index++) {
+        final matches = current.where(
+          (option) => option.value == selectedValue[index],
+        );
+        if (matches.isEmpty) {
+          return false;
+        }
+        final option = matches.first;
+        if (index == selectedValue.length - 1) {
+          return option.children.isEmpty;
+        }
+        current = option.children;
+      }
+      return false;
+    }
+
+    List<({List<Object?> values, List<String> labels})> paths(
+      List<TCascaderOption> current, [
+      List<Object?> values = const [],
+      List<String> labels = const [],
+    ]) {
+      final result = <({List<Object?> values, List<String> labels})>[];
+      for (final option in current) {
+        final nextValues = [...values, option.value];
+        final nextLabels = [...labels, option.label];
+        if (option.children.isEmpty) {
+          result.add((values: nextValues, labels: nextLabels));
+        } else {
+          result.addAll(paths(option.children, nextValues, nextLabels));
+        }
+      }
+      return result;
+    }
+
+    void showCascader() {
+      var draft = List<Object?>.of(effectiveValue);
+      var query = '';
+      late VoidCallback closePopup;
+      TPopup.show(
+        context,
+        options: TPopupOptions.bottom(
+          height: MediaQuery.sizeOf(context).height * 0.85,
+          headerBuilder: (_, close) {
+            closePopup = close;
+            return TPopupHeader(
+              title: const TText('请选择地址'),
+              confirmButton: TToolbarPressable(
+                onTap: () {
+                  if (allowIntermediateSelection) {
+                    onChanged(List<Object?>.unmodifiable(draft));
+                  }
+                  close();
+                },
+                child: TIcon(
+                  TIcons.close,
+                  size: 24,
+                  color: context.tTheme.textColorPrimary,
+                ),
+              ),
+            );
+          },
+          child: StatefulBuilder(
+            builder: (context, setPopupState) {
+              final matches = searchable && query.isNotEmpty
+                  ? paths(options)
+                        .where((path) => path.labels.join().contains(query))
+                        .toList()
+                  : const <({List<Object?> values, List<String> labels})>[];
+              return Column(
+                children: [
+                  if (searchable)
+                    Padding(
+                      padding: EdgeInsets.all(context.tTheme.spacer16),
+                      child: TSearchBar(
+                        key: const ValueKey('cascader-search-field'),
+                        hintText: '搜索省/市/区',
+                        onChanged: (value) =>
+                            setPopupState(() => query = value.trim()),
+                      ),
+                    ),
+                  Expanded(
+                    child: query.isNotEmpty
+                        ? ListView(
+                            children: [
+                              for (final path in matches)
+                                TCell(
+                                  title: TText(path.labels.join(' / ')),
+                                  onTap: () {
+                                    onChanged(
+                                      List<Object?>.unmodifiable(path.values),
+                                    );
+                                    closePopup();
+                                  },
+                                ),
+                              if (matches.isEmpty)
+                                const Center(child: TText('暂无数据')),
+                            ],
+                          )
+                        : TCascader(
+                            key: const ValueKey('cascader-popup-panel'),
+                            options: options,
+                            value: draft,
+                            variant: variant,
+                            subtitles: subtitles,
+                            onChanged: (next) {
+                              setPopupState(
+                                () => draft = List<Object?>.of(next),
+                              );
+                              if (!allowIntermediateSelection &&
+                                  isComplete(next)) {
+                                onChanged(List<Object?>.unmodifiable(next));
+                                closePopup();
+                              }
+                            },
+                          ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      );
+    }
+
+    final labels = labelsFor(effectiveValue);
+    return TCell(
+      key: ValueKey('cascader-$id-trigger'),
+      title: const TText('地址'),
+      note: TText(labels.isEmpty ? '请选择地址' : labels.join('/')),
+      arrow: true,
+      onTap: showCascader,
+    );
+  }

@@ -10,7 +10,7 @@
         SizedBox(width: 32),
         TAvatar(
           size: TAvatarSize.medium,
-          variant: TAvatarVariant.square,
+          shape: TAvatarShape.square,
           image: AssetImage('assets/img/t_avatar_1.png'),
         ),
       ],

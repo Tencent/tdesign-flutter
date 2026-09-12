@@ -5,10 +5,7 @@
       children: [
         TAvatar(size: TAvatarSize.medium),
         SizedBox(width: 32),
-        TAvatar(
-          size: TAvatarSize.medium,
-          variant: TAvatarVariant.square,
-        ),
+        TAvatar(size: TAvatarSize.medium, shape: TAvatarShape.square),
       ],
     );
   }

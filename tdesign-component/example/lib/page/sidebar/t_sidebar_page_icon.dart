@@ -9,9 +9,6 @@ class TSideBarIconPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const TSideBarAnchorPage(
-      title: 'SideBar 带图标侧边栏',
-      withIcons: true,
-    );
+    return const TSideBarAnchorPage(title: 'SideBar 带图标侧边导航', withIcons: true);
   }
 }

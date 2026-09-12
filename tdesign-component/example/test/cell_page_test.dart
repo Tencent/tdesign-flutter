@@ -69,8 +69,8 @@ void main() {
 
   String imageOf(Widget? widget) => switch (widget) {
     null => '-',
-    TImage(:final src, :final variant, :final width, :final height) =>
-      'image:$src:${variant.name}:${width}x$height',
+    TImage(:final src, :final shape, :final fit, :final width, :final height) =>
+      'image:$src:${shape.name}:${fit.name}:${width}x$height',
     _ => widget.runtimeType.toString(),
   };
 

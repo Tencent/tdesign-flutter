@@ -6,8 +6,6 @@ import 'package:tdesign_flutter/src/components/sidebar/t_sidebar_theme_data.dart
 void main() {
   group('TSideBarThemeData 纯函数', () {
     const theme = TSideBarThemeData(
-      style: TSideBarVariant.normal,
-      height: 50,
       contentPadding: EdgeInsets.all(8),
       selectedColor: Colors.red,
       unSelectedColor: Colors.grey,
@@ -17,14 +15,8 @@ void main() {
     );
 
     test('copyWith 覆盖字段', () {
-      final copied = theme.copyWith(
-        style: TSideBarVariant.outline,
-        height: 60,
-        selectedColor: Colors.green,
-      );
+      final copied = theme.copyWith(selectedColor: Colors.green);
       expect(copied, isA<TSideBarThemeData>());
-      expect(copied.style, TSideBarVariant.outline);
-      expect(copied.height, 60);
       expect(copied.selectedColor, Colors.green);
       expect(copied.unSelectedColor, Colors.grey);
     });
@@ -41,19 +33,15 @@ void main() {
     });
 
     test('lerp 在 t=0 / 0.5 / 1 返回 TSideBarThemeData', () {
-      const other = TSideBarThemeData(
-        style: TSideBarVariant.outline,
-        height: 80,
-        selectedColor: Colors.purple,
-      );
+      const other = TSideBarThemeData(selectedColor: Colors.purple);
       final at0 = theme.lerp(other, 0);
       final atHalf = theme.lerp(other, 0.5);
       final at1 = theme.lerp(other, 1);
       expect(at0, isA<TSideBarThemeData>());
       expect(atHalf, isA<TSideBarThemeData>());
       expect(at1, isA<TSideBarThemeData>());
-      expect(atHalf.style, TSideBarVariant.outline);
-      expect(at1.style, TSideBarVariant.outline);
+      expect(atHalf.selectedColor, isA<Color>());
+      expect(at1.selectedColor?.toARGB32(), Colors.purple.toARGB32());
     });
 
     test('lerp cover remaining fields', () {

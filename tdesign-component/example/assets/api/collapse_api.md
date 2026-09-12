@@ -11,7 +11,6 @@
 | elevation | double? | - | 折叠面板列表的阴影 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | mode | TCollapseMode | TCollapseMode.multiple | 折叠面板模式 |
-| onChanged | ValueChanged<T?>? | - | 手风琴模式下 value 变更回调 |
-| onExpansionChanged | ExpansionPanelCallback? | - | 折叠面板列表的回调函数； 回调时，入参为当前点击的折叠面板的索引 index 和是否展开的状态 isExpanded |
-| value | T? | - | 手风琴模式下当前展开面板的 value |
+| onChanged | ValueChanged<List<T>>? | - | 展开值列表变更回调。 回调返回点击后的完整、不可修改列表。为 null 时整组不可交互，并使用禁用 视觉和语义；单项仍可通过 `TCollapsePanel.disabled` 禁用。 |
+| value | List<T> | - | 当前展开面板的值列表，是所有模式唯一的展开状态源。 列表中的值必须唯一，并与唯一的 `TCollapsePanel.value` 匹配。 `TCollapseMode.accordion` 模式最多允许一个值。 |
 | variant | TCollapseVariant? | - | 折叠面板视觉形态。未设置时从 `TCollapseThemeData.variant` 读取。 |

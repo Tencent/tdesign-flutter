@@ -88,8 +88,8 @@ class _NavigationComponentsScene extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const _SectionLabel('NavBar'),
-                      TNavBar(
-                        title: 'Page title',
+                      const TNavBar(
+                        title: Text('Page title'),
                         useDefaultBack: true,
                         actions: [
                           TNavBarItem(icon: TIcons.home, onTap: _noop),
@@ -112,7 +112,7 @@ class _NavigationComponentsScene extends StatelessWidget {
                       const SizedBox(height: 18),
                       const _SectionLabel('TabBar'),
                       TTabBar(
-                        variant: TTabBarVariant.iconText,
+                        type: TTabBarType.iconText,
                         value: 1,
                         useSafeArea: false,
                         placeholder: false,
@@ -125,7 +125,7 @@ class _NavigationComponentsScene extends StatelessWidget {
                       ),
                       const SizedBox(height: 18),
                       const _SectionLabel('Steps'),
-                      TSteps(
+                      const TSteps.progress(
                         value: 1,
                         steps: [
                           TStepsItemData(title: 'Done', content: 'Complete'),

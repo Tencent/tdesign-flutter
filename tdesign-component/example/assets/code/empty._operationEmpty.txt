@@ -1,7 +1,11 @@
 Widget _operationEmpty(BuildContext context) {
-    return const TEmpty(
-      variant: TEmptyVariant.operation,
-      customOperationWidget: Text('操作按钮'),
+    return TEmpty(
       emptyText: '描述文字',
+      operation: TButton(
+        size: TButtonSize.large,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () {},
+        child: const Text('操作按钮'),
+      ),
     );
   }

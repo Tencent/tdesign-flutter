@@ -95,7 +95,7 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
       // opacity: 0,
       centerTitle: false,
       titleMargin: 0,
-      titleWidget: Theme(
+      title: Theme(
         data: Theme.of(context).mergeExtension(
           const TSearchBarThemeData(variant: TSearchBarVariant.round),
         ),
@@ -124,10 +124,11 @@ TTabBar _buildTabBar() {
   var iconSize = 39 * 60 / 98;
   var textSize = 8.0;
   return TTabBar(
-    variant: TTabBarVariant.weakIconText,
+    type: TTabBarType.iconText,
+    itemStyle: TTabBarItemStyle.normal,
     value: 0,
     onChanged: (_) {},
-    useVerticalDivider: false,
+    split: false,
     barHeight: 98 * 60 / 98,
     navigationTabs: [
       TTabBarItemConfig(

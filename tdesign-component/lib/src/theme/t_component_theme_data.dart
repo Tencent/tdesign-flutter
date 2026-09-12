@@ -50,7 +50,6 @@ export '../components/skeleton/t_skeleton_theme_data.dart'
     show TSkeletonThemeData;
 export '../components/slider/t_slider_theme.dart' show TSliderThemeData;
 export '../components/stepper/t_stepper_theme_data.dart' show TStepperThemeData;
-export '../components/steps/t_steps_theme_data.dart' show TStepsThemeData;
 export '../components/swipe_cell/t_swipe_cell_theme_data.dart'
     show TSwipeCellThemeData;
 export '../components/swiper/t_swiper_theme_data.dart' show TSwiperThemeData;
