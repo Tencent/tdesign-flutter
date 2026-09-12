@@ -318,12 +318,21 @@ class TCheckbox extends StatelessWidget {
         !selected &&
         !indeterminate &&
         variant != TCheckboxVariant.check) {
+      final fillColor = materialTheme.fillColor?.resolve(states);
+      final materialSide = materialTheme.side;
+      final resolvedMaterialSide = materialSide is WidgetStateBorderSide
+          ? materialSide.resolve(states)
+          : materialSide;
+      final borderColor =
+          theme?.disableColor ??
+          resolvedMaterialSide?.color ??
+          context.tTheme.componentBorderColor;
       return Container(
         width: indicatorSize,
         height: indicatorSize,
         decoration: BoxDecoration(
-          color: context.tTheme.bgColorComponentDisabled,
-          border: Border.all(color: context.tTheme.componentBorderColor),
+          color: fillColor ?? context.tTheme.bgColorComponentDisabled,
+          border: Border.all(color: borderColor),
           shape: variant == TCheckboxVariant.circle
               ? BoxShape.circle
               : BoxShape.rectangle,

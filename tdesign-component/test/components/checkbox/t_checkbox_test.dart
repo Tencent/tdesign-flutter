@@ -230,6 +230,68 @@ void main() {
       expect(border.top.color, Colors.purple);
     });
 
+    testWidgets('禁用未选保留组件 Theme 的描边覆盖', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          const TCheckbox(value: false, title: '组件主题禁用未选'),
+          checkboxTheme: const TCheckboxThemeData(
+            disableColor: Colors.purple,
+          ),
+        ),
+      );
+
+      final decoration = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.decoration)
+          .whereType<BoxDecoration>()
+          .singleWhere(
+            (decoration) =>
+                decoration.color == const Color(0xFFEEEEEE) &&
+                decoration.shape == BoxShape.circle,
+          );
+      final border = decoration.border! as Border;
+
+      expect(border.top.color, Colors.purple);
+    });
+
+    testWidgets('禁用未选保留显式 Material Theme 的填充和描边覆盖', (tester) async {
+      final theme = TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+        checkboxTheme: CheckboxThemeData(
+          fillColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.disabled)
+                ? Colors.orange
+                : null,
+          ),
+          side: WidgetStateBorderSide.resolveWith(
+            (states) => states.contains(WidgetState.disabled)
+                ? const BorderSide(color: Colors.green)
+                : null,
+          ),
+        ),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: const Scaffold(
+            body: TCheckbox(value: false, title: 'Material 主题禁用未选'),
+          ),
+        ),
+      );
+
+      final decoration = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.decoration)
+          .whereType<BoxDecoration>()
+          .singleWhere(
+            (decoration) =>
+                decoration.color == Colors.orange &&
+                decoration.shape == BoxShape.circle,
+          );
+      final border = decoration.border! as Border;
+
+      expect(border.top.color, Colors.green);
+    });
+
     testWidgets('多行文案与指示器顶部对齐且分割线从文案起点开始', (tester) async {
       await tester.pumpWidget(
         wrap(TCheckbox(value: false, title: '第一行\n第二行', onChanged: (_) {})),

@@ -33,8 +33,11 @@ Checkbox Demo 与指定设计稿在命名、多行对齐、禁用未选样式、
 
 默认亮色主题下，禁用未选指示器填充采用 `bgColorComponentDisabled`（`#EEEEEE`）、描边采用 `componentBorderColor`（Gy4，`#DCDCDC`）；布局尺寸均从现有 TDesign Token 派生。
 
+禁用未选状态仍遵循既有主题优先级：`TCheckboxThemeData.disableColor` 可覆盖描边色；调用方显式提供的 Material `CheckboxThemeData.fillColor` 和 `side` 分别覆盖填充色与描边色；未显式配置时才回退上述 TDesign Token。Flutter 自动生成的 Material 默认值不得覆盖 TDesign 默认视觉。
+
 ## 验收标准
 
 - [x] 六项已确认的 Checkbox 偏差均完成修复。
 - [x] 不硬编码设计色值。
 - [x] 组件和 Demo 回归覆盖新行为。
+- [x] 禁用未选状态保留组件 Theme 与显式 Material Theme 的覆盖能力。
