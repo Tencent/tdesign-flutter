@@ -248,22 +248,33 @@ class _TInputViewPageState extends State<TInputViewPage> {
           child: TInput(
             borderless: true,
             hintText: '输入验证码',
-            suffix: SizedBox(
-              width: 72,
-              height: 24,
-              child: OverflowBox(
-                minHeight: 36,
-                maxHeight: 36,
-                alignment: Alignment.center,
-                child: Image.network(
-                  'https://wwcdn.weixin.qq.com/node/wework/images/202010241547.ac6876be9c.png',
-                  width: 72,
-                  height: 36,
-                  fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) =>
-                      const SizedBox(width: 72, height: 36),
+            suffix: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 1,
+                  height: 24,
+                  color: token.componentStrokeColor,
                 ),
-              ),
+                const SizedBox(width: 16),
+                SizedBox(
+                  width: 72,
+                  height: 24,
+                  child: OverflowBox(
+                    minHeight: 36,
+                    maxHeight: 36,
+                    alignment: Alignment.center,
+                    child: Image.network(
+                      'https://wwcdn.weixin.qq.com/node/wework/images/202010241547.ac6876be9c.png',
+                      width: 72,
+                      height: 36,
+                      fit: BoxFit.contain,
+                      errorBuilder: (_, __, ___) =>
+                          const SizedBox(width: 72, height: 36),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
