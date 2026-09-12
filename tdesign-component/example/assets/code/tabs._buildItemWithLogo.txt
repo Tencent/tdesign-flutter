@@ -8,7 +8,7 @@ Widget _buildItemWithLogo(BuildContext context) {
             children: [
               Icon(TIcons.app, size: 18),
               SizedBox(width: 4),
-              Text('选项1'),
+              Text('选项'),
             ],
           ),
         ),
@@ -21,12 +21,12 @@ Widget _buildItemWithLogo(BuildContext context) {
             children: [
               Icon(TIcons.app, size: 18),
               SizedBox(width: 4),
-              Text('选项2'),
+              Text('选项'),
             ],
           ),
         ),
       ),
-      TTab(text: '选项3', icon: Icon(TIcons.app, size: 18)),
+      TTab(text: '选项', icon: Icon(TIcons.app, size: 18)),
     ];
     return DefaultTabController(
       length: tabs.length,

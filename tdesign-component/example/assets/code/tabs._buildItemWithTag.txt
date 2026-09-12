@@ -1,9 +1,9 @@
 Widget _buildItemWithTag(BuildContext context) {
     const tabs = [
-      TTab(text: '选项1'),
-      TTab(text: '选项2'),
-      TTab(text: '选项3'),
-      TTab(text: '选项4'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
+      TTab(text: '选项'),
     ];
     return const DefaultTabController(
       length: 4,

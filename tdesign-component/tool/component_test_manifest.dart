@@ -540,6 +540,11 @@ const componentTestManifests = <ComponentTestManifest>[
           'test/components/navigation_components_golden_test.dart',
         ],
       ),
+      VisualTestManifest(
+        name: 'Tabs Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/tabs_page_golden_test.dart'],
+      ),
     ],
   ),
   ComponentTestManifest(

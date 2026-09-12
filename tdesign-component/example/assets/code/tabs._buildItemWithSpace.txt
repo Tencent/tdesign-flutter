@@ -2,7 +2,6 @@ Widget _buildItemWithSpace(BuildContext context) {
     return DefaultTabController(
       length: 6,
       child: TTabsBar(
-        isScrollable: true,
         tabs: List.generate(6, (_) => const TTab(text: '选项')),
       ),
     );

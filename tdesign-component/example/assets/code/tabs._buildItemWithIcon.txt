@@ -1,8 +1,8 @@
 Widget _buildItemWithIcon(BuildContext context) {
-    final tabs = List.generate(3, (index) {
-      final text = '选项${index + 1}';
-      return TTab(text: text, icon: const Icon(TIcons.app, size: 18));
-    });
+    final tabs = List.generate(
+      3,
+      (_) => const TTab(text: '选项', icon: Icon(TIcons.app, size: 18)),
+    );
     return DefaultTabController(
       length: tabs.length,
       child: TTabsBar(tabs: tabs),

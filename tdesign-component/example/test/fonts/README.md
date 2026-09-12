@@ -93,6 +93,12 @@ SHA-256 为 `59c5bebba9bf720005fb977a94b9c150b0b8e8c2698c1dca3a66d9f0d7cd9722`�
 - 子集 SHA-256：`77e2e93df0b403af5ddd7411b6472ada58a93fcade6b87a34c26fe422f698c70`
 - 许可证：SIL Open Font License 1.1，见 `OFL.txt`
 
+`TabsGoldenCJK-Regular.otf` 仅用于 Tabs 整页明暗及内容区交互 Golden，字符清单见
+`tabs_demo_glyphs.txt`。它使用 Android 16 系统开源 `NotoSansCJK-Regular.ttc`
+的 SC 字体面（index 2）生成，并作为 Tabs Demo 的独立 fallback，不改变其他页面
+既有基线；子集工具为 HarfBuzz 11.4.5，子集 SHA-256 为
+`883cb872c26093d5a7f5b9b491d8037657395b4c974f1942d97f9d341c9f71ee`。
+
 `SideBarGoldenCJK-Regular.otf` 仅补充 SideBar 整页 Golden 的公开标题、说明与
 入口文案，字符清单见 `sidebar_demo_glyphs.txt`。它作为独立 fallback 加载，避免
 扩充共享字体后改变其他组件既有基线；上游与本文其余子集相同，子集工具为
