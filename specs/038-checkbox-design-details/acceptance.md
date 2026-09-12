@@ -11,13 +11,13 @@
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
 | `flutter test --no-pub test/components/checkbox/t_checkbox_test.dart test/components/checkbox/t_check_box_group_test.dart` | 通过 | 45 tests |
-| `flutter test --no-pub --exclude-tags demo --coverage test/components/checkbox/t_check_box_group_test.dart test/components/checkbox/t_checkbox_test.dart` | 通过 | 45 tests |
+| `flutter test --no-pub --exclude-tags demo --coverage test/components/checkbox/t_check_box_group_test.dart test/components/checkbox/t_checkbox_test.dart` | 通过 | 46 tests；含默认与自定义禁用颜色 token 路径 |
 | `dart run tool/check_component_coverage.dart checkbox` | 通过 | 348/361，96.40% |
 | `flutter test --no-pub --exclude-tags golden test/checkbox_page_test.dart` | 通过 | 1 test |
-| `flutter test --no-pub test/checkbox_page_test.dart` | 通过 | Light/Dark Golden |
+| `Flutter 3.32.0 Linux: flutter test --no-pub test/checkbox_page_test.dart` | 通过 | Light/Dark Golden；禁用未选描边为 `#DCDCDC` |
 | `flutter analyze --fatal-infos` | 通过 | 0 issues |
 | `flutter build apk --debug` | 通过 | Android Debug APK |
-| `Flutter 3.44.9: flutter test --no-pub test/components/checkbox/t_checkbox_test.dart test/components/checkbox/t_check_box_group_test.dart` | 通过 | 45 tests |
+| `Flutter 3.44.9: flutter test --no-pub test/components/checkbox/t_checkbox_test.dart test/components/checkbox/t_check_box_group_test.dart` | 通过 | 46 tests |
 
 ## 人工验收
 

@@ -29,7 +29,7 @@ Checkbox Demo 与指定设计稿在命名、多行对齐、禁用未选样式、
 
 ## 行为契约
 
-默认主题下，禁用未选指示器填充采用 `bgColorComponentDisabled`、描边采用 `componentBorderColor`；布局尺寸均从现有 TDesign Token 派生。
+默认亮色主题下，禁用未选指示器填充采用 `bgColorComponentDisabled`（`#EEEEEE`）、描边采用 `componentBorderColor`（Gy4，`#DCDCDC`）；布局尺寸均从现有 TDesign Token 派生。
 
 ## 验收标准
 

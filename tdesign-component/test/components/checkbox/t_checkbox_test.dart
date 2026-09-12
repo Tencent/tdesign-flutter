@@ -194,7 +194,40 @@ void main() {
           );
       final border = decoration.border! as Border;
 
-      expect(border.top.color, token.componentBorderColor);
+      expect(decoration.color, const Color(0xFFEEEEEE));
+      expect(token.componentBorderColor, const Color(0xFFDCDCDC));
+      expect(border.top.color, const Color(0xFFDCDCDC));
+    });
+
+    testWidgets('禁用未选跟随自定义组件描边色和禁用填充色', (tester) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'checkbox-disabled-color-token-test',
+        colorMap: const {
+          'componentBorderColor': Colors.purple,
+          'bgColorComponentDisabled': Colors.orange,
+        },
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(token),
+          home: const Scaffold(
+            body: TCheckbox(value: false, title: '自定义禁用未选'),
+          ),
+        ),
+      );
+
+      final decoration = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.decoration)
+          .whereType<BoxDecoration>()
+          .singleWhere(
+            (decoration) =>
+                decoration.color == Colors.orange &&
+                decoration.shape == BoxShape.circle,
+          );
+      final border = decoration.border! as Border;
+
+      expect(border.top.color, Colors.purple);
     });
 
     testWidgets('多行文案与指示器顶部对齐且分割线从文案起点开始', (tester) async {
