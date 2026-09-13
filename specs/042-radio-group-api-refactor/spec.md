@@ -59,6 +59,8 @@
    variant 开启分割线属于非法组合并触发断言。
 9. 每次有效点击最多触发一次 Group 回调，每个选项只产生一条单选语义交互链路。
 10. Group 使用仓库内部 `InheritedWidget` 传递状态，不能依赖 latest-only Flutter API。
+11. `.options` 的横向 `inline` 布局按内容自然收缩并换行，不使用 `columns`
+    等分父约束；其他需要网格对齐的布局继续由 `columns` 约束。
 
 ## 验收标准
 

@@ -85,6 +85,16 @@ class TRadioOption<T> {
 }
 
 /// 由最近的 [TRadioGroup] 控制选中状态的单选框。
+///
+/// 必须作为同类型 [TRadioGroup] 的后代使用：
+///
+/// ```dart
+/// TRadioGroup<String>(
+///   value: value,
+///   onChanged: onChanged,
+///   child: const TRadio<String>(value: 'a', title: '选项 A'),
+/// )
+/// ```
 class TRadio<T> extends StatelessWidget {
   const TRadio({
     super.key,
@@ -499,7 +509,7 @@ class _TRadioIndicatorPainter extends CustomPainter {
   }
 }
 
-/// 严格受控的单选框组。
+/// 严格受控的单选组。
 ///
 /// 默认构造通过 `child` 接收调用方布局；标准数据列表使用
 /// `TRadioGroup.options`。组内的 [TRadio] 从该组件读取选中值和变更回调。
@@ -515,29 +525,40 @@ class TRadioGroup<T> extends StatelessWidget {
 
     /// 包含 [TRadio] 的自定义布局。
     required this.child,
-  });
+  }) : _options = null,
+       _direction = Axis.vertical,
+       _columns = 1,
+       _variant = TRadioVariant.block,
+       _showDivider = null,
+       _contentDirection = TContentDirection.right,
+       _size = TRadioSize.medium,
+       _iconType = TRadioIconType.fill,
+       _titleMaxLines = 3,
+       _subTitleMaxLines = 5;
 
   /// 使用数据项生成标准布局的单选框组。
-  const factory TRadioGroup.options({
-    Key? key,
+  const TRadioGroup.options({
+    super.key,
 
     /// 受控选中值。
-    required T? value,
+    required this.value,
 
     /// 单选框数据项。
     required List<TRadioOption<T>> options,
 
     /// 选中值变更回调；为 null 时整组禁用。
-    ValueChanged<T>? onChanged,
+    this.onChanged,
 
     /// 排列方向，默认纵向。
-    Axis direction,
+    Axis direction = Axis.vertical,
 
     /// 每行列数，默认 1，必须大于 0。
-    int columns,
+    ///
+    /// 横向 [TRadioVariant.inline] 按内容自然收缩，不使用该列数等分宽度。
+    int columns = 1,
 
     /// 生成项的完整视觉结构，默认 [TRadioVariant.block]。
-    TRadioVariant variant,
+    TRadioVariant variant = TRadioVariant.block,
 
     /// 是否显示项间分割线。
     ///
@@ -545,20 +566,35 @@ class TRadioGroup<T> extends StatelessWidget {
     bool? showDivider,
 
     /// 控件与文案排列方向，默认文案在指示器右侧。
-    TContentDirection contentDirection,
+    TContentDirection contentDirection = TContentDirection.right,
 
     /// 单选框尺寸，默认 [TRadioSize.medium]。
-    TRadioSize size,
+    TRadioSize size = TRadioSize.medium,
 
     /// 内置指示器样式，默认 [TRadioIconType.fill]。
-    TRadioIconType iconType,
+    TRadioIconType iconType = TRadioIconType.fill,
 
     /// 主标题最大行数，默认 3 行。
-    int titleMaxLines,
+    int titleMaxLines = 3,
 
     /// 副标题最大行数，默认 5 行。
-    int subTitleMaxLines,
-  }) = _TRadioOptionsGroup<T>;
+    int subTitleMaxLines = 5,
+  }) : assert(columns > 0),
+       assert(
+         variant == TRadioVariant.block || showDivider != true,
+         'showDivider can only be enabled for TRadioVariant.block.',
+       ),
+       child = const SizedBox.shrink(),
+       _options = options,
+       _direction = direction,
+       _columns = columns,
+       _variant = variant,
+       _showDivider = showDivider,
+       _contentDirection = contentDirection,
+       _size = size,
+       _iconType = iconType,
+       _titleMaxLines = titleMaxLines,
+       _subTitleMaxLines = subTitleMaxLines;
 
   /// 受控选中值。
   final T? value;
@@ -569,67 +605,32 @@ class TRadioGroup<T> extends StatelessWidget {
   /// 包含 [TRadio] 的自定义布局。
   final Widget child;
 
-  @override
-  Widget build(BuildContext context) {
-    return _TRadioGroupScope<T>(
-      value: value,
-      onChanged: onChanged,
-      child: child,
-    );
-  }
-}
-
-class _TRadioOptionsGroup<T> extends TRadioGroup<T> {
-  const _TRadioOptionsGroup({
-    super.key,
-    required T? value,
-    required this.options,
-    ValueChanged<T>? onChanged,
-    this.direction = Axis.vertical,
-    this.columns = 1,
-    this.variant = TRadioVariant.block,
-    this.showDivider,
-    this.contentDirection = TContentDirection.right,
-    this.size = TRadioSize.medium,
-    this.iconType = TRadioIconType.fill,
-    this.titleMaxLines = 3,
-    this.subTitleMaxLines = 5,
-  }) : assert(columns > 0),
-       assert(
-         variant == TRadioVariant.block || showDivider != true,
-         'showDivider can only be enabled for TRadioVariant.block.',
-       ),
-       super(
-         value: value,
-         onChanged: onChanged,
-         child: const SizedBox.shrink(),
-       );
-
-  final List<TRadioOption<T>> options;
-  final Axis direction;
-  final int columns;
-  final TRadioVariant variant;
-  final bool? showDivider;
-  final TContentDirection contentDirection;
-  final TRadioSize size;
-  final TRadioIconType iconType;
-  final int titleMaxLines;
-  final int subTitleMaxLines;
+  final List<TRadioOption<T>>? _options;
+  final Axis _direction;
+  final int _columns;
+  final TRadioVariant _variant;
+  final bool? _showDivider;
+  final TContentDirection _contentDirection;
+  final TRadioSize _size;
+  final TRadioIconType _iconType;
+  final int _titleMaxLines;
+  final int _subTitleMaxLines;
 
   @override
   Widget build(BuildContext context) {
     return _TRadioGroupScope<T>(
       value: value,
       onChanged: onChanged,
-      child: _buildOptions(context),
+      child: _options == null ? child : _buildOptions(context),
     );
   }
 
   Widget _buildOptions(BuildContext context) {
-    if (variant == TRadioVariant.card) {
+    final options = _options!;
+    if (_variant == TRadioVariant.card) {
       return TSelectionCardGroupLayout(
-        direction: direction,
-        columns: columns,
+        direction: _direction,
+        columns: _columns,
         children: List.generate(options.length, (index) {
           return _buildItem(context, options[index], index);
         }),
@@ -638,9 +639,18 @@ class _TRadioOptionsGroup<T> extends TRadioGroup<T> {
         ],
       );
     }
-    if (direction == Axis.vertical && columns == 1) {
+    if (_direction == Axis.vertical && _columns == 1) {
       return Column(
         mainAxisSize: MainAxisSize.min,
+        children: List.generate(options.length, (index) {
+          return _buildItem(context, options[index], index);
+        }),
+      );
+    }
+    if (_variant == TRadioVariant.inline && _direction == Axis.horizontal) {
+      return Wrap(
+        spacing: context.tTheme.spacer16,
+        runSpacing: context.tTheme.spacer8,
         children: List.generate(options.length, (index) {
           return _buildItem(context, options[index], index);
         }),
@@ -649,7 +659,7 @@ class _TRadioOptionsGroup<T> extends TRadioGroup<T> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth.isFinite
-            ? constraints.maxWidth / columns
+            ? constraints.maxWidth / _columns
             : null;
         return Wrap(
           children: List.generate(options.length, (index) {
@@ -667,24 +677,24 @@ class _TRadioOptionsGroup<T> extends TRadioGroup<T> {
       title: option.label,
       subTitle: option.subTitle,
       disabled: option.disabled,
-      variant: variant,
-      contentDirection: contentDirection,
-      size: size,
-      iconType: iconType,
-      titleMaxLines: titleMaxLines,
-      subTitleMaxLines: subTitleMaxLines,
+      variant: _variant,
+      contentDirection: _contentDirection,
+      size: _size,
+      iconType: _iconType,
+      titleMaxLines: _titleMaxLines,
+      subTitleMaxLines: _subTitleMaxLines,
     );
-    final effectiveShowDivider = showDivider ?? true;
-    if (variant != TRadioVariant.block ||
+    final effectiveShowDivider = _showDivider ?? true;
+    if (_variant != TRadioVariant.block ||
         !effectiveShowDivider ||
-        index == options.length - 1) {
+        index == _options!.length - 1) {
       return radio;
     }
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         radio,
-        _TRadioDivider(size: size, contentDirection: contentDirection),
+        _TRadioDivider(size: _size, contentDirection: _contentDirection),
       ],
     );
   }

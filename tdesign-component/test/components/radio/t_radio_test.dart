@@ -683,6 +683,29 @@ void main() {
   });
 
   group('TRadioGroup 受控行为', () {
+    testWidgets('点击已选项仍回传当前值且只回调一次', (tester) async {
+      var calls = 0;
+      String? changed;
+      await tester.pumpWidget(
+        wrap(
+          TRadioGroup<String>.options(
+            value: 'a',
+            options: const [TRadioOption(value: 'a', label: '选项 A')],
+            onChanged: (value) {
+              calls += 1;
+              changed = value;
+            },
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('选项 A'));
+      await tester.pump();
+
+      expect(calls, 1);
+      expect(changed, 'a');
+    });
+
     testWidgets('点击 option 触发互斥选中回调', (tester) async {
       String? changed;
       await tester.pumpWidget(
@@ -842,7 +865,35 @@ void main() {
       expect(subTitle.maxLines, 3);
     });
 
-    testWidgets('横向多列布局可构建', (tester) async {
+    testWidgets('inline 横向布局按内容收缩且四字标题不折行', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          const SizedBox(
+            width: 343,
+            child: TRadioGroup<String>.options(
+              value: 'a',
+              options: [
+                TRadioOption(value: 'a', label: '单选标题'),
+                TRadioOption(value: 'b', label: '单选标题'),
+                TRadioOption(value: 'c', label: '上限四字'),
+              ],
+              direction: Axis.horizontal,
+              columns: 3,
+              variant: TRadioVariant.inline,
+            ),
+          ),
+        ),
+      );
+
+      final radios = find.byType(TRadio<String>);
+      final top = tester.getTopLeft(radios.first).dy;
+      expect(tester.getTopLeft(radios.at(1)).dy, top);
+      expect(tester.getTopLeft(radios.at(2)).dy, top);
+      expect(tester.getSize(find.text('上限四字')).height, 24);
+      expect(tester.getSize(radios.first).width, lessThan(343 / 3));
+    });
+
+    testWidgets('block 横向多列布局可构建', (tester) async {
       await tester.pumpWidget(
         wrap(
           const SizedBox(

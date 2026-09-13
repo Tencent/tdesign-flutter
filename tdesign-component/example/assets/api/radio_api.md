@@ -2,6 +2,7 @@
 ### TRadio
 #### 简介
 由最近的 `TRadioGroup` 控制选中状态的单选框。
+必须作为同类型 `TRadioGroup` 的后代使用：
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -22,7 +23,7 @@
 
 ### TRadioGroup
 #### 简介
-严格受控的单选框组。
+严格受控的单选组。
 默认构造通过 `child` 接收调用方布局；标准数据列表使用
 `TRadioGroup.options`。组内的 `TRadio` 从该组件读取选中值和变更回调。
 
@@ -38,15 +39,15 @@
 | value | T? | - | 受控选中值。 |
 | options | List<TRadioOption<T>> | - | - |
 | onChanged | ValueChanged<T>? | - | 选中值变更回调；为 null 时整组禁用。 |
-| direction | Axis | - | 排列方向，默认纵向。 |
-| columns | int | - | 每行列数，默认 1，必须大于 0。 |
-| variant | TRadioVariant | - | 生成项的完整视觉结构，默认 `TRadioVariant.block`。 |
+| direction | Axis | Axis.vertical | 排列方向，默认纵向。 |
+| columns | int | 1 | 每行列数，默认 1，必须大于 0。 横向 `TRadioVariant.inline` 按内容自然收缩，不使用该列数等分宽度。 |
+| variant | TRadioVariant | TRadioVariant.block | 生成项的完整视觉结构，默认 `TRadioVariant.block`。 |
 | showDivider | bool? | - | 是否显示项间分割线。 为空时仅 `TRadioVariant.block` 默认显示；非 block 结构不能设为 true。 |
-| contentDirection | TContentDirection | - | 控件与文案排列方向，默认文案在指示器右侧。 |
-| size | TRadioSize | - | 单选框尺寸，默认 `TRadioSize.medium`。 |
-| iconType | TRadioIconType | - | 内置指示器样式，默认 `TRadioIconType.fill`。 |
-| titleMaxLines | int | - | 主标题最大行数，默认 3 行。 |
-| subTitleMaxLines | int | - | 副标题最大行数，默认 5 行。 |
+| contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向，默认文案在指示器右侧。 |
+| size | TRadioSize | TRadioSize.medium | 单选框尺寸，默认 `TRadioSize.medium`。 |
+| iconType | TRadioIconType | TRadioIconType.fill | 内置指示器样式，默认 `TRadioIconType.fill`。 |
+| titleMaxLines | int | 3 | 主标题最大行数，默认 3 行。 |
+| subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 |
 
 #### 默认构造方法
 
