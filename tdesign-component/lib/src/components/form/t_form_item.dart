@@ -145,7 +145,9 @@ class TFormItem extends StatelessWidget {
       TFormItemContentAlignment.end => TextAlign.end,
     };
     final labelText = '${label ?? ''}${theme?.showColon == true ? ':' : ''}';
-    final labelFont = token.fontBodyLarge;
+    final labelFont = layout == TFormLayout.vertical
+        ? token.fontBodyMedium
+        : token.fontBodyLarge;
     final labelStyle = TextStyle(
       color: token.textColorPrimary,
       fontSize: labelFont?.size,
