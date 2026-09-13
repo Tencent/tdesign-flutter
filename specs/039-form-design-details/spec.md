@@ -29,10 +29,11 @@ Form Demo 的排布选择器、禁用开关、水平字段对齐、竖向性别�
 
 ## 行为契约
 
-Demo 只通过现有组件 API、Theme 和基础布局组合表达设计；颜色使用 `bgColorSecondaryContainer`、`componentBorderColor` 等语义 Token。
+Demo 只通过现有组件 API、Theme 和基础布局组合表达设计；颜色使用 `bgColorSecondaryContainer`、`componentBorderColor` 等语义 Token。水平与竖向性别项共用 `TRadioGroup.options` 的 `inline` 结构，不在 Demo 中重复实现 Radio 的手势、状态或无障碍语义。
 
 ## 验收标准
 
 - [x] 四组已确认的 Form 偏差均完成修复。
 - [x] 不硬编码颜色。
 - [x] Demo 回归覆盖颜色、对齐、间距、顺序和主题。
+- [x] 性别项不包含旧 Radio API 或 Demo 级视觉兼容代码。

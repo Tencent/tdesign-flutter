@@ -240,9 +240,18 @@ class _TFormPageState extends State<TFormPage> {
                 verticalAlignment: horizontal
                     ? TFormItemVerticalAlignment.center
                     : null,
-                child: horizontal
-                    ? _buildGenderGroup(context, value, onChanged)
-                    : _buildCompactGenderGroup(context, value, onChanged),
+                child: TRadioGroup<String>.options(
+                  key: const ValueKey('form-gender-options'),
+                  value: value,
+                  options: const [
+                    TRadioOption(value: 'man', label: '男'),
+                    TRadioOption(value: 'women', label: '女'),
+                    TRadioOption(value: 'secret', label: '保密'),
+                  ],
+                  direction: Axis.horizontal,
+                  variant: TRadioVariant.inline,
+                  onChanged: _disabled ? null : onChanged,
+                ),
               ),
             ),
             TFormField<String>(
@@ -434,80 +443,6 @@ class _TFormPageState extends State<TFormPage> {
               child: const TText('提交'),
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildGenderGroup(
-    BuildContext context,
-    String value,
-    ValueChanged<String>? onChanged,
-  ) {
-    return Theme(
-      data: Theme.of(
-        context,
-      ).mergeExtension(TRadioThemeData(insetSpacing: context.tTheme.spacer4)),
-      child: TRadioGroup<String>(
-        value: value,
-        options: const [
-          TRadioOption(value: 'man', label: '男'),
-          TRadioOption(value: 'women', label: '女'),
-          TRadioOption(value: 'secret', label: '保密'),
-        ],
-        direction: Axis.horizontal,
-        columns: 3,
-        showDivider: false,
-        onChanged: _disabled ? null : onChanged,
-      ),
-    );
-  }
-
-  Widget _buildCompactGenderGroup(
-    BuildContext context,
-    String value,
-    ValueChanged<String>? onChanged,
-  ) {
-    const options = [
-      TRadioOption(value: 'man', label: '男'),
-      TRadioOption(value: 'women', label: '女'),
-      TRadioOption(value: 'secret', label: '保密'),
-    ];
-    return Theme(
-      data: Theme.of(
-        context,
-      ).copyWith(materialTapTargetSize: MaterialTapTargetSize.shrinkWrap),
-      child: Row(
-        key: const ValueKey('form-vertical-gender-options'),
-        children: [
-          for (final option in options)
-            Expanded(
-              child: Semantics(
-                label: option.label,
-                checked: value == option.value,
-                inMutuallyExclusiveGroup: true,
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: _disabled || onChanged == null
-                      ? null
-                      : () => onChanged(option.value),
-                  child: Row(
-                    children: [
-                      ExcludeSemantics(
-                        child: TRadio<String>(
-                          value: option.value,
-                          groupValue: value,
-                          onChanged: _disabled ? null : onChanged,
-                          showDivider: false,
-                        ),
-                      ),
-                      SizedBox(width: context.tTheme.spacer8),
-                      TText(option.label),
-                    ],
-                  ),
-                ),
-              ),
-            ),
         ],
       ),
     );

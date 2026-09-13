@@ -2,7 +2,7 @@
 
 ## 技术方案
 
-在 Form Demo 中为排布按钮和 Switch 提供语义 Token 样式；移除水平尾部对齐；性别项按布局选择标准或紧凑 Radio 组合；统一底部按钮顺序和配色。
+在 Form Demo 中为排布按钮和 Switch 提供语义 Token 样式；移除水平尾部对齐；性别项在两种 Form 排布下统一使用 `TRadioGroup.options` 与 `TRadioVariant.inline`；统一底部按钮顺序和配色。
 
 ## 影响范围
 
@@ -19,7 +19,8 @@
 
 ## 风险与取舍
 
-- 竖向性别项使用现有纯指示器能力组合紧凑布局，保持状态与无障碍语义。
+- 性别项不再自行拼接手势、语义或指示器，也不保留旧 Radio 构造参数和 Theme 间距补丁；选中状态、禁用态与无障碍语义均由 `TRadioGroup` 统一负责。
+- Form 只负责标签与字段的外部对齐和间距，Radio 的紧凑视觉结构由 `TRadioVariant.inline` 负责。
 
 ## 验证策略
 

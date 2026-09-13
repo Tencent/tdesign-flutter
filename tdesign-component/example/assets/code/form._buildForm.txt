@@ -63,9 +63,18 @@ Widget _buildForm(BuildContext context) {
                 verticalAlignment: horizontal
                     ? TFormItemVerticalAlignment.center
                     : null,
-                child: horizontal
-                    ? _buildGenderGroup(context, value, onChanged)
-                    : _buildCompactGenderGroup(context, value, onChanged),
+                child: TRadioGroup<String>.options(
+                  key: const ValueKey('form-gender-options'),
+                  value: value,
+                  options: const [
+                    TRadioOption(value: 'man', label: '男'),
+                    TRadioOption(value: 'women', label: '女'),
+                    TRadioOption(value: 'secret', label: '保密'),
+                  ],
+                  direction: Axis.horizontal,
+                  variant: TRadioVariant.inline,
+                  onChanged: _disabled ? null : onChanged,
+                ),
               ),
             ),
             TFormField<String>(

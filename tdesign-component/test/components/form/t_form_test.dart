@@ -524,7 +524,7 @@ void main() {
                           builder: (context, value, onChanged, errorText) =>
                               item(
                                 'Radio',
-                                TRadioGroup<String>(
+                                TRadioGroup<String>.options(
                                   value: value,
                                   options: const [
                                     TRadioOption(

@@ -58,6 +58,20 @@ void main() {
       tester.getCenter(label).dy,
       closeTo(tester.getCenter(genderGroup).dy, 0.01),
     );
+
+    final genderOptions = find.byKey(const ValueKey('form-gender-options'));
+    final radios = tester.widgetList<TRadio<String>>(
+      find.descendant(of: genderOptions, matching: find.byType(TRadio<String>)),
+    );
+    expect(radios, hasLength(3));
+    expect(
+      radios.map((radio) => radio.variant),
+      everyElement(TRadioVariant.inline),
+    );
+
+    await tester.tap(find.descendant(of: genderItem, matching: find.text('女')));
+    await tester.pump();
+    expect(tester.widget<TRadioGroup<String>>(genderOptions).value, 'women');
   });
 
   testWidgets('竖向性别间距和底部按钮顺序符合设计', (tester) async {
@@ -67,7 +81,7 @@ void main() {
 
     final genderItem = find.byKey(const ValueKey('form-gender-item'));
     final label = find.descendant(of: genderItem, matching: find.text('性别'));
-    final options = find.byKey(const ValueKey('form-vertical-gender-options'));
+    final options = find.byKey(const ValueKey('form-gender-options'));
     final reset = find.byKey(const ValueKey('form-reset-button'));
     final submit = find.byKey(const ValueKey('form-submit-button'));
 
