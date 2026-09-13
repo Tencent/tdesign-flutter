@@ -61,6 +61,14 @@
 10. Group 使用仓库内部 `InheritedWidget` 传递状态，不能依赖 latest-only Flutter API。
 11. `.options` 的横向 `inline` 布局按内容自然收缩并换行，不使用 `columns`
     等分父约束；其他需要网格对齐的布局继续由 `columns` 约束。
+12. `block` 项间分割线的实际线条从正文起点绘制，左侧缩进区域由容器背景承接，
+    不得透出页面底色形成视觉通栏。
+13. 横向 `inline` Demo 的文案区域距离容器上下均为 `spacer16`，不得由组件和
+    Demo 重复叠加垂直留白。
+14. 未选中且禁用的内置圆形指示器使用 `componentBorderColor` 描边和
+    `bgColorComponentDisabled` 填充；浅色默认值分别为 `#DCDCDC` 与 `#EEEEEE`。
+15. 纵向与横向 `card` 的文案区域均在边框内垂直居中，边框到单行文案上下均为
+    `spacer16`。
 
 ## 验收标准
 
