@@ -91,7 +91,7 @@ class _TRadioPageState extends State<TRadioPage> {
 
   @ExampleCode(group: 'radio')
   Widget _verticalRadios(BuildContext context) {
-    return TRadioGroup<int>(
+    return TRadioGroup<int>.options(
       value: _verticalValue,
       options: _options,
       onChanged: (value) {
@@ -106,25 +106,20 @@ class _TRadioPageState extends State<TRadioPage> {
     return Container(
       color: context.tTheme.bgColorContainer,
       padding: EdgeInsets.all(context.tTheme.spacer16),
-      child: Theme(
-        data: Theme.of(
-          context,
-        ).mergeExtension(TRadioThemeData(insetSpacing: context.tTheme.spacer4)),
-        child: TRadioGroup<int>(
-          value: _horizontalValue,
-          options: _horizontalOptions,
-          direction: Axis.horizontal,
-          columns: 3,
-          showDivider: false,
-          onChanged: (value) => setState(() => _horizontalValue = value),
-        ),
+      child: TRadioGroup<int>.options(
+        value: _horizontalValue,
+        options: _horizontalOptions,
+        direction: Axis.horizontal,
+        columns: 3,
+        variant: TRadioVariant.inline,
+        onChanged: (value) => setState(() => _horizontalValue = value),
       ),
     );
   }
 
   @ExampleCode(group: 'radio')
   Widget _disabledRadios(BuildContext context) {
-    return const TRadioGroup<int>(
+    return const TRadioGroup<int>.options(
       value: 0,
       options: [
         TRadioOption(value: 0, label: '单选'),
@@ -137,20 +132,24 @@ class _TRadioPageState extends State<TRadioPage> {
   Widget _themes(BuildContext context) {
     return Column(
       children: [
-        TRadio<bool>(
-          value: true,
-          groupValue: _lineSelected,
-          title: '单选',
-          iconType: TRadioIconType.check,
+        TRadioGroup<bool>(
+          value: _lineSelected,
           onChanged: (_) => setState(() => _lineSelected = !_lineSelected),
+          child: const TRadio<bool>(
+            value: true,
+            title: '单选',
+            iconType: TRadioIconType.check,
+          ),
         ),
         SizedBox(height: context.tTheme.spacer16),
-        TRadio<bool>(
-          value: true,
-          groupValue: _dotSelected,
-          title: '单选',
-          iconType: TRadioIconType.dot,
+        TRadioGroup<bool>(
+          value: _dotSelected,
           onChanged: (_) => setState(() => _dotSelected = !_dotSelected),
+          child: const TRadio<bool>(
+            value: true,
+            title: '单选',
+            iconType: TRadioIconType.dot,
+          ),
         ),
       ],
     );
@@ -160,19 +159,20 @@ class _TRadioPageState extends State<TRadioPage> {
   Widget _positions(BuildContext context) {
     return Column(
       children: [
-        TRadio<bool>(
-          value: true,
-          groupValue: _leftSelected,
-          title: '单选',
+        TRadioGroup<bool>(
+          value: _leftSelected,
           onChanged: (_) => setState(() => _leftSelected = !_leftSelected),
+          child: const TRadio<bool>(value: true, title: '单选'),
         ),
         SizedBox(height: context.tTheme.spacer16),
-        TRadio<bool>(
-          value: true,
-          groupValue: _rightSelected,
-          title: '单选',
-          contentDirection: TContentDirection.left,
+        TRadioGroup<bool>(
+          value: _rightSelected,
           onChanged: (_) => setState(() => _rightSelected = !_rightSelected),
+          child: const TRadio<bool>(
+            value: true,
+            title: '单选',
+            contentDirection: TContentDirection.left,
+          ),
         ),
       ],
     );
@@ -184,7 +184,7 @@ class _TRadioPageState extends State<TRadioPage> {
       padding: EdgeInsets.all(context.tTheme.spacer16),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(context.tTheme.radiusExtraLarge),
-        child: TRadioGroup<int>(
+        child: TRadioGroup<int>.options(
           value: _verticalCardValue,
           options: _cardOptions,
           titleMaxLines: 2,
@@ -199,10 +199,10 @@ class _TRadioPageState extends State<TRadioPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TRadioGroup<int>(
+        TRadioGroup<int>.options(
           value: _verticalSpecialCardValue,
           options: _specialVerticalOptions,
-          cardMode: true,
+          variant: TRadioVariant.card,
           subTitleMaxLines: 1,
           onChanged: (value) =>
               setState(() => _verticalSpecialCardValue = value),
@@ -217,12 +217,12 @@ class _TRadioPageState extends State<TRadioPage> {
           ),
           child: TText('横向卡片单选框', textColor: context.tTheme.textColorSecondary),
         ),
-        TRadioGroup<int>(
+        TRadioGroup<int>.options(
           value: _horizontalCardValue,
           options: _specialHorizontalOptions,
           direction: Axis.horizontal,
           columns: 3,
-          cardMode: true,
+          variant: TRadioVariant.card,
           onChanged: (value) => setState(() => _horizontalCardValue = value),
         ),
       ],

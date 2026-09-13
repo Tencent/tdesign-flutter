@@ -219,7 +219,7 @@ class _TFormPageState extends State<TFormPage> {
                   data: Theme.of(context).mergeExtension(
                     TRadioThemeData(insetSpacing: context.tTheme.spacer4),
                   ),
-                  child: TRadioGroup<String>(
+                  child: TRadioGroup<String>.options(
                     value: value,
                     options: const [
                       TRadioOption(value: 'man', label: '男'),

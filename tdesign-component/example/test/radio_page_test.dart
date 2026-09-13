@@ -51,29 +51,29 @@ void main() {
     expect(find.text('01 组件类型'), findsOneWidget);
     expect(find.text('用于在预设的一组选项中执行单项选择，并呈现选择结果。'), findsOneWidget);
 
-    final verticalGroup = tester.widget<TRadioGroup<int>>(
-      find.byWidgetPredicate(
-        (widget) => widget is TRadioGroup<int> && widget.options.length == 4,
+    const longLabel = '单选单选单选单选单选单选单选单选单选单选单选单选单选单选';
+    final verticalGroupFinder = find.ancestor(
+      of: find.text(longLabel),
+      matching: find.byWidgetPredicate((widget) => widget is TRadioGroup<int>),
+    );
+    final verticalGroup = tester.widget<TRadioGroup<int>>(verticalGroupFinder);
+    expect(verticalGroup.value, 1);
+    final longLabelRadio = tester.widget<TRadio<int>>(
+      find.ancestor(
+        of: find.text(longLabel),
+        matching: find.byType(TRadio<int>),
       ),
     );
-    expect(verticalGroup.value, 1);
-    expect(verticalGroup.iconType, TRadioIconType.fill);
-    expect(verticalGroup.titleMaxLines, 3);
-    expect(verticalGroup.subTitleMaxLines, 5);
-    expect(verticalGroup.options[2].label, '单选单选单选单选单选单选单选单选单选单选单选单选单选单选');
+    expect(longLabelRadio.iconType, TRadioIconType.fill);
+    expect(longLabelRadio.titleMaxLines, 3);
+    expect(longLabelRadio.subTitleMaxLines, 5);
+    final horizontalRadio = tester.widget<TRadio<int>>(
+      find.ancestor(of: find.text('上限四字'), matching: find.byType(TRadio<int>)),
+    );
+    expect(horizontalRadio.variant, TRadioVariant.inline);
     verticalGroup.onChanged?.call(1);
     await tester.pump();
-    expect(
-      tester
-          .widget<TRadioGroup<int>>(
-            find.byWidgetPredicate(
-              (widget) =>
-                  widget is TRadioGroup<int> && widget.options.length == 4,
-            ),
-          )
-          .value,
-      isNull,
-    );
+    expect(tester.widget<TRadioGroup<int>>(verticalGroupFinder).value, isNull);
 
     final scrollState = tester.state<ScrollableState>(
       find.descendant(
@@ -115,38 +115,21 @@ void main() {
     scrollState.position.jumpTo(scrollState.position.maxScrollExtent);
     await tester.pump();
     await tester.pump();
-    final specialGroups = find
-        .byWidgetPredicate(
-          (widget) => widget is TRadioGroup<int> && widget.cardMode,
-        )
-        .evaluate()
-        .map((element) => element.widget as TRadioGroup<int>)
-        .toList();
-    expect(specialGroups, hasLength(2));
-    expect(specialGroups.first.direction, Axis.vertical);
-    expect(specialGroups.last.direction, Axis.horizontal);
-    expect(specialGroups.last.columns, 3);
-    expect(
-      specialGroups.first.options.every(
-        (item) => item.subTitle == '描述信息描述信息描述信息描述信息描述信息',
-      ),
-      isTrue,
+    const specialDescription = '描述信息描述信息描述信息描述信息描述信息';
+    expect(find.text(specialDescription), findsNWidgets(3));
+    final specialGroupFinder = find.ancestor(
+      of: find.text(specialDescription).first,
+      matching: find.byWidgetPredicate((widget) => widget is TRadioGroup<int>),
     );
-    expect(
-      specialGroups.last.options.every((item) => item.subTitle == null),
-      isTrue,
+    final specialGroup = tester.widget<TRadioGroup<int>>(specialGroupFinder);
+    final cards = find.byWidgetPredicate(
+      (widget) => widget.runtimeType.toString() == 'TSelectionCard',
     );
+    expect(cards, findsNWidgets(6));
 
-    specialGroups.first.onChanged?.call(2);
+    specialGroup.onChanged?.call(2);
     await tester.pump();
-    final updatedGroups = find
-        .byWidgetPredicate(
-          (widget) => widget is TRadioGroup<int> && widget.cardMode,
-        )
-        .evaluate()
-        .map((element) => element.widget as TRadioGroup<int>)
-        .toList();
-    expect(updatedGroups.map((group) => group.value), [2, 0]);
+    expect(tester.widget<TRadioGroup<int>>(specialGroupFinder).value, 2);
   });
 
   testWidgets('非通栏单选样式使用 radiusExtraLarge 圆角 token', (tester) async {

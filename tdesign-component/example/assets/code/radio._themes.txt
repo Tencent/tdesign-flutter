@@ -1,20 +1,24 @@
 Widget _themes(BuildContext context) {
     return Column(
       children: [
-        TRadio<bool>(
-          value: true,
-          groupValue: _lineSelected,
-          title: '单选',
-          iconType: TRadioIconType.check,
+        TRadioGroup<bool>(
+          value: _lineSelected,
           onChanged: (_) => setState(() => _lineSelected = !_lineSelected),
+          child: const TRadio<bool>(
+            value: true,
+            title: '单选',
+            iconType: TRadioIconType.check,
+          ),
         ),
         SizedBox(height: context.tTheme.spacer16),
-        TRadio<bool>(
-          value: true,
-          groupValue: _dotSelected,
-          title: '单选',
-          iconType: TRadioIconType.dot,
+        TRadioGroup<bool>(
+          value: _dotSelected,
           onChanged: (_) => setState(() => _dotSelected = !_dotSelected),
+          child: const TRadio<bool>(
+            value: true,
+            title: '单选',
+            iconType: TRadioIconType.dot,
+          ),
         ),
       ],
     );

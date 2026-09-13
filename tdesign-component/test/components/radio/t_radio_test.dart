@@ -2,6 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+Widget controlledRadio<T>({
+  Key? key,
+  required T value,
+  required T? selectedValue,
+  ValueChanged<T>? onChanged,
+  String? title,
+  String? subTitle,
+  TRadioSize size = TRadioSize.medium,
+  TRadioIconType iconType = TRadioIconType.fill,
+  TRadioVariant variant = TRadioVariant.block,
+  TContentDirection contentDirection = TContentDirection.right,
+  int titleMaxLines = 3,
+  int subTitleMaxLines = 5,
+  TRadioIconBuilder? customIconBuilder,
+}) {
+  return TRadioGroup<T>(
+    value: selectedValue,
+    onChanged: onChanged,
+    child: TRadio<T>(
+      key: key,
+      value: value,
+      title: title,
+      subTitle: subTitle,
+      size: size,
+      iconType: iconType,
+      variant: variant,
+      contentDirection: contentDirection,
+      titleMaxLines: titleMaxLines,
+      subTitleMaxLines: subTitleMaxLines,
+      customIconBuilder: customIconBuilder,
+    ),
+  );
+}
+
 void main() {
   Widget wrap(Widget child, {TRadioThemeData? radioTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
@@ -33,24 +67,20 @@ void main() {
         .toList();
   }
 
-  group('TRadio v1 单项行为', () {
+  group('TRadio 单项行为', () {
     testWidgets('默认主标题和副标题行数与小程序一致', (tester) async {
-      const radio = TRadio<String>(
+      final radio = controlledRadio<String>(
         value: 'a',
-        groupValue: 'a',
+        selectedValue: 'a',
         title: '主标题',
         subTitle: '副标题',
       );
-      const group = TRadioGroup<String>(value: 'a', options: options);
-
-      expect(radio.titleMaxLines, 3);
-      expect(radio.subTitleMaxLines, 5);
-      expect(group.titleMaxLines, 3);
-      expect(group.subTitleMaxLines, 5);
-      expect(radio.showDivider, isTrue);
-      expect(group.showDivider, isTrue);
-
       await tester.pumpWidget(wrap(radio));
+      final radioWidget = tester.widget<TRadio<String>>(
+        find.byType(TRadio<String>),
+      );
+      expect(radioWidget.titleMaxLines, 3);
+      expect(radioWidget.subTitleMaxLines, 5);
       final title = tester.widget<Text>(find.text('主标题'));
       final subTitle = tester.widget<Text>(find.text('副标题'));
       expect(title.maxLines, 3);
@@ -59,47 +89,40 @@ void main() {
       expect(subTitle.overflow, TextOverflow.ellipsis);
     });
 
-    testWidgets('默认显示分割线且卡片模式与显式关闭时不显示', (tester) async {
+    testWidgets('仅 block options 默认显示项间分割线', (tester) async {
       await tester.pumpWidget(
         wrap(
           const Column(
             children: [
-              TRadio<String>(value: 'a', groupValue: 'b', title: '默认分割线'),
-              TRadio<String>(
+              TRadioGroup<String>.options(value: 'a', options: options),
+              TRadioGroup<String>.options(
                 value: 'a',
-                groupValue: 'b',
-                title: '关闭分割线',
-                showDivider: false,
-              ),
-              TRadio<String>(
-                value: 'a',
-                groupValue: 'a',
-                title: '卡片模式',
-                cardMode: true,
+                options: options,
+                variant: TRadioVariant.inline,
               ),
             ],
           ),
         ),
       );
 
-      expect(find.byType(TDivider), findsOneWidget);
+      expect(find.byType(TDivider), findsNWidgets(options.length - 1));
     });
 
     testWidgets('Group 默认仅在选项之间显示分割线', (tester) async {
       await tester.pumpWidget(
-        wrap(const TRadioGroup<String>(value: 'a', options: options)),
+        wrap(const TRadioGroup<String>.options(value: 'a', options: options)),
       );
 
       expect(find.byType(TDivider), findsNWidgets(options.length - 1));
     });
 
-    testWidgets('按 groupValue 渲染选中态并触发 onChanged', (tester) async {
+    testWidgets('按 Group value 渲染选中态并触发 onChanged', (tester) async {
       String? changed;
       await tester.pumpWidget(
         wrap(
-          TRadio<String>(
+          controlledRadio<String>(
             value: 'a',
-            groupValue: 'b',
+            selectedValue: 'b',
             title: '选项 A',
             onChanged: (value) => changed = value,
           ),
@@ -114,7 +137,13 @@ void main() {
 
     testWidgets('onChanged 为 null 时禁用', (tester) async {
       await tester.pumpWidget(
-        wrap(const TRadio<String>(value: 'a', groupValue: 'a', title: '选项 A')),
+        wrap(
+          controlledRadio<String>(
+            value: 'a',
+            selectedValue: 'a',
+            title: '选项 A',
+          ),
+        ),
       );
 
       await tester.tap(find.text('选项 A'));
@@ -125,9 +154,9 @@ void main() {
     testWidgets('自定义 iconBuilder 生效', (tester) async {
       await tester.pumpWidget(
         wrap(
-          TRadio<String>(
+          controlledRadio<String>(
             value: 'a',
-            groupValue: 'a',
+            selectedValue: 'a',
             onChanged: (_) {},
             customIconBuilder: (context, selected, disabled) {
               return Text('$selected $disabled');
@@ -145,11 +174,12 @@ void main() {
     ) async {
       await tester.pumpWidget(
         wrap(
-          TRadio<String>(
+          TRadioGroup<String>.options(
             value: 'a',
-            groupValue: 'b',
-            title: '大尺寸',
-            subTitle: '副标题',
+            options: const [
+              TRadioOption(value: 'a', label: '大尺寸', subTitle: '副标题'),
+              TRadioOption(value: 'b', label: '第二项'),
+            ],
             size: TRadioSize.large,
             contentDirection: TContentDirection.left,
             showDivider: true,
@@ -164,16 +194,18 @@ void main() {
     });
   });
 
-  group('TRadio v1 视觉参数', () {
+  group('TRadio 视觉参数', () {
     testWidgets('块级单行内容使用 56 高度且分割线从正文起点开始', (tester) async {
       await tester.pumpWidget(
         wrap(
           SizedBox(
             width: 320,
-            child: TRadio<String>(
+            child: TRadioGroup<String>.options(
               value: 'a',
-              groupValue: 'b',
-              title: '单选',
+              options: const [
+                TRadioOption(value: 'a', label: '单选'),
+                TRadioOption(value: 'b', label: '第二项'),
+              ],
               showDivider: true,
               onChanged: (_) {},
             ),
@@ -193,7 +225,7 @@ void main() {
         ),
       );
 
-      expect(tester.getSize(gesture).height, 56);
+      expect(tester.getSize(gesture.first).height, 56);
       expect(tester.getTopLeft(dividerLine).dx, 48);
       expect(tester.getSize(dividerLine).height, 0.5);
     });
@@ -204,9 +236,9 @@ void main() {
           Column(
             children: TRadioSize.values
                 .map(
-                  (size) => TRadio<TRadioSize>(
+                  (size) => controlledRadio<TRadioSize>(
                     value: size,
-                    groupValue: TRadioSize.medium,
+                    selectedValue: TRadioSize.medium,
                     title: '主标题-${size.name}',
                     subTitle: '副标题',
                     size: size,
@@ -250,10 +282,10 @@ void main() {
           Column(
             children: TRadioSize.values
                 .map(
-                  (size) => TRadio<TRadioSize>(
+                  (size) => controlledRadio<TRadioSize>(
                     key: ValueKey(size),
                     value: size,
-                    groupValue: TRadioSize.medium,
+                    selectedValue: TRadioSize.medium,
                     title: size.name,
                     size: size,
                     onChanged: (_) {},
@@ -294,21 +326,20 @@ void main() {
           home: Scaffold(
             body: Column(
               children: [
-                TRadio<String>(
+                controlledRadio<String>(
                   key: const ValueKey('token-block'),
                   value: 'a',
-                  groupValue: 'a',
+                  selectedValue: 'a',
                   title: '块级',
-                  showDivider: false,
                   onChanged: (_) {},
                 ),
-                TRadio<String>(
+                controlledRadio<String>(
                   key: const ValueKey('token-card'),
                   value: 'b',
-                  groupValue: 'b',
+                  selectedValue: 'b',
                   title: '卡片',
                   subTitle: '说明',
-                  cardMode: true,
+                  variant: TRadioVariant.card,
                   onChanged: (_) {},
                 ),
               ],
@@ -335,7 +366,13 @@ void main() {
 
     testWidgets('纯指示器在默认 48×48 热区内居中', (tester) async {
       await tester.pumpWidget(
-        wrap(TRadio<String>(value: 'a', groupValue: 'b', onChanged: (_) {})),
+        wrap(
+          controlledRadio<String>(
+            value: 'a',
+            selectedValue: 'b',
+            onChanged: (_) {},
+          ),
+        ),
       );
 
       final radio = find.byType(TRadio<String>);
@@ -369,9 +406,9 @@ void main() {
         MaterialApp(
           theme: compactTheme,
           home: Scaffold(
-            body: TRadio<String>(
+            body: controlledRadio<String>(
               value: 'a',
-              groupValue: 'b',
+              selectedValue: 'b',
               onChanged: (_) {},
             ),
           ),
@@ -410,9 +447,9 @@ void main() {
         MaterialApp(
           theme: theme,
           home: Scaffold(
-            body: TRadio<String>(
+            body: controlledRadio<String>(
               value: 'a',
-              groupValue: 'a',
+              selectedValue: 'a',
               title: '全局样式',
               subTitle: '副标题',
               onChanged: (_) {},
@@ -441,9 +478,9 @@ void main() {
         MaterialApp(
           theme: theme,
           home: Scaffold(
-            body: TRadio<String>(
+            body: controlledRadio<String>(
               value: 'a',
-              groupValue: 'a',
+              selectedValue: 'a',
               title: '主标题',
               subTitle: '副标题',
               onChanged: (_) {},
@@ -462,9 +499,9 @@ void main() {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(
         wrap(
-          TRadio<String>(
+          controlledRadio<String>(
             value: 'a',
-            groupValue: 'a',
+            selectedValue: 'a',
             title: '选项 A',
             onChanged: (_) {},
           ),
@@ -490,27 +527,27 @@ void main() {
         wrap(
           Column(
             children: [
-              TRadio<String>(
+              controlledRadio<String>(
                 value: 'a',
-                groupValue: 'a',
+                selectedValue: 'a',
                 iconType: TRadioIconType.check,
                 onChanged: (_) {},
               ),
-              TRadio<String>(
+              controlledRadio<String>(
                 value: 'b',
-                groupValue: 'b',
+                selectedValue: 'b',
                 iconType: TRadioIconType.fill,
                 onChanged: (_) {},
               ),
-              TRadio<String>(
+              controlledRadio<String>(
                 value: 'c',
-                groupValue: 'none',
+                selectedValue: 'none',
                 iconType: TRadioIconType.fill,
                 onChanged: (_) {},
               ),
-              TRadio<String>(
+              controlledRadio<String>(
                 value: 'd',
-                groupValue: 'd',
+                selectedValue: 'd',
                 iconType: TRadioIconType.dot,
                 onChanged: (_) {},
               ),
@@ -541,14 +578,18 @@ void main() {
         wrap(
           Column(
             children: [
-              TRadio<String>(
+              controlledRadio<String>(
                 value: 'a',
-                groupValue: 'b',
+                selectedValue: 'b',
                 title: '未选',
                 subTitle: '描述信息',
                 onChanged: (_) {},
               ),
-              const TRadio<String>(value: 'b', groupValue: 'b', title: '禁用选中'),
+              controlledRadio<String>(
+                value: 'b',
+                selectedValue: 'b',
+                title: '禁用选中',
+              ),
             ],
           ),
         ),
@@ -571,9 +612,9 @@ void main() {
     testWidgets('Theme 视觉 token 可覆盖选中色、标题色和内容间距', (tester) async {
       await tester.pumpWidget(
         wrap(
-          TRadio<String>(
+          controlledRadio<String>(
             value: 'a',
-            groupValue: 'a',
+            selectedValue: 'a',
             title: '主题单选',
             onChanged: (_) {},
           ),
@@ -605,9 +646,9 @@ void main() {
         wrap(
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: TRadio<String>(
+            child: controlledRadio<String>(
               value: 'a',
-              groupValue: 'b',
+              selectedValue: 'b',
               title: '无界宽度单选项',
               subTitle: '副标题',
               onChanged: (_) {},
@@ -627,9 +668,9 @@ void main() {
         wrap(
           SizedBox(
             width: 320,
-            child: TRadio<String>(
+            child: controlledRadio<String>(
               value: 'a',
-              groupValue: 'b',
+              selectedValue: 'b',
               title: '有界宽度单选项',
               onChanged: (_) {},
             ),
@@ -641,15 +682,20 @@ void main() {
     });
   });
 
-  group('TRadioGroup v1 受控行为', () {
+  group('TRadioGroup 受控行为', () {
     testWidgets('点击 option 触发互斥选中回调', (tester) async {
       String? changed;
       await tester.pumpWidget(
         wrap(
           TRadioGroup<String>(
             value: 'a',
-            options: options,
             onChanged: (value) => changed = value,
+            child: const Row(
+              children: [
+                TRadio<String>(value: 'a', title: '选项 A'),
+                TRadio<String>(value: 'b', title: '选项 B', subTitle: '说明 B'),
+              ],
+            ),
           ),
         ),
       );
@@ -663,7 +709,7 @@ void main() {
 
     testWidgets('onChanged 为 null 时整组禁用', (tester) async {
       await tester.pumpWidget(
-        wrap(const TRadioGroup<String>(value: 'a', options: options)),
+        wrap(const TRadioGroup<String>.options(value: 'a', options: options)),
       );
 
       await tester.tap(find.text('选项 A'));
@@ -675,7 +721,7 @@ void main() {
       String? changed;
       await tester.pumpWidget(
         wrap(
-          TRadioGroup<String>(
+          TRadioGroup<String>.options(
             value: 'a',
             options: options,
             onChanged: (value) => changed = value,
@@ -690,11 +736,92 @@ void main() {
     });
   });
 
-  group('TRadioGroup v1 布局与自定义项', () {
+  group('TRadioGroup 布局与自定义项', () {
+    testWidgets('inline 只保留内容高度且仍由 Group 触发一次回调', (tester) async {
+      var calls = 0;
+      String? changed;
+      await tester.pumpWidget(
+        wrap(
+          TRadioGroup<String>(
+            value: 'a',
+            onChanged: (value) {
+              calls += 1;
+              changed = value;
+            },
+            child: const TRadio<String>(
+              value: 'b',
+              title: '行内选项',
+              variant: TRadioVariant.inline,
+            ),
+          ),
+        ),
+      );
+
+      final gesture = find.descendant(
+        of: find.byType(TRadio<String>),
+        matching: find.byType(GestureDetector),
+      );
+      expect(tester.getSize(gesture).height, 24);
+      expect(find.byType(TDivider), findsNothing);
+
+      await tester.tap(find.text('行内选项'));
+      await tester.pump();
+      expect(calls, 1);
+      expect(changed, 'b');
+    });
+
+    testWidgets('TRadio 缺少同类型 Group 时抛出清晰错误', (tester) async {
+      await tester.pumpWidget(
+        wrap(const TRadio<String>(value: 'a', title: '孤立选项')),
+      );
+
+      final error = tester.takeException();
+      expect(error, isA<FlutterError>());
+      expect(error.toString(), contains('requires a TRadioGroup<String>'));
+    });
+
+    testWidgets('单项 disabled 不影响同组其他选项', (tester) async {
+      String? changed;
+      await tester.pumpWidget(
+        wrap(
+          TRadioGroup<String>(
+            value: 'a',
+            onChanged: (value) => changed = value,
+            child: const Row(
+              children: [
+                TRadio<String>(value: 'a', title: '禁用项', disabled: true),
+                TRadio<String>(value: 'b', title: '可用项'),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('禁用项'));
+      await tester.pump();
+      expect(changed, isNull);
+
+      await tester.tap(find.text('可用项'));
+      await tester.pump();
+      expect(changed, 'b');
+    });
+
+    test('非 block variant 禁止开启分割线', () {
+      expect(
+        () => TRadioGroup<String>.options(
+          value: null,
+          options: options,
+          variant: TRadioVariant.inline,
+          showDivider: true,
+        ),
+        throwsAssertionError,
+      );
+    });
+
     testWidgets('透传指示器样式和标题行数', (tester) async {
       await tester.pumpWidget(
         wrap(
-          const TRadioGroup<String>(
+          const TRadioGroup<String>.options(
             value: 'a',
             options: options,
             iconType: TRadioIconType.fill,
@@ -720,7 +847,7 @@ void main() {
         wrap(
           const SizedBox(
             width: 240,
-            child: TRadioGroup<String>(
+            child: TRadioGroup<String>.options(
               value: 'a',
               options: options,
               direction: Axis.horizontal,
@@ -730,17 +857,20 @@ void main() {
         ),
       );
 
-      expect(find.byType(TRadioGroup<String>), findsOneWidget);
+      expect(
+        find.byWidgetPredicate((widget) => widget is TRadioGroup<String>),
+        findsOneWidget,
+      );
       expect(find.byType(Wrap), findsOneWidget);
     });
 
-    testWidgets('cardMode 使用卡片组布局', (tester) async {
+    testWidgets('card variant 使用卡片组布局', (tester) async {
       await tester.pumpWidget(
         wrap(
-          const TRadioGroup<String>(
+          const TRadioGroup<String>.options(
             value: 'a',
             options: options,
-            cardMode: true,
+            variant: TRadioVariant.card,
           ),
         ),
       );
@@ -749,22 +879,24 @@ void main() {
       expect(find.text('选项 B'), findsOneWidget);
     });
 
-    testWidgets('itemBuilder 由 Group 接管点击和语义', (tester) async {
+    testWidgets('自定义 child 仍由真实 TRadio 接管点击和语义', (tester) async {
       String? changed;
       await tester.pumpWidget(
         wrap(
           TRadioGroup<String>(
             value: 'a',
-            options: options,
             onChanged: (value) => changed = value,
-            itemBuilder: (context, option, selected, disabled) {
-              return Text('${option.label} $selected $disabled');
-            },
+            child: const Wrap(
+              children: [
+                TRadio<String>(value: 'a', title: '选项 A'),
+                TRadio<String>(value: 'b', title: '选项 B'),
+              ],
+            ),
           ),
         ),
       );
 
-      await tester.tap(find.text('选项 B false false'));
+      await tester.tap(find.text('选项 B'));
       await tester.pump();
 
       expect(changed, 'b');
@@ -772,7 +904,11 @@ void main() {
 
     test('columns 必须大于 0', () {
       expect(
-        () => TRadioGroup<String>(value: null, options: options, columns: 0),
+        () => TRadioGroup<String>.options(
+          value: null,
+          options: options,
+          columns: 0,
+        ),
         throwsAssertionError,
       );
     });
@@ -812,9 +948,9 @@ void main() {
     testWidgets('Theme 注入可渲染', (tester) async {
       await tester.pumpWidget(
         wrap(
-          TRadio<String>(
+          controlledRadio<String>(
             value: 'a',
-            groupValue: 'a',
+            selectedValue: 'a',
             title: '主题',
             onChanged: (_) {},
           ),
@@ -823,9 +959,9 @@ void main() {
 
       await tester.pumpWidget(
         wrap(
-          TRadio<String>(
+          controlledRadio<String>(
             value: 'a',
-            groupValue: 'a',
+            selectedValue: 'a',
             title: '主题',
             onChanged: (_) {},
           ),

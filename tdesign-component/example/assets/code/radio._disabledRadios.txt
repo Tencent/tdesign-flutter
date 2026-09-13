@@ -1,5 +1,5 @@
 Widget _disabledRadios(BuildContext context) {
-    return const TRadioGroup<int>(
+    return const TRadioGroup<int>.options(
       value: 0,
       options: [
         TRadioOption(value: 0, label: '单选'),

@@ -341,9 +341,13 @@
       },
       "api": {
         "names": [
-          "TRadioStyle",
           "TRadio",
-          "TRadioGroup"
+          "TRadioGroup",
+          "TRadioOption",
+          "TRadioSize",
+          "TRadioIconType",
+          "TRadioVariant",
+          "TRadioIconBuilder"
         ],
         "getComments": true
       }
