@@ -243,7 +243,7 @@ void main() {
       expect(tester.getSize(dividerBackground).width, 320);
     });
 
-    testWidgets('卡片单行文案在边框内居中且上下各为 spacer16', (tester) async {
+    testWidgets('卡片单行文案在边框内居中且四周均为 spacer16', (tester) async {
       await tester.pumpWidget(
         wrap(
           SizedBox(
@@ -284,10 +284,18 @@ void main() {
           of: radio,
           matching: find.text(key == 'vertical-card' ? '纵向卡片' : '横向卡片'),
         );
+        final content = find
+            .descendant(of: card, matching: find.byType(Column))
+            .first;
         expect(tester.getCenter(title).dy, tester.getCenter(card).dy);
         expect(tester.getTopLeft(title).dy - tester.getTopLeft(card).dy, 16);
         expect(
           tester.getBottomRight(card).dy - tester.getBottomRight(title).dy,
+          16,
+        );
+        expect(tester.getTopLeft(content).dx - tester.getTopLeft(card).dx, 16);
+        expect(
+          tester.getBottomRight(card).dx - tester.getBottomRight(content).dx,
           16,
         );
       }

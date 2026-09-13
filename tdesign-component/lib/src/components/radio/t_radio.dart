@@ -243,9 +243,7 @@ class TRadio<T> extends StatelessWidget {
                   : EdgeInsets.zero,
             TRadioVariant.card =>
               hasContent
-                  ? EdgeInsets.symmetric(
-                      vertical: _cardContentVerticalPadding(context),
-                    )
+                  ? EdgeInsets.all(_cardContentPadding(context))
                   : EdgeInsets.zero,
           },
           decoration: variant == TRadioVariant.block
@@ -322,7 +320,7 @@ class TRadio<T> extends StatelessWidget {
     return contentHeight + context.tTheme.spacer16 * 2;
   }
 
-  double _cardContentVerticalPadding(BuildContext context) {
+  double _cardContentPadding(BuildContext context) {
     return math.max(
       0,
       context.tTheme.spacer16 - selectionCardBorderWidth(context),

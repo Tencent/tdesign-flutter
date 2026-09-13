@@ -67,8 +67,8 @@
     Demo 重复叠加垂直留白。
 14. 未选中且禁用的内置圆形指示器使用 `componentBorderColor` 描边和
     `bgColorComponentDisabled` 填充；浅色默认值分别为 `#DCDCDC` 与 `#EEEEEE`。
-15. 纵向与横向 `card` 的文案区域均在边框内垂直居中，边框到单行文案上下均为
-    `spacer16`。
+15. 纵向与横向 `card` 的文案区域均在边框内居中，边框到单行文案四周均为
+    `spacer16`，选中角标不得遮挡文案。
 
 ## 验收标准
 

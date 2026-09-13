@@ -12,10 +12,10 @@
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
 | `flutter test --no-pub test/components/radio/t_radio_test.dart test/components/radio/t_radio_theme_contract_test.dart` | 通过 | 40 项 Radio 行为与主题测试，含 #1109 四项视觉契约 |
-| `flutter test --no-pub --coverage test/components/radio/t_radio_test.dart test/components/radio/t_radio_theme_contract_test.dart && dart run tool/check_component_coverage.dart radio` | 通过 | Radio 生产代码行覆盖率 290/298，97.32% |
+| `flutter test --no-pub --coverage test/components/radio/t_radio_test.dart test/components/radio/t_radio_theme_contract_test.dart && dart run tool/check_component_coverage.dart radio` | 通过 | Radio 生产代码行覆盖率 289/297，97.31% |
 | `flutter test --no-pub test/components/form/t_form_test.dart` | 通过 | 49 项，确认 Form 机械迁移未破坏既有行为 |
-| `flutter test --no-pub test/radio_page_test.dart`（example） | 通过 | 6 项 Demo 行为与结构测试；横向上下 16dp、两类卡片居中均有几何断言 |
-| `flutter test --no-pub test/radio_page_golden_test.dart`（Linux） | 通过 | Flutter 3.32.0 明暗两张既有 Golden 无更新参数复跑，无非预期视觉漂移 |
+| `flutter test --no-pub test/radio_page_test.dart`（example） | 通过 | 6 项 Demo 行为与结构测试；横向上下 16dp、两类卡片四周 16dp 安全间距均有几何断言 |
+| `flutter test --no-pub --update-goldens test/radio_page_golden_test.dart && flutter test --no-pub test/radio_page_golden_test.dart`（Linux） | 通过 | Flutter 3.32.0 明暗 Golden 更新一次后立即无更新参数复跑 2/2；更新前因卡片水平安全间距和禁用态颜色产生 1.52% 预期差异 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例代码产物一致 |
 | `node tool/generate_api.mjs --dry-run` | 通过 | Radio API 元数据可生成 |
 | `flutter analyze --fatal-infos` | 通过 | Flutter 3.32.0，0 error / 0 warning |
@@ -26,9 +26,9 @@
 
 ## 人工验收
 
-- [x] Radio Demo 的 inline/block/card 用法与交互符合 Spec
-- [x] Radio Demo Golden 检查无裁切、溢出或重复绘制区域
-- [x] iPhone 16 模拟器分段检查分割线、横向留白、禁用未选及纵横卡片视觉
+- [x] Radio Demo 的 inline/block/card 用法与交互符合 Spec，卡片文字四周保留 16dp 安全间距
+- [x] Radio Demo Golden 检查无裁切、溢出、重复绘制或选中角标遮字
+- [x] iPhone 16 模拟器从当前源码重新构建，分段检查分割线、横向留白、禁用未选及纵横卡片视觉
 - [ ] 真机/模拟器触控体验留待 Form 接入 inline 时联合验收
 
 ## 未覆盖项与后续工作

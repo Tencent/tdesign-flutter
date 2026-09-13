@@ -172,7 +172,7 @@ void main() {
     );
   });
 
-  testWidgets('纵向与横向卡片文案均在边框内垂直居中', (tester) async {
+  testWidgets('纵向与横向卡片文案均在边框内居中且保留安全间距', (tester) async {
     tester.view.physicalSize = const Size(375, 2600);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -207,12 +207,14 @@ void main() {
         tester.getCenter(content).dy,
         closeTo(tester.getCenter(card).dy, 0.01),
       );
-      expect(
-        tester.getTopLeft(content).dy - tester.getTopLeft(card).dy,
-        16,
-      );
+      expect(tester.getTopLeft(content).dy - tester.getTopLeft(card).dy, 16);
       expect(
         tester.getBottomRight(card).dy - tester.getBottomRight(content).dy,
+        16,
+      );
+      expect(tester.getTopLeft(content).dx - tester.getTopLeft(card).dx, 16);
+      expect(
+        tester.getBottomRight(card).dx - tester.getBottomRight(content).dx,
         16,
       );
     }

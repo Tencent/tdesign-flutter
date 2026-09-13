@@ -44,7 +44,8 @@ Radio Demo 已按小程序公开示例整理结构和文案，但真机截图显
 - 横向 Demo 使用通栏容器背景；`inline` Radio 自身不提供外围内边距，Demo 使用 `spacer16` 作为容器内边距，使文案距离上下均为 16dp，不形成额外的卡片外框或重复留白。
 - 块级 Radio 根据三档目标高度动态计算上下内边距；分割线行使用 `bgColorContainer` 承接左侧透明区域，实际线条不带外边距并从正文起点开始，避免页面底色造成视觉通栏。
 - 未选中且禁用的圆形指示器使用 `componentBorderColor` 描边和 `bgColorComponentDisabled` 填充；默认浅色主题分别对应 `#DCDCDC` 与 `#EEEEEE`，不硬编码色值。
-- 纵向和横向卡片的文案区域在边框内垂直居中，边框到单行文案上下均为 `spacer16`。
+- 纵向和横向卡片的文案区域在边框内居中，边框到单行文案四周均为
+  `spacer16`；选中角标不得遮挡文案。
 - `TRadio` 和 `TRadioGroup` 默认显示分割线，与小程序默认非无边框模式及 Checkbox 保持一致；显式设置 `showDivider: false` 时关闭，卡片模式始终不显示分割线。
 - 带副标题时，内置指示器与主标题行盒垂直居中，不相对整个多行文本块居中。
 - 副标题默认使用 `textColorSecondary`，与小程序 `text-color-secondary` token 保持一致。
