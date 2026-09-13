@@ -200,10 +200,20 @@ void main() {
             ),
           )
           .first;
-      final content = find.descendant(of: card, matching: find.byType(Row));
+      final content = find
+          .descendant(of: card, matching: find.byType(Column))
+          .first;
       expect(
         tester.getCenter(content).dy,
         closeTo(tester.getCenter(card).dy, 0.01),
+      );
+      expect(
+        tester.getTopLeft(content).dy - tester.getTopLeft(card).dy,
+        16,
+      );
+      expect(
+        tester.getBottomRight(card).dy - tester.getBottomRight(content).dy,
+        16,
       );
     }
   });
