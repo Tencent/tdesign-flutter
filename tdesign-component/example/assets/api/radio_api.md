@@ -40,7 +40,7 @@
 | options | List<TRadioOption<T>> | - | - |
 | onChanged | ValueChanged<T>? | - | 选中值变更回调；为 null 时整组禁用。 |
 | direction | Axis | Axis.vertical | 排列方向，默认纵向。 |
-| columns | int | 1 | 每行列数，默认 1，必须大于 0。 横向 `TRadioVariant.inline` 按内容自然收缩，不使用该列数等分宽度。 |
+| columns | int | 1 | 每行列数，默认 1，必须大于 0。 横向 `TRadioVariant.inline` 按内容自然收缩并在行内两端对齐， 不使用该列数等分宽度。 |
 | variant | TRadioVariant | TRadioVariant.block | 生成项的完整视觉结构，默认 `TRadioVariant.block`。 |
 | showDivider | bool? | - | 是否显示项间分割线。 为空时仅 `TRadioVariant.block` 默认显示；非 block 结构不能设为 true。 |
 | contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向，默认文案在指示器右侧。 |
