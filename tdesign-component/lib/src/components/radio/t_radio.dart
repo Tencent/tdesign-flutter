@@ -579,7 +579,8 @@ class TRadioGroup<T> extends StatelessWidget {
 
     /// 每行列数，默认 1，必须大于 0。
     ///
-    /// 横向 [TRadioVariant.inline] 按内容自然收缩，不使用该列数等分宽度。
+    /// 横向 [TRadioVariant.inline] 按内容自然收缩并在行内两端对齐，
+    /// 不使用该列数等分宽度。
     int columns = 1,
 
     /// 生成项的完整视觉结构，默认 [TRadioVariant.block]。
@@ -674,6 +675,7 @@ class TRadioGroup<T> extends StatelessWidget {
     }
     if (_variant == TRadioVariant.inline && _direction == Axis.horizontal) {
       return Wrap(
+        alignment: WrapAlignment.spaceBetween,
         spacing: context.tTheme.spacer16,
         runSpacing: context.tTheme.spacer8,
         children: List.generate(options.length, (index) {

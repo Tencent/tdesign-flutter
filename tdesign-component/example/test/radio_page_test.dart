@@ -87,6 +87,8 @@ void main() {
       '横向单选框',
       '02 组件状态',
       '单选框状态',
+      '单选-已选',
+      '单选-未选',
       '03 组件样式',
       '勾选样式',
       '勾选显示位置',
@@ -152,7 +154,7 @@ void main() {
     );
   });
 
-  testWidgets('横向单选框距离容器上下均为 spacer16', (tester) async {
+  testWidgets('横向单选框距离容器四周为 spacer16 并在中间均分余量', (tester) async {
     tester.view.physicalSize = const Size(375, 2600);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -162,14 +164,35 @@ void main() {
     await tester.pump();
 
     final layout = find.byKey(const ValueKey('radio-horizontal-layout'));
-    final firstTitle = find
-        .descendant(of: layout, matching: find.text('单选标题'))
-        .first;
+    expect(tester.getSize(layout).width, 375);
+    final radios = find.descendant(
+      of: layout,
+      matching: find.byType(TRadio<int>),
+    );
+    final firstTitle = find.descendant(
+      of: radios.first,
+      matching: find.text('单选标题'),
+    );
     expect(tester.getTopLeft(firstTitle).dy - tester.getTopLeft(layout).dy, 16);
     expect(
       tester.getBottomRight(layout).dy - tester.getBottomRight(firstTitle).dy,
       16,
     );
+    expect(
+      tester.getTopLeft(radios.first).dx - tester.getTopLeft(layout).dx,
+      16,
+    );
+    expect(
+      tester.getBottomRight(layout).dx - tester.getBottomRight(radios.last).dx,
+      16,
+    );
+    final firstGap =
+        tester.getTopLeft(radios.at(1)).dx -
+        tester.getBottomRight(radios.first).dx;
+    final secondGap =
+        tester.getTopLeft(radios.last).dx -
+        tester.getBottomRight(radios.at(1)).dx;
+    expect(firstGap, closeTo(secondGap, 0.01));
   });
 
   testWidgets('纵向与横向卡片文案均在边框内居中且保留安全间距', (tester) async {

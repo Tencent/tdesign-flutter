@@ -66,7 +66,11 @@ class _TRadioPageState extends State<TRadioPage> {
           title: '组件类型',
           children: [
             ExampleItem(desc: '纵向单选框', builder: _verticalRadios),
-            ExampleItem(desc: '横向单选框', builder: _horizontalRadios),
+            ExampleItem(
+              desc: '横向单选框',
+              builder: _horizontalRadios,
+              center: false,
+            ),
           ],
         ),
         ExampleModule(
@@ -123,8 +127,8 @@ class _TRadioPageState extends State<TRadioPage> {
     return const TRadioGroup<int>.options(
       value: 0,
       options: [
-        TRadioOption(value: 0, label: '单选'),
-        TRadioOption(value: 1, label: '单选'),
+        TRadioOption(value: 0, label: '单选-已选'),
+        TRadioOption(value: 1, label: '单选-未选'),
       ],
     );
   }

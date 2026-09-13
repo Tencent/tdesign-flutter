@@ -948,7 +948,7 @@ void main() {
       expect(subTitle.maxLines, 3);
     });
 
-    testWidgets('inline 横向布局按内容收缩且四字标题不折行', (tester) async {
+    testWidgets('inline 横向布局按内容收缩、两端对齐且四字标题不折行', (tester) async {
       await tester.pumpWidget(
         wrap(
           const SizedBox(
@@ -974,6 +974,8 @@ void main() {
       expect(tester.getTopLeft(radios.at(2)).dy, top);
       expect(tester.getSize(find.text('上限四字')).height, 24);
       expect(tester.getSize(radios.first).width, lessThan(343 / 3));
+      expect(tester.getTopLeft(radios.first).dx, 0);
+      expect(tester.getBottomRight(radios.last).dx, 343);
     });
 
     testWidgets('block 横向多列布局可构建', (tester) async {
