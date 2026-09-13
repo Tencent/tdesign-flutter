@@ -1,12 +1,12 @@
 Widget _buildCustomBadge(BuildContext context) => TBadge(
     label: 'NEW',
-    offset: const Offset(-16, 0),
+    variant: TBadgeVariant.custom,
     child: Theme(
       data: Theme.of(
         context,
       ).mergeExtension(const TButtonThemeData(shape: TButtonShape.square)),
       child: TButton(
-        size: TButtonSize.medium,
+        size: TButtonSize.large,
         icon: const Icon(TIcons.notification),
         onPressed: () {},
       ),

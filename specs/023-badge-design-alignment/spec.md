@@ -39,14 +39,16 @@
 
 ## 行为契约
 
-  - `variant` 只表达结构形态：`normal`、`dot`、`square`、`bubble`、左右 Ribbon、左右 Triangle。
+- `variant` 只表达结构与锚点形态：`normal`、`custom`、`dot`、`square`、`bubble`、左右 Ribbon、左右 Triangle。
 - 移除混入尺寸语义的 `TBadgeVariant.small`；调用方迁移到 `size`。
 - `size` 仅表达 `medium`、`large`，默认 `medium`；中尺寸使用 `fontMarkExtraSmall` 与 16px 行盒，大尺寸使用 `fontMarkSmall` 与 20px 行盒。
 - `dot` 默认直径为 8 逻辑像素，与官方移动端 `--td-badge-dot-size` 一致；显式
   `BadgeThemeData.smallSize` 仍可覆盖。8px 只属于 `TBadge` 的内置视觉默认值；
   `TThemeBuilder` 不投影 `smallSize`，原生 Material `Badge` 自然回退 Flutter 的
   6px 默认值，不把 TDesign Badge 的尺寸扩散到原生组件。
-- `offset` 为逐实例位置偏移，解析顺序为实例 `offset` > 局部 `BadgeTheme.offset` > 全局 `ThemeData.badgeTheme.offset` > 默认值。
+- `custom` 与 `normal` 使用相同胶囊视觉，但提供设计稿定义的自定义文本锚点；调用方无需设置 `offset`。
+- `offset` API 保留为逐实例位置覆盖，解析顺序为实例 `offset` > 局部 `BadgeTheme.offset` > 全局 `ThemeData.badgeTheme.offset` > 当前形态默认值。`normal` 的默认中心点与内容右上角对齐；`custom` 的默认标签左边位于内容右边 -16px，水平中线与内容顶边对齐；Dot 和角标形态继续直接贴合内容边角。
+- 公开 Demo 的自定义徽标使用 48px Large 方形按钮和 `TBadgeVariant.custom`，不传入 `offset`。
 - `border` 保留为正交的对比色描边能力，不再用于表达 Square。
 - `normal` 单字符呈圆形、多字符呈胶囊形；Square、Bubble 使用同一标签内容与可见性逻辑；Ribbon、Triangle 固定贴合被标记内容的左上或右上角。
 - `ribbonLeft/right` 与 `triangleLeft/right` 表示物理方位，在 RTL 中不自动互换。
@@ -57,6 +59,7 @@
 ## Token 与固定几何
 
 - 背景色、文字色、字体、行高、圆点圆角、容器背景和描边颜色继续来自 TDesign Token / Theme。
+- 普通及自定义右上角徽标的锚点补偿是 Badge 专属位置几何；当前主题没有对应语义 token，因此由组件内形态默认值承载，实例及 `BadgeTheme.offset` 仍可覆盖。
 - Medium/Large 的默认水平 padding 分别为 4/5 逻辑像素，对应移动端规范的 8/10rpx。
 - Square 的 2px 圆角与 Bubble 左下 1px 尖角是 Badge 专有形状常量；当前主题 Token 没有语义等价值，因此不错误映射到 3px 的 `radiusSmall`。
 - Ribbon/Triangle 画布尺寸由当前 Badge 行盒派生，不依赖设备像素比或平台字体基线。

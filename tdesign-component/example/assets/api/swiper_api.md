@@ -7,6 +7,8 @@ Controller 驱动的轮播组件。
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | allowImplicitScrolling | bool | false | 是否允许无障碍服务请求将未显示的页面滚动到可见区域。 |
+| animationCurve | Curve | Curves.easeInOut | 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画曲线。 |
+| animationDuration | Duration | kThemeAnimationDuration | 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画时长。 |
 | autoplay | bool | false | 是否自动播放。 |
 | autoplayInterval | Duration | const Duration(seconds: 3) | 自动播放每次页面稳定后重新等待的完整间隔，必须大于零。 |
 | children | List<Widget>? | - | 静态页面列表；与 `itemBuilder` 二选一，且不能为空。 |
@@ -20,12 +22,12 @@ Controller 驱动的轮播组件。
 | nextIcon | Widget? | - | next 控制按钮的自定义图标。 仅替换图标内容；点击热区、禁用状态、Tooltip 和切页行为仍由组件管理。 |
 | onChanged | ValueChanged<int>? | - | 当前实际展示页发生变化时触发。 |
 | padEnds | bool | true | 当 `viewportFraction` 小于 1 时，首尾页面是否保留端部留白。 |
-| pageEffect | TSwiperPageEffect? | - | 页面视觉效果；为空时从组件主题解析。 |
+| pageEffect | TSwiperPageEffect? | - | 页面视觉效果；为空时默认为 `TSwiperPageEffect.none`。 |
 | pageSnapping | bool | true | 页面停止滚动时是否自动对齐到整页。 |
-| pagination | TSwiperPaginationVariant? | - | 指示器形态；为空时从组件主题解析，最终默认为 `TSwiperPaginationVariant.dots`。 |
-| paginationAlignment | AlignmentGeometry? | - | 指示器对齐；横向默认底部居中，竖向默认右侧居中。 覆盖模式下控制指示器在轮播内容中的位置；外置模式下控制指示器 在下方或右侧外部区域内的对齐。 |
+| pagination | TSwiperPaginationVariant? | - | 指示器形态；为空时默认为 `TSwiperPaginationVariant.dots`。 |
+| paginationAlignment | AlignmentGeometry? | - | 指示器对齐；切换按钮默认居中，其他横向指示器默认底部居中， 其他竖向指示器默认右侧居中。 覆盖模式下控制指示器在轮播内容中的位置；外置模式下控制指示器 在下方或右侧外部区域内的对齐。 |
 | paginationItemBuilder | TSwiperPaginationItemBuilder? | - | 自定义 dots 和 dotsBar 的单个标记。 组件仍负责排列、间距、选中语义和业务下标更新。 |
-| paginationPlacement | TSwiperPaginationPlacement? | - | 指示器位置；为空时从组件主题解析，最终默认为覆盖在轮播内容上。 |
+| paginationPlacement | TSwiperPaginationPlacement? | - | 指示器位置；为空时默认为覆盖在轮播内容上。 |
 | physics | ScrollPhysics? | - | 页面视图使用的滚动物理效果。 未指定时使用 `PageView` 的默认物理效果。 |
 | previousIcon | Widget? | - | previous 控制按钮的自定义图标。 仅替换图标内容；点击热区、禁用状态、Tooltip 和切页行为仍由组件管理。 |
 | reverse | bool | false | 是否反转页面的视觉顺序和滚动方向。 |
@@ -49,13 +51,14 @@ Controller 驱动的轮播组件。
 ### TSwiperThemeData
 #### 简介
 轮播组件级 ThemeExtension。
-保存页面效果、指示器和切换按钮的视觉默认值。
+保存指示器、内容圆角和切换按钮的视觉默认值。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | activeColor | Color? | - | 激活项颜色。 |
 | activeDotExtent | double? | - | 长条激活项在滚动主轴上的长度。 |
+| borderRadius | BorderRadiusGeometry? | - | 轮播内容圆角。 |
 | controlIconSize | double? | - | 控制按钮图标尺寸。 |
 | controlStyle | ButtonStyle? | - | 控制按钮样式。 |
 | dotSize | double? | - | 圆点直径。 |
@@ -63,11 +66,8 @@ Controller 驱动的轮播组件。
 | fractionBackgroundColor | Color? | - | 数字指示器背景色。 |
 | fractionStyle | TextStyle? | - | 数字指示器文字样式。 |
 | inactiveColor | Color? | - | 未激活项颜色。 |
-| pageEffect | TSwiperPageEffect? | - | 默认页面切换效果。 |
-| pagination | TSwiperPaginationVariant? | - | 默认指示器形态。 |
 | paginationAlignment | AlignmentGeometry? | - | 默认指示器对齐方式。 |
 | paginationMargin | EdgeInsetsGeometry? | - | 指示器外边距。 |
-| paginationPlacement | TSwiperPaginationPlacement? | - | 默认指示器位置。 |
 
 
 ### TSwiperPaginationItemDetails
@@ -120,6 +120,7 @@ Controller 驱动的轮播组件。
 | --- | --- |
 | none | 无额外效果。 |
 | cardMargin | 卡片间距效果。 |
+| scale | 相邻卡片沿交叉轴缩放，当前页保持完整尺寸。 |
 | scaleAndFade | 缩放和透明度效果。 |
 
 

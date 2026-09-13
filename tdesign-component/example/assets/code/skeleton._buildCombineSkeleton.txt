@@ -16,10 +16,7 @@ Widget _buildCombineSkeleton(BuildContext context) {
                   ),
                 ],
                 [TSkeletonBlock.line(width: constraints.maxWidth)],
-                const [
-                  TSkeletonBlock.line(),
-                  TSkeletonBlock.spacer(flex: 1),
-                ],
+                const [TSkeletonBlock.line(), TSkeletonBlock.spacer(flex: 1)],
               ],
             ),
           ),
@@ -28,7 +25,6 @@ Widget _buildCombineSkeleton(BuildContext context) {
     }
 
     return Row(
-      // spacing: context.tTheme.spacer16,
       children: [
         buildRowCols(),
         SizedBox(width: context.tTheme.spacer16),

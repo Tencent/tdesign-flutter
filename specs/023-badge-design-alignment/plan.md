@@ -2,7 +2,7 @@
 
 ## 技术方案
 
-- 将 `TBadgeVariant.small` 拆为独立 `TBadgeSize`，避免形态与尺寸双重所有权。
+- 将 `TBadgeVariant.small` 拆为独立 `TBadgeSize`，避免形态与尺寸双重所有权；增加 `custom` 形态承载设计稿独立的自定义文本锚点。
 - 继续复用 Material `Badge` 处理普通、圆点、方形和气泡的 child 锚定；角标使用 `Stack + CustomPainter` 按公开枚举指定的物理左右方位贴合内容边角。
 - 中/大尺寸从 `fontMarkExtraSmall`、`fontMarkSmall` 的字号和行高取得；颜色、文字样式、padding、alignment、offset 继续遵循实例、局部 Theme、显式全局 Theme、Token 的覆盖链。`TThemeBuilder` 自动投影给原生 Material Badge 的主题按来源识别，不通过数值相等启发式覆盖 TDesign 尺寸预设。
 - Dot 的内置直径从官方移动端徽标尺寸取得 8 逻辑像素，只作为 `TBadge` 的
@@ -25,6 +25,7 @@
 
 - breaking：删除 `TBadgeVariant.small`，改用 `size: TBadgeSize.medium/large`。
 - 新增：Square、Bubble、Ribbon、Triangle 形态枚举。
+- 新增：`TBadgeVariant.custom`，无需手动 `offset` 即可使用自定义徽标设计锚点。
 - 新增：`TBadgeSize` 与 `TBadge.size`。
 - 新增：实例级 `TBadge.offset`。
 
@@ -35,6 +36,7 @@
 - 角标绘制不依赖平台字体基线；画布尺寸从 Badge Size 派生，文字仍由 `TText` 渲染并在受限区域内缩放。
 - Square 2px 与 Bubble 左下 1px 是设计稿专有几何；颜色、字体、通用圆角和描边继续走 Theme/Token。
 - 设计稿中的 Circle 使用 `normal` 表达：单字符呈圆形，多字符自然扩展为胶囊形，不新增重复形态枚举。
+- 自定义徽标与普通文本徽标共用胶囊视觉，但锚点契约不同，因此用显式 `custom` 形态区分，不根据 `label` 内容做数字/文本启发式判断。
 
 ## 验证策略
 

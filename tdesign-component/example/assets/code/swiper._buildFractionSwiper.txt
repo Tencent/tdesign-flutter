@@ -1,4 +1,18 @@
-Widget _buildFractionSwiper(BuildContext context) => _buildSwiper(
-        context,
-        pagination: TSwiperPaginationVariant.fraction,
-      );
+Widget _buildFractionSwiper(BuildContext context) {
+    return TSwiper(
+      loop: true,
+      autoplay: true,
+      animationDuration: const Duration(milliseconds: 500),
+      autoplayInterval: const Duration(seconds: 5),
+      pagination: TSwiperPaginationVariant.fraction,
+      paginationAlignment: Alignment.bottomRight,
+      children: List.generate(
+        6,
+        (index) => Image.asset(
+          index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
+          fit: BoxFit.cover,
+          semanticLabel: '图片 ${index + 1}',
+        ),
+      ),
+    );
+  }
