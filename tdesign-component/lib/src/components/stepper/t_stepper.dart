@@ -492,11 +492,29 @@ class _StepperStyle {
   final TextStyle disabledTextStyle;
 
   static _StepperStyle resolve(BuildContext context, TStepper widget) {
-    return _resolveTheme(
+    final style = _resolveTheme(
       context,
       widget,
       Theme.of(context).extension<TStepperThemeData>(),
     );
+    assert(_debugTextGeometryFits(style));
+    return style;
+  }
+
+  static bool _debugTextGeometryFits(_StepperStyle style) {
+    final fontSize = style.textStyle.fontSize!;
+    final lineHeight = fontSize * style.textStyle.height!;
+    assert(
+      fontSize <= style.controlSize,
+      'TStepper resolved fontSize ($fontSize) must not exceed '
+      'controlSize (${style.controlSize}).',
+    );
+    assert(
+      lineHeight <= style.controlSize,
+      'TStepper resolved text line height ($lineHeight) must not exceed '
+      'controlSize (${style.controlSize}).',
+    );
+    return true;
   }
 
   static _StepperStyle _resolveTheme(
@@ -547,6 +565,7 @@ class _StepperStyle {
         )
         .merge(componentTheme?.textStyle);
     final resolvedFontSize = themedTextStyle.fontSize ?? geometry.fontSize;
+    final explicitTextHeight = componentTheme?.textStyle?.height;
     final resolvedLineHeight = math.min(geometry.lineHeight, controlSize);
     final textStyle = themedTextStyle.copyWith(
       fontSize: resolvedFontSize,
@@ -554,8 +573,7 @@ class _StepperStyle {
       // 字号时，按最终字号重新计算倍数；控件高度变小时则收敛到可用高度，
       // 避免保留基于默认字号计算的旧倍数而裁切文字和光标。
       height:
-          componentTheme?.textStyle?.height ??
-          resolvedLineHeight / resolvedFontSize,
+          explicitTextHeight ?? resolvedLineHeight / resolvedFontSize,
       // 将额外行高均分到字形上下，避免 Android 按字体 ascent/descent
       // 比例分配 leading 后产生视觉上移。
       leadingDistribution:

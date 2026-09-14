@@ -457,6 +457,11 @@ void main() {
       expect(renderEditable(tester).preferredLineHeight, 16);
       expect(tester.getSize(find.byType(EditableText)).height, 16);
 
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('rejects a font size larger than the control height in debug',
+        (tester) async {
       await tester.pumpWidget(wrap(
         TStepper(value: 1, onChanged: (_) {}),
         stepperTheme: const TStepperThemeData(
@@ -464,13 +469,50 @@ void main() {
           textStyle: TextStyle(fontSize: 20),
         ),
       ));
-      await tester.pumpAndSettle();
-      input = editableText(tester);
-      expect(input.style.fontSize, 20);
-      expect(input.style.fontSize! * input.style.height!, 16);
-      expect(renderEditable(tester).preferredLineHeight, 16);
-      expect(tester.getSize(find.byType(EditableText)).height, 16);
-      expect(tester.takeException(), isNull);
+
+      final exception = tester.takeException();
+      expect(exception, isA<AssertionError>());
+      expect(exception.toString(), contains('fontSize (20.0)'));
+      expect(exception.toString(), contains('controlSize (16.0)'));
+    });
+
+    testWidgets('rejects an explicit line box taller than the control in debug',
+        (tester) async {
+      await tester.pumpWidget(wrap(
+        TStepper(value: 1, onChanged: (_) {}),
+        stepperTheme: const TStepperThemeData(
+          controlSize: 20,
+          textStyle: TextStyle(height: 2),
+        ),
+      ));
+
+      final exception = tester.takeException();
+      expect(exception, isA<AssertionError>());
+      expect(exception.toString(), contains('line height (24.0)'));
+      expect(exception.toString(), contains('controlSize (20.0)'));
+    });
+
+    testWidgets('rejects an interpolated line box taller than the control',
+        (tester) async {
+      final theme = const TStepperThemeData(
+        controlSize: 20,
+        textStyle: TextStyle(fontSize: 20, height: 1),
+      ).lerp(
+        const TStepperThemeData(
+          controlSize: 20,
+          textStyle: TextStyle(fontSize: 10, height: 2),
+        ),
+        0.5,
+      );
+      await tester.pumpWidget(wrap(
+        TStepper(value: 1, onChanged: (_) {}),
+        stepperTheme: theme,
+      ));
+
+      final exception = tester.takeException();
+      expect(exception, isA<AssertionError>());
+      expect(exception.toString(), contains('line height (22.5)'));
+      expect(exception.toString(), contains('controlSize (20.0)'));
     });
 
     testWidgets('DefaultTextStyle and IconTheme control unset foregrounds',

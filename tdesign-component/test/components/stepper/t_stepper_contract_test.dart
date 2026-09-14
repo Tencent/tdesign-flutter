@@ -213,7 +213,7 @@ void main() {
       disabledBackgroundColor: Colors.black,
       borderColor: Colors.black,
       borderRadius: BorderRadius.all(Radius.circular(10)),
-      textStyle: TextStyle(fontSize: 20, height: 1.5),
+      textStyle: TextStyle(fontSize: 16, height: 1.5),
     );
     for (final reverse in [false, true]) {
       final theme = reverse ? b.lerp(a, 0.5) : a.lerp(b, 0.5);
@@ -233,7 +233,7 @@ void main() {
           input(tester).style.color,
           Color.lerp(disabled ? Colors.green : Colors.red, Colors.black, 0.5),
         );
-        expect(input(tester).style.fontSize, 16);
+        expect(input(tester).style.fontSize, 14);
         expect(input(tester).style.height, closeTo(19 / 12, 0.000001));
         expect(
           inputDecoration(tester).color,

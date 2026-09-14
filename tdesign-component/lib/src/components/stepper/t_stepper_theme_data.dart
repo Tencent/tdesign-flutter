@@ -63,7 +63,8 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
     ///
     /// 在继承 DefaultTextStyle 和 ThemeData.textTheme 后合并；非空字段可覆盖
     /// 默认字号、行高及 [foregroundColor]。仅覆盖字号时会按最终字号重新计算
-    /// 默认行高倍数；显式设置的 [TextStyle.height] 始终优先。
+    /// 默认行高倍数；显式设置的 [TextStyle.height] 始终优先。最终字号或显式
+    /// 物理行盒超过控件高度属于无效配置，并会在调试模式触发断言。
     this.textStyle,
   }) : assert(inputWidth == null || inputWidth > 0),
        assert(controlSize == null || controlSize > 0),
@@ -112,7 +113,8 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
 
   /// 输入文本样式，可覆盖继承样式中的字号、行高和前景色。
   ///
-  /// 仅覆盖字号时会按最终字号重新计算默认行高倍数；显式行高始终优先。
+  /// 仅覆盖字号时会按最终字号重新计算默认行高倍数；显式行高始终优先。最终
+  /// 字号或显式物理行盒超过控件高度属于无效配置，并会在调试模式触发断言。
   final TextStyle? textStyle;
 
   @override
