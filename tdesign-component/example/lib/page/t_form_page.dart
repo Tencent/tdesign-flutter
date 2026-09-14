@@ -433,6 +433,7 @@ class _TFormPageState extends State<TFormPage> {
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
+        height: _pickerPopupHeight(context),
         headerBuilder: (_, close) => TPopupHeader(
           cancelButton: TextButton(onPressed: close, child: const TText('取消')),
           title: const TText('选择日期'),
@@ -467,6 +468,7 @@ class _TFormPageState extends State<TFormPage> {
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
+        height: _pickerPopupHeight(context),
         headerBuilder: (_, close) => TPopupHeader(
           cancelButton: TextButton(onPressed: close, child: const TText('取消')),
           title: const TText('选择地址'),
@@ -514,4 +516,8 @@ class _TFormPageState extends State<TFormPage> {
       _photos = List.of(_initialPhotos);
     });
   }
+
+  double _pickerPopupHeight(BuildContext context) =>
+      (Theme.of(context).extension<TPickerThemeData>()?.height ?? 200) +
+      TPopupHeader.headerHeight;
 }
