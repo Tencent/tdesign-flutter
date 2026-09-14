@@ -401,13 +401,26 @@ void main() {
       expect(inputDecoration(tester).color, Colors.yellow);
     });
 
-    testWidgets(
-        'default line height is centered and component theme can override it',
+    testWidgets('design line boxes are centered and theme can override them',
         (tester) async {
-      await tester.pumpWidget(wrap(
-        TStepper(value: 1, onChanged: (_) {}),
-      ));
-      expect(editableText(tester).style.height, 1);
+      for (final entry in [
+        (TStepperSize.small, 16.0),
+        (TStepperSize.medium, 20.0),
+        (TStepperSize.large, 24.0),
+      ]) {
+        await tester.pumpWidget(wrap(
+          TStepper(value: 1, size: entry.$1, onChanged: (_) {}),
+        ));
+        final input = editableText(tester);
+        expect(input.style.fontSize! * input.style.height!, entry.$2);
+        expect(input.style.leadingDistribution, TextLeadingDistribution.even);
+        expect(input.style.fontFamily, 'packages/tdesign_flutter/TCloudNumber');
+        expect(tester.getSize(find.byType(EditableText)).height, entry.$2);
+        expect(
+          tester.getCenter(find.byType(EditableText)).dy,
+          tester.getCenter(find.byType(Row)).dy,
+        );
+      }
 
       await tester.pumpWidget(wrap(
         TStepper(value: 1, onChanged: (_) {}),
@@ -423,7 +436,7 @@ void main() {
         (tester) async {
       await tester.pumpWidget(wrap(
         DefaultTextStyle(
-          style: const TextStyle(color: Colors.red),
+          style: const TextStyle(color: Colors.red, fontFamily: 'TestFont'),
           child: IconTheme(
             data: const IconThemeData(color: Colors.green),
             child: TStepper(value: 1, onChanged: (_) {}),
@@ -432,6 +445,7 @@ void main() {
       ));
 
       expect(editableText(tester).style.color, Colors.red);
+      expect(editableText(tester).style.fontFamily, 'TestFont');
       expect(
         tester.widget<Icon>(find.byIcon(TIcons.plus)).color,
         Colors.green,

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart' show TextInputFormatter;
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_font_family.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import 't_stepper_defaults.dart';
@@ -519,8 +520,14 @@ class _StepperStyle {
     final defaultTextStyle = context.tExplicitDefaultTextStyle;
     final materialTextStyle =
         materialTheme.tExplicitTextTheme?.bodySmall ?? const TextStyle();
+    final numberFontFamily = token.numberFontFamily;
+    final usesNumberFont =
+        defaultTextStyle?.fontFamily == null &&
+        materialTextStyle.fontFamily == null;
     final inheritedFontFamily =
-        defaultTextStyle?.fontFamily ?? materialTextStyle.fontFamily;
+        defaultTextStyle?.fontFamily ??
+        materialTextStyle.fontFamily ??
+        numberFontFamily?.fontFamily;
     final foregroundColor =
         componentTheme?.foregroundColor ??
         defaultTextStyle?.color ??
@@ -534,8 +541,13 @@ class _StepperStyle {
           fontSize: geometry.fontSize,
           color: foregroundColor,
           fontFamily: inheritedFontFamily,
+          package: usesNumberFont ? numberFontFamily?.package : null,
           letterSpacing: 0,
-          height: 1,
+          height: geometry.lineHeight / geometry.fontSize,
+          // Figma 的三档文字分别使用 10/16、12/20、16/24 行盒。
+          // 将额外行高均分到字形上下，避免 Android 按字体 ascent/descent
+          // 比例分配 leading 后产生视觉上移。
+          leadingDistribution: TextLeadingDistribution.even,
         )
         .merge(componentTheme?.textStyle);
     final inputTheme = materialTheme.inputDecorationTheme;

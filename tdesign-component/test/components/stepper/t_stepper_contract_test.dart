@@ -234,7 +234,7 @@ void main() {
           Color.lerp(disabled ? Colors.green : Colors.red, Colors.black, 0.5),
         );
         expect(input(tester).style.fontSize, 16);
-        expect(input(tester).style.height, 1.25);
+        expect(input(tester).style.height, closeTo(19 / 12, 0.000001));
         expect(
           inputDecoration(tester).color,
           Color.lerp(
