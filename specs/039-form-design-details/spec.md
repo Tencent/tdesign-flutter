@@ -2,7 +2,9 @@
 
 ## 背景
 
-Form Demo 的排布选择器、禁用开关、水平字段对齐、竖向性别间距和底部操作与指定设计稿不一致。
+Form Demo 的默认正常态、排布选择器、禁用开关、水平字段对齐、竖向性别间距和底部操作与指定设计稿不一致。
+
+设计基准为 Figma `Form 表单 移动端展示` 节点 [`41936:17938`](https://www.figma.com/design/mdBVCCVGERhxoZLle2eLT0/Flutter-%E8%AE%BE%E8%AE%A1%E8%B5%B0%E6%9F%A5-%E2%80%94%E2%80%94-%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%B1%95%E7%A4%BA---%E4%BA%A4%E4%BA%92---%E6%96%B0%E5%A2%9E%E7%BB%84%E4%BB%B6?node-id=41936-17938)，画板尺寸为 375 × 1254。旧节点 `45666:6110` 不作为本 PR 的验收依据。
 
 ## 目标
 
@@ -11,11 +13,13 @@ Form Demo 的排布选择器、禁用开关、水平字段对齐、竖向性别�
 - 水平表单性别项垂直居中，选择类内容统一左对齐。
 - 竖向性别标题到选项 8dp、选项到底部 16dp。
 - 两种排布均按“重置、提交”排列，重置为浅色、提交为主要样式。
+- 正常态默认展示设计稿中的用户名、密码、性别、生日、籍贯、年限、评分、个人简介和上传图片；用户名默认态不展示提示文案。
+- 排布标题使用设计稿文案“竖向排布”，个人简介内容完整显示且不溢出。
 
 ## 非目标
 
 - 不新增或修改 Form、Radio、Button、Switch 公开 API。
-- 不改变表单校验和提交数据语义。
+- 不改变表单校验和提交数据结构；重置恢复设计稿展示的默认值。
 
 ## 范围
 
@@ -29,7 +33,7 @@ Form Demo 的排布选择器、禁用开关、水平字段对齐、竖向性别�
 
 ## 行为契约
 
-Demo 只通过现有组件 API、Theme 和基础布局组合表达设计；颜色使用 `bgColorSecondaryContainer`、`componentBorderColor` 等语义 Token。水平与竖向性别项共用 `TRadioGroup.options` 的 `inline` 结构，不在 Demo 中重复实现 Radio 的手势、状态或无障碍语义。
+Demo 只通过现有组件 API、Theme 和基础布局组合表达设计；颜色使用 `bgColorSecondaryContainer`、`componentBorderColor` 等语义 Token。水平与竖向性别项共用 `TRadioGroup.options` 的 `inline` 结构，不在 Demo 中重复实现 Radio 的手势、状态或无障碍语义。正常态和重置态使用同一组设计默认值，避免页面初始展示与重置结果漂移。
 
 ## 验收标准
 
@@ -37,3 +41,4 @@ Demo 只通过现有组件 API、Theme 和基础布局组合表达设计；颜�
 - [x] 不硬编码颜色。
 - [x] Demo 回归覆盖颜色、对齐、间距、顺序和主题。
 - [x] 性别项不包含旧 Radio API 或 Demo 级视觉兼容代码。
+- [x] 正常态默认值、提示文案、排布标题和个人简介高度与正确 Figma 节点一致。

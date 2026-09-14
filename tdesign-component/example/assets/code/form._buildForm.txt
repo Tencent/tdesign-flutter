@@ -24,7 +24,6 @@ Widget _buildForm(BuildContext context) {
                   : '只能输入8个字符英文',
               builder: (context, value, onChanged, errorText) => TFormItem(
                 label: '用户名',
-                help: '输入用户名',
                 child: TInput(
                   controller: _nameController,
                   enabled: !_disabled,
@@ -162,7 +161,8 @@ Widget _buildForm(BuildContext context) {
               builder: (context, value, onChanged, errorText) => TFormItem(
                 label: '个人简介',
                 child: SizedBox(
-                  height: 100,
+                  key: const ValueKey('form-resume-content'),
+                  height: 124,
                   child: TTextarea(
                     controller: _resumeController,
                     enabled: !_disabled,

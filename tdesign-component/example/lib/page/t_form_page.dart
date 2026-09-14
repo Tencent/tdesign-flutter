@@ -15,20 +15,30 @@ class TFormPage extends StatefulWidget {
 class _TFormPageState extends State<TFormPage> {
   static const _regionItems = TPickerColumns([
     [
+      TPickerOption(label: '广东省', value: 'guangdong'),
       TPickerOption(label: '北京市', value: 'beijing'),
-      TPickerOption(label: '天津市', value: 'tianjin'),
     ],
     [
+      TPickerOption(label: '深圳市', value: 'shenzhen'),
+      TPickerOption(label: '广州市', value: 'guangzhou'),
       TPickerOption(label: '海淀区', value: 'haidian'),
       TPickerOption(label: '朝阳区', value: 'chaoyang'),
-      TPickerOption(label: '蓟州区', value: 'jizhou'),
     ],
   ]);
   static const _initialDate = TDateTimePickerValue(
-    year: 2026,
+    year: 2022,
     month: 8,
-    day: 20,
+    day: 10,
   );
+  static const _initialName = 'Abcdefgh';
+  static const _initialPassword = '12345678';
+  static const _initialGender = 'man';
+  static const _initialBirth = '2022-08-10';
+  static const _initialPlace = '广东省 深圳市';
+  static const _initialAge = 3;
+  static const _initialDescription = 3.5;
+  static const _initialResume =
+      '本人性格开朗、稳重、细心、待人热情、真诚，工作认真负责，积极主动，勇于创新，具有很强的团队协作精神。';
   static const _initialPhotos = [
     TUploadFile(
       id: 'uploaded-1',
@@ -39,23 +49,23 @@ class _TFormPageState extends State<TFormPage> {
     TUploadFile(
       id: 'uploaded-2',
       name: 'uploaded2.png',
-      url: 'https://tdesign.gtimg.com/mobile/demos/example6.png',
+      url: 'https://tdesign.gtimg.com/mobile/demos/example4.png',
       status: TUploadFileStatus.success,
     ),
   ];
 
   final _formController = TFormController();
-  final _nameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _resumeController = TextEditingController();
+  final _nameController = TextEditingController(text: _initialName);
+  final _passwordController = TextEditingController(text: _initialPassword);
+  final _resumeController = TextEditingController(text: _initialResume);
 
   TFormLayout _layout = TFormLayout.horizontal;
   bool _disabled = false;
-  String _gender = '';
-  String _birth = '';
-  String _place = '';
-  num _age = 3;
-  double _description = 2;
+  String _gender = _initialGender;
+  String _birth = _initialBirth;
+  String _place = _initialPlace;
+  num _age = _initialAge;
+  double _description = _initialDescription;
   List<TUploadFile> _photos = List.of(_initialPhotos);
 
   @override
@@ -146,7 +156,7 @@ class _TFormPageState extends State<TFormPage> {
                           ),
                     onPressed: () =>
                         setState(() => _layout = TFormLayout.vertical),
-                    child: const TText('竖直排布'),
+                    child: const TText('竖向排布'),
                   ),
                 ),
               ],
@@ -201,7 +211,6 @@ class _TFormPageState extends State<TFormPage> {
                   : '只能输入8个字符英文',
               builder: (context, value, onChanged, errorText) => TFormItem(
                 label: '用户名',
-                help: '输入用户名',
                 child: TInput(
                   controller: _nameController,
                   enabled: !_disabled,
@@ -339,7 +348,8 @@ class _TFormPageState extends State<TFormPage> {
               builder: (context, value, onChanged, errorText) => TFormItem(
                 label: '个人简介',
                 child: SizedBox(
-                  height: 100,
+                  key: const ValueKey('form-resume-content'),
+                  height: 124,
                   child: TTextarea(
                     controller: _resumeController,
                     enabled: !_disabled,
@@ -483,7 +493,7 @@ class _TFormPageState extends State<TFormPage> {
     BuildContext context,
     ValueChanged<String>? onChanged,
   ) {
-    var draft = <Object?>['beijing', 'haidian'];
+    var draft = <Object?>['guangdong', 'shenzhen'];
     TPopup.show(
       context,
       options: TPopupOptions.bottom(
@@ -494,14 +504,15 @@ class _TFormPageState extends State<TFormPage> {
             onPressed: () {
               if (mounted) {
                 const labels = {
+                  'guangdong': '广东省',
                   'beijing': '北京市',
-                  'tianjin': '天津市',
+                  'shenzhen': '深圳市',
+                  'guangzhou': '广州市',
                   'haidian': '海淀区',
                   'chaoyang': '朝阳区',
-                  'jizhou': '蓟州区',
                 };
                 onChanged?.call(
-                  draft.map((value) => labels[value] ?? '$value').join('/'),
+                  draft.map((value) => labels[value] ?? '$value').join(' '),
                 );
               }
               close();
@@ -523,14 +534,14 @@ class _TFormPageState extends State<TFormPage> {
   void _reset() {
     _formController.reset();
     setState(() {
-      _nameController.clear();
-      _passwordController.clear();
-      _resumeController.clear();
-      _gender = '';
-      _birth = '';
-      _place = '';
-      _age = 3;
-      _description = 2;
+      _nameController.text = _initialName;
+      _passwordController.text = _initialPassword;
+      _resumeController.text = _initialResume;
+      _gender = _initialGender;
+      _birth = _initialBirth;
+      _place = _initialPlace;
+      _age = _initialAge;
+      _description = _initialDescription;
       _photos = List.of(_initialPhotos);
     });
   }

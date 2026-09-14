@@ -12,8 +12,53 @@ void main() {
     page: TFormPage(),
     expectedTexts: ['01 组件类型'],
     componentType: TFormItem,
+    supplementalCjkFontFamily: 'TDesign Form Golden CJK',
+    supplementalCjkFontPath: 'test/fonts/FormGoldenCJK-Regular.otf',
   );
   registerDemoPageTests(spec);
+
+  testWidgets('默认值与设计稿正常态一致', (tester) async {
+    await pumpFullDemoPage(tester, spec, ThemeMode.light);
+
+    expect(find.text('Abcdefgh'), findsOneWidget);
+    expect(find.text('输入用户名'), findsNothing);
+    expect(find.text('2022-08-10'), findsOneWidget);
+    expect(find.text('广东省 深圳市'), findsOneWidget);
+    expect(find.text(_resume), findsOneWidget);
+    expect(find.text('竖向排布'), findsOneWidget);
+    expect(
+      tester.getSize(find.byKey(const ValueKey('form-resume-content'))).height,
+      124,
+    );
+    expect(
+      tester
+          .widget<TRadioGroup<String>>(
+            find.byKey(const ValueKey('form-gender-options')),
+          )
+          .value,
+      'man',
+    );
+    expect(tester.widget<TRate>(find.byType(TRate)).value, 3.5);
+  });
+
+  testWidgets('重置后恢复设计稿默认值', (tester) async {
+    await pumpFullDemoPage(tester, spec, ThemeMode.light);
+    final name = tester.widget<TInput>(find.byType(TInput).first).controller!;
+    name.text = 'Changed';
+    await tester.tap(find.text('女'));
+    await tester.tap(find.byKey(const ValueKey('form-reset-button')));
+    await tester.pump();
+
+    expect(name.text, 'Abcdefgh');
+    expect(
+      tester
+          .widget<TRadioGroup<String>>(
+            find.byKey(const ValueKey('form-gender-options')),
+          )
+          .value,
+      'man',
+    );
+  });
 
   testWidgets('排布按钮和禁用开关使用设计语义色', (tester) async {
     await pumpFullDemoPage(tester, spec, ThemeMode.light);
@@ -98,3 +143,5 @@ void main() {
     );
   });
 }
+
+const _resume = '本人性格开朗、稳重、细心、待人热情、真诚，工作认真负责，积极主动，勇于创新，具有很强的团队协作精神。';

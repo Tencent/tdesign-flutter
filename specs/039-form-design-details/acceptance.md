@@ -3,7 +3,7 @@
 ## 验证环境
 
 - 分支：`rss1102/fix/form-design-details`
-- 基线：`origin/develop@5d75a033d`（包含 #1119）
+- 基线：`origin/develop@7941a170d`（包含 #1119 与 #1120）
 - Flutter/Dart：Flutter 3.32.0（FVM）、Flutter 3.47.0 / Dart 3.13.0
 
 ## 自动化验证
@@ -11,18 +11,19 @@
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
 | `flutter test --no-pub test/components/form/t_form_test.dart` | 通过 | 49 tests |
-| `flutter test --no-pub --exclude-tags golden test/form_demo_test.dart` | 通过 | 4 tests；覆盖 inline Radio、交互、对齐、间距和按钮样式 |
+| `flutter test --no-pub --exclude-tags golden test/form_demo_test.dart` | 通过 | 6 tests；覆盖默认值、重置、inline Radio、交互、对齐、间距和按钮样式 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例代码与源码一致 |
-| Linux 3.32.0：`flutter test --no-pub test/form_demo_test.dart` | 通过 | 6 tests；先确认旧基线仅因性别行上下各 16px 兼容间距而缩短 32px，再更新并无更新复跑 |
+| Linux 3.32.0：`flutter test --no-pub test/form_demo_test.dart` | 通过 | 8 tests；新增专用 CJK 子集字体后更新基线，并以非更新模式复跑通过 |
 | `flutter analyze --fatal-infos` | 通过 | 组件包与 example 均为 0 issues |
 | `flutter build apk --debug` | 通过 | Android Debug APK 构建成功 |
-| Flutter 3.47.0：Form 组件 / Demo 非 Golden 测试 | 通过 | 49 + 4 tests |
+| Flutter 3.47.0：Form 组件 / Demo 非 Golden 测试 | 通过 | 49 + 6 tests |
 | Flutter 3.47.0：`flutter analyze --fatal-infos` | 通过 | 组件包与 example 均为 0 issues |
 
 ## 人工验收
 
-- [x] iPhone 16 模拟器复验合入 #1119 后的水平、竖向布局和无障碍节点
-- [ ] Android 16 真机当前未连接；不可沿用旧 head 冒充最终真机证据
+- [x] Figma 桌面端确认正确设计节点为 `41936:17938`，画板尺寸 375 × 1254、背景 `#F6F6F6`
+- [x] iPhone 16 模拟器运行移动端集成测试并采集水平、竖向和禁用态截图
+- [ ] Android 16 真机已连接且 APK 构建成功，但设备端取消了安装，未取得最终运行截图
 
 ### 原 Form 修复的 Android 真机修改前后对比
 
@@ -41,6 +42,15 @@
 
 ![Form 合入 Radio 重构后的移动端实装](assets/form-radio-integration-ios.png)
 
+## 正常态设计基准
+
+- 用户名：`Abcdefgh`；密码：8 位掩码；性别：默认选中“男”。
+- 生日：`2022-08-10`；籍贯：`广东省 深圳市`；年限：`3`；评分：`3.5`。
+- 个人简介使用设计稿 50 字文案，显示 `50/50` 且不发生 RenderFlex 溢出。
+- 两张上传图片使用相同示例图；开关默认关闭；用户名下方不显示默认 tips。
+- 排布标题为“竖向排布”。
+
 ## 未覆盖项与后续工作
 
-- Android 16 真机当前未连接，因此最终集成态以 CI 对齐 Golden、Android APK 构建与 iPhone 移动端实装交叉验证；Android 连接后可补同页复验，但当前记录不将模拟器写成真机。
+- 尚未获得 Figma 正确节点的本地 1x 导出图，因此当前只记录设计属性与设备实装，不把 Golden 或屏幕目测表述为“像素差分完成”。
+- Android 16 真机的安装被设备端取消；重新允许安装后再补同页运行截图，当前记录不将模拟器或 APK 构建写成真机运行证据。
