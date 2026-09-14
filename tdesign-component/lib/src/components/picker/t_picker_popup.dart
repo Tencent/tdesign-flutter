@@ -63,7 +63,7 @@ final class TPickerPopup {
     /// 是否避让底部安全区，默认 false。
     bool useSafeArea = false,
 
-    /// 可选的 Navigator 上下文；默认使用 [context]。
+    /// 可选的 Navigator 上下文；默认使用 `context`。
     BuildContext? navigatorContext,
 
     /// 是否使用根 Navigator，默认 false。
