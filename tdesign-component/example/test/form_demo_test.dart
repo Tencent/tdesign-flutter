@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
+import 'package:tdesign_flutter_example/base/notification_center.dart';
 import 'package:tdesign_flutter_example/page/t_form_page.dart';
 
 import 'demo_page_test_utils.dart';
@@ -18,6 +22,58 @@ void main() {
     supplementalCjkFontPath: 'test/fonts/FormGoldenCJK-Regular.otf',
   );
   registerDemoPageTests(spec);
+
+  testWidgets('查看代码入口映射到完整可运行示例', (tester) async {
+    await pumpFullDemoPage(tester, spec, ThemeMode.light);
+
+    final wrapper = tester.widget<CodeWrapper>(find.byType(CodeWrapper));
+    expect(wrapper.methodName, 'FormBasicDemo');
+    final code = await rootBundle.loadString(
+      'assets/code/form.FormBasicDemo.txt',
+    );
+    expect(code, contains('class FormBasicDemo extends StatefulWidget'));
+    expect(code, contains('class _FormBasicDemoState'));
+    expect(code, contains('Widget _buildForm(BuildContext context)'));
+
+    TNotification.postNotification('onApiVisibleChange', {'apiVisible': true});
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('code'));
+    await tester.pumpAndSettle();
+
+    final panel = tester.widget<Markdown>(find.byType(Markdown));
+    expect(panel.data, contains(code));
+    Navigator.of(tester.element(find.byType(Markdown))).pop();
+    await tester.pumpAndSettle();
+    await disposeDemoPage(tester);
+  });
+
+  for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('form ${mode.name} vertical Demo golden', (tester) async {
+      await pumpFullDemoPage(tester, spec, mode);
+      await tester.tap(find.byKey(const ValueKey('form-layout-vertical')));
+      await tester.pump();
+      await _expandCurrentDemoPage(tester);
+
+      await expectLater(
+        find.byKey(const ValueKey('form-demo-page')),
+        matchesGoldenFile('goldens/form_page_vertical_${mode.name}.png'),
+      );
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
+
+    testWidgets('form ${mode.name} disabled Demo golden', (tester) async {
+      await pumpFullDemoPage(tester, spec, mode);
+      await tester.tap(find.byKey(const ValueKey('form-disabled-switch')));
+      await tester.pump();
+      _resetDemoScroll(tester);
+
+      await expectLater(
+        find.byKey(const ValueKey('form-demo-page')),
+        matchesGoldenFile('goldens/form_page_disabled_${mode.name}.png'),
+      );
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
+  }
 
   testWidgets('默认值与设计稿正常态一致', (tester) async {
     await pumpFullDemoPage(tester, spec, ThemeMode.light);
@@ -121,6 +177,28 @@ void main() {
       Theme.of(switchContext).extension<TSwitchThemeData>()?.trackOffColor,
       token.componentBorderColor,
     );
+
+    await tester.tap(find.byKey(const ValueKey('form-disabled-switch')));
+    await tester.pump();
+    final formFields = find.byWidgetPredicate((widget) => widget is TFormField);
+    expect(formFields, findsNWidgets(9));
+    _expectFieldCallbacks(tester, isNull);
+    expect(
+      tester
+          .widget<TButton>(find.byKey(const ValueKey('form-reset-button')))
+          .onPressed,
+      isNull,
+    );
+    expect(
+      tester
+          .widget<TButton>(find.byKey(const ValueKey('form-submit-button')))
+          .onPressed,
+      isNull,
+    );
+
+    await tester.tap(find.byKey(const ValueKey('form-disabled-switch')));
+    await tester.pump();
+    _expectFieldCallbacks(tester, isNotNull);
   });
 
   testWidgets('水平字段内容左对齐且性别项垂直居中', (tester) async {
@@ -201,6 +279,159 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.getSize(find.byType(TPicker)).height, 200);
   });
+
+  testWidgets('日期和籍贯确认后再次打开保留当前值', (tester) async {
+    await pumpFullDemoPage(tester, spec, ThemeMode.light);
+
+    await tester.tap(find.text('2022-08-10'));
+    await tester.pumpAndSettle();
+    const changedDate = TDateTimePickerValue(year: 2024, month: 5, day: 6);
+    tester
+        .widget<TDateTimePicker>(find.byType(TDateTimePicker))
+        .onChanged
+        ?.call(changedDate);
+    await tester.pump();
+    await tester.tap(find.text('确定'));
+    await tester.pumpAndSettle();
+    expect(find.text('2024-05-06'), findsOneWidget);
+
+    await tester.tap(find.text('2024-05-06'));
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<TDateTimePicker>(find.byType(TDateTimePicker)).value,
+      changedDate,
+    );
+    await tester.tap(find.text('取消'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('广东省 深圳市'));
+    await tester.pumpAndSettle();
+    final picker = tester.widget<TPicker>(find.byType(TPicker));
+    picker.onChanged?.call(
+      const TPickerValue(
+        selectedOptions: [
+          TPickerOption(label: '北京市', value: 'beijing'),
+          TPickerOption(label: '海淀区', value: 'haidian'),
+        ],
+        indexes: [1, 2],
+      ),
+    );
+    await tester.pump();
+    await tester.tap(find.text('确定'));
+    await tester.pumpAndSettle();
+    expect(find.text('北京市 海淀区'), findsOneWidget);
+
+    await tester.tap(find.text('北京市 海淀区'));
+    await tester.pumpAndSettle();
+    expect(tester.widget<TPicker>(find.byType(TPicker)).value, [
+      'beijing',
+      'haidian',
+    ]);
+    await tester.tap(find.text('取消'));
+    await tester.pumpAndSettle();
+
+    final reset = find.byKey(const ValueKey('form-reset-button'));
+    await tester.ensureVisible(reset);
+    await tester.pumpAndSettle();
+    await tester.tap(reset);
+    await tester.pumpAndSettle();
+    final initialPlace = find.text('广东省 深圳市');
+    await tester.ensureVisible(initialPlace);
+    await tester.tap(initialPlace);
+    await tester.pumpAndSettle();
+    expect(tester.widget<TPicker>(find.byType(TPicker)).value, [
+      'guangdong',
+      'shenzhen',
+    ]);
+    await tester.tap(find.text('取消'));
+    await tester.pumpAndSettle();
+    await disposeDemoPage(tester);
+  });
+
+  testWidgets('日期和籍贯取消后丢弃草稿值', (tester) async {
+    await pumpFullDemoPage(tester, spec, ThemeMode.light);
+
+    await tester.tap(find.text('2022-08-10'));
+    await tester.pumpAndSettle();
+    tester
+        .widget<TDateTimePicker>(find.byType(TDateTimePicker))
+        .onChanged
+        ?.call(const TDateTimePickerValue(year: 2025, month: 6, day: 7));
+    await tester.pump();
+    await tester.tap(find.text('取消'));
+    await tester.pumpAndSettle();
+    expect(find.text('2022-08-10'), findsOneWidget);
+    await tester.tap(find.text('2022-08-10'));
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<TDateTimePicker>(find.byType(TDateTimePicker)).value,
+      const TDateTimePickerValue(year: 2022, month: 8, day: 10),
+    );
+    await tester.tap(find.text('取消'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('广东省 深圳市'));
+    await tester.pumpAndSettle();
+    tester
+        .widget<TPicker>(find.byType(TPicker))
+        .onChanged
+        ?.call(
+          const TPickerValue(
+            selectedOptions: [
+              TPickerOption(label: '北京市', value: 'beijing'),
+              TPickerOption(label: '朝阳区', value: 'chaoyang'),
+            ],
+            indexes: [1, 3],
+          ),
+        );
+    await tester.pump();
+    await tester.tap(find.text('取消'));
+    await tester.pumpAndSettle();
+    expect(find.text('广东省 深圳市'), findsOneWidget);
+    await tester.tap(find.text('广东省 深圳市'));
+    await tester.pumpAndSettle();
+    expect(tester.widget<TPicker>(find.byType(TPicker)).value, [
+      'guangdong',
+      'shenzhen',
+    ]);
+    await tester.tap(find.text('取消'));
+    await tester.pumpAndSettle();
+    await disposeDemoPage(tester);
+  });
+}
+
+Future<void> _expandCurrentDemoPage(WidgetTester tester) async {
+  for (var attempt = 0; attempt < 4; attempt++) {
+    final scrollable = _demoScrollable(tester);
+    final extent = scrollable.position.maxScrollExtent;
+    if (extent <= 0.01) {
+      break;
+    }
+    tester.view.physicalSize = Size(
+      tester.view.physicalSize.width,
+      tester.view.physicalSize.height + extent,
+    );
+    await tester.pump();
+  }
+  _resetDemoScroll(tester);
+}
+
+void _resetDemoScroll(WidgetTester tester) {
+  final scrollable = _demoScrollable(tester);
+  if (scrollable.position.hasPixels) {
+    scrollable.position.jumpTo(0);
+  }
+}
+
+ScrollableState _demoScrollable(WidgetTester tester) {
+  return tester.state<ScrollableState>(
+    find
+        .descendant(
+          of: find.byType(CustomScrollView).first,
+          matching: find.byType(Scrollable),
+        )
+        .first,
+  );
 }
 
 TFormField<T> _field<T>(WidgetTester tester, String name) {
@@ -208,6 +439,30 @@ TFormField<T> _field<T>(WidgetTester tester, String name) {
     find.byWidgetPredicate(
       (widget) => widget is TFormField<T> && widget.name == name,
     ),
+  );
+}
+
+void _expectFieldCallbacks(WidgetTester tester, Matcher matcher) {
+  for (final name in [
+    'name',
+    'password',
+    'gender',
+    'birth',
+    'place',
+    'resume',
+  ]) {
+    expect(_field<String>(tester, name).onChanged, matcher, reason: name);
+  }
+  expect(_field<num>(tester, 'age').onChanged, matcher, reason: 'age');
+  expect(
+    _field<double>(tester, 'description').onChanged,
+    matcher,
+    reason: 'description',
+  );
+  expect(
+    _field<List<TUploadFile>>(tester, 'photo').onChanged,
+    matcher,
+    reason: 'photo',
   );
 }
 

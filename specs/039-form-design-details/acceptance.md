@@ -3,21 +3,20 @@
 ## 验证环境
 
 - 分支：`rss1102/fix/form-design-details`
-- 基线：`origin/develop@d3ae100b0`（包含 #1119、#1120 与 #1121）
+- 基线：`origin/develop@33fbe96d`
 - Flutter/Dart：Flutter 3.32.0（FVM）、Flutter 3.47.0 / Dart 3.13.0
 
 ## 自动化验证
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter test --no-pub test/components/form/t_form_test.dart` | 通过 | 49 tests |
-| `flutter test --no-pub --exclude-tags golden test/form_demo_test.dart` | 通过 | 8 tests；覆盖默认值、提交反馈、完整重置、inline Radio、交互、对齐、间距、按钮样式和 Picker 弹层高度 |
-| `dart run tool/generate_example_code.dart --check` | 通过 | 示例代码与源码一致 |
-| Linux 3.32.0：`flutter test --no-pub test/form_demo_test.dart` | 等待远端 CI | 正常态视觉未随本轮提交反馈改动变化；最终结论以当前 Head 的 Linux visual regression 为准 |
-| `flutter analyze --fatal-infos` | 通过 | 组件包与 example 均为 0 issues |
-| `flutter build apk --debug` | 通过 | Android Debug APK 构建成功 |
-| Flutter 3.47.0：Form 组件 / Demo 非 Golden 测试 | 通过 | 组件生产源码未变；Demo 8 tests 通过 |
-| Flutter 3.47.0：`flutter analyze --fatal-infos` | 通过 | 组件包与 example 均为 0 issues |
+| Flutter 3.32.0 / 3.47.0：`flutter test --no-pub test/components/form/t_form_test.dart` | 通过 | 两版本均 56 tests；覆盖受控时序、字段回调内校验、清校验焦点保留、拒绝值回退、Controller、Theme、必填标记及 RTL 标签物理位置 |
+| Flutter 3.32.0 / 3.47.0：`flutter test --no-pub --exclude-tags golden test/form_demo_test.dart` | 通过 | 两版本均 11 tests；覆盖真实代码面板、默认值、提交、重置、布局、字段禁用/恢复语义、Radio、按钮、Picker 弹层高度、确认值恢复、取消草稿及重置选中值 |
+| `dart run tool/generate_example_code.dart --check` | 通过 | `FormBasicDemo` 的完整类示例与源码一致，旧的不完整 `_buildForm` 片段已移除 |
+| `flutter test --no-pub test/tool/run_component_regression_test.dart` | 通过 | Form 组件测试、生产源码覆盖率、Demo 双版本功能回归与视觉回归均已登记 |
+| Flutter 3.32.0 Linux：`flutter test test/form_demo_test.dart` | 通过 | 默认、竖向、禁用三种状态的 light/dark 共 6 张完整页面 Golden；生成后无更新参数严格复跑通过，竖向基线为 375 × 1384 并覆盖上传区和按钮 |
+| Flutter 3.32.0 / 3.47.0：`flutter analyze --no-pub --fatal-infos` | 通过 | 组件包与 example 在两版本均为 0 issues |
+| `flutter test --coverage ...` + `dart run tool/check_component_coverage.dart form` | 通过 | Form 生产源码 `386/393 = 98.22%` |
 
 ## 人工验收
 
@@ -54,3 +53,4 @@
 
 - 按维护要求不在仓库或本地保留新的 Figma/真机对比附件；正确节点、当前实现与逐项修改原因已直接发布到 [PR 对比评论](https://github.com/Tencent/tdesign-flutter/pull/1105#issuecomment-5661594048)。
 - Figma 与 Android 的系统字体栅格、设备像素比和页面壳不同，直接截图用于逐项布局核对，不将跨平台截图表述为逐像素零差异。
+- 本轮新增的回调时序、清校验焦点、Demo 禁用语义、Picker 当前值和真实代码面板均为非视觉契约，未改变已有 6 张 Golden 的渲染输出；远端 CI 仍需在 PR 新 Head 上确认完整视觉任务。
