@@ -2,6 +2,8 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
+import 'picker_defaults.dart';
+
 /// TPicker 组件级 ThemeExtension
 ///
 /// 被 TPicker 和 TDateTimePicker 共用。
@@ -39,7 +41,11 @@ class TPickerThemeData extends ThemeExtension<TPickerThemeData> {
     return TPickerThemeData(
       height: height == null && other.height == null
           ? null
-          : lerpDouble(height ?? 200, other.height ?? 200, t),
+          : lerpDouble(
+              height ?? defaultPickerHeight,
+              other.height ?? defaultPickerHeight,
+              t,
+            ),
       itemCount: t < 0.5 ? itemCount : other.itemCount,
     );
   }

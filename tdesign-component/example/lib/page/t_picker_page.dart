@@ -227,43 +227,38 @@ class _TPickerPageState extends State<TPickerPage> {
       String? title,
     }) {
       var draft = List<Object?>.of(value);
-      TPopup.show(
+      TPickerPopup.show(
         context,
-        options: TPopupOptions.bottom(
-          height:
-              (Theme.of(context).extension<TPickerThemeData>()?.height ?? 200) +
-              TPopupHeader.headerHeight,
-          headerBuilder: (_, close) => TPopupHeader(
-            cancelButton: TToolbarPressable(
-              onTap: close,
-              child: TText(
-                '取消',
-                font: context.tTheme.fontBodyLarge,
-                textColor: context.tTheme.textColorSecondary,
-              ),
-            ),
-            title: title == null
-                ? null
-                : TText(title, font: context.tTheme.fontTitleLarge),
-            confirmButton: TToolbarPressable(
-              onTap: () {
-                onConfirm(List<Object?>.of(draft));
-                close();
-              },
-              child: TText(
-                '确定',
-                font: context.tTheme.fontBodyLarge,
-                textColor: context.tTheme.brandNormalColor,
-              ),
+        headerBuilder: (_, close) => TPopupHeader(
+          cancelButton: TToolbarPressable(
+            onTap: close,
+            child: TText(
+              '取消',
+              font: context.tTheme.fontBodyLarge,
+              textColor: context.tTheme.textColorSecondary,
             ),
           ),
-          child: StatefulBuilder(
-            builder: (_, setPopupState) => TPicker(
-              key: pickerKey,
-              items: items,
-              value: draft,
-              onChanged: (value) => setPopupState(() => draft = value.values),
+          title: title == null
+              ? null
+              : TText(title, font: context.tTheme.fontTitleLarge),
+          confirmButton: TToolbarPressable(
+            onTap: () {
+              onConfirm(List<Object?>.of(draft));
+              close();
+            },
+            child: TText(
+              '确定',
+              font: context.tTheme.fontBodyLarge,
+              textColor: context.tTheme.brandNormalColor,
             ),
+          ),
+        ),
+        child: StatefulBuilder(
+          builder: (_, setPopupState) => TPicker(
+            key: pickerKey,
+            items: items,
+            value: draft,
+            onChanged: (value) => setPopupState(() => draft = value.values),
           ),
         ),
       );

@@ -28,6 +28,71 @@ void main() {
     ],
   ]);
 
+  Future<TPopupHandle> openPickerPopup(
+    WidgetTester tester, {
+    TPickerThemeData? pickerTheme,
+  }) async {
+    TPopupHandle? handle;
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(
+          extensions: [
+            TThemeData.defaultData(),
+            if (pickerTheme != null) pickerTheme,
+          ],
+        ),
+        home: Builder(
+          builder: (context) => TextButton(
+            onPressed: () {
+              handle = TPickerPopup.show(
+                context,
+                headerBuilder: (_, close) => TPopupHeader(
+                  cancelButton: TextButton(
+                    onPressed: close,
+                    child: const Text('取消'),
+                  ),
+                  title: const Text('选择'),
+                ),
+                child: TPicker(
+                  items: columns,
+                  value: const ['a', 1],
+                  onChanged: (_) {},
+                ),
+              );
+            },
+            child: const Text('打开'),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('打开'));
+    await tester.pumpAndSettle();
+    return handle!;
+  }
+
+  testWidgets('TPickerPopup 默认为标准头部和完整滚轮预留 258px', (tester) async {
+    final handle = await openPickerPopup(tester);
+
+    expect(handle.options.height, 258);
+    expect(tester.getSize(find.byType(TPopupHeader)).height, 58);
+    expect(tester.getSize(find.byType(TPicker)).height, 200);
+    expect(
+      tester.getBottomLeft(find.byType(TPicker)).dy -
+          tester.getTopLeft(find.byType(TPopupHeader)).dy,
+      258,
+    );
+  });
+
+  testWidgets('TPickerPopup 总高跟随子树 Picker Theme', (tester) async {
+    final handle = await openPickerPopup(
+      tester,
+      pickerTheme: const TPickerThemeData(height: 240),
+    );
+
+    expect(handle.options.height, 298);
+    expect(tester.getSize(find.byType(TPicker)).height, 240);
+  });
+
   testWidgets('滚轮统一字号并继承 TextTheme，禁用项可自定义内容', (tester) async {
     final control = FixedExtentScrollController(initialItem: 2);
     addTearDown(control.dispose);

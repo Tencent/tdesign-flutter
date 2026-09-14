@@ -142,6 +142,20 @@ void main() {
       TButtonColorScheme.primary,
     );
   });
+
+  testWidgets('日期和籍贯弹窗为 Picker 保留完整高度', (tester) async {
+    await pumpFullDemoPage(tester, spec, ThemeMode.light);
+
+    await tester.tap(find.text('2022-08-10'));
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(TDateTimePicker)).height, 200);
+
+    await tester.tap(find.text('取消'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('广东省 深圳市'));
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(TPicker)).height, 200);
+  });
 }
 
 const _resume = '本人性格开朗、稳重、细心、待人热情、真诚，工作认真负责，积极主动，勇于创新，具有很强的团队协作精神。';

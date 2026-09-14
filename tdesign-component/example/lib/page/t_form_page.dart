@@ -460,30 +460,28 @@ class _TFormPageState extends State<TFormPage> {
 
   void _showDatePicker(BuildContext context, ValueChanged<String>? onChanged) {
     var draft = _initialDate;
-    TPopup.show(
+    TPickerPopup.show(
       context,
-      options: TPopupOptions.bottom(
-        headerBuilder: (_, close) => TPopupHeader(
-          cancelButton: TextButton(onPressed: close, child: const TText('取消')),
-          title: const TText('选择日期'),
-          confirmButton: TextButton(
-            onPressed: () {
-              if (mounted) {
-                onChanged?.call(
-                  '${draft.year}-${draft.month.toString().padLeft(2, '0')}-${draft.day.toString().padLeft(2, '0')}',
-                );
-              }
-              close();
-            },
-            child: const TText('确定'),
-          ),
+      headerBuilder: (_, close) => TPopupHeader(
+        cancelButton: TextButton(onPressed: close, child: const TText('取消')),
+        title: const TText('选择日期'),
+        confirmButton: TextButton(
+          onPressed: () {
+            if (mounted) {
+              onChanged?.call(
+                '${draft.year}-${draft.month.toString().padLeft(2, '0')}-${draft.day.toString().padLeft(2, '0')}',
+              );
+            }
+            close();
+          },
+          child: const TText('确定'),
         ),
-        child: StatefulBuilder(
-          builder: (context, setPopupState) => TDateTimePicker(
-            mode: DateTimePickerMode(dateMode: DateMode.date),
-            value: draft,
-            onChanged: (value) => setPopupState(() => draft = value),
-          ),
+      ),
+      child: StatefulBuilder(
+        builder: (context, setPopupState) => TDateTimePicker(
+          mode: DateTimePickerMode(dateMode: DateMode.date),
+          value: draft,
+          onChanged: (value) => setPopupState(() => draft = value),
         ),
       ),
     );
@@ -494,38 +492,36 @@ class _TFormPageState extends State<TFormPage> {
     ValueChanged<String>? onChanged,
   ) {
     var draft = <Object?>['guangdong', 'shenzhen'];
-    TPopup.show(
+    TPickerPopup.show(
       context,
-      options: TPopupOptions.bottom(
-        headerBuilder: (_, close) => TPopupHeader(
-          cancelButton: TextButton(onPressed: close, child: const TText('取消')),
-          title: const TText('选择地址'),
-          confirmButton: TextButton(
-            onPressed: () {
-              if (mounted) {
-                const labels = {
-                  'guangdong': '广东省',
-                  'beijing': '北京市',
-                  'shenzhen': '深圳市',
-                  'guangzhou': '广州市',
-                  'haidian': '海淀区',
-                  'chaoyang': '朝阳区',
-                };
-                onChanged?.call(
-                  draft.map((value) => labels[value] ?? '$value').join(' '),
-                );
-              }
-              close();
-            },
-            child: const TText('确定'),
-          ),
+      headerBuilder: (_, close) => TPopupHeader(
+        cancelButton: TextButton(onPressed: close, child: const TText('取消')),
+        title: const TText('选择地址'),
+        confirmButton: TextButton(
+          onPressed: () {
+            if (mounted) {
+              const labels = {
+                'guangdong': '广东省',
+                'beijing': '北京市',
+                'shenzhen': '深圳市',
+                'guangzhou': '广州市',
+                'haidian': '海淀区',
+                'chaoyang': '朝阳区',
+              };
+              onChanged?.call(
+                draft.map((value) => labels[value] ?? '$value').join(' '),
+              );
+            }
+            close();
+          },
+          child: const TText('确定'),
         ),
-        child: StatefulBuilder(
-          builder: (context, setPopupState) => TPicker(
-            items: _regionItems,
-            value: draft,
-            onChanged: (value) => setPopupState(() => draft = value.values),
-          ),
+      ),
+      child: StatefulBuilder(
+        builder: (context, setPopupState) => TPicker(
+          items: _regionItems,
+          value: draft,
+          onChanged: (value) => setPopupState(() => draft = value.values),
         ),
       ),
     );
