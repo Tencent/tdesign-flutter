@@ -49,7 +49,7 @@ SHA-256 为 `59c5bebba9bf720005fb977a94b9c150b0b8e8c2698c1dca3a66d9f0d7cd9722`�
 `PickerGoldenCJK-Regular.otf` 仅补充 Picker 整页 Golden 新增且既有子集未覆盖的
 字形，字符清单见 `picker_demo_glyphs.txt`。独立加载可避免扩充共享字体改变既有组件的
 像素基线，子集 SHA-256 为
-`83d2e4d3b8ae6282eeab5d8930466e082b29a3a88ac32f19da543ad1b547a107`。
+`54321709d3095fd55996e301d0958f3f6fd8c71928cc38da403f3fdc1b4b30d7`。
 
 `RadioGoldenCJK-Regular.otf` 使用同一上游与子集参数，字符清单见
 `radio_glyphs.txt`，仅用于 Radio 整页 Golden。子集 SHA-256 为
