@@ -1,0 +1,27 @@
+# 实施任务
+
+- [x] DONE 明确需求和验收边界
+- [x] DONE 完成 Form Demo 修复
+- [x] DONE 补充 Demo 测试
+- [x] DONE 生成示例代码并更新 Golden
+- [x] DONE 执行完整验证并记录结果
+- [x] DONE 创建 PR 并在 Issue #1027 跟进
+- [x] DONE 更正设计基准为 Figma `41936:17938`
+- [x] DONE 对齐正常态默认值、重置结果、提示文案和个人简介高度
+- [x] DONE 为新增中文字符补充确定性 Golden 字体并更新基线
+- [x] DONE 补充 iPhone 移动端截图集成测试入口
+- [x] DONE 接入既有 `TForm.onSubmit` 并补充成功反馈测试
+- [x] DONE 覆盖全部字段默认值恢复和校验状态清理
+- [x] DONE 在 PR 对话中直接发布正确 Figma 节点、当前实现与修改原因，不新增本地对比附件
+- [x] DONE 修正 `TForm.onChanged` 的值快照时序和外部受控值同步语义
+- [x] DONE 为 Controller 多宿主误用增加 debug 断言
+- [x] DONE 修正 Theme 默认值插值、必填标记样式合并和 RTL 标签对齐
+- [x] DONE 将 Demo 提取为完整可生成、可复制的 `FormBasicDemo`
+- [x] DONE 增加竖向与禁用态 light/dark 完整页面 Golden
+- [x] DONE 完成 Flutter 3.32.0/latest 测试、严格 analyze、覆盖率及 Linux Golden 复验
+- [x] DONE 使字段回调内校验和读取使用本次值
+- [x] DONE 清除校验时保留字段子树和输入焦点
+- [x] DONE 统一 Demo 的 `TFormField` 禁用状态源
+- [x] DONE 使日期和籍贯 Picker 重新打开恢复已确认值
+- [x] DONE 真实打开 Form Demo 代码面板并校验生成内容
+- [x] DONE 将 Form Demo 交互测试登记到双版本 Example 功能回归清单

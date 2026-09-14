@@ -4,6 +4,13 @@
 Golden 因宿主机缺少 CJK fallback 而把中文渲染成缺字符号。它不会打包进 Example
 或组件产物。
 
+`FormGoldenCJK-Regular.otf` 仅补充 Form 默认值中新增且既有子集未覆盖的
+字形，字符清单见 `form_demo_glyphs.txt`。它使用 Android 16 系统的开源
+`NotoSansCJK-Regular.ttc` SC 字体面（index 2）生成，并作为 Form Demo
+最后的独立 fallback，不改变其他页面既有基线。子集工具为
+HarfBuzz 11.4.5，子集 SHA-256 为
+`31036643ddabc5f4621d22fe743b454cef77c785a0d386f4f9a97bf125ad55ea`。
+
 `TDesignFeedbackGoldenCJK-Regular.otf` 是 ActionSheet、Dialog、DropdownMenu、
 NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 `component_demo_glyphs.txt` 与 `feedback_demo_glyphs.txt`。独立加载可避免扩充共享

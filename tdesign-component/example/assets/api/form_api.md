@@ -11,7 +11,7 @@ TDesign 表单容器。
 | child | Widget | - | 表单内容。 |
 | controller | TFormController? | - | 表单控制器。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onChanged | VoidCallback? | - | 任意字段值变化时触发。 仅清除校验状态或外部错误时不会触发。 |
+| onChanged | VoidCallback? | - | 用户通过 `TFormField` 提交字段值变化时触发。 回调执行时 `TFormController.values` 已包含本次变化。仅同步外部受控值、 清除校验状态或外部错误时不会触发。 |
 | onSubmit | ValueChanged<Map<String, Object?>>? | - | 校验通过后触发，参数为各 `TFormField` 注册的字段值。 |
 | showErrorMessage | bool | true | 是否向字段 builder 暴露错误文案。 |
 
