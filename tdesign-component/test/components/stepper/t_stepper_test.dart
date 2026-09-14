@@ -535,6 +535,77 @@ void main() {
       );
     });
 
+    testWidgets('component theme keeps an unscoped custom font family',
+        (tester) async {
+      await tester.pumpWidget(wrap(
+        TStepper(value: 1, onChanged: (_) {}),
+        stepperTheme: const TStepperThemeData(
+          textStyle: TextStyle(fontFamily: 'TestFont'),
+        ),
+      ));
+
+      expect(editableText(tester).style.fontFamily, 'TestFont');
+    });
+
+    testWidgets('component theme keeps a package custom font family',
+        (tester) async {
+      await tester.pumpWidget(wrap(
+        TStepper(value: 1, onChanged: (_) {}),
+        stepperTheme: const TStepperThemeData(
+          textStyle: TextStyle(
+            fontFamily: 'TestFont',
+            package: 'test_package',
+          ),
+        ),
+      ));
+
+      expect(
+        editableText(tester).style.fontFamily,
+        'packages/test_package/TestFont',
+      );
+    });
+
+    testWidgets('component theme font overrides an inherited package font',
+        (tester) async {
+      await tester.pumpWidget(wrap(
+        DefaultTextStyle(
+          style: const TextStyle(
+            fontFamily: 'InheritedFont',
+            package: 'inherited_package',
+          ),
+          child: TStepper(value: 1, onChanged: (_) {}),
+        ),
+        stepperTheme: const TStepperThemeData(
+          textStyle: TextStyle(fontFamily: 'TestFont', fontSize: 18),
+        ),
+      ));
+
+      expect(editableText(tester).style.fontFamily, 'TestFont');
+      expect(editableText(tester).style.fontSize, 18);
+    });
+
+    testWidgets('theme-only font size preserves an inherited package font',
+        (tester) async {
+      await tester.pumpWidget(wrap(
+        DefaultTextStyle(
+          style: const TextStyle(
+            fontFamily: 'InheritedFont',
+            package: 'inherited_package',
+          ),
+          child: TStepper(value: 1, onChanged: (_) {}),
+        ),
+        stepperTheme: const TStepperThemeData(
+          textStyle: TextStyle(fontSize: 18),
+        ),
+      ));
+
+      expect(
+        editableText(tester).style.fontFamily,
+        'packages/inherited_package/InheritedFont',
+      );
+      expect(editableText(tester).style.fontSize, 18);
+    });
+
     testWidgets('bare TThemeData supplies token background fallback',
         (tester) async {
       final token = TThemeData.defaultData().copyWithTThemeData(

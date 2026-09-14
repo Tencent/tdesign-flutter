@@ -517,6 +517,39 @@ class _StepperStyle {
     return true;
   }
 
+  /// Flutter 的 [TextStyle.merge] 会在覆盖样式未设置 `package` 时保留底层
+  /// 样式的私有 package。把公开字体族（已包含 package 前缀）重新构造成不
+  /// 携带私有 package 的样式，确保更高优先级的字体族不会被错误归入旧包。
+  static TextStyle _flattenFontPackage(TextStyle style) {
+    return TextStyle(
+      inherit: style.inherit,
+      color: style.color,
+      backgroundColor: style.backgroundColor,
+      fontSize: style.fontSize,
+      fontWeight: style.fontWeight,
+      fontStyle: style.fontStyle,
+      letterSpacing: style.letterSpacing,
+      wordSpacing: style.wordSpacing,
+      textBaseline: style.textBaseline,
+      height: style.height,
+      leadingDistribution: style.leadingDistribution,
+      locale: style.locale,
+      foreground: style.foreground,
+      background: style.background,
+      shadows: style.shadows,
+      fontFeatures: style.fontFeatures,
+      fontVariations: style.fontVariations,
+      decoration: style.decoration,
+      decorationColor: style.decorationColor,
+      decorationStyle: style.decorationStyle,
+      decorationThickness: style.decorationThickness,
+      debugLabel: style.debugLabel,
+      fontFamily: style.fontFamily,
+      fontFamilyFallback: style.fontFamilyFallback,
+      overflow: style.overflow,
+    );
+  }
+
   static _StepperStyle _resolveTheme(
     BuildContext context,
     TStepper widget,
@@ -536,17 +569,27 @@ class _StepperStyle {
         widget.variant ?? componentTheme?.variant ?? TStepperVariant.normal;
     final geometry = stepperGeometry(size);
     final controlSize = componentTheme?.controlSize ?? geometry.controlSize;
-    final defaultTextStyle = context.tExplicitDefaultTextStyle;
-    final materialTextStyle =
-        materialTheme.tExplicitTextTheme?.bodySmall ?? const TextStyle();
+    final explicitDefaultTextStyle = context.tExplicitDefaultTextStyle;
+    final defaultTextStyle = explicitDefaultTextStyle == null
+        ? null
+        : _flattenFontPackage(explicitDefaultTextStyle);
+    final materialTextStyle = _flattenFontPackage(
+      materialTheme.tExplicitTextTheme?.bodySmall ?? const TextStyle(),
+    );
+    final rawComponentTextStyle = componentTheme?.textStyle;
+    final componentTextStyle = rawComponentTextStyle == null
+        ? null
+        : _flattenFontPackage(rawComponentTextStyle);
     final numberFontFamily = token.numberFontFamily;
-    final usesNumberFont =
-        defaultTextStyle?.fontFamily == null &&
-        materialTextStyle.fontFamily == null;
+    final resolvedNumberFontFamily = numberFontFamily == null
+        ? null
+        : numberFontFamily.package == null
+        ? numberFontFamily.fontFamily
+        : 'packages/${numberFontFamily.package}/${numberFontFamily.fontFamily}';
     final inheritedFontFamily =
         defaultTextStyle?.fontFamily ??
         materialTextStyle.fontFamily ??
-        numberFontFamily?.fontFamily;
+        resolvedNumberFontFamily;
     final foregroundColor =
         componentTheme?.foregroundColor ??
         defaultTextStyle?.color ??
@@ -560,10 +603,9 @@ class _StepperStyle {
           fontSize: geometry.fontSize,
           color: foregroundColor,
           fontFamily: inheritedFontFamily,
-          package: usesNumberFont ? numberFontFamily?.package : null,
           letterSpacing: 0,
         )
-        .merge(componentTheme?.textStyle);
+        .merge(componentTextStyle);
     final resolvedFontSize = themedTextStyle.fontSize ?? geometry.fontSize;
     final explicitTextHeight = componentTheme?.textStyle?.height;
     final resolvedLineHeight = math.min(geometry.lineHeight, controlSize);
