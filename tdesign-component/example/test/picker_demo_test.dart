@@ -108,7 +108,70 @@ void main() {
     }, tags: 'demo');
   }
 
-  testWidgets('Picker popup preserves wheel height and centers selection', (
+  for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('all Picker popups share the design geometry in ${mode.name}', (
+      tester,
+    ) async {
+      await pumpDemoPageAtPhoneViewport(tester, pickerDemoPageTestSpec, mode);
+      const titles = {
+        'city': '选择地区',
+        'time': '选择时间',
+        'area': '选择地区',
+        'title': '选择地区',
+        'without-title': null,
+      };
+      for (final entry in titles.entries) {
+        final trigger = find.byKey(ValueKey('picker-${entry.key}-trigger'));
+        await tester.ensureVisible(trigger);
+        await tester.tap(trigger);
+        await tester.pumpAndSettle();
+        final wheel = find.byType(ListWheelScrollView).first;
+        expect(tester.getSize(wheel).height, 200, reason: entry.key);
+        expect(
+          tester.widget<ListWheelScrollView>(wheel).itemExtent,
+          40,
+          reason: entry.key,
+        );
+        final tokens = tester.element(wheel).tTheme;
+        final highlight = find.byWidgetPredicate(
+          (widget) =>
+              widget is Container &&
+              widget.decoration is BoxDecoration &&
+              (widget.decoration as BoxDecoration).color ==
+                  tokens.bgColorSecondaryContainer,
+        );
+        expect(tester.getSize(highlight), const Size(343, 40));
+        expect(tester.getCenter(highlight).dy, tester.getCenter(wheel).dy);
+        final header = find.byType(TPopupHeader);
+        expect(tester.getSize(header).height, TPopupHeader.headerHeight);
+        if (entry.value case final title?) {
+          final titleFinder = find.descendant(
+            of: header,
+            matching: find.text(title),
+          );
+          expect(titleFinder, findsOneWidget, reason: entry.key);
+          final richTitle = find.descendant(
+            of: titleFinder,
+            matching: find.byType(RichText),
+          );
+          expect(
+            tester.widget<RichText>(richTitle).text.style?.decoration,
+            TextDecoration.none,
+          );
+        } else {
+          expect(
+            find.descendant(of: header, matching: find.byType(TText)),
+            findsNWidgets(2),
+          );
+        }
+        await tester.tap(find.text('取消'));
+        await tester.pumpAndSettle();
+      }
+      await disposeDemoPage(tester);
+    }, tags: 'demo');
+  }
+
+  testWidgets('area popup matches the Figma candidates around the selection', (
     tester,
   ) async {
     await pumpDemoPageAtPhoneViewport(
@@ -116,33 +179,28 @@ void main() {
       pickerDemoPageTestSpec,
       ThemeMode.light,
     );
-    await tester.tap(find.byKey(const ValueKey('picker-city-trigger')));
+    await tester.tap(find.byKey(const ValueKey('picker-area-trigger')));
     await tester.pumpAndSettle();
-    final wheel = find.byType(ListWheelScrollView);
-    expect(tester.getSize(wheel).height, 200);
-    expect(tester.widget<ListWheelScrollView>(wheel).itemExtent, 40);
-    final tokens = tester.element(wheel).tTheme;
-    final highlight = find.byWidgetPredicate(
-      (widget) =>
-          widget is Container &&
-          widget.decoration is BoxDecoration &&
-          (widget.decoration as BoxDecoration).color ==
-              tokens.bgColorSecondaryContainer,
+    final picker = tester.widget<TPicker>(
+      find.byKey(const ValueKey('picker-area-panel')),
     );
-    expect(tester.getSize(highlight), const Size(343, 40));
-    expect(tester.getCenter(highlight).dy, tester.getCenter(wheel).dy);
-    final title = find.descendant(
-      of: find.byType(TPopupHeader),
-      matching: find.text('选择地区'),
-    );
-    final richTitle = find.descendant(
-      of: title,
-      matching: find.byType(RichText),
-    );
-    expect(
-      tester.widget<RichText>(richTitle).text.style?.decoration,
-      TextDecoration.none,
-    );
+    final roots = (picker.items as TPickerLinked).options;
+    expect(roots.map((option) => option.label), ['天津', '北京', '广东', '湖南', '湖北']);
+    final cities = roots[2].children;
+    expect(cities.map((option) => option.label), [
+      '广州',
+      '韶关',
+      '深圳',
+      '珠海',
+      '汕头',
+    ]);
+    expect(cities[2].children.map((option) => option.label), [
+      '宝安区',
+      '南山区',
+      '福田区',
+      '罗湖区',
+      '光明区',
+    ]);
     await disposeDemoPage(tester);
   }, tags: 'demo');
 

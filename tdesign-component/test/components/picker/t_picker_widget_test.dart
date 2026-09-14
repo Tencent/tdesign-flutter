@@ -81,9 +81,45 @@ void main() {
     expect(labels, hasLength(5));
     expect(labels.map((label) => label.style!.fontSize), everyElement(19));
     expect(labels[2].style!.fontWeight, FontWeight.w800);
+    expect(
+      labels.map((label) => label.style!.leadingDistribution),
+      everyElement(TextLeadingDistribution.even),
+    );
     expect(labels[1].style!.fontWeight, FontWeight.w800);
     expect(labels[1].style!.color, Colors.pink);
     expect(find.text('custom-disabled'), findsOneWidget);
+  });
+
+  testWidgets('默认选项使用 16/24 行盒并在 40px 选项内居中', (tester) async {
+    final control = FixedExtentScrollController();
+    addTearDown(control.dispose);
+    await tester.pumpWidget(
+      wrap(
+        SizedBox(
+          key: const ValueKey('picker-item-box'),
+          width: 100,
+          height: 40,
+          child: PickerItemWidget(
+            fixedExtentScrollController: control,
+            colIndex: 0,
+            index: 0,
+            option: const TPickerOption(label: '选项', value: 0),
+            itemHeight: 40,
+          ),
+        ),
+      ),
+    );
+    final label = find.byType(TText);
+    final style = tester.widget<TText>(label).style!;
+    expect(style.fontSize, 16);
+    expect(style.height, 1.5);
+    expect(style.fontWeight, FontWeight.w600);
+    expect(style.leadingDistribution, TextLeadingDistribution.even);
+    expect(tester.getSize(label).height, 24);
+    expect(
+      tester.getCenter(label).dy,
+      tester.getCenter(find.byKey(const ValueKey('picker-item-box'))).dy,
+    );
   });
 
   group('TPicker controlled behavior', () {
