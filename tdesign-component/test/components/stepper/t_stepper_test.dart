@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -24,6 +25,9 @@ void main() {
 
   EditableText editableText(WidgetTester tester) =>
       tester.widget<EditableText>(find.byType(EditableText));
+
+  RenderEditable renderEditable(WidgetTester tester) =>
+      tester.allRenderObjects.whereType<RenderEditable>().single;
 
   Size stepperSize(WidgetTester tester) {
     final row = find.descendant(
@@ -430,6 +434,43 @@ void main() {
       ));
       await tester.pumpAndSettle();
       expect(editableText(tester).style.height, 1.25);
+
+      await tester.pumpWidget(wrap(
+        TStepper(value: 1, onChanged: (_) {}),
+        stepperTheme: const TStepperThemeData(
+          textStyle: TextStyle(fontSize: 20),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      var input = editableText(tester);
+      expect(input.style.fontSize, 20);
+      expect(input.style.fontSize! * input.style.height!, 20);
+      expect(renderEditable(tester).preferredLineHeight, 20);
+
+      await tester.pumpWidget(wrap(
+        TStepper(value: 1, onChanged: (_) {}),
+        stepperTheme: const TStepperThemeData(controlSize: 16),
+      ));
+      await tester.pumpAndSettle();
+      input = editableText(tester);
+      expect(input.style.fontSize! * input.style.height!, 16);
+      expect(renderEditable(tester).preferredLineHeight, 16);
+      expect(tester.getSize(find.byType(EditableText)).height, 16);
+
+      await tester.pumpWidget(wrap(
+        TStepper(value: 1, onChanged: (_) {}),
+        stepperTheme: const TStepperThemeData(
+          controlSize: 16,
+          textStyle: TextStyle(fontSize: 20),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      input = editableText(tester);
+      expect(input.style.fontSize, 20);
+      expect(input.style.fontSize! * input.style.height!, 16);
+      expect(renderEditable(tester).preferredLineHeight, 16);
+      expect(tester.getSize(find.byType(EditableText)).height, 16);
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('DefaultTextStyle and IconTheme control unset foregrounds',

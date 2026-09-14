@@ -517,6 +517,7 @@ class _StepperStyle {
     final variant =
         widget.variant ?? componentTheme?.variant ?? TStepperVariant.normal;
     final geometry = stepperGeometry(size);
+    final controlSize = componentTheme?.controlSize ?? geometry.controlSize;
     final defaultTextStyle = context.tExplicitDefaultTextStyle;
     final materialTextStyle =
         materialTheme.tExplicitTextTheme?.bodySmall ?? const TextStyle();
@@ -535,7 +536,7 @@ class _StepperStyle {
         token.textColorPrimary;
     final disabledForegroundColor =
         componentTheme?.disabledForegroundColor ?? token.textDisabledColor;
-    final textStyle = materialTextStyle
+    final themedTextStyle = materialTextStyle
         .merge(defaultTextStyle)
         .copyWith(
           fontSize: geometry.fontSize,
@@ -543,13 +544,24 @@ class _StepperStyle {
           fontFamily: inheritedFontFamily,
           package: usesNumberFont ? numberFontFamily?.package : null,
           letterSpacing: 0,
-          height: geometry.lineHeight / geometry.fontSize,
-          // Figma 的三档文字分别使用 10/16、12/20、16/24 行盒。
-          // 将额外行高均分到字形上下，避免 Android 按字体 ascent/descent
-          // 比例分配 leading 后产生视觉上移。
-          leadingDistribution: TextLeadingDistribution.even,
         )
         .merge(componentTheme?.textStyle);
+    final resolvedFontSize = themedTextStyle.fontSize ?? geometry.fontSize;
+    final resolvedLineHeight = math.min(geometry.lineHeight, controlSize);
+    final textStyle = themedTextStyle.copyWith(
+      fontSize: resolvedFontSize,
+      // Figma 的三档文字分别使用 10/16、12/20、16/24 行盒。Theme 只覆盖
+      // 字号时，按最终字号重新计算倍数；控件高度变小时则收敛到可用高度，
+      // 避免保留基于默认字号计算的旧倍数而裁切文字和光标。
+      height:
+          componentTheme?.textStyle?.height ??
+          resolvedLineHeight / resolvedFontSize,
+      // 将额外行高均分到字形上下，避免 Android 按字体 ascent/descent
+      // 比例分配 leading 后产生视觉上移。
+      leadingDistribution:
+          componentTheme?.textStyle?.leadingDistribution ??
+          TextLeadingDistribution.even,
+    );
     final inputTheme = materialTheme.inputDecorationTheme;
     final inputFillColor = inputTheme.fillColor;
     final borderColor =
@@ -559,7 +571,7 @@ class _StepperStyle {
 
     return _StepperStyle(
       variant: variant,
-      controlSize: componentTheme?.controlSize ?? geometry.controlSize,
+      controlSize: controlSize,
       inputWidth: componentTheme?.inputWidth ?? geometry.inputWidth,
       iconSize: componentTheme?.iconSize ?? geometry.iconSize,
       spacing: componentTheme?.spacing ?? stepperSpacing,
