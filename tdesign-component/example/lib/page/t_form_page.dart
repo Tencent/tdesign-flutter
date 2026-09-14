@@ -199,6 +199,7 @@ class _TFormPageState extends State<TFormPage> {
       child: TForm(
         controller: _formController,
         showErrorMessage: true,
+        onSubmit: (_) => TToast.showSuccess('提交成功', context: context),
         child: Column(
           children: [
             TFormField<String>(

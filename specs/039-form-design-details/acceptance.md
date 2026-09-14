@@ -3,7 +3,7 @@
 ## 验证环境
 
 - 分支：`rss1102/fix/form-design-details`
-- 基线：`origin/develop@7941a170d`（包含 #1119 与 #1120）
+- 基线：`origin/develop@d3ae100b0`（包含 #1119、#1120 与 #1121）
 - Flutter/Dart：Flutter 3.32.0（FVM）、Flutter 3.47.0 / Dart 3.13.0
 
 ## 自动化验证
@@ -11,19 +11,19 @@
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
 | `flutter test --no-pub test/components/form/t_form_test.dart` | 通过 | 49 tests |
-| `flutter test --no-pub --exclude-tags golden test/form_demo_test.dart` | 通过 | 6 tests；覆盖默认值、重置、inline Radio、交互、对齐、间距和按钮样式 |
+| `flutter test --no-pub --exclude-tags golden test/form_demo_test.dart` | 通过 | 8 tests；覆盖默认值、提交反馈、完整重置、inline Radio、交互、对齐、间距、按钮样式和 Picker 弹层高度 |
 | `dart run tool/generate_example_code.dart --check` | 通过 | 示例代码与源码一致 |
-| Linux 3.32.0：`flutter test --no-pub test/form_demo_test.dart` | 通过 | 8 tests；新增专用 CJK 子集字体后更新基线，并以非更新模式复跑通过 |
+| Linux 3.32.0：`flutter test --no-pub test/form_demo_test.dart` | 等待远端 CI | 正常态视觉未随本轮提交反馈改动变化；最终结论以当前 Head 的 Linux visual regression 为准 |
 | `flutter analyze --fatal-infos` | 通过 | 组件包与 example 均为 0 issues |
 | `flutter build apk --debug` | 通过 | Android Debug APK 构建成功 |
-| Flutter 3.47.0：Form 组件 / Demo 非 Golden 测试 | 通过 | 49 + 6 tests |
+| Flutter 3.47.0：Form 组件 / Demo 非 Golden 测试 | 通过 | 组件生产源码未变；Demo 8 tests 通过 |
 | Flutter 3.47.0：`flutter analyze --fatal-infos` | 通过 | 组件包与 example 均为 0 issues |
 
 ## 人工验收
 
 - [x] Figma 桌面端确认正确设计节点为 `41936:17938`，画板尺寸 375 × 1254、背景 `#F6F6F6`
 - [x] iPhone 16 模拟器运行移动端集成测试并采集水平、竖向和禁用态截图
-- [ ] Android 16 真机已连接且 APK 构建成功，但设备端取消了安装，未取得最终运行截图
+- [x] Android 16 真机（1220 × 2656）安装并运行最终源码，水平、竖向、禁用态和提交成功集成流程通过
 
 ### 原 Form 修复的 Android 真机修改前后对比
 
@@ -52,5 +52,5 @@
 
 ## 未覆盖项与后续工作
 
-- 尚未获得 Figma 正确节点的本地 1x 导出图，因此当前只记录设计属性与设备实装，不把 Golden 或屏幕目测表述为“像素差分完成”。
-- Android 16 真机的安装被设备端取消；重新允许安装后再补同页运行截图，当前记录不将模拟器或 APK 构建写成真机运行证据。
+- 按维护要求不在仓库或本地保留新的 Figma/真机对比附件；正确节点与最终真机截图直接发布到 PR 对话中。
+- Figma 与 Android 的系统字体栅格、设备像素比和页面壳不同，直接截图用于逐项布局核对，不将跨平台截图表述为逐像素零差异。

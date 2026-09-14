@@ -33,6 +33,11 @@ void main() {
     await tester.dragUntilVisible(submit, page, const Offset(0, -400));
     await tester.pumpAndSettle();
     await binding.takeScreenshot('form-horizontal-bottom');
+    await tester.tap(submit);
+    await tester.pump();
+    expect(find.text('提交成功'), findsOneWidget);
+    await binding.takeScreenshot('form-submit-success');
+    await tester.pump(const Duration(seconds: 3));
 
     final vertical = find.byKey(const ValueKey('form-layout-vertical'));
     await tester.dragUntilVisible(vertical, page, const Offset(0, 400));
