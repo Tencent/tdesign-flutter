@@ -29,7 +29,7 @@ void main() {
       await tester.pumpAndSettle();
       final markdown = tester.widget<Markdown>(find.byType(Markdown));
       expect(markdown.data, contains('return TCell('));
-      expect(markdown.data, contains('TPopup.show'));
+      expect(markdown.data, contains('TPickerPopup.show'));
       expect(markdown.data, contains('StatefulBuilder'));
       expect(markdown.data, contains('onConfirm(List<Object?>.of(draft))'));
       Navigator.of(tester.element(find.byType(Markdown))).pop();
