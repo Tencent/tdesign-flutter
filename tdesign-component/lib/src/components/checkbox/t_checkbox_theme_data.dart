@@ -13,7 +13,7 @@ class TCheckboxThemeData extends ThemeExtension<TCheckboxThemeData> {
   /// 选择颜色
   final Color? selectColor;
 
-  /// 禁用颜色
+  /// 禁用态指示器的前景色；未选时用于描边色。
   final Color? disableColor;
 
   /// 标题文字颜色
@@ -41,7 +41,7 @@ class TCheckboxThemeData extends ThemeExtension<TCheckboxThemeData> {
     /// 选中态颜色。
     this.selectColor,
 
-    /// 禁用态颜色。
+    /// 禁用态指示器的前景色；未选时用于描边色。
     this.disableColor,
 
     /// 主标题颜色。

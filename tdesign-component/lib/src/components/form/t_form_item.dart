@@ -132,9 +132,11 @@ class TFormItem extends StatelessWidget {
       TFormItemVerticalAlignment.center => CrossAxisAlignment.center,
     };
     final labelAlignment = switch (effectiveLabelAlign) {
-      (TextAlign.start || TextAlign.left) => AlignmentDirectional.topStart,
-      (TextAlign.center) => Alignment.topCenter,
-      _ => AlignmentDirectional.topEnd,
+      TextAlign.start || TextAlign.justify => AlignmentDirectional.topStart,
+      TextAlign.left => Alignment.topLeft,
+      TextAlign.center => Alignment.topCenter,
+      TextAlign.right => Alignment.topRight,
+      TextAlign.end => AlignmentDirectional.topEnd,
     };
     final contentAreaAlignment = switch (effectiveContentAlignment) {
       TFormItemContentAlignment.start => AlignmentDirectional.centerStart,
@@ -145,7 +147,9 @@ class TFormItem extends StatelessWidget {
       TFormItemContentAlignment.end => TextAlign.end,
     };
     final labelText = '${label ?? ''}${theme?.showColon == true ? ':' : ''}';
-    final labelFont = token.fontBodyLarge;
+    final labelFont = layout == TFormLayout.vertical
+        ? token.fontBodyMedium
+        : token.fontBodyLarge;
     final labelStyle = TextStyle(
       color: token.textColorPrimary,
       fontSize: labelFont?.size,
@@ -171,9 +175,9 @@ class TFormItem extends StatelessWidget {
     final requiredMark = effectiveRequired
         ? Text(
             '*',
-            style:
-                theme?.requiredMarkStyle ??
-                TextStyle(color: context.tTheme.errorNormalColor),
+            style: TextStyle(
+              color: context.tTheme.errorNormalColor,
+            ).merge(theme?.requiredMarkStyle),
           )
         : null;
     final markedLabel = labelWidget == null

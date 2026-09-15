@@ -1,6 +1,7 @@
-TTimeCounter _buildCustomUnitSimple(BuildContext context) {
+Widget _buildCustomUnitSimple(BuildContext context) {
   return const TTimeCounter(
-    time: 60 * 60 * 1000,
+    time: 96 * 60 * 1000,
+    variant: TTimeCounterVariant.highlight,
     splitWithUnit: true,
   );
 }

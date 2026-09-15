@@ -42,6 +42,18 @@ enum TRadioIconType {
   fill,
 }
 
+/// 单选框的完整视觉结构。
+enum TRadioVariant {
+  /// 行内结构，不绘制通栏背景、外围内边距或标准块高。
+  inline,
+
+  /// 通栏结构，使用标准块高、容器背景和外围内边距。
+  block,
+
+  /// 卡片结构。
+  card,
+}
+
 @immutable
 /// 单选框组的数据项。
 class TRadioOption<T> {
@@ -72,28 +84,23 @@ class TRadioOption<T> {
   final bool disabled;
 }
 
-/// 自定义单选框组数据项构建器。
-typedef TRadioOptionBuilder<T> =
-    Widget Function(
-      BuildContext context,
-      TRadioOption<T> option,
-      bool selected,
-      bool disabled,
-    );
-
-/// 遵循 Material value/groupValue 语义的严格受控单选框。
+/// 由最近的 [TRadioGroup] 控制选中状态的单选框。
+///
+/// 必须作为同类型 [TRadioGroup] 的后代使用：
+///
+/// ```dart
+/// TRadioGroup<String>(
+///   value: value,
+///   onChanged: onChanged,
+///   child: const TRadio<String>(value: 'a', title: '选项 A'),
+/// )
+/// ```
 class TRadio<T> extends StatelessWidget {
   const TRadio({
     super.key,
 
     /// 当前选项值。
     required this.value,
-
-    /// 组内受控选中值。
-    required this.groupValue,
-
-    /// 选中值变更回调；为 null 时禁用。
-    this.onChanged,
 
     /// 主标题文案。
     this.title,
@@ -107,11 +114,11 @@ class TRadio<T> extends StatelessWidget {
     /// 内置指示器样式；[customIconBuilder] 非空时以自定义指示器为准。
     this.iconType = TRadioIconType.fill,
 
-    /// 是否使用卡片模式。
-    this.cardMode = false,
+    /// 完整视觉结构，默认使用通栏结构。
+    this.variant = TRadioVariant.block,
 
-    /// 是否显示底部分割线，默认显示；卡片模式不显示。
-    this.showDivider = true,
+    /// 是否禁用当前选项。
+    this.disabled = false,
 
     /// 控件与文案排列方向。
     this.contentDirection = TContentDirection.right,
@@ -129,12 +136,6 @@ class TRadio<T> extends StatelessWidget {
   /// 当前选项值。
   final T value;
 
-  /// 组内受控选中值。
-  final T? groupValue;
-
-  /// 选中值变更回调；为 null 时禁用。
-  final ValueChanged<T>? onChanged;
-
   /// 主标题文案。
   final String? title;
 
@@ -147,11 +148,11 @@ class TRadio<T> extends StatelessWidget {
   /// 内置指示器样式。
   final TRadioIconType iconType;
 
-  /// 是否使用卡片模式。
-  final bool cardMode;
+  /// 完整视觉结构。
+  final TRadioVariant variant;
 
-  /// 是否显示底部分割线，默认显示；卡片模式不显示。
-  final bool showDivider;
+  /// 是否禁用当前选项。
+  final bool disabled;
 
   /// 控件与文案排列方向。
   final TContentDirection contentDirection;
@@ -165,22 +166,43 @@ class TRadio<T> extends StatelessWidget {
   /// 自定义单选框指示器。
   final TRadioIconBuilder? customIconBuilder;
 
-  bool get _selected => value == groupValue;
-  bool get _disabled => onChanged == null;
-
   @override
   Widget build(BuildContext context) {
+    final group = _TRadioGroupScope.maybeOf<T>(context);
+    if (group == null) {
+      throw FlutterError.fromParts([
+        ErrorSummary('TRadio<$T> requires a TRadioGroup<$T> ancestor.'),
+        ErrorDescription(
+          'TRadio no longer owns groupValue or onChanged. Wrap it with '
+          'TRadioGroup<$T>, or use TRadioGroup<$T>.options.',
+        ),
+      ]);
+    }
+    final selected = value == group.value;
+    final effectiveDisabled = disabled || group.onChanged == null;
     final theme = Theme.of(context).extension<TRadioThemeData>();
     final indicator =
-        customIconBuilder?.call(context, _selected, _disabled) ??
-        (cardMode ? null : _buildIndicator(context, theme));
+        customIconBuilder?.call(context, selected, effectiveDisabled) ??
+        (variant == TRadioVariant.card
+            ? null
+            : _buildIndicator(context, theme, selected, effectiveDisabled));
     final titleStyle = _resolveTitleStyle(context);
-    final content = _buildContent(context, theme, titleStyle);
+    final content = _buildContent(
+      context,
+      theme,
+      titleStyle,
+      effectiveDisabled,
+    );
     final hasContent = content != null;
     final indicatorSize = _indicatorSize(context);
-    final constraints = hasContent
-        ? BoxConstraints(minHeight: _contentMinHeight(context))
-        : _resolveTapTargetConstraints(context);
+    final constraints = switch (variant) {
+      TRadioVariant.inline => BoxConstraints(minHeight: indicatorSize),
+      TRadioVariant.block =>
+        hasContent
+            ? BoxConstraints(minHeight: _contentMinHeight(context))
+            : _resolveTapTargetConstraints(context),
+      TRadioVariant.card => const BoxConstraints(),
+    };
     final tileContent = LayoutBuilder(
       builder: (context, layoutConstraints) {
         final hasBoundedWidth = layoutConstraints.hasBoundedWidth;
@@ -197,30 +219,43 @@ class TRadio<T> extends StatelessWidget {
               indicator,
           if (indicator != null && content != null)
             SizedBox(
-              width: cardMode ? 0 : theme?.spacing ?? context.tTheme.spacer8,
+              width: variant == TRadioVariant.card
+                  ? 0
+                  : theme?.spacing ?? context.tTheme.spacer8,
             ),
           if (content != null)
-            if (hasBoundedWidth) Expanded(child: content) else content,
+            if (hasBoundedWidth && variant != TRadioVariant.inline)
+              Expanded(child: content)
+            else
+              Flexible(fit: FlexFit.loose, child: content),
         ];
         return Container(
-          constraints: cardMode ? null : constraints,
-          padding: hasContent
-              ? EdgeInsets.symmetric(
-                  horizontal: theme?.insetSpacing ?? context.tTheme.spacer16,
-                  vertical: cardMode
-                      ? context.tTheme.spacer8
-                      : _contentVerticalPadding(context, titleStyle),
-                )
-              : EdgeInsets.zero,
-          decoration: cardMode
-              ? null
-              : BoxDecoration(
+          constraints: constraints,
+          padding: switch (variant) {
+            TRadioVariant.inline => EdgeInsets.zero,
+            TRadioVariant.block =>
+              hasContent
+                  ? EdgeInsets.symmetric(
+                      horizontal:
+                          theme?.insetSpacing ?? context.tTheme.spacer16,
+                      vertical: _contentVerticalPadding(context, titleStyle),
+                    )
+                  : EdgeInsets.zero,
+            TRadioVariant.card =>
+              hasContent
+                  ? EdgeInsets.all(_cardContentPadding(context))
+                  : EdgeInsets.zero,
+          },
+          decoration: variant == TRadioVariant.block
+              ? BoxDecoration(
                   color: hasContent
                       ? context.tTheme.bgColorContainer
                       : Colors.transparent,
-                ),
+                )
+              : null,
           child: Row(
-            mainAxisSize: hasContent && hasBoundedWidth
+            mainAxisSize:
+                hasContent && hasBoundedWidth && variant != TRadioVariant.inline
                 ? MainAxisSize.max
                 : MainAxisSize.min,
             mainAxisAlignment: hasContent
@@ -236,10 +271,10 @@ class TRadio<T> extends StatelessWidget {
         );
       },
     );
-    final tile = cardMode
+    final tile = variant == TRadioVariant.card
         ? TSelectionCard(
-            selected: _selected,
-            disabled: _disabled,
+            selected: selected,
+            disabled: effectiveDisabled,
             selectedColor:
                 theme?.selectColor ?? context.tTheme.brandNormalColor,
             disabledColor:
@@ -252,40 +287,13 @@ class TRadio<T> extends StatelessWidget {
           )
         : tileContent;
     return Semantics(
-      enabled: !_disabled,
+      enabled: !effectiveDisabled,
       inMutuallyExclusiveGroup: true,
-      checked: _selected,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: _disabled ? null : () => onChanged!(value),
-            child: tile,
-          ),
-          if (showDivider && !cardMode) _buildDivider(context, theme),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDivider(BuildContext context, TRadioThemeData? radioTheme) {
-    final theme = Theme.of(context);
-    final dividerTheme =
-        theme.extension<TDividerThemeData>()?.copyWith(
-          margin: EdgeInsets.zero,
-        ) ??
-        const TDividerThemeData(margin: EdgeInsets.zero);
-    final insetSpacing = radioTheme?.insetSpacing ?? context.tTheme.spacer16;
-    final contentSpacing = radioTheme?.spacing ?? context.tTheme.spacer8;
-    final start = contentDirection == TContentDirection.right
-        ? insetSpacing + _indicatorSize(context) + contentSpacing
-        : insetSpacing;
-    return Theme(
-      data: theme.mergeExtension(dividerTheme),
-      child: Padding(
-        padding: EdgeInsetsDirectional.only(start: start),
-        child: const TDivider(),
+      checked: selected,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: effectiveDisabled ? null : () => group.onChanged!(value),
+        child: tile,
       ),
     );
   }
@@ -310,6 +318,13 @@ class TRadio<T> extends StatelessWidget {
               _titleLineHeight(_resolveSubTitleStyle(context))
         : titleHeight;
     return contentHeight + context.tTheme.spacer16 * 2;
+  }
+
+  double _cardContentPadding(BuildContext context) {
+    return math.max(
+      0,
+      context.tTheme.spacer16 - selectionCardBorderWidth(context),
+    );
   }
 
   double _titleLineHeight(TextStyle titleStyle) =>
@@ -343,19 +358,26 @@ class TRadio<T> extends StatelessWidget {
     TRadioSize.large => context.tTheme.spacer24 + context.tTheme.spacer4,
   };
 
-  Widget _buildIndicator(BuildContext context, TRadioThemeData? theme) {
+  Widget _buildIndicator(
+    BuildContext context,
+    TRadioThemeData? theme,
+    bool selected,
+    bool disabled,
+  ) {
     final materialTheme = RadioTheme.of(context);
     final colorScheme = Theme.of(context).tExplicitColorScheme;
     final states = <WidgetState>{
-      if (_selected) WidgetState.selected,
-      if (_disabled) WidgetState.disabled,
+      if (selected) WidgetState.selected,
+      if (disabled) WidgetState.disabled,
     };
-    final color = _disabled
-        ? (theme?.disableColor ??
-              materialTheme.fillColor?.resolve(states) ??
-              colorScheme?.onSurface.withValues(alpha: 0.38) ??
-              context.tTheme.brandDisabledColor)
-        : _selected
+    final color = disabled
+        ? selected
+              ? (theme?.disableColor ??
+                    materialTheme.fillColor?.resolve(states) ??
+                    colorScheme?.onSurface.withValues(alpha: 0.38) ??
+                    context.tTheme.brandDisabledColor)
+              : (theme?.disableColor ?? context.tTheme.componentBorderColor)
+        : selected
         ? (theme?.selectColor ??
               materialTheme.fillColor?.resolve(states) ??
               colorScheme?.primary ??
@@ -364,7 +386,7 @@ class TRadio<T> extends StatelessWidget {
               colorScheme?.outline ??
               context.tTheme.componentBorderColor);
     final iconSize = _indicatorSize(context);
-    final selectedIcon = _selected
+    final selectedIcon = selected
         ? switch (iconType) {
             TRadioIconType.check => TIcons.check,
             TRadioIconType.fill => TIcons.check_circle_filled,
@@ -380,9 +402,12 @@ class TRadio<T> extends StatelessWidget {
           ? null
           : CustomPaint(
               painter: _TRadioIndicatorPainter(
-                selected: _selected,
+                selected: selected,
                 color: color,
                 iconType: iconType,
+                backgroundColor: disabled && !selected
+                    ? context.tTheme.bgColorComponentDisabled
+                    : null,
               ),
             ),
     );
@@ -412,6 +437,7 @@ class TRadio<T> extends StatelessWidget {
     BuildContext context,
     TRadioThemeData? theme,
     TextStyle titleStyle,
+    bool disabled,
   ) {
     if (title == null && subTitle == null) {
       return null;
@@ -427,7 +453,7 @@ class TRadio<T> extends StatelessWidget {
             maxLines: titleMaxLines,
             overflow: TextOverflow.ellipsis,
             style: titleStyle.copyWith(
-              color: _disabled
+              color: disabled
                   ? context.tTheme.textDisabledColor
                   : (theme?.titleColor ?? context.tTheme.textColorPrimary),
             ),
@@ -440,7 +466,7 @@ class TRadio<T> extends StatelessWidget {
             maxLines: subTitleMaxLines,
             overflow: TextOverflow.ellipsis,
             style: subTitleStyle.copyWith(
-              color: _disabled
+              color: disabled
                   ? context.tTheme.textDisabledColor
                   : (theme?.subTitleColor ?? context.tTheme.textColorSecondary),
             ),
@@ -455,11 +481,13 @@ class _TRadioIndicatorPainter extends CustomPainter {
     required this.selected,
     required this.color,
     required this.iconType,
+    this.backgroundColor,
   });
 
   final bool selected;
   final Color color;
   final TRadioIconType iconType;
+  final Color? backgroundColor;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -473,6 +501,16 @@ class _TRadioIndicatorPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
       ..style = PaintingStyle.stroke;
+    if (backgroundColor case final backgroundColor?) {
+      canvas.drawCircle(
+        center,
+        outerRadius,
+        Paint()
+          ..isAntiAlias = true
+          ..color = backgroundColor
+          ..style = PaintingStyle.fill,
+      );
+    }
     switch (iconType) {
       case TRadioIconType.dot:
         canvas.drawCircle(center, outerRadius, paint);
@@ -491,11 +529,15 @@ class _TRadioIndicatorPainter extends CustomPainter {
   bool shouldRepaint(covariant _TRadioIndicatorPainter oldDelegate) {
     return selected != oldDelegate.selected ||
         color != oldDelegate.color ||
+        backgroundColor != oldDelegate.backgroundColor ||
         iconType != oldDelegate.iconType;
   }
 }
 
-/// 数据驱动且严格受控的单选框组。
+/// 严格受控的单选组。
+///
+/// 默认构造通过 `child` 接收调用方布局；标准数据列表使用
+/// `TRadioGroup.options`。组内的 [TRadio] 从该组件读取选中值和变更回调。
 class TRadioGroup<T> extends StatelessWidget {
   const TRadioGroup({
     super.key,
@@ -503,88 +545,118 @@ class TRadioGroup<T> extends StatelessWidget {
     /// 受控选中值。
     required this.value,
 
+    /// 选中值变更回调；为 null 时整组禁用。
+    this.onChanged,
+
+    /// 包含 [TRadio] 的自定义布局。
+    required this.child,
+  }) : _options = null,
+       _direction = Axis.vertical,
+       _columns = 1,
+       _variant = TRadioVariant.block,
+       _showDivider = null,
+       _contentDirection = TContentDirection.right,
+       _size = TRadioSize.medium,
+       _iconType = TRadioIconType.fill,
+       _titleMaxLines = 3,
+       _subTitleMaxLines = 5;
+
+  /// 使用数据项生成标准布局的单选框组。
+  const TRadioGroup.options({
+    super.key,
+
+    /// 受控选中值。
+    required this.value,
+
     /// 单选框数据项。
-    required this.options,
+    required List<TRadioOption<T>> options,
 
     /// 选中值变更回调；为 null 时整组禁用。
     this.onChanged,
 
-    /// 排列方向。
-    this.direction = Axis.vertical,
+    /// 排列方向，默认纵向。
+    Axis direction = Axis.vertical,
 
-    /// 每行列数，必须大于 0。
-    this.columns = 1,
+    /// 每行列数，默认 1，必须大于 0。
+    ///
+    /// 横向 [TRadioVariant.inline] 按内容自然收缩并在行内两端对齐，
+    /// 不使用该列数等分宽度。
+    int columns = 1,
 
-    /// 是否使用卡片模式。
-    this.cardMode = false,
+    /// 生成项的完整视觉结构，默认 [TRadioVariant.block]。
+    TRadioVariant variant = TRadioVariant.block,
 
-    /// 是否显示项间分割线，默认显示；卡片模式不显示。
-    this.showDivider = true,
+    /// 是否显示项间分割线。
+    ///
+    /// 为空时仅 [TRadioVariant.block] 默认显示；非 block 结构不能设为 true。
+    bool? showDivider,
 
-    /// 控件与文案排列方向。
-    this.contentDirection = TContentDirection.right,
+    /// 控件与文案排列方向，默认文案在指示器右侧。
+    TContentDirection contentDirection = TContentDirection.right,
 
-    /// 单选框尺寸。
-    this.size = TRadioSize.medium,
+    /// 单选框尺寸，默认 [TRadioSize.medium]。
+    TRadioSize size = TRadioSize.medium,
 
-    /// 内置指示器样式。
-    this.iconType = TRadioIconType.fill,
+    /// 内置指示器样式，默认 [TRadioIconType.fill]。
+    TRadioIconType iconType = TRadioIconType.fill,
 
     /// 主标题最大行数，默认 3 行。
-    this.titleMaxLines = 3,
+    int titleMaxLines = 3,
 
     /// 副标题最大行数，默认 5 行。
-    this.subTitleMaxLines = 5,
-
-    /// 自定义数据项视觉；交互仍由组接管。
-    this.itemBuilder,
-  }) : assert(columns > 0);
+    int subTitleMaxLines = 5,
+  }) : assert(columns > 0),
+       assert(
+         variant == TRadioVariant.block || showDivider != true,
+         'showDivider can only be enabled for TRadioVariant.block.',
+       ),
+       child = const SizedBox.shrink(),
+       _options = options,
+       _direction = direction,
+       _columns = columns,
+       _variant = variant,
+       _showDivider = showDivider,
+       _contentDirection = contentDirection,
+       _size = size,
+       _iconType = iconType,
+       _titleMaxLines = titleMaxLines,
+       _subTitleMaxLines = subTitleMaxLines;
 
   /// 受控选中值。
   final T? value;
 
-  /// 单选框数据项。
-  final List<TRadioOption<T>> options;
-
   /// 选中值变更回调；为 null 时整组禁用。
   final ValueChanged<T>? onChanged;
 
-  /// 排列方向。
-  final Axis direction;
+  /// 包含 [TRadio] 的自定义布局。
+  final Widget child;
 
-  /// 每行列数。
-  final int columns;
-
-  /// 是否使用卡片模式。
-  final bool cardMode;
-
-  /// 是否显示项间分割线，默认显示；卡片模式不显示。
-  final bool showDivider;
-
-  /// 控件与文案排列方向。
-  final TContentDirection contentDirection;
-
-  /// 单选框尺寸。
-  final TRadioSize size;
-
-  /// 内置指示器样式。
-  final TRadioIconType iconType;
-
-  /// 主标题最大行数，默认 3 行。
-  final int titleMaxLines;
-
-  /// 副标题最大行数，默认 5 行。
-  final int subTitleMaxLines;
-
-  /// 自定义数据项视觉；交互仍由组接管。
-  final TRadioOptionBuilder<T>? itemBuilder;
+  final List<TRadioOption<T>>? _options;
+  final Axis _direction;
+  final int _columns;
+  final TRadioVariant _variant;
+  final bool? _showDivider;
+  final TContentDirection _contentDirection;
+  final TRadioSize _size;
+  final TRadioIconType _iconType;
+  final int _titleMaxLines;
+  final int _subTitleMaxLines;
 
   @override
   Widget build(BuildContext context) {
-    if (cardMode) {
+    return _TRadioGroupScope<T>(
+      value: value,
+      onChanged: onChanged,
+      child: _options == null ? child : _buildOptions(context),
+    );
+  }
+
+  Widget _buildOptions(BuildContext context) {
+    final options = _options!;
+    if (_variant == TRadioVariant.card) {
       return TSelectionCardGroupLayout(
-        direction: direction,
-        columns: columns,
+        direction: _direction,
+        columns: _columns,
         children: List.generate(options.length, (index) {
           return _buildItem(context, options[index], index);
         }),
@@ -593,9 +665,19 @@ class TRadioGroup<T> extends StatelessWidget {
         ],
       );
     }
-    if (direction == Axis.vertical && columns == 1) {
+    if (_direction == Axis.vertical && _columns == 1) {
       return Column(
         mainAxisSize: MainAxisSize.min,
+        children: List.generate(options.length, (index) {
+          return _buildItem(context, options[index], index);
+        }),
+      );
+    }
+    if (_variant == TRadioVariant.inline && _direction == Axis.horizontal) {
+      return Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        spacing: context.tTheme.spacer16,
+        runSpacing: context.tTheme.spacer8,
         children: List.generate(options.length, (index) {
           return _buildItem(context, options[index], index);
         }),
@@ -604,7 +686,7 @@ class TRadioGroup<T> extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth.isFinite
-            ? constraints.maxWidth / columns
+            ? constraints.maxWidth / _columns
             : null;
         return Wrap(
           children: List.generate(options.length, (index) {
@@ -617,34 +699,88 @@ class TRadioGroup<T> extends StatelessWidget {
   }
 
   Widget _buildItem(BuildContext context, TRadioOption<T> option, int index) {
-    final selected = value == option.value;
-    final disabled = onChanged == null || option.disabled;
-    if (itemBuilder != null) {
-      final child = itemBuilder!(context, option, selected, disabled);
-      return Semantics(
-        enabled: !disabled,
-        checked: selected,
-        inMutuallyExclusiveGroup: true,
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: disabled ? null : () => onChanged!(option.value),
-          child: child,
-        ),
-      );
-    }
-    return TRadio<T>(
+    final radio = TRadio<T>(
       value: option.value,
-      groupValue: value,
-      onChanged: disabled ? null : onChanged,
       title: option.label,
       subTitle: option.subTitle,
-      cardMode: cardMode,
-      showDivider: showDivider && index < options.length - 1,
-      contentDirection: contentDirection,
-      size: size,
-      iconType: iconType,
-      titleMaxLines: titleMaxLines,
-      subTitleMaxLines: subTitleMaxLines,
+      disabled: option.disabled,
+      variant: _variant,
+      contentDirection: _contentDirection,
+      size: _size,
+      iconType: _iconType,
+      titleMaxLines: _titleMaxLines,
+      subTitleMaxLines: _subTitleMaxLines,
+    );
+    final effectiveShowDivider = _showDivider ?? true;
+    if (_variant != TRadioVariant.block ||
+        !effectiveShowDivider ||
+        index == _options!.length - 1) {
+      return radio;
+    }
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        radio,
+        _TRadioDivider(size: _size, contentDirection: _contentDirection),
+      ],
+    );
+  }
+}
+
+class _TRadioGroupScope<T> extends InheritedWidget {
+  const _TRadioGroupScope({
+    required this.value,
+    required this.onChanged,
+    required super.child,
+  });
+
+  final T? value;
+  final ValueChanged<T>? onChanged;
+
+  static _TRadioGroupScope<T>? maybeOf<T>(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<_TRadioGroupScope<T>>();
+  }
+
+  @override
+  bool updateShouldNotify(_TRadioGroupScope<T> oldWidget) {
+    return value != oldWidget.value || onChanged != oldWidget.onChanged;
+  }
+}
+
+class _TRadioDivider extends StatelessWidget {
+  const _TRadioDivider({required this.size, required this.contentDirection});
+
+  final TRadioSize size;
+  final TContentDirection contentDirection;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final radioTheme = theme.extension<TRadioThemeData>();
+    final dividerTheme =
+        theme.extension<TDividerThemeData>()?.copyWith(
+          margin: EdgeInsets.zero,
+        ) ??
+        const TDividerThemeData(margin: EdgeInsets.zero);
+    final insetSpacing = radioTheme?.insetSpacing ?? context.tTheme.spacer16;
+    final contentSpacing = radioTheme?.spacing ?? context.tTheme.spacer8;
+    final indicatorSize = switch (size) {
+      TRadioSize.small => context.tTheme.spacer16 + context.tTheme.spacer4,
+      TRadioSize.medium => context.tTheme.spacer24,
+      TRadioSize.large => context.tTheme.spacer24 + context.tTheme.spacer4,
+    };
+    final start = contentDirection == TContentDirection.right
+        ? insetSpacing + indicatorSize + contentSpacing
+        : insetSpacing;
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: Theme(
+        data: theme.mergeExtension(dividerTheme),
+        child: Padding(
+          padding: EdgeInsetsDirectional.only(start: start),
+          child: const TDivider(),
+        ),
+      ),
     );
   }
 }

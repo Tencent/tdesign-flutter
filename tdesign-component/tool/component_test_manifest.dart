@@ -302,6 +302,19 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'image_viewer',
+    coverageTargets: ['lib/src/components/image_viewer/'],
+    componentTests: ['test/components/image_viewer/t_image_viewer_test.dart'],
+    exampleTests: ['test/image_viewer_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'ImageViewer Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/image_viewer_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'dialog',
     coverageTargets: ['lib/src/components/dialog/'],
     componentTests: ['test/components/dialog/t_dialog_test.dart'],
@@ -527,6 +540,11 @@ const componentTestManifests = <ComponentTestManifest>[
           'test/components/navigation_components_golden_test.dart',
         ],
       ),
+      VisualTestManifest(
+        name: 'Tabs Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/tabs_page_golden_test.dart'],
+      ),
     ],
   ),
   ComponentTestManifest(
@@ -552,6 +570,19 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Skeleton Demo',
         workingDirectory: 'example',
         testFiles: ['test/skeleton_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'time_counter',
+    coverageTargets: ['lib/src/components/time_counter/'],
+    componentTests: ['test/components/time_counter/t_time_counter_test.dart'],
+    exampleTests: ['test/time_counter_page_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'TimeCounter Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/time_counter_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -819,6 +850,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'form',
     coverageTargets: ['lib/src/components/form/'],
     componentTests: ['test/components/form/t_form_test.dart'],
+    exampleTests: ['test/form_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Form Demo',

@@ -74,6 +74,68 @@ void main() {
     expect(find.text('3分'), findsOneWidget);
     expect(find.text('一般'), findsOneWidget);
     expect(find.text('未评分'), findsOneWidget);
+    expect(find.text('评分风格'), findsOneWidget);
+    expect(find.text('设置评分颜色'), findsNothing);
+    expect(find.text('服务很棒'), findsOneWidget);
+    expect(find.text('可以前往'), findsNothing);
+
+    final largeSizeCell = find.ancestor(
+      of: find.text('大尺寸 24'),
+      matching: find.byType(TCell),
+    );
+    final smallSizeCell = find.ancestor(
+      of: find.text('小尺寸 20'),
+      matching: find.byType(TCell),
+    );
+    expect(
+      tester.getTopLeft(smallSizeCell).dy -
+          tester.getBottomLeft(largeSizeCell).dy,
+      16,
+    );
+
+    final filledStyleCell = find.ancestor(
+      of: find.text('填充评分'),
+      matching: find.byType(TCell),
+    );
+    final outlinedStyleCell = find.ancestor(
+      of: find.text('线描评分'),
+      matching: find.byType(TCell),
+    );
+    expect(
+      tester.getTopLeft(outlinedStyleCell).dy -
+          tester.getBottomLeft(filledStyleCell).dy,
+      16,
+    );
+    final outlinedRate = find.descendant(
+      of: outlinedStyleCell,
+      matching: find.byType(TRate),
+    );
+    final outlinedContext = tester.element(outlinedRate);
+    final outlinedIcons = tester.widgetList<Icon>(
+      find.descendant(
+        of: outlinedStyleCell,
+        matching: find.byIcon(TIcons.star_filled),
+      ),
+    );
+    expect(outlinedIcons, isNotEmpty);
+    expect(
+      outlinedIcons.every(
+        (icon) => icon.color == outlinedContext.tTheme.warningColor5,
+      ),
+      isTrue,
+    );
+
+    final verticalContainer = tester.widget<Container>(
+      find.byKey(const ValueKey('rate-vertical-container')),
+    );
+    final verticalContext = tester.element(
+      find.byKey(const ValueKey('rate-vertical-container')),
+    );
+    expect(verticalContainer.color, verticalContext.tTheme.bgColorContainer);
+    expect(
+      tester.widget<Text>(find.text('未评分')).style?.color,
+      verticalContext.tTheme.textDisabledColor,
+    );
     final describedTitles = find.text('带描述评分');
     expect(describedTitles, findsNWidgets(4));
     final describedTitleTops = [

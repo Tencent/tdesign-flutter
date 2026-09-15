@@ -7,6 +7,9 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 
+double selectionCardBorderWidth(BuildContext context) =>
+    context.tTheme.spacer4 * 3 / 8;
+
 double _fontLineHeight(
   Font? font,
   TextStyle? explicitStyle,
@@ -74,14 +77,14 @@ class TSelectionCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor,
         border: Border.all(
-          width: context.tTheme.spacer4 * 3 / 8,
+          width: selectionCardBorderWidth(context),
           color: selected ? stateColor : Colors.transparent,
         ),
         borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: Stack(
         children: [
-          child,
+          Align(alignment: AlignmentDirectional.centerStart, child: child),
           if (selected)
             Positioned(
               top: 0,

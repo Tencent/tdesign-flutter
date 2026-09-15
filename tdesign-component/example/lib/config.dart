@@ -142,7 +142,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         name: 'cascader',
         pageBuilder: _wrapInheritedTheme((context) => const TCascaderPage())),
     ExamplePageModel(
-        text: 'Checkbox 复选框',
+        text: 'Checkbox 多选框',
         name: 'checkbox',
         pageBuilder: _wrapInheritedTheme((context) => const TCheckboxPage())),
     ExamplePageModel(
@@ -258,7 +258,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         name: 'tag',
         pageBuilder: _wrapInheritedTheme((context) => const TTagPage())),
     ExamplePageModel(
-        text: 'TimeCounter 计时',
+        text: 'TimeCounter 计时器',
         name: 'timeCounter',
         pageBuilder:
             _wrapInheritedTheme((context) => const TTimeCounterPage())),

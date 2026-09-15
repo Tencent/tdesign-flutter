@@ -3,7 +3,7 @@
 #### 简介
 严格受控的滚轮选择器。
 独立多列使用 `TPickerColumns`，层级联动使用 `TPickerLinked`。弹层和确认
-操作由调用方组合，组件本身只负责滚轮选择。
+操作由调用方组合，组件本身只负责滚轮选择。标准弹层使用 `TPickerPopup.show`。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
@@ -14,6 +14,43 @@
 | onChanged | ValueChanged<TPickerValue>? | - | 值变化回调；为 null 时禁用。 |
 | onColumnScrollEnd | void Function(int columnIndex, TPickerValue value)? | - | 某列滚动结束回调。 |
 | value | List<Object?> | - | 各列受控值。使用不可变列表，更新时提供新列表。 拖动期间可显示候选值；滚动结束后父级未接受 `onChanged` 的值时， 恢复到此值。父级接受变化时，应通过重建回传新的值。 |
+
+
+### TPickerPopup
+#### 简介
+Picker 专用弹层入口。
+`TPicker` 与 `TDateTimePicker` 的滚轮仍是可独立组合的纯面板；需要设计稿中的
+底部弹层时使用 `show`。该入口统一为标准 `TPopupHeader` 和完整滚轮视窗预留
+高度，避免调用方按通用 Popup 默认高度拼装后压缩或裁切滚轮。
+
+#### 静态方法
+
+##### TPickerPopup.show
+
+打开包含标准头部和 Picker 滚轮的底部弹层。
+弹层总高为当前 `TPickerThemeData.height`（默认 200）加
+`TPopupHeader.headerHeight`（58）。`child` 通常为 `TPicker` 或
+`TDateTimePicker`，其受控值、确认和取消状态仍由调用方管理。
+
+返回类型：`TPopupHandle`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | - |
+| child | Widget | - | - |
+| headerBuilder | TPickerPopupHeaderBuilder | - | - |
+| inset | TPopupBottomInset? | - | 底部弹层的边缘缩进。 |
+| radius | double? | - | 顶部圆角；null 时使用 Popup 主题或 TDesign 默认值。 |
+| backgroundColor | Color? | - | 面板背景色；null 时使用 Popup 主题或容器色。 |
+| overlay | TPopupOverlayConfig? | - | 蒙层行为；null 时沿用 Popup 默认值。 |
+| destroyOnClose | bool | false | 关闭后是否销毁弹层内容，默认 false。 |
+| animationDuration | Duration? | - | 打开和关闭动画时长。 |
+| onOpened | VoidCallback? | - | 打开动画完成回调。 |
+| onClosed | VoidCallback? | - | 关闭动画完成回调。 |
+| onVisibleChange | TPopupVisibleChangeCallback? | - | 弹层显隐变化回调。 |
+| useSafeArea | bool | false | 是否避让底部安全区，默认 false。 |
+| navigatorContext | BuildContext? | - | 可选的 Navigator 上下文；默认使用 `context`。 |
+| useRootNavigator | bool | false | 是否使用根 Navigator，默认 false。 |
 
 
 ### TPickerOption
@@ -63,6 +100,18 @@ const 构造不会复制或冻结传入的 `selectedOptions` 和 `indexes`。
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | options | List<TPickerOption> | - | 根选项。 |
+
+
+### TPickerPopupHeaderBuilder
+#### 简介
+构建 Picker 标准弹层头部。
+返回类型限定为 `TPopupHeader`，使弹层尺寸计算与实际头部的
+`TPopupHeader.headerHeight` 保持一致。
+#### 类型定义
+
+```dart
+typedef TPickerPopupHeaderBuilder = TPopupHeader Function(BuildContext context, VoidCallback close);
+```
 
 
 ### TPickerItemBuilder
