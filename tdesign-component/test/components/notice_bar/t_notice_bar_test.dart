@@ -124,6 +124,18 @@ void main() {
       expect(iconTheme.size, 22);
     });
 
+    testWidgets('自定义 prefix 与正文统一保留 8px 间距', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TNoticeBar(content: '带前缀图标', prefix: Icon(Icons.info)),
+        ),
+      );
+
+      final iconRect = tester.getRect(find.byIcon(Icons.info));
+      final textRect = tester.getRect(find.text('带前缀图标'));
+      expect(textRect.left - iconRect.right, 8);
+    });
+
     testWidgets('prefix 中的 Icon 可显式覆盖颜色与尺寸', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
@@ -155,6 +167,7 @@ void main() {
         ),
       );
       expect(find.byIcon(TIcons.info_circle_filled), findsNothing);
+      expect(tester.getTopLeft(find.text('内容')).dx, 16);
     });
 
     testWidgets('operation 与 suffixIcon 同时渲染', (tester) async {

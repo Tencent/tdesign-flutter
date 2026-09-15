@@ -57,7 +57,7 @@ void main() {
     expect(notices[3].suffixIcon, TIcons.chevron_right);
     expect(notices[4].prefix, isNull);
     expect(notices[4].suffixIcon, TIcons.chevron_right);
-    expect(notices[5].prefix, isA<Padding>());
+    expect((notices[5].prefix! as Icon).icon, TIcons.sound);
     expect(notices[5].suffixIcon, TIcons.chevron_right);
     expect(notices[6].operation, isA<TLink>());
     expect(notices[6].suffixIcon, TIcons.close);

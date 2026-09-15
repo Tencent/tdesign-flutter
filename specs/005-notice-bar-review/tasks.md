@@ -45,3 +45,7 @@
 - [x] 完成收敛后固定视口 light/dark 页面截图验收。
 - [x] 移除首帧宽度对 `MediaQuery` 屏幕尺寸的兜底依赖。
 - [ ] 完成真实设备触摸、循环与逐帧验收。
+- [x] Issue #1027：组件统一为所有非空 prefix 提供 8px 正文间距。
+- [x] Issue #1027：删除自定义样式 Demo 的手工间距，避免双重 Padding。
+- [x] Issue #1027：更新并无参数复跑 Flutter 3.32.0 Linux 明暗 Golden。
+- [x] Issue #1027：完成 Flutter 3.32.0 / 3.47.0 全量复验。
