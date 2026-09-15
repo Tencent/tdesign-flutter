@@ -189,7 +189,7 @@ class TPullDownRefreshTexts {
 
 | Demo 分组 | 小程序公开项 | 形态来源 | 归属标注 |
 | --- | --- | --- | --- |
-| 顶部下拉刷新（基础用法） | ✅ 是（base） | 小程序 | 大骨架 + 三组双列骨架 + 中央刷新提示；Web 同位置点击触发 |
+| 顶部下拉刷新（基础用法） | ✅ 是（base） | 小程序 | 大骨架 + 三组双列骨架 + 中央刷新提示；双列卡片内图片骨架在文字骨架上方；Web 同位置点击触发 |
 | 自定义提示语（loadingTexts） | props 已有（`loadingTexts`），无独立 Demo | Mobile Vue | **新增 API 演示**（Demo 形态仅参考 Mobile Vue） |
 | 刷新超时（refreshTimeout） | props 已有（`refreshTimeout` + `timeout`），无独立 Demo | Mobile Vue | **新增 API 演示**（Demo 形态仅参考 Mobile Vue） |
 - [ ] 英文 l10n 修正（`Release Refresh` / `Pull To Refresh` / `Refresh Completed` 加空格）。

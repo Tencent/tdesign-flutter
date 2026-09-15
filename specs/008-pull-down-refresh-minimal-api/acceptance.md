@@ -29,7 +29,7 @@
 - **状态回调去重**：`onStateChanged` 在状态跳变处去重上报，异步调度避免 build 期同步回调。
 - **异常传播**：`onRefresh` / `onLoadMore` 同步抛错 / Future 失败均正常结束（不悬挂）；错误经 `FlutterError.reportError` 上报（不吞掉），避免 easy_refresh 对任务失败无条件 rethrow 产生调用方无法接管的 unhandled async error。`onLoadMore` 已补同步抛错与 Future 失败两组测试。
 - **默认值补齐**：`lowerThreshold=50`、`successDuration=500ms` 与小程序一致，并有公开默认值断言。
-- **基础 Demo 同构**：大骨架、三组双列骨架、中央刷新提示与小程序公开 base Demo 对应；Web 可点击同一区域触发刷新。
+- **基础 Demo 同构**：大骨架、三组双列骨架、中央刷新提示与小程序公开 base Demo 对应；双列卡片内图片骨架位于文字骨架上方；Web 可点击同一区域触发刷新。
 - **整体下拉交互**：Header 使用非 clamping overscroll；拖拽时刷新头与滚动内容同步下移，并有首项纵向位移回归测试。
 - **timeout 语义**：超时瞬时上报 `timeout` 后立即结束刷新并复位（无专属渲染文案，已在 dartdoc 说明）。
 - **英文文案**：`releaseRefresh` 改为 `Release to refresh`。
