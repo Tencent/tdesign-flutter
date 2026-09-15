@@ -40,7 +40,8 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
     return ExamplePage(
       title: tTitle(),
       desc: '用于用户输入搜索信息，并进行页面内容搜索。',
-      backgroundColor: context.tTheme.bgColorPage,
+      compactDemo: true,
+      showTestModule: false,
       exampleCodeGroup: 'search',
       children: [
         ExampleModule(

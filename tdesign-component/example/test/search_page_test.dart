@@ -38,12 +38,15 @@ void main() {
     expect(find.text('基础搜索框'), findsOneWidget);
     expect(find.text('字数限制'), findsOneWidget);
     expect(find.text('获取焦点后显示取消按钮'), findsOneWidget);
+    expect(find.text('取消'), findsNothing);
     expect(find.text('搜索框形状'), findsOneWidget);
     expect(find.text('默认状态其他对齐方式'), findsOneWidget);
     expect(find.text('03 组件状态'), findsNothing);
     expect(find.byType(TSearchBar), findsNWidgets(8));
 
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
+    expect(page.compactDemo, isTrue);
+    expect(page.showTestModule, isFalse);
     expect(page.children.map((module) => module.title), ['组件类型', '组件样式']);
     expect(page.children.last.children.map((item) => item.desc), [
       '搜索框形状',
@@ -61,6 +64,14 @@ void main() {
           .textAlignment,
       isNull,
     );
+    final actionSearchBar = find.byWidgetPredicate(
+      (widget) => widget is TSearchBar && widget.onActionPressed != null,
+    );
+    await tester.tap(
+      find.descendant(of: actionSearchBar, matching: find.byType(TextField)),
+    );
+    await tester.pump();
+    expect(find.text('取消'), findsOneWidget);
     expect(
       searchBars.where((searchBar) => searchBar.hintText == '最多输入10个字符（汉字算两个）'),
       hasLength(1),
