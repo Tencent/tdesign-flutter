@@ -158,6 +158,7 @@ class _TTimeCounterStyle {
     }
 
     if (hasUnit) {
+      // 单位是正文标签，不沿用数字块或标点的强调色。
       splitColor = context.tTheme.textColorPrimary;
     }
   }

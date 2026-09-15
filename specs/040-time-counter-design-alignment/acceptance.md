@@ -21,13 +21,13 @@
 
 | 门禁 | 结果 |
 | --- | --- |
-| Flutter 3.32.0 组件测试 | PASS，41/41 |
+| Flutter 3.32.0 组件测试 | PASS，46/46 |
 | Flutter 3.32.0 Demo 功能与代码资产测试 | PASS，4/4 |
 | Flutter 3.32.0 component / example analyze | PASS，均 0 issue |
-| Flutter 3.47.0 组件测试 | PASS，41/41 |
+| Flutter 3.47.0 组件测试 | PASS，46/46 |
 | Flutter 3.47.0 Demo 功能与代码资产测试 | PASS，4/4 |
 | Flutter 3.47.0 component / example analyze | PASS，均 0 issue |
-| TimeCounter 生产代码覆盖率 | PASS，277/280，98.93% |
+| TimeCounter 生产代码覆盖率 | PASS，279/283，98.59% |
 | 代码面板生成校验 | PASS，11 个资产无漂移 |
 | Flutter 3.32.0 Linux Golden | PASS，light / dark 2/2；更新后无参数精确复跑 |
 | 小米 Android 16 当前源码 | PASS，完整 Example App 构建安装；首屏与尺寸区实测持续计时、16px 左对齐且无裁切 |

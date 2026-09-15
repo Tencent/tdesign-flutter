@@ -20,9 +20,9 @@
 1. `time` 必须非负；`format` 必须由时间段和单字符非空白分隔符组成。
 2. `format` 中每种时间段最多出现一次；相邻时间段之间必须有且仅有一个非空白分隔符，最后可有一个单位字符。
 3. `format` 不含 `S` 时仅在格式化后的可见值变化时重建并触发 `onChanged`；包含 `S` 时按有效绘制帧重建并通知。
-4. `onFinish` 在一次运行自然到达终点时只触发一次；单纯初始为零或 reset 不重复完成通知，显式从终点 start 可完成一次。
-5. `time` 或 `direction` 更新时按新契约重置，并保持更新前的运行/暂停状态；`autoStart` 只在首次挂载时读取，后续更新不作为运行命令。
-6. Controller 由调用方持有和释放，只公开 `start`、`pause`、`reset` 三个命令；`reset` 支持更新目标时长并拒绝负值，重置后保持暂停，需要继续计时时显式调用 `start`。
+4. `onFinish` 在一次运行到达终点时只触发一次；单纯初始为零或 reset 不重复完成通知，显式从终点 start 可完成一次。
+5. `time` 或 `direction` 更新时按新契约重置，并保持更新前的运行/暂停状态；声明式 `time` 更新优先于此前 `controller.reset(time)` 的临时目标；`autoStart` 只在首次挂载时读取，后续更新不作为运行命令。
+6. Controller 由调用方持有和释放，只公开 `start`、`pause`、`reset` 三个命令；绑定多个 `TTimeCounter` 时命令广播给所有实例；`reset` 支持更新目标时长并拒绝负值，重置后保持暂停，需要继续计时时显式调用 `start`。
 7. `size`、`variant`、`splitWithUnit` 动态变化时立即重算组件样式。
 
 ## API 收敛

@@ -6,24 +6,25 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| autoStart | bool | true | 首次挂载时是否自动开始计时，默认为 true。 该值只决定初始行为；挂载后的开始、暂停和重置由 `controller` 控制。 |
+| autoStart | bool | true | 首次挂载时是否自动开始计时，默认为 true。 该值只决定初始行为；挂载后的开始、暂停和重置由 `controller` 控制。 设置为 false 后仍需启动计时时，应同时传入 `controller`。 |
 | content | TTimeCounterBuilder? | - | 自定义计时内容；为空时使用标准数字块。 |
 | controller | TTimeCounterController? | - | 控制器，可控制开始、暂停和重置。 |
 | direction | TTimeCounterDirection | TTimeCounterDirection.down | 计时方向，默认倒计时。 |
-| format | String | 'HH:mm:ss' | 时间格式，D-日、H-时、m-分、s-秒、S-毫秒，默认为 `HH:mm:ss`。 每段可重复字符控制最小位数，相邻时间段之间仅允许一个非空白分隔符； 最后一段后可追加一个单位字符。例如 `HH:mm:ss`、`mmmm分sss秒`。 包含 `S` 段时按绘制帧更新，否则仅在格式化后的可见值变化时更新。 使用 `content` 时，该字段仍决定计时更新精度。 |
+| format | String | 'HH:mm:ss' | 时间格式，D-日、H-时、m-分、s-秒、S-毫秒，默认为 `HH:mm:ss`。 每段可重复字符控制最小位数，相邻时间段之间仅允许一个非空白分隔符； 最后一段后可追加一个单位字符。例如 `HH:mm:ss`、`mmmm分sss秒`。 两位 `H`、`m`、`s` 分别按 24、60、60 取余；需要展示累计值时， 可将对应时间段扩展为三位及以上，例如 `HHH:mm:ss` 会展示累计小时数。 包含 `S` 段时按绘制帧更新，否则仅在格式化后的可见值变化时更新。 使用 `content` 时，该字段仍决定计时更新精度。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onChanged | ValueChanged<int>? | - | 格式化后的可见值变化时触发，回调值为当前毫秒数。 `format` 包含毫秒段时按绘制帧触发，否则仅在可见时间段变化时触发。 |
-| onFinish | VoidCallback? | - | 计时自然到达终点时触发一次回调。 |
+| onFinish | VoidCallback? | - | 计时到达终点时触发一次回调。 初始值或重置值已在终点时不会自动触发；此时显式调用 `TTimeCounterController.start` 会触发一次。 |
 | size | TTimeCounterSize? | - | 计时器尺寸；优先于组件 Theme。 |
 | splitWithUnit | bool | false | 是否使用本地化时间单位分隔，默认为 false。 |
-| time | int | - | 必需；计时时长，单位毫秒 |
+| time | int | - | 必需；计时时长，单位毫秒。 父组件更新该值时会按新的声明式配置重置计时，并覆盖此前 `TTimeCounterController.reset` 传入的临时目标时长。 |
 | variant | TTimeCounterVariant? | - | 视觉形态；优先于组件 Theme。 |
 
 
 ### TTimeCounterController
 #### 简介
 计时器控制器，可控制开始、暂停和重置。
-Controller 由调用方创建并负责释放。
+Controller 由调用方创建并负责释放。绑定多个 `TTimeCounter` 时，
+每条命令会广播给所有已绑定组件。
 
 ### TTimeCounterThemeData
 #### 简介

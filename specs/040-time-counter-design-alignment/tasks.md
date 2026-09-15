@@ -19,3 +19,5 @@
 - [x] DONE 将公开 Demo 实例改为设计稿左对齐并更新视觉基线
 - [x] DONE 补充状态竞争、格式精度和 Demo 布局测试
 - [x] DONE 在最新 develop 上完成双版本、覆盖率与 Golden 复验
+- [x] DONE 固定 Controller 广播绑定语义与声明式 time 优先级
+- [x] DONE 私有化 State 计时命令并补强组合与完成回调测试
