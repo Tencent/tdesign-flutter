@@ -4,6 +4,12 @@
 
 复用现有 `TDropdownMenu`、单选/多选面板与 `TDropdownThemeData`。默认值按 `组件 Theme > Flutter Theme > TDesign 语义 Token > 单一设计常量` 解析：字体、颜色、间距和圆角使用现有 Token；24px 图标容器、56px 单选行和 40px 多选项保留在现有 Theme 字段或单一内置默认中，不增加同义 API。Demo 启用 `compactDemo`，三列展开态按 Figma 构造 15 个选项并移除人为 280px 上限。
 
+### 2026-09-15 局部修复方案
+
+- 保持 `_DropdownOptionRow` 的既有选中颜色解析链，并用组件测试与 Demo 测试分别断言文字、勾选图标均为品牌主色；不为无法复现的问题制造视觉改动。
+- 将 `_DropdownOptionChip` 的禁用背景回退从“禁用文字色 × 12%”改为 `TThemeData.bgColorComponentDisabled`。`TDropdownThemeData.disabledOptionColor` 仍保持最高优先级，既有自定义主题不受影响。
+- 公开 Demo 不增加颜色参数。仅更新实际受影响的三列多选明暗 Golden，并保留修复前、修复后和像素差异证据。
+
 ## 影响范围
 
 | 范围 | 文件或模块 | 影响 |

@@ -1,5 +1,13 @@
 # 运行截图比对
 
+## 2026-09-15 Issue #1027 差异标记
+
+| 修复前 | 修复后 | 像素差异 |
+| --- | --- | --- |
+| ![禁用项修复前](evidence/issue-1027-before.png) | ![禁用项修复后](evidence/issue-1027-after.png) | ![仅禁用项背景发生变化](evidence/issue-1027-diff.png) |
+
+差异图只标出三列底部禁用项的背景区域。浅色旧基线与修复后实际图共有 12,765 个差异像素（4.19%）；组件默认背景现为 `bgColorComponentDisabled` / `#EEEEEE`。当前单选展开态已验证选中文字和勾选图标同为品牌蓝，因此没有为该项伪造 before/after 变化。
+
 基线：`tdesign-miniprogram@1.16.0`（`ae55fb050b7a9474c33752b45b71c741f37ed872`），统一使用 375dp 宽视口。Flutter 截图覆盖公开页面 light/dark；系统导航栏和字体栅格属于平台合理差异。
 
 | 场景 | 小程序 | Flutter light | Flutter dark |
