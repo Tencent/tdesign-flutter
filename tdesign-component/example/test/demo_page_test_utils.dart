@@ -123,9 +123,8 @@ Future<void> loadDemoGoldenFonts(DemoPageTestSpec spec) async {
     ),
     _loadGoldenFont(
       'packages/cupertino_icons/CupertinoIcons',
-      () => rootBundle.load(
-        'packages/cupertino_icons/assets/CupertinoIcons.ttf',
-      ),
+      () =>
+          rootBundle.load('packages/cupertino_icons/assets/CupertinoIcons.ttf'),
     ),
     _loadGoldenFont(
       'Roboto',
@@ -183,10 +182,7 @@ Future<void> loadDemoGoldenFonts(DemoPageTestSpec spec) async {
   await Future.wait(loaders);
 }
 
-Future<void> _loadGoldenFont(
-  String family,
-  Future<ByteData> Function() bytes,
-) {
+Future<void> _loadGoldenFont(String family, Future<ByteData> Function() bytes) {
   return _goldenFontLoads.putIfAbsent(
     family,
     () => (FontLoader(family)..addFont(bytes())).load(),
@@ -240,9 +236,13 @@ Future<void> pumpFullDemoPage(
 Future<void> pumpDemoPageAtPhoneViewport(
   WidgetTester tester,
   DemoPageTestSpec spec,
-  ThemeMode mode,
-) async {
-  tester.view.physicalSize = Size(_pageWidth, spec.phoneViewportHeight);
+  ThemeMode mode, {
+  double? height,
+}) async {
+  tester.view.physicalSize = Size(
+    _pageWidth,
+    height ?? spec.phoneViewportHeight,
+  );
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.resetPhysicalSize);
   addTearDown(tester.view.resetDevicePixelRatio);

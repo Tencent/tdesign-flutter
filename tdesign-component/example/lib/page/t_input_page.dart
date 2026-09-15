@@ -248,22 +248,33 @@ class _TInputViewPageState extends State<TInputViewPage> {
           child: TInput(
             borderless: true,
             hintText: '输入验证码',
-            suffix: SizedBox(
-              width: 72,
-              height: 24,
-              child: OverflowBox(
-                minHeight: 36,
-                maxHeight: 36,
-                alignment: Alignment.center,
-                child: Image.network(
-                  'https://wwcdn.weixin.qq.com/node/wework/images/202010241547.ac6876be9c.png',
-                  width: 72,
-                  height: 36,
-                  fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) =>
-                      const SizedBox(width: 72, height: 36),
+            suffix: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 1,
+                  height: 24,
+                  color: token.componentStrokeColor,
                 ),
-              ),
+                const SizedBox(width: 16),
+                SizedBox(
+                  width: 72,
+                  height: 24,
+                  child: OverflowBox(
+                    minHeight: 36,
+                    maxHeight: 36,
+                    alignment: Alignment.center,
+                    child: Image.network(
+                      'https://wwcdn.weixin.qq.com/node/wework/images/202010241547.ac6876be9c.png',
+                      width: 72,
+                      height: 36,
+                      fit: BoxFit.contain,
+                      errorBuilder: (_, __, ___) =>
+                          const SizedBox(width: 72, height: 36),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -355,6 +366,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
   @ExampleCode(group: 'input')
   Widget _buildLabel(BuildContext context) => const TFormItem(
     label: '标签超长时最多十个字',
+    verticalAlignment: TFormItemVerticalAlignment.center,
     child: TInput(borderless: true, hintText: '请输入文字'),
   );
 
@@ -372,6 +384,7 @@ class _TInputViewPageState extends State<TInputViewPage> {
         TFormItem(
           label: '标签文字',
           errorText: '错误提示',
+          verticalAlignment: TFormItemVerticalAlignment.center,
           child: Theme(
             data: Theme.of(context).mergeExtension(
               TInputThemeData(clearIconColor: token.errorNormalColor),

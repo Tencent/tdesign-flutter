@@ -95,8 +95,8 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
           ],
         ),
         ExampleModule(
-          title: '组件规格',
-          children: [ExampleItem(desc: '多选框尺寸规格', builder: _cardCheckboxes)],
+          title: '特殊样式',
+          children: [ExampleItem(desc: '纵向卡片多选框', builder: _cardCheckboxes)],
         ),
       ],
     );

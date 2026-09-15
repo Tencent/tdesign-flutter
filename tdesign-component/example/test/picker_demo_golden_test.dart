@@ -6,7 +6,23 @@ import 'demo_page_test_utils.dart';
 import 'picker_demo_test_spec.dart';
 
 void main() {
-  registerDemoGoldenTests(pickerDemoPageTestSpec);
+  setUpAll(() => loadDemoGoldenFonts(pickerDemoPageTestSpec));
+
+  for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('picker ${mode.name} Demo golden', (tester) async {
+      await pumpDemoPageAtPhoneViewport(
+        tester,
+        pickerDemoPageTestSpec,
+        mode,
+        height: 776,
+      );
+      await expectLater(
+        find.byKey(const ValueKey('picker-demo-page')),
+        matchesGoldenFile('goldens/picker_page_${mode.name}.png'),
+      );
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
+  }
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('picker linked changes ${mode.name} golden', (tester) async {
@@ -18,7 +34,7 @@ void main() {
       final panel = find.byKey(const ValueKey('picker-area-panel'));
       const expected = [
         ['beijing', 'beijing', 'dongcheng'],
-        ['guangdong', 'dongguan', 'dongcheng'],
+        ['guangdong', 'shaoguan', 'zhenjiang'],
         ['guangdong', 'shenzhen', 'nanshan'],
       ];
       for (final column in [2, 1, 0]) {

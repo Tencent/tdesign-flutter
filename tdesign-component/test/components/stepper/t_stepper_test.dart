@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -24,6 +25,9 @@ void main() {
 
   EditableText editableText(WidgetTester tester) =>
       tester.widget<EditableText>(find.byType(EditableText));
+
+  RenderEditable renderEditable(WidgetTester tester) =>
+      tester.allRenderObjects.whereType<RenderEditable>().single;
 
   Size stepperSize(WidgetTester tester) {
     final row = find.descendant(
@@ -401,13 +405,26 @@ void main() {
       expect(inputDecoration(tester).color, Colors.yellow);
     });
 
-    testWidgets(
-        'default line height is centered and component theme can override it',
+    testWidgets('design line boxes are centered and theme can override them',
         (tester) async {
-      await tester.pumpWidget(wrap(
-        TStepper(value: 1, onChanged: (_) {}),
-      ));
-      expect(editableText(tester).style.height, 1);
+      for (final entry in [
+        (TStepperSize.small, 16.0),
+        (TStepperSize.medium, 20.0),
+        (TStepperSize.large, 24.0),
+      ]) {
+        await tester.pumpWidget(wrap(
+          TStepper(value: 1, size: entry.$1, onChanged: (_) {}),
+        ));
+        final input = editableText(tester);
+        expect(input.style.fontSize! * input.style.height!, entry.$2);
+        expect(input.style.leadingDistribution, TextLeadingDistribution.even);
+        expect(input.style.fontFamily, 'packages/tdesign_flutter/TCloudNumber');
+        expect(tester.getSize(find.byType(EditableText)).height, entry.$2);
+        expect(
+          tester.getCenter(find.byType(EditableText)).dy,
+          tester.getCenter(find.byType(Row)).dy,
+        );
+      }
 
       await tester.pumpWidget(wrap(
         TStepper(value: 1, onChanged: (_) {}),
@@ -417,13 +434,92 @@ void main() {
       ));
       await tester.pumpAndSettle();
       expect(editableText(tester).style.height, 1.25);
+
+      await tester.pumpWidget(wrap(
+        TStepper(value: 1, onChanged: (_) {}),
+        stepperTheme: const TStepperThemeData(
+          textStyle: TextStyle(fontSize: 20),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      var input = editableText(tester);
+      expect(input.style.fontSize, 20);
+      expect(input.style.fontSize! * input.style.height!, 20);
+      expect(renderEditable(tester).preferredLineHeight, 20);
+
+      await tester.pumpWidget(wrap(
+        TStepper(value: 1, onChanged: (_) {}),
+        stepperTheme: const TStepperThemeData(controlSize: 16),
+      ));
+      await tester.pumpAndSettle();
+      input = editableText(tester);
+      expect(input.style.fontSize! * input.style.height!, 16);
+      expect(renderEditable(tester).preferredLineHeight, 16);
+      expect(tester.getSize(find.byType(EditableText)).height, 16);
+
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('rejects a font size larger than the control height in debug',
+        (tester) async {
+      await tester.pumpWidget(wrap(
+        TStepper(value: 1, onChanged: (_) {}),
+        stepperTheme: const TStepperThemeData(
+          controlSize: 16,
+          textStyle: TextStyle(fontSize: 20),
+        ),
+      ));
+
+      final exception = tester.takeException();
+      expect(exception, isA<AssertionError>());
+      expect(exception.toString(), contains('fontSize (20.0)'));
+      expect(exception.toString(), contains('controlSize (16.0)'));
+    });
+
+    testWidgets('rejects an explicit line box taller than the control in debug',
+        (tester) async {
+      await tester.pumpWidget(wrap(
+        TStepper(value: 1, onChanged: (_) {}),
+        stepperTheme: const TStepperThemeData(
+          controlSize: 20,
+          textStyle: TextStyle(height: 2),
+        ),
+      ));
+
+      final exception = tester.takeException();
+      expect(exception, isA<AssertionError>());
+      expect(exception.toString(), contains('line height (24.0)'));
+      expect(exception.toString(), contains('controlSize (20.0)'));
+    });
+
+    testWidgets('rejects an interpolated line box taller than the control',
+        (tester) async {
+      final theme = const TStepperThemeData(
+        controlSize: 20,
+        textStyle: TextStyle(fontSize: 20, height: 1),
+      ).lerp(
+        const TStepperThemeData(
+          controlSize: 20,
+          textStyle: TextStyle(fontSize: 10, height: 2),
+        ),
+        0.5,
+      );
+      await tester.pumpWidget(wrap(
+        TStepper(value: 1, onChanged: (_) {}),
+        stepperTheme: theme,
+      ));
+
+      final exception = tester.takeException();
+      expect(exception, isA<AssertionError>());
+      expect(exception.toString(), contains('line height (22.5)'));
+      expect(exception.toString(), contains('controlSize (20.0)'));
     });
 
     testWidgets('DefaultTextStyle and IconTheme control unset foregrounds',
         (tester) async {
       await tester.pumpWidget(wrap(
         DefaultTextStyle(
-          style: const TextStyle(color: Colors.red),
+          style: const TextStyle(color: Colors.red, fontFamily: 'TestFont'),
           child: IconTheme(
             data: const IconThemeData(color: Colors.green),
             child: TStepper(value: 1, onChanged: (_) {}),
@@ -432,10 +528,82 @@ void main() {
       ));
 
       expect(editableText(tester).style.color, Colors.red);
+      expect(editableText(tester).style.fontFamily, 'TestFont');
       expect(
         tester.widget<Icon>(find.byIcon(TIcons.plus)).color,
         Colors.green,
       );
+    });
+
+    testWidgets('component theme keeps an unscoped custom font family',
+        (tester) async {
+      await tester.pumpWidget(wrap(
+        TStepper(value: 1, onChanged: (_) {}),
+        stepperTheme: const TStepperThemeData(
+          textStyle: TextStyle(fontFamily: 'TestFont'),
+        ),
+      ));
+
+      expect(editableText(tester).style.fontFamily, 'TestFont');
+    });
+
+    testWidgets('component theme keeps a package custom font family',
+        (tester) async {
+      await tester.pumpWidget(wrap(
+        TStepper(value: 1, onChanged: (_) {}),
+        stepperTheme: const TStepperThemeData(
+          textStyle: TextStyle(
+            fontFamily: 'TestFont',
+            package: 'test_package',
+          ),
+        ),
+      ));
+
+      expect(
+        editableText(tester).style.fontFamily,
+        'packages/test_package/TestFont',
+      );
+    });
+
+    testWidgets('component theme font overrides an inherited package font',
+        (tester) async {
+      await tester.pumpWidget(wrap(
+        DefaultTextStyle(
+          style: const TextStyle(
+            fontFamily: 'InheritedFont',
+            package: 'inherited_package',
+          ),
+          child: TStepper(value: 1, onChanged: (_) {}),
+        ),
+        stepperTheme: const TStepperThemeData(
+          textStyle: TextStyle(fontFamily: 'TestFont', fontSize: 18),
+        ),
+      ));
+
+      expect(editableText(tester).style.fontFamily, 'TestFont');
+      expect(editableText(tester).style.fontSize, 18);
+    });
+
+    testWidgets('theme-only font size preserves an inherited package font',
+        (tester) async {
+      await tester.pumpWidget(wrap(
+        DefaultTextStyle(
+          style: const TextStyle(
+            fontFamily: 'InheritedFont',
+            package: 'inherited_package',
+          ),
+          child: TStepper(value: 1, onChanged: (_) {}),
+        ),
+        stepperTheme: const TStepperThemeData(
+          textStyle: TextStyle(fontSize: 18),
+        ),
+      ));
+
+      expect(
+        editableText(tester).style.fontFamily,
+        'packages/inherited_package/InheritedFont',
+      );
+      expect(editableText(tester).style.fontSize, 18);
     });
 
     testWidgets('bare TThemeData supplies token background fallback',

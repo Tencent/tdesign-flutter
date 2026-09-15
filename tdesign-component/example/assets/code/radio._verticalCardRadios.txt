@@ -3,7 +3,7 @@ Widget _verticalCardRadios(BuildContext context) {
       padding: EdgeInsets.all(context.tTheme.spacer16),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(context.tTheme.radiusExtraLarge),
-        child: TRadioGroup<int>(
+        child: TRadioGroup<int>.options(
           value: _verticalCardValue,
           options: _cardOptions,
           titleMaxLines: 2,

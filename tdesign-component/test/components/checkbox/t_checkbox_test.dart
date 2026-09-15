@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/components/checkbox/t_selection_card.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
@@ -174,6 +175,156 @@ void main() {
       expect(uncheckedIcon.color, token.componentBorderColor);
       expect(disabledCheckedIcon.color, token.brandDisabledColor);
       expect(disabledTitle.style?.color, token.textDisabledColor);
+    });
+
+    testWidgets('禁用未选使用禁用填充色和组件描边色', (tester) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrap(const TCheckbox(value: false, title: '禁用未选')),
+      );
+
+      final decoration = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.decoration)
+          .whereType<BoxDecoration>()
+          .singleWhere(
+            (decoration) =>
+                decoration.color == token.bgColorComponentDisabled &&
+                decoration.shape == BoxShape.circle,
+          );
+      final border = decoration.border! as Border;
+
+      expect(decoration.color, const Color(0xFFEEEEEE));
+      expect(token.componentBorderColor, const Color(0xFFDCDCDC));
+      expect(border.top.color, const Color(0xFFDCDCDC));
+    });
+
+    testWidgets('禁用未选跟随自定义组件描边色和禁用填充色', (tester) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'checkbox-disabled-color-token-test',
+        colorMap: const {
+          'componentBorderColor': Colors.purple,
+          'bgColorComponentDisabled': Colors.orange,
+        },
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(token),
+          home: const Scaffold(
+            body: TCheckbox(value: false, title: '自定义禁用未选'),
+          ),
+        ),
+      );
+
+      final decoration = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.decoration)
+          .whereType<BoxDecoration>()
+          .singleWhere(
+            (decoration) =>
+                decoration.color == Colors.orange &&
+                decoration.shape == BoxShape.circle,
+          );
+      final border = decoration.border! as Border;
+
+      expect(border.top.color, Colors.purple);
+    });
+
+    testWidgets('禁用未选保留组件 Theme 的描边覆盖', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          const TCheckbox(value: false, title: '组件主题禁用未选'),
+          checkboxTheme: const TCheckboxThemeData(
+            disableColor: Colors.purple,
+          ),
+        ),
+      );
+
+      final decoration = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.decoration)
+          .whereType<BoxDecoration>()
+          .singleWhere(
+            (decoration) =>
+                decoration.color == const Color(0xFFEEEEEE) &&
+                decoration.shape == BoxShape.circle,
+          );
+      final border = decoration.border! as Border;
+
+      expect(border.top.color, Colors.purple);
+    });
+
+    testWidgets('禁用未选保留显式 Material Theme 的填充和描边覆盖', (tester) async {
+      final theme = TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+        checkboxTheme: CheckboxThemeData(
+          fillColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.disabled)
+                ? Colors.orange
+                : null,
+          ),
+          side: WidgetStateBorderSide.resolveWith(
+            (states) => states.contains(WidgetState.disabled)
+                ? const BorderSide(color: Colors.green)
+                : null,
+          ),
+        ),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: const Scaffold(
+            body: TCheckbox(value: false, title: 'Material 主题禁用未选'),
+          ),
+        ),
+      );
+
+      final decoration = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.decoration)
+          .whereType<BoxDecoration>()
+          .singleWhere(
+            (decoration) =>
+                decoration.color == Colors.orange &&
+                decoration.shape == BoxShape.circle,
+          );
+      final border = decoration.border! as Border;
+
+      expect(border.top.color, Colors.green);
+    });
+
+    testWidgets('多行文案与指示器顶部对齐且分割线从文案起点开始', (tester) async {
+      await tester.pumpWidget(
+        wrap(TCheckbox(value: false, title: '第一行\n第二行', onChanged: (_) {})),
+      );
+
+      final indicator = find.byIcon(TIcons.circle);
+      final title = find.text('第一行\n第二行');
+      final divider = find.byType(TDivider);
+
+      expect(tester.getTopLeft(indicator).dy, tester.getTopLeft(title).dy);
+      expect(tester.getTopLeft(divider).dx, tester.getTopLeft(title).dx);
+    });
+
+    testWidgets('卡片文案在边框内垂直居中并保留上下 16 间距', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          TCheckbox(
+            value: false,
+            title: '卡片文案',
+            cardMode: true,
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      final card = find.byType(TSelectionCard);
+      final title = find.text('卡片文案');
+      final cardRect = tester.getRect(card);
+      final titleRect = tester.getRect(title);
+
+      expect(titleRect.center.dy, cardRect.center.dy);
+      expect(titleRect.top - cardRect.top, 16);
+      expect(cardRect.bottom - titleRect.bottom, 16);
     });
 
     testWidgets('Theme 视觉 token 可覆盖选中色、标题色和内容间距', (tester) async {
