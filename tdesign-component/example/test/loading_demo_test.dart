@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/components/loading/t_activity_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'demo_page_test_utils.dart';
@@ -21,6 +22,15 @@ void main() {
               'assets/img/loading-logo2.png',
     );
     expect(customImage, findsOneWidget);
+
+    final activityIndicators = tester.widgetList<TCupertinoActivityIndicator>(
+      find.byType(TCupertinoActivityIndicator),
+    );
+    expect(activityIndicators, hasLength(3));
+    expect(
+      activityIndicators.map((indicator) => indicator.activeColor),
+      everyElement(TThemeData.defaultData().textColorPrimary),
+    );
 
     final sliderFinder = find.byType(TSlider);
     expect(tester.widget<TSlider>(sliderFinder).value, 800);

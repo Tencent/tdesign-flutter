@@ -2,9 +2,14 @@
 
 ## TODO
 
-- （无）
+- [ ] 创建 Loading 独立 PR，并将链接回填到 Issue #1027 对应条目
 
 ## DOING
+
+- [x] 复核 Figma `24386:5280` 的“颜色不一致”24×24 标注和当前 Linux Golden
+- [x] 修复组件 activity 内置默认颜色，保持 Theme / Material 覆盖优先级
+- [x] 补充组件与公开 Demo 颜色断言，Demo 不注入黑色补偿
+- [x] 保存 before / after / diff，仅更新 Loading 明暗整页 Golden并精确复跑
 
 - [x] 创建 Spec `007-loading-contract-alignment`
 - [x] `t_loading.dart`：duration 默认 2000→800
