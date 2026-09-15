@@ -188,8 +188,6 @@ export 'src/components/text/t_text.dart';
 export 'src/components/text/t_text_theme_data.dart' show TTextThemeData;
 export 'src/components/textarea/t_textarea.dart';
 export 'src/components/time_counter/t_time_counter.dart';
-export 'src/components/time_counter/t_time_counter_controller.dart'
-    show TTimeCounterController;
 export 'src/components/time_counter/t_time_counter_theme_data.dart'
     show TTimeCounterThemeData;
 export 'src/components/time_counter/t_time_counter_types.dart'

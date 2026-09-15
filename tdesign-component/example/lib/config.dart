@@ -258,7 +258,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
         name: 'tag',
         pageBuilder: _wrapInheritedTheme((context) => const TTagPage())),
     ExamplePageModel(
-        text: 'TimeCounter 计时',
+        text: 'TimeCounter 计时器',
         name: 'timeCounter',
         pageBuilder:
             _wrapInheritedTheme((context) => const TTimeCounterPage())),
