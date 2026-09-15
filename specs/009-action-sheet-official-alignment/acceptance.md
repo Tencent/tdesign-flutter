@@ -32,6 +32,15 @@
 
 - 翻页、禁用项和全部入口的真机连续交互仍需人工复核；静态截图不能替代交互验收。
 
+## 2026-09-15 Issue #1027 像素修复复验
+
+- 基线：`origin/develop@b8a4bec7d`；Figma 节点 `24386:5277`，具体核对分页宫格 `27478:26787` 与带描述宫格 `27478:26633`。
+- 缺口分层：分页入口为 Demo 缺口；40dp 默认宫格图标槽位与描述栏底部间距为组件缺口；灰色圆角图标容器为 `TActionSheetItem.icon` 的 Demo 内容。
+- Flutter 3.32.0：组件测试 51/51、Demo 功能测试 12/12、组件与 Example 严格 analyze、示例代码生成检查和回归清单自测 13/13 通过；ActionSheet 生产源码覆盖率 `398/408 = 97.55%`。
+- Flutter 3.32.0 Linux：旧 Golden 对新渲染差异 `11.97%`，保存 before / after / isolated diff 后更新有意视觉基线；ActionSheet 全量 Golden 无更新参数复跑 18/18 通过。
+- Flutter 3.47.0：组件测试 51/51、Demo 功能测试 12/12、组件与 Example 严格 analyze 通过；首次 Demo 测试的 `ink_sparkle.frag` 跨 SDK 缓存污染在 clean + pub get 后消失。
+- API / breaking：未新增、删除或重命名公开 API；修复既有默认视觉，不构成 breaking change。
+
 ## 2026-08-31 develop 同步复验
 
 - 已合并 `origin/develop@fb26b8d5`，冲突按 develop 共享测试基建与本 PR ActionSheet 改动并集解决。
