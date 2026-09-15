@@ -850,6 +850,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'form',
     coverageTargets: ['lib/src/components/form/'],
     componentTests: ['test/components/form/t_form_test.dart'],
+    exampleTests: ['test/form_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Form Demo',

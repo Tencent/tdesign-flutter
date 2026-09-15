@@ -268,6 +268,7 @@
       "api": {
         "names": [
           "TPicker",
+          "TPickerPopup",
           "TPickerOption",
           "TPickerValue",
           "TPickerColumns",
@@ -341,9 +342,13 @@
       },
       "api": {
         "names": [
-          "TRadioStyle",
           "TRadio",
-          "TRadioGroup"
+          "TRadioGroup",
+          "TRadioOption",
+          "TRadioSize",
+          "TRadioIconType",
+          "TRadioVariant",
+          "TRadioIconBuilder"
         ],
         "getComments": true
       }

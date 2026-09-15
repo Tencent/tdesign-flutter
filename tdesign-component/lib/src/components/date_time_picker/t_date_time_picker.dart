@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../util/context_extension.dart';
+import '../picker/picker_defaults.dart';
 import '../picker/t_picker_theme_data.dart';
 import 't_date_time_picker_column.dart';
 import 't_date_time_picker_enums.dart';
@@ -249,8 +250,8 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
       showWeek: widget.showWeek,
       steps: widget.steps,
       renderLabel: widget.renderLabel,
-      height: pickerTheme?.height ?? 200,
-      itemCount: pickerTheme?.itemCount ?? 5,
+      height: pickerTheme?.height ?? defaultPickerHeight,
+      itemCount: pickerTheme?.itemCount ?? defaultPickerItemCount,
       onChanged: _handleWheelChanged,
       onScrollEnd: _handleScrollEnd,
     );

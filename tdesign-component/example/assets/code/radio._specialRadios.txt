@@ -2,10 +2,11 @@ Widget _specialRadios(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TRadioGroup<int>(
+        TRadioGroup<int>.options(
+          key: const ValueKey('radio-vertical-card-layout'),
           value: _verticalSpecialCardValue,
           options: _specialVerticalOptions,
-          cardMode: true,
+          variant: TRadioVariant.card,
           subTitleMaxLines: 1,
           onChanged: (value) =>
               setState(() => _verticalSpecialCardValue = value),
@@ -20,12 +21,13 @@ Widget _specialRadios(BuildContext context) {
           ),
           child: TText('横向卡片单选框', textColor: context.tTheme.textColorSecondary),
         ),
-        TRadioGroup<int>(
+        TRadioGroup<int>.options(
+          key: const ValueKey('radio-horizontal-card-layout'),
           value: _horizontalCardValue,
           options: _specialHorizontalOptions,
           direction: Axis.horizontal,
           columns: 3,
-          cardMode: true,
+          variant: TRadioVariant.card,
           onChanged: (value) => setState(() => _horizontalCardValue = value),
         ),
       ],

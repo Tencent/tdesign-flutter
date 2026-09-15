@@ -23,15 +23,39 @@ void main() {
     await binding.convertFlutterSurfaceToImage();
     await tester.pumpAndSettle();
     await binding.takeScreenshot('picker-page');
-    for (final id in ['city', 'time', 'area', 'title', 'without-title']) {
+    const ids = ['city', 'time', 'area', 'title', 'without-title'];
+
+    Future<void> captureOpenedPickers(String mode) async {
+      for (final id in ids) {
+        final trigger = find.byKey(ValueKey('picker-$id-trigger'));
+        await tester.ensureVisible(trigger);
+        await tester.tap(trigger);
+        await tester.pumpAndSettle();
+        final wheel = find.byType(ListWheelScrollView).first;
+        expect(tester.getSize(wheel).height, 200);
+        expect(tester.widget<ListWheelScrollView>(wheel).itemExtent, 40);
+        await binding.takeScreenshot('picker-$id-opened-$mode');
+        await tester.tap(find.text('取消'));
+        await tester.pumpAndSettle();
+      }
+    }
+
+    await captureOpenedPickers('light');
+    final areaTrigger = find.byKey(const ValueKey('picker-area-trigger'));
+    final provider = tester.element(areaTrigger).read<ThemeModeProvider>();
+    final previousMode = provider.themeMode;
+    provider.themeMode = ThemeMode.dark;
+    await tester.pumpAndSettle();
+    await captureOpenedPickers('dark');
+    provider.themeMode = previousMode;
+    await tester.pumpAndSettle();
+
+    for (final id in ids) {
       final trigger = find.byKey(ValueKey('picker-$id-trigger'));
       await tester.ensureVisible(trigger);
       await tester.tap(trigger);
       await tester.pumpAndSettle();
       final panel = find.byType(TPicker);
-      if (id == 'area') {
-        await binding.takeScreenshot('picker-area');
-      }
       final initial = List<Object?>.of(tester.widget<TPicker>(panel).value);
       final wheel = find.byType(ListWheelScrollView).first;
       expect(tester.getSize(wheel).height, 200);
@@ -83,20 +107,6 @@ void main() {
       await tester.pumpAndSettle();
     }
     await tester.tap(codeIcon);
-    await tester.pumpAndSettle();
-    final trigger = find.byKey(const ValueKey('picker-area-trigger'));
-    final provider = tester.element(trigger).read<ThemeModeProvider>();
-    final previousMode = provider.themeMode;
-    provider.themeMode = ThemeMode.dark;
-    await tester.pumpAndSettle();
-    await tester.ensureVisible(trigger);
-    await tester.tap(trigger);
-    await tester.pumpAndSettle();
-    await binding.takeScreenshot('picker-area-dark');
-    expect(tester.getSize(find.byType(ListWheelScrollView).first).height, 200);
-    await tester.tap(find.text('取消'));
-    await tester.pumpAndSettle();
-    provider.themeMode = previousMode;
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });

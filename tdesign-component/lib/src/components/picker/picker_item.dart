@@ -111,6 +111,13 @@ class PickerItemWidget extends StatelessWidget {
                           ),
                   )
                   .merge(textTheme?.textStyle);
+          final centeredStyle = style.copyWith(
+            // Figma 使用 16/24 文字行盒并在 40px 选项内上下各留 8px。
+            // 等分额外行高可避免 Android 字体按 ascent/descent 比例分配后
+            // 字形视觉中心偏离选中条，同时保留调用方显式配置。
+            leadingDistribution:
+                style.leadingDistribution ?? TextLeadingDistribution.even,
+          );
           return Center(
             child:
                 itemBuilder?.call(context, option, colIndex, index, distance) ??
@@ -118,7 +125,7 @@ class PickerItemWidget extends StatelessWidget {
                   option.label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: style,
+                  style: centeredStyle,
                 ),
           );
         },

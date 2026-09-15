@@ -1,5 +1,5 @@
 Widget _verticalRadios(BuildContext context) {
-    return TRadioGroup<int>(
+    return TRadioGroup<int>.options(
       value: _verticalValue,
       options: _options,
       onChanged: (value) {
