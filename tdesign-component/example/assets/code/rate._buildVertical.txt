@@ -1,4 +1,6 @@
-Widget _buildVertical(BuildContext context) => const Padding(
-    padding: EdgeInsets.all(16),
-    child: Center(child: _VerticalRate()),
+Widget _buildVertical(BuildContext context) => Container(
+    key: const ValueKey('rate-vertical-container'),
+    padding: EdgeInsets.all(context.tTheme.spacer16),
+    color: context.tTheme.bgColorContainer,
+    child: const Center(child: _VerticalRate()),
   );
