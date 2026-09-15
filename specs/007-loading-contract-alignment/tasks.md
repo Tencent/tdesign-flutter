@@ -2,7 +2,7 @@
 
 ## TODO
 
-- [ ] 创建 Loading 独立 PR，并将链接回填到 Issue #1027 对应条目
+- [x] 创建 Loading 独立 PR #1126，并将链接回填到 Issue #1027 对应条目
 
 ## DOING
 
