@@ -234,9 +234,9 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          widget.backgroundColor ??
-          (widget.compactDemo ? context.tTheme.bgColorPage : null),
+      backgroundColor: widget.compactDemo
+          ? _compactBackgroundColor
+          : widget.backgroundColor,
       floatingActionButton: widget.floatingActionButton,
       floatingActionButtonLocation: widget.floatingActionButtonLocation,
       floatingActionButtonAnimator: widget.floatingActionButtonAnimator,
@@ -384,20 +384,20 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   Widget _buildCompactHeader() {
     return Container(
       width: double.infinity,
-      color: widget.backgroundColor ?? context.tTheme.bgColorPage,
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+      color: _compactBackgroundColor,
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TText(
             widget.title,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               color: context.tTheme.textColorPrimary,
               fontWeight: FontWeight.w600,
             ),
           ),
           if (widget.desc.isNotEmpty) ...[
-            const SizedBox(height: 4),
+            const SizedBox(height: 8),
             TText(
               widget.desc,
               font: context.tTheme.fontBodyMedium,
@@ -408,6 +408,12 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       ),
     );
   }
+
+  Color get _compactBackgroundColor =>
+      widget.backgroundColor ??
+      (Theme.of(context).brightness == Brightness.light
+          ? const Color(0xFFF6F6F6)
+          : context.tTheme.bgColorPage);
 
   Widget _singleChild() => widget.singleChild!;
 

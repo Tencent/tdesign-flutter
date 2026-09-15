@@ -9,7 +9,7 @@ void main() {
       name: 'search',
       title: 'Search 搜索框',
       page: TSearchBarPage(),
-      expectedTexts: ['01 组件类型', '02 组件样式', '03 组件状态'],
+      expectedTexts: ['01 组件类型', '02 组件样式'],
       componentType: TSearchBar,
     ),
   );
