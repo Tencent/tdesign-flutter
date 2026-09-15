@@ -43,8 +43,6 @@ const messageDemoCases = [
     triggerText: '带关闭的通知',
     visibleText: '这是一条带关闭的消息通知',
     lifetime: MessageDemoLifetime.persistent,
-    actionText: '按钮',
-    feedbackText: '已点击按钮',
     hasCloseButton: true,
   ),
   MessageDemoCase(

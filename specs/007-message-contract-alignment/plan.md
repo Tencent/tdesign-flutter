@@ -70,3 +70,10 @@
 - 示例代码一致性：codegen `--check`
 - 站点/组件契约：`node scripts/check-flutter-component-contracts.mjs`
 - 人工验收：先点击触发默认、关闭按钮与声明式实例，再比较微信开发者工具实际页、Flutter Web 触发态和 Flutter 3.32.0 Linux 明暗 Golden；真机 DPR 单独记录。
+
+## 2026-09-15 收敛方案
+
+- 在 `TMessage` 布局边界统一加入 16px 水平外边距，并将安全区继续作为外层约束；不在 Demo 逐实例包 `Padding`。
+- “带关闭的通知”删除 Demo 的 `action`，避免把关闭能力和操作按钮混成同一示例。
+- 删除声明式 Demo 为旧组件几何加入的 `Transform.translate(-16px)`，防止示例层反向掩盖组件默认值。
+- 以 Flutter 3.32.0 Linux 的 22 组 Message 页面/展开态 Golden 作为像素回归门禁，并用关闭通知明亮图保存修复前、修复后和差异图。
