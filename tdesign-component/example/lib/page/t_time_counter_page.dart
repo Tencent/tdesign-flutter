@@ -4,6 +4,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/example_code.dart';
 
+const _counterPadding = EdgeInsets.symmetric(horizontal: 16);
+
 class TTimeCounterPage extends StatelessWidget {
   const TTimeCounterPage({super.key});
 
@@ -11,29 +13,84 @@ class TTimeCounterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(context),
-      desc: '用于实时展示倒计时数值。',
+      desc: '用于实时展示计时数值，支持正向计时与倒计时。',
       exampleCodeGroup: 'timeCounter',
       showTestModule: false,
       children: const [
         ExampleModule(
           title: '组件类型',
           children: [
-            ExampleItem(desc: '时分秒', builder: _buildSimple),
-            ExampleItem(desc: '带毫秒', builder: _buildMillisecondSimple),
-            ExampleItem(desc: '带方形底', builder: _buildSquareSimple),
-            ExampleItem(desc: '带圆形底', builder: _buildRoundSimple),
-            ExampleItem(desc: '带单位', builder: _buildUnitSimple),
-            ExampleItem(desc: '无底色带单位', builder: _buildCustomUnitSimple),
+            ExampleItem(
+              desc: '时分秒',
+              builder: _buildSimple,
+              center: false,
+              padding: _counterPadding,
+            ),
+            ExampleItem(
+              desc: '带毫秒',
+              builder: _buildMillisecondSimple,
+              center: false,
+              padding: _counterPadding,
+            ),
+            ExampleItem(
+              desc: '带方形底',
+              builder: _buildSquareSimple,
+              center: false,
+              padding: _counterPadding,
+            ),
+            ExampleItem(
+              desc: '带圆形底',
+              builder: _buildRoundSimple,
+              center: false,
+              padding: _counterPadding,
+            ),
+            ExampleItem(
+              desc: '带单位',
+              builder: _buildUnitSimple,
+              center: false,
+              padding: _counterPadding,
+            ),
+            ExampleItem(
+              desc: '无底色带单位',
+              builder: _buildCustomUnitSimple,
+              center: false,
+              padding: _counterPadding,
+            ),
           ],
         ),
         ExampleModule(
           title: '组件尺寸',
           children: [
-            ExampleItem(desc: '时分秒', builder: _buildDefaultSizes),
-            ExampleItem(desc: '带毫秒', builder: _buildMillisecondSizes),
-            ExampleItem(desc: '带方形底', builder: _buildSquareSizes),
-            ExampleItem(desc: '带圆形底', builder: _buildRoundSizes),
-            ExampleItem(desc: '带单位', builder: _buildUnitSizes),
+            ExampleItem(
+              desc: '时分秒',
+              builder: _buildDefaultSizes,
+              center: false,
+              padding: _counterPadding,
+            ),
+            ExampleItem(
+              desc: '带毫秒',
+              builder: _buildMillisecondSizes,
+              center: false,
+              padding: _counterPadding,
+            ),
+            ExampleItem(
+              desc: '带方形底',
+              builder: _buildSquareSizes,
+              center: false,
+              padding: _counterPadding,
+            ),
+            ExampleItem(
+              desc: '带圆形底',
+              builder: _buildRoundSizes,
+              center: false,
+              padding: _counterPadding,
+            ),
+            ExampleItem(
+              desc: '带单位',
+              builder: _buildUnitSizes,
+              center: false,
+              padding: _counterPadding,
+            ),
           ],
         ),
       ],

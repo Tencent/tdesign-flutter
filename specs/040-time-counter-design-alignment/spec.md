@@ -9,23 +9,25 @@
 - 公开 Demo 按“组件类型 / 组件尺寸”展示 6 个基础场景和 5 组三档尺寸场景。
 - 使用 `96 * 60 * 1000` 的同源初始时长，由组件标准 `highlight` 形态实现无底色高亮数字与单位视觉。
 - `format` 是展示内容和更新精度的唯一来源；秒级模式仅跨秒更新，含 `S` 毫秒段时按绘制帧更新。
-- `onChanged` 与用户可见展示变化同步，避免普通秒级模式逐帧通知。
-- 动态切换 `autoStart`、`direction`、`time` 时保持可预测的重置、开始和暂停行为。
+- `onChanged` 与用户可见展示变化同步，避免未展示的时间单位变化时产生冗余通知。
+- 保留通用计时器名称与正向/倒计时能力，并统一组件内部、注释和 Demo 文案的“计时器”语义。
+- `autoStart` 仅决定首次挂载是否启动；挂载后的开始、暂停和重置由 Controller 命令唯一控制。
+- 动态切换 `direction`、`time` 时保持当前运行/暂停状态，并按新配置重置计时值。
 - 生成代码面板包含复现场景所需的完整组件组合和状态计算。
 
 ## 行为契约
 
 1. `time` 必须非负；`format` 必须由时间段和单字符非空白分隔符组成。
 2. `format` 中每种时间段最多出现一次；相邻时间段之间必须有且仅有一个非空白分隔符，最后可有一个单位字符。
-3. `format` 不含 `S` 时仅在秒值变化或到达终点时重建并触发 `onChanged`；包含 `S` 时按有效绘制帧重建并通知。
+3. `format` 不含 `S` 时仅在格式化后的可见值变化时重建并触发 `onChanged`；包含 `S` 时按有效绘制帧重建并通知。
 4. `onFinish` 在一次运行自然到达终点时只触发一次；单纯初始为零或 reset 不重复完成通知，显式从终点 start 可完成一次。
-5. `time` 或 `direction` 更新时按新契约重置；`autoStart` 从 false 变 true 开始，从 true 变 false 暂停。
-6. Controller 由调用方持有和释放，只公开 `start`、`pause`、`reset` 三个命令；重复 reset 支持更新目标时长并拒绝负值。
+5. `time` 或 `direction` 更新时按新契约重置，并保持更新前的运行/暂停状态；`autoStart` 只在首次挂载时读取，后续更新不作为运行命令。
+6. Controller 由调用方持有和释放，只公开 `start`、`pause`、`reset` 三个命令；`reset` 支持更新目标时长并拒绝负值，重置后保持暂停，需要继续计时时显式调用 `start`。
 7. `size`、`variant`、`splitWithUnit` 动态变化时立即重算组件样式。
 
 ## API 收敛
 
-- 保留 Flutter 的 `direction`、`content` 和 `TTimeCounterController`，它们表达公开 Demo 之外仍成立的 Flutter 用例。
+- 保留组件名 `TTimeCounter` 以及 Flutter 的 `direction`、`content` 和 `TTimeCounterController`，它们共同表达通用正向/倒计时用例；Figma CountDown 仅作为倒计时视觉场景，不反向限定组件命名。
 - 不新增小程序的字符串 `content`、结构化 change payload 或外部 class API；自定义内容继续使用 Widget builder，回调继续传递毫秒整数。
 - `TTimeCounterVariant` 使用 `plain`、`highlight`、`round`、`square` 表达四种标准绘制形态；Demo 不用 builder 覆盖标准形态。
 - 删除可由 `format` 推导的 `showMillisecond`；`splitWithUnit` 保留为本地化单位展示入口。

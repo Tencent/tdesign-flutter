@@ -13,3 +13,9 @@
 - [x] DONE 由组件标准 highlight 形态替代 Demo 手工样式
 - [x] DONE 更新生成产物并完成聚焦测试、覆盖率与双版本 analyze
 - [x] DONE 在 Flutter 3.32.0 Linux 更新并复验 Golden
+- [x] DONE 保留 TTimeCounter 命名并统一通用计时语义
+- [x] DONE 收敛 autoStart 与 Controller 的运行状态所有权
+- [x] DONE 让 onChanged 严格跟随格式化后的可见值
+- [x] DONE 将公开 Demo 实例改为设计稿左对齐并更新视觉基线
+- [x] DONE 补充状态竞争、格式精度和 Demo 布局测试
+- [x] DONE 在最新 develop 上完成双版本、覆盖率与 Golden 复验

@@ -456,6 +456,44 @@ void main() {
       expect(find.text('10'), findsOneWidget);
       expect(changes, [10000]);
     });
+
+    testWidgets('controller.reset() 重置后保持暂停', (tester) async {
+      final controller = TTimeCounterController();
+      await tester.pumpWidget(
+        wrapWithTheme(TTimeCounter(time: 5000, controller: controller)),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('04'), findsOneWidget);
+
+      controller.pause();
+      controller.reset();
+      await tester.pump();
+      expect(find.text('05'), findsOneWidget);
+
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('05'), findsOneWidget);
+    });
+
+    testWidgets('controller.reset() 刷新自定义内容但不重复通知相同可见值', (tester) async {
+      final controller = TTimeCounterController();
+      final changes = <int>[];
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTimeCounter(
+            time: 5000,
+            autoStart: false,
+            controller: controller,
+            onChanged: changes.add,
+            content: (time) => Text('$time'),
+          ),
+        ),
+      );
+
+      controller.reset(5500);
+      await tester.pump();
+      expect(find.text('5500'), findsOneWidget);
+      expect(changes, isEmpty);
+    });
   });
 
   // ============================================================
@@ -615,7 +653,7 @@ void main() {
           ),
         ),
       );
-      // 等待计时器执行（direction=up 时 _time 累加）
+      // 等待计时器执行（direction=up 时当前计时值递增）
       await tester.pump(const Duration(seconds: 1));
       controller.pause();
       await tester.pump();
@@ -704,15 +742,20 @@ void main() {
       expect(millisecondChanges, hasLength(3));
     });
 
-    testWidgets('动态 autoStart 开始和暂停当前计时', (tester) async {
+    testWidgets('autoStart 仅决定初始行为，运行期由 controller 控制', (tester) async {
       var autoStart = false;
+      final controller = TTimeCounterController();
       late StateSetter update;
       await tester.pumpWidget(
         wrapWithTheme(
           StatefulBuilder(
             builder: (context, setState) {
               update = setState;
-              return TTimeCounter(time: 5000, autoStart: autoStart);
+              return TTimeCounter(
+                time: 5000,
+                autoStart: autoStart,
+                controller: controller,
+              );
             },
           ),
         ),
@@ -723,12 +766,36 @@ void main() {
       update(() => autoStart = true);
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
+      expect(find.text('05'), findsOneWidget);
+
+      controller.start();
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
       expect(find.text('04'), findsOneWidget);
 
       update(() => autoStart = false);
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
-      expect(find.text('04'), findsOneWidget);
+      expect(find.text('03'), findsOneWidget);
+
+      controller.pause();
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('03'), findsOneWidget);
+    });
+
+    testWidgets('onChanged 仅在 format 对应的可见值变化时触发', (tester) async {
+      final changes = <int>[];
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTimeCounter(time: 65000, format: 'mm', onChanged: changes.add),
+        ),
+      );
+
+      await tester.pump(const Duration(seconds: 3));
+      expect(changes, isEmpty);
+      await tester.pump(const Duration(seconds: 3));
+      expect(changes, hasLength(1));
     });
 
     testWidgets('动态 direction 按新方向重置并正向计时', (tester) async {

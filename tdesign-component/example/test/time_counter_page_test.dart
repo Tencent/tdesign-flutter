@@ -28,6 +28,11 @@ void main() {
     expect(counters[5].splitWithUnit, isTrue);
     expect(counters[5].content, isNull);
     expect(find.text('03 单元测试'), findsNothing);
+    expect(find.text('用于实时展示计时数值，支持正向计时与倒计时。'), findsOneWidget);
+
+    for (final counter in counters) {
+      expect(tester.getTopLeft(find.byWidget(counter)).dx, 16);
+    }
 
     for (var group = 0; group < 5; group++) {
       final offset = 6 + group * 3;
