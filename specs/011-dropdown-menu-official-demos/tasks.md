@@ -4,7 +4,7 @@
 - [x] DONE 修复组件禁用多选项的默认背景 Token，Demo 不传颜色覆盖组件问题
 - [x] DONE 生成并人工检查修复前、修复后与差异图，仅更新三列多选明暗 Golden
 - [x] DONE 完成 Flutter 3.32.0 / latest 全量聚焦回归、覆盖率、严格 analyze 与工具自测
-- [ ] TODO 创建独立 PR 并回填 Issue #1027 DropdownMenu 条目
+- [x] DONE 创建独立 PR #1125；Issue #1027 DropdownMenu 条目在 PR 推送完成后回填
 
 - [x] DONE 修复多列等宽、遮罩透明度和动画时长优先级，补充草稿契约文档
 - [x] DONE 双版本组件/Demo/工具回归、严格 analyze、生产覆盖率与 Linux Golden 验证
