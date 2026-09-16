@@ -67,6 +67,21 @@ void main() {
     expect(find.text('最新产品'), findsNothing);
   });
 
+  testWidgets('单选项选中文字和勾选图标使用品牌色', (tester) async {
+    configureViewport(tester);
+    await tester.pumpWidget(buildPage());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('全部产品'));
+    await tester.pumpAndSettle();
+
+    final selectedText = tester.widget<Text>(find.text('全部产品').last);
+    final selectedIcon = tester.widget<Icon>(find.byIcon(TIcons.check));
+    final brandColor = TThemeData.defaultData().brandNormalColor;
+    expect(selectedText.style?.color, brandColor);
+    expect(selectedIcon.color, brandColor);
+  });
+
   testWidgets('三列多选展开态与设计稿一致', (tester) async {
     configureViewport(tester);
     await tester.pumpWidget(buildPage());
@@ -83,6 +98,21 @@ void main() {
 
     expect(find.text('选项名称'), findsNWidgets(12));
     expect(find.text('禁用选项'), findsNWidgets(3));
+    final disabledChip = tester.widget<Container>(
+      find
+          .ancestor(
+            of: find.text('禁用选项').first,
+            matching: find.byWidgetPredicate(
+              (widget) =>
+                  widget is Container && widget.decoration is BoxDecoration,
+            ),
+          )
+          .first,
+    );
+    expect(
+      (disabledChip.decoration! as BoxDecoration).color,
+      const Color(0xFFEEEEEE),
+    );
     expect(find.text('数码'), findsNothing);
     expect(find.text('生活'), findsNothing);
     expect(
