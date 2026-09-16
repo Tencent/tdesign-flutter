@@ -22,21 +22,57 @@ class TNavBarPage extends StatelessWidget {
         ExampleModule(
           title: '组件类型',
           children: [
-            ExampleItem(desc: '基础H5导航栏', builder: _baseH5Navbar),
-            ExampleItem(builder: _leftMultiAction),
-            ExampleItem(builder: _rightMultiAction),
-            ExampleItem(desc: '带搜索导航栏', builder: _searchNavbar),
-            ExampleItem(desc: '带图片导航栏', builder: _logoNavbar),
+            ExampleItem(
+              key: const Key('navbar-demo-scene-base'),
+              desc: '基础H5导航栏',
+              builder: _baseH5Navbar,
+            ),
+            ExampleItem(
+              key: const Key('navbar-demo-scene-left-multi'),
+              builder: _leftMultiAction,
+            ),
+            ExampleItem(
+              key: const Key('navbar-demo-scene-right-multi'),
+              builder: _rightMultiAction,
+            ),
+            ExampleItem(
+              key: const Key('navbar-demo-scene-search'),
+              desc: '带搜索导航栏',
+              builder: _searchNavbar,
+            ),
+            ExampleItem(
+              key: const Key('navbar-demo-scene-image'),
+              desc: '带图片导航栏',
+              builder: _logoNavbar,
+            ),
           ],
         ),
         ExampleModule(
           title: '组件样式',
           children: [
-            ExampleItem(desc: '标题对齐', builder: _titleCenterNavbar),
-            ExampleItem(builder: _titleLeftNavbar),
-            ExampleItem(desc: '标题尺寸', builder: _titleNormalNavbar),
-            ExampleItem(builder: _titleBelowNavbar),
-            ExampleItem(desc: '自定义颜色', builder: _setBgColorNavbar),
+            ExampleItem(
+              key: const Key('navbar-demo-scene-title-center'),
+              desc: '标题对齐',
+              builder: _titleCenterNavbar,
+            ),
+            ExampleItem(
+              key: const Key('navbar-demo-scene-title-left'),
+              builder: _titleLeftNavbar,
+            ),
+            ExampleItem(
+              key: const Key('navbar-demo-scene-title-normal'),
+              desc: '标题尺寸',
+              builder: _titleNormalNavbar,
+            ),
+            ExampleItem(
+              key: const Key('navbar-demo-scene-title-below'),
+              builder: _titleBelowNavbar,
+            ),
+            ExampleItem(
+              key: const Key('navbar-demo-scene-custom-color'),
+              desc: '自定义颜色',
+              builder: _setBgColorNavbar,
+            ),
           ],
         ),
       ],
