@@ -28,9 +28,7 @@ API 结论：合并 `develop@fb26b8d5` 后，实例 `colorScheme` 已是配色�
 
 ## 2026-09-15 Issue #1027 标记差异
 
-| 修复前 | 修复后 | 差异标记 |
-| --- | --- | --- |
-| ![修复前](evidence/issue-1027/before.png) | ![修复后](evidence/issue-1027/after.png) | ![像素差异](evidence/issue-1027/diff.png) |
+完整修改前、修改后与独立像素差异图保存在 GitHub PR #1129 描述的附件中，不作为 Spec 二进制文件提交。
 
 - **组件差异**：顶部左/右、底部左/右的气泡相对锚点重新定位，箭头定位点固定距对应气泡边缘 12px，并继续指向锚点。
 - **Demo 检查**：四个公开示例只传标准 placement，没有 Padding、Transform 或专用位置参数。
