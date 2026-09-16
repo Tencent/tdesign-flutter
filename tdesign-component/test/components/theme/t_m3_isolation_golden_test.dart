@@ -90,11 +90,10 @@ class _ControlColumn extends StatelessWidget {
                 title: 'Checkbox',
                 onChanged: _checkboxNoop,
               ),
-              const TRadio<String>(
+              const TRadioGroup<String>(
                 value: 'a',
-                groupValue: 'a',
-                title: 'Radio',
                 onChanged: _radioNoop,
+                child: TRadio<String>(value: 'a', title: 'Radio'),
               ),
               const SizedBox(height: 8),
               const Row(

@@ -1,5 +1,6 @@
 # 验收记录
 
+- 2026-09-11 评分设计细节修复：启用状态 0 分文案使用 `textDisabledColor`（默认 `#42000000`），尺寸与评分风格两组容器间距均为 `spacer16`，线描评分使用 `warningColor5`，竖向描述容器使用 `bgColorContainer` 并显示“服务很棒”。Flutter 3.32.0 的 Rate 38 项组件测试、2 项 Demo 测试、组件与 Example analyze 均通过，生产源码覆盖率 365/371（98.38%）；Linux 明暗 Golden 更新后无参数复跑 2/2 通过。Flutter 3.47.0 的 38 项组件测试、2 项 Demo 测试及两包 analyze 均通过。新增 Rate 专用 CJK fallback，字形与 SHA-256 已校验，无缺字符号。
 - 2026-09-02 禁用态辅助文字颜色回归：Flutter 3.32.0 与 3.47.0 的 `flutter test --no-pub --exclude-tags golden test/components/rate/t_rate_test.dart` 均为 36 项通过，分别直接断言默认 `textDisabledColor` Token 与显式 `ColorScheme.onSurface` 的 38% 透明度；3.32.0 覆盖率门禁为 361/367，98.37%；两个 SDK 的 `flutter analyze` 均零问题。
 - 2026-09-01 垂直对齐修复前根因测试：默认 `fontBodyLarge` 目标行盒为 24px，Rate 辅助文字实际为 23px，且 `TextStyle.height == null`；同一测试在修复后测得 24px，并确认文字与首个 24px 星标中心差小于 0.01px。
 - `flutter test test/components/rate/t_rate_test.dart test/components/text/t_text_test.dart test/components/text/t_text_resolve_test.dart`：56 项通过；Rate 辅助文字改用 `TText`，完整合并 `fontBodyLarge` 与 Theme 局部覆盖，并覆盖外层 `DefaultTextStyle`、窄容器位置和 1.0/1.5/2.0 文本缩放。

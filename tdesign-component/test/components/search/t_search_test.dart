@@ -240,7 +240,7 @@ void main() {
       );
       expect(decoration.color, token.bgColorSecondaryContainer);
       expect(decoration.borderRadius, BorderRadius.circular(6));
-      expect(tester.getSize(find.byIcon(TIcons.search)), const Size.square(24));
+      expect(tester.getSize(find.byIcon(TIcons.search)), const Size.square(20));
       expect(field(tester).style?.fontSize, token.fontBodyLarge?.size);
       expect(field(tester).style?.height, token.fontBodyLarge?.height);
       expect(

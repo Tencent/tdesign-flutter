@@ -51,29 +51,29 @@ void main() {
     expect(find.text('01 组件类型'), findsOneWidget);
     expect(find.text('用于在预设的一组选项中执行单项选择，并呈现选择结果。'), findsOneWidget);
 
-    final verticalGroup = tester.widget<TRadioGroup<int>>(
-      find.byWidgetPredicate(
-        (widget) => widget is TRadioGroup<int> && widget.options.length == 4,
+    const longLabel = '单选单选单选单选单选单选单选单选单选单选单选单选单选单选';
+    final verticalGroupFinder = find.ancestor(
+      of: find.text(longLabel),
+      matching: find.byWidgetPredicate((widget) => widget is TRadioGroup<int>),
+    );
+    final verticalGroup = tester.widget<TRadioGroup<int>>(verticalGroupFinder);
+    expect(verticalGroup.value, 1);
+    final longLabelRadio = tester.widget<TRadio<int>>(
+      find.ancestor(
+        of: find.text(longLabel),
+        matching: find.byType(TRadio<int>),
       ),
     );
-    expect(verticalGroup.value, 1);
-    expect(verticalGroup.iconType, TRadioIconType.fill);
-    expect(verticalGroup.titleMaxLines, 3);
-    expect(verticalGroup.subTitleMaxLines, 5);
-    expect(verticalGroup.options[2].label, '单选单选单选单选单选单选单选单选单选单选单选单选单选单选');
+    expect(longLabelRadio.iconType, TRadioIconType.fill);
+    expect(longLabelRadio.titleMaxLines, 3);
+    expect(longLabelRadio.subTitleMaxLines, 5);
+    final horizontalRadio = tester.widget<TRadio<int>>(
+      find.ancestor(of: find.text('上限四字'), matching: find.byType(TRadio<int>)),
+    );
+    expect(horizontalRadio.variant, TRadioVariant.inline);
     verticalGroup.onChanged?.call(1);
     await tester.pump();
-    expect(
-      tester
-          .widget<TRadioGroup<int>>(
-            find.byWidgetPredicate(
-              (widget) =>
-                  widget is TRadioGroup<int> && widget.options.length == 4,
-            ),
-          )
-          .value,
-      isNull,
-    );
+    expect(tester.widget<TRadioGroup<int>>(verticalGroupFinder).value, isNull);
 
     final scrollState = tester.state<ScrollableState>(
       find.descendant(
@@ -87,6 +87,8 @@ void main() {
       '横向单选框',
       '02 组件状态',
       '单选框状态',
+      '单选-已选',
+      '单选-未选',
       '03 组件样式',
       '勾选样式',
       '勾选显示位置',
@@ -115,38 +117,21 @@ void main() {
     scrollState.position.jumpTo(scrollState.position.maxScrollExtent);
     await tester.pump();
     await tester.pump();
-    final specialGroups = find
-        .byWidgetPredicate(
-          (widget) => widget is TRadioGroup<int> && widget.cardMode,
-        )
-        .evaluate()
-        .map((element) => element.widget as TRadioGroup<int>)
-        .toList();
-    expect(specialGroups, hasLength(2));
-    expect(specialGroups.first.direction, Axis.vertical);
-    expect(specialGroups.last.direction, Axis.horizontal);
-    expect(specialGroups.last.columns, 3);
-    expect(
-      specialGroups.first.options.every(
-        (item) => item.subTitle == '描述信息描述信息描述信息描述信息描述信息',
-      ),
-      isTrue,
+    const specialDescription = '描述信息描述信息描述信息描述信息描述信息';
+    expect(find.text(specialDescription), findsNWidgets(3));
+    final specialGroupFinder = find.ancestor(
+      of: find.text(specialDescription).first,
+      matching: find.byWidgetPredicate((widget) => widget is TRadioGroup<int>),
     );
-    expect(
-      specialGroups.last.options.every((item) => item.subTitle == null),
-      isTrue,
+    final specialGroup = tester.widget<TRadioGroup<int>>(specialGroupFinder);
+    final cards = find.byWidgetPredicate(
+      (widget) => widget.runtimeType.toString() == 'TSelectionCard',
     );
+    expect(cards, findsNWidgets(6));
 
-    specialGroups.first.onChanged?.call(2);
+    specialGroup.onChanged?.call(2);
     await tester.pump();
-    final updatedGroups = find
-        .byWidgetPredicate(
-          (widget) => widget is TRadioGroup<int> && widget.cardMode,
-        )
-        .evaluate()
-        .map((element) => element.widget as TRadioGroup<int>)
-        .toList();
-    expect(updatedGroups.map((group) => group.value), [2, 0]);
+    expect(tester.widget<TRadioGroup<int>>(specialGroupFinder).value, 2);
   });
 
   testWidgets('非通栏单选样式使用 radiusExtraLarge 圆角 token', (tester) async {
@@ -167,6 +152,95 @@ void main() {
       tester.widget<ClipRRect>(nonFullWidthClip).borderRadius,
       BorderRadius.circular(TThemeData.defaultData().radiusExtraLarge),
     );
+  });
+
+  testWidgets('横向单选框距离容器四周为 spacer16 并在中间均分余量', (tester) async {
+    tester.view.physicalSize = const Size(375, 2600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(buildPage(ThemeMode.light));
+    await tester.pump();
+
+    final layout = find.byKey(const ValueKey('radio-horizontal-layout'));
+    expect(tester.getSize(layout).width, 375);
+    final radios = find.descendant(
+      of: layout,
+      matching: find.byType(TRadio<int>),
+    );
+    final firstTitle = find.descendant(
+      of: radios.first,
+      matching: find.text('单选标题'),
+    );
+    expect(tester.getTopLeft(firstTitle).dy - tester.getTopLeft(layout).dy, 16);
+    expect(
+      tester.getBottomRight(layout).dy - tester.getBottomRight(firstTitle).dy,
+      16,
+    );
+    expect(
+      tester.getTopLeft(radios.first).dx - tester.getTopLeft(layout).dx,
+      16,
+    );
+    expect(
+      tester.getBottomRight(layout).dx - tester.getBottomRight(radios.last).dx,
+      16,
+    );
+    final firstGap =
+        tester.getTopLeft(radios.at(1)).dx -
+        tester.getBottomRight(radios.first).dx;
+    final secondGap =
+        tester.getTopLeft(radios.last).dx -
+        tester.getBottomRight(radios.at(1)).dx;
+    expect(firstGap, closeTo(secondGap, 0.01));
+  });
+
+  testWidgets('纵向与横向卡片文案均在边框内居中且保留安全间距', (tester) async {
+    tester.view.physicalSize = const Size(375, 2600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(buildPage(ThemeMode.light));
+    await tester.pump();
+
+    final scrollable = find.descendant(
+      of: find.byType(CustomScrollView),
+      matching: find.byType(Scrollable),
+    );
+    for (final key in const [
+      'radio-vertical-card-layout',
+      'radio-horizontal-card-layout',
+    ]) {
+      final group = find.byKey(ValueKey(key));
+      await tester.scrollUntilVisible(group, 500, scrollable: scrollable);
+      await tester.pump();
+      final card = find
+          .descendant(
+            of: group,
+            matching: find.byWidgetPredicate(
+              (widget) => widget.runtimeType.toString() == 'TSelectionCard',
+            ),
+          )
+          .first;
+      final content = find
+          .descendant(of: card, matching: find.byType(Column))
+          .first;
+      expect(
+        tester.getCenter(content).dy,
+        closeTo(tester.getCenter(card).dy, 0.01),
+      );
+      expect(tester.getTopLeft(content).dy - tester.getTopLeft(card).dy, 16);
+      expect(
+        tester.getBottomRight(card).dy - tester.getBottomRight(content).dy,
+        16,
+      );
+      expect(tester.getTopLeft(content).dx - tester.getTopLeft(card).dx, 16);
+      expect(
+        tester.getBottomRight(card).dx - tester.getBottomRight(content).dx,
+        16,
+      );
+    }
   });
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {

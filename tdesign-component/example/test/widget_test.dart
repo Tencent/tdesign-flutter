@@ -117,6 +117,72 @@ void main() {
     },
   );
 
+  testWidgets('compact Demo uses the mobile page header and light canvas',
+      (tester) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(ChangeNotifierProvider(
+      create: (_) => ThemeModeProvider(),
+      child: MaterialApp(
+        theme: TThemeBuilder.light(token),
+        home: ExamplePage(
+          title: '页面标题',
+          desc: '页面说明',
+          exampleCodeGroup: 'test',
+          compactDemo: true,
+          showTestModule: false,
+          children: const [
+            ExampleModule(
+              title: '模块标题',
+              children: [
+                ExampleItem(ignoreCode: true, builder: _emptyExample),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ));
+    await tester.pump();
+
+    final pageTitleFinder = find.byWidgetPredicate(
+      (widget) => widget is TText && widget.data == '页面标题',
+    );
+    final pageDescriptionFinder = find.byWidgetPredicate(
+      (widget) => widget is TText && widget.data == '页面说明',
+    );
+    final pageTitle = tester.widget<TText>(pageTitleFinder);
+    final moduleTitleFinder = find.byWidgetPredicate(
+      (widget) => widget is TText && widget.data == '01 模块标题',
+    );
+    expect(pageTitle.style?.fontSize, token.fontHeadlineSmall?.size);
+    expect(pageTitle.style?.height, token.fontHeadlineSmall?.height);
+    expect(pageTitle.style?.fontWeight, FontWeight.w600);
+    expect(
+      tester.getTopLeft(pageDescriptionFinder).dy -
+          tester.getBottomLeft(pageTitleFinder).dy,
+      8,
+    );
+    expect(
+      tester.getTopLeft(pageTitleFinder).dy -
+          tester.getBottomLeft(find.byType(TNavBar)).dy,
+      24,
+    );
+    expect(
+      tester.getTopLeft(moduleTitleFinder).dy -
+          tester.getBottomLeft(pageDescriptionFinder).dy,
+      32,
+    );
+    expect(
+      tester.widget<Scaffold>(find.byType(Scaffold)).backgroundColor,
+      const Color(0xFFF6F6F6),
+    );
+    expect(
+      find.byWidgetPredicate(
+        (widget) => widget is SizedBox && widget.height == 32,
+      ),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('单元测试模块仅在 debug 模式按开关展示', (tester) async {
     Widget buildPage({required bool showTestModule}) {
       return ChangeNotifierProvider(

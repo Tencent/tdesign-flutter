@@ -200,29 +200,86 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
     }
     return TFormThemeData(
       showColon: t < 0.5 ? showColon : other.showColon,
-      labelWidth: lerpDouble(labelWidth, other.labelWidth, t),
+      labelWidth: _lerpDoubleWithDefault(labelWidth, other.labelWidth, t, 80),
       layout: t < 0.5 ? layout : other.layout,
       labelAlign: t < 0.5 ? labelAlign : other.labelAlign,
       requiredMarkPosition: t < 0.5
           ? requiredMarkPosition
           : other.requiredMarkPosition,
-      labelStyle: TextStyle.lerp(labelStyle, other.labelStyle, t),
-      requiredMarkStyle: TextStyle.lerp(
+      labelStyle: _lerpNullable(
+        labelStyle,
+        other.labelStyle,
+        t,
+        TextStyle.lerp,
+      ),
+      requiredMarkStyle: _lerpNullable(
         requiredMarkStyle,
         other.requiredMarkStyle,
         t,
+        TextStyle.lerp,
       ),
-      helpStyle: TextStyle.lerp(helpStyle, other.helpStyle, t),
-      errorStyle: TextStyle.lerp(errorStyle, other.errorStyle, t),
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      borderColor: Color.lerp(borderColor, other.borderColor, t),
-      itemPadding: EdgeInsetsGeometry.lerp(itemPadding, other.itemPadding, t),
-      itemSpacing: lerpDouble(itemSpacing, other.itemSpacing, t),
-      labelGap: lerpDouble(labelGap, other.labelGap, t),
-      leadingGap: lerpDouble(leadingGap, other.leadingGap, t),
-      messageGap: lerpDouble(messageGap, other.messageGap, t),
+      helpStyle: _lerpNullable(helpStyle, other.helpStyle, t, TextStyle.lerp),
+      errorStyle: _lerpNullable(
+        errorStyle,
+        other.errorStyle,
+        t,
+        TextStyle.lerp,
+      ),
+      backgroundColor: _lerpNullable(
+        backgroundColor,
+        other.backgroundColor,
+        t,
+        Color.lerp,
+      ),
+      borderColor: _lerpNullable(borderColor, other.borderColor, t, Color.lerp),
+      itemPadding: _lerpEdgeInsetsWithDefault(
+        itemPadding,
+        other.itemPadding,
+        t,
+        const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      ),
+      itemSpacing: _lerpDoubleWithDefault(itemSpacing, other.itemSpacing, t, 0),
+      labelGap: _lerpDoubleWithDefault(labelGap, other.labelGap, t, 8),
+      leadingGap: _lerpNullable(leadingGap, other.leadingGap, t, lerpDouble),
+      messageGap: _lerpNullable(messageGap, other.messageGap, t, lerpDouble),
       verticalAlignment: t < 0.5 ? verticalAlignment : other.verticalAlignment,
       contentAlignment: t < 0.5 ? contentAlignment : other.contentAlignment,
     );
   }
+}
+
+double? _lerpDoubleWithDefault(
+  double? begin,
+  double? end,
+  double t,
+  double defaultValue,
+) {
+  if (begin == null && end == null) {
+    return null;
+  }
+  return lerpDouble(begin ?? defaultValue, end ?? defaultValue, t);
+}
+
+EdgeInsetsGeometry? _lerpEdgeInsetsWithDefault(
+  EdgeInsetsGeometry? begin,
+  EdgeInsetsGeometry? end,
+  double t,
+  EdgeInsetsGeometry defaultValue,
+) {
+  if (begin == null && end == null) {
+    return null;
+  }
+  return EdgeInsetsGeometry.lerp(begin ?? defaultValue, end ?? defaultValue, t);
+}
+
+T? _lerpNullable<T>(
+  T? begin,
+  T? end,
+  double t,
+  T? Function(T?, T?, double) lerp,
+) {
+  if (begin == null || end == null) {
+    return t < 0.5 ? begin : end;
+  }
+  return lerp(begin, end, t);
 }

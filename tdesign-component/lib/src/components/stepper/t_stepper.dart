@@ -5,6 +5,7 @@ import 'package:flutter/services.dart' show TextInputFormatter;
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_font_family.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import 't_stepper_defaults.dart';
@@ -491,10 +492,61 @@ class _StepperStyle {
   final TextStyle disabledTextStyle;
 
   static _StepperStyle resolve(BuildContext context, TStepper widget) {
-    return _resolveTheme(
+    final style = _resolveTheme(
       context,
       widget,
       Theme.of(context).extension<TStepperThemeData>(),
+    );
+    assert(_debugTextGeometryFits(style));
+    return style;
+  }
+
+  static bool _debugTextGeometryFits(_StepperStyle style) {
+    final fontSize = style.textStyle.fontSize!;
+    final lineHeight = fontSize * style.textStyle.height!;
+    assert(
+      fontSize <= style.controlSize,
+      'TStepper resolved fontSize ($fontSize) must not exceed '
+      'controlSize (${style.controlSize}).',
+    );
+    assert(
+      lineHeight <= style.controlSize,
+      'TStepper resolved text line height ($lineHeight) must not exceed '
+      'controlSize (${style.controlSize}).',
+    );
+    return true;
+  }
+
+  /// Flutter 的 [TextStyle.merge] 会在覆盖样式未设置 `package` 时保留底层
+  /// 样式的私有 package。把公开字体族（已包含 package 前缀）重新构造成不
+  /// 携带私有 package 的样式，确保更高优先级的字体族不会被错误归入旧包。
+  static TextStyle _flattenFontPackage(TextStyle style) {
+    return TextStyle(
+      inherit: style.inherit,
+      color: style.color,
+      backgroundColor: style.backgroundColor,
+      fontSize: style.fontSize,
+      fontWeight: style.fontWeight,
+      fontStyle: style.fontStyle,
+      letterSpacing: style.letterSpacing,
+      wordSpacing: style.wordSpacing,
+      textBaseline: style.textBaseline,
+      height: style.height,
+      leadingDistribution: style.leadingDistribution,
+      locale: style.locale,
+      foreground: style.foreground,
+      background: style.background,
+      shadows: style.shadows,
+      fontFeatures: style.fontFeatures,
+      fontVariations: style.fontVariations,
+      decoration: style.decoration,
+      decorationColor: style.decorationColor,
+      decorationStyle: style.decorationStyle,
+      decorationThickness: style.decorationThickness,
+      debugLabel: style.debugLabel,
+      fontFamily: style.fontFamily,
+      fontFamilyFallback: style.fontFamilyFallback,
+      overflow: style.overflow,
     );
   }
 
@@ -516,11 +568,28 @@ class _StepperStyle {
     final variant =
         widget.variant ?? componentTheme?.variant ?? TStepperVariant.normal;
     final geometry = stepperGeometry(size);
-    final defaultTextStyle = context.tExplicitDefaultTextStyle;
-    final materialTextStyle =
-        materialTheme.tExplicitTextTheme?.bodySmall ?? const TextStyle();
+    final controlSize = componentTheme?.controlSize ?? geometry.controlSize;
+    final explicitDefaultTextStyle = context.tExplicitDefaultTextStyle;
+    final defaultTextStyle = explicitDefaultTextStyle == null
+        ? null
+        : _flattenFontPackage(explicitDefaultTextStyle);
+    final materialTextStyle = _flattenFontPackage(
+      materialTheme.tExplicitTextTheme?.bodySmall ?? const TextStyle(),
+    );
+    final rawComponentTextStyle = componentTheme?.textStyle;
+    final componentTextStyle = rawComponentTextStyle == null
+        ? null
+        : _flattenFontPackage(rawComponentTextStyle);
+    final numberFontFamily = token.numberFontFamily;
+    final resolvedNumberFontFamily = numberFontFamily == null
+        ? null
+        : numberFontFamily.package == null
+        ? numberFontFamily.fontFamily
+        : 'packages/${numberFontFamily.package}/${numberFontFamily.fontFamily}';
     final inheritedFontFamily =
-        defaultTextStyle?.fontFamily ?? materialTextStyle.fontFamily;
+        defaultTextStyle?.fontFamily ??
+        materialTextStyle.fontFamily ??
+        resolvedNumberFontFamily;
     final foregroundColor =
         componentTheme?.foregroundColor ??
         defaultTextStyle?.color ??
@@ -528,16 +597,31 @@ class _StepperStyle {
         token.textColorPrimary;
     final disabledForegroundColor =
         componentTheme?.disabledForegroundColor ?? token.textDisabledColor;
-    final textStyle = materialTextStyle
+    final themedTextStyle = materialTextStyle
         .merge(defaultTextStyle)
         .copyWith(
           fontSize: geometry.fontSize,
           color: foregroundColor,
           fontFamily: inheritedFontFamily,
           letterSpacing: 0,
-          height: 1,
         )
-        .merge(componentTheme?.textStyle);
+        .merge(componentTextStyle);
+    final resolvedFontSize = themedTextStyle.fontSize ?? geometry.fontSize;
+    final explicitTextHeight = componentTheme?.textStyle?.height;
+    final resolvedLineHeight = math.min(geometry.lineHeight, controlSize);
+    final textStyle = themedTextStyle.copyWith(
+      fontSize: resolvedFontSize,
+      // Figma 的三档文字分别使用 10/16、12/20、16/24 行盒。Theme 只覆盖
+      // 字号时，按最终字号重新计算倍数；控件高度变小时则收敛到可用高度，
+      // 避免保留基于默认字号计算的旧倍数而裁切文字和光标。
+      height:
+          explicitTextHeight ?? resolvedLineHeight / resolvedFontSize,
+      // 将额外行高均分到字形上下，避免 Android 按字体 ascent/descent
+      // 比例分配 leading 后产生视觉上移。
+      leadingDistribution:
+          componentTheme?.textStyle?.leadingDistribution ??
+          TextLeadingDistribution.even,
+    );
     final inputTheme = materialTheme.inputDecorationTheme;
     final inputFillColor = inputTheme.fillColor;
     final borderColor =
@@ -547,7 +631,7 @@ class _StepperStyle {
 
     return _StepperStyle(
       variant: variant,
-      controlSize: componentTheme?.controlSize ?? geometry.controlSize,
+      controlSize: controlSize,
       inputWidth: componentTheme?.inputWidth ?? geometry.inputWidth,
       iconSize: componentTheme?.iconSize ?? geometry.iconSize,
       spacing: componentTheme?.spacing ?? stepperSpacing,

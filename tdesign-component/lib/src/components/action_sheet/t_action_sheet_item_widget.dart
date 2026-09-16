@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
@@ -33,7 +35,7 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
       context,
     ).extension<TActionSheetThemeData>();
     final iconSize = actionSheetTheme?.iconSize ?? 24;
-    final iconExtent = actionSheetTheme?.gridIconExtent ?? 48;
+    final iconExtent = actionSheetTheme?.gridIconExtent ?? 40;
     final iconColor = item.disabled
         ? context.tTheme.textDisabledColor
         : (actionSheetTheme?.iconColor ?? context.tTheme.textColorPrimary);
@@ -44,43 +46,68 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
               onSelected?.call(item);
               Navigator.maybePop(context);
             },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (item.icon != null) ...[
-            Stack(
-              clipBehavior: Clip.none,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final labelFont = context.tTheme.fontBodySmall;
+          final labelHeight =
+              (labelFont?.size ?? 12) * (labelFont?.height ?? (20 / 12));
+          final contentHeight = item.icon == null
+              ? labelHeight
+              : iconExtent + context.tTheme.spacer8 + labelHeight;
+          final availableSpacing = constraints.maxHeight.isFinite
+              ? math.max(0.0, constraints.maxHeight - contentHeight)
+              : context.tTheme.spacer16;
+          final topSpacing =
+              availableSpacing >=
+                  context.tTheme.spacer16 + context.tTheme.spacer12
+              ? context.tTheme.spacer16
+              : availableSpacing / 2;
+          return Padding(
+            padding: EdgeInsets.only(
+              left: context.tTheme.spacer8,
+              top: topSpacing,
+              right: context.tTheme.spacer8,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                IconTheme(
-                  data: IconThemeData(color: iconColor, size: iconSize),
-                  child: SizedBox(
-                    width: iconExtent,
-                    height: iconExtent,
-                    child: Center(child: item.icon!),
+                if (item.icon != null) ...[
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      IconTheme(
+                        data: IconThemeData(color: iconColor, size: iconSize),
+                        child: SizedBox(
+                          width: iconExtent,
+                          height: iconExtent,
+                          child: Center(child: item.icon!),
+                        ),
+                      ),
+                      if (item.badge != null)
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: FractionalTranslation(
+                            translation: const Offset(0.5, -0.5),
+                            child: item.badge!,
+                          ),
+                        ),
+                    ],
                   ),
+                  SizedBox(height: context.tTheme.spacer8),
+                ],
+                TText(
+                  item.label,
+                  font: context.tTheme.fontBodySmall,
+                  textColor: context.tTheme.textColorPrimary,
+                  style: item.textStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                if (item.badge != null)
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: FractionalTranslation(
-                      translation: const Offset(0.5, -0.5),
-                      child: item.badge!,
-                    ),
-                  ),
               ],
             ),
-            SizedBox(height: context.tTheme.spacer8),
-          ],
-          TText(
-            item.label,
-            font: context.tTheme.fontBodySmall,
-            textColor: context.tTheme.textColorPrimary,
-            style: item.textStyle,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+          );
+        },
       ),
     );
     if (!item.disabled) {
