@@ -1,0 +1,33 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+/// 在已配置 TDesign 主题的应用中使用 `TagSelectOutlineExample()`。
+class TagSelectOutlineExample extends StatefulWidget {
+  const TagSelectOutlineExample({super.key});
+
+  @override
+  State<TagSelectOutlineExample> createState() =>
+      _TagSelectOutlineExampleState();
+}
+
+class _TagSelectOutlineExampleState extends State<TagSelectOutlineExample> {
+  static const _labels = ['标签一', '标签二', '标签三'];
+  final _selectedValues = [false, true, false];
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: context.tTheme.spacer8,
+      children: List.generate(_labels.length, (index) {
+        return TSelectTag(
+          _labels[index],
+          value: _selectedValues[index],
+          variant: TTagVariant.outline,
+          onChanged: (value) {
+            setState(() => _selectedValues[index] = value);
+          },
+        );
+      }),
+    );
+  }
+}

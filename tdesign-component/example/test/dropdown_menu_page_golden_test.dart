@@ -9,6 +9,32 @@ import 'dropdown_menu_demo_test_spec.dart';
 void main() {
   registerDemoGoldenTests(dropdownMenuDemoPageTestSpec);
 
+  const openedGoldenScenarioIds = [
+    'product',
+    'sorter',
+    'single_column',
+    'double_column',
+    'triple_column',
+  ];
+  final openedGoldenScenarios = openedGoldenScenarioIds
+      .map(
+        (id) => dropdownMenuPublicScenarios.singleWhere(
+          (scenario) => scenario.id == id,
+        ),
+      )
+      .toList(growable: false);
+
+  test('opened Goldens cover every public expandable menu', () {
+    final expectedIds = dropdownMenuPublicScenarios
+        .where(
+          (scenario) =>
+              scenario.goldenPolicy == DropdownMenuGoldenPolicy.opened,
+        )
+        .map((scenario) => scenario.id)
+        .toSet();
+    expect(openedGoldenScenarioIds.toSet(), expectedIds);
+  });
+
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('dropdown menu overscroll ${mode.name} opened golden', (
       tester,
@@ -88,69 +114,41 @@ void main() {
       await disposeDemoPage(tester);
     }, tags: 'golden');
 
-    testWidgets('dropdown menu single select ${mode.name} opened golden', (
-      tester,
-    ) async {
-      await pumpDemoPageAtPhoneViewport(
+    for (final scenario in openedGoldenScenarios) {
+      testWidgets('dropdown menu ${scenario.id} ${mode.name} opened golden', (
         tester,
-        dropdownMenuDemoPageTestSpec,
-        mode,
-      );
+      ) async {
+        await pumpDemoPageAtPhoneViewport(
+          tester,
+          dropdownMenuDemoPageTestSpec,
+          mode,
+        );
 
-      final trigger = find.text('全部产品');
-      final scrollable = find.descendant(
-        of: find.byType(CustomScrollView).first,
-        matching: find.byType(Scrollable),
-      );
-      await tester.scrollUntilVisible(
-        trigger,
-        200,
-        scrollable: scrollable.first,
-      );
-      await tester.tap(trigger);
-      await tester.pumpAndSettle();
+        final trigger = find.text(scenario.label);
+        final scrollable = find.descendant(
+          of: find.byType(CustomScrollView).first,
+          matching: find.byType(Scrollable),
+        );
+        await tester.scrollUntilVisible(
+          trigger,
+          200,
+          scrollable: scrollable.first,
+        );
+        await tester.tap(trigger);
+        await tester.pumpAndSettle();
 
-      expect(find.text('最新产品'), findsOneWidget);
-      await expectLater(
-        find.byType(Overlay),
-        matchesGoldenFile(
-          'goldens/dropdown_menu_single_opened_${mode.name}.png',
-        ),
-      );
-      await disposeDemoPage(tester);
-    }, tags: 'golden');
-
-    testWidgets('dropdown menu multiple select ${mode.name} opened golden', (
-      tester,
-    ) async {
-      await pumpDemoPageAtPhoneViewport(
-        tester,
-        dropdownMenuDemoPageTestSpec,
-        mode,
-      );
-
-      final trigger = find.text('三列多选');
-      final scrollable = find.descendant(
-        of: find.byType(CustomScrollView).first,
-        matching: find.byType(Scrollable),
-      );
-      await tester.scrollUntilVisible(
-        trigger,
-        200,
-        scrollable: scrollable.first,
-      );
-      await tester.tap(trigger);
-      await tester.pumpAndSettle();
-
-      expect(find.text('选项名称'), findsNWidgets(12));
-      expect(find.text('禁用选项'), findsNWidgets(3));
-      await expectLater(
-        find.byType(Overlay),
-        matchesGoldenFile(
-          'goldens/dropdown_menu_multiple_opened_${mode.name}.png',
-        ),
-      );
-      await disposeDemoPage(tester);
-    }, tags: 'golden');
+        expect(
+          find.text(scenario.expectedPanelText),
+          findsNWidgets(scenario.expectedPanelTextCount),
+        );
+        await expectLater(
+          find.byType(Overlay),
+          matchesGoldenFile(
+            'goldens/dropdown_menu_${scenario.goldenName}_opened_${mode.name}.png',
+          ),
+        );
+        await disposeDemoPage(tester);
+      }, tags: 'golden');
+    }
   }
 }
