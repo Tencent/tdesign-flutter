@@ -911,11 +911,17 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/swipe_cell/t_swipe_cell_inherited_test.dart',
       'test/components/swipe_cell/t_swipe_cell_test.dart',
     ],
+    exampleTests: ['test/swipe_cell_demo_test.dart'],
     visualTests: [
+      VisualTestManifest(
+        name: 'SwipeCell actions',
+        workingDirectory: '.',
+        testFiles: ['test/components/swipe_cell/t_swipe_cell_golden_test.dart'],
+      ),
       VisualTestManifest(
         name: 'SwipeCell Demo',
         workingDirectory: 'example',
-        testFiles: ['test/swipe_cell_demo_test.dart'],
+        testFiles: ['test/swipe_cell_demo_golden_test.dart'],
       ),
     ],
   ),
