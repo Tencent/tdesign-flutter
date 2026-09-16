@@ -7,7 +7,7 @@
 - Demo 修复：确认类无标题/纯标题右侧操作改为品牌填充；两种输入和两种组件用法改为文字操作；六种图片统一 16:9 全宽，并将文案/图片到按钮以及居中标题区到图片收敛为 24dp；长内容补足真实溢出文本。
 - Flutter 3.32.0：组件 32/32、Demo 16/16、组件与 Example 严格 analyze 均通过；Dialog 生产源码覆盖率 `301/305 = 98.69%`；示例生成及 `--check` 通过；回归/生成器清单自测 18/18 通过。
 - Flutter 3.47.0：组件 32/32、Demo 16/16、组件与 Example 严格 analyze 均通过。首次测试命中跨版本 `ink_sparkle.frag` 缓存污染，分别清理组件和 Example 构建缓存、重新离线取依赖后复跑通过，确认不是源码失败。
-- CI 同款 Linux/Flutter 3.32.0：38 个明暗主题 Golden 更新后，无 `--update-goldens` 精确复跑 38/38 通过。代表性图片打开态在更新前精确比较为 `22.82% / 69488px` 差异；旧图、最终图与 isolated diff 分别见 `evidence/issue-1027-before.png`、`evidence/issue-1027-after.png`、`evidence/issue-1027-diff.png`。
+- CI 同款 Linux/Flutter 3.32.0：38 个明暗主题 Golden 更新后，无 `--update-goldens` 精确复跑 38/38 通过。代表性图片打开态在更新前精确比较为 `22.82% / 69488px` 差异；完整修改前、修改后与独立像素差异图保存在 GitHub PR #1124 描述的附件中，不作为 Spec 二进制文件提交。
 - GitHub PR [#1124](https://github.com/Tencent/tdesign-flutter/pull/1124) 已创建，核心实现提交为 `33b87889583d26673f1d046a97dffaa6105c770a`；Issue #1027 的 Dialog 条目已追加该 PR。首次读取时 Spell Check、CNB 同步与 CLA 通过，analyze、test、Golden、构建、预览和代码扫描仍在运行，merge state 为 `BLOCKED`，因此不标记为远端 CI 全绿。
 
 ## 验证环境
