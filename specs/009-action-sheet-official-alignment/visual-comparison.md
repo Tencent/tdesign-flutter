@@ -13,9 +13,7 @@
 
 基线为 `origin/develop@b8a4bec7d`，截图均来自 CI 同款 Linux amd64 / Flutter 3.32.0 / 375×812 / DPR 1 环境。旧 Golden 与新渲染直接比较得到 `11.97%` 像素差异；确认差异后才更新基线，并在无 `--update-goldens` 参数下复跑。
 
-| 修改前 Golden | 修改后渲染 | 标记差异 |
-| --- | --- | --- |
-| ![修改前](evidence/issue-1027-before.png) | ![修改后](evidence/issue-1027-after.png) | ![差异标记](evidence/issue-1027-diff.png) |
+完整修改前、修改后与独立像素差异图保存在 GitHub PR #1123 描述的附件中，不作为 Spec 二进制文件提交。
 
 差异项：
 
