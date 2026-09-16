@@ -45,6 +45,10 @@ class TActionSheetPage extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             ),
             ExampleItem(
+              builder: _pagedGrid,
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            ),
+            ExampleItem(
               builder: _iconGrid,
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             ),
@@ -158,11 +162,12 @@ class TActionSheetPage extends StatelessWidget {
 
   Widget _gridIcon(IconData icon, Color color) {
     return Container(
-      width: 48,
-      height: 48,
+      key: ValueKey(icon),
+      width: 40,
+      height: 40,
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        shape: BoxShape.circle,
+        borderRadius: BorderRadius.circular(6),
       ),
       alignment: Alignment.center,
       child: Icon(icon, size: 24, color: color),
@@ -212,23 +217,61 @@ class TActionSheetPage extends StatelessWidget {
     ),
   ];
 
-  List<TActionSheetItem<String>> _iconGridItems() => const [
-    TActionSheetItem(value: 'share', label: '分享', icon: Icon(TIcons.share)),
-    TActionSheetItem(value: 'favorite', label: '收藏', icon: Icon(TIcons.star)),
+  Widget _iconGridIcon(IconData icon) => Builder(
+    builder: (context) => Container(
+      key: ValueKey(icon),
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: context.tTheme.bgColorSecondaryContainer,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      alignment: Alignment.center,
+      child: Icon(icon, size: 24),
+    ),
+  );
+
+  List<TActionSheetItem<String>> _iconGridItems() => [
+    TActionSheetItem(
+      value: 'share',
+      label: '分享',
+      icon: _iconGridIcon(TIcons.share),
+    ),
+    TActionSheetItem(
+      value: 'favorite',
+      label: '收藏',
+      icon: _iconGridIcon(TIcons.star),
+    ),
     TActionSheetItem(
       value: 'download',
       label: '下载',
-      icon: Icon(TIcons.download),
+      icon: _iconGridIcon(TIcons.download),
     ),
-    TActionSheetItem(value: 'edit', label: '编辑', icon: Icon(TIcons.edit)),
-    TActionSheetItem(value: 'copy', label: '复制', icon: Icon(TIcons.file_copy)),
-    TActionSheetItem(value: 'refresh', label: '刷新', icon: Icon(TIcons.refresh)),
+    TActionSheetItem(
+      value: 'edit',
+      label: '编辑',
+      icon: _iconGridIcon(TIcons.edit),
+    ),
+    TActionSheetItem(
+      value: 'copy',
+      label: '复制',
+      icon: _iconGridIcon(TIcons.file_copy),
+    ),
+    TActionSheetItem(
+      value: 'refresh',
+      label: '刷新',
+      icon: _iconGridIcon(TIcons.refresh),
+    ),
     TActionSheetItem(
       value: 'upload',
       label: '上传',
-      icon: Icon(TIcons.cloud_upload),
+      icon: _iconGridIcon(TIcons.cloud_upload),
     ),
-    TActionSheetItem(value: 'delete', label: '删除', icon: Icon(TIcons.delete)),
+    TActionSheetItem(
+      value: 'delete',
+      label: '删除',
+      icon: _iconGridIcon(TIcons.delete),
+    ),
   ];
 
   List<TActionSheetItem<String>> _gridItems(BuildContext context) =>
@@ -323,6 +366,21 @@ class TActionSheetPage extends StatelessWidget {
       context,
       subtitle: '动作面板描述文字',
       items: _gridItems(context),
+      onSelected: (item) => _showSelection(context, item),
+    ),
+  );
+
+  @ExampleCode(group: 'action_sheet')
+  Widget _pagedGrid(BuildContext context) => _trigger(
+    label: '带翻页宫格型',
+    onPressed: () => TActionSheet.showGrid(
+      context,
+      items: [
+        ..._appGridItems(context),
+        ..._iconGridItems(),
+        ..._appGridItems(context),
+      ],
+      layout: const TActionSheetGridLayout.paged(count: 8, rows: 2),
       onSelected: (item) => _showSelection(context, item),
     ),
   );

@@ -878,11 +878,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'textarea',
     coverageTargets: ['lib/src/components/textarea/'],
     componentTests: ['test/components/textarea/t_textarea_test.dart'],
+    exampleTests: ['test/textarea_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Textarea Demo',
         workingDirectory: 'example',
-        testFiles: ['test/textarea_demo_test.dart'],
+        testFiles: ['test/textarea_page_golden_test.dart'],
       ),
     ],
   ),

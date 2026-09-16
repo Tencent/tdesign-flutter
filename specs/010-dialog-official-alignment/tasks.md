@@ -1,5 +1,8 @@
 # 实施任务
 
+- [x] DONE 完成 Issue #1027 本轮双版本、覆盖率、Linux Golden 与差异图；远端 PR 状态见 acceptance.md
+- [x] DONE 修复长内容滚动条与关闭图标可见边界，保留组件滚动和点击语义
+- [x] DONE 对齐确认、输入、图片和组件用法 Demo 的按钮与 24dp/全宽图片布局
 - [x] DONE 根据最新 Review 修正相对 develop 的排序兼容性说明，更新最终测试/Golden 汇总并分离历史阶段记录
 - [x] DONE 同步 GitHub/CNB PR 标题、正文和更新日志：新增关闭结果参数、普通操作默认配色及混合角色排序变化
 - [x] DONE 按用户补充要求，将全部 22 个 Dialog Demo 统一显式开启蒙层关闭，并将四方向回归扩展至全部入口

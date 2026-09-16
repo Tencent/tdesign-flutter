@@ -17,12 +17,16 @@
 调用方误判作用域；宫格 Item 与副标题统一居中。Theme 的
 `itemHeight` 同步改名为 `gridItemHeight`，使名称与仅影响宫格的实际行为一致。
 常规宫格和多行滚动宫格继续共用 `TActionSheetItemWidget`，Example 的可比较
-入口改为复用同一组 8 项应用数据，不新增、删除或隐藏 Demo。
+入口改为复用同一组 8 项应用数据，并补充当前设计稿要求的分页宫格公开入口。
 默认、分页和横向滚动宫格统一回传带稳定 `value` 的完整 Item，
 布局路径不再对外维护或暴露面板偏移索引。
 将 `badge` 放宽为 Widget 槽位，移除标题颜色对图标颜色的隐式影响；宫格尾部空位
 直接渲染空占位，Item Widget 只接收有效 Item。角标位置使用自身尺寸的分数平移，
 不再通过帧后测量维护临时状态。Theme 插值辅助保持库内私有。
+宫格 Item 的默认图标槽位调整为 40dp，并在 96dp 行高中保持设计稿的
+16dp 顶部起始位置；描述栏补齐 12dp 下内边距，使描述文字到首行图标为 28dp。
+带图标 Demo 通过 `TActionSheetItem.icon` 内容槽位提供 40×40dp、6dp 圆角和
+`bgColorSecondaryContainer` 背景，不在面板外层覆盖组件布局。
 列表使用无测量的 `Row + Align + FractionalTranslation`，只为任意徽标 Widget
 预留半宽，并将其中心锚定在标题右上角；标题保留弹性宽度与省略能力，避免窄屏下
 徽标越出视口，也不把完整徽标宽度当作普通行内尾随内容。
