@@ -106,11 +106,6 @@ class TMessagePage extends StatelessWidget {
         content: '这是一条带关闭的消息通知',
         duration: null,
         showCloseButton: true,
-        action: TLink(
-          child: const Text('按钮'),
-          colorScheme: TLinkColorScheme.primary,
-          onPressed: () => TMessage.show(context: context, content: '已点击按钮'),
-        ),
       ),
     );
   }
@@ -206,22 +201,19 @@ class _DeclarativeMessageDemoState extends State<_DeclarativeMessageDemo> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Transform.translate(
-          offset: const Offset(-16, 0),
-          child: SizedBox(
-            width: MediaQuery.sizeOf(context).width,
-            height: 56,
-            child: Stack(
-              children: [
-                if (_showMessage)
-                  const TMessage(
-                    content: '这是一条通过组件调用的消息通知',
-                    offset: Offset.zero,
-                    useSafeArea: false,
-                    duration: null,
-                  ),
-              ],
-            ),
+        SizedBox(
+          width: MediaQuery.sizeOf(context).width,
+          height: 56,
+          child: Stack(
+            children: [
+              if (_showMessage)
+                const TMessage(
+                  content: '这是一条通过组件调用的消息通知',
+                  offset: Offset.zero,
+                  useSafeArea: false,
+                  duration: null,
+                ),
+            ],
           ),
         ),
         const SizedBox(height: 8),
