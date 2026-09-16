@@ -97,6 +97,7 @@ TPopover 已公开点击、长按、主题背景色、最小/最大尺寸和十�
 - 锚点具有有效、非零 RenderBox 时，最终位置约束在 MediaQuery 安全区内。
 - 底部边界同时考虑系统安全区和 viewInsets.bottom，避免键盘遮挡。
 - 横向 placement 的总宽度、纵向 placement 的总高度包含箭头尺寸。
+- topLeft / topRight / bottomLeft / bottomRight 的箭头定位点距气泡对应左右边缘固定为 12px；箭头基准计算、气泡定位与绘制 margin 使用同一口径。
 - 无有效 RenderBox 但上下文仍存活时保留内部定位原语的兼容路径；调用方通过 `TPopover.showPopover` 使用组件。
 - 锚点 Element 已 unmounted 时不得继续在 (0, 0) 绘制气泡。
 
@@ -127,4 +128,10 @@ TPopover 已公开点击、长按、主题背景色、最小/最大尺寸和十�
 - [x] 公开 Demo 的 21 个按钮均与小程序一样使用 large 尺寸。
 - [x] 明暗主题整页 Golden 与 42 张逐 Demo 展开态 Golden 在 Flutter 3.32.0 Linux 可复现。
 - [x] 42 张展开态 Golden 已逐张检查，无溢出、裁切或箭头错位。
+
+## 2026-09-15 Issue #1027 像素复核
+
+- **组件问题**：四个顶部/底部角落 placement 原代码把 `arrowSize` 额外叠加到 12px margin，又通过箭头平移对齐锚点中心，使箭头没有保持设计要求的固定 12px。现将气泡相对锚点一起定位，箭头定位点严格保持 12px，并同步 clamp 后的基础箭头中心计算。
+- 该几何完全由 `TPopoverWidget` 绘制，Demo 未增加 Padding、Transform 或专用参数。
+- 未改变公开 API；只收敛默认箭头位置。
 - [x] flutter analyze、组件文档契约检查和 git diff --check 通过。
