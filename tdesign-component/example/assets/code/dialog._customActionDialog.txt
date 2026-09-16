@@ -7,10 +7,15 @@ Widget _customActionDialog(BuildContext context) {
           title: Text('弹窗标题'),
           content: Text('通过现有操作项组合业务能力，无需增加跨端专用参数。'),
           actions: [
-            TDialogAction(child: Text('取消'), result: 'cancel'),
+            TDialogAction(
+              child: Text('取消'),
+              result: 'cancel',
+              variant: TButtonVariant.text,
+            ),
             TDialogAction(
               result: 'share',
               role: TDialogActionRole.primary,
+              variant: TButtonVariant.text,
               child: Text('分享给朋友'),
             ),
           ],

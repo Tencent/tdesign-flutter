@@ -12,6 +12,15 @@ import '../input/t_input.dart';
 import '../input/t_input_theme_data.dart';
 import '../input/t_input_types.dart';
 
+/// 多行文本框内部标题与编辑区的排列方式。
+enum TTextareaLayout {
+  /// 标题与编辑区横向排列。
+  horizontal,
+
+  /// 标题与编辑区竖向排列。
+  vertical,
+}
+
 /// TDesign 多行文本输入框。
 ///
 /// 编辑能力复用 [TInput]；容器、内部标题、提示词和计数器遵循
@@ -49,6 +58,9 @@ class TTextarea extends StatefulWidget {
     ///
     /// 表单中的字段标签请使用 `TFormItem.label`，避免与表单必填、校验语义重复。
     this.label,
+
+    /// 内部标题与编辑区的排列方式。
+    this.layout = TTextareaLayout.horizontal,
 
     /// 前缀组件。
     this.prefix,
@@ -129,6 +141,9 @@ class TTextarea extends StatefulWidget {
 
   /// 输入框内部标题；表单字段标签应由 `TFormItem` 提供。
   final String? label;
+
+  /// 内部标题与编辑区的排列方式。
+  final TTextareaLayout layout;
 
   /// 前缀组件。
   final Widget? prefix;
@@ -293,16 +308,25 @@ class _TTextareaState extends State<TTextarea> {
         inputFormatters: widget.inputFormatters,
       ),
     );
-    final content = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (widget.label != null) ...[
-          Text(widget.label!, style: labelStyle),
-          SizedBox(height: token.spacer8),
+    final content = switch ((widget.label, widget.layout)) {
+      (null, _) => editor,
+      (final label?, TTextareaLayout.horizontal) => Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: labelStyle),
+          SizedBox(width: token.spacer16),
+          Expanded(child: editor),
         ],
-        editor,
-      ],
-    );
+      ),
+      (final label?, TTextareaLayout.vertical) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(label, style: labelStyle),
+          SizedBox(height: token.spacer8),
+          editor,
+        ],
+      ),
+    };
 
     return DecoratedBox(
       decoration: BoxDecoration(

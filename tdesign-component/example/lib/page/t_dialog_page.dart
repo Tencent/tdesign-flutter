@@ -116,8 +116,8 @@ class TDialogPage extends StatelessWidget {
           barrierDismissible: true,
           dialog: TDialog(
             title: const Text('对话框标题'),
-            maxHeight: 456,
-            content: Text(List.filled(12, '这里是辅助内容文案。').join()),
+            maxHeight: 400,
+            content: Text(List.filled(48, '这里是辅助内容文案。').join()),
             actions: const [
               TDialogAction(
                 child: Text('知道了'),
@@ -150,7 +150,7 @@ class TDialogPage extends StatelessWidget {
           barrierDismissible: true,
           dialog: TDialog(
             content: const Text(_description),
-            actions: _actions(destructive: true),
+            actions: _actions(),
           ),
         );
       }),
@@ -158,10 +158,7 @@ class TDialogPage extends StatelessWidget {
         TDialog.show<bool>(
           context,
           barrierDismissible: true,
-          dialog: TDialog(
-            title: const Text('对话框标题'),
-            actions: _actions(primaryColorScheme: TButtonColorScheme.light),
-          ),
+          dialog: TDialog(title: const Text('对话框标题'), actions: _actions()),
         );
       }),
     ]);
@@ -355,12 +352,14 @@ class TDialogPage extends StatelessWidget {
     required bool showTitle,
     required bool showContent,
   }) {
-    const image = Image(
-      image: AssetImage('assets/img/image.png'),
-      // 设计稿图片视口高度，间距 token 不用于表达内容尺寸。
-      height: 160,
-      width: double.infinity,
-      fit: BoxFit.cover,
+    const image = AspectRatio(
+      key: ValueKey('dialog-image'),
+      aspectRatio: 16 / 9,
+      child: Image(
+        image: AssetImage('assets/img/image.png'),
+        width: double.infinity,
+        fit: BoxFit.cover,
+      ),
     );
     final token = context.tTheme;
     final title = showTitle
@@ -375,16 +374,17 @@ class TDialogPage extends StatelessWidget {
         ? const Text(_description, textAlign: TextAlign.center)
         : null;
     final textContent = Padding(
-      padding: EdgeInsets.all(token.spacer24),
+      padding: EdgeInsets.fromLTRB(
+        token.spacer24,
+        token.spacer24,
+        token.spacer24,
+        imageOnTop ? 0 : token.spacer24,
+      ),
       child: Column(
         children: [
           if (title != null) title,
           if (title != null && description != null)
             SizedBox(height: token.spacer8),
-          if (!imageOnTop) ...[
-            image,
-            if (description != null) SizedBox(height: token.spacer8),
-          ],
           if (description != null) description,
         ],
       ),
@@ -398,6 +398,7 @@ class TDialogPage extends StatelessWidget {
           children: [
             if (imageOnTop) image,
             if (showTitle || showContent) textContent,
+            if (!imageOnTop) image,
           ],
         ),
         actions: _actions(),
@@ -415,7 +416,7 @@ class TDialogPage extends StatelessWidget {
           dialog: TDialog(
             title: const Text('带输入框对话框'),
             content: _dialogInput(context, topPadding: context.tTheme.spacer8),
-            actions: _actions(),
+            actions: _actions(variant: TButtonVariant.text),
           ),
         );
       }),
@@ -432,7 +433,7 @@ class TDialogPage extends StatelessWidget {
                 _dialogInput(context),
               ],
             ),
-            actions: _actions(),
+            actions: _actions(variant: TButtonVariant.text),
           ),
         );
       }),
@@ -480,11 +481,13 @@ class TDialogPage extends StatelessWidget {
             TDialogAction(
               child: Text('取消'),
               result: _DialogCommandResult.cancel,
+              variant: TButtonVariant.text,
             ),
             TDialogAction(
               child: Text('确定'),
               role: TDialogActionRole.primary,
               result: _DialogCommandResult.confirm,
+              variant: TButtonVariant.text,
             ),
           ],
         ),
@@ -513,10 +516,15 @@ class TDialogPage extends StatelessWidget {
           title: Text('弹窗标题'),
           content: Text('通过现有操作项组合业务能力，无需增加跨端专用参数。'),
           actions: [
-            TDialogAction(child: Text('取消'), result: 'cancel'),
+            TDialogAction(
+              child: Text('取消'),
+              result: 'cancel',
+              variant: TButtonVariant.text,
+            ),
             TDialogAction(
               result: 'share',
               role: TDialogActionRole.primary,
+              variant: TButtonVariant.text,
               child: Text('分享给朋友'),
             ),
           ],

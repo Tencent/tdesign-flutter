@@ -14,7 +14,7 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
   /// 默认图标字形尺寸；同时作为列表图标槽位尺寸。
   final double? iconSize;
 
-  /// 宫格布局的图标槽位尺寸。
+  /// 宫格布局的图标槽位尺寸；未设置时默认 40dp。
   final double? gridIconExtent;
 
   /// 默认图标颜色。
