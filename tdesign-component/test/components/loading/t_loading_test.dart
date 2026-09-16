@@ -63,6 +63,10 @@ void main() {
         wrapWithTheme(const TLoading(icon: TLoadingIcon.circle)),
       );
       expect(find.byType(TLoading), findsOneWidget);
+      expect(
+        tester.widget<TCircleIndicator>(find.byType(TCircleIndicator)).color,
+        TThemeData.defaultData().brandNormalColor,
+      );
     });
 
     testWidgets('point 点状图标正常渲染', (tester) async {
@@ -70,6 +74,12 @@ void main() {
         wrapWithTheme(const TLoading(icon: TLoadingIcon.point)),
       );
       expect(find.byType(TLoading), findsOneWidget);
+      expect(
+        tester
+            .widget<TPointBounceIndicator>(find.byType(TPointBounceIndicator))
+            .color,
+        TThemeData.defaultData().brandNormalColor,
+      );
     });
 
     testWidgets('activity 菊花状图标正常渲染', (tester) async {
@@ -77,6 +87,31 @@ void main() {
         wrapWithTheme(const TLoading(icon: TLoadingIcon.activity)),
       );
       expect(find.byType(TLoading), findsOneWidget);
+      expect(
+        tester
+            .widget<TCupertinoActivityIndicator>(
+              find.byType(TCupertinoActivityIndicator),
+            )
+            .activeColor,
+        TThemeData.defaultData().textColorPrimary,
+      );
+    });
+
+    testWidgets('activity 仍响应 Theme iconColor 覆盖', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TLoading(icon: TLoadingIcon.activity),
+          loadingTheme: const TLoadingThemeData(iconColor: Colors.red),
+        ),
+      );
+      expect(
+        tester
+            .widget<TCupertinoActivityIndicator>(
+              find.byType(TCupertinoActivityIndicator),
+            )
+            .activeColor,
+        Colors.red,
+      );
     });
   });
 

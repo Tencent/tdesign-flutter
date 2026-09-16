@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 ///
 /// 通过 Theme 子树注入，控制子树的默认加载样式。
 class TLoadingThemeData extends ThemeExtension<TLoadingThemeData> {
-  /// 图标颜色
+  /// 图标颜色。
+  ///
+  /// 未指定时 circle / point 使用品牌主色，activity 使用主文字色；
+  /// Flutter [ProgressIndicatorThemeData.color] 或显式 [ColorScheme] 仍优先于内置默认色。
   final Color? iconColor;
 
   /// 文案颜色

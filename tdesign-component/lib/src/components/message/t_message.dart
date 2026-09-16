@@ -110,10 +110,12 @@ class TMessage extends StatefulWidget {
 
   /// 期望的屏幕绝对坐标。
   ///
-  /// [useSafeArea] 为 true 时，最终消息矩形会被约束在安全可视区域内。
+  /// 未显式传入时，消息保留 16 逻辑像素水平外间距；[useSafeArea] 为 true 时，
+  /// 显式坐标也会被约束在含该外间距的系统安全可视区域内。
   final Offset? offset;
 
-  /// 是否避让系统安全区，默认为 true。
+  /// 是否避让系统安全区，默认为 true。设为 false 时显式 [offset] 保持绝对坐标，
+  /// 消息宽度仍使用扣除 16 像素水平外间距后的默认宽度。
   final bool useSafeArea;
 
   /// 消息语义状态
@@ -238,6 +240,8 @@ class TMessage extends StatefulWidget {
 
 class _TMessageState extends State<TMessage>
     with SingleTickerProviderStateMixin {
+  static const double _horizontalMargin = 16;
+
   late final AnimationController _animationController;
   bool _isPresented = true;
   bool _isAnimationRunning = false;
@@ -257,10 +261,12 @@ class _TMessageState extends State<TMessage>
 
   double get _defaultTop => _safePadding.top + kToolbarHeight;
 
-  double get _minimumLeft => _safePadding.left;
+  double get _minimumLeft => _safePadding.left + _horizontalMargin;
 
   double get _maximumRight =>
-      MediaQuery.sizeOf(context).width - _safePadding.right;
+      MediaQuery.sizeOf(context).width -
+      _safePadding.right -
+      _horizontalMargin;
 
   double get _effectiveWidth {
     final availableWidth = math.max(0.0, _maximumRight - _minimumLeft);

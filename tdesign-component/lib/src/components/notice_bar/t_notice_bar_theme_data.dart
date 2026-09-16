@@ -133,15 +133,23 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
       return this;
     }
     return TNoticeBarThemeData(
-      height: lerpDouble(height, other.height, t),
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
-      leftIconColor: Color.lerp(leftIconColor, other.leftIconColor, t),
-      rightIconColor: Color.lerp(rightIconColor, other.rightIconColor, t),
-      padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
+      height: _lerpHeight(height, other.height, t),
+      backgroundColor: _lerpColor(
+        backgroundColor,
+        other.backgroundColor,
+        t,
+      ),
+      textStyle: _lerpTextStyle(textStyle, other.textStyle, t),
+      leftIconColor: _lerpColor(leftIconColor, other.leftIconColor, t),
+      rightIconColor: _lerpColor(rightIconColor, other.rightIconColor, t),
+      padding: _lerpPadding(padding, other.padding, t),
     );
   }
 
+  /// 在两个可选数值之间插值。
+  ///
+  /// 当仅一端有值时采用离散切换，避免把缺省值错误地当作 0。组件已知默认值
+  /// 的字段会在 [lerp] 内使用其实际默认值平滑插值。
   static double? lerpDouble(
     /// 起始值。
     double? a,
@@ -155,6 +163,47 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
     if (a == null && b == null) {
       return null;
     }
-    return (a ?? 0.0) * (1.0 - t) + (b ?? 0.0) * t;
+    if (a == null || b == null) {
+      return t < 0.5 ? a : b;
+    }
+    return a * (1.0 - t) + b * t;
+  }
+
+  static double? _lerpHeight(double? a, double? b, double t) {
+    if (a == null && b == null) {
+      return null;
+    }
+    const defaultHeight = 22.0;
+    return (a ?? defaultHeight) * (1.0 - t) +
+        (b ?? defaultHeight) * t;
+  }
+
+  static EdgeInsetsGeometry? _lerpPadding(
+    EdgeInsetsGeometry? a,
+    EdgeInsetsGeometry? b,
+    double t,
+  ) {
+    if (a == null && b == null) {
+      return null;
+    }
+    return EdgeInsetsGeometry.lerp(
+      a ?? defaultPadding,
+      b ?? defaultPadding,
+      t,
+    );
+  }
+
+  static Color? _lerpColor(Color? a, Color? b, double t) {
+    if (a == null || b == null) {
+      return t < 0.5 ? a : b;
+    }
+    return Color.lerp(a, b, t);
+  }
+
+  static TextStyle? _lerpTextStyle(TextStyle? a, TextStyle? b, double t) {
+    if (a == null || b == null) {
+      return t < 0.5 ? a : b;
+    }
+    return TextStyle.lerp(a, b, t);
   }
 }

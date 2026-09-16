@@ -22,12 +22,12 @@
 | showCloseButton | bool | false | 是否显示关闭按钮 |
 | closeButton | Widget? | - | 自定义关闭按钮 |
 | marquee | TMessageMarquee? | - | 跑马灯配置 |
-| offset | Offset? | - | 期望的屏幕绝对坐标。 `useSafeArea` 为 true 时，最终消息矩形会被约束在安全可视区域内。 |
+| offset | Offset? | - | 期望的屏幕绝对坐标。 未显式传入时，消息保留 16 逻辑像素水平外间距；`useSafeArea` 为 true 时， 显式坐标也会被约束在含该外间距的系统安全可视区域内。 |
 | status | TMessageStatus | TMessageStatus.info | 消息语义状态 |
 | onCloseButtonPressed | VoidCallback? | - | 点击关闭按钮时触发 |
 | onDurationEnd | VoidCallback? | - | 自动展示时长结束且关闭动画完成时触发 |
 | onDismissed | VoidCallback? | - | 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发。 每次展示最多触发一次。 |
-| useSafeArea | bool | true | 是否避让系统安全区，默认为 true。 |
+| useSafeArea | bool | true | 是否避让系统安全区，默认为 true。设为 false 时显式 `offset` 保持绝对坐标， 消息宽度仍使用扣除 16 像素水平外间距后的默认宽度。 |
 
 #### 默认构造方法
 
@@ -40,11 +40,11 @@
 | icon | Widget? | - | 自定义前置图标 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | marquee | TMessageMarquee? | - | 跑马灯配置 |
-| offset | Offset? | - | 期望的屏幕绝对坐标。 `useSafeArea` 为 true 时，最终消息矩形会被约束在安全可视区域内。 |
+| offset | Offset? | - | 期望的屏幕绝对坐标。 未显式传入时，消息保留 16 逻辑像素水平外间距；`useSafeArea` 为 true 时， 显式坐标也会被约束在含该外间距的系统安全可视区域内。 |
 | onCloseButtonPressed | VoidCallback? | - | 点击关闭按钮时触发 |
 | onDismissed | VoidCallback? | - | 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发。 每次展示最多触发一次。 |
 | onDurationEnd | VoidCallback? | - | 自动展示时长结束且关闭动画完成时触发 |
 | showCloseButton | bool | false | 是否显示关闭按钮 |
 | showIcon | bool | true | 是否显示前置图标 |
 | status | TMessageStatus | TMessageStatus.info | 消息语义状态 |
-| useSafeArea | bool | true | 是否避让系统安全区，默认为 true。 |
+| useSafeArea | bool | true | 是否避让系统安全区，默认为 true。设为 false 时显式 `offset` 保持绝对坐标， 消息宽度仍使用扣除 16 像素水平外间距后的默认宽度。 |
