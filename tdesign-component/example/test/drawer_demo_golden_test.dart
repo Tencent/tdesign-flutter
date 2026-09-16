@@ -21,6 +21,23 @@ void main() {
       await disposeDemoPage(tester);
     }, tags: 'golden');
 
+    testWidgets('drawer basic ${mode.name} pressed golden', (tester) async {
+      await pumpDemoPageAtPhoneViewport(tester, drawerDemoPageTestSpec, mode);
+      await tester.tap(find.widgetWithText(TButton, '基础抽屉'));
+      await tester.pumpAndSettle();
+
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.text('菜单一')),
+      );
+      await tester.pump();
+      await expectLater(
+        find.byType(Overlay),
+        matchesGoldenFile('goldens/drawer_basic_pressed_${mode.name}.png'),
+      );
+      await gesture.up();
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
+
     for (final entry in const {
       'icon': '带图标抽屉',
       'small_title': '小标题抽屉',

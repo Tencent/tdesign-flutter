@@ -147,6 +147,35 @@ void main() {
     );
   });
 
+  testWidgets('带标题抽屉保持左对齐且仅绘制菜单项分隔线', (tester) async {
+    await pumpDemoPageAtPhoneViewport(
+      tester,
+      drawerDemoPageTestSpec,
+      ThemeMode.light,
+    );
+    await openDrawer(tester, '小标题抽屉');
+
+    final drawer = find.byType(TDrawer);
+    final titleRect = tester.getRect(
+      find.descendant(of: drawer, matching: find.text('标题')),
+    );
+    final firstItemRect = tester.getRect(
+      find.descendant(of: drawer, matching: find.text('菜单一')),
+    );
+    expect(titleRect.left, closeTo(firstItemRect.left, 0.01));
+    expect(
+      find.descendant(of: drawer, matching: find.byType(VerticalDivider)),
+      findsNothing,
+    );
+    final dividers = tester
+        .widgetList<Divider>(
+          find.descendant(of: drawer, matching: find.byType(Divider)),
+        )
+        .toList();
+    expect(dividers, hasLength(8));
+    expect(dividers.every((divider) => divider.indent == 16), isTrue);
+  });
+
   testWidgets('大小标题、左右方向和底部插槽均可操作', (tester) async {
     await pumpDemoPageAtPhoneViewport(
       tester,
