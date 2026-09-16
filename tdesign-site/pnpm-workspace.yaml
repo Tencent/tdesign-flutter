@@ -1,5 +1,6 @@
 allowBuilds:
   core-js: true
+  core-js-pure: false
   es5-ext: true
   esbuild: true
   fsevents: true

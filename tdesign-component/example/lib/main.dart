@@ -86,7 +86,14 @@ class _MyAppState extends State<MyApp> {
               if (!kIsWeb) {
                 return;
               }
-              setupThemeModeListener(themeModeProvider);
+              setupThemeModeListener(
+                themeModeProvider,
+                onThemeUpdate: (themeData) {
+                  if (mounted && !identical(_themeData, themeData)) {
+                    setState(() => _themeData = themeData);
+                  }
+                },
+              );
             });
           }
 

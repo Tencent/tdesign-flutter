@@ -4,8 +4,9 @@
   "packageManager": "pnpm@11.20.0",
   "scripts": {
     "copy:readme": "node script/copy-readme.js",
+    "test:theme": "node --test site/utils/flutterThemeBridge.test.mjs",
     "test:example-code": "node --test site/flutter-example-docs/*.test.mjs && node site/flutter-example-docs/check-docs.mjs",
-    "site": "pnpm test:example-code && cd site && vite build",
+    "site": "pnpm test:theme && pnpm test:example-code && cd site && vite build",
     "presite:dev": "npm run copy:readme",
     "dev": "node script/dev.mjs",
     "dev:site": "cd site && vite",
@@ -15,6 +16,7 @@
   "license": "MIT",
   "devDependencies": {
     "@tdesign/site-components": "^0.18.1",
+    "@tdesign/theme-generator": "1.2.6",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "~5.35.0",
     "@vitejs/plugin-vue": "^5.2.4",
