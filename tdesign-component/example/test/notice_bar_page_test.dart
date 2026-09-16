@@ -96,4 +96,70 @@ void main() {
     expect(tester.takeException(), isNull);
     await disposeDemoPage(tester);
   });
+
+  testWidgets('公开场景与契约双向一致', (tester) async {
+    await pumpFullDemoPage(tester, noticeBarDemoPageTestSpec, ThemeMode.light);
+    final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
+    final actual = [
+      for (final module in page.children)
+        for (final item in module.children) '${module.title}/${item.desc}',
+    ];
+    final expected = noticeBarDemoScenarios
+        .map((scenario) => '${scenario.group}/${scenario.label}')
+        .toList();
+    expect(actual, expected);
+    expect(
+      noticeBarDemoScenarios.map((scenario) => scenario.id).toSet(),
+      hasLength(noticeBarDemoScenarios.length),
+    );
+    await disposeDemoPage(tester);
+  });
+
+  testWidgets('所有公开操作都触发对应反馈，垂直公告会轮播', (tester) async {
+    await pumpFullDemoPage(tester, noticeBarDemoPageTestSpec, ThemeMode.light);
+    final notices = find.byType(TNoticeBar);
+
+    await tester.tap(
+      find.descendant(of: notices.at(2), matching: find.byIcon(TIcons.close)),
+    );
+    await tester.pump();
+    expect(find.text('点击了关闭按钮'), findsOneWidget);
+    TToast.dismissAll();
+    await tester.pump();
+
+    await tester.tap(
+      find.descendant(of: notices.at(3), matching: find.text('详情')),
+    );
+    await tester.pump();
+    expect(find.text('点击了详情'), findsOneWidget);
+    TToast.dismissAll();
+    await tester.pump();
+
+    await tester.tap(
+      find.descendant(
+        of: notices.at(4),
+        matching: find.byIcon(TIcons.chevron_right),
+      ),
+    );
+    await tester.pump();
+    expect(find.text('点击了入口图标'), findsOneWidget);
+    TToast.dismissAll();
+    await tester.pump();
+
+    await tester.tap(
+      find.descendant(of: notices.at(6), matching: find.text('详情')),
+    );
+    await tester.pump();
+    expect(find.text('点击了详情'), findsOneWidget);
+    TToast.dismissAll();
+    await tester.pump();
+
+    expect(find.text('君不见'), findsWidgets);
+    final nextItemTop = tester.getRect(find.text('高堂明镜悲白发').first).top;
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.text('高堂明镜悲白发'), findsWidgets);
+    expect(tester.getRect(find.text('高堂明镜悲白发').first).top, isNot(nextItemTop));
+    await disposeDemoPage(tester);
+  });
 }
