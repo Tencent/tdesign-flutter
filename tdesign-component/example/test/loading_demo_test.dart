@@ -2,12 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/loading/t_activity_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
 
 import 'demo_page_test_utils.dart';
 import 'loading_demo_test_spec.dart';
 
 void main() {
   registerDemoStructureTests(loadingDemoPageTestSpec);
+
+  testWidgets('loading 公开场景与契约双向一致', (tester) async {
+    await pumpFullDemoPage(tester, loadingDemoPageTestSpec, ThemeMode.light);
+    final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
+    final actual = [
+      for (final module in page.children)
+        for (final item in module.children) '${module.title}/${item.desc}',
+    ];
+    final expected = loadingDemoScenarios
+        .map((scenario) => '${scenario.group}/${scenario.label}')
+        .toList();
+    expect(actual, expected);
+    expect(
+      loadingDemoScenarios.map((scenario) => scenario.id).toSet(),
+      hasLength(loadingDemoScenarios.length),
+    );
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
 
   testWidgets('loading Demo renders custom image and updates speed label', (
     tester,
