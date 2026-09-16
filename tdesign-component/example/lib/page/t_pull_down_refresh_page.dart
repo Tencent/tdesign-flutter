@@ -231,14 +231,14 @@ class _PullDownRefreshSkeletonCard extends StatelessWidget {
       layout: TSkeletonLayout(
         rowSpacing: 8,
         rows: [
-          [TSkeletonBlock.line()],
-          [TSkeletonBlock.line(flex: 5), TSkeletonBlock.spacer(flex: 3)],
           [
             TSkeletonBlock(
               height: 164,
               style: TSkeletonBlockStyle(borderRadius: 12),
             ),
           ],
+          [TSkeletonBlock.line()],
+          [TSkeletonBlock.line(flex: 5), TSkeletonBlock.spacer(flex: 3)],
         ],
       ),
       animation: TSkeletonAnimation.flashed,

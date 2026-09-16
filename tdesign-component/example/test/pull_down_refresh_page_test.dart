@@ -31,6 +31,14 @@ void main() {
     expect(find.byType(TPullDownRefresh), findsOneWidget);
     // 首屏可见：大骨架 + 前两组双列骨架；第三组位于内部滚动区域下方。
     expect(find.byType(TSkeleton), findsAtLeastNWidgets(5));
+    final cardSkeletons = tester
+        .widgetList<TSkeleton>(find.byType(TSkeleton))
+        .where((skeleton) => skeleton.layout?.rows.length == 3);
+    expect(cardSkeletons, isNotEmpty);
+    for (final skeleton in cardSkeletons) {
+      expect(skeleton.layout!.rows.first.single.height, 164);
+      expect(skeleton.layout!.rows[1].single.height, 16);
+    }
     expect(find.text('拖拽该区域演示 顶部下拉刷新'), findsOneWidget);
     expect(find.textContaining('刷新次数'), findsNothing);
     expect(tester.takeException(), isNull);
