@@ -7,7 +7,7 @@ Widget _inputDialogs(BuildContext context) {
           dialog: TDialog(
             title: const Text('带输入框对话框'),
             content: _dialogInput(context, topPadding: context.tTheme.spacer8),
-            actions: _actions(),
+            actions: _actions(variant: TButtonVariant.text),
           ),
         );
       }),
@@ -24,7 +24,7 @@ Widget _inputDialogs(BuildContext context) {
                 _dialogInput(context),
               ],
             ),
-            actions: _actions(),
+            actions: _actions(variant: TButtonVariant.text),
           ),
         );
       }),
