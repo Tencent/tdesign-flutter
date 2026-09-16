@@ -59,8 +59,9 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
   `showGrid` 不暴露不能控制 Item 对齐的 `align` 参数。
 - `TActionSheetThemeData.gridItemHeight` 只提供宫格 Item 的默认高度；
   列表项高度仍由列表视觉契约决定。
-- 默认、分页和滚动宫格统一复用 `TActionSheetItemWidget` 的 96dp 行高、48dp
-  图标槽位、24dp 默认图标字号、8dp 图文间距和 `fontBodySmall` 标签字体。
+- 默认、分页和滚动宫格统一复用 `TActionSheetItemWidget` 的 96dp 行高、40dp
+  图标槽位、24dp 默认图标字号、8dp 图文间距和 `fontBodySmall` 标签字体；
+  带描述宫格的描述文字与首行图标视觉间距为 28dp。
 - Example 中常规宫格与多行滚动宫格的首个可视面板使用相同的前 8 项数据，
   使两种布局的字号、间距和图标呈现可以直接对照；13 个公开入口保持不变。
 - ActionSheet 页面、常规宫格和多行滚动宫格 Golden 使用的确定性 CJK 字体必须
@@ -68,13 +69,14 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
 - 多行滚动宫格先按 `count` 划分可视面板，再在每个面板内按行优先顺序排列，
   确保初始可视区域对应前 `count` 个项目。
 - `count` 与 `rows` 必须为正数，`count >= rows` 且 `count` 能被 `rows` 整除。
-- Example 保留 13 个现有场景：4 个列表类型、6 个宫格类型、1 个状态场景和 2 个对齐场景。
+- Example 展示 14 个场景：4 个列表类型、7 个宫格类型、1 个状态场景和 2 个对齐场景；
+  分页宫格必须有独立公开入口并展示分页指示器。
 - 公开页在“组件样式”后结束，不展示仅供内部验证的“单元测试”模块。
 
 ## 验收标准
 
 - [x] 样式 token 和 84 高度有 Widget 测试保护。
-- [x] 13 个 Demo 各自有可见入口和独立代码片段。
+- [x] 14 个 Demo 各自有可见入口和独立代码片段。
 - [x] Widget 测试验证 `8 / 2`、`10 / 2` 的跨模式密度、滚动顺序和非法组合。
 - [x] Example 测试与 Golden 验证多行滚动 Demo 的默认可视容量和明暗视觉。
 - [x] Example 测试验证常规宫格与多行滚动宫格首屏数据和 Item 视觉指标一致。
