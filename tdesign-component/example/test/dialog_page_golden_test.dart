@@ -9,6 +9,9 @@ void main() {
   registerDemoGoldenTests(dialogDemoPageTestSpec);
 
   const openedScenarios = {
+    'feedback': '反馈类-带标题',
+    'feedback_no_title': '反馈类-无标题',
+    'feedback_title_only': '反馈类-纯标题',
     'long_content': '反馈类-内容超长',
     'command': '命令行操作',
     'confirm': '确认类-带标题',
@@ -24,10 +27,15 @@ void main() {
     'image_middle': '图片居中-带标题描述',
     'image_middle_title_only': '图片居中-纯标题',
     'text_actions': '文字按钮',
+    'horizontal_actions': '水平基础按钮',
     'multi_actions': '多按钮',
     'close_button': '带关闭按钮的对话框',
     'custom_action': '开放能力按钮',
   };
+
+  test('opened golden scenarios cover every public dialog entry', () {
+    expect(openedScenarios.values.toSet(), dialogScenarioLabels.toSet());
+  });
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     for (final scenario in openedScenarios.entries) {

@@ -8,31 +8,6 @@ import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 import 'demo_page_test_utils.dart';
 import 'dialog_demo_test_spec.dart';
 
-const _scenarioLabels = [
-  '反馈类-带标题',
-  '反馈类-无标题',
-  '反馈类-纯标题',
-  '反馈类-内容超长',
-  '确认类-带标题',
-  '确认类-无标题',
-  '确认类-纯标题',
-  '输入类-无描述',
-  '输入类-带描述',
-  '图片置顶-带标题描述',
-  '图片置顶-无标题',
-  '图片置顶-纯标题',
-  '图片置顶-纯图片',
-  '图片居中-带标题描述',
-  '图片居中-纯标题',
-  '文字按钮',
-  '水平基础按钮',
-  '垂直基础按钮',
-  '多按钮',
-  '带关闭按钮的对话框',
-  '命令行操作',
-  '开放能力按钮',
-];
-
 void main() {
   tearDown(TToast.dismissAll);
   registerDemoStructureTests(dialogDemoPageTestSpec);
@@ -95,7 +70,7 @@ void main() {
     await tester.pumpWidget(buildPage());
     await tester.pump();
 
-    for (final label in _scenarioLabels) {
+    for (final label in dialogScenarioLabels) {
       final trigger = find.widgetWithText(TButton, label);
       await tester.scrollUntilVisible(
         trigger,
@@ -119,7 +94,7 @@ void main() {
     await tester.pumpWidget(buildPage());
     await tester.pump();
 
-    for (final label in _scenarioLabels) {
+    for (final label in dialogScenarioLabels) {
       await openScenario(tester, label);
       expect(find.byType(TDialog), findsOneWidget, reason: '$label 应打开');
       await closeCurrentDialog(tester);
@@ -154,7 +129,7 @@ void main() {
   testWidgets('全部 22 个示例显式开启蒙层关闭，面板内点击不关闭', (tester) async {
     configureViewport(tester);
     tester.view.physicalSize = const Size(375, 812);
-    for (final label in _scenarioLabels) {
+    for (final label in dialogScenarioLabels) {
       await tester.pumpWidget(const SizedBox.shrink());
       await tester.pumpWidget(buildPage());
       await tester.pump();
