@@ -37,7 +37,7 @@
 | contentPadding | EdgeInsetsGeometry? | - | 标题和内容区域内边距。 |
 | elevation | double? | - | 面板阴影高度。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| maxHeight | double? | - | 面板最大高度。 |
+| maxHeight | double? | - | 面板最大高度。 内容超过该高度时，标题保持固定，正文区域显示滚动条并可滚动。 |
 | semanticLabel | String? | - | 无障碍语义标签。 |
 | shape | ShapeBorder? | - | 面板形状。 |
 | showCloseButton | bool | false | 是否显示右上角关闭按钮。 |
