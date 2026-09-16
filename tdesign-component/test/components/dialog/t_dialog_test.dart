@@ -486,6 +486,32 @@ void main() {
         ),
         findsOneWidget,
       );
+      final scrollbar = tester.widget<RawScrollbar>(
+        find.descendant(
+          of: find.byType(TDialog),
+          matching: find.byType(RawScrollbar),
+        ),
+      );
+      expect(scrollbar.thumbVisibility, isTrue);
+      expect(scrollbar.thickness, 4);
+      expect(scrollbar.radius, const Radius.circular(2));
+      expect(scrollbar.crossAxisMargin, 16);
+      expect(
+        scrollbar.thumbColor,
+        const Color(0xFFDCDCDC).withValues(alpha: 0.5),
+      );
+      final scrollView = find.descendant(
+        of: find.byType(TDialog),
+        matching: find.byType(SingleChildScrollView),
+      );
+      final titleTop = tester.getTopLeft(find.text('长内容')).dy;
+      await tester.drag(scrollView, const Offset(0, -80));
+      await tester.pump();
+      expect(tester.getTopLeft(find.text('长内容')).dy, titleTop);
+      expect(
+        tester.widget<SingleChildScrollView>(scrollView).controller!.offset,
+        greaterThan(0),
+      );
       expect(tester.takeException(), isNull);
     });
 
@@ -984,8 +1010,13 @@ void main() {
           matching: find.byType(Positioned),
         ),
       );
-      expect(positioned.top, 8);
-      expect(positioned.right, 8);
+      expect(positioned.top, 0);
+      expect(positioned.right, 0);
+      final dialogRect = tester.getRect(find.byType(TDialog));
+      final closeIconRect = tester.getRect(find.byIcon(TIcons.close));
+      expect(closeIconRect.top - dialogRect.top, 8);
+      expect(dialogRect.right - closeIconRect.right, 8);
+      expect(closeIconRect.size, const Size.square(24));
     });
 
     testWidgets('默认间距与圆角跟随 TDesign token', (tester) async {
@@ -1026,7 +1057,18 @@ void main() {
           matching: find.byType(SingleChildScrollView),
         ),
       );
-      expect(scrollView.padding, const EdgeInsets.fromLTRB(30, 30, 30, 0));
+      expect(scrollView.padding, const EdgeInsets.fromLTRB(30, 0, 30, 0));
+      expect(
+        find.ancestor(
+          of: find.text('Token 标题'),
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is Padding &&
+                widget.padding == const EdgeInsets.fromLTRB(30, 30, 30, 0),
+          ),
+        ),
+        findsOneWidget,
+      );
       final dialog = tester.widget<TDialog>(find.byType(TDialog));
       expect(dialog.actionsPadding, isNull);
       expect(dialog.actionSpacing, isNull);
@@ -1050,8 +1092,12 @@ void main() {
           matching: find.byType(Positioned),
         ),
       );
-      expect(closePosition.top, 10);
-      expect(closePosition.right, 10);
+      expect(closePosition.top, 0);
+      expect(closePosition.right, 0);
+      final dialogRect = tester.getRect(find.byType(TDialog));
+      final closeIconRect = tester.getRect(find.byIcon(TIcons.close));
+      expect(closeIconRect.top - dialogRect.top, 10);
+      expect(dialogRect.right - closeIconRect.right, 10);
       expect(
         find.byWidgetPredicate(
           (widget) =>
