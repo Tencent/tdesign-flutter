@@ -5,6 +5,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
+import '../../theme/t_spacers.dart';
+import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../text/t_text.dart';
 import 't_notice_bar_theme_data.dart';
@@ -60,8 +62,9 @@ class TNoticeBar extends StatefulWidget {
   /// 自定义前缀区域。
   ///
   /// 为 null 时根据 [status] 显示默认图标；传入 [SizedBox.shrink] 可隐藏
-  /// 前缀区域。组件统一在非空前缀与正文之间保留 8 逻辑像素间距；自定义
-  /// [Icon] 中未显式指定的颜色或尺寸会继承公告栏状态色和标准图标尺寸。
+  /// 前缀区域。组件统一在非空前缀与正文之间保留 [TSpacers.spacer8] 间距
+  /// （默认 8 逻辑像素）；自定义 [Icon] 中未显式指定的颜色或尺寸会继承公告栏
+  /// 状态色和标准图标尺寸。
   final Widget? prefix;
 
   /// 内容右侧、[suffixIcon] 左侧的自定义操作区。
@@ -464,7 +467,9 @@ class _TNoticeBarState extends State<TNoticeBar> {
           prefix.height == 0 &&
           prefix.child == null;
       return Padding(
-        padding: EdgeInsets.only(right: isHidden ? 0 : 8),
+        padding: EdgeInsets.only(
+          right: isHidden ? 0 : context.tTheme.spacer8,
+        ),
         child: _buildCustomTapTarget(
           TNoticeBarTapTarget.prefix,
           IconTheme.merge(
@@ -478,7 +483,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
       );
     }
     return Padding(
-      padding: const EdgeInsets.only(right: 8),
+      padding: EdgeInsets.only(right: context.tTheme.spacer8),
       child: _buildBuiltInTapTarget(
         TNoticeBarTapTarget.prefix,
         Icon(

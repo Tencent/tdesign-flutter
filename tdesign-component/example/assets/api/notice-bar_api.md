@@ -15,7 +15,7 @@
 | maxLines | int | 1 | 文本行数（仅静态有效） |
 | onPressed | ValueChanged<TNoticeBarTapTarget>? | - | 点击事件 |
 | operation | Widget? | - | 内容右侧、`suffixIcon` 左侧的自定义操作区。 可以和 `suffixIcon` 同时显示。 |
-| prefix | Widget? | - | 自定义前缀区域。 为 null 时根据 `status` 显示默认图标；传入 `SizedBox.shrink` 可隐藏 前缀区域。组件统一在非空前缀与正文之间保留 8 逻辑像素间距；自定义 `Icon` 中未显式指定的颜色或尺寸会继承公告栏状态色和标准图标尺寸。 |
+| prefix | Widget? | - | 自定义前缀区域。 为 null 时根据 `status` 显示默认图标；传入 `SizedBox.shrink` 可隐藏 前缀区域。组件统一在非空前缀与正文之间保留 `TSpacers.spacer8` 间距 （默认 8 逻辑像素）；自定义 `Icon` 中未显式指定的颜色或尺寸会继承公告栏 状态色和标准图标尺寸。 |
 | speed | double | 50 | 横向跑马灯每秒滚动的逻辑像素，仅在 `direction` 为 `Axis.horizontal` 且 `marquee` 为 true 时生效。 |
 | status | TNoticeBarStatus | TNoticeBarStatus.info | 公告栏业务状态，决定默认配色和默认前缀图标。 |
 | suffixIcon | IconData? | - | 尾部图标，可以和 `operation` 同时显示。 |
@@ -29,6 +29,10 @@ TNoticeBar 组件级 ThemeExtension
 #### 静态方法
 
 ##### TNoticeBarThemeData.lerpDouble
+
+在两个可选数值之间插值。
+当仅一端有值时采用离散切换，避免把缺省值错误地当作 0。组件已知默认值
+的字段会在 `lerp` 内使用其实际默认值平滑插值。
 
 返回类型：`double?`
 
