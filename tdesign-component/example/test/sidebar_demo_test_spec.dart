@@ -7,6 +7,58 @@ import 'package:tdesign_flutter_example/page/sidebar/t_sidebar_page_pagination.d
 
 import 'demo_page_test_utils.dart';
 
+class SideBarDemoScene {
+  const SideBarDemoScene({
+    required this.id,
+    required this.label,
+    required this.pageType,
+    required this.pageSpecName,
+  });
+
+  final String id;
+  final String label;
+  final Type pageType;
+  final String pageSpecName;
+}
+
+const sideBarDemoScenes = [
+  SideBarDemoScene(
+    id: 'anchor',
+    label: '锚点用法',
+    pageType: TSideBarAnchorPage,
+    pageSpecName: 'sidebar_anchor',
+  ),
+  SideBarDemoScene(
+    id: 'pagination',
+    label: '切页用法',
+    pageType: TSideBarPaginationPage,
+    pageSpecName: 'sidebar_pagination',
+  ),
+  SideBarDemoScene(
+    id: 'icon',
+    label: '带图标侧边导航',
+    pageType: TSideBarIconPage,
+    pageSpecName: 'sidebar_icon',
+  ),
+  SideBarDemoScene(
+    id: 'tag',
+    label: '自定义样式',
+    pageType: TSideBarCustomPage,
+    pageSpecName: 'sidebar_tag',
+  ),
+];
+
+const sideBarFunctionalOnlyCases = {'pagination_disabled': '禁用项点击后没有独立视觉结果'};
+
+Set<String> expectedSideBarGoldenCases() => {
+  for (final mode in ['light', 'dark']) 'sidebar:page:$mode',
+  for (final scene in sideBarDemoScenes)
+    for (final mode in ['light', 'dark']) ...{
+      '${scene.id}:page:$mode',
+      '${scene.id}:selected_item:$mode',
+    },
+};
+
 const sidebarDemoPageTestSpec = DemoPageTestSpec(
   name: 'sidebar',
   title: 'SideBar 侧边栏',
