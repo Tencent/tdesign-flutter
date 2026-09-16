@@ -3,6 +3,31 @@ import 'package:tdesign_flutter_example/page/t_dialog_page.dart';
 
 import 'demo_page_test_utils.dart';
 
+const dialogScenarioLabels = [
+  '反馈类-带标题',
+  '反馈类-无标题',
+  '反馈类-纯标题',
+  '反馈类-内容超长',
+  '确认类-带标题',
+  '确认类-无标题',
+  '确认类-纯标题',
+  '输入类-无描述',
+  '输入类-带描述',
+  '图片置顶-带标题描述',
+  '图片置顶-无标题',
+  '图片置顶-纯标题',
+  '图片置顶-纯图片',
+  '图片居中-带标题描述',
+  '图片居中-纯标题',
+  '文字按钮',
+  '水平基础按钮',
+  '垂直基础按钮',
+  '多按钮',
+  '带关闭按钮的对话框',
+  '命令行操作',
+  '开放能力按钮',
+];
+
 const dialogDemoPageTestSpec = DemoPageTestSpec(
   useFeedbackGoldenFont: true,
   name: 'dialog',
