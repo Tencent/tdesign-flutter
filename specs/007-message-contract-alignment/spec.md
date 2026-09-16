@@ -59,7 +59,7 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 | --- | --- | --- | --- |
 | 组件类型 | 纯文字的通知 | 纯文字通知 | `TMessage.show(showIcon: false)` |
 | 组件类型 | 带图标的通知 | 带图标通知 | `TMessage.show(showIcon: true)`（默认） |
-| 组件类型 | 带关闭的通知 | 带关闭通知 | `TMessage.show(showCloseButton: true, action: TLink(...))` |
+| 组件类型 | 带关闭的通知 | 带关闭通知 | `TMessage.show(showCloseButton: true)` |
 | 组件类型 | 可滚动的通知 | 跑马灯通知 | `TMessage.show(marquee: ...)` |
 | 组件类型 | 带按钮的通知 | 带操作通知 | `TMessage.show(action: TLink(...))` |
 | 组件类型 | 组件调用 | 组件声明式调用 | `if (showMessage) TMessage(...)` |
@@ -78,7 +78,7 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 
 - 删除公开 `TMessage.visible`。直接构造 `TMessage` 即渲染消息，页面内展示 / 隐藏由父级 Widget 树插入或移除组件；`TMessage.show()` 创建 Overlay，并由返回的 `TMessageHandle` 关闭。
 - `duration` 默认保持 3 秒；仅 `null` 表示不自动关闭，非 null 时必须为正数。
-- 默认消息宽度占满安全可视区域，纵向位置为系统安全区与 Flutter 页面导航栏之后；显式 `offset` 仍按既有规则受安全区约束。
+- 默认消息在安全可视区域左右各保留 16px 外边距，纵向位置为系统安全区与 Flutter 页面导航栏之后；显式 `offset` 仍按既有规则受安全区约束。
 - 默认文本使用 TDesign `body-medium`，默认阴影内部引用 `shadowsBase` token；已有 `TMessageThemeData.elevation` 显式配置仍优先，不新增同义 Theme 字段。
 - 连续调用 `TMessage.show()` 且未传 `offset` 时，新消息替换上一条。显式传入不同 `offset` 的多消息能力保留。
 - `TMessageStatus` 是消息语义状态的唯一公开选择器；删除语义不准确的 `TMessageVariant` / `variant`。
@@ -121,3 +121,10 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 - [x] `lib/src/components/message/` 行覆盖率 ≥95%。
 - [x] Message 相关 Widget 测试通过。
 - [x] `flutter analyze --fatal-infos` 通过。
+
+## 2026-09-15 Issue #1027 像素复核
+
+- **组件问题**：默认 Message 原先铺满安全可视区域，缺少设计要求的左右 16px 外边距。修复后默认左右边界均在安全区内缩 16px；`useSafeArea: false` 的显式 `offset` 坐标仍保持绝对定位语义。
+- **Demo 问题**：“带关闭的通知”同时传入关闭图标和操作按钮，导致多出“按钮”；现仅保留关闭图标。“带按钮的通知”继续独立展示操作按钮。
+- **Demo 遮盖清理**：声明式示例删除 `Transform.translate(-16px)` 的旧全宽补偿，直接消费组件的新默认边距。
+- 未改变公开 API 签名；默认几何属于用户可感知的组件视觉修复。

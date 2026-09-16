@@ -8,14 +8,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// Theme 注入、边界情况。
 void main() {
   /// 用 TTheme 包裹以提供基础 Token
-  Widget wrapWithTheme(Widget child, {TNoticeBarThemeData? noticeBarTheme}) {
+  Widget wrapWithTheme(
+    Widget child, {
+    TNoticeBarThemeData? noticeBarTheme,
+    TThemeData? themeData,
+  }) {
     final themeExtensions = <ThemeExtension>[
       if (noticeBarTheme != null) noticeBarTheme,
     ];
     // 注意：必须通过 MaterialApp.theme 传递 extensions
     return MaterialApp(
       theme: ThemeData(
-        extensions: [TThemeData.defaultData(), ...themeExtensions],
+        extensions: [themeData ?? TThemeData.defaultData(), ...themeExtensions],
       ),
       home: Scaffold(body: child),
     );
@@ -124,6 +128,35 @@ void main() {
       expect(iconTheme.size, 22);
     });
 
+    testWidgets('自定义 prefix 与正文统一保留 8px 间距', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TNoticeBar(content: '带前缀图标', prefix: Icon(Icons.info)),
+        ),
+      );
+
+      final iconRect = tester.getRect(find.byIcon(Icons.info));
+      final textRect = tester.getRect(find.text('带前缀图标'));
+      expect(textRect.left - iconRect.right, 8);
+    });
+
+    testWidgets('prefix 与正文间距跟随 spacer8 Token', (tester) async {
+      final themeData = TThemeData.defaultData().copyWithTThemeData(
+        'notice-bar-spacing-test',
+        marginMap: const {'spacer8': 13},
+      );
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TNoticeBar(content: '带前缀图标', prefix: Icon(Icons.info)),
+          themeData: themeData,
+        ),
+      );
+
+      final iconRect = tester.getRect(find.byIcon(Icons.info));
+      final textRect = tester.getRect(find.text('带前缀图标'));
+      expect(textRect.left - iconRect.right, 13);
+    });
+
     testWidgets('prefix 中的 Icon 可显式覆盖颜色与尺寸', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
@@ -155,6 +188,7 @@ void main() {
         ),
       );
       expect(find.byIcon(TIcons.info_circle_filled), findsNothing);
+      expect(tester.getTopLeft(find.text('内容')).dx, 16);
     });
 
     testWidgets('operation 与 suffixIcon 同时渲染', (tester) async {
@@ -388,6 +422,102 @@ void main() {
       const b = TNoticeBarThemeData(height: 30);
       final mid = a.lerp(b, 0.5);
       expect(mid.height, 26);
+    });
+
+    test('TNoticeBarThemeData.lerp 使用真实默认尺寸且不生成透明色', () {
+      const defaults = TNoticeBarThemeData();
+      const custom = TNoticeBarThemeData(
+        height: 30,
+        backgroundColor: Colors.red,
+        textStyle: TextStyle(color: Colors.blue),
+        leftIconColor: Colors.green,
+        rightIconColor: Colors.orange,
+        padding: EdgeInsets.all(20),
+      );
+
+      final forwardBeforeSwitch = defaults.lerp(custom, 0.25);
+      final forwardAfterSwitch = defaults.lerp(custom, 0.75);
+      final reverseBeforeSwitch = custom.lerp(defaults, 0.25);
+      final reverseAfterSwitch = custom.lerp(defaults, 0.75);
+      const alternate = TNoticeBarThemeData(backgroundColor: Colors.blue);
+
+      expect(defaults.lerp(custom, 0).height, 22);
+      expect(defaults.lerp(custom, 0).padding, TNoticeBarThemeData.defaultPadding);
+      expect(defaults.lerp(custom, 1).height, 30);
+      expect(defaults.lerp(custom, 1).padding, const EdgeInsets.all(20));
+      expect(forwardBeforeSwitch.height, 24);
+      expect(forwardAfterSwitch.height, 28);
+      expect(
+        forwardBeforeSwitch.padding,
+        const EdgeInsets.fromLTRB(17, 14.75, 14, 14.75),
+      );
+      expect(forwardBeforeSwitch.backgroundColor, isNull);
+      expect(forwardAfterSwitch.backgroundColor, Colors.red);
+      expect(forwardBeforeSwitch.textStyle, isNull);
+      expect(forwardAfterSwitch.textStyle, custom.textStyle);
+      expect(reverseBeforeSwitch.backgroundColor, Colors.red);
+      expect(reverseAfterSwitch.backgroundColor, isNull);
+      expect(reverseBeforeSwitch.leftIconColor, Colors.green);
+      expect(reverseAfterSwitch.leftIconColor, isNull);
+      expect(
+        custom.lerp(alternate, 0.5).backgroundColor,
+        Color.lerp(Colors.red, Colors.blue, 0.5),
+      );
+      expect(const TNoticeBarThemeData().lerp(defaults, 0.5).height, isNull);
+      expect(const TNoticeBarThemeData().lerp(defaults, 0.5).padding, isNull);
+    });
+
+    test('lerpDouble 对缺省值离散切换而不是按 0 插值', () {
+      expect(TNoticeBarThemeData.lerpDouble(null, 30, 0.25), isNull);
+      expect(TNoticeBarThemeData.lerpDouble(null, 30, 0.75), 30);
+      expect(TNoticeBarThemeData.lerpDouble(30, null, 0.25), 30);
+      expect(TNoticeBarThemeData.lerpDouble(30, null, 0.75), isNull);
+      expect(TNoticeBarThemeData.lerpDouble(22, 30, 0.5), 26);
+    });
+
+    testWidgets('AnimatedTheme 以默认高度 22 平滑过渡到自定义高度', (
+      tester,
+    ) async {
+      var useCustomTheme = false;
+      late StateSetter setState;
+
+      Widget buildAnimatedTheme() {
+        return MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, setter) {
+              setState = setter;
+              final noticeBarTheme = useCustomTheme
+                  ? const TNoticeBarThemeData(height: 30)
+                  : const TNoticeBarThemeData();
+              return AnimatedTheme(
+                duration: const Duration(seconds: 1),
+                curve: Curves.linear,
+                data: ThemeData(
+                  extensions: [TThemeData.defaultData(), noticeBarTheme],
+                ),
+                child: const Scaffold(body: TNoticeBar(content: '内容')),
+              );
+            },
+          ),
+        );
+      }
+
+      await tester.pumpWidget(buildAnimatedTheme());
+      expect(tester.widget<Icon>(find.byType(Icon).first).size, 22);
+
+      setState(() => useCustomTheme = true);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(tester.widget<Icon>(find.byType(Icon).first).size, 26);
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(tester.widget<Icon>(find.byType(Icon).first).size, 30);
+
+      setState(() => useCustomTheme = false);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(tester.widget<Icon>(find.byType(Icon).first).size, 26);
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(tester.widget<Icon>(find.byType(Icon).first).size, 22);
     });
 
     testWidgets('TNoticeBarThemeData.resolve 根据 status 解析颜色', (tester) async {

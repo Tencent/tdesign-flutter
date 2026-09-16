@@ -119,14 +119,14 @@ void main() {
       final box = tester.widget<SizedBox>(
         find.byWidgetPredicate(
           (widget) =>
-              widget is SizedBox && widget.height == 48 && widget.width == 320,
+              widget is SizedBox && widget.height == 48 && widget.width == 288,
         ),
       );
-      expect(box.width, 320);
+      expect(box.width, 288);
       final positioned = tester.widget<AnimatedPositioned>(
         find.byType(AnimatedPositioned),
       );
-      expect(positioned.left, 0);
+      expect(positioned.left, 16);
     });
 
     testWidgets('关闭按钮完成关闭生命周期', (tester) async {
@@ -217,8 +217,8 @@ void main() {
       final positioned = tester.widget<AnimatedPositioned>(
         find.byType(AnimatedPositioned),
       );
-      // 默认全宽消息会把 Theme 期望坐标收口到安全可视区域。
-      expect(positioned.left, 0);
+      // 默认消息保留 16px 外间距，Theme 期望坐标收口到安全可视区域。
+      expect(positioned.left, 16);
       expect(positioned.top, 40);
     });
 
@@ -267,15 +267,15 @@ void main() {
       final messageBox = tester.widget<SizedBox>(
         find.byWidgetPredicate(
           (widget) =>
-              widget is SizedBox && widget.height == 48 && widget.width == 321,
+              widget is SizedBox && widget.height == 48 && widget.width == 289,
         ),
       );
-      expect(messageBox.width, 321);
-      expect(positioned.left, 24);
+      expect(messageBox.width, 289);
+      expect(positioned.left, 40);
       expect(positioned.top, 132);
     });
 
-    testWidgets('useSafeArea=false 保留绝对 offset 与原始宽度', (tester) async {
+    testWidgets('useSafeArea=false 保留绝对 offset 并应用默认水平宽度', (tester) async {
       await tester.pumpWidget(
         wrap(
           const TMessage(
@@ -298,7 +298,7 @@ void main() {
       expect(
         find.byWidgetPredicate(
           (widget) =>
-              widget is SizedBox && widget.height == 48 && widget.width == 375,
+              widget is SizedBox && widget.height == 48 && widget.width == 343,
         ),
         findsOneWidget,
       );
@@ -430,9 +430,9 @@ void main() {
       await tester.pump();
 
       final clipWidth = tester.getSize(find.byType(ClipRect)).width;
-      // 375 - 水平内边距 32 - 图标与间距 30 - action 间距与宽度 40
-      // - 关闭按钮间距与宽度 30 = 243。
-      expect(clipWidth, 243);
+      // 375 - 外间距 32 - 水平内边距 32 - 图标与间距 30
+      // - action 间距与宽度 40 - 关闭按钮间距与宽度 30 = 211。
+      expect(clipWidth, 211);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
     });

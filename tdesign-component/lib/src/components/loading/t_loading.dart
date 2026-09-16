@@ -77,11 +77,14 @@ class TLoading extends StatelessWidget {
     final materialTheme = Theme.of(context);
     final colorScheme = materialTheme.tExplicitColorScheme;
     final effectiveAxis = theme.axis ?? Axis.horizontal;
+    final defaultIconColor = icon == TLoadingIcon.activity
+        ? context.tTheme.textColorPrimary
+        : context.tTheme.brandNormalColor;
     final effectiveIconColor =
         theme.iconColor ??
         materialTheme.progressIndicatorTheme.color ??
         colorScheme?.primary ??
-        context.tTheme.brandNormalColor;
+        defaultIconColor;
     final effectiveCustomIcon = customIcon;
     final effectiveDuration = theme.duration ?? 800;
     final effectiveRefreshWidget = refreshWidget;

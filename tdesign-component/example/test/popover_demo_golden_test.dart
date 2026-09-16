@@ -125,5 +125,45 @@ void main() {
         await disposeDemoPage(tester);
       }, tags: 'golden');
     }
+
+    for (var index = 1; index <= 3; index++) {
+      testWidgets(
+        'popover custom option $index ${mode.name} post action golden',
+        (tester) async {
+          await pumpDemoPageAtPhoneViewport(
+            tester,
+            popoverDemoPageTestSpec,
+            mode,
+          );
+          final trigger = find.widgetWithText(TButton, '自定义内容');
+          final pageScrollable = find
+              .descendant(
+                of: find.byType(CustomScrollView),
+                matching: find.byType(Scrollable),
+              )
+              .first;
+          await tester.scrollUntilVisible(
+            trigger,
+            240,
+            scrollable: pageScrollable,
+          );
+          await tester.pumpAndSettle();
+          await tester.tap(trigger);
+          await tester.pumpAndSettle();
+          await tester.tap(find.byKey(Key('popover-custom-option-$index')));
+          await tester.pump();
+          expect(find.text('已选择：选项$index'), findsOneWidget);
+          await expectLater(
+            find.byType(Overlay),
+            matchesGoldenFile(
+              'goldens/popover_custom_option_${index}_post_action_${mode.name}.png',
+            ),
+          );
+          TToast.dismissAll();
+          await disposeDemoPage(tester);
+        },
+        tags: 'golden',
+      );
+    }
   }
 }
