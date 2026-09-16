@@ -28,6 +28,7 @@
 - Breaking：删除与 `TTextarea` 重复的 `TInput.multiline` 命名构造器；多行场景迁移到 `TTextarea`，底层仍由单一 `TInput` 实现复用 Flutter 编辑能力。
 - Breaking：删除 `TFormRule` 与 `TFormField.rules`，字段约束统一迁移到 Flutter 原生 `validator`；必填场景继续使用 `required` / `requiredMessage`。
 - 新增：`TTextarea.label`，仅用于独立多行输入框内部标题。
+- Breaking：带内部标题的 `TTextarea` 默认改为横向排列；新增 `TTextarea.layout`，原竖排效果迁移到 `TTextareaLayout.vertical`。
 - Breaking：删除 `TInputThemeData.showClearButton`，使用 `clearButtonMode`。
 - Breaking：删除 `TInput.decoration`、`TTextarea.decoration` 和 `TInputThemeData.decorationTheme`；提示词样式迁移到 `TInputThemeData.hintStyle`，其他视觉使用对应的 TDesign 专属 API。
 - 新增：`TInput.clearButtonMode`、`TTextarea.clearButtonMode`。
