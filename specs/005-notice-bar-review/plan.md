@@ -63,3 +63,12 @@ Demo 使用收敛后的公开 API；内部点击回调由组件聚焦测试覆�
 
 - 改动仅涉及标准 `ScrollController`、`Timer`、`TextPainter` API，在 `flutter@3.32.0` 与 `flutter@latest` 中均可用且行为一致。
 - 未引入新依赖或新 API。
+
+## 2026-09-15 Issue #1027 收敛方案
+
+- 将前缀与正文之间的 8px 间距从内置图标特例提升为组件统一布局契约，覆盖自定义图标、水平滚动和垂直滚动。
+- 间距读取 `TThemeData.spacer8`，默认视觉保持 8px，并允许主题 Token 一致控制。
+- `SizedBox.shrink()` 作为已有隐藏前缀表达时不产生间距。
+- 修正 `TNoticeBarThemeData.lerp`：已知尺寸默认值参与平滑插值；依赖上下文解析的可空样式不再从 0 或透明色插值。
+- 删除自定义样式 Demo 中手工添加的右侧 8px Padding，避免 Demo 模拟或重复组件视觉。
+- 用 Flutter 3.32.0 Linux 明暗整页 Golden 做像素回归，并保存修复前、修复后及差异标记图。
