@@ -8,19 +8,30 @@ import 'drawer_demo_test_spec.dart';
 void main() {
   registerDemoGoldenTests(drawerDemoPageTestSpec);
 
+  const goldenCases = [
+    ('basic', '基础抽屉'),
+    ('icon', '带图标抽屉'),
+    ('small_title', '小标题抽屉'),
+    ('large_title', '大标题抽屉'),
+    ('left', '左侧抽屉'),
+    ('right', '右侧抽屉'),
+    ('footer', '带底部插槽'),
+  ];
+  final registeredGoldenCases = {
+    for (final mode in [ThemeMode.light, ThemeMode.dark]) ...{
+      'drawer:page:${mode.name}',
+      'basic:pressed:${mode.name}',
+    },
+    for (final entry in goldenCases)
+      for (final mode in [ThemeMode.light, ThemeMode.dark])
+        '${entry.$1}:opened:${mode.name}',
+  };
+
+  test('Drawer Golden 注册集合覆盖所有公开场景', () {
+    expect(registeredGoldenCases, expectedDrawerGoldenCases());
+  });
+
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
-    testWidgets('drawer basic ${mode.name} opened golden', (tester) async {
-      await pumpDemoPageAtPhoneViewport(tester, drawerDemoPageTestSpec, mode);
-      await tester.tap(find.widgetWithText(TButton, '基础抽屉'));
-      await tester.pumpAndSettle();
-
-      await expectLater(
-        find.byType(Overlay),
-        matchesGoldenFile('goldens/drawer_basic_opened_${mode.name}.png'),
-      );
-      await disposeDemoPage(tester);
-    }, tags: 'golden');
-
     testWidgets('drawer basic ${mode.name} pressed golden', (tester) async {
       await pumpDemoPageAtPhoneViewport(tester, drawerDemoPageTestSpec, mode);
       await tester.tap(find.widgetWithText(TButton, '基础抽屉'));
@@ -38,25 +49,18 @@ void main() {
       await disposeDemoPage(tester);
     }, tags: 'golden');
 
-    for (final entry in const {
-      'icon': '带图标抽屉',
-      'small_title': '小标题抽屉',
-      'large_title': '大标题抽屉',
-      'left': '左侧抽屉',
-      'right': '右侧抽屉',
-      'footer': '带底部插槽',
-    }.entries) {
-      testWidgets('drawer ${entry.key} ${mode.name} opened golden', (
+    for (final entry in goldenCases) {
+      testWidgets('drawer ${entry.$1} ${mode.name} opened golden', (
         tester,
       ) async {
         await pumpDemoPageAtPhoneViewport(tester, drawerDemoPageTestSpec, mode);
-        await tester.tap(find.widgetWithText(TButton, entry.value));
+        await tester.tap(find.widgetWithText(TButton, entry.$2));
         await tester.pumpAndSettle();
 
         await expectLater(
           find.byType(Overlay),
           matchesGoldenFile(
-            'goldens/drawer_${entry.key}_opened_${mode.name}.png',
+            'goldens/drawer_${entry.$1}_opened_${mode.name}.png',
           ),
         );
         await disposeDemoPage(tester);

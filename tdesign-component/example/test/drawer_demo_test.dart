@@ -32,28 +32,43 @@ void main() {
   }
 
   testWidgets('公开 Demo 展示 Figma 的七个入口', (tester) async {
+    await pumpFullDemoPage(tester, drawerDemoPageTestSpec, ThemeMode.light);
+
+    expect(find.text('单元测试'), findsNothing);
+    final renderedEntries = <(String, double)>[];
+    for (final scene in drawerDemoScenes) {
+      final label = scene.label;
+      expect(find.widgetWithText(TButton, label), findsOneWidget);
+      renderedEntries.add((
+        label,
+        tester.getTopLeft(find.widgetWithText(TButton, label)).dy,
+      ));
+    }
+    expect(find.byType(TButton), findsNWidgets(drawerDemoScenes.length));
+    renderedEntries.sort((left, right) => left.$2.compareTo(right.$2));
+    expect(
+      renderedEntries.map((entry) => entry.$1),
+      drawerDemoScenes.map((scene) => scene.label),
+    );
+  });
+
+  testWidgets('七个公开入口都能真实打开并关闭 Drawer', (tester) async {
     await pumpDemoPageAtPhoneViewport(
       tester,
       drawerDemoPageTestSpec,
       ThemeMode.light,
     );
 
-    expect(find.text('单元测试'), findsNothing);
-    for (final label in const [
-      '基础抽屉',
-      '带图标抽屉',
-      '小标题抽屉',
-      '大标题抽屉',
-      '左侧抽屉',
-      '右侧抽屉',
-      '带底部插槽',
-    ]) {
-      await tester.scrollUntilVisible(
-        find.widgetWithText(TButton, label),
-        160,
-        scrollable: pageScrollable().first,
-      );
-      expect(find.widgetWithText(TButton, label), findsOneWidget);
+    for (final scene in drawerDemoScenes) {
+      await openDrawer(tester, scene.label);
+      expect(find.byType(TDrawer), findsOneWidget, reason: scene.id);
+      final drawerRect = tester.getRect(find.byType(TDrawer));
+      final dismissPoint = scene.id == 'right'
+          ? Offset(15, drawerRect.center.dy)
+          : Offset(360, drawerRect.center.dy);
+      await tester.tapAt(dismissPoint);
+      await tester.pumpAndSettle();
+      expect(find.byType(TDrawer), findsNothing, reason: scene.id);
     }
   });
 
