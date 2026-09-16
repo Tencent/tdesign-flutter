@@ -908,6 +908,11 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
     visualTests: [
       VisualTestManifest(
+        name: 'SwipeCell actions',
+        workingDirectory: '.',
+        testFiles: ['test/components/swipe_cell/t_swipe_cell_golden_test.dart'],
+      ),
+      VisualTestManifest(
         name: 'SwipeCell Demo',
         workingDirectory: 'example',
         testFiles: ['test/swipe_cell_demo_test.dart'],

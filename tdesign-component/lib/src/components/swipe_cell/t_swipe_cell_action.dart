@@ -88,6 +88,7 @@ class TSwipeCellAction extends StatelessWidget {
     final effectiveTextStyle = tokenTextStyle
         .merge(materialTheme.tExplicitTextTheme?.labelMedium)
         .merge(context.tExplicitDefaultTextStyle)
+        .copyWith(color: context.tTheme.textColorAnti)
         .merge(theme.actionTextStyle)
         .merge(labelStyle);
 
