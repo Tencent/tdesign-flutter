@@ -4,6 +4,7 @@
 
 - 对齐新版 Figma 页面 24386:5239 的 375×812 移动端展示，以及组件集的 type(number/a-z) × theme(normal/capsule) × state(default/active)。
 - 公开 Demo 按新版 Figma 拆成“字母索引 / 数字索引 / 胶囊索引”三项，并验证点击、连续拖动、吸顶与滚动联动。
+- 三个全屏索引示例均避让系统顶部安全区，内容不得覆盖手机时间、电量等宿主状态栏区域。
 - 组件继续采用 Flutter 的 ScrollController + builder 组合，不复制小程序只能驱动页面级滚动的限制。
 
 ## 跨端证据

@@ -32,7 +32,7 @@ Widget _buildLetterIndexes(BuildContext context) {
                 );
               },
             ),
-            useSafeArea: false,
+            useSafeArea: true,
           ),
         );
       },
