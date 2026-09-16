@@ -28,43 +28,71 @@ void main() {
     );
   }
 
-  testWidgets('官方多选和禁用 Demo 入口公开可见', (tester) async {
-    configureViewport(tester);
-    await tester.pumpWidget(buildPage());
-    await tester.pumpAndSettle();
+  testWidgets('公开菜单入口与场景契约顺序完全一致', (tester) async {
+    await pumpFullDemoPage(
+      tester,
+      dropdownMenuDemoPageTestSpec,
+      ThemeMode.light,
+    );
 
-    const labels = ['全部产品', '默认排序', '单列多选', '双列多选', '三列多选', '禁用菜单'];
-    for (final label in labels) {
-      final finder = find.text(label);
+    final actualLabels = <String?>[];
+    final actualEnabledStates = <bool>[];
+    for (final menu in tester.widgetList<TDropdownMenu>(
+      find.byType(TDropdownMenu),
+    )) {
+      for (final item in menu.items) {
+        actualLabels.add(item.label);
+        actualEnabledStates.add(item.enabled);
+      }
+    }
+    expect(
+      actualLabels,
+      dropdownMenuPublicScenarios.map((scenario) => scenario.label).toList(),
+    );
+    expect(
+      actualEnabledStates,
+      dropdownMenuPublicScenarios.map((scenario) => scenario.enabled).toList(),
+    );
+    expect(find.text('单元测试'), findsNothing);
+    await disposeDemoPage(tester);
+  });
+
+  testWidgets('全部公开菜单入口均执行对应展开或禁用行为', (tester) async {
+    configureViewport(tester);
+
+    for (final scenario in dropdownMenuPublicScenarios) {
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpWidget(buildPage());
+      await tester.pumpAndSettle();
+
+      final duplicateIndex = dropdownMenuPublicScenarios
+          .takeWhile((candidate) => candidate.id != scenario.id)
+          .where((candidate) => candidate.label == scenario.label)
+          .length;
+      final matchingTriggers = find.text(scenario.label);
+      final trigger = matchingTriggers.at(duplicateIndex);
       await tester.scrollUntilVisible(
-        finder.first,
+        trigger,
         300,
         scrollable: find.byType(Scrollable).first,
       );
-      expect(finder, label == '禁用菜单' ? findsNWidgets(2) : findsOneWidget);
+      await tester.tap(trigger);
+      await tester.pumpAndSettle();
+
+      final panelSurface = find.byKey(
+        const ValueKey<String>('t-dropdown-menu-panel-surface'),
+      );
+      if (scenario.enabled) {
+        expect(panelSurface, findsOneWidget, reason: scenario.id);
+        expect(
+          find.text(scenario.expectedPanelText),
+          findsNWidgets(scenario.expectedPanelTextCount),
+          reason: scenario.id,
+        );
+      } else {
+        expect(panelSurface, findsNothing, reason: scenario.id);
+      }
     }
-    expect(find.text('单元测试'), findsNothing);
-  });
-
-  testWidgets('两个禁用菜单均不展开', (tester) async {
-    configureViewport(tester);
-    await tester.pumpWidget(buildPage());
-    await tester.pumpAndSettle();
-
-    final disabled = find.text('禁用菜单');
-    await tester.scrollUntilVisible(
-      disabled.first,
-      300,
-      scrollable: find.byType(Scrollable).first,
-    );
-    expect(disabled, findsNWidgets(2));
-    await tester.tap(disabled.first);
-    await tester.pumpAndSettle();
-    expect(find.text('最新产品'), findsNothing);
-
-    await tester.tap(disabled.last);
-    await tester.pumpAndSettle();
-    expect(find.text('最新产品'), findsNothing);
   });
 
   testWidgets('单选项选中文字和勾选图标使用品牌色', (tester) async {
