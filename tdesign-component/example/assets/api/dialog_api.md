@@ -27,10 +27,10 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| actions | List<TDialogAction> | const <TDialogAction>[] | 操作列表；1～2 个横向排列，更多操作纵向排列。 纵向排列时，`TDialogAction.role` 为 `TDialogActionRole.primary` 或 `TDialogActionRole.destructive` 的强调操作优先展示，同类操作保持声明顺序。 |
+| actions | List<TDialogAction> | const <TDialogAction>[] | 操作列表；一到两个操作横向排列，更多操作纵向排列。 一到两个操作全部显式使用 `TButtonVariant.text` 时，操作区使用带分隔线的 贴边文字按钮 Footer；其他情况使用带内边距的普通操作区。 纵向排列时，`TDialogAction.role` 为 `TDialogActionRole.primary` 或 `TDialogActionRole.destructive` 的强调操作优先展示，同类操作保持声明顺序。 |
 | actionSpacing | double? | - | 操作之间的间距。未设置时使用主题 token 默认值。 |
-| actionsPadding | EdgeInsetsGeometry? | - | 操作区内边距。未设置时使用主题 token 默认值。 |
-| actionsWidget | Widget? | - | 完全自定义操作区。 |
+| actionsPadding | EdgeInsetsGeometry? | - | 操作区内边距。未设置时使用主题 token 默认值。 一到两个操作全部显式使用 `TButtonVariant.text` 时，默认仅保留 32dp 顶部间距，使文字按钮 Footer 横向贴边；显式设置后使用传入的内边距。 |
+| actionsWidget | Widget? | - | 完全自定义操作区。 使用后 `actions` 必须为空；仅在标准操作列表无法表达布局时使用。 |
 | backgroundColor | Color? | - | 面板背景色。 |
 | closeButtonResult | Object? | - | 点击内置关闭按钮并成功关闭时的返回值，默认为 null。 类型应与 `show` 的泛型一致。可与 `TDialogAction.result` 和 `show` 的 `barrierResult` 配合，通过同一个 Future 区分关闭来源。 不影响系统返回或业务调用 Navigator.pop 的返回值。 |
 | content | Widget? | - | 内容槽位。 |
@@ -56,9 +56,9 @@
 | disabled | bool | false | 是否禁用。 |
 | onPressed | VoidCallback? | - | 点击回调，在自动关闭前执行。 |
 | result | Object? | - | 关闭 Dialog 时返回的结果。 |
-| role | TDialogActionRole | TDialogActionRole.normal | 操作语义角色，默认为 `TDialogActionRole.normal`。 未指定变体时使用填充按钮：普通操作采用浅色配色，主要操作采用品牌配色， 危险操作采用危险配色。显式变体、配色和样式优先于角色默认值。 |
-| style | ButtonStyle? | - | 显式按钮样式。 |
-| variant | TButtonVariant? | - | 显式按钮变体；未指定时使用 `TButtonVariant.fill`。 |
+| role | TDialogActionRole | TDialogActionRole.normal | 操作语义角色，默认为 `TDialogActionRole.normal`。 未指定 `variant` 时使用填充按钮：普通操作采用 `TButtonColorScheme.light`， 主要操作采用 `TButtonColorScheme.primary`，危险操作采用 `TButtonColorScheme.danger`。显式设置的 `variant`、`colorScheme` 和 `style` 优先于角色提供的默认值。 |
+| style | ButtonStyle? | - | 显式按钮样式；用于覆盖单个操作，未设置时使用 Dialog Theme 和角色默认样式。 |
+| variant | TButtonVariant? | - | 显式按钮变体；未指定时使用 `TButtonVariant.fill`。 当 `TDialog.actions` 中有一到两个操作，且所有操作都显式使用 `TButtonVariant.text` 时，Dialog 自动切换为带分隔线的贴边文字按钮 Footer。 混合使用不同变体时仍采用普通操作区布局，每个按钮保留各自的变体。 |
 
 
 ### TConfirmDialog
