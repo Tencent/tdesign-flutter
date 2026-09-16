@@ -120,6 +120,13 @@ void main() {
     );
     expect(search.actions, hasLength(2));
     expect(image.actions, hasLength(2));
+    final searchIcon = find.descendant(
+      of: find.byKey(const Key('navbar-demo-search')),
+      matching: find.byIcon(TIcons.search),
+    );
+    expect(searchIcon, findsOneWidget);
+    expect(tester.widget<Icon>(searchIcon).size, 20);
+    expect(tester.getSize(searchIcon), const Size.square(20));
     expect(image.title, isA<TImage>());
     final logo = image.title! as TImage;
     expect(logo.width, 87);
