@@ -16,6 +16,7 @@ const actionSheetDemoPageTestSpec = DemoPageTestSpec(
     '带徽标列表型',
     '常规宫格型',
     '带描述宫格型',
+    '带翻页宫格型',
     '带图标宫格型',
     '带徽标宫格型',
     '多行滚动宫格型',
@@ -29,6 +30,6 @@ const actionSheetDemoPageTestSpec = DemoPageTestSpec(
     '左对齐列表型',
   ],
   componentType: TButton,
-  expectedComponentCount: 13,
+  expectedComponentCount: 14,
   useFeedbackGoldenFont: true,
 );
