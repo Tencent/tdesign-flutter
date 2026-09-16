@@ -8,11 +8,7 @@
 
 ## Golden 对比
 
-| 版本 | 图片 | 标记 |
-| --- | --- | --- |
-| 修改前 | `evidence/issue-1027/before.png` | 双列卡片内文字骨架位于图片骨架上方 |
-| 修改后 | `evidence/issue-1027/after.png` | 双列卡片内图片骨架位于文字骨架上方 |
-| 差异 | `evidence/issue-1027/diff.png` | 红色像素为本次顺序调整区域 |
+完整修改前、修改后与独立像素差异图保存在 GitHub PR #1130 描述的附件中，不作为 Spec 二进制文件提交。差异只涉及双列卡片内图片骨架与文字骨架的上下顺序。
 
 - 代表性 light 页面 Golden：`25565 / 753000 = 3.40%` 像素发生变化。
 - light / dark 两张页面 Golden 均按固定 Linux Flutter 3.32.0 环境更新，并在不带 `--update-goldens` 的情况下复跑通过。
