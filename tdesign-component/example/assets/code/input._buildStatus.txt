@@ -5,6 +5,7 @@ Widget _buildStatus(BuildContext context) {
         TFormItem(
           label: '标签文字',
           errorText: '错误提示',
+          verticalAlignment: TFormItemVerticalAlignment.center,
           child: Theme(
             data: Theme.of(context).mergeExtension(
               TInputThemeData(clearIconColor: token.errorNormalColor),

@@ -9,6 +9,7 @@ Widget _buildSize(BuildContext context) => Column(
           child: const _StatefulRate(initialValue: 3),
         ),
       ),
+      SizedBox(height: context.tTheme.spacer16),
       TCell(
         title: const Text('小尺寸 20'),
         note: Theme(

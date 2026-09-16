@@ -99,6 +99,7 @@ export 'src/components/notice_bar/t_notice_bar_theme_data.dart'
 export 'src/components/notice_bar/t_notice_bar_types.dart'
     show TNoticeBarStatus;
 export 'src/components/picker/t_picker.dart';
+export 'src/components/picker/t_picker_popup.dart';
 export 'src/components/picker/t_picker_theme_data.dart' show TPickerThemeData;
 export 'src/components/picker/t_picker_types.dart';
 export 'src/components/popover/t_popover.dart';
@@ -172,7 +173,8 @@ export 'src/components/table/t_table_col.dart';
 export 'src/components/table/t_table_theme_data.dart' show TTableThemeData;
 export 'src/components/table/t_table_types.dart';
 export 'src/components/tabs/t_tab.dart';
-export 'src/components/tabs/t_tab_bar.dart' show TTabsBar, TTabsBarIndicator;
+export 'src/components/tabs/t_tab_bar.dart'
+    show TTabsBar, TTabsBarIndicator, TTabsBarSize;
 export 'src/components/tabs/t_tab_bar_theme_data.dart'
     show TTabsBarThemeData, TTabsBarVariant;
 export 'src/components/tabs/t_tab_bar_view.dart';
@@ -186,8 +188,6 @@ export 'src/components/text/t_text.dart';
 export 'src/components/text/t_text_theme_data.dart' show TTextThemeData;
 export 'src/components/textarea/t_textarea.dart';
 export 'src/components/time_counter/t_time_counter.dart';
-export 'src/components/time_counter/t_time_counter_controller.dart'
-    show TTimeCounterController;
 export 'src/components/time_counter/t_time_counter_theme_data.dart'
     show TTimeCounterThemeData;
 export 'src/components/time_counter/t_time_counter_types.dart'

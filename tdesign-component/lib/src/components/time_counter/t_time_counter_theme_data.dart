@@ -2,40 +2,25 @@ import 'package:flutter/material.dart';
 
 import 't_time_counter_types.dart';
 
-/// 计时器组件的视觉和展示默认值。
+/// 计时器组件的视觉默认值。
 @immutable
 class TTimeCounterThemeData extends ThemeExtension<TTimeCounterThemeData> {
-  const TTimeCounterThemeData({
-    this.variant,
-    this.size,
-    this.showMillisecond,
-    this.splitWithUnit,
-  });
+  const TTimeCounterThemeData({this.defaultVariant, this.defaultSize});
 
   /// 默认视觉形态。
-  final TTimeCounterVariant? variant;
+  final TTimeCounterVariant? defaultVariant;
 
   /// 默认尺寸。
-  final TTimeCounterSize? size;
-
-  /// 默认是否显示毫秒。
-  final bool? showMillisecond;
-
-  /// 默认是否使用本地化时间单位分隔。
-  final bool? splitWithUnit;
+  final TTimeCounterSize? defaultSize;
 
   @override
   TTimeCounterThemeData copyWith({
-    TTimeCounterVariant? variant,
-    TTimeCounterSize? size,
-    bool? showMillisecond,
-    bool? splitWithUnit,
+    TTimeCounterVariant? defaultVariant,
+    TTimeCounterSize? defaultSize,
   }) {
     return TTimeCounterThemeData(
-      variant: variant ?? this.variant,
-      size: size ?? this.size,
-      showMillisecond: showMillisecond ?? this.showMillisecond,
-      splitWithUnit: splitWithUnit ?? this.splitWithUnit,
+      defaultVariant: defaultVariant ?? this.defaultVariant,
+      defaultSize: defaultSize ?? this.defaultSize,
     );
   }
 
@@ -48,10 +33,8 @@ class TTimeCounterThemeData extends ThemeExtension<TTimeCounterThemeData> {
       return this;
     }
     return TTimeCounterThemeData(
-      variant: t < 0.5 ? variant : other.variant,
-      size: t < 0.5 ? size : other.size,
-      showMillisecond: t < 0.5 ? showMillisecond : other.showMillisecond,
-      splitWithUnit: t < 0.5 ? splitWithUnit : other.splitWithUnit,
+      defaultVariant: t < 0.5 ? defaultVariant : other.defaultVariant,
+      defaultSize: t < 0.5 ? defaultSize : other.defaultSize,
     );
   }
 }

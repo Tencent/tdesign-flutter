@@ -88,7 +88,7 @@ class TActionSheetGrid<T> extends StatefulWidget {
               MediaQuery.sizeOf(context).width - token.spacer16 * 2,
             ),
           );
-      height += token.spacer4 + painter.height;
+      height += token.spacer4 + painter.height + token.spacer12;
       painter.dispose();
     }
     if (showPagination) {
@@ -163,6 +163,7 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
         left: context.tTheme.spacer16,
         right: context.tTheme.spacer16,
         top: context.tTheme.spacer4,
+        bottom: context.tTheme.spacer12,
       ),
       child: Center(
         child: TText(

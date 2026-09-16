@@ -20,7 +20,7 @@
 | `dart run tool/generate_example_code.dart --check` | 通过 | Example 代码资产与源码一致 |
 | `flutter build web`（`tdesign-component/example`） | 通过 | Web Demo 可构建 |
 | `flutter build web --no-web-resources-cdn`（`tdesign-component/example`） | 通过 | 使用仓库构建产物内的 CanvasKit 完成本地截图验收 |
-| `flutter test test/form_input_textarea_page_golden_test.dart`（`tdesign-component/example`） | 通过 | 375dp 手机宽度完整覆盖 Input、Textarea、Form 三页全部滚动内容，浅色与深色共 6 个标准基线；测试固定加载 Roboto 和 49 KB 的 Noto Sans SC Regular 中文子集，不依赖宿主字体；Linux CI 固定 Flutter 3.32.0 并以 0% 严格比较作为唯一权威结果，其他宿主按实测 3.48%～4.32% 栅格差异以 5% 容差本地预检；测试同时严格校验页面宽高、主滚动区、完整内容高度、关键组件数量/矩形与边框 |
+| `flutter test test/textarea_page_golden_test.dart`（`tdesign-component/example`） | 通过 | 375dp 手机宽度完整覆盖 Textarea 的 8 个公开场景；浅色/深色分别包含初始整页和全部可编辑场景输入后的整页，共 4 个标准基线；Linux CI 固定 Flutter 3.32.0 并以 0% 严格比较作为唯一权威结果 |
 
 ## 人工验收
 
@@ -65,7 +65,7 @@ docker run --rm --platform linux/amd64 \
   -v "$PWD:/workspace" \
   -w /workspace/tdesign-component/example \
   docker.cnb.cool/liweijie0812/docker/flutter-3.32.0 \
-  flutter test test/form_input_textarea_page_golden_test.dart --update-goldens
+  flutter test test/textarea_page_golden_test.dart --update-goldens
 ```
 
 更新后必须在同一容器去掉 `--update-goldens` 再运行一次，确认 Linux 0% 比较通过。
@@ -80,3 +80,11 @@ docker run --rm --platform linux/amd64 \
 - 示例代码生成校验通过；公开 API 文档已登记并生成 `TTextareaLayout`。
 - Flutter 3.32.0 Linux 固定环境中更新浅色/深色 Textarea 页面 Golden，随后无更新参数复跑通过（0% 像素差异）。
 - Android 真机 `40302eeb`（Android 16，1220×2656）已完成 debug APK 构建与安装；最终页面截图因设备锁屏未完成。
+
+## Textarea 场景与 Golden 覆盖补充（2026-09-16）
+
+- 共享场景契约固定 4 个分组、8 个公开场景、顺序、关键初始参数和 Golden 策略。
+- `textarea_page_test.dart` 从实际渲染的 `ExamplePage` 双向校验分组/场景，逐项核对 8 个 `TTextarea` 的布局、文案、限制、禁用与边框参数，并对所有可编辑场景执行输入。
+- `textarea_page_golden_test.dart` 分别保存浅色/深色初始整页和“全部可编辑场景输入后”整页，共4 张 Golden；集合断言保证初始页覆盖全部 8 个场景，输入后 Golden 覆盖全部 7 个可编辑场景。
+- 功能测试与 Golden 测试已在 `component_test_manifest.dart` 分别登记，避免用 Linux 视觉入口代替 Flutter 3.32.0/latest 功能回归。
+- Golden 仅在 Flutter 3.32.0 Linux 固定环境更新，更新后必须在同一容器中无更新参数复跑，要求 0% 像素差异。

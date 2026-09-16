@@ -8,31 +8,6 @@ import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 import 'demo_page_test_utils.dart';
 import 'dialog_demo_test_spec.dart';
 
-const _scenarioLabels = [
-  '反馈类-带标题',
-  '反馈类-无标题',
-  '反馈类-纯标题',
-  '反馈类-内容超长',
-  '确认类-带标题',
-  '确认类-无标题',
-  '确认类-纯标题',
-  '输入类-无描述',
-  '输入类-带描述',
-  '图片置顶-带标题描述',
-  '图片置顶-无标题',
-  '图片置顶-纯标题',
-  '图片置顶-纯图片',
-  '图片居中-带标题描述',
-  '图片居中-纯标题',
-  '文字按钮',
-  '水平基础按钮',
-  '垂直基础按钮',
-  '多按钮',
-  '带关闭按钮的对话框',
-  '命令行操作',
-  '开放能力按钮',
-];
-
 void main() {
   tearDown(TToast.dismissAll);
   registerDemoStructureTests(dialogDemoPageTestSpec);
@@ -95,7 +70,7 @@ void main() {
     await tester.pumpWidget(buildPage());
     await tester.pump();
 
-    for (final label in _scenarioLabels) {
+    for (final label in dialogScenarioLabels) {
       final trigger = find.widgetWithText(TButton, label);
       await tester.scrollUntilVisible(
         trigger,
@@ -119,7 +94,7 @@ void main() {
     await tester.pumpWidget(buildPage());
     await tester.pump();
 
-    for (final label in _scenarioLabels) {
+    for (final label in dialogScenarioLabels) {
       await openScenario(tester, label);
       expect(find.byType(TDialog), findsOneWidget, reason: '$label 应打开');
       await closeCurrentDialog(tester);
@@ -154,7 +129,7 @@ void main() {
   testWidgets('全部 22 个示例显式开启蒙层关闭，面板内点击不关闭', (tester) async {
     configureViewport(tester);
     tester.view.physicalSize = const Size(375, 812);
-    for (final label in _scenarioLabels) {
+    for (final label in dialogScenarioLabels) {
       await tester.pumpWidget(const SizedBox.shrink());
       await tester.pumpWidget(buildPage());
       await tester.pump();
@@ -252,20 +227,53 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('图片置顶场景使用现有 content Widget 表达', (tester) async {
+  testWidgets('六种图片场景保持全宽图片和 24dp 内容间距', (tester) async {
     configureViewport(tester);
     await tester.pumpWidget(buildPage());
     await tester.pump();
 
-    await openScenario(tester, '图片置顶-带标题描述');
+    for (final label in [
+      '图片置顶-带标题描述',
+      '图片置顶-无标题',
+      '图片置顶-纯标题',
+      '图片置顶-纯图片',
+      '图片居中-带标题描述',
+      '图片居中-纯标题',
+    ]) {
+      await openScenario(tester, label);
+      final dialogFinder = find.byType(TDialog);
+      final dialog = tester.widget<TDialog>(dialogFinder);
+      expect(dialog.contentPadding, EdgeInsets.zero, reason: label);
+      final dialogRect = tester.getRect(dialogFinder);
+      final imageRect = tester.getRect(
+        find.byKey(const ValueKey('dialog-image')),
+      );
+      expect(imageRect.left, dialogRect.left, reason: label);
+      expect(imageRect.right, dialogRect.right, reason: label);
+      expect(imageRect.width / imageRect.height, closeTo(16 / 9, 0.001));
 
-    final dialog = tester.widget<TDialog>(find.byType(TDialog));
-    expect(dialog.contentPadding, EdgeInsets.zero);
-    final image = tester.widget<Image>(
-      find.descendant(of: find.byType(TDialog), matching: find.byType(Image)),
-    );
-    expect(image.height, 160);
-    expect(find.text('对话框标题'), findsOneWidget);
+      final buttons = find.descendant(
+        of: dialogFinder,
+        matching: find.byType(TButton),
+      );
+      final firstButtonRect = tester.getRect(buttons.first);
+      if (label == '图片居中-纯标题') {
+        final titleRect = tester.getRect(find.text('对话框标题'));
+        expect(imageRect.top - titleRect.bottom, 24, reason: label);
+      }
+      if (label == '图片置顶-带标题描述' || label == '图片置顶-无标题') {
+        final descriptionRect = tester.getRect(
+          find.text('告知当前状态、信息和解决方法，等内容。描述尽可能控制在三行内。'),
+        );
+        expect(firstButtonRect.top - descriptionRect.bottom, 24, reason: label);
+      } else if (label == '图片置顶-纯标题') {
+        final titleRect = tester.getRect(find.text('对话框标题'));
+        expect(firstButtonRect.top - titleRect.bottom, 24, reason: label);
+      } else {
+        expect(firstButtonRect.top - imageRect.bottom, 24, reason: label);
+      }
+      await closeCurrentDialog(tester);
+    }
     expect(tester.takeException(), isNull);
   });
 
@@ -348,14 +356,72 @@ void main() {
     }
   });
 
-  testWidgets('确认类纯标题使用浅色确认按钮', (tester) async {
+  testWidgets('确认类无标题和纯标题的右侧按钮使用品牌填充样式', (tester) async {
     configureViewport(tester);
     await tester.pumpWidget(buildPage());
     await tester.pump();
 
-    await openScenario(tester, '确认类-纯标题');
-    final dialog = tester.widget<TDialog>(find.byType(TDialog));
-    expect(dialog.actions.last.colorScheme, TButtonColorScheme.light);
+    for (final label in ['确认类-无标题', '确认类-纯标题']) {
+      await openScenario(tester, label);
+      final confirm = tester.widget<TButton>(
+        find.widgetWithText(TButton, '确定'),
+      );
+      expect(confirm.variant, TButtonVariant.fill, reason: label);
+      expect(confirm.colorScheme, TButtonColorScheme.primary, reason: label);
+      await closeCurrentDialog(tester);
+    }
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('输入类和组件用法使用贴边文字按钮', (tester) async {
+    configureViewport(tester);
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+
+    for (final label in ['输入类-无描述', '输入类-带描述', '命令行操作', '开放能力按钮']) {
+      await openScenario(tester, label);
+      final dialog = tester.widget<TDialog>(find.byType(TDialog));
+      expect(
+        dialog.actions.map((action) => action.variant),
+        everyElement(TButtonVariant.text),
+        reason: label,
+      );
+      await closeCurrentDialog(tester);
+    }
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('长内容显示 4dp 滚动条且关闭图标距顶部和右侧均为 8dp', (tester) async {
+    configureViewport(tester);
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+
+    await openScenario(tester, '反馈类-内容超长');
+    final scrollbar = tester.widget<RawScrollbar>(
+      find.descendant(
+        of: find.byType(TDialog),
+        matching: find.byType(RawScrollbar),
+      ),
+    );
+    expect(scrollbar.thumbVisibility, isTrue);
+    expect(scrollbar.thickness, 4);
+    expect(scrollbar.radius, const Radius.circular(2));
+    expect(scrollbar.crossAxisMargin, 16);
+    final scrollView = tester.widget<SingleChildScrollView>(
+      find.descendant(
+        of: find.byType(TDialog),
+        matching: find.byType(SingleChildScrollView),
+      ),
+    );
+    expect(scrollView.controller!.position.maxScrollExtent, greaterThan(0));
+    await closeCurrentDialog(tester);
+
+    await openScenario(tester, '带关闭按钮的对话框');
+    final dialogRect = tester.getRect(find.byType(TDialog));
+    final closeIconRect = tester.getRect(find.byIcon(TIcons.close));
+    expect(closeIconRect.top - dialogRect.top, 8);
+    expect(dialogRect.right - closeIconRect.right, 8);
+    expect(closeIconRect.size, const Size.square(24));
     expect(tester.takeException(), isNull);
   });
 

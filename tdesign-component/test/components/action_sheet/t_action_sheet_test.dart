@@ -320,7 +320,7 @@ void main() {
           matching: find.byType(Positioned),
         ),
       );
-      expect(positioned.last.height, 282);
+      expect(positioned.last.height, 294);
       expect(tester.takeException(), isNull);
 
       handle.close();
