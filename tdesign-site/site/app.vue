@@ -6,11 +6,14 @@
     <td-doc-aside ref="tdDocAside" title="Flutter"></td-doc-aside>
 
     <router-view :style="contentStyle" @loaded="contentLoaded" :docType="docType" />
+    <td-theme-generator device="mobile"></td-theme-generator>
   </td-doc-layout>
 </template>
 
 <script>
 import siteConfig from './site.config';
+import '@tdesign/theme-generator';
+import { ensureFlutterThemeTokenCoverage, generateFlutterThemeFromParts } from './utils/flutterThemeBridge.mjs';
 
 import { defineComponent } from 'vue';
 
@@ -33,6 +36,12 @@ export default defineComponent({
     return {
       docType: '',
       loaded: false,
+      themeObservers: {},
+      themeStyles: { light: '', dark: '', extra: '' },
+      themeBaselines: { light: '', dark: '', extra: '' },
+      themeUpdateTimer: null,
+      lastThemeJson: null,
+      demoReadyHandler: null,
     };
   },
 
@@ -55,6 +64,22 @@ export default defineComponent({
       window.scrollTo(0, 0);
     };
     this.$refs.tdDocSearch.docsearchInfo = { indexName: 'tdesign_doc_flutter' };
+
+    this.observeThemeStyle('custom-theme', 'light');
+    this.observeThemeStyle('custom-theme-dark', 'dark');
+    this.observeThemeStyle('custom-theme-extra', 'extra');
+    this.demoReadyHandler = (event) => {
+      this.sendThemeToFlutterIframe(event.detail?.iframe);
+    };
+    window.addEventListener('flutter-demo-ready', this.demoReadyHandler);
+  },
+
+  beforeUnmount() {
+    Object.values(this.themeObservers).forEach((observer) => observer?.disconnect());
+    if (this.themeUpdateTimer) clearTimeout(this.themeUpdateTimer);
+    if (this.demoReadyHandler) {
+      window.removeEventListener('flutter-demo-ready', this.demoReadyHandler);
+    }
   },
 
   watch: {
@@ -70,6 +95,74 @@ export default defineComponent({
         this.loaded = true;
         callback();
       });
+    },
+    observeThemeStyle(styleId, themePart) {
+      const attach = (styleElement) => {
+        const update = () => {
+          let cssText = styleElement.textContent || '';
+          if (themePart === 'extra') {
+            const completedCss = ensureFlutterThemeTokenCoverage(cssText);
+            if (completedCss !== cssText) {
+              styleElement.textContent = completedCss;
+              cssText = completedCss;
+            }
+          }
+          if (!this.themeBaselines[themePart]) {
+            this.themeBaselines[themePart] = cssText;
+          }
+          this.themeStyles[themePart] = cssText;
+          this.scheduleThemeUpdate();
+        };
+        update();
+        const observer = new MutationObserver(update);
+        observer.observe(styleElement, {
+          childList: true,
+          characterData: true,
+          subtree: true,
+        });
+        this.themeObservers[styleId] = observer;
+      };
+
+      const styleElement = document.getElementById(styleId);
+      if (styleElement) {
+        attach(styleElement);
+        return;
+      }
+      const headObserver = new MutationObserver(() => {
+        const addedStyle = document.getElementById(styleId);
+        if (!addedStyle) return;
+        headObserver.disconnect();
+        attach(addedStyle);
+      });
+      headObserver.observe(document.head, { childList: true });
+      this.themeObservers[`${styleId}-head`] = headObserver;
+    },
+    scheduleThemeUpdate() {
+      if (this.themeUpdateTimer) clearTimeout(this.themeUpdateTimer);
+      this.themeUpdateTimer = setTimeout(() => {
+        if (!this.themeStyles.light || !this.themeStyles.dark) return;
+        const themeJson = generateFlutterThemeFromParts(
+          this.themeStyles.light,
+          this.themeStyles.dark,
+          this.themeStyles.extra,
+          this.themeBaselines,
+        );
+        const serialized = JSON.stringify(themeJson);
+        if (serialized === this.lastThemeJson) return;
+        this.lastThemeJson = serialized;
+        document.querySelectorAll('iframe[src*="/example/"]').forEach((iframe) => {
+          this.sendThemeToFlutterIframe(iframe, themeJson);
+        });
+      }, 80);
+    },
+    sendThemeToFlutterIframe(iframe, themeJson = null) {
+      if (!iframe?.contentWindow) return;
+      const currentTheme = themeJson || (this.lastThemeJson && JSON.parse(this.lastThemeJson));
+      if (!currentTheme) return;
+      iframe.contentWindow.postMessage(
+        JSON.stringify({ type: 'flutter-theme-update', theme: currentTheme }),
+        window.location.origin,
+      );
     },
   },
 });
