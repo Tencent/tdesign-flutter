@@ -13,6 +13,8 @@ void main() {
   registerDemoStructureTests(sidebarDemoPageTestSpec);
   registerDemoStructureTests(sidebarAnchorDemoTestSpec);
   registerDemoStructureTests(sidebarTagDemoTestSpec);
+  registerDemoStructureTests(sidebarPaginationDemoTestSpec);
+  registerDemoStructureTests(sidebarIconDemoTestSpec);
 
   testWidgets('主页面跳转按钮沿用紧凑 Demo 的水平边距', (tester) async {
     await pumpDemoPageAtPhoneViewport(

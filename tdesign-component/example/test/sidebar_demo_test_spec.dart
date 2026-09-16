@@ -2,6 +2,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/page/sidebar/t_sidebar_page.dart';
 import 'package:tdesign_flutter_example/page/sidebar/t_sidebar_page_anchor.dart';
 import 'package:tdesign_flutter_example/page/sidebar/t_sidebar_page_custom.dart';
+import 'package:tdesign_flutter_example/page/sidebar/t_sidebar_page_icon.dart';
+import 'package:tdesign_flutter_example/page/sidebar/t_sidebar_page_pagination.dart';
 
 import 'demo_page_test_utils.dart';
 
@@ -42,6 +44,30 @@ const sidebarTagDemoTestSpec = DemoPageTestSpec(
   name: 'sidebar_tag',
   title: 'SideBar 自定义样式',
   page: TSideBarCustomPage(),
+  componentType: TSideBar,
+  expectedComponentCount: 1,
+  expectedTexts: ['选项', '标题'],
+  supplementalCjkFontFamily: 'TDesign SideBar Golden CJK',
+  supplementalCjkFontPath: 'test/fonts/SideBarGoldenCJK-Regular.otf',
+  precacheAssetImages: ['assets/img/empty.png'],
+);
+
+const sidebarPaginationDemoTestSpec = DemoPageTestSpec(
+  name: 'sidebar_pagination',
+  title: 'SideBar 切页用法',
+  page: TSideBarPaginationPage(),
+  componentType: TSideBar,
+  expectedComponentCount: 1,
+  expectedTexts: ['选项', '标题'],
+  supplementalCjkFontFamily: 'TDesign SideBar Golden CJK',
+  supplementalCjkFontPath: 'test/fonts/SideBarGoldenCJK-Regular.otf',
+  precacheAssetImages: ['assets/img/empty.png'],
+);
+
+const sidebarIconDemoTestSpec = DemoPageTestSpec(
+  name: 'sidebar_icon',
+  title: 'SideBar 带图标侧边导航',
+  page: TSideBarIconPage(),
   componentType: TSideBar,
   expectedComponentCount: 1,
   expectedTexts: ['选项', '标题'],
