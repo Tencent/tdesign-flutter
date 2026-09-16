@@ -5,7 +5,7 @@
 - Figma 当前 Loading 页为 `24386:5280`。“颜色不一致”文字标注位于 `x=-976, y=303, 60×20`，对应红色 20% 标记框 `x=-976, y=323, 24×24`；设计基准中的 activity 为主文字黑色，circle / point 为品牌蓝。
 - 根因是**组件默认值**：`TLoading` 把同一 `brandNormalColor` 传给 circle、point、activity。修复后 activity 使用 `textColorPrimary`，circle / point 不变；公开 Demo 未添加颜色 Theme，避免掩盖组件问题。
 - Flutter 3.32 Linux 首次精确比较：light 704px（0.17%）、dark 698px（0.16%）；差异只覆盖纯图标、横向图文、竖向图文共 3 个 activity 指示器。只更新 Loading light/dark 两张 Golden 后，无更新参数复跑 2/2。
-- 可审计图片：修复前 [`evidence/issue-1027/before.png`](evidence/issue-1027/before.png)、修复后 [`evidence/issue-1027/after.png`](evidence/issue-1027/after.png)、差异标记 [`evidence/issue-1027/diff.png`](evidence/issue-1027/diff.png)。
+- 完整修改前、修改后与独立像素差异图保存在 GitHub PR #1126 描述的附件中，不作为 Spec 二进制文件提交。
 - Flutter 3.32：组件与工具回归 63/63（其中 Loading 组件 50/50），公开 Demo 2/2；生产源码 LCOV `265/266 = 99.62%`；组件与 Example 严格 analyze 均 0 issues。
 - Flutter 3.47：Loading 组件 50/50、公开 Demo 2/2；组件与 Example 严格 analyze 均 0 issues。两个 SDK 间执行 clean 并分别恢复依赖，未混用编译缓存。
 - 示例代码生成器 `--check` 通过，无生成片段变化。
