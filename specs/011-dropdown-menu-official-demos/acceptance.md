@@ -7,7 +7,7 @@
 - 当前基线的单选展开态中，选中文字与勾选图标均为品牌主色；组件测试和公开 Demo 测试新增直接断言。因此该反馈不需要生产视觉修改。
 - 分栏禁用项的旧背景来自禁用文字色 12% 透明度，并非组件禁用背景 Token。修复后默认读取 `bgColorComponentDisabled`，浅色主题精确为 `#EEEEEE`；这是**组件实现修复**，Demo 未传入任何补偿颜色。
 - Linux Flutter 3.32 首次无更新参数比较仅多选展开态失败：浅色 12,765px（4.19%）。差异集中于 3 个禁用项的 40dp 背景区域；页面、菜单、正常/选中项、操作按钮和遮罩均未变化。只更新多选展开态 light/dark 两张基线后，无更新参数复跑 8/8，精确比较通过。
-- 可审计图片：修复前 [`evidence/issue-1027-before.png`](evidence/issue-1027-before.png)、修复后 [`evidence/issue-1027-after.png`](evidence/issue-1027-after.png)、差异标记 [`evidence/issue-1027-diff.png`](evidence/issue-1027-diff.png)。
+- 完整修改前、修改后与独立像素差异图保存在 GitHub PR #1125 描述的附件中，不作为 Spec 二进制文件提交。
 - Figma Starter 本轮读取额度已在前序组件核对中耗尽；本项沿用本 Spec 已冻结的 Figma `24386:5279` 契约，并以 Issue 明确给出的 `#EEEEEE` 和当前 Linux 像素证据验收，不声称完成新的在线 Figma 截图读取。
 - Flutter 3.32.0：组件与工具回归 110/110，公开 Demo 5/5；组件生产 LCOV `967/983 = 98.37%`；组件与 Example 严格 analyze 均 0 issues。
 - Flutter 3.47.0：组件 97/97、公开 Demo 5/5；组件与 Example 严格 analyze 均 0 issues。两个 SDK 间执行 clean 并分别恢复依赖，没有混用编译缓存。
