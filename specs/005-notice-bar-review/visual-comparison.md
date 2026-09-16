@@ -18,9 +18,7 @@ Flutter 使用现有组合与 Theme 表达这些效果，没有新增 interval�
 
 ## 2026-09-15 Issue #1027 标记差异
 
-| 修复前 | 修复后 | 差异标记 |
-| --- | --- | --- |
-| ![修复前](evidence/issue-1027/before.png) | ![修复后](evidence/issue-1027/after.png) | ![像素差异](evidence/issue-1027/diff.png) |
+完整修改前、修改后与独立像素差异图保存在 GitHub PR #1128 描述的附件中，不作为 Spec 二进制文件提交。
 
 - **组件差异**：“带图标的公告栏”和垂直滚动公告栏的自定义图标与正文之间补齐 8px。
 - **Demo 遮盖检查**：自定义样式公告栏原本手工带 8px Padding；该 Padding 已删除，组件接管间距后此实例视觉保持不变。
