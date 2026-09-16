@@ -65,3 +65,13 @@
 - placement 仅做同轴反向翻转，不会在纵向和横向之间跨轴选择。
 - 超长文本在 maxHeight 下的滚动、裁切或省略策略尚未形成公共契约，本次不扩展。
 - 目标设备人工验收尚未执行，因此本 Spec 暂不标记为完全关闭。
+
+## 2026-09-15 Issue #1027 像素复核
+
+- [x] 判定为组件问题：四角 placement 的箭头与气泡位置由 `TPopoverWidget` 统一计算，Demo 未参与几何修饰。
+- [x] 真实 `TPopoverAnchor` Widget 测试逐一断言 topLeft、topRight、bottomLeft、bottomRight 的箭头定位点距对应边缘 12px。
+- [x] 代表场景 `popover_placement_top_left_opened_light` 变化 5,840px（1.92%），差异包含气泡整体位置与箭头固定内缩。
+- [x] 仅四个目标 placement 的 light/dark 共 8 张展开态 Golden 产生差异；其余 36/44 项保持原基线。
+- [x] Flutter 3.32.0 Linux 44/44 Golden 更新后无参数复跑通过。
+- [x] Flutter 3.32.0：组件及回归工具 76/76、Demo 8/8，严格 analyze 0 问题；生产源码覆盖率 616/628 = 98.09%。
+- [x] Flutter 3.47.0：组件 63/63、Demo 8/8，严格 analyze 0 问题。

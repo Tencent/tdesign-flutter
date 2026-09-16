@@ -20,3 +20,7 @@
 - [x] 为 21 个公开 Demo 增加 light/dark 展开态 Golden 并逐张检查
 - [ ] 在目标设备完成窄屏、键盘、四边 placement 和组合 Widget 交互人工验收
 - [ ] 完成最终 Review 后关闭 Spec
+- [x] Issue #1027：四个顶部/底部角落 placement 箭头定位点固定为 12px。
+- [x] Issue #1027：同步气泡相对锚点位置、基础箭头中心和 clamp 补偿算法。
+- [x] Issue #1027：更新并无参数复跑 44 组 Flutter 3.32.0 Linux Golden。
+- [x] Issue #1027：完成 Flutter 3.32.0 / 3.47.0 全量复验。

@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/page/t_pull_down_refresh_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
+
+import 'demo_page_test_utils.dart';
+import 'pull_down_refresh_demo_test_spec.dart';
 
 void main() {
   Widget buildPage() {
@@ -31,11 +35,41 @@ void main() {
     expect(find.byType(TPullDownRefresh), findsOneWidget);
     // 首屏可见：大骨架 + 前两组双列骨架；第三组位于内部滚动区域下方。
     expect(find.byType(TSkeleton), findsAtLeastNWidgets(5));
+    final cardSkeletons = tester
+        .widgetList<TSkeleton>(find.byType(TSkeleton))
+        .where((skeleton) => skeleton.layout?.rows.length == 3);
+    expect(cardSkeletons, isNotEmpty);
+    for (final skeleton in cardSkeletons) {
+      expect(skeleton.layout!.rows.first.single.height, 164);
+      expect(skeleton.layout!.rows[1].single.height, 16);
+    }
     expect(find.text('拖拽该区域演示 顶部下拉刷新'), findsOneWidget);
     expect(find.textContaining('刷新次数'), findsNothing);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
     await tester.pump(const Duration(seconds: 1));
+  });
+
+  testWidgets('公开场景与契约双向一致', (tester) async {
+    await pumpFullDemoPage(
+      tester,
+      pullDownRefreshDemoPageTestSpec,
+      ThemeMode.light,
+    );
+    final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
+    final actual = [
+      for (final module in page.children)
+        for (final item in module.children) '${module.title}/${item.desc}',
+    ];
+    final expected = pullDownRefreshDemoScenarios
+        .map((scenario) => '${scenario.group}/${scenario.label}')
+        .toList();
+    expect(actual, expected);
+    expect(
+      pullDownRefreshDemoScenarios.map((scenario) => scenario.id).toSet(),
+      hasLength(pullDownRefreshDemoScenarios.length),
+    );
+    await disposeDemoPage(tester);
   });
 
   testWidgets('点击中央提示可触发刷新，供 Web Preview 验收', (tester) async {

@@ -440,11 +440,15 @@ const componentTestManifests = <ComponentTestManifest>[
       'lib/src/components/refresh/t_pull_down_refresh_texts.dart',
     ],
     componentTests: ['test/components/refresh/t_refresh_test.dart'],
+    exampleTests: [
+      'test/pull_down_refresh_demo_test.dart',
+      'test/pull_down_refresh_page_test.dart',
+    ],
     visualTests: [
       VisualTestManifest(
         name: 'PullDownRefresh Demo',
         workingDirectory: 'example',
-        testFiles: ['test/pull_down_refresh_demo_test.dart'],
+        testFiles: ['test/pull_down_refresh_demo_golden_test.dart'],
       ),
     ],
   ),

@@ -48,3 +48,10 @@
 - 运行 scripts/check-flutter-component-contracts.mjs 和 git diff --check。
 - 运行示例代码生成器及 `--check`，保证代码查看器与 Demo 源码同步。
 - 人工验收窄屏、安全区、键盘、四边 placement、组合 Widget 内部交互和页面跳转销毁锚点。
+
+## 2026-09-15 Issue #1027 收敛方案
+
+- topLeft / bottomLeft 以锚点中心减去 `12 + arrowSize` 计算气泡左坐标；topRight / bottomRight 对称计算右侧坐标。
+- 四个角落 placement 的箭头 margin 固定为 12px，基础箭头中心同步使用 `12 + arrowSize`；仅当 viewport clamp 改变气泡位置时才产生补偿位移。
+- 该问题属于组件定位算法，Demo 不添加位置参数或 Transform。
+- Flutter 3.32.0 Linux 只更新四个目标 placement 的明暗展开态 Golden，其余页面和展开态必须保持零差异。
