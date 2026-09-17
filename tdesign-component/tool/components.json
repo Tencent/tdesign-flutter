@@ -675,7 +675,11 @@
           "TTableSort",
           "TTableColumnFixed",
           "TTableColumnAlign",
+          "TTableCellContext",
+          "TTableCellSpan",
+          "TTableCellSpanBuilder",
           "TTableCellTap",
+          "TTableRowKey",
           "TTableRowTap",
           "TTableCellBuilder"
         ],

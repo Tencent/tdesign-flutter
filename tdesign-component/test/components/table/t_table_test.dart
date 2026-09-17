@@ -126,7 +126,7 @@ void main() {
             loading: true,
             loadingWidget: const Text('Loading'),
             footer: const Text('Footer'),
-            onCellTap: (_, __, ___) => taps++,
+            onCellTap: (_) => taps++,
           ),
         ),
       );
@@ -288,7 +288,7 @@ void main() {
       expect(find.text('cell-right'), findsNWidgets(3));
     });
 
-    testWidgets('数据缩减后回收已移除行的横向滚动控制器', (tester) async {
+    testWidgets('数据缩减后共享横向滚动保持可用', (tester) async {
       var visibleRows = List.generate(8, (index) => _Row('R$index', index));
       late StateSetter update;
       await tester.pumpWidget(
@@ -480,6 +480,44 @@ void main() {
       expect(requested, isNot(contains(rows.first)));
     });
 
+    testWidgets('rowKey 在数据对象重建后保持受控选中状态', (tester) async {
+      const previousAlice = _Row('Alice', 29);
+      Set<_Row>? requested;
+      await tester.pumpWidget(
+        app(
+          TTable(
+            columns: columns(),
+            data: rows,
+            rowKey: (row) => row.name,
+            selectionMode: TTableSelectionMode.multiple,
+            selectedRows: const {previousAlice},
+            onSelectionChanged: (value) => requested = value,
+          ),
+        ),
+      );
+
+      expect(
+        tester.widget<TCheckbox>(find.byType(TCheckbox).at(1)).value,
+        true,
+      );
+      await tester.tap(find.byType(TCheckbox).at(1));
+      expect(requested, isEmpty);
+    });
+
+    testWidgets('rowKey 拒绝当前数据中的重复标识', (tester) async {
+      await tester.pumpWidget(
+        app(
+          TTable(
+            columns: columns(),
+            data: const [_Row('Alice', 20), _Row('Alice', 30)],
+            rowKey: (row) => row.name,
+          ),
+        ),
+      );
+
+      expect(tester.takeException(), isFlutterError);
+    });
+
     testWidgets('表头全选只包含可选行', (tester) async {
       Set<_Row>? requested;
       await tester.pumpWidget(
@@ -590,18 +628,20 @@ void main() {
   });
 
   group('callbacks and theme', () {
-    testWidgets('点击单元格返回强类型 row 与 column', (tester) async {
+    testWidgets('点击单元格返回强类型行列上下文', (tester) async {
       _Row? tappedRow;
       String? tappedColumn;
       int? tappedRowIndex;
+      int? tappedColumnIndex;
       await tester.pumpWidget(
         app(
           TTable(
             columns: columns(),
             data: rows,
-            onCellTap: (_, row, column) {
-              tappedRow = row;
-              tappedColumn = column.id;
+            onCellTap: (cell) {
+              tappedRow = cell.row;
+              tappedColumn = cell.column.id;
+              tappedColumnIndex = cell.columnIndex;
             },
             onRowTap: (index, _) => tappedRowIndex = index,
           ),
@@ -611,6 +651,7 @@ void main() {
       expect(tappedRow, rows.first);
       expect(tappedColumn, 'name');
       expect(tappedRowIndex, 0);
+      expect(tappedColumnIndex, 0);
     });
 
     testWidgets('maxHeight 仅约束表体并产生垂直滚动通知', (tester) async {
@@ -625,7 +666,7 @@ void main() {
           ),
         ),
       );
-      await tester.drag(find.byType(ListView), const Offset(0, -200));
+      await tester.drag(_verticalScrollView(), const Offset(0, -200));
       await tester.pump();
       expect(notifications, greaterThan(0));
     });
@@ -641,9 +682,151 @@ void main() {
         ),
       );
       final header = tester.getRect(find.text('Name'));
-      final body = tester.getRect(find.byType(ListView));
+      final body = tester.getRect(_verticalScrollView());
       expect(body.top, greaterThanOrEqualTo(header.bottom));
       expect(body.height, lessThanOrEqualTo(120));
+    });
+
+    testWidgets('height 固定整个表格并让剩余表体滚动', (tester) async {
+      var notifications = 0;
+      await tester.pumpWidget(
+        app(
+          TTable(
+            columns: columns(),
+            data: List.generate(20, (index) => _Row('R$index', index)),
+            height: 240,
+            footer: const SizedBox(height: 24, child: Text('Footer')),
+            onScroll: (_) => notifications++,
+          ),
+        ),
+      );
+
+      expect(tester.getSize(find.byType(TTable<_Row>)).height, 240);
+      final header = tester.getRect(find.text('Name'));
+      final body = tester.getRect(_verticalScrollView());
+      final footer = tester.getRect(find.text('Footer'));
+      expect(body.top, greaterThanOrEqualTo(header.bottom));
+      expect(body.bottom, lessThanOrEqualTo(footer.top));
+      await tester.drag(_verticalScrollView(), const Offset(0, -200));
+      await tester.pump();
+      expect(notifications, greaterThan(0));
+    });
+
+    testWidgets('minWidth 约束自动列和显式列宽', (tester) async {
+      final widthColumns = [
+        TTableColumn<_Row>(
+          id: 'name',
+          header: const Text('Wide name'),
+          minWidth: 240,
+          cellBuilder: (_, row, __) => Text(row.name),
+        ),
+        TTableColumn<_Row>(
+          id: 'age',
+          header: const Text('Wide age'),
+          minWidth: 160,
+          cellBuilder: (_, row, __) => Text('${row.age}'),
+        ),
+        TTableColumn<_Row>(
+          id: 'score',
+          header: const Text('Wide score'),
+          width: 40,
+          minWidth: 80,
+          cellBuilder: (_, row, __) => Text('${row.age}'),
+        ),
+      ];
+      await tester.pumpWidget(app(TTable(columns: widthColumns, data: rows)));
+
+      final widths = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.constraints?.maxWidth)
+          .whereType<double>()
+          .toList();
+      expect(widths, contains(240));
+      expect(widths, contains(160));
+      expect(widths, contains(80));
+    });
+
+    testWidgets('cellSpanBuilder 合并行列且覆盖坐标不再构建', (tester) async {
+      final built = <String>[];
+      TTableCellContext<_Row>? tapped;
+      final mergedColumns = List.generate(
+        3,
+        (columnIndex) => TTableColumn<_Row>(
+          id: 'column-$columnIndex',
+          header: Text('Column $columnIndex'),
+          width: 100,
+          cellBuilder: (_, __, rowIndex) {
+            final value = '$rowIndex-$columnIndex';
+            built.add(value);
+            return Text(value);
+          },
+        ),
+      );
+      await tester.pumpWidget(
+        app(
+          TTable(
+            columns: mergedColumns,
+            data: rows,
+            cellSpanBuilder: (cell) =>
+                cell.rowIndex == 0 && cell.columnIndex == 0
+                ? const TTableCellSpan(rowSpan: 2, columnSpan: 2)
+                : null,
+            onCellTap: (cell) => tapped = cell,
+          ),
+        ),
+      );
+
+      expect(built, isNot(contains('0-1')));
+      expect(built, isNot(contains('1-0')));
+      expect(built, isNot(contains('1-1')));
+      final mergedCell = find
+          .ancestor(of: find.text('0-0'), matching: find.byType(Container))
+          .first;
+      expect(tester.getSize(mergedCell), const Size(200, 76));
+      await tester.tap(find.text('0-0'));
+      expect(tapped?.rowIndex, 0);
+      expect(tapped?.columnIndex, 0);
+    });
+
+    testWidgets('cellSpanBuilder 拒绝越界和跨固定区域', (tester) async {
+      await tester.pumpWidget(
+        app(
+          TTable(
+            columns: columns(),
+            data: rows,
+            cellSpanBuilder: (_) =>
+                const TTableCellSpan(rowSpan: 4, columnSpan: 1),
+          ),
+        ),
+      );
+      expect(tester.takeException(), isFlutterError);
+
+      final fixedColumns = [
+        TTableColumn<_Row>(
+          id: 'left',
+          header: const Text('Left'),
+          fixed: TTableColumnFixed.left,
+          cellBuilder: (_, row, __) => Text(row.name),
+        ),
+        TTableColumn<_Row>(
+          id: 'center',
+          header: const Text('Center'),
+          cellBuilder: (_, row, __) => Text('${row.age}'),
+        ),
+      ];
+      await tester.pumpWidget(
+        app(
+          TTable(
+            columns: fixedColumns,
+            data: rows,
+            cellSpanBuilder: (cell) =>
+                cell.rowIndex == 0 && cell.columnIndex == 0
+                ? const TTableCellSpan(columnSpan: 2)
+                : null,
+          ),
+        ),
+      );
+      expect(tester.takeException(), isFlutterError);
     });
 
     testWidgets('表体不继承 MediaQuery 顶部安全区留白', (tester) async {
@@ -834,9 +1017,34 @@ void main() {
         () => TTable(columns: columns(), data: rows, maxHeight: 0),
         throwsAssertionError,
       );
+      expect(
+        () => TTable(columns: columns(), data: rows, height: 0),
+        throwsAssertionError,
+      );
+      expect(
+        () =>
+            TTable(columns: columns(), data: rows, height: 200, maxHeight: 160),
+        throwsAssertionError,
+      );
+      expect(
+        () => TTableColumn<_Row>(
+          id: 'bad-min',
+          header: const Text('Bad'),
+          minWidth: 0,
+          cellBuilder: (_, __, ___) => const Text('bad'),
+        ),
+        throwsAssertionError,
+      );
+      expect(() => TTableCellSpan(rowSpan: 0), throwsAssertionError);
     });
   });
 }
+
+Finder _verticalScrollView() => find.byWidgetPredicate(
+  (widget) =>
+      widget is SingleChildScrollView &&
+      widget.scrollDirection == Axis.vertical,
+);
 
 Iterable<Border> _tableBorders(WidgetTester tester) sync* {
   for (final container in tester.widgetList<Container>(

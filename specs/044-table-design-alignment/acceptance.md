@@ -12,17 +12,16 @@
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `flutter analyze`（组件，Flutter 3.32.0） | 通过 | 0 error / 0 warning |
-| `flutter analyze`（example，Flutter 3.32.0） | 通过 | 0 error / 0 warning |
-| `flutter test test/components/table/t_table_test.dart test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart`（Flutter 3.32.0） | 通过 | Table 组件、清单与回归入口均通过 |
-| `flutter test test/table_page_test.dart`（Flutter 3.32.0） | 通过 | 3 项 Demo 结构、样式与交互测试 |
-| Table 归一化坐标断言（Flutter 3.32.0 / Linux） | 通过 | 9 个 Table 顶部坐标与 Figma 逐项相同，高度均为 418 |
-| `flutter test --update-goldens test/table_demo_golden_test.dart`（Linux Flutter 3.32.0） | 通过 | 生成 light / dark 基线 |
-| `flutter test test/table_demo_golden_test.dart`（Linux Flutter 3.32.0） | 通过 | 不更新基线复跑，2 项通过 |
-| `flutter analyze`（组件与 example，Flutter 3.47.0） | 通过 | 两个目录均 0 issue |
-| `flutter test test/components/table/t_table_test.dart`（Flutter 3.47.0） | 通过 | 38 项通过 |
-| `flutter test test/table_page_test.dart`（Flutter 3.47.0） | 通过 | 3 项通过 |
+| `flutter test test/components/table/t_table_test.dart --coverage` + `dart run tool/check_component_coverage.dart table`（Flutter 3.32.0） | 通过 | 44 项通过；Table 生产源码 `425/429 = 99.07%` |
+| `flutter test test/table_page_test.dart`（Flutter 3.32.0） | 通过 | 3 项 Demo 结构、尺寸与交互测试 |
+| `flutter analyze --fatal-infos`（组件与 example，Flutter 3.32.0） | 通过 | 两个目录均 0 issue |
+| `flutter analyze --fatal-infos` + Table 组件/Demo 测试（Flutter 3.47.0） | 通过 | 组件 44 项、Demo 3 项，两个目录均 0 issue |
+| `flutter test test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart`（Flutter 3.32.0） | 通过 | 覆盖率、组件回归和视觉回归清单均已登记 |
+| `dart run tool/generate_example_code.dart --check` | 通过 | Table Demo 源码与生成片段同步 |
+| Table API 定向生成 | 通过 | `table_api.md` 包含新增公开类型、参数与限制条件 |
 | `git diff --check` | 通过 | 无空白错误 |
+| Android 真机 `40302eeb` 构建、安装与启动 | 通过 | Android 16，`com.tdesign.tdesign_flutter_example/.MainActivity` 已验证前台运行 |
+| Table light/dark Golden（Linux Flutter 3.32.0） | 等待远端复跑 | 旧 head `6c94607c` 已通过；表体渲染结构变化后不沿用旧 head 结论 |
 
 ## 人工验收
 
@@ -37,4 +36,5 @@
 
 ## 未覆盖项与后续工作
 
-- 合并单元格和固定行不属于本次 Figma 公开 Demo，后续独立设计。
+- 固定行不属于本次 Figma 公开 Demo，后续独立设计。
+- 行 key、合并单元格、列最小宽度、固定高度和 cell 上下文已作为追加契约完成实现与本地验证；Linux Golden 与远端 CI 仍以推送后最终 head 为准。
