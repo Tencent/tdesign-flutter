@@ -13,6 +13,7 @@ Flutter SideBar 的公开 Demo、结构状态所有权和默认宽度与新版 F
 - `TSideBarItem` 是不可变数据配置，不是 Widget，不接收 `key`；真实 Widget `TSideBar` 与内部渲染项保留 Flutter Key，内部滚动定位机制不变。
 - 每项提供可访问的 label、selected、enabled 语义；disabled 项不触发回调。
 - 默认标签使用 Body Large Token，图标 20dp，选中指示线 3×14dp，line/tag 圆角 9dp。
+- 默认选中标签使用 600 字重；Badge 以标签文字自身的右上角为锚点，不以整行剩余宽度为锚点。
 
 ## Demo 契约
 

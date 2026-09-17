@@ -33,6 +33,7 @@
 - 分支：`rss1102/breaking/sidebar-design-alignment`
 - 合并基线：`origin/develop` (`3d5ed773`)
 - Figma：页面 `24787:18812`，移动端画板 `28591:34071`
+- 选中文字保持 600 字重；圆点与数字 Badge 已收敛到标签文字右上角，并新增短标签几何断言与四类交互后 Golden。
 - 小程序：`Tencent/tdesign-miniprogram` develop `ae55fb05`
 
 ## 自动化验证
