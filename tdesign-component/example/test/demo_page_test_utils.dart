@@ -28,7 +28,6 @@ class DemoPageTestSpec {
     required this.expectedTexts,
     this.componentType,
     this.expectedComponentCount,
-    this.useMaterialIcons = false,
     this.useFeedbackGoldenFont = false,
     this.useAlignmentCjkFont = false,
     this.supplementalCjkFontFamily,
@@ -36,6 +35,7 @@ class DemoPageTestSpec {
     this.precacheAssetImages = const [],
     this.goldenAtPhoneViewport = false,
     this.phoneViewportHeight = _initialPageHeight,
+    this.goldenDirectory,
   }) : assert(
          (supplementalCjkFontFamily == null) ==
              (supplementalCjkFontPath == null),
@@ -47,7 +47,6 @@ class DemoPageTestSpec {
   final List<String> expectedTexts;
   final Type? componentType;
   final int? expectedComponentCount;
-  final bool useMaterialIcons;
   final bool useFeedbackGoldenFont;
   final bool useAlignmentCjkFont;
   final String? supplementalCjkFontFamily;
@@ -55,6 +54,7 @@ class DemoPageTestSpec {
   final List<String> precacheAssetImages;
   final bool goldenAtPhoneViewport;
   final double phoneViewportHeight;
+  final String? goldenDirectory;
 }
 
 void registerDemoPageTests(DemoPageTestSpec spec) {
@@ -100,11 +100,20 @@ void registerDemoGoldenTests(DemoPageTestSpec spec) {
 
       await expectLater(
         find.byKey(ValueKey('${spec.name}-demo-page')),
-        matchesGoldenFile('goldens/${spec.name}_page_${mode.name}.png'),
+        matchesGoldenFile(
+          _demoGoldenFile(spec, '${spec.name}_page_${mode.name}.png'),
+        ),
       );
       await disposeDemoPage(tester);
     }, tags: 'golden');
   }
+}
+
+Uri _demoGoldenFile(DemoPageTestSpec spec, String fileName) {
+  final directory = spec.goldenDirectory ?? spec.name;
+  return Uri.file(
+    '${Directory.current.path}/test/$directory/goldens/$fileName',
+  );
 }
 
 Future<void> disposeDemoPage(WidgetTester tester) async {
@@ -133,22 +142,24 @@ Future<void> loadDemoGoldenFonts(DemoPageTestSpec spec) async {
       ).readAsBytes().then(ByteData.sublistView),
     ),
     _loadGoldenFont(
+      'MaterialIcons',
+      () => File(
+        '${flutterBin.path}/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
+      ).readAsBytes().then(ByteData.sublistView),
+    ),
+    _loadGoldenFont(
+      'packages/tdesign_flutter/TCloudNumber',
+      () => rootBundle.load(
+        'packages/tdesign_flutter/assets/tdesign/TCloudNumberVF.ttf',
+      ),
+    ),
+    _loadGoldenFont(
       _goldenCjkFontFamily,
       () => File(
         'test/fonts/TDesignGoldenCJK-Regular.otf',
       ).readAsBytes().then(ByteData.sublistView),
     ),
   ];
-  if (spec.useMaterialIcons || spec.useFeedbackGoldenFont) {
-    loaders.add(
-      _loadGoldenFont(
-        'MaterialIcons',
-        () => File(
-          '${flutterBin.path}/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
-        ).readAsBytes().then(ByteData.sublistView),
-      ),
-    );
-  }
   if (spec.useFeedbackGoldenFont) {
     loaders.add(
       _loadGoldenFont(
@@ -261,11 +272,11 @@ Widget _buildPage(DemoPageTestSpec spec, ThemeMode mode) {
     create: (_) => ThemeModeProvider(),
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: _withGoldenFonts(
+      theme: withDemoGoldenFonts(
         TThemeBuilder.light(TThemeData.defaultData()),
         spec,
       ),
-      darkTheme: _withGoldenFonts(
+      darkTheme: withDemoGoldenFonts(
         TThemeBuilder.dark(TThemeData.defaultData()),
         spec,
       ),
@@ -278,7 +289,7 @@ Widget _buildPage(DemoPageTestSpec spec, ThemeMode mode) {
   );
 }
 
-ThemeData _withGoldenFonts(ThemeData theme, DemoPageTestSpec spec) {
+ThemeData withDemoGoldenFonts(ThemeData theme, DemoPageTestSpec spec) {
   final fallback = [
     if (spec.useFeedbackGoldenFont) _feedbackGoldenCjkFontFamily,
     _goldenCjkFontFamily,

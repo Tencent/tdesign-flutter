@@ -12,6 +12,10 @@ class VisualTestSuite {
   String get workingDirectory => manifest.workingDirectory;
   List<String> get testFiles => manifest.testFiles;
   List<String> get arguments => manifest.arguments;
+  VisualTestKind get kind => manifest.kind;
+
+  String get executionKey =>
+      [workingDirectory, ...testFiles, '--', ...arguments].join('\u0000');
 }
 
 final visualTestSuites = [
@@ -20,14 +24,25 @@ final visualTestSuites = [
       VisualTestSuite(component.name, visualTest),
 ];
 
-Future<int> runVisualRegression() async {
+Future<int> runVisualRegression({bool updateGoldens = false}) async {
   final failedSuites = <String>[];
+  final executedSuites = <String>{};
 
   for (final suite in visualTestSuites) {
+    if (!executedSuites.add(suite.executionKey)) {
+      stdout.writeln('\n=== ${suite.name} (shared suite already executed) ===');
+      continue;
+    }
     stdout.writeln('\n=== ${suite.name} ===');
     final process = await Process.start(
       'flutter',
-      ['test', ...suite.testFiles, '--no-pub', ...suite.arguments],
+      [
+        'test',
+        ...suite.testFiles,
+        '--no-pub',
+        ...suite.arguments,
+        if (updateGoldens) '--update-goldens',
+      ],
       workingDirectory: suite.workingDirectory,
       mode: ProcessStartMode.inheritStdio,
     );
@@ -45,6 +60,22 @@ Future<int> runVisualRegression() async {
   return 0;
 }
 
-Future<void> main() async {
-  exitCode = await runVisualRegression();
+Future<void> main(List<String> arguments) async {
+  final unsupported = arguments.where(
+    (argument) => argument != '--update-goldens',
+  );
+  if (unsupported.isNotEmpty) {
+    stderr.writeln(
+      'Usage: dart run tool/run_visual_regression.dart [--update-goldens]',
+    );
+    exitCode = 64;
+    return;
+  }
+  final updateGoldens = arguments.contains('--update-goldens');
+  if (updateGoldens) {
+    stdout.writeln(
+      'Golden update mode enabled; use only in Linux Flutter 3.32.0.',
+    );
+  }
+  exitCode = await runVisualRegression(updateGoldens: updateGoldens);
 }
