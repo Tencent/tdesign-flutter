@@ -35,12 +35,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'avatar',
     coverageTargets: ['lib/src/components/avatar/'],
     componentTests: ['test/components/avatar/t_avatar_test.dart'],
-    exampleTests: ['test/avatar_demo_test.dart'],
+    exampleTests: ['test/avatar/avatar_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Avatar Demo',
         workingDirectory: 'example',
-        testFiles: ['test/avatar_demo_golden_test.dart'],
+        testFiles: ['test/avatar/avatar_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -53,12 +53,12 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/action_sheet/t_action_sheet_list_test.dart',
       'test/components/action_sheet/t_action_sheet_test.dart',
     ],
-    exampleTests: ['test/action_sheet_page_test.dart'],
+    exampleTests: ['test/action_sheet/action_sheet_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'ActionSheet Demo',
         workingDirectory: 'example',
-        testFiles: ['test/action_sheet_page_golden_test.dart'],
+        testFiles: ['test/action_sheet/action_sheet_page_golden_test.dart'],
       ),
     ],
   ),
@@ -66,7 +66,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'badge',
     coverageTargets: ['lib/src/components/badge/'],
     componentTests: ['test/components/badge/t_badge_test.dart'],
-    exampleTests: ['test/badge_page_test.dart'],
+    exampleTests: ['test/badge/badge_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Badge Component',
@@ -79,14 +79,14 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'cell',
     coverageTargets: ['lib/src/components/cell/'],
     componentTests: ['test/components/cell/t_cell_test.dart'],
-    exampleTests: ['test/cell_page_test.dart'],
+    exampleTests: ['test/cell/cell_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Cell Demo',
         workingDirectory: 'example',
         testFiles: [
-          'test/cell_page_test.dart',
-          'test/cell_demo_golden_test.dart',
+          'test/cell/cell_page_test.dart',
+          'test/cell/cell_demo_golden_test.dart',
         ],
       ),
     ],
@@ -99,7 +99,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/backtop/t_backtop_theme_test.dart',
       'test/components/backtop/t_backtop_widget_test.dart',
     ],
-    exampleTests: ['test/backtop_demo_test.dart'],
+    exampleTests: ['test/backtop/backtop_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'BackTop Component',
@@ -112,7 +112,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'BackTop Demo',
         workingDirectory: 'example',
-        testFiles: ['test/backtop_demo_golden_test.dart'],
+        testFiles: ['test/backtop/backtop_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -129,7 +129,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Button Demo',
         workingDirectory: 'example',
-        testFiles: ['test/button_demo_test.dart'],
+        testFiles: ['test/button/button_demo_test.dart'],
       ),
     ],
   ),
@@ -137,7 +137,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'cascader',
     coverageTargets: ['lib/src/components/cascader/'],
     componentTests: ['test/components/cascader/t_cascader_test.dart'],
-    exampleTests: ['test/cascader_demo_test.dart'],
+    exampleTests: ['test/cascader/cascader_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Cascader Component',
@@ -147,7 +147,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Cascader Demo',
         workingDirectory: 'example',
-        testFiles: ['test/cascader_demo_golden_test.dart'],
+        testFiles: ['test/cascader/cascader_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -162,12 +162,12 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/picker/wheel_column_test.dart',
       'test/components/date_time_picker/t_date_time_picker_wheel_test.dart',
     ],
-    exampleTests: ['test/picker_demo_test.dart'],
+    exampleTests: ['test/picker/picker_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Picker Demo',
         workingDirectory: 'example',
-        testFiles: ['test/picker_demo_golden_test.dart'],
+        testFiles: ['test/picker/picker_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -175,12 +175,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'progress',
     coverageTargets: ['lib/src/components/progress/'],
     componentTests: ['test/components/progress/t_progress_test.dart'],
-    exampleTests: ['test/progress_demo_test.dart'],
+    exampleTests: ['test/progress/progress_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Progress Demo',
         workingDirectory: 'example',
-        testFiles: ['test/progress_demo_golden_test.dart'],
+        testFiles: ['test/progress/progress_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -193,12 +193,12 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/date_time_picker/t_date_time_picker_wheel_test.dart',
       'test/t_date_time_picker_test.dart',
     ],
-    exampleTests: ['test/date_time_picker_demo_test.dart'],
+    exampleTests: ['test/date_time_picker/date_time_picker_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'DateTimePicker Demo',
         workingDirectory: 'example',
-        testFiles: ['test/date_time_picker_demo_golden_test.dart'],
+        testFiles: ['test/date_time_picker/date_time_picker_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -214,7 +214,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/t_calendar_on_change_init_test.dart',
       'test/t_calendar_test.dart',
     ],
-    exampleTests: ['test/calendar_demo_test.dart'],
+    exampleTests: ['test/calendar/calendar_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Calendar States',
@@ -224,7 +224,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Calendar Demo',
         workingDirectory: 'example',
-        testFiles: ['test/calendar_demo_golden_test.dart'],
+        testFiles: ['test/calendar/calendar_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -235,12 +235,12 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/tag/t_select_tag_test.dart',
       'test/components/tag/t_tag_test.dart',
     ],
-    exampleTests: ['test/tag_page_test.dart'],
+    exampleTests: ['test/tag/tag_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Tag Demo',
         workingDirectory: 'example',
-        testFiles: ['test/tag_page_test.dart'],
+        testFiles: ['test/tag/tag_page_test.dart'],
         arguments: ['--exclude-tags', 'demo'],
       ),
     ],
@@ -250,14 +250,14 @@ const componentTestManifests = <ComponentTestManifest>[
     coverageTargets: ['lib/src/components/popover/'],
     componentTests: ['test/components/popover/t_popover_test.dart'],
     exampleTests: [
-      'test/popover_demo_test.dart',
-      'test/popover_page_test.dart',
+      'test/popover/popover_demo_test.dart',
+      'test/popover/popover_page_test.dart',
     ],
     visualTests: [
       VisualTestManifest(
         name: 'Popover Demo',
         workingDirectory: 'example',
-        testFiles: ['test/popover_demo_golden_test.dart'],
+        testFiles: ['test/popover/popover_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -272,7 +272,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Checkbox Demo',
         workingDirectory: 'example',
-        testFiles: ['test/checkbox_page_test.dart'],
+        testFiles: ['test/checkbox/checkbox_page_test.dart'],
       ),
     ],
   ),
@@ -283,12 +283,12 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/collapse/t_collapse_test.dart',
       'test/components/collapse/t_collapse_misc_test.dart',
     ],
-    exampleTests: ['test/collapse_demo_test.dart'],
+    exampleTests: ['test/collapse/collapse_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Collapse Demo',
         workingDirectory: 'example',
-        testFiles: ['test/collapse_demo_golden_test.dart'],
+        testFiles: ['test/collapse/collapse_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -300,7 +300,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Divider Demo',
         workingDirectory: 'example',
-        testFiles: ['test/divider_demo_test.dart'],
+        testFiles: ['test/divider/divider_demo_test.dart'],
       ),
     ],
   ),
@@ -308,12 +308,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'empty',
     coverageTargets: ['lib/src/components/empty/'],
     componentTests: ['test/components/empty/t_empty_test.dart'],
-    exampleTests: ['test/empty_demo_test.dart'],
+    exampleTests: ['test/empty/empty_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Empty Demo',
         workingDirectory: 'example',
-        testFiles: ['test/empty_demo_golden_test.dart'],
+        testFiles: ['test/empty/empty_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -321,12 +321,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'image_viewer',
     coverageTargets: ['lib/src/components/image_viewer/'],
     componentTests: ['test/components/image_viewer/t_image_viewer_test.dart'],
-    exampleTests: ['test/image_viewer_demo_test.dart'],
+    exampleTests: ['test/image_viewer/image_viewer_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'ImageViewer Demo',
         workingDirectory: 'example',
-        testFiles: ['test/image_viewer_demo_golden_test.dart'],
+        testFiles: ['test/image_viewer/image_viewer_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -334,12 +334,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'dialog',
     coverageTargets: ['lib/src/components/dialog/'],
     componentTests: ['test/components/dialog/t_dialog_test.dart'],
-    exampleTests: ['test/dialog_page_test.dart'],
+    exampleTests: ['test/dialog/dialog_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Dialog Demo',
         workingDirectory: 'example',
-        testFiles: ['test/dialog_page_golden_test.dart'],
+        testFiles: ['test/dialog/dialog_page_golden_test.dart'],
       ),
     ],
   ),
@@ -350,12 +350,12 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/dropdown_menu/t_dropdown_item_test.dart',
       'test/components/dropdown_menu/t_dropdown_menu_test.dart',
     ],
-    exampleTests: ['test/dropdown_menu_page_test.dart'],
+    exampleTests: ['test/dropdown_menu/dropdown_menu_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'DropdownMenu Demo',
         workingDirectory: 'example',
-        testFiles: ['test/dropdown_menu_page_golden_test.dart'],
+        testFiles: ['test/dropdown_menu/dropdown_menu_page_golden_test.dart'],
       ),
     ],
   ),
@@ -363,7 +363,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'drawer',
     coverageTargets: ['lib/src/components/drawer/'],
     componentTests: ['test/components/drawer/t_drawer_test.dart'],
-    exampleTests: ['test/drawer_demo_test.dart'],
+    exampleTests: ['test/drawer/drawer_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Drawer Component',
@@ -373,7 +373,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Drawer Demo',
         workingDirectory: 'example',
-        testFiles: ['test/drawer_demo_golden_test.dart'],
+        testFiles: ['test/drawer/drawer_demo_golden_test.dart'],
       ),
       VisualTestManifest(
         name: 'Drawer Popup Consumer',
@@ -397,7 +397,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Fab Demo',
         workingDirectory: 'example',
-        testFiles: ['test/fab_demo_test.dart'],
+        testFiles: ['test/fab/fab_demo_test.dart'],
       ),
     ],
   ),
@@ -405,12 +405,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'footer',
     coverageTargets: ['lib/src/components/footer/'],
     componentTests: ['test/components/footer/t_footer_test.dart'],
-    exampleTests: ['test/footer_demo_test.dart'],
+    exampleTests: ['test/footer/footer_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Footer Demo',
         workingDirectory: 'example',
-        testFiles: ['test/footer_demo_golden_test.dart'],
+        testFiles: ['test/footer/footer_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -421,12 +421,12 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/indexes/sticky_header/sticky_header_test.dart',
       'test/components/indexes/t_indexes_test.dart',
     ],
-    exampleTests: ['test/indexes_demo_test.dart'],
+    exampleTests: ['test/indexes/indexes_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Indexes Demo',
         workingDirectory: 'example',
-        testFiles: ['test/indexes_demo_golden_test.dart'],
+        testFiles: ['test/indexes/indexes_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -434,7 +434,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'image',
     coverageTargets: ['lib/src/components/image/'],
     componentTests: ['test/components/image/t_image_test.dart'],
-    exampleTests: ['test/image_demo_test.dart'],
+    exampleTests: ['test/image/image_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Image Component',
@@ -444,7 +444,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Image Demo',
         workingDirectory: 'example',
-        testFiles: ['test/image_demo_golden_test.dart'],
+        testFiles: ['test/image/image_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -457,14 +457,14 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
     componentTests: ['test/components/refresh/t_refresh_test.dart'],
     exampleTests: [
-      'test/pull_down_refresh_demo_test.dart',
-      'test/pull_down_refresh_page_test.dart',
+      'test/refresh/pull_down_refresh_demo_test.dart',
+      'test/refresh/pull_down_refresh_page_test.dart',
     ],
     visualTests: [
       VisualTestManifest(
         name: 'PullDownRefresh Demo',
         workingDirectory: 'example',
-        testFiles: ['test/pull_down_refresh_demo_golden_test.dart'],
+        testFiles: ['test/refresh/pull_down_refresh_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -472,12 +472,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'rate',
     coverageTargets: ['lib/src/components/rate/'],
     componentTests: ['test/components/rate/t_rate_test.dart'],
-    exampleTests: ['test/rate_demo_test.dart'],
+    exampleTests: ['test/rate/rate_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Rate Demo',
         workingDirectory: 'example',
-        testFiles: ['test/rate_demo_golden_test.dart'],
+        testFiles: ['test/rate/rate_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -485,12 +485,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'result',
     coverageTargets: ['lib/src/components/result/'],
     componentTests: ['test/components/result/t_result_test.dart'],
-    exampleTests: ['test/result_demo_test.dart'],
+    exampleTests: ['test/result/result_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Result Demo',
         workingDirectory: 'example',
-        testFiles: ['test/result_demo_golden_test.dart'],
+        testFiles: ['test/result/result_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -498,7 +498,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'tab_bar',
     coverageTargets: ['lib/src/components/tabbar/'],
     componentTests: ['test/components/tabbar/t_tab_bar_test.dart'],
-    exampleTests: ['test/tab_bar_demo_test.dart'],
+    exampleTests: ['test/tab_bar/tab_bar_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'TabBar Component',
@@ -508,7 +508,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'TabBar Demo',
         workingDirectory: 'example',
-        testFiles: ['test/tab_bar_demo_golden_test.dart'],
+        testFiles: ['test/tab_bar/tab_bar_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -519,7 +519,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/navbar/t_nav_bar_test.dart',
       'test/components/navbar/t_navbar_test.dart',
     ],
-    exampleTests: ['test/navbar_page_test.dart'],
+    exampleTests: ['test/navbar/navbar_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'NavBar Component',
@@ -532,7 +532,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'NavBar Demo',
         workingDirectory: 'example',
-        testFiles: ['test/navbar_demo_golden_test.dart'],
+        testFiles: ['test/navbar/navbar_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -550,7 +550,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/tabs/t_tab_bar_test.dart',
       'test/components/tabs/t_tab_test.dart',
     ],
-    exampleTests: ['test/tabs_page_test.dart'],
+    exampleTests: ['test/tabs/tabs_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Tabs Component',
@@ -563,7 +563,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Tabs Demo',
         workingDirectory: 'example',
-        testFiles: ['test/tabs_page_golden_test.dart'],
+        testFiles: ['test/tabs/tabs_page_golden_test.dart'],
       ),
     ],
   ),
@@ -571,12 +571,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'swiper',
     coverageTargets: ['lib/src/components/swiper/'],
     componentTests: ['test/components/swiper/t_swiper_test.dart'],
-    exampleTests: ['test/swiper_page_test.dart'],
+    exampleTests: ['test/swiper/swiper_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Swiper Demo',
         workingDirectory: 'example',
-        testFiles: ['test/swiper_demo_golden_test.dart'],
+        testFiles: ['test/swiper/swiper_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -584,12 +584,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'table',
     coverageTargets: ['lib/src/components/table/'],
     componentTests: ['test/components/table/t_table_test.dart'],
-    exampleTests: ['test/table_demo_test.dart'],
+    exampleTests: ['test/table/table_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Table Demo',
         workingDirectory: 'example',
-        testFiles: ['test/table_demo_test.dart'],
+        testFiles: ['test/table/table_demo_test.dart'],
       ),
     ],
   ),
@@ -597,12 +597,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'skeleton',
     coverageTargets: ['lib/src/components/skeleton/'],
     componentTests: ['test/components/skeleton/t_skeleton_test.dart'],
-    exampleTests: ['test/skeleton_demo_test.dart'],
+    exampleTests: ['test/skeleton/skeleton_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Skeleton Demo',
         workingDirectory: 'example',
-        testFiles: ['test/skeleton_demo_golden_test.dart'],
+        testFiles: ['test/skeleton/skeleton_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -610,12 +610,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'time_counter',
     coverageTargets: ['lib/src/components/time_counter/'],
     componentTests: ['test/components/time_counter/t_time_counter_test.dart'],
-    exampleTests: ['test/time_counter_page_test.dart'],
+    exampleTests: ['test/time_counter/time_counter_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'TimeCounter Demo',
         workingDirectory: 'example',
-        testFiles: ['test/time_counter_demo_golden_test.dart'],
+        testFiles: ['test/time_counter/time_counter_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -627,7 +627,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Icon Demo',
         workingDirectory: 'example',
-        testFiles: ['test/icon_demo_test.dart'],
+        testFiles: ['test/icon/icon_demo_test.dart'],
       ),
     ],
   ),
@@ -644,7 +644,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Link Demo',
         workingDirectory: 'example',
-        testFiles: ['test/link_demo_test.dart'],
+        testFiles: ['test/link/link_demo_test.dart'],
       ),
     ],
   ),
@@ -652,12 +652,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'loading',
     coverageTargets: ['lib/src/components/loading/'],
     componentTests: ['test/components/loading/t_loading_test.dart'],
-    exampleTests: ['test/loading_demo_test.dart'],
+    exampleTests: ['test/loading/loading_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Loading Demo',
         workingDirectory: 'example',
-        testFiles: ['test/loading_demo_golden_test.dart'],
+        testFiles: ['test/loading/loading_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -665,12 +665,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'message',
     coverageTargets: ['lib/src/components/message/'],
     componentTests: ['test/components/message/t_message_test.dart'],
-    exampleTests: ['test/message_demo_test.dart'],
+    exampleTests: ['test/message/message_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Message Demo',
         workingDirectory: 'example',
-        testFiles: ['test/message_demo_golden_test.dart'],
+        testFiles: ['test/message/message_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -678,12 +678,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'notice_bar',
     coverageTargets: ['lib/src/components/notice_bar/'],
     componentTests: ['test/components/notice_bar/t_notice_bar_test.dart'],
-    exampleTests: ['test/notice_bar_page_test.dart'],
+    exampleTests: ['test/notice_bar/notice_bar_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'NoticeBar Demo',
         workingDirectory: 'example',
-        testFiles: ['test/notice_bar_page_golden_test.dart'],
+        testFiles: ['test/notice_bar/notice_bar_page_golden_test.dart'],
       ),
     ],
   ),
@@ -701,12 +701,12 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/t_popup_route_test.dart',
       'test/t_popup_test.dart',
     ],
-    exampleTests: ['test/popup_demo_test.dart'],
+    exampleTests: ['test/popup/popup_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Popup Demo',
         workingDirectory: 'example',
-        testFiles: ['test/popup_demo_golden_test.dart'],
+        testFiles: ['test/popup/popup_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -717,12 +717,12 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/radio/t_radio_test.dart',
       'test/components/radio/t_radio_theme_contract_test.dart',
     ],
-    exampleTests: ['test/radio_page_test.dart'],
+    exampleTests: ['test/radio/radio_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Radio Demo',
         workingDirectory: 'example',
-        testFiles: ['test/radio_page_golden_test.dart'],
+        testFiles: ['test/radio/radio_page_golden_test.dart'],
       ),
     ],
   ),
@@ -738,7 +738,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Text Demo',
         workingDirectory: 'example',
-        testFiles: ['test/text_demo_test.dart'],
+        testFiles: ['test/text/text_demo_test.dart'],
       ),
     ],
   ),
@@ -750,7 +750,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Search Demo',
         workingDirectory: 'example',
-        testFiles: ['test/search_demo_test.dart'],
+        testFiles: ['test/search/search_demo_test.dart'],
       ),
     ],
   ),
@@ -762,12 +762,12 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/steps/t_steps_vertical_item_test.dart',
       'test/components/steps/t_steps_widget_test.dart',
     ],
-    exampleTests: ['test/steps_page_test.dart'],
+    exampleTests: ['test/steps/steps_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Steps Demo',
         workingDirectory: 'example',
-        testFiles: ['test/steps_demo_golden_test.dart'],
+        testFiles: ['test/steps/steps_demo_golden_test.dart'],
       ),
       VisualTestManifest(
         name: 'Steps shared navigation',
@@ -785,15 +785,15 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/sidebar/t_sidebar_widget_test.dart',
     ],
     exampleTests: [
-      'test/sidebar_anchor_test.dart',
-      'test/sidebar_demo_test.dart',
-      'test/sidebar_page_test.dart',
+      'test/sidebar/sidebar_anchor_test.dart',
+      'test/sidebar/sidebar_demo_test.dart',
+      'test/sidebar/sidebar_page_test.dart',
     ],
     visualTests: [
       VisualTestManifest(
         name: 'SideBar Demo',
         workingDirectory: 'example',
-        testFiles: ['test/sidebar_demo_golden_test.dart'],
+        testFiles: ['test/sidebar/sidebar_demo_golden_test.dart'],
       ),
       VisualTestManifest(
         name: 'SideBar shared navigation',
@@ -806,7 +806,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'slider',
     coverageTargets: ['lib/src/components/slider/'],
     componentTests: ['test/components/slider/t_slider_test.dart'],
-    exampleTests: ['test/slider_demo_test.dart'],
+    exampleTests: ['test/slider/slider_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Slider Component',
@@ -816,7 +816,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Slider Demo',
         workingDirectory: 'example',
-        testFiles: ['test/slider_demo_golden_test.dart'],
+        testFiles: ['test/slider/slider_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -827,13 +827,13 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/stepper/t_stepper_test.dart',
       'test/components/stepper/t_stepper_contract_test.dart',
     ],
-    exampleTests: ['test/stepper_demo_test.dart'],
+    exampleTests: ['test/stepper/stepper_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Stepper Demo and component',
         workingDirectory: 'example',
         testFiles: [
-          'test/stepper_demo_golden_test.dart',
+          'test/stepper/stepper_demo_golden_test.dart',
           '../test/components/stepper/t_stepper_golden_test.dart',
         ],
       ),
@@ -850,7 +850,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Switch Demo',
         workingDirectory: 'example',
-        testFiles: ['test/switch_demo_test.dart'],
+        testFiles: ['test/switch/switch_demo_test.dart'],
       ),
     ],
   ),
@@ -858,12 +858,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'tree_select',
     coverageTargets: ['lib/src/components/tree/'],
     componentTests: ['test/components/tree/t_tree_select_test.dart'],
-    exampleTests: ['test/tree_select_demo_test.dart'],
+    exampleTests: ['test/tree_select/tree_select_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'TreeSelect Demo',
         workingDirectory: 'example',
-        testFiles: ['test/tree_select_demo_golden_test.dart'],
+        testFiles: ['test/tree_select/tree_select_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -875,7 +875,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Upload Demo',
         workingDirectory: 'example',
-        testFiles: ['test/upload_demo_test.dart'],
+        testFiles: ['test/upload/upload_demo_test.dart'],
       ),
     ],
   ),
@@ -883,12 +883,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'form',
     coverageTargets: ['lib/src/components/form/'],
     componentTests: ['test/components/form/t_form_test.dart'],
-    exampleTests: ['test/form_demo_test.dart'],
+    exampleTests: ['test/form/form_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Form Demo',
         workingDirectory: 'example',
-        testFiles: ['test/form_demo_test.dart'],
+        testFiles: ['test/form/form_demo_test.dart'],
       ),
     ],
   ),
@@ -903,7 +903,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Input Demo',
         workingDirectory: 'example',
-        testFiles: ['test/input_demo_test.dart'],
+        testFiles: ['test/input/input_demo_test.dart'],
       ),
     ],
   ),
@@ -911,12 +911,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'textarea',
     coverageTargets: ['lib/src/components/textarea/'],
     componentTests: ['test/components/textarea/t_textarea_test.dart'],
-    exampleTests: ['test/textarea_page_test.dart'],
+    exampleTests: ['test/textarea/textarea_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Textarea Demo',
         workingDirectory: 'example',
-        testFiles: ['test/textarea_page_golden_test.dart'],
+        testFiles: ['test/textarea/textarea_page_golden_test.dart'],
       ),
     ],
   ),
@@ -932,7 +932,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/theme/t_resource_delegate_test.dart',
       'test/components/theme/t_theme_test.dart',
     ],
-    exampleTests: ['test/theme_demo_test.dart'],
+    exampleTests: ['test/theme/theme_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Theme Component',
@@ -942,7 +942,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Theme Demo',
         workingDirectory: 'example',
-        testFiles: ['test/theme_demo_test.dart'],
+        testFiles: ['test/theme/theme_demo_test.dart'],
       ),
     ],
   ),
@@ -954,7 +954,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Toast Demo',
         workingDirectory: 'example',
-        testFiles: ['test/toast_demo_test.dart'],
+        testFiles: ['test/toast/toast_demo_test.dart'],
       ),
     ],
   ),
@@ -966,7 +966,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/swipe_cell/t_swipe_cell_inherited_test.dart',
       'test/components/swipe_cell/t_swipe_cell_test.dart',
     ],
-    exampleTests: ['test/swipe_cell_demo_test.dart'],
+    exampleTests: ['test/swipe_cell/swipe_cell_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'SwipeCell actions',
@@ -976,7 +976,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'SwipeCell Demo',
         workingDirectory: 'example',
-        testFiles: ['test/swipe_cell_demo_golden_test.dart'],
+        testFiles: ['test/swipe_cell/swipe_cell_demo_golden_test.dart'],
       ),
     ],
   ),

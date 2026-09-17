@@ -35,6 +35,7 @@ class DemoPageTestSpec {
     this.precacheAssetImages = const [],
     this.goldenAtPhoneViewport = false,
     this.phoneViewportHeight = _initialPageHeight,
+    this.goldenDirectory,
   }) : assert(
          (supplementalCjkFontFamily == null) ==
              (supplementalCjkFontPath == null),
@@ -53,6 +54,7 @@ class DemoPageTestSpec {
   final List<String> precacheAssetImages;
   final bool goldenAtPhoneViewport;
   final double phoneViewportHeight;
+  final String? goldenDirectory;
 }
 
 void registerDemoPageTests(DemoPageTestSpec spec) {
@@ -98,11 +100,20 @@ void registerDemoGoldenTests(DemoPageTestSpec spec) {
 
       await expectLater(
         find.byKey(ValueKey('${spec.name}-demo-page')),
-        matchesGoldenFile('goldens/${spec.name}_page_${mode.name}.png'),
+        matchesGoldenFile(
+          _demoGoldenFile(spec, '${spec.name}_page_${mode.name}.png'),
+        ),
       );
       await disposeDemoPage(tester);
     }, tags: 'golden');
   }
+}
+
+Uri _demoGoldenFile(DemoPageTestSpec spec, String fileName) {
+  final directory = spec.goldenDirectory ?? spec.name;
+  return Uri.file(
+    '${Directory.current.path}/test/$directory/goldens/$fileName',
+  );
 }
 
 Future<void> disposeDemoPage(WidgetTester tester) async {
