@@ -1,35 +1,34 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/page/t_cell_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
+import 'demo_page_test_utils.dart';
+
+const _cellDemoSpec = DemoPageTestSpec(
+  name: 'cell',
+  title: 'Cell 单元格',
+  page: TCellPage(),
+  expectedTexts: const ['01 组件类型', '单行单元格', '多行单元格', '02 组件样式', '卡片单元格'],
+  componentType: TCell,
+  precacheAssetImages: const ['assets/img/t_avatar_1.png'],
+);
+
 void main() {
-  setUpAll(() async {
-    final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
-      ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
-    final flutterBin = File(
-      Platform.resolvedExecutable,
-    ).parent.parent.parent.parent.parent;
-    final robotoFile = File(
-      '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
-    );
-    final robotoFont = FontLoader('Roboto')
-      ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView));
-    await Future.wait([iconFont.load(), robotoFont.load()]);
-  });
+  setUpAll(() => loadDemoGoldenFonts(_cellDemoSpec));
 
   Widget buildPage() {
     return ChangeNotifierProvider(
       create: (_) => ThemeModeProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        theme: withDemoGoldenFonts(
+          TThemeBuilder.light(TThemeData.defaultData()),
+          _cellDemoSpec,
+        ),
         home: const TCellPage(),
       ),
     );

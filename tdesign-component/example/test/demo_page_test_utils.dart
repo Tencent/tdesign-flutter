@@ -261,11 +261,11 @@ Widget _buildPage(DemoPageTestSpec spec, ThemeMode mode) {
     create: (_) => ThemeModeProvider(),
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: _withGoldenFonts(
+      theme: withDemoGoldenFonts(
         TThemeBuilder.light(TThemeData.defaultData()),
         spec,
       ),
-      darkTheme: _withGoldenFonts(
+      darkTheme: withDemoGoldenFonts(
         TThemeBuilder.dark(TThemeData.defaultData()),
         spec,
       ),
@@ -278,7 +278,7 @@ Widget _buildPage(DemoPageTestSpec spec, ThemeMode mode) {
   );
 }
 
-ThemeData _withGoldenFonts(ThemeData theme, DemoPageTestSpec spec) {
+ThemeData withDemoGoldenFonts(ThemeData theme, DemoPageTestSpec spec) {
   final fallback = [
     if (spec.useFeedbackGoldenFont) _feedbackGoldenCjkFontFamily,
     _goldenCjkFontFamily,
