@@ -128,7 +128,7 @@ void main() {
   });
 
   test(
-    'every public component owns a Demo Golden suite and light/dark PNGs',
+    'every public component owns a Demo Golden suite and light/dark PNG pairs',
     () {
       for (final component in componentTestSuites) {
         final demoSuites = visualTestSuites.where(
