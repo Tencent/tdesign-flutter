@@ -31,6 +31,8 @@ Flutter SideBar 的公开 Demo、结构状态所有权和默认宽度与新版 F
 
 选中文字样式按 `TextStyle.merge` 合并 Theme 与实例；颜色按字段解析：实例 `selectedTextStyle.color` > 实例 `selectedColor` > Theme `selectedTextStyle.color` > Theme `selectedColor` > 品牌色 Token。文字、图标和指示线使用相同的选中颜色；只设置字号不能清空颜色。默认指示线保持 3×14dp，不读取 M3 自动生成的配色。
 
+ThemeExtension 的 nullable 视觉字段以 `null` 表示继续使用实例配置、组件结构默认值或当前 TDesign token。主题插值只有在两端都有显式值时执行连续插值；任一端为 `null` 时在 50% 切换点离散保留对应回退，不能把 `null` 当作透明色、零内边距或空文字样式。两侧均为 `null` 时结果保持 `null`。
+
 ## Breaking change
 
 - 移除 `TSideBarItem` 构造器中从未保存或使用的 `key` 参数；调用方删除 `key:` 即可，不改变 `value` 的选中语义或默认样式。
