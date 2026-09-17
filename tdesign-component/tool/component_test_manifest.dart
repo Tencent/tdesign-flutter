@@ -76,6 +76,22 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'cell',
+    coverageTargets: ['lib/src/components/cell/'],
+    componentTests: ['test/components/cell/t_cell_test.dart'],
+    exampleTests: ['test/cell_page_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Cell Demo',
+        workingDirectory: 'example',
+        testFiles: [
+          'test/cell_page_test.dart',
+          'test/cell_demo_golden_test.dart',
+        ],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'backtop',
     coverageTargets: ['lib/src/components/backtop/'],
     componentTests: [
@@ -565,6 +581,19 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'table',
+    coverageTargets: ['lib/src/components/table/'],
+    componentTests: ['test/components/table/t_table_test.dart'],
+    exampleTests: ['test/table_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Table Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/table_demo_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'skeleton',
     coverageTargets: ['lib/src/components/skeleton/'],
     componentTests: ['test/components/skeleton/t_skeleton_test.dart'],
@@ -888,6 +917,32 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Textarea Demo',
         workingDirectory: 'example',
         testFiles: ['test/textarea_page_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'theme',
+    coverageTargets: ['lib/src/theme/t_theme.dart'],
+    componentTests: [
+      'test/acceptance/theme_acceptance_test.dart',
+      'test/theme_test.dart',
+      'test/theme/t_theme_extensions_test.dart',
+      'test/components/theme/t_colors_test.dart',
+      'test/components/theme/t_material_theme_priority_test.dart',
+      'test/components/theme/t_resource_delegate_test.dart',
+      'test/components/theme/t_theme_test.dart',
+    ],
+    exampleTests: ['test/theme_demo_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Theme Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/theme/t_m3_isolation_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Theme Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/theme_demo_test.dart'],
       ),
     ],
   ),

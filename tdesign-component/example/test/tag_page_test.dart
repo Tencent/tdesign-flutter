@@ -33,7 +33,31 @@ void main() {
   registerDemoStructureTests(_tagSpec);
   registerDemoGoldenTests(_tagSpec);
 
-  testWidgets('Tag Demo exposes every color scheme and variant', (tester) async {
+  for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('tag selected ${mode.name} golden', (tester) async {
+      await pumpFullDemoPage(tester, _tagSpec, mode);
+      final tag = find.byWidgetPredicate(
+        (widget) =>
+            widget is TSelectTag &&
+            widget.text == '标签一' &&
+            widget.variant == TTagVariant.outline,
+      );
+      expect(tester.widget<TSelectTag>(tag).value, isFalse);
+      await tester.tap(tag);
+      await tester.pump();
+      expect(tester.widget<TSelectTag>(tag).value, isTrue);
+
+      await expectLater(
+        find.byKey(const ValueKey('tag-demo-page')),
+        matchesGoldenFile('goldens/tag_selected_${mode.name}.png'),
+      );
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
+  }
+
+  testWidgets('Tag Demo exposes every color scheme and variant', (
+    tester,
+  ) async {
     await pumpFullDemoPage(tester, _tagSpec, ThemeMode.light);
 
     final tags = tester.widgetList<TTag>(find.byType(TTag)).toList();
@@ -49,8 +73,9 @@ void main() {
     await disposeDemoPage(tester);
   }, tags: 'demo');
 
-  testWidgets('Tag Demo exposes long ellipsis and selectable outline styles',
-      (tester) async {
+  testWidgets('Tag Demo exposes long ellipsis and selectable outline styles', (
+    tester,
+  ) async {
     await pumpFullDemoPage(tester, _tagSpec, ThemeMode.light);
 
     const longText = '超长省略文本标签超长省略文本标签';
@@ -67,13 +92,17 @@ void main() {
         .where((tag) => tag.variant == TTagVariant.outline)
         .toList();
     expect(outlineSelectTags, hasLength(3));
-    expect(outlineSelectTags.map((tag) => tag.value),
-        orderedEquals([false, true, false]));
+    expect(
+      outlineSelectTags.map((tag) => tag.value),
+      orderedEquals([false, true, false]),
+    );
 
-    final firstOutlineTag = find.byWidgetPredicate((widget) =>
-        widget is TSelectTag &&
-        widget.text == '标签一' &&
-        widget.variant == TTagVariant.outline);
+    final firstOutlineTag = find.byWidgetPredicate(
+      (widget) =>
+          widget is TSelectTag &&
+          widget.text == '标签一' &&
+          widget.variant == TTagVariant.outline,
+    );
     await tester.tap(firstOutlineTag);
     await tester.pump();
     expect(tester.widget<TSelectTag>(firstOutlineTag).value, isTrue);
@@ -100,10 +129,12 @@ void main() {
         .first;
     final outlineWrapper = find
         .ancestor(
-          of: find.byWidgetPredicate((widget) =>
-              widget is TSelectTag &&
-              widget.text == '标签一' &&
-              widget.variant == TTagVariant.outline),
+          of: find.byWidgetPredicate(
+            (widget) =>
+                widget is TSelectTag &&
+                widget.text == '标签一' &&
+                widget.variant == TTagVariant.outline,
+          ),
           matching: find.byType(CodeWrapper),
         )
         .first;
@@ -115,13 +146,14 @@ void main() {
       (wrapper: longWrapper, asset: 'assets/code/tag._buildLongTextTag.txt'),
       (
         wrapper: outlineWrapper,
-        asset: 'assets/code/tag.TagSelectOutlineExample.txt'
+        asset: 'assets/code/tag.TagSelectOutlineExample.txt',
       ),
     ];
     for (final entry in entries) {
       final source = await rootBundle.loadString(entry.asset);
       await tester.tap(
-          find.descendant(of: entry.wrapper, matching: find.text('code')));
+        find.descendant(of: entry.wrapper, matching: find.text('code')),
+      );
       await tester.pumpAndSettle();
       final panel = find.byType(Markdown);
       expect(tester.widget<Markdown>(panel).data, contains(source));

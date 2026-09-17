@@ -15,13 +15,37 @@ void main() {
   );
   registerDemoPageTests(spec);
 
+  for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('input entered ${mode.name} golden', (tester) async {
+      await pumpFullDemoPage(tester, spec, mode);
+      final input = find.byType(TInput).first;
+      final textField = find.descendant(
+        of: input,
+        matching: find.byType(TextField),
+      );
+      await tester.tap(textField);
+      await tester.enterText(textField, 'TDesign');
+      await tester.pump();
+
+      expect(tester.widget<TextField>(textField).controller?.text, 'TDesign');
+      await expectLater(
+        find.byKey(const ValueKey('input-demo-page')),
+        matchesGoldenFile('goldens/input_entered_${mode.name}.png'),
+      );
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
+  }
+
   testWidgets('图形验证码左侧保留分割线', (tester) async {
     await pumpFullDemoPage(tester, spec, ThemeMode.light);
 
     final captchaImage = find.byWidgetPredicate(
       (widget) => widget is Image && widget.width == 72 && widget.height == 36,
     );
-    final suffixRow = find.ancestor(of: captchaImage, matching: find.byType(Row));
+    final suffixRow = find.ancestor(
+      of: captchaImage,
+      matching: find.byType(Row),
+    );
     final divider = find.descendant(
       of: suffixRow.first,
       matching: find.byWidgetPredicate(

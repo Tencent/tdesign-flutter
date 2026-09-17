@@ -23,6 +23,12 @@ NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 新增文案的补充 fallback。它排在原字体之后，避免扩充原字体改变 Button、Checkbox、
 Upload 等既有 Golden 的字形选择与像素基线。
 
+`TableGoldenCJK-Regular.otf` 仅补充 Table 整页 Golden 的公开标题、列名、状态与
+测试说明字形，字符清单见 `table_demo_glyphs.txt`。它作为 Table Demo 最后的独立
+fallback，不改变其他组件既有基线；上游为下方记录的 Noto Sans SC 2.004，子集工具为
+HarfBuzz 11.4.5，子集 SHA-256 为
+`7a0e3fec2307b0d132e25032734c9d4895dedee1c7dfcdc2d27e41ca43925aa9`。
+
 `TreeSelectGoldenCJK-Regular.otf` 仅补充 TreeSelect 整页 Golden 新增且既有子集
 未覆盖的字形，字符清单见 `tree_select_demo_glyphs.txt`，不会改变既有组件基线。
 它使用 Noto Sans SC 2.004 `NotoSansSC-Regular.otf`，来源与本文下方记录一致；
@@ -172,5 +178,6 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 更新 Navbar 页面文案时，更新 Navbar 字符清单。
 更新 Image 页面文案时，更新 Image 字符清单。
 更新 Rate 页面文案时，更新 Rate 字符清单。
+更新 Table 页面文案时，更新 Table 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。

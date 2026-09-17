@@ -92,6 +92,29 @@ void main() {
         matchesGoldenFile('goldens/radio_page_${mode.name}.png'),
       );
     });
+
+    testWidgets('Radio Demo ${mode.name} selected golden', (tester) async {
+      tester.view.physicalSize = const Size(375, 2600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(buildPage(mode));
+      await tester.pump();
+      final group = find.byType(TRadioGroup<int>).first;
+      final radios = find.descendant(
+        of: group,
+        matching: find.byType(TRadio<int>),
+      );
+      await tester.tap(radios.last);
+      await tester.pump();
+
+      expect(tester.widget<TRadioGroup<int>>(group).value, 3);
+      await expectLater(
+        find.byKey(const Key('radio-page-golden')),
+        matchesGoldenFile('goldens/radio_selected_${mode.name}.png'),
+      );
+    });
   }
 }
 
