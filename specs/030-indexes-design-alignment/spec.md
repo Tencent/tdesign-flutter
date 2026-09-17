@@ -19,6 +19,7 @@
 |---|---|
 | indexList / builderContent | 数据与内容组合，由调用方提供；不增加动态 Map 配置；动态列表移除当前项时回退首项并同步滚动与 onChanged |
 | initialIndex | 非受控首次位置；必须属于 indexList，后续更新不重置用户滚动 |
+| useSafeArea | 默认 false；仅在 TIndexes 自己拥有屏幕边缘布局时显式开启。Popup 或页面壳已处理安全区时保持关闭，避免重复避让 |
 | builderAnchor / builderIndex | Flutter Widget 扩展点，分别覆盖锚点和侧栏项 |
 | scrollController | 支持页面内嵌滚动容器，是 Flutter 原生能力 |
 | sticky / stickyOffset / capsuleTheme / reverse | 实例行为，使用具体默认值，不再由 ThemeData 隐式改变 |
@@ -39,7 +40,7 @@
 
 ## 兼容性
 
-这是 breaking change：sticky、stickyOffset、capsuleTheme、reverse 从 nullable 改为具体默认值；TIndexesThemeData 移除行为字段并新增视觉字段。新增 initialIndex 为兼容能力。迁移时把行为配置放回每个 TIndexes 实例，把视觉覆盖放入 TIndexesThemeData。
+这是 breaking change：sticky、stickyOffset、capsuleTheme、reverse 从 nullable 改为具体默认值；TIndexesThemeData 移除行为字段并新增视觉字段。新增 initialIndex 为兼容能力。迁移时把行为配置放回每个 TIndexes 实例，把视觉覆盖放入 TIndexesThemeData。后续新增的 useSafeArea 默认为 false，不改变既有布局；独立全屏场景可显式开启。
 
 ## 验收门禁
 

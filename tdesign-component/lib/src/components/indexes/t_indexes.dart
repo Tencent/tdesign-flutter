@@ -22,6 +22,7 @@ class TIndexes extends StatefulWidget {
     this.indexList,
     this.initialIndex,
     this.indexListMaxHeight,
+    this.useSafeArea = false,
     this.sticky = true,
     this.stickyOffset = 0,
     this.capsuleTheme = false,
@@ -51,6 +52,12 @@ class TIndexes extends StatefulWidget {
 
   /// 索引列表最大高度（父容器高度的百分比，默认 0.8）
   final double? indexListMaxHeight;
+
+  /// 是否避让系统安全区，默认 false。
+  ///
+  /// 仅在组件自身负责屏幕边缘布局时开启；若外层 Popup 或页面壳已经处理安全区，
+  /// 应保持关闭，避免重复避让。
+  final bool useSafeArea;
 
   /// 锚点是否吸顶
   final bool sticky;
@@ -203,30 +210,31 @@ class _TIndexesState extends State<TIndexes> {
   @override
   Widget build(BuildContext context) {
     final theme = _resolveTheme();
-    return Container(
-      color: context.tTheme.bgColorContainer,
-      child: Stack(
-        children: [
-          CustomScrollView(
-            controller: _scrollController,
-            reverse: widget.reverse,
-            slivers: _slivers(),
-          ),
-          TIndexesList(
-            indexList: _indexList,
-            activeIndex: _activeIndex,
-            onSelect: (newIndex, oldIndex) {
-              widget.onSelect?.call(newIndex);
-              _notifyChange(newIndex);
-              _scrollToTarget(newIndex, oldIndex);
-            },
-            indexListMaxHeight:
-                widget.indexListMaxHeight ?? theme.indexListMaxHeight ?? 0.8,
-            builderIndex: widget.builderIndex,
-          ),
-        ],
-      ),
+    Widget child = Stack(
+      children: [
+        CustomScrollView(
+          controller: _scrollController,
+          reverse: widget.reverse,
+          slivers: _slivers(),
+        ),
+        TIndexesList(
+          indexList: _indexList,
+          activeIndex: _activeIndex,
+          onSelect: (newIndex, oldIndex) {
+            widget.onSelect?.call(newIndex);
+            _notifyChange(newIndex);
+            _scrollToTarget(newIndex, oldIndex);
+          },
+          indexListMaxHeight:
+              widget.indexListMaxHeight ?? theme.indexListMaxHeight ?? 0.8,
+          builderIndex: widget.builderIndex,
+        ),
+      ],
     );
+    if (widget.useSafeArea) {
+      child = SafeArea(child: child);
+    }
+    return Container(color: context.tTheme.bgColorContainer, child: child);
   }
 
   List<Widget> _slivers() {
