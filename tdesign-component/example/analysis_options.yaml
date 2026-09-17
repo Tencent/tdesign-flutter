@@ -23,6 +23,14 @@ analyzer:
     unnecessary_lambdas: warning
     prefer_equal_for_default_values: warning
     avoid_init_to_null: warning
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 linter:
   rules:
