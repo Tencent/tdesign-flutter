@@ -19,13 +19,23 @@ class VisualTestManifest {
     required this.name,
     required this.workingDirectory,
     required this.testFiles,
+    this.kind = VisualTestKind.demo,
     this.arguments = const [],
   });
 
   final String name;
   final String workingDirectory;
   final List<String> testFiles;
+  final VisualTestKind kind;
   final List<String> arguments;
+}
+
+enum VisualTestKind {
+  /// 公开 Example 页面及其真实交互状态。
+  demo,
+
+  /// 脱离 Example 页面、直接固定组件渲染契约的聚焦场景。
+  component,
 }
 
 const sharedExampleTests = ['test/widget_test.dart'];
@@ -72,6 +82,12 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Badge Component',
         workingDirectory: '.',
         testFiles: ['test/components/badge/t_badge_golden_test.dart'],
+        kind: VisualTestKind.component,
+      ),
+      VisualTestManifest(
+        name: 'Badge Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/badge/badge_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -108,6 +124,7 @@ const componentTestManifests = <ComponentTestManifest>[
           'test/components/backtop/t_backtop_golden_test.dart',
           'test/components/navigation_components_golden_test.dart',
         ],
+        kind: VisualTestKind.component,
       ),
       VisualTestManifest(
         name: 'BackTop Demo',
@@ -131,6 +148,12 @@ const componentTestManifests = <ComponentTestManifest>[
         workingDirectory: 'example',
         testFiles: ['test/button/button_demo_test.dart'],
       ),
+      VisualTestManifest(
+        name: 'Button shared base components',
+        workingDirectory: '.',
+        testFiles: ['test/components/base_components_golden_test.dart'],
+        kind: VisualTestKind.component,
+      ),
     ],
   ),
   ComponentTestManifest(
@@ -143,6 +166,7 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Cascader Component',
         workingDirectory: '.',
         testFiles: ['test/components/cascader/t_cascader_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
       VisualTestManifest(
         name: 'Cascader Demo',
@@ -181,6 +205,14 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Progress Demo',
         workingDirectory: 'example',
         testFiles: ['test/progress/progress_demo_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Progress Popup layout component',
+        workingDirectory: '.',
+        testFiles: [
+          'test/components/theme/t_popup_progress_layout_golden_test.dart',
+        ],
+        kind: VisualTestKind.component,
       ),
     ],
   ),
@@ -222,6 +254,7 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Calendar States',
         workingDirectory: '.',
         testFiles: ['test/components/calendar/t_calendar_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
       VisualTestManifest(
         name: 'Calendar Demo',
@@ -304,6 +337,12 @@ const componentTestManifests = <ComponentTestManifest>[
         workingDirectory: 'example',
         testFiles: ['test/divider/divider_demo_test.dart'],
       ),
+      VisualTestManifest(
+        name: 'Divider shared base components',
+        workingDirectory: '.',
+        testFiles: ['test/components/base_components_golden_test.dart'],
+        kind: VisualTestKind.component,
+      ),
     ],
   ),
   ComponentTestManifest(
@@ -371,6 +410,7 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Drawer Component',
         workingDirectory: '.',
         testFiles: ['test/components/navigation_components_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
       VisualTestManifest(
         name: 'Drawer Demo',
@@ -381,6 +421,7 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Drawer Popup Consumer',
         workingDirectory: '.',
         testFiles: ['test/components/theme/t_popup_consumers_golden_test.dart'],
+        kind: VisualTestKind.component,
         arguments: [
           '--plain-name',
           'drawer keeps the shared Popup visual contract',
@@ -400,6 +441,12 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Fab Demo',
         workingDirectory: 'example',
         testFiles: ['test/fab/fab_demo_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Fab shared base components',
+        workingDirectory: '.',
+        testFiles: ['test/components/base_components_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
     ],
   ),
@@ -442,6 +489,7 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Image Component',
         workingDirectory: '.',
         testFiles: ['test/components/image/t_image_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
       VisualTestManifest(
         name: 'Image Demo',
@@ -467,6 +515,12 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'PullDownRefresh Demo',
         workingDirectory: 'example',
         testFiles: ['test/refresh/pull_down_refresh_demo_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'PullDownRefresh Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/refresh/t_refresh_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
     ],
   ),
@@ -506,6 +560,7 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'TabBar Component',
         workingDirectory: '.',
         testFiles: ['test/components/tabbar/t_tab_bar_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
       VisualTestManifest(
         name: 'TabBar Demo',
@@ -530,6 +585,7 @@ const componentTestManifests = <ComponentTestManifest>[
           'test/components/navbar/t_nav_bar_safe_area_golden_test.dart',
           'test/components/navigation_components_golden_test.dart',
         ],
+        kind: VisualTestKind.component,
       ),
       VisualTestManifest(
         name: 'NavBar Demo',
@@ -561,6 +617,7 @@ const componentTestManifests = <ComponentTestManifest>[
           'test/components/tabs/t_tab_golden_test.dart',
           'test/components/navigation_components_golden_test.dart',
         ],
+        kind: VisualTestKind.component,
       ),
       VisualTestManifest(
         name: 'Tabs Demo',
@@ -631,6 +688,12 @@ const componentTestManifests = <ComponentTestManifest>[
         workingDirectory: 'example',
         testFiles: ['test/icon/icon_demo_test.dart'],
       ),
+      VisualTestManifest(
+        name: 'Icon shared base components',
+        workingDirectory: '.',
+        testFiles: ['test/components/base_components_golden_test.dart'],
+        kind: VisualTestKind.component,
+      ),
     ],
   ),
   ComponentTestManifest(
@@ -647,6 +710,12 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Link Demo',
         workingDirectory: 'example',
         testFiles: ['test/link/link_demo_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Link shared base components',
+        workingDirectory: '.',
+        testFiles: ['test/components/base_components_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
     ],
   ),
@@ -710,6 +779,14 @@ const componentTestManifests = <ComponentTestManifest>[
         workingDirectory: 'example',
         testFiles: ['test/popup/popup_demo_golden_test.dart'],
       ),
+      VisualTestManifest(
+        name: 'Popup Progress layout component',
+        workingDirectory: '.',
+        testFiles: [
+          'test/components/theme/t_popup_progress_layout_golden_test.dart',
+        ],
+        kind: VisualTestKind.component,
+      ),
     ],
   ),
   ComponentTestManifest(
@@ -741,6 +818,12 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Text Demo',
         workingDirectory: 'example',
         testFiles: ['test/text/text_demo_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Text shared base components',
+        workingDirectory: '.',
+        testFiles: ['test/components/base_components_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
     ],
   ),
@@ -775,6 +858,7 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Steps shared navigation',
         workingDirectory: '.',
         testFiles: ['test/components/navigation_components_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
     ],
   ),
@@ -801,6 +885,7 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'SideBar shared navigation',
         workingDirectory: '.',
         testFiles: ['test/components/navigation_components_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
     ],
   ),
@@ -814,6 +899,7 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Slider Component',
         workingDirectory: '.',
         testFiles: ['test/components/slider/t_slider_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
       VisualTestManifest(
         name: 'Slider Demo',
@@ -832,12 +918,15 @@ const componentTestManifests = <ComponentTestManifest>[
     exampleTests: ['test/stepper/stepper_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
-        name: 'Stepper Demo and component',
+        name: 'Stepper Demo',
         workingDirectory: 'example',
-        testFiles: [
-          'test/stepper/stepper_demo_golden_test.dart',
-          '../test/components/stepper/t_stepper_golden_test.dart',
-        ],
+        testFiles: ['test/stepper/stepper_demo_golden_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Stepper Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/stepper/t_stepper_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
     ],
   ),
@@ -878,6 +967,12 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Upload Demo',
         workingDirectory: 'example',
         testFiles: ['test/upload/upload_demo_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Upload Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/upload/t_upload_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
     ],
   ),
@@ -940,6 +1035,7 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Theme Component',
         workingDirectory: '.',
         testFiles: ['test/components/theme/t_m3_isolation_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
       VisualTestManifest(
         name: 'Theme Demo',
@@ -974,6 +1070,7 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'SwipeCell actions',
         workingDirectory: '.',
         testFiles: ['test/components/swipe_cell/t_swipe_cell_golden_test.dart'],
+        kind: VisualTestKind.component,
       ),
       VisualTestManifest(
         name: 'SwipeCell Demo',

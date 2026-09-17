@@ -12,6 +12,7 @@
 | --- | --- | --- |
 | 组件 | 无 | 不改变组件实现或契约 |
 | 测试 | `tdesign-component/example/test/` | 补齐操作后和动画固定时点 Golden |
+| 测试清单 | `tdesign-component/tool/component_test_manifest.dart` | 显式区分 Demo / 组件 Golden，并反向检查所有 Golden 测试文件均已调度 |
 | 示例 | 公开 Demo 页面 | 只作为被测对象，不改变展示 |
 | 文档 | 本 Spec 与覆盖矩阵 | 记录取舍和验收证据 |
 
@@ -24,10 +25,12 @@
 - Linux 与 macOS 字体栅格化不同，基线仅在 CI 匹配的 Linux Flutter 3.32.0 生成。
 - 机械地为无视觉差异操作截图会制造重复基线；此类场景只保留功能测试并记录原因。
 - 循环动画无法依靠 `pumpAndSettle` 达到确定状态，只测试确定的静态配置或固定时间点。
+- 共享组件矩阵若按多个组件重复执行会浪费 CI 时间；保留多组件归属，但按工作目录、文件和参数组成的执行键去重。
 
 ## 验证策略
 
 - 单元测试：调度器清单、自测与覆盖矩阵集合检查。
+- 完整性门禁：57 个组件逐项检查 Demo 套件、成对 light/dark PNG、测试源码中的 Golden 断言，以及 Golden 文件到调度器的反向登记。
 - 比较器门禁：扫描 Example 测试，禁止覆写 `goldenFileComparator` 或调用自定义列表比较逻辑，统一使用 Flutter 默认精确比较器。
 - 集成或 Widget 测试：双版本运行受影响 Demo 功能测试；Linux 3.32.0 运行视觉回归。
 - 静态检查：`flutter analyze --fatal-infos`、`git diff --check`。

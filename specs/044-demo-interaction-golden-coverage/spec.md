@@ -41,6 +41,9 @@
 5. Golden 更新只在 Linux Flutter 3.32.0 环境进行，更新后使用相同命令无更新参数复跑。
 6. 新增的视觉测试必须登记到对应组件的 `visualTests`，功能断言仍由双版本 example regression 执行。
 7. 所有 Golden 使用 Flutter 默认精确比较器，禁止像素比例容差；空格、标点、字形、位置或颜色造成的任意像素变化都必须使测试失败。
+8. 每个公开 API 组件必须拥有 `VisualTestKind.demo` 类型的视觉套件，且组件目录至少包含同名状态集合的 light/dark PNG；组件聚焦快照使用 `VisualTestKind.component` 明确区分。
+9. `example/test/**/*_golden_test.dart` 与 `test/components/**/*_golden_test.dart` 必须被视觉调度器反向登记；禁止保留“文件和 PNG 存在、CI 从未执行”的孤立测试。
+10. 多个组件共同使用的组件 Golden 可以共享同一测试文件，但调度器只执行一次；每个消费组件仍保留可审计的归属。
 
 ## 验收标准
 
@@ -51,3 +54,5 @@
 - [x] 调度器自测、example 功能测试、Linux 视觉回归及严格 analyze 通过。
 - [x] 调度器自测禁止自定义宽松 Golden 比较器，全部基线严格逐像素比较。
 - [x] 未修改组件生产代码、公开 API 和 Demo 默认视觉。
+- [x] 57 个公开组件均有独立 Demo 视觉套件和成对 light/dark 基线；Badge 不再只依赖组件矩阵。
+- [x] Demo Golden 与组件 Golden 在清单中具有机器可读的明确类型，所有 Golden 测试文件均进入调度器。

@@ -23,7 +23,13 @@ void main() {
     );
     final robotoFont = FontLoader('Roboto')
       ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView));
-    await robotoFont.load();
+    final cjkFont = FontLoader('TDesign Golden CJK')
+      ..addFont(
+        File(
+          'example/test/fonts/TDesignGoldenCJK-Regular.otf',
+        ).readAsBytes().then(ByteData.sublistView),
+      );
+    await Future.wait([robotoFont.load(), cjkFont.load()]);
   });
 
   testWidgets('基础刷新 demo（固定视口）', (tester) async {
@@ -34,7 +40,10 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: TThemeBuilder.light(TThemeData.defaultData()).copyWith(
-          textTheme: ThemeData.light().textTheme.apply(fontFamily: 'Roboto'),
+          textTheme: ThemeData.light().textTheme.apply(
+            fontFamily: 'Roboto',
+            fontFamilyFallback: const ['TDesign Golden CJK'],
+          ),
         ),
         home: Scaffold(body: _buildRefreshDemo()),
       ),
@@ -55,7 +64,10 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: TThemeBuilder.light(TThemeData.defaultData()).copyWith(
-          textTheme: ThemeData.light().textTheme.apply(fontFamily: 'Roboto'),
+          textTheme: ThemeData.light().textTheme.apply(
+            fontFamily: 'Roboto',
+            fontFamilyFallback: const ['TDesign Golden CJK'],
+          ),
         ),
         home: Scaffold(body: _buildLoadingTextsDemo()),
       ),
@@ -76,7 +88,10 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: TThemeBuilder.light(TThemeData.defaultData()).copyWith(
-          textTheme: ThemeData.light().textTheme.apply(fontFamily: 'Roboto'),
+          textTheme: ThemeData.light().textTheme.apply(
+            fontFamily: 'Roboto',
+            fontFamilyFallback: const ['TDesign Golden CJK'],
+          ),
         ),
         home: Scaffold(body: _buildTimeoutDemo()),
       ),

@@ -55,7 +55,7 @@ void main() {
     await tester.pumpAndSettle();
 
     await expectLater(
-      find.byKey(const Key('popup-progress-layout-scene')),
+      find.byKey(const Key('popup-progress-content')),
       matchesGoldenFile('goldens/popup_progress_layout.png'),
     );
   });
@@ -112,48 +112,51 @@ class _ProgressMatrix extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: context.tTheme.bgColorContainer,
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Bounded',
-              style: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Roboto',
-                fontSize: 14,
-                decoration: TextDecoration.none,
+    return RepaintBoundary(
+      key: const Key('popup-progress-content'),
+      child: ColoredBox(
+        color: context.tTheme.bgColorContainer,
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Bounded',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Roboto',
+                  fontSize: 14,
+                  decoration: TextDecoration.none,
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            TProgress(
-              variant: TProgressVariant.linear,
-              value: 0.6,
-              label: const SizedBox.shrink(),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'Unbounded fallback',
-              style: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Roboto',
-                fontSize: 14,
-                decoration: TextDecoration.none,
-              ),
-            ),
-            const SizedBox(height: 12),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: TProgress(
+              const SizedBox(height: 12),
+              TProgress(
                 variant: TProgressVariant.linear,
-                value: 0.4,
+                value: 0.6,
                 label: const SizedBox.shrink(),
               ),
-            ),
-          ],
+              const SizedBox(height: 24),
+              const Text(
+                'Unbounded fallback',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Roboto',
+                  fontSize: 14,
+                  decoration: TextDecoration.none,
+                ),
+              ),
+              const SizedBox(height: 12),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: TProgress(
+                  variant: TProgressVariant.linear,
+                  value: 0.4,
+                  label: const SizedBox.shrink(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

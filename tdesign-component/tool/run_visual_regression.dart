@@ -12,6 +12,10 @@ class VisualTestSuite {
   String get workingDirectory => manifest.workingDirectory;
   List<String> get testFiles => manifest.testFiles;
   List<String> get arguments => manifest.arguments;
+  VisualTestKind get kind => manifest.kind;
+
+  String get executionKey =>
+      [workingDirectory, ...testFiles, '--', ...arguments].join('\u0000');
 }
 
 final visualTestSuites = [
@@ -22,8 +26,13 @@ final visualTestSuites = [
 
 Future<int> runVisualRegression({bool updateGoldens = false}) async {
   final failedSuites = <String>[];
+  final executedSuites = <String>{};
 
   for (final suite in visualTestSuites) {
+    if (!executedSuites.add(suite.executionKey)) {
+      stdout.writeln('\n=== ${suite.name} (shared suite already executed) ===');
+      continue;
+    }
     stdout.writeln('\n=== ${suite.name} ===');
     final process = await Process.start(
       'flutter',

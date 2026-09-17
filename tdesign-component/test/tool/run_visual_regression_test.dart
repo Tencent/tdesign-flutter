@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../tool/component_test_manifest.dart';
 import '../../tool/demo_golden_coverage.dart';
 import '../../tool/run_component_regression.dart';
 import '../../tool/run_visual_regression.dart';
@@ -14,6 +15,14 @@ void main() {
       for (final testFile in suite.testFiles) {
         final path = '${suite.workingDirectory}/$testFile';
         expect(File(path).existsSync(), isTrue, reason: '${suite.name}: $path');
+        final source = File(path).readAsStringSync();
+        expect(
+          source.contains('matchesGoldenFile') ||
+              source.contains('registerDemoGoldenTests') ||
+              source.contains('registerDemoPageTests'),
+          isTrue,
+          reason: '${suite.name}: $path does not register a Golden assertion',
+        );
       }
     }
   });
@@ -87,6 +96,109 @@ void main() {
   test('visual regression suite names are unique', () {
     final names = visualTestSuites.map((suite) => suite.name).toList();
     expect(names.toSet(), hasLength(names.length));
+  });
+
+  test('Demo and component Golden suites have explicit ownership', () {
+    for (final suite in visualTestSuites) {
+      switch (suite.kind) {
+        case VisualTestKind.demo:
+          expect(
+            suite.workingDirectory,
+            'example',
+            reason: '${suite.name} must run from the example package',
+          );
+          expect(
+            suite.testFiles,
+            everyElement(startsWith('test/')),
+            reason: '${suite.name} must only contain example tests',
+          );
+        case VisualTestKind.component:
+          expect(
+            suite.workingDirectory,
+            '.',
+            reason: '${suite.name} must run from the component package',
+          );
+          expect(
+            suite.testFiles,
+            everyElement(startsWith('test/components/')),
+            reason: '${suite.name} must only contain component tests',
+          );
+      }
+    }
+  });
+
+  test(
+    'every public component owns a Demo Golden suite and light/dark PNGs',
+    () {
+      for (final component in componentTestSuites) {
+        final demoSuites = visualTestSuites.where(
+          (suite) =>
+              suite.component == component.name &&
+              suite.kind == VisualTestKind.demo,
+        );
+        expect(
+          demoSuites,
+          isNotEmpty,
+          reason: '${component.name} is missing a Demo Golden suite',
+        );
+
+        final goldenDirectory = Directory(
+          'example/test/${component.name}/goldens',
+        );
+        expect(
+          goldenDirectory.existsSync(),
+          isTrue,
+          reason: '${component.name} is missing its Demo Golden directory',
+        );
+        final baselines = goldenDirectory
+            .listSync()
+            .whereType<File>()
+            .map((file) => file.path)
+            .toList();
+        final lightStates = baselines
+            .where((path) => path.endsWith('_light.png'))
+            .map((path) => path.substring(0, path.length - '_light.png'.length))
+            .toSet();
+        final darkStates = baselines
+            .where((path) => path.endsWith('_dark.png'))
+            .map((path) => path.substring(0, path.length - '_dark.png'.length))
+            .toSet();
+        expect(
+          lightStates,
+          isNotEmpty,
+          reason: '${component.name} is missing a light Demo Golden',
+        );
+        expect(
+          darkStates,
+          lightStates,
+          reason: '${component.name} is missing a dark Demo Golden',
+        );
+      }
+    },
+  );
+
+  test('every Golden test file is registered in visual regression', () {
+    final registered = <String>{
+      for (final suite in visualTestSuites)
+        for (final testFile in suite.testFiles)
+          suite.workingDirectory == '.'
+              ? testFile
+              : '${suite.workingDirectory}/$testFile',
+    };
+    final goldenTests = <String>{
+      for (final root in ['test/components', 'example/test'])
+        ...Directory(root)
+            .listSync(recursive: true)
+            .whereType<File>()
+            .where((file) => file.path.endsWith('_golden_test.dart'))
+            .map((file) => file.path),
+    };
+
+    expect(
+      registered,
+      containsAll(goldenTests),
+      reason: 'Golden test files must not exist outside the visual runner',
+    );
   });
 
   test('every regression component owns a visual regression suite', () {
