@@ -169,8 +169,56 @@ void main() {
       find.byWidgetPredicate(
         (widget) => widget is SizedBox && widget.height == token.spacer8,
       ),
-      findsAtLeastNWidgets(2),
+      findsAtLeastNWidgets(1),
     );
+    expect(
+      find.byWidgetPredicate(
+        (widget) => widget is SizedBox && widget.width == token.spacer16,
+      ),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('label defaults to horizontal layout with token spacing', (
+    tester,
+  ) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(
+      wrap(
+        const SizedBox(
+          width: 375,
+          child: TTextarea(label: '标签文字', hintText: '请输入文字'),
+        ),
+      ),
+    );
+
+    final labelRect = tester.getRect(find.text('标签文字'));
+    final fieldRect = tester.getRect(find.byType(TextField));
+    expect(labelRect.top, fieldRect.top);
+    expect(fieldRect.left - labelRect.right, token.spacer16);
+  });
+
+  testWidgets('vertical layout stacks label above editor with token spacing', (
+    tester,
+  ) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(
+      wrap(
+        const SizedBox(
+          width: 375,
+          child: TTextarea(
+            label: '标签文字',
+            hintText: '请输入文字',
+            layout: TTextareaLayout.vertical,
+          ),
+        ),
+      ),
+    );
+
+    final labelRect = tester.getRect(find.text('标签文字'));
+    final fieldRect = tester.getRect(find.byType(TextField));
+    expect(fieldRect.top - labelRect.bottom, token.spacer8);
+    expect(fieldRect.left, labelRect.left);
   });
 
   testWidgets('textarea label uses text theme and disabled semantics', (

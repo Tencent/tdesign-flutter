@@ -4,6 +4,7 @@
 
 - 对齐新版 Figma 页面 24386:5239 的 375×812 移动端展示，以及组件集的 type(number/a-z) × theme(normal/capsule) × state(default/active)。
 - 公开 Demo 按新版 Figma 拆成“字母索引 / 数字索引 / 胶囊索引”三项，并验证点击、连续拖动、吸顶与滚动联动。
+- 三个全屏索引示例均避让系统顶部安全区，内容不得覆盖手机时间、电量等宿主状态栏区域。
 - 组件继续采用 Flutter 的 ScrollController + builder 组合，不复制小程序只能驱动页面级滚动的限制。
 
 ## 跨端证据
@@ -27,7 +28,7 @@
 
 活动锚点由滚动视口派生，是单一状态源。本轮以 initialIndex 表达小程序 Demo 的初始 B，但不机械增加 current/defaultCurrent 双状态；需要定制索引显示时使用 builderIndex，需要外部驱动时使用 scrollController。
 
-`reverse` 仍是完整支持的滚动方向：初始定位、近端选择和未构建远端索引选择均须落入可见视口。ThemeExtension 的 nullable 字段表示继续使用当前子树 token；插值任一端为 null 时保持该回退语义，不从 0 或透明值开始插值。提示最小尺寸大于默认最大宽度时，有效最大宽度同步扩展，不能产生无效 BoxConstraints。
+`reverse` 仍是完整支持的滚动方向：初始定位、近端选择和未构建远端索引选择均须落入可见视口。ThemeExtension 的 nullable 字段分为两类：`indexListMaxHeight`、`indexItemSize`、`indexItemSpacing`、`tipMaxWidth` 的 `null` 分别代表固定运行时默认值 0.8、20、2、99，主题插值必须从这些有效默认值连续计算；其余字段的 `null` 表示继续使用当前子树 token，插值任一端为 `null` 时保持动态回退语义，不从 0 或透明值开始插值。两侧均为 `null` 时结果保持 `null`。提示最小尺寸大于默认最大宽度时，有效最大宽度同步扩展，不能产生无效 BoxConstraints。
 
 ## 默认视觉契约
 

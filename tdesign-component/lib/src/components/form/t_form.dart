@@ -18,9 +18,10 @@ class TForm extends StatefulWidget {
     /// 自动校验时机。
     this.autovalidateMode,
 
-    /// 任意字段值变化时触发。
+    /// 用户通过 [TFormField] 提交字段值变化时触发。
     ///
-    /// 仅清除校验状态或外部错误时不会触发。
+    /// 回调执行时 [TFormController.values] 已包含本次变化。仅同步外部受控值、
+    /// 清除校验状态或外部错误时不会触发。
     this.onChanged,
 
     /// 校验通过后触发，参数为各 [TFormField] 注册的字段值。
@@ -43,9 +44,10 @@ class TForm extends StatefulWidget {
   /// [Form] 的校验语义。
   final AutovalidateMode? autovalidateMode;
 
-  /// 任意字段值变化时触发。
+  /// 用户通过 [TFormField] 提交字段值变化时触发。
   ///
-  /// 仅清除校验状态或外部错误时不会触发。
+  /// 回调执行时 [TFormController.values] 已包含本次变化。仅同步外部受控值、
+  /// 清除校验状态或外部错误时不会触发。
   final VoidCallback? onChanged;
 
   /// 校验通过后触发。
@@ -296,7 +298,14 @@ class TFormController {
   void setValidateMessage(Map<String, String?> messages) =>
       _state?.setValidateMessage(messages);
 
-  void _attach(TFormState state) => _state = state;
+  void _attach(TFormState state) {
+    assert(
+      _state == null || identical(_state, state),
+      'A TFormController cannot be attached to more than one TForm at the '
+      'same time.',
+    );
+    _state = state;
+  }
 
   void _detach(TFormState state) {
     if (identical(_state, state)) {
@@ -409,7 +418,8 @@ class TFormField<T> extends StatefulWidget {
 
 class _TFormFieldState<T> extends State<TFormField<T>> {
   _TFormScope? _scope;
-  GlobalKey<FormFieldState<T>> _fieldKey = GlobalKey<FormFieldState<T>>();
+  final GlobalKey<_TControlledFormFieldState<T>> _fieldKey =
+      GlobalKey<_TControlledFormFieldState<T>>();
   bool _syncScheduled = false;
 
   @override
@@ -456,7 +466,7 @@ class _TFormFieldState<T> extends State<TFormField<T>> {
       }
       final field = _fieldKey.currentState;
       if (field != null && field.value != widget.value) {
-        field.didChange(widget.value);
+        field.syncControlledValue(widget.value);
         _scope?.state._setValue(widget.name, this, widget.value);
       }
     });
@@ -474,12 +484,7 @@ class _TFormFieldState<T> extends State<TFormField<T>> {
   }
 
   void _clearValidate() {
-    setState(() {
-      // Recreate only Flutter's validation state. Using FormFieldState.reset
-      // here would also restore initialValue and diverge from widget.value,
-      // which remains the single source of truth for this controlled field.
-      _fieldKey = GlobalKey<FormFieldState<T>>();
-    });
+    _fieldKey.currentState?.clearValidation();
   }
 
   bool _isRequiredEmpty(Object? value) {
@@ -500,7 +505,7 @@ class _TFormFieldState<T> extends State<TFormField<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return FormField<T>(
+    return _TControlledFormField<T>(
       key: _fieldKey,
       initialValue: widget.value,
       enabled: widget.onChanged != null,
@@ -526,8 +531,8 @@ class _TFormFieldState<T> extends State<TFormField<T>> {
             widget.onChanged == null
                 ? null
                 : (next) {
-                    field.didChange(next);
                     _scope?.state._setValue(widget.name, this, next);
+                    field.didChange(next);
                     widget.onChanged?.call(next);
                     _scheduleValueSync();
                   },
@@ -537,4 +542,29 @@ class _TFormFieldState<T> extends State<TFormField<T>> {
       },
     );
   }
+}
+
+/// [FormField] bridge that synchronizes a controlled value without treating
+/// the update as user interaction or emitting [Form.onChanged].
+class _TControlledFormField<T> extends FormField<T> {
+  const _TControlledFormField({
+    required super.builder,
+    super.key,
+    super.initialValue,
+    super.enabled,
+    super.validator,
+    super.onSaved,
+    super.autovalidateMode,
+  });
+
+  @override
+  FormFieldState<T> createState() => _TControlledFormFieldState<T>();
+}
+
+class _TControlledFormFieldState<T> extends FormFieldState<T> {
+  void syncControlledValue(T value) {
+    setState(() => setValue(value));
+  }
+
+  void clearValidation() => reset();
 }

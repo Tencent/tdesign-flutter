@@ -17,3 +17,8 @@
 - [x] TODO Widget / Overlay 销毁时释放 duration / marquee 任务并覆盖运行期参数更新
 - [x] TODO 跑马灯使用真实布局约束并覆盖短 action / 窄屏
 - [x] TODO `TMessageStatus/status` 与单一实例 `offset` API 迁移
+- [x] TODO Issue #1027 默认左右 16px 外边距组件修复
+- [x] TODO Issue #1027 带关闭通知删除多余 Demo 操作按钮
+- [x] TODO 删除声明式 Demo 的旧全宽位移补偿
+- [x] TODO 更新并无参数复跑 22 组 Flutter 3.32.0 Linux Golden
+- [x] TODO Flutter 3.32.0 / 3.47.0 完整复验

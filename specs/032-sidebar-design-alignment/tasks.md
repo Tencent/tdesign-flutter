@@ -9,3 +9,4 @@
 - [x] 完成 Android 真机热重启、操作、集成测试与持久安装
 - [ ] 创建独立 GitHub/CNB PR并关联 #1027 对应条目
 - [ ] 完成 CodeBuddy Review 并处理反馈
+- [x] 修复 nullable Theme 字段在动画中间态制造临时显式样式，并补齐中间态回归测试

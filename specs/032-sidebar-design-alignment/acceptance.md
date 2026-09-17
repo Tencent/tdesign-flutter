@@ -1,5 +1,13 @@
 # 验收记录
 
+## 2026-09-17 Theme 中间态修复
+
+- 修复前在 `develop@5eeaf357` 上通过聚焦测试复现：从动态回退主题过渡到显式 `EdgeInsets.all(16)` 时，`t=0.25` 被错误插值为 `EdgeInsets.all(4)`；颜色和文字样式同样会生成半透明或临时显式值，覆盖本应继续生效的 TDesign token。
+- 修复后 nullable padding、颜色和文字样式仅在两端均为显式值时连续插值；任一端为 `null` 时离散保留对应回退。
+- 聚焦测试覆盖两端显式值、正反向 nullable、两侧 `null`、端点与 `ThemeData.lerp` 中间态集成路径。
+- Flutter 3.32.0 / 3.47.0 合并运行 Indexes 与 SideBar 完整组件回归均为 148/148；3.32.0 覆盖率中 SideBar 生产源码为 260/260（100%）。Linux Flutter 3.32.0 的相关 Demo Golden 与 Indexes 合并无更新复跑共 33/33，通过且无 PNG 变化。
+- 两个 SDK 对本次 4 个源码/测试文件严格 analyze 均为零诊断；整包 `--fatal-infos` 仍被 develop 既有、且均位于未改文件的 28 条 `RegExp` 弃用提示阻断，未在本 PR 扩大范围处理。
+
 ## 2026-09-08 锚点快速选择竞态修复（本地验证）
 
 - 根因：多个 `handleSidebarChange` 并发复用 `_isProgrammaticScroll`；旧动画结束或取消时会提前恢复视口同步，并以中间位置覆盖最后一次选择。
@@ -33,6 +41,7 @@
 - 分支：`rss1102/breaking/sidebar-design-alignment`
 - 合并基线：`origin/develop` (`3d5ed773`)
 - Figma：页面 `24787:18812`，移动端画板 `28591:34071`
+- 选中文字保持 600 字重；圆点与数字 Badge 已收敛到标签文字右上角，并新增短标签几何断言与四类交互后 Golden。
 - 小程序：`Tencent/tdesign-miniprogram` develop `ae55fb05`
 
 ## 自动化验证

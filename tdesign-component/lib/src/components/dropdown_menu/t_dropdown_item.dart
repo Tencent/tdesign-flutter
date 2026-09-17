@@ -436,10 +436,7 @@ class _DropdownOptionChip extends StatelessWidget {
     final material = Theme.of(context);
     final colorScheme = material.tExplicitColorScheme;
     final backgroundColor = disabled
-        ? theme.disabledOptionColor ??
-              (material.tExplicitDisabledColor ??
-                      context.tTheme.textDisabledColor)
-                  .withValues(alpha: 0.12)
+        ? theme.disabledOptionColor ?? context.tTheme.bgColorComponentDisabled
         : selected
         ? theme.selectedOptionColor ??
               colorScheme?.primaryContainer ??

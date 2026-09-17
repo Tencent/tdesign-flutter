@@ -32,11 +32,6 @@ class TTextareaPage extends StatelessWidget {
               builder: _buildMaxLength,
               center: false,
             ),
-            ExampleItem(
-              desc: '按字符权重限制',
-              builder: _buildMaxCharacter,
-              center: false,
-            ),
           ],
         ),
         ExampleModule(
@@ -48,6 +43,7 @@ class TTextareaPage extends StatelessWidget {
         ExampleModule(
           title: '组件样式',
           children: [
+            ExampleItem(desc: '竖排样式', builder: _buildVertical, center: false),
             ExampleItem(desc: '卡片样式', builder: _buildCard, center: false),
           ],
         ),
@@ -89,18 +85,6 @@ class TTextareaPage extends StatelessWidget {
   );
 
   @ExampleCode(group: 'textarea')
-  Widget _buildMaxCharacter(BuildContext context) => const SizedBox(
-    height: 162,
-    child: TTextarea(
-      label: '标签文字',
-      hintText: '设置最大字符个数，一个汉字表示两个字符',
-      minLines: 3,
-      maxCharacter: 200,
-      indicator: true,
-    ),
-  );
-
-  @ExampleCode(group: 'textarea')
   Widget _buildDisabled(BuildContext context) => const SizedBox(
     height: 128,
     child: TTextarea(
@@ -108,6 +92,17 @@ class TTextareaPage extends StatelessWidget {
       hintText: '请输入文字',
       initialValue: '不可编辑文字',
       enabled: false,
+      minLines: 2,
+    ),
+  );
+
+  @ExampleCode(group: 'textarea')
+  Widget _buildVertical(BuildContext context) => const SizedBox(
+    height: 128,
+    child: TTextarea(
+      label: '标签文字',
+      hintText: '请输入文字',
+      layout: TTextareaLayout.vertical,
       minLines: 2,
     ),
   );
@@ -124,6 +119,7 @@ class TTextareaPage extends StatelessWidget {
         child: TTextarea(
           label: '标签文字',
           hintText: '请输入文字',
+          layout: TTextareaLayout.vertical,
           minLines: 2,
           maxLength: 500,
           indicator: true,

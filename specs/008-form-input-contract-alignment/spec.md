@@ -89,7 +89,7 @@ TForm                 表单生命周期、字段注册和统一操作
 
 - `TInput` 不提供 label，表单字段 label 由 `TFormItem` 提供。
 - 删除与 `TTextarea` 重复的 `TInput.multiline` 命名构造器；`maxLines` / `minLines` 唯一决定多行布局，`inputType` 只选择 Flutter 键盘类型，不参与视觉布局判断。正式多行输入场景统一使用 `TTextarea`。
-- `TTextarea.label` 仅表达独立多行输入框内部的标题，使用 `fontBodyMedium + textColorPrimary`；位于 `TFormItem` 中时仍使用 `TFormItem.label`，不得同时传入两份标签。
+- `TTextarea.label` 仅表达独立多行输入框内部的标题，使用 `fontBodyMedium + textColorPrimary`；位于 `TFormItem` 中时仍使用 `TFormItem.label`，不得同时传入两份标签。内部标题默认与编辑区横向排列；`TTextareaLayout.vertical` 用于组件样式中的显式竖排场景。
 - `clearButtonMode` 为单一清除按钮配置：`never`、`always`、`focused`。
 - `clearButtonMode` 默认 `never`，与小程序 `clearable=false` 对齐；需要清除能力时显式使用 `always` 或 `focused`。
 - `suffix` 存在时不自动插入清除按钮。
@@ -100,7 +100,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - `borderless` 控制输入壳层是否绘制边框；`TTextarea.bordered` 为小程序语义的正向别名，二者不在同一组件上重复暴露。
 - 非 `borderless` 的单行 `TInput` 默认绘制底部分隔线，匹配小程序 Input；通过 `TInputThemeData.borderRadius` 设置圆角时使用完整边框，用于标签外置等标准输入框场景。
 - `TTextarea.indicator` 在配置 `maxLength` 或 `maxCharacter` 时展示当前计数；`autosize` 通过 `minLines`/`maxLines` 组合实现，避免引入平台专属布局 API。
-- Textarea 输入文字使用 `fontBodyLarge`，placeholder 使用 `fontBodyMedium + textColorPlaceholder`，indicator 使用 `fontBodySmall + textColorPlaceholder`；标题与编辑区、编辑区与 indicator 的间距均读取 `spacer8`。
+- Textarea 输入文字使用 `fontBodyLarge`，placeholder 使用 `fontBodyMedium + textColorPlaceholder`，indicator 使用 `fontBodySmall + textColorPlaceholder`；横排标题与编辑区的间距读取 `spacer16`，竖排标题与编辑区、编辑区与 indicator 的间距读取 `spacer8`。
 - 独立 Textarea 默认由组件提供 16dp 容器内边距和容器背景；放入 `TFormItem` 时自动去除这层内边距和背景，避免 Demo 或业务手工抵消双重留白。
 - 不公开 Material `InputDecoration` 透传入口；hint、前后置内容、背景、边框、内边距、label 和 help/error 分别由 TInput、TInputThemeData 和 TFormItem 的专属 API 负责，避免两套视觉配置冲突。
 - `TInputThemeData.borderColor` 可覆盖输入壳层在聚焦与非聚焦状态下的边框颜色；`backgroundColor`、`contentPadding`、`borderRadius` 和 `hintStyle` 继续负责对应的视觉 token。独立输入组件的表单错误样式复用 Material `InputDecorationTheme.errorStyle`，`TFormItem` 内的错误仍由 `TFormThemeData.errorStyle` 控制；Textarea 内部标题复用 Flutter `TextTheme.bodyMedium`。
@@ -115,7 +115,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - Form Demo 的水平/竖直布局使用同一组用户名、密码、性别、生日、籍贯、年限、自我评价、个人简介、上传照片字段；禁用状态逐组件传递，不使用整棵子树透明度模拟。
 - Form Demo 的生日和籍贯是选择触发器，不使用只读 `TInput` 模拟编辑行为；`TFormItem` 负责字段行和内容对齐，业务组合使用文本展示当前值并通过手势打开 Picker，同时提供按钮语义。
 - Form Demo 的上传照片字段使用与其他字段相同的表单级校验时机：首次提交前只更新受控文件列表，提交时统一执行空列表必填校验，首次提交后再随用户交互更新错误；Upload 组件只负责回传受控文件列表。
-- Textarea Demo 的固定高度、卡片圆角和外置标签容器属于示例场景；默认 Textarea 保持方形容器，只有 `bordered` 或显式主题圆角才绘制圆角。内部标题、默认 padding、placeholder 和 indicator 的 token 样式由组件负责。
+- Textarea Demo 的固定高度、卡片圆角和外置标签容器属于示例场景；默认 Textarea 保持方形容器，只有 `bordered` 或显式主题圆角才绘制圆角。内部标题、布局、默认 padding、placeholder 和 indicator 的 token 样式由组件负责。Demo 不展示设计稿中不存在的按字符权重限制场景，`03 组件样式` 依次展示竖排样式与卡片样式。
 - Input 与 Textarea 的外置标签 Demo 统一由可独立使用的 `TFormItem` 表达，不在 Demo 手写标签字号、颜色和间距。
 - Demo 视觉对齐优先验证容器层级、字段行高度、标签与内容的相对位置、分隔线和状态颜色，再验证代码面板等 Example 基础设施。
 
@@ -124,7 +124,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - [x] `TFormItem` 可在没有 `TForm` 的页面中独立显示 label、help、errorText 和 required 标记。
 - [x] `TFormController` 支持全量及按字段 validate、clearValidate、setValidateMessage。
 - [x] Form 外部错误能展示在对应 `TFormItem`，且清除校验后消失。
-- [x] `TInput` 不再提供 label；`TTextarea.label` 仅承担独立内部标题，清除按钮只由 `clearButtonMode` 决定。
+- [x] `TInput` 不再提供 label；`TTextarea.label` 仅承担独立内部标题，并支持默认横排与显式竖排，清除按钮只由 `clearButtonMode` 决定。
 - [x] `TInput`、`TTextarea` 不再公开 `decoration`，`TInputThemeData` 使用专属 `hintStyle` 代替 `decorationTheme`。
 - [x] 默认输入壳层不依赖 Material `InputDecoration` 的 border/fill/padding 绘制，ThemeData 的 Material 输入主题不会污染 TDesign 视觉。
 - [x] Input 覆盖基础、前后缀、密码显隐、禁用、只读、清除、边框、状态、`maxLength`、`maxCharacter` 场景。

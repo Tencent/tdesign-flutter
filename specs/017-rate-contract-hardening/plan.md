@@ -14,6 +14,8 @@
 - 命中计算和裁剪根据 `Directionality` 选择方向。
 - 浮层可见样式从 `TThemeData` 的 spacer、radius、font、shadow 和 color 派生。
 - 辅助文本使用 `TText`，先由完整 `fontBodyLarge` 构造字号、行高、字重和均匀 leading，再合并 `TRateThemeData.textStyle`；颜色未配置时读取显式 `ColorScheme.onSurface`，最后回退 TDesign 文本 token。外层 Row 显式按中心对齐，星色继续使用 Rate Theme 与 warning/component token。
+- 0 分辅助文案使用 `textDisabledColor`；显式 Material `onSurface` 复用该 Token 的透明度，保持主题覆盖优先级。
+- Rate Demo 的尺寸、风格示例以 `spacer16` 分隔独立容器；线描色、竖向容器背景分别使用 `warningColor5`、`bgColorContainer`。
 - 移除整星填充和文案解析中的不可达或重复防御分支。
 - 通过单一交互生命周期标记合并 tap/drag 识别器的开始事件，指针取消时以当前受控值结束，避免重复开始或提交未确认值。
 - Semantics 同时保留数值和辅助文案，确保半星相邻值可区分。

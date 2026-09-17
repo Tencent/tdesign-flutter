@@ -398,6 +398,49 @@ void main() {
       await tester.pump();
       expect(find.text('大箭头'), findsOneWidget);
     });
+
+    testWidgets('顶部与底部四角箭头定位点距气泡左右边缘 12px', (tester) async {
+      for (final placement in const [
+        TPopoverPlacement.topLeft,
+        TPopoverPlacement.topRight,
+        TPopoverPlacement.bottomLeft,
+        TPopoverPlacement.bottomRight,
+      ]) {
+        final controller = TPopoverController();
+        await tester.pumpWidget(
+          wrapWithTheme(
+            Center(
+              child: TPopoverAnchor(
+                controller: controller,
+                placement: placement,
+                content: SizedBox(
+                  width: 120,
+                  height: 40,
+                  child: Text(placement.name),
+                ),
+                builder: (context, controller, child) =>
+                    const SizedBox(width: 104, height: 40, child: Text('触发项')),
+              ),
+            ),
+          ),
+        );
+        controller.open();
+        await tester.pumpAndSettle();
+
+        final contentRect = tester.getRect(
+          find.byKey(const Key('t-popover-content')),
+        );
+        final arrowRect = tester.getRect(arrowContainerFinder());
+        if (placement == TPopoverPlacement.topLeft ||
+            placement == TPopoverPlacement.bottomLeft) {
+          expect(arrowRect.left - contentRect.left, 12);
+        } else {
+          expect(contentRect.right - arrowRect.right, 12);
+        }
+        controller.close();
+        await tester.pump();
+      }
+    });
   });
 
   // ============================================================

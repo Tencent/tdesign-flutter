@@ -3,20 +3,20 @@ Widget _leftMultiAction(BuildContext context) {
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
         key: const Key('navbar-demo-left-multi-action'),
-        title: const Text(titleText),
+        title: const Text('标题文字'),
         useDefaultBack: true,
         leading: [
           TNavBarItem(
             icon: TIcons.close,
             iconSize: 24,
-            onTap: () => _showAction(context, '关闭'),
+            onTap: () => TToast.showText('点击了关闭', context: context),
           ),
         ],
         actions: [
           TNavBarItem(
             icon: TIcons.ellipsis,
             iconSize: 24,
-            onTap: () => _showAction(context, '更多'),
+            onTap: () => TToast.showText('点击了更多', context: context),
           ),
         ],
       ),

@@ -35,7 +35,7 @@ enum TDividerAlign {
 /// - 模式 B（线 + 中间）：[layout] 为 horizontal 且 [child] 非空
 ///
 /// 竖线（[TDividerLayout.vertical]）时强制忽略 [dashed]、[align]、[child]，
-/// 默认高度 14dp，左右外边距 8dp。
+/// 默认高度 14dp，左右外边距 16dp。
 ///
 /// 示例：
 /// ```dart
@@ -97,7 +97,7 @@ class TDivider extends StatelessWidget {
           effectiveLayout,
           dividerTheme.space,
           effectiveThickness,
-          token.spacer8,
+          token.spacer16,
         );
     final contentFont = token.fontBodySmall;
     final defaultTextStyle = TextStyle(
@@ -256,7 +256,7 @@ class TDivider extends StatelessWidget {
     TDividerLayout layout,
     double? materialSpace,
     double thickness,
-    double spacer8,
+    double spacer16,
   ) {
     if (materialSpace != null) {
       final side = ((materialSpace - thickness) / 2)
@@ -268,6 +268,6 @@ class TDivider extends StatelessWidget {
     }
     return layout == TDividerLayout.horizontal
         ? const EdgeInsets.symmetric(vertical: 10)
-        : EdgeInsets.symmetric(horizontal: spacer8);
+        : EdgeInsets.symmetric(horizontal: spacer16);
   }
 }

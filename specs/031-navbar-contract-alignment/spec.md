@@ -54,7 +54,11 @@ NavBar 需要同时对照新版 Figma 的 H5/Flutter 专属移动画板、小程
 - `titleColor`、`backIconColor`、`backgroundColor`、`padding`、`titleMargin`、`opacity`、`border`、`boxShadow` 仍可由 `TNavBarThemeData` 提供子树默认值；标题字体、字重和显式前景色由传入的 `title` Widget 自身样式控制。`titleColor` 只作为标题未自带颜色时的默认值；`TText` 会解析自身默认正文色，需通过 `TText.textColor` 显式接入 NavBar 的目标颜色。
 - 解析优先级为构造器 > `TNavBarThemeData` > Material `AppBarTheme`（对应字段）> TDesign 语义 Token。
 - `TNavBarBorder` 只定义边框的颜色、宽度、圆角与内边距，不决定是否启用边框模式。
-- `TNavBarThemeData.copyWith` 区分参数未传与显式 `null`，允许清除任一 nullable 子树默认值。
+- `TNavBarThemeData.copyWith` 保持 Flutter 常见的类型安全语义：只替换非空参数，
+  省略或传入 `null` 均保留原值；需要清除配置时重新构造 ThemeData，只传入仍需保留的字段。
+- Theme 动画对固定默认值（`titleMargin = 16`、`opacity = 1`）和两端显式配置的
+  `padding`、边框、阴影做连续插值；依赖运行时 Material/TDesign Theme 的 nullable
+  颜色或间距在任一端未配置时离散切换，避免把 `null` 错当成透明色或零间距。
 
 ### Demo
 
@@ -71,6 +75,9 @@ NavBar 需要同时对照新版 Figma 的 H5/Flutter 专属移动画板、小程
 - `title` 从 `String?` 改为 `Widget?`，并移除 `titleWidget`；文本调用迁移为 `title: Text('...')`，自定义标题直接迁移到 `title`。
 - 提供 `onBack` 后不再自动执行 `Navigator.maybePop`；仍需自动返回的调用方应在回调中自行调用 pop，或不提供 `onBack`。
 - 移除仅服务组件内部渲染的 `TBarItemAction` 与 `TNavBarItem.toWidget`；操作回调改用 Flutter 标准 `VoidCallback`。
+- `TNavBarThemeData.copyWith` 参数由 `Object?` 收敛为实际字段类型；合法的颜色、间距、
+  边框和阴影调用无需迁移。过去使用 `copyWith(field: null)` 清除字段的调用，需改为
+  重新构造 `TNavBarThemeData`。
 
 ## 验收标准
 

@@ -108,3 +108,13 @@ flutter test --no-pub test/picker_demo_test.dart test/picker_demo_golden_test.da
 - Flutter 3.47：`dart analyze --fatal-infos`，无诊断。
 - Flutter 3.32 隔离环境：Picker 与 DateTimePicker 登记测试共 182 项通过；Picker 生产代码覆盖率 97.51%。
 - Picker 与 DateTimePicker 深浅色 Demo Golden 共 34 项通过，原基线无变化。
+
+## develop 视觉复核与选项居中修复（2026-09-14）
+
+- 基线固定为 `origin/develop@5d75a033d`。Chrome 中重新读取当前 Figma 文件：移动端展示01为 375×776、移动端展示02为 375×812；选项文字节点使用 Body/Large 16/24，选项变体为 64×24 且水平居中。Picker 弹层继续使用 58px 标题栏、200px 滚轮、5 项和 40px 单项。
+- Android 16 真机分别运行 develop 基线与修复版。基线截图像素扫描显示 40px 选中条内中文墨迹中心因默认 proportional leading 比几何中心低 2–3 物理像素（约 0.6–0.9 逻辑像素）；组件默认改为 `TextLeadingDistribution.even` 后偏差收敛为 0.5–1 物理像素且方向不再偏下。修复版五个入口的深浅色展开截图、取消/确认、代码面板和滚轮交互均通过；调用方显式 leadingDistribution 仍优先，不增加平台判断或平移常量。
+- 地区 Demo 的选中项上下候选改为设计稿顺序：天津/北京/广东/湖南/湖北，广州/韶关/深圳/珠海/汕头，宝安区/南山区/福田区/罗湖区/光明区；保持 TPickerLinked 和初值 `广东 深圳 福田区`。新增精确数据回归，并扩充 Picker 独立 Golden 字体子集。
+- Flutter 3.32.0 与 3.47.0 严格 analyze 均无问题；两版本各通过 68 项 Picker/DateTimePicker 共享组件测试。Picker Demo 新增深浅色五入口统一几何断言后，两版本的 12 项测试均通过。Flutter 3.32.0 生产覆盖率 394/404 = 97.52%。
+- Flutter 3.32.0 Linux 首次无更新参数只在地区弹层产生预期数据差异；检查 master/test/diff 后更新 8 张地区打开/联动深浅色基线。完整 Demo 复核又发现关闭态 Figma 画板为 375×776、旧 Golden 为 375×812；首次无更新复跑仅两张整页图因尺寸不等失败，检查实际图后更新深浅色整页基线。五个打开态其余 8 张基线未变化。
+- iPhone 16 / iOS 18.2 模拟器使用 Flutter 3.32.0 真实运行通过，逐个点击五个入口并保存浅色、深色共 10 张展开态截图；另保存整页与代码面板截图。所有展开态均为 58px 标题栏、200px 滚轮和 40px 单项；选中条内字形墨迹中心相对几何中心偏差为 0.17–0.33 逻辑像素。设备截图只作为 Figma 人工像素测量证据，不写回 Linux Golden。
+- Picker 视觉回归共 14 个 Golden 测试、18 张图片：375×776 完整页面 2 张、375×812 五个展开态深浅色 10 张、地区三级联动深浅色 6 张。最终在 Flutter 3.32.0 Linux 离线环境以无更新参数精确复跑，全部通过、差异为 0。

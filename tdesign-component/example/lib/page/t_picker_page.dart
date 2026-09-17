@@ -65,33 +65,30 @@ class _TPickerPageState extends State<TPickerPage> {
       value: 'guangdong',
       children: [
         TPickerOption(
-          label: '潮州',
-          value: 'chaozhou',
-          children: [TPickerOption(label: '湘桥区', value: 'xiangqiao')],
+          label: '广州',
+          value: 'guangzhou',
+          children: [TPickerOption(label: '天河区', value: 'tianhe')],
         ),
         TPickerOption(
-          label: '东莞',
-          value: 'dongguan',
-          children: [TPickerOption(label: '东城街道', value: 'dongcheng')],
+          label: '韶关',
+          value: 'shaoguan',
+          children: [TPickerOption(label: '浈江区', value: 'zhenjiang')],
         ),
         TPickerOption(
           label: '深圳',
           value: 'shenzhen',
           children: [
-            TPickerOption(label: '罗湖区', value: 'luohu'),
+            TPickerOption(label: '宝安区', value: 'baoan'),
             TPickerOption(label: '南山区', value: 'nanshan'),
             TPickerOption(label: '福田区', value: 'futian'),
-            TPickerOption(label: '宝安区', value: 'baoan'),
-            TPickerOption(label: '龙岗区', value: 'longgang'),
+            TPickerOption(label: '罗湖区', value: 'luohu'),
+            TPickerOption(label: '光明区', value: 'guangming'),
           ],
         ),
         TPickerOption(
-          label: '广州',
-          value: 'guangzhou',
-          children: [
-            TPickerOption(label: '天河区', value: 'tianhe'),
-            TPickerOption(label: '越秀区', value: 'yuexiu'),
-          ],
+          label: '珠海',
+          value: 'zhuhai',
+          children: [TPickerOption(label: '香洲区', value: 'xiangzhou')],
         ),
         TPickerOption(
           label: '汕头',
@@ -101,24 +98,24 @@ class _TPickerPageState extends State<TPickerPage> {
       ],
     ),
     TPickerOption(
-      label: '浙江',
-      value: 'zhejiang',
+      label: '湖南',
+      value: 'hunan',
       children: [
         TPickerOption(
-          label: '杭州',
-          value: 'hangzhou',
-          children: [TPickerOption(label: '西湖区', value: 'xihu')],
+          label: '长沙',
+          value: 'changsha',
+          children: [TPickerOption(label: '岳麓区', value: 'yuelu')],
         ),
       ],
     ),
     TPickerOption(
-      label: '河北',
-      value: 'hebei',
+      label: '湖北',
+      value: 'hubei',
       children: [
         TPickerOption(
-          label: '石家庄',
-          value: 'shijiazhuang',
-          children: [TPickerOption(label: '长安区', value: 'changan')],
+          label: '武汉',
+          value: 'wuhan',
+          children: [TPickerOption(label: '武昌区', value: 'wuchang')],
         ),
       ],
     ),
@@ -230,43 +227,38 @@ class _TPickerPageState extends State<TPickerPage> {
       String? title,
     }) {
       var draft = List<Object?>.of(value);
-      TPopup.show(
+      TPickerPopup.show(
         context,
-        options: TPopupOptions.bottom(
-          height:
-              (Theme.of(context).extension<TPickerThemeData>()?.height ?? 200) +
-              TPopupHeader.headerHeight,
-          headerBuilder: (_, close) => TPopupHeader(
-            cancelButton: TToolbarPressable(
-              onTap: close,
-              child: TText(
-                '取消',
-                font: context.tTheme.fontBodyLarge,
-                textColor: context.tTheme.textColorSecondary,
-              ),
-            ),
-            title: title == null
-                ? null
-                : TText(title, font: context.tTheme.fontTitleLarge),
-            confirmButton: TToolbarPressable(
-              onTap: () {
-                onConfirm(List<Object?>.of(draft));
-                close();
-              },
-              child: TText(
-                '确定',
-                font: context.tTheme.fontBodyLarge,
-                textColor: context.tTheme.brandNormalColor,
-              ),
+        headerBuilder: (_, close) => TPopupHeader(
+          cancelButton: TToolbarPressable(
+            onTap: close,
+            child: TText(
+              '取消',
+              font: context.tTheme.fontBodyLarge,
+              textColor: context.tTheme.textColorSecondary,
             ),
           ),
-          child: StatefulBuilder(
-            builder: (_, setPopupState) => TPicker(
-              key: pickerKey,
-              items: items,
-              value: draft,
-              onChanged: (value) => setPopupState(() => draft = value.values),
+          title: title == null
+              ? null
+              : TText(title, font: context.tTheme.fontTitleLarge),
+          confirmButton: TToolbarPressable(
+            onTap: () {
+              onConfirm(List<Object?>.of(draft));
+              close();
+            },
+            child: TText(
+              '确定',
+              font: context.tTheme.fontBodyLarge,
+              textColor: context.tTheme.brandNormalColor,
             ),
+          ),
+        ),
+        child: StatefulBuilder(
+          builder: (_, setPopupState) => TPicker(
+            key: pickerKey,
+            items: items,
+            value: draft,
+            onChanged: (value) => setPopupState(() => draft = value.values),
           ),
         ),
       );
