@@ -704,6 +704,11 @@ const componentTestManifests = <ComponentTestManifest>[
     exampleTests: ['test/table_page_test.dart'],
     visualTests: [
       VisualTestManifest(
+        name: 'Table API states',
+        workingDirectory: '.',
+        testFiles: ['test/components/table/t_table_golden_test.dart'],
+      ),
+      VisualTestManifest(
         name: 'Table Demo',
         workingDirectory: 'example',
         testFiles: ['test/table_demo_golden_test.dart'],

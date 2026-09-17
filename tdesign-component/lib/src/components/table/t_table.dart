@@ -721,15 +721,13 @@ class _TTableState<T> extends State<TTable<T>> {
           cellContext.columnIndex == paneStart,
       trailingBoundary:
           column.fixed == TTableColumnFixed.left && cellEnd == paneEnd,
-      child: !hasTap
-          ? content
-          : InkWell(
-              onTap: () {
-                widget.onCellTap?.call(cellContext);
-                widget.onRowTap?.call(cellContext.rowIndex, cellContext.row);
-              },
-              child: content,
-            ),
+      onTap: !hasTap
+          ? null
+          : () {
+              widget.onCellTap?.call(cellContext);
+              widget.onRowTap?.call(cellContext.rowIndex, cellContext.row);
+            },
+      child: content,
     );
   }
 
@@ -744,17 +742,27 @@ class _TTableState<T> extends State<TTable<T>> {
     Color? backgroundColor,
     bool leadingBoundary = false,
     bool trailingBoundary = false,
+    VoidCallback? onTap,
   }) {
     final alignment = switch (align) {
       TTableColumnAlign.left => Alignment.centerLeft,
       TTableColumnAlign.center => Alignment.center,
       TTableColumnAlign.right => Alignment.centerRight,
     };
+    final content = Padding(
+      padding: theme?.cellPadding ?? const EdgeInsets.symmetric(horizontal: 16),
+      child: ClipRect(
+        child: DefaultTextStyle.merge(
+          style: _textStyle(context, header: header),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          child: child,
+        ),
+      ),
+    );
     return Container(
       width: width,
       height: height,
-      alignment: alignment,
-      padding: theme?.cellPadding ?? const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: backgroundColor,
         border: _cellBorder(
@@ -764,14 +772,12 @@ class _TTableState<T> extends State<TTable<T>> {
           trailingBoundary: trailingBoundary,
         ),
       ),
-      child: ClipRect(
-        child: DefaultTextStyle.merge(
-          style: _textStyle(context, header: header),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          child: child,
-        ),
-      ),
+      child: onTap == null
+          ? Align(alignment: alignment, child: content)
+          : InkWell(
+              onTap: onTap,
+              child: Align(alignment: alignment, child: content),
+            ),
     );
   }
 
