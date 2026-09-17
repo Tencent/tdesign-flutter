@@ -232,11 +232,11 @@ const demoGoldenCoverage = <DemoGoldenCoverage>[
     states: [
       'initial',
       'sort ascending and descending',
-      'selection changed',
-      'fixed columns scrolled',
-      'max height scrolled',
+      'horizontal table scrolled',
+      'fixed first column scrolled',
+      'fixed last column scrolled',
     ],
-    rationale: '排序、选择和两个滚动容器均由真实操作固定；加载、空态和样式直接展示在初始页。',
+    rationale: '排序、横向滚动和固定首尾列均由真实操作固定；其他样式直接展示在初始页。',
   ),
   DemoGoldenCoverage(
     component: 'skeleton',

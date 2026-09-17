@@ -177,6 +177,42 @@ void main() {
         ),
       );
       expect(find.byType(TIndexes), findsOneWidget);
+      expect(
+        tester.widget<TIndexes>(find.byType(TIndexes)).useSafeArea,
+        isFalse,
+      );
+      final rootContainer = tester.widget<Container>(
+        find
+            .descendant(
+              of: find.byType(TIndexes),
+              matching: find.byType(Container),
+            )
+            .first,
+      );
+      expect(rootContainer.child, isA<Stack>());
+    });
+
+    testWidgets('显式开启时使用 SafeArea 避让系统区域', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TIndexes(
+            indexList: const ['A', 'B'],
+            useSafeArea: true,
+            builderContent: (context, index) =>
+                ListTile(title: Text('内容$index')),
+          ),
+        ),
+      );
+
+      final rootContainer = tester.widget<Container>(
+        find
+            .descendant(
+              of: find.byType(TIndexes),
+              matching: find.byType(Container),
+            )
+            .first,
+      );
+      expect(rootContainer.child, isA<SafeArea>());
     });
 
     testWidgets('侧边索引默认视觉使用 token 尺寸、颜色和字体', (tester) async {

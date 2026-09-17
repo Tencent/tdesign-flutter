@@ -640,19 +640,6 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
-    name: 'table',
-    coverageTargets: ['lib/src/components/table/'],
-    componentTests: ['test/components/table/t_table_test.dart'],
-    exampleTests: ['test/table/table_demo_test.dart'],
-    visualTests: [
-      VisualTestManifest(
-        name: 'Table Demo',
-        workingDirectory: 'example',
-        testFiles: ['test/table/table_demo_test.dart'],
-      ),
-    ],
-  ),
-  ComponentTestManifest(
     name: 'skeleton',
     coverageTargets: ['lib/src/components/skeleton/'],
     componentTests: ['test/components/skeleton/t_skeleton_test.dart'],
@@ -802,6 +789,28 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Radio Demo',
         workingDirectory: 'example',
         testFiles: ['test/radio/radio_page_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'table',
+    coverageTargets: ['lib/src/components/table/'],
+    componentTests: ['test/components/table/t_table_test.dart'],
+    exampleTests: ['test/table/table_page_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Table API states',
+        workingDirectory: '.',
+        testFiles: ['test/components/table/t_table_golden_test.dart'],
+        kind: VisualTestKind.component,
+      ),
+      VisualTestManifest(
+        name: 'Table Demo',
+        workingDirectory: 'example',
+        testFiles: [
+          'test/table/table_demo_golden_test.dart',
+          'test/table/table_interaction_golden_test.dart',
+        ],
       ),
     ],
   ),

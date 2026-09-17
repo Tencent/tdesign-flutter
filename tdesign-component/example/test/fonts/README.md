@@ -5,7 +5,7 @@
 缺少 CJK fallback 而把中文渲染成缺字符号。字符清单见
 `component_demo_glyphs.txt`；上游为 Noto Sans SC 2.004，子集工具为
 HarfBuzz 11.4.5，子集 SHA-256 为
-`d66ad15ca83f8f88d717840c0802ff56cc34d967caedc59a4411475f1a776de6`。
+`de3fede62f0ed5ed7cd0457860777af7cafb826f03c90b483ff598734b3e15dc`。
 它不会打包进 Example 或组件产物。
 
 共享 Demo Golden 工具统一加载 Roboto、Material Icons、Cupertino Icons、
@@ -31,11 +31,11 @@ NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 新增文案的补充 fallback。它排在原字体之后，避免扩充原字体改变 Button、Checkbox、
 Upload 等既有 Golden 的字形选择与像素基线。
 
-`TableGoldenCJK-Regular.otf` 仅补充 Table 整页 Golden 的公开标题、列名、状态与
-测试说明字形，字符清单见 `table_demo_glyphs.txt`。它作为 Table Demo 最后的独立
-fallback，不改变其他组件既有基线；上游为下方记录的 Noto Sans SC 2.004，子集工具为
-HarfBuzz 11.4.5，子集 SHA-256 为
-`7a0e3fec2307b0d132e25032734c9d4895dedee1c7dfcdc2d27e41ca43925aa9`。
+`TableGoldenCJK-Regular.otf` 仅补充 Table 整页 Golden 的公开说明、场景标题与
+单元格文案，字符清单见 `table_demo_glyphs.txt`。它作为 Table Demo 最后的专用
+fallback，不改变其他页面既有字形选择；使用 Noto Sans SC 2.004 与
+fonttools 4.59.1 生成，子集 SHA-256 为
+`f496cbf68c3d2d6a365a90f555bc7944609e2a3b9bf559b111149b47e4d4ee7d`。
 
 `TreeSelectGoldenCJK-Regular.otf` 仅补充 TreeSelect 整页 Golden 新增且既有子集
 未覆盖的字形，字符清单见 `tree_select_demo_glyphs.txt`，不会改变既有组件基线。
