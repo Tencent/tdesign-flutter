@@ -7,16 +7,16 @@
 | actions | List<TNavBarItem>? | - | 右侧操作项（对齐 AppBar.actions） |
 | backgroundColor | Color? | - | 背景颜色 |
 | backIconColor | Color? | - | 左边返回图标颜色 |
-| belowTitleWidget | Widget? | - | NavBar 下方的 Widget |
-| border | TNavBarBorder? | - | 操作项边框配置 |
+| belowTitleWidget | Widget? | - | NavBar 标题区域下方的 Widget。 该内容位于 `height` 所定义的内容高度内；内容较高时，调用方需要同步增大 `height`，避免挤压标题栏。 |
+| border | TNavBarBorder? | - | 操作项边框配置，仅在 `useBorderStyle` 为 true 时生效。 |
 | boxShadow | List<BoxShadow>? | - | 底部阴影 |
 | centerTitle | bool | true | 标题是否居中 |
-| flexibleSpace | Widget? | - | 固定背景 Widget |
+| flexibleSpace | Widget? | - | 固定背景 Widget。 位于导航栏内容下层；若 `backgroundColor` 完全不透明，背景内容不会透出。 |
 | height | double | 48 | 高度；作为 `PreferredSizeWidget.preferredSize` 的唯一高度来源 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | leading | List<TNavBarItem>? | - | 左侧操作项（对齐 AppBar.leading） |
-| onBack | VoidCallback? | - | 返回事件。 提供该回调时，由调用方完全接管返回行为；未提供时，默认返回按钮会执行 `Navigator.maybePop`。 |
-| opacity | double? | - | 透明度 |
+| onBack | VoidCallback? | - | 默认返回按钮的点击事件。 仅在 `useDefaultBack` 为 true 时生效。提供该回调时，由调用方完全接管返回 行为；未提供时，默认返回按钮会执行 `Navigator.maybePop`。 |
+| opacity | double? | - | 背景颜色透明度，默认 1。 |
 | padding | EdgeInsetsGeometry? | - | 内部填充 |
 | title | Widget? | - | 标题控件。 文本标题可传入 `Text`，用法与 `AppBar.title` 一致。 标题自身的显式文本样式优先于 NavBar 提供的默认标题样式；例如 `TText` 默认会解析正文颜色，如需使用 `titleColor`，请通过 `TText.textColor` 传入相同颜色，或改用未显式设置颜色的 `Text`。 |
 | titleColor | Color? | - | 标题的默认颜色。 仅在 `title` 未自行提供前景色时生效。标题 Widget 自身的显式颜色优先； `TText` 会解析默认正文色，因此使用 `TText` 时可通过 `TText.textColor` 明确传入所需颜色。 |
@@ -34,6 +34,6 @@
 | customWidget | Widget? | - | 自定义组件，优先级高于 icon，可以是任意 Widget |
 | icon | IconData? | - | 图标 |
 | iconColor | Color? | - | 图标颜色 |
-| iconSize | double? | 24.0 | 图标尺寸 |
+| iconSize | double? | 24.0 | 图标尺寸，默认 24；显式传入 null 时由当前 `IconTheme` 决定。 |
 | onTap | VoidCallback? | - | 点击回调；`null` 表示禁用 |
 | padding | EdgeInsetsGeometry? | - | 内部填充 |

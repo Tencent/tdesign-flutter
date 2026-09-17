@@ -8,4 +8,6 @@
 - [x] DONE 建立并人工核对组件、Demo、共享导航 light/dark 严格 Golden
 - [x] DONE 执行双 SDK analyze、覆盖率、生成检查和构建
 - [x] DONE 最终代码 Android 真机 Hot Restart、可见操作与普通 APK 持久安装
+- [x] DONE 修复 TNavBarThemeData 类型安全与连续视觉字段插值
+- [x] DONE 补齐 dartdoc、站点文档及可独立理解的 Demo 代码片段
 - [ ] TODO 独立 GitHub / CNB PR、#1027 NavBar 条目与 CodeBuddy Review

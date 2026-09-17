@@ -8,7 +8,7 @@ Widget _titleBelowNavbar(BuildContext context) {
         belowTitleWidget: SizedBox(
           height: 36,
           child: TText(
-            titleText,
+            '标题文字',
             font: Font(size: 28, lineHeight: 36),
             fontWeight: FontWeight.w600,
           ),
@@ -20,19 +20,19 @@ Widget _titleBelowNavbar(BuildContext context) {
           TNavBarItem(
             icon: TIcons.chevron_left,
             iconSize: 24,
-            onTap: () => _showAction(context, '返回'),
+            onTap: () => TToast.showText('点击了返回', context: context),
           ),
         ],
         actions: [
           TNavBarItem(
             icon: TIcons.home,
             iconSize: 24,
-            onTap: () => _showAction(context, '首页'),
+            onTap: () => TToast.showText('点击了首页', context: context),
           ),
           TNavBarItem(
             icon: TIcons.ellipsis,
             iconSize: 24,
-            onTap: () => _showAction(context, '更多'),
+            onTap: () => TToast.showText('点击了更多', context: context),
           ),
         ],
       ),

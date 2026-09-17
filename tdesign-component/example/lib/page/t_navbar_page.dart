@@ -3,14 +3,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../base/example_widget.dart';
 import '../annotation/example_code.dart';
 
-const titleText = '标题文字';
-
 class TNavBarPage extends StatelessWidget {
   const TNavBarPage({Key? key}) : super(key: key);
-
-  void _showAction(BuildContext context, String label) {
-    TToast.showText('点击了$label', context: context);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +77,7 @@ class TNavBarPage extends StatelessWidget {
   Widget _baseH5Navbar(BuildContext context) {
     return const TNavBar(
       key: Key('navbar-demo-base'),
-      title: Text(titleText),
+      title: Text('标题文字'),
       useDefaultBack: true,
     );
   }
@@ -94,20 +88,20 @@ class TNavBarPage extends StatelessWidget {
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
         key: const Key('navbar-demo-left-multi-action'),
-        title: const Text(titleText),
+        title: const Text('标题文字'),
         useDefaultBack: true,
         leading: [
           TNavBarItem(
             icon: TIcons.close,
             iconSize: 24,
-            onTap: () => _showAction(context, '关闭'),
+            onTap: () => TToast.showText('点击了关闭', context: context),
           ),
         ],
         actions: [
           TNavBarItem(
             icon: TIcons.ellipsis,
             iconSize: 24,
-            onTap: () => _showAction(context, '更多'),
+            onTap: () => TToast.showText('点击了更多', context: context),
           ),
         ],
       ),
@@ -120,18 +114,18 @@ class TNavBarPage extends StatelessWidget {
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
         key: const Key('navbar-demo-right-multi-action'),
-        title: const Text(titleText),
+        title: const Text('标题文字'),
         useDefaultBack: true,
         actions: [
           TNavBarItem(
             icon: TIcons.home,
             iconSize: 24,
-            onTap: () => _showAction(context, '首页'),
+            onTap: () => TToast.showText('点击了首页', context: context),
           ),
           TNavBarItem(
             icon: TIcons.ellipsis,
             iconSize: 24,
-            onTap: () => _showAction(context, '更多'),
+            onTap: () => TToast.showText('点击了更多', context: context),
           ),
         ],
       ),
@@ -159,12 +153,12 @@ class TNavBarPage extends StatelessWidget {
         TNavBarItem(
           icon: TIcons.home,
           iconSize: 24,
-          onTap: () => _showAction(context, '首页'),
+          onTap: () => TToast.showText('点击了首页', context: context),
         ),
         TNavBarItem(
           icon: TIcons.ellipsis,
           iconSize: 24,
-          onTap: () => _showAction(context, '更多'),
+          onTap: () => TToast.showText('点击了更多', context: context),
         ),
       ],
     );
@@ -186,12 +180,12 @@ class TNavBarPage extends StatelessWidget {
         TNavBarItem(
           icon: TIcons.home,
           iconSize: 24,
-          onTap: () => _showAction(context, '首页'),
+          onTap: () => TToast.showText('点击了首页', context: context),
         ),
         TNavBarItem(
           icon: TIcons.ellipsis,
           iconSize: 24,
-          onTap: () => _showAction(context, '更多'),
+          onTap: () => TToast.showText('点击了更多', context: context),
         ),
       ],
     );
@@ -200,18 +194,18 @@ class TNavBarPage extends StatelessWidget {
   @ExampleCode(group: 'navbar')
   Widget _titleCenterNavbar(BuildContext context) {
     return TNavBar(
-      title: const Text(titleText),
+      title: const Text('标题文字'),
       useDefaultBack: true,
       actions: [
         TNavBarItem(
           icon: TIcons.home,
           iconSize: 24,
-          onTap: () => _showAction(context, '首页'),
+          onTap: () => TToast.showText('点击了首页', context: context),
         ),
         TNavBarItem(
           icon: TIcons.ellipsis,
           iconSize: 24,
-          onTap: () => _showAction(context, '更多'),
+          onTap: () => TToast.showText('点击了更多', context: context),
         ),
       ],
     );
@@ -222,7 +216,7 @@ class TNavBarPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: TNavBar(
-        title: const Text(titleText),
+        title: const Text('标题文字'),
         centerTitle: false,
         titleMargin: 0,
         useDefaultBack: true,
@@ -230,12 +224,12 @@ class TNavBarPage extends StatelessWidget {
           TNavBarItem(
             icon: TIcons.home,
             iconSize: 24,
-            onTap: () => _showAction(context, '首页'),
+            onTap: () => TToast.showText('点击了首页', context: context),
           ),
           TNavBarItem(
             icon: TIcons.ellipsis,
             iconSize: 24,
-            onTap: () => _showAction(context, '更多'),
+            onTap: () => TToast.showText('点击了更多', context: context),
           ),
         ],
       ),
@@ -245,18 +239,18 @@ class TNavBarPage extends StatelessWidget {
   @ExampleCode(group: 'navbar')
   Widget _titleNormalNavbar(BuildContext context) {
     return TNavBar(
-      title: const Text(titleText),
+      title: const Text('标题文字'),
       useDefaultBack: true,
       actions: [
         TNavBarItem(
           icon: TIcons.home,
           iconSize: 24,
-          onTap: () => _showAction(context, '首页'),
+          onTap: () => TToast.showText('点击了首页', context: context),
         ),
         TNavBarItem(
           icon: TIcons.ellipsis,
           iconSize: 24,
-          onTap: () => _showAction(context, '更多'),
+          onTap: () => TToast.showText('点击了更多', context: context),
         ),
       ],
     );
@@ -273,7 +267,7 @@ class TNavBarPage extends StatelessWidget {
         belowTitleWidget: SizedBox(
           height: 36,
           child: TText(
-            titleText,
+            '标题文字',
             font: Font(size: 28, lineHeight: 36),
             fontWeight: FontWeight.w600,
           ),
@@ -285,19 +279,19 @@ class TNavBarPage extends StatelessWidget {
           TNavBarItem(
             icon: TIcons.chevron_left,
             iconSize: 24,
-            onTap: () => _showAction(context, '返回'),
+            onTap: () => TToast.showText('点击了返回', context: context),
           ),
         ],
         actions: [
           TNavBarItem(
             icon: TIcons.home,
             iconSize: 24,
-            onTap: () => _showAction(context, '首页'),
+            onTap: () => TToast.showText('点击了首页', context: context),
           ),
           TNavBarItem(
             icon: TIcons.ellipsis,
             iconSize: 24,
-            onTap: () => _showAction(context, '更多'),
+            onTap: () => TToast.showText('点击了更多', context: context),
           ),
         ],
       ),
@@ -307,10 +301,7 @@ class TNavBarPage extends StatelessWidget {
   @ExampleCode(group: 'navbar')
   Widget _setBgColorNavbar(BuildContext context) {
     return TNavBar(
-      title: const Text(
-        titleText,
-        style: TextStyle(fontWeight: FontWeight.w600),
-      ),
+      title: const Text('标题文字', style: TextStyle(fontWeight: FontWeight.w600)),
       titleColor: Colors.white,
       backgroundColor: context.tTheme.brandNormalColor,
       useDefaultBack: false,
@@ -319,7 +310,7 @@ class TNavBarPage extends StatelessWidget {
           icon: TIcons.chevron_left,
           iconSize: 24,
           iconColor: Colors.white,
-          onTap: () => _showAction(context, '返回'),
+          onTap: () => TToast.showText('点击了返回', context: context),
         ),
       ],
       actions: [
@@ -327,13 +318,13 @@ class TNavBarPage extends StatelessWidget {
           icon: TIcons.home,
           iconSize: 24,
           iconColor: Colors.white,
-          onTap: () => _showAction(context, '首页'),
+          onTap: () => TToast.showText('点击了首页', context: context),
         ),
         TNavBarItem(
           icon: TIcons.ellipsis,
           iconSize: 24,
           iconColor: Colors.white,
-          onTap: () => _showAction(context, '更多'),
+          onTap: () => TToast.showText('点击了更多', context: context),
         ),
       ],
     );

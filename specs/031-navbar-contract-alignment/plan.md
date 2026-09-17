@@ -7,6 +7,7 @@
 3. 公开 Demo 采用新版 Figma 的 H5/Flutter 画板，不绘制微信宿主胶囊；小程序用于校验尺寸、顺序和交互语义。
 4. 新增固定 `375 × 1318` 页面 Golden 和组件状态矩阵，并同步共享导航视觉基线。
 5. 最终代码在 Android 真机明确 Hot Restart，执行安全操作项、搜索、滚动和主题切换，再安装普通 Launcher APK。
+6. `TNavBarThemeData.copyWith` 使用字段实际类型；固定默认值及显式视觉字段按字段连续插值，动态 Theme 回退不伪造透明色或零值。
 
 ## 影响范围
 
@@ -24,12 +25,14 @@
 - `TNavBar.height` 改为非空 `double`，默认 48。
 - `TNavBar.useBorderStyle` 改为非空 `bool`，默认 `false`。
 - 移除 `TNavBarThemeData.useBorderStyle`。
+- `TNavBarThemeData.copyWith` 参数从 `Object?` 收敛为实际字段类型；`null` 按 Flutter 常见语义保留原值。
 
 ## 风险与取舍
 
 - 默认返回变化会影响未显式传参的页面，必须在更新日志标为 breaking 并给出迁移方式。
 - 微信宿主胶囊不属于 Flutter 组件所有权；伪造会制造错误的平台承诺，因此只记录视觉差异。
 - 页面 Golden 固定 Figma 视口，但系统状态栏不属于 Flutter `RepaintBoundary`，由真机截图补证。
+- `copyWith(field: null)` 不再清空字段；需要清空时重新构造 ThemeData，以换取公开 API 的静态类型安全。
 
 ## 验证策略
 
