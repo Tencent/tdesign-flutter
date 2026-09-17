@@ -56,8 +56,80 @@ void main() {
       expect(lerped.unSelectedBgColor, isA<Color>());
     });
 
+    test('lerp 对两端显式值执行连续插值', () {
+      const begin = TSideBarThemeData(
+        contentPadding: EdgeInsets.all(8),
+        selectedColor: Colors.black,
+        selectedTextStyle: TextStyle(fontSize: 12),
+      );
+      const end = TSideBarThemeData(
+        contentPadding: EdgeInsets.all(16),
+        selectedColor: Colors.white,
+        selectedTextStyle: TextStyle(fontSize: 16),
+      );
+
+      final lerped = begin.lerp(end, 0.5);
+      expect(lerped.contentPadding, const EdgeInsets.all(12));
+      expect(lerped.selectedColor, Color.lerp(Colors.black, Colors.white, 0.5));
+      expect(lerped.selectedTextStyle?.fontSize, 14);
+    });
+
     test('lerp other 非同类型时返回 this', () {
       expect(theme.lerp(null, 0.5), theme);
+    });
+
+    test('lerp 不把动态主题回退插值为透明色或零内边距', () {
+      const fallback = TSideBarThemeData();
+      const explicit = TSideBarThemeData(
+        contentPadding: EdgeInsets.all(16),
+        selectedColor: Colors.red,
+        unSelectedColor: Colors.grey,
+        selectedTextStyle: TextStyle(
+          color: Colors.red,
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+        selectedBgColor: Colors.blue,
+        unSelectedBgColor: Colors.white,
+      );
+
+      final beforeSwitch = fallback.lerp(explicit, 0.25);
+      expect(beforeSwitch.contentPadding, isNull);
+      expect(beforeSwitch.selectedColor, isNull);
+      expect(beforeSwitch.unSelectedColor, isNull);
+      expect(beforeSwitch.selectedTextStyle, isNull);
+      expect(beforeSwitch.selectedBgColor, isNull);
+      expect(beforeSwitch.unSelectedBgColor, isNull);
+
+      final reverseBeforeSwitch = explicit.lerp(fallback, 0.25);
+      expect(reverseBeforeSwitch.contentPadding, explicit.contentPadding);
+      expect(reverseBeforeSwitch.selectedColor, explicit.selectedColor);
+      expect(reverseBeforeSwitch.unSelectedColor, explicit.unSelectedColor);
+      expect(reverseBeforeSwitch.selectedTextStyle, explicit.selectedTextStyle);
+      expect(reverseBeforeSwitch.selectedBgColor, explicit.selectedBgColor);
+      expect(reverseBeforeSwitch.unSelectedBgColor, explicit.unSelectedBgColor);
+
+      final bothFallback = fallback.lerp(const TSideBarThemeData(), 0.5);
+      expect(bothFallback.contentPadding, isNull);
+      expect(bothFallback.selectedColor, isNull);
+      expect(bothFallback.selectedTextStyle, isNull);
+    });
+
+    test('ThemeData.lerp 不为动态回退制造临时显式样式', () {
+      final begin = ThemeData(extensions: const [TSideBarThemeData()]);
+      final end = ThemeData(
+        extensions: const [
+          TSideBarThemeData(
+            contentPadding: EdgeInsets.all(16),
+            selectedColor: Colors.red,
+          ),
+        ],
+      );
+
+      final theme = ThemeData.lerp(begin, end, 0.25);
+      final sideBarTheme = theme.extension<TSideBarThemeData>()!;
+      expect(sideBarTheme.contentPadding, isNull);
+      expect(sideBarTheme.selectedColor, isNull);
     });
   });
 }

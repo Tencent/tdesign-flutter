@@ -20,6 +20,14 @@
 | Android 16 最终真机 | 通过 | 设备集成 1/1；最终代码 Hot Restart、可见操作、普通 APK 持久安装 |
 | 公共 Demo 壳层隔离回归 | 3/3 通过 | ExamplePage 显式持有既有 Body 尺度 16/500，并从 TDesign Body Medium token 固定既有 22/14 行高度量；不继承 Material bodyMedium，Navbar 默认值与宿主主题变化不再污染其他组件 Golden |
 
+### 2026-09-17 API 复审补充
+
+- Flutter 3.32.0 与 3.47.0：Navbar 组件 62/62、Demo 5/5 通过；组件包与 Example `analyze --fatal-infos` 均无诊断。
+- 生产源码覆盖率：`TNavBar` / `TNavBarThemeData` LH/LF = 178/178 = 100%。
+- Flutter 3.32.0 Linux：Navbar Demo Golden 14/14 无更新参数通过，现有 PNG 无变化。
+- 示例代码生成与 `--check` 通过；10 个公开代码片段不再引用未展示的 `titleText` 或 `_showAction`。
+- API 生成完成，Navbar 生成文档与最新 dartdoc 一致；站点文档已移除旧版字段与失效示例。
+
 ## 人工验收
 
 - [x] 新版 Figma H5/Flutter 与小程序两张 `375 × 1318` 画板已分别读取
@@ -32,6 +40,8 @@
 - `useDefaultBack`、`height`、`useBorderStyle` 的默认值或可空性变化均属于公开 breaking contract，已在 Spec 给出迁移说明；仓库内未发现 `height: null`、`useBorderStyle: null` 或 `TNavBarThemeData(useBorderStyle: ...)` 调用残留。
 - `height` 是 `PreferredSizeWidget` 的实例结构契约，`useBorderStyle` 是实例结构选择器；两者不由 Theme 持有，避免双状态源。
 - Theme 只保留可继承视觉值；有效值优先级保持“构造器 > TNavBarThemeData > Material AppBarTheme > TDesign 语义 Token”。
+- `TNavBarThemeData.copyWith` 参数保持静态类型安全；固定默认值与两端显式视觉字段
+  在 Theme 动画中连续插值，依赖运行时 Theme 的 nullable 回退不被错误转换为透明色或零值。
 - 默认标题使用 Title Large 语义 Token（18/26/600），返回图标为 24；组件不复制小程序宿主胶囊、路由 delta、fixed 或 placeholder API。
 - 本轮未新增 `variant`、`status` 或 `colorScheme`，也未用字符串模拟枚举；禁用交互仍由 `onTap: null` 表达。
 

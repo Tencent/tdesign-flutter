@@ -440,11 +440,15 @@ const componentTestManifests = <ComponentTestManifest>[
       'lib/src/components/refresh/t_pull_down_refresh_texts.dart',
     ],
     componentTests: ['test/components/refresh/t_refresh_test.dart'],
+    exampleTests: [
+      'test/pull_down_refresh_demo_test.dart',
+      'test/pull_down_refresh_page_test.dart',
+    ],
     visualTests: [
       VisualTestManifest(
         name: 'PullDownRefresh Demo',
         workingDirectory: 'example',
-        testFiles: ['test/pull_down_refresh_demo_test.dart'],
+        testFiles: ['test/pull_down_refresh_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -540,6 +544,11 @@ const componentTestManifests = <ComponentTestManifest>[
           'test/components/navigation_components_golden_test.dart',
         ],
       ),
+      VisualTestManifest(
+        name: 'Tabs Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/tabs_page_golden_test.dart'],
+      ),
     ],
   ),
   ComponentTestManifest(
@@ -565,6 +574,19 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Skeleton Demo',
         workingDirectory: 'example',
         testFiles: ['test/skeleton_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
+    name: 'time_counter',
+    coverageTargets: ['lib/src/components/time_counter/'],
+    componentTests: ['test/components/time_counter/t_time_counter_test.dart'],
+    exampleTests: ['test/time_counter_page_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'TimeCounter Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/time_counter_demo_golden_test.dart'],
       ),
     ],
   ),
@@ -832,6 +854,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'form',
     coverageTargets: ['lib/src/components/form/'],
     componentTests: ['test/components/form/t_form_test.dart'],
+    exampleTests: ['test/form_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Form Demo',
@@ -859,11 +882,12 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'textarea',
     coverageTargets: ['lib/src/components/textarea/'],
     componentTests: ['test/components/textarea/t_textarea_test.dart'],
+    exampleTests: ['test/textarea_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Textarea Demo',
         workingDirectory: 'example',
-        testFiles: ['test/textarea_demo_test.dart'],
+        testFiles: ['test/textarea_page_golden_test.dart'],
       ),
     ],
   ),
@@ -887,11 +911,17 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/swipe_cell/t_swipe_cell_inherited_test.dart',
       'test/components/swipe_cell/t_swipe_cell_test.dart',
     ],
+    exampleTests: ['test/swipe_cell_demo_test.dart'],
     visualTests: [
+      VisualTestManifest(
+        name: 'SwipeCell actions',
+        workingDirectory: '.',
+        testFiles: ['test/components/swipe_cell/t_swipe_cell_golden_test.dart'],
+      ),
       VisualTestManifest(
         name: 'SwipeCell Demo',
         workingDirectory: 'example',
-        testFiles: ['test/swipe_cell_demo_test.dart'],
+        testFiles: ['test/swipe_cell_demo_golden_test.dart'],
       ),
     ],
   ),

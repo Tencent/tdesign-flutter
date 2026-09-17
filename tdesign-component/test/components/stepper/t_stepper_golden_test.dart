@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,16 +7,13 @@ void main() {
   setUpAll(() async {
     final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
       ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
-    final flutterBin =
-        File(Platform.resolvedExecutable).parent.parent.parent.parent.parent;
-    final robotoFile = File(
-      '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
-    );
-    final robotoFont = FontLoader('Roboto')
+    final numberFont = FontLoader('packages/tdesign_flutter/TCloudNumber')
       ..addFont(
-        robotoFile.readAsBytes().then(ByteData.sublistView),
+        rootBundle.load(
+          'packages/tdesign_flutter/assets/tdesign/TCloudNumberVF.ttf',
+        ),
       );
-    await Future.wait([iconFont.load(), robotoFont.load()]);
+    await Future.wait([iconFont.load(), numberFont.load()]);
   });
 
   Widget scene({required Brightness brightness}) {
@@ -29,7 +24,8 @@ void main() {
     final theme = baseTheme.mergeExtension(
       const TStepperThemeData(
         textStyle: TextStyle(
-          fontFamily: 'Roboto',
+          fontFamily: 'TCloudNumber',
+          package: 'tdesign_flutter',
         ),
       ),
     );

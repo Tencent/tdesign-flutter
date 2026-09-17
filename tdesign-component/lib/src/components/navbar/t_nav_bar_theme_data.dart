@@ -2,8 +2,6 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
-const _unset = Object();
-
 /// NavBar 边框配置（迁入 ThemeData）
 class TNavBarBorder {
   /// 边框宽度
@@ -48,10 +46,10 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
   /// 中间文案左右两边间距
   final double? titleMargin;
 
-  /// 透明度
+  /// 背景颜色透明度，未配置时为 1
   final double? opacity;
 
-  /// 操作项边框配置
+  /// 操作项边框配置，仅在 TNavBar.useBorderStyle 为 true 时生效
   final TNavBarBorder? border;
 
   /// 底部阴影
@@ -68,44 +66,31 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
     this.boxShadow,
   });
 
-  /// 返回只替换指定字段的新主题。
+  /// 返回只替换非空参数的新主题。
   ///
-  /// 省略参数会保留原值；显式传入 `null` 会清除对应配置，使组件继续回退到
-  /// Material Theme 或 TDesign Token。
+  /// 参数省略或传入 `null` 都会保留原值，符合 Flutter `copyWith` 的常见语义。
+  /// 如需清除某个配置并恢复下层 Theme 或 Token，请重新构造
+  /// [TNavBarThemeData]，只传入仍需保留的字段。
   @override
   TNavBarThemeData copyWith({
-    Object? titleColor = _unset,
-    Object? backIconColor = _unset,
-    Object? backgroundColor = _unset,
-    Object? padding = _unset,
-    Object? titleMargin = _unset,
-    Object? opacity = _unset,
-    Object? border = _unset,
-    Object? boxShadow = _unset,
+    Color? titleColor,
+    Color? backIconColor,
+    Color? backgroundColor,
+    EdgeInsetsGeometry? padding,
+    double? titleMargin,
+    double? opacity,
+    TNavBarBorder? border,
+    List<BoxShadow>? boxShadow,
   }) {
     return TNavBarThemeData(
-      titleColor: identical(titleColor, _unset)
-          ? this.titleColor
-          : titleColor as Color?,
-      backIconColor: identical(backIconColor, _unset)
-          ? this.backIconColor
-          : backIconColor as Color?,
-      backgroundColor: identical(backgroundColor, _unset)
-          ? this.backgroundColor
-          : backgroundColor as Color?,
-      padding: identical(padding, _unset)
-          ? this.padding
-          : padding as EdgeInsetsGeometry?,
-      titleMargin: identical(titleMargin, _unset)
-          ? this.titleMargin
-          : titleMargin as double?,
-      opacity: identical(opacity, _unset) ? this.opacity : opacity as double?,
-      border: identical(border, _unset)
-          ? this.border
-          : border as TNavBarBorder?,
-      boxShadow: identical(boxShadow, _unset)
-          ? this.boxShadow
-          : boxShadow as List<BoxShadow>?,
+      titleColor: titleColor ?? this.titleColor,
+      backIconColor: backIconColor ?? this.backIconColor,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      padding: padding ?? this.padding,
+      titleMargin: titleMargin ?? this.titleMargin,
+      opacity: opacity ?? this.opacity,
+      border: border ?? this.border,
+      boxShadow: boxShadow ?? this.boxShadow,
     );
   }
 
@@ -122,20 +107,30 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
         other.backgroundColor,
         t,
       ),
-      padding: t < 0.5 ? padding : other.padding,
-      titleMargin: _lerpNullableDouble(titleMargin, other.titleMargin, t),
-      opacity: _lerpNullableDouble(opacity, other.opacity, t),
-      border: t < 0.5 ? border : other.border,
-      boxShadow: t < 0.5 ? boxShadow : other.boxShadow,
+      padding: _lerpNullableInsets(padding, other.padding, t),
+      titleMargin: _lerpDoubleWithDefault(
+        titleMargin,
+        other.titleMargin,
+        t,
+        16,
+      ),
+      opacity: _lerpDoubleWithDefault(opacity, other.opacity, t, 1),
+      border: _lerpNavBarBorder(border, other.border, t),
+      boxShadow: BoxShadow.lerpList(boxShadow, other.boxShadow, t),
     );
   }
 }
 
-double? _lerpNullableDouble(double? begin, double? end, double t) {
-  if (begin == null || end == null) {
-    return t < 0.5 ? begin : end;
+double? _lerpDoubleWithDefault(
+  double? begin,
+  double? end,
+  double t,
+  double defaultValue,
+) {
+  if (begin == null && end == null) {
+    return null;
   }
-  return lerpDouble(begin, end, t);
+  return lerpDouble(begin ?? defaultValue, end ?? defaultValue, t);
 }
 
 Color? _lerpNullableColor(Color? begin, Color? end, double t) {
@@ -143,4 +138,43 @@ Color? _lerpNullableColor(Color? begin, Color? end, double t) {
     return t < 0.5 ? begin : end;
   }
   return Color.lerp(begin, end, t);
+}
+
+EdgeInsetsGeometry? _lerpNullableInsets(
+  EdgeInsetsGeometry? begin,
+  EdgeInsetsGeometry? end,
+  double t,
+) {
+  if (begin == null || end == null) {
+    return t < 0.5 ? begin : end;
+  }
+  return EdgeInsetsGeometry.lerp(begin, end, t);
+}
+
+TNavBarBorder? _lerpNavBarBorder(
+  TNavBarBorder? begin,
+  TNavBarBorder? end,
+  double t,
+) {
+  if (begin == null && end == null) {
+    return null;
+  }
+  if (t == 0) {
+    return begin;
+  }
+  if (t == 1) {
+    return end;
+  }
+  final effectiveBegin = begin ?? const TNavBarBorder();
+  final effectiveEnd = end ?? const TNavBarBorder();
+  return TNavBarBorder(
+    width: lerpDouble(effectiveBegin.width, effectiveEnd.width, t)!,
+    radius: lerpDouble(effectiveBegin.radius, effectiveEnd.radius, t)!,
+    color: _lerpNullableColor(effectiveBegin.color, effectiveEnd.color, t),
+    padding: _lerpNullableInsets(
+      effectiveBegin.padding,
+      effectiveEnd.padding,
+      t,
+    ),
+  );
 }

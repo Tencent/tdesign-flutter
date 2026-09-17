@@ -13,11 +13,13 @@ Widget _commandDialog(BuildContext context) {
             TDialogAction(
               child: Text('取消'),
               result: _DialogCommandResult.cancel,
+              variant: TButtonVariant.text,
             ),
             TDialogAction(
               child: Text('确定'),
               role: TDialogActionRole.primary,
               result: _DialogCommandResult.confirm,
+              variant: TButtonVariant.text,
             ),
           ],
         ),

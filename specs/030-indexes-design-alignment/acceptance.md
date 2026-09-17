@@ -1,8 +1,17 @@
 # Indexes 验收记录
 
+## 2026-09-17 Theme 中间态修复
+
+- 修复前在 `develop@5eeaf357` 上通过聚焦测试复现：`indexListMaxHeight`、`indexItemSize`、`indexItemSpacing`、`tipMaxWidth` 从 `null` 过渡到显式值时，`t=0.25` 仍为 `null`，在 50% 切换点发生可见尺寸跳变。
+- 修复后上述字段分别从运行时固定默认值 0.8、20、2、99 连续插值；颜色、token 尺寸和字体等动态回退字段仍在一端为 `null` 时保持回退语义，不生成错误的临时覆盖。
+- 聚焦测试覆盖显式值、正反向 nullable、两侧 `null`、`t=0.25/0.75` 中间态及 `ThemeData.lerp` 集成路径。
+- Flutter 3.32.0 / 3.47.0 合并运行 Indexes 与 SideBar 完整组件回归均为 148/148；3.32.0 覆盖率中 Indexes 生产源码为 705/738（95.53%）。Linux Flutter 3.32.0 的相关 Demo Golden 与 SideBar 合并无更新复跑共 33/33，通过且无 PNG 变化。
+- 两个 SDK 对本次 4 个源码/测试文件严格 analyze 均为零诊断；整包 `--fatal-infos` 仍被 develop 既有、且均位于未改文件的 28 条 `RegExp` 弃用提示阻断，未在本 PR 扩大范围处理。
+
 ## 设计与交互证据
 
 - 新版 Figma 页面 `24386:5239` 及 375×812 展示帧已人工读取；组件集确认 8 个变体：number/a-z、normal/capsule、default/active。页面入口为“字母索引 / 数字索引 / 胶囊索引”三项。
+- 三个索引浮层显式启用 Popup 安全区；在 24dp 顶部系统区域下，索引内容从 y=24 开始，不再覆盖手机状态栏。
 - 已在小程序官网真实 WebView 点击“基础用法”：打开后默认定位 B，B 锚点和侧栏同时激活；源码确认点击与连续触摸选择、300ms 提示消退、页面级滚动约束。
 - 小程序 develop Demo 目前只有“基础用法 / 胶囊索引”，缺少新版 Figma 单列的普通数字索引，已作为跨端差异记录。Flutter Demo 优先对齐新版 Figma 三项布局；字母示例以 initialIndex=B 同步激活态与滚动位置，数字与胶囊示例使用 1,3,5,7,8,10,#。Flutter 保留内嵌 ScrollController 能力。
 

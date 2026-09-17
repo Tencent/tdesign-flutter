@@ -45,7 +45,7 @@
 2. **优先级解析**：在 `TSwipeCellAction.build` 中按 **P0 实例参数 > P1 组件 Theme > P4 Token（或内置兜底）** 解析：
    - 背景色：`backgroundColor` → `theme.actionBackgroundColor` → `null`
    - 图标色：`iconColor` → `theme.actionIconColor` → `labelStyle?.color` → `context.tTheme.textColorAnti`
-   - 文字样式：`labelStyle` → `theme.actionTextStyle` → `context.tTheme.fontMarkMedium` → 内置兜底
+   - 文字样式：`labelStyle` → `theme.actionTextStyle` → `context.tTheme.textColorAnti` + `fontMarkMedium` → 内置兜底；外层 `DefaultTextStyle` / Material `TextTheme` 可提供字号、字重等排版信息，但不能覆盖操作区默认反色文字
    - 图标尺寸：`iconSize` → `theme.actionIconSize` → `18`
    - 间距：`spacing` → `theme.actionSpacing` → `2`
 3. **DOM 对称**：图标与文字均以 `Flexible(fit: FlexFit.loose)` 包裹。
@@ -61,3 +61,4 @@
 - [ ] 二次确认支持按 `id` 匹配重建的等价 action；未配置 `id` 时保持实例引用匹配。
 - [ ] 新增测试通过，`flutter analyze` 无新增告警。
 - [ ] 同时兼容 `flutter@3.32.0` 与 `flutter@latest`。
+- [ ] 未显式传入 `labelStyle` / `actionTextStyle` 时，操作文字始终使用 `textColorAnti`，不被页面外层黑色 `DefaultTextStyle` 覆盖。

@@ -74,7 +74,7 @@ TActionSheet 组件级视觉 ThemeExtension
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | barrierColor | Color? | - | 蒙层颜色 |
-| gridIconExtent | double? | - | 宫格布局的图标槽位尺寸。 |
+| gridIconExtent | double? | - | 宫格布局的图标槽位尺寸；未设置时默认 40dp。 |
 | gridItemHeight | double? | - | 宫格项目高度 |
 | iconColor | Color? | - | 默认图标颜色。 |
 | iconSize | double? | - | 默认图标字形尺寸；同时作为列表图标槽位尺寸。 |

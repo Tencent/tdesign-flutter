@@ -31,6 +31,18 @@
 
 - macOS 工程未配置，因此不能在本仓库直接生成 App/DMG；测试模块使用 `kDebugMode` 编译期常量保护，release 平台共用同一 Dart 构建路径。
 
+## #1119 重构迁移复核
+
+- #1109 的分割线、横向留白、未选禁用态和卡片居中契约已迁入
+  `TRadioGroup` 单一状态源与 `variant` 新 API，不再依赖已删除的 `groupValue`、
+  `cardMode` 或单项 `showDivider`。
+- Flutter 3.32.0 / 3.47.0：Radio 组件与主题测试均为 40/40，Demo 测试均为
+  6/6；两个版本组件与 example analyze 均为 0 issues。
+- Linux Flutter 3.32.0：浅色/深色 Golden 按修复结果更新一次，并立即无更新参数
+  复跑 2/2；几何断言覆盖两类卡片四周 16dp 安全间距，防止选中角标遮字。
+- 当前 Radio 生产代码覆盖率为 289/297，97.31%；iPhone 16 模拟器从当前源码
+  重新构建后已分段检查四项视觉结果。
+
 ## 小程序实际运行补充复核
 
 - 微信开发者工具 RC 2.02.2607161，基础库 3.17.1，iOS 模拟器：横向示例为通栏容器，`spacer16` 位于白色容器内部；勾选样式使用 24px TDesign `check` 图标，默认选中态使用 24px TDesign `check-circle-filled` 图标；主标题和副标题默认最多显示 3 行、5 行。

@@ -27,8 +27,8 @@ Widget _feedbackDialogs(BuildContext context) {
           barrierDismissible: true,
           dialog: TDialog(
             title: const Text('对话框标题'),
-            maxHeight: 456,
-            content: Text(List.filled(12, '这里是辅助内容文案。').join()),
+            maxHeight: 400,
+            content: Text(List.filled(48, '这里是辅助内容文案。').join()),
             actions: const [
               TDialogAction(
                 child: Text('知道了'),

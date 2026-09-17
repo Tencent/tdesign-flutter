@@ -5,6 +5,10 @@ import '../button/t_button_types.dart';
 import 't_dialog.dart';
 
 /// 单操作确认弹窗，是 [TDialog] 的便捷封装。
+///
+/// 内置操作使用 [TDialogActionRole.primary]，默认渲染为品牌色填充按钮。需要多个
+/// 操作、文字按钮 Footer 或其他按钮变体时，使用 [TDialog] 和
+/// [TDialog.actions] 组合 [TDialogAction]。
 class TConfirmDialog extends StatelessWidget {
   const TConfirmDialog({
     super.key,

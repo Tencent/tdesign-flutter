@@ -17,7 +17,7 @@ Widget _confirmDialogs(BuildContext context) {
           barrierDismissible: true,
           dialog: TDialog(
             content: const Text(_description),
-            actions: _actions(destructive: true),
+            actions: _actions(),
           ),
         );
       }),
@@ -25,10 +25,7 @@ Widget _confirmDialogs(BuildContext context) {
         TDialog.show<bool>(
           context,
           barrierDismissible: true,
-          dialog: TDialog(
-            title: const Text('对话框标题'),
-            actions: _actions(primaryColorScheme: TButtonColorScheme.light),
-          ),
+          dialog: TDialog(title: const Text('对话框标题'), actions: _actions()),
         );
       }),
     ]);

@@ -13,6 +13,7 @@ import 't_popover_types.dart';
 
 const double _kDefaultPopoverMaxWidth = 300;
 const EdgeInsets _kDefaultPopoverPadding = EdgeInsets.all(12);
+const double _kHorizontalArrowInset = 12;
 
 /// 气泡弹层 Widget
 class TPopoverWidget extends StatefulWidget {
@@ -287,19 +288,19 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
       case TPopoverPlacement.topLeft:
         margin = EdgeInsets.only(
           top: _effectiveArrowSize,
-          left: _effectiveArrowSize + 12,
+          left: _kHorizontalArrowInset,
         );
         break;
       case TPopoverPlacement.topRight:
         margin = EdgeInsets.only(
           top: _effectiveArrowSize,
-          right: _effectiveArrowSize + 12,
+          right: _kHorizontalArrowInset,
         );
         break;
       case TPopoverPlacement.bottomLeft:
         margin = EdgeInsets.only(
           bottom: _effectiveArrowSize,
-          left: _effectiveArrowSize + 12,
+          left: _kHorizontalArrowInset,
         );
         break;
       case TPopoverPlacement.bottom:
@@ -308,7 +309,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
       case TPopoverPlacement.bottomRight:
         margin = EdgeInsets.only(
           bottom: _effectiveArrowSize,
-          right: _effectiveArrowSize + 12,
+          right: _kHorizontalArrowInset,
         );
         break;
       case TPopoverPlacement.rightTop:
@@ -590,15 +591,18 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   }
 
   double _baseArrowCenter(Size popoverSize, TPopoverPlacement placement) {
-    final edgeInset = _effectiveArrowSize * 2;
+    final horizontalArrowCenterInset =
+        _kHorizontalArrowInset + _effectiveArrowSize;
+    final verticalArrowCenterInset = _effectiveArrowSize * 2;
     return switch (placement) {
       TPopoverPlacement.topLeft ||
-      TPopoverPlacement.bottomLeft => edgeInset + 12,
-      TPopoverPlacement.topRight ||
-      TPopoverPlacement.bottomRight => popoverSize.width - edgeInset - 12,
-      TPopoverPlacement.leftTop || TPopoverPlacement.rightTop => edgeInset + 6,
-      TPopoverPlacement.leftBottom ||
-      TPopoverPlacement.rightBottom => popoverSize.height - edgeInset - 6,
+      TPopoverPlacement.bottomLeft => horizontalArrowCenterInset,
+      TPopoverPlacement.topRight || TPopoverPlacement.bottomRight =>
+        popoverSize.width - horizontalArrowCenterInset,
+      TPopoverPlacement.leftTop ||
+      TPopoverPlacement.rightTop => verticalArrowCenterInset + 6,
+      TPopoverPlacement.leftBottom || TPopoverPlacement.rightBottom =>
+        popoverSize.height - verticalArrowCenterInset - 6,
       TPopoverPlacement.top ||
       TPopoverPlacement.bottom => popoverSize.width / 2,
       TPopoverPlacement.left ||
@@ -656,10 +660,13 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     required double arrowSize,
   }) {
     return switch (placement) {
-      TPopoverPlacement.topLeft ||
-      TPopoverPlacement.bottomLeft => anchorRect.left,
-      TPopoverPlacement.topRight ||
-      TPopoverPlacement.bottomRight => anchorRect.right - popoverSize.width,
+      TPopoverPlacement.topLeft || TPopoverPlacement.bottomLeft =>
+        anchorRect.center.dx -
+            (_kHorizontalArrowInset + _effectiveArrowSize),
+      TPopoverPlacement.topRight || TPopoverPlacement.bottomRight =>
+        anchorRect.center.dx +
+            (_kHorizontalArrowInset + _effectiveArrowSize) -
+            popoverSize.width,
       TPopoverPlacement.rightTop ||
       TPopoverPlacement.right ||
       TPopoverPlacement.rightBottom => anchorRect.right + _effectiveOffset,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../util/context_extension.dart';
 import 'multi_wheel_layout.dart';
+import 'picker_defaults.dart';
 import 't_picker_theme_data.dart';
 import 't_picker_types.dart';
 import 'wheel_column.dart';
@@ -12,7 +13,7 @@ const double _disabledOpacity = 0.5;
 /// 严格受控的滚轮选择器。
 ///
 /// 独立多列使用 [TPickerColumns]，层级联动使用 [TPickerLinked]。弹层和确认
-/// 操作由调用方组合，组件本身只负责滚轮选择。
+/// 操作由调用方组合，组件本身只负责滚轮选择。标准弹层使用 `TPickerPopup.show`。
 class TPicker extends StatefulWidget {
   const TPicker({
     super.key,
@@ -67,9 +68,9 @@ class _TPickerState extends State<TPicker> {
   TPickerThemeData? get _theme =>
       Theme.of(context).extension<TPickerThemeData>();
 
-  double get _height => _theme?.height ?? 200;
+  double get _height => _theme?.height ?? defaultPickerHeight;
 
-  int get _itemCount => _theme?.itemCount ?? 5;
+  int get _itemCount => _theme?.itemCount ?? defaultPickerItemCount;
 
   double get _itemHeight => _height / _itemCount;
 

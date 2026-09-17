@@ -9,6 +9,13 @@
 3. **尺寸 API 语义不一致**：官方两端的 `size` 都是可连续配置的指示器尺寸，默认 `20px`；Flutter 使用 `TLoadingSize` 枚举，而且同一枚举在 circle / activity / point 上对应不同几何含义，无法表达 Button 默认 20px 与公开尺寸 Demo 的 24/28/32px。
 4. **站点文档多处过时/不一致**：示例文件链接笔误、`axis/iconColor/textColor/duration` 误列为 `TLoading` 构造参数（实际在 `TLoadingThemeData`）、示例代码与源码不符、`loading_api.md` 与 README 分叉。
 
+### 2026-09-15 Issue #1027 复核
+
+- Figma 页面节点 `24386:5280` 的“颜色不一致”标注对应 24×24 的 activity 指示器；设计基准中 activity 使用主文字黑色，而 circle / point 保持品牌色。
+- 当前组件把同一个品牌色默认值传给所有预设指示器，导致纯图标、横向图文、竖向图文中的 3 个 activity 实例全部错误呈现为蓝色。
+- 本轮在组件默认解析链中区分图标类型：activity 默认读取 `textColorPrimary`，circle / point 继续读取 `brandNormalColor`。Demo 不注入黑色覆盖，因此这是**组件问题修复**，不是 Demo 遮盖。
+- `TLoadingThemeData.iconColor`、Flutter `ProgressIndicatorThemeData.color` 和显式 `ColorScheme` 的覆盖能力保持不变；无公开 API 签名变化，不是 breaking change。
+
 ## 目标
 
 - 将 `TLoading.size` 收敛为单一 `double` 参数，默认 `20.0`；移除 `TLoadingSize`，不在 Theme 中增加重复尺寸入口。
@@ -91,6 +98,12 @@
 - 站点 README 内嵌示例代码改为与 `t_loading_page.dart` 源码一致的 `Theme + mergeExtension` 写法。
 - `example/assets/api/loading_api.md` 与站点 README 收敛一致。
 - 同步修正 `duration` 默认值（800）与 `axis` 默认方向（horizontal）的文档描述。
+
+### 6. 指示器默认颜色
+
+- 未显式配置颜色时，circle / point 使用 `brandNormalColor`，activity 使用 `textColorPrimary`（浅色主题为 Gy1 90% 黑色）。
+- 统一覆盖优先级保持 `TLoadingThemeData.iconColor > ProgressIndicatorThemeData.color > 显式 ColorScheme.primary > 图标类型内置 Token`。
+- 同一个 `TLoadingThemeData.iconColor` 仍可统一覆盖所有图标类型，不新增逐图标颜色 API。
 
 ## 兼容性
 

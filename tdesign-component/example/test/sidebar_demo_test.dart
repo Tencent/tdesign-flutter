@@ -13,6 +13,44 @@ void main() {
   registerDemoStructureTests(sidebarDemoPageTestSpec);
   registerDemoStructureTests(sidebarAnchorDemoTestSpec);
   registerDemoStructureTests(sidebarTagDemoTestSpec);
+  registerDemoStructureTests(sidebarPaginationDemoTestSpec);
+  registerDemoStructureTests(sidebarIconDemoTestSpec);
+
+  testWidgets('主页公开场景与覆盖契约双向一致', (tester) async {
+    await pumpFullDemoPage(tester, sidebarDemoPageTestSpec, ThemeMode.light);
+
+    final renderedEntries = <(String, double)>[];
+    for (final scene in sideBarDemoScenes) {
+      final button = find.widgetWithText(TButton, scene.label);
+      expect(button, findsOneWidget, reason: scene.id);
+      renderedEntries.add((scene.label, tester.getTopLeft(button).dy));
+    }
+    expect(find.byType(TButton), findsNWidgets(sideBarDemoScenes.length));
+    renderedEntries.sort((left, right) => left.$2.compareTo(right.$2));
+    expect(
+      renderedEntries.map((entry) => entry.$1),
+      sideBarDemoScenes.map((scene) => scene.label),
+    );
+  });
+
+  testWidgets('四个公开入口都通过主页真实路由到达目标页', (tester) async {
+    await pumpDemoPageAtPhoneViewport(
+      tester,
+      sidebarDemoPageTestSpec,
+      ThemeMode.light,
+    );
+
+    for (final scene in sideBarDemoScenes) {
+      final button = find.widgetWithText(TButton, scene.label);
+      await tester.ensureVisible(button);
+      await tester.tap(button);
+      await tester.pumpAndSettle();
+      expect(find.byType(scene.pageType), findsOneWidget, reason: scene.id);
+      expect(find.byType(TSideBar), findsOneWidget, reason: scene.id);
+      Navigator.of(tester.element(find.byType(scene.pageType))).pop();
+      await tester.pumpAndSettle();
+    }
+  });
 
   testWidgets('主页面跳转按钮沿用紧凑 Demo 的水平边距', (tester) async {
     await pumpDemoPageAtPhoneViewport(
@@ -21,7 +59,8 @@ void main() {
       ThemeMode.light,
     );
 
-    for (final label in const ['锚点用法', '切页用法', '带图标侧边导航', '自定义样式']) {
+    for (final scene in sideBarDemoScenes) {
+      final label = scene.label;
       final button = find.widgetWithText(TButton, label);
       await tester.ensureVisible(button);
       final rect = tester.getRect(button);

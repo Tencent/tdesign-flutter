@@ -30,6 +30,8 @@ void main() {
   testWidgets('Indexes basic scenario opens and selects a letter', (
     tester,
   ) async {
+    tester.view.padding = const FakeViewPadding(top: 24);
+    addTearDown(tester.view.resetPadding);
     await pumpDemoPageAtPhoneViewport(
       tester,
       indexesDemoPageTestSpec,
@@ -39,6 +41,10 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('indexes-letter-trigger')));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('indexes-letter-panel')), findsOneWidget);
+    expect(
+      tester.getTopLeft(find.byKey(const ValueKey('indexes-letter-panel'))).dy,
+      24,
+    );
     expect(find.text('北京'), findsOneWidget);
     expect(find.text('白银'), findsOneWidget);
 

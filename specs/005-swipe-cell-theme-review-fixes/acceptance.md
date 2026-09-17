@@ -16,3 +16,10 @@
 ## 人工验收结论
 
 - 编译验收通过（双版本 apk + web）。测试与 lint 待人工验证。
+
+## Issue #1027 补充验收
+
+- 确认问题位于组件样式合并顺序，不在 Demo：外层 `DefaultTextStyle` 的黑色会覆盖 `textColorAnti`。
+- 修复后默认动作文字固定回退到 `textColorAnti`；P1 `actionTextStyle` 与 P0 `labelStyle` 仍可显式覆盖。
+- 新增展开态 light / dark Golden，并在 Linux Flutter 3.32.0 环境更新后无参数复跑通过；组件测试 31/31，生产源码覆盖率 `320/332 = 96.39%`，Demo 3/3，组件与 example analyze 0 问题。
+- Flutter 3.47.0：组件与主题回归 45/45、Demo 结构 1/1，组件与 example analyze 0 问题。
