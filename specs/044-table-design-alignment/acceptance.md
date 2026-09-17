@@ -21,7 +21,7 @@
 | Table API 定向生成 | 通过 | `table_api.md` 包含新增公开类型、参数与限制条件 |
 | `git diff --check` | 通过 | 无空白错误 |
 | Android 真机 `40302eeb` 构建、安装与启动 | 通过 | Android 16，`com.tdesign.tdesign_flutter_example/.MainActivity` 已验证前台运行 |
-| Table Demo + API states light/dark Golden（Linux Flutter 3.32.0） | 待 CI 校准 | Demo 2 张；组件 API 矩阵 2 张，覆盖合并、minWidth + 固定列、height + footer；最终以 Linux 无更新复跑为准 |
+| Table Demo + API states light/dark Golden（Linux Flutter 3.32.0） | 基线已校准，待无更新复跑 | Demo 2 张；新增组件 API 矩阵仅有 2 张平台字体光栅差异，已从当前 head 对应的 Linux CI 产物更新；最终以推送后的无更新复跑为准 |
 
 ## 人工验收
 
