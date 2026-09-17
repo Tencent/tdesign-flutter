@@ -28,7 +28,10 @@ class VisualTestManifest {
   final List<String> arguments;
 }
 
-const sharedExampleTests = ['test/widget_test.dart'];
+const sharedExampleTests = [
+  'test/widget_test.dart',
+  'test/web_theme_message_test.dart',
+];
 
 const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(
