@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
@@ -24,7 +26,10 @@ const double _kMenuItemMinHeight = 23;
 /// 展开项弹窗 单个item默认高度
 const double _kDefaultMenuItemHeight = 48;
 
-/// 展开项弹窗 单个item默认宽度为按钮宽度-20
+/// 展开项弹窗默认最小宽度
+const double _kDefaultMenuMinWidth = 107;
+
+/// 展开项弹窗默认宽度相对按钮宽度的收缩量
 const double _kDefaultMenuItemWidthShrink = 20;
 
 /// 导航栏默认高度
@@ -1010,7 +1015,10 @@ class _TTabBarItemWithBadge extends StatelessWidget {
           ).modalBarrierDismissLabel,
           child: capturedThemes.wrap(
             _TabBarPopupDialog(
-              itemWidth - _kDefaultMenuItemWidthShrink,
+              math.max(
+                _kDefaultMenuMinWidth,
+                itemWidth - _kDefaultMenuItemWidthShrink,
+              ),
               btnContext: context,
               config: popUpButtonConfig.popUpDialogConfig,
               items: popUpButtonConfig.items,
@@ -1067,7 +1075,9 @@ class TTabBarPopUpShapeConfig {
     this.arrowHeight,
   });
 
-  /// 弹窗宽度（不设置，默认为按钮宽度 - 20）
+  /// 弹窗宽度。
+  ///
+  /// 不设置时使用 `max(107, 标签项宽度 - 20)`；显式设置时覆盖该默认值。
   final double? popUpWidth;
 
   /// 单个选项高度 所有选项等高 不设置则使用默认值 48

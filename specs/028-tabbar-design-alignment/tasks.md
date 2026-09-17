@@ -18,3 +18,7 @@
 - [x] DONE 删除重复徽标配置层，以可空 TBadge 和自身 offset 收敛显隐与定位
 - [x] DONE 撤回仅服务 TabBar 的公共 `ExamplePage.navBarTitle` 扩展
 - [ ] TODO 本轮修复推送后，检查新 head CI 并完成新一轮 CNB Review
+- [x] DONE 修复二级菜单默认宽度并同步公开 dartdoc
+- [x] DONE 补充九个公开实例的点击功能断言与明暗 postAction Golden
+- [x] DONE 补充纯文本点击和双层菜单选择 Toast 的独立明暗 Golden
+- [x] DONE 生成设计稿 / 修复前 / 修复后三栏标注图并核对差异归属

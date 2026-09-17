@@ -3,6 +3,28 @@ import 'package:tdesign_flutter_example/page/t_tab_bar_page.dart';
 
 import 'demo_page_test_utils.dart';
 
+const tabBarDemoSceneIds = [
+  'text',
+  'icon_text',
+  'icon',
+  'double_layer',
+  'weak_text',
+  'weak_icon',
+  'weak_icon_text',
+  'capsule',
+  'custom',
+];
+
+Set<String> expectedTabBarGoldenCases() => {
+  for (final mode in ['light', 'dark']) ...{
+    for (final scene in tabBarDemoSceneIds) 'scene:$scene:initial:$mode',
+    for (final scene in tabBarDemoSceneIds) 'scene:$scene:selected:$mode',
+    'double_layer:menu_open:$mode',
+    'text:toast:$mode',
+    'double_layer:menu_toast:$mode',
+  },
+};
+
 const tabBarDemoPageTestSpec = DemoPageTestSpec(
   name: 'tab_bar',
   title: 'TabBar 底部标签栏',
