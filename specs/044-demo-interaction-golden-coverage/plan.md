@@ -28,6 +28,7 @@
 ## 验证策略
 
 - 单元测试：调度器清单、自测与覆盖矩阵集合检查。
+- 比较器门禁：扫描 Example 测试，禁止覆写 `goldenFileComparator` 或调用自定义列表比较逻辑，统一使用 Flutter 默认精确比较器。
 - 集成或 Widget 测试：双版本运行受影响 Demo 功能测试；Linux 3.32.0 运行视觉回归。
 - 静态检查：`flutter analyze --fatal-infos`、`git diff --check`。
 - 人工验收：检查实际图、基线图和失败差异图，确认没有裁切、缺字或意外重复图。

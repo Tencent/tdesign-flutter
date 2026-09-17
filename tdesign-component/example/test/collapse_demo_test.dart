@@ -12,7 +12,6 @@ const collapseDemoSpec = DemoPageTestSpec(
   page: TCollapsePage(),
   expectedTexts: ['基础折叠面板', '带操作说明', '手风琴式', '卡片折叠面板'],
   componentType: TCollapse<String>,
-  useMaterialIcons: true,
   supplementalCjkFontFamily: 'TDesign Collapse Golden CJK',
   supplementalCjkFontPath: 'test/fonts/CollapseGoldenCJK-Regular.otf',
 );

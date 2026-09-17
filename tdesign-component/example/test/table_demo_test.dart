@@ -24,7 +24,6 @@ void main() {
       '带边框表格',
       '斑马纹表格',
     ],
-    useMaterialIcons: true,
     supplementalCjkFontFamily: 'Table Golden CJK',
     supplementalCjkFontPath: 'test/fonts/TableGoldenCJK-Regular.otf',
   );

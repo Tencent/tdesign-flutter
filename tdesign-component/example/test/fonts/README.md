@@ -1,8 +1,16 @@
 # 页面 Golden 测试字体
 
-`TDesignGoldenCJK-Regular.otf` 是仅供测试使用的中文字体子集，避免 Linux
-Golden 因宿主机缺少 CJK fallback 而把中文渲染成缺字符号。它不会打包进 Example
-或组件产物。
+`TDesignGoldenCJK-Regular.otf` 是仅供测试使用的中文字体子集，覆盖当前组件库、
+公开 Example 页面和 Demo 测试源码中的全部中文字符，避免 Linux Golden 因宿主机
+缺少 CJK fallback 而把中文渲染成缺字符号。字符清单见
+`component_demo_glyphs.txt`；上游为 Noto Sans SC 2.004，子集工具为
+HarfBuzz 11.4.5，子集 SHA-256 为
+`d66ad15ca83f8f88d717840c0802ff56cc34d967caedc59a4411475f1a776de6`。
+它不会打包进 Example 或组件产物。
+
+共享 Demo Golden 工具统一加载 Roboto、Material Icons、Cupertino Icons、
+`tdesign_flutter_icons` 和组件包内的 TCloudNumber 字体；不能依赖某个测试文件按需
+加载，否则相同组件在不同 Golden 中可能出现空图标或错误数字字形。
 
 `FormGoldenCJK-Regular.otf` 仅补充 Form 默认值中新增且既有子集未覆盖的
 字形，字符清单见 `form_demo_glyphs.txt`。它使用 Android 16 系统的开源
@@ -153,31 +161,11 @@ HarfBuzz 11.4.5，子集 SHA-256 为
 原字体经过子集化后按各测试字体用途设置独立 family/full/PostScript name
 （例如 feedback 子集使用 `TDesign Feedback Golden CJK`），不继续使用上游保留字体名。
 
-更新 Button、Divider、Fab、Icon、Link、Text、Form、Input、Rate、Search、Switch、
-Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后，更新原字符清单；
+更新组件、公开 Example 或 Demo 测试中的中文/全角文案后，统一重新生成
+`component_demo_glyphs.txt` 和共享字体。调度器自测会扫描 `lib`、`example/lib`
+及 `example/test`，并直接解析字体 `cmap`，同时检查源码、字符清单和真实字形三者
+完整。各专用字符清单仅在对应专用 fallback 仍需新增字形时同步更新。
 Skeleton 默认占位色等共享视觉契约变化时，同时复验并按需更新使用 Skeleton 的
 PullDownRefresh Demo 明暗基线。
-更新 Loading、Message、Popover 或 Popup 页面文案时，更新补充字符清单；更新
-ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedback 字符清单。
-更新 TreeSelect 页面文案时，更新 TreeSelect 字符清单。
-更新 Stepper 页面文案时，更新 Stepper 字符清单。
-更新 Slider 页面文案时，更新 Slider 字符清单。
-更新 Picker 页面文案时，更新 Picker 字符清单。
-更新 Calendar 页面文案时，更新 Calendar 字符清单。
-更新 Steps 页面文案时，更新 Steps 字符清单。
-更新 SideBar 页面文案时，更新 SideBar 字符清单。
-更新 TabBar 页面文案时，更新 TabBar 字符清单。
-更新 Cascader 页面文案时，更新 Cascader 字符清单。
-更新 Indexes 页面或城市数据时，更新 Indexes 字符清单。
-更新 BackTop 页面文案时，更新 BackTop 字符清单。
-更新 Drawer 页面文案时，更新 Drawer 字符清单。
-更新 Skeleton 页面文案时，更新 Skeleton 字符清单。
-更新 Progress 页面文案时，更新 Progress 字符清单。
-更新 Swiper 页面文案时，更新 Swiper 字符清单。
-更新 Avatar 页面文案时，更新 Avatar 字符清单。
-更新 Navbar 页面文案时，更新 Navbar 字符清单。
-更新 Image 页面文案时，更新 Image 字符清单。
-更新 Rate 页面文案时，更新 Rate 字符清单。
-更新 Table 页面文案时，更新 Table 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。

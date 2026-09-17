@@ -9,13 +9,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/page/t_cell_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
-import 'golden_test_utils.dart';
-
 void main() {
-  late GoldenFileComparator originalGoldenComparator;
-
   setUpAll(() async {
-    originalGoldenComparator = useGoldenDiffTolerance();
     final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
       ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
     final flutterBin = File(
@@ -27,10 +22,6 @@ void main() {
     final robotoFont = FontLoader('Roboto')
       ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView));
     await Future.wait([iconFont.load(), robotoFont.load()]);
-  });
-
-  tearDownAll(() {
-    goldenFileComparator = originalGoldenComparator;
   });
 
   Widget buildPage() {

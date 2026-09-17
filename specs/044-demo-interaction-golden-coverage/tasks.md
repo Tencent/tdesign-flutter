@@ -6,4 +6,6 @@
 - [x] DONE 核对并补齐三个遗漏组件的 CI 视觉回归登记
 - [x] DONE 在 Linux Flutter 3.32.0 更新并无更新参数复跑 Golden
 - [x] DONE 执行双版本严格 analyze、交互回归和工具自测
+- [x] DONE 移除 Cell、Radio 的像素容差并增加精确比较器门禁
+- [x] DONE 修复共享中文、Material Icons 与 TCloudNumber 字体加载并重建全量 Golden
 - [x] DONE 完成 Review

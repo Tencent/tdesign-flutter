@@ -11,12 +11,9 @@ import 'package:tdesign_flutter_example/l10n/app_localizations.dart';
 import 'package:tdesign_flutter_example/page/t_radio_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
-import 'golden_test_utils.dart';
-
 const _goldenCjkFontFamily = 'Radio Golden CJK';
 
 void main() {
-  final originalGoldenComparator = useGoldenDiffTolerance();
   setUpAll(() async {
     final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
       ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
@@ -36,10 +33,6 @@ void main() {
       );
     await Future.wait([iconFont.load(), robotoFont.load(), cjkFont.load()]);
   });
-  tearDownAll(() {
-    goldenFileComparator = originalGoldenComparator;
-  });
-
   Widget buildPage(ThemeMode mode) {
     return RepaintBoundary(
       key: const Key('radio-page-golden'),

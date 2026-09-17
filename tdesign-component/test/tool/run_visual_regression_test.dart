@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 
@@ -15,6 +16,72 @@ void main() {
         expect(File(path).existsSync(), isTrue, reason: '${suite.name}: $path');
       }
     }
+  });
+
+  test('visual regression uses the exact default Golden comparator', () {
+    final goldenTests = [
+      for (final root in ['test', 'example/test'])
+        ...Directory(root)
+            .listSync(recursive: true)
+            .whereType<File>()
+            .where((file) => file.path.endsWith('.dart')),
+    ];
+    const comparatorAssignment =
+        'goldenFileComparator'
+        ' =';
+    const listComparator =
+        'GoldenFileComparator'
+        '.compareLists';
+
+    for (final file in goldenTests) {
+      final source = file.readAsStringSync();
+      expect(
+        source,
+        isNot(contains(comparatorAssignment)),
+        reason: '${file.path} must keep Flutter exact pixel comparison',
+      );
+      expect(
+        source,
+        isNot(contains(listComparator)),
+        reason: '${file.path} must not add a tolerant pixel comparator',
+      );
+    }
+  });
+
+  test('shared Demo font covers every declared and source CJK glyph', () {
+    final glyphManifest = File('example/test/fonts/component_demo_glyphs.txt');
+    final declaredGlyphs = glyphManifest
+        .readAsStringSync()
+        .runes
+        .where((rune) => !_isWhitespace(rune))
+        .toSet();
+    final sourceGlyphs = <int>{};
+    for (final root in ['lib', 'example/lib', 'example/test']) {
+      for (final file
+          in Directory(root)
+              .listSync(recursive: true)
+              .whereType<File>()
+              .where((file) => file.path.endsWith('.dart'))) {
+        sourceGlyphs.addAll(
+          file.readAsStringSync().runes.where(_belongsInSharedCjkFont),
+        );
+      }
+    }
+
+    expect(
+      declaredGlyphs,
+      containsAll(sourceGlyphs),
+      reason: 'component_demo_glyphs.txt must cover current visible sources',
+    );
+
+    final fontGlyphs = _readCmapCodePoints(
+      File('example/test/fonts/TDesignGoldenCJK-Regular.otf'),
+    );
+    expect(
+      fontGlyphs,
+      containsAll(declaredGlyphs),
+      reason: 'TDesignGoldenCJK-Regular.otf must contain every declared glyph',
+    );
   });
 
   test('visual regression suite names are unique', () {
@@ -58,6 +125,105 @@ void main() {
       expect(coverage.rationale.trim(), isNotEmpty, reason: coverage.component);
     }
   });
+}
+
+bool _isWhitespace(int rune) =>
+    rune == 0x09 || rune == 0x0a || rune == 0x0d || rune == 0x20;
+
+bool _belongsInSharedCjkFont(int rune) =>
+    rune == 0x26 ||
+    rune == 0xb7 ||
+    rune == 0x2014 ||
+    rune == 0x2026 ||
+    rune == 0x2191 ||
+    rune == 0x2192 ||
+    (rune >= 0x3000 && rune <= 0x303f) ||
+    (rune >= 0x3400 && rune <= 0x4dbf) ||
+    (rune >= 0x4e00 && rune <= 0x9fff) ||
+    (rune >= 0xff00 && rune <= 0xffef);
+
+Set<int> _readCmapCodePoints(File font) {
+  final data = ByteData.sublistView(font.readAsBytesSync());
+  final tableCount = data.getUint16(4);
+  int? cmapOffset;
+  for (var index = 0; index < tableCount; index++) {
+    final recordOffset = 12 + index * 16;
+    if (data.getUint32(recordOffset) == 0x636d6170) {
+      cmapOffset = data.getUint32(recordOffset + 8);
+      break;
+    }
+  }
+  if (cmapOffset == null) {
+    throw const FormatException('Font does not contain a cmap table');
+  }
+
+  final codePoints = <int>{};
+  final subtableCount = data.getUint16(cmapOffset + 2);
+  for (var index = 0; index < subtableCount; index++) {
+    final recordOffset = cmapOffset + 4 + index * 8;
+    final subtableOffset = cmapOffset + data.getUint32(recordOffset + 4);
+    switch (data.getUint16(subtableOffset)) {
+      case 4:
+        _readFormat4Cmap(data, subtableOffset, codePoints);
+      case 12:
+        _readFormat12Cmap(data, subtableOffset, codePoints);
+    }
+  }
+  return codePoints;
+}
+
+void _readFormat4Cmap(ByteData data, int offset, Set<int> codePoints) {
+  final length = data.getUint16(offset + 2);
+  final end = offset + length;
+  final segmentCount = data.getUint16(offset + 6) ~/ 2;
+  final endCodeOffset = offset + 14;
+  final startCodeOffset = endCodeOffset + segmentCount * 2 + 2;
+  final deltaOffset = startCodeOffset + segmentCount * 2;
+  final rangeOffset = deltaOffset + segmentCount * 2;
+
+  for (var index = 0; index < segmentCount; index++) {
+    final startCode = data.getUint16(startCodeOffset + index * 2);
+    final endCode = data.getUint16(endCodeOffset + index * 2);
+    final delta = data.getInt16(deltaOffset + index * 2);
+    final rangeAddress = rangeOffset + index * 2;
+    final idRangeOffset = data.getUint16(rangeAddress);
+    for (var codePoint = startCode; codePoint <= endCode; codePoint++) {
+      if (codePoint == 0xffff) {
+        continue;
+      }
+      var glyph = 0;
+      if (idRangeOffset == 0) {
+        glyph = (codePoint + delta) & 0xffff;
+      } else {
+        final glyphAddress =
+            rangeAddress + idRangeOffset + (codePoint - startCode) * 2;
+        if (glyphAddress + 2 <= end) {
+          glyph = data.getUint16(glyphAddress);
+          if (glyph != 0) {
+            glyph = (glyph + delta) & 0xffff;
+          }
+        }
+      }
+      if (glyph != 0) {
+        codePoints.add(codePoint);
+      }
+    }
+  }
+}
+
+void _readFormat12Cmap(ByteData data, int offset, Set<int> codePoints) {
+  final groupCount = data.getUint32(offset + 12);
+  for (var index = 0; index < groupCount; index++) {
+    final groupOffset = offset + 16 + index * 12;
+    final startCode = data.getUint32(groupOffset);
+    final endCode = data.getUint32(groupOffset + 4);
+    final startGlyph = data.getUint32(groupOffset + 8);
+    for (var codePoint = startCode; codePoint <= endCode; codePoint++) {
+      if (startGlyph + codePoint - startCode != 0) {
+        codePoints.add(codePoint);
+      }
+    }
+  }
 }
 
 String _publicComponentSlug(String name) {
