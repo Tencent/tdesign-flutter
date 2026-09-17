@@ -1,3 +1,0 @@
-Widget _buildBasic(BuildContext context) {
-    return _frame(TTable(columns: _columns, data: _rows));
-  }

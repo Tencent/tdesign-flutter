@@ -8,3 +8,4 @@
 6. 生成文档/代码片段，独立提交并创建关联 GitHub #1027 的 PR。
 7. 根据专项复审补齐 reverse 选择、动态 indexList 降级、Theme nullable 插值和超大提示尺寸边界，并在字母核心片段中说明数据结构。
 8. 为 reverse 远端递进增加无锚点进展时的视口步进与滚动边界终止，避免相同参数反复调度。
+9. 区分 ThemeExtension 固定默认值与动态 token 回退：固定默认值参与连续插值，动态回退保持离散切换，并覆盖双向 nullable、两侧 null、显式值和 ThemeData 中间态。

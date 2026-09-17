@@ -56,4 +56,22 @@ void main() {
     expect(images.every((image) => image.width == 48), isTrue);
     expect(images.every((image) => image.height == 48), isTrue);
   });
+
+  testWidgets('SideBar 切页禁用项点击后保持当前页', (tester) async {
+    expect(sideBarFunctionalOnlyCases['pagination_disabled'], '禁用项点击后没有独立视觉结果');
+    await pumpDemoPageAtPhoneViewport(
+      tester,
+      sidebarPaginationDemoTestSpec,
+      ThemeMode.light,
+    );
+
+    final sideBar = find.byType(TSideBar);
+    expect(tester.widget<TSideBar>(sideBar).value, 1);
+    await tester.tap(
+      find.descendant(of: sideBar, matching: find.text('选项')).at(4),
+    );
+    await tester.pumpAndSettle();
+
+    expect(tester.widget<TSideBar>(sideBar).value, 1);
+  });
 }

@@ -45,6 +45,8 @@ void main() {
       200,
       scrollable: pageScrollable().first,
     );
+    await tester.ensureVisible(trigger);
+    await tester.pumpAndSettle();
     await tester.tap(trigger);
     await tester.pumpAndSettle();
   }
@@ -97,6 +99,23 @@ void main() {
       200,
       scrollable: pageScrollable().first,
     );
+    await tester.ensureVisible(trigger);
+    await tester.pumpAndSettle();
+    await tester.tap(trigger);
+    await tester.pumpAndSettle();
+  }
+
+  Future<void> openGrid(WidgetTester tester, String label) async {
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+    final trigger = find.widgetWithText(TButton, label);
+    await tester.scrollUntilVisible(
+      trigger,
+      200,
+      scrollable: pageScrollable().first,
+    );
+    await tester.ensureVisible(trigger);
+    await tester.pumpAndSettle();
     await tester.tap(trigger);
     await tester.pumpAndSettle();
   }
@@ -113,6 +132,7 @@ void main() {
       '带徽标列表型',
       '常规宫格型',
       '带描述宫格型',
+      '带翻页宫格型',
       '带图标宫格型',
       '带徽标宫格型',
       '多行滚动宫格型',
@@ -208,8 +228,8 @@ void main() {
             matching: find.byWidgetPredicate(
               (widget) =>
                   widget is SizedBox &&
-                  widget.width == 48 &&
-                  widget.height == 48,
+                  widget.width == 40 &&
+                  widget.height == 40,
             ),
           )
           .first;
@@ -241,7 +261,7 @@ void main() {
 
     expect(scroll.itemSize, basic.itemSize);
     expect(scroll.iconSlotSize, basic.iconSlotSize);
-    expect(scroll.iconSlotSize, const Size.square(48));
+    expect(scroll.iconSlotSize, const Size.square(40));
     expect(scroll.iconSize, basic.iconSize);
     expect(scroll.iconSize, const Size.square(24));
     expect(scroll.iconTextGap, basic.iconTextGap);
@@ -249,6 +269,54 @@ void main() {
     expect(scroll.textStyle.fontSize, basic.textStyle.fontSize);
     expect(scroll.textStyle.height, basic.textStyle.height);
     expect(scroll.textStyle.fontWeight, basic.textStyle.fontWeight);
+  });
+
+  testWidgets('带描述宫格的描述文字到首行图标容器间距为 28dp', (tester) async {
+    configurePhone(tester);
+    await openGrid(tester, '带描述宫格型');
+
+    final subtitle = find.text('动作面板描述文字');
+    final firstIconContainer = find.byKey(const ValueKey(TIcons.chat));
+    expect(
+      tester.getTopLeft(firstIconContainer).dy -
+          tester.getBottomLeft(subtitle).dy,
+      28,
+    );
+  });
+
+  testWidgets('带图标宫格使用 40dp 灰色圆角容器', (tester) async {
+    configurePhone(tester);
+    await openGrid(tester, '带图标宫格型');
+
+    final iconContainer = find.byKey(const ValueKey(TIcons.share));
+    expect(tester.getSize(iconContainer), const Size.square(40));
+    final container = tester.widget<Container>(iconContainer);
+    final decoration = container.decoration! as BoxDecoration;
+    expect(
+      decoration.color,
+      TThemeData.defaultData().bgColorSecondaryContainer,
+    );
+    expect(decoration.borderRadius, BorderRadius.circular(6));
+  });
+
+  testWidgets('带翻页宫格展示三页指示器并可滑动到下一页', (tester) async {
+    configurePhone(tester);
+    await openGrid(tester, '带翻页宫格型');
+
+    expect(find.byType(PageView), findsOneWidget);
+    final dots = tester.widgetList<Container>(find.byType(Container)).where((
+      container,
+    ) {
+      final decoration = container.decoration;
+      return decoration is BoxDecoration &&
+          decoration.shape == BoxShape.circle &&
+          container.constraints?.maxWidth == 8 &&
+          container.constraints?.maxHeight == 8;
+    });
+    expect(dots, hasLength(3));
+    await tester.drag(find.byType(PageView), const Offset(-375, 0));
+    await tester.pumpAndSettle();
+    expect(find.text('分享'), findsOneWidget);
   });
 
   testWidgets('多行滚动宫格首屏按 count=8 rows=2 展示前八项', (tester) async {

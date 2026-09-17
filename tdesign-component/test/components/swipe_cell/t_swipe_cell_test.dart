@@ -274,7 +274,7 @@ void main() {
   });
 
   group('主题继承', () {
-    testWidgets('DefaultTextStyle 和 IconTheme 可控制默认 action', (tester) async {
+    testWidgets('DefaultTextStyle 保留字号但不覆盖 action 语义文字色', (tester) async {
       await tester.pumpWidget(
         app(
           DefaultTextStyle(
@@ -297,7 +297,7 @@ void main() {
       final text = tester.widget<Text>(find.text('操作'));
       final icon = tester.widget<Icon>(find.byIcon(Icons.edit));
       expect(text.style?.fontSize, 19);
-      expect(text.style?.color, Colors.purple);
+      expect(text.style?.color, TThemeData.defaultData().textColorAnti);
       expect(icon.size, 31);
       expect(icon.color, Colors.green);
     });

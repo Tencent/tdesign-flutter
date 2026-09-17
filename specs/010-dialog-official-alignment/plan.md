@@ -2,13 +2,13 @@
 
 ## 技术方案
 
-修正已有默认样式值，并让现有 `TDialogAction.variant` 真正表达 Figma 的文字操作区：文字操作保留官方 32dp 顶间距、贴边 56dp Footer 和分隔线，基础操作保留内边距；三个及以上操作按主操作优先展示。Dialog 使用 Flutter 标准模态路由居中承载自适应面板，保持 240ms 缩放动画、遮罩点击和主题捕获语义，不扩展 Popup 公共契约。组件与 Example 的圆角、间距和字体优先复用语义匹配的 TDesign token；311dp 面板宽度、56dp Footer 高度与 0.5dp 分隔线因没有等价语义 token，保留为单一设计常量。Example 层用现有 `Widget` 槽位、`TInput` 和操作区组合能力表达官方场景。
+修正已有默认样式值，并让现有 `TDialogAction.variant` 真正表达 Figma 的文字操作区：文字操作保留官方 32dp 顶间距、贴边 56dp Footer 和分隔线，基础操作保留内边距；三个及以上操作按主操作优先展示。Dialog 使用 Flutter 标准模态路由居中承载自适应面板，保持 240ms 缩放动画、遮罩点击和主题捕获语义，不扩展 Popup 公共契约。组件内部为溢出内容提供可见滚动条，并在保留 48dp 关闭热区的前提下把 24dp 图标可见边界对齐到 top/end 8dp。组件与 Example 的圆角、间距和字体优先复用语义匹配的 TDesign token；311dp 面板宽度、56dp Footer 高度与 0.5dp 分隔线因没有等价语义 token，保留为单一设计常量。Example 层用现有 `Widget` 槽位、`TInput` 和操作区组合能力表达官方场景。
 
 ## 影响范围
 
 | 范围 | 文件或模块 | 影响 |
 | --- | --- | --- |
-| 组件 | `t_dialog.dart` | 默认可见间距、文字操作区和多操作顺序 |
+| 组件 | `t_dialog.dart` | 默认可见间距、长内容滚动条、关闭图标热区、文字操作区和多操作顺序 |
 | 路由 | Flutter `RawDialogRoute` 私有子类 | 保留居中自适应、主题捕获、SafeArea、遮罩与缩放动画；在标准蒙层的 onDismiss 中用 maybePop 返回调用方指定的值；Popup 不变 |
 | 测试 | `test/components/dialog/` | 样式和 ThemeData 契约 |
 | 示例 | `example/lib/page/t_dialog_page.dart` | 22 场景公开矩阵 |

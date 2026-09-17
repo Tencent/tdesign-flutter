@@ -181,7 +181,7 @@ Widget _buildLetterIndexes(BuildContext context) {
                 );
               },
             ),
-            useSafeArea: false,
+            useSafeArea: true,
           ),
         );
       },
@@ -218,7 +218,7 @@ Widget _buildNumberIndexes(BuildContext context) {
                 );
               },
             ),
-            useSafeArea: false,
+            useSafeArea: true,
           ),
         );
       },
@@ -255,7 +255,7 @@ Widget _buildCapsuleIndexes(BuildContext context) {
                 );
               },
             ),
-            useSafeArea: false,
+            useSafeArea: true,
           ),
         );
       },

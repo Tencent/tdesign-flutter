@@ -67,6 +67,35 @@ void main() {
     await disposeDemoPage(tester);
   });
 
+  testWidgets('所有公开标签栏场景均可受控切换选中项', (tester) async {
+    await pumpFullDemoPage(tester, tabBarDemoPageTestSpec, ThemeMode.light);
+    final bars = find.byType(TTabBar);
+    expect(bars, findsNWidgets(9));
+
+    for (final index in [...List.generate(8, (index) => index + 1), 0]) {
+      final bar = bars.at(index);
+      final widget = tester.widget<TTabBar>(bar);
+      final target = switch (widget.type) {
+        TTabBarType.text || TTabBarType.iconText || TTabBarType.doubleLayer =>
+          find.descendant(of: bar, matching: find.text('应用')),
+        TTabBarType.icon => find.descendant(
+          of: bar,
+          matching: find.byIcon(TIcons.app),
+        ),
+      };
+      await tester.tap(target);
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<TTabBar>(bar).value,
+        1,
+        reason: 'TabBar index $index',
+      );
+    }
+
+    await tester.pump(const Duration(seconds: 3));
+    await disposeDemoPage(tester);
+  });
+
   testWidgets('TabBar 所有代码入口展示实际生成片段', (tester) async {
     await pumpFullDemoPage(tester, tabBarDemoPageTestSpec, ThemeMode.light);
     const snippetNames = [

@@ -23,6 +23,7 @@ class ExamplePage extends StatefulWidget {
     Key? key,
     this.navBarKey,
     required this.title,
+    this.navBarTitle,
     this.desc = '',
     this.children = const [],
     this.padding,
@@ -45,6 +46,11 @@ class ExamplePage extends StatefulWidget {
 
   /// 标题
   final String title;
+
+  /// 导航栏标题。
+  ///
+  /// 为空时与页面内容标题 [title] 保持一致；设计稿区分导航栏短标题与页面完整标题时可单独指定。
+  final String? navBarTitle;
 
   /// 如果封装的children无法满足需求，可以自定义子控件
   final bool showSingleChild;
@@ -234,9 +240,9 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          widget.backgroundColor ??
-          (widget.compactDemo ? context.tTheme.bgColorPage : null),
+      backgroundColor: widget.compactDemo
+          ? _compactBackgroundColor
+          : widget.backgroundColor,
       floatingActionButton: widget.floatingActionButton,
       floatingActionButtonLocation: widget.floatingActionButtonLocation,
       floatingActionButtonAnimator: widget.floatingActionButtonAnimator,
@@ -375,7 +381,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
               ],
             ),
           ),
-        const SizedBox(height: 16),
+        SizedBox(height: item.compactContentSpacing ?? 16),
         _buildExampleContent(item),
       ],
     );
@@ -384,20 +390,20 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   Widget _buildCompactHeader() {
     return Container(
       width: double.infinity,
-      color: widget.backgroundColor ?? context.tTheme.bgColorPage,
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+      color: _compactBackgroundColor,
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TText(
             widget.title,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               color: context.tTheme.textColorPrimary,
               fontWeight: FontWeight.w600,
             ),
           ),
           if (widget.desc.isNotEmpty) ...[
-            const SizedBox(height: 4),
+            const SizedBox(height: 8),
             TText(
               widget.desc,
               font: context.tTheme.fontBodyMedium,
@@ -408,6 +414,12 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       ),
     );
   }
+
+  Color get _compactBackgroundColor =>
+      widget.backgroundColor ??
+      (Theme.of(context).brightness == Brightness.light
+          ? const Color(0xFFF6F6F6)
+          : context.tTheme.bgColorPage);
 
   Widget _singleChild() => widget.singleChild!;
 
@@ -488,7 +500,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
     return TNavBar(
       key: widget.navBarKey,
       title: Text(
-        widget.title,
+        widget.navBarTitle ?? widget.title,
         style: TextStyle(
           fontSize: 16,
           height: titleLineHeight,
@@ -611,6 +623,7 @@ class ExampleItem {
     this.center = true,
     this.ignoreCode = false,
     this.padding,
+    this.compactContentSpacing,
   });
 
   /// Demo 内容的稳定定位与视觉快照边界。
@@ -627,6 +640,11 @@ class ExampleItem {
   final bool ignoreCode;
 
   final EdgeInsetsGeometry? padding;
+
+  /// 紧凑 Demo 中说明文字与示例内容之间的间距。
+  ///
+  /// 为空时使用公共默认值 16；仅用于设计稿明确给出不同标题块高度的场景。
+  final double? compactContentSpacing;
 }
 
 /// 组件示例

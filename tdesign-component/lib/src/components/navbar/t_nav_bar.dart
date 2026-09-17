@@ -57,16 +57,21 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
   /// 是否使用默认的返回按钮，默认不显示
   final bool useDefaultBack;
 
-  /// 返回事件。
+  /// 默认返回按钮的点击事件。
   ///
-  /// 提供该回调时，由调用方完全接管返回行为；未提供时，默认返回按钮会执行
-  /// [Navigator.maybePop]。
+  /// 仅在 [useDefaultBack] 为 true 时生效。提供该回调时，由调用方完全接管返回
+  /// 行为；未提供时，默认返回按钮会执行 [Navigator.maybePop]。
   final VoidCallback? onBack;
 
-  /// NavBar 下方的 Widget
+  /// NavBar 标题区域下方的 Widget。
+  ///
+  /// 该内容位于 [height] 所定义的内容高度内；内容较高时，调用方需要同步增大
+  /// [height]，避免挤压标题栏。
   final Widget? belowTitleWidget;
 
-  /// 固定背景 Widget
+  /// 固定背景 Widget。
+  ///
+  /// 位于导航栏内容下层；若 [backgroundColor] 完全不透明，背景内容不会透出。
   final Widget? flexibleSpace;
 
   // ---- L4 样式（可覆盖 ThemeData 默认值） ----
@@ -93,13 +98,13 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
   /// 中间文案左右两边间距
   final double? titleMargin;
 
-  /// 透明度
+  /// 背景颜色透明度，默认 1。
   final double? opacity;
 
   /// 是否使用边框模式
   final bool useBorderStyle;
 
-  /// 操作项边框配置
+  /// 操作项边框配置，仅在 [useBorderStyle] 为 true 时生效。
   final TNavBarBorder? border;
 
   /// 底部阴影
@@ -346,7 +351,7 @@ class TNavBarItem {
   /// 点击回调；`null` 表示禁用
   final VoidCallback? onTap;
 
-  /// 图标尺寸
+  /// 图标尺寸，默认 24；显式传入 null 时由当前 [IconTheme] 决定。
   final double? iconSize;
 
   /// 内部填充

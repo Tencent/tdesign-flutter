@@ -2,6 +2,12 @@
 
 ## 技术方案
 
+### 2026-09-15 activity 默认颜色修复
+
+- 保留现有单一 `TLoadingThemeData.iconColor` 入口和 Material Theme 覆盖链。
+- 仅将最后一级内置回退按图标类型拆分：activity → `textColorPrimary`，circle / point → `brandNormalColor`。
+- 公开 Demo 不传黑色；组件、Demo 测试直接断言 3 个 activity 实例的最终颜色。仅更新 Loading 明暗整页 Golden，并保存 before / after / diff。
+
 ### 1. `duration` 默认值 2000 → 800
 
 `t_loading.dart` `_effectiveTheme` 内：

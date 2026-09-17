@@ -150,49 +150,44 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
 
     void showPicker() {
       var draft = value;
-      TPopup.show(
+      TPickerPopup.show(
         context,
-        options: TPopupOptions.bottom(
-          height:
-              (Theme.of(context).extension<TPickerThemeData>()?.height ?? 200) +
-              TPopupHeader.headerHeight,
-          headerBuilder: (_, close) => TPopupHeader(
-            cancelButton: TToolbarPressable(
-              onTap: close,
-              child: TText(
-                '取消',
-                font: context.tTheme.fontBodyLarge,
-                textColor: context.tTheme.textColorSecondary,
-              ),
-            ),
-            title: showTitle
-                ? TText('选择时间', font: context.tTheme.fontTitleLarge)
-                : null,
-            confirmButton: TToolbarPressable(
-              onTap: () {
-                onConfirm(draft);
-                close();
-              },
-              child: TText(
-                '确定',
-                font: context.tTheme.fontBodyLarge,
-                textColor: context.tTheme.brandNormalColor,
-              ),
+        headerBuilder: (_, close) => TPopupHeader(
+          cancelButton: TToolbarPressable(
+            onTap: close,
+            child: TText(
+              '取消',
+              font: context.tTheme.fontBodyLarge,
+              textColor: context.tTheme.textColorSecondary,
             ),
           ),
-          child: StatefulBuilder(
-            builder: (_, setPopupState) => TDateTimePicker(
-              key: ValueKey('date-time-picker-$id-panel'),
-              value: draft,
-              mode: mode,
-              showWeek: showWeek,
-              // 六列并排时年份省略单位，避免 375px 窄屏省略年份数字。
-              renderLabel: id == 'date-time'
-                  ? (column, value) =>
-                        column == DateTimeColumn.year ? '$value' : null
-                  : null,
-              onChanged: (next) => setPopupState(() => draft = next),
+          title: showTitle
+              ? TText('选择时间', font: context.tTheme.fontTitleLarge)
+              : null,
+          confirmButton: TToolbarPressable(
+            onTap: () {
+              onConfirm(draft);
+              close();
+            },
+            child: TText(
+              '确定',
+              font: context.tTheme.fontBodyLarge,
+              textColor: context.tTheme.brandNormalColor,
             ),
+          ),
+        ),
+        child: StatefulBuilder(
+          builder: (_, setPopupState) => TDateTimePicker(
+            key: ValueKey('date-time-picker-$id-panel'),
+            value: draft,
+            mode: mode,
+            showWeek: showWeek,
+            // 六列并排时年份省略单位，避免 375px 窄屏省略年份数字。
+            renderLabel: id == 'date-time'
+                ? (column, value) =>
+                      column == DateTimeColumn.year ? '$value' : null
+                : null,
+            onChanged: (next) => setPopupState(() => draft = next),
           ),
         ),
       );

@@ -15,6 +15,7 @@
 ### 2. `TSwipeCellAction` 优先级解析与布局对称
 
 - 在 `build` 中读取 `Theme.of(context).extension<TSwipeCellThemeData>()`，按 P0 > P1 > P4 解析生效值。
+- 合并 Material / `DefaultTextStyle` 的排版属性后重新落回 `textColorAnti`，再合并 P1 `actionTextStyle` 与 P0 `labelStyle`，避免页面默认黑色覆盖操作区反色文字。
 - `iconSize` / `spacing` 改为可空，解析时兜底原默认值（18 / 2）。
 - 图标与文字统一用 `Flexible(fit: FlexFit.loose)` 包裹，保证主轴布局对称，文字 `overflow: ellipsis` 防溢出。
 

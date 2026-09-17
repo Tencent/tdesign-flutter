@@ -22,7 +22,10 @@ enum TTimeCounterSize {
 /// 计时器视觉形态。
 enum TTimeCounterVariant {
   /// 无数字块背景。
-  defaultTheme,
+  plain,
+
+  /// 无数字块背景，并以错误色突出数字。
+  highlight,
 
   /// 圆形数字块。
   round,

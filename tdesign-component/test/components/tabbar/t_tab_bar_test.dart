@@ -509,10 +509,53 @@ void main() {
 
       await tester.tap(find.text('更多'));
       await tester.pumpAndSettle();
+      expect(tester.getSize(find.byType(TTabBarMenuItem).first).width, 120);
       await tester.tap(find.text('选项B'));
       await tester.pumpAndSettle();
 
       expect(selected, '选项B');
+    });
+
+    testWidgets('double-layer popup keeps the design minimum width', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.doubleLayer,
+            value: 3,
+            useSafeArea: false,
+            navigationTabs: List.generate(
+              4,
+              (index) => TTabBarItemConfig(
+                tabText: '标签${index + 1}',
+                popUpButtonConfig: index == 3
+                    ? TTabBarPopUpBtnConfig(
+                        items: const [
+                          TTabBarMenuItem(value: '基本信息'),
+                          TTabBarMenuItem(value: '个人主页'),
+                          TTabBarMenuItem(value: '设置'),
+                        ],
+                        onChanged: (_) {},
+                      )
+                    : null,
+              ),
+            ),
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('标签4'));
+      await tester.pumpAndSettle();
+
+      expect(tester.getSize(find.byType(TTabBarMenuItem).first).width, 107);
+      expect(tester.getSize(find.byType(TTabBarMenuItem).first).height, 48);
     });
 
     testWidgets('ink well routes double-layer popup through one tap chain', (

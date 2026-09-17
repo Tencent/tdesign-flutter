@@ -8,10 +8,7 @@ Widget _customNoticeBar(BuildContext context) {
     ),
     child: const TNoticeBar(
       content: '提示文字描述提示文字描述提示文字描述',
-      prefix: Padding(
-        padding: EdgeInsets.only(right: 8),
-        child: Icon(TIcons.sound),
-      ),
+      prefix: Icon(TIcons.sound),
       suffixIcon: TIcons.chevron_right,
     ),
   );

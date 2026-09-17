@@ -53,7 +53,7 @@
 - `speed` 表示横向跑马灯每秒滚动的逻辑像素数，单位为 px/s；不再控制纵向切换动画。
 - `interval` 默认值为 2 秒且仅控制纵向轮播；纵向列表由 `direction == Axis.vertical` 与多条 `items` 启用，不依赖 `marquee`。
 - `status` 是 info / success / warning / error 的唯一实例状态入口；ThemeData 不再保存枚举型状态选择器。
-- `prefix` 是 Flutter Widget 插槽：null 使用 status 默认图标，自定义 Widget 覆盖默认图标，`SizedBox.shrink()` 隐藏前缀；自定义 Widget 中未显式指定颜色或尺寸的 `Icon` 继承状态图标颜色和标准图标尺寸。
+- `prefix` 是 Flutter Widget 插槽：null 使用 status 默认图标，自定义 Widget 覆盖默认图标，`SizedBox.shrink()` 隐藏前缀；组件统一在非空前缀与正文之间保留 8px，自定义 Widget 中未显式指定颜色或尺寸的 `Icon` 继承状态图标颜色和标准图标尺寸。
 - `items` 非空时作为权威内容数据源并优先于 `content`；`content` 仅在 `items` 为空时显示。
 - `operation` 是内容右侧、尾部图标左侧的 Widget 插槽，可与 `suffixIcon` 共存；点击报告 `TNoticeBarTapTarget.operation`。
 - 删除职责重复或含义模糊的 `left`、`right`、`prefixIcon` 与 ThemeData `variant`。
@@ -80,6 +80,13 @@
 - [x] GitHub 与 CNB 双版本功能回归均登记 `notice_bar_page_test.dart`。
 - [x] NoticeBar Demo 结构由自定义功能测试唯一断言，通用 Golden Spec 不保留重复且未消费的结构配置。
 - [x] 首帧空白段使用 `LayoutBuilder` 的内容区宽度，并有窄容器回归断言。
+
+## 2026-09-15 Issue #1027 像素复核
+
+- **组件问题**：内置前缀自带 8px 间距，但自定义 `prefix` 把间距责任交给调用方，导致“带图标的公告栏”和“垂直滚动公告栏”图标紧贴正文。前缀与正文的关系属于 NoticeBar 布局契约，现由组件对所有非空前缀统一提供 `spacer8` Token 间距（默认 8px）。
+- **Demo 遮盖清理**：自定义样式 Demo 删除手工 `Padding(right: 8)`，避免修复组件后产生双重间距，也避免 Demo 层继续模拟组件默认关系。
+- **Theme 插值契约**：`height` 与 `padding` 使用组件真实默认值平滑插值；依赖上下文 Token 或状态解析的颜色、文字样式在 `null` 与显式值之间离散切换，避免动态主题过渡期间产生 0 尺寸或透明中间态；两端均为 `null` 时继续保持 `null`，交由 `resolve` 使用当前上下文解析。
+- `SizedBox.shrink()` 仍完整隐藏前缀且不残留 8px 空隙；未改变公开 API 签名。
 
 ## Breaking change
 

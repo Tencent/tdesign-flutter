@@ -1,7 +1,7 @@
 Widget _baseH5Navbar(BuildContext context) {
     return const TNavBar(
       key: Key('navbar-demo-base'),
-      title: Text(titleText),
+      title: Text('标题文字'),
       useDefaultBack: true,
     );
   }

@@ -244,7 +244,7 @@ class _TSearchBarState extends State<TSearchBar> {
                   children: [
                     IconTheme(
                       data: searchIconTheme,
-                      child: const Icon(TIcons.search),
+                      child: const Icon(TIcons.search, size: 20),
                     ),
                     const SizedBox(width: _kIconGap),
                     Expanded(

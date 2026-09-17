@@ -144,6 +144,10 @@ void main() {
     final selectedIcon = find.byIcon(TIcons.check);
     expect(selectedIcon, findsOneWidget);
     expect(tester.widget<Icon>(selectedIcon).size, 24);
+    expect(
+      tester.widget<Text>(selectedText).style?.color,
+      TThemeData.defaultData().brandNormalColor,
+    );
     expect(tester.widget<Text>(selectedText).style?.fontSize, 16);
     expect(tester.widget<Text>(selectedText).style?.height, 1.5);
     expect(tester.getTopLeft(selectedText).dx, closeTo(16, 0.001));
@@ -469,6 +473,21 @@ void main() {
     final chips = find.text('选项名称');
     expect(chips, findsNWidgets(12));
     expect(find.text('禁用选项'), findsNWidgets(3));
+    final disabledChip = tester.widget<Container>(
+      find
+          .ancestor(
+            of: find.text('禁用选项').first,
+            matching: find.byWidgetPredicate(
+              (widget) =>
+                  widget is Container && widget.decoration is BoxDecoration,
+            ),
+          )
+          .first,
+    );
+    expect(
+      (disabledChip.decoration! as BoxDecoration).color,
+      TThemeData.defaultData().bgColorComponentDisabled,
+    );
     expect(
       tester
           .getSize(

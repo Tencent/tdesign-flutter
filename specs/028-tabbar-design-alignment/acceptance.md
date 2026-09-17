@@ -125,3 +125,33 @@
 - 维护者已确认当前可先以 Simulator 证据推送并发起 CNB Review；Android 真机重新
   连接后再补最终版本逐项操作，Simulator 证据不冒充真机证据。
 - GitHub #1085 / CNB #152 已存在；本轮新 head 远端 CI 与 CodeBuddy Review 待推送后核验。
+
+## 2026-09-17 双层菜单默认宽度补充验收
+
+- Figma node `28591:35265` 的双层菜单为 107px 宽、152px 高，包含 3 个
+  48px 菜单行；修复前 375px 四等分场景默认宽度约 73.25px，修复后为 107px。
+- 修复前 / 修复后 / Figma 三栏标注图和修复前后像素 Diff 作为 PR Review 证据
+  单独生成，不提交进仓库或 Spec，避免长期积累二进制审查资产。
+- Flutter 3.32.0 与 3.47.0 的组件测试、Demo 测试及 analyze 均通过；Linux
+  Flutter 3.32.0 的 10 个视觉用例与 1 个注册集合测试更新后无更新参数复跑
+  11/11 通过。
+- 本轮尚未用最终提交在移动设备重新逐项操作，因此对应移动设备验收项继续保持
+  未完成，不以测试或 Golden 替代。
+
+### Demo Golden 覆盖矩阵
+
+| 公开范围 | 初始态 | 点击后稳定态 | 独立交互态 | 明暗主题 |
+| --- | --- | --- | --- | --- |
+| 纯文本 | 整页 Golden | 第二项选中整页 Golden | “点击了 Item 2” Toast | light / dark |
+| 图标加文本 | 整页 Golden | 第二项选中整页 Golden | 无额外视觉结果 | light / dark |
+| 纯图标 | 整页 Golden | 第二项选中整页 Golden | 无额外视觉结果 | light / dark |
+| 双层级文本 | 整页 Golden | 第二项选中整页 Golden | 菜单展开、“选择了个人主页” Toast | light / dark |
+| 弱选中纯文本 | 整页 Golden | 第二项选中整页 Golden | 无额外视觉结果 | light / dark |
+| 弱选中纯图标 | 整页 Golden | 第二项选中整页 Golden | 无额外视觉结果 | light / dark |
+| 弱选中图标加文本 | 整页 Golden | 第二项选中整页 Golden | 无额外视觉结果 | light / dark |
+| 悬浮胶囊 | 整页 Golden | 第二项选中整页 Golden | 无额外视觉结果 | light / dark |
+| 自定义样式 | 整页 Golden | 第二项选中整页 Golden | 无额外视觉结果 | light / dark |
+
+整页 Golden 使用 375×1260 视口完整包含 9 个实例，不是首屏截图；Toast 与展开菜单
+使用 375×812 手机视口的 Overlay Golden。注册集合测试将上述 9 个初始态、9 个
+选中态及 3 类独立交互态逐主题登记，避免后续删掉测试却继续宣称覆盖完整。

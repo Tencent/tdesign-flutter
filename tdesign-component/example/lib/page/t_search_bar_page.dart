@@ -40,7 +40,8 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
     return ExamplePage(
       title: tTitle(),
       desc: '用于用户输入搜索信息，并进行页面内容搜索。',
-      backgroundColor: context.tTheme.bgColorPage,
+      compactDemo: true,
+      showTestModule: false,
       exampleCodeGroup: 'search',
       children: [
         ExampleModule(
@@ -59,11 +60,6 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
           title: '组件样式',
           children: [
             ExampleItem(desc: '搜索框形状', center: false, builder: _buildShape),
-          ],
-        ),
-        ExampleModule(
-          title: '组件状态',
-          children: [
             ExampleItem(
               desc: '默认状态其他对齐方式',
               center: false,
@@ -109,11 +105,11 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
     return const Column(
       children: [
         _SearchDemoSurface(
-          child: TSearchBar(hintText: '最大输入10个字符', maxLength: 10),
+          child: TSearchBar(hintText: '最多输入10个汉字', maxLength: 10),
         ),
         SizedBox(height: 16),
         _SearchDemoSurface(
-          child: TSearchBar(hintText: '最大输入10个字符，汉字算两个', maxCharacter: 10),
+          child: TSearchBar(hintText: '最多输入10个字符（汉字算两个）', maxCharacter: 10),
         ),
       ],
     );
@@ -125,7 +121,6 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
       child: TSearchBar(
         controller: _actionController,
         hintText: '搜索预设文案',
-        textAlignment: TSearchBarAlignment.center,
         actionText: _showAction ? '取消' : null,
         onFocusChanged: (focused) => setState(() => _showAction = focused),
         onActionPressed: () {

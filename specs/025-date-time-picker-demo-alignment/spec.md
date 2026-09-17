@@ -28,7 +28,7 @@
 
 ## 组件边界
 
-三个组件均为平铺、严格受控的面板。组件内部不创建 Popup、不显示弹层标题栏或确认按钮，不提供 visible/usePopup/autoClose/defaultValue。使用方自行组合 TPopup、标题、关闭、临时值与取消/确认；公开 Demo 的弹出效果只用于演示这种组合，不代表组件默认模式。
+三个滚轮组件均为平铺、严格受控的面板，内部不创建 Popup、不显示弹层标题栏或确认按钮，不提供 visible/usePopup/autoClose/defaultValue。需要设计稿中的标准弹层时使用 TPickerPopup；它只统一 Popup 尺寸与路由组合，临时值、标题内容、取消和确认行为仍由调用方管理。
 
 ## 参考与默认值判断
 

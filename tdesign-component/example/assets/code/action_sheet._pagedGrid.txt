@@ -1,0 +1,13 @@
+Widget _pagedGrid(BuildContext context) => _trigger(
+    label: '带翻页宫格型',
+    onPressed: () => TActionSheet.showGrid(
+      context,
+      items: [
+        ..._appGridItems(context),
+        ..._iconGridItems(),
+        ..._appGridItems(context),
+      ],
+      layout: const TActionSheetGridLayout.paged(count: 8, rows: 2),
+      onSelected: (item) => _showSelection(context, item),
+    ),
+  );

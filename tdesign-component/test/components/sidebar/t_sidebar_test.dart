@@ -583,9 +583,11 @@ void main() {
       expect(find.byType(TWrapSideBarItem), findsOneWidget);
       final icon = tester.getRect(find.byIcon(Icons.star));
       final label = tester.getRect(find.text('短'));
-      final badge = tester.getRect(find.byType(TBadge));
+      final badgeLabel = tester.getRect(find.text('1'));
       expect(icon.right, lessThanOrEqualTo(label.left));
-      expect(badge.top, lessThan(label.top));
+      expect(badgeLabel.top, lessThan(label.top));
+      expect(badgeLabel.center.dx, greaterThanOrEqualTo(label.right));
+      expect(badgeLabel.center.dx - label.right, lessThanOrEqualTo(12));
     });
 
     testWidgets('长标签与浮层 badge 可共同渲染', (tester) async {
