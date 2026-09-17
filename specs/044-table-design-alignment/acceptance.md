@@ -21,7 +21,7 @@
 | Table API 定向生成 | 通过 | `table_api.md` 包含新增公开类型、参数与限制条件 |
 | `git diff --check` | 通过 | 无空白错误 |
 | Android 真机 `40302eeb` 构建、安装与启动 | 通过 | Android 16，`com.tdesign.tdesign_flutter_example/.MainActivity` 已验证前台运行 |
-| Table light/dark Golden（Linux Flutter 3.32.0） | 等待远端复跑 | 旧 head `6c94607c` 已通过；表体渲染结构变化后不沿用旧 head 结论 |
+| Table light/dark Golden（Linux Flutter 3.32.0） | 已更新待无更新复跑 | 从当前实现对应的 CI 失败产物更新 light/dark 基线；不沿用旧 head 结论 |
 
 ## 人工验收
 
@@ -37,4 +37,4 @@
 ## 未覆盖项与后续工作
 
 - 固定行不属于本次 Figma 公开 Demo，后续独立设计。
-- 行 key、合并单元格、列最小宽度、固定高度和 cell 上下文已作为追加契约完成实现与本地验证；Linux Golden 与远端 CI 仍以推送后最终 head 为准。
+- 行 key、合并单元格、列最小宽度、固定高度和 cell 上下文已作为追加契约完成实现与本地验证；Linux Golden 已从同一 CI 环境更新，最终结论以推送后的无更新复跑为准。
