@@ -20,7 +20,7 @@
 | scrollController | ScrollController? | - | 滚动控制器 |
 | sticky | bool | true | 锚点是否吸顶 |
 | stickyOffset | double | 0 | 锚点吸顶时与顶部的距离 |
-| useSafeArea | bool | true | 是否避让系统安全区 |
+| useSafeArea | bool | false | 是否避让系统安全区，默认 false。 仅在组件自身负责屏幕边缘布局时开启；若外层 Popup 或页面壳已经处理安全区， 应保持关闭，避免重复避让。 |
 
 
 ### TIndexesAnchor
