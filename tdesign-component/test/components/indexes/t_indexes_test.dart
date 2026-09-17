@@ -100,7 +100,7 @@ void main() {
       expect(lerped.anchorVerticalPadding, 6);
     });
 
-    test('lerp 保留 nullable 字段的主题回退语义', () {
+    test('lerp 区分固定默认值与动态主题回退', () {
       const fallback = TIndexesThemeData();
       const explicit = TIndexesThemeData(
         indexItemSize: 24,
@@ -108,16 +108,60 @@ void main() {
       );
 
       final beforeSwitch = fallback.lerp(explicit, 0.25);
-      expect(beforeSwitch.indexItemSize, isNull);
+      expect(beforeSwitch.indexItemSize, 21);
       expect(beforeSwitch.activeIndexBackgroundColor, isNull);
 
       final afterSwitch = fallback.lerp(explicit, 0.75);
-      expect(afterSwitch.indexItemSize, 24);
+      expect(afterSwitch.indexItemSize, 23);
       expect(afterSwitch.activeIndexBackgroundColor, Colors.blue);
+
+      final reverseBeforeSwitch = explicit.lerp(fallback, 0.25);
+      expect(reverseBeforeSwitch.indexItemSize, 23);
+      expect(reverseBeforeSwitch.activeIndexBackgroundColor, Colors.blue);
+
+      final reverseAfterSwitch = explicit.lerp(fallback, 0.75);
+      expect(reverseAfterSwitch.indexItemSize, 21);
+      expect(reverseAfterSwitch.activeIndexBackgroundColor, isNull);
 
       final bothFallback = fallback.lerp(const TIndexesThemeData(), 0.5);
       expect(bothFallback.indexItemSize, isNull);
       expect(bothFallback.activeIndexBackgroundColor, isNull);
+    });
+
+    test('lerp 使用运行时固定默认值计算连续字段的中间态', () {
+      const fallback = TIndexesThemeData();
+      const explicit = TIndexesThemeData(
+        indexListMaxHeight: 0.6,
+        indexItemSize: 24,
+        indexItemSpacing: 6,
+        tipMaxWidth: 119,
+      );
+
+      final forward = fallback.lerp(explicit, 0.25);
+      expect(forward.indexListMaxHeight, closeTo(0.75, 0.0001));
+      expect(forward.indexItemSize, 21);
+      expect(forward.indexItemSpacing, 3);
+      expect(forward.tipMaxWidth, 104);
+
+      final reverse = explicit.lerp(fallback, 0.25);
+      expect(reverse.indexListMaxHeight, closeTo(0.65, 0.0001));
+      expect(reverse.indexItemSize, 23);
+      expect(reverse.indexItemSpacing, 5);
+      expect(reverse.tipMaxWidth, 114);
+    });
+
+    test('ThemeData.lerp 使用相同的固定默认值和动态回退语义', () {
+      final begin = ThemeData(extensions: const [TIndexesThemeData()]);
+      final end = ThemeData(
+        extensions: const [
+          TIndexesThemeData(indexItemSize: 24, activeIndexColor: Colors.blue),
+        ],
+      );
+
+      final theme = ThemeData.lerp(begin, end, 0.25);
+      final indexesTheme = theme.extension<TIndexesThemeData>()!;
+      expect(indexesTheme.indexItemSize, 21);
+      expect(indexesTheme.activeIndexColor, isNull);
     });
   });
 

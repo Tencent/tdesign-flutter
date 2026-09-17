@@ -186,20 +186,32 @@ class TIndexesThemeData extends ThemeExtension<TIndexesThemeData> {
       return this;
     }
     return TIndexesThemeData(
-      indexListMaxHeight: _lerpNullableDouble(
+      indexListMaxHeight: _lerpDoubleWithDefault(
         indexListMaxHeight,
         other.indexListMaxHeight,
         t,
+        0.8,
       ),
       sidebarRight: _lerpNullableDouble(sidebarRight, other.sidebarRight, t),
-      indexItemSize: _lerpNullableDouble(indexItemSize, other.indexItemSize, t),
-      indexItemSpacing: _lerpNullableDouble(
+      indexItemSize: _lerpDoubleWithDefault(
+        indexItemSize,
+        other.indexItemSize,
+        t,
+        20,
+      ),
+      indexItemSpacing: _lerpDoubleWithDefault(
         indexItemSpacing,
         other.indexItemSpacing,
         t,
+        2,
       ),
       tipSize: _lerpNullableDouble(tipSize, other.tipSize, t),
-      tipMaxWidth: _lerpNullableDouble(tipMaxWidth, other.tipMaxWidth, t),
+      tipMaxWidth: _lerpDoubleWithDefault(
+        tipMaxWidth,
+        other.tipMaxWidth,
+        t,
+        99,
+      ),
       tipGap: _lerpNullableDouble(tipGap, other.tipGap, t),
       indexColor: _lerpNullableColor(indexColor, other.indexColor, t),
       activeIndexColor: _lerpNullableColor(
@@ -257,6 +269,18 @@ class TIndexesThemeData extends ThemeExtension<TIndexesThemeData> {
       capsuleMargin: _lerpNullableDouble(capsuleMargin, other.capsuleMargin, t),
     );
   }
+}
+
+double? _lerpDoubleWithDefault(
+  double? begin,
+  double? end,
+  double t,
+  double defaultValue,
+) {
+  if (begin == null && end == null) {
+    return null;
+  }
+  return lerpDouble(begin ?? defaultValue, end ?? defaultValue, t);
 }
 
 double? _lerpNullableDouble(double? begin, double? end, double t) {

@@ -66,24 +66,57 @@ class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
       return this;
     }
     return TSideBarThemeData(
-      contentPadding: EdgeInsetsGeometry.lerp(
+      contentPadding: _lerpNullableInsets(
         contentPadding,
         other.contentPadding,
         t,
       ),
-      selectedColor: Color.lerp(selectedColor, other.selectedColor, t),
-      unSelectedColor: Color.lerp(unSelectedColor, other.unSelectedColor, t),
-      selectedTextStyle: TextStyle.lerp(
+      selectedColor: _lerpNullableColor(selectedColor, other.selectedColor, t),
+      unSelectedColor: _lerpNullableColor(
+        unSelectedColor,
+        other.unSelectedColor,
+        t,
+      ),
+      selectedTextStyle: _lerpNullableTextStyle(
         selectedTextStyle,
         other.selectedTextStyle,
         t,
       ),
-      selectedBgColor: Color.lerp(selectedBgColor, other.selectedBgColor, t),
-      unSelectedBgColor: Color.lerp(
+      selectedBgColor: _lerpNullableColor(
+        selectedBgColor,
+        other.selectedBgColor,
+        t,
+      ),
+      unSelectedBgColor: _lerpNullableColor(
         unSelectedBgColor,
         other.unSelectedBgColor,
         t,
       ),
     );
   }
+}
+
+EdgeInsetsGeometry? _lerpNullableInsets(
+  EdgeInsetsGeometry? begin,
+  EdgeInsetsGeometry? end,
+  double t,
+) {
+  if (begin == null || end == null) {
+    return t < 0.5 ? begin : end;
+  }
+  return EdgeInsetsGeometry.lerp(begin, end, t);
+}
+
+Color? _lerpNullableColor(Color? begin, Color? end, double t) {
+  if (begin == null || end == null) {
+    return t < 0.5 ? begin : end;
+  }
+  return Color.lerp(begin, end, t);
+}
+
+TextStyle? _lerpNullableTextStyle(TextStyle? begin, TextStyle? end, double t) {
+  if (begin == null || end == null) {
+    return t < 0.5 ? begin : end;
+  }
+  return TextStyle.lerp(begin, end, t);
 }
