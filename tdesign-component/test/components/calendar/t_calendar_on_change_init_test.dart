@@ -66,8 +66,9 @@ void main() {
     await tester.tap(day16.first);
     await tester.pump();
 
-    final sheetState = tester.state(find.byType(_TestMultipleSheet))
-        as _TestMultipleSheetState;
+    final sheetState =
+        tester.state(find.byType(_TestMultipleSheet))
+            as _TestMultipleSheetState;
     expect(sheetState.pending.length, 2);
   });
 }

@@ -4,8 +4,8 @@ import 'package:tdesign_flutter/src/components/popup/t_popup.dart'
     show PopupLayout;
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import 'helpers/popup_test_helpers.dart';
-import 'helpers/popup_test_resource.dart';
+import '../../helpers/popup_test_helpers.dart';
+import '../../helpers/popup_test_resource.dart';
 
 void main() {
   tearDown(resetPopupTestResource);

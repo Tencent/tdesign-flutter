@@ -443,9 +443,7 @@ void main() {
       List<DateTime>? result;
 
       await tester.pumpWidget(
-        _buildTestApp(
-          _RuntimeMaxDateHarness(onChanged: (v) => result = v),
-        ),
+        _buildTestApp(_RuntimeMaxDateHarness(onChanged: (v) => result = v)),
       );
       await tester.pumpAndSettle();
 
@@ -467,9 +465,7 @@ void main() {
       List<DateTime>? result;
 
       await tester.pumpWidget(
-        _buildTestApp(
-          _RuntimeWeekStartHarness(onChanged: (v) => result = v),
-        ),
+        _buildTestApp(_RuntimeWeekStartHarness(onChanged: (v) => result = v)),
       );
       await tester.pumpAndSettle();
 
@@ -483,9 +479,7 @@ void main() {
     });
 
     testWidgets('运行期变更 style.cellHeight 后格高更新', (tester) async {
-      await tester.pumpWidget(
-        _buildTestApp(const _RuntimeStyleHarness()),
-      );
+      await tester.pumpWidget(_buildTestApp(const _RuntimeStyleHarness()));
       await tester.pumpAndSettle();
 
       final cellGesture = find
@@ -577,9 +571,8 @@ class _RuntimeWeekStartHarnessState extends State<_RuntimeWeekStartHarness> {
     return Column(
       children: [
         TextButton(
-          onPressed: () => setState(
-            () => _firstDayOfWeek = TCalendarFirstDayOfWeek.monday,
-          ),
+          onPressed: () =>
+              setState(() => _firstDayOfWeek = TCalendarFirstDayOfWeek.monday),
           child: const Text('切到周一'),
         ),
         Expanded(
@@ -632,9 +625,9 @@ class _RuntimeStyleHarnessState extends State<_RuntimeStyleHarness> {
         SizedBox(
           height: _calendarHeightFor(_cellHeight),
           child: Theme(
-            data: Theme.of(context).mergeExtension(
-              TCalendarThemeData(cellHeight: _cellHeight),
-            ),
+            data: Theme.of(
+              context,
+            ).mergeExtension(TCalendarThemeData(cellHeight: _cellHeight)),
             child: TCalendar(
               variant: TCalendarVariant.single,
               value: const [],

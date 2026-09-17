@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/popup/t_popup.dart';
 
-import 'helpers/popup_test_helpers.dart';
+import '../../helpers/popup_test_helpers.dart';
 
 void main() {
   group('PopupLayout', () {
@@ -15,9 +15,11 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: Stack(children: [
-              layout.wrapPositioned(child: const SizedBox(height: 50))
-            ]),
+            body: Stack(
+              children: [
+                layout.wrapPositioned(child: const SizedBox(height: 50)),
+              ],
+            ),
           ),
         ),
       );
@@ -37,9 +39,11 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: Stack(children: [
-              layout.wrapPositioned(child: const SizedBox(height: 50))
-            ]),
+            body: Stack(
+              children: [
+                layout.wrapPositioned(child: const SizedBox(height: 50)),
+              ],
+            ),
           ),
         ),
       );
@@ -51,15 +55,13 @@ void main() {
     });
 
     testWidgets('bottom 无 height 时使用默认高度并贴底', (tester) async {
-      final layout = PopupLayout(
-        placement: TPopupPlacement.bottom,
-      );
+      final layout = PopupLayout(placement: TPopupPlacement.bottom);
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: Stack(
               children: [
-                layout.wrapPositioned(child: const SizedBox(height: 1))
+                layout.wrapPositioned(child: const SizedBox(height: 1)),
               ],
             ),
           ),
@@ -76,7 +78,9 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: Stack(children: [layout.wrapPositioned(child: const SizedBox())]),
+            body: Stack(
+              children: [layout.wrapPositioned(child: const SizedBox())],
+            ),
           ),
         ),
       );
@@ -94,8 +98,9 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body:
-                Stack(children: [left.wrapPositioned(child: const SizedBox())]),
+            body: Stack(
+              children: [left.wrapPositioned(child: const SizedBox())],
+            ),
           ),
         ),
       );
@@ -124,8 +129,9 @@ void main() {
       expect(positioned.bottom, 10);
     });
 
-    testWidgets('center placement 仅 Center 包裹（尺寸由 PopupShell 控制）',
-        (tester) async {
+    testWidgets('center placement 仅 Center 包裹（尺寸由 PopupShell 控制）', (
+      tester,
+    ) async {
       final layout = PopupLayout(
         placement: TPopupPlacement.center,
         width: 200,
@@ -149,42 +155,34 @@ void main() {
         ),
       );
       expect(find.byType(Center), findsOneWidget);
-      final box =
-          tester.widget<SizedBox>(find.byKey(const ValueKey('content')));
+      final box = tester.widget<SizedBox>(
+        find.byKey(const ValueKey('content')),
+      );
       expect(box.width, 200);
       expect(box.height, 150);
     });
 
     test('slideOffset 五向偏移', () {
-      final layout = PopupLayout(
-        placement: TPopupPlacement.top,
-      );
+      final layout = PopupLayout(placement: TPopupPlacement.top);
       expect(layout.slideOffset(0), const Offset(0, -1));
       expect(layout.slideOffset(1), const Offset(0, 0));
 
-      final bottom = PopupLayout(
-        placement: TPopupPlacement.bottom,
-      );
+      final bottom = PopupLayout(placement: TPopupPlacement.bottom);
       expect(bottom.slideOffset(0), const Offset(0, 1));
 
-      final left = PopupLayout(
-        placement: TPopupPlacement.left,
-      );
+      final left = PopupLayout(placement: TPopupPlacement.left);
       expect(left.slideOffset(0.5), const Offset(-0.5, 0));
 
-      final right = PopupLayout(
-        placement: TPopupPlacement.right,
-      );
+      final right = PopupLayout(placement: TPopupPlacement.right);
       expect(right.slideOffset(0.5), const Offset(0.5, 0));
 
-      final center = PopupLayout(
-        placement: TPopupPlacement.center,
-      );
+      final center = PopupLayout(placement: TPopupPlacement.center);
       expect(center.slideOffset(0.5), Offset.zero);
     });
 
-    testWidgets('center 仅 Positioned.fill + Center，由 PopupShell 控制尺寸',
-        (tester) async {
+    testWidgets('center 仅 Positioned.fill + Center，由 PopupShell 控制尺寸', (
+      tester,
+    ) async {
       final layout = PopupLayout(
         placement: TPopupPlacement.center,
         width: 100,
@@ -301,8 +299,7 @@ void main() {
         expect(positioned.right, 0);
       });
 
-      testWidgets('center 应用完整 safePadding，在安全区内居中',
-          (tester) async {
+      testWidgets('center 应用完整 safePadding，在安全区内居中', (tester) async {
         final layout = PopupLayout(placement: TPopupPlacement.center);
         await tester.pumpWidget(
           MaterialApp(
@@ -326,8 +323,7 @@ void main() {
         expect(find.byKey(const ValueKey('panel')), findsOneWidget);
       });
 
-      testWidgets('inset 类型与 placement 不匹配时仅应用 safePadding',
-          (tester) async {
+      testWidgets('inset 类型与 placement 不匹配时仅应用 safePadding', (tester) async {
         final layout = PopupLayout(
           placement: TPopupPlacement.top,
           inset: const TPopupBottomInset(left: 99, right: 88),
@@ -446,10 +442,7 @@ void main() {
 
       testWidgets('仅单侧安全区：top 不受 bottom padding 影响', (tester) async {
         const onlyBottom = EdgeInsets.only(bottom: 59);
-        final layout = PopupLayout(
-          placement: TPopupPlacement.top,
-          height: 80,
-        );
+        final layout = PopupLayout(placement: TPopupPlacement.top, height: 80);
         final safePadding = PopupLayout.safePaddingFor(
           TPopupPlacement.top,
           onlyBottom,
@@ -532,10 +525,7 @@ void main() {
 
     testWidgets('top 仅应用垂直 safePadding', (tester) async {
       const safeTop = 47.0;
-      final layout = PopupLayout(
-        placement: TPopupPlacement.top,
-        height: 80,
-      );
+      final layout = PopupLayout(placement: TPopupPlacement.top, height: 80);
       final safePadding = PopupLayout.safePaddingFor(
         TPopupPlacement.top,
         const EdgeInsets.fromLTRB(11, safeTop, 33, 44),
@@ -591,9 +581,7 @@ void main() {
 
     testWidgets('bottom 无 height 时使用默认高度并贴安全区上沿', (tester) async {
       const safeBottom = 21.0;
-      final layout = PopupLayout(
-        placement: TPopupPlacement.bottom,
-      );
+      final layout = PopupLayout(placement: TPopupPlacement.bottom);
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -678,15 +666,11 @@ void main() {
 
     test('alignment 各方向', () {
       expect(
-        PopupLayout(
-          placement: TPopupPlacement.top,
-        ).alignment,
+        PopupLayout(placement: TPopupPlacement.top).alignment,
         Alignment.topCenter,
       );
       expect(
-        PopupLayout(
-          placement: TPopupPlacement.right,
-        ).alignment,
+        PopupLayout(placement: TPopupPlacement.right).alignment,
         Alignment.centerRight,
       );
     });
