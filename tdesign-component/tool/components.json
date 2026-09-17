@@ -668,10 +668,18 @@
       "api": {
         "names": [
           "TTable",
-          "TTableCol",
-          "TTableEmpty"
+          "TTableColumn",
+          "TTableThemeData",
+          "TTableSelectionMode",
+          "TTableSortDirection",
+          "TTableSort",
+          "TTableColumnFixed",
+          "TTableColumnAlign",
+          "TTableCellTap",
+          "TTableRowTap",
+          "TTableCellBuilder"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {

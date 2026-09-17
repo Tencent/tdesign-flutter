@@ -698,6 +698,19 @@ const componentTestManifests = <ComponentTestManifest>[
     ],
   ),
   ComponentTestManifest(
+    name: 'table',
+    coverageTargets: ['lib/src/components/table/'],
+    componentTests: ['test/components/table/t_table_test.dart'],
+    exampleTests: ['test/table_page_test.dart'],
+    visualTests: [
+      VisualTestManifest(
+        name: 'Table Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/table_demo_golden_test.dart'],
+      ),
+    ],
+  ),
+  ComponentTestManifest(
     name: 'text',
     coverageTargets: ['lib/src/components/text/'],
     componentTests: [

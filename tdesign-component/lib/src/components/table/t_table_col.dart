@@ -25,11 +25,8 @@ enum TTableColumnAlign {
 }
 
 /// 单元格构建器。
-typedef TTableCellBuilder<T> = Widget Function(
-  BuildContext context,
-  T row,
-  int rowIndex,
-);
+typedef TTableCellBuilder<T> =
+    Widget Function(BuildContext context, T row, int rowIndex);
 
 /// 强类型表格列配置。
 class TTableColumn<T> {
@@ -37,11 +34,11 @@ class TTableColumn<T> {
     required this.id,
     required this.header,
     required this.cellBuilder,
-    this.width = 120,
+    this.width,
     this.fixed = TTableColumnFixed.none,
     this.align = TTableColumnAlign.left,
     this.comparator,
-  }) : assert(width > 0);
+  }) : assert(width == null || width > 0);
 
   /// 列唯一标识，用于受控排序。
   final String id;
@@ -53,7 +50,10 @@ class TTableColumn<T> {
   final TTableCellBuilder<T> cellBuilder;
 
   /// 列宽。
-  final double width;
+  ///
+  /// 为空时与其他未指定宽度的列均分表格剩余宽度；显式宽度超出可用区域时，
+  /// 中间非固定列可横向滚动。
+  final double? width;
 
   /// 固定位置。
   final TTableColumnFixed fixed;

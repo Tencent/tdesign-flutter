@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
+import '../checkbox/t_check_box.dart';
 import '../empty/t_empty.dart';
+import '../icon/t_icon.dart';
+import '../loading/t_loading.dart';
 import 't_table_col.dart';
 import 't_table_theme_data.dart';
 import 't_table_types.dart';
@@ -11,6 +16,9 @@ import 't_table_types.dart';
 /// 单元格点击回调。
 typedef TTableCellTap<T> =
     void Function(int rowIndex, T row, TTableColumn<T> column);
+
+/// 行点击回调。
+typedef TTableRowTap<T> = void Function(int rowIndex, T row);
 
 /// 强类型、受控排序与选择的表格组件。
 class TTable<T> extends StatefulWidget {
@@ -29,7 +37,10 @@ class TTable<T> extends StatefulWidget {
     this.footer,
     this.showHeader = true,
     this.maxHeight,
+    this.bordered,
+    this.stripe,
     this.onCellTap,
+    this.onRowTap,
     this.onScroll,
     super.key,
   }) : assert(columns.length > 0),
@@ -81,8 +92,23 @@ class TTable<T> extends StatefulWidget {
   /// 表体的最大可视高度；内容超过此高度时在表体内滚动。
   final double? maxHeight;
 
+  /// 是否显示完整单元格边框。
+  ///
+  /// 为空时读取 [TTableThemeData.bordered]，最后回退为 `false`。
+  final bool? bordered;
+
+  /// 是否为奇数数据行显示斑马纹背景。
+  ///
+  /// 为空时读取 [TTableThemeData.stripe]，最后回退为 `false`。
+  final bool? stripe;
+
   /// 单元格点击回调。
   final TTableCellTap<T>? onCellTap;
+
+  /// 行点击回调。
+  ///
+  /// 点击普通单元格时，会在 [onCellTap] 之后调用该回调；点击选择控件时不触发。
+  final TTableRowTap<T>? onRowTap;
 
   /// 垂直滚动通知。
   final ValueChanged<ScrollNotification>? onScroll;
@@ -94,10 +120,25 @@ class TTable<T> extends StatefulWidget {
 class _TTableState<T> extends State<TTable<T>> {
   static const _loadingBodyHeight = 96.0;
   static const _selectionColumnWidth = 48.0;
+  static const _defaultColumnWidth = 120.0;
+  static const _defaultRowHeight = 38.0;
+  static const _defaultHeaderHeight = 38.0;
 
   final _horizontalScroll = _TableScrollCoordinator();
 
   bool get _selectable => widget.selectionMode == TTableSelectionMode.multiple;
+
+  @override
+  void didUpdateWidget(covariant TTable<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.data.length < oldWidget.data.length) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _horizontalScroll.retainRows(widget.data.length);
+        }
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -109,20 +150,10 @@ class _TTableState<T> extends State<TTable<T>> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TTableThemeData>();
     final rows = _sortedData();
-    final left = widget.columns
-        .where((column) => column.fixed == TTableColumnFixed.left)
-        .toList();
-    final center = widget.columns
-        .where((column) => column.fixed == TTableColumnFixed.none)
-        .toList();
-    final right = widget.columns
-        .where((column) => column.fixed == TTableColumnFixed.right)
-        .toList();
-
     final naturalWidth =
         widget.columns.fold<double>(
           0,
-          (total, column) => total + column.width,
+          (total, column) => total + (column.width ?? _defaultColumnWidth),
         ) +
         (_selectable ? _selectionColumnWidth : 0);
 
@@ -131,6 +162,16 @@ class _TTableState<T> extends State<TTable<T>> {
         final width =
             theme?.width ??
             (constraints.hasBoundedWidth ? constraints.maxWidth : naturalWidth);
+        final resolvedColumns = _resolveColumns(width);
+        final left = resolvedColumns
+            .where((column) => column.value.fixed == TTableColumnFixed.left)
+            .toList();
+        final center = resolvedColumns
+            .where((column) => column.value.fixed == TTableColumnFixed.none)
+            .toList();
+        final right = resolvedColumns
+            .where((column) => column.value.fixed == TTableColumnFixed.right)
+            .toList();
         return SizedBox(
           width: width,
           child: Column(
@@ -145,6 +186,31 @@ class _TTableState<T> extends State<TTable<T>> {
         );
       },
     );
+  }
+
+  List<_ResolvedTableColumn<T>> _resolveColumns(double tableWidth) {
+    final availableWidth =
+        (tableWidth - (_selectable ? _selectionColumnWidth : 0)).clamp(
+          0.0,
+          double.infinity,
+        );
+    final explicitWidth = widget.columns.fold<double>(
+      0,
+      (total, column) => total + (column.width ?? 0),
+    );
+    final flexibleCount = widget.columns
+        .where((column) => column.width == null)
+        .length;
+    final remainingWidth = availableWidth - explicitWidth;
+    final flexibleWidth = flexibleCount == 0
+        ? _defaultColumnWidth
+        : remainingWidth > 0
+        ? remainingWidth / flexibleCount
+        : _defaultColumnWidth;
+    return [
+      for (final column in widget.columns)
+        _ResolvedTableColumn(column, column.width ?? flexibleWidth),
+    ];
   }
 
   List<T> _sortedData() {
@@ -172,18 +238,24 @@ class _TTableState<T> extends State<TTable<T>> {
     BuildContext context,
     TTableThemeData? theme,
     List<T> rows,
-    List<TTableColumn<T>> left,
-    List<TTableColumn<T>> center,
-    List<TTableColumn<T>> right,
+    List<_ResolvedTableColumn<T>> left,
+    List<_ResolvedTableColumn<T>> center,
+    List<_ResolvedTableColumn<T>> right,
   ) {
     return SizedBox(
-      height: theme?.headerHeight ?? 48,
+      height: theme?.headerHeight ?? _defaultHeaderHeight,
       child: ColoredBox(
-        color: theme?.headerColor ?? context.tTheme.bgColorSecondaryContainer,
+        color: theme?.headerColor ?? context.tTheme.bgColorContainer,
         child: Row(
           children: [
             if (_selectable) _buildSelectAll(context, rows),
-            ...left.map((column) => _buildHeaderCell(context, theme, column)),
+            for (var index = 0; index < left.length; index++)
+              _buildHeaderCell(
+                context,
+                theme,
+                left[index],
+                trailingBoundary: index == left.length - 1,
+              ),
             Expanded(
               child: SingleChildScrollView(
                 controller: _horizontalScroll.headerController,
@@ -195,7 +267,13 @@ class _TTableState<T> extends State<TTable<T>> {
                 ),
               ),
             ),
-            ...right.map((column) => _buildHeaderCell(context, theme, column)),
+            for (var index = 0; index < right.length; index++)
+              _buildHeaderCell(
+                context,
+                theme,
+                right[index],
+                leadingBoundary: index == 0,
+              ),
           ],
         ),
       ),
@@ -206,9 +284,9 @@ class _TTableState<T> extends State<TTable<T>> {
     BuildContext context,
     TTableThemeData? theme,
     List<T> rows,
-    List<TTableColumn<T>> left,
-    List<TTableColumn<T>> center,
-    List<TTableColumn<T>> right,
+    List<_ResolvedTableColumn<T>> left,
+    List<_ResolvedTableColumn<T>> center,
+    List<_ResolvedTableColumn<T>> right,
   ) {
     var content = rows.isEmpty
         ? widget.loading
@@ -236,10 +314,7 @@ class _TTableState<T> extends State<TTable<T>> {
             child: ColoredBox(
               color: (theme?.backgroundColor ?? context.tTheme.bgColorContainer)
                   .withValues(alpha: 0.72),
-              child: Center(
-                child:
-                    widget.loadingWidget ?? const CircularProgressIndicator(),
-              ),
+              child: Center(child: widget.loadingWidget ?? const TLoading()),
             ),
           ),
         ),
@@ -255,9 +330,9 @@ class _TTableState<T> extends State<TTable<T>> {
     BuildContext context,
     TTableThemeData? theme,
     List<T> rows,
-    List<TTableColumn<T>> left,
-    List<TTableColumn<T>> center,
-    List<TTableColumn<T>> right,
+    List<_ResolvedTableColumn<T>> left,
+    List<_ResolvedTableColumn<T>> center,
+    List<_ResolvedTableColumn<T>> right,
   ) {
     final body = ListView.builder(
       shrinkWrap: true,
@@ -265,9 +340,10 @@ class _TTableState<T> extends State<TTable<T>> {
       itemCount: rows.length,
       itemBuilder: (context, index) {
         final row = rows[index];
-        final striped = (theme?.stripe ?? false) && index.isOdd;
+        final striped =
+            (widget.stripe ?? theme?.stripe ?? false) && index.isOdd;
         return SizedBox(
-          height: theme?.rowHeight ?? 48,
+          height: theme?.rowHeight ?? _defaultRowHeight,
           child: ColoredBox(
             color: striped
                 ? theme?.stripeColor ?? context.tTheme.bgColorSecondaryContainer
@@ -275,9 +351,19 @@ class _TTableState<T> extends State<TTable<T>> {
             child: Row(
               children: [
                 if (_selectable) _buildRowSelection(context, row, index),
-                ...left.map(
-                  (column) => _buildCell(context, theme, row, index, column),
-                ),
+                for (
+                  var columnIndex = 0;
+                  columnIndex < left.length;
+                  columnIndex++
+                )
+                  _buildCell(
+                    context,
+                    theme,
+                    row,
+                    index,
+                    left[columnIndex],
+                    trailingBoundary: columnIndex == left.length - 1,
+                  ),
                 Expanded(
                   child: SingleChildScrollView(
                     controller: _horizontalScroll.rowController(index),
@@ -292,9 +378,19 @@ class _TTableState<T> extends State<TTable<T>> {
                     ),
                   ),
                 ),
-                ...right.map(
-                  (column) => _buildCell(context, theme, row, index, column),
-                ),
+                for (
+                  var columnIndex = 0;
+                  columnIndex < right.length;
+                  columnIndex++
+                )
+                  _buildCell(
+                    context,
+                    theme,
+                    row,
+                    index,
+                    right[columnIndex],
+                    leadingBoundary: columnIndex == 0,
+                  ),
               ],
             ),
           ),
@@ -318,27 +414,30 @@ class _TTableState<T> extends State<TTable<T>> {
   Widget _buildHeaderCell(
     BuildContext context,
     TTableThemeData? theme,
-    TTableColumn<T> column,
-  ) {
+    _ResolvedTableColumn<T> resolvedColumn, {
+    bool leadingBoundary = false,
+    bool trailingBoundary = false,
+  }) {
+    final column = resolvedColumn.value;
     final active = widget.sort?.columnId == column.id;
     final content = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Flexible(child: column.header),
-        if (column.comparator != null)
-          Icon(
-            active && widget.sort?.direction == TTableSortDirection.descending
-                ? Icons.arrow_downward
-                : Icons.arrow_upward,
-            size: 16,
-          ),
+        if (column.comparator != null) ...[
+          const SizedBox(width: 4),
+          _SortIndicator(direction: active ? widget.sort?.direction : null),
+        ],
       ],
     );
     return _cellFrame(
       context,
       theme,
-      column.width,
+      resolvedColumn.width,
       column.align,
+      header: true,
+      leadingBoundary: leadingBoundary,
+      trailingBoundary: trailingBoundary,
       child: column.comparator == null
           ? content
           : InkWell(onTap: () => _requestSort(column), child: content),
@@ -350,18 +449,27 @@ class _TTableState<T> extends State<TTable<T>> {
     TTableThemeData? theme,
     T row,
     int rowIndex,
-    TTableColumn<T> column,
-  ) {
+    _ResolvedTableColumn<T> resolvedColumn, {
+    bool leadingBoundary = false,
+    bool trailingBoundary = false,
+  }) {
+    final column = resolvedColumn.value;
     final content = column.cellBuilder(context, row, rowIndex);
+    final hasTap = widget.onCellTap != null || widget.onRowTap != null;
     return _cellFrame(
       context,
       theme,
-      column.width,
+      resolvedColumn.width,
       column.align,
-      child: widget.onCellTap == null
+      leadingBoundary: leadingBoundary,
+      trailingBoundary: trailingBoundary,
+      child: !hasTap
           ? content
           : InkWell(
-              onTap: () => widget.onCellTap!(rowIndex, row, column),
+              onTap: () {
+                widget.onCellTap?.call(rowIndex, row, column);
+                widget.onRowTap?.call(rowIndex, row);
+              },
               child: content,
             ),
     );
@@ -373,6 +481,9 @@ class _TTableState<T> extends State<TTable<T>> {
     double width,
     TTableColumnAlign align, {
     required Widget child,
+    bool header = false,
+    bool leadingBoundary = false,
+    bool trailingBoundary = false,
   }) {
     final alignment = switch (align) {
       TTableColumnAlign.left => Alignment.centerLeft,
@@ -383,9 +494,23 @@ class _TTableState<T> extends State<TTable<T>> {
       width: width,
       height: double.infinity,
       alignment: alignment,
-      padding: theme?.cellPadding ?? const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(border: _cellBorder(context, theme)),
-      child: child,
+      padding: theme?.cellPadding ?? const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        border: _cellBorder(
+          context,
+          theme,
+          leadingBoundary: leadingBoundary,
+          trailingBoundary: trailingBoundary,
+        ),
+      ),
+      child: ClipRect(
+        child: DefaultTextStyle.merge(
+          style: _textStyle(context, header: header),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          child: child,
+        ),
+      ),
     );
   }
 
@@ -405,7 +530,7 @@ class _TTableState<T> extends State<TTable<T>> {
       enabled: selectableRows.isNotEmpty,
       onChanged: (checked) {
         final next = Set<T>.of(widget.selectedRows);
-        if (checked == true) {
+        if (selectedCount == 0 && checked == true) {
           next.addAll(selectableRows);
         } else {
           next.removeAll(selectableRows);
@@ -450,9 +575,10 @@ class _TTableState<T> extends State<TTable<T>> {
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
         child: Center(
-          child: Checkbox(
+          child: TCheckbox(
             value: tristate ? null : value,
-            tristate: tristate,
+            size: TCheckboxSize.small,
+            showDivider: false,
             onChanged: enabled ? onChanged : null,
           ),
         ),
@@ -460,16 +586,43 @@ class _TTableState<T> extends State<TTable<T>> {
     );
   }
 
-  Border _cellBorder(BuildContext context, TTableThemeData? theme) {
+  TextStyle _textStyle(BuildContext context, {required bool header}) {
+    final tokenFont = context.tTheme.fontBodyMedium;
+    return TextStyle(
+      color: header
+          ? context.tTheme.textColorPlaceholder
+          : context.tTheme.textColorPrimary,
+      fontSize: tokenFont?.size ?? 14,
+      height: tokenFont?.height ?? 22 / 14,
+      fontWeight: tokenFont?.fontWeight ?? FontWeight.w400,
+    );
+  }
+
+  Border _cellBorder(
+    BuildContext context,
+    TTableThemeData? theme, {
+    bool leadingBoundary = false,
+    bool trailingBoundary = false,
+  }) {
     final resolvedTheme =
         theme ?? Theme.of(context).extension<TTableThemeData>();
     final side = BorderSide(
       color: resolvedTheme?.borderColor ?? context.tTheme.componentStrokeColor,
       width: 0.5,
     );
-    return resolvedTheme?.bordered ?? false
-        ? Border.all(color: side.color, width: side.width)
-        : Border(bottom: side);
+    final bordered = widget.bordered ?? resolvedTheme?.bordered ?? false;
+    if (bordered) {
+      return Border.all(color: side.color, width: side.width);
+    }
+    return Border(
+      left: leadingBoundary
+          ? BorderSide(color: side.color, width: 1)
+          : BorderSide.none,
+      right: trailingBoundary
+          ? BorderSide(color: side.color, width: 1)
+          : BorderSide.none,
+      bottom: side,
+    );
   }
 
   void _requestSort(TTableColumn<T> column) {
@@ -495,6 +648,54 @@ class _TTableState<T> extends State<TTable<T>> {
   }
 }
 
+class _ResolvedTableColumn<T> {
+  const _ResolvedTableColumn(this.value, this.width);
+
+  final TTableColumn<T> value;
+  final double width;
+}
+
+class _SortIndicator extends StatelessWidget {
+  const _SortIndicator({this.direction});
+
+  final TTableSortDirection? direction;
+
+  @override
+  Widget build(BuildContext context) {
+    final activeColor = context.tTheme.brandNormalColor;
+    final inactiveColor = context.tTheme.textColorPlaceholder;
+    return SizedBox(
+      width: 12,
+      height: 18,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            top: 0,
+            child: TIcon(
+              TIcons.caret_up_small,
+              size: 12,
+              color: direction == TTableSortDirection.ascending
+                  ? activeColor
+                  : inactiveColor,
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            child: TIcon(
+              TIcons.caret_down_small,
+              size: 12,
+              color: direction == TTableSortDirection.descending
+                  ? activeColor
+                  : inactiveColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// 让表头和每个表体行共享横向偏移的私有协调器。
 class _TableScrollCoordinator {
   final Map<int, ScrollController> _rowControllers = {};
@@ -505,6 +706,15 @@ class _TableScrollCoordinator {
 
   ScrollController rowController(int index) =>
       _rowControllers.putIfAbsent(index, _createController);
+
+  void retainRows(int count) {
+    final removedIndexes = _rowControllers.keys
+        .where((index) => index >= count)
+        .toList();
+    for (final index in removedIndexes) {
+      _rowControllers.remove(index)?.dispose();
+    }
+  }
 
   ScrollController _createController() {
     final controller = ScrollController(initialScrollOffset: _offset);

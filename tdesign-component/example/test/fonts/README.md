@@ -137,6 +137,12 @@ HarfBuzz 11.4.5，子集 SHA-256 为
 既有共享字体的像素基线；使用 HarfBuzz 11.4.5 生成，子集 SHA-256 为
 `ba2f7a0b21ed4df2a6b24f8c44bec1d6b183ed28fce76131f89cf8ed93d54e91`。
 
+`TableGoldenCJK-Regular.otf` 仅补充 Table 整页 Golden 的公开说明、场景标题与
+单元格文案，字符清单见 `table_demo_glyphs.txt`。它作为 Table Demo 最后的专用
+fallback，不改变其他页面既有字形选择；使用 Noto Sans SC 2.004 与
+fonttools 4.59.1 生成，子集 SHA-256 为
+`f496cbf68c3d2d6a365a90f555bc7944609e2a3b9bf559b111149b47e4d4ee7d`。
+
 - 上游：Noto Sans SC 2.004 `NotoSansSC-Regular.otf`
 - 来源：`https://github.com/notofonts/noto-cjk/raw/Sans2.004/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf`
 - 上游 SHA-256：`faa6c9df652116dde789d351359f3d7e5d2285a2b2a1f04a2d7244df706d5ea9`
@@ -172,5 +178,6 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 更新 Navbar 页面文案时，更新 Navbar 字符清单。
 更新 Image 页面文案时，更新 Image 字符清单。
 更新 Rate 页面文案时，更新 Rate 字符清单。
+更新 Table 页面文案时，更新 Table 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。

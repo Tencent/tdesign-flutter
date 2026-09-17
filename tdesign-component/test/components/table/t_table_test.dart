@@ -42,6 +42,18 @@ void main() {
       expect(find.text('Name'), findsOneWidget);
       expect(find.text('Alice'), findsOneWidget);
       expect(find.text('40'), findsOneWidget);
+      expect(tester.getSize(find.byType(TTable<_Row>)).height, 152);
+    });
+
+    testWidgets('未指定列宽时均分有界表格宽度', (tester) async {
+      await tester.pumpWidget(app(TTable(columns: columns(), data: rows)));
+      final cellWidths = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.constraints?.maxWidth)
+          .whereType<double>()
+          .where((width) => width == 180)
+          .length;
+      expect(cellWidths, greaterThanOrEqualTo(8));
     });
 
     testWidgets('横向无界时按列宽总和自然展开', (tester) async {
@@ -134,11 +146,11 @@ void main() {
       expect(taps, 0);
     });
 
-    testWidgets('loading 默认显示 CircularProgressIndicator', (tester) async {
+    testWidgets('loading 默认显示 TLoading', (tester) async {
       await tester.pumpWidget(
         app(TTable(columns: columns(), data: rows, loading: true)),
       );
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(TLoading), findsOneWidget);
     });
 
     testWidgets('空数据 loading 保留表头并提供有限表体高度', (tester) async {
@@ -274,6 +286,26 @@ void main() {
       expect(find.text('cell-left'), findsNWidgets(3));
       expect(find.text('cell-center'), findsNWidgets(3));
       expect(find.text('cell-right'), findsNWidgets(3));
+    });
+
+    testWidgets('数据缩减后回收已移除行的横向滚动控制器', (tester) async {
+      var visibleRows = List.generate(8, (index) => _Row('R$index', index));
+      late StateSetter update;
+      await tester.pumpWidget(
+        app(
+          StatefulBuilder(
+            builder: (context, setState) {
+              update = setState;
+              return TTable(columns: columns(), data: visibleRows);
+            },
+          ),
+        ),
+      );
+      update(() => visibleRows = visibleRows.take(2).toList());
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('R7'), findsNothing);
+      expect(tester.takeException(), isNull);
     });
   });
 
@@ -426,7 +458,7 @@ void main() {
           ),
         ),
       );
-      await tester.tap(find.byType(Checkbox).at(1));
+      await tester.tap(find.byType(TCheckbox).at(1));
       expect(requested, contains(rows.first));
       expect(selected, isEmpty);
     });
@@ -444,7 +476,7 @@ void main() {
           ),
         ),
       );
-      await tester.tap(find.byType(Checkbox).at(1));
+      await tester.tap(find.byType(TCheckbox).at(1));
       expect(requested, isNot(contains(rows.first)));
     });
 
@@ -461,7 +493,7 @@ void main() {
           ),
         ),
       );
-      await tester.tap(find.byType(Checkbox).first);
+      await tester.tap(find.byType(TCheckbox).first);
       expect(requested, {rows[0], rows[2]});
     });
 
@@ -478,10 +510,9 @@ void main() {
           ),
         ),
       );
-      final selectAll = tester.widget<Checkbox>(find.byType(Checkbox).first);
+      final selectAll = tester.widget<TCheckbox>(find.byType(TCheckbox).first);
       expect(selectAll.value, isNull);
-      expect(selectAll.tristate, isTrue);
-      await tester.tap(find.byType(Checkbox).first);
+      await tester.tap(find.byType(TCheckbox).first);
       expect(requested, isEmpty);
     });
 
@@ -498,7 +529,7 @@ void main() {
         ),
       );
       expect(
-        tester.widget<Checkbox>(find.byType(Checkbox).at(1)).onChanged,
+        tester.widget<TCheckbox>(find.byType(TCheckbox).at(1)).onChanged,
         isNull,
       );
     });
@@ -514,7 +545,10 @@ void main() {
           ),
         ),
       );
-      expect(tester.widget<Checkbox>(find.byType(Checkbox)).onChanged, isNull);
+      expect(
+        tester.widget<TCheckbox>(find.byType(TCheckbox)).onChanged,
+        isNull,
+      );
     });
 
     testWidgets('选择框隔离页面级 CheckboxTheme 样式污染', (tester) async {
@@ -559,6 +593,7 @@ void main() {
     testWidgets('点击单元格返回强类型 row 与 column', (tester) async {
       _Row? tappedRow;
       String? tappedColumn;
+      int? tappedRowIndex;
       await tester.pumpWidget(
         app(
           TTable(
@@ -568,12 +603,14 @@ void main() {
               tappedRow = row;
               tappedColumn = column.id;
             },
+            onRowTap: (index, _) => tappedRowIndex = index,
           ),
         ),
       );
       await tester.tap(find.text('Alice'));
       expect(tappedRow, rows.first);
       expect(tappedColumn, 'name');
+      expect(tappedRowIndex, 0);
     });
 
     testWidgets('maxHeight 仅约束表体并产生垂直滚动通知', (tester) async {
@@ -673,6 +710,26 @@ void main() {
         isTrue,
       );
       expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('实例 bordered 与 stripe 覆盖 Theme 默认值', (tester) async {
+      await tester.pumpWidget(
+        app(
+          TTable(
+            columns: columns(),
+            data: rows,
+            bordered: false,
+            stripe: false,
+          ),
+          tableTheme: const TTableThemeData(bordered: true, stripe: true),
+        ),
+      );
+      expect(
+        _tableBorders(
+          tester,
+        ).every((border) => border.left.style == BorderStyle.none),
+        isTrue,
+      );
     });
   });
 
