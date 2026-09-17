@@ -13,12 +13,12 @@ Widget _logoNavbar(BuildContext context) {
         TNavBarItem(
           icon: TIcons.home,
           iconSize: 24,
-          onTap: () => _showAction(context, '首页'),
+          onTap: () => TToast.showText('点击了首页', context: context),
         ),
         TNavBarItem(
           icon: TIcons.ellipsis,
           iconSize: 24,
-          onTap: () => _showAction(context, '更多'),
+          onTap: () => TToast.showText('点击了更多', context: context),
         ),
       ],
     );
