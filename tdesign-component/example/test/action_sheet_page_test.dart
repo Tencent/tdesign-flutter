@@ -388,4 +388,29 @@ void main() {
     expect(badges[3].offset, isNull);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('带徽标宫格型按设计稿展示 NEW、圆点与计数', (tester) async {
+    configurePhone(tester);
+
+    await openGrid(tester, '带徽标宫格型');
+
+    TBadge badgeFor(String label) => tester.widget<TBadge>(
+      find.descendant(
+        of: find.ancestor(
+          of: find.text(label),
+          matching: find.byType(TActionSheetItemWidget<String>),
+        ),
+        matching: find.byType(TBadge),
+      ),
+    );
+
+    expect(find.byType(TBadge), findsNWidgets(3));
+    expect(badgeFor('WeChat').label, 'NEW');
+    expect(badgeFor('WeChat').variant, TBadgeVariant.custom);
+    expect(badgeFor('Collect').variant, TBadgeVariant.dot);
+    expect(badgeFor('Download').label, '8');
+    expect(badgeFor('Download').variant, TBadgeVariant.normal);
+    expect(find.text('99+'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
 }

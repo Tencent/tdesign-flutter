@@ -19,7 +19,10 @@ class TSideBarItem {
     this.value = -1,
   });
 
-  /// 徽标
+  /// 展示在标签文字右上角的徽标；为空时不显示。
+  ///
+  /// SideBar 会将标签文字作为徽标锚点，因此 [TBadge.child] 必须为空；
+  /// [TBadge.offset] 可用于逐项调整默认位置。
   final TBadge? badge;
 
   /// 是否禁用

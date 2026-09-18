@@ -8,3 +8,4 @@
 5. 双 SDK analyze、测试、覆盖率、构建与生成产物检查。
 6. 真机 uppercase `R` 热重启和人工操作后，再分别创建 GitHub/CNB PR、关联 #1027 并请求 CodeBuddy Review。
 7. 修复 ThemeExtension nullable 字段插值产生的透明色和零内边距覆盖，补齐显式值、双向 nullable、两侧 null 与 ThemeData 中间态测试。
+8. 明确 SideBar 管理 Badge 锚点，拒绝带 `child` 的徽标配置，避免调用方内容被静默覆盖。

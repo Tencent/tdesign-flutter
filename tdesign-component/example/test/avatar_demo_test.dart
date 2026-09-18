@@ -33,8 +33,7 @@ void main() {
         .widgetList<Positioned>(find.byType(Positioned))
         .where((positioned) {
           final child = positioned.child;
-          return child is TBadge ||
-              (child is BadgeTheme && child.child is TBadge);
+          return child is TBadge;
         })
         .toList();
     expect(badgePositions, hasLength(3));
@@ -43,34 +42,31 @@ void main() {
       everyElement(
         isA<Positioned>()
             .having((positioned) => positioned.right, 'right', -4)
-            .having((positioned) => positioned.top, 'top', -4),
+            .having((positioned) => positioned.top, 'top', -2),
       ),
     );
-
-    final dotTheme = badgePositions.first.child as BadgeTheme;
-    expect(dotTheme.data.smallSize, 10);
 
     final avatarFinders = List.generate(
       3,
       (index) => find.byType(TAvatar).at(index + 6),
     );
     final badgeFinders = List.generate(3, find.byType(TBadge).at);
-    expect(tester.getSize(badgeFinders[0]), const Size.square(10));
+    expect(tester.getSize(badgeFinders[0]), const Size.square(8));
     expect(tester.getSize(badgeFinders[1]), const Size.square(16));
     expect(tester.getSize(badgeFinders[2]).height, 16);
     expect(
       tester.getTopLeft(badgeFinders[0]) - tester.getTopLeft(avatarFinders[0]),
-      const Offset(42, -4),
+      const Offset(44, -2),
     );
     expect(
       tester.getTopLeft(badgeFinders[1]) - tester.getTopLeft(avatarFinders[1]),
-      const Offset(36, -4),
+      const Offset(36, -2),
     );
     for (var index = 0; index < badgeFinders.length; index++) {
       final badgeRect = tester.getRect(badgeFinders[index]);
       final avatarRect = tester.getRect(avatarFinders[index]);
       expect(badgeRect.right - avatarRect.right, 4);
-      expect(badgeRect.top - avatarRect.top, -4);
+      expect(badgeRect.top - avatarRect.top, -2);
     }
 
     final badgeStacks = tester

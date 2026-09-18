@@ -598,7 +598,7 @@ void main() {
       expect(selected, '选项A');
     });
 
-    testWidgets('badge uses its own offset and anchors to iconText content', (
+    testWidgets('badge uses its own offset and anchors to iconText icon', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -632,10 +632,108 @@ void main() {
       final badge = tester.widget<TBadge>(find.byType(TBadge));
       expect(badge.offset, const Offset(2, 1));
       expect(badge.child, isNotNull);
+      expect(
+        find.descendant(
+          of: find.byType(TBadge),
+          matching: find.byIcon(Icons.mail),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: find.byType(TBadge), matching: find.text('消息')),
+        findsNothing,
+      );
       final badgeCenter = tester.getCenter(find.text('9'));
       final iconCenter = tester.getCenter(find.byIcon(Icons.mail));
       expect(badgeCenter.dx, greaterThan(iconCenter.dx));
       expect(badgeCenter.dy, lessThan(iconCenter.dy));
+    });
+
+    testWidgets('iconText default badge anchors to icon top-right', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.iconText,
+            value: 0,
+            navigationTabs: const [
+              TTabBarItemConfig(
+                tabText: '很长的标签文字',
+                selectedIcon: Icon(Icons.mail, size: 20),
+                unselectedIcon: Icon(Icons.mail_outline, size: 20),
+                badge: TBadge(label: '9'),
+              ),
+              TTabBarItemConfig(
+                tabText: '首页',
+                selectedIcon: Icon(Icons.home, size: 20),
+                unselectedIcon: Icon(Icons.home_outlined, size: 20),
+              ),
+            ],
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      final iconRect = tester.getRect(find.byIcon(Icons.mail));
+      final badgeCenter = tester.getCenter(find.text('9'));
+      expect(badgeCenter.dx, closeTo(iconRect.right, 0.01));
+      expect(badgeCenter.dy, closeTo(iconRect.top, 0.01));
+    });
+
+    testWidgets(
+      'text badge uses TabBar default offset when no override exists',
+      (tester) async {
+        await tester.pumpWidget(
+          wrapWithTheme(
+            TTabBar(
+              type: TTabBarType.text,
+              value: 0,
+              navigationTabs: const [
+                TTabBarItemConfig(
+                  tabText: '消息',
+                  badge: TBadge(label: '9'),
+                ),
+                TTabBarItemConfig(tabText: '首页'),
+              ],
+              onChanged: (_) {},
+            ),
+          ),
+        );
+
+        final badge = tester.widget<TBadge>(find.byType(TBadge));
+        expect(badge.offset, const Offset(16, -8));
+        expect(badge.child, isNotNull);
+      },
+    );
+
+    testWidgets('local BadgeTheme offset overrides TabBar text default', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          BadgeTheme(
+            data: const BadgeThemeData(offset: Offset(3, 4)),
+            child: TTabBar(
+              type: TTabBarType.text,
+              value: 0,
+              navigationTabs: const [
+                TTabBarItemConfig(
+                  tabText: '消息',
+                  badge: TBadge(label: '9'),
+                ),
+                TTabBarItemConfig(tabText: '首页'),
+              ],
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      final badge = tester.widget<TBadge>(find.byType(TBadge));
+      expect(badge.offset, isNull);
+      final materialBadge = tester.widget<Badge>(find.byType(Badge));
+      expect(materialBadge.offset, const Offset(3, 4));
     });
 
     testWidgets('badge inherits theme offset without blocking item taps', (

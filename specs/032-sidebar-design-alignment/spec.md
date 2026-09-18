@@ -14,6 +14,8 @@ Flutter SideBar 的公开 Demo、结构状态所有权和默认宽度与新版 F
 - 每项提供可访问的 label、selected、enabled 语义；disabled 项不触发回调。
 - 默认标签使用 Body Large Token，图标 20dp，选中指示线 3×14dp，line/tag 圆角 9dp。
 - 默认选中标签使用 600 字重；Badge 以标签文字自身的右上角为锚点，不以整行剩余宽度为锚点。
+- `TSideBarItem.badge` 仅配置徽标内容和样式，标签文字由 SideBar 作为锚点注入；
+  调用方传入的 `TBadge.child` 必须为空。`TBadge.offset` 只用于逐项显式微调。
 
 ## Demo 契约
 
@@ -40,3 +42,5 @@ ThemeExtension 的 nullable 视觉字段以 `null` 表示继续使用实例配�
 - `TSideBar.style` 重命名为非空的 `variant`，默认 `line`。
 - `TSideBarThemeData.style`、`height` 被移除。
 - `TSideBar` 默认宽度从依赖父约束/最小 106dp 收敛为固定 103dp，并新增 `width` 覆盖入口。
+- 带 `child` 的 `TSideBarItem.badge` 不再被静默覆盖；debug 模式会断言失败，调用方
+  删除 `child`，标签锚点由 SideBar 提供。

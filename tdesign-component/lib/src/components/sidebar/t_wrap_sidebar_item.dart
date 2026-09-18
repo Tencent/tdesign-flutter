@@ -55,6 +55,10 @@ class TWrapSideBarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    assert(
+      badge == null || badge!.child == null,
+      '[TWrapSideBarItem] badge.child is managed by TSideBar.',
+    );
     return Semantics(
       button: true,
       selected: selected,

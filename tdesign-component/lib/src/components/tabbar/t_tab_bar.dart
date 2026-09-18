@@ -44,6 +44,9 @@ const double _kPopupButtonPadding = 8.0;
 /// 展开项弹窗箭头和触发按钮的间距
 const double _kPopupArrowGap = 4.0;
 
+/// 纯文本标签的徽标中心相对文字锚点的默认偏移。
+const Offset _kTextBadgeOffset = Offset(16, -8);
+
 /// 展开项弹窗距离视口边界的安全距离
 const double _kPopupViewportPadding = 8.0;
 
@@ -162,7 +165,10 @@ class TTabBarItemConfig {
   /// 展示在标签内容右上角的徽标；为空时不显示。
   ///
   /// 徽标内容和样式由 [TBadge] 配置，[TBadge.offset] 可用于逐项调整默认锚点。
-  /// TabBar 内容会作为徽标锚点，因此传入的 [TBadge.child] 必须为空；
+  /// 纯文本项未设置实例或 BadgeTheme offset 时使用 TabBar 的文本徽标默认位置；
+  /// 纯图标项与图文项均以图标作为锚点，使用 [TBadge] 的默认右上角位置，
+  /// 图文项下方的文字宽度不会改变徽标位置。
+  /// TabBar 会注入对应内容作为徽标锚点，因此传入的 [TBadge.child] 必须为空；
   /// [TBadge.onTap] 会作为标签项点击链中的附加回调执行，遵循相同的
   /// [allowMultipleTaps] 门控：未选中项会调用，重复点击当前选中项仅在
   /// [allowMultipleTaps] 为 true 时调用，整栏禁用时不会调用。
@@ -899,21 +905,27 @@ class _TTabBarItemWithBadge extends StatelessWidget {
               context.tTheme.fontBodyExtraSmall!,
             )
           : const SizedBox.shrink();
+      final badge = itemConfig.badge;
       child = Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          icon,
+          badge == null ? icon : _attachBadge(context, badge, icon),
           if (centerDistance > 0) SizedBox(height: centerDistance),
           text,
         ],
       );
+      return child;
     }
 
     final badge = itemConfig.badge;
     if (badge == null) {
       return child;
     }
+    return _attachBadge(context, badge, child);
+  }
+
+  Widget _attachBadge(BuildContext context, TBadge badge, Widget child) {
     assert(
       badge.child == null,
       '[TTabBarItemConfig] badge.child is managed by TTabBar.',
@@ -925,9 +937,24 @@ class _TTabBarItemWithBadge extends StatelessWidget {
       size: badge.size,
       border: badge.border,
       showZero: badge.showZero,
-      offset: badge.offset,
+      offset: _resolveBadgeOffset(context, badge),
       child: child,
     );
+  }
+
+  Offset? _resolveBadgeOffset(BuildContext context, TBadge badge) {
+    if (badge.offset != null || basicType != _TTabBarBasicType.text) {
+      return badge.offset;
+    }
+    final localOffset = context
+        .dependOnInheritedWidgetOfExactType<BadgeTheme>()
+        ?.data
+        .offset;
+    final globalOffset = Theme.of(context).tExplicitBadgeTheme?.offset;
+    if (localOffset != null || globalOffset != null) {
+      return null;
+    }
+    return _kTextBadgeOffset;
   }
 
   Widget _textItem(

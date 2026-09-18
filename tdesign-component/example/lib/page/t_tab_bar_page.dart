@@ -192,12 +192,6 @@ class _TTabBarPageState extends State<TTabBarPage> {
       TBadge(label: 'New'),
       TBadge(label: '···'),
     ];
-    const textBadges = [
-      TBadge(label: '16', offset: Offset(16, -8)),
-      TBadge(variant: TBadgeVariant.dot, offset: Offset(16, -8)),
-      TBadge(label: 'New', offset: Offset(16, -8)),
-      TBadge(label: '···', offset: Offset(16, -8)),
-    ];
     return Column(
       children: [
         TTabBar(
@@ -209,10 +203,8 @@ class _TTabBarPageState extends State<TTabBarPage> {
           onChanged: (value) => setState(() => _weakValues[0] = value),
           navigationTabs: List.generate(
             4,
-            (index) => TTabBarItemConfig(
-              tabText: labels[index],
-              badge: textBadges[index],
-            ),
+            (index) =>
+                TTabBarItemConfig(tabText: labels[index], badge: badges[index]),
           ),
         ),
         const SizedBox(height: 16),

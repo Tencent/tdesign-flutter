@@ -96,6 +96,18 @@ void main() {
     await disposeDemoPage(tester);
   });
 
+  testWidgets('默认徽标示例不通过逐项 offset 修正组件位置', (tester) async {
+    await pumpFullDemoPage(tester, tabBarDemoPageTestSpec, ThemeMode.light);
+    final weakTextBar = tester.widget<TTabBar>(find.byType(TTabBar).at(4));
+
+    expect(weakTextBar.type, TTabBarType.text);
+    expect(
+      weakTextBar.navigationTabs.map((item) => item.badge?.offset),
+      everyElement(isNull),
+    );
+    await disposeDemoPage(tester);
+  });
+
   testWidgets('TabBar 所有代码入口展示实际生成片段', (tester) async {
     await pumpFullDemoPage(tester, tabBarDemoPageTestSpec, ThemeMode.light);
     const snippetNames = [

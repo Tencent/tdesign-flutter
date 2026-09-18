@@ -279,16 +279,26 @@ class TActionSheetPage extends StatelessWidget {
 
   List<TActionSheetItem<String>> _badgeGridItems(BuildContext context) {
     final items = _gridItems(context);
+    const labels = [
+      'WeChat',
+      'QQ',
+      'Doc',
+      'Map',
+      'Share',
+      'Collect',
+      'Download',
+      'Edit',
+    ];
     return List.generate(items.length, (index) {
       final item = items[index];
       return TActionSheetItem(
         value: item.value,
-        label: item.label,
+        label: labels[index],
         icon: item.icon,
         badge: switch (index) {
-          1 => const TBadge(variant: TBadgeVariant.dot),
-          3 => const TBadge(label: '8'),
-          7 => const TBadge(label: '99+'),
+          0 => const TBadge(label: 'NEW', variant: TBadgeVariant.custom),
+          5 => const TBadge(variant: TBadgeVariant.dot),
+          6 => const TBadge(label: '8'),
           _ => null,
         },
       );

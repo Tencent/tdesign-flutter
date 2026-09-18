@@ -26,7 +26,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| badge | TBadge? | - | 徽标 |
+| badge | TBadge? | - | 展示在标签文字右上角的徽标；为空时不显示。 SideBar 会将标签文字作为徽标锚点，因此 `TBadge.child` 必须为空； `TBadge.offset` 可用于逐项调整默认位置。 |
 | disabled | bool | false | 是否禁用 |
 | icon | IconData? | - | 图标 |
 | label | String | '' | 标签 |

@@ -150,11 +150,8 @@ class _TAvatarPageState extends State<TAvatarPage> {
               ),
               Positioned(
                 right: -4,
-                top: -4,
-                child: BadgeTheme(
-                  data: BadgeThemeData(smallSize: 10),
-                  child: TBadge(variant: TBadgeVariant.dot),
-                ),
+                top: -2,
+                child: TBadge(variant: TBadgeVariant.dot),
               ),
             ],
           ),
@@ -171,7 +168,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
                 foregroundColor: context.tTheme.whiteColor1,
                 child: const Text('A'),
               ),
-              const Positioned(child: TBadge(label: '8'), right: -4, top: -4),
+              const Positioned(child: TBadge(label: '8'), right: -4, top: -2),
             ],
           ),
         ),
@@ -182,7 +179,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
             alignment: Alignment.bottomLeft,
             children: [
               TAvatar(size: TAvatarSize.medium),
-              Positioned(child: TBadge(label: '12'), right: -4, top: -4),
+              Positioned(child: TBadge(label: '12'), right: -4, top: -2),
             ],
           ),
         ),

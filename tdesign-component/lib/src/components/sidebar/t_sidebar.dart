@@ -193,6 +193,10 @@ class _TSideBarState extends State<TSideBar> {
   }
 
   void getDisplayChildren() {
+    assert(
+      widget.children.every((item) => item.badge?.child == null),
+      '[TSideBarItem] badge.child is managed by TSideBar.',
+    );
     _itemKeys.removeWhere((index, _) => index >= widget.children.length);
     displayChildren = widget.children
         .asMap()

@@ -91,6 +91,24 @@ void main() {
   });
 
   group('TSideBar 基础渲染', () {
+    testWidgets('badge child 由 SideBar 管理', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TSideBar(
+            value: 0,
+            children: [
+              TSideBarItem(
+                value: 0,
+                label: '选项',
+                badge: TBadge(label: '1', child: SizedBox()),
+              ),
+            ],
+          ),
+        ),
+      );
+      expect(tester.takeException(), isAssertionError);
+    });
+
     testWidgets('基础渲染', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
