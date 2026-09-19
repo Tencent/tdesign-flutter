@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/components/badge/t_badge_fallback.dart';
+import 'package:tdesign_flutter/src/components/badge/t_badge_internal.dart';
+import 'package:tdesign_flutter/src/components/badge/t_badge_resolved_style.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
@@ -48,6 +51,105 @@ void main() {
       expect(custom.isCustom, isTrue);
       expect(custom.alignment, AlignmentDirectional.bottomEnd);
       expect(custom.offset, const Offset(2, 3));
+    });
+
+    testWidgets('内部预设适配器透传配置、点击与组合组件默认定位', (tester) async {
+      var taps = 0;
+      await tester.pumpWidget(
+        app(
+          TBadgeFromConfig(
+            config: const TBadgeConfig(
+              label: '8',
+              size: TBadgeSize.large,
+              border: true,
+              showZero: false,
+            ),
+            fallbackAlignment: AlignmentDirectional.bottomEnd,
+            fallbackOffset: const Offset(2, 3),
+            onTap: () => taps++,
+            child: const Text('消息'),
+          ),
+        ),
+      );
+
+      final badge = tester.widget<TBadge>(find.byType(TBadge));
+      expect(badge.label, '8');
+      expect(badge.size, TBadgeSize.large);
+      expect(badge.border, isTrue);
+      expect(badge.showZero, isFalse);
+      expect(badgeOf(tester).alignment, AlignmentDirectional.bottomEnd);
+      expect(badgeOf(tester).offset, const Offset(2, 3));
+
+      await tester.tap(find.byType(TBadge));
+      expect(taps, 1);
+    });
+
+    testWidgets('内部自定义适配器只替换徽标本体并保留锚点', (tester) async {
+      const anchorKey = Key('adapter-anchor');
+      const badgeKey = Key('adapter-custom-badge');
+      await tester.pumpWidget(
+        app(
+          const TBadgeFromConfig(
+            config: TBadgeConfig.custom(
+              badge: SizedBox.square(key: badgeKey, dimension: 10),
+              alignment: AlignmentDirectional.bottomStart,
+              offset: Offset(-2, 4),
+            ),
+            child: SizedBox.square(key: anchorKey, dimension: 40),
+          ),
+        ),
+      );
+
+      final badge = tester.widget<TBadge>(find.byType(TBadge));
+      expect(badge.badge, isNotNull);
+      expect(badge.child, isNotNull);
+      expect(
+        tester.getCenter(find.byKey(badgeKey)),
+        tester.getBottomLeft(find.byKey(anchorKey)) + const Offset(-2, 4),
+      );
+    });
+
+    test('组合组件默认定位仅在值变化时通知依赖者', () {
+      const oldFallback = TBadgeFallback(
+        alignment: AlignmentDirectional.topStart,
+        offset: Offset(1, 2),
+        child: SizedBox(),
+      );
+      const sameFallback = TBadgeFallback(
+        alignment: AlignmentDirectional.topStart,
+        offset: Offset(1, 2),
+        child: SizedBox(),
+      );
+      const changedFallback = TBadgeFallback(
+        alignment: AlignmentDirectional.bottomEnd,
+        offset: Offset(3, 4),
+        child: SizedBox(),
+      );
+
+      expect(sameFallback.updateShouldNotify(oldFallback), isFalse);
+      expect(changedFallback.updateShouldNotify(oldFallback), isTrue);
+    });
+
+    testWidgets('共享样式解析器按真实文字宽度计算徽标尺寸', (tester) async {
+      late Size shortLabelSize;
+      late Size longLabelSize;
+      await tester.pumpWidget(
+        app(
+          Builder(
+            builder: (context) {
+              final style = TBadgeResolvedStyle.resolve(context, large: false);
+              shortLabelSize = style.measureLabel(context, '8');
+              longLabelSize = style.measureLabel(context, '999+');
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      expect(shortLabelSize.height, 16);
+      expect(shortLabelSize.width, greaterThanOrEqualTo(16));
+      expect(longLabelSize.height, 16);
+      expect(longLabelSize.width, greaterThan(shortLabelSize.width));
     });
   });
 
