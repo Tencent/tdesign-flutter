@@ -178,23 +178,23 @@ class TActionSheetPage extends StatelessWidget {
     TActionSheetItem(
       value: 'wechat',
       label: '微信',
-      icon: _assetGridIcon('assets/img/t_actionSheet_1.png'),
+      icon: _assetGridIcon('assets/img/t_action_sheet_1.png'),
       badge: const TBadgeConfig(label: 'NEW'),
     ),
     TActionSheetItem(
       value: 'moments',
       label: '朋友圈',
-      icon: _assetGridIcon('assets/img/t_actionSheet_2.png'),
+      icon: _assetGridIcon('assets/img/t_action_sheet_2.png'),
     ),
     TActionSheetItem(
       value: 'qq',
       label: 'QQ',
-      icon: _assetGridIcon('assets/img/t_actionSheet_3.png'),
+      icon: _assetGridIcon('assets/img/t_action_sheet_3.png'),
     ),
     TActionSheetItem(
       value: 'wecom',
       label: '企业微信',
-      icon: _assetGridIcon('assets/img/t_actionSheet_4.png'),
+      icon: _assetGridIcon('assets/img/t_action_sheet_4.png'),
     ),
     TActionSheetItem(
       value: 'favorite',
