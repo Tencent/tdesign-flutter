@@ -52,7 +52,6 @@ import 'page/t_swipe_cell_page.dart';
 import 'page/t_swiper_page.dart';
 import 'page/t_switch_page.dart';
 import 'page/t_tab_bar_page.dart';
-import 'page/t_table_page.dart';
 import 'page/t_tabs_page.dart';
 import 'page/t_tag_page.dart';
 import 'page/t_text_page.dart';
@@ -61,6 +60,7 @@ import 'page/t_time_counter_page.dart';
 import 'page/t_toast_page.dart';
 import 'page/t_tree_select_page.dart';
 import 'page/t_upload_page.dart';
+import 'page/table/table_page.dart';
 
 PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
   return (context, model) {

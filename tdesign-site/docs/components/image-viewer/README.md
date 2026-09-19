@@ -16,57 +16,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_image_viewer_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_image_viewer_page.dart)
+以下示例代码直接来自 Example App 的 `@ExampleCode(group: "image-viewer")` 生成资产，Web 文档不维护代码副本。
 
-### 1 组件类型
-
-基础图片预览
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _basicImageViewer(BuildContext context) {
-    return TButton(
-      type: TButtonType.ghost,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      size: TButtonSize.large,
-      text: '基础图片预览',
-      onTap: () {
-        TImageViewer.showImageViewer(context: context, images: images);
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-带操作图片预览
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _actionImageViewer(BuildContext context) {
-    return TButton(
-      type: TButtonType.ghost,
-      theme: TButtonTheme.primary,
-      isBlock: true,
-      size: TButtonSize.large,
-      text: '带操作图片预览',
-      onTap: () {
-        TImageViewer.showImageViewer(
-          context: context,
-          images: images,
-          showIndex: true,
-          deleteBtn: true,
-        );
-      },
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
+{{ flutter-example-group image-viewer }}
 
 ## API
 ### TImageViewer

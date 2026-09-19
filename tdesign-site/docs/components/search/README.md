@@ -13,50 +13,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_search_bar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/t_search_bar_page.dart)
+以下示例代码直接来自 Example App 的 `@ExampleCode(group: "search")` 生成资产，Web 文档不维护代码副本。
 
-### 基础搜索框
-
-搜索结果是业务内容，通过 `TCell` 在搜索框下方组合，不属于 `TSearchBar` 公共 API。
-
-```dart
-TSearchBar(
-  controller: controller,
-  hintText: '输入tdesign，有预览结果',
-  onChanged: filterResults,
-  onFocusChanged: handleFocusChanged,
-)
-```
-
-### 字数限制
-
-```dart
-TSearchBar(hintText: '最大输入10个字符', maxLength: 10)
-TSearchBar(hintText: '最大输入10个字符，汉字算两个', maxCharacter: 10)
-```
-
-### 获取焦点后显示取消按钮
-
-```dart
-TSearchBar(
-  controller: controller,
-  hintText: '搜索预设文案',
-  textAlignment: TSearchBarAlignment.center,
-  actionText: focused ? '取消' : null,
-  onFocusChanged: (value) => setState(() => focused = value),
-  onActionPressed: () {
-    controller.clear();
-    FocusManager.instance.primaryFocus?.unfocus();
-  },
-)
-```
-
-### 搜索框形状与对齐
-
-```dart
-const TSearchBar(variant: TSearchBarVariant.round)
-const TSearchBar(textAlignment: TSearchBarAlignment.center)
-```
+{{ flutter-example-group search }}
 
 ## API
 

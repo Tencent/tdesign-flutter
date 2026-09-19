@@ -16,72 +16,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_calendar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_calendar_page.dart)
+以下示例代码直接来自 Example App 的 `@ExampleCode(group: "calendar")` 生成资产，Web 文档不维护代码副本。
 
-### 1 组件类型
-
-
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-Widget _buildSimple(BuildContext context) {
-  return const _SimpleDemo();
-}</pre>
-
-</td-code-block>
-                
-### 1 组件样式
-
-自定义副标题、按钮、单元格
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-Widget _buildStyle(BuildContext context) {
-  return const _StyleDemo();
-}</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-Widget _buildStyle(BuildContext context) {
-  return const _StyleDemo();
-}</pre>
-
-</td-code-block>
-                
-
-农历日历
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-Widget _buildLunar(BuildContext context) {
-  return const _LunarCalendarDemo();
-}</pre>
-
-</td-code-block>
-                
-
-          
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-Widget _buildLunar(BuildContext context) {
-  return const _LunarCalendarDemo();
-}</pre>
-
-</td-code-block>
-                
-
+{{ flutter-example-group calendar }}
 
 ## API
 ### TCalendar

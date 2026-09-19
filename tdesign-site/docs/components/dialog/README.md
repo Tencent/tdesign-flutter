@@ -13,7 +13,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_dialog_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_dialog_page.dart)
+以下示例代码直接来自 Example App 的 `@ExampleCode(group: "dialog")` 生成资产，Web 文档不维护代码副本。
+
+{{ flutter-example-group dialog }}
 
 ## 基本使用
 

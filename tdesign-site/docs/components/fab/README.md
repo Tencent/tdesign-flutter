@@ -16,78 +16,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_fab_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_fab_page.dart)
+以下示例代码直接来自 Example App 的 `@ExampleCode(group: "fab")` 生成资产，Web 文档不维护代码副本。
 
-默认动作层固定使用 large / fill / primary 规格。需要自定义尺寸、颜色、形状或投影时，
-请通过 `child` 组合完整动作层。
-
-### 1 组件类型
-
-纯图标悬浮按钮
-
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildPureIconFab(BuildContext context) {
-    return TFab(onPressed: _onFabPressed, semanticLabel: '增加');
-  }</pre>
-
-</td-code-block>
-                                  
-
-图标加文字悬浮按钮
-
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildTextFab(BuildContext context) {
-    return TFab(
-      icon: const Icon(TIcons.share),
-      text: '分享给朋友',
-      onPressed: _onFabPressed,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-### 2 组件样式
-
-可移动悬浮按钮
-
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildDraggableFab(BuildContext context) {
-    return TFab(
-      icon: const Icon(TIcons.gesture_press),
-      text: '拖我',
-      draggable: TFabDragAxis.all,
-      yBounds: const TFabBounds(start: 0, end: 32),
-      onPressed: _onFabPressed,
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-带自动收缩功能
-
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildCollapsibleFab(BuildContext context) {
-    return TFab(
-      right: _scrolling ? 0 : 16,
-      bottom: _scrolling ? 64 : 24,
-      onPressed: _onFabPressed,
-      child: _scrolling
-          ? const _CollapsedFabContent()
-          : const _ExpandedFabContent(),
-    );
-  }</pre>
-
-</td-code-block>
-                                  
+{{ flutter-example-group fab }}
 
 ## API
 ### TFab

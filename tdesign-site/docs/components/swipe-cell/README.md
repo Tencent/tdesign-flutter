@@ -13,7 +13,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_swipe_cell_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_swipe_cell_page.dart)
+以下示例代码直接来自 Example App 的 `@ExampleCode(group: "SwipeCell")` 生成资产，Web 文档不维护代码副本。
+
+{{ flutter-example-group SwipeCell }}
 
 ## 使用说明
 

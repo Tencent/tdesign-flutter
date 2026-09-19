@@ -16,9 +16,9 @@ DropdownMenu 是页面级筛选栏，适用于商品列表等内容的排序、�
 
 ## 代码演示
 
-示例代码以 `t_dropdown_menu_page.dart` 中的 `@ExampleCode` 为唯一来源，并生成到 Example 的 `assets/code/dropdown_menu.*.txt`。
+以下示例代码直接来自 Example App 的 `@ExampleCode(group: "dropdown_menu")` 生成资产，Web 文档不维护代码副本。
 
-Example 页面按公开矩阵覆盖组件类型（单选下拉菜单、1/2/3 列分栏下拉菜单）和组件状态（禁用状态）。自定义面板、向上展开、横向滚动与局部主题仍是可用的 Flutter 组合能力，但不混入官方公开 Demo。代码查看器直接读取生成后的片段，不在 README 维护第二份示例源码。
+{{ flutter-example-group dropdown_menu }}
 
 ## API
 
