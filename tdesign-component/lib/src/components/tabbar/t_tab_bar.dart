@@ -164,15 +164,15 @@ class TTabBarItemConfig {
 
   /// 展示在标签内容右上角的徽标；为空时不显示。
   ///
-  /// 徽标内容和样式由 [TBadge] 配置，[TBadge.offset] 可用于逐项调整默认锚点。
-  /// 纯文本项未设置实例或 BadgeTheme offset 时使用 TabBar 的文本徽标默认位置；
-  /// 纯图标项与图文项均以图标作为锚点，使用 [TBadge] 的默认右上角位置，
+  /// 徽标内容和样式由 [TBadgeConfig] 描述，[TBadgeConfig.offset] 可用于逐项
+  /// 调整默认位置。纯文本项未设置实例或 BadgeTheme offset 时使用 TabBar 的
+  /// 文本徽标默认位置；纯图标项与图文项均以图标作为锚点，使用徽标的默认
+  /// 右上角位置，
   /// 图文项下方的文字宽度不会改变徽标位置。
-  /// TabBar 会注入对应内容作为徽标锚点，因此传入的 [TBadge.child] 必须为空；
-  /// [TBadge.onTap] 会作为标签项点击链中的附加回调执行，遵循相同的
-  /// [allowMultipleTaps] 门控：未选中项会调用，重复点击当前选中项仅在
-  /// [allowMultipleTaps] 为 true 时调用，整栏禁用时不会调用。
-  final TBadge? badge;
+  ///
+  /// TabBar 自己拥有徽标锚点与点击区域；点击行为通过 [onTap] 配置。调用方
+  /// 已经拥有目标 Widget 时，应直接使用 [TBadge] 包装该 Widget。
+  final TBadgeConfig? badge;
 
   /// 弹窗配置
   final TTabBarPopUpBtnConfig? popUpButtonConfig;
@@ -910,7 +910,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          badge == null ? icon : _attachBadge(context, badge, icon),
+          badge == null ? icon : _attachBadge(badge, icon),
           if (centerDistance > 0) SizedBox(height: centerDistance),
           text,
         ],
@@ -922,39 +922,17 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     if (badge == null) {
       return child;
     }
-    return _attachBadge(context, badge, child);
+    return _attachBadge(badge, child);
   }
 
-  Widget _attachBadge(BuildContext context, TBadge badge, Widget child) {
-    assert(
-      badge.child == null,
-      '[TTabBarItemConfig] badge.child is managed by TTabBar.',
-    );
-    return TBadge(
-      key: badge.key,
-      label: badge.label,
-      variant: badge.variant,
-      size: badge.size,
-      border: badge.border,
-      showZero: badge.showZero,
-      offset: _resolveBadgeOffset(context, badge),
+  Widget _attachBadge(TBadgeConfig badge, Widget child) {
+    return TBadge.fromConfig(
+      config: badge,
+      fallbackOffset: basicType == _TTabBarBasicType.text
+          ? _kTextBadgeOffset
+          : null,
       child: child,
     );
-  }
-
-  Offset? _resolveBadgeOffset(BuildContext context, TBadge badge) {
-    if (badge.offset != null || basicType != _TTabBarBasicType.text) {
-      return badge.offset;
-    }
-    final localOffset = context
-        .dependOnInheritedWidgetOfExactType<BadgeTheme>()
-        ?.data
-        .offset;
-    final globalOffset = Theme.of(context).tExplicitBadgeTheme?.offset;
-    if (localOffset != null || globalOffset != null) {
-      return null;
-    }
-    return _kTextBadgeOffset;
   }
 
   Widget _textItem(
@@ -1023,9 +1001,6 @@ class _TTabBarItemWithBadge extends StatelessWidget {
   }
 
   void handleTap(BuildContext context) {
-    if (!isSelected || itemConfig.allowMultipleTaps) {
-      itemConfig.badge?.onTap?.call();
-    }
     onTap.call();
 
     var popUpButtonConfig = itemConfig.popUpButtonConfig;

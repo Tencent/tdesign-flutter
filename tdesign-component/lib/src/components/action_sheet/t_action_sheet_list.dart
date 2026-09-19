@@ -7,6 +7,8 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
+import '../badge/t_badge.dart';
+import '../badge/t_badge_defaults.dart';
 import '../text/t_text.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_item_widget.dart';
@@ -225,40 +227,7 @@ class TActionSheetList<T> extends StatelessWidget {
                         ),
                         SizedBox(width: context.tTheme.spacer8),
                       ],
-                      Flexible(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Flexible(
-                              child: TText(
-                                item.label,
-                                font: context.tTheme.fontBodyLarge,
-                                textColor: item.disabled
-                                    ? context
-                                          .tTheme
-                                          .textDisabledColor // 禁用状态下的文本颜色
-                                    : context
-                                          .tTheme
-                                          .textColorPrimary, // 正常状态下的文本颜色
-                                style: item.textStyle,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            if (item.badge != null)
-                              Align(
-                                alignment: Alignment.topLeft,
-                                widthFactor: 0.5,
-                                heightFactor: 0.5,
-                                child: FractionalTranslation(
-                                  translation: const Offset(-0.5, -0.5),
-                                  child: item.badge!,
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
+                      Flexible(child: _buildLabel(context, item)),
                     ],
                   ),
                   if (item.subtitle != null && item.subtitle!.isNotEmpty) ...[
@@ -285,6 +254,107 @@ class TActionSheetList<T> extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Widget _buildLabel(BuildContext context, TActionSheetItem<T> item) {
+    final label = TText(
+      item.label,
+      font: context.tTheme.fontBodyLarge,
+      textColor: item.disabled
+          ? context.tTheme.textDisabledColor
+          : context.tTheme.textColorPrimary,
+      style: item.textStyle,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
+    final badge = item.badge;
+    if (badge == null) {
+      return label;
+    }
+    final offset = _badgeOffset(context, badge);
+    final badgeLabel = TBadge.fromConfig(
+      config: badge,
+      child: label,
+      fallbackAlignment: AlignmentDirectional.topEnd,
+      fallbackOffset: offset,
+    );
+    final overflow = _badgeHorizontalOverflow(context, badge, offset);
+    if (overflow == 0) {
+      return badgeLabel;
+    }
+    return Padding(
+      padding: switch (align) {
+        TActionSheetAlign.center => EdgeInsets.symmetric(horizontal: overflow),
+        TActionSheetAlign.left ||
+        TActionSheetAlign.right => EdgeInsetsDirectional.only(end: overflow),
+      },
+      child: badgeLabel,
+    );
+  }
+
+  double _badgeHorizontalOverflow(
+    BuildContext context,
+    TBadgeConfig badge,
+    Offset fallbackOffset,
+  ) {
+    if (badge.isCustom || badge.alignment != null || badge.offset != null) {
+      return 0;
+    }
+    if (badge.variant == TBadgeVariant.dot) {
+      return TBadgeDefaults.dotSize / 2 + fallbackOffset.dx;
+    }
+    if (badge.variant != TBadgeVariant.circle || badge.label == null) {
+      return 0;
+    }
+    final badgeSize = _badgeSize(context, badge);
+    return badgeSize.width / 2 + fallbackOffset.dx;
+  }
+
+  Offset _badgeOffset(BuildContext context, TBadgeConfig badge) {
+    if (badge.isCustom) {
+      return Offset.zero;
+    }
+    if (badge.variant == TBadgeVariant.dot) {
+      return const Offset(2, 0);
+    }
+    if (badge.variant != TBadgeVariant.circle || badge.label == null) {
+      return Offset.zero;
+    }
+    if (badge.label!.runes.length == 1 && badge.size == TBadgeSize.medium) {
+      return const Offset(6, 4);
+    }
+    final badgeSize = _badgeSize(context, badge);
+    final horizontalInset = badge.size == TBadgeSize.medium ? 6.0 : 2.0;
+    return Offset(
+      badgeSize.width / 2 - horizontalInset,
+      badgeSize.height / 2 - 4,
+    );
+  }
+
+  Size _badgeSize(BuildContext context, TBadgeConfig badge) {
+    final font = badge.size == TBadgeSize.large
+        ? context.tTheme.fontMarkSmall
+        : context.tTheme.fontMarkExtraSmall;
+    final textPainter = TextPainter(
+      text: TextSpan(
+        text: badge.label,
+        style: TextStyle(
+          fontSize: font?.size,
+          height: font?.height,
+          fontWeight: font?.fontWeight,
+        ),
+      ),
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+    )..layout();
+    final badgeHeight = badge.size == TBadgeSize.large ? 20.0 : 16.0;
+    final horizontalPadding = badge.size == TBadgeSize.large ? 10.0 : 8.0;
+    final badgeWidth = math.max(
+      badgeHeight,
+      textPainter.width + horizontalPadding,
+    );
+    textPainter.dispose();
+    return Size(badgeWidth, badgeHeight);
   }
 
   /// 构建取消按钮

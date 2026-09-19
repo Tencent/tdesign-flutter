@@ -2,7 +2,7 @@ Widget _centerList(BuildContext context) => _trigger(
     label: '居中列表型',
     onPressed: () => TActionSheet.showList(
       context,
-      cancelText: 'cancel',
+      cancelText: 'Cancel',
       subtitle: 'Email Settings',
       align: TActionSheetAlign.center,
       items: _iconItems(),

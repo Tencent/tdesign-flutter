@@ -74,7 +74,7 @@ class _BadgeScene extends StatelessWidget {
                   child: Column(
                     children: [
                       _VariantRow(
-                        name: 'normal',
+                        name: 'circle',
                         badge: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [

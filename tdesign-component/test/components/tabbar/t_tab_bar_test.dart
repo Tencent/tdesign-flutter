@@ -123,7 +123,7 @@ void main() {
     });
 
     test('item badge and popup config keep constructor data', () {
-      const tabBadge = TBadge(variant: TBadgeVariant.dot);
+      const tabBadge = TBadgeConfig(variant: TBadgeVariant.dot);
       const tabItem = TTabBarItemConfig(tabText: '消息', badge: tabBadge);
       expect(tabItem.badge, same(tabBadge));
 
@@ -613,7 +613,7 @@ void main() {
                 tabText: '消息',
                 selectedIcon: const Icon(Icons.mail),
                 unselectedIcon: const Icon(Icons.mail_outline),
-                badge: const TBadge(label: '9', offset: Offset(2, 1)),
+                badge: const TBadgeConfig(label: '9', offset: Offset(2, 1)),
                 onTap: () {},
               ),
               TTabBarItemConfig(
@@ -662,7 +662,7 @@ void main() {
                 tabText: '很长的标签文字',
                 selectedIcon: Icon(Icons.mail, size: 20),
                 unselectedIcon: Icon(Icons.mail_outline, size: 20),
-                badge: TBadge(label: '9'),
+                badge: TBadgeConfig(label: '9'),
               ),
               TTabBarItemConfig(
                 tabText: '首页',
@@ -692,7 +692,7 @@ void main() {
               navigationTabs: const [
                 TTabBarItemConfig(
                   tabText: '消息',
-                  badge: TBadge(label: '9'),
+                  badge: TBadgeConfig(label: '9'),
                 ),
                 TTabBarItemConfig(tabText: '首页'),
               ],
@@ -702,8 +702,10 @@ void main() {
         );
 
         final badge = tester.widget<TBadge>(find.byType(TBadge));
-        expect(badge.offset, const Offset(16, -8));
+        expect(badge.offset, isNull);
         expect(badge.child, isNotNull);
+        final materialBadge = tester.widget<Badge>(find.byType(Badge));
+        expect(materialBadge.offset, const Offset(16, -8));
       },
     );
 
@@ -720,7 +722,7 @@ void main() {
               navigationTabs: const [
                 TTabBarItemConfig(
                   tabText: '消息',
-                  badge: TBadge(label: '9'),
+                  badge: TBadgeConfig(label: '9'),
                 ),
                 TTabBarItemConfig(tabText: '首页'),
               ],
@@ -736,10 +738,10 @@ void main() {
       expect(materialBadge.offset, const Offset(3, 4));
     });
 
-    testWidgets('badge inherits theme offset without blocking item taps', (
+    testWidgets('badge inherits theme offset without blocking item onTap', (
       tester,
     ) async {
-      var badgeTaps = 0;
+      var itemTaps = 0;
       var changedValue = -1;
       await tester.pumpWidget(
         MaterialApp(
@@ -755,7 +757,8 @@ void main() {
                 const TTabBarItemConfig(tabText: '首页'),
                 TTabBarItemConfig(
                   tabText: '消息',
-                  badge: TBadge(label: '1', onTap: () => badgeTaps++),
+                  badge: const TBadgeConfig(label: '1'),
+                  onTap: () => itemTaps++,
                 ),
               ],
               onChanged: (value) => changedValue = value,
@@ -769,14 +772,14 @@ void main() {
 
       await tester.tap(find.text('消息'));
       await tester.pump();
-      expect(badgeTaps, 1);
+      expect(itemTaps, 1);
       expect(changedValue, 1);
     });
 
-    testWidgets('badge onTap follows allowMultipleTaps with InkWell', (
+    testWidgets('item onTap follows allowMultipleTaps with badge and InkWell', (
       tester,
     ) async {
-      var badgeTaps = 0;
+      var itemTaps = 0;
       var changedCount = 0;
       var selectedIndex = 0;
       await tester.pumpWidget(
@@ -789,12 +792,14 @@ void main() {
               navigationTabs: [
                 TTabBarItemConfig(
                   tabText: '首页',
-                  badge: TBadge(label: '1', onTap: () => badgeTaps++),
+                  badge: const TBadgeConfig(label: '1'),
+                  onTap: () => itemTaps++,
                 ),
                 TTabBarItemConfig(
                   tabText: '消息',
                   allowMultipleTaps: true,
-                  badge: TBadge(label: '2', onTap: () => badgeTaps++),
+                  badge: const TBadgeConfig(label: '2'),
+                  onTap: () => itemTaps++,
                 ),
               ],
               onChanged: (index) {
@@ -808,17 +813,17 @@ void main() {
 
       await tester.tap(find.text('首页'));
       await tester.pump();
-      expect(badgeTaps, 0);
+      expect(itemTaps, 0);
       expect(changedCount, 0);
 
       await tester.tap(find.text('消息'));
       await tester.pump();
-      expect(badgeTaps, 1);
+      expect(itemTaps, 1);
       expect(changedCount, 1);
 
       await tester.tap(find.text('消息'));
       await tester.pump();
-      expect(badgeTaps, 2);
+      expect(itemTaps, 2);
       expect(changedCount, 1);
     });
 

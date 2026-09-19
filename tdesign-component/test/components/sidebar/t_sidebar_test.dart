@@ -91,7 +91,7 @@ void main() {
   });
 
   group('TSideBar 基础渲染', () {
-    testWidgets('badge child 由 SideBar 管理', (tester) async {
+    testWidgets('badge 配置由 SideBar 绑定到标签锚点', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           const TSideBar(
@@ -100,13 +100,15 @@ void main() {
               TSideBarItem(
                 value: 0,
                 label: '选项',
-                badge: TBadge(label: '1', child: SizedBox()),
+                badge: TBadgeConfig(label: '1'),
               ),
             ],
           ),
         ),
       );
-      expect(tester.takeException(), isAssertionError);
+      expect(tester.takeException(), isNull);
+      expect(find.byType(TBadge), findsOneWidget);
+      expect(find.text('1'), findsOneWidget);
     });
 
     testWidgets('基础渲染', (tester) async {
@@ -594,7 +596,7 @@ void main() {
             value: 3,
             disabled: false,
             icon: Icons.star,
-            badge: TBadge(label: '1'),
+            badge: TBadgeConfig(label: '1'),
           ),
         ),
       );
@@ -616,7 +618,7 @@ void main() {
             label: '很长很长的标签内容xxx',
             value: 4,
             disabled: false,
-            badge: TBadge(label: '9'),
+            badge: TBadgeConfig(label: '9'),
           ),
         ),
       );
@@ -637,7 +639,7 @@ void main() {
                 label: '这是一个非常非常长的侧边栏标题',
                 value: 5,
                 disabled: false,
-                badge: TBadge(label: '9'),
+                badge: TBadgeConfig(label: '9'),
               ),
             ),
           ),

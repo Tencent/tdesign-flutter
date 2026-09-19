@@ -46,8 +46,8 @@ class TSideBarCustomPageState extends State<TSideBarCustomPage> {
         label: labels[index],
         value: index,
         badge: switch (index) {
-          1 => const TBadge(variant: TBadgeVariant.dot),
-          2 => const TBadge(label: '8'),
+          1 => const TBadgeConfig(variant: TBadgeVariant.dot),
+          2 => const TBadgeConfig(label: '8'),
           _ => null,
         },
       ),

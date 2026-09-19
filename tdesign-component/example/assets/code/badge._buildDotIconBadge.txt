@@ -1,4 +1,5 @@
 Widget _buildDotIconBadge(BuildContext context) => const TBadge(
     variant: TBadgeVariant.dot,
+    offset: Offset(-1, 1),
     child: Icon(TIcons.notification),
   );

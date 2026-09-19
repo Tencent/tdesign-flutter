@@ -239,6 +239,24 @@ void main() {
         .toList();
     expect(dotColors, contains(token.brandNormalColor));
     expect(dotColors, contains(token.textDisabledColor));
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is SizedBox &&
+            widget.height == TActionSheetGrid.paginationIndicatorExtent,
+      ),
+      findsOneWidget,
+    );
+    expect(
+      TActionSheetGrid.preferredPopupHeight(
+        tester.element(find.byType(TActionSheetGrid<int>)),
+        subtitle: null,
+        layout: const TActionSheetGridLayout.paged(count: 8, rows: 2),
+        itemHeight: 96,
+        showCancel: true,
+      ),
+      288,
+    );
     // 翻页（左滑）触发 onPageChanged
     await tester.drag(find.byType(PageView), const Offset(-400, 0));
     await tester.pumpAndSettle();
@@ -277,6 +295,46 @@ void main() {
   testWidgets('fixed layout 走默认 grid', (tester) async {
     await tester.pumpWidget(wrap(TActionSheetGrid(items: items(4))));
     expect(find.byType(TActionSheetGrid<int>), findsOneWidget);
+  });
+
+  testWidgets('分组滚动宫格按标题、项目和取消区计算 340dp 高度', (tester) async {
+    const sections = [
+      TActionSheetGridSection(
+        title: 'Forward To',
+        items: [TActionSheetItem(value: 1, label: 'Allen')],
+      ),
+      TActionSheetGridSection(
+        title: 'Share',
+        items: [TActionSheetItem(value: 2, label: 'WeChat')],
+      ),
+    ];
+    await tester.pumpWidget(
+      wrap(
+        const TActionSheetSectionGrid(
+          sections: sections,
+          cancelText: 'Cancel',
+          itemWidth: 80,
+          itemHeight: 96,
+          useSafeArea: false,
+        ),
+      ),
+    );
+
+    final context = tester.element(find.byType(TActionSheetSectionGrid<int>));
+    expect(
+      TActionSheetSectionGrid.preferredPopupHeight(
+        context,
+        sectionCount: sections.length,
+        itemHeight: 96,
+        showCancel: true,
+      ),
+      340,
+    );
+    expect(find.text('Forward To'), findsOneWidget);
+    expect(find.text('Share'), findsOneWidget);
+    expect(find.text('Allen'), findsOneWidget);
+    expect(find.text('WeChat'), findsOneWidget);
+    expect(find.text('Cancel'), findsOneWidget);
   });
 
   testWidgets('默认 grid 超出 count 时可纵向滚动', (tester) async {

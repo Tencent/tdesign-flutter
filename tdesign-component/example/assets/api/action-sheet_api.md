@@ -6,7 +6,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| badge | Widget? | - | 角标槽位。 列表模式下跟随标题展示；宫格模式下仅在 `icon` 非空时展示在图标右上角。 |
+| badge | TBadgeConfig? | - | 展示在项目内容上的徽标配置；为空时不显示。 列表模式下以标题为锚点；宫格模式下以 `icon` 为锚点，因此宫格模式仅在 `icon` 非空时展示。默认位置由 ActionSheet 管理，`TBadgeConfig.alignment` 与 `TBadgeConfig.offset` 可逐项覆盖；完全自定义外观使用 `TBadgeConfig.custom`。 |
 | disabled | bool | false | 是否禁用 |
 | icon | Widget? | - | 图标槽位；调用方拥有其背景、形状和显式尺寸。 未显式设置尺寸或颜色的 `Icon` 会继承 `TActionSheetThemeData`。 |
 | label | String | - | 标题 |
@@ -42,6 +42,28 @@
 | onCancel | VoidCallback? | - | 点击取消时回调。 |
 | onClosed | VoidCallback? | - | 面板关闭后回调。 |
 | onSelected | TActionSheetOnSelected<T>? | - | 点击动作时回调。 |
+
+
+##### TActionSheet.showGridSections
+
+显示带标题分组的横向滚动宫格动作面板。
+
+返回类型：`TPopupHandle`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | 用于查找承载弹层的 Navigator。 |
+| sections | List<TActionSheetGridSection<T>> | - | 带标题的分组列表，每组独立横向滚动。 |
+| cancelText | String? | - | 取消按钮文字，为 null 时使用本地化文案。 |
+| showCancel | bool | true | 是否显示取消按钮。 |
+| showOverlay | bool | true | 是否显示蒙层。 |
+| closeOnOverlayClick | bool | true | 点击蒙层是否关闭。 |
+| useSafeArea | bool | true | 是否避让系统安全区。 |
+| itemWidth | double | 80 | 横向列表单项宽度，默认为 80。 |
+| itemHeight | double? | - | 单项高度；为 null 时使用组件主题，最终回退为 96。 |
+| onCancel | VoidCallback? | - | 点击取消时回调。 |
+| onClosed | VoidCallback? | - | 面板关闭后回调。 |
+| onSelected | TActionSheetOnSelected<T>? | - | 点击项目时回传原始项目。 |
 
 
 ##### TActionSheet.showList
@@ -126,6 +148,19 @@ TActionSheet 组件级视觉 ThemeExtension
 | count | int | - | 一个可视面板期望容纳的项目数 |
 | mode | TActionSheetGridMode | - | 布局模式 |
 | rows | int | - | 行数 |
+
+
+### TActionSheetGridSection
+#### 简介
+横向滚动宫格中的一个带标题分组。
+通过 `TActionSheet.showGridSections` 展示。每个分组独立横向滚动，
+`title` 显示在该组项目上方；`items` 为空时仍保留标题。
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| items | List<TActionSheetItem<T>> | - | 该分组中的宫格项目。 |
+| title | String | - | 分组标题。 |
 
 
 ### TActionSheetAlign

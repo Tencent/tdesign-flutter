@@ -6,6 +6,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
+import '../badge/t_badge.dart';
 import '../text/t_text.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_theme_data.dart';
@@ -72,28 +73,7 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 if (item.icon != null) ...[
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      IconTheme(
-                        data: IconThemeData(color: iconColor, size: iconSize),
-                        child: SizedBox(
-                          width: iconExtent,
-                          height: iconExtent,
-                          child: Center(child: item.icon!),
-                        ),
-                      ),
-                      if (item.badge != null)
-                        Positioned(
-                          right: 0,
-                          top: 0,
-                          child: FractionalTranslation(
-                            translation: const Offset(0.5, -0.5),
-                            child: item.badge!,
-                          ),
-                        ),
-                    ],
-                  ),
+                  _buildIcon(context, iconColor, iconSize, iconExtent),
                   SizedBox(height: context.tTheme.spacer8),
                 ],
                 TText(
@@ -117,6 +97,31 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
       enabled: false,
       child: Opacity(opacity: 0.4, child: content),
     );
+  }
+
+  Widget _buildIcon(
+    BuildContext context,
+    Color iconColor,
+    double iconSize,
+    double iconExtent,
+  ) {
+    final icon = IconTheme(
+      data: IconThemeData(color: iconColor, size: iconSize),
+      child: SizedBox(
+        width: iconExtent,
+        height: iconExtent,
+        child: Center(child: item.icon!),
+      ),
+    );
+    final badge = item.badge;
+    return badge == null
+        ? icon
+        : TBadge.fromConfig(
+            config: badge,
+            child: icon,
+            fallbackAlignment: AlignmentDirectional.topEnd,
+            fallbackOffset: const Offset(-2, -1),
+          );
   }
 }
 

@@ -49,19 +49,15 @@ class TActionSheetPage extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             ),
             ExampleItem(
-              builder: _iconGrid,
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            ),
-            ExampleItem(
-              builder: _badgeGrid,
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            ),
-            ExampleItem(
               builder: _scrollGrid,
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             ),
             ExampleItem(
               builder: _descriptionScrollGrid,
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            ),
+            ExampleItem(
+              builder: _badgeGrid,
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             ),
           ],
@@ -71,7 +67,7 @@ class TActionSheetPage extends StatelessWidget {
           children: [
             ExampleItem(
               desc: '列表型选项状态',
-              builder: _statusList,
+              builder: _statusIconList,
               padding: const EdgeInsets.symmetric(horizontal: 16),
             ),
           ],
@@ -118,17 +114,17 @@ class TActionSheetPage extends StatelessWidget {
     const TActionSheetItem(
       value: 'move',
       label: 'Move',
-      icon: Icon(TIcons.folder),
+      icon: Icon(TIcons.enter),
     ),
     const TActionSheetItem(
       value: 'important',
       label: 'Mark as important',
-      icon: Icon(TIcons.notification),
+      icon: Icon(TIcons.bookmark),
     ),
     const TActionSheetItem(
       value: 'unsubscribe',
       label: 'Unsubscribe',
-      icon: Icon(TIcons.delete),
+      icon: Icon(TIcons.pin),
     ),
     const TActionSheetItem(
       value: 'tasks',
@@ -141,79 +137,62 @@ class TActionSheetPage extends StatelessWidget {
     const TActionSheetItem(
       value: 'move',
       label: 'Move',
-      badge: TBadge(variant: TBadgeVariant.dot),
+      badge: TBadgeConfig(variant: TBadgeVariant.dot),
     ),
     const TActionSheetItem(
       value: 'important',
       label: 'Mark as important',
-      badge: TBadge(label: '8'),
+      badge: TBadgeConfig(label: '8'),
     ),
     const TActionSheetItem(
       value: 'unsubscribe',
       label: 'Unsubscribe',
-      badge: TBadge(label: '99'),
+      badge: TBadgeConfig(label: '99'),
     ),
     const TActionSheetItem(
       value: 'tasks',
       label: 'Add to Tasks',
-      badge: TBadge(label: '99+'),
+      badge: TBadgeConfig(label: '99+'),
     ),
   ];
 
-  Widget _gridIcon(IconData icon, Color color) {
+  Widget _assetGridIcon(String path) {
     return Container(
-      key: ValueKey(icon),
+      key: ValueKey(path),
       width: 40,
       height: 40,
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color: Colors.black.withValues(alpha: 0.06),
+          width: 0.5,
+        ),
       ),
-      alignment: Alignment.center,
-      child: Icon(icon, size: 24, color: color),
+      clipBehavior: Clip.antiAlias,
+      child: Image.asset(path, fit: BoxFit.cover),
     );
   }
 
-  List<TActionSheetItem<String>> _appGridItems(BuildContext context) => [
+  List<TActionSheetItem<String>> _appGridItems() => [
     TActionSheetItem(
       value: 'wechat',
-      label: '微信',
-      icon: _gridIcon(TIcons.chat, context.tTheme.successNormalColor),
-    ),
-    TActionSheetItem(
-      value: 'moments',
-      label: '朋友圈',
-      icon: _gridIcon(TIcons.share, context.tTheme.successNormalColor),
+      label: 'WeChat',
+      icon: _assetGridIcon('assets/img/action_sheet_wechat.png'),
     ),
     TActionSheetItem(
       value: 'qq',
       label: 'QQ',
-      icon: _gridIcon(TIcons.user, context.tTheme.brandNormalColor),
-    ),
-    TActionSheetItem(
-      value: 'work-wechat',
-      label: '企业微信',
-      icon: _gridIcon(TIcons.app, context.tTheme.brandNormalColor),
+      icon: _assetGridIcon('assets/img/action_sheet_qq.png'),
     ),
     TActionSheetItem(
       value: 'document',
-      label: '腾讯文档',
-      icon: _gridIcon(TIcons.folder, context.tTheme.warningNormalColor),
+      label: 'Doc',
+      icon: _assetGridIcon('assets/img/action_sheet_doc.png'),
     ),
     TActionSheetItem(
-      value: 'email',
-      label: '邮箱',
-      icon: _gridIcon(TIcons.notification, context.tTheme.errorNormalColor),
-    ),
-    TActionSheetItem(
-      value: 'cloud',
-      label: '微云',
-      icon: _gridIcon(TIcons.cloud_upload, context.tTheme.brandNormalColor),
-    ),
-    TActionSheetItem(
-      value: 'file',
-      label: '文件',
-      icon: _gridIcon(TIcons.file_copy, context.tTheme.warningNormalColor),
+      value: 'map',
+      label: 'Map',
+      icon: _assetGridIcon('assets/img/action_sheet_map.png'),
     ),
   ];
 
@@ -234,80 +213,90 @@ class TActionSheetPage extends StatelessWidget {
   List<TActionSheetItem<String>> _iconGridItems() => [
     TActionSheetItem(
       value: 'share',
-      label: '分享',
+      label: 'Share',
       icon: _iconGridIcon(TIcons.share),
     ),
     TActionSheetItem(
       value: 'favorite',
-      label: '收藏',
+      label: 'Collect',
       icon: _iconGridIcon(TIcons.star),
     ),
     TActionSheetItem(
       value: 'download',
-      label: '下载',
-      icon: _iconGridIcon(TIcons.download),
+      label: 'Download',
+      icon: _iconGridIcon(TIcons.cloud_download),
     ),
     TActionSheetItem(
       value: 'edit',
-      label: '编辑',
+      label: 'Edit',
       icon: _iconGridIcon(TIcons.edit),
-    ),
-    TActionSheetItem(
-      value: 'copy',
-      label: '复制',
-      icon: _iconGridIcon(TIcons.file_copy),
-    ),
-    TActionSheetItem(
-      value: 'refresh',
-      label: '刷新',
-      icon: _iconGridIcon(TIcons.refresh),
-    ),
-    TActionSheetItem(
-      value: 'upload',
-      label: '上传',
-      icon: _iconGridIcon(TIcons.cloud_upload),
-    ),
-    TActionSheetItem(
-      value: 'delete',
-      label: '删除',
-      icon: _iconGridIcon(TIcons.delete),
     ),
   ];
 
-  List<TActionSheetItem<String>> _gridItems(BuildContext context) =>
-      _appGridItems(context);
+  List<TActionSheetItem<String>> _gridItems() => [
+    ..._appGridItems(),
+    ..._iconGridItems(),
+  ];
 
-  List<TActionSheetItem<String>> _badgeGridItems(BuildContext context) {
-    final items = _gridItems(context);
-    const labels = [
-      'WeChat',
-      'QQ',
-      'Doc',
-      'Map',
-      'Share',
-      'Collect',
-      'Download',
-      'Edit',
-    ];
+  List<TActionSheetItem<String>> _badgeGridItems() {
+    final items = _gridItems();
     return List.generate(items.length, (index) {
       final item = items[index];
       return TActionSheetItem(
         value: item.value,
-        label: labels[index],
+        label: item.label,
         icon: item.icon,
         badge: switch (index) {
-          0 => const TBadge(label: 'NEW', variant: TBadgeVariant.custom),
-          5 => const TBadge(variant: TBadgeVariant.dot),
-          6 => const TBadge(label: '8'),
+          0 => const TBadgeConfig(label: 'NEW'),
+          5 => const TBadgeConfig(variant: TBadgeVariant.dot),
+          6 => const TBadgeConfig(label: '8'),
           _ => null,
         },
       );
     });
   }
 
-  List<TActionSheetItem<String>> _scrollGridItems(BuildContext context) => [
-    ..._appGridItems(context),
+  List<TActionSheetItem<String>> _scrollGridItems() => [
+    ..._appGridItems(),
+    TActionSheetItem(
+      value: 'qq-music',
+      label: 'QQ Music',
+      icon: _assetGridIcon('assets/img/action_sheet_qq_music.png'),
+    ),
     ..._iconGridItems(),
+    TActionSheetItem(
+      value: 'link',
+      label: 'Link',
+      icon: _iconGridIcon(TIcons.link),
+    ),
+  ];
+
+  List<TActionSheetItem<String>> _personGridItems() => const [
+    TActionSheetItem(
+      value: 'allen',
+      label: 'Allen',
+      icon: _ActionSheetAssetIcon('assets/img/action_sheet_allen.png'),
+    ),
+    TActionSheetItem(
+      value: 'nick',
+      label: 'Nick',
+      icon: _ActionSheetAssetIcon('assets/img/action_sheet_nick.png'),
+    ),
+    TActionSheetItem(
+      value: 'jacky',
+      label: 'Jacky',
+      icon: _ActionSheetAssetIcon('assets/img/action_sheet_jacky.png'),
+    ),
+    TActionSheetItem(
+      value: 'eric',
+      label: 'Eric',
+      icon: _ActionSheetAssetIcon('assets/img/action_sheet_eric.png'),
+    ),
+    TActionSheetItem(
+      value: 'johnson',
+      label: 'Johnson',
+      icon: _ActionSheetAssetIcon('assets/img/action_sheet_johnson.png'),
+    ),
   ];
 
   void _showSelection(BuildContext context, TActionSheetItem<String> item) {
@@ -319,7 +308,7 @@ class TActionSheetPage extends StatelessWidget {
     label: '常规列表型',
     onPressed: () => TActionSheet.showList(
       context,
-      cancelText: 'cancel',
+      cancelText: 'Cancel',
       items: _textItems(),
       onSelected: (item) => _showSelection(context, item),
     ),
@@ -330,7 +319,7 @@ class TActionSheetPage extends StatelessWidget {
     label: '带描述列表型',
     onPressed: () => TActionSheet.showList(
       context,
-      cancelText: 'cancel',
+      cancelText: 'Cancel',
       subtitle: 'Email Settings',
       items: _textItems(),
       onSelected: (item) => _showSelection(context, item),
@@ -342,7 +331,7 @@ class TActionSheetPage extends StatelessWidget {
     label: '带图标列表型',
     onPressed: () => TActionSheet.showList(
       context,
-      cancelText: 'cancel',
+      cancelText: 'Cancel',
       items: _iconItems(),
       onSelected: (item) => _showSelection(context, item),
     ),
@@ -353,7 +342,7 @@ class TActionSheetPage extends StatelessWidget {
     label: '带徽标列表型',
     onPressed: () => TActionSheet.showList(
       context,
-      cancelText: 'cancel',
+      cancelText: 'Cancel',
       items: _badgeItems(),
       onSelected: (item) => _showSelection(context, item),
     ),
@@ -364,7 +353,8 @@ class TActionSheetPage extends StatelessWidget {
     label: '常规宫格型',
     onPressed: () => TActionSheet.showGrid(
       context,
-      items: _gridItems(context),
+      cancelText: 'Cancel',
+      items: _gridItems(),
       onSelected: (item) => _showSelection(context, item),
     ),
   );
@@ -374,8 +364,9 @@ class TActionSheetPage extends StatelessWidget {
     label: '带描述宫格型',
     onPressed: () => TActionSheet.showGrid(
       context,
-      subtitle: '动作面板描述文字',
-      items: _gridItems(context),
+      cancelText: 'Cancel',
+      subtitle: 'Forward To',
+      items: _gridItems(),
       onSelected: (item) => _showSelection(context, item),
     ),
   );
@@ -385,22 +376,9 @@ class TActionSheetPage extends StatelessWidget {
     label: '带翻页宫格型',
     onPressed: () => TActionSheet.showGrid(
       context,
-      items: [
-        ..._appGridItems(context),
-        ..._iconGridItems(),
-        ..._appGridItems(context),
-      ],
+      items: [..._gridItems(), ..._iconGridItems(), ..._gridItems()],
       layout: const TActionSheetGridLayout.paged(count: 8, rows: 2),
-      onSelected: (item) => _showSelection(context, item),
-    ),
-  );
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _iconGrid(BuildContext context) => _trigger(
-    label: '带图标宫格型',
-    onPressed: () => TActionSheet.showGrid(
-      context,
-      items: _iconGridItems(),
+      cancelText: 'Cancel',
       onSelected: (item) => _showSelection(context, item),
     ),
   );
@@ -410,7 +388,8 @@ class TActionSheetPage extends StatelessWidget {
     label: '带徽标宫格型',
     onPressed: () => TActionSheet.showGrid(
       context,
-      items: _badgeGridItems(context),
+      cancelText: 'Cancel',
+      items: _badgeGridItems(),
       onSelected: (item) => _showSelection(context, item),
     ),
   );
@@ -420,8 +399,13 @@ class TActionSheetPage extends StatelessWidget {
     label: '多行滚动宫格型',
     onPressed: () => TActionSheet.showGrid(
       context,
-      items: _scrollGridItems(context),
-      layout: const TActionSheetGridLayout.scroll(count: 8, rows: 2),
+      cancelText: 'Cancel',
+      items: _scrollGridItems(),
+      layout: const TActionSheetGridLayout.scroll(
+        count: 10,
+        rows: 2,
+        itemMinWidth: 80,
+      ),
       onSelected: (item) => _showSelection(context, item),
     ),
   );
@@ -429,40 +413,39 @@ class TActionSheetPage extends StatelessWidget {
   @ExampleCode(group: 'action_sheet')
   Widget _descriptionScrollGrid(BuildContext context) => _trigger(
     label: '带描述多行滚动宫格型',
-    onPressed: () => TActionSheet.showGrid(
+    onPressed: () => TActionSheet.showGridSections(
       context,
-      subtitle: '动作面板描述文字',
-      items: _scrollGridItems(context),
-      layout: const TActionSheetGridLayout.scroll(count: 8, rows: 2),
+      cancelText: 'Cancel',
+      sections: [
+        TActionSheetGridSection(title: 'Forward To', items: _personGridItems()),
+        TActionSheetGridSection(title: 'Share', items: _scrollGridItems()),
+      ],
       onSelected: (item) => _showSelection(context, item),
     ),
   );
 
   @ExampleCode(group: 'action_sheet')
-  Widget _statusList(BuildContext context) => _trigger(
+  Widget _statusIconList(BuildContext context) => _trigger(
     label: '列表型选项状态',
     onPressed: () => TActionSheet.showList(
       context,
-      cancelText: 'cancel',
+      cancelText: 'Cancel',
       items: [
         const TActionSheetItem(
           value: 'move',
           label: 'Move',
-          icon: Icon(TIcons.folder),
+          icon: Icon(TIcons.enter),
         ),
         TActionSheetItem(
           value: 'important',
           label: 'Mark as important',
-          icon: Icon(
-            TIcons.notification,
-            color: context.tTheme.brandNormalColor,
-          ),
+          icon: Icon(TIcons.bookmark, color: context.tTheme.brandNormalColor),
           textStyle: TextStyle(color: context.tTheme.brandNormalColor),
         ),
         TActionSheetItem(
           value: 'unsubscribe',
           label: 'Unsubscribe',
-          icon: Icon(TIcons.delete, color: context.tTheme.errorNormalColor),
+          icon: Icon(TIcons.pin, color: context.tTheme.errorNormalColor),
           textStyle: TextStyle(color: context.tTheme.errorNormalColor),
         ),
         const TActionSheetItem(
@@ -481,7 +464,7 @@ class TActionSheetPage extends StatelessWidget {
     label: '居中列表型',
     onPressed: () => TActionSheet.showList(
       context,
-      cancelText: 'cancel',
+      cancelText: 'Cancel',
       subtitle: 'Email Settings',
       align: TActionSheetAlign.center,
       items: _iconItems(),
@@ -494,11 +477,34 @@ class TActionSheetPage extends StatelessWidget {
     label: '左对齐列表型',
     onPressed: () => TActionSheet.showList(
       context,
-      cancelText: 'cancel',
+      cancelText: 'Cancel',
       subtitle: 'Email Settings',
       align: TActionSheetAlign.left,
       items: _iconItems(),
       onSelected: (item) => _showSelection(context, item),
     ),
   );
+}
+
+class _ActionSheetAssetIcon extends StatelessWidget {
+  const _ActionSheetAssetIcon(this.path);
+
+  final String path;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color: Colors.black.withValues(alpha: 0.06),
+          width: 0.5,
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Image.asset(path, fit: BoxFit.cover),
+    );
+  }
 }

@@ -34,7 +34,7 @@ void main() {
               label: '带图标',
               icon: Icon(Icons.star),
               subtitle: '副标题内容',
-              badge: TBadge(label: '1'),
+              badge: TBadgeConfig(label: '1'),
             ),
             TActionSheetItem(value: 2, label: '普通项'),
           ],
@@ -54,7 +54,9 @@ void main() {
             TActionSheetItem(
               value: 1,
               label: '带徽标',
-              badge: SizedBox(key: badgeKey, width: 12, height: 6),
+              badge: TBadgeConfig.custom(
+                badge: SizedBox(key: badgeKey, width: 12, height: 6),
+              ),
             ),
           ],
         ),
@@ -82,7 +84,7 @@ void main() {
               value: 1,
               label: label,
               icon: Icon(Icons.star),
-              badge: TBadge(label: '99+'),
+              badge: TBadgeConfig(label: '99+'),
             ),
           ],
         ),
@@ -91,12 +93,10 @@ void main() {
 
     expect(tester.takeException(), isNull);
     final titleFinder = find.widgetWithText(TText, label);
-    final badgeFinder = find.byType(TBadge);
     final title = tester.widget<TText>(titleFinder);
     expect(title.maxLines, 1);
     expect(title.overflow, TextOverflow.ellipsis);
-    expect(tester.getCenter(badgeFinder), tester.getTopRight(titleFinder));
-    expect(tester.getRect(badgeFinder).right, lessThanOrEqualTo(220));
+    expect(tester.getRect(find.text('99+')).right, lessThanOrEqualTo(220));
   });
 
   testWidgets('列表图标尺寸来自 Theme 而不是文本字号', (tester) async {

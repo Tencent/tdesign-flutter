@@ -1,27 +1,24 @@
-Widget _statusList(BuildContext context) => _trigger(
+Widget _statusIconList(BuildContext context) => _trigger(
     label: '列表型选项状态',
     onPressed: () => TActionSheet.showList(
       context,
-      cancelText: 'cancel',
+      cancelText: 'Cancel',
       items: [
         const TActionSheetItem(
           value: 'move',
           label: 'Move',
-          icon: Icon(TIcons.folder),
+          icon: Icon(TIcons.enter),
         ),
         TActionSheetItem(
           value: 'important',
           label: 'Mark as important',
-          icon: Icon(
-            TIcons.notification,
-            color: context.tTheme.brandNormalColor,
-          ),
+          icon: Icon(TIcons.bookmark, color: context.tTheme.brandNormalColor),
           textStyle: TextStyle(color: context.tTheme.brandNormalColor),
         ),
         TActionSheetItem(
           value: 'unsubscribe',
           label: 'Unsubscribe',
-          icon: Icon(TIcons.delete, color: context.tTheme.errorNormalColor),
+          icon: Icon(TIcons.pin, color: context.tTheme.errorNormalColor),
           textStyle: TextStyle(color: context.tTheme.errorNormalColor),
         ),
         const TActionSheetItem(

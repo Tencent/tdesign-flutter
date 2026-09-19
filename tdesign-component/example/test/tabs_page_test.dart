@@ -148,7 +148,7 @@ void main() {
     final badges = bar.tabs.take(2).map((tab) => tab.child! as TBadge).toList();
     expect(badges.map((badge) => badge.variant), [
       TBadgeVariant.dot,
-      TBadgeVariant.normal,
+      TBadgeVariant.circle,
     ]);
     expect(badges.every((badge) => badge.child is Row), isTrue);
     expect(bar.tabs[2].child, isNull);

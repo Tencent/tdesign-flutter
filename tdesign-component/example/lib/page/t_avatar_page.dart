@@ -53,11 +53,13 @@ class _TAvatarPageState extends State<TAvatarPage> {
             ExampleItem(
               desc: '纯展示的头像组',
               padding: padding,
+              center: false,
               builder: _buildDisplayAvatar,
             ),
             ExampleItem(
               desc: '带操作的头像组',
               padding: padding,
+              center: false,
               builder: _buildOperationAvatar,
             ),
           ],
@@ -139,49 +141,33 @@ class _TAvatarPageState extends State<TAvatarPage> {
     return Row(
       // spacing: 32,
       children: [
-        const SizedBox(
-          child: Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.bottomLeft,
-            children: [
-              TAvatar(
-                size: TAvatarSize.medium,
-                image: AssetImage('assets/img/t_avatar_1.png'),
-              ),
-              Positioned(
-                right: -4,
-                top: -2,
-                child: TBadge(variant: TBadgeVariant.dot),
-              ),
-            ],
+        const BadgeTheme(
+          data: BadgeThemeData(smallSize: 10),
+          child: TBadge(
+            variant: TBadgeVariant.dot,
+            offset: Offset(-1, 2),
+            child: TAvatar(
+              size: TAvatarSize.medium,
+              image: AssetImage('assets/img/t_avatar_1.png'),
+            ),
           ),
         ),
         const SizedBox(width: 32),
-        SizedBox(
-          child: Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.bottomLeft,
-            children: [
-              TAvatar(
-                size: TAvatarSize.medium,
-                backgroundColor: context.tTheme.brandNormalColor,
-                foregroundColor: context.tTheme.whiteColor1,
-                child: const Text('A'),
-              ),
-              const Positioned(child: TBadge(label: '8'), right: -4, top: -2),
-            ],
+        TBadge(
+          label: '8',
+          offset: const Offset(-5, 6),
+          child: TAvatar(
+            size: TAvatarSize.medium,
+            backgroundColor: context.tTheme.brandNormalColor,
+            foregroundColor: context.tTheme.whiteColor1,
+            child: const Text('A'),
           ),
         ),
         const SizedBox(width: 32),
-        const SizedBox(
-          child: Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.bottomLeft,
-            children: [
-              TAvatar(size: TAvatarSize.medium),
-              Positioned(child: TBadge(label: '12'), right: -4, top: -2),
-            ],
-          ),
+        const TBadge(
+          label: '12',
+          offset: Offset(-5, 6),
+          child: TAvatar(size: TAvatarSize.medium),
         ),
       ],
     );
@@ -191,7 +177,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
   @ExampleCode(group: 'avatar')
   Widget _buildDisplayAvatar(BuildContext context) {
     return const TAvatarGroup(
-      dimension: 44,
+      dimension: 48,
       cascading: TAvatarGroupCascading.startUp,
       maxCount: 5,
       overflow: TAvatar(child: Text('+5')),
@@ -210,7 +196,7 @@ class _TAvatarPageState extends State<TAvatarPage> {
   @ExampleCode(group: 'avatar')
   Widget _buildOperationAvatar(BuildContext context) {
     return TAvatarGroup(
-      dimension: 44,
+      dimension: 48,
       cascading: TAvatarGroupCascading.endUp,
       children: [
         const TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),

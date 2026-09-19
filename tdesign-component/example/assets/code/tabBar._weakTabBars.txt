@@ -5,10 +5,10 @@
     const labels = ['首页', '应用', '聊天', '我的'];
     const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
     const badges = [
-      TBadge(label: '16'),
-      TBadge(variant: TBadgeVariant.dot),
-      TBadge(label: 'New'),
-      TBadge(label: '···'),
+      TBadgeConfig(label: '16'),
+      TBadgeConfig(variant: TBadgeVariant.dot),
+      TBadgeConfig(label: 'New'),
+      TBadgeConfig(label: '···'),
     ];
     return Column(
       children: [

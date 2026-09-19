@@ -133,7 +133,6 @@ void main() {
       '常规宫格型',
       '带描述宫格型',
       '带翻页宫格型',
-      '带图标宫格型',
       '带徽标宫格型',
       '多行滚动宫格型',
       '带描述多行滚动宫格型',
@@ -196,9 +195,9 @@ void main() {
     await openBasicGrid(tester);
 
     expect(find.byType(TActionSheetGrid<String>), findsOneWidget);
-    expect(find.text('微信'), findsOneWidget);
-    expect(find.text('文件'), findsOneWidget);
-    expect(find.text('取消'), findsOneWidget);
+    expect(find.text('WeChat'), findsOneWidget);
+    expect(find.text('Edit'), findsOneWidget);
+    expect(find.text('Cancel'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -218,7 +217,7 @@ void main() {
       await open(tester);
       final item = find
           .ancestor(
-            of: find.text('微信'),
+            of: find.text('WeChat'),
             matching: find.byType(TActionSheetItemWidget<String>),
           )
           .first;
@@ -233,12 +232,14 @@ void main() {
             ),
           )
           .first;
-      final icon = find.descendant(of: item, matching: find.byType(Icon)).first;
+      final icon = find
+          .descendant(of: item, matching: find.byType(Image))
+          .first;
       final label = find
           .descendant(
             of: item,
             matching: find.byWidgetPredicate(
-              (widget) => widget is TText && widget.data == '微信',
+              (widget) => widget is TText && widget.data == 'WeChat',
             ),
           )
           .first;
@@ -251,7 +252,7 @@ void main() {
             tester.getTopLeft(label).dy - tester.getBottomLeft(iconSlot).dy,
         textStyle: labelWidget.getTextStyle(tester.element(label)),
       );
-      await tester.tap(find.text('取消'));
+      await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
       return metrics;
     }
@@ -259,11 +260,13 @@ void main() {
     final basic = await readMetrics(openBasicGrid);
     final scroll = await readMetrics(openScrollGrid);
 
-    expect(scroll.itemSize, basic.itemSize);
+    expect(basic.itemSize.width, 93.75);
+    expect(scroll.itemSize.width, 80);
+    expect(scroll.itemSize.height, basic.itemSize.height);
     expect(scroll.iconSlotSize, basic.iconSlotSize);
     expect(scroll.iconSlotSize, const Size.square(40));
     expect(scroll.iconSize, basic.iconSize);
-    expect(scroll.iconSize, const Size.square(24));
+    expect(scroll.iconSize, const Size.square(39));
     expect(scroll.iconTextGap, basic.iconTextGap);
     expect(scroll.iconTextGap, 8);
     expect(scroll.textStyle.fontSize, basic.textStyle.fontSize);
@@ -275,8 +278,10 @@ void main() {
     configurePhone(tester);
     await openGrid(tester, '带描述宫格型');
 
-    final subtitle = find.text('动作面板描述文字');
-    final firstIconContainer = find.byKey(const ValueKey(TIcons.chat));
+    final subtitle = find.text('Forward To');
+    final firstIconContainer = find.byKey(
+      const ValueKey('assets/img/action_sheet_wechat.png'),
+    );
     expect(
       tester.getTopLeft(firstIconContainer).dy -
           tester.getBottomLeft(subtitle).dy,
@@ -284,18 +289,17 @@ void main() {
     );
   });
 
-  testWidgets('带图标宫格使用 40dp 灰色圆角容器', (tester) async {
+  testWidgets('常规宫格使用设计稿品牌资源和 40dp 图标槽', (tester) async {
     configurePhone(tester);
-    await openGrid(tester, '带图标宫格型');
+    await openGrid(tester, '常规宫格型');
 
-    final iconContainer = find.byKey(const ValueKey(TIcons.share));
+    final iconContainer = find.byKey(
+      const ValueKey('assets/img/action_sheet_wechat.png'),
+    );
     expect(tester.getSize(iconContainer), const Size.square(40));
     final container = tester.widget<Container>(iconContainer);
     final decoration = container.decoration! as BoxDecoration;
-    expect(
-      decoration.color,
-      TThemeData.defaultData().bgColorSecondaryContainer,
-    );
+    expect(decoration.border, isNotNull);
     expect(decoration.borderRadius, BorderRadius.circular(6));
   });
 
@@ -316,16 +320,16 @@ void main() {
     expect(dots, hasLength(3));
     await tester.drag(find.byType(PageView), const Offset(-375, 0));
     await tester.pumpAndSettle();
-    expect(find.text('分享'), findsOneWidget);
+    expect(find.text('Share'), findsOneWidget);
   });
 
-  testWidgets('多行滚动宫格首屏按 count=8 rows=2 展示前八项', (tester) async {
+  testWidgets('多行滚动宫格按两行五列排列并露出第五列', (tester) async {
     configurePhone(tester);
 
     await openScrollGrid(tester);
 
-    final firstRow = ['微信', '朋友圈', 'QQ', '企业微信'];
-    final secondRow = ['腾讯文档', '邮箱', '微云', '文件'];
+    final firstRow = ['WeChat', 'QQ', 'Doc', 'Map', 'QQ Music'];
+    final secondRow = ['Share', 'Collect', 'Download', 'Edit', 'Link'];
     final firstTop = tester.getTopLeft(find.text(firstRow.first)).dy;
     final secondTop = tester.getTopLeft(find.text(secondRow.first)).dy;
     for (final label in firstRow) {
@@ -335,12 +339,21 @@ void main() {
       expect(tester.getTopLeft(find.text(label)).dy, secondTop);
     }
     expect(secondTop, greaterThan(firstTop));
-    for (var column = 0; column < 4; column++) {
+    for (var column = 0; column < 5; column++) {
       expect(
         tester.getCenter(find.text(firstRow[column])).dx,
         tester.getCenter(find.text(secondRow[column])).dx,
       );
     }
+    final scrollable = tester.state<ScrollableState>(
+      find
+          .descendant(
+            of: find.byType(TActionSheetGrid<String>),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    expect(scrollable.position.maxScrollExtent, 25);
     expect(tester.takeException(), isNull);
   });
 
@@ -350,7 +363,7 @@ void main() {
     await openBasicList(tester);
 
     expect(find.text('Move'), findsOneWidget);
-    expect(find.text('cancel'), findsOneWidget);
+    expect(find.text('Cancel'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -368,7 +381,7 @@ void main() {
     ]) {
       expect(find.text(label), findsOneWidget);
     }
-    expect(find.text('cancel'), findsOneWidget);
+    expect(find.text('Cancel'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -406,10 +419,10 @@ void main() {
 
     expect(find.byType(TBadge), findsNWidgets(3));
     expect(badgeFor('WeChat').label, 'NEW');
-    expect(badgeFor('WeChat').variant, TBadgeVariant.custom);
+    expect(badgeFor('WeChat').variant, TBadgeVariant.circle);
     expect(badgeFor('Collect').variant, TBadgeVariant.dot);
     expect(badgeFor('Download').label, '8');
-    expect(badgeFor('Download').variant, TBadgeVariant.normal);
+    expect(badgeFor('Download').variant, TBadgeVariant.circle);
     expect(find.text('99+'), findsNothing);
     expect(tester.takeException(), isNull);
   });

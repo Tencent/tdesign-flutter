@@ -2,7 +2,7 @@ Widget _leftList(BuildContext context) => _trigger(
     label: '左对齐列表型',
     onPressed: () => TActionSheet.showList(
       context,
-      cancelText: 'cancel',
+      cancelText: 'Cancel',
       subtitle: 'Email Settings',
       align: TActionSheetAlign.left,
       items: _iconItems(),

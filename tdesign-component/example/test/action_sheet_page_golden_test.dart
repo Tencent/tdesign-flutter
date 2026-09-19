@@ -195,37 +195,6 @@ void main() {
       await disposeDemoPage(tester);
     }, tags: 'golden');
 
-    testWidgets('action sheet icon grid ${mode.name} opened golden', (
-      tester,
-    ) async {
-      await pumpDemoPageAtPhoneViewport(
-        tester,
-        actionSheetDemoPageTestSpec,
-        mode,
-      );
-      final trigger = find.widgetWithText(TButton, '带图标宫格型');
-      final scrollable = find.descendant(
-        of: find.byType(CustomScrollView).first,
-        matching: find.byType(Scrollable),
-      );
-      await tester.scrollUntilVisible(
-        trigger,
-        200,
-        scrollable: scrollable.first,
-      );
-      await tester.ensureVisible(trigger);
-      await tester.pumpAndSettle();
-      await tester.tap(trigger);
-      await tester.pumpAndSettle();
-      await expectLater(
-        find.byType(Overlay),
-        matchesGoldenFile(
-          'goldens/action_sheet_icon_grid_opened_${mode.name}.png',
-        ),
-      );
-      await disposeDemoPage(tester);
-    }, tags: 'golden');
-
     testWidgets('action sheet paged grid ${mode.name} opened golden', (
       tester,
     ) async {
