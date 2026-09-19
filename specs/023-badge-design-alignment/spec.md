@@ -51,14 +51,18 @@
   `variant` 枚举；`badge` 只表示徽标本体，不包含锚点或 `Positioned`。
 - `offset` API 保留为逐实例位置覆盖，解析顺序为实例 `offset` > 局部
   `BadgeTheme.offset` > 显式全局 `BadgeThemeData.offset` > 消费组件默认值 >
-  `Offset.zero`。普通与自定义徽标默认均以中心点对齐内容右上角；Dot 使用同一
-  锚点规则，角标形态由 `variant` 固定物理方位。
+  `Offset.zero`。普通与自定义徽标默认均以中心点对齐内容的逻辑右上角
+  `AlignmentDirectional.topEnd`，RTL 下对应物理左上角；Dot 使用同一锚点规则，
+  角标形态由 `variant` 固定物理方位。消费组件提供的默认 offset 根据最终生效的
+  alignment 转换方向，实例或 BadgeTheme 显式 offset 始终使用物理坐标。
 - 当调用方已经拥有锚点 Widget 时直接使用 `TBadge(child: ...)`；TabBar、SideBar、
   ActionSheet 等内部拥有锚点的组合组件接收不可渲染的 `TBadgeConfig`，由组件负责
   注入锚点和场景默认位置。内部配置适配器不进入公开 API 文档。
 - `border` 保留为正交的对比色描边能力，不再用于表达 Square。
 - Circle 单字符呈圆形、多字符呈胶囊形；Square、Bubble 使用同一标签内容与可见性逻辑；Ribbon、Triangle 固定贴合被标记内容的左上或右上角。
 - `ribbonLeft/right` 与 `triangleLeft/right` 表示物理方位，在 RTL 中不自动互换。
+- `AlignmentDirectional` 随文字方向解析；显式 `Alignment.topLeft/topRight` 保持
+  物理方位，并决定消费组件默认 offset 的方向。
 - `label == null` 隐藏普通文字徽标；`dot` 始终显示且不创建文字；`showZero` 仅控制字符串 `0`。
 - 默认文字使用 `TText`，Theme 显式 `textStyle` 保持最高覆盖优先级，未指定 `leadingDistribution` 时使用 `even`。
 - `TThemeBuilder` 为原生 Material `Badge` 生成的默认 `BadgeThemeData` 仅视为 Token 投影，不覆盖 `TBadgeSize` 的 16/20px 预设；调用方显式提供的局部或全局 `BadgeThemeData.textStyle`、`padding`、`largeSize` 仍按优先级覆盖两档预设。

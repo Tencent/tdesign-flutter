@@ -704,10 +704,139 @@ void main() {
         final badge = tester.widget<TBadge>(find.byType(TBadge));
         expect(badge.offset, isNull);
         expect(badge.child, isNotNull);
-        final materialBadge = tester.widget<Badge>(find.byType(Badge));
-        expect(materialBadge.offset, const Offset(16, -8));
+        final title = find.widgetWithText(TText, '消息');
+        expect(
+          tester.getCenter(find.text('9')),
+          tester.getTopRight(title) + const Offset(16, -8),
+        );
       },
     );
+
+    testWidgets('text badge default offset follows RTL logical end', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Directionality(
+            textDirection: TextDirection.rtl,
+            child: TTabBar(
+              type: TTabBarType.text,
+              value: 0,
+              navigationTabs: const [
+                TTabBarItemConfig(
+                  tabText: '消息',
+                  badge: TBadgeConfig(label: '9'),
+                ),
+                TTabBarItemConfig(tabText: '首页'),
+              ],
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      final title = find.widgetWithText(TText, '消息');
+      expect(
+        tester.getCenter(find.text('9')),
+        tester.getTopLeft(title) + const Offset(-16, -8),
+      );
+    });
+
+    testWidgets('explicit badge offset remains physical in RTL', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Directionality(
+            textDirection: TextDirection.rtl,
+            child: TTabBar(
+              type: TTabBarType.text,
+              value: 0,
+              navigationTabs: const [
+                TTabBarItemConfig(
+                  tabText: '消息',
+                  badge: TBadgeConfig(label: '9', offset: Offset(3, 4)),
+                ),
+                TTabBarItemConfig(tabText: '首页'),
+              ],
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        tester.getCenter(find.text('9')),
+        tester.getTopLeft(find.widgetWithText(TText, '消息')) +
+            const Offset(3, 4),
+      );
+    });
+
+    testWidgets('physical alignment controls component fallback direction', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Directionality(
+            textDirection: TextDirection.rtl,
+            child: TTabBar(
+              type: TTabBarType.text,
+              value: 0,
+              navigationTabs: const [
+                TTabBarItemConfig(
+                  tabText: '消息',
+                  badge: TBadgeConfig(
+                    label: '9',
+                    alignment: Alignment.topRight,
+                  ),
+                ),
+                TTabBarItemConfig(tabText: '首页'),
+              ],
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        tester.getCenter(find.text('9')),
+        tester.getTopRight(find.widgetWithText(TText, '消息')) +
+            const Offset(16, -8),
+      );
+    });
+
+    testWidgets('BadgeTheme alignment controls component fallback direction', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          BadgeTheme(
+            data: const BadgeThemeData(alignment: Alignment.topRight),
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: TTabBar(
+                type: TTabBarType.text,
+                value: 0,
+                navigationTabs: const [
+                  TTabBarItemConfig(
+                    tabText: '消息',
+                    badge: TBadgeConfig(label: '9'),
+                  ),
+                  TTabBarItemConfig(tabText: '首页'),
+                ],
+                onChanged: (_) {},
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        tester.getCenter(find.text('9')),
+        tester.getTopRight(find.widgetWithText(TText, '消息')) +
+            const Offset(16, -8),
+      );
+    });
 
     testWidgets('local BadgeTheme offset overrides TabBar text default', (
       tester,
@@ -734,8 +863,11 @@ void main() {
 
       final badge = tester.widget<TBadge>(find.byType(TBadge));
       expect(badge.offset, isNull);
-      final materialBadge = tester.widget<Badge>(find.byType(Badge));
-      expect(materialBadge.offset, const Offset(3, 4));
+      expect(
+        tester.getCenter(find.text('9')),
+        tester.getTopRight(find.widgetWithText(TText, '消息')) +
+            const Offset(3, 4),
+      );
     });
 
     testWidgets('badge inherits theme offset without blocking item onTap', (

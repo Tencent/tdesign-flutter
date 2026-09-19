@@ -58,7 +58,8 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
 - `TActionSheetThemeData` 只持有视觉默认值，不持有 `count`、`rows`、
   `itemMinWidth` 或默认对齐等布局行为。
 - `TActionSheetAlign` 只属于列表布局；宫格 Item 与面板副标题固定居中，
-  `showGrid` 不暴露不能控制 Item 对齐的 `align` 参数。
+  `showGrid` 不暴露不能控制 Item 对齐的 `align` 参数。枚举的 `left/right` 表示
+  物理左右，在 RTL 下不交换；标题、描述与徽标预留空间遵循同一物理对齐结果。
 - `TActionSheetThemeData.gridItemHeight` 只提供宫格 Item 的默认高度；
   列表项高度仍由列表视觉契约决定。
 - 默认、分页和滚动宫格统一复用 `TActionSheetItemWidget` 的 96dp 行高、40dp

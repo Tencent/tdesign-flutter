@@ -8,6 +8,7 @@ import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../badge/t_badge.dart';
 import '../badge/t_badge_internal.dart';
+import '../badge/t_badge_layout.dart';
 import '../text/t_text.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_theme_data.dart';
@@ -121,18 +122,30 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
             config: badge,
             child: icon,
             fallbackAlignment: AlignmentDirectional.topEnd,
-            fallbackOffset: const Offset(-2, -1),
+            fallbackOffset: resolveBadgeFallbackOffset(
+              context,
+              const Offset(-2, -1),
+              alignment: badge.alignment,
+              fallbackAlignment: AlignmentDirectional.topEnd,
+            ),
           );
   }
 }
 
 /// 获取主轴对齐方式
-MainAxisAlignment getMainAxisAlignment(TActionSheetAlign align) {
+MainAxisAlignment getMainAxisAlignment(
+  TActionSheetAlign align, [
+  TextDirection textDirection = TextDirection.ltr,
+]) {
   switch (align) {
     case TActionSheetAlign.left:
-      return MainAxisAlignment.start;
+      return textDirection == TextDirection.ltr
+          ? MainAxisAlignment.start
+          : MainAxisAlignment.end;
     case TActionSheetAlign.right:
-      return MainAxisAlignment.end;
+      return textDirection == TextDirection.ltr
+          ? MainAxisAlignment.end
+          : MainAxisAlignment.start;
     case TActionSheetAlign.center:
       return MainAxisAlignment.center;
   }

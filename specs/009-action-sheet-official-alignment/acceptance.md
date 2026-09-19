@@ -32,6 +32,13 @@
 
 - 翻页、禁用项和全部入口的真机连续交互仍需人工复核；静态截图不能替代交互验收。
 
+## 2026-09-19 RTL 对齐与徽标定位复验
+
+- `TActionSheetAlign.left/right` 明确保持物理左/右语义；RTL 下标题、副标题和面板描述使用同一几何方向，不再因 Row 的 start/end 与 `TextAlign.left/right` 含义不同而错位。
+- 列表和宫格徽标继续由 ActionSheet 拥有锚点；组件默认偏移根据 Badge 最终生效的 alignment 转换，实例 alignment、局部 Theme alignment 与 RTL 均有实际几何断言。
+- Flutter 3.32.0 与 3.47.0 下完整 ActionSheet 组件测试 59 项通过，组件包严格 analyze 均为 0 issues。
+- Flutter 3.32.0 覆盖率 `503/521 = 96.55%`；本轮未改变 LTR 设计稿默认渲染，因此未更新既有 Linux Golden。
+
 ## 2026-09-15 Issue #1027 像素修复复验
 
 - 基线：`origin/develop@b8a4bec7d`；Figma 节点 `24386:5277`，具体核对分页宫格 `27478:26787` 与带描述宫格 `27478:26633`。

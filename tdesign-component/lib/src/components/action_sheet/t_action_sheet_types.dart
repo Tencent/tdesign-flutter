@@ -120,7 +120,7 @@ final class _TActionSheetScrollGridLayout extends TActionSheetGridLayout {
   final double? itemMinWidth;
 }
 
-/// 动作面板列表内容对齐方式
+/// 动作面板列表内容的物理对齐方式，不随文字方向交换左右。
 enum TActionSheetAlign {
   /// 居中对齐
   center,

@@ -90,12 +90,11 @@ class TBadgeResolvedStyle {
           defaultLabelHeight,
       textStyle: resolvedTextStyle,
       padding: padding,
-      alignment:
-          alignment ??
-          localBadgeTheme?.alignment ??
-          globalBadgeTheme?.alignment ??
-          fallbackAlignment ??
-          AlignmentDirectional.topEnd,
+      alignment: resolveAlignment(
+        context,
+        alignment: alignment,
+        fallbackAlignment: fallbackAlignment,
+      ),
       offset:
           offset ??
           localBadgeTheme?.offset ??
@@ -106,8 +105,26 @@ class TBadgeResolvedStyle {
           tBadgeTheme?.borderColor ??
           materialTheme.tExplicitColorScheme?.surface ??
           token.bgColorContainer,
-      borderWidth: tBadgeTheme?.borderWidth ?? 1,
+      borderWidth: tBadgeTheme?.borderWidth ?? TBadgeDefaults.borderWidth,
     );
+  }
+
+  /// 按实例、局部主题、显式全局主题和消费组件默认值解析最终对齐方式。
+  static AlignmentGeometry resolveAlignment(
+    BuildContext context, {
+    AlignmentGeometry? alignment,
+    AlignmentGeometry? fallbackAlignment,
+  }) {
+    final materialTheme = Theme.of(context);
+    final localBadgeTheme = context
+        .dependOnInheritedWidgetOfExactType<BadgeTheme>()
+        ?.data;
+    final globalBadgeTheme = materialTheme.tExplicitBadgeTheme;
+    return alignment ??
+        localBadgeTheme?.alignment ??
+        globalBadgeTheme?.alignment ??
+        fallbackAlignment ??
+        AlignmentDirectional.topEnd;
   }
 
   final Color backgroundColor;

@@ -93,6 +93,32 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    testWidgets('RTL 下宫格徽标默认位置跟随逻辑尾端', (tester) async {
+      const badgeKey = Key('rtl-custom-badge');
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const Directionality(
+            textDirection: TextDirection.rtl,
+            child: TActionSheetItemWidget(
+              item: TActionSheetItem(
+                value: 'rtl-badge',
+                label: '自定义角标',
+                icon: Icon(Icons.star),
+                badge: TBadgeConfig.custom(
+                  badge: SizedBox(key: badgeKey, width: 12, height: 6),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        tester.getCenter(find.byKey(badgeKey)),
+        tester.getTopLeft(find.byType(TBadge)) + const Offset(2, -1),
+      );
+    });
+
     testWidgets('点击触发 onSelected 并返回业务值', (tester) async {
       String? selected;
       await tester.pumpWidget(

@@ -8,6 +8,7 @@ import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
 import 't_badge_fallback.dart';
 import 't_badge_label.dart';
+import 't_badge_layout.dart';
 import 't_badge_resolved_style.dart';
 
 /// 徽标的结构形态；尺寸与描边分别由 [TBadge.size]、[TBadge.border] 控制。
@@ -120,6 +121,8 @@ class TBadgeConfig {
   /// 在最终对齐位置上追加的偏移。
   ///
   /// 为空时依次使用当前 [BadgeThemeData.offset] 和消费组件的默认值。
+  /// 显式值使用物理坐标：正 x 始终向右，RTL 下不会自动镜像；消费组件仅会
+  /// 根据最终生效的 [alignment] 转换自己提供的默认偏移。
   /// ribbon、triangle 始终贴住锚点的物理左上角或右上角，但仍读取该偏移。
   final Offset? offset;
 
@@ -192,7 +195,8 @@ class TBadge extends StatelessWidget {
 
   /// 徽标相对 [child] 的对齐方式。
   ///
-  /// 为空时依次读取局部与全局 [BadgeThemeData.alignment]，最终回退为右上角。
+  /// 为空时依次读取局部与全局 [BadgeThemeData.alignment]，最终回退为逻辑
+  /// 右上角 [AlignmentDirectional.topEnd]，在 RTL 下对应物理左上角。
   /// ribbon、triangle 的方位已编码在 [variant] 中，不读取该字段。
   /// 当 [child] 为空时不参与布局。
   final AlignmentGeometry? alignment;
@@ -200,7 +204,9 @@ class TBadge extends StatelessWidget {
   /// 相对默认锚点的逐实例位置偏移；未设置时读取 [BadgeThemeData.offset]，
   /// 再读取组合组件提供的默认偏移，最终回退为 [Offset.zero]。
   ///
-  /// 默认右上角徽标以中心点对齐内容右上角。当 [child] 为空时不参与布局。
+  /// 显式值使用物理坐标：正 x 始终向右，RTL 下不会自动镜像。
+  /// 默认徽标以中心点对齐内容的逻辑右上角，在 RTL 下对应物理左上角。
+  /// 当 [child] 为空时不参与布局。
   final Offset? offset;
 
   /// 被徽标标记的内容；为空时徽标可独立展示。
@@ -249,7 +255,7 @@ class TBadge extends StatelessWidget {
     final isCorner = _isCornerVariant(variant);
     final text = label ?? '';
     final resolvedPadding = padding.resolve(Directionality.of(context));
-    final singleCharacterWidth = text.runes.length == 1 && !isDot
+    final singleCharacterWidth = isSingleBadgeCharacter(text) && !isDot
         ? math
               .max(0.0, effectiveLargeSize - resolvedPadding.horizontal)
               .toDouble()

@@ -17,8 +17,8 @@ TabBar、SideBar、ActionSheet 等内部拥有锚点的组合组件使用
 | --- | --- | --- | --- |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | badge | Widget? | - | `TBadge.custom` 提供的完整徽标外观。 普通构造下为 null。该 Widget 仅表示徽标本体，不包含 `child`。 |
-| alignment | AlignmentGeometry? | - | 徽标相对 `child` 的对齐方式。 为空时依次读取局部与全局 `BadgeThemeData.alignment`，最终回退为右上角。 ribbon、triangle 的方位已编码在 `variant` 中，不读取该字段。 当 `child` 为空时不参与布局。 |
-| offset | Offset? | - | 相对默认锚点的逐实例位置偏移；未设置时读取 `BadgeThemeData.offset`， 再读取组合组件提供的默认偏移，最终回退为 `Offset.zero`。 默认右上角徽标以中心点对齐内容右上角。当 `child` 为空时不参与布局。 |
+| alignment | AlignmentGeometry? | - | 徽标相对 `child` 的对齐方式。 为空时依次读取局部与全局 `BadgeThemeData.alignment`，最终回退为逻辑 右上角 `AlignmentDirectional.topEnd`，在 RTL 下对应物理左上角。 ribbon、triangle 的方位已编码在 `variant` 中，不读取该字段。 当 `child` 为空时不参与布局。 |
+| offset | Offset? | - | 相对默认锚点的逐实例位置偏移；未设置时读取 `BadgeThemeData.offset`， 再读取组合组件提供的默认偏移，最终回退为 `Offset.zero`。 显式值使用物理坐标：正 x 始终向右，RTL 下不会自动镜像。 默认徽标以中心点对齐内容的逻辑右上角，在 RTL 下对应物理左上角。 当 `child` 为空时不参与布局。 |
 | child | Widget? | - | 被徽标标记的内容；为空时徽标可独立展示。 |
 | onTap | GestureTapCallback? | - | 点击徽标及其 `child` 时触发；为空时不创建点击语义。 |
 
@@ -26,12 +26,12 @@ TabBar、SideBar、ActionSheet 等内部拥有锚点的组合组件使用
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| alignment | AlignmentGeometry? | - | 徽标相对 `child` 的对齐方式。 为空时依次读取局部与全局 `BadgeThemeData.alignment`，最终回退为右上角。 ribbon、triangle 的方位已编码在 `variant` 中，不读取该字段。 当 `child` 为空时不参与布局。 |
+| alignment | AlignmentGeometry? | - | 徽标相对 `child` 的对齐方式。 为空时依次读取局部与全局 `BadgeThemeData.alignment`，最终回退为逻辑 右上角 `AlignmentDirectional.topEnd`，在 RTL 下对应物理左上角。 ribbon、triangle 的方位已编码在 `variant` 中，不读取该字段。 当 `child` 为空时不参与布局。 |
 | border | bool | false | 是否为徽标增加对比色描边，默认为 false，适用于全部形态。 |
 | child | Widget? | - | 被徽标标记的内容；为空时徽标可独立展示。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | label | String? | '0' | 徽标实际展示的短文本，例如 `8`、`99+` 或 `NEW`。 文本形态下为 null 时隐藏徽标；`TBadgeVariant.dot` 不读取该字段。 |
-| offset | Offset? | - | 相对默认锚点的逐实例位置偏移；未设置时读取 `BadgeThemeData.offset`， 再读取组合组件提供的默认偏移，最终回退为 `Offset.zero`。 默认右上角徽标以中心点对齐内容右上角。当 `child` 为空时不参与布局。 |
+| offset | Offset? | - | 相对默认锚点的逐实例位置偏移；未设置时读取 `BadgeThemeData.offset`， 再读取组合组件提供的默认偏移，最终回退为 `Offset.zero`。 显式值使用物理坐标：正 x 始终向右，RTL 下不会自动镜像。 默认徽标以中心点对齐内容的逻辑右上角，在 RTL 下对应物理左上角。 当 `child` 为空时不参与布局。 |
 | onTap | GestureTapCallback? | - | 点击徽标及其 `child` 时触发；为空时不创建点击语义。 |
 | showZero | bool | true | `label` 恰好为字符串 `0` 时是否显示徽标，默认为 true。 `TBadgeVariant.dot` 始终显示，不受该字段影响。 |
 | size | TBadgeSize | TBadgeSize.medium | 徽标的预设尺寸，默认为 `TBadgeSize.medium`。 `TBadgeVariant.dot` 与 `TBadge.custom` 不读取该字段。 |
@@ -65,7 +65,7 @@ ActionSheet 等组件在内部创建徽标锚点时使用；组件会把配置�
 | --- | --- | --- | --- |
 | badge | Widget? | - | 仅定义徽标本体；最终锚点和默认位置由消费该配置的组合组件决定。 |
 | alignment | AlignmentGeometry? | - | 徽标相对锚点的对齐方式。 为空时依次使用当前 `BadgeThemeData.alignment` 和消费组件的默认值。 ribbon、triangle 的方位已编码在 `variant` 中，不读取该字段。 |
-| offset | Offset? | - | 在最终对齐位置上追加的偏移。 为空时依次使用当前 `BadgeThemeData.offset` 和消费组件的默认值。 ribbon、triangle 始终贴住锚点的物理左上角或右上角，但仍读取该偏移。 |
+| offset | Offset? | - | 在最终对齐位置上追加的偏移。 为空时依次使用当前 `BadgeThemeData.offset` 和消费组件的默认值。 显式值使用物理坐标：正 x 始终向右，RTL 下不会自动镜像；消费组件仅会 根据最终生效的 `alignment` 转换自己提供的默认偏移。 ribbon、triangle 始终贴住锚点的物理左上角或右上角，但仍读取该偏移。 |
 
 #### 默认构造方法
 
@@ -74,7 +74,7 @@ ActionSheet 等组件在内部创建徽标锚点时使用；组件会把配置�
 | alignment | AlignmentGeometry? | - | 徽标相对锚点的对齐方式。 为空时依次使用当前 `BadgeThemeData.alignment` 和消费组件的默认值。 ribbon、triangle 的方位已编码在 `variant` 中，不读取该字段。 |
 | border | bool | false | 是否为预设徽标增加对比色描边，默认为 false。 `TBadgeConfig.custom` 不读取该字段。 |
 | label | String? | '0' | 预设徽标展示的短文本，例如 `8`、`99+` 或 `NEW`。 文本形态下为 null 时隐藏徽标；`TBadgeVariant.dot` 不读取该字段。 `TBadgeConfig.custom` 下固定为 null。 |
-| offset | Offset? | - | 在最终对齐位置上追加的偏移。 为空时依次使用当前 `BadgeThemeData.offset` 和消费组件的默认值。 ribbon、triangle 始终贴住锚点的物理左上角或右上角，但仍读取该偏移。 |
+| offset | Offset? | - | 在最终对齐位置上追加的偏移。 为空时依次使用当前 `BadgeThemeData.offset` 和消费组件的默认值。 显式值使用物理坐标：正 x 始终向右，RTL 下不会自动镜像；消费组件仅会 根据最终生效的 `alignment` 转换自己提供的默认偏移。 ribbon、triangle 始终贴住锚点的物理左上角或右上角，但仍读取该偏移。 |
 | showZero | bool | true | `label` 恰好为字符串 `0` 时是否显示，默认为 true。 `TBadgeVariant.dot` 与 `TBadgeConfig.custom` 不读取该字段。 |
 | size | TBadgeSize | TBadgeSize.medium | 预设徽标尺寸，默认为 `TBadgeSize.medium`。 `TBadgeVariant.dot` 与 `TBadgeConfig.custom` 不读取该字段。 |
 | variant | TBadgeVariant | TBadgeVariant.circle | 预设徽标的结构形态，默认为 `TBadgeVariant.circle`。 `TBadgeConfig.custom` 不读取该字段。 |

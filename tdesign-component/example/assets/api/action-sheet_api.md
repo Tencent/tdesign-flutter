@@ -165,7 +165,7 @@ TActionSheet 组件级视觉 ThemeExtension
 
 ### TActionSheetAlign
 #### 简介
-动作面板列表内容对齐方式
+动作面板列表内容的物理对齐方式，不随文字方向交换左右。
 #### 枚举值
 
 

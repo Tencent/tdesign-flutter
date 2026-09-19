@@ -9,6 +9,7 @@ import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../badge/t_badge.dart';
 import '../badge/t_badge_internal.dart';
+import '../badge/t_badge_layout.dart';
 import '../badge/t_badge_resolved_style.dart';
 import '../text/t_text.dart';
 import 't_action_sheet_item.dart';
@@ -149,7 +150,10 @@ class TActionSheetList<T> extends StatelessWidget {
         ),
       ),
       child: Row(
-        mainAxisAlignment: getMainAxisAlignment(align),
+        mainAxisAlignment: getMainAxisAlignment(
+          align,
+          Directionality.of(context),
+        ),
         children: [
           Flexible(
             child: TText(
@@ -209,7 +213,10 @@ class TActionSheetList<T> extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
-                    mainAxisAlignment: getMainAxisAlignment(align),
+                    mainAxisAlignment: getMainAxisAlignment(
+                      align,
+                      Directionality.of(context),
+                    ),
                     children: [
                       if (item.icon != null) ...[
                         IconTheme(
@@ -234,7 +241,10 @@ class TActionSheetList<T> extends StatelessWidget {
                   if (item.subtitle != null && item.subtitle!.isNotEmpty) ...[
                     SizedBox(height: context.tTheme.spacer4),
                     Row(
-                      mainAxisAlignment: getMainAxisAlignment(align),
+                      mainAxisAlignment: getMainAxisAlignment(
+                        align,
+                        Directionality.of(context),
+                      ),
                       children: [
                         Flexible(
                           child: TText(
@@ -333,6 +343,16 @@ class TActionSheetList<T> extends StatelessWidget {
   }
 
   Offset _badgeOffset(BuildContext context, TBadgeConfig badge) {
+    final ltrOffset = _ltrBadgeOffset(context, badge);
+    return resolveBadgeFallbackOffset(
+      context,
+      ltrOffset,
+      alignment: badge.alignment,
+      fallbackAlignment: AlignmentDirectional.topEnd,
+    );
+  }
+
+  Offset _ltrBadgeOffset(BuildContext context, TBadgeConfig badge) {
     if (badge.isCustom) {
       return Offset.zero;
     }
@@ -342,7 +362,8 @@ class TActionSheetList<T> extends StatelessWidget {
     if (badge.variant != TBadgeVariant.circle || badge.label == null) {
       return Offset.zero;
     }
-    if (badge.label!.runes.length == 1 && badge.size == TBadgeSize.medium) {
+    if (isSingleBadgeCharacter(badge.label!) &&
+        badge.size == TBadgeSize.medium) {
       return const Offset(6, 4);
     }
     final badgeSize = _badgeSize(context, badge);

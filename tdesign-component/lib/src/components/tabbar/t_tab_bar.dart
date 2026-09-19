@@ -11,6 +11,7 @@ import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
 import '../badge/t_badge_internal.dart';
+import '../badge/t_badge_layout.dart';
 import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
 import 't_tab_bar_theme_data.dart';
@@ -910,7 +911,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          badge == null ? icon : _attachBadge(badge, icon),
+          badge == null ? icon : _attachBadge(context, badge, icon),
           if (centerDistance > 0) SizedBox(height: centerDistance),
           text,
         ],
@@ -922,14 +923,18 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     if (badge == null) {
       return child;
     }
-    return _attachBadge(badge, child);
+    return _attachBadge(context, badge, child);
   }
 
-  Widget _attachBadge(TBadgeConfig badge, Widget child) {
+  Widget _attachBadge(BuildContext context, TBadgeConfig badge, Widget child) {
     return TBadgeFromConfig(
       config: badge,
       fallbackOffset: basicType == _TTabBarBasicType.text
-          ? _kTextBadgeOffset
+          ? resolveBadgeFallbackOffset(
+              context,
+              _kTextBadgeOffset,
+              alignment: badge.alignment,
+            )
           : null,
       child: child,
     );

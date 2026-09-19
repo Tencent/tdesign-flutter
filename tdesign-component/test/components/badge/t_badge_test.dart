@@ -312,6 +312,12 @@ void main() {
       expect(size, const Size.square(16));
     });
 
+    testWidgets('组合字符按单个可见字符使用圆形徽标', (tester) async {
+      await tester.pumpWidget(app(const TBadge(label: 'e\u0301')));
+
+      expect(tester.getSize(find.byType(Badge)), const Size.square(16));
+    });
+
     testWidgets('无 child 时 dot 使用圆点尺寸而非占位尺寸', (tester) async {
       await tester.pumpWidget(app(const TBadge(variant: TBadgeVariant.dot)));
 
@@ -1091,13 +1097,58 @@ void main() {
 
     test('TBadgeThemeData copyWith 和 lerp 覆盖完整分支', () {
       const data = TBadgeThemeData(borderColor: Colors.red, borderWidth: 1);
+      const defaults = TBadgeThemeData();
+      const custom = TBadgeThemeData(borderColor: Colors.blue, borderWidth: 3);
       expect(data.copyWith(borderWidth: 2).borderWidth, 2);
       expect(data.copyWith().borderColor, Colors.red);
       expect(
         data.lerp(const TBadgeThemeData(borderWidth: 3), 0.5).borderWidth,
         2,
       );
+      expect(
+        data.lerp(custom, 0.5).borderColor,
+        Color.lerp(Colors.red, Colors.blue, 0.5),
+      );
+      expect(defaults.lerp(custom, 0.25).borderColor, isNull);
+      expect(defaults.lerp(custom, 0.25).borderWidth, 1.5);
+      expect(defaults.lerp(custom, 0.75).borderColor, Colors.blue);
+      expect(defaults.lerp(custom, 0.75).borderWidth, 2.5);
+      expect(custom.lerp(defaults, 0.25).borderColor, Colors.blue);
+      expect(custom.lerp(defaults, 0.75).borderColor, isNull);
+      expect(defaults.lerp(const TBadgeThemeData(), 0.5).borderWidth, isNull);
       expect(data.lerp(null, 0.5), same(data));
+    });
+
+    testWidgets('主题插值后的实际描边保留 Token 回退与有效宽度', (tester) async {
+      const defaults = TBadgeThemeData();
+      const custom = TBadgeThemeData(borderColor: Colors.blue, borderWidth: 3);
+
+      BoxBorder renderedBorder() => tester
+          .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+          .map((box) => box.decoration)
+          .whereType<BoxDecoration>()
+          .singleWhere((decoration) => decoration.border != null)
+          .border!;
+
+      await tester.pumpWidget(
+        app(
+          const TBadge(label: '8', border: true),
+          theme: bareTokenTheme().mergeExtension(defaults.lerp(custom, 0.25)),
+        ),
+      );
+      expect(
+        renderedBorder(),
+        Border.all(color: token.bgColorContainer, width: 1.5),
+      );
+
+      await tester.pumpWidget(
+        app(
+          const TBadge(label: '8', border: true),
+          theme: bareTokenTheme().mergeExtension(defaults.lerp(custom, 0.75)),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(renderedBorder(), Border.all(color: Colors.blue, width: 2.5));
     });
   });
 }
