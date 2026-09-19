@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
+import 'package:tdesign_flutter_example/base/notification_center.dart';
 
 import 'demo_page_test_utils.dart';
 import 'table_demo_test_spec.dart';
@@ -82,6 +86,51 @@ void main() {
     await tester.pump();
     expect(tester.getTopLeft(fixedHeaders.at(0)).dx, fixedBefore);
     expect(tester.getTopLeft(fixedHeaders.at(1)).dx, lessThan(scrollingBefore));
+
+    await disposeDemoPage(tester);
+  });
+
+  testWidgets('Table 全部代码面板映射到自包含的类级示例', (tester) async {
+    await pumpFullDemoPage(tester, tableDemoPageTestSpec, ThemeMode.light);
+
+    const names = [
+      'TableBasicExample',
+      'TableSortableExample',
+      'TableOperationTextExample',
+      'TableOperationIconExample',
+      'TableFixedFirstExample',
+      'TableFixedLastExample',
+      'TableHorizontalScrollExample',
+      'TableStripeExample',
+      'TableBorderedExample',
+    ];
+    expect(
+      tester
+          .widgetList<CodeWrapper>(find.byType(CodeWrapper))
+          .map((wrapper) => wrapper.methodName),
+      names,
+    );
+
+    TNotification.postNotification('onApiVisibleChange', {'apiVisible': true});
+    await tester.pumpAndSettle();
+    expect(find.text('code'), findsNWidgets(names.length));
+
+    for (var index = 0; index < names.length; index++) {
+      final expected = await rootBundle.loadString(
+        'assets/code/table.${names[index]}.txt',
+      );
+      expect(expected, contains('class ${names[index]}'));
+      expect(expected, contains("import 'package:flutter/material.dart';"));
+
+      await tester.tap(find.text('code').at(index));
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<Markdown>(find.byType(Markdown)).data,
+        contains(expected),
+      );
+      Navigator.of(tester.element(find.byType(Markdown))).pop();
+      await tester.pumpAndSettle();
+    }
 
     await disposeDemoPage(tester);
   });

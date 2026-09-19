@@ -16,35 +16,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-### 1 颜色示例
+以下示例代码直接来自 Example App 的 `@ExampleCode(group: "theme")` 生成资产，Web 文档不维护代码副本。
 
-功能色
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
-
-</td-code-block>
-                      
-
-文字&图标颜色
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
-
-</td-code-block>
-                      
-
-中性色板
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
-
-</td-code-block>
-                      
-
+{{ flutter-example-group theme }}
 
 ## API
 ### TTheme

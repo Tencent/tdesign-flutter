@@ -13,40 +13,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[查看完整示例](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/t_result_page.dart)
+以下示例代码直接来自 Example App 的 `@ExampleCode(group: "result")` 生成资产，Web 文档不维护代码副本。
 
-### 基础结果
-
-通过 `status` 设置成功、失败、警告或默认信息状态。
-
-```dart
-const TResult(
-  status: TResultStatus.success,
-  title: '成功状态',
-)
-```
-
-### 带描述结果
-
-```dart
-const TResult(
-  status: TResultStatus.error,
-  title: '失败状态',
-  description: '描述文字',
-)
-```
-
-### 自定义结果
-
-传入 `icon` 时将完整替换状态对应的默认图标，图标尺寸和样式由调用方控制。
-
-```dart
-TResult(
-  icon: Image.asset('assets/img/illustration.png', height: 80),
-  title: '自定义结果',
-  description: '描述文字',
-)
-```
+{{ flutter-example-group result }}
 
 ## API
 

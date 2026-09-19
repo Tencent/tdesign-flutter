@@ -1,0 +1,31 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../base/example_widget.dart';
+
+class TableHorizontalScrollExample extends StatelessWidget {
+  const TableHorizontalScrollExample({super.key});
+
+  static final _rows = List<List<String>>.generate(
+    10,
+    (index) => index == 0
+        ? ['横向平铺内容不省略', '横向平铺内容不省略', '横向平铺内容不省略']
+        : ['内容', '内容', '内容'],
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return TTable(
+      key: const ValueKey('table-horizontal-scroll'),
+      columns: [
+        for (var index = 0; index < 3; index++)
+          TTableColumn<List<String>>(
+            id: 'title${index + 1}',
+            header: const Text('标题'),
+            width: 160,
+            cellBuilder: (_, row, __) => Text(row[index]),
+          ),
+      ],
+      data: _rows,
+    );
+  }
+}

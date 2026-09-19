@@ -1,9 +1,0 @@
-Widget _buildSortableTable(BuildContext context) {
-    return TTable(
-      key: const ValueKey('table-sortable'),
-      columns: _columns(sortable: true),
-      data: _rows,
-      sort: _sort,
-      onSortChanged: (value) => setState(() => _sort = value),
-    );
-  }

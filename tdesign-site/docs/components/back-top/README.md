@@ -16,62 +16,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_backtop_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_backtop_page.dart)
+以下示例代码直接来自 Example App 的 `@ExampleCode(group: "backtop")` 生成资产，Web 文档不维护代码副本。
 
-### 1 组件类型
-
-圆形返回顶部
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildCircleBackTop(BuildContext context) {
-    return getCustomButton(context, '圆形返回顶部', () {
-      setState(() {
-        showBackTop = true;
-        if (controller.hasClients) {
-          controller.jumpTo(500);
-        }
-        style = TBackTopStyle.circle;
-      });
-    });
-  }</pre>
-
-</td-code-block>
-                                  
-
-半圆形返回顶部
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildHalfCircleBackTop(BuildContext context) {
-    return Column(
-      children: [
-        getCustomButton(context, '半圆形返回顶部', () {
-          setState(() {
-            showBackTop = true;
-            if (controller.hasClients) {
-              controller.jumpTo(500);
-            }
-            style = TBackTopStyle.halfCircle;
-          });
-        }),
-        Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 24,
-            children: List.generate(6, (_) => getDemoBox(context)),
-          ),
-        )
-      ],
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
+{{ flutter-example-group backtop }}
 
 ## API
 ### TBackTop

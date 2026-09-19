@@ -13,82 +13,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_notice_bar_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_notice_bar_page.dart)
+以下示例代码直接来自 Example App 的 `@ExampleCode(group: "noticeBar")` 生成资产，Web 文档不维护代码副本。
 
-### 01 组件类型
-
-默认根据 `status` 显示前缀图标；使用空 Widget 可以显示纯文字公告栏。
-
-```dart
-const TNoticeBar(
-  content: '这是一条普通的通知信息',
-  prefix: SizedBox.shrink(),
-)
-```
-
-自定义前缀、操作区和尾部图标。自定义前缀中的 `Icon` 未指定颜色或尺寸时，
-会继承当前 `status` 的图标颜色和公告栏标准图标尺寸；显式值优先：
-
-```dart
-TNoticeBar(
-  content: '这是一条普通的通知信息',
-  prefix: const Icon(TIcons.sound),
-  operation: const TLink(child: Text('详情')),
-  suffixIcon: TIcons.chevron_right,
-  onPressed: (target) {
-    if (target == TNoticeBarTapTarget.operation) {
-      // 打开详情
-    }
-  },
-)
-```
-
-`operation` 和 `suffixIcon` 是两个独立区域，可以同时显示。
-
-### 02 组件状态
-
-```dart
-const Column(
-  children: [
-    TNoticeBar(content: '默认状态公告栏'),
-    TNoticeBar(
-      status: TNoticeBarStatus.success,
-      content: '成功状态公告栏',
-    ),
-    TNoticeBar(
-      status: TNoticeBarStatus.warning,
-      content: '警示状态公告栏',
-    ),
-    TNoticeBar(
-      status: TNoticeBarStatus.error,
-      content: '错误状态公告栏',
-    ),
-  ],
-)
-```
-
-### 03 可滚动公告栏
-
-`marquee` 和 `speed` 只控制横向跑马灯：
-
-```dart
-const TNoticeBar(
-  content: '提示文字描述提示文字描述提示文字描述提示文字描述文',
-  marquee: true,
-  speed: 80,
-)
-```
-
-纵向轮播使用 `items`、`direction` 和 `interval`，不需要开启 `marquee`：
-
-```dart
-const TNoticeBar(
-  prefix: Icon(TIcons.sound),
-  items: ['君不见', '高堂明镜悲白发', '朝如青丝暮成雪'],
-  direction: Axis.vertical,
-  interval: Duration(seconds: 3),
-)
-```
+{{ flutter-example-group noticeBar }}
 
 ## API
 

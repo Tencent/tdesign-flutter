@@ -13,40 +13,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-### 基础页脚
+以下示例代码直接来自 Example App 的 `@ExampleCode(group: "footer")` 生成资产，Web 文档不维护代码副本。
 
-```dart
-const TFooter(
-  text: 'Copyright © 2021-2031 TD.All Rights Reserved.',
-);
-```
-
-### 链接页脚
-
-```dart
-TFooter(
-  links: [
-    TLink(
-      child: const Text('底部链接'),
-      onPressed: () {},
-    ),
-  ],
-  text: 'Copyright © 2021-2031 TD.All Rights Reserved.',
-);
-```
-
-### 品牌页脚
-
-```dart
-const TFooter(
-  logo: TImage(
-    src: 'assets/img/t_brand.png',
-    width: 104,
-    height: 24,
-    fit: BoxFit.contain,
-  ),
-);
-```
+{{ flutter-example-group footer }}
 
 ## API
 
