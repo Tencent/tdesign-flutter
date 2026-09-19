@@ -489,7 +489,7 @@ class TMaterialThemeBuilder {
         textColor: extensionData.textColorAnti,
         textStyle: _textStyle(
           extensionData.fontMarkExtraSmall,
-        )?.copyWith(color: extensionData.textColorAnti),
+        )?.copyWith(color: extensionData.textColorAnti, letterSpacing: 0),
         largeSize: 16,
         padding: const EdgeInsets.symmetric(horizontal: 4),
       ),

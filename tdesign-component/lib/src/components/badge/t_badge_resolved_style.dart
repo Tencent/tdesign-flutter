@@ -56,15 +56,18 @@ class TBadgeResolvedStyle {
     final materialTextStyle = large
         ? materialTheme.tExplicitTextTheme?.labelMedium
         : materialTheme.tExplicitTextTheme?.labelSmall;
-    final textStyle =
+    final themedTextStyle =
         localBadgeTheme?.textStyle ??
         globalBadgeTheme?.textStyle ??
-        materialTextStyle ??
+        materialTextStyle;
+    final resolvedTextStyle =
+        themedTextStyle ??
         TextStyle(
           color: textColor,
           fontSize: font?.size,
           height: font?.height,
           fontWeight: font?.fontWeight,
+          letterSpacing: 0,
         );
     final padding =
         localBadgeTheme?.padding ??
@@ -85,7 +88,7 @@ class TBadgeResolvedStyle {
           localBadgeTheme?.largeSize ??
           globalBadgeTheme?.largeSize ??
           defaultLabelHeight,
-      textStyle: textStyle,
+      textStyle: resolvedTextStyle,
       padding: padding,
       alignment:
           alignment ??

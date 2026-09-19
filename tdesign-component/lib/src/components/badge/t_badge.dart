@@ -4,15 +4,11 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
-import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
 import 't_badge_fallback.dart';
+import 't_badge_label.dart';
 import 't_badge_resolved_style.dart';
-
-// Badge 专有几何来自移动端设计规范；公共色彩、字体与圆角仍由主题 token 提供。
-const _badgeSquareRadius = 2.0;
-const _badgeBubbleSharpRadius = 1.0;
 
 /// 徽标的结构形态；尺寸与描边分别由 [TBadge.size]、[TBadge.border] 控制。
 enum TBadgeVariant {
@@ -266,7 +262,9 @@ class TBadge extends StatelessWidget {
     final textLabel = SizedBox(
       height: textLineHeight,
       width: singleCharacterWidth,
-      child: Center(
+      child: Align(
+        widthFactor: 1,
+        heightFactor: 1,
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: TText(
@@ -314,34 +312,36 @@ class TBadge extends StatelessWidget {
             );
     }
 
-    final badgeLabel = isDot
-        ? border
-              ? _buildDecoratedLabel(
-                  label: null,
-                  backgroundColor: backgroundColor,
-                  borderColor: borderColor,
-                  borderWidth: borderWidth,
-                  padding: EdgeInsets.zero,
-                  minHeight: smallSize,
-                  minWidth: smallSize,
-                  borderRadius: BorderRadius.circular(
-                    context.tTheme.radiusRound,
-                  ),
-                )
-              : null
-        : _buildLabelForVariant(
-            label: textLabel,
-            backgroundColor: backgroundColor,
-            borderColor: borderColor,
-            borderWidth: borderWidth,
-            padding: effectivePadding,
-            height: effectiveLargeSize,
-          );
-    final usesCustomLabel =
-        border ||
-        variant == TBadgeVariant.square ||
-        variant == TBadgeVariant.bubble;
-    final effectiveLabel = badgeLabel;
+    final labelShape = switch (variant) {
+      TBadgeVariant.dot => TBadgeLabelShape.dot,
+      TBadgeVariant.square => TBadgeLabelShape.square,
+      TBadgeVariant.bubble => TBadgeLabelShape.bubble,
+      _ => TBadgeLabelShape.circle,
+    };
+    final badgeLabel = TBadgeLabel(
+      shape: labelShape,
+      visible: visible,
+      label: textLabel,
+      backgroundColor: backgroundColor,
+      borderColor: borderColor,
+      borderWidth: border ? borderWidth : 0,
+      padding: effectivePadding,
+      height: effectiveLargeSize,
+      dotSize: smallSize,
+    );
+    if (variant == TBadgeVariant.square || variant == TBadgeVariant.bubble) {
+      final result = child == null
+          ? badgeLabel
+          : _buildAnchoredBadge(
+              context: context,
+              badge: badgeLabel,
+              alignment: resolvedAlignment,
+              offset: resolvedOffset,
+            );
+      return _wrapTap(result);
+    }
+    final usesCustomLabel = border;
+    final effectiveLabel = border ? badgeLabel : (isDot ? null : textLabel);
     final effectiveAlignment = resolvedAlignment;
     final effectiveOffset = resolvedOffset;
     final materialBadge = Badge(
@@ -435,82 +435,6 @@ class TBadge extends StatelessWidget {
     TBadgeVariant.triangleLeft => true,
     _ => false,
   };
-
-  Widget _buildLabelForVariant({
-    required Widget label,
-    required Color backgroundColor,
-    required Color borderColor,
-    required double borderWidth,
-    required EdgeInsetsGeometry padding,
-    required double height,
-  }) {
-    return switch (variant) {
-      TBadgeVariant.square => _buildDecoratedLabel(
-        label: label,
-        backgroundColor: backgroundColor,
-        borderColor: borderColor,
-        borderWidth: border ? borderWidth : 0,
-        padding: padding,
-        minHeight: height,
-        minWidth: height,
-        borderRadius: BorderRadius.circular(_badgeSquareRadius),
-      ),
-      TBadgeVariant.bubble => _buildDecoratedLabel(
-        label: label,
-        backgroundColor: backgroundColor,
-        borderColor: borderColor,
-        borderWidth: border ? borderWidth : 0,
-        padding: padding,
-        minHeight: height,
-        minWidth: 0,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(height),
-          topRight: Radius.circular(height),
-          bottomRight: Radius.circular(height),
-          bottomLeft: const Radius.circular(_badgeBubbleSharpRadius),
-        ),
-      ),
-      _ when border => _buildDecoratedLabel(
-        label: label,
-        backgroundColor: backgroundColor,
-        borderColor: borderColor,
-        borderWidth: borderWidth,
-        padding: padding,
-        minHeight: height,
-        minWidth: height,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      _ => label,
-    };
-  }
-
-  Widget _buildDecoratedLabel({
-    required Widget? label,
-    required Color backgroundColor,
-    required Color borderColor,
-    required double borderWidth,
-    required EdgeInsetsGeometry padding,
-    required double minHeight,
-    required double minWidth,
-    required BorderRadiusGeometry borderRadius,
-  }) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: minHeight, minWidth: minWidth),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          border: borderWidth > 0
-              ? Border.all(color: borderColor, width: borderWidth)
-              : null,
-          borderRadius: borderRadius,
-        ),
-        child: Padding(
-          padding: padding,
-          child: Center(child: label),
-        ),
-      ),
-    );
-  }
 
   Widget _buildCornerBadge({
     required Widget label,

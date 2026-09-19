@@ -434,7 +434,7 @@ void main() {
       );
     });
 
-    testWidgets('square 与 bubble 使用各自结构形态', (tester) async {
+    testWidgets('square 与 bubble 使用设计圆角且不经过 Material 胶囊裁剪', (tester) async {
       await tester.pumpWidget(
         app(
           const Row(
@@ -450,7 +450,23 @@ void main() {
 
       expect(find.text('8'), findsOneWidget);
       expect(find.text('领取积分'), findsOneWidget);
-      expect(find.byType(DecoratedBox), findsWidgets);
+      expect(find.byType(Badge), findsNothing);
+      final decorations = tester
+          .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+          .map((widget) => widget.decoration)
+          .whereType<BoxDecoration>();
+      expect(
+        decorations.map((decoration) => decoration.borderRadius),
+        containsAll(<BorderRadius>[
+          BorderRadius.circular(2),
+          const BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+            bottomLeft: Radius.circular(1),
+          ),
+        ]),
+      );
       expect(tester.takeException(), isNull);
     });
 
@@ -476,6 +492,41 @@ void main() {
 
       expect(tester.getSize(find.byKey(squareKey)).width, greaterThan(16));
       expect(tester.getSize(find.byKey(circleKey)), const Size.square(16));
+    });
+
+    testWidgets('square 与 bubble 在宽松父约束下仍按内容收缩', (tester) async {
+      const squareKey = Key('loose-square');
+      const bubbleKey = Key('loose-bubble');
+      await tester.pumpWidget(
+        app(
+          const SizedBox(
+            width: 200,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Align(
+                  child: TBadge(
+                    key: squareKey,
+                    label: '8',
+                    variant: TBadgeVariant.square,
+                  ),
+                ),
+                Align(
+                  child: TBadge(
+                    key: bubbleKey,
+                    label: 'NEW',
+                    variant: TBadgeVariant.bubble,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(tester.getSize(find.byKey(squareKey)), const Size.square(16));
+      expect(tester.getSize(find.byKey(bubbleKey)).height, 16);
+      expect(tester.getSize(find.byKey(bubbleKey)).width, lessThan(200));
     });
 
     testWidgets('左右 ribbon 与 triangle 贴合 child 且不溢出', (tester) async {
@@ -815,6 +866,7 @@ void main() {
       expect(badge.padding, const EdgeInsets.symmetric(horizontal: 4));
       expect(badge.textStyle?.fontSize, token.fontMarkExtraSmall?.size);
       expect(badge.textStyle?.height, token.fontMarkExtraSmall?.height);
+      expect(badge.textStyle?.letterSpacing, 0);
     });
 
     testWidgets('iOS 本地化 TextTheme 不覆盖 Badge Mark Token', (tester) async {
