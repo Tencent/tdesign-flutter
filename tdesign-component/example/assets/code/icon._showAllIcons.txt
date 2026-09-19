@@ -32,23 +32,25 @@ Widget _showAllIcons(BuildContext context) {
                 iconList = query.isEmpty
                     ? TIcons.allIconsMap.entries.toList()
                     : TIcons.allIconsMap.entries
-                        .where((item) => item.key.toLowerCase().contains(query))
-                        .toList();
+                          .where(
+                            (item) => item.key.toLowerCase().contains(query),
+                          )
+                          .toList();
               });
             },
           ),
-          Builder(builder: (context) {
-            if (iconList.isEmpty) {
-              return const SizedBox(
-                height: 96,
-                child: Center(child: TText('暂无内容')),
-              );
-            }
+          Builder(
+            builder: (context) {
+              if (iconList.isEmpty) {
+                return const SizedBox(
+                  height: 96,
+                  child: Center(child: TText('暂无内容')),
+                );
+              }
 
-            return IconCatalogGrid(
-              icons: iconList,
-            );
-          })
+              return IconCatalogGrid(icons: iconList);
+            },
+          ),
         ],
       ),
     );

@@ -8,7 +8,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_base.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/l10n/app_localizations.dart';
-import 'package:tdesign_flutter_example/page/t_radio_page.dart';
+import 'package:tdesign_flutter_example/page/radio/radio_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
 import 'golden_test_utils.dart';

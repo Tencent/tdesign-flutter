@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
-import 'package:tdesign_flutter_example/page/t_collapse_page.dart';
+import 'package:tdesign_flutter_example/page/collapse/collapse_page.dart';
 
 import 'demo_page_test_utils.dart';
 

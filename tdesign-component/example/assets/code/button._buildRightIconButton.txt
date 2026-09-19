@@ -29,7 +29,7 @@ Widget _buildRightIconButton(BuildContext context) {
           colorScheme: TButtonColorScheme.primary,
           iconPosition: TButtonIconPosition.right,
           onPressed: _onTap,
-        )
+        ),
       ],
     );
   }

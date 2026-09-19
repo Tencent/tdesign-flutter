@@ -1,8 +1,9 @@
 Widget _buildMarkFillTag(BuildContext context) {
     // Mark 标签：左圆角右直角
     return Theme(
-      data: Theme.of(context)
-          .mergeExtension(const TTagThemeData(shape: TTagShape.mark)),
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TTagThemeData(shape: TTagShape.mark)),
       child: const TTag('标签文字'),
     );
   }

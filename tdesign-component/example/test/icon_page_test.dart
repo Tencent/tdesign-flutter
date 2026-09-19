@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart' hide TIcons;
-import 'package:tdesign_flutter_example/page/t_icon_page.dart';
+import 'package:tdesign_flutter_example/page/icon/icon_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 import 'package:url_launcher/link.dart';

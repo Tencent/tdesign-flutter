@@ -2,6 +2,18 @@
 
 组件示例 App，同时承载组件代码查看和 Web 文档示例代码。
 
+## 目录结构
+
+每个组件使用独立目录，入口固定为 `page/<component>/<component>_page.dart`，因此可直接按组件名定位；不要使用 `index.dart`、数字前缀或 `t_` 前缀隐藏入口语义。
+
+每个公开 `ExampleModule` 独立为一个业务语义文件，例如 `button_type.dart`、`button_status.dart`、`button_theme.dart`。入口负责页面元数据、模块顺序、状态和生命周期，模块文件负责模块注册；只有跨模块复用或具备独立状态的复杂 example 才增加 shared/example 文件，不按每个 `ExampleItem` 机械拆分。
+
+从 `tdesign-component` 目录运行结构检查：
+
+```bash
+dart run tool/check_demo_structure.dart
+```
+
 ## 示例代码片段
 
 为需要展示源码的方法或独立 Widget 添加 `@ExampleCode(group: '...')`。`group` 必须与所在页面的 `ExamplePage.exampleCodeGroup` 一致，生成器会输出 `assets/code/<group>.<name>.txt`。

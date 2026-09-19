@@ -1,4 +1,7 @@
 Widget _buildIconOutlineTag(BuildContext context) {
-    return const TTag('标签文字',
-        icon: TIcons.discount, variant: TTagVariant.outline);
+    return const TTag(
+      '标签文字',
+      icon: TIcons.discount,
+      variant: TTagVariant.outline,
+    );
   }

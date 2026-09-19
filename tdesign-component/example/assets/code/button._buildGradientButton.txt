@@ -26,9 +26,10 @@ Widget _buildGradientButton(BuildContext context) {
             context,
             const TButtonThemeData(
               gradient: LinearGradient(
-                  colors: [Colors.red, Colors.blue],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter),
+                colors: [Colors.red, Colors.blue],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
           ),
           child: TButton(
@@ -45,9 +46,10 @@ Widget _buildGradientButton(BuildContext context) {
             context,
             const TButtonThemeData(
               gradient: LinearGradient(
-                  colors: [Colors.red, Colors.blue],
-                  begin: Alignment.centerRight,
-                  end: Alignment.centerLeft),
+                colors: [Colors.red, Colors.blue],
+                begin: Alignment.centerRight,
+                end: Alignment.centerLeft,
+              ),
             ),
           ),
           child: TButton(
@@ -59,7 +61,7 @@ Widget _buildGradientButton(BuildContext context) {
             iconPosition: TButtonIconPosition.right,
             onPressed: _onTap,
           ),
-        )
+        ),
       ],
     );
   }

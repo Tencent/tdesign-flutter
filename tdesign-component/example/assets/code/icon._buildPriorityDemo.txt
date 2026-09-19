@@ -5,10 +5,7 @@ Widget _buildPriorityDemo(BuildContext context) {
       data: Theme.of(context).copyWith(
         extensions: [
           ...Theme.of(context).extensions.values,
-          TIconThemeData(
-            size: 36,
-            color: context.tTheme.brandNormalColor,
-          ),
+          TIconThemeData(size: 36, color: context.tTheme.brandNormalColor),
         ],
       ),
       child: Column(

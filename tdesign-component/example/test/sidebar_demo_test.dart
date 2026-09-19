@@ -5,7 +5,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_base.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/base/notification_center.dart';
-import 'package:tdesign_flutter_example/page/sidebar/t_sidebar_page_anchor.dart';
+import 'package:tdesign_flutter_example/page/sidebar/sidebar_anchor_example.dart';
 
 import 'demo_page_test_utils.dart';
 import 'sidebar_demo_test_spec.dart';

@@ -1,6 +1,3 @@
 Widget _buildChildTestButton(BuildContext context) {
-    return TButton(
-      child: Container(),
-      onPressed: null,
-    );
+    return TButton(child: Container(), onPressed: null);
   }

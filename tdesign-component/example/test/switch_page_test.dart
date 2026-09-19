@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_base.dart';
-import 'package:tdesign_flutter_example/page/t_switch_page.dart';
+import 'package:tdesign_flutter_example/page/switch/switch_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
 const _pageWidth = 375.0;

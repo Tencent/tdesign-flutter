@@ -7,10 +7,7 @@ Widget _buildMultipleTextToast(BuildContext context) {
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: () {
-          TToast.showText(
-            '最多一行展示十个汉字宽度限制最多不超过三行文字',
-            context: context,
-          );
+          TToast.showText('最多一行展示十个汉字宽度限制最多不超过三行文字', context: context);
         },
       ),
     );

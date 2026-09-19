@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_dropdown_menu_page.dart';
+import 'package:tdesign_flutter_example/page/dropdown_menu/dropdown_menu_page.dart';
 
 import 'demo_page_test_utils.dart';
 import 'dropdown_menu_demo_test_spec.dart';

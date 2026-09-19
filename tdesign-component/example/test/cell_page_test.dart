@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_cell_page.dart';
+import 'package:tdesign_flutter_example/page/cell/cell_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
 import 'golden_test_utils.dart';

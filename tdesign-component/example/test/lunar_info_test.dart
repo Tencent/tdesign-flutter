@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:tdesign_flutter_example/lunar_info.dart';
+import 'package:tdesign_flutter_example/page/calendar/lunar_info.dart';
 
 void main() {
   group('LunarInfo (example)', () {

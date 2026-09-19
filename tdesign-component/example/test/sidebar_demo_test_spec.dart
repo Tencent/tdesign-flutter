@@ -1,9 +1,9 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/sidebar/t_sidebar_page.dart';
-import 'package:tdesign_flutter_example/page/sidebar/t_sidebar_page_anchor.dart';
-import 'package:tdesign_flutter_example/page/sidebar/t_sidebar_page_custom.dart';
-import 'package:tdesign_flutter_example/page/sidebar/t_sidebar_page_icon.dart';
-import 'package:tdesign_flutter_example/page/sidebar/t_sidebar_page_pagination.dart';
+import 'package:tdesign_flutter_example/page/sidebar/sidebar_anchor_example.dart';
+import 'package:tdesign_flutter_example/page/sidebar/sidebar_custom_example.dart';
+import 'package:tdesign_flutter_example/page/sidebar/sidebar_icon_example.dart';
+import 'package:tdesign_flutter_example/page/sidebar/sidebar_page.dart';
+import 'package:tdesign_flutter_example/page/sidebar/sidebar_pagination_example.dart';
 
 import 'demo_page_test_utils.dart';
 

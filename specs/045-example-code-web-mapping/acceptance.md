@@ -8,6 +8,8 @@
 
 ## 自动化验证
 
+> 下表为 Table 与 Web 单源映射阶段的既有记录；全组件目录迁移完成后重新执行并更新。
+
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
 | `dart run tool/generate_example_code.dart --check --verbose` | PASS | 413 份片段全部同步 |
@@ -21,6 +23,14 @@
 | `pnpm site` | PASS | 全量映射测试随生产站点构建执行，108 modules transformed |
 | Linux 3.32 `flutter test --no-pub test/table_demo_golden_test.dart` | PASS | `tdesign-flutter-golden-cache:3.32.0`，light/dark 2/2，未更新基线 |
 | `git diff --check` | PASS | 无空白错误 |
+| `dart run tool/check_demo_structure.dart` | PASS | 60 个入口、141 个语义模块，Calendar 与 Sidebar 等辅助 example 已归位 |
+| `dart run tool/generate_example_code.dart --check --verbose` | PASS | 413 份片段全部同步；目录迁移后 26 份格式化产物已重新生成 |
+| `flutter analyze --fatal-infos` | PASS | Flutter 3.32，0 issues |
+| Flutter 3.47 `flutter analyze --no-pub --fatal-infos` | PASS | 0 issues |
+| 九类组件与辅助 example 抽查 | PASS | Table、Calendar、Sidebar、Input、Button、Form、TreeSelect、Stepper、LunarInfo，51/51 |
+| `flutter test test/tool/generate_example_code_test.dart` | PASS | 5/5 |
+| `pnpm test:example-code` | PASS | 57 份组件文档映射 404 份生成代码 |
+| `pnpm site` | PASS | 108 modules transformed，生产构建完成 |
 
 ## 人工验收
 
@@ -28,8 +38,10 @@
 - [x] 57 份组件 Web 文档均只有一个组映射，无手写 Dart `td-code-block`
 - [x] Table、Stepper、Form 展开后的 Web 代码与生成资产逐字一致
 - [x] 缺失或非法映射会阻止映射测试或站点构建
+- [x] 60 个语义入口、141 个模块文件和辅助 example 的归属均已通过脚本检查并抽查
 
 ## 未覆盖项与后续工作
 
-- 其他组件 Dart Demo 的目录拆分不属于本次 Web 单源迁移；页面运行行为未修改。
+- macOS 本地完整测试中的 Golden 仍因平台文字栅格差异批量失败，未更新基线；非 Golden 明确抽查与双版本 analyze 已通过。
+- 完整非 Golden 测试另暴露两个既有问题：ActionSheet 使用不存在的大小写路径 `t_actionSheet_1.png`，Switch 颜色断言与当前主题值不一致；两者与本次目录迁移无关，未扩大范围修改。
 - macOS 本地 Golden 因平台文字栅格差异出现约 7.3% diff；未更新基线，最终结论采用 CI 同款 Linux 3.32 的 2/2 精确通过结果。

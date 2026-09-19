@@ -1,0 +1,385 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+import 'tag_select_outline_example.dart';
+
+part 'tag_selectable.dart';
+part 'tag_size.dart';
+part 'tag_status_theme.dart';
+part 'tag_type.dart';
+
+class TTagPage extends StatefulWidget {
+  const TTagPage({Key? key}) : super(key: key);
+
+  @override
+  State<TTagPage> createState() => _TTagPageState();
+}
+
+class _TTagPageState extends State<TTagPage> {
+  bool _selected1 = false;
+  bool _selected2 = true;
+  bool _selected3 = false;
+  bool _primarySelected = true;
+  bool _successSelected = true;
+  bool _warningSelected = true;
+  bool _dangerSelected = true;
+  final List<String> _closableTags = ['标签文字'];
+  final List<String> _closableOutlineTags = ['标签文字'];
+
+  @override
+  Widget build(BuildContext context) {
+    return ExamplePage(
+      title: tTitle(),
+      desc: '用于表明主体的类目，属性或状态',
+      exampleCodeGroup: 'tag',
+      children: [
+        _tagTypeModule,
+        _tagStatusThemeModule,
+        _tagSizeModule,
+        _tagSelectableModule,
+      ],
+      test: [
+        ExampleItem(
+          desc: '禁用状态',
+          ignoreCode: true,
+          builder: (context) {
+            return Container(
+              alignment: Alignment.topLeft,
+              padding: const EdgeInsets.only(left: 16),
+              child: Wrap(spacing: 8, children: [_buildDisabledTag(context)]),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  // ============ 组件类型 ============
+
+  @ExampleCode(group: 'tag')
+  Widget _buildSimpleFillTag(BuildContext context) {
+    // 基础填充标签（默认 defaultTheme 语义色）
+    return const TTag('标签文字');
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildSimpleOutlineTag(BuildContext context) {
+    return const TTag('标签文字', variant: TTagVariant.outline);
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildCircleFillTag(BuildContext context) {
+    // 圆弧标签：通过 TTagThemeData(shape: TTagShape.round) 子树注入
+    return Theme(
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TTagThemeData(shape: TTagShape.round)),
+      child: const TTag('标签文字'),
+    );
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildCircleOutlineTag(BuildContext context) {
+    return Theme(
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TTagThemeData(shape: TTagShape.round)),
+      child: const TTag('标签文字', variant: TTagVariant.outline),
+    );
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildMarkFillTag(BuildContext context) {
+    // Mark 标签：左圆角右直角
+    return Theme(
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TTagThemeData(shape: TTagShape.mark)),
+      child: const TTag('标签文字'),
+    );
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildMarkOutlineTag(BuildContext context) {
+    return Theme(
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TTagThemeData(shape: TTagShape.mark)),
+      child: const TTag('标签文字', variant: TTagVariant.outline),
+    );
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildIconFillTag(BuildContext context) {
+    // 带图标的标签：通过构造器 icon 参数传入 IconData
+    return const TTag('标签文字', icon: TIcons.discount);
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildIconOutlineTag(BuildContext context) {
+    return const TTag(
+      '标签文字',
+      icon: TIcons.discount,
+      variant: TTagVariant.outline,
+    );
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildLongTextTag(BuildContext context) {
+    return Theme(
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TTagThemeData(fixedWidth: 130)),
+      child: const TTag('超长省略文本标签超长省略文本标签', variant: TTagVariant.light),
+    );
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildCloseFillTag(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      children: _closableTags
+          .map(
+            (text) => TTag(
+              text,
+              needCloseIcon: true,
+              onCloseTap: () => setState(() => _closableTags.remove(text)),
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildCloseOutlineTag(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      children: _closableOutlineTags
+          .map(
+            (text) => TTag(
+              text,
+              variant: TTagVariant.outline,
+              needCloseIcon: true,
+              onCloseTap: () =>
+                  setState(() => _closableOutlineTags.remove(text)),
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  // ============ 组件状态（主题） ============
+
+  @ExampleCode(group: 'tag')
+  Widget _buildDarkShowTags(BuildContext context) {
+    // 非浅色填充各主题
+    return const Wrap(
+      spacing: 8,
+      children: [
+        TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
+        TTag('主要', colorScheme: TTagColorScheme.primary),
+        TTag('警告', colorScheme: TTagColorScheme.warning),
+        TTag('危险', colorScheme: TTagColorScheme.danger),
+        TTag('成功', colorScheme: TTagColorScheme.success),
+      ],
+    );
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildLightShowTags(BuildContext context) {
+    // 浅色填充各主题
+    return const Wrap(
+      spacing: 8,
+      children: [
+        TTag(
+          '默认',
+          colorScheme: TTagColorScheme.defaultTheme,
+          variant: TTagVariant.light,
+        ),
+        TTag(
+          '主要',
+          colorScheme: TTagColorScheme.primary,
+          variant: TTagVariant.light,
+        ),
+        TTag(
+          '警告',
+          colorScheme: TTagColorScheme.warning,
+          variant: TTagVariant.light,
+        ),
+        TTag(
+          '危险',
+          colorScheme: TTagColorScheme.danger,
+          variant: TTagVariant.light,
+        ),
+        TTag(
+          '成功',
+          colorScheme: TTagColorScheme.success,
+          variant: TTagVariant.light,
+        ),
+      ],
+    );
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildOutlineShowTags(BuildContext context) {
+    // 非浅色描边各主题
+    return const Wrap(
+      spacing: 8,
+      children: [
+        TTag(
+          '默认',
+          colorScheme: TTagColorScheme.defaultTheme,
+          variant: TTagVariant.outline,
+        ),
+        TTag(
+          '主要',
+          colorScheme: TTagColorScheme.primary,
+          variant: TTagVariant.outline,
+        ),
+        TTag(
+          '警告',
+          colorScheme: TTagColorScheme.warning,
+          variant: TTagVariant.outline,
+        ),
+        TTag(
+          '危险',
+          colorScheme: TTagColorScheme.danger,
+          variant: TTagVariant.outline,
+        ),
+        TTag(
+          '成功',
+          colorScheme: TTagColorScheme.success,
+          variant: TTagVariant.outline,
+        ),
+      ],
+    );
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildLightOutlineShowTags(BuildContext context) {
+    // 浅色描边各主题
+    return const Wrap(
+      spacing: 8,
+      children: [
+        TTag(
+          '默认',
+          colorScheme: TTagColorScheme.defaultTheme,
+          variant: TTagVariant.lightOutline,
+        ),
+        TTag(
+          '主要',
+          colorScheme: TTagColorScheme.primary,
+          variant: TTagVariant.lightOutline,
+        ),
+        TTag(
+          '警告',
+          colorScheme: TTagColorScheme.warning,
+          variant: TTagVariant.lightOutline,
+        ),
+        TTag(
+          '危险',
+          colorScheme: TTagColorScheme.danger,
+          variant: TTagVariant.lightOutline,
+        ),
+        TTag(
+          '成功',
+          colorScheme: TTagColorScheme.success,
+          variant: TTagVariant.lightOutline,
+        ),
+      ],
+    );
+  }
+
+  // ============ 组件尺寸 ============
+
+  @ExampleCode(group: 'tag')
+  Widget _buildAllSizeTags(BuildContext context) {
+    return const Wrap(
+      spacing: 8,
+      direction: Axis.vertical,
+      children: [
+        TTag('超大标签', size: TTagSize.extraLarge),
+        TTag('大型标签', size: TTagSize.large),
+        TTag('中等标签', size: TTagSize.medium),
+        TTag('小型标签', size: TTagSize.small),
+      ],
+    );
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildSelectDefault(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      children: [
+        TSelectTag(
+          '标签一',
+          value: _selected1,
+          onChanged: (v) => setState(() => _selected1 = v),
+        ),
+        TSelectTag(
+          '标签二',
+          value: _selected2,
+          onChanged: (v) => setState(() => _selected2 = v),
+        ),
+        TSelectTag(
+          '标签三',
+          value: _selected3,
+          onChanged: (v) => setState(() => _selected3 = v),
+        ),
+      ],
+    );
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildSelectColorSchemes(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      children: [
+        TSelectTag(
+          '主要',
+          colorScheme: TTagColorScheme.primary,
+          value: _primarySelected,
+          onChanged: (value) => setState(() => _primarySelected = value),
+        ),
+        TSelectTag(
+          '成功',
+          colorScheme: TTagColorScheme.success,
+          value: _successSelected,
+          onChanged: (value) => setState(() => _successSelected = value),
+        ),
+        TSelectTag(
+          '警告',
+          colorScheme: TTagColorScheme.warning,
+          value: _warningSelected,
+          onChanged: (value) => setState(() => _warningSelected = value),
+        ),
+        TSelectTag(
+          '危险',
+          colorScheme: TTagColorScheme.danger,
+          value: _dangerSelected,
+          onChanged: (value) => setState(() => _dangerSelected = value),
+        ),
+      ],
+    );
+  }
+
+  @ExampleCode(group: 'tag')
+  Widget _buildSelectDisabled(BuildContext context) {
+    return const TSelectTag('禁用标签', value: false, onChanged: null);
+  }
+
+  // ============ 测试 ============
+
+  Widget _buildDisabledTag(BuildContext context) {
+    return const Wrap(
+      spacing: 8,
+      children: [
+        TTag('禁用', colorScheme: TTagColorScheme.defaultTheme, enabled: false),
+        TTag('禁用', colorScheme: TTagColorScheme.primary, enabled: false),
+        TTag('禁用', colorScheme: TTagColorScheme.danger, enabled: false),
+      ],
+    );
+  }
+}

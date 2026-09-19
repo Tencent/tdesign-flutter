@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/src/components/action_sheet/t_action_sheet_grid.dart';
 import 'package:tdesign_flutter/src/components/action_sheet/t_action_sheet_item_widget.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_action_sheet_page.dart';
+import 'package:tdesign_flutter_example/page/action_sheet/action_sheet_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
 import 'action_sheet_demo_test_spec.dart';
