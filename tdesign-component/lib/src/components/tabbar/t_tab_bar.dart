@@ -10,6 +10,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
+import '../badge/t_badge_internal.dart';
 import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
 import 't_tab_bar_theme_data.dart';
@@ -167,8 +168,7 @@ class TTabBarItemConfig {
   /// 徽标内容和样式由 [TBadgeConfig] 描述，[TBadgeConfig.offset] 可用于逐项
   /// 调整默认位置。纯文本项未设置实例或 BadgeTheme offset 时使用 TabBar 的
   /// 文本徽标默认位置；纯图标项与图文项均以图标作为锚点，使用徽标的默认
-  /// 右上角位置，
-  /// 图文项下方的文字宽度不会改变徽标位置。
+  /// 右上角位置；图文项下方的文字宽度不会改变徽标位置。
   ///
   /// TabBar 自己拥有徽标锚点与点击区域；点击行为通过 [onTap] 配置。调用方
   /// 已经拥有目标 Widget 时，应直接使用 [TBadge] 包装该 Widget。
@@ -926,7 +926,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
   }
 
   Widget _attachBadge(TBadgeConfig badge, Widget child) {
-    return TBadge.fromConfig(
+    return TBadgeFromConfig(
       config: badge,
       fallbackOffset: basicType == _TTabBarBasicType.text
           ? _kTextBadgeOffset

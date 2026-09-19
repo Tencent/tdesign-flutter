@@ -51,11 +51,11 @@
 - `itemStyle == label` 时选中项显示品牌浅色背景；`normal` 只改变前景色。
 - `style == capsule` 时标签栏具有 16px 外边距、圆角与顶部阴影，不显示顶部边线。
 - `split` 仅在 Normal 选项样式中绘制分隔线。
-- 单项徽标由可空的 `TBadge` 唯一表达；`null` 表示不显示，内容、形态和逐项偏移
-  均由 `TBadge` 自身配置。TabBar 不再保存重复的显隐开关或定位字段。
+- 单项徽标由可空的 `TBadgeConfig` 唯一表达；`null` 表示不显示，内容、形态和
+  可选逐项偏移均由配置提供。TabBar 不再保存重复的显隐开关或定位字段。
 - TabBar 负责选择徽标的语义锚点和标准位置：纯文本项在调用方未显式提供
-  `TBadge.offset`、局部 `BadgeTheme.offset` 或全局 `BadgeThemeData.offset` 时，
-  使用 TabBar 的文本徽标内置位置；纯图标项以图标作为 `TBadge.child`；图文项也只
+  `TBadgeConfig.offset`、局部 `BadgeTheme.offset` 或全局 `BadgeThemeData.offset` 时，
+  使用 TabBar 的文本徽标内置位置；纯图标项以图标作为内部徽标锚点；图文项也只
   以图标作为徽标锚点，文字不参与锚点宽度计算。两种图标场景均使用 `TBadge` 的
   默认右上角位置。公开默认 Demo 不传固定 offset，显式 offset 仅用于逐项自定义。
 - 颜色和字体默认值来自 `TThemeData`；实例参数优先于 `TTabBarThemeData`，

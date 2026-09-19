@@ -22,20 +22,6 @@ TabBar、SideBar、ActionSheet 等内部拥有锚点的组合组件使用
 | child | Widget? | - | 被徽标标记的内容；为空时徽标可独立展示。 |
 | onTap | GestureTapCallback? | - | 点击徽标及其 `child` 时触发；为空时不创建点击语义。 |
 
-
-##### TBadge.fromConfig
-
-使用组合组件提供的 `config` 创建徽标；回退位置只在配置与 `BadgeThemeData` 均未指定位置时生效。
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| config | TBadgeConfig | - | - |
-| child | Widget? | - | 被徽标标记的内容；为空时徽标可独立展示。 |
-| onTap | GestureTapCallback? | - | 点击徽标及其 `child` 时触发；为空时不创建点击语义。 |
-| fallbackAlignment | AlignmentGeometry? | - | 消费组件为自身锚点定义的默认对齐方式。 |
-| fallbackOffset | Offset? | - | 消费组件为自身锚点定义的默认偏移。 |
-
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |

@@ -46,8 +46,10 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
   默认项目宽度；仅滚动布局显式 `itemMinWidth` 可以扩大项目宽度并触发滚动。
 - `TActionSheetItem<T>` 只持有动作内容、状态与稳定业务值 `value`，不持有 `group`；
   选择动作只通过 `onSelected(item)` 回传，不暴露会随布局变化的全局索引。
-- `TActionSheetItem.badge` 是 Widget 槽位，不绑定具体 Badge 实现；列表徽标中心锚定
+- `TActionSheetItem.badge` 接收 `TBadgeConfig`，只描述徽标本体；列表徽标中心锚定
   标题右上角，宫格徽标中心锚定图标槽位右上角，不把徽标作为普通行内尾随内容。
+  配置、局部 Theme、全局 Theme 与 ActionSheet 场景默认位置按 Badge 统一优先级
+  解析，列表预留空间使用同一套字体、尺寸与 padding 数据。
   `textStyle` 只控制标题，不作为图标颜色的第二来源。宫格尾部空位由布局直接占位，不允许
   以 `item=null` 表达。需要标题与图标同色时，调用方分别设置 `textStyle` 与
   `Icon.color`，Demo 状态项不得依赖隐式联动。

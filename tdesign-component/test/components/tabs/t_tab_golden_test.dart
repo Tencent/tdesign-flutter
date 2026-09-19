@@ -74,7 +74,11 @@ class _TabsScene extends StatelessWidget {
                         tabs: [
                           TTab(text: 'News'),
                           TTab(
-                            child: TBadge(label: '8', child: Text('Inbox')),
+                            child: TBadge(
+                              label: '8',
+                              offset: Offset(-1, 0),
+                              child: Text('Inbox'),
+                            ),
                           ),
                           TTab(
                             text: 'Disabled',

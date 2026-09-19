@@ -7,6 +7,7 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../badge/t_badge.dart';
+import '../badge/t_badge_internal.dart';
 import '../text/t_text.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_theme_data.dart';
@@ -116,7 +117,7 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
     final badge = item.badge;
     return badge == null
         ? icon
-        : TBadge.fromConfig(
+        : TBadgeFromConfig(
             config: badge,
             child: icon,
             fallbackAlignment: AlignmentDirectional.topEnd,

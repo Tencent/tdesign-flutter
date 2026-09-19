@@ -7,8 +7,8 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
-import 't_badge_defaults.dart';
-import 't_badge_theme_data.dart';
+import 't_badge_fallback.dart';
+import 't_badge_resolved_style.dart';
 
 // Badge 专有几何来自移动端设计规范；公共色彩、字体与圆角仍由主题 token 提供。
 const _badgeSquareRadius = 2.0;
@@ -155,9 +155,7 @@ class TBadge extends StatelessWidget {
     this.offset,
     this.child,
     this.onTap,
-  }) : badge = null,
-       _fallbackAlignment = null,
-       _fallbackOffset = null;
+  }) : badge = null;
 
   /// 创建完全自定义外观的徽标；[badge] 是徽标本体，[child] 是可选锚点，未提供锚点时直接展示徽标本体。
   const TBadge.custom({
@@ -171,34 +169,7 @@ class TBadge extends StatelessWidget {
        variant = TBadgeVariant.circle,
        size = TBadgeSize.medium,
        border = false,
-       showZero = true,
-       _fallbackAlignment = null,
-       _fallbackOffset = null;
-
-  /// 使用组合组件提供的 [config] 创建徽标；回退位置只在配置与 [BadgeThemeData] 均未指定位置时生效。
-  TBadge.fromConfig({
-    super.key,
-
-    /// 组合组件传入的徽标内容、形态与可选位置覆盖。
-    required TBadgeConfig config,
-    this.child,
-    this.onTap,
-
-    /// 消费组件为自身锚点定义的默认对齐方式。
-    AlignmentGeometry? fallbackAlignment,
-
-    /// 消费组件为自身锚点定义的默认偏移。
-    Offset? fallbackOffset,
-  }) : label = config.label,
-       variant = config.variant,
-       size = config.size,
-       border = config.border,
-       showZero = config.showZero,
-       alignment = config.alignment,
-       offset = config.offset,
-       badge = config.badge,
-       _fallbackAlignment = fallbackAlignment,
-       _fallbackOffset = fallbackOffset;
+       showZero = true;
 
   /// 徽标实际展示的短文本，例如 `8`、`99+` 或 `NEW`。
   ///
@@ -247,83 +218,37 @@ class TBadge extends StatelessWidget {
   /// 点击徽标及其 [child] 时触发；为空时不创建点击语义。
   final GestureTapCallback? onTap;
 
-  final AlignmentGeometry? _fallbackAlignment;
-  final Offset? _fallbackOffset;
-
   @override
   Widget build(BuildContext context) {
-    final materialTheme = Theme.of(context);
-    final localBadgeTheme = context
-        .dependOnInheritedWidgetOfExactType<BadgeTheme>()
-        ?.data;
-    final globalBadgeTheme = materialTheme.tExplicitBadgeTheme;
-    final tTheme = Theme.of(context).extension<TBadgeThemeData>();
-    final token = context.tTheme;
-    final backgroundColor =
-        localBadgeTheme?.backgroundColor ??
-        globalBadgeTheme?.backgroundColor ??
-        token.errorNormalColor;
-    final textColor =
-        localBadgeTheme?.textColor ??
-        globalBadgeTheme?.textColor ??
-        token.textColorAnti;
-    final smallSize =
-        localBadgeTheme?.smallSize ??
-        globalBadgeTheme?.smallSize ??
-        TBadgeDefaults.dotSize;
-    final font = size == TBadgeSize.large
-        ? token.fontMarkSmall
-        : token.fontMarkExtraSmall;
-    final materialTextStyle = size == TBadgeSize.large
-        ? materialTheme.tExplicitTextTheme?.labelMedium
-        : materialTheme.tExplicitTextTheme?.labelSmall;
-    final textStyle =
-        localBadgeTheme?.textStyle ??
-        globalBadgeTheme?.textStyle ??
-        materialTextStyle ??
-        TextStyle(
-          color: textColor,
-          fontSize: font?.size,
-          height: font?.height,
-          fontWeight: font?.fontWeight,
-        );
-    const mediumPadding = EdgeInsets.symmetric(horizontal: 4);
-    const largePadding = EdgeInsets.symmetric(horizontal: 6);
-    final padding =
-        localBadgeTheme?.padding ??
-        globalBadgeTheme?.padding ??
-        (size == TBadgeSize.large ? largePadding : mediumPadding);
-    final resolvedAlignment =
-        alignment ??
-        localBadgeTheme?.alignment ??
-        globalBadgeTheme?.alignment ??
-        _fallbackAlignment;
-    final resolvedOffset =
-        offset ??
-        localBadgeTheme?.offset ??
-        globalBadgeTheme?.offset ??
-        _fallbackOffset;
+    final fallback = context
+        .dependOnInheritedWidgetOfExactType<TBadgeFallback>();
+    final style = TBadgeResolvedStyle.resolve(
+      context,
+      large: size == TBadgeSize.large,
+      alignment: alignment,
+      offset: offset,
+      fallbackAlignment: fallback?.alignment,
+      fallbackOffset: fallback?.offset,
+    );
+    final backgroundColor = style.backgroundColor;
+    final textColor = style.textColor;
+    final smallSize = style.smallSize;
+    final textStyle = style.textStyle;
+    final padding = style.padding;
+    final resolvedAlignment = style.alignment;
+    final resolvedOffset = style.offset;
     if (badge != null) {
       return _buildCustomBadge(
         context: context,
         badge: badge!,
-        alignment: resolvedAlignment ?? AlignmentDirectional.topEnd,
-        offset: resolvedOffset ?? Offset.zero,
+        alignment: resolvedAlignment,
+        offset: resolvedOffset,
       );
     }
     final visible =
         variant == TBadgeVariant.dot ||
         (label != null && (showZero || label != '0'));
-    final tokenHeight = (font?.size ?? 0) * (font?.height ?? 0);
-    final defaultLabelHeight = tokenHeight > 0
-        ? tokenHeight
-        : size == TBadgeSize.large
-        ? 20.0
-        : 16.0;
-    final effectiveLargeSize =
-        localBadgeTheme?.largeSize ??
-        globalBadgeTheme?.largeSize ??
-        defaultLabelHeight;
+    final effectiveLargeSize = style.largeSize;
     final isDot = variant == TBadgeVariant.dot;
     final isCorner = _isCornerVariant(variant);
     final text = label ?? '';
@@ -359,11 +284,8 @@ class TBadge extends StatelessWidget {
         ),
       ),
     );
-    final borderColor =
-        tTheme?.borderColor ??
-        materialTheme.tExplicitColorScheme?.surface ??
-        token.bgColorContainer;
-    final borderWidth = tTheme?.borderWidth ?? 1;
+    final borderColor = style.borderColor;
+    final borderWidth = style.borderWidth;
     final effectivePadding = isDot ? EdgeInsets.zero : padding;
 
     if (isCorner) {
@@ -374,7 +296,7 @@ class TBadge extends StatelessWidget {
         borderColor: borderColor,
         borderWidth: borderWidth,
         dimension: effectiveLargeSize * 2,
-        offset: resolvedOffset ?? Offset.zero,
+        offset: resolvedOffset,
       );
       final result = Stack(
         clipBehavior: Clip.none,
@@ -402,7 +324,9 @@ class TBadge extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   minHeight: smallSize,
                   minWidth: smallSize,
-                  borderRadius: BorderRadius.circular(token.radiusRound),
+                  borderRadius: BorderRadius.circular(
+                    context.tTheme.radiusRound,
+                  ),
                 )
               : null
         : _buildLabelForVariant(
@@ -418,8 +342,8 @@ class TBadge extends StatelessWidget {
         variant == TBadgeVariant.square ||
         variant == TBadgeVariant.bubble;
     final effectiveLabel = badgeLabel;
-    final effectiveAlignment = resolvedAlignment ?? AlignmentDirectional.topEnd;
-    final effectiveOffset = resolvedOffset ?? Offset.zero;
+    final effectiveAlignment = resolvedAlignment;
+    final effectiveOffset = resolvedOffset;
     final materialBadge = Badge(
       isLabelVisible: visible,
       alignment: effectiveAlignment,

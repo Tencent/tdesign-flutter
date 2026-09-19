@@ -129,6 +129,7 @@ class TTabsPage extends StatelessWidget {
       TTab(
         child: TBadge(
           variant: TBadgeVariant.dot,
+          offset: Offset(-4, 4),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -142,6 +143,7 @@ class TTabsPage extends StatelessWidget {
       TTab(
         child: TBadge(
           label: '8',
+          offset: Offset(-1, 0),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

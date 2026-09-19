@@ -74,7 +74,7 @@ class TBadgePage extends StatelessWidget {
                 desc: '圆形徽标',
                 center: false,
                 padding: padding,
-                builder: _buildNormalBadge,
+                builder: _buildCircleBadge,
               ),
               ExampleItem(
                 desc: '方形徽标',
@@ -212,7 +212,7 @@ class TBadgePage extends StatelessWidget {
   );
 
   @ExampleCode(group: 'badge')
-  Widget _buildNormalBadge(BuildContext context) => const TBadge(
+  Widget _buildCircleBadge(BuildContext context) => const TBadge(
     label: '8',
     offset: Offset(2, -2),
     child: Icon(TIcons.notification),

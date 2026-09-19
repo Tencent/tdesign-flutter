@@ -8,7 +8,8 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../badge/t_badge.dart';
-import '../badge/t_badge_defaults.dart';
+import '../badge/t_badge_internal.dart';
+import '../badge/t_badge_resolved_style.dart';
 import '../text/t_text.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_item_widget.dart';
@@ -272,7 +273,7 @@ class TActionSheetList<T> extends StatelessWidget {
       return label;
     }
     final offset = _badgeOffset(context, badge);
-    final badgeLabel = TBadge.fromConfig(
+    final badgeLabel = TBadgeFromConfig(
       config: badge,
       child: label,
       fallbackAlignment: AlignmentDirectional.topEnd,
@@ -297,17 +298,38 @@ class TActionSheetList<T> extends StatelessWidget {
     TBadgeConfig badge,
     Offset fallbackOffset,
   ) {
-    if (badge.isCustom || badge.alignment != null || badge.offset != null) {
+    if (badge.isCustom || _isCornerBadge(badge.variant)) {
       return 0;
     }
-    if (badge.variant == TBadgeVariant.dot) {
-      return TBadgeDefaults.dotSize / 2 + fallbackOffset.dx;
-    }
-    if (badge.variant != TBadgeVariant.circle || badge.label == null) {
+    if (badge.variant != TBadgeVariant.dot &&
+        (badge.label == null || (!badge.showZero && badge.label == '0'))) {
       return 0;
     }
-    final badgeSize = _badgeSize(context, badge);
-    return badgeSize.width / 2 + fallbackOffset.dx;
+    final style = TBadgeResolvedStyle.resolve(
+      context,
+      large: badge.size == TBadgeSize.large,
+      alignment: badge.alignment,
+      offset: badge.offset,
+      fallbackAlignment: AlignmentDirectional.topEnd,
+      fallbackOffset: fallbackOffset,
+    );
+    final textDirection = Directionality.of(context);
+    if (style.alignment.resolve(textDirection) !=
+        AlignmentDirectional.topEnd.resolve(textDirection)) {
+      return 0;
+    }
+    final width = badge.variant == TBadgeVariant.dot
+        ? style.smallSize
+        : badge.label == null
+        ? 0
+        : style.measureLabel(context, badge.label!).width;
+    if (width == 0) {
+      return 0;
+    }
+    final outwardOffset = textDirection == TextDirection.ltr
+        ? style.offset.dx
+        : -style.offset.dx;
+    return math.max(0, width / 2 + outwardOffset);
   }
 
   Offset _badgeOffset(BuildContext context, TBadgeConfig badge) {
@@ -332,30 +354,20 @@ class TActionSheetList<T> extends StatelessWidget {
   }
 
   Size _badgeSize(BuildContext context, TBadgeConfig badge) {
-    final font = badge.size == TBadgeSize.large
-        ? context.tTheme.fontMarkSmall
-        : context.tTheme.fontMarkExtraSmall;
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: badge.label,
-        style: TextStyle(
-          fontSize: font?.size,
-          height: font?.height,
-          fontWeight: font?.fontWeight,
-        ),
-      ),
-      textDirection: Directionality.of(context),
-      textScaler: MediaQuery.textScalerOf(context),
-    )..layout();
-    final badgeHeight = badge.size == TBadgeSize.large ? 20.0 : 16.0;
-    final horizontalPadding = badge.size == TBadgeSize.large ? 10.0 : 8.0;
-    final badgeWidth = math.max(
-      badgeHeight,
-      textPainter.width + horizontalPadding,
+    final style = TBadgeResolvedStyle.resolve(
+      context,
+      large: badge.size == TBadgeSize.large,
     );
-    textPainter.dispose();
-    return Size(badgeWidth, badgeHeight);
+    return style.measureLabel(context, badge.label ?? '');
   }
+
+  bool _isCornerBadge(TBadgeVariant variant) => switch (variant) {
+    TBadgeVariant.ribbonLeft ||
+    TBadgeVariant.ribbonRight ||
+    TBadgeVariant.triangleLeft ||
+    TBadgeVariant.triangleRight => true,
+    _ => false,
+  };
 
   /// 构建取消按钮
   Widget _buildCancelButton(BuildContext context) {

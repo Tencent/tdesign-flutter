@@ -49,36 +49,6 @@ void main() {
       expect(custom.alignment, AlignmentDirectional.bottomEnd);
       expect(custom.offset, const Offset(2, 3));
     });
-
-    testWidgets('fromConfig 与直接使用共享预设和自定义渲染', (tester) async {
-      const customKey = Key('config-custom-badge');
-      await tester.pumpWidget(
-        app(
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TBadge.fromConfig(
-                config: const TBadgeConfig(
-                  label: '8',
-                  variant: TBadgeVariant.square,
-                ),
-                child: const Icon(Icons.mail),
-              ),
-              TBadge.fromConfig(
-                config: const TBadgeConfig.custom(
-                  badge: SizedBox.square(key: customKey, dimension: 12),
-                ),
-                child: const Icon(Icons.star),
-              ),
-            ],
-          ),
-        ),
-      );
-
-      expect(find.text('8'), findsOneWidget);
-      expect(find.byKey(customKey), findsOneWidget);
-      expect(find.byType(TBadge), findsNWidgets(2));
-    });
   });
 
   group('数量与可见性', () {

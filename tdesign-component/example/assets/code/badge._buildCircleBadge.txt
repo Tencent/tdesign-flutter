@@ -1,4 +1,4 @@
-Widget _buildNormalBadge(BuildContext context) => const TBadge(
+Widget _buildCircleBadge(BuildContext context) => const TBadge(
     label: '8',
     offset: Offset(2, -2),
     child: Icon(TIcons.notification),

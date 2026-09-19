@@ -99,6 +99,38 @@ void main() {
     expect(tester.getRect(find.text('99+')).right, lessThanOrEqualTo(220));
   });
 
+  testWidgets('隐藏零值徽标不占用标题空间', (tester) async {
+    tester.view.physicalSize = const Size(220, 400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    const label = '这是一个用于比较可用宽度的长标题内容';
+    await tester.pumpWidget(
+      wrap(
+        const TActionSheetList(
+          align: TActionSheetAlign.left,
+          showCancel: false,
+          items: [
+            TActionSheetItem(
+              value: 1,
+              label: label,
+              badge: TBadgeConfig(label: '0', showZero: false),
+            ),
+            TActionSheetItem(value: 2, label: label),
+          ],
+        ),
+      ),
+    );
+
+    final labels = find.widgetWithText(TText, label);
+    expect(labels, findsNWidgets(2));
+    expect(
+      tester.getSize(labels.at(0)).width,
+      tester.getSize(labels.at(1)).width,
+    );
+  });
+
   testWidgets('列表图标尺寸来自 Theme 而不是文本字号', (tester) async {
     await tester.pumpWidget(
       wrap(

@@ -5,6 +5,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
+import '../badge/t_badge_internal.dart';
 import '../text/t_text.dart';
 import 't_sidebar_theme_data.dart';
 
@@ -138,7 +139,7 @@ class TWrapSideBarItem extends StatelessWidget {
                   padding: const EdgeInsetsDirectional.only(end: 12),
                   child: Align(
                     alignment: AlignmentDirectional.centerStart,
-                    child: TBadge.fromConfig(config: badge!, child: label),
+                    child: TBadgeFromConfig(config: badge!, child: label),
                   ),
                 ),
         ),
