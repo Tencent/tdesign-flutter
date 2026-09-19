@@ -67,5 +67,9 @@ const actionSheetDemoPageTestSpec = DemoPageTestSpec(
     'assets/img/action_sheet_jacky.png',
     'assets/img/action_sheet_eric.png',
     'assets/img/action_sheet_johnson.png',
+    'assets/img/t_action_sheet_1.png',
+    'assets/img/t_action_sheet_2.png',
+    'assets/img/t_action_sheet_3.png',
+    'assets/img/t_action_sheet_4.png',
   ],
 );

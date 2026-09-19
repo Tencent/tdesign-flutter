@@ -49,15 +49,15 @@ class TActionSheetPage extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             ),
             ExampleItem(
+              builder: _badgeGrid,
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            ),
+            ExampleItem(
               builder: _scrollGrid,
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             ),
             ExampleItem(
               builder: _descriptionScrollGrid,
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            ),
-            ExampleItem(
-              builder: _badgeGrid,
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             ),
           ],
@@ -238,23 +238,51 @@ class TActionSheetPage extends StatelessWidget {
     ..._iconGridItems(),
   ];
 
-  List<TActionSheetItem<String>> _badgeGridItems() {
-    final items = _gridItems();
-    return List.generate(items.length, (index) {
-      final item = items[index];
-      return TActionSheetItem(
-        value: item.value,
-        label: item.label,
-        icon: item.icon,
-        badge: switch (index) {
-          0 => const TBadgeConfig(label: 'NEW'),
-          5 => const TBadgeConfig(variant: TBadgeVariant.dot),
-          6 => const TBadgeConfig(label: '8'),
-          _ => null,
-        },
-      );
-    });
-  }
+  List<TActionSheetItem<String>> _badgeGridItems() => [
+    TActionSheetItem(
+      value: 'wechat',
+      label: '微信',
+      icon: _assetGridIcon('assets/img/t_action_sheet_1.png'),
+      badge: const TBadgeConfig(label: 'NEW'),
+    ),
+    TActionSheetItem(
+      value: 'moments',
+      label: '朋友圈',
+      icon: _assetGridIcon('assets/img/t_action_sheet_2.png'),
+    ),
+    TActionSheetItem(
+      value: 'qq',
+      label: 'QQ',
+      icon: _assetGridIcon('assets/img/t_action_sheet_3.png'),
+    ),
+    TActionSheetItem(
+      value: 'wecom',
+      label: '企业微信',
+      icon: _assetGridIcon('assets/img/t_action_sheet_4.png'),
+    ),
+    TActionSheetItem(
+      value: 'favorite',
+      label: '收藏',
+      icon: _iconGridIcon(TIcons.star),
+      badge: const TBadgeConfig(variant: TBadgeVariant.dot),
+    ),
+    TActionSheetItem(
+      value: 'refresh',
+      label: '刷新',
+      icon: _iconGridIcon(TIcons.refresh),
+    ),
+    TActionSheetItem(
+      value: 'download',
+      label: '下载',
+      icon: _iconGridIcon(TIcons.download),
+      badge: const TBadgeConfig(label: '8'),
+    ),
+    TActionSheetItem(
+      value: 'copy',
+      label: '复制',
+      icon: _iconGridIcon(TIcons.queue),
+    ),
+  ];
 
   List<TActionSheetItem<String>> _scrollGridItems() => [
     ..._appGridItems(),

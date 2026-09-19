@@ -164,7 +164,7 @@ void main() {
     expect(find.text('单元测试'), findsNothing);
   });
 
-  testWidgets('触发按钮按 Figma 使用 16dp 边距和 8dp 间距连续排列', (tester) async {
+  testWidgets('触发按钮按 Figma 顺序使用 16dp 边距和 8dp 间距连续排列', (tester) async {
     tester.view.physicalSize = const Size(375, 1400);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -172,12 +172,21 @@ void main() {
     await tester.pumpWidget(buildPage());
     await tester.pump();
 
-    final triggers = [
-      find.widgetWithText(TButton, '常规列表型'),
-      find.widgetWithText(TButton, '带描述列表型'),
-      find.widgetWithText(TButton, '带图标列表型'),
-      find.widgetWithText(TButton, '带徽标列表型'),
+    const labels = [
+      '常规列表型',
+      '带描述列表型',
+      '带图标列表型',
+      '带徽标列表型',
+      '常规宫格型',
+      '带描述宫格型',
+      '带翻页宫格型',
+      '带徽标宫格型',
+      '多行滚动宫格型',
+      '带描述多行滚动宫格型',
     ];
+    final triggers = labels
+        .map((label) => find.widgetWithText(TButton, label))
+        .toList();
     final rects = triggers.map(tester.getRect).toList();
     for (final rect in rects) {
       expect(rect.left, 16);
@@ -185,7 +194,12 @@ void main() {
       expect(rect.height, 48);
     }
     for (var index = 1; index < rects.length; index++) {
-      expect(rects[index].top - rects[index - 1].bottom, 8);
+      final gap = rects[index].top - rects[index - 1].bottom;
+      if (index == 4) {
+        expect(gap, greaterThan(8));
+      } else {
+        expect(gap, 8);
+      }
     }
   });
 
@@ -418,11 +432,16 @@ void main() {
     );
 
     expect(find.byType(TBadge), findsNWidgets(3));
-    expect(badgeFor('WeChat').label, 'NEW');
-    expect(badgeFor('WeChat').variant, TBadgeVariant.circle);
-    expect(badgeFor('Collect').variant, TBadgeVariant.dot);
-    expect(badgeFor('Download').label, '8');
-    expect(badgeFor('Download').variant, TBadgeVariant.circle);
+    const labels = ['微信', '朋友圈', 'QQ', '企业微信', '收藏', '刷新', '下载', '复制'];
+    for (final label in labels) {
+      expect(find.text(label), findsOneWidget);
+    }
+    expect(badgeFor('微信').label, 'NEW');
+    expect(badgeFor('微信').variant, TBadgeVariant.circle);
+    expect(badgeFor('收藏').variant, TBadgeVariant.dot);
+    expect(badgeFor('下载').label, '8');
+    expect(badgeFor('下载').variant, TBadgeVariant.circle);
+    expect(find.byIcon(TIcons.queue), findsOneWidget);
     expect(find.text('99+'), findsNothing);
     expect(tester.takeException(), isNull);
   });
