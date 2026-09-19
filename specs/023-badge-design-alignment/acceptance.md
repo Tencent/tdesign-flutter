@@ -36,6 +36,15 @@
 - Golden 固定在 Flutter 3.32.0；latest 只验证行为与 analyze，避免把 SDK 字体栅格差异误判为视觉变更。
 - 未在 iOS 真机逐像素截图；跨平台风险由逻辑像素、Theme/Token、RTL、三档字体缩放与双 SDK 测试约束。
 
+## 2026-09-19 RTL 与组合组件定位复验
+
+- 默认锚点收敛为逻辑右上角 `AlignmentDirectional.topEnd`；RTL 下自动落在物理左上角，显式 `Alignment.topLeft/topRight` 保持物理语义。
+- 显式 `Offset` 保持 Flutter 物理坐标语义；TabBar、ActionSheet 提供的默认偏移根据最终生效的 alignment 转换，不再只按文本方向盲目镜像。
+- TabBar 测试直接断言徽标与标题的实际渲染中心关系，并覆盖实例 alignment、局部 `BadgeTheme` alignment 及 RTL；Badge 测试新增主题插值后的实际描边渲染断言。
+- Flutter 3.32.0 与 3.47.0 下 Badge、TabBar 及 ActionSheet 受影响测试共 143 项通过，组件包严格 analyze 均为 0 issues。
+- Flutter 3.32.0 覆盖率：Badge `283/289 = 97.92%`，TabBar `510/521 = 97.89%`；Badge API 生成文档与源码注释一致。
+- 本轮只补齐 RTL 和主题行为契约，LTR 设计稿对应的渲染默认值未改变，因此未更新既有 Linux Golden。
+
 ## 2026-09-11 右上角位置复验
 
 - Figma 与 Android 真机对比确认普通右上角文字徽标位置偏低；实现校正 Material 的方向性水平位置，并抵消框架额外追加的 8px 纵向兼容补偿，使最终中心点向上 4 逻辑像素并与内容右上角对齐。

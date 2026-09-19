@@ -6,6 +6,9 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
+import '../badge/t_badge.dart';
+import '../badge/t_badge_internal.dart';
+import '../badge/t_badge_layout.dart';
 import '../text/t_text.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_theme_data.dart';
@@ -72,28 +75,7 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 if (item.icon != null) ...[
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      IconTheme(
-                        data: IconThemeData(color: iconColor, size: iconSize),
-                        child: SizedBox(
-                          width: iconExtent,
-                          height: iconExtent,
-                          child: Center(child: item.icon!),
-                        ),
-                      ),
-                      if (item.badge != null)
-                        Positioned(
-                          right: 0,
-                          top: 0,
-                          child: FractionalTranslation(
-                            translation: const Offset(0.5, -0.5),
-                            child: item.badge!,
-                          ),
-                        ),
-                    ],
-                  ),
+                  _buildIcon(context, iconColor, iconSize, iconExtent),
                   SizedBox(height: context.tTheme.spacer8),
                 ],
                 TText(
@@ -118,15 +100,52 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
       child: Opacity(opacity: 0.4, child: content),
     );
   }
+
+  Widget _buildIcon(
+    BuildContext context,
+    Color iconColor,
+    double iconSize,
+    double iconExtent,
+  ) {
+    final icon = IconTheme(
+      data: IconThemeData(color: iconColor, size: iconSize),
+      child: SizedBox(
+        width: iconExtent,
+        height: iconExtent,
+        child: Center(child: item.icon!),
+      ),
+    );
+    final badge = item.badge;
+    return badge == null
+        ? icon
+        : TBadgeFromConfig(
+            config: badge,
+            child: icon,
+            fallbackAlignment: AlignmentDirectional.topEnd,
+            fallbackOffset: resolveBadgeFallbackOffset(
+              context,
+              const Offset(-2, -1),
+              alignment: badge.alignment,
+              fallbackAlignment: AlignmentDirectional.topEnd,
+            ),
+          );
+  }
 }
 
 /// 获取主轴对齐方式
-MainAxisAlignment getMainAxisAlignment(TActionSheetAlign align) {
+MainAxisAlignment getMainAxisAlignment(
+  TActionSheetAlign align, [
+  TextDirection textDirection = TextDirection.ltr,
+]) {
   switch (align) {
     case TActionSheetAlign.left:
-      return MainAxisAlignment.start;
+      return textDirection == TextDirection.ltr
+          ? MainAxisAlignment.start
+          : MainAxisAlignment.end;
     case TActionSheetAlign.right:
-      return MainAxisAlignment.end;
+      return textDirection == TextDirection.ltr
+          ? MainAxisAlignment.end
+          : MainAxisAlignment.start;
     case TActionSheetAlign.center:
       return MainAxisAlignment.center;
   }

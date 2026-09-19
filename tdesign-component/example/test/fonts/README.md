@@ -90,6 +90,12 @@ SHA-256 为 `59c5bebba9bf720005fb977a94b9c150b0b8e8c2698c1dca3a66d9f0d7cd9722`�
 或既有共享字体的像素基线，子集 SHA-256 为
 `f7a30185d3942c4cb698afb1e74002cc16eaddfcf70ae1ec0774f16e61f9392f`。
 
+`BadgeGoldenCJK-Regular.otf` 仅补充 Badge 整页 Golden 所需字形，字符清单见
+`badge_demo_glyphs.txt`。它作为 Badge Demo 最后的专用 fallback，不改变其他页面
+或既有共享字体的像素基线；上游使用本文记录的 Noto Sans SC 2.004，子集工具为
+HarfBuzz 11.4.5，子集 SHA-256 为
+`0c7933246c76faff195e871bde8f83fb04e488d867efde542fa111bbaff7d88e`。
+
 `TabBarGoldenCJK-Regular.otf` 仅用于 TabBar 整页明暗 Golden，字符清单见
 `tab_bar_demo_glyphs.txt`。它在 Android 真机热重启、逐项操作及 Figma 人工核对
 完成后才生成，不改变其他页面的字体回退和既有快照。
@@ -175,6 +181,7 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 更新 Progress 页面文案时，更新 Progress 字符清单。
 更新 Swiper 页面文案时，更新 Swiper 字符清单。
 更新 Avatar 页面文案时，更新 Avatar 字符清单。
+更新 Badge 页面文案时，更新 Badge 字符清单。
 更新 Navbar 页面文案时，更新 Navbar 字符清单。
 更新 Image 页面文案时，更新 Image 字符清单。
 更新 Rate 页面文案时，更新 Rate 字符清单。

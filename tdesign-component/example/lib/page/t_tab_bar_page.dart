@@ -187,16 +187,10 @@ class _TTabBarPageState extends State<TTabBarPage> {
     const labels = ['首页', '应用', '聊天', '我的'];
     const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
     const badges = [
-      TBadge(label: '16'),
-      TBadge(variant: TBadgeVariant.dot),
-      TBadge(label: 'New'),
-      TBadge(label: '···'),
-    ];
-    const textBadges = [
-      TBadge(label: '16', offset: Offset(16, -8)),
-      TBadge(variant: TBadgeVariant.dot, offset: Offset(16, -8)),
-      TBadge(label: 'New', offset: Offset(16, -8)),
-      TBadge(label: '···', offset: Offset(16, -8)),
+      TBadgeConfig(label: '16'),
+      TBadgeConfig(variant: TBadgeVariant.dot),
+      TBadgeConfig(label: 'New'),
+      TBadgeConfig(label: '···'),
     ];
     return Column(
       children: [
@@ -209,10 +203,8 @@ class _TTabBarPageState extends State<TTabBarPage> {
           onChanged: (value) => setState(() => _weakValues[0] = value),
           navigationTabs: List.generate(
             4,
-            (index) => TTabBarItemConfig(
-              tabText: labels[index],
-              badge: textBadges[index],
-            ),
+            (index) =>
+                TTabBarItemConfig(tabText: labels[index], badge: badges[index]),
           ),
         ),
         const SizedBox(height: 16),

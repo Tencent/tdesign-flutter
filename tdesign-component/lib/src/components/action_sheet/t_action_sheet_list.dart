@@ -7,6 +7,10 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
+import '../badge/t_badge.dart';
+import '../badge/t_badge_internal.dart';
+import '../badge/t_badge_layout.dart';
+import '../badge/t_badge_resolved_style.dart';
 import '../text/t_text.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_item_widget.dart';
@@ -146,7 +150,10 @@ class TActionSheetList<T> extends StatelessWidget {
         ),
       ),
       child: Row(
-        mainAxisAlignment: getMainAxisAlignment(align),
+        mainAxisAlignment: getMainAxisAlignment(
+          align,
+          Directionality.of(context),
+        ),
         children: [
           Flexible(
             child: TText(
@@ -206,7 +213,10 @@ class TActionSheetList<T> extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
-                    mainAxisAlignment: getMainAxisAlignment(align),
+                    mainAxisAlignment: getMainAxisAlignment(
+                      align,
+                      Directionality.of(context),
+                    ),
                     children: [
                       if (item.icon != null) ...[
                         IconTheme(
@@ -225,46 +235,16 @@ class TActionSheetList<T> extends StatelessWidget {
                         ),
                         SizedBox(width: context.tTheme.spacer8),
                       ],
-                      Flexible(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Flexible(
-                              child: TText(
-                                item.label,
-                                font: context.tTheme.fontBodyLarge,
-                                textColor: item.disabled
-                                    ? context
-                                          .tTheme
-                                          .textDisabledColor // 禁用状态下的文本颜色
-                                    : context
-                                          .tTheme
-                                          .textColorPrimary, // 正常状态下的文本颜色
-                                style: item.textStyle,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            if (item.badge != null)
-                              Align(
-                                alignment: Alignment.topLeft,
-                                widthFactor: 0.5,
-                                heightFactor: 0.5,
-                                child: FractionalTranslation(
-                                  translation: const Offset(-0.5, -0.5),
-                                  child: item.badge!,
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
+                      Flexible(child: _buildLabel(context, item)),
                     ],
                   ),
                   if (item.subtitle != null && item.subtitle!.isNotEmpty) ...[
                     SizedBox(height: context.tTheme.spacer4),
                     Row(
-                      mainAxisAlignment: getMainAxisAlignment(align),
+                      mainAxisAlignment: getMainAxisAlignment(
+                        align,
+                        Directionality.of(context),
+                      ),
                       children: [
                         Flexible(
                           child: TText(
@@ -286,6 +266,129 @@ class TActionSheetList<T> extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildLabel(BuildContext context, TActionSheetItem<T> item) {
+    final label = TText(
+      item.label,
+      font: context.tTheme.fontBodyLarge,
+      textColor: item.disabled
+          ? context.tTheme.textDisabledColor
+          : context.tTheme.textColorPrimary,
+      style: item.textStyle,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
+    final badge = item.badge;
+    if (badge == null) {
+      return label;
+    }
+    final offset = _badgeOffset(context, badge);
+    final badgeLabel = TBadgeFromConfig(
+      config: badge,
+      child: label,
+      fallbackAlignment: AlignmentDirectional.topEnd,
+      fallbackOffset: offset,
+    );
+    final overflow = _badgeHorizontalOverflow(context, badge, offset);
+    if (overflow == 0) {
+      return badgeLabel;
+    }
+    return Padding(
+      padding: switch (align) {
+        TActionSheetAlign.center => EdgeInsets.symmetric(horizontal: overflow),
+        TActionSheetAlign.left ||
+        TActionSheetAlign.right => EdgeInsetsDirectional.only(end: overflow),
+      },
+      child: badgeLabel,
+    );
+  }
+
+  double _badgeHorizontalOverflow(
+    BuildContext context,
+    TBadgeConfig badge,
+    Offset fallbackOffset,
+  ) {
+    if (badge.isCustom || _isCornerBadge(badge.variant)) {
+      return 0;
+    }
+    if (badge.variant != TBadgeVariant.dot &&
+        (badge.label == null || (!badge.showZero && badge.label == '0'))) {
+      return 0;
+    }
+    final style = TBadgeResolvedStyle.resolve(
+      context,
+      large: badge.size == TBadgeSize.large,
+      alignment: badge.alignment,
+      offset: badge.offset,
+      fallbackAlignment: AlignmentDirectional.topEnd,
+      fallbackOffset: fallbackOffset,
+    );
+    final textDirection = Directionality.of(context);
+    if (style.alignment.resolve(textDirection) !=
+        AlignmentDirectional.topEnd.resolve(textDirection)) {
+      return 0;
+    }
+    final width = badge.variant == TBadgeVariant.dot
+        ? style.smallSize
+        : badge.label == null
+        ? 0
+        : style.measureLabel(context, badge.label!).width;
+    if (width == 0) {
+      return 0;
+    }
+    final outwardOffset = textDirection == TextDirection.ltr
+        ? style.offset.dx
+        : -style.offset.dx;
+    return math.max(0, width / 2 + outwardOffset);
+  }
+
+  Offset _badgeOffset(BuildContext context, TBadgeConfig badge) {
+    final ltrOffset = _ltrBadgeOffset(context, badge);
+    return resolveBadgeFallbackOffset(
+      context,
+      ltrOffset,
+      alignment: badge.alignment,
+      fallbackAlignment: AlignmentDirectional.topEnd,
+    );
+  }
+
+  Offset _ltrBadgeOffset(BuildContext context, TBadgeConfig badge) {
+    if (badge.isCustom) {
+      return Offset.zero;
+    }
+    if (badge.variant == TBadgeVariant.dot) {
+      return const Offset(2, 0);
+    }
+    if (badge.variant != TBadgeVariant.circle || badge.label == null) {
+      return Offset.zero;
+    }
+    if (isSingleBadgeCharacter(badge.label!) &&
+        badge.size == TBadgeSize.medium) {
+      return const Offset(6, 4);
+    }
+    final badgeSize = _badgeSize(context, badge);
+    final horizontalInset = badge.size == TBadgeSize.medium ? 6.0 : 2.0;
+    return Offset(
+      badgeSize.width / 2 - horizontalInset,
+      badgeSize.height / 2 - 4,
+    );
+  }
+
+  Size _badgeSize(BuildContext context, TBadgeConfig badge) {
+    final style = TBadgeResolvedStyle.resolve(
+      context,
+      large: badge.size == TBadgeSize.large,
+    );
+    return style.measureLabel(context, badge.label ?? '');
+  }
+
+  bool _isCornerBadge(TBadgeVariant variant) => switch (variant) {
+    TBadgeVariant.ribbonLeft ||
+    TBadgeVariant.ribbonRight ||
+    TBadgeVariant.triangleLeft ||
+    TBadgeVariant.triangleRight => true,
+    _ => false,
+  };
 
   /// 构建取消按钮
   Widget _buildCancelButton(BuildContext context) {

@@ -33,7 +33,7 @@ class TSideBarPageState extends State<TSideBarPage> {
     return ExamplePage(
       title: tTitle(),
       exampleCodeGroup: 'sideBar',
-      desc: '用于信息分类后的展示切换或锚点，位于页面左侧。',
+      desc: '用于内容分类后的展示切换。',
       compactDemo: true,
       showTestModule: false,
       children: [
@@ -47,7 +47,7 @@ class TSideBarPageState extends State<TSideBarPage> {
               builder: _buildNavigatorSideBar,
             ),
             ExampleItem(
-              desc: '图标侧边导航',
+              desc: '带图标侧边导航',
               padding: const EdgeInsets.symmetric(horizontal: 16),
               builder: _buildIconSideBar,
               // 图标示例复用锚点页面的真实组件实现；这里不能指向仅负责跳转的按钮方法。
@@ -94,6 +94,11 @@ class TSideBarPageState extends State<TSideBarPage> {
   Widget _buildStyleSideBar(BuildContext context) {
     return Column(
       children: [
+        CodeWrapper(
+          builder: (_) => getCustomButton(context, '非通栏选项样式', 'SideBarAnchor'),
+          methodName: '_buildAnchorSideBar',
+        ),
+        const SizedBox(height: 16),
         CodeWrapper(
           builder: (_) => getCustomButton(context, '自定义样式', 'SideBarCustom'),
           methodName: '_buildCustomSideBar',

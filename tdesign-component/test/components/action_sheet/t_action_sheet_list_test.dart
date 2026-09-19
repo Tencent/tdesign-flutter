@@ -34,7 +34,7 @@ void main() {
               label: '带图标',
               icon: Icon(Icons.star),
               subtitle: '副标题内容',
-              badge: TBadge(label: '1'),
+              badge: TBadgeConfig(label: '1'),
             ),
             TActionSheetItem(value: 2, label: '普通项'),
           ],
@@ -54,7 +54,9 @@ void main() {
             TActionSheetItem(
               value: 1,
               label: '带徽标',
-              badge: SizedBox(key: badgeKey, width: 12, height: 6),
+              badge: TBadgeConfig.custom(
+                badge: SizedBox(key: badgeKey, width: 12, height: 6),
+              ),
             ),
           ],
         ),
@@ -64,6 +66,109 @@ void main() {
     final title = find.widgetWithText(TText, '带徽标');
     final badge = find.byKey(badgeKey);
     expect(tester.getCenter(badge), tester.getTopRight(title));
+  });
+
+  testWidgets('RTL 下列表徽标默认位置跟随逻辑尾端', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        const Directionality(
+          textDirection: TextDirection.rtl,
+          child: TActionSheetList(
+            showCancel: false,
+            items: [
+              TActionSheetItem(
+                value: 1,
+                label: '带徽标',
+                badge: TBadgeConfig(label: '9'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    final title = find.widgetWithText(TText, '带徽标');
+    expect(
+      tester.getCenter(find.text('9')),
+      tester.getTopLeft(title) + const Offset(-6, 4),
+    );
+  });
+
+  testWidgets('RTL 下物理 alignment 决定组件默认偏移方向', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        const Directionality(
+          textDirection: TextDirection.rtl,
+          child: TActionSheetList(
+            showCancel: false,
+            items: [
+              TActionSheetItem(
+                value: 1,
+                label: '物理右上角',
+                badge: TBadgeConfig(label: '9', alignment: Alignment.topRight),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    final title = find.widgetWithText(TText, '物理右上角');
+    expect(
+      tester.getCenter(find.text('9')),
+      tester.getTopRight(title) + const Offset(6, 4),
+    );
+  });
+
+  testWidgets('left 和 right 在 RTL 下保持物理方向', (tester) async {
+    Widget list(TActionSheetAlign align) => Directionality(
+      textDirection: TextDirection.rtl,
+      child: TActionSheetList(
+        align: align,
+        subtitle: '面板说明',
+        showCancel: false,
+        items: const [TActionSheetItem(value: 1, label: '操作项')],
+      ),
+    );
+
+    await tester.pumpWidget(wrap(list(TActionSheetAlign.left)));
+    expect(
+      tester.getRect(find.widgetWithText(TText, '面板说明')).left,
+      closeTo(16, 0.01),
+    );
+    expect(
+      tester.getRect(find.widgetWithText(TText, '操作项')).left,
+      closeTo(16, 0.01),
+    );
+
+    await tester.pumpWidget(wrap(list(TActionSheetAlign.right)));
+    final description = find.widgetWithText(TText, '面板说明');
+    final item = find.widgetWithText(TText, '操作项');
+    expect(tester.getRect(description).right, closeTo(784, 0.01));
+    expect(tester.getRect(item).right, closeTo(784, 0.01));
+  });
+
+  testWidgets('组合字符使用单字符徽标默认位置', (tester) async {
+    await tester.pumpWidget(
+      wrap(
+        const TActionSheetList(
+          showCancel: false,
+          items: [
+            TActionSheetItem(
+              value: 1,
+              label: '组合字符',
+              badge: TBadgeConfig(label: 'e\u0301'),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    final title = find.widgetWithText(TText, '组合字符');
+    expect(
+      tester.getCenter(find.text('e\u0301')),
+      tester.getTopRight(title) + const Offset(6, 4),
+    );
   });
 
   testWidgets('窄屏带图标长标题和徽标不溢出', (tester) async {
@@ -82,7 +187,7 @@ void main() {
               value: 1,
               label: label,
               icon: Icon(Icons.star),
-              badge: TBadge(label: '99+'),
+              badge: TBadgeConfig(label: '99+'),
             ),
           ],
         ),
@@ -91,12 +196,42 @@ void main() {
 
     expect(tester.takeException(), isNull);
     final titleFinder = find.widgetWithText(TText, label);
-    final badgeFinder = find.byType(TBadge);
     final title = tester.widget<TText>(titleFinder);
     expect(title.maxLines, 1);
     expect(title.overflow, TextOverflow.ellipsis);
-    expect(tester.getCenter(badgeFinder), tester.getTopRight(titleFinder));
-    expect(tester.getRect(badgeFinder).right, lessThanOrEqualTo(220));
+    expect(tester.getRect(find.text('99+')).right, lessThanOrEqualTo(220));
+  });
+
+  testWidgets('隐藏零值徽标不占用标题空间', (tester) async {
+    tester.view.physicalSize = const Size(220, 400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    const label = '这是一个用于比较可用宽度的长标题内容';
+    await tester.pumpWidget(
+      wrap(
+        const TActionSheetList(
+          align: TActionSheetAlign.left,
+          showCancel: false,
+          items: [
+            TActionSheetItem(
+              value: 1,
+              label: label,
+              badge: TBadgeConfig(label: '0', showZero: false),
+            ),
+            TActionSheetItem(value: 2, label: label),
+          ],
+        ),
+      ),
+    );
+
+    final labels = find.widgetWithText(TText, label);
+    expect(labels, findsNWidgets(2));
+    expect(
+      tester.getSize(labels.at(0)).width,
+      tester.getSize(labels.at(1)).width,
+    );
   });
 
   testWidgets('列表图标尺寸来自 Theme 而不是文本字号', (tester) async {

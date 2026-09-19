@@ -50,8 +50,8 @@ class TSideBarPaginationPageState extends State<TSideBarPaginationPage> {
         value: index,
         disabled: index == 4,
         badge: switch (index) {
-          1 => const TBadge(variant: TBadgeVariant.dot),
-          2 => const TBadge(label: '8'),
+          1 => const TBadgeConfig(variant: TBadgeVariant.dot),
+          2 => const TBadgeConfig(label: '8'),
           _ => null,
         },
       ),

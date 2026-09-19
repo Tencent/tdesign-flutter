@@ -3,52 +3,33 @@
     return Row(
       // spacing: 32,
       children: [
-        const SizedBox(
-          child: Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.bottomLeft,
-            children: [
-              TAvatar(
-                size: TAvatarSize.medium,
-                image: AssetImage('assets/img/t_avatar_1.png'),
-              ),
-              Positioned(
-                right: -4,
-                top: -4,
-                child: BadgeTheme(
-                  data: BadgeThemeData(smallSize: 10),
-                  child: TBadge(variant: TBadgeVariant.dot),
-                ),
-              ),
-            ],
+        const BadgeTheme(
+          data: BadgeThemeData(smallSize: 10),
+          child: TBadge(
+            variant: TBadgeVariant.dot,
+            offset: Offset(-1, 2),
+            child: TAvatar(
+              size: TAvatarSize.medium,
+              image: AssetImage('assets/img/t_avatar_1.png'),
+            ),
           ),
         ),
         const SizedBox(width: 32),
-        SizedBox(
-          child: Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.bottomLeft,
-            children: [
-              TAvatar(
-                size: TAvatarSize.medium,
-                backgroundColor: context.tTheme.brandNormalColor,
-                foregroundColor: context.tTheme.whiteColor1,
-                child: const Text('A'),
-              ),
-              const Positioned(child: TBadge(label: '8'), right: -4, top: -4),
-            ],
+        TBadge(
+          label: '8',
+          offset: const Offset(-5, 6),
+          child: TAvatar(
+            size: TAvatarSize.medium,
+            backgroundColor: context.tTheme.brandNormalColor,
+            foregroundColor: context.tTheme.whiteColor1,
+            child: const Text('A'),
           ),
         ),
         const SizedBox(width: 32),
-        const SizedBox(
-          child: Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.bottomLeft,
-            children: [
-              TAvatar(size: TAvatarSize.medium),
-              Positioned(child: TBadge(label: '12'), right: -4, top: -4),
-            ],
-          ),
+        const TBadge(
+          label: '12',
+          offset: Offset(-5, 6),
+          child: TAvatar(size: TAvatarSize.medium),
         ),
       ],
     );

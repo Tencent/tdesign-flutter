@@ -26,7 +26,7 @@ class _SideBarItemData {
   final bool? disabled;
   final IconData? icon;
   final String? label;
-  final TBadge? badge;
+  final TBadgeConfig? badge;
   final TextStyle? textStyle;
 }
 

@@ -64,11 +64,11 @@ const sidebarDemoPageTestSpec = DemoPageTestSpec(
   title: 'SideBar 侧边栏',
   page: TSideBarPage(),
   componentType: TButton,
-  expectedComponentCount: 4,
+  expectedComponentCount: 5,
   supplementalCjkFontFamily: 'TDesign SideBar Golden CJK',
   supplementalCjkFontPath: 'test/fonts/SideBarGoldenCJK-Regular.otf',
   expectedTexts: [
-    '用于信息分类后的展示切换或锚点，位于页面左侧。',
+    '用于内容分类后的展示切换。',
     '01 组件类型',
     '侧边导航用法',
     '锚点用法',
@@ -76,6 +76,7 @@ const sidebarDemoPageTestSpec = DemoPageTestSpec(
     '带图标侧边导航',
     '02 组件样式',
     '侧边导航样式',
+    '非通栏选项样式',
     '自定义样式',
   ],
 );

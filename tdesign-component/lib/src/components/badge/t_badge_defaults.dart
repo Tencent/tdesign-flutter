@@ -6,4 +6,7 @@ abstract final class TBadgeDefaults {
   /// `spacer8`。后续建立正式的 Badge 组件 token 后，应将该默认值迁移到
   /// 对应 token，同时保留 `BadgeThemeData.smallSize` 的显式覆盖能力。
   static const dotSize = 8.0;
+
+  /// 描边的默认宽度，单位为逻辑像素。
+  static const borderWidth = 1.0;
 }

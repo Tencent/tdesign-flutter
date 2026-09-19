@@ -5,11 +5,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_base.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/base/notification_center.dart';
+import 'package:tdesign_flutter_example/page/sidebar/t_sidebar_page_anchor.dart';
 
 import 'demo_page_test_utils.dart';
 import 'sidebar_demo_test_spec.dart';
 
 void main() {
+  const entryLabels = ['锚点用法', '切页用法', '带图标侧边导航', '非通栏选项样式', '自定义样式'];
+
   registerDemoStructureTests(sidebarDemoPageTestSpec);
   registerDemoStructureTests(sidebarAnchorDemoTestSpec);
   registerDemoStructureTests(sidebarTagDemoTestSpec);
@@ -20,20 +23,17 @@ void main() {
     await pumpFullDemoPage(tester, sidebarDemoPageTestSpec, ThemeMode.light);
 
     final renderedEntries = <(String, double)>[];
-    for (final scene in sideBarDemoScenes) {
-      final button = find.widgetWithText(TButton, scene.label);
-      expect(button, findsOneWidget, reason: scene.id);
-      renderedEntries.add((scene.label, tester.getTopLeft(button).dy));
+    for (final label in entryLabels) {
+      final button = find.widgetWithText(TButton, label);
+      expect(button, findsOneWidget, reason: label);
+      renderedEntries.add((label, tester.getTopLeft(button).dy));
     }
-    expect(find.byType(TButton), findsNWidgets(sideBarDemoScenes.length));
+    expect(find.byType(TButton), findsNWidgets(entryLabels.length));
     renderedEntries.sort((left, right) => left.$2.compareTo(right.$2));
-    expect(
-      renderedEntries.map((entry) => entry.$1),
-      sideBarDemoScenes.map((scene) => scene.label),
-    );
+    expect(renderedEntries.map((entry) => entry.$1), entryLabels);
   });
 
-  testWidgets('四个公开入口都通过主页真实路由到达目标页', (tester) async {
+  testWidgets('四个组件场景入口都通过主页真实路由到达目标页', (tester) async {
     await pumpDemoPageAtPhoneViewport(
       tester,
       sidebarDemoPageTestSpec,
@@ -50,6 +50,13 @@ void main() {
       Navigator.of(tester.element(find.byType(scene.pageType))).pop();
       await tester.pumpAndSettle();
     }
+
+    final nonChannel = find.widgetWithText(TButton, '非通栏选项样式');
+    await tester.ensureVisible(nonChannel);
+    await tester.tap(nonChannel);
+    await tester.pumpAndSettle();
+    expect(find.byType(TSideBarAnchorPage), findsOneWidget);
+    expect(find.byType(TSideBar), findsOneWidget);
   });
 
   testWidgets('主页面跳转按钮沿用紧凑 Demo 的水平边距', (tester) async {
@@ -59,8 +66,7 @@ void main() {
       ThemeMode.light,
     );
 
-    for (final scene in sideBarDemoScenes) {
-      final label = scene.label;
+    for (final label in entryLabels) {
       final button = find.widgetWithText(TButton, label);
       await tester.ensureVisible(button);
       final rect = tester.getRect(button);

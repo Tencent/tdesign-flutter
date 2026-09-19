@@ -2,7 +2,8 @@ Widget _basicGrid(BuildContext context) => _trigger(
     label: '常规宫格型',
     onPressed: () => TActionSheet.showGrid(
       context,
-      items: _gridItems(context),
+      cancelText: 'Cancel',
+      items: _gridItems(),
       onSelected: (item) => _showSelection(context, item),
     ),
   );

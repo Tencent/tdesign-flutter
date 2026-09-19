@@ -46,8 +46,10 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
   默认项目宽度；仅滚动布局显式 `itemMinWidth` 可以扩大项目宽度并触发滚动。
 - `TActionSheetItem<T>` 只持有动作内容、状态与稳定业务值 `value`，不持有 `group`；
   选择动作只通过 `onSelected(item)` 回传，不暴露会随布局变化的全局索引。
-- `TActionSheetItem.badge` 是 Widget 槽位，不绑定具体 Badge 实现；列表徽标中心锚定
+- `TActionSheetItem.badge` 接收 `TBadgeConfig`，只描述徽标本体；列表徽标中心锚定
   标题右上角，宫格徽标中心锚定图标槽位右上角，不把徽标作为普通行内尾随内容。
+  配置、局部 Theme、全局 Theme 与 ActionSheet 场景默认位置按 Badge 统一优先级
+  解析，列表预留空间使用同一套字体、尺寸与 padding 数据。
   `textStyle` 只控制标题，不作为图标颜色的第二来源。宫格尾部空位由布局直接占位，不允许
   以 `item=null` 表达。需要标题与图标同色时，调用方分别设置 `textStyle` 与
   `Icon.color`，Demo 状态项不得依赖隐式联动。
@@ -56,7 +58,8 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
 - `TActionSheetThemeData` 只持有视觉默认值，不持有 `count`、`rows`、
   `itemMinWidth` 或默认对齐等布局行为。
 - `TActionSheetAlign` 只属于列表布局；宫格 Item 与面板副标题固定居中，
-  `showGrid` 不暴露不能控制 Item 对齐的 `align` 参数。
+  `showGrid` 不暴露不能控制 Item 对齐的 `align` 参数。枚举的 `left/right` 表示
+  物理左右，在 RTL 下不交换；标题、描述与徽标预留空间遵循同一物理对齐结果。
 - `TActionSheetThemeData.gridItemHeight` 只提供宫格 Item 的默认高度；
   列表项高度仍由列表视觉契约决定。
 - 默认、分页和滚动宫格统一复用 `TActionSheetItemWidget` 的 96dp 行高、40dp

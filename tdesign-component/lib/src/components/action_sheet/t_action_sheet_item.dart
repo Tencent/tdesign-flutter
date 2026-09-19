@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../badge/t_badge.dart';
 import 't_action_sheet_theme_data.dart';
 
 /// 动作面板项目
@@ -28,10 +29,13 @@ class TActionSheetItem<T> {
   /// 未显式设置尺寸或颜色的 [Icon] 会继承 [TActionSheetThemeData]。
   final Widget? icon;
 
-  /// 角标槽位。
+  /// 展示在项目内容上的徽标配置；为空时不显示。
   ///
-  /// 列表模式下跟随标题展示；宫格模式下仅在 [icon] 非空时展示在图标右上角。
-  final Widget? badge;
+  /// 列表模式下以标题为锚点；宫格模式下以 [icon] 为锚点，因此宫格模式仅在
+  /// [icon] 非空时展示。默认位置由 ActionSheet 管理，[TBadgeConfig.alignment]
+  /// 与 [TBadgeConfig.offset] 可逐项覆盖；完全自定义外观使用
+  /// [TBadgeConfig.custom]。
+  final TBadgeConfig? badge;
 
   /// 是否禁用
   final bool disabled;

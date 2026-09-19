@@ -108,6 +108,69 @@ final class TActionSheet {
     );
   }
 
+  /// 显示带标题分组的横向滚动宫格动作面板。
+  /// [context] 用于查找承载弹层的 Navigator。
+  /// [sections] 带标题的分组列表，每组独立横向滚动。
+  /// [cancelText] 取消按钮文字，为 null 时使用本地化文案。
+  /// [showCancel] 是否显示取消按钮。
+  /// [showOverlay] 是否显示蒙层。
+  /// [closeOnOverlayClick] 点击蒙层是否关闭。
+  /// [useSafeArea] 是否避让系统安全区。
+  /// [itemWidth] 横向列表单项宽度，默认为 80。
+  /// [itemHeight] 单项高度；为 null 时使用组件主题，最终回退为 96。
+  /// [onCancel] 点击取消时回调。
+  /// [onClosed] 面板关闭后回调。
+  /// [onSelected] 点击项目时回传原始项目。
+  static TPopupHandle showGridSections<T>(
+    BuildContext context, {
+    required List<TActionSheetGridSection<T>> sections,
+    String? cancelText,
+    bool showCancel = true,
+    bool showOverlay = true,
+    bool closeOnOverlayClick = true,
+    bool useSafeArea = true,
+    double itemWidth = 80,
+    double? itemHeight,
+    VoidCallback? onCancel,
+    VoidCallback? onClosed,
+    TActionSheetOnSelected<T>? onSelected,
+  }) {
+    assert(itemWidth > 0, 'itemWidth must be greater than 0');
+    final theme = Theme.of(context).extension<TActionSheetThemeData>();
+    final effectiveCancelText = cancelText ?? context.resource.cancel;
+    final effectiveItemHeight = itemHeight ?? theme?.gridItemHeight ?? 96;
+    final popupHeight = TActionSheetSectionGrid.preferredPopupHeight(
+      context,
+      sectionCount: sections.length,
+      itemHeight: effectiveItemHeight,
+      showCancel: showCancel,
+    );
+    return TPopup.show(
+      context,
+      options: TPopupOptions.bottom(
+        height: popupHeight,
+        overlay: TPopupOverlayConfig(
+          showOverlay: showOverlay,
+          closeOnClick: showOverlay && closeOnOverlayClick,
+          color: showOverlay ? theme?.barrierColor : Colors.transparent,
+        ),
+        radius: theme?.panelRadius,
+        useSafeArea: useSafeArea,
+        onClosed: onClosed,
+        child: TActionSheetSectionGrid<T>(
+          sections: sections,
+          cancelText: effectiveCancelText,
+          itemWidth: itemWidth,
+          itemHeight: effectiveItemHeight,
+          showCancel: showCancel,
+          onCancel: onCancel,
+          onSelected: onSelected,
+          useSafeArea: false,
+        ),
+      ),
+    );
+  }
+
   static TPopupHandle _show<T>(
     BuildContext context, {
     required _TActionSheetLayout layout,

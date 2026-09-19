@@ -1,7 +1,10 @@
 Widget _buildNumberButtonBadge(BuildContext context) => TBadge(
     label: '8',
     child: TButton(
-      size: TButtonSize.medium,
+      size: TButtonSize.large,
+      style: const ButtonStyle(
+        padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 24)),
+      ),
       onPressed: () {},
       child: const Text('按钮'),
     ),

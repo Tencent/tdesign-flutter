@@ -73,6 +73,11 @@ const componentTestManifests = <ComponentTestManifest>[
         workingDirectory: '.',
         testFiles: ['test/components/badge/t_badge_golden_test.dart'],
       ),
+      VisualTestManifest(
+        name: 'Badge Demo',
+        workingDirectory: 'example',
+        testFiles: ['test/badge_demo_golden_test.dart'],
+      ),
     ],
   ),
   ComponentTestManifest(

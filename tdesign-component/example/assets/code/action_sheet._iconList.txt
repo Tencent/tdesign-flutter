@@ -2,7 +2,7 @@ Widget _iconList(BuildContext context) => _trigger(
     label: '带图标列表型',
     onPressed: () => TActionSheet.showList(
       context,
-      cancelText: 'cancel',
+      cancelText: 'Cancel',
       items: _iconItems(),
       onSelected: (item) => _showSelection(context, item),
     ),

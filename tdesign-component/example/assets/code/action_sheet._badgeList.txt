@@ -2,7 +2,7 @@ Widget _badgeList(BuildContext context) => _trigger(
     label: '带徽标列表型',
     onPressed: () => TActionSheet.showList(
       context,
-      cancelText: 'cancel',
+      cancelText: 'Cancel',
       items: _badgeItems(),
       onSelected: (item) => _showSelection(context, item),
     ),

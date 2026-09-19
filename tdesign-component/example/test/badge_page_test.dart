@@ -35,10 +35,8 @@ void main() {
       '圆形徽标',
       '方形徽标',
       '气泡徽标',
-      '左侧带状角标',
-      '右侧带状角标',
-      '左侧三角角标',
-      '右侧三角角标',
+      '角标',
+      '三角角标',
     ]);
     expect(page.children[2].children.map((item) => item.desc), [
       'Large',
@@ -46,6 +44,13 @@ void main() {
     ]);
     expect(page.floatingActionButton, isNull);
     expect(page.showTestModule, isFalse);
+    expect(page.backgroundColor, const Color(0xFFF6F6F6));
+    expect(
+      page.children
+          .expand((module) => module.children)
+          .every((item) => !item.center),
+      isTrue,
+    );
   });
 
   testWidgets('设计稿形态、尺寸、偏移和按钮规格均进入公开 Demo', (tester) async {
@@ -75,36 +80,45 @@ void main() {
     expect(
       tester
           .widgetList<TButton>(find.byType(TButton))
-          .every((button) => button.size == TButtonSize.medium),
+          .every((button) => button.size == TButtonSize.large),
+      isTrue,
+    );
+    expect(tester.getSize(find.byType(TButton)), const Size(80, 48));
+    expect(
+      tester
+          .widgetList<TBadge>(find.byType(TBadge))
+          .every((badge) => badge.offset == const Offset(-1, 1)),
       isTrue,
     );
 
+    await pumpItem(0, 1);
+    expect(
+      tester
+          .widgetList<TBadge>(find.byType(TBadge))
+          .map((badge) => badge.label),
+      ['8', '8', '8'],
+    );
+    expect(tester.getSize(find.byType(TButton)), const Size(80, 48));
+
     await pumpItem(0, 2);
     final customBadge = tester.widget<TBadge>(find.byType(TBadge));
-    expect(customBadge.variant, TBadgeVariant.custom);
+    expect(customBadge.badge, isNotNull);
     expect(customBadge.offset, isNull);
     expect(
       tester.widget<TButton>(find.byType(TButton)).size,
       TButtonSize.large,
     );
-    final badgeContainer = find.descendant(
-      of: find.byType(Badge),
-      matching: find.byType(Container),
-    );
-    final badgeRect = tester.getRect(badgeContainer);
+    final badgeRect = tester.getRect(find.text('NEW'));
     final buttonRect = tester.getRect(find.byType(TButton));
     expect(buttonRect.size, const Size.square(48));
-    expect(badgeRect.left, buttonRect.right - 16);
-    expect(badgeRect.center.dy, buttonRect.top);
+    expect(badgeRect.center, buttonRect.topRight);
 
     for (final (itemIndex, variants) in [
-      (0, [TBadgeVariant.normal]),
+      (0, [TBadgeVariant.circle]),
       (1, [TBadgeVariant.square]),
       (2, [TBadgeVariant.bubble]),
-      (3, [TBadgeVariant.ribbonLeft]),
-      (4, [TBadgeVariant.ribbonRight]),
-      (5, [TBadgeVariant.triangleLeft]),
-      (6, [TBadgeVariant.triangleRight]),
+      (3, [TBadgeVariant.ribbonLeft, TBadgeVariant.ribbonRight]),
+      (4, [TBadgeVariant.triangleLeft, TBadgeVariant.triangleRight]),
     ]) {
       await pumpItem(1, itemIndex);
       expect(
@@ -113,11 +127,40 @@ void main() {
             .map((badge) => badge.variant),
         variants,
       );
+      if (itemIndex < 2) {
+        expect(
+          tester.widget<TBadge>(find.byType(TBadge)).offset,
+          const Offset(2, -2),
+        );
+      }
+      if (itemIndex == 2) {
+        expect(
+          tester.widget<TBadge>(find.byType(TBadge)).offset,
+          const Offset(8, 0),
+        );
+        expect(
+          tester.widget<TButton>(find.byType(TButton)).size,
+          TButtonSize.large,
+        );
+      }
+      if (itemIndex >= 3) {
+        expect(
+          tester
+              .widgetList<TBadge>(find.byType(TBadge))
+              .every((badge) => badge.size == TBadgeSize.large),
+          isTrue,
+        );
+        expect(find.byType(TCellGroup), findsOneWidget);
+      }
     }
 
     await pumpItem(2, 0);
-    expect(tester.widget<TBadge>(find.byType(TBadge)).size, TBadgeSize.large);
+    var badge = tester.widget<TBadge>(find.byType(TBadge));
+    expect(badge.size, TBadgeSize.large);
+    expect((badge.child! as TAvatar).image, isA<AssetImage>());
     await pumpItem(2, 1);
-    expect(tester.widget<TBadge>(find.byType(TBadge)).size, TBadgeSize.medium);
+    badge = tester.widget<TBadge>(find.byType(TBadge));
+    expect(badge.size, TBadgeSize.medium);
+    expect((badge.child! as TAvatar).image, isA<AssetImage>());
   });
 }

@@ -16,7 +16,7 @@ void main() {
       ThemeMode.light,
     );
 
-    expect(find.text('非通栏选项样式'), findsNothing);
+    expect(find.text('非通栏选项样式'), findsOneWidget);
     expect(find.text('延迟加载'), findsNothing);
     await tester.tap(find.text('锚点用法'));
     await tester.pumpAndSettle();

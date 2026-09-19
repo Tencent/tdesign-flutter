@@ -86,3 +86,17 @@
 ## 待完成
 
 - 独立 GitHub / CNB PR、Issue #1027 SideBar 条目关联及 CodeBuddy Review。
+
+## 2026-09-18 Badge child 契约补充
+
+- `TSideBarItem.badge` 的 dartdoc 明确标签由 SideBar 注入为锚点，调用方不得传
+  `TBadge.child`；组件构建边界新增 debug 断言，避免原先静默丢弃调用方 child。
+- 保留 `TSideBarItem` 和内部渲染项的 const 构造能力；Flutter 3.32 不允许 const
+  构造器 assert 读取另一个 Widget 的实例字段，因此校验位于运行构建边界。
+- SideBar API 文档由源码重新生成。Flutter 3.32.0 组件测试 67/67 通过；
+  Flutter 3.47.0 与 TabBar 合并执行 94/94 通过。两个 SDK 的组件包与 Example
+  严格 analyze 均零问题。
+- Flutter 3.32.0 聚焦覆盖率门禁通过：SideBar 生产代码 259/262，98.85%（门槛
+  95%）。
+- 本次只收紧无效组合并补文档，不改变合法 SideBar Badge 的默认视觉，因此未更新
+  SideBar Golden；远端 CI 与真机未执行。

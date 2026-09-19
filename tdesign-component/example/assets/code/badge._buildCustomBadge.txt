@@ -1,6 +1,16 @@
-Widget _buildCustomBadge(BuildContext context) => TBadge(
-    label: 'NEW',
-    variant: TBadgeVariant.custom,
+Widget _buildCustomBadge(BuildContext context) => TBadge.custom(
+    badge: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        color: context.tTheme.errorNormalColor,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: TText(
+        'NEW',
+        font: context.tTheme.fontMarkExtraSmall,
+        textColor: context.tTheme.textColorAnti,
+      ),
+    ),
     child: Theme(
       data: Theme.of(
         context,

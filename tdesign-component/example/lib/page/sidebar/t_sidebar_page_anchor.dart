@@ -154,8 +154,8 @@ class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
         value: index,
         icon: widget.withIcons ? TIcons.app : null,
         badge: switch (index) {
-          1 => const TBadge(variant: TBadgeVariant.dot),
-          2 => const TBadge(label: '8'),
+          1 => const TBadgeConfig(variant: TBadgeVariant.dot),
+          2 => const TBadgeConfig(label: '8'),
           _ => null,
         },
       ),
