@@ -2,15 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
-
-final dividerBaseExampleItem = ExampleItem(
-  key: const Key('divider-base-example'),
-  desc: '水平分割线',
-  center: false,
-  methodName: 'DividerBaseExample',
-  builder: (_) => const DividerBaseExample(),
-);
 
 @ExampleCode(group: 'divider')
 class DividerBaseExample extends StatelessWidget {

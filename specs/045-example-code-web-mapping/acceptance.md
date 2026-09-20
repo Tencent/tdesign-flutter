@@ -40,7 +40,7 @@
 - [x] 缺失或非法映射会阻止映射测试或站点构建
 - [x] 旧结构阶段的 60 个语义入口、141 个模块文件和辅助 example 归属均已通过脚本检查并抽查
 - [ ] ExampleModule 分组已合并到 60 个页面入口，纯分组模块文件全部移除
-- [ ] 全部公开 ExampleItem 均有独立语义文件，运行页面与代码面板引用同一 Widget
+- [ ] 全部公开 ExampleItem 配置均位于页面入口，其引用的 Widget 均有独立语义文件，运行页面与代码面板引用同一 Widget
 - [ ] 每份代码包含所需 imports、数据、状态、回调、helper、Controller 和生命周期，可在最小宿主中解析或编译
 - [ ] Web 展示顺序与 ExampleModule / ExampleItem 顺序一致，且不混入测试专用或未注册片段
 

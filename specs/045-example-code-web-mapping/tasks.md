@@ -5,7 +5,7 @@
 - [x] DONE 迁移全部组件、基础入口和辅助 example 到所属目录
 - [x] DONE 历史阶段将 141 个 ExampleModule 拆为语义模块文件
 - [ ] TODO 将 ExampleModule 分组和 ExampleItem 顺序合并回页面入口，删除纯分组模块文件
-- [ ] TODO 将全部公开 ExampleItem 拆为独立语义 example 文件
+- [ ] TODO 将全部公开 ExampleItem 引用的 Widget 拆为独立语义 example 文件，ExampleItem 配置保留在页面入口
 - [ ] TODO 将页面级字段、Controller、helper 和生命周期迁入对应 example Widget/State
 - [ ] TODO 将全部公开示例改为类级 `@ExampleCode` 并移除方法级隐藏依赖
 - [ ] TODO 生成保持 ExampleModule / ExampleItem 顺序的公开示例清单

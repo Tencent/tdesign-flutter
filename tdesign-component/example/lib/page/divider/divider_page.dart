@@ -16,11 +16,27 @@ class TDividerPage extends StatelessWidget {
       children: [
         ExampleModule(
           title: '组件类型',
-          children: [dividerBaseExampleItem],
+          children: [
+            ExampleItem(
+              key: const Key('divider-base-example'),
+              desc: '水平分割线',
+              center: false,
+              methodName: 'DividerBaseExample',
+              builder: (_) => const DividerBaseExample(),
+            ),
+          ],
         ),
         ExampleModule(
           title: '组件状态',
-          children: [dividerDashedExampleItem],
+          children: [
+            ExampleItem(
+              key: const Key('divider-dashed-example'),
+              desc: '虚线样式',
+              center: false,
+              methodName: 'DividerDashedExample',
+              builder: (_) => const DividerDashedExample(),
+            ),
+          ],
         ),
       ],
     );

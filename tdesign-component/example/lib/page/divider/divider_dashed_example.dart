@@ -2,15 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
-
-final dividerDashedExampleItem = ExampleItem(
-  key: const Key('divider-dashed-example'),
-  desc: '虚线样式',
-  center: false,
-  methodName: 'DividerDashedExample',
-  builder: (_) => const DividerDashedExample(),
-);
 
 @ExampleCode(group: 'divider')
 class DividerDashedExample extends StatelessWidget {
