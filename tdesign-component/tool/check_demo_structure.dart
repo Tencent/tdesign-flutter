@@ -6,6 +6,9 @@ final _configFile = File('example/lib/config.dart');
 final _codeDirectory = Directory('example/assets/code');
 final _manifestFile = File('example/assets/code/manifest.json');
 
+String _normalizeName(String value) =>
+    value.replaceAll(RegExp(r'[^A-Za-z0-9]'), '').toLowerCase();
+
 void main() {
   final errors = <String>[];
   final entries = <File>[];
@@ -55,6 +58,20 @@ void main() {
         errors.add('页面入口缺少 @ExampleCodeManifest：$relativePath');
       }
       continue;
+    }
+
+    if (exampleAnnotations > 0) {
+      final classMatch = RegExp(
+        r'@ExampleCode\([\s\S]*?\)\s*class\s+(\w+)',
+      ).firstMatch(source);
+      final className = classMatch?.group(1);
+      if (className == null ||
+          !_normalizeName(className).contains(_normalizeName(component))) {
+        errors.add(
+          '公开示例类名必须包含组件语义：$relativePath'
+          '${className == null ? '' : ' ($className)'}',
+        );
+      }
     }
 
     final declaresModuleGetter = source.contains('ExampleModule get ');

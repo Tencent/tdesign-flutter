@@ -4,11 +4,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart' hide TIcons;
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 import 'package:url_launcher/link.dart';
 
-class ThemeDemo extends StatelessWidget {
-  const ThemeDemo({super.key});
+class IconPriorityExample extends StatelessWidget {
+  const IconPriorityExample({super.key});
 
-  Widget _buildThemeDemo(BuildContext context) {
-    // 通过 TIconThemeData 统一控制子树 TIcon 默认 size 和 color
+  Widget _buildIconPriorityExample(BuildContext context) {
+    // 优先级链：构造器参数 > TIconThemeData > IconTheme
+    // 子树 TIconThemeData 设置 size=36，但构造器指定 size=20 会覆盖
     return Theme(
       data: Theme.of(context).copyWith(
         extensions: [
@@ -20,19 +21,22 @@ class ThemeDemo extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Row(
+          Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TIcon(TIcons.home_filled),
-              SizedBox(width: 16),
-              TIcon(TIcons.setting),
-              SizedBox(width: 16),
-              TIcon(TIcons.notification),
+              // 构造器 size 覆盖 Theme 的 36
+              const TIcon(TIcons.home_filled, size: 20),
+              const SizedBox(width: 16),
+              // 构造器 color 覆盖 Theme 的品牌色
+              TIcon(TIcons.setting, color: context.tTheme.errorNormalColor),
+              const SizedBox(width: 16),
+              // 无构造器参数，继承 Theme 默认
+              const TIcon(TIcons.notification),
             ],
           ),
           const SizedBox(height: 4),
           Text(
-            '↑ 继承 TIconThemeData 默认 size=36 和品牌色',
+            '↑ 前两个图标构造器覆盖 Theme，第三个继承 Theme',
             style: TextStyle(
               fontSize: 12,
               color: context.tTheme.textColorSecondary,
@@ -45,6 +49,6 @@ class ThemeDemo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _buildThemeDemo(context);
+    return _buildIconPriorityExample(context);
   }
 }

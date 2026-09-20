@@ -765,11 +765,11 @@
           },
           {
             "description": "Theme 默认 size/color:",
-            "assetKey": "icon.ThemeDemo"
+            "assetKey": "icon.IconThemeExample"
           },
           {
             "description": "构造器优先级覆盖 Theme:",
-            "assetKey": "icon.PriorityDemo"
+            "assetKey": "icon.IconPriorityExample"
           }
         ]
       },
@@ -1416,7 +1416,7 @@
           },
           {
             "description": "页面示例",
-            "assetKey": "result.PageExample"
+            "assetKey": "result.ResultPageExample"
           }
         ]
       }
@@ -2062,7 +2062,7 @@
         "items": [
           {
             "description": "子树默认样式",
-            "assetKey": "text.ThemeDemo"
+            "assetKey": "text.TextThemeExample"
           }
         ]
       }

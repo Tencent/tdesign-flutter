@@ -40,8 +40,8 @@ class TResultPage extends StatelessWidget {
             ),
             ExampleItem(
               desc: '页面示例',
-              methodName: 'PageExample',
-              builder: (_) => const PageExample(),
+              methodName: 'ResultPageExample',
+              builder: (_) => const ResultPageExample(),
             ),
           ],
         ),

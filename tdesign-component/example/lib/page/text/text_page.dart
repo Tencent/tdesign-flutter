@@ -98,8 +98,8 @@ class TTextPage extends StatelessWidget {
           children: [
             ExampleItem(
               desc: '子树默认样式',
-              methodName: 'ThemeDemo',
-              builder: (_) => const ThemeDemo(),
+              methodName: 'TextThemeExample',
+              builder: (_) => const TextThemeExample(),
             ),
           ],
         ),

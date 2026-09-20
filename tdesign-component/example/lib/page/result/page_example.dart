@@ -4,10 +4,10 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'result')
-class PageExample extends StatelessWidget {
-  const PageExample({super.key});
+class ResultPageExample extends StatelessWidget {
+  const ResultPageExample({super.key});
 
-  Widget _buildPageExample(BuildContext context) {
+  Widget _buildResultPageExample(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
       child: SizedBox(
@@ -63,6 +63,6 @@ class PageExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _buildPageExample(context);
+    return _buildResultPageExample(context);
   }
 }

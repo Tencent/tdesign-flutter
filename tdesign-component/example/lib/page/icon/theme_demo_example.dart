@@ -7,10 +7,10 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'icon')
-class ThemeDemo extends StatelessWidget {
-  const ThemeDemo({super.key});
+class IconThemeExample extends StatelessWidget {
+  const IconThemeExample({super.key});
 
-  Widget _buildThemeDemo(BuildContext context) {
+  Widget _buildIconThemeExample(BuildContext context) {
     // 通过 TIconThemeData 统一控制子树 TIcon 默认 size 和 color
     return Theme(
       data: Theme.of(context).copyWith(
@@ -48,6 +48,6 @@ class ThemeDemo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _buildThemeDemo(context);
+    return _buildIconThemeExample(context);
   }
 }

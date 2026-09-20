@@ -4,10 +4,10 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'text')
-class ThemeDemo extends StatelessWidget {
-  const ThemeDemo({super.key});
+class TextThemeExample extends StatelessWidget {
+  const TextThemeExample({super.key});
 
-  Widget _buildThemeDemo(BuildContext context) {
+  Widget _buildTextThemeExample(BuildContext context) {
     return Theme(
       data: Theme.of(context).copyWith(
         extensions: [
@@ -24,6 +24,6 @@ class ThemeDemo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _buildThemeDemo(context);
+    return _buildTextThemeExample(context);
   }
 }

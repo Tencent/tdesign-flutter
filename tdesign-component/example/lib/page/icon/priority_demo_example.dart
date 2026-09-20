@@ -7,10 +7,10 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'icon')
-class PriorityDemo extends StatelessWidget {
-  const PriorityDemo({super.key});
+class IconPriorityExample extends StatelessWidget {
+  const IconPriorityExample({super.key});
 
-  Widget _buildPriorityDemo(BuildContext context) {
+  Widget _buildIconPriorityExample(BuildContext context) {
     // 优先级链：构造器参数 > TIconThemeData > IconTheme
     // 子树 TIconThemeData 设置 size=36，但构造器指定 size=20 会覆盖
     return Theme(
@@ -52,6 +52,6 @@ class PriorityDemo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _buildPriorityDemo(context);
+    return _buildIconPriorityExample(context);
   }
 }
