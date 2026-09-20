@@ -63,7 +63,7 @@ class _TIconPageState extends State<TIconPage> {
           title: 'icon示例',
           children: [
             ExampleItem(
-              desc: '',
+              desc: 'icon数量: ${TIcons.allIconsMap.length}',
               methodName: 'ShowAllIconsExample',
               builder: (_) => const ShowAllIconsExample(),
             ),
