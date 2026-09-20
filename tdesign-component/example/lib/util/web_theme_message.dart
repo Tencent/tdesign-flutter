@@ -18,6 +18,17 @@ dynamic decodeWebThemeMessageData(dynamic data) {
   }
 }
 
+ThemeMode? parseWebThemeMode(dynamic message) {
+  if (message is! Map || message['type'] != 'flutter-theme-update') {
+    return null;
+  }
+  return switch (message['themeMode']) {
+    'dark' => ThemeMode.dark,
+    'light' => ThemeMode.light,
+    _ => null,
+  };
+}
+
 /// Parses a decoded website message into a Flutter theme.
 TThemeData? parseWebThemeUpdateMessage(dynamic message) {
   if (message is! Map || message['type'] != 'flutter-theme-update') {

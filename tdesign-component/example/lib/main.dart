@@ -42,6 +42,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late TThemeData _themeData;
+  bool _webThemeListenerSetup = false;
 
   @override
   void initState() {
@@ -80,7 +81,8 @@ class _MyAppState extends State<MyApp> {
       child: Consumer2<ThemeModeProvider, LocaleProvider>(
         builder: (context, themeModeProvider, localeProvider, child) {
           // 在 Web 平台设置 postMessage 监听
-          if (PlatformUtil.isWeb) {
+          if (PlatformUtil.isWeb && !_webThemeListenerSetup) {
+            _webThemeListenerSetup = true;
             WidgetsBinding.instance.addPostFrameCallback((_) {
               // 仅在 Web 平台执行
               if (!kIsWeb) {

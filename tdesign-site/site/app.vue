@@ -13,7 +13,11 @@
 <script>
 import siteConfig from './site.config';
 import '@tdesign/theme-generator';
-import { ensureFlutterThemeTokenCoverage, generateFlutterThemeFromParts } from './utils/flutterThemeBridge.mjs';
+import {
+  createFlutterThemeMessage,
+  ensureFlutterThemeTokenCoverage,
+  generateFlutterThemeFromParts,
+} from './utils/flutterThemeBridge.mjs';
 
 import { defineComponent } from 'vue';
 
@@ -42,6 +46,7 @@ export default defineComponent({
       themeUpdateTimer: null,
       lastThemeJson: null,
       demoReadyHandler: null,
+      themeModeObserver: null,
     };
   },
 
@@ -68,6 +73,11 @@ export default defineComponent({
     this.observeThemeStyle('custom-theme', 'light');
     this.observeThemeStyle('custom-theme-dark', 'dark');
     this.observeThemeStyle('custom-theme-extra', 'extra');
+    this.themeModeObserver = new MutationObserver(() => this.scheduleThemeUpdate());
+    this.themeModeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['theme-mode'],
+    });
     this.demoReadyHandler = (event) => {
       this.sendThemeToFlutterIframe(event.detail?.iframe);
     };
@@ -76,6 +86,7 @@ export default defineComponent({
 
   beforeUnmount() {
     Object.values(this.themeObservers).forEach((observer) => observer?.disconnect());
+    this.themeModeObserver?.disconnect();
     if (this.themeUpdateTimer) clearTimeout(this.themeUpdateTimer);
     if (this.demoReadyHandler) {
       window.removeEventListener('flutter-demo-ready', this.demoReadyHandler);
@@ -147,20 +158,24 @@ export default defineComponent({
           this.themeStyles.extra,
           this.themeBaselines,
         );
-        const serialized = JSON.stringify(themeJson);
+        const message = createFlutterThemeMessage(
+          themeJson,
+          document.documentElement.getAttribute('theme-mode') === 'dark' ? 'dark' : 'light',
+        );
+        const serialized = JSON.stringify(message);
         if (serialized === this.lastThemeJson) return;
         this.lastThemeJson = serialized;
         document.querySelectorAll('iframe[src*="/example/"]').forEach((iframe) => {
-          this.sendThemeToFlutterIframe(iframe, themeJson);
+          this.sendThemeToFlutterIframe(iframe, message);
         });
       }, 80);
     },
-    sendThemeToFlutterIframe(iframe, themeJson = null) {
+    sendThemeToFlutterIframe(iframe, message = null) {
       if (!iframe?.contentWindow) return;
-      const currentTheme = themeJson || (this.lastThemeJson && JSON.parse(this.lastThemeJson));
-      if (!currentTheme) return;
+      const currentMessage = message || (this.lastThemeJson && JSON.parse(this.lastThemeJson));
+      if (!currentMessage) return;
       iframe.contentWindow.postMessage(
-        JSON.stringify({ type: 'flutter-theme-update', theme: currentTheme }),
+        JSON.stringify(currentMessage),
         window.location.origin,
       );
     },

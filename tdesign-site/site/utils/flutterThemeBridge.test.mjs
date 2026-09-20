@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import {
   ensureFlutterThemeTokenCoverage,
+  createFlutterThemeMessage,
   flutterThemeContract,
   generateFlutterThemeFromParts,
   normalizeCssColor,
@@ -138,4 +139,14 @@ test('completes mobile CSS once and keeps light and dark values independent', ()
   assert.equal(output.dark.color.brandColor7, '#AABBCC');
   assert.equal(output.light.font.fontBodyMedium.size, 18);
   assert.equal(output.dark.font.fontBodyMedium.size, 18);
+});
+
+test('builds one complete message for mode and token updates', () => {
+  const theme = { light: { color: {} }, dark: { color: {} } };
+  assert.deepEqual(createFlutterThemeMessage(theme, 'dark'), {
+    type: 'flutter-theme-update',
+    themeMode: 'dark',
+    theme,
+  });
+  assert.equal(createFlutterThemeMessage(theme, 'system').themeMode, 'light');
 });
