@@ -17,6 +17,7 @@
 | subtitleBuilder | TCalendarSubtitleBuilder? | - | 日期副标题构建器。 |
 | value | List<DateTime> | - | 受控选中日期列表。 列表长度与 `variant` 对应： - `TCalendarVariant.single`：1 个元素（选中日期） - `TCalendarVariant.multiple`：N 个元素（所有选中日期） - `TCalendarVariant.range`：2 个元素（起始、结束日期） |
 | variant | TCalendarVariant | TCalendarVariant.single | 选择模式。 |
+| weekdayNames | List<String>? | - | 星期标题。未设置时使用当前资源代理中的文案。 |
 
 
 ### TCalendarStyle
