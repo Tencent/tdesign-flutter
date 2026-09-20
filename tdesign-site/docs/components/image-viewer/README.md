@@ -16,8 +16,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-以下示例代码直接来自 Example App 的 `@ExampleCode(group: "image-viewer")` 生成资产，Web 文档不维护代码副本。
-
 {{ flutter-example-group image-viewer }}
 
 ## API

@@ -36,6 +36,10 @@ for (const slug of fs.readdirSync(docsDirectory).sort()) {
   }
 
   const source = fs.readFileSync(readme, 'utf8');
+  if (source.includes('以下示例代码直接来自 Example App')) {
+    errors.push(`${slug}: contains redundant generated-example boilerplate`);
+    continue;
+  }
   const directives = [...source.matchAll(/\{\{\s*flutter-example-group\s+([^\s}]+)\s*\}\}/g)].map((match) => match[1]);
   if (directives.length !== 1 || directives[0] !== expectedGroup) {
     errors.push(

@@ -702,10 +702,6 @@
           {
             "description": "带自动收缩功能",
             "assetKey": "fab.FabCollapsibleExample"
-          },
-          {
-            "description": "",
-            "assetKey": "fab.FabSkeletonExample"
           }
         ]
       }

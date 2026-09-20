@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-class FabSkeletonExample extends StatelessWidget {
-  const FabSkeletonExample({super.key});
+class FabSkeletonContent extends StatelessWidget {
+  const FabSkeletonContent({super.key});
   Widget _buildSkeletonContent(BuildContext context) {
     Widget buildGroup() {
       return Expanded(

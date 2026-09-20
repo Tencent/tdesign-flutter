@@ -16,8 +16,6 @@ DropdownMenu 是页面级筛选栏，适用于商品列表等内容的排序、�
 
 ## 代码演示
 
-以下示例代码直接来自 Example App 的 `@ExampleCode(group: "dropdown_menu")` 生成资产，Web 文档不维护代码副本。
-
 {{ flutter-example-group dropdown_menu }}
 
 ## API

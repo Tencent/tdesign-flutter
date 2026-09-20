@@ -42,6 +42,7 @@ Table 页面同时包含静态、受控交互、固定列和样式示例，作�
 - 每个目录仅有一个 `<component>_page.dart` 页面入口；入口负责页面元信息、`ExampleModule` 分组、`ExampleItem` 配置和顺序，不另建只承载分组的模块文件。
 - 60 个入口覆盖 57 个组件和 Font、Radius、Shadows 三个额外基础页；每个公开 `ExampleItem` 使用场景语义命名的独立文件，不使用序号前后缀。
 - 页面入口只持有 `ExampleItem` 的 key、描述、布局选项、代码映射名和 Widget 构建入口，不得持有公开示例运行所需的可变状态、Controller、业务数据或私有 helper；这些声明必须归属于对应 example 文件内的 Widget/State。
+- 只承担页面占位、滚动背景或测试支撑的辅助内容必须使用 `ignoreCode: true`，不得登记 `methodName` 或 `@ExampleCode`；Web 清单只包含用户可复制的公开组件示例。
 - `table/table_page.dart` 保持 Table Demo 唯一入口并直接承载两个公开 `ExampleModule`；排序状态归属于排序示例自身。
 - 每个公开 `ExampleItem` 显式映射到自身文件中的类级 `@ExampleCode`，运行 Demo 和代码面板使用同一个 Widget 类。
 - `@ExampleCode` 只标记源码生成边界，不进入生成资产；生成器不得通过改写 Widget 类型来“美化”代码，示例源码本身必须是可复制的规范实现。
@@ -66,3 +67,4 @@ Table 页面同时包含静态、受控交互、固定列和样式示例，作�
 - [x] 结构检查、示例生成器 `--check`、全组件测试、站点构建、双版本 analyze 和 Linux Golden 通过。
 - [x] Web 代码面板显示可复制源码，开发模式右侧 Flutter Web 预览可实际加载。
 - [x] Button、Divider、Fab、Icon、Link、Text 基础组件示例按真实状态需求选择 Widget 类型；19 个无状态示例已移除空 State 样板，确有交互状态的 Icon 示例仍保留 `StatefulWidget`。
+- [x] FAB 页面骨架仅作为悬浮按钮的滚动背景，不进入公开示例清单或 Web 代码面板。

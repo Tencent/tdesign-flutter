@@ -10,13 +10,13 @@
 
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `dart run tool/check_demo_structure.dart` | PASS | 60 个入口、0 个旧分组文件；375 个公开 ExampleItem 与 375 个独立 `@ExampleCode` 文件、生成资产一一对应 |
-| `dart run tool/generate_example_code.dart --check` | PASS | 375 份片段与 manifest 完全同步，`legacyGroups: []` |
+| `dart run tool/check_demo_structure.dart` | PASS | 60 个入口、0 个旧分组文件；374 个公开 ExampleItem 与 374 个独立 `@ExampleCode` 文件、生成资产一一对应 |
+| `dart run tool/generate_example_code.dart --check` | PASS | 374 份片段与 manifest 完全同步，`legacyGroups: []` |
 | `flutter test test/tool/generate_example_code_test.dart` | PASS | Flutter 3.32，11/11；覆盖整文件导出、显式辅助文件合并、严格页面、拒绝缺失页面清单及内部条件模块 |
 | `flutter analyze --no-pub --fatal-infos` | PASS | Flutter 3.32，根包与 example 子包均 0 issues |
 | Flutter 3.47 `flutter analyze --no-pub --fatal-infos` | PASS | 根包与 example 子包均 0 issues |
 | example 全量非视觉测试 | PASS | 排除独立 Golden 文件和 `golden` tag 后，69 个测试文件、294/294 |
-| `npm run test:example-code` | PASS | Node 映射测试 9/9；57 份组件文档映射 365 份组件示例，另有 fonts/radius/shadows 10 份基础示例；覆盖开发/生产预览地址 |
+| `npm run test:example-code` | PASS | Node 映射测试 10/10；57 份组件文档映射 364 份组件示例，另有 fonts/radius/shadows 10 份基础示例；覆盖开发/生产预览地址及 FAB 辅助背景排除规则 |
 | `npm run site` | PASS | 站点生产构建完成，109 modules transformed |
 | `git diff --check` | PASS | 无空白错误 |
 | Linux 3.32 Golden / 远端 CI | PASS | PR #1142，`42bdd37a`：Linux Flutter 3.32 全量视觉回归、Flutter 3.32/latest analyze/test、Android/iOS/Web 构建、站点构建、autofix、CodeCC、拼写与 CLA 全部通过 |
@@ -33,7 +33,7 @@
 ## 人工与结构抽查
 
 - [x] ExampleModule 分组和完整 ExampleItem 配置已合并到 60 个页面入口，纯分组模块文件全部移除。
-- [x] 375 个公开 ExampleItem 各自对应一个独立语义文件，运行页面和 Web 代码面板引用同一 Widget。
+- [x] 374 个公开 ExampleItem 各自对应一个独立语义文件，运行页面和 Web 代码面板引用同一 Widget。
 - [x] state、Controller、helper 与生命周期归属于对应示例；Progress、Stepper、Calendar、FAB、BackTop、Theme、Toast、Popover 等复杂页面已分别复测。
 - [x] Sidebar 的四个辅助详情页通过显式 `includes` 合并进相应可复制代码，不由解析器猜测隐藏依赖。
 - [x] Popover 仅跳过完全由 `ignoreCode: true` 项组成的内部条件模块；公开条件模块仍会被严格解析拒绝。
@@ -43,9 +43,10 @@
 - [x] 57 份组件文档均只有一个组映射，无手写 Dart `td-code-block`，未注册资产不会进入文档。
 - [x] 本地 `npm run dev` 同时启动 Vite `19000` 与 Flutter Web `19001`；Button 文档在 1440px 视口下显示 375px 宽右侧实时预览。
 - [x] Button 代码块 Shadow DOM 正常初始化并展示解码后的 Dart 源码，iframe 指向 `http://127.0.0.1:19001/#button`；修复后页面未再产生 Dart grammar 错误。
+- [x] 57 份组件文档“代码演示”下方的生成来源说明已移除；FAB 实页只展示 4 个公开示例，不再出现 `FabSkeletonExample` 内部标题。
 - [x] `42bdd37a` 的 Linux 3.32 Golden 与全部远端 CI 通过。
 - [x] Button、Fab、Link、Text 中 19 个无跨帧状态的示例改为 `StatelessWidget`；Divider 原本已是无状态实现，Icon 仅保留确实管理搜索/滚动/复制反馈状态的 `ShowAllIconsExample`。
-- [x] 19 份生成资产与运行源码同步，未在解析器中引入 Widget 重写或业务依赖推断。
+- [x] 18 份基础组件公开生成资产与运行源码同步；FAB 骨架改为 `FabSkeletonContent` 页面辅助内容并从 manifest 移除，未在解析器中引入 Widget 重写或业务依赖推断。
 
 ## 复杂示例归属判断
 

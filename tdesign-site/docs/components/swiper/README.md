@@ -17,8 +17,6 @@ import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
 ## 代码演示
 
-以下示例代码直接来自 Example App 的 `@ExampleCode(group: "swiper")` 生成资产，Web 文档不维护代码副本。
-
 {{ flutter-example-group swiper }}
 
 ## API

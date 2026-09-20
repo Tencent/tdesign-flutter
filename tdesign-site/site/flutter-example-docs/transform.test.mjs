@@ -69,6 +69,17 @@ test('renders Divider in its registered ExampleItem order', () => {
   );
 });
 
+test('excludes FAB page background support from public examples', () => {
+  const keys = listFlutterExampleKeys('fab');
+  assert.deepEqual(keys, [
+    'fab.FabIconOnlyExample',
+    'fab.FabIconTextExample',
+    'fab.FabDraggableExample',
+    'fab.FabCollapsibleExample',
+  ]);
+  assert.ok(!keys.includes('fab.FabSkeletonExample'));
+});
+
 test('rejects unsafe, malformed and missing mappings', () => {
   assert.throws(() => readFlutterExampleCode('../secret'), /Invalid Flutter example asset key/);
   assert.throws(() => replaceFlutterExampleDirectives('{{ flutter-example }}'), /Invalid Flutter example directive/);

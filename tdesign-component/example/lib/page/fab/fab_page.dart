@@ -9,7 +9,7 @@ import 'fab_collapsible_example.dart';
 import 'fab_draggable_example.dart';
 import 'fab_icon_only_example.dart';
 import 'fab_icon_text_example.dart';
-import 'fab_skeleton_example.dart';
+import 'fab_skeleton_content.dart';
 
 enum _FabDemoType { base, advance, draggable, collapsible }
 
@@ -125,10 +125,9 @@ class _TFabPageState extends State<TFabPage> {
                       ),
                     ),
                     ExampleItem(
-                      desc: '',
                       center: false,
-                      methodName: 'FabSkeletonExample',
-                      builder: (_) => const FabSkeletonExample(),
+                      ignoreCode: true,
+                      builder: (_) => const FabSkeletonContent(),
                     ),
                   ],
                 ),
