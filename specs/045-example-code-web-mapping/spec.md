@@ -9,7 +9,7 @@ Table 页面同时包含静态、受控交互、固定列和样式示例，作�
 ## 目标
 
 - 将 57 个组件页面、3 个额外基础页及其公开模块统一整理到 `page/<component>/`，入口固定命名为 `<component>_page.dart`。
-- 每个 `ExampleModule` 独立为一个语义文件；每个公开 `ExampleItem` 再独立为一个语义 example 文件。
+- `<component>_page.dart` 统一保存页面元信息、`ExampleModule` 分组和 `ExampleItem` 顺序；每个公开 `ExampleItem` 的实际用例独立为一个语义 example 文件。
 - 每个公开 `ExampleItem` 文件包含可运行 Widget、imports、数据、状态、回调、helper 和适用的生命周期，不依赖页面入口或其他示例的私有声明。
 - Calendar 农历数据、Sidebar 子页及既有 Form、Progress、Stepper、Tag、TreeSelect 辅助 example 归入所属组件目录，并由对应示例显式引用。
 - 57 份组件 Web Markdown 均按组件组引用全部生成资产，不再复制第二份 Dart 源码。
@@ -27,7 +27,7 @@ Table 页面同时包含静态、受控交互、固定列和样式示例，作�
 
 ### 涉及
 
-- 全部组件与基础 Example 页面目录、模块声明、辅助 example 和生成代码资产。
+- 全部组件与基础 Example 页面目录、页面分组声明、辅助 example 和生成代码资产。
 - Example 配置与 Demo 测试的入口引用。
 - Web Markdown 转换器、映射测试及全部 57 份组件文档。
 
@@ -38,23 +38,23 @@ Table 页面同时包含静态、受控交互、固定列和样式示例，作�
 
 ## 行为契约
 
-- 每个目录仅有一个 `<component>_page.dart` 页面入口；入口只负责页面元信息和模块顺序，模块文件只负责对应 `ExampleModule` 及 `ExampleItem` 顺序。
-- 60 个入口覆盖 57 个组件和 Font、Radius、Shadows 三个额外基础页；模块文件使用 `type`、`status`、`style`、`size` 等业务语义命名，每个公开 `ExampleItem` 使用场景语义命名的独立文件，不使用序号前后缀。
-- 页面入口和模块文件不得持有公开示例运行所需的可变状态、Controller、数据或私有 helper；这些声明必须归属于对应 example 文件内的 Widget/State。
-- `table/table_page.dart` 保持 Table Demo 唯一入口；`table_type.dart` 与 `table_style.dart` 分别承载两个公开 `ExampleModule`，排序状态归属于排序示例自身。
+- 每个目录仅有一个 `<component>_page.dart` 页面入口；入口负责页面元信息、`ExampleModule` 分组和 `ExampleItem` 顺序，不另建只承载分组的模块文件。
+- 60 个入口覆盖 57 个组件和 Font、Radius、Shadows 三个额外基础页；每个公开 `ExampleItem` 使用场景语义命名的独立文件，不使用序号前后缀。
+- 页面入口不得持有公开示例运行所需的可变状态、Controller、数据或私有 helper；这些声明必须归属于对应 example 文件内的 Widget/State。
+- `table/table_page.dart` 保持 Table Demo 唯一入口并直接承载两个公开 `ExampleModule`；排序状态归属于排序示例自身。
 - 每个公开 `ExampleItem` 显式映射到自身文件中的类级 `@ExampleCode`，运行 Demo 和代码面板使用同一个 Widget 类。
 - 组件 Web 指令格式为 `{{ flutter-example-group <group> }}`，按公开模块和 ExampleItem 顺序展开该组生成资产；不得按文件名排序混入测试专用或未注册片段。单片段指令 `{{ flutter-example <group>.<name> }}` 仅作为底层能力保留。
 - 组件文档目录名与生成组按忽略 `-`、`_` 和大小写的规则一一匹配；每份文档必须且只能有一个组映射。
 - 全部 57 份组件文档不得保留手写 Dart `td-code-block`；`radius`、`shadows` 属于 Example 基础配置页，没有组件 Web 路由，不纳入组件文档映射。
 - 找不到资产时不得降级为“建设中”，必须抛出错误阻止发布过期文档。
-- `dart run tool/check_demo_structure.dart` 必须阻止入口回退到 `page/` 根目录、模块重新内联、ExampleItem 未独立成文件、页面持有示例私有状态、非语义命名、缺失 config 引用和辅助文件漂移。
+- `dart run tool/check_demo_structure.dart` 必须阻止入口回退到 `page/` 根目录、纯分组模块文件残留、ExampleItem 实现未独立成文件、页面持有示例私有状态、非语义命名、缺失 config 引用和辅助文件漂移。
 - CI 必须验证全部公开 ExampleItem 与生成资产一一对应、顺序一致，并验证每份类级示例源码在最小宿主中可解析或编译；仅检查文件存在和数量不算通过。
 
 ## 验收标准
 
 - [x] Table 9 个公开示例的顺序、文案、尺寸、交互和 Golden 均保持不变。
-- [x] 57 个组件、3 个额外基础页和关联辅助 example 均完成目录迁移，141 个 `ExampleModule` 独立成语义文件。
-- [ ] 57 个组件及 3 个基础页的全部公开 ExampleItem 均独立成语义文件，并由对应模块按原顺序引用。
+- [x] 57 个组件、3 个额外基础页和关联辅助 example 均完成目录迁移。
+- [ ] 57 个组件及 3 个基础页的全部公开 ExampleItem 均独立成语义文件，并由页面入口中的对应模块按原顺序引用。
 - [ ] 每个公开 ExampleItem 均显示来自同一运行 Widget 的自包含类级源码，不存在未定义字段、helper、Controller 或页面 State 依赖。
 - [ ] 57 份组件 Web 文档按公开 ExampleItem 顺序映射生成资产，不混入测试专用或未注册片段。
 - [ ] 映射测试覆盖全部文档清单、ExampleItem 一一对应、顺序、源码解析/编译以及非法键和缺失资产。

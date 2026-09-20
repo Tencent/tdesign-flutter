@@ -30,9 +30,6 @@ void main() {
     final source = entity.readAsStringSync();
     if (fileName == '${component}_page.dart') {
       entries.add(entity);
-      if (source.contains('ExampleModule(')) {
-        errors.add('入口文件内仍直接声明 ExampleModule：$relativePath');
-      }
     }
     final declaresModuleGetter = source.contains('ExampleModule get ');
     final declaresModuleFunction = RegExp(
@@ -53,8 +50,8 @@ void main() {
   if (entries.length != 60) {
     errors.add('应包含 57 个组件入口和 3 个额外基础入口，共 60 个；实际 ${entries.length} 个');
   }
-  if (modules.length != 143) {
-    errors.add('应包含 143 个按 ExampleModule 拆分的模块文件；实际 ${modules.length} 个');
+  if (modules.length != 141) {
+    errors.add('应包含 141 个待迁移的分组模块文件；实际 ${modules.length} 个');
   }
 
   final config = _configFile.readAsStringSync();
@@ -89,6 +86,6 @@ void main() {
   }
 
   stdout.writeln(
-    'Demo 目录结构检查通过：${entries.length} 个入口、${modules.length} 个模块，辅助 example 已归位。',
+    'Demo 目录结构检查通过：${entries.length} 个入口、${modules.length} 个待迁移分组文件，辅助 example 已归位。',
   );
 }
