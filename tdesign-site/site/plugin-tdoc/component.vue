@@ -103,11 +103,18 @@ export default defineComponent({
       observer.disconnect();
       (this as any).themeObserver = null;
     }
+    const iframe = this.$refs.demoIframe as HTMLIFrameElement | undefined;
+    const iframeLoadHandler = (this as any).iframeLoadHandler;
+    if (iframe && iframeLoadHandler) {
+      iframe.removeEventListener('load', iframeLoadHandler);
+      (this as any).iframeLoadHandler = null;
+    }
   },
 
   data() {
     return {
       themeObserver: null as MutationObserver | null,
+      iframeLoadHandler: null as (() => void) | null,
     };
   },
 
@@ -124,19 +131,22 @@ export default defineComponent({
         if (iframe && iframe.contentWindow) {
           const themeMode = getThemeMode();
           iframe.contentWindow.postMessage(
-            {
+            JSON.stringify({
               type: 'theme-mode-change',
               themeMode: themeMode,
-            },
-            '*'
+            }),
+            window.location.origin
           );
         }
       };
 
       // 初始发送一次
-      iframe.addEventListener('load', () => {
+      const handleIframeLoad = () => {
         sendThemeMode();
-      });
+        window.dispatchEvent(new CustomEvent('flutter-demo-ready', { detail: { iframe } }));
+      };
+      iframe.addEventListener('load', handleIframeLoad);
+      (this as any).iframeLoadHandler = handleIframeLoad;
 
       // 如果 iframe 已经加载，立即发送
       if (iframe.contentWindow) {

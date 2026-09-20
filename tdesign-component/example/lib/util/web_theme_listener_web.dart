@@ -1,65 +1,47 @@
 // Web 平台实现：使用 dart:html 监听 postMessage
-
-
-
 // ignore: deprecated_member_use, avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
-
-
 import 'package:flutter/material.dart';
-
-
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../provider/theme_mode_provider.dart';
-
-
-
-// 静态变量，用于确保只设置一次监听器
+import 'web_theme_message.dart';
 
 bool _listenerSetup = false;
+ValueChanged<TThemeData>? _onThemeUpdate;
 
-
-
-/// Web 平台的主题模式监听器实现
-
-void setupThemeModeListener(ThemeModeProvider themeModeProvider) {
-
-  // 只设置一次监听器
-
+/// Web 平台的主题模式与 Token 监听器实现。
+void setupThemeModeListener(
+  ThemeModeProvider themeModeProvider, {
+  ValueChanged<TThemeData>? onThemeUpdate,
+}) {
+  _onThemeUpdate = onThemeUpdate;
   if (_listenerSetup) {
     return;
   }
   _listenerSetup = true;
 
-
-
-  // 监听来自父窗口的 postMessage
-
   html.window.onMessage.listen((event) {
-
-    if (event.data is Map) {
-
-      final data = event.data as Map;
-
-      if (data['type'] == 'theme-mode-change') {
-
-        final themeMode = data['themeMode'] as String?;
-
-        if (themeMode == 'dark') {
-
-          themeModeProvider.themeMode = ThemeMode.dark;
-
-        } else if (themeMode == 'light') {
-
-          themeModeProvider.themeMode = ThemeMode.light;
-
-        }
-
-      }
-
+    if (event.origin != html.window.location.origin) {
+      return;
     }
-
+    final data = decodeWebThemeMessageData(event.data);
+    if (data is! Map) {
+      return;
+    }
+    if (data['type'] == 'theme-mode-change') {
+      final themeMode = data['themeMode'] as String?;
+      if (themeMode == 'dark') {
+        themeModeProvider.themeMode = ThemeMode.dark;
+      } else if (themeMode == 'light') {
+        themeModeProvider.themeMode = ThemeMode.light;
+      }
+      return;
+    }
+    final theme = parseWebThemeUpdateMessage(data);
+    if (theme != null) {
+      _onThemeUpdate?.call(theme);
+    }
   });
-
 }
