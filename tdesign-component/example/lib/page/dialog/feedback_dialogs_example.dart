@@ -4,14 +4,9 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'dialog')
-class FeedbackDialogsExample extends StatefulWidget {
+class FeedbackDialogsExample extends StatelessWidget {
   const FeedbackDialogsExample({super.key});
 
-  @override
-  State<FeedbackDialogsExample> createState() => _FeedbackDialogsExampleState();
-}
-
-class _FeedbackDialogsExampleState extends State<FeedbackDialogsExample> {
   Widget _feedbackDialogs(BuildContext context) {
     return _scenarios(context, [
       _trigger('反馈类-带标题', () {

@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-class AvatarSkeletonExample extends StatefulWidget {
+class AvatarSkeletonExample extends StatelessWidget {
   const AvatarSkeletonExample({super.key});
 
-  @override
-  State<AvatarSkeletonExample> createState() => _AvatarSkeletonExampleState();
-}
-
-class _AvatarSkeletonExampleState extends State<AvatarSkeletonExample> {
   Widget Function(BuildContext) _wrapper(
     Function(BuildContext) builder, {
     bool isFlexible = false,

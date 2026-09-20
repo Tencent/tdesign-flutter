@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-class ButtonDialogsExample extends StatefulWidget {
+class ButtonDialogsExample extends StatelessWidget {
   const ButtonDialogsExample({super.key});
 
-  @override
-  State<ButtonDialogsExample> createState() => _ButtonDialogsExampleState();
-}
-
-class _ButtonDialogsExampleState extends State<ButtonDialogsExample> {
   Widget _buttonDialogs(BuildContext context) {
     return _scenarios(context, [
       _statusScenario(

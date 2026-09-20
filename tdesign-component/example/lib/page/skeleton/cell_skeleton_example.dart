@@ -4,14 +4,9 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'skeleton')
-class CellSkeletonExample extends StatefulWidget {
+class CellSkeletonExample extends StatelessWidget {
   const CellSkeletonExample({super.key});
 
-  @override
-  State<CellSkeletonExample> createState() => _CellSkeletonExampleState();
-}
-
-class _CellSkeletonExampleState extends State<CellSkeletonExample> {
   Widget Function(BuildContext) _wrapper(
     Function(BuildContext) builder, {
     bool isFlexible = false,

@@ -21,43 +21,40 @@ class DropdownMenuSortingExample extends StatefulWidget {
 
 class _DropdownMenuSortingExampleState
     extends State<DropdownMenuSortingExample> {
+  var _product = 'all';
+  var _sorter = 'default';
+
   Widget _sorting(BuildContext context) {
-    var product = 'all';
-    var sorter = 'default';
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return TDropdownMenu(
-          items: [
-            TDropdownMenuItem(
-              label: switch (product) {
-                'new' => '最新产品',
-                'hot' => '最火产品',
-                _ => '全部产品',
-              },
-              panelBuilder: (context, controller) =>
-                  TDropdownSingleSelectPanel<String>(
-                    controller: controller,
-                    value: product,
-                    options: DropdownMenuSortingExample.productOptions,
-                    onChanged: (value) => setState(() => product = value),
-                  ),
-            ),
-            TDropdownMenuItem(
-              label: sorter == 'default' ? '默认排序' : '价格从高到低',
-              panelBuilder: (context, controller) =>
-                  TDropdownSingleSelectPanel<String>(
-                    controller: controller,
-                    value: sorter,
-                    options: const [
-                      TDropdownMenuOption(value: 'default', label: '默认排序'),
-                      TDropdownMenuOption(value: 'price', label: '价格从高到低'),
-                    ],
-                    onChanged: (value) => setState(() => sorter = value),
-                  ),
-            ),
-          ],
-        );
-      },
+    return TDropdownMenu(
+      items: [
+        TDropdownMenuItem(
+          label: switch (_product) {
+            'new' => '最新产品',
+            'hot' => '最火产品',
+            _ => '全部产品',
+          },
+          panelBuilder: (context, controller) =>
+              TDropdownSingleSelectPanel<String>(
+                controller: controller,
+                value: _product,
+                options: DropdownMenuSortingExample.productOptions,
+                onChanged: (value) => setState(() => _product = value),
+              ),
+        ),
+        TDropdownMenuItem(
+          label: _sorter == 'default' ? '默认排序' : '价格从高到低',
+          panelBuilder: (context, controller) =>
+              TDropdownSingleSelectPanel<String>(
+                controller: controller,
+                value: _sorter,
+                options: const [
+                  TDropdownMenuOption(value: 'default', label: '默认排序'),
+                  TDropdownMenuOption(value: 'price', label: '价格从高到低'),
+                ],
+                onChanged: (value) => setState(() => _sorter = value),
+              ),
+        ),
+      ],
     );
   }
 

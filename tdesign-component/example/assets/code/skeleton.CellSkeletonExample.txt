@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-class CellSkeletonExample extends StatefulWidget {
+class CellSkeletonExample extends StatelessWidget {
   const CellSkeletonExample({super.key});
 
-  @override
-  State<CellSkeletonExample> createState() => _CellSkeletonExampleState();
-}
-
-class _CellSkeletonExampleState extends State<CellSkeletonExample> {
   Widget Function(BuildContext) _wrapper(
     Function(BuildContext) builder, {
     bool isFlexible = false,

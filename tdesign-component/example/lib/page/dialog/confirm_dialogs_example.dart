@@ -4,14 +4,9 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'dialog')
-class ConfirmDialogsExample extends StatefulWidget {
+class ConfirmDialogsExample extends StatelessWidget {
   const ConfirmDialogsExample({super.key});
 
-  @override
-  State<ConfirmDialogsExample> createState() => _ConfirmDialogsExampleState();
-}
-
-class _ConfirmDialogsExampleState extends State<ConfirmDialogsExample> {
   Widget _confirmDialogs(BuildContext context) {
     return _scenarios(context, [
       _trigger('确认类-带标题', () {

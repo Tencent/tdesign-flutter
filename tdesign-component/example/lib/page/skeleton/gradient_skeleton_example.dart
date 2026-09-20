@@ -4,15 +4,9 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'skeleton')
-class GradientSkeletonExample extends StatefulWidget {
+class GradientSkeletonExample extends StatelessWidget {
   const GradientSkeletonExample({super.key});
 
-  @override
-  State<GradientSkeletonExample> createState() =>
-      _GradientSkeletonExampleState();
-}
-
-class _GradientSkeletonExampleState extends State<GradientSkeletonExample> {
   Widget Function(BuildContext) _wrapper(
     Function(BuildContext) builder, {
     bool isFlexible = false,

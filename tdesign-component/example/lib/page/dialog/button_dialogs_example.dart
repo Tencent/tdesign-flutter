@@ -4,14 +4,9 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'dialog')
-class ButtonDialogsExample extends StatefulWidget {
+class ButtonDialogsExample extends StatelessWidget {
   const ButtonDialogsExample({super.key});
 
-  @override
-  State<ButtonDialogsExample> createState() => _ButtonDialogsExampleState();
-}
-
-class _ButtonDialogsExampleState extends State<ButtonDialogsExample> {
   Widget _buttonDialogs(BuildContext context) {
     return _scenarios(context, [
       _statusScenario(

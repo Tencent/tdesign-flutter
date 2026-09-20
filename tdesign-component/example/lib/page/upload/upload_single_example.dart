@@ -12,17 +12,16 @@ class UploadSingleExample extends StatefulWidget {
 }
 
 class _UploadSingleExampleState extends State<UploadSingleExample> {
+  var _files = const <TUploadFile>[];
+
   Widget _single(BuildContext context) {
-    var files = const <TUploadFile>[];
-    return StatefulBuilder(
-      builder: (context, setState) => _demo(
-        TUpload(
-          files: files,
-          maxFiles: 1,
-          onChanged: (value) => setState(() => files = value),
-        ),
-        title: '上传图片',
+    return _demo(
+      TUpload(
+        files: _files,
+        maxFiles: 1,
+        onChanged: (value) => setState(() => _files = value),
       ),
+      title: '上传图片',
     );
   }
 

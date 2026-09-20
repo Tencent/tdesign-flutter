@@ -4,14 +4,9 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'skeleton')
-class FlashedSkeletonExample extends StatefulWidget {
+class FlashedSkeletonExample extends StatelessWidget {
   const FlashedSkeletonExample({super.key});
 
-  @override
-  State<FlashedSkeletonExample> createState() => _FlashedSkeletonExampleState();
-}
-
-class _FlashedSkeletonExampleState extends State<FlashedSkeletonExample> {
   Widget Function(BuildContext) _wrapper(
     Function(BuildContext) builder, {
     bool isFlexible = false,

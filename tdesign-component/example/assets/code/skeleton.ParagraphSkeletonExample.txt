@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-class ParagraphSkeletonExample extends StatefulWidget {
+class ParagraphSkeletonExample extends StatelessWidget {
   const ParagraphSkeletonExample({super.key});
 
-  @override
-  State<ParagraphSkeletonExample> createState() =>
-      _ParagraphSkeletonExampleState();
-}
-
-class _ParagraphSkeletonExampleState extends State<ParagraphSkeletonExample> {
   Widget Function(BuildContext) _wrapper(
     Function(BuildContext) builder, {
     bool isFlexible = false,

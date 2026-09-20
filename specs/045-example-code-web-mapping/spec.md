@@ -66,5 +66,5 @@ Table 页面同时包含静态、受控交互、固定列和样式示例，作�
 - [x] 映射测试覆盖全部文档清单、ExampleItem 一一对应、顺序以及非法键和缺失资产；Flutter Widget 回归覆盖生成代码面板的真实加载。
 - [x] 结构检查、示例生成器 `--check`、全组件测试、站点构建、双版本 analyze 和 Linux Golden 通过。
 - [x] Web 代码面板显示可复制源码，开发模式右侧 Flutter Web 预览可实际加载。
-- [x] Button、Divider、Fab、Icon、Link、Text 基础组件示例按真实状态需求选择 Widget 类型；19 个无状态示例已移除空 State 样板，确有交互状态的 Icon 示例仍保留 `StatefulWidget`。
+- [x] 全部 374 个公开示例按真实状态需求选择 Widget 类型：无跨帧状态的示例移除空 State 样板；交互状态由对应示例 State 直接持有，不使用无职责的外层 State 包裹局部 `StatefulBuilder`；Controller、资源释放和生命周期协调仍保留 `StatefulWidget`。
 - [x] FAB 页面骨架仅作为悬浮按钮的滚动背景，不进入公开示例清单或 Web 代码面板。

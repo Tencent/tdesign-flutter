@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-class ActionSheetPagedGridExample extends StatefulWidget {
+class ActionSheetPagedGridExample extends StatelessWidget {
   const ActionSheetPagedGridExample({super.key});
 
-  @override
-  State<ActionSheetPagedGridExample> createState() =>
-      _ActionSheetPagedGridExampleState();
-}
-
-class _ActionSheetPagedGridExampleState
-    extends State<ActionSheetPagedGridExample> {
   Widget _pagedGrid(BuildContext context) => _trigger(
     label: '带翻页宫格型',
     onPressed: () => TActionSheet.showGrid(

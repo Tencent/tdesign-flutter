@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-class InputDialogsExample extends StatefulWidget {
+class InputDialogsExample extends StatelessWidget {
   const InputDialogsExample({super.key});
 
-  @override
-  State<InputDialogsExample> createState() => _InputDialogsExampleState();
-}
-
-class _InputDialogsExampleState extends State<InputDialogsExample> {
   Widget _inputDialogs(BuildContext context) {
     return _scenarios(context, [
       _trigger('输入类-无描述', () {

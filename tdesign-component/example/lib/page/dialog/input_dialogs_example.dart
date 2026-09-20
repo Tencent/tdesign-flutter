@@ -4,14 +4,9 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'dialog')
-class InputDialogsExample extends StatefulWidget {
+class InputDialogsExample extends StatelessWidget {
   const InputDialogsExample({super.key});
 
-  @override
-  State<InputDialogsExample> createState() => _InputDialogsExampleState();
-}
-
-class _InputDialogsExampleState extends State<InputDialogsExample> {
   Widget _inputDialogs(BuildContext context) {
     return _scenarios(context, [
       _trigger('输入类-无描述', () {

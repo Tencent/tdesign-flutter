@@ -4,16 +4,9 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'action_sheet')
-class ActionSheetScrollGridExample extends StatefulWidget {
+class ActionSheetScrollGridExample extends StatelessWidget {
   const ActionSheetScrollGridExample({super.key});
 
-  @override
-  State<ActionSheetScrollGridExample> createState() =>
-      _ActionSheetScrollGridExampleState();
-}
-
-class _ActionSheetScrollGridExampleState
-    extends State<ActionSheetScrollGridExample> {
   Widget _scrollGrid(BuildContext context) => _trigger(
     label: '多行滚动宫格型',
     onPressed: () => TActionSheet.showGrid(

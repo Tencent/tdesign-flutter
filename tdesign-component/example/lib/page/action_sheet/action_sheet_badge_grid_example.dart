@@ -4,16 +4,9 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'action_sheet')
-class ActionSheetBadgeGridExample extends StatefulWidget {
+class ActionSheetBadgeGridExample extends StatelessWidget {
   const ActionSheetBadgeGridExample({super.key});
 
-  @override
-  State<ActionSheetBadgeGridExample> createState() =>
-      _ActionSheetBadgeGridExampleState();
-}
-
-class _ActionSheetBadgeGridExampleState
-    extends State<ActionSheetBadgeGridExample> {
   Widget _badgeGrid(BuildContext context) => _trigger(
     label: '带徽标宫格型',
     onPressed: () => TActionSheet.showGrid(

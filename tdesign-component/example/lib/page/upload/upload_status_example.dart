@@ -12,17 +12,16 @@ class UploadStatusExample extends StatefulWidget {
 }
 
 class _UploadStatusExampleState extends State<UploadStatusExample> {
+  var _files = _statusFiles;
+
   Widget _status(BuildContext context) {
-    var files = _statusFiles;
-    return StatefulBuilder(
-      builder: (context, setState) => _demo(
-        TUpload(
-          files: files,
-          maxFiles: 4,
-          onChanged: (value) => setState(() => files = value),
-        ),
-        title: '上传图片',
+    return _demo(
+      TUpload(
+        files: _files,
+        maxFiles: 4,
+        onChanged: (value) => setState(() => _files = value),
       ),
+      title: '上传图片',
     );
   }
 

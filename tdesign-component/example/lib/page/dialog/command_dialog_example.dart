@@ -4,14 +4,9 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'dialog')
-class CommandDialogExample extends StatefulWidget {
+class CommandDialogExample extends StatelessWidget {
   const CommandDialogExample({super.key});
 
-  @override
-  State<CommandDialogExample> createState() => _CommandDialogExampleState();
-}
-
-class _CommandDialogExampleState extends State<CommandDialogExample> {
   Widget _commandDialog(BuildContext context) {
     return _trigger('命令行操作', () async {
       final result = await TDialog.show<_DialogCommandResult>(

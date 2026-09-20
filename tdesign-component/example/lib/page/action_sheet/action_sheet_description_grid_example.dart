@@ -4,16 +4,9 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'action_sheet')
-class ActionSheetDescriptionGridExample extends StatefulWidget {
+class ActionSheetDescriptionGridExample extends StatelessWidget {
   const ActionSheetDescriptionGridExample({super.key});
 
-  @override
-  State<ActionSheetDescriptionGridExample> createState() =>
-      _ActionSheetDescriptionGridExampleState();
-}
-
-class _ActionSheetDescriptionGridExampleState
-    extends State<ActionSheetDescriptionGridExample> {
   Widget _descriptionGrid(BuildContext context) => _trigger(
     label: '带描述宫格型',
     onPressed: () => TActionSheet.showGrid(

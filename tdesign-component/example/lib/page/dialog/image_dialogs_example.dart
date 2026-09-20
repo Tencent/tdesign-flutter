@@ -4,14 +4,9 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'dialog')
-class ImageDialogsExample extends StatefulWidget {
+class ImageDialogsExample extends StatelessWidget {
   const ImageDialogsExample({super.key});
 
-  @override
-  State<ImageDialogsExample> createState() => _ImageDialogsExampleState();
-}
-
-class _ImageDialogsExampleState extends State<ImageDialogsExample> {
   Widget _imageDialogs(BuildContext context) {
     return _scenarios(context, [
       _trigger('图片置顶-带标题描述', () {

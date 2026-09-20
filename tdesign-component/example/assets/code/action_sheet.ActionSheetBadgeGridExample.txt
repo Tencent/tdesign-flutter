@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-class ActionSheetBadgeGridExample extends StatefulWidget {
+class ActionSheetBadgeGridExample extends StatelessWidget {
   const ActionSheetBadgeGridExample({super.key});
 
-  @override
-  State<ActionSheetBadgeGridExample> createState() =>
-      _ActionSheetBadgeGridExampleState();
-}
-
-class _ActionSheetBadgeGridExampleState
-    extends State<ActionSheetBadgeGridExample> {
   Widget _badgeGrid(BuildContext context) => _trigger(
     label: '带徽标宫格型',
     onPressed: () => TActionSheet.showGrid(

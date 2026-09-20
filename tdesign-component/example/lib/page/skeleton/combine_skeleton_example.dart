@@ -4,14 +4,9 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'skeleton')
-class CombineSkeletonExample extends StatefulWidget {
+class CombineSkeletonExample extends StatelessWidget {
   const CombineSkeletonExample({super.key});
 
-  @override
-  State<CombineSkeletonExample> createState() => _CombineSkeletonExampleState();
-}
-
-class _CombineSkeletonExampleState extends State<CombineSkeletonExample> {
   Widget Function(BuildContext) _wrapper(
     Function(BuildContext) builder, {
     bool isFlexible = false,

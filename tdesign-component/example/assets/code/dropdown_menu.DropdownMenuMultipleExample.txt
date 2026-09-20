@@ -11,45 +11,42 @@ class DropdownMenuMultipleExample extends StatefulWidget {
 
 class _DropdownMenuMultipleExampleState
     extends State<DropdownMenuMultipleExample> {
-  Widget _multiple(BuildContext context) {
-    var singleColumn = <String>{'option-1'};
-    var doubleColumn = <String>{'option-1'};
-    var tripleColumn = <String>{'option-1'};
-    return StatefulBuilder(
-      builder: (context, setState) {
-        TDropdownMenuItem menuItem(
-          String label,
-          int columns,
-          Set<String> selected,
-          ValueChanged<Set<String>> onConfirm,
-        ) {
-          return TDropdownMenuItem(
-            label: label,
-            panelBuilder: (context, controller) =>
-                TDropdownMultiSelectPanel<String>(
-                  controller: controller,
-                  options: categoryOptions,
-                  values: selected,
-                  columns: columns,
-                  onConfirm: onConfirm,
-                ),
-          );
-        }
+  var _singleColumn = <String>{'option-1'};
+  var _doubleColumn = <String>{'option-1'};
+  var _tripleColumn = <String>{'option-1'};
 
-        return TDropdownMenu(
-          items: [
-            menuItem('单列多选', 1, singleColumn, (values) {
-              setState(() => singleColumn = values);
-            }),
-            menuItem('双列多选', 2, doubleColumn, (values) {
-              setState(() => doubleColumn = values);
-            }),
-            menuItem('三列多选', 3, tripleColumn, (values) {
-              setState(() => tripleColumn = values);
-            }),
-          ],
-        );
-      },
+  Widget _multiple(BuildContext context) {
+    TDropdownMenuItem menuItem(
+      String label,
+      int columns,
+      Set<String> selected,
+      ValueChanged<Set<String>> onConfirm,
+    ) {
+      return TDropdownMenuItem(
+        label: label,
+        panelBuilder: (context, controller) =>
+            TDropdownMultiSelectPanel<String>(
+              controller: controller,
+              options: categoryOptions,
+              values: selected,
+              columns: columns,
+              onConfirm: onConfirm,
+            ),
+      );
+    }
+
+    return TDropdownMenu(
+      items: [
+        menuItem('单列多选', 1, _singleColumn, (values) {
+          setState(() => _singleColumn = values);
+        }),
+        menuItem('双列多选', 2, _doubleColumn, (values) {
+          setState(() => _doubleColumn = values);
+        }),
+        menuItem('三列多选', 3, _tripleColumn, (values) {
+          setState(() => _tripleColumn = values);
+        }),
+      ],
     );
   }
 

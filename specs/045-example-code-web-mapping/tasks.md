@@ -19,5 +19,6 @@
 - [x] DONE 让站点开发命令同时启动 Vite 与 Flutter Web，并为开发/生产环境选择正确预览地址
 - [x] DONE 清理 19 个基础组件无状态实现，并同步其中 18 份公开可复制代码资产
 - [x] DONE 从公开 FAB 代码清单移除仅承担页面背景的骨架辅助内容
+- [x] DONE 全量复核 374 个公开示例的 Widget 状态归属，清理空 State、重复 `StatefulBuilder` 并修复超时计数状态
 - [x] DONE `42bdd37a` 的 Linux Golden 与全部远端 CI 通过；双版本 analyze/test、Android/iOS/Web 构建、站点构建与 autofix 均为绿色
 - [ ] TODO 完成 Review

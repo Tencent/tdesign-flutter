@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-class FeedbackDialogsExample extends StatefulWidget {
+class FeedbackDialogsExample extends StatelessWidget {
   const FeedbackDialogsExample({super.key});
 
-  @override
-  State<FeedbackDialogsExample> createState() => _FeedbackDialogsExampleState();
-}
-
-class _FeedbackDialogsExampleState extends State<FeedbackDialogsExample> {
   Widget _feedbackDialogs(BuildContext context) {
     return _scenarios(context, [
       _trigger('反馈类-带标题', () {

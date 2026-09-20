@@ -20,6 +20,9 @@
 | `npm run site` | PASS | 站点生产构建完成，109 modules transformed |
 | `git diff --check` | PASS | 无空白错误 |
 | Linux 3.32 Golden / 远端 CI | PASS | PR #1142，`42bdd37a`：Linux Flutter 3.32 全量视觉回归、Flutter 3.32/latest analyze/test、Android/iOS/Web 构建、站点构建、autofix、CodeCC、拼写与 CLA 全部通过 |
+| 374 个公开示例状态归属审计 | PASS | 268 个 `StatelessWidget`、106 个 `StatefulWidget`；不存在公开示例内嵌 `StatefulBuilder`，唯一不直接调用 `setState` / 生命周期的 Stateful 示例用于稳定持有 `TPullDownRefreshController` |
+| 状态归属修复聚焦回归 | PASS | Flutter 3.32 / 3.47 的 8 个受影响功能测试文件均 48/48；3.32 完整 Example 非视觉回归 262/262；生成器测试 11/11；Web 映射测试 10/10；两版本 Example 严格 analyze 均为 0 issues |
+| Flutter 3.32 Linux 受影响 Golden | PASS | ActionSheet、Dialog、DropdownMenu、Skeleton、Upload、PullDownRefresh 共 108/108；仅更新超时后计数由 0 变为 1 的明暗两张基线，更新后无参数严格复跑通过 |
 
 ### 基础组件无状态示例复核
 
@@ -47,6 +50,7 @@
 - [x] `42bdd37a` 的 Linux 3.32 Golden 与全部远端 CI 通过。
 - [x] Button、Fab、Link、Text 中 19 个无跨帧状态的示例改为 `StatelessWidget`；Divider 原本已是无状态实现，Icon 仅保留确实管理搜索/滚动/复制反馈状态的 `ShowAllIconsExample`。
 - [x] 18 份基础组件公开生成资产与运行源码同步；FAB 骨架改为 `FabSkeletonContent` 页面辅助内容并从 manifest 移除，未在解析器中引入 Widget 重写或业务依赖推断。
+- [x] 374 个公开示例完成 Widget 类型与状态所有权复核：21 个 ActionSheet/Dialog/Skeleton 空 State 改为 `StatelessWidget`；Cell、DropdownMenu、Upload 的 10 个交互示例移除重复 `StatefulBuilder` 并由自身 State 持有值；PullDownRefresh 超时示例会实际累计并显示超时次数。
 
 ## 复杂示例归属判断
 

@@ -4,16 +4,9 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'action_sheet')
-class ActionSheetPagedGridExample extends StatefulWidget {
+class ActionSheetPagedGridExample extends StatelessWidget {
   const ActionSheetPagedGridExample({super.key});
 
-  @override
-  State<ActionSheetPagedGridExample> createState() =>
-      _ActionSheetPagedGridExampleState();
-}
-
-class _ActionSheetPagedGridExampleState
-    extends State<ActionSheetPagedGridExample> {
   Widget _pagedGrid(BuildContext context) => _trigger(
     label: '带翻页宫格型',
     onPressed: () => TActionSheet.showGrid(
