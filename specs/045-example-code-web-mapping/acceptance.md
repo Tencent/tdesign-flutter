@@ -16,8 +16,8 @@
 | `flutter analyze --no-pub --fatal-infos` | PASS | Flutter 3.32，根包与 example 子包均 0 issues |
 | Flutter 3.47 `flutter analyze --no-pub --fatal-infos` | PASS | 根包与 example 子包均 0 issues |
 | example 全量非视觉测试 | PASS | 排除独立 Golden 文件和 `golden` tag 后，69 个测试文件、294/294 |
-| `npm run test:example-code` | PASS | Node 映射测试 6/6；57 份组件文档映射 365 份组件示例，另有 fonts/radius/shadows 10 份基础示例 |
-| `npm run site` | PASS | 站点生产构建完成，108 modules transformed |
+| `npm run test:example-code` | PASS | Node 映射测试 9/9；57 份组件文档映射 365 份组件示例，另有 fonts/radius/shadows 10 份基础示例；覆盖开发/生产预览地址 |
+| `npm run site` | PASS | 站点生产构建完成，109 modules transformed |
 | `git diff --check` | PASS | 无空白错误 |
 | Linux 3.32 Golden / 远端 CI | PASS | PR #1142，`42bdd37a`：Linux Flutter 3.32 全量视觉回归、Flutter 3.32/latest analyze/test、Android/iOS/Web 构建、站点构建、autofix、CodeCC、拼写与 CLA 全部通过 |
 
@@ -32,6 +32,8 @@
 - [x] Web 严格按 manifest 恢复公开分组、描述和顺序；缺少描述时才以示例类名兜底。
 - [x] Table、Stepper、Form、Calendar、Sidebar、Popover、Progress、Tag、TreeSelect 等不同复杂度代码面板已由 Widget 测试实际加载。
 - [x] 57 份组件文档均只有一个组映射，无手写 Dart `td-code-block`，未注册资产不会进入文档。
+- [x] 本地 `npm run dev` 同时启动 Vite `19000` 与 Flutter Web `19001`；Button 文档在 1440px 视口下显示 375px 宽右侧实时预览。
+- [x] Button 代码块 Shadow DOM 正常初始化并展示解码后的 Dart 源码，iframe 指向 `http://127.0.0.1:19001/#button`；修复后页面未再产生 Dart grammar 错误。
 - [x] `42bdd37a` 的 Linux 3.32 Golden 与全部远端 CI 通过。
 
 ## 复杂示例归属判断

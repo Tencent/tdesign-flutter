@@ -48,6 +48,8 @@ Table 页面同时包含静态、受控交互、固定列和样式示例，作�
 - 组件文档目录名与生成组按忽略 `-`、`_` 和大小写的规则一一匹配；每份文档必须且只能有一个组映射。
 - 全部 57 份组件文档不得保留手写 Dart `td-code-block`；`radius`、`shadows` 属于 Example 基础配置页，没有组件 Web 路由，不纳入组件文档映射。
 - 找不到资产时不得降级为“建设中”，必须抛出错误阻止发布过期文档。
+- Web 代码面板必须显示并复制解码后的完整 Dart 源码；站点代码块不支持 Dart grammar 时，由 Flutter 文档适配层选择兼容 grammar，不得把 URL 编码文本直接暴露给用户。
+- `tdesign-site` 的默认开发命令必须同时启动文档站和 Flutter Web 示例，并让右侧预览指向同一开发主机的 Flutter 服务；生产构建仍使用 `/flutter/example/` 静态产物。
 - `dart run tool/check_demo_structure.dart` 必须阻止入口回退到 `page/` 根目录、纯分组模块文件残留、ExampleItem 实现未独立成文件、页面持有示例私有状态、非语义命名、缺失 config 引用和辅助文件漂移。
 - CI 必须验证全部公开 ExampleItem 与生成资产一一对应、顺序一致，并验证每份类级示例源码在最小宿主中可解析或编译；仅检查文件存在和数量不算通过。
 
@@ -60,3 +62,4 @@ Table 页面同时包含静态、受控交互、固定列和样式示例，作�
 - [x] 57 份组件 Web 文档按公开 ExampleItem 顺序映射生成资产，不混入测试专用或未注册片段。
 - [x] 映射测试覆盖全部文档清单、ExampleItem 一一对应、顺序以及非法键和缺失资产；Flutter Widget 回归覆盖生成代码面板的真实加载。
 - [x] 结构检查、示例生成器 `--check`、全组件测试、站点构建、双版本 analyze 和 Linux Golden 通过。
+- [x] Web 代码面板显示可复制源码，开发模式右侧 Flutter Web 预览可实际加载。

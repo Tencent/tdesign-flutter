@@ -96,8 +96,12 @@ export function readFlutterExampleGroup(group, exampleCodeDirectory = defaultExa
 
 function renderFlutterExample(assetKey, exampleCodeDirectory) {
   const code = readFlutterExampleCode(assetKey, exampleCodeDirectory);
+  // @tdesign/site-components bundles its own Prism instance without the Dart
+  // grammar. Use its built-in C-like grammar while keeping the public panel
+  // label as Dart; requesting `dart` makes the custom element fail before it
+  // can decode and render the generated source.
   return `<td-code-block panel="Dart">
-  <pre slot="Dart" lang="dart">${encodeURIComponent(code)}</pre>
+  <pre slot="Dart" lang="clike">${encodeURIComponent(code)}</pre>
 </td-code-block>`;
 }
 

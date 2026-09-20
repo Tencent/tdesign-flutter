@@ -31,7 +31,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ## 本地运行官网示例代码
 
 - 在 `tdesign-site` 目录执行 `pnpm install --frozen-lockfile` 安装依赖
-- 运行 `pnpm site:dev` 启动本地文档站点
+- 在 `tdesign-site` 目录运行 `pnpm dev`，同时启动文档站点和 Flutter Web 预览
 
 ## 组件库版本
 

@@ -27,8 +27,8 @@ test('renders the generated Dart source into the Web code block', () => {
   const expected = readFlutterExampleCode('table.TableBasicExample');
   const source = replaceFlutterExampleDirectives('### 基础表格\n\n{{ flutter-example table.TableBasicExample }}');
   assert.match(source, /<td-code-block panel="Dart">/);
-  assert.match(source, /lang="dart"/);
-  const encoded = source.match(/<pre slot="Dart" lang="dart">(.+)<\/pre>/s)[1];
+  assert.match(source, /lang="clike"/);
+  const encoded = source.match(/<pre slot="Dart" lang="clike">(.+)<\/pre>/s)[1];
   assert.equal(decodeURIComponent(encoded), expected);
 });
 
