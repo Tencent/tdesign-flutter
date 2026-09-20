@@ -1,6 +1,7 @@
+import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { defineConfig, type ConfigEnv } from 'vite';
+import { defineConfig, type ConfigEnv, type Plugin, type ViteDevServer } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import createTDesignPlugin from './plugin-tdoc';
@@ -12,6 +13,48 @@ const publicPathMap: Record<string, string> = {
   preview: '/',
   production: '/flutter/',
 };
+
+function flutterExampleDevServer(): Plugin {
+  return {
+    name: 'flutter-example-dev-server',
+    configureServer(server: ViteDevServer) {
+      server.middlewares.use('/flutter/example', (req, res, next) => {
+        const requestUrl = req.url || '/';
+        const targetPath = requestUrl.startsWith('/flutter/example')
+          ? requestUrl.slice('/flutter/example'.length) || '/'
+          : requestUrl;
+        const proxyRequest = http.request(
+          {
+            hostname: '127.0.0.1',
+            port: 19001,
+            path: targetPath,
+            method: req.method,
+            headers: { ...req.headers, host: '127.0.0.1:19001' },
+          },
+          (proxyResponse) => {
+            const contentType = proxyResponse.headers['content-type'] || '';
+            const chunks: Buffer[] = [];
+            proxyResponse.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
+            proxyResponse.on('end', () => {
+              let body = Buffer.concat(chunks);
+              if (contentType.includes('text/html')) {
+                body = Buffer.from(body.toString('utf8').replace('<base href="/">', '<base href="/flutter/example/">'));
+              }
+              const headers = { ...proxyResponse.headers, 'content-length': body.length };
+              delete headers['transfer-encoding'];
+              res.writeHead(proxyResponse.statusCode || 502, headers);
+              res.end(body);
+            });
+          },
+        );
+        proxyRequest.on('error', () => {
+          next();
+        });
+        req.pipe(proxyRequest);
+      });
+    },
+  };
+}
 
 // https://vitejs.dev/config/
 export default ({ mode }: ConfigEnv) => {
@@ -53,6 +96,7 @@ export default ({ mode }: ConfigEnv) => {
         },
       }),
       vueJsx(),
+      flutterExampleDevServer(),
       createTDesignPlugin(),
     ],
   });
