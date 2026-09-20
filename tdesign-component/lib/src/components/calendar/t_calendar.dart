@@ -120,7 +120,7 @@ class TCalendar extends StatefulWidget {
 
   /// 星期标题，按星期日到星期六排列。
   ///
-  /// 未设置时使用 [TResourceManager] 提供的当前语言文案。
+  /// 未设置时使用 `TResourceManager` 提供的当前语言文案。
   final List<String>? weekdayNames;
 
   /// 整格自定义构建器；返回非 null 时替换该格默认布局（主数字 + 副标题均不渲染）。
