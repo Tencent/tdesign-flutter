@@ -3,10 +3,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
+import 'radius_circle_example.dart';
+import 'radius_default_example.dart';
+import 'radius_extra_large_example.dart';
+import 'radius_large_example.dart';
+import 'radius_round_example.dart';
+import 'radius_small_example.dart';
 
-part 'radius_value.dart';
-part 'radius_special.dart';
-
+@ExampleCodeManifest()
 /// 圆角示例页面
 class TRadiusPage extends StatelessWidget {
   const TRadiusPage({Key? key}) : super(key: key);
@@ -16,69 +20,48 @@ class TRadiusPage extends StatelessWidget {
     return ExamplePage(
       title: tTitle(context),
       exampleCodeGroup: 'radius',
-      children: [_radiusValueModule, _radiusSpecialModule],
-    );
-  }
-
-  @ExampleCode(group: 'radius')
-  Widget _buildRadiusSmall(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.tTheme.brandNormalColor,
-        borderRadius: BorderRadius.circular(context.tTheme.radiusSmall),
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'radius')
-  Widget _buildRadiusDefault(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.tTheme.brandNormalColor,
-        borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'radius')
-  Widget _buildRadiusLarge(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.tTheme.brandNormalColor,
-        borderRadius: BorderRadius.circular(context.tTheme.radiusLarge),
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'radius')
-  Widget _buildRadiusExtraLarge(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.tTheme.brandNormalColor,
-        borderRadius: BorderRadius.circular(context.tTheme.radiusExtraLarge),
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'radius')
-  Widget _buildRadiusRound(BuildContext context) {
-    // 胶囊型，数值设置较大
-    return Container(
-      decoration: BoxDecoration(
-        color: context.tTheme.brandNormalColor,
-        borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'radius')
-  Widget _buildRadiusCircle(BuildContext context) {
-    //  圆形与胶囊型一致，如果长宽一致即是圆形
-    return Container(
-      decoration: BoxDecoration(
-        color: context.tTheme.brandNormalColor,
-        borderRadius: BorderRadius.circular(context.tTheme.radiusCircle),
-      ),
+      children: [
+        ExampleModule(
+          title: '数值型',
+          children: [
+            ExampleItem(
+              desc: '3px 极小组件圆角',
+              methodName: 'RadiusSmallExample',
+              builder: (_) => const RadiusSmallExample(),
+            ),
+            ExampleItem(
+              desc: '6px 组件圆角',
+              methodName: 'RadiusDefaultExample',
+              builder: (_) => const RadiusDefaultExample(),
+            ),
+            ExampleItem(
+              desc: '9px 卡片圆角',
+              methodName: 'RadiusLargeExample',
+              builder: (_) => const RadiusLargeExample(),
+            ),
+            ExampleItem(
+              desc: '12px 面板圆角',
+              methodName: 'RadiusExtraLargeExample',
+              builder: (_) => const RadiusExtraLargeExample(),
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: '特殊',
+          children: [
+            ExampleItem(
+              desc: '胶囊型',
+              methodName: 'RadiusRoundExample',
+              builder: (_) => const RadiusRoundExample(),
+            ),
+            ExampleItem(
+              desc: '圆型',
+              methodName: 'RadiusCircleExample',
+              builder: (_) => const RadiusCircleExample(),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

@@ -1,0 +1,536 @@
+import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class StyleSideBarExample extends StatelessWidget {
+  const StyleSideBarExample({super.key});
+
+  Widget _buildStyleSideBar(BuildContext context) {
+    return Column(
+      children: [
+        Builder(
+          builder: (_) => getCustomButton(context, '非通栏选项样式', 'SideBarAnchor'),
+        ),
+        const SizedBox(height: 16),
+        Builder(
+          builder: (_) => getCustomButton(context, '自定义样式', 'SideBarCustom'),
+        ),
+      ],
+    );
+  }
+
+  Widget getCustomButton(BuildContext context, String text, String routeName) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: Text(text),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () => _openSideBarDemo(context, routeName),
+      ),
+    );
+  }
+
+  void _openSideBarDemo(BuildContext context, String routeName) {
+    Widget? page;
+    var title = '';
+
+    switch (routeName) {
+      case 'SideBarAnchor':
+        title = 'SideBar 锚点';
+        page = const TSideBarAnchorPage();
+        break;
+      case 'SideBarPagination':
+        title = 'SideBar 切页';
+        page = const TSideBarPaginationPage();
+        break;
+      case 'SideBarIcon':
+        title = 'SideBar 带图标';
+        page = const TSideBarIconPage();
+        break;
+      case 'SideBarCustom':
+        title = 'SideBar 自定义样式';
+        page = const TSideBarCustomPage();
+        break;
+    }
+    if (page == null) {
+      return;
+    }
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => Scaffold(
+          appBar: AppBar(title: Text(title)),
+          body: SafeArea(child: page!),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildStyleSideBar(context);
+  }
+}
+
+/// SideBar 锚点与图标示例。
+class TSideBarAnchorPage extends StatefulWidget {
+  const TSideBarAnchorPage({
+    super.key,
+    this.title = 'SideBar 锚点用法',
+    this.variant = TSideBarVariant.line,
+    this.withIcons = false,
+  });
+
+  final String title;
+  final TSideBarVariant variant;
+  final bool withIcons;
+
+  @override
+  State<TSideBarAnchorPage> createState() => TSideBarAnchorPageState();
+}
+
+class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
+  static const _anchorEdgeTolerance = 0.5;
+  static const _itemCount = 10;
+
+  var currentValue = 1;
+  final _demoScroller = ScrollController();
+  var _isProgrammaticScroll = false;
+  var _programmaticScrollGeneration = 0;
+  final _headerKeys = List.generate(_itemCount, (_) => GlobalKey());
+  final _contentViewportKey = GlobalKey();
+  final _lastSectionKey = GlobalKey();
+  var _trailingExtent = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _demoScroller.addListener(() {
+      if (!_isProgrammaticScroll) {
+        _syncSelectionFromViewport();
+      }
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        handleSidebarChange(currentValue);
+      }
+    });
+  }
+
+  void _syncSelectionFromViewport() {
+    final index = _indexForViewport();
+    if (index != currentValue && mounted) {
+      setState(() => currentValue = index);
+    }
+  }
+
+  void _syncTrailingExtent() {
+    final viewport =
+        _contentViewportKey.currentContext?.findRenderObject() as RenderBox?;
+    final header =
+        _headerKeys.last.currentContext?.findRenderObject() as RenderBox?;
+    final section =
+        _lastSectionKey.currentContext?.findRenderObject() as RenderBox?;
+    if (viewport == null || header == null || section == null) {
+      return;
+    }
+    final headerTop = header.localToGlobal(Offset.zero).dy;
+    final sectionBottom =
+        section.localToGlobal(Offset.zero).dy + section.size.height;
+    final extent = max(0.0, viewport.size.height - (sectionBottom - headerTop));
+    if ((extent - _trailingExtent).abs() > _anchorEdgeTolerance && mounted) {
+      setState(() => _trailingExtent = extent);
+    }
+  }
+
+  int _indexForViewport() {
+    final viewport =
+        _contentViewportKey.currentContext?.findRenderObject() as RenderBox?;
+    if (viewport == null) {
+      return currentValue;
+    }
+    final viewportTop = viewport.localToGlobal(Offset.zero).dy;
+    var index = 0;
+    for (var i = 1; i < _headerKeys.length; i++) {
+      final header =
+          _headerKeys[i].currentContext?.findRenderObject() as RenderBox?;
+      if (header == null ||
+          header.localToGlobal(Offset.zero).dy >
+              viewportTop + _anchorEdgeTolerance) {
+        break;
+      }
+      index = i;
+    }
+    return index;
+  }
+
+  Future<void> handleSidebarChange(int value) async {
+    final generation = ++_programmaticScrollGeneration;
+    if (currentValue != value) {
+      setState(() => currentValue = value);
+    }
+    final targetContext = _headerKeys[value].currentContext;
+    if (targetContext == null) {
+      return;
+    }
+    _isProgrammaticScroll = true;
+    try {
+      await Scrollable.ensureVisible(
+        targetContext,
+        alignment: 0,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    } finally {
+      if (mounted && generation == _programmaticScrollGeneration) {
+        _isProgrammaticScroll = false;
+        _syncSelectionFromViewport();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _demoScroller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => _buildAnchorSideBar(context);
+
+  Widget _buildAnchorSideBar(BuildContext context) {
+    // 接入说明：currentValue、handleSidebarChange 与滚动控制器由页面状态持有；
+    // 此处展示 TSideBar 与内容列表的核心组装，接入时需自行维护 value/onChanged 联动。
+    final labels = List.filled(10, '选项');
+    final titles = List.filled(10, '标题');
+    final itemCounts = List.filled(10, 8);
+    final items = List.generate(
+      labels.length,
+      (index) => TSideBarItem(
+        label: labels[index],
+        value: index,
+        icon: widget.withIcons ? TIcons.app : null,
+        badge: switch (index) {
+          1 => const TBadgeConfig(variant: TBadgeVariant.dot),
+          2 => const TBadgeConfig(label: '8'),
+          _ => null,
+        },
+      ),
+    );
+
+    Widget buildSection(int sectionIndex) {
+      return KeyedSubtree(
+        key: sectionIndex == labels.length - 1 ? _lastSectionKey : null,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            KeyedSubtree(
+              key: ValueKey('sidebar-section-$sectionIndex'),
+              child: Container(
+                key: _headerKeys[sectionIndex],
+                height: 54,
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TText(
+                  titles[sectionIndex],
+                  font: context.tTheme.fontBodyLarge,
+                ),
+              ),
+            ),
+            for (var index = 0; index < itemCounts[sectionIndex]; index++)
+              Container(
+                height: 80,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: context.tTheme.grayColor2),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    const TImage(
+                      src: 'assets/img/empty.png',
+                      width: 48,
+                      height: 48,
+                    ),
+                    const SizedBox(width: 16),
+                    TText('标题', font: context.tTheme.fontBodyLarge),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      );
+    }
+
+    return Row(
+      children: [
+        TSideBar(
+          variant: widget.variant,
+          value: currentValue,
+          children: items,
+          onChanged: handleSidebarChange,
+        ),
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) {
+                  _syncTrailingExtent();
+                }
+              });
+              return SingleChildScrollView(
+                key: _contentViewportKey,
+                controller: _demoScroller,
+                child: Container(
+                  color: context.tTheme.bgColorContainer,
+                  child: Column(
+                    children: [
+                      for (var index = 0; index < labels.length; index++)
+                        buildSection(index),
+                      SizedBox(height: _trailingExtent),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// SideBar 切页示例。
+class TSideBarPaginationPage extends StatefulWidget {
+  const TSideBarPaginationPage({super.key});
+
+  @override
+  State<TSideBarPaginationPage> createState() => TSideBarPaginationPageState();
+}
+
+class TSideBarPaginationPageState extends State<TSideBarPaginationPage> {
+  var currentValue = 1;
+  final _pageController = PageController(initialPage: 1);
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => _buildPaginationSideBar(context);
+
+  Widget _buildPaginationSideBar(BuildContext context) {
+    // 接入说明：currentValue、setCurrentValue 与 PageController 由页面状态持有；
+    // 此处展示 TSideBar 与 PageView 的核心组装，接入时需自行维护 value/onChanged 联动。
+    final labels = List.filled(10, '选项');
+    final titles = List.filled(10, '标题');
+    final itemCounts = List.filled(10, 8);
+    final items = List.generate(
+      labels.length,
+      (index) => TSideBarItem(
+        label: labels[index],
+        value: index,
+        disabled: index == 4,
+        badge: switch (index) {
+          1 => const TBadgeConfig(variant: TBadgeVariant.dot),
+          2 => const TBadgeConfig(label: '8'),
+          _ => null,
+        },
+      ),
+    );
+
+    void setCurrentValue(int value) {
+      _pageController.jumpToPage(value);
+      if (currentValue != value) {
+        setState(() => currentValue = value);
+      }
+    }
+
+    return Row(
+      children: [
+        TSideBar(
+          value: currentValue,
+          children: items,
+          onChanged: setCurrentValue,
+        ),
+        Expanded(
+          child: PageView.builder(
+            controller: _pageController,
+            scrollDirection: Axis.vertical,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: titles.length,
+            itemBuilder: (_, pageIndex) => Container(
+              color: context.tTheme.bgColorContainer,
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: itemCounts[pageIndex],
+                itemBuilder: (_, index) => Container(
+                  height: 80,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: context.tTheme.grayColor2),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const TImage(
+                        src: 'assets/img/empty.png',
+                        shape: TImageShape.roundedSquare,
+                        fit: BoxFit.cover,
+                        width: 48,
+                        height: 48,
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: TText(
+                          titles[pageIndex],
+                          font: context.tTheme.fontBodyLarge,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// TSideBarIconPage 演示。
+class TSideBarIconPage extends StatelessWidget {
+  const TSideBarIconPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const TSideBarAnchorPage(title: 'SideBar 带图标侧边导航', withIcons: true);
+  }
+}
+
+/// SideBar 标签样式示例。
+class TSideBarCustomPage extends StatefulWidget {
+  const TSideBarCustomPage({super.key});
+
+  @override
+  State<TSideBarCustomPage> createState() => TSideBarCustomPageState();
+}
+
+class TSideBarCustomPageState extends State<TSideBarCustomPage> {
+  var currentValue = 1;
+  final _pageController = PageController(initialPage: 1);
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => _buildCustomSideBar(context);
+
+  Widget _buildCustomSideBar(BuildContext context) {
+    // 接入说明：currentValue、setCurrentValue 与 PageController 由页面状态持有；
+    // 此处展示 tag 变体与内容页的核心组装，接入时需自行维护 value/onChanged 联动。
+    final labels = List.filled(10, '选项');
+    final titles = List.filled(10, '标题');
+    final itemCounts = List.filled(10, 8);
+    final items = List.generate(
+      labels.length,
+      (index) => TSideBarItem(
+        label: labels[index],
+        value: index,
+        badge: switch (index) {
+          1 => const TBadgeConfig(variant: TBadgeVariant.dot),
+          2 => const TBadgeConfig(label: '8'),
+          _ => null,
+        },
+      ),
+    );
+
+    void setCurrentValue(int value) {
+      _pageController.jumpToPage(value);
+      if (currentValue != value) {
+        setState(() => currentValue = value);
+      }
+    }
+
+    Widget buildPage(int pageIndex) {
+      return Container(
+        color: context.tTheme.bgColorContainer,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 54,
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TText(
+                titles[pageIndex],
+                font: context.tTheme.fontBodyLarge,
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: itemCounts[pageIndex],
+                itemBuilder: (_, index) => Container(
+                  height: 80,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: context.tTheme.grayColor2),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const TImage(
+                        src: 'assets/img/empty.png',
+                        width: 48,
+                        height: 48,
+                      ),
+                      const SizedBox(width: 16),
+                      TText('标题', font: context.tTheme.fontBodyLarge),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Row(
+      children: [
+        TSideBar(
+          variant: TSideBarVariant.tag,
+          value: currentValue,
+          children: items,
+          selectedTextStyle: TextStyle(
+            color: context.tTheme.brandNormalColor,
+            fontWeight: FontWeight.w600,
+          ),
+          selectedBgColor: context.tTheme.brandLightColor,
+          unSelectedColor: context.tTheme.textColorSecondary,
+          onChanged: setCurrentValue,
+        ),
+        Expanded(
+          child: PageView.builder(
+            controller: _pageController,
+            scrollDirection: Axis.vertical,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: titles.length,
+            itemBuilder: (_, index) => buildPage(index),
+          ),
+        ),
+      ],
+    );
+  }
+}

@@ -3,11 +3,21 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
+import 'action_sheet_badge_grid_example.dart';
+import 'action_sheet_badge_list_example.dart';
+import 'action_sheet_basic_grid_example.dart';
+import 'action_sheet_basic_list_example.dart';
+import 'action_sheet_center_list_example.dart';
+import 'action_sheet_description_grid_example.dart';
+import 'action_sheet_description_list_example.dart';
+import 'action_sheet_description_scroll_grid_example.dart';
+import 'action_sheet_icon_list_example.dart';
+import 'action_sheet_left_list_example.dart';
+import 'action_sheet_paged_grid_example.dart';
+import 'action_sheet_scroll_grid_example.dart';
+import 'action_sheet_status_icon_list_example.dart';
 
-part 'action_sheet_type.dart';
-part 'action_sheet_status.dart';
-part 'action_sheet_style.dart';
-
+@ExampleCodeManifest()
 class TActionSheetPage extends StatelessWidget {
   const TActionSheetPage({super.key});
 
@@ -19,456 +29,100 @@ class TActionSheetPage extends StatelessWidget {
       exampleCodeGroup: 'action_sheet',
       showTestModule: false,
       children: [
-        _actionSheetTypeModule,
-        _actionSheetStatusModule,
-        _actionSheetStyleModule,
-      ],
-    );
-  }
-
-  Widget _trigger({required String label, required VoidCallback onPressed}) {
-    return SizedBox(
-      width: double.infinity,
-      child: TButton(
-        child: Text(label),
-        size: TButtonSize.large,
-        variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
-        onPressed: onPressed,
-      ),
-    );
-  }
-
-  List<TActionSheetItem<String>> _textItems() => [
-    const TActionSheetItem(value: 'move', label: 'Move'),
-    const TActionSheetItem(value: 'important', label: 'Mark as important'),
-    const TActionSheetItem(value: 'unsubscribe', label: 'Unsubscribe'),
-    const TActionSheetItem(value: 'tasks', label: 'Add to Tasks'),
-  ];
-
-  List<TActionSheetItem<String>> _iconItems() => [
-    const TActionSheetItem(
-      value: 'move',
-      label: 'Move',
-      icon: Icon(TIcons.enter),
-    ),
-    const TActionSheetItem(
-      value: 'important',
-      label: 'Mark as important',
-      icon: Icon(TIcons.bookmark),
-    ),
-    const TActionSheetItem(
-      value: 'unsubscribe',
-      label: 'Unsubscribe',
-      icon: Icon(TIcons.pin),
-    ),
-    const TActionSheetItem(
-      value: 'tasks',
-      label: 'Add to Tasks',
-      icon: Icon(TIcons.cloud_upload),
-    ),
-  ];
-
-  List<TActionSheetItem<String>> _badgeItems() => [
-    const TActionSheetItem(
-      value: 'move',
-      label: 'Move',
-      badge: TBadgeConfig(variant: TBadgeVariant.dot),
-    ),
-    const TActionSheetItem(
-      value: 'important',
-      label: 'Mark as important',
-      badge: TBadgeConfig(label: '8'),
-    ),
-    const TActionSheetItem(
-      value: 'unsubscribe',
-      label: 'Unsubscribe',
-      badge: TBadgeConfig(label: '99'),
-    ),
-    const TActionSheetItem(
-      value: 'tasks',
-      label: 'Add to Tasks',
-      badge: TBadgeConfig(label: '99+'),
-    ),
-  ];
-
-  Widget _assetGridIcon(String path) {
-    return Container(
-      key: ValueKey(path),
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(
-          color: Colors.black.withValues(alpha: 0.06),
-          width: 0.5,
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(
+              desc: '列表型动作面板',
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              methodName: 'ActionSheetBasicListExample',
+              builder: (_) => const ActionSheetBasicListExample(),
+            ),
+            ExampleItem(
+              desc: '',
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              methodName: 'ActionSheetDescriptionListExample',
+              builder: (_) => const ActionSheetDescriptionListExample(),
+            ),
+            ExampleItem(
+              desc: '',
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              methodName: 'ActionSheetIconListExample',
+              builder: (_) => const ActionSheetIconListExample(),
+            ),
+            ExampleItem(
+              desc: '',
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              methodName: 'ActionSheetBadgeListExample',
+              builder: (_) => const ActionSheetBadgeListExample(),
+            ),
+            ExampleItem(
+              desc: '宫格型动作面板',
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              methodName: 'ActionSheetBasicGridExample',
+              builder: (_) => const ActionSheetBasicGridExample(),
+            ),
+            ExampleItem(
+              desc: '',
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              methodName: 'ActionSheetDescriptionGridExample',
+              builder: (_) => const ActionSheetDescriptionGridExample(),
+            ),
+            ExampleItem(
+              desc: '',
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              methodName: 'ActionSheetPagedGridExample',
+              builder: (_) => const ActionSheetPagedGridExample(),
+            ),
+            ExampleItem(
+              desc: '',
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              methodName: 'ActionSheetBadgeGridExample',
+              builder: (_) => const ActionSheetBadgeGridExample(),
+            ),
+            ExampleItem(
+              desc: '',
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              methodName: 'ActionSheetScrollGridExample',
+              builder: (_) => const ActionSheetScrollGridExample(),
+            ),
+            ExampleItem(
+              desc: '',
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              methodName: 'ActionSheetDescriptionScrollGridExample',
+              builder: (_) => const ActionSheetDescriptionScrollGridExample(),
+            ),
+          ],
         ),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Image.asset(path, fit: BoxFit.cover),
-    );
-  }
-
-  List<TActionSheetItem<String>> _appGridItems() => [
-    TActionSheetItem(
-      value: 'wechat',
-      label: 'WeChat',
-      icon: _assetGridIcon('assets/img/action_sheet_wechat.png'),
-    ),
-    TActionSheetItem(
-      value: 'qq',
-      label: 'QQ',
-      icon: _assetGridIcon('assets/img/action_sheet_qq.png'),
-    ),
-    TActionSheetItem(
-      value: 'document',
-      label: 'Doc',
-      icon: _assetGridIcon('assets/img/action_sheet_doc.png'),
-    ),
-    TActionSheetItem(
-      value: 'map',
-      label: 'Map',
-      icon: _assetGridIcon('assets/img/action_sheet_map.png'),
-    ),
-  ];
-
-  Widget _iconGridIcon(IconData icon) => Builder(
-    builder: (context) => Container(
-      key: ValueKey(icon),
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: context.tTheme.bgColorSecondaryContainer,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      alignment: Alignment.center,
-      child: Icon(icon, size: 24),
-    ),
-  );
-
-  List<TActionSheetItem<String>> _iconGridItems() => [
-    TActionSheetItem(
-      value: 'share',
-      label: 'Share',
-      icon: _iconGridIcon(TIcons.share),
-    ),
-    TActionSheetItem(
-      value: 'favorite',
-      label: 'Collect',
-      icon: _iconGridIcon(TIcons.star),
-    ),
-    TActionSheetItem(
-      value: 'download',
-      label: 'Download',
-      icon: _iconGridIcon(TIcons.cloud_download),
-    ),
-    TActionSheetItem(
-      value: 'edit',
-      label: 'Edit',
-      icon: _iconGridIcon(TIcons.edit),
-    ),
-  ];
-
-  List<TActionSheetItem<String>> _gridItems() => [
-    ..._appGridItems(),
-    ..._iconGridItems(),
-  ];
-
-  List<TActionSheetItem<String>> _badgeGridItems() => [
-    TActionSheetItem(
-      value: 'wechat',
-      label: '微信',
-      icon: _assetGridIcon('assets/img/t_action_sheet_1.png'),
-      badge: const TBadgeConfig(label: 'NEW'),
-    ),
-    TActionSheetItem(
-      value: 'moments',
-      label: '朋友圈',
-      icon: _assetGridIcon('assets/img/t_action_sheet_2.png'),
-    ),
-    TActionSheetItem(
-      value: 'qq',
-      label: 'QQ',
-      icon: _assetGridIcon('assets/img/t_action_sheet_3.png'),
-    ),
-    TActionSheetItem(
-      value: 'wecom',
-      label: '企业微信',
-      icon: _assetGridIcon('assets/img/t_action_sheet_4.png'),
-    ),
-    TActionSheetItem(
-      value: 'favorite',
-      label: '收藏',
-      icon: _iconGridIcon(TIcons.star),
-      badge: const TBadgeConfig(variant: TBadgeVariant.dot),
-    ),
-    TActionSheetItem(
-      value: 'refresh',
-      label: '刷新',
-      icon: _iconGridIcon(TIcons.refresh),
-    ),
-    TActionSheetItem(
-      value: 'download',
-      label: '下载',
-      icon: _iconGridIcon(TIcons.download),
-      badge: const TBadgeConfig(label: '8'),
-    ),
-    TActionSheetItem(
-      value: 'copy',
-      label: '复制',
-      icon: _iconGridIcon(TIcons.queue),
-    ),
-  ];
-
-  List<TActionSheetItem<String>> _scrollGridItems() => [
-    ..._appGridItems(),
-    TActionSheetItem(
-      value: 'qq-music',
-      label: 'QQ Music',
-      icon: _assetGridIcon('assets/img/action_sheet_qq_music.png'),
-    ),
-    ..._iconGridItems(),
-    TActionSheetItem(
-      value: 'link',
-      label: 'Link',
-      icon: _iconGridIcon(TIcons.link),
-    ),
-  ];
-
-  List<TActionSheetItem<String>> _personGridItems() => const [
-    TActionSheetItem(
-      value: 'allen',
-      label: 'Allen',
-      icon: _ActionSheetAssetIcon('assets/img/action_sheet_allen.png'),
-    ),
-    TActionSheetItem(
-      value: 'nick',
-      label: 'Nick',
-      icon: _ActionSheetAssetIcon('assets/img/action_sheet_nick.png'),
-    ),
-    TActionSheetItem(
-      value: 'jacky',
-      label: 'Jacky',
-      icon: _ActionSheetAssetIcon('assets/img/action_sheet_jacky.png'),
-    ),
-    TActionSheetItem(
-      value: 'eric',
-      label: 'Eric',
-      icon: _ActionSheetAssetIcon('assets/img/action_sheet_eric.png'),
-    ),
-    TActionSheetItem(
-      value: 'johnson',
-      label: 'Johnson',
-      icon: _ActionSheetAssetIcon('assets/img/action_sheet_johnson.png'),
-    ),
-  ];
-
-  void _showSelection(BuildContext context, TActionSheetItem<String> item) {
-    TToast.showText('已选择：${item.label}', context: context);
-  }
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _basicList(BuildContext context) => _trigger(
-    label: '常规列表型',
-    onPressed: () => TActionSheet.showList(
-      context,
-      cancelText: 'Cancel',
-      items: _textItems(),
-      onSelected: (item) => _showSelection(context, item),
-    ),
-  );
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _descriptionList(BuildContext context) => _trigger(
-    label: '带描述列表型',
-    onPressed: () => TActionSheet.showList(
-      context,
-      cancelText: 'Cancel',
-      subtitle: 'Email Settings',
-      items: _textItems(),
-      onSelected: (item) => _showSelection(context, item),
-    ),
-  );
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _iconList(BuildContext context) => _trigger(
-    label: '带图标列表型',
-    onPressed: () => TActionSheet.showList(
-      context,
-      cancelText: 'Cancel',
-      items: _iconItems(),
-      onSelected: (item) => _showSelection(context, item),
-    ),
-  );
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _badgeList(BuildContext context) => _trigger(
-    label: '带徽标列表型',
-    onPressed: () => TActionSheet.showList(
-      context,
-      cancelText: 'Cancel',
-      items: _badgeItems(),
-      onSelected: (item) => _showSelection(context, item),
-    ),
-  );
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _basicGrid(BuildContext context) => _trigger(
-    label: '常规宫格型',
-    onPressed: () => TActionSheet.showGrid(
-      context,
-      cancelText: 'Cancel',
-      items: _gridItems(),
-      onSelected: (item) => _showSelection(context, item),
-    ),
-  );
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _descriptionGrid(BuildContext context) => _trigger(
-    label: '带描述宫格型',
-    onPressed: () => TActionSheet.showGrid(
-      context,
-      cancelText: 'Cancel',
-      subtitle: 'Forward To',
-      items: _gridItems(),
-      onSelected: (item) => _showSelection(context, item),
-    ),
-  );
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _pagedGrid(BuildContext context) => _trigger(
-    label: '带翻页宫格型',
-    onPressed: () => TActionSheet.showGrid(
-      context,
-      items: [..._gridItems(), ..._iconGridItems(), ..._gridItems()],
-      layout: const TActionSheetGridLayout.paged(count: 8, rows: 2),
-      cancelText: 'Cancel',
-      onSelected: (item) => _showSelection(context, item),
-    ),
-  );
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _badgeGrid(BuildContext context) => _trigger(
-    label: '带徽标宫格型',
-    onPressed: () => TActionSheet.showGrid(
-      context,
-      cancelText: 'Cancel',
-      items: _badgeGridItems(),
-      onSelected: (item) => _showSelection(context, item),
-    ),
-  );
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _scrollGrid(BuildContext context) => _trigger(
-    label: '多行滚动宫格型',
-    onPressed: () => TActionSheet.showGrid(
-      context,
-      cancelText: 'Cancel',
-      items: _scrollGridItems(),
-      layout: const TActionSheetGridLayout.scroll(
-        count: 10,
-        rows: 2,
-        itemMinWidth: 80,
-      ),
-      onSelected: (item) => _showSelection(context, item),
-    ),
-  );
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _descriptionScrollGrid(BuildContext context) => _trigger(
-    label: '带描述多行滚动宫格型',
-    onPressed: () => TActionSheet.showGridSections(
-      context,
-      cancelText: 'Cancel',
-      sections: [
-        TActionSheetGridSection(title: 'Forward To', items: _personGridItems()),
-        TActionSheetGridSection(title: 'Share', items: _scrollGridItems()),
-      ],
-      onSelected: (item) => _showSelection(context, item),
-    ),
-  );
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _statusIconList(BuildContext context) => _trigger(
-    label: '列表型选项状态',
-    onPressed: () => TActionSheet.showList(
-      context,
-      cancelText: 'Cancel',
-      items: [
-        const TActionSheetItem(
-          value: 'move',
-          label: 'Move',
-          icon: Icon(TIcons.enter),
+        ExampleModule(
+          title: '组件状态',
+          children: [
+            ExampleItem(
+              desc: '列表型选项状态',
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              methodName: 'ActionSheetStatusIconListExample',
+              builder: (_) => const ActionSheetStatusIconListExample(),
+            ),
+          ],
         ),
-        TActionSheetItem(
-          value: 'important',
-          label: 'Mark as important',
-          icon: Icon(TIcons.bookmark, color: context.tTheme.brandNormalColor),
-          textStyle: TextStyle(color: context.tTheme.brandNormalColor),
-        ),
-        TActionSheetItem(
-          value: 'unsubscribe',
-          label: 'Unsubscribe',
-          icon: Icon(TIcons.pin, color: context.tTheme.errorNormalColor),
-          textStyle: TextStyle(color: context.tTheme.errorNormalColor),
-        ),
-        const TActionSheetItem(
-          value: 'tasks',
-          label: 'Add to Tasks',
-          icon: Icon(TIcons.cloud_upload),
-          disabled: true,
+        ExampleModule(
+          title: '组件样式',
+          children: [
+            ExampleItem(
+              desc: '列表型对齐方式',
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              methodName: 'ActionSheetCenterListExample',
+              builder: (_) => const ActionSheetCenterListExample(),
+            ),
+            ExampleItem(
+              desc: '',
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              methodName: 'ActionSheetLeftListExample',
+              builder: (_) => const ActionSheetLeftListExample(),
+            ),
+          ],
         ),
       ],
-      onSelected: (item) => _showSelection(context, item),
-    ),
-  );
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _centerList(BuildContext context) => _trigger(
-    label: '居中列表型',
-    onPressed: () => TActionSheet.showList(
-      context,
-      cancelText: 'Cancel',
-      subtitle: 'Email Settings',
-      align: TActionSheetAlign.center,
-      items: _iconItems(),
-      onSelected: (item) => _showSelection(context, item),
-    ),
-  );
-
-  @ExampleCode(group: 'action_sheet')
-  Widget _leftList(BuildContext context) => _trigger(
-    label: '左对齐列表型',
-    onPressed: () => TActionSheet.showList(
-      context,
-      cancelText: 'Cancel',
-      subtitle: 'Email Settings',
-      align: TActionSheetAlign.left,
-      items: _iconItems(),
-      onSelected: (item) => _showSelection(context, item),
-    ),
-  );
-}
-
-class _ActionSheetAssetIcon extends StatelessWidget {
-  const _ActionSheetAssetIcon(this.path);
-
-  final String path;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(
-          color: Colors.black.withValues(alpha: 0.06),
-          width: 0.5,
-        ),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Image.asset(path, fit: BoxFit.cover),
     );
   }
 }

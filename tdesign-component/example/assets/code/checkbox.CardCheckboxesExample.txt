@@ -1,0 +1,62 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class CardCheckboxesExample extends StatefulWidget {
+  const CardCheckboxesExample({super.key});
+
+  @override
+  State<CardCheckboxesExample> createState() => _CardCheckboxesExampleState();
+}
+
+class _CardCheckboxesExampleState extends State<CardCheckboxesExample> {
+  Widget _cardCheckboxes(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TCheckboxGroup<String>(
+          value: _verticalCardValue,
+          options: _verticalCardOptions,
+          cardMode: true,
+          onChanged: (value) => setState(() => _verticalCardValue = value),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+          child: TText(
+            '横向卡片多选框',
+            font: context.tTheme.fontBodyMedium,
+            textColor: context.tTheme.textColorSecondary,
+          ),
+        ),
+        TCheckboxGroup<String>(
+          value: _horizontalCardValue,
+          options: _horizontalCardOptions,
+          direction: Axis.horizontal,
+          columns: 3,
+          cardMode: true,
+          onChanged: (value) => setState(() => _horizontalCardValue = value),
+        ),
+      ],
+    );
+  }
+
+  List<String> _verticalCardValue = ['a', 'b'];
+
+  static const _verticalCardOptions = [
+    TCheckboxOption(value: 'a', label: '多选', subTitle: '描述信息描述信息描述信息描述信息描述信息'),
+    TCheckboxOption(value: 'b', label: '多选', subTitle: '描述信息描述信息描述信息描述信息描述信息'),
+    TCheckboxOption(value: 'c', label: '多选', subTitle: '描述信息描述信息描述信息描述信息描述信息'),
+  ];
+
+  List<String> _horizontalCardValue = ['a', 'b'];
+
+  static const _horizontalCardOptions = [
+    TCheckboxOption(value: 'a', label: '多选'),
+    TCheckboxOption(value: 'b', label: '多选'),
+    TCheckboxOption(value: 'c', label: '多选'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return _cardCheckboxes(context);
+  }
+}

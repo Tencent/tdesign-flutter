@@ -3,9 +3,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
+import 'font_token_module_example.dart';
 
-part 'font_token.dart';
-
+@ExampleCodeManifest()
 /// 字体示例页面
 class TFontPage extends StatelessWidget {
   const TFontPage({Key? key}) : super(key: key);
@@ -16,7 +16,18 @@ class TFontPage extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       title: tTitle(context),
       exampleCodeGroup: 'fonts',
-      children: [_fontTokenModule],
+      children: [
+        ExampleModule(
+          title: 'Token',
+          children: [
+            ExampleItem(
+              desc: '',
+              methodName: 'FontTokenModuleExample',
+              builder: (_) => const FontTokenModuleExample(),
+            ),
+          ],
+        ),
+      ],
       test: [
         ExampleItem(
           desc: '字体测试',

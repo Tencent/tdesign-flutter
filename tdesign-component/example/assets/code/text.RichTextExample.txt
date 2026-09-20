@@ -1,0 +1,31 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class RichTextExample extends StatelessWidget {
+  const RichTextExample({super.key});
+
+  Widget _buildRichText(BuildContext context) {
+    return TText.rich(
+      TextSpan(
+        children: [
+          const TextSpan(text: '使用 '),
+          TTextSpan(
+            text: 'TTextSpan',
+            fontWeight: FontWeight.w600,
+            textColor: context.tTheme.brandNormalColor,
+          ),
+          const TextSpan(text: ' 组合局部样式 '),
+          const WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: Icon(TIcons.check_circle, size: 20),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildRichText(context);
+  }
+}

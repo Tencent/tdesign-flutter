@@ -1,0 +1,60 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'popover')
+class PopoverArrowExample extends StatefulWidget {
+  const PopoverArrowExample({super.key});
+
+  @override
+  State<PopoverArrowExample> createState() => _PopoverArrowExampleState();
+}
+
+class _PopoverArrowExampleState extends State<PopoverArrowExample> {
+  Widget _buildPopover(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 0),
+      child: LayoutBuilder(
+        builder: (popoverContext, constraints) {
+          return TButton(
+            size: TButtonSize.large,
+            child: const Text('带箭头'),
+            variant: TButtonVariant.outline,
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {
+              TPopover.showPopover(
+                context: popoverContext,
+                content: const Text('弹出气泡内容'),
+                colorScheme: theme,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  TPopoverColorScheme theme = TPopoverColorScheme.light;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        theme = Theme.of(context).brightness == Brightness.dark
+            ? TPopoverColorScheme.light
+            : TPopoverColorScheme.defaultTheme;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildPopover(context);
+  }
+}

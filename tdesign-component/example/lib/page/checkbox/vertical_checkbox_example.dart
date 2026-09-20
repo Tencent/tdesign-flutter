@@ -1,0 +1,63 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'checkbox')
+class VerticalCheckboxExample extends StatefulWidget {
+  const VerticalCheckboxExample({super.key});
+
+  @override
+  State<VerticalCheckboxExample> createState() =>
+      _VerticalCheckboxExampleState();
+}
+
+class _VerticalCheckboxExampleState extends State<VerticalCheckboxExample> {
+  Widget _verticalCheckbox(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TCheckboxThemeData(variant: TCheckboxVariant.circle),
+      ),
+      child: Column(
+        children: [
+          for (var index = 0; index < _verticalOptions.length; index++)
+            TCheckbox(
+              value: _verticalValue.contains(_verticalOptions[index].value),
+              title: _verticalOptions[index].label,
+              subTitle: _verticalOptions[index].subTitle,
+              titleMaxLines: index == 2 ? 2 : 1,
+              subTitleMaxLines: index == 3 ? 2 : 1,
+              showDivider: index < _verticalOptions.length - 1,
+              onChanged: (_) => _toggleVertical(_verticalOptions[index].value),
+            ),
+        ],
+      ),
+    );
+  }
+
+  static const _verticalOptions = [
+    TCheckboxOption(value: 'a', label: '多选'),
+    TCheckboxOption(value: 'b', label: '多选'),
+    TCheckboxOption(value: 'c', label: '多选标题多行多选标题多行多选标题多行多选标题多行多选标题多行多选标题多行'),
+    TCheckboxOption(
+      value: 'd',
+      label: '多选',
+      subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
+    ),
+  ];
+
+  List<String> _verticalValue = ['a', 'b'];
+
+  void _toggleVertical(String value) {
+    setState(() {
+      _verticalValue = _verticalValue.contains(value)
+          ? _verticalValue.where((item) => item != value).toList()
+          : [..._verticalValue, value];
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _verticalCheckbox(context);
+  }
+}

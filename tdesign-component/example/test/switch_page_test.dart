@@ -76,7 +76,7 @@ void main() {
     expect(scrollable.position.maxScrollExtent, 0);
     expect(
       tester.widget<Scaffold>(find.byType(Scaffold)).backgroundColor,
-      TThemeData.defaultData().bgColorPage,
+      const Color(0xFFF6F6F6),
     );
   });
 

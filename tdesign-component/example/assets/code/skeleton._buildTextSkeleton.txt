@@ -1,3 +1,0 @@
-Widget _buildTextSkeleton(BuildContext context) {
-    return const TSkeleton(variant: TSkeletonVariant.text);
-  }

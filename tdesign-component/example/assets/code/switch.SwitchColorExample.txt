@@ -1,0 +1,59 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class SwitchColorExample extends StatelessWidget {
+  const SwitchColorExample({super.key});
+
+  Widget _buildColor(BuildContext context) => Theme(
+    data: Theme.of(
+      context,
+    ).mergeExtension(const TSwitchThemeData(trackOnColor: Color(0xFF00A870))),
+    child: const TCell(
+      title: Text('自定义颜色开关'),
+      note: SwitchColorExampleStatefulSwitch(initialValue: true),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildColor(context);
+  }
+}
+
+class SwitchColorExampleStatefulSwitch extends StatefulWidget {
+  const SwitchColorExampleStatefulSwitch({
+    super.key,
+    this.initialValue = false,
+    this.size,
+    this.variant,
+    this.openText,
+    this.closeText,
+  });
+
+  final bool initialValue;
+  final TSwitchSize? size;
+  final TSwitchVariant? variant;
+  final String? openText;
+  final String? closeText;
+
+  @override
+  State<SwitchColorExampleStatefulSwitch> createState() =>
+      SwitchColorExampleStatefulSwitchState();
+}
+
+class SwitchColorExampleStatefulSwitchState
+    extends State<SwitchColorExampleStatefulSwitch> {
+  late bool value = widget.initialValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return TSwitch(
+      value: value,
+      size: widget.size,
+      variant: widget.variant,
+      openText: widget.openText,
+      closeText: widget.closeText,
+      onChanged: (next) => setState(() => value = next),
+    );
+  }
+}

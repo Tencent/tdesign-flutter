@@ -1,0 +1,30 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'tag')
+class SimpleFillTagExample extends StatelessWidget {
+  const SimpleFillTagExample({super.key});
+
+  Widget _buildSimpleFillTag(BuildContext context) {
+    // 基础填充标签（默认 defaultTheme 语义色）
+    return const TTag('标签文字');
+  }
+
+  Widget _buildSimpleOutlineTag(BuildContext context) {
+    return const TTag('标签文字', variant: TTagVariant.outline);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(width: 16),
+        Builder(builder: _buildSimpleFillTag),
+        const SizedBox(width: 16),
+        Builder(builder: _buildSimpleOutlineTag),
+      ],
+    );
+  }
+}

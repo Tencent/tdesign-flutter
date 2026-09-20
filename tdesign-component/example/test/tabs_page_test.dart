@@ -29,7 +29,15 @@ void main() {
 
     final element = tester.element(find.byType(TTabsPage));
     Widget builtAt(int moduleIndex, int itemIndex) {
-      return page.children[moduleIndex].children[itemIndex].builder(element);
+      var widget = page.children[moduleIndex].children[itemIndex].builder(
+        element,
+      );
+      if (widget is StatelessWidget) {
+        // This metadata test deliberately expands the public example wrapper.
+        // ignore: invalid_use_of_protected_member
+        widget = widget.build(element);
+      }
+      return widget;
     }
 
     TTabsBar findBar(Widget widget) {

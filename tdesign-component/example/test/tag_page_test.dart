@@ -112,7 +112,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final entries = [
-      (wrapper: longWrapper, asset: 'assets/code/tag._buildLongTextTag.txt'),
+      (wrapper: longWrapper, asset: 'assets/code/tag.LongTextTagExample.txt'),
       (
         wrapper: outlineWrapper,
         asset: 'assets/code/tag.TagSelectOutlineExample.txt'

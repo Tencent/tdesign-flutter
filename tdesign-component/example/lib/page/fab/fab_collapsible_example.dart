@@ -1,0 +1,116 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import '../../annotation/example_code.dart';
+
+@ExampleCode(group: 'fab')
+class FabCollapsibleExample extends StatelessWidget {
+  const FabCollapsibleExample({super.key, required this.onSelected});
+
+  final VoidCallback onSelected;
+
+  static Widget buildFab(VoidCallback onPressed, {required bool scrolling}) {
+    return TFab(
+      right: scrolling ? 0 : 16,
+      bottom: scrolling ? 64 : 24,
+      onPressed: onPressed,
+      child: scrolling
+          ? const _CollapsedFabContent()
+          : const _ExpandedFabContent(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: SizedBox(
+      width: double.infinity,
+      child: TButton(
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: onSelected,
+        child: const Text('带自动收缩功能'),
+      ),
+    ),
+  );
+}
+
+class _ExpandedFabContent extends StatelessWidget {
+  const _ExpandedFabContent();
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: 44,
+    height: 156,
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    decoration: ShapeDecoration(
+      color: context.tTheme.bgColorContainer,
+      shape: StadiumBorder(
+        side: BorderSide(color: context.tTheme.componentBorderColor),
+      ),
+      shadows: context.tTheme.shadowsMiddle ?? const [],
+    ),
+    child: const Column(
+      children: [
+        Expanded(
+          child: _CollapsibleAction(icon: TIcons.add_circle, text: '添加'),
+        ),
+        SizedBox(height: 4),
+        Expanded(
+          child: _CollapsibleAction(icon: TIcons.star, text: '收藏'),
+        ),
+        SizedBox(height: 4),
+        Expanded(
+          child: _CollapsibleAction(icon: TIcons.jump, text: '分享'),
+        ),
+      ],
+    ),
+  );
+}
+
+class _CollapsibleAction extends StatelessWidget {
+  const _CollapsibleAction({required this.icon, required this.text});
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => SizedBox.expand(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Icon(icon, size: 20, color: context.tTheme.textColorPrimary),
+        TText(
+          text,
+          font: context.tTheme.fontBodySmall,
+          textColor: context.tTheme.textColorPrimary,
+        ),
+      ],
+    ),
+  );
+}
+
+class _CollapsedFabContent extends StatelessWidget {
+  const _CollapsedFabContent();
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: 32,
+    height: 32,
+    decoration: ShapeDecoration(
+      color: context.tTheme.bgColorContainer,
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.horizontal(left: Radius.circular(16)),
+        side: BorderSide(color: context.tTheme.componentBorderColor),
+      ),
+      shadows: context.tTheme.shadowsMiddle ?? const [],
+    ),
+    alignment: Alignment.center,
+    child: Icon(
+      TIcons.chevron_left,
+      size: 20,
+      color: context.tTheme.textColorPrimary,
+    ),
+  );
+}

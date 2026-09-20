@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
+import 'brand_footer_example.dart';
+import 'footer_example.dart';
+import 'single_link_footer_example.dart';
 
-part 'footer_type.dart';
-
+@ExampleCodeManifest()
 class TFooterPage extends StatelessWidget {
   const TFooterPage({Key? key}) : super(key: key);
 
@@ -14,52 +16,28 @@ class TFooterPage extends StatelessWidget {
       title: tTitle(context),
       desc: '用于展示App的版权声明、联系信息、重要页面链接和其他相关内容等信息。',
       exampleCodeGroup: 'footer',
-      children: [_footerTypeModule],
+      children: [
+        ExampleModule(
+          title: '类型',
+          children: [
+            ExampleItem(
+              desc: '基础页脚',
+              methodName: 'FooterExample',
+              builder: (_) => const FooterExample(),
+            ),
+            ExampleItem(
+              desc: '基础加链接页脚',
+              methodName: 'SingleLinkFooterExample',
+              builder: (_) => const SingleLinkFooterExample(),
+            ),
+            ExampleItem(
+              desc: '品牌页脚',
+              methodName: 'BrandFooterExample',
+              builder: (_) => const BrandFooterExample(),
+            ),
+          ],
+        ),
+      ],
     );
   }
-}
-
-@ExampleCode(group: 'footer')
-Widget _buildFooter(BuildContext context) {
-  return const TFooter(text: 'Copyright © 2021-2031 TD.All Rights Reserved.');
-}
-
-@ExampleCode(group: 'footer')
-Widget _buildSingleLinkFooter(BuildContext context) {
-  TLink link(String text) => TLink(
-    child: Text(text),
-    colorScheme: TLinkColorScheme.primary,
-    onPressed: () {},
-  );
-  return Column(
-    children: [
-      TFooter(
-        links: [link('底部链接')],
-        text: 'Copyright © 2021-2031 TD.All Rights Reserved.',
-      ),
-      const SizedBox(height: 24),
-      TFooter(
-        links: [link('底部链接'), link('底部链接')],
-        text: 'Copyright © 2021-2031 TD.All Rights Reserved.',
-      ),
-    ],
-  );
-}
-
-@ExampleCode(group: 'footer')
-Widget _buildBrandFooter(BuildContext context) {
-  const logo = TImage(
-    src: 'assets/img/t_brand.png',
-    width: 104,
-    height: 24,
-    fit: BoxFit.contain,
-    shape: TImageShape.square,
-  );
-  return const Column(
-    children: [
-      TFooter(logo: logo),
-      SizedBox(height: 24),
-      TFooter(logo: logo),
-    ],
-  );
 }

@@ -4,16 +4,16 @@
 - [x] DONE 重构 Table 页面与自包含示例
 - [x] DONE 迁移全部组件、基础入口和辅助 example 到所属目录
 - [x] DONE 历史阶段将 141 个 ExampleModule 拆为语义模块文件
-- [ ] TODO 将 ExampleModule 分组和 ExampleItem 顺序合并回页面入口，删除纯分组模块文件
-- [ ] TODO 将全部公开 ExampleItem 引用的 Widget 拆为独立语义 example 文件，ExampleItem 配置保留在页面入口
-- [ ] TODO 将页面级字段、Controller、helper 和生命周期迁入对应 example Widget/State
-- [ ] TODO 将全部公开示例改为类级 `@ExampleCode` 并移除方法级隐藏依赖
-- [ ] TODO 将全部页面登记到公开示例清单并清空 `legacyGroups`
+- [x] DONE 将 ExampleModule 分组和 ExampleItem 顺序合并回页面入口，删除纯分组模块文件
+- [x] DONE 将全部公开 ExampleItem 引用的 Widget 拆为独立语义 example 文件，ExampleItem 配置保留在页面入口
+- [x] DONE 将页面级字段、Controller、helper 和生命周期迁入对应 example Widget/State
+- [x] DONE 将全部公开示例改为类级 `@ExampleCode` 并移除方法级隐藏依赖
+- [x] DONE 将全部页面登记到公开示例清单并清空 `legacyGroups`
 - [x] DONE 建立 manifest 生成、严格页面标记和 Web 消费基础设施，并用 Divider 验证注册顺序
-- [ ] TODO 增加公开 ExampleItem 与生成资产一一对应及源码解析/编译门禁
+- [x] DONE 增加公开 ExampleItem 与生成资产一一对应及源码解析/编译门禁
 - [x] DONE 增加 Demo 目录结构回归检查
 - [x] DONE 实现 Web 示例资产映射与错误门禁
 - [x] DONE 将全部 57 份组件文档迁移为组映射
 - [x] DONE 补充 Table 代码面板、多组件抽查与全量映射清单测试
-- [ ] TODO 执行双版本、全组件 ExampleItem、站点及 Linux Golden 验证并记录最终结果
+- [ ] TODO 等待最新 head 的 Linux Golden 与远端 CI；双版本 analyze、全组件非视觉测试和站点构建已完成
 - [ ] TODO 完成 Review

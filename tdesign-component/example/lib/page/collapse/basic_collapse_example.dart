@@ -1,0 +1,42 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'collapse')
+class BasicCollapseExample extends StatefulWidget {
+  const BasicCollapseExample({super.key});
+
+  @override
+  State<BasicCollapseExample> createState() => _BasicCollapseExampleState();
+}
+
+class _BasicCollapseExampleState extends State<BasicCollapseExample> {
+  /// 核心片段：导入 material.dart 和 tdesign_flutter.dart，并放入
+  /// StatefulWidget 的 State。`_basicValue` 是由 State 持有的展开值列表，
+  /// 初始包含唯一面板值；`onChanged` 通过 `setState` 写回完整列表。
+  /// `randomString` 是页面级常量，仅作为面板正文示例。
+  Widget _buildBasicCollapse(BuildContext context) {
+    return TCollapse<String>(
+      value: _basicValue,
+      onChanged: (value) => setState(() => _basicValue = value),
+      children: [
+        TCollapsePanel<String>(
+          value: 'basic',
+          headerBuilder: (context, isExpanded) => const Text('折叠面板标题'),
+          body: const Text(randomString),
+        ),
+      ],
+    );
+  }
+
+  List<String> _basicValue = const ['basic'];
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildBasicCollapse(context);
+  }
+}
+
+const String randomString =
+    '此处可自定义内容此处可自定义内容此处可自定义内容此处可自定义内容此处可自定义内容此处可自定义内容此处可自定义内容此处可自定义内容';

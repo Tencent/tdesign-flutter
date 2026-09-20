@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
-import 'tree_select_examples.dart';
+import 'tree_select_multiple_example.dart';
+import 'tree_select_single_example.dart';
+import 'tree_select_three_columns_example.dart';
 
-part 'tree_select_type.dart';
-part 'tree_select_status.dart';
-
+@ExampleCodeManifest()
 class TTreeSelectPage extends StatelessWidget {
   const TTreeSelectPage({super.key});
 
@@ -16,6 +17,32 @@ class TTreeSelectPage extends StatelessWidget {
     exampleCodeGroup: 'tree-select',
     compactDemo: true,
     showTestModule: false,
-    children: [_treeSelectTypeModule, _treeSelectStatusModule],
+    children: [
+      ExampleModule(
+        title: '组件类型',
+        children: [
+          ExampleItem(
+            desc: '基础树形选择器',
+            methodName: 'TreeSelectSingleExample',
+            builder: (_) => const TreeSelectSingleExample(),
+          ),
+          ExampleItem(
+            desc: '多选树形选择器',
+            methodName: 'TreeSelectMultipleExample',
+            builder: (_) => const TreeSelectMultipleExample(),
+          ),
+        ],
+      ),
+      ExampleModule(
+        title: '组件状态',
+        children: [
+          ExampleItem(
+            desc: '树形选择器-三列',
+            methodName: 'TreeSelectThreeColumnsExample',
+            builder: (_) => const TreeSelectThreeColumnsExample(),
+          ),
+        ],
+      ),
+    ],
   );
 }

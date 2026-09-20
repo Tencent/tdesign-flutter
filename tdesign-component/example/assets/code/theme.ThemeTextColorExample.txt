@@ -1,0 +1,56 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class ThemeTextColorExample extends StatefulWidget {
+  const ThemeTextColorExample({super.key});
+
+  @override
+  State<ThemeTextColorExample> createState() => _ThemeTextColorExampleState();
+}
+
+class _ThemeTextColorExampleState extends State<ThemeTextColorExample> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    fontMap
+      ..clear()
+      ..addEntries(
+        context.tTheme.colorMap.entries.where(
+          (entry) => entry.key.startsWith('font'),
+        ),
+      );
+  }
+
+  Widget _buildTextColor(BuildContext context) {
+    var textList = ['Gy', 'Wh'];
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: fontMap.length,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        var light = (index - 3).abs() < 2;
+        var type = index ~/ 4;
+        index = index % 4;
+        var function = textList[type];
+        return Container(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          color: type == 0 ? Colors.white : Colors.black,
+          child: Container(
+            color: context.tTheme.colorMap['font${function}Color${index + 1}'],
+            child: TText(
+              'font${function}Color${index + 1}',
+              textColor: light ? Colors.black : Colors.white,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  var fontMap = <String, Color>{};
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildTextColor(context);
+  }
+}

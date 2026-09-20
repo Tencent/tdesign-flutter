@@ -111,13 +111,13 @@ void main() {
   testWidgets('TabBar 所有代码入口展示实际生成片段', (tester) async {
     await pumpFullDemoPage(tester, tabBarDemoPageTestSpec, ThemeMode.light);
     const snippetNames = [
-      '_textTabBar',
-      '_iconTextTabBar',
-      '_iconTabBar',
-      '_doubleLayerTabBar',
-      '_weakTabBars',
-      '_capsuleTabBar',
-      '_customTabBar',
+      'TextTabBarExample',
+      'IconTextTabBarExample',
+      'IconTabBarExample',
+      'DoubleLayerTabBarExample',
+      'WeakTabBarsExample',
+      'CapsuleTabBarExample',
+      'CustomTabBarExample',
     ];
 
     TNotification.postNotification('onApiVisibleChange', {'apiVisible': true});

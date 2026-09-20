@@ -1,0 +1,50 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'textarea')
+class TextareaCustomExample extends StatelessWidget {
+  const TextareaCustomExample({super.key});
+
+  Widget _buildCustom(BuildContext context) => Theme(
+    data: Theme.of(context)
+        .mergeExtension(
+          TFormThemeData(
+            layout: TFormLayout.vertical,
+            backgroundColor: context.tTheme.bgColorSecondaryContainer,
+            borderColor: Colors.transparent,
+            itemPadding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+            labelGap: context.tTheme.spacer8,
+            labelStyle: TextStyle(
+              fontSize: context.tTheme.fontBodySmall?.size,
+              height: context.tTheme.fontBodySmall?.height,
+              fontWeight: context.tTheme.fontBodySmall?.fontWeight,
+            ),
+          ),
+        )
+        .mergeExtension(
+          const TInputThemeData(
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+        ),
+    child: const TFormItem(
+      label: '标签文字',
+      child: SizedBox(
+        height: 124,
+        child: TTextarea(
+          hintText: '请输入文字',
+          bordered: true,
+          minLines: 2,
+          maxLength: 100,
+          indicator: true,
+        ),
+      ),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildCustom(context);
+  }
+}

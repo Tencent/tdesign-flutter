@@ -3,13 +3,20 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
-
-part 'badge_size.dart';
-part 'badge_style.dart';
-part 'badge_type.dart';
+import 'bubble_badge_example.dart';
+import 'circle_badge_example.dart';
+import 'custom_badge_example.dart';
+import 'dot_message_badge_example.dart';
+import 'large_badge_example.dart';
+import 'medium_badge_example.dart';
+import 'number_message_badge_example.dart';
+import 'ribbon_badge_example.dart';
+import 'square_badge_example.dart';
+import 'triangle_badge_example.dart';
 
 const _badgeItemPadding = EdgeInsets.symmetric(horizontal: 16);
 
+@ExampleCodeManifest()
 class TBadgePage extends StatelessWidget {
   const TBadgePage({super.key});
 
@@ -28,7 +35,91 @@ class TBadgePage extends StatelessWidget {
         exampleCodeGroup: 'badge',
         backgroundColor: pageBackground,
         showTestModule: false,
-        children: [_badgeTypeModule, _badgeStyleModule, _badgeSizeModule],
+        children: [
+          ExampleModule(
+            title: '组件类型',
+            children: [
+              ExampleItem(
+                desc: '红点徽标',
+                center: false,
+                padding: _badgeItemPadding,
+                methodName: 'DotMessageBadgeExample',
+                builder: (_) => const DotMessageBadgeExample(),
+              ),
+              ExampleItem(
+                desc: '数字徽标',
+                center: false,
+                padding: _badgeItemPadding,
+                methodName: 'NumberMessageBadgeExample',
+                builder: (_) => const NumberMessageBadgeExample(),
+              ),
+              ExampleItem(
+                desc: '自定义徽标',
+                center: false,
+                padding: _badgeItemPadding,
+                methodName: 'CustomBadgeExample',
+                builder: (_) => const CustomBadgeExample(),
+              ),
+            ],
+          ),
+          ExampleModule(
+            title: '组件样式',
+            children: [
+              ExampleItem(
+                desc: '圆形徽标',
+                center: false,
+                padding: _badgeItemPadding,
+                methodName: 'CircleBadgeExample',
+                builder: (_) => const CircleBadgeExample(),
+              ),
+              ExampleItem(
+                desc: '方形徽标',
+                center: false,
+                padding: _badgeItemPadding,
+                methodName: 'SquareBadgeExample',
+                builder: (_) => const SquareBadgeExample(),
+              ),
+              ExampleItem(
+                desc: '气泡徽标',
+                center: false,
+                padding: _badgeItemPadding,
+                methodName: 'BubbleBadgeExample',
+                builder: (_) => const BubbleBadgeExample(),
+              ),
+              ExampleItem(
+                desc: '角标',
+                center: false,
+                methodName: 'RibbonBadgeExample',
+                builder: (_) => const RibbonBadgeExample(),
+              ),
+              ExampleItem(
+                desc: '三角角标',
+                center: false,
+                methodName: 'TriangleBadgeExample',
+                builder: (_) => const TriangleBadgeExample(),
+              ),
+            ],
+          ),
+          ExampleModule(
+            title: '组件尺寸',
+            children: [
+              ExampleItem(
+                desc: 'Large',
+                center: false,
+                padding: _badgeItemPadding,
+                methodName: 'LargeBadgeExample',
+                builder: (_) => const LargeBadgeExample(),
+              ),
+              ExampleItem(
+                desc: 'Medium',
+                center: false,
+                padding: _badgeItemPadding,
+                methodName: 'MediumBadgeExample',
+                builder: (_) => const MediumBadgeExample(),
+              ),
+            ],
+          ),
+        ],
         test: [
           ExampleItem(
             ignoreCode: true,
@@ -44,167 +135,6 @@ class TBadgePage extends StatelessWidget {
       ),
     );
   }
-
-  @ExampleCode(group: 'badge')
-  Widget _buildDotMessageBadge(BuildContext context) => TBadge(
-    variant: TBadgeVariant.dot,
-    offset: const Offset(-1, 1),
-    child: TText('消息', font: context.tTheme.fontBodyLarge),
-  );
-
-  @ExampleCode(group: 'badge')
-  Widget _buildDotIconBadge(BuildContext context) => const TBadge(
-    variant: TBadgeVariant.dot,
-    offset: Offset(-1, 1),
-    child: Icon(TIcons.notification),
-  );
-
-  @ExampleCode(group: 'badge')
-  Widget _buildDotButtonBadge(BuildContext context) => TBadge(
-    variant: TBadgeVariant.dot,
-    offset: const Offset(-1, 1),
-    child: TButton(
-      size: TButtonSize.large,
-      style: const ButtonStyle(
-        padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 24)),
-      ),
-      onPressed: () {},
-      child: const Text('按钮'),
-    ),
-  );
-
-  @ExampleCode(group: 'badge')
-  Widget _buildNumberMessageBadge(BuildContext context) => TBadge(
-    label: '8',
-    child: TText('消息', font: context.tTheme.fontBodyLarge),
-  );
-
-  @ExampleCode(group: 'badge')
-  Widget _buildNumberIconBadge(BuildContext context) =>
-      const TBadge(label: '8', child: Icon(TIcons.notification));
-
-  @ExampleCode(group: 'badge')
-  Widget _buildNumberButtonBadge(BuildContext context) => TBadge(
-    label: '8',
-    child: TButton(
-      size: TButtonSize.large,
-      style: const ButtonStyle(
-        padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 24)),
-      ),
-      onPressed: () {},
-      child: const Text('按钮'),
-    ),
-  );
-
-  @ExampleCode(group: 'badge')
-  Widget _buildCustomBadge(BuildContext context) => TBadge.custom(
-    badge: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      decoration: BoxDecoration(
-        color: context.tTheme.errorNormalColor,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: TText(
-        'NEW',
-        font: context.tTheme.fontMarkExtraSmall,
-        textColor: context.tTheme.textColorAnti,
-      ),
-    ),
-    child: Theme(
-      data: Theme.of(
-        context,
-      ).mergeExtension(const TButtonThemeData(shape: TButtonShape.square)),
-      child: TButton(
-        size: TButtonSize.large,
-        icon: const Icon(TIcons.notification),
-        onPressed: () {},
-      ),
-    ),
-  );
-
-  @ExampleCode(group: 'badge')
-  Widget _buildCircleBadge(BuildContext context) => const TBadge(
-    label: '8',
-    offset: Offset(2, -2),
-    child: Icon(TIcons.notification),
-  );
-
-  @ExampleCode(group: 'badge')
-  Widget _buildSquareBadge(BuildContext context) => const TBadge(
-    label: '8',
-    variant: TBadgeVariant.square,
-    offset: Offset(2, -2),
-    child: Icon(TIcons.notification),
-  );
-
-  @ExampleCode(group: 'badge')
-  Widget _buildBubbleBadge(BuildContext context) => TBadge(
-    label: '领取积分',
-    variant: TBadgeVariant.bubble,
-    offset: const Offset(8, 0),
-    child: Theme(
-      data: Theme.of(
-        context,
-      ).mergeExtension(const TButtonThemeData(shape: TButtonShape.square)),
-      child: TButton(
-        size: TButtonSize.large,
-        icon: const Icon(TIcons.shop),
-        onPressed: () {},
-      ),
-    ),
-  );
-
-  @ExampleCode(group: 'badge')
-  Widget _buildRibbonBadge(BuildContext context) => TCellGroup(
-    cells: const [
-      TCell(title: Text('单行标题')),
-      TCell(title: Text('单行标题')),
-    ],
-    builder: (context, cell, index) => TBadge(
-      label: 'NEW',
-      variant: index == 0
-          ? TBadgeVariant.ribbonLeft
-          : TBadgeVariant.ribbonRight,
-      size: TBadgeSize.large,
-      child: cell,
-    ),
-  );
-
-  @ExampleCode(group: 'badge')
-  Widget _buildTriangleBadge(BuildContext context) => TCellGroup(
-    cells: const [
-      TCell(title: Text('单行标题')),
-      TCell(title: Text('单行标题')),
-    ],
-    builder: (context, cell, index) => TBadge(
-      label: 'NEW',
-      variant: index == 0
-          ? TBadgeVariant.triangleLeft
-          : TBadgeVariant.triangleRight,
-      size: TBadgeSize.large,
-      child: cell,
-    ),
-  );
-
-  @ExampleCode(group: 'badge')
-  Widget _buildLargeBadge(BuildContext context) => const TBadge(
-    label: '8',
-    size: TBadgeSize.large,
-    child: TAvatar(
-      size: TAvatarSize.large,
-      image: AssetImage('assets/img/t_avatar_1.png'),
-    ),
-  );
-
-  @ExampleCode(group: 'badge')
-  Widget _buildMediumBadge(BuildContext context) => const TBadge(
-    label: '8',
-    size: TBadgeSize.medium,
-    child: TAvatar(
-      size: TAvatarSize.medium,
-      image: AssetImage('assets/img/t_avatar_1.png'),
-    ),
-  );
 
   Widget _buildHiddenZeroBadge(BuildContext context) => const TBadge(
     label: '0',

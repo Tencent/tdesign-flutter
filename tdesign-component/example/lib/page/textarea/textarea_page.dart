@@ -3,12 +3,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
+import 'textarea_autosize_example.dart';
+import 'textarea_basic_example.dart';
+import 'textarea_card_example.dart';
+import 'textarea_custom_example.dart';
+import 'textarea_disabled_example.dart';
+import 'textarea_label_example.dart';
+import 'textarea_max_length_example.dart';
+import 'textarea_vertical_example.dart';
 
-part 'textarea_type.dart';
-part 'textarea_status.dart';
-part 'textarea_style.dart';
-part 'textarea_special.dart';
-
+@ExampleCodeManifest()
 /// TTextarea 示例页。
 class TTextareaPage extends StatelessWidget {
   const TTextareaPage({super.key});
@@ -22,119 +26,76 @@ class TTextareaPage extends StatelessWidget {
       compactDemo: true,
       showTestModule: false,
       children: [
-        _textareaTypeModule,
-        _textareaStatusModule,
-        _textareaStyleModule,
-        _textareaSpecialModule,
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(
+              desc: '基础多行文本框',
+              center: false,
+              methodName: 'TextareaBasicExample',
+              builder: (_) => const TextareaBasicExample(),
+            ),
+            ExampleItem(
+              desc: '带标题多行文本框',
+              center: false,
+              methodName: 'TextareaLabelExample',
+              builder: (_) => const TextareaLabelExample(),
+            ),
+            ExampleItem(
+              desc: '自动增高多行文本框',
+              center: false,
+              methodName: 'TextareaAutosizeExample',
+              builder: (_) => const TextareaAutosizeExample(),
+            ),
+            ExampleItem(
+              desc: '设置字符数限制',
+              center: false,
+              methodName: 'TextareaMaxLengthExample',
+              builder: (_) => const TextareaMaxLengthExample(),
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: '组件状态',
+          children: [
+            ExampleItem(
+              desc: '禁用状态',
+              center: false,
+              methodName: 'TextareaDisabledExample',
+              builder: (_) => const TextareaDisabledExample(),
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: '组件样式',
+          children: [
+            ExampleItem(
+              desc: '竖排样式',
+              center: false,
+              methodName: 'TextareaVerticalExample',
+              builder: (_) => const TextareaVerticalExample(),
+            ),
+            ExampleItem(
+              desc: '卡片样式',
+              center: false,
+              methodName: 'TextareaCardExample',
+              builder: (_) => const TextareaCardExample(),
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: '特殊样式',
+          children: [
+            ExampleItem(
+              desc: '标签外置输入框',
+              center: false,
+              methodName: 'TextareaCustomExample',
+              builder: (_) => const TextareaCustomExample(),
+            ),
+          ],
+        ),
       ],
       test: const [],
     );
   }
-
-  @ExampleCode(group: 'textarea')
-  Widget _buildBasic(BuildContext context) =>
-      const SizedBox(height: 128, child: TTextarea(hintText: '请输入文字'));
-
-  @ExampleCode(group: 'textarea')
-  Widget _buildLabel(BuildContext context) => const SizedBox(
-    height: 128,
-    child: TTextarea(label: '标签文字', hintText: '请输入文字', minLines: 2),
-  );
-
-  @ExampleCode(group: 'textarea')
-  Widget _buildAutosize(BuildContext context) =>
-      const TTextarea(label: '标签文字', hintText: '请输入文字', minLines: 1);
-
-  @ExampleCode(group: 'textarea')
-  Widget _buildMaxLength(BuildContext context) => const SizedBox(
-    height: 162,
-    child: TTextarea(
-      label: '标签文字',
-      hintText: '设置最大字符个数',
-      minLines: 3,
-      maxLength: 200,
-      indicator: true,
-    ),
-  );
-
-  @ExampleCode(group: 'textarea')
-  Widget _buildDisabled(BuildContext context) => const SizedBox(
-    height: 128,
-    child: TTextarea(
-      label: '标签文字',
-      hintText: '请输入文字',
-      initialValue: '不可编辑文字',
-      enabled: false,
-      minLines: 2,
-    ),
-  );
-
-  @ExampleCode(group: 'textarea')
-  Widget _buildVertical(BuildContext context) => const SizedBox(
-    height: 128,
-    child: TTextarea(
-      label: '标签文字',
-      hintText: '请输入文字',
-      layout: TTextareaLayout.vertical,
-      minLines: 2,
-    ),
-  );
-
-  @ExampleCode(group: 'textarea')
-  Widget _buildCard(BuildContext context) => Padding(
-    padding: const EdgeInsets.all(16),
-    child: Theme(
-      data: Theme.of(
-        context,
-      ).mergeExtension(const TInputThemeData(borderRadius: 9)),
-      child: const SizedBox(
-        height: 156,
-        child: TTextarea(
-          label: '标签文字',
-          hintText: '请输入文字',
-          layout: TTextareaLayout.vertical,
-          minLines: 2,
-          maxLength: 500,
-          indicator: true,
-        ),
-      ),
-    ),
-  );
-
-  @ExampleCode(group: 'textarea')
-  Widget _buildCustom(BuildContext context) => Theme(
-    data: Theme.of(context)
-        .mergeExtension(
-          TFormThemeData(
-            layout: TFormLayout.vertical,
-            backgroundColor: context.tTheme.bgColorSecondaryContainer,
-            borderColor: Colors.transparent,
-            itemPadding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-            labelGap: context.tTheme.spacer8,
-            labelStyle: TextStyle(
-              fontSize: context.tTheme.fontBodySmall?.size,
-              height: context.tTheme.fontBodySmall?.height,
-              fontWeight: context.tTheme.fontBodySmall?.fontWeight,
-            ),
-          ),
-        )
-        .mergeExtension(
-          const TInputThemeData(
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          ),
-        ),
-    child: const TFormItem(
-      label: '标签文字',
-      child: SizedBox(
-        height: 124,
-        child: TTextarea(
-          hintText: '请输入文字',
-          bordered: true,
-          minLines: 2,
-          maxLength: 100,
-          indicator: true,
-        ),
-      ),
-    ),
-  );
 }

@@ -1,0 +1,49 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'action_sheet')
+class ActionSheetDescriptionListExample extends StatelessWidget {
+  const ActionSheetDescriptionListExample({super.key});
+
+  Widget _descriptionList(BuildContext context) => _trigger(
+    label: '带描述列表型',
+    onPressed: () => TActionSheet.showList(
+      context,
+      cancelText: 'Cancel',
+      subtitle: 'Email Settings',
+      items: _textItems(),
+      onSelected: (item) => _showSelection(context, item),
+    ),
+  );
+
+  Widget _trigger({required String label, required VoidCallback onPressed}) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: Text(label),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+  List<TActionSheetItem<String>> _textItems() => [
+    const TActionSheetItem(value: 'move', label: 'Move'),
+    const TActionSheetItem(value: 'important', label: 'Mark as important'),
+    const TActionSheetItem(value: 'unsubscribe', label: 'Unsubscribe'),
+    const TActionSheetItem(value: 'tasks', label: 'Add to Tasks'),
+  ];
+
+  void _showSelection(BuildContext context, TActionSheetItem<String> item) {
+    TToast.showText('已选择：${item.label}', context: context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _descriptionList(context);
+  }
+}

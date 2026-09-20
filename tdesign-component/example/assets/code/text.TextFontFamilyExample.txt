@@ -1,0 +1,21 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class TextFontFamilyExample extends StatelessWidget {
+  const TextFontFamilyExample({super.key});
+
+  Widget _buildFontFamily(BuildContext context) {
+    return TText(
+      '0123456789',
+      fontFamily: FontFamily(
+        fontFamily: 'TCloudNumber',
+        package: 'tdesign_flutter',
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildFontFamily(context);
+  }
+}

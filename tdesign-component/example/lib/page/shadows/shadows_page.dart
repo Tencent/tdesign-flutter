@@ -3,9 +3,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
+import 'shadows_base_example.dart';
+import 'shadows_middle_example.dart';
+import 'shadows_top_example.dart';
 
-part 'shadows_shadow.dart';
-
+@ExampleCodeManifest()
 /// 圆角示例页面
 class TShadowsPage extends StatelessWidget {
   const TShadowsPage({Key? key}) : super(key: key);
@@ -15,40 +17,28 @@ class TShadowsPage extends StatelessWidget {
     return ExamplePage(
       title: tTitle(context),
       exampleCodeGroup: 'shadows',
-      children: [_shadowsShadowModule],
-    );
-  }
-
-  @ExampleCode(group: 'shadows')
-  Widget _buildShadowsBase(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.tTheme.bgColorContainer,
-        boxShadow: context.tTheme.shadowsBase,
-        borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'shadows')
-  Widget _buildShadowsMiddle(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.tTheme.bgColorContainer,
-        boxShadow: context.tTheme.shadowsMiddle,
-        borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'shadows')
-  Widget _buildShadowsTop(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.tTheme.bgColorContainer,
-        boxShadow: context.tTheme.shadowsTop,
-        borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
-      ),
+      children: [
+        ExampleModule(
+          title: '投影',
+          children: [
+            ExampleItem(
+              desc: '基础投影',
+              methodName: 'ShadowsBaseExample',
+              builder: (_) => const ShadowsBaseExample(),
+            ),
+            ExampleItem(
+              desc: '中层投影',
+              methodName: 'ShadowsMiddleExample',
+              builder: (_) => const ShadowsMiddleExample(),
+            ),
+            ExampleItem(
+              desc: '上层投影',
+              methodName: 'ShadowsTopExample',
+              builder: (_) => const ShadowsTopExample(),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

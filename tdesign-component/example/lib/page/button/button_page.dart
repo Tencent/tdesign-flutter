@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
+import 'block_fill_button_example.dart';
+import 'combination_buttons_example.dart';
+import 'default_fill_button_example.dart';
+import 'disable_primary_fill_button_example.dart';
+import 'large_button_example.dart';
+import 'primary_fill_button_example.dart';
+import 'primary_ghost_button_example.dart';
+import 'rectangle_icon_button_example.dart';
+import 'rectangle_shape_button_example.dart';
 
-part 'button_type.dart';
-part 'button_status.dart';
-part 'button_theme.dart';
-
+@ExampleCodeManifest()
 class TButtonPage extends StatefulWidget {
   const TButtonPage({Key? key}) : super(key: key);
 
@@ -21,7 +27,70 @@ class _TButtonPageState extends State<TButtonPage> {
       title: tTitle(),
       desc: '用于开启一个闭环的操作任务，如"删除"对象、"购买"商品等。',
       exampleCodeGroup: 'button',
-      children: [_buttonTypeModule, _buttonStatusModule, _buttonThemeModule],
+      children: [
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(
+              desc: '基础按钮',
+              methodName: 'PrimaryFillButtonExample',
+              builder: (_) => const PrimaryFillButtonExample(),
+            ),
+            ExampleItem(
+              desc: '图标按钮',
+              center: false,
+              methodName: 'RectangleIconButtonExample',
+              builder: (_) => const RectangleIconButtonExample(),
+            ),
+            ExampleItem(
+              desc: '幽灵按钮',
+              methodName: 'PrimaryGhostButtonExample',
+              builder: (_) => const PrimaryGhostButtonExample(),
+            ),
+            ExampleItem(
+              desc: '组合按钮',
+              methodName: 'CombinationButtonsExample',
+              builder: (_) => const CombinationButtonsExample(),
+            ),
+            ExampleItem(
+              desc: '通栏按钮',
+              methodName: 'BlockFillButtonExample',
+              builder: (_) => const BlockFillButtonExample(),
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: '组件状态',
+          children: [
+            ExampleItem(
+              desc: '按钮禁用状态',
+              methodName: 'DisablePrimaryFillButtonExample',
+              builder: (_) => const DisablePrimaryFillButtonExample(),
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: '组件主题',
+          children: [
+            ExampleItem(
+              desc: '按钮尺寸',
+              methodName: 'LargeButtonExample',
+              builder: (_) => const LargeButtonExample(),
+            ),
+            ExampleItem(
+              desc: '按钮形状',
+              center: false,
+              methodName: 'RectangleShapeButtonExample',
+              builder: (_) => const RectangleShapeButtonExample(),
+            ),
+            ExampleItem(
+              desc: '按钮主题',
+              methodName: 'DefaultFillButtonExample',
+              builder: (_) => const DefaultFillButtonExample(),
+            ),
+          ],
+        ),
+      ],
       test: [
         ExampleItem(
           ignoreCode: true,
@@ -132,18 +201,6 @@ class _TButtonPageState extends State<TButtonPage> {
     TToast.showText('点击了按钮', context: context);
   }
 
-  /// 为子树注入 [TButtonThemeData.shape]（外形走 Theme）
-  Widget _withButtonShape(
-    BuildContext context,
-    TButtonShape shape,
-    Widget child,
-  ) {
-    return Theme(
-      data: _mergeButtonTheme(context, TButtonThemeData(shape: shape)),
-      child: child,
-    );
-  }
-
   /// 合并 TButtonThemeData 到当前 Theme 子树（替代 mergeExtension）
   static ThemeData _mergeButtonTheme(
     BuildContext context,
@@ -158,410 +215,10 @@ class _TButtonPageState extends State<TButtonPage> {
     return Theme.of(context).copyWith(extensions: existingExtensions);
   }
 
-  @ExampleCode(group: 'button')
-  TButton _buildLightTextButton(BuildContext context) {
-    return TButton(
-      child: const Text('文字按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.text,
-      colorScheme: TButtonColorScheme.light,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildLightStrokeButton(BuildContext context) {
-    return TButton(
-      child: const Text('描边按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.light,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildDangerTextButton(BuildContext context) {
-    return TButton(
-      child: const Text('文字按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.text,
-      colorScheme: TButtonColorScheme.danger,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildDangerStrokeButton(BuildContext context) {
-    return TButton(
-      child: const Text('描边按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.danger,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildDangerFillButton(BuildContext context) {
-    return TButton(
-      child: const Text('填充按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.danger,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildDefaultTextButton(BuildContext context) {
-    return TButton(
-      child: const Text('文字按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.text,
-      colorScheme: TButtonColorScheme.defaultTheme,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildDefaultStrokeButton(BuildContext context) {
-    return TButton(
-      child: const Text('描边按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.defaultTheme,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  Widget _buildRectangleShapeButton(BuildContext context) {
-    return _withButtonShape(
-      context,
-      TButtonShape.rectangle,
-      TButton(
-        child: const Text('矩形'),
-        size: TButtonSize.large,
-        variant: TButtonVariant.fill,
-        colorScheme: TButtonColorScheme.primary,
-        onPressed: _onTap,
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  Widget _buildCircleButton(BuildContext context) {
-    return _withButtonShape(
-      context,
-      TButtonShape.circle,
-      TButton(
-        icon: const Icon(TIcons.app),
-        size: TButtonSize.large,
-        variant: TButtonVariant.fill,
-        colorScheme: TButtonColorScheme.primary,
-        onPressed: _onTap,
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  Widget _buildRoundButton(BuildContext context) {
-    return _withButtonShape(
-      context,
-      TButtonShape.round,
-      TButton(
-        child: const Text('填充按钮'),
-        size: TButtonSize.large,
-        variant: TButtonVariant.fill,
-        colorScheme: TButtonColorScheme.primary,
-        onPressed: _onTap,
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildExtraSmallButton(BuildContext context) {
-    return TButton(
-      child: const Text('按钮28'),
-      size: TButtonSize.extraSmall,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildSmallButton(BuildContext context) {
-    return TButton(
-      child: const Text('按钮32'),
-      size: TButtonSize.small,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildMediumButton(BuildContext context) {
-    return TButton(
-      child: const Text('按钮40'),
-      size: TButtonSize.medium,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildLargeButton(BuildContext context) {
-    return TButton(
-      child: const Text('按钮48'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildDisablePrimaryTextButton(BuildContext context) {
-    return const TButton(
-      child: Text('文字按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.text,
-      colorScheme: TButtonColorScheme.primary,
-      onPressed: null,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildDisablePrimaryStrokeButton(BuildContext context) {
-    return const TButton(
-      child: Text('描边按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
-      onPressed: null,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildDisableDefaultFillButton(BuildContext context) {
-    return const TButton(
-      child: Text('填充按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.defaultTheme,
-      onPressed: null,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildDisableLightFillButton(BuildContext context) {
-    return const TButton(
-      child: Text('填充按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.light,
-      onPressed: null,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildDisablePrimaryFillButton(BuildContext context) {
-    return const TButton(
-      child: Text('填充按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
-      onPressed: null,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  Widget _buildBlockFillButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: TButton(
-        child: const Text('填充按钮'),
-        size: TButtonSize.large,
-        variant: TButtonVariant.fill,
-        colorScheme: TButtonColorScheme.primary,
-        onPressed: _onTap,
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildDefaultGhostButton(BuildContext context) {
-    return TButton(
-      child: const Text('幽灵按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.ghost,
-      colorScheme: TButtonColorScheme.defaultTheme,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildDangerGhostButton(BuildContext context) {
-    return TButton(
-      child: const Text('幽灵按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.ghost,
-      colorScheme: TButtonColorScheme.danger,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildPrimaryGhostButton(BuildContext context) {
-    return TButton(
-      child: const Text('幽灵按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.ghost,
-      colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  Widget _buildSquareIconButton(BuildContext context) {
-    return _withButtonShape(
-      context,
-      TButtonShape.square,
-      TButton(
-        icon: const Icon(TIcons.app),
-        size: TButtonSize.large,
-        variant: TButtonVariant.fill,
-        colorScheme: TButtonColorScheme.primary,
-        onPressed: _onTap,
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildLoadingIconButton(BuildContext context) {
-    return TButton(
-      child: const Text('加载中'),
-      icon: Theme(
-        // TLoading 已移除 themeData 构造参数，改用 mergeExtension 注入子树主题
-        data: Theme.of(context).mergeExtension(
-          TLoadingThemeData(iconColor: context.tTheme.whiteColor1),
-        ),
-        child: const TLoading(icon: TLoadingIcon.circle),
-      ),
-      size: TButtonSize.large,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildRectangleIconButton(BuildContext context) {
-    return TButton(
-      child: const Text('填充按钮'),
-      icon: const Icon(TIcons.app),
-      size: TButtonSize.large,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildPrimaryTextButton(BuildContext context) {
-    return TButton(
-      child: const Text('文字按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.text,
-      colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildPrimaryStrokeButton(BuildContext context) {
-    return TButton(
-      child: const Text('描边按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildDefaultFillButton(BuildContext context) {
-    return TButton(
-      child: const Text('填充按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.defaultTheme,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildPrimaryFillButton(BuildContext context) {
-    return TButton(
-      child: const Text('填充按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  TButton _buildLightFillButton(BuildContext context) {
-    return TButton(
-      child: const Text('填充按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.light,
-      onPressed: _onTap,
-    );
-  }
-
-  @ExampleCode(group: 'button')
-  Widget _buildCombinationButtons(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          Expanded(
-            child: TButton(
-              child: const Text('填充按钮'),
-              size: TButtonSize.large,
-              variant: TButtonVariant.fill,
-              colorScheme: TButtonColorScheme.light,
-              onPressed: _onTap,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: TButton(
-              child: const Text('填充按钮'),
-              size: TButtonSize.large,
-              variant: TButtonVariant.fill,
-              colorScheme: TButtonColorScheme.primary,
-              onPressed: _onTap,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'button')
   Widget _buildChildTestButton(BuildContext context) {
     return TButton(child: Container(), onPressed: null);
   }
 
-  @ExampleCode(group: 'button')
   Widget _buildRightIconButton(BuildContext context) {
     return Wrap(
       spacing: 16,
@@ -598,7 +255,6 @@ class _TButtonPageState extends State<TButtonPage> {
     );
   }
 
-  @ExampleCode(group: 'button')
   Widget _buildGradientButton(BuildContext context) {
     return Wrap(
       spacing: 16,

@@ -1,0 +1,33 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class BlockFillButtonExample extends StatefulWidget {
+  const BlockFillButtonExample({super.key});
+
+  @override
+  State<BlockFillButtonExample> createState() => _BlockFillButtonExampleState();
+}
+
+class _BlockFillButtonExampleState extends State<BlockFillButtonExample> {
+  Widget _buildBlockFillButton(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: const Text('填充按钮'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.fill,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: _onTap,
+      ),
+    );
+  }
+
+  void _onTap() {
+    TToast.showText('点击了按钮', context: context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildBlockFillButton(context);
+  }
+}

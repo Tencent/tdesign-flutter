@@ -8,55 +8,40 @@
 
 ## 自动化验证
 
-> 下表是旧结构阶段的历史记录。用户追加“每个公开 ExampleItem 独立文件且代码完整可复制”的验收条件后，以下结果不能作为最终验收；新结构完成后须在最新 head 重新执行并替换。
-
 | 命令 | 结果 | 备注 |
 | --- | --- | --- |
-| `dart run tool/generate_example_code.dart --check --verbose` | PASS | 413 份片段全部同步 |
-| `flutter test test/tool/generate_example_code_test.dart` | PASS | Flutter 3.32，5/5 |
-| `flutter analyze --fatal-infos` | PASS | Flutter 3.32，0 issues |
-| `flutter test test/table_page_test.dart` | PASS | Flutter 3.32，4/4，覆盖 9 个真实代码面板 |
-| `flutter analyze --fatal-infos` | PASS | Flutter 3.47，0 issues |
-| `flutter test test/table_page_test.dart` | PASS | Flutter 3.47，清理跨 SDK shader 缓存后 4/4 |
-| `pnpm test:example-code` | PASS | Node 映射测试 4/4；全量清单验证 57 份组件文档映射 404 份生成代码，仅排除非组件组 radius/shadows |
-| `node scripts/check-flutter-component-contracts.mjs` | PASS | 56 条公开站点路由均具有组件源码、Example 注册和文档 |
-| `pnpm site` | PASS | 全量映射测试随生产站点构建执行，108 modules transformed |
-| Linux 3.32 `flutter test --no-pub test/table_demo_golden_test.dart` | PASS | `tdesign-flutter-golden-cache:3.32.0`，light/dark 2/2，未更新基线 |
+| `dart run tool/check_demo_structure.dart` | PASS | 60 个入口、0 个旧分组文件；375 个公开 ExampleItem 与 375 个独立 `@ExampleCode` 文件、生成资产一一对应 |
+| `dart run tool/generate_example_code.dart --check` | PASS | 375 份片段与 manifest 完全同步，`legacyGroups: []` |
+| `flutter test test/tool/generate_example_code_test.dart` | PASS | Flutter 3.32，11/11；覆盖整文件导出、显式辅助文件合并、严格页面、拒绝缺失页面清单及内部条件模块 |
+| `flutter analyze --no-pub --fatal-infos` | PASS | Flutter 3.32，根包与 example 子包均 0 issues |
+| Flutter 3.47 `flutter analyze --no-pub --fatal-infos` | PASS | 根包与 example 子包均 0 issues |
+| example 全量非视觉测试 | PASS | 排除独立 Golden 文件和 `golden` tag 后，69 个测试文件、294/294 |
+| `npm run test:example-code` | PASS | Node 映射测试 6/6；57 份组件文档映射 365 份组件示例，另有 fonts/radius/shadows 10 份基础示例 |
+| `npm run site` | PASS | 站点生产构建完成，108 modules transformed |
 | `git diff --check` | PASS | 无空白错误 |
-| `dart run tool/check_demo_structure.dart` | PASS | 60 个入口、141 个语义模块，Calendar 与 Sidebar 等辅助 example 已归位 |
-| `dart run tool/generate_example_code.dart --check --verbose` | PASS | 413 份片段全部同步；目录迁移后 26 份格式化产物已重新生成 |
-| `flutter analyze --fatal-infos` | PASS | Flutter 3.32，0 issues |
-| Flutter 3.47 `flutter analyze --no-pub --fatal-infos` | PASS | 0 issues |
-| 九类组件与辅助 example 抽查 | PASS | Table、Calendar、Sidebar、Input、Button、Form、TreeSelect、Stepper、LunarInfo，51/51 |
-| `flutter test test/tool/generate_example_code_test.dart` | PASS | 5/5 |
-| `pnpm test:example-code` | PASS | 57 份组件文档映射 404 份生成代码 |
-| `pnpm site` | PASS | 108 modules transformed，生产构建完成 |
+| Linux 3.32 Golden / 远端 CI | PENDING | 推送最新 head 后以仓库 CI 的 Linux 字体、DPR 与 Flutter 3.32 环境为准 |
 
-## 人工验收
+## 人工与结构抽查
 
-- [x] Table 页面公开顺序、坐标、尺寸、交互与 Linux light/dark Golden 未改变
-- [x] 57 份组件 Web 文档均只有一个组映射，无手写 Dart `td-code-block`
-- [x] Table、Stepper、Form 展开后的 Web 代码与生成资产逐字一致
-- [x] 缺失或非法映射会阻止映射测试或站点构建
-- [x] 旧结构阶段的 60 个语义入口、141 个模块文件和辅助 example 归属均已通过脚本检查并抽查
-- [ ] ExampleModule 分组已合并到 60 个页面入口，纯分组模块文件全部移除
-- [ ] 全部公开 ExampleItem 配置均位于页面入口，其引用的 Widget 均有独立语义文件，运行页面与代码面板引用同一 Widget
-- [ ] 每份代码包含所需 imports、数据、状态、回调、helper、Controller 和生命周期，可在最小宿主中解析或编译
-- [ ] Web 展示顺序与 ExampleModule / ExampleItem 顺序一致，且不混入测试专用或未注册片段
+- [x] ExampleModule 分组和完整 ExampleItem 配置已合并到 60 个页面入口，纯分组模块文件全部移除。
+- [x] 375 个公开 ExampleItem 各自对应一个独立语义文件，运行页面和 Web 代码面板引用同一 Widget。
+- [x] state、Controller、helper 与生命周期归属于对应示例；Progress、Stepper、Calendar、FAB、BackTop、Theme、Toast、Popover 等复杂页面已分别复测。
+- [x] Sidebar 的四个辅助详情页通过显式 `includes` 合并进相应可复制代码，不由解析器猜测隐藏依赖。
+- [x] Popover 仅跳过完全由 `ignoreCode: true` 项组成的内部条件模块；公开条件模块仍会被严格解析拒绝。
+- [x] 生成资产不含本地相对导入，也不依赖 `CodeWrapper`、`ExamplePageModel` 或 `ExamplePageInheritedTheme`。
+- [x] Web 严格按 manifest 恢复公开分组、描述和顺序；缺少描述时才以示例类名兜底。
+- [x] Table、Stepper、Form、Calendar、Sidebar、Popover、Progress、Tag、TreeSelect 等不同复杂度代码面板已由 Widget 测试实际加载。
+- [x] 57 份组件文档均只有一个组映射，无手写 Dart `td-code-block`，未注册资产不会进入文档。
+- [ ] 最新 head 的 Linux 3.32 Golden 与全部远端 CI 通过。
 
-## 未覆盖项与后续工作
+## 复杂示例归属判断
 
-- macOS 本地完整测试中的 Golden 仍因平台文字栅格差异批量失败，未更新基线；非 Golden 明确抽查与双版本 analyze 已通过。
-- ActionSheet 大小写敏感资源路径已在 `31111055` 修复，并由最新 Linux Golden 验证通过；旧记录不再作为已知问题。
-- 当前 413 份生成片段中仍存在方法级片段引用页面字段、`setState`、helper 或 Controller 的情况；这是新验收条件下的阻塞项。
-- macOS 本地 Golden 因平台文字栅格差异出现约 7.3% diff；未更新基线，最终结论采用 CI 同款 Linux 3.32 的 2/2 精确通过结果。
+- 示例自身可拥有的状态、Controller、局部数据、回调和生命周期全部迁入独立 example Widget/State。
+- 页面壳必须拥有的跨示例宿主行为保留在页面，例如 FAB 当前悬浮层、BackTop 页面滚动容器；独立示例通过显式回调或公开工厂连接，不依赖页面私有字段。
+- 只有一个公开示例需要的同文件 helper 由整文件生成直接保留；Sidebar 这类真实的多文件辅助页面通过显式 `includes` 声明。
+- 解析器只处理语法结构和显式依赖，不通过名字或调用链猜测业务依赖；解析不合理时优先修正示例所有权，只有合法完整源码仍无法表达时才扩展解析能力。
 
-## 新结构基础设施检查点（2026-09-20）
+## Golden 说明
 
-- Divider 页面已用 `@ExampleCodeManifest` 进入严格清单，manifest 顺序为 `DividerBaseExample`、`DividerDashedExample`，与页面两个 `ExampleModule` / `ExampleItem` 的顺序一致。
-- 独立 `*_example.dart` / `*_demo.dart` 改为整文件生成，顶层数据、helper、模型和扩展不再因只提取 Widget 与 State 而丢失。
-- Web 对严格组只读取 manifest，不扫描同组其他文件；未迁移组暂列入 `legacyGroups`，该兼容清单必须在全量迁移完成后清空。
-- Flutter 清单解析与 Web 标题渲染已从通用 `plugin-tdoc` 目录移至 `site/flutter-example-docs/`；严格组按 manifest 恢复公开 `ExampleModule.title` 与 `ExampleItem.desc`，`td-code-block` 仍只负责展示和复制源码。
-- 生成器聚焦测试 8/8 通过；Web 映射测试 6/6 通过；57 份组件文档仍映射 404 份现有生成代码。
-- `flutter analyze --fatal-infos`、Divider 非视觉 Widget 测试、生成器 `--check`、Demo 结构检查及站点生产构建通过。
-- macOS Divider Golden 仍受已记录的字体栅格差异影响（本次约 6.7%）；本次没有视觉改动，未更新 Linux 权威基线。
+- macOS 本地 Golden 会因平台字体栅格差异产生批量像素差异，因此没有更新 Linux 权威基线。
+- 本次最终视觉结论等待 PR 最新 head 的 Linux Flutter 3.32 CI；通过前不声明“可直接合并”。

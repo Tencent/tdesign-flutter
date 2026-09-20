@@ -1,0 +1,175 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'dialog')
+class ImageDialogsExample extends StatefulWidget {
+  const ImageDialogsExample({super.key});
+
+  @override
+  State<ImageDialogsExample> createState() => _ImageDialogsExampleState();
+}
+
+class _ImageDialogsExampleState extends State<ImageDialogsExample> {
+  Widget _imageDialogs(BuildContext context) {
+    return _scenarios(context, [
+      _trigger('图片置顶-带标题描述', () {
+        _showImageDialog(
+          context,
+          imageOnTop: true,
+          showTitle: true,
+          showContent: true,
+        );
+      }),
+      _trigger('图片置顶-无标题', () {
+        _showImageDialog(
+          context,
+          imageOnTop: true,
+          showTitle: false,
+          showContent: true,
+        );
+      }),
+      _trigger('图片置顶-纯标题', () {
+        _showImageDialog(
+          context,
+          imageOnTop: true,
+          showTitle: true,
+          showContent: false,
+        );
+      }),
+      _trigger('图片置顶-纯图片', () {
+        _showImageDialog(
+          context,
+          imageOnTop: true,
+          showTitle: false,
+          showContent: false,
+        );
+      }),
+      _trigger('图片居中-带标题描述', () {
+        _showImageDialog(
+          context,
+          imageOnTop: false,
+          showTitle: true,
+          showContent: true,
+        );
+      }),
+      _trigger('图片居中-纯标题', () {
+        _showImageDialog(
+          context,
+          imageOnTop: false,
+          showTitle: true,
+          showContent: false,
+        );
+      }),
+    ]);
+  }
+
+  Widget _scenarios(BuildContext context, List<Widget> children) {
+    return Column(
+      children: [
+        for (var index = 0; index < children.length; index++) ...[
+          if (index > 0) SizedBox(height: context.tTheme.spacer16),
+          children[index],
+        ],
+      ],
+    );
+  }
+
+  Widget _trigger(String text, VoidCallback onPressed) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: onPressed,
+        child: Text(text),
+      ),
+    );
+  }
+
+  void _showImageDialog(
+    BuildContext context, {
+    required bool imageOnTop,
+    required bool showTitle,
+    required bool showContent,
+  }) {
+    const image = AspectRatio(
+      key: ValueKey('dialog-image'),
+      aspectRatio: 16 / 9,
+      child: Image(
+        image: AssetImage('assets/img/image.png'),
+        width: double.infinity,
+        fit: BoxFit.cover,
+      ),
+    );
+    final token = context.tTheme;
+    final title = showTitle
+        ? TText(
+            '对话框标题',
+            textAlign: TextAlign.center,
+            font: token.fontTitleLarge,
+            textColor: token.textColorPrimary,
+          )
+        : null;
+    final description = showContent
+        ? const Text(_description, textAlign: TextAlign.center)
+        : null;
+    final textContent = Padding(
+      padding: EdgeInsets.fromLTRB(
+        token.spacer24,
+        token.spacer24,
+        token.spacer24,
+        imageOnTop ? 0 : token.spacer24,
+      ),
+      child: Column(
+        children: [
+          if (title != null) title,
+          if (title != null && description != null)
+            SizedBox(height: token.spacer8),
+          if (description != null) description,
+        ],
+      ),
+    );
+    TDialog.show<bool>(
+      context,
+      barrierDismissible: true,
+      dialog: TDialog(
+        contentPadding: EdgeInsets.zero,
+        content: Column(
+          children: [
+            if (imageOnTop) image,
+            if (showTitle || showContent) textContent,
+            if (!imageOnTop) image,
+          ],
+        ),
+        actions: _actions(),
+      ),
+    );
+  }
+
+  static const _description = '告知当前状态、信息和解决方法，等内容。描述尽可能控制在三行内。';
+
+  List<TDialogAction> _actions({
+    bool destructive = false,
+    TButtonVariant? variant,
+    TButtonColorScheme? primaryColorScheme,
+  }) => [
+    TDialogAction(variant: variant, child: const Text('取消'), result: false),
+    TDialogAction(
+      child: Text(destructive ? '警示操作' : '确定'),
+      result: true,
+      variant: variant,
+      colorScheme: primaryColorScheme,
+      role: destructive
+          ? TDialogActionRole.destructive
+          : TDialogActionRole.primary,
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return _imageDialogs(context);
+  }
+}

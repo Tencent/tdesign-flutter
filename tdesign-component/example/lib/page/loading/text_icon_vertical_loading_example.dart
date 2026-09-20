@@ -1,0 +1,36 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'loading')
+class TextIconVerticalLoadingExample extends StatelessWidget {
+  const TextIconVerticalLoadingExample({super.key});
+
+  /// 图标加文字竖向
+  Widget _buildTextIconVerticalLoading(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Theme(
+          data: Theme.of(
+            context,
+          ).mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
+          child: const TLoading(icon: TLoadingIcon.circle, text: '加载中'),
+        ),
+        const SizedBox(width: 64),
+        Theme(
+          data: Theme.of(
+            context,
+          ).mergeExtension(const TLoadingThemeData(axis: Axis.vertical)),
+          child: const TLoading(icon: TLoadingIcon.activity, text: '加载中'),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildTextIconVerticalLoading(context);
+  }
+}

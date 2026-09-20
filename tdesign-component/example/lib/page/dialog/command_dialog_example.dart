@@ -1,0 +1,74 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'dialog')
+class CommandDialogExample extends StatefulWidget {
+  const CommandDialogExample({super.key});
+
+  @override
+  State<CommandDialogExample> createState() => _CommandDialogExampleState();
+}
+
+class _CommandDialogExampleState extends State<CommandDialogExample> {
+  Widget _commandDialog(BuildContext context) {
+    return _trigger('命令行操作', () async {
+      final result = await TDialog.show<_DialogCommandResult>(
+        context,
+        barrierDismissible: true,
+        barrierResult: _DialogCommandResult.overlay,
+        dialog: const TDialog(
+          title: Text('弹窗标题'),
+          content: Text('告知当前状态、信息和解决方法等内容。'),
+          showCloseButton: true,
+          closeButtonResult: _DialogCommandResult.closeButton,
+          actions: [
+            TDialogAction(
+              child: Text('取消'),
+              result: _DialogCommandResult.cancel,
+              variant: TButtonVariant.text,
+            ),
+            TDialogAction(
+              child: Text('确定'),
+              role: TDialogActionRole.primary,
+              result: _DialogCommandResult.confirm,
+              variant: TButtonVariant.text,
+            ),
+          ],
+        ),
+      );
+      if (!context.mounted) {
+        return;
+      }
+      final message = switch (result) {
+        _DialogCommandResult.confirm => '点击了确定',
+        _DialogCommandResult.cancel => '点击了取消',
+        _DialogCommandResult.overlay => '点击蒙层关闭',
+        _DialogCommandResult.closeButton => '点击关闭按钮',
+        null => '返回或程序关闭',
+      };
+      TToast.showText(message, context: context);
+    });
+  }
+
+  Widget _trigger(String text, VoidCallback onPressed) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: onPressed,
+        child: Text(text),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _commandDialog(context);
+  }
+}
+
+enum _DialogCommandResult { confirm, cancel, overlay, closeButton }

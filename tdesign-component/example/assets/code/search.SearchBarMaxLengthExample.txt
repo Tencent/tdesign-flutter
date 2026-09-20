@@ -1,0 +1,45 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class SearchBarMaxLengthExample extends StatelessWidget {
+  const SearchBarMaxLengthExample({super.key});
+
+  Widget _buildMaxLength(BuildContext context) {
+    return const Column(
+      children: [
+        SearchBarMaxLengthExampleSearchDemoSurface(
+          child: TSearchBar(hintText: '最多输入10个汉字', maxLength: 10),
+        ),
+        SizedBox(height: 16),
+        SearchBarMaxLengthExampleSearchDemoSurface(
+          child: TSearchBar(hintText: '最多输入10个字符（汉字算两个）', maxCharacter: 10),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildMaxLength(context);
+  }
+}
+
+class SearchBarMaxLengthExampleSearchDemoSurface extends StatelessWidget {
+  const SearchBarMaxLengthExampleSearchDemoSurface({
+    super.key,
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: child,
+      ),
+    );
+  }
+}

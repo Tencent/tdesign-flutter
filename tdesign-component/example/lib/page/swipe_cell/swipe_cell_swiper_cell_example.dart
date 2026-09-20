@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'SwipeCell')
+class SwipeCellSwiperCellExample extends StatelessWidget {
+  const SwipeCellSwiperCellExample({super.key});
+
+  Widget _buildSwiperCell(BuildContext context) {
+    return Column(
+      children: [
+        TSwipeCell(
+          end: TSwipeCellPanel(
+            children: [_action(context, '删除', context.tTheme.errorNormalColor)],
+          ),
+          child: const TCell(title: Text('左滑单操作'), note: Text('辅助信息')),
+        ),
+        const SizedBox(height: 16),
+        TSwipeCell(
+          end: TSwipeCellPanel(
+            children: [_action(context, '删除', context.tTheme.errorNormalColor)],
+          ),
+          child: const TCell(
+            title: Text('左滑大列表'),
+            note: Text('辅助信息'),
+            subtitle: Text('一段很长很长的内容文字'),
+            image: CircleAvatar(
+              backgroundImage: AssetImage('assets/img/t_avatar_1.png'),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        TSwipeCell(
+          end: TSwipeCellPanel(
+            children: [
+              _action(context, '编辑', context.tTheme.warningNormalColor),
+              _action(context, '删除', context.tTheme.errorNormalColor),
+            ],
+          ),
+          child: const TCell(title: Text('左滑双操作'), note: Text('辅助信息')),
+        ),
+        const SizedBox(height: 16),
+        TSwipeCell(
+          end: TSwipeCellPanel(
+            children: [
+              _action(context, '收藏', context.tTheme.brandNormalColor),
+              _action(context, '编辑', context.tTheme.warningNormalColor),
+              _action(context, '删除', context.tTheme.errorNormalColor),
+            ],
+          ),
+          child: const TCell(title: Text('左滑多操作'), note: Text('辅助信息')),
+        ),
+      ],
+    );
+  }
+
+  TSwipeCellAction _action(
+    BuildContext context,
+    String label,
+    Color? color, {
+    IconData? icon,
+  }) {
+    return TSwipeCellAction(backgroundColor: color, icon: icon, label: label);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildSwiperCell(context);
+  }
+}

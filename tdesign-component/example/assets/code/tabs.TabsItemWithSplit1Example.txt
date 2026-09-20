@@ -1,0 +1,23 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class TabsItemWithSplit1Example extends StatelessWidget {
+  const TabsItemWithSplit1Example({super.key});
+
+  Widget _buildItemWithSplit1(BuildContext context) {
+    return const DefaultTabController(
+      length: 2,
+      child: TTabsBar(
+        tabs: [
+          TTab(text: '选项'),
+          TTab(text: '选项'),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildItemWithSplit1(context);
+  }
+}

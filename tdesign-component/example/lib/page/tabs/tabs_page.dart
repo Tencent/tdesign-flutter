@@ -3,11 +3,21 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
+import 'tabs_item_with_content_example.dart';
+import 'tabs_item_with_icon_example.dart';
+import 'tabs_item_with_line_example.dart';
+import 'tabs_item_with_logo_example.dart';
+import 'tabs_item_with_size_large_example.dart';
+import 'tabs_item_with_size_small_example.dart';
+import 'tabs_item_with_space_example.dart';
+import 'tabs_item_with_split1_example.dart';
+import 'tabs_item_with_split2_example.dart';
+import 'tabs_item_with_split3_example.dart';
+import 'tabs_item_with_split4_example.dart';
+import 'tabs_item_with_status_example.dart';
+import 'tabs_item_with_tag_example.dart';
 
-part 'tabs_status.dart';
-part 'tabs_style.dart';
-part 'tabs_type.dart';
-
+@ExampleCodeManifest()
 class TTabsPage extends StatelessWidget {
   const TTabsPage({Key? key}) : super(key: key);
 
@@ -18,217 +28,88 @@ class TTabsPage extends StatelessWidget {
       desc: '用于内容分类后的展示切换。',
       exampleCodeGroup: 'tabs',
       padding: const EdgeInsets.only(top: 16),
-      children: [_tabsTypeModule, _tabsStatusModule, _tabsStyleModule],
-    );
-  }
-
-  @ExampleCode(group: 'tabs')
-  Widget _buildItemWithSplit1(BuildContext context) {
-    return const DefaultTabController(
-      length: 2,
-      child: TTabsBar(
-        tabs: [
-          TTab(text: '选项'),
-          TTab(text: '选项'),
-        ],
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'tabs')
-  Widget _buildItemWithSplit2(BuildContext context) {
-    return const DefaultTabController(
-      length: 3,
-      child: TTabsBar(
-        tabs: [
-          TTab(text: '选项'),
-          TTab(text: '选项'),
-          TTab(text: '上限六个文字'),
-        ],
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'tabs')
-  Widget _buildItemWithSplit3(BuildContext context) {
-    return const DefaultTabController(
-      length: 4,
-      child: TTabsBar(
-        tabs: [
-          TTab(text: '选项'),
-          TTab(text: '选项'),
-          TTab(text: '选项'),
-          TTab(text: '上限四字'),
-        ],
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'tabs')
-  Widget _buildItemWithSplit4(BuildContext context) {
-    return const DefaultTabController(
-      length: 5,
-      child: TTabsBar(
-        tabs: [
-          TTab(text: '选项'),
-          TTab(text: '选项'),
-          TTab(text: '选项'),
-          TTab(text: '选项'),
-          TTab(text: '上限四字'),
-        ],
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'tabs')
-  Widget _buildItemWithSpace(BuildContext context) {
-    return DefaultTabController(
-      length: 6,
-      child: TTabsBar(tabs: List.generate(6, (_) => const TTab(text: '选项'))),
-    );
-  }
-
-  @ExampleCode(group: 'tabs')
-  Widget _buildItemWithIcon(BuildContext context) {
-    final tabs = List.generate(
-      3,
-      (_) => const TTab(text: '选项', icon: Icon(TIcons.app, size: 18)),
-    );
-    return DefaultTabController(
-      length: tabs.length,
-      child: TTabsBar(tabs: tabs),
-    );
-  }
-
-  @ExampleCode(group: 'tabs')
-  Widget _buildItemWithLogo(BuildContext context) {
-    const tabs = [
-      TTab(
-        child: TBadge(
-          variant: TBadgeVariant.dot,
-          offset: Offset(-4, 4),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(TIcons.app, size: 18),
-              SizedBox(width: 4),
-              Text('选项'),
-            ],
-          ),
-        ),
-      ),
-      TTab(
-        child: TBadge(
-          label: '8',
-          offset: Offset(-1, 0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(TIcons.app, size: 18),
-              SizedBox(width: 4),
-              Text('选项'),
-            ],
-          ),
-        ),
-      ),
-      TTab(text: '选项', icon: Icon(TIcons.app, size: 18)),
-    ];
-    return DefaultTabController(
-      length: tabs.length,
-      child: const TTabsBar(tabs: tabs),
-    );
-  }
-
-  @ExampleCode(group: 'tabs')
-  Widget _buildItemWithContent(BuildContext context) {
-    final contentColor = context.tTheme.textColorPlaceholder;
-    return SizedBox(
-      height: 168,
-      child: DefaultTabController(
-        length: 4,
-        child: Column(
+      children: [
+        ExampleModule(
+          title: '组件类型',
           children: [
-            const TTabsBar(
-              tabs: [
-                TTab(text: '选项一'),
-                TTab(text: '选项二'),
-                TTab(text: '选项三'),
-                TTab(text: '选项四'),
-              ],
+            ExampleItem(
+              desc: '均分选项卡',
+              methodName: 'TabsItemWithSplit1Example',
+              builder: (_) => const TabsItemWithSplit1Example(),
             ),
-            Expanded(
-              child: TTabsBarView(
-                children: [
-                  Center(child: TText('内容区', textColor: contentColor)),
-                  Center(child: TText('内容区', textColor: contentColor)),
-                  Center(child: TText('内容区', textColor: contentColor)),
-                  Center(child: TText('内容区', textColor: contentColor)),
-                ],
-              ),
+            ExampleItem(
+              desc: '',
+              methodName: 'TabsItemWithSplit2Example',
+              builder: (_) => const TabsItemWithSplit2Example(),
+            ),
+            ExampleItem(
+              desc: '',
+              methodName: 'TabsItemWithSplit3Example',
+              builder: (_) => const TabsItemWithSplit3Example(),
+            ),
+            ExampleItem(
+              desc: '',
+              methodName: 'TabsItemWithSplit4Example',
+              builder: (_) => const TabsItemWithSplit4Example(),
+            ),
+            ExampleItem(
+              desc: '等距选项卡',
+              methodName: 'TabsItemWithSpaceExample',
+              builder: (_) => const TabsItemWithSpaceExample(),
+            ),
+            ExampleItem(
+              desc: '带图标选项卡',
+              methodName: 'TabsItemWithIconExample',
+              builder: (_) => const TabsItemWithIconExample(),
+            ),
+            ExampleItem(
+              desc: '带徽标选项卡',
+              methodName: 'TabsItemWithLogoExample',
+              builder: (_) => const TabsItemWithLogoExample(),
+            ),
+            ExampleItem(
+              desc: '带内容区选项卡',
+              methodName: 'TabsItemWithContentExample',
+              builder: (_) => const TabsItemWithContentExample(),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'tabs')
-  Widget _buildItemWithStatus(BuildContext context) {
-    const tabs = [
-      TTab(text: '选中'),
-      TTab(text: '默认'),
-      TTab(text: '禁用', enabled: false),
-    ];
-    return const DefaultTabController(length: 3, child: TTabsBar(tabs: tabs));
-  }
-
-  @ExampleCode(group: 'tabs')
-  Widget _buildItemWithSizeSmall(BuildContext context) {
-    const tabs = [
-      TTab(text: '小尺寸'),
-      TTab(text: '选项'),
-      TTab(text: '选项'),
-      TTab(text: '选项'),
-    ];
-    return const DefaultTabController(length: 4, child: TTabsBar(tabs: tabs));
-  }
-
-  @ExampleCode(group: 'tabs')
-  Widget _buildItemWithSizeLarge(BuildContext context) {
-    const tabs = [
-      TTab(text: '大尺寸'),
-      TTab(text: '选项'),
-      TTab(text: '选项'),
-      TTab(text: '选项'),
-    ];
-    return const DefaultTabController(
-      length: 4,
-      child: TTabsBar(tabs: tabs, size: TTabsBarSize.large),
-    );
-  }
-
-  @ExampleCode(group: 'tabs')
-  Widget _buildItemWithLine(BuildContext context) {
-    const tabs = [
-      TTab(text: '选项'),
-      TTab(text: '选项'),
-      TTab(text: '选项'),
-      TTab(text: '选项'),
-    ];
-    return const DefaultTabController(length: 4, child: TTabsBar(tabs: tabs));
-  }
-
-  @ExampleCode(group: 'tabs')
-  Widget _buildItemWithTag(BuildContext context) {
-    const tabs = [
-      TTab(text: '选项'),
-      TTab(text: '选项'),
-      TTab(text: '选项'),
-      TTab(text: '选项'),
-    ];
-    return const DefaultTabController(
-      length: 4,
-      child: TTabsBar(tabs: tabs, variant: TTabsBarVariant.tag),
+        ExampleModule(
+          title: '组件状态',
+          children: [
+            ExampleItem(
+              desc: '选项卡状态',
+              methodName: 'TabsItemWithStatusExample',
+              builder: (_) => const TabsItemWithStatusExample(),
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: '组件样式',
+          children: [
+            ExampleItem(
+              desc: '选项卡尺寸',
+              methodName: 'TabsItemWithSizeSmallExample',
+              builder: (_) => const TabsItemWithSizeSmallExample(),
+            ),
+            ExampleItem(
+              desc: '',
+              methodName: 'TabsItemWithSizeLargeExample',
+              builder: (_) => const TabsItemWithSizeLargeExample(),
+            ),
+            ExampleItem(
+              desc: '选项卡样式',
+              methodName: 'TabsItemWithLineExample',
+              builder: (_) => const TabsItemWithLineExample(),
+            ),
+            ExampleItem(
+              desc: '',
+              methodName: 'TabsItemWithTagExample',
+              builder: (_) => const TabsItemWithTagExample(),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

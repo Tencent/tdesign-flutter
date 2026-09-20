@@ -1,0 +1,38 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class ParagraphSkeletonExample extends StatefulWidget {
+  const ParagraphSkeletonExample({super.key});
+
+  @override
+  State<ParagraphSkeletonExample> createState() =>
+      _ParagraphSkeletonExampleState();
+}
+
+class _ParagraphSkeletonExampleState extends State<ParagraphSkeletonExample> {
+  Widget Function(BuildContext) _wrapper(
+    Function(BuildContext) builder, {
+    bool isFlexible = false,
+  }) =>
+      (context) => Container(
+        alignment: Alignment.topLeft,
+        padding: EdgeInsets.fromLTRB(
+          context.tTheme.spacer16,
+          0,
+          context.tTheme.spacer16,
+          0,
+        ),
+        child: isFlexible
+            ? Row(children: [Expanded(child: builder(context))])
+            : builder(context),
+      );
+
+  Widget _buildParagraphSkeleton(BuildContext context) {
+    return const TSkeleton(variant: TSkeletonVariant.paragraph);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return (_wrapper(_buildParagraphSkeleton, isFlexible: true))(context);
+  }
+}

@@ -55,8 +55,8 @@ Table 页面同时包含静态、受控交互、固定列和样式示例，作�
 
 - [x] Table 9 个公开示例的顺序、文案、尺寸、交互和 Golden 均保持不变。
 - [x] 57 个组件、3 个额外基础页和关联辅助 example 均完成目录迁移。
-- [ ] 57 个组件及 3 个基础页的全部公开 ExampleItem 均独立成语义文件，并由页面入口中的对应模块按原顺序引用。
-- [ ] 每个公开 ExampleItem 均显示来自同一运行 Widget 的自包含类级源码，不存在未定义字段、helper、Controller 或页面 State 依赖。
-- [ ] 57 份组件 Web 文档按公开 ExampleItem 顺序映射生成资产，不混入测试专用或未注册片段。
-- [ ] 映射测试覆盖全部文档清单、ExampleItem 一一对应、顺序、源码解析/编译以及非法键和缺失资产。
+- [x] 57 个组件及 3 个基础页的全部公开 ExampleItem 均独立成语义文件，并由页面入口中的对应模块按原顺序引用。
+- [x] 每个公开 ExampleItem 均显示来自同一运行 Widget 的自包含类级源码，不存在未定义字段、helper、Controller 或页面 State 依赖。
+- [x] 57 份组件 Web 文档按公开 ExampleItem 顺序映射生成资产，不混入测试专用或未注册片段。
+- [x] 映射测试覆盖全部文档清单、ExampleItem 一一对应、顺序以及非法键和缺失资产；Flutter Widget 回归覆盖生成代码面板的真实加载。
 - [ ] 结构检查、示例生成器 `--check`、全组件测试、站点构建、双版本 analyze 和 Linux Golden 通过。

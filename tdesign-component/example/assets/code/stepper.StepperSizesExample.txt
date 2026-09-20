@@ -16,31 +16,37 @@ class _StepperSizesExampleState extends State<StepperSizesExample> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        TStepper(
-          key: const ValueKey('stepper-sizes'),
-          value: _large,
-          size: TStepperSize.large,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _large = value),
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TStepper(
+              key: const ValueKey('stepper-sizes'),
+              value: _large,
+              size: TStepperSize.large,
+              variant: TStepperVariant.filled,
+              onChanged: (value) => setState(() => _large = value),
+            ),
+            TStepper(
+              key: const ValueKey('stepper-medium'),
+              value: _medium,
+              size: TStepperSize.medium,
+              variant: TStepperVariant.filled,
+              onChanged: (value) => setState(() => _medium = value),
+            ),
+            TStepper(
+              key: const ValueKey('stepper-small'),
+              value: _small,
+              size: TStepperSize.small,
+              variant: TStepperVariant.filled,
+              onChanged: (value) => setState(() => _small = value),
+            ),
+          ],
         ),
-        TStepper(
-          key: const ValueKey('stepper-medium'),
-          value: _medium,
-          size: TStepperSize.medium,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _medium = value),
-        ),
-        TStepper(
-          key: const ValueKey('stepper-small'),
-          value: _small,
-          size: TStepperSize.small,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _small = value),
-        ),
-      ],
+      ),
     );
   }
 }

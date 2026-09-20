@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
-import 'stepper_examples.dart';
+import 'stepper_base_example.dart';
+import 'stepper_bounds_example.dart';
+import 'stepper_disabled_example.dart';
+import 'stepper_sizes_example.dart';
+import 'stepper_variants_example.dart';
 
-part 'stepper_type.dart';
-part 'stepper_status.dart';
-part 'stepper_style.dart';
-
+@ExampleCodeManifest()
 class TStepperPage extends StatefulWidget {
   const TStepperPage({super.key});
 
@@ -23,11 +25,52 @@ class _TStepperPageState extends State<TStepperPage> {
     exampleCodeGroup: 'stepper',
     compactDemo: true,
     showTestModule: false,
-    children: [_stepperTypeModule, _stepperStatusModule, _stepperStyleModule],
-  );
-
-  Widget _container(Widget child) => ColoredBox(
-    color: context.tTheme.bgColorContainer,
-    child: Padding(padding: const EdgeInsets.all(16), child: child),
+    children: [
+      ExampleModule(
+        title: '组件类型',
+        children: [
+          ExampleItem(
+            desc: '基础步进器',
+            center: false,
+            methodName: 'StepperBaseExample',
+            builder: (_) => const StepperBaseExample(),
+          ),
+        ],
+      ),
+      ExampleModule(
+        title: '组件状态',
+        children: [
+          ExampleItem(
+            desc: '最大最小状态',
+            center: false,
+            methodName: 'StepperBoundsExample',
+            builder: (_) => const StepperBoundsExample(),
+          ),
+          ExampleItem(
+            desc: '禁用状态',
+            center: false,
+            methodName: 'StepperDisabledExample',
+            builder: (_) => const StepperDisabledExample(),
+          ),
+        ],
+      ),
+      ExampleModule(
+        title: '组件样式',
+        children: [
+          ExampleItem(
+            desc: '步进器样式',
+            center: false,
+            methodName: 'StepperVariantsExample',
+            builder: (_) => const StepperVariantsExample(),
+          ),
+          ExampleItem(
+            desc: '步进器尺寸',
+            center: false,
+            methodName: 'StepperSizesExample',
+            builder: (_) => const StepperSizesExample(),
+          ),
+        ],
+      ),
+    ],
   );
 }

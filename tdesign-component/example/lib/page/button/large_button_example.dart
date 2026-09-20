@@ -1,0 +1,73 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'button')
+class LargeButtonExample extends StatefulWidget {
+  const LargeButtonExample({super.key});
+
+  @override
+  State<LargeButtonExample> createState() => _LargeButtonExampleState();
+}
+
+class _LargeButtonExampleState extends State<LargeButtonExample> {
+  TButton _buildLargeButton(BuildContext context) {
+    return TButton(
+      child: const Text('按钮48'),
+      size: TButtonSize.large,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: _onTap,
+    );
+  }
+
+  TButton _buildMediumButton(BuildContext context) {
+    return TButton(
+      child: const Text('按钮40'),
+      size: TButtonSize.medium,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: _onTap,
+    );
+  }
+
+  TButton _buildSmallButton(BuildContext context) {
+    return TButton(
+      child: const Text('按钮32'),
+      size: TButtonSize.small,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: _onTap,
+    );
+  }
+
+  TButton _buildExtraSmallButton(BuildContext context) {
+    return TButton(
+      child: const Text('按钮28'),
+      size: TButtonSize.extraSmall,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: _onTap,
+    );
+  }
+
+  void _onTap() {
+    TToast.showText('点击了按钮', context: context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 16,
+      runSpacing: 16,
+      children: [
+        Builder(builder: _buildLargeButton),
+        Builder(builder: _buildMediumButton),
+        Builder(builder: _buildSmallButton),
+        Builder(builder: _buildExtraSmallButton),
+      ],
+    );
+  }
+}

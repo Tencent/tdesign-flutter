@@ -1,0 +1,22 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'result')
+class CustomResultExample extends StatelessWidget {
+  const CustomResultExample({super.key});
+
+  Widget _buildCustomResult(BuildContext context) {
+    return TResult(
+      icon: Image.asset('assets/img/illustration.png', height: 80),
+      title: '自定义结果',
+      description: '描述文字',
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildCustomResult(context);
+  }
+}

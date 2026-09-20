@@ -261,17 +261,91 @@ class _ExampleCodeCollector extends RecursiveAstVisitor<void> {
   }
 
   String _standaloneFileSource(Annotation marker) {
+    final includeNames = _annotationIncludes(marker);
+    final importSources = <String>{};
     final removals = <({int start, int end})>[
       (start: marker.offset, end: _lineEnd(marker.end)),
       for (final directive in _unit.directives.whereType<ImportDirective>())
-        if (_isExampleInfrastructureImport(directive))
-          (start: directive.offset, end: directive.end),
+        (start: directive.offset, end: directive.end),
     ]..sort((left, right) => right.start.compareTo(left.start));
+    for (final directive in _unit.directives.whereType<ImportDirective>()) {
+      final uri = directive.uri.stringValue;
+      if (!_isExampleInfrastructureImport(directive) &&
+          !includeNames.contains(uri)) {
+        importSources.add(directive.toSource());
+      }
+    }
     var source = _source;
     for (final removal in removals) {
       source = source.replaceRange(removal.start, removal.end, '');
     }
-    return source.replaceAll(RegExp(r'\n{3,}'), '\n\n').trim();
+    final includedBodies = <String>[];
+    for (final includeName in includeNames) {
+      final includeFile = File(
+        '${_file.parent.path}${Platform.pathSeparator}$includeName',
+      );
+      if (!includeFile.existsSync()) {
+        _errors.add(
+          '${_file.path}: included example helper not found: $includeName',
+        );
+        continue;
+      }
+      var includedSource = includeFile.readAsStringSync();
+      final includedUnit = parseString(
+        content: includedSource,
+        path: includeFile.path,
+      ).unit;
+      final includedRemovals = <({int start, int end})>[];
+      for (final directive
+          in includedUnit.directives.whereType<ImportDirective>()) {
+        final uri = directive.uri.stringValue;
+        if (!_isExampleInfrastructureImport(directive) &&
+            !includeNames.contains(uri)) {
+          importSources.add(directive.toSource());
+        }
+        includedRemovals.add((start: directive.offset, end: directive.end));
+      }
+      includedRemovals.sort((left, right) => right.start.compareTo(left.start));
+      for (final removal in includedRemovals) {
+        includedSource = includedSource.replaceRange(
+          removal.start,
+          removal.end,
+          '',
+        );
+      }
+      includedBodies.add(
+        includedSource.replaceAll(RegExp(r'\n{3,}'), '\n\n').trim(),
+      );
+    }
+    final imports = importSources.toList()..sort();
+    return [
+      if (imports.isNotEmpty) imports.join('\n'),
+      source.replaceAll(RegExp(r'\n{3,}'), '\n\n').trim(),
+      ...includedBodies,
+    ].where((part) => part.isNotEmpty).join('\n\n');
+  }
+
+  Set<String> _annotationIncludes(Annotation marker) {
+    final result = <String>{};
+    for (final argument in marker.arguments?.arguments ?? const []) {
+      if (argument is! NamedExpression ||
+          argument.name.label.name != 'includes' ||
+          argument.expression is! ListLiteral) {
+        continue;
+      }
+      for (final element in (argument.expression as ListLiteral).elements) {
+        if (element is! SimpleStringLiteral ||
+            !RegExp(r'^[A-Za-z0-9_]+\.dart$').hasMatch(element.value)) {
+          _errors.add(
+            '${_file.path}: $_annotationName includes must contain only '
+            'literal sibling Dart file names.',
+          );
+          continue;
+        }
+        result.add(element.value);
+      }
+    }
+    return result;
   }
 
   int _lineEnd(int offset) {
@@ -369,6 +443,9 @@ class _ExampleManifestCollector {
     }
     final modules = <Map<String, Object>>[];
     for (final element in children.elements) {
+      if (element is IfElement && _isIgnoredConditionalModule(element)) {
+        continue;
+      }
       if (_invocationName(element) != 'ExampleModule') {
         return null;
       }
@@ -413,6 +490,28 @@ class _ExampleManifestCollector {
     return modules;
   }
 
+  bool _isIgnoredConditionalModule(IfElement element) {
+    if (element.elseElement != null ||
+        _invocationName(element.thenElement) != 'ExampleModule') {
+      return false;
+    }
+    final moduleArguments = _invocationArguments(element.thenElement)!;
+    final items = _listArgument(moduleArguments, 'children');
+    if (items == null || items.elements.isEmpty) {
+      return false;
+    }
+    for (final item in items.elements) {
+      if (_invocationName(item) != 'ExampleItem') {
+        return false;
+      }
+      final arguments = _invocationArguments(item)!;
+      if (_boolArgument(arguments, 'ignoreCode') != true) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   void throwIfInvalid() {
     if (_errors.isNotEmpty) {
       throw StateError(_errors.join('\n'));
@@ -424,9 +523,15 @@ class _ExampleManifestCollector {
       _groups.entries.toList()
         ..sort((left, right) => left.key.compareTo(right.key)),
     );
-    final legacyGroups = allGroups.difference(_groups.keys.toSet()).toList()
-      ..sort();
-    return '${const JsonEncoder.withIndent('  ').convert({'version': 1, 'groups': groups, 'legacyGroups': legacyGroups})}\n';
+    final unregisteredGroups =
+        allGroups.difference(_groups.keys.toSet()).toList()..sort();
+    if (unregisteredGroups.isNotEmpty) {
+      throw StateError(
+        'Every @ExampleCode group must have an @ExampleCodeManifest page. '
+        'Missing: ${unregisteredGroups.join(', ')}',
+      );
+    }
+    return '${const JsonEncoder.withIndent('  ').convert({'version': 1, 'groups': groups, 'legacyGroups': <String>[]})}\n';
   }
 }
 

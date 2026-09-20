@@ -1,0 +1,31 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'footer')
+class BrandFooterExample extends StatelessWidget {
+  const BrandFooterExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildBrandFooter(context);
+  }
+}
+
+Widget _buildBrandFooter(BuildContext context) {
+  const logo = TImage(
+    src: 'assets/img/t_brand.png',
+    width: 104,
+    height: 24,
+    fit: BoxFit.contain,
+    shape: TImageShape.square,
+  );
+  return const Column(
+    children: [
+      TFooter(logo: logo),
+      SizedBox(height: 24),
+      TFooter(logo: logo),
+    ],
+  );
+}

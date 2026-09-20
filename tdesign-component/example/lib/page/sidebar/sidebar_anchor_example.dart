@@ -3,9 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
-
 /// SideBar 锚点与图标示例。
 class TSideBarAnchorPage extends StatefulWidget {
   const TSideBarAnchorPage({
@@ -130,17 +127,8 @@ class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return ExamplePage(
-      title: widget.title,
-      exampleCodeGroup: 'sideBar',
-      showSingleChild: true,
-      showTestModule: false,
-      singleChild: CodeWrapper(isCenter: false, builder: _buildAnchorSideBar),
-    );
-  }
+  Widget build(BuildContext context) => _buildAnchorSideBar(context);
 
-  @ExampleCode(group: 'sideBar')
   Widget _buildAnchorSideBar(BuildContext context) {
     // 接入说明：currentValue、handleSidebarChange 与滚动控制器由页面状态持有；
     // 此处展示 TSideBar 与内容列表的核心组装，接入时需自行维护 value/onChanged 联动。

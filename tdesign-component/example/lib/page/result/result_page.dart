@@ -3,9 +3,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
+import 'basic_results_example.dart';
+import 'custom_result_example.dart';
+import 'description_results_example.dart';
+import 'page_example.dart';
 
-part 'result_type.dart';
-
+@ExampleCodeManifest()
 class TResultPage extends StatelessWidget {
   const TResultPage({super.key});
 
@@ -16,113 +19,33 @@ class TResultPage extends StatelessWidget {
       desc: '用于反馈不同结果的展示。',
       exampleCodeGroup: 'result',
       showTestModule: false,
-      children: [_resultTypeModule],
-    );
-  }
-
-  @ExampleCode(group: 'result')
-  Widget _buildBasicResults(BuildContext context) {
-    return const Column(
       children: [
-        TResult(status: TResultStatus.success, title: '成功状态'),
-        SizedBox(height: 48),
-        TResult(status: TResultStatus.error, title: '失败状态'),
-        SizedBox(height: 48),
-        TResult(status: TResultStatus.warning, title: '警示状态'),
-        SizedBox(height: 48),
-        TResult(title: '默认状态'),
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(
+              desc: '基础结果',
+              methodName: 'BasicResultsExample',
+              builder: (_) => const BasicResultsExample(),
+            ),
+            ExampleItem(
+              desc: '带描述结果',
+              methodName: 'DescriptionResultsExample',
+              builder: (_) => const DescriptionResultsExample(),
+            ),
+            ExampleItem(
+              desc: '自定义结果',
+              methodName: 'CustomResultExample',
+              builder: (_) => const CustomResultExample(),
+            ),
+            ExampleItem(
+              desc: '页面示例',
+              methodName: 'PageExample',
+              builder: (_) => const PageExample(),
+            ),
+          ],
+        ),
       ],
-    );
-  }
-
-  @ExampleCode(group: 'result')
-  Widget _buildDescriptionResults(BuildContext context) {
-    return const Column(
-      children: [
-        TResult(
-          status: TResultStatus.success,
-          title: '成功状态',
-          description: '描述文字',
-        ),
-        SizedBox(height: 48),
-        TResult(
-          status: TResultStatus.error,
-          title: '失败状态',
-          description: '描述文字',
-        ),
-        SizedBox(height: 48),
-        TResult(
-          status: TResultStatus.warning,
-          title: '警示状态',
-          description: '描述文字',
-        ),
-        SizedBox(height: 48),
-        TResult(title: '默认状态', description: '描述文字'),
-      ],
-    );
-  }
-
-  @ExampleCode(group: 'result')
-  Widget _buildCustomResult(BuildContext context) {
-    return TResult(
-      icon: Image.asset('assets/img/illustration.png', height: 80),
-      title: '自定义结果',
-      description: '描述文字',
-    );
-  }
-
-  @ExampleCode(group: 'result')
-  Widget _buildPageExample(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
-      child: SizedBox(
-        width: double.infinity,
-        child: TButton(
-          key: const ValueKey('result-page-example'),
-          size: TButtonSize.large,
-          variant: TButtonVariant.outline,
-          colorScheme: TButtonColorScheme.primary,
-          child: const Text('页面示例'),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (context) => Scaffold(
-                  body: SafeArea(
-                    child: Column(
-                      children: [
-                        const TNavBar(title: TText('Result')),
-                        const Expanded(
-                          child: Center(
-                            child: TResult(
-                              status: TResultStatus.success,
-                              title: '成功状态',
-                              description: '描述文字',
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: TButton(
-                              key: const ValueKey('result-page-back'),
-                              size: TButtonSize.large,
-                              variant: TButtonVariant.outline,
-                              colorScheme: TButtonColorScheme.primary,
-                              child: const Text('返回'),
-                              onPressed: () => Navigator.of(context).pop(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
     );
   }
 }

@@ -1,0 +1,50 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class CombinationButtonsExample extends StatefulWidget {
+  const CombinationButtonsExample({super.key});
+
+  @override
+  State<CombinationButtonsExample> createState() =>
+      _CombinationButtonsExampleState();
+}
+
+class _CombinationButtonsExampleState extends State<CombinationButtonsExample> {
+  Widget _buildCombinationButtons(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: TButton(
+              child: const Text('填充按钮'),
+              size: TButtonSize.large,
+              variant: TButtonVariant.fill,
+              colorScheme: TButtonColorScheme.light,
+              onPressed: _onTap,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: TButton(
+              child: const Text('填充按钮'),
+              size: TButtonSize.large,
+              variant: TButtonVariant.fill,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: _onTap,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _onTap() {
+    TToast.showText('点击了按钮', context: context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Builder(builder: _buildCombinationButtons);
+  }
+}

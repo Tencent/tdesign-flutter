@@ -1,0 +1,40 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'tag')
+class MarkFillTagExample extends StatelessWidget {
+  const MarkFillTagExample({super.key});
+
+  Widget _buildMarkFillTag(BuildContext context) {
+    // Mark 标签：左圆角右直角
+    return Theme(
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TTagThemeData(shape: TTagShape.mark)),
+      child: const TTag('标签文字'),
+    );
+  }
+
+  Widget _buildMarkOutlineTag(BuildContext context) {
+    return Theme(
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TTagThemeData(shape: TTagShape.mark)),
+      child: const TTag('标签文字', variant: TTagVariant.outline),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(width: 16),
+        Builder(builder: _buildMarkFillTag),
+        const SizedBox(width: 16),
+        Builder(builder: _buildMarkOutlineTag),
+      ],
+    );
+  }
+}

@@ -6,7 +6,10 @@ class ExampleCode {
   /// The generated snippet group. It must match the page's example code group.
   final String group;
 
-  const ExampleCode({required this.group});
+  /// Relative helper files whose declarations are part of this copyable demo.
+  final List<String> includes;
+
+  const ExampleCode({required this.group, this.includes = const []});
 }
 
 /// Marks a migrated Example page whose public code order is manifest-driven.

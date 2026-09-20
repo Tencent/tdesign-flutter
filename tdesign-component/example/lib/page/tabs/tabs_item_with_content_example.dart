@@ -1,0 +1,46 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'tabs')
+class TabsItemWithContentExample extends StatelessWidget {
+  const TabsItemWithContentExample({super.key});
+
+  Widget _buildItemWithContent(BuildContext context) {
+    final contentColor = context.tTheme.textColorPlaceholder;
+    return SizedBox(
+      height: 168,
+      child: DefaultTabController(
+        length: 4,
+        child: Column(
+          children: [
+            const TTabsBar(
+              tabs: [
+                TTab(text: '选项一'),
+                TTab(text: '选项二'),
+                TTab(text: '选项三'),
+                TTab(text: '选项四'),
+              ],
+            ),
+            Expanded(
+              child: TTabsBarView(
+                children: [
+                  Center(child: TText('内容区', textColor: contentColor)),
+                  Center(child: TText('内容区', textColor: contentColor)),
+                  Center(child: TText('内容区', textColor: contentColor)),
+                  Center(child: TText('内容区', textColor: contentColor)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildItemWithContent(context);
+  }
+}

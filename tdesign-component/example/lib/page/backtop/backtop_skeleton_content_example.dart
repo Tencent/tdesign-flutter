@@ -1,0 +1,56 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'backtop')
+class BacktopSkeletonContentExample extends StatelessWidget {
+  const BacktopSkeletonContentExample({super.key});
+
+  Widget _buildSkeletonContent(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final itemWidth = (constraints.maxWidth - 16) / 2;
+      return Wrap(
+        spacing: 16,
+        runSpacing: 24,
+        children: List.generate(
+          8,
+          (_) => SizedBox(
+            width: itemWidth,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: itemWidth,
+                  height: itemWidth,
+                  decoration: BoxDecoration(
+                    color: context.tTheme.bgColorComponent,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _buildSkeletonLine(context, itemWidth),
+                const SizedBox(height: 10),
+                _buildSkeletonLine(context, itemWidth * 0.61),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
+
+  Widget _buildSkeletonLine(BuildContext context, double width) => Container(
+    width: width,
+    height: 16,
+    decoration: BoxDecoration(
+      color: context.tTheme.bgColorComponent,
+      borderRadius: BorderRadius.circular(context.tTheme.radiusSmall),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildSkeletonContent(context);
+  }
+}

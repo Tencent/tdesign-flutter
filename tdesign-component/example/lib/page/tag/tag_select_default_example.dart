@@ -1,0 +1,49 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'tag')
+class TagSelectDefaultExample extends StatefulWidget {
+  const TagSelectDefaultExample({super.key});
+
+  @override
+  State<TagSelectDefaultExample> createState() =>
+      _TagSelectDefaultExampleState();
+}
+
+class _TagSelectDefaultExampleState extends State<TagSelectDefaultExample> {
+  Widget _buildSelectDefault(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      children: [
+        TSelectTag(
+          '标签一',
+          value: _selected1,
+          onChanged: (v) => setState(() => _selected1 = v),
+        ),
+        TSelectTag(
+          '标签二',
+          value: _selected2,
+          onChanged: (v) => setState(() => _selected2 = v),
+        ),
+        TSelectTag(
+          '标签三',
+          value: _selected3,
+          onChanged: (v) => setState(() => _selected3 = v),
+        ),
+      ],
+    );
+  }
+
+  bool _selected1 = false;
+
+  bool _selected2 = true;
+
+  bool _selected3 = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildSelectDefault(context);
+  }
+}

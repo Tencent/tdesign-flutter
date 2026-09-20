@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
+import 'theme_function_color_example.dart';
+import 'theme_other_color_example.dart';
+import 'theme_text_color_example.dart';
 
-part 'theme_color.dart';
-
+@ExampleCodeManifest()
 /// 主题颜色示例页
 class TThemeColorsPage extends StatefulWidget {
   const TThemeColorsPage({Key? key}) : super(key: key);
@@ -16,13 +18,40 @@ class TThemeColorsPage extends StatefulWidget {
 }
 
 class _TThemeColorsPageState extends State<TThemeColorsPage> {
+  final brandMap = <String, Color>{};
+  final errorMap = <String, Color>{};
+  final warningMap = <String, Color>{};
+  final successMap = <String, Color>{};
+  final grayMap = <String, Color>{};
+
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(),
       desc: '点击标题栏右上角图标可查看使用示例代码',
       exampleCodeGroup: 'theme',
-      children: [_themeColorModule],
+      children: [
+        ExampleModule(
+          title: '颜色示例',
+          children: [
+            ExampleItem(
+              desc: '功能色',
+              methodName: 'ThemeFunctionColorExample',
+              builder: (_) => const ThemeFunctionColorExample(),
+            ),
+            ExampleItem(
+              desc: '文字&图标颜色',
+              methodName: 'ThemeTextColorExample',
+              builder: (_) => const ThemeTextColorExample(),
+            ),
+            ExampleItem(
+              desc: '中性色板',
+              methodName: 'ThemeOtherColorExample',
+              builder: (_) => const ThemeOtherColorExample(),
+            ),
+          ],
+        ),
+      ],
       test: [
         ExampleItem(builder: _buildDefaultTheme),
         ExampleItem(builder: _buildCustomTheme),
@@ -30,12 +59,7 @@ class _TThemeColorsPageState extends State<TThemeColorsPage> {
     );
   }
 
-  var brandMap = <String, Color>{};
-  var errorMap = <String, Color>{};
-  var warningMap = <String, Color>{};
-  var successMap = <String, Color>{};
   var fontMap = <String, Color>{};
-  var grayMap = <String, Color>{};
 
   @override
   void initState() {
@@ -84,7 +108,6 @@ class _TThemeColorsPageState extends State<TThemeColorsPage> {
     });
   }
 
-  @ExampleCode(group: 'theme')
   Widget _buildDefaultTheme(BuildContext context) {
     // 通过context.tTheme.xxx使用公共主题属性
     return Container(
@@ -103,7 +126,6 @@ class _TThemeColorsPageState extends State<TThemeColorsPage> {
     );
   }
 
-  @ExampleCode(group: 'theme')
   Widget _buildCustomTheme(BuildContext context) {
     /// 此处替换主题
     return Theme(
@@ -119,100 +141,6 @@ class _TThemeColorsPageState extends State<TThemeColorsPage> {
       ),
       // 不能直接在此处使用context，这里虽然被包裹在TGTheme中，但是context未更新，因此读不到最新数据
       child: const TestWidget(),
-    );
-  }
-
-  Widget _buildFunctionColor(BuildContext context) {
-    var functionList = ['brand', 'error', 'warning', 'success'];
-    if (brandMap.length == errorMap.length &&
-        warningMap.length == successMap.length &&
-        brandMap.length == warningMap.length) {
-      return ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: brandMap.length * 4,
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(16),
-        itemBuilder: (context, index) {
-          var type = index ~/ brandMap.length;
-          index = index % brandMap.length;
-          var function = functionList[type];
-          var map = {};
-          if (type == 0) {
-            map = brandMap;
-          } else if (type == 1) {
-            map = errorMap;
-          } else if (type == 2) {
-            map = warningMap;
-          } else if (type == 3) {
-            map = successMap;
-          }
-          if (index < 10) {
-            return Container(
-              color: context.tTheme.colorMap['${function}Color${index + 1}'],
-              child: TText('${function}Color${index + 1}'),
-            );
-          } else {
-            return Container(
-              color: map.values.elementAt(index),
-              child: TText(map.keys.elementAt(index)),
-            );
-          }
-        },
-      );
-    } else {
-      return TText('功能色数量不一样', textColor: context.tTheme.errorNormalColor);
-    }
-  }
-
-  Widget _buildTextColor(BuildContext context) {
-    var textList = ['Gy', 'Wh'];
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: fontMap.length,
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        var light = (index - 3).abs() < 2;
-        var type = index ~/ 4;
-        index = index % 4;
-        var function = textList[type];
-        return Container(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          color: type == 0 ? Colors.white : Colors.black,
-          child: Container(
-            color: context.tTheme.colorMap['font${function}Color${index + 1}'],
-            child: TText(
-              'font${function}Color${index + 1}',
-              textColor: light ? Colors.black : Colors.white,
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildOtherColor(BuildContext context) {
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: grayMap.length,
-      padding: const EdgeInsets.all(16),
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        var light = index < 6;
-        if (index == 0) {
-          return Container(
-            color: context.tTheme.bgColorContainer,
-            child: const TText('whiteColor1'),
-          );
-        } else {
-          return Container(
-            color: context.tTheme.colorMap['grayColor${index}'],
-            child: TText(
-              'grayColor${index}',
-              textColor: light ? Colors.black : Colors.white,
-            ),
-          );
-        }
-      },
     );
   }
 }

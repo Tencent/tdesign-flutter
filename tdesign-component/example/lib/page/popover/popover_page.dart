@@ -5,11 +5,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
+import 'popover_arrow_example.dart';
+import 'popover_bottom_placements_example.dart';
+import 'popover_color_schemes_example.dart';
+import 'popover_custom_content_example.dart';
+import 'popover_left_placements_example.dart';
+import 'popover_no_arrow_example.dart';
+import 'popover_right_placements_example.dart';
+import 'popover_top_placements_example.dart';
 
-part 'popover_type.dart';
-part 'popover_style.dart';
-part 'popover_interaction.dart';
-
+@ExampleCodeManifest()
 class TPopoverPage extends StatefulWidget {
   const TPopoverPage({super.key, this.showInternalExamples = false});
 
@@ -21,7 +26,6 @@ class TPopoverPage extends StatefulWidget {
 }
 
 class _TPopoverPage extends State<TPopoverPage> {
-  final _customContentPopoverController = TPopoverController();
   TPopoverColorScheme theme = TPopoverColorScheme.light;
   String _eventStatus = '点击或长按气泡后查看结果';
   String _lifecycleStatus = '尚未打开生命周期气泡';
@@ -50,9 +54,87 @@ class _TPopoverPage extends State<TPopoverPage> {
       exampleCodeGroup: 'popover',
       showTestModule: false,
       children: [
-        _popoverTypeModule,
-        _popoverStyleModule,
-        if (widget.showInternalExamples) _popoverInteractionModule,
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(
+              desc: '带箭头的弹出气泡',
+              methodName: 'PopoverArrowExample',
+              builder: (_) => const PopoverArrowExample(),
+            ),
+            ExampleItem(
+              desc: '不带箭头的弹出气泡',
+              methodName: 'PopoverNoArrowExample',
+              builder: (_) => const PopoverNoArrowExample(),
+            ),
+            ExampleItem(
+              desc: '自定义内容弹出气泡',
+              methodName: 'PopoverCustomContentExample',
+              builder: (_) => const PopoverCustomContentExample(),
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: '组件样式',
+          children: [
+            ExampleItem(
+              desc: '',
+              methodName: 'PopoverColorSchemesExample',
+              builder: (_) => const PopoverColorSchemesExample(),
+            ),
+            ExampleItem(
+              desc: '顶部弹出气泡',
+              methodName: 'PopoverTopPlacementsExample',
+              builder: (_) => const PopoverTopPlacementsExample(),
+            ),
+            ExampleItem(
+              desc: '底部弹出气泡',
+              methodName: 'PopoverBottomPlacementsExample',
+              builder: (_) => const PopoverBottomPlacementsExample(),
+            ),
+            ExampleItem(
+              desc: '右侧弹出气泡',
+              methodName: 'PopoverRightPlacementsExample',
+              builder: (_) => const PopoverRightPlacementsExample(),
+            ),
+            ExampleItem(
+              desc: '左侧弹出气泡',
+              methodName: 'PopoverLeftPlacementsExample',
+              builder: (_) => const PopoverLeftPlacementsExample(),
+            ),
+          ],
+        ),
+        if (widget.showInternalExamples)
+          ExampleModule(
+            title: '交互与边界',
+            children: [
+              ExampleItem(
+                desc: '点击与长按回调',
+                ignoreCode: true,
+                builder: _buildEventPopover,
+              ),
+              ExampleItem(
+                desc: '主题与尺寸约束',
+                ignoreCode: true,
+                builder: _buildThemeSizePopover,
+              ),
+              ExampleItem(
+                desc: '窄屏四角边界与自动翻转',
+                ignoreCode: true,
+                builder: _buildBoundaryPopover,
+              ),
+              ExampleItem(
+                desc: '键盘遮挡场景',
+                ignoreCode: true,
+                builder: _buildKeyboardPopover,
+              ),
+              ExampleItem(
+                desc: '锚点销毁与 Future',
+                ignoreCode: true,
+                builder: _buildLifecyclePopover,
+              ),
+            ],
+          ),
       ],
       test: [
         ExampleItem(desc: '显示多行内容', builder: _buildMultiLinePopover),
@@ -61,118 +143,6 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @ExampleCode(group: 'popover')
-  Widget _buildPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('带箭头'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: const Text('弹出气泡内容'),
-                colorScheme: theme,
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildNoArrowPopover(BuildContext context) {
-    return LayoutBuilder(
-      builder: (popoverContext, constrains) {
-        return TButton(
-          size: TButtonSize.large,
-          child: const Text('不带箭头'),
-          variant: TButtonVariant.outline,
-          colorScheme: TButtonColorScheme.primary,
-          onPressed: () {
-            TPopover.showPopover(
-              context: popoverContext,
-              content: const Text('弹出气泡内容'),
-              showArrow: false,
-              colorScheme: theme,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildNCustomPopover(BuildContext context) {
-    void selectOption(String option) {
-      _customContentPopoverController.close();
-      TToast.showText('已选择：$option', context: context);
-    }
-
-    final textStyle = TextStyle(
-      color: theme == TPopoverColorScheme.light
-          ? context.tTheme.fontGyColor1
-          : context.tTheme.fontWhColor1,
-    );
-    final dividerColor = textStyle.color;
-    return TPopoverAnchor(
-      controller: _customContentPopoverController,
-      padding: EdgeInsets.zero,
-      colorScheme: theme,
-      width: 150,
-      height: 146,
-      content: Column(
-        children: [
-          GestureDetector(
-            key: const Key('popover-custom-option-1'),
-            behavior: HitTestBehavior.opaque,
-            onTap: () => selectOption('选项1'),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-              child: TText('选项1', style: textStyle),
-            ),
-          ),
-          Container(height: 1, color: dividerColor),
-          GestureDetector(
-            key: const Key('popover-custom-option-2'),
-            behavior: HitTestBehavior.opaque,
-            onTap: () => selectOption('选项2'),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-              child: TText('选项2', style: textStyle),
-            ),
-          ),
-          Container(height: 1, color: dividerColor),
-          GestureDetector(
-            key: const Key('popover-custom-option-3'),
-            behavior: HitTestBehavior.opaque,
-            onTap: () => selectOption('选项3'),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-              child: TText('选项3', style: textStyle),
-            ),
-          ),
-        ],
-      ),
-      builder: (popoverContext, controller, child) {
-        return TButton(
-          key: const Key('popover-custom-content-trigger'),
-          size: TButtonSize.large,
-          child: const Text('自定义内容'),
-          variant: TButtonVariant.outline,
-          colorScheme: TButtonColorScheme.primary,
-          onPressed: controller.open,
-        );
-      },
-    );
-  }
-
-  @ExampleCode(group: 'popover')
   Widget _buildEventPopover(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,7 +176,6 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @ExampleCode(group: 'popover')
   Widget _buildThemeSizePopover(BuildContext context) {
     final popoverTheme = Theme.of(context).mergeExtension(
       const TPopoverThemeData(
@@ -261,7 +230,6 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @ExampleCode(group: 'popover')
   Widget _buildBoundaryPopover(BuildContext context) {
     Widget buildTrigger({
       required Alignment alignment,
@@ -325,7 +293,6 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @ExampleCode(group: 'popover')
   Widget _buildKeyboardPopover(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -362,7 +329,6 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @ExampleCode(group: 'popover')
   Widget _buildLifecyclePopover(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -422,486 +388,6 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @ExampleCode(group: 'popover')
-  Widget _buildDarkPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('深色'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: const Text('弹出气泡内容'),
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildLightPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('浅色'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: const Text('弹出气泡内容'),
-                colorScheme: TPopoverColorScheme.light,
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildPrimaryPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('品牌色'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: const Text('弹出气泡内容'),
-                colorScheme: TPopoverColorScheme.primary,
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildSuccessPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('成功色'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: const Text('弹出气泡内容'),
-                colorScheme: TPopoverColorScheme.success,
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildWarningPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('警告色'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: const Text('弹出气泡内容'),
-                colorScheme: TPopoverColorScheme.warning,
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildDangerPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('错误色'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: const Text('弹出气泡内容'),
-                colorScheme: TPopoverColorScheme.danger,
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildTopLeftPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('顶部左'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: const Text('弹出气泡内容'),
-                placement: TPopoverPlacement.topLeft,
-                colorScheme: theme,
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildTopPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('顶部中'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: const Text('弹出气泡内容'),
-                placement: TPopoverPlacement.top,
-                colorScheme: theme,
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildTopRightPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('顶部右'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: const Text('弹出气泡内容'),
-                placement: TPopoverPlacement.topRight,
-                colorScheme: theme,
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildBottomLeftPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('底部左'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: const Text('弹出气泡内容'),
-                placement: TPopoverPlacement.bottomLeft,
-                colorScheme: theme,
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildBottomPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('底部中'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: const Text('弹出气泡内容'),
-                placement: TPopoverPlacement.bottom,
-                colorScheme: theme,
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildBottomRightPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.large,
-            child: const Text('底部右'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                content: const Text('弹出气泡内容'),
-                placement: TPopoverPlacement.bottomRight,
-                colorScheme: theme,
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildRightTopPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return SizedBox(
-            width: 223,
-            child: TButton(
-              size: TButtonSize.large,
-              child: const Text('右侧上'),
-              variant: TButtonVariant.outline,
-              colorScheme: TButtonColorScheme.primary,
-              onPressed: () {
-                TPopover.showPopover(
-                  context: popoverContext,
-                  content: const Text('气泡内容'),
-                  placement: TPopoverPlacement.rightTop,
-                  colorScheme: theme,
-                );
-              },
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildRightPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return SizedBox(
-            width: 223,
-            child: TButton(
-              size: TButtonSize.large,
-              child: const Text('右侧中'),
-              variant: TButtonVariant.outline,
-              colorScheme: TButtonColorScheme.primary,
-              onPressed: () {
-                TPopover.showPopover(
-                  context: popoverContext,
-                  content: const Text('气泡内容'),
-                  placement: TPopoverPlacement.right,
-                  colorScheme: theme,
-                );
-              },
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildRightBottomPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return SizedBox(
-            width: 223,
-            child: TButton(
-              size: TButtonSize.large,
-              child: const Text('右侧下'),
-              variant: TButtonVariant.outline,
-              colorScheme: TButtonColorScheme.primary,
-              onPressed: () {
-                TPopover.showPopover(
-                  context: popoverContext,
-                  content: const Text('气泡内容'),
-                  placement: TPopoverPlacement.rightBottom,
-                  colorScheme: theme,
-                );
-              },
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildLeftTopPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return SizedBox(
-            width: 223,
-            child: TButton(
-              size: TButtonSize.large,
-              child: const Text('左侧上'),
-              variant: TButtonVariant.outline,
-              colorScheme: TButtonColorScheme.primary,
-              onPressed: () {
-                TPopover.showPopover(
-                  context: popoverContext,
-                  content: const Text('气泡内容'),
-                  placement: TPopoverPlacement.leftTop,
-                  colorScheme: theme,
-                );
-              },
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildLeftPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return SizedBox(
-            width: 223,
-            child: TButton(
-              size: TButtonSize.large,
-              child: const Text('左侧中'),
-              variant: TButtonVariant.outline,
-              colorScheme: TButtonColorScheme.primary,
-              onPressed: () {
-                TPopover.showPopover(
-                  context: popoverContext,
-                  content: const Text('气泡内容'),
-                  placement: TPopoverPlacement.left,
-                  colorScheme: theme,
-                );
-              },
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
-  Widget _buildLeftBottomPopover(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 0),
-      margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return SizedBox(
-            width: 223,
-            child: TButton(
-              size: TButtonSize.large,
-              child: const Text('左侧下'),
-              variant: TButtonVariant.outline,
-              colorScheme: TButtonColorScheme.primary,
-              onPressed: () {
-                TPopover.showPopover(
-                  context: popoverContext,
-                  content: const Text('气泡内容'),
-                  placement: TPopoverPlacement.leftBottom,
-                  colorScheme: theme,
-                );
-              },
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'popover')
   Widget _buildMultiLinePopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),
@@ -926,7 +412,6 @@ class _TPopoverPage extends State<TPopoverPage> {
     );
   }
 
-  @ExampleCode(group: 'popover')
   Widget _buildCustomRadiusPopover(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 0),

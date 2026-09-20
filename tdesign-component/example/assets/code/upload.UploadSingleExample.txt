@@ -1,0 +1,47 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class UploadSingleExample extends StatefulWidget {
+  const UploadSingleExample({super.key});
+
+  @override
+  State<UploadSingleExample> createState() => _UploadSingleExampleState();
+}
+
+class _UploadSingleExampleState extends State<UploadSingleExample> {
+  Widget _single(BuildContext context) {
+    var files = const <TUploadFile>[];
+    return StatefulBuilder(
+      builder: (context, setState) => _demo(
+        TUpload(
+          files: files,
+          maxFiles: 1,
+          onChanged: (value) => setState(() => files = value),
+        ),
+        title: '上传图片',
+      ),
+    );
+  }
+
+  Widget _demo(TUpload upload, {required String title}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: TText(title),
+        ),
+        const SizedBox(height: 16),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: upload,
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _single(context);
+  }
+}

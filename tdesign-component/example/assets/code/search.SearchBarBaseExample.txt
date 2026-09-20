@@ -1,0 +1,137 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class SearchBarBaseExample extends StatefulWidget {
+  const SearchBarBaseExample({super.key});
+
+  @override
+  State<SearchBarBaseExample> createState() => _SearchBarBaseExampleState();
+}
+
+class _SearchBarBaseExampleState extends State<SearchBarBaseExample> {
+  Widget _buildBase(BuildContext context) {
+    return Column(
+      children: [
+        const SearchBarBaseExampleSearchDemoSurface(
+          child: TSearchBar(hintText: '搜索预设文案'),
+        ),
+        const SizedBox(height: 16),
+        SearchBarBaseExampleSearchDemoSurface(
+          child: Column(
+            children: [
+              TSearchBar(
+                controller: _resultController,
+                hintText: '输入tdesign，有预览结果',
+                onChanged: _filterResults,
+                onFocusChanged: _handleResultFocusChanged,
+              ),
+              ..._results.map(
+                (result) => TCell(
+                  title: _highlightResult(result),
+                  onTap: () => _selectResult(result),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  final _resultController = TextEditingController();
+
+  void _filterResults(String value) {
+    setState(() {
+      _resultSelected = false;
+      _results = _resultFocused
+          ? _allResults.where((item) => item.contains(value)).toList()
+          : const [];
+    });
+  }
+
+  void _handleResultFocusChanged(bool focused) {
+    setState(() {
+      _resultFocused = focused;
+      _results = focused && !_resultSelected
+          ? _allResults
+                .where((item) => item.contains(_resultController.text))
+                .toList()
+          : const [];
+    });
+  }
+
+  var _results = const <String>[];
+
+  Widget _highlightResult(String result) {
+    final query = _resultController.text;
+    final start = result.indexOf(query);
+    if (query.isEmpty || start < 0) {
+      return Text(result);
+    }
+    final end = start + query.length;
+    return Text.rich(
+      TextSpan(
+        children: [
+          TextSpan(text: result.substring(0, start)),
+          TextSpan(
+            text: result.substring(start, end),
+            style: TextStyle(color: context.tTheme.brandNormalColor),
+          ),
+          TextSpan(text: result.substring(end)),
+        ],
+      ),
+    );
+  }
+
+  void _selectResult(String result) {
+    setState(() {
+      _resultController.text = result;
+      _resultSelected = true;
+      _results = const [];
+    });
+  }
+
+  var _resultSelected = false;
+
+  var _resultFocused = false;
+
+  static const _allResults = <String>[
+    'tdesign-vue',
+    'tdesign-react',
+    'tdesign-miniprogram',
+    'tdesign-angular',
+    'tdesign-mobile-vue',
+    'tdesign-mobile-react',
+  ];
+
+  @override
+  void dispose() {
+    _resultController.dispose();
+    _actionController.dispose();
+    super.dispose();
+  }
+
+  final _actionController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildBase(context);
+  }
+}
+
+class SearchBarBaseExampleSearchDemoSurface extends StatelessWidget {
+  const SearchBarBaseExampleSearchDemoSurface({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: child,
+      ),
+    );
+  }
+}

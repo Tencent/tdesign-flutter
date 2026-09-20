@@ -25,6 +25,35 @@ void main() {
     File('${sourceDirectory.path}/$name.dart').writeAsStringSync(source);
   }
 
+  void writeManifest(String group, List<String> methodNames) {
+    final pageName = '${group[0].toUpperCase()}${group.substring(1)}Page';
+    final items = methodNames
+        .map(
+          (methodName) =>
+              '''
+          ExampleItem(
+            methodName: '$methodName',
+            builder: (_) => const $methodName(),
+          ),''',
+        )
+        .join();
+    writeSource('${group}_page', '''
+@ExampleCodeManifest()
+class $pageName {
+  Object build(Object context) => ExamplePage(
+    exampleCodeGroup: '$group',
+    children: [
+      ExampleModule(
+        title: 'Examples',
+        children: [$items
+        ],
+      ),
+    ],
+  );
+}
+''');
+  }
+
   ExampleCodeGenerator createGenerator() => ExampleCodeGenerator(
     sourceDirectory: sourceDirectory,
     outputDirectory: outputDirectory,
@@ -40,6 +69,7 @@ class Examples {
 @ExampleCode(group: 'button')
 void topLevelDemo() {}
 ''');
+    writeManifest('button', <String>['classDemo', 'topLevelDemo']);
 
     expect(createGenerator().run().isUpToDate, isFalse);
     expect(
@@ -59,6 +89,7 @@ void topLevelDemo() {}
 @ExampleCode(group: 'button')
 void demo() {}
 ''');
+    writeManifest('button', <String>['demo']);
     File('${outputDirectory.path}/stale.txt').writeAsStringSync('stale');
 
     final checked = createGenerator().run(check: true);
@@ -95,6 +126,7 @@ class _CounterState extends State<Counter> {
 }
 class _OtherState extends State<Other> {}
 ''');
+    writeManifest('counter', <String>['Counter']);
     createGenerator().run();
     final snippet = File(
       '${outputDirectory.path}/counter.Counter.txt',
@@ -116,6 +148,7 @@ class _OtherState extends State<Other> {}
 @ExampleCode(group: 'button')
 void demo() {}
 ''');
+    writeManifest('button', <String>['demo']);
 
     // First verbose run should detect and write the snippet.
     final verboseResult = createGenerator().run(verbose: true);
@@ -174,6 +207,7 @@ class CounterExample extends StatelessWidget {
 
 String formatValue(int value) => 'value: \$value';
 ''');
+    writeManifest('counter', <String>['CounterExample']);
 
     createGenerator().run();
     final snippet = File(
@@ -185,7 +219,40 @@ String formatValue(int value) => 'value: \$value';
     expect(snippet, isNot(contains('@ExampleCode')));
   });
 
-  test('generates strict page order and records legacy groups', () {
+  test('inlines declared sibling helper files into a standalone example', () {
+    writeSource('helper', '''
+import 'package:flutter/material.dart';
+
+class IncludedHelper extends StatelessWidget {
+  const IncludedHelper({super.key});
+  @override
+  Widget build(BuildContext context) => const Text('helper');
+}
+''');
+    writeSource('included_example', '''
+import 'package:flutter/material.dart';
+import '../annotation/example_code.dart';
+import 'helper.dart';
+
+@ExampleCode(group: 'included', includes: ['helper.dart'])
+class IncludedExample extends StatelessWidget {
+  const IncludedExample({super.key});
+  @override
+  Widget build(BuildContext context) => const IncludedHelper();
+}
+''');
+    writeManifest('included', <String>['IncludedExample']);
+
+    createGenerator().run();
+    final snippet = File(
+      '${outputDirectory.path}/included.IncludedExample.txt',
+    ).readAsStringSync();
+    expect(snippet, contains('class IncludedExample extends StatelessWidget'));
+    expect(snippet, contains('class IncludedHelper extends StatelessWidget'));
+    expect(snippet, isNot(contains("import 'helper.dart'")));
+  });
+
+  test('generates strict page order with no legacy groups', () {
     writeSource('divider_base_example', '''
 @ExampleCode(group: 'divider')
 class DividerBaseExample {}
@@ -193,10 +260,6 @@ class DividerBaseExample {}
     writeSource('divider_dashed_example', '''
 @ExampleCode(group: 'divider')
 class DividerDashedExample {}
-''');
-    writeSource('legacy', '''
-@ExampleCode(group: 'legacy')
-void legacyDemo() {}
 ''');
     writeSource('divider_page', '''
 @ExampleCodeManifest()
@@ -232,7 +295,25 @@ class DividerPage {
       manifest.indexOf('divider.DividerDashedExample'),
       lessThan(manifest.indexOf('divider.DividerBaseExample')),
     );
-    expect(manifest, contains('"legacyGroups": [\n    "legacy"\n  ]'));
+    expect(manifest, contains('"legacyGroups": []'));
+  });
+
+  test('rejects an example group without a strict page manifest', () {
+    writeSource('legacy', '''
+@ExampleCode(group: 'legacy')
+void legacyDemo() {}
+''');
+
+    expect(
+      () => createGenerator().run(),
+      throwsA(
+        isA<StateError>().having(
+          (error) => error.message,
+          'message',
+          contains('Missing: legacy'),
+        ),
+      ),
+    );
   });
 
   test('rejects an invalid strict page mapping', () {
@@ -270,5 +351,46 @@ class SamplePage {
         ),
       ),
     );
+  });
+
+  test('strict page skips a conditional internal-only module', () {
+    writeSource('sample_example', '''
+@ExampleCode(group: 'sample')
+class SampleExample {}
+''');
+    writeSource('sample_page', '''
+@ExampleCodeManifest()
+class SamplePage {
+  final bool showInternal = false;
+  Object build(Object context) => ExamplePage(
+    exampleCodeGroup: 'sample',
+    children: [
+      ExampleModule(
+        title: '公开示例',
+        children: [
+          ExampleItem(
+            methodName: 'SampleExample',
+            builder: (_) => const SampleExample(),
+          ),
+        ],
+      ),
+      if (showInternal)
+        ExampleModule(
+          title: '内部回归',
+          children: [
+            ExampleItem(ignoreCode: true, builder: (_) => Object()),
+          ],
+        ),
+    ],
+  );
+}
+''');
+
+    createGenerator().run();
+    final manifest = File(
+      '${outputDirectory.path}/manifest.json',
+    ).readAsStringSync();
+    expect(manifest, contains('"公开示例"'));
+    expect(manifest, isNot(contains('内部回归')));
   });
 }

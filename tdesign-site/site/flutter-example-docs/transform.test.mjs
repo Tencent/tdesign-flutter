@@ -7,6 +7,7 @@ import test from 'node:test';
 import {
   listFlutterExampleKeys,
   readFlutterExampleCode,
+  readFlutterExampleGroup,
   replaceFlutterExampleDirectives,
 } from './transform.mjs';
 
@@ -33,12 +34,19 @@ test('renders the generated Dart source into the Web code block', () => {
 
 test('renders every generated source in a component group', () => {
   const keys = listFlutterExampleKeys('table');
+  const modules = readFlutterExampleGroup('table');
   const source = replaceFlutterExampleDirectives('{{ flutter-example-group table }}');
 
   assert.equal(keys.length, 9);
-  for (const key of keys) {
-    assert.ok(source.includes(`#### \`${key.slice('table.'.length)}\``));
-    assert.ok(source.includes(encodeURIComponent(readFlutterExampleCode(key))));
+  for (const module of modules) {
+    assert.ok(source.includes(`### ${module.title}`));
+    for (const item of module.items) {
+      const fallback = `\`${item.assetKey.slice('table.'.length)}\``;
+      assert.ok(source.includes(`#### ${item.description || fallback}`));
+      assert.ok(
+        source.includes(encodeURIComponent(readFlutterExampleCode(item.assetKey))),
+      );
+    }
   }
   assert.doesNotMatch(source, /flutter-example/);
 });

@@ -1,0 +1,30 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class ImageAvatarExample extends StatelessWidget {
+  const ImageAvatarExample({super.key});
+
+  /// 图片头像
+  Widget _buildImageAvatar(BuildContext context) {
+    return const Row(
+      // spacing: 32,
+      children: [
+        TAvatar(
+          size: TAvatarSize.medium,
+          image: AssetImage('assets/img/t_avatar_1.png'),
+        ),
+        SizedBox(width: 32),
+        TAvatar(
+          size: TAvatarSize.medium,
+          shape: TAvatarShape.square,
+          image: AssetImage('assets/img/t_avatar_1.png'),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildImageAvatar(context);
+  }
+}

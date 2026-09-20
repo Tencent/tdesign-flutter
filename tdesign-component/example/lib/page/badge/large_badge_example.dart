@@ -1,0 +1,23 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'badge')
+class LargeBadgeExample extends StatelessWidget {
+  const LargeBadgeExample({super.key});
+
+  Widget _buildLargeBadge(BuildContext context) => const TBadge(
+    label: '8',
+    size: TBadgeSize.large,
+    child: TAvatar(
+      size: TAvatarSize.large,
+      image: AssetImage('assets/img/t_avatar_1.png'),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildLargeBadge(context);
+  }
+}

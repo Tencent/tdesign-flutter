@@ -1,9 +1,0 @@
-TButton _buildDangerGhostButton(BuildContext context) {
-    return TButton(
-      child: const Text('幽灵按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.ghost,
-      colorScheme: TButtonColorScheme.danger,
-      onPressed: _onTap,
-    );
-  }

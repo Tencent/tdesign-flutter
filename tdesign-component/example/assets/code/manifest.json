@@ -1,6 +1,588 @@
 {
   "version": 1,
   "groups": {
+    "PullDownRefresh": [
+      {
+        "title": "顶部下拉刷新",
+        "items": [
+          {
+            "description": "基础用法",
+            "assetKey": "PullDownRefresh.PullDownRefreshRefreshExample"
+          }
+        ]
+      },
+      {
+        "title": "自定义提示语",
+        "items": [
+          {
+            "description": "loadingTexts（小程序已有公开 props 的新增 API 演示，Demo 形态仅参考 Mobile Vue）",
+            "assetKey": "PullDownRefresh.PullDownRefreshLoadingTextsExample"
+          }
+        ]
+      },
+      {
+        "title": "刷新超时",
+        "items": [
+          {
+            "description": "refreshTimeout（小程序已有公开 props 的新增 API 演示，Demo 形态仅参考 Mobile Vue）",
+            "assetKey": "PullDownRefresh.PullDownRefreshTimeoutExample"
+          }
+        ]
+      }
+    ],
+    "SwipeCell": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "左滑操作",
+            "assetKey": "SwipeCell.SwipeCellSwiperCellExample"
+          },
+          {
+            "description": "右滑操作",
+            "assetKey": "SwipeCell.SwipeCellSwiperRightCellExample"
+          },
+          {
+            "description": "左右滑操作",
+            "assetKey": "SwipeCell.SwipeCellSwiperRightLeftCellExample"
+          },
+          {
+            "description": "带图标的滑动操作",
+            "assetKey": "SwipeCell.SwipeCellSwiperIconCellExample"
+          }
+        ]
+      }
+    ],
+    "action_sheet": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "列表型动作面板",
+            "assetKey": "action_sheet.ActionSheetBasicListExample"
+          },
+          {
+            "description": "",
+            "assetKey": "action_sheet.ActionSheetDescriptionListExample"
+          },
+          {
+            "description": "",
+            "assetKey": "action_sheet.ActionSheetIconListExample"
+          },
+          {
+            "description": "",
+            "assetKey": "action_sheet.ActionSheetBadgeListExample"
+          },
+          {
+            "description": "宫格型动作面板",
+            "assetKey": "action_sheet.ActionSheetBasicGridExample"
+          },
+          {
+            "description": "",
+            "assetKey": "action_sheet.ActionSheetDescriptionGridExample"
+          },
+          {
+            "description": "",
+            "assetKey": "action_sheet.ActionSheetPagedGridExample"
+          },
+          {
+            "description": "",
+            "assetKey": "action_sheet.ActionSheetBadgeGridExample"
+          },
+          {
+            "description": "",
+            "assetKey": "action_sheet.ActionSheetScrollGridExample"
+          },
+          {
+            "description": "",
+            "assetKey": "action_sheet.ActionSheetDescriptionScrollGridExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "列表型选项状态",
+            "assetKey": "action_sheet.ActionSheetStatusIconListExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "列表型对齐方式",
+            "assetKey": "action_sheet.ActionSheetCenterListExample"
+          },
+          {
+            "description": "",
+            "assetKey": "action_sheet.ActionSheetLeftListExample"
+          }
+        ]
+      }
+    ],
+    "avatar": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "图片头像",
+            "assetKey": "avatar.ImageAvatarExample"
+          },
+          {
+            "description": "字符头像",
+            "assetKey": "avatar.TextAvatarExample"
+          },
+          {
+            "description": "图标头像",
+            "assetKey": "avatar.IconAvatarExample"
+          },
+          {
+            "description": "带徽标头像",
+            "assetKey": "avatar.BadgeAvatarExample"
+          }
+        ]
+      },
+      {
+        "title": "特殊类型",
+        "items": [
+          {
+            "description": "纯展示的头像组",
+            "assetKey": "avatar.DisplayAvatarExample"
+          },
+          {
+            "description": "带操作的头像组",
+            "assetKey": "avatar.OperationAvatarExample"
+          }
+        ]
+      },
+      {
+        "title": "组件尺寸",
+        "items": [
+          {
+            "description": "组件尺寸",
+            "assetKey": "avatar.SizeAvatarExample"
+          }
+        ]
+      }
+    ],
+    "backtop": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "圆形返回顶部",
+            "assetKey": "backtop.BacktopCircleTriggerExample"
+          },
+          {
+            "description": "半圆形返回顶部",
+            "assetKey": "backtop.BacktopHalfRoundTriggerExample"
+          },
+          {
+            "description": "",
+            "assetKey": "backtop.BacktopSkeletonContentExample"
+          }
+        ]
+      }
+    ],
+    "badge": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "红点徽标",
+            "assetKey": "badge.DotMessageBadgeExample"
+          },
+          {
+            "description": "数字徽标",
+            "assetKey": "badge.NumberMessageBadgeExample"
+          },
+          {
+            "description": "自定义徽标",
+            "assetKey": "badge.CustomBadgeExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "圆形徽标",
+            "assetKey": "badge.CircleBadgeExample"
+          },
+          {
+            "description": "方形徽标",
+            "assetKey": "badge.SquareBadgeExample"
+          },
+          {
+            "description": "气泡徽标",
+            "assetKey": "badge.BubbleBadgeExample"
+          },
+          {
+            "description": "角标",
+            "assetKey": "badge.RibbonBadgeExample"
+          },
+          {
+            "description": "三角角标",
+            "assetKey": "badge.TriangleBadgeExample"
+          }
+        ]
+      },
+      {
+        "title": "组件尺寸",
+        "items": [
+          {
+            "description": "Large",
+            "assetKey": "badge.LargeBadgeExample"
+          },
+          {
+            "description": "Medium",
+            "assetKey": "badge.MediumBadgeExample"
+          }
+        ]
+      }
+    ],
+    "button": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础按钮",
+            "assetKey": "button.PrimaryFillButtonExample"
+          },
+          {
+            "description": "图标按钮",
+            "assetKey": "button.RectangleIconButtonExample"
+          },
+          {
+            "description": "幽灵按钮",
+            "assetKey": "button.PrimaryGhostButtonExample"
+          },
+          {
+            "description": "组合按钮",
+            "assetKey": "button.CombinationButtonsExample"
+          },
+          {
+            "description": "通栏按钮",
+            "assetKey": "button.BlockFillButtonExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "按钮禁用状态",
+            "assetKey": "button.DisablePrimaryFillButtonExample"
+          }
+        ]
+      },
+      {
+        "title": "组件主题",
+        "items": [
+          {
+            "description": "按钮尺寸",
+            "assetKey": "button.LargeButtonExample"
+          },
+          {
+            "description": "按钮形状",
+            "assetKey": "button.RectangleShapeButtonExample"
+          },
+          {
+            "description": "按钮主题",
+            "assetKey": "button.DefaultFillButtonExample"
+          }
+        ]
+      }
+    ],
+    "calendar": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础日历",
+            "assetKey": "calendar.CalendarSingleExample"
+          },
+          {
+            "description": "",
+            "assetKey": "calendar.CalendarMultipleExample"
+          },
+          {
+            "description": "带单行描述的日历",
+            "assetKey": "calendar.CalendarDescribedExample"
+          },
+          {
+            "description": "带双行描述的日历",
+            "assetKey": "calendar.CalendarDoubleDescribedExample"
+          },
+          {
+            "description": "带翻页功能的日历",
+            "assetKey": "calendar.CalendarSwitchModeExample"
+          },
+          {
+            "description": "可选择区间日期的日历",
+            "assetKey": "calendar.CalendarRangeExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "国际化",
+            "assetKey": "calendar.CalendarLocalizedExample"
+          },
+          {
+            "description": "含不可选的日历",
+            "assetKey": "calendar.CalendarLimitedExample"
+          },
+          {
+            "description": "不使用 Popup",
+            "assetKey": "calendar.CalendarInlineExample"
+          }
+        ]
+      }
+    ],
+    "cascader": [
+      {
+        "title": "类型",
+        "items": [
+          {
+            "description": "",
+            "assetKey": "cascader.CascaderBaseExample"
+          },
+          {
+            "description": "选项卡风格",
+            "assetKey": "cascader.CascaderTabExample"
+          }
+        ]
+      },
+      {
+        "title": "进阶",
+        "items": [
+          {
+            "description": "带初始值",
+            "assetKey": "cascader.CascaderInitialExample"
+          },
+          {
+            "description": "自定义 keys",
+            "assetKey": "cascader.CascaderKeysExample"
+          },
+          {
+            "description": "使用次级标题",
+            "assetKey": "cascader.CascaderSubtitleExample"
+          },
+          {
+            "description": "选择任意一项",
+            "assetKey": "cascader.CascaderAnyExample"
+          },
+          {
+            "description": "支持搜索",
+            "assetKey": "cascader.CascaderSearchExample"
+          }
+        ]
+      }
+    ],
+    "cell": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "单行单元格",
+            "assetKey": "cell.CellSingleLineExample"
+          },
+          {
+            "description": "多行单元格",
+            "assetKey": "cell.CellMultipleLineExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "卡片单元格",
+            "assetKey": "cell.CellCardGroupExample"
+          }
+        ]
+      }
+    ],
+    "checkbox": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "纵向多选框",
+            "assetKey": "checkbox.VerticalCheckboxExample"
+          },
+          {
+            "description": "横向多选框",
+            "assetKey": "checkbox.HorizontalCheckboxExample"
+          },
+          {
+            "description": "带全选多选框",
+            "assetKey": "checkbox.CheckboxCheckAllExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "多选框状态",
+            "assetKey": "checkbox.DisabledCheckboxExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "勾选样式",
+            "assetKey": "checkbox.CheckboxVariantsExample"
+          },
+          {
+            "description": "勾选显示位置",
+            "assetKey": "checkbox.CheckboxPositionsExample"
+          },
+          {
+            "description": "非通栏多选样式",
+            "assetKey": "checkbox.NonFullWidthCheckboxExample"
+          }
+        ]
+      },
+      {
+        "title": "特殊样式",
+        "items": [
+          {
+            "description": "纵向卡片多选框",
+            "assetKey": "checkbox.CardCheckboxesExample"
+          }
+        ]
+      }
+    ],
+    "collapse": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础折叠面板",
+            "assetKey": "collapse.BasicCollapseExample"
+          },
+          {
+            "description": "带操作说明",
+            "assetKey": "collapse.CollapseWithOperationTextExample"
+          },
+          {
+            "description": "手风琴式",
+            "assetKey": "collapse.AccordionCollapseExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "卡片折叠面板",
+            "assetKey": "collapse.CardCollapseExample"
+          }
+        ]
+      }
+    ],
+    "date-time-picker": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "年月日选择器",
+            "assetKey": "date-time-picker.DateTimePickerDateExample"
+          },
+          {
+            "description": "年月选择器",
+            "assetKey": "date-time-picker.DateTimePickerMonthExample"
+          },
+          {
+            "description": "月日选择器",
+            "assetKey": "date-time-picker.DateTimePickerMonthDayExample"
+          },
+          {
+            "description": "时分秒选择器",
+            "assetKey": "date-time-picker.DateTimePickerSecondExample"
+          },
+          {
+            "description": "时分选择器",
+            "assetKey": "date-time-picker.DateTimePickerMinuteExample"
+          },
+          {
+            "description": "年月日时分秒选择器",
+            "assetKey": "date-time-picker.DateTimePickerDateTimeExample"
+          },
+          {
+            "description": "年月日带星期选择器",
+            "assetKey": "date-time-picker.DateTimePickerWeekExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "是否带标题",
+            "assetKey": "date-time-picker.DateTimePickerTitleExample"
+          },
+          {
+            "description": "",
+            "assetKey": "date-time-picker.DateTimePickerWithoutTitleExample"
+          }
+        ]
+      }
+    ],
+    "dialog": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "反馈类对话框",
+            "assetKey": "dialog.FeedbackDialogsExample"
+          },
+          {
+            "description": "确认类对话框",
+            "assetKey": "dialog.ConfirmDialogsExample"
+          },
+          {
+            "description": "输入类对话框",
+            "assetKey": "dialog.InputDialogsExample"
+          },
+          {
+            "description": "带图片的对话框",
+            "assetKey": "dialog.ImageDialogsExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "",
+            "assetKey": "dialog.ButtonDialogsExample"
+          }
+        ]
+      },
+      {
+        "title": "组件用法",
+        "items": [
+          {
+            "description": "命令调用",
+            "assetKey": "dialog.CommandDialogExample"
+          },
+          {
+            "description": "自定义按钮",
+            "assetKey": "dialog.CustomActionDialogExample"
+          }
+        ]
+      }
+    ],
     "divider": [
       {
         "title": "组件类型",
@@ -20,66 +602,1735 @@
           }
         ]
       }
+    ],
+    "drawer": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础抽屉",
+            "assetKey": "drawer.DrawerBaseSimpleExample"
+          },
+          {
+            "description": "带图标抽屉",
+            "assetKey": "drawer.DrawerIconSimpleExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "带标题样式",
+            "assetKey": "drawer.DrawerTitleSimpleExample"
+          },
+          {
+            "description": "抽屉方向",
+            "assetKey": "drawer.DrawerPlacementSimpleExample"
+          },
+          {
+            "description": "带底部插槽样式",
+            "assetKey": "drawer.DrawerBottomSimpleExample"
+          }
+        ]
+      }
+    ],
+    "dropdown_menu": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "单选下拉菜单",
+            "assetKey": "dropdown_menu.DropdownMenuSortingExample"
+          },
+          {
+            "description": "分栏下拉菜单",
+            "assetKey": "dropdown_menu.DropdownMenuMultipleExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "禁用状态",
+            "assetKey": "dropdown_menu.DropdownMenuDisabledExample"
+          }
+        ]
+      }
+    ],
+    "empty": [
+      {
+        "title": "01 类型",
+        "items": [
+          {
+            "description": "图标空状态",
+            "assetKey": "empty.IconEmptyExample"
+          },
+          {
+            "description": "自定义图片空状态",
+            "assetKey": "empty.ImageEmptyExample"
+          },
+          {
+            "description": "带操作空状态",
+            "assetKey": "empty.OperationEmptyExample"
+          }
+        ]
+      }
+    ],
+    "fab": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "纯图标悬浮按钮",
+            "assetKey": "fab.FabIconOnlyExample"
+          },
+          {
+            "description": "图标加文字悬浮按钮",
+            "assetKey": "fab.FabIconTextExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "可移动悬浮按钮",
+            "assetKey": "fab.FabDraggableExample"
+          },
+          {
+            "description": "带自动收缩功能",
+            "assetKey": "fab.FabCollapsibleExample"
+          },
+          {
+            "description": "",
+            "assetKey": "fab.FabSkeletonExample"
+          }
+        ]
+      }
+    ],
+    "fonts": [
+      {
+        "title": "Token",
+        "items": [
+          {
+            "description": "",
+            "assetKey": "fonts.FontTokenModuleExample"
+          }
+        ]
+      }
+    ],
+    "footer": [
+      {
+        "title": "类型",
+        "items": [
+          {
+            "description": "基础页脚",
+            "assetKey": "footer.FooterExample"
+          },
+          {
+            "description": "基础加链接页脚",
+            "assetKey": "footer.SingleLinkFooterExample"
+          },
+          {
+            "description": "品牌页脚",
+            "assetKey": "footer.BrandFooterExample"
+          }
+        ]
+      }
+    ],
+    "form": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础表单",
+            "assetKey": "form.FormBasicDemo"
+          }
+        ]
+      }
+    ],
+    "icon": [
+      {
+        "title": "主题与图标",
+        "items": [
+          {
+            "description": "TIcon 基础用法:",
+            "assetKey": "icon.BasicTIconExample"
+          },
+          {
+            "description": "指定 size 和 color:",
+            "assetKey": "icon.SizedTIconExample"
+          },
+          {
+            "description": "TIcon.fromName 通过名称:",
+            "assetKey": "icon.IconFromNameExample"
+          },
+          {
+            "description": "Theme 默认 size/color:",
+            "assetKey": "icon.ThemeDemo"
+          },
+          {
+            "description": "构造器优先级覆盖 Theme:",
+            "assetKey": "icon.PriorityDemo"
+          }
+        ]
+      },
+      {
+        "title": "icon示例",
+        "items": [
+          {
+            "description": "",
+            "assetKey": "icon.ShowAllIconsExample"
+          }
+        ]
+      }
+    ],
+    "image": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "",
+            "assetKey": "image.ImageTypesExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "",
+            "assetKey": "image.ImageStatesExample"
+          }
+        ]
+      }
+    ],
+    "image-viewer": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础图片预览",
+            "assetKey": "image-viewer.ImageViewerBasicExample"
+          },
+          {
+            "description": "带操作图片预览",
+            "assetKey": "image-viewer.ImageViewerWithActionsExample"
+          }
+        ]
+      }
+    ],
+    "indexes": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "索引类型",
+            "assetKey": "indexes.LetterIndexesExample"
+          },
+          {
+            "description": "",
+            "assetKey": "indexes.NumberIndexesExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "其他索引列表样式",
+            "assetKey": "indexes.CapsuleIndexesExample"
+          }
+        ]
+      }
+    ],
+    "input": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础输入框",
+            "assetKey": "input.InputBasicExample"
+          },
+          {
+            "description": "带字数限制输入框",
+            "assetKey": "input.InputFormatterExample"
+          },
+          {
+            "description": "带操作输入框",
+            "assetKey": "input.InputActionExample"
+          },
+          {
+            "description": "带图标输入框",
+            "assetKey": "input.InputSlotsExample"
+          },
+          {
+            "description": "特定类型输入框",
+            "assetKey": "input.InputPasswordExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "输入框状态",
+            "assetKey": "input.InputStatusExample"
+          },
+          {
+            "description": "信息超长状态",
+            "assetKey": "input.InputLabelExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "内容位置",
+            "assetKey": "input.InputAlignExample"
+          },
+          {
+            "description": "竖排样式",
+            "assetKey": "input.InputLayoutExample"
+          },
+          {
+            "description": "非通栏样式",
+            "assetKey": "input.InputBannerExample"
+          },
+          {
+            "description": "标签外置样式",
+            "assetKey": "input.InputBorderedExample"
+          },
+          {
+            "description": "自定义样式输入框",
+            "assetKey": "input.InputCustomExample"
+          }
+        ]
+      }
+    ],
+    "link": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础文字链接",
+            "assetKey": "link.BasicLinksExample"
+          },
+          {
+            "description": "下划线文字链接",
+            "assetKey": "link.UnderlineLinksExample"
+          },
+          {
+            "description": "前置图标文字链接",
+            "assetKey": "link.PrefixLinksExample"
+          },
+          {
+            "description": "后置图标文字链接",
+            "assetKey": "link.SuffixLinksExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "不同主题",
+            "assetKey": "link.ColorSchemeLinksExample"
+          },
+          {
+            "description": "禁用状态",
+            "assetKey": "link.DisabledLinksExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "链接尺寸",
+            "assetKey": "link.LinkSizesExample"
+          }
+        ]
+      }
+    ],
+    "loading": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "纯图标",
+            "assetKey": "loading.PureIconLoadingExample"
+          },
+          {
+            "description": "图标加文字横向",
+            "assetKey": "loading.TextIconHorizontalLoadingExample"
+          },
+          {
+            "description": "图标加文字竖向",
+            "assetKey": "loading.TextIconVerticalLoadingExample"
+          },
+          {
+            "description": "纯文字",
+            "assetKey": "loading.PureTextLoadingExample"
+          }
+        ]
+      },
+      {
+        "title": "组件尺寸",
+        "items": [
+          {
+            "description": "大尺寸",
+            "assetKey": "loading.LoadingSizesExample"
+          }
+        ]
+      },
+      {
+        "title": "加载速度",
+        "items": [
+          {
+            "description": "加载速度调整",
+            "assetKey": "loading.CustomSpeedLoadingExample"
+          }
+        ]
+      }
+    ],
+    "message": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "消息通知内容为文本、带操作按钮",
+            "assetKey": "message.MessageTypesExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "消息组件风格",
+            "assetKey": "message.MessageStylesExample"
+          }
+        ]
+      }
+    ],
+    "navbar": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础H5导航栏",
+            "assetKey": "navbar.BaseH5NavbarExample"
+          },
+          {
+            "description": "",
+            "assetKey": "navbar.NavbarLeftMultiActionExample"
+          },
+          {
+            "description": "",
+            "assetKey": "navbar.NavbarRightMultiActionExample"
+          },
+          {
+            "description": "带搜索导航栏",
+            "assetKey": "navbar.SearchNavbarExample"
+          },
+          {
+            "description": "带图片导航栏",
+            "assetKey": "navbar.LogoNavbarExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "标题对齐",
+            "assetKey": "navbar.TitleCenterNavbarExample"
+          },
+          {
+            "description": "",
+            "assetKey": "navbar.TitleLeftNavbarExample"
+          },
+          {
+            "description": "标题尺寸",
+            "assetKey": "navbar.TitleNormalNavbarExample"
+          },
+          {
+            "description": "",
+            "assetKey": "navbar.TitleBelowNavbarExample"
+          },
+          {
+            "description": "自定义颜色",
+            "assetKey": "navbar.SetBgColorNavbarExample"
+          }
+        ]
+      }
+    ],
+    "noticeBar": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "纯文字的公告栏",
+            "assetKey": "noticeBar.TextNoticeBarExample"
+          },
+          {
+            "description": "带图标的公告栏",
+            "assetKey": "noticeBar.IconNoticeBarExample"
+          },
+          {
+            "description": "带关闭的公告栏",
+            "assetKey": "noticeBar.CloseNoticeBarExample"
+          },
+          {
+            "description": "带入口的公告栏",
+            "assetKey": "noticeBar.EntranceNoticeBarExample"
+          },
+          {
+            "description": "自定义样式的公告栏",
+            "assetKey": "noticeBar.CustomNoticeBarExample"
+          },
+          {
+            "description": "自定义内容的公告栏",
+            "assetKey": "noticeBar.CustomContentNoticeBarExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "公告栏类型有普通（info）、警示（warning）、成功（success）、错误（error）",
+            "assetKey": "noticeBar.ThemeNoticeBarsExample"
+          }
+        ]
+      },
+      {
+        "title": "可滚动公告栏",
+        "items": [
+          {
+            "description": "可滚动公告栏有水平（horizontal）和垂直（vertical）",
+            "assetKey": "noticeBar.ScrollingNoticeBarsExample"
+          }
+        ]
+      }
+    ],
+    "picker": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础选择器",
+            "assetKey": "picker.PickerBaseExample"
+          },
+          {
+            "description": "",
+            "assetKey": "picker.PickerTimeExample"
+          },
+          {
+            "description": "",
+            "assetKey": "picker.PickerAreaExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "是否带标题",
+            "assetKey": "picker.PickerTitleExample"
+          }
+        ]
+      }
+    ],
+    "popover": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "带箭头的弹出气泡",
+            "assetKey": "popover.PopoverArrowExample"
+          },
+          {
+            "description": "不带箭头的弹出气泡",
+            "assetKey": "popover.PopoverNoArrowExample"
+          },
+          {
+            "description": "自定义内容弹出气泡",
+            "assetKey": "popover.PopoverCustomContentExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "",
+            "assetKey": "popover.PopoverColorSchemesExample"
+          },
+          {
+            "description": "顶部弹出气泡",
+            "assetKey": "popover.PopoverTopPlacementsExample"
+          },
+          {
+            "description": "底部弹出气泡",
+            "assetKey": "popover.PopoverBottomPlacementsExample"
+          },
+          {
+            "description": "右侧弹出气泡",
+            "assetKey": "popover.PopoverRightPlacementsExample"
+          },
+          {
+            "description": "左侧弹出气泡",
+            "assetKey": "popover.PopoverLeftPlacementsExample"
+          }
+        ]
+      }
+    ],
+    "popup": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础弹出层",
+            "assetKey": "popup.BasePopupsExample"
+          }
+        ]
+      },
+      {
+        "title": "组件示例",
+        "items": [
+          {
+            "description": "应用示例",
+            "assetKey": "popup.ApplicationPopupsExample"
+          }
+        ]
+      }
+    ],
+    "progress": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "线性进度条",
+            "assetKey": "progress.ProgressLinearExample"
+          },
+          {
+            "description": "百分比内显",
+            "assetKey": "progress.ProgressPlumpExample"
+          },
+          {
+            "description": "环形进度条",
+            "assetKey": "progress.ProgressCircleExample"
+          },
+          {
+            "description": "微型环形进度条",
+            "assetKey": "progress.ProgressMicroCircleExample"
+          },
+          {
+            "description": "带操作按钮",
+            "assetKey": "progress.ProgressButtonExample"
+          },
+          {
+            "description": "微型按钮进度条",
+            "assetKey": "progress.ProgressMicroButtonExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "线性进度条",
+            "assetKey": "progress.ProgressLinearStatusExample"
+          },
+          {
+            "description": "百分比内显进度条",
+            "assetKey": "progress.ProgressPlumpStatusExample"
+          },
+          {
+            "description": "环形进度条",
+            "assetKey": "progress.ProgressCircleStatusExample"
+          }
+        ]
+      }
+    ],
+    "radio": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "纵向单选框",
+            "assetKey": "radio.VerticalRadiosExample"
+          },
+          {
+            "description": "横向单选框",
+            "assetKey": "radio.HorizontalRadiosExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "单选框状态",
+            "assetKey": "radio.DisabledRadiosExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "勾选样式",
+            "assetKey": "radio.RadioThemesExample"
+          },
+          {
+            "description": "勾选显示位置",
+            "assetKey": "radio.RadioPositionsExample"
+          },
+          {
+            "description": "非通栏单选样式",
+            "assetKey": "radio.VerticalCardRadiosExample"
+          }
+        ]
+      },
+      {
+        "title": "特殊样式",
+        "items": [
+          {
+            "description": "纵向卡片单选框",
+            "assetKey": "radio.SpecialRadiosExample"
+          }
+        ]
+      }
+    ],
+    "radius": [
+      {
+        "title": "数值型",
+        "items": [
+          {
+            "description": "3px 极小组件圆角",
+            "assetKey": "radius.RadiusSmallExample"
+          },
+          {
+            "description": "6px 组件圆角",
+            "assetKey": "radius.RadiusDefaultExample"
+          },
+          {
+            "description": "9px 卡片圆角",
+            "assetKey": "radius.RadiusLargeExample"
+          },
+          {
+            "description": "12px 面板圆角",
+            "assetKey": "radius.RadiusExtraLargeExample"
+          }
+        ]
+      },
+      {
+        "title": "特殊",
+        "items": [
+          {
+            "description": "胶囊型",
+            "assetKey": "radius.RadiusRoundExample"
+          },
+          {
+            "description": "圆型",
+            "assetKey": "radius.RadiusCircleExample"
+          }
+        ]
+      }
+    ],
+    "rate": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "实心评分",
+            "assetKey": "rate.RateBasicExample"
+          },
+          {
+            "description": "自定义评分",
+            "assetKey": "rate.RateCustomExample"
+          },
+          {
+            "description": "第三方图标评分",
+            "assetKey": "rate.RateThirdPartyIconExample"
+          },
+          {
+            "description": "自定义评分数量",
+            "assetKey": "rate.RateCountExample"
+          },
+          {
+            "description": "带描述评分",
+            "assetKey": "rate.RateShowTextExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "",
+            "assetKey": "rate.RateActionExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "评分大小",
+            "assetKey": "rate.RateSizeExample"
+          },
+          {
+            "description": "评分风格",
+            "assetKey": "rate.RateColorExample"
+          }
+        ]
+      },
+      {
+        "title": "特殊样式",
+        "items": [
+          {
+            "description": "竖向带描述评分",
+            "assetKey": "rate.RateVerticalExample"
+          }
+        ]
+      }
+    ],
+    "result": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础结果",
+            "assetKey": "result.BasicResultsExample"
+          },
+          {
+            "description": "带描述结果",
+            "assetKey": "result.DescriptionResultsExample"
+          },
+          {
+            "description": "自定义结果",
+            "assetKey": "result.CustomResultExample"
+          },
+          {
+            "description": "页面示例",
+            "assetKey": "result.PageExample"
+          }
+        ]
+      }
+    ],
+    "search": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础搜索框",
+            "assetKey": "search.SearchBarBaseExample"
+          },
+          {
+            "description": "字数限制",
+            "assetKey": "search.SearchBarMaxLengthExample"
+          },
+          {
+            "description": "获取焦点后显示取消按钮",
+            "assetKey": "search.SearchBarActionExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "搜索框形状",
+            "assetKey": "search.SearchBarShapeExample"
+          },
+          {
+            "description": "默认状态其他对齐方式",
+            "assetKey": "search.SearchBarCenterExample"
+          }
+        ]
+      }
+    ],
+    "shadows": [
+      {
+        "title": "投影",
+        "items": [
+          {
+            "description": "基础投影",
+            "assetKey": "shadows.ShadowsBaseExample"
+          },
+          {
+            "description": "中层投影",
+            "assetKey": "shadows.ShadowsMiddleExample"
+          },
+          {
+            "description": "上层投影",
+            "assetKey": "shadows.ShadowsTopExample"
+          }
+        ]
+      }
+    ],
+    "sideBar": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "侧边导航用法",
+            "assetKey": "sideBar.NavigatorSideBarExample"
+          },
+          {
+            "description": "带图标侧边导航",
+            "assetKey": "sideBar.IconSideBarExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "侧边导航样式",
+            "assetKey": "sideBar.StyleSideBarExample"
+          }
+        ]
+      }
+    ],
+    "skeleton": [
+      {
+        "title": "骨架屏类型",
+        "items": [
+          {
+            "description": "头像骨架屏",
+            "assetKey": "skeleton.AvatarSkeletonExample"
+          },
+          {
+            "description": "图片骨架屏",
+            "assetKey": "skeleton.ImageSkeletonExample"
+          },
+          {
+            "description": "文本骨架屏",
+            "assetKey": "skeleton.TextSkeletonExample"
+          },
+          {
+            "description": "段落骨架屏",
+            "assetKey": "skeleton.ParagraphSkeletonExample"
+          },
+          {
+            "description": "单元格骨架屏",
+            "assetKey": "skeleton.CellSkeletonExample"
+          },
+          {
+            "description": "宫格骨架屏",
+            "assetKey": "skeleton.GridSkeletonExample"
+          },
+          {
+            "description": "图文组合骨架屏",
+            "assetKey": "skeleton.CombineSkeletonExample"
+          }
+        ]
+      },
+      {
+        "title": "组件动效",
+        "items": [
+          {
+            "description": "渐变加载效果",
+            "assetKey": "skeleton.GradientSkeletonExample"
+          },
+          {
+            "description": "闪烁加载效果",
+            "assetKey": "skeleton.FlashedSkeletonExample"
+          }
+        ]
+      }
+    ],
+    "slider": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "单游标滑块",
+            "assetKey": "slider.SliderSingleExample"
+          },
+          {
+            "description": "双游标滑块",
+            "assetKey": "slider.SliderRangeExample"
+          },
+          {
+            "description": "带数值滑动选择器",
+            "assetKey": "slider.SliderLabeledExample"
+          },
+          {
+            "description": "起始非零滑动选择器",
+            "assetKey": "slider.SliderNonZeroExample"
+          },
+          {
+            "description": "带刻度滑动选择器",
+            "assetKey": "slider.SliderScaleExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "滑块禁用状态",
+            "assetKey": "slider.SliderDisabledExample"
+          }
+        ]
+      },
+      {
+        "title": "特殊样式",
+        "items": [
+          {
+            "description": "胶囊型滑块",
+            "assetKey": "slider.SliderCapsuleExample"
+          }
+        ]
+      },
+      {
+        "title": "垂直状态",
+        "items": [
+          {
+            "description": "",
+            "assetKey": "slider.SliderVerticalExample"
+          }
+        ]
+      }
+    ],
+    "stepper": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础步进器",
+            "assetKey": "stepper.StepperBaseExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "最大最小状态",
+            "assetKey": "stepper.StepperBoundsExample"
+          },
+          {
+            "description": "禁用状态",
+            "assetKey": "stepper.StepperDisabledExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "步进器样式",
+            "assetKey": "stepper.StepperVariantsExample"
+          },
+          {
+            "description": "步进器尺寸",
+            "assetKey": "stepper.StepperSizesExample"
+          }
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "Horizontal Default Steps 水平默认步骤条",
+            "assetKey": "steps.StepsHorizontalDefaultExample"
+          },
+          {
+            "description": "Horizontal Icon Steps 水平图标步骤条",
+            "assetKey": "steps.StepsHorizontalIconExample"
+          },
+          {
+            "description": "Horizontal Dot Steps 水平简略步骤条",
+            "assetKey": "steps.StepsHorizontalDotExample"
+          },
+          {
+            "description": "Vertical Default Steps 垂直默认步骤条",
+            "assetKey": "steps.StepsVerticalDefaultExample"
+          },
+          {
+            "description": "Vertical Icon Steps 垂直图标步骤条",
+            "assetKey": "steps.StepsVerticalIconExample"
+          },
+          {
+            "description": "Vertical Dot Steps 垂直简略步骤条",
+            "assetKey": "steps.StepsVerticalDotExample"
+          },
+          {
+            "description": "Customize Steps Content 自定义步骤条内容",
+            "assetKey": "steps.StepsCustomContentExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "Error 错误状态",
+            "assetKey": "steps.StepsErrorStatesExample"
+          }
+        ]
+      },
+      {
+        "title": "特殊类型",
+        "items": [
+          {
+            "description": "Vertical Customize Steps 垂直自定义步骤条",
+            "assetKey": "steps.StepsVerticalSelectableExample"
+          },
+          {
+            "description": "Read-only Steps 纯展示步骤条",
+            "assetKey": "steps.DisplayStepsExample"
+          }
+        ]
+      }
+    ],
+    "swiper": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "点状（dots）",
+            "assetKey": "swiper.DotsSwiperExample"
+          },
+          {
+            "description": "点条状（dots-bar）",
+            "assetKey": "swiper.DotsBarSwiperExample"
+          },
+          {
+            "description": "分式（fraction）",
+            "assetKey": "swiper.FractionSwiperExample"
+          },
+          {
+            "description": "切换按钮（controls）",
+            "assetKey": "swiper.ControlsSwiperExample"
+          },
+          {
+            "description": "卡片式（cards）",
+            "assetKey": "swiper.CardsSwiperExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "垂直模式",
+            "assetKey": "swiper.VerticalSwiperExample"
+          }
+        ]
+      }
+    ],
+    "switch": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础开关",
+            "assetKey": "switch.SwitchBasicExample"
+          },
+          {
+            "description": "带描述开关",
+            "assetKey": "switch.SwitchLabelExample"
+          },
+          {
+            "description": "自定义颜色开关",
+            "assetKey": "switch.SwitchColorExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "",
+            "assetKey": "switch.SwitchStatusExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "开关尺寸",
+            "assetKey": "switch.SwitchSizesExample"
+          }
+        ]
+      }
+    ],
+    "tabBar": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "纯文本标签栏",
+            "assetKey": "tabBar.TextTabBarExample"
+          },
+          {
+            "description": "图标加文本标签栏",
+            "assetKey": "tabBar.IconTextTabBarExample"
+          },
+          {
+            "description": "纯图标标签栏",
+            "assetKey": "tabBar.IconTabBarExample"
+          },
+          {
+            "description": "双层级文本标签栏",
+            "assetKey": "tabBar.DoubleLayerTabBarExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "弱选中标签栏",
+            "assetKey": "tabBar.WeakTabBarsExample"
+          },
+          {
+            "description": "悬浮胶囊标签栏",
+            "assetKey": "tabBar.CapsuleTabBarExample"
+          }
+        ]
+      },
+      {
+        "title": "自定义",
+        "items": [
+          {
+            "description": "自定义样式",
+            "assetKey": "tabBar.CustomTabBarExample"
+          }
+        ]
+      }
+    ],
+    "table": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础表格",
+            "assetKey": "table.TableBasicExample"
+          },
+          {
+            "description": "可排序表格",
+            "assetKey": "table.TableSortableExample"
+          },
+          {
+            "description": "带操作或按钮表格",
+            "assetKey": "table.TableOperationTextExample"
+          },
+          {
+            "description": "",
+            "assetKey": "table.TableOperationIconExample"
+          },
+          {
+            "description": "可固定首列表格",
+            "assetKey": "table.TableFixedFirstExample"
+          },
+          {
+            "description": "可固定尾列表格",
+            "assetKey": "table.TableFixedLastExample"
+          },
+          {
+            "description": "横向平铺可滚动表格",
+            "assetKey": "table.TableHorizontalScrollExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "带斑马纹表格样式",
+            "assetKey": "table.TableStripeExample"
+          },
+          {
+            "description": "带边框表格样式",
+            "assetKey": "table.TableBorderedExample"
+          }
+        ]
+      }
+    ],
+    "tabs": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "均分选项卡",
+            "assetKey": "tabs.TabsItemWithSplit1Example"
+          },
+          {
+            "description": "",
+            "assetKey": "tabs.TabsItemWithSplit2Example"
+          },
+          {
+            "description": "",
+            "assetKey": "tabs.TabsItemWithSplit3Example"
+          },
+          {
+            "description": "",
+            "assetKey": "tabs.TabsItemWithSplit4Example"
+          },
+          {
+            "description": "等距选项卡",
+            "assetKey": "tabs.TabsItemWithSpaceExample"
+          },
+          {
+            "description": "带图标选项卡",
+            "assetKey": "tabs.TabsItemWithIconExample"
+          },
+          {
+            "description": "带徽标选项卡",
+            "assetKey": "tabs.TabsItemWithLogoExample"
+          },
+          {
+            "description": "带内容区选项卡",
+            "assetKey": "tabs.TabsItemWithContentExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "选项卡状态",
+            "assetKey": "tabs.TabsItemWithStatusExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "选项卡尺寸",
+            "assetKey": "tabs.TabsItemWithSizeSmallExample"
+          },
+          {
+            "description": "",
+            "assetKey": "tabs.TabsItemWithSizeLargeExample"
+          },
+          {
+            "description": "选项卡样式",
+            "assetKey": "tabs.TabsItemWithLineExample"
+          },
+          {
+            "description": "",
+            "assetKey": "tabs.TabsItemWithTagExample"
+          }
+        ]
+      }
+    ],
+    "tag": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础标签",
+            "assetKey": "tag.SimpleFillTagExample"
+          },
+          {
+            "description": "圆弧标签",
+            "assetKey": "tag.CircleFillTagExample"
+          },
+          {
+            "description": "Mark标签",
+            "assetKey": "tag.MarkFillTagExample"
+          },
+          {
+            "description": "带图标的标签",
+            "assetKey": "tag.IconFillTagExample"
+          },
+          {
+            "description": "超长省略文本标签",
+            "assetKey": "tag.LongTextTagExample"
+          },
+          {
+            "description": "可关闭的标签",
+            "assetKey": "tag.CloseFillTagExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态（主题）",
+        "items": [
+          {
+            "description": "填充型各主题",
+            "assetKey": "tag.DarkShowTagsExample"
+          },
+          {
+            "description": "描边型各主题",
+            "assetKey": "tag.OutlineShowTagsExample"
+          }
+        ]
+      },
+      {
+        "title": "组件尺寸",
+        "items": [
+          {
+            "description": "",
+            "assetKey": "tag.AllSizeTagsExample"
+          }
+        ]
+      },
+      {
+        "title": "可选标签",
+        "items": [
+          {
+            "description": "默认形态",
+            "assetKey": "tag.TagSelectDefaultExample"
+          },
+          {
+            "description": "描边形态",
+            "assetKey": "tag.TagSelectOutlineExample"
+          },
+          {
+            "description": "不同语义色",
+            "assetKey": "tag.TagSelectColorSchemesExample"
+          },
+          {
+            "description": "禁用状态",
+            "assetKey": "tag.TagSelectDisabledExample"
+          }
+        ]
+      }
+    ],
+    "text": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "普通文本",
+            "assetKey": "text.PlainTextExample"
+          },
+          {
+            "description": "富文本",
+            "assetKey": "text.RichTextExample"
+          }
+        ]
+      },
+      {
+        "title": "文本样式",
+        "items": [
+          {
+            "description": "字体 Token 与颜色",
+            "assetKey": "text.TextTokenStyleExample"
+          },
+          {
+            "description": "字重与删除线",
+            "assetKey": "text.TextDecorationExample"
+          },
+          {
+            "description": "字形背景与行盒背景",
+            "assetKey": "text.TextBackgroundExample"
+          },
+          {
+            "description": "字体族与资源 package",
+            "assetKey": "text.TextFontFamilyExample"
+          }
+        ]
+      },
+      {
+        "title": "段落与辅助能力",
+        "items": [
+          {
+            "description": "多行省略",
+            "assetKey": "text.TextOverflowExample"
+          },
+          {
+            "description": "对齐与文字缩放",
+            "assetKey": "text.TextLayoutExample"
+          },
+          {
+            "description": "文字选择与语义",
+            "assetKey": "text.AccessibleTextExample"
+          },
+          {
+            "description": "获取 Flutter 原生 Text",
+            "assetKey": "text.RawTextExample"
+          }
+        ]
+      },
+      {
+        "title": "组件主题",
+        "items": [
+          {
+            "description": "子树默认样式",
+            "assetKey": "text.ThemeDemo"
+          }
+        ]
+      }
+    ],
+    "textarea": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础多行文本框",
+            "assetKey": "textarea.TextareaBasicExample"
+          },
+          {
+            "description": "带标题多行文本框",
+            "assetKey": "textarea.TextareaLabelExample"
+          },
+          {
+            "description": "自动增高多行文本框",
+            "assetKey": "textarea.TextareaAutosizeExample"
+          },
+          {
+            "description": "设置字符数限制",
+            "assetKey": "textarea.TextareaMaxLengthExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "禁用状态",
+            "assetKey": "textarea.TextareaDisabledExample"
+          }
+        ]
+      },
+      {
+        "title": "组件样式",
+        "items": [
+          {
+            "description": "竖排样式",
+            "assetKey": "textarea.TextareaVerticalExample"
+          },
+          {
+            "description": "卡片样式",
+            "assetKey": "textarea.TextareaCardExample"
+          }
+        ]
+      },
+      {
+        "title": "特殊样式",
+        "items": [
+          {
+            "description": "标签外置输入框",
+            "assetKey": "textarea.TextareaCustomExample"
+          }
+        ]
+      }
+    ],
+    "theme": [
+      {
+        "title": "颜色示例",
+        "items": [
+          {
+            "description": "功能色",
+            "assetKey": "theme.ThemeFunctionColorExample"
+          },
+          {
+            "description": "文字&图标颜色",
+            "assetKey": "theme.ThemeTextColorExample"
+          },
+          {
+            "description": "中性色板",
+            "assetKey": "theme.ThemeOtherColorExample"
+          }
+        ]
+      }
+    ],
+    "timeCounter": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "时分秒",
+            "assetKey": "timeCounter.TimeCounterSimpleExample"
+          },
+          {
+            "description": "带毫秒",
+            "assetKey": "timeCounter.TimeCounterMillisecondSimpleExample"
+          },
+          {
+            "description": "带方形底",
+            "assetKey": "timeCounter.TimeCounterSquareSimpleExample"
+          },
+          {
+            "description": "带圆形底",
+            "assetKey": "timeCounter.TimeCounterRoundSimpleExample"
+          },
+          {
+            "description": "带单位",
+            "assetKey": "timeCounter.TimeCounterUnitSimpleExample"
+          },
+          {
+            "description": "无底色带单位",
+            "assetKey": "timeCounter.TimeCounterCustomUnitSimpleExample"
+          }
+        ]
+      },
+      {
+        "title": "组件尺寸",
+        "items": [
+          {
+            "description": "时分秒",
+            "assetKey": "timeCounter.TimeCounterDefaultSizesExample"
+          },
+          {
+            "description": "带毫秒",
+            "assetKey": "timeCounter.TimeCounterMillisecondSizesExample"
+          },
+          {
+            "description": "带方形底",
+            "assetKey": "timeCounter.TimeCounterSquareSizesExample"
+          },
+          {
+            "description": "带圆形底",
+            "assetKey": "timeCounter.TimeCounterRoundSizesExample"
+          },
+          {
+            "description": "带单位",
+            "assetKey": "timeCounter.TimeCounterUnitSizesExample"
+          }
+        ]
+      }
+    ],
+    "toast": [
+      {
+        "title": "基础提示",
+        "items": [
+          {
+            "description": "纯文本",
+            "assetKey": "toast.TextToastExample"
+          },
+          {
+            "description": "多行文字",
+            "assetKey": "toast.MultipleTextToastExample"
+          },
+          {
+            "description": "带横向图标",
+            "assetKey": "toast.HorizontalIconToastExample"
+          },
+          {
+            "description": "带竖向图标",
+            "assetKey": "toast.VerticalIconToastExample"
+          },
+          {
+            "description": "加载状态",
+            "assetKey": "toast.LoadingToastExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "成功提示",
+            "assetKey": "toast.SuccessToastExample"
+          },
+          {
+            "description": "警告提示",
+            "assetKey": "toast.WarningToastExample"
+          },
+          {
+            "description": "错误提示",
+            "assetKey": "toast.FailToastExample"
+          }
+        ]
+      },
+      {
+        "title": "显示遮罩",
+        "items": [
+          {
+            "description": "禁止滑动和点击",
+            "assetKey": "toast.CoverToastExample"
+          }
+        ]
+      },
+      {
+        "title": "手动关闭",
+        "items": [
+          {
+            "description": "显示提示",
+            "assetKey": "toast.ShowToastExample"
+          },
+          {
+            "description": "关闭提示",
+            "assetKey": "toast.HideToastExample"
+          }
+        ]
+      }
+    ],
+    "tree-select": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "基础树形选择器",
+            "assetKey": "tree-select.TreeSelectSingleExample"
+          },
+          {
+            "description": "多选树形选择器",
+            "assetKey": "tree-select.TreeSelectMultipleExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "树形选择器-三列",
+            "assetKey": "tree-select.TreeSelectThreeColumnsExample"
+          }
+        ]
+      }
+    ],
+    "upload": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "单选上传",
+            "assetKey": "upload.UploadSingleExample"
+          },
+          {
+            "description": "多选上传",
+            "assetKey": "upload.UploadMultipleExample"
+          },
+          {
+            "description": "长按图片拖拽排片",
+            "assetKey": "upload.UploadTileExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "加载状态",
+            "assetKey": "upload.UploadStatusExample"
+          },
+          {
+            "description": "从聊天记录上选",
+            "assetKey": "upload.UploadMessageFileExample"
+          }
+        ]
+      },
+      {
+        "title": "组件风格",
+        "items": [
+          {
+            "description": "宫格/列表布局",
+            "assetKey": "upload.UploadLayoutsExample"
+          }
+        ]
+      }
     ]
   },
-  "legacyGroups": [
-    "PullDownRefresh",
-    "SwipeCell",
-    "action_sheet",
-    "avatar",
-    "backtop",
-    "badge",
-    "button",
-    "calendar",
-    "cascader",
-    "cell",
-    "checkbox",
-    "collapse",
-    "date-time-picker",
-    "dialog",
-    "drawer",
-    "dropdown_menu",
-    "empty",
-    "fab",
-    "footer",
-    "form",
-    "icon",
-    "image",
-    "image-viewer",
-    "indexes",
-    "input",
-    "link",
-    "loading",
-    "message",
-    "navbar",
-    "noticeBar",
-    "picker",
-    "popover",
-    "popup",
-    "progress",
-    "radio",
-    "radius",
-    "rate",
-    "result",
-    "search",
-    "shadows",
-    "sideBar",
-    "skeleton",
-    "slider",
-    "stepper",
-    "steps",
-    "swiper",
-    "switch",
-    "tabBar",
-    "table",
-    "tabs",
-    "tag",
-    "text",
-    "textarea",
-    "theme",
-    "timeCounter",
-    "toast",
-    "tree-select",
-    "upload"
-  ]
+  "legacyGroups": []
 }

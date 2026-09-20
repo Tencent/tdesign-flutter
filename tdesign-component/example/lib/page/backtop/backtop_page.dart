@@ -3,9 +3,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
+import 'backtop_circle_trigger_example.dart';
+import 'backtop_half_round_trigger_example.dart';
+import 'backtop_skeleton_content_example.dart';
 
-part 'backtop_type.dart';
-
+@ExampleCodeManifest()
 class TBackTopPage extends StatefulWidget {
   const TBackTopPage({Key? key}) : super(key: key);
 
@@ -57,81 +59,36 @@ class _TBackTopPageState extends State<TBackTopPage> {
           ? const _BackTopEdgeLocation()
           : FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
-      children: [_backtopTypeModule],
-    );
-  }
-
-  @ExampleCode(group: 'backtop')
-  Widget _buildCircleTrigger(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: TButton(
-        key: const Key('backtop-demo-circle-trigger'),
-        variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
-        size: TButtonSize.large,
-        onPressed: () => _selectShape(TBackTopShape.circle),
-        child: const TText('圆形返回顶部'),
-      ),
-    );
-  }
-
-  @ExampleCode(group: 'backtop')
-  Widget _buildHalfRoundTrigger(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: TButton(
-        key: const Key('backtop-demo-half-round-trigger'),
-        variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
-        size: TButtonSize.large,
-        onPressed: () => _selectShape(TBackTopShape.halfCircle),
-        child: const TText('半圆形返回顶部'),
-      ),
-    );
-  }
-
-  Widget _buildSkeletonContent(BuildContext context) => LayoutBuilder(
-    builder: (context, constraints) {
-      final itemWidth = (constraints.maxWidth - 16) / 2;
-      return Wrap(
-        spacing: 16,
-        runSpacing: 24,
-        children: List.generate(
-          8,
-          (_) => SizedBox(
-            width: itemWidth,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: itemWidth,
-                  height: itemWidth,
-                  decoration: BoxDecoration(
-                    color: context.tTheme.bgColorComponent,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                _buildSkeletonLine(context, itemWidth),
-                const SizedBox(height: 10),
-                _buildSkeletonLine(context, itemWidth * 0.61),
-              ],
+      children: [
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(
+              desc: '圆形返回顶部',
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              methodName: 'BacktopCircleTriggerExample',
+              builder: (_) =>
+                  BacktopCircleTriggerExample(onSelected: _selectShape),
             ),
-          ),
+            ExampleItem(
+              desc: '半圆形返回顶部',
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              methodName: 'BacktopHalfRoundTriggerExample',
+              builder: (_) =>
+                  BacktopHalfRoundTriggerExample(onSelected: _selectShape),
+            ),
+            ExampleItem(
+              desc: '',
+              center: false,
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              methodName: 'BacktopSkeletonContentExample',
+              builder: (_) => const BacktopSkeletonContentExample(),
+            ),
+          ],
         ),
-      );
-    },
-  );
-
-  Widget _buildSkeletonLine(BuildContext context, double width) => Container(
-    width: width,
-    height: 16,
-    decoration: BoxDecoration(
-      color: context.tTheme.bgColorComponent,
-      borderRadius: BorderRadius.circular(context.tTheme.radiusSmall),
-    ),
-  );
+      ],
+    );
+  }
 }
 
 /// 半圆形 BackTop 的直边属于贴屏结构，宿主只负责把组件放到屏幕右边缘。

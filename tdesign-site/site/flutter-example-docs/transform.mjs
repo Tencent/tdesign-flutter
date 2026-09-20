@@ -44,20 +44,7 @@ export function readFlutterExampleCode(assetKey, exampleCodeDirectory = defaultE
 
 export function listFlutterExampleKeys(group, exampleCodeDirectory = defaultExampleCodeDirectory) {
   const configuredGroup = readFlutterExampleGroup(group, exampleCodeDirectory);
-  if (configuredGroup) {
-    return configuredGroup.flatMap((module) => module.items.map((item) => item.assetKey));
-  }
-
-  const prefix = `${group}.`;
-  const assetKeys = fs
-    .readdirSync(exampleCodeDirectory)
-    .filter((fileName) => fileName.startsWith(prefix) && fileName.endsWith('.txt'))
-    .map((fileName) => fileName.slice(0, -'.txt'.length))
-    .sort((left, right) => left.localeCompare(right));
-  if (assetKeys.length === 0) {
-    throw new Error(`Missing Flutter example code group: ${group}`);
-  }
-  return assetKeys;
+  return configuredGroup.flatMap((module) => module.items.map((item) => item.assetKey));
 }
 
 export function readFlutterExampleGroup(group, exampleCodeDirectory = defaultExampleCodeDirectory) {
@@ -104,11 +91,7 @@ export function readFlutterExampleGroup(group, exampleCodeDirectory = defaultExa
     return configuredGroup;
   }
 
-  if (!manifest.legacyGroups.includes(group)) {
-    throw new Error(`Missing Flutter example code group: ${group}`);
-  }
-
-  return null;
+  throw new Error(`Missing Flutter example code group: ${group}`);
 }
 
 function renderFlutterExample(assetKey, exampleCodeDirectory) {
@@ -124,15 +107,6 @@ function headingText(value) {
 
 function renderFlutterExampleGroup(group, exampleCodeDirectory) {
   const configuredGroup = readFlutterExampleGroup(group, exampleCodeDirectory);
-  if (!configuredGroup) {
-    return listFlutterExampleKeys(group, exampleCodeDirectory)
-      .map((assetKey) => {
-        const exampleName = assetKey.slice(group.length + 1);
-        return `#### \`${exampleName}\`\n\n${renderFlutterExample(assetKey, exampleCodeDirectory)}`;
-      })
-      .join('\n\n');
-  }
-
   return configuredGroup
     .map((module) => {
       const examples = module.items

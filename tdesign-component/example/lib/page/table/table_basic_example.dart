@@ -1,0 +1,26 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+
+@ExampleCode(group: 'table')
+class TableBasicExample extends StatelessWidget {
+  const TableBasicExample({super.key});
+
+  static final _rows = List<List<String>>.generate(
+    10,
+    (index) => [index == 9 ? '内容内容内容内容' : '内容', '内容', '内容', '内容'],
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final columns = List<TTableColumn<List<String>>>.generate(
+      4,
+      (index) => TTableColumn<List<String>>(
+        id: 'title${index + 1}',
+        header: const Text('标题'),
+        cellBuilder: (_, row, __) => Text(row[index]),
+      ),
+    );
+    return TTable(columns: columns, data: _rows);
+  }
+}

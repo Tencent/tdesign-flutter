@@ -1,0 +1,29 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'tabs')
+class TabsItemWithSplit4Example extends StatelessWidget {
+  const TabsItemWithSplit4Example({super.key});
+
+  Widget _buildItemWithSplit4(BuildContext context) {
+    return const DefaultTabController(
+      length: 5,
+      child: TTabsBar(
+        tabs: [
+          TTab(text: '选项'),
+          TTab(text: '选项'),
+          TTab(text: '选项'),
+          TTab(text: '选项'),
+          TTab(text: '上限四字'),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildItemWithSplit4(context);
+  }
+}

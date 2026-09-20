@@ -1,9 +1,0 @@
-Widget _buildFontFamily(BuildContext context) {
-    return TText(
-      '0123456789',
-      fontFamily: FontFamily(
-        fontFamily: 'TCloudNumber',
-        package: 'tdesign_flutter',
-      ),
-    );
-  }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 import 'form_basic_demo.dart';
 
-part 'form_type.dart';
-
 /// TForm、TFormItem 与 TFormField 组合示例页面。
+@ExampleCodeManifest()
 class TFormPage extends StatelessWidget {
   const TFormPage({super.key});
 
@@ -17,7 +17,19 @@ class TFormPage extends StatelessWidget {
       exampleCodeGroup: 'form',
       compactDemo: true,
       showTestModule: false,
-      children: [_formTypeModule],
+      children: [
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(
+              desc: '基础表单',
+              builder: (_) => const FormBasicDemo(),
+              methodName: 'FormBasicDemo',
+              center: false,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

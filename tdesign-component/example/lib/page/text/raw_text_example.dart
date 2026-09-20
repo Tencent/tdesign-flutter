@@ -1,0 +1,25 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'text')
+class RawTextExample extends StatefulWidget {
+  const RawTextExample({super.key});
+
+  @override
+  State<RawTextExample> createState() => _RawTextExampleState();
+}
+
+class _RawTextExampleState extends State<RawTextExample> {
+  Widget _buildRawText(BuildContext context) {
+    return const TText(exampleText).getRawText(context: context);
+  }
+
+  static const exampleText = '文本 Text';
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildRawText(context);
+  }
+}

@@ -16,28 +16,34 @@ class _StepperVariantsExampleState extends State<StepperVariantsExample> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        TStepper(
-          key: const ValueKey('stepper-variants'),
-          value: _filled,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _filled = value),
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TStepper(
+              key: const ValueKey('stepper-variants'),
+              value: _filled,
+              variant: TStepperVariant.filled,
+              onChanged: (value) => setState(() => _filled = value),
+            ),
+            TStepper(
+              key: const ValueKey('stepper-outline'),
+              value: _outline,
+              variant: TStepperVariant.outline,
+              onChanged: (value) => setState(() => _outline = value),
+            ),
+            TStepper(
+              key: const ValueKey('stepper-normal'),
+              value: _normal,
+              variant: TStepperVariant.normal,
+              onChanged: (value) => setState(() => _normal = value),
+            ),
+          ],
         ),
-        TStepper(
-          key: const ValueKey('stepper-outline'),
-          value: _outline,
-          variant: TStepperVariant.outline,
-          onChanged: (value) => setState(() => _outline = value),
-        ),
-        TStepper(
-          key: const ValueKey('stepper-normal'),
-          value: _normal,
-          variant: TStepperVariant.normal,
-          onChanged: (value) => setState(() => _normal = value),
-        ),
-      ],
+      ),
     );
   }
 }

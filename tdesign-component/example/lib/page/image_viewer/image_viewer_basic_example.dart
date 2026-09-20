@@ -1,0 +1,36 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'image-viewer')
+class ImageViewerBasicExample extends StatelessWidget {
+  const ImageViewerBasicExample({super.key});
+
+  Widget _buildBasic(BuildContext context) {
+    const images = <ImageProvider<Object>>[
+      AssetImage('assets/img/image.png'),
+      AssetImage('assets/img/t_action_sheet_8.png'),
+    ];
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: () => TImageViewer.show(
+          context: context,
+          images: images,
+          showClose: false,
+          showIndex: true,
+        ),
+        child: const Text('基础图片预览'),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildBasic(context);
+  }
+}

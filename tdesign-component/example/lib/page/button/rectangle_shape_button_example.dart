@@ -1,0 +1,120 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'button')
+class RectangleShapeButtonExample extends StatefulWidget {
+  const RectangleShapeButtonExample({super.key});
+
+  @override
+  State<RectangleShapeButtonExample> createState() =>
+      _RectangleShapeButtonExampleState();
+}
+
+class _RectangleShapeButtonExampleState
+    extends State<RectangleShapeButtonExample> {
+  Widget _buildRectangleShapeButton(BuildContext context) {
+    return _withButtonShape(
+      context,
+      TButtonShape.rectangle,
+      TButton(
+        child: const Text('矩形'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.fill,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: _onTap,
+      ),
+    );
+  }
+
+  Widget _buildSquareIconButton(BuildContext context) {
+    return _withButtonShape(
+      context,
+      TButtonShape.square,
+      TButton(
+        icon: const Icon(TIcons.app),
+        size: TButtonSize.large,
+        variant: TButtonVariant.fill,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: _onTap,
+      ),
+    );
+  }
+
+  Widget _buildRoundButton(BuildContext context) {
+    return _withButtonShape(
+      context,
+      TButtonShape.round,
+      TButton(
+        child: const Text('填充按钮'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.fill,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: _onTap,
+      ),
+    );
+  }
+
+  Widget _buildCircleButton(BuildContext context) {
+    return _withButtonShape(
+      context,
+      TButtonShape.circle,
+      TButton(
+        icon: const Icon(TIcons.app),
+        size: TButtonSize.large,
+        variant: TButtonVariant.fill,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: _onTap,
+      ),
+    );
+  }
+
+  /// 为子树注入 [TButtonThemeData.shape]（外形走 Theme）
+  Widget _withButtonShape(
+    BuildContext context,
+    TButtonShape shape,
+    Widget child,
+  ) {
+    return Theme(
+      data: _mergeButtonTheme(context, TButtonThemeData(shape: shape)),
+      child: child,
+    );
+  }
+
+  void _onTap() {
+    TToast.showText('点击了按钮', context: context);
+  }
+
+  /// 合并 TButtonThemeData 到当前 Theme 子树（替代 mergeExtension）
+  static ThemeData _mergeButtonTheme(
+    BuildContext context,
+    TButtonThemeData buttonTheme,
+  ) {
+    final existingExtensions = List<ThemeExtension>.from(
+      Theme.of(context).extensions.values,
+    );
+    // 移除旧的 TButtonThemeData（如果存在）
+    existingExtensions.removeWhere((e) => e is TButtonThemeData);
+    existingExtensions.add(buttonTheme);
+    return Theme.of(context).copyWith(extensions: existingExtensions);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Wrap(
+        spacing: 16,
+        runSpacing: 16,
+        children: [
+          Builder(builder: _buildRectangleShapeButton),
+          Builder(builder: _buildSquareIconButton),
+          Builder(builder: _buildRoundButton),
+          Builder(builder: _buildCircleButton),
+        ],
+      ),
+    );
+  }
+}

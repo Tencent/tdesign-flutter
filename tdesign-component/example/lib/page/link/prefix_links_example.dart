@@ -1,0 +1,64 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'link')
+class PrefixLinksExample extends StatefulWidget {
+  const PrefixLinksExample({super.key});
+
+  @override
+  State<PrefixLinksExample> createState() => _PrefixLinksExampleState();
+}
+
+class _PrefixLinksExampleState extends State<PrefixLinksExample> {
+  Widget _buildPrefixLinks(BuildContext context) {
+    return _exampleRow(context, [
+      _link(
+        colorScheme: TLinkColorScheme.primary,
+        prefixIcon: const Icon(TIcons.link),
+      ),
+      _link(prefixIcon: const Icon(TIcons.link)),
+    ]);
+  }
+
+  Widget _exampleRow(BuildContext context, List<Widget> children) {
+    return Container(
+      height: 48,
+      color: context.tTheme.bgColorContainer,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: children,
+      ),
+    );
+  }
+
+  TLink _link({
+    String label = '跳转链接',
+    TLinkColorScheme? colorScheme,
+    TLinkSize size = TLinkSize.small,
+    bool? underline,
+    Widget? prefixIcon,
+    Widget? suffixIcon,
+    bool disabled = false,
+  }) {
+    return TLink(
+      child: Text(label),
+      colorScheme: colorScheme,
+      size: size,
+      underline: underline,
+      prefixIcon: prefixIcon,
+      suffixIcon: suffixIcon,
+      onPressed: disabled ? null : _onLinkPressed,
+    );
+  }
+
+  void _onLinkPressed() {
+    TToast.showText('点击了链接', context: context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildPrefixLinks(context);
+  }
+}

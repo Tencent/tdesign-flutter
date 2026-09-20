@@ -1,0 +1,26 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'noticeBar')
+class CustomContentNoticeBarExample extends StatelessWidget {
+  const CustomContentNoticeBarExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return _customContentNoticeBar(context);
+  }
+}
+
+Widget _customContentNoticeBar(BuildContext context) {
+  return TNoticeBar(
+    content: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字描述提示文字描述',
+    operation: TLink(
+      child: const Text('详情'),
+      colorScheme: TLinkColorScheme.primary,
+      onPressed: () => TToast.showText('点击了详情', context: context),
+    ),
+    suffixIcon: TIcons.close,
+  );
+}

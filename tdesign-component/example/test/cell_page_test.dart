@@ -165,8 +165,8 @@ void main() {
       '单行标题|$description|-|-|text:辅助信息|arrow:true|required:false|align:-|tap:true',
       '单行标题|$description|icon:${TIcons.app.codePoint}|-|-|arrow:true|required:false|align:-|tap:true',
       '单行标题|一段很长很长的内容文字，长文本自动换行，该选项的描述是一段很长的内容|-|-|-|arrow:false|required:false|align:-|tap:true',
-      '单行标题|一段很长很长很长的内容文字|-|image:assets/img/t_avatar_1.png:circle:48.0x48.0|-|arrow:true|required:false|align:-|tap:true',
-      '单行标题|$description|-|image:assets/img/t_avatar_1.png:circle:48.0x48.0|-|arrow:false|required:false|align:top|tap:true',
+      '单行标题|一段很长很长很长的内容文字|-|image:assets/img/t_avatar_1.png:circle:cover:48.0x48.0|-|arrow:true|required:false|align:-|tap:true',
+      '单行标题|$description|-|image:assets/img/t_avatar_1.png:circle:cover:48.0x48.0|-|arrow:false|required:false|align:top|tap:true',
     ]);
 
     final card = groupOf(tester, 'cell-demo-card');

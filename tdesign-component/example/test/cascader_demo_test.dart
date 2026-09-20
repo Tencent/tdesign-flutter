@@ -13,7 +13,7 @@ void main() {
     'Cascader code panel contains initial value and key conversion',
     () async {
       final source = await rootBundle.loadString(
-        'assets/code/cascader._cell.txt',
+        'assets/code/cascader.CascaderBaseExample.txt',
       );
       expect(source, contains("'name': '北京市'"));
       expect(source, contains("label: item['name']! as String"));

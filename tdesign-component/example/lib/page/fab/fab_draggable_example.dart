@@ -1,0 +1,38 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import '../../annotation/example_code.dart';
+
+@ExampleCode(group: 'fab')
+class FabDraggableExample extends StatelessWidget {
+  const FabDraggableExample({super.key, required this.onSelected});
+
+  final VoidCallback onSelected;
+
+  static Widget buildFab(VoidCallback onPressed) {
+    return TFab(
+      icon: const Icon(TIcons.gesture_press),
+      text: '拖我',
+      draggable: TFabDragAxis.all,
+      yBounds: const TFabBounds(start: 0, end: 32),
+      onPressed: onPressed,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => _selector('可移动悬浮按钮');
+
+  Widget _selector(String text) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: SizedBox(
+      width: double.infinity,
+      child: TButton(
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: onSelected,
+        child: Text(text),
+      ),
+    ),
+  );
+}

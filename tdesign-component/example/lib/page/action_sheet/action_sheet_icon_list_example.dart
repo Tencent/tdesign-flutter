@@ -1,0 +1,64 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'action_sheet')
+class ActionSheetIconListExample extends StatelessWidget {
+  const ActionSheetIconListExample({super.key});
+
+  Widget _iconList(BuildContext context) => _trigger(
+    label: '带图标列表型',
+    onPressed: () => TActionSheet.showList(
+      context,
+      cancelText: 'Cancel',
+      items: _iconItems(),
+      onSelected: (item) => _showSelection(context, item),
+    ),
+  );
+
+  Widget _trigger({required String label, required VoidCallback onPressed}) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: Text(label),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+  List<TActionSheetItem<String>> _iconItems() => [
+    const TActionSheetItem(
+      value: 'move',
+      label: 'Move',
+      icon: Icon(TIcons.enter),
+    ),
+    const TActionSheetItem(
+      value: 'important',
+      label: 'Mark as important',
+      icon: Icon(TIcons.bookmark),
+    ),
+    const TActionSheetItem(
+      value: 'unsubscribe',
+      label: 'Unsubscribe',
+      icon: Icon(TIcons.pin),
+    ),
+    const TActionSheetItem(
+      value: 'tasks',
+      label: 'Add to Tasks',
+      icon: Icon(TIcons.cloud_upload),
+    ),
+  ];
+
+  void _showSelection(BuildContext context, TActionSheetItem<String> item) {
+    TToast.showText('已选择：${item.label}', context: context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _iconList(context);
+  }
+}
