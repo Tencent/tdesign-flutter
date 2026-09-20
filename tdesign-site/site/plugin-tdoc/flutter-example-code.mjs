@@ -13,6 +13,25 @@ export const defaultExampleCodeDirectory = path.resolve(
   '../../../tdesign-component/example/assets/code',
 );
 
+export const defaultExampleCodeManifest = path.join(defaultExampleCodeDirectory, 'manifest.json');
+
+export function readFlutterExampleManifest(exampleCodeDirectory = defaultExampleCodeDirectory) {
+  const manifestPath = path.join(exampleCodeDirectory, 'manifest.json');
+  if (!fs.existsSync(manifestPath)) {
+    throw new Error(`Missing Flutter example manifest: ${manifestPath}`);
+  }
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  if (
+    manifest?.version !== 1 ||
+    typeof manifest.groups !== 'object' ||
+    manifest.groups === null ||
+    !Array.isArray(manifest.legacyGroups)
+  ) {
+    throw new Error(`Invalid Flutter example manifest: ${manifestPath}`);
+  }
+  return manifest;
+}
+
 export function readFlutterExampleCode(assetKey, exampleCodeDirectory = defaultExampleCodeDirectory) {
   if (!assetKeyPattern.test(assetKey)) {
     throw new Error(`Invalid Flutter example asset key: ${assetKey}`);
@@ -28,6 +47,40 @@ export function readFlutterExampleCode(assetKey, exampleCodeDirectory = defaultE
 export function listFlutterExampleKeys(group, exampleCodeDirectory = defaultExampleCodeDirectory) {
   if (!groupPattern.test(group)) {
     throw new Error(`Invalid Flutter example group: ${group}`);
+  }
+
+  const manifest = readFlutterExampleManifest(exampleCodeDirectory);
+  const configuredGroup = manifest.groups[group];
+  if (configuredGroup) {
+    if (!Array.isArray(configuredGroup)) {
+      throw new Error(`Invalid Flutter example manifest group: ${group}`);
+    }
+    const assetKeys = configuredGroup.flatMap((module) => {
+      if (typeof module?.title !== 'string' || !Array.isArray(module.items)) {
+        throw new Error(`Invalid Flutter example manifest group: ${group}`);
+      }
+      return module.items.map((item) => item?.assetKey);
+    });
+    const uniqueKeys = new Set(assetKeys);
+    if (
+      assetKeys.length === 0 ||
+      uniqueKeys.size !== assetKeys.length ||
+      assetKeys.some((assetKey) =>
+        typeof assetKey !== 'string' ||
+        !assetKeyPattern.test(assetKey) ||
+        !assetKey.startsWith(`${group}.`)
+      )
+    ) {
+      throw new Error(`Invalid Flutter example manifest group: ${group}`);
+    }
+    for (const assetKey of assetKeys) {
+      readFlutterExampleCode(assetKey, exampleCodeDirectory);
+    }
+    return assetKeys;
+  }
+
+  if (!manifest.legacyGroups.includes(group)) {
+    throw new Error(`Missing Flutter example code group: ${group}`);
   }
 
   const prefix = `${group}.`;

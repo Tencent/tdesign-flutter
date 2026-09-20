@@ -50,3 +50,12 @@
 - ActionSheet 大小写敏感资源路径已在 `31111055` 修复，并由最新 Linux Golden 验证通过；旧记录不再作为已知问题。
 - 当前 413 份生成片段中仍存在方法级片段引用页面字段、`setState`、helper 或 Controller 的情况；这是新验收条件下的阻塞项。
 - macOS 本地 Golden 因平台文字栅格差异出现约 7.3% diff；未更新基线，最终结论采用 CI 同款 Linux 3.32 的 2/2 精确通过结果。
+
+## 新结构基础设施检查点（2026-09-20）
+
+- Divider 页面已用 `@ExampleCodeManifest` 进入严格清单，manifest 顺序为 `DividerBaseExample`、`DividerDashedExample`，与页面两个 `ExampleModule` / `ExampleItem` 的顺序一致。
+- 独立 `*_example.dart` / `*_demo.dart` 改为整文件生成，顶层数据、helper、模型和扩展不再因只提取 Widget 与 State 而丢失。
+- Web 对严格组只读取 manifest，不扫描同组其他文件；未迁移组暂列入 `legacyGroups`，该兼容清单必须在全量迁移完成后清空。
+- 生成器聚焦测试 8/8 通过；Web 映射测试 6/6 通过；57 份组件文档仍映射 404 份现有生成代码。
+- `flutter analyze --fatal-infos`、Divider 非视觉 Widget 测试、生成器 `--check`、Demo 结构检查及站点生产构建通过。
+- macOS Divider Golden 仍受已记录的字体栅格差异影响（本次约 6.7%）；本次没有视觉改动，未更新 Linux 权威基线。

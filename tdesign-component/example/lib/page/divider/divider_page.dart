@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 import 'divider_base_example.dart';
 import 'divider_dashed_example.dart';
 
+@ExampleCodeManifest()
 class TDividerPage extends StatelessWidget {
   const TDividerPage({Key? key}) : super(key: key);
 

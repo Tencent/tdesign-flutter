@@ -9,6 +9,7 @@
 5. 用结构检查锁定 60 个入口、公开 ExampleItem 的独立文件、语义命名、配置引用、状态所有权和辅助文件归属，并阻止纯分组模块文件回流。
 6. 用类级 `@ExampleCode` 标记每个公开 ExampleItem 的实际运行 Widget；生成器直接导出整个文件所需 imports、Widget 和匹配 State，不递归猜测页面依赖。
 7. 生成公开示例清单，保留 ExampleModule / ExampleItem 顺序，并在站点 Markdown 转换时按清单展开源码。
+   迁移期间只有显式标记 `@ExampleCodeManifest` 的已完成页面进入严格清单；其余组暂列入 `legacyGroups` 保持现有展示。最终合并前清空 `legacyGroups` 并删除目录扫描兼容分支。
 8. 把资产读取和指令替换抽成无框架依赖的 `.mjs` 模块；用 Node 清单检查覆盖全部组件文档、公开示例一一对应、顺序和错误分支。
 9. 将 57 份组件文档的手写 Dart 副本替换为单一组映射；保留 API 与组件专项说明。
 

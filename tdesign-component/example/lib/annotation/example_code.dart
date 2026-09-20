@@ -1,10 +1,18 @@
 /// Marks a function, method, or standalone example Widget for the code viewer.
 ///
-/// An annotated class includes its imports and directly associated same-file
-/// `State<Widget>` class. Other helpers must be self-contained in these classes.
+/// A standalone `*_example.dart` or `*_demo.dart` class exports its complete
+/// source file so top-level data, helpers, models and extensions stay copyable.
 class ExampleCode {
   /// The generated snippet group. It must match the page's example code group.
   final String group;
 
   const ExampleCode({required this.group});
+}
+
+/// Marks a migrated Example page whose public code order is manifest-driven.
+///
+/// Every non-ignored `ExampleItem` on the page must declare a literal
+/// `methodName` and directly build the same standalone Widget class.
+class ExampleCodeManifest {
+  const ExampleCodeManifest();
 }

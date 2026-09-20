@@ -1,4 +1,7 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import test from 'node:test';
 
 import {
@@ -40,6 +43,19 @@ test('renders every generated source in a component group', () => {
   assert.doesNotMatch(source, /flutter-example/);
 });
 
+test('renders Divider in its registered ExampleItem order', () => {
+  const keys = listFlutterExampleKeys('divider');
+  assert.deepEqual(keys, [
+    'divider.DividerBaseExample',
+    'divider.DividerDashedExample',
+  ]);
+
+  const source = replaceFlutterExampleDirectives('{{ flutter-example-group divider }}');
+  assert.ok(
+    source.indexOf('DividerBaseExample') < source.indexOf('DividerDashedExample'),
+  );
+});
+
 test('rejects unsafe, malformed and missing mappings', () => {
   assert.throws(() => readFlutterExampleCode('../secret'), /Invalid Flutter example asset key/);
   assert.throws(() => replaceFlutterExampleDirectives('{{ flutter-example }}'), /Invalid Flutter example directive/);
@@ -52,4 +68,38 @@ test('rejects unsafe, malformed and missing mappings', () => {
     () => replaceFlutterExampleDirectives('{{ flutter-example-group missing }}'),
     /Missing Flutter example code group/,
   );
+});
+
+test('uses strict manifest order and excludes unregistered assets', () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'flutter-example-code-'));
+  try {
+    fs.writeFileSync(path.join(directory, 'sample.First.txt'), 'first');
+    fs.writeFileSync(path.join(directory, 'sample.Second.txt'), 'second');
+    fs.writeFileSync(path.join(directory, 'sample.Unregistered.txt'), 'hidden');
+    fs.writeFileSync(
+      path.join(directory, 'manifest.json'),
+      JSON.stringify({
+        version: 1,
+        groups: {
+          sample: [
+            {
+              title: '类型',
+              items: [
+                { description: '第二项', assetKey: 'sample.Second' },
+                { description: '第一项', assetKey: 'sample.First' },
+              ],
+            },
+          ],
+        },
+        legacyGroups: [],
+      }),
+    );
+
+    assert.deepEqual(listFlutterExampleKeys('sample', directory), [
+      'sample.Second',
+      'sample.First',
+    ]);
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
 });

@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "groups": {
+    "divider": [
+      {
+        "title": "组件类型",
+        "items": [
+          {
+            "description": "水平分割线",
+            "assetKey": "divider.DividerBaseExample"
+          }
+        ]
+      },
+      {
+        "title": "组件状态",
+        "items": [
+          {
+            "description": "虚线样式",
+            "assetKey": "divider.DividerDashedExample"
+          }
+        ]
+      }
+    ]
+  },
+  "legacyGroups": [
+    "PullDownRefresh",
+    "SwipeCell",
+    "action_sheet",
+    "avatar",
+    "backtop",
+    "badge",
+    "button",
+    "calendar",
+    "cascader",
+    "cell",
+    "checkbox",
+    "collapse",
+    "date-time-picker",
+    "dialog",
+    "drawer",
+    "dropdown_menu",
+    "empty",
+    "fab",
+    "footer",
+    "form",
+    "icon",
+    "image",
+    "image-viewer",
+    "indexes",
+    "input",
+    "link",
+    "loading",
+    "message",
+    "navbar",
+    "noticeBar",
+    "picker",
+    "popover",
+    "popup",
+    "progress",
+    "radio",
+    "radius",
+    "rate",
+    "result",
+    "search",
+    "shadows",
+    "sideBar",
+    "skeleton",
+    "slider",
+    "stepper",
+    "steps",
+    "swiper",
+    "switch",
+    "tabBar",
+    "table",
+    "tabs",
+    "tag",
+    "text",
+    "textarea",
+    "theme",
+    "timeCounter",
+    "toast",
+    "tree-select",
+    "upload"
+  ]
+}

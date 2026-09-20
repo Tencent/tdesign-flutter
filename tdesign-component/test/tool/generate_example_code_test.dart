@@ -10,8 +10,9 @@ void main() {
   late Directory outputDirectory;
 
   setUp(() {
-    fixtureRoot =
-        Directory.systemTemp.createTempSync('example-code-generator-');
+    fixtureRoot = Directory.systemTemp.createTempSync(
+      'example-code-generator-',
+    );
     sourceDirectory = Directory('${fixtureRoot.path}/lib')..createSync();
     outputDirectory = Directory('${fixtureRoot.path}/code')..createSync();
   });
@@ -25,9 +26,9 @@ void main() {
   }
 
   ExampleCodeGenerator createGenerator() => ExampleCodeGenerator(
-        sourceDirectory: sourceDirectory,
-        outputDirectory: outputDirectory,
-      );
+    sourceDirectory: sourceDirectory,
+    outputDirectory: outputDirectory,
+  );
 
   test('exports class and top-level methods without annotation', () {
     writeSource('examples', '''
@@ -46,8 +47,9 @@ void topLevelDemo() {}
       'void classDemo() {}\n',
     );
     expect(
-      File('${outputDirectory.path}/button.topLevelDemo.txt')
-          .readAsStringSync(),
+      File(
+        '${outputDirectory.path}/button.topLevelDemo.txt',
+      ).readAsStringSync(),
       'void topLevelDemo() {}\n',
     );
   });
@@ -60,8 +62,10 @@ void demo() {}
     File('${outputDirectory.path}/stale.txt').writeAsStringSync('stale');
 
     final checked = createGenerator().run(check: true);
-    expect(checked.changed,
-        containsAll(<String>['button.demo.txt', 'stale:stale.txt']));
+    expect(
+      checked.changed,
+      containsAll(<String>['button.demo.txt', 'stale:stale.txt']),
+    );
     expect(File('${outputDirectory.path}/stale.txt').existsSync(), isTrue);
 
     createGenerator().run();
@@ -115,7 +119,7 @@ void demo() {}
 
     // First verbose run should detect and write the snippet.
     final verboseResult = createGenerator().run(verbose: true);
-    expect(verboseResult.changed, <String>['button.demo.txt']);
+    expect(verboseResult.changed, <String>['button.demo.txt', 'manifest.json']);
     expect(
       File('${outputDirectory.path}/button.demo.txt').readAsStringSync(),
       'void demo() {}\n',
@@ -150,6 +154,120 @@ class MoreExamples {
             .having((error) => error.message, 'message', contains('invalid'))
             .having((error) => error.message, 'message', contains('missing'))
             .having((error) => error.message, 'message', contains('duplicate')),
+      ),
+    );
+  });
+
+  test('exports a complete standalone example file', () {
+    writeSource('counter_example', '''
+import 'package:flutter/material.dart';
+import '../annotation/example_code.dart';
+
+const initialValue = 3;
+
+@ExampleCode(group: 'counter')
+class CounterExample extends StatelessWidget {
+  const CounterExample({super.key});
+  @override
+  Widget build(BuildContext context) => Text(formatValue(initialValue));
+}
+
+String formatValue(int value) => 'value: \$value';
+''');
+
+    createGenerator().run();
+    final snippet = File(
+      '${outputDirectory.path}/counter.CounterExample.txt',
+    ).readAsStringSync();
+    expect(snippet, contains('const initialValue = 3;'));
+    expect(snippet, contains('String formatValue(int value)'));
+    expect(snippet, isNot(contains('example_code.dart')));
+    expect(snippet, isNot(contains('@ExampleCode')));
+  });
+
+  test('generates strict page order and records legacy groups', () {
+    writeSource('divider_base_example', '''
+@ExampleCode(group: 'divider')
+class DividerBaseExample {}
+''');
+    writeSource('divider_dashed_example', '''
+@ExampleCode(group: 'divider')
+class DividerDashedExample {}
+''');
+    writeSource('legacy', '''
+@ExampleCode(group: 'legacy')
+void legacyDemo() {}
+''');
+    writeSource('divider_page', '''
+@ExampleCodeManifest()
+class DividerPage {
+  Object build(Object context) => ExamplePage(
+    exampleCodeGroup: 'divider',
+    children: [
+      ExampleModule(
+        title: '组件类型',
+        children: [
+          ExampleItem(
+            desc: '虚线样式',
+            methodName: 'DividerDashedExample',
+            builder: (_) => const DividerDashedExample(),
+          ),
+          ExampleItem(
+            desc: '水平分割线',
+            methodName: 'DividerBaseExample',
+            builder: (_) => const DividerBaseExample(),
+          ),
+        ],
+      ),
+    ],
+  );
+}
+''');
+
+    createGenerator().run();
+    final manifest = File(
+      '${outputDirectory.path}/manifest.json',
+    ).readAsStringSync();
+    expect(
+      manifest.indexOf('divider.DividerDashedExample'),
+      lessThan(manifest.indexOf('divider.DividerBaseExample')),
+    );
+    expect(manifest, contains('"legacyGroups": [\n    "legacy"\n  ]'));
+  });
+
+  test('rejects an invalid strict page mapping', () {
+    writeSource('sample_example', '''
+@ExampleCode(group: 'sample')
+class SampleExample {}
+''');
+    writeSource('sample_page', '''
+@ExampleCodeManifest()
+class SamplePage {
+  Object build(Object context) => ExamplePage(
+    exampleCodeGroup: 'sample',
+    children: [
+      ExampleModule(
+        title: '类型',
+        children: [
+          ExampleItem(
+            methodName: 'WrongExample',
+            builder: (_) => const SampleExample(),
+          ),
+        ],
+      ),
+    ],
+  );
+}
+''');
+
+    expect(
+      () => createGenerator().run(),
+      throwsA(
+        isA<StateError>().having(
+          (error) => error.message,
+          'message',
+          contains('methodName to the directly built Widget class'),
+        ),
       ),
     );
   });

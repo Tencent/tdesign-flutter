@@ -8,7 +8,8 @@
 - [ ] TODO 将全部公开 ExampleItem 引用的 Widget 拆为独立语义 example 文件，ExampleItem 配置保留在页面入口
 - [ ] TODO 将页面级字段、Controller、helper 和生命周期迁入对应 example Widget/State
 - [ ] TODO 将全部公开示例改为类级 `@ExampleCode` 并移除方法级隐藏依赖
-- [ ] TODO 生成保持 ExampleModule / ExampleItem 顺序的公开示例清单
+- [ ] TODO 将全部页面登记到公开示例清单并清空 `legacyGroups`
+- [x] DONE 建立 manifest 生成、严格页面标记和 Web 消费基础设施，并用 Divider 验证注册顺序
 - [ ] TODO 增加公开 ExampleItem 与生成资产一一对应及源码解析/编译门禁
 - [x] DONE 增加 Demo 目录结构回归检查
 - [x] DONE 实现 Web 示例资产映射与错误门禁
