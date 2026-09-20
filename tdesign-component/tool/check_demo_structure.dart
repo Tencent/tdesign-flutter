@@ -20,6 +20,7 @@ void main() {
       '${_pageDirectory.path}/'.length,
     );
     final segments = relativePath.split(Platform.pathSeparator);
+    final fileName = segments.last;
     final source = entity.readAsStringSync();
     final exampleAnnotations = RegExp(
       r'^@ExampleCode\(',
@@ -29,6 +30,9 @@ void main() {
       annotatedExamples.add(entity);
       if (exampleAnnotations != 1) {
         errors.add('公开示例文件必须且只能声明一个 @ExampleCode：$relativePath');
+      }
+      if (!fileName.endsWith('_example.dart')) {
+        errors.add('公开示例文件必须以 _example.dart 结尾：$relativePath');
       }
     }
 
@@ -44,7 +48,6 @@ void main() {
       continue;
     }
     final component = segments.first;
-    final fileName = segments.last;
     final isEntry = fileName == '${component}_page.dart';
     if (isEntry) {
       entries.add(entity);

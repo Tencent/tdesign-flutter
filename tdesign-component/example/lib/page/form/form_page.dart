@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
-import 'form_basic_demo.dart';
+import 'form_basic_example.dart';
 
 /// TForm、TFormItem 与 TFormField 组合示例页面。
 @ExampleCodeManifest()
