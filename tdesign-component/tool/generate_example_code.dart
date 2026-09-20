@@ -188,9 +188,11 @@ class _ExampleCodeCollector extends RecursiveAstVisitor<void> {
     var source = _sourceWithoutMarker(node, annotation);
     if (node is ClassDeclaration) {
       final imports = _unit.directives.whereType<ImportDirective>().where(
-        (directive) =>
-            !(directive.uri.stringValue?.endsWith('example_code.dart') ??
-                false),
+        (directive) {
+          final uri = directive.uri.stringValue;
+          return !(uri?.endsWith('example_code.dart') ?? false) &&
+              !(uri?.endsWith('example_widget.dart') ?? false);
+        },
       );
       final states = _unit.declarations.whereType<ClassDeclaration>().where(
         (declaration) =>

@@ -1,4 +1,11 @@
-Widget _buildBaseDividers(BuildContext context) {
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class DividerBaseExample extends StatelessWidget {
+  const DividerBaseExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -26,3 +33,16 @@ Widget _buildBaseDividers(BuildContext context) {
       ),
     );
   }
+
+  Widget _sectionTitle(BuildContext context, String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: TText(
+        text,
+        font: context.tTheme.fontBodyMedium,
+        style: const TextStyle(height: 20 / 14),
+        textColor: context.tTheme.textColorSecondary,
+      ),
+    );
+  }
+}

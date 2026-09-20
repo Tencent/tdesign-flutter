@@ -1,15 +1,6 @@
-part of 'divider_page.dart';
+import '../../base/example_widget.dart';
+import 'divider_dashed_example.dart';
 
-extension _DividerStatusModule on TDividerPage {
-  ExampleModule get _dividerStatusModule => ExampleModule(
-    title: '组件状态',
-    children: [
-      ExampleItem(
-        key: const Key('divider-dashed-example'),
-        desc: '虚线样式',
-        center: false,
-        builder: _buildDashedDividers,
-      ),
-    ],
-  );
+ExampleModule dividerStatusModule() {
+  return ExampleModule(title: '组件状态', children: [dividerDashedExampleItem]);
 }

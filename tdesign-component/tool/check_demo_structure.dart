@@ -34,9 +34,14 @@ void main() {
         errors.add('入口文件内仍直接声明 ExampleModule：$relativePath');
       }
     }
-    if (source.contains('ExampleModule get ')) {
+    final declaresModuleGetter = source.contains('ExampleModule get ');
+    final declaresModuleFunction = RegExp(
+      r'ExampleModule\s+\w+\s*\(\s*\)',
+    ).hasMatch(source);
+    if (declaresModuleGetter || declaresModuleFunction) {
       modules.add(entity);
-      if (!source.contains("part of '${component}_page.dart';")) {
+      if (declaresModuleGetter &&
+          !source.contains("part of '${component}_page.dart';")) {
         errors.add('模块文件未归属于语义入口：$relativePath');
       }
       if (fileName.contains('module_')) {
@@ -48,8 +53,8 @@ void main() {
   if (entries.length != 60) {
     errors.add('应包含 57 个组件入口和 3 个额外基础入口，共 60 个；实际 ${entries.length} 个');
   }
-  if (modules.length != 141) {
-    errors.add('应包含 141 个按 ExampleModule 拆分的模块文件；实际 ${modules.length} 个');
+  if (modules.length != 143) {
+    errors.add('应包含 143 个按 ExampleModule 拆分的模块文件；实际 ${modules.length} 个');
   }
 
   final config = _configFile.readAsStringSync();

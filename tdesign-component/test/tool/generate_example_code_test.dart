@@ -73,6 +73,7 @@ void demo() {}
     writeSource('stateful', '''
 import 'package:flutter/material.dart';
 import '../annotation/example_code.dart';
+import '../base/example_widget.dart';
 
 @ExampleCode(group: 'counter')
 class Counter extends StatefulWidget {
@@ -101,6 +102,7 @@ class _OtherState extends State<Other> {}
     expect(snippet, contains('setState(() => value++)'));
     expect(snippet, isNot(contains('_OtherState')));
     expect(snippet, isNot(contains('example_code.dart')));
+    expect(snippet, isNot(contains('example_widget.dart')));
     expect(snippet, isNot(contains('@ExampleCode')));
     expect(createGenerator().run(check: true).isUpToDate, isTrue);
   });

@@ -1,4 +1,11 @@
-Widget _buildDashedDividers(BuildContext context) {
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class DividerDashedExample extends StatelessWidget {
+  const DividerDashedExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return const SizedBox(
       width: double.infinity,
       child: Column(
@@ -20,3 +27,4 @@ Widget _buildDashedDividers(BuildContext context) {
       ),
     );
   }
+}
