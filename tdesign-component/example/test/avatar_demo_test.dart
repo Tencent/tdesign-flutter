@@ -56,7 +56,7 @@ void main() {
     await pumpFullDemoPage(tester, avatarDemoPageTestSpec, ThemeMode.light);
 
     final source = await rootBundle.loadString(
-      'assets/code/avatar._buildSizeAvatar.txt',
+      'assets/code/avatar.SizeAvatarExample.txt',
     );
     expect(source, contains('Widget avatarRow(TAvatarSize size)'));
     expect(source, isNot(contains('_AvatarSizeRow')));

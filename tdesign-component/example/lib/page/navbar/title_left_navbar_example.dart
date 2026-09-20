@@ -1,0 +1,38 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'navbar')
+class TitleLeftNavbarExample extends StatelessWidget {
+  const TitleLeftNavbarExample({super.key});
+
+  Widget _titleLeftNavbar(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: TNavBar(
+        title: const Text('标题文字'),
+        centerTitle: false,
+        titleMargin: 0,
+        useDefaultBack: true,
+        actions: [
+          TNavBarItem(
+            icon: TIcons.home,
+            iconSize: 24,
+            onTap: () => TToast.showText('点击了首页', context: context),
+          ),
+          TNavBarItem(
+            icon: TIcons.ellipsis,
+            iconSize: 24,
+            onTap: () => TToast.showText('点击了更多', context: context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _titleLeftNavbar(context);
+  }
+}

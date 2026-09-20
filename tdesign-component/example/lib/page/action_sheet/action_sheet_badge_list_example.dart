@@ -1,0 +1,64 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'action_sheet')
+class ActionSheetBadgeListExample extends StatelessWidget {
+  const ActionSheetBadgeListExample({super.key});
+
+  Widget _badgeList(BuildContext context) => _trigger(
+    label: '带徽标列表型',
+    onPressed: () => TActionSheet.showList(
+      context,
+      cancelText: 'Cancel',
+      items: _badgeItems(),
+      onSelected: (item) => _showSelection(context, item),
+    ),
+  );
+
+  Widget _trigger({required String label, required VoidCallback onPressed}) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: Text(label),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+  List<TActionSheetItem<String>> _badgeItems() => [
+    const TActionSheetItem(
+      value: 'move',
+      label: 'Move',
+      badge: TBadgeConfig(variant: TBadgeVariant.dot),
+    ),
+    const TActionSheetItem(
+      value: 'important',
+      label: 'Mark as important',
+      badge: TBadgeConfig(label: '8'),
+    ),
+    const TActionSheetItem(
+      value: 'unsubscribe',
+      label: 'Unsubscribe',
+      badge: TBadgeConfig(label: '99'),
+    ),
+    const TActionSheetItem(
+      value: 'tasks',
+      label: 'Add to Tasks',
+      badge: TBadgeConfig(label: '99+'),
+    ),
+  ];
+
+  void _showSelection(BuildContext context, TActionSheetItem<String> item) {
+    TToast.showText('已选择：${item.label}', context: context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _badgeList(context);
+  }
+}

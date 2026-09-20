@@ -1,5 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_action_sheet_page.dart';
+import 'package:tdesign_flutter_example/page/action_sheet/action_sheet_page.dart';
 
 import 'demo_page_test_utils.dart';
 

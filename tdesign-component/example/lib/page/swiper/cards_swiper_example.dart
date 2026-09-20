@@ -1,0 +1,61 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'swiper')
+class CardsSwiperExample extends StatelessWidget {
+  const CardsSwiperExample({super.key});
+
+  Widget _buildCardsSwiper(BuildContext context) {
+    final cardTheme = TSwiperThemeData(
+      borderRadius: BorderRadius.zero,
+      paginationMargin: const EdgeInsets.only(top: 12),
+      activeColor: context.tTheme.brandNormalColor,
+      inactiveColor: context.tTheme.bgColorComponent,
+    );
+    List<Widget> buildImages() => List.generate(6, (index) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(context.tTheme.radiusLarge),
+        child: Image.asset(
+          index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
+          fit: BoxFit.cover,
+          semanticLabel: '图片 ${index + 1}',
+        ),
+      );
+    });
+    Widget buildCard(TSwiperPageEffect effect) {
+      return SizedBox(
+        height: 210,
+        child: Theme(
+          data: Theme.of(context).mergeExtension(cardTheme),
+          child: TSwiper(
+            loop: true,
+            autoplay: false,
+            pagination: TSwiperPaginationVariant.dots,
+            paginationPlacement: TSwiperPaginationPlacement.outside,
+            pageEffect: effect,
+            viewportFraction: 0.82,
+            children: buildImages(),
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        buildCard(TSwiperPageEffect.cardMargin),
+        const SizedBox(height: 42),
+        buildCard(TSwiperPageEffect.scale),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final content = (() {
+      return _buildCardsSwiper(context);
+    })();
+    return SizedBox(height: 462, child: content);
+  }
+}

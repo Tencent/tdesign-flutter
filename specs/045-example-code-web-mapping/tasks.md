@@ -1,0 +1,24 @@
+# 实施任务
+
+- [x] DONE 明确 Table 示例和 Web 文档的单源边界
+- [x] DONE 重构 Table 页面与自包含示例
+- [x] DONE 迁移全部组件、基础入口和辅助 example 到所属目录
+- [x] DONE 历史阶段将 141 个 ExampleModule 拆为语义模块文件
+- [x] DONE 将 ExampleModule 分组和 ExampleItem 顺序合并回页面入口，删除纯分组模块文件
+- [x] DONE 将全部公开 ExampleItem 引用的 Widget 拆为独立语义 example 文件，ExampleItem 配置保留在页面入口
+- [x] DONE 将页面级字段、Controller、helper 和生命周期迁入对应 example Widget/State
+- [x] DONE 将全部公开示例改为类级 `@ExampleCode` 并移除方法级隐藏依赖
+- [x] DONE 将全部页面登记到公开示例清单并清空 `legacyGroups`
+- [x] DONE 建立 manifest 生成、严格页面标记和 Web 消费基础设施，并用 Divider 验证注册顺序
+- [x] DONE 增加公开 ExampleItem 与生成资产一一对应及源码解析/编译门禁
+- [x] DONE 增加 Demo 目录结构回归检查
+- [x] DONE 实现 Web 示例资产映射与错误门禁
+- [x] DONE 将全部 57 份组件文档迁移为组映射
+- [x] DONE 补充 Table 代码面板、多组件抽查与全量映射清单测试
+- [x] DONE 修复站点代码块 Dart grammar 异常导致的 URL 编码源码泄漏
+- [x] DONE 让站点开发命令同时启动 Vite 与 Flutter Web，并为开发/生产环境选择正确预览地址
+- [x] DONE 清理 19 个基础组件无状态实现，并同步其中 18 份公开可复制代码资产
+- [x] DONE 从公开 FAB 代码清单移除仅承担页面背景的骨架辅助内容
+- [x] DONE 全量复核 374 个公开示例的 Widget 状态归属，清理空 State、重复 `StatefulBuilder` 并修复超时计数状态
+- [x] DONE `42bdd37a` 的 Linux Golden 与全部远端 CI 通过；双版本 analyze/test、Android/iOS/Web 构建、站点构建与 autofix 均为绿色
+- [ ] TODO 完成 Review

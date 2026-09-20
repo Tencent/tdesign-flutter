@@ -8,7 +8,7 @@ isComponent: true
 <span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
 
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
+通过统一入口引入 TDesign Flutter 组件：
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -16,62 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_backtop_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_backtop_page.dart)
-
-### 1 组件类型
-
-圆形返回顶部
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildCircleBackTop(BuildContext context) {
-    return getCustomButton(context, '圆形返回顶部', () {
-      setState(() {
-        showBackTop = true;
-        if (controller.hasClients) {
-          controller.jumpTo(500);
-        }
-        style = TBackTopStyle.circle;
-      });
-    });
-  }</pre>
-
-</td-code-block>
-                                  
-
-半圆形返回顶部
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildHalfCircleBackTop(BuildContext context) {
-    return Column(
-      children: [
-        getCustomButton(context, '半圆形返回顶部', () {
-          setState(() {
-            showBackTop = true;
-            if (controller.hasClients) {
-              controller.jumpTo(500);
-            }
-            style = TBackTopStyle.halfCircle;
-          });
-        }),
-        Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
-          child: Wrap(
-            spacing: 16,
-            runSpacing: 24,
-            children: List.generate(6, (_) => getDemoBox(context)),
-          ),
-        )
-      ],
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
+{{ flutter-example-group backtop }}
 
 ## API
 ### TBackTop

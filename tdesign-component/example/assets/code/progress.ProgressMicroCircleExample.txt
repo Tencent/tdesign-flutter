@@ -1,0 +1,16 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class ProgressMicroCircleExample extends StatelessWidget {
+  const ProgressMicroCircleExample({super.key});
+
+  Widget _buildMicroCircle(BuildContext context) {
+    return TProgress(variant: TProgressVariant.microCircular, value: 0.3);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildMicroCircle(context);
+  }
+}

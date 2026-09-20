@@ -1,0 +1,49 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class CheckboxPositionsExample extends StatefulWidget {
+  const CheckboxPositionsExample({super.key});
+
+  @override
+  State<CheckboxPositionsExample> createState() =>
+      _CheckboxPositionsExampleState();
+}
+
+class _CheckboxPositionsExampleState extends State<CheckboxPositionsExample> {
+  Widget _positions(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TCheckboxThemeData(variant: TCheckboxVariant.circle),
+      ),
+      child: Column(
+        children: [
+          TCheckbox(
+            value: _leftPositionValue,
+            title: '多选',
+            onChanged: (value) {
+              setState(() => _leftPositionValue = value == true);
+            },
+          ),
+          const SizedBox(height: 16),
+          TCheckbox(
+            value: _rightPositionValue,
+            title: '多选',
+            contentDirection: TContentDirection.left,
+            onChanged: (value) {
+              setState(() => _rightPositionValue = value == true);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  bool _leftPositionValue = true;
+
+  bool _rightPositionValue = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return _positions(context);
+  }
+}

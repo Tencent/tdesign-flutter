@@ -1,0 +1,43 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'collapse')
+class CardCollapseExample extends StatefulWidget {
+  const CardCollapseExample({super.key});
+
+  @override
+  State<CardCollapseExample> createState() => _CardCollapseExampleState();
+}
+
+class _CardCollapseExampleState extends State<CardCollapseExample> {
+  /// 核心片段：导入 material.dart 和 tdesign_flutter.dart，并放入
+  /// StatefulWidget 的 State。`_cardValue` 是由 State 持有的展开值列表，
+  /// 初始仅包含三项中的首项；`onChanged` 通过 `setState` 写回完整列表。
+  /// `randomString` 是页面级常量，仅作为面板正文示例。
+  Widget _buildCardCollapse(BuildContext context) {
+    return TCollapse<String>(
+      variant: TCollapseVariant.card,
+      value: _cardValue,
+      onChanged: (value) => setState(() => _cardValue = value),
+      children: List.generate(3, (index) {
+        return TCollapsePanel<String>(
+          value: 'card-$index',
+          headerBuilder: (context, isExpanded) => const Text('折叠面板标题'),
+          body: const Text(randomString),
+        );
+      }).toList(),
+    );
+  }
+
+  List<String> _cardValue = const ['card-0'];
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildCardCollapse(context);
+  }
+}
+
+const String randomString =
+    '此处可自定义内容此处可自定义内容此处可自定义内容此处可自定义内容此处可自定义内容此处可自定义内容此处可自定义内容此处可自定义内容';

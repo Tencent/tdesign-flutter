@@ -1,0 +1,65 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class CheckboxCheckAllExample extends StatefulWidget {
+  const CheckboxCheckAllExample({super.key});
+
+  @override
+  State<CheckboxCheckAllExample> createState() =>
+      _CheckboxCheckAllExampleState();
+}
+
+class _CheckboxCheckAllExampleState extends State<CheckboxCheckAllExample> {
+  Widget _checkAll(BuildContext context) {
+    final enabledValues = _checkAllOptions
+        .map((option) => option.value)
+        .toList();
+    final allSelected = _checkAllValue.length == enabledValues.length;
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TCheckboxThemeData(variant: TCheckboxVariant.circle),
+      ),
+      child: Column(
+        children: [
+          TCheckbox(
+            value: allSelected
+                ? true
+                : _checkAllValue.isEmpty
+                ? false
+                : null,
+            title: '全选',
+            onChanged: (checked) {
+              setState(() {
+                _checkAllValue = checked == true ? enabledValues : [];
+              });
+            },
+            showDivider: true,
+          ),
+          TCheckboxGroup<String>(
+            value: _checkAllValue,
+            options: _checkAllOptions,
+            showDivider: true,
+            onChanged: (value) => setState(() => _checkAllValue = value),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static const _checkAllOptions = [
+    TCheckboxOption(value: 'a', label: '多选'),
+    TCheckboxOption(value: 'b', label: '多选'),
+    TCheckboxOption(
+      value: 'c',
+      label: '多选',
+      subTitle: '单选描述信息单选描述信息单选描述信息单选描述信息单选描述信息单选描述信息单选描述信息',
+    ),
+  ];
+
+  List<String> _checkAllValue = ['a', 'b', 'c'];
+
+  @override
+  Widget build(BuildContext context) {
+    return _checkAll(context);
+  }
+}

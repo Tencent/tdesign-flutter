@@ -1,6 +1,0 @@
-Widget _buildSquareBadge(BuildContext context) => const TBadge(
-    label: '8',
-    variant: TBadgeVariant.square,
-    offset: Offset(2, -2),
-    child: Icon(TIcons.notification),
-  );

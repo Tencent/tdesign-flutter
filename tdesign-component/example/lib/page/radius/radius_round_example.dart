@@ -1,0 +1,24 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'radius')
+class RadiusRoundExample extends StatelessWidget {
+  const RadiusRoundExample({super.key});
+
+  Widget _buildRadiusRound(BuildContext context) {
+    // 胶囊型，数值设置较大
+    return Container(
+      decoration: BoxDecoration(
+        color: context.tTheme.brandNormalColor,
+        borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildRadiusRound(context);
+  }
+}

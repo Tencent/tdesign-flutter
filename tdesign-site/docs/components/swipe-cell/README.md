@@ -13,7 +13,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_swipe_cell_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_swipe_cell_page.dart)
+{{ flutter-example-group SwipeCell }}
 
 ## 使用说明
 

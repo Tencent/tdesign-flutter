@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'dialog')
+class FeedbackDialogsExample extends StatelessWidget {
+  const FeedbackDialogsExample({super.key});
+
+  Widget _feedbackDialogs(BuildContext context) {
+    return _scenarios(context, [
+      _trigger('反馈类-带标题', () {
+        TDialog.show<bool>(
+          context,
+          barrierDismissible: true,
+          dialog: const TConfirmDialog(title: '对话框标题', content: _description),
+        );
+      }),
+      _trigger('反馈类-无标题', () {
+        TDialog.show<bool>(
+          context,
+          barrierDismissible: true,
+          dialog: const TConfirmDialog(content: _description),
+        );
+      }),
+      _trigger('反馈类-纯标题', () {
+        TDialog.show<bool>(
+          context,
+          barrierDismissible: true,
+          dialog: const TConfirmDialog(title: '对话框标题'),
+        );
+      }),
+      _trigger('反馈类-内容超长', () {
+        TDialog.show<void>(
+          context,
+          barrierDismissible: true,
+          dialog: TDialog(
+            title: const Text('对话框标题'),
+            maxHeight: 400,
+            content: Text(List.filled(48, '这里是辅助内容文案。').join()),
+            actions: const [
+              TDialogAction(
+                child: Text('知道了'),
+                role: TDialogActionRole.primary,
+              ),
+            ],
+          ),
+        );
+      }),
+    ]);
+  }
+
+  Widget _scenarios(BuildContext context, List<Widget> children) {
+    return Column(
+      children: [
+        for (var index = 0; index < children.length; index++) ...[
+          if (index > 0) SizedBox(height: context.tTheme.spacer16),
+          children[index],
+        ],
+      ],
+    );
+  }
+
+  Widget _trigger(String text, VoidCallback onPressed) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: onPressed,
+        child: Text(text),
+      ),
+    );
+  }
+
+  static const _description = '告知当前状态、信息和解决方法，等内容。描述尽可能控制在三行内。';
+
+  @override
+  Widget build(BuildContext context) {
+    return _feedbackDialogs(context);
+  }
+}

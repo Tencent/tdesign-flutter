@@ -1,3 +1,0 @@
-/// 纯文字
-    Widget _buildPureTextLoading(BuildContext context) =>
-      const TLoading(icon: null, text: '加载中...');

@@ -3,7 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
-import 'package:tdesign_flutter_example/page/t_pull_down_refresh_page.dart';
+import 'package:tdesign_flutter_example/page/pull_down_refresh/pull_down_refresh_page.dart';
+import 'package:tdesign_flutter_example/page/pull_down_refresh/pull_down_refresh_timeout_example.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
 import 'demo_page_test_utils.dart';
@@ -85,6 +86,27 @@ void main() {
     expect(find.text('正在刷新'), findsOneWidget);
     expect(tester.takeException(), isNull);
     await tester.pump(const Duration(seconds: 2));
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(const Duration(seconds: 1));
+  });
+
+  testWidgets('超时回调更新公开示例中的刷新次数', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        home: const Scaffold(body: PullDownRefreshTimeoutExample()),
+      ),
+    );
+
+    expect(find.text('超时刷新次数：0'), findsOneWidget);
+    final refresh = tester.widget<TPullDownRefresh>(
+      find.byType(TPullDownRefresh),
+    );
+    refresh.onStateChanged!(TPullDownRefreshState.timeout);
+    await tester.pump();
+
+    expect(find.text('超时刷新次数：1'), findsOneWidget);
+    TToast.dismissAll();
     await tester.pumpWidget(const SizedBox());
     await tester.pump(const Duration(seconds: 1));
   });

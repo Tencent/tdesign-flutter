@@ -1,0 +1,34 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'text')
+class TextBackgroundExample extends StatelessWidget {
+  const TextBackgroundExample({super.key});
+
+  Widget _buildBackground(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TText(
+          '字形背景',
+          style: TextStyle(backgroundColor: context.tTheme.brandFocusColor),
+        ),
+        const SizedBox(height: 12),
+        ColoredBox(
+          color: context.tTheme.brandFocusColor,
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            child: TText('行盒背景'),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildBackground(context);
+  }
+}

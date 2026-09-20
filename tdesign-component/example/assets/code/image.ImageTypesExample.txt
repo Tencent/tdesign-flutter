@@ -1,0 +1,79 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class ImageTypesExample extends StatelessWidget {
+  const ImageTypesExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildImageTypes(context);
+  }
+}
+
+Widget _buildImageTypes(BuildContext context) {
+  const source = 'assets/img/image.png';
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      _demoRow([
+        _demoItem('裁切', const TImage(src: source, fit: BoxFit.cover)),
+        _demoItem(
+          '适应高',
+          const TImage(
+            src: source,
+            width: 89,
+            height: 72,
+            fit: BoxFit.fitHeight,
+          ),
+        ),
+        _demoItem('拉伸', const TImage(src: source, width: 134, height: 72)),
+      ]),
+      const SizedBox(height: 24),
+      _demoRow([
+        _demoItem('方形', const TImage(src: source, fit: BoxFit.cover)),
+        _demoItem(
+          '圆角方形',
+          const TImage(
+            src: source,
+            fit: BoxFit.cover,
+            shape: TImageShape.roundedSquare,
+          ),
+        ),
+        _demoItem(
+          '圆形',
+          const TImage(
+            src: source,
+            fit: BoxFit.cover,
+            shape: TImageShape.circle,
+          ),
+        ),
+      ]),
+    ],
+  );
+}
+
+Widget _demoRow(List<Widget> children) {
+  return Align(
+    alignment: Alignment.centerLeft,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (var index = 0; index < children.length; index++) ...[
+            if (index > 0) const SizedBox(width: 24),
+            children[index],
+          ],
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _demoItem(String label, Widget image) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [TText(label), const SizedBox(height: 16), image],
+  );
+}

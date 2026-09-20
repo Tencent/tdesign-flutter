@@ -7,15 +7,21 @@ class StepperDisabledExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        TStepper(
-          key: ValueKey('stepper-disabled'),
-          value: 0,
-          variant: TStepperVariant.filled,
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: const Padding(
+        padding: EdgeInsets.all(16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            TStepper(
+              key: ValueKey('stepper-disabled'),
+              value: 0,
+              variant: TStepperVariant.filled,
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

@@ -1,0 +1,52 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'progress')
+class ProgressPlumpStatusExample extends StatelessWidget {
+  const ProgressPlumpStatusExample({super.key});
+
+  Widget _buildPlumpStatus(BuildContext context) {
+    return Column(
+      children: [
+        TProgress(variant: TProgressVariant.plump, value: 0.8),
+        const SizedBox(height: 8),
+        TProgress(
+          variant: TProgressVariant.plump,
+          value: 1,
+          status: TProgressStatus.success,
+        ),
+        const SizedBox(height: 8),
+        TProgress(
+          variant: TProgressVariant.plump,
+          value: 0.8,
+          status: TProgressStatus.warning,
+        ),
+        const SizedBox(height: 8),
+        TProgress(
+          variant: TProgressVariant.plump,
+          value: 0.8,
+          status: TProgressStatus.error,
+        ),
+        const SizedBox(height: 8),
+        TProgress(
+          variant: TProgressVariant.plump,
+          value: 0.8,
+          gradient: LinearGradient(
+            colors: [
+              context.tTheme.brandNormalColor,
+              context.tTheme.successNormalColor,
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildPlumpStatus(context);
+  }
+}

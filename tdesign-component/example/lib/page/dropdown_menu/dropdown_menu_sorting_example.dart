@@ -1,0 +1,65 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'dropdown_menu')
+class DropdownMenuSortingExample extends StatefulWidget {
+  const DropdownMenuSortingExample({super.key});
+
+  static const productOptions = <TDropdownMenuOption<String>>[
+    TDropdownMenuOption(value: 'all', label: '全部产品'),
+    TDropdownMenuOption(value: 'new', label: '最新产品'),
+    TDropdownMenuOption(value: 'hot', label: '最火产品'),
+    TDropdownMenuOption(value: 'disabled', label: '禁用选项', disabled: true),
+  ];
+
+  @override
+  State<DropdownMenuSortingExample> createState() =>
+      _DropdownMenuSortingExampleState();
+}
+
+class _DropdownMenuSortingExampleState
+    extends State<DropdownMenuSortingExample> {
+  var _product = 'all';
+  var _sorter = 'default';
+
+  Widget _sorting(BuildContext context) {
+    return TDropdownMenu(
+      items: [
+        TDropdownMenuItem(
+          label: switch (_product) {
+            'new' => '最新产品',
+            'hot' => '最火产品',
+            _ => '全部产品',
+          },
+          panelBuilder: (context, controller) =>
+              TDropdownSingleSelectPanel<String>(
+                controller: controller,
+                value: _product,
+                options: DropdownMenuSortingExample.productOptions,
+                onChanged: (value) => setState(() => _product = value),
+              ),
+        ),
+        TDropdownMenuItem(
+          label: _sorter == 'default' ? '默认排序' : '价格从高到低',
+          panelBuilder: (context, controller) =>
+              TDropdownSingleSelectPanel<String>(
+                controller: controller,
+                value: _sorter,
+                options: const [
+                  TDropdownMenuOption(value: 'default', label: '默认排序'),
+                  TDropdownMenuOption(value: 'price', label: '价格从高到低'),
+                ],
+                onChanged: (value) => setState(() => _sorter = value),
+              ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _sorting(context);
+  }
+}

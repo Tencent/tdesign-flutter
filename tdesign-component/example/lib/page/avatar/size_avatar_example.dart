@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'avatar')
+class SizeAvatarExample extends StatelessWidget {
+  const SizeAvatarExample({super.key});
+
+  /// 组件尺寸
+  Widget _buildSizeAvatar(BuildContext context) {
+    Widget avatarRow(TAvatarSize size) {
+      return Row(
+        children: [
+          TAvatar(
+            size: size,
+            image: const AssetImage('assets/img/t_avatar_1.png'),
+          ),
+          const SizedBox(width: 32),
+          TAvatar(
+            size: size,
+            backgroundColor: context.tTheme.brandNormalColor,
+            foregroundColor: context.tTheme.whiteColor1,
+            child: const Text('A'),
+          ),
+          const SizedBox(width: 32),
+          TAvatar(size: size),
+        ],
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        avatarRow(TAvatarSize.large),
+        const SizedBox(height: 24),
+        avatarRow(TAvatarSize.medium),
+        const SizedBox(height: 24),
+        avatarRow(TAvatarSize.small),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildSizeAvatar(context);
+  }
+}

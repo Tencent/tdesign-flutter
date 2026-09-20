@@ -105,17 +105,17 @@ void main() {
 
   testWidgets('十一条查看代码资产均来自当前实现且依赖完整', (tester) async {
     const files = [
-      'timeCounter._buildSimple.txt',
-      'timeCounter._buildMillisecondSimple.txt',
-      'timeCounter._buildSquareSimple.txt',
-      'timeCounter._buildRoundSimple.txt',
-      'timeCounter._buildUnitSimple.txt',
-      'timeCounter._buildCustomUnitSimple.txt',
-      'timeCounter._buildDefaultSizes.txt',
-      'timeCounter._buildMillisecondSizes.txt',
-      'timeCounter._buildSquareSizes.txt',
-      'timeCounter._buildRoundSizes.txt',
-      'timeCounter._buildUnitSizes.txt',
+      'timeCounter.TimeCounterSimpleExample.txt',
+      'timeCounter.TimeCounterMillisecondSimpleExample.txt',
+      'timeCounter.TimeCounterSquareSimpleExample.txt',
+      'timeCounter.TimeCounterRoundSimpleExample.txt',
+      'timeCounter.TimeCounterUnitSimpleExample.txt',
+      'timeCounter.TimeCounterCustomUnitSimpleExample.txt',
+      'timeCounter.TimeCounterDefaultSizesExample.txt',
+      'timeCounter.TimeCounterMillisecondSizesExample.txt',
+      'timeCounter.TimeCounterSquareSizesExample.txt',
+      'timeCounter.TimeCounterRoundSizesExample.txt',
+      'timeCounter.TimeCounterUnitSizesExample.txt',
     ];
     for (final file in files) {
       final source = await rootBundle.loadString('assets/code/$file');

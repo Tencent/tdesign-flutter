@@ -1,0 +1,34 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'tag')
+class IconFillTagExample extends StatelessWidget {
+  const IconFillTagExample({super.key});
+
+  Widget _buildIconFillTag(BuildContext context) {
+    // 带图标的标签：通过构造器 icon 参数传入 IconData
+    return const TTag('标签文字', icon: TIcons.discount);
+  }
+
+  Widget _buildIconOutlineTag(BuildContext context) {
+    return const TTag(
+      '标签文字',
+      icon: TIcons.discount,
+      variant: TTagVariant.outline,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(width: 16),
+        Builder(builder: _buildIconFillTag),
+        const SizedBox(width: 16),
+        Builder(builder: _buildIconOutlineTag),
+      ],
+    );
+  }
+}

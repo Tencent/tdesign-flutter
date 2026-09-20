@@ -1,0 +1,201 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'action_sheet')
+class ActionSheetDescriptionScrollGridExample extends StatelessWidget {
+  const ActionSheetDescriptionScrollGridExample({super.key});
+
+  Widget _descriptionScrollGrid(BuildContext context) => _trigger(
+    label: '带描述多行滚动宫格型',
+    onPressed: () => TActionSheet.showGridSections(
+      context,
+      cancelText: 'Cancel',
+      sections: [
+        TActionSheetGridSection(title: 'Forward To', items: _personGridItems()),
+        TActionSheetGridSection(title: 'Share', items: _scrollGridItems()),
+      ],
+      onSelected: (item) => _showSelection(context, item),
+    ),
+  );
+
+  Widget _trigger({required String label, required VoidCallback onPressed}) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: Text(label),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+  List<TActionSheetItem<String>> _personGridItems() => const [
+    TActionSheetItem(
+      value: 'allen',
+      label: 'Allen',
+      icon: ActionSheetDescriptionScrollGridExampleActionSheetAssetIcon(
+        'assets/img/action_sheet_allen.png',
+      ),
+    ),
+    TActionSheetItem(
+      value: 'nick',
+      label: 'Nick',
+      icon: ActionSheetDescriptionScrollGridExampleActionSheetAssetIcon(
+        'assets/img/action_sheet_nick.png',
+      ),
+    ),
+    TActionSheetItem(
+      value: 'jacky',
+      label: 'Jacky',
+      icon: ActionSheetDescriptionScrollGridExampleActionSheetAssetIcon(
+        'assets/img/action_sheet_jacky.png',
+      ),
+    ),
+    TActionSheetItem(
+      value: 'eric',
+      label: 'Eric',
+      icon: ActionSheetDescriptionScrollGridExampleActionSheetAssetIcon(
+        'assets/img/action_sheet_eric.png',
+      ),
+    ),
+    TActionSheetItem(
+      value: 'johnson',
+      label: 'Johnson',
+      icon: ActionSheetDescriptionScrollGridExampleActionSheetAssetIcon(
+        'assets/img/action_sheet_johnson.png',
+      ),
+    ),
+  ];
+
+  List<TActionSheetItem<String>> _scrollGridItems() => [
+    ..._appGridItems(),
+    TActionSheetItem(
+      value: 'qq-music',
+      label: 'QQ Music',
+      icon: _assetGridIcon('assets/img/action_sheet_qq_music.png'),
+    ),
+    ..._iconGridItems(),
+    TActionSheetItem(
+      value: 'link',
+      label: 'Link',
+      icon: _iconGridIcon(TIcons.link),
+    ),
+  ];
+
+  void _showSelection(BuildContext context, TActionSheetItem<String> item) {
+    TToast.showText('已选择：${item.label}', context: context);
+  }
+
+  List<TActionSheetItem<String>> _appGridItems() => [
+    TActionSheetItem(
+      value: 'wechat',
+      label: 'WeChat',
+      icon: _assetGridIcon('assets/img/action_sheet_wechat.png'),
+    ),
+    TActionSheetItem(
+      value: 'qq',
+      label: 'QQ',
+      icon: _assetGridIcon('assets/img/action_sheet_qq.png'),
+    ),
+    TActionSheetItem(
+      value: 'document',
+      label: 'Doc',
+      icon: _assetGridIcon('assets/img/action_sheet_doc.png'),
+    ),
+    TActionSheetItem(
+      value: 'map',
+      label: 'Map',
+      icon: _assetGridIcon('assets/img/action_sheet_map.png'),
+    ),
+  ];
+
+  Widget _assetGridIcon(String path) {
+    return Container(
+      key: ValueKey(path),
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color: Colors.black.withValues(alpha: 0.06),
+          width: 0.5,
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Image.asset(path, fit: BoxFit.cover),
+    );
+  }
+
+  List<TActionSheetItem<String>> _iconGridItems() => [
+    TActionSheetItem(
+      value: 'share',
+      label: 'Share',
+      icon: _iconGridIcon(TIcons.share),
+    ),
+    TActionSheetItem(
+      value: 'favorite',
+      label: 'Collect',
+      icon: _iconGridIcon(TIcons.star),
+    ),
+    TActionSheetItem(
+      value: 'download',
+      label: 'Download',
+      icon: _iconGridIcon(TIcons.cloud_download),
+    ),
+    TActionSheetItem(
+      value: 'edit',
+      label: 'Edit',
+      icon: _iconGridIcon(TIcons.edit),
+    ),
+  ];
+
+  Widget _iconGridIcon(IconData icon) => Builder(
+    builder: (context) => Container(
+      key: ValueKey(icon),
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: context.tTheme.bgColorSecondaryContainer,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      alignment: Alignment.center,
+      child: Icon(icon, size: 24),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return _descriptionScrollGrid(context);
+  }
+}
+
+class ActionSheetDescriptionScrollGridExampleActionSheetAssetIcon
+    extends StatelessWidget {
+  const ActionSheetDescriptionScrollGridExampleActionSheetAssetIcon(
+    this.path, {
+    super.key,
+  });
+
+  final String path;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color: Colors.black.withValues(alpha: 0.06),
+          width: 0.5,
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Image.asset(path, fit: BoxFit.cover),
+    );
+  }
+}

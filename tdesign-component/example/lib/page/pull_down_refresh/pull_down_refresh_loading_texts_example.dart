@@ -1,0 +1,73 @@
+import 'dart:async';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'PullDownRefresh')
+class PullDownRefreshLoadingTextsExample extends StatefulWidget {
+  const PullDownRefreshLoadingTextsExample({super.key});
+
+  @override
+  State<PullDownRefreshLoadingTextsExample> createState() =>
+      _PullDownRefreshLoadingTextsExampleState();
+}
+
+class _PullDownRefreshLoadingTextsExampleState
+    extends State<PullDownRefreshLoadingTextsExample> {
+  Widget _buildLoadingTexts(BuildContext context) {
+    return SizedBox(
+      height: 300,
+      child: TPullDownRefresh(
+        loadingBarHeight: 70,
+        maxBarHeight: 100,
+        texts: const TPullDownRefreshTexts(
+          pullToRefresh: '下拉即可刷新...',
+          releaseToRefresh: '释放即可刷新...',
+          refreshing: '加载中...',
+          refreshComplete: '刷新成功',
+        ),
+        onRefresh: () {
+          return Future<void>.delayed(const Duration(seconds: 1), () {
+            setState(() {
+              loadingTextsCount++;
+            });
+          });
+        },
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            _demoHint(context, '下拉刷新'),
+            const SizedBox(height: 16),
+            _demoHint(context, '自定义提示语刷新次数：${loadingTextsCount}'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  var loadingTextsCount = 0;
+
+  Widget _demoHint(BuildContext context, String message) {
+    return Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: context.tTheme.bgColorContainer,
+        borderRadius: BorderRadius.all(
+          Radius.circular(context.tTheme.radiusLarge),
+        ),
+      ),
+      child: TText(
+        message,
+        font: context.tTheme.fontBodyLarge,
+        textColor: context.tTheme.textColorPlaceholder,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildLoadingTexts(context);
+  }
+}

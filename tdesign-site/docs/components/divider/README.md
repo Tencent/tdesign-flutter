@@ -8,7 +8,7 @@ isComponent: true
 <span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
 
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
+通过统一入口引入 TDesign Flutter 组件：
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -16,128 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_divider_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_divider_page.dart)
-
-### 1 组件类型
-
-水平分割线
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _verticalDivider(BuildContext context) {
-    return Container(
-      height: 20,
-      alignment: Alignment.center,
-      child: const TDivider(),
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-带文字水平分割线
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _verticalTextDivider(BuildContext context) {
-    return const Wrap(
-      runSpacing: 20,
-      children: [
-        TDivider(
-          text: '文字信息',
-          alignment: TextAlignment.left,
-        ),
-        TDivider(
-          text: '文字信息',
-          alignment: TextAlignment.center,
-        ),
-        TDivider(
-          text: '文字信息',
-          alignment: TextAlignment.right,
-        ),
-      ],
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-垂直分割
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _horizontalTextDivider(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      margin: const EdgeInsets.only(left: 16),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          TText(
-            '文字信息',
-            textColor: TTheme.of(context).textColorPlaceholder,
-          ),
-          const TDivider(
-            width: 0.5,
-            height: 12,
-            margin: EdgeInsets.symmetric(horizontal: 8),
-          ),
-          TText('文字信息', textColor: TTheme.of(context).textColorPlaceholder),
-          const TDivider(
-            width: 0.5,
-            height: 12,
-            margin: EdgeInsets.symmetric(horizontal: 8),
-            isDashed: true,
-            direction: Axis.vertical,
-          ),
-          TText('文字信息', textColor: TTheme.of(context).textColorPlaceholder),
-        ],
-      ),
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 组件状态
-
-虚线样式
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _dashedDivider(BuildContext context) {
-    return const Wrap(
-      runSpacing: 20,
-      children: [
-        TDivider(
-          isDashed: true,
-        ),
-        TDivider(
-          text: '文字信息',
-          alignment: TextAlignment.left,
-          isDashed: true,
-        ),
-        TDivider(
-          text: '文字信息',
-          alignment: TextAlignment.center,
-          isDashed: true,
-        ),
-        TDivider(
-          text: '文字信息',
-          alignment: TextAlignment.right,
-          isDashed: true,
-        ),
-      ],
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
+{{ flutter-example-group divider }}
 
 ## API
 ### TDivider

@@ -1,0 +1,15 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class TimeCounterSimpleExample extends StatelessWidget {
+  const TimeCounterSimpleExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildSimple(context);
+  }
+}
+
+Widget _buildSimple(BuildContext context) {
+  return const TTimeCounter(time: 96 * 60 * 1000);
+}

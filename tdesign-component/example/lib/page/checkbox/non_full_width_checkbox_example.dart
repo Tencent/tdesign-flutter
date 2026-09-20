@@ -1,0 +1,49 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'checkbox')
+class NonFullWidthCheckboxExample extends StatefulWidget {
+  const NonFullWidthCheckboxExample({super.key});
+
+  @override
+  State<NonFullWidthCheckboxExample> createState() =>
+      _NonFullWidthCheckboxExampleState();
+}
+
+class _NonFullWidthCheckboxExampleState
+    extends State<NonFullWidthCheckboxExample> {
+  Widget _nonFullWidthCheckbox(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TCheckboxThemeData(variant: TCheckboxVariant.circle),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(context.tTheme.radiusExtraLarge),
+          child: TCheckboxGroup<String>(
+            value: _nonFullWidthValue,
+            options: _nonFullWidthOptions,
+            showDivider: true,
+            onChanged: (value) => setState(() => _nonFullWidthValue = value),
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<String> _nonFullWidthValue = ['a', 'b'];
+
+  static const _nonFullWidthOptions = [
+    TCheckboxOption(value: 'a', label: '多选'),
+    TCheckboxOption(value: 'b', label: '多选'),
+    TCheckboxOption(value: 'c', label: '多选标题多行多选标题多行多选标题多行多选标题多行多选标题多行多选标题'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return _nonFullWidthCheckbox(context);
+  }
+}

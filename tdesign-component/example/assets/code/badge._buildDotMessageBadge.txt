@@ -1,5 +1,0 @@
-Widget _buildDotMessageBadge(BuildContext context) => TBadge(
-    variant: TBadgeVariant.dot,
-    offset: const Offset(-1, 1),
-    child: TText('消息', font: context.tTheme.fontBodyLarge),
-  );

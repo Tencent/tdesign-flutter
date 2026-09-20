@@ -1,3 +1,0 @@
-Widget _buildBorderedTable(BuildContext context) {
-    return TTable(columns: _columns(), data: _rows, bordered: true);
-  }

@@ -1,0 +1,34 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'slider')
+class SliderRangeExample extends StatefulWidget {
+  const SliderRangeExample({super.key});
+
+  @override
+  State<SliderRangeExample> createState() => _SliderRangeExampleState();
+}
+
+class _SliderRangeExampleState extends State<SliderRangeExample> {
+  Widget _buildRange(BuildContext context) => _panel(
+    TRangeSlider(
+      key: const ValueKey('slider-range'),
+      value: _range,
+      min: 0,
+      max: 100,
+      onChanged: (value) => setState(() => _range = value),
+    ),
+  );
+
+  Widget _panel(Widget child) =>
+      Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: child);
+
+  RangeValues _range = const RangeValues(35, 65);
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildRange(context);
+  }
+}

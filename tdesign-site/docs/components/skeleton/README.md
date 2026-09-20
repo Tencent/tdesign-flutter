@@ -13,9 +13,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_skeleton_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_skeleton_page.dart)
-
-示例页中的 `@ExampleCode(group: 'skeleton')` 是本页代码片段的唯一来源，覆盖预设形态、自定义布局和两种动画效果。
+{{ flutter-example-group skeleton }}
 
 ## API
 

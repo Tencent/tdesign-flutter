@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/base/notification_center.dart';
-import 'package:tdesign_flutter_example/page/t_tag_page.dart';
+import 'package:tdesign_flutter_example/page/tag/tag_page.dart';
 
 import 'demo_page_test_utils.dart';
 
@@ -112,7 +112,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final entries = [
-      (wrapper: longWrapper, asset: 'assets/code/tag._buildLongTextTag.txt'),
+      (wrapper: longWrapper, asset: 'assets/code/tag.LongTextTagExample.txt'),
       (
         wrapper: outlineWrapper,
         asset: 'assets/code/tag.TagSelectOutlineExample.txt'

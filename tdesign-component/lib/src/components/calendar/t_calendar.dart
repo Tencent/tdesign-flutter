@@ -54,6 +54,9 @@ class TCalendar extends StatefulWidget {
     /// 月标题构建器。
     TCalendarMonthTitleBuilder? monthTitleBuilder,
 
+    /// 星期标题。未设置时使用当前资源代理中的文案。
+    this.weekdayNames,
+
     /// 日期格构建器。
     this.cellBuilder,
 
@@ -70,6 +73,10 @@ class TCalendar extends StatefulWidget {
              maxDate == null ||
              !_dateOnly(minDate).isAfter(_dateOnly(maxDate)),
          'minDate 不能晚于 maxDate',
+       ),
+       assert(
+         weekdayNames == null || weekdayNames.length == 7,
+         'weekdayNames 必须按星期日到星期六提供 7 个文案',
        ),
        minDate = minDate == null ? _getDefaultMinDate() : _dateOnly(minDate),
        maxDate = maxDate == null ? _getDefaultMaxDate() : _dateOnly(maxDate),
@@ -110,6 +117,11 @@ class TCalendar extends StatefulWidget {
 
   /// 月标题构建器，参数 [DateTime] 为当月 1 日（仅年月有效）。
   final TCalendarMonthTitleBuilder monthTitleBuilder;
+
+  /// 星期标题，按星期日到星期六排列。
+  ///
+  /// 未设置时使用 `TResourceManager` 提供的当前语言文案。
+  final List<String>? weekdayNames;
 
   /// 整格自定义构建器；返回非 null 时替换该格默认布局（主数字 + 副标题均不渲染）。
   ///
@@ -186,15 +198,17 @@ class _TCalendarState extends State<TCalendar> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    weekdayNames = [
-      context.resource.sunday,
-      context.resource.monday,
-      context.resource.tuesday,
-      context.resource.wednesday,
-      context.resource.thursday,
-      context.resource.friday,
-      context.resource.saturday,
-    ];
+    weekdayNames =
+        widget.weekdayNames ??
+        [
+          context.resource.sunday,
+          context.resource.monday,
+          context.resource.tuesday,
+          context.resource.wednesday,
+          context.resource.thursday,
+          context.resource.friday,
+          context.resource.saturday,
+        ];
     monthNames = [
       context.resource.january,
       context.resource.february,

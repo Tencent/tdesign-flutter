@@ -1,8 +1,0 @@
-Widget _buildLargeBadge(BuildContext context) => const TBadge(
-    label: '8',
-    size: TBadgeSize.large,
-    child: TAvatar(
-      size: TAvatarSize.large,
-      image: AssetImage('assets/img/t_avatar_1.png'),
-    ),
-  );

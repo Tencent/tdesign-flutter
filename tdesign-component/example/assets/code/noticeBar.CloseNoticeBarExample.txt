@@ -1,0 +1,23 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class CloseNoticeBarExample extends StatelessWidget {
+  const CloseNoticeBarExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return _closeNoticeBar(context);
+  }
+}
+
+Widget _closeNoticeBar(BuildContext context) {
+  return TNoticeBar(
+    content: '这是一条普通的通知信息',
+    suffixIcon: TIcons.close,
+    onPressed: (target) {
+      if (target == TNoticeBarTapTarget.suffix) {
+        TToast.showText('点击了关闭按钮', context: context);
+      }
+    },
+  );
+}

@@ -1,0 +1,43 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'radio')
+class VerticalCardRadiosExample extends StatefulWidget {
+  const VerticalCardRadiosExample({super.key});
+
+  @override
+  State<VerticalCardRadiosExample> createState() =>
+      _VerticalCardRadiosExampleState();
+}
+
+class _VerticalCardRadiosExampleState extends State<VerticalCardRadiosExample> {
+  Widget _verticalCardRadios(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(context.tTheme.spacer16),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(context.tTheme.radiusExtraLarge),
+        child: TRadioGroup<int>.options(
+          value: _verticalCardValue,
+          options: _cardOptions,
+          titleMaxLines: 2,
+          onChanged: (value) => setState(() => _verticalCardValue = value),
+        ),
+      ),
+    );
+  }
+
+  int? _verticalCardValue = 0;
+
+  static const _cardOptions = [
+    TRadioOption(value: 0, label: '单选'),
+    TRadioOption(value: 1, label: '单选'),
+    TRadioOption(value: 2, label: '单选标题多行单选标题多行单选标题多行单选标题多行单选标题多行'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return _verticalCardRadios(context);
+  }
+}

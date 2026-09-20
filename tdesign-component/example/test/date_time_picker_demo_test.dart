@@ -47,21 +47,23 @@ void main() {
       dateTimePickerDemoPageTestSpec,
       ThemeMode.light,
     );
-    final source = await rootBundle.loadString(
-      'assets/code/date-time-picker._cell.txt',
-    );
-    expect(source.trim(), isNotEmpty);
-    for (final id in [
-      'date',
-      'month',
-      'month-day',
-      'second',
-      'minute',
-      'date-time',
-      'week',
-      'title',
-      'without-title',
-    ]) {
+    const entries = {
+      'date': 'DateTimePickerDateExample',
+      'month': 'DateTimePickerMonthExample',
+      'month-day': 'DateTimePickerMonthDayExample',
+      'second': 'DateTimePickerSecondExample',
+      'minute': 'DateTimePickerMinuteExample',
+      'date-time': 'DateTimePickerDateTimeExample',
+      'week': 'DateTimePickerWeekExample',
+      'title': 'DateTimePickerTitleExample',
+      'without-title': 'DateTimePickerWithoutTitleExample',
+    };
+    for (final entry in entries.entries) {
+      final id = entry.key;
+      final source = await rootBundle.loadString(
+        'assets/code/date-time-picker.${entry.value}.txt',
+      );
+      expect(source.trim(), isNotEmpty);
       final trigger = find.byKey(ValueKey('date-time-picker-$id-trigger'));
       for (var attempt = 0; attempt < 12; attempt++) {
         if (trigger.evaluate().isNotEmpty &&

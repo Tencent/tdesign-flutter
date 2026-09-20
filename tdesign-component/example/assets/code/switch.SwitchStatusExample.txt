@@ -1,0 +1,58 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class SwitchStatusExample extends StatelessWidget {
+  const SwitchStatusExample({super.key});
+
+  Widget _buildStatus(BuildContext context) => const Column(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      SwitchStatusExampleSwitchGroupLabel('加载状态'),
+      TCellGroup(
+        cells: [
+          TCell(
+            title: Text('加载状态'),
+            note: TSwitch(value: false, loading: true),
+          ),
+          TCell(title: Text('加载状态'), note: TSwitch(value: true, loading: true)),
+        ],
+      ),
+      SwitchStatusExampleSwitchGroupLabel('禁用状态', top: 24),
+      TCellGroup(
+        cells: [
+          TCell(title: Text('禁用状态'), note: TSwitch(value: false)),
+          TCell(title: Text('禁用状态'), note: TSwitch(value: true)),
+        ],
+      ),
+    ],
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildStatus(context);
+  }
+}
+
+class SwitchStatusExampleSwitchGroupLabel extends StatelessWidget {
+  const SwitchStatusExampleSwitchGroupLabel(
+    this.text, {
+    super.key,
+    this.top = 8,
+  });
+
+  final String text;
+  final double top;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(16, top, 16, 16),
+      child: TText(
+        text,
+        font: context.tTheme.fontBodyMedium,
+        textColor: context.tTheme.textColorSecondary,
+      ),
+    );
+  }
+}

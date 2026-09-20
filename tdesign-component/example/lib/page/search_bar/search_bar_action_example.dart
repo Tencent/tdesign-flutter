@@ -1,0 +1,68 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'search')
+class SearchBarActionExample extends StatefulWidget {
+  const SearchBarActionExample({super.key});
+
+  @override
+  State<SearchBarActionExample> createState() => _SearchBarActionExampleState();
+}
+
+class _SearchBarActionExampleState extends State<SearchBarActionExample> {
+  Widget _buildAction(BuildContext context) {
+    return SearchBarActionExampleSearchDemoSurface(
+      child: TSearchBar(
+        controller: _actionController,
+        hintText: '搜索预设文案',
+        actionText: _showAction ? '取消' : null,
+        onFocusChanged: (focused) => setState(() => _showAction = focused),
+        onActionPressed: () {
+          _actionController.clear();
+          FocusManager.instance.primaryFocus?.unfocus();
+          setState(() => _showAction = false);
+        },
+      ),
+    );
+  }
+
+  final _actionController = TextEditingController();
+
+  var _showAction = false;
+
+  @override
+  void dispose() {
+    _resultController.dispose();
+    _actionController.dispose();
+    super.dispose();
+  }
+
+  final _resultController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildAction(context);
+  }
+}
+
+class SearchBarActionExampleSearchDemoSurface extends StatelessWidget {
+  const SearchBarActionExampleSearchDemoSurface({
+    super.key,
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: child,
+      ),
+    );
+  }
+}

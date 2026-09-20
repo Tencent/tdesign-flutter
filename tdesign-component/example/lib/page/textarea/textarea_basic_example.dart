@@ -1,0 +1,17 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'textarea')
+class TextareaBasicExample extends StatelessWidget {
+  const TextareaBasicExample({super.key});
+
+  Widget _buildBasic(BuildContext context) =>
+      const SizedBox(height: 128, child: TTextarea(hintText: '请输入文字'));
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildBasic(context);
+  }
+}

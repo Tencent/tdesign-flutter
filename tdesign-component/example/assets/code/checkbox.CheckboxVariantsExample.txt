@@ -1,0 +1,47 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class CheckboxVariantsExample extends StatefulWidget {
+  const CheckboxVariantsExample({super.key});
+
+  @override
+  State<CheckboxVariantsExample> createState() =>
+      _CheckboxVariantsExampleState();
+}
+
+class _CheckboxVariantsExampleState extends State<CheckboxVariantsExample> {
+  Widget _variants(BuildContext context) {
+    return Column(
+      children: [
+        for (final (index, entry) in const [
+          (TCheckboxVariant.check, '多选'),
+          (TCheckboxVariant.square, '多选'),
+        ].indexed) ...[
+          Theme(
+            data: Theme.of(
+              context,
+            ).mergeExtension(TCheckboxThemeData(variant: entry.$1)),
+            child: TCheckbox(
+              value: _variantValues[entry.$1],
+              title: entry.$2,
+              onChanged: (value) {
+                setState(() => _variantValues[entry.$1] = value == true);
+              },
+            ),
+          ),
+          if (index == 0) const SizedBox(height: 16),
+        ],
+      ],
+    );
+  }
+
+  final Map<TCheckboxVariant, bool> _variantValues = {
+    TCheckboxVariant.square: true,
+    TCheckboxVariant.check: true,
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return _variants(context);
+  }
+}

@@ -8,7 +8,7 @@ isComponent: true
 <span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
 
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
+通过统一入口引入 TDesign Flutter 组件：
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -16,35 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-### 1 颜色示例
-
-功能色
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
-
-</td-code-block>
-                      
-
-文字&图标颜色
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
-
-</td-code-block>
-                      
-
-中性色板
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">暂无演示代码</pre>
-
-</td-code-block>
-                      
-
+{{ flutter-example-group theme }}
 
 ## API
 ### TTheme

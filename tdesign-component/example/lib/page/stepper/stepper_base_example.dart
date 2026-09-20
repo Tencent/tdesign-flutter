@@ -1,0 +1,38 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+/// 在已配置 TDesign 主题的应用中使用 `StepperBaseExample()`。
+@ExampleCode(group: 'stepper')
+class StepperBaseExample extends StatefulWidget {
+  const StepperBaseExample({super.key});
+
+  @override
+  State<StepperBaseExample> createState() => _StepperBaseExampleState();
+}
+
+class _StepperBaseExampleState extends State<StepperBaseExample> {
+  num _base = 3;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            TStepper(
+              key: const ValueKey('stepper-base'),
+              value: _base,
+              variant: TStepperVariant.filled,
+              onChanged: (value) => setState(() => _base = value),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,161 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart' hide TIcons;
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
+import 'package:url_launcher/link.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'icon')
+class ShowAllIconsExample extends StatefulWidget {
+  const ShowAllIconsExample({super.key});
+
+  @override
+  State<ShowAllIconsExample> createState() => _ShowAllIconsExampleState();
+}
+
+class _ShowAllIconsExampleState extends State<ShowAllIconsExample> {
+  Widget _showAllIcons(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child: Column(
+        children: [
+          RepaintBoundary(
+            key: const Key('icon-official-link-section'),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              alignment: Alignment.topLeft,
+              color: context.tTheme.bgColorContainer,
+              child: Link(
+                key: const Key('icon-official-link'),
+                uri: Uri.parse('https://tdesign.tencent.com/icons'),
+                target: LinkTarget.blank,
+                builder: (context, followLink) => TLink(
+                  child: const Text('https://tdesign.tencent.com/icons'),
+                  prefixIcon: const Icon(TIcons.link),
+                  suffixIcon: const Icon(TIcons.jump),
+                  colorScheme: TLinkColorScheme.primary,
+                  semanticLabel: '打开 TDesign 图标官网',
+                  onPressed: followLink,
+                ),
+              ),
+            ),
+          ),
+          TSearchBar(
+            hintText: '搜索',
+            onChanged: (text) {
+              final query = text.trim().toLowerCase();
+              setState(() {
+                iconList = query.isEmpty
+                    ? TIcons.allIconsMap.entries.toList()
+                    : TIcons.allIconsMap.entries
+                          .where(
+                            (item) => item.key.toLowerCase().contains(query),
+                          )
+                          .toList();
+              });
+            },
+          ),
+          Builder(
+            builder: (context) {
+              if (iconList.isEmpty) {
+                return const SizedBox(
+                  height: 96,
+                  child: Center(child: TText('暂无内容')),
+                );
+              }
+
+              return IconCatalogGrid(icons: iconList);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<MapEntry<String, IconData>> iconList = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    iconList = TIcons.allIconsMap.entries.toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _showAllIcons(context);
+  }
+}
+
+/// Icon Demo 使用的懒加载网格，避免一次性创建全部图标。
+@visibleForTesting
+class IconCatalogGrid extends StatelessWidget {
+  const IconCatalogGrid({super.key, required this.icons});
+
+  final List<MapEntry<String, IconData>> icons;
+
+  Future<void> _copyIcon(BuildContext context, String name) async {
+    final code = 'TIcon(TIcons.$name)';
+    await Clipboard.setData(ClipboardData(text: code));
+    if (!context.mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(context)
+      ..clearSnackBars()
+      ..showSnackBar(
+        SnackBar(
+          content: Text('已复制 $code'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.sizeOf(context).height * 0.7,
+      child: GridView.builder(
+        key: const Key('icon-catalog-grid'),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 96,
+          mainAxisExtent: 64,
+          mainAxisSpacing: 15,
+        ),
+        itemCount: icons.length,
+        itemBuilder: (context, index) {
+          final item = icons[index];
+          return Semantics(
+            button: true,
+            label: '${item.key} 图标',
+            hint: '点击复制代码',
+            child: InkWell(
+              borderRadius: BorderRadius.circular(6),
+              onTap: () => _copyIcon(context, item.key),
+              child: Container(
+                key: ValueKey('icon-catalog-item-${item.key}'),
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TIcon(item.value, size: 24),
+                    const SizedBox(height: 4),
+                    TText(
+                      item.key,
+                      font: context.tTheme.fontBodySmall,
+                      textColor: context.tTheme.textColorPlaceholder,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

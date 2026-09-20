@@ -8,7 +8,7 @@ isComponent: true
 <span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
 
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
+通过统一入口引入 TDesign Flutter 组件：
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -16,108 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_collapse_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_collapse_page.dart)
-
-### 1 Type 组件类型
-
-Basic 基础折叠面板
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildBasicCollapse(BuildContext context) {
-    return TCollapse&lt;String&gt;(
-      value: _basicValue,
-      onChanged: (value) =&gt; setState(() =&gt; _basicValue = value),
-      children: [
-        TCollapsePanel&lt;String&gt;(
-          value: 'basic',
-          headerBuilder: (context, isExpanded) =&gt;
-              const Text('折叠面板标题'),
-          body: const Text(randomString),
-        ),
-      ],
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-with Operation Instructions 带操作说明
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildCollapseWithOperationText(BuildContext context) {
-    return TCollapse&lt;String&gt;(
-      value: _operationValue,
-      onChanged: (value) =&gt; setState(() =&gt; _operationValue = value),
-      children: [
-        TCollapsePanel&lt;String&gt;(
-          value: 'operation',
-          headerBuilder: (context, isExpanded) =&gt;
-              const Text('折叠面板标题'),
-          trailingBuilder: (context, isExpanded) =&gt;
-              Text(isExpanded ? '收起' : '展开'),
-          body: const Text(randomString),
-        ),
-      ],
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
-Accordion 手风琴式
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildAccordionCollapse(BuildContext context) {
-    final values = List.generate(3, (index) =&gt; '$index');
-    return TCollapse&lt;String&gt;(
-      mode: TCollapseMode.accordion,
-      value: _accordionValue,
-      onChanged: (value) =&gt; setState(() =&gt; _accordionValue = value),
-      children: values.map((panelValue) {
-        return TCollapsePanel&lt;String&gt;(
-          value: panelValue,
-          headerBuilder: (context, isExpanded) =&gt;
-              const Text('折叠面板标题'),
-          body: const Text(randomString),
-        );
-      }).toList(),
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-### 2 Style 组件样式
-
-Card Style 卡片样式
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildCardCollapse(BuildContext context) {
-    return TCollapse&lt;String&gt;(
-      variant: TCollapseVariant.card,
-      value: _cardValue,
-      onChanged: (value) =&gt; setState(() =&gt; _cardValue = value),
-      children: List.generate(3, (index) {
-        return TCollapsePanel&lt;String&gt;(
-          value: 'card-$index',
-          headerBuilder: (context, isExpanded) =&gt;
-              const Text('折叠面板标题'),
-          body: const Text(randomString),
-        );
-      }).toList(),
-    );
-  }</pre>
-
-</td-code-block>
-                                  
-
+{{ flutter-example-group collapse }}
 
 ## API
 ### TCollapse

@@ -1,0 +1,55 @@
+import 'package:flutter/cupertino.dart' show CupertinoIcons;
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'rate')
+class RateBasicExample extends StatelessWidget {
+  const RateBasicExample({super.key});
+
+  Widget _buildBasic(BuildContext context) => const TCell(
+    title: Text('实心评分'),
+    note: RateBasicExampleStatefulRate(initialValue: 3),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildBasic(context);
+  }
+}
+
+class RateBasicExampleStatefulRate extends StatefulWidget {
+  const RateBasicExampleStatefulRate({
+    super.key,
+    required this.initialValue,
+    this.count = 5,
+    this.allowHalf = false,
+    this.icon,
+    this.texts,
+  });
+  final double initialValue;
+  final int count;
+  final bool allowHalf;
+  final TRateIconBuilder? icon;
+  final List<String>? texts;
+
+  @override
+  State<RateBasicExampleStatefulRate> createState() =>
+      RateBasicExampleStatefulRateState();
+}
+
+class RateBasicExampleStatefulRateState
+    extends State<RateBasicExampleStatefulRate> {
+  late double value = widget.initialValue;
+
+  @override
+  Widget build(BuildContext context) => TRate(
+    value: value,
+    count: widget.count,
+    allowHalf: widget.allowHalf,
+    icon: widget.icon,
+    texts: widget.texts,
+    onChanged: (next) => setState(() => value = next),
+  );
+}
