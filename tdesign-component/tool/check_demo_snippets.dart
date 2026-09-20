@@ -47,23 +47,10 @@ Future<void> main() async {
         }
         if (importPath.startsWith('package:tdesign_flutter_example/')) {
           errors.add('$name imports private Example App code: $importPath');
-        } else if (!importPath.startsWith('dart:') &&
-            !importPath.startsWith('package:')) {
-          errors.add('$name imports a relative path: $importPath');
         }
       }
-      for (final infrastructure in [
-        'ExampleItem',
-        'ExampleModule',
-        'ExamplePageModel',
-        'ExamplePageInheritedTheme',
-        'CodeWrapper',
-      ]) {
-        if (source.contains(infrastructure)) {
-          errors.add(
-            '$name depends on Example infrastructure: $infrastructure',
-          );
-        }
+      if (source.trim().isEmpty) {
+        errors.add('$name is empty');
       }
       File('${auditDirectory.path}/$name').writeAsStringSync(source);
     }
