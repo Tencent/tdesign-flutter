@@ -44,10 +44,19 @@ void main() {
 
   test('decodes JSON string messages used by JavaScript postMessage', () {
     final data = decodeWebThemeMessageData(
-      '{"type":"theme-mode-change","themeMode":"dark"}',
+      '{"type":"flutter-theme-update","themeMode":"dark","theme":{"light":{},"dark":{}}}',
     );
 
-    expect(data, {'type': 'theme-mode-change', 'themeMode': 'dark'});
+    expect(data, {
+      'type': 'flutter-theme-update',
+      'themeMode': 'dark',
+      'theme': {'light': {}, 'dark': {}},
+    });
+    expect(parseWebThemeMode(data), ThemeMode.dark);
+    expect(
+      parseWebThemeMode({'type': 'theme-mode-change', 'themeMode': 'dark'}),
+      isNull,
+    );
     expect(decodeWebThemeMessageData('{invalid'), isNull);
   });
 }

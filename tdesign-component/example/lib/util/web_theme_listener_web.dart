@@ -30,18 +30,14 @@ void setupThemeModeListener(
     if (data is! Map) {
       return;
     }
-    if (data['type'] == 'theme-mode-change') {
-      final themeMode = data['themeMode'] as String?;
-      if (themeMode == 'dark') {
-        themeModeProvider.themeMode = ThemeMode.dark;
-      } else if (themeMode == 'light') {
-        themeModeProvider.themeMode = ThemeMode.light;
-      }
+    final theme = parseWebThemeUpdateMessage(data);
+    if (theme == null) {
       return;
     }
-    final theme = parseWebThemeUpdateMessage(data);
-    if (theme != null) {
-      _onThemeUpdate?.call(theme);
+    final themeMode = parseWebThemeMode(data);
+    if (themeMode != null) {
+      themeModeProvider.themeMode = themeMode;
     }
+    _onThemeUpdate?.call(theme);
   });
 }

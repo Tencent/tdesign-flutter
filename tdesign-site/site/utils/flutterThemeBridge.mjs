@@ -431,6 +431,14 @@ export function generateFlutterThemeFromParts(lightCss, darkCss, extraCss, basel
   };
 }
 
+export function createFlutterThemeMessage(theme, themeMode = 'light') {
+  return {
+    type: 'flutter-theme-update',
+    themeMode: themeMode === 'dark' ? 'dark' : 'light',
+    theme,
+  };
+}
+
 export const flutterThemeContract = Object.freeze({
   fontTokens: FONT_SPECS.map(([name]) => name),
   radiusTokens: Object.keys(RADIUS_TOKENS),
