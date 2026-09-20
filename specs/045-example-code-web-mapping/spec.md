@@ -44,6 +44,7 @@ Table 页面同时包含静态、受控交互、固定列和样式示例，作�
 - `table/table_page.dart` 保持 Table Demo 唯一入口并直接承载两个公开 `ExampleModule`；排序状态归属于排序示例自身。
 - 每个公开 `ExampleItem` 显式映射到自身文件中的类级 `@ExampleCode`，运行 Demo 和代码面板使用同一个 Widget 类。
 - 组件 Web 指令格式为 `{{ flutter-example-group <group> }}`，按公开模块和 ExampleItem 顺序展开该组生成资产；不得按文件名排序混入测试专用或未注册片段。单片段指令 `{{ flutter-example <group>.<name> }}` 仅作为底层能力保留。
+- Flutter 专属清单解析与渲染由 `tdesign-site/site/flutter-example-docs/` 适配层负责；严格组必须显示 `ExampleModule.title` 和 `ExampleItem.desc`，内部 Widget 类名只作为缺少公开描述时的兜底。可复用的 `vite-plugin-tdoc`、本地插件封装和 `td-code-block` 不承担 Flutter 业务语义。
 - 组件文档目录名与生成组按忽略 `-`、`_` 和大小写的规则一一匹配；每份文档必须且只能有一个组映射。
 - 全部 57 份组件文档不得保留手写 Dart `td-code-block`；`radius`、`shadows` 属于 Example 基础配置页，没有组件 Web 路由，不纳入组件文档映射。
 - 找不到资产时不得降级为“建设中”，必须抛出错误阻止发布过期文档。

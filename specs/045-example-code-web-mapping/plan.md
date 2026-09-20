@@ -10,7 +10,7 @@
 6. 用类级 `@ExampleCode` 标记每个公开 ExampleItem 的实际运行 Widget；生成器直接导出整个文件所需 imports、Widget 和匹配 State，不递归猜测页面依赖。
 7. 生成公开示例清单，保留 ExampleModule / ExampleItem 顺序，并在站点 Markdown 转换时按清单展开源码。
    迁移期间只有显式标记 `@ExampleCodeManifest` 的已完成页面进入严格清单；其余组暂列入 `legacyGroups` 保持现有展示。最终合并前清空 `legacyGroups` 并删除目录扫描兼容分支。
-8. 把资产读取和指令替换抽成无框架依赖的 `.mjs` 模块；用 Node 清单检查覆盖全部组件文档、公开示例一一对应、顺序和错误分支。
+8. 把 Flutter 资产清单读取、公开分组/描述渲染和指令替换收敛到 `tdesign-site/site/flutter-example-docs/` 的无框架依赖 `.mjs` 适配层；`vite-plugin-tdoc` 及本地封装只负责通用 Markdown 转换，不感知 Flutter 清单格式。用 Node 清单检查覆盖全部组件文档、公开示例一一对应、顺序和错误分支。
 9. 将 57 份组件文档的手写 Dart 副本替换为单一组映射；保留 API 与组件专项说明。
 
 ## 影响范围
@@ -20,7 +20,7 @@
 | 组件 | 无 | 不修改生产组件 |
 | 测试 | Table Demo、生成器、站点映射测试 | 锁定入口、代码面板与映射完整性 |
 | 示例 | `example/lib/page/*/` | 57 个组件、3 个基础页、页面分组、全部公开 ExampleItem 和辅助 example 的目录重构 |
-| 文档 | 57 份组件 README、TDoc transform | 全部公开组件示例按运行顺序改为单源映射 |
+| 文档 | 57 份组件 README、Flutter Example 文档适配层、TDoc transform 接入点 | 全部公开组件示例按运行顺序和公开分组/描述改为单源映射 |
 
 ## API 变化
 

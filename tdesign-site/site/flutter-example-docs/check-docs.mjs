@@ -6,10 +6,10 @@ import {
   defaultExampleCodeDirectory,
   listFlutterExampleKeys,
   replaceFlutterExampleDirectives,
-} from './flutter-example-code.mjs';
+} from './transform.mjs';
 
-const pluginDirectory = path.dirname(fileURLToPath(import.meta.url));
-const docsDirectory = path.resolve(pluginDirectory, '../../docs/components');
+const adapterDirectory = path.dirname(fileURLToPath(import.meta.url));
+const docsDirectory = path.resolve(adapterDirectory, '../../docs/components');
 const normalize = (value) => value.replace(/[-_]/g, '').toLowerCase();
 const assetGroups = new Map();
 

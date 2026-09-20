@@ -6,14 +6,12 @@ const directivePattern = /\{\{\s*flutter-example\s+([^\s}]+)\s*\}\}/g;
 const groupDirectivePattern = /\{\{\s*flutter-example-group\s+([^\s}]+)\s*\}\}/g;
 const assetKeyPattern = /^[A-Za-z0-9_-]+\.[A-Za-z_][A-Za-z0-9_]*$/;
 const groupPattern = /^[A-Za-z0-9_-]+$/;
-const pluginDirectory = path.dirname(fileURLToPath(import.meta.url));
+const adapterDirectory = path.dirname(fileURLToPath(import.meta.url));
 
 export const defaultExampleCodeDirectory = path.resolve(
-  pluginDirectory,
+  adapterDirectory,
   '../../../tdesign-component/example/assets/code',
 );
-
-export const defaultExampleCodeManifest = path.join(defaultExampleCodeDirectory, 'manifest.json');
 
 export function readFlutterExampleManifest(exampleCodeDirectory = defaultExampleCodeDirectory) {
   const manifestPath = path.join(exampleCodeDirectory, 'manifest.json');
@@ -45,6 +43,24 @@ export function readFlutterExampleCode(assetKey, exampleCodeDirectory = defaultE
 }
 
 export function listFlutterExampleKeys(group, exampleCodeDirectory = defaultExampleCodeDirectory) {
+  const configuredGroup = readFlutterExampleGroup(group, exampleCodeDirectory);
+  if (configuredGroup) {
+    return configuredGroup.flatMap((module) => module.items.map((item) => item.assetKey));
+  }
+
+  const prefix = `${group}.`;
+  const assetKeys = fs
+    .readdirSync(exampleCodeDirectory)
+    .filter((fileName) => fileName.startsWith(prefix) && fileName.endsWith('.txt'))
+    .map((fileName) => fileName.slice(0, -'.txt'.length))
+    .sort((left, right) => left.localeCompare(right));
+  if (assetKeys.length === 0) {
+    throw new Error(`Missing Flutter example code group: ${group}`);
+  }
+  return assetKeys;
+}
+
+export function readFlutterExampleGroup(group, exampleCodeDirectory = defaultExampleCodeDirectory) {
   if (!groupPattern.test(group)) {
     throw new Error(`Invalid Flutter example group: ${group}`);
   }
@@ -56,10 +72,19 @@ export function listFlutterExampleKeys(group, exampleCodeDirectory = defaultExam
       throw new Error(`Invalid Flutter example manifest group: ${group}`);
     }
     const assetKeys = configuredGroup.flatMap((module) => {
-      if (typeof module?.title !== 'string' || !Array.isArray(module.items)) {
+      if (
+        typeof module?.title !== 'string' ||
+        module.title.trim().length === 0 ||
+        !Array.isArray(module.items)
+      ) {
         throw new Error(`Invalid Flutter example manifest group: ${group}`);
       }
-      return module.items.map((item) => item?.assetKey);
+      return module.items.map((item) => {
+        if (typeof item?.description !== 'string') {
+          throw new Error(`Invalid Flutter example manifest group: ${group}`);
+        }
+        return item?.assetKey;
+      });
     });
     const uniqueKeys = new Set(assetKeys);
     if (
@@ -76,23 +101,14 @@ export function listFlutterExampleKeys(group, exampleCodeDirectory = defaultExam
     for (const assetKey of assetKeys) {
       readFlutterExampleCode(assetKey, exampleCodeDirectory);
     }
-    return assetKeys;
+    return configuredGroup;
   }
 
   if (!manifest.legacyGroups.includes(group)) {
     throw new Error(`Missing Flutter example code group: ${group}`);
   }
 
-  const prefix = `${group}.`;
-  const assetKeys = fs
-    .readdirSync(exampleCodeDirectory)
-    .filter((fileName) => fileName.startsWith(prefix) && fileName.endsWith('.txt'))
-    .map((fileName) => fileName.slice(0, -'.txt'.length))
-    .sort((left, right) => left.localeCompare(right));
-  if (assetKeys.length === 0) {
-    throw new Error(`Missing Flutter example code group: ${group}`);
-  }
-  return assetKeys;
+  return null;
 }
 
 function renderFlutterExample(assetKey, exampleCodeDirectory) {
@@ -102,15 +118,38 @@ function renderFlutterExample(assetKey, exampleCodeDirectory) {
 </td-code-block>`;
 }
 
-export function replaceFlutterExampleDirectives(source, exampleCodeDirectory = defaultExampleCodeDirectory) {
-  const groupsReplaced = source.replace(groupDirectivePattern, (_, group) => {
-    const examples = listFlutterExampleKeys(group, exampleCodeDirectory)
+function headingText(value) {
+  return value.replace(/\s+/g, ' ').trim();
+}
+
+function renderFlutterExampleGroup(group, exampleCodeDirectory) {
+  const configuredGroup = readFlutterExampleGroup(group, exampleCodeDirectory);
+  if (!configuredGroup) {
+    return listFlutterExampleKeys(group, exampleCodeDirectory)
       .map((assetKey) => {
         const exampleName = assetKey.slice(group.length + 1);
         return `#### \`${exampleName}\`\n\n${renderFlutterExample(assetKey, exampleCodeDirectory)}`;
       })
       .join('\n\n');
-    return `\n${examples}`;
+  }
+
+  return configuredGroup
+    .map((module) => {
+      const examples = module.items
+        .map((item) => {
+          const exampleName = item.assetKey.slice(group.length + 1);
+          const title = headingText(item.description) || `\`${exampleName}\``;
+          return `#### ${title}\n\n${renderFlutterExample(item.assetKey, exampleCodeDirectory)}`;
+        })
+        .join('\n\n');
+      return `### ${headingText(module.title)}\n\n${examples}`;
+    })
+    .join('\n\n');
+}
+
+export function replaceFlutterExampleDirectives(source, exampleCodeDirectory = defaultExampleCodeDirectory) {
+  const groupsReplaced = source.replace(groupDirectivePattern, (_, group) => {
+    return `\n${renderFlutterExampleGroup(group, exampleCodeDirectory)}`;
   });
   const replaced = groupsReplaced.replace(directivePattern, (_, assetKey) => {
     return `\n${renderFlutterExample(assetKey, exampleCodeDirectory)}`;

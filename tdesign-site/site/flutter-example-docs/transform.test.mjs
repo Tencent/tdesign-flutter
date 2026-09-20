@@ -8,7 +8,7 @@ import {
   listFlutterExampleKeys,
   readFlutterExampleCode,
   replaceFlutterExampleDirectives,
-} from './flutter-example-code.mjs';
+} from './transform.mjs';
 
 test('resolves representative Table, Stepper and Form assets', () => {
   const cases = [
@@ -51,8 +51,13 @@ test('renders Divider in its registered ExampleItem order', () => {
   ]);
 
   const source = replaceFlutterExampleDirectives('{{ flutter-example-group divider }}');
+  assert.match(source, /### 组件类型/);
+  assert.match(source, /#### 水平分割线/);
+  assert.match(source, /### 组件状态/);
+  assert.match(source, /#### 虚线样式/);
+  assert.doesNotMatch(source, /#### `DividerBaseExample`/);
   assert.ok(
-    source.indexOf('DividerBaseExample') < source.indexOf('DividerDashedExample'),
+    source.indexOf('#### 水平分割线') < source.indexOf('#### 虚线样式'),
   );
 });
 

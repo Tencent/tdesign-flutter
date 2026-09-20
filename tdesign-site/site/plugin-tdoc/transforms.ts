@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import mdToVue from '../scripts/md-to-vue';
-import { replaceFlutterExampleDirectives } from './flutter-example-code.mjs';
+import { replaceFlutterExampleDirectives } from '../flutter-example-docs/transform.mjs';
 
 let demoCodesImports: Record<string, string> = {};
 

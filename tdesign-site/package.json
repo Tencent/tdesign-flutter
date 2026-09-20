@@ -4,7 +4,7 @@
   "packageManager": "pnpm@11.20.0",
   "scripts": {
     "copy:readme": "node script/copy-readme.js",
-    "test:example-code": "node --test site/plugin-tdoc/flutter-example-code.test.mjs && node site/plugin-tdoc/check-flutter-example-docs.mjs",
+    "test:example-code": "node --test site/flutter-example-docs/transform.test.mjs && node site/flutter-example-docs/check-docs.mjs",
     "site": "pnpm test:example-code && cd site && vite build",
     "presite:dev": "npm run copy:readme",
     "dev": "cd site && vite",
