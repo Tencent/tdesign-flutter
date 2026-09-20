@@ -61,7 +61,7 @@ class _CalendarSwitchModeExampleState extends State<CalendarSwitchModeExample> {
     var anchor = draft.isEmpty ? start : draft.first;
     late TPopupHandle popup;
     popup = TPopup.show(
-      context,
+      Navigator.of(context).context,
       options: TPopupOptions.bottom(
         height: MediaQuery.sizeOf(context).height * 0.85,
         headerBuilder: (_, close) => SizedBox(

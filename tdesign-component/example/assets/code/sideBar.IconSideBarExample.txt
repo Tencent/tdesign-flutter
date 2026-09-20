@@ -24,37 +24,24 @@ class IconSideBarExample extends StatelessWidget {
 
   void _openSideBarDemo(BuildContext context, String routeName) {
     Widget? page;
-    var title = '';
-
     switch (routeName) {
       case 'SideBarAnchor':
-        title = 'SideBar 锚点';
         page = const TSideBarAnchorPage();
         break;
       case 'SideBarPagination':
-        title = 'SideBar 切页';
         page = const TSideBarPaginationPage();
         break;
       case 'SideBarIcon':
-        title = 'SideBar 带图标';
         page = const TSideBarIconPage();
         break;
       case 'SideBarCustom':
-        title = 'SideBar 自定义样式';
         page = const TSideBarCustomPage();
         break;
     }
     if (page == null) {
       return;
     }
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => Scaffold(
-          appBar: AppBar(title: Text(title)),
-          body: SafeArea(child: page!),
-        ),
-      ),
-    );
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => page!));
   }
 
   @override
@@ -187,7 +174,10 @@ class TSideBarAnchorPageState extends State<TSideBarAnchorPage> {
   }
 
   @override
-  Widget build(BuildContext context) => _buildAnchorSideBar(context);
+  Widget build(BuildContext context) => SideBarExampleScaffold(
+    title: widget.title,
+    child: _buildAnchorSideBar(context),
+  );
 
   Widget _buildAnchorSideBar(BuildContext context) {
     // 接入说明：currentValue、handleSidebarChange 与滚动控制器由页面状态持有；
@@ -311,7 +301,10 @@ class TSideBarPaginationPageState extends State<TSideBarPaginationPage> {
   }
 
   @override
-  Widget build(BuildContext context) => _buildPaginationSideBar(context);
+  Widget build(BuildContext context) => SideBarExampleScaffold(
+    title: 'SideBar 切页用法',
+    child: _buildPaginationSideBar(context),
+  );
 
   Widget _buildPaginationSideBar(BuildContext context) {
     // 接入说明：currentValue、setCurrentValue 与 PageController 由页面状态持有；
@@ -423,7 +416,10 @@ class TSideBarCustomPageState extends State<TSideBarCustomPage> {
   }
 
   @override
-  Widget build(BuildContext context) => _buildCustomSideBar(context);
+  Widget build(BuildContext context) => SideBarExampleScaffold(
+    title: 'SideBar 自定义样式',
+    child: _buildCustomSideBar(context),
+  );
 
   Widget _buildCustomSideBar(BuildContext context) {
     // 接入说明：currentValue、setCurrentValue 与 PageController 由页面状态持有；
@@ -521,6 +517,54 @@ class TSideBarCustomPageState extends State<TSideBarCustomPage> {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Standalone shell for the full-screen SideBar auxiliary examples.
+class SideBarExampleScaffold extends StatelessWidget {
+  const SideBarExampleScaffold({
+    super.key,
+    required this.title,
+    required this.child,
+  });
+
+  final String title;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final titleLineHeight = context.tTheme.fontBodyMedium?.height ?? 22 / 14;
+    return Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SafeArea(
+            bottom: false,
+            child: TNavBar(
+              title: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  height: titleLineHeight,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              leading: [
+                TNavBarItem(
+                  icon: TIcons.chevron_left,
+                  iconSize: 28,
+                  onTap: () => Navigator.maybePop(context),
+                ),
+                TNavBarItem(icon: TIcons.mode_dark, onTap: () {}),
+              ],
+              useDefaultBack: false,
+              useSafeArea: false,
+            ),
+          ),
+          Expanded(child: SafeArea(top: false, child: child)),
+        ],
+      ),
     );
   }
 }

@@ -14,6 +14,7 @@ import 'sidebar_pagination_example.dart';
     'sidebar_pagination_example.dart',
     'sidebar_icon_example.dart',
     'sidebar_custom_example.dart',
+    'sidebar_example_scaffold.dart',
   ],
 )
 class StyleSideBarExample extends StatelessWidget {
@@ -48,37 +49,24 @@ class StyleSideBarExample extends StatelessWidget {
 
   void _openSideBarDemo(BuildContext context, String routeName) {
     Widget? page;
-    var title = '';
-
     switch (routeName) {
       case 'SideBarAnchor':
-        title = 'SideBar 锚点';
         page = const TSideBarAnchorPage();
         break;
       case 'SideBarPagination':
-        title = 'SideBar 切页';
         page = const TSideBarPaginationPage();
         break;
       case 'SideBarIcon':
-        title = 'SideBar 带图标';
         page = const TSideBarIconPage();
         break;
       case 'SideBarCustom':
-        title = 'SideBar 自定义样式';
         page = const TSideBarCustomPage();
         break;
     }
     if (page == null) {
       return;
     }
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => Scaffold(
-          appBar: AppBar(title: Text(title)),
-          body: SafeArea(child: page!),
-        ),
-      ),
-    );
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => page!));
   }
 
   @override

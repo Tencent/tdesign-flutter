@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import 'sidebar_example_scaffold.dart';
+
 /// SideBar 切页示例。
 class TSideBarPaginationPage extends StatefulWidget {
   const TSideBarPaginationPage({super.key});
@@ -20,7 +22,10 @@ class TSideBarPaginationPageState extends State<TSideBarPaginationPage> {
   }
 
   @override
-  Widget build(BuildContext context) => _buildPaginationSideBar(context);
+  Widget build(BuildContext context) => SideBarExampleScaffold(
+    title: 'SideBar 切页用法',
+    child: _buildPaginationSideBar(context),
+  );
 
   Widget _buildPaginationSideBar(BuildContext context) {
     // 接入说明：currentValue、setCurrentValue 与 PageController 由页面状态持有；

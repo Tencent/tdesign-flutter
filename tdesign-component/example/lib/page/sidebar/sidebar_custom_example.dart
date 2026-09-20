@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import 'sidebar_example_scaffold.dart';
+
 /// SideBar 标签样式示例。
 class TSideBarCustomPage extends StatefulWidget {
   const TSideBarCustomPage({super.key});
@@ -20,7 +22,10 @@ class TSideBarCustomPageState extends State<TSideBarCustomPage> {
   }
 
   @override
-  Widget build(BuildContext context) => _buildCustomSideBar(context);
+  Widget build(BuildContext context) => SideBarExampleScaffold(
+    title: 'SideBar 自定义样式',
+    child: _buildCustomSideBar(context),
+  );
 
   Widget _buildCustomSideBar(BuildContext context) {
     // 接入说明：currentValue、setCurrentValue 与 PageController 由页面状态持有；

@@ -85,7 +85,7 @@ class _PickerAreaExampleState extends State<PickerAreaExample> {
     }) {
       var draft = List<Object?>.of(value);
       TPickerPopup.show(
-        context,
+        Navigator.of(context).context,
         headerBuilder: (_, close) => TPopupHeader(
           cancelButton: TToolbarPressable(
             onTap: close,
