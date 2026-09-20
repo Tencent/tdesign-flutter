@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-// Package import is intentional: the copied Web example must not retain a
-// repository-relative path to the Example app's generated localization API.
-// ignore: prefer_relative_imports
-import 'package:tdesign_flutter_example/l10n/app_localizations.dart';
 
 import '../../annotation/example_code.dart';
 
@@ -100,6 +96,7 @@ class _CalendarLocalizedExampleState extends State<CalendarLocalizedExample> {
                   : start,
               maxDate: showMonthSwitcher && last.isBefore(end) ? last : end,
               anchorDate: anchor,
+              weekdayNames: _englishWeekdays,
               subtitleBuilder: subtitleBuilder,
               cellBuilder: cellBuilder,
               monthTitleBuilder: showMonthSwitcher
@@ -159,14 +156,7 @@ class _CalendarLocalizedExampleState extends State<CalendarLocalizedExample> {
                 ],
               ),
             );
-            return localized
-                ? Localizations.override(
-                    context: context,
-                    locale: const Locale('en'),
-                    delegates: AppLocalizations.localizationsDelegates,
-                    child: body,
-                  )
-                : body;
+            return body;
           },
         ),
       ),
@@ -204,6 +194,8 @@ const _englishMonths = [
   'November',
   'December',
 ];
+
+const _englishWeekdays = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
 class CalendarLocalizedExampleCalendarMonthSwitcher extends StatelessWidget {
   const CalendarLocalizedExampleCalendarMonthSwitcher({
