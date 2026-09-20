@@ -19,7 +19,7 @@
 | `npm run test:example-code` | PASS | Node 映射测试 6/6；57 份组件文档映射 365 份组件示例，另有 fonts/radius/shadows 10 份基础示例 |
 | `npm run site` | PASS | 站点生产构建完成，108 modules transformed |
 | `git diff --check` | PASS | 无空白错误 |
-| Linux 3.32 Golden / 远端 CI | PENDING | 推送最新 head 后以仓库 CI 的 Linux 字体、DPR 与 Flutter 3.32 环境为准 |
+| Linux 3.32 Golden / 远端 CI | PASS | PR #1142，`42bdd37a`：Linux Flutter 3.32 全量视觉回归、Flutter 3.32/latest analyze/test、Android/iOS/Web 构建、站点构建、autofix、CodeCC、拼写与 CLA 全部通过 |
 
 ## 人工与结构抽查
 
@@ -32,7 +32,7 @@
 - [x] Web 严格按 manifest 恢复公开分组、描述和顺序；缺少描述时才以示例类名兜底。
 - [x] Table、Stepper、Form、Calendar、Sidebar、Popover、Progress、Tag、TreeSelect 等不同复杂度代码面板已由 Widget 测试实际加载。
 - [x] 57 份组件文档均只有一个组映射，无手写 Dart `td-code-block`，未注册资产不会进入文档。
-- [ ] 最新 head 的 Linux 3.32 Golden 与全部远端 CI 通过。
+- [x] `42bdd37a` 的 Linux 3.32 Golden 与全部远端 CI 通过。
 
 ## 复杂示例归属判断
 
@@ -44,4 +44,5 @@
 ## Golden 说明
 
 - macOS 本地 Golden 会因平台字体栅格差异产生批量像素差异，因此没有更新 Linux 权威基线。
-- 本次最终视觉结论等待 PR 最新 head 的 Linux Flutter 3.32 CI；通过前不声明“可直接合并”。
+- `42bdd37a` 的 PR Linux Flutter 3.32 全量 Golden 已通过；没有更新任何 Golden 基线。
+- 迁移后首次失败来自示例宿主边界而非解析器：Picker/Calendar 弹层需从页面 Navigator 上下文打开，Sidebar 辅助页需保留独立页面壳，Icon 需保留公开数量描述。修复后对应旧 Golden 全部通过。

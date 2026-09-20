@@ -15,5 +15,5 @@
 - [x] DONE 实现 Web 示例资产映射与错误门禁
 - [x] DONE 将全部 57 份组件文档迁移为组映射
 - [x] DONE 补充 Table 代码面板、多组件抽查与全量映射清单测试
-- [ ] TODO 等待最新 head 的 Linux Golden 与远端 CI；双版本 analyze、全组件非视觉测试和站点构建已完成
+- [x] DONE `42bdd37a` 的 Linux Golden 与全部远端 CI 通过；双版本 analyze/test、Android/iOS/Web 构建、站点构建与 autofix 均为绿色
 - [ ] TODO 完成 Review
