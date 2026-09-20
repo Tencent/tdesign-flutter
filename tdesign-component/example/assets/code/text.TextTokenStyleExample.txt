@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-class TextTokenStyleExample extends StatefulWidget {
+class TextTokenStyleExample extends StatelessWidget {
   const TextTokenStyleExample({super.key});
-
-  @override
-  State<TextTokenStyleExample> createState() => _TextTokenStyleExampleState();
-}
-
-class _TextTokenStyleExampleState extends State<TextTokenStyleExample> {
   Widget _buildTokenStyle(BuildContext context) {
     return TText(
       exampleText,

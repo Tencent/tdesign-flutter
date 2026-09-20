@@ -4,21 +4,15 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'button')
-class LargeButtonExample extends StatefulWidget {
+class LargeButtonExample extends StatelessWidget {
   const LargeButtonExample({super.key});
-
-  @override
-  State<LargeButtonExample> createState() => _LargeButtonExampleState();
-}
-
-class _LargeButtonExampleState extends State<LargeButtonExample> {
   TButton _buildLargeButton(BuildContext context) {
     return TButton(
       child: const Text('按钮48'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -28,7 +22,7 @@ class _LargeButtonExampleState extends State<LargeButtonExample> {
       size: TButtonSize.medium,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -38,7 +32,7 @@ class _LargeButtonExampleState extends State<LargeButtonExample> {
       size: TButtonSize.small,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -48,11 +42,11 @@ class _LargeButtonExampleState extends State<LargeButtonExample> {
       size: TButtonSize.extraSmall,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
-  void _onTap() {
+  void _onTap(BuildContext context) {
     TToast.showText('点击了按钮', context: context);
   }
 

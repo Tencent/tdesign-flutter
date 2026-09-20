@@ -4,16 +4,8 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'button')
-class RectangleIconButtonExample extends StatefulWidget {
+class RectangleIconButtonExample extends StatelessWidget {
   const RectangleIconButtonExample({super.key});
-
-  @override
-  State<RectangleIconButtonExample> createState() =>
-      _RectangleIconButtonExampleState();
-}
-
-class _RectangleIconButtonExampleState
-    extends State<RectangleIconButtonExample> {
   TButton _buildRectangleIconButton(BuildContext context) {
     return TButton(
       child: const Text('填充按钮'),
@@ -21,7 +13,7 @@ class _RectangleIconButtonExampleState
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -34,7 +26,7 @@ class _RectangleIconButtonExampleState
         size: TButtonSize.large,
         variant: TButtonVariant.fill,
         colorScheme: TButtonColorScheme.primary,
-        onPressed: _onTap,
+        onPressed: () => _onTap(context),
       ),
     );
   }
@@ -52,11 +44,11 @@ class _RectangleIconButtonExampleState
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
-  void _onTap() {
+  void _onTap(BuildContext context) {
     TToast.showText('点击了按钮', context: context);
   }
 

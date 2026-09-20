@@ -4,14 +4,8 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'button')
-class BlockFillButtonExample extends StatefulWidget {
+class BlockFillButtonExample extends StatelessWidget {
   const BlockFillButtonExample({super.key});
-
-  @override
-  State<BlockFillButtonExample> createState() => _BlockFillButtonExampleState();
-}
-
-class _BlockFillButtonExampleState extends State<BlockFillButtonExample> {
   Widget _buildBlockFillButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -20,12 +14,12 @@ class _BlockFillButtonExampleState extends State<BlockFillButtonExample> {
         size: TButtonSize.large,
         variant: TButtonVariant.fill,
         colorScheme: TButtonColorScheme.primary,
-        onPressed: _onTap,
+        onPressed: () => _onTap(context),
       ),
     );
   }
 
-  void _onTap() {
+  void _onTap(BuildContext context) {
     TToast.showText('点击了按钮', context: context);
   }
 

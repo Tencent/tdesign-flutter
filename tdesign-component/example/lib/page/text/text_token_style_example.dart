@@ -4,14 +4,8 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'text')
-class TextTokenStyleExample extends StatefulWidget {
+class TextTokenStyleExample extends StatelessWidget {
   const TextTokenStyleExample({super.key});
-
-  @override
-  State<TextTokenStyleExample> createState() => _TextTokenStyleExampleState();
-}
-
-class _TextTokenStyleExampleState extends State<TextTokenStyleExample> {
   Widget _buildTokenStyle(BuildContext context) {
     return TText(
       exampleText,

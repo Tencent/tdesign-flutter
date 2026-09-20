@@ -4,22 +4,15 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'button')
-class DefaultFillButtonExample extends StatefulWidget {
+class DefaultFillButtonExample extends StatelessWidget {
   const DefaultFillButtonExample({super.key});
-
-  @override
-  State<DefaultFillButtonExample> createState() =>
-      _DefaultFillButtonExampleState();
-}
-
-class _DefaultFillButtonExampleState extends State<DefaultFillButtonExample> {
   TButton _buildDefaultFillButton(BuildContext context) {
     return TButton(
       child: const Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.defaultTheme,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -29,7 +22,7 @@ class _DefaultFillButtonExampleState extends State<DefaultFillButtonExample> {
       size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.defaultTheme,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -39,7 +32,7 @@ class _DefaultFillButtonExampleState extends State<DefaultFillButtonExample> {
       size: TButtonSize.large,
       variant: TButtonVariant.text,
       colorScheme: TButtonColorScheme.defaultTheme,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -49,7 +42,7 @@ class _DefaultFillButtonExampleState extends State<DefaultFillButtonExample> {
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -59,7 +52,7 @@ class _DefaultFillButtonExampleState extends State<DefaultFillButtonExample> {
       size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -69,7 +62,7 @@ class _DefaultFillButtonExampleState extends State<DefaultFillButtonExample> {
       size: TButtonSize.large,
       variant: TButtonVariant.text,
       colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -79,7 +72,7 @@ class _DefaultFillButtonExampleState extends State<DefaultFillButtonExample> {
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.danger,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -89,7 +82,7 @@ class _DefaultFillButtonExampleState extends State<DefaultFillButtonExample> {
       size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.danger,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -99,7 +92,7 @@ class _DefaultFillButtonExampleState extends State<DefaultFillButtonExample> {
       size: TButtonSize.large,
       variant: TButtonVariant.text,
       colorScheme: TButtonColorScheme.danger,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -109,7 +102,7 @@ class _DefaultFillButtonExampleState extends State<DefaultFillButtonExample> {
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.light,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -119,7 +112,7 @@ class _DefaultFillButtonExampleState extends State<DefaultFillButtonExample> {
       size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorScheme: TButtonColorScheme.light,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -129,11 +122,11 @@ class _DefaultFillButtonExampleState extends State<DefaultFillButtonExample> {
       size: TButtonSize.large,
       variant: TButtonVariant.text,
       colorScheme: TButtonColorScheme.light,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
-  void _onTap() {
+  void _onTap(BuildContext context) {
     TToast.showText('点击了按钮', context: context);
   }
 

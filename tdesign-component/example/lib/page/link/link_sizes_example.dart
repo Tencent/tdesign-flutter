@@ -4,29 +4,26 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'link')
-class LinkSizesExample extends StatefulWidget {
+class LinkSizesExample extends StatelessWidget {
   const LinkSizesExample({super.key});
-
-  @override
-  State<LinkSizesExample> createState() => _LinkSizesExampleState();
-}
-
-class _LinkSizesExampleState extends State<LinkSizesExample> {
   Widget _buildLinkSizes(BuildContext context) {
     return _exampleRow(context, [
       _link(
+        context,
         label: 'S号链接',
         colorScheme: TLinkColorScheme.primary,
         size: TLinkSize.small,
         suffixIcon: const Icon(TIcons.jump),
       ),
       _link(
+        context,
         label: 'M号链接',
         colorScheme: TLinkColorScheme.primary,
         size: TLinkSize.medium,
         suffixIcon: const Icon(TIcons.jump),
       ),
       _link(
+        context,
         label: 'L号链接',
         colorScheme: TLinkColorScheme.primary,
         size: TLinkSize.large,
@@ -46,7 +43,8 @@ class _LinkSizesExampleState extends State<LinkSizesExample> {
     );
   }
 
-  TLink _link({
+  TLink _link(
+    BuildContext context, {
     String label = '跳转链接',
     TLinkColorScheme? colorScheme,
     TLinkSize size = TLinkSize.small,
@@ -62,11 +60,11 @@ class _LinkSizesExampleState extends State<LinkSizesExample> {
       underline: underline,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
-      onPressed: disabled ? null : _onLinkPressed,
+      onPressed: disabled ? null : () => _onLinkPressed(context),
     );
   }
 
-  void _onLinkPressed() {
+  void _onLinkPressed(BuildContext context) {
     TToast.showText('点击了链接', context: context);
   }
 

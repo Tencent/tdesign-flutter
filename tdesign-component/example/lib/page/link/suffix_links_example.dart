@@ -4,21 +4,16 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'link')
-class SuffixLinksExample extends StatefulWidget {
+class SuffixLinksExample extends StatelessWidget {
   const SuffixLinksExample({super.key});
-
-  @override
-  State<SuffixLinksExample> createState() => _SuffixLinksExampleState();
-}
-
-class _SuffixLinksExampleState extends State<SuffixLinksExample> {
   Widget _buildSuffixLinks(BuildContext context) {
     return _exampleRow(context, [
       _link(
+        context,
         colorScheme: TLinkColorScheme.primary,
         suffixIcon: const Icon(TIcons.jump),
       ),
-      _link(suffixIcon: const Icon(TIcons.jump)),
+      _link(context, suffixIcon: const Icon(TIcons.jump)),
     ]);
   }
 
@@ -33,7 +28,8 @@ class _SuffixLinksExampleState extends State<SuffixLinksExample> {
     );
   }
 
-  TLink _link({
+  TLink _link(
+    BuildContext context, {
     String label = '跳转链接',
     TLinkColorScheme? colorScheme,
     TLinkSize size = TLinkSize.small,
@@ -49,11 +45,11 @@ class _SuffixLinksExampleState extends State<SuffixLinksExample> {
       underline: underline,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
-      onPressed: disabled ? null : _onLinkPressed,
+      onPressed: disabled ? null : () => _onLinkPressed(context),
     );
   }
 
-  void _onLinkPressed() {
+  void _onLinkPressed(BuildContext context) {
     TToast.showText('点击了链接', context: context);
   }
 

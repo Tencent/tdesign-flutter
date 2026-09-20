@@ -17,5 +17,6 @@
 - [x] DONE 补充 Table 代码面板、多组件抽查与全量映射清单测试
 - [x] DONE 修复站点代码块 Dart grammar 异常导致的 URL 编码源码泄漏
 - [x] DONE 让站点开发命令同时启动 Vite 与 Flutter Web，并为开发/生产环境选择正确预览地址
+- [x] DONE 清理基础组件示例中的空 State 样板，并同步 19 份可复制代码资产
 - [x] DONE `42bdd37a` 的 Linux Golden 与全部远端 CI 通过；双版本 analyze/test、Android/iOS/Web 构建、站点构建与 autofix 均为绿色
 - [ ] TODO 完成 Review

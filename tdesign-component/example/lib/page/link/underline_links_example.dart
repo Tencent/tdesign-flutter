@@ -4,18 +4,12 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'link')
-class UnderlineLinksExample extends StatefulWidget {
+class UnderlineLinksExample extends StatelessWidget {
   const UnderlineLinksExample({super.key});
-
-  @override
-  State<UnderlineLinksExample> createState() => _UnderlineLinksExampleState();
-}
-
-class _UnderlineLinksExampleState extends State<UnderlineLinksExample> {
   Widget _buildUnderlineLinks(BuildContext context) {
     return _exampleRow(context, [
-      _link(colorScheme: TLinkColorScheme.primary, underline: true),
-      _link(underline: true),
+      _link(context, colorScheme: TLinkColorScheme.primary, underline: true),
+      _link(context, underline: true),
     ]);
   }
 
@@ -30,7 +24,8 @@ class _UnderlineLinksExampleState extends State<UnderlineLinksExample> {
     );
   }
 
-  TLink _link({
+  TLink _link(
+    BuildContext context, {
     String label = '跳转链接',
     TLinkColorScheme? colorScheme,
     TLinkSize size = TLinkSize.small,
@@ -46,11 +41,11 @@ class _UnderlineLinksExampleState extends State<UnderlineLinksExample> {
       underline: underline,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
-      onPressed: disabled ? null : _onLinkPressed,
+      onPressed: disabled ? null : () => _onLinkPressed(context),
     );
   }
 
-  void _onLinkPressed() {
+  void _onLinkPressed(BuildContext context) {
     TToast.showText('点击了链接', context: context);
   }
 

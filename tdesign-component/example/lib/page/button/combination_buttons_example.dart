@@ -4,15 +4,8 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'button')
-class CombinationButtonsExample extends StatefulWidget {
+class CombinationButtonsExample extends StatelessWidget {
   const CombinationButtonsExample({super.key});
-
-  @override
-  State<CombinationButtonsExample> createState() =>
-      _CombinationButtonsExampleState();
-}
-
-class _CombinationButtonsExampleState extends State<CombinationButtonsExample> {
   Widget _buildCombinationButtons(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -24,7 +17,7 @@ class _CombinationButtonsExampleState extends State<CombinationButtonsExample> {
               size: TButtonSize.large,
               variant: TButtonVariant.fill,
               colorScheme: TButtonColorScheme.light,
-              onPressed: _onTap,
+              onPressed: () => _onTap(context),
             ),
           ),
           const SizedBox(width: 16),
@@ -34,7 +27,7 @@ class _CombinationButtonsExampleState extends State<CombinationButtonsExample> {
               size: TButtonSize.large,
               variant: TButtonVariant.fill,
               colorScheme: TButtonColorScheme.primary,
-              onPressed: _onTap,
+              onPressed: () => _onTap(context),
             ),
           ),
         ],
@@ -42,7 +35,7 @@ class _CombinationButtonsExampleState extends State<CombinationButtonsExample> {
     );
   }
 
-  void _onTap() {
+  void _onTap(BuildContext context) {
     TToast.showText('点击了按钮', context: context);
   }
 

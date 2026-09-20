@@ -4,22 +4,15 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'button')
-class PrimaryGhostButtonExample extends StatefulWidget {
+class PrimaryGhostButtonExample extends StatelessWidget {
   const PrimaryGhostButtonExample({super.key});
-
-  @override
-  State<PrimaryGhostButtonExample> createState() =>
-      _PrimaryGhostButtonExampleState();
-}
-
-class _PrimaryGhostButtonExampleState extends State<PrimaryGhostButtonExample> {
   TButton _buildPrimaryGhostButton(BuildContext context) {
     return TButton(
       child: const Text('幽灵按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.ghost,
       colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -29,7 +22,7 @@ class _PrimaryGhostButtonExampleState extends State<PrimaryGhostButtonExample> {
       size: TButtonSize.large,
       variant: TButtonVariant.ghost,
       colorScheme: TButtonColorScheme.danger,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
@@ -39,11 +32,11 @@ class _PrimaryGhostButtonExampleState extends State<PrimaryGhostButtonExample> {
       size: TButtonSize.large,
       variant: TButtonVariant.ghost,
       colorScheme: TButtonColorScheme.defaultTheme,
-      onPressed: _onTap,
+      onPressed: () => _onTap(context),
     );
   }
 
-  void _onTap() {
+  void _onTap(BuildContext context) {
     TToast.showText('点击了按钮', context: context);
   }
 

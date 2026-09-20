@@ -4,16 +4,8 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'button')
-class RectangleShapeButtonExample extends StatefulWidget {
+class RectangleShapeButtonExample extends StatelessWidget {
   const RectangleShapeButtonExample({super.key});
-
-  @override
-  State<RectangleShapeButtonExample> createState() =>
-      _RectangleShapeButtonExampleState();
-}
-
-class _RectangleShapeButtonExampleState
-    extends State<RectangleShapeButtonExample> {
   Widget _buildRectangleShapeButton(BuildContext context) {
     return _withButtonShape(
       context,
@@ -23,7 +15,7 @@ class _RectangleShapeButtonExampleState
         size: TButtonSize.large,
         variant: TButtonVariant.fill,
         colorScheme: TButtonColorScheme.primary,
-        onPressed: _onTap,
+        onPressed: () => _onTap(context),
       ),
     );
   }
@@ -37,7 +29,7 @@ class _RectangleShapeButtonExampleState
         size: TButtonSize.large,
         variant: TButtonVariant.fill,
         colorScheme: TButtonColorScheme.primary,
-        onPressed: _onTap,
+        onPressed: () => _onTap(context),
       ),
     );
   }
@@ -51,7 +43,7 @@ class _RectangleShapeButtonExampleState
         size: TButtonSize.large,
         variant: TButtonVariant.fill,
         colorScheme: TButtonColorScheme.primary,
-        onPressed: _onTap,
+        onPressed: () => _onTap(context),
       ),
     );
   }
@@ -65,7 +57,7 @@ class _RectangleShapeButtonExampleState
         size: TButtonSize.large,
         variant: TButtonVariant.fill,
         colorScheme: TButtonColorScheme.primary,
-        onPressed: _onTap,
+        onPressed: () => _onTap(context),
       ),
     );
   }
@@ -82,7 +74,7 @@ class _RectangleShapeButtonExampleState
     );
   }
 
-  void _onTap() {
+  void _onTap(BuildContext context) {
     TToast.showText('点击了按钮', context: context);
   }
 

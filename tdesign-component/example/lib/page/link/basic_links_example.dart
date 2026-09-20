@@ -4,18 +4,12 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'link')
-class BasicLinksExample extends StatefulWidget {
+class BasicLinksExample extends StatelessWidget {
   const BasicLinksExample({super.key});
-
-  @override
-  State<BasicLinksExample> createState() => _BasicLinksExampleState();
-}
-
-class _BasicLinksExampleState extends State<BasicLinksExample> {
   Widget _buildBasicLinks(BuildContext context) {
     return _exampleRow(context, [
-      _link(colorScheme: TLinkColorScheme.primary),
-      _link(),
+      _link(context, colorScheme: TLinkColorScheme.primary),
+      _link(context),
     ]);
   }
 
@@ -30,7 +24,8 @@ class _BasicLinksExampleState extends State<BasicLinksExample> {
     );
   }
 
-  TLink _link({
+  TLink _link(
+    BuildContext context, {
     String label = '跳转链接',
     TLinkColorScheme? colorScheme,
     TLinkSize size = TLinkSize.small,
@@ -46,11 +41,11 @@ class _BasicLinksExampleState extends State<BasicLinksExample> {
       underline: underline,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
-      onPressed: disabled ? null : _onLinkPressed,
+      onPressed: disabled ? null : () => _onLinkPressed(context),
     );
   }
 
-  void _onLinkPressed() {
+  void _onLinkPressed(BuildContext context) {
     TToast.showText('点击了链接', context: context);
   }
 

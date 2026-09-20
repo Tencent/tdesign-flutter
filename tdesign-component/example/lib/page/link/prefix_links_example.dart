@@ -4,21 +4,16 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'link')
-class PrefixLinksExample extends StatefulWidget {
+class PrefixLinksExample extends StatelessWidget {
   const PrefixLinksExample({super.key});
-
-  @override
-  State<PrefixLinksExample> createState() => _PrefixLinksExampleState();
-}
-
-class _PrefixLinksExampleState extends State<PrefixLinksExample> {
   Widget _buildPrefixLinks(BuildContext context) {
     return _exampleRow(context, [
       _link(
+        context,
         colorScheme: TLinkColorScheme.primary,
         prefixIcon: const Icon(TIcons.link),
       ),
-      _link(prefixIcon: const Icon(TIcons.link)),
+      _link(context, prefixIcon: const Icon(TIcons.link)),
     ]);
   }
 
@@ -33,7 +28,8 @@ class _PrefixLinksExampleState extends State<PrefixLinksExample> {
     );
   }
 
-  TLink _link({
+  TLink _link(
+    BuildContext context, {
     String label = '跳转链接',
     TLinkColorScheme? colorScheme,
     TLinkSize size = TLinkSize.small,
@@ -49,11 +45,11 @@ class _PrefixLinksExampleState extends State<PrefixLinksExample> {
       underline: underline,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
-      onPressed: disabled ? null : _onLinkPressed,
+      onPressed: disabled ? null : () => _onLinkPressed(context),
     );
   }
 
-  void _onLinkPressed() {
+  void _onLinkPressed(BuildContext context) {
     TToast.showText('点击了链接', context: context);
   }
 

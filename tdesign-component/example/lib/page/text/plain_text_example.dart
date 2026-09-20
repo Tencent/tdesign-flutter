@@ -4,14 +4,8 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'text')
-class PlainTextExample extends StatefulWidget {
+class PlainTextExample extends StatelessWidget {
   const PlainTextExample({super.key});
-
-  @override
-  State<PlainTextExample> createState() => _PlainTextExampleState();
-}
-
-class _PlainTextExampleState extends State<PlainTextExample> {
   Widget _buildPlainText(BuildContext context) {
     return const TText(exampleText);
   }

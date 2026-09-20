@@ -4,25 +4,21 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'link')
-class DisabledLinksExample extends StatefulWidget {
+class DisabledLinksExample extends StatelessWidget {
   const DisabledLinksExample({super.key});
-
-  @override
-  State<DisabledLinksExample> createState() => _DisabledLinksExampleState();
-}
-
-class _DisabledLinksExampleState extends State<DisabledLinksExample> {
   Widget _buildDisabledLinks(BuildContext context) {
     return Column(
       children: [
         _exampleRow(context, [
           _link(
+            context,
             colorScheme: TLinkColorScheme.primary,
             suffixIcon: const Icon(TIcons.jump),
             disabled: true,
           ),
-          _link(suffixIcon: const Icon(TIcons.jump), disabled: true),
+          _link(context, suffixIcon: const Icon(TIcons.jump), disabled: true),
           _link(
+            context,
             colorScheme: TLinkColorScheme.danger,
             suffixIcon: const Icon(TIcons.jump),
             disabled: true,
@@ -31,11 +27,13 @@ class _DisabledLinksExampleState extends State<DisabledLinksExample> {
         const SizedBox(height: 16),
         _exampleRow(context, [
           _link(
+            context,
             colorScheme: TLinkColorScheme.warning,
             suffixIcon: const Icon(TIcons.jump),
             disabled: true,
           ),
           _link(
+            context,
             colorScheme: TLinkColorScheme.success,
             suffixIcon: const Icon(TIcons.jump),
             disabled: true,
@@ -56,7 +54,8 @@ class _DisabledLinksExampleState extends State<DisabledLinksExample> {
     );
   }
 
-  TLink _link({
+  TLink _link(
+    BuildContext context, {
     String label = '跳转链接',
     TLinkColorScheme? colorScheme,
     TLinkSize size = TLinkSize.small,
@@ -72,11 +71,11 @@ class _DisabledLinksExampleState extends State<DisabledLinksExample> {
       underline: underline,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
-      onPressed: disabled ? null : _onLinkPressed,
+      onPressed: disabled ? null : () => _onLinkPressed(context),
     );
   }
 
-  void _onLinkPressed() {
+  void _onLinkPressed(BuildContext context) {
     TToast.showText('点击了链接', context: context);
   }
 

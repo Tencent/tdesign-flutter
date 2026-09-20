@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-class PlainTextExample extends StatefulWidget {
+class PlainTextExample extends StatelessWidget {
   const PlainTextExample({super.key});
-
-  @override
-  State<PlainTextExample> createState() => _PlainTextExampleState();
-}
-
-class _PlainTextExampleState extends State<PlainTextExample> {
   Widget _buildPlainText(BuildContext context) {
     return const TText(exampleText);
   }

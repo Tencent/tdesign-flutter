@@ -11,6 +11,7 @@ Table 页面同时包含静态、受控交互、固定列和样式示例，作�
 - 将 57 个组件页面、3 个额外基础页及其公开模块统一整理到 `page/<component>/`，入口固定命名为 `<component>_page.dart`。
 - `<component>_page.dart` 统一保存页面元信息、`ExampleModule` 分组、完整 `ExampleItem` 配置和顺序；每个公开 `ExampleItem` 引用的实际 Widget 独立为一个语义 example 文件。
 - 每个公开示例文件只保存可运行 Widget 及其 imports、数据、状态、回调、helper 和适用的生命周期，不包含 `ExampleItem` 或其他 Example 页面基础设施，也不依赖页面入口或其他示例的私有声明。
+- 示例没有跨帧可变状态、Controller 或生命周期时必须使用 `StatelessWidget`；只有确实需要 `setState`、资源释放或生命周期协调时才使用 `StatefulWidget`，避免把样板 State 暴露给复制代码的用户。
 - Calendar 农历数据、Sidebar 子页及既有 Form、Progress、Stepper、Tag、TreeSelect 辅助 example 归入所属组件目录，并由对应示例显式引用。
 - 57 份组件 Web Markdown 均按组件组引用全部生成资产，不再复制第二份 Dart 源码。
 - Web 构建在映射格式非法或目标资产不存在时失败。
@@ -43,6 +44,7 @@ Table 页面同时包含静态、受控交互、固定列和样式示例，作�
 - 页面入口只持有 `ExampleItem` 的 key、描述、布局选项、代码映射名和 Widget 构建入口，不得持有公开示例运行所需的可变状态、Controller、业务数据或私有 helper；这些声明必须归属于对应 example 文件内的 Widget/State。
 - `table/table_page.dart` 保持 Table Demo 唯一入口并直接承载两个公开 `ExampleModule`；排序状态归属于排序示例自身。
 - 每个公开 `ExampleItem` 显式映射到自身文件中的类级 `@ExampleCode`，运行 Demo 和代码面板使用同一个 Widget 类。
+- `@ExampleCode` 只标记源码生成边界，不进入生成资产；生成器不得通过改写 Widget 类型来“美化”代码，示例源码本身必须是可复制的规范实现。
 - 组件 Web 指令格式为 `{{ flutter-example-group <group> }}`，按公开模块和 ExampleItem 顺序展开该组生成资产；不得按文件名排序混入测试专用或未注册片段。单片段指令 `{{ flutter-example <group>.<name> }}` 仅作为底层能力保留。
 - Flutter 专属清单解析与渲染由 `tdesign-site/site/flutter-example-docs/` 适配层负责；严格组必须显示 `ExampleModule.title` 和 `ExampleItem.desc`，内部 Widget 类名只作为缺少公开描述时的兜底。可复用的 `vite-plugin-tdoc`、本地插件封装和 `td-code-block` 不承担 Flutter 业务语义。
 - 组件文档目录名与生成组按忽略 `-`、`_` 和大小写的规则一一匹配；每份文档必须且只能有一个组映射。
@@ -63,3 +65,4 @@ Table 页面同时包含静态、受控交互、固定列和样式示例，作�
 - [x] 映射测试覆盖全部文档清单、ExampleItem 一一对应、顺序以及非法键和缺失资产；Flutter Widget 回归覆盖生成代码面板的真实加载。
 - [x] 结构检查、示例生成器 `--check`、全组件测试、站点构建、双版本 analyze 和 Linux Golden 通过。
 - [x] Web 代码面板显示可复制源码，开发模式右侧 Flutter Web 预览可实际加载。
+- [x] Button、Divider、Fab、Icon、Link、Text 基础组件示例按真实状态需求选择 Widget 类型；19 个无状态示例已移除空 State 样板，确有交互状态的 Icon 示例仍保留 `StatefulWidget`。

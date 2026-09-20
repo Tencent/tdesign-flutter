@@ -21,6 +21,15 @@
 | `git diff --check` | PASS | 无空白错误 |
 | Linux 3.32 Golden / 远端 CI | PASS | PR #1142，`42bdd37a`：Linux Flutter 3.32 全量视觉回归、Flutter 3.32/latest analyze/test、Android/iOS/Web 构建、站点构建、autofix、CodeCC、拼写与 CLA 全部通过 |
 
+### 基础组件无状态示例复核
+
+| 命令 | 结果 | 备注 |
+| --- | --- | --- |
+| `flutter analyze --no-pub --fatal-infos`（example） | PASS | Flutter 3.32，0 issues |
+| 6 个基础组件 `Demo structure` | PASS | Button、Divider、Fab、Icon、Link、Text，6/6 |
+| `flutter test test/fab_page_test.dart test/icon_page_test.dart` | PASS | 6/6 专项交互测试 |
+| macOS 基础组件 Golden 探测 | 环境差异 | 改动及未改动的 Divider/Icon 均出现字体栅格像素差异；未更新 Linux 权威基线，交由 PR CI 复核 |
+
 ## 人工与结构抽查
 
 - [x] ExampleModule 分组和完整 ExampleItem 配置已合并到 60 个页面入口，纯分组模块文件全部移除。
@@ -35,6 +44,8 @@
 - [x] 本地 `npm run dev` 同时启动 Vite `19000` 与 Flutter Web `19001`；Button 文档在 1440px 视口下显示 375px 宽右侧实时预览。
 - [x] Button 代码块 Shadow DOM 正常初始化并展示解码后的 Dart 源码，iframe 指向 `http://127.0.0.1:19001/#button`；修复后页面未再产生 Dart grammar 错误。
 - [x] `42bdd37a` 的 Linux 3.32 Golden 与全部远端 CI 通过。
+- [x] Button、Fab、Link、Text 中 19 个无跨帧状态的示例改为 `StatelessWidget`；Divider 原本已是无状态实现，Icon 仅保留确实管理搜索/滚动/复制反馈状态的 `ShowAllIconsExample`。
+- [x] 19 份生成资产与运行源码同步，未在解析器中引入 Widget 重写或业务依赖推断。
 
 ## 复杂示例归属判断
 

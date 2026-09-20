@@ -4,25 +4,20 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'link')
-class ColorSchemeLinksExample extends StatefulWidget {
+class ColorSchemeLinksExample extends StatelessWidget {
   const ColorSchemeLinksExample({super.key});
-
-  @override
-  State<ColorSchemeLinksExample> createState() =>
-      _ColorSchemeLinksExampleState();
-}
-
-class _ColorSchemeLinksExampleState extends State<ColorSchemeLinksExample> {
   Widget _buildColorSchemeLinks(BuildContext context) {
     return Column(
       children: [
         _exampleRow(context, [
           _link(
+            context,
             colorScheme: TLinkColorScheme.primary,
             suffixIcon: const Icon(TIcons.jump),
           ),
-          _link(suffixIcon: const Icon(TIcons.jump)),
+          _link(context, suffixIcon: const Icon(TIcons.jump)),
           _link(
+            context,
             colorScheme: TLinkColorScheme.danger,
             suffixIcon: const Icon(TIcons.jump),
           ),
@@ -30,10 +25,12 @@ class _ColorSchemeLinksExampleState extends State<ColorSchemeLinksExample> {
         const SizedBox(height: 16),
         _exampleRow(context, [
           _link(
+            context,
             colorScheme: TLinkColorScheme.warning,
             suffixIcon: const Icon(TIcons.jump),
           ),
           _link(
+            context,
             colorScheme: TLinkColorScheme.success,
             suffixIcon: const Icon(TIcons.jump),
           ),
@@ -53,7 +50,8 @@ class _ColorSchemeLinksExampleState extends State<ColorSchemeLinksExample> {
     );
   }
 
-  TLink _link({
+  TLink _link(
+    BuildContext context, {
     String label = '跳转链接',
     TLinkColorScheme? colorScheme,
     TLinkSize size = TLinkSize.small,
@@ -69,11 +67,11 @@ class _ColorSchemeLinksExampleState extends State<ColorSchemeLinksExample> {
       underline: underline,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
-      onPressed: disabled ? null : _onLinkPressed,
+      onPressed: disabled ? null : () => _onLinkPressed(context),
     );
   }
 
-  void _onLinkPressed() {
+  void _onLinkPressed(BuildContext context) {
     TToast.showText('点击了链接', context: context);
   }
 

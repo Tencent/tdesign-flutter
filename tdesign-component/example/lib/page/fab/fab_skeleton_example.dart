@@ -1,18 +1,11 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'fab')
-class FabSkeletonExample extends StatefulWidget {
+class FabSkeletonExample extends StatelessWidget {
   const FabSkeletonExample({super.key});
-
-  @override
-  State<FabSkeletonExample> createState() => _FabSkeletonExampleState();
-}
-
-class _FabSkeletonExampleState extends State<FabSkeletonExample> {
   Widget _buildSkeletonContent(BuildContext context) {
     Widget buildGroup() {
       return Expanded(
