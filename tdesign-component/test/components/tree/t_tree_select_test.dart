@@ -264,6 +264,12 @@ void main() {
     expect(rootStyle?.color, token.brandNormalColor);
     expect(rootStyle?.fontSize, token.fontBodyLarge?.size ?? 16);
     expect(rootStyle?.fontWeight, FontWeight.w600);
+    final rootIndicator = tester.widget<SizedBox>(
+      find.byKey(const ValueKey('tree-select-root-indicator')),
+    );
+    expect(rootIndicator.width, 3);
+    expect(rootIndicator.height, 16);
+    expect((rootIndicator.child! as ColoredBox).color, token.brandNormalColor);
     final leafStyle = tester.widget<Text>(find.text('Apple')).style;
     expect(leafStyle?.color, token.textColorPrimary);
     expect(leafStyle?.fontSize, token.fontBodyLarge?.size ?? 16);

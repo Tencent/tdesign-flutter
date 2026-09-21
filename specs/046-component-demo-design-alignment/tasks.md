@@ -11,3 +11,6 @@
 - [x] 完成模拟器关键交互验证。
 - [x] 生成并提交 28 个设计五栏比较图，分别保留 develop/current 配准差异、current 配准渲染与真实原图。
 - [x] 生成并提交全部变更 Golden 三栏比较图与 manifest。
+- [x] 复核并修复最新走查确认的 TabBar、Cascader、Input、Slider、TreeSelect、Empty、Tag 差异。
+- [x] 在相同 Flutter、字体与视口环境重新生成上述 7 个 Demo 的 develop／current 像素对比。
+- [x] 移除 Button Loading 图标和 Input 页面的隐式 Demo 样式补丁，将颜色继承与可复制主题配置收敛到合理所有权。

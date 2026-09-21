@@ -167,14 +167,13 @@ void main() {
       'slider-vertical-capsule',
       'slider-vertical-capsule-scale-range',
     ]) {
-      expect(
-        find.ancestor(
-          of: find.byKey(ValueKey(key)),
-          matching: find.byType(SliderTheme),
-        ),
-        findsWidgets,
-        reason: key,
-      );
+      final widget = tester.widget(find.byKey(ValueKey(key)));
+      final variant = switch (widget) {
+        TSlider() => widget.variant,
+        TRangeSlider() => widget.variant,
+        _ => throw StateError('Unexpected slider type for $key'),
+      };
+      expect(variant, TSliderVariant.capsule, reason: key);
     }
     await disposeDemoPage(tester);
   }, tags: 'demo');

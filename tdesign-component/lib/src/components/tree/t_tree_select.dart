@@ -537,6 +537,17 @@ class _TreeOptionTile extends StatelessWidget {
             Positioned.fill(
               child: ColoredBox(color: selectedBackgroundColor),
             ),
+          if (selected && root)
+            Positioned(
+              left: 0,
+              top: (height - 16) / 2,
+              child: SizedBox(
+                key: const ValueKey('tree-select-root-indicator'),
+                width: 3,
+                height: 16,
+                child: ColoredBox(color: indicatorColor),
+              ),
+            ),
           if (!selected && previousSelected)
             Positioned(
               top: 0,

@@ -11,7 +11,6 @@ import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
 import '../badge/t_badge_internal.dart';
-import '../badge/t_badge_layout.dart';
 import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
 import 't_tab_bar_theme_data.dart';
@@ -45,9 +44,6 @@ const double _kPopupButtonPadding = 8.0;
 
 /// 展开项弹窗箭头和触发按钮的间距
 const double _kPopupArrowGap = 4.0;
-
-/// 纯文本标签的徽标中心相对文字锚点的默认偏移。
-const Offset _kTextBadgeOffset = Offset(16, -8);
 
 /// 展开项弹窗距离视口边界的安全距离
 const double _kPopupViewportPadding = 8.0;
@@ -453,7 +449,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
               decoration: BoxDecoration(
                 color: _effectiveBackgroundColor,
                 borderRadius: isCapsuleOutlineType
-                    ? BorderRadius.circular(context.tTheme.radiusCircle)
+                    ? BorderRadius.circular(context.tTheme.radiusDefault)
                     : null,
                 border: widget.showTopBorder && !isCapsuleOutlineType
                     ? Border(
@@ -927,17 +923,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
   }
 
   Widget _attachBadge(BuildContext context, TBadgeConfig badge, Widget child) {
-    return TBadgeFromConfig(
-      config: badge,
-      fallbackOffset: basicType == _TTabBarBasicType.text
-          ? resolveBadgeFallbackOffset(
-              context,
-              _kTextBadgeOffset,
-              alignment: badge.alignment,
-            )
-          : null,
-      child: child,
-    );
+    return TBadgeFromConfig(config: badge, child: child);
   }
 
   Widget _textItem(
@@ -993,9 +979,13 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     }
     return Material(
       color: Colors.transparent,
-      borderRadius: isInOrOutCapsule ? BorderRadius.circular(24) : null,
+      borderRadius: isInOrOutCapsule
+          ? BorderRadius.circular(context.tTheme.radiusDefault)
+          : null,
       child: InkWell(
-        borderRadius: isInOrOutCapsule ? BorderRadius.circular(24) : null,
+        borderRadius: isInOrOutCapsule
+            ? BorderRadius.circular(context.tTheme.radiusDefault)
+            : null,
         splashFactory: InkRipple.splashFactory,
         splashColor: selectedBgColor ?? context.tTheme.brandLightColor,
         highlightColor: selectedBgColor ?? context.tTheme.brandLightColor,

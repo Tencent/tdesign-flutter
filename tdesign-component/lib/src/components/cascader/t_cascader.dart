@@ -348,7 +348,7 @@ class _TCascaderState extends State<TCascader> {
               size: 22,
               color: _resolveIconColor(
                 context,
-                context.tTheme.textColorPlaceholder,
+                context.tTheme.textColorPrimary,
               ),
             ),
           ],
@@ -391,7 +391,7 @@ class _TCascaderState extends State<TCascader> {
         context.tTheme.spacer16,
         20,
         context.tTheme.spacer16,
-        0,
+        context.tTheme.spacer8,
       ),
       child: TText(
         widget.subtitles[_activeLevel],
@@ -460,7 +460,7 @@ class _TCascaderState extends State<TCascader> {
                   size: 22,
                   color: _resolveIconColor(
                     context,
-                    context.tTheme.textColorPlaceholder,
+                    context.tTheme.textColorPrimary,
                   ),
                 ),
             ],

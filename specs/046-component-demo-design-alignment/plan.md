@@ -13,7 +13,9 @@
 - Breaking：`TFooter.logo` 不再吞掉非空 `text`，品牌页脚可以组合展示文案和品牌内容。
 - 默认行为变化：`TSwiperPageEffect.scale` 与 `scaleAndFade` 按设计稿等比缩放和露出相邻卡片。
 - 默认布局变化：`TCell.note` 使用受约束自然宽度；`TCheckbox` 根据真实行数切换垂直对齐。
-- 无新增 Demo 专用公共 API。
+- 新增：`TSlider.variant` / `TRangeSlider.variant` 以 `normal` 和 `capsule` 表达公开结构形态；默认为 `normal`，不改变旧调用行为。胶囊轨道的内缩、游标和刻度由组件统一绘制，不是 Demo 专用 API。
+- 默认样式修复：`TButton` 图标插槽将已解析的图标色传给其中的 `TLoading`；显式 `TLoadingThemeData.iconColor` 仍保持最高优先级，独立 `TLoading` 默认色不变。
+- Demo 边界修复：Input 必填标记的右侧配置移入 `InputBasicExample`，使运行页面与“查看代码”具有相同的主题上下文。
 
 ## 视觉证据
 

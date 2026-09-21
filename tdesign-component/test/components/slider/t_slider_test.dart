@@ -16,14 +16,19 @@ void main() {
     expect(rangeThumbShape.disabledBorderColor, disabledBorderColor);
   }
 
-  Widget wrap(Widget child, {TSliderThemeData? sliderTheme}) {
+  Widget wrap(
+    Widget child, {
+    TSliderThemeData? sliderTheme,
+    SliderThemeData? materialSliderTheme,
+  }) {
     return MaterialApp(
       theme: ThemeData(
         extensions: [
           TThemeData.defaultData(),
           if (sliderTheme != null) sliderTheme,
         ],
-        sliderTheme: const SliderThemeData(trackHeight: 6),
+        sliderTheme:
+            materialSliderTheme ?? const SliderThemeData(trackHeight: 6),
       ),
       home: Scaffold(
         body: Center(child: SizedBox(width: 320, child: child)),
@@ -97,8 +102,7 @@ void main() {
       expectThumbBorders(
         theme,
         borderColor: TThemeData.defaultData().grayColor1,
-        disabledBorderColor:
-            TThemeData.defaultData().bgColorComponentDisabled,
+        disabledBorderColor: TThemeData.defaultData().bgColorComponentDisabled,
       );
     });
 
@@ -229,6 +233,47 @@ void main() {
       expect(
         SliderTheme.of(tester.element(find.byType(Slider))).showValueIndicator,
         ShowValueIndicator.never,
+      );
+      final tickShape = SliderTheme.of(
+        tester.element(find.byType(Slider)),
+      ).tickMarkShape;
+      expect(tickShape, const RoundSliderTickMarkShape(tickMarkRadius: 3));
+    });
+
+    testWidgets('capsule variant owns inset track and 20px thumb geometry', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TSlider(
+            value: 0.4,
+            divisions: 5,
+            variant: TSliderVariant.capsule,
+          ),
+          materialSliderTheme: const SliderThemeData(
+            trackHeight: 6,
+            activeTickMarkColor: Colors.purple,
+          ),
+        ),
+      );
+
+      final theme = SliderTheme.of(tester.element(find.byType(Slider)));
+      expect(theme.trackHeight, 16);
+      expect(theme.activeTickMarkColor, Colors.purple);
+      expect(
+        theme.trackShape.runtimeType.toString(),
+        '_CapsuleSliderTrackShape',
+      );
+      expect(
+        theme.thumbShape?.getPreferredSize(true, false),
+        const Size.square(20),
+      );
+      expect(
+        theme.tickMarkShape?.getPreferredSize(
+          sliderTheme: theme,
+          isEnabled: true,
+        ),
+        const Size(2, 10),
       );
     });
 
@@ -371,6 +416,42 @@ void main() {
           tester.element(find.byType(RangeSlider)),
         ).showValueIndicator,
         ShowValueIndicator.never,
+      );
+      final tickShape = SliderTheme.of(
+        tester.element(find.byType(RangeSlider)),
+      ).rangeTickMarkShape;
+      expect(tickShape, const RoundRangeSliderTickMarkShape(tickMarkRadius: 3));
+    });
+
+    testWidgets('range capsule variant uses component-owned geometry', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TRangeSlider(
+            value: RangeValues(0.2, 0.8),
+            divisions: 5,
+            variant: TSliderVariant.capsule,
+          ),
+        ),
+      );
+
+      final theme = SliderTheme.of(tester.element(find.byType(RangeSlider)));
+      expect(theme.trackHeight, 16);
+      expect(
+        theme.rangeTrackShape.runtimeType.toString(),
+        '_CapsuleRangeSliderTrackShape',
+      );
+      expect(
+        theme.rangeThumbShape?.getPreferredSize(true, false),
+        const Size.square(20),
+      );
+      expect(
+        theme.rangeTickMarkShape?.getPreferredSize(
+          sliderTheme: theme,
+          isEnabled: true,
+        ),
+        const Size(2, 10),
       );
     });
 

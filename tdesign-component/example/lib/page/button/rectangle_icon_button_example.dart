@@ -34,13 +34,7 @@ class RectangleIconButtonExample extends StatelessWidget {
   TButton _buildLoadingIconButton(BuildContext context) {
     return TButton(
       child: const Text('加载中'),
-      icon: Theme(
-        // TLoading 已移除 themeData 构造参数，改用 mergeExtension 注入子树主题
-        data: Theme.of(context).mergeExtension(
-          TLoadingThemeData(iconColor: context.tTheme.whiteColor1),
-        ),
-        child: const TLoading(size: 24, icon: TLoadingIcon.circle),
-      ),
+      icon: const TLoading(size: 24, icon: TLoadingIcon.circle),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorScheme: TButtonColorScheme.primary,

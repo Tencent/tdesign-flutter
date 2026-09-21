@@ -80,7 +80,7 @@ void main() {
 
     const longText = '超长省略文本标签超长省略文本标签';
     final longTag = tester.widget<TTag>(find.widgetWithText(TTag, longText));
-    expect(longTag.variant, TTagVariant.light);
+    expect(longTag.variant, TTagVariant.dark);
 
     final longTextWidget = tester.widget<Text>(find.text(longText));
     expect(longTextWidget.maxLines, 1);

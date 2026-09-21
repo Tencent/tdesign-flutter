@@ -77,6 +77,13 @@ class _InputBasicExampleState extends State<InputBasicExample> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildBasic(context);
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TFormThemeData(
+          requiredMarkPosition: TFormRequiredMarkPosition.right,
+        ),
+      ),
+      child: _buildBasic(context),
+    );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/page/input/input_basic_example.dart';
 import 'package:tdesign_flutter_example/page/input/input_page.dart';
 
 import 'demo_page_test_utils.dart';
@@ -14,6 +15,26 @@ void main() {
     componentType: TInput,
   );
   registerDemoPageTests(spec);
+
+  testWidgets('基础输入框自带必填标记位置主题', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        home: const Scaffold(body: InputBasicExample()),
+      ),
+    );
+
+    final requiredItem = find.byWidgetPredicate(
+      (widget) => widget is TFormItem && widget.required == true,
+    );
+    expect(requiredItem, findsOneWidget);
+    expect(
+      Theme.of(
+        tester.element(requiredItem),
+      ).extension<TFormThemeData>()?.requiredMarkPosition,
+      TFormRequiredMarkPosition.right,
+    );
+  }, tags: 'demo');
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('input invalid phone ${mode.name} golden', (tester) async {
@@ -41,6 +62,26 @@ void main() {
     expect(find.text('只读模式'), findsNothing);
     expect(find.text('17600600600'), findsNothing);
     expect(find.text('输入手机号码'), findsOneWidget);
+    final errorItem = tester.widget<TFormItem>(
+      find.byWidgetPredicate(
+        (widget) => widget is TFormItem && widget.errorText == '错误提示',
+      ),
+    );
+    expect(errorItem.verticalAlignment, TFormItemVerticalAlignment.start);
+    final errorInput = find.descendant(
+      of: find.byWidgetPredicate(
+        (widget) => widget is TFormItem && widget.errorText == '错误提示',
+      ),
+      matching: find.byType(TInput),
+    );
+    final clearIcon = find.descendant(
+      of: errorInput,
+      matching: find.byIcon(TIcons.close_circle_filled),
+    );
+    expect(
+      tester.widget<Icon>(clearIcon).color,
+      TThemeData.defaultData().errorNormalColor,
+    );
   }, tags: 'demo');
 
   testWidgets('图形验证码左侧保留分割线', (tester) async {

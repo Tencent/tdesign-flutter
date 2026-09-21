@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
@@ -7,6 +9,19 @@ import 't_slider_theme.dart';
 
 /// Formats the value shown above a slider thumb.
 typedef TSliderThumbFormatter = String Function(double value);
+
+/// Slider visual structure.
+enum TSliderVariant {
+  /// Standard thin track.
+  normal,
+
+  /// Capsule track with a 3px inset active segment and 20px thumbs.
+  capsule,
+}
+
+const double _kScaleTickRadius = 3;
+const double _kCapsuleTrackHeight = 16;
+const double _kCapsuleTrackInset = 3;
 
 SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
   final inherited = SliderTheme.of(context);
@@ -62,6 +77,12 @@ SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
         inherited.disabledInactiveTickMarkColor ??
         colorScheme?.onSurface.withValues(alpha: 0.12) ??
         disabledComponent,
+    tickMarkShape:
+        inherited.tickMarkShape ??
+        const RoundSliderTickMarkShape(tickMarkRadius: _kScaleTickRadius),
+    rangeTickMarkShape:
+        inherited.rangeTickMarkShape ??
+        const RoundRangeSliderTickMarkShape(tickMarkRadius: _kScaleTickRadius),
     thumbColor: inherited.thumbColor ?? thumb,
     disabledThumbColor: inherited.disabledThumbColor ?? disabledThumb,
     thumbShape:
@@ -92,6 +113,34 @@ SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
           height: token.fontBodyMedium?.height,
           fontWeight: token.fontBodyMedium?.fontWeight,
         ).merge(material.tExplicitTextTheme?.bodyMedium),
+  );
+}
+
+SliderThemeData _resolveSliderTheme(
+  BuildContext context,
+  TSliderVariant variant,
+) {
+  final inherited = SliderTheme.of(context);
+  final base = _sliderThemeWithTokenFallback(context);
+  if (variant == TSliderVariant.normal) {
+    return base;
+  }
+  final token = context.tTheme;
+  return base.copyWith(
+    trackHeight: _kCapsuleTrackHeight,
+    trackShape: const _CapsuleSliderTrackShape(),
+    rangeTrackShape: const _CapsuleRangeSliderTrackShape(),
+    tickMarkShape: const _CapsuleSliderTickMarkShape(),
+    rangeTickMarkShape: const _CapsuleRangeSliderTickMarkShape(),
+    activeTickMarkColor:
+        inherited.activeTickMarkColor ?? token.bgColorContainer,
+    inactiveTickMarkColor:
+        inherited.inactiveTickMarkColor ?? token.bgColorSecondaryContainer,
+    disabledActiveTickMarkColor:
+        inherited.disabledActiveTickMarkColor ?? token.bgColorContainer,
+    disabledInactiveTickMarkColor:
+        inherited.disabledInactiveTickMarkColor ??
+        token.bgColorSecondaryContainer,
   );
 }
 
@@ -143,6 +192,9 @@ class TSlider extends StatelessWidget {
 
     /// 刻度值格式化回调。
     this.scaleFormatter,
+
+    /// 滑块视觉结构，默认使用标准细轨道。
+    this.variant = TSliderVariant.normal,
   }) : assert(max > min),
        assert(value >= min && value <= max),
        assert(divisions == null || divisions > 0),
@@ -181,6 +233,9 @@ class TSlider extends StatelessWidget {
   /// 刻度值格式化回调。
   final TSliderThumbFormatter? scaleFormatter;
 
+  /// 滑块视觉结构。
+  final TSliderVariant variant;
+
   @override
   Widget build(BuildContext context) {
     final label = showThumbValue
@@ -196,7 +251,7 @@ class TSlider extends StatelessWidget {
       divisions: divisions,
       label: label,
     );
-    final baseTheme = _sliderThemeWithTokenFallback(context);
+    final baseTheme = _resolveSliderTheme(context, variant);
     final sliderTheme = baseTheme.copyWith(
       showValueIndicator: showThumbValue ? ShowValueIndicator.never : null,
       thumbShape: label == null
@@ -269,6 +324,9 @@ class TRangeSlider extends StatelessWidget {
 
     /// 刻度值格式化回调。
     this.scaleFormatter,
+
+    /// 滑块视觉结构，默认使用标准细轨道。
+    this.variant = TSliderVariant.normal,
   }) : assert(max > min),
        assert(divisions == null || divisions > 0),
        assert(!showScaleValue || divisions != null);
@@ -306,6 +364,9 @@ class TRangeSlider extends StatelessWidget {
   /// 刻度值格式化回调。
   final TSliderThumbFormatter? scaleFormatter;
 
+  /// 滑块视觉结构。
+  final TSliderVariant variant;
+
   @override
   Widget build(BuildContext context) {
     assert(value.start >= min && value.end <= max);
@@ -325,7 +386,7 @@ class TRangeSlider extends StatelessWidget {
       divisions: divisions,
       labels: labels,
     );
-    final baseTheme = _sliderThemeWithTokenFallback(context);
+    final baseTheme = _resolveSliderTheme(context, variant);
     final sliderTheme = baseTheme.copyWith(
       showValueIndicator: showThumbValue ? ShowValueIndicator.never : null,
       rangeThumbShape: labels == null
@@ -359,6 +420,224 @@ class TRangeSlider extends StatelessWidget {
         ? content
         : DecoratedBox(decoration: decoration, child: content);
   }
+}
+
+class _CapsuleSliderTrackShape extends RoundedRectSliderTrackShape {
+  const _CapsuleSliderTrackShape();
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset offset, {
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required Animation<double> enableAnimation,
+    required TextDirection textDirection,
+    required Offset thumbCenter,
+    Offset? secondaryOffset,
+    bool isDiscrete = false,
+    bool isEnabled = false,
+    double additionalActiveTrackHeight = 2,
+  }) {
+    final trackRect = getPreferredRect(
+      parentBox: parentBox,
+      offset: offset,
+      sliderTheme: sliderTheme,
+      isEnabled: isEnabled,
+      isDiscrete: isDiscrete,
+    );
+    if (trackRect.isEmpty) {
+      return;
+    }
+    final inactiveColor = Color.lerp(
+      sliderTheme.disabledInactiveTrackColor,
+      sliderTheme.inactiveTrackColor,
+      enableAnimation.value,
+    )!;
+    final activeColor = Color.lerp(
+      sliderTheme.disabledActiveTrackColor,
+      sliderTheme.activeTrackColor,
+      enableAnimation.value,
+    )!;
+    final outerRadius = Radius.circular(trackRect.height / 2);
+    context.canvas.drawRRect(
+      RRect.fromRectAndRadius(trackRect, outerRadius),
+      Paint()..color = inactiveColor,
+    );
+
+    final innerTop = trackRect.top + _kCapsuleTrackInset;
+    final innerBottom = trackRect.bottom - _kCapsuleTrackInset;
+    final activeRect = textDirection == TextDirection.ltr
+        ? Rect.fromLTRB(
+            trackRect.left + _kCapsuleTrackInset,
+            innerTop,
+            thumbCenter.dx,
+            innerBottom,
+          )
+        : Rect.fromLTRB(
+            thumbCenter.dx,
+            innerTop,
+            trackRect.right - _kCapsuleTrackInset,
+            innerBottom,
+          );
+    if (activeRect.width > 0 && activeRect.height > 0) {
+      context.canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          activeRect,
+          Radius.circular(activeRect.height / 2),
+        ),
+        Paint()..color = activeColor,
+      );
+    }
+  }
+}
+
+class _CapsuleRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
+  const _CapsuleRangeSliderTrackShape();
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset offset, {
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required Animation<double> enableAnimation,
+    required Offset startThumbCenter,
+    required Offset endThumbCenter,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+    required TextDirection textDirection,
+    double additionalActiveTrackHeight = 2,
+  }) {
+    final trackRect = getPreferredRect(
+      parentBox: parentBox,
+      offset: offset,
+      sliderTheme: sliderTheme,
+      isEnabled: isEnabled,
+      isDiscrete: isDiscrete,
+    );
+    if (trackRect.isEmpty) {
+      return;
+    }
+    final inactiveColor = Color.lerp(
+      sliderTheme.disabledInactiveTrackColor,
+      sliderTheme.inactiveTrackColor,
+      enableAnimation.value,
+    )!;
+    final activeColor = Color.lerp(
+      sliderTheme.disabledActiveTrackColor,
+      sliderTheme.activeTrackColor,
+      enableAnimation.value,
+    )!;
+    context.canvas.drawRRect(
+      RRect.fromRectAndRadius(trackRect, Radius.circular(trackRect.height / 2)),
+      Paint()..color = inactiveColor,
+    );
+
+    final left = math.min(startThumbCenter.dx, endThumbCenter.dx);
+    final right = math.max(startThumbCenter.dx, endThumbCenter.dx);
+    final activeRect = Rect.fromLTRB(
+      left,
+      trackRect.top + _kCapsuleTrackInset,
+      right,
+      trackRect.bottom - _kCapsuleTrackInset,
+    );
+    if (activeRect.width > 0 && activeRect.height > 0) {
+      context.canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          activeRect,
+          Radius.circular(activeRect.height / 2),
+        ),
+        Paint()..color = activeColor,
+      );
+    }
+  }
+}
+
+class _CapsuleSliderTickMarkShape extends SliderTickMarkShape {
+  const _CapsuleSliderTickMarkShape();
+
+  @override
+  Size getPreferredSize({
+    required SliderThemeData sliderTheme,
+    required bool isEnabled,
+  }) => const Size(2, _kCapsuleTrackHeight - 2 * _kCapsuleTrackInset);
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required Animation<double> enableAnimation,
+    required Offset thumbCenter,
+    required bool isEnabled,
+    required TextDirection textDirection,
+  }) {
+    final active = switch (textDirection) {
+      TextDirection.ltr => center.dx <= thumbCenter.dx,
+      TextDirection.rtl => center.dx >= thumbCenter.dx,
+    };
+    final color = Color.lerp(
+      active
+          ? sliderTheme.disabledActiveTickMarkColor
+          : sliderTheme.disabledInactiveTickMarkColor,
+      active
+          ? sliderTheme.activeTickMarkColor
+          : sliderTheme.inactiveTickMarkColor,
+      enableAnimation.value,
+    )!;
+    _paintCapsuleTick(context.canvas, center, color);
+  }
+}
+
+class _CapsuleRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
+  const _CapsuleRangeSliderTickMarkShape();
+
+  @override
+  Size getPreferredSize({
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+  }) => const Size(2, _kCapsuleTrackHeight - 2 * _kCapsuleTrackInset);
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required Animation<double> enableAnimation,
+    required Offset startThumbCenter,
+    required Offset endThumbCenter,
+    bool isEnabled = false,
+    required TextDirection textDirection,
+  }) {
+    final left = math.min(startThumbCenter.dx, endThumbCenter.dx);
+    final right = math.max(startThumbCenter.dx, endThumbCenter.dx);
+    final active = center.dx >= left && center.dx <= right;
+    final color = Color.lerp(
+      active
+          ? sliderTheme.disabledActiveTickMarkColor
+          : sliderTheme.disabledInactiveTickMarkColor,
+      active
+          ? sliderTheme.activeTickMarkColor
+          : sliderTheme.inactiveTickMarkColor,
+      enableAnimation.value,
+    )!;
+    _paintCapsuleTick(context.canvas, center, color);
+  }
+}
+
+void _paintCapsuleTick(Canvas canvas, Offset center, Color color) {
+  final rect = Rect.fromCenter(
+    center: center,
+    width: 2,
+    height: _kCapsuleTrackHeight - 2 * _kCapsuleTrackInset,
+  );
+  canvas.drawRRect(
+    RRect.fromRectAndRadius(rect, const Radius.circular(1)),
+    Paint()..color = color,
+  );
 }
 
 class _TDesignSliderThumbShape extends SliderComponentShape {

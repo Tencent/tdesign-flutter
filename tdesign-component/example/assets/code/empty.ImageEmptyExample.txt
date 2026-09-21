@@ -10,7 +10,7 @@ class ImageEmptyExample extends StatelessWidget {
         dimension: 120,
         child: Container(
           decoration: BoxDecoration(
-            color: context.tTheme.bgColorComponent,
+            color: context.tTheme.bgColorSecondaryContainer,
             borderRadius: BorderRadius.circular(8),
           ),
           child: const TImage(src: 'assets/img/empty.png', fit: BoxFit.contain),

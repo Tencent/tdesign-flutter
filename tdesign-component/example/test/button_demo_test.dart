@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/page/button/button_page.dart';
 import 'package:tdesign_flutter_example/page/button/disable_primary_fill_button_example.dart';
@@ -91,7 +92,12 @@ void main() {
       ThemeMode.light,
     );
 
-    expect(tester.widget<TLoading>(find.byType(TLoading)).size, 24);
+    final loading = find.byType(TLoading);
+    expect(tester.widget<TLoading>(loading).size, 24);
+    expect(
+      tester.widget<TCircleIndicator>(find.byType(TCircleIndicator)).color,
+      TThemeData.defaultData().whiteColor1,
+    );
 
     final disabledButton = find.widgetWithText(TButton, '描边按钮').first;
     await tester.scrollUntilVisible(disabledButton, 300);

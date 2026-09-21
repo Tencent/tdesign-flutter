@@ -354,8 +354,10 @@ class _TInputState extends State<TInput> {
       clearIconSize: theme?.clearIconSize ?? 20,
       clearIconColor:
           theme?.clearIconColor ??
-          material.tExplicitColorScheme?.onSurfaceVariant ??
-          token.textColorPlaceholder,
+          (effectiveStatus == TInputStatus.error
+              ? token.errorNormalColor
+              : material.tExplicitColorScheme?.onSurfaceVariant ??
+                    token.textColorPlaceholder),
       onClear: _clear,
       enabled: widget.enabled,
       readOnly: widget.readOnly,

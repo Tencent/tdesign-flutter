@@ -581,7 +581,7 @@ void main() {
     });
 
     testWidgets(
-      'status keeps the default clear color and theme can override it',
+      'error status colors the clear icon and theme can override it',
       (tester) async {
         final token = TThemeData.defaultData();
         for (final status in TInputStatus.values) {
@@ -596,7 +596,9 @@ void main() {
           );
           expect(
             tester.widget<Icon>(find.byIcon(TIcons.close_circle_filled)).color,
-            token.textColorPlaceholder,
+            status == TInputStatus.error
+                ? token.errorNormalColor
+                : token.textColorPlaceholder,
           );
         }
 
@@ -607,13 +609,13 @@ void main() {
               status: TInputStatus.error,
               clearButtonMode: TInputClearButtonMode.always,
             ),
-            inputTheme: TInputThemeData(clearIconColor: token.errorNormalColor),
+            inputTheme: const TInputThemeData(clearIconColor: Colors.purple),
           ),
         );
         await tester.pumpAndSettle();
         expect(
           tester.widget<Icon>(find.byIcon(TIcons.close_circle_filled)).color,
-          token.errorNormalColor,
+          Colors.purple,
         );
       },
     );

@@ -10,13 +10,6 @@ class SliderVerticalExample extends StatefulWidget {
 
 class _SliderVerticalExampleState extends State<SliderVerticalExample> {
   Widget _buildVertical(BuildContext context) {
-    final capsuleTheme = SliderTheme.of(context).copyWith(
-      trackHeight: 16,
-      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
-      rangeThumbShape: const RoundRangeSliderThumbShape(enabledThumbRadius: 8),
-      overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
-    );
-
     Widget verticalSlider({
       required Widget slider,
       String? thumbLabel,
@@ -105,15 +98,13 @@ class _SliderVerticalExampleState extends State<SliderVerticalExample> {
         ),
         _subsection(context, '胶囊型垂直滑块'),
         verticalSlider(
-          slider: SliderTheme(
-            data: capsuleTheme,
-            child: TSlider(
-              key: const ValueKey('slider-vertical-capsule'),
-              value: _verticalCapsule,
-              min: 0,
-              max: 100,
-              onChanged: (value) => setState(() => _verticalCapsule = value),
-            ),
+          slider: TSlider(
+            key: const ValueKey('slider-vertical-capsule'),
+            value: _verticalCapsule,
+            min: 0,
+            max: 100,
+            variant: TSliderVariant.capsule,
+            onChanged: (value) => setState(() => _verticalCapsule = value),
           ),
           thumbLabel: _percent(_verticalCapsule),
           normalizedValue: _verticalCapsule / 100,
@@ -121,17 +112,15 @@ class _SliderVerticalExampleState extends State<SliderVerticalExample> {
         ),
         _subsection(context, '带刻度的胶囊型垂直滑块'),
         verticalSlider(
-          slider: SliderTheme(
-            data: capsuleTheme,
-            child: TRangeSlider(
-              key: const ValueKey('slider-vertical-capsule-scale-range'),
-              value: _verticalCapsuleScaleRange,
-              min: 0,
-              max: 100,
-              divisions: 5,
-              onChanged: (value) =>
-                  setState(() => _verticalCapsuleScaleRange = value),
-            ),
+          slider: TRangeSlider(
+            key: const ValueKey('slider-vertical-capsule-scale-range'),
+            value: _verticalCapsuleScaleRange,
+            min: 0,
+            max: 100,
+            divisions: 5,
+            variant: TSliderVariant.capsule,
+            onChanged: (value) =>
+                setState(() => _verticalCapsuleScaleRange = value),
           ),
           showMarks: true,
           marksKey: const ValueKey('slider-vertical-capsule-scale-labels'),

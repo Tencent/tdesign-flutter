@@ -13,16 +13,9 @@ class SliderCapsuleExample extends StatefulWidget {
 
 class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
   Widget _buildCapsule(BuildContext context) {
-    final capsuleTheme = SliderTheme.of(context).copyWith(
-      trackHeight: 16,
-      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
-      rangeThumbShape: const RoundRangeSliderThumbShape(enabledThumbRadius: 8),
-      overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
-    );
-
     Widget capsule(Widget slider) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: SliderTheme(data: capsuleTheme, child: slider),
+      child: slider,
     );
 
     return Column(
@@ -33,6 +26,7 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
             value: _capsule,
             min: 0,
             max: 100,
+            variant: TSliderVariant.capsule,
             onChanged: (value) => setState(() => _capsule = value),
           ),
         ),
@@ -42,6 +36,7 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
             value: _capsuleRange,
             min: 0,
             max: 100,
+            variant: TSliderVariant.capsule,
             onChanged: (value) => setState(() => _capsuleRange = value),
           ),
         ),
@@ -51,6 +46,7 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
             value: _capsuleLabeledRange,
             min: 0,
             max: 100,
+            variant: TSliderVariant.capsule,
             showThumbValue: true,
             thumbFormatter: _percent,
             onChanged: (value) => setState(() => _capsuleLabeledRange = value),
@@ -63,6 +59,7 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
             min: 0,
             max: 100,
             divisions: 5,
+            variant: TSliderVariant.capsule,
             showScaleValue: true,
             scaleFormatter: _integer,
             onChanged: (value) => setState(() => _capsuleScale = value),
@@ -75,6 +72,7 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
             min: 0,
             max: 100,
             divisions: 5,
+            variant: TSliderVariant.capsule,
             showScaleValue: true,
             scaleFormatter: _integer,
             onChanged: (value) => setState(() => _capsuleScaleRange = value),

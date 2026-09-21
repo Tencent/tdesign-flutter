@@ -649,6 +649,32 @@ void main() {
       expect(badgeCenter.dy, lessThan(iconCenter.dy));
     });
 
+    testWidgets('capsule container uses the 6px design radius', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.text,
+            style: TTabBarStyle.capsule,
+            value: 0,
+            navigationTabs: textTabs(),
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      final capsule = tester.widget<Container>(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is Container &&
+              widget.margin == const EdgeInsets.symmetric(horizontal: 16),
+        ),
+      );
+      expect(
+        (capsule.decoration! as BoxDecoration).borderRadius,
+        BorderRadius.circular(TThemeData.defaultData().radiusDefault),
+      );
+    });
+
     testWidgets('iconText default badge anchors to icon top-right', (
       tester,
     ) async {
@@ -682,7 +708,7 @@ void main() {
     });
 
     testWidgets(
-      'text badge uses TabBar default offset when no override exists',
+      'text badge uses the shared top-end anchor when no override exists',
       (tester) async {
         await tester.pumpWidget(
           wrapWithTheme(
@@ -705,10 +731,7 @@ void main() {
         expect(badge.offset, isNull);
         expect(badge.child, isNotNull);
         final title = find.widgetWithText(TText, '消息');
-        expect(
-          tester.getCenter(find.text('9')),
-          tester.getTopRight(title) + const Offset(16, -8),
-        );
+        expect(tester.getCenter(find.text('9')), tester.getTopRight(title));
       },
     );
 
@@ -736,10 +759,7 @@ void main() {
       );
 
       final title = find.widgetWithText(TText, '消息');
-      expect(
-        tester.getCenter(find.text('9')),
-        tester.getTopLeft(title) + const Offset(-16, -8),
-      );
+      expect(tester.getCenter(find.text('9')), tester.getTopLeft(title));
     });
 
     testWidgets('explicit badge offset remains physical in RTL', (
@@ -800,8 +820,7 @@ void main() {
 
       expect(
         tester.getCenter(find.text('9')),
-        tester.getTopRight(find.widgetWithText(TText, '消息')) +
-            const Offset(16, -8),
+        tester.getTopRight(find.widgetWithText(TText, '消息')),
       );
     });
 
@@ -833,8 +852,7 @@ void main() {
 
       expect(
         tester.getCenter(find.text('9')),
-        tester.getTopRight(find.widgetWithText(TText, '消息')) +
-            const Offset(16, -8),
+        tester.getTopRight(find.widgetWithText(TText, '消息')),
       );
     });
 
