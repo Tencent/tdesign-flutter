@@ -19,7 +19,7 @@
 | content | Widget | - | - |
 | offset | double? | - | 弹层与触发元素的间距。 |
 | colorScheme | TPopoverColorScheme | TPopoverColorScheme.defaultTheme | 气泡预设配色。 |
-| closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 |
+| closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 外部目标仍会接收该次点击，因此可在单次点击中从一个气泡切换到另一个气泡。 |
 | closeOnScroll | bool | true | 页面滚动时是否关闭弹层。 默认为 true，避免触发元素移动后气泡停留在旧坐标。 |
 | placement | TPopoverPlacement | TPopoverPlacement.top | 浮层出现位置，默认为 `TPopoverPlacement.top`。 |
 | showArrow | bool? | - | 是否显示气泡箭头。 |
@@ -49,7 +49,7 @@
 | arrowSize | double? | - | 箭头尺寸。 |
 | builder | TPopoverAnchorBuilder | - | 构建气泡所绑定的触发区域。 构建器会收到当前有效的控制器；未传入 `controller` 时由组件内部创建。 |
 | child | Widget? | - | 传递给 `builder` 的可选子组件。 |
-| closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 |
+| closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 外部目标仍会接收该次点击，因此可在单次点击中从一个气泡切换到另一个气泡。 |
 | closeOnScroll | bool | true | 页面滚动时是否关闭弹层。 |
 | colorScheme | TPopoverColorScheme | TPopoverColorScheme.defaultTheme | 气泡预设配色。 |
 | content | Widget | - | 气泡内容。 |

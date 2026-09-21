@@ -3,6 +3,7 @@
 - [x] 固定 `origin/develop@47e070a70bafbb99ea5722cf59c03ab5bf61ae3f` 为比较基线。
 - [x] 按设计稿复核并修复 28 个公开 Demo。
 - [x] 收敛 Progress、Swiper、Checkbox、Footer、Cell、Collapse、Popover 的组件职责。
+- [x] 修复 Popover 外部点击遮挡另一触发器的交互回归，并覆盖旧关新开、当前触发器关闭与滚动边界。
 - [x] 对齐共享灰阶 Token，并审查全部消费 Golden。
 - [x] 更新组件、Demo、API、示例代码、Spec 与回归测试。
 - [x] 完成 Flutter 3.32.0 与 latest 非视觉门禁。

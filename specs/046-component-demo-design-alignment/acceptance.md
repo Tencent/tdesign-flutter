@@ -3,7 +3,7 @@
 ## 基线
 
 - Git：`origin/develop@47e070a70bafbb99ea5722cf59c03ab5bf61ae3f`
-- 受影响源码与测试 binary diff 指纹：`aa7bf106ccc53633a5e421acd2167b22c9b66b4b29ba439e7f1dd73716fbb071`
+- 受影响源码与测试 binary diff 指纹：`b9a1a63f686ba0504d82fdb5aed54fa447587d245e2de0405dd66ccbcbc3439c`
 - Golden：Linux amd64、Flutter 3.32.0、仓库固定字体与视口
 - Latest：Flutter 3.47.0 clean snapshot
 - 设计比较：统一从首个公开标题裁切，省略状态栏、Figma 头部与底部测试区域
@@ -23,6 +23,7 @@
 | Progress 生产源码覆盖率 | 524/527，99.43% |
 | Checkbox 生产源码覆盖率 | 393/410，95.85% |
 | Swiper 生产源码覆盖率 | 478/495，96.57% |
+| Popover 生产源码覆盖率 | 630/642，98.13% |
 
 ## Golden 差异归因
 
@@ -42,6 +43,7 @@
 - DateTimePicker 默认值、选中行居中与弹层安全区正确。
 - Swiper 控制按钮实际切页，缩放与淡化场景露出两侧卡片。
 - Popover top-left / bottom-right 实际打开，气泡边缘对齐触发按钮，箭头保持约 12px 内边距。
+- Popover 已打开时单击另一触发器，旧气泡关闭且新气泡在同一次点击中打开；单击当前触发器只关闭，拖动滚动不误判为外部点击。
 - ImageViewer 可打开并返回关闭；拖拽和双指缩放由 25/25 指针级 Widget 测试覆盖，桌面自动化层未注入多点触控。
 
 ## 结论

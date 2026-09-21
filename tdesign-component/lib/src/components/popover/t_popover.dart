@@ -190,6 +190,7 @@ class TPopoverAnchor extends StatefulWidget {
   final TPopoverColorScheme colorScheme;
 
   /// 点击气泡外部区域时是否关闭弹层。
+  /// 外部目标仍会接收该次点击，因此可在单次点击中从一个气泡切换到另一个气泡。
   final bool closeOnClickOutside;
 
   /// 页面滚动时是否关闭弹层。
@@ -387,6 +388,7 @@ class TPopover {
     TPopoverColorScheme colorScheme = TPopoverColorScheme.defaultTheme,
 
     /// 点击气泡外部区域时是否关闭弹层。
+    /// 外部目标仍会接收该次点击，因此可在单次点击中从一个气泡切换到另一个气泡。
     bool closeOnClickOutside = true,
 
     /// 页面滚动时是否关闭弹层。
@@ -543,20 +545,6 @@ class TPopover {
               color: effectiveOverlayColor,
             ),
           ),
-          if (closeOnClickOutside || closeOnScroll)
-            Listener(
-              behavior: HitTestBehavior.translucent,
-              onPointerMove: closeOnScroll ? (_) => dismiss() : null,
-              onPointerSignal: closeOnScroll ? (_) => dismiss() : null,
-              child: closeOnClickOutside
-                  ? GestureDetector(
-                      key: const Key('t-popover-outside-dismiss'),
-                      behavior: HitTestBehavior.translucent,
-                      onTap: dismiss,
-                      child: const SizedBox.expand(),
-                    )
-                  : const SizedBox.expand(),
-            ),
           TPopoverWidget(
             context: context,
             content: content,
@@ -570,6 +558,7 @@ class TPopover {
             height: height,
             onTap: onTap,
             onLongTap: onLongTap,
+            onTapOutside: closeOnClickOutside ? dismiss : null,
             radius:
                 radius ??
                 (theme.borderRadius == null
