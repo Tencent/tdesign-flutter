@@ -120,8 +120,8 @@ Controller 驱动的轮播组件。
 | --- | --- |
 | none | 无额外效果。 |
 | cardMargin | 卡片间距效果。 |
-| scale | 相邻卡片沿交叉轴缩放，当前页保持完整尺寸。 |
-| scaleAndFade | 缩放和透明度效果。 |
+| scale | 相邻卡片等比缩放，当前页保持完整尺寸。 |
+| scaleAndFade | 相邻卡片等比缩放、淡化并向当前页两侧叠放。 |
 
 
 ### TSwiperPaginationItemBuilder
