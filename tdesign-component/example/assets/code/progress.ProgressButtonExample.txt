@@ -42,9 +42,8 @@ class _ProgressButtonExampleState extends State<ProgressButtonExample> {
 
   @override
   Widget build(BuildContext context) {
-    return TProgress(
+    return TProgress.button(
       key: const Key('progress-button'),
-      variant: TProgressVariant.button,
       value: _value,
       label: Text(_value == 0 ? '开始' : '${(_value * 100).round()}%'),
       semanticsLabel: '上传进度',

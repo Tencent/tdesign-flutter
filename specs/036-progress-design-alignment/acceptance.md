@@ -41,14 +41,14 @@
 | Linux Golden | 2/2 通过 | Flutter 3.32.0 amd64；更新后无更新参数精确复跑 |
 | 回归清单工具自测 | 13/13 通过 | coverage、component、visual manifest |
 | 生成器与站点契约 | 通过 | 示例代码 check；57 份 API 生成仅 Progress 有差异；56 个站点路由契约通过 |
-| Web 实际操作 | 通过 | 点击按钮一次：`开始/0%` → 按 1% 自动连续递增至 `80%`；点击微型按钮：`30%` → `60%` |
+| Web 实际操作 | 通过 | 点击按钮一次：`开始/0%` → 按 1% 自动连续递增至 `80%`；点击微型按钮：`75%` → `100%` |
 
 - API 已直接收敛，不提供旧名称兼容：`primary` → `normal`，`micro` 拆为
   `microCircular` / `microButton`，并删除可推翻形态语义的历史 Theme 字段。
-- 微型按钮视觉圆环保持 16px，透明命中区扩大到 44×44；按钮和只读环形的语义角色分离。
+- 微型按钮视觉圆环保持 24px，组件布局与透明命中区为 44×44；Demo 直接使用组件，不通过 `OverflowBox`、负位移或裁剪缩小占位。按钮和只读环形的语义角色分离。
 - `gradient` 覆盖 linear、plump、button，优先级高于 Theme 和状态默认色；环形传入渐变会断言失败。
 - Button Demo 由独立 `StatefulWidget` 持有进度和计时器；父级重建不会重置进度，推进中重复点击不会启动并发任务。
-- warning、error、success 的默认标签同时保留状态图标和百分比；填充色按组件 Theme、ProgressIndicatorTheme、`status` token 依次解析。
+- warning、error、success 在线性与环形形态默认只显示状态图标；plump 保留内部百分比并在外侧显示状态图标。填充色按组件 Theme、ProgressIndicatorTheme、`status` token 依次解析。
 
 ## 验证边界
 
@@ -61,3 +61,42 @@
 - 品牌色轨道、已完成区的对比渐变、高度与圆角均由 `TProgressVariant.button` 本体绘制；Demo 只传入 `value` / `label` / 交互回调。
 - Flutter 3.32.0 与 3.47.0：组件测试 55/55、完整 Demo 回归 5/5 通过；组件与 Example 严格 analyze 零问题。
 - Linux amd64 Flutter 3.32.0：light/dark Golden 按单个 Button 的“开始”初始态与组件本体渐变更新，无更新参数精确复跑 2/2 通过。
+
+## 命名构造重构与二次 Review 修复
+
+- 公开创建入口已从 `TProgress(variant: ...)` 收敛为六个命名构造函数；只读形态不再暴露交互回调，环形形态不再暴露线性渐变参数。
+- 基础线性轨道默认高度从 4px 修正为 6px；三方像素复验后基础 Demo 保持设计稿 80%，并由测试验证百分比位于轨道右侧。
+- 三方像素复验纠正了整页算法遗漏：Progress 页面恢复设计稿白底并去掉垂直外间距；环形、微型环形、按钮分别对齐 112px、24px、48px；状态图标和百分比按形态拆分布局。
+- Flutter 3.32.0：组件测试 56/56、Demo 测试 5/5 通过，组件与 Example 严格 analyze 零问题。
+- Flutter 3.47.0：组件测试 56/56、Demo 测试 5/5 通过，组件与 Example 严格 analyze 零问题。
+- 示例代码生成器写入后 `--check` 通过；API 文档已重新生成且列出六个命名构造函数。
+- macOS Flutter 3.32.0 fresh render 已用于 Figma / develop / 当前实现三方人工像素复核；仓库 Golden 随后已在 Linux Flutter 3.32.0 更新，并完成无更新参数的全量精确复验。
+
+## Figma 图层值复核与 Token 修复
+
+- Figma 移动端 frame `28600:38672` 的结构化图层确认：linear 为 6px、
+  `Body/Medium` 和 22px 状态图标；plump 为 20px、`Mark/Small`、8px
+  标签间距和 20px 外置状态图标；circular 为 112px / 6px、
+  `Title/ExtraLarge` 和 48px 状态图标；button 为 48px 和 `Mark/Large`。
+- Figma 状态实例中，error 在线性形态使用实心感叹号圆形，在 plump 形态使用实心叉号圆形，在环形形态使用无外圈叉号。
+- 组件不再从轨道高度按比例推导 linear、plump、circular 和 button 字体，
+  改为消费对应的全局字体 Token；标准 8px 标签间距消费 `spacer8`。测试同时
+  验证自定义 `fontMarkSmall` 与 `spacer8` 会改变最终样式。
+- Flutter 3.32.0 与 3.47.0：Progress 组件测试 60/60、Demo 测试 5/5
+  通过，组件严格 analyze 零问题；最终生产代码覆盖率 524/527（99.43%）。
+- macOS Flutter 3.32.0 无更新参数 Golden 已确认发生预期视觉差异：旧基线
+  375×1934，当前渲染 375×1926。仓库基线最终在 Linux amd64、Flutter
+  3.32.0 环境更新，并在移除 `--update-goldens` 后通过全量视觉回归复验。
+- Demo 中按钮形态标题统一为“按钮进度条”，修正此前误复制的图片预览文案；
+  该修正只影响示例描述，不扩展组件 API。
+
+## develop 二次 Review 最终门禁
+
+- 比较基线固定为 `origin/develop@47e070a70bafbb99ea5722cf59c03ab5bf61ae3f`。
+- Flutter 3.32.0 Linux 首轮全量严格比较只出现 119 张预期变更：93 张为共享灰阶
+  Token 的单通道 1 级差异，其余 26 张仅来自 Progress 设计重构与 `TCell.note`
+  自然宽度对 Calendar / SwipeCell 的预期布局影响；未发现未知 Golden 漂移。
+- 在同一 Linux amd64、Flutter 3.32.0 环境更新后，移除更新参数并再次执行完整
+  视觉回归清单，所有套件通过，无新增 Golden。
+- Flutter 3.47.0 从 clean + pub get 开始执行完整组件回归与 Example 回归：全部组件
+  回归套件通过，Example 262/262 通过。

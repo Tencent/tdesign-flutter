@@ -3,7 +3,7 @@
 ## 基线
 
 - Figma：`TDesign-for-mobile--Community-` 节点 `24386:5246`。
-- 小程序公开页：`https://tdesign.tencent.com/miniprogram/components/cascader`。
+- 小程序公开页仅作为组件 token 辅助参考：`https://tdesign.tencent.com/miniprogram/components/cascader`。
 - Flutter 固定视口：375×812 CSS px，DPR 1；Golden 使用 Flutter 3.32.0 Linux。
 
 ## 设计属性矩阵
@@ -24,7 +24,7 @@ step/tab 导航、活动层级次级标题和选项列表。
 
 - 基础和 tab 示例选择末级后立即提交、关闭并更新 Cell。
 - 任意层示例允许停留在中间层，点击关闭按钮提交当前草稿；蒙层关闭不提交。
-- 搜索命中末级后立即提交并关闭。
+- 四级末项命中后立即提交并关闭。
 
 稳定的视觉回归基线由 `cascader_page_{light,dark}.png` 和
-`cascader_{base,tab,subtitle,any,search}_opened_{light,dark}.png` 提供。
+`cascader_{vertical,vertical-locator,horizontal,horizontal-locator,with-title,without-title}_opened_{light,dark}.png` 提供。

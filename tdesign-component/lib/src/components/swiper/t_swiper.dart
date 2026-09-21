@@ -265,7 +265,8 @@ class TSwiper extends StatefulWidget {
 }
 
 class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
-  static const _cardAdjacentScale = 126 / 192;
+  static const _cardAdjacentScale = 0.8;
+  static const _cardPadding = 6.0;
 
   late TSwiperController _controller;
   late bool _ownsController;
@@ -622,32 +623,67 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
         final current = _pageController.hasClients
             ? _pageController.page ?? _pageController.initialPage.toDouble()
             : _pageController.initialPage.toDouble();
-        final distance = (current - page).abs().clamp(0.0, 1.0);
+        final position = (current - page).clamp(-1.0, 1.0);
+        final distance = position.abs();
+        final padding = widget.scrollDirection == Axis.horizontal
+            ? const EdgeInsets.symmetric(horizontal: _cardPadding)
+            : const EdgeInsets.symmetric(vertical: _cardPadding);
+        final edgeAlignment = widget.scrollDirection == Axis.horizontal
+            ? position > 0
+                  ? Alignment.centerRight
+                  : Alignment.centerLeft
+            : position > 0
+            ? Alignment.bottomCenter
+            : Alignment.topCenter;
         switch (effect) {
           case TSwiperPageEffect.none:
             return child!;
           case TSwiperPageEffect.cardMargin:
-            return Padding(
-              padding: widget.scrollDirection == Axis.horizontal
-                  ? const EdgeInsets.symmetric(horizontal: 6)
-                  : const EdgeInsets.symmetric(vertical: 6),
-              child: child,
-            );
+            return Padding(padding: padding, child: child);
           case TSwiperPageEffect.scale:
-            final crossAxisScale = 1 - distance * (1 - _cardAdjacentScale);
-            return Transform.scale(
-              scaleX: widget.scrollDirection == Axis.vertical
-                  ? crossAxisScale
-                  : 1,
-              scaleY: widget.scrollDirection == Axis.horizontal
-                  ? crossAxisScale
-                  : 1,
-              child: child,
+            final scale = 1 - distance * (1 - _cardAdjacentScale);
+            return Padding(
+              padding: padding,
+              child: Transform.scale(
+                scale: scale,
+                alignment: distance == 0 ? Alignment.center : edgeAlignment,
+                child: child,
+              ),
             );
           case TSwiperPageEffect.scaleAndFade:
-            return Opacity(
-              opacity: 1 - distance * 0.3,
-              child: Transform.scale(scale: 1 - distance * 0.2, child: child),
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final pageExtent = widget.scrollDirection == Axis.horizontal
+                    ? constraints.maxWidth
+                    : constraints.maxHeight;
+                final offset = position * pageExtent * _cardAdjacentScale;
+                return Transform.translate(
+                  offset: widget.scrollDirection == Axis.horizontal
+                      ? Offset(offset, 0)
+                      : Offset(0, offset),
+                  child: ClipRect(
+                    clipper: distance == 0
+                        ? null
+                        : _TSwiperScaleFadeClipper(
+                            axis: widget.scrollDirection,
+                            beforeCurrent: position > 0,
+                            pageExtent: pageExtent,
+                            viewportFraction: widget.viewportFraction,
+                            padEnds: widget.padEnds,
+                          ),
+                    child: Padding(
+                      padding: padding,
+                      child: Opacity(
+                        opacity: 1 - distance * 0.3,
+                        child: Transform.scale(
+                          scale: 1 - distance * (1 - _cardAdjacentScale),
+                          child: child,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
             );
         }
       },
@@ -858,5 +894,65 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
     }
     _pageController.dispose();
     super.dispose();
+  }
+}
+
+class _TSwiperScaleFadeClipper extends CustomClipper<Rect> {
+  const _TSwiperScaleFadeClipper({
+    required this.axis,
+    required this.beforeCurrent,
+    required this.pageExtent,
+    required this.viewportFraction,
+    required this.padEnds,
+  });
+
+  static const _outerInset = 16.0;
+  static const _cardPadding = 6.0;
+  static const _translationFactor = 0.8;
+
+  final Axis axis;
+  final bool beforeCurrent;
+  final double pageExtent;
+  final double viewportFraction;
+  final bool padEnds;
+
+  @override
+  Rect getClip(Size size) {
+    final viewportExtent = pageExtent / viewportFraction;
+    final leading = padEnds ? (viewportExtent - pageExtent) / 2 : 0.0;
+    final translatedPageStart = beforeCurrent
+        ? leading - pageExtent + pageExtent * _translationFactor
+        : leading + pageExtent - pageExtent * _translationFactor;
+    final currentStart = leading + _cardPadding;
+    final currentEnd = viewportExtent - leading - _cardPadding;
+    final start = beforeCurrent
+        ? _outerInset - translatedPageStart
+        : currentEnd - translatedPageStart;
+    final end = beforeCurrent
+        ? currentStart - translatedPageStart
+        : viewportExtent - _outerInset - translatedPageStart;
+    if (axis == Axis.horizontal) {
+      return Rect.fromLTRB(
+        start.clamp(0, size.width),
+        0,
+        end.clamp(0, size.width),
+        size.height,
+      );
+    }
+    return Rect.fromLTRB(
+      0,
+      start.clamp(0, size.height),
+      size.width,
+      end.clamp(0, size.height),
+    );
+  }
+
+  @override
+  bool shouldReclip(_TSwiperScaleFadeClipper oldClipper) {
+    return axis != oldClipper.axis ||
+        beforeCurrent != oldClipper.beforeCurrent ||
+        pageExtent != oldClipper.pageExtent ||
+        viewportFraction != oldClipper.viewportFraction ||
+        padEnds != oldClipper.padEnds;
   }
 }

@@ -6,9 +6,10 @@ import '../../base/example_widget.dart';
 import 'slider_capsule_example.dart';
 import 'slider_disabled_example.dart';
 import 'slider_labeled_example.dart';
-import 'slider_non_zero_example.dart';
+import 'slider_labeled_range_example.dart';
 import 'slider_range_example.dart';
 import 'slider_scale_example.dart';
+import 'slider_scale_range_example.dart';
 import 'slider_single_example.dart';
 import 'slider_vertical_example.dart';
 
@@ -43,19 +44,24 @@ class _TSliderPageState extends State<TSliderPage> {
             builder: (_) => const SliderRangeExample(),
           ),
           ExampleItem(
-            desc: '带数值滑动选择器',
+            desc: '带数值单游标滑块',
             methodName: 'SliderLabeledExample',
             builder: (_) => const SliderLabeledExample(),
           ),
           ExampleItem(
-            desc: '起始非零滑动选择器',
-            methodName: 'SliderNonZeroExample',
-            builder: (_) => const SliderNonZeroExample(),
+            desc: '带数值双游标滑块',
+            methodName: 'SliderLabeledRangeExample',
+            builder: (_) => const SliderLabeledRangeExample(),
           ),
           ExampleItem(
-            desc: '带刻度滑动选择器',
+            desc: '带刻度单游标滑块',
             methodName: 'SliderScaleExample',
             builder: (_) => const SliderScaleExample(),
+          ),
+          ExampleItem(
+            desc: '带刻度双游标滑块',
+            methodName: 'SliderScaleRangeExample',
+            builder: (_) => const SliderScaleRangeExample(),
           ),
         ],
       ),

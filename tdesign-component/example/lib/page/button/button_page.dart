@@ -27,6 +27,7 @@ class _TButtonPageState extends State<TButtonPage> {
       title: tTitle(),
       desc: '用于开启一个闭环的操作任务，如"删除"对象、"购买"商品等。',
       exampleCodeGroup: 'button',
+      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',
@@ -63,17 +64,19 @@ class _TButtonPageState extends State<TButtonPage> {
           title: '组件状态',
           children: [
             ExampleItem(
-              desc: '按钮禁用状态',
+              desc: '按钮禁用态',
+              center: false,
               methodName: 'DisablePrimaryFillButtonExample',
               builder: (_) => const DisablePrimaryFillButtonExample(),
             ),
           ],
         ),
         ExampleModule(
-          title: '组件主题',
+          title: '组件样式',
           children: [
             ExampleItem(
               desc: '按钮尺寸',
+              center: false,
               methodName: 'LargeButtonExample',
               builder: (_) => const LargeButtonExample(),
             ),

@@ -8,18 +8,20 @@ import 'demo_page_test_utils.dart';
 
 const footerDemoSpec = DemoPageTestSpec(
   name: 'footer',
-  title: 'Footer',
+  title: 'Footer 页脚',
   page: TFooterPage(),
   expectedTexts: [
     '基础页脚',
     '基础加链接页脚',
     '品牌页脚',
-    'Copyright © 2021-2031 TD.All Rights Reserved.',
+    'Copyright © 2019-2023 TDesign.All Rights Reserved.',
     '底部链接',
   ],
   componentType: TFooter,
   expectedComponentCount: 5,
   precacheAssetImages: ['assets/img/t_brand.png'],
+  supplementalCjkFontFamily: 'TDesign Demo Review Golden CJK',
+  supplementalCjkFontPath: 'test/fonts/DemoReviewGoldenCJK-Regular.otf',
 );
 
 void main() {
@@ -28,7 +30,7 @@ void main() {
   testWidgets('公开实例顺序与组合数量符合设计稿', (tester) async {
     await pumpFullDemoPage(tester, footerDemoSpec, ThemeMode.light);
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
-    expect(page.children.single.title, '类型');
+    expect(page.children.single.title, '组件类型');
     expect(page.children.single.children.map((item) => item.desc), [
       '基础页脚',
       '基础加链接页脚',

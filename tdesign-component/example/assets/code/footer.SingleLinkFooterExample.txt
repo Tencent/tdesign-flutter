@@ -20,12 +20,12 @@ Widget _buildSingleLinkFooter(BuildContext context) {
     children: [
       TFooter(
         links: [link('底部链接')],
-        text: 'Copyright © 2021-2031 TD.All Rights Reserved.',
+        text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
       ),
       const SizedBox(height: 24),
       TFooter(
         links: [link('底部链接'), link('底部链接')],
-        text: 'Copyright © 2021-2031 TD.All Rights Reserved.',
+        text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
       ),
     ],
   );

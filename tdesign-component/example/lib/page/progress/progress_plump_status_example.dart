@@ -11,28 +11,15 @@ class ProgressPlumpStatusExample extends StatelessWidget {
   Widget _buildPlumpStatus(BuildContext context) {
     return Column(
       children: [
-        TProgress(variant: TProgressVariant.plump, value: 0.8),
-        const SizedBox(height: 8),
-        TProgress(
-          variant: TProgressVariant.plump,
-          value: 1,
-          status: TProgressStatus.success,
-        ),
-        const SizedBox(height: 8),
-        TProgress(
-          variant: TProgressVariant.plump,
-          value: 0.8,
-          status: TProgressStatus.warning,
-        ),
-        const SizedBox(height: 8),
-        TProgress(
-          variant: TProgressVariant.plump,
-          value: 0.8,
-          status: TProgressStatus.error,
-        ),
-        const SizedBox(height: 8),
-        TProgress(
-          variant: TProgressVariant.plump,
+        TProgress.plump(value: 0.8),
+        const SizedBox(height: 17),
+        TProgress.plump(value: 1, status: TProgressStatus.success),
+        const SizedBox(height: 17),
+        TProgress.plump(value: 0.8, status: TProgressStatus.warning),
+        const SizedBox(height: 17),
+        TProgress.plump(value: 0.8, status: TProgressStatus.error),
+        const SizedBox(height: 17),
+        TProgress.plump(
           value: 0.8,
           gradient: LinearGradient(
             colors: [

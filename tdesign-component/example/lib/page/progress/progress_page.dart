@@ -18,42 +18,49 @@ class TProgressPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const itemPadding = EdgeInsets.symmetric(horizontal: 16);
     return ExamplePage(
       title: tTitle(context),
       desc: '用于展示任务当前的进度。',
       exampleCodeGroup: 'progress',
-      padding: const EdgeInsets.all(16),
+      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',
           children: [
             ExampleItem(
               desc: '线性进度条',
+              padding: itemPadding,
               methodName: 'ProgressLinearExample',
               builder: (_) => const ProgressLinearExample(),
             ),
             ExampleItem(
               desc: '百分比内显',
+              padding: itemPadding,
               methodName: 'ProgressPlumpExample',
               builder: (_) => const ProgressPlumpExample(),
             ),
             ExampleItem(
               desc: '环形进度条',
+              padding: itemPadding,
               methodName: 'ProgressCircleExample',
               builder: (_) => const ProgressCircleExample(),
             ),
             ExampleItem(
               desc: '微型环形进度条',
+              padding: itemPadding,
               methodName: 'ProgressMicroCircleExample',
               builder: (_) => const ProgressMicroCircleExample(),
             ),
             ExampleItem(
-              desc: '带操作按钮',
+              desc: '按钮进度条',
+              padding: itemPadding,
               methodName: 'ProgressButtonExample',
               builder: (_) => const ProgressButtonExample(),
             ),
             ExampleItem(
               desc: '微型按钮进度条',
+              padding: itemPadding,
               methodName: 'ProgressMicroButtonExample',
               builder: (_) => const ProgressMicroButtonExample(),
             ),
@@ -64,16 +71,19 @@ class TProgressPage extends StatelessWidget {
           children: [
             ExampleItem(
               desc: '线性进度条',
+              padding: itemPadding,
               methodName: 'ProgressLinearStatusExample',
               builder: (_) => const ProgressLinearStatusExample(),
             ),
             ExampleItem(
               desc: '百分比内显进度条',
+              padding: itemPadding,
               methodName: 'ProgressPlumpStatusExample',
               builder: (_) => const ProgressPlumpStatusExample(),
             ),
             ExampleItem(
               desc: '环形进度条',
+              padding: itemPadding,
               methodName: 'ProgressCircleStatusExample',
               builder: (_) => const ProgressCircleStatusExample(),
             ),

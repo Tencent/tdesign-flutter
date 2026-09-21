@@ -6,12 +6,15 @@ class ImageEmptyExample extends StatelessWidget {
 
   Widget _imageEmpty(BuildContext context) {
     return TEmpty(
-      image: Container(
-        decoration: BoxDecoration(
-          color: context.tTheme.bgColorComponent,
-          borderRadius: BorderRadius.circular(8),
+      image: SizedBox.square(
+        dimension: 120,
+        child: Container(
+          decoration: BoxDecoration(
+            color: context.tTheme.bgColorComponent,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const TImage(src: 'assets/img/empty.png', fit: BoxFit.contain),
         ),
-        child: const TImage(src: 'assets/img/empty.png', fit: BoxFit.contain),
       ),
       emptyText: '描述文字',
     );

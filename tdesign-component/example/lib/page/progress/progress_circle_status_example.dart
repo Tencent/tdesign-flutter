@@ -9,26 +9,20 @@ class ProgressCircleStatusExample extends StatelessWidget {
   const ProgressCircleStatusExample({super.key});
 
   Widget _buildCircleStatus(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        TProgress(variant: TProgressVariant.circular, value: 0.3),
-        TProgress(
-          variant: TProgressVariant.circular,
-          value: 0.3,
-          status: TProgressStatus.warning,
-        ),
-        TProgress(
-          variant: TProgressVariant.circular,
-          value: 0.3,
-          status: TProgressStatus.error,
-        ),
-        TProgress(
-          variant: TProgressVariant.circular,
-          value: 1,
-          status: TProgressStatus.success,
-        ),
-      ],
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TProgress.circular(value: 0.3),
+          const SizedBox(height: 24),
+          TProgress.circular(value: 0.3, status: TProgressStatus.warning),
+          const SizedBox(height: 24),
+          TProgress.circular(value: 0.3, status: TProgressStatus.error),
+          const SizedBox(height: 24),
+          TProgress.circular(value: 1, status: TProgressStatus.success),
+        ],
+      ),
     );
   }
 

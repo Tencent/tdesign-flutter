@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/gestures.dart' show kTouchSlop;
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
@@ -31,6 +32,7 @@ class TPopoverWidget extends StatefulWidget {
     this.height,
     this.onTap,
     this.onLongTap,
+    this.onTapOutside,
     this.radius,
   });
 
@@ -70,6 +72,9 @@ class TPopoverWidget extends StatefulWidget {
   /// 长按事件
   final VoidCallback? onLongTap;
 
+  /// 点击气泡外部时触发。
+  final VoidCallback? onTapOutside;
+
   /// 圆角
   final BorderRadius? radius;
 
@@ -81,6 +86,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   TPopoverPlacement _resolvedPlacement = TPopoverPlacement.top;
   Offset _arrowTranslation = Offset.zero;
   bool _layoutReady = false;
+  final Map<int, Offset> _outsidePointerDownPositions = {};
 
   @override
   void initState() {
@@ -99,6 +105,20 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
       _arrowTranslation = Offset.zero;
       _layoutReady = false;
     }
+  }
+
+  void _handleTapOutsideDown(PointerDownEvent event) {
+    _outsidePointerDownPositions[event.pointer] = event.position;
+  }
+
+  void _handleTapOutsideUp(PointerUpEvent event) {
+    final downPosition = _outsidePointerDownPositions.remove(event.pointer);
+    if (downPosition == null ||
+        (event.position - downPosition).distanceSquared >
+            kTouchSlop * kTouchSlop) {
+      return;
+    }
+    widget.onTapOutside?.call();
   }
 
   TPopoverThemeData get _theme =>
@@ -620,6 +640,12 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     if (!_effectiveShowArrow) {
       return Offset.zero;
     }
+    if (placement == TPopoverPlacement.topLeft ||
+        placement == TPopoverPlacement.topRight ||
+        placement == TPopoverPlacement.bottomLeft ||
+        placement == TPopoverPlacement.bottomRight) {
+      return Offset.zero;
+    }
     final horizontal =
         _isLeftPlacement(placement) || _isRightPlacement(placement);
     final extent = horizontal ? popoverSize.height : popoverSize.width;
@@ -660,13 +686,10 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     required double arrowSize,
   }) {
     return switch (placement) {
-      TPopoverPlacement.topLeft || TPopoverPlacement.bottomLeft =>
-        anchorRect.center.dx -
-            (_kHorizontalArrowInset + _effectiveArrowSize),
-      TPopoverPlacement.topRight || TPopoverPlacement.bottomRight =>
-        anchorRect.center.dx +
-            (_kHorizontalArrowInset + _effectiveArrowSize) -
-            popoverSize.width,
+      TPopoverPlacement.topLeft ||
+      TPopoverPlacement.bottomLeft => anchorRect.left,
+      TPopoverPlacement.topRight ||
+      TPopoverPlacement.bottomRight => anchorRect.right - popoverSize.width,
       TPopoverPlacement.rightTop ||
       TPopoverPlacement.right ||
       TPopoverPlacement.rightBottom => anchorRect.right + _effectiveOffset,
@@ -782,7 +805,15 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         child: popover,
       );
     }
-    return IgnorePointer(
+    if (widget.onTapOutside != null) {
+      popover = TapRegion(
+        key: const Key('t-popover-outside-dismiss'),
+        onTapOutside: _handleTapOutsideDown,
+        onTapUpOutside: _handleTapOutsideUp,
+        child: popover,
+      );
+    }
+    final positionedPopover = IgnorePointer(
       ignoring: !_layoutReady,
       child: Opacity(
         opacity: _layoutReady ? 1 : 0,
@@ -798,6 +829,24 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
           child: popover,
         ),
       ),
+    );
+    if (widget.onTapOutside == null) {
+      return positionedPopover;
+    }
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Positioned.fromRect(
+          rect: anchorRect,
+          child: GestureDetector(
+            key: const Key('t-popover-anchor-dismiss'),
+            behavior: HitTestBehavior.opaque,
+            onTap: widget.onTapOutside,
+            child: const SizedBox.expand(),
+          ),
+        ),
+        positionedPopover,
+      ],
     );
   }
 }

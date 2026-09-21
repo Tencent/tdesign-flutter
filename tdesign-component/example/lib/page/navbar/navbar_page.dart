@@ -24,6 +24,8 @@ class TNavBarPage extends StatelessWidget {
       title: tTitle(context),
       exampleCodeGroup: 'navbar',
       desc: '用于不同页面之间切换或者跳转，位于内容区的上方，系统状态栏的下方。',
+      compactDemo: true,
+      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

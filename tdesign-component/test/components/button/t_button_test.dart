@@ -481,7 +481,7 @@ void main() {
             fontWeight: FontWeight.w700,
           ),
         },
-        marginMap: const {'spacer8': 13},
+        marginMap: const {'spacer4': 13},
       );
 
       for (final sizeCase in const [

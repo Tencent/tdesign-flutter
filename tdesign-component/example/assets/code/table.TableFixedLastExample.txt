@@ -24,15 +24,16 @@ class TableFixedLastExample extends StatelessWidget {
         TTableColumn<List<String>>(
           id: 'actions',
           header: const Text('标题'),
-          width: 94,
+          width: 116,
           fixed: TTableColumnFixed.right,
           cellBuilder: (context, _, __) => Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 '修改',
                 style: TextStyle(color: context.tTheme.brandNormalColor),
               ),
+              const SizedBox(width: 24),
               Text(
                 '通过',
                 style: TextStyle(color: context.tTheme.brandNormalColor),

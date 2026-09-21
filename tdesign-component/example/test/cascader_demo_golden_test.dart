@@ -9,7 +9,32 @@ void main() {
   registerDemoGoldenTests(cascaderDemoPageTestSpec);
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
-    for (final id in ['base', 'tab', 'subtitle', 'any', 'search']) {
+    testWidgets('cascader selected result ${mode.name} golden', (tester) async {
+      await pumpFullDemoPage(tester, cascaderDemoPageTestSpec, mode);
+      await tester.tap(find.byKey(const ValueKey('cascader-vertical-trigger')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('南头街道'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(TCascader), findsNothing);
+      expect(find.text('广东 深圳 南山区 南头街道'), findsOneWidget);
+      await expectLater(
+        find.byKey(const ValueKey('cascader-demo-page')),
+        matchesGoldenFile(
+          'goldens/cascader_vertical_selected_${mode.name}.png',
+        ),
+      );
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
+
+    for (final id in [
+      'vertical',
+      'vertical-locator',
+      'horizontal',
+      'horizontal-locator',
+      'with-title',
+      'without-title',
+    ]) {
       testWidgets('cascader $id ${mode.name} opened golden', (tester) async {
         await pumpDemoPageAtPhoneViewport(
           tester,

@@ -30,8 +30,6 @@ class InputStatusExample extends StatelessWidget {
         const SizedBox(height: 16),
         _buildDisabled(context),
         const SizedBox(height: 16),
-        _buildReadOnly(context),
-        const SizedBox(height: 16),
       ],
     );
   }
@@ -39,11 +37,6 @@ class InputStatusExample extends StatelessWidget {
   Widget _buildDisabled(BuildContext context) => const TFormItem(
     label: '标签文字',
     child: TInput(borderless: true, initialValue: '不可编辑文字', enabled: false),
-  );
-
-  Widget _buildReadOnly(BuildContext context) => const TFormItem(
-    label: '标签文字',
-    child: TInput(borderless: true, initialValue: '只读模式', readOnly: true),
   );
 
   @override

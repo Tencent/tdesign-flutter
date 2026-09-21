@@ -79,6 +79,25 @@ void main() {
     }
   });
 
+  testWidgets('公开 Demo 单击另一触发器时关闭旧气泡并打开新气泡', (tester) async {
+    configurePhone(tester);
+    await showPage(tester);
+
+    await tester.tap(find.text('带箭头'));
+    await tester.pumpAndSettle();
+    expect(find.text('弹出气泡内容'), findsOneWidget);
+
+    final customTrigger = find.byKey(
+      const Key('popover-custom-content-trigger'),
+    );
+    await tester.tap(customTrigger);
+    await tester.pumpAndSettle();
+
+    expect(find.text('弹出气泡内容'), findsNothing);
+    expect(find.byKey(const Key('popover-custom-option-1')), findsOneWidget);
+    expect(find.byKey(const Key('t-popover-content')), findsOneWidget);
+  });
+
   testWidgets('主题背景与尺寸约束在 Demo 中可观察', (tester) async {
     configurePhone(tester);
     await showPage(tester);

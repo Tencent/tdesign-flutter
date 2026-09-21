@@ -6,10 +6,10 @@
 
 ## 目标
 
-- 公开 Demo 按“组件类型 / 组件样式”展示 dots、dots-bar、fraction、controls、两种 cards 和可交互垂直模式。
+- 公开 Demo 按“组件类型 / 组件样式 / 组件动效”展示 dots、dots-bar、fraction、controls、三种 cards、三种指示器位置和可交互动效参数。
 - 使用公开 Demo 同源的本地图片，统一默认圆角、导航颜色、间距和卡片露出效果。
 - 自动播放、内置控制按钮和 Controller 的默认程序化切换共享组件 `animationDuration`；Controller 显式时长仍优先。
-- 验证拖拽、按钮、自动播放、循环边界、垂直配置和代码面板完整性。
+- 验证拖拽、按钮、自动播放、循环边界、指示器位置和代码面板完整性。
 
 ## 行为契约
 
@@ -19,9 +19,11 @@
 4. 用户拖拽、应用非 resumed、TickerMode 关闭和动画进行中均暂停自动播放。
 5. Swiper 内容默认按 TDesign 大圆角裁剪；外置分页不被内容裁剪。
 6. 默认覆盖式 dots/dots-bar 使用反色前景；卡片 Demo 显式使用品牌色导航。
-7. 公开 Demo 仅保留目标六个条目；额外扩展能力留在组件测试，不作为公开 Demo 混入。
+7. 公开 Demo 按设计稿保留类型、指示器位置和动效参数三个分组；额外扩展能力留在组件测试，不作为公开 Demo 混入。
 8. controls 使用 Flutter 工程默认视觉尺寸：圆形背景 32dp、图标 18dp，并由 `IconButton` 保留 48dp 触控区域；该值不冒充 Figma 精确标注，可由组件 Theme 覆盖。
 9. 公开 Demo 的六张轮播内容均从第一页开始；fraction 保持右下角紧凑胶囊，controls 默认在内容左右两侧垂直居中，不由 Demo 外层样式修正。
+10. Cards 使用 295/375 的页面占比，在组件内部保留左右各 6dp 间距，得到设计稿 283dp 中心卡片；scale 相邻卡片等比缩放至 0.8，scaleAndFade 同时等比缩放、淡化并向中心叠放。
+11. 三种 Cards 效果复用同一组轮播数据；相邻页露出、缩放、淡化与叠放全部由 `TSwiperPageEffect` 实现，Demo 不按效果类型替换图片来模拟设计结果。
 
 ## API 收敛
 

@@ -10,15 +10,15 @@ void main() {
   registerDemoStructureTests(cascaderDemoPageTestSpec);
 
   test(
-    'Cascader code panel contains initial value and key conversion',
+    'Cascader code panel contains the four-level controlled value',
     () async {
       final source = await rootBundle.loadString(
         'assets/code/cascader.CascaderBaseExample.txt',
       );
-      expect(source, contains("'name': '北京市'"));
-      expect(source, contains("label: item['name']! as String"));
-      expect(source, contains("'tianjin-city'"));
-      expect(source, contains('useInitialValue && value.isEmpty'));
+      expect(source, contains("TCascaderOption(label: '粤海街道'"));
+      expect(source, contains("'guangdong'"));
+      expect(source, contains("title: const TText('选择地区')"));
+      expect(source, contains('height: 580'));
     },
   );
 
@@ -28,13 +28,12 @@ void main() {
     await pumpFullDemoPage(tester, cascaderDemoPageTestSpec, ThemeMode.light);
 
     final keys = <ValueKey<String>>[
-      const ValueKey('cascader-base-trigger'),
-      const ValueKey('cascader-tab-trigger'),
-      const ValueKey('cascader-initial-trigger'),
-      const ValueKey('cascader-keys-trigger'),
-      const ValueKey('cascader-subtitle-trigger'),
-      const ValueKey('cascader-any-trigger'),
-      const ValueKey('cascader-search-trigger'),
+      const ValueKey('cascader-vertical-trigger'),
+      const ValueKey('cascader-vertical-locator-trigger'),
+      const ValueKey('cascader-horizontal-trigger'),
+      const ValueKey('cascader-horizontal-locator-trigger'),
+      const ValueKey('cascader-with-title-trigger'),
+      const ValueKey('cascader-without-title-trigger'),
     ];
     final tops = keys
         .map((key) => tester.getTopLeft(find.byKey(key)).dy)
@@ -48,7 +47,7 @@ void main() {
   ) async {
     await pumpFullDemoPage(tester, cascaderDemoPageTestSpec, ThemeMode.light);
 
-    await tester.tap(find.byKey(const ValueKey('cascader-base-trigger')));
+    await tester.tap(find.byKey(const ValueKey('cascader-vertical-trigger')));
     await tester.pumpAndSettle();
     expect(
       tester.widget<TCascader>(find.byType(TCascader)).variant,
@@ -57,7 +56,7 @@ void main() {
     await tester.tap(find.byIcon(TIcons.close));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const ValueKey('cascader-tab-trigger')));
+    await tester.tap(find.byKey(const ValueKey('cascader-horizontal-trigger')));
     await tester.pumpAndSettle();
     expect(
       tester.widget<TCascader>(find.byType(TCascader)).variant,
@@ -66,9 +65,6 @@ void main() {
     await tester.tap(find.byIcon(TIcons.close));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const ValueKey('cascader-keys-trigger')));
-    await tester.pumpAndSettle();
-    expect(find.text('北京市'), findsOneWidget);
     await disposeDemoPage(tester);
   }, tags: 'demo');
 
@@ -77,38 +73,28 @@ void main() {
   ) async {
     await pumpFullDemoPage(tester, cascaderDemoPageTestSpec, ThemeMode.light);
 
-    await tester.tap(find.byKey(const ValueKey('cascader-subtitle-trigger')));
+    await tester.tap(
+      find.byKey(const ValueKey('cascader-vertical-locator-trigger')),
+    );
     await tester.pumpAndSettle();
     expect(tester.widget<TCascader>(find.byType(TCascader)).subtitles, const [
-      '请选择省份',
-      '请选择城市',
-      '请选择区/县',
+      '一级选项标题',
+      '二级选项标题',
+      '三级选项标题',
+      '四级选项标题',
     ]);
-    expect(find.text('请选择省份'), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('cascader-beijing')));
-    await tester.pump();
-    expect(find.text('请选择城市'), findsOneWidget);
+    expect(find.text('四级选项标题'), findsOneWidget);
+    expect(find.text('标题文字'), findsOneWidget);
     await tester.tap(find.byIcon(TIcons.close));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const ValueKey('cascader-any-trigger')));
+    await tester.tap(
+      find.byKey(const ValueKey('cascader-without-title-trigger')),
+    );
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('cascader-guangdong')));
-    await tester.pump();
     expect(find.byType(TCascader), findsOneWidget);
-    await tester.tap(find.byIcon(TIcons.close));
-    await tester.pumpAndSettle();
-    expect(find.text('广东省'), findsOneWidget);
+    expect(find.text('标题文字'), findsNothing);
 
-    await tester.tap(find.byKey(const ValueKey('cascader-search-trigger')));
-    await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextField), '南山');
-    await tester.pump();
-    expect(find.text('广东省 / 深圳市 / 南山区'), findsOneWidget);
-    await tester.tap(find.text('广东省 / 深圳市 / 南山区'));
-    await tester.pumpAndSettle();
-    expect(find.byType(TCascader), findsNothing);
-    expect(find.text('广东省/深圳市/南山区'), findsOneWidget);
     await disposeDemoPage(tester);
   }, tags: 'demo');
 
@@ -117,17 +103,13 @@ void main() {
   ) async {
     await pumpFullDemoPage(tester, cascaderDemoPageTestSpec, ThemeMode.light);
 
-    await tester.tap(find.byKey(const ValueKey('cascader-base-trigger')));
+    await tester.tap(find.byKey(const ValueKey('cascader-vertical-trigger')));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('cascader-beijing')));
-    await tester.pump();
-    await tester.tap(find.byKey(const ValueKey('cascader-beijing-city')));
-    await tester.pump();
-    await tester.tap(find.byKey(const ValueKey('cascader-dongcheng')));
+    await tester.tap(find.text('南头街道'));
     await tester.pumpAndSettle();
 
     expect(find.byType(TCascader), findsNothing);
-    expect(find.text('北京市/北京市/东城区'), findsOneWidget);
+    expect(find.text('广东 深圳 南山区 南头街道'), findsOneWidget);
     await disposeDemoPage(tester);
   }, tags: 'demo');
 }

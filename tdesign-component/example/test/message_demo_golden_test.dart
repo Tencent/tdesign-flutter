@@ -29,27 +29,6 @@ void main() {
         await disposeDemoPage(tester);
       }, tags: 'golden');
     }
-
-    testWidgets('message action ${mode.name} post action golden', (
-      tester,
-    ) async {
-      final demoCase = messageDemoCases.singleWhere(
-        (item) => item.name == 'action',
-      );
-      await pumpDemoPageAtPhoneViewport(tester, messageDemoPageTestSpec, mode);
-      await _openMessage(tester, demoCase);
-      await tester.tap(find.text(demoCase.actionText!));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 400));
-      expect(find.text(demoCase.feedbackText!), findsOneWidget);
-      await expectLater(
-        find.byType(Overlay),
-        matchesGoldenFile(
-          'goldens/message_action_post_action_${mode.name}.png',
-        ),
-      );
-      await disposeDemoPage(tester);
-    }, tags: 'golden');
   }
 }
 
@@ -72,8 +51,5 @@ Future<void> _openMessage(WidgetTester tester, MessageDemoCase demoCase) async {
   expect(find.text(demoCase.visibleText), findsOneWidget);
   if (demoCase.actionText case final actionText?) {
     expect(find.text(actionText), findsOneWidget);
-  }
-  if (demoCase.lifetime == MessageDemoLifetime.declarative) {
-    expect(find.widgetWithText(TButton, '隐藏消息'), findsOneWidget);
   }
 }

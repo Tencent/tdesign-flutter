@@ -15,7 +15,6 @@ void main() {
       'range',
       'labeled',
       'labeled-range',
-      'non-zero',
       'scale',
       'scale-range',
       'disabled',
@@ -35,7 +34,7 @@ void main() {
         .map((id) => tester.getTopLeft(find.byKey(ValueKey('slider-$id'))).dy)
         .toList();
     expect(tops, orderedEquals([...tops]..sort()));
-    expect(find.byType(TSlider), findsNWidgets(9));
+    expect(find.byType(TSlider), findsNWidgets(8));
     expect(find.byType(TRangeSlider), findsNWidgets(10));
     await disposeDemoPage(tester);
   }, tags: 'demo');
@@ -69,15 +68,6 @@ void main() {
     expect(labeledRange.value, const RangeValues(40, 60));
     expect(labeledRange.showThumbValue, isTrue);
     expect(labeledRange.thumbFormatter, isNotNull);
-
-    final nonZero = tester.widget<TSlider>(
-      find.byKey(const ValueKey('slider-non-zero')),
-    );
-    expect(nonZero.value, 30);
-    expect(nonZero.min, 20);
-    expect(nonZero.max, 100);
-    expect(nonZero.divisions, 4);
-    expect(nonZero.showScaleValue, isTrue);
 
     for (final key in ['slider-scale', 'slider-capsule-scale']) {
       final slider = tester.widget<TSlider>(find.byKey(ValueKey(key)));

@@ -8,8 +8,10 @@
 
 ## 行为契约
 
-- `logo` 非空时优先展示；否则 `links` 与 `text` 可组合。
-- 多链接间绘制分隔线；版权文字保持单行省略。
+- `logo` 非空时隐藏 `links`，但可与 `text` 组合为“版权文案 + 品牌”样式；
+  组合时文案与 Logo 使用 `spacer8`。
+- 多链接间绘制分隔线；链接与分隔线的水平间距使用 `spacer12`，分隔线颜色使用
+  `componentStrokeColor`；版权文字保持单行省略。
 - Theme 高度作为可选的外层布局约束；未配置时由内容自然撑开，与小程序 Footer 的内容驱动布局一致。
 
 ## Breaking changes
@@ -19,5 +21,5 @@
 
 ## 验收
 
-- [ ] 组件、Demo、覆盖率、双版本 analyze/test 通过。
-- [ ] Flutter 3.32.0 Linux light/dark Golden 更新并复验通过。
+- [x] 组件、Demo、覆盖率、双版本 analyze/test 通过。
+- [x] Flutter 3.32.0 Linux light/dark Golden 更新并复验通过。

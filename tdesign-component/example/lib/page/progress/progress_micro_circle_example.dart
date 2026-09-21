@@ -9,7 +9,10 @@ class ProgressMicroCircleExample extends StatelessWidget {
   const ProgressMicroCircleExample({super.key});
 
   Widget _buildMicroCircle(BuildContext context) {
-    return TProgress(variant: TProgressVariant.microCircular, value: 0.3);
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: TProgress.microCircular(value: 0.75),
+    );
   }
 
   @override

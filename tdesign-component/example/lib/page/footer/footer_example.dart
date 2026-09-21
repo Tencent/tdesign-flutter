@@ -14,5 +14,7 @@ class FooterExample extends StatelessWidget {
 }
 
 Widget _buildFooter(BuildContext context) {
-  return const TFooter(text: 'Copyright © 2021-2031 TD.All Rights Reserved.');
+  return const TFooter(
+    text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
+  );
 }

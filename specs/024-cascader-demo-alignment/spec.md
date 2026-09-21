@@ -6,8 +6,8 @@ Flutter Cascader 的公开 Demo 原先以常规能力分组，未覆盖小程序
 
 ## 目标
 
-- 按当前小程序公开页面顺序覆盖基础、选项卡、初始值、自定义数据映射、次级标题、任意层选择和搜索，并用 Chrome 复现完成行为。
-- 以 Figma `24386:5246` 的 step/tab、1-4 层、subtitle 和 close-btn 变体作为可见结构基线。
+- 按 Figma 移动端展示 `28591:36801` 的顺序覆盖垂直、垂直带字母定位、水平、水平带字母定位、带标题和无标题六个入口。
+- 以 Figma `24386:5246` 的 step/tab、1-4 层、subtitle 和 close-btn 变体作为唯一可见结构基线；小程序仅辅助确认组件 token，不决定 Flutter 公开 Demo 的增删。
 - 保持 `TCascader` 为严格受控的平铺层级面板；Popup、搜索输入、提交策略和原始数据映射由 Flutter Widget 组合完成。
 - 由组件内部活动层级选择次级标题，不公开第二套层级状态源。
 - 补齐 Demo 结构、交互、打开状态 light/dark Golden 与组件回归证据。
@@ -25,7 +25,7 @@ Flutter Cascader 的公开 Demo 原先以常规能力分组，未覆盖小程序
 - `variant` 唯一表达 step / tab 导航形态。
 - `subtitles` 是按内部活动层级读取的不可变内容配置，不让调用方控制活动层级。
 - 原始字段映射在创建 `TCascaderOption` 的边界完成。
-- 基础、tab、初始值、字段映射、次级标题和搜索在选中末级后提交并关闭；任意层示例由 Popup 关闭按钮提交当前草稿，点击蒙层不提交。
+- 六个入口都以四级受控值展示，选中末级后提交并关闭；Popup 高度固定为设计稿 580dp。
 - `TCascaderOption.children` 按 Flutter Widget 不可变配置约定使用；数据变化时替换 option/list，不支持原地变更。
 - 选项列表由组件固定为零 padding，不继承宿主 `MediaQuery` 安全区；弹层边界由组合层负责。
 - 导航与选项支持 Flutter 焦点遍历，并通过 Enter / Space 激活；禁用项不进入激活路径。
@@ -39,6 +39,8 @@ Flutter Cascader 的公开 Demo 原先以常规能力分组，未覆盖小程序
   Material 自动注入的 `DefaultTextStyle` 不得被当成调用方显式覆盖。
 - TSearchBar 自身提供 TextField 所需的 Material 渲染上下文，使其无需 Demo 额外包装，
   同时不向 Popup 的其他子组件注入 Material 默认视觉。
+- 触发 Cell 的地址值使用标准 `TCell.note` 槽位；标题与长 note 的宽度分配由
+  `TCell` 通用布局负责，Demo 不得改用 `trailing` 或局部文字样式规避截断。
 
 ## 兼容性
 
@@ -49,7 +51,7 @@ Flutter Cascader 的公开 Demo 原先以常规能力分组，未覆盖小程序
 
 ## 验收标准
 
-- 页面仅出现「类型 / 进阶」两组七个触发实例，顺序与小程序一致。
-- step、tab、初始路径、typed mapping、活动层级次级标题、任意层提交、末级自动完成和搜索均有功能断言。
+- 页面仅出现「组件类型 / 组件样式」两组六个触发实例，顺序、文案和回显值与 Figma `28591:36801` 一致。
+- step、tab、四级初始路径、活动层级次级标题、有/无标题和末级自动完成均有功能断言。
 - “查看代码”展示真实 `TPopup + TCascader` 状态组合，不引用未展示的私有核心方法。
 - 组件测试、Demo 功能测试、打开与关闭状态 light/dark Golden、覆盖率和双版本 analyze 通过。

@@ -36,7 +36,7 @@ class RectangleIconButtonExample extends StatelessWidget {
         data: Theme.of(context).mergeExtension(
           TLoadingThemeData(iconColor: context.tTheme.whiteColor1),
         ),
-        child: const TLoading(icon: TLoadingIcon.circle),
+        child: const TLoading(size: 24, icon: TLoadingIcon.circle),
       ),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,

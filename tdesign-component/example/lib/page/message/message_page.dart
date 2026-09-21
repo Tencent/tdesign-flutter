@@ -24,7 +24,7 @@ class TMessagePage extends StatelessWidget {
           title: '组件类型',
           children: [
             ExampleItem(
-              desc: '消息通知内容为文本、带操作按钮',
+              desc: '纯文字的通知',
               methodName: 'MessageTypesExample',
               builder: (_) => const MessageTypesExample(),
             ),
@@ -34,7 +34,7 @@ class TMessagePage extends StatelessWidget {
           title: '组件状态',
           children: [
             ExampleItem(
-              desc: '消息组件风格',
+              desc: '普通通知',
               methodName: 'MessageStylesExample',
               builder: (_) => const MessageStylesExample(),
             ),

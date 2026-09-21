@@ -23,7 +23,10 @@ Widget _buildBrandFooter(BuildContext context) {
   );
   return const Column(
     children: [
-      TFooter(logo: logo),
+      TFooter(
+        text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
+        logo: logo,
+      ),
       SizedBox(height: 24),
       TFooter(logo: logo),
     ],

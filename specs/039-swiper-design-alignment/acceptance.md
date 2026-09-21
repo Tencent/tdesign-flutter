@@ -36,7 +36,9 @@
 - 小程序 `current` 没有映射为第二份状态；Flutter 使用 `TSwiperController.initialIndex/index` 管理受控状态，避免 Widget 参数和 Controller 竞争。
 - 小程序字符串 easing 没有照搬；公开 API 使用 Flutter `Curve`，`animationDuration` 与 `animationCurve` 同时供 autoplay、内置 controls 和 Controller 默认继承。
 - 小程序图片 `load` / 点击事件没有上移到 Swiper；Flutter 子 Widget 自己持有图片加载与点击语义。
-- cards 的 `126/192` 邻项高度比例实现为交叉轴 scale，不缩放滚动主轴，避免改变 PageView 布局和手势命中区。
+- cards 使用 295/375 页面占比及组件内部两侧 6dp 间距得到 283dp 中心卡片；
+  相邻卡片以 0.8 等比缩放，`scaleAndFade` 在同一缩放基础上淡化并向中心叠放，
+  不通过 Demo 外层变形伪造组件效果。
 - 保持既有 `autoplay=false`、`loop=false` 默认值，只在公开场景显式启用，避免设计对齐造成默认行为 breaking change。
 - `pagination`、`paginationPlacement`、`pageEffect` 仅由 `TSwiper` 实例 API 持有；`TSwiperThemeData` 只保留颜色、尺寸、间距、圆角和文字/按钮样式等视觉字段，不保留历史行为字段。
 - 删除 Theme 中上述三个已发布行为字段属于 breaking change；调用方迁移到 `TSwiper` 的同名实例参数，不保留兼容别名。

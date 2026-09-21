@@ -9,7 +9,10 @@ class ProgressCircleExample extends StatelessWidget {
   const ProgressCircleExample({super.key});
 
   Widget _buildCircle(BuildContext context) {
-    return TProgress(variant: TProgressVariant.circular, value: 0.3);
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: TProgress.circular(value: 0.3),
+    );
   }
 
   @override

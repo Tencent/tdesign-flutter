@@ -26,7 +26,7 @@ class CardsSwiperExample extends StatelessWidget {
     });
     Widget buildCard(TSwiperPageEffect effect) {
       return SizedBox(
-        height: 210,
+        height: 177,
         child: Theme(
           data: Theme.of(context).mergeExtension(cardTheme),
           child: TSwiper(
@@ -35,7 +35,8 @@ class CardsSwiperExample extends StatelessWidget {
             pagination: TSwiperPaginationVariant.dots,
             paginationPlacement: TSwiperPaginationPlacement.outside,
             pageEffect: effect,
-            viewportFraction: 0.82,
+            // Figma: 283px card + 12px gap = 295px page extent.
+            viewportFraction: 295 / 375,
             children: buildImages(),
           ),
         ),
@@ -45,8 +46,10 @@ class CardsSwiperExample extends StatelessWidget {
     return Column(
       children: [
         buildCard(TSwiperPageEffect.cardMargin),
-        const SizedBox(height: 42),
+        const SizedBox(height: 24),
         buildCard(TSwiperPageEffect.scale),
+        const SizedBox(height: 24),
+        buildCard(TSwiperPageEffect.scaleAndFade),
       ],
     );
   }
@@ -56,6 +59,6 @@ class CardsSwiperExample extends StatelessWidget {
     final content = (() {
       return _buildCardsSwiper(context);
     })();
-    return SizedBox(height: 462, child: content);
+    return SizedBox(height: 579, child: content);
   }
 }

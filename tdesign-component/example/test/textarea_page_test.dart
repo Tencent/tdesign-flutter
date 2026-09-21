@@ -75,8 +75,8 @@ void main() {
       expect(field.controller?.text, postActionText, reason: scenario.id);
     }
 
-    expect(find.text('6/200'), findsOneWidget);
-    expect(find.text('4/500'), findsOneWidget);
+    expect(find.text('6/500'), findsOneWidget);
+    expect(find.text('4/500'), findsNWidgets(2));
     expect(find.text('6/100'), findsOneWidget);
     await disposeDemoPage(tester);
   }, tags: 'demo');

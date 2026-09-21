@@ -18,7 +18,6 @@ class TextareaCardExample extends StatelessWidget {
         child: TTextarea(
           label: '标签文字',
           hintText: '请输入文字',
-          layout: TTextareaLayout.vertical,
           minLines: 2,
           maxLength: 500,
           indicator: true,
