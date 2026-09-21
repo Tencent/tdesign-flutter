@@ -9,5 +9,5 @@
 - [x] 完成 Flutter 3.32.0 与 latest 非视觉门禁。
 - [x] 完成 Linux Flutter 3.32.0 Golden 更新及无更新参数复跑。
 - [x] 完成模拟器关键交互验证。
-- [x] 生成并提交 28 个设计四栏比较图，分别标注 develop 与 current 相对 Figma 的差异。
+- [x] 生成并提交 28 个设计五栏比较图，分别保留 develop/current 配准差异、current 配准渲染与真实原图。
 - [x] 生成并提交全部变更 Golden 三栏比较图与 manifest。
