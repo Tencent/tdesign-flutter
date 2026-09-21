@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/page/progress/progress_button_example.dart';
 
 import 'demo_page_test_utils.dart';
@@ -52,6 +53,60 @@ void main() {
         reason: status.name,
       );
     }
+
+    final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
+    expect(page.showTestModule, isFalse);
+    expect(page.backgroundColor, isNull);
+    expect(page.padding, isNull);
+
+    final itemDescription = find.text('线性进度条').first;
+    expect(tester.getTopLeft(itemDescription).dx, 16);
+
+    final baseLinear = progress.firstWhere(
+      (item) => item.variant == TProgressVariant.linear,
+    );
+    expect(baseLinear.value, 0.8);
+    final baseLinearFinder = find.byWidget(baseLinear);
+    expect(
+      tester
+          .getSize(
+            find.descendant(
+              of: baseLinearFinder,
+              matching: find.byKey(const ValueKey('progress-track')),
+            ),
+          )
+          .height,
+      6,
+    );
+    final labelFinder = find.descendant(
+      of: baseLinearFinder,
+      matching: find.text('80%'),
+    );
+    expect(labelFinder, findsOneWidget);
+    expect(
+      tester
+          .getTopRight(
+            find.descendant(
+              of: baseLinearFinder,
+              matching: find.byKey(const ValueKey('progress-track')),
+            ),
+          )
+          .dx,
+      lessThan(tester.getTopLeft(labelFinder).dx),
+    );
+
+    final circular = progress
+        .where((item) => item.variant == TProgressVariant.circular)
+        .toList();
+    final statusCircular = circular.skip(1).toList();
+    final statusOffsets = statusCircular
+        .map((item) => tester.getTopLeft(find.byWidget(item)))
+        .toList();
+    expect(statusOffsets.map((offset) => offset.dx).toSet(), hasLength(1));
+    expect(
+      statusOffsets.map((offset) => offset.dy),
+      orderedEquals(statusOffsets.map((offset) => offset.dy).toList()..sort()),
+    );
   });
 
   testWidgets('单个按钮进度点击后按 1% 自动推进到 80%', (tester) async {

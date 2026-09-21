@@ -10,39 +10,16 @@ class SliderLabeledExample extends StatefulWidget {
 
 class _SliderLabeledExampleState extends State<SliderLabeledExample> {
   Widget _buildLabeled(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _panel(
-          TSlider(
-            key: const ValueKey('slider-labeled'),
-            value: _labeled,
-            min: 0,
-            max: 100,
-            showThumbValue: true,
-            thumbFormatter: _percent,
-            onChanged: (value) => setState(() => _labeled = value),
-          ),
-        ),
-        _subsection(context, '带数值双游标滑块'),
-        Row(
-          children: [
-            const TText('0%'),
-            Expanded(
-              child: TRangeSlider(
-                key: const ValueKey('slider-labeled-range'),
-                value: _labeledRange,
-                min: 0,
-                max: 100,
-                showThumbValue: true,
-                thumbFormatter: _percent,
-                onChanged: (value) => setState(() => _labeledRange = value),
-              ),
-            ),
-            const TText('100%'),
-          ],
-        ),
-      ],
+    return _panel(
+      TSlider(
+        key: const ValueKey('slider-labeled'),
+        value: _labeled,
+        min: 0,
+        max: 100,
+        showThumbValue: true,
+        thumbFormatter: _percent,
+        onChanged: (value) => setState(() => _labeled = value),
+      ),
     );
   }
 
@@ -52,14 +29,6 @@ class _SliderLabeledExampleState extends State<SliderLabeledExample> {
   double _labeled = 35;
 
   static String _percent(double value) => '${value.round()}%';
-
-  Widget _subsection(BuildContext context, String text, {bool top = true}) =>
-      Padding(
-        padding: EdgeInsets.only(top: top ? 12 : 0, bottom: 8),
-        child: TText(text, font: context.tTheme.fontBodyMedium),
-      );
-
-  RangeValues _labeledRange = const RangeValues(40, 60);
 
   @override
   Widget build(BuildContext context) {

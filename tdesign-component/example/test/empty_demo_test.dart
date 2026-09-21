@@ -8,7 +8,7 @@ import 'demo_page_test_utils.dart';
 
 const emptyDemoSpec = DemoPageTestSpec(
   name: 'empty',
-  title: 'Empty',
+  title: 'Empty 空状态',
   page: TEmptyPage(),
   expectedTexts: ['图标空状态', '自定义图片空状态', '带操作空状态', '描述文字', '操作按钮'],
   componentType: TEmpty,
@@ -22,9 +22,12 @@ void main() {
   testWidgets('公开实例顺序与内容组合符合设计稿', (tester) async {
     await pumpFullDemoPage(tester, emptyDemoSpec, ThemeMode.light);
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
-    expect(page.children.single.title, '01 类型');
-    expect(page.children.single.children.map((item) => item.desc),
-        ['图标空状态', '自定义图片空状态', '带操作空状态']);
+    expect(page.children.single.title, '组件类型');
+    expect(page.children.single.children.map((item) => item.desc), [
+      '图标空状态',
+      '自定义图片空状态',
+      '带操作空状态',
+    ]);
     final empties = tester.widgetList<TEmpty>(find.byType(TEmpty)).toList();
     expect(empties[0].image, isNull);
     expect(empties[1].image, isNotNull);

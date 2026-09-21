@@ -11,9 +11,9 @@ class TextareaMaxLengthExample extends StatelessWidget {
     height: 162,
     child: TTextarea(
       label: '标签文字',
-      hintText: '设置最大字符个数',
+      hintText: '请输入文字',
       minLines: 3,
-      maxLength: 200,
+      maxLength: 500,
       indicator: true,
     ),
   );

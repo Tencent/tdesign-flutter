@@ -29,7 +29,10 @@ Widget _buildImageTypes(BuildContext context) {
             fit: BoxFit.fitHeight,
           ),
         ),
-        _demoItem('拉伸', const TImage(src: source, width: 134, height: 72)),
+        _demoItem(
+          '拉伸',
+          const TImage(src: source, width: 134, height: 72, fit: BoxFit.fill),
+        ),
       ]),
       const SizedBox(height: 24),
       _demoRow([

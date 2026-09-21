@@ -273,13 +273,13 @@
         "title": "组件状态",
         "items": [
           {
-            "description": "按钮禁用状态",
+            "description": "按钮禁用态",
             "assetKey": "button.DisablePrimaryFillButtonExample"
           }
         ]
       },
       {
-        "title": "组件主题",
+        "title": "组件样式",
         "items": [
           {
             "description": "按钮尺寸",
@@ -346,40 +346,36 @@
     ],
     "cascader": [
       {
-        "title": "类型",
+        "title": "组件类型",
         "items": [
           {
-            "description": "",
+            "description": "垂直级联选择器",
             "assetKey": "cascader.CascaderBaseExample"
           },
           {
-            "description": "选项卡风格",
+            "description": "垂直级联选择器-带字母定位",
+            "assetKey": "cascader.CascaderInitialExample"
+          },
+          {
+            "description": "水平级联选择器",
             "assetKey": "cascader.CascaderTabExample"
+          },
+          {
+            "description": "水平级联选择器-带字母定位",
+            "assetKey": "cascader.CascaderKeysExample"
           }
         ]
       },
       {
-        "title": "进阶",
+        "title": "组件样式",
         "items": [
           {
-            "description": "带初始值",
-            "assetKey": "cascader.CascaderInitialExample"
-          },
-          {
-            "description": "自定义 keys",
-            "assetKey": "cascader.CascaderKeysExample"
-          },
-          {
-            "description": "使用次级标题",
+            "description": "带标题级联选择器",
             "assetKey": "cascader.CascaderSubtitleExample"
           },
           {
-            "description": "选择任意一项",
+            "description": "无标题级联选择器",
             "assetKey": "cascader.CascaderAnyExample"
-          },
-          {
-            "description": "支持搜索",
-            "assetKey": "cascader.CascaderSearchExample"
           }
         ]
       }
@@ -661,7 +657,7 @@
     ],
     "empty": [
       {
-        "title": "01 类型",
+        "title": "组件类型",
         "items": [
           {
             "description": "图标空状态",
@@ -719,7 +715,7 @@
     ],
     "footer": [
       {
-        "title": "类型",
+        "title": "组件类型",
         "items": [
           {
             "description": "基础页脚",
@@ -1227,7 +1223,7 @@
             "assetKey": "progress.ProgressMicroCircleExample"
           },
           {
-            "description": "带操作按钮",
+            "description": "按钮进度条",
             "assetKey": "progress.ProgressButtonExample"
           },
           {
@@ -1557,16 +1553,20 @@
             "assetKey": "slider.SliderRangeExample"
           },
           {
-            "description": "带数值滑动选择器",
+            "description": "带数值单游标滑块",
             "assetKey": "slider.SliderLabeledExample"
           },
           {
-            "description": "起始非零滑动选择器",
-            "assetKey": "slider.SliderNonZeroExample"
+            "description": "带数值双游标滑块",
+            "assetKey": "slider.SliderLabeledRangeExample"
           },
           {
-            "description": "带刻度滑动选择器",
+            "description": "带刻度单游标滑块",
             "assetKey": "slider.SliderScaleExample"
+          },
+          {
+            "description": "带刻度双游标滑块",
+            "assetKey": "slider.SliderScaleRangeExample"
           }
         ]
       },
@@ -1722,8 +1722,17 @@
         "title": "组件样式",
         "items": [
           {
-            "description": "垂直模式",
-            "assetKey": "swiper.VerticalSwiperExample"
+            "description": "指示器位置",
+            "assetKey": "swiper.PaginationPlacementSwiperExample"
+          }
+        ]
+      },
+      {
+        "title": "组件动效",
+        "items": [
+          {
+            "description": "调整动效参数",
+            "assetKey": "swiper.MotionSwiperExample"
           }
         ]
       }
@@ -1954,11 +1963,15 @@
           {
             "description": "可关闭的标签",
             "assetKey": "tag.CloseFillTagExample"
+          },
+          {
+            "description": "可选中的标签",
+            "assetKey": "tag.TagSelectVariantsExample"
           }
         ]
       },
       {
-        "title": "组件状态（主题）",
+        "title": "组件状态",
         "items": [
           {
             "description": "填充型各主题",
@@ -1976,27 +1989,6 @@
           {
             "description": "",
             "assetKey": "tag.AllSizeTagsExample"
-          }
-        ]
-      },
-      {
-        "title": "可选标签",
-        "items": [
-          {
-            "description": "默认形态",
-            "assetKey": "tag.TagSelectDefaultExample"
-          },
-          {
-            "description": "描边形态",
-            "assetKey": "tag.TagSelectOutlineExample"
-          },
-          {
-            "description": "不同语义色",
-            "assetKey": "tag.TagSelectColorSchemesExample"
-          },
-          {
-            "description": "禁用状态",
-            "assetKey": "tag.TagSelectDisabledExample"
           }
         ]
       }

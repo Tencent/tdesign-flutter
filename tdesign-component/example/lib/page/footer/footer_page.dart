@@ -14,11 +14,12 @@ class TFooterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(context),
-      desc: '用于展示App的版权声明、联系信息、重要页面链接和其他相关内容等信息。',
+      desc: '用于基础列表展示，可附带文字、品牌 logo、操作，常用商详、个人中心、设置等页面。',
       exampleCodeGroup: 'footer',
+      showTestModule: false,
       children: [
         ExampleModule(
-          title: '类型',
+          title: '组件类型',
           children: [
             ExampleItem(
               desc: '基础页脚',

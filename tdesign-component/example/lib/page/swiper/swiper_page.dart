@@ -8,7 +8,8 @@ import 'controls_swiper_example.dart';
 import 'dots_bar_swiper_example.dart';
 import 'dots_swiper_example.dart';
 import 'fraction_swiper_example.dart';
-import 'vertical_swiper_example.dart';
+import 'motion_swiper_example.dart';
+import 'pagination_placement_swiper_example.dart';
 
 @ExampleCodeManifest()
 class TSwiperPage extends StatefulWidget {
@@ -25,6 +26,7 @@ class _TSwiperPageState extends State<TSwiperPage> {
       title: tTitle(),
       desc: '用于循环轮播一组图片或内容，也可以滑动进行切换，轮播动效时间可以设置。',
       exampleCodeGroup: 'swiper',
+      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',
@@ -65,10 +67,21 @@ class _TSwiperPageState extends State<TSwiperPage> {
           title: '组件样式',
           children: [
             ExampleItem(
-              desc: '垂直模式',
+              desc: '指示器位置',
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              methodName: 'VerticalSwiperExample',
-              builder: (_) => const VerticalSwiperExample(),
+              methodName: 'PaginationPlacementSwiperExample',
+              builder: (_) => const PaginationPlacementSwiperExample(),
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: '组件动效',
+          children: [
+            ExampleItem(
+              desc: '调整动效参数',
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              methodName: 'MotionSwiperExample',
+              builder: (_) => const MotionSwiperExample(),
             ),
           ],
         ),

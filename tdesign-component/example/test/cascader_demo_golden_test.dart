@@ -9,7 +9,14 @@ void main() {
   registerDemoGoldenTests(cascaderDemoPageTestSpec);
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
-    for (final id in ['base', 'tab', 'subtitle', 'any', 'search']) {
+    for (final id in [
+      'vertical',
+      'vertical-locator',
+      'horizontal',
+      'horizontal-locator',
+      'with-title',
+      'without-title',
+    ]) {
       testWidgets('cascader $id ${mode.name} opened golden', (tester) async {
         await pumpDemoPageAtPhoneViewport(
           tester,

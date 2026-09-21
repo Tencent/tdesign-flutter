@@ -52,16 +52,18 @@ class LargeButtonExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      alignment: WrapAlignment.center,
-      spacing: 16,
-      runSpacing: 16,
-      children: [
-        Builder(builder: _buildLargeButton),
-        Builder(builder: _buildMediumButton),
-        Builder(builder: _buildSmallButton),
-        Builder(builder: _buildExtraSmallButton),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Wrap(
+        spacing: 12,
+        runSpacing: 16,
+        children: [
+          Builder(builder: _buildLargeButton),
+          Builder(builder: _buildMediumButton),
+          Builder(builder: _buildSmallButton),
+          Builder(builder: _buildExtraSmallButton),
+        ],
+      ),
     );
   }
 }

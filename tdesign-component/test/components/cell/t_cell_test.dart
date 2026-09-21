@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -340,6 +341,24 @@ void main() {
       expect(subtitleStyle.style.fontSize, token.fontBodyMedium?.size);
       expect(subtitleStyle.style.height, token.fontBodyMedium?.height);
       expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('note 优先使用内容宽度且保留标题空间', (tester) async {
+      const address = '广东 深圳 南山区 粤海街道';
+      await tester.pumpWidget(
+        app(
+          const SizedBox(
+            width: 375,
+            child: TCell(title: Text('选择地区'), note: Text(address), arrow: true),
+          ),
+        ),
+      );
+
+      final paragraph = tester.renderObject<RenderParagraph>(
+        find.text(address),
+      );
+      expect(paragraph.didExceedMaxLines, isFalse);
+      expect(find.text('选择地区'), findsOneWidget);
     });
 
     testWidgets('显式 Text 配置可覆盖默认单行限制', (tester) async {

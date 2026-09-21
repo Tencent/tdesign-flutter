@@ -16,9 +16,10 @@ class TEmptyPage extends StatelessWidget {
       title: tTitle(context),
       exampleCodeGroup: 'empty',
       desc: '用于空状态时的占位提示。',
+      showTestModule: false,
       children: [
         ExampleModule(
-          title: '01 类型',
+          title: '组件类型',
           children: [
             ExampleItem(
               desc: '图标空状态',

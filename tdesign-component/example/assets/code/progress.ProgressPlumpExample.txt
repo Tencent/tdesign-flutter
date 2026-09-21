@@ -6,7 +6,7 @@ class ProgressPlumpExample extends StatelessWidget {
   const ProgressPlumpExample({super.key});
 
   Widget _buildPlump(BuildContext context) {
-    return TProgress(variant: TProgressVariant.plump, value: 0.8);
+    return TProgress.plump(value: 0.8);
   }
 
   @override

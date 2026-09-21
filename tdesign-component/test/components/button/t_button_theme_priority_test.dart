@@ -52,6 +52,10 @@ void main() {
     expect(buttonTheme?.ghostStyle, isNull);
   });
 
+  test('默认中性填充色与设计 Token 保持一致', () {
+    expect(TThemeData.defaultData().bgColorComponent, const Color(0xFFE7E7E7));
+  });
+
   testWidgets('TThemeBuilder 自动投影不污染默认样式，显式 copyWith 仍生效', (tester) async {
     Future<Color?> resolve(ThemeData theme) async {
       await tester.pumpWidget(

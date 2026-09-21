@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_footer_theme_data.dart';
 
@@ -10,7 +11,7 @@ class TFooter extends StatelessWidget {
   const TFooter({Key? key, this.logo, this.text = '', this.links = const []})
     : super(key: key);
 
-  /// 品牌内容；非空时优先展示，不再展示 [links] 和 [text]。
+  /// 品牌内容；可与 [text] 组合展示，非空时不展示 [links]。
   final Widget? logo;
 
   /// 文字
@@ -23,7 +24,11 @@ class TFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TFooterThemeData>();
     final children = logo != null
-        ? <Widget>[_renderLogo()]
+        ? <Widget>[
+            if (text.isNotEmpty) _renderText(context),
+            if (text.isNotEmpty) SizedBox(height: context.tTheme.spacer8),
+            _renderLogo(),
+          ]
         : <Widget>[
             if (links.isNotEmpty)
               _renderLinks(context)
@@ -64,7 +69,9 @@ class TFooter extends StatelessWidget {
             children: [
               for (var index = 0; index < links.length; index++) ...[
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.tTheme.spacer12,
+                  ),
                   child: IntrinsicWidth(child: links[index]),
                 ),
                 if (index < links.length - 1)
@@ -72,7 +79,7 @@ class TFooter extends StatelessWidget {
                     width: 1,
                     height: 22,
                     child: ColoredBox(
-                      color: context.tTheme.textColorPlaceholder,
+                      color: context.tTheme.componentStrokeColor,
                     ),
                   ),
               ],

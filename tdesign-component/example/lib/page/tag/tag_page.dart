@@ -12,10 +12,7 @@ import 'long_text_tag_example.dart';
 import 'mark_fill_tag_example.dart';
 import 'outline_show_tags_example.dart';
 import 'simple_fill_tag_example.dart';
-import 'tag_select_color_schemes_example.dart';
-import 'tag_select_default_example.dart';
-import 'tag_select_disabled_example.dart';
-import 'tag_select_outline_example.dart';
+import 'tag_select_variants_example.dart';
 
 @ExampleCodeManifest()
 class TTagPage extends StatefulWidget {
@@ -32,6 +29,7 @@ class _TTagPageState extends State<TTagPage> {
       title: tTitle(),
       desc: '用于表明主体的类目，属性或状态',
       exampleCodeGroup: 'tag',
+      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',
@@ -66,10 +64,15 @@ class _TTagPageState extends State<TTagPage> {
               methodName: 'CloseFillTagExample',
               builder: (_) => const CloseFillTagExample(),
             ),
+            ExampleItem(
+              desc: '可选中的标签',
+              methodName: 'TagSelectVariantsExample',
+              builder: (_) => const TagSelectVariantsExample(),
+            ),
           ],
         ),
         ExampleModule(
-          title: '组件状态（主题）',
+          title: '组件状态',
           children: [
             ExampleItem(
               desc: '填充型各主题',
@@ -90,31 +93,6 @@ class _TTagPageState extends State<TTagPage> {
               desc: '',
               methodName: 'AllSizeTagsExample',
               builder: (_) => const AllSizeTagsExample(),
-            ),
-          ],
-        ),
-        ExampleModule(
-          title: '可选标签',
-          children: [
-            ExampleItem(
-              desc: '默认形态',
-              methodName: 'TagSelectDefaultExample',
-              builder: (_) => const TagSelectDefaultExample(),
-            ),
-            ExampleItem(
-              desc: '描边形态',
-              methodName: 'TagSelectOutlineExample',
-              builder: (_) => const TagSelectOutlineExample(),
-            ),
-            ExampleItem(
-              desc: '不同语义色',
-              methodName: 'TagSelectColorSchemesExample',
-              builder: (_) => const TagSelectColorSchemesExample(),
-            ),
-            ExampleItem(
-              desc: '禁用状态',
-              methodName: 'TagSelectDisabledExample',
-              builder: (_) => const TagSelectDisabledExample(),
             ),
           ],
         ),

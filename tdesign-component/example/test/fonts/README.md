@@ -23,6 +23,12 @@ NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 新增文案的补充 fallback。它排在原字体之后，避免扩充原字体改变 Button、Checkbox、
 Upload 等既有 Golden 的字形选择与像素基线。
 
+`DemoReviewGoldenCJK-Regular.otf` 仅补充 Footer 和 Tag 整页 Golden 的
+“圆、弧、底、脚”字，字符清单见 `demo_review_glyphs.txt`。它作为这两个 Demo 的
+最后独立 fallback，不改变其他页面的既有像素基线。它使用本文记录的
+Noto Sans SC 2.004 与 HarfBuzz 11.4.5 生成，子集 SHA-256 为
+`09ceb5b1f9ac5e5451b6cd0e6b46945aee4e035c0eab17554c4772713e8a6ed0`。
+
 `TreeSelectGoldenCJK-Regular.otf` 仅补充 TreeSelect 整页 Golden 新增且既有子集
 未覆盖的字形，字符清单见 `tree_select_demo_glyphs.txt`，不会改变既有组件基线。
 它使用 Noto Sans SC 2.004 `NotoSansSC-Regular.otf`，来源与本文下方记录一致；
@@ -120,12 +126,12 @@ HarfBuzz 11.4.5，子集 SHA-256 为
 `CascaderGoldenCJK-Regular.otf` 仅补充 Cascader 整页 Golden 新增且既有子集
 未覆盖的字形，字符清单见 `cascader_demo_glyphs.txt`。独立加载可避免扩充共享
 字体改变既有组件的像素基线，子集 SHA-256 为
-`8bdb3ff2e9b33a303bce6b1d6d00ab951f7a27cb34b9626fd60805cff1ca8efa`。
+`8bbb7b7109383e63954943d26ba653540b8037147b5258a19482589b0dd01ee6`。
 
 `IndexesGoldenCJK-Regular.otf` 仅补充 Indexes 城市列表和公开 Demo 文案，字符清单见
 `indexes_demo_glyphs.txt`。它使用相同上游与子集参数，并设置独立 family，避免改变
 其他组件现有 Golden 的字体回退结果。子集 SHA-256 为
-`79e8744ec10861ff4a4685ea5915b779c400e3c8c42c8c91c00d815ab9d00d5c`。
+`cedb91f9c93622514e0a86c6f2eab924310755de88e2dcbdc88a5dd211f973c1`。
 
 `NavBarGoldenCJK-Regular.otf` 仅补充 Navbar 整页 Golden 的全部可见中文，
 字符清单见 `navbar_demo_glyphs.txt`。独立加载可避免扩大共享字体并改变其他组件

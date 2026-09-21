@@ -12,7 +12,7 @@ class TextareaCustomExample extends StatelessWidget {
         .mergeExtension(
           TFormThemeData(
             layout: TFormLayout.vertical,
-            backgroundColor: context.tTheme.bgColorSecondaryContainer,
+            backgroundColor: context.tTheme.bgColorContainer,
             borderColor: Colors.transparent,
             itemPadding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
             labelGap: context.tTheme.spacer8,

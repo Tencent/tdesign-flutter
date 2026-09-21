@@ -9,7 +9,7 @@ class ProgressLinearExample extends StatelessWidget {
   const ProgressLinearExample({super.key});
 
   Widget _buildLinear(BuildContext context) {
-    return TProgress(variant: TProgressVariant.linear, value: 0.8);
+    return TProgress.linear(value: 0.8);
   }
 
   @override

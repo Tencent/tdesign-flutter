@@ -15,13 +15,26 @@ void main() {
   );
   registerDemoPageTests(spec);
 
+  testWidgets('状态与手机号示例保持设计稿初始状态', (tester) async {
+    await pumpFullDemoPage(tester, spec, ThemeMode.light);
+
+    expect(find.text('只读模式'), findsNothing);
+    expect(find.text('17600600600'), findsNothing);
+    expect(find.text('输入手机号码'), findsOneWidget);
+  }, tags: 'demo');
+
   testWidgets('图形验证码左侧保留分割线', (tester) async {
     await pumpFullDemoPage(tester, spec, ThemeMode.light);
 
-    final captchaImage = find.byWidgetPredicate(
-      (widget) => widget is Image && widget.width == 72 && widget.height == 36,
+    final captcha = find.byKey(const ValueKey('input-captcha'));
+    final suffixRow = find.ancestor(of: captcha, matching: find.byType(Row));
+    final captchaBox = find.ancestor(
+      of: captcha,
+      matching: find.byWidgetPredicate(
+        (widget) =>
+            widget is SizedBox && widget.width == 72 && widget.height == 36,
+      ),
     );
-    final suffixRow = find.ancestor(of: captchaImage, matching: find.byType(Row));
     final divider = find.descendant(
       of: suffixRow.first,
       matching: find.byWidgetPredicate(
@@ -32,14 +45,16 @@ void main() {
       ),
     );
 
-    expect(captchaImage, findsOneWidget);
+    expect(captcha, findsOneWidget);
+    expect(captchaBox, findsOneWidget);
+    expect(find.text('DwrSe'), findsOneWidget);
     expect(divider, findsOneWidget);
     expect(
       tester.widget<Container>(divider).color,
       TThemeData.defaultData().componentStrokeColor,
     );
     expect(
-      tester.getTopLeft(captchaImage).dx - tester.getTopRight(divider).dx,
+      tester.getTopLeft(captchaBox).dx - tester.getTopRight(divider).dx,
       16,
     );
   }, tags: 'demo');

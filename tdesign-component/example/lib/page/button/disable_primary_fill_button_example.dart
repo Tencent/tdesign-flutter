@@ -59,17 +59,19 @@ class DisablePrimaryFillButtonExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      alignment: WrapAlignment.center,
-      spacing: 16,
-      runSpacing: 16,
-      children: [
-        Builder(builder: _buildDisablePrimaryFillButton),
-        Builder(builder: _buildDisableLightFillButton),
-        Builder(builder: _buildDisableDefaultFillButton),
-        Builder(builder: _buildDisablePrimaryStrokeButton),
-        Builder(builder: _buildDisablePrimaryTextButton),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 16),
+      child: Wrap(
+        spacing: 16,
+        runSpacing: 16,
+        children: [
+          Builder(builder: _buildDisablePrimaryFillButton),
+          Builder(builder: _buildDisableLightFillButton),
+          Builder(builder: _buildDisableDefaultFillButton),
+          Builder(builder: _buildDisablePrimaryStrokeButton),
+          Builder(builder: _buildDisablePrimaryTextButton),
+        ],
+      ),
     );
   }
 }

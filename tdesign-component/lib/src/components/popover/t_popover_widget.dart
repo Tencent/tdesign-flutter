@@ -620,6 +620,12 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     if (!_effectiveShowArrow) {
       return Offset.zero;
     }
+    if (placement == TPopoverPlacement.topLeft ||
+        placement == TPopoverPlacement.topRight ||
+        placement == TPopoverPlacement.bottomLeft ||
+        placement == TPopoverPlacement.bottomRight) {
+      return Offset.zero;
+    }
     final horizontal =
         _isLeftPlacement(placement) || _isRightPlacement(placement);
     final extent = horizontal ? popoverSize.height : popoverSize.width;
@@ -660,13 +666,10 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     required double arrowSize,
   }) {
     return switch (placement) {
-      TPopoverPlacement.topLeft || TPopoverPlacement.bottomLeft =>
-        anchorRect.center.dx -
-            (_kHorizontalArrowInset + _effectiveArrowSize),
-      TPopoverPlacement.topRight || TPopoverPlacement.bottomRight =>
-        anchorRect.center.dx +
-            (_kHorizontalArrowInset + _effectiveArrowSize) -
-            popoverSize.width,
+      TPopoverPlacement.topLeft ||
+      TPopoverPlacement.bottomLeft => anchorRect.left,
+      TPopoverPlacement.topRight ||
+      TPopoverPlacement.bottomRight => anchorRect.right - popoverSize.width,
       TPopoverPlacement.rightTop ||
       TPopoverPlacement.right ||
       TPopoverPlacement.rightBottom => anchorRect.right + _effectiveOffset,

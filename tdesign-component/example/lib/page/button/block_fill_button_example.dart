@@ -7,14 +7,17 @@ import '../../base/example_widget.dart';
 class BlockFillButtonExample extends StatelessWidget {
   const BlockFillButtonExample({super.key});
   Widget _buildBlockFillButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: TButton(
-        child: const Text('填充按钮'),
-        size: TButtonSize.large,
-        variant: TButtonVariant.fill,
-        colorScheme: TButtonColorScheme.primary,
-        onPressed: () => _onTap(context),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: SizedBox(
+        width: double.infinity,
+        child: TButton(
+          child: const Text('填充按钮'),
+          size: TButtonSize.large,
+          variant: TButtonVariant.fill,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () => _onTap(context),
+        ),
       ),
     );
   }

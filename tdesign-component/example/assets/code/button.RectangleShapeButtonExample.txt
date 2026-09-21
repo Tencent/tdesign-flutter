@@ -8,7 +8,7 @@ class RectangleShapeButtonExample extends StatelessWidget {
       context,
       TButtonShape.rectangle,
       TButton(
-        child: const Text('矩形'),
+        child: const Text('填充按钮'),
         size: TButtonSize.large,
         variant: TButtonVariant.fill,
         colorScheme: TButtonColorScheme.primary,
@@ -59,6 +59,23 @@ class RectangleShapeButtonExample extends StatelessWidget {
     );
   }
 
+  Widget _buildBlockShapeButton(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: _withButtonShape(
+        context,
+        TButtonShape.rectangle,
+        TButton(
+          child: const Text('填充按钮'),
+          size: TButtonSize.large,
+          variant: TButtonVariant.fill,
+          colorScheme: TButtonColorScheme.primary,
+          onPressed: () => _onTap(context),
+        ),
+      ),
+    );
+  }
+
   /// 为子树注入 [TButtonThemeData.shape]（外形走 Theme）
   Widget _withButtonShape(
     BuildContext context,
@@ -91,19 +108,25 @@ class RectangleShapeButtonExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Wrap(
-        spacing: 16,
-        runSpacing: 16,
-        children: [
-          Builder(builder: _buildRectangleShapeButton),
-          Builder(builder: _buildSquareIconButton),
-          Builder(builder: _buildRoundButton),
-          Builder(builder: _buildCircleButton),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Wrap(
+            spacing: 12,
+            runSpacing: 16,
+            children: [
+              Builder(builder: _buildRectangleShapeButton),
+              Builder(builder: _buildSquareIconButton),
+              Builder(builder: _buildRoundButton),
+              Builder(builder: _buildCircleButton),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        Builder(builder: _buildBlockShapeButton),
+      ],
     );
   }
 }

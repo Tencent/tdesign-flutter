@@ -434,8 +434,10 @@ void main() {
         if (placement == TPopoverPlacement.topLeft ||
             placement == TPopoverPlacement.bottomLeft) {
           expect(arrowRect.left - contentRect.left, 12);
+          expect(contentRect.left, tester.getRect(find.text('触发项')).left);
         } else {
           expect(contentRect.right - arrowRect.right, 12);
+          expect(contentRect.right, tester.getRect(find.text('触发项')).right);
         }
         controller.close();
         await tester.pump();

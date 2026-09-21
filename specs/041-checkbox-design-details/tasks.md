@@ -7,3 +7,4 @@
 - [x] DONE 执行完整验证并记录结果
 - [x] DONE 补充禁用未选的组件 Theme 与 Material Theme 覆盖回归
 - [x] DONE 创建 PR 并在 Issue #1027 跟进
+- [x] DONE 二次 Review：补齐单行垂直居中和方形指示器 1.5dp 圆角

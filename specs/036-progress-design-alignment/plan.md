@@ -2,10 +2,13 @@
 
 ## 技术方案
 
-- 将公开形态一次收敛为 `linear`、`plump`、`circular`、`microCircular`、`button`、`microButton`；形态唯一决定结构、默认尺寸、标签布局和交互边界。
+- 将公开入口一次收敛为 `TProgress.linear`、`TProgress.plump`、`TProgress.circular`、`TProgress.microCircular`、`TProgress.button`、`TProgress.microButton` 六个命名构造函数；形态唯一决定可传参数、结构、默认尺寸、标签布局和交互边界。
 - 增加 `TProgressStatus` 与可选 `status` 参数，内部统一解析默认颜色和图标；常规状态命名为 `normal`，不以色相名称冒充状态。
 - 删除 `TProgressLabelPosition` 及 Theme 中的标签位置、显示开关、标签宽度/对齐和无界兜底宽度等历史兼容字段。
 - 继续使用 `TProgressThemeData` 承载颜色、尺寸、圆角与动画；增加逐实例 `LinearGradient` 完整填充样式，解析顺序为实例渐变、Theme / Flutter 显式视觉字段、状态语义 token。
+- 组件特有的轨道、环形和图标尺寸集中为 Progress 内置设计默认值；文字直接消费
+  `Body/Medium`、`Mark/Small`、`Title/ExtraLarge`、`Mark/Large` 全局字体
+  Token，不再从轨道尺寸按比例推导。
 - 对齐 Flutter 的 `semanticsLabel` / `semanticsValue`，交互形态补充按钮语义与 44px 触控区域。
 - Demo 状态仅由页面持有，按钮操作通过 `setState` 推进，不把 Timer 或 Controller 泄漏到组件 API。
 
@@ -20,6 +23,7 @@
 
 ## API 变化
 
+- 删除接收 `variant` 的未命名构造函数，改用六个命名构造函数；`variant` 保留为实例只读信息。
 - 新增 `TProgressVariant.plump`。
 - 新增 `TProgressStatus` 和可选 `status`，默认 `normal`。
 - `micro` 替换为语义明确的 `microCircular` 与 `microButton`。
