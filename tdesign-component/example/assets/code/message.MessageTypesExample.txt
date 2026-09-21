@@ -8,16 +8,36 @@ class MessageTypesExample extends StatelessWidget {
     return Column(
       children: [
         _buildTextMessage(context),
+        const SizedBox(height: 24),
+        _buildLabeledExample(context, '带图标的通知', _buildIconMessage(context)),
+        const SizedBox(height: 24),
+        _buildLabeledExample(context, '带关闭的通知', _buildCloseMessage(context)),
+        const SizedBox(height: 24),
+        _buildLabeledExample(context, '可滚动的通知', _buildScrollMessage(context)),
+        const SizedBox(height: 24),
+        _buildLabeledExample(context, '带按钮的通知', _buildLinkMessage(context)),
+        const SizedBox(height: 24),
+        _buildLabeledExample(context, '函数式调用', _buildFunctionMessage(context)),
+      ],
+    );
+  }
+
+  Widget _buildLabeledExample(
+    BuildContext context,
+    String label,
+    Widget child,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TText(
+          label,
+          key: ValueKey('message-type-label-$label'),
+          font: context.tTheme.fontBodyMedium,
+          textColor: context.tTheme.textColorSecondary,
+        ),
         const SizedBox(height: 16),
-        _buildIconMessage(context),
-        const SizedBox(height: 16),
-        _buildCloseMessage(context),
-        const SizedBox(height: 16),
-        _buildScrollMessage(context),
-        const SizedBox(height: 16),
-        _buildLinkMessage(context),
-        const SizedBox(height: 16),
-        _buildComponentMessage(context),
+        child,
       ],
     );
   }
@@ -75,14 +95,18 @@ class MessageTypesExample extends StatelessWidget {
         action: TLink(
           child: const Text('链接'),
           colorScheme: TLinkColorScheme.primary,
-          onPressed: () => TMessage.show(context: context, content: '已点击链接'),
+          onPressed: () {},
         ),
       ),
     );
   }
 
-  Widget _buildComponentMessage(BuildContext context) {
-    return const MessageTypesExampleDeclarativeMessageDemo();
+  Widget _buildFunctionMessage(BuildContext context) {
+    return _fullWidthButton(
+      text: '函数式调用',
+      onPressed: () =>
+          TMessage.show(context: context, content: '这是一条通过函数式调用的消息通知'),
+    );
   }
 
   Widget _fullWidthButton({
@@ -93,6 +117,7 @@ class MessageTypesExample extends StatelessWidget {
       width: double.infinity,
       child: TButton(
         child: Text(text),
+        size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorScheme: TButtonColorScheme.primary,
         onPressed: onPressed,
@@ -103,53 +128,5 @@ class MessageTypesExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _buildMessageTypes(context);
-  }
-}
-
-/// 组件声明式调用示例：通过 Widget 树插入 / 移除消息。
-class MessageTypesExampleDeclarativeMessageDemo extends StatefulWidget {
-  const MessageTypesExampleDeclarativeMessageDemo({super.key});
-
-  @override
-  State<MessageTypesExampleDeclarativeMessageDemo> createState() =>
-      MessageTypesExampleDeclarativeMessageDemoState();
-}
-
-class MessageTypesExampleDeclarativeMessageDemoState
-    extends State<MessageTypesExampleDeclarativeMessageDemo> {
-  bool _showMessage = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: MediaQuery.sizeOf(context).width,
-          height: 56,
-          child: Stack(
-            children: [
-              if (_showMessage)
-                const TMessage(
-                  content: '这是一条通过组件调用的消息通知',
-                  offset: Offset.zero,
-                  useSafeArea: false,
-                  duration: null,
-                ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 8),
-        SizedBox(
-          width: double.infinity,
-          child: TButton(
-            child: Text(_showMessage ? '隐藏消息' : '组件调用'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () => setState(() => _showMessage = !_showMessage),
-          ),
-        ),
-      ],
-    );
   }
 }

@@ -42,7 +42,8 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
   /// 图标与文案之间的间距，单位为逻辑像素。
   ///
   /// 仅在按钮同时提供 icon 和 child 时生效；该值控制两者
-  /// 之间的实际间隔，不会改变按钮整体内边距。
+  /// 之间的实际间隔，不会改变按钮整体内边距。为空时使用全局
+  /// `spacer4`（4dp）。
   final double? iconTextSpacing;
 
   /// 渐变背景色（装饰层，非 ButtonStyle 字段）

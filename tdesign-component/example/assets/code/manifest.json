@@ -994,7 +994,7 @@
         "title": "组件类型",
         "items": [
           {
-            "description": "消息通知内容为文本、带操作按钮",
+            "description": "纯文字的通知",
             "assetKey": "message.MessageTypesExample"
           }
         ]
@@ -1003,7 +1003,7 @@
         "title": "组件状态",
         "items": [
           {
-            "description": "消息组件风格",
+            "description": "普通通知",
             "assetKey": "message.MessageStylesExample"
           }
         ]

@@ -35,6 +35,26 @@ void main() {
   registerDemoStructureTests(_tagSpec);
   registerDemoGoldenTests(_tagSpec);
 
+  for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('tag selected ${mode.name} golden', (tester) async {
+      await pumpFullDemoPage(tester, _tagSpec, mode);
+      final selectable = find.byWidgetPredicate(
+        (widget) =>
+            widget is TSelectTag &&
+            widget.text == '未选中态' &&
+            widget.variant == TTagVariant.outline,
+      );
+      await tester.tap(selectable);
+      await tester.pumpAndSettle();
+      expect(tester.widget<TSelectTag>(selectable).value, isTrue);
+      await expectLater(
+        find.byKey(const ValueKey('tag-demo-page')),
+        matchesGoldenFile('goldens/tag_selected_${mode.name}.png'),
+      );
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
+  }
+
   testWidgets('Tag Demo exposes every color scheme and variant', (
     tester,
   ) async {

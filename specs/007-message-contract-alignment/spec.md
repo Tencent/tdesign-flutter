@@ -6,7 +6,7 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 
 1. **公开 Demo 覆盖不全**：Flutter 示例页 `t_message_page.dart` 仅覆盖"组件状态（4 主题）+ 跑马灯"，而官方存在以下公开 Demo 缺失：
    - 纯文字通知（无图标）、带关闭通知、带按钮（链接）通知 —— 对应小程序 `message/_example/base`、mobile-vue `message/demos/base.vue`；
-   - 组件声明式调用（由 Flutter Widget 树插入 / 移除）—— 对应小程序公开 Demo 中的组件调用效果，但不机械复制其 `visible` 属性；
+   - 函数式调用——通过 Flutter 已有的 `TMessage.show()` 展示 Overlay 消息，不在 Demo 页面流中插入额外占位；
    - Mobile Vue 另有“关闭所有通知”扩展示例，但小程序公开 Demo 页不展示该分组，不应作为 Flutter 对齐基线。
 2. **示例生成代码不同步**：`example/assets/code/` 仅含 `message._marquee.txt`，未与完整 Demo 同步。
 3. **站点文档严重过期**：`tdesign-site/docs/components/message/README.md` 仍使用已废弃 API（`TMessage.showMessage`、`MessageTheme`、`MessageLink`、`MessageMarquee`、`closeBtn`、`icon`、`theme`、`onCloseBtnClick`、`onLinkClick` 等），无法编译，与现网公开 API 不一致。
@@ -62,7 +62,7 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 | 组件类型 | 带关闭的通知 | 带关闭通知 | `TMessage.show(showCloseButton: true)` |
 | 组件类型 | 可滚动的通知 | 跑马灯通知 | `TMessage.show(marquee: ...)` |
 | 组件类型 | 带按钮的通知 | 带操作通知 | `TMessage.show(action: TLink(...))` |
-| 组件类型 | 组件调用 | 组件声明式调用 | `if (showMessage) TMessage(...)` |
+| 组件类型 | 函数式调用 | 函数式调用 | `TMessage.show(...)` |
 | 组件风格 | 普通 / 成功 / 警示 / 错误 | 同 4 状态 | `TMessage.show(status: ...)` |
 
 - 官方存在、Flutter 缺失的 Demo 必须补齐（上表各条目）。

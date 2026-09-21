@@ -36,6 +36,33 @@ void main() {
   });
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('dropdown menu committed selection ${mode.name} golden', (
+      tester,
+    ) async {
+      await pumpDemoPageAtPhoneViewport(
+        tester,
+        dropdownMenuDemoPageTestSpec,
+        mode,
+      );
+      await tester.tap(find.text('全部产品'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('最新产品'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byKey(const ValueKey<String>('t-dropdown-menu-panel-surface')),
+        findsNothing,
+      );
+      expect(find.text('最新产品'), findsOneWidget);
+      await expectLater(
+        find.byKey(const ValueKey('dropdown_menu-demo-page')),
+        matchesGoldenFile(
+          'goldens/dropdown_menu_single_selected_${mode.name}.png',
+        ),
+      );
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
+
     testWidgets('dropdown menu overscroll ${mode.name} opened golden', (
       tester,
     ) async {

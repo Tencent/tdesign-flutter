@@ -77,4 +77,30 @@ void main() {
     expect(find.text('矩形'), findsNothing);
     expect(find.text('填充按钮'), findsNWidgets(3));
   }, tags: 'demo');
+
+  testWidgets('button 页面不再二次居中左对齐示例', (tester) async {
+    await pumpDemoPageAtPhoneViewport(
+      tester,
+      const DemoPageTestSpec(
+        name: 'button',
+        title: 'Button 按钮',
+        page: TButtonPage(),
+        expectedTexts: ['01 组件类型', '02 组件状态', '03 组件样式'],
+        componentType: TButton,
+      ),
+      ThemeMode.light,
+    );
+
+    expect(tester.widget<TLoading>(find.byType(TLoading)).size, 24);
+
+    final disabledButton = find.widgetWithText(TButton, '描边按钮').first;
+    await tester.scrollUntilVisible(disabledButton, 300);
+    expect(tester.getTopLeft(disabledButton).dx, 16);
+
+    final sizeButton = find.widgetWithText(TButton, '按钮48');
+    await tester.scrollUntilVisible(sizeButton, 300);
+    expect(tester.getTopLeft(sizeButton).dx, 16);
+
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
 }

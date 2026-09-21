@@ -65,6 +65,7 @@ class _TButtonPageState extends State<TButtonPage> {
           children: [
             ExampleItem(
               desc: '按钮禁用态',
+              center: false,
               methodName: 'DisablePrimaryFillButtonExample',
               builder: (_) => const DisablePrimaryFillButtonExample(),
             ),
@@ -75,6 +76,7 @@ class _TButtonPageState extends State<TButtonPage> {
           children: [
             ExampleItem(
               desc: '按钮尺寸',
+              center: false,
               methodName: 'LargeButtonExample',
               builder: (_) => const LargeButtonExample(),
             ),

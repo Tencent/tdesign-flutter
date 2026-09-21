@@ -15,6 +15,26 @@ void main() {
   );
   registerDemoPageTests(spec);
 
+  for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('input invalid phone ${mode.name} golden', (tester) async {
+      await pumpFullDemoPage(tester, spec, mode);
+      final phoneInput = find.descendant(
+        of: find.widgetWithText(TInput, '输入手机号码'),
+        matching: find.byType(EditableText),
+      );
+      expect(phoneInput, findsOneWidget);
+      await tester.enterText(phoneInput, '123');
+      FocusManager.instance.primaryFocus?.unfocus();
+      await tester.pumpAndSettle();
+      expect(find.text('手机号输入不正确'), findsOneWidget);
+      await expectLater(
+        find.byKey(const ValueKey('input-demo-page')),
+        matchesGoldenFile('goldens/input_invalid_phone_${mode.name}.png'),
+      );
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
+  }
+
   testWidgets('状态与手机号示例保持设计稿初始状态', (tester) async {
     await pumpFullDemoPage(tester, spec, ThemeMode.light);
 

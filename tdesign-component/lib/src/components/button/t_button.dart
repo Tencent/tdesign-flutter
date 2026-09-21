@@ -184,7 +184,7 @@ class _TButtonState extends State<TButton> {
     // 构建带图标的内容
     final hasIcon = widget.icon != null;
     final hasChild = widget.child != null;
-    final iconTextSpacing = theme?.iconTextSpacing ?? context.tTheme.spacer8;
+    final iconTextSpacing = theme?.iconTextSpacing ?? context.tTheme.spacer4;
     final gradient = theme?.gradient;
 
     Widget? content;

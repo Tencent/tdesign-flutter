@@ -9,6 +9,33 @@ void main() {
   registerDemoGoldenTests(dateTimePickerDemoPageTestSpec);
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('date_time_picker month confirmed ${mode.name} golden', (
+      tester,
+    ) async {
+      await pumpFullDemoPage(tester, dateTimePickerDemoPageTestSpec, mode);
+      final trigger = find.byKey(
+        const ValueKey('date-time-picker-month-trigger'),
+      );
+      await tester.tap(trigger);
+      await tester.pumpAndSettle();
+      await tester.drag(
+        find.byType(ListWheelScrollView).first,
+        const Offset(0, 80),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('确定'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(TDateTimePicker), findsNothing);
+      await expectLater(
+        find.byKey(const ValueKey('date_time_picker-demo-page')),
+        matchesGoldenFile(
+          'goldens/date_time_picker_month_confirmed_${mode.name}.png',
+        ),
+      );
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
+
     for (final id in [
       'date',
       'month',
