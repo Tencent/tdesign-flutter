@@ -65,6 +65,15 @@ void main() {
     expect(buttons, findsNWidgets(5));
     expect(tester.getTopLeft(buttons.first).dx, 16);
     expect(tester.getSize(buttons.last).width, 375);
+    final blockButton = tester.widget<ElevatedButton>(
+      find.descendant(of: buttons.last, matching: find.byType(ElevatedButton)),
+    );
+    final blockShape = blockButton.style?.shape?.resolve({});
+    expect(blockShape, isA<RoundedRectangleBorder>());
+    expect(
+      (blockShape! as RoundedRectangleBorder).borderRadius,
+      BorderRadius.zero,
+    );
     expect(find.text('矩形'), findsNothing);
     expect(find.text('填充按钮'), findsNWidgets(3));
   }, tags: 'demo');

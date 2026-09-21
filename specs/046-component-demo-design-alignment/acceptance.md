@@ -3,7 +3,7 @@
 ## 基线
 
 - Git：`origin/develop@47e070a70bafbb99ea5722cf59c03ab5bf61ae3f`
-- 受影响源码与测试 binary diff 指纹：`b9a1a63f686ba0504d82fdb5aed54fa447587d245e2de0405dd66ccbcbc3439c`
+- 受影响源码与测试 binary diff 指纹：`ecf5d116d7837ec2ad9381c377471723057ec4ed9c4a962e153836abce07a177`
 - Golden：Linux amd64、Flutter 3.32.0、仓库固定字体与视口
 - Latest：Flutter 3.47.0 clean snapshot
 - 设计比较：统一从首个公开标题裁切，省略状态栏、Figma 头部与底部测试区域
@@ -20,6 +20,7 @@
 | 示例代码生成与 `--check` | 通过 |
 | Demo 结构审计 | 60 个入口、372 个 ExampleItem、0 orphan |
 | Linux Flutter 3.32.0 全量 Golden | 更新后移除更新参数，全部视觉套件通过 |
+| Button 聚焦回归 | Demo 功能测试 2/2；Linux 3.32.0 Golden 4/4，更新后无更新复跑通过 |
 | Progress 生产源码覆盖率 | 524/527，99.43% |
 | Checkbox 生产源码覆盖率 | 393/410，95.85% |
 | Swiper 生产源码覆盖率 | 478/495，96.57% |
@@ -27,6 +28,8 @@
 
 ## Golden 差异归因
 
+- 28 份设计稿证据已升级为 Figma 原图、develop 差异、current 差异、当前原图四栏；develop 与 current 使用相同分段配准、强差阈值和低对比标注规则，当前残留差异不再只记录比例而缺少定位图。
+- Button“按钮形状”末项按设计稿使用铺满父容器的 0 圆角实例。Linux light/dark Golden 相对上一版均只改变 56 个像素，边界严格位于该 375×48 按钮四角；Figma 与修复后首末行蓝色范围均为 `[0,375)`、高度均为 48px。
 - 最终提交包含 201 份逐文件三栏证据：179 个修改、12 个新增、10 个删除；
   `manifest.tsv` 无缺项、无像素完全相同却被提交为修改的基线，其中 103 个比较的
   最大 RGBA 通道差为 1。

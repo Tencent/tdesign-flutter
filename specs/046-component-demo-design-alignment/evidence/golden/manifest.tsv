@@ -22,8 +22,8 @@ M	tdesign-component/example/test/goldens/backtop_page_half-round_scrolled_light.
 M	tdesign-component/example/test/goldens/backtop_page_light.png	375	812	103908	304500	0.34124138	1	example/test/goldens/backtop_page_light-develop-diff-current.png
 M	tdesign-component/example/test/goldens/badge_page_dark.png	375	1511	11381	566625	0.02008559	1	example/test/goldens/badge_page_dark-develop-diff-current.png
 M	tdesign-component/example/test/goldens/badge_page_light.png	375	1511	11248	566625	0.01985087	1	example/test/goldens/badge_page_light-develop-diff-current.png
-M	tdesign-component/example/test/goldens/button_page_dark.png	375	4420	1099235	1657500	0.66318854	241	example/test/goldens/button_page_dark-develop-diff-current.png
-M	tdesign-component/example/test/goldens/button_page_light.png	375	4420	264547	1657500	0.15960603	255	example/test/goldens/button_page_light-develop-diff-current.png
+M	tdesign-component/example/test/goldens/button_page_dark.png	375	4420	1099255	1657500	0.66320060	241	example/test/goldens/button_page_dark-develop-diff-current.png
+M	tdesign-component/example/test/goldens/button_page_light.png	375	4420	264567	1657500	0.15961810	255	example/test/goldens/button_page_light-develop-diff-current.png
 M	tdesign-component/example/test/goldens/calendar_page_dark.png	375	1833	1292	687375	0.00187961	76	example/test/goldens/calendar_page_dark-develop-diff-current.png
 M	tdesign-component/example/test/goldens/calendar_page_light.png	375	1833	1282	687375	0.00186507	102	example/test/goldens/calendar_page_light-develop-diff-current.png
 M	tdesign-component/example/test/goldens/calendar_range_opened_dark.png	375	812	595	304500	0.00195402	34	example/test/goldens/calendar_range_opened_dark-develop-diff-current.png

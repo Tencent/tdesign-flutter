@@ -62,16 +62,17 @@ class RectangleShapeButtonExample extends StatelessWidget {
   Widget _buildBlockShapeButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      child: _withButtonShape(
-        context,
-        TButtonShape.rectangle,
-        TButton(
-          child: const Text('填充按钮'),
-          size: TButtonSize.large,
-          variant: TButtonVariant.fill,
-          colorScheme: TButtonColorScheme.primary,
-          onPressed: () => _onTap(context),
+      child: TButton(
+        child: const Text('填充按钮'),
+        size: TButtonSize.large,
+        variant: TButtonVariant.fill,
+        colorScheme: TButtonColorScheme.primary,
+        style: const ButtonStyle(
+          shape: WidgetStatePropertyAll<OutlinedBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+          ),
         ),
+        onPressed: () => _onTap(context),
       ),
     );
   }

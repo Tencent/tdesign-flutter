@@ -9,7 +9,7 @@
 - 逐一复核 Button、Indexes、Navbar、SideBar、TabBar、Tabs、Cascader、Checkbox、DateTimePicker、Input、Slider、Stepper、Textarea、TreeSelect、Avatar、Badge、Collapse、Empty、Footer、Image、ImageViewer、Progress、Swiper、Table、Tag、TimeCounter、DropdownMenu、Popover。
 - Demo 只负责公开示例的状态与外部排列，不通过特殊样式掩盖组件缺陷。
 - 组件默认视觉、交互与 API 在组件层收敛；共享色值由 Token 统一提供。
-- 为设计稿和全部变更 Golden 提供可审计的三栏像素证据。
+- 为设计稿提供可分别定位 develop/current 差异的四栏证据，并为全部变更 Golden 提供可审计的三栏像素证据。
 
 ## 非目标
 
@@ -20,8 +20,8 @@
 
 ## 行为契约
 
-- 页面截图从第一个公开标题开始，移除设备状态栏、Figma 头部与底部测试区域，三列使用一致的内容边界。
-- 设计比较图固定为：Figma 原图、`develop × Figma` 红色差异、当前实现原图；红色为强差异，橙色为连续低对比色差。
+- 页面截图从第一个公开标题开始，移除设备状态栏、Figma 头部与底部测试区域，四列使用一致的内容边界。
+- 设计比较图固定为：Figma 原图、`develop × Figma` 差异、`current × Figma` 差异、当前实现原图；红色为强差异，橙色为连续低对比色差。develop 与 current 必须分别生成标注列，避免只统计当前差异比例却无法定位当前实现的残留偏差。
 - Golden 比较图固定为：`origin/develop` 基线、逐像素精确差异、当前基线；任一 RGBA 通道不同即在中栏标红。
 - Golden 新增项以空白 develop 基线表示，删除项以空白当前基线表示，不能从证据清单中省略。
 - `TProgress` 使用六个命名构造函数表达形态；形态无效参数不进入对应构造函数，`status` 是任务状态的唯一入口。
@@ -35,7 +35,7 @@
 
 ## 验收标准
 
-- [x] 28 个 Demo 都有设计稿／develop 差异／当前实现三栏证据。
+- [x] 28 个 Demo 都有设计稿／develop 差异／current 差异／当前实现四栏证据。
 - [x] 全部变更 Golden 都有 develop／精确差异／当前三栏证据与逐文件统计。
 - [x] Flutter 3.32.0 与 latest 严格 analyze、组件回归和 Example 回归通过。
 - [x] Linux amd64 Flutter 3.32.0 全量 Golden 更新后，无更新参数精确复跑通过。

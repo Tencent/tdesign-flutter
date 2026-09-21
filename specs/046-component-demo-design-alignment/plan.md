@@ -17,7 +17,7 @@
 
 ## 视觉证据
 
-- `evidence/design/`：28 个完整 Demo 的 Figma／develop 差异／当前实现比较图。
+- `evidence/design/`：28 个完整 Demo 的 Figma／develop 差异／current 差异／当前实现比较图。
 - `evidence/golden/`：全部变更 Golden 的 develop／精确红色差异／当前基线比较图。
 - `evidence/golden/manifest.tsv`：状态、尺寸、差异像素数、比例、最大通道差和比较图路径。
 
