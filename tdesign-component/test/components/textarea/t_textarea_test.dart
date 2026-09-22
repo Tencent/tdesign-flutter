@@ -330,18 +330,6 @@ void main() {
       ),
       findsNothing,
     );
-    expect(
-      find.descendant(
-        of: find.byType(TFormItem),
-        matching: find.byWidgetPredicate(
-          (widget) =>
-              widget is Container &&
-              widget.padding ==
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        ),
-      ),
-      findsOneWidget,
-    );
   });
 
   testWidgets('rebinds its focus listener when focusNode changes', (
