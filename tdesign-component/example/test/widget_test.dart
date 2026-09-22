@@ -140,6 +140,12 @@ void main() {
                     methodName: 'EmptyExample',
                     builder: _emptyExample,
                   ),
+                  ExampleItem(
+                    key: ValueKey('compact-surface-content'),
+                    ignoreCode: true,
+                    compactStyle: CompactExampleStyle.surface(),
+                    builder: _emptyExample,
+                  ),
                 ],
               ),
             ],
@@ -181,12 +187,24 @@ void main() {
       tester.widget<Scaffold>(find.byType(Scaffold)).backgroundColor,
       const Color(0xFFF6F6F6),
     );
+    final compactSurface = find.byWidgetPredicate(
+      (widget) =>
+          widget is ColoredBox && widget.color == token.bgColorContainer,
+    );
+    expect(compactSurface, findsOneWidget);
     expect(
-      find.byWidgetPredicate(
-        (widget) =>
-            widget is ColoredBox && widget.color == token.bgColorContainer,
+      find.ancestor(
+        of: find.byKey(const ValueKey('compact-example-content')),
+        matching: compactSurface,
       ),
       findsNothing,
+    );
+    expect(
+      find.ancestor(
+        of: find.byKey(const ValueKey('compact-surface-content')),
+        matching: compactSurface,
+      ),
+      findsOneWidget,
     );
     expect(
       tester.getSize(find.byKey(const ValueKey('compact-example-content'))),

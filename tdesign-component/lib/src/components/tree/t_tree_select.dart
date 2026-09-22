@@ -538,8 +538,8 @@ class _TreeOptionTile extends StatelessWidget {
               child: ColoredBox(color: selectedBackgroundColor),
             ),
           if (selected && root)
-            Positioned(
-              left: 0,
+            PositionedDirectional(
+              start: 0,
               top: (height - 16) / 2,
               child: SizedBox(
                 key: const ValueKey('tree-select-root-indicator'),

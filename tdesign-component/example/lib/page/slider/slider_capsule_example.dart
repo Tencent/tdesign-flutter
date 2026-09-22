@@ -4,7 +4,12 @@ import '../../annotation/example_code.dart';
 
 @ExampleCode(group: 'slider')
 class SliderCapsuleExample extends StatefulWidget {
-  const SliderCapsuleExample({super.key});
+  const SliderCapsuleExample({
+    super.key,
+    this.type = SliderCapsuleExampleType.single,
+  });
+
+  final SliderCapsuleExampleType type;
 
   @override
   State<SliderCapsuleExample> createState() => _SliderCapsuleExampleState();
@@ -12,110 +17,81 @@ class SliderCapsuleExample extends StatefulWidget {
 
 class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
   Widget _buildCapsule(BuildContext context) {
-    Widget capsule(
-      Widget slider, {
-      double horizontal = 0,
-      double vertical = 4,
-    }) => ColoredBox(
-      color: context.tTheme.bgColorContainer,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: horizontal,
-          vertical: vertical,
+    return switch (widget.type) {
+      SliderCapsuleExampleType.single => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: TSlider(
+          key: const ValueKey('slider-capsule'),
+          value: _capsule,
+          min: 0,
+          max: 100,
+          variant: TSliderVariant.capsule,
+          onChanged: (value) => setState(() => _capsule = value),
         ),
-        child: slider,
       ),
-    );
-
-    return Column(
-      children: [
-        capsule(
-          TSlider(
-            key: const ValueKey('slider-capsule'),
-            value: _capsule,
-            min: 0,
-            max: 100,
-            variant: TSliderVariant.capsule,
-            onChanged: (value) => setState(() => _capsule = value),
-          ),
+      SliderCapsuleExampleType.range => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: TRangeSlider(
+          key: const ValueKey('slider-capsule-range'),
+          value: _capsuleRange,
+          min: 0,
+          max: 100,
+          variant: TSliderVariant.capsule,
+          onChanged: (value) => setState(() => _capsuleRange = value),
         ),
-        _gap(context),
-        capsule(
-          TRangeSlider(
-            key: const ValueKey('slider-capsule-range'),
-            value: _capsuleRange,
-            min: 0,
-            max: 100,
-            variant: TSliderVariant.capsule,
-            onChanged: (value) => setState(() => _capsuleRange = value),
-          ),
-        ),
-        _gap(context),
-        capsule(
-          Row(
-            children: [
-              const TText('0'),
-              Expanded(
-                child: TRangeSlider(
-                  key: const ValueKey('slider-capsule-labeled-range'),
-                  value: _capsuleLabeledRange,
-                  min: 0,
-                  max: 100,
-                  variant: TSliderVariant.capsule,
-                  showThumbValue: true,
-                  thumbFormatter: _integer,
-                  onChanged: (value) =>
-                      setState(() => _capsuleLabeledRange = value),
-                ),
+      ),
+      SliderCapsuleExampleType.labeledRange => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: Row(
+          children: [
+            const TText('0'),
+            Expanded(
+              child: TRangeSlider(
+                key: const ValueKey('slider-capsule-labeled-range'),
+                value: _capsuleLabeledRange,
+                min: 0,
+                max: 100,
+                variant: TSliderVariant.capsule,
+                showThumbValue: true,
+                thumbFormatter: _integer,
+                onChanged: (value) =>
+                    setState(() => _capsuleLabeledRange = value),
               ),
-              const TText('100'),
-            ],
-          ),
-          horizontal: 16,
+            ),
+            const TText('100'),
+          ],
         ),
-        _gap(context),
-        capsule(
-          TSlider(
-            key: const ValueKey('slider-capsule-scale'),
-            value: _capsuleScale,
-            min: 0,
-            max: 100,
-            divisions: 5,
-            variant: TSliderVariant.capsule,
-            showScaleValue: true,
-            scaleFormatter: _integer,
-            onChanged: (value) => setState(() => _capsuleScale = value),
-          ),
-          vertical: 1,
+      ),
+      SliderCapsuleExampleType.scale => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 1),
+        child: TSlider(
+          key: const ValueKey('slider-capsule-scale'),
+          value: _capsuleScale,
+          min: 0,
+          max: 100,
+          divisions: 5,
+          variant: TSliderVariant.capsule,
+          showScaleValue: true,
+          scaleFormatter: _integer,
+          onChanged: (value) => setState(() => _capsuleScale = value),
         ),
-        _gap(context),
-        capsule(
-          TRangeSlider(
-            key: const ValueKey('slider-capsule-scale-range'),
-            value: _capsuleScaleRange,
-            min: 0,
-            max: 100,
-            divisions: 5,
-            variant: TSliderVariant.capsule,
-            showScaleValue: true,
-            scaleFormatter: _integer,
-            onChanged: (value) => setState(() => _capsuleScaleRange = value),
-          ),
-          vertical: 1,
+      ),
+      SliderCapsuleExampleType.scaleRange => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 1),
+        child: TRangeSlider(
+          key: const ValueKey('slider-capsule-scale-range'),
+          value: _capsuleScaleRange,
+          min: 0,
+          max: 100,
+          divisions: 5,
+          variant: TSliderVariant.capsule,
+          showScaleValue: true,
+          scaleFormatter: _integer,
+          onChanged: (value) => setState(() => _capsuleScaleRange = value),
         ),
-      ],
-    );
+      ),
+    };
   }
-
-  Widget _gap(BuildContext context) => SizedBox(
-    width: double.infinity,
-    height: 16,
-    child: ColoredBox(
-      color: Theme.of(context).brightness == Brightness.light
-          ? const Color(0xFFF6F6F6)
-          : context.tTheme.bgColorPage,
-    ),
-  );
 
   double _capsule = 25;
 
@@ -134,3 +110,5 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
     return _buildCapsule(context);
   }
 }
+
+enum SliderCapsuleExampleType { single, range, labeledRange, scale, scaleRange }

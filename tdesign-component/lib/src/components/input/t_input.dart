@@ -639,7 +639,9 @@ class _TInputShellState extends State<_TInputShell> {
           );
 
     final inputRow = Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: widget.multiline
+          ? CrossAxisAlignment.start
+          : CrossAxisAlignment.center,
       children: [
         if (widget.prefix != null) ...[
           _TInputSlot(

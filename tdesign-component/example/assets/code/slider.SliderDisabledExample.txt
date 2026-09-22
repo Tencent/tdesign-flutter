@@ -2,78 +2,55 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 class SliderDisabledExample extends StatelessWidget {
-  const SliderDisabledExample({super.key});
+  const SliderDisabledExample({
+    super.key,
+    this.type = SliderDisabledExampleType.single,
+  });
 
-  Widget _buildDisabled(BuildContext context) => Column(
-    children: [
-      _surface(
-        context,
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 4),
-          child: TSlider(
-            key: ValueKey('slider-disabled'),
-            value: 35,
-            min: 0,
-            max: 100,
-          ),
-        ),
-      ),
-      _gap(context),
-      _surface(
-        context,
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-          child: Row(
-            children: [
-              TText('0'),
-              Expanded(
-                child: TRangeSlider(
-                  key: ValueKey('slider-disabled-labeled-range'),
-                  value: RangeValues(40, 60),
-                  min: 0,
-                  max: 100,
-                  showThumbValue: true,
-                  thumbFormatter: _integer,
-                ),
-              ),
-              TText('100'),
-            ],
-          ),
-        ),
-      ),
-      _gap(context),
-      _surface(
-        context,
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 3),
-          child: TRangeSlider(
-            key: ValueKey('slider-disabled-scale-range'),
-            value: RangeValues(20, 60),
-            min: 0,
-            max: 100,
-            divisions: 5,
-            showScaleValue: true,
-            scaleFormatter: _integer,
-          ),
-        ),
-      ),
-    ],
-  );
+  final SliderDisabledExampleType type;
 
-  Widget _surface(BuildContext context, Widget child) => ColoredBox(
-    color: context.tTheme.bgColorContainer,
-    child: child,
-  );
-
-  Widget _gap(BuildContext context) => SizedBox(
-    width: double.infinity,
-    height: 16,
-    child: ColoredBox(
-      color: Theme.of(context).brightness == Brightness.light
-          ? const Color(0xFFF6F6F6)
-          : context.tTheme.bgColorPage,
+  Widget _buildDisabled(BuildContext context) => switch (type) {
+    SliderDisabledExampleType.single => const Padding(
+      padding: EdgeInsets.symmetric(vertical: 4),
+      child: TSlider(
+        key: ValueKey('slider-disabled'),
+        value: 35,
+        min: 0,
+        max: 100,
+      ),
     ),
-  );
+    SliderDisabledExampleType.labeledRange => const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+      child: Row(
+        children: [
+          TText('0'),
+          Expanded(
+            child: TRangeSlider(
+              key: ValueKey('slider-disabled-labeled-range'),
+              value: RangeValues(40, 60),
+              min: 0,
+              max: 100,
+              showThumbValue: true,
+              thumbFormatter: _integer,
+            ),
+          ),
+          TText('100'),
+        ],
+      ),
+    ),
+    SliderDisabledExampleType.scaleRange => const Padding(
+      padding: EdgeInsets.symmetric(vertical: 3),
+      child: TRangeSlider(
+        key: ValueKey('slider-disabled-scale-range'),
+        value: RangeValues(20, 60),
+        min: 0,
+        max: 100,
+        divisions: 5,
+        showScaleValue: true,
+        scaleFormatter: _integer,
+      ),
+    ),
+  };
 
   static String _integer(double value) => value.round().toString();
 
@@ -82,3 +59,5 @@ class SliderDisabledExample extends StatelessWidget {
     return _buildDisabled(context);
   }
 }
+
+enum SliderDisabledExampleType { single, labeledRange, scaleRange }

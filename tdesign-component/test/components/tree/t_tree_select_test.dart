@@ -295,6 +295,35 @@ void main() {
     );
   });
 
+  testWidgets('root indicator follows the directional leading edge',
+      (tester) async {
+    Future<double> indicatorCenter(TextDirection direction) async {
+      await tester.pumpWidget(
+        wrap(
+          Directionality(
+            textDirection: direction,
+            child: const TTreeSelect(
+              options: options,
+              value: [
+                ['fruit', 'apple'],
+              ],
+              onChanged: _ignore,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      return tester
+          .getCenter(find.byKey(const ValueKey('tree-select-root-indicator')))
+          .dx;
+    }
+
+    final ltrCenter = await indicatorCenter(TextDirection.ltr);
+    final rtlCenter = await indicatorCenter(TextDirection.rtl);
+    expect(ltrCenter, lessThan(103));
+    expect(rtlCenter, greaterThan(697));
+  });
+
   testWidgets('deep tree keeps narrow intermediate columns and fills leaf',
       (tester) async {
     await tester.pumpWidget(wrap(const Align(

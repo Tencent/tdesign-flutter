@@ -14,7 +14,6 @@ class InputBorderedExample extends StatelessWidget {
             const TFormThemeData(
               layout: TFormLayout.vertical,
               borderColor: Colors.transparent,
-              itemPadding: EdgeInsets.fromLTRB(16, 16, 16, 22),
               labelGap: 8,
             ),
           )

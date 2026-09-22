@@ -2057,10 +2057,7 @@ void main() {
 
       Rect labelRect(Key itemKey) {
         final paragraph = tester.renderObject<RenderParagraph>(
-          find.descendant(
-            of: find.byKey(itemKey),
-            matching: find.text('标签'),
-          ),
+          find.descendant(of: find.byKey(itemKey), matching: find.text('标签')),
         );
         final glyphs = paragraph
             .getBoxesForSelection(
@@ -2188,5 +2185,31 @@ void main() {
     expect(fromDefaults.labelGap, 10);
     expect(fromDefaults.backgroundColor, isNull);
     expect(defaults.lerp(defaults, 0.5).labelWidth, isNull);
+  });
+
+  testWidgets('default horizontal item height does not depend on extra', (
+    tester,
+  ) async {
+    const plainKey = Key('plain-form-item');
+    const extraKey = Key('extra-form-item');
+    await tester.pumpWidget(
+      wrap(
+        const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TFormItem(key: plainKey, label: '标签', child: SizedBox(height: 24)),
+            TFormItem(
+              key: extraKey,
+              label: '标签',
+              extra: SizedBox(width: 24, height: 28),
+              child: SizedBox(height: 24),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    expect(tester.getSize(find.byKey(plainKey)).height, 56);
+    expect(tester.getSize(find.byKey(extraKey)).height, 56);
   });
 }

@@ -61,7 +61,7 @@ class TTextareaPage extends StatelessWidget {
             ExampleItem(
               desc: '禁用状态',
               center: false,
-              compactContentSpacing: 14,
+              compactStyle: const CompactExampleStyle(contentSpacing: 14),
               methodName: 'TextareaDisabledExample',
               builder: (_) => const TextareaDisabledExample(),
             ),
@@ -73,14 +73,14 @@ class TTextareaPage extends StatelessWidget {
             ExampleItem(
               desc: '竖排样式',
               center: false,
-              compactContentSpacing: 14,
+              compactStyle: const CompactExampleStyle(contentSpacing: 14),
               methodName: 'TextareaVerticalExample',
               builder: (_) => const TextareaVerticalExample(),
             ),
             ExampleItem(
               desc: '卡片样式',
               center: false,
-              compactContentSpacing: 14,
+              compactStyle: const CompactExampleStyle(contentSpacing: 14),
               methodName: 'TextareaCardExample',
               builder: (_) => const TextareaCardExample(),
             ),

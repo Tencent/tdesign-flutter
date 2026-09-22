@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
+import 'package:tdesign_flutter_example/page/textarea/textarea_max_length_example.dart';
 
 import 'demo_page_test_utils.dart';
 import 'textarea_demo_test_spec.dart';
@@ -49,6 +50,7 @@ void main() {
 
     expect(find.text('按字符权重限制'), findsNothing);
     expect(find.text('单元测试'), findsNothing);
+    expect(tester.getSize(find.byType(TextareaMaxLengthExample)).height, 128);
     await disposeDemoPage(tester);
   }, tags: 'demo');
 

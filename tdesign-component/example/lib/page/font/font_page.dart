@@ -13,7 +13,7 @@ class TFontPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      padding: const EdgeInsets.all(8),
+      itemMargin: const EdgeInsets.all(8),
       title: tTitle(context),
       exampleCodeGroup: 'fonts',
       children: [

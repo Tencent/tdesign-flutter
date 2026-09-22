@@ -132,3 +132,13 @@
 - [x] Figma 的“带数值”场景仅在游标外侧显示 35、40/60；“带刻度”场景只显示 0/20/40/60/80/100，游标内部不增加文字。当前 Demo 与组件参数分别锁定，避免旧差异图叠字被误认为实际渲染。
 - [x] 普通、禁用及胶囊型带数值区间统一补齐 0/100 端点和 16px 页面内距；端点组合属于 Demo 内容，未改 Slider 默认绘制或公开 API。
 - [x] 四个垂直滑块子标题恢复为设计稿的左对齐；聚焦 Demo 测试 5/5、严格 analyze 0 issues，Linux Flutter 3.32.0 四张 Slider Golden 更新后无更新复跑 4/4 通过。
+
+## 2026-09-23 Demo 框架重构
+
+- [x] `showSingleChild` / `singleChild` 在仓库内没有调用点，已删除对应构造参数、分支和辅助方法。
+- [x] 删除单页逃逸入口后，`children` 改为必填且继续断言非空，构造契约不再保留必然失败的空列表默认值。
+- [x] `ExampleModule` 的 `Key?` 从未保存或消费，已删除。
+- [x] `compactContentSpacing` / `compactSurface` 合并为 `CompactExampleStyle`，默认视觉语义保持 16px 间距与透明表面；容器表面由页面壳私有实现。
+- [x] `ExamplePage.padding` 的实现实际是示例项外边距，已更名为 `itemMargin`，三个调用点的值保持不变。
+- [x] 重构前后当前工作区全部 Golden 内容哈希均为 `88624f0a1a4a2e674cb7d67e261b5043daef8a1a1282afd7784a28f7bfcadadc`；隔离副本与当前工作区逐文件完全一致。
+- [x] Linux amd64 Flutter 3.32.0 完整视觉调度全部通过且未写回 Golden；Flutter 3.32.0 全量 Example 功能回归 265/265 通过，Flutter 3.44.9 受影响页面回归 62/62 通过；双版本严格 analyze、Demo 结构和生成示例检查通过。

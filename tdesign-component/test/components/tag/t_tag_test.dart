@@ -77,6 +77,7 @@ void main() {
       await tester.pumpWidget(wrapWithTheme(
         const TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
       ));
+      await tester.pumpAndSettle();
       expect(find.text('默认'), findsOneWidget);
       final container = tester.widget<Container>(
         find
@@ -88,6 +89,30 @@ void main() {
         decoration.color,
         TThemeData.defaultData().bgColorSecondaryContainer,
       );
+    });
+
+    testWidgets('defaultTheme background follows an explicit ColorScheme',
+        (tester) async {
+      const surface = Color(0xFFABCDEF);
+      final theme = TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+        colorScheme: const ColorScheme.light(
+          surfaceContainerHighest: surface,
+        ),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: const Scaffold(body: TTag('显式主题')),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final container = tester.widget<Container>(
+        find
+            .descendant(of: find.byType(TTag), matching: find.byType(Container))
+            .first,
+      );
+      expect((container.decoration! as BoxDecoration).color, surface);
     });
 
     testWidgets('primary 色彩渲染', (tester) async {

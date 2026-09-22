@@ -26,7 +26,7 @@ class TToastPage extends StatelessWidget {
       title: tTitle(context),
       desc: '轻量级反馈/提示，可快速在屏幕中间展示简要信息并自动消失。',
       exampleCodeGroup: 'toast',
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      itemMargin: const EdgeInsets.symmetric(horizontal: 16),
       children: [
         ExampleModule(
           title: '基础提示',

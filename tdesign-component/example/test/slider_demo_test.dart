@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
+import 'package:tdesign_flutter_example/page/slider/slider_capsule_example.dart';
+import 'package:tdesign_flutter_example/page/slider/slider_disabled_example.dart';
 
 import 'demo_page_test_utils.dart';
 import 'slider_demo_test_spec.dart';
@@ -10,6 +13,11 @@ void main() {
 
   testWidgets('Slider Demo keeps official scenarios in order', (tester) async {
     await pumpFullDemoPage(tester, sliderDemoPageTestSpec, ThemeMode.light);
+    final compactSurface = find.byWidgetPredicate(
+      (widget) =>
+          widget is ColoredBox &&
+          widget.color == TThemeData.defaultData().bgColorContainer,
+    );
     const keys = [
       'single',
       'range',
@@ -36,6 +44,34 @@ void main() {
     expect(tops, orderedEquals([...tops]..sort()));
     expect(find.byType(TSlider), findsNWidgets(8));
     expect(find.byType(TRangeSlider), findsNWidgets(10));
+    expect(
+      find.descendant(
+        of: find.byType(SliderCapsuleExample),
+        matching: find.byType(ColoredBox),
+      ),
+      findsNothing,
+    );
+    expect(
+      find.descendant(
+        of: find.byType(SliderDisabledExample),
+        matching: find.byType(ColoredBox),
+      ),
+      findsNothing,
+    );
+    expect(
+      find.ancestor(
+        of: find.byType(SliderCapsuleExample),
+        matching: compactSurface,
+      ),
+      findsNWidgets(5),
+    );
+    expect(
+      find.ancestor(
+        of: find.byType(SliderDisabledExample),
+        matching: compactSurface,
+      ),
+      findsNWidgets(3),
+    );
     await disposeDemoPage(tester);
   }, tags: 'demo');
 

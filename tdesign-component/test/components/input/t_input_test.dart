@@ -520,6 +520,39 @@ void main() {
   });
 
   group('TInput clear button', () {
+    testWidgets(
+      'single-line actions stay centered and multiline actions align top',
+      (tester) async {
+        await tester.pumpWidget(
+          wrap(
+            const TInput(
+              initialValue: 'content',
+              clearButtonMode: TInputClearButtonMode.always,
+            ),
+          ),
+        );
+
+        final singleEditor = tester.getRect(find.byType(EditableText));
+        final singleClear = tester.getRect(find.byType(IconButton));
+        expect(singleClear.center.dy, closeTo(singleEditor.center.dy, 0.01));
+
+        await tester.pumpWidget(
+          wrap(
+            const TInput(
+              initialValue: 'line one\nline two',
+              maxLines: 2,
+              clearButtonMode: TInputClearButtonMode.always,
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final multilineEditor = tester.getRect(find.byType(EditableText));
+        final multilineClear = tester.getRect(find.byType(IconButton));
+        expect(multilineClear.top, closeTo(multilineEditor.top, 0.01));
+      },
+    );
+
     testWidgets('clears current controller and notifies onChanged', (
       tester,
     ) async {

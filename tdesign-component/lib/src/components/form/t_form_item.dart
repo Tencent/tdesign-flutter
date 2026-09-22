@@ -257,6 +257,10 @@ class TFormItem extends StatelessWidget {
 
     return Container(
       color: theme?.backgroundColor ?? token.bgColorContainer,
+      constraints:
+          theme?.itemPadding == null && layout == TFormLayout.horizontal
+          ? const BoxConstraints(minHeight: 56)
+          : null,
       foregroundDecoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -268,7 +272,7 @@ class TFormItem extends StatelessWidget {
           theme?.itemPadding ??
           EdgeInsets.symmetric(
             horizontal: 16,
-            vertical: extra == null ? 16 : 14,
+            vertical: layout == TFormLayout.horizontal ? 14 : 16,
           ),
       margin: EdgeInsets.only(bottom: theme?.itemSpacing ?? 0),
       child: layout == TFormLayout.horizontal
