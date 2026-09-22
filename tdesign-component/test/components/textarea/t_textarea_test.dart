@@ -320,9 +320,25 @@ void main() {
     );
     expect(find.text('字段'), findsOneWidget);
     expect(
-      find.byWidgetPredicate(
-        (widget) =>
-            widget is Padding && widget.padding == const EdgeInsets.all(16),
+      find.descendant(
+        of: find.byType(TTextarea),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is Padding &&
+              widget.padding == const EdgeInsets.all(16),
+        ),
+      ),
+      findsNothing,
+    );
+    expect(
+      find.descendant(
+        of: find.byType(TFormItem),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is Container &&
+              widget.padding ==
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        ),
       ),
       findsOneWidget,
     );
