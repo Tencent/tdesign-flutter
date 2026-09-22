@@ -67,7 +67,7 @@
 | backgroundColor | Color? | - | 弹窗背景颜色 |
 | popUpItemHeight | double? | _kDefaultMenuItemHeight | 单个选项高度 所有选项等高 不设置则使用默认值 48 |
 | popUpWidth | double? | - | 弹窗宽度。 不设置时使用 `max(107, 标签项宽度 - 20)`；显式设置时覆盖该默认值。 |
-| radius | double? | - | panel圆角 默认0 |
+| radius | double? | - | 弹层面板圆角。 不设置时使用当前 TDesign 主题的 `radiusDefault`（默认 6px）； 显式设置时覆盖主题默认值。 |
 
 
 ### TTabBarMenuItem
