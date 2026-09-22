@@ -10,7 +10,8 @@ class SliderLabeledExample extends StatefulWidget {
 
 class _SliderLabeledExampleState extends State<SliderLabeledExample> {
   Widget _buildLabeled(BuildContext context) {
-    return CompactDemoSurface(
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: TSlider(

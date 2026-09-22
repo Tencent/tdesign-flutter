@@ -9,7 +9,8 @@ class SliderRangeExample extends StatefulWidget {
 }
 
 class _SliderRangeExampleState extends State<SliderRangeExample> {
-  Widget _buildRange(BuildContext context) => CompactDemoSurface(
+  Widget _buildRange(BuildContext context) => ColoredBox(
+    color: context.tTheme.bgColorContainer,
     child: Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: TRangeSlider(

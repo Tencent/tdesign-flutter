@@ -4,10 +4,11 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 class SliderDisabledExample extends StatelessWidget {
   const SliderDisabledExample({super.key});
 
-  Widget _buildDisabled(BuildContext context) => const Column(
+  Widget _buildDisabled(BuildContext context) => Column(
     children: [
-      CompactDemoSurface(
-        child: Padding(
+      _surface(
+        context,
+        const Padding(
           padding: EdgeInsets.symmetric(vertical: 4),
           child: TSlider(
             key: ValueKey('slider-disabled'),
@@ -17,9 +18,10 @@ class SliderDisabledExample extends StatelessWidget {
           ),
         ),
       ),
-      CompactDemoGap(),
-      CompactDemoSurface(
-        child: Padding(
+      _gap(context),
+      _surface(
+        context,
+        const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
           child: Row(
             children: [
@@ -39,9 +41,10 @@ class SliderDisabledExample extends StatelessWidget {
           ),
         ),
       ),
-      CompactDemoGap(),
-      CompactDemoSurface(
-        child: Padding(
+      _gap(context),
+      _surface(
+        context,
+        const Padding(
           padding: EdgeInsets.symmetric(vertical: 3),
           child: TRangeSlider(
             key: ValueKey('slider-disabled-scale-range'),
@@ -55,6 +58,21 @@ class SliderDisabledExample extends StatelessWidget {
         ),
       ),
     ],
+  );
+
+  Widget _surface(BuildContext context, Widget child) => ColoredBox(
+    color: context.tTheme.bgColorContainer,
+    child: child,
+  );
+
+  Widget _gap(BuildContext context) => SizedBox(
+    width: double.infinity,
+    height: 16,
+    child: ColoredBox(
+      color: Theme.of(context).brightness == Brightness.light
+          ? const Color(0xFFF6F6F6)
+          : context.tTheme.bgColorPage,
+    ),
   );
 
   static String _integer(double value) => value.round().toString();

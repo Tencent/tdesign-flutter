@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'slider')
 class SliderVerticalExample extends StatefulWidget {
@@ -82,8 +81,9 @@ class _SliderVerticalExampleState extends State<SliderVerticalExample> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        CompactDemoSurface(
-          child: Column(
+        _surface(
+          context,
+          Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _subsection(context, '单游标垂直滑块'),
@@ -102,9 +102,10 @@ class _SliderVerticalExampleState extends State<SliderVerticalExample> {
             ],
           ),
         ),
-        const CompactDemoGap(),
-        CompactDemoSurface(
-          child: Column(
+        _gap(context),
+        _surface(
+          context,
+          Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _subsection(context, '带刻度的双游标垂直滑块'),
@@ -124,9 +125,10 @@ class _SliderVerticalExampleState extends State<SliderVerticalExample> {
             ],
           ),
         ),
-        const CompactDemoGap(),
-        CompactDemoSurface(
-          child: Column(
+        _gap(context),
+        _surface(
+          context,
+          Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _subsection(context, '胶囊型垂直滑块'),
@@ -147,9 +149,10 @@ class _SliderVerticalExampleState extends State<SliderVerticalExample> {
             ],
           ),
         ),
-        const CompactDemoGap(),
-        CompactDemoSurface(
-          child: Column(
+        _gap(context),
+        _surface(
+          context,
+          Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _subsection(context, '带刻度的胶囊型垂直滑块'),
@@ -176,6 +179,21 @@ class _SliderVerticalExampleState extends State<SliderVerticalExample> {
       ],
     );
   }
+
+  Widget _surface(BuildContext context, Widget child) => ColoredBox(
+    color: context.tTheme.bgColorContainer,
+    child: child,
+  );
+
+  Widget _gap(BuildContext context) => SizedBox(
+    width: double.infinity,
+    height: 16,
+    child: ColoredBox(
+      color: Theme.of(context).brightness == Brightness.light
+          ? const Color(0xFFF6F6F6)
+          : context.tTheme.bgColorPage,
+    ),
+  );
 
   Widget _subsection(BuildContext context, String text) => Padding(
     padding: const EdgeInsets.only(bottom: 8),

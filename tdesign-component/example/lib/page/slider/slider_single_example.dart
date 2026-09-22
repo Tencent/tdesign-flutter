@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'slider')
 class SliderSingleExample extends StatefulWidget {
@@ -12,7 +11,8 @@ class SliderSingleExample extends StatefulWidget {
 }
 
 class _SliderSingleExampleState extends State<SliderSingleExample> {
-  Widget _buildSingle(BuildContext context) => CompactDemoSurface(
+  Widget _buildSingle(BuildContext context) => ColoredBox(
+    color: context.tTheme.bgColorContainer,
     child: Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: TSlider(

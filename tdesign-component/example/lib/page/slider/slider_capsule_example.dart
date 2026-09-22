@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'slider')
 class SliderCapsuleExample extends StatefulWidget {
@@ -17,7 +16,8 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
       Widget slider, {
       double horizontal = 0,
       double vertical = 4,
-    }) => CompactDemoSurface(
+    }) => ColoredBox(
+      color: context.tTheme.bgColorContainer,
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: horizontal,
@@ -39,7 +39,7 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
             onChanged: (value) => setState(() => _capsule = value),
           ),
         ),
-        const CompactDemoGap(),
+        _gap(context),
         capsule(
           TRangeSlider(
             key: const ValueKey('slider-capsule-range'),
@@ -50,7 +50,7 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
             onChanged: (value) => setState(() => _capsuleRange = value),
           ),
         ),
-        const CompactDemoGap(),
+        _gap(context),
         capsule(
           Row(
             children: [
@@ -73,7 +73,7 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
           ),
           horizontal: 16,
         ),
-        const CompactDemoGap(),
+        _gap(context),
         capsule(
           TSlider(
             key: const ValueKey('slider-capsule-scale'),
@@ -88,7 +88,7 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
           ),
           vertical: 1,
         ),
-        const CompactDemoGap(),
+        _gap(context),
         capsule(
           TRangeSlider(
             key: const ValueKey('slider-capsule-scale-range'),
@@ -106,6 +106,16 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
       ],
     );
   }
+
+  Widget _gap(BuildContext context) => SizedBox(
+    width: double.infinity,
+    height: 16,
+    child: ColoredBox(
+      color: Theme.of(context).brightness == Brightness.light
+          ? const Color(0xFFF6F6F6)
+          : context.tTheme.bgColorPage,
+    ),
+  );
 
   double _capsule = 25;
 

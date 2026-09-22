@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'slider')
 class SliderScaleExample extends StatefulWidget {
@@ -13,7 +12,8 @@ class SliderScaleExample extends StatefulWidget {
 
 class _SliderScaleExampleState extends State<SliderScaleExample> {
   Widget _buildScale(BuildContext context) {
-    return CompactDemoSurface(
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 3),
         child: TSlider(

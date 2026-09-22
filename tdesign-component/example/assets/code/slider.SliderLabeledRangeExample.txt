@@ -14,7 +14,8 @@ class _SliderLabeledRangeExampleState extends State<SliderLabeledRangeExample> {
 
   @override
   Widget build(BuildContext context) {
-    return CompactDemoSurface(
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
         child: Row(

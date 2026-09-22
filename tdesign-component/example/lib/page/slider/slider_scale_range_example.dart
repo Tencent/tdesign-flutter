@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'slider')
 class SliderScaleRangeExample extends StatefulWidget {
@@ -20,7 +19,8 @@ class _SliderScaleRangeExampleState extends State<SliderScaleRangeExample> {
 
   @override
   Widget build(BuildContext context) {
-    return CompactDemoSurface(
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 3),
         child: TRangeSlider(

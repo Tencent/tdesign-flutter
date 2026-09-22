@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/base/example_widget.dart';
 
 import 'demo_page_test_utils.dart';
 import 'slider_demo_test_spec.dart';
@@ -170,10 +169,17 @@ void main() {
         .toList();
     expect(scaleLabels, orderedEquals(['0', '20', '40', '60', '80', '100']));
     final verticalSectionTitle = find.text('单游标垂直滑块');
+    final surfaceColor = tester
+        .element(verticalSectionTitle)
+        .tTheme
+        .bgColorContainer;
     final verticalSectionSurface = find.ancestor(
       of: verticalSectionTitle,
-      matching: find.byType(CompactDemoSurface),
+      matching: find.byWidgetPredicate(
+        (widget) => widget is ColoredBox && widget.color == surfaceColor,
+      ),
     );
+    expect(verticalSectionSurface, findsOneWidget);
     expect(
       tester.getTopLeft(verticalSectionTitle).dx,
       tester.getTopLeft(verticalSectionSurface).dx,
