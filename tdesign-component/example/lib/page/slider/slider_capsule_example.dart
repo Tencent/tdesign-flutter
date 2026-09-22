@@ -13,9 +13,18 @@ class SliderCapsuleExample extends StatefulWidget {
 
 class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
   Widget _buildCapsule(BuildContext context) {
-    Widget capsule(Widget slider) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: slider,
+    Widget capsule(
+      Widget slider, {
+      double horizontal = 0,
+      double vertical = 4,
+    }) => CompactDemoSurface(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: horizontal,
+          vertical: vertical,
+        ),
+        child: slider,
+      ),
     );
 
     return Column(
@@ -30,6 +39,7 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
             onChanged: (value) => setState(() => _capsule = value),
           ),
         ),
+        const CompactDemoGap(),
         capsule(
           TRangeSlider(
             key: const ValueKey('slider-capsule-range'),
@@ -40,18 +50,30 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
             onChanged: (value) => setState(() => _capsuleRange = value),
           ),
         ),
+        const CompactDemoGap(),
         capsule(
-          TRangeSlider(
-            key: const ValueKey('slider-capsule-labeled-range'),
-            value: _capsuleLabeledRange,
-            min: 0,
-            max: 100,
-            variant: TSliderVariant.capsule,
-            showThumbValue: true,
-            thumbFormatter: _percent,
-            onChanged: (value) => setState(() => _capsuleLabeledRange = value),
+          Row(
+            children: [
+              const TText('0'),
+              Expanded(
+                child: TRangeSlider(
+                  key: const ValueKey('slider-capsule-labeled-range'),
+                  value: _capsuleLabeledRange,
+                  min: 0,
+                  max: 100,
+                  variant: TSliderVariant.capsule,
+                  showThumbValue: true,
+                  thumbFormatter: _integer,
+                  onChanged: (value) =>
+                      setState(() => _capsuleLabeledRange = value),
+                ),
+              ),
+              const TText('100'),
+            ],
           ),
+          horizontal: 16,
         ),
+        const CompactDemoGap(),
         capsule(
           TSlider(
             key: const ValueKey('slider-capsule-scale'),
@@ -64,7 +86,9 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
             scaleFormatter: _integer,
             onChanged: (value) => setState(() => _capsuleScale = value),
           ),
+          vertical: 1,
         ),
+        const CompactDemoGap(),
         capsule(
           TRangeSlider(
             key: const ValueKey('slider-capsule-scale-range'),
@@ -77,18 +101,17 @@ class _SliderCapsuleExampleState extends State<SliderCapsuleExample> {
             scaleFormatter: _integer,
             onChanged: (value) => setState(() => _capsuleScaleRange = value),
           ),
+          vertical: 1,
         ),
       ],
     );
   }
 
-  double _capsule = 30;
+  double _capsule = 25;
 
   RangeValues _capsuleRange = const RangeValues(40, 60);
 
   RangeValues _capsuleLabeledRange = const RangeValues(40, 60);
-
-  static String _percent(double value) => '${value.round()}%';
 
   double _capsuleScale = 60;
 

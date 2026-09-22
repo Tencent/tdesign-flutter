@@ -18,7 +18,7 @@ class DropdownMenuSortingExample extends StatefulWidget {
 
 class _DropdownMenuSortingExampleState
     extends State<DropdownMenuSortingExample> {
-  var _product = 'all';
+  var _product = 'hot';
   var _sorter = 'default';
 
   Widget _sorting(BuildContext context) {

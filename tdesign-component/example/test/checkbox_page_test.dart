@@ -36,6 +36,22 @@ const _checkboxSpec = DemoPageTestSpec(
 void main() {
   registerDemoPageTests(_checkboxSpec);
 
+  testWidgets('禁用列表只在两项之间显示分割线', (tester) async {
+    await pumpFullDemoPage(tester, _checkboxSpec, ThemeMode.light);
+    final disabled = tester
+        .widgetList<TCheckbox>(find.byType(TCheckbox))
+        .where(
+          (checkbox) =>
+              checkbox.title == '选项禁用-已选' || checkbox.title == '选项禁用-默认',
+        )
+        .toList();
+
+    expect(disabled, hasLength(2));
+    expect(disabled[0].showDivider, isTrue);
+    expect(disabled[1].showDivider, isFalse);
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
+
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('checkbox selected ${mode.name} golden', (tester) async {
       await pumpFullDemoPage(tester, _checkboxSpec, mode);

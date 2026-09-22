@@ -20,7 +20,6 @@ class InputFormatterExample extends StatelessWidget {
         help: '最大输入10个字符，汉字算两个',
         child: TInput(borderless: true, hintText: '请输入文字', maxCharacter: 10),
       ),
-      SizedBox(height: 16),
     ],
   );
 

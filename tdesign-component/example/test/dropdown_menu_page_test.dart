@@ -95,19 +95,19 @@ void main() {
     }
   });
 
-  testWidgets('单选项选中文字和勾选图标使用品牌色', (tester) async {
+  testWidgets('单选项选中文字保持主文字色，勾选图标使用品牌色', (tester) async {
     configureViewport(tester);
     await tester.pumpWidget(buildPage());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('全部产品'));
+    await tester.tap(find.text('最火产品').first);
     await tester.pumpAndSettle();
 
-    final selectedText = tester.widget<Text>(find.text('全部产品').last);
+    final selectedText = tester.widget<Text>(find.text('最火产品').last);
     final selectedIcon = tester.widget<Icon>(find.byIcon(TIcons.check));
-    final brandColor = TThemeData.defaultData().brandNormalColor;
-    expect(selectedText.style?.color, brandColor);
-    expect(selectedIcon.color, brandColor);
+    final tokens = TThemeData.defaultData();
+    expect(selectedText.style?.color, tokens.textColorPrimary);
+    expect(selectedIcon.color, tokens.brandNormalColor);
   });
 
   testWidgets('三列多选展开态与设计稿一致', (tester) async {

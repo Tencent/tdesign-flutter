@@ -269,15 +269,11 @@ class TTag extends StatelessWidget {
           borderColor = material?.outline ?? token.componentBorderColor;
           textColor = material?.onSurface ?? token.textColorPrimary;
           backgroundColor = isLight
-              ? material?.surfaceContainerHighest ??
-                    token.bgColorSecondaryContainer
+              ? token.bgColorSecondaryContainer
               : Colors.transparent;
         } else {
           textColor = material?.onSurface ?? token.textColorPrimary;
-          backgroundColor = isLight
-              ? material?.surfaceContainerHighest ??
-                    token.bgColorSecondaryContainer
-              : material?.surfaceContainerHighest ?? token.bgColorComponent;
+          backgroundColor = token.bgColorSecondaryContainer;
           borderColor = backgroundColor;
         }
     }

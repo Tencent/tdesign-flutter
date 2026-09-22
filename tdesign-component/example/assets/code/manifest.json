@@ -1589,7 +1589,7 @@
         ]
       },
       {
-        "title": "垂直状态",
+        "title": "垂直型滑块",
         "items": [
           {
             "description": "",
@@ -1949,10 +1949,6 @@
             "assetKey": "tag.CircleFillTagExample"
           },
           {
-            "description": "Mark标签",
-            "assetKey": "tag.MarkFillTagExample"
-          },
-          {
             "description": "带图标的标签",
             "assetKey": "tag.IconFillTagExample"
           },
@@ -1974,12 +1970,8 @@
         "title": "组件状态",
         "items": [
           {
-            "description": "填充型各主题",
+            "description": "展示型标签",
             "assetKey": "tag.DarkShowTagsExample"
-          },
-          {
-            "description": "描边型各主题",
-            "assetKey": "tag.OutlineShowTagsExample"
           }
         ]
       },

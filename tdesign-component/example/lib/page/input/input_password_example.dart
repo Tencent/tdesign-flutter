@@ -22,7 +22,7 @@ class _InputPasswordExampleState extends State<InputPasswordExample> {
           child: TInput(
             borderless: true,
             hintText: '请输入密码',
-            initialValue: '123456',
+            initialValue: '12345678',
             obscureText: true,
             showPasswordToggle: true,
             inputType: TextInputType.visiblePassword,
@@ -46,7 +46,7 @@ class _InputPasswordExampleState extends State<InputPasswordExample> {
                 const SizedBox(width: 16),
                 SizedBox(
                   width: 72,
-                  height: 36,
+                  height: 24,
                   child: Center(
                     child: TText(
                       'DwrSe',
@@ -138,7 +138,6 @@ class _InputPasswordExampleState extends State<InputPasswordExample> {
             inputType: TextInputType.number,
           ),
         ),
-        const SizedBox(height: 16),
       ],
     );
   }

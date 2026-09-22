@@ -13,6 +13,9 @@ class SliderVerticalExample extends StatefulWidget {
 
 class _SliderVerticalExampleState extends State<SliderVerticalExample> {
   Widget _buildVertical(BuildContext context) {
+    final trackInset = context.tTheme.spacer16;
+    final trackLength = 200 - 2 * trackInset;
+
     Widget verticalSlider({
       required Widget slider,
       String? thumbLabel,
@@ -20,9 +23,10 @@ class _SliderVerticalExampleState extends State<SliderVerticalExample> {
       bool showMarks = false,
       Key? labelKey,
       Key? marksKey,
+      double height = 202,
     }) {
       return SizedBox(
-        height: 210,
+        height: height,
         child: Center(
           child: SizedBox(
             width: 100,
@@ -42,26 +46,31 @@ class _SliderVerticalExampleState extends State<SliderVerticalExample> {
                 if (showMarks)
                   Positioned(
                     left: 58,
-                    top: 24,
-                    bottom: 24,
-                    child: Column(
+                    width: 42,
+                    top: 0,
+                    bottom: 0,
+                    child: Stack(
                       key: marksKey,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        TText('0'),
-                        TText('20'),
-                        TText('40'),
-                        TText('60'),
-                        TText('80'),
-                        TText('100'),
-                      ],
+                      clipBehavior: Clip.none,
+                      children: List.generate(6, (index) {
+                        return Positioned(
+                          top: trackInset + index * trackLength / 5,
+                          child: FractionalTranslation(
+                            translation: const Offset(0, -0.5),
+                            child: TText('${index * 20}'),
+                          ),
+                        );
+                      }),
                     ),
                   ),
                 if (thumbLabel != null && normalizedValue != null)
                   Positioned(
                     left: 58,
-                    top: 16 + normalizedValue * 152,
-                    child: TText(thumbLabel, key: labelKey),
+                    top: trackInset + normalizedValue * trackLength,
+                    child: FractionalTranslation(
+                      translation: const Offset(0, -0.5),
+                      child: TText(thumbLabel, key: labelKey),
+                    ),
                   ),
               ],
             ),
@@ -73,74 +82,109 @@ class _SliderVerticalExampleState extends State<SliderVerticalExample> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _subsection(context, '单游标垂直滑块', top: false),
-        verticalSlider(
-          slider: TSlider(
-            key: const ValueKey('slider-vertical'),
-            value: _vertical,
-            min: 0,
-            max: 100,
-            onChanged: (value) => setState(() => _vertical = value),
+        CompactDemoSurface(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _subsection(context, '单游标垂直滑块'),
+              verticalSlider(
+                slider: TSlider(
+                  key: const ValueKey('slider-vertical'),
+                  value: _vertical,
+                  min: 0,
+                  max: 100,
+                  onChanged: (value) => setState(() => _vertical = value),
+                ),
+                thumbLabel: _integer(_vertical),
+                normalizedValue: _vertical / 100,
+                labelKey: const ValueKey('slider-vertical-label'),
+              ),
+            ],
           ),
-          thumbLabel: _percent(_vertical),
-          normalizedValue: _vertical / 100,
-          labelKey: const ValueKey('slider-vertical-label'),
         ),
-        _subsection(context, '带刻度的双游标垂直滑块'),
-        verticalSlider(
-          slider: TRangeSlider(
-            key: const ValueKey('slider-vertical-scale-range'),
-            value: _verticalScaleRange,
-            min: 0,
-            max: 100,
-            divisions: 5,
-            onChanged: (value) => setState(() => _verticalScaleRange = value),
+        const CompactDemoGap(),
+        CompactDemoSurface(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _subsection(context, '带刻度的双游标垂直滑块'),
+              verticalSlider(
+                slider: TRangeSlider(
+                  key: const ValueKey('slider-vertical-scale-range'),
+                  value: _verticalScaleRange,
+                  min: 0,
+                  max: 100,
+                  divisions: 5,
+                  onChanged: (value) =>
+                      setState(() => _verticalScaleRange = value),
+                ),
+                showMarks: true,
+                marksKey: const ValueKey('slider-vertical-scale-labels'),
+              ),
+            ],
           ),
-          showMarks: true,
-          marksKey: const ValueKey('slider-vertical-scale-labels'),
         ),
-        _subsection(context, '胶囊型垂直滑块'),
-        verticalSlider(
-          slider: TSlider(
-            key: const ValueKey('slider-vertical-capsule'),
-            value: _verticalCapsule,
-            min: 0,
-            max: 100,
-            variant: TSliderVariant.capsule,
-            onChanged: (value) => setState(() => _verticalCapsule = value),
+        const CompactDemoGap(),
+        CompactDemoSurface(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _subsection(context, '胶囊型垂直滑块'),
+              verticalSlider(
+                slider: TSlider(
+                  key: const ValueKey('slider-vertical-capsule'),
+                  value: _verticalCapsule,
+                  min: 0,
+                  max: 100,
+                  variant: TSliderVariant.capsule,
+                  onChanged: (value) =>
+                      setState(() => _verticalCapsule = value),
+                ),
+                thumbLabel: _integer(_verticalCapsule),
+                normalizedValue: _verticalCapsule / 100,
+                labelKey: const ValueKey('slider-vertical-capsule-label'),
+              ),
+            ],
           ),
-          thumbLabel: _percent(_verticalCapsule),
-          normalizedValue: _verticalCapsule / 100,
-          labelKey: const ValueKey('slider-vertical-capsule-label'),
         ),
-        _subsection(context, '带刻度的胶囊型垂直滑块'),
-        verticalSlider(
-          slider: TRangeSlider(
-            key: const ValueKey('slider-vertical-capsule-scale-range'),
-            value: _verticalCapsuleScaleRange,
-            min: 0,
-            max: 100,
-            divisions: 5,
-            variant: TSliderVariant.capsule,
-            onChanged: (value) =>
-                setState(() => _verticalCapsuleScaleRange = value),
+        const CompactDemoGap(),
+        CompactDemoSurface(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _subsection(context, '带刻度的胶囊型垂直滑块'),
+              verticalSlider(
+                slider: TRangeSlider(
+                  key: const ValueKey('slider-vertical-capsule-scale-range'),
+                  value: _verticalCapsuleScaleRange,
+                  min: 0,
+                  max: 100,
+                  divisions: 5,
+                  variant: TSliderVariant.capsule,
+                  onChanged: (value) =>
+                      setState(() => _verticalCapsuleScaleRange = value),
+                ),
+                showMarks: true,
+                marksKey: const ValueKey(
+                  'slider-vertical-capsule-scale-labels',
+                ),
+                height: 218,
+              ),
+            ],
           ),
-          showMarks: true,
-          marksKey: const ValueKey('slider-vertical-capsule-scale-labels'),
         ),
       ],
     );
   }
 
-  Widget _subsection(BuildContext context, String text, {bool top = true}) =>
-      Padding(
-        padding: EdgeInsets.only(top: top ? 12 : 0, bottom: 8),
-        child: TText(text, font: context.tTheme.fontBodyMedium),
-      );
+  Widget _subsection(BuildContext context, String text) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: TText(text, font: context.tTheme.fontBodyMedium),
+  );
 
   double _vertical = 35;
 
-  static String _percent(double value) => '${value.round()}%';
+  static String _integer(double value) => value.round().toString();
 
   RangeValues _verticalScaleRange = const RangeValues(20, 60);
 

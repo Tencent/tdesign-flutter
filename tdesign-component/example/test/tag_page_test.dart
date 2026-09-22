@@ -17,16 +17,15 @@ const _tagSpec = DemoPageTestSpec(
     '01 组件类型',
     '基础标签',
     '圆弧标签',
-    'Mark标签',
     '超长省略文本标签',
     '可选中的标签',
     '02 组件状态',
-    '填充型各主题',
-    '描边型各主题',
+    '展示型标签',
     '03 组件尺寸',
     'outline',
   ],
   componentType: TTag,
+  useFeedbackGoldenFont: true,
   supplementalCjkFontFamily: 'TDesign Demo Review Golden CJK',
   supplementalCjkFontPath: 'test/fonts/DemoReviewGoldenCJK-Regular.otf',
 );
@@ -95,6 +94,10 @@ void main() {
     expect(
       outlineSelectTags.map((tag) => tag.value),
       orderedEquals([false, true]),
+    );
+    expect(
+      tester.getTopLeft(find.widgetWithText(TSelectTag, '未选中态').first).dx,
+      112,
     );
 
     final firstOutlineTag = find.byWidgetPredicate(

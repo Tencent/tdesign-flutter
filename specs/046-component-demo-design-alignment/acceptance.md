@@ -100,3 +100,35 @@
 - [x] 新增 34 张 Flutter 3.32.0 Linux Golden：17 个操作后场景的 light / dark（Table 分为排序与滚动，ImageViewer 分为删除确认与缩放）。
 - [x] Golden 均由真实 `tap` / `drag` / 双 pointer / 受控时间触发，未直接改写 Widget 内部状态。
 - [x] 相同 Linux / Flutter 3.32.0 / 字体 / DPR / viewport 环境中，更新后移除 `--update-goldens` 复跑：未变的其他 14 个文件 110/110，最终 ImageViewer 8/8，当前集合合计 118/118 通过。
+
+## 2026-09-22 TabBar 与 Slider 二次复核
+
+- [x] TabBar 悬浮胶囊保留全圆角，阴影从顶层级收敛为与设计稿接近的基础层级；组件测试直接锁定语义 Token。
+- [x] TabBar 双层菜单弹层默认使用 `radiusDefault`（默认 6px），显式圆角覆盖及自定义主题圆角均由组件测试锁定；Linux 展开态 light/dark Golden 已更新并无更新复跑通过。
+- [x] Slider 普通轨道默认 4px，胶囊外轨为 24px、内轨为 18px，普通与胶囊轨道统一为 16px 水平边界；普通离散刻度点超出轨道可见，刻度文字与轨道端点共用坐标。
+- [x] Slider Demo 移除 5 处用于补偿 Material 默认边界的 8px 水平 Padding；垂直刻度文字改为按轨道坐标定位，不重画组件样式。
+- [x] 保留的 Figma 证据与当前渲染复核：胶囊型水平轨道长度均约 343px；偏差来自轨道厚度，组件已按外轨 24px、内轨 18px、游标 20px 修正，未改 Demo 横向布局。
+- [x] Flutter 3.32.0 组件定向回归 58/58、Demo/交互回归 12/12 通过；组件与 Example `flutter analyze` 均为 0 issues。
+- [x] Linux amd64 / Flutter 3.32.0 更新 Slider 4 张、TabBar 10 张 Golden；同容器立即移除更新参数复跑，Slider 4/4、合计 15/15 通过。
+
+## 2026-09-22 优先差异复核
+
+- [x] Input 去除重复尾间距和设计稿外帮助行后，错误状态标题与首行内容顶部对齐；验证码分隔线及图标插槽间距由组件与布局断言锁定。
+- [x] Textarea 字符限制场景收敛为 128px / 两行，后续模块约 34px 累计偏移消失；标签基线及计数器底部 16px 由组件测试锁定。
+- [x] Slider 标签、刻度、胶囊初始值和垂直标题与设计稿一致；Tag 状态与尺寸分组不再额外制造设计稿外场景。
+- [x] DropdownMenu 使用真实单选展开态比较，默认选中“最火产品”，选项文字保持主文字色、勾选保持品牌色。
+- [x] Linux amd64 / Flutter 3.32.0 更新后立即无更新复跑：Input、Slider、Textarea、Tag、DropdownMenu 优先集合通过；Textarea 最终 5/5 通过。
+
+## 2026-09-22 布局所有权与缺字复核
+
+- [x] Input 首个水平表单项内容起点由 `TFormItem` 统一增加 16px 标签间距；有标签内容 x=112、无标签内容 x=16 的组件断言均通过，未在 Input Demo 补局部间距。
+- [x] Slider 保持 Material 交互区域语义；设计稿中的 56px 示例行由 Demo 页面布局负责，避免组件在普通业务布局中额外增高。单值 30% 初始状态仅在该 Demo 调整。
+- [x] Tag 可选标签的 96px 标签栏只在该示例修正；Golden 使用测试框架已有 feedback 字形子集，“危险”完整渲染，未扩大公共字体默认集合。
+- [x] Flutter 3.32.0 组件回归 84/84、Demo/交互回归 14/14 通过；Linux amd64 Golden 更新后无更新复跑 22/22 通过；组件与 Example analyze 均为 0 issues。
+- [x] `compactDemo` 灰色页面底与白色内容块由公共页面壳统一绘制；Slider 等透明内容不再整页透出灰底，Input、Textarea 等已有白色组件背景保持同色叠加。
+
+## 2026-09-22 Slider 游标文字与端点复核
+
+- [x] Figma 的“带数值”场景仅在游标外侧显示 35、40/60；“带刻度”场景只显示 0/20/40/60/80/100，游标内部不增加文字。当前 Demo 与组件参数分别锁定，避免旧差异图叠字被误认为实际渲染。
+- [x] 普通、禁用及胶囊型带数值区间统一补齐 0/100 端点和 16px 页面内距；端点组合属于 Demo 内容，未改 Slider 默认绘制或公开 API。
+- [x] 四个垂直滑块子标题恢复为设计稿的左对齐；聚焦 Demo 测试 5/5、严格 analyze 0 issues，Linux Flutter 3.32.0 四张 Slider Golden 更新后无更新复跑 4/4 通过。

@@ -9,8 +9,6 @@ import 'close_fill_tag_example.dart';
 import 'dark_show_tags_example.dart';
 import 'icon_fill_tag_example.dart';
 import 'long_text_tag_example.dart';
-import 'mark_fill_tag_example.dart';
-import 'outline_show_tags_example.dart';
 import 'simple_fill_tag_example.dart';
 import 'tag_select_variants_example.dart';
 
@@ -45,11 +43,6 @@ class _TTagPageState extends State<TTagPage> {
               builder: (_) => const CircleFillTagExample(),
             ),
             ExampleItem(
-              desc: 'Mark标签',
-              methodName: 'MarkFillTagExample',
-              builder: (_) => const MarkFillTagExample(),
-            ),
-            ExampleItem(
               desc: '带图标的标签',
               methodName: 'IconFillTagExample',
               builder: (_) => const IconFillTagExample(),
@@ -75,14 +68,9 @@ class _TTagPageState extends State<TTagPage> {
           title: '组件状态',
           children: [
             ExampleItem(
-              desc: '填充型各主题',
+              desc: '展示型标签',
               methodName: 'DarkShowTagsExample',
               builder: (_) => const DarkShowTagsExample(),
-            ),
-            ExampleItem(
-              desc: '描边型各主题',
-              methodName: 'OutlineShowTagsExample',
-              builder: (_) => const OutlineShowTagsExample(),
             ),
           ],
         ),

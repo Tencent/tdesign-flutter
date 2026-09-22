@@ -70,6 +70,7 @@ class _TSliderPageState extends State<TSliderPage> {
         children: [
           ExampleItem(
             desc: '滑块禁用状态',
+            compactContentSpacing: 14,
             methodName: 'SliderDisabledExample',
             builder: (_) => const SliderDisabledExample(),
           ),
@@ -80,16 +81,18 @@ class _TSliderPageState extends State<TSliderPage> {
         children: [
           ExampleItem(
             desc: '胶囊型滑块',
+            compactContentSpacing: 14,
             methodName: 'SliderCapsuleExample',
             builder: (_) => const SliderCapsuleExample(),
           ),
         ],
       ),
       ExampleModule(
-        title: '垂直状态',
+        title: '垂直型滑块',
         children: [
           ExampleItem(
             desc: '',
+            compactContentSpacing: 2,
             methodName: 'SliderVerticalExample',
             builder: (_) => const SliderVerticalExample(),
           ),

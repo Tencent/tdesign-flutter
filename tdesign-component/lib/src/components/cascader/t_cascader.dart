@@ -348,7 +348,7 @@ class _TCascaderState extends State<TCascader> {
               size: 22,
               color: _resolveIconColor(
                 context,
-                context.tTheme.textColorPrimary,
+                context.tTheme.textColorPlaceholder,
               ),
             ),
           ],
@@ -460,7 +460,7 @@ class _TCascaderState extends State<TCascader> {
                   size: 22,
                   color: _resolveIconColor(
                     context,
-                    context.tTheme.textColorPrimary,
+                    context.tTheme.textColorPlaceholder,
                   ),
                 ),
             ],

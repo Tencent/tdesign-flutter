@@ -656,7 +656,7 @@ void main() {
       );
       expect(
         tester.widget<Icon>(find.byIcon(TIcons.chevron_right).last).color,
-        token.textColorPrimary,
+        token.textColorPlaceholder,
       );
     });
 

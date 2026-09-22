@@ -8,11 +8,11 @@ class TextareaMaxLengthExample extends StatelessWidget {
   const TextareaMaxLengthExample({super.key});
 
   Widget _buildMaxLength(BuildContext context) => const SizedBox(
-    height: 162,
+    height: 132,
     child: TTextarea(
       label: '标签文字',
       hintText: '请输入文字',
-      minLines: 3,
+      minLines: 2,
       maxLength: 500,
       indicator: true,
     ),

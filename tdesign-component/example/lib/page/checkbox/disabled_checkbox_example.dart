@@ -15,7 +15,7 @@ class DisabledCheckboxExample extends StatelessWidget {
       child: const Column(
         children: [
           TCheckbox(value: true, title: '选项禁用-已选'),
-          TCheckbox(value: false, title: '选项禁用-默认'),
+          TCheckbox(value: false, title: '选项禁用-默认', showDivider: false),
         ],
       ),
     );

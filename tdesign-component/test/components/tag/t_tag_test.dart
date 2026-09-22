@@ -78,7 +78,16 @@ void main() {
         const TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
       ));
       expect(find.text('默认'), findsOneWidget);
-      expect(find.byType(Container), findsWidgets);
+      final container = tester.widget<Container>(
+        find
+            .descendant(of: find.byType(TTag), matching: find.byType(Container))
+            .first,
+      );
+      final decoration = container.decoration! as BoxDecoration;
+      expect(
+        decoration.color,
+        TThemeData.defaultData().bgColorSecondaryContainer,
+      );
     });
 
     testWidgets('primary 色彩渲染', (tester) async {

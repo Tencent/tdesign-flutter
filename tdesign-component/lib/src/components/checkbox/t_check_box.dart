@@ -219,19 +219,25 @@ class TCheckbox extends StatelessWidget {
             child: tile,
           ),
           if (showDivider && !cardMode)
-            Padding(
-              padding: EdgeInsetsDirectional.only(
-                start: contentDirection == TContentDirection.right && hasContent
-                    ? (theme?.insetSpacing ?? context.tTheme.spacer16) +
-                          _indicatorSize(context) +
-                          (theme?.spacing ?? context.tTheme.spacer8)
-                    : theme?.insetSpacing ?? context.tTheme.spacer16,
-              ),
-              child: Theme(
-                data: Theme.of(context).mergeExtension(
-                  const TDividerThemeData(margin: EdgeInsets.zero),
+            ColoredBox(
+              color: hasContent
+                  ? context.tTheme.bgColorContainer
+                  : Colors.transparent,
+              child: Padding(
+                padding: EdgeInsetsDirectional.only(
+                  start:
+                      contentDirection == TContentDirection.right && hasContent
+                      ? (theme?.insetSpacing ?? context.tTheme.spacer16) +
+                            _indicatorSize(context) +
+                            (theme?.spacing ?? context.tTheme.spacer8)
+                      : theme?.insetSpacing ?? context.tTheme.spacer16,
                 ),
-                child: const TDivider(),
+                child: Theme(
+                  data: Theme.of(context).mergeExtension(
+                    const TDividerThemeData(margin: EdgeInsets.zero),
+                  ),
+                  child: const TDivider(),
+                ),
               ),
             ),
         ],

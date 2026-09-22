@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_slider_theme.dart';
 
@@ -20,7 +21,6 @@ enum TSliderVariant {
 }
 
 const double _kScaleTickRadius = 3;
-const double _kCapsuleTrackHeight = 16;
 const double _kCapsuleTrackInset = 3;
 
 SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
@@ -122,16 +122,28 @@ SliderThemeData _resolveSliderTheme(
 ) {
   final inherited = SliderTheme.of(context);
   final base = _sliderThemeWithTokenFallback(context);
-  if (variant == TSliderVariant.normal) {
-    return base;
-  }
   final token = context.tTheme;
+  if (variant == TSliderVariant.normal) {
+    return base.copyWith(
+      trackHeight: inherited.trackHeight ?? token.spacer4,
+      trackShape:
+          inherited.trackShape ??
+          _TDesignSliderTrackShape(horizontalInset: token.spacer16),
+      rangeTrackShape:
+          inherited.rangeTrackShape ??
+          _TDesignRangeSliderTrackShape(horizontalInset: token.spacer16),
+    );
+  }
   return base.copyWith(
-    trackHeight: _kCapsuleTrackHeight,
-    trackShape: const _CapsuleSliderTrackShape(),
-    rangeTrackShape: const _CapsuleRangeSliderTrackShape(),
-    tickMarkShape: const _CapsuleSliderTickMarkShape(),
-    rangeTickMarkShape: const _CapsuleRangeSliderTickMarkShape(),
+    trackHeight: token.spacer24,
+    trackShape: _CapsuleSliderTrackShape(horizontalInset: token.spacer16),
+    rangeTrackShape: _CapsuleRangeSliderTrackShape(
+      horizontalInset: token.spacer16,
+    ),
+    tickMarkShape: _CapsuleSliderTickMarkShape(trackHeight: token.spacer24),
+    rangeTickMarkShape: _CapsuleRangeSliderTickMarkShape(
+      trackHeight: token.spacer24,
+    ),
     activeTickMarkColor:
         inherited.activeTickMarkColor ?? token.bgColorContainer,
     inactiveTickMarkColor:
@@ -267,7 +279,10 @@ class TSlider extends StatelessWidget {
     ).extension<TSliderThemeData>()?.decoration;
     final themedSlider = SliderTheme(data: sliderTheme, child: slider);
     final sliderContent = showThumbValue
-        ? Padding(padding: const EdgeInsets.only(top: 20), child: themedSlider)
+        ? Padding(
+            padding: EdgeInsets.only(top: context.tTheme.spacer16),
+            child: themedSlider,
+          )
         : themedSlider;
     final safeDivisions = divisions != null && divisions! > 0
         ? divisions
@@ -402,7 +417,10 @@ class TRangeSlider extends StatelessWidget {
     ).extension<TSliderThemeData>()?.decoration;
     final themedSlider = SliderTheme(data: sliderTheme, child: slider);
     final sliderContent = showThumbValue
-        ? Padding(padding: const EdgeInsets.only(top: 20), child: themedSlider)
+        ? Padding(
+            padding: EdgeInsets.only(top: context.tTheme.spacer16),
+            child: themedSlider,
+          )
         : themedSlider;
     final safeDivisions = divisions != null && divisions! > 0
         ? divisions
@@ -422,8 +440,138 @@ class TRangeSlider extends StatelessWidget {
   }
 }
 
+Rect _preferredTrackRect({
+  required RenderBox parentBox,
+  required Offset offset,
+  required SliderThemeData sliderTheme,
+  required double horizontalInset,
+}) {
+  final trackHeight = sliderTheme.trackHeight ?? 0;
+  final trackWidth = math.max(0.0, parentBox.size.width - 2 * horizontalInset);
+  return Rect.fromLTWH(
+    offset.dx + horizontalInset,
+    offset.dy + (parentBox.size.height - trackHeight) / 2,
+    trackWidth,
+    trackHeight,
+  );
+}
+
+class _TDesignSliderTrackShape extends RoundedRectSliderTrackShape {
+  const _TDesignSliderTrackShape({required this.horizontalInset});
+
+  final double horizontalInset;
+
+  @override
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) => _preferredTrackRect(
+    parentBox: parentBox,
+    offset: offset,
+    sliderTheme: sliderTheme,
+    horizontalInset: horizontalInset,
+  );
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset offset, {
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required Animation<double> enableAnimation,
+    required TextDirection textDirection,
+    required Offset thumbCenter,
+    Offset? secondaryOffset,
+    bool isDiscrete = false,
+    bool isEnabled = false,
+    double additionalActiveTrackHeight = 2,
+  }) {
+    super.paint(
+      context,
+      offset,
+      parentBox: parentBox,
+      sliderTheme: sliderTheme,
+      enableAnimation: enableAnimation,
+      textDirection: textDirection,
+      thumbCenter: thumbCenter,
+      secondaryOffset: secondaryOffset,
+      isDiscrete: isDiscrete,
+      isEnabled: isEnabled,
+      additionalActiveTrackHeight: 0,
+    );
+  }
+}
+
+class _TDesignRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
+  const _TDesignRangeSliderTrackShape({required this.horizontalInset});
+
+  final double horizontalInset;
+
+  @override
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) => _preferredTrackRect(
+    parentBox: parentBox,
+    offset: offset,
+    sliderTheme: sliderTheme,
+    horizontalInset: horizontalInset,
+  );
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset offset, {
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required Animation<double> enableAnimation,
+    required Offset startThumbCenter,
+    required Offset endThumbCenter,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+    required TextDirection textDirection,
+    double additionalActiveTrackHeight = 2,
+  }) {
+    super.paint(
+      context,
+      offset,
+      parentBox: parentBox,
+      sliderTheme: sliderTheme,
+      enableAnimation: enableAnimation,
+      startThumbCenter: startThumbCenter,
+      endThumbCenter: endThumbCenter,
+      isEnabled: isEnabled,
+      isDiscrete: isDiscrete,
+      textDirection: textDirection,
+      additionalActiveTrackHeight: 0,
+    );
+  }
+}
+
 class _CapsuleSliderTrackShape extends RoundedRectSliderTrackShape {
-  const _CapsuleSliderTrackShape();
+  const _CapsuleSliderTrackShape({required this.horizontalInset});
+
+  final double horizontalInset;
+
+  @override
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) => _preferredTrackRect(
+    parentBox: parentBox,
+    offset: offset,
+    sliderTheme: sliderTheme,
+    horizontalInset: horizontalInset,
+  );
 
   @override
   void paint(
@@ -493,7 +641,23 @@ class _CapsuleSliderTrackShape extends RoundedRectSliderTrackShape {
 }
 
 class _CapsuleRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
-  const _CapsuleRangeSliderTrackShape();
+  const _CapsuleRangeSliderTrackShape({required this.horizontalInset});
+
+  final double horizontalInset;
+
+  @override
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) => _preferredTrackRect(
+    parentBox: parentBox,
+    offset: offset,
+    sliderTheme: sliderTheme,
+    horizontalInset: horizontalInset,
+  );
 
   @override
   void paint(
@@ -555,13 +719,15 @@ class _CapsuleRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
 }
 
 class _CapsuleSliderTickMarkShape extends SliderTickMarkShape {
-  const _CapsuleSliderTickMarkShape();
+  const _CapsuleSliderTickMarkShape({required this.trackHeight});
+
+  final double trackHeight;
 
   @override
   Size getPreferredSize({
     required SliderThemeData sliderTheme,
     required bool isEnabled,
-  }) => const Size(2, _kCapsuleTrackHeight - 2 * _kCapsuleTrackInset);
+  }) => Size(2, trackHeight - 2 * _kCapsuleTrackInset);
 
   @override
   void paint(
@@ -587,18 +753,20 @@ class _CapsuleSliderTickMarkShape extends SliderTickMarkShape {
           : sliderTheme.inactiveTickMarkColor,
       enableAnimation.value,
     )!;
-    _paintCapsuleTick(context.canvas, center, color);
+    _paintCapsuleTick(context.canvas, center, color, trackHeight);
   }
 }
 
 class _CapsuleRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
-  const _CapsuleRangeSliderTickMarkShape();
+  const _CapsuleRangeSliderTickMarkShape({required this.trackHeight});
+
+  final double trackHeight;
 
   @override
   Size getPreferredSize({
     required SliderThemeData sliderTheme,
     bool isEnabled = false,
-  }) => const Size(2, _kCapsuleTrackHeight - 2 * _kCapsuleTrackInset);
+  }) => Size(2, trackHeight - 2 * _kCapsuleTrackInset);
 
   @override
   void paint(
@@ -624,15 +792,20 @@ class _CapsuleRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
           : sliderTheme.inactiveTickMarkColor,
       enableAnimation.value,
     )!;
-    _paintCapsuleTick(context.canvas, center, color);
+    _paintCapsuleTick(context.canvas, center, color, trackHeight);
   }
 }
 
-void _paintCapsuleTick(Canvas canvas, Offset center, Color color) {
+void _paintCapsuleTick(
+  Canvas canvas,
+  Offset center,
+  Color color,
+  double trackHeight,
+) {
   final rect = Rect.fromCenter(
     center: center,
     width: 2,
-    height: _kCapsuleTrackHeight - 2 * _kCapsuleTrackInset,
+    height: trackHeight - 2 * _kCapsuleTrackInset,
   );
   canvas.drawRRect(
     RRect.fromRectAndRadius(rect, const Radius.circular(1)),
@@ -916,20 +1089,36 @@ class _SliderWithScaleLabels extends StatelessWidget {
     final labels = List<Widget>.generate(divisions + 1, (index) {
       final value = min + (max - min) * index / divisions;
       final text = formatter?.call(value) ?? value.toString();
+      final isFirst = index == 0;
+      final isLast = index == divisions;
       return Expanded(
-        child: Text(
-          text,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          textAlign: TextAlign.center,
+        flex: isFirst || isLast ? 1 : 2,
+        child: Align(
+          alignment: isFirst
+              ? AlignmentDirectional.centerStart
+              : isLast
+              ? AlignmentDirectional.centerEnd
+              : Alignment.center,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+          ),
         ),
       );
     });
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: labels,
+          ),
+        ),
         slider,
-        Row(children: labels),
       ],
     );
   }

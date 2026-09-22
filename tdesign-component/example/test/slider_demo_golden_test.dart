@@ -21,7 +21,7 @@ void main() {
         tester
             .widget<TSlider>(find.byKey(const ValueKey('slider-single')))
             .value,
-        greaterThan(23),
+        greaterThan(25),
       );
       await expectLater(
         find.byKey(const ValueKey('slider-demo-page')),

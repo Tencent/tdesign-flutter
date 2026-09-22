@@ -8,7 +8,7 @@ class TextareaCardExample extends StatelessWidget {
   const TextareaCardExample({super.key});
 
   Widget _buildCard(BuildContext context) => Padding(
-    padding: const EdgeInsets.all(16),
+    padding: const EdgeInsets.symmetric(horizontal: 16),
     child: Theme(
       data: Theme.of(
         context,

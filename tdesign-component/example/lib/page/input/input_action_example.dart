@@ -24,13 +24,8 @@ class InputActionExample extends StatelessWidget {
         const SizedBox(height: 16),
         TFormItem(
           label: '标签文字',
-          help: '最多十个字',
-          verticalAlignment: TFormItemVerticalAlignment.start,
-          child: const TInput(
-            borderless: true,
-            hintText: '请输入文字',
-            maxCharacter: 10,
-          ),
+          verticalAlignment: TFormItemVerticalAlignment.center,
+          child: const TInput(borderless: true, hintText: '请输入文字'),
           extra: TButton(
             size: TButtonSize.extraSmall,
             colorScheme: TButtonColorScheme.primary,
@@ -48,7 +43,6 @@ class InputActionExample extends StatelessWidget {
             suffix: avatarIcon,
           ),
         ),
-        const SizedBox(height: 16),
       ],
     );
   }

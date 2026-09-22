@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
 
 import 'demo_page_test_utils.dart';
 import 'slider_demo_test_spec.dart';
@@ -46,13 +47,13 @@ void main() {
     final single = tester.widget<TSlider>(
       find.byKey(const ValueKey('slider-single')),
     );
-    expect(single.value, 23);
+    expect(single.value, 25);
     expect(single.onChanged, isNotNull);
 
     final range = tester.widget<TRangeSlider>(
       find.byKey(const ValueKey('slider-range')),
     );
-    expect(range.value, const RangeValues(35, 65));
+    expect(range.value, const RangeValues(40, 60));
     expect(range.onChanged, isNotNull);
 
     final labeled = tester.widget<TSlider>(
@@ -68,6 +69,32 @@ void main() {
     expect(labeledRange.value, const RangeValues(40, 60));
     expect(labeledRange.showThumbValue, isTrue);
     expect(labeledRange.thumbFormatter, isNotNull);
+
+    final capsule = tester.widget<TSlider>(
+      find.byKey(const ValueKey('slider-capsule')),
+    );
+    expect(capsule.value, 25);
+
+    for (final key in [
+      'slider-labeled-range',
+      'slider-disabled-labeled-range',
+      'slider-capsule-labeled-range',
+    ]) {
+      final row = find
+          .ancestor(of: find.byKey(ValueKey(key)), matching: find.byType(Row))
+          .first;
+      final endpointLabels = find.descendant(
+        of: row,
+        matching: find.byType(TText),
+      );
+      expect(
+        tester.widgetList<TText>(endpointLabels).map((text) => text.data),
+        orderedEquals(['0', '100']),
+        reason: key,
+      );
+      expect(tester.getTopLeft(endpointLabels.first).dx, 16, reason: key);
+      expect(tester.getTopRight(endpointLabels.last).dx, 359, reason: key);
+    }
 
     for (final key in ['slider-scale', 'slider-capsule-scale']) {
       final slider = tester.widget<TSlider>(find.byKey(ValueKey(key)));
@@ -110,7 +137,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       tester.widget<TSlider>(find.byKey(const ValueKey('slider-single'))).value,
-      greaterThan(23),
+      greaterThan(25),
     );
     await disposeDemoPage(tester);
   }, tags: 'demo');
@@ -133,16 +160,38 @@ void main() {
       );
       expect(rotated.quarterTurns, 1, reason: key);
     }
+    final scaleLabelFinder = find.descendant(
+      of: find.byKey(const ValueKey('slider-vertical-scale-labels')),
+      matching: find.byType(TText),
+    );
     final scaleLabels = tester
-        .widgetList<TText>(
-          find.descendant(
-            of: find.byKey(const ValueKey('slider-vertical-scale-labels')),
-            matching: find.byType(TText),
-          ),
-        )
+        .widgetList<TText>(scaleLabelFinder)
         .map((text) => text.data)
         .toList();
     expect(scaleLabels, orderedEquals(['0', '20', '40', '60', '80', '100']));
+    final verticalSectionTitle = find.text('单游标垂直滑块');
+    final verticalSectionSurface = find.ancestor(
+      of: verticalSectionTitle,
+      matching: find.byType(CompactDemoSurface),
+    );
+    expect(
+      tester.getTopLeft(verticalSectionTitle).dx,
+      tester.getTopLeft(verticalSectionSurface).dx,
+    );
+    final verticalTrackRect = tester.getRect(
+      find.ancestor(
+        of: find.byKey(const ValueKey('slider-vertical-scale-range')),
+        matching: find.byType(RotatedBox),
+      ),
+    );
+    expect(
+      tester.getCenter(scaleLabelFinder.at(0)).dy,
+      closeTo(verticalTrackRect.top + 16, 0.01),
+    );
+    expect(
+      tester.getCenter(scaleLabelFinder.at(5)).dy,
+      closeTo(verticalTrackRect.bottom - 16, 0.01),
+    );
     for (final key in [
       'slider-vertical-label',
       'slider-vertical-scale-labels',

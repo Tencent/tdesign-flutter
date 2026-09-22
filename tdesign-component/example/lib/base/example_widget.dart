@@ -339,6 +339,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
         itemCount: entries.length,
         itemBuilder: (_, index) => _buildCompactItem(entries[index]),
       ),
+      const SliverToBoxAdapter(child: SizedBox(height: 32)),
     ];
   }
 
@@ -351,7 +352,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (hasTitle) const SizedBox(height: 32),
+        if (hasTitle) SizedBox(height: moduleIndex == 0 ? 28 : 32),
         if (hasTitle || item.desc.isNotEmpty)
           Padding(
             padding: EdgeInsets.fromLTRB(16, hasTitle ? 0 : 24, 16, 0),
@@ -602,6 +603,35 @@ class _CompactExampleEntry {
   final ExampleModule module;
   final int moduleIndex;
   final int itemIndex;
+}
+
+///紧凑 Demo 中分隔同一示例内多个独立内容块的页面色间距。
+class CompactDemoGap extends StatelessWidget {
+  const CompactDemoGap({super.key, this.height = 16});
+
+  final double height;
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    width: double.infinity,
+    height: height,
+    child: ColoredBox(
+      color: Theme.of(context).brightness == Brightness.light
+          ? const Color(0xFFF6F6F6)
+          : context.tTheme.bgColorPage,
+    ),
+  );
+}
+
+/// 紧凑 Demo 中承载透明组件的容器色表面。
+class CompactDemoSurface extends StatelessWidget {
+  const CompactDemoSurface({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) =>
+      ColoredBox(color: context.tTheme.bgColorContainer, child: child);
 }
 
 /// 示例模块

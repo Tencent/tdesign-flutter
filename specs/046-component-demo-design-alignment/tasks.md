@@ -14,3 +14,9 @@
 - [x] 复核并修复最新走查确认的 TabBar、Cascader、Input、Slider、TreeSelect、Empty、Tag 差异。
 - [x] 在相同 Flutter、字体与视口环境重新生成上述 7 个 Demo 的 develop／current 像素对比。
 - [x] 移除 Button Loading 图标和 Input 页面的隐式 Demo 样式补丁，将颜色继承与可复制主题配置收敛到合理所有权。
+- [x] 收敛 TabBar 胶囊阴影层级，并将 Slider 轨道、刻度和标注统一到 TDesign 组件坐标系。
+- [x] 将 TabBar 双层菜单弹层默认圆角收敛到主题 `radiusDefault`，保留实例 `radius` 覆盖优先级并更新展开态 Golden。
+- [x] 修正 Input 重复尾间距、Textarea 字符限制高度、Tag 公开分组及 DropdownMenu 单选初始状态，并以相同状态重做优先差异对比。
+- [x] 修正水平 FormItem 内容间距、Slider 组件高度与单值初始位置、Tag 可选标签分栏，并补齐 Tag Golden 的已有反馈字形子集。
+- [x] 修复 `compactDemo` 公共壳缺失白色示例内容块的问题，并复核全部紧凑 Demo 的共享视觉影响。
+- [x] 复核 Slider 游标文字归属，补齐三种带数值区间的端点布局，并修正垂直子标题对齐。

@@ -150,12 +150,17 @@ class TFormItem extends StatelessWidget {
     final labelFont = layout == TFormLayout.vertical
         ? token.fontBodyMedium
         : token.fontBodyLarge;
-    final labelStyle = TextStyle(
-      color: token.textColorPrimary,
-      fontSize: labelFont?.size,
-      height: labelFont?.height,
-      fontWeight: labelFont?.fontWeight,
-    ).merge(textTheme?.bodyMedium).merge(theme?.labelStyle);
+    final labelStyle = (textTheme?.bodyMedium ?? const TextStyle())
+        .merge(
+          TextStyle(
+            color: token.textColorPrimary,
+            fontSize: labelFont?.size,
+            height: labelFont?.height,
+            fontWeight: labelFont?.fontWeight,
+            letterSpacing: 0,
+          ),
+        )
+        .merge(theme?.labelStyle);
     final helpFont = token.fontBodySmall;
     final messageTextStyle = TextStyle(
       fontSize: helpFont?.size,
@@ -182,21 +187,23 @@ class TFormItem extends StatelessWidget {
         : null;
     final markedLabel = labelWidget == null
         ? null
+        : requiredMark == null
+        ? labelWidget
         : Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               if ((theme?.requiredMarkPosition ??
                       TFormRequiredMarkPosition.left) ==
                   TFormRequiredMarkPosition.left) ...[
-                if (requiredMark != null) requiredMark,
-                if (requiredMark != null) const SizedBox(width: 2),
+                requiredMark,
+                const SizedBox(width: 2),
               ],
               Flexible(child: labelWidget),
               if ((theme?.requiredMarkPosition ??
                       TFormRequiredMarkPosition.left) ==
                   TFormRequiredMarkPosition.right) ...[
-                if (requiredMark != null) const SizedBox(width: 2),
-                if (requiredMark != null) requiredMark,
+                const SizedBox(width: 2),
+                requiredMark,
               ],
             ],
           );
@@ -259,7 +266,10 @@ class TFormItem extends StatelessWidget {
       ),
       padding:
           theme?.itemPadding ??
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: extra == null ? 16 : 14,
+          ),
       margin: EdgeInsets.only(bottom: theme?.itemSpacing ?? 0),
       child: layout == TFormLayout.horizontal
           ? Row(
@@ -269,11 +279,13 @@ class TFormItem extends StatelessWidget {
                   leadingWidget,
                   SizedBox(width: effectiveLeadingGap),
                 ],
-                if (markedLabel != null)
+                if (markedLabel != null) ...[
                   SizedBox(
                     width: effectiveLabelWidth,
                     child: Align(alignment: labelAlignment, child: markedLabel),
                   ),
+                  SizedBox(width: token.spacer16),
+                ],
                 Expanded(child: content),
                 if (extra != null) extra!,
               ],

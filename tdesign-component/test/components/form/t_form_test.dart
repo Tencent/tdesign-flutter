@@ -1620,6 +1620,27 @@ void main() {
   });
 
   group('TFormItem layout', () {
+    testWidgets('horizontal label keeps the design gap before content', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TFormItem(label: 'Name', child: Text('Field')),
+          formTheme: const TFormThemeData(labelWidth: 80),
+        ),
+      );
+
+      expect(tester.getTopLeft(find.text('Field')).dx, 112);
+    });
+
+    testWidgets('horizontal item without label does not add a label gap', (
+      tester,
+    ) async {
+      await tester.pumpWidget(wrap(const TFormItem(child: Text('Field'))));
+
+      expect(tester.getTopLeft(find.text('Field')).dx, 16);
+    });
+
     testWidgets('horizontal layout renders label, mark, child and help', (
       tester,
     ) async {
@@ -2012,19 +2033,19 @@ void main() {
               children: [
                 TFormItem(
                   key: leftKey,
-                  label: 'Label',
+                  label: '标签',
                   labelAlign: TextAlign.left,
                   child: SizedBox(),
                 ),
                 TFormItem(
                   key: rightKey,
-                  label: 'Label',
+                  label: '标签',
                   labelAlign: TextAlign.right,
                   child: SizedBox(),
                 ),
                 TFormItem(
                   key: startKey,
-                  label: 'Label',
+                  label: '标签',
                   labelAlign: TextAlign.start,
                   child: SizedBox(),
                 ),
@@ -2038,12 +2059,12 @@ void main() {
         final paragraph = tester.renderObject<RenderParagraph>(
           find.descendant(
             of: find.byKey(itemKey),
-            matching: find.text('Label'),
+            matching: find.text('标签'),
           ),
         );
         final glyphs = paragraph
             .getBoxesForSelection(
-              const TextSelection(baseOffset: 0, extentOffset: 5),
+              const TextSelection(baseOffset: 0, extentOffset: 2),
             )
             .map((box) => box.toRect())
             .reduce((bounds, box) => bounds.expandToInclude(box));

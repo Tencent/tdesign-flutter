@@ -19,7 +19,7 @@ const sliderDemoPageTestSpec = DemoPageTestSpec(
     '滑块禁用状态',
     '03 特殊样式',
     '胶囊型滑块',
-    '04 垂直状态',
+    '04 垂直型滑块',
     '单游标垂直滑块',
     '带刻度的双游标垂直滑块',
     '胶囊型垂直滑块',

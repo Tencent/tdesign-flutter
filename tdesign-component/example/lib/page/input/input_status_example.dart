@@ -23,7 +23,6 @@ class InputStatusExample extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         _buildDisabled(context),
-        const SizedBox(height: 16),
       ],
     );
   }

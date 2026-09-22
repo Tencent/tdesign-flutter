@@ -82,6 +82,17 @@ void main() {
       tester.widget<Icon>(clearIcon).color,
       TThemeData.defaultData().errorNormalColor,
     );
+    final label = find.descendant(
+      of: find.byWidgetPredicate(
+        (widget) => widget is TFormItem && widget.errorText == '错误提示',
+      ),
+      matching: find.text('标签文字'),
+    );
+    final inputText = find.text('已输入内容');
+    expect(
+      tester.getTopLeft(label).dy,
+      closeTo(tester.getTopLeft(inputText).dy, 0.01),
+    );
   }, tags: 'demo');
 
   testWidgets('图形验证码左侧保留分割线', (tester) async {
@@ -93,7 +104,7 @@ void main() {
       of: captcha,
       matching: find.byWidgetPredicate(
         (widget) =>
-            widget is SizedBox && widget.width == 72 && widget.height == 36,
+            widget is SizedBox && widget.width == 72 && widget.height == 24,
       ),
     );
     final divider = find.descendant(

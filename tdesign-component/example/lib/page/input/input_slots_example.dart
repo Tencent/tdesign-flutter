@@ -22,7 +22,6 @@ class InputSlotsExample extends StatelessWidget {
           ),
           SizedBox(height: 16),
           TInput(borderless: true, hintText: '请输入文字', prefix: Icon(TIcons.app)),
-          SizedBox(height: 16),
         ],
       ),
     );

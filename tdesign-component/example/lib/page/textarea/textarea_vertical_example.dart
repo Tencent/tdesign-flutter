@@ -11,8 +11,7 @@ class TextareaVerticalExample extends StatelessWidget {
     height: 162,
     child: TTextarea(
       label: '标签文字',
-      hintText: '',
-      initialValue: '预设长文本预设长文本',
+      hintText: '预设长文本预设长文本',
       layout: TTextareaLayout.vertical,
       minLines: 2,
       maxLength: 500,

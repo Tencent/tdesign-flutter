@@ -32,7 +32,6 @@ class _InputBasicExampleState extends State<InputBasicExample> {
           hintText: '请输入文字',
         ),
       ),
-      const SizedBox(height: 16),
     ],
   );
 

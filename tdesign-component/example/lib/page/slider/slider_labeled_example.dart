@@ -13,25 +13,25 @@ class SliderLabeledExample extends StatefulWidget {
 
 class _SliderLabeledExampleState extends State<SliderLabeledExample> {
   Widget _buildLabeled(BuildContext context) {
-    return _panel(
-      TSlider(
-        key: const ValueKey('slider-labeled'),
-        value: _labeled,
-        min: 0,
-        max: 100,
-        showThumbValue: true,
-        thumbFormatter: _percent,
-        onChanged: (value) => setState(() => _labeled = value),
+    return CompactDemoSurface(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: TSlider(
+          key: const ValueKey('slider-labeled'),
+          value: _labeled,
+          min: 0,
+          max: 100,
+          showThumbValue: true,
+          thumbFormatter: _integer,
+          onChanged: (value) => setState(() => _labeled = value),
+        ),
       ),
     );
   }
 
-  Widget _panel(Widget child) =>
-      Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: child);
-
   double _labeled = 35;
 
-  static String _percent(double value) => '${value.round()}%';
+  static String _integer(double value) => value.round().toString();
 
   @override
   Widget build(BuildContext context) {

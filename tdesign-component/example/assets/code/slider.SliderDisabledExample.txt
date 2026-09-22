@@ -6,38 +6,56 @@ class SliderDisabledExample extends StatelessWidget {
 
   Widget _buildDisabled(BuildContext context) => const Column(
     children: [
-      TSlider(key: ValueKey('slider-disabled'), value: 35, min: 0, max: 100),
-      SizedBox(height: 16),
-      Row(
-        children: [
-          TText('0%'),
-          Expanded(
-            child: TRangeSlider(
-              key: ValueKey('slider-disabled-labeled-range'),
-              value: RangeValues(40, 60),
-              min: 0,
-              max: 100,
-              showThumbValue: true,
-              thumbFormatter: _percent,
-            ),
+      CompactDemoSurface(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 4),
+          child: TSlider(
+            key: ValueKey('slider-disabled'),
+            value: 35,
+            min: 0,
+            max: 100,
           ),
-          TText('100%'),
-        ],
+        ),
       ),
-      SizedBox(height: 16),
-      TRangeSlider(
-        key: ValueKey('slider-disabled-scale-range'),
-        value: RangeValues(20, 60),
-        min: 0,
-        max: 100,
-        divisions: 5,
-        showScaleValue: true,
-        scaleFormatter: _integer,
+      CompactDemoGap(),
+      CompactDemoSurface(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+          child: Row(
+            children: [
+              TText('0'),
+              Expanded(
+                child: TRangeSlider(
+                  key: ValueKey('slider-disabled-labeled-range'),
+                  value: RangeValues(40, 60),
+                  min: 0,
+                  max: 100,
+                  showThumbValue: true,
+                  thumbFormatter: _integer,
+                ),
+              ),
+              TText('100'),
+            ],
+          ),
+        ),
+      ),
+      CompactDemoGap(),
+      CompactDemoSurface(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 3),
+          child: TRangeSlider(
+            key: ValueKey('slider-disabled-scale-range'),
+            value: RangeValues(20, 60),
+            min: 0,
+            max: 100,
+            divisions: 5,
+            showScaleValue: true,
+            scaleFormatter: _integer,
+          ),
+        ),
       ),
     ],
   );
-
-  static String _percent(double value) => '${value.round()}%';
 
   static String _integer(double value) => value.round().toString();
 

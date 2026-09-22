@@ -7,7 +7,7 @@ class InputLayoutExample extends StatelessWidget {
   Widget _buildLayout(BuildContext context) {
     return Theme(
       data: Theme.of(context).mergeExtension(
-        const TFormThemeData(layout: TFormLayout.vertical, labelGap: 4),
+        const TFormThemeData(layout: TFormLayout.vertical, labelGap: 8),
       ),
       child: const TFormItem(
         label: '标签文字',

@@ -8,14 +8,28 @@ class AllSizeTagsExample extends StatelessWidget {
   const AllSizeTagsExample({super.key});
 
   Widget _buildAllSizeTags(BuildContext context) {
-    return const Wrap(
-      spacing: 8,
-      direction: Axis.vertical,
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TTag('超大标签', size: TTagSize.extraLarge),
-        TTag('大型标签', size: TTagSize.large),
-        TTag('中等标签', size: TTagSize.medium),
-        TTag('小型标签', size: TTagSize.small),
+        Wrap(
+          spacing: 8,
+          children: [
+            TTag('加大尺寸', size: TTagSize.extraLarge),
+            TTag('大尺寸', size: TTagSize.large),
+            TTag('中尺寸', size: TTagSize.medium),
+            TTag('小尺寸', size: TTagSize.small),
+          ],
+        ),
+        SizedBox(height: 16),
+        Wrap(
+          spacing: 8,
+          children: [
+            TTag('加大尺寸', size: TTagSize.extraLarge, needCloseIcon: true),
+            TTag('大尺寸', size: TTagSize.large, needCloseIcon: true),
+            TTag('中尺寸', size: TTagSize.medium, needCloseIcon: true),
+            TTag('小尺寸', size: TTagSize.small, needCloseIcon: true),
+          ],
+        ),
       ],
     );
   }
@@ -25,11 +39,7 @@ class AllSizeTagsExample extends StatelessWidget {
     return Container(
       alignment: Alignment.topLeft,
       padding: const EdgeInsets.only(left: 16),
-      child: Wrap(
-        spacing: 8,
-        direction: Axis.vertical,
-        children: [Builder(builder: _buildAllSizeTags)],
-      ),
+      child: Builder(builder: _buildAllSizeTags),
     );
   }
 }

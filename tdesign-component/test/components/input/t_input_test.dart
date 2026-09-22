@@ -535,6 +535,7 @@ void main() {
         ),
       );
 
+      expect(tester.getSize(find.byType(IconButton)), const Size(32, 20));
       await tester.tap(find.byIcon(TIcons.close_circle_filled));
       await tester.pump();
       expect(controller.text, isEmpty);
@@ -578,6 +579,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(tester.widget<IconButton>(find.byType(IconButton)).iconSize, 28);
+      expect(tester.getSize(find.byType(IconButton)), const Size(32, 28));
     });
 
     testWidgets(
