@@ -7,8 +7,15 @@ import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  Widget wrap(Widget child, {TLoadingThemeData? loadingTheme}) {
-    var theme = TThemeBuilder.light(TThemeData.defaultData());
+  Widget wrap(
+    Widget child, {
+    TLoadingThemeData? loadingTheme,
+    Brightness brightness = Brightness.light,
+  }) {
+    final tokens = TThemeData.defaultData();
+    var theme = brightness == Brightness.light
+        ? TThemeBuilder.light(tokens)
+        : TThemeBuilder.dark(tokens);
     if (loadingTheme != null) {
       theme = theme.mergeExtension(loadingTheme);
     }
@@ -347,6 +354,7 @@ void main() {
           ),
           loadingTheme: const TLoadingThemeData(
             iconColor: Colors.red,
+            textColor: Colors.green,
             duration: 1234,
           ),
         ),
@@ -364,6 +372,47 @@ void main() {
       );
       expect(indicator.color, Colors.red);
       expect(indicator.duration, 1234);
+      final loadingText = tester.widget<TText>(
+        find.descendant(
+          of: find.byType(TLoading),
+          matching: find.byType(TText),
+        ),
+      );
+      expect(loadingText.textColor, Colors.green);
+      completer.complete();
+      await tester.pump(const Duration(seconds: 1));
+    });
+
+    testWidgets('暗色刷新文案使用上下文禁用色且不改变独立 Loading 默认值', (tester) async {
+      final completer = Completer<void>();
+      final controller = TPullDownRefreshController();
+      final tokens = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () => completer.future,
+            controller: controller,
+          ),
+          brightness: Brightness.dark,
+        ),
+      );
+
+      unawaited(controller.refresh());
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+        if (find.byType(TLoading).evaluate().isNotEmpty) {
+          break;
+        }
+      }
+
+      final loadingText = tester.widget<TText>(
+        find.descendant(
+          of: find.byType(TLoading),
+          matching: find.byType(TText),
+        ),
+      );
+      expect(loadingText.textColor, tokens.dark!.textDisabledColor);
+
       completer.complete();
       await tester.pump(const Duration(seconds: 1));
     });

@@ -21,6 +21,15 @@
 | 逐公开 Demo Golden（固定视口） | ✅ success | 三张 baseline 已更新；复用仓库统一的 1.5% 差异面积容差，规避 macOS/Linux 字体栅格差异 |
 | generate_example_code --check | ✅ 手动核对一致 | 示例代码资产与生成器输出逐字一致 |
 
+### 2026-09-23 暗色文字回归补充
+
+- Flutter 3.32.0 / 3.47.0：Refresh 组件 33 项测试、Demo 页面 5 项测试及
+  component / example 严格 analyze 均通过。
+- Refresh 生产源码覆盖率为 `186/192 = 96.88%`，通过 95% 门槛。
+- Flutter 3.32.0 Linux：8 项受影响 Demo Golden 更新后无参复跑通过；
+  组件 3 项 Golden 无差异。
+- 示例代码生成器 `--check` 通过，回归清单自测通过。
+
 ## 代码补强（已落地，验证依赖 CI / 人工）
 
 - **每个公开 Demo** 均有逐项 Widget 断言（基础 / 自定义提示语 / 超时）+ 固定视口 Golden 测试文件。
@@ -44,6 +53,8 @@
 - [x] `refreshTimeout` 默认 3000ms，超时通过 `onStateChanged(timeout)` 上报；传入 null 关闭超时
 - [x] `onLoadMore` 非空时按 `lowerThreshold` 自动启用触底加载，且不渲染额外 Footer UI
 - [x] `onRefresh == null` 时禁用下拉刷新并保留滚动
+- [x] 暗色刷新文案默认使用 `textDisabledColor`，显式
+  `TLoadingThemeData.textColor` 可覆盖；独立 `TLoading` 默认值不变
 
 ## 未覆盖项与后续工作（如实保留，不臆测通过）
 

@@ -98,6 +98,9 @@ class TPullDownRefresh extends StatefulWidget {
 - `maxBarHeight`：默认 `80`（对齐官方），最大下拉高度（阻尼上限）。
 - `successDuration`：默认 `500ms`，刷新完成提示展示时长（对应官方 `successDuration`）。
 - Loading 指示器样式自动继承 Flutter Theme 子树中的 `TLoadingThemeData`；组件只固定横向排列，不把跨组件 ThemeData 暴露为构造参数。
+- Loading 文案的上下文默认色使用 `textDisabledColor`；调用方显式配置的
+  `TLoadingThemeData.textColor` 仍优先。独立 `TLoading` 保持自己的
+  `textColorPrimary` 默认值，Refresh 不修改或预填全局 Loading Theme。
 - Header 背景色统一使用全局 `bgColorContainer` token，不提供实例级颜色参数。
 - `onStateChanged`：`void Function(TPullDownRefreshState)?`，状态变化回调（对应 `change`/`onChange`），值域为 `TPullDownRefreshState`（inactive / dragging / ready / refreshing / done / timeout）。
 

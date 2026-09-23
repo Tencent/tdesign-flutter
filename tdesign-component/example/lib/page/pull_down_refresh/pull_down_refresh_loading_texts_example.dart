@@ -61,7 +61,7 @@ class _PullDownRefreshLoadingTextsExampleState
       child: TText(
         message,
         font: context.tTheme.fontBodyLarge,
-        textColor: context.tTheme.textColorPlaceholder,
+        textColor: context.tTheme.textColorSecondary,
       ),
     );
   }
