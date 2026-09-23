@@ -124,6 +124,32 @@ void main() {
       expect(td.extension<TThemeData>(), isNotNull);
     });
 
+    test('ThemeData.lerp 插值 Token 投影的全部 Material 视觉字段', () {
+      final token = TThemeData.defaultData();
+      final light = TThemeBuilder.light(token);
+      final dark = TThemeBuilder.dark(token);
+      final middle = ThemeData.lerp(light, dark, 0.5);
+
+      expect(middle.colorScheme, isNot(light.colorScheme));
+      expect(middle.colorScheme, isNot(dark.colorScheme));
+      expect(middle.extension<TThemeData>(), isNotNull);
+      expect(middle.elevatedButtonTheme.style, isNotNull);
+      expect(middle.outlinedButtonTheme.style, isNotNull);
+      expect(middle.textButtonTheme.style, isNotNull);
+      expect(middle.badgeTheme, isA<BadgeThemeData>());
+      expect(middle.dividerTheme, isA<DividerThemeData>());
+    });
+
+    test('BadgeTheme 区分 Token 投影与调用方显式覆盖', () {
+      final projected = TThemeBuilder.light(TThemeData.defaultData());
+      expect(projected.tExplicitBadgeTheme, isNull);
+
+      final explicit = projected.copyWith(
+        badgeTheme: projected.badgeTheme.copyWith(backgroundColor: Colors.red),
+      );
+      expect(explicit.tExplicitBadgeTheme?.backgroundColor, Colors.red);
+    });
+
     test('buildLight 注入当前组件 ThemeData 默认定义', () {
       final theme = TThemeBuilder.light(TThemeData.defaultData());
 
