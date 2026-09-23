@@ -205,14 +205,16 @@ void main() {
       expect(normalTrackRect.left, 18);
       expect(normalTrackRect.right, normalBox.size.width - 18);
       expect(capsuleTheme.trackHeight, 28);
-      expect(capsuleTrackRect.left, 18);
-      expect(capsuleTrackRect.right, capsuleBox.size.width - 18);
+      // Material's discrete centers are inset by half the track height;
+      // the visual capsule still starts 18px from each edge.
+      expect(capsuleTrackRect.left, 7);
+      expect(capsuleTrackRect.right, capsuleBox.size.width - 7);
       expect(
         capsuleTickShape.getPreferredSize(
           sliderTheme: capsuleTheme,
           isEnabled: true,
         ),
-        const Size(2, 22),
+        Size.zero,
       );
     });
 
@@ -383,7 +385,7 @@ void main() {
           sliderTheme: theme,
           isEnabled: true,
         ),
-        const Size(2, 18),
+        Size.zero,
       );
       final sliderFinder = find.byType(Slider);
       final renderBox = tester.renderObject<RenderBox>(sliderFinder);
@@ -394,9 +396,11 @@ void main() {
         isEnabled: true,
         isDiscrete: true,
       );
-      expect(trackRect.left, 16);
-      expect(trackRect.right, renderBox.size.width - 16);
+      expect(trackRect.left, 7);
+      expect(trackRect.right, renderBox.size.width - 7);
       expect(trackRect.height, 24);
+      expect(trackRect.left + trackRect.height / 2, 19);
+      expect(trackRect.right - trackRect.height / 2, renderBox.size.width - 19);
     });
 
     testWidgets('capsule ticks divide only the interior of the track', (
@@ -466,9 +470,20 @@ void main() {
           );
         }
 
-        expect(pixel(first), pixel(first + 4));
-        expect(pixel(last), pixel(last - 4));
+        expect(pixel(first), isNot(Colors.white));
+        expect(pixel(last), isNot(Colors.white));
         expect(pixel(interior), isNot(pixel(interior + 4)));
+        if (slider is TSlider) {
+          final visualLeft = trackRect.left + trackRect.height / 2 - 3;
+          final visualWidth = trackRect.width - trackRect.height + 6;
+          final dividerLeft = visualLeft + 1.5;
+          final dividerStep = (visualWidth - 3) / 5;
+          final selectedGap = (dividerLeft + 2 * dividerStep).floorToDouble();
+          final inactiveGap = (dividerLeft + 4 * dividerStep).floorToDouble();
+          final outerColor = TThemeData.defaultData().bgColorComponent;
+          expect(pixel(selectedGap), outerColor);
+          expect(pixel(inactiveGap), outerColor);
+        }
       }
 
       await expectInteriorTicksOnly(
@@ -491,6 +506,30 @@ void main() {
           onChanged: (_) {},
         ),
       );
+    });
+
+    testWidgets('dense capsule divisions do not invert painted segments', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const Column(
+            children: [
+              TSlider(
+                value: 0.5,
+                divisions: 400,
+                variant: TSliderVariant.capsule,
+              ),
+              TRangeSlider(
+                value: RangeValues(0.25, 0.75),
+                divisions: 400,
+                variant: TSliderVariant.capsule,
+              ),
+            ],
+          ),
+        ),
+      );
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('showScaleValue renders formatted scale labels', (
@@ -678,7 +717,7 @@ void main() {
           sliderTheme: theme,
           isEnabled: true,
         ),
-        const Size(2, 18),
+        Size.zero,
       );
     });
 
