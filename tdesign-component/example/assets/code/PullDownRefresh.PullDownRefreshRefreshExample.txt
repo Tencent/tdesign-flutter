@@ -61,7 +61,7 @@ class _PullDownRefreshRefreshExampleState
                     PlatformUtil.isWeb ? '点击该区域演示 顶部下拉刷新' : '拖拽该区域演示 顶部下拉刷新',
                     textAlign: TextAlign.center,
                     font: context.tTheme.fontBodyLarge,
-                    textColor: context.tTheme.textColorPlaceholder,
+                    textColor: context.tTheme.textDisabledColor,
                   ),
                 ),
               ),

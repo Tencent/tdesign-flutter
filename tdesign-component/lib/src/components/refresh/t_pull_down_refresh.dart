@@ -453,6 +453,16 @@ class _TPullDownRefreshHeader extends Header {
     final inheritedLoadingTheme = Theme.of(
       context,
     ).extension<TLoadingThemeData>();
+    final refreshLoadingTheme =
+        (inheritedLoadingTheme ?? const TLoadingThemeData()).copyWith(
+          axis: Axis.horizontal,
+          // Loading 独立使用时以主文字色作为默认值；嵌入下拉刷新后，文案属于
+          // 短暂的过程提示，应使用禁用文字色。这里只补齐调用方未显式配置的
+          // 字段，避免把 Refresh 的上下文默认值扩散到独立 Loading 或其他组件。
+          textColor:
+              inheritedLoadingTheme?.textColor ??
+              context.tTheme.textDisabledColor,
+        );
     String text;
     if (showLoading) {
       text = texts.refreshing;
@@ -474,11 +484,7 @@ class _TPullDownRefreshHeader extends Header {
         color: context.tTheme.bgColorContainer,
         child: showLoading
             ? Theme(
-                data: Theme.of(context).mergeExtension(
-                  (inheritedLoadingTheme ?? const TLoadingThemeData()).copyWith(
-                    axis: Axis.horizontal,
-                  ),
-                ),
+                data: Theme.of(context).mergeExtension(refreshLoadingTheme),
                 child: TLoading(size: 24, text: text),
               )
             : TText(
