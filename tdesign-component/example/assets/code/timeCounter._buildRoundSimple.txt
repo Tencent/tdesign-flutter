@@ -1,6 +1,0 @@
-Widget _buildRoundSimple(BuildContext context) {
-  return const TTimeCounter(
-    time: 96 * 60 * 1000,
-    variant: TTimeCounterVariant.round,
-  );
-}

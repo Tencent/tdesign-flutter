@@ -1,5 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_dropdown_menu_page.dart';
+import 'package:tdesign_flutter_example/page/dropdown_menu/dropdown_menu_page.dart';
 
 import '../demo_page_test_utils.dart';
 
@@ -31,7 +31,7 @@ class DropdownMenuPublicScenario {
 const dropdownMenuPublicScenarios = [
   DropdownMenuPublicScenario(
     id: 'product',
-    label: '全部产品',
+    label: '最火产品',
     enabled: true,
     goldenPolicy: DropdownMenuGoldenPolicy.opened,
     expectedPanelText: '最新产品',

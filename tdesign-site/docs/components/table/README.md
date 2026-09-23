@@ -13,9 +13,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[t_table_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_table_page.dart)
-
-示例页中的 `@ExampleCode(group: 'table')` 是本页代码片段的唯一来源，覆盖排序、选择、固定列、表体滚动、加载、边框和斑马纹。
+{{ flutter-example-group table }}
 
 ## API
 

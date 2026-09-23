@@ -25,23 +25,18 @@ class ExamplePage extends StatefulWidget {
     required this.title,
     this.navBarTitle,
     this.desc = '',
-    this.children = const [],
-    this.padding,
+    required this.children,
+    this.itemMargin,
     this.backgroundColor,
     this.compactDemo = false,
     required this.exampleCodeGroup,
     this.test = const [],
-    this.showSingleChild = false,
-    this.singleChild,
     this.scrollController,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.floatingActionButtonAnimator,
     this.showTestModule = true,
-  }) : assert(
-         children.length > 0 || (showSingleChild && singleChild != null),
-         'children or singleChild must have at least one',
-       ),
+  }) : assert(children.length > 0, 'children must have at least one'),
        super(key: key);
 
   /// 标题
@@ -52,20 +47,14 @@ class ExamplePage extends StatefulWidget {
   /// 为空时与页面内容标题 [title] 保持一致；设计稿区分导航栏短标题与页面完整标题时可单独指定。
   final String? navBarTitle;
 
-  /// 如果封装的children无法满足需求，可以自定义子控件
-  final bool showSingleChild;
-
-  /// 自定义的自控件，只有showSingleChild为true才会展示。CodeWrapper的builder构建真正的试图
-  final CodeWrapper? singleChild;
-
   /// 示例组件模块列表
   final List<ExampleModule> children;
 
-  /// 描述，showSingleChild为false会展示
+  /// 页面描述。
   final String desc;
 
-  /// 填充
-  final EdgeInsetsGeometry? padding;
+  /// 普通布局中每个示例项的外边距。
+  final EdgeInsetsGeometry? itemMargin;
 
   /// 使用小程序 Demo 的紧凑分组结构：说明条、白色示例块、连续字段行。
   final bool compactDemo;
@@ -254,14 +243,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SafeArea(bottom: false, child: _buildNavBar()),
-            Expanded(
-              child: SafeArea(
-                top: false,
-                child: widget.showSingleChild && widget.singleChild != null
-                    ? _singleChild()
-                    : _buildExampleList(),
-              ),
-            ),
+            Expanded(child: SafeArea(top: false, child: _buildExampleList())),
           ],
         ),
       ),
@@ -339,6 +321,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
         itemCount: entries.length,
         itemBuilder: (_, index) => _buildCompactItem(entries[index]),
       ),
+      const SliverToBoxAdapter(child: SizedBox(height: 32)),
     ];
   }
 
@@ -351,7 +334,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (hasTitle) const SizedBox(height: 32),
+        if (hasTitle) SizedBox(height: moduleIndex == 0 ? 28 : 32),
         if (hasTitle || item.desc.isNotEmpty)
           Padding(
             padding: EdgeInsets.fromLTRB(16, hasTitle ? 0 : 24, 16, 0),
@@ -381,8 +364,11 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
               ],
             ),
           ),
-        SizedBox(height: item.compactContentSpacing ?? 16),
-        _buildExampleContent(item),
+        SizedBox(height: item.compactStyle.contentSpacing),
+        if (item.compactStyle.surface == CompactExampleSurface.container)
+          _CompactDemoSurface(child: _buildExampleContent(item))
+        else
+          _buildExampleContent(item),
       ],
     );
   }
@@ -420,8 +406,6 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       (Theme.of(context).brightness == Brightness.light
           ? const Color(0xFFF6F6F6)
           : context.tTheme.bgColorPage);
-
-  Widget _singleChild() => widget.singleChild!;
 
   ExampleItem _buildTestExampleItem() => ExampleItem(
     desc: '''未在示例稿中体现，但有必要验证的组件样式，请添加到'test'参数中。以下情景必须有测试：
@@ -518,9 +502,6 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   }
 
   Widget _buildHeader() {
-    if (widget.showSingleChild) {
-      return Container();
-    }
     return Container(
       margin: const EdgeInsets.only(left: 16, right: 16),
       child: Column(
@@ -563,7 +544,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
 
   Widget _buildExampleItem(ExampleModule data, int index) {
     return Container(
-      margin: widget.padding,
+      margin: widget.itemMargin,
       child: ExampleItemWidget(data: data.children[index], index: index),
     );
   }
@@ -604,9 +585,20 @@ class _CompactExampleEntry {
   final int itemIndex;
 }
 
+/// 紧凑 Demo 中承载透明组件的容器色表面。
+class _CompactDemoSurface extends StatelessWidget {
+  const _CompactDemoSurface({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) =>
+      ColoredBox(color: context.tTheme.bgColorContainer, child: child);
+}
+
 /// 示例模块
 class ExampleModule {
-  const ExampleModule({Key? key, required this.title, required this.children});
+  const ExampleModule({required this.title, required this.children});
 
   final String title;
 
@@ -623,7 +615,7 @@ class ExampleItem {
     this.center = true,
     this.ignoreCode = false,
     this.padding,
-    this.compactContentSpacing,
+    this.compactStyle = const CompactExampleStyle(),
   });
 
   /// Demo 内容的稳定定位与视觉快照边界。
@@ -641,10 +633,35 @@ class ExampleItem {
 
   final EdgeInsetsGeometry? padding;
 
-  /// 紧凑 Demo 中说明文字与示例内容之间的间距。
-  ///
-  /// 为空时使用公共默认值 16；仅用于设计稿明确给出不同标题块高度的场景。
-  final double? compactContentSpacing;
+  /// 紧凑 Demo 专属的页面壳布局配置。
+  final CompactExampleStyle compactStyle;
+}
+
+/// 紧凑 Demo 的页面壳布局配置。
+@immutable
+class CompactExampleStyle {
+  const CompactExampleStyle({
+    this.contentSpacing = 16,
+    this.surface = CompactExampleSurface.transparent,
+  });
+
+  const CompactExampleStyle.surface({this.contentSpacing = 16})
+    : surface = CompactExampleSurface.container;
+
+  /// 说明文字与示例内容之间的间距。
+  final double contentSpacing;
+
+  /// 示例内容使用的页面壳表面。
+  final CompactExampleSurface surface;
+}
+
+/// 紧凑 Demo 示例内容的页面壳表面类型。
+enum CompactExampleSurface {
+  /// 保留示例内容自身背景。
+  transparent,
+
+  /// 使用 TDesign 容器背景承载透明组件。
+  container,
 }
 
 /// 组件示例

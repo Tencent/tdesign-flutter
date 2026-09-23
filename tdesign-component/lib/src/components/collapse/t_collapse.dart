@@ -398,7 +398,10 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     final materialStyle =
         ListTileTheme.of(context).titleTextStyle ??
         Theme.of(context).tExplicitTextTheme?.titleMedium;
-    return tokenStyle.merge(materialStyle).merge(theme?.headerTextStyle);
+    return tokenStyle
+        .merge(materialStyle)
+        .copyWith(fontWeight: FontWeight.w400)
+        .merge(theme?.headerTextStyle);
   }
 
   TextStyle _disabledHeaderTextStyle(

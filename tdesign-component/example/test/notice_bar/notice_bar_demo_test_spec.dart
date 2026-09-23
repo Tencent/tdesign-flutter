@@ -1,4 +1,4 @@
-import 'package:tdesign_flutter_example/page/t_notice_bar_page.dart';
+import 'package:tdesign_flutter_example/page/notice_bar/notice_bar_page.dart';
 
 import '../demo_page_test_utils.dart';
 

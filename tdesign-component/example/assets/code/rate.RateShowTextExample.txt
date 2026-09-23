@@ -1,0 +1,100 @@
+import 'package:flutter/cupertino.dart' show CupertinoIcons;
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class RateShowTextExample extends StatelessWidget {
+  const RateShowTextExample({super.key});
+
+  Widget _buildShowText(BuildContext context) => Column(
+    children: [
+      const RateShowTextExampleRateRow(
+        title: '带描述评分',
+        rate: RateShowTextExampleStatefulRate(
+          initialValue: 3,
+          texts: ['1分', '2分', '3分', '4分', '5分'],
+        ),
+      ),
+      SizedBox(height: context.tTheme.spacer16),
+      const RateShowTextExampleRateRow(
+        title: '带描述评分',
+        rate: RateShowTextExampleStatefulRate(
+          initialValue: 3,
+          texts: ['极差', '失望', '一般', '满意', '惊喜'],
+        ),
+      ),
+      SizedBox(height: context.tTheme.spacer16),
+      const RateShowTextExampleRateRow(
+        title: '带描述评分',
+        rate: RateShowTextExampleStatefulRate(
+          initialValue: 0,
+          texts: ['极差', '失望', '一般', '满意', '惊喜'],
+        ),
+      ),
+    ],
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildShowText(context);
+  }
+}
+
+class RateShowTextExampleRateRow extends StatelessWidget {
+  const RateShowTextExampleRateRow({
+    super.key,
+    required this.title,
+    required this.rate,
+  });
+
+  final String title;
+  final Widget rate;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    height: 48,
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    color: context.tTheme.bgColorContainer,
+    child: Row(
+      children: [
+        SizedBox(width: 100, child: TText(title)),
+        const Spacer(),
+        rate,
+      ],
+    ),
+  );
+}
+
+class RateShowTextExampleStatefulRate extends StatefulWidget {
+  const RateShowTextExampleStatefulRate({
+    super.key,
+    required this.initialValue,
+    this.count = 5,
+    this.allowHalf = false,
+    this.icon,
+    this.texts,
+  });
+  final double initialValue;
+  final int count;
+  final bool allowHalf;
+  final TRateIconBuilder? icon;
+  final List<String>? texts;
+
+  @override
+  State<RateShowTextExampleStatefulRate> createState() =>
+      RateShowTextExampleStatefulRateState();
+}
+
+class RateShowTextExampleStatefulRateState
+    extends State<RateShowTextExampleStatefulRate> {
+  late double value = widget.initialValue;
+
+  @override
+  Widget build(BuildContext context) => TRate(
+    value: value,
+    count: widget.count,
+    allowHalf: widget.allowHalf,
+    icon: widget.icon,
+    texts: widget.texts,
+    onChanged: (next) => setState(() => value = next),
+  );
+}

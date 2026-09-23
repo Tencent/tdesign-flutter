@@ -1,9 +1,9 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_message_page.dart';
+import 'package:tdesign_flutter_example/page/message/message_page.dart';
 
 import '../demo_page_test_utils.dart';
 
-enum MessageDemoLifetime { autoDismiss, persistent, declarative }
+enum MessageDemoLifetime { autoDismiss, persistent }
 
 class MessageDemoCase {
   const MessageDemoCase({
@@ -12,7 +12,6 @@ class MessageDemoCase {
     required this.visibleText,
     required this.lifetime,
     this.actionText,
-    this.feedbackText,
     this.hasCloseButton = false,
   });
 
@@ -21,7 +20,6 @@ class MessageDemoCase {
   final String visibleText;
   final MessageDemoLifetime lifetime;
   final String? actionText;
-  final String? feedbackText;
   final bool hasCloseButton;
 }
 
@@ -57,13 +55,12 @@ const messageDemoCases = [
     visibleText: '这是一条带操作的消息通知',
     lifetime: MessageDemoLifetime.persistent,
     actionText: '链接',
-    feedbackText: '已点击链接',
   ),
   MessageDemoCase(
-    name: 'declarative',
-    triggerText: '组件调用',
-    visibleText: '这是一条通过组件调用的消息通知',
-    lifetime: MessageDemoLifetime.declarative,
+    name: 'function',
+    triggerText: '函数式调用',
+    visibleText: '这是一条通过函数式调用的消息通知',
+    lifetime: MessageDemoLifetime.autoDismiss,
   ),
   MessageDemoCase(
     name: 'info',
@@ -98,15 +95,13 @@ const messageDemoPageTestSpec = DemoPageTestSpec(
   useAlignmentCjkFont: true,
   expectedTexts: [
     '01 组件类型',
-    '消息通知内容为文本、带操作按钮',
     '纯文字的通知',
     '带图标的通知',
     '带关闭的通知',
     '可滚动的通知',
     '带按钮的通知',
-    '组件调用',
+    '函数式调用',
     '02 组件状态',
-    '消息组件风格',
     '普通通知',
     '成功通知',
     '警示通知',

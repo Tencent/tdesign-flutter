@@ -16,6 +16,7 @@
 | showThumbValue | bool | false | 是否持续显示拇指上方数值。 |
 | thumbFormatter | TSliderThumbFormatter? | - | 拇指上方数值格式化回调。 |
 | value | double | - | 受控滑块值。 |
+| variant | TSliderVariant | TSliderVariant.normal | 滑块视觉结构，默认使用标准细轨道。 |
 
 
 ### TRangeSlider
@@ -35,6 +36,17 @@
 | showThumbValue | bool | false | 是否持续显示拇指上方数值。 |
 | thumbFormatter | TSliderThumbFormatter? | - | 拇指上方数值格式化回调。 |
 | value | RangeValues | - | 受控范围值。 |
+| variant | TSliderVariant | TSliderVariant.normal | 滑块视觉结构，默认使用标准细轨道。 |
+
+
+### TSliderVariant
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| normal | Standard thin track. |
+| capsule | Capsule track with a 3px inset active segment and 20px thumbs. |
 
 
 ### TSliderThumbFormatter

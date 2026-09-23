@@ -16,7 +16,8 @@ import 't_action_sheet_types.dart';
 /// 以宫格布局展示可选项，支持分页和横向滚动。
 /// 通常不直接使用，由 `TActionSheet.showGrid` 创建。
 class TActionSheetGrid<T> extends StatefulWidget {
-  static const paginationIndicatorExtent = 8.0;
+  static const paginationIndicatorSize = 8.0;
+  static const paginationIndicatorExtent = 24.0;
 
   /// 动作面板的项目列表
   final List<TActionSheetItem<T>> items;
@@ -297,23 +298,150 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
   }
 
   Widget _buildPaginationDots(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        (widget.items.length / widget.layout.count).ceil(),
-        (index) {
-          return Container(
-            margin: EdgeInsets.symmetric(horizontal: context.tTheme.spacer4),
-            width: TActionSheetGrid.paginationIndicatorExtent,
-            height: TActionSheetGrid.paginationIndicatorExtent,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: currentPage == index
-                  ? context.tTheme.brandNormalColor
-                  : context.tTheme.textDisabledColor,
+    return SizedBox(
+      height: TActionSheetGrid.paginationIndicatorExtent,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(
+          (widget.items.length / widget.layout.count).ceil(),
+          (index) {
+            return Container(
+              margin: EdgeInsets.symmetric(horizontal: context.tTheme.spacer4),
+              width: TActionSheetGrid.paginationIndicatorSize,
+              height: TActionSheetGrid.paginationIndicatorSize,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: currentPage == index
+                    ? context.tTheme.brandNormalColor
+                    : context.tTheme.textDisabledColor,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+/// 带标题分组的横向滚动宫格动作面板。
+///
+/// 通常不直接使用，由 `TActionSheet.showGridSections` 创建。
+class TActionSheetSectionGrid<T> extends StatelessWidget {
+  const TActionSheetSectionGrid({
+    super.key,
+    required this.sections,
+    required this.cancelText,
+    required this.itemWidth,
+    required this.itemHeight,
+    this.showCancel = true,
+    this.onCancel,
+    this.onSelected,
+    this.useSafeArea = true,
+  });
+
+  /// 带标题的宫格分组。
+  final List<TActionSheetGridSection<T>> sections;
+
+  /// 取消按钮文本。
+  final String cancelText;
+
+  /// 横向滚动项目宽度。
+  final double itemWidth;
+
+  /// 横向滚动项目高度。
+  final double itemHeight;
+
+  /// 是否显示取消按钮。
+  final bool showCancel;
+
+  /// 点击取消按钮时触发。
+  final VoidCallback? onCancel;
+
+  /// 点击项目时触发。
+  final TActionSheetOnSelected<T>? onSelected;
+
+  /// 是否避让底部安全区。
+  final bool useSafeArea;
+
+  /// 根据当前字体与布局参数计算弹层首选高度。
+  static double preferredPopupHeight(
+    BuildContext context, {
+    required int sectionCount,
+    required double itemHeight,
+    required bool showCancel,
+  }) {
+    final token = context.tTheme;
+    final titleHeight =
+        (token.fontBodyMedium?.size ?? 14) *
+        (token.fontBodyMedium?.height ?? (22 / 14));
+    final sectionHeight = token.spacer12 * 2 + titleHeight + itemHeight;
+    return sectionCount * sectionHeight +
+        (showCancel ? token.spacer8 + actionSheetCancelButtonHeight : 0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final borderRadius = Radius.circular(context.tTheme.radiusExtraLarge);
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: borderRadius,
+          topRight: borderRadius,
+        ),
+        color: context.tTheme.bgColorContainer,
+      ),
+      clipBehavior: Clip.antiAlias,
+      padding: useSafeArea
+          ? EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom)
+          : EdgeInsets.zero,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final section in sections) ...[
+            _buildSectionTitle(context, section.title),
+            SizedBox(
+              height: itemHeight,
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                scrollDirection: Axis.horizontal,
+                itemCount: section.items.length,
+                itemBuilder: (context, index) => SizedBox(
+                  width: itemWidth,
+                  height: itemHeight,
+                  child: TActionSheetItemWidget<T>(
+                    item: section.items[index],
+                    onSelected: onSelected,
+                  ),
+                ),
+              ),
             ),
-          );
-        },
+          ],
+          if (showCancel)
+            buildCancelButton(
+              context,
+              false,
+              cancelText,
+              onCancel,
+              spacingColor: context.tTheme.bgColorContainer,
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(BuildContext context, String title) {
+    return SizedBox(
+      width: double.infinity,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: context.tTheme.spacer16,
+          vertical: context.tTheme.spacer12,
+        ),
+        child: TText(
+          title,
+          font: context.tTheme.fontBodyMedium,
+          textColor: context.tTheme.textColorPlaceholder,
+        ),
       ),
     );
   }

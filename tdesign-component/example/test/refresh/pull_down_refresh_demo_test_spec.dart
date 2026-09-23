@@ -1,5 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_pull_down_refresh_page.dart';
+import 'package:tdesign_flutter_example/page/pull_down_refresh/pull_down_refresh_page.dart';
 
 import '../demo_page_test_utils.dart';
 

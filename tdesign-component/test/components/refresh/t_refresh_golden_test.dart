@@ -23,12 +23,9 @@ void main() {
     );
     final robotoFont = FontLoader('Roboto')
       ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView));
+    final cjkFile = File('example/test/fonts/TDesignGoldenCJK-Regular.otf');
     final cjkFont = FontLoader('TDesign Golden CJK')
-      ..addFont(
-        File(
-          'example/test/fonts/TDesignGoldenCJK-Regular.otf',
-        ).readAsBytes().then(ByteData.sublistView),
-      );
+      ..addFont(cjkFile.readAsBytes().then(ByteData.sublistView));
     await Future.wait([robotoFont.load(), cjkFont.load()]);
   });
 

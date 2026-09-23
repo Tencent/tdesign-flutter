@@ -138,5 +138,46 @@ void main() {
       expect(t.textColorPrimary, isA<Color>());
       expect(t.bgColorContainer, isA<Color>());
     });
+
+    test('默认主题中性灰阶与移动端色板一致', () {
+      final light = TThemeData.defaultData();
+      final dark = light.dark!;
+      const expected = <Color>[
+        Color(0xFFF3F3F3),
+        Color(0xFFEEEEEE),
+        Color(0xFFE7E7E7),
+        Color(0xFFDCDCDC),
+        Color(0xFFC5C5C5),
+        Color(0xFFA6A6A6),
+        Color(0xFF8B8B8B),
+        Color(0xFF777777),
+        Color(0xFF5E5E5E),
+        Color(0xFF4B4B4B),
+        Color(0xFF383838),
+        Color(0xFF2C2C2C),
+        Color(0xFF242424),
+        Color(0xFF181818),
+      ];
+
+      List<Color> grayColors(TThemeData theme) => <Color>[
+            theme.grayColor1,
+            theme.grayColor2,
+            theme.grayColor3,
+            theme.grayColor4,
+            theme.grayColor5,
+            theme.grayColor6,
+            theme.grayColor7,
+            theme.grayColor8,
+            theme.grayColor9,
+            theme.grayColor10,
+            theme.grayColor11,
+            theme.grayColor12,
+            theme.grayColor13,
+            theme.grayColor14,
+          ];
+
+      expect(grayColors(light), expected);
+      expect(grayColors(dark), expected);
+    });
   });
 }

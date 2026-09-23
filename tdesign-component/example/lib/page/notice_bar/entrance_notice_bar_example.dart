@@ -1,0 +1,40 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'noticeBar')
+class EntranceNoticeBarExample extends StatelessWidget {
+  const EntranceNoticeBarExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return _entranceNoticeBar(context);
+  }
+}
+
+Widget _entranceNoticeBar(BuildContext context) {
+  return Column(
+    children: [
+      TNoticeBar(
+        content: '这是一条普通的通知信息',
+        operation: TLink(
+          child: const Text('详情'),
+          colorScheme: TLinkColorScheme.primary,
+          onPressed: () => TToast.showText('点击了详情', context: context),
+        ),
+        suffixIcon: TIcons.chevron_right,
+      ),
+      const SizedBox(height: 16),
+      TNoticeBar(
+        content: '这是一条普通的通知信息',
+        suffixIcon: TIcons.chevron_right,
+        onPressed: (target) {
+          if (target == TNoticeBarTapTarget.suffix) {
+            TToast.showText('点击了入口图标', context: context);
+          }
+        },
+      ),
+    ],
+  );
+}

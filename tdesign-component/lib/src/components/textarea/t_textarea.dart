@@ -308,26 +308,6 @@ class _TTextareaState extends State<TTextarea> {
         inputFormatters: widget.inputFormatters,
       ),
     );
-    final content = switch ((widget.label, widget.layout)) {
-      (null, _) => editor,
-      (final label?, TTextareaLayout.horizontal) => Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: labelStyle),
-          SizedBox(width: token.spacer16),
-          Expanded(child: editor),
-        ],
-      ),
-      (final label?, TTextareaLayout.vertical) => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(label, style: labelStyle),
-          SizedBox(height: token.spacer8),
-          editor,
-        ],
-      ),
-    };
-
     return DecoratedBox(
       decoration: BoxDecoration(
         color: inFormItem
@@ -340,7 +320,39 @@ class _TTextareaState extends State<TTextarea> {
           theme?.borderRadius ?? (widget.bordered ? token.radiusDefault : 0),
         ),
       ),
-      child: Padding(padding: contentPadding, child: content),
+      child: Padding(
+        padding: contentPadding,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final constrainedEditor = constraints.hasTightHeight
+                ? SizedBox(height: constraints.maxHeight, child: editor)
+                : editor;
+            return switch ((widget.label, widget.layout)) {
+              (null, _) => constrainedEditor,
+              (final label?, TTextareaLayout.horizontal) => Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text(label, style: labelStyle),
+                  SizedBox(width: token.spacer16),
+                  Expanded(child: constrainedEditor),
+                ],
+              ),
+              (final label?, TTextareaLayout.vertical) => Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(label, style: labelStyle),
+                  SizedBox(height: token.spacer8),
+                  if (constraints.hasTightHeight)
+                    Expanded(child: editor)
+                  else
+                    editor,
+                ],
+              ),
+            };
+          },
+        ),
+      ),
     );
   }
 }

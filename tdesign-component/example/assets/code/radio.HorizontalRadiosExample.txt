@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class HorizontalRadiosExample extends StatefulWidget {
+  const HorizontalRadiosExample({super.key});
+
+  @override
+  State<HorizontalRadiosExample> createState() =>
+      _HorizontalRadiosExampleState();
+}
+
+class _HorizontalRadiosExampleState extends State<HorizontalRadiosExample> {
+  Widget _horizontalRadios(BuildContext context) {
+    return Container(
+      key: const ValueKey('radio-horizontal-layout'),
+      color: context.tTheme.bgColorContainer,
+      padding: EdgeInsets.all(context.tTheme.spacer16),
+      child: TRadioGroup<int>.options(
+        value: _horizontalValue,
+        options: _horizontalOptions,
+        direction: Axis.horizontal,
+        columns: 3,
+        variant: TRadioVariant.inline,
+        onChanged: (value) => setState(() => _horizontalValue = value),
+      ),
+    );
+  }
+
+  int? _horizontalValue = 0;
+
+  static const _horizontalOptions = [
+    TRadioOption(value: 0, label: '单选标题'),
+    TRadioOption(value: 1, label: '单选标题'),
+    TRadioOption(value: 2, label: '上限四字'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return _horizontalRadios(context);
+  }
+}

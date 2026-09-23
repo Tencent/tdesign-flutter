@@ -1,0 +1,121 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class ActionSheetDescriptionGridExample extends StatelessWidget {
+  const ActionSheetDescriptionGridExample({super.key});
+
+  Widget _descriptionGrid(BuildContext context) => _trigger(
+    label: '带描述宫格型',
+    onPressed: () => TActionSheet.showGrid(
+      context,
+      cancelText: 'Cancel',
+      subtitle: 'Forward To',
+      items: _gridItems(),
+      onSelected: (item) => _showSelection(context, item),
+    ),
+  );
+
+  Widget _trigger({required String label, required VoidCallback onPressed}) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: Text(label),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+  List<TActionSheetItem<String>> _gridItems() => [
+    ..._appGridItems(),
+    ..._iconGridItems(),
+  ];
+
+  void _showSelection(BuildContext context, TActionSheetItem<String> item) {
+    TToast.showText('已选择：${item.label}', context: context);
+  }
+
+  List<TActionSheetItem<String>> _appGridItems() => [
+    TActionSheetItem(
+      value: 'wechat',
+      label: 'WeChat',
+      icon: _assetGridIcon('assets/img/action_sheet_wechat.png'),
+    ),
+    TActionSheetItem(
+      value: 'qq',
+      label: 'QQ',
+      icon: _assetGridIcon('assets/img/action_sheet_qq.png'),
+    ),
+    TActionSheetItem(
+      value: 'document',
+      label: 'Doc',
+      icon: _assetGridIcon('assets/img/action_sheet_doc.png'),
+    ),
+    TActionSheetItem(
+      value: 'map',
+      label: 'Map',
+      icon: _assetGridIcon('assets/img/action_sheet_map.png'),
+    ),
+  ];
+
+  List<TActionSheetItem<String>> _iconGridItems() => [
+    TActionSheetItem(
+      value: 'share',
+      label: 'Share',
+      icon: _iconGridIcon(TIcons.share),
+    ),
+    TActionSheetItem(
+      value: 'favorite',
+      label: 'Collect',
+      icon: _iconGridIcon(TIcons.star),
+    ),
+    TActionSheetItem(
+      value: 'download',
+      label: 'Download',
+      icon: _iconGridIcon(TIcons.cloud_download),
+    ),
+    TActionSheetItem(
+      value: 'edit',
+      label: 'Edit',
+      icon: _iconGridIcon(TIcons.edit),
+    ),
+  ];
+
+  Widget _iconGridIcon(IconData icon) => Builder(
+    builder: (context) => Container(
+      key: ValueKey(icon),
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: context.tTheme.bgColorSecondaryContainer,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      alignment: Alignment.center,
+      child: Icon(icon, size: 24),
+    ),
+  );
+
+  Widget _assetGridIcon(String path) {
+    return Container(
+      key: ValueKey(path),
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color: Colors.black.withValues(alpha: 0.06),
+          width: 0.5,
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Image.asset(path, fit: BoxFit.cover),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _descriptionGrid(context);
+  }
+}

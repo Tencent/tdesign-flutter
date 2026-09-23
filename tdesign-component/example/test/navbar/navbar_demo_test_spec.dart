@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_navbar_page.dart';
+import 'package:tdesign_flutter_example/page/navbar/navbar_page.dart';
 
 import '../demo_page_test_utils.dart';
 

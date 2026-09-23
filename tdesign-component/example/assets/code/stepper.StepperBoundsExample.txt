@@ -15,24 +15,30 @@ class _StepperBoundsExampleState extends State<StepperBoundsExample> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        TStepper(
-          key: const ValueKey('stepper-minimum'),
-          value: _minimum,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _minimum = value),
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            TStepper(
+              key: const ValueKey('stepper-minimum'),
+              value: _minimum,
+              variant: TStepperVariant.filled,
+              onChanged: (value) => setState(() => _minimum = value),
+            ),
+            const SizedBox(width: 32),
+            TStepper(
+              key: const ValueKey('stepper-maximum'),
+              value: _maximum,
+              max: 999,
+              variant: TStepperVariant.filled,
+              onChanged: (value) => setState(() => _maximum = value),
+            ),
+          ],
         ),
-        const SizedBox(width: 32),
-        TStepper(
-          key: const ValueKey('stepper-maximum'),
-          value: _maximum,
-          max: 999,
-          variant: TStepperVariant.filled,
-          onChanged: (value) => setState(() => _maximum = value),
-        ),
-      ],
+      ),
     );
   }
 }

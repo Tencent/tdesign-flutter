@@ -1,0 +1,28 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'noticeBar')
+class ThemeNoticeBarsExample extends StatelessWidget {
+  const ThemeNoticeBarsExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return _themeNoticeBars(context);
+  }
+}
+
+Widget _themeNoticeBars(BuildContext context) {
+  return const Column(
+    children: [
+      TNoticeBar(content: '默认状态公告栏默认状态公告栏'),
+      SizedBox(height: 16),
+      TNoticeBar(status: TNoticeBarStatus.success, content: '成功状态公告栏成功状态公告栏'),
+      SizedBox(height: 16),
+      TNoticeBar(status: TNoticeBarStatus.warning, content: '警示状态公告栏警示状态公告栏'),
+      SizedBox(height: 16),
+      TNoticeBar(status: TNoticeBarStatus.error, content: '错误状态公告栏错误状态公告栏'),
+    ],
+  );
+}

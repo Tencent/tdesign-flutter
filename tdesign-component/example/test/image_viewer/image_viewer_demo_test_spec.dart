@@ -1,4 +1,4 @@
-import 'package:tdesign_flutter_example/page/t_image_viewer_page.dart';
+import 'package:tdesign_flutter_example/page/image_viewer/image_viewer_page.dart';
 
 import '../demo_page_test_utils.dart';
 

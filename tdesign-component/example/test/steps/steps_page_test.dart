@@ -56,16 +56,16 @@ void main() {
   testWidgets('Steps 所有代码入口展示对应的实际生成片段', (tester) async {
     await pumpFullDemoPage(tester, stepsDemoPageTestSpec, ThemeMode.light);
     const names = [
-      '_buildHorizontalDefault',
-      '_buildHorizontalIcon',
-      '_buildHorizontalDot',
-      '_buildVerticalDefault',
-      '_buildVerticalIcon',
-      '_buildVerticalDot',
-      '_buildCustomContent',
-      '_buildErrorStates',
-      '_buildVerticalSelectable',
-      '_buildDisplaySteps',
+      'StepsHorizontalDefaultExample',
+      'StepsHorizontalIconExample',
+      'StepsHorizontalDotExample',
+      'StepsVerticalDefaultExample',
+      'StepsVerticalIconExample',
+      'StepsVerticalDotExample',
+      'StepsCustomContentExample',
+      'StepsErrorStatesExample',
+      'StepsVerticalSelectableExample',
+      'DisplayStepsExample',
     ];
     TNotification.postNotification('onApiVisibleChange', {'apiVisible': true});
     await tester.pumpAndSettle();

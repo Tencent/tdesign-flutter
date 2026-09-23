@@ -8,7 +8,7 @@ isComponent: true
 <span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20lines-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20functions-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20statements-100%25-blue" /></span><span class="coverages-badge" style="margin-right: 10px"><img src="https://img.shields.io/badge/coverages%3A%20branches-83%25-blue" /></span>
 ## 引入
 
-在tdesign_flutter/tdesign_flutter.dart中有所有组件的路径。
+通过统一入口引入 TDesign Flutter 组件：
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -16,130 +16,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[td_link_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/td_link_page.dart)
-
-### 1 组件类型
-
-基础文字链接
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _basicTypeBasic(BuildContext context) {
-    return Container(
-        height: 48,
-        color: TTheme.of(context).bgColorContainer,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TLinkType.basic),
-        ));
-  }</pre>
-
-</td-code-block>
-                                  
-
-下划线文字链接
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _withUnderline(BuildContext context) {
-    return Container(
-        height: 48,
-        color: TTheme.of(context).bgColorContainer,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TLinkType.withUnderline),
-        ));
-  }</pre>
-
-</td-code-block>
-                                  
-
-前置图标文字链接
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _withPrefixIcon(BuildContext context) {
-    return Container(
-        height: 48,
-        color: TTheme.of(context).bgColorContainer,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TLinkType.withPrefixIcon),
-        ));
-  }</pre>
-
-</td-code-block>
-                                  
-
-后置图标文字链接
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _withSuffixIcon(BuildContext context) {
-    return Container(
-        height: 48,
-        color: TTheme.of(context).bgColorContainer,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _buildLinksWithType(TLinkType.withSuffixIcon),
-        ));
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 组件状态
-
-不同主题
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildLinkStats(BuildContext context) {
-    return _buildLinkWithStyles(TLinkState.normal);
-  }</pre>
-
-</td-code-block>
-                                  
-
-禁用状态
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildDisabledLinkStats(BuildContext context) {
-    return _buildLinkWithStyles(TLinkState.disabled);
-  }</pre>
-
-</td-code-block>
-                                  
-### 1 组件样式
-
-链接尺寸
-            
-<td-code-block panel="Dart">
-
-  <pre slot="Dart" lang="javascript">
-  Widget _buildLinkSizes(BuildContext context) {
-    return Container(
-        height: 48,
-        color: TTheme.of(context).bgColorContainer,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildLinkWithSizeAndStyle(TLinkStyle.primary, TLinkSize.small),
-            _buildLinkWithSizeAndStyle(TLinkStyle.primary, TLinkSize.medium),
-            _buildLinkWithSizeAndStyle(TLinkStyle.primary, TLinkSize.large),
-          ],
-        ));
-  }</pre>
-
-</td-code-block>
-                                  
-
+{{ flutter-example-group link }}
 
 ## API
 ### TLink

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_swiper_page.dart';
+import 'package:tdesign_flutter_example/page/swiper/swiper_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
 import '../demo_page_test_utils.dart';
@@ -41,7 +41,7 @@ void main() {
     );
   }
 
-  testWidgets('公开 Demo 使用六个目标条目、同源图片和准确初始配置', (tester) async {
+  testWidgets('公开 Demo 使用设计稿分组、同源图片和准确初始配置', (tester) async {
     await tester.pumpWidget(buildPage());
     await tester.pump();
     await tester.pump();
@@ -52,7 +52,8 @@ void main() {
       swiperWhere(
         (candidate) =>
             candidate.pagination == TSwiperPaginationVariant.dots &&
-            !candidate.autoplay,
+            !candidate.autoplay &&
+            candidate.paginationPlacement == null,
       ),
     );
     expect(swiper.children, hasLength(6));
@@ -108,7 +109,10 @@ void main() {
 
     await scrollTo(tester, find.text('卡片式（cards）'));
     await scrollTo(tester, find.text('02 组件样式'));
-    expect(find.text('垂直模式'), findsOneWidget);
+    expect(find.text('指示器位置'), findsOneWidget);
+    await scrollTo(tester, find.text('03 组件动效'));
+    expect(find.text('03 组件动效'), findsOneWidget);
+    expect(find.text('调整动效参数'), findsOneWidget);
     expect(find.text('外置分页'), findsNothing);
     expect(find.text('自定义标记'), findsNothing);
     expect(find.text('外部控制'), findsNothing);
@@ -121,7 +125,8 @@ void main() {
     final dots = swiperWhere(
       (candidate) =>
           candidate.pagination == TSwiperPaginationVariant.dots &&
-          !candidate.autoplay,
+          !candidate.autoplay &&
+          candidate.paginationPlacement == null,
     );
     await tester.fling(
       find.descendant(of: dots, matching: find.byType(PageView)),
@@ -160,44 +165,74 @@ void main() {
     expect(pageView.controller?.page, 1);
   });
 
-  testWidgets('卡片双模式和垂直参数面板使用受控交互', (tester) async {
+  testWidgets('卡片三模式、指示器位置和动效参数使用受控交互', (tester) async {
     await tester.pumpWidget(buildPage());
     await tester.pump();
 
     await scrollTo(tester, find.text('卡片式（cards）'));
     final cardSwipers = tester
         .widgetList<TSwiper>(find.byType(TSwiper))
-        .where((swiper) => swiper.viewportFraction == 0.82);
-    expect(cardSwipers, hasLength(2));
+        .where((swiper) => (swiper.viewportFraction - 295 / 375).abs() < 0.001);
+    expect(cardSwipers, hasLength(3));
+    expect(cardSwipers.every((swiper) => swiper.children?.length == 6), isTrue);
     expect(
       cardSwipers.map((swiper) => swiper.pageEffect),
-      containsAll([TSwiperPageEffect.cardMargin, TSwiperPageEffect.scale]),
+      containsAll([
+        TSwiperPageEffect.cardMargin,
+        TSwiperPageEffect.scale,
+        TSwiperPageEffect.scaleAndFade,
+      ]),
+    );
+
+    await scrollTo(tester, find.text('指示器位置'));
+    final placementSwipers = tester
+        .widgetList<TSwiper>(find.byType(TSwiper))
+        .where((swiper) => swiper.paginationPlacement != null)
+        .toList();
+    expect(placementSwipers, hasLength(3));
+    expect(
+      placementSwipers.map((swiper) => swiper.paginationPlacement),
+      orderedEquals([
+        TSwiperPaginationPlacement.overlay,
+        TSwiperPaginationPlacement.overlay,
+        TSwiperPaginationPlacement.outside,
+      ]),
     );
 
     await scrollTo(tester, find.text('自动播放间隔时间（单位毫秒）'));
-    var vertical = tester.widget<TSwiper>(
-      swiperWhere((candidate) => candidate.scrollDirection == Axis.vertical),
+    var motion = tester.widget<TSwiper>(
+      swiperWhere(
+        (candidate) =>
+            candidate.autoplay &&
+            candidate.pagination == TSwiperPaginationVariant.dots,
+      ),
     );
-    expect(vertical.autoplay, isTrue);
-    expect(vertical.autoplayInterval, const Duration(seconds: 5));
-    expect(vertical.animationDuration, const Duration(milliseconds: 500));
+    expect(motion.autoplay, isTrue);
+    expect(motion.autoplayInterval, const Duration(seconds: 4));
+    expect(motion.animationDuration, const Duration(milliseconds: 500));
 
     await tester.tap(find.byType(TSwitch));
     await tester.pump();
-    vertical = tester.widget<TSwiper>(
-      swiperWhere((candidate) => candidate.scrollDirection == Axis.vertical),
+    motion = tester.widget<TSwiper>(
+      swiperWhere(
+        (candidate) =>
+            !candidate.autoplay &&
+            candidate.animationDuration == const Duration(milliseconds: 500),
+      ).last,
     );
-    expect(vertical.autoplay, isFalse);
+    expect(motion.autoplay, isFalse);
     expect(find.text('关'), findsOneWidget);
 
     final sliders = tester.widgetList<TSlider>(find.byType(TSlider)).toList();
     sliders.first.onChanged!(1000);
     sliders.last.onChanged!(1200);
     await tester.pump();
-    vertical = tester.widget<TSwiper>(
-      swiperWhere((candidate) => candidate.scrollDirection == Axis.vertical),
+    motion = tester.widget<TSwiper>(
+      swiperWhere(
+        (candidate) => candidate.autoplayInterval == const Duration(seconds: 1),
+      ),
     );
-    expect(vertical.autoplayInterval, const Duration(seconds: 1));
-    expect(vertical.animationDuration, const Duration(milliseconds: 1200));
+    expect(motion.autoplayInterval, const Duration(seconds: 1));
+    expect(motion.animationDuration, const Duration(milliseconds: 1200));
   });
 }

@@ -264,6 +264,12 @@ void main() {
     expect(rootStyle?.color, token.brandNormalColor);
     expect(rootStyle?.fontSize, token.fontBodyLarge?.size ?? 16);
     expect(rootStyle?.fontWeight, FontWeight.w600);
+    final rootIndicator = tester.widget<SizedBox>(
+      find.byKey(const ValueKey('tree-select-root-indicator')),
+    );
+    expect(rootIndicator.width, 3);
+    expect(rootIndicator.height, 16);
+    expect((rootIndicator.child! as ColoredBox).color, token.brandNormalColor);
     final leafStyle = tester.widget<Text>(find.text('Apple')).style;
     expect(leafStyle?.color, token.textColorPrimary);
     expect(leafStyle?.fontSize, token.fontBodyLarge?.size ?? 16);
@@ -287,6 +293,35 @@ void main() {
       ),
       findsOneWidget,
     );
+  });
+
+  testWidgets('root indicator follows the directional leading edge',
+      (tester) async {
+    Future<double> indicatorCenter(TextDirection direction) async {
+      await tester.pumpWidget(
+        wrap(
+          Directionality(
+            textDirection: direction,
+            child: const TTreeSelect(
+              options: options,
+              value: [
+                ['fruit', 'apple'],
+              ],
+              onChanged: _ignore,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      return tester
+          .getCenter(find.byKey(const ValueKey('tree-select-root-indicator')))
+          .dx;
+    }
+
+    final ltrCenter = await indicatorCenter(TextDirection.ltr);
+    final rtlCenter = await indicatorCenter(TextDirection.rtl);
+    expect(ltrCenter, lessThan(103));
+    expect(rtlCenter, greaterThan(697));
   });
 
   testWidgets('deep tree keeps narrow intermediate columns and fills leaf',

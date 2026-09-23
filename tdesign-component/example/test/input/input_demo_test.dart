@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_input_page.dart';
+import 'package:tdesign_flutter_example/page/input/input_basic_example.dart';
+import 'package:tdesign_flutter_example/page/input/input_page.dart';
 
 import '../demo_page_test_utils.dart';
 
@@ -15,36 +16,96 @@ void main() {
   );
   registerDemoPageTests(spec);
 
-  for (final mode in [ThemeMode.light, ThemeMode.dark]) {
-    testWidgets('input entered ${mode.name} golden', (tester) async {
-      await pumpFullDemoPage(tester, spec, mode);
-      final input = find.byType(TInput).first;
-      final textField = find.descendant(
-        of: input,
-        matching: find.byType(TextField),
-      );
-      await tester.tap(textField);
-      await tester.enterText(textField, 'TDesign');
-      await tester.pump();
+  testWidgets('基础输入框自带必填标记位置主题', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        home: const Scaffold(body: InputBasicExample()),
+      ),
+    );
 
-      expect(tester.widget<TextField>(textField).controller?.text, 'TDesign');
+    final requiredItem = find.byWidgetPredicate(
+      (widget) => widget is TFormItem && widget.required == true,
+    );
+    expect(requiredItem, findsOneWidget);
+    expect(
+      Theme.of(
+        tester.element(requiredItem),
+      ).extension<TFormThemeData>()?.requiredMarkPosition,
+      TFormRequiredMarkPosition.right,
+    );
+  }, tags: 'demo');
+
+  for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('input invalid phone ${mode.name} golden', (tester) async {
+      await pumpFullDemoPage(tester, spec, mode);
+      final phoneInput = find.descendant(
+        of: find.widgetWithText(TInput, '输入手机号码'),
+        matching: find.byType(EditableText),
+      );
+      expect(phoneInput, findsOneWidget);
+      await tester.enterText(phoneInput, '123');
+      FocusManager.instance.primaryFocus?.unfocus();
+      await tester.pumpAndSettle();
+      expect(find.text('手机号输入不正确'), findsOneWidget);
       await expectLater(
         find.byKey(const ValueKey('input-demo-page')),
-        matchesGoldenFile('goldens/input_entered_${mode.name}.png'),
+        matchesGoldenFile('goldens/input_invalid_phone_${mode.name}.png'),
       );
       await disposeDemoPage(tester);
     }, tags: 'golden');
   }
 
+  testWidgets('状态与手机号示例保持设计稿初始状态', (tester) async {
+    await pumpFullDemoPage(tester, spec, ThemeMode.light);
+
+    expect(find.text('只读模式'), findsNothing);
+    expect(find.text('17600600600'), findsNothing);
+    expect(find.text('输入手机号码'), findsOneWidget);
+    final errorItem = tester.widget<TFormItem>(
+      find.byWidgetPredicate(
+        (widget) => widget is TFormItem && widget.errorText == '错误提示',
+      ),
+    );
+    expect(errorItem.verticalAlignment, TFormItemVerticalAlignment.start);
+    final errorInput = find.descendant(
+      of: find.byWidgetPredicate(
+        (widget) => widget is TFormItem && widget.errorText == '错误提示',
+      ),
+      matching: find.byType(TInput),
+    );
+    final clearIcon = find.descendant(
+      of: errorInput,
+      matching: find.byIcon(TIcons.close_circle_filled),
+    );
+    expect(
+      tester.widget<Icon>(clearIcon).color,
+      TThemeData.defaultData().errorNormalColor,
+    );
+    final label = find.descendant(
+      of: find.byWidgetPredicate(
+        (widget) => widget is TFormItem && widget.errorText == '错误提示',
+      ),
+      matching: find.text('标签文字'),
+    );
+    final inputText = find.text('已输入内容');
+    expect(
+      tester.getTopLeft(label).dy,
+      closeTo(tester.getTopLeft(inputText).dy, 0.01),
+    );
+  }, tags: 'demo');
+
   testWidgets('图形验证码左侧保留分割线', (tester) async {
     await pumpFullDemoPage(tester, spec, ThemeMode.light);
 
-    final captchaImage = find.byWidgetPredicate(
-      (widget) => widget is Image && widget.width == 72 && widget.height == 36,
-    );
-    final suffixRow = find.ancestor(
-      of: captchaImage,
-      matching: find.byType(Row),
+    final captcha = find.byKey(const ValueKey('input-captcha'));
+    final suffixRow = find.ancestor(of: captcha, matching: find.byType(Row));
+    final captchaBox = find.ancestor(
+      of: captcha,
+      matching: find.byWidgetPredicate(
+        (widget) =>
+            widget is SizedBox && widget.width == 72 && widget.height == 24,
+      ),
     );
     final divider = find.descendant(
       of: suffixRow.first,
@@ -56,14 +117,16 @@ void main() {
       ),
     );
 
-    expect(captchaImage, findsOneWidget);
+    expect(captcha, findsOneWidget);
+    expect(captchaBox, findsOneWidget);
+    expect(find.text('DwrSe'), findsOneWidget);
     expect(divider, findsOneWidget);
     expect(
       tester.widget<Container>(divider).color,
       TThemeData.defaultData().componentStrokeColor,
     );
     expect(
-      tester.getTopLeft(captchaImage).dx - tester.getTopRight(divider).dx,
+      tester.getTopLeft(captchaBox).dx - tester.getTopRight(divider).dx,
       16,
     );
   }, tags: 'demo');

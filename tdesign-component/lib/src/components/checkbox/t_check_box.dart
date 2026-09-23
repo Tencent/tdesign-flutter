@@ -129,28 +129,42 @@ class TCheckbox extends StatelessWidget {
     final tileContent = LayoutBuilder(
       builder: (context, layoutConstraints) {
         final hasBoundedWidth = layoutConstraints.hasBoundedWidth;
+        final padding = hasContent
+            ? (theme?.customSpace ??
+                  EdgeInsets.symmetric(
+                    horizontal: theme?.insetSpacing ?? context.tTheme.spacer16,
+                    vertical: cardMode
+                        ? context.tTheme.spacer16 -
+                              selectionCardBorderWidth(context)
+                        : context.tTheme.spacer8,
+                  ))
+            : EdgeInsets.zero;
+        final spacing = cardMode
+            ? 0.0
+            : theme?.spacing ?? context.tTheme.spacer8;
+        final availableContentWidth = hasBoundedWidth && indicator != null
+            ? math
+                  .max(
+                    0,
+                    layoutConstraints.maxWidth -
+                        padding.resolve(Directionality.of(context)).horizontal -
+                        _indicatorSize(context) -
+                        spacing,
+                  )
+                  .toDouble()
+            : double.infinity;
+        final alignContentToTop =
+            hasContent &&
+            _contentUsesMultipleLines(context, availableContentWidth);
         final children = <Widget>[
           if (indicator != null) indicator,
-          if (indicator != null && content != null)
-            SizedBox(
-              width: cardMode ? 0 : theme?.spacing ?? context.tTheme.spacer8,
-            ),
+          if (indicator != null && content != null) SizedBox(width: spacing),
           if (content != null)
             if (hasBoundedWidth) Expanded(child: content) else content,
         ];
         return Container(
           constraints: cardMode ? null : constraints,
-          padding: hasContent
-              ? (theme?.customSpace ??
-                    EdgeInsets.symmetric(
-                      horizontal:
-                          theme?.insetSpacing ?? context.tTheme.spacer16,
-                      vertical: cardMode
-                          ? context.tTheme.spacer16 -
-                                selectionCardBorderWidth(context)
-                          : context.tTheme.spacer8,
-                    ))
-              : EdgeInsets.zero,
+          padding: padding,
           decoration: cardMode
               ? null
               : BoxDecoration(
@@ -165,7 +179,7 @@ class TCheckbox extends StatelessWidget {
             mainAxisAlignment: hasContent
                 ? MainAxisAlignment.start
                 : MainAxisAlignment.center,
-            crossAxisAlignment: hasContent
+            crossAxisAlignment: alignContentToTop
                 ? CrossAxisAlignment.start
                 : CrossAxisAlignment.center,
             children: contentDirection == TContentDirection.right
@@ -205,19 +219,25 @@ class TCheckbox extends StatelessWidget {
             child: tile,
           ),
           if (showDivider && !cardMode)
-            Padding(
-              padding: EdgeInsetsDirectional.only(
-                start: contentDirection == TContentDirection.right && hasContent
-                    ? (theme?.insetSpacing ?? context.tTheme.spacer16) +
-                          _indicatorSize(context) +
-                          (theme?.spacing ?? context.tTheme.spacer8)
-                    : theme?.insetSpacing ?? context.tTheme.spacer16,
-              ),
-              child: Theme(
-                data: Theme.of(context).mergeExtension(
-                  const TDividerThemeData(margin: EdgeInsets.zero),
+            ColoredBox(
+              color: hasContent
+                  ? context.tTheme.bgColorContainer
+                  : Colors.transparent,
+              child: Padding(
+                padding: EdgeInsetsDirectional.only(
+                  start:
+                      contentDirection == TContentDirection.right && hasContent
+                      ? (theme?.insetSpacing ?? context.tTheme.spacer16) +
+                            _indicatorSize(context) +
+                            (theme?.spacing ?? context.tTheme.spacer8)
+                      : theme?.insetSpacing ?? context.tTheme.spacer16,
                 ),
-                child: const TDivider(),
+                child: Theme(
+                  data: Theme.of(context).mergeExtension(
+                    const TDividerThemeData(margin: EdgeInsets.zero),
+                  ),
+                  child: const TDivider(),
+                ),
               ),
             ),
         ],
@@ -289,12 +309,7 @@ class TCheckbox extends StatelessWidget {
             : selected
             ? TIcons.check_circle_filled
             : TIcons.circle,
-      TCheckboxVariant.square =>
-        indeterminate
-            ? TIcons.minus_rectangle_filled
-            : selected
-            ? TIcons.check_rectangle_filled
-            : TIcons.rectangle,
+      TCheckboxVariant.square => null,
       TCheckboxVariant.check =>
         selected || indeterminate
             ? (indeterminate ? TIcons.minus : TIcons.check)
@@ -314,6 +329,18 @@ class TCheckbox extends StatelessWidget {
               colorScheme?.outline ??
               context.tTheme.componentBorderColor);
     final indicatorSize = _indicatorSize(context);
+    if (variant == TCheckboxVariant.square) {
+      return _buildSquareIndicator(
+        context,
+        indicatorSize: indicatorSize,
+        selected: selected,
+        indeterminate: indeterminate,
+        color: color,
+        theme: theme,
+        materialTheme: materialTheme,
+        states: states,
+      );
+    }
     if (_disabled &&
         !selected &&
         !indeterminate &&
@@ -349,6 +376,82 @@ class TCheckbox extends StatelessWidget {
           ? null
           : Icon(icon, size: indicatorSize, color: color),
     );
+  }
+
+  Widget _buildSquareIndicator(
+    BuildContext context, {
+    required double indicatorSize,
+    required bool selected,
+    required bool indeterminate,
+    required Color color,
+    required TCheckboxThemeData? theme,
+    required CheckboxThemeData materialTheme,
+    required Set<WidgetState> states,
+  }) {
+    const radius = BorderRadius.all(Radius.circular(1.5));
+    final active = selected || indeterminate;
+    final fillColor = _disabled && !active
+        ? materialTheme.fillColor?.resolve(states) ??
+              context.tTheme.bgColorComponentDisabled
+        : active
+        ? color
+        : Colors.transparent;
+    final materialSide = materialTheme.side;
+    final resolvedMaterialSide = materialSide is WidgetStateBorderSide
+        ? materialSide.resolve(states)
+        : materialSide;
+    final borderColor = _disabled && !active
+        ? theme?.disableColor ??
+              resolvedMaterialSide?.color ??
+              context.tTheme.componentBorderColor
+        : active
+        ? color
+        : resolvedMaterialSide?.color ?? context.tTheme.componentBorderColor;
+    final mark = indeterminate
+        ? TIcons.minus
+        : selected
+        ? TIcons.check
+        : null;
+    return Container(
+      key: const ValueKey('checkbox-square-indicator'),
+      width: indicatorSize,
+      height: indicatorSize,
+      decoration: BoxDecoration(
+        color: fillColor,
+        border: Border.all(color: borderColor),
+        borderRadius: radius,
+      ),
+      alignment: Alignment.center,
+      child: mark == null
+          ? null
+          : Icon(
+              mark,
+              size: indicatorSize * 0.75,
+              color: context.tTheme.textColorAnti,
+            ),
+    );
+  }
+
+  bool _contentUsesMultipleLines(BuildContext context, double maxWidth) {
+    if (title != null && subTitle != null) {
+      return true;
+    }
+    final text = title ?? subTitle;
+    if (text == null || text.isEmpty) {
+      return false;
+    }
+    final style = title != null
+        ? _resolveTitleStyle(context)
+        : _resolveSubTitleStyle(context);
+    final painter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+      maxLines: title != null ? titleMaxLines : subTitleMaxLines,
+    )..layout(maxWidth: maxWidth);
+    final multipleLines = painter.computeLineMetrics().length > 1;
+    painter.dispose();
+    return multipleLines;
   }
 
   TextStyle _resolveTitleStyle(BuildContext context) {

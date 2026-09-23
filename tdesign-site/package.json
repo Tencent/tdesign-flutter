@@ -4,9 +4,11 @@
   "packageManager": "pnpm@11.20.0",
   "scripts": {
     "copy:readme": "node script/copy-readme.js",
-    "site": "cd site && vite build",
+    "test:example-code": "node --test site/flutter-example-docs/*.test.mjs && node site/flutter-example-docs/check-docs.mjs",
+    "site": "pnpm test:example-code && cd site && vite build",
     "presite:dev": "npm run copy:readme",
-    "dev": "cd site && vite",
+    "dev": "node script/dev.mjs",
+    "dev:site": "cd site && vite",
     "changelog": "node script/generate-changelog.js"
   },
   "author": "tdesign",

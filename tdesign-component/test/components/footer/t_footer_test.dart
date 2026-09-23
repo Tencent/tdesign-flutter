@@ -3,12 +3,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  Widget app(Widget child, {TFooterThemeData? theme}) => MaterialApp(
-    theme: ThemeData(
-      extensions: [TThemeData.defaultData(), if (theme != null) theme],
-    ),
-    home: Scaffold(body: child),
-  );
+  Widget app(Widget child, {TFooterThemeData? theme, TThemeData? token}) =>
+      MaterialApp(
+        theme: ThemeData(
+          extensions: [
+            token ?? TThemeData.defaultData(),
+            if (theme != null) theme,
+          ],
+        ),
+        home: Scaffold(body: child),
+      );
 
   testWidgets('text-only footer renders the copyright', (tester) async {
     await tester.pumpWidget(app(const TFooter(text: '版权所有')));
@@ -45,6 +49,26 @@ void main() {
       ),
       findsOneWidget,
     );
+    final divider = tester.widget<ColoredBox>(
+      find.descendant(
+        of: find.byType(TFooter),
+        matching: find.byType(ColoredBox),
+      ),
+    );
+    expect(divider.color, TThemeData.defaultData().componentStrokeColor);
+
+    final linkPaddings = tester
+        .widgetList<Padding>(
+          find.ancestor(
+            of: find.byType(IntrinsicWidth),
+            matching: find.byType(Padding),
+          ),
+        )
+        .where(
+          (padding) =>
+              padding.padding == const EdgeInsets.symmetric(horizontal: 12),
+        );
+    expect(linkPaddings, hasLength(2));
   });
 
   testWidgets('link content keeps its intrinsic width in the footer', (
@@ -53,9 +77,7 @@ void main() {
     await tester.pumpWidget(
       app(
         TFooter(
-          links: [
-            TLink(child: const Text('底部链接'), onPressed: () {}),
-          ],
+          links: [TLink(child: const Text('底部链接'), onPressed: () {})],
           text: '版权信息',
         ),
       ),
@@ -70,7 +92,9 @@ void main() {
     );
   });
 
-  testWidgets('logo takes precedence over links and text', (tester) async {
+  testWidgets('logo takes precedence over links and composes with text', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       app(
         const TFooter(
@@ -82,7 +106,55 @@ void main() {
     );
     expect(find.byKey(const ValueKey('logo')), findsOneWidget);
     expect(find.text('链接'), findsNothing);
-    expect(find.text('版权'), findsNothing);
+    expect(find.text('版权'), findsOneWidget);
+    expect(
+      tester.getTopLeft(find.text('版权')).dy,
+      lessThan(tester.getTopLeft(find.byKey(const ValueKey('logo'))).dy),
+    );
+  });
+
+  testWidgets('link spacing and brand gap follow spacing tokens', (
+    tester,
+  ) async {
+    final token = TThemeData.defaultData().copyWithTThemeData(
+      'footer-spacing',
+      marginMap: {'spacer8': 10, 'spacer12': 18},
+    );
+    await tester.pumpWidget(
+      app(
+        const TFooter(
+          logo: SizedBox(key: ValueKey('logo'), width: 32, height: 32),
+          text: '品牌',
+        ),
+        token: token,
+      ),
+    );
+
+    expect(
+      find.descendant(
+        of: find.byType(TFooter),
+        matching: find.byWidgetPredicate(
+          (widget) => widget is SizedBox && widget.height == 10,
+        ),
+      ),
+      findsOneWidget,
+    );
+
+    await tester.pumpWidget(
+      app(const TFooter(links: [Text('链接一'), Text('链接二')]), token: token),
+    );
+    final paddings = tester
+        .widgetList<Padding>(
+          find.ancestor(
+            of: find.byType(IntrinsicWidth),
+            matching: find.byType(Padding),
+          ),
+        )
+        .where(
+          (padding) =>
+              padding.padding == const EdgeInsets.symmetric(horizontal: 18),
+        );
+    expect(paddings, hasLength(2));
   });
 
   testWidgets('long text remains one line and ellipsizes', (tester) async {

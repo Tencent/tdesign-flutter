@@ -327,6 +327,37 @@ void main() {
       await tester.pumpAndSettle();
     });
 
+    testWidgets('showGridSections 展示两个独立滚动分组并回传选中项', (tester) async {
+      final context = await pumpHost(tester);
+      TActionSheetItem<String>? selected;
+      final handle = TActionSheet.showGridSections(
+        context,
+        cancelText: 'Cancel',
+        sections: const [
+          TActionSheetGridSection(
+            title: 'Forward To',
+            items: [TActionSheetItem(value: 'allen', label: 'Allen')],
+          ),
+          TActionSheetGridSection(
+            title: 'Share',
+            items: [TActionSheetItem(value: 'wechat', label: 'WeChat')],
+          ),
+        ],
+        onSelected: (item) => selected = item,
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(TActionSheetSectionGrid<String>), findsOneWidget);
+      expect(
+        tester.getSize(find.byType(TActionSheetSectionGrid<String>)).height,
+        340,
+      );
+      await tester.tap(find.text('WeChat'));
+      await tester.pumpAndSettle();
+      expect(selected?.value, 'wechat');
+      expect(handle.isShowing, isFalse);
+    });
+
     testWidgets('showGrid 在小视口内收缩并允许纵向滚动', (tester) async {
       tester.view.physicalSize = const Size(375, 220);
       tester.view.devicePixelRatio = 1;

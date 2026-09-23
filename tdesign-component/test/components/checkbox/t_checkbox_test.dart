@@ -210,9 +210,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: TThemeBuilder.light(token),
-          home: const Scaffold(
-            body: TCheckbox(value: false, title: '自定义禁用未选'),
-          ),
+          home: const Scaffold(body: TCheckbox(value: false, title: '自定义禁用未选')),
         ),
       );
 
@@ -234,9 +232,7 @@ void main() {
       await tester.pumpWidget(
         wrap(
           const TCheckbox(value: false, title: '组件主题禁用未选'),
-          checkboxTheme: const TCheckboxThemeData(
-            disableColor: Colors.purple,
-          ),
+          checkboxTheme: const TCheckboxThemeData(disableColor: Colors.purple),
         ),
       );
 
@@ -258,9 +254,8 @@ void main() {
       final theme = TThemeBuilder.light(TThemeData.defaultData()).copyWith(
         checkboxTheme: CheckboxThemeData(
           fillColor: WidgetStateProperty.resolveWith(
-            (states) => states.contains(WidgetState.disabled)
-                ? Colors.orange
-                : null,
+            (states) =>
+                states.contains(WidgetState.disabled) ? Colors.orange : null,
           ),
           side: WidgetStateBorderSide.resolveWith(
             (states) => states.contains(WidgetState.disabled)
@@ -303,6 +298,24 @@ void main() {
 
       expect(tester.getTopLeft(indicator).dy, tester.getTopLeft(title).dy);
       expect(tester.getTopLeft(divider).dx, tester.getTopLeft(title).dx);
+      final dividerBackground = tester.widget<ColoredBox>(
+        find.ancestor(of: divider, matching: find.byType(ColoredBox)).first,
+      );
+      expect(
+        dividerBackground.color,
+        TThemeData.defaultData().bgColorContainer,
+      );
+    });
+
+    testWidgets('单行文案与指示器在行内容中垂直居中', (tester) async {
+      await tester.pumpWidget(
+        wrap(TCheckbox(value: false, title: '单行标题', onChanged: (_) {})),
+      );
+
+      final indicator = find.byIcon(TIcons.circle);
+      final title = find.text('单行标题');
+
+      expect(tester.getCenter(indicator).dy, tester.getCenter(title).dy);
     });
 
     testWidgets('卡片文案在边框内垂直居中并保留上下 16 间距', (tester) async {
@@ -466,8 +479,40 @@ void main() {
         ),
       );
 
-      expect(find.byIcon(TIcons.check_rectangle_filled), findsOneWidget);
+      final indicator = tester.widget<Container>(
+        find.byKey(const ValueKey('checkbox-square-indicator')),
+      );
+      final decoration = indicator.decoration! as BoxDecoration;
+      expect(
+        decoration.borderRadius,
+        const BorderRadius.all(Radius.circular(1.5)),
+      );
+      expect(find.byIcon(TIcons.check), findsOneWidget);
       expect(find.byType(TDivider), findsNothing);
+    });
+
+    testWidgets('禁用未选方形指示器使用禁用填充和描边 token', (tester) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrap(
+          const TCheckbox(value: false, title: '禁用方形'),
+          checkboxTheme: const TCheckboxThemeData(
+            variant: TCheckboxVariant.square,
+          ),
+        ),
+      );
+
+      final indicator = tester.widget<Container>(
+        find.byKey(const ValueKey('checkbox-square-indicator')),
+      );
+      final decoration = indicator.decoration! as BoxDecoration;
+      final border = decoration.border! as Border;
+      expect(decoration.color, token.bgColorComponentDisabled);
+      expect(border.top.color, token.componentBorderColor);
+      expect(
+        decoration.borderRadius,
+        const BorderRadius.all(Radius.circular(1.5)),
+      );
     });
 
     testWidgets('三种尺寸的文案行高且左右内容方向可构建', (tester) async {

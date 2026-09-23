@@ -361,10 +361,7 @@ class _DropdownOptionRow extends StatelessWidget {
                     context.tTheme.textDisabledColor,
               )
         : selected
-        ? theme.selectedOptionTextStyle ??
-              base.copyWith(
-                color: colorScheme?.primary ?? context.tTheme.brandNormalColor,
-              )
+        ? theme.selectedOptionTextStyle ?? base
         : base;
     return Semantics(
       selected: selected,

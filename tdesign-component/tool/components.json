@@ -392,6 +392,7 @@
         "names": [
           "TSlider",
           "TRangeSlider",
+          "TSliderVariant",
           "TSliderThemeData"
         ],
         "getComments": false
@@ -495,6 +496,7 @@
       "api": {
         "names": [
           "TBadge",
+          "TBadgeConfig",
           "TBadgeThemeData"
         ],
         "getComments": true
@@ -715,6 +717,7 @@
           "TActionSheetAlign",
           "TActionSheetGridLayout",
           "TActionSheetGridMode",
+          "TActionSheetGridSection",
           "TActionSheetOnSelected"
         ],
         "getComments": true

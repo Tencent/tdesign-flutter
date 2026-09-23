@@ -12,6 +12,10 @@
 - 删除把 Figma 整栏方向误建模为图文排列的 `layout`；普通图文项恢复固定纵向内容结构。
 - 水波纹与非水波纹路径各只保留一个点击识别器，并收敛回调文档与次数测试。
 - 不为单个组件扩展公共 `ExamplePage` 导航标题 API；页面壳差异不进入组件契约。
+- 将纯文本徽标的标准位置从 Demo 固定 offset 收回 TabBar 内部；实例 offset、
+  局部 BadgeTheme 和全局 BadgeTheme 仍按原优先级覆盖，图标与图文不改变默认锚点。
+- 将图文项的徽标 child 从整列 `图标 + 文字` 收敛为图标本身，保持 TBadge 默认
+  右上角语义，避免文字宽度改变 Badge 的水平位置。
 
 ## 技术方案
 
@@ -36,6 +40,8 @@
 - breaking：删除重复封装显隐和定位的 `TTabBarBadgeConfig`；
   `TTabBarItemConfig.badge` 直接接收可空 `TBadge`，`null` 表示不显示，偏移使用
   `TBadge.offset`。
+- breaking：纯文本项在没有实例或 BadgeTheme offset 时改用 TabBar 标准徽标位置；
+  已显式配置 offset 的调用不受影响。
 - `TTabBarItemConfig` 支持 const；逐项 `onTap` 改为可选。
 - breaking：Theme 移除行为/结构字段，由实例参数拥有。
 
@@ -46,6 +52,8 @@
 - 当前包仍处于 alpha；选择一次性收敛冲突状态源，不保留会继续误导的新旧双 API。
 - 小程序作为公开效果和操作参考；Flutter 保留 Widget、回调和受控状态惯例。
 - 固定几何仅用于 TabBar 专有结构；颜色、字体、圆角与阴影优先使用 TDesign Token。
+- 纯文本徽标位置属于 TabBar 专有组合几何，不修改 `TBadge` 的全局默认位置，避免
+  影响 Tabs、SideBar、Avatar 等其他消费者。
 
 ## 验证策略
 

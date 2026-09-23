@@ -51,8 +51,13 @@
 - `itemStyle == label` 时选中项显示品牌浅色背景；`normal` 只改变前景色。
 - `style == capsule` 时标签栏具有 16px 外边距、圆角与顶部阴影，不显示顶部边线。
 - `split` 仅在 Normal 选项样式中绘制分隔线。
-- 单项徽标由可空的 `TBadge` 唯一表达；`null` 表示不显示，内容、形态和逐项偏移
-  均由 `TBadge` 自身配置。TabBar 不再保存重复的显隐开关或定位字段。
+- 单项徽标由可空的 `TBadgeConfig` 唯一表达；`null` 表示不显示，内容、形态和
+  可选逐项偏移均由配置提供。TabBar 不再保存重复的显隐开关或定位字段。
+- TabBar 负责选择徽标的语义锚点和标准位置：纯文本项在调用方未显式提供
+  `TBadgeConfig.offset`、局部 `BadgeTheme.offset` 或全局 `BadgeThemeData.offset` 时，
+  使用 TabBar 的文本徽标内置位置；纯图标项以图标作为内部徽标锚点；图文项也只
+  以图标作为徽标锚点，文字不参与锚点宽度计算。两种图标场景均使用 `TBadge` 的
+  默认右上角位置。公开默认 Demo 不传固定 offset，显式 offset 仅用于逐项自定义。
 - 颜色和字体默认值来自 `TThemeData`；实例参数优先于 `TTabBarThemeData`，
   Theme 优先于全局 Token。
 - Theme 动画中 nullable 尺寸按运行时内置默认值插值；nullable 颜色与边线保持
@@ -81,3 +86,5 @@
 - [x] 九个公开 TabBar 实例的点击后选中状态由单张明暗 postAction Golden 覆盖。
 - [x] 纯文本点击 Toast、双层菜单展开及菜单选择 Toast 均有独立明暗 Golden，
   不以等待反馈消失后的整页截图替代。
+- [x] 纯文本、纯图标与图文三种 Badge 均按各自 Figma 锚点完成修复前后截图复核；
+  图文 Badge 必须锚定图标，不能受下方文字宽度影响。

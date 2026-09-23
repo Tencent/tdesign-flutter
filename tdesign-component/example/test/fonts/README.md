@@ -5,7 +5,7 @@
 缺少 CJK fallback 而把中文渲染成缺字符号。字符清单见
 `component_demo_glyphs.txt`；上游为 Noto Sans SC 2.004，子集工具为
 HarfBuzz 11.4.5，子集 SHA-256 为
-`de3fede62f0ed5ed7cd0457860777af7cafb826f03c90b483ff598734b3e15dc`。
+`cec52eafc35cd8e1c7096678be98d0c6b70cded681ad7019a58431ccb0dc667e`。
 它不会打包进 Example 或组件产物。
 
 共享 Demo Golden 工具统一加载 Roboto、Material Icons、Cupertino Icons、
@@ -31,11 +31,11 @@ NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 新增文案的补充 fallback。它排在原字体之后，避免扩充原字体改变 Button、Checkbox、
 Upload 等既有 Golden 的字形选择与像素基线。
 
-`TableGoldenCJK-Regular.otf` 仅补充 Table 整页 Golden 的公开说明、场景标题与
-单元格文案，字符清单见 `table_demo_glyphs.txt`。它作为 Table Demo 最后的专用
-fallback，不改变其他页面既有字形选择；使用 Noto Sans SC 2.004 与
-fonttools 4.59.1 生成，子集 SHA-256 为
-`f496cbf68c3d2d6a365a90f555bc7944609e2a3b9bf559b111149b47e4d4ee7d`。
+`DemoReviewGoldenCJK-Regular.otf` 仅补充 Footer 和 Tag 整页 Golden 的
+“圆、弧、底、脚”字，字符清单见 `demo_review_glyphs.txt`。它作为这两个 Demo 的
+最后独立 fallback，不改变其他页面的既有像素基线。它使用本文记录的
+Noto Sans SC 2.004 与 HarfBuzz 11.4.5 生成，子集 SHA-256 为
+`09ceb5b1f9ac5e5451b6cd0e6b46945aee4e035c0eab17554c4772713e8a6ed0`。
 
 `TreeSelectGoldenCJK-Regular.otf` 仅补充 TreeSelect 整页 Golden 新增且既有子集
 未覆盖的字形，字符清单见 `tree_select_demo_glyphs.txt`，不会改变既有组件基线。
@@ -104,6 +104,12 @@ SHA-256 为 `59c5bebba9bf720005fb977a94b9c150b0b8e8c2698c1dca3a66d9f0d7cd9722`�
 或既有共享字体的像素基线，子集 SHA-256 为
 `f7a30185d3942c4cb698afb1e74002cc16eaddfcf70ae1ec0774f16e61f9392f`。
 
+`BadgeGoldenCJK-Regular.otf` 仅补充 Badge 整页 Golden 所需字形，字符清单见
+`badge_demo_glyphs.txt`。它作为 Badge Demo 最后的专用 fallback，不改变其他页面
+或既有共享字体的像素基线；上游使用本文记录的 Noto Sans SC 2.004，子集工具为
+HarfBuzz 11.4.5，子集 SHA-256 为
+`0c7933246c76faff195e871bde8f83fb04e488d867efde542fa111bbaff7d88e`。
+
 `TabBarGoldenCJK-Regular.otf` 仅用于 TabBar 整页明暗 Golden，字符清单见
 `tab_bar_demo_glyphs.txt`。它在 Android 真机热重启、逐项操作及 Figma 人工核对
 完成后才生成，不改变其他页面的字体回退和既有快照。
@@ -128,12 +134,12 @@ HarfBuzz 11.4.5，子集 SHA-256 为
 `CascaderGoldenCJK-Regular.otf` 仅补充 Cascader 整页 Golden 新增且既有子集
 未覆盖的字形，字符清单见 `cascader_demo_glyphs.txt`。独立加载可避免扩充共享
 字体改变既有组件的像素基线，子集 SHA-256 为
-`8bdb3ff2e9b33a303bce6b1d6d00ab951f7a27cb34b9626fd60805cff1ca8efa`。
+`8bbb7b7109383e63954943d26ba653540b8037147b5258a19482589b0dd01ee6`。
 
 `IndexesGoldenCJK-Regular.otf` 仅补充 Indexes 城市列表和公开 Demo 文案，字符清单见
 `indexes_demo_glyphs.txt`。它使用相同上游与子集参数，并设置独立 family，避免改变
 其他组件现有 Golden 的字体回退结果。子集 SHA-256 为
-`79e8744ec10861ff4a4685ea5915b779c400e3c8c42c8c91c00d815ab9d00d5c`。
+`cedb91f9c93622514e0a86c6f2eab924310755de88e2dcbdc88a5dd211f973c1`。
 
 `NavBarGoldenCJK-Regular.otf` 仅补充 Navbar 整页 Golden 的全部可见中文，
 字符清单见 `navbar_demo_glyphs.txt`。独立加载可避免扩大共享字体并改变其他组件
@@ -167,5 +173,28 @@ HarfBuzz 11.4.5，子集 SHA-256 为
 完整。各专用字符清单仅在对应专用 fallback 仍需新增字形时同步更新。
 Skeleton 默认占位色等共享视觉契约变化时，同时复验并按需更新使用 Skeleton 的
 PullDownRefresh Demo 明暗基线。
+更新 Loading、Message、Popover 或 Popup 页面文案时，更新补充字符清单；更新
+ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedback 字符清单。
+更新 TreeSelect 页面文案时，更新 TreeSelect 字符清单。
+更新 Stepper 页面文案时，更新 Stepper 字符清单。
+更新 Slider 页面文案时，更新 Slider 字符清单。
+更新 Picker 页面文案时，更新 Picker 字符清单。
+更新 Calendar 页面文案时，更新 Calendar 字符清单。
+更新 Steps 页面文案时，更新 Steps 字符清单。
+更新 SideBar 页面文案时，更新 SideBar 字符清单。
+更新 TabBar 页面文案时，更新 TabBar 字符清单。
+更新 Cascader 页面文案时，更新 Cascader 字符清单。
+更新 Indexes 页面或城市数据时，更新 Indexes 字符清单。
+更新 BackTop 页面文案时，更新 BackTop 字符清单。
+更新 Drawer 页面文案时，更新 Drawer 字符清单。
+更新 Skeleton 页面文案时，更新 Skeleton 字符清单。
+更新 Progress 页面文案时，更新 Progress 字符清单。
+更新 Swiper 页面文案时，更新 Swiper 字符清单。
+更新 Avatar 页面文案时，更新 Avatar 字符清单。
+更新 Badge 页面文案时，更新 Badge 字符清单。
+更新 Navbar 页面文案时，更新 Navbar 字符清单。
+更新 Image 页面文案时，更新 Image 字符清单。
+更新 Rate 页面文案时，更新 Rate 字符清单。
+更新 Table 页面文案时，更新 Table 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。

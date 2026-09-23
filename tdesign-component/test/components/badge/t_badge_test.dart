@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/components/badge/t_badge_fallback.dart';
+import 'package:tdesign_flutter/src/components/badge/t_badge_internal.dart';
+import 'package:tdesign_flutter/src/components/badge/t_badge_resolved_style.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
@@ -30,6 +33,125 @@ void main() {
 
   Badge badgeOf(WidgetTester tester) =>
       tester.widget<Badge>(find.byType(Badge));
+
+  group('配置适配', () {
+    test('预设配置与完全自定义配置互斥', () {
+      const preset = TBadgeConfig(label: '8');
+      const custom = TBadgeConfig.custom(
+        badge: SizedBox.square(dimension: 12),
+        alignment: AlignmentDirectional.bottomEnd,
+        offset: Offset(2, 3),
+      );
+
+      expect(preset.variant, TBadgeVariant.circle);
+      expect(preset.badge, isNull);
+      expect(preset.isCustom, isFalse);
+      expect(custom.label, isNull);
+      expect(custom.badge, isNotNull);
+      expect(custom.isCustom, isTrue);
+      expect(custom.alignment, AlignmentDirectional.bottomEnd);
+      expect(custom.offset, const Offset(2, 3));
+    });
+
+    testWidgets('内部预设适配器透传配置、点击与组合组件默认定位', (tester) async {
+      var taps = 0;
+      await tester.pumpWidget(
+        app(
+          TBadgeFromConfig(
+            config: const TBadgeConfig(
+              label: '8',
+              size: TBadgeSize.large,
+              border: true,
+              showZero: false,
+            ),
+            fallbackAlignment: AlignmentDirectional.bottomEnd,
+            fallbackOffset: const Offset(2, 3),
+            onTap: () => taps++,
+            child: const Text('消息'),
+          ),
+        ),
+      );
+
+      final badge = tester.widget<TBadge>(find.byType(TBadge));
+      expect(badge.label, '8');
+      expect(badge.size, TBadgeSize.large);
+      expect(badge.border, isTrue);
+      expect(badge.showZero, isFalse);
+      expect(badgeOf(tester).alignment, AlignmentDirectional.bottomEnd);
+      expect(badgeOf(tester).offset, const Offset(2, 3));
+
+      await tester.tap(find.byType(TBadge));
+      expect(taps, 1);
+    });
+
+    testWidgets('内部自定义适配器只替换徽标本体并保留锚点', (tester) async {
+      const anchorKey = Key('adapter-anchor');
+      const badgeKey = Key('adapter-custom-badge');
+      await tester.pumpWidget(
+        app(
+          const TBadgeFromConfig(
+            config: TBadgeConfig.custom(
+              badge: SizedBox.square(key: badgeKey, dimension: 10),
+              alignment: AlignmentDirectional.bottomStart,
+              offset: Offset(-2, 4),
+            ),
+            child: SizedBox.square(key: anchorKey, dimension: 40),
+          ),
+        ),
+      );
+
+      final badge = tester.widget<TBadge>(find.byType(TBadge));
+      expect(badge.badge, isNotNull);
+      expect(badge.child, isNotNull);
+      expect(
+        tester.getCenter(find.byKey(badgeKey)),
+        tester.getBottomLeft(find.byKey(anchorKey)) + const Offset(-2, 4),
+      );
+    });
+
+    test('组合组件默认定位仅在值变化时通知依赖者', () {
+      const oldFallback = TBadgeFallback(
+        alignment: AlignmentDirectional.topStart,
+        offset: Offset(1, 2),
+        child: SizedBox(),
+      );
+      const sameFallback = TBadgeFallback(
+        alignment: AlignmentDirectional.topStart,
+        offset: Offset(1, 2),
+        child: SizedBox(),
+      );
+      const changedFallback = TBadgeFallback(
+        alignment: AlignmentDirectional.bottomEnd,
+        offset: Offset(3, 4),
+        child: SizedBox(),
+      );
+
+      expect(sameFallback.updateShouldNotify(oldFallback), isFalse);
+      expect(changedFallback.updateShouldNotify(oldFallback), isTrue);
+    });
+
+    testWidgets('共享样式解析器按真实文字宽度计算徽标尺寸', (tester) async {
+      late Size shortLabelSize;
+      late Size longLabelSize;
+      await tester.pumpWidget(
+        app(
+          Builder(
+            builder: (context) {
+              final style = TBadgeResolvedStyle.resolve(context, large: false);
+              shortLabelSize = style.measureLabel(context, '8');
+              longLabelSize = style.measureLabel(context, '999+');
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+
+      expect(shortLabelSize.height, 16);
+      expect(shortLabelSize.width, greaterThanOrEqualTo(16));
+      expect(longLabelSize.height, 16);
+      expect(longLabelSize.width, greaterThan(shortLabelSize.width));
+    });
+  });
 
   group('数量与可见性', () {
     testWidgets('显示普通数量并保留 child', (tester) async {
@@ -183,12 +305,17 @@ void main() {
       }
     });
 
-    testWidgets('无 child 时 normal 是独立徽标', (tester) async {
+    testWidgets('无 child 时 circle 是 16px 独立圆形徽标', (tester) async {
       await tester.pumpWidget(app(const TBadge(label: '8')));
 
       final size = tester.getSize(find.byType(Badge));
-      expect(size.height, 16);
-      expect(size.width, greaterThanOrEqualTo(16));
+      expect(size, const Size.square(16));
+    });
+
+    testWidgets('组合字符按单个可见字符使用圆形徽标', (tester) async {
+      await tester.pumpWidget(app(const TBadge(label: 'e\u0301')));
+
+      expect(tester.getSize(find.byType(Badge)), const Size.square(16));
     });
 
     testWidgets('无 child 时 dot 使用圆点尺寸而非占位尺寸', (tester) async {
@@ -229,7 +356,7 @@ void main() {
       expect(label.style?.height, token.fontMarkSmall?.height);
       expect(
         badgeOf(tester).padding,
-        const EdgeInsets.symmetric(horizontal: 5),
+        const EdgeInsets.symmetric(horizontal: 6),
       );
     });
 
@@ -267,44 +394,53 @@ void main() {
       expect(badgeCenter, childTopRight);
     });
 
-    testWidgets('自定义徽标无需 offset 即使用设计稿默认锚点', (tester) async {
+    testWidgets('完全自定义徽标默认以中心锚定 child 右上角', (tester) async {
       const childKey = Key('custom-badge-child');
+      const badgeKey = Key('custom-badge');
       await tester.pumpWidget(
         app(
-          const TBadge(
-            label: 'NEW',
-            variant: TBadgeVariant.custom,
+          const TBadge.custom(
+            badge: SizedBox.square(key: badgeKey, dimension: 12),
             child: SizedBox.square(key: childKey, dimension: 48),
           ),
         ),
       );
 
-      final badgeContainer = find.descendant(
-        of: find.byType(Badge),
-        matching: find.byType(Container),
+      expect(
+        tester.getCenter(find.byKey(badgeKey)),
+        tester.getTopRight(find.byKey(childKey)),
       );
-      final badgeRect = tester.getRect(badgeContainer);
-      final childRect = tester.getRect(find.byKey(childKey));
-      expect(badgeRect.left, childRect.right - 16);
-      expect(badgeRect.center.dy, childRect.top);
     });
 
-    testWidgets('自定义徽标仍允许实例 offset 覆盖默认位置', (tester) async {
+    testWidgets('多字符徽标可超出窄 child 宽度完整渲染', (tester) async {
+      await tester.pumpWidget(
+        app(const TBadge(label: '999+', child: SizedBox.square(dimension: 8))),
+      );
+
+      expect(tester.getSize(find.text('999+')).width, greaterThan(8));
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('完全自定义徽标允许 offset 覆盖默认位置', (tester) async {
+      const childKey = Key('offset-child');
+      const badgeKey = Key('offset-badge');
       await tester.pumpWidget(
         app(
-          const TBadge(
-            label: 'NEW',
-            variant: TBadgeVariant.custom,
+          const TBadge.custom(
+            badge: SizedBox.square(key: badgeKey, dimension: 12),
             offset: Offset(3, 4),
-            child: SizedBox.square(dimension: 48),
+            child: SizedBox.square(key: childKey, dimension: 48),
           ),
         ),
       );
 
-      expect(badgeOf(tester).offset, const Offset(3, 4));
+      expect(
+        tester.getCenter(find.byKey(badgeKey)),
+        tester.getTopRight(find.byKey(childKey)) + const Offset(3, 4),
+      );
     });
 
-    testWidgets('square 与 bubble 使用各自结构形态', (tester) async {
+    testWidgets('square 与 bubble 使用设计圆角且不经过 Material 胶囊裁剪', (tester) async {
       await tester.pumpWidget(
         app(
           const Row(
@@ -320,8 +456,83 @@ void main() {
 
       expect(find.text('8'), findsOneWidget);
       expect(find.text('领取积分'), findsOneWidget);
-      expect(find.byType(DecoratedBox), findsWidgets);
+      expect(find.byType(Badge), findsNothing);
+      final decorations = tester
+          .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+          .map((widget) => widget.decoration)
+          .whereType<BoxDecoration>();
+      expect(
+        decorations.map((decoration) => decoration.borderRadius),
+        containsAll(<BorderRadius>[
+          BorderRadius.circular(2),
+          const BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+            bottomLeft: Radius.circular(1),
+          ),
+        ]),
+      );
       expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('square 保留设计水平内边距且单字符 border 仍为正圆', (tester) async {
+      const squareKey = Key('square-padding');
+      const circleKey = Key('border-circle');
+      await tester.pumpWidget(
+        app(
+          const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TBadge(
+                key: squareKey,
+                label: '88',
+                variant: TBadgeVariant.square,
+              ),
+              SizedBox(width: 8),
+              TBadge(key: circleKey, label: '8', border: true),
+            ],
+          ),
+        ),
+      );
+
+      expect(tester.getSize(find.byKey(squareKey)).width, greaterThan(16));
+      expect(tester.getSize(find.byKey(circleKey)), const Size.square(16));
+    });
+
+    testWidgets('square 与 bubble 在宽松父约束下仍按内容收缩', (tester) async {
+      const squareKey = Key('loose-square');
+      const bubbleKey = Key('loose-bubble');
+      await tester.pumpWidget(
+        app(
+          const SizedBox(
+            width: 200,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Align(
+                  child: TBadge(
+                    key: squareKey,
+                    label: '8',
+                    variant: TBadgeVariant.square,
+                  ),
+                ),
+                Align(
+                  child: TBadge(
+                    key: bubbleKey,
+                    label: 'NEW',
+                    variant: TBadgeVariant.bubble,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(tester.getSize(find.byKey(squareKey)), const Size.square(16));
+      expect(tester.getSize(find.byKey(bubbleKey)).height, 16);
+      expect(tester.getSize(find.byKey(bubbleKey)).width, lessThan(200));
     });
 
     testWidgets('左右 ribbon 与 triangle 贴合 child 且不溢出', (tester) async {
@@ -661,6 +872,7 @@ void main() {
       expect(badge.padding, const EdgeInsets.symmetric(horizontal: 4));
       expect(badge.textStyle?.fontSize, token.fontMarkExtraSmall?.size);
       expect(badge.textStyle?.height, token.fontMarkExtraSmall?.height);
+      expect(badge.textStyle?.letterSpacing, 0);
     });
 
     testWidgets('iOS 本地化 TextTheme 不覆盖 Badge Mark Token', (tester) async {
@@ -686,9 +898,9 @@ void main() {
 
     testWidgets('iOS 显式 TextTheme 仍可覆盖 Badge Mark Token', (tester) async {
       const labelStyle = TextStyle(fontSize: 15, height: 1.1);
-      final baseTheme = TThemeBuilder.light(token).copyWith(
-        platform: TargetPlatform.iOS,
-      );
+      final baseTheme = TThemeBuilder.light(
+        token,
+      ).copyWith(platform: TargetPlatform.iOS);
       final explicitTheme = baseTheme.copyWith(
         textTheme: baseTheme.textTheme.copyWith(labelSmall: labelStyle),
       );
@@ -762,7 +974,7 @@ void main() {
       expect(badges[0].padding, const EdgeInsets.symmetric(horizontal: 4));
       expect(badges[0].textStyle?.fontSize, token.fontMarkExtraSmall?.size);
       expect(badges[1].largeSize, 20);
-      expect(badges[1].padding, const EdgeInsets.symmetric(horizontal: 5));
+      expect(badges[1].padding, const EdgeInsets.symmetric(horizontal: 6));
       expect(badges[1].textStyle?.fontSize, token.fontMarkSmall?.size);
     });
 
@@ -885,13 +1097,58 @@ void main() {
 
     test('TBadgeThemeData copyWith 和 lerp 覆盖完整分支', () {
       const data = TBadgeThemeData(borderColor: Colors.red, borderWidth: 1);
+      const defaults = TBadgeThemeData();
+      const custom = TBadgeThemeData(borderColor: Colors.blue, borderWidth: 3);
       expect(data.copyWith(borderWidth: 2).borderWidth, 2);
       expect(data.copyWith().borderColor, Colors.red);
       expect(
         data.lerp(const TBadgeThemeData(borderWidth: 3), 0.5).borderWidth,
         2,
       );
+      expect(
+        data.lerp(custom, 0.5).borderColor,
+        Color.lerp(Colors.red, Colors.blue, 0.5),
+      );
+      expect(defaults.lerp(custom, 0.25).borderColor, isNull);
+      expect(defaults.lerp(custom, 0.25).borderWidth, 1.5);
+      expect(defaults.lerp(custom, 0.75).borderColor, Colors.blue);
+      expect(defaults.lerp(custom, 0.75).borderWidth, 2.5);
+      expect(custom.lerp(defaults, 0.25).borderColor, Colors.blue);
+      expect(custom.lerp(defaults, 0.75).borderColor, isNull);
+      expect(defaults.lerp(const TBadgeThemeData(), 0.5).borderWidth, isNull);
       expect(data.lerp(null, 0.5), same(data));
+    });
+
+    testWidgets('主题插值后的实际描边保留 Token 回退与有效宽度', (tester) async {
+      const defaults = TBadgeThemeData();
+      const custom = TBadgeThemeData(borderColor: Colors.blue, borderWidth: 3);
+
+      BoxBorder renderedBorder() => tester
+          .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+          .map((box) => box.decoration)
+          .whereType<BoxDecoration>()
+          .singleWhere((decoration) => decoration.border != null)
+          .border!;
+
+      await tester.pumpWidget(
+        app(
+          const TBadge(label: '8', border: true),
+          theme: bareTokenTheme().mergeExtension(defaults.lerp(custom, 0.25)),
+        ),
+      );
+      expect(
+        renderedBorder(),
+        Border.all(color: token.bgColorContainer, width: 1.5),
+      );
+
+      await tester.pumpWidget(
+        app(
+          const TBadge(label: '8', border: true),
+          theme: bareTokenTheme().mergeExtension(defaults.lerp(custom, 0.75)),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(renderedBorder(), Border.all(color: Colors.blue, width: 2.5));
     });
   });
 }

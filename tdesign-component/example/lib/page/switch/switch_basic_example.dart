@@ -1,0 +1,57 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'switch')
+class SwitchBasicExample extends StatelessWidget {
+  const SwitchBasicExample({super.key});
+
+  Widget _buildBasic(BuildContext context) => const TCell(
+    title: Text('基础开关'),
+    note: SwitchBasicExampleStatefulSwitch(initialValue: true),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildBasic(context);
+  }
+}
+
+class SwitchBasicExampleStatefulSwitch extends StatefulWidget {
+  const SwitchBasicExampleStatefulSwitch({
+    super.key,
+    this.initialValue = false,
+    this.size,
+    this.variant,
+    this.openText,
+    this.closeText,
+  });
+
+  final bool initialValue;
+  final TSwitchSize? size;
+  final TSwitchVariant? variant;
+  final String? openText;
+  final String? closeText;
+
+  @override
+  State<SwitchBasicExampleStatefulSwitch> createState() =>
+      SwitchBasicExampleStatefulSwitchState();
+}
+
+class SwitchBasicExampleStatefulSwitchState
+    extends State<SwitchBasicExampleStatefulSwitch> {
+  late bool value = widget.initialValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return TSwitch(
+      value: value,
+      size: widget.size,
+      variant: widget.variant,
+      openText: widget.openText,
+      closeText: widget.closeText,
+      onChanged: (next) => setState(() => value = next),
+    );
+  }
+}

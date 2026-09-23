@@ -146,6 +146,10 @@ void main() {
     expect(tester.widget<Icon>(selectedIcon).size, 24);
     expect(
       tester.widget<Text>(selectedText).style?.color,
+      TThemeData.defaultData().textColorPrimary,
+    );
+    expect(
+      tester.widget<Icon>(selectedIcon).color,
       TThemeData.defaultData().brandNormalColor,
     );
     expect(tester.widget<Text>(selectedText).style?.fontSize, 16);

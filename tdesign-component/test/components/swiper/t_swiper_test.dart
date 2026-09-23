@@ -923,7 +923,26 @@ void main() {
       expect(find.byType(Opacity), findsWidgets);
     });
 
-    testWidgets('scale 只沿交叉轴缩放相邻卡片', (tester) async {
+    testWidgets('纵向 scaleAndFade 裁切相邻卡片且保持可滑动', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TSwiper(
+            scrollDirection: Axis.vertical,
+            viewportFraction: 0.8,
+            pageEffect: TSwiperPageEffect.scaleAndFade,
+            children: pages,
+          ),
+        ),
+      );
+
+      expect(find.byType(ClipRect), findsWidgets);
+      await tester.drag(find.byType(PageView), const Offset(0, -500));
+      await tester.pumpAndSettle();
+      expect(pageControllerOf(tester).page, isNot(0));
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('scale 按设计稿等比缩放相邻卡片', (tester) async {
       await tester.pumpWidget(
         app(
           const TSwiper(
@@ -938,7 +957,8 @@ void main() {
       expect(
         transforms.any((transform) {
           final matrix = transform.transform.storage;
-          return matrix[0] == 1 && (matrix[5] - 126 / 192).abs() < 0.000001;
+          return (matrix[0] - 0.8).abs() < 0.000001 &&
+              (matrix[5] - 0.8).abs() < 0.000001;
         }),
         isTrue,
       );

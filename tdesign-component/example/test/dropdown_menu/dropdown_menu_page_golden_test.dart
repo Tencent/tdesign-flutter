@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_dropdown_menu_page.dart';
+import 'package:tdesign_flutter_example/page/dropdown_menu/dropdown_menu_sorting_example.dart';
 
 import '../demo_page_test_utils.dart';
 import 'dropdown_menu_demo_test_spec.dart';
@@ -36,6 +36,33 @@ void main() {
   });
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('dropdown menu committed selection ${mode.name} golden', (
+      tester,
+    ) async {
+      await pumpDemoPageAtPhoneViewport(
+        tester,
+        dropdownMenuDemoPageTestSpec,
+        mode,
+      );
+      await tester.tap(find.text('最火产品').first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('最新产品'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byKey(const ValueKey<String>('t-dropdown-menu-panel-surface')),
+        findsNothing,
+      );
+      expect(find.text('最新产品'), findsOneWidget);
+      await expectLater(
+        find.byKey(const ValueKey('dropdown_menu-demo-page')),
+        matchesGoldenFile(
+          'goldens/dropdown_menu_single_selected_${mode.name}.png',
+        ),
+      );
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
+
     testWidgets('dropdown menu overscroll ${mode.name} opened golden', (
       tester,
     ) async {
@@ -66,7 +93,8 @@ void main() {
                             TDropdownSingleSelectPanel<String>(
                               controller: controller,
                               value: 'all',
-                              options: TDropdownMenuPage.productOptions,
+                              options:
+                                  DropdownMenuSortingExample.productOptions,
                               onChanged: (_) {},
                             ),
                       ),
@@ -79,7 +107,7 @@ void main() {
           ),
         ),
       );
-      await tester.tap(find.text('全部产品'));
+      await tester.tap(find.text('全部产品').last);
       await tester.pumpAndSettle();
       final gesture = await tester.startGesture(const Offset(20, 80));
       for (var step = 0; step < 5; step++) {

@@ -14,6 +14,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 `TText` 是 Flutter `Text` 的 TDesign Token 薄封装。文字排版、字体 fallback、
 无障碍缩放、语义和选区行为均由 Flutter 原生实现；容器居中和图文 baseline 由父布局负责。
 
+## 代码演示
+
+{{ flutter-example-group text }}
+
 ## 基础用法
 
 ```dart

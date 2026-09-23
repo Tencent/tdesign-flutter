@@ -1,0 +1,72 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'steps')
+class StepsErrorStatesExample extends StatelessWidget {
+  const StepsErrorStatesExample({super.key});
+
+  /// Error 错误状态
+  Widget _buildErrorStates(BuildContext context) {
+    return const Column(
+      children: [
+        TSteps.progress(
+          steps: [
+            TStepsItemData(title: 'Finish', content: 'Content'),
+            TStepsItemData(title: 'Error', content: 'Content'),
+            TStepsItemData(title: 'Default', content: 'Content'),
+            TStepsItemData(title: 'Default', content: 'Content'),
+          ],
+          value: 1,
+          status: TStepsStatus.error,
+        ),
+        SizedBox(height: 32),
+        TSteps.progress(
+          steps: [
+            TStepsItemData(
+              title: 'Finish',
+              content: 'Content',
+              icon: TIcons.cart,
+            ),
+            TStepsItemData(
+              title: 'Error',
+              content: 'Content',
+              icon: TIcons.cart,
+              errorIcon: TIcons.close_circle,
+            ),
+            TStepsItemData(
+              title: 'Default',
+              content: 'Content',
+              icon: TIcons.cart,
+            ),
+            TStepsItemData(
+              title: 'Default',
+              content: 'Content',
+              icon: TIcons.cart,
+            ),
+          ],
+          value: 1,
+          status: TStepsStatus.error,
+        ),
+        SizedBox(height: 32),
+        TSteps.progress(
+          steps: [
+            TStepsItemData(title: 'Finish', content: 'Content'),
+            TStepsItemData(title: 'Error', content: 'Content'),
+            TStepsItemData(title: 'Default', content: 'Content'),
+            TStepsItemData(title: 'Default', content: 'Content'),
+          ],
+          value: 1,
+          status: TStepsStatus.error,
+          indicator: TStepsIndicator.dot,
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildErrorStates(context);
+  }
+}

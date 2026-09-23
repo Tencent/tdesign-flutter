@@ -434,8 +434,10 @@ void main() {
         if (placement == TPopoverPlacement.topLeft ||
             placement == TPopoverPlacement.bottomLeft) {
           expect(arrowRect.left - contentRect.left, 12);
+          expect(contentRect.left, tester.getRect(find.text('触发项')).left);
         } else {
           expect(contentRect.right - arrowRect.right, 12);
+          expect(contentRect.right, tester.getRect(find.text('触发项')).right);
         }
         controller.close();
         await tester.pump();
@@ -1037,6 +1039,90 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('可关闭'), findsNothing);
+    });
+
+    testWidgets('点击另一触发器时关闭旧气泡并在同一次点击中打开新气泡', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Builder(
+                builder: (context) => TextButton(
+                  onPressed: () {
+                    unawaited(
+                      TPopover.showPopover(
+                        context: context,
+                        content: const Text('第一个气泡'),
+                        placement: TPopoverPlacement.bottom,
+                      ),
+                    );
+                  },
+                  child: const Text('第一个触发器'),
+                ),
+              ),
+              Builder(
+                builder: (context) => TextButton(
+                  onPressed: () {
+                    unawaited(
+                      TPopover.showPopover(
+                        context: context,
+                        content: const Text('第二个气泡'),
+                        placement: TPopoverPlacement.bottom,
+                      ),
+                    );
+                  },
+                  child: const Text('第二个触发器'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('第一个触发器'));
+      await tester.pumpAndSettle();
+      expect(find.text('第一个气泡'), findsOneWidget);
+
+      await tester.tap(find.text('第二个触发器'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('第一个气泡'), findsNothing);
+      expect(find.text('第二个气泡'), findsOneWidget);
+    });
+
+    testWidgets('再次点击当前触发器只关闭已展开气泡', (tester) async {
+      var pressedCount = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) => TextButton(
+              onPressed: () {
+                pressedCount++;
+                unawaited(
+                  TPopover.showPopover(
+                    context: context,
+                    content: const Text('可切换气泡'),
+                    placement: TPopoverPlacement.bottom,
+                  ),
+                );
+              },
+              child: const Text('可切换触发器'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tapAt(tester.getCenter(find.text('可切换触发器')));
+      await tester.pumpAndSettle();
+      expect(find.text('可切换气泡'), findsOneWidget);
+      expect(pressedCount, 1);
+
+      await tester.tapAt(tester.getCenter(find.text('可切换触发器')));
+      await tester.pumpAndSettle();
+
+      expect(find.text('可切换气泡'), findsNothing);
+      expect(pressedCount, 1);
     });
 
     testWidgets('展示后页面仍可滚动且滚动时关闭气泡', (tester) async {

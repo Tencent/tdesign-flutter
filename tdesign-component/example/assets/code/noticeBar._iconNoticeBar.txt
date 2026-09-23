@@ -1,6 +1,0 @@
-Widget _iconNoticeBar(BuildContext context) {
-  return const TNoticeBar(
-    content: '提示文字描述提示文字描述提示文字描述',
-    prefix: Icon(TIcons.error_circle_filled),
-  );
-}

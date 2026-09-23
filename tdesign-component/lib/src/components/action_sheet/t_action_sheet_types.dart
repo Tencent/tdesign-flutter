@@ -1,7 +1,24 @@
+import 'package:flutter/foundation.dart';
+
 import 't_action_sheet_item.dart';
 
 /// 选择动作面板项目时触发
 typedef TActionSheetOnSelected<T> = void Function(TActionSheetItem<T> item);
+
+/// 横向滚动宫格中的一个带标题分组。
+///
+/// 通过 `TActionSheet.showGridSections` 展示。每个分组独立横向滚动，
+/// [title] 显示在该组项目上方；[items] 为空时仍保留标题。
+@immutable
+class TActionSheetGridSection<T> {
+  const TActionSheetGridSection({required this.title, required this.items});
+
+  /// 分组标题。
+  final String title;
+
+  /// 该分组中的宫格项目。
+  final List<TActionSheetItem<T>> items;
+}
 
 /// 宫格布局模式
 enum TActionSheetGridMode {
@@ -103,7 +120,7 @@ final class _TActionSheetScrollGridLayout extends TActionSheetGridLayout {
   final double? itemMinWidth;
 }
 
-/// 动作面板列表内容对齐方式
+/// 动作面板列表内容的物理对齐方式，不随文字方向交换左右。
 enum TActionSheetAlign {
   /// 居中对齐
   center,

@@ -1,0 +1,33 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'textarea')
+class TextareaCardExample extends StatelessWidget {
+  const TextareaCardExample({super.key});
+
+  Widget _buildCard(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: Theme(
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TInputThemeData(borderRadius: 9)),
+      child: const SizedBox(
+        height: 156,
+        child: TTextarea(
+          label: '标签文字',
+          hintText: '请输入文字',
+          minLines: 2,
+          maxLength: 500,
+          indicator: true,
+        ),
+      ),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildCard(context);
+  }
+}

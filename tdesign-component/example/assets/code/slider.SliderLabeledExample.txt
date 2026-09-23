@@ -1,0 +1,38 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class SliderLabeledExample extends StatefulWidget {
+  const SliderLabeledExample({super.key});
+
+  @override
+  State<SliderLabeledExample> createState() => _SliderLabeledExampleState();
+}
+
+class _SliderLabeledExampleState extends State<SliderLabeledExample> {
+  Widget _buildLabeled(BuildContext context) {
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: TSlider(
+          key: const ValueKey('slider-labeled'),
+          value: _labeled,
+          min: 0,
+          max: 100,
+          showThumbValue: true,
+          thumbFormatter: _integer,
+          onChanged: (value) => setState(() => _labeled = value),
+        ),
+      ),
+    );
+  }
+
+  double _labeled = 35;
+
+  static String _integer(double value) => value.round().toString();
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildLabeled(context);
+  }
+}

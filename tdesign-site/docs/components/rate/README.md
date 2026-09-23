@@ -13,6 +13,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 完整示例见 [t_rate_page.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/t_rate_page.dart)。
 
+## 代码演示
+
+{{ flutter-example-group rate }}
+
 ## 基础用法
 
 `TRate` 是严格受控组件。`value` 是唯一评分状态源，`onChanged` 为 null 时组件禁用。

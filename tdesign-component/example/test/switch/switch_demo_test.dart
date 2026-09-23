@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_switch_page.dart';
+import 'package:tdesign_flutter_example/page/switch/switch_page.dart';
 
 import '../demo_page_test_utils.dart';
 

@@ -2,6 +2,8 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
+import 't_badge_defaults.dart';
+
 /// Material [BadgeThemeData] 未覆盖的 TDesign 徽标视觉默认值。
 ///
 /// 只保存描边的视觉默认值，不保存形态、尺寸、内容或交互状态。
@@ -29,8 +31,28 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
       return this;
     }
     return TBadgeThemeData(
-      borderColor: Color.lerp(borderColor, other.borderColor, t),
-      borderWidth: lerpDouble(borderWidth, other.borderWidth, t),
+      // null 表示依赖当前上下文的容器背景色，不能把它当作透明色参与
+      // 插值；在动画中点切换配置，才能保留两端各自的运行时回退语义。
+      borderColor: _lerpContextualColor(borderColor, other.borderColor, t),
+      borderWidth: _lerpBorderWidth(borderWidth, other.borderWidth, t),
+    );
+  }
+
+  static Color? _lerpContextualColor(Color? begin, Color? end, double t) {
+    if (begin == null || end == null) {
+      return t < 0.5 ? begin : end;
+    }
+    return Color.lerp(begin, end, t);
+  }
+
+  static double? _lerpBorderWidth(double? begin, double? end, double t) {
+    if (begin == null && end == null) {
+      return null;
+    }
+    return lerpDouble(
+      begin ?? TBadgeDefaults.borderWidth,
+      end ?? TBadgeDefaults.borderWidth,
+      t,
     );
   }
 }

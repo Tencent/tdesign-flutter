@@ -1,0 +1,35 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'timeCounter')
+class TimeCounterRoundSizesExample extends StatelessWidget {
+  const TimeCounterRoundSizesExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildRoundSizes(context);
+  }
+}
+
+Widget _buildRoundSizes(BuildContext context) {
+  return const Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      TTimeCounter(
+        time: 96 * 60 * 1000,
+        size: TTimeCounterSize.small,
+        variant: TTimeCounterVariant.round,
+      ),
+      SizedBox(height: 24),
+      TTimeCounter(time: 96 * 60 * 1000, variant: TTimeCounterVariant.round),
+      SizedBox(height: 24),
+      TTimeCounter(
+        time: 96 * 60 * 1000,
+        size: TTimeCounterSize.large,
+        variant: TTimeCounterVariant.round,
+      ),
+    ],
+  );
+}

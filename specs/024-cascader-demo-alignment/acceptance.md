@@ -20,7 +20,7 @@
 - 分支点击必须等待父级回写后推进层级；相对旧版“组件先推进”的行为属于 breaking
   change，PR 标题与更新日志需明确迁移方式。
 - `subtitles` 只提供按内部活动层级读取的文案，不公开 `activeLevel`，不会形成第二套状态源。
-- Popup、标题、搜索框、过滤结果和提交策略通过现有 Flutter 组件组合，不新增平台弹层 API。
+- Popup、标题和提交策略通过现有 Flutter 组件组合，不新增平台弹层 API。
 - 保留既有 tab 默认值；基础 Demo 显式使用 step，该默认值保持兼容。
 
 ## 验证结果
@@ -38,7 +38,7 @@
 - Cascader 生产代码覆盖率：`308/315 = 97.78%`。
 - Search 生产代码覆盖率：`193/197 = 97.97%`。
 - TCascader 分隔线只接受显式 Material 覆盖，TThemeBuilder 投影的默认值不会覆盖
-  TDesign `componentStrokeColor`；公开代码片段列明七个示例的受控状态和差异配置。
+  TDesign `componentStrokeColor`；公开代码片段列明六个 Figma 示例的受控状态和差异配置。
 - Flutter 3.47.0：组件包及 Demo 工程严格 analyze 通过；TCascader、Search、TText、
   共享主题组合回归 54 tests passed，Demo 6 tests passed。
 - 回归、覆盖率及 Golden 清单自测 13 tests passed；API 文档重新生成，示例代码生成
@@ -46,10 +46,10 @@
 
 ## 视觉结论
 
-- 两组标题、七个触发实例、说明条与地址字段顺序均与小程序公开 Demo 一致。
-- 小程序截图见 `evidence/miniprogram-top.jpg`；Flutter 权威基线见 `tdesign-component/example/test/goldens/cascader_page_{light,dark}.png`。
-- TCascader 自身实现 step/tab 导航、活动层级次级标题、选项列表和 TDesign 默认样式；Popup、搜索和提交策略由 Flutter 组合完成。
-- 打开状态覆盖基础、tab、次级标题、任意层和搜索五种场景，并分别固定 light/dark 基线。
+- 两组标题、六个触发实例、说明条与四级地址回显顺序均与 Figma `28591:36801` 一致。
+- Figma 是 Demo 增删与排列的唯一基准；小程序仅用于补充组件 token 证据。Flutter 权威基线见 `tdesign-component/example/test/goldens/cascader_page_{light,dark}.png`。
+- TCascader 自身实现 step/tab 导航、活动层级次级标题、选项列表和 TDesign 默认样式；Popup、标题和提交策略由 Flutter 组合完成。
+- 打开状态覆盖垂直、垂直带定位、水平、水平带定位、带标题和无标题六种场景，并分别固定 light/dark 基线。
 - 已在连接设备上完成基础三级选择：弹层逐级切换、末级提交、自动关闭和 Cell 回显均符合交互契约。
 - 真机验证发现选项列表曾继承系统顶部安全区，造成导航分隔线下出现额外空白；组件现显式使用零列表内边距，并由非零安全区组件测试防止回归。
 

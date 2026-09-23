@@ -1,4 +1,4 @@
-import 'package:tdesign_flutter_example/page/t_slider_page.dart';
+import 'package:tdesign_flutter_example/page/slider/slider_page.dart';
 
 import '../demo_page_test_utils.dart';
 
@@ -11,16 +11,15 @@ const sliderDemoPageTestSpec = DemoPageTestSpec(
     '01 组件类型',
     '单游标滑块',
     '双游标滑块',
-    '带数值滑动选择器',
+    '带数值单游标滑块',
     '带数值双游标滑块',
-    '起始非零滑动选择器',
-    '带刻度滑动选择器',
+    '带刻度单游标滑块',
     '带刻度双游标滑块',
     '02 组件状态',
     '滑块禁用状态',
     '03 特殊样式',
     '胶囊型滑块',
-    '04 垂直状态',
+    '04 垂直型滑块',
     '单游标垂直滑块',
     '带刻度的双游标垂直滑块',
     '胶囊型垂直滑块',

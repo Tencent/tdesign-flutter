@@ -1,5 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_swiper_page.dart';
+import 'package:tdesign_flutter_example/page/swiper/swiper_page.dart';
 
 import '../demo_page_test_utils.dart';
 
@@ -15,13 +15,15 @@ const swiperDemoPageTestSpec = DemoPageTestSpec(
     '切换按钮（controls）',
     '卡片式（cards）',
     '02 组件样式',
-    '垂直模式',
+    '指示器位置',
+    '03 组件动效',
+    '调整动效参数',
     '自动播放',
     '自动播放间隔时间（单位毫秒）',
     '动画持续时间（单位毫秒）',
   ],
   componentType: TSwiper,
-  expectedComponentCount: 7,
+  expectedComponentCount: 11,
   useAlignmentCjkFont: true,
   supplementalCjkFontFamily: 'Swiper Golden CJK',
   supplementalCjkFontPath: 'test/fonts/SwiperGoldenCJK-Regular.otf',

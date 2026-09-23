@@ -13,35 +13,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-### 图标空状态
-
-```dart
-const TEmpty(emptyText: '描述文字');
-```
-
-### 自定义图片空状态
-
-```dart
-TEmpty(
-  image: const TImage(
-    src: 'assets/img/empty.png',
-    fit: BoxFit.contain,
-  ),
-  emptyText: '描述文字',
-);
-```
-
-### 带操作空状态
-
-```dart
-TEmpty(
-  emptyText: '描述文字',
-  operation: TButton(
-    onPressed: () {},
-    child: const Text('操作按钮'),
-  ),
-);
-```
+{{ flutter-example-group empty }}
 
 ## API
 

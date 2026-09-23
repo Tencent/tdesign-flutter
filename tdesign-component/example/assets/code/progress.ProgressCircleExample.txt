@@ -1,0 +1,19 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class ProgressCircleExample extends StatelessWidget {
+  const ProgressCircleExample({super.key});
+
+  Widget _buildCircle(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: TProgress.circular(value: 0.3),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildCircle(context);
+  }
+}

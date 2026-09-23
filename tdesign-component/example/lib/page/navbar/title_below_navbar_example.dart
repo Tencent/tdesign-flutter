@@ -1,0 +1,55 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'navbar')
+class TitleBelowNavbarExample extends StatelessWidget {
+  const TitleBelowNavbarExample({super.key});
+
+  Widget _titleBelowNavbar(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: TNavBar(
+        key: const Key('navbar-demo-custom-height'),
+        height: 80,
+        title: TText('返回', font: context.tTheme.fontBodyLarge),
+        belowTitleWidget: SizedBox(
+          height: 36,
+          child: TText(
+            '标题文字',
+            font: Font(size: 28, lineHeight: 36),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        centerTitle: false,
+        titleMargin: 8,
+        useDefaultBack: false,
+        leading: [
+          TNavBarItem(
+            icon: TIcons.chevron_left,
+            iconSize: 24,
+            onTap: () => TToast.showText('点击了返回', context: context),
+          ),
+        ],
+        actions: [
+          TNavBarItem(
+            icon: TIcons.home,
+            iconSize: 24,
+            onTap: () => TToast.showText('点击了首页', context: context),
+          ),
+          TNavBarItem(
+            icon: TIcons.ellipsis,
+            iconSize: 24,
+            onTap: () => TToast.showText('点击了更多', context: context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _titleBelowNavbar(context);
+  }
+}

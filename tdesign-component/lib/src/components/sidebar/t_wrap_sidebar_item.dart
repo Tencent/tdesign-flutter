@@ -5,6 +5,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
+import '../badge/t_badge_internal.dart';
 import '../text/t_text.dart';
 import 't_sidebar_theme_data.dart';
 
@@ -33,7 +34,7 @@ class TWrapSideBarItem extends StatelessWidget {
     required this.variant,
   }) : super(key: key);
 
-  final TBadge? badge;
+  final TBadgeConfig? badge;
   final bool disabled;
   final IconData? icon;
   final String label;
@@ -138,25 +139,11 @@ class TWrapSideBarItem extends StatelessWidget {
                   padding: const EdgeInsetsDirectional.only(end: 12),
                   child: Align(
                     alignment: AlignmentDirectional.centerStart,
-                    child: _attachBadgeToLabel(badge!, label),
+                    child: TBadgeFromConfig(config: badge!, child: label),
                   ),
                 ),
         ),
       ],
-    );
-  }
-
-  Widget _attachBadgeToLabel(TBadge source, Widget label) {
-    return TBadge(
-      key: source.key,
-      label: source.label,
-      variant: source.variant,
-      size: source.size,
-      border: source.border,
-      showZero: source.showZero,
-      offset: source.offset,
-      onTap: source.onTap,
-      child: label,
     );
   }
 

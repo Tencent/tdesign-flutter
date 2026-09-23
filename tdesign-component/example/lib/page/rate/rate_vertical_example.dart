@@ -1,0 +1,57 @@
+import 'package:flutter/cupertino.dart' show CupertinoIcons;
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'rate')
+class RateVerticalExample extends StatelessWidget {
+  const RateVerticalExample({super.key});
+
+  Widget _buildVertical(BuildContext context) => Container(
+    key: const ValueKey('rate-vertical-container'),
+    padding: EdgeInsets.all(context.tTheme.spacer16),
+    color: context.tTheme.bgColorContainer,
+    child: const Center(child: RateVerticalExampleVerticalRate()),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildVertical(context);
+  }
+}
+
+class RateVerticalExampleVerticalRate extends StatefulWidget {
+  const RateVerticalExampleVerticalRate({super.key});
+  @override
+  State<RateVerticalExampleVerticalRate> createState() =>
+      RateVerticalExampleVerticalRateState();
+}
+
+class RateVerticalExampleVerticalRateState
+    extends State<RateVerticalExampleVerticalRate> {
+  static const _texts = ['非常糟糕', '有些糟糕', '可以尝试', '服务很棒', '推荐前往'];
+  double value = 4;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Theme(
+        data: Theme.of(
+          context,
+        ).mergeExtension(const TRateThemeData(iconSize: 30)),
+        child: TRate(
+          value: value,
+          onChanged: (next) => setState(() => value = next),
+        ),
+      ),
+      const SizedBox(height: 12),
+      TText(
+        _texts[value.ceil().clamp(1, _texts.length) - 1],
+        font: value > 3 ? context.tTheme.fontBodyLarge : null,
+        textColor: value > 3 ? context.tTheme.warningColor5 : null,
+      ),
+    ],
+  );
+}

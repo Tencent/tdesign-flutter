@@ -1,6 +1,0 @@
-Widget _buildGradientSkeleton(BuildContext context) {
-    return const TSkeleton(
-      animation: TSkeletonAnimation.gradient,
-      variant: TSkeletonVariant.paragraph,
-    );
-  }

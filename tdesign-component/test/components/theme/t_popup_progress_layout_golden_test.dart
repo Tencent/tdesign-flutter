@@ -55,7 +55,7 @@ void main() {
     await tester.pumpAndSettle();
 
     await expectLater(
-      find.byKey(const Key('popup-progress-content')),
+      find.byKey(const Key('popup-progress-layout-scene')),
       matchesGoldenFile('goldens/popup_progress_layout.png'),
     );
   });
@@ -131,11 +131,7 @@ class _ProgressMatrix extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              TProgress(
-                variant: TProgressVariant.linear,
-                value: 0.6,
-                label: const SizedBox.shrink(),
-              ),
+              TProgress.linear(value: 0.6, label: const SizedBox.shrink()),
               const SizedBox(height: 24),
               const Text(
                 'Unbounded fallback',
@@ -149,8 +145,7 @@ class _ProgressMatrix extends StatelessWidget {
               const SizedBox(height: 12),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: TProgress(
-                  variant: TProgressVariant.linear,
+                child: TProgress.linear(
                   value: 0.4,
                   label: const SizedBox.shrink(),
                 ),

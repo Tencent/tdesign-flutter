@@ -1,5 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_backtop_page.dart';
+import 'package:tdesign_flutter_example/page/backtop/backtop_page.dart';
 
 import '../demo_page_test_utils.dart';
 

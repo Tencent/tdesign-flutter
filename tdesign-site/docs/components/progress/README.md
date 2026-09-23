@@ -13,67 +13,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 代码演示
 
-[查看完整 Demo 源码](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_progress_page.dart)
-
-### 组件类型
-
-```dart
-Column(
-  children: [
-    TProgress(variant: TProgressVariant.linear, value: 0.8),
-    TProgress(variant: TProgressVariant.plump, value: 0.8),
-    TProgress(variant: TProgressVariant.circular, value: 0.3),
-    TProgress(variant: TProgressVariant.microCircular, value: 0.3),
-    TProgress(
-      variant: TProgressVariant.button,
-      value: 0,
-      label: const Text('开始'),
-      semanticsLabel: '上传进度',
-      onTap: () {},
-    ),
-    TProgress(
-      variant: TProgressVariant.microButton,
-      value: 0.3,
-      label: const Icon(TIcons.play),
-      onTap: () {},
-    ),
-  ],
-)
-```
-
-`linear` 固定为标签外显，`plump` 固定为标签内显；只读微型环形与可交互微型按钮分别使用 `microCircular`、`microButton`。
-
-### 组件状态与渐变
-
-```dart
-Column(
-  children: [
-    TProgress(variant: TProgressVariant.linear, value: 0.8),
-    TProgress(
-      variant: TProgressVariant.linear,
-      value: 0.8,
-      status: TProgressStatus.warning,
-    ),
-    TProgress(
-      variant: TProgressVariant.plump,
-      value: 0.8,
-      status: TProgressStatus.error,
-    ),
-    TProgress(
-      variant: TProgressVariant.circular,
-      value: 1,
-      status: TProgressStatus.success,
-    ),
-    TProgress(
-      variant: TProgressVariant.linear,
-      value: 0.8,
-      gradient: const LinearGradient(
-        colors: [Color(0xFF0052D9), Color(0xFF00A870)],
-      ),
-    ),
-  ],
-)
-```
+{{ flutter-example-group progress }}
 
 ## API
 

@@ -22,3 +22,6 @@
 - [x] DONE 补充九个公开实例的点击功能断言与明暗 postAction Golden
 - [x] DONE 补充纯文本点击和双层菜单选择 Toast 的独立明暗 Golden
 - [x] DONE 生成设计稿 / 修复前 / 修复后三栏标注图并核对差异归属
+- [x] DONE 将纯文本徽标默认位置收回组件并删除公开 Demo 固定 offset
+- [x] DONE 验证实例、局部 Theme、全局 Theme 与组件内置位置的覆盖顺序
+- [x] DONE 修复图文项 Badge 的图标锚点并重新生成三种形态的前后对比证据

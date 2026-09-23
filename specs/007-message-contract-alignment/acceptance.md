@@ -100,3 +100,21 @@
 - [x] Flutter 3.32.0 Linux 22/22 Golden 更新后无参数复跑。
 - [x] Flutter 3.32.0：组件及回归工具 48/48、Demo 12/12，严格 analyze 0 问题；生产源码覆盖率 239/243 = 98.35%。
 - [x] Flutter 3.47.0：组件 35/35、Demo 12/12，严格 analyze 0 问题。
+
+## 2026-09-21 声明式 Demo 隐藏态占位修复
+
+- [x] 隐藏态不再构建 56px 消息容器和 8px 消息内间距；“带按钮的通知”与“组件调用”之间只保留设计稿规定的 24px 示例间距、22px 说明行及 16px 文案到按钮间距。
+- [x] 消息显示时仍由父级 `_showMessage` 控制 Widget 树插入和移除；`duration: null` 的常驻语义未改变。
+- [x] 声明式容器宽度改为遵循父布局约束，不再使用屏幕绝对宽度。
+- [x] Flutter 3.32.0 Message Demo 13/13、TMessage 组件 35/35、Example 严格 analyze 0 问题，codegen `--check` 通过。
+- [x] Linux Flutter 3.32.0 Message Golden 24/24 更新后无更新参数复跑通过；移除隐藏占位后的中间基线为 900px。
+- [x] 初始页精确差异为 17,870 / 361,500 像素（4.94%），差异边界仅出现在原隐藏占位及其后续页面流；声明式打开态按 64px 页面流偏移配准后为 0 / 259,500 像素差异，证明 `TMessage` 本体视觉未改变。
+
+## 2026-09-21 Figma Demo 按钮布局与交互对齐
+
+- [x] Figma 移动端节点 `28611:46543` 的十个触发按钮均使用 `TButtonSize.large`，尺寸为 343×48；未在 Demo 外层复制按钮内部字体、边框、颜色或圆角。
+- [x] 后续示例使用设计稿的 14px/22px token 说明文字、16px 文案到按钮间距及 24px 示例块间距；首项说明继续由 `ExampleItem.desc` 承担。
+- [x] 按当前 Figma 节点 `28611:46543` 收敛为“函数式调用”：按钮调用 `TMessage.show()` 在 Overlay 展示消息，按钮文案和 Demo 页面几何保持不变。
+- [x] “带按钮的通知”保留可点击 `TLink` action，不再添加设计稿未定义的二次 Message 反馈。
+- [x] Flutter 3.32.0 与 3.47.0 的 Message Demo 均 14/14 通过，严格 analyze 均为 0 问题；示例代码已从实际 Demo 源码重新生成并通过 `--check`。
+- [x] Linux Flutter 3.32.0 Message Golden 收敛为 22 个有实质视觉差异的页面 / 打开态；更新后无更新参数复跑 22/22 通过。移除了与打开态完全相同的 action 点击后冗余 Golden，并以 function 打开态替代旧 declarative 打开态。

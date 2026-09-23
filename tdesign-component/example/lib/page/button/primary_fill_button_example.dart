@@ -1,0 +1,81 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'button')
+class PrimaryFillButtonExample extends StatelessWidget {
+  const PrimaryFillButtonExample({super.key});
+  TButton _buildPrimaryFillButton(BuildContext context) {
+    return TButton(
+      child: const Text('填充按钮'),
+      size: TButtonSize.large,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: () => _onTap(context),
+    );
+  }
+
+  TButton _buildLightFillButton(BuildContext context) {
+    return TButton(
+      child: const Text('填充按钮'),
+      size: TButtonSize.large,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.light,
+      onPressed: () => _onTap(context),
+    );
+  }
+
+  TButton _buildDefaultFillButton(BuildContext context) {
+    return TButton(
+      child: const Text('填充按钮'),
+      size: TButtonSize.large,
+      variant: TButtonVariant.fill,
+      colorScheme: TButtonColorScheme.defaultTheme,
+      onPressed: () => _onTap(context),
+    );
+  }
+
+  TButton _buildPrimaryStrokeButton(BuildContext context) {
+    return TButton(
+      child: const Text('描边按钮'),
+      size: TButtonSize.large,
+      variant: TButtonVariant.outline,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: () => _onTap(context),
+    );
+  }
+
+  TButton _buildPrimaryTextButton(BuildContext context) {
+    return TButton(
+      child: const Text('文字按钮'),
+      size: TButtonSize.large,
+      variant: TButtonVariant.text,
+      colorScheme: TButtonColorScheme.primary,
+      onPressed: () => _onTap(context),
+    );
+  }
+
+  void _onTap(BuildContext context) {
+    TToast.showText('点击了按钮', context: context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.topLeft,
+      padding: const EdgeInsets.only(left: 16),
+      child: Wrap(
+        spacing: 16,
+        runSpacing: 16,
+        children: [
+          Builder(builder: _buildPrimaryFillButton),
+          Builder(builder: _buildLightFillButton),
+          Builder(builder: _buildDefaultFillButton),
+          Builder(builder: _buildPrimaryStrokeButton),
+          Builder(builder: _buildPrimaryTextButton),
+        ],
+      ),
+    );
+  }
+}

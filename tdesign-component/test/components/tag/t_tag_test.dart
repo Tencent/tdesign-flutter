@@ -77,8 +77,75 @@ void main() {
       await tester.pumpWidget(wrapWithTheme(
         const TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
       ));
+      await tester.pumpAndSettle();
       expect(find.text('默认'), findsOneWidget);
-      expect(find.byType(Container), findsWidgets);
+      final container = tester.widget<Container>(
+        find
+            .descendant(of: find.byType(TTag), matching: find.byType(Container))
+            .first,
+      );
+      final decoration = container.decoration! as BoxDecoration;
+      expect(
+        decoration.color,
+        TThemeData.defaultData().bgColorComponent,
+      );
+    });
+
+    testWidgets('defaultTheme dark and light fills use distinct tokens', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(wrapWithTheme(
+        const Row(
+          children: [
+            TTag('深色', variant: TTagVariant.dark),
+            TTag('浅色', variant: TTagVariant.light),
+          ],
+        ),
+      ));
+
+      Color fill(String label) {
+        final container = tester.widget<Container>(
+          find
+              .descendant(
+                of: find.widgetWithText(TTag, label),
+                matching: find.byWidgetPredicate(
+                  (widget) =>
+                      widget is Container && widget.decoration is BoxDecoration,
+                ),
+              )
+              .first,
+        );
+        return (container.decoration! as BoxDecoration).color!;
+      }
+
+      expect(fill('深色'), token.bgColorComponent);
+      expect(fill('浅色'), token.bgColorSecondaryContainer);
+      expect(fill('深色'), isNot(fill('浅色')));
+    });
+
+    testWidgets('defaultTheme background follows an explicit ColorScheme',
+        (tester) async {
+      const surface = Color(0xFFABCDEF);
+      final theme = TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+        colorScheme: const ColorScheme.light(
+          surfaceContainerHighest: surface,
+        ),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: const Scaffold(body: TTag('显式主题')),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final container = tester.widget<Container>(
+        find
+            .descendant(of: find.byType(TTag), matching: find.byType(Container))
+            .first,
+      );
+      expect((container.decoration! as BoxDecoration).color, surface);
     });
 
     testWidgets('primary 色彩渲染', (tester) async {

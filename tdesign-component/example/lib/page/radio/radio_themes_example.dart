@@ -1,0 +1,49 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'radio')
+class RadioThemesExample extends StatefulWidget {
+  const RadioThemesExample({super.key});
+
+  @override
+  State<RadioThemesExample> createState() => _RadioThemesExampleState();
+}
+
+class _RadioThemesExampleState extends State<RadioThemesExample> {
+  Widget _themes(BuildContext context) {
+    return Column(
+      children: [
+        TRadioGroup<bool>(
+          value: _lineSelected,
+          onChanged: (_) => setState(() => _lineSelected = !_lineSelected),
+          child: const TRadio<bool>(
+            value: true,
+            title: '单选',
+            iconType: TRadioIconType.check,
+          ),
+        ),
+        SizedBox(height: context.tTheme.spacer16),
+        TRadioGroup<bool>(
+          value: _dotSelected,
+          onChanged: (_) => setState(() => _dotSelected = !_dotSelected),
+          child: const TRadio<bool>(
+            value: true,
+            title: '单选',
+            iconType: TRadioIconType.dot,
+          ),
+        ),
+      ],
+    );
+  }
+
+  bool _lineSelected = true;
+
+  bool _dotSelected = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return _themes(context);
+  }
+}

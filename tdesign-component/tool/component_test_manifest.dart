@@ -146,7 +146,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Button Demo',
         workingDirectory: 'example',
-        testFiles: ['test/button/button_demo_test.dart'],
+        testFiles: [
+          'test/button/button_demo_test.dart',
+          'test/button/button_layout_test.dart',
+        ],
       ),
       VisualTestManifest(
         name: 'Button shared base components',
@@ -307,7 +310,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Checkbox Demo',
         workingDirectory: 'example',
-        testFiles: ['test/checkbox/checkbox_page_test.dart'],
+        testFiles: [
+          'test/checkbox/checkbox_page_test.dart',
+          'test/checkbox/checkbox_alignment_test.dart',
+        ],
       ),
     ],
   ),
@@ -323,7 +329,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Collapse Demo',
         workingDirectory: 'example',
-        testFiles: ['test/collapse/collapse_demo_golden_test.dart'],
+        testFiles: [
+          'test/collapse/collapse_demo_golden_test.dart',
+          'test/collapse/collapse_closed_golden_test.dart',
+        ],
       ),
     ],
   ),
@@ -440,7 +449,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Fab Demo',
         workingDirectory: 'example',
-        testFiles: ['test/fab/fab_demo_test.dart'],
+        testFiles: [
+          'test/fab/fab_demo_test.dart',
+          'test/fab/fab_structure_test.dart',
+        ],
       ),
       VisualTestManifest(
         name: 'Fab shared base components',
@@ -635,7 +647,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Swiper Demo',
         workingDirectory: 'example',
-        testFiles: ['test/swiper/swiper_demo_golden_test.dart'],
+        testFiles: [
+          'test/swiper/swiper_demo_golden_test.dart',
+          'test/swiper/swiper_next_page_golden_test.dart',
+        ],
       ),
     ],
   ),
@@ -673,7 +688,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Icon Demo',
         workingDirectory: 'example',
-        testFiles: ['test/icon/icon_demo_test.dart'],
+        testFiles: [
+          'test/icon/icon_demo_test.dart',
+          'test/icon/icon_structure_test.dart',
+        ],
       ),
       VisualTestManifest(
         name: 'Icon shared base components',
@@ -696,7 +714,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Link Demo',
         workingDirectory: 'example',
-        testFiles: ['test/link/link_demo_test.dart'],
+        testFiles: [
+          'test/link/link_demo_test.dart',
+          'test/link/link_structure_test.dart',
+        ],
       ),
       VisualTestManifest(
         name: 'Link shared base components',
@@ -844,7 +865,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Search Demo',
         workingDirectory: 'example',
-        testFiles: ['test/search/search_demo_test.dart'],
+        testFiles: [
+          'test/search/search_demo_test.dart',
+          'test/search/search_structure_test.dart',
+        ],
       ),
     ],
   ),
@@ -913,7 +937,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Slider Demo',
         workingDirectory: 'example',
-        testFiles: ['test/slider/slider_demo_golden_test.dart'],
+        testFiles: [
+          'test/slider/slider_demo_golden_test.dart',
+          'test/slider/slider_dragged_golden_test.dart',
+        ],
       ),
     ],
   ),
@@ -929,7 +956,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Stepper Demo',
         workingDirectory: 'example',
-        testFiles: ['test/stepper/stepper_demo_golden_test.dart'],
+        testFiles: [
+          'test/stepper/stepper_demo_golden_test.dart',
+          'test/stepper/stepper_incremented_golden_test.dart',
+        ],
       ),
       VisualTestManifest(
         name: 'Stepper Component',
@@ -950,7 +980,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Switch Demo',
         workingDirectory: 'example',
-        testFiles: ['test/switch/switch_demo_test.dart'],
+        testFiles: [
+          'test/switch/switch_demo_test.dart',
+          'test/switch/switch_structure_test.dart',
+        ],
       ),
     ],
   ),
@@ -963,7 +996,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'TreeSelect Demo',
         workingDirectory: 'example',
-        testFiles: ['test/tree_select/tree_select_demo_golden_test.dart'],
+        testFiles: [
+          'test/tree_select/tree_select_demo_golden_test.dart',
+          'test/tree_select/tree_select_changed_golden_test.dart',
+        ],
       ),
     ],
   ),
@@ -1061,7 +1097,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Toast Demo',
         workingDirectory: 'example',
-        testFiles: ['test/toast/toast_demo_test.dart'],
+        testFiles: [
+          'test/toast/toast_demo_test.dart',
+          'test/toast/toast_structure_test.dart',
+        ],
       ),
     ],
   ),

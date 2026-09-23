@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../loading/t_loading_theme_data.dart';
 import 't_button_resolve.dart';
 import 't_button_theme_data.dart';
 import 't_button_types.dart';
@@ -184,16 +185,19 @@ class _TButtonState extends State<TButton> {
     // 构建带图标的内容
     final hasIcon = widget.icon != null;
     final hasChild = widget.child != null;
-    final iconTextSpacing = theme?.iconTextSpacing ?? context.tTheme.spacer8;
+    final iconTextSpacing = theme?.iconTextSpacing ?? context.tTheme.spacer4;
     final gradient = theme?.gradient;
 
     Widget? content;
     if (hasChild || hasIcon) {
       final children = <Widget>[];
+      final themedIcon = hasIcon
+          ? _TButtonIconTheme(child: widget.icon!)
+          : null;
 
       // 左侧图标
       if (hasIcon && widget.iconPosition == TButtonIconPosition.left) {
-        children.add(widget.icon!);
+        children.add(themedIcon!);
       }
 
       // 内容
@@ -203,7 +207,7 @@ class _TButtonState extends State<TButton> {
 
       // 右侧图标
       if (hasIcon && widget.iconPosition == TButtonIconPosition.right) {
-        children.add(widget.icon!);
+        children.add(themedIcon!);
       }
 
       // 图标与文案间距
@@ -425,6 +429,31 @@ class _TButtonState extends State<TButton> {
       TButtonShape.square => tTheme.radiusDefault,
       TButtonShape.circle => 0, // coverage:ignore-line
     };
+  }
+}
+
+/// 保留按钮已解析的 IconTheme，
+/// 并将其颜色透传给图标插槽内的 TLoading。
+class _TButtonIconTheme extends StatelessWidget {
+  const _TButtonIconTheme({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final loadingTheme = theme.extension<TLoadingThemeData>();
+    if (loadingTheme?.iconColor != null) {
+      return child;
+    }
+    final effectiveLoadingTheme = (loadingTheme ?? const TLoadingThemeData())
+        .merge(TLoadingThemeData(iconColor: IconTheme.of(context).color));
+    return Theme(
+      data: theme
+          .copyWith(iconTheme: IconTheme.of(context))
+          .mergeExtension(effectiveLoadingTheme),
+      child: child,
+    );
   }
 }
 

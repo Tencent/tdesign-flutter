@@ -1,5 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_textarea_page.dart';
+import 'package:tdesign_flutter_example/page/textarea/textarea_page.dart';
 
 import '../demo_page_test_utils.dart';
 
@@ -91,11 +91,11 @@ const textareaPublicScenarios = [
     module: '组件类型',
     description: '设置字符数限制',
     label: '标签文字',
-    hintText: '设置最大字符个数',
+    hintText: '请输入文字',
     layout: TTextareaLayout.horizontal,
     enabled: true,
-    minLines: 3,
-    maxLength: 200,
+    minLines: 2,
+    maxLength: 500,
     indicator: true,
     bordered: false,
     goldenPolicy: TextareaGoldenPolicy.postAction,
@@ -120,11 +120,12 @@ const textareaPublicScenarios = [
     module: '组件样式',
     description: '竖排样式',
     label: '标签文字',
-    hintText: '请输入文字',
+    hintText: '预设长文本预设长文本',
     layout: TTextareaLayout.vertical,
     enabled: true,
     minLines: 2,
-    indicator: false,
+    maxLength: 500,
+    indicator: true,
     bordered: false,
     goldenPolicy: TextareaGoldenPolicy.postAction,
     postActionText: '竖排输入',
@@ -135,7 +136,7 @@ const textareaPublicScenarios = [
     description: '卡片样式',
     label: '标签文字',
     hintText: '请输入文字',
-    layout: TTextareaLayout.vertical,
+    layout: TTextareaLayout.horizontal,
     enabled: true,
     minLines: 2,
     maxLength: 500,

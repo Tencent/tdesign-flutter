@@ -1,0 +1,51 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import '../../annotation/example_code.dart';
+
+@ExampleCode(group: 'swiper')
+class PaginationPlacementSwiperExample extends StatelessWidget {
+  const PaginationPlacementSwiperExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _swiper(
+          placement: TSwiperPaginationPlacement.overlay,
+          alignment: Alignment.topCenter,
+        ),
+        const SizedBox(height: 16),
+        _swiper(
+          placement: TSwiperPaginationPlacement.overlay,
+          alignment: Alignment.bottomCenter,
+        ),
+        const SizedBox(height: 16),
+        _swiper(placement: TSwiperPaginationPlacement.outside),
+      ],
+    );
+  }
+
+  Widget _swiper({
+    required TSwiperPaginationPlacement placement,
+    AlignmentGeometry? alignment,
+  }) {
+    return SizedBox(
+      height: placement == TSwiperPaginationPlacement.outside ? 208 : 192,
+      child: TSwiper(
+        loop: true,
+        pagination: TSwiperPaginationVariant.dots,
+        paginationPlacement: placement,
+        paginationAlignment: alignment,
+        children: List.generate(
+          6,
+          (index) => Image.asset(
+            index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
+            fit: BoxFit.cover,
+            semanticLabel: '图片 ${index + 1}',
+          ),
+        ),
+      ),
+    );
+  }
+}

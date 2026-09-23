@@ -1,0 +1,192 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+
+@ExampleCode(group: 'slider')
+class SliderVerticalExample extends StatefulWidget {
+  const SliderVerticalExample({
+    super.key,
+    this.type = SliderVerticalExampleType.single,
+  });
+
+  final SliderVerticalExampleType type;
+
+  @override
+  State<SliderVerticalExample> createState() => _SliderVerticalExampleState();
+}
+
+class _SliderVerticalExampleState extends State<SliderVerticalExample> {
+  Widget _buildVertical(BuildContext context) {
+    final trackInset = context.tTheme.spacer16;
+    final trackLength = 200 - 2 * trackInset;
+
+    Widget verticalSlider({
+      required Widget slider,
+      String? thumbLabel,
+      double? normalizedValue,
+      bool showMarks = false,
+      Key? labelKey,
+      Key? marksKey,
+      double height = 202,
+    }) {
+      return SizedBox(
+        height: height,
+        child: Center(
+          child: SizedBox(
+            width: 100,
+            height: 200,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Positioned(
+                  left: 8,
+                  top: 0,
+                  child: SizedBox(
+                    width: 48,
+                    height: 200,
+                    child: RotatedBox(quarterTurns: 1, child: slider),
+                  ),
+                ),
+                if (showMarks)
+                  Positioned(
+                    left: 58,
+                    width: 42,
+                    top: 0,
+                    bottom: 0,
+                    child: Stack(
+                      key: marksKey,
+                      clipBehavior: Clip.none,
+                      children: List.generate(6, (index) {
+                        return Positioned(
+                          top: trackInset + index * trackLength / 5,
+                          child: FractionalTranslation(
+                            translation: const Offset(0, -0.5),
+                            child: TText('${index * 20}'),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                if (thumbLabel != null && normalizedValue != null)
+                  Positioned(
+                    left: 58,
+                    top: trackInset + normalizedValue * trackLength,
+                    child: FractionalTranslation(
+                      translation: const Offset(0, -0.5),
+                      child: TText(thumbLabel, key: labelKey),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return switch (widget.type) {
+      SliderVerticalExampleType.single => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _subsection(context, '单游标垂直滑块'),
+          verticalSlider(
+            slider: TSlider(
+              key: const ValueKey('slider-vertical'),
+              value: _vertical,
+              min: 0,
+              max: 100,
+              onChanged: (value) => setState(() => _vertical = value),
+            ),
+            thumbLabel: _integer(_vertical),
+            normalizedValue: _vertical / 100,
+            labelKey: const ValueKey('slider-vertical-label'),
+          ),
+        ],
+      ),
+      SliderVerticalExampleType.scaleRange => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _subsection(context, '带刻度的双游标垂直滑块'),
+          verticalSlider(
+            slider: TRangeSlider(
+              key: const ValueKey('slider-vertical-scale-range'),
+              value: _verticalScaleRange,
+              min: 0,
+              max: 100,
+              divisions: 5,
+              onChanged: (value) => setState(() => _verticalScaleRange = value),
+            ),
+            showMarks: true,
+            marksKey: const ValueKey('slider-vertical-scale-labels'),
+          ),
+        ],
+      ),
+      SliderVerticalExampleType.capsule => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _subsection(context, '胶囊型垂直滑块'),
+          verticalSlider(
+            slider: TSlider(
+              key: const ValueKey('slider-vertical-capsule'),
+              value: _verticalCapsule,
+              min: 0,
+              max: 100,
+              variant: TSliderVariant.capsule,
+              onChanged: (value) => setState(() => _verticalCapsule = value),
+            ),
+            thumbLabel: _integer(_verticalCapsule),
+            normalizedValue: _verticalCapsule / 100,
+            labelKey: const ValueKey('slider-vertical-capsule-label'),
+          ),
+        ],
+      ),
+      SliderVerticalExampleType.capsuleScaleRange => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _subsection(context, '带刻度的胶囊型垂直滑块'),
+          verticalSlider(
+            slider: TRangeSlider(
+              key: const ValueKey('slider-vertical-capsule-scale-range'),
+              value: _verticalCapsuleScaleRange,
+              min: 0,
+              max: 100,
+              divisions: 5,
+              variant: TSliderVariant.capsule,
+              onChanged: (value) =>
+                  setState(() => _verticalCapsuleScaleRange = value),
+            ),
+            showMarks: true,
+            marksKey: const ValueKey('slider-vertical-capsule-scale-labels'),
+            height: 218,
+          ),
+        ],
+      ),
+    };
+  }
+
+  Widget _subsection(BuildContext context, String text) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: TText(text, font: context.tTheme.fontBodyMedium),
+  );
+
+  double _vertical = 35;
+
+  static String _integer(double value) => value.round().toString();
+
+  RangeValues _verticalScaleRange = const RangeValues(20, 60);
+
+  double _verticalCapsule = 35;
+
+  RangeValues _verticalCapsuleScaleRange = const RangeValues(20, 80);
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildVertical(context);
+  }
+}
+
+enum SliderVerticalExampleType {
+  single,
+  scaleRange,
+  capsule,
+  capsuleScaleRange,
+}

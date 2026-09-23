@@ -10,6 +10,8 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
+import '../badge/t_badge_internal.dart';
+import '../badge/t_badge_layout.dart';
 import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
 import 't_tab_bar_theme_data.dart';
@@ -43,6 +45,9 @@ const double _kPopupButtonPadding = 8.0;
 
 /// 展开项弹窗箭头和触发按钮的间距
 const double _kPopupArrowGap = 4.0;
+
+/// 纯文本标签比图标锚点宽，默认向逻辑起始方向收进 6px。
+const Offset _kTextBadgeOffset = Offset(-6, 0);
 
 /// 展开项弹窗距离视口边界的安全距离
 const double _kPopupViewportPadding = 8.0;
@@ -161,12 +166,14 @@ class TTabBarItemConfig {
 
   /// 展示在标签内容右上角的徽标；为空时不显示。
   ///
-  /// 徽标内容和样式由 [TBadge] 配置，[TBadge.offset] 可用于逐项调整默认锚点。
-  /// TabBar 内容会作为徽标锚点，因此传入的 [TBadge.child] 必须为空；
-  /// [TBadge.onTap] 会作为标签项点击链中的附加回调执行，遵循相同的
-  /// [allowMultipleTaps] 门控：未选中项会调用，重复点击当前选中项仅在
-  /// [allowMultipleTaps] 为 true 时调用，整栏禁用时不会调用。
-  final TBadge? badge;
+  /// 徽标内容和样式由 [TBadgeConfig] 描述，[TBadgeConfig.offset] 可用于逐项
+  /// 调整默认位置。纯文本项未设置实例或 BadgeTheme offset 时使用 TabBar 的
+  /// 文本徽标默认位置；纯图标项与图文项均以图标作为锚点，使用徽标的默认
+  /// 右上角位置；图文项下方的文字宽度不会改变徽标位置。
+  ///
+  /// TabBar 自己拥有徽标锚点与点击区域；点击行为通过 [onTap] 配置。调用方
+  /// 已经拥有目标 Widget 时，应直接使用 [TBadge] 包装该 Widget。
+  final TBadgeConfig? badge;
 
   /// 弹窗配置
   final TTabBarPopUpBtnConfig? popUpButtonConfig;
@@ -459,7 +466,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
                       )
                     : null,
                 boxShadow: isCapsuleOutlineType
-                    ? context.tTheme.shadowsTop
+                    ? context.tTheme.shadowsBase
                     : null,
               ),
               child: Stack(
@@ -899,33 +906,36 @@ class _TTabBarItemWithBadge extends StatelessWidget {
               context.tTheme.fontBodyExtraSmall!,
             )
           : const SizedBox.shrink();
+      final badge = itemConfig.badge;
       child = Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          icon,
+          badge == null ? icon : _attachBadge(context, badge, icon),
           if (centerDistance > 0) SizedBox(height: centerDistance),
           text,
         ],
       );
+      return child;
     }
 
     final badge = itemConfig.badge;
     if (badge == null) {
       return child;
     }
-    assert(
-      badge.child == null,
-      '[TTabBarItemConfig] badge.child is managed by TTabBar.',
-    );
-    return TBadge(
-      key: badge.key,
-      label: badge.label,
-      variant: badge.variant,
-      size: badge.size,
-      border: badge.border,
-      showZero: badge.showZero,
-      offset: badge.offset,
+    return _attachBadge(context, badge, child);
+  }
+
+  Widget _attachBadge(BuildContext context, TBadgeConfig badge, Widget child) {
+    return TBadgeFromConfig(
+      config: badge,
+      fallbackOffset: basicType == _TTabBarBasicType.text
+          ? resolveBadgeFallbackOffset(
+              context,
+              _kTextBadgeOffset,
+              alignment: badge.alignment,
+            )
+          : null,
       child: child,
     );
   }
@@ -983,9 +993,13 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     }
     return Material(
       color: Colors.transparent,
-      borderRadius: isInOrOutCapsule ? BorderRadius.circular(24) : null,
+      borderRadius: isInOrOutCapsule
+          ? BorderRadius.circular(context.tTheme.radiusCircle)
+          : null,
       child: InkWell(
-        borderRadius: isInOrOutCapsule ? BorderRadius.circular(24) : null,
+        borderRadius: isInOrOutCapsule
+            ? BorderRadius.circular(context.tTheme.radiusCircle)
+            : null,
         splashFactory: InkRipple.splashFactory,
         splashColor: selectedBgColor ?? context.tTheme.brandLightColor,
         highlightColor: selectedBgColor ?? context.tTheme.brandLightColor,
@@ -996,9 +1010,6 @@ class _TTabBarItemWithBadge extends StatelessWidget {
   }
 
   void handleTap(BuildContext context) {
-    if (!isSelected || itemConfig.allowMultipleTaps) {
-      itemConfig.badge?.onTap?.call();
-    }
     onTap.call();
 
     var popUpButtonConfig = itemConfig.popUpButtonConfig;
@@ -1086,7 +1097,10 @@ class TTabBarPopUpShapeConfig {
   /// 弹窗背景颜色
   final Color? backgroundColor;
 
-  /// panel圆角 默认0
+  /// 弹层面板圆角。
+  ///
+  /// 不设置时使用当前 TDesign 主题的 `radiusDefault`（默认 6px）；
+  /// 显式设置时覆盖主题默认值。
   final double? radius;
 
   /// 箭头宽度 默认13.5
@@ -1304,6 +1318,8 @@ class _TabBarPopupDialogState extends State<_TabBarPopupDialog> {
                     backgroundColor:
                         widget.config?.backgroundColor ??
                         context.tTheme.bgColorContainer,
+                    radius:
+                        widget.config?.radius ?? context.tTheme.radiusDefault,
                   ),
                   child: Container(
                     alignment: Alignment.topCenter,
@@ -1353,7 +1369,14 @@ class _TabBarPanelPainter extends CustomPainter {
   /// 背景颜色
   final Color backgroundColor;
 
-  _TabBarPanelPainter({this.config, required this.backgroundColor});
+  /// 已解析的弹层圆角。
+  final double radius;
+
+  _TabBarPanelPainter({
+    this.config,
+    required this.backgroundColor,
+    required this.radius,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -1368,7 +1391,7 @@ class _TabBarPanelPainter extends CustomPainter {
     canvas.drawRRect(
       RRect.fromRectAndRadius(
         Rect.fromLTWH(0, 0, panelWidth, panelHeight),
-        Radius.circular(config?.radius ?? 0.0),
+        Radius.circular(radius),
       ),
       paint,
     );
@@ -1396,6 +1419,7 @@ class _TabBarPanelPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _TabBarPanelPainter oldDelegate) {
     return oldDelegate.backgroundColor != backgroundColor ||
-        oldDelegate.config != config;
+        oldDelegate.config != config ||
+        oldDelegate.radius != radius;
   }
 }

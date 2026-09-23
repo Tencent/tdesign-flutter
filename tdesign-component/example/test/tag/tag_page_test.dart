@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/base/notification_center.dart';
-import 'package:tdesign_flutter_example/page/t_tag_page.dart';
+import 'package:tdesign_flutter_example/page/tag/tag_page.dart';
 
 import '../demo_page_test_utils.dart';
 
@@ -17,16 +17,17 @@ const _tagSpec = DemoPageTestSpec(
     '01 组件类型',
     '基础标签',
     '圆弧标签',
-    'Mark标签',
     '超长省略文本标签',
-    '02 组件状态（主题）',
-    '填充型各主题',
-    '描边型各主题',
+    '可选中的标签',
+    '02 组件状态',
+    '展示型标签',
     '03 组件尺寸',
-    '04 可选标签',
-    '描边形态',
+    'outline',
   ],
   componentType: TTag,
+  useFeedbackGoldenFont: true,
+  supplementalCjkFontFamily: 'TDesign Demo Review Golden CJK',
+  supplementalCjkFontPath: 'test/fonts/DemoReviewGoldenCJK-Regular.otf',
 );
 
 void main() {
@@ -36,17 +37,15 @@ void main() {
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('tag selected ${mode.name} golden', (tester) async {
       await pumpFullDemoPage(tester, _tagSpec, mode);
-      final tag = find.byWidgetPredicate(
+      final selectable = find.byWidgetPredicate(
         (widget) =>
             widget is TSelectTag &&
-            widget.text == '标签一' &&
+            widget.text == '未选中态' &&
             widget.variant == TTagVariant.outline,
       );
-      expect(tester.widget<TSelectTag>(tag).value, isFalse);
-      await tester.tap(tag);
-      await tester.pump();
-      expect(tester.widget<TSelectTag>(tag).value, isTrue);
-
+      await tester.tap(selectable);
+      await tester.pumpAndSettle();
+      expect(tester.widget<TSelectTag>(selectable).value, isTrue);
       await expectLater(
         find.byKey(const ValueKey('tag-demo-page')),
         matchesGoldenFile('goldens/tag_selected_${mode.name}.png'),
@@ -91,16 +90,20 @@ void main() {
         .widgetList<TSelectTag>(find.byType(TSelectTag))
         .where((tag) => tag.variant == TTagVariant.outline)
         .toList();
-    expect(outlineSelectTags, hasLength(3));
+    expect(outlineSelectTags, hasLength(2));
     expect(
       outlineSelectTags.map((tag) => tag.value),
-      orderedEquals([false, true, false]),
+      orderedEquals([false, true]),
+    );
+    expect(
+      tester.getTopLeft(find.widgetWithText(TSelectTag, '未选中态').first).dx,
+      112,
     );
 
     final firstOutlineTag = find.byWidgetPredicate(
       (widget) =>
           widget is TSelectTag &&
-          widget.text == '标签一' &&
+          widget.text == '未选中态' &&
           widget.variant == TTagVariant.outline,
     );
     await tester.tap(firstOutlineTag);
@@ -132,7 +135,7 @@ void main() {
           of: find.byWidgetPredicate(
             (widget) =>
                 widget is TSelectTag &&
-                widget.text == '标签一' &&
+                widget.text == '未选中态' &&
                 widget.variant == TTagVariant.outline,
           ),
           matching: find.byType(CodeWrapper),
@@ -143,10 +146,10 @@ void main() {
     await tester.pumpAndSettle();
 
     final entries = [
-      (wrapper: longWrapper, asset: 'assets/code/tag._buildLongTextTag.txt'),
+      (wrapper: longWrapper, asset: 'assets/code/tag.LongTextTagExample.txt'),
       (
         wrapper: outlineWrapper,
-        asset: 'assets/code/tag.TagSelectOutlineExample.txt',
+        asset: 'assets/code/tag.TagSelectVariantsExample.txt',
       ),
     ];
     for (final entry in entries) {

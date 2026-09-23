@@ -1,0 +1,62 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class AllSizeTagsExample extends StatelessWidget {
+  const AllSizeTagsExample({super.key});
+
+  Widget _buildAllSizeTags(BuildContext context) {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: 8,
+          children: [
+            TTag('加大尺寸', size: TTagSize.extraLarge, variant: TTagVariant.light),
+            TTag('大尺寸', size: TTagSize.large, variant: TTagVariant.light),
+            TTag('中尺寸', size: TTagSize.medium, variant: TTagVariant.light),
+            TTag('小尺寸', size: TTagSize.small, variant: TTagVariant.light),
+          ],
+        ),
+        SizedBox(height: 16),
+        Wrap(
+          spacing: 8,
+          children: [
+            TTag(
+              '加大尺寸',
+              size: TTagSize.extraLarge,
+              variant: TTagVariant.light,
+              needCloseIcon: true,
+            ),
+            TTag(
+              '大尺寸',
+              size: TTagSize.large,
+              variant: TTagVariant.light,
+              needCloseIcon: true,
+            ),
+            TTag(
+              '中尺寸',
+              size: TTagSize.medium,
+              variant: TTagVariant.light,
+              needCloseIcon: true,
+            ),
+            TTag(
+              '小尺寸',
+              size: TTagSize.small,
+              variant: TTagVariant.light,
+              needCloseIcon: true,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.topLeft,
+      padding: const EdgeInsets.only(left: 16),
+      child: Builder(builder: _buildAllSizeTags),
+    );
+  }
+}

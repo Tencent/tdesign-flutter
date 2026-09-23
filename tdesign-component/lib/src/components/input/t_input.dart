@@ -354,8 +354,10 @@ class _TInputState extends State<TInput> {
       clearIconSize: theme?.clearIconSize ?? 20,
       clearIconColor:
           theme?.clearIconColor ??
-          material.tExplicitColorScheme?.onSurfaceVariant ??
-          token.textColorPlaceholder,
+          (effectiveStatus == TInputStatus.error
+              ? token.errorNormalColor
+              : material.tExplicitColorScheme?.onSurfaceVariant ??
+                    token.textColorPlaceholder),
       onClear: _clear,
       enabled: widget.enabled,
       readOnly: widget.readOnly,
@@ -404,9 +406,17 @@ class _TInputState extends State<TInput> {
             ),
           );
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [shell, if (error != null) error],
+    return LayoutBuilder(
+      builder: (context, constraints) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (widget._multiline && constraints.hasTightHeight)
+            Expanded(child: shell)
+          else
+            shell,
+          if (error != null) error,
+        ],
+      ),
     );
   }
 
@@ -568,14 +578,17 @@ class _TInputShellState extends State<_TInputShell> {
     final clearButton = showClearButton
         ? SizedBox(
             width: 32,
-            height: 32,
+            height: widget.clearIconSize,
             child: IconButton(
               tooltip: '清除',
               onPressed: widget.enabled && !widget.readOnly
                   ? widget.onClear
                   : null,
               padding: EdgeInsets.zero,
-              constraints: const BoxConstraints.tightFor(width: 32, height: 32),
+              constraints: BoxConstraints.tightFor(
+                width: 32,
+                height: widget.clearIconSize,
+              ),
               iconSize: widget.clearIconSize,
               icon: Icon(
                 TIcons.close_circle_filled,
@@ -625,6 +638,38 @@ class _TInputShellState extends State<_TInputShell> {
             bottom: hasFocus ? widget.focusedBorderSide : widget.borderSide,
           );
 
+    final inputRow = Row(
+      crossAxisAlignment: widget.multiline
+          ? CrossAxisAlignment.start
+          : CrossAxisAlignment.center,
+      children: [
+        if (widget.prefix != null) ...[
+          _TInputSlot(
+            color: widget.enabled
+                ? context.tTheme.textColorPrimary
+                : context.tTheme.textDisabledColor,
+            child: widget.prefix!,
+          ),
+          SizedBox(width: context.tTheme.spacer16),
+        ],
+        Expanded(child: widget.editor),
+        if (clearButton != null) ...[const SizedBox(width: 4), clearButton],
+        if (passwordButton != null) ...[
+          const SizedBox(width: 4),
+          passwordButton,
+        ],
+        if (widget.suffix != null) ...[
+          SizedBox(width: context.tTheme.spacer8),
+          _TInputSlot(
+            color: widget.enabled
+                ? context.tTheme.textColorPlaceholder
+                : context.tTheme.textDisabledColor,
+            child: widget.suffix!,
+          ),
+        ],
+      ],
+    );
+
     return DecoratedBox(
       decoration: BoxDecoration(
         color: widget.backgroundColor,
@@ -633,48 +678,19 @@ class _TInputShellState extends State<_TInputShell> {
       ),
       child: Padding(
         padding: widget.contentPadding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              crossAxisAlignment: widget.multiline
-                  ? CrossAxisAlignment.start
-                  : CrossAxisAlignment.center,
-              children: [
-                if (widget.prefix != null) ...[
-                  _TInputSlot(
-                    color: widget.enabled
-                        ? context.tTheme.textColorPrimary
-                        : context.tTheme.textDisabledColor,
-                    child: widget.prefix!,
-                  ),
-                  SizedBox(width: context.tTheme.spacer16),
-                ],
-                Expanded(child: widget.editor),
-                if (clearButton != null) ...[
-                  const SizedBox(width: 4),
-                  clearButton,
-                ],
-                if (passwordButton != null) ...[
-                  const SizedBox(width: 4),
-                  passwordButton,
-                ],
-                if (widget.suffix != null) ...[
-                  SizedBox(width: context.tTheme.spacer8),
-                  _TInputSlot(
-                    color: widget.enabled
-                        ? context.tTheme.textColorPlaceholder
-                        : context.tTheme.textDisabledColor,
-                    child: widget.suffix!,
-                  ),
-                ],
+        child: LayoutBuilder(
+          builder: (context, constraints) => Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              inputRow,
+              if (counter != null) ...[
+                if (widget.multiline && constraints.hasTightHeight)
+                  const Spacer(),
+                SizedBox(height: widget.counterGap),
+                counter,
               ],
-            ),
-            if (counter != null) ...[
-              SizedBox(height: widget.counterGap),
-              counter,
             ],
-          ],
+          ),
         ),
       ),
     );

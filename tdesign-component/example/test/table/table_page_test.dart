@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
+import 'package:tdesign_flutter_example/base/notification_center.dart';
 
 import '../demo_page_test_utils.dart';
 import 'table_demo_test_spec.dart';
@@ -22,18 +26,18 @@ void main() {
       find.descendant(of: find.byType(TNavBar), matching: find.text('Table')),
       findsOneWidget,
     );
-    // Figma 的原始坐标已扣除 44px iOS 状态栏，页面内容从 NavBar 起
-    // 与 Flutter Golden 使用同一个 375px / DPR 1 坐标系比较。
+    // Figma 的原始坐标已扣除 44px iOS 状态栏；公共标题行盒修正后，
+    // 页面内容从 NavBar 起，与 Flutter Golden 使用同一个 375px / DPR 1 坐标系比较。
     expect(tableTopCoordinates, [
-      278,
-      750,
-      1222,
-      1656,
-      2128,
-      2599,
-      3071,
-      3593,
-      4065,
+      274,
+      746,
+      1218,
+      1652,
+      2124,
+      2595,
+      3067,
+      3589,
+      4061,
     ]);
     for (var index = 0; index < tables.length; index++) {
       expect(tester.getSize(tableFinder.at(index)).height, 418);
@@ -82,6 +86,51 @@ void main() {
     await tester.pump();
     expect(tester.getTopLeft(fixedHeaders.at(0)).dx, fixedBefore);
     expect(tester.getTopLeft(fixedHeaders.at(1)).dx, lessThan(scrollingBefore));
+
+    await disposeDemoPage(tester);
+  });
+
+  testWidgets('Table 全部代码面板映射到自包含的类级示例', (tester) async {
+    await pumpFullDemoPage(tester, tableDemoPageTestSpec, ThemeMode.light);
+
+    const names = [
+      'TableBasicExample',
+      'TableSortableExample',
+      'TableOperationTextExample',
+      'TableOperationIconExample',
+      'TableFixedFirstExample',
+      'TableFixedLastExample',
+      'TableHorizontalScrollExample',
+      'TableStripeExample',
+      'TableBorderedExample',
+    ];
+    expect(
+      tester
+          .widgetList<CodeWrapper>(find.byType(CodeWrapper))
+          .map((wrapper) => wrapper.methodName),
+      names,
+    );
+
+    TNotification.postNotification('onApiVisibleChange', {'apiVisible': true});
+    await tester.pumpAndSettle();
+    expect(find.text('code'), findsNWidgets(names.length));
+
+    for (var index = 0; index < names.length; index++) {
+      final expected = await rootBundle.loadString(
+        'assets/code/table.${names[index]}.txt',
+      );
+      expect(expected, contains('class ${names[index]}'));
+      expect(expected, contains("import 'package:flutter/material.dart';"));
+
+      await tester.tap(find.text('code').at(index));
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<Markdown>(find.byType(Markdown)).data,
+        contains(expected),
+      );
+      Navigator.of(tester.element(find.byType(Markdown))).pop();
+      await tester.pumpAndSettle();
+    }
 
     await disposeDemoPage(tester);
   });

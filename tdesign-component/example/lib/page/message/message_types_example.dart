@@ -1,0 +1,135 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'message')
+class MessageTypesExample extends StatelessWidget {
+  const MessageTypesExample({super.key});
+
+  Widget _buildMessageTypes(BuildContext context) {
+    return Column(
+      children: [
+        _buildTextMessage(context),
+        const SizedBox(height: 24),
+        _buildLabeledExample(context, '带图标的通知', _buildIconMessage(context)),
+        const SizedBox(height: 24),
+        _buildLabeledExample(context, '带关闭的通知', _buildCloseMessage(context)),
+        const SizedBox(height: 24),
+        _buildLabeledExample(context, '可滚动的通知', _buildScrollMessage(context)),
+        const SizedBox(height: 24),
+        _buildLabeledExample(context, '带按钮的通知', _buildLinkMessage(context)),
+        const SizedBox(height: 24),
+        _buildLabeledExample(context, '函数式调用', _buildFunctionMessage(context)),
+      ],
+    );
+  }
+
+  Widget _buildLabeledExample(
+    BuildContext context,
+    String label,
+    Widget child,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TText(
+          label,
+          key: ValueKey('message-type-label-$label'),
+          font: context.tTheme.fontBodyMedium,
+          textColor: context.tTheme.textColorSecondary,
+        ),
+        const SizedBox(height: 16),
+        child,
+      ],
+    );
+  }
+
+  Widget _buildTextMessage(BuildContext context) {
+    return _fullWidthButton(
+      text: '纯文字的通知',
+      onPressed: () => TMessage.show(
+        context: context,
+        content: '这是一条纯文字的消息通知',
+        showIcon: false,
+      ),
+    );
+  }
+
+  Widget _buildIconMessage(BuildContext context) {
+    return _fullWidthButton(
+      text: '带图标的通知',
+      onPressed: () => TMessage.show(context: context, content: '这是一条带图标的消息通知'),
+    );
+  }
+
+  Widget _buildCloseMessage(BuildContext context) {
+    return _fullWidthButton(
+      text: '带关闭的通知',
+      onPressed: () => TMessage.show(
+        context: context,
+        content: '这是一条带关闭的消息通知',
+        duration: null,
+        showCloseButton: true,
+      ),
+    );
+  }
+
+  Widget _buildScrollMessage(BuildContext context) {
+    return _fullWidthButton(
+      text: '可滚动的通知',
+      onPressed: () => TMessage.show(
+        context: context,
+        content: '这是一条较长的通知信息，这是一条较长的通知信息，这是一条较长的通知信息',
+        showIcon: false,
+        duration: null,
+        marquee: const TMessageMarquee(repeat: true),
+      ),
+    );
+  }
+
+  Widget _buildLinkMessage(BuildContext context) {
+    return _fullWidthButton(
+      text: '带按钮的通知',
+      onPressed: () => TMessage.show(
+        context: context,
+        content: '这是一条带操作的消息通知',
+        duration: null,
+        action: TLink(
+          child: const Text('链接'),
+          colorScheme: TLinkColorScheme.primary,
+          onPressed: () {},
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFunctionMessage(BuildContext context) {
+    return _fullWidthButton(
+      text: '函数式调用',
+      onPressed: () =>
+          TMessage.show(context: context, content: '这是一条通过函数式调用的消息通知'),
+    );
+  }
+
+  Widget _fullWidthButton({
+    required String text,
+    required VoidCallback onPressed,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      child: TButton(
+        child: Text(text),
+        size: TButtonSize.large,
+        variant: TButtonVariant.outline,
+        colorScheme: TButtonColorScheme.primary,
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildMessageTypes(context);
+  }
+}

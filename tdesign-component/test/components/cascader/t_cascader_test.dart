@@ -562,6 +562,12 @@ void main() {
       );
 
       expect(find.text('Province'), findsOneWidget);
+      final subtitle = find.byKey(const ValueKey('cascader-subtitle'));
+      expect(
+        tester.getTopLeft(find.text('Guangdong')).dy -
+            tester.getBottomLeft(subtitle).dy,
+        closeTo(24, 1),
+      );
       await tester.tap(find.byKey(const ValueKey('cascader-gd')));
       await tester.pump();
       expect(find.text('City'), findsOneWidget);

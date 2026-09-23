@@ -3,11 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  Widget wrapWithTheme(Widget child, {TTabBarThemeData? tabBarTheme}) {
+  Widget wrapWithTheme(
+    Widget child, {
+    TTabBarThemeData? tabBarTheme,
+    TThemeData? themeData,
+  }) {
     return MaterialApp(
       theme: ThemeData(
         extensions: [
-          TThemeData.defaultData(),
+          themeData ?? TThemeData.defaultData(),
           if (tabBarTheme != null) tabBarTheme,
         ],
       ),
@@ -123,7 +127,7 @@ void main() {
     });
 
     test('item badge and popup config keep constructor data', () {
-      const tabBadge = TBadge(variant: TBadgeVariant.dot);
+      const tabBadge = TBadgeConfig(variant: TBadgeVariant.dot);
       const tabItem = TTabBarItemConfig(tabText: '消息', badge: tabBadge);
       expect(tabItem.badge, same(tabBadge));
 
@@ -510,10 +514,57 @@ void main() {
       await tester.tap(find.text('更多'));
       await tester.pumpAndSettle();
       expect(tester.getSize(find.byType(TTabBarMenuItem).first).width, 120);
+      final panel = tester.widget<CustomPaint>(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CustomPaint &&
+              widget.painter.runtimeType.toString() == '_TabBarPanelPainter',
+        ),
+      );
+      expect((panel.painter as dynamic).radius, 4);
       await tester.tap(find.text('选项B'));
       await tester.pumpAndSettle();
 
       expect(selected, '选项B');
+    });
+
+    testWidgets('popup defaults to the theme radius', (tester) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'tabbar-popup-radius-test',
+        radiusMap: {'radiusDefault': 9},
+      );
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.doubleLayer,
+            value: 0,
+            navigationTabs: [
+              TTabBarItemConfig(
+                tabText: '更多',
+                popUpButtonConfig: TTabBarPopUpBtnConfig(
+                  items: const [TTabBarMenuItem(value: '选项A')],
+                  onChanged: (_) {},
+                ),
+              ),
+              const TTabBarItemConfig(tabText: '普通'),
+            ],
+            onChanged: (_) {},
+          ),
+          themeData: token,
+        ),
+      );
+
+      await tester.tap(find.text('更多'));
+      await tester.pumpAndSettle();
+
+      final panel = tester.widget<CustomPaint>(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CustomPaint &&
+              widget.painter.runtimeType.toString() == '_TabBarPanelPainter',
+        ),
+      );
+      expect((panel.painter as dynamic).radius, 9);
     });
 
     testWidgets('double-layer popup keeps the design minimum width', (
@@ -598,7 +649,7 @@ void main() {
       expect(selected, '选项A');
     });
 
-    testWidgets('badge uses its own offset and anchors to iconText content', (
+    testWidgets('badge uses its own offset and anchors to iconText icon', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -613,7 +664,7 @@ void main() {
                 tabText: '消息',
                 selectedIcon: const Icon(Icons.mail),
                 unselectedIcon: const Icon(Icons.mail_outline),
-                badge: const TBadge(label: '9', offset: Offset(2, 1)),
+                badge: const TBadgeConfig(label: '9', offset: Offset(2, 1)),
                 onTap: () {},
               ),
               TTabBarItemConfig(
@@ -632,16 +683,277 @@ void main() {
       final badge = tester.widget<TBadge>(find.byType(TBadge));
       expect(badge.offset, const Offset(2, 1));
       expect(badge.child, isNotNull);
+      expect(
+        find.descendant(
+          of: find.byType(TBadge),
+          matching: find.byIcon(Icons.mail),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: find.byType(TBadge), matching: find.text('消息')),
+        findsNothing,
+      );
       final badgeCenter = tester.getCenter(find.text('9'));
       final iconCenter = tester.getCenter(find.byIcon(Icons.mail));
       expect(badgeCenter.dx, greaterThan(iconCenter.dx));
       expect(badgeCenter.dy, lessThan(iconCenter.dy));
     });
 
-    testWidgets('badge inherits theme offset without blocking item taps', (
+    testWidgets('capsule container keeps the pill design radius', (
       tester,
     ) async {
-      var badgeTaps = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.text,
+            style: TTabBarStyle.capsule,
+            value: 0,
+            navigationTabs: textTabs(),
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      final capsule = tester.widget<Container>(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is Container &&
+              widget.margin == const EdgeInsets.symmetric(horizontal: 16),
+        ),
+      );
+      expect(
+        (capsule.decoration! as BoxDecoration).borderRadius,
+        BorderRadius.circular(TThemeData.defaultData().radiusCircle),
+      );
+      expect(
+        (capsule.decoration! as BoxDecoration).boxShadow,
+        TThemeData.defaultData().shadowsBase,
+      );
+    });
+
+    testWidgets('iconText default badge anchors to icon top-right', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.iconText,
+            value: 0,
+            navigationTabs: const [
+              TTabBarItemConfig(
+                tabText: '很长的标签文字',
+                selectedIcon: Icon(Icons.mail, size: 20),
+                unselectedIcon: Icon(Icons.mail_outline, size: 20),
+                badge: TBadgeConfig(label: '9'),
+              ),
+              TTabBarItemConfig(
+                tabText: '首页',
+                selectedIcon: Icon(Icons.home, size: 20),
+                unselectedIcon: Icon(Icons.home_outlined, size: 20),
+              ),
+            ],
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      final iconRect = tester.getRect(find.byIcon(Icons.mail));
+      final badgeCenter = tester.getCenter(find.text('9'));
+      expect(badgeCenter.dx, closeTo(iconRect.right, 0.01));
+      expect(badgeCenter.dy, closeTo(iconRect.top, 0.01));
+    });
+
+    testWidgets(
+      'text badge uses the shared top-end anchor when no override exists',
+      (tester) async {
+        await tester.pumpWidget(
+          wrapWithTheme(
+            TTabBar(
+              type: TTabBarType.text,
+              value: 0,
+              navigationTabs: const [
+                TTabBarItemConfig(
+                  tabText: '消息',
+                  badge: TBadgeConfig(label: '9'),
+                ),
+                TTabBarItemConfig(tabText: '首页'),
+              ],
+              onChanged: (_) {},
+            ),
+          ),
+        );
+
+        final title = find.widgetWithText(TText, '消息');
+        expect(
+          tester.getCenter(find.text('9')),
+          tester.getTopRight(title) + const Offset(-6, 0),
+        );
+      },
+    );
+
+    testWidgets('text badge default offset follows RTL logical end', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Directionality(
+            textDirection: TextDirection.rtl,
+            child: TTabBar(
+              type: TTabBarType.text,
+              value: 0,
+              navigationTabs: const [
+                TTabBarItemConfig(
+                  tabText: '消息',
+                  badge: TBadgeConfig(label: '9'),
+                ),
+                TTabBarItemConfig(tabText: '首页'),
+              ],
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      final title = find.widgetWithText(TText, '消息');
+      expect(
+        tester.getCenter(find.text('9')),
+        tester.getTopLeft(title) + const Offset(6, 0),
+      );
+    });
+
+    testWidgets('explicit badge offset remains physical in RTL', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Directionality(
+            textDirection: TextDirection.rtl,
+            child: TTabBar(
+              type: TTabBarType.text,
+              value: 0,
+              navigationTabs: const [
+                TTabBarItemConfig(
+                  tabText: '消息',
+                  badge: TBadgeConfig(label: '9', offset: Offset(3, 4)),
+                ),
+                TTabBarItemConfig(tabText: '首页'),
+              ],
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        tester.getCenter(find.text('9')),
+        tester.getTopLeft(find.widgetWithText(TText, '消息')) +
+            const Offset(3, 4),
+      );
+    });
+
+    testWidgets('physical alignment controls component fallback direction', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Directionality(
+            textDirection: TextDirection.rtl,
+            child: TTabBar(
+              type: TTabBarType.text,
+              value: 0,
+              navigationTabs: const [
+                TTabBarItemConfig(
+                  tabText: '消息',
+                  badge: TBadgeConfig(
+                    label: '9',
+                    alignment: Alignment.topRight,
+                  ),
+                ),
+                TTabBarItemConfig(tabText: '首页'),
+              ],
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        tester.getCenter(find.text('9')),
+        tester.getTopRight(find.widgetWithText(TText, '消息')) +
+            const Offset(-6, 0),
+      );
+    });
+
+    testWidgets('BadgeTheme alignment controls component fallback direction', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          BadgeTheme(
+            data: const BadgeThemeData(alignment: Alignment.topRight),
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: TTabBar(
+                type: TTabBarType.text,
+                value: 0,
+                navigationTabs: const [
+                  TTabBarItemConfig(
+                    tabText: '消息',
+                    badge: TBadgeConfig(label: '9'),
+                  ),
+                  TTabBarItemConfig(tabText: '首页'),
+                ],
+                onChanged: (_) {},
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        tester.getCenter(find.text('9')),
+        tester.getTopRight(find.widgetWithText(TText, '消息')) +
+            const Offset(-6, 0),
+      );
+    });
+
+    testWidgets('local BadgeTheme offset overrides TabBar text default', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          BadgeTheme(
+            data: const BadgeThemeData(offset: Offset(3, 4)),
+            child: TTabBar(
+              type: TTabBarType.text,
+              value: 0,
+              navigationTabs: const [
+                TTabBarItemConfig(
+                  tabText: '消息',
+                  badge: TBadgeConfig(label: '9'),
+                ),
+                TTabBarItemConfig(tabText: '首页'),
+              ],
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      final badge = tester.widget<TBadge>(find.byType(TBadge));
+      expect(badge.offset, isNull);
+      expect(
+        tester.getCenter(find.text('9')),
+        tester.getTopRight(find.widgetWithText(TText, '消息')) +
+            const Offset(3, 4),
+      );
+    });
+
+    testWidgets('badge inherits theme offset without blocking item onTap', (
+      tester,
+    ) async {
+      var itemTaps = 0;
       var changedValue = -1;
       await tester.pumpWidget(
         MaterialApp(
@@ -657,7 +969,8 @@ void main() {
                 const TTabBarItemConfig(tabText: '首页'),
                 TTabBarItemConfig(
                   tabText: '消息',
-                  badge: TBadge(label: '1', onTap: () => badgeTaps++),
+                  badge: const TBadgeConfig(label: '1'),
+                  onTap: () => itemTaps++,
                 ),
               ],
               onChanged: (value) => changedValue = value,
@@ -671,14 +984,14 @@ void main() {
 
       await tester.tap(find.text('消息'));
       await tester.pump();
-      expect(badgeTaps, 1);
+      expect(itemTaps, 1);
       expect(changedValue, 1);
     });
 
-    testWidgets('badge onTap follows allowMultipleTaps with InkWell', (
+    testWidgets('item onTap follows allowMultipleTaps with badge and InkWell', (
       tester,
     ) async {
-      var badgeTaps = 0;
+      var itemTaps = 0;
       var changedCount = 0;
       var selectedIndex = 0;
       await tester.pumpWidget(
@@ -691,12 +1004,14 @@ void main() {
               navigationTabs: [
                 TTabBarItemConfig(
                   tabText: '首页',
-                  badge: TBadge(label: '1', onTap: () => badgeTaps++),
+                  badge: const TBadgeConfig(label: '1'),
+                  onTap: () => itemTaps++,
                 ),
                 TTabBarItemConfig(
                   tabText: '消息',
                   allowMultipleTaps: true,
-                  badge: TBadge(label: '2', onTap: () => badgeTaps++),
+                  badge: const TBadgeConfig(label: '2'),
+                  onTap: () => itemTaps++,
                 ),
               ],
               onChanged: (index) {
@@ -710,17 +1025,17 @@ void main() {
 
       await tester.tap(find.text('首页'));
       await tester.pump();
-      expect(badgeTaps, 0);
+      expect(itemTaps, 0);
       expect(changedCount, 0);
 
       await tester.tap(find.text('消息'));
       await tester.pump();
-      expect(badgeTaps, 1);
+      expect(itemTaps, 1);
       expect(changedCount, 1);
 
       await tester.tap(find.text('消息'));
       await tester.pump();
-      expect(badgeTaps, 2);
+      expect(itemTaps, 2);
       expect(changedCount, 1);
     });
 

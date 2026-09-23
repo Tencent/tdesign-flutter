@@ -1,4 +1,4 @@
-import 'package:tdesign_flutter_example/page/t_tree_select_page.dart';
+import 'package:tdesign_flutter_example/page/tree_select/tree_select_page.dart';
 
 import '../demo_page_test_utils.dart';
 

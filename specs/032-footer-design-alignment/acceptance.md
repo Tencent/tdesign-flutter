@@ -6,3 +6,9 @@
 - Flutter 3.47.0：clean 后重新获取依赖；组件测试 7 项、Demo 测试 3 项通过；组件库和 Example 静态分析均无问题。
 - Linux Flutter 3.32.0：明暗 Demo Golden 先生成、人工检查，再以无更新模式复验，2 项通过。
 - 生成物：示例代码与 API 文档已重新生成，示例代码 `--check` 通过。
+
+## 二次 Review 补充
+
+- 品牌样式由 `TFooter` 自身支持 `text + logo` 组合；Demo 不通过额外 Column 或间距覆盖模拟。
+- 品牌文案与 Logo 间距消费 `spacer8`；链接与分隔线的水平间距消费 `spacer12`；
+  分隔线颜色消费 `componentStrokeColor`，并由自定义 Token 组件测试验证。

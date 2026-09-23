@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
-import 'package:tdesign_flutter_example/page/t_tabs_page.dart';
+import 'package:tdesign_flutter_example/page/tabs/tabs_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
 void main() {
@@ -29,7 +29,15 @@ void main() {
 
     final element = tester.element(find.byType(TTabsPage));
     Widget builtAt(int moduleIndex, int itemIndex) {
-      return page.children[moduleIndex].children[itemIndex].builder(element);
+      var widget = page.children[moduleIndex].children[itemIndex].builder(
+        element,
+      );
+      if (widget is StatelessWidget) {
+        // This metadata test deliberately expands the public example wrapper.
+        // ignore: invalid_use_of_protected_member
+        widget = widget.build(element);
+      }
+      return widget;
     }
 
     TTabsBar findBar(Widget widget) {
@@ -148,7 +156,7 @@ void main() {
     final badges = bar.tabs.take(2).map((tab) => tab.child! as TBadge).toList();
     expect(badges.map((badge) => badge.variant), [
       TBadgeVariant.dot,
-      TBadgeVariant.normal,
+      TBadgeVariant.circle,
     ]);
     expect(badges.every((badge) => badge.child is Row), isTrue);
     expect(bar.tabs[2].child, isNull);

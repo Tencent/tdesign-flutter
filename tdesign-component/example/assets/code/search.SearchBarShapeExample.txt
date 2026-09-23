@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class SearchBarShapeExample extends StatelessWidget {
+  const SearchBarShapeExample({super.key});
+
+  Widget _buildShape(BuildContext context) {
+    return const Column(
+      children: [
+        SearchBarShapeExampleSearchDemoSurface(
+          child: TSearchBar(hintText: '搜索预设文案'),
+        ),
+        SizedBox(height: 16),
+        SearchBarShapeExampleSearchDemoSurface(
+          child: TSearchBar(
+            hintText: '搜索预设文案',
+            variant: TSearchBarVariant.round,
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildShape(context);
+  }
+}
+
+class SearchBarShapeExampleSearchDemoSurface extends StatelessWidget {
+  const SearchBarShapeExampleSearchDemoSurface({
+    super.key,
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: child,
+      ),
+    );
+  }
+}

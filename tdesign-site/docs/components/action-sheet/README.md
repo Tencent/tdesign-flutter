@@ -11,6 +11,10 @@ isComponent: true
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 
+## 代码演示
+
+{{ flutter-example-group action_sheet }}
+
 ## 使用场景
 
 ActionSheet 通过 `TActionSheet.showList` 和 `TActionSheet.showGrid`

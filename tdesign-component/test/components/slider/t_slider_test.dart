@@ -1,4 +1,7 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -16,14 +19,19 @@ void main() {
     expect(rangeThumbShape.disabledBorderColor, disabledBorderColor);
   }
 
-  Widget wrap(Widget child, {TSliderThemeData? sliderTheme}) {
+  Widget wrap(
+    Widget child, {
+    TSliderThemeData? sliderTheme,
+    SliderThemeData? materialSliderTheme,
+  }) {
     return MaterialApp(
       theme: ThemeData(
         extensions: [
           TThemeData.defaultData(),
           if (sliderTheme != null) sliderTheme,
         ],
-        sliderTheme: const SliderThemeData(trackHeight: 6),
+        sliderTheme:
+            materialSliderTheme ?? const SliderThemeData(trackHeight: 6),
       ),
       home: Scaffold(
         body: Center(child: SizedBox(width: 320, child: child)),
@@ -77,9 +85,23 @@ void main() {
     testWidgets('uses TDesign token colors when SliderTheme is unspecified', (
       tester,
     ) async {
-      await tester.pumpWidget(wrap(const TSlider(value: 0.5)));
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(extensions: [TThemeData.defaultData()]),
+          home: const Scaffold(
+            body: Center(
+              child: SizedBox(width: 320, child: TSlider(value: 0.5)),
+            ),
+          ),
+        ),
+      );
 
       final theme = SliderTheme.of(tester.element(find.byType(Slider)));
+      expect(theme.trackHeight, 4);
+      expect(
+        theme.trackShape.runtimeType.toString(),
+        '_TDesignSliderTrackShape',
+      );
       expect(theme.activeTrackColor, TThemeData.defaultData().brandNormalColor);
       expect(
         theme.inactiveTrackColor,
@@ -97,8 +119,102 @@ void main() {
       expectThumbBorders(
         theme,
         borderColor: TThemeData.defaultData().grayColor1,
-        disabledBorderColor:
-            TThemeData.defaultData().bgColorComponentDisabled,
+        disabledBorderColor: TThemeData.defaultData().bgColorComponentDisabled,
+      );
+    });
+
+    testWidgets('default track uses the design 16px horizontal inset', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(extensions: [TThemeData.defaultData()]),
+          home: const Scaffold(
+            body: Center(
+              child: SizedBox(width: 320, child: TSlider(value: 0.5)),
+            ),
+          ),
+        ),
+      );
+
+      final sliderFinder = find.byType(Slider);
+      final theme = SliderTheme.of(tester.element(sliderFinder));
+      final renderBox = tester.renderObject<RenderBox>(sliderFinder);
+      final dynamic trackShape = theme.trackShape;
+      final Rect trackRect = trackShape.getPreferredRect(
+        parentBox: renderBox,
+        sliderTheme: theme,
+        isEnabled: true,
+        isDiscrete: false,
+      );
+      expect(trackRect.left, 16);
+      expect(trackRect.right, renderBox.size.width - 16);
+      expect(trackRect.height, 4);
+    });
+
+    testWidgets('track geometry follows custom spacing tokens', (tester) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'custom-slider-spacing',
+        marginMap: const {'spacer4': 5, 'spacer16': 18, 'spacer24': 28},
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(extensions: [token]),
+          home: const Scaffold(
+            body: Center(
+              child: SizedBox(
+                width: 320,
+                child: Column(
+                  children: [
+                    TSlider(value: 0.5),
+                    TSlider(
+                      value: 0.5,
+                      divisions: 5,
+                      variant: TSliderVariant.capsule,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      final sliders = find.byType(Slider);
+      final normalTheme = SliderTheme.of(tester.element(sliders.at(0)));
+      final capsuleTheme = SliderTheme.of(tester.element(sliders.at(1)));
+      final normalBox = tester.renderObject<RenderBox>(sliders.at(0));
+      final capsuleBox = tester.renderObject<RenderBox>(sliders.at(1));
+      final dynamic normalTrackShape = normalTheme.trackShape;
+      final dynamic capsuleTrackShape = capsuleTheme.trackShape;
+      final dynamic capsuleTickShape = capsuleTheme.tickMarkShape;
+      final Rect normalTrackRect = normalTrackShape.getPreferredRect(
+        parentBox: normalBox,
+        sliderTheme: normalTheme,
+        isEnabled: true,
+        isDiscrete: false,
+      );
+      final Rect capsuleTrackRect = capsuleTrackShape.getPreferredRect(
+        parentBox: capsuleBox,
+        sliderTheme: capsuleTheme,
+        isEnabled: true,
+        isDiscrete: true,
+      );
+
+      expect(normalTheme.trackHeight, 5);
+      expect(normalTrackRect.left, 18);
+      expect(normalTrackRect.right, normalBox.size.width - 18);
+      expect(capsuleTheme.trackHeight, 28);
+      // Material's discrete centers are inset by half the track height;
+      // the visual capsule still starts 18px from each edge.
+      expect(capsuleTrackRect.left, 7);
+      expect(capsuleTrackRect.right, capsuleBox.size.width - 7);
+      expect(
+        capsuleTickShape.getPreferredSize(
+          sliderTheme: capsuleTheme,
+          isEnabled: true,
+        ),
+        Size.zero,
       );
     });
 
@@ -230,6 +346,190 @@ void main() {
         SliderTheme.of(tester.element(find.byType(Slider))).showValueIndicator,
         ShowValueIndicator.never,
       );
+      final tickShape = SliderTheme.of(
+        tester.element(find.byType(Slider)),
+      ).tickMarkShape;
+      expect(tickShape, const RoundSliderTickMarkShape(tickMarkRadius: 3));
+    });
+
+    testWidgets('capsule variant owns inset track and 20px thumb geometry', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TSlider(
+            value: 0.4,
+            divisions: 5,
+            variant: TSliderVariant.capsule,
+          ),
+          materialSliderTheme: const SliderThemeData(
+            trackHeight: 6,
+            activeTickMarkColor: Colors.purple,
+          ),
+        ),
+      );
+
+      final theme = SliderTheme.of(tester.element(find.byType(Slider)));
+      expect(theme.trackHeight, 24);
+      expect(theme.activeTickMarkColor, Colors.purple);
+      expect(
+        theme.trackShape.runtimeType.toString(),
+        '_CapsuleSliderTrackShape',
+      );
+      expect(
+        theme.thumbShape?.getPreferredSize(true, false),
+        const Size.square(20),
+      );
+      expect(
+        theme.tickMarkShape?.getPreferredSize(
+          sliderTheme: theme,
+          isEnabled: true,
+        ),
+        Size.zero,
+      );
+      final sliderFinder = find.byType(Slider);
+      final renderBox = tester.renderObject<RenderBox>(sliderFinder);
+      final dynamic trackShape = theme.trackShape;
+      final Rect trackRect = trackShape.getPreferredRect(
+        parentBox: renderBox,
+        sliderTheme: theme,
+        isEnabled: true,
+        isDiscrete: true,
+      );
+      expect(trackRect.left, 7);
+      expect(trackRect.right, renderBox.size.width - 7);
+      expect(trackRect.height, 24);
+      expect(trackRect.left + trackRect.height / 2, 19);
+      expect(trackRect.right - trackRect.height / 2, renderBox.size.width - 19);
+    });
+
+    testWidgets('capsule ticks divide only the interior of the track', (
+      tester,
+    ) async {
+      const boundaryKey = ValueKey('capsule-ticks');
+
+      Future<void> expectInteriorTicksOnly(Widget slider) async {
+        await tester.pumpWidget(
+          wrap(
+            RepaintBoundary(
+              key: boundaryKey,
+              child: SizedBox(width: 320, height: 48, child: slider),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final boundaryFinder = find.byKey(boundaryKey);
+        final sliderFinder = find.byWidgetPredicate(
+          (widget) => widget is Slider || widget is RangeSlider,
+        );
+        final theme = SliderTheme.of(tester.element(sliderFinder));
+        final sliderBox = tester.renderObject<RenderBox>(sliderFinder);
+        final trackRect = slider is TSlider
+            ? theme.trackShape!.getPreferredRect(
+                parentBox: sliderBox,
+                sliderTheme: theme,
+                isEnabled: true,
+                isDiscrete: true,
+              )
+            : theme.rangeTrackShape!.getPreferredRect(
+                parentBox: sliderBox,
+                sliderTheme: theme,
+                isEnabled: true,
+                isDiscrete: true,
+              );
+        final sliderOffset =
+            tester.getTopLeft(sliderFinder) - tester.getTopLeft(boundaryFinder);
+        final first = trackRect.left + trackRect.height / 2;
+        final last = trackRect.right - trackRect.height / 2;
+        final interior = first + (last - first) * 2 / 5;
+        final y = (sliderOffset.dy + trackRect.center.dy).round();
+
+        final boundary = tester.renderObject<RenderRepaintBoundary>(
+          boundaryFinder,
+        );
+        final pixels = await tester.runAsync(() async {
+          final image = await boundary.toImage(pixelRatio: 1);
+          final data = await image.toByteData(
+            format: ui.ImageByteFormat.rawRgba,
+          );
+          final result = (
+            width: image.width,
+            bytes: data!.buffer.asUint8List(),
+          );
+          image.dispose();
+          return result;
+        });
+        Color pixel(double x) {
+          final index = (y * pixels!.width + (sliderOffset.dx + x).round()) * 4;
+          return Color.fromARGB(
+            pixels.bytes[index + 3],
+            pixels.bytes[index],
+            pixels.bytes[index + 1],
+            pixels.bytes[index + 2],
+          );
+        }
+
+        expect(pixel(first), isNot(Colors.white));
+        expect(pixel(last), isNot(Colors.white));
+        expect(pixel(interior), isNot(pixel(interior + 4)));
+        if (slider is TSlider) {
+          final visualLeft = trackRect.left + trackRect.height / 2 - 3;
+          final visualWidth = trackRect.width - trackRect.height + 6;
+          final dividerLeft = visualLeft + 1.5;
+          final dividerStep = (visualWidth - 3) / 5;
+          final selectedGap = (dividerLeft + 2 * dividerStep).floorToDouble();
+          final inactiveGap = (dividerLeft + 4 * dividerStep).floorToDouble();
+          final outerColor = TThemeData.defaultData().bgColorComponent;
+          expect(pixel(selectedGap), outerColor);
+          expect(pixel(inactiveGap), outerColor);
+        }
+      }
+
+      await expectInteriorTicksOnly(
+        TSlider(
+          value: 60,
+          min: 0,
+          max: 100,
+          divisions: 5,
+          variant: TSliderVariant.capsule,
+          onChanged: (_) {},
+        ),
+      );
+      await expectInteriorTicksOnly(
+        TRangeSlider(
+          value: const RangeValues(20, 80),
+          min: 0,
+          max: 100,
+          divisions: 5,
+          variant: TSliderVariant.capsule,
+          onChanged: (_) {},
+        ),
+      );
+    });
+
+    testWidgets('dense capsule divisions do not invert painted segments', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const Column(
+            children: [
+              TSlider(
+                value: 0.5,
+                divisions: 400,
+                variant: TSliderVariant.capsule,
+              ),
+              TRangeSlider(
+                value: RangeValues(0.25, 0.75),
+                divisions: 400,
+                variant: TSliderVariant.capsule,
+              ),
+            ],
+          ),
+        ),
+      );
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('showScaleValue renders formatted scale labels', (
@@ -251,6 +551,17 @@ void main() {
       expect(find.text('0%'), findsOneWidget);
       expect(find.text('50%'), findsOneWidget);
       expect(find.text('100%'), findsOneWidget);
+      final sliderRect = tester.getRect(find.byType(Slider));
+      expect(tester.getRect(find.text('0%')).left, sliderRect.left + 16);
+      expect(tester.getRect(find.text('100%')).right, sliderRect.right - 16);
+      expect(
+        tester.getCenter(find.text('50%')).dx,
+        closeTo(sliderRect.center.dx, 0.01),
+      );
+      expect(
+        tester.getBottomLeft(find.text('0%')).dy,
+        lessThanOrEqualTo(sliderRect.top),
+      );
     });
 
     testWidgets('showThumbValue defaults to two decimal places', (
@@ -372,6 +683,42 @@ void main() {
         ).showValueIndicator,
         ShowValueIndicator.never,
       );
+      final tickShape = SliderTheme.of(
+        tester.element(find.byType(RangeSlider)),
+      ).rangeTickMarkShape;
+      expect(tickShape, const RoundRangeSliderTickMarkShape(tickMarkRadius: 3));
+    });
+
+    testWidgets('range capsule variant uses component-owned geometry', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TRangeSlider(
+            value: RangeValues(0.2, 0.8),
+            divisions: 5,
+            variant: TSliderVariant.capsule,
+          ),
+        ),
+      );
+
+      final theme = SliderTheme.of(tester.element(find.byType(RangeSlider)));
+      expect(theme.trackHeight, 24);
+      expect(
+        theme.rangeTrackShape.runtimeType.toString(),
+        '_CapsuleRangeSliderTrackShape',
+      );
+      expect(
+        theme.rangeThumbShape?.getPreferredSize(true, false),
+        const Size.square(20),
+      );
+      expect(
+        theme.rangeTickMarkShape?.getPreferredSize(
+          sliderTheme: theme,
+          isEnabled: true,
+        ),
+        Size.zero,
+      );
     });
 
     testWidgets('showScaleValue renders formatted range scale labels', (
@@ -393,6 +740,10 @@ void main() {
       expect(find.text('0%'), findsOneWidget);
       expect(find.text('50%'), findsOneWidget);
       expect(find.text('100%'), findsOneWidget);
+      expect(
+        tester.getBottomLeft(find.text('0%')).dy,
+        lessThanOrEqualTo(tester.getTopLeft(find.byType(RangeSlider)).dy),
+      );
     });
 
     testWidgets('range showThumbValue defaults to two decimal places', (

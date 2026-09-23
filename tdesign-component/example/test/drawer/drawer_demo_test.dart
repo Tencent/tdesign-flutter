@@ -80,11 +80,11 @@ void main() {
     );
 
     const entries = {
-      '基础抽屉': 'drawer._buildBaseSimple.txt',
-      '带图标抽屉': 'drawer._buildIconSimple.txt',
-      '小标题抽屉': 'drawer._buildTitleSimple.txt',
-      '左侧抽屉': 'drawer._buildPlacementSimple.txt',
-      '带底部插槽': 'drawer._buildBottomSimple.txt',
+      '基础抽屉': 'drawer.DrawerBaseSimpleExample.txt',
+      '带图标抽屉': 'drawer.DrawerIconSimpleExample.txt',
+      '小标题抽屉': 'drawer.DrawerTitleSimpleExample.txt',
+      '左侧抽屉': 'drawer.DrawerPlacementSimpleExample.txt',
+      '带底部插槽': 'drawer.DrawerBottomSimpleExample.txt',
     };
     for (final entry in entries.entries) {
       final trigger = find.widgetWithText(TButton, entry.key);

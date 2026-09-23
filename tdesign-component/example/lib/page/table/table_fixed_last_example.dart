@@ -1,0 +1,50 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+
+@ExampleCode(group: 'table')
+class TableFixedLastExample extends StatelessWidget {
+  const TableFixedLastExample({super.key});
+
+  static final _rows = List<List<String>>.generate(
+    10,
+    (index) => [index == 9 ? '内容内容内容内容' : '内容'],
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return TTable(
+      key: const ValueKey('table-fixed-last'),
+      columns: [
+        for (var index = 1; index <= 5; index++)
+          TTableColumn<List<String>>(
+            id: 'title$index',
+            header: const Text('标题'),
+            width: 120,
+            cellBuilder: (_, __, ___) => const Text('内容'),
+          ),
+        TTableColumn<List<String>>(
+          id: 'actions',
+          header: const Text('标题'),
+          width: 116,
+          fixed: TTableColumnFixed.right,
+          cellBuilder: (context, _, __) => Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '修改',
+                style: TextStyle(color: context.tTheme.brandNormalColor),
+              ),
+              const SizedBox(width: 24),
+              Text(
+                '通过',
+                style: TextStyle(color: context.tTheme.brandNormalColor),
+              ),
+            ],
+          ),
+        ),
+      ],
+      data: _rows,
+    );
+  }
+}

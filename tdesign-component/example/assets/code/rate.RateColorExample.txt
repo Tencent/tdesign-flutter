@@ -1,0 +1,85 @@
+import 'package:flutter/cupertino.dart' show CupertinoIcons;
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class RateColorExample extends StatelessWidget {
+  const RateColorExample({super.key});
+
+  Widget _buildColor(BuildContext context) => Column(
+    children: [
+      TCell(
+        title: const Text('填充评分'),
+        note: Theme(
+          data: Theme.of(context).mergeExtension(
+            const TRateThemeData(
+              starColor: Color(0xFFF96102),
+              inactiveStarColor: Color(0xFFBBBBBB),
+            ),
+          ),
+          child: const RateColorExampleStatefulRate(
+            initialValue: 3,
+            allowHalf: true,
+          ),
+        ),
+      ),
+      SizedBox(height: context.tTheme.spacer16),
+      TCell(
+        title: const Text('线描评分'),
+        note: Theme(
+          data: Theme.of(context).mergeExtension(
+            TRateThemeData(starColor: context.tTheme.warningColor5),
+          ),
+          child: RateColorExampleStatefulRate(
+            initialValue: 3,
+            icon: (filled) => Icon(
+              filled ? TIcons.star_filled : TIcons.star,
+              color: filled
+                  ? context.tTheme.warningColor5
+                  : context.tTheme.bgColorComponent,
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildColor(context);
+  }
+}
+
+class RateColorExampleStatefulRate extends StatefulWidget {
+  const RateColorExampleStatefulRate({
+    super.key,
+    required this.initialValue,
+    this.count = 5,
+    this.allowHalf = false,
+    this.icon,
+    this.texts,
+  });
+  final double initialValue;
+  final int count;
+  final bool allowHalf;
+  final TRateIconBuilder? icon;
+  final List<String>? texts;
+
+  @override
+  State<RateColorExampleStatefulRate> createState() =>
+      RateColorExampleStatefulRateState();
+}
+
+class RateColorExampleStatefulRateState
+    extends State<RateColorExampleStatefulRate> {
+  late double value = widget.initialValue;
+
+  @override
+  Widget build(BuildContext context) => TRate(
+    value: value,
+    count: widget.count,
+    allowHalf: widget.allowHalf,
+    icon: widget.icon,
+    texts: widget.texts,
+    onChanged: (next) => setState(() => value = next),
+  );
+}

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_popover_page.dart';
+import 'package:tdesign_flutter_example/page/popover/popover_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
 void main() {
@@ -77,6 +77,25 @@ void main() {
       TToast.dismissAll();
       await tester.pump();
     }
+  });
+
+  testWidgets('公开 Demo 单击另一触发器时关闭旧气泡并打开新气泡', (tester) async {
+    configurePhone(tester);
+    await showPage(tester);
+
+    await tester.tap(find.text('带箭头'));
+    await tester.pumpAndSettle();
+    expect(find.text('弹出气泡内容'), findsOneWidget);
+
+    final customTrigger = find.byKey(
+      const Key('popover-custom-content-trigger'),
+    );
+    await tester.tap(customTrigger);
+    await tester.pumpAndSettle();
+
+    expect(find.text('弹出气泡内容'), findsNothing);
+    expect(find.byKey(const Key('popover-custom-option-1')), findsOneWidget);
+    expect(find.byKey(const Key('t-popover-content')), findsOneWidget);
   });
 
   testWidgets('主题背景与尺寸约束在 Demo 中可观察', (tester) async {

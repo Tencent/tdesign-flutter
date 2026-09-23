@@ -1,0 +1,59 @@
+import 'package:flutter/cupertino.dart' show CupertinoIcons;
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'rate')
+class RateThirdPartyIconExample extends StatelessWidget {
+  const RateThirdPartyIconExample({super.key});
+
+  Widget _buildThirdPartyIcon(BuildContext context) => TCell(
+    title: const Text('第三方图标'),
+    note: RateThirdPartyIconExampleStatefulRate(
+      initialValue: 3,
+      icon: (filled) =>
+          Icon(filled ? CupertinoIcons.heart_fill : CupertinoIcons.heart),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildThirdPartyIcon(context);
+  }
+}
+
+class RateThirdPartyIconExampleStatefulRate extends StatefulWidget {
+  const RateThirdPartyIconExampleStatefulRate({
+    super.key,
+    required this.initialValue,
+    this.count = 5,
+    this.allowHalf = false,
+    this.icon,
+    this.texts,
+  });
+  final double initialValue;
+  final int count;
+  final bool allowHalf;
+  final TRateIconBuilder? icon;
+  final List<String>? texts;
+
+  @override
+  State<RateThirdPartyIconExampleStatefulRate> createState() =>
+      RateThirdPartyIconExampleStatefulRateState();
+}
+
+class RateThirdPartyIconExampleStatefulRateState
+    extends State<RateThirdPartyIconExampleStatefulRate> {
+  late double value = widget.initialValue;
+
+  @override
+  Widget build(BuildContext context) => TRate(
+    value: value,
+    count: widget.count,
+    allowHalf: widget.allowHalf,
+    icon: widget.icon,
+    texts: widget.texts,
+    onChanged: (next) => setState(() => value = next),
+  );
+}

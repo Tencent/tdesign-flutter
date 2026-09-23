@@ -1,0 +1,30 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'empty')
+class ImageEmptyExample extends StatelessWidget {
+  const ImageEmptyExample({super.key});
+
+  Widget _imageEmpty(BuildContext context) {
+    return TEmpty(
+      image: SizedBox.square(
+        dimension: 120,
+        child: Container(
+          decoration: BoxDecoration(
+            color: context.tTheme.bgColorSecondaryContainer,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const TImage(src: 'assets/img/empty.png', fit: BoxFit.contain),
+        ),
+      ),
+      emptyText: '描述文字',
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _imageEmpty(context);
+  }
+}

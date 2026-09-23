@@ -155,3 +155,47 @@
 整页 Golden 使用 375×1260 视口完整包含 9 个实例，不是首屏截图；Toast 与展开菜单
 使用 375×812 手机视口的 Overlay Golden。注册集合测试将上述 9 个初始态、9 个
 选中态及 3 类独立交互态逐主题登记，避免后续删掉测试却继续宣称覆盖完整。
+
+## 2026-09-18 纯文本徽标默认定位收敛
+
+- 基于本地 `develop@0de62b9b`，将公开 Demo 的 `Offset(16, -8)` 收回 TabBar
+  纯文本项内部；实例 `TBadge.offset`、局部 `BadgeTheme.offset`、全局
+  `BadgeThemeData.offset` 仍依次优先，图标与图文项继续使用 `TBadge` 默认位置。
+- 公开 Demo 四个纯文本徽标均不再传 offset；示例片段和 TabBar API 文档由源码
+  重新生成，`generate_example_code.dart --check` 通过。
+- Flutter 3.32.0：TabBar 组件 27/27、TabBar Demo 7/7 通过；组件包与 Example
+  `flutter analyze --fatal-infos --no-pub` 均零问题。
+- Flutter 3.47.0：TabBar 与 SideBar 聚焦组件测试合计 94/94、TabBar Demo 7/7
+  通过；组件包与 Example 严格 analyze 均零问题。
+- Flutter 3.32.0 聚焦覆盖率门禁通过：TabBar 生产代码 520/531，97.93%（门槛
+  95%）。
+- macOS Flutter 3.32.0 无更新运行组件 Golden 时，纯文本、图文和胶囊等不含
+  Badge 的场景也出现 0.20%–0.40% 字形栅格差异；纯图标场景通过。已检查实际图、
+  基线图和差异图，未更新 Linux 权威基线；Flutter 3.32.0 Linux Golden 仍待验证。
+- 本轮未重新打开 Figma 或运行移动设备，不将功能测试视为最终逐像素验收。
+
+## 2026-09-18 图文徽标锚点修复
+
+- PR 分支已快进到最新 `origin/develop@cec91a38` 后重新验证；上游新增的 Indexes
+  与 Table 改动不在本次 diff 中。
+- 图文项不再把“图标 + 文字”整列注入 `TBadge.child`，改为仅以 icon 作为徽标
+  锚点；因此下方文字宽度不再改变 Badge 的水平位置。纯文本项与纯图标项行为不变。
+- 新增长文案图文项几何断言：默认 Badge 中心与 icon 右上角重合；既有显式
+  offset 用例同时断言 icon 位于 `TBadge` 内、文字位于 `TBadge` 外。
+- Flutter 3.32.0 聚焦组件测试 95/95、四个 Badge 相关公开 Demo 测试 27/27
+  通过；组件和 Example 聚焦 `flutter analyze --fatal-infos` 均零问题，
+  `git diff --check` 通过。
+- Flutter 3.47.0 同组组件测试 95/95、公开 Demo 测试 27/27 通过，组件包与
+  Example 严格 analyze 均零问题。首次并行 Demo 测试命中跨 SDK
+  `ink_sparkle.frag` 缓存污染；使用 3.47.0 clean + pub get 后串行复跑通过。
+- Flutter 3.32.0 生产源码覆盖率：TabBar `524/535 = 97.94%`，SideBar
+  `262/262 = 100.00%`，均高于 95% 门槛；示例代码生成检查通过。
+- 使用同一环境的修复前、修复后截图与 Figma 节点重新生成三栏标注图；TabBar
+  纯文本、纯图标、图文三种形态均单列，图文差异标注为“整列锚点 → icon 锚点”。
+  SideBar、Avatar、Cell、ActionSheet 列表和宫格也保留各自形态与所有权结论。
+- macOS Flutter 3.32.0 对现有 TabBar Golden 的无更新复跑存在约 4.73%–5.97%
+  的整页字形/环境差异，未写回 Linux 权威基线；本轮视觉结论来自同环境前后截图、
+  Figma 标注图及精确几何断言，不把该本地 Golden 失败误报为回归通过。
+- 最新 debug APK 已构建并安装到 Android 16 真机 `40302eeb`；包
+  `com.tdesign.tdesign_flutter_example` 的 `MainActivity` 已确认处于前台，detach
+  后进程仍在运行。

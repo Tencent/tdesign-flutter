@@ -1,0 +1,170 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class CascaderTabExample extends StatelessWidget {
+  const CascaderTabExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const CascaderDesignDemo(
+      id: 'horizontal',
+      variant: TCascaderVariant.tab,
+    );
+  }
+}
+
+/// Shared Cascader composition used by the six public examples.
+class CascaderDesignDemo extends StatefulWidget {
+  const CascaderDesignDemo({
+    super.key,
+    required this.id,
+    this.variant = TCascaderVariant.step,
+    this.showTitle = true,
+  });
+
+  final String id;
+  final TCascaderVariant variant;
+  final bool showTitle;
+
+  @override
+  State<CascaderDesignDemo> createState() => _CascaderDesignDemoState();
+}
+
+class _CascaderDesignDemoState extends State<CascaderDesignDemo> {
+  static const _options = [
+    TCascaderOption(
+      label: '广东',
+      value: 'guangdong',
+      children: [
+        TCascaderOption(
+          label: '深圳',
+          value: 'shenzhen',
+          children: [
+            TCascaderOption(
+              label: '南山区',
+              value: 'nanshan',
+              children: [
+                TCascaderOption(label: '粤海街道', value: 'yuehai'),
+                TCascaderOption(label: '南头街道', value: 'nantou'),
+                TCascaderOption(label: '蛇口街道', value: 'shekou'),
+              ],
+            ),
+            TCascaderOption(
+              label: '福田区',
+              value: 'futian',
+              children: [
+                TCascaderOption(label: '福田街道', value: 'futian-street'),
+              ],
+            ),
+          ],
+        ),
+        TCascaderOption(
+          label: '广州',
+          value: 'guangzhou',
+          children: [
+            TCascaderOption(
+              label: '天河区',
+              value: 'tianhe',
+              children: [TCascaderOption(label: '石牌街道', value: 'shipai')],
+            ),
+          ],
+        ),
+      ],
+    ),
+  ];
+
+  List<Object?> _value = const ['guangdong', 'shenzhen', 'nanshan', 'yuehai'];
+
+  static List<String> _labelsFor(List<Object?> values) {
+    final labels = <String>[];
+    var current = _options;
+    for (final value in values) {
+      final index = current.indexWhere((option) => option.value == value);
+      if (index < 0) {
+        break;
+      }
+      labels.add(current[index].label);
+      current = current[index].children;
+    }
+    return labels;
+  }
+
+  static bool _isComplete(List<Object?> values) {
+    var current = _options;
+    for (var index = 0; index < values.length; index++) {
+      final optionIndex = current.indexWhere(
+        (option) => option.value == values[index],
+      );
+      if (optionIndex < 0) {
+        return false;
+      }
+      final option = current[optionIndex];
+      if (index == values.length - 1) {
+        return option.children.isEmpty;
+      }
+      current = option.children;
+    }
+    return false;
+  }
+
+  void _showCascader() {
+    var draft = List<Object?>.of(_value);
+    late VoidCallback closePopup;
+    TPopup.show(
+      context,
+      options: TPopupOptions.bottom(
+        height: 580,
+        headerBuilder: widget.showTitle
+            ? (_, close) {
+                closePopup = close;
+                return TPopupHeader(
+                  title: const TText('标题文字'),
+                  confirmButton: TToolbarPressable(
+                    onTap: close,
+                    child: TIcon(
+                      TIcons.close,
+                      size: 24,
+                      color: context.tTheme.textColorPrimary,
+                    ),
+                  ),
+                );
+              }
+            : (_, close) {
+                closePopup = close;
+                return const SizedBox.shrink();
+              },
+        child: StatefulBuilder(
+          builder: (context, setPopupState) => TCascader(
+            key: const ValueKey('cascader-popup-panel'),
+            options: _options,
+            value: draft,
+            variant: widget.variant,
+            subtitles: const ['一级选项标题', '二级选项标题', '三级选项标题', '四级选项标题'],
+            onChanged: (next) {
+              setPopupState(() => draft = List<Object?>.of(next));
+              if (_isComplete(next)) {
+                setState(() => _value = List<Object?>.unmodifiable(next));
+                closePopup();
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TCellGroup(
+      cells: [
+        TCell(
+          key: ValueKey('cascader-${widget.id}-trigger'),
+          title: const TText('选择地区'),
+          note: TText(_labelsFor(_value).join(' ')),
+          arrow: true,
+          onTap: _showCascader,
+        ),
+      ],
+    );
+  }
+}

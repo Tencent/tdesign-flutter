@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
-import 'package:tdesign_flutter_example/page/t_image_page.dart';
+import 'package:tdesign_flutter_example/page/image/image_page.dart';
 
 import '../demo_page_test_utils.dart';
 
 const imageDemoSpec = DemoPageTestSpec(
   name: 'image',
-  title: 'Image',
+  title: 'Image 图片',
   page: TImagePage(),
   expectedTexts: [
     '裁切',
@@ -32,7 +32,7 @@ const imageDemoSpec = DemoPageTestSpec(
 void main() {
   registerDemoStructureTests(imageDemoSpec);
 
-  testWidgets('公开分组与十个实例符合设计稿', (tester) async {
+  testWidgets('公开分组与十个实例对齐设计稿和官方 Demo', (tester) async {
     await pumpFullDemoPage(tester, imageDemoSpec, ThemeMode.light);
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
     expect(page.children.map((module) => module.title), ['组件类型', '组件状态']);

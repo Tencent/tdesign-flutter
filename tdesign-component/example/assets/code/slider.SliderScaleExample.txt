@@ -1,0 +1,39 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class SliderScaleExample extends StatefulWidget {
+  const SliderScaleExample({super.key});
+
+  @override
+  State<SliderScaleExample> createState() => _SliderScaleExampleState();
+}
+
+class _SliderScaleExampleState extends State<SliderScaleExample> {
+  Widget _buildScale(BuildContext context) {
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 3),
+        child: TSlider(
+          key: const ValueKey('slider-scale'),
+          value: _scale,
+          min: 0,
+          max: 100,
+          divisions: 5,
+          showScaleValue: true,
+          scaleFormatter: _integer,
+          onChanged: (value) => setState(() => _scale = value),
+        ),
+      ),
+    );
+  }
+
+  double _scale = 60;
+
+  static String _integer(double value) => value.round().toString();
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildScale(context);
+  }
+}

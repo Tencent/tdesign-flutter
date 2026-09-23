@@ -1,3 +1,0 @@
-Widget _buildFooter(BuildContext context) {
-  return const TFooter(text: 'Copyright © 2021-2031 TD.All Rights Reserved.');
-}

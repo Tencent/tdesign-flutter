@@ -1,0 +1,128 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import 'sidebar_example_scaffold.dart';
+
+/// SideBar 标签样式示例。
+class TSideBarCustomPage extends StatefulWidget {
+  const TSideBarCustomPage({super.key});
+
+  @override
+  State<TSideBarCustomPage> createState() => TSideBarCustomPageState();
+}
+
+class TSideBarCustomPageState extends State<TSideBarCustomPage> {
+  var currentValue = 1;
+  final _pageController = PageController(initialPage: 1);
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => SideBarExampleScaffold(
+    title: 'SideBar 自定义样式',
+    child: _buildCustomSideBar(context),
+  );
+
+  Widget _buildCustomSideBar(BuildContext context) {
+    // 接入说明：currentValue、setCurrentValue 与 PageController 由页面状态持有；
+    // 此处展示 tag 变体与内容页的核心组装，接入时需自行维护 value/onChanged 联动。
+    final labels = List.filled(10, '选项');
+    final titles = List.filled(10, '标题');
+    final itemCounts = List.filled(10, 8);
+    final items = List.generate(
+      labels.length,
+      (index) => TSideBarItem(
+        label: labels[index],
+        value: index,
+        badge: switch (index) {
+          1 => const TBadgeConfig(variant: TBadgeVariant.dot),
+          2 => const TBadgeConfig(label: '8'),
+          _ => null,
+        },
+      ),
+    );
+
+    void setCurrentValue(int value) {
+      _pageController.jumpToPage(value);
+      if (currentValue != value) {
+        setState(() => currentValue = value);
+      }
+    }
+
+    Widget buildPage(int pageIndex) {
+      return Container(
+        color: context.tTheme.bgColorContainer,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 54,
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TText(
+                titles[pageIndex],
+                font: context.tTheme.fontBodyLarge,
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: itemCounts[pageIndex],
+                itemBuilder: (_, index) => Container(
+                  height: 80,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: context.tTheme.grayColor2),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const TImage(
+                        src: 'assets/img/empty.png',
+                        width: 48,
+                        height: 48,
+                      ),
+                      const SizedBox(width: 16),
+                      TText('标题', font: context.tTheme.fontBodyLarge),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Row(
+      children: [
+        TSideBar(
+          variant: TSideBarVariant.tag,
+          value: currentValue,
+          children: items,
+          selectedTextStyle: TextStyle(
+            color: context.tTheme.brandNormalColor,
+            fontWeight: FontWeight.w600,
+          ),
+          selectedBgColor: context.tTheme.brandLightColor,
+          unSelectedColor: context.tTheme.textColorSecondary,
+          onChanged: setCurrentValue,
+        ),
+        Expanded(
+          child: PageView.builder(
+            controller: _pageController,
+            scrollDirection: Axis.vertical,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: titles.length,
+            itemBuilder: (_, index) => buildPage(index),
+          ),
+        ),
+      ],
+    );
+  }
+}

@@ -11,6 +11,10 @@ isComponent: true
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 
+## 代码演示
+
+{{ flutter-example-group form }}
+
 ## 组件关系
 
 ```text
@@ -21,35 +25,6 @@ TForm                 表单生命周期、字段注册和统一操作
 ```
 
 `TFormField` 和 `TFormItem` 均可独立使用。Flutter 业务状态仍由调用方持有，组件不会复制一份表单 data。
-
-## 基础用法
-
-```dart
-final formController = TFormController();
-var name = '';
-
-TForm(
-  controller: formController,
-  onSubmit: (values) {},
-  child: TFormField<String>(
-    name: 'name',
-    value: name,
-    required: true,
-    requiredMessage: '请输入用户名',
-    onChanged: (value) => setState(() => name = value),
-    validator: (value) => value.length == 8 ? null : '只能输入8个字符',
-    builder: (context, value, onChanged, errorText) => TFormItem(
-      label: '用户名',
-      help: '输入用户名',
-      child: TInput(
-        borderless: true,
-        hintText: '请输入用户名',
-        onChanged: onChanged,
-      ),
-    ),
-  ),
-)
-```
 
 ## 校验与提交
 
@@ -87,4 +62,4 @@ Theme(
 - 删除 `TFormRule` / `TFormField.rules`，必填使用 `required`，其他约束统一写入 Flutter 原生 `validator`。
 - 表单项视觉继续由 `TFormItem` 负责，不把 label、help、error 等参数复制到输入组件。
 
-完整示例见 [t_form_page.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/t_form_page.dart)，完整 API 以组件 dartdoc 和 Example API 面板为准。
+完整示例以以上 Example App 生成代码为准，完整 API 以组件 dartdoc 和 Example API 面板为准。

@@ -1,5 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import 'package:tdesign_flutter_example/page/t_progress_page.dart';
+import 'package:tdesign_flutter_example/page/progress/progress_page.dart';
 
 import '../demo_page_test_utils.dart';
 
@@ -13,7 +13,7 @@ const progressDemoPageTestSpec = DemoPageTestSpec(
     '百分比内显',
     '环形进度条',
     '微型环形进度条',
-    '带操作按钮',
+    '按钮进度条',
     '微型按钮进度条',
     '02 组件状态',
     '线性进度条',

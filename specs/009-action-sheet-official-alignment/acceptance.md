@@ -32,6 +32,13 @@
 
 - 翻页、禁用项和全部入口的真机连续交互仍需人工复核；静态截图不能替代交互验收。
 
+## 2026-09-19 RTL 对齐与徽标定位复验
+
+- `TActionSheetAlign.left/right` 明确保持物理左/右语义；RTL 下标题、副标题和面板描述使用同一几何方向，不再因 Row 的 start/end 与 `TextAlign.left/right` 含义不同而错位。
+- 列表和宫格徽标继续由 ActionSheet 拥有锚点；组件默认偏移根据 Badge 最终生效的 alignment 转换，实例 alignment、局部 Theme alignment 与 RTL 均有实际几何断言。
+- Flutter 3.32.0 与 3.47.0 下完整 ActionSheet 组件测试 59 项通过，组件包严格 analyze 均为 0 issues。
+- Flutter 3.32.0 覆盖率 `503/521 = 96.55%`；本轮未改变 LTR 设计稿默认渲染，因此未更新既有 Linux Golden。
+
 ## 2026-09-15 Issue #1027 像素修复复验
 
 - 基线：`origin/develop@b8a4bec7d`；Figma 节点 `24386:5277`，具体核对分页宫格 `27478:26787` 与带描述宫格 `27478:26633`。
@@ -135,3 +142,12 @@
   12/12 通过。
 - Android 16 物理手机：四个徽标均在标题右上角，与文本无行内挤压或重叠，
   底部安全区与取消项正常。
+
+## 2026-09-18 带徽标宫格公开 Demo 复核
+
+- 带徽标宫格恢复设计稿中的 `WeChat / QQ / Doc / Map / Share / Collect /
+  Download / Edit` 文案，并按对应项目展示 `NEW / Dot / 8` 三种徽标状态。
+- 本次不修改 ActionSheet 的徽标锚点实现：宫格仍由组件将徽标中心锚定图标槽位
+  右上角；修改仅修正公开 Demo 数据及其结构测试。
+- Figma、修复前、修复后三栏标注图与所有 Badge 场景汇总图用于 PR 视觉复核；
+  最终测试与 CI 状态以本轮最新提交记录为准。
