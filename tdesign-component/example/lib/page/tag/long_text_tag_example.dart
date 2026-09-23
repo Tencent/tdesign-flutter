@@ -12,7 +12,7 @@ class LongTextTagExample extends StatelessWidget {
       data: Theme.of(
         context,
       ).mergeExtension(const TTagThemeData(fixedWidth: 130)),
-      child: const TTag('超长省略文本标签超长省略文本标签'),
+      child: const TTag('超长省略文本标签超长省略文本标签', variant: TTagVariant.light),
     );
   }
 

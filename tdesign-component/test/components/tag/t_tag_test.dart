@@ -87,8 +87,41 @@ void main() {
       final decoration = container.decoration! as BoxDecoration;
       expect(
         decoration.color,
-        TThemeData.defaultData().bgColorSecondaryContainer,
+        TThemeData.defaultData().bgColorComponent,
       );
+    });
+
+    testWidgets('defaultTheme dark and light fills use distinct tokens', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(wrapWithTheme(
+        const Row(
+          children: [
+            TTag('深色', variant: TTagVariant.dark),
+            TTag('浅色', variant: TTagVariant.light),
+          ],
+        ),
+      ));
+
+      Color fill(String label) {
+        final container = tester.widget<Container>(
+          find
+              .descendant(
+                of: find.widgetWithText(TTag, label),
+                matching: find.byWidgetPredicate(
+                  (widget) =>
+                      widget is Container && widget.decoration is BoxDecoration,
+                ),
+              )
+              .first,
+        );
+        return (container.decoration! as BoxDecoration).color!;
+      }
+
+      expect(fill('深色'), token.bgColorComponent);
+      expect(fill('浅色'), token.bgColorSecondaryContainer);
+      expect(fill('深色'), isNot(fill('浅色')));
     });
 
     testWidgets('defaultTheme background follows an explicit ColorScheme',

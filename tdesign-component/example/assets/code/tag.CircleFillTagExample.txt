@@ -10,7 +10,7 @@ class CircleFillTagExample extends StatelessWidget {
       data: Theme.of(
         context,
       ).mergeExtension(const TTagThemeData(shape: TTagShape.round)),
-      child: const TTag('标签文字'),
+      child: const TTag('标签文字', variant: TTagVariant.light),
     );
   }
 

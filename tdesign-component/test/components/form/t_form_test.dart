@@ -1793,6 +1793,56 @@ void main() {
       );
     });
 
+    testWidgets('explicit Material label typography overrides token defaults', (
+      tester,
+    ) async {
+      const materialLabel = TextStyle(
+        color: Colors.deepPurple,
+        fontSize: 19,
+        fontWeight: FontWeight.w600,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(
+            TThemeData.defaultData(),
+          ).copyWith(textTheme: const TextTheme(bodyMedium: materialLabel)),
+          home: const Scaffold(
+            body: TFormItem(label: 'Material label', child: Text('Field')),
+          ),
+        ),
+      );
+
+      final style = tester.widget<Text>(find.text('Material label')).style;
+      expect(style?.color, materialLabel.color);
+      expect(style?.fontSize, materialLabel.fontSize);
+      expect(style?.fontWeight, materialLabel.fontWeight);
+    });
+
+    testWidgets('font fallback does not override default label geometry', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData();
+      final theme = TThemeBuilder.light(token);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme.copyWith(
+            textTheme: theme.textTheme.apply(
+              fontFamilyFallback: ['TDesign Test Fallback'],
+            ),
+          ),
+          home: const Scaffold(
+            body: TFormItem(label: 'Default label', child: Text('Field')),
+          ),
+        ),
+      );
+
+      final style = tester.widget<Text>(find.text('Default label')).style;
+      expect(style?.fontSize, token.fontBodyLarge?.size);
+      expect(style?.height, token.fontBodyLarge?.height);
+      expect(style?.fontWeight, token.fontBodyLarge?.fontWeight);
+      expect(style?.fontFamilyFallback, contains('TDesign Test Fallback'));
+    });
+
     testWidgets('required mark theme merges with the semantic error color', (
       tester,
     ) async {

@@ -14,20 +14,40 @@ class AllSizeTagsExample extends StatelessWidget {
         Wrap(
           spacing: 8,
           children: [
-            TTag('加大尺寸', size: TTagSize.extraLarge),
-            TTag('大尺寸', size: TTagSize.large),
-            TTag('中尺寸', size: TTagSize.medium),
-            TTag('小尺寸', size: TTagSize.small),
+            TTag('加大尺寸', size: TTagSize.extraLarge, variant: TTagVariant.light),
+            TTag('大尺寸', size: TTagSize.large, variant: TTagVariant.light),
+            TTag('中尺寸', size: TTagSize.medium, variant: TTagVariant.light),
+            TTag('小尺寸', size: TTagSize.small, variant: TTagVariant.light),
           ],
         ),
         SizedBox(height: 16),
         Wrap(
           spacing: 8,
           children: [
-            TTag('加大尺寸', size: TTagSize.extraLarge, needCloseIcon: true),
-            TTag('大尺寸', size: TTagSize.large, needCloseIcon: true),
-            TTag('中尺寸', size: TTagSize.medium, needCloseIcon: true),
-            TTag('小尺寸', size: TTagSize.small, needCloseIcon: true),
+            TTag(
+              '加大尺寸',
+              size: TTagSize.extraLarge,
+              variant: TTagVariant.light,
+              needCloseIcon: true,
+            ),
+            TTag(
+              '大尺寸',
+              size: TTagSize.large,
+              variant: TTagVariant.light,
+              needCloseIcon: true,
+            ),
+            TTag(
+              '中尺寸',
+              size: TTagSize.medium,
+              variant: TTagVariant.light,
+              needCloseIcon: true,
+            ),
+            TTag(
+              '小尺寸',
+              size: TTagSize.small,
+              variant: TTagVariant.light,
+              needCloseIcon: true,
+            ),
           ],
         ),
       ],

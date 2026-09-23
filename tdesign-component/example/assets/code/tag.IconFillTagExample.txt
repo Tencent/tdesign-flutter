@@ -6,7 +6,11 @@ class IconFillTagExample extends StatelessWidget {
 
   Widget _buildIconFillTag(BuildContext context) {
     // 带图标的标签：通过构造器 icon 参数传入 IconData
-    return const TTag('标签文字', icon: TIcons.discount);
+    return const TTag(
+      '标签文字',
+      icon: TIcons.discount,
+      variant: TTagVariant.light,
+    );
   }
 
   Widget _buildIconOutlineTag(BuildContext context) {
