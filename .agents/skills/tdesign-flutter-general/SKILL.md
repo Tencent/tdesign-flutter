@@ -29,7 +29,7 @@ Skills 按职责补充规范：本 skill 管通用协作与 CI 登记；[`tdesig
 
 - PR 标题遵循 Conventional Commits：`type(scope): 描述`；分支及平台约定按 `AGENTS.md` 的入口读取。
 - PR 正文**完整保留 `.github/PULL_REQUEST_TEMPLATE.md` 原模板结构**（所有勾选项含未选 `[ ]`、所有 HTML 注释原样保留），只打勾 / 填写，不删减。
-- 组件 PR 的更新日志只描述组件 / 库使用方在实际接入中可感知的行为变化。Demo 页面布局、示例文案、示例代码、Golden 和测试等配套改动不单独写入 Changelog；将它们写在「需求背景和解决方案」中，并勾选对应 PR 性质。同一 PR 同时修改组件与其 Demo 时，更新日志只保留组件行为条目。以文档、站点或示例应用本身为交付目标的独立 PR 仍按实际受众判断。
+- 生成组件 PR 的 Changelog 时，组件与 Demo 同改只保留组件行为条目；Demo 配套改动写在「需求背景和解决方案」并勾选对应 PR 性质。完整边界及独立交付例外见 [`CONTRIBUTING.md`「PR 更新日志规范」](../../../CONTRIBUTING.md#pr-更新日志规范)。
 - 更新日志条目遵循 Conventional Commits 的 commit type，与最终分组固定对应（完整见 [`CONTRIBUTING.md`](../../../CONTRIBUTING.md)）：
 
   | commit type | 最终分组 | 示例 |
