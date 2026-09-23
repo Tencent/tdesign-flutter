@@ -1,4 +1,7 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -394,6 +397,100 @@ void main() {
       expect(trackRect.left, 16);
       expect(trackRect.right, renderBox.size.width - 16);
       expect(trackRect.height, 24);
+    });
+
+    testWidgets('capsule ticks divide only the interior of the track', (
+      tester,
+    ) async {
+      const boundaryKey = ValueKey('capsule-ticks');
+
+      Future<void> expectInteriorTicksOnly(Widget slider) async {
+        await tester.pumpWidget(
+          wrap(
+            RepaintBoundary(
+              key: boundaryKey,
+              child: SizedBox(width: 320, height: 48, child: slider),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final boundaryFinder = find.byKey(boundaryKey);
+        final sliderFinder = find.byWidgetPredicate(
+          (widget) => widget is Slider || widget is RangeSlider,
+        );
+        final theme = SliderTheme.of(tester.element(sliderFinder));
+        final sliderBox = tester.renderObject<RenderBox>(sliderFinder);
+        final trackRect = slider is TSlider
+            ? theme.trackShape!.getPreferredRect(
+                parentBox: sliderBox,
+                sliderTheme: theme,
+                isEnabled: true,
+                isDiscrete: true,
+              )
+            : theme.rangeTrackShape!.getPreferredRect(
+                parentBox: sliderBox,
+                sliderTheme: theme,
+                isEnabled: true,
+                isDiscrete: true,
+              );
+        final sliderOffset =
+            tester.getTopLeft(sliderFinder) - tester.getTopLeft(boundaryFinder);
+        final first = trackRect.left + trackRect.height / 2;
+        final last = trackRect.right - trackRect.height / 2;
+        final interior = first + (last - first) * 2 / 5;
+        final y = (sliderOffset.dy + trackRect.center.dy).round();
+
+        final boundary = tester.renderObject<RenderRepaintBoundary>(
+          boundaryFinder,
+        );
+        final pixels = await tester.runAsync(() async {
+          final image = await boundary.toImage(pixelRatio: 1);
+          final data = await image.toByteData(
+            format: ui.ImageByteFormat.rawRgba,
+          );
+          final result = (
+            width: image.width,
+            bytes: data!.buffer.asUint8List(),
+          );
+          image.dispose();
+          return result;
+        });
+        Color pixel(double x) {
+          final index = (y * pixels!.width + (sliderOffset.dx + x).round()) * 4;
+          return Color.fromARGB(
+            pixels.bytes[index + 3],
+            pixels.bytes[index],
+            pixels.bytes[index + 1],
+            pixels.bytes[index + 2],
+          );
+        }
+
+        expect(pixel(first), pixel(first + 4));
+        expect(pixel(last), pixel(last - 4));
+        expect(pixel(interior), isNot(pixel(interior + 4)));
+      }
+
+      await expectInteriorTicksOnly(
+        TSlider(
+          value: 60,
+          min: 0,
+          max: 100,
+          divisions: 5,
+          variant: TSliderVariant.capsule,
+          onChanged: (_) {},
+        ),
+      );
+      await expectInteriorTicksOnly(
+        TRangeSlider(
+          value: const RangeValues(20, 80),
+          min: 0,
+          max: 100,
+          divisions: 5,
+          variant: TSliderVariant.capsule,
+          onChanged: (_) {},
+        ),
+      );
     });
 
     testWidgets('showScaleValue renders formatted scale labels', (

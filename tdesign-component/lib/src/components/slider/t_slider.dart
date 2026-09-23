@@ -740,6 +740,15 @@ class _CapsuleSliderTickMarkShape extends SliderTickMarkShape {
     required bool isEnabled,
     required TextDirection textDirection,
   }) {
+    final trackRect = sliderTheme.trackShape!.getPreferredRect(
+      parentBox: parentBox,
+      sliderTheme: sliderTheme,
+      isEnabled: isEnabled,
+      isDiscrete: true,
+    );
+    if (_isCapsuleEndpointTick(center.dx, trackRect)) {
+      return;
+    }
     final active = switch (textDirection) {
       TextDirection.ltr => center.dx <= thumbCenter.dx,
       TextDirection.rtl => center.dx >= thumbCenter.dx,
@@ -780,6 +789,15 @@ class _CapsuleRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
     bool isEnabled = false,
     required TextDirection textDirection,
   }) {
+    final trackRect = sliderTheme.rangeTrackShape!.getPreferredRect(
+      parentBox: parentBox,
+      sliderTheme: sliderTheme,
+      isEnabled: isEnabled,
+      isDiscrete: true,
+    );
+    if (_isCapsuleEndpointTick(center.dx, trackRect)) {
+      return;
+    }
     final left = math.min(startThumbCenter.dx, endThumbCenter.dx);
     final right = math.max(startThumbCenter.dx, endThumbCenter.dx);
     final active = center.dx >= left && center.dx <= right;
@@ -794,6 +812,16 @@ class _CapsuleRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
     )!;
     _paintCapsuleTick(context.canvas, center, color, trackHeight);
   }
+}
+
+bool _isCapsuleEndpointTick(double x, Rect trackRect) {
+  // Material places discrete endpoint ticks half a track height inside its
+  // rounded track. Figma labels those endpoints but draws separators only
+  // between the segments.
+  const tolerance = 0.5;
+  final endpointInset = trackRect.height / 2;
+  return (x - trackRect.left - endpointInset).abs() < tolerance ||
+      (x - trackRect.right + endpointInset).abs() < tolerance;
 }
 
 void _paintCapsuleTick(
