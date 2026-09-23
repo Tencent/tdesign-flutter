@@ -520,6 +520,39 @@ void main() {
   });
 
   group('TInput clear button', () {
+    testWidgets(
+      'single-line actions stay centered and multiline actions align top',
+      (tester) async {
+        await tester.pumpWidget(
+          wrap(
+            const TInput(
+              initialValue: 'content',
+              clearButtonMode: TInputClearButtonMode.always,
+            ),
+          ),
+        );
+
+        final singleEditor = tester.getRect(find.byType(EditableText));
+        final singleClear = tester.getRect(find.byType(IconButton));
+        expect(singleClear.center.dy, closeTo(singleEditor.center.dy, 0.01));
+
+        await tester.pumpWidget(
+          wrap(
+            const TInput(
+              initialValue: 'line one\nline two',
+              maxLines: 2,
+              clearButtonMode: TInputClearButtonMode.always,
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final multilineEditor = tester.getRect(find.byType(EditableText));
+        final multilineClear = tester.getRect(find.byType(IconButton));
+        expect(multilineClear.top, closeTo(multilineEditor.top, 0.01));
+      },
+    );
+
     testWidgets('clears current controller and notifies onChanged', (
       tester,
     ) async {
@@ -535,6 +568,7 @@ void main() {
         ),
       );
 
+      expect(tester.getSize(find.byType(IconButton)), const Size(32, 20));
       await tester.tap(find.byIcon(TIcons.close_circle_filled));
       await tester.pump();
       expect(controller.text, isEmpty);
@@ -578,10 +612,11 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(tester.widget<IconButton>(find.byType(IconButton)).iconSize, 28);
+      expect(tester.getSize(find.byType(IconButton)), const Size(32, 28));
     });
 
     testWidgets(
-      'status keeps the default clear color and theme can override it',
+      'error status colors the clear icon and theme can override it',
       (tester) async {
         final token = TThemeData.defaultData();
         for (final status in TInputStatus.values) {
@@ -596,7 +631,9 @@ void main() {
           );
           expect(
             tester.widget<Icon>(find.byIcon(TIcons.close_circle_filled)).color,
-            token.textColorPlaceholder,
+            status == TInputStatus.error
+                ? token.errorNormalColor
+                : token.textColorPlaceholder,
           );
         }
 
@@ -607,13 +644,13 @@ void main() {
               status: TInputStatus.error,
               clearButtonMode: TInputClearButtonMode.always,
             ),
-            inputTheme: TInputThemeData(clearIconColor: token.errorNormalColor),
+            inputTheme: const TInputThemeData(clearIconColor: Colors.purple),
           ),
         );
         await tester.pumpAndSettle();
         expect(
           tester.widget<Icon>(find.byIcon(TIcons.close_circle_filled)).color,
-          token.errorNormalColor,
+          Colors.purple,
         );
       },
     );

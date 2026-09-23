@@ -1620,6 +1620,27 @@ void main() {
   });
 
   group('TFormItem layout', () {
+    testWidgets('horizontal label keeps the design gap before content', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TFormItem(label: 'Name', child: Text('Field')),
+          formTheme: const TFormThemeData(labelWidth: 80),
+        ),
+      );
+
+      expect(tester.getTopLeft(find.text('Field')).dx, 112);
+    });
+
+    testWidgets('horizontal item without label does not add a label gap', (
+      tester,
+    ) async {
+      await tester.pumpWidget(wrap(const TFormItem(child: Text('Field'))));
+
+      expect(tester.getTopLeft(find.text('Field')).dx, 16);
+    });
+
     testWidgets('horizontal layout renders label, mark, child and help', (
       tester,
     ) async {
@@ -1770,6 +1791,56 @@ void main() {
         tester.widget<Text>(find.text('Error')).style?.color,
         token.errorNormalColor,
       );
+    });
+
+    testWidgets('explicit Material label typography overrides token defaults', (
+      tester,
+    ) async {
+      const materialLabel = TextStyle(
+        color: Colors.deepPurple,
+        fontSize: 19,
+        fontWeight: FontWeight.w600,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(
+            TThemeData.defaultData(),
+          ).copyWith(textTheme: const TextTheme(bodyMedium: materialLabel)),
+          home: const Scaffold(
+            body: TFormItem(label: 'Material label', child: Text('Field')),
+          ),
+        ),
+      );
+
+      final style = tester.widget<Text>(find.text('Material label')).style;
+      expect(style?.color, materialLabel.color);
+      expect(style?.fontSize, materialLabel.fontSize);
+      expect(style?.fontWeight, materialLabel.fontWeight);
+    });
+
+    testWidgets('font fallback does not override default label geometry', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData();
+      final theme = TThemeBuilder.light(token);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme.copyWith(
+            textTheme: theme.textTheme.apply(
+              fontFamilyFallback: ['TDesign Test Fallback'],
+            ),
+          ),
+          home: const Scaffold(
+            body: TFormItem(label: 'Default label', child: Text('Field')),
+          ),
+        ),
+      );
+
+      final style = tester.widget<Text>(find.text('Default label')).style;
+      expect(style?.fontSize, token.fontBodyLarge?.size);
+      expect(style?.height, token.fontBodyLarge?.height);
+      expect(style?.fontWeight, token.fontBodyLarge?.fontWeight);
+      expect(style?.fontFamilyFallback, contains('TDesign Test Fallback'));
     });
 
     testWidgets('required mark theme merges with the semantic error color', (
@@ -2012,19 +2083,19 @@ void main() {
               children: [
                 TFormItem(
                   key: leftKey,
-                  label: 'Label',
+                  label: '标签',
                   labelAlign: TextAlign.left,
                   child: SizedBox(),
                 ),
                 TFormItem(
                   key: rightKey,
-                  label: 'Label',
+                  label: '标签',
                   labelAlign: TextAlign.right,
                   child: SizedBox(),
                 ),
                 TFormItem(
                   key: startKey,
-                  label: 'Label',
+                  label: '标签',
                   labelAlign: TextAlign.start,
                   child: SizedBox(),
                 ),
@@ -2036,14 +2107,11 @@ void main() {
 
       Rect labelRect(Key itemKey) {
         final paragraph = tester.renderObject<RenderParagraph>(
-          find.descendant(
-            of: find.byKey(itemKey),
-            matching: find.text('Label'),
-          ),
+          find.descendant(of: find.byKey(itemKey), matching: find.text('标签')),
         );
         final glyphs = paragraph
             .getBoxesForSelection(
-              const TextSelection(baseOffset: 0, extentOffset: 5),
+              const TextSelection(baseOffset: 0, extentOffset: 2),
             )
             .map((box) => box.toRect())
             .reduce((bounds, box) => bounds.expandToInclude(box));
@@ -2167,5 +2235,31 @@ void main() {
     expect(fromDefaults.labelGap, 10);
     expect(fromDefaults.backgroundColor, isNull);
     expect(defaults.lerp(defaults, 0.5).labelWidth, isNull);
+  });
+
+  testWidgets('default horizontal item height does not depend on extra', (
+    tester,
+  ) async {
+    const plainKey = Key('plain-form-item');
+    const extraKey = Key('extra-form-item');
+    await tester.pumpWidget(
+      wrap(
+        const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TFormItem(key: plainKey, label: '标签', child: SizedBox(height: 24)),
+            TFormItem(
+              key: extraKey,
+              label: '标签',
+              extra: SizedBox(width: 24, height: 28),
+              child: SizedBox(height: 24),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    expect(tester.getSize(find.byKey(plainKey)).height, 56);
+    expect(tester.getSize(find.byKey(extraKey)).height, 56);
   });
 }

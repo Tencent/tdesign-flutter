@@ -70,8 +70,23 @@ class _TSliderPageState extends State<TSliderPage> {
         children: [
           ExampleItem(
             desc: '滑块禁用状态',
+            compactStyle: const CompactExampleStyle.surface(contentSpacing: 14),
             methodName: 'SliderDisabledExample',
             builder: (_) => const SliderDisabledExample(),
+          ),
+          ExampleItem(
+            ignoreCode: true,
+            compactStyle: const CompactExampleStyle.surface(),
+            builder: (_) => const SliderDisabledExample(
+              type: SliderDisabledExampleType.labeledRange,
+            ),
+          ),
+          ExampleItem(
+            ignoreCode: true,
+            compactStyle: const CompactExampleStyle.surface(),
+            builder: (_) => const SliderDisabledExample(
+              type: SliderDisabledExampleType.scaleRange,
+            ),
           ),
         ],
       ),
@@ -80,18 +95,69 @@ class _TSliderPageState extends State<TSliderPage> {
         children: [
           ExampleItem(
             desc: '胶囊型滑块',
+            compactStyle: const CompactExampleStyle.surface(contentSpacing: 14),
             methodName: 'SliderCapsuleExample',
             builder: (_) => const SliderCapsuleExample(),
+          ),
+          ExampleItem(
+            ignoreCode: true,
+            compactStyle: const CompactExampleStyle.surface(),
+            builder: (_) => const SliderCapsuleExample(
+              type: SliderCapsuleExampleType.range,
+            ),
+          ),
+          ExampleItem(
+            ignoreCode: true,
+            compactStyle: const CompactExampleStyle.surface(),
+            builder: (_) => const SliderCapsuleExample(
+              type: SliderCapsuleExampleType.labeledRange,
+            ),
+          ),
+          ExampleItem(
+            ignoreCode: true,
+            compactStyle: const CompactExampleStyle.surface(),
+            builder: (_) => const SliderCapsuleExample(
+              type: SliderCapsuleExampleType.scale,
+            ),
+          ),
+          ExampleItem(
+            ignoreCode: true,
+            compactStyle: const CompactExampleStyle.surface(),
+            builder: (_) => const SliderCapsuleExample(
+              type: SliderCapsuleExampleType.scaleRange,
+            ),
           ),
         ],
       ),
       ExampleModule(
-        title: '垂直状态',
+        title: '垂直型滑块',
         children: [
           ExampleItem(
             desc: '',
+            compactStyle: const CompactExampleStyle.surface(contentSpacing: 2),
             methodName: 'SliderVerticalExample',
             builder: (_) => const SliderVerticalExample(),
+          ),
+          ExampleItem(
+            ignoreCode: true,
+            compactStyle: const CompactExampleStyle.surface(),
+            builder: (_) => const SliderVerticalExample(
+              type: SliderVerticalExampleType.scaleRange,
+            ),
+          ),
+          ExampleItem(
+            ignoreCode: true,
+            compactStyle: const CompactExampleStyle.surface(),
+            builder: (_) => const SliderVerticalExample(
+              type: SliderVerticalExampleType.capsule,
+            ),
+          ),
+          ExampleItem(
+            ignoreCode: true,
+            compactStyle: const CompactExampleStyle.surface(),
+            builder: (_) => const SliderVerticalExample(
+              type: SliderVerticalExampleType.capsuleScaleRange,
+            ),
           ),
         ],
       ),

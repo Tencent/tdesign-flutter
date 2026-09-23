@@ -194,40 +194,53 @@ Future<void> pumpFullDemoPage(
   DemoPageTestSpec spec,
   ThemeMode mode,
 ) async {
-  var height = _initialPageHeight;
   // 调整视口时保留页面与 model，避免丢失 ExamplePage 初始化的代码分组。
   final page = _buildPage(spec, mode);
-  for (var attempt = 0; attempt < 4; attempt++) {
-    tester.view.physicalSize = Size(_pageWidth, height);
-    tester.view.devicePixelRatio = 1;
-    await tester.pumpWidget(page);
+  tester.view.physicalSize = const Size(_pageWidth, _initialPageHeight);
+  tester.view.devicePixelRatio = 1;
+  await tester.pumpWidget(page);
+  await tester.pump();
+  if (spec.precacheAssetImages.isNotEmpty) {
+    final context = tester.element(find.byType(MaterialApp));
+    await tester.runAsync(() async {
+      for (final assetName in spec.precacheAssetImages) {
+        await precacheImage(AssetImage(assetName), context);
+      }
+    });
     await tester.pump();
-    if (attempt == 0 && spec.precacheAssetImages.isNotEmpty) {
-      final context = tester.element(find.byType(MaterialApp));
-      await tester.runAsync(() async {
-        for (final assetName in spec.precacheAssetImages) {
-          await precacheImage(AssetImage(assetName), context);
-        }
-      });
-      await tester.pump();
-    }
+  }
 
-    final scrollables = find.byType(CustomScrollView);
-    if (scrollables.evaluate().isEmpty) {
-      break;
-    }
+  final scrollables = find.byType(CustomScrollView);
+  if (scrollables.evaluate().isNotEmpty) {
     final scrollable = find.descendant(
       of: scrollables.first,
       matching: find.byType(Scrollable),
     );
-    final extent = tester
-        .state<ScrollableState>(scrollable.first)
-        .position
-        .maxScrollExtent;
-    if (extent <= 0.01) {
-      break;
+    final position = tester.state<ScrollableState>(scrollable.first).position;
+
+    // SliverList.builder 在首屏只布局可见子项，此时 maxScrollExtent
+    // 只是估算值。直接用该值扩大视口会把估算误差变成 Golden
+    // 底部的空白区。先在固定手机视口下逐步走到真实末尾，
+    // 让所有 sliver 完成布局，再用最终 extent 计算全页高度。
+    for (var attempt = 0; attempt < 40; attempt++) {
+      final target = position.maxScrollExtent;
+      if (target <= position.pixels + 0.01) {
+        break;
+      }
+      position.jumpTo(target);
+      await tester.pump();
     }
-    height = (height + extent).clamp(_initialPageHeight, _maxPageHeight);
+
+    final height = (_initialPageHeight + position.maxScrollExtent).clamp(
+      _initialPageHeight,
+      _maxPageHeight,
+    );
+    tester.view.physicalSize = Size(_pageWidth, height);
+    await tester.pump();
+    if (position.hasPixels) {
+      position.jumpTo(0);
+      await tester.pump();
+    }
   }
   addTearDown(tester.view.resetPhysicalSize);
   addTearDown(tester.view.resetDevicePixelRatio);

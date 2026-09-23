@@ -1,8 +1,10 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
+import '../../theme/t_text_theme_source.dart';
 import '../../theme/t_theme.dart';
 import 't_field_scope.dart';
 import 't_form.dart';
@@ -150,12 +152,56 @@ class TFormItem extends StatelessWidget {
     final labelFont = layout == TFormLayout.vertical
         ? token.fontBodyMedium
         : token.fontBodyLarge;
-    final labelStyle = TextStyle(
+    final labelBaseStyle = TextStyle(
       color: token.textColorPrimary,
       fontSize: labelFont?.size,
       height: labelFont?.height,
       fontWeight: labelFont?.fontWeight,
-    ).merge(textTheme?.bodyMedium).merge(theme?.labelStyle);
+      letterSpacing: 0,
+    );
+    final materialLabelStyle = textTheme?.bodyMedium;
+    final projectedTextTheme = materialTheme.extensions.values
+        .whereType<TTextThemeSource>()
+        .firstOrNull
+        ?.textTheme;
+    final implicitTextTheme =
+        projectedTextTheme ??
+        ThemeData(
+          brightness: materialTheme.brightness,
+          colorScheme: materialTheme.colorScheme,
+          useMaterial3: materialTheme.useMaterial3,
+        ).textTheme;
+    final typography = materialTheme.useMaterial3
+        ? Typography.material2021(platform: materialTheme.platform)
+        : Typography.material2014(platform: materialTheme.platform);
+    final implicitLabelStyle = typography.englishLike
+        .merge(implicitTextTheme)
+        .bodyMedium;
+    final mergedLabelStyle = labelBaseStyle.merge(materialLabelStyle);
+    // TextTheme.apply(fontFamilyFallback: ...) 只配置字形时，Material 的
+    // bodyMedium 默认字号不能覆盖水平表单项的 bodyLarge Token 尺寸。
+    final labelStyle = mergedLabelStyle
+        .copyWith(
+          color: materialLabelStyle?.color == implicitLabelStyle?.color
+              ? labelBaseStyle.color
+              : mergedLabelStyle.color,
+          fontSize: materialLabelStyle?.fontSize == implicitLabelStyle?.fontSize
+              ? labelBaseStyle.fontSize
+              : mergedLabelStyle.fontSize,
+          height: materialLabelStyle?.height == implicitLabelStyle?.height
+              ? labelBaseStyle.height
+              : mergedLabelStyle.height,
+          fontWeight:
+              materialLabelStyle?.fontWeight == implicitLabelStyle?.fontWeight
+              ? labelBaseStyle.fontWeight
+              : mergedLabelStyle.fontWeight,
+          letterSpacing:
+              materialLabelStyle?.letterSpacing ==
+                  implicitLabelStyle?.letterSpacing
+              ? labelBaseStyle.letterSpacing
+              : mergedLabelStyle.letterSpacing,
+        )
+        .merge(theme?.labelStyle);
     final helpFont = token.fontBodySmall;
     final messageTextStyle = TextStyle(
       fontSize: helpFont?.size,
@@ -182,21 +228,23 @@ class TFormItem extends StatelessWidget {
         : null;
     final markedLabel = labelWidget == null
         ? null
+        : requiredMark == null
+        ? labelWidget
         : Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               if ((theme?.requiredMarkPosition ??
                       TFormRequiredMarkPosition.left) ==
                   TFormRequiredMarkPosition.left) ...[
-                if (requiredMark != null) requiredMark,
-                if (requiredMark != null) const SizedBox(width: 2),
+                requiredMark,
+                const SizedBox(width: 2),
               ],
               Flexible(child: labelWidget),
               if ((theme?.requiredMarkPosition ??
                       TFormRequiredMarkPosition.left) ==
                   TFormRequiredMarkPosition.right) ...[
-                if (requiredMark != null) const SizedBox(width: 2),
-                if (requiredMark != null) requiredMark,
+                const SizedBox(width: 2),
+                requiredMark,
               ],
             ],
           );
@@ -250,6 +298,10 @@ class TFormItem extends StatelessWidget {
 
     return Container(
       color: theme?.backgroundColor ?? token.bgColorContainer,
+      constraints:
+          theme?.itemPadding == null && layout == TFormLayout.horizontal
+          ? const BoxConstraints(minHeight: 56)
+          : null,
       foregroundDecoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -259,7 +311,10 @@ class TFormItem extends StatelessWidget {
       ),
       padding:
           theme?.itemPadding ??
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: layout == TFormLayout.horizontal ? 14 : 16,
+          ),
       margin: EdgeInsets.only(bottom: theme?.itemSpacing ?? 0),
       child: layout == TFormLayout.horizontal
           ? Row(
@@ -269,11 +324,13 @@ class TFormItem extends StatelessWidget {
                   leadingWidget,
                   SizedBox(width: effectiveLeadingGap),
                 ],
-                if (markedLabel != null)
+                if (markedLabel != null) ...[
                   SizedBox(
                     width: effectiveLabelWidth,
                     child: Align(alignment: labelAlignment, child: markedLabel),
                   ),
+                  SizedBox(width: token.spacer16),
+                ],
                 Expanded(child: content),
                 if (extra != null) extra!,
               ],

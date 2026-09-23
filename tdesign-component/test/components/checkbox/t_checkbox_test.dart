@@ -298,6 +298,13 @@ void main() {
 
       expect(tester.getTopLeft(indicator).dy, tester.getTopLeft(title).dy);
       expect(tester.getTopLeft(divider).dx, tester.getTopLeft(title).dx);
+      final dividerBackground = tester.widget<ColoredBox>(
+        find.ancestor(of: divider, matching: find.byType(ColoredBox)).first,
+      );
+      expect(
+        dividerBackground.color,
+        TThemeData.defaultData().bgColorContainer,
+      );
     });
 
     testWidgets('单行文案与指示器在行内容中垂直居中', (tester) async {

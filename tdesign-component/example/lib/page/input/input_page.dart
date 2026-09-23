@@ -28,109 +28,102 @@ class TInputViewPage extends StatefulWidget {
 class _TInputViewPageState extends State<TInputViewPage> {
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).mergeExtension(
-        const TFormThemeData(
-          requiredMarkPosition: TFormRequiredMarkPosition.right,
+    return ExamplePage(
+      title: tTitle(),
+      exampleCodeGroup: 'input',
+      desc: '用于单行文本信息输入。',
+      compactDemo: true,
+      showTestModule: false,
+      children: [
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(
+              desc: '基础输入框',
+              center: false,
+              methodName: 'InputBasicExample',
+              builder: (_) => const InputBasicExample(),
+            ),
+            ExampleItem(
+              desc: '带字数限制输入框',
+              center: false,
+              methodName: 'InputFormatterExample',
+              builder: (_) => const InputFormatterExample(),
+            ),
+            ExampleItem(
+              desc: '带操作输入框',
+              center: false,
+              methodName: 'InputActionExample',
+              builder: (_) => const InputActionExample(),
+            ),
+            ExampleItem(
+              desc: '带图标输入框',
+              center: false,
+              methodName: 'InputSlotsExample',
+              builder: (_) => const InputSlotsExample(),
+            ),
+            ExampleItem(
+              desc: '特定类型输入框',
+              center: false,
+              methodName: 'InputPasswordExample',
+              builder: (_) => const InputPasswordExample(),
+            ),
+          ],
         ),
-      ),
-      child: ExamplePage(
-        title: tTitle(),
-        exampleCodeGroup: 'input',
-        desc: '用于单行文本信息输入。',
-        compactDemo: true,
-        showTestModule: false,
-        children: [
-          ExampleModule(
-            title: '组件类型',
-            children: [
-              ExampleItem(
-                desc: '基础输入框',
-                center: false,
-                methodName: 'InputBasicExample',
-                builder: (_) => const InputBasicExample(),
-              ),
-              ExampleItem(
-                desc: '带字数限制输入框',
-                center: false,
-                methodName: 'InputFormatterExample',
-                builder: (_) => const InputFormatterExample(),
-              ),
-              ExampleItem(
-                desc: '带操作输入框',
-                center: false,
-                methodName: 'InputActionExample',
-                builder: (_) => const InputActionExample(),
-              ),
-              ExampleItem(
-                desc: '带图标输入框',
-                center: false,
-                methodName: 'InputSlotsExample',
-                builder: (_) => const InputSlotsExample(),
-              ),
-              ExampleItem(
-                desc: '特定类型输入框',
-                center: false,
-                methodName: 'InputPasswordExample',
-                builder: (_) => const InputPasswordExample(),
-              ),
-            ],
-          ),
-          ExampleModule(
-            title: '组件状态',
-            children: [
-              ExampleItem(
-                desc: '输入框状态',
-                center: false,
-                methodName: 'InputStatusExample',
-                builder: (_) => const InputStatusExample(),
-              ),
-              ExampleItem(
-                desc: '信息超长状态',
-                center: false,
-                methodName: 'InputLabelExample',
-                builder: (_) => const InputLabelExample(),
-              ),
-            ],
-          ),
-          ExampleModule(
-            title: '组件样式',
-            children: [
-              ExampleItem(
-                desc: '内容位置',
-                center: false,
-                methodName: 'InputAlignExample',
-                builder: (_) => const InputAlignExample(),
-              ),
-              ExampleItem(
-                desc: '竖排样式',
-                center: false,
-                methodName: 'InputLayoutExample',
-                builder: (_) => const InputLayoutExample(),
-              ),
-              ExampleItem(
-                desc: '非通栏样式',
-                center: false,
-                methodName: 'InputBannerExample',
-                builder: (_) => const InputBannerExample(),
-              ),
-              ExampleItem(
-                desc: '标签外置样式',
-                center: false,
-                methodName: 'InputBorderedExample',
-                builder: (_) => const InputBorderedExample(),
-              ),
-              ExampleItem(
-                desc: '自定义样式输入框',
-                center: false,
-                methodName: 'InputCustomExample',
-                builder: (_) => const InputCustomExample(),
-              ),
-            ],
-          ),
-        ],
-        test: const [],
-      ),
+        ExampleModule(
+          title: '组件状态',
+          children: [
+            ExampleItem(
+              desc: '输入框状态',
+              center: false,
+              methodName: 'InputStatusExample',
+              builder: (_) => const InputStatusExample(),
+            ),
+            ExampleItem(
+              desc: '信息超长状态',
+              center: false,
+              methodName: 'InputLabelExample',
+              builder: (_) => const InputLabelExample(),
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: '组件样式',
+          children: [
+            ExampleItem(
+              desc: '内容位置',
+              center: false,
+              methodName: 'InputAlignExample',
+              builder: (_) => const InputAlignExample(),
+            ),
+            ExampleItem(
+              desc: '竖排样式',
+              center: false,
+              methodName: 'InputLayoutExample',
+              builder: (_) => const InputLayoutExample(),
+            ),
+            ExampleItem(
+              desc: '非通栏样式',
+              center: false,
+              methodName: 'InputBannerExample',
+              builder: (_) => const InputBannerExample(),
+            ),
+            ExampleItem(
+              desc: '标签外置样式',
+              center: false,
+              methodName: 'InputBorderedExample',
+              builder: (_) => const InputBorderedExample(),
+            ),
+            ExampleItem(
+              desc: '自定义样式输入框',
+              center: false,
+              methodName: 'InputCustomExample',
+              builder: (_) => const InputCustomExample(),
+            ),
+          ],
+        ),
+      ],
+      test: const [],
     );
   }
 }

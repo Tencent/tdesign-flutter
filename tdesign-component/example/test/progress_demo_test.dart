@@ -57,7 +57,7 @@ void main() {
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
     expect(page.showTestModule, isFalse);
     expect(page.backgroundColor, isNull);
-    expect(page.padding, isNull);
+    expect(page.itemMargin, isNull);
 
     final itemDescription = find.text('线性进度条').first;
     expect(tester.getTopLeft(itemDescription).dx, 16);

@@ -3,11 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  Widget wrapWithTheme(Widget child, {TTabBarThemeData? tabBarTheme}) {
+  Widget wrapWithTheme(
+    Widget child, {
+    TTabBarThemeData? tabBarTheme,
+    TThemeData? themeData,
+  }) {
     return MaterialApp(
       theme: ThemeData(
         extensions: [
-          TThemeData.defaultData(),
+          themeData ?? TThemeData.defaultData(),
           if (tabBarTheme != null) tabBarTheme,
         ],
       ),
@@ -510,10 +514,57 @@ void main() {
       await tester.tap(find.text('更多'));
       await tester.pumpAndSettle();
       expect(tester.getSize(find.byType(TTabBarMenuItem).first).width, 120);
+      final panel = tester.widget<CustomPaint>(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CustomPaint &&
+              widget.painter.runtimeType.toString() == '_TabBarPanelPainter',
+        ),
+      );
+      expect((panel.painter as dynamic).radius, 4);
       await tester.tap(find.text('选项B'));
       await tester.pumpAndSettle();
 
       expect(selected, '选项B');
+    });
+
+    testWidgets('popup defaults to the theme radius', (tester) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'tabbar-popup-radius-test',
+        radiusMap: {'radiusDefault': 9},
+      );
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.doubleLayer,
+            value: 0,
+            navigationTabs: [
+              TTabBarItemConfig(
+                tabText: '更多',
+                popUpButtonConfig: TTabBarPopUpBtnConfig(
+                  items: const [TTabBarMenuItem(value: '选项A')],
+                  onChanged: (_) {},
+                ),
+              ),
+              const TTabBarItemConfig(tabText: '普通'),
+            ],
+            onChanged: (_) {},
+          ),
+          themeData: token,
+        ),
+      );
+
+      await tester.tap(find.text('更多'));
+      await tester.pumpAndSettle();
+
+      final panel = tester.widget<CustomPaint>(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CustomPaint &&
+              widget.painter.runtimeType.toString() == '_TabBarPanelPainter',
+        ),
+      );
+      expect((panel.painter as dynamic).radius, 9);
     });
 
     testWidgets('double-layer popup keeps the design minimum width', (
@@ -649,6 +700,38 @@ void main() {
       expect(badgeCenter.dy, lessThan(iconCenter.dy));
     });
 
+    testWidgets('capsule container keeps the pill design radius', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.text,
+            style: TTabBarStyle.capsule,
+            value: 0,
+            navigationTabs: textTabs(),
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      final capsule = tester.widget<Container>(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is Container &&
+              widget.margin == const EdgeInsets.symmetric(horizontal: 16),
+        ),
+      );
+      expect(
+        (capsule.decoration! as BoxDecoration).borderRadius,
+        BorderRadius.circular(TThemeData.defaultData().radiusCircle),
+      );
+      expect(
+        (capsule.decoration! as BoxDecoration).boxShadow,
+        TThemeData.defaultData().shadowsBase,
+      );
+    });
+
     testWidgets('iconText default badge anchors to icon top-right', (
       tester,
     ) async {
@@ -682,7 +765,7 @@ void main() {
     });
 
     testWidgets(
-      'text badge uses TabBar default offset when no override exists',
+      'text badge uses the shared top-end anchor when no override exists',
       (tester) async {
         await tester.pumpWidget(
           wrapWithTheme(
@@ -701,13 +784,10 @@ void main() {
           ),
         );
 
-        final badge = tester.widget<TBadge>(find.byType(TBadge));
-        expect(badge.offset, isNull);
-        expect(badge.child, isNotNull);
         final title = find.widgetWithText(TText, '消息');
         expect(
           tester.getCenter(find.text('9')),
-          tester.getTopRight(title) + const Offset(16, -8),
+          tester.getTopRight(title) + const Offset(-6, 0),
         );
       },
     );
@@ -738,7 +818,7 @@ void main() {
       final title = find.widgetWithText(TText, '消息');
       expect(
         tester.getCenter(find.text('9')),
-        tester.getTopLeft(title) + const Offset(-16, -8),
+        tester.getTopLeft(title) + const Offset(6, 0),
       );
     });
 
@@ -801,7 +881,7 @@ void main() {
       expect(
         tester.getCenter(find.text('9')),
         tester.getTopRight(find.widgetWithText(TText, '消息')) +
-            const Offset(16, -8),
+            const Offset(-6, 0),
       );
     });
 
@@ -834,7 +914,7 @@ void main() {
       expect(
         tester.getCenter(find.text('9')),
         tester.getTopRight(find.widgetWithText(TText, '消息')) +
-            const Offset(16, -8),
+            const Offset(-6, 0),
       );
     });
 

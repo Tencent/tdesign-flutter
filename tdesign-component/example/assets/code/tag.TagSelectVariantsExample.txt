@@ -35,10 +35,10 @@ class _TagSelectVariantsExampleState extends State<TagSelectVariantsExample> {
   Widget _row(String label, TTagVariant variant) {
     final values = _values[variant]!;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 24),
       child: Row(
         children: [
-          SizedBox(width: 88, child: TText(label)),
+          SizedBox(width: 96, child: TText(label)),
           TSelectTag(
             '未选中态',
             value: values[0],

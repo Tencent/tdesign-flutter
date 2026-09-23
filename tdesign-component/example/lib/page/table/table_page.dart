@@ -33,19 +33,19 @@ class TTablePage extends StatelessWidget {
           children: [
             ExampleItem(
               desc: '基础表格',
-              compactContentSpacing: 8,
+              compactStyle: const CompactExampleStyle(contentSpacing: 8),
               methodName: 'TableBasicExample',
               builder: (_) => const TableBasicExample(),
             ),
             ExampleItem(
               desc: '可排序表格',
-              compactContentSpacing: 8,
+              compactStyle: const CompactExampleStyle(contentSpacing: 8),
               methodName: 'TableSortableExample',
               builder: (_) => const TableSortableExample(),
             ),
             ExampleItem(
               desc: '带操作或按钮表格',
-              compactContentSpacing: 8,
+              compactStyle: const CompactExampleStyle(contentSpacing: 8),
               methodName: 'TableOperationTextExample',
               builder: (_) => const TableOperationTextExample(),
             ),
@@ -56,19 +56,19 @@ class TTablePage extends StatelessWidget {
             ),
             ExampleItem(
               desc: '可固定首列表格',
-              compactContentSpacing: 8,
+              compactStyle: const CompactExampleStyle(contentSpacing: 8),
               methodName: 'TableFixedFirstExample',
               builder: (_) => const TableFixedFirstExample(),
             ),
             ExampleItem(
               desc: '可固定尾列表格',
-              compactContentSpacing: 7,
+              compactStyle: const CompactExampleStyle(contentSpacing: 7),
               methodName: 'TableFixedLastExample',
               builder: (_) => const TableFixedLastExample(),
             ),
             ExampleItem(
               desc: '横向平铺可滚动表格',
-              compactContentSpacing: 8,
+              compactStyle: const CompactExampleStyle(contentSpacing: 8),
               methodName: 'TableHorizontalScrollExample',
               builder: (_) => const TableHorizontalScrollExample(),
             ),
@@ -79,13 +79,13 @@ class TTablePage extends StatelessWidget {
           children: [
             ExampleItem(
               desc: '带斑马纹表格样式',
-              compactContentSpacing: 14,
+              compactStyle: const CompactExampleStyle(contentSpacing: 14),
               methodName: 'TableStripeExample',
               builder: (_) => const TableStripeExample(),
             ),
             ExampleItem(
               desc: '带边框表格样式',
-              compactContentSpacing: 8,
+              compactStyle: const CompactExampleStyle(contentSpacing: 8),
               methodName: 'TableBorderedExample',
               builder: (_) => const TableBorderedExample(),
             ),

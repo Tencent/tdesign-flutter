@@ -392,6 +392,7 @@
         "names": [
           "TSlider",
           "TRangeSlider",
+          "TSliderVariant",
           "TSliderThemeData"
         ],
         "getComments": false

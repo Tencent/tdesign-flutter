@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'slider')
 class SliderScaleExample extends StatefulWidget {
@@ -13,22 +12,23 @@ class SliderScaleExample extends StatefulWidget {
 
 class _SliderScaleExampleState extends State<SliderScaleExample> {
   Widget _buildScale(BuildContext context) {
-    return _panel(
-      TSlider(
-        key: const ValueKey('slider-scale'),
-        value: _scale,
-        min: 0,
-        max: 100,
-        divisions: 5,
-        showScaleValue: true,
-        scaleFormatter: _integer,
-        onChanged: (value) => setState(() => _scale = value),
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 3),
+        child: TSlider(
+          key: const ValueKey('slider-scale'),
+          value: _scale,
+          min: 0,
+          max: 100,
+          divisions: 5,
+          showScaleValue: true,
+          scaleFormatter: _integer,
+          onChanged: (value) => setState(() => _scale = value),
+        ),
       ),
     );
   }
-
-  Widget _panel(Widget child) =>
-      Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: child);
 
   double _scale = 60;
 

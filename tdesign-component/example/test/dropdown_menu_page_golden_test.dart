@@ -44,7 +44,7 @@ void main() {
         dropdownMenuDemoPageTestSpec,
         mode,
       );
-      await tester.tap(find.text('全部产品'));
+      await tester.tap(find.text('最火产品').first);
       await tester.pumpAndSettle();
       await tester.tap(find.text('最新产品'));
       await tester.pumpAndSettle();
@@ -107,7 +107,7 @@ void main() {
           ),
         ),
       );
-      await tester.tap(find.text('全部产品'));
+      await tester.tap(find.text('全部产品').last);
       await tester.pumpAndSettle();
       final gesture = await tester.startGesture(const Offset(20, 80));
       for (var step = 0; step < 5; step++) {

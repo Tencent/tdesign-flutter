@@ -4,6 +4,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  double alphabeticBaseline(WidgetTester tester, Finder finder) {
+    final renderBox = tester.renderObject<RenderBox>(finder);
+    final localBaseline = renderBox.getDryBaseline(
+      renderBox.constraints,
+      TextBaseline.alphabetic,
+    );
+    return tester.getTopLeft(finder).dy + localBaseline!;
+  }
+
   Widget wrap(Widget child, {TInputThemeData? inputTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
     if (inputTheme != null) {
@@ -194,8 +203,36 @@ void main() {
 
     final labelRect = tester.getRect(find.text('标签文字'));
     final fieldRect = tester.getRect(find.byType(TextField));
-    expect(labelRect.top, fieldRect.top);
     expect(fieldRect.left - labelRect.right, token.spacer16);
+    expect(labelRect.top, tester.getRect(find.text('请输入文字')).top);
+    expect(
+      alphabeticBaseline(tester, find.text('标签文字')),
+      closeTo(alphabeticBaseline(tester, find.text('请输入文字')), 0.01),
+    );
+  });
+
+  testWidgets('bounded textarea keeps the indicator 16px from the bottom', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      wrap(
+        const SizedBox(
+          width: 375,
+          height: 162,
+          child: TTextarea(
+            label: '标签文字',
+            hintText: '请输入文字',
+            minLines: 3,
+            maxLength: 500,
+            indicator: true,
+          ),
+        ),
+      ),
+    );
+
+    final textareaRect = tester.getRect(find.byType(TTextarea));
+    final indicatorRect = tester.getRect(find.text('0/500'));
+    expect(textareaRect.bottom - indicatorRect.bottom, 16);
   });
 
   testWidgets('vertical layout stacks label above editor with token spacing', (
@@ -283,11 +320,15 @@ void main() {
     );
     expect(find.text('字段'), findsOneWidget);
     expect(
-      find.byWidgetPredicate(
-        (widget) =>
-            widget is Padding && widget.padding == const EdgeInsets.all(16),
+      find.descendant(
+        of: find.byType(TTextarea),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is Padding &&
+              widget.padding == const EdgeInsets.all(16),
+        ),
       ),
-      findsOneWidget,
+      findsNothing,
     );
   });
 

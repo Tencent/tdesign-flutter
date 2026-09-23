@@ -26,18 +26,18 @@ void main() {
       find.descendant(of: find.byType(TNavBar), matching: find.text('Table')),
       findsOneWidget,
     );
-    // Figma 的原始坐标已扣除 44px iOS 状态栏，页面内容从 NavBar 起
-    // 与 Flutter Golden 使用同一个 375px / DPR 1 坐标系比较。
+    // Figma 的原始坐标已扣除 44px iOS 状态栏；公共标题行盒修正后，
+    // 页面内容从 NavBar 起，与 Flutter Golden 使用同一个 375px / DPR 1 坐标系比较。
     expect(tableTopCoordinates, [
-      278,
-      750,
-      1222,
-      1656,
-      2128,
-      2599,
-      3071,
-      3593,
-      4065,
+      274,
+      746,
+      1218,
+      1652,
+      2124,
+      2595,
+      3067,
+      3589,
+      4061,
     ]);
     for (var index = 0; index < tables.length; index++) {
       expect(tester.getSize(tableFinder.at(index)).height, 418);

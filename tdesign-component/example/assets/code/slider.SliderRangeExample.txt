@@ -9,20 +9,21 @@ class SliderRangeExample extends StatefulWidget {
 }
 
 class _SliderRangeExampleState extends State<SliderRangeExample> {
-  Widget _buildRange(BuildContext context) => _panel(
-    TRangeSlider(
-      key: const ValueKey('slider-range'),
-      value: _range,
-      min: 0,
-      max: 100,
-      onChanged: (value) => setState(() => _range = value),
+  Widget _buildRange(BuildContext context) => ColoredBox(
+    color: context.tTheme.bgColorContainer,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: TRangeSlider(
+        key: const ValueKey('slider-range'),
+        value: _range,
+        min: 0,
+        max: 100,
+        onChanged: (value) => setState(() => _range = value),
+      ),
     ),
   );
 
-  Widget _panel(Widget child) =>
-      Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: child);
-
-  RangeValues _range = const RangeValues(35, 65);
+  RangeValues _range = const RangeValues(40, 60);
 
   @override
   Widget build(BuildContext context) {

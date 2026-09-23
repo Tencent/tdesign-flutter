@@ -31,7 +31,7 @@ class DropdownMenuPublicScenario {
 const dropdownMenuPublicScenarios = [
   DropdownMenuPublicScenario(
     id: 'product',
-    label: '全部产品',
+    label: '最火产品',
     enabled: true,
     goldenPolicy: DropdownMenuGoldenPolicy.opened,
     expectedPanelText: '最新产品',

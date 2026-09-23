@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// TButton Widget 测试
@@ -11,11 +12,13 @@ void main() {
   Widget wrapWithTheme(
     Widget child, {
     TButtonThemeData? buttonTheme,
+    TLoadingThemeData? loadingTheme,
     ButtonStyle? materialStyle,
     TThemeData? tTheme,
   }) {
     final themeExtensions = <ThemeExtension>[
       if (buttonTheme != null) buttonTheme,
+      if (loadingTheme != null) loadingTheme,
     ];
     // 注意：必须通过 MaterialApp.theme 传递 extensions，
     // 用外层 Theme 包 MaterialApp 会被 MaterialApp 默认 ThemeData.light() 覆盖，导致 extension 丢失。
@@ -1258,6 +1261,54 @@ void main() {
         expect(iconTheme.color, Colors.purple);
         expect(iconTheme.size, 29);
       }
+    });
+
+    testWidgets('普通与渐变分支均将按钮图标色传递给 TLoading', (tester) async {
+      for (final gradient in [false, true]) {
+        await tester.pumpWidget(
+          wrapWithTheme(
+            TButton(
+              icon: const TLoading(),
+              child: const Text('加载中'),
+              style: const ButtonStyle(
+                iconColor: WidgetStatePropertyAll(Colors.purple),
+              ),
+              onPressed: () {},
+            ),
+            buttonTheme: gradient
+                ? const TButtonThemeData(
+                    gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+                  )
+                : null,
+          ),
+        );
+
+        expect(
+          tester.widget<TCircleIndicator>(find.byType(TCircleIndicator)).color,
+          Colors.purple,
+        );
+      }
+    });
+
+    testWidgets('显式 TLoadingThemeData 颜色优先于按钮图标色', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TButton(
+            icon: const TLoading(),
+            child: const Text('加载中'),
+            style: const ButtonStyle(
+              iconColor: WidgetStatePropertyAll(Colors.purple),
+            ),
+            onPressed: () {},
+          ),
+          loadingTheme: const TLoadingThemeData(iconColor: Colors.red),
+        ),
+      );
+
+      expect(
+        tester.widget<TCircleIndicator>(find.byType(TCircleIndicator)).color,
+        Colors.red,
+      );
     });
 
     testWidgets('Material stateful textStyle 在普通与渐变分支保留且遵循尺寸 token', (

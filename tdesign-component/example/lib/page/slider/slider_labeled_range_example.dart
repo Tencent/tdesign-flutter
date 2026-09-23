@@ -15,26 +15,32 @@ class SliderLabeledRangeExample extends StatefulWidget {
 class _SliderLabeledRangeExampleState extends State<SliderLabeledRangeExample> {
   RangeValues _value = const RangeValues(40, 60);
 
-  static String _percent(double value) => '${value.round()}%';
-
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const TText('0%'),
-        Expanded(
-          child: TRangeSlider(
-            key: const ValueKey('slider-labeled-range'),
-            value: _value,
-            min: 0,
-            max: 100,
-            showThumbValue: true,
-            thumbFormatter: _percent,
-            onChanged: (value) => setState(() => _value = value),
-          ),
+    return ColoredBox(
+      color: context.tTheme.bgColorContainer,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+        child: Row(
+          children: [
+            const TText('0'),
+            Expanded(
+              child: TRangeSlider(
+                key: const ValueKey('slider-labeled-range'),
+                value: _value,
+                min: 0,
+                max: 100,
+                showThumbValue: true,
+                thumbFormatter: _integer,
+                onChanged: (value) => setState(() => _value = value),
+              ),
+            ),
+            const TText('100'),
+          ],
         ),
-        const TText('100%'),
-      ],
+      ),
     );
   }
+
+  static String _integer(double value) => value.round().toString();
 }

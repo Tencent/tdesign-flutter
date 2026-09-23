@@ -31,7 +31,6 @@ class InputAlignExample extends StatelessWidget {
           textAlign: TextAlign.end,
         ),
       ),
-      SizedBox(height: 16),
     ],
   );
 

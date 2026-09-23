@@ -32,7 +32,6 @@ class _InputBasicExampleState extends State<InputBasicExample> {
           hintText: '请输入文字',
         ),
       ),
-      const SizedBox(height: 16),
     ],
   );
 
@@ -77,6 +76,13 @@ class _InputBasicExampleState extends State<InputBasicExample> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildBasic(context);
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        const TFormThemeData(
+          requiredMarkPosition: TFormRequiredMarkPosition.right,
+        ),
+      ),
+      child: _buildBasic(context),
+    );
   }
 }

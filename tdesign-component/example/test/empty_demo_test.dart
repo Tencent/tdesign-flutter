@@ -32,6 +32,14 @@ void main() {
     expect(empties[0].image, isNull);
     expect(empties[1].image, isNotNull);
     expect(empties[1].emptyText, '描述文字');
+    final imageBox = empties[1].image! as SizedBox;
+    expect(imageBox.width, 120);
+    expect(imageBox.height, 120);
+    final imageContainer = imageBox.child! as Container;
+    expect(
+      (imageContainer.decoration! as BoxDecoration).color,
+      TThemeData.defaultData().bgColorSecondaryContainer,
+    );
     expect(empties[2].operation, isA<TButton>());
   }, tags: 'demo');
 }

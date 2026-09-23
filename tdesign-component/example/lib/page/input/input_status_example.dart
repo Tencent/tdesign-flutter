@@ -8,28 +8,21 @@ class InputStatusExample extends StatelessWidget {
   const InputStatusExample({super.key});
 
   Widget _buildStatus(BuildContext context) {
-    final token = context.tTheme;
     return Column(
       children: [
-        TFormItem(
+        const TFormItem(
           label: '标签文字',
           errorText: '错误提示',
-          verticalAlignment: TFormItemVerticalAlignment.center,
-          child: Theme(
-            data: Theme.of(context).mergeExtension(
-              TInputThemeData(clearIconColor: token.errorNormalColor),
-            ),
-            child: const TInput(
-              borderless: true,
-              initialValue: '已输入内容',
-              status: TInputStatus.error,
-              clearButtonMode: TInputClearButtonMode.always,
-            ),
+          verticalAlignment: TFormItemVerticalAlignment.start,
+          child: TInput(
+            borderless: true,
+            initialValue: '已输入内容',
+            status: TInputStatus.error,
+            clearButtonMode: TInputClearButtonMode.always,
           ),
         ),
         const SizedBox(height: 16),
         _buildDisabled(context),
-        const SizedBox(height: 16),
       ],
     );
   }

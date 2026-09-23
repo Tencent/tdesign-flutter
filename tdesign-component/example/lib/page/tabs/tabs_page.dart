@@ -27,7 +27,7 @@ class TTabsPage extends StatelessWidget {
       title: tTitle(context),
       desc: '用于内容分类后的展示切换。',
       exampleCodeGroup: 'tabs',
-      padding: const EdgeInsets.only(top: 16),
+      itemMargin: const EdgeInsets.only(top: 16),
       children: [
         ExampleModule(
           title: '组件类型',

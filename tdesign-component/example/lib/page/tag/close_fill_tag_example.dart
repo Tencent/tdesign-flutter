@@ -19,6 +19,7 @@ class _CloseFillTagExampleState extends State<CloseFillTagExample> {
           .map(
             (text) => TTag(
               text,
+              variant: TTagVariant.light,
               needCloseIcon: true,
               onCloseTap: () => setState(() => _closableTags.remove(text)),
             ),
