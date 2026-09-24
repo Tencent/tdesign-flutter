@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/base/notification_center.dart';
+import 'package:tdesign_flutter_example/page/tag/circle_fill_tag_example.dart';
 import 'package:tdesign_flutter_example/page/tag/tag_page.dart';
 
 import '../demo_page_test_utils.dart';
@@ -68,6 +69,45 @@ void main() {
       tags.map((tag) => tag.variant).toSet(),
       containsAll(TTagVariant.values),
     );
+    expect(tester.takeException(), isNull);
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
+
+  testWidgets('Tag Demo page copy and shape row match the design', (
+    tester,
+  ) async {
+    await pumpFullDemoPage(tester, _tagSpec, ThemeMode.light);
+
+    expect(find.text('Tag'), findsOneWidget);
+    expect(find.text('用于表明主体的类目，属性或状态。'), findsOneWidget);
+
+    final shapeTags = find.descendant(
+      of: find.byType(CircleFillTagExample),
+      matching: find.byType(TTag),
+    );
+    expect(shapeTags, findsNWidgets(3));
+    final tags = tester.widgetList<TTag>(shapeTags).toList();
+    expect(
+      tags.map((tag) => tag.variant),
+      orderedEquals([
+        TTagVariant.light,
+        TTagVariant.outline,
+        TTagVariant.outline,
+      ]),
+    );
+    expect(
+      shapeTags.evaluate().map(
+        (element) => Theme.of(element).extension<TTagThemeData>()?.shape,
+      ),
+      orderedEquals([TTagShape.round, TTagShape.round, TTagShape.mark]),
+    );
+
+    final rects = List.generate(
+      3,
+      (index) => tester.getRect(shapeTags.at(index)),
+    );
+    expect(rects[1].left - rects[0].right, 16);
+    expect(rects[2].left - rects[1].right, 16);
     expect(tester.takeException(), isNull);
     await disposeDemoPage(tester);
   }, tags: 'demo');

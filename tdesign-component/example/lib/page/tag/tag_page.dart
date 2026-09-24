@@ -25,7 +25,8 @@ class _TTagPageState extends State<TTagPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tTitle(),
-      desc: '用于表明主体的类目，属性或状态',
+      navBarTitle: 'Tag',
+      desc: '用于表明主体的类目，属性或状态。',
       exampleCodeGroup: 'tag',
       showTestModule: false,
       children: [

@@ -16,6 +16,7 @@
 - 新增：`TSlider.variant` / `TRangeSlider.variant` 以 `normal` 和 `capsule` 表达公开结构形态；默认为 `normal`，不改变旧调用行为。胶囊轨道的内缩、游标和刻度由组件统一绘制，不是 Demo 专用 API。
 - 默认样式修复：`TButton` 图标插槽将已解析的图标色传给其中的 `TLoading`；显式 `TLoadingThemeData.iconColor` 仍保持最高优先级，独立 `TLoading` 默认色不变。
 - Demo 边界修复：Input 必填标记的右侧配置移入 `InputBasicExample`，使运行页面与“查看代码”具有相同的主题上下文。
+- Tag 修复不新增或修改公开 API；默认行盒、描边外框、图标尺寸与语义色按既有枚举和 Theme 契约纠正，不属于 breaking change。
 
 ## 视觉证据
 
@@ -43,3 +44,11 @@
 - 重构前后对全部 Golden PNG 计算内容哈希，要求完全一致。
 - 在 Linux amd64 Flutter 3.32.0 中只运行无更新参数的完整视觉回归；出现差异时先定位布局回归，只有设计证据证明旧基线错误才进入独立视觉修复，不在重构中接受新图。
 - Flutter 3.32.0 与 latest 执行 Demo 结构、功能、生成示例和严格 analyze。
+
+## Tag 行盒与边框槽位修复
+
+1. 先按设计稿修正 Tag Demo 的导航栏标题、说明标点，以及“圆弧标签”同一行的三个形态实例；Demo 只负责实例组合和 16px 外部间距。
+2. 所有变体统一绘制 1px 边框：outline 使用语义边框色，填充变体使用透明色；内容 padding 不再按 variant 扣减。
+3. 单行标签以字体 Token 的行高和当前 `TextScaler` 建立固定行盒，使用均分 leading 的原生文本布局，不增加平台或字体专属位移。
+4. 组件高度由缩放后的行高、内容 padding 与两侧边框计算；图标尺寸、图文间距和关闭图标颜色按尺寸与语义 Token 解析。
+5. 先以组件测试锁定尺寸、变体、字体缩放和图标契约，再在 Linux Flutter 3.32.0 更新并复跑 Tag Demo Golden；Flutter 3.32.0 与 latest 均执行非视觉测试和严格 analyze。

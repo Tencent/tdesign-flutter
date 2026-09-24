@@ -52,7 +52,10 @@ void main() {
 
       expect((tagRect.center.dy - textRect.center.dy).abs(), lessThan(1));
       expect(tagRect.width, lessThan(120));
-      expect(textWidget.style?.height, isNull);
+      expect(textWidget.style?.height, closeTo(20 / 12, 0.001));
+      expect(textWidget.style?.leadingDistribution,
+          TextLeadingDistribution.even);
+      expect(textWidget.textHeightBehavior, isNull);
     });
 
     testWidgets('带图标的标签渲染', (tester) async {
@@ -211,6 +214,96 @@ void main() {
   // TTagSize 尺寸
   // ============================================================
   group('TTag 尺寸（size）', () {
+    testWidgets('填充与描边变体共享四档外框高度', (tester) async {
+      const expectedHeights = <TTagSize, double>{
+        TTagSize.extraLarge: 40,
+        TTagSize.large: 28,
+        TTagSize.medium: 24,
+        TTagSize.small: 20,
+      };
+
+      for (final entry in expectedHeights.entries) {
+        for (final variant in TTagVariant.values) {
+          await tester.pumpWidget(wrapWithTheme(
+            TTag('尺寸', size: entry.key, variant: variant),
+          ));
+
+          final tagContainer = find.descendant(
+            of: find.byType(TTag),
+            matching: find.byWidgetPredicate(
+              (widget) =>
+                  widget is Container && widget.decoration is BoxDecoration,
+            ),
+          );
+          expect(
+            tester.getSize(tagContainer.first).height,
+            entry.value,
+            reason: '${entry.key} / $variant',
+          );
+        }
+      }
+    });
+
+    testWidgets('文字缩放同步扩展行盒和标签高度', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(
+        const MediaQuery(
+          data: MediaQueryData(textScaler: TextScaler.linear(2)),
+          child: TTag('缩放'),
+        ),
+      ));
+
+      final tagContainer = find.descendant(
+        of: find.byType(TTag),
+        matching: find.byWidgetPredicate(
+          (widget) => widget is Container && widget.decoration is BoxDecoration,
+        ),
+      );
+      final tagRect = tester.getRect(tagContainer.first);
+      final textRect = tester.getRect(find.text('缩放'));
+      expect(tagRect.height, 44);
+      expect((tagRect.center.dy - textRect.center.dy).abs(), lessThan(1));
+    });
+
+    testWidgets('前置与关闭图标按标签尺寸缩放', (tester) async {
+      const expectedSizes = <TTagSize, double>{
+        TTagSize.extraLarge: 16,
+        TTagSize.large: 16,
+        TTagSize.medium: 14,
+        TTagSize.small: 12,
+      };
+
+      for (final entry in expectedSizes.entries) {
+        await tester.pumpWidget(wrapWithTheme(
+          TTag(
+            '图标',
+            size: entry.key,
+            icon: Icons.star,
+            needCloseIcon: true,
+          ),
+        ));
+
+        expect(tester.widget<Icon>(find.byIcon(Icons.star)).size, entry.value);
+        expect(tester.widget<Icon>(find.byIcon(TIcons.close)).size, entry.value);
+      }
+    });
+
+    testWidgets('小尺寸图文间距为 2', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(
+        const TTag(
+          '间距',
+          size: TTagSize.small,
+          icon: Icons.star,
+          needCloseIcon: true,
+        ),
+      ));
+
+      final iconRect = tester.getRect(find.byIcon(Icons.star));
+      final textRect = tester.getRect(find.text('间距'));
+      final closeRect = tester.getRect(find.byIcon(TIcons.close));
+      expect(textRect.left - iconRect.right, 2);
+      expect(closeRect.left - textRect.right, 2);
+    });
+
     testWidgets('extraLarge 尺寸渲染', (tester) async {
       await tester.pumpWidget(wrapWithTheme(
         const TTag('超大', size: TTagSize.extraLarge),
@@ -258,6 +351,24 @@ void main() {
       expect(container.decoration, isA<BoxDecoration>());
       final decoration = container.decoration as BoxDecoration;
       expect(decoration.border, isNotNull);
+      expect(decoration.color, TThemeData.defaultData().bgColorContainer);
+      expect((decoration.border! as Border).top.width, 1);
+    });
+
+    testWidgets('填充变体使用透明边框保持相同布局槽位', (tester) async {
+      await tester.pumpWidget(wrapWithTheme(
+        const TTag('填充', variant: TTagVariant.dark),
+      ));
+
+      final container = tester.widget<Container>(
+        find
+            .descendant(of: find.byType(TTag), matching: find.byType(Container))
+            .first,
+      );
+      final decoration = container.decoration! as BoxDecoration;
+      final border = decoration.border! as Border;
+      expect(border.top.width, 1);
+      expect(border.top.color, Colors.transparent);
     });
 
     testWidgets('light 浅色样式渲染', (tester) async {
@@ -318,6 +429,10 @@ void main() {
         const TTag('可关闭', needCloseIcon: true),
       ));
       expect(find.byIcon(TIcons.close), findsOneWidget);
+      expect(
+        tester.widget<Icon>(find.byIcon(TIcons.close)).color,
+        TThemeData.defaultData().textColorPlaceholder,
+      );
     });
 
     testWidgets('onCloseTap 点击触发回调', (tester) async {

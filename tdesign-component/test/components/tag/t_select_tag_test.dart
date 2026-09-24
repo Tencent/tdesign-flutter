@@ -58,7 +58,9 @@ void main() {
 
       expect((tagRect.center.dy - textRect.center.dy).abs(), lessThan(1));
       expect(tagRect.width, lessThan(120));
-      expect(textWidget.style?.height, isNull);
+      expect(textWidget.style?.height, closeTo(20 / 12, 0.001));
+      expect(textWidget.style?.leadingDistribution,
+          TextLeadingDistribution.even);
     });
 
     testWidgets('未选中带 onChanged，点击触发取反回调', (tester) async {
