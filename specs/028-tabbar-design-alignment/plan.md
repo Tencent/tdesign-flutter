@@ -43,8 +43,8 @@
 - 左右排列的图文项把 Badge 锚定到整组图文，文字在窄项宽或较大系统字体下
   限制为单行并省略，避免 RenderFlex 溢出；上下排列仍以图标锚定 Badge。
 - 保留受控 `value/onChanged`，让禁用状态只由 `onChanged` 决定。
-- 将 `TTabBarThemeData` 收敛到高度、颜色、间距、边线等视觉默认值；移除
-  split、顶部边线开关、水波纹和动画策略。
+- 将 `TTabBarThemeData` 收敛到高度、颜色和分割线等视觉默认值；移除
+  split、顶部边线配置、水波纹和动画策略。
 - 按移动端画板重建三个分组、九个四项 TabBar 实例，并为可交互示例保留页面受控状态。
 
 ## API 变化
@@ -65,6 +65,8 @@
 - breaking：Theme 移除行为/结构字段，由实例参数拥有。
 - breaking：删除 `TTabBar` 构造参数及 `TTabBarThemeData` 字段
   `centerDistance`；保留原来的内置 0/4px 默认视觉，自定义间距不再支持。
+- breaking：删除 `showTopBorder`、实例与 Theme 中的 `topBorder`；Filled 始终绘制默认顶边线，Capsule 仍不绘制。先前隐藏顶线的调用与自定义 Demo 会改为显示默认线。
+- breaking：删除 `placeholder`；`useSafeArea: true` 延续原默认行为，以标签栏背景填满底部安全区。需要把栏整体避开安全区的调用改用外层 `SafeArea` 与 `useSafeArea: false` 组合。
 
 ## 风险与取舍
 

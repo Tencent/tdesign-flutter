@@ -53,12 +53,10 @@ void main() {
         barHeight: 64,
         selectedBgColor: Colors.red,
         dividerColor: Colors.green,
-        topBorder: const BorderSide(color: Colors.black),
       );
       expect(copied.barHeight, 64);
       expect(copied.selectedBgColor, Colors.red);
       expect(copied.dividerColor, Colors.green);
-      expect(copied.topBorder?.color, Colors.black);
 
       const start = TTabBarThemeData(barHeight: 56);
       const end = TTabBarThemeData(barHeight: 64);
@@ -86,7 +84,6 @@ void main() {
         selectedBgColor: Colors.red,
         dividerHeight: 40,
         dividerThickness: 1.5,
-        topBorder: BorderSide(color: Colors.blue, width: 2),
       );
 
       final early = defaults.lerp(custom, 0.25);
@@ -94,19 +91,16 @@ void main() {
       expect(early.dividerHeight, 34);
       expect(early.dividerThickness, 0.75);
       expect(early.selectedBgColor, isNull);
-      expect(early.topBorder, isNull);
 
       final late = defaults.lerp(custom, 0.75);
       expect(late.barHeight, 62);
       expect(late.selectedBgColor, Colors.red);
-      expect(late.topBorder, const BorderSide(color: Colors.blue, width: 2));
 
       final empty = defaults.lerp(const TTabBarThemeData(), 0.5);
       expect(empty.barHeight, isNull);
       expect(empty.dividerHeight, isNull);
       expect(empty.dividerThickness, isNull);
       expect(empty.selectedBgColor, isNull);
-      expect(empty.topBorder, isNull);
     });
 
     testWidgets('inline gap keeps its default through Theme transitions', (
@@ -579,39 +573,92 @@ void main() {
       }
     });
 
-    testWidgets(
-      'repeated tap, long press, safe area and no placeholder paths',
-      (tester) async {
-        var tapCount = 0;
-        var longPressed = false;
+    testWidgets('repeated tap, long press and default safe area path', (
+      tester,
+    ) async {
+      var tapCount = 0;
+      var longPressed = false;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.text,
+            value: 0,
+            navigationTabs: [
+              TTabBarItemConfig(
+                tabText: '标签1',
+                allowMultipleTaps: true,
+                onTap: () => tapCount++,
+                onLongPress: () => longPressed = true,
+              ),
+              TTabBarItemConfig(tabText: '标签2', onTap: () {}),
+            ],
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('标签1'));
+      await tester.longPress(find.text('标签1'));
+      await tester.pumpAndSettle();
+
+      expect(tapCount, 1);
+      expect(longPressed, isTrue);
+    });
+
+    testWidgets('safe area fills only when enabled', (tester) async {
+      Widget buildBar({required bool useSafeArea}) => wrapWithTheme(
+        MediaQuery(
+          data: const MediaQueryData(padding: EdgeInsets.only(bottom: 24)),
+          child: TTabBar(
+            type: TTabBarType.text,
+            value: 0,
+            useSafeArea: useSafeArea,
+            navigationTabs: textTabs(),
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(buildBar(useSafeArea: true));
+      expect(tester.getSize(find.byType(TTabBar)).height, 80);
+
+      await tester.pumpWidget(buildBar(useSafeArea: false));
+      expect(tester.getSize(find.byType(TTabBar)).height, 56);
+    });
+
+    testWidgets('filled has default top border and capsule has none', (
+      tester,
+    ) async {
+      Future<BorderSide?> topBorder(TTabBarStyle style) async {
         await tester.pumpWidget(
           wrapWithTheme(
             TTabBar(
               type: TTabBarType.text,
+              style: style,
               value: 0,
-              placeholder: false,
-              navigationTabs: [
-                TTabBarItemConfig(
-                  tabText: '标签1',
-                  allowMultipleTaps: true,
-                  onTap: () => tapCount++,
-                  onLongPress: () => longPressed = true,
-                ),
-                TTabBarItemConfig(tabText: '标签2', onTap: () {}),
-              ],
+              useSafeArea: false,
+              navigationTabs: textTabs(),
               onChanged: (_) {},
             ),
           ),
         );
+        for (final container in tester.widgetList<Container>(
+          find.descendant(
+            of: find.byType(TTabBar),
+            matching: find.byType(Container),
+          ),
+        )) {
+          final decoration = container.foregroundDecoration;
+          if (decoration is BoxDecoration && decoration.border is Border) {
+            return (decoration.border! as Border).top;
+          }
+        }
+        return null;
+      }
 
-        await tester.tap(find.text('标签1'));
-        await tester.longPress(find.text('标签1'));
-        await tester.pumpAndSettle();
-
-        expect(tapCount, 1);
-        expect(longPressed, isTrue);
-      },
-    );
+      expect((await topBorder(TTabBarStyle.filled))?.width, 0.5);
+      expect(await topBorder(TTabBarStyle.capsule), isNull);
+    });
 
     testWidgets('expansion panel popup opens and reports selected value', (
       tester,

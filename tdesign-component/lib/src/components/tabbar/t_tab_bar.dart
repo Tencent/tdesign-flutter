@@ -224,10 +224,7 @@ class TTabBar extends StatefulWidget {
     this.dividerHeight,
     this.dividerThickness,
     this.dividerColor,
-    this.showTopBorder = true,
-    this.topBorder,
     this.useSafeArea = true,
-    this.placeholder = true,
     this.selectedBgColor,
     this.unselectedBgColor,
     this.backgroundColor,
@@ -322,17 +319,9 @@ class TTabBar extends StatefulWidget {
   /// 分割线颜色（可选）
   final Color? dividerColor;
 
-  /// 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值，非胶囊型才生效）
-  final bool showTopBorder;
-
-  /// 上边线样式
-  final BorderSide? topBorder;
-
-  /// 使用安全区域
+  /// 是否填充底部安全区域；默认 true，使用标签栏背景色填充。
+  /// 嵌入页面内部且不需要底部安全区时可设为 false。
   final bool useSafeArea;
-
-  /// 是否添加安全区域占位
-  final bool placeholder;
 
   /// 选中时背景颜色
   final Color? selectedBgColor;
@@ -378,7 +367,6 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
   late double _effectiveDividerHeight;
   late double _effectiveDividerThickness;
   late Color _effectiveDividerColor;
-  late BorderSide? _effectiveTopBorder;
 
   @override
   void initState() {
@@ -435,7 +423,6 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
         widget.dividerColor ??
         theme?.dividerColor ??
         context.tTheme.componentStrokeColor;
-    _effectiveTopBorder = widget.topBorder ?? theme?.topBorder;
     _animationController.duration =
         widget.animationDuration ?? const Duration(milliseconds: 300);
   }
@@ -489,16 +476,13 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
                       shadows: context.tTheme.shadowsTop,
                     )
                   : BoxDecoration(color: _effectiveBackgroundColor),
-              foregroundDecoration:
-                  !isCapsuleOutlineType && widget.showTopBorder
+              foregroundDecoration: !isCapsuleOutlineType
                   ? BoxDecoration(
                       border: Border(
-                        top:
-                            _effectiveTopBorder ??
-                            BorderSide(
-                              color: context.tTheme.componentStrokeColor,
-                              width: 0.5,
-                            ),
+                        top: BorderSide(
+                          color: context.tTheme.componentStrokeColor,
+                          width: 0.5,
+                        ),
                       ),
                     )
                   : null,
@@ -531,15 +515,11 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
               ),
             );
             if (widget.useSafeArea) {
-              if (widget.placeholder) {
-                result = Container(
-                  padding: EdgeInsets.only(bottom: safeAreaBottomHeight),
-                  color: _effectiveBackgroundColor,
-                  child: result,
-                );
-              } else {
-                result = SafeArea(child: result);
-              }
+              result = Container(
+                padding: EdgeInsets.only(bottom: safeAreaBottomHeight),
+                color: _effectiveBackgroundColor,
+                child: result,
+              );
             }
             final isDisabled = widget.onChanged == null;
             return Semantics(

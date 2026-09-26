@@ -1,5 +1,11 @@
 # 验收记录
 
+## 2026-09-27 顶边线和安全区 API 收敛
+
+- 删除 `showTopBorder`、实例与 Theme 的 `topBorder`、`placeholder`。Filled 保持默认 0.5px 顶线，Capsule 仍无顶线；自定义 Demo 现在也使用默认线。`useSafeArea: true` 仍用组件背景填满底部安全区，false 不处理。需要仅避开安全区的场景须在组件外组合 `SafeArea`，此组合尚未作为公开 Demo 验证。
+- Flutter 3.32.0 与 3.47.0：组件测试各 44/44、Demo 测试各 9/9；组件包和 Example 包完整 `flutter analyze --fatal-infos --no-pub` 均零问题。3.32.0 TabBar 生产源码覆盖率 504/513（98.25%），示例代码 `--check` 通过。
+- Linux Flutter 3.32.0：先无更新比对，组件 Golden 14/14 与共享导航矩阵 2/2 通过；公开 Demo 有 8 张仅在自定义实例新增默认顶线的区域发生差异。审查差异后更新该 8 张，随后公开 Demo 无更新严格复跑 11/11 通过；两张文字 Toast Golden 不变。
+
 ## 2026-09-27 centerDistance API 删除
 
 - `TTabBar` 构造参数及 `TTabBarThemeData` 字段均已删除，生成的 TabBar API 文档已同步。图文项沿用原默认：上下排列 0px，左右排列 4px，公开 Demo 配置不变；自定义间距无直接替代参数，这是有意的 breaking 收敛。

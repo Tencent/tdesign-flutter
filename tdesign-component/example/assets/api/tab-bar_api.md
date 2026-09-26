@@ -18,15 +18,12 @@
 | navigationTabs | List<TTabBarItemConfig> | - | tabs配置 |
 | needInkWell | bool | false | 是否需要水波纹效果 |
 | onChanged | ValueChanged<int>? | - | 选中项变化；null 时整栏禁用 |
-| placeholder | bool | true | 是否添加安全区域占位 |
 | selectedBgColor | Color? | - | 选中时背景颜色 |
-| showTopBorder | bool | true | 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值，非胶囊型才生效） |
 | split | bool | false | 是否使用竖线分隔；`itemStyle` 为 `TTabBarItemStyle.label` 时不显示。 |
 | style | TTabBarStyle | TTabBarStyle.filled | 标签栏容器样式。 |
-| topBorder | BorderSide? | - | 上边线样式 |
 | type | TTabBarType | - | 标签栏内容类型。 |
 | unselectedBgColor | Color? | - | 未选中时背景颜色 |
-| useSafeArea | bool | true | 使用安全区域 |
+| useSafeArea | bool | true | 是否填充底部安全区域；默认 true，使用标签栏背景色填充。 嵌入页面内部且不需要底部安全区时可设为 false。 |
 | value | int | - | 选中的 index |
 
 

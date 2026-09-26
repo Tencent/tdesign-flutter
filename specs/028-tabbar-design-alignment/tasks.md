@@ -1,5 +1,6 @@
 # 实施任务
 
+- [x] DONE 2026-09-27：删除 `showTopBorder`、实例/Theme `topBorder` 与 `placeholder`，Filled 固定默认顶线，`useSafeArea` 仅决定是否以组件背景填充底部安全区；自定义 Demo 恢复默认顶线。Flutter 3.32.0/3.47.0 组件测试各 44/44、Demo 测试各 9/9、两个包完整 analyze 零告警；3.32.0 生产覆盖率 504/513（98.25%）。Linux 3.32.0 组件 Golden 14/14 与共享导航矩阵 2/2 无更新通过；公开 Demo 先确认 8 张仅新增顶线，再更新 8 张且无更新严格复跑 11/11 通过。
 - [x] DONE 2026-09-27：移除公开 `TTabBar.centerDistance` 和 `TTabBarThemeData.centerDistance`，图文默认间距改由组件内部固定为上下 0px、左右 4px；下方旧 Theme 插值任务仅为历史验证记录，不再代表当前 API。Flutter 3.32.0 与 3.47.0 组件测试各 42/42、Demo 测试各 9/9、两包完整 analyze 零告警；3.47.0 TabBar 生产覆盖率 514/523（98.28%）。默认绘制未变，本批次无需更新 Golden。
 - [x] DONE 2026-09-27：PR #1146 首轮 Linux CI 发现共享 `navigation_components` 明暗矩阵未更新。下载 CI failure artifact 并核对差异仅在 TabBar 一行；Linux 3.32 临时副本复现完全相同的 0.60%/0.59% 差异，更新该两张共享 Golden 后无更新复跑 2/2 通过。
 - [x] DONE 2026-09-27：在独立 develop worktree 验证 Flutter 3.32/3.47 的 TabBar 组件 42/42、公开 Demo 9/9，两个版本的组件包及 Example 包完整 analyze 零告警；3.32 覆盖率 528/538（98.14%），示例片段 `--check` 通过。

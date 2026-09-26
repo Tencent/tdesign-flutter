@@ -20,7 +20,6 @@ class _CustomTabBarExampleState extends State<CustomTabBarExample> {
     return TTabBar(
       type: TTabBarType.icon,
       itemStyle: TTabBarItemStyle.normal,
-      showTopBorder: false,
       useSafeArea: false,
       value: _customValue,
       onChanged: (newValue) => setState(() => _customValue = newValue),
@@ -30,10 +29,7 @@ class _CustomTabBarExampleState extends State<CustomTabBarExample> {
           selectedIcon: Icon(icons[index]),
           unselectedIcon: Icon(icons[index]),
           allowMultipleTaps: true,
-          onTap: () => TToast.showText(
-            '第 ${index + 1} 项',
-            context: context,
-          ),
+          onTap: () => TToast.showText('第 ${index + 1} 项', context: context),
         ),
       ),
     );

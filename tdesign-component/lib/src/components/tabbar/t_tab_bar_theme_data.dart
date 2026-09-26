@@ -28,9 +28,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
   /// 默认分割线颜色
   final Color? dividerColor;
 
-  /// 默认上边线样式
-  final BorderSide? topBorder;
-
   const TTabBarThemeData({
     this.barHeight,
     this.selectedBgColor,
@@ -39,7 +36,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
     this.dividerHeight,
     this.dividerThickness,
     this.dividerColor,
-    this.topBorder,
   });
 
   @override
@@ -51,7 +47,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
     double? dividerHeight,
     double? dividerThickness,
     Color? dividerColor,
-    BorderSide? topBorder,
   }) {
     return TTabBarThemeData(
       barHeight: barHeight ?? this.barHeight,
@@ -61,7 +56,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
       dividerHeight: dividerHeight ?? this.dividerHeight,
       dividerThickness: dividerThickness ?? this.dividerThickness,
       dividerColor: dividerColor ?? this.dividerColor,
-      topBorder: topBorder ?? this.topBorder,
     );
   }
 
@@ -100,7 +94,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
         t,
       ),
       dividerColor: _lerpOptionalColor(dividerColor, other.dividerColor, t),
-      topBorder: _lerpOptionalBorderSide(topBorder, other.topBorder, t),
     );
   }
 
@@ -124,16 +117,5 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
       return t < 0.5 ? a : b;
     }
     return Color.lerp(a, b, t);
-  }
-
-  static BorderSide? _lerpOptionalBorderSide(
-    BorderSide? a,
-    BorderSide? b,
-    double t,
-  ) {
-    if (a == null || b == null) {
-      return t < 0.5 ? a : b;
-    }
-    return BorderSide.lerp(a, b, t);
   }
 }
