@@ -1,5 +1,6 @@
 # 实施任务
 
+- [x] DONE 2026-09-27：PR #1146 首轮 Linux CI 发现共享 `navigation_components` 明暗矩阵未更新。下载 CI failure artifact 并核对差异仅在 TabBar 一行；Linux 3.32 临时副本复现完全相同的 0.60%/0.59% 差异，更新该两张共享 Golden 后无更新复跑 2/2 通过。
 - [x] DONE 2026-09-27：在独立 develop worktree 验证 Flutter 3.32/3.47 的 TabBar 组件 42/42、公开 Demo 9/9，两个版本的组件包及 Example 包完整 analyze 零告警；3.32 覆盖率 528/538（98.14%），示例片段 `--check` 通过。
 - [x] DONE 2026-09-27：Linux Flutter 3.32 临时副本先无更新复现差异，再审查并更新 TabBar 组件 14 张（含新增左右图文明暗图）和 Demo 10 张 Golden，随后两组均无更新严格复跑通过。临时依赖覆盖仅用于绕开镜像内 Git 缓存问题，未进入提交。
 - [ ] TODO：获得可访问的 375px 完整移动端 Demo 节点或导出图，完成当前版本九个公开实例逐项视觉核对；已取得的可访问副本 `5iZtzla34Rz25j4cK7viAz:25529:22098` 是组件展板，不能代替整页验收。
