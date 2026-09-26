@@ -19,9 +19,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
   /// 默认背景颜色
   final Color? backgroundColor;
 
-  /// 默认 icon 与文本中间距离
-  final double? centerDistance;
-
   /// 默认分割线高度
   final double? dividerHeight;
 
@@ -31,19 +28,14 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
   /// 默认分割线颜色
   final Color? dividerColor;
 
-  /// 默认上边线样式
-  final BorderSide? topBorder;
-
   const TTabBarThemeData({
     this.barHeight,
     this.selectedBgColor,
     this.unselectedBgColor,
     this.backgroundColor,
-    this.centerDistance,
     this.dividerHeight,
     this.dividerThickness,
     this.dividerColor,
-    this.topBorder,
   });
 
   @override
@@ -52,22 +44,18 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
     Color? selectedBgColor,
     Color? unselectedBgColor,
     Color? backgroundColor,
-    double? centerDistance,
     double? dividerHeight,
     double? dividerThickness,
     Color? dividerColor,
-    BorderSide? topBorder,
   }) {
     return TTabBarThemeData(
       barHeight: barHeight ?? this.barHeight,
       selectedBgColor: selectedBgColor ?? this.selectedBgColor,
       unselectedBgColor: unselectedBgColor ?? this.unselectedBgColor,
       backgroundColor: backgroundColor ?? this.backgroundColor,
-      centerDistance: centerDistance ?? this.centerDistance,
       dividerHeight: dividerHeight ?? this.dividerHeight,
       dividerThickness: dividerThickness ?? this.dividerThickness,
       dividerColor: dividerColor ?? this.dividerColor,
-      topBorder: topBorder ?? this.topBorder,
     );
   }
 
@@ -93,12 +81,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
         other.backgroundColor,
         t,
       ),
-      centerDistance: _lerpDoubleWithDefault(
-        centerDistance,
-        other.centerDistance,
-        0,
-        t,
-      ),
       dividerHeight: _lerpDoubleWithDefault(
         dividerHeight,
         other.dividerHeight,
@@ -112,7 +94,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
         t,
       ),
       dividerColor: _lerpOptionalColor(dividerColor, other.dividerColor, t),
-      topBorder: _lerpOptionalBorderSide(topBorder, other.topBorder, t),
     );
   }
 
@@ -136,16 +117,5 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
       return t < 0.5 ? a : b;
     }
     return Color.lerp(a, b, t);
-  }
-
-  static BorderSide? _lerpOptionalBorderSide(
-    BorderSide? a,
-    BorderSide? b,
-    double t,
-  ) {
-    if (a == null || b == null) {
-      return t < 0.5 ? a : b;
-    }
-    return BorderSide.lerp(a, b, t);
   }
 }

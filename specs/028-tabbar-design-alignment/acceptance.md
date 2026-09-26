@@ -1,5 +1,29 @@
 # 验收记录
 
+## 2026-09-27 顶边线和安全区 API 收敛
+
+- 删除 `showTopBorder`、实例与 Theme 的 `topBorder`、`placeholder`。Filled 保持默认 0.5px 顶线，Capsule 仍无顶线；自定义 Demo 现在也使用默认线。`useSafeArea: true` 仍用组件背景填满底部安全区，false 不处理。需要仅避开安全区的场景须在组件外组合 `SafeArea`，此组合尚未作为公开 Demo 验证。
+- Flutter 3.32.0 与 3.47.0：组件测试各 44/44、Demo 测试各 9/9；组件包和 Example 包完整 `flutter analyze --fatal-infos --no-pub` 均零问题。3.32.0 TabBar 生产源码覆盖率 504/513（98.25%），示例代码 `--check` 通过。
+- Linux Flutter 3.32.0：先无更新比对，组件 Golden 14/14 与共享导航矩阵 2/2 通过；公开 Demo 有 8 张仅在自定义实例新增默认顶线的区域发生差异。审查差异后更新该 8 张，随后公开 Demo 无更新严格复跑 11/11 通过；两张文字 Toast Golden 不变。
+
+## 2026-09-27 centerDistance API 删除
+
+- `TTabBar` 构造参数及 `TTabBarThemeData` 字段均已删除，生成的 TabBar API 文档已同步。图文项沿用原默认：上下排列 0px，左右排列 4px，公开 Demo 配置不变；自定义间距无直接替代参数，这是有意的 breaking 收敛。
+- Flutter 3.32.0 与 3.47.0：组件测试各 42/42，Demo 测试各 9/9；组件包与 Example 包 `flutter analyze --fatal-infos --no-pub` 均零问题。3.47.0 TabBar 生产源码 `LH/LF = 514/523 = 98.28%`，示例代码 `--check` 通过。
+- 变更仅移除覆盖入口并保留原内部默认布局；未修改公开 Demo 与绘制默认值，因此本批次跳过 Golden，原有完整 Figma 页面和最终真机逐项验收缺口仍按下节记录。
+
+## 2026-09-27 develop 隔离分支复核
+
+- 本节的图文布局结论替代下方 2026-09-08 对 Figma Horizontal/Vertical 名称的旧解释：可访问组件展板显示该对变体是单项图文的上下/左右排列，两种标签栏都保持水平整栏。
+- 从 `develop@97afb678` 建立独立 worktree，只迁移 TabBar 组件、公开 Demo、测试、Spec 和对应生成产物；原有 Token 重构工作树保持原状。适配 develop 已有 Token 名称，未引入全局 Token 改动。
+- Flutter 3.32.0 与 3.47.0：组件测试各 42/42，公开 Demo 测试各 9/9；组件包与 Example 包完整 analyze 均零问题。3.32.0 TabBar 生产覆盖率 528/538 = 98.14%，示例代码生成 `--check` 通过。
+- Linux Flutter 3.32.0 先运行不带更新参数的 Golden 并检查实际图、旧图和差异；更新 TabBar 组件明暗 14 张（包含新增的左右图文实例）及公开 Demo 明暗和操作后 10 张，随后两组无更新、无像素容差复跑分别 14/14 与 11/11 测试通过。Linux 临时副本使用本地工具依赖覆盖修复镜像缓存，未改工作树依赖声明；图片中的图标包版本与工作树锁文件同为 0.0.7。
+- Draft PR #1146 的首轮 Linux CI 暴露共享导航组件矩阵仍含旧 TabBar 行：明暗分别 0.60%（2712px）、0.59%（2689px）。CI 差异图显示其他导航组件未变；本地相同环境复现相同差异，更新共享矩阵两张 Golden 后无更新严格复跑 2/2 通过。其他依赖该矩阵的 BackTop、Drawer、NavBar、Tabs 分组无需修改生产源码。
+- Flutter 3.32.0 Android 16 真机 debug APK 构建、安装并启动成功；`com.tdesign.tdesign_flutter_example/.MainActivity` 已确认前台，UI 层级可见 TabBar 页面 3 组、9 实例。设备随后锁屏，本轮尚未对最终版逐项手动点击和截图核对。
+- Flutter 3.47.0 Example Web release 构建成功；`synthetic-package` 与 Wasm dry-run 只产生既有提示。`git diff --check` 通过。
+- 可访问的 Figma 副本 `5iZtzla34Rz25j4cK7viAz:25529:22098` 是 1440×2596 组件展板；完整 375px 移动端 Demo 节点 `28591:35219` 不在该副本中，原分支也无读取权限。当前无法据此宣称整页 Figma 逐像素一致，仍待提供可访问页面或导出图。
+
+
 ## 2026-09-08 最终 develop 同步
 
 - 已合并最新 `origin/develop@a841e3dd`。唯一文本冲突位于

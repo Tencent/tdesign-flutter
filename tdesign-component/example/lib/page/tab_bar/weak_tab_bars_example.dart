@@ -35,8 +35,15 @@ class _WeakTabBarsExampleState extends State<WeakTabBarsExample> {
           onChanged: (value) => setState(() => _weakValues[0] = value),
           navigationTabs: List.generate(
             4,
-            (index) =>
-                TTabBarItemConfig(tabText: labels[index], badge: badges[index]),
+            (index) => TTabBarItemConfig(
+              tabText: labels[index],
+              badge: badges[index],
+              allowMultipleTaps: true,
+              onTap: () => TToast.showText(
+                '第 ${index + 1} 项',
+                context: context,
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 16),
@@ -49,9 +56,14 @@ class _WeakTabBarsExampleState extends State<WeakTabBarsExample> {
           navigationTabs: List.generate(
             4,
             (index) => TTabBarItemConfig(
-              selectedIcon: Icon(icons[index], size: 20),
-              unselectedIcon: Icon(icons[index], size: 20),
+              selectedIcon: Icon(icons[index]),
+              unselectedIcon: Icon(icons[index]),
               badge: badges[index],
+              allowMultipleTaps: true,
+              onTap: () => TToast.showText(
+                '第 ${index + 1} 项',
+                context: context,
+              ),
             ),
           ),
         ),
@@ -66,9 +78,14 @@ class _WeakTabBarsExampleState extends State<WeakTabBarsExample> {
             4,
             (index) => TTabBarItemConfig(
               tabText: labels[index],
-              selectedIcon: Icon(icons[index], size: 20),
-              unselectedIcon: Icon(icons[index], size: 20),
+              selectedIcon: Icon(icons[index]),
+              unselectedIcon: Icon(icons[index]),
               badge: badges[index],
+              allowMultipleTaps: true,
+              onTap: () => TToast.showText(
+                '第 ${index + 1} 项',
+                context: context,
+              ),
             ),
           ),
         ),

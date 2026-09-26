@@ -142,6 +142,7 @@ void main() {
     int value = 0,
     TTabBarItemStyle itemStyle = TTabBarItemStyle.label,
     TTabBarStyle style = TTabBarStyle.filled,
+    TTabBarIconTextLayout iconTextLayout = TTabBarIconTextLayout.stacked,
   }) async {
     tester.view.physicalSize = const Size(400, 120);
     tester.view.devicePixelRatio = 1.0;
@@ -153,6 +154,7 @@ void main() {
           type: type,
           itemStyle: itemStyle,
           style: style,
+          iconTextLayout: iconTextLayout,
           value: value,
           navigationTabs: tabs,
           onChanged: (_) {},
@@ -202,6 +204,19 @@ void main() {
           tabs: iconTextTabs(),
           brightness: brightness,
           golden: 'goldens/t_tab_bar_icon_text_$suffix.png',
+        );
+      });
+
+      testWidgets('inline icon text keeps icons and labels on one row $suffix', (
+        tester,
+      ) async {
+        await expectTabBarGolden(
+          tester,
+          type: TTabBarType.iconText,
+          iconTextLayout: TTabBarIconTextLayout.inline,
+          tabs: iconTextTabs(),
+          brightness: brightness,
+          golden: 'goldens/t_tab_bar_icon_text_inline_$suffix.png',
         );
       });
 

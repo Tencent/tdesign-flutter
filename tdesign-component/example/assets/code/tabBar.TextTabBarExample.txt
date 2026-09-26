@@ -18,13 +18,17 @@ class _TextTabBarExampleState extends State<TextTabBarExample> {
       type: TTabBarType.text,
       useSafeArea: false,
       value: _textValue,
-      onChanged: (newValue) {
-        setState(() => _textValue = newValue);
-        TToast.showText('点击了 Item ${newValue + 1}', context: context);
-      },
+      onChanged: (newValue) => setState(() => _textValue = newValue),
       navigationTabs: List.generate(
         4,
-        (index) => TTabBarItemConfig(tabText: labels[index]),
+        (index) => TTabBarItemConfig(
+          tabText: labels[index],
+          allowMultipleTaps: true,
+          onTap: () => TToast.showText(
+            '第 ${index + 1} 项',
+            context: context,
+          ),
+        ),
       ),
     );
   }

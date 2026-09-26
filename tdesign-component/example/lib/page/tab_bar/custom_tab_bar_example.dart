@@ -20,15 +20,16 @@ class _CustomTabBarExampleState extends State<CustomTabBarExample> {
     return TTabBar(
       type: TTabBarType.icon,
       itemStyle: TTabBarItemStyle.normal,
-      showTopBorder: false,
       useSafeArea: false,
       value: _customValue,
       onChanged: (newValue) => setState(() => _customValue = newValue),
       navigationTabs: List.generate(
         4,
         (index) => TTabBarItemConfig(
-          selectedIcon: Icon(icons[index], size: 20),
-          unselectedIcon: Icon(icons[index], size: 20),
+          selectedIcon: Icon(icons[index]),
+          unselectedIcon: Icon(icons[index]),
+          allowMultipleTaps: true,
+          onTap: () => TToast.showText('第 ${index + 1} 项', context: context),
         ),
       ),
     );

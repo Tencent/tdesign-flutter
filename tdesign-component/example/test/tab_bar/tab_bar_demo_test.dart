@@ -12,6 +12,23 @@ import 'tab_bar_demo_test_spec.dart';
 void main() {
   registerDemoStructureTests(tabBarDemoPageTestSpec);
 
+  testWidgets('Golden 字体实际用于胶囊标签文字', (tester) async {
+    await pumpFullDemoPage(tester, tabBarDemoPageTestSpec, ThemeMode.light);
+    final capsule = find.byWidgetPredicate(
+      (widget) => widget is TTabBar && widget.style == TTabBarStyle.capsule,
+    );
+    final label = find
+        .descendant(
+          of: capsule,
+          matching: find.byWidgetPredicate(
+            (widget) => widget is TText && widget.data == 'Item',
+          ),
+        )
+        .first;
+    expect(tester.widget<TText>(label).style?.fontFamily, 'Roboto');
+    await disposeDemoPage(tester);
+  });
+
   testWidgets('双层级示例初始状态与菜单操作符合设计稿', (tester) async {
     await pumpFullDemoPage(tester, tabBarDemoPageTestSpec, ThemeMode.light);
     final barFinder = find.byType(TTabBar).at(3);
@@ -48,6 +65,7 @@ void main() {
       tester.getBottomLeft(find.text('设置')).dy,
       lessThan(tester.getTopLeft(bar).dy),
     );
+    await tester.pump(const Duration(seconds: 3));
     await disposeDemoPage(tester);
   });
 
@@ -75,22 +93,43 @@ void main() {
     for (final index in [...List.generate(8, (index) => index + 1), 0]) {
       final bar = bars.at(index);
       final widget = tester.widget<TTabBar>(bar);
-      final target = switch (widget.type) {
-        TTabBarType.text || TTabBarType.iconText || TTabBarType.doubleLayer =>
-          find.descendant(of: bar, matching: find.text('应用')),
-        TTabBarType.icon => find.descendant(
-          of: bar,
-          matching: find.byIcon(TIcons.app),
-        ),
-      };
+      final target = widget.style == TTabBarStyle.capsule
+          ? find.descendant(of: bar, matching: find.text('Item')).at(1)
+          : switch (widget.type) {
+              TTabBarType.text ||
+              TTabBarType.iconText ||
+              TTabBarType.doubleLayer => find.descendant(
+                of: bar,
+                matching: find.text('应用'),
+              ),
+              TTabBarType.icon => find.descendant(
+                of: bar,
+                matching: find.byIcon(TIcons.app),
+              ),
+            };
       await tester.tap(target);
       await tester.pumpAndSettle();
+      expect(
+        find.text('第 2 项'),
+        findsOneWidget,
+        reason: 'TabBar index $index 的点击反馈',
+      );
       expect(
         tester.widget<TTabBar>(bar).value,
         1,
         reason: 'TabBar index $index',
       );
+      await tester.pump(const Duration(seconds: 3));
     }
+
+    final firstBar = bars.first;
+    await tester.tap(find.descendant(of: firstBar, matching: find.text('首页')));
+    await tester.pumpAndSettle();
+    expect(find.text('第 1 项'), findsOneWidget);
+    await tester.tap(find.descendant(of: firstBar, matching: find.text('首页')));
+    await tester.pumpAndSettle();
+    expect(find.text('第 1 项'), findsOneWidget);
+    expect(tester.widget<TTabBar>(firstBar).value, 0);
 
     await tester.pump(const Duration(seconds: 3));
     await disposeDemoPage(tester);
@@ -103,6 +142,55 @@ void main() {
     expect(weakTextBar.type, TTabBarType.text);
     expect(
       weakTextBar.navigationTabs.map((item) => item.badge?.offset),
+      everyElement(isNull),
+    );
+    await disposeDemoPage(tester);
+  });
+
+  testWidgets('胶囊示例展示设计稿中的图文和首项圆点徽标', (tester) async {
+    await pumpFullDemoPage(tester, tabBarDemoPageTestSpec, ThemeMode.light);
+    final capsuleFinder = find.byWidgetPredicate(
+      (widget) => widget is TTabBar && widget.style == TTabBarStyle.capsule,
+    );
+    final capsule = tester.widget<TTabBar>(capsuleFinder);
+    expect(capsule.type, TTabBarType.iconText);
+    expect(capsule.selectedBgColor, isNull);
+    expect(capsule.navigationTabs, hasLength(4));
+    expect(
+      capsule.navigationTabs.map((item) => item.selectTabTextStyle),
+      everyElement(isNull),
+    );
+    expect(
+      capsule.navigationTabs.map((item) => item.unselectTabTextStyle),
+      everyElement(isNull),
+    );
+    expect(
+      capsule.navigationTabs.map((item) => item.tabText),
+      everyElement('Item'),
+    );
+    expect(capsule.navigationTabs.first.badge?.variant, TBadgeVariant.dot);
+    expect(
+      capsule.navigationTabs.map((item) => item.selectedIcon),
+      everyElement(
+        isA<Icon>()
+            .having((icon) => icon.icon, 'icon', TIcons.app)
+            .having((icon) => icon.size, 'size', isNull),
+      ),
+    );
+    expect(
+      capsule.navigationTabs.map((item) => item.unselectedIcon),
+      everyElement(
+        isA<Icon>()
+            .having((icon) => icon.icon, 'icon', TIcons.app)
+            .having((icon) => icon.size, 'size', isNull),
+      ),
+    );
+    expect(
+      find.descendant(of: capsuleFinder, matching: find.byIcon(TIcons.app)),
+      findsNWidgets(4),
+    );
+    expect(
+      capsule.navigationTabs.skip(1).map((item) => item.badge),
       everyElement(isNull),
     );
     await disposeDemoPage(tester);
