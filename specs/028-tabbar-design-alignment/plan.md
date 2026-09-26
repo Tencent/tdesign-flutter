@@ -13,8 +13,9 @@
 
 ## 本轮补充修复
 
-- `centerDistance` 的 null 回退随图文排列变化；ThemeData 无实例上下文，
-  仅对两个显式距离做连续插值，null/显式组合在中点切换并交由组件解析内置值。
+- 移除 `TTabBar.centerDistance` 与 `TTabBarThemeData.centerDistance`，图文项
+  间距由组件按布局内置解析（上下 0px、左右 4px），避免暴露缺乏公开场景的
+  第二个间距覆盖入口。该删除属于 breaking API 变更；自定义间距无直接替代参数。
 - 从 TabBar 源码重新生成 API 文档，核对新增 `iconTextLayout` 与图文 Badge
   锚点说明；不手写生成产物，也不改变公开 Demo 布局。
 - 将二级菜单默认宽度从单纯的“标签项宽度减 20”调整为带 107px 设计下限的内部规则；保留既有 `popUpWidth` 显式覆盖，不增加 API。
@@ -62,6 +63,8 @@
   已显式配置 offset 的调用不受影响。
 - `TTabBarItemConfig` 支持 const；逐项 `onTap` 改为可选。
 - breaking：Theme 移除行为/结构字段，由实例参数拥有。
+- breaking：删除 `TTabBar` 构造参数及 `TTabBarThemeData` 字段
+  `centerDistance`；保留原来的内置 0/4px 默认视觉，自定义间距不再支持。
 
 ## 风险与取舍
 

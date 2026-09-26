@@ -1,5 +1,6 @@
 # 实施任务
 
+- [x] DONE 2026-09-27：移除公开 `TTabBar.centerDistance` 和 `TTabBarThemeData.centerDistance`，图文默认间距改由组件内部固定为上下 0px、左右 4px；下方旧 Theme 插值任务仅为历史验证记录，不再代表当前 API。Flutter 3.32.0 与 3.47.0 组件测试各 42/42、Demo 测试各 9/9、两包完整 analyze 零告警；3.47.0 TabBar 生产覆盖率 514/523（98.28%）。默认绘制未变，本批次无需更新 Golden。
 - [x] DONE 2026-09-27：PR #1146 首轮 Linux CI 发现共享 `navigation_components` 明暗矩阵未更新。下载 CI failure artifact 并核对差异仅在 TabBar 一行；Linux 3.32 临时副本复现完全相同的 0.60%/0.59% 差异，更新该两张共享 Golden 后无更新复跑 2/2 通过。
 - [x] DONE 2026-09-27：在独立 develop worktree 验证 Flutter 3.32/3.47 的 TabBar 组件 42/42、公开 Demo 9/9，两个版本的组件包及 Example 包完整 analyze 零告警；3.32 覆盖率 528/538（98.14%），示例片段 `--check` 通过。
 - [x] DONE 2026-09-27：Linux Flutter 3.32 临时副本先无更新复现差异，再审查并更新 TabBar 组件 14 张（含新增左右图文明暗图）和 Demo 10 张 Golden，随后两组均无更新严格复跑通过。临时依赖覆盖仅用于绕开镜像内 Git 缓存问题，未进入提交。

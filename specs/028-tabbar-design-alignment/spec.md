@@ -45,7 +45,7 @@
 - `iconTextLayout` 仅对 `iconText` 生效，默认 `stacked`（图标在上、文字在下），
   可选 `inline`（图标在左、文字在右）；双层级菜单入口固定使用菜单图标在文字
   左侧的结构，不受此参数影响。`inline` 使用 20px 图标、16px/24px 文字及
-  默认 4px 图文间距，显式 `centerDistance` 仍优先。
+  默认 4px 图文间距；上下排列使用 0px。图文间距由组件内部决定，不提供公开覆盖参数。
 - `inline` 图文项的徽标锚定整组图文右上角；默认 `stacked` 仍锚定图标右上角。
   Filled 栏按两侧各 8px、项间 8px 分配，Label 选中底色覆盖整个项宽；
   Capsule 栏沿用同一内部间距并保留 16px 外边距。
@@ -67,11 +67,8 @@
   显式 offset 仅用于逐项自定义。
 - 颜色和字体默认值来自 `TThemeData`；实例参数优先于 `TTabBarThemeData`，
   Theme 优先于全局 Token。
-- Theme 动画中 nullable 尺寸按运行时内置默认值插值；但 `centerDistance`
-  的内置默认值取决于实例 `iconTextLayout`（上下 0px、左右 4px），ThemeData
-  无法获知该布局。该字段两端都显式设置时连续插值；任一端为 null 时保持
-  “未覆盖”语义并在动画中点切换，避免错误地把左右排列的 null 当作 0px。
-  nullable 颜色与边线同样保持“未覆盖”语义，不得插值出透明色或
+- Theme 动画中 nullable 尺寸按运行时内置默认值插值；nullable 颜色与边线
+  保持“未覆盖”语义，不得插值出透明色或
   `BorderSide.none` 污染低优先级 Token。
 - 内置文字样式使用共享解析器的低优先级 defaults；显式 TTextThemeData、DefaultTextStyle、TextTheme 按字段覆盖，单项 TextStyle 最高优先。
 - 二级菜单通过 InheritedTheme 捕获触发处的局部 Theme；菜单背景配置同时作用于面板和菜单行，不被内部容器背景遮挡。

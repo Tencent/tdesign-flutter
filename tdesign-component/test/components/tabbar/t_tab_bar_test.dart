@@ -70,14 +70,12 @@ void main() {
       const data = TTabBarThemeData(
         barHeight: 56,
         selectedBgColor: Colors.red,
-        centerDistance: 4,
         dividerHeight: 32,
       );
       final copied = data.copyWith();
 
       expect(copied.barHeight, 56);
       expect(copied.selectedBgColor, Colors.red);
-      expect(copied.centerDistance, 4);
       expect(copied.dividerHeight, 32);
     });
 
@@ -86,7 +84,6 @@ void main() {
       const custom = TTabBarThemeData(
         barHeight: 64,
         selectedBgColor: Colors.red,
-        centerDistance: 8,
         dividerHeight: 40,
         dividerThickness: 1.5,
         topBorder: BorderSide(color: Colors.blue, width: 2),
@@ -94,7 +91,6 @@ void main() {
 
       final early = defaults.lerp(custom, 0.25);
       expect(early.barHeight, 58);
-      expect(early.centerDistance, isNull);
       expect(early.dividerHeight, 34);
       expect(early.dividerThickness, 0.75);
       expect(early.selectedBgColor, isNull);
@@ -102,39 +98,22 @@ void main() {
 
       final late = defaults.lerp(custom, 0.75);
       expect(late.barHeight, 62);
-      expect(late.centerDistance, 8);
       expect(late.selectedBgColor, Colors.red);
       expect(late.topBorder, const BorderSide(color: Colors.blue, width: 2));
 
-      expect(custom.lerp(defaults, 0.25).centerDistance, 8);
-      expect(custom.lerp(defaults, 0.75).centerDistance, isNull);
-      expect(defaults.lerp(custom, 0).centerDistance, isNull);
-      expect(defaults.lerp(custom, 0.5).centerDistance, 8);
-      expect(defaults.lerp(custom, 1).centerDistance, 8);
-      expect(custom.lerp(defaults, 0).centerDistance, 8);
-      expect(custom.lerp(defaults, 0.5).centerDistance, isNull);
-      expect(custom.lerp(defaults, 1).centerDistance, isNull);
-      expect(
-        custom
-            .lerp(const TTabBarThemeData(centerDistance: 12), 0.5)
-            .centerDistance,
-        10,
-      );
-
       final empty = defaults.lerp(const TTabBarThemeData(), 0.5);
       expect(empty.barHeight, isNull);
-      expect(empty.centerDistance, isNull);
       expect(empty.dividerHeight, isNull);
       expect(empty.dividerThickness, isNull);
       expect(empty.selectedBgColor, isNull);
       expect(empty.topBorder, isNull);
     });
 
-    testWidgets('inline gap uses its own default through Theme transitions', (
+    testWidgets('inline gap keeps its default through Theme transitions', (
       tester,
     ) async {
       const defaults = TTabBarThemeData();
-      const custom = TTabBarThemeData(centerDistance: 8);
+      const custom = TTabBarThemeData(barHeight: 64);
 
       Future<double> renderedGap(TTabBarThemeData theme) async {
         await tester.pumpWidget(
@@ -157,8 +136,8 @@ void main() {
       }
 
       expect(await renderedGap(defaults.lerp(custom, 0.25)), closeTo(4, 1));
-      expect(await renderedGap(defaults.lerp(custom, 0.75)), closeTo(8, 1));
-      expect(await renderedGap(custom.lerp(defaults, 0.25)), closeTo(8, 1));
+      expect(await renderedGap(defaults.lerp(custom, 0.75)), closeTo(4, 1));
+      expect(await renderedGap(custom.lerp(defaults, 0.25)), closeTo(4, 1));
       expect(await renderedGap(custom.lerp(defaults, 0.75)), closeTo(4, 1));
     });
   });
@@ -447,7 +426,6 @@ void main() {
         wrapWithTheme(
           TTabBar(
             type: TTabBarType.iconText,
-            centerDistance: 4,
             value: 0,
             navigationTabs: iconTextTabs(),
             onChanged: (_) {},
@@ -816,7 +794,6 @@ void main() {
             type: TTabBarType.iconText,
             value: 0,
             needInkWell: true,
-            centerDistance: 6,
             navigationTabs: [
               TTabBarItemConfig(
                 tabText: '消息',

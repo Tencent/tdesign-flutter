@@ -40,6 +40,9 @@ const double _kDefaultTabBarHeight = 56;
 /// 图标项与图文项的默认图标尺寸；显式 Icon.size 仍优先。
 const double _kDefaultTabIconSize = 20;
 
+/// 左右图文项的内置图文间距；上下排列不留额外间距。
+const double _kInlineIconTextGap = 4;
+
 /// 标签栏的内边距与项间距；胶囊栏另有页面侧边距。
 const double _kCapsuleOuterMargin = 16;
 const double _kBarPadding = 8;
@@ -228,7 +231,6 @@ class TTabBar extends StatefulWidget {
     this.selectedBgColor,
     this.unselectedBgColor,
     this.backgroundColor,
-    this.centerDistance,
     this.needInkWell = false,
     this.indicatorAnimation = TTabBarIndicatorAnimation.none,
     this.animationDuration,
@@ -291,8 +293,8 @@ class TTabBar extends StatefulWidget {
 
   /// 图文项的图标与文字排列方式；仅当 [type] 为 [TTabBarType.iconText] 时生效。
   ///
-  /// 默认为 [TTabBarIconTextLayout.stacked]。左右排列时默认图文间距为 4px，
-  /// 显式 [centerDistance] 或组件 Theme 的同名值优先。该参数不改变标签栏
+  /// 默认为 [TTabBarIconTextLayout.stacked]。上下排列时图文间距为 0px，
+  /// 左右排列时为 4px。该参数不改变标签栏
   /// 自身的水平方向，也不影响双层级菜单入口。
   final TTabBarIconTextLayout iconTextLayout;
 
@@ -341,9 +343,6 @@ class TTabBar extends StatefulWidget {
   /// 背景颜色 （可选）
   final Color? backgroundColor;
 
-  /// 图文项中图标与文字的间距；未指定时上下排列为 0px、左右排列为 4px。
-  final double? centerDistance;
-
   /// 是否需要水波纹效果
   final bool needInkWell;
 
@@ -376,7 +375,6 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
   late Color _effectiveSelectedBgColor;
   late Color? _effectiveUnselectedBgColor;
   late Color _effectiveBackgroundColor;
-  late double _effectiveCenterDistance;
   late double _effectiveDividerHeight;
   late double _effectiveDividerThickness;
   late Color _effectiveDividerColor;
@@ -429,10 +427,6 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
         widget.backgroundColor ??
         theme?.backgroundColor ??
         context.tTheme.bgColorContainer;
-    _effectiveCenterDistance =
-        widget.centerDistance ??
-        theme?.centerDistance ??
-        (widget.iconTextLayout == TTabBarIconTextLayout.inline ? 4 : 0);
     _effectiveDividerHeight =
         widget.dividerHeight ?? theme?.dividerHeight ?? 32;
     _effectiveDividerThickness =
@@ -733,7 +727,6 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
         itemWidth: itemWidth,
         selectedBgColor: _effectiveSelectedBgColor,
         unselectedBgColor: _effectiveUnselectedBgColor,
-        centerDistance: _effectiveCenterDistance,
         iconTextLayout: widget.iconTextLayout,
         needInkWell: widget.needInkWell,
         showItemBackground:
@@ -782,7 +775,6 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     required this.onTap,
     required this.selectedBgColor,
     required this.unselectedBgColor,
-    required this.centerDistance,
     required this.iconTextLayout,
     this.onLongPress,
     this.needInkWell = false,
@@ -818,9 +810,6 @@ class _TTabBarItemWithBadge extends StatelessWidget {
 
   /// 未选中时背景颜色
   final Color? unselectedBgColor;
-
-  /// icon与文本中间距离
-  final double centerDistance;
 
   /// 图文项内部排列方式。
   final TTabBarIconTextLayout iconTextLayout;
@@ -956,7 +945,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             icon,
-            if (centerDistance > 0) SizedBox(width: centerDistance),
+            const SizedBox(width: _kInlineIconTextGap),
             Flexible(child: text),
           ],
         );
@@ -973,11 +962,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            iconWithBadge,
-            if (centerDistance > 0) SizedBox(height: centerDistance),
-            text,
-          ],
+          children: [iconWithBadge, text],
         ),
       );
       return child;

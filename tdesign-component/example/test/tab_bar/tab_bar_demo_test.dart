@@ -155,7 +155,6 @@ void main() {
     final capsule = tester.widget<TTabBar>(capsuleFinder);
     expect(capsule.type, TTabBarType.iconText);
     expect(capsule.selectedBgColor, isNull);
-    expect(capsule.centerDistance, isNull);
     expect(capsule.navigationTabs, hasLength(4));
     expect(
       capsule.navigationTabs.map((item) => item.selectTabTextStyle),

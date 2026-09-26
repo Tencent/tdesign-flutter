@@ -8,11 +8,10 @@
 | animationDuration | Duration? | - | 动画时长 |
 | backgroundColor | Color? | - | 背景颜色 （可选） |
 | barHeight | double? | - | tab高度 |
-| centerDistance | double? | - | 图文项中图标与文字的间距；未指定时上下排列为 0px、左右排列为 4px。 |
 | dividerColor | Color? | - | 分割线颜色（可选） |
 | dividerHeight | double? | - | 分割线高度（可选） |
 | dividerThickness | double? | - | 分割线厚度（可选） |
-| iconTextLayout | TTabBarIconTextLayout | TTabBarIconTextLayout.stacked | 图文项的图标与文字排列方式；仅当 `type` 为 `TTabBarType.iconText` 时生效。 默认为 `TTabBarIconTextLayout.stacked`。左右排列时默认图文间距为 4px， 显式 `centerDistance` 或组件 Theme 的同名值优先。该参数不改变标签栏 自身的水平方向，也不影响双层级菜单入口。 |
+| iconTextLayout | TTabBarIconTextLayout | TTabBarIconTextLayout.stacked | 图文项的图标与文字排列方式；仅当 `type` 为 `TTabBarType.iconText` 时生效。 默认为 `TTabBarIconTextLayout.stacked`。上下排列时图文间距为 0px， 左右排列时为 4px。该参数不改变标签栏 自身的水平方向，也不影响双层级菜单入口。 |
 | indicatorAnimation | TTabBarIndicatorAnimation | TTabBarIndicatorAnimation.none | 指示器动画类型 |
 | itemStyle | TTabBarItemStyle | TTabBarItemStyle.label | 单个标签项的选中样式。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |

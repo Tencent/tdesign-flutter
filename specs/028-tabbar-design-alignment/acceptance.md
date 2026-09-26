@@ -1,5 +1,11 @@
 # 验收记录
 
+## 2026-09-27 centerDistance API 删除
+
+- `TTabBar` 构造参数及 `TTabBarThemeData` 字段均已删除，生成的 TabBar API 文档已同步。图文项沿用原默认：上下排列 0px，左右排列 4px，公开 Demo 配置不变；自定义间距无直接替代参数，这是有意的 breaking 收敛。
+- Flutter 3.32.0 与 3.47.0：组件测试各 42/42，Demo 测试各 9/9；组件包与 Example 包 `flutter analyze --fatal-infos --no-pub` 均零问题。3.47.0 TabBar 生产源码 `LH/LF = 514/523 = 98.28%`，示例代码 `--check` 通过。
+- 变更仅移除覆盖入口并保留原内部默认布局；未修改公开 Demo 与绘制默认值，因此本批次跳过 Golden，原有完整 Figma 页面和最终真机逐项验收缺口仍按下节记录。
+
 ## 2026-09-27 develop 隔离分支复核
 
 - 本节的图文布局结论替代下方 2026-09-08 对 Figma Horizontal/Vertical 名称的旧解释：可访问组件展板显示该对变体是单项图文的上下/左右排列，两种标签栏都保持水平整栏。
