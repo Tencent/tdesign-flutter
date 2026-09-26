@@ -27,8 +27,13 @@ class _CustomTabBarExampleState extends State<CustomTabBarExample> {
       navigationTabs: List.generate(
         4,
         (index) => TTabBarItemConfig(
-          selectedIcon: Icon(icons[index], size: 20),
-          unselectedIcon: Icon(icons[index], size: 20),
+          selectedIcon: Icon(icons[index]),
+          unselectedIcon: Icon(icons[index]),
+          allowMultipleTaps: true,
+          onTap: () => TToast.showText(
+            '第 ${index + 1} 项',
+            context: context,
+          ),
         ),
       ),
     );

@@ -13,9 +13,8 @@ class _CapsuleTabBarExampleState extends State<CapsuleTabBarExample> {
   /// 在 StatefulWidget 的 State 中声明 `int _capsuleValue = 0;`，
   /// 从 build 调用本方法；状态由 State 持有并通过 setState 重建。
   Widget _capsuleTabBar(BuildContext context) {
-    const icons = [TIcons.home, TIcons.app, TIcons.chat, TIcons.user];
     return TTabBar(
-      type: TTabBarType.icon,
+      type: TTabBarType.iconText,
       style: TTabBarStyle.capsule,
       useSafeArea: false,
       value: _capsuleValue,
@@ -23,8 +22,17 @@ class _CapsuleTabBarExampleState extends State<CapsuleTabBarExample> {
       navigationTabs: List.generate(
         4,
         (index) => TTabBarItemConfig(
-          selectedIcon: Icon(icons[index], size: 20),
-          unselectedIcon: Icon(icons[index], size: 20),
+          tabText: 'Item',
+          selectedIcon: const Icon(TIcons.app),
+          unselectedIcon: const Icon(TIcons.app),
+          badge: index == 0
+              ? const TBadgeConfig(variant: TBadgeVariant.dot)
+              : null,
+          allowMultipleTaps: true,
+          onTap: () => TToast.showText(
+            '第 ${index + 1} 项',
+            context: context,
+          ),
         ),
       ),
     );

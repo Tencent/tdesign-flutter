@@ -19,7 +19,9 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
   /// 默认背景颜色
   final Color? backgroundColor;
 
-  /// 默认 icon 与文本中间距离
+  /// 图文项的子树级默认间距；null 时交由 TabBar 按布局解析：上下排列为
+  /// 0px，左右排列为 4px。组件实例的 `centerDistance` 优先。
+  /// 动态主题只在两端都显式配置时连续插值；null 与显式值在中点切换。
   final double? centerDistance;
 
   /// 默认分割线高度
@@ -93,10 +95,9 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
         other.backgroundColor,
         t,
       ),
-      centerDistance: _lerpDoubleWithDefault(
+      centerDistance: _lerpCenterDistance(
         centerDistance,
         other.centerDistance,
-        0,
         t,
       ),
       dividerHeight: _lerpDoubleWithDefault(
@@ -126,6 +127,16 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
       return null;
     }
     return lerpDouble(a ?? defaultValue, b ?? defaultValue, t);
+  }
+
+  // The null fallback depends on the consuming TabBar's iconTextLayout.
+  // ThemeData has no access to that layout: interpolating null as 0 would
+  // incorrectly shrink an inline item's 4px default gap during transitions.
+  static double? _lerpCenterDistance(double? a, double? b, double t) {
+    if (a == null || b == null) {
+      return t < 0.5 ? a : b;
+    }
+    return lerpDouble(a, b, t);
   }
 
   // null delegates to the lower-priority TDesign token. That token is only

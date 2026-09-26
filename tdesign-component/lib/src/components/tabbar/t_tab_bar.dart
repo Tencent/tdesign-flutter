@@ -37,6 +37,14 @@ const double _kDefaultMenuItemWidthShrink = 20;
 /// 导航栏默认高度
 const double _kDefaultTabBarHeight = 56;
 
+/// 图标项与图文项的默认图标尺寸；显式 Icon.size 仍优先。
+const double _kDefaultTabIconSize = 20;
+
+/// 标签栏的内边距与项间距；胶囊栏另有页面侧边距。
+const double _kCapsuleOuterMargin = 16;
+const double _kBarPadding = 8;
+const double _kItemGap = 8;
+
 /// 展开项弹窗弹出动画时间
 const Duration _kPopupMenuDuration = Duration(milliseconds: 10);
 
@@ -83,6 +91,15 @@ enum TTabBarStyle {
 
   /// 带外边距、圆角和阴影的悬浮胶囊。
   capsule,
+}
+
+/// 图文标签项中图标与文字的排列方式，仅对 [TTabBarType.iconText] 生效。
+enum TTabBarIconTextLayout {
+  /// 图标在上、文字在下；默认布局。
+  stacked,
+
+  /// 图标在左、文字在右。
+  inline,
 }
 
 /// 底部标签栏基本类型
@@ -143,10 +160,11 @@ class TTabBarItemConfig {
     this.allowMultipleTaps = false,
   });
 
-  /// 选中时图标
+  /// 选中时图标。未指定尺寸的 Icon 默认使用 TabBar 的 20px 图标尺寸；
+  /// Icon 自身显式指定的尺寸优先。
   final Widget? selectedIcon;
 
-  /// 未选中时图标
+  /// 未选中时图标。尺寸默认值与 [selectedIcon] 相同。
   final Widget? unselectedIcon;
 
   /// tab 文本
@@ -168,8 +186,8 @@ class TTabBarItemConfig {
   ///
   /// 徽标内容和样式由 [TBadgeConfig] 描述，[TBadgeConfig.offset] 可用于逐项
   /// 调整默认位置。纯文本项未设置实例或 BadgeTheme offset 时使用 TabBar 的
-  /// 文本徽标默认位置；纯图标项与图文项均以图标作为锚点，使用徽标的默认
-  /// 右上角位置；图文项下方的文字宽度不会改变徽标位置。
+  /// 文本徽标默认位置；纯图标项与上下排列的图文项以图标作为锚点，
+  /// 左右排列的图文项以整组图文作为锚点，均使用徽标的默认右上角位置。
   ///
   /// TabBar 自己拥有徽标锚点与点击区域；点击行为通过 [onTap] 配置。调用方
   /// 已经拥有目标 Widget 时，应直接使用 [TBadge] 包装该 Widget。
@@ -197,6 +215,7 @@ class TTabBar extends StatefulWidget {
     required this.navigationTabs,
     this.itemStyle = TTabBarItemStyle.label,
     this.style = TTabBarStyle.filled,
+    this.iconTextLayout = TTabBarIconTextLayout.stacked,
     this.barHeight,
     this.split = false,
     this.dividerHeight,
@@ -270,6 +289,13 @@ class TTabBar extends StatefulWidget {
   /// 标签栏容器样式。
   final TTabBarStyle style;
 
+  /// 图文项的图标与文字排列方式；仅当 [type] 为 [TTabBarType.iconText] 时生效。
+  ///
+  /// 默认为 [TTabBarIconTextLayout.stacked]。左右排列时默认图文间距为 4px，
+  /// 显式 [centerDistance] 或组件 Theme 的同名值优先。该参数不改变标签栏
+  /// 自身的水平方向，也不影响双层级菜单入口。
+  final TTabBarIconTextLayout iconTextLayout;
+
   _TTabBarBasicType get _basicType => type.basicType;
 
   TTabBarItemStyle get _componentType => itemStyle;
@@ -315,7 +341,7 @@ class TTabBar extends StatefulWidget {
   /// 背景颜色 （可选）
   final Color? backgroundColor;
 
-  /// icon与文本中间距离（可选）
+  /// 图文项中图标与文字的间距；未指定时上下排列为 0px、左右排列为 4px。
   final double? centerDistance;
 
   /// 是否需要水波纹效果
@@ -404,7 +430,9 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
         theme?.backgroundColor ??
         context.tTheme.bgColorContainer;
     _effectiveCenterDistance =
-        widget.centerDistance ?? theme?.centerDistance ?? 0;
+        widget.centerDistance ??
+        theme?.centerDistance ??
+        (widget.iconTextLayout == TTabBarIconTextLayout.inline ? 4 : 0);
     _effectiveDividerHeight =
         widget.dividerHeight ?? theme?.dividerHeight ?? 32;
     _effectiveDividerThickness =
@@ -434,54 +462,74 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
       builder: (BuildContext context, Widget? child) {
         return LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
-            /// -2 是为了增加边框
-            var maxWidth =
-                double.parse(constraints.biggest.width.toStringAsFixed(1)) - 2;
-
-            /// 胶囊样式 比正常样式宽度要小32
-            if (isCapsuleOutlineType) {
-              maxWidth -= 32;
-            }
-            var itemWidth = maxWidth / widget.navigationTabs.length;
+            final count = widget.navigationTabs.length;
+            final barWidth = math.max(
+              0.0,
+              constraints.maxWidth -
+                  (isCapsuleOutlineType ? 2 * _kCapsuleOuterMargin : 0),
+            );
+            final barPadding = math.min(_kBarPadding, barWidth / 2);
+            final contentWidth = barWidth - 2 * barPadding;
+            final itemGap = count > 1
+                ? math.min(_kItemGap, contentWidth / (count - 1))
+                : 0.0;
+            final itemWidth = math.max(
+              0.0,
+              (contentWidth - itemGap * (count - 1)) / count,
+            );
 
             Widget result = Container(
               height: _effectiveBarHeight,
               alignment: Alignment.center,
               margin: isCapsuleOutlineType
-                  ? const EdgeInsets.symmetric(horizontal: 16)
+                  ? const EdgeInsets.symmetric(horizontal: _kCapsuleOuterMargin)
                   : null,
-              decoration: BoxDecoration(
-                color: _effectiveBackgroundColor,
-                borderRadius: isCapsuleOutlineType
-                    ? BorderRadius.circular(context.tTheme.radiusCircle)
-                    : null,
-                border: widget.showTopBorder && !isCapsuleOutlineType
-                    ? Border(
+              decoration: isCapsuleOutlineType
+                  ? ShapeDecoration(
+                      color: _effectiveBackgroundColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          context.tTheme.radiusRound,
+                        ),
+                      ),
+                      shadows: context.tTheme.shadowsTop,
+                    )
+                  : BoxDecoration(color: _effectiveBackgroundColor),
+              foregroundDecoration:
+                  !isCapsuleOutlineType && widget.showTopBorder
+                  ? BoxDecoration(
+                      border: Border(
                         top:
                             _effectiveTopBorder ??
                             BorderSide(
                               color: context.tTheme.componentStrokeColor,
                               width: 0.5,
                             ),
-                      )
-                    : null,
-                boxShadow: isCapsuleOutlineType
-                    ? context.tTheme.shadowsBase
-                    : null,
-              ),
+                      ),
+                    )
+                  : null,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
                   // 动画指示器（在底层）
-                  _buildAnimatedIndicator(context, itemWidth),
+                  _buildAnimatedIndicator(
+                    context,
+                    itemWidth,
+                    barPadding: barPadding,
+                    itemGap: itemGap,
+                  ),
                   // Tab 项（在上层）
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: List.generate(widget.navigationTabs.length, (
-                      index,
-                    ) {
-                      return _item(index, itemWidth);
-                    }),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: barPadding,
+                      vertical: math.min(_kBarPadding, _effectiveBarHeight / 2),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(count, (index) {
+                        return _item(index, itemWidth);
+                      }),
+                    ),
                   ),
                   // 分割线（在最上层）
                   _verticalDivider(),
@@ -553,7 +601,12 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
   }
 
   /// 构建动画指示器
-  Widget _buildAnimatedIndicator(BuildContext context, double itemWidth) {
+  Widget _buildAnimatedIndicator(
+    BuildContext context,
+    double itemWidth, {
+    required double barPadding,
+    required double itemGap,
+  }) {
     // 只有 label 样式才显示背景指示器
     if (widget._componentType != TTabBarItemStyle.label) {
       return const SizedBox.shrink();
@@ -568,9 +621,21 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
 
     switch (widget.indicatorAnimation) {
       case TTabBarIndicatorAnimation.linear:
-        return _buildLinearIndicator(context, itemWidth, animValue);
+        return _buildLinearIndicator(
+          context,
+          itemWidth,
+          animValue,
+          barPadding: barPadding,
+          itemGap: itemGap,
+        );
       case TTabBarIndicatorAnimation.elastic:
-        return _buildElasticIndicator(context, itemWidth, animValue);
+        return _buildElasticIndicator(
+          context,
+          itemWidth,
+          animValue,
+          barPadding: barPadding,
+          itemGap: itemGap,
+        );
       case TTabBarIndicatorAnimation.none:
         return const SizedBox.shrink();
     }
@@ -580,25 +645,17 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
   Widget _buildLinearIndicator(
     BuildContext context,
     double itemWidth,
-    double animValue,
-  ) {
-    final horizontalPadding = widget.navigationTabs.length > 3 ? 8.0 : 12.0;
-    final indicatorWidth = itemWidth - horizontalPadding * 2;
-
-    // 计算指示器位置
-    final left = animValue * itemWidth + horizontalPadding;
-
-    // 计算高度
-    final height =
-        widget._basicType == _TTabBarBasicType.text ||
-            widget._basicType == _TTabBarBasicType.expansionPanel
-        ? 32.0
-        : null;
+    double animValue, {
+    required double barPadding,
+    required double itemGap,
+  }) {
+    final left = barPadding + animValue * (itemWidth + itemGap);
+    final height = math.max(0.0, _effectiveBarHeight - 2 * _kBarPadding);
 
     return Positioned(
       left: left,
       child: Container(
-        width: indicatorWidth,
+        width: itemWidth,
         height: height,
         decoration: BoxDecoration(
           color: _effectiveSelectedBgColor,
@@ -612,9 +669,12 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
   Widget _buildElasticIndicator(
     BuildContext context,
     double itemWidth,
-    double animValue,
-  ) {
-    final horizontalPadding = widget.navigationTabs.length > 3 ? 8.0 : 12.0;
+    double animValue, {
+    required double barPadding,
+    required double itemGap,
+  }) {
+    final step = itemWidth + itemGap;
+    final start = barPadding;
 
     // 计算起始和目标索引
     final fromIndex = animValue.floor();
@@ -628,28 +688,20 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
     if (progress < 0.5) {
       // 前半段：从起点向终点拉伸
       final stretchProgress = progress * 2; // 0 -> 1
-      width =
-          (itemWidth - horizontalPadding * 2) *
-          (1 + stretchProgress * (toIndex - fromIndex));
-      left = fromIndex * itemWidth + horizontalPadding;
+      width = itemWidth + stretchProgress * (toIndex - fromIndex) * step;
+      left = start + fromIndex * step;
     } else {
       // 后半段：从终点收缩到正常宽度
       final shrinkProgress = (progress - 0.5) * 2; // 0 -> 1
-      width =
-          (itemWidth - horizontalPadding * 2) *
-          (1 + (1 - shrinkProgress) * (toIndex - fromIndex));
+      width = itemWidth + (1 - shrinkProgress) * (toIndex - fromIndex) * step;
       left =
-          fromIndex * itemWidth +
-          horizontalPadding +
-          shrinkProgress * (toIndex - fromIndex) * itemWidth;
+          start +
+          fromIndex * step +
+          shrinkProgress * (toIndex - fromIndex) * step;
     }
 
     // 计算高度
-    final height =
-        widget._basicType == _TTabBarBasicType.text ||
-            widget._basicType == _TTabBarBasicType.expansionPanel
-        ? 32.0
-        : null;
+    final height = math.max(0.0, _effectiveBarHeight - 2 * _kBarPadding);
 
     return Positioned(
       left: left,
@@ -666,33 +718,23 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
 
   Widget _item(int index, double itemWidth) {
     var tabItemConfig = widget.navigationTabs[index];
-    // iconText 且存在 centerDistance 间距时，压缩上下内边距为图标+文本+间距腾出空间，
-    // 避免 Column 内容溢出（centerDistance 默认为 0，不影响常规渲染与 Golden 基线）。
-    final isIconTextWithGap =
-        widget._basicType == _TTabBarBasicType.iconText &&
-        _effectiveCenterDistance > 0;
+    final itemHeight = math.max(0.0, _effectiveBarHeight - 2 * _kBarPadding);
     return Container(
-      height: _effectiveBarHeight,
+      height: itemHeight,
       width: itemWidth,
       alignment: Alignment.center,
-      padding: EdgeInsets.only(
-        top: isIconTextWithGap ? 4 : 7,
-        bottom: isIconTextWithGap
-            ? 1
-            : (widget._basicType == _TTabBarBasicType.iconText ? 5 : 7),
-      ),
       child: _TTabBarItemWithBadge(
         basicType: widget._basicType,
         componentType: widget._componentType,
         selectionType: widget._selectionType,
         itemConfig: tabItemConfig,
         isSelected: index == _selectedIndex,
-        itemHeight: _effectiveBarHeight,
+        itemHeight: itemHeight,
         itemWidth: itemWidth,
-        tabsLength: widget.navigationTabs.length,
         selectedBgColor: _effectiveSelectedBgColor,
         unselectedBgColor: _effectiveUnselectedBgColor,
         centerDistance: _effectiveCenterDistance,
+        iconTextLayout: widget.iconTextLayout,
         needInkWell: widget.needInkWell,
         showItemBackground:
             widget.indicatorAnimation == TTabBarIndicatorAnimation.none,
@@ -738,10 +780,10 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     required this.itemHeight,
     required this.itemWidth,
     required this.onTap,
-    required this.tabsLength,
     required this.selectedBgColor,
     required this.unselectedBgColor,
     required this.centerDistance,
+    required this.iconTextLayout,
     this.onLongPress,
     this.needInkWell = false,
     this.showItemBackground = true,
@@ -771,9 +813,6 @@ class _TTabBarItemWithBadge extends StatelessWidget {
   /// 点击事件
   final GestureTapCallback onTap;
 
-  /// tab总个数
-  final int tabsLength;
-
   /// 选中时背景颜色
   final Color? selectedBgColor;
 
@@ -782,6 +821,9 @@ class _TTabBarItemWithBadge extends StatelessWidget {
 
   /// icon与文本中间距离
   final double centerDistance;
+
+  /// 图文项内部排列方式。
+  final TTabBarIconTextLayout iconTextLayout;
 
   /// 长按事件
   final GestureLongPressCallback? onLongPress;
@@ -812,13 +854,8 @@ class _TTabBarItemWithBadge extends StatelessWidget {
               Visibility(
                 visible: componentType == TTabBarItemStyle.label,
                 child: Container(
-                  /// 设计稿上 tab个数大于3时，左右边距为8，小于等于3时，左右边距为12
-                  width: itemWidth - (tabsLength > 3 ? 16 : 24),
-                  height:
-                      basicType == _TTabBarBasicType.text ||
-                          basicType == _TTabBarBasicType.expansionPanel
-                      ? 32
-                      : null,
+                  width: itemWidth,
+                  height: itemHeight,
                   decoration: BoxDecoration(
                     color: isSelected
                         ? selectedBgColor ?? context.tTheme.brandLightColor
@@ -834,7 +871,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     );
   }
 
-  Widget _constructItem(BuildContext context, bool isInOrOutCapsule) {
+  Widget _constructItem(BuildContext context) {
     Widget child = Container();
     if (basicType == _TTabBarBasicType.text) {
       child = _textItem(
@@ -879,6 +916,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
       var unSelectedIcon = itemConfig.unselectedIcon;
       child = IconTheme(
         data: IconThemeData(
+          size: _kDefaultTabIconSize,
           color: isSelected
               ? context.tTheme.brandNormalColor
               : context.tTheme.textColorPrimary,
@@ -892,6 +930,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
       var unSelectedIcon = itemConfig.unselectedIcon;
       final icon = IconTheme(
         data: IconThemeData(
+          size: _kDefaultTabIconSize,
           color: isSelected
               ? context.tTheme.brandNormalColor
               : context.tTheme.textColorPrimary,
@@ -903,18 +942,43 @@ class _TTabBarItemWithBadge extends StatelessWidget {
               context,
               itemConfig,
               isSelected,
-              context.tTheme.fontBodyExtraSmall!,
+              iconTextLayout == TTabBarIconTextLayout.inline
+                  ? context.tTheme.fontBodyLarge!
+                  : context.tTheme.fontBodyExtraSmall!,
+              singleLine: iconTextLayout == TTabBarIconTextLayout.inline,
             )
           : const SizedBox.shrink();
       final badge = itemConfig.badge;
-      child = Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          badge == null ? icon : _attachBadge(context, badge, icon),
-          if (centerDistance > 0) SizedBox(height: centerDistance),
-          text,
-        ],
+      if (iconTextLayout == TTabBarIconTextLayout.inline) {
+        final content = Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            icon,
+            if (centerDistance > 0) SizedBox(width: centerDistance),
+            Flexible(child: text),
+          ],
+        );
+        return badge == null ? content : _attachBadge(context, badge, content);
+      }
+      final iconWithBadge = badge == null
+          ? icon
+          : _attachBadge(context, badge, icon);
+      child = OverflowBox(
+        alignment: Alignment.center,
+        minHeight: 0,
+        maxHeight: itemHeight + 2 * _kBarPadding,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            iconWithBadge,
+            if (centerDistance > 0) SizedBox(height: centerDistance),
+            text,
+          ],
+        ),
       );
       return child;
     }
@@ -944,16 +1008,19 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     BuildContext context,
     TTabBarItemConfig config,
     bool isSelected,
-    Font font,
-  ) {
+    Font font, {
+    bool singleLine = false,
+  }) {
     return TText(
       config.tabText ?? '',
+      maxLines: singleLine ? 1 : null,
+      overflow: singleLine ? TextOverflow.ellipsis : null,
       style: TTextResolve.resolve(
         context: context,
         defaults: TextStyle(
           fontSize: font.size,
           height: font.height,
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
           color: isSelected
               ? context.tTheme.brandNormalColor
               : context.tTheme.textColorPrimary,
@@ -970,22 +1037,10 @@ class _TTabBarItemWithBadge extends StatelessWidget {
         componentType == TTabBarItemStyle.label ||
         selectionType == TTabBarStyle.capsule;
 
-    // centerDistance > 0 时进一步压缩顶部内边距，为图标与文本的间距腾出空间
-    final reduceTopPad =
-        basicType == _TTabBarBasicType.iconText && centerDistance > 0;
-    final itemPadding = basicType == _TTabBarBasicType.text
-        ? EdgeInsets.zero
-        : EdgeInsets.only(
-            top: (isInOrOutCapsule ? 3.0 : 2.0) - (reduceTopPad ? 1.0 : 0.0),
-            bottom: isInOrOutCapsule
-                ? (basicType == _TTabBarBasicType.iconText ? 0.0 : 1.0)
-                : 0.0,
-          );
     var child = Container(
       alignment: Alignment.center,
-      padding: itemPadding,
       color: Colors.transparent,
-      child: _constructItem(context, isInOrOutCapsule),
+      child: _constructItem(context),
     );
 
     if (!needInkWell) {
@@ -993,12 +1048,16 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     }
     return Material(
       color: Colors.transparent,
-      borderRadius: isInOrOutCapsule
-          ? BorderRadius.circular(context.tTheme.radiusCircle)
+      shape: isInOrOutCapsule
+          ? RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
+            )
           : null,
       child: InkWell(
-        borderRadius: isInOrOutCapsule
-            ? BorderRadius.circular(context.tTheme.radiusCircle)
+        customBorder: isInOrOutCapsule
+            ? RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
+              )
             : null,
         splashFactory: InkRipple.splashFactory,
         splashColor: selectedBgColor ?? context.tTheme.brandLightColor,

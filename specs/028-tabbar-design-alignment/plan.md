@@ -1,7 +1,22 @@
 # 实施方案
 
+## 2026-09-25 胶囊几何修复
+
+- 将图标项与图文项的 20px 图标默认尺寸收回 `TTabBar` 的 IconTheme；
+  默认 Demo 删除重复的 `Icon(size: 20)`，显式尺寸继续优先。
+- 胶囊外栏保留 16px 页面侧边距；内部改用 8px 四边内边距和 8px 项间距，
+  项宽由可用宽度减去内边距与间距后等分，不再从全屏宽度扣 2px 估算。
+- 胶囊选中背景使用完整项宽及 40px 内容高度；图文内容在项内垂直居中，
+  徽标继续锚定图标。无动画与滑动指示器使用同一几何来源。
+- 以 4 项图文带徽标、纯图标、纯文本及窄宽度场景作组件回归；对照截图
+  只比较相同配置，旧 Demo Golden 不作为新阴影的设计目标。
+
 ## 本轮补充修复
 
+- `centerDistance` 的 null 回退随图文排列变化；ThemeData 无实例上下文，
+  仅对两个显式距离做连续插值，null/显式组合在中点切换并交由组件解析内置值。
+- 从 TabBar 源码重新生成 API 文档，核对新增 `iconTextLayout` 与图文 Badge
+  锚点说明；不手写生成产物，也不改变公开 Demo 布局。
 - 将二级菜单默认宽度从单纯的“标签项宽度减 20”调整为带 107px 设计下限的内部规则；保留既有 `popUpWidth` 显式覆盖，不增加 API。
 - 为九个公开实例统一执行一次真实点击，并用明暗 postAction Golden 覆盖切换后的完整页面；二级菜单展开态仍使用独立 Golden。
 - 为纯文本点击 Toast 和双层菜单选择 Toast 分别补充明暗 Overlay Golden；注册集合测试逐项映射 9 个初始态、9 个选中态和 3 类独立交互态。
@@ -21,8 +36,11 @@
 
 - 用 `TTabBarType`、`TTabBarItemStyle`、`TTabBarStyle` 替代混合语义的
   `TTabBarVariant`。
-- 组件内部从三个正交参数派生渲染；普通图文项固定使用 `Column`，双层级入口
-  的菜单图标与文字固定使用 `Row`。
+- 组件内部从三个正交参数派生渲染；普通图文项默认上下排列，新增独立的
+  `iconTextLayout` 选择 Figma 中图标在左、文字在右的图文项；它只改变单项内容，
+  不改变整栏方向。双层级入口的菜单图标与文字仍固定使用 `Row`。
+- 左右排列的图文项把 Badge 锚定到整组图文，文字在窄项宽或较大系统字体下
+  限制为单行并省略，避免 RenderFlex 溢出；上下排列仍以图标锚定 Badge。
 - 保留受控 `value/onChanged`，让禁用状态只由 `onChanged` 决定。
 - 将 `TTabBarThemeData` 收敛到高度、颜色、间距、边线等视觉默认值；移除
   split、顶部边线开关、水波纹和动画策略。
@@ -32,7 +50,7 @@
 
 - breaking：删除 `TTabBarVariant` 与 `variant`。
 - 新增：`TTabBarType type`、`TTabBarItemStyle itemStyle`、
-  `TTabBarStyle style`。
+  `TTabBarStyle style`、`TTabBarIconTextLayout iconTextLayout`。
 - 删除本 PR 尚未发布且语义不成立的 `TTabBarLayout` 与 `layout` 草案 API；
   不产生额外迁移成本。未来若需要纵向 TabBar，应单独设计改变整栏轴向、尺寸、
   分隔线和选项分布的完整契约。
@@ -47,6 +65,8 @@
 
 ## 风险与取舍
 
+- 未显式设置 `Icon.size` 的图标项从 Flutter 隐式 24px 变为组件默认 20px，
+  属于可见默认行为变化；需要保留旧尺寸时可传 `Icon(size: 24)`。
 - 默认菜单宽度变化属于公开默认行为调整：窄标签项下菜单会变宽；显式设置
   `popUpWidth` 的调用不受影响。按仓库规范以 breaking change 记录。
 - 当前包仍处于 alpha；选择一次性收敛冲突状态源，不保留会继续误导的新旧双 API。

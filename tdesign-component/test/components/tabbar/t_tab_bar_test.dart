@@ -94,7 +94,7 @@ void main() {
 
       final early = defaults.lerp(custom, 0.25);
       expect(early.barHeight, 58);
-      expect(early.centerDistance, 2);
+      expect(early.centerDistance, isNull);
       expect(early.dividerHeight, 34);
       expect(early.dividerThickness, 0.75);
       expect(early.selectedBgColor, isNull);
@@ -102,8 +102,24 @@ void main() {
 
       final late = defaults.lerp(custom, 0.75);
       expect(late.barHeight, 62);
+      expect(late.centerDistance, 8);
       expect(late.selectedBgColor, Colors.red);
       expect(late.topBorder, const BorderSide(color: Colors.blue, width: 2));
+
+      expect(custom.lerp(defaults, 0.25).centerDistance, 8);
+      expect(custom.lerp(defaults, 0.75).centerDistance, isNull);
+      expect(defaults.lerp(custom, 0).centerDistance, isNull);
+      expect(defaults.lerp(custom, 0.5).centerDistance, 8);
+      expect(defaults.lerp(custom, 1).centerDistance, 8);
+      expect(custom.lerp(defaults, 0).centerDistance, 8);
+      expect(custom.lerp(defaults, 0.5).centerDistance, isNull);
+      expect(custom.lerp(defaults, 1).centerDistance, isNull);
+      expect(
+        custom
+            .lerp(const TTabBarThemeData(centerDistance: 12), 0.5)
+            .centerDistance,
+        10,
+      );
 
       final empty = defaults.lerp(const TTabBarThemeData(), 0.5);
       expect(empty.barHeight, isNull);
@@ -112,6 +128,38 @@ void main() {
       expect(empty.dividerThickness, isNull);
       expect(empty.selectedBgColor, isNull);
       expect(empty.topBorder, isNull);
+    });
+
+    testWidgets('inline gap uses its own default through Theme transitions', (
+      tester,
+    ) async {
+      const defaults = TTabBarThemeData();
+      const custom = TTabBarThemeData(centerDistance: 8);
+
+      Future<double> renderedGap(TTabBarThemeData theme) async {
+        await tester.pumpWidget(
+          wrapWithTheme(
+            TTabBar(
+              type: TTabBarType.iconText,
+              iconTextLayout: TTabBarIconTextLayout.inline,
+              value: 0,
+              useSafeArea: false,
+              navigationTabs: iconTextTabs(),
+              onChanged: (_) {},
+            ),
+            tabBarTheme: theme,
+          ),
+        );
+        await tester.pumpAndSettle();
+        final icon = tester.getRect(find.byIcon(Icons.home));
+        final label = tester.getRect(find.text('标签1'));
+        return label.left - icon.right;
+      }
+
+      expect(await renderedGap(defaults.lerp(custom, 0.25)), closeTo(4, 1));
+      expect(await renderedGap(defaults.lerp(custom, 0.75)), closeTo(8, 1));
+      expect(await renderedGap(custom.lerp(defaults, 0.25)), closeTo(8, 1));
+      expect(await renderedGap(custom.lerp(defaults, 0.75)), closeTo(4, 1));
     });
   });
 
@@ -410,6 +458,116 @@ void main() {
       final firstIcon = tester.getCenter(find.byIcon(Icons.home));
       final firstText = tester.getCenter(find.text('标签1'));
       expect(firstIcon.dy, lessThan(firstText.dy));
+    });
+
+    testWidgets('inline iconText places icon before text in the same row', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(375, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.iconText,
+            iconTextLayout: TTabBarIconTextLayout.inline,
+            style: TTabBarStyle.capsule,
+            value: 0,
+            useSafeArea: false,
+            navigationTabs: iconTextTabs(),
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      final icon = tester.getRect(find.byIcon(Icons.home));
+      final label = tester.getRect(find.text('标签1'));
+      expect(icon.right, lessThan(label.left));
+      expect((icon.center.dy - label.center.dy).abs(), lessThan(1));
+      expect(label.left - icon.right, closeTo(4, 1));
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('filled inline iconText follows item width and badge anchor', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(375, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.iconText,
+            iconTextLayout: TTabBarIconTextLayout.inline,
+            value: 0,
+            useSafeArea: false,
+            navigationTabs: List.generate(
+              4,
+              (index) => TTabBarItemConfig(
+                tabText: 'Item',
+                selectedIcon: const Icon(Icons.home),
+                unselectedIcon: const Icon(Icons.home_outlined),
+                badge: index == 0 ? const TBadgeConfig(label: '9') : null,
+              ),
+            ),
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      final selected = find.byWidgetPredicate(
+        (widget) =>
+            widget is Container &&
+            widget.decoration is BoxDecoration &&
+            (widget.decoration! as BoxDecoration).color ==
+                const Color(0xFFF2F3FF),
+      );
+      final selectedRect = tester.getRect(selected);
+      final textRect = tester.getRect(find.text('Item').first);
+      final badgeCenter = tester.getCenter(find.text('9'));
+      expect(selectedRect.left, 8);
+      expect(selectedRect.width, closeTo(83.75, 0.01));
+      expect(selectedRect.height, 40);
+      expect(badgeCenter.dx, closeTo(textRect.right, 0.01));
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('capsule renders every configured icon across selection', (
+      tester,
+    ) async {
+      var selected = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          StatefulBuilder(
+            builder: (context, setState) => TTabBar(
+              type: TTabBarType.iconText,
+              style: TTabBarStyle.capsule,
+              value: selected,
+              useSafeArea: false,
+              onChanged: (index) => setState(() => selected = index),
+              navigationTabs: const [
+                TTabBarItemConfig(
+                  tabText: 'First',
+                  selectedIcon: Icon(Icons.check),
+                  unselectedIcon: Icon(Icons.close),
+                ),
+                TTabBarItemConfig(
+                  tabText: 'Second',
+                  selectedIcon: Icon(Icons.star),
+                  unselectedIcon: Icon(Icons.favorite),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      expect(find.byIcon(Icons.check), findsOneWidget);
+      expect(find.byIcon(Icons.favorite), findsOneWidget);
+      await tester.tap(find.text('Second'));
+      await tester.pumpAndSettle();
+      expect(selected, 1);
+      expect(find.byIcon(Icons.close), findsOneWidget);
+      expect(find.byIcon(Icons.star), findsOneWidget);
+      expect(find.byIcon(Icons.check), findsNothing);
+      expect(find.byIcon(Icons.favorite), findsNothing);
     });
 
     testWidgets('updates value with none, linear and elastic animations', (
@@ -723,13 +881,199 @@ void main() {
         ),
       );
       expect(
-        (capsule.decoration! as BoxDecoration).borderRadius,
-        BorderRadius.circular(TThemeData.defaultData().radiusCircle),
+        (capsule.decoration! as ShapeDecoration).shape,
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            TThemeData.defaultData().radiusRound,
+          ),
+        ),
       );
       expect(
-        (capsule.decoration! as BoxDecoration).boxShadow,
-        TThemeData.defaultData().shadowsBase,
+        (capsule.decoration! as ShapeDecoration).shadows,
+        TThemeData.defaultData().shadowsTop,
       );
+    });
+
+    testWidgets('capsule shadow follows shadowsTop token', (tester) async {
+      const capsuleShadow = [
+        BoxShadow(color: Colors.blue, blurRadius: 7, offset: Offset(0, 3)),
+      ];
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'tabbar-capsule-shadow-test',
+        shadowMap: {
+          'shadowsBase': const [BoxShadow(color: Colors.red)],
+          'shadowsTop': capsuleShadow,
+        },
+      );
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.text,
+            style: TTabBarStyle.capsule,
+            value: 0,
+            navigationTabs: textTabs(),
+            onChanged: (_) {},
+          ),
+          themeData: token,
+        ),
+      );
+
+      final capsule = tester.widget<Container>(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is Container &&
+              widget.margin == const EdgeInsets.symmetric(horizontal: 16),
+        ),
+      );
+      expect((capsule.decoration! as ShapeDecoration).shadows, capsuleShadow);
+    });
+
+    testWidgets(
+      'capsule iconText uses design item bounds and centered content',
+      (tester) async {
+        await tester.binding.setSurfaceSize(const Size(375, 800));
+        addTearDown(() => tester.binding.setSurfaceSize(null));
+        const selectedColor = Color(0xFFF2F3FF);
+        await tester.pumpWidget(
+          wrapWithTheme(
+            TTabBar(
+              type: TTabBarType.iconText,
+              style: TTabBarStyle.capsule,
+              value: 0,
+              useSafeArea: false,
+              onChanged: (_) {},
+              navigationTabs: List.generate(
+                4,
+                (index) => TTabBarItemConfig(
+                  tabText: 'Item',
+                  selectedIcon: const Icon(TIcons.app),
+                  unselectedIcon: const Icon(TIcons.app),
+                  badge: index == 0
+                      ? const TBadgeConfig(variant: TBadgeVariant.dot)
+                      : null,
+                ),
+              ),
+            ),
+          ),
+        );
+
+        final capsule = find.byWidgetPredicate(
+          (widget) =>
+              widget is Container &&
+              widget.margin == const EdgeInsets.symmetric(horizontal: 16),
+        );
+        final selected = find.byWidgetPredicate(
+          (widget) =>
+              widget is Container &&
+              widget.decoration is BoxDecoration &&
+              (widget.decoration! as BoxDecoration).color == selectedColor,
+        );
+        final capsuleFill = find.descendant(
+          of: capsule,
+          matching: find.byWidgetPredicate(
+            (widget) =>
+                widget is DecoratedBox && widget.decoration is ShapeDecoration,
+          ),
+        );
+        final capsuleRect = tester.getRect(capsuleFill.first);
+        final selectedRect = tester.getRect(selected);
+        expect(capsuleRect.left, 16);
+        expect(capsuleRect.width, 343);
+        expect(capsuleRect.height, 56);
+        expect(selectedRect.left, capsuleRect.left + 8);
+        expect(selectedRect.top, capsuleRect.top + 8);
+        expect(selectedRect.width, closeTo(75.75, 0.01));
+        expect(selectedRect.height, 40);
+        expect(find.byType(TBadge), findsOneWidget);
+        expect(find.text('Item'), findsNWidgets(4));
+        final iconCenter = tester.getCenter(find.byIcon(TIcons.app).first);
+        final textCenter = tester.getCenter(find.text('Item').first);
+        final iconRect = tester.getRect(find.byIcon(TIcons.app).first);
+        final textRect = tester.getRect(find.text('Item').first);
+        expect(iconCenter.dx, closeTo(selectedRect.center.dx, 0.01));
+        expect(textCenter.dx, closeTo(selectedRect.center.dx, 0.01));
+        expect(iconRect.top, closeTo(selectedRect.top + 2, 0.01));
+        expect(iconRect.size, const Size(20, 20));
+        expect(textRect.top, closeTo(selectedRect.top + 22, 0.01));
+        expect(textRect.height, 16);
+        expect(tester.takeException(), isNull);
+      },
+    );
+
+    testWidgets('icon defaults to 20 while an explicit size wins', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.icon,
+            value: 0,
+            useSafeArea: false,
+            onChanged: (_) {},
+            navigationTabs: const [
+              TTabBarItemConfig(
+                selectedIcon: Icon(TIcons.app, size: 22),
+                unselectedIcon: Icon(TIcons.app, size: 22),
+              ),
+              TTabBarItemConfig(
+                selectedIcon: Icon(TIcons.chat),
+                unselectedIcon: Icon(TIcons.chat),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      expect(tester.getSize(find.byIcon(TIcons.app)), const Size(22, 22));
+      expect(tester.getSize(find.byIcon(TIcons.chat)), const Size(20, 20));
+    });
+
+    testWidgets('capsule animated indicators follow the item spacing', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(375, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      const indicatorColor = Color(0xFFF2F3FF);
+      for (final animation in [
+        TTabBarIndicatorAnimation.linear,
+        TTabBarIndicatorAnimation.elastic,
+      ]) {
+        var selectedIndex = 0;
+        await tester.pumpWidget(
+          wrapWithTheme(
+            StatefulBuilder(
+              builder: (context, setState) => TTabBar(
+                type: TTabBarType.text,
+                style: TTabBarStyle.capsule,
+                value: selectedIndex,
+                useSafeArea: false,
+                selectedBgColor: indicatorColor,
+                indicatorAnimation: animation,
+                onChanged: (index) => setState(() => selectedIndex = index),
+                navigationTabs: List.generate(
+                  4,
+                  (index) => TTabBarItemConfig(tabText: 'Item $index'),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final indicator = find.byWidgetPredicate(
+          (widget) =>
+              widget is Container &&
+              widget.decoration is BoxDecoration &&
+              (widget.decoration! as BoxDecoration).color == indicatorColor,
+        );
+        expect(tester.getRect(indicator).left, 24);
+        await tester.tap(find.text('Item 1'));
+        await tester.pumpAndSettle();
+        final rect = tester.getRect(indicator);
+        expect(rect.left, closeTo(107.75, 0.01));
+        expect(rect.width, closeTo(75.75, 0.01));
+        expect(rect.height, 40);
+        expect(tester.takeException(), isNull);
+      }
     });
 
     testWidgets('iconText default badge anchors to icon top-right', (

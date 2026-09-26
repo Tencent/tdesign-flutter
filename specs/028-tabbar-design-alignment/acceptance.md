@@ -1,5 +1,16 @@
 # 验收记录
 
+## 2026-09-27 develop 隔离分支复核
+
+- 本节的图文布局结论替代下方 2026-09-08 对 Figma Horizontal/Vertical 名称的旧解释：可访问组件展板显示该对变体是单项图文的上下/左右排列，两种标签栏都保持水平整栏。
+- 从 `develop@97afb678` 建立独立 worktree，只迁移 TabBar 组件、公开 Demo、测试、Spec 和对应生成产物；原有 Token 重构工作树保持原状。适配 develop 已有 Token 名称，未引入全局 Token 改动。
+- Flutter 3.32.0 与 3.47.0：组件测试各 42/42，公开 Demo 测试各 9/9；组件包与 Example 包完整 analyze 均零问题。3.32.0 TabBar 生产覆盖率 528/538 = 98.14%，示例代码生成 `--check` 通过。
+- Linux Flutter 3.32.0 先运行不带更新参数的 Golden 并检查实际图、旧图和差异；更新 TabBar 组件明暗 14 张（包含新增的左右图文实例）及公开 Demo 明暗和操作后 10 张，随后两组无更新、无像素容差复跑分别 14/14 与 11/11 测试通过。Linux 临时副本使用本地工具依赖覆盖修复镜像缓存，未改工作树依赖声明；图片中的图标包版本与工作树锁文件同为 0.0.7。
+- Flutter 3.32.0 Android 16 真机 debug APK 构建、安装并启动成功；`com.tdesign.tdesign_flutter_example/.MainActivity` 已确认前台，UI 层级可见 TabBar 页面 3 组、9 实例。设备随后锁屏，本轮尚未对最终版逐项手动点击和截图核对。
+- Flutter 3.47.0 Example Web release 构建成功；`synthetic-package` 与 Wasm dry-run 只产生既有提示。`git diff --check` 通过。
+- 可访问的 Figma 副本 `5iZtzla34Rz25j4cK7viAz:25529:22098` 是 1440×2596 组件展板；完整 375px 移动端 Demo 节点 `28591:35219` 不在该副本中，原分支也无读取权限。当前无法据此宣称整页 Figma 逐像素一致，仍待提供可访问页面或导出图。
+
+
 ## 2026-09-08 最终 develop 同步
 
 - 已合并最新 `origin/develop@a841e3dd`。唯一文本冲突位于
