@@ -849,6 +849,123 @@ void main() {
     });
 
     for (final brightness in [Brightness.light, Brightness.dark]) {
+      testWidgets('success 组件色覆盖全局色且不影响其他配色（$brightness）', (tester) async {
+        const baseColor = Color(0xFF126B43);
+        const lightColor = Color(0xFFB1E7C3);
+        final token = TThemeData.defaultData();
+        final theme =
+            (brightness == Brightness.light
+                    ? TThemeBuilder.light(token)
+                    : TThemeBuilder.dark(token))
+                .mergeExtension(
+                  const TTagThemeData(
+                    successColor: baseColor,
+                    successLightColor: lightColor,
+                  ),
+                );
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: const Scaffold(
+              body: Column(
+                children: [
+                  TTag('实色成功', colorScheme: TTagColorScheme.success),
+                  TTag(
+                    '浅色成功',
+                    colorScheme: TTagColorScheme.success,
+                    variant: TTagVariant.light,
+                  ),
+                  TTag(
+                    '描边成功',
+                    colorScheme: TTagColorScheme.success,
+                    variant: TTagVariant.outline,
+                  ),
+                  TTag(
+                    '浅描边成功',
+                    colorScheme: TTagColorScheme.success,
+                    variant: TTagVariant.lightOutline,
+                  ),
+                  TTag(
+                    '禁用成功',
+                    colorScheme: TTagColorScheme.success,
+                    enabled: false,
+                  ),
+                  TTag('主要', colorScheme: TTagColorScheme.primary),
+                ],
+              ),
+            ),
+          ),
+        );
+
+        BoxDecoration decoration(String label) {
+          final container = tester.widget<Container>(
+            find
+                .descendant(
+                  of: find.widgetWithText(TTag, label),
+                  matching: find.byWidgetPredicate(
+                    (widget) =>
+                        widget is Container &&
+                        widget.decoration is BoxDecoration,
+                  ),
+                )
+                .first,
+          );
+          return container.decoration! as BoxDecoration;
+        }
+
+        expect(decoration('实色成功').color, baseColor);
+        expect(decoration('浅色成功').color, lightColor);
+        expect(tester.widget<Text>(find.text('浅色成功')).style!.color, baseColor);
+        expect(decoration('描边成功').border!.top.color, baseColor);
+        expect(decoration('浅描边成功').border!.top.color, baseColor);
+        expect(decoration('浅描边成功').color, lightColor);
+        expect(decoration('禁用成功').color, isNot(baseColor));
+        expect(decoration('主要').color, isNot(baseColor));
+      });
+
+      testWidgets('仅覆盖 successLightColor 时基础色仍取全局 Token（$brightness）', (
+        tester,
+      ) async {
+        const customLight = Color(0xFFB1E7C3);
+        final token = TThemeData.defaultData();
+        final effectiveToken = brightness == Brightness.light
+            ? token
+            : token.dark!;
+        final theme =
+            (brightness == Brightness.light
+                    ? TThemeBuilder.light(token)
+                    : TThemeBuilder.dark(token))
+                .mergeExtension(
+                  const TTagThemeData(successLightColor: customLight),
+                );
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: const Scaffold(
+              body: TTag(
+                '浅色成功',
+                colorScheme: TTagColorScheme.success,
+                variant: TTagVariant.light,
+              ),
+            ),
+          ),
+        );
+
+        final container = tester.widget<Container>(
+          find
+              .descendant(
+                of: find.byType(TTag),
+                matching: find.byType(Container),
+              )
+              .first,
+        );
+        expect((container.decoration! as BoxDecoration).color, customLight);
+        expect(
+          tester.widget<Text>(find.text('浅色成功')).style!.color,
+          effectiveToken.successColor,
+        );
+      });
+
       testWidgets('dangerColor 仅覆盖 danger 基础色（$brightness）', (tester) async {
         const customDanger = Color(0xFF123ABC);
         const materialError = Color(0xFFAA2200);
@@ -1015,27 +1132,41 @@ void main() {
       const defaults = TTagThemeData();
       const custom = TTagThemeData(
         dangerColor: Colors.purple,
+        successColor: Colors.green,
+        successLightColor: Colors.lightGreen,
         squareBorderRadius: 12,
       );
       final merged = defaults.copyWith(
         dangerColor: Colors.purple,
+        successColor: Colors.green,
+        successLightColor: Colors.lightGreen,
         squareBorderRadius: 12,
       );
       expect(merged.dangerColor, Colors.purple);
+      expect(merged.successColor, Colors.green);
+      expect(merged.successLightColor, Colors.lightGreen);
       expect(merged.squareBorderRadius, 12);
       expect(merged.copyWith().dangerColor, Colors.purple);
+      expect(merged.copyWith().successColor, Colors.green);
+      expect(merged.copyWith().successLightColor, Colors.lightGreen);
       expect(merged.copyWith().squareBorderRadius, 12);
       expect(defaults.lerp(defaults, 0.5).dangerColor, isNull);
+      expect(defaults.lerp(defaults, 0.5).successColor, isNull);
+      expect(defaults.lerp(defaults, 0.5).successLightColor, isNull);
       expect(defaults.lerp(defaults, 0.5).squareBorderRadius, isNull);
       expect(defaults.lerp(custom, 0.25).dangerColor, isNull);
       expect(defaults.lerp(custom, 0.75).dangerColor, Colors.purple);
+      expect(defaults.lerp(custom, 0.25).successColor, isNull);
+      expect(defaults.lerp(custom, 0.75).successColor, Colors.green);
+      expect(defaults.lerp(custom, 0.75).successLightColor, Colors.lightGreen);
       expect(defaults.lerp(custom, 0.5).squareBorderRadius, 8);
       expect(custom.lerp(defaults, 0.5).squareBorderRadius, 8);
       expect(custom.lerp(defaults, 0.75).dangerColor, isNull);
+      expect(custom.lerp(defaults, 0.75).successColor, isNull);
       expect(
-        const TTagThemeData(dangerColor: Colors.red)
-            .lerp(const TTagThemeData(dangerColor: Colors.blue), 0.5)
-            .dangerColor,
+        const TTagThemeData(
+          dangerColor: Colors.red,
+        ).lerp(const TTagThemeData(dangerColor: Colors.blue), 0.5).dangerColor,
         Color.lerp(Colors.red, Colors.blue, 0.5),
       );
     });

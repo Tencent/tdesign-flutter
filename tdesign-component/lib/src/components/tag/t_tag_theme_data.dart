@@ -8,12 +8,16 @@ import 't_tag_types.dart';
 /// 标签组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树的默认样式。
-/// 构造器参数优先于 Theme。
+/// 具体视觉值由组件 Theme 控制，未指定时回退全局 Token。
 class TTagThemeData extends ThemeExtension<TTagThemeData> {
-  /// 文字颜色
+  /// 所有启用 Tag 的统一文字颜色；优先于各配色预设的文字色。
+  ///
+  /// 禁用态仍使用禁用 Token。只修改 success 预设时使用 [successColor]。
   final Color? textColor;
 
-  /// 背景颜色
+  /// 所有启用 Tag 的统一背景色；优先于各配色预设的填充色。
+  ///
+  /// 禁用态仍使用禁用 Token。只修改 success 浅色填充时使用 [successLightColor]。
   final Color? backgroundColor;
 
   /// danger 预设的基础色，对应小程序的 `--td-tag-danger-color`。
@@ -21,6 +25,16 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
   /// 未设置时沿显式 Material `ColorScheme.error`、全局 `errorColor` 回退。
   /// 仅影响 danger 预设；浅色填充仍使用 danger 浅色默认值。
   final Color? dangerColor;
+
+  /// success 预设的基础色，对应 `--td-tag-success-color`。
+  ///
+  /// 未设置时回退全局 `successColor`；不改变禁用态。
+  final Color? successColor;
+
+  /// success 预设的浅色填充，对应 `--td-tag-success-light-color`。
+  ///
+  /// 未设置时回退全局 `successColor1`；不改变基础色或禁用态。
+  final Color? successLightColor;
 
   /// 字体尺寸
   final Font? font;
@@ -54,6 +68,8 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     this.textColor,
     this.backgroundColor,
     this.dangerColor,
+    this.successColor,
+    this.successLightColor,
     this.font,
     this.fontWeight,
     this.padding,
@@ -69,6 +85,8 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     Color? textColor,
     Color? backgroundColor,
     Color? dangerColor,
+    Color? successColor,
+    Color? successLightColor,
     Font? font,
     FontWeight? fontWeight,
     EdgeInsets? padding,
@@ -82,6 +100,8 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
       textColor: textColor ?? this.textColor,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       dangerColor: dangerColor ?? this.dangerColor,
+      successColor: successColor ?? this.successColor,
+      successLightColor: successLightColor ?? this.successLightColor,
       font: font ?? this.font,
       fontWeight: fontWeight ?? this.fontWeight,
       padding: padding ?? this.padding,
@@ -106,6 +126,13 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
       dangerColor: dangerColor == null || other.dangerColor == null
           ? (t < 0.5 ? dangerColor : other.dangerColor)
           : Color.lerp(dangerColor, other.dangerColor, t),
+      successColor: successColor == null || other.successColor == null
+          ? (t < 0.5 ? successColor : other.successColor)
+          : Color.lerp(successColor, other.successColor, t),
+      successLightColor:
+          successLightColor == null || other.successLightColor == null
+          ? (t < 0.5 ? successLightColor : other.successLightColor)
+          : Color.lerp(successLightColor, other.successLightColor, t),
       font: t < 0.5 ? font : other.font,
       fontWeight: t < 0.5 ? fontWeight : other.fontWeight,
       padding:

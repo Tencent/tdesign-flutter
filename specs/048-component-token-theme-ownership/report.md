@@ -55,7 +55,7 @@
 | --- | --- | --- | --- |
 | P0 | 公开 API 大范围 breaking 尚待发布决策与外部迁移验证 | 已发布字段删除清单及替代写法见 [迁移文档](./migration.md)；尚未用外部调用方编译验证 | 按最终 diff 逐字段核对迁移，选择 breaking 版本与提交类型，验证示例和实际使用方；不能作为普通重构发布 |
 | 已处理 | Avatar/Popover 的已确认同义视觉入口 | Avatar `foregroundColor` 与 `textStyle.color`；Popover `radius` 与 Theme `borderRadius`、`overlayColor` 与 Theme `barrierColor` | 2026-09-28 已收敛为单一 Theme 入口，迁移方式与回归见下方补记；其他组件仍须继续查异名同义字段 |
-| P1 | 804 个组件变量未全部证明最终消费 | [逐项静态证据](./component-consumption-audit.json)固定读取小程序 `1a1c5ca`：404 项有同目录全局 getter 候选、28 项有组件 Theme 字段候选（12 项两者都有）、290 项同目录无直接证据、82 项无对应 Flutter 组件目录。进一步查 Less 动态 `@@` 与直接 CSS 引用后，100 项属于“动态 Less 可能消费”，仅 10 项在冻结源码未见静态消费者。Button 12 项、Tag 12 项默认 Widget 值、Tag 6 项回退 Widget 路径及 2 项组件 Theme 覆盖已逐项裁定；其余 681 项仍待审。候选命中不是最终绘制证明 | 按[审查队列](./component-consumption-review.md)继续对有对应组件的行做状态/Theme/最终绘制核验；81 项小程序已消费但 Flutter 当前没有对应组件，应归属未来组件范围，不给现有组件制造假 Theme 字段 |
+| P1 | 804 个组件变量未全部证明最终消费 | [逐项静态证据](./component-consumption-audit.json)固定读取小程序 `1a1c5ca`：402 项有同目录全局 getter 候选、30 项有组件 Theme 字段候选（14 项两者都有）、290 项同目录无直接证据、82 项无对应 Flutter 组件目录。进一步查 Less 动态 `@@` 与直接 CSS 引用后，100 项属于“动态 Less 可能消费”，仅 10 项在冻结源码未见静态消费者。Button 12 项、Tag 12 项默认 Widget 值、Tag 5 项回退 Widget 路径及 4 项组件 Theme 覆盖已逐项裁定；其余 680 项仍待审。候选命中不是最终绘制证明 | 按[审查队列](./component-consumption-review.md)继续对有对应组件的行做状态/Theme/最终绘制核验；81 项小程序已消费但 Flutter 当前没有对应组件，应归属未来组件范围，不给现有组件制造假 Theme 字段 |
 | P1 | 小程序自身变量歧义 | `sliderDefaultColor`、`tabBarBorderColor` 回退冲突；3 项无回退，1 项未解析引用，14 项 CSS `calc()` | 保留原始表达与使用位置，设计稿/运行态逐项裁定，不能擅自定值 |
 | P1 | 原定 47 个用例仍有 12 个旧基线差异 | BackTop 组件 1、BackTop Demo 4、Indexes Demo 7；其余 TabBar/导航已按设计契约和 Token 字体度量裁定 | 继续按设计稿/小程序逐实例判断剩余差异；修实现缺陷后，在固定 Linux 3.32 更新对应基线并无更新重跑；再验 3.47 功能，不机械要求跨系统像素相同 |
 | P2 | Flutter 3.47 的部分 Demo 测试受 SDK shader 错误干扰 | Dialog、Popover、Swiper 公开 Demo 出现 `shaders/ink_sparkle.frag` 解码失败，而 Linux 3.32 Dialog 16 项全通过 | 将环境问题与组件断言分开；修复/刷新 3.47 SDK 缓存后重跑，不能当作组件通过或失败 |
@@ -72,6 +72,12 @@ Avatar 移除了 `TAvatarThemeData.textStyle`，保留 `foregroundColor` 为默�
 
 ## 2026-09-28 Tag 组件专属 Token 补记
 
-`TTagThemeData.dangerColor` 现在单独控制 danger 基础色，未指定时动态回退显式 Material error / 全局 `errorColor`；浅色填充、其他配色和禁用态保持原路径。`squareBorderRadius` 单独控制方形圆角，未指定时保留 4dp，round/mark 不受影响。两个字段已进入生成的 Tag API 文档和逐项映射表；审计仅将这两项标为“组件 Theme/Widget 已验证，视觉待裁定”，不扩大到其余 681 个待审变量。
+`TTagThemeData.dangerColor` 单独控制 danger 基础色，未指定时动态回退显式 Material error / 全局 `errorColor`；浅色填充、其他配色和禁用态保持原路径。`squareBorderRadius` 单独控制方形圆角，未指定时保留 4dp，round/mark 不受影响。下文 2026-09-29 补记增加了 success 的两个独立组件 Theme 字段；目前共 4 项组件覆盖经 Widget 验证，其余 680 项仍待审。
+
+## 2026-09-29 Tag success 与 TabBar 单入口补记
+
+Tag 增加 `TTagThemeData.successColor/successLightColor`，分别覆盖 success 的基础色和浅色填充；未设置时动态回退全局 `successColor/successColor1`。`TSelectTag` 通过内部 `TTag` 继承同一组件 Theme，禁用态与其他配色不受影响。TabBar 删除与 `TTabBarThemeData` 同义的 8 个实例视觉参数；`centerDistance` 在实例和 Theme 两侧均删除，不提供兼容转发或同义别名。单实例视觉定制用局部 Theme；默认图文布局与边线回退不变。迁移写法见 [迁移清单](./migration.md)。
+
+Flutter 3.32.0 Linux 与 3.47.0 的 Tag/SelectTag/TabBar 聚焦测试各 118/118 通过，Tag/TabBar 生产行覆盖率分别为 202/207（97.58%）、488/500（97.60%）。两版本组件包与 Example 工程的最终严格分析均为 0 issues。Linux 3.32.0 无更新 Golden：TabBar 组件 12/12、TabBar Demo 11/11、Tag Demo 4/4 通过；没有更新 PNG，也不据此宣称设计稿像素一致。组件变量审计以冻结小程序提交重新生成，当前 804 项中 680 项待审。
 
 Flutter 3.32.0 与 3.47.0 下 Tag/SelectTag 组件测试各 79 项通过，受影响 Dart 文件定向 `flutter analyze --fatal-infos` 均无诊断；`git diff --check` 通过。默认取值未改变，不更新 Golden；固定 Linux 3.32.0 的无更新 Golden 本次尚未复跑，当前 PR 已存在的大范围旧基线差异仍须独立归因。此补记不构成合并发布验收。

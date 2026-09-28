@@ -70,14 +70,12 @@ void main() {
       const data = TTabBarThemeData(
         barHeight: 56,
         selectedBgColor: Colors.red,
-        centerDistance: 4,
         dividerHeight: 32,
       );
       final copied = data.copyWith();
 
       expect(copied.barHeight, 56);
       expect(copied.selectedBgColor, Colors.red);
-      expect(copied.centerDistance, 4);
       expect(copied.dividerHeight, 32);
     });
 
@@ -86,7 +84,6 @@ void main() {
       const custom = TTabBarThemeData(
         barHeight: 64,
         selectedBgColor: Colors.red,
-        centerDistance: 8,
         dividerHeight: 40,
         dividerThickness: 1.5,
         topBorder: BorderSide(color: Colors.blue, width: 2),
@@ -94,7 +91,6 @@ void main() {
 
       final early = defaults.lerp(custom, 0.25);
       expect(early.barHeight, 58);
-      expect(early.centerDistance, 2);
       expect(early.dividerHeight, 34);
       expect(early.dividerThickness, 0.75);
       expect(early.selectedBgColor, isNull);
@@ -107,7 +103,6 @@ void main() {
 
       final empty = defaults.lerp(const TTabBarThemeData(), 0.5);
       expect(empty.barHeight, isNull);
-      expect(empty.centerDistance, isNull);
       expect(empty.dividerHeight, isNull);
       expect(empty.dividerThickness, isNull);
       expect(empty.selectedBgColor, isNull);
@@ -399,7 +394,6 @@ void main() {
         wrapWithTheme(
           TTabBar(
             type: TTabBarType.iconText,
-            centerDistance: 4,
             value: 0,
             navigationTabs: iconTextTabs(),
             onChanged: (_) {},
@@ -658,7 +652,6 @@ void main() {
             type: TTabBarType.iconText,
             value: 0,
             needInkWell: true,
-            centerDistance: 6,
             navigationTabs: [
               TTabBarItemConfig(
                 tabText: '消息',

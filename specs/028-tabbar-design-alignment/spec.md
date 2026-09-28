@@ -58,8 +58,9 @@
   使用 TabBar 的文本徽标内置位置；纯图标项以图标作为内部徽标锚点；图文项也只
   以图标作为徽标锚点，文字不参与锚点宽度计算。两种图标场景均使用 `TBadge` 的
   默认右上角位置。公开默认 Demo 不传固定 offset，显式 offset 仅用于逐项自定义。
-- 颜色和字体默认值来自 `TThemeData`；实例参数优先于 `TTabBarThemeData`，
-  Theme 优先于全局 Token。
+- 颜色和字体默认值来自 `TThemeData`；TabBar 的具体视觉数值仅由
+  `TTabBarThemeData` 覆盖，全局 Token 是未设置组件 Theme 字段时的回退。
+  内容、结构选择和交互仍由实例参数控制。
 - Theme 动画中 nullable 尺寸按运行时内置默认值插值；nullable 颜色与边线保持
   “未覆盖”语义，不得插值出透明色或 `BorderSide.none` 污染低优先级 Token。
 - 内置文字样式使用共享解析器的低优先级 defaults；显式 TTextThemeData、DefaultTextStyle、TextTheme 按字段覆盖，单项 TextStyle 最高优先。

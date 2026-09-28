@@ -199,3 +199,7 @@
 - 最新 debug APK 已构建并安装到 Android 16 真机 `40302eeb`；包
   `com.tdesign.tdesign_flutter_example` 的 `MainActivity` 已确认处于前台，detach
   后进程仍在运行。
+
+## 2026-09-29 Token PR 中的 TabBar API 归属补充
+
+本次在 `rss1102/breaking/miniprogram-token-standardization` 收敛 TabBar 视觉入口：8 个实例视觉字段移到已有 `TTabBarThemeData` 的唯一控制路径；`centerDistance` 在实例和 Theme 两侧移除，默认图文布局保持。Linux Flutter 3.32.0 无更新 Golden：组件 12/12、Demo 11/11 通过；Tag/SelectTag/TabBar 聚焦测试 118/118 通过。迁移用法及完整双版本结果见 `specs/048-component-token-theme-ownership/acceptance.md`。

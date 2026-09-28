@@ -85,6 +85,8 @@ class TTag extends StatelessWidget {
       isOutline,
       !enabled,
       theme?.dangerColor,
+      theme?.successColor,
+      theme?.successLightColor,
     );
     final borderRadius = _resolveBorderRadius(
       context,
@@ -185,6 +187,8 @@ class TTag extends StatelessWidget {
     bool isOutline,
     bool disable,
     Color? dangerColor,
+    Color? successColor,
+    Color? successLightColor,
   ) {
     final token = context.tTheme;
     final material = Theme.of(context).tExplicitColorScheme;
@@ -255,15 +259,15 @@ class TTag extends StatelessWidget {
         }
         break;
       case TTagColorScheme.success:
+        final baseColor = successColor ?? token.successColor;
+        final lightColor = successLightColor ?? token.successColor1;
         if (isOutline) {
-          borderColor = token.successColor;
-          textColor = token.successColor;
-          backgroundColor = isLight
-              ? token.successColor1
-              : token.bgColorContainer;
+          borderColor = baseColor;
+          textColor = baseColor;
+          backgroundColor = isLight ? lightColor : token.bgColorContainer;
         } else {
-          textColor = isLight ? token.successColor : token.textColorAnti;
-          backgroundColor = isLight ? token.successColor1 : token.successColor;
+          textColor = isLight ? baseColor : token.textColorAnti;
+          backgroundColor = isLight ? lightColor : baseColor;
           borderColor = backgroundColor;
         }
         break;

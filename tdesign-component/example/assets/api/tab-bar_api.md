@@ -6,12 +6,6 @@
 | --- | --- | --- | --- |
 | animationCurve | Curve? | - | 动画曲线 |
 | animationDuration | Duration? | - | 动画时长 |
-| backgroundColor | Color? | - | 背景颜色 （可选） |
-| barHeight | double? | - | tab高度 |
-| centerDistance | double? | - | icon与文本中间距离（可选） |
-| dividerColor | Color? | - | 分割线颜色（可选） |
-| dividerHeight | double? | - | 分割线高度（可选） |
-| dividerThickness | double? | - | 分割线厚度（可选） |
 | indicatorAnimation | TTabBarIndicatorAnimation | TTabBarIndicatorAnimation.none | 指示器动画类型 |
 | itemStyle | TTabBarItemStyle | TTabBarItemStyle.label | 单个标签项的选中样式。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
@@ -19,13 +13,10 @@
 | needInkWell | bool | false | 是否需要水波纹效果 |
 | onChanged | ValueChanged<int>? | - | 选中项变化；null 时整栏禁用 |
 | placeholder | bool | true | 是否添加安全区域占位 |
-| selectedBgColor | Color? | - | 选中时背景颜色 |
-| showTopBorder | bool | true | 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值，非胶囊型才生效） |
+| showTopBorder | bool | true | 是否显示顶部边线，默认显示；胶囊样式不显示。 边线外观由 `TTabBarThemeData.topBorder` 定义，未设置时使用内置默认值。 |
 | split | bool | false | 是否使用竖线分隔；`itemStyle` 为 `TTabBarItemStyle.label` 时不显示。 |
 | style | TTabBarStyle | TTabBarStyle.filled | 标签栏容器样式。 |
-| topBorder | BorderSide? | - | 上边线样式 |
 | type | TTabBarType | - | 标签栏内容类型。 |
-| unselectedBgColor | Color? | - | 未选中时背景颜色 |
 | useSafeArea | bool | true | 使用安全区域 |
 | value | int | - | 选中的 index |
 
@@ -79,6 +70,21 @@
 | itemWidget | Widget? | - | 选项widget |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | value | String | - | 选项值 |
+
+
+### TTabBarThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 标签栏容器背景色；未设置时回退全局 `bgColorContainer`。 |
+| barHeight | double? | - | 标签栏高度；未设置时为 56 逻辑像素。 |
+| dividerColor | Color? | - | 竖向分割线颜色；未设置时回退全局 `componentStroke`。 |
+| dividerHeight | double? | - | 竖向分割线高度；未设置时为 32 逻辑像素，仅在实例 `split` 生效时使用。 |
+| dividerThickness | double? | - | 竖向分割线厚度；未设置时为 0.5 逻辑像素，仅在实例 `split` 生效时使用。 |
+| selectedBgColor | Color? | - | Label 选中项背景色；未设置时回退全局 `brandColorLight`。 |
+| topBorder | BorderSide? | - | 顶部边线样式；未设置时使用 `componentStroke`、0.5 逻辑像素。 仅在实例 `showTopBorder` 为 true 且不是胶囊样式时绘制。 |
+| unselectedBgColor | Color? | - | Label 未选中项背景色；未设置时不额外绘制背景。 |
 
 
 ### TTabBarType

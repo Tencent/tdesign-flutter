@@ -4,34 +4,35 @@ import 'package:flutter/material.dart';
 
 /// 底部标签栏 ThemeExtension
 ///
-/// 管理 TTabBar 的子树级视觉默认值（高度、颜色、间距与分割线等）。
-/// 构造器参数优先级高于 ThemeData。
+/// 管理 TTabBar 的子树级视觉默认值（高度、颜色与边线等）。
+///
+/// 实例负责内容、状态和行为；单实例定制可用局部 Theme 注入此扩展。
+/// 各字段为 null 时沿全局 Token 或下述组件内置值回退。
 class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
-  /// 默认高度
+  /// 标签栏高度；未设置时为 56 逻辑像素。
   final double? barHeight;
 
-  /// 默认选中时背景颜色
+  /// Label 选中项背景色；未设置时回退全局 `brandColorLight`。
   final Color? selectedBgColor;
 
-  /// 默认未选中时背景颜色
+  /// Label 未选中项背景色；未设置时不额外绘制背景。
   final Color? unselectedBgColor;
 
-  /// 默认背景颜色
+  /// 标签栏容器背景色；未设置时回退全局 `bgColorContainer`。
   final Color? backgroundColor;
 
-  /// 默认 icon 与文本中间距离
-  final double? centerDistance;
-
-  /// 默认分割线高度
+  /// 竖向分割线高度；未设置时为 32 逻辑像素，仅在实例 `split` 生效时使用。
   final double? dividerHeight;
 
-  /// 默认分割线厚度
+  /// 竖向分割线厚度；未设置时为 0.5 逻辑像素，仅在实例 `split` 生效时使用。
   final double? dividerThickness;
 
-  /// 默认分割线颜色
+  /// 竖向分割线颜色；未设置时回退全局 `componentStroke`。
   final Color? dividerColor;
 
-  /// 默认上边线样式
+  /// 顶部边线样式；未设置时使用 `componentStroke`、0.5 逻辑像素。
+  ///
+  /// 仅在实例 `showTopBorder` 为 true 且不是胶囊样式时绘制。
   final BorderSide? topBorder;
 
   const TTabBarThemeData({
@@ -39,7 +40,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
     this.selectedBgColor,
     this.unselectedBgColor,
     this.backgroundColor,
-    this.centerDistance,
     this.dividerHeight,
     this.dividerThickness,
     this.dividerColor,
@@ -52,7 +52,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
     Color? selectedBgColor,
     Color? unselectedBgColor,
     Color? backgroundColor,
-    double? centerDistance,
     double? dividerHeight,
     double? dividerThickness,
     Color? dividerColor,
@@ -63,7 +62,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
       selectedBgColor: selectedBgColor ?? this.selectedBgColor,
       unselectedBgColor: unselectedBgColor ?? this.unselectedBgColor,
       backgroundColor: backgroundColor ?? this.backgroundColor,
-      centerDistance: centerDistance ?? this.centerDistance,
       dividerHeight: dividerHeight ?? this.dividerHeight,
       dividerThickness: dividerThickness ?? this.dividerThickness,
       dividerColor: dividerColor ?? this.dividerColor,
@@ -91,12 +89,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
       backgroundColor: _lerpOptionalColor(
         backgroundColor,
         other.backgroundColor,
-        t,
-      ),
-      centerDistance: _lerpDoubleWithDefault(
-        centerDistance,
-        other.centerDistance,
-        0,
         t,
       ),
       dividerHeight: _lerpDoubleWithDefault(

@@ -6,6 +6,15 @@
 - 小程序冻结基线：`develop@1a1c5ca135b0e9bf19abc43a59870c4908a28ad5`。
 - 目标 SDK：Flutter 3.32.0 与最新稳定版；Golden 固定 Linux 3.32.0。
 
+## 2026-09-29 Tag success / TabBar 单入口补充验收
+
+- 公开契约：`TTagThemeData.successColor/successLightColor` 分别覆盖 success 基础色与浅色填充，未设置时沿全局 Token 回退；Tag 和 SelectTag 共用。`TTabBar` 删除 8 个与组件 Theme 同义的实例视觉字段；`centerDistance` 在实例和 Theme 两侧删除，没有兼容转发或别名。`TTabBarThemeData` 已纳入 API 生成清单；Tag/TabBar 的生成 API 表与官网组件页均改为当前公开源码，迁移用法见 `migration.md`。
+- Flutter 3.32.0 Linux 与 3.47.0 的 Tag、SelectTag、TabBar 聚焦测试各 118/118 通过；Tag/TabBar 生产源码行覆盖率分别为 202/207（97.58%）、488/500（97.60%）。Tag/TabBar 公开 Demo 非视觉测试在 Linux 3.32.0 通过。
+- 两版本组件包与 Example 工程 `flutter analyze --no-pub --fatal-infos` 均为 0 issues；首次 3.47.0 `--no-pub` 混用 3.32.0 本地包配置的 SDK 编译错误，经该版本 `flutter pub get` 后正式复跑通过，不属于源码问题。
+- Linux amd64、Flutter 3.32.0 固定镜像中无更新 Golden：TabBar 组件 12/12、TabBar Demo 11/11、Tag Demo 4/4 通过；未写回 PNG。默认画面未变，不代表新定制色已与 Figma 逐像素相同。
+- 示例代码生成 `--check` 与 `git diff --check` 通过；两组件的组件/示例测试均已在集中式 manifest 登记。本轮不新增新的默认 Demo 实例或 Golden 文件。
+- 审计以小程序冻结提交重新生成：216 个全局键结论不变；804 个组件变量中，Tag 组件 Theme/Widget 已核对项从 2 增至 4，待审从 681 降至 680。外部使用方的 breaking API 编译迁移和 PR 新 head CI 尚未执行。
+
 ## 隔离分支验证（2026-09-28）
 
 - Flutter 3.32.0 与 3.47.0 的完整组件包 `flutter analyze --no-pub --fatal-infos` 均为 0 issues。

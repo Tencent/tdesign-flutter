@@ -46,6 +46,8 @@
 - Avatar 默认图标与文字的前景色只由 `TAvatarThemeData.foregroundColor` 控制；移除组件 Theme 中可同时设置颜色的 `textStyle`。字符头像仍按 `size` 使用内置字号与字重，特殊排版由调用方传入带样式的 `child: Text(...)`，不为通用 `Widget child` 再增组件级文字样式入口。
 - Popover 蒙层色和气泡圆角只由 `TPopoverThemeData.barrierColor/borderRadius` 控制；移除 `TPopoverAnchor` 与 `TPopover.showPopover` 的同义实例字段 `overlayColor/radius`。单个气泡可包裹局部 Theme；`borderRadius` 使用 `BorderRadius` 保存原实例圆角的逐角表达能力。默认值仍沿组件原有回退，不以旧 Golden 自动裁定。
 - Tag 的 `TTagThemeData.dangerColor` 对应小程序 `--td-tag-danger-color`，只覆盖 danger 的基础色：深色填充与描边、浅色文字及描边；浅色填充继续独立回退到 `errorColor1`，禁用态不受影响。未设置时沿显式 Material `ColorScheme.error`、全局 `errorColor` 动态回退。`squareBorderRadius` 对应 `--td-tag-square-border-radius`，只影响 square 形状；未设置时保持 375px 基准下 `8rpx = 4dp`，不借用全局 `radiusSmall`，不改变 round/mark。两个组件 Theme 字段均不得与实例选择器重复。
+- Tag 的 `successColor` 与 `successLightColor` 分别定义 success 预设的基础色和浅色填充，对应小程序的两个独立组件变量。未设置时动态回退全局 `successColor`、`successColor1`；禁用态仍使用禁用 Token。它们不是第二个 `colorScheme` 选择器，不与通用 `backgroundColor` 混为一项。
+- TabBar 的 `barHeight`、分隔线尺寸/颜色、上边线、选中/未选中背景和容器背景只由 `TTabBarThemeData` 定义；`TTabBar` 实例不再暴露同义视觉标量。原 `centerDistance` 没有对应的组件 Token 或独立结构语义，从实例和组件 Theme 一起移除，图文使用组件内置布局。实例仍负责内容类型、选中状态、分隔线/上边线是否显示及交互行为。单个 TabBar 的视觉定制使用局部 Theme，不保留仅为兼容而存在的双入口。
 
 ## 验收标准
 

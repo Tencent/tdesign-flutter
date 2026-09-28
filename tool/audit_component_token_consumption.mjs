@@ -143,19 +143,26 @@ const tagSizeWidgetValues = new Set([
 const tagWidgetEvidence = new Map([
   ['tagWarningLightColor', ['tdesign-component/test/components/tag/t_tag_test.dart:151', 'tdesign-component/test/components/tag/t_tag_test.dart:239']],
   ['tagDangerLightColor', ['tdesign-component/test/components/tag/t_tag_test.dart:151', 'tdesign-component/test/components/tag/t_tag_test.dart:239']],
-  ['tagSuccessLightColor', ['tdesign-component/test/components/tag/t_tag_test.dart:151', 'tdesign-component/test/components/tag/t_tag_test.dart:239']],
   ['tagOutlineBgColor', ['tdesign-component/test/components/tag/t_tag_test.dart:508']],
   ['tagDefaultColor', ['tdesign-component/test/components/tag/t_tag_test.dart:508']],
   ['tagCloseIconColor', ['tdesign-component/test/components/tag/t_tag_test.dart:630']],
 ]);
 const tagThemeWidgetEvidence = new Map([
   ['tagDangerColor', [
-    'tdesign-component/test/components/tag/t_tag_test.dart:852',
-    'tdesign-component/test/components/tag/t_select_tag_test.dart:118',
+    'tdesign-component/test/components/tag/t_tag_test.dart:969',
+    'tdesign-component/test/components/tag/t_select_tag_test.dart:168',
   ]],
   ['tagSquareBorderRadius', [
     'tdesign-component/test/components/tag/t_tag_test.dart:372',
-    'tdesign-component/test/components/tag/t_tag_test.dart:954',
+    'tdesign-component/test/components/tag/t_tag_test.dart:1071',
+  ]],
+  ['tagSuccessColor', [
+    'tdesign-component/test/components/tag/t_tag_test.dart:852',
+    'tdesign-component/test/components/tag/t_select_tag_test.dart:19',
+  ]],
+  ['tagSuccessLightColor', [
+    'tdesign-component/test/components/tag/t_tag_test.dart:852',
+    'tdesign-component/test/components/tag/t_tag_test.dart:926',
   ]],
 ]);
 

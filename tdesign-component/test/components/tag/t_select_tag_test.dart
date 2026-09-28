@@ -16,6 +16,57 @@ void main() {
   }
 
   group('TSelectTag', () {
+    testWidgets('选中 success 继承 Tag 组件色，未选中不套用 success 色', (tester) async {
+      const success = Color(0xFF126B43);
+      const successLight = Color(0xFFB1E7C3);
+      final onChanged = (bool _) {};
+      await tester.pumpWidget(
+        wrap(
+          Column(
+            children: [
+              TSelectTag(
+                '选中成功',
+                value: true,
+                onChanged: onChanged,
+                colorScheme: TTagColorScheme.success,
+                variant: TTagVariant.light,
+              ),
+              TSelectTag(
+                '未选成功',
+                value: false,
+                onChanged: onChanged,
+                colorScheme: TTagColorScheme.success,
+                variant: TTagVariant.light,
+              ),
+            ],
+          ),
+          tagTheme: const TTagThemeData(
+            successColor: success,
+            successLightColor: successLight,
+          ),
+        ),
+      );
+
+      Color? fill(String label) {
+        final container = tester.widget<Container>(
+          find
+              .descendant(
+                of: find.widgetWithText(TSelectTag, label),
+                matching: find.byWidgetPredicate(
+                  (widget) =>
+                      widget is Container && widget.decoration is BoxDecoration,
+                ),
+              )
+              .first,
+        );
+        return (container.decoration! as BoxDecoration).color;
+      }
+
+      expect(fill('选中成功'), successLight);
+      expect(tester.widget<Text>(find.text('选中成功')).style!.color, success);
+      expect(fill('未选成功'), isNot(successLight));
+    });
+
     testWidgets('未选中且无回调（defaultTheme）', (tester) async {
       await tester.pumpWidget(wrap(const TSelectTag('标签', value: false)));
       expect(find.byType(TSelectTag), findsOneWidget);

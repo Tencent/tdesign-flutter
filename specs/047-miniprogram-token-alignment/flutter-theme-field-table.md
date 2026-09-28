@@ -362,7 +362,6 @@
 | tabbar | selectedBgColor | tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart |  |
 | tabbar | unselectedBgColor | tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart |  |
 | tabbar | backgroundColor | tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart |  |
-| tabbar | centerDistance | tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart |  |
 | tabbar | dividerHeight | tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart |  |
 | tabbar | dividerThickness | tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart |  |
 | tabbar | dividerColor | tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart |  |
@@ -388,6 +387,8 @@
 | tag | textColor | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart |  |
 | tag | backgroundColor | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart |  |
 | tag | dangerColor | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart | tagDangerColor |
+| tag | successColor | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart | tagSuccessColor |
+| tag | successLightColor | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart | tagSuccessLightColor |
 | tag | font | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart |  |
 | tag | fontWeight | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart |  |
 | tag | padding | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart |  |

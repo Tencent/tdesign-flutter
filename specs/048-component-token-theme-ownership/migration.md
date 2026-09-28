@@ -18,7 +18,8 @@
 | `TDrawer.width/backgroundColor`、`TDrawerContent.width/backgroundColor` | `TDrawerThemeData` 的宽度和背景字段 | 需用局部 Theme 设置单个抽屉的具体视觉值。 |
 | `TSideBar.selectedColor/unSelectedColor/selectedTextStyle/contentPadding/selectedBgColor/unSelectedBgColor` | `TSideBarThemeData` 对应字段 | 选中项状态仍由实例控制，具体配色与内边距从 Theme 取。 |
 | `TNavBar.titleColor/backIconColor/backgroundColor/padding/titleMargin/opacity/border/boxShadow` | `TNavBarThemeData` 对应字段 | 单个导航栏的定制值须通过局部 Theme 传入。 |
-| `TTabBar.barHeight/dividerHeight/dividerThickness/dividerColor/topBorder/selectedBgColor/unselectedBgColor/backgroundColor/centerDistance` | `TTabBarThemeData` 对应视觉字段 | 分隔线及中心距离的默认值由组件负责；不再由实例重复覆盖。 |
+| `TTabBar.barHeight/dividerHeight/dividerThickness/dividerColor/topBorder/selectedBgColor/unselectedBgColor/backgroundColor` | `TTabBarThemeData` 对应视觉字段 | 单实例定制使用局部 Theme，不保留同义实例参数。 |
+| `TTabBar.centerDistance`、`TTabBarThemeData.centerDistance` | 无 | 图文默认间距为 0，由组件内置布局确定；原自定义间距能力移除，不提供同义兼容入口。 |
 | `TDialog`、`TConfirmDialog` 的 `backgroundColor/shape/elevation/width/maxHeight/contentPadding` | `TDialogThemeData` 对应字段 | 内容与按钮仍用实例参数；单对话框的面板外观用局部 Theme。 |
 | `TFormItem.labelWidth/labelAlign`；`TFormThemeData.verticalAlignment/contentAlignment` | 标签宽度、文字对齐迁入 `TFormThemeData`；纵向/内容对齐留在 `TFormItem` | 子树标签排版与单个表单项区域对齐职责分开。 |
 | `TPopover.offset/arrowSize/padding`；`TPopoverThemeData.showArrow` | 具体视觉尺寸迁入 `TPopoverThemeData`；`TPopover.showArrow` 保留 | 箭头有无是实例选择，尺寸与间距是子树默认值。 |
@@ -46,6 +47,24 @@ Theme(
 ```
 
 `colorScheme` 只选择内置预设；组件 Theme 指定的具体描边、前景和背景会覆盖该预设。只有单个按钮要覆盖具体颜色时，使用实例 `style`。`TTextThemeData` 已恢复，没有把已发布的 Text 子树默认能力列为迁移项。
+
+TabBar 的单实例视觉定制同样使用局部 Theme，例如：
+
+```dart
+Theme(
+  data: Theme.of(context).mergeExtension(
+    const TTabBarThemeData(barHeight: 60),
+  ),
+  child: TTabBar(
+    type: TTabBarType.iconText,
+    navigationTabs: tabs,
+    value: selectedIndex,
+    onChanged: onChanged,
+  ),
+)
+```
+
+Tag 的 success 配色可单独通过 `TTagThemeData.successColor` 和 `successLightColor` 定义；前者控制基础色，后者控制浅色填充。未设置的字段分别动态回退全局 `successColor`、`successColor1`。这不是 `TTag.colorScheme` 的第二个选择入口，也不会改变禁用态。
 
 `TText` 未显式指定字体时的正文回退从 `fontBodyLarge`（16dp/24dp）改为小程序 `fontBodyMedium`（14dp/22dp）。依赖旧默认字号的调用方应在实例 `font`/`style` 或子树 `TTextThemeData.font` 中显式指定 16dp/24dp；这是默认行为变化，即使构造签名未变也须按 breaking change 发布。
 

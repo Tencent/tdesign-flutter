@@ -8133,12 +8133,6 @@
     },
     {
       "component": "tabbar",
-      "field": "centerDistance",
-      "file": "tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "tabbar",
       "field": "dividerHeight",
       "file": "tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart",
       "sameNameMiniVariable": null
@@ -8286,6 +8280,18 @@
       "field": "dangerColor",
       "file": "tdesign-component/lib/src/components/tag/t_tag_theme_data.dart",
       "sameNameMiniVariable": "tagDangerColor"
+    },
+    {
+      "component": "tag",
+      "field": "successColor",
+      "file": "tdesign-component/lib/src/components/tag/t_tag_theme_data.dart",
+      "sameNameMiniVariable": "tagSuccessColor"
+    },
+    {
+      "component": "tag",
+      "field": "successLightColor",
+      "file": "tdesign-component/lib/src/components/tag/t_tag_theme_data.dart",
+      "sameNameMiniVariable": "tagSuccessLightColor"
     },
     {
       "component": "tag",
@@ -31742,7 +31748,9 @@
       "miniDarkDefault": "#059465",
       "miniLightCandidates": [],
       "miniDarkCandidates": [],
-      "matchingFlutterThemeFields": [],
+      "matchingFlutterThemeFields": [
+        "tag.successColor"
+      ],
       "globalFallbackToken": "successColor",
       "miniComponent": "tag",
       "miniConsumers": [
@@ -31751,7 +31759,7 @@
       ],
       "flutterComponent": "tag",
       "candidateThemeField": "successColor",
-      "matchingThemeField": false,
+      "matchingThemeField": true,
       "directGlobalGetterFound": true,
       "miniValueStatus": "默认表达已解析",
       "flutterValueStatus": "最终消费值未逐项验证"
@@ -31774,7 +31782,9 @@
       "miniDarkDefault": "#193a2a",
       "miniLightCandidates": [],
       "miniDarkCandidates": [],
-      "matchingFlutterThemeFields": [],
+      "matchingFlutterThemeFields": [
+        "tag.successLightColor"
+      ],
       "globalFallbackToken": "successColor1",
       "miniComponent": "tag",
       "miniConsumers": [
@@ -31783,7 +31793,7 @@
       ],
       "flutterComponent": "tag",
       "candidateThemeField": "successLightColor",
-      "matchingThemeField": false,
+      "matchingThemeField": true,
       "directGlobalGetterFound": true,
       "miniValueStatus": "默认表达已解析",
       "flutterValueStatus": "最终消费值未逐项验证"
@@ -32878,8 +32888,8 @@
   "componentAuditSummary": {
     "total": 804,
     "withSameNameFlutterDirectory": 597,
-    "withSameNameThemeField": 28,
-    "withSameNameThemeFieldAcrossDirectories": 35,
+    "withSameNameThemeField": 30,
+    "withSameNameThemeFieldAcrossDirectories": 37,
     "withGlobalFallback": 559,
     "withGlobalGetterInOwnerDirectory": 333,
     "noFallback": [

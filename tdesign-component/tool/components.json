@@ -190,7 +190,8 @@
           "TTabBarItemConfig",
           "TTabBarPopUpBtnConfig",
           "TTabBarPopUpShapeConfig",
-          "TTabBarMenuItem"
+          "TTabBarMenuItem",
+          "TTabBarThemeData"
         ],
         "getComments": false
       }
