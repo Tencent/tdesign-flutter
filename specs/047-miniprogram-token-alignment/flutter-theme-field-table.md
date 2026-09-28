@@ -10,15 +10,12 @@
 | action_sheet | iconSize | tdesign-component/lib/src/components/action_sheet/t_action_sheet_theme_data.dart |  |
 | action_sheet | gridIconExtent | tdesign-component/lib/src/components/action_sheet/t_action_sheet_theme_data.dart |  |
 | action_sheet | iconColor | tdesign-component/lib/src/components/action_sheet/t_action_sheet_theme_data.dart |  |
-| avatar | size | tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart |  |
-| avatar | shape | tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart |  |
-| avatar | variant | tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart |  |
 | avatar | dimension | tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart |  |
 | avatar | iconSize | tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart |  |
 | avatar | squareBorderRadius | tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart |  |
+| avatar | circleBorderRadius | tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart | avatarCircleBorderRadius |
 | avatar | backgroundColor | tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart |  |
 | avatar | foregroundColor | tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart |  |
-| avatar | textStyle | tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart |  |
 | avatar | groupSpacing | tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart |  |
 | avatar | groupBorderWidth | tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart |  |
 | avatar | groupBorderColor | tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart |  |
@@ -35,8 +32,6 @@
 | backtop | textStyle | tdesign-component/lib/src/components/backtop/t_backtop_theme_data.dart |  |
 | badge | borderColor | tdesign-component/lib/src/components/badge/t_badge_theme_data.dart |  |
 | badge | borderWidth | tdesign-component/lib/src/components/badge/t_badge_theme_data.dart |  |
-| button | defaultVariant | tdesign-component/lib/src/components/button/t_button_theme_data.dart |  |
-| button | defaultSize | tdesign-component/lib/src/components/button/t_button_theme_data.dart |  |
 | button | filledStyle | tdesign-component/lib/src/components/button/t_button_theme_data.dart |  |
 | button | outlinedStyle | tdesign-component/lib/src/components/button/t_button_theme_data.dart |  |
 | button | textButtonStyle | tdesign-component/lib/src/components/button/t_button_theme_data.dart |  |
@@ -82,10 +77,8 @@
 | cell | cardBorderRadius | tdesign-component/lib/src/components/cell/t_cell_theme_data.dart |  |
 | cell | cardPadding | tdesign-component/lib/src/components/cell/t_cell_theme_data.dart |  |
 | cell | titlePadding | tdesign-component/lib/src/components/cell/t_cell_theme_data.dart |  |
-| cell | align | tdesign-component/lib/src/components/cell/t_cell_theme_data.dart |  |
 | cell | showBottomBorder | tdesign-component/lib/src/components/cell/t_cell_theme_data.dart |  |
 | cell | height | tdesign-component/lib/src/components/cell/t_cell_theme_data.dart | cellHeight |
-| cell | groupVariant | tdesign-component/lib/src/components/cell/t_cell_theme_data.dart |  |
 | cell | groupBordered | tdesign-component/lib/src/components/cell/t_cell_theme_data.dart |  |
 | cell | showLastDivider | tdesign-component/lib/src/components/cell/t_cell_theme_data.dart |  |
 | checkbox | variant | tdesign-component/lib/src/components/checkbox/t_checkbox_theme_data.dart |  |
@@ -97,9 +90,7 @@
 | checkbox | spacing | tdesign-component/lib/src/components/checkbox/t_checkbox_theme_data.dart |  |
 | checkbox | insetSpacing | tdesign-component/lib/src/components/checkbox/t_checkbox_theme_data.dart |  |
 | checkbox | customSpace | tdesign-component/lib/src/components/checkbox/t_checkbox_theme_data.dart |  |
-| collapse | variant | tdesign-component/lib/src/components/collapse/t_collapse_theme_data.dart |  |
 | collapse | backgroundColor | tdesign-component/lib/src/components/collapse/t_collapse_theme_data.dart |  |
-| collapse | animationDuration | tdesign-component/lib/src/components/collapse/t_collapse_theme_data.dart |  |
 | collapse | elevation | tdesign-component/lib/src/components/collapse/t_collapse_theme_data.dart |  |
 | collapse | headerTextStyle | tdesign-component/lib/src/components/collapse/t_collapse_theme_data.dart |  |
 | collapse | contentTextStyle | tdesign-component/lib/src/components/collapse/t_collapse_theme_data.dart |  |
@@ -164,7 +155,6 @@
 | dropdown_menu | optionBorderRadius | tdesign-component/lib/src/components/dropdown_menu/t_dropdown_theme_data.dart |  |
 | dropdown_menu | actionAreaPadding | tdesign-component/lib/src/components/dropdown_menu/t_dropdown_theme_data.dart |  |
 | dropdown_menu | actionGap | tdesign-component/lib/src/components/dropdown_menu/t_dropdown_theme_data.dart |  |
-| dropdown_menu | animationDuration | tdesign-component/lib/src/components/dropdown_menu/t_dropdown_theme_data.dart |  |
 | empty | emptyTextColor | tdesign-component/lib/src/components/empty/t_empty_theme_data.dart |  |
 | empty | emptyTextFont | tdesign-component/lib/src/components/empty/t_empty_theme_data.dart |  |
 | fab | defaultRight | tdesign-component/lib/src/components/fab/t_fab_theme_data.dart |  |
@@ -190,10 +180,6 @@
 | form | labelGap | tdesign-component/lib/src/components/form/t_form_theme_data.dart |  |
 | form | leadingGap | tdesign-component/lib/src/components/form/t_form_theme_data.dart |  |
 | form | messageGap | tdesign-component/lib/src/components/form/t_form_theme_data.dart |  |
-| form | verticalAlignment | tdesign-component/lib/src/components/form/t_form_theme_data.dart |  |
-| form | contentAlignment | tdesign-component/lib/src/components/form/t_form_theme_data.dart |  |
-| icon | size | tdesign-component/lib/src/components/icon/t_icon_theme_data.dart |  |
-| icon | color | tdesign-component/lib/src/components/icon/t_icon_theme_data.dart |  |
 | image | color | tdesign-component/lib/src/components/image/t_image_theme_data.dart | imageColor |
 | image | colorBlendMode | tdesign-component/lib/src/components/image/t_image_theme_data.dart |  |
 | image | centerSlice | tdesign-component/lib/src/components/image/t_image_theme_data.dart |  |
@@ -232,11 +218,8 @@
 | indexes | anchorVerticalPadding | tdesign-component/lib/src/components/indexes/t_indexes_theme_data.dart |  |
 | indexes | anchorHorizontalPadding | tdesign-component/lib/src/components/indexes/t_indexes_theme_data.dart |  |
 | indexes | capsuleMargin | tdesign-component/lib/src/components/indexes/t_indexes_theme_data.dart |  |
-| input | clearButtonMode | tdesign-component/lib/src/components/input/t_input_theme_data.dart |  |
 | input | clearIconSize | tdesign-component/lib/src/components/input/t_input_theme_data.dart |  |
-| input | multilineMinLines | tdesign-component/lib/src/components/input/t_input_theme_data.dart |  |
 | input | textStyle | tdesign-component/lib/src/components/input/t_input_theme_data.dart |  |
-| input | cursorColor | tdesign-component/lib/src/components/input/t_input_theme_data.dart |  |
 | input | hintStyle | tdesign-component/lib/src/components/input/t_input_theme_data.dart |  |
 | input | clearIconColor | tdesign-component/lib/src/components/input/t_input_theme_data.dart |  |
 | input | contentPadding | tdesign-component/lib/src/components/input/t_input_theme_data.dart |  |
@@ -244,9 +227,6 @@
 | input | backgroundColor | tdesign-component/lib/src/components/input/t_input_theme_data.dart |  |
 | input | borderColor | tdesign-component/lib/src/components/input/t_input_theme_data.dart | inputBorderColor |
 | input | borderWidth | tdesign-component/lib/src/components/input/t_input_theme_data.dart |  |
-| link | defaultSize | tdesign-component/lib/src/components/link/t_link_theme_data.dart |  |
-| link | defaultColorScheme | tdesign-component/lib/src/components/link/t_link_theme_data.dart |  |
-| link | underline | tdesign-component/lib/src/components/link/t_link_theme_data.dart |  |
 | link | textStyle | tdesign-component/lib/src/components/link/t_link_theme_data.dart |  |
 | link | iconSize | tdesign-component/lib/src/components/link/t_link_theme_data.dart |  |
 | link | iconGap | tdesign-component/lib/src/components/link/t_link_theme_data.dart |  |
@@ -285,7 +265,6 @@
 | popover | borderRadius | tdesign-component/lib/src/components/popover/t_popover_theme_data.dart |  |
 | popover | barrierColor | tdesign-component/lib/src/components/popover/t_popover_theme_data.dart |  |
 | popover | arrowSize | tdesign-component/lib/src/components/popover/t_popover_theme_data.dart |  |
-| popover | showArrow | tdesign-component/lib/src/components/popover/t_popover_theme_data.dart |  |
 | popover | offset | tdesign-component/lib/src/components/popover/t_popover_theme_data.dart |  |
 | popover | boxShadow | tdesign-component/lib/src/components/popover/t_popover_theme_data.dart |  |
 | popup | barrierColor | tdesign-component/lib/src/components/popup/t_popup_theme_data.dart |  |
@@ -323,7 +302,6 @@
 | result | iconSize | tdesign-component/lib/src/components/result/t_result_theme_data.dart |  |
 | result | titleStyle | tdesign-component/lib/src/components/result/t_result_theme_data.dart |  |
 | result | descriptionStyle | tdesign-component/lib/src/components/result/t_result_theme_data.dart |  |
-| search | variant | tdesign-component/lib/src/components/search/t_search_bar_theme_data.dart |  |
 | search | height | tdesign-component/lib/src/components/search/t_search_bar_theme_data.dart | searchHeight |
 | search | inputBackgroundColor | tdesign-component/lib/src/components/search/t_search_bar_theme_data.dart |  |
 | search | contentPadding | tdesign-component/lib/src/components/search/t_search_bar_theme_data.dart |  |
@@ -344,8 +322,6 @@
 | skeleton | highlightColor | tdesign-component/lib/src/components/skeleton/t_skeleton_theme_data.dart |  |
 | skeleton | borderRadius | tdesign-component/lib/src/components/skeleton/t_skeleton_theme_data.dart |  |
 | skeleton | rowSpacing | tdesign-component/lib/src/components/skeleton/t_skeleton_theme_data.dart | skeletonRowSpacing |
-| stepper | size | tdesign-component/lib/src/components/stepper/t_stepper_theme_data.dart |  |
-| stepper | variant | tdesign-component/lib/src/components/stepper/t_stepper_theme_data.dart |  |
 | stepper | inputWidth | tdesign-component/lib/src/components/stepper/t_stepper_theme_data.dart |  |
 | stepper | controlSize | tdesign-component/lib/src/components/stepper/t_stepper_theme_data.dart |  |
 | stepper | iconSize | tdesign-component/lib/src/components/stepper/t_stepper_theme_data.dart |  |
@@ -376,8 +352,6 @@
 | swiper | fractionBackgroundColor | tdesign-component/lib/src/components/swiper/t_swiper_theme_data.dart |  |
 | swiper | controlStyle | tdesign-component/lib/src/components/swiper/t_swiper_theme_data.dart |  |
 | swiper | controlIconSize | tdesign-component/lib/src/components/swiper/t_swiper_theme_data.dart |  |
-| switch | defaultSize | tdesign-component/lib/src/components/switch/t_switch_theme_data.dart |  |
-| switch | defaultVariant | tdesign-component/lib/src/components/switch/t_switch_theme_data.dart |  |
 | switch | trackOnColor | tdesign-component/lib/src/components/switch/t_switch_theme_data.dart |  |
 | switch | trackOffColor | tdesign-component/lib/src/components/switch/t_switch_theme_data.dart |  |
 | switch | thumbContentOnColor | tdesign-component/lib/src/components/switch/t_switch_theme_data.dart |  |
@@ -393,8 +367,6 @@
 | tabbar | dividerThickness | tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart |  |
 | tabbar | dividerColor | tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart |  |
 | tabbar | topBorder | tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart |  |
-| table | bordered | tdesign-component/lib/src/components/table/t_table_theme_data.dart |  |
-| table | stripe | tdesign-component/lib/src/components/table/t_table_theme_data.dart |  |
 | table | rowHeight | tdesign-component/lib/src/components/table/t_table_theme_data.dart | tableRowHeight |
 | table | headerHeight | tdesign-component/lib/src/components/table/t_table_theme_data.dart |  |
 | table | width | tdesign-component/lib/src/components/table/t_table_theme_data.dart |  |
@@ -415,9 +387,11 @@
 | tabs | tagBackgroundColor | tdesign-component/lib/src/components/tabs/t_tab_bar_theme_data.dart |  |
 | tag | textColor | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart |  |
 | tag | backgroundColor | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart |  |
+| tag | dangerColor | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart | tagDangerColor |
 | tag | font | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart |  |
 | tag | fontWeight | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart |  |
 | tag | padding | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart |  |
+| tag | squareBorderRadius | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart | tagSquareBorderRadius |
 | tag | shape | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart |  |
 | tag | overflow | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart |  |
 | tag | maxLines | tdesign-component/lib/src/components/tag/t_tag_theme_data.dart |  |
@@ -426,8 +400,11 @@
 | text | textStyle | tdesign-component/lib/src/components/text/t_text_theme_data.dart |  |
 | text | strutStyle | tdesign-component/lib/src/components/text/t_text_theme_data.dart |  |
 | text | textWidthBasis | tdesign-component/lib/src/components/text/t_text_theme_data.dart |  |
-| time_counter | defaultVariant | tdesign-component/lib/src/components/time_counter/t_time_counter_theme_data.dart |  |
-| time_counter | defaultSize | tdesign-component/lib/src/components/time_counter/t_time_counter_theme_data.dart |  |
+| time_counter | defaultTextColor | tdesign-component/lib/src/components/time_counter/t_time_counter_theme_data.dart |  |
+| time_counter | blockTextColor | tdesign-component/lib/src/components/time_counter/t_time_counter_theme_data.dart |  |
+| time_counter | blockBackgroundColor | tdesign-component/lib/src/components/time_counter/t_time_counter_theme_data.dart |  |
+| time_counter | squareBorderRadius | tdesign-component/lib/src/components/time_counter/t_time_counter_theme_data.dart |  |
+| time_counter | roundBorderRadius | tdesign-component/lib/src/components/time_counter/t_time_counter_theme_data.dart |  |
 | toast | backgroundColor | tdesign-component/lib/src/components/toast/t_toast_theme_data.dart |  |
 | toast | textStyle | tdesign-component/lib/src/components/toast/t_toast_theme_data.dart |  |
 | toast | iconSize | tdesign-component/lib/src/components/toast/t_toast_theme_data.dart |  |

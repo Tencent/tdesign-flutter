@@ -114,5 +114,38 @@ void main() {
       expect(text.style?.color, token.textColorDisabled);
       expect(icon.color, token.textColorDisabled);
     });
+
+    testWidgets('选中 danger 继承 Tag 组件 Token，未选中不受影响', (tester) async {
+      const customDanger = Color(0xFF123ABC);
+      Widget selected(bool value) => wrap(
+        TSelectTag(
+          '可选危险',
+          value: value,
+          colorScheme: TTagColorScheme.danger,
+          onChanged: (_) {},
+        ),
+        tagTheme: const TTagThemeData(dangerColor: customDanger),
+      );
+
+      BoxDecoration decoration() {
+        final container = tester.widget<Container>(
+          find
+              .descendant(
+                of: find.byType(TSelectTag),
+                matching: find.byWidgetPredicate(
+                  (widget) =>
+                      widget is Container && widget.decoration is BoxDecoration,
+                ),
+              )
+              .first,
+        );
+        return container.decoration! as BoxDecoration;
+      }
+
+      await tester.pumpWidget(selected(true));
+      expect(decoration().color, customDanger);
+      await tester.pumpWidget(selected(false));
+      expect(decoration().color, isNot(customDanger));
+    });
   });
 }

@@ -84,8 +84,13 @@ class TTag extends StatelessWidget {
       isLight,
       isOutline,
       !enabled,
+      theme?.dangerColor,
     );
-    final borderRadius = _resolveBorderRadius(context, shape);
+    final borderRadius = _resolveBorderRadius(
+      context,
+      shape,
+      theme?.squareBorderRadius,
+    );
 
     var child = _buildLabel(
       // 禁用态应始终使用禁用 token，避免普通 ThemeExtension 的颜色覆盖状态。
@@ -179,6 +184,7 @@ class TTag extends StatelessWidget {
     bool isLight,
     bool isOutline,
     bool disable,
+    Color? dangerColor,
   ) {
     final token = context.tTheme;
     final material = Theme.of(context).tExplicitColorScheme;
@@ -231,19 +237,20 @@ class TTag extends StatelessWidget {
         }
         break;
       case TTagColorScheme.danger:
+        final baseColor = dangerColor ?? material?.error ?? token.errorColor;
         if (isOutline) {
-          borderColor = material?.error ?? token.errorColor;
-          textColor = material?.error ?? token.errorColor;
+          borderColor = baseColor;
+          textColor = baseColor;
           backgroundColor = isLight
               ? material?.errorContainer ?? token.errorColor1
               : token.bgColorContainer;
         } else {
           textColor = isLight
-              ? material?.error ?? token.errorColor
+              ? baseColor
               : material?.onError ?? token.textColorAnti;
           backgroundColor = isLight
               ? material?.errorContainer ?? token.errorColor1
-              : material?.error ?? token.errorColor;
+              : baseColor;
           borderColor = backgroundColor;
         }
         break;
@@ -290,11 +297,12 @@ class TTag extends StatelessWidget {
   BorderRadiusGeometry _resolveBorderRadius(
     BuildContext context,
     TTagShape shape,
+    double? squareBorderRadius,
   ) {
     switch (shape) {
       case TTagShape.square:
         // 小程序 --td-tag-square-border-radius 默认 8rpx；不借用 3dp 的全局 radiusSmall。
-        return BorderRadius.circular(4);
+        return BorderRadius.circular(squareBorderRadius ?? 4);
       case TTagShape.round:
         return BorderRadius.circular(context.tTheme.radiusRound);
       case TTagShape.mark:

@@ -45,6 +45,7 @@
 - 无显式字体的独立 `TText` 使用小程序 `packages/components/paragraph/paragraph.less` 中 `@font-body-medium` 的 14dp/22dp 语义，而非 `fontBodyLarge` 16dp/24dp；组合组件传入的内置文字默认值、显式 Flutter 主题、组件 Theme 与实例样式仍按既定优先级覆盖。这个默认字号/行高变化属于可见 breaking 行为，须列入迁移与 Golden 审查。
 - Avatar 默认图标与文字的前景色只由 `TAvatarThemeData.foregroundColor` 控制；移除组件 Theme 中可同时设置颜色的 `textStyle`。字符头像仍按 `size` 使用内置字号与字重，特殊排版由调用方传入带样式的 `child: Text(...)`，不为通用 `Widget child` 再增组件级文字样式入口。
 - Popover 蒙层色和气泡圆角只由 `TPopoverThemeData.barrierColor/borderRadius` 控制；移除 `TPopoverAnchor` 与 `TPopover.showPopover` 的同义实例字段 `overlayColor/radius`。单个气泡可包裹局部 Theme；`borderRadius` 使用 `BorderRadius` 保存原实例圆角的逐角表达能力。默认值仍沿组件原有回退，不以旧 Golden 自动裁定。
+- Tag 的 `TTagThemeData.dangerColor` 对应小程序 `--td-tag-danger-color`，只覆盖 danger 的基础色：深色填充与描边、浅色文字及描边；浅色填充继续独立回退到 `errorColor1`，禁用态不受影响。未设置时沿显式 Material `ColorScheme.error`、全局 `errorColor` 动态回退。`squareBorderRadius` 对应 `--td-tag-square-border-radius`，只影响 square 形状；未设置时保持 375px 基准下 `8rpx = 4dp`，不借用全局 `radiusSmall`，不改变 round/mark。两个组件 Theme 字段均不得与实例选择器重复。
 
 ## 验收标准
 

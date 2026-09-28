@@ -2,18 +2,19 @@
   "miniprogramCommit": "1a1c5ca135b0e9bf19abc43a59870c4908a28ad5",
   "total": 804,
   "statusCounts": {
-    "global-getter-candidate": 406,
-    "no-direct-consumer-evidence": 291,
+    "global-getter-candidate": 404,
+    "no-direct-consumer-evidence": 290,
     "no-matching-flutter-component-directory": 82,
-    "theme-field-and-global-getter-candidates": 10,
-    "theme-field-candidate": 15
+    "theme-field-and-global-getter-candidates": 12,
+    "theme-field-candidate": 16
   },
   "reviewDecisionCounts": {
+    "component-theme-widget-verified-visual-pending": 2,
     "default-widget-value-verified": 24,
-    "fallback-widget-verified-visual-pending": 7,
+    "fallback-widget-verified-visual-pending": 6,
     "no-frozen-source-consumer-found": 10,
     "outside-current-flutter-component-surface": 81,
-    "pending": 682
+    "pending": 681
   },
   "caveat": "Directory matches are static candidates. reviewDecision records limited source and Widget-test judgments; finalPaintVerified remains false until visual and state coverage is complete.",
   "rows": [
@@ -532,14 +533,17 @@
       "miniHasDynamicLessLookup": false,
       "miniSourceUse": "referenced",
       "flutterDirectory": "tdesign-component/lib/src/components/avatar",
-      "themeField": null,
-      "themeFieldUses": [],
+      "themeField": "circleBorderRadius",
+      "themeFieldUses": [
+        "tdesign-component/lib/src/components/avatar/t_avatar.dart:65",
+        "tdesign-component/lib/src/components/avatar/t_avatar.dart:219"
+      ],
       "globalFallbackGetter": "radiusCircle",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/avatar/t_avatar.dart:63",
-        "tdesign-component/lib/src/components/avatar/t_avatar.dart:221"
+        "tdesign-component/lib/src/components/avatar/t_avatar.dart:65",
+        "tdesign-component/lib/src/components/avatar/t_avatar.dart:219"
       ],
-      "staticStatus": "global-getter-candidate",
+      "staticStatus": "theme-field-and-global-getter-candidates",
       "reviewDecision": "pending",
       "reviewEvidence": [],
       "finalPaintVerified": false
@@ -905,8 +909,8 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "radiusDefault",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/avatar/t_avatar.dart:64",
-        "tdesign-component/lib/src/components/avatar/t_avatar.dart:218"
+        "tdesign-component/lib/src/components/avatar/t_avatar.dart:66",
+        "tdesign-component/lib/src/components/avatar/t_avatar.dart:216"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -15311,7 +15315,7 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "textColorAnti",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/popover/t_popover_widget.dart:269"
+        "tdesign-component/lib/src/components/popover/t_popover_widget.dart:265"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -15451,14 +15455,14 @@
       "flutterDirectory": "tdesign-component/lib/src/components/popover",
       "themeField": "padding",
       "themeFieldUses": [
-        "tdesign-component/lib/src/components/popover/t_popover.dart:526",
+        "tdesign-component/lib/src/components/popover/t_popover.dart:507",
         "tdesign-component/lib/src/components/popover/t_popover_widget.dart:30",
         "tdesign-component/lib/src/components/popover/t_popover_widget.dart:134",
-        "tdesign-component/lib/src/components/popover/t_popover_widget.dart:717",
-        "tdesign-component/lib/src/components/popover/t_popover_widget.dart:718",
-        "tdesign-component/lib/src/components/popover/t_popover_widget.dart:720",
-        "tdesign-component/lib/src/components/popover/t_popover_widget.dart:726",
-        "tdesign-component/lib/src/components/popover/t_popover_widget.dart:749"
+        "tdesign-component/lib/src/components/popover/t_popover_widget.dart:713",
+        "tdesign-component/lib/src/components/popover/t_popover_widget.dart:714",
+        "tdesign-component/lib/src/components/popover/t_popover_widget.dart:716",
+        "tdesign-component/lib/src/components/popover/t_popover_widget.dart:722",
+        "tdesign-component/lib/src/components/popover/t_popover_widget.dart:745"
       ],
       "globalFallbackGetter": "spacer1",
       "fallbackUses": [],
@@ -18797,6 +18801,7 @@
       "fallbackUses": [
         "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:102",
         "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:254",
+        "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:255",
         "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart:102",
         "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart:240"
       ],
@@ -18859,7 +18864,7 @@
         "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:88",
         "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:89",
         "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:90",
-        "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:276",
+        "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:277",
         "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart:88",
         "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart:89",
         "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart:90",
@@ -18930,7 +18935,7 @@
         "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:88",
         "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:89",
         "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:90",
-        "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:276",
+        "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:277",
         "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart:88",
         "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart:89",
         "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart:90",
@@ -18967,7 +18972,7 @@
         "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:88",
         "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:89",
         "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:90",
-        "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:276",
+        "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:277",
         "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart:88",
         "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart:89",
         "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart:90",
@@ -19004,7 +19009,7 @@
         "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:88",
         "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:89",
         "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:90",
-        "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:276",
+        "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart:277",
         "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart:88",
         "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart:89",
         "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart:90",
@@ -21165,10 +21170,10 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "brandColorLight",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:387",
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:817",
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:1019",
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:1020"
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:399",
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:824",
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:1004",
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:1005"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -21198,10 +21203,10 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "brandColor",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:849",
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:877",
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:891",
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:981"
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:856",
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:883",
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:896",
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:958"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -21232,8 +21237,8 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "bgColorContainer",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:391",
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:1335"
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:405",
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:1320"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -21293,10 +21298,10 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "textColorPrimary",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:850",
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:878",
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:892",
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:982"
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:857",
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:884",
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:897",
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:959"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -21382,8 +21387,8 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "shadow3",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:451",
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:1329"
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:469",
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:1314"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -21441,8 +21446,8 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "shadow3",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:451",
-        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:1329"
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:469",
+        "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart:1314"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -22310,8 +22315,8 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "textColorPlaceholder",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:194",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:286"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:200",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:293"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "fallback-widget-verified-visual-pending",
@@ -22340,18 +22345,20 @@
       "miniHasDynamicLessLookup": true,
       "miniSourceUse": "referenced",
       "flutterDirectory": "tdesign-component/lib/src/components/tag",
-      "themeField": null,
-      "themeFieldUses": [],
+      "themeField": "dangerColor",
+      "themeFieldUses": [
+        "tdesign-component/lib/src/components/tag/t_tag.dart:87"
+      ],
       "globalFallbackGetter": "errorColor",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:235",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:236",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:242",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:246"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:240"
       ],
-      "staticStatus": "global-getter-candidate",
-      "reviewDecision": "pending",
-      "reviewEvidence": [],
+      "staticStatus": "theme-field-and-global-getter-candidates",
+      "reviewDecision": "component-theme-widget-verified-visual-pending",
+      "reviewEvidence": [
+        "tdesign-component/test/components/tag/t_tag_test.dart:852",
+        "tdesign-component/test/components/tag/t_select_tag_test.dart:118"
+      ],
       "finalPaintVerified": false
     },
     {
@@ -22378,8 +22385,8 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "errorColor1",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:238",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:245"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:245",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:252"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "fallback-widget-verified-visual-pending",
@@ -22413,8 +22420,8 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "bgColorComponent",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:266",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:277"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:273",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:284"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "fallback-widget-verified-visual-pending",
@@ -22447,8 +22454,8 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "textColorPrimary",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:267",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:273"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:274",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:280"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -22479,8 +22486,8 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "bgColorSecondaryContainer",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:270",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:276"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:277",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:283"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -22511,7 +22518,7 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "bgColorComponentDisabled",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:192"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:198"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -22542,7 +22549,7 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "componentBorder",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:193"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:199"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -22573,7 +22580,7 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "textColorDisabled",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:189"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:195"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -22604,8 +22611,8 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "fontBodyMedium",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:319",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:321"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:327",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:329"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "default-widget-value-verified",
@@ -22700,8 +22707,8 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "fontBodyMedium",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:319",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:321"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:327",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:329"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "default-widget-value-verified",
@@ -22825,7 +22832,7 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "fontBodySmall",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:325"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:333"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "default-widget-value-verified",
@@ -22920,11 +22927,11 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "bgColorContainer",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:209",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:226",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:239",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:256",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:271"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:215",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:232",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:246",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:263",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:278"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "fallback-widget-verified-visual-pending",
@@ -22957,10 +22964,10 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "brandColor",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:205",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:206",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:211",
         "tdesign-component/lib/src/components/tag/t_tag.dart:212",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:216"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:218",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:222"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -22991,8 +22998,8 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "brandColorLight",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:208",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:215"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:214",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:221"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -23023,9 +23030,9 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "radiusRound",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:299",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:302",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:303"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:307",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:310",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:311"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -23056,7 +23063,7 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "fontBodyExtraSmall",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:323"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:331"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "default-widget-value-verified",
@@ -23147,14 +23154,17 @@
       "miniHasDynamicLessLookup": true,
       "miniSourceUse": "referenced",
       "flutterDirectory": "tdesign-component/lib/src/components/tag",
-      "themeField": null,
-      "themeFieldUses": [],
+      "themeField": "squareBorderRadius",
+      "themeFieldUses": [
+        "tdesign-component/lib/src/components/tag/t_tag.dart:92"
+      ],
       "globalFallbackGetter": null,
       "fallbackUses": [],
-      "staticStatus": "no-direct-consumer-evidence",
-      "reviewDecision": "fallback-widget-verified-visual-pending",
+      "staticStatus": "theme-field-candidate",
+      "reviewDecision": "component-theme-widget-verified-visual-pending",
       "reviewEvidence": [
-        "tdesign-component/test/components/tag/t_tag_test.dart:342"
+        "tdesign-component/test/components/tag/t_tag_test.dart:372",
+        "tdesign-component/test/components/tag/t_tag_test.dart:954"
       ],
       "finalPaintVerified": false
     },
@@ -23182,10 +23192,10 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "successColor",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:252",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:253",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:258",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:259"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:259",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:260",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:265",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:266"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -23216,8 +23226,8 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "successColor1",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:255",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:259"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:262",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:266"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "fallback-widget-verified-visual-pending",
@@ -23251,10 +23261,10 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "warningColor",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:222",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:223",
         "tdesign-component/lib/src/components/tag/t_tag.dart:228",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:229"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:229",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:234",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:235"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "pending",
@@ -23285,8 +23295,8 @@
       "themeFieldUses": [],
       "globalFallbackGetter": "warningColor1",
       "fallbackUses": [
-        "tdesign-component/lib/src/components/tag/t_tag.dart:225",
-        "tdesign-component/lib/src/components/tag/t_tag.dart:229"
+        "tdesign-component/lib/src/components/tag/t_tag.dart:231",
+        "tdesign-component/lib/src/components/tag/t_tag.dart:235"
       ],
       "staticStatus": "global-getter-candidate",
       "reviewDecision": "fallback-widget-verified-visual-pending",

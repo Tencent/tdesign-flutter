@@ -6021,24 +6021,6 @@
     },
     {
       "component": "avatar",
-      "field": "size",
-      "file": "tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "avatar",
-      "field": "shape",
-      "file": "tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "avatar",
-      "field": "variant",
-      "file": "tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "avatar",
       "field": "dimension",
       "file": "tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart",
       "sameNameMiniVariable": null
@@ -6057,6 +6039,12 @@
     },
     {
       "component": "avatar",
+      "field": "circleBorderRadius",
+      "file": "tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart",
+      "sameNameMiniVariable": "avatarCircleBorderRadius"
+    },
+    {
+      "component": "avatar",
       "field": "backgroundColor",
       "file": "tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart",
       "sameNameMiniVariable": null
@@ -6064,12 +6052,6 @@
     {
       "component": "avatar",
       "field": "foregroundColor",
-      "file": "tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "avatar",
-      "field": "textStyle",
       "file": "tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart",
       "sameNameMiniVariable": null
     },
@@ -6167,18 +6149,6 @@
       "component": "badge",
       "field": "borderWidth",
       "file": "tdesign-component/lib/src/components/badge/t_badge_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "button",
-      "field": "defaultVariant",
-      "file": "tdesign-component/lib/src/components/button/t_button_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "button",
-      "field": "defaultSize",
-      "file": "tdesign-component/lib/src/components/button/t_button_theme_data.dart",
       "sameNameMiniVariable": null
     },
     {
@@ -6453,12 +6423,6 @@
     },
     {
       "component": "cell",
-      "field": "align",
-      "file": "tdesign-component/lib/src/components/cell/t_cell_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "cell",
       "field": "showBottomBorder",
       "file": "tdesign-component/lib/src/components/cell/t_cell_theme_data.dart",
       "sameNameMiniVariable": null
@@ -6468,12 +6432,6 @@
       "field": "height",
       "file": "tdesign-component/lib/src/components/cell/t_cell_theme_data.dart",
       "sameNameMiniVariable": "cellHeight"
-    },
-    {
-      "component": "cell",
-      "field": "groupVariant",
-      "file": "tdesign-component/lib/src/components/cell/t_cell_theme_data.dart",
-      "sameNameMiniVariable": null
     },
     {
       "component": "cell",
@@ -6543,19 +6501,7 @@
     },
     {
       "component": "collapse",
-      "field": "variant",
-      "file": "tdesign-component/lib/src/components/collapse/t_collapse_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "collapse",
       "field": "backgroundColor",
-      "file": "tdesign-component/lib/src/components/collapse/t_collapse_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "collapse",
-      "field": "animationDuration",
       "file": "tdesign-component/lib/src/components/collapse/t_collapse_theme_data.dart",
       "sameNameMiniVariable": null
     },
@@ -6944,12 +6890,6 @@
       "sameNameMiniVariable": null
     },
     {
-      "component": "dropdown_menu",
-      "field": "animationDuration",
-      "file": "tdesign-component/lib/src/components/dropdown_menu/t_dropdown_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
       "component": "empty",
       "field": "emptyTextColor",
       "file": "tdesign-component/lib/src/components/empty/t_empty_theme_data.dart",
@@ -7097,30 +7037,6 @@
       "component": "form",
       "field": "messageGap",
       "file": "tdesign-component/lib/src/components/form/t_form_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "form",
-      "field": "verticalAlignment",
-      "file": "tdesign-component/lib/src/components/form/t_form_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "form",
-      "field": "contentAlignment",
-      "file": "tdesign-component/lib/src/components/form/t_form_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "icon",
-      "field": "size",
-      "file": "tdesign-component/lib/src/components/icon/t_icon_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "icon",
-      "field": "color",
-      "file": "tdesign-component/lib/src/components/icon/t_icon_theme_data.dart",
       "sameNameMiniVariable": null
     },
     {
@@ -7353,31 +7269,13 @@
     },
     {
       "component": "input",
-      "field": "clearButtonMode",
-      "file": "tdesign-component/lib/src/components/input/t_input_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "input",
       "field": "clearIconSize",
       "file": "tdesign-component/lib/src/components/input/t_input_theme_data.dart",
       "sameNameMiniVariable": null
     },
     {
       "component": "input",
-      "field": "multilineMinLines",
-      "file": "tdesign-component/lib/src/components/input/t_input_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "input",
       "field": "textStyle",
-      "file": "tdesign-component/lib/src/components/input/t_input_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "input",
-      "field": "cursorColor",
       "file": "tdesign-component/lib/src/components/input/t_input_theme_data.dart",
       "sameNameMiniVariable": null
     },
@@ -7421,24 +7319,6 @@
       "component": "input",
       "field": "borderWidth",
       "file": "tdesign-component/lib/src/components/input/t_input_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "link",
-      "field": "defaultSize",
-      "file": "tdesign-component/lib/src/components/link/t_link_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "link",
-      "field": "defaultColorScheme",
-      "file": "tdesign-component/lib/src/components/link/t_link_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "link",
-      "field": "underline",
-      "file": "tdesign-component/lib/src/components/link/t_link_theme_data.dart",
       "sameNameMiniVariable": null
     },
     {
@@ -7671,12 +7551,6 @@
     },
     {
       "component": "popover",
-      "field": "showArrow",
-      "file": "tdesign-component/lib/src/components/popover/t_popover_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "popover",
       "field": "offset",
       "file": "tdesign-component/lib/src/components/popover/t_popover_theme_data.dart",
       "sameNameMiniVariable": null
@@ -7899,12 +7773,6 @@
     },
     {
       "component": "search",
-      "field": "variant",
-      "file": "tdesign-component/lib/src/components/search/t_search_bar_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "search",
       "field": "height",
       "file": "tdesign-component/lib/src/components/search/t_search_bar_theme_data.dart",
       "sameNameMiniVariable": "searchHeight"
@@ -8022,18 +7890,6 @@
       "field": "rowSpacing",
       "file": "tdesign-component/lib/src/components/skeleton/t_skeleton_theme_data.dart",
       "sameNameMiniVariable": "skeletonRowSpacing"
-    },
-    {
-      "component": "stepper",
-      "field": "size",
-      "file": "tdesign-component/lib/src/components/stepper/t_stepper_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "stepper",
-      "field": "variant",
-      "file": "tdesign-component/lib/src/components/stepper/t_stepper_theme_data.dart",
-      "sameNameMiniVariable": null
     },
     {
       "component": "stepper",
@@ -8217,18 +8073,6 @@
     },
     {
       "component": "switch",
-      "field": "defaultSize",
-      "file": "tdesign-component/lib/src/components/switch/t_switch_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "switch",
-      "field": "defaultVariant",
-      "file": "tdesign-component/lib/src/components/switch/t_switch_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "switch",
       "field": "trackOnColor",
       "file": "tdesign-component/lib/src/components/switch/t_switch_theme_data.dart",
       "sameNameMiniVariable": null
@@ -8315,18 +8159,6 @@
       "component": "tabbar",
       "field": "topBorder",
       "file": "tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "table",
-      "field": "bordered",
-      "file": "tdesign-component/lib/src/components/table/t_table_theme_data.dart",
-      "sameNameMiniVariable": null
-    },
-    {
-      "component": "table",
-      "field": "stripe",
-      "file": "tdesign-component/lib/src/components/table/t_table_theme_data.dart",
       "sameNameMiniVariable": null
     },
     {
@@ -8451,6 +8283,12 @@
     },
     {
       "component": "tag",
+      "field": "dangerColor",
+      "file": "tdesign-component/lib/src/components/tag/t_tag_theme_data.dart",
+      "sameNameMiniVariable": "tagDangerColor"
+    },
+    {
+      "component": "tag",
       "field": "font",
       "file": "tdesign-component/lib/src/components/tag/t_tag_theme_data.dart",
       "sameNameMiniVariable": null
@@ -8466,6 +8304,12 @@
       "field": "padding",
       "file": "tdesign-component/lib/src/components/tag/t_tag_theme_data.dart",
       "sameNameMiniVariable": null
+    },
+    {
+      "component": "tag",
+      "field": "squareBorderRadius",
+      "file": "tdesign-component/lib/src/components/tag/t_tag_theme_data.dart",
+      "sameNameMiniVariable": "tagSquareBorderRadius"
     },
     {
       "component": "tag",
@@ -8517,13 +8361,31 @@
     },
     {
       "component": "time_counter",
-      "field": "defaultVariant",
+      "field": "defaultTextColor",
       "file": "tdesign-component/lib/src/components/time_counter/t_time_counter_theme_data.dart",
       "sameNameMiniVariable": null
     },
     {
       "component": "time_counter",
-      "field": "defaultSize",
+      "field": "blockTextColor",
+      "file": "tdesign-component/lib/src/components/time_counter/t_time_counter_theme_data.dart",
+      "sameNameMiniVariable": null
+    },
+    {
+      "component": "time_counter",
+      "field": "blockBackgroundColor",
+      "file": "tdesign-component/lib/src/components/time_counter/t_time_counter_theme_data.dart",
+      "sameNameMiniVariable": null
+    },
+    {
+      "component": "time_counter",
+      "field": "squareBorderRadius",
+      "file": "tdesign-component/lib/src/components/time_counter/t_time_counter_theme_data.dart",
+      "sameNameMiniVariable": null
+    },
+    {
+      "component": "time_counter",
+      "field": "roundBorderRadius",
       "file": "tdesign-component/lib/src/components/time_counter/t_time_counter_theme_data.dart",
       "sameNameMiniVariable": null
     },
@@ -9242,7 +9104,9 @@
       "miniDarkDefault": "50%",
       "miniLightCandidates": [],
       "miniDarkCandidates": [],
-      "matchingFlutterThemeFields": [],
+      "matchingFlutterThemeFields": [
+        "avatar.circleBorderRadius"
+      ],
       "globalFallbackToken": "radiusCircle",
       "miniComponent": "avatar",
       "miniConsumers": [
@@ -9250,8 +9114,8 @@
       ],
       "flutterComponent": "avatar",
       "candidateThemeField": "circleBorderRadius",
-      "matchingThemeField": false,
-      "directGlobalGetterFound": false,
+      "matchingThemeField": true,
+      "directGlobalGetterFound": true,
       "miniValueStatus": "默认表达已解析",
       "flutterValueStatus": "最终消费值未逐项验证"
     },
@@ -12041,7 +11905,7 @@
       "flutterComponent": "button",
       "candidateThemeField": "lightActiveBgColor",
       "matchingThemeField": false,
-      "directGlobalGetterFound": false,
+      "directGlobalGetterFound": true,
       "miniValueStatus": "默认表达已解析",
       "flutterValueStatus": "最终消费值未逐项验证"
     },
@@ -12071,7 +11935,7 @@
       "flutterComponent": "button",
       "candidateThemeField": "lightActiveBorderColor",
       "matchingThemeField": false,
-      "directGlobalGetterFound": false,
+      "directGlobalGetterFound": true,
       "miniValueStatus": "默认表达已解析",
       "flutterValueStatus": "最终消费值未逐项验证"
     },
@@ -12281,7 +12145,7 @@
       "flutterComponent": "button",
       "candidateThemeField": "lightOutlineActiveBgColor",
       "matchingThemeField": false,
-      "directGlobalGetterFound": false,
+      "directGlobalGetterFound": true,
       "miniValueStatus": "默认表达已解析",
       "flutterValueStatus": "最终消费值未逐项验证"
     },
@@ -26909,7 +26773,7 @@
       "flutterComponent": "skeleton",
       "candidateThemeField": "circleBorderRadius",
       "matchingThemeField": false,
-      "directGlobalGetterFound": false,
+      "directGlobalGetterFound": true,
       "miniValueStatus": "默认表达已解析",
       "flutterValueStatus": "最终消费值未逐项验证"
     },
@@ -31020,7 +30884,7 @@
       "flutterComponent": "tag",
       "candidateThemeField": "closeIconColor",
       "matchingThemeField": false,
-      "directGlobalGetterFound": false,
+      "directGlobalGetterFound": true,
       "miniValueStatus": "默认表达已解析",
       "flutterValueStatus": "最终消费值未逐项验证"
     },
@@ -31042,7 +30906,9 @@
       "miniDarkDefault": "#c64751",
       "miniLightCandidates": [],
       "miniDarkCandidates": [],
-      "matchingFlutterThemeFields": [],
+      "matchingFlutterThemeFields": [
+        "tag.dangerColor"
+      ],
       "globalFallbackToken": "errorColor",
       "miniComponent": "tag",
       "miniConsumers": [
@@ -31051,7 +30917,7 @@
       ],
       "flutterComponent": "tag",
       "candidateThemeField": "dangerColor",
-      "matchingThemeField": false,
+      "matchingThemeField": true,
       "directGlobalGetterFound": true,
       "miniValueStatus": "默认表达已解析",
       "flutterValueStatus": "最终消费值未逐项验证"
@@ -31084,7 +30950,7 @@
       "flutterComponent": "tag",
       "candidateThemeField": "dangerLightColor",
       "matchingThemeField": false,
-      "directGlobalGetterFound": false,
+      "directGlobalGetterFound": true,
       "miniValueStatus": "默认表达已解析",
       "flutterValueStatus": "最终消费值未逐项验证"
     },
@@ -31628,7 +31494,7 @@
       "flutterComponent": "tag",
       "candidateThemeField": "outlineBgColor",
       "matchingThemeField": false,
-      "directGlobalGetterFound": false,
+      "directGlobalGetterFound": true,
       "miniValueStatus": "默认表达已解析",
       "flutterValueStatus": "最终消费值未逐项验证"
     },
@@ -31842,7 +31708,9 @@
       "miniDarkDefault": "4dp",
       "miniLightCandidates": [],
       "miniDarkCandidates": [],
-      "matchingFlutterThemeFields": [],
+      "matchingFlutterThemeFields": [
+        "tag.squareBorderRadius"
+      ],
       "globalFallbackToken": null,
       "miniComponent": "tag",
       "miniConsumers": [
@@ -31851,7 +31719,7 @@
       ],
       "flutterComponent": "tag",
       "candidateThemeField": "squareBorderRadius",
-      "matchingThemeField": false,
+      "matchingThemeField": true,
       "directGlobalGetterFound": false,
       "miniValueStatus": "默认表达已解析",
       "flutterValueStatus": "最终消费值未逐项验证"
@@ -31916,7 +31784,7 @@
       "flutterComponent": "tag",
       "candidateThemeField": "successLightColor",
       "matchingThemeField": false,
-      "directGlobalGetterFound": false,
+      "directGlobalGetterFound": true,
       "miniValueStatus": "默认表达已解析",
       "flutterValueStatus": "最终消费值未逐项验证"
     },
@@ -31980,7 +31848,7 @@
       "flutterComponent": "tag",
       "candidateThemeField": "warningLightColor",
       "matchingThemeField": false,
-      "directGlobalGetterFound": false,
+      "directGlobalGetterFound": true,
       "miniValueStatus": "默认表达已解析",
       "flutterValueStatus": "最终消费值未逐项验证"
     },
@@ -33010,10 +32878,10 @@
   "componentAuditSummary": {
     "total": 804,
     "withSameNameFlutterDirectory": 597,
-    "withSameNameThemeField": 25,
-    "withSameNameThemeFieldAcrossDirectories": 32,
+    "withSameNameThemeField": 28,
+    "withSameNameThemeFieldAcrossDirectories": 35,
     "withGlobalFallback": 559,
-    "withGlobalGetterInOwnerDirectory": 323,
+    "withGlobalGetterInOwnerDirectory": 333,
     "noFallback": [
       "navbarLeftMaxWidth",
       "uploadDragTransitionDuration",

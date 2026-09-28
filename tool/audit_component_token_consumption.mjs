@@ -6,7 +6,9 @@ import { fileURLToPath } from 'node:url';
 // Static evidence only: a matching field/getter is not proof of a final paint value.
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const source = join(repo, 'tdesign-component/lib/src/components');
-const miniRepo = resolve(repo, '../tdesign-miniprogram');
+const miniRepo = process.env.TDESIGN_MINIPROGRAM_ROOT
+  ? resolve(process.env.TDESIGN_MINIPROGRAM_ROOT)
+  : resolve(repo, '../tdesign-miniprogram');
 const audit = JSON.parse(
   readFileSync(join(repo, 'specs/047-miniprogram-token-alignment/token-audit.json'), 'utf8'),
 );
@@ -142,10 +144,19 @@ const tagWidgetEvidence = new Map([
   ['tagWarningLightColor', ['tdesign-component/test/components/tag/t_tag_test.dart:151', 'tdesign-component/test/components/tag/t_tag_test.dart:239']],
   ['tagDangerLightColor', ['tdesign-component/test/components/tag/t_tag_test.dart:151', 'tdesign-component/test/components/tag/t_tag_test.dart:239']],
   ['tagSuccessLightColor', ['tdesign-component/test/components/tag/t_tag_test.dart:151', 'tdesign-component/test/components/tag/t_tag_test.dart:239']],
-  ['tagSquareBorderRadius', ['tdesign-component/test/components/tag/t_tag_test.dart:342']],
   ['tagOutlineBgColor', ['tdesign-component/test/components/tag/t_tag_test.dart:508']],
   ['tagDefaultColor', ['tdesign-component/test/components/tag/t_tag_test.dart:508']],
   ['tagCloseIconColor', ['tdesign-component/test/components/tag/t_tag_test.dart:630']],
+]);
+const tagThemeWidgetEvidence = new Map([
+  ['tagDangerColor', [
+    'tdesign-component/test/components/tag/t_tag_test.dart:852',
+    'tdesign-component/test/components/tag/t_select_tag_test.dart:118',
+  ]],
+  ['tagSquareBorderRadius', [
+    'tdesign-component/test/components/tag/t_tag_test.dart:372',
+    'tdesign-component/test/components/tag/t_tag_test.dart:954',
+  ]],
 ]);
 
 const rows = audit.componentVariables.map((variable) => {
@@ -185,16 +196,20 @@ const rows = audit.componentVariables.map((variable) => {
       ? 'outside-current-flutter-component-surface'
       : buttonWidgetValues.has(variable.name) || tagSizeWidgetValues.has(variable.name)
         ? 'default-widget-value-verified'
-        : tagWidgetEvidence.has(variable.name)
-          ? 'fallback-widget-verified-visual-pending'
-          : 'pending';
+        : tagThemeWidgetEvidence.has(variable.name)
+          ? 'component-theme-widget-verified-visual-pending'
+          : tagWidgetEvidence.has(variable.name)
+            ? 'fallback-widget-verified-visual-pending'
+            : 'pending';
   const reviewEvidence = buttonWidgetValues.has(variable.name)
     ? ['tdesign-component/test/components/button/t_button_test.dart:432']
     : tagSizeWidgetValues.has(variable.name)
       ? ['tdesign-component/test/components/tag/t_tag_test.dart:431']
-    : tagWidgetEvidence.has(variable.name)
-      ? tagWidgetEvidence.get(variable.name)
-      : [];
+    : tagThemeWidgetEvidence.has(variable.name)
+      ? tagThemeWidgetEvidence.get(variable.name)
+      : tagWidgetEvidence.has(variable.name)
+        ? tagWidgetEvidence.get(variable.name)
+        : [];
   let staticStatus;
   if (directory == null) {
     staticStatus = 'no-matching-flutter-component-directory';

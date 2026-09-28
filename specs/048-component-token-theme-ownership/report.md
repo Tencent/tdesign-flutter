@@ -55,7 +55,7 @@
 | --- | --- | --- | --- |
 | P0 | 公开 API 大范围 breaking 尚待发布决策与外部迁移验证 | 已发布字段删除清单及替代写法见 [迁移文档](./migration.md)；尚未用外部调用方编译验证 | 按最终 diff 逐字段核对迁移，选择 breaking 版本与提交类型，验证示例和实际使用方；不能作为普通重构发布 |
 | 已处理 | Avatar/Popover 的已确认同义视觉入口 | Avatar `foregroundColor` 与 `textStyle.color`；Popover `radius` 与 Theme `borderRadius`、`overlayColor` 与 Theme `barrierColor` | 2026-09-28 已收敛为单一 Theme 入口，迁移方式与回归见下方补记；其他组件仍须继续查异名同义字段 |
-| P1 | 804 个组件变量未全部证明最终消费 | [逐项静态证据](./component-consumption-audit.json)固定读取小程序 `1a1c5ca`：406 项有同目录全局 getter 候选、25 项有组件 Theme 字段候选（10 项两者都有）、291 项同目录无直接证据、82 项无对应 Flutter 组件目录。进一步查 Less 动态 `@@` 与直接 CSS 引用后，100 项属于“动态 Less 可能消费”，仅 10 项在冻结源码未见静态消费者。Button 12 项、Tag 12 项默认 Widget 值及 Tag 7 项回退 Widget 路径已逐项裁定；其余 682 项仍待审。候选命中不是最终绘制证明 | 按[审查队列](./component-consumption-review.md)继续对有对应组件的行做状态/Theme/最终绘制核验；81 项小程序已消费但 Flutter 当前没有对应组件，应归属未来组件范围，不给现有组件制造假 Theme 字段 |
+| P1 | 804 个组件变量未全部证明最终消费 | [逐项静态证据](./component-consumption-audit.json)固定读取小程序 `1a1c5ca`：404 项有同目录全局 getter 候选、28 项有组件 Theme 字段候选（12 项两者都有）、290 项同目录无直接证据、82 项无对应 Flutter 组件目录。进一步查 Less 动态 `@@` 与直接 CSS 引用后，100 项属于“动态 Less 可能消费”，仅 10 项在冻结源码未见静态消费者。Button 12 项、Tag 12 项默认 Widget 值、Tag 6 项回退 Widget 路径及 2 项组件 Theme 覆盖已逐项裁定；其余 681 项仍待审。候选命中不是最终绘制证明 | 按[审查队列](./component-consumption-review.md)继续对有对应组件的行做状态/Theme/最终绘制核验；81 项小程序已消费但 Flutter 当前没有对应组件，应归属未来组件范围，不给现有组件制造假 Theme 字段 |
 | P1 | 小程序自身变量歧义 | `sliderDefaultColor`、`tabBarBorderColor` 回退冲突；3 项无回退，1 项未解析引用，14 项 CSS `calc()` | 保留原始表达与使用位置，设计稿/运行态逐项裁定，不能擅自定值 |
 | P1 | 原定 47 个用例仍有 12 个旧基线差异 | BackTop 组件 1、BackTop Demo 4、Indexes Demo 7；其余 TabBar/导航已按设计契约和 Token 字体度量裁定 | 继续按设计稿/小程序逐实例判断剩余差异；修实现缺陷后，在固定 Linux 3.32 更新对应基线并无更新重跑；再验 3.47 功能，不机械要求跨系统像素相同 |
 | P2 | Flutter 3.47 的部分 Demo 测试受 SDK shader 错误干扰 | Dialog、Popover、Swiper 公开 Demo 出现 `shaders/ink_sparkle.frag` 解码失败，而 Linux 3.32 Dialog 16 项全通过 | 将环境问题与组件断言分开；修复/刷新 3.47 SDK 缓存后重跑，不能当作组件通过或失败 |
@@ -69,3 +69,9 @@
 Avatar 移除了 `TAvatarThemeData.textStyle`，保留 `foregroundColor` 为默认文字和图标的唯一前景色入口；默认字号/字重仍随 `size`，特殊文字排版通过 `child: Text(style: ...)`。Popover 移除了 `TPopoverAnchor` 和 `TPopover.showPopover` 的 `overlayColor/radius`，保留 Theme 的 `barrierColor/borderRadius`；`borderRadius` 改为 `BorderRadius?` 以保留逐角配置。单实例自定义使用局部 Theme。API 生成清单已收录两个 Theme 类，生成文档不再展示被删除的字段和仅供内部使用的插值辅助方法。
 
 两组件的组件测试在 3.32.0 与 3.47.0 各通过 100 项，公开 Demo 功能测试各通过 7 项；两版本的完整组件包和 Demo 包严格分析均为 0 issues。3.32.0 Linux 隔离覆盖率 Avatar 169/173（97.69%）、Popover 620/632（98.10%）。Linux 3.32.0 无更新复跑 Avatar/Popover Demo Golden 共 25 通过、27 差异；Avatar 的浅/暗差分别仍为 16,958px / 20,571px，与本报告先前记录的值相同。Popover 的失败样本仍需逐张做 Token/旧基线/实现归因；本次不更新 Golden、不宣称视觉门禁通过。上述 API 删除与 Theme 字段改型均属 breaking，迁移见 `migration.md`。
+
+## 2026-09-28 Tag 组件专属 Token 补记
+
+`TTagThemeData.dangerColor` 现在单独控制 danger 基础色，未指定时动态回退显式 Material error / 全局 `errorColor`；浅色填充、其他配色和禁用态保持原路径。`squareBorderRadius` 单独控制方形圆角，未指定时保留 4dp，round/mark 不受影响。两个字段已进入生成的 Tag API 文档和逐项映射表；审计仅将这两项标为“组件 Theme/Widget 已验证，视觉待裁定”，不扩大到其余 681 个待审变量。
+
+Flutter 3.32.0 与 3.47.0 下 Tag/SelectTag 组件测试各 79 项通过，受影响 Dart 文件定向 `flutter analyze --fatal-infos` 均无诊断；`git diff --check` 通过。默认取值未改变，不更新 Golden；固定 Linux 3.32.0 的无更新 Golden 本次尚未复跑，当前 PR 已存在的大范围旧基线差异仍须独立归因。此补记不构成合并发布验收。
