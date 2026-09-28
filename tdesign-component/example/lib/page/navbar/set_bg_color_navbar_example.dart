@@ -8,33 +8,42 @@ class SetBgColorNavbarExample extends StatelessWidget {
   const SetBgColorNavbarExample({super.key});
 
   Widget _setBgColorNavbar(BuildContext context) {
-    return TNavBar(
-      title: const Text('标题文字', style: TextStyle(fontWeight: FontWeight.w600)),
-      titleColor: Colors.white,
-      backgroundColor: context.tTheme.brandNormalColor,
-      useDefaultBack: false,
-      leading: [
-        TNavBarItem(
-          icon: TIcons.chevron_left,
-          iconSize: 24,
-          iconColor: Colors.white,
-          onTap: () => TToast.showText('点击了返回', context: context),
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        TNavBarThemeData(
+          titleColor: Colors.white,
+          backgroundColor: context.tTheme.brandColor,
         ),
-      ],
-      actions: [
-        TNavBarItem(
-          icon: TIcons.home,
-          iconSize: 24,
-          iconColor: Colors.white,
-          onTap: () => TToast.showText('点击了首页', context: context),
+      ),
+      child: TNavBar(
+        title: const Text(
+          '标题文字',
+          style: TextStyle(fontWeight: FontWeight.w600),
         ),
-        TNavBarItem(
-          icon: TIcons.ellipsis,
-          iconSize: 24,
-          iconColor: Colors.white,
-          onTap: () => TToast.showText('点击了更多', context: context),
-        ),
-      ],
+        useDefaultBack: false,
+        leading: [
+          TNavBarItem(
+            icon: TIcons.chevron_left,
+            iconSize: 24,
+            iconColor: Colors.white,
+            onTap: () => TToast.showText('点击了返回', context: context),
+          ),
+        ],
+        actions: [
+          TNavBarItem(
+            icon: TIcons.home,
+            iconSize: 24,
+            iconColor: Colors.white,
+            onTap: () => TToast.showText('点击了首页', context: context),
+          ),
+          TNavBarItem(
+            icon: TIcons.ellipsis,
+            iconSize: 24,
+            iconColor: Colors.white,
+            onTap: () => TToast.showText('点击了更多', context: context),
+          ),
+        ],
+      ),
     );
   }
 

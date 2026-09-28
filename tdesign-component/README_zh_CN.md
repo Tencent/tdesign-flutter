@@ -77,7 +77,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ```dart
 // 颜色
-TTheme.of(context).brandNormalColor
+TTheme.of(context).brandColor
 
 // 字体
 TTheme.defaultData().fontBodyLarge
@@ -104,7 +104,7 @@ String themeConfig = '''
 {
   "myTheme": {
     "color": {
-      "brandNormalColor": "#D7B386"
+      "brandColor": "#D7B386"
     },
     "font": {
       "fontBodyMedium": {

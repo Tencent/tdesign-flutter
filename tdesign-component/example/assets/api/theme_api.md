@@ -47,6 +47,8 @@
 | extraThemeData | TExtraThemeData? | - | 额外定义的结构 |
 | fontFamilyMap | TMap<String, FontFamily> | - | 字体样式 |
 | fontMap | TMap<String, Font> | - | 字体尺寸 |
+| fontMetricMap | TMap<String, double>? | - | 小程序独立字号与行高 Token，单位为 Flutter 逻辑像素。 |
+| insetShadowMap | TMap<String, BorderSide>? | - | 小程序 blur=0 的内投影在 Flutter 中对应的内侧边线。 |
 | name | String | - | 名称 |
 | radiusMap | TMap<String, double> | - | 圆角 |
 | refMap | TMap<String, String> | - | 映射关系 |

@@ -84,16 +84,22 @@ void main() {
                         children: [
                           Text(fontSize == null ? '默认样式' : '仅 fontSize: 18'),
                           Expanded(
-                            child: TSideBar(
-                              value: 1,
-                              selectedTextStyle: fontSize == null
-                                  ? null
-                                  : TextStyle(fontSize: fontSize),
-                              onChanged: (_) {},
-                              children: List.generate(
-                                5,
-                                (index) =>
-                                    TSideBarItem(value: index, label: '选项'),
+                            child: Theme(
+                              data: Theme.of(context).mergeExtension(
+                                TSideBarThemeData(
+                                  selectedTextStyle: fontSize == null
+                                      ? null
+                                      : TextStyle(fontSize: fontSize),
+                                ),
+                              ),
+                              child: TSideBar(
+                                value: 1,
+                                onChanged: (_) {},
+                                children: List.generate(
+                                  5,
+                                  (index) =>
+                                      TSideBarItem(value: index, label: '选项'),
+                                ),
                               ),
                             ),
                           ),
@@ -120,7 +126,7 @@ void main() {
       for (final indicator in tester.widgetList<Container>(indicators)) {
         expect(
           (indicator.decoration! as BoxDecoration).color,
-          tester.element(find.byType(TSideBar).first).tTheme.brandNormalColor,
+          tester.element(find.byType(TSideBar).first).tTheme.brandColor,
         );
       }
       await binding.takeScreenshot('sidebar-fontsize-${mode.name}');

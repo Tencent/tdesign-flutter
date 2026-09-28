@@ -2,8 +2,6 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
-import 't_input_types.dart';
-
 /// TInput 与 TTextarea 共用的组件级 ThemeExtension。
 ///
 /// 输入组件的外层边框、颜色、内边距和文本样式在这里提供组件级默认值；
@@ -11,23 +9,14 @@ import 't_input_types.dart';
 /// 污染。
 class TInputThemeData extends ThemeExtension<TInputThemeData> {
   const TInputThemeData({
-    /// 清除按钮默认显示模式。
-    this.clearButtonMode,
-
     /// 清除图标尺寸。
     this.clearIconSize,
-
-    /// 多行输入默认最小行数。
-    this.multilineMinLines,
 
     /// 输入文本样式。
     ///
     /// 未指定的字段继承 TDesign `fontBodyLarge`；颜色覆盖可用状态的输入
     /// 文字，不影响禁用态，也不影响壳层和提示的语义状态色。
     this.textStyle,
-
-    /// 光标颜色。
-    this.cursorColor,
 
     /// 占位提示文本样式。
     ///
@@ -56,23 +45,15 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
     this.borderWidth,
   });
 
-  /// 清除按钮默认显示模式。
-  final TInputClearButtonMode? clearButtonMode;
-
   /// 清除图标尺寸。
   final double? clearIconSize;
 
-  /// 多行输入默认最小行数。
-  final int? multilineMinLines;
-
   /// 输入文本样式。
   ///
-  /// 未指定的字段继承 TDesign `fontBodyLarge`；颜色覆盖可用状态的输入
-  /// 文字，不影响禁用态，也不影响壳层和提示的语义状态色。
+  /// 为子树中的输入框提供默认值；单个 `TInput.style` 优先。
+  /// 未指定的字段继承显式 Material 文字主题或 TDesign `fontBodyLarge`；
+  /// 颜色覆盖可用状态的输入文字，不影响壳层和提示的语义状态色。
   final TextStyle? textStyle;
-
-  /// 光标颜色。
-  final Color? cursorColor;
 
   /// 占位提示文本样式。
   ///
@@ -99,11 +80,8 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
 
   @override
   TInputThemeData copyWith({
-    TInputClearButtonMode? clearButtonMode,
     double? clearIconSize,
-    int? multilineMinLines,
     TextStyle? textStyle,
-    Color? cursorColor,
     TextStyle? hintStyle,
     Color? clearIconColor,
     EdgeInsetsGeometry? contentPadding,
@@ -113,11 +91,8 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
     double? borderWidth,
   }) {
     return TInputThemeData(
-      clearButtonMode: clearButtonMode ?? this.clearButtonMode,
       clearIconSize: clearIconSize ?? this.clearIconSize,
-      multilineMinLines: multilineMinLines ?? this.multilineMinLines,
       textStyle: textStyle ?? this.textStyle,
-      cursorColor: cursorColor ?? this.cursorColor,
       hintStyle: hintStyle ?? this.hintStyle,
       clearIconColor: clearIconColor ?? this.clearIconColor,
       contentPadding: contentPadding ?? this.contentPadding,
@@ -134,11 +109,8 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
       return this;
     }
     return TInputThemeData(
-      clearButtonMode: t < 0.5 ? clearButtonMode : other.clearButtonMode,
       clearIconSize: lerpDouble(clearIconSize, other.clearIconSize, t),
-      multilineMinLines: t < 0.5 ? multilineMinLines : other.multilineMinLines,
       textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
-      cursorColor: Color.lerp(cursorColor, other.cursorColor, t),
       hintStyle: TextStyle.lerp(hintStyle, other.hintStyle, t),
       clearIconColor: Color.lerp(clearIconColor, other.clearIconColor, t),
       contentPadding: EdgeInsetsGeometry.lerp(

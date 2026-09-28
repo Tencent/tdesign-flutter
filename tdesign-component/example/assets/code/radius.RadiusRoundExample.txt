@@ -8,7 +8,7 @@ class RadiusRoundExample extends StatelessWidget {
     // 胶囊型，数值设置较大
     return Container(
       decoration: BoxDecoration(
-        color: context.tTheme.brandNormalColor,
+        color: context.tTheme.brandColor,
         borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
       ),
     );

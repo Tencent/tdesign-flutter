@@ -7,11 +7,8 @@ import 't_cell.dart';
 import 't_cell_theme_data.dart';
 
 /// 单元格包装构建器。
-typedef TCellGroupBuilder = Widget Function(
-  BuildContext context,
-  TCell cell,
-  int index,
-);
+typedef TCellGroupBuilder =
+    Widget Function(BuildContext context, TCell cell, int index);
 
 /// 单元格组。
 class TCellGroup extends StatelessWidget {
@@ -30,7 +27,7 @@ class TCellGroup extends StatelessWidget {
   /// 组标题。
   final Widget? title;
 
-  /// 组视觉形态；未设置时读取 Theme。
+  /// 组视觉形态；未设置时为 [TCellGroupVariant.standard]。
   final TCellGroupVariant? variant;
 
   /// 自定义单元格外层构建器。
@@ -42,8 +39,7 @@ class TCellGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TCellThemeData>();
-    final resolvedVariant =
-        variant ?? theme?.groupVariant ?? TCellGroupVariant.standard;
+    final resolvedVariant = variant ?? TCellGroupVariant.standard;
     final children = [
       for (var index = 0; index < cells.length; index++)
         _withDivider(
@@ -63,8 +59,8 @@ class TCellGroup extends StatelessWidget {
       decoration: BoxDecoration(
         border: theme?.groupBordered ?? false
             ? Border.all(
-                color: theme?.groupBorderColor ??
-                    context.tTheme.componentStrokeColor,
+                color:
+                    theme?.groupBorderColor ?? context.tTheme.componentStroke,
               )
             : null,
         borderRadius: resolvedVariant == TCellGroupVariant.card
@@ -87,12 +83,14 @@ class TCellGroup extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               softWrap: false,
-              style: theme?.groupTitleStyle ??
+              style:
+                  theme?.groupTitleStyle ??
                   TextStyle(
                     color: context.tTheme.textColorPrimary,
                     fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
                     height: context.tTheme.fontBodyMedium?.height,
-                    fontWeight: context.tTheme.fontBodyMedium?.fontWeight ??
+                    fontWeight:
+                        context.tTheme.fontBodyMedium?.fontWeight ??
                         FontWeight.w400,
                   ),
               child: title!,
@@ -121,7 +119,7 @@ class TCellGroup extends StatelessWidget {
           height: 0.5,
           thickness: 0.5,
           indent: 16,
-          color: theme?.borderColor ?? context.tTheme.componentStrokeColor,
+          color: theme?.borderColor ?? context.tTheme.componentStroke,
         ),
       ],
     );

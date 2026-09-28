@@ -242,8 +242,10 @@ void main() {
     ]) {
       await openScenario(tester, label);
       final dialogFinder = find.byType(TDialog);
-      final dialog = tester.widget<TDialog>(dialogFinder);
-      expect(dialog.contentPadding, EdgeInsets.zero, reason: label);
+      final dialogTheme = Theme.of(
+        tester.element(dialogFinder),
+      ).extension<TDialogThemeData>();
+      expect(dialogTheme?.contentPadding, EdgeInsets.zero, reason: label);
       final dialogRect = tester.getRect(dialogFinder);
       final imageRect = tester.getRect(
         find.byKey(const ValueKey('dialog-image')),

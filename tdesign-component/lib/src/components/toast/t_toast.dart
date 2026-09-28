@@ -571,22 +571,15 @@ class TToast {
           Stack(
             children: [
               Positioned.fill(child: Container(color: maskColor)),
-              Align(
-                alignment: alignment,
-                child: widget,
-              ),
+              Align(alignment: alignment, child: widget),
             ],
           ),
         ),
       );
     } else {
       overlayEntry = OverlayEntry(
-        builder: (BuildContext context) => captured.wrap(
-          Align(
-            alignment: alignment,
-            child: widget,
-          ),
-        ),
+        builder: (BuildContext context) =>
+            captured.wrap(Align(alignment: alignment, child: widget)),
       );
     }
 
@@ -642,7 +635,7 @@ class _TIconTextToast extends StatelessWidget {
         padding:
             toastTheme.padding ?? const EdgeInsets.fromLTRB(22, 14, 22, 14),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
+          color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
@@ -686,7 +679,7 @@ class _TIconTextToast extends StatelessWidget {
       child: Container(
         padding: toastTheme.padding ?? const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
+          color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
@@ -748,7 +741,7 @@ class _TToastLoading extends StatelessWidget {
         padding:
             toastTheme.padding ?? const EdgeInsets.symmetric(horizontal: 24),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
+          color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
@@ -798,7 +791,7 @@ class _TToastLoadingWithoutText extends StatelessWidget {
       child: Container(
         padding: toastTheme.padding ?? const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
+          color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
@@ -837,13 +830,12 @@ class _TTextToast extends StatelessWidget {
             .merge(config);
     return ConstrainedBox(
       constraints:
-          constraints ??
-          BoxConstraints(maxWidth: toastTheme.maxWidth ?? 185),
+          constraints ?? BoxConstraints(maxWidth: toastTheme.maxWidth ?? 185),
       child: Container(
         padding:
             toastTheme.padding ?? const EdgeInsets.fromLTRB(22, 14, 22, 14),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
+          color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),

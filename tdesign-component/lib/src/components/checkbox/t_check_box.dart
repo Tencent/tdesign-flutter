@@ -132,16 +132,16 @@ class TCheckbox extends StatelessWidget {
         final padding = hasContent
             ? (theme?.customSpace ??
                   EdgeInsets.symmetric(
-                    horizontal: theme?.insetSpacing ?? context.tTheme.spacer16,
+                    horizontal: theme?.insetSpacing ?? context.tTheme.spacer2,
                     vertical: cardMode
-                        ? context.tTheme.spacer16 -
+                        ? context.tTheme.spacer2 -
                               selectionCardBorderWidth(context)
-                        : context.tTheme.spacer8,
+                        : context.tTheme.spacer,
                   ))
             : EdgeInsets.zero;
         final spacing = cardMode
             ? 0.0
-            : theme?.spacing ?? context.tTheme.spacer8;
+            : theme?.spacing ?? context.tTheme.spacer;
         final availableContentWidth = hasBoundedWidth && indicator != null
             ? math
                   .max(
@@ -193,10 +193,9 @@ class TCheckbox extends StatelessWidget {
         ? TSelectionCard(
             selected: selected,
             disabled: _disabled,
-            selectedColor:
-                theme?.selectColor ?? context.tTheme.brandNormalColor,
+            selectedColor: theme?.selectColor ?? context.tTheme.brandColor,
             disabledColor:
-                theme?.disableColor ?? context.tTheme.brandDisabledColor,
+                theme?.disableColor ?? context.tTheme.brandColorDisabled,
             backgroundColor:
                 theme?.backgroundColor ?? context.tTheme.bgColorContainer,
             borderRadius: context.tTheme.radiusDefault,
@@ -227,10 +226,10 @@ class TCheckbox extends StatelessWidget {
                 padding: EdgeInsetsDirectional.only(
                   start:
                       contentDirection == TContentDirection.right && hasContent
-                      ? (theme?.insetSpacing ?? context.tTheme.spacer16) +
+                      ? (theme?.insetSpacing ?? context.tTheme.spacer2) +
                             _indicatorSize(context) +
-                            (theme?.spacing ?? context.tTheme.spacer8)
-                      : theme?.insetSpacing ?? context.tTheme.spacer16,
+                            (theme?.spacing ?? context.tTheme.spacer)
+                      : theme?.insetSpacing ?? context.tTheme.spacer2,
                 ),
                 child: Theme(
                   data: Theme.of(context).mergeExtension(
@@ -246,25 +245,23 @@ class TCheckbox extends StatelessWidget {
   }
 
   double _contentMinHeight(BuildContext context) => switch (size) {
-    TCheckboxSize.small => context.tTheme.spacer48,
-    TCheckboxSize.medium => context.tTheme.spacer48 + context.tTheme.spacer8,
-    TCheckboxSize.large => context.tTheme.spacer64,
+    TCheckboxSize.small => context.tTheme.spacer5,
+    TCheckboxSize.medium => context.tTheme.spacer5 + context.tTheme.spacer,
+    TCheckboxSize.large => 64.0,
   };
 
   double _indicatorSize(BuildContext context) => switch (size) {
-    TCheckboxSize.small => context.tTheme.spacer16 + context.tTheme.spacer4,
-    TCheckboxSize.medium => context.tTheme.spacer24,
-    TCheckboxSize.large => context.tTheme.spacer24 + context.tTheme.spacer4,
+    TCheckboxSize.small => context.tTheme.spacer2 + 4.0,
+    TCheckboxSize.medium => context.tTheme.spacer3,
+    TCheckboxSize.large => context.tTheme.spacer3 + 4.0,
   };
 
   double _cardMinHeight(BuildContext context) {
     final titleHeight = _textLineHeight(_resolveTitleStyle(context));
     final contentHeight = subTitle?.isNotEmpty == true
-        ? titleHeight +
-              context.tTheme.spacer4 +
-              _textLineHeight(_resolveSubTitleStyle(context))
+        ? titleHeight + 4.0 + _textLineHeight(_resolveSubTitleStyle(context))
         : titleHeight;
-    return contentHeight + context.tTheme.spacer16 * 2;
+    return contentHeight + context.tTheme.spacer2 * 2;
   }
 
   double _textLineHeight(TextStyle style) =>
@@ -319,15 +316,15 @@ class TCheckbox extends StatelessWidget {
         ? (theme?.disableColor ??
               materialTheme.fillColor?.resolve(states) ??
               colorScheme?.onSurface.withValues(alpha: 0.38) ??
-              context.tTheme.brandDisabledColor)
+              context.tTheme.brandColorDisabled)
         : selected || indeterminate
         ? (theme?.selectColor ??
               materialTheme.fillColor?.resolve(states) ??
               colorScheme?.primary ??
-              context.tTheme.brandNormalColor)
+              context.tTheme.brandColor)
         : (materialTheme.side?.color ??
               colorScheme?.outline ??
-              context.tTheme.componentBorderColor);
+              context.tTheme.componentBorder);
     final indicatorSize = _indicatorSize(context);
     if (variant == TCheckboxVariant.square) {
       return _buildSquareIndicator(
@@ -353,7 +350,7 @@ class TCheckbox extends StatelessWidget {
       final borderColor =
           theme?.disableColor ??
           resolvedMaterialSide?.color ??
-          context.tTheme.componentBorderColor;
+          context.tTheme.componentBorder;
       return Container(
         width: indicatorSize,
         height: indicatorSize,
@@ -403,10 +400,10 @@ class TCheckbox extends StatelessWidget {
     final borderColor = _disabled && !active
         ? theme?.disableColor ??
               resolvedMaterialSide?.color ??
-              context.tTheme.componentBorderColor
+              context.tTheme.componentBorder
         : active
         ? color
-        : resolvedMaterialSide?.color ?? context.tTheme.componentBorderColor;
+        : resolvedMaterialSide?.color ?? context.tTheme.componentBorder;
     final mark = indeterminate
         ? TIcons.minus
         : selected
@@ -493,12 +490,11 @@ class TCheckbox extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: titleStyle.copyWith(
               color: _disabled
-                  ? context.tTheme.textDisabledColor
+                  ? context.tTheme.textColorDisabled
                   : (theme?.titleColor ?? context.tTheme.textColorPrimary),
             ),
           ),
-        if (title != null && subTitle != null)
-          SizedBox(height: context.tTheme.spacer4),
+        if (title != null && subTitle != null) const SizedBox(height: 4.0),
         if (subTitle != null)
           Text(
             subTitle!,
@@ -506,7 +502,7 @@ class TCheckbox extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: subTitleStyle.copyWith(
               color: _disabled
-                  ? context.tTheme.textDisabledColor
+                  ? context.tTheme.textColorDisabled
                   : (theme?.subTitleColor ?? context.tTheme.textColorSecondary),
             ),
           ),

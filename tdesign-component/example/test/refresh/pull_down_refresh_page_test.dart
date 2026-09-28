@@ -50,7 +50,7 @@ void main() {
       tester
           .widget<TText>(find.widgetWithText(TText, '拖拽该区域演示 顶部下拉刷新'))
           .textColor,
-      TThemeData.defaultData().textDisabledColor,
+      TThemeData.defaultData().textColorDisabled,
     );
     expect(find.textContaining('刷新次数'), findsNothing);
     expect(tester.takeException(), isNull);

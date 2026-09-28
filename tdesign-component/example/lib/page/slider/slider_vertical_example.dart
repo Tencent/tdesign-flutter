@@ -17,7 +17,7 @@ class SliderVerticalExample extends StatefulWidget {
 
 class _SliderVerticalExampleState extends State<SliderVerticalExample> {
   Widget _buildVertical(BuildContext context) {
-    final trackInset = context.tTheme.spacer16;
+    final trackInset = context.tTheme.spacer2;
     final trackLength = 200 - 2 * trackInset;
 
     Widget verticalSlider({

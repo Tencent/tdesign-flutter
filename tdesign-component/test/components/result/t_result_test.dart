@@ -33,7 +33,7 @@ void main() {
       await tester.pumpWidget(wrapWithTheme(const TResult()));
       final icon = tester.widget<Icon>(find.byIcon(TIcons.info_circle));
       expect(icon.size, 80);
-      expect(icon.color, token.brandNormalColor);
+      expect(icon.color, token.brandColor);
     });
 
     testWidgets('带 title 渲染', (tester) async {
@@ -80,7 +80,7 @@ void main() {
       );
       final icon = tester.widget<Icon>(find.byIcon(TIcons.check_circle));
       expect(icon.size, 80);
-      expect(icon.color, token.successNormalColor);
+      expect(icon.color, token.successColor);
       expect(find.text('成功'), findsOneWidget);
     });
 
@@ -93,7 +93,7 @@ void main() {
       );
       final icon = tester.widget<Icon>(find.byIcon(TIcons.error_circle));
       expect(icon.size, 80);
-      expect(icon.color, token.warningNormalColor);
+      expect(icon.color, token.warningColor);
     });
 
     testWidgets('status: error 显示 close_circle', (tester) async {
@@ -103,7 +103,7 @@ void main() {
       );
       final icon = tester.widget<Icon>(find.byIcon(TIcons.close_circle));
       expect(icon.size, 80);
-      expect(icon.color, token.errorNormalColor);
+      expect(icon.color, token.errorColor);
     });
 
     testWidgets('status: info 显示 info_circle', (tester) async {
@@ -169,17 +169,17 @@ void main() {
 
     testWidgets('内容间距跟随 spacer12 token', (tester) async {
       final token = TThemeData.defaultData();
-      final originalSpacing = token.spacerMap['spacer12'];
+      final originalSpacing = token.spacerMap['spacer1'];
       void restoreSpacing() {
         if (originalSpacing == null) {
-          token.spacerMap.remove('spacer12');
+          token.spacerMap.remove('spacer1');
         } else {
-          token.spacerMap['spacer12'] = originalSpacing;
+          token.spacerMap['spacer1'] = originalSpacing;
         }
       }
 
       addTearDown(restoreSpacing);
-      token.spacerMap['spacer12'] = 20;
+      token.spacerMap['spacer1'] = 20;
       await tester.pumpWidget(
         MaterialApp(
           theme: TThemeBuilder.light(token),

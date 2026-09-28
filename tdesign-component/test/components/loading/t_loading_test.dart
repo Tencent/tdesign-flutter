@@ -65,7 +65,7 @@ void main() {
       expect(find.byType(TLoading), findsOneWidget);
       expect(
         tester.widget<TCircleIndicator>(find.byType(TCircleIndicator)).color,
-        TThemeData.defaultData().brandNormalColor,
+        TThemeData.defaultData().brandColor,
       );
     });
 
@@ -78,7 +78,7 @@ void main() {
         tester
             .widget<TPointBounceIndicator>(find.byType(TPointBounceIndicator))
             .color,
-        TThemeData.defaultData().brandNormalColor,
+        TThemeData.defaultData().brandColor,
       );
     });
 

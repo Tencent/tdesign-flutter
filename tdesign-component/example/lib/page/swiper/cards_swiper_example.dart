@@ -11,7 +11,7 @@ class CardsSwiperExample extends StatelessWidget {
     final cardTheme = TSwiperThemeData(
       borderRadius: BorderRadius.zero,
       paginationMargin: const EdgeInsets.only(top: 12),
-      activeColor: context.tTheme.brandNormalColor,
+      activeColor: context.tTheme.brandColor,
       inactiveColor: context.tTheme.bgColorComponent,
     );
     List<Widget> buildImages() => List.generate(6, (index) {

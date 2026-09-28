@@ -10,7 +10,7 @@ import '../../theme/t_theme.dart';
 ///
 /// 供 TPicker、DateTimePickerWheel 共用 UI 壳；列内容与联动逻辑由调用方提供。
 /// 外壳绘制当前 TThemeData 的 bgColorContainer 底色及同色边缘渐隐，
-/// 不透出父面板底色。渐隐高度取 spacer48，且不超过滚轮高度的一半。
+/// 不透出父面板底色。渐隐高度取 spacer5（48dp），且不超过滚轮高度的一半。
 @internal
 class MultiWheelLayout extends StatelessWidget {
   const MultiWheelLayout({
@@ -42,8 +42,8 @@ class MultiWheelLayout extends StatelessWidget {
           children: [
             Positioned(
               top: (height - itemHeight) / 2,
-              left: theme.spacer16,
-              right: theme.spacer16,
+              left: theme.spacer2,
+              right: theme.spacer2,
               child: Container(
                 height: itemHeight,
                 decoration: BoxDecoration(
@@ -53,7 +53,7 @@ class MultiWheelLayout extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: theme.spacer32),
+              padding: EdgeInsets.symmetric(horizontal: theme.spacer4),
               child: Row(
                 children: [
                   for (final column in columns) Expanded(child: column),
@@ -66,7 +66,7 @@ class MultiWheelLayout extends StatelessWidget {
                 bottom: top ? null : 0,
                 left: 0,
                 right: 0,
-                height: theme.spacer48.clamp(0, height / 2).toDouble(),
+                height: theme.spacer5.clamp(0, height / 2).toDouble(),
                 child: IgnorePointer(
                   child: DecoratedBox(
                     decoration: BoxDecoration(

@@ -26,7 +26,6 @@ class TTabsBar extends StatelessWidget {
     this.controller,
     this.decoration,
     this.isScrollable = false,
-    this.indicator,
     this.onTap,
     this.size = TTabsBarSize.small,
     this.variant = TTabsBarVariant.line,
@@ -46,12 +45,6 @@ class TTabsBar extends StatelessWidget {
   /// 是否横向滚动。
   final bool isScrollable;
 
-  /// 自定义指示器；非空时覆盖 Theme 指示器。
-  ///
-  /// [TTabsBarVariant.line] 默认使用 TDesign 品牌色指示器，Tag 与 Card
-  /// 默认不显示指示器。
-  final Decoration? indicator;
-
   /// 点击事件
   final ValueChanged<int>? onTap;
 
@@ -70,8 +63,7 @@ class TTabsBar extends StatelessWidget {
     final dividerHeight = themeData.dividerHeight ?? 0.5;
     final backgroundColor =
         themeData.backgroundColor ?? context.tTheme.bgColorContainer;
-    final resolvedIndicator =
-        indicator ?? themeData.indicator ?? _defaultIndicator(context);
+    final resolvedIndicator = themeData.indicator ?? _defaultIndicator(context);
     return Container(
       height: 48,
       decoration:
@@ -86,7 +78,7 @@ class TTabsBar extends StatelessWidget {
                           bottom: BorderSide(
                             color:
                                 themeData.dividerColor ??
-                                context.tTheme.componentStrokeColor,
+                                context.tTheme.componentStroke,
                             width: dividerHeight,
                           ),
                         ),
@@ -95,8 +87,7 @@ class TTabsBar extends StatelessWidget {
         isScrollable: isScrollable,
         indicator: resolvedIndicator,
         indicatorSize: TabBarIndicatorSize.tab,
-        labelColor:
-            themeData.labelStyle?.color ?? context.tTheme.brandNormalColor,
+        labelColor: themeData.labelStyle?.color ?? context.tTheme.brandColor,
         labelStyle: themeData.labelStyle ?? _getLabelStyle(context),
         labelPadding:
             themeData.labelPadding ??
@@ -128,7 +119,7 @@ class TTabsBar extends StatelessWidget {
     if (variant != TTabsBarVariant.line) {
       return _TNoneIndicator();
     }
-    return TTabsBarIndicator(indicatorColor: context.tTheme.brandNormalColor);
+    return TTabsBarIndicator(indicatorColor: context.tTheme.brandColor);
   }
 
   TextStyle _getUnSelectLabelStyle(BuildContext context) {
@@ -159,10 +150,7 @@ class TTabsBar extends StatelessWidget {
       fontWeight: tokenFont?.fontWeight,
       fontFamily: inheritedStyle?.fontFamily,
       fontFamilyFallback: inheritedStyle?.fontFamilyFallback,
-    ).copyWith(
-      fontWeight: FontWeight.w600,
-      color: context.tTheme.brandNormalColor,
-    );
+    ).copyWith(fontWeight: FontWeight.w600, color: context.tTheme.brandColor);
   }
 }
 

@@ -154,8 +154,11 @@ void main() {
             of: titleFinder,
             matching: find.byType(RichText),
           );
+          // null 与 TextDecoration.none 都表示最终不绘制下划线；
+          // TText 解析后使用 inherit: false，可能省略这个默认字段。
           expect(
-            tester.widget<RichText>(richTitle).text.style?.decoration,
+            tester.widget<RichText>(richTitle).text.style?.decoration ??
+                TextDecoration.none,
             TextDecoration.none,
           );
         } else {

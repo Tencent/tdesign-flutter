@@ -25,7 +25,7 @@ class RateColorExample extends StatelessWidget {
           ),
         ),
       ),
-      SizedBox(height: context.tTheme.spacer16),
+      SizedBox(height: context.tTheme.spacer2),
       TCell(
         title: const Text('线描评分'),
         note: Theme(

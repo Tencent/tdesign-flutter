@@ -81,7 +81,7 @@ class PickerItemWidget extends StatelessWidget {
                     height: font?.height,
                     fontWeight: font?.fontWeight,
                     color: disabled
-                        ? theme.textDisabledColor
+                        ? theme.textColorDisabled
                         : selected
                         ? theme.textColorPrimary
                         : theme.textColorSecondary,
@@ -93,7 +93,7 @@ class PickerItemWidget extends StatelessWidget {
                             height: font?.height,
                             fontWeight: font?.fontWeight,
                             color: disabled
-                                ? theme.textDisabledColor
+                                ? theme.textColorDisabled
                                 : selected
                                 ? theme.textColorPrimary
                                 : theme.textColorSecondary,

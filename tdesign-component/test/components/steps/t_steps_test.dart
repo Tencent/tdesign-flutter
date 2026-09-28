@@ -24,54 +24,48 @@ void main() {
   testWidgets('横纵文字继承显式主题，局部字号不改写状态颜色', (tester) async {
     final token = TThemeData.defaultData();
     for (final direction in TStepsDirection.values) {
-      for (final materialTheme in [false, true]) {
-        final theme = TThemeBuilder.light(token);
-        await tester.pumpWidget(
-          MaterialApp(
-            theme: materialTheme
-                ? theme.copyWith(
-                    textTheme: const TextTheme(
-                      bodyLarge: TextStyle(fontSize: 21),
-                    ),
-                  )
-                : theme.mergeExtension(
-                    const TTextThemeData(textStyle: TextStyle(fontSize: 21)),
-                  ),
-            home: Scaffold(
-              body: TSteps.progress(
-                direction: direction,
-                steps: buildSteps(3),
-                value: 1,
-                status: TStepsStatus.error,
-              ),
+      final theme = TThemeBuilder.light(token);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme.copyWith(
+            textTheme: const TextTheme(bodyLarge: TextStyle(fontSize: 21)),
+          ),
+          home: Scaffold(
+            body: TSteps.progress(
+              direction: direction,
+              steps: buildSteps(3),
+              value: 1,
+              status: TStepsStatus.error,
             ),
           ),
-        );
-        expect(tester.widget<Text>(find.text('步骤1')).style?.fontSize, 21);
-        expect(tester.widget<Text>(find.text('步骤2')).style?.fontSize, 21);
-        expect(
-          tester.widget<Text>(find.text('步骤1')).style?.color,
-          token.textColorPrimary,
-        );
-        expect(
-          tester.widget<Text>(find.text('步骤2')).style?.color,
-          token.errorNormalColor,
-        );
-        expect(
-          tester.widget<Text>(find.text('步骤3')).style?.color,
-          token.textColorPlaceholder,
-        );
-        expect(tester.widget<Text>(find.text('内容1')).style?.fontSize, 21);
-        expect(tester.takeException(), isNull);
-      }
+        ),
+      );
+      expect(tester.widget<Text>(find.text('步骤1')).style?.fontSize, 21);
+      expect(tester.widget<Text>(find.text('步骤2')).style?.fontSize, 21);
+      expect(
+        tester.widget<Text>(find.text('步骤1')).style?.color,
+        token.textColorPrimary,
+      );
+      expect(
+        tester.widget<Text>(find.text('步骤2')).style?.color,
+        token.errorColor,
+      );
+      expect(
+        tester.widget<Text>(find.text('步骤3')).style?.color,
+        token.textColorPlaceholder,
+      );
+      expect(tester.widget<Text>(find.text('内容1')).style?.fontSize, 21);
+      expect(tester.takeException(), isNull);
     }
   });
 
   testWidgets('显式文字颜色生效且 customTitle 保持实例优先', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
-        theme: TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
-          const TTextThemeData(textStyle: TextStyle(color: Colors.purple)),
+        theme: TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+          textTheme: const TextTheme(
+            bodyLarge: TextStyle(color: Colors.purple),
+          ),
         ),
         home: const Scaffold(
           body: TSteps.progress(
@@ -125,7 +119,7 @@ void main() {
       expect(dots, hasLength(3));
       for (final dot in dots) {
         final decoration = dot.decoration! as BoxDecoration;
-        expect(decoration.color, TThemeData.defaultData().brandNormalColor);
+        expect(decoration.color, TThemeData.defaultData().brandColor);
         expect(decoration.border, isNull);
       }
     }
@@ -370,10 +364,7 @@ void main() {
         expect(dotDecorations, hasLength(3));
         expect(dotDecorations[0].color, Colors.transparent);
         expect(dotDecorations[0].border, isNotNull);
-        expect(
-          dotDecorations[1].color,
-          TThemeData.defaultData().brandNormalColor,
-        );
+        expect(dotDecorations[1].color, TThemeData.defaultData().brandColor);
         expect(dotDecorations[2].color, Colors.transparent);
         expect(dotDecorations[2].border, isNotNull);
       }

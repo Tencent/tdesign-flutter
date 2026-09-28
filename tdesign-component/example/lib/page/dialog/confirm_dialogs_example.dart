@@ -44,7 +44,7 @@ class ConfirmDialogsExample extends StatelessWidget {
     return Column(
       children: [
         for (var index = 0; index < children.length; index++) ...[
-          if (index > 0) SizedBox(height: context.tTheme.spacer16),
+          if (index > 0) SizedBox(height: context.tTheme.spacer2),
           children[index],
         ],
       ],

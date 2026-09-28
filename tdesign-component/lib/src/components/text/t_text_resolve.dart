@@ -1,8 +1,10 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
+import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_text_theme_source.dart';
 import '../../theme/t_theme.dart';
@@ -15,8 +17,9 @@ class TTextResolve {
 
   /// 解析 [TText] 最终样式。
   ///
-  /// 优先级：实例 style > 实例便利参数 > TTextThemeData >
-  /// DefaultTextStyle > Material TextTheme > 组合组件 defaults > TDesign Token。
+  /// 优先级：实例 style > 实例便利参数 > 组件 Theme >
+  /// 显式 DefaultTextStyle > 显式 Material TextTheme >
+  /// 组合组件 defaults > TDesign Token。
   ///
   /// [defaults] 仅供组合组件提供内置文字样式，不代表调用方显式覆盖。
   /// 调用方的部分主题配置只替换对应字段，未配置字段仍使用组件默认值。
@@ -32,7 +35,7 @@ class TTextResolve {
     Color? lineThroughColor,
   }) {
     final token = context.tTheme;
-    final tokenFont = token.fontBodyLarge ?? Font(size: 16, lineHeight: 24);
+    final tokenFont = token.fontBodyMedium ?? Font(size: 14, lineHeight: 22);
     final material = Theme.of(context);
     final componentTheme = material.extension<TTextThemeData>();
 
@@ -42,23 +45,25 @@ class TTextResolve {
         : ambientTextStyle;
     resolved = _merge(
       resolved,
-      _fontStyle(tokenFont).copyWith(color: token.textColorPrimary),
+      _fontStyle(tokenFont).copyWith(
+        color: token.textColorPrimary,
+        fontFamily: _tokenFontFamily(token.fontFamily),
+        fontFamilyFallback: _tokenFontFallback(token.fontFamily),
+      ),
     );
     resolved = _merge(resolved, defaults);
-    // 既有 TText 调用保留原有解析；组合组件 defaults 使用字段级来源解析。
-    resolved = _merge(
-      resolved,
-      defaults == null
-          ? material.tExplicitTextTheme?.bodyLarge
-          : _explicitMaterialTextStyle(material),
-    );
-    final defaultTextStyle = defaults == null
-        ? context.tExplicitDefaultTextStyle
-        : _explicitDefaultTextStyle(context);
+    // Material TextTheme 的字体兜底等局部补全不应把 bodyLarge 的默认
+    // 字号/行高一并升格为显式输入，覆盖 TDesign bodyMedium Token。
+    resolved = _merge(resolved, _explicitMaterialTextStyle(material));
+    final defaultTextStyle = _explicitDefaultTextStyle(context);
     if (!_isMaterialFallbackStyle(defaultTextStyle)) {
       resolved = _merge(resolved, defaultTextStyle);
     }
-    resolved = _merge(resolved, _fontStyleOrNull(componentTheme?.font));
+    final themeFont = componentTheme?.font;
+    resolved = _merge(
+      resolved,
+      themeFont == null ? null : _fontStyle(themeFont),
+    );
     resolved = _merge(resolved, componentTheme?.textStyle);
     resolved = _merge(
       resolved,
@@ -103,6 +108,41 @@ class TTextResolve {
       return style;
     }
     return style == null ? explicit : explicit.merge(style);
+  }
+
+  static List<String>? _tokenFontFallback(FontFamily? family) {
+    if (family == null) {
+      return null;
+    }
+    final fallback = family.fallback;
+    // CSS 字体栈用完后由浏览器选择系统 sans-serif 字体。Flutter 测试环境
+    // 不会为未安装的 PingFang/Microsoft YaHei/Arial Regular 自动补上 Roboto。
+    // 保持 Token 原始列表不变，仅为其默认字体栈追加 Flutter 兜底。
+    if (family.fontFamily != 'PingFang SC' ||
+        (fallback?.contains('Roboto') ?? false)) {
+      return fallback;
+    }
+    return [...?fallback, 'Roboto'];
+  }
+
+  static String? _tokenFontFamily(FontFamily? family) {
+    if (family == null) {
+      return null;
+    }
+    // 小程序 CSS 字体栈最后由浏览器选用系统 sans-serif。Flutter 在非 Apple
+    // 平台上不能依赖未安装的 PingFang 自动跳过；默认栈在这些平台用 Roboto。
+    // Apple 平台与用户显式配置的主字体仍保持 Token 原值。
+    if (family.fontFamily == 'PingFang SC' &&
+        family.package == null &&
+        listEquals(family.fallback, const [
+          'Microsoft YaHei',
+          'Arial Regular',
+        ]) &&
+        defaultTargetPlatform != TargetPlatform.iOS &&
+        defaultTargetPlatform != TargetPlatform.macOS) {
+      return 'Roboto';
+    }
+    return family.fontFamily;
   }
 
   static TextStyle? _explicitMaterialTextStyle(ThemeData material) {
@@ -262,10 +302,6 @@ class TTextResolve {
     );
   }
 
-  static TextStyle? _fontStyleOrNull(Font? font) {
-    return font == null ? null : _fontStyle(font);
-  }
-
   static TextStyle? _explicitStyle({
     Font? font,
     FontWeight? fontWeight,
@@ -288,6 +324,7 @@ class TTextResolve {
       height: font?.height,
       fontWeight: fontWeight ?? font?.fontWeight,
       fontFamily: fontFamily?.fontFamily,
+      fontFamilyFallback: fontFamily?.fallback,
       package: fontFamily?.package,
       decoration: isTextThrough == null
           ? null

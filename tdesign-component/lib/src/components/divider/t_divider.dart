@@ -90,14 +90,14 @@ class TDivider extends StatelessWidget {
     final effectiveIndent = theme?.indent;
     final effectiveEndIndent = theme?.endIndent;
     final effectiveGapPadding =
-        theme?.gapPadding ?? EdgeInsets.symmetric(horizontal: token.spacer12);
+        theme?.gapPadding ?? EdgeInsets.symmetric(horizontal: token.spacer1);
     final effectiveMargin =
         theme?.margin ??
         _defaultMargin(
           effectiveLayout,
           dividerTheme.space,
           effectiveThickness,
-          token.spacer16,
+          token.spacer2,
         );
     final contentFont = token.fontBodySmall;
     final defaultTextStyle = TextStyle(

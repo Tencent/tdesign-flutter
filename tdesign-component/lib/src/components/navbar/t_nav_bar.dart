@@ -23,17 +23,8 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.onBack,
     this.belowTitleWidget,
     this.flexibleSpace,
-    // L4 样式参数（可覆盖 Theme）
-    this.titleColor,
-    this.backIconColor,
-    this.backgroundColor,
     this.height = 48,
-    this.padding,
-    this.titleMargin,
-    this.opacity,
     this.useBorderStyle = false,
-    this.border,
-    this.boxShadow,
     this.useSafeArea = false,
   }) : super(key: key);
 
@@ -41,7 +32,7 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
   ///
   /// 文本标题可传入 [Text]，用法与 [AppBar.title] 一致。
   /// 标题自身的显式文本样式优先于 NavBar 提供的默认标题样式；例如 `TText`
-  /// 默认会解析正文颜色，如需使用 `titleColor`，请通过 `TText.textColor`
+  /// 默认会解析正文颜色，如需使用 Theme 的标题颜色，请通过 `TText.textColor`
   /// 传入相同颜色，或改用未显式设置颜色的 [Text]。
   final Widget? title;
 
@@ -71,44 +62,14 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// 固定背景 Widget。
   ///
-  /// 位于导航栏内容下层；若 [backgroundColor] 完全不透明，背景内容不会透出。
+  /// 位于导航栏内容下层；若 Theme 的背景色完全不透明，背景内容不会透出。
   final Widget? flexibleSpace;
-
-  // ---- L4 样式（可覆盖 ThemeData 默认值） ----
-
-  /// 标题的默认颜色。
-  ///
-  /// 仅在 [title] 未自行提供前景色时生效。标题 Widget 自身的显式颜色优先；
-  /// `TText` 会解析默认正文色，因此使用 `TText` 时可通过 `TText.textColor`
-  /// 明确传入所需颜色。
-  final Color? titleColor;
-
-  /// 左边返回图标颜色
-  final Color? backIconColor;
-
-  /// 背景颜色
-  final Color? backgroundColor;
 
   /// 高度；作为 [PreferredSizeWidget.preferredSize] 的唯一高度来源
   final double height;
 
-  /// 内部填充
-  final EdgeInsetsGeometry? padding;
-
-  /// 中间文案左右两边间距
-  final double? titleMargin;
-
-  /// 背景颜色透明度，默认 1。
-  final double? opacity;
-
   /// 是否使用边框模式
   final bool useBorderStyle;
-
-  /// 操作项边框配置，仅在 [useBorderStyle] 为 true 时生效。
-  final TNavBarBorder? border;
-
-  /// 底部阴影
-  final List<BoxShadow>? boxShadow;
 
   /// 是否避让顶部系统安全区。
   ///
@@ -124,17 +85,15 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
       Theme.of(context).extension<TNavBarThemeData>() ??
       const TNavBarThemeData();
 
-  // ---- ThemeData 取值辅助（构造器优先 > Theme > 默认） ----
+  // ---- ThemeData 取值辅助（组件 Theme > Flutter Theme > Token） ----
 
   Color _effectiveTitleColor(BuildContext context) =>
-      titleColor ??
       _themeData(context).titleColor ??
       Theme.of(context).appBarTheme.foregroundColor ??
       Theme.of(context).tExplicitColorScheme?.onSurface ??
       context.tTheme.textColorPrimary;
 
   Color _effectiveBackIconColor(BuildContext context) =>
-      backIconColor ??
       _themeData(context).backIconColor ??
       Theme.of(context).appBarTheme.iconTheme?.color ??
       Theme.of(context).appBarTheme.foregroundColor ??
@@ -142,7 +101,6 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
       context.tTheme.textColorPrimary;
 
   Color _effectiveBackgroundColor(BuildContext context) =>
-      backgroundColor ??
       _themeData(context).backgroundColor ??
       Theme.of(context).appBarTheme.backgroundColor ??
       Theme.of(context).tExplicitColorScheme?.surface ??
@@ -151,28 +109,24 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
   double get _effectiveHeight => preferredSize.height;
 
   EdgeInsetsGeometry _effectivePadding(BuildContext context) =>
-      padding ??
       _themeData(context).padding ??
-      EdgeInsets.symmetric(
-        horizontal: context.tTheme.spacer16,
-        vertical: context.tTheme.spacer4,
-      );
+      EdgeInsets.symmetric(horizontal: context.tTheme.spacer2, vertical: 4.0);
 
   double _effectiveTitleMargin(BuildContext context) =>
-      titleMargin ?? _themeData(context).titleMargin ?? 16;
+      _themeData(context).titleMargin ?? 16;
 
   double _effectiveOpacity(BuildContext context) =>
-      opacity ?? _themeData(context).opacity ?? 1.0;
+      _themeData(context).opacity ?? 1.0;
 
   TNavBarBorder _effectiveBorder(BuildContext context) =>
-      border ?? _themeData(context).border ?? const TNavBarBorder();
+      _themeData(context).border ?? const TNavBarBorder();
 
   List<BoxShadow>? _effectiveBoxShadow(BuildContext context) =>
-      boxShadow ?? _themeData(context).boxShadow;
+      _themeData(context).boxShadow;
 
   Widget _addBorder(BuildContext context, List<Widget> items) {
     var border = _effectiveBorder(context);
-    var borderColor = border.color ?? context.tTheme.componentStrokeColor;
+    var borderColor = border.color ?? context.tTheme.componentStroke;
     var children = <Widget>[];
     for (var i = 0; i < items.length; i++) {
       children.add(items[i]);
@@ -188,9 +142,7 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
         borderRadius: BorderRadius.circular(border.radius),
         border: Border.all(color: borderColor, width: border.width),
       ),
-      padding:
-          border.padding ??
-          EdgeInsets.symmetric(horizontal: context.tTheme.spacer4),
+      padding: border.padding ?? const EdgeInsets.symmetric(horizontal: 4.0),
       child: child,
     );
   }
@@ -225,15 +177,15 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
         padding:
             item.padding ??
             (isLeading
-                ? EdgeInsets.only(right: context.tTheme.spacer8)
-                : EdgeInsets.only(left: context.tTheme.spacer8)),
+                ? EdgeInsets.only(right: context.tTheme.spacer)
+                : EdgeInsets.only(left: context.tTheme.spacer)),
         child:
             item.customWidget ??
             Icon(
               item.icon,
               size: item.iconSize,
               color: isDisabled
-                  ? context.tTheme.textDisabledColor
+                  ? context.tTheme.textColorDisabled
                   : item.iconColor,
             ),
       ),

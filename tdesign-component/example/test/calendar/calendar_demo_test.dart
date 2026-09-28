@@ -231,11 +231,11 @@ void main() {
         .toList();
     final token = TThemeData.defaultData();
     expect(normalDay.textColor, token.textColorPrimary);
-    expect(holidayDay.textColor, token.errorNormalColor);
+    expect(holidayDay.textColor, token.errorColor);
     expect(selectedDay.textColor, token.textColorAnti);
     expect(prices, contains(token.textColorPlaceholder));
     expect(prices, contains(token.textColorAnti));
-    expect(prices, isNot(contains(token.errorNormalColor)));
+    expect(prices, isNot(contains(token.errorColor)));
 
     await disposeDemoPage(tester);
   }, tags: 'demo');

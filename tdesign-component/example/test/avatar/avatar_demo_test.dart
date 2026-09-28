@@ -14,10 +14,10 @@ void main() {
 
     final groups = tester.widgetList<TAvatarGroup>(find.byType(TAvatarGroup));
     expect(groups, hasLength(2));
-    expect(groups.first.dimension, 48);
+    expect(tester.getSize(find.byWidget(groups.first)).height, 48);
     expect(groups.first.maxCount, 5);
     expect(groups.first.children, hasLength(6));
-    expect(groups.last.dimension, 48);
+    expect(tester.getSize(find.byWidget(groups.last)).height, 48);
     expect(groups.last.cascading, TAvatarGroupCascading.endUp);
     expect(groups.last.children, hasLength(6));
   });

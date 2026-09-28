@@ -7,7 +7,7 @@ class RadiusExtraLargeExample extends StatelessWidget {
   Widget _buildRadiusExtraLarge(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: context.tTheme.brandNormalColor,
+        color: context.tTheme.brandColor,
         borderRadius: BorderRadius.circular(context.tTheme.radiusExtraLarge),
       ),
     );

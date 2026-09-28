@@ -161,7 +161,7 @@ class TWrapSideBarItem extends StatelessWidget {
               color:
                   selectedTextStyle?.color ??
                   selectedColor ??
-                  context.tTheme.brandNormalColor,
+                  context.tTheme.brandColor,
               borderRadius: BorderRadius.circular(4),
             ),
           ),
@@ -173,7 +173,7 @@ class TWrapSideBarItem extends StatelessWidget {
   Widget renderIcon(BuildContext context) {
     final iconColor = () {
       if (disabled) {
-        return context.tTheme.textDisabledColor;
+        return context.tTheme.textColorDisabled;
       }
       if (!selected) {
         return unSelectedColor ?? context.tTheme.textColorPrimary;
@@ -181,7 +181,7 @@ class TWrapSideBarItem extends StatelessWidget {
       if (selectedTextStyle?.color != null) {
         return selectedTextStyle!.color!;
       }
-      return selectedColor ?? context.tTheme.brandNormalColor;
+      return selectedColor ?? context.tTheme.brandColor;
     }();
 
     return Visibility(
@@ -203,9 +203,9 @@ class TWrapSideBarItem extends StatelessWidget {
       style: effectiveStyle,
       fontWeight: selected && !disabled ? FontWeight.w600 : FontWeight.w400,
       textColor: disabled
-          ? context.tTheme.textDisabledColor
+          ? context.tTheme.textColorDisabled
           : selected
-          ? selectedColor ?? context.tTheme.brandNormalColor
+          ? selectedColor ?? context.tTheme.brandColor
           : unSelectedColor ?? context.tTheme.textColorPrimary,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,

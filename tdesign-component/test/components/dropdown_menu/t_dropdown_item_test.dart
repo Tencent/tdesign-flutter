@@ -30,15 +30,13 @@ void main() {
         ) async {
           final tokens = TThemeData.defaultData().copyWithTThemeData(
             'dropdown-grid',
-            marginMap: {'spacer12': gap},
+            marginMap: {'spacer1': gap},
           );
           await tester.pumpWidget(
             MaterialApp(
               theme: TThemeBuilder.light(tokens),
-              builder: (_, child) => Directionality(
-                textDirection: direction,
-                child: child!,
-              ),
+              builder: (_, child) =>
+                  Directionality(textDirection: direction, child: child!),
               home: Scaffold(
                 body: Directionality(
                   textDirection: direction,
@@ -114,8 +112,9 @@ void main() {
     expect(option.group, '数字');
   });
 
-  testWidgets('single select reports value and closes with selection reason',
-      (tester) async {
+  testWidgets('single select reports value and closes with selection reason', (
+    tester,
+  ) async {
     String? selected;
     TDropdownMenuCloseReason? reason;
     await tester.pumpWidget(
@@ -128,11 +127,11 @@ void main() {
               label: '单选',
               panelBuilder: (context, controller) =>
                   TDropdownSingleSelectPanel<String>(
-                controller: controller,
-                options: options,
-                value: 'a',
-                onChanged: (value) => selected = value,
-              ),
+                    controller: controller,
+                    options: options,
+                    value: 'a',
+                    onChanged: (value) => selected = value,
+                  ),
             ),
           ],
         ),
@@ -150,7 +149,7 @@ void main() {
     );
     expect(
       tester.widget<Icon>(selectedIcon).color,
-      TThemeData.defaultData().brandNormalColor,
+      TThemeData.defaultData().brandColor,
     );
     expect(tester.widget<Text>(selectedText).style?.fontSize, 16);
     expect(tester.widget<Text>(selectedText).style?.height, 1.5);
@@ -194,12 +193,12 @@ void main() {
               label: '单选',
               panelBuilder: (context, controller) =>
                   TDropdownSingleSelectPanel<String>(
-                controller: controller,
-                options: options,
-                value: null,
-                maxHeight: 200,
-                onChanged: (_) => changed = true,
-              ),
+                    controller: controller,
+                    options: options,
+                    value: null,
+                    maxHeight: 200,
+                    onChanged: (_) => changed = true,
+                  ),
             ),
           ],
         ),
@@ -225,15 +224,15 @@ void main() {
               label: '多选',
               panelBuilder: (context, controller) =>
                   TDropdownMultiSelectPanel<String>(
-                controller: controller,
-                options: options,
-                values: const {'a'},
-                columns: 2,
-                onConfirm: (values) {
-                  confirmed = values;
-                  confirmCount++;
-                },
-              ),
+                    controller: controller,
+                    options: options,
+                    values: const {'a'},
+                    columns: 2,
+                    onConfirm: (values) {
+                      confirmed = values;
+                      confirmCount++;
+                    },
+                  ),
             ),
           ],
         ),
@@ -262,8 +261,9 @@ void main() {
     expect(() => confirmed!.add('x'), throwsUnsupportedError);
   });
 
-  testWidgets('reset only changes draft and cancel discards it',
-      (tester) async {
+  testWidgets('reset only changes draft and cancel discards it', (
+    tester,
+  ) async {
     Set<String>? confirmed;
     final controller = TDropdownMenuController();
     await tester.pumpWidget(
@@ -276,11 +276,11 @@ void main() {
               label: '多选',
               panelBuilder: (context, panelController) =>
                   TDropdownMultiSelectPanel<String>(
-                controller: panelController,
-                options: options,
-                values: const {'a', 'b'},
-                onConfirm: (values) => confirmed = values,
-              ),
+                    controller: panelController,
+                    options: options,
+                    values: const {'a', 'b'},
+                    onConfirm: (values) => confirmed = values,
+                  ),
             ),
           ],
         ),
@@ -304,8 +304,9 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('external committed value synchronizes while draft is clean',
-      (tester) async {
+  testWidgets('external committed value synchronizes while draft is clean', (
+    tester,
+  ) async {
     var values = <String>{'a'};
     Set<String>? confirmed;
     late StateSetter rebuild;
@@ -321,11 +322,11 @@ void main() {
                   label: '多选',
                   panelBuilder: (context, controller) =>
                       TDropdownMultiSelectPanel<String>(
-                    controller: controller,
-                    options: options,
-                    values: values,
-                    onConfirm: (value) => confirmed = value,
-                  ),
+                        controller: controller,
+                        options: options,
+                        values: values,
+                        onConfirm: (value) => confirmed = value,
+                      ),
                 ),
               ],
             );
@@ -343,8 +344,9 @@ void main() {
     expect(confirmed, {'b'});
   });
 
-  testWidgets('dirty multi-select draft is not overwritten externally',
-      (tester) async {
+  testWidgets('dirty multi-select draft is not overwritten externally', (
+    tester,
+  ) async {
     var values = <String>{'a'};
     Set<String>? confirmed;
     late StateSetter rebuild;
@@ -360,11 +362,11 @@ void main() {
                   label: '多选',
                   panelBuilder: (context, controller) =>
                       TDropdownMultiSelectPanel<String>(
-                    controller: controller,
-                    options: options,
-                    values: values,
-                    onConfirm: (value) => confirmed = value,
-                  ),
+                        controller: controller,
+                        options: options,
+                        values: values,
+                        onConfirm: (value) => confirmed = value,
+                      ),
                 ),
               ],
             );
@@ -393,28 +395,28 @@ void main() {
               label: '主题',
               panelBuilder: (context, controller) =>
                   TDropdownMultiSelectPanel<String>(
-                controller: controller,
-                options: const [
-                  TDropdownMenuOption(
-                    value: 'a',
-                    label: '选项 A',
-                    group: '同组',
+                    controller: controller,
+                    options: const [
+                      TDropdownMenuOption(
+                        value: 'a',
+                        label: '选项 A',
+                        group: '同组',
+                      ),
+                      TDropdownMenuOption(
+                        value: 'b',
+                        label: '选项 B',
+                        group: '同组',
+                      ),
+                      TDropdownMenuOption(
+                        value: 'c',
+                        label: '选项 C',
+                        group: '同组',
+                      ),
+                    ],
+                    values: const {'a'},
+                    columns: 2,
+                    onConfirm: (_) {},
                   ),
-                  TDropdownMenuOption(
-                    value: 'b',
-                    label: '选项 B',
-                    group: '同组',
-                  ),
-                  TDropdownMenuOption(
-                    value: 'c',
-                    label: '选项 C',
-                    group: '同组',
-                  ),
-                ],
-                values: const {'a'},
-                columns: 2,
-                onConfirm: (_) {},
-              ),
             ),
           ],
         ),

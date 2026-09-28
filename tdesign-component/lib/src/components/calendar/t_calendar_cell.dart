@@ -192,7 +192,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
     BoxDecoration? decoration,
   ) {
     _positionOffset = 0;
-    final bridgeColor = cellStyle.centreColor ?? context.tTheme.brandLightColor;
+    final bridgeColor = cellStyle.centreColor ?? context.tTheme.brandColorLight;
     final next = _nextDay();
     if (widget.cell?.selectType == DateSelectType.start) {
       if (widget.cell?.isLastDayOfMonth == true) {
@@ -236,7 +236,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
           Positioned(
             left: 0,
             right: 0,
-            bottom: context.tTheme.spacer4,
+            bottom: 4.0,
             child: Center(child: subtitle),
           ),
       ],

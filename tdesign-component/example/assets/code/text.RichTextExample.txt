@@ -12,7 +12,7 @@ class RichTextExample extends StatelessWidget {
           TTextSpan(
             text: 'TTextSpan',
             fontWeight: FontWeight.w600,
-            textColor: context.tTheme.brandNormalColor,
+            textColor: context.tTheme.brandColor,
           ),
           const TextSpan(text: ' 组合局部样式 '),
           const WidgetSpan(

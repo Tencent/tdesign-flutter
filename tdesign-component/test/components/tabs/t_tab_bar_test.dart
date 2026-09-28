@@ -174,7 +174,7 @@ void main() {
       );
       expect(tabBar.indicator, isA<TTabsBarIndicator>());
       expect(tabBar.indicatorSize, TabBarIndicatorSize.tab);
-      expect(tabBar.labelColor, token.brandNormalColor);
+      expect(tabBar.labelColor, token.brandColor);
       expect(tabBar.unselectedLabelColor, token.textColorPrimary);
       expect(tabBar.labelStyle?.fontFamily, 'TestFont');
       expect(tabBar.labelStyle?.fontSize, token.fontBodyMedium?.size);
@@ -188,10 +188,10 @@ void main() {
       final disabledParagraph = tester.renderObject<RenderParagraph>(
         find.text('禁用'),
       );
-      expect(disabledParagraph.text.style?.color, token.textDisabledColor);
+      expect(disabledParagraph.text.style?.color, token.textColorDisabled);
       final iconTheme = IconTheme.of(tester.element(find.byIcon(Icons.block)));
       expect(iconTheme.size, 18);
-      expect(iconTheme.color, token.textDisabledColor);
+      expect(iconTheme.color, token.textColorDisabled);
       expect(iconTheme.opacity, 1);
 
       final container = tester.widget<Container>(
@@ -200,7 +200,7 @@ void main() {
         ),
       );
       final decoration = container.decoration! as BoxDecoration;
-      expect(decoration.border?.bottom.color, token.componentStrokeColor);
+      expect(decoration.border?.bottom.color, token.componentStroke);
     });
 
     testWidgets('renders all supported variants', (tester) async {
@@ -222,7 +222,7 @@ void main() {
       expect(tabBar.indicator, isA<TTabsBarIndicator>());
       expect(
         (tabBar.indicator! as TTabsBarIndicator).indicatorColor,
-        TThemeData.defaultData().brandNormalColor,
+        TThemeData.defaultData().brandColor,
       );
 
       await tester.pumpWidget(
@@ -357,8 +357,10 @@ void main() {
           TTabsBar(
             tabs: tabs(),
             isScrollable: true,
-            indicator: const TTabsBarIndicator(indicatorColor: Colors.red),
             onTap: (index) => tapped = index,
+          ),
+          tabsBarTheme: const TTabsBarThemeData(
+            indicator: TTabsBarIndicator(indicatorColor: Colors.red),
           ),
         ),
       );

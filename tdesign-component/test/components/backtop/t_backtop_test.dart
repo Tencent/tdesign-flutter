@@ -7,6 +7,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 覆盖：默认渲染、shape 形态、showText、visibilityOffset 显隐、onPressed 回调/禁用、
 /// 回顶动画防抖、ThemeData 子树注入、品牌主题、tooltip。
 void main() {
+  RoundedRectangleBorder circleBorder(
+    TThemeData token, {
+    BorderSide side = BorderSide.none,
+  }) => RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(token.radiusCircle),
+    side: side,
+  );
+
   /// 用 TTheme 包裹以提供基础 Token
   Widget wrapWithTheme(Widget child, {TBackTopThemeData? backTopTheme}) {
     final themeExtensions = <ThemeExtension>[
@@ -52,6 +60,60 @@ void main() {
         wrapWithTheme(const TBackTop(shape: TBackTopShape.halfCircle)),
       );
       expect(find.byType(TBackTop), findsOneWidget);
+      final decoration = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.decoration)
+          .whereType<ShapeDecoration>()
+          .first;
+      final token = TThemeData.defaultData();
+      expect(
+        decoration.shape,
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(token.radiusRound),
+            bottomLeft: Radius.circular(token.radiusRound),
+          ),
+          side: BorderSide(color: token.componentBorder, width: 0.5),
+        ),
+      );
+    });
+
+    testWidgets('半圆形跟随 radiusRound，不受 radiusCircle 覆盖影响', (tester) async {
+      final token =
+          TThemeData.defaultData().copyWith(
+                radiusMap: {'radiusRound': 12, 'radiusCircle': 8},
+              )
+              as TThemeData;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(extensions: [token]),
+          home: const Scaffold(
+            body: Row(
+              children: [
+                TBackTop(),
+                TBackTop(shape: TBackTopShape.halfCircle),
+              ],
+            ),
+          ),
+        ),
+      );
+      final decorations = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.decoration)
+          .whereType<ShapeDecoration>()
+          .toList();
+      final side = BorderSide(color: token.componentBorder, width: 0.5);
+      expect(decorations[0].shape, circleBorder(token, side: side));
+      expect(
+        decorations[1].shape,
+        RoundedRectangleBorder(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(12),
+            bottomLeft: Radius.circular(12),
+          ),
+          side: side,
+        ),
+      );
     });
 
     testWidgets('showText 为 true 时显示文案', (tester) async {
@@ -307,10 +369,16 @@ void main() {
       final decoration = tester
           .widgetList<Container>(find.byType(Container))
           .map((container) => container.decoration)
-          .whereType<BoxDecoration>()
+          .whereType<ShapeDecoration>()
           .first;
       expect(decoration.color, token.bgColorContainer);
-      expect(decoration.border?.top.color, token.componentBorderColor);
+      expect(
+        decoration.shape,
+        circleBorder(
+          token,
+          side: BorderSide(color: token.componentBorder, width: 0.5),
+        ),
+      );
       expect(
         tester.widget<Icon>(find.byIcon(TIcons.backtop)).color,
         token.textColorPrimary,
@@ -331,10 +399,16 @@ void main() {
       final decoration = tester
           .widgetList<Container>(find.byType(Container))
           .map((container) => container.decoration)
-          .whereType<BoxDecoration>()
+          .whereType<ShapeDecoration>()
           .first;
       expect(decoration.color, Colors.red);
-      expect(decoration.border?.top.color, Colors.redAccent);
+      expect(
+        decoration.shape,
+        circleBorder(
+          TThemeData.defaultData(),
+          side: const BorderSide(color: Colors.redAccent, width: 0.5),
+        ),
+      );
       expect(
         tester.widget<Icon>(find.byIcon(TIcons.backtop)).color,
         Colors.white,
@@ -492,10 +566,16 @@ void main() {
       final decoration = tester
           .widgetList<Container>(find.byType(Container))
           .map((container) => container.decoration)
-          .whereType<BoxDecoration>()
+          .whereType<ShapeDecoration>()
           .first;
       expect(decoration.color, token.bgColorContainer);
-      expect(decoration.border?.top.color, token.componentBorderColor);
+      expect(
+        decoration.shape,
+        circleBorder(
+          token,
+          side: BorderSide(color: token.componentBorder, width: 0.5),
+        ),
+      );
       expect(
         tester.widget<Icon>(find.byIcon(TIcons.backtop)).color,
         token.textColorPrimary,
@@ -530,15 +610,21 @@ void main() {
       final decorations = tester
           .widgetList<Container>(find.byType(Container))
           .map((container) => container.decoration)
-          .whereType<BoxDecoration>()
+          .whereType<ShapeDecoration>()
           .toList();
       expect(decorations[0].color, token.grayColor13);
       expect(decorations[1].color, token.grayColor14);
+      final side = BorderSide(color: token.grayColor9, width: 0.5);
+      expect(decorations[0].shape, circleBorder(token, side: side));
       expect(
-        decorations.every(
-          (decoration) => decoration.border?.top.color == token.grayColor9,
+        decorations[1].shape,
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(token.radiusRound),
+            bottomLeft: Radius.circular(token.radiusRound),
+          ),
+          side: side,
         ),
-        isTrue,
       );
       expect(
         tester
@@ -599,7 +685,7 @@ void main() {
       );
       final decoratedSizes = tester
           .widgetList<Container>(find.byType(Container))
-          .where((container) => container.decoration is BoxDecoration)
+          .where((container) => container.decoration is ShapeDecoration)
           .map((container) => tester.getSize(find.byWidget(container)));
       expect(decoratedSizes.any((size) => size.height == 44), isTrue);
       expect(tester.widget<Icon>(find.byIcon(TIcons.backtop)).size, 24);

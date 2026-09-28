@@ -352,7 +352,7 @@ class TProgress extends StatelessWidget {
       case TProgressVariant.button:
         return _DefaultValues(
           strokeWidth: _ProgressDefaults.buttonHeight,
-          backgroundColor: context.tTheme.brandNormalColor,
+          backgroundColor: context.tTheme.brandColor,
           linearBorderRadius: BorderRadius.circular(
             context.tTheme.radiusDefault,
           ),
@@ -363,10 +363,10 @@ class TProgress extends StatelessWidget {
 
   Color _statusColor(BuildContext context, TProgressStatus status) =>
       switch (status) {
-        TProgressStatus.normal => context.tTheme.brandNormalColor,
-        TProgressStatus.warning => context.tTheme.warningNormalColor,
-        TProgressStatus.error => context.tTheme.errorNormalColor,
-        TProgressStatus.success => context.tTheme.successNormalColor,
+        TProgressStatus.normal => context.tTheme.brandColor,
+        TProgressStatus.warning => context.tTheme.warningColor,
+        TProgressStatus.error => context.tTheme.errorColor,
+        TProgressStatus.success => context.tTheme.successColor,
       };
 }
 
@@ -674,7 +674,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
             return Row(
               children: [
                 Expanded(child: _buildInsideLabel()),
-                SizedBox(width: context.tTheme.spacer8),
+                SizedBox(width: context.tTheme.spacer),
                 _buildExternalStatusIcon(),
               ],
             );
@@ -751,7 +751,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
           textDirection: TextDirection.rtl,
           children: [
             _buildLabelWidget(context.tTheme.textColorPrimary),
-            SizedBox(width: context.tTheme.spacer8),
+            SizedBox(width: context.tTheme.spacer),
             Expanded(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
@@ -809,7 +809,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
         alignment: Alignment.centerRight,
         child: Padding(
           key: const ValueKey('progress-inside-label-padding'),
-          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer8),
+          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer),
           child: _buildLabelWidget(context.tTheme.textColorAnti),
         ),
       ),
@@ -847,7 +847,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer8),
+          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer),
           child: _buildLabelWidget(context.tTheme.textColorPrimary),
         ),
       ],
@@ -1013,7 +1013,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
       colors: [
         _effectiveColor,
         Color.alphaBlend(
-          context.tTheme.fontWhColor1.withValues(alpha: 0.3),
+          context.tTheme.fontWhite1.withValues(alpha: 0.3),
           _effectiveColor,
         ),
       ],
@@ -1030,7 +1030,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
     return Container(
       height: widget.strokeWidth,
       alignment: Alignment.center,
-      child: _buildLabelWidget(context.tTheme.fontWhColor1),
+      child: _buildLabelWidget(context.tTheme.fontWhite1),
     );
   }
 }

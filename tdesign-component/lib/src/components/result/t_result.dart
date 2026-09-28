@@ -87,7 +87,7 @@ class TResult extends StatelessWidget {
             if (index > 0)
               SizedBox(
                 key: ValueKey('result-spacing-$index'),
-                height: context.tTheme.spacer12,
+                height: context.tTheme.spacer1,
               ),
             children[index],
           ],
@@ -113,25 +113,25 @@ class TResult extends StatelessWidget {
       case TResultStatus.success:
         return Icon(
           TIcons.check_circle,
-          color: context.tTheme.successNormalColor,
+          color: context.tTheme.successColor,
           size: iconSize,
         );
       case TResultStatus.warning:
         return Icon(
           TIcons.error_circle,
-          color: context.tTheme.warningNormalColor,
+          color: context.tTheme.warningColor,
           size: iconSize,
         );
       case TResultStatus.error:
         return Icon(
           TIcons.close_circle,
-          color: material?.error ?? context.tTheme.errorNormalColor,
+          color: material?.error ?? context.tTheme.errorColor,
           size: iconSize,
         );
       case TResultStatus.info:
         return Icon(
           TIcons.info_circle,
-          color: material?.primary ?? context.tTheme.brandNormalColor,
+          color: material?.primary ?? context.tTheme.brandColor,
           size: iconSize,
         );
     }

@@ -68,7 +68,7 @@ class TActionSheetGrid<T> extends StatefulWidget {
   }) {
     final token = context.tTheme;
     final showPagination = layout.mode == TActionSheetGridMode.paged;
-    var height = token.spacer8 + layout.rows * itemHeight;
+    var height = token.spacer + layout.rows * itemHeight;
     if (subtitle?.isNotEmpty ?? false) {
       final font = token.fontBodyMedium;
       final painter =
@@ -86,10 +86,10 @@ class TActionSheetGrid<T> extends StatefulWidget {
           )..layout(
             maxWidth: math.max(
               0,
-              MediaQuery.sizeOf(context).width - token.spacer16 * 2,
+              MediaQuery.sizeOf(context).width - token.spacer2 * 2,
             ),
           );
-      height += token.spacer4 + painter.height + token.spacer12;
+      height += 4.0 + painter.height + token.spacer1;
       painter.dispose();
     }
     if (showPagination) {
@@ -97,7 +97,7 @@ class TActionSheetGrid<T> extends StatefulWidget {
     }
     if (showCancel) {
       height +=
-          (showPagination ? token.spacer16 : token.spacer8) +
+          (showPagination ? token.spacer2 : token.spacer) +
           actionSheetCancelButtonHeight;
     }
     return height;
@@ -128,7 +128,7 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(height: context.tTheme.spacer8),
+          SizedBox(height: context.tTheme.spacer),
           if (widget.subtitle?.isNotEmpty ?? false) _buildDescription(context),
           Flexible(fit: FlexFit.loose, child: _buildGridContent(context)),
           if (widget.showCancel)
@@ -161,10 +161,10 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
   Widget _buildDescription(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        left: context.tTheme.spacer16,
-        right: context.tTheme.spacer16,
-        top: context.tTheme.spacer4,
-        bottom: context.tTheme.spacer12,
+        left: context.tTheme.spacer2,
+        right: context.tTheme.spacer2,
+        top: 4.0,
+        bottom: context.tTheme.spacer1,
       ),
       child: Center(
         child: TText(
@@ -306,14 +306,14 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
           (widget.items.length / widget.layout.count).ceil(),
           (index) {
             return Container(
-              margin: EdgeInsets.symmetric(horizontal: context.tTheme.spacer4),
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
               width: TActionSheetGrid.paginationIndicatorSize,
               height: TActionSheetGrid.paginationIndicatorSize,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: currentPage == index
-                    ? context.tTheme.brandNormalColor
-                    : context.tTheme.textDisabledColor,
+                    ? context.tTheme.brandColor
+                    : context.tTheme.textColorDisabled,
               ),
             );
           },
@@ -374,9 +374,9 @@ class TActionSheetSectionGrid<T> extends StatelessWidget {
     final titleHeight =
         (token.fontBodyMedium?.size ?? 14) *
         (token.fontBodyMedium?.height ?? (22 / 14));
-    final sectionHeight = token.spacer12 * 2 + titleHeight + itemHeight;
+    final sectionHeight = token.spacer1 * 2 + titleHeight + itemHeight;
     return sectionCount * sectionHeight +
-        (showCancel ? token.spacer8 + actionSheetCancelButtonHeight : 0);
+        (showCancel ? token.spacer + actionSheetCancelButtonHeight : 0);
   }
 
   @override
@@ -434,8 +434,8 @@ class TActionSheetSectionGrid<T> extends StatelessWidget {
       width: double.infinity,
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: context.tTheme.spacer16,
-          vertical: context.tTheme.spacer12,
+          horizontal: context.tTheme.spacer2,
+          vertical: context.tTheme.spacer1,
         ),
         child: TText(
           title,

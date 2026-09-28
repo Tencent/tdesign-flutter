@@ -19,7 +19,7 @@ class TButtonResolve {
   /// 解析最终的 [ButtonStyle]
   ///
   /// [variant] 按钮形态，决定 fill / outline / text / ghost 的基础样式链路。
-  /// [colorScheme] 语义色方案；为 null 时使用默认色方案。
+  /// [colorScheme] 语义色方案；为 null 时使用默认色方案，仅选择内置色板。
   /// [size] 尺寸规格，用于推导最小尺寸、内边距和默认字号。
   /// [icon] 图标内容；与 [hasChild] 一起决定图标尺寸。
   /// [hasChild] 是否存在文本或自定义内容，用于区分纯图标按钮与图文按钮。
@@ -31,7 +31,7 @@ class TButtonResolve {
     /// 按钮形态，决定 fill / outline / text / ghost 的基础样式链路。
     required TButtonVariant variant,
 
-    /// 语义色方案；为 null 时使用默认色方案。
+    /// 语义色方案；为 null 时使用默认色方案，仅选择内置色板。
     required TButtonColorScheme? colorScheme,
 
     /// 尺寸规格，用于推导最小尺寸、内边距和默认字号。
@@ -78,7 +78,7 @@ class TButtonResolve {
         ? null
         : _resolveShape(effectiveShape: theme!.shape!, tTheme: tTheme);
 
-    // 5. 实例 size > 组件 defaultSize，并据此生成组件规格尺寸。
+    // 5. 实例 size 选择组件规格尺寸。
     final effectiveShape = theme?.shape ?? TButtonShape.rectangle;
     final tapTargetSize =
         componentPalette?.tapTargetSize ??
@@ -142,12 +142,7 @@ class TButtonResolve {
       resolved = _overrideWith(resolved, paddingStyle);
     }
 
-    // 显式实例 colorScheme 属于 P0 参数，覆盖组件与 Material 色板。
-    if (colorScheme != null) {
-      resolved = _overrideWith(resolved, colorStyle);
-    }
-
-    // 渐变存在时强制背景 null（触发 MaterialType.transparency），阻止 M3 默认样式污染渐变效果（在 P0 之前，允许 P0 覆盖）
+    // 渐变存在时强制背景 null（触发 MaterialType.transparency），阻止 M3 默认样式污染渐变效果。
     if (hasGradient) {
       resolved = _overrideWith(
         resolved,
@@ -160,13 +155,12 @@ class TButtonResolve {
       );
     }
 
-    // P0：实例 style 覆盖所有
     if (instanceStyle != null) {
       resolved = _overrideWith(resolved, instanceStyle);
     }
 
     // 最终样式未显式配置交互层时，使用最终前景色生成 Flutter 原生 WidgetState 反馈。
-    // 放在 P0 之后只补空缺，不覆盖 Material、组件 Theme 或实例 style 的显式 overlayColor。
+    // 只补空缺，不覆盖 Material 或组件 Theme 的显式 overlayColor。
     if (resolved.overlayColor == null) {
       final foreground = resolved.foregroundColor;
       final background = resolved.backgroundColor;
@@ -257,14 +251,14 @@ class TButtonResolve {
 
     switch (scheme) {
       case TButtonColorScheme.primary:
-        bg = colorScheme?.primary ?? tTheme.brandNormalColor;
+        bg = colorScheme?.primary ?? tTheme.brandColor;
         fg = colorScheme?.onPrimary ?? tTheme.textColorAnti;
       case TButtonColorScheme.danger:
-        bg = colorScheme?.error ?? tTheme.errorNormalColor;
+        bg = colorScheme?.error ?? tTheme.errorColor;
         fg = colorScheme?.onError ?? tTheme.textColorAnti;
       case TButtonColorScheme.light:
-        bg = colorScheme?.primaryContainer ?? tTheme.brandLightColor;
-        fg = colorScheme?.onPrimaryContainer ?? tTheme.brandNormalColor;
+        bg = colorScheme?.primaryContainer ?? tTheme.brandColorLight;
+        fg = colorScheme?.onPrimaryContainer ?? tTheme.brandColor;
       case TButtonColorScheme.defaultTheme:
         bg = colorScheme?.surfaceContainerHighest ?? tTheme.bgColorComponent;
         fg = colorScheme?.onSurface ?? tTheme.textColorPrimary;
@@ -308,33 +302,54 @@ class TButtonResolve {
 
     switch (scheme) {
       case TButtonColorScheme.primary:
-        borderColor = colorScheme?.primary ?? tTheme.brandNormalColor;
-        fg = colorScheme?.primary ?? tTheme.brandNormalColor;
+        borderColor = colorScheme?.primary ?? tTheme.brandColor;
+        fg = colorScheme?.primary ?? tTheme.brandColor;
       case TButtonColorScheme.danger:
-        borderColor = colorScheme?.error ?? tTheme.errorNormalColor;
-        fg = colorScheme?.error ?? tTheme.errorNormalColor;
+        borderColor = colorScheme?.error ?? tTheme.errorColor;
+        fg = colorScheme?.error ?? tTheme.errorColor;
       case TButtonColorScheme.light:
-        borderColor = colorScheme?.primary ?? tTheme.brandNormalColor;
-        fg = colorScheme?.primary ?? tTheme.brandNormalColor;
+        borderColor = colorScheme?.primary ?? tTheme.brandColor;
+        fg = colorScheme?.primary ?? tTheme.brandColor;
       case TButtonColorScheme.defaultTheme:
-        borderColor = colorScheme?.outline ?? tTheme.componentBorderColor;
+        borderColor = colorScheme?.outline ?? tTheme.componentBorder;
         fg = colorScheme?.onSurface ?? tTheme.textColorPrimary;
     }
 
     return ButtonStyle(
       backgroundColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.pressed)) {
-          return colorScheme?.onSurface.withValues(alpha: 0.08) ??
-              tTheme.bgColorContainerActive;
+        if (states.contains(WidgetState.disabled)) {
+          return scheme == TButtonColorScheme.primary
+              ? Colors.transparent
+              : colorScheme?.surface ?? tTheme.bgColorContainer;
         }
-        return colorScheme == null && scheme == TButtonColorScheme.light
-            ? tTheme.brandLightColor
-            : Colors.transparent;
+        if (states.contains(WidgetState.pressed)) {
+          return scheme == TButtonColorScheme.light
+              ? colorScheme?.primaryContainer ?? tTheme.brandColorLightActive
+              : colorScheme?.onSurface.withValues(alpha: 0.08) ??
+                    tTheme.bgColorContainerActive;
+        }
+        return scheme == TButtonColorScheme.light
+            ? colorScheme?.primaryContainer ?? tTheme.brandColorLight
+            : colorScheme?.surface ?? tTheme.bgColorContainer;
       }),
       foregroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
           return colorScheme?.onSurface.withValues(alpha: 0.38) ??
-              _disabledNonFillForegroundColor(scheme, tTheme);
+              switch (scheme) {
+                TButtonColorScheme.defaultTheme => tTheme.componentBorder,
+                TButtonColorScheme.primary ||
+                TButtonColorScheme.light => tTheme.brandColorDisabled,
+                TButtonColorScheme.danger => tTheme.errorColorDisabled,
+              };
+        }
+        if (states.contains(WidgetState.pressed)) {
+          return switch (scheme) {
+            TButtonColorScheme.primary || TButtonColorScheme.light =>
+              colorScheme?.primary ?? tTheme.brandColorActive,
+            TButtonColorScheme.danger =>
+              colorScheme?.error ?? tTheme.errorColorActive,
+            TButtonColorScheme.defaultTheme => fg,
+          };
         }
         return fg;
       }),
@@ -343,9 +358,24 @@ class TButtonResolve {
           return BorderSide(
             color:
                 colorScheme?.onSurface.withValues(alpha: 0.12) ??
-                (scheme == TButtonColorScheme.primary
-                    ? tTheme.brandDisabledColor
-                    : tTheme.componentBorderColor.withValues(alpha: 0.4)),
+                switch (scheme) {
+                  TButtonColorScheme.defaultTheme => tTheme.componentBorder,
+                  TButtonColorScheme.primary ||
+                  TButtonColorScheme.light => tTheme.brandColorDisabled,
+                  TButtonColorScheme.danger => tTheme.errorColorDisabled,
+                },
+            width: 1,
+          );
+        }
+        if (states.contains(WidgetState.pressed)) {
+          return BorderSide(
+            color: switch (scheme) {
+              TButtonColorScheme.defaultTheme => borderColor,
+              TButtonColorScheme.primary || TButtonColorScheme.light =>
+                colorScheme?.primary ?? tTheme.brandColorActive,
+              TButtonColorScheme.danger =>
+                colorScheme?.error ?? tTheme.errorColorActive,
+            },
             width: 1,
           );
         }
@@ -368,11 +398,11 @@ class TButtonResolve {
 
     switch (scheme) {
       case TButtonColorScheme.primary:
-        fg = colorScheme?.primary ?? tTheme.brandNormalColor;
+        fg = colorScheme?.primary ?? tTheme.brandColor;
       case TButtonColorScheme.danger:
-        fg = colorScheme?.error ?? tTheme.errorNormalColor;
+        fg = colorScheme?.error ?? tTheme.errorColor;
       case TButtonColorScheme.light:
-        fg = colorScheme?.primary ?? tTheme.brandNormalColor;
+        fg = colorScheme?.primary ?? tTheme.brandColor;
       case TButtonColorScheme.defaultTheme:
         fg = colorScheme?.onSurface ?? tTheme.textColorPrimary;
     }
@@ -409,13 +439,13 @@ class TButtonResolve {
 
     switch (scheme) {
       case TButtonColorScheme.primary:
-        fg = colorScheme?.primary ?? tTheme.brandNormalColor;
+        fg = colorScheme?.primary ?? tTheme.brandColor;
       case TButtonColorScheme.danger:
-        fg = colorScheme?.error ?? tTheme.errorNormalColor;
+        fg = colorScheme?.error ?? tTheme.errorColor;
       case TButtonColorScheme.light:
-        fg = colorScheme?.primary ?? tTheme.brandNormalColor;
+        fg = colorScheme?.primary ?? tTheme.brandColor;
       case TButtonColorScheme.defaultTheme:
-        fg = colorScheme?.onInverseSurface ?? tTheme.fontWhColor1;
+        fg = colorScheme?.onInverseSurface ?? tTheme.fontWhite1;
     }
 
     return ButtonStyle(
@@ -423,14 +453,14 @@ class TButtonResolve {
       foregroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
           return colorScheme?.onInverseSurface.withValues(alpha: 0.38) ??
-              tTheme.fontWhColor4;
+              tTheme.fontWhite4;
         }
         return fg;
       }),
       side: WidgetStateProperty.resolveWith((states) {
         final color = states.contains(WidgetState.disabled)
             ? colorScheme?.onInverseSurface.withValues(alpha: 0.38) ??
-                  tTheme.fontWhColor4
+                  tTheme.fontWhite4
             : fg;
         return BorderSide(color: color, width: 1);
       }),
@@ -552,9 +582,9 @@ class TButtonResolve {
     TThemeData tTheme,
   ) {
     return switch (scheme) {
-      TButtonColorScheme.primary => tTheme.brandDisabledColor,
-      TButtonColorScheme.danger => tTheme.errorDisabledColor,
-      TButtonColorScheme.light => tTheme.brandLightColor,
+      TButtonColorScheme.primary => tTheme.brandColorDisabled,
+      TButtonColorScheme.danger => tTheme.errorColorDisabled,
+      TButtonColorScheme.light => tTheme.brandColorLight,
       TButtonColorScheme.defaultTheme => tTheme.bgColorComponentDisabled,
     };
   }
@@ -565,9 +595,9 @@ class TButtonResolve {
   ) {
     return switch (scheme) {
       TButtonColorScheme.primary => tTheme.textColorAnti,
-      TButtonColorScheme.light => tTheme.brandDisabledColor,
+      TButtonColorScheme.light => tTheme.brandColorDisabled,
       TButtonColorScheme.danger ||
-      TButtonColorScheme.defaultTheme => tTheme.textDisabledColor,
+      TButtonColorScheme.defaultTheme => tTheme.textColorDisabled,
     };
   }
 
@@ -577,9 +607,9 @@ class TButtonResolve {
   ) {
     return switch (scheme) {
       TButtonColorScheme.primary ||
-      TButtonColorScheme.light => tTheme.brandDisabledColor,
+      TButtonColorScheme.light => tTheme.brandColorDisabled,
       TButtonColorScheme.danger ||
-      TButtonColorScheme.defaultTheme => tTheme.textDisabledColor,
+      TButtonColorScheme.defaultTheme => tTheme.textColorDisabled,
     };
   }
 
@@ -588,10 +618,10 @@ class TButtonResolve {
     TThemeData tTheme,
   ) {
     return switch (scheme) {
-      TButtonColorScheme.primary => tTheme.brandClickColor,
-      TButtonColorScheme.danger => tTheme.errorClickColor,
-      TButtonColorScheme.light => tTheme.brandFocusColor,
-      TButtonColorScheme.defaultTheme => tTheme.bgColorComponentHover,
+      TButtonColorScheme.primary => tTheme.brandColorActive,
+      TButtonColorScheme.danger => tTheme.errorColorActive,
+      TButtonColorScheme.light => tTheme.brandColorFocus,
+      TButtonColorScheme.defaultTheme => tTheme.bgColorComponent,
     };
   }
 

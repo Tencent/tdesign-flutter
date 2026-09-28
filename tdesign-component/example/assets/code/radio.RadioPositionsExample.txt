@@ -17,7 +17,7 @@ class _RadioPositionsExampleState extends State<RadioPositionsExample> {
           onChanged: (_) => setState(() => _leftSelected = !_leftSelected),
           child: const TRadio<bool>(value: true, title: '单选'),
         ),
-        SizedBox(height: context.tTheme.spacer16),
+        SizedBox(height: context.tTheme.spacer2),
         TRadioGroup<bool>(
           value: _rightSelected,
           onChanged: (_) => setState(() => _rightSelected = !_rightSelected),

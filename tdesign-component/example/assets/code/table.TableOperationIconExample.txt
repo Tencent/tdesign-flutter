@@ -25,16 +25,8 @@ class TableOperationIconExample extends StatelessWidget {
           cellBuilder: (context, _, __) => Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TIcon(
-                TIcons.upload,
-                size: 16,
-                color: context.tTheme.brandNormalColor,
-              ),
-              TIcon(
-                TIcons.delete,
-                size: 16,
-                color: context.tTheme.brandNormalColor,
-              ),
+              TIcon(TIcons.upload, size: 16, color: context.tTheme.brandColor),
+              TIcon(TIcons.delete, size: 16, color: context.tTheme.brandColor),
             ],
           ),
         ),

@@ -8,14 +8,9 @@ class IconThemeExample extends StatelessWidget {
   const IconThemeExample({super.key});
 
   Widget _buildIconThemeExample(BuildContext context) {
-    // 通过 TIconThemeData 统一控制子树 TIcon 默认 size 和 color
-    return Theme(
-      data: Theme.of(context).copyWith(
-        extensions: [
-          ...Theme.of(context).extensions.values,
-          TIconThemeData(size: 36, color: context.tTheme.brandNormalColor),
-        ],
-      ),
+    // 通过 Flutter IconTheme 统一控制子树图标默认尺寸和颜色。
+    return IconTheme(
+      data: IconThemeData(size: 36, color: context.tTheme.brandColor),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,7 +27,7 @@ class IconThemeExample extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            '↑ 继承 TIconThemeData 默认 size=36 和品牌色',
+            '↑ 继承 IconTheme 默认 size=36 和品牌色',
             style: TextStyle(
               fontSize: 12,
               color: context.tTheme.textColorSecondary,

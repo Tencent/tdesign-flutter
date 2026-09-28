@@ -202,7 +202,7 @@ void main() {
         final unselected = tester.widget<Text>(find.text('默认未选')).style!;
         final custom = tester.widget<Text>(find.text('局部覆盖')).style!;
         expect(selected.fontSize, 21);
-        expect(selected.color, token.brandNormalColor);
+        expect(selected.color, token.brandColor);
         expect(unselected.fontSize, 21);
         expect(unselected.color, token.textColorPrimary);
         expect(custom.fontSize, 24);
@@ -728,7 +728,7 @@ void main() {
       );
       expect(
         (capsule.decoration! as BoxDecoration).boxShadow,
-        TThemeData.defaultData().shadowsBase,
+        TThemeData.defaultData().shadow3,
       );
     });
 

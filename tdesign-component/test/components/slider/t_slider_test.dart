@@ -102,15 +102,15 @@ void main() {
         theme.trackShape.runtimeType.toString(),
         '_TDesignSliderTrackShape',
       );
-      expect(theme.activeTrackColor, TThemeData.defaultData().brandNormalColor);
+      expect(theme.activeTrackColor, TThemeData.defaultData().brandColor);
       expect(
         theme.inactiveTrackColor,
-        TThemeData.defaultData().bgColorComponentHover,
+        TThemeData.defaultData().bgColorComponent,
       );
       expect(theme.thumbColor, TThemeData.defaultData().textColorAnti);
       expect(
         theme.disabledActiveTrackColor,
-        TThemeData.defaultData().brandDisabledColor,
+        TThemeData.defaultData().brandColorDisabled,
       );
       expect(
         theme.disabledInactiveTrackColor,
@@ -155,7 +155,7 @@ void main() {
     testWidgets('track geometry follows custom spacing tokens', (tester) async {
       final token = TThemeData.defaultData().copyWithTThemeData(
         'custom-slider-spacing',
-        marginMap: const {'spacer4': 5, 'spacer16': 18, 'spacer24': 28},
+        marginMap: const {'spacer2': 18, 'spacer3': 28},
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -201,7 +201,7 @@ void main() {
         isDiscrete: true,
       );
 
-      expect(normalTheme.trackHeight, 5);
+      expect(normalTheme.trackHeight, 4);
       expect(normalTrackRect.left, 18);
       expect(normalTrackRect.right, normalBox.size.width - 18);
       expect(capsuleTheme.trackHeight, 28);
@@ -231,8 +231,8 @@ void main() {
       );
 
       final theme = SliderTheme.of(tester.element(find.byType(Slider)));
-      expect(theme.activeTrackColor, darkToken.brandNormalColor);
-      expect(theme.inactiveTrackColor, darkToken.bgColorComponentHover);
+      expect(theme.activeTrackColor, darkToken.brandColor);
+      expect(theme.inactiveTrackColor, darkToken.bgColorComponent);
       expect(theme.thumbColor, darkToken.textColorAnti);
       expectThumbBorders(
         theme,

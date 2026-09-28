@@ -142,7 +142,6 @@ void main() {
     }
     for (final bar in [lineBar, tagBar]) {
       expect(bar.controller, isNull);
-      expect(bar.indicator, isNull);
       expect(bar.decoration, isNull);
     }
 

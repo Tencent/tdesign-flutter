@@ -69,7 +69,7 @@ class TDropdownSingleSelectPanel<T> extends StatelessWidget {
             height: theme.optionHeight ?? 56,
             padding:
                 theme.optionPadding ??
-                EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+                EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
             onTap: option.disabled
                 ? null
                 : () {
@@ -159,10 +159,10 @@ class _TDropdownMultiSelectPanelState<T>
             child: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.fromLTRB(
-                  context.tTheme.spacer16,
-                  context.tTheme.spacer12,
-                  context.tTheme.spacer16,
-                  context.tTheme.spacer16,
+                  context.tTheme.spacer2,
+                  context.tTheme.spacer1,
+                  context.tTheme.spacer2,
+                  context.tTheme.spacer2,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,7 +171,7 @@ class _TDropdownMultiSelectPanelState<T>
                       if (entry.key != null)
                         Padding(
                           padding: EdgeInsets.only(
-                            bottom: context.tTheme.spacer12,
+                            bottom: context.tTheme.spacer1,
                           ),
                           child: Text(
                             entry.key!,
@@ -192,7 +192,7 @@ class _TDropdownMultiSelectPanelState<T>
                         ),
                       ..._buildRows(context, entry.value, theme),
                       if (entry.key != groups.keys.last)
-                        SizedBox(height: context.tTheme.spacer16),
+                        SizedBox(height: context.tTheme.spacer2),
                     ],
                   ],
                 ),
@@ -219,12 +219,12 @@ class _TDropdownMultiSelectPanelState<T>
           padding: EdgeInsets.only(
             bottom: start + columns >= options.length
                 ? 0
-                : context.tTheme.spacer12,
+                : context.tTheme.spacer1,
           ),
           child: Row(
             children: List<Widget>.generate(columns * 2 - 1, (slot) {
               if (slot.isOdd) {
-                return SizedBox(width: context.tTheme.spacer12);
+                return SizedBox(width: context.tTheme.spacer1);
               }
               final column = slot ~/ 2;
               if (column >= rowOptions.length) {
@@ -254,7 +254,7 @@ class _TDropdownMultiSelectPanelState<T>
     final colorScheme = material.tExplicitColorScheme;
     return Container(
       padding:
-          theme.actionAreaPadding ?? EdgeInsets.all(context.tTheme.spacer16),
+          theme.actionAreaPadding ?? EdgeInsets.all(context.tTheme.spacer2),
       decoration: BoxDecoration(
         color:
             theme.panelBackgroundColor ??
@@ -265,7 +265,7 @@ class _TDropdownMultiSelectPanelState<T>
             color:
                 theme.dividerColor ??
                 material.tExplicitDividerColor ??
-                context.tTheme.componentStrokeColor,
+                context.tTheme.componentStroke,
             width: 0.5,
           ),
         ),
@@ -279,7 +279,7 @@ class _TDropdownMultiSelectPanelState<T>
               child: Text(context.resource.reset),
             ),
           ),
-          SizedBox(width: theme.actionGap ?? context.tTheme.spacer16),
+          SizedBox(width: theme.actionGap ?? context.tTheme.spacer2),
           Expanded(
             child: TButton(
               colorScheme: TButtonColorScheme.primary,
@@ -358,7 +358,7 @@ class _DropdownOptionRow extends StatelessWidget {
               base.copyWith(
                 color:
                     material.tExplicitDisabledColor ??
-                    context.tTheme.textDisabledColor,
+                    context.tTheme.textColorDisabled,
               )
         : selected
         ? theme.selectedOptionTextStyle ?? base
@@ -374,7 +374,7 @@ class _DropdownOptionRow extends StatelessWidget {
               color:
                   theme.dividerColor ??
                   material.tExplicitDividerColor ??
-                  context.tTheme.componentStrokeColor,
+                  context.tTheme.componentStroke,
               width: 0.5,
             ),
           ),
@@ -399,9 +399,7 @@ class _DropdownOptionRow extends StatelessWidget {
                     Icon(
                       TIcons.check,
                       size: 24,
-                      color:
-                          colorScheme?.primary ??
-                          context.tTheme.brandNormalColor,
+                      color: colorScheme?.primary ?? context.tTheme.brandColor,
                     ),
                 ],
               ),
@@ -437,7 +435,7 @@ class _DropdownOptionChip extends StatelessWidget {
         : selected
         ? theme.selectedOptionColor ??
               colorScheme?.primaryContainer ??
-              context.tTheme.brandLightColor
+              context.tTheme.brandColorLight
         : theme.optionColor ??
               colorScheme?.surfaceContainerHighest ??
               context.tTheme.bgColorSecondaryContainer;
@@ -456,14 +454,14 @@ class _DropdownOptionChip extends StatelessWidget {
               base.copyWith(
                 color:
                     material.tExplicitDisabledColor ??
-                    context.tTheme.textDisabledColor,
+                    context.tTheme.textColorDisabled,
               )
         : selected
         ? theme.selectedOptionTextStyle ??
               base.copyWith(
                 color:
                     colorScheme?.onPrimaryContainer ??
-                    context.tTheme.brandNormalColor,
+                    context.tTheme.brandColor,
               )
         : base;
     return Semantics(
@@ -486,7 +484,7 @@ class _DropdownOptionChip extends StatelessWidget {
           ),
           padding:
               theme.optionPadding ??
-              EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+              EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
           child: Text(
             label,
             style: style,

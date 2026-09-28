@@ -55,11 +55,7 @@ class _CellMultipleLineExampleState extends State<CellMultipleLineExample> {
         onTap: () {},
       ),
       TCell(
-        prefix: Icon(
-          TIcons.app,
-          size: 24,
-          color: context.tTheme.brandNormalColor,
-        ),
+        prefix: Icon(TIcons.app, size: 24, color: context.tTheme.brandColor),
         title: const Text('单行标题'),
         subtitle: const Text(description),
         arrow: true,
@@ -106,7 +102,7 @@ class _CellMultipleLineExampleState extends State<CellMultipleLineExample> {
               height: 0.5,
               thickness: 0.5,
               indent: 16,
-              color: context.tTheme.componentStrokeColor,
+              color: context.tTheme.componentStroke,
             ),
         ],
       ],

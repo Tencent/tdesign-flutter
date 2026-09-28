@@ -105,7 +105,7 @@ class TSearchBar extends StatefulWidget {
   /// 输入格式化器。
   final List<TextInputFormatter>? inputFormatters;
 
-  /// 搜索框形态；优先于 [TSearchBarThemeData.variant]。
+  /// 搜索框形态；未设置时为 [TSearchBarVariant.square]。
   final TSearchBarVariant? variant;
 
   /// 文本对齐方式，默认左对齐。
@@ -166,8 +166,7 @@ class _TSearchBarState extends State<TSearchBar> {
   Widget build(BuildContext context) {
     final token = context.tTheme;
     final theme = Theme.of(context).extension<TSearchBarThemeData>();
-    final effectiveVariant =
-        widget.variant ?? theme?.variant ?? TSearchBarVariant.square;
+    final effectiveVariant = widget.variant ?? TSearchBarVariant.square;
     final effectiveAlignment = widget.textAlignment ?? TSearchBarAlignment.left;
     final height = theme?.height ?? _kSearchBarHeight;
     final inputBackgroundColor =
@@ -191,22 +190,22 @@ class _TSearchBarState extends State<TSearchBar> {
         .copyWith(
           color: widget.enabled
               ? theme?.textStyle?.color ?? token.textColorPrimary
-              : token.textDisabledColor,
+              : token.textColorDisabled,
         );
     final hintStyle = defaultHintStyle
         .merge(theme?.hintStyle)
         .copyWith(
           color: widget.enabled
               ? theme?.hintStyle?.color ?? token.textColorPlaceholder
-              : token.textDisabledColor,
+              : token.textColorDisabled,
         );
     final actionStyle = defaultTextStyle
-        .copyWith(color: token.brandNormalColor)
+        .copyWith(color: token.brandColor)
         .merge(theme?.actionTextStyle)
         .copyWith(
           color: widget.enabled
-              ? theme?.actionTextStyle?.color ?? token.brandNormalColor
-              : token.textDisabledColor,
+              ? theme?.actionTextStyle?.color ?? token.brandColor
+              : token.textColorDisabled,
         );
     var searchIconTheme = IconThemeData(
       size: _kIconSize,
@@ -218,9 +217,9 @@ class _TSearchBarState extends State<TSearchBar> {
     ).merge(theme?.clearIconTheme);
     if (!widget.enabled) {
       searchIconTheme = searchIconTheme.copyWith(
-        color: token.textDisabledColor,
+        color: token.textColorDisabled,
       );
-      clearIconTheme = clearIconTheme.copyWith(color: token.textDisabledColor);
+      clearIconTheme = clearIconTheme.copyWith(color: token.textColorDisabled);
     }
 
     return SizedBox(
@@ -275,7 +274,7 @@ class _TSearchBarState extends State<TSearchBar> {
                                 required isFocused,
                                 required maxLength,
                               }) => null,
-                          cursorColor: token.brandNormalColor,
+                          cursorColor: token.brandColor,
                           cursorHeight: theme?.cursorHeight,
                           textAlignVertical: TextAlignVertical.center,
                           textAlign:

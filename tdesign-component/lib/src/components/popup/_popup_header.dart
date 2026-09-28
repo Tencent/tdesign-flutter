@@ -36,11 +36,11 @@ class TPopupHeader extends StatelessWidget {
       children: [
         if (cancelButton != null)
           Padding(
-            padding: EdgeInsets.only(left: theme.spacer8),
+            padding: EdgeInsets.only(left: theme.spacer),
             child: cancelButton,
           )
         else
-          SizedBox(width: theme.spacer16),
+          SizedBox(width: theme.spacer2),
         Expanded(
           child: title == null
               ? const SizedBox.shrink()
@@ -48,11 +48,11 @@ class TPopupHeader extends StatelessWidget {
         ),
         if (confirmButton != null)
           Padding(
-            padding: EdgeInsets.only(right: theme.spacer8),
+            padding: EdgeInsets.only(right: theme.spacer),
             child: confirmButton,
           )
         else
-          SizedBox(width: theme.spacer16),
+          SizedBox(width: theme.spacer2),
       ],
     );
   }

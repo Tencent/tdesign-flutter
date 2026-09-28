@@ -1064,7 +1064,10 @@ const componentTestManifests = <ComponentTestManifest>[
   ),
   ComponentTestManifest(
     name: 'theme',
-    coverageTargets: ['lib/src/theme/t_theme.dart'],
+    coverageTargets: [
+      'lib/src/theme/t_theme.dart',
+      'lib/src/theme/t_radius.dart',
+    ],
     componentTests: [
       'test/acceptance/theme_acceptance_test.dart',
       'test/theme/theme_test.dart',

@@ -9,7 +9,7 @@ class TextDecorationExample extends StatelessWidget {
       '已失效文本',
       fontWeight: FontWeight.w600,
       isTextThrough: true,
-      lineThroughColor: context.tTheme.errorNormalColor,
+      lineThroughColor: context.tTheme.errorColor,
     );
   }
 

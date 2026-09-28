@@ -141,13 +141,13 @@ void main() {
       final activeDecoration = active.decoration! as BoxDecoration;
       final activeGradient = activeDecoration.gradient! as LinearGradient;
 
-      expect(trackDecoration.color, tokens.brandNormalColor);
-      expect(activeGradient.colors.first, tokens.brandNormalColor);
+      expect(trackDecoration.color, tokens.brandColor);
+      expect(activeGradient.colors.first, tokens.brandColor);
       expect(
         activeGradient.colors.last,
         Color.alphaBlend(
-          tokens.fontWhColor1.withValues(alpha: 0.3),
-          tokens.brandNormalColor,
+          tokens.fontWhite1.withValues(alpha: 0.3),
+          tokens.brandColor,
         ),
       );
     });
@@ -642,7 +642,7 @@ void main() {
             fontWeight: FontWeight.w500,
           ),
         },
-        marginMap: {'spacer8': 10},
+        marginMap: {'spacer': 10},
       );
       await tester.pumpWidget(
         wrapWithTheme(
@@ -703,10 +703,10 @@ void main() {
     testWidgets('四种状态解析语义颜色与默认标签', (tester) async {
       final token = TThemeData.defaultData();
       final expectedColors = <TProgressStatus, Color>{
-        TProgressStatus.normal: token.brandNormalColor,
-        TProgressStatus.warning: token.warningNormalColor,
-        TProgressStatus.error: token.errorNormalColor,
-        TProgressStatus.success: token.successNormalColor,
+        TProgressStatus.normal: token.brandColor,
+        TProgressStatus.warning: token.warningColor,
+        TProgressStatus.error: token.errorColor,
+        TProgressStatus.success: token.successColor,
       };
 
       for (final entry in expectedColors.entries) {
@@ -836,10 +836,7 @@ void main() {
       final value = tester.widget<Container>(
         find.byKey(const ValueKey('progress-value')),
       );
-      expect(
-        (value.decoration! as BoxDecoration).color,
-        token.brandNormalColor,
-      );
+      expect((value.decoration! as BoxDecoration).color, token.brandColor);
     });
 
     testWidgets('Material ProgressIndicatorTheme 显式颜色优先于 status', (

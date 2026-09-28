@@ -93,14 +93,14 @@ class TActionSheetList<T> extends StatelessWidget {
           )..layout(
             maxWidth: math.max(
               0,
-              MediaQuery.sizeOf(context).width - token.spacer16 * 2,
+              MediaQuery.sizeOf(context).width - token.spacer2 * 2,
             ),
           );
-      height += token.spacer12 * 2 + painter.height;
+      height += token.spacer1 * 2 + painter.height;
       painter.dispose();
     }
     if (showCancel) {
-      height += token.spacer8 + actionSheetCancelButtonHeight;
+      height += token.spacer + actionSheetCancelButtonHeight;
     }
     return height;
   }
@@ -137,16 +137,13 @@ class TActionSheetList<T> extends StatelessWidget {
   Widget _buildDescription(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: context.tTheme.spacer16,
-        vertical: context.tTheme.spacer12,
+        horizontal: context.tTheme.spacer2,
+        vertical: context.tTheme.spacer1,
       ),
       decoration: BoxDecoration(
         color: context.tTheme.bgColorContainer,
         border: Border(
-          bottom: BorderSide(
-            color: context.tTheme.componentStrokeColor,
-            width: 0.5,
-          ),
+          bottom: BorderSide(color: context.tTheme.componentStroke, width: 0.5),
         ),
       ),
       child: Row(
@@ -198,13 +195,11 @@ class TActionSheetList<T> extends StatelessWidget {
               height: item.subtitle == null || item.subtitle!.isEmpty
                   ? _itemExtent
                   : _itemWithSubtitleExtent,
-              padding: EdgeInsets.symmetric(
-                horizontal: context.tTheme.spacer16,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: context.tTheme.componentStrokeColor,
+                    color: context.tTheme.componentStroke,
                     width: 0.5,
                   ),
                 ),
@@ -222,7 +217,7 @@ class TActionSheetList<T> extends StatelessWidget {
                         IconTheme(
                           data: IconThemeData(
                             color: item.disabled
-                                ? context.tTheme.textDisabledColor
+                                ? context.tTheme.textColorDisabled
                                 : (actionSheetTheme?.iconColor ??
                                       context.tTheme.textColorPrimary),
                             size: iconSize,
@@ -233,13 +228,13 @@ class TActionSheetList<T> extends StatelessWidget {
                             child: Center(child: item.icon!),
                           ),
                         ),
-                        SizedBox(width: context.tTheme.spacer8),
+                        SizedBox(width: context.tTheme.spacer),
                       ],
                       Flexible(child: _buildLabel(context, item)),
                     ],
                   ),
                   if (item.subtitle != null && item.subtitle!.isNotEmpty) ...[
-                    SizedBox(height: context.tTheme.spacer4),
+                    const SizedBox(height: 4.0),
                     Row(
                       mainAxisAlignment: getMainAxisAlignment(
                         align,
@@ -272,7 +267,7 @@ class TActionSheetList<T> extends StatelessWidget {
       item.label,
       font: context.tTheme.fontBodyLarge,
       textColor: item.disabled
-          ? context.tTheme.textDisabledColor
+          ? context.tTheme.textColorDisabled
           : context.tTheme.textColorPrimary,
       style: item.textStyle,
       maxLines: 1,

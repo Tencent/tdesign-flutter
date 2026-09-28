@@ -186,12 +186,12 @@ class TTag extends StatelessWidget {
       return _TagColors(
         textColor:
             material?.onSurface.withValues(alpha: 0.38) ??
-            token.textDisabledColor,
-        backgroundColor: isOutline && !isLight
-            ? Colors.transparent
-            : material?.onSurface.withValues(alpha: 0.12) ??
-                  token.bgColorComponentDisabled,
-        borderColor: material?.outline ?? token.componentBorderColor,
+            token.textColorDisabled,
+        backgroundColor:
+            material?.onSurface.withValues(alpha: 0.12) ??
+            token.bgColorComponentDisabled,
+        borderColor: material?.outline ?? token.componentBorder,
+        closeIconColor: token.textColorPlaceholder,
       );
     }
 
@@ -202,76 +202,73 @@ class TTag extends StatelessWidget {
     switch (colorScheme) {
       case TTagColorScheme.primary:
         if (isOutline) {
-          borderColor = material?.primary ?? token.brandNormalColor;
-          textColor = material?.primary ?? token.brandNormalColor;
+          borderColor = material?.primary ?? token.brandColor;
+          textColor = material?.primary ?? token.brandColor;
           backgroundColor = isLight
-              ? material?.primaryContainer ?? token.brandLightColor
-              : Colors.transparent;
+              ? material?.primaryContainer ?? token.brandColorLight
+              : token.bgColorContainer;
         } else {
           textColor = isLight
-              ? material?.primary ?? token.brandNormalColor
+              ? material?.primary ?? token.brandColor
               : material?.onPrimary ?? token.textColorAnti;
           backgroundColor = isLight
-              ? material?.primaryContainer ?? token.brandLightColor
-              : material?.primary ?? token.brandNormalColor;
+              ? material?.primaryContainer ?? token.brandColorLight
+              : material?.primary ?? token.brandColor;
           borderColor = backgroundColor;
         }
         break;
       case TTagColorScheme.warning:
         if (isOutline) {
-          borderColor = token.warningNormalColor;
-          textColor = token.warningNormalColor;
+          borderColor = token.warningColor;
+          textColor = token.warningColor;
           backgroundColor = isLight
-              ? token.warningLightColor
-              : Colors.transparent;
+              ? token.warningColor1
+              : token.bgColorContainer;
         } else {
-          textColor = isLight ? token.warningNormalColor : token.textColorAnti;
-          backgroundColor = isLight
-              ? token.warningLightColor
-              : token.warningNormalColor;
+          textColor = isLight ? token.warningColor : token.textColorAnti;
+          backgroundColor = isLight ? token.warningColor1 : token.warningColor;
           borderColor = backgroundColor;
         }
         break;
       case TTagColorScheme.danger:
         if (isOutline) {
-          borderColor = material?.error ?? token.errorNormalColor;
-          textColor = material?.error ?? token.errorNormalColor;
+          borderColor = material?.error ?? token.errorColor;
+          textColor = material?.error ?? token.errorColor;
           backgroundColor = isLight
-              ? material?.errorContainer ?? token.errorLightColor
-              : Colors.transparent;
+              ? material?.errorContainer ?? token.errorColor1
+              : token.bgColorContainer;
         } else {
           textColor = isLight
-              ? material?.error ?? token.errorNormalColor
+              ? material?.error ?? token.errorColor
               : material?.onError ?? token.textColorAnti;
           backgroundColor = isLight
-              ? material?.errorContainer ?? token.errorLightColor
-              : material?.error ?? token.errorNormalColor;
+              ? material?.errorContainer ?? token.errorColor1
+              : material?.error ?? token.errorColor;
           borderColor = backgroundColor;
         }
         break;
       case TTagColorScheme.success:
         if (isOutline) {
-          borderColor = token.successNormalColor;
-          textColor = token.successNormalColor;
+          borderColor = token.successColor;
+          textColor = token.successColor;
           backgroundColor = isLight
-              ? token.successLightColor
-              : Colors.transparent;
+              ? token.successColor1
+              : token.bgColorContainer;
         } else {
-          textColor = isLight ? token.successNormalColor : token.textColorAnti;
-          backgroundColor = isLight
-              ? token.successLightColor
-              : token.successNormalColor;
+          textColor = isLight ? token.successColor : token.textColorAnti;
+          backgroundColor = isLight ? token.successColor1 : token.successColor;
           borderColor = backgroundColor;
         }
         break;
       case TTagColorScheme.defaultTheme:
         if (isOutline) {
-          borderColor = material?.outline ?? token.componentBorderColor;
+          borderColor =
+              material?.surfaceContainerHighest ?? token.bgColorComponent;
           textColor = material?.onSurface ?? token.textColorPrimary;
           backgroundColor = isLight
               ? material?.surfaceContainerHighest ??
                     token.bgColorSecondaryContainer
-              : Colors.transparent;
+              : token.bgColorContainer;
         } else {
           textColor = material?.onSurface ?? token.textColorPrimary;
           backgroundColor = isLight
@@ -286,7 +283,7 @@ class TTag extends StatelessWidget {
       textColor: textColor,
       backgroundColor: backgroundColor,
       borderColor: borderColor,
-      closeIconColor: textColor,
+      closeIconColor: token.textColorPlaceholder,
     );
   }
 
@@ -296,7 +293,8 @@ class TTag extends StatelessWidget {
   ) {
     switch (shape) {
       case TTagShape.square:
-        return BorderRadius.circular(context.tTheme.radiusSmall);
+        // 小程序 --td-tag-square-border-radius 默认 8rpx；不借用 3dp 的全局 radiusSmall。
+        return BorderRadius.circular(4);
       case TTagShape.round:
         return BorderRadius.circular(context.tTheme.radiusRound);
       case TTagShape.mark:

@@ -24,10 +24,10 @@ class TSwitch extends StatelessWidget {
     /// 开关状态变更回调；为 null 时禁用。
     this.onChanged,
 
-    /// 开关尺寸；未传时读取 [TSwitchThemeData.defaultSize]。
+    /// 开关尺寸；未传时为 [TSwitchSize.medium]。
     this.size,
 
-    /// 开关内容形态；未传时读取 [TSwitchThemeData.defaultVariant]。
+    /// 开关内容形态；未传时为 [TSwitchVariant.filled]。
     this.variant,
 
     /// 是否处于加载状态；加载时显示指示器并禁用交互。
@@ -64,9 +64,8 @@ class TSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TSwitchThemeData>();
-    final resolvedSize = size ?? theme?.defaultSize ?? TSwitchSize.medium;
-    final resolvedVariant =
-        variant ?? theme?.defaultVariant ?? TSwitchVariant.filled;
+    final resolvedSize = size ?? TSwitchSize.medium;
+    final resolvedVariant = variant ?? TSwitchVariant.filled;
     final enabled = onChanged != null && !loading;
     final resolved = TSwitchResolve.resolve(
       context: context,

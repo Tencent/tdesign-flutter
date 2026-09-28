@@ -17,7 +17,7 @@ class FontTokenModuleExample extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color: context.tTheme.componentBorderColor,
+                color: context.tTheme.componentBorder,
                 width: 0.5,
               ),
             ),

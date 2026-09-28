@@ -69,7 +69,7 @@ class _NavigationComponentsScene extends StatelessWidget {
         fontFamily: 'Roboto',
         fontFamilyFallback: const ['TDesign Golden CJK'],
       ),
-    );
+    ).mergeExtension(const TDrawerThemeData(width: 190));
 
     return MaterialApp(
       theme: theme,
@@ -195,7 +195,6 @@ class _NavigationComponentsScene extends StatelessWidget {
                           children: [
                             Expanded(
                               child: TDrawer(
-                                width: 190,
                                 title: Text('Menu'),
                                 items: [
                                   TDrawerItem(title: 'Dashboard'),

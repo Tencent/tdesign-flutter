@@ -68,7 +68,7 @@ class TTextarea extends StatefulWidget {
     /// 后缀组件。
     this.suffix,
 
-    /// 清除按钮显示模式；未传时读取 `TInputThemeData.clearButtonMode`。
+    /// 清除按钮显示模式；未传时不显示清除按钮。
     this.clearButtonMode,
 
     /// 输入框语义状态。
@@ -80,7 +80,7 @@ class TTextarea extends StatefulWidget {
     /// 最大行数；null 表示不限制。
     this.maxLines,
 
-    /// 最小行数；未传时读取 Theme 默认值。
+    /// 最小行数；未传时使用输入框内置默认值。
     this.minLines,
 
     /// 最大字符数。
@@ -249,16 +249,16 @@ class _TTextareaState extends State<TTextarea> {
         theme?.contentPadding ??
         (inFormItem ? EdgeInsets.zero : const EdgeInsets.all(16));
     final borderColor = !widget.enabled
-        ? theme?.borderColor ?? token.componentStrokeColor
+        ? theme?.borderColor ?? token.componentStroke
         : theme?.borderColor ??
               switch (effectiveStatus) {
                 TInputStatus.normal =>
                   _focusNode.hasFocus
-                      ? token.brandNormalColor
-                      : token.componentBorderColor,
-                TInputStatus.success => token.successNormalColor,
-                TInputStatus.warning => token.warningNormalColor,
-                TInputStatus.error => token.errorNormalColor,
+                      ? token.brandColor
+                      : token.componentBorder,
+                TInputStatus.success => token.successColor,
+                TInputStatus.warning => token.warningColor,
+                TInputStatus.error => token.errorColor,
               };
     final inputTheme = (theme ?? const TInputThemeData()).copyWith(
       contentPadding: EdgeInsets.zero,
@@ -277,7 +277,7 @@ class _TTextareaState extends State<TTextarea> {
                   ? material.tExplicitTextTheme?.bodyMedium?.color ??
                         material.tExplicitColorScheme?.onSurface ??
                         token.textColorPrimary
-                  : token.textDisabledColor,
+                  : token.textColorDisabled,
             );
     final editor = Theme(
       data: Theme.of(context).mergeExtension(inputTheme),
@@ -334,7 +334,7 @@ class _TTextareaState extends State<TTextarea> {
                 textBaseline: TextBaseline.alphabetic,
                 children: [
                   Text(label, style: labelStyle),
-                  SizedBox(width: token.spacer16),
+                  SizedBox(width: token.spacer2),
                   Expanded(child: constrainedEditor),
                 ],
               ),
@@ -342,7 +342,7 @@ class _TTextareaState extends State<TTextarea> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(label, style: labelStyle),
-                  SizedBox(height: token.spacer8),
+                  SizedBox(height: token.spacer),
                   if (constraints.hasTightHeight)
                     Expanded(child: editor)
                   else

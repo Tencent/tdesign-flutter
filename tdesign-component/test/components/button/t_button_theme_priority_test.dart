@@ -13,6 +13,7 @@ void main() {
   Widget themedButton({
     TButtonThemeData componentTheme = const TButtonThemeData(),
     ButtonStyle? materialStyle,
+    TButtonVariant variant = TButtonVariant.fill,
     TButtonColorScheme? instanceColorScheme,
     ButtonStyle? instanceStyle,
   }) {
@@ -24,6 +25,7 @@ void main() {
       ),
       home: Scaffold(
         body: TButton(
+          variant: variant,
           colorScheme: instanceColorScheme,
           style: instanceStyle,
           onPressed: () {},
@@ -128,7 +130,7 @@ void main() {
     expect(background(tester), Colors.green);
   });
 
-  testWidgets('显式实例 colorScheme 覆盖组件 ThemeExtension', (tester) async {
+  testWidgets('实例 colorScheme 只选择预设，组件 Theme 具体颜色优先', (tester) async {
     await tester.pumpWidget(
       themedButton(
         componentTheme: const TButtonThemeData(
@@ -140,7 +142,32 @@ void main() {
       ),
     );
 
-    expect(background(tester), colorScheme.primary);
+    expect(background(tester), Colors.green);
+  });
+
+  testWidgets('outline 的 Theme 描边和文字不被显式 colorScheme 覆盖', (tester) async {
+    await tester.pumpWidget(
+      themedButton(
+        variant: TButtonVariant.outline,
+        instanceColorScheme: TButtonColorScheme.danger,
+        componentTheme: const TButtonThemeData(
+          outlinedStyle: ButtonStyle(
+            side: WidgetStatePropertyAll(BorderSide(color: Colors.green)),
+            foregroundColor: WidgetStatePropertyAll(Colors.purple),
+          ),
+        ),
+      ),
+    );
+
+    final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    for (final states in [
+      <WidgetState>{},
+      <WidgetState>{WidgetState.pressed},
+      <WidgetState>{WidgetState.disabled},
+    ]) {
+      expect(button.style?.side?.resolve(states)?.color, Colors.green);
+      expect(button.style?.foregroundColor?.resolve(states), Colors.purple);
+    }
   });
 
   testWidgets('P0 实例 style 覆盖所有层级', (tester) async {

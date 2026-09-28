@@ -264,9 +264,7 @@ class _TMessageState extends State<TMessage>
   double get _minimumLeft => _safePadding.left + _horizontalMargin;
 
   double get _maximumRight =>
-      MediaQuery.sizeOf(context).width -
-      _safePadding.right -
-      _horizontalMargin;
+      MediaQuery.sizeOf(context).width - _safePadding.right - _horizontalMargin;
 
   double get _effectiveWidth {
     final availableWidth = math.max(0.0, _maximumRight - _minimumLeft);
@@ -500,19 +498,19 @@ class _TMessageState extends State<TMessage>
     final (icon, color) = switch (widget.status) {
       TMessageStatus.info => (
         TIcons.error_circle_filled,
-        context.tTheme.brandNormalColor,
+        context.tTheme.brandColor,
       ),
       TMessageStatus.success => (
         TIcons.check_circle_filled,
-        context.tTheme.successNormalColor,
+        context.tTheme.successColor,
       ),
       TMessageStatus.warning => (
         TIcons.error_circle_filled,
-        context.tTheme.warningNormalColor,
+        context.tTheme.warningColor,
       ),
       TMessageStatus.error => (
         TIcons.error_circle_filled,
-        context.tTheme.errorNormalColor,
+        context.tTheme.errorColor,
       ),
     };
     return Icon(icon, color: color, size: 22);
@@ -577,7 +575,7 @@ class _TMessageState extends State<TMessage>
             decoration: ShapeDecoration(
               color: backgroundColor,
               shape: shape,
-              shadows: context.tTheme.shadowsBase ?? const [],
+              shadows: context.tTheme.shadow1 ?? const [],
             ),
             child: Material(type: MaterialType.transparency, child: content),
           )

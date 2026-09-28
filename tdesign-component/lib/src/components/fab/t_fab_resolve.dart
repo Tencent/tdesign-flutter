@@ -78,7 +78,7 @@ class TFabResolve {
     // TButtonThemeData 的 padding/gradient 等字段意外改变 Fab 基线。
     final fabBtnTheme = TButtonThemeData(
       shape: effectiveShape,
-      iconTextSpacing: context.tTheme.spacer4,
+      iconTextSpacing: 4.0,
     );
 
     final shadowShape = switch (effectiveShape) {
@@ -90,7 +90,7 @@ class TFabResolve {
     return DecoratedBox(
       decoration: ShapeDecoration(
         shape: shadowShape,
-        shadows: context.tTheme.shadowsMiddle ?? const [],
+        shadows: context.tTheme.shadow2 ?? const [],
       ),
       child: Theme(
         data: Theme.of(context).mergeExtension(fabBtnTheme),

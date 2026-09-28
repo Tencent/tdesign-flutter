@@ -29,7 +29,7 @@ void main() {
         .widgetList<Container>(find.byType(Container))
         .firstWhere(
           (container) =>
-              container.padding == EdgeInsets.only(top: token.spacer8) &&
+              container.padding == EdgeInsets.only(top: token.spacer) &&
               container.color == token.bgColorContainer,
         );
     expect(cancelSpacing.color, token.bgColorContainer);
@@ -237,8 +237,8 @@ void main() {
         .where((decoration) => decoration.shape == BoxShape.circle)
         .map((decoration) => decoration.color)
         .toList();
-    expect(dotColors, contains(token.brandNormalColor));
-    expect(dotColors, contains(token.textDisabledColor));
+    expect(dotColors, contains(token.brandColor));
+    expect(dotColors, contains(token.textColorDisabled));
     expect(
       find.byWidgetPredicate(
         (widget) =>

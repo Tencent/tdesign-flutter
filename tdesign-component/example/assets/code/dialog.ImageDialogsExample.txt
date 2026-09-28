@@ -61,7 +61,7 @@ class ImageDialogsExample extends StatelessWidget {
     return Column(
       children: [
         for (var index = 0; index < children.length; index++) ...[
-          if (index > 0) SizedBox(height: context.tTheme.spacer16),
+          if (index > 0) SizedBox(height: context.tTheme.spacer2),
           children[index],
         ],
       ],
@@ -110,16 +110,16 @@ class ImageDialogsExample extends StatelessWidget {
         : null;
     final textContent = Padding(
       padding: EdgeInsets.fromLTRB(
-        token.spacer24,
-        token.spacer24,
-        token.spacer24,
-        imageOnTop ? 0 : token.spacer24,
+        token.spacer3,
+        token.spacer3,
+        token.spacer3,
+        imageOnTop ? 0 : token.spacer3,
       ),
       child: Column(
         children: [
           if (title != null) title,
           if (title != null && description != null)
-            SizedBox(height: token.spacer8),
+            SizedBox(height: token.spacer),
           if (description != null) description,
         ],
       ),
@@ -127,16 +127,20 @@ class ImageDialogsExample extends StatelessWidget {
     TDialog.show<bool>(
       context,
       barrierDismissible: true,
-      dialog: TDialog(
-        contentPadding: EdgeInsets.zero,
-        content: Column(
-          children: [
-            if (imageOnTop) image,
-            if (showTitle || showContent) textContent,
-            if (!imageOnTop) image,
-          ],
+      dialog: Theme(
+        data: Theme.of(context).mergeExtension(
+          const TDialogThemeData(contentPadding: EdgeInsets.zero),
         ),
-        actions: _actions(),
+        child: TDialog(
+          content: Column(
+            children: [
+              if (imageOnTop) image,
+              if (showTitle || showContent) textContent,
+              if (!imageOnTop) image,
+            ],
+          ),
+          actions: _actions(),
+        ),
       ),
     );
   }

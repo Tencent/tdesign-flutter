@@ -476,13 +476,14 @@
     {
       "slug": "avatar",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/avatar/t_avatar.dart"
+        "type": "folder",
+        "path": "lib/src/components/avatar"
       },
       "api": {
         "names": [
           "TAvatar",
-          "TAvatarGroup"
+          "TAvatarGroup",
+          "TAvatarThemeData"
         ],
         "getComments": false
       }
@@ -813,6 +814,7 @@
           "TPopover",
           "TPopoverAnchor",
           "TPopoverController",
+          "TPopoverThemeData",
           "TPopoverColorScheme",
           "TPopoverPlacement"
         ],

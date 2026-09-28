@@ -116,12 +116,6 @@ class TDialog extends StatelessWidget {
     this.showCloseButton = false,
     this.closeButtonResult,
     this.semanticLabel,
-    this.backgroundColor,
-    this.shape,
-    this.elevation,
-    this.width,
-    this.maxHeight,
-    this.contentPadding,
 
     /// 操作区内边距。未设置时使用主题 token 默认值。
     ///
@@ -170,26 +164,6 @@ class TDialog extends StatelessWidget {
 
   /// 无障碍语义标签。
   final String? semanticLabel;
-
-  /// 面板背景色。
-  final Color? backgroundColor;
-
-  /// 面板形状。
-  final ShapeBorder? shape;
-
-  /// 面板阴影高度。
-  final double? elevation;
-
-  /// 面板宽度。
-  final double? width;
-
-  /// 面板最大高度。
-  ///
-  /// 内容超过该高度时，标题保持固定，正文区域显示滚动条并可滚动。
-  final double? maxHeight;
-
-  /// 标题和内容区域内边距。
-  final EdgeInsetsGeometry? contentPadding;
 
   /// 操作区内边距；未设置（`null`）时使用当前主题 token。
   ///
@@ -255,39 +229,35 @@ class TDialog extends StatelessWidget {
     final material = theme.dialogTheme;
     final token = context.tTheme;
     final effectiveBackground =
-        backgroundColor ??
         extension?.backgroundColor ??
         material.backgroundColor ??
         token.bgColorContainer;
     final effectiveShape =
-        shape ??
         extension?.shape ??
         material.shape ??
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(token.radiusExtraLarge),
         );
-    final effectiveElevation =
-        elevation ?? extension?.elevation ?? material.elevation ?? 0;
-    final effectiveWidth = width ?? extension?.width ?? 311;
+    final effectiveElevation = extension?.elevation ?? material.elevation ?? 0;
+    final effectiveWidth = extension?.width ?? 311;
     final viewportHeight = MediaQuery.sizeOf(context).height;
     final effectiveMaxHeight = math.max(
       0.0,
       math.min(
-        maxHeight ?? extension?.maxHeight ?? viewportHeight * 0.8,
-        viewportHeight - token.spacer32,
+        extension?.maxHeight ?? viewportHeight * 0.8,
+        viewportHeight - token.spacer4,
       ),
     );
     final dialogWidth = math.max(
       0.0,
       math.min(
         effectiveWidth,
-        MediaQuery.sizeOf(context).width - token.spacer32,
+        MediaQuery.sizeOf(context).width - token.spacer4,
       ),
     );
     final effectiveContentPadding =
-        contentPadding ??
         extension?.contentPadding ??
-        EdgeInsets.fromLTRB(token.spacer24, token.spacer24, token.spacer24, 0);
+        EdgeInsets.fromLTRB(token.spacer3, token.spacer3, token.spacer3, 0);
     final resolvedTitleStyle =
         extension?.titleTextStyle ??
         material.titleTextStyle ??
@@ -328,10 +298,10 @@ class TDialog extends StatelessWidget {
     final effectiveActionsPadding =
         actionsPadding ??
         (useTextActionLayout
-            ? EdgeInsets.only(top: token.spacer32)
-            : EdgeInsets.all(token.spacer24));
-    final effectiveActionSpacing = actionSpacing ?? token.spacer12;
-    final closeButtonExtent = 24 + token.spacer8 + token.spacer16;
+            ? EdgeInsets.only(top: token.spacer4)
+            : EdgeInsets.all(token.spacer3));
+    final effectiveActionSpacing = actionSpacing ?? token.spacer1;
+    final closeButtonExtent = 24 + token.spacer + token.spacer2;
 
     return Semantics(
       namesRoute: true,
@@ -362,7 +332,7 @@ class TDialog extends StatelessWidget {
                       titleStyle: titleStyle,
                       content: content,
                       contentStyle: contentStyle,
-                      titleContentSpacing: token.spacer8,
+                      titleContentSpacing: token.spacer,
                     ),
                   ),
                   if (actionsWidget != null)
@@ -386,10 +356,10 @@ class TDialog extends StatelessWidget {
                   child: IconButton(
                     tooltip: context.resource.close,
                     padding: EdgeInsetsDirectional.fromSTEB(
-                      token.spacer16,
-                      token.spacer8,
-                      token.spacer8,
-                      token.spacer16,
+                      token.spacer2,
+                      token.spacer,
+                      token.spacer,
+                      token.spacer2,
                     ),
                     constraints: BoxConstraints.tightFor(
                       width: closeButtonExtent,
@@ -635,7 +605,7 @@ class _DialogActions extends StatelessWidget {
 
     if (textLayout && buttons.length <= 2) {
       final divider = BorderSide(
-        color: context.tTheme.componentBorderColor,
+        color: context.tTheme.componentBorder,
         width: 0.5,
       );
       return DecoratedBox(

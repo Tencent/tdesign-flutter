@@ -24,7 +24,7 @@ class _RadioThemesExampleState extends State<RadioThemesExample> {
             iconType: TRadioIconType.check,
           ),
         ),
-        SizedBox(height: context.tTheme.spacer16),
+        SizedBox(height: context.tTheme.spacer2),
         TRadioGroup<bool>(
           value: _dotSelected,
           onChanged: (_) => setState(() => _dotSelected = !_dotSelected),

@@ -384,11 +384,10 @@ void main() {
       final token = TThemeData.defaultData().copyWithTThemeData(
         'radio-size-token-test',
         marginMap: const {
-          'spacer4': 5,
-          'spacer8': 9,
-          'spacer16': 18,
-          'spacer24': 27,
-          'spacer48': 51,
+          'spacer': 9,
+          'spacer2': 18,
+          'spacer3': 27,
+          'spacer5': 51,
         },
       );
       await tester.pumpWidget(
@@ -431,7 +430,7 @@ void main() {
       );
 
       expect(tester.getSize(gesture('token-block')).height, 60);
-      expect(tester.getSize(gesture('token-card')).height, 87);
+      expect(tester.getSize(gesture('token-card')).height, 86);
       expect(selectedIcon.size, 27);
     });
 
@@ -589,7 +588,7 @@ void main() {
       expect(indicator.width, 24.0);
       expect(indicator.height, 24.0);
       expect(selectedIcon.size, 24.0);
-      expect(selectedIcon.color, token.brandNormalColor);
+      expect(selectedIcon.color, token.brandColor);
     });
 
     testWidgets('check 和默认 fill 使用同尺寸 TDesign 图标', (tester) async {
@@ -633,9 +632,9 @@ void main() {
         find.byIcon(TIcons.check_circle_filled),
       );
       expect(checkIcon.size, 24);
-      expect(checkIcon.color, token.brandNormalColor);
+      expect(checkIcon.color, token.brandColor);
       expect(fillIcon.size, 24);
-      expect(fillIcon.color, token.brandNormalColor);
+      expect(fillIcon.color, token.brandColor);
       expect(painters.map((painter) => painter.iconType), [
         TRadioIconType.fill,
         TRadioIconType.dot,
@@ -680,16 +679,16 @@ void main() {
 
       expect(painters, hasLength(2));
       expect(painters.first.selected, isFalse);
-      expect(painters.first.color, token.componentBorderColor);
+      expect(painters.first.color, token.componentBorder);
       expect(painters.first.backgroundColor, isNull);
       expect(painters.last.selected, isFalse);
-      expect(painters.last.color, token.componentBorderColor);
+      expect(painters.last.color, token.componentBorder);
       expect(painters.last.backgroundColor, token.bgColorComponentDisabled);
-      expect(token.componentBorderColor, const Color(0xFFDCDCDC));
+      expect(token.componentBorder, const Color(0xFFDCDCDC));
       expect(token.bgColorComponentDisabled, const Color(0xFFEEEEEE));
-      expect(disabledIcon.color, token.brandDisabledColor);
+      expect(disabledIcon.color, token.brandColorDisabled);
       expect(subTitle.style?.color, token.textColorSecondary);
-      expect(disabledTitle.style?.color, token.textDisabledColor);
+      expect(disabledTitle.style?.color, token.textColorDisabled);
     });
 
     testWidgets('Theme 视觉 token 可覆盖选中色、标题色和内容间距', (tester) async {

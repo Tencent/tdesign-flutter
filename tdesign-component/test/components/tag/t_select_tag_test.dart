@@ -17,9 +17,7 @@ void main() {
 
   group('TSelectTag', () {
     testWidgets('未选中且无回调（defaultTheme）', (tester) async {
-      await tester.pumpWidget(wrap(
-        const TSelectTag('标签', value: false),
-      ));
+      await tester.pumpWidget(wrap(const TSelectTag('标签', value: false)));
       expect(find.byType(TSelectTag), findsOneWidget);
       expect(find.text('标签'), findsOneWidget);
 
@@ -38,13 +36,11 @@ void main() {
       final decoration = tagContainer.decoration as BoxDecoration;
       final text = tester.widget<Text>(find.text('标签'));
       expect(decoration.color, token.bgColorComponentDisabled);
-      expect(text.style?.color, token.textDisabledColor);
+      expect(text.style?.color, token.textColorDisabled);
     });
 
     testWidgets('文字垂直居中且宽度按内容自适应', (tester) async {
-      await tester.pumpWidget(wrap(
-        const TSelectTag('居中', value: false),
-      ));
+      await tester.pumpWidget(wrap(const TSelectTag('居中', value: false)));
 
       final tagContainerFinder = find.descendant(
         of: find.byType(TSelectTag),
@@ -63,17 +59,19 @@ void main() {
 
     testWidgets('未选中带 onChanged，点击触发取反回调', (tester) async {
       var changed = false;
-      await tester.pumpWidget(wrap(
+      await tester.pumpWidget(
+        wrap(
           TSelectTag(
             '点击',
             value: false,
             colorScheme: TTagColorScheme.primary,
             variant: TTagVariant.light,
             icon: Icons.star,
-          size: TTagSize.small,
-          onChanged: (v) => changed = v,
+            size: TTagSize.small,
+            onChanged: (v) => changed = v,
+          ),
         ),
-      ));
+      );
       expect(find.byType(TSelectTag), findsOneWidget);
       // 点击触发 onChanged（取反：false -> true）
       await tester.tap(find.byType(TSelectTag));
@@ -83,15 +81,17 @@ void main() {
     });
 
     testWidgets('无 onChanged 时使用禁用态，即使 value 为 true', (tester) async {
-      await tester.pumpWidget(wrap(
-        const TSelectTag(
-          '选中',
-          value: true,
-          colorScheme: TTagColorScheme.danger,
-          icon: Icons.check,
-          size: TTagSize.large,
+      await tester.pumpWidget(
+        wrap(
+          const TSelectTag(
+            '选中',
+            value: true,
+            colorScheme: TTagColorScheme.danger,
+            icon: Icons.check,
+            size: TTagSize.large,
+          ),
         ),
-      ));
+      );
       expect(find.byType(TSelectTag), findsOneWidget);
 
       final token = TThemeData.defaultData();
@@ -111,8 +111,8 @@ void main() {
       final icon = tester.widget<Icon>(find.byIcon(Icons.check));
 
       expect(decoration.color, token.bgColorComponentDisabled);
-      expect(text.style?.color, token.textDisabledColor);
-      expect(icon.color, token.textDisabledColor);
+      expect(text.style?.color, token.textColorDisabled);
+      expect(icon.color, token.textColorDisabled);
     });
   });
 }

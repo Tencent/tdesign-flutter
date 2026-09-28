@@ -25,13 +25,13 @@ class _SpecialRadiosExampleState extends State<SpecialRadiosExample> {
           onChanged: (value) =>
               setState(() => _verticalSpecialCardValue = value),
         ),
-        SizedBox(height: context.tTheme.spacer24),
+        SizedBox(height: context.tTheme.spacer3),
         Padding(
           padding: EdgeInsets.fromLTRB(
-            context.tTheme.spacer16,
+            context.tTheme.spacer2,
             0,
-            context.tTheme.spacer16,
-            context.tTheme.spacer16,
+            context.tTheme.spacer2,
+            context.tTheme.spacer2,
           ),
           child: TText('横向卡片单选框', textColor: context.tTheme.textColorSecondary),
         ),

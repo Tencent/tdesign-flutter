@@ -104,7 +104,7 @@ void main() {
         isDisabled: false,
         isActive: true,
       ),
-      token.brandClickColor,
+      token.brandColorActive,
     );
     expect(
       TLinkResolve.resolveColor(
@@ -114,7 +114,7 @@ void main() {
         isDisabled: true,
         isActive: false,
       ),
-      token.brandDisabledColor,
+      token.brandColorDisabled,
     );
   });
 

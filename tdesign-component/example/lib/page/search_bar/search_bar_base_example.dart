@@ -78,7 +78,7 @@ class _SearchBarBaseExampleState extends State<SearchBarBaseExample> {
           TextSpan(text: result.substring(0, start)),
           TextSpan(
             text: result.substring(start, end),
-            style: TextStyle(color: context.tTheme.brandNormalColor),
+            style: TextStyle(color: context.tTheme.brandColor),
           ),
           TextSpan(text: result.substring(end)),
         ],

@@ -105,7 +105,7 @@ void main() {
       final backIcon = tester.widget<Icon>(find.byIcon(TIcons.chevron_left));
       expect(backIcon.size, 24.0);
       expect(backIcon.color, token.textColorPrimary);
-      expect(backIcon.color, isNot(token.textDisabledColor));
+      expect(backIcon.color, isNot(token.textColorDisabled));
     });
 
     testWidgets('useDefaultBack 为 false 时不显示返回图标', (tester) async {
@@ -214,7 +214,8 @@ void main() {
     testWidgets('自定义 backgroundColor', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TNavBar(title: Text('标题'), backgroundColor: Colors.blue),
+          const TNavBar(title: Text('标题')),
+          navBarTheme: const TNavBarThemeData(backgroundColor: Colors.blue),
         ),
       );
       expect(find.byType(TNavBar), findsOneWidget);
@@ -223,20 +224,18 @@ void main() {
     testWidgets('自定义 titleColor', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TNavBar(title: Text('彩色标题'), titleColor: Colors.red),
+          const TNavBar(title: Text('彩色标题')),
+          navBarTheme: const TNavBarThemeData(titleColor: Colors.red),
         ),
       );
       expect(find.text('彩色标题'), findsOneWidget);
     });
 
-    testWidgets('构造器 backIconColor 覆盖默认返回图标颜色', (tester) async {
+    testWidgets('Theme backIconColor 覆盖默认返回图标颜色', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TNavBar(
-            title: Text('标题'),
-            backIconColor: Colors.red,
-            useDefaultBack: true,
-          ),
+          const TNavBar(title: Text('标题'), useDefaultBack: true),
+          navBarTheme: const TNavBarThemeData(backIconColor: Colors.red),
         ),
       );
 
@@ -671,7 +670,7 @@ void main() {
 
       final icon = tester.widget<Icon>(find.byIcon(TIcons.home));
       expect(icon.size, 24.0);
-      expect(icon.color, token.textDisabledColor);
+      expect(icon.color, token.textColorDisabled);
     });
 
     testWidgets('onTap: null 的自定义操作项使用禁用透明度', (tester) async {

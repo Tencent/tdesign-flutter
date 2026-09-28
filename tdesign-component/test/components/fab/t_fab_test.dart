@@ -76,12 +76,10 @@ void main() {
       expect(tester.getSize(find.byType(TButton)), const Size(48, 48));
     });
 
-    testWidgets('Fab 默认动作规格不受 TButtonTheme 默认值影响', (tester) async {
+    testWidgets('Fab 默认动作规格不受 TButtonTheme 视觉值影响', (tester) async {
       final theme = TThemeBuilder.light(TThemeData.defaultData())
           .mergeExtension(
             const TButtonThemeData(
-              defaultSize: TButtonSize.extraSmall,
-              defaultVariant: TButtonVariant.outline,
               padding: EdgeInsets.zero,
               gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
             ),
@@ -134,10 +132,7 @@ void main() {
           .where((decoration) => decoration.shadows?.isNotEmpty ?? false);
       expect(decorations, hasLength(1));
       expect(decorations.single.shape, isA<CircleBorder>());
-      expect(
-        decorations.single.shadows,
-        TThemeData.defaultData().shadowsMiddle,
-      );
+      expect(decorations.single.shadows, TThemeData.defaultData().shadow2);
 
       await tester.pumpWidget(wrapWithTheme(const TFab(text: '发布')));
       final textDecoration = tester

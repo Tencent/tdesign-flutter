@@ -15,18 +15,14 @@ class SizedTIconExample extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        TIcon(
-          TIcons.home_filled,
-          size: 32,
-          color: context.tTheme.brandNormalColor,
-        ),
+        TIcon(TIcons.home_filled, size: 32, color: context.tTheme.brandColor),
         const SizedBox(width: 16),
-        TIcon(TIcons.setting, size: 28, color: context.tTheme.errorNormalColor),
+        TIcon(TIcons.setting, size: 28, color: context.tTheme.errorColor),
         const SizedBox(width: 16),
         TIcon(
           TIcons.notification,
           size: 24,
-          color: context.tTheme.warningNormalColor,
+          color: context.tTheme.warningColor,
         ),
       ],
     );

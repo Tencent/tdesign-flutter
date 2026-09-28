@@ -22,12 +22,6 @@ class TConfirmDialog extends StatelessWidget {
     this.showCloseButton = false,
     this.closeButtonResult,
     this.semanticLabel,
-    this.backgroundColor,
-    this.shape,
-    this.elevation,
-    this.width,
-    this.maxHeight,
-    this.contentPadding,
     this.buttonStyle,
   }) : assert(
          content == null || contentWidget == null,
@@ -46,12 +40,6 @@ class TConfirmDialog extends StatelessWidget {
   /// 内置关闭按钮成功关闭时返回的值，默认 null；透传至 [TDialog.closeButtonResult]。
   final Object? closeButtonResult;
   final String? semanticLabel;
-  final Color? backgroundColor;
-  final ShapeBorder? shape;
-  final double? elevation;
-  final double? width;
-  final double? maxHeight;
-  final EdgeInsetsGeometry? contentPadding;
   final ButtonStyle? buttonStyle;
 
   @override
@@ -62,12 +50,6 @@ class TConfirmDialog extends StatelessWidget {
       showCloseButton: showCloseButton,
       closeButtonResult: closeButtonResult,
       semanticLabel: semanticLabel ?? title,
-      backgroundColor: backgroundColor,
-      shape: shape,
-      elevation: elevation,
-      width: width,
-      maxHeight: maxHeight,
-      contentPadding: contentPadding,
       actions: [
         TDialogAction(
           role: TDialogActionRole.primary,

@@ -99,7 +99,7 @@ class ButtonDialogsExample extends StatelessWidget {
     return Column(
       children: [
         for (var index = 0; index < children.length; index++) ...[
-          if (index > 0) SizedBox(height: context.tTheme.spacer16),
+          if (index > 0) SizedBox(height: context.tTheme.spacer2),
           children[index],
         ],
       ],
@@ -115,7 +115,7 @@ class ButtonDialogsExample extends StatelessWidget {
           font: context.tTheme.fontBodyMedium,
           textColor: context.tTheme.textColorSecondary,
         ),
-        SizedBox(height: context.tTheme.spacer16),
+        SizedBox(height: context.tTheme.spacer2),
         trigger,
       ],
     );
@@ -155,7 +155,7 @@ class ButtonDialogsExample extends StatelessWidget {
 
   Widget _verticalButtons(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(context.tTheme.spacer24),
+      padding: EdgeInsets.all(context.tTheme.spacer3),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -165,7 +165,7 @@ class ButtonDialogsExample extends StatelessWidget {
             onPressed: () => Navigator.pop(context, true),
             child: const Text('确定'),
           ),
-          SizedBox(height: context.tTheme.spacer12),
+          SizedBox(height: context.tTheme.spacer1),
           TButton(
             variant: TButtonVariant.fill,
             colorScheme: TButtonColorScheme.light,

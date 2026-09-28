@@ -70,7 +70,7 @@ class _CalendarSingleExampleState extends State<CalendarSingleExample> {
                 font: context.tTheme.fontTitleLarge,
               ),
               Positioned(
-                right: context.tTheme.spacer8,
+                right: context.tTheme.spacer,
                 child: IconButton(
                   tooltip: localized ? 'Close' : '关闭',
                   onPressed: close,
@@ -130,7 +130,7 @@ class _CalendarSingleExampleState extends State<CalendarSingleExample> {
                         : calendar,
                   ),
                   Padding(
-                    padding: EdgeInsets.all(context.tTheme.spacer16),
+                    padding: EdgeInsets.all(context.tTheme.spacer2),
                     child: SizedBox(
                       width: double.infinity,
                       child: TButton(

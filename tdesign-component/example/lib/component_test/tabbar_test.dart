@@ -67,14 +67,14 @@ class _StudyDetailState extends State with SingleTickerProviderStateMixin {
                       TextStyle(fontSize: 12.sp, color: Colors.red),
                   labelStyle:
                       TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w500),
+                  indicator: TTabsBarIndicator(
+                    indicatorColor: context.tTheme.brandColor,
+                    indicatorWidth: 16.w,
+                  ),
                 ),
               ),
               child: TTabsBar(
                 controller: _tabController,
-                indicator: TTabsBarIndicator(
-                  indicatorColor: context.tTheme.brandNormalColor,
-                  indicatorWidth: 16.w,
-                ),
                 tabs: _tabs.map((e) => TTab(text: '$e')).toList(),
               ),
             ),
@@ -132,7 +132,7 @@ class _CourseItemDetail extends StatelessWidget {
                   child: Text(
                 '集合图形离开撒娇的案例三等奖集合图形离开撒娇的案例',
                 style: TextStyle(
-                    color: context.tTheme.fontGyColor1,
+                    color: context.tTheme.fontGray1,
                     fontSize: 14.sp,
                     overflow: TextOverflow.ellipsis,
                     height: 1.5.h),
@@ -146,7 +146,7 @@ class _CourseItemDetail extends StatelessWidget {
               '2020年8月15日开始，共20节课',
               style: TextStyle(
                 fontSize: 12.sp,
-                color: context.tTheme.fontGyColor2,
+                color: context.tTheme.fontGray2,
               ),
             ),
           ),
@@ -167,7 +167,7 @@ class _CourseItemDetail extends StatelessWidget {
                 maxLines: 1,
                 style: TextStyle(
                     fontSize: 12.sp,
-                    color: context.tTheme.fontGyColor2,
+                    color: context.tTheme.fontGray2,
                     overflow: TextOverflow.ellipsis),
               )
             ],

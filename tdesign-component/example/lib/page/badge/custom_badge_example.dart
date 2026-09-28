@@ -11,7 +11,7 @@ class CustomBadgeExample extends StatelessWidget {
     badge: Container(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
-        color: context.tTheme.errorNormalColor,
+        color: context.tTheme.errorColor,
         borderRadius: BorderRadius.circular(999),
       ),
       child: TText(

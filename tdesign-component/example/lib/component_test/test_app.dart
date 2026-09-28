@@ -22,10 +22,8 @@ void main() async {
     MaterialApp(
       home: Theme(
         data: ThemeData(
-          extensions: [
-            themeData,
-            const TTextThemeData(textStyle: TextStyle(fontFamily: 'test1')),
-          ],
+          textTheme: const TextTheme(bodyLarge: TextStyle(fontFamily: 'test1')),
+          extensions: [themeData],
         ),
         child: Builder(
           builder: (context) {
@@ -35,7 +33,7 @@ void main() async {
               // appBar: _buildAppBar(context),
               // body: StudyDetail(),
               body: body(context),
-              bottomNavigationBar: _buildTabBar(),
+              bottomNavigationBar: _buildTabBar(context),
             );
           },
         ),
@@ -59,7 +57,7 @@ Padding body(BuildContext context) {
         ),
         TText(
           '测试文案',
-          textColor: context.tTheme.brandNormalColor,
+          textColor: context.tTheme.brandColor,
           fontFamily: FontFamily(fontFamily: 'test1'),
         ),
         const TFormItem(
@@ -76,108 +74,114 @@ Padding body(BuildContext context) {
             maxLength: 500,
             bordered: true,
           ),
-        )
+        ),
       ],
     ),
   );
 }
 
 PreferredSizeWidget _buildAppBar(BuildContext context) {
-  return TNavBar(
-      useDefaultBack: false,
-      useSafeArea: true,
-      // screenAdaptation: false,
-      flexibleSpace: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(colors: [Colors.red, Colors.green]),
+  return PreferredSize(
+    preferredSize: const Size.fromHeight(48),
+    child: Theme(
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TNavBarThemeData(titleMargin: 0)),
+      child: TNavBar(
+        useDefaultBack: false,
+        useSafeArea: true,
+        // screenAdaptation: false,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(colors: [Colors.red, Colors.green]),
+          ),
         ),
-      ),
-      // opacity: 0,
-      centerTitle: false,
-      titleMargin: 0,
-      title: Theme(
-        data: Theme.of(context).mergeExtension(
-          const TSearchBarThemeData(variant: TSearchBarVariant.round),
-        ),
-        child: TSearchBar(
+        // opacity: 0,
+        centerTitle: false,
+        title: TSearchBar(
+          variant: TSearchBarVariant.round,
           hintText: '搜索预设文案',
           onChanged: (String text) {
             print('input：$text');
           },
         ),
+        actions: [
+          TNavBarItem(
+            icon: TIcons.home,
+            iconSize: 24,
+            onTap: () => TToast.showText('点击了首页', context: context),
+          ),
+          TNavBarItem(
+            icon: TIcons.ellipsis,
+            iconSize: 24,
+            onTap: () => TToast.showText('点击了更多', context: context),
+          ),
+        ],
       ),
-      actions: [
-        TNavBarItem(
-          icon: TIcons.home,
-          iconSize: 24,
-          onTap: () => TToast.showText('点击了首页', context: context),
-        ),
-        TNavBarItem(
-          icon: TIcons.ellipsis,
-          iconSize: 24,
-          onTap: () => TToast.showText('点击了更多', context: context),
-        ),
-      ]);
+    ),
+  );
 }
 
-TTabBar _buildTabBar() {
+Widget _buildTabBar(BuildContext context) {
   var iconSize = 39 * 60 / 98;
   var textSize = 8.0;
-  return TTabBar(
-    type: TTabBarType.iconText,
-    itemStyle: TTabBarItemStyle.normal,
-    value: 0,
-    onChanged: (_) {},
-    split: false,
-    barHeight: 98 * 60 / 98,
-    navigationTabs: [
-      TTabBarItemConfig(
-        selectedIcon: Icon(TIcons.home, size: iconSize, color: Colors.red),
-        unselectedIcon: Icon(
-          TIcons.home,
-          size: iconSize,
-          color: const Color(0xFF383838),
+  return Theme(
+    data: Theme.of(
+      context,
+    ).mergeExtension(const TTabBarThemeData(barHeight: 60)),
+    child: TTabBar(
+      type: TTabBarType.iconText,
+      itemStyle: TTabBarItemStyle.normal,
+      value: 0,
+      onChanged: (_) {},
+      split: false,
+      navigationTabs: [
+        TTabBarItemConfig(
+          selectedIcon: Icon(TIcons.home, size: iconSize, color: Colors.red),
+          unselectedIcon: Icon(
+            TIcons.home,
+            size: iconSize,
+            color: const Color(0xFF383838),
+          ),
+          tabText: '首页',
+          selectTabTextStyle: TextStyle(fontSize: textSize, color: Colors.red),
+          unselectTabTextStyle: TextStyle(fontSize: textSize),
+          onTap: () {
+            // context.read<CurrentIndexProvider>().changeIndex(0);
+          },
         ),
-        tabText: '首页',
-        selectTabTextStyle: TextStyle(fontSize: textSize, color: Colors.red),
-        unselectTabTextStyle: TextStyle(
-          fontSize: textSize,
+        TTabBarItemConfig(
+          selectedIcon: Icon(TIcons.app, size: iconSize, color: Colors.red),
+          unselectedIcon: Icon(
+            TIcons.app,
+            size: iconSize,
+            color: const Color(0xFF383838),
+          ),
+          tabText: '办事',
+          selectTabTextStyle: TextStyle(fontSize: textSize, color: Colors.red),
+          unselectTabTextStyle: TextStyle(
+            fontSize: textSize,
+            color: Colors.black,
+          ),
+          onTap: () {
+            // context.read<CurrentIndexProvider>().changeIndex(1);
+          },
         ),
-        onTap: () {
-          // context.read<CurrentIndexProvider>().changeIndex(0);
-        },
-      ),
-      TTabBarItemConfig(
-        selectedIcon: Icon(TIcons.app, size: iconSize, color: Colors.red),
-        unselectedIcon: Icon(
-          TIcons.app,
-          size: iconSize,
-          color: const Color(0xFF383838),
+        TTabBarItemConfig(
+          selectedIcon: Icon(TIcons.user, size: iconSize, color: Colors.red),
+          unselectedIcon: Icon(
+            TIcons.user,
+            size: iconSize,
+            color: const Color(0xFF383838),
+          ),
+          tabText: '我的',
+          selectTabTextStyle: TextStyle(fontSize: textSize, color: Colors.red),
+          unselectTabTextStyle: TextStyle(fontSize: textSize),
+          onTap: () {
+            // context.read<CurrentIndexProvider>().changeIndex(2);
+          },
         ),
-        tabText: '办事',
-        selectTabTextStyle: TextStyle(fontSize: textSize, color: Colors.red),
-        unselectTabTextStyle:
-            TextStyle(fontSize: textSize, color: Colors.black),
-        onTap: () {
-          // context.read<CurrentIndexProvider>().changeIndex(1);
-        },
-      ),
-      TTabBarItemConfig(
-        selectedIcon: Icon(TIcons.user, size: iconSize, color: Colors.red),
-        unselectedIcon: Icon(
-          TIcons.user,
-          size: iconSize,
-          color: const Color(0xFF383838),
-        ),
-        tabText: '我的',
-        selectTabTextStyle: TextStyle(fontSize: textSize, color: Colors.red),
-        unselectTabTextStyle: TextStyle(
-          fontSize: textSize,
-        ),
-        onTap: () {
-          // context.read<CurrentIndexProvider>().changeIndex(2);
-        },
-      ),
-    ],
+      ],
+    ),
   );
 }

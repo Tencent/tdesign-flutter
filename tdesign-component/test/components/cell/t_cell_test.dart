@@ -124,7 +124,7 @@ void main() {
       });
     }
 
-    testWidgets('Theme 提供高度、对齐、边框和文字样式', (tester) async {
+    testWidgets('实例控制对齐，Theme 提供高度、边框和文字样式', (tester) async {
       await tester.pumpWidget(
         app(
           const TCell(
@@ -133,6 +133,7 @@ void main() {
             note: Text('Theme note'),
             arrow: true,
             required: true,
+            align: TCellAlign.top,
           ),
           cellTheme: const TCellThemeData(
             titleStyle: TextStyle(fontSize: 18),
@@ -143,7 +144,6 @@ void main() {
             borderColor: Colors.blue,
             backgroundColor: Colors.white,
             padding: EdgeInsets.all(8),
-            align: TCellAlign.top,
             showBottomBorder: true,
             height: 80,
           ),
@@ -195,7 +195,7 @@ void main() {
       final text = tester.widget<Text>(find.text(value));
       expect(text.style?.fontSize, token.fontBodyMedium?.size);
       expect(text.style?.color, token.textColorPrimary);
-      expect(text.style?.color, isNot(token.textDisabledColor));
+      expect(text.style?.color, isNot(token.textColorDisabled));
     });
 
     testWidgets('默认标题不继承外层粗体', (tester) async {
@@ -410,12 +410,11 @@ void main() {
       expect(find.byKey(const ValueKey('cell-1')), findsOneWidget);
     });
 
-    testWidgets('card 实例形态覆盖 Theme', (tester) async {
+    testWidgets('card 形态仅由实例选择', (tester) async {
       await tester.pumpWidget(
         app(
           const TCellGroup(variant: TCellGroupVariant.card, cells: cells),
           cellTheme: const TCellThemeData(
-            groupVariant: TCellGroupVariant.standard,
             cardBorderRadius: BorderRadius.all(Radius.circular(6)),
             cardPadding: EdgeInsets.all(4),
           ),
@@ -491,10 +490,8 @@ void main() {
       cardBorderRadius: BorderRadius.all(Radius.circular(2)),
       cardPadding: EdgeInsets.all(3),
       titlePadding: EdgeInsets.all(4),
-      align: TCellAlign.top,
       showBottomBorder: true,
       height: 40,
-      groupVariant: TCellGroupVariant.standard,
       groupBordered: true,
       showLastDivider: false,
     );
@@ -513,18 +510,15 @@ void main() {
       cardBorderRadius: BorderRadius.all(Radius.circular(4)),
       cardPadding: EdgeInsets.all(5),
       titlePadding: EdgeInsets.all(6),
-      align: TCellAlign.bottom,
       showBottomBorder: false,
       height: 60,
-      groupVariant: TCellGroupVariant.card,
       groupBordered: false,
       showLastDivider: true,
     );
 
     test('copyWith 与 lerp 覆盖全部字段', () {
-      final copied = a.copyWith(height: 50, align: TCellAlign.center);
+      final copied = a.copyWith(height: 50);
       expect(copied.height, 50);
-      expect(copied.align, TCellAlign.center);
       expect(copied.titleStyle, a.titleStyle);
       final value = a.lerp(b, 0.5);
       expect(value.titleStyle?.fontSize, 15);
@@ -541,10 +535,8 @@ void main() {
       expect(value.cardBorderRadius, BorderRadius.circular(3));
       expect(value.cardPadding, const EdgeInsets.all(4));
       expect(value.titlePadding, const EdgeInsets.all(5));
-      expect(value.align, TCellAlign.bottom);
       expect(value.showBottomBorder, false);
       expect(value.height, 50);
-      expect(value.groupVariant, TCellGroupVariant.card);
       expect(value.groupBordered, false);
       expect(value.showLastDivider, true);
       expect(a.lerp(null, 0.5), same(a));

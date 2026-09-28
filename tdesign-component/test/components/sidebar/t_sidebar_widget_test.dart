@@ -3,7 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  Widget wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
+  Widget wrap(Widget child, {TSideBarThemeData? sideBarTheme}) => MaterialApp(
+    theme: ThemeData(
+      extensions: [
+        TThemeData.defaultData(),
+        if (sideBarTheme != null) sideBarTheme,
+      ],
+    ),
+    home: Scaffold(body: child),
+  );
 
   final items = [
     const TSideBarItem(value: 1, label: '选项一', icon: Icons.star),
@@ -29,12 +37,14 @@ void main() {
           TSideBar(
             value: 1,
             variant: TSideBarVariant.tag,
-            selectedColor: Colors.red,
-            unSelectedColor: Colors.grey,
-            contentPadding: const EdgeInsets.all(8),
             height: 300,
             children: items,
             onChanged: (_) {},
+          ),
+          sideBarTheme: const TSideBarThemeData(
+            selectedColor: Colors.red,
+            unSelectedColor: Colors.grey,
+            contentPadding: EdgeInsets.all(8),
           ),
         ),
       );

@@ -175,7 +175,7 @@ void main() {
     expect(verticalBackground, token.bgColorSecondaryContainer);
     expect(
       Theme.of(switchContext).extension<TSwitchThemeData>()?.trackOffColor,
-      token.componentBorderColor,
+      token.componentBorder,
     );
 
     await tester.tap(find.byKey(const ValueKey('form-disabled-switch')));

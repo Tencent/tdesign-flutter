@@ -24,7 +24,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 TText(
   '文本 Text',
   font: context.tTheme.fontHeadlineLarge,
-  textColor: context.tTheme.brandNormalColor,
+  textColor: context.tTheme.brandColor,
 )
 ```
 
@@ -34,7 +34,7 @@ TText(
 TText(
   '文本 Text',
   font: context.tTheme.fontBodyLarge,
-  textColor: context.tTheme.brandNormalColor,
+  textColor: context.tTheme.brandColor,
   style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
 )
 ```
@@ -47,7 +47,7 @@ TText(
 TText.rich(
   TextSpan(
     children: [
-      TTextSpan(text: '警告', textColor: context.tTheme.warningNormalColor),
+      TTextSpan(text: '警告', textColor: context.tTheme.warningColor),
       const TextSpan(text: '普通内容'),
     ],
   ),

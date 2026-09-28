@@ -3,16 +3,14 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_theme.dart';
-import 't_icon_theme_data.dart';
 
 /// TIcon 图标组件
 ///
-/// Material [Icon] 的薄包装，提供 TDesign 默认颜色和组件级 Theme 注入能力。
+/// Material [Icon] 的薄包装，提供 TDesign 默认颜色并继承 [IconTheme]。
 /// 图标数据由 `tdesign_flutter_icons` 资源包提供，通过 `TIcons.xxx` 常量引用。
 ///
 /// 优先级链：
-/// 构造器参数 > [TIconThemeData] > [IconTheme] > ThemeData.iconTheme >
-/// TDesign token 颜色兜底。
+/// 构造器参数 > 显式 [IconTheme] > ThemeData.iconTheme > TDesign token 兜底。
 ///
 /// ```dart
 /// // 基础使用
@@ -24,11 +22,9 @@ import 't_icon_theme_data.dart';
 /// // 通过名称引用
 /// TIcon.fromName('home_filled')
 ///
-/// // 子树 Theme 注入
-/// Theme(
-///   data: Theme.of(context).mergeExtension(
-///     const TIconThemeData(size: 20, color: Colors.grey),
-///   ),
+/// // 子树 IconTheme 注入
+/// IconTheme(
+///   data: const IconThemeData(size: 20, color: Colors.grey),
 ///   child: TIcon(TIcons.home_filled),
 /// )
 /// ```
@@ -38,13 +34,13 @@ class TIcon extends StatelessWidget {
 
   /// 图标尺寸，单位为逻辑像素。
   ///
-  /// 未设置时依次读取 [TIconThemeData.size]、显式 [IconTheme]，最后由 Flutter
+  /// 未设置时读取显式 [IconTheme]，最后由 Flutter
   /// 原生 [Icon] 使用其默认尺寸。
   final double? size;
 
   /// 图标颜色。
   ///
-  /// 未设置时依次读取 [TIconThemeData.color]、显式 [IconTheme]，最后回退到
+  /// 未设置时读取显式 [IconTheme]，最后回退到
   /// TDesign 的 `textColorPrimary` Token。
   final Color? color;
 
@@ -87,17 +83,12 @@ class TIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final materialTheme = Theme.of(context);
-    final theme = materialTheme.extension<TIconThemeData>();
     final iconTheme = context.tExplicitIconTheme;
 
     // 尺寸不硬造 token 映射，颜色必须兜到 TDesign token。
-    final effectiveSize = size ?? theme?.size ?? iconTheme?.size;
+    final effectiveSize = size ?? iconTheme?.size;
     final effectiveColor =
-        color ??
-        theme?.color ??
-        iconTheme?.color ??
-        context.tTheme.textColorPrimary;
+        color ?? iconTheme?.color ?? context.tTheme.textColorPrimary;
 
     return Icon(
       icon,

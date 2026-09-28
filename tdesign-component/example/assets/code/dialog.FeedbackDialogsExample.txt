@@ -31,16 +31,20 @@ class FeedbackDialogsExample extends StatelessWidget {
         TDialog.show<void>(
           context,
           barrierDismissible: true,
-          dialog: TDialog(
-            title: const Text('对话框标题'),
-            maxHeight: 400,
-            content: Text(List.filled(48, '这里是辅助内容文案。').join()),
-            actions: const [
-              TDialogAction(
-                child: Text('知道了'),
-                role: TDialogActionRole.primary,
-              ),
-            ],
+          dialog: Theme(
+            data: Theme.of(
+              context,
+            ).mergeExtension(const TDialogThemeData(maxHeight: 400)),
+            child: TDialog(
+              title: const Text('对话框标题'),
+              content: Text(List.filled(48, '这里是辅助内容文案。').join()),
+              actions: const [
+                TDialogAction(
+                  child: Text('知道了'),
+                  role: TDialogActionRole.primary,
+                ),
+              ],
+            ),
           ),
         );
       }),
@@ -51,7 +55,7 @@ class FeedbackDialogsExample extends StatelessWidget {
     return Column(
       children: [
         for (var index = 0; index < children.length; index++) ...[
-          if (index > 0) SizedBox(height: context.tTheme.spacer16),
+          if (index > 0) SizedBox(height: context.tTheme.spacer2),
           children[index],
         ],
       ],

@@ -33,7 +33,7 @@
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | scrollable | bool | false | 是否使用可滚动列表。 |
 | title | Widget? | - | 组标题。 |
-| variant | TCellGroupVariant? | - | 组视觉形态；未设置时读取 Theme。 |
+| variant | TCellGroupVariant? | - | 组视觉形态；未设置时为 `TCellGroupVariant.standard`。 |
 
 
 ### TCellAlign

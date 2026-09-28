@@ -247,11 +247,9 @@ void main() {
 
   group('TSwitch theme and resolver', () {
     testWidgets(
-      'theme supplies defaults and instance semantics override them',
+      'instance semantics and Theme visual values have separate owners',
       (tester) async {
         const theme = TSwitchThemeData(
-          defaultSize: TSwitchSize.small,
-          defaultVariant: TSwitchVariant.text,
           trackOnColor: Colors.red,
           trackOffColor: Colors.green,
           thumbContentOnColor: Colors.blue,
@@ -261,7 +259,12 @@ void main() {
         );
         await tester.pumpWidget(
           wrap(
-            const TSwitch(value: true, onChanged: _noop),
+            const TSwitch(
+              value: true,
+              size: TSwitchSize.small,
+              variant: TSwitchVariant.text,
+              onChanged: _noop,
+            ),
             switchTheme: theme,
           ),
         );
@@ -299,7 +302,7 @@ void main() {
 
       final defaults = TSwitchResolve.resolve(context: context, enabled: true);
       final token = TThemeData.defaultData();
-      expect(defaults.trackOnColor, context.tTheme.brandNormalColor);
+      expect(defaults.trackOnColor, context.tTheme.brandColor);
       expect(defaults.thumbContentOnFont.fontSize, token.fontBodyMedium?.size);
 
       final themed = TSwitchResolve.resolve(
@@ -324,8 +327,6 @@ void main() {
 
     test('ThemeData copyWith and lerp cover all fields', () {
       const base = TSwitchThemeData(
-        defaultSize: TSwitchSize.small,
-        defaultVariant: TSwitchVariant.filled,
         trackOnColor: Colors.red,
         trackOffColor: Colors.green,
         thumbContentOnColor: Colors.blue,
@@ -334,8 +335,6 @@ void main() {
         thumbContentOffFont: TextStyle(fontSize: 10),
       );
       const other = TSwitchThemeData(
-        defaultSize: TSwitchSize.large,
-        defaultVariant: TSwitchVariant.icon,
         trackOnColor: Colors.black,
         trackOffColor: Colors.white,
         thumbContentOnColor: Colors.purple,
@@ -344,27 +343,40 @@ void main() {
         thumbContentOffFont: TextStyle(fontSize: 18),
       );
 
-      expect(base.copyWith().defaultSize, TSwitchSize.small);
-      expect(
-        base
-            .copyWith(
-              defaultSize: TSwitchSize.large,
-              defaultVariant: TSwitchVariant.text,
-              trackOnColor: Colors.black,
-              trackOffColor: Colors.white,
-              thumbContentOnColor: Colors.purple,
-              thumbContentOffColor: Colors.yellow,
-              thumbContentOnFont: const TextStyle(fontSize: 20),
-              thumbContentOffFont: const TextStyle(fontSize: 18),
-            )
-            .trackOnColor,
-        Colors.black,
+      final copied = base.copyWith(
+        trackOnColor: Colors.black,
+        trackOffColor: Colors.white,
+        thumbContentOnColor: Colors.purple,
+        thumbContentOffColor: Colors.yellow,
+        thumbContentOnFont: const TextStyle(fontSize: 20),
+        thumbContentOffFont: const TextStyle(fontSize: 18),
       );
+      expect(copied.trackOnColor, Colors.black);
+      expect(copied.trackOffColor, Colors.white);
+      expect(copied.thumbContentOnColor, Colors.purple);
+      expect(copied.thumbContentOffColor, Colors.yellow);
+      expect(copied.thumbContentOnFont?.fontSize, 20);
+      expect(copied.thumbContentOffFont?.fontSize, 18);
       expect(base.lerp(null, 0.5), same(base));
       expect(base.lerp(other, 0), same(base));
       expect(base.lerp(other, 1), same(other));
-      expect(base.lerp(other, 0.25).defaultSize, TSwitchSize.small);
-      expect(base.lerp(other, 0.75).defaultSize, TSwitchSize.large);
+
+      final midpoint = base.lerp(other, 0.5);
+      expect(midpoint.trackOnColor, Color.lerp(Colors.red, Colors.black, 0.5));
+      expect(
+        midpoint.trackOffColor,
+        Color.lerp(Colors.green, Colors.white, 0.5),
+      );
+      expect(
+        midpoint.thumbContentOnColor,
+        Color.lerp(Colors.blue, Colors.purple, 0.5),
+      );
+      expect(
+        midpoint.thumbContentOffColor,
+        Color.lerp(Colors.orange, Colors.yellow, 0.5),
+      );
+      expect(midpoint.thumbContentOnFont?.fontSize, 16);
+      expect(midpoint.thumbContentOffFont?.fontSize, 14);
     });
   });
 

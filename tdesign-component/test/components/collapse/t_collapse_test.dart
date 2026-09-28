@@ -416,16 +416,13 @@ void main() {
       );
     });
 
-    testWidgets('Theme 和实例 variant 按优先级解析', (tester) async {
+    testWidgets('实例 variant 独立选择 block 形态', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           TCollapse<String>(
             value: const [],
             variant: TCollapseVariant.block,
             children: [buildPanel(value: 'a', title: '标题', bodyText: '内容')],
-          ),
-          collapseTheme: const TCollapseThemeData(
-            variant: TCollapseVariant.card,
           ),
         ),
       );
@@ -442,9 +439,8 @@ void main() {
       );
     });
 
-    testWidgets('Theme card、样式、间距和圆角生效', (tester) async {
+    testWidgets('实例 card 配合 Theme 样式、间距和圆角生效', (tester) async {
       const theme = TCollapseThemeData(
-        variant: TCollapseVariant.card,
         headerTextStyle: TextStyle(color: Colors.red),
         contentTextStyle: TextStyle(color: Colors.blue),
         iconColor: Colors.purple,
@@ -457,6 +453,7 @@ void main() {
         wrapWithTheme(
           TCollapse<String>(
             value: const ['a'],
+            variant: TCollapseVariant.card,
             onChanged: (_) {},
             children: [
               TCollapsePanel<String>(
@@ -500,19 +497,12 @@ void main() {
     });
 
     test('TCollapseThemeData copyWith 和 lerp', () {
-      const base = TCollapseThemeData(
-        variant: TCollapseVariant.card,
-        elevation: 2,
-      );
+      const base = TCollapseThemeData(elevation: 2);
       final merged = base.copyWith(backgroundColor: Colors.red);
-      expect(merged.variant, TCollapseVariant.card);
       expect(merged.elevation, 2);
       expect(merged.backgroundColor, Colors.red);
 
-      const other = TCollapseThemeData(
-        variant: TCollapseVariant.block,
-        elevation: 4,
-      );
+      const other = TCollapseThemeData(elevation: 4);
       expect(base.lerp(other, 0.5).elevation, 4);
       expect(base.lerp(null, 0.5), same(base));
     });
@@ -554,11 +544,11 @@ void main() {
       expect(semanticsWidget.properties.onTap, isNull);
       expect(
         DefaultTextStyle.of(tester.element(find.text('组级禁用'))).style.color,
-        TThemeData.defaultData().textDisabledColor,
+        TThemeData.defaultData().textColorDisabled,
       );
       expect(
         DefaultTextStyle.of(tester.element(find.text('操作'))).style.color,
-        TThemeData.defaultData().textDisabledColor,
+        TThemeData.defaultData().textColorDisabled,
       );
       semantics.dispose();
     });
@@ -682,15 +672,15 @@ void main() {
       expect(find.text('B:0'), findsOneWidget);
     });
 
-    testWidgets('空列表、动画时长和 elevation 可渲染', (tester) async {
+    testWidgets('空列表、实例动画时长和 Theme elevation 可渲染', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           const TCollapse<String>(
             value: [],
             animationDuration: Duration(milliseconds: 100),
-            elevation: 4,
             children: [],
           ),
+          collapseTheme: const TCollapseThemeData(elevation: 4),
         ),
       );
 

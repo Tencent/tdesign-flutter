@@ -130,7 +130,7 @@ void main() {
     expect((spans[1] as TextSpan).text, 'mobile');
     expect(
       (spans[1] as TextSpan).style?.color,
-      TThemeData.defaultData().brandNormalColor,
+      TThemeData.defaultData().brandColor,
     );
 
     await tester.tap(find.text('tdesign-mobile-vue'));

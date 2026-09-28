@@ -31,7 +31,7 @@ class TLink extends StatelessWidget {
   /// 后置图标；为 null 时不占位。
   final Widget? suffixIcon;
 
-  /// 是否显示下划线；未设置时读取 [TLinkThemeData.underline]，最终回退 false。
+  /// 是否显示下划线；未设置时为 false。
   final bool? underline;
 
   /// 语义颜色方案；未设置时默认为 [TLinkColorScheme.defaultTheme]。
@@ -56,12 +56,9 @@ class TLink extends StatelessWidget {
       child: child,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
-      underline: underline ?? theme?.underline ?? false,
-      colorScheme:
-          colorScheme ??
-          theme?.defaultColorScheme ??
-          TLinkColorScheme.defaultTheme,
-      size: size ?? theme?.defaultSize ?? TLinkSize.medium,
+      underline: underline ?? false,
+      colorScheme: colorScheme ?? TLinkColorScheme.defaultTheme,
+      size: size ?? TLinkSize.medium,
       onPressed: onPressed,
       semanticLabel: semanticLabel,
       tooltip: tooltip,

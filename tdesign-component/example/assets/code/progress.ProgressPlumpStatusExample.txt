@@ -19,10 +19,7 @@ class ProgressPlumpStatusExample extends StatelessWidget {
         TProgress.plump(
           value: 0.8,
           gradient: LinearGradient(
-            colors: [
-              context.tTheme.brandNormalColor,
-              context.tTheme.successNormalColor,
-            ],
+            colors: [context.tTheme.brandColor, context.tTheme.successColor],
           ),
         ),
       ],

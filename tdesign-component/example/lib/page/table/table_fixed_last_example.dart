@@ -31,15 +31,9 @@ class TableFixedLastExample extends StatelessWidget {
           cellBuilder: (context, _, __) => Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                '修改',
-                style: TextStyle(color: context.tTheme.brandNormalColor),
-              ),
+              Text('修改', style: TextStyle(color: context.tTheme.brandColor)),
               const SizedBox(width: 24),
-              Text(
-                '通过',
-                style: TextStyle(color: context.tTheme.brandNormalColor),
-              ),
+              Text('通过', style: TextStyle(color: context.tTheme.brandColor)),
             ],
           ),
         ),

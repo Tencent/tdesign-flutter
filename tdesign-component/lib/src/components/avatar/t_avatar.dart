@@ -13,7 +13,9 @@ import 't_avatar_types.dart';
 /// 头像。
 ///
 /// [image] 负责图片内容，[child] 负责文字、图标等自定义内容。两者同时提供时，
-/// [child] 会作为图片加载失败前的背景内容。
+/// [child] 会作为图片加载失败前的背景内容。默认图标与文字前景色由
+/// [TAvatarThemeData.foregroundColor] 控制；特殊文字排版可在 [child] 中使用
+/// `Text(style: ...)`，组件不再额外提供文字样式入口。
 class TAvatar extends StatelessWidget {
   const TAvatar({
     this.image,
@@ -21,9 +23,6 @@ class TAvatar extends StatelessWidget {
     this.size,
     this.shape,
     this.variant,
-    this.backgroundColor,
-    this.foregroundColor,
-    this.textStyle,
     this.fit = BoxFit.cover,
     this.onTap,
     super.key,
@@ -38,24 +37,15 @@ class TAvatar extends StatelessWidget {
   /// 自定义头像内容。
   final Widget? child;
 
-  /// 头像尺寸；未设置时依次读取 Theme 和中尺寸默认值。
+  /// 头像尺寸；未设置时使用中尺寸默认值。
   final TAvatarSize? size;
 
-  /// 头像形状；未设置时依次读取 Theme 和圆形默认值。
+  /// 头像形状；未设置时使用圆形默认值。
   final TAvatarShape? shape;
 
   /// 头像形状的旧命名。
   @Deprecated('Use shape instead. This property will be removed in 1.0.0.')
   final TAvatarVariant? variant;
-
-  /// 头像背景色，优先于 Theme。
-  final Color? backgroundColor;
-
-  /// 默认图标及字符内容的前景色，优先于 Theme。
-  final Color? foregroundColor;
-
-  /// 字符内容样式，优先于 Theme，并继承对应尺寸的默认字号和字重。
-  final TextStyle? textStyle;
 
   /// 图片填充方式。
   final BoxFit fit;
@@ -66,33 +56,19 @@ class TAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TAvatarThemeData>();
-    final resolvedSize = size ?? theme?.size ?? TAvatarSize.medium;
+    final resolvedSize = size ?? TAvatarSize.medium;
     final resolvedShape =
-        shape ??
-        _avatarShapeFromVariant(variant) ??
-        theme?.shape ??
-        _avatarShapeFromVariant(theme?.variant) ??
-        TAvatarShape.circle;
+        shape ?? _avatarShapeFromVariant(variant) ?? TAvatarShape.circle;
     final dimension =
         theme?.dimension ?? TAvatarDefaults.dimensionFor(resolvedSize);
     final radius = resolvedShape == TAvatarShape.circle
-        ? dimension / 2
+        ? theme?.circleBorderRadius ?? context.tTheme.radiusCircle
         : theme?.squareBorderRadius ?? context.tTheme.radiusDefault;
     final resolvedForegroundColor =
-        foregroundColor ??
-        textStyle?.color ??
-        theme?.foregroundColor ??
-        theme?.textStyle?.color ??
-        context.tTheme.brandNormalColor;
-    final resolvedTextStyle =
-        TextStyle(
-              fontSize: TAvatarDefaults.fontSizeFor(resolvedSize),
-              height: 1,
-              fontWeight: FontWeight.w600,
-            )
-            .merge(theme?.textStyle)
-            .merge(textStyle)
-            .copyWith(color: resolvedForegroundColor);
+        theme?.foregroundColor ?? context.tTheme.brandColor;
+    final resolvedTextStyle = TAvatarDefaults.textStyleFor(
+      resolvedSize,
+    ).copyWith(color: resolvedForegroundColor);
     final content =
         child ??
         Icon(
@@ -104,10 +80,7 @@ class TAvatar extends StatelessWidget {
     final avatar = ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: ColoredBox(
-        color:
-            backgroundColor ??
-            theme?.backgroundColor ??
-            context.tTheme.brandFocusColor,
+        color: theme?.backgroundColor ?? context.tTheme.brandColorFocus,
         child: SizedBox.square(
           dimension: dimension,
           child: Stack(
@@ -145,25 +118,17 @@ class TAvatar extends StatelessWidget {
 ///
 /// 头像组只负责布局，不解析图片来源或缓存成员状态。
 /// 当成员是 [TAvatar] 时，其 [TAvatar.shape] 同时决定成员外框与裁剪形状；
-/// 其他 Widget 使用组件 Theme 中的形状或圆形默认值。
+/// 其他 Widget 使用圆形默认值。
 class TAvatarGroup extends StatelessWidget {
   const TAvatarGroup({
     required this.children,
     this.maxCount,
     this.overflow,
     this.spacing,
-    this.dimension,
     this.cascading = TAvatarGroupCascading.endUp,
     super.key,
   }) : assert(maxCount == null || maxCount > 0),
-       assert(
-         dimension == null || (dimension > 0 && dimension != double.infinity),
-       ),
-       assert(spacing == null || (spacing >= 0 && spacing != double.infinity)),
-       assert(
-         dimension == null || spacing == null || spacing <= dimension,
-         'spacing cannot be greater than dimension',
-       );
+       assert(spacing == null || (spacing >= 0 && spacing != double.infinity));
 
   /// 头像列表。
   final List<Widget> children;
@@ -176,9 +141,6 @@ class TAvatarGroup extends StatelessWidget {
 
   /// 相邻头像的重叠宽度；有效范围为 0 到成员外框边长。
   final double? spacing;
-
-  /// 头像组成员的外框边长；未设置时读取 Theme，默认 48。
-  final double? dimension;
 
   /// 头像组成员的层叠方向，使用 start/end 语义并跟随文字方向。
   final TAvatarGroupCascading cascading;
@@ -197,7 +159,7 @@ class TAvatarGroup extends StatelessWidget {
       visible.add(overflow!);
     }
     final requestedDimension =
-        dimension ?? theme?.dimension ?? TAvatarDefaults.mediumDimension;
+        theme?.dimension ?? TAvatarDefaults.mediumDimension;
     final resolvedDimension =
         requestedDimension.isFinite && requestedDimension > 0
         ? requestedDimension
@@ -254,7 +216,7 @@ class TAvatarGroup extends StatelessWidget {
         theme?.squareBorderRadius ?? context.tTheme.radiusDefault;
     final innerDimension = resolvedDimension - borderWidth * 2;
     final innerRadius = shape == TAvatarShape.circle
-        ? innerDimension / 2
+        ? (theme?.circleBorderRadius ?? context.tTheme.radiusCircle)
         : (squareRadius - borderWidth).clamp(0, innerDimension / 2).toDouble();
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -286,13 +248,9 @@ class TAvatarGroup extends StatelessWidget {
     if (child is TAvatar) {
       return child.shape ??
           _avatarShapeFromVariant(child.variant) ??
-          theme?.shape ??
-          _avatarShapeFromVariant(theme?.variant) ??
           TAvatarShape.circle;
     }
-    return theme?.shape ??
-        _avatarShapeFromVariant(theme?.variant) ??
-        TAvatarShape.circle;
+    return TAvatarShape.circle;
   }
 }
 

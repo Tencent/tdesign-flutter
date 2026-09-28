@@ -865,7 +865,7 @@ void main() {
       await tester.pumpWidget(app(const TBadge(label: '8')));
 
       final badge = badgeOf(tester);
-      expect(badge.backgroundColor, token.errorNormalColor);
+      expect(badge.backgroundColor, token.errorColor);
       expect(badge.textColor, token.textColorAnti);
       expect(badge.largeSize, 16);
       expect(badge.smallSize, 8);
@@ -920,7 +920,7 @@ void main() {
       );
 
       final badge = badgeOf(tester);
-      expect(badge.backgroundColor, token.errorNormalColor);
+      expect(badge.backgroundColor, token.errorColor);
       expect(badge.textColor, token.textColorAnti);
       expect(badge.largeSize, 16);
       expect(badge.smallSize, 8);

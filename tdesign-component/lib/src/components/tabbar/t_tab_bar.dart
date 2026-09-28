@@ -396,7 +396,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
     _effectiveSelectedBgColor =
         widget.selectedBgColor ??
         theme?.selectedBgColor ??
-        context.tTheme.brandLightColor;
+        context.tTheme.brandColorLight;
     _effectiveUnselectedBgColor =
         widget.unselectedBgColor ?? theme?.unselectedBgColor;
     _effectiveBackgroundColor =
@@ -412,7 +412,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
     _effectiveDividerColor =
         widget.dividerColor ??
         theme?.dividerColor ??
-        context.tTheme.componentStrokeColor;
+        context.tTheme.componentStroke;
     _effectiveTopBorder = widget.topBorder ?? theme?.topBorder;
     _animationController.duration =
         widget.animationDuration ?? const Duration(milliseconds: 300);
@@ -460,13 +460,13 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
                         top:
                             _effectiveTopBorder ??
                             BorderSide(
-                              color: context.tTheme.componentStrokeColor,
+                              color: context.tTheme.componentStroke,
                               width: 0.5,
                             ),
                       )
                     : null,
                 boxShadow: isCapsuleOutlineType
-                    ? context.tTheme.shadowsBase
+                    ? context.tTheme.shadow3
                     : null,
               ),
               child: Stack(
@@ -821,7 +821,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
                       : null,
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? selectedBgColor ?? context.tTheme.brandLightColor
+                        ? selectedBgColor ?? context.tTheme.brandColorLight
                         : unselectedBgColor,
                     borderRadius: const BorderRadius.all(Radius.circular(24)),
                   ),
@@ -853,7 +853,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
               TIcons.view_list,
               size: 16.0,
               color: isSelected
-                  ? context.tTheme.brandNormalColor
+                  ? context.tTheme.brandColor
                   : context.tTheme.textColorPrimary,
             ),
             const SizedBox(width: 5),
@@ -880,7 +880,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
       child = IconTheme(
         data: IconThemeData(
           color: isSelected
-              ? context.tTheme.brandNormalColor
+              ? context.tTheme.brandColor
               : context.tTheme.textColorPrimary,
         ),
         child: isSelected ? selectedIcon! : unSelectedIcon!,
@@ -893,7 +893,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
       final icon = IconTheme(
         data: IconThemeData(
           color: isSelected
-              ? context.tTheme.brandNormalColor
+              ? context.tTheme.brandColor
               : context.tTheme.textColorPrimary,
         ),
         child: isSelected ? selectedIcon! : unSelectedIcon!,
@@ -955,7 +955,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
           height: font.height,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           color: isSelected
-              ? context.tTheme.brandNormalColor
+              ? context.tTheme.brandColor
               : context.tTheme.textColorPrimary,
         ),
         style: isSelected
@@ -1001,8 +1001,8 @@ class _TTabBarItemWithBadge extends StatelessWidget {
             ? BorderRadius.circular(context.tTheme.radiusCircle)
             : null,
         splashFactory: InkRipple.splashFactory,
-        splashColor: selectedBgColor ?? context.tTheme.brandLightColor,
-        highlightColor: selectedBgColor ?? context.tTheme.brandLightColor,
+        splashColor: selectedBgColor ?? context.tTheme.brandColorLight,
+        highlightColor: selectedBgColor ?? context.tTheme.brandColorLight,
         onTap: () => handleTap(context),
         child: child,
       ),
@@ -1311,7 +1311,7 @@ class _TabBarPopupDialogState extends State<_TabBarPopupDialog> {
                 height:
                     popUpItemHeight * widget.items.length +
                     (widget.config?.arrowHeight ?? _kArrowHeight),
-                decoration: BoxDecoration(boxShadow: context.tTheme.shadowsTop),
+                decoration: BoxDecoration(boxShadow: context.tTheme.shadow3),
                 child: CustomPaint(
                   painter: _TabBarPanelPainter(
                     config: widget.config,
@@ -1342,7 +1342,7 @@ class _TabBarPopupDialogState extends State<_TabBarPopupDialog> {
                                 child: Divider(
                                   thickness: 0.5,
                                   height: 0.5,
-                                  color: context.tTheme.componentStrokeColor,
+                                  color: context.tTheme.componentStroke,
                                 ),
                               ),
                             ),

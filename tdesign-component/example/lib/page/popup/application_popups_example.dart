@@ -44,7 +44,7 @@ class ApplicationPopupsExample extends StatelessWidget {
                   onTap: close,
                   child: TText(
                     '确定',
-                    textColor: theme.brandNormalColor,
+                    textColor: theme.brandColor,
                     font: theme.fontTitleMedium,
                     fontWeight: FontWeight.w600,
                   ),
@@ -65,7 +65,7 @@ class ApplicationPopupsExample extends StatelessWidget {
                 tooltip: '关闭',
                 icon: Icon(
                   TIcons.close_circle,
-                  color: theme.fontWhColor1,
+                  color: theme.fontWhite1,
                   size: 32,
                 ),
                 onPressed: close,

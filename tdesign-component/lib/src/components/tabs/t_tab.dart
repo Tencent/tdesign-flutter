@@ -57,7 +57,7 @@ class TTab extends Tab {
     Widget content = Center(widthFactor: 1.0, child: label);
     if (!enabled) {
       final disabledStyle = DefaultTextStyle.of(context).style
-          .copyWith(color: context.tTheme.textDisabledColor)
+          .copyWith(color: context.tTheme.textColorDisabled)
           .merge(
             Theme.of(
               context,

@@ -150,7 +150,7 @@ void main() {
 
       final icon = tester.widget<Icon>(find.byIcon(TIcons.check_circle_filled));
       expect(icon.size, 24.0);
-      expect(icon.color, token.brandNormalColor);
+      expect(icon.color, token.brandColor);
     });
 
     testWidgets('完整主题下启用未选、禁用选中和文字颜色使用对应 token', (tester) async {
@@ -172,9 +172,9 @@ void main() {
       );
       final disabledTitle = tester.widget<Text>(find.text('禁用选中'));
 
-      expect(uncheckedIcon.color, token.componentBorderColor);
-      expect(disabledCheckedIcon.color, token.brandDisabledColor);
-      expect(disabledTitle.style?.color, token.textDisabledColor);
+      expect(uncheckedIcon.color, token.componentBorder);
+      expect(disabledCheckedIcon.color, token.brandColorDisabled);
+      expect(disabledTitle.style?.color, token.textColorDisabled);
     });
 
     testWidgets('禁用未选使用禁用填充色和组件描边色', (tester) async {
@@ -195,7 +195,7 @@ void main() {
       final border = decoration.border! as Border;
 
       expect(decoration.color, const Color(0xFFEEEEEE));
-      expect(token.componentBorderColor, const Color(0xFFDCDCDC));
+      expect(token.componentBorder, const Color(0xFFDCDCDC));
       expect(border.top.color, const Color(0xFFDCDCDC));
     });
 
@@ -203,7 +203,7 @@ void main() {
       final token = TThemeData.defaultData().copyWithTThemeData(
         'checkbox-disabled-color-token-test',
         colorMap: const {
-          'componentBorderColor': Colors.purple,
+          'componentBorder': Colors.purple,
           'bgColorComponentDisabled': Colors.orange,
         },
       );
@@ -508,7 +508,7 @@ void main() {
       final decoration = indicator.decoration! as BoxDecoration;
       final border = decoration.border! as Border;
       expect(decoration.color, token.bgColorComponentDisabled);
-      expect(border.top.color, token.componentBorderColor);
+      expect(border.top.color, token.componentBorder);
       expect(
         decoration.borderRadius,
         const BorderRadius.all(Radius.circular(1.5)),
@@ -551,11 +551,10 @@ void main() {
           'fontBodyMedium': Font(size: 15, lineHeight: 23),
         },
         marginMap: const {
-          'spacer4': 5,
-          'spacer8': 9,
-          'spacer16': 18,
-          'spacer24': 27,
-          'spacer48': 51,
+          'spacer': 9,
+          'spacer2': 18,
+          'spacer3': 27,
+          'spacer5': 51,
         },
       );
       await tester.pumpWidget(
@@ -597,7 +596,7 @@ void main() {
       );
 
       expect(tester.getSize(gesture('token-block')).height, 60);
-      expect(tester.getSize(gesture('token-card')).height, 90);
+      expect(tester.getSize(gesture('token-card')).height, 89);
       expect(selectedIcon.size, 27);
     });
 

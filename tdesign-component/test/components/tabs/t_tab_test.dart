@@ -96,7 +96,7 @@ void main() {
           ),
         );
 
-        final disabledColor = TThemeData.defaultData().textDisabledColor;
+        final disabledColor = TThemeData.defaultData().textColorDisabled;
         final paragraph = tester.renderObject<RenderParagraph>(find.text('禁用'));
         expect(paragraph.text.style?.color, disabledColor);
         expect(

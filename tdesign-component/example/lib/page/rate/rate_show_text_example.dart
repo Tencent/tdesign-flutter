@@ -17,7 +17,7 @@ class RateShowTextExample extends StatelessWidget {
           texts: ['1分', '2分', '3分', '4分', '5分'],
         ),
       ),
-      SizedBox(height: context.tTheme.spacer16),
+      SizedBox(height: context.tTheme.spacer2),
       const RateShowTextExampleRateRow(
         title: '带描述评分',
         rate: RateShowTextExampleStatefulRate(
@@ -25,7 +25,7 @@ class RateShowTextExample extends StatelessWidget {
           texts: ['极差', '失望', '一般', '满意', '惊喜'],
         ),
       ),
-      SizedBox(height: context.tTheme.spacer16),
+      SizedBox(height: context.tTheme.spacer2),
       const RateShowTextExampleRateRow(
         title: '带描述评分',
         rate: RateShowTextExampleStatefulRate(

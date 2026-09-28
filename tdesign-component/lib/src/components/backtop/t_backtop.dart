@@ -190,7 +190,7 @@ class _TBackTopState extends State<TBackTop> {
       backgroundColor: theme.backgroundColor ?? defaultBackground,
       borderColor:
           theme.borderColor ??
-          (isDark ? token.grayColor9 : token.componentBorderColor),
+          (isDark ? token.grayColor9 : token.componentBorder),
       contentColor: theme.contentColor ?? defaultContent,
       roundSize: theme.roundSize ?? 48,
       halfCircleHeight: theme.halfCircleHeight ?? 40,
@@ -199,13 +199,15 @@ class _TBackTopState extends State<TBackTop> {
       borderWidth: theme.borderWidth ?? 0.5,
       halfCircleHorizontalPadding: theme.halfCircleHorizontalPadding ?? 8,
       contentGap: theme.contentGap ?? 2,
-      textStyle: TextStyle(
-        fontSize: token.fontMarkExtraSmall?.size ?? 10,
-        height: 1.2,
-        fontWeight: token.fontMarkExtraSmall?.fontWeight ?? FontWeight.w600,
-      ).merge(theme.textStyle).copyWith(
-        color: theme.contentColor ?? defaultContent,
-      ),
+      textStyle:
+          TextStyle(
+                fontSize: token.fontMarkExtraSmall?.size ?? 10,
+                height: 1.2,
+                fontWeight:
+                    token.fontMarkExtraSmall?.fontWeight ?? FontWeight.w600,
+              )
+              .merge(theme.textStyle)
+              .copyWith(color: theme.contentColor ?? defaultContent),
     );
   }
 
@@ -214,9 +216,11 @@ class _TBackTopState extends State<TBackTop> {
     return Container(
       width: style.roundSize,
       height: style.roundSize,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(context.tTheme.radiusCircle),
-        border: Border.all(color: style.borderColor, width: style.borderWidth),
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(context.tTheme.radiusCircle),
+          side: BorderSide(color: style.borderColor, width: style.borderWidth),
+        ),
         color: style.backgroundColor,
       ),
       child: Center(
@@ -250,15 +254,18 @@ class _TBackTopState extends State<TBackTop> {
         padding: EdgeInsets.symmetric(
           horizontal: style.halfCircleHorizontalPadding,
         ),
-        decoration: BoxDecoration(
+        decoration: ShapeDecoration(
           color: style.backgroundColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(context.tTheme.radiusCircle),
-            bottomLeft: Radius.circular(context.tTheme.radiusCircle),
-          ),
-          border: Border.all(
-            color: style.borderColor,
-            width: style.borderWidth,
+          // 小程序半圆形使用 radius-round；只有正圆形使用 radius-circle (50%)。
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(context.tTheme.radiusRound),
+              bottomLeft: Radius.circular(context.tTheme.radiusRound),
+            ),
+            side: BorderSide(
+              color: style.borderColor,
+              width: style.borderWidth,
+            ),
           ),
         ),
         child: Row(

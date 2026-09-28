@@ -9,11 +9,7 @@ import '../../theme/t_theme.dart';
 
 /// 带水平缩进的折叠面板分隔线。
 class TInsetDivider extends StatelessWidget {
-  const TInsetDivider({
-    this.color,
-    this.indent,
-    Key? key,
-  }) : super(key: key);
+  const TInsetDivider({this.color, this.indent, Key? key}) : super(key: key);
 
   final Color? color;
   final double? indent;
@@ -21,15 +17,17 @@ class TInsetDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
+      height: 1,
+      child: Divider(
+        color:
+            color ??
+            DividerTheme.of(context).color ??
+            context.tTheme.componentStroke,
+        indent: indent ?? context.tTheme.spacer2,
+        endIndent: 0.0,
         height: 1,
-        child: Divider(
-          color: color ??
-              DividerTheme.of(context).color ??
-              context.tTheme.componentStrokeColor,
-          indent: indent ?? context.tTheme.spacer16,
-          endIndent: 0.0,
-          height: 1,
-          thickness: 0.5,
-        ));
+        thickness: 0.5,
+      ),
+    );
   }
 }
