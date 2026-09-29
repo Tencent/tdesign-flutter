@@ -11,6 +11,8 @@
 
 用户提供的全局 Radius 规范优先于先前引用的 Figma 变量页：small/default/large/extraLarge/round 为 3/6/9/12/999dp。Flutter 全局主题与小程序 216 个键同名，不再有 `radiusMedium`；头像方角读取 `radiusDefault`，Tag 方角默认读取 `radiusSmall`。下文按日期记录的 2/3/6dp 与 `radiusMedium` 是历史检查点，不代表最新源码。CSS `radiusCircle: 50%` 与 Flutter 固定半径 `9999dp` 仍是已记录的平台表达差异。
 
+2026-09-29 合并 #1146/#1147 后，Tag 同时保留组件 Theme 的 `dangerColor`、`successColor`、`successLightColor` 和 `squareBorderRadius`；后者未显式指定时继续回退 `radiusSmall = 3dp`，未恢复旧 4dp。Flutter 3.32.0 Tag/SelectTag 聚焦测试 75/75 通过；固定 Linux 3.32.0 对四张公开 Tag Demo 图先无更新比对，确认差异包含已裁定的 3dp 方角和新增的第三种圆弧实例后，只更新这四张，在同环境无更新严格复跑通过。此结果不代表字体宽度或整页 Figma 像素差已裁定；完整视觉调度器仍须以合并后的最终源码运行。
+
 ## 自动化验证
 
 | 命令 | 结果 | 备注 |

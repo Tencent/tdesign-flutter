@@ -1,5 +1,11 @@
 # 验收记录
 
+## 2026-09-29 与 Token PR 合并后的检查点
+
+- TabBar 继续保留 `iconTextLayout` 与默认顶线/安全区行为；`centerDistance`、`showTopBorder`、`placeholder` 均不再是公开入口。高度、选中背景和分隔线等具体视觉值仅在组件 Theme 设置，未恢复同义实例字段。
+- 合并源码使用新的 `brandColorLight`、`grayColor3`、`borderLevel1Color`、`shadow3` 与 `radiusRound` Token；图文徽标回到 #1146 的默认锚点，避免合并时带入额外圆点偏移。
+- Flutter 3.32.0：TabBar 组件聚焦测试 44/44、公开 Demo 功能测试 9/9；组件包与 Example 包严格 analyze 零诊断，示例代码生成 `--check` 通过。固定 Linux 3.32.0 的公开 Demo 11 张在核对徽标、暗色 Token 和菜单文字差异后更新 6 张，同环境立即无更新严格复跑通过。组件 Golden、完整视觉调度器及最新 Flutter 版本仍待最终合并源码复核。
+
 ## 2026-09-27 顶边线和安全区 API 收敛
 
 - 删除 `showTopBorder`、实例与 Theme 的 `topBorder`、`placeholder`。Filled 保持默认 0.5px 顶线，Capsule 仍无顶线；自定义 Demo 现在也使用默认线。`useSafeArea: true` 仍用组件背景填满底部安全区，false 不处理。需要仅避开安全区的场景须在组件外组合 `SafeArea`，此组合尚未作为公开 Demo 验证。

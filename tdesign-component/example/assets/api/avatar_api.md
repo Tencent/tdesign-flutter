@@ -32,7 +32,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 默认背景色。 |
+| backgroundColor | Color? | - | 默认背景色；未设置时回退全局 `brandColorLightActive`。 |
 | circleBorderRadius | double? | - | 圆形头像圆角；未设置时回退全局 `radiusCircle`（逻辑像素）。 |
 | dimension | double? | - | 自定义头像边长。 |
 | foregroundColor | Color? | - | 默认图标与继承文字的前景色；未设置时回退全局品牌色。 |
@@ -40,4 +40,4 @@
 | groupBorderWidth | double? | - | 头像组成员描边宽度。 |
 | groupSpacing | double? | - | 头像组重叠宽度。 |
 | iconSize | double? | - | 默认图标大小。 |
-| squareBorderRadius | double? | - | 方形头像圆角。 |
+| squareBorderRadius | double? | - | 方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。 |

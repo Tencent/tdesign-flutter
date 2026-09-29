@@ -1,5 +1,10 @@
 # 验收记录
 
+## 2026-09-29 合并 PR 检查点
+
+- 将 #1147 的组件 Theme 改动与 #1146 的 TabBar 公开布局合入同一提交历史；TabBar 具体视觉值保留组件 Theme 单入口，`centerDistance`、`showTopBorder`、`placeholder` 均不恢复。Tag 保留组件专属 danger/success 色，方角默认回退用户确认的全局 `radiusSmall = 3dp`。
+- Flutter 3.32.0 TabBar 组件测试 44/44、公开 Demo 功能测试 9/9，组件包和 Example 包严格 analyze 零诊断；TabBar Demo 11 张与 Tag Demo 4 张 Linux Golden 在逐项核对后更新，随即在同一环境无更新严格复跑通过。两版本完整组件/示例调度器、全部 Linux Golden、API 生成产物及外部 breaking 调用方编译仍待最终检查。下文历史检查点的 12/35、Tag 4dp 和未通过截图数量不代表合并后的最终状态。
+
 ## 验证环境
 
 - Flutter 分支：`rss1102/refactor/miniprogram-tokens`；工作区已有其他未提交改动，保留不覆盖。

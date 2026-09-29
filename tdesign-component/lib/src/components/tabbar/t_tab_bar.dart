@@ -60,9 +60,6 @@ const double _kPopupArrowGap = 4.0;
 /// 纯文本标签比图标锚点宽，默认向逻辑起始方向收进 6px。
 const Offset _kTextBadgeOffset = Offset(-6, 0);
 
-/// 上下图文项的圆点相对图标右上角内收 1px、下移 2px。
-const Offset _kStackedIconTextDotOffset = Offset(-1, 2);
-
 /// 展开项弹窗距离视口边界的安全距离
 const double _kPopupViewportPadding = 8.0;
 
@@ -193,8 +190,7 @@ class TTabBarItemConfig {
   /// 徽标内容和样式由 [TBadgeConfig] 描述，[TBadgeConfig.offset] 可用于逐项
   /// 调整默认位置。纯文本项未设置实例或 BadgeTheme offset 时使用 TabBar 的
   /// 文本徽标默认位置；纯图标项与上下排列的图文项以图标作为锚点，
-  /// 左右排列的图文项以整组图文作为锚点。上下图文的圆点默认相对图标
-  /// 右上角内收 1px、下移 2px；其他图标徽标使用默认右上角位置。
+  /// 左右排列的图文项以整组图文作为锚点，均使用徽标的默认右上角位置。
   /// 显式 offset 与 BadgeTheme offset 均优先于组件默认值。
   ///
   /// TabBar 自己拥有徽标锚点与点击区域；点击行为通过 [onTap] 配置。调用方
@@ -928,28 +924,15 @@ class _TTabBarItemWithBadge extends StatelessWidget {
   }
 
   Widget _attachBadge(BuildContext context, TBadgeConfig badge, Widget child) {
-    final Offset? fallbackOffset;
-    if (basicType == _TTabBarBasicType.text) {
-      fallbackOffset = resolveBadgeFallbackOffset(
-        context,
-        _kTextBadgeOffset,
-        alignment: badge.alignment,
-      );
-    } else if (basicType == _TTabBarBasicType.iconText &&
-        iconTextLayout == TTabBarIconTextLayout.stacked &&
-        badge.variant == TBadgeVariant.dot &&
-        !badge.isCustom) {
-      fallbackOffset = resolveBadgeFallbackOffset(
-        context,
-        _kStackedIconTextDotOffset,
-        alignment: badge.alignment,
-      );
-    } else {
-      fallbackOffset = null;
-    }
     return TBadgeFromConfig(
       config: badge,
-      fallbackOffset: fallbackOffset,
+      fallbackOffset: basicType == _TTabBarBasicType.text
+          ? resolveBadgeFallbackOffset(
+              context,
+              _kTextBadgeOffset,
+              alignment: badge.alignment,
+            )
+          : null,
       child: child,
     );
   }
