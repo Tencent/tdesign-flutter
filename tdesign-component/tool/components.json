@@ -190,7 +190,8 @@
           "TTabBarItemConfig",
           "TTabBarPopUpBtnConfig",
           "TTabBarPopUpShapeConfig",
-          "TTabBarMenuItem"
+          "TTabBarMenuItem",
+          "TTabBarThemeData"
         ],
         "getComments": false
       }
@@ -699,7 +700,8 @@
         "names": [
           "TTag",
           "TSelectTag",
-          "TTagStyle"
+          "TTagStyle",
+          "TTagThemeData"
         ],
         "getComments": false
       }

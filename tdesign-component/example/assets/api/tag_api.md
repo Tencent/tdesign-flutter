@@ -29,3 +29,23 @@
 | size | TTagSize | TTagSize.medium | 标签尺寸。 |
 | value | bool | - | 当前选中状态。 |
 | variant | TTagVariant | TTagVariant.dark | 标签绘制形态。 |
+
+
+### TTagThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 所有启用 Tag 的统一背景色；优先于各配色预设的填充色。 禁用态仍使用禁用 Token。只修改 success 浅色填充时使用 `successLightColor`。 |
+| dangerColor | Color? | - | danger 预设的基础色，对应小程序的 `--td-tag-danger-color`。 未设置时沿显式 Material `ColorScheme.error`、全局 `errorColor` 回退。 仅影响 danger 预设；浅色填充仍使用 danger 浅色默认值。 |
+| fixedWidth | double? | - | 标签固定宽度 |
+| font | Font? | - | 字体尺寸 |
+| fontWeight | FontWeight? | - | 字体粗细 |
+| maxLines | int? | - | 文字最大行数。 未设置时组件默认按紧凑标签语义使用单行。 |
+| overflow | TextOverflow? | - | 文字溢出处理 |
+| padding | EdgeInsets? | - | 自定义间距 |
+| shape | TTagShape? | - | 标签形状 |
+| squareBorderRadius | double? | - | 方形标签圆角，对应小程序的 `--td-tag-square-border-radius`。 未设置时为 4 逻辑像素（375px 基准下的 8rpx）；不影响圆角和标记形状。 |
+| successColor | Color? | - | success 预设的基础色，对应 `--td-tag-success-color`。 未设置时回退全局 `successColor`；不改变禁用态。 |
+| successLightColor | Color? | - | success 预设的浅色填充，对应 `--td-tag-success-light-color`。 未设置时回退全局 `successColor1`；不改变基础色或禁用态。 |
+| textColor | Color? | - | 所有启用 Tag 的统一文字颜色；优先于各配色预设的文字色。 禁用态仍使用禁用 Token。只修改 success 预设时使用 `successColor`。 |

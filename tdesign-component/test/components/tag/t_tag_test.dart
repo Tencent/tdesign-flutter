@@ -1114,6 +1114,58 @@ void main() {
       expect(find.text('success'), findsOneWidget);
     });
 
+    testWidgets('组件专属颜色只覆盖 danger 和 success 预设', (tester) async {
+      const danger = Color(0xFF9A231A);
+      const success = Color(0xFF126B43);
+      const successLight = Color(0xFFB1E7C3);
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const Column(
+            children: [
+              TTag('危险', colorScheme: TTagColorScheme.danger),
+              TTag('成功', colorScheme: TTagColorScheme.success),
+              TTag(
+                '浅成功',
+                colorScheme: TTagColorScheme.success,
+                variant: TTagVariant.light,
+              ),
+              TTag('主要', colorScheme: TTagColorScheme.primary),
+            ],
+          ),
+          tagTheme: const TTagThemeData(
+            dangerColor: danger,
+            successColor: success,
+            successLightColor: successLight,
+          ),
+        ),
+      );
+
+      Color? background(String label) {
+        final tag = find.widgetWithText(TTag, label);
+        final container = tester.widget<Container>(
+          find.descendant(of: tag, matching: find.byType(Container)).first,
+        );
+        return (container.decoration! as BoxDecoration).color;
+      }
+
+      expect(background('危险'), danger);
+      expect(background('成功'), success);
+      expect(background('浅成功'), successLight);
+      expect(background('主要'), isNot(anyOf(danger, success, successLight)));
+    });
+
+    test('组件专属颜色 copyWith 与 lerp 保留动态 Token 回退', () {
+      const base = TTagThemeData(dangerColor: Colors.red);
+      const target = TTagThemeData(
+        successColor: Colors.green,
+        successLightColor: Colors.lightGreen,
+      );
+      expect(base.copyWith(successColor: Colors.blue).dangerColor, Colors.red);
+      expect(base.lerp(target, 0.25).dangerColor, Colors.red);
+      expect(base.lerp(target, 0.75).dangerColor, isNull);
+      expect(base.lerp(target, 0.75).successColor, Colors.green);
+    });
+
     testWidgets('all tag variants render', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(

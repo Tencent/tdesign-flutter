@@ -85,6 +85,9 @@ class TTag extends StatelessWidget {
       isLight,
       isOutline,
       !enabled,
+      theme?.dangerColor,
+      theme?.successColor,
+      theme?.successLightColor,
     );
     final borderRadius = _resolveBorderRadius(context, shape, theme);
 
@@ -183,6 +186,9 @@ class TTag extends StatelessWidget {
     bool isLight,
     bool isOutline,
     bool disable,
+    Color? dangerColor,
+    Color? successColor,
+    Color? successLightColor,
   ) {
     final token = context.tTheme;
     final material = Theme.of(context).tExplicitColorScheme;
@@ -235,32 +241,33 @@ class TTag extends StatelessWidget {
         }
         break;
       case TTagColorScheme.danger:
+        final baseColor = dangerColor ?? material?.error ?? token.errorColor;
         if (isOutline) {
-          borderColor = material?.error ?? token.errorColor;
-          textColor = material?.error ?? token.errorColor;
+          borderColor = baseColor;
+          textColor = baseColor;
           backgroundColor = isLight
               ? material?.errorContainer ?? token.errorColor1
               : token.bgColorContainer;
         } else {
           textColor = isLight
-              ? material?.error ?? token.errorColor
+              ? baseColor
               : material?.onError ?? token.textColorAnti;
           backgroundColor = isLight
               ? material?.errorContainer ?? token.errorColor1
-              : material?.error ?? token.errorColor;
+              : baseColor;
           borderColor = backgroundColor;
         }
         break;
       case TTagColorScheme.success:
+        final baseColor = successColor ?? token.successColor;
+        final lightColor = successLightColor ?? token.successColor1;
         if (isOutline) {
-          borderColor = token.successColor;
-          textColor = token.successColor;
-          backgroundColor = isLight
-              ? token.successColor1
-              : token.bgColorContainer;
+          borderColor = baseColor;
+          textColor = baseColor;
+          backgroundColor = isLight ? lightColor : token.bgColorContainer;
         } else {
-          textColor = isLight ? token.successColor : token.textColorAnti;
-          backgroundColor = isLight ? token.successColor1 : token.successColor;
+          textColor = isLight ? baseColor : token.textColorAnti;
+          backgroundColor = isLight ? lightColor : baseColor;
           borderColor = backgroundColor;
         }
         break;
