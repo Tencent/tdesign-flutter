@@ -117,8 +117,6 @@ void main() {
     expect(a.lerp(b, 0), same(a));
     expect(a.lerp(b, 1), same(b));
     final unset = a.lerp(a, 0.5);
-    expect(unset.size, isNull);
-    expect(unset.variant, isNull);
     expect(unset.inputWidth, isNull);
     expect(unset.controlSize, isNull);
     expect(unset.iconSize, isNull);
@@ -133,42 +131,35 @@ void main() {
     expect(unset.textStyle, isNull);
   });
 
-  for (final entry in [
-    (TStepperSize.small, 20.0, 34.0, 12.0),
-    (TStepperSize.medium, 24.0, 38.0, 16.0),
-    (TStepperSize.large, 26.0, 45.0, 20.0),
-  ]) {
-    test('nullable geometry uses ${entry.$1} defaults in both directions', () {
-      final a = TStepperThemeData(size: entry.$1);
-      final b = TStepperThemeData(
-        size: entry.$1,
-        controlSize: 40,
-        inputWidth: 80,
-        iconSize: 24,
-        spacing: 8,
-        borderWidth: 3,
-      );
-      for (final t in [0.25, 0.5, 0.75]) {
-        final forward = a.lerp(b, t);
-        final reverse = b.lerp(a, 1 - t);
-        expect(forward.controlSize, entry.$2 + (40 - entry.$2) * t);
-        expect(reverse.controlSize, forward.controlSize);
-        expect(forward.inputWidth, entry.$3 + (80 - entry.$3) * t);
-        expect(reverse.inputWidth, forward.inputWidth);
-        expect(forward.iconSize, entry.$4 + (24 - entry.$4) * t);
-        expect(reverse.iconSize, forward.iconSize);
-        expect(forward.spacing, 4 + 4 * t);
-        expect(reverse.spacing, forward.spacing);
-        expect(forward.borderWidth, 1 + 2 * t);
-        expect(reverse.borderWidth, forward.borderWidth);
-      }
-    });
-  }
+  test('nullable geometry uses medium defaults in both directions', () {
+    const a = TStepperThemeData();
+    const b = TStepperThemeData(
+      controlSize: 40,
+      inputWidth: 80,
+      iconSize: 24,
+      spacing: 8,
+      borderWidth: 3,
+    );
+    for (final t in [0.25, 0.5, 0.75]) {
+      final forward = a.lerp(b, t);
+      final reverse = b.lerp(a, 1 - t);
+      expect(forward.controlSize, 24 + (40 - 24) * t);
+      expect(reverse.controlSize, forward.controlSize);
+      expect(forward.inputWidth, 38 + (80 - 38) * t);
+      expect(reverse.inputWidth, forward.inputWidth);
+      expect(forward.iconSize, 16 + (24 - 16) * t);
+      expect(reverse.iconSize, forward.iconSize);
+      expect(forward.spacing, 4 + 4 * t);
+      expect(reverse.spacing, forward.spacing);
+      expect(forward.borderWidth, 1 + 2 * t);
+      expect(reverse.borderWidth, forward.borderWidth);
+    }
+  });
 
   testWidgets(
     'rendered interpolation uses the instance size and can be copied',
     (tester) async {
-      const a = TStepperThemeData(size: TStepperSize.large);
+      const a = TStepperThemeData();
       const b = TStepperThemeData(
         controlSize: 40,
         inputWidth: 80,
@@ -199,10 +190,10 @@ void main() {
       'stepper-lerp',
       colorMap: {
         'textColorPrimary': Colors.red,
-        'textDisabledColor': Colors.green,
+        'textColorDisabled': Colors.green,
         'bgColorSecondaryContainer': Colors.yellow,
         'bgColorComponentDisabled': Colors.orange,
-        'componentBorderColor': Colors.blue,
+        'componentBorder': Colors.blue,
       },
     );
     const a = TStepperThemeData();

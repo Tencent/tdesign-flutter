@@ -411,7 +411,7 @@ void main() {
           matching: find.byType(TText),
         ),
       );
-      expect(loadingText.textColor, tokens.dark!.textDisabledColor);
+      expect(loadingText.textColor, tokens.dark!.textColorDisabled);
 
       completer.complete();
       await tester.pump(const Duration(seconds: 1));

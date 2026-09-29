@@ -92,7 +92,7 @@ class _FormBasicDemoState extends State<FormBasicDemo> {
           decoration: BoxDecoration(
             color: context.tTheme.bgColorContainer,
             border: Border(
-              bottom: BorderSide(color: context.tTheme.componentStrokeColor),
+              bottom: BorderSide(color: context.tTheme.componentStroke),
             ),
           ),
           child: Theme(
@@ -150,9 +150,7 @@ class _FormBasicDemoState extends State<FormBasicDemo> {
           title: const TText('禁用态'),
           note: Theme(
             data: Theme.of(context).mergeExtension(
-              TSwitchThemeData(
-                trackOffColor: context.tTheme.componentBorderColor,
-              ),
+              TSwitchThemeData(trackOffColor: context.tTheme.componentBorder),
             ),
             child: TSwitch(
               key: const ValueKey('form-disabled-switch'),
@@ -394,7 +392,7 @@ class _FormBasicDemoState extends State<FormBasicDemo> {
     TIcons.chevron_right,
     size: 24,
     color: _disabled
-        ? context.tTheme.textDisabledColor
+        ? context.tTheme.textColorDisabled
         : context.tTheme.textColorPlaceholder,
     semanticLabel: '选择',
   );
@@ -409,7 +407,7 @@ class _FormBasicDemoState extends State<FormBasicDemo> {
       hasValue ? value! : placeholder,
       font: context.tTheme.fontBodyLarge,
       textColor: _disabled
-          ? context.tTheme.textDisabledColor
+          ? context.tTheme.textColorDisabled
           : hasValue
           ? context.tTheme.textColorPrimary
           : context.tTheme.textColorPlaceholder,
@@ -422,7 +420,7 @@ class _FormBasicDemoState extends State<FormBasicDemo> {
       decoration: BoxDecoration(
         color: context.tTheme.bgColorContainer,
         border: Border(
-          bottom: BorderSide(color: context.tTheme.componentStrokeColor),
+          bottom: BorderSide(color: context.tTheme.componentStroke),
         ),
       ),
       child: Row(

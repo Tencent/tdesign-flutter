@@ -563,8 +563,10 @@ void main() {
         app(
           const TSwiper(
             pagination: TSwiperPaginationVariant.fraction,
-            paginationAlignment: Alignment.bottomRight,
             children: pages,
+          ),
+          swiperTheme: const TSwiperThemeData(
+            paginationAlignment: Alignment.bottomRight,
           ),
         ),
       );
@@ -814,16 +816,23 @@ void main() {
             brightness: brightness,
           ),
         );
+        await tester.pumpAndSettle();
 
         final button = tester.widget<IconButton>(find.byType(IconButton).first);
         final state = <WidgetState>{};
+        final defaults = TThemeData.defaultData();
+        final token = brightness == Brightness.dark ? defaults.dark! : defaults;
         expect(
-          button.style?.backgroundColor?.resolve(state),
-          TThemeData.defaultData().fontGyColor3,
+          token.textColorAnti,
+          brightness == Brightness.dark
+              ? const Color(0xE6FFFFFF)
+              : Colors.white,
         );
+        expect(button.style?.backgroundColor?.resolve(state), token.fontGray3);
         expect(
           button.style?.foregroundColor?.resolve(state),
-          TThemeData.defaultData().textColorAnti,
+          token.textColorAnti,
+          reason: 'brightness=$brightness',
         );
       }
     });

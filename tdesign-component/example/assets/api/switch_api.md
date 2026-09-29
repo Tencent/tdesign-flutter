@@ -9,6 +9,6 @@
 | loading | bool | false | 是否处于加载状态；加载时显示指示器并禁用交互。 |
 | onChanged | ValueChanged<bool>? | - | 开关状态变更回调；为 null 时禁用。 |
 | openText | String? | - | text 形态的开启文案。 |
-| size | TSwitchSize? | - | 开关尺寸；未传时读取 `TSwitchThemeData.defaultSize`。 |
+| size | TSwitchSize? | - | 开关尺寸；未传时为 `TSwitchSize.medium`。 |
 | value | bool | - | 受控开关状态。 |
-| variant | TSwitchVariant? | - | 开关内容形态；未传时读取 `TSwitchThemeData.defaultVariant`。 |
+| variant | TSwitchVariant? | - | 开关内容形态；未传时为 `TSwitchVariant.filled`。 |

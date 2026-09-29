@@ -12,7 +12,7 @@ class TextareaCustomExample extends StatelessWidget {
             backgroundColor: context.tTheme.bgColorContainer,
             borderColor: Colors.transparent,
             itemPadding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-            labelGap: context.tTheme.spacer8,
+            labelGap: context.tTheme.spacer,
             labelStyle: TextStyle(
               fontSize: context.tTheme.fontBodySmall?.size,
               height: context.tTheme.fontBodySmall?.height,

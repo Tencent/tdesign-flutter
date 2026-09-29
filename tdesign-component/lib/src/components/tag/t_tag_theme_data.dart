@@ -16,7 +16,7 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
   /// 背景颜色
   final Color? backgroundColor;
 
-  /// 字体尺寸
+  /// 字体尺寸和行高；未设置时随标签尺寸使用对应的全局字体 Token。
   final Font? font;
 
   /// 字体粗细
@@ -27,6 +27,10 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
 
   /// 标签形状
   final TTagShape? shape;
+
+  /// 方形标签圆角，单位为逻辑像素；未设置时所有尺寸均读取全局
+  /// `radiusSmall`（当前默认 3dp）。
+  final double? squareBorderRadius;
 
   /// 文字溢出处理
   final TextOverflow? overflow;
@@ -46,6 +50,7 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     this.fontWeight,
     this.padding,
     this.shape,
+    this.squareBorderRadius,
     this.overflow,
     this.maxLines,
     this.fixedWidth,
@@ -59,6 +64,7 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     FontWeight? fontWeight,
     EdgeInsets? padding,
     TTagShape? shape,
+    double? squareBorderRadius,
     TextOverflow? overflow,
     int? maxLines,
     double? fixedWidth,
@@ -70,6 +76,7 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
       fontWeight: fontWeight ?? this.fontWeight,
       padding: padding ?? this.padding,
       shape: shape ?? this.shape,
+      squareBorderRadius: squareBorderRadius ?? this.squareBorderRadius,
       overflow: overflow ?? this.overflow,
       maxLines: maxLines ?? this.maxLines,
       fixedWidth: fixedWidth ?? this.fixedWidth,
@@ -89,6 +96,11 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
       padding:
           EdgeInsetsGeometry.lerp(padding, other.padding, t) as EdgeInsets?,
       shape: t < 0.5 ? shape : other.shape,
+      // null 表示继承当前子树的 radiusSmall，不能当作 0dp 参与插值。
+      squareBorderRadius:
+          squareBorderRadius == null || other.squareBorderRadius == null
+          ? (t < 0.5 ? squareBorderRadius : other.squareBorderRadius)
+          : lerpDouble(squareBorderRadius, other.squareBorderRadius, t),
       overflow: t < 0.5 ? overflow : other.overflow,
       maxLines: t < 0.5 ? maxLines : other.maxLines,
       fixedWidth: lerpDouble(fixedWidth, other.fixedWidth, t),

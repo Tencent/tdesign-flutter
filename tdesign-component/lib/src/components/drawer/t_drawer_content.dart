@@ -13,12 +13,10 @@ class _TDrawerContent extends StatelessWidget {
     this.child,
     this.title,
     this.onItemClick,
-    this.width,
     this.enableFeedback = true,
-    this.backgroundColor,
     this.showDivider = true,
     this.showLastDivider = true,
-  }) : assert(width == null || width > 0);
+  });
 
   /// 抽屉的底部
   final Widget? footer;
@@ -36,13 +34,11 @@ class _TDrawerContent extends StatelessWidget {
   final TDrawerItemClickCallback? onItemClick;
 
   /// 宽度；优先级高于 ThemeData，默认使用 280。
-  final double? width;
 
   /// 点击时是否显示背景按压反馈，默认 true。
   final bool enableFeedback;
 
   /// 组件背景颜色；优先级高于 ThemeData 和默认值。
-  final Color? backgroundColor;
 
   /// 是否显示菜单项分隔线，默认 true。
   final bool showDivider;
@@ -53,11 +49,9 @@ class _TDrawerContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final drawerTheme = Theme.of(context).extension<TDrawerThemeData>();
-    final effectiveWidth = width ?? drawerTheme?.width ?? 280;
+    final effectiveWidth = drawerTheme?.width ?? 280;
     final effectiveBackgroundColor =
-        backgroundColor ??
-        drawerTheme?.backgroundColor ??
-        context.tTheme.bgColorContainer;
+        drawerTheme?.backgroundColor ?? context.tTheme.bgColorContainer;
     final content =
         child ??
         Column(
@@ -104,7 +98,7 @@ class _TDrawerContent extends StatelessWidget {
                     iconGap: drawerTheme?.itemIconGap ?? 8,
                     dividerColor:
                         drawerTheme?.dividerColor ??
-                        context.tTheme.componentStrokeColor,
+                        context.tTheme.componentStroke,
                     dividerIndent: drawerTheme?.dividerIndent ?? 16,
                     dividerThickness: drawerTheme?.dividerThickness ?? 0.5,
                     showDivider:

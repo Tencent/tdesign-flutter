@@ -20,35 +20,33 @@ class _ThemeOtherColorExampleState extends State<ThemeOtherColorExample> {
       ..clear()
       ..addEntries(
         context.tTheme.colorMap.entries.where(
-          (entry) =>
-              !entry.key.startsWith('brand') &&
-              !entry.key.startsWith('error') &&
-              !entry.key.startsWith('warning') &&
-              !entry.key.startsWith('success') &&
-              !entry.key.startsWith('font'),
+          (entry) => entry.key.startsWith('grayColor'),
         ),
       );
   }
 
   Widget _buildOtherColor(BuildContext context) {
+    final entries = grayMap.entries.toList();
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: grayMap.length,
+      itemCount: entries.length + 1,
       padding: const EdgeInsets.all(16),
       shrinkWrap: true,
       itemBuilder: (context, index) {
-        var light = index < 6;
         if (index == 0) {
           return Container(
             color: context.tTheme.bgColorContainer,
-            child: const TText('whiteColor1'),
+            child: const TText('bgColorContainer'),
           );
         } else {
+          final entry = entries[index - 1];
           return Container(
-            color: context.tTheme.colorMap['grayColor${index}'],
+            color: entry.value,
             child: TText(
-              'grayColor${index}',
-              textColor: light ? Colors.black : Colors.white,
+              entry.key,
+              textColor: entry.value.computeLuminance() < 0.5
+                  ? Colors.white
+                  : Colors.black,
             ),
           );
         }

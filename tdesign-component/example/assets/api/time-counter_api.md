@@ -28,13 +28,18 @@ Controller 由调用方创建并负责释放。绑定多个 `TTimeCounter` 时�
 
 ### TTimeCounterThemeData
 #### 简介
-计时器组件的视觉默认值。
+计时器组件的具体视觉默认值。
+尺寸档位与形态由 `TTimeCounter.size` / `variant` 唯一选择；未设置的视觉值
+在使用时回退当前 TDesign 全局 Token，而不是在 Theme 中冻结默认值。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| defaultSize | TTimeCounterSize? | - | 默认尺寸。 |
-| defaultVariant | TTimeCounterVariant? | - | 默认视觉形态。 |
+| blockBackgroundColor | Color? | - | 圆形、方形数字块的背景色；未设置时回退 `errorColor`。 |
+| blockTextColor | Color? | - | 圆形、方形数字块的文字颜色；未设置时回退 `textColorAnti`。 |
+| defaultTextColor | Color? | - | 纯文本计时数字颜色；未设置时回退 `textColorPrimary`。 |
+| roundBorderRadius | double? | - | 圆形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusCircle`。 默认数字块宽高相等，故固定大半径显示为正圆。自定义较小半径时显示 对应的圆角方块，不再被固定 `BoxShape.circle` 忽略。 |
+| squareBorderRadius | double? | - | 方形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusSmall`。 |
 
 
 ### TTimeCounterDirection

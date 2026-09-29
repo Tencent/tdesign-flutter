@@ -13,4 +13,4 @@
 | size | TLinkSize? | - | 链接尺寸；未设置时默认为 `TLinkSize.medium`。 |
 | suffixIcon | Widget? | - | 后置图标；为 null 时不占位。 |
 | tooltip | String? | - | 鼠标悬浮提示。 |
-| underline | bool? | - | 是否显示下划线；未设置时读取 `TLinkThemeData.underline`，最终回退 false。 |
+| underline | bool? | - | 是否显示下划线；未设置时为 false。 |

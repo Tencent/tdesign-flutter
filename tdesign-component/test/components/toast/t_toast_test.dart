@@ -193,7 +193,7 @@ void main() {
 
       final box = tester.widget<Container>(toastBoxFinder('默认文本'));
       final decoration = box.decoration! as BoxDecoration;
-      expect(decoration.color, token.fontGyColor2);
+      expect(decoration.color, token.fontGray2);
 
       await waitForDismiss(tester);
     });

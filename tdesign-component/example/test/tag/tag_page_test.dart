@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/base/notification_center.dart';
+import 'package:tdesign_flutter_example/page/tag/circle_fill_tag_example.dart';
 import 'package:tdesign_flutter_example/page/tag/tag_page.dart';
 
 import '../demo_page_test_utils.dart';
@@ -33,6 +34,44 @@ const _tagSpec = DemoPageTestSpec(
 void main() {
   registerDemoStructureTests(_tagSpec);
   registerDemoGoldenTests(_tagSpec);
+
+  testWidgets('round Tag Demo includes the mark outline instance', (
+    tester,
+  ) async {
+    await pumpFullDemoPage(tester, _tagSpec, ThemeMode.light);
+
+    final tags = tester
+        .widgetList<TTag>(
+          find.descendant(
+            of: find.byType(CircleFillTagExample),
+            matching: find.byType(TTag),
+          ),
+        )
+        .toList();
+    expect(tags, hasLength(3));
+    expect(
+      tags.map((tag) => tag.variant),
+      orderedEquals([
+        TTagVariant.light,
+        TTagVariant.outline,
+        TTagVariant.outline,
+      ]),
+    );
+
+    final markContext = tester.element(
+      find
+          .descendant(
+            of: find.byType(CircleFillTagExample),
+            matching: find.byType(TTag),
+          )
+          .last,
+    );
+    expect(
+      Theme.of(markContext).extension<TTagThemeData>()?.shape,
+      TTagShape.mark,
+    );
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('tag selected ${mode.name} golden', (tester) async {

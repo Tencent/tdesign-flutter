@@ -26,6 +26,15 @@ class CircleFillTagExample extends StatelessWidget {
     );
   }
 
+  Widget _buildMarkOutlineTag(BuildContext context) {
+    return Theme(
+      data: Theme.of(
+        context,
+      ).mergeExtension(const TTagThemeData(shape: TTagShape.mark)),
+      child: const TTag('标签文字', variant: TTagVariant.outline),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -34,6 +43,8 @@ class CircleFillTagExample extends StatelessWidget {
         Builder(builder: _buildCircleFillTag),
         const SizedBox(width: 16),
         Builder(builder: _buildCircleOutlineTag),
+        const SizedBox(width: 16),
+        Builder(builder: _buildMarkOutlineTag),
       ],
     );
   }

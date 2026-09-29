@@ -170,15 +170,14 @@ class _TTimeCounterState extends State<TTimeCounter>
 
   void _resolveStyle() {
     final tTheme = Theme.of(context).extension<TTimeCounterThemeData>();
-    final effectiveSize =
-        widget.size ?? tTheme?.defaultSize ?? TTimeCounterSize.medium;
-    final effectiveVariant =
-        widget.variant ?? tTheme?.defaultVariant ?? TTimeCounterVariant.plain;
+    final effectiveSize = widget.size ?? TTimeCounterSize.medium;
+    final effectiveVariant = widget.variant ?? TTimeCounterVariant.plain;
     _style = _TTimeCounterStyle.generateStyle(
       context,
       size: effectiveSize,
       variant: effectiveVariant,
       splitWithUnit: widget.splitWithUnit,
+      componentTheme: tTheme,
     );
   }
 

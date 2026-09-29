@@ -188,25 +188,29 @@ class _NavigationComponentsScene extends StatelessWidget {
                       ),
                       const SizedBox(height: 18),
                       const _SectionLabel('Drawer and SideBar'),
-                      const SizedBox(
+                      SizedBox(
                         height: 190,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Expanded(
-                              child: TDrawer(
-                                width: 190,
-                                title: Text('Menu'),
-                                items: [
-                                  TDrawerItem(title: 'Dashboard'),
-                                  TDrawerItem(title: 'Messages'),
-                                  TDrawerItem(title: 'Settings'),
-                                ],
-                                onItemClick: _ignoreDrawer,
+                              child: Theme(
+                                data: theme.mergeExtension(
+                                  const TDrawerThemeData(width: 190),
+                                ),
+                                child: const TDrawer(
+                                  title: Text('Menu'),
+                                  items: [
+                                    TDrawerItem(title: 'Dashboard'),
+                                    TDrawerItem(title: 'Messages'),
+                                    TDrawerItem(title: 'Settings'),
+                                  ],
+                                  onItemClick: _ignoreDrawer,
+                                ),
                               ),
                             ),
-                            SizedBox(width: 12),
-                            SizedBox(
+                            const SizedBox(width: 12),
+                            const SizedBox(
                               width: 150,
                               child: TSideBar(
                                 value: 1,

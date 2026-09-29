@@ -44,14 +44,14 @@ class _CalendarDoubleDescribedExampleState
                 : null;
             final holiday = holidayLabel != null;
             final dayColor = disabled
-                ? context.tTheme.textDisabledColor
+                ? context.tTheme.textColorDisabled
                 : selected
                 ? context.tTheme.textColorAnti
                 : holiday
-                ? context.tTheme.errorNormalColor
+                ? context.tTheme.errorColor
                 : context.tTheme.textColorPrimary;
             final priceColor = disabled
-                ? context.tTheme.textDisabledColor
+                ? context.tTheme.textColorDisabled
                 : selected
                 ? context.tTheme.textColorAnti
                 : context.tTheme.textColorPlaceholder;
@@ -64,7 +64,7 @@ class _CalendarDoubleDescribedExampleState
                   textColor: dayColor,
                 ),
                 Positioned(
-                  top: context.tTheme.spacer4,
+                  top: 4.0,
                   child: TText(
                     holidayLabel ?? '',
                     font: context.tTheme.fontBodyExtraSmall,
@@ -72,7 +72,7 @@ class _CalendarDoubleDescribedExampleState
                   ),
                 ),
                 Positioned(
-                  bottom: context.tTheme.spacer4,
+                  bottom: 4.0,
                   child: TText(
                     '¥60',
                     font: context.tTheme.fontBodyExtraSmall,
@@ -129,7 +129,7 @@ class _CalendarDoubleDescribedExampleState
                 font: context.tTheme.fontTitleLarge,
               ),
               Positioned(
-                right: context.tTheme.spacer8,
+                right: context.tTheme.spacer,
                 child: IconButton(
                   tooltip: localized ? 'Close' : '关闭',
                   onPressed: close,
@@ -189,7 +189,7 @@ class _CalendarDoubleDescribedExampleState
                         : calendar,
                   ),
                   Padding(
-                    padding: EdgeInsets.all(context.tTheme.spacer16),
+                    padding: EdgeInsets.all(context.tTheme.spacer2),
                     child: SizedBox(
                       width: double.infinity,
                       child: TButton(

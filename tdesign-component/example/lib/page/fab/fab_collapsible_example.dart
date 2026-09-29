@@ -47,9 +47,9 @@ class _ExpandedFabContent extends StatelessWidget {
     decoration: ShapeDecoration(
       color: context.tTheme.bgColorContainer,
       shape: StadiumBorder(
-        side: BorderSide(color: context.tTheme.componentBorderColor),
+        side: BorderSide(color: context.tTheme.componentBorder),
       ),
-      shadows: context.tTheme.shadowsMiddle ?? const [],
+      shadows: context.tTheme.shadow2 ?? const [],
     ),
     child: const Column(
       children: [
@@ -102,9 +102,9 @@ class _CollapsedFabContent extends StatelessWidget {
       color: context.tTheme.bgColorContainer,
       shape: RoundedRectangleBorder(
         borderRadius: const BorderRadius.horizontal(left: Radius.circular(16)),
-        side: BorderSide(color: context.tTheme.componentBorderColor),
+        side: BorderSide(color: context.tTheme.componentBorder),
       ),
-      shadows: context.tTheme.shadowsMiddle ?? const [],
+      shadows: context.tTheme.shadow2 ?? const [],
     ),
     alignment: Alignment.center,
     child: Icon(

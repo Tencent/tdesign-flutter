@@ -6,19 +6,13 @@ import 't_button_types.dart';
 
 /// TButton 组件级 ThemeExtension
 ///
-/// 通过 Theme 子树注入，控制子树的默认形态。
-/// 构造器参数优先于 Theme，P0 [ButtonStyle] 实例优先于 Theme。
+/// 通过 Theme 子树注入具体视觉样式；按钮变体和尺寸由实例选择。
+/// P0 [ButtonStyle] 实例优先于 Theme。
 class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
-  /// 未传按钮 variant 时的默认变体
-  final TButtonVariant defaultVariant;
-
-  /// 未传按钮 size 时的默认尺寸
-  final TButtonSize defaultSize;
-
   /// P1 组件样式：fill 变体的 [ButtonStyle]。
   ///
-  /// 尺寸、形状和 padding 的组件级默认值优先使用 [defaultSize]、[shape]
-  /// 和 [padding]；其余标准 [ButtonStyle] 字段按组件主题优先级参与合并。
+  /// 形状和 padding 的组件级默认值优先使用 [shape] 和 [padding]；
+  /// 其余标准 [ButtonStyle] 字段按组件主题优先级参与合并。
   final ButtonStyle? filledStyle;
 
   /// P1 组件样式：outline 变体的 [ButtonStyle]。
@@ -42,16 +36,14 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
   /// 图标与文案之间的间距，单位为逻辑像素。
   ///
   /// 仅在按钮同时提供 icon 和 child 时生效；该值控制两者
-  /// 之间的实际间隔，不会改变按钮整体内边距。为空时使用全局
-  /// `spacer4`（4dp）。
+  /// 之间的实际间隔，不会改变按钮整体内边距。为空时使用组件内置
+  /// 默认值 4dp；全局 `spacer4` 对应 32dp，不用于此间距。
   final double? iconTextSpacing;
 
   /// 渐变背景色（装饰层，非 ButtonStyle 字段）
   final Gradient? gradient;
 
   const TButtonThemeData({
-    this.defaultVariant = TButtonVariant.fill,
-    this.defaultSize = TButtonSize.medium,
     this.filledStyle,
     this.outlinedStyle,
     this.textButtonStyle,
@@ -68,8 +60,6 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
 
   @override
   TButtonThemeData copyWith({
-    TButtonVariant? defaultVariant,
-    TButtonSize? defaultSize,
     ButtonStyle? filledStyle,
     ButtonStyle? outlinedStyle,
     ButtonStyle? textButtonStyle,
@@ -80,8 +70,6 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
     Gradient? gradient,
   }) {
     return TButtonThemeData(
-      defaultVariant: defaultVariant ?? this.defaultVariant,
-      defaultSize: defaultSize ?? this.defaultSize,
       filledStyle: filledStyle ?? this.filledStyle,
       outlinedStyle: outlinedStyle ?? this.outlinedStyle,
       textButtonStyle: textButtonStyle ?? this.textButtonStyle,
@@ -99,8 +87,6 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
       return this;
     }
     return TButtonThemeData(
-      defaultVariant: t < 0.5 ? defaultVariant : other.defaultVariant,
-      defaultSize: t < 0.5 ? defaultSize : other.defaultSize,
       filledStyle: t < 0.5 ? filledStyle : other.filledStyle,
       outlinedStyle: t < 0.5 ? outlinedStyle : other.outlinedStyle,
       textButtonStyle: t < 0.5 ? textButtonStyle : other.textButtonStyle,

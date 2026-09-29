@@ -32,6 +32,7 @@ class DemoPageTestSpec {
     this.useAlignmentCjkFont = false,
     this.supplementalCjkFontFamily,
     this.supplementalCjkFontPath,
+    this.goldenTokenFontFamily,
     this.precacheAssetImages = const [],
     this.goldenAtPhoneViewport = false,
     this.phoneViewportHeight = _initialPageHeight,
@@ -51,6 +52,7 @@ class DemoPageTestSpec {
   final bool useAlignmentCjkFont;
   final String? supplementalCjkFontFamily;
   final String? supplementalCjkFontPath;
+  final String? goldenTokenFontFamily;
   final List<String> precacheAssetImages;
   final bool goldenAtPhoneViewport;
   final double phoneViewportHeight;
@@ -322,6 +324,23 @@ ThemeData withDemoGoldenFonts(ThemeData theme, DemoPageTestSpec spec) {
       ),
     ),
   );
+  if (spec.goldenTokenFontFamily case final family?) {
+    final token = withFonts.extension<TThemeData>() ?? TThemeData.defaultData();
+    // TText resolves its primary family from the TDesign token. A Material
+    // TextTheme fallback alone does not change that primary family in goldens.
+    return withFonts.mergeExtension(
+      token.copyWithTThemeData(
+        '${token.name}-golden-font',
+        fontFamilyMap: {
+          'fontFamily': FontFamily(fontFamily: family, fallback: fallback),
+          'fontFamilyMedium': FontFamily(
+            fontFamily: family,
+            fallback: fallback,
+          ),
+        },
+      ),
+    );
+  }
   if (spec.name != 'dialog') {
     return withFonts;
   }

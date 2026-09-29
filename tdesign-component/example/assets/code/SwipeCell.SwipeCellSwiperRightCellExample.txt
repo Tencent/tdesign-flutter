@@ -7,7 +7,7 @@ class SwipeCellSwiperRightCellExample extends StatelessWidget {
   Widget _buildSwiperRightCell(BuildContext context) {
     return TSwipeCell(
       start: TSwipeCellPanel(
-        children: [_action(context, '选择', context.tTheme.brandNormalColor)],
+        children: [_action(context, '选择', context.tTheme.brandColor)],
       ),
       child: const TCell(title: Text('右滑单操作'), note: Text('辅助信息')),
     );

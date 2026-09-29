@@ -10,7 +10,6 @@ class DisplayAvatarExample extends StatelessWidget {
   /// 纯展示的头像组
   Widget _buildDisplayAvatar(BuildContext context) {
     return const TAvatarGroup(
-      dimension: 48,
       cascading: TAvatarGroupCascading.startUp,
       maxCount: 5,
       overflow: TAvatar(child: Text('+5')),

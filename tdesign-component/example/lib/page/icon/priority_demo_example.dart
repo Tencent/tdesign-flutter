@@ -11,15 +11,9 @@ class IconPriorityExample extends StatelessWidget {
   const IconPriorityExample({super.key});
 
   Widget _buildIconPriorityExample(BuildContext context) {
-    // 优先级链：构造器参数 > TIconThemeData > IconTheme
-    // 子树 TIconThemeData 设置 size=36，但构造器指定 size=20 会覆盖
-    return Theme(
-      data: Theme.of(context).copyWith(
-        extensions: [
-          ...Theme.of(context).extensions.values,
-          TIconThemeData(size: 36, color: context.tTheme.brandNormalColor),
-        ],
-      ),
+    // 优先级链：构造器参数 > Flutter IconTheme。
+    return IconTheme(
+      data: IconThemeData(size: 36, color: context.tTheme.brandColor),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -31,7 +25,7 @@ class IconPriorityExample extends StatelessWidget {
               const TIcon(TIcons.home_filled, size: 20),
               const SizedBox(width: 16),
               // 构造器 color 覆盖 Theme 的品牌色
-              TIcon(TIcons.setting, color: context.tTheme.errorNormalColor),
+              TIcon(TIcons.setting, color: context.tTheme.errorColor),
               const SizedBox(width: 16),
               // 无构造器参数，继承 Theme 默认
               const TIcon(TIcons.notification),

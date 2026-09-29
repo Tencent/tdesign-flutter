@@ -7,8 +7,6 @@ import 'package:tdesign_flutter/src/components/button/t_button_types.dart';
 void main() {
   group('TButtonThemeData 纯函数', () {
     const theme = TButtonThemeData(
-      defaultVariant: TButtonVariant.fill,
-      defaultSize: TButtonSize.medium,
       shape: TButtonShape.round,
       padding: EdgeInsets.all(8),
       iconTextSpacing: 6,
@@ -17,14 +15,10 @@ void main() {
 
     test('copyWith 覆盖字段', () {
       final copied = theme.copyWith(
-        defaultVariant: TButtonVariant.outline,
-        defaultSize: TButtonSize.large,
         shape: TButtonShape.circle,
         iconTextSpacing: 10,
       );
       expect(copied, isA<TButtonThemeData>());
-      expect(copied.defaultVariant, TButtonVariant.outline);
-      expect(copied.defaultSize, TButtonSize.large);
       expect(copied.shape, TButtonShape.circle);
       // 未覆盖字段保持原值
       expect(copied.iconTextSpacing, 10);
@@ -33,8 +27,6 @@ void main() {
 
     test('lerp 在 t=0 / 0.5 / 1 返回 TButtonThemeData', () {
       const other = TButtonThemeData(
-        defaultVariant: TButtonVariant.text,
-        defaultSize: TButtonSize.small,
         shape: TButtonShape.square,
         iconTextSpacing: 20,
       );
@@ -44,10 +36,8 @@ void main() {
       expect(at0, isA<TButtonThemeData>());
       expect(atHalf, isA<TButtonThemeData>());
       expect(at1, isA<TButtonThemeData>());
-      // t<0.5 时取 this 的枚举字段（t=0.5 边界归属 other 侧）
-      expect(atHalf.defaultVariant, TButtonVariant.text);
-      // t>=0.5 时取 other 的枚举字段
-      expect(at1.defaultVariant, TButtonVariant.text);
+      expect(atHalf.shape, TButtonShape.square);
+      expect(at1.shape, TButtonShape.square);
     });
 
     test('lerp other 非同类型时返回 this', () {

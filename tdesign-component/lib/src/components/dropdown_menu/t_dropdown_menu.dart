@@ -204,8 +204,7 @@ class TDropdownMenu extends StatefulWidget {
 
   /// 展开、关闭及切换动画时长。
   ///
-  /// 未指定时使用 [TDropdownThemeData.animationDuration]，再回退到 200ms。
-  /// 显式值（包括 [Duration.zero]）优先于主题；系统禁用动画时始终使用零时长。
+  /// 未指定时为 200ms。系统禁用动画时始终使用零时长。
   final Duration? animationDuration;
   final ValueChanged<int>? onOpened;
   final TDropdownMenuClosedCallback? onClosed;
@@ -263,9 +262,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     if (MediaQuery.maybeOf(context)?.disableAnimations ?? false) {
       return Duration.zero;
     }
-    return widget.animationDuration ??
-        _theme.animationDuration ??
-        const Duration(milliseconds: 200);
+    return widget.animationDuration ?? const Duration(milliseconds: 200);
   }
 
   void _resetAutoPlacement({
@@ -591,7 +588,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
                   color:
                       theme.dividerColor ??
                       material.tExplicitDividerColor ??
-                      context.tTheme.componentStrokeColor,
+                      context.tTheme.componentStroke,
                   width: 0.5,
                 ),
               ),
@@ -647,12 +644,12 @@ class _TDropdownMenuState extends State<TDropdownMenu>
               baseStyle.copyWith(
                 color:
                     material.tExplicitDisabledColor ??
-                    context.tTheme.textDisabledColor,
+                    context.tTheme.textColorDisabled,
               )
         : isOpen
         ? theme.activeTextStyle ??
               baseStyle.copyWith(
-                color: colorScheme?.primary ?? context.tTheme.brandNormalColor,
+                color: colorScheme?.primary ?? context.tTheme.brandColor,
                 fontWeight: activeTokenFont?.fontWeight,
               )
         : baseStyle.copyWith(
@@ -661,11 +658,11 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     final iconColor = !item.enabled
         ? theme.disabledIconColor ??
               material.tExplicitDisabledColor ??
-              context.tTheme.textDisabledColor
+              context.tTheme.textColorDisabled
         : isOpen
         ? theme.activeIconColor ??
               colorScheme?.primary ??
-              context.tTheme.brandNormalColor
+              context.tTheme.brandColor
         : theme.iconColor ??
               context.tExplicitIconTheme?.color ??
               context.tTheme.textColorPrimary;
@@ -695,7 +692,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            SizedBox(width: context.tTheme.spacer4),
+            const SizedBox(width: 4.0),
             AnimatedRotation(
               turns: arrowTurns,
               duration: _duration,

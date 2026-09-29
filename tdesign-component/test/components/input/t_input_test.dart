@@ -208,10 +208,10 @@ void main() {
       await tester.pumpWidget(
         wrap(const TInput(hintText: 'hint', enabled: false)),
       );
-      expect(field(tester).style?.color, token.textDisabledColor);
+      expect(field(tester).style?.color, token.textColorDisabled);
       expect(
         tester.widget<EditableText>(find.byType(EditableText)).style.color,
-        token.textDisabledColor,
+        token.textColorDisabled,
       );
 
       await tester.pumpWidget(
@@ -222,10 +222,10 @@ void main() {
           ),
         ),
       );
-      expect(field(tester).style?.color, token.textDisabledColor);
+      expect(field(tester).style?.color, token.textColorDisabled);
       expect(
         field(tester).decoration?.hintStyle?.color,
-        token.textDisabledColor,
+        token.textColorDisabled,
       );
 
       for (final status in const [
@@ -379,7 +379,7 @@ void main() {
           ),
         );
 
-        expect(field(tester).style?.color, token.textDisabledColor);
+        expect(field(tester).style?.color, token.textColorDisabled);
       },
     );
 
@@ -462,7 +462,7 @@ void main() {
     ) async {
       final token = TThemeData.defaultData().copyWithTThemeData(
         'input-slot-spacing',
-        marginMap: {'spacer8': 10, 'spacer16': 20},
+        marginMap: {'spacer': 10, 'spacer2': 20},
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -479,8 +479,8 @@ void main() {
       final editorLeft = tester.getTopLeft(find.byType(EditableText)).dx;
       final editorRight = tester.getTopRight(find.byType(EditableText)).dx;
       final suffixLeft = tester.getTopLeft(find.byIcon(Icons.info)).dx;
-      expect(editorLeft - prefixRight, token.spacer16);
-      expect(suffixLeft - editorRight, token.spacer8);
+      expect(editorLeft - prefixRight, token.spacer2);
+      expect(suffixLeft - editorRight, token.spacer);
       final inputShell = find
           .descendant(
             of: find.byType(TInput),
@@ -590,13 +590,10 @@ void main() {
       expect(find.byIcon(Icons.info), findsOneWidget);
     });
 
-    testWidgets('theme can hide or resize clear button', (tester) async {
+    testWidgets('instance controls visibility; Theme controls clear icon size', (tester) async {
       await tester.pumpWidget(
         wrap(
           const TInput(initialValue: 'content'),
-          inputTheme: const TInputThemeData(
-            clearButtonMode: TInputClearButtonMode.never,
-          ),
         ),
       );
       expect(find.byIcon(TIcons.close_circle_filled), findsNothing);
@@ -632,7 +629,7 @@ void main() {
           expect(
             tester.widget<Icon>(find.byIcon(TIcons.close_circle_filled)).color,
             status == TInputStatus.error
-                ? token.errorNormalColor
+                ? token.errorColor
                 : token.textColorPlaceholder,
           );
         }
@@ -783,7 +780,7 @@ void main() {
                 (shell.decoration as BoxDecoration).border != null,
           );
       final border = (borderedShell.decoration as BoxDecoration).border!;
-      expect((border as Border).bottom.color, token.errorNormalColor);
+      expect((border as Border).bottom.color, token.errorColor);
 
       await tester.pumpWidget(
         wrap(

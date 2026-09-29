@@ -24,14 +24,17 @@ class BadgeAvatarExample extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 32),
-        TBadge(
-          label: '8',
-          offset: const Offset(-5, 6),
-          child: TAvatar(
-            size: TAvatarSize.medium,
-            backgroundColor: context.tTheme.brandNormalColor,
-            foregroundColor: context.tTheme.whiteColor1,
-            child: const Text('A'),
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            TAvatarThemeData(
+              backgroundColor: context.tTheme.brandColor,
+              foregroundColor: context.tTheme.whiteColor1,
+            ),
+          ),
+          child: const TBadge(
+            label: '8',
+            offset: Offset(-5, 6),
+            child: TAvatar(size: TAvatarSize.medium, child: Text('A')),
           ),
         ),
         const SizedBox(width: 32),

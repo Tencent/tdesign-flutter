@@ -11,7 +11,7 @@ class ShadowsMiddleExample extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: context.tTheme.bgColorContainer,
-        boxShadow: context.tTheme.shadowsMiddle,
+        boxShadow: context.tTheme.shadow2,
         borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
       ),
     );

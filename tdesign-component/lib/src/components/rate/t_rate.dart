@@ -142,8 +142,8 @@ class _TRateState extends State<TRate> {
     final material = Theme.of(context);
     final theme = material.extension<TRateThemeData>();
     final explicitColorScheme = material.tExplicitColorScheme;
-    final iconSize = theme?.iconSize ?? context.tTheme.spacer24;
-    final iconGap = theme?.iconGap ?? context.tTheme.spacer8;
+    final iconSize = theme?.iconSize ?? context.tTheme.spacer3;
+    final iconGap = theme?.iconGap ?? context.tTheme.spacer;
     final texts = widget.texts;
     final step = widget.allowHalf ? 0.5 : 1.0;
     final increasedValue = (_effectiveValue + step)
@@ -297,7 +297,7 @@ class _TRateState extends State<TRate> {
                 ),
               ),
               if (texts != null) ...[
-                SizedBox(width: theme?.textGap ?? context.tTheme.spacer16),
+                SizedBox(width: theme?.textGap ?? context.tTheme.spacer2),
                 if (constraints.hasBoundedWidth)
                   Flexible(
                     child: SizedBox(
@@ -342,7 +342,7 @@ class _TRateState extends State<TRate> {
     ColorScheme? explicitColorScheme,
   ) {
     final font = context.tTheme.fontBodyLarge;
-    final disabledTextColor = context.tTheme.textDisabledColor;
+    final disabledTextColor = context.tTheme.textColorDisabled;
     final explicitOnSurface = explicitColorScheme?.onSurface;
     final defaultStyle = TextStyle(
       color: _enabled
@@ -351,7 +351,7 @@ class _TRateState extends State<TRate> {
                       disabledTextColor
                 : explicitOnSurface ?? context.tTheme.textColorPrimary
           : explicitOnSurface?.withValues(alpha: 0.38) ??
-                context.tTheme.textDisabledColor,
+                context.tTheme.textColorDisabled,
       fontSize: font?.size ?? 16,
       height: font?.height ?? 1.5,
       fontWeight: font?.fontWeight ?? FontWeight.w400,
@@ -369,7 +369,7 @@ class _TRateState extends State<TRate> {
     final fill = (_effectiveValue - index).clamp(0, 1).toDouble();
     final selectedColor = _enabled
         ? (theme?.starColor ?? context.tTheme.warningColor5)
-        : context.tTheme.textDisabledColor;
+        : context.tTheme.textColorDisabled;
     final inactiveColor = _enabled
         ? (theme?.inactiveStarColor ?? context.tTheme.bgColorComponent)
         : context.tTheme.bgColorComponentDisabled;
@@ -516,10 +516,10 @@ class _TRateState extends State<TRate> {
     final selectedColor = theme?.starColor ?? token.warningColor5;
     final inactiveColor = theme?.inactiveStarColor ?? token.bgColorComponent;
     final naturalPopupWidth = _valueIndicatorShowsHalfChoices
-        ? iconSize * 2 + token.spacer40
-        : iconSize + token.spacer24;
-    final popupHeight = iconSize + token.spacer32 + token.spacer4;
-    final horizontalInset = token.spacer8;
+        ? iconSize * 2 + 40.0
+        : iconSize + token.spacer3;
+    final popupHeight = iconSize + token.spacer4 + 4.0;
+    final horizontalInset = token.spacer;
     final popupWidth = naturalPopupWidth.clamp(
       0.0,
       (mediaQuery.size.width - horizontalInset * 2).clamp(0.0, double.infinity),
@@ -530,16 +530,16 @@ class _TRateState extends State<TRate> {
         .clamp(horizontalInset, maxLeft)
         .toDouble();
     final preferredTop =
-        _valueIndicatorPosition.dy - popupHeight - token.spacer12;
+        _valueIndicatorPosition.dy - popupHeight - token.spacer1;
     final rawTop = preferredTop >= mediaQuery.padding.top
         ? preferredTop
-        : _valueIndicatorPosition.dy + token.spacer12;
-    final verticalInset = mediaQuery.padding.top + token.spacer8;
+        : _valueIndicatorPosition.dy + token.spacer1;
+    final verticalInset = mediaQuery.padding.top + token.spacer;
     final maxTop =
         (mediaQuery.size.height -
                 mediaQuery.padding.bottom -
                 popupHeight -
-                token.spacer8)
+                token.spacer)
             .clamp(verticalInset, double.infinity);
     final top = rawTop.clamp(verticalInset, maxTop).toDouble();
 
@@ -559,7 +559,7 @@ class _TRateState extends State<TRate> {
               inactiveColor: inactiveColor,
               onTap: () => _selectHalfChoice(wholeValue - 0.5),
             ),
-            SizedBox(width: token.spacer4),
+            const SizedBox(width: 4.0),
             _buildValueIndicatorItem(
               overlayContext,
               value: wholeValue,
@@ -586,7 +586,7 @@ class _TRateState extends State<TRate> {
         return choices;
       }
       return SizedBox(
-        width: (popupWidth - token.spacer8).clamp(0, double.infinity),
+        width: (popupWidth - token.spacer).clamp(0, double.infinity),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: choices,
@@ -612,14 +612,13 @@ class _TRateState extends State<TRate> {
               key: _valueIndicatorShowsHalfChoices
                   ? _halfChoiceKey
                   : _valueIndicatorKey,
-              padding: EdgeInsets.all(token.spacer4),
+              padding: const EdgeInsets.all(4.0),
               decoration: BoxDecoration(
                 color:
                     material.tExplicitColorScheme?.surface ??
                     token.bgColorContainer,
                 borderRadius: BorderRadius.circular(token.radiusDefault),
-                boxShadow:
-                    theme?.overlayBoxShadow ?? token.shadowsBase ?? const [],
+                boxShadow: theme?.overlayBoxShadow ?? token.shadow1 ?? const [],
               ),
               child: buildContent(),
             ),
@@ -646,10 +645,7 @@ class _TRateState extends State<TRate> {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: token.spacer4,
-          vertical: token.spacer4 / 2,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0 / 2),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

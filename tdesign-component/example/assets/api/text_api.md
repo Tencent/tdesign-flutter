@@ -95,11 +95,11 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| font | Font? | - | 默认 TDesign 字体 Token。 |
-| strutStyle | StrutStyle? | - | 默认段落支柱样式。 |
-| textHeightBehavior | ui.TextHeightBehavior? | - | 默认文本高度行为。 |
-| textStyle | TextStyle? | - | 默认 Flutter 文字样式。 |
-| textWidthBasis | TextWidthBasis? | - | 默认文本宽度计算方式。 |
+| font | Font? | - | 子树的 TDesign 字体默认值；`textStyle` 的同名字段优先。 |
+| strutStyle | StrutStyle? | - | 子树的段落支柱样式默认值；实例 `TText.strutStyle` 优先。 |
+| textHeightBehavior | ui.TextHeightBehavior? | - | 子树的文字高度行为默认值；实例 `TText.textHeightBehavior` 优先。 |
+| textStyle | TextStyle? | - | 子树的文字样式默认值；实例 `TText.style` 优先。 |
+| textWidthBasis | TextWidthBasis? | - | 子树的文字宽度计算默认值；实例 `TText.textWidthBasis` 优先。 |
 
 
 ### TFontLoader

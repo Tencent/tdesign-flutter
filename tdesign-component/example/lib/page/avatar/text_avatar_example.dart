@@ -9,24 +9,25 @@ class TextAvatarExample extends StatelessWidget {
 
   /// 字符头像
   Widget _buildTextAvatar(BuildContext context) {
-    return Row(
-      // spacing: 32,
-      children: [
-        TAvatar(
-          size: TAvatarSize.medium,
-          backgroundColor: context.tTheme.brandNormalColor,
+    return Theme(
+      data: Theme.of(context).mergeExtension(
+        TAvatarThemeData(
+          backgroundColor: context.tTheme.brandColor,
           foregroundColor: context.tTheme.whiteColor1,
-          child: const Text('A'),
         ),
-        const SizedBox(width: 32),
-        TAvatar(
-          size: TAvatarSize.medium,
-          shape: TAvatarShape.square,
-          backgroundColor: context.tTheme.brandNormalColor,
-          foregroundColor: context.tTheme.whiteColor1,
-          child: const Text('A'),
-        ),
-      ],
+      ),
+      child: const Row(
+        // spacing: 32,
+        children: [
+          TAvatar(size: TAvatarSize.medium, child: Text('A')),
+          SizedBox(width: 32),
+          TAvatar(
+            size: TAvatarSize.medium,
+            shape: TAvatarShape.square,
+            child: Text('A'),
+          ),
+        ],
+      ),
     );
   }
 

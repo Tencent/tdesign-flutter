@@ -728,7 +728,7 @@ void main() {
                     'bgColorComponent': Colors.blue,
                     'textColorPrimary': Colors.green,
                   },
-                  marginMap: {'spacer24': 30},
+                  marginMap: {'spacer3': 30},
                 )
                 as TThemeData;
         final colorScheme = ColorScheme.fromSeed(
@@ -774,10 +774,10 @@ void main() {
         ),
       );
 
-      expect(token.textDisabledColor, const Color(0x42000000));
+      expect(token.textColorDisabled, const Color(0x42000000));
       expect(
         tester.widget<Text>(find.text('未评分')).style?.color,
-        token.textDisabledColor,
+        token.textColorDisabled,
       );
     });
 
@@ -803,7 +803,7 @@ void main() {
 
         expect(
           tester.widget<Text>(find.text('未评分')).style?.color,
-          Colors.purple.withValues(alpha: token.textDisabledColor.a),
+          Colors.purple.withValues(alpha: token.textColorDisabled.a),
         );
       },
     );
@@ -813,7 +813,7 @@ void main() {
     ) async {
       final token =
           TThemeData.defaultData().copyWith(
-                colorMap: {'textDisabledColor': Colors.orange},
+                colorMap: {'textColorDisabled': Colors.orange},
               )
               as TThemeData;
 

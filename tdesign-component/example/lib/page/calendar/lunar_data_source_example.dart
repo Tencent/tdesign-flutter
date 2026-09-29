@@ -120,7 +120,7 @@ class LunarDataSourceExample {
         subtitleColor = context.tTheme.textColorAnti;
         break;
       case DateSelectType.disabled:
-        subtitleColor = context.tTheme.textDisabledColor;
+        subtitleColor = context.tTheme.textColorDisabled;
         break;
       default:
         subtitleColor = context.tTheme.textColorPlaceholder;

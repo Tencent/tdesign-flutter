@@ -6,7 +6,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| bordered | bool? | - | 是否显示完整单元格边框。 为空时读取 `TTableThemeData.bordered`，最后回退为 `false`。 |
+| bordered | bool? | - | 是否显示完整单元格边框。 未设置时为 `false`。 |
 | cellSpanBuilder | TTableCellSpanBuilder<T>? | - | 返回逻辑单元格的行列跨度。 为空时所有单元格跨度均为 `1 × 1`。该回调仅为尚未被其他合并区域覆盖的 坐标调用；返回 `null` 等同于 `TTableCellSpan` 的默认值。跨度不得越界、重叠， 也不得跨越左固定区、水平滚动区和右固定区。 |
 | columns | List<TTableColumn<T>> | - | 列配置。 |
 | data | List<T> | - | 行数据。 |
@@ -28,7 +28,7 @@
 | selectionMode | TTableSelectionMode | TTableSelectionMode.none | 行选择模式。 |
 | showHeader | bool | true | 是否显示表头。 |
 | sort | TTableSort? | - | 当前受控排序值。 |
-| stripe | bool? | - | 是否为奇数数据行显示斑马纹背景。 为空时读取 `TTableThemeData.stripe`，最后回退为 `false`。 |
+| stripe | bool? | - | 是否为奇数数据行显示斑马纹背景。 未设置时为 `false`。 |
 
 
 ### TTableColumn
@@ -58,12 +58,10 @@
 | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 默认行背景色。 |
 | borderColor | Color? | - | 边框颜色。 |
-| bordered | bool? | - | 是否显示单元格边框。 |
 | cellPadding | EdgeInsetsGeometry? | - | 单元格内边距。 |
 | headerColor | Color? | - | 表头背景色。 |
 | headerHeight | double? | - | 表头高度。 |
 | rowHeight | double? | - | 数据行高度。 |
-| stripe | bool? | - | 是否显示斑马纹。 |
 | stripeColor | Color? | - | 斑马纹背景色。 |
 | width | double? | - | 表格宽度。 |
 

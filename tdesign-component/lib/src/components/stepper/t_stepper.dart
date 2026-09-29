@@ -51,14 +51,12 @@ class TStepper extends StatefulWidget {
 
     /// 组件尺寸。
     ///
-    /// 为空时依次使用 [TStepperThemeData.size] 和
-    /// [TStepperSize.medium]。
+    /// 为空时使用 [TStepperSize.medium]。
     this.size,
 
     /// 组件形态。
     ///
-    /// 为空时依次使用 [TStepperThemeData.variant] 和
-    /// [TStepperVariant.normal]。
+    /// 为空时使用 [TStepperVariant.normal]。
     this.variant,
   }) : assert(min <= max),
        assert(value >= min && value <= max),
@@ -83,10 +81,10 @@ class TStepper extends StatefulWidget {
   /// 编辑时合法草稿同时决定步进起点与按钮的边界状态。
   final num step;
 
-  /// 组件尺寸；为空时依次使用组件主题和 [TStepperSize.medium]。
+  /// 组件尺寸；为空时使用 [TStepperSize.medium]。
   final TStepperSize? size;
 
-  /// 组件形态；为空时依次使用组件主题和 [TStepperVariant.normal]。
+  /// 组件形态；为空时使用 [TStepperVariant.normal]。
   final TStepperVariant? variant;
 
   @override
@@ -564,9 +562,8 @@ class _StepperStyle {
     }
     final materialTheme = Theme.of(context);
     final token = context.tTheme;
-    final size = widget.size ?? componentTheme?.size ?? TStepperSize.medium;
-    final variant =
-        widget.variant ?? componentTheme?.variant ?? TStepperVariant.normal;
+    final size = widget.size ?? TStepperSize.medium;
+    final variant = widget.variant ?? TStepperVariant.normal;
     final geometry = stepperGeometry(size);
     final controlSize = componentTheme?.controlSize ?? geometry.controlSize;
     final explicitDefaultTextStyle = context.tExplicitDefaultTextStyle;
@@ -580,12 +577,8 @@ class _StepperStyle {
     final componentTextStyle = rawComponentTextStyle == null
         ? null
         : _flattenFontPackage(rawComponentTextStyle);
-    final numberFontFamily = token.numberFontFamily;
-    final resolvedNumberFontFamily = numberFontFamily == null
-        ? null
-        : numberFontFamily.package == null
-        ? numberFontFamily.fontFamily
-        : 'packages/${numberFontFamily.package}/${numberFontFamily.fontFamily}';
+    // Flutter asset used by Stepper; not a mini-program global token.
+    const resolvedNumberFontFamily = 'packages/tdesign_flutter/TCloudNumber';
     final inheritedFontFamily =
         defaultTextStyle?.fontFamily ??
         materialTextStyle.fontFamily ??
@@ -596,7 +589,7 @@ class _StepperStyle {
         materialTextStyle.color ??
         token.textColorPrimary;
     final disabledForegroundColor =
-        componentTheme?.disabledForegroundColor ?? token.textDisabledColor;
+        componentTheme?.disabledForegroundColor ?? token.textColorDisabled;
     final themedTextStyle = materialTextStyle
         .merge(defaultTextStyle)
         .copyWith(
@@ -614,8 +607,7 @@ class _StepperStyle {
       // Figma 的三档文字分别使用 10/16、12/20、16/24 行盒。Theme 只覆盖
       // 字号时，按最终字号重新计算倍数；控件高度变小时则收敛到可用高度，
       // 避免保留基于默认字号计算的旧倍数而裁切文字和光标。
-      height:
-          explicitTextHeight ?? resolvedLineHeight / resolvedFontSize,
+      height: explicitTextHeight ?? resolvedLineHeight / resolvedFontSize,
       // 将额外行高均分到字形上下，避免 Android 按字体 ascent/descent
       // 比例分配 leading 后产生视觉上移。
       leadingDistribution:
@@ -627,7 +619,7 @@ class _StepperStyle {
     final borderColor =
         componentTheme?.borderColor ??
         inputTheme.enabledBorder?.borderSide.color ??
-        token.componentBorderColor;
+        token.componentBorder;
 
     return _StepperStyle(
       variant: variant,

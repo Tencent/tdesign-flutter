@@ -86,7 +86,7 @@ class _TCellState extends State<TCell> {
     final materialTheme = Theme.of(context);
     final listTileTheme = materialTheme.listTileTheme;
     final colorScheme = materialTheme.tExplicitColorScheme;
-    final align = widget.align ?? theme?.align ?? TCellAlign.center;
+    final align = widget.align ?? TCellAlign.center;
     final crossAxisAlignment = switch (align) {
       TCellAlign.top => CrossAxisAlignment.start,
       TCellAlign.center => CrossAxisAlignment.center,
@@ -100,10 +100,10 @@ class _TCellState extends State<TCell> {
     final hasMainContent = widget.title != null || widget.subtitle != null;
     final content = Container(
       height: theme?.height,
-      padding: theme?.padding ?? EdgeInsets.all(context.tTheme.spacer16),
+      padding: theme?.padding ?? EdgeInsets.all(context.tTheme.spacer2),
       decoration: BoxDecoration(
         color: _pressed
-            ? theme?.pressedColor ?? context.tTheme.bgColorContainerHover
+            ? theme?.pressedColor ?? context.tTheme.bgColorSecondaryContainer
             : theme?.backgroundColor ??
                   listTileTheme.tileColor ??
                   colorScheme?.surface ??
@@ -112,8 +112,7 @@ class _TCellState extends State<TCell> {
             ? Border(
                 bottom: BorderSide(
                   width: 0.5,
-                  color:
-                      theme?.borderColor ?? context.tTheme.componentStrokeColor,
+                  color: theme?.borderColor ?? context.tTheme.componentStroke,
                 ),
               )
             : null,
@@ -124,11 +123,11 @@ class _TCellState extends State<TCell> {
           children: [
             if (widget.image != null) ...[
               widget.image!,
-              SizedBox(width: context.tTheme.spacer12),
+              SizedBox(width: context.tTheme.spacer1),
             ],
             if (widget.prefix != null) ...[
               widget.prefix!,
-              SizedBox(width: context.tTheme.spacer12),
+              SizedBox(width: context.tTheme.spacer1),
             ],
             if (hasMainContent || widget.note == null)
               Expanded(
@@ -175,13 +174,13 @@ class _TCellState extends State<TCell> {
                                   TextStyle(
                                     color:
                                         colorScheme?.error ??
-                                        context.tTheme.errorNormalColor,
+                                        context.tTheme.errorColor,
                                   ),
                             ),
                         ],
                       ),
                     if (widget.title != null && widget.subtitle != null)
-                      SizedBox(height: context.tTheme.spacer4),
+                      const SizedBox(height: 4.0),
                     if (widget.subtitle != null)
                       DefaultTextStyle.merge(
                         style:
@@ -204,7 +203,7 @@ class _TCellState extends State<TCell> {
                 ),
               ),
             if (widget.note != null) ...[
-              if (hasMainContent) SizedBox(width: context.tTheme.spacer4),
+              if (hasMainContent) const SizedBox(width: 4.0),
               if (hasMainContent)
                 ConstrainedBox(
                   constraints: BoxConstraints(
@@ -257,11 +256,11 @@ class _TCellState extends State<TCell> {
                 ),
             ],
             if (widget.trailing != null) ...[
-              SizedBox(width: context.tTheme.spacer4),
+              const SizedBox(width: 4.0),
               widget.trailing!,
             ],
             if (widget.arrow) ...[
-              SizedBox(width: context.tTheme.spacer4),
+              const SizedBox(width: 4.0),
               Icon(
                 TIcons.chevron_right,
                 size: 24,

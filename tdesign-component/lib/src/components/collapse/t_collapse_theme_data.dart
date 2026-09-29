@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 't_collapse_types.dart';
-
 /// 折叠面板组件级 ThemeExtension
 class TCollapseThemeData extends ThemeExtension<TCollapseThemeData> {
-  /// 面板风格（block/card）
-  final TCollapseVariant? variant;
-
   /// 默认面板背景色
   final Color? backgroundColor;
-
-  /// 动画时长
-  final Duration? animationDuration;
 
   /// 阴影
   final double? elevation;
@@ -44,9 +36,7 @@ class TCollapseThemeData extends ThemeExtension<TCollapseThemeData> {
   final BorderRadius? cardBorderRadius;
 
   const TCollapseThemeData({
-    this.variant,
     this.backgroundColor,
-    this.animationDuration,
     this.elevation,
     this.headerTextStyle,
     this.contentTextStyle,
@@ -61,9 +51,7 @@ class TCollapseThemeData extends ThemeExtension<TCollapseThemeData> {
 
   @override
   TCollapseThemeData copyWith({
-    TCollapseVariant? variant,
     Color? backgroundColor,
-    Duration? animationDuration,
     double? elevation,
     TextStyle? headerTextStyle,
     TextStyle? contentTextStyle,
@@ -76,9 +64,7 @@ class TCollapseThemeData extends ThemeExtension<TCollapseThemeData> {
     BorderRadius? cardBorderRadius,
   }) {
     return TCollapseThemeData(
-      variant: variant ?? this.variant,
       backgroundColor: backgroundColor ?? this.backgroundColor,
-      animationDuration: animationDuration ?? this.animationDuration,
       elevation: elevation ?? this.elevation,
       headerTextStyle: headerTextStyle ?? this.headerTextStyle,
       contentTextStyle: contentTextStyle ?? this.contentTextStyle,
@@ -99,25 +85,41 @@ class TCollapseThemeData extends ThemeExtension<TCollapseThemeData> {
       return this;
     }
     return TCollapseThemeData(
-      variant: t < 0.5 ? variant : other.variant,
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      animationDuration: t < 0.5 ? animationDuration : other.animationDuration,
       elevation: t < 0.5 ? elevation : other.elevation,
-      headerTextStyle:
-          TextStyle.lerp(headerTextStyle, other.headerTextStyle, t),
-      contentTextStyle:
-          TextStyle.lerp(contentTextStyle, other.contentTextStyle, t),
+      headerTextStyle: TextStyle.lerp(
+        headerTextStyle,
+        other.headerTextStyle,
+        t,
+      ),
+      contentTextStyle: TextStyle.lerp(
+        contentTextStyle,
+        other.contentTextStyle,
+        t,
+      ),
       disabledHeaderTextStyle: TextStyle.lerp(
-          disabledHeaderTextStyle, other.disabledHeaderTextStyle, t),
+        disabledHeaderTextStyle,
+        other.disabledHeaderTextStyle,
+        t,
+      ),
       iconColor: Color.lerp(iconColor, other.iconColor, t),
-      disabledIconColor:
-          Color.lerp(disabledIconColor, other.disabledIconColor, t),
+      disabledIconColor: Color.lerp(
+        disabledIconColor,
+        other.disabledIconColor,
+        t,
+      ),
       dividerColor: Color.lerp(dividerColor, other.dividerColor, t),
-      contentPadding:
-          EdgeInsetsGeometry.lerp(contentPadding, other.contentPadding, t),
+      contentPadding: EdgeInsetsGeometry.lerp(
+        contentPadding,
+        other.contentPadding,
+        t,
+      ),
       cardMargin: EdgeInsetsGeometry.lerp(cardMargin, other.cardMargin, t),
-      cardBorderRadius:
-          BorderRadius.lerp(cardBorderRadius, other.cardBorderRadius, t),
+      cardBorderRadius: BorderRadius.lerp(
+        cardBorderRadius,
+        other.cardBorderRadius,
+        t,
+      ),
     );
   }
 }

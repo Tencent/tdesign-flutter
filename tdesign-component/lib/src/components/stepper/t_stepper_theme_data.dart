@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 't_stepper_theme_interpolation.dart';
-import 't_stepper_types.dart';
 
 /// `TStepper` 的组件级主题。
 ///
@@ -10,12 +9,6 @@ import 't_stepper_types.dart';
 /// IconTheme、InputDecorationTheme 和 ThemeData，最后回退 TDesign token。
 class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
   const TStepperThemeData({
-    /// 默认尺寸；为空时使用 [TStepperSize.medium]。
-    this.size,
-
-    /// 默认形态；为空时使用 [TStepperVariant.normal]。
-    this.variant,
-
     /// 输入段宽度。
     ///
     /// 为空时 small、medium、large 分别使用 34、38、45。
@@ -72,12 +65,6 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
        assert(spacing == null || spacing >= 0),
        assert(borderWidth == null || borderWidth >= 0);
 
-  /// 默认尺寸；为空时使用中尺寸。
-  final TStepperSize? size;
-
-  /// 默认形态；为空时使用 normal。
-  final TStepperVariant? variant;
-
   /// 输入段宽度；为空时 small、medium、large 分别为 34、38、45。
   final double? inputWidth;
 
@@ -119,8 +106,6 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
 
   @override
   TStepperThemeData copyWith({
-    TStepperSize? size,
-    TStepperVariant? variant,
     double? inputWidth,
     double? controlSize,
     double? iconSize,
@@ -135,8 +120,6 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
     TextStyle? textStyle,
   }) {
     return TStepperThemeData(
-      size: size ?? this.size,
-      variant: variant ?? this.variant,
       inputWidth: inputWidth ?? this.inputWidth,
       controlSize: controlSize ?? this.controlSize,
       iconSize: iconSize ?? this.iconSize,

@@ -10,7 +10,7 @@ class TextTokenStyleExample extends StatelessWidget {
     return TText(
       exampleText,
       font: context.tTheme.fontHeadlineSmall,
-      textColor: context.tTheme.brandNormalColor,
+      textColor: context.tTheme.brandColor,
     );
   }
 

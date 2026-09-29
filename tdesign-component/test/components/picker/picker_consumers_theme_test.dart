@@ -4,21 +4,43 @@ import 'package:tdesign_flutter/src/components/picker/multi_wheel_layout.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  testWidgets('Picker 继续继承 TTextThemeData 的子树文字默认值', (tester) async {
+    final theme = TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+      const TTextThemeData(
+        textStyle: TextStyle(fontSize: 23, color: Colors.purple),
+      ),
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: theme,
+        home: Scaffold(
+          body: TPicker(
+            items: const TPickerColumns([
+              [TPickerOption(label: '继承项', value: 0)],
+            ]),
+            value: const [0],
+            onChanged: (_) {},
+          ),
+        ),
+      ),
+    );
+    final text = tester.widget<Text>(find.text('继承项'));
+    expect(text.style?.fontSize, 23);
+    expect(text.style?.color, Colors.purple);
+  });
   for (final date in [false, true]) {
-    testWidgets('explicit component text theme date=$date', (tester) async {
+    testWidgets('explicit Material text theme date=$date', (tester) async {
       final changes = <Object>[];
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(
-            extensions: const [
-              TTextThemeData(
-                textStyle: TextStyle(
-                  fontSize: 31,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.pink,
-                ),
+            textTheme: const TextTheme(
+              bodyLarge: TextStyle(
+                fontSize: 31,
+                fontWeight: FontWeight.w800,
+                color: Colors.pink,
               ),
-            ],
+            ),
           ),
           home: Scaffold(
             body: date
@@ -224,7 +246,7 @@ void main() {
                     'bgColorContainer': const Color(0xFF123456),
                     'bgColorSecondaryContainer': const Color(0xFF456789),
                   },
-                  marginMap: {'spacer48': 24},
+                  marginMap: {'spacer5': 24},
                 )
               : TThemeData.defaultData();
           await tester.pumpWidget(

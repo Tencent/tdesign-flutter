@@ -461,7 +461,7 @@ class TMaterialThemeBuilder {
     );
     final iconTheme = IconThemeData(color: extensionData.textColorPrimary);
     final dividerTheme = DividerThemeData(
-      color: extensionData.componentStrokeColor,
+      color: extensionData.componentStroke,
       thickness: 0.5,
     );
     final buttonStyle = _materialButtonStyle(extensionData, colorScheme);
@@ -485,7 +485,7 @@ class TMaterialThemeBuilder {
       textTheme: textTheme,
       dividerTheme: dividerTheme,
       badgeTheme: BadgeThemeData(
-        backgroundColor: extensionData.errorNormalColor,
+        backgroundColor: extensionData.errorColor,
         textColor: extensionData.textColorAnti,
         textStyle: _textStyle(
           extensionData.fontMarkExtraSmall,
@@ -504,13 +504,13 @@ class TMaterialThemeBuilder {
           color: extensionData.textColorPlaceholder,
         ),
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: extensionData.componentBorderColor),
+          borderSide: BorderSide(color: extensionData.componentBorder),
         ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: colorScheme.primary),
         ),
         disabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: extensionData.componentStrokeColor),
+          borderSide: BorderSide(color: extensionData.componentStroke),
         ),
       ),
       useMaterial3: true,
@@ -536,8 +536,6 @@ class TMaterialThemeBuilder {
     return <ThemeExtension<dynamic>>[
       token,
       const TButtonThemeData(),
-      _textExtension(token),
-      _iconTheme(token),
       _dividerTheme(token),
       _linkTheme(token),
       const TFabThemeData(),
@@ -579,6 +577,7 @@ class TMaterialThemeBuilder {
       const TTableThemeData(),
       const TTabsBarThemeData(),
       const TTagThemeData(),
+      const TTextThemeData(),
       const TTimeCounterThemeData(),
       const TToastThemeData(),
       const TTreeSelectThemeData(),
@@ -621,7 +620,7 @@ class TMaterialThemeBuilder {
       backgroundColor: colorScheme.primary,
       foregroundColor: colorScheme.onPrimary,
       disabledBackgroundColor: token.bgColorComponentDisabled,
-      disabledForegroundColor: token.textDisabledColor,
+      disabledForegroundColor: token.textColorDisabled,
       textStyle: _textStyle(token.fontLinkMedium),
     );
   }
@@ -666,16 +665,6 @@ class TMaterialThemeBuilder {
     );
   }
 
-  TTextThemeData _textExtension(TThemeData _) {
-    // Token defaults are exposed through Material TextTheme and TText's final
-    // fallback. Keeping this extension empty lets local DefaultTextStyle work.
-    return const TTextThemeData();
-  }
-
-  TIconThemeData _iconTheme(TThemeData _) {
-    return const TIconThemeData();
-  }
-
   TDividerThemeData _dividerTheme(TThemeData _) {
     return const TDividerThemeData();
   }
@@ -688,36 +677,36 @@ class TMaterialThemeBuilder {
   ColorScheme _lightColorScheme(TThemeData t) {
     return ColorScheme.light(
       // 品牌主色
-      primary: t.brandNormalColor,
+      primary: t.brandColor,
       onPrimary: t.textColorAnti,
-      primaryContainer: t.brandLightColor,
-      onPrimaryContainer: t.brandNormalColor,
+      primaryContainer: t.brandColorLight,
+      onPrimaryContainer: t.brandColor,
       // 次级
-      secondary: t.brandHoverColor,
+      secondary: t.brandColor6,
       onSecondary: t.textColorAnti,
       secondaryContainer: t.bgColorSecondaryContainer,
       onSecondaryContainer: t.textColorPrimary,
       // 警告色
-      tertiary: t.warningNormalColor,
+      tertiary: t.warningColor,
       onTertiary: t.textColorAnti,
-      tertiaryContainer: t.warningLightColor,
-      onTertiaryContainer: t.warningNormalColor,
+      tertiaryContainer: t.warningColorLight,
+      onTertiaryContainer: t.warningColor,
       // 错误色
-      error: t.errorNormalColor,
+      error: t.errorColor,
       onError: t.textColorAnti,
-      errorContainer: t.errorLightColor,
-      onErrorContainer: t.errorNormalColor,
+      errorContainer: t.errorColorLight,
+      onErrorContainer: t.errorColor,
       // 背景与表面
       surface: t.bgColorContainer,
       onSurface: t.textColorPrimary,
       surfaceContainerHighest: t.bgColorComponent,
       onSurfaceVariant: t.textColorSecondary,
       // 描边
-      outline: t.componentBorderColor,
-      outlineVariant: t.componentStrokeColor,
+      outline: t.componentBorder,
+      outlineVariant: t.componentStroke,
       // 反色
       inverseSurface: t.grayColor13,
-      onInverseSurface: t.fontWhColor1,
+      onInverseSurface: t.fontWhite1,
       inversePrimary: t.brandColor3,
       // 基础
       shadow: Colors.black,
@@ -729,36 +718,36 @@ class TMaterialThemeBuilder {
   ColorScheme _darkColorScheme(TThemeData t) {
     return ColorScheme.dark(
       // 品牌主色
-      primary: t.brandNormalColor,
+      primary: t.brandColor,
       onPrimary: t.textColorAnti,
-      primaryContainer: t.brandLightColor,
-      onPrimaryContainer: t.brandNormalColor,
+      primaryContainer: t.brandColorLight,
+      onPrimaryContainer: t.brandColor,
       // 次级
-      secondary: t.brandHoverColor,
+      secondary: t.brandColor6,
       onSecondary: t.textColorAnti,
       secondaryContainer: t.bgColorSecondaryContainer,
       onSecondaryContainer: t.textColorPrimary,
       // 警告色
-      tertiary: t.warningNormalColor,
+      tertiary: t.warningColor,
       onTertiary: t.textColorAnti,
-      tertiaryContainer: t.warningLightColor,
-      onTertiaryContainer: t.warningNormalColor,
+      tertiaryContainer: t.warningColorLight,
+      onTertiaryContainer: t.warningColor,
       // 错误色
-      error: t.errorNormalColor,
+      error: t.errorColor,
       onError: t.textColorAnti,
-      errorContainer: t.errorLightColor,
-      onErrorContainer: t.errorNormalColor,
+      errorContainer: t.errorColorLight,
+      onErrorContainer: t.errorColor,
       // 背景与表面
       surface: t.bgColorContainer,
       onSurface: t.textColorPrimary,
       surfaceContainerHighest: t.bgColorComponent,
       onSurfaceVariant: t.textColorSecondary,
       // 描边
-      outline: t.componentBorderColor,
-      outlineVariant: t.componentStrokeColor,
+      outline: t.componentBorder,
+      outlineVariant: t.componentStroke,
       // 反色
       inverseSurface: t.grayColor13,
-      onInverseSurface: t.fontWhColor1,
+      onInverseSurface: t.fontWhite1,
       inversePrimary: t.brandColor3,
       // 基础
       shadow: Colors.black,
@@ -828,6 +817,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
   /// 字体尺寸
   late TMap<String, Font> fontMap;
 
+  /// 小程序独立字号与行高 Token，单位为 Flutter 逻辑像素。
+  late TMap<String, double> fontMetricMap;
+
   /// 圆角
   late TMap<String, double> radiusMap;
 
@@ -836,6 +828,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
 
   /// 阴影
   late TMap<String, List<BoxShadow>> shadowMap;
+
+  /// 小程序 blur=0 的内投影在 Flutter 中对应的内侧边线。
+  late TMap<String, BorderSide> insetShadowMap;
 
   /// 间隔
   late TMap<String, double> spacerMap;
@@ -850,13 +845,17 @@ class TThemeData extends ThemeExtension<TThemeData> {
     required this.name,
     required this.colorMap,
     required this.fontMap,
+    TMap<String, double>? fontMetricMap,
     required this.radiusMap,
     required this.fontFamilyMap,
     required this.shadowMap,
+    TMap<String, BorderSide>? insetShadowMap,
     required this.spacerMap,
     required this.refMap,
     this.extraThemeData,
   }) {
+    this.fontMetricMap = fontMetricMap ?? TMap<String, double>();
+    this.insetShadowMap = insetShadowMap ?? TMap<String, BorderSide>();
     light = this;
   }
 
@@ -885,9 +884,11 @@ class TThemeData extends ThemeExtension<TThemeData> {
     String name, {
     Map<String, Color>? colorMap,
     Map<String, Font>? fontMap,
+    Map<String, double>? fontMetricMap,
     Map<String, double>? radiusMap,
     Map<String, FontFamily>? fontFamilyMap,
     Map<String, List<BoxShadow>>? shadowMap,
+    Map<String, BorderSide>? insetShadowMap,
     Map<String, double>? marginMap,
     TExtraThemeData? extraThemeData,
   }) {
@@ -895,9 +896,11 @@ class TThemeData extends ThemeExtension<TThemeData> {
           name: name,
           colorMap: colorMap,
           fontMap: fontMap,
+          fontMetricMap: fontMetricMap,
           radiusMap: radiusMap,
           fontFamilyMap: fontFamilyMap,
           shadowMap: shadowMap,
+          insetShadowMap: insetShadowMap,
           marginMap: marginMap,
           extraThemeData: extraThemeData,
         )
@@ -909,28 +912,53 @@ class TThemeData extends ThemeExtension<TThemeData> {
     String? name,
     Map<String, Color>? colorMap,
     Map<String, Font>? fontMap,
+    Map<String, double>? fontMetricMap,
     Map<String, double>? radiusMap,
     Map<String, FontFamily>? fontFamilyMap,
     Map<String, List<BoxShadow>>? shadowMap,
+    Map<String, BorderSide>? insetShadowMap,
     Map<String, double>? marginMap,
     TExtraThemeData? extraThemeData,
   }) {
+    final copiedRefs = _copyMap<String>(refMap, null);
     return TThemeData(
       name: name ?? 'default',
-      colorMap: _copyMap<Color>(this.colorMap, colorMap),
-      fontMap: _copyMap<Font>(this.fontMap, fontMap),
-      radiusMap: _copyMap<double>(this.radiusMap, radiusMap),
-      fontFamilyMap: _copyMap<FontFamily>(this.fontFamilyMap, fontFamilyMap),
-      shadowMap: _copyMap<List<BoxShadow>>(this.shadowMap, shadowMap),
-      spacerMap: _copyMap<double>(spacerMap, marginMap),
-      refMap: _copyMap<String>(refMap, refMap),
+      colorMap: _copyMap<Color>(this.colorMap, colorMap, copiedRefs),
+      fontMap: _copyMap<Font>(this.fontMap, fontMap, copiedRefs),
+      fontMetricMap: _copyMap<double>(
+        this.fontMetricMap,
+        fontMetricMap,
+        copiedRefs,
+      ),
+      radiusMap: _copyMap<double>(this.radiusMap, radiusMap, copiedRefs),
+      fontFamilyMap: _copyMap<FontFamily>(
+        this.fontFamilyMap,
+        fontFamilyMap,
+        copiedRefs,
+      ),
+      shadowMap: _copyMap<List<BoxShadow>>(
+        this.shadowMap,
+        shadowMap,
+        copiedRefs,
+      ),
+      insetShadowMap: _copyMap<BorderSide>(
+        this.insetShadowMap,
+        insetShadowMap,
+        copiedRefs,
+      ),
+      spacerMap: _copyMap<double>(spacerMap, marginMap, copiedRefs),
+      refMap: copiedRefs,
       extraThemeData: extraThemeData ?? this.extraThemeData,
     );
   }
 
   /// 拷贝Map,防止内层
-  TMap<String, T> _copyMap<T>(TMap<String, T> src, Map<String, T>? add) {
-    var map = TMap<String, T>(factory: () => src);
+  TMap<String, T> _copyMap<T>(
+    TMap<String, T> src,
+    Map<String, T>? add, [
+    TMap<String, String>? refs,
+  ]) {
+    var map = TMap<String, T>(factory: () => src, refs: refs);
 
     src.forEach((key, value) {
       map[key] = value;
@@ -943,17 +971,25 @@ class TThemeData extends ThemeExtension<TThemeData> {
 
   /// 创建空对象
   static TThemeData _emptyData(String name, {TExtraThemeData? extraThemeData}) {
-    var refMap = TMap<String, String>();
+    var refMap = TMap<String, String>(factory: () => defaultData().refMap);
     return TThemeData(
       name: name,
       colorMap: TMap(factory: () => defaultData().colorMap, refs: refMap),
       fontMap: TMap(factory: () => defaultData().fontMap, refs: refMap),
+      fontMetricMap: TMap(
+        factory: () => defaultData().fontMetricMap,
+        refs: refMap,
+      ),
       radiusMap: TMap(factory: () => defaultData().radiusMap, refs: refMap),
       fontFamilyMap: TMap(
         factory: () => defaultData().fontFamilyMap,
         refs: refMap,
       ),
       shadowMap: TMap(factory: () => defaultData().shadowMap, refs: refMap),
+      insetShadowMap: TMap(
+        factory: () => defaultData().insetShadowMap,
+        refs: refMap,
+      ),
       spacerMap: TMap(factory: () => defaultData().spacerMap, refs: refMap),
       refMap: refMap,
     );
@@ -1049,6 +1085,12 @@ class TThemeData extends ThemeExtension<TThemeData> {
       theme.fontMap[key] = Font.fromJson(value);
     });
 
+    /// 小程序字体尺寸与行高可独立覆盖，不能只保留复合 Font。
+    Map<String, dynamic>? fontMetricsMap = curThemeMap?['fontMetric'];
+    fontMetricsMap?.forEach((key, value) {
+      theme.fontMetricMap[key] = (value as num).toDouble();
+    });
+
     /// 设置圆角
     Map<String, dynamic>? cornersMap = curThemeMap?['radius'];
     cornersMap?.forEach((key, value) {
@@ -1080,6 +1122,15 @@ class TThemeData extends ThemeExtension<TThemeData> {
       });
 
       theme.shadowMap[key] = list;
+    });
+
+    /// 当前小程序内阴影均为 blur=0、扩散=0 的 0.5px 内侧描边。
+    Map<String, dynamic>? insetShadowsMap = curThemeMap?['insetShadow'];
+    insetShadowsMap?.forEach((key, value) {
+      theme.insetShadowMap[key] = BorderSide(
+        color: toColor(value['color']) ?? Colors.transparent,
+        width: (value['width'] as num).toDouble(),
+      );
     });
 
     /// 设置Margin
@@ -1133,9 +1184,11 @@ class TThemeData extends ThemeExtension<TThemeData> {
       name: other.name,
       colorMap: other.colorMap,
       fontMap: other.fontMap,
+      fontMetricMap: other.fontMetricMap,
       radiusMap: other.radiusMap,
       fontFamilyMap: other.fontFamilyMap,
       shadowMap: other.shadowMap,
+      insetShadowMap: other.insetShadowMap,
       spacerMap: other.spacerMap,
       refMap: other.refMap,
     );
@@ -1158,17 +1211,32 @@ class TMap<K, V> extends DelegatingMap<K, V> {
 
   @override
   V? operator [](Object? key) {
-    // return super[key];
-    key = refs?[key] ?? key;
-    var value = super[key];
-    if (value != null) {
-      return value;
+    return _resolve(key, <Object?>{});
+  }
+
+  V? _resolve(Object? key, Set<Object?> visited) {
+    if (!visited.add(key)) {
+      return null;
     }
-    var defaultValue = factory?.call()?.get(key);
-    if (defaultValue is V) {
-      return defaultValue;
+    // An explicitly configured token wins over its default reference. This
+    // mirrors a CSS custom property overriding a var(--td-...) fallback.
+    final localValue = super[key];
+    if (localValue != null) {
+      return localValue;
     }
-    return null;
+    final reference = refs?[key];
+    if (reference != null) {
+      final referencedValue = _resolve(reference, visited);
+      if (referencedValue != null) {
+        return referencedValue;
+      }
+    }
+    final fallback = factory?.call();
+    if (identical(fallback, this)) {
+      return null;
+    }
+    final defaultValue = fallback?[key];
+    return defaultValue is V ? defaultValue : null;
   }
 
   V? get(Object? key) {

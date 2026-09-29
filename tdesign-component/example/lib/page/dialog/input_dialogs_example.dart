@@ -15,7 +15,7 @@ class InputDialogsExample extends StatelessWidget {
           barrierDismissible: true,
           dialog: TDialog(
             title: const Text('带输入框对话框'),
-            content: _dialogInput(context, topPadding: context.tTheme.spacer8),
+            content: _dialogInput(context, topPadding: context.tTheme.spacer),
             actions: _actions(variant: TButtonVariant.text),
           ),
         );
@@ -29,7 +29,7 @@ class InputDialogsExample extends StatelessWidget {
             content: Column(
               children: [
                 const Text(_description),
-                SizedBox(height: context.tTheme.spacer16),
+                SizedBox(height: context.tTheme.spacer2),
                 _dialogInput(context),
               ],
             ),
@@ -44,7 +44,7 @@ class InputDialogsExample extends StatelessWidget {
     return Column(
       children: [
         for (var index = 0; index < children.length; index++) ...[
-          if (index > 0) SizedBox(height: context.tTheme.spacer16),
+          if (index > 0) SizedBox(height: context.tTheme.spacer2),
           children[index],
         ],
       ],
@@ -71,10 +71,9 @@ class InputDialogsExample extends StatelessWidget {
       child: Theme(
         data: Theme.of(context).mergeExtension(
           TInputThemeData(
-            clearButtonMode: TInputClearButtonMode.focused,
             contentPadding: EdgeInsets.symmetric(
-              horizontal: token.spacer16,
-              vertical: token.spacer12,
+              horizontal: token.spacer2,
+              vertical: token.spacer1,
             ),
             borderRadius: 4,
             backgroundColor: token.bgColorPage,

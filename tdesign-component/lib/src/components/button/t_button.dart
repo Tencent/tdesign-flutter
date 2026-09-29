@@ -69,17 +69,18 @@ class TButton extends StatefulWidget {
   /// 内容（纯文案用 `Text('...')`）
   final Widget? child;
 
-  /// 尺寸，未传时使用 Theme [TButtonThemeData.defaultSize]。
+  /// 尺寸，未传时使用 [TButtonSize.medium]。
   ///
   /// 默认按 48、40、32、28dp 的 TDesign 视觉高度参与布局。
   final TButtonSize? size;
 
-  /// 变体（fill / outline / text / ghost），未传时使用 Theme [TButtonThemeData.defaultVariant]
+  /// 变体（fill / outline / text / ghost），未传时使用 [TButtonVariant.fill]。
   final TButtonVariant? variant;
 
   /// 配色方案；未传时使用 [TButtonColorScheme.defaultTheme]。
   ///
-  /// Theme 提供具体颜色和样式，不选择组件的配色方案。
+  /// 只选择内置调色预设，不覆写 Material/组件 Theme 中显式设置的颜色、
+  /// 边框和文字样式；当前按钮的具体样式可通过 [style] 覆盖。
   final TButtonColorScheme? colorScheme;
 
   /// 图标（Widget 类型，IconData 需包裹为 `Icon(...)`）
@@ -97,7 +98,8 @@ class TButton extends StatefulWidget {
   /// 不会触发点击或长按回调。
   final VoidCallback? onLongPress;
 
-  /// P0 逃逸舱：[ButtonStyle] 覆盖所有 resolve 结果。
+  /// 当前按钮的完整 [ButtonStyle] 覆盖；优先于组件 [TButtonThemeData]
+  /// 提供的子树默认样式，不影响同一子树中的其他按钮。
   ///
   /// 组件默认使用 [MaterialTapTargetSize.shrinkWrap] 保持 TDesign 精确尺寸；
   /// 需要至少 48dp 点击区时可将 [ButtonStyle.tapTargetSize] 设为
@@ -159,10 +161,8 @@ class _TButtonState extends State<TButton> {
   Widget build(BuildContext context) {
     // 获取 Theme
     final theme = Theme.of(context).extension<TButtonThemeData>();
-    final effectiveVariant =
-        widget.variant ?? theme?.defaultVariant ?? TButtonVariant.fill;
-    final effectiveSize =
-        widget.size ?? theme?.defaultSize ?? TButtonSize.medium;
+    final effectiveVariant = widget.variant ?? TButtonVariant.fill;
+    final effectiveSize = widget.size ?? TButtonSize.medium;
     final sizeMetrics = TButtonResolve.sizeMetrics(
       effectiveSize,
       context.tTheme,
@@ -185,7 +185,7 @@ class _TButtonState extends State<TButton> {
     // 构建带图标的内容
     final hasIcon = widget.icon != null;
     final hasChild = widget.child != null;
-    final iconTextSpacing = theme?.iconTextSpacing ?? context.tTheme.spacer4;
+    final iconTextSpacing = theme?.iconTextSpacing ?? 4.0;
     final gradient = theme?.gradient;
 
     Widget? content;

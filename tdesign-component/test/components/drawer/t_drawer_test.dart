@@ -245,8 +245,8 @@ void main() {
 
   group('TDrawer', () {
     test('拒绝非正数宽度', () {
-      expect(() => TDrawer(width: 0), throwsAssertionError);
-      expect(() => TDrawer(width: -1), throwsAssertionError);
+      expect(() => TDrawerThemeData(width: 0), throwsAssertionError);
+      expect(() => TDrawerThemeData(width: -1), throwsAssertionError);
     });
 
     testWidgets('使用 child 渲染自定义内容', (tester) async {
@@ -309,7 +309,8 @@ void main() {
       const longTitle = '这是一个非常非常长的抽屉菜单标题用于验证不溢出';
       await tester.pumpWidget(
         wrapWithTheme(
-          const TDrawer(width: 120, items: [TDrawerItem(title: longTitle)]),
+          const TDrawer(items: [TDrawerItem(title: longTitle)]),
+          drawerTheme: const TDrawerThemeData(width: 120),
         ),
       );
       await tester.pumpAndSettle();
@@ -572,7 +573,10 @@ void main() {
 
     testWidgets('自定义宽度', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(const TDrawer(width: 300, child: SizedBox.expand())),
+        wrapWithTheme(
+          const TDrawer(child: SizedBox.expand()),
+          drawerTheme: const TDrawerThemeData(width: 300),
+        ),
       );
       final container = tester.widget<Container>(
         find
@@ -585,13 +589,11 @@ void main() {
       expect(container.constraints?.maxWidth, 300);
     });
 
-    testWidgets('构造器背景色覆盖默认主题背景色', (tester) async {
+    testWidgets('Theme 背景色覆盖默认背景色', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TDrawer(
-            backgroundColor: Colors.yellow,
-            child: SizedBox.expand(),
-          ),
+          const TDrawer(child: SizedBox.expand()),
+          drawerTheme: const TDrawerThemeData(backgroundColor: Colors.yellow),
         ),
       );
 
@@ -599,13 +601,11 @@ void main() {
       expect(container.color, Colors.yellow);
     });
 
-    testWidgets('构造器背景色作为菜单项默认背景色', (tester) async {
+    testWidgets('Theme 背景色作为菜单项默认背景色', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TDrawer(
-            backgroundColor: Colors.yellow,
-            items: [TDrawerItem(title: '菜单1')],
-          ),
+          const TDrawer(items: [TDrawerItem(title: '菜单1')]),
+          drawerTheme: const TDrawerThemeData(backgroundColor: Colors.yellow),
         ),
       );
 
@@ -713,7 +713,7 @@ void main() {
       expect(find.text('菜单1'), findsNothing);
     });
 
-    testWidgets('内容参数与 Theme 优先级由 TDrawer 持有', (tester) async {
+    testWidgets('抽屉浮层使用组件 Theme 的宽度和背景色', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: fullTheme(
@@ -729,11 +729,7 @@ void main() {
                 onPressed: () {
                   showTDrawer(
                     context,
-                    drawer: const TDrawer(
-                      width: 250,
-                      backgroundColor: Colors.green,
-                      items: [TDrawerItem(title: '菜单1')],
-                    ),
+                    drawer: const TDrawer(items: [TDrawerItem(title: '菜单1')]),
                   );
                 },
               ),
@@ -744,8 +740,8 @@ void main() {
 
       await tester.tap(find.text('打开'));
       await tester.pumpAndSettle();
-      final container = drawerContainer(tester, color: Colors.green);
-      expect(container.constraints?.maxWidth, 250);
+      final container = drawerContainer(tester, color: Colors.yellow);
+      expect(container.constraints?.maxWidth, 320);
     });
 
     testWidgets('默认避让系统安全区', (tester) async {

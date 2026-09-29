@@ -107,7 +107,7 @@ class _DateTimePickerMonthExampleState
             child: TText(
               '确定',
               font: context.tTheme.fontBodyLarge,
-              textColor: context.tTheme.brandNormalColor,
+              textColor: context.tTheme.brandColor,
             ),
           ),
         ),

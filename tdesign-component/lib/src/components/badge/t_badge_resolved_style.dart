@@ -43,7 +43,7 @@ class TBadgeResolvedStyle {
     final backgroundColor =
         localBadgeTheme?.backgroundColor ??
         globalBadgeTheme?.backgroundColor ??
-        token.errorNormalColor;
+        token.errorColor;
     final textColor =
         localBadgeTheme?.textColor ??
         globalBadgeTheme?.textColor ??

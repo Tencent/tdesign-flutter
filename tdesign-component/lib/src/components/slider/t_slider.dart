@@ -29,10 +29,10 @@ SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
   final material = Theme.of(context);
   final colorScheme = material.tExplicitColorScheme;
   final token = context.tTheme;
-  final brand = token.brandNormalColor;
-  final inactiveTrack = token.bgColorComponentHover;
+  final brand = token.brandColor;
+  final inactiveTrack = token.componentBorder;
   final disabledComponent = token.bgColorComponentDisabled;
-  final disabledBrand = token.brandDisabledColor;
+  final disabledBrand = token.brandColorDisabled;
   final thumb = colorScheme?.primary ?? token.textColorAnti;
   final disabledThumb = colorScheme == null
       ? token.textColorAnti
@@ -127,25 +127,27 @@ SliderThemeData _resolveSliderTheme(
   final token = context.tTheme;
   if (variant == TSliderVariant.normal) {
     return base.copyWith(
-      trackHeight: inherited.trackHeight ?? token.spacer4,
+      trackHeight: inherited.trackHeight ?? 4.0,
       trackShape:
           inherited.trackShape ??
-          _TDesignSliderTrackShape(horizontalInset: token.spacer16),
+          _TDesignSliderTrackShape(horizontalInset: token.spacer2),
       rangeTrackShape:
           inherited.rangeTrackShape ??
-          _TDesignRangeSliderTrackShape(horizontalInset: token.spacer16),
+          _TDesignRangeSliderTrackShape(horizontalInset: token.spacer2),
     );
   }
   return base.copyWith(
-    trackHeight: token.spacer24,
+    trackHeight: token.spacer3,
     trackShape: _CapsuleSliderTrackShape(
-      horizontalInset: token.spacer16,
-      outerColor: token.bgColorComponent,
+      horizontalInset: token.spacer2,
+      outerColor: base.inactiveTrackColor ?? token.componentBorder,
+      disabledOuterColor: token.bgColorComponent,
       divisions: divisions,
     ),
     rangeTrackShape: _CapsuleRangeSliderTrackShape(
-      horizontalInset: token.spacer16,
-      outerColor: token.bgColorComponent,
+      horizontalInset: token.spacer2,
+      outerColor: base.inactiveTrackColor ?? token.componentBorder,
+      disabledOuterColor: token.bgColorComponent,
       divisions: divisions,
     ),
     tickMarkShape: SliderTickMarkShape.noTickMark,
@@ -161,7 +163,7 @@ Color _disabledThumbLabelColor(BuildContext context) {
   return Theme.of(
         context,
       ).tExplicitColorScheme?.onSurface.withValues(alpha: 0.38) ??
-      context.tTheme.textDisabledColor;
+      context.tTheme.textColorDisabled;
 }
 
 /// 基于 Material [Slider] 的严格受控单值滑块。
@@ -277,7 +279,7 @@ class TSlider extends StatelessWidget {
     final themedSlider = SliderTheme(data: sliderTheme, child: slider);
     final sliderContent = showThumbValue
         ? Padding(
-            padding: EdgeInsets.only(top: context.tTheme.spacer16),
+            padding: EdgeInsets.only(top: context.tTheme.spacer2),
             child: themedSlider,
           )
         : themedSlider;
@@ -415,7 +417,7 @@ class TRangeSlider extends StatelessWidget {
     final themedSlider = SliderTheme(data: sliderTheme, child: slider);
     final sliderContent = showThumbValue
         ? Padding(
-            padding: EdgeInsets.only(top: context.tTheme.spacer16),
+            padding: EdgeInsets.only(top: context.tTheme.spacer2),
             child: themedSlider,
           )
         : themedSlider;
@@ -644,11 +646,13 @@ class _CapsuleSliderTrackShape extends RoundedRectSliderTrackShape {
   const _CapsuleSliderTrackShape({
     required this.horizontalInset,
     required this.outerColor,
+    required this.disabledOuterColor,
     required this.divisions,
   });
 
   final double horizontalInset;
   final Color outerColor;
+  final Color disabledOuterColor;
   final int? divisions;
 
   @override
@@ -705,7 +709,11 @@ class _CapsuleSliderTrackShape extends RoundedRectSliderTrackShape {
     _paintCapsuleSegments(
       context.canvas,
       trackRect: trackRect,
-      outerColor: outerColor,
+      outerColor: Color.lerp(
+        disabledOuterColor,
+        outerColor,
+        enableAnimation.value,
+      )!,
       inactiveColor: inactiveColor,
       activeColor: activeColor,
       activeLeft: textDirection == TextDirection.ltr
@@ -723,11 +731,13 @@ class _CapsuleRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
   const _CapsuleRangeSliderTrackShape({
     required this.horizontalInset,
     required this.outerColor,
+    required this.disabledOuterColor,
     required this.divisions,
   });
 
   final double horizontalInset;
   final Color outerColor;
+  final Color disabledOuterColor;
   final int? divisions;
 
   @override
@@ -785,7 +795,11 @@ class _CapsuleRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
     _paintCapsuleSegments(
       context.canvas,
       trackRect: trackRect,
-      outerColor: outerColor,
+      outerColor: Color.lerp(
+        disabledOuterColor,
+        outerColor,
+        enableAnimation.value,
+      )!,
       inactiveColor: inactiveColor,
       activeColor: activeColor,
       activeLeft: left,
@@ -1117,7 +1131,7 @@ class _SliderWithScaleLabels extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: labels,

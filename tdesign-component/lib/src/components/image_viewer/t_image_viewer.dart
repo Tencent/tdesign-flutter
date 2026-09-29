@@ -247,12 +247,12 @@ class _TImageViewerViewState extends State<_TImageViewerView>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TImageViewerThemeData>();
-    final appBarHeight = context.tTheme.spacer48;
-    final actionSize = context.tTheme.spacer40;
+    final appBarHeight = context.tTheme.spacer5;
+    const actionSize = 40.0;
     final backgroundColor =
         theme?.backgroundColor ??
         Color.alphaBlend(
-          context.tTheme.fontGyColor1,
+          context.tTheme.fontGray1,
           context.tTheme.bgColorContainer,
         );
     return Material(
@@ -311,11 +311,11 @@ class _TImageViewerViewState extends State<_TImageViewerView>
               child: Container(
                 height: appBarHeight,
                 padding: EdgeInsets.symmetric(
-                  horizontal: context.tTheme.spacer8,
+                  horizontal: context.tTheme.spacer,
                 ),
                 color:
                     theme?.appBarBackgroundColor ??
-                    context.tTheme.fontGyColor1.withValues(alpha: 1),
+                    context.tTheme.fontGray1.withValues(alpha: 1),
                 child: Row(
                   children: [
                     SizedBox(
@@ -445,28 +445,27 @@ class _TImageViewerViewState extends State<_TImageViewerView>
   }) {
     final color = theme?.iconColor ?? context.tTheme.textColorAnti;
     final disabledColor =
-        theme?.iconColor?.withValues(alpha: 0.38) ??
-        context.tTheme.fontWhColor4;
+        theme?.iconColor?.withValues(alpha: 0.38) ?? context.tTheme.fontWhite4;
     return ButtonStyle(
       foregroundColor: WidgetStatePropertyAll(enabled ? color : disabledColor),
       backgroundColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       overlayColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.pressed)) {
-          return context.tTheme.fontWhColor4;
+          return context.tTheme.fontWhite4;
         }
         if (states.contains(WidgetState.hovered) ||
             states.contains(WidgetState.focused)) {
-          return context.tTheme.fontWhColor3;
+          return context.tTheme.fontWhite3;
         }
         return Colors.transparent;
       }),
       surfaceTintColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       shadowColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
       elevation: const WidgetStatePropertyAll<double>(0),
-      minimumSize: WidgetStatePropertyAll(Size.square(context.tTheme.spacer40)),
-      maximumSize: WidgetStatePropertyAll(Size.square(context.tTheme.spacer40)),
-      padding: WidgetStatePropertyAll(EdgeInsets.all(context.tTheme.spacer8)),
-      iconSize: WidgetStatePropertyAll(context.tTheme.spacer24),
+      minimumSize: const WidgetStatePropertyAll(Size.square(40.0)),
+      maximumSize: const WidgetStatePropertyAll(Size.square(40.0)),
+      padding: WidgetStatePropertyAll(EdgeInsets.all(context.tTheme.spacer)),
+      iconSize: WidgetStatePropertyAll(context.tTheme.spacer3),
       shape: const WidgetStatePropertyAll(CircleBorder()),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
@@ -555,7 +554,7 @@ class _TImageViewerPageState extends State<_TImageViewerPage>
               errorBuilder: (_, __, ___) => Icon(
                 TIcons.close,
                 key: const ValueKey('image-viewer-error-placeholder'),
-                size: context.tTheme.spacer24,
+                size: context.tTheme.spacer3,
                 color: context.tTheme.textColorAnti,
               ),
             ),

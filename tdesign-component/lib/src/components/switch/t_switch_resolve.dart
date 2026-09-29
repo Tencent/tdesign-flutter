@@ -59,22 +59,22 @@ class TSwitchResolve {
           theme?.trackOnColor ??
           switchTheme.trackColor?.resolve(onStates) ??
           colorScheme?.primary ??
-          token.brandNormalColor,
+          token.brandColor,
       trackOffColor:
           theme?.trackOffColor ??
           switchTheme.trackColor?.resolve(offStates) ??
           colorScheme?.surfaceContainerHighest ??
-          token.textDisabledColor,
+          token.textColorDisabled,
       thumbContentOnColor:
           theme?.thumbContentOnColor ??
           switchTheme.thumbColor?.resolve(onStates) ??
           colorScheme?.onPrimary ??
-          token.brandNormalColor,
+          token.brandColor,
       thumbContentOffColor:
           theme?.thumbContentOffColor ??
           switchTheme.thumbColor?.resolve(offStates) ??
           colorScheme?.onSurfaceVariant ??
-          token.textDisabledColor,
+          token.textColorDisabled,
       thumbContentOnFont:
           theme?.thumbContentOnFont ??
           TextStyle(fontSize: token.fontBodyMedium?.size ?? 14),

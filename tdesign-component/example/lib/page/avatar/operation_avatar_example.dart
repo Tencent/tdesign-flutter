@@ -10,7 +10,6 @@ class OperationAvatarExample extends StatelessWidget {
   /// 带操作的头像组
   Widget _buildOperationAvatar(BuildContext context) {
     return TAvatarGroup(
-      dimension: 48,
       cascading: TAvatarGroupCascading.endUp,
       children: [
         const TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),

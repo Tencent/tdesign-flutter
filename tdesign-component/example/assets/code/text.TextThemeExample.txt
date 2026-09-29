@@ -6,16 +6,13 @@ class TextThemeExample extends StatelessWidget {
 
   Widget _buildTextThemeExample(BuildContext context) {
     return Theme(
-      data: Theme.of(context).copyWith(
-        extensions: [
-          ...Theme.of(context).extensions.values,
-          TTextThemeData(
-            font: context.tTheme.fontTitleLarge,
-            textStyle: TextStyle(color: context.tTheme.brandNormalColor),
-          ),
-        ],
+      data: Theme.of(context).mergeExtension(
+        TTextThemeData(
+          font: context.tTheme.fontTitleLarge,
+          textStyle: TextStyle(color: context.tTheme.brandColor),
+        ),
       ),
-      child: const TText('继承 TTextThemeData 的默认样式'),
+      child: const TText('继承组件主题样式'),
     );
   }
 

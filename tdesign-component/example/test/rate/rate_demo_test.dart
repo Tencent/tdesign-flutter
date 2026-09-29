@@ -134,7 +134,7 @@ void main() {
     expect(verticalContainer.color, verticalContext.tTheme.bgColorContainer);
     expect(
       tester.widget<Text>(find.text('未评分')).style?.color,
-      verticalContext.tTheme.textDisabledColor,
+      verticalContext.tTheme.textColorDisabled,
     );
     final describedTitles = find.text('带描述评分');
     expect(describedTitles, findsNWidgets(4));

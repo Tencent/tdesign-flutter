@@ -8,8 +8,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  Widget app(Widget child, {TAvatarThemeData? avatarTheme}) {
-    var theme = TThemeBuilder.light(TThemeData.defaultData());
+  Widget app(
+    Widget child, {
+    TAvatarThemeData? avatarTheme,
+    TThemeData? tokens,
+  }) {
+    var theme = TThemeBuilder.light(tokens ?? TThemeData.defaultData());
     if (avatarTheme != null) {
       theme = theme.mergeExtension(avatarTheme);
     }
@@ -26,7 +30,7 @@ void main() {
       expect(find.byType(Icon), findsOneWidget);
       expect(tester.getSize(find.byType(ClipRRect)), const Size.square(48));
       final clip = tester.widget<ClipRRect>(find.byType(ClipRRect));
-      expect(clip.borderRadius, BorderRadius.circular(24));
+      expect(clip.borderRadius, BorderRadius.circular(9999));
     });
 
     for (final entry in const {
@@ -55,20 +59,67 @@ void main() {
       expect(clip.borderRadius, BorderRadius.circular(6));
     });
 
-    testWidgets('实例尺寸和形状覆盖 Theme', (tester) async {
+    testWidgets('方形头像默认读取 radiusDefault 和 brandColorLightActive', (
+      tester,
+    ) async {
+      final tokens = TThemeData.defaultData().copyWithTThemeData(
+        'avatar-design-defaults',
+        radiusMap: {'radiusSmall': 3, 'radiusDefault': 9},
+        colorMap: {
+          'brandColorFocus': Colors.red,
+          'brandColorLightActive': Colors.green,
+        },
+      );
+      await tester.pumpWidget(
+        app(const TAvatar(shape: TAvatarShape.square), tokens: tokens),
+      );
+
+      expect(
+        tester.widget<ClipRRect>(find.byType(ClipRRect)).borderRadius,
+        BorderRadius.circular(9),
+      );
+      final background = tester.widget<ColoredBox>(
+        find.descendant(
+          of: find.byType(TAvatar),
+          matching: find.byType(ColoredBox),
+        ),
+      );
+      expect(background.color, Colors.green);
+    });
+
+    testWidgets('圆形头像使用组件 Theme 的圆角', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TAvatar(),
+          avatarTheme: const TAvatarThemeData(circleBorderRadius: 10),
+        ),
+      );
+
+      final clip = tester.widget<ClipRRect>(find.byType(ClipRRect));
+      expect(clip.borderRadius, BorderRadius.circular(10));
+    });
+
+    testWidgets('未指定组件圆角时读取自定义全局 radiusCircle', (tester) async {
+      final tokens =
+          TThemeData.defaultData().copyWith(radiusMap: {'radiusCircle': 7})
+              as TThemeData;
+      await tester.pumpWidget(app(const TAvatar(), tokens: tokens));
+
+      final clip = tester.widget<ClipRRect>(find.byType(ClipRRect));
+      expect(clip.borderRadius, BorderRadius.circular(7));
+    });
+
+    testWidgets('实例尺寸和形状选择预设，Theme 保留具体视觉值', (tester) async {
       await tester.pumpWidget(
         app(
           const TAvatar(size: TAvatarSize.small, shape: TAvatarShape.circle),
-          avatarTheme: const TAvatarThemeData(
-            size: TAvatarSize.large,
-            shape: TAvatarShape.square,
-          ),
+          avatarTheme: const TAvatarThemeData(squareBorderRadius: 6),
         ),
       );
 
       expect(tester.getSize(find.byType(ClipRRect)), const Size.square(40));
       final clip = tester.widget<ClipRRect>(find.byType(ClipRRect));
-      expect(clip.borderRadius, BorderRadius.circular(20));
+      expect(clip.borderRadius, BorderRadius.circular(9999));
     });
 
     testWidgets('Theme 可控制尺寸、图标和颜色', (tester) async {
@@ -106,14 +157,13 @@ void main() {
       expect(find.byType(Icon), findsNothing);
     });
 
-    testWidgets('字符内容按尺寸应用 Semibold 样式和实例颜色', (tester) async {
+    testWidgets('字符内容按尺寸应用 Semibold 样式和 Theme 颜色', (tester) async {
       await tester.pumpWidget(
         app(
-          const TAvatar(
-            size: TAvatarSize.large,
+          const TAvatar(size: TAvatarSize.large, child: Text('A')),
+          avatarTheme: const TAvatarThemeData(
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,
-            child: Text('A'),
           ),
         ),
       );
@@ -139,19 +189,17 @@ void main() {
       );
     });
 
-    testWidgets('实例 foregroundColor 覆盖 Theme 文字颜色', (tester) async {
+    testWidgets('Theme 前景色控制默认文字，child 可单独指定排版', (tester) async {
       await tester.pumpWidget(
         app(
-          const TAvatar(foregroundColor: Colors.white, child: Text('A')),
-          avatarTheme: const TAvatarThemeData(
-            textStyle: TextStyle(color: Colors.red, letterSpacing: 2),
-          ),
+          const TAvatar(child: Text('A', style: TextStyle(letterSpacing: 2))),
+          avatarTheme: const TAvatarThemeData(foregroundColor: Colors.white),
         ),
       );
 
       final style = DefaultTextStyle.of(tester.element(find.text('A'))).style;
       expect(style.color, Colors.white);
-      expect(style.letterSpacing, 2);
+      expect(tester.widget<Text>(find.text('A')).style?.letterSpacing, 2);
     });
 
     testWidgets('shape 优先且不能和旧 variant 同时传入', (tester) async {
@@ -280,11 +328,11 @@ void main() {
       expect(decoration.border!.top.color, Colors.green);
     });
 
-    testWidgets('实例 dimension 控制 44px 外框且覆盖 Theme', (tester) async {
+    testWidgets('Theme dimension 控制 44px 外框', (tester) async {
       await tester.pumpWidget(
         app(
-          const TAvatarGroup(dimension: 44, children: [TAvatar(), TAvatar()]),
-          avatarTheme: const TAvatarThemeData(dimension: 60),
+          const TAvatarGroup(children: [TAvatar(), TAvatar()]),
+          avatarTheme: const TAvatarThemeData(dimension: 44),
         ),
       );
 
@@ -371,13 +419,16 @@ void main() {
           .where((clip) => clip.child is SizedBox)
           .toList();
       expect(memberClips, hasLength(2));
-      expect(memberClips[0].borderRadius, BorderRadius.circular(22));
+      expect(memberClips[0].borderRadius, BorderRadius.circular(9999));
       expect(memberClips[1].borderRadius, BorderRadius.circular(4));
     });
 
     testWidgets('极小尺寸会收敛到安全约束', (tester) async {
       await tester.pumpWidget(
-        app(const TAvatarGroup(dimension: 1, children: [TAvatar(), TAvatar()])),
+        app(
+          const TAvatarGroup(children: [TAvatar(), TAvatar()]),
+          avatarTheme: const TAvatarThemeData(dimension: 1),
+        ),
       );
       expect(tester.takeException(), isNull);
       expect(tester.getSize(find.byType(TAvatarGroup)), const Size(1, 1));
@@ -403,8 +454,6 @@ void main() {
 
   group('TAvatarThemeData', () {
     const first = TAvatarThemeData(
-      size: TAvatarSize.small,
-      shape: TAvatarShape.circle,
       dimension: 40,
       iconSize: 20,
       squareBorderRadius: 4,
@@ -415,8 +464,6 @@ void main() {
       groupBorderColor: Colors.black,
     );
     const second = TAvatarThemeData(
-      size: TAvatarSize.large,
-      shape: TAvatarShape.square,
       dimension: 80,
       iconSize: 40,
       squareBorderRadius: 12,
@@ -428,9 +475,7 @@ void main() {
     );
 
     test('copyWith 保留原值并覆盖指定值', () {
-      final copied = first.copyWith(dimension: 44, shape: TAvatarShape.square);
-      expect(copied.size, TAvatarSize.small);
-      expect(copied.shape, TAvatarShape.square);
+      final copied = first.copyWith(dimension: 44);
       expect(copied.dimension, 44);
       expect(copied.iconSize, 20);
       expect(copied.squareBorderRadius, 4);
@@ -441,7 +486,6 @@ void main() {
       expect(copied.groupBorderColor, Colors.black);
 
       final overridden = first.copyWith(
-        size: TAvatarSize.large,
         iconSize: 30,
         squareBorderRadius: 8,
         backgroundColor: Colors.blue,
@@ -450,7 +494,6 @@ void main() {
         groupBorderWidth: 4,
         groupBorderColor: Colors.white,
       );
-      expect(overridden.size, TAvatarSize.large);
       expect(overridden.iconSize, 30);
       expect(overridden.squareBorderRadius, 8);
       expect(overridden.backgroundColor, Colors.blue);
@@ -460,13 +503,11 @@ void main() {
       expect(overridden.groupBorderColor, Colors.white);
     });
 
-    test('lerp 插值数值和颜色并切换枚举', () {
+    test('lerp 插值数值和颜色', () {
       final early = first.lerp(second, 0.25);
       final late = first.lerp(second, 0.75);
-      expect(early.size, TAvatarSize.small);
-      expect(late.size, TAvatarSize.large);
-      expect(early.shape, TAvatarShape.circle);
-      expect(late.shape, TAvatarShape.square);
+      expect(early.dimension, 50);
+      expect(late.dimension, 70);
       expect(first.lerp(second, 0.5).dimension, 60);
       expect(first.lerp(second, 0.5).iconSize, 30);
       expect(first.lerp(second, 0.5).squareBorderRadius, 8);
@@ -488,7 +529,6 @@ void main() {
         iconSize: 40,
         squareBorderRadius: 10,
         backgroundColor: Colors.red,
-        textStyle: TextStyle(fontSize: 20),
         groupSpacing: 16,
         groupBorderWidth: 4,
       );
@@ -497,7 +537,6 @@ void main() {
       expect(middle.dimension, 64);
       expect(middle.iconSize, 32);
       expect(middle.squareBorderRadius, 8);
-      expect(middle.textStyle?.fontSize, 18);
       expect(middle.groupSpacing, 12);
       expect(middle.groupBorderWidth, 3);
       expect(empty.lerp(explicit, 0.25).backgroundColor, isNull);
@@ -516,7 +555,6 @@ void main() {
       expect(middle.squareBorderRadius, isNull);
       expect(middle.backgroundColor, isNull);
       expect(middle.foregroundColor, isNull);
-      expect(middle.textStyle, isNull);
       expect(middle.groupSpacing, isNull);
       expect(middle.groupBorderWidth, isNull);
       expect(middle.groupBorderColor, isNull);
@@ -544,20 +582,17 @@ void main() {
         () => TAvatarGroup(children: const [], maxCount: 0),
         throwsAssertionError,
       );
-      expect(
-        () => TAvatarGroup(children: const [], dimension: 0),
-        throwsAssertionError,
-      );
+      expect(() => TAvatarThemeData(dimension: 0), throwsAssertionError);
       expect(
         () => TAvatarGroup(children: const [], spacing: -1),
         throwsAssertionError,
       );
       expect(
-        () => TAvatarGroup(children: const [], dimension: 44, spacing: 100),
+        () => TAvatarThemeData(dimension: 44, groupSpacing: 100),
         throwsAssertionError,
       );
       expect(
-        () => TAvatarGroup(children: const [], dimension: double.infinity),
+        () => TAvatarThemeData(dimension: double.infinity),
         throwsAssertionError,
       );
       expect(

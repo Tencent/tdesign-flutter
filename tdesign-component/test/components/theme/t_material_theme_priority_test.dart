@@ -214,7 +214,7 @@ void main() {
     final defaults = await resolve(
       wrap(const TSwitch(value: true, onChanged: _noop)),
     );
-    expect(defaults.$1, token.brandNormalColor);
+    expect(defaults.$1, token.brandColor);
 
     final colorScheme = await resolve(
       wrap(
@@ -264,7 +264,7 @@ void main() {
       await resolve(
         wrap(const TCheckbox(value: true, onChanged: _checkboxNoop)),
       ),
-      TThemeData.defaultData().brandNormalColor,
+      TThemeData.defaultData().brandColor,
     );
     expect(
       await resolve(
@@ -321,7 +321,7 @@ void main() {
 
     final token = TThemeData.defaultData();
     final defaults = await resolve(ThemeData(extensions: [token]));
-    expect(defaults.$1, token.brandNormalColor);
+    expect(defaults.$1, token.brandColor);
 
     final material = await resolve(
       ThemeData(
@@ -371,7 +371,7 @@ void main() {
         const TInput(),
       );
       expect(defaults.style?.color, token.textColorPrimary);
-      expect(defaults.cursorColor, token.brandNormalColor);
+      expect(defaults.cursorColor, token.brandColor);
 
       final colorScheme = await resolve(
         ThemeData(colorScheme: customScheme, extensions: [token]),
@@ -403,7 +403,6 @@ void main() {
             token,
             const TInputThemeData(
               textStyle: TextStyle(color: Colors.green, fontSize: 20),
-              cursorColor: Colors.green,
             ),
           ],
         ),
@@ -411,16 +410,13 @@ void main() {
       );
       expect(component.style?.color, Colors.green);
       expect(component.style?.fontSize, 20);
-      expect(component.cursorColor, Colors.green);
+      expect(component.cursorColor, customScheme.primary);
 
       final instance = await resolve(
         ThemeData(
           extensions: [
             token,
-            const TInputThemeData(
-              textStyle: TextStyle(color: Colors.green),
-              cursorColor: Colors.green,
-            ),
+            const TInputThemeData(textStyle: TextStyle(color: Colors.green)),
           ],
         ),
         const TInput(
@@ -537,32 +533,32 @@ void main() {
 
     expect(
       effectiveTextStyle(tester, 'success link').color,
-      token.successNormalColor,
+      token.successColor,
     );
     expect(
       tester.widget<Text>(find.text('success tag')).style?.color,
-      token.successNormalColor,
+      token.successColor,
     );
     expect(
       tester.widget<Icon>(find.byIcon(TIcons.check_circle)).color,
-      token.successNormalColor,
+      token.successColor,
     );
-    expect(noticeTheme.leftIconColor, token.successNormalColor);
-    expect(noticeTheme.backgroundColor, token.successLightColor);
+    expect(noticeTheme.leftIconColor, token.successColor);
+    expect(noticeTheme.backgroundColor, token.successColorLight);
     expect(
       effectiveTextStyle(tester, 'warning link').color,
-      token.warningNormalColor,
+      token.warningColor,
     );
     expect(
       tester.widget<Text>(find.text('warning tag')).style?.color,
-      token.warningNormalColor,
+      token.warningColor,
     );
     expect(
       tester.widget<Icon>(find.byIcon(TIcons.error_circle)).color,
-      token.warningNormalColor,
+      token.warningColor,
     );
-    expect(warningNoticeTheme.leftIconColor, token.warningNormalColor);
-    expect(warningNoticeTheme.backgroundColor, token.warningLightColor);
+    expect(warningNoticeTheme.leftIconColor, token.warningColor);
+    expect(warningNoticeTheme.backgroundColor, token.warningColorLight);
   });
 }
 

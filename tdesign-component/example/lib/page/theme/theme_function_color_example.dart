@@ -85,7 +85,7 @@ class _ThemeFunctionColorExampleState extends State<ThemeFunctionColorExample> {
         },
       );
     } else {
-      return TText('功能色数量不一样', textColor: context.tTheme.errorNormalColor);
+      return TText('功能色数量不一样', textColor: context.tTheme.errorColor);
     }
   }
 

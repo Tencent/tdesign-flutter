@@ -62,7 +62,7 @@ class TNoticeBar extends StatefulWidget {
   /// 自定义前缀区域。
   ///
   /// 为 null 时根据 [status] 显示默认图标；传入 [SizedBox.shrink] 可隐藏
-  /// 前缀区域。组件统一在非空前缀与正文之间保留 [TSpacers.spacer8] 间距
+  /// 前缀区域。组件统一在非空前缀与正文之间保留 [TSpacers.spacer] 间距
   /// （默认 8 逻辑像素）；自定义 [Icon] 中未显式指定的颜色或尺寸会继承公告栏
   /// 状态色和标准图标尺寸。
   final Widget? prefix;
@@ -467,9 +467,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
           prefix.height == 0 &&
           prefix.child == null;
       return Padding(
-        padding: EdgeInsets.only(
-          right: isHidden ? 0 : context.tTheme.spacer8,
-        ),
+        padding: EdgeInsets.only(right: isHidden ? 0 : context.tTheme.spacer),
         child: _buildCustomTapTarget(
           TNoticeBarTapTarget.prefix,
           IconTheme.merge(
@@ -483,7 +481,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
       );
     }
     return Padding(
-      padding: EdgeInsets.only(right: context.tTheme.spacer8),
+      padding: EdgeInsets.only(right: context.tTheme.spacer),
       child: _buildBuiltInTapTarget(
         TNoticeBarTapTarget.prefix,
         Icon(

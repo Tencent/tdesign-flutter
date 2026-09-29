@@ -229,28 +229,23 @@ void main() {
       final token = TThemeData.defaultData();
       final timeText = tester.widget<Text>(find.text('01'));
       final unitText = tester.widget<Text>(find.text('时'));
-      expect(timeText.style?.color, token.errorNormalColor);
-      expect(timeText.style?.fontSize, token.fontBodyExtraLarge?.size);
-      expect(timeText.style?.height, 24 / token.fontBodyExtraLarge!.size);
+      expect(timeText.style?.color, token.errorColor);
+      expect(timeText.style?.fontSize, 18);
+      expect(timeText.style?.height, 24 / 18);
       expect(unitText.style?.color, token.textColorPrimary);
       expect(unitText.style?.fontSize, token.fontBodyExtraSmall?.size);
       expect(unitText.style?.height, token.fontBodyExtraSmall?.height);
       expect(tester.getSize(find.text('01')).height, 24);
     });
 
-    testWidgets('highlight 响应 TDesign 颜色和字体 token', (tester) async {
+    testWidgets('highlight 响应全局语义色和仍存在的字体 token', (tester) async {
       final token = TThemeData.defaultData().copyWithTThemeData(
         'time-counter-highlight-test',
         colorMap: {
-          'errorNormalColor': Colors.purple,
+          'errorColor': Colors.purple,
           'textColorPrimary': Colors.green,
         },
         fontMap: {
-          'fontBodyExtraLarge': Font(
-            size: 19,
-            lineHeight: 27,
-            fontWeight: FontWeight.w700,
-          ),
           'fontBodyExtraSmall': Font(
             size: 11,
             lineHeight: 17,
@@ -275,9 +270,9 @@ void main() {
       final timeText = tester.widget<Text>(find.text('05'));
       final unitText = tester.widget<Text>(find.text('秒'));
       expect(timeText.style?.color, Colors.purple);
-      expect(timeText.style?.fontSize, 19);
-      expect(timeText.style?.height, 24 / 19);
-      expect(timeText.style?.fontWeight, FontWeight.w700);
+      expect(timeText.style?.fontSize, 18);
+      expect(timeText.style?.height, 24 / 18);
+      expect(timeText.style?.fontWeight, FontWeight.w400);
       expect(unitText.style?.color, Colors.green);
       expect(unitText.style?.fontSize, 11);
       expect(unitText.style?.height, 17 / 11);
@@ -314,50 +309,106 @@ void main() {
       final splitText = tester.widget<Text>(find.text(':').first);
 
       expect(tester.getSize(find.byWidget(timeBox)), const Size(24, 24));
-      expect(decoration.shape, BoxShape.circle);
-      expect(decoration.color, token.errorNormalColor);
+      expect(decoration.shape, BoxShape.rectangle);
+      expect(
+        decoration.borderRadius,
+        BorderRadius.circular(token.radiusCircle),
+      );
+      expect(decoration.color, token.errorColor);
       expect(timeText.style?.fontSize, token.fontBodyMedium?.size);
       expect(timeText.style?.color, token.textColorAnti);
-      expect(splitText.style?.color, token.errorNormalColor);
+      expect(splitText.style?.color, token.errorColor);
     });
   });
 
   // ============================================================
-  // Theme 覆盖（TTimeCounterThemeData）
+  // 规格选择与具体视觉 Theme 覆盖
   // ============================================================
   group('TTimeCounter Theme 覆盖', () {
-    testWidgets('TTimeCounterThemeData 注入后正常渲染', (tester) async {
+    testWidgets('实例选择规格，Theme 覆盖数字块颜色与圆角', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const Center(child: TTimeCounter(time: 5000, autoStart: false)),
+          const Center(
+            child: TTimeCounter(
+              time: 5000,
+              autoStart: false,
+              size: TTimeCounterSize.large,
+              variant: TTimeCounterVariant.round,
+            ),
+          ),
           timeCounterTheme: const TTimeCounterThemeData(
-            defaultSize: TTimeCounterSize.large,
-            defaultVariant: TTimeCounterVariant.round,
+            blockBackgroundColor: Colors.blue,
+            blockTextColor: Colors.white,
+            roundBorderRadius: 8,
           ),
         ),
       );
-      expect(find.byType(TTimeCounter), findsOneWidget);
+      final box = tester.widget<Container>(
+        find
+            .ancestor(
+              of: find.text('05'),
+              matching: find.byWidgetPredicate(
+                (widget) =>
+                    widget is Container && widget.decoration is BoxDecoration,
+              ),
+            )
+            .first,
+      );
+      final decoration = box.decoration! as BoxDecoration;
+      expect(tester.getSize(find.byWidget(box)), const Size(28, 28));
+      expect(decoration.color, Colors.blue);
+      expect(decoration.borderRadius, BorderRadius.circular(8));
+      expect(tester.widget<Text>(find.text('05')).style?.color, Colors.white);
+    });
+
+    testWidgets('圆块读取自定义全局 radiusCircle，不被固定 circle 形状遮蔽', (tester) async {
+      final token =
+          TThemeData.defaultData().copyWith(radiusMap: {'radiusCircle': 6})
+              as TThemeData;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TTimeCounter(
+            time: 5000,
+            autoStart: false,
+            variant: TTimeCounterVariant.round,
+          ),
+          token: token,
+        ),
+      );
+      final box = tester.widget<Container>(
+        find
+            .ancestor(
+              of: find.text('05'),
+              matching: find.byWidgetPredicate(
+                (widget) =>
+                    widget is Container && widget.decoration is BoxDecoration,
+              ),
+            )
+            .first,
+      );
+      expect(
+        (box.decoration! as BoxDecoration).borderRadius,
+        BorderRadius.circular(6),
+      );
     });
 
     test('TTimeCounterThemeData copyWith and lerp', () {
       const a = TTimeCounterThemeData(
-        defaultVariant: TTimeCounterVariant.round,
-        defaultSize: TTimeCounterSize.small,
+        defaultTextColor: Colors.red,
+        blockTextColor: Colors.white,
+        roundBorderRadius: 8,
       );
       const b = TTimeCounterThemeData(
-        defaultVariant: TTimeCounterVariant.square,
-        defaultSize: TTimeCounterSize.large,
+        defaultTextColor: Colors.blue,
+        blockTextColor: Colors.black,
+        roundBorderRadius: 12,
       );
 
-      expect(
-        a.copyWith(defaultSize: TTimeCounterSize.medium).defaultSize,
-        TTimeCounterSize.medium,
-      );
-      expect(a.copyWith().defaultVariant, TTimeCounterVariant.round);
-      expect(a.lerp(b, 0.25).defaultVariant, TTimeCounterVariant.round);
-      expect(a.lerp(b, 0.75).defaultSize, TTimeCounterSize.large);
-      expect(a.lerp(null, 0.5).defaultVariant, a.defaultVariant);
-      expect(a.lerp(null, 0.5).defaultSize, a.defaultSize);
+      expect(a.copyWith(roundBorderRadius: 10).roundBorderRadius, 10);
+      expect(a.copyWith().blockTextColor, Colors.white);
+      expect(a.lerp(b, 0.25).roundBorderRadius, 9);
+      expect(a.lerp(b, 0.75).blockTextColor, isNotNull);
+      expect(a.lerp(null, 0.5), same(a));
     });
   });
 
@@ -420,12 +471,15 @@ void main() {
         expect(timeBoxes, findsNWidgets(3));
         for (final box in tester.widgetList<Container>(timeBoxes)) {
           final decoration = box.decoration! as BoxDecoration;
-          expect(decoration.color, token.errorNormalColor);
+          expect(decoration.color, token.errorColor);
+          expect(decoration.shape, BoxShape.rectangle);
           expect(
-            decoration.shape,
-            variant == TTimeCounterVariant.round
-                ? BoxShape.circle
-                : BoxShape.rectangle,
+            decoration.borderRadius,
+            BorderRadius.circular(
+              variant == TTimeCounterVariant.round
+                  ? token.radiusCircle
+                  : token.radiusSmall,
+            ),
           );
         }
         expect(

@@ -27,19 +27,27 @@ class PaginationPlacementSwiperExample extends StatelessWidget {
     required TSwiperPaginationPlacement placement,
     AlignmentGeometry? alignment,
   }) {
-    return SizedBox(
-      height: placement == TSwiperPaginationPlacement.outside ? 208 : 192,
-      child: TSwiper(
-        loop: true,
-        pagination: TSwiperPaginationVariant.dots,
-        paginationPlacement: placement,
-        paginationAlignment: alignment,
-        children: List.generate(
-          6,
-          (index) => Image.asset(
-            index.isEven ? 'assets/img/swiper1.png' : 'assets/img/swiper2.png',
-            fit: BoxFit.cover,
-            semanticLabel: '图片 ${index + 1}',
+    return Builder(
+      builder: (context) => Theme(
+        data: Theme.of(
+          context,
+        ).mergeExtension(TSwiperThemeData(paginationAlignment: alignment)),
+        child: SizedBox(
+          height: placement == TSwiperPaginationPlacement.outside ? 208 : 192,
+          child: TSwiper(
+            loop: true,
+            pagination: TSwiperPaginationVariant.dots,
+            paginationPlacement: placement,
+            children: List.generate(
+              6,
+              (index) => Image.asset(
+                index.isEven
+                    ? 'assets/img/swiper1.png'
+                    : 'assets/img/swiper2.png',
+                fit: BoxFit.cover,
+                semanticLabel: '图片 ${index + 1}',
+              ),
+            ),
           ),
         ),
       ),

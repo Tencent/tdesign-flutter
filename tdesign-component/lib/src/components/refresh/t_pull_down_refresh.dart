@@ -461,7 +461,7 @@ class _TPullDownRefreshHeader extends Header {
           // 字段，避免把 Refresh 的上下文默认值扩散到独立 Loading 或其他组件。
           textColor:
               inheritedLoadingTheme?.textColor ??
-              context.tTheme.textDisabledColor,
+              context.tTheme.textColorDisabled,
         );
     String text;
     if (showLoading) {

@@ -17,9 +17,9 @@ class IconFromNameExample extends StatelessWidget {
       children: [
         TIcon.fromName('home_filled'),
         const SizedBox(width: 16),
-        TIcon.fromName('heart_filled', color: context.tTheme.errorNormalColor),
+        TIcon.fromName('heart_filled', color: context.tTheme.errorColor),
         const SizedBox(width: 16),
-        TIcon.fromName('star_filled', color: context.tTheme.warningNormalColor),
+        TIcon.fromName('star_filled', color: context.tTheme.warningColor),
       ],
     );
   }

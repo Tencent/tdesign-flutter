@@ -203,7 +203,7 @@ class _TSkeletonState extends State<TSkeleton> with TickerProviderStateMixin {
     final layout = _effectiveLayout(context);
     final theme = Theme.of(context).extension<TSkeletonThemeData>();
     final rowSpacing =
-        layout.rowSpacing ?? theme?.rowSpacing ?? context.tTheme.spacer16;
+        layout.rowSpacing ?? theme?.rowSpacing ?? context.tTheme.spacer2;
     final rows = <Widget>[];
     for (final row in layout.rows) {
       rows.add(
@@ -242,7 +242,7 @@ class _TSkeletonState extends State<TSkeleton> with TickerProviderStateMixin {
         switch (block.style.shape) {
           TSkeletonBlockShape.rounded =>
             theme?.borderRadius ?? context.tTheme.radiusSmall,
-          TSkeletonBlockShape.circle => (block.height ?? block.width ?? 0) / 2,
+          TSkeletonBlockShape.circle => context.tTheme.radiusCircle,
           TSkeletonBlockShape.rectangle => 0,
         };
     final blockColor = block.isSpacer
@@ -257,7 +257,7 @@ class _TSkeletonState extends State<TSkeleton> with TickerProviderStateMixin {
         widget.animation == TSkeletonAnimation.flashed && !block.isSpacer
         ? Color.lerp(
             blockColor,
-            context.tTheme.componentStrokeColor.withValues(alpha: .3),
+            context.tTheme.componentStroke.withValues(alpha: .3),
             flashedProgress,
           )
         : blockColor;

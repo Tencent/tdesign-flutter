@@ -2,18 +2,10 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
-import 't_switch_types.dart';
-
 /// TSwitch 组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树默认样式。
 class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
-  /// Widget 未指定尺寸时使用的默认尺寸。
-  final TSwitchSize? defaultSize;
-
-  /// Widget 未指定形态时使用的默认形态。
-  final TSwitchVariant? defaultVariant;
-
   /// 开启时轨道颜色
   final Color? trackOnColor;
 
@@ -33,12 +25,6 @@ class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
   final TextStyle? thumbContentOffFont;
 
   const TSwitchThemeData({
-    /// 默认尺寸。
-    this.defaultSize,
-
-    /// 默认内容形态。
-    this.defaultVariant,
-
     /// 开启态轨道颜色。
     this.trackOnColor,
 
@@ -60,8 +46,6 @@ class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
 
   @override
   TSwitchThemeData copyWith({
-    TSwitchSize? defaultSize,
-    TSwitchVariant? defaultVariant,
     Color? trackOnColor,
     Color? trackOffColor,
     Color? thumbContentOnColor,
@@ -70,8 +54,6 @@ class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
     TextStyle? thumbContentOffFont,
   }) {
     return TSwitchThemeData(
-      defaultSize: defaultSize ?? this.defaultSize,
-      defaultVariant: defaultVariant ?? this.defaultVariant,
       trackOnColor: trackOnColor ?? this.trackOnColor,
       trackOffColor: trackOffColor ?? this.trackOffColor,
       thumbContentOnColor: thumbContentOnColor ?? this.thumbContentOnColor,
@@ -93,8 +75,6 @@ class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
       return other;
     }
     return TSwitchThemeData(
-      defaultSize: t <= 0.5 ? defaultSize : other.defaultSize,
-      defaultVariant: t <= 0.5 ? defaultVariant : other.defaultVariant,
       trackOnColor: Color.lerp(trackOnColor, other.trackOnColor, t),
       trackOffColor: Color.lerp(trackOffColor, other.trackOffColor, t),
       thumbContentOnColor: Color.lerp(

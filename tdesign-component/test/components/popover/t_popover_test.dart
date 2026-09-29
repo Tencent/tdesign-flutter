@@ -10,8 +10,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 覆盖 TPopoverColorScheme、TPopoverPlacement、内容渲染、箭头、回调等。
 void main() {
   /// 构建带主题的测试壳
-  Widget wrapWithTheme(Widget child, {TPopoverThemeData? popoverTheme}) {
-    var theme = TThemeBuilder.light(TThemeData.defaultData());
+  Widget wrapWithTheme(
+    Widget child, {
+    TPopoverThemeData? popoverTheme,
+    TThemeData? tokens,
+  }) {
+    var theme = TThemeBuilder.light(tokens ?? TThemeData.defaultData());
     if (popoverTheme != null) {
       theme = theme.mergeExtension(popoverTheme);
     }
@@ -125,6 +129,48 @@ void main() {
       );
       final decoration = container.decoration! as BoxDecoration;
       expect(decoration.color, token.grayColor14);
+    });
+
+    testWidgets('圆角未配置时跟随全局 Token，组件 Theme 可以覆盖', (tester) async {
+      final tokens =
+          TThemeData.defaultData().copyWith(radiusMap: {'radiusDefault': 7})
+              as TThemeData;
+      const content = Center(child: Text('圆角 Token'));
+
+      Widget subject() => Builder(
+        builder: (context) => Center(
+          child: TPopoverWidget(context: context, content: content),
+        ),
+      );
+
+      await tester.pumpWidget(wrapWithTheme(subject(), tokens: tokens));
+      var decoration =
+          tester
+                  .widget<Container>(
+                    find.byKey(const Key('t-popover-content')),
+                  )
+                  .decoration!
+              as BoxDecoration;
+      expect(decoration.borderRadius, BorderRadius.circular(7));
+
+      await tester.pumpWidget(
+        wrapWithTheme(
+          subject(),
+          tokens: tokens,
+          popoverTheme: const TPopoverThemeData(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      decoration =
+          tester
+                  .widget<Container>(
+                    find.byKey(const Key('t-popover-content')),
+                  )
+                  .decoration!
+              as BoxDecoration;
+      expect(decoration.borderRadius, BorderRadius.circular(16));
     });
 
     testWidgets('主题 backgroundColor 覆盖语义色的背景 token', (tester) async {
@@ -598,7 +644,7 @@ void main() {
           ),
           popoverTheme: const TPopoverThemeData(
             padding: EdgeInsets.all(10),
-            borderRadius: 20,
+            borderRadius: BorderRadius.all(Radius.circular(20)),
             arrowSize: 16,
           ),
         ),
@@ -1418,6 +1464,9 @@ void main() {
               },
             ),
           ),
+          popoverTheme: const TPopoverThemeData(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
         ),
       );
 
@@ -1431,7 +1480,6 @@ void main() {
           width: 180,
           height: 150,
           placement: TPopoverPlacement.top,
-          radius: BorderRadius.circular(20),
         ),
       );
       await tester.pumpAndSettle();
@@ -1524,7 +1572,10 @@ void main() {
           ),
           popoverTheme: const TPopoverThemeData(
             backgroundColor: Colors.black,
-            borderRadius: 8,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              bottomRight: Radius.circular(16),
+            ),
             arrowSize: 10,
             minWidth: 50,
             maxHeight: 200,
@@ -1554,18 +1605,27 @@ void main() {
         (themedContainer.decoration! as BoxDecoration).boxShadow?.first.color,
         Colors.purple,
       );
+      expect(
+        (themedContainer.decoration! as BoxDecoration).borderRadius,
+        const BorderRadius.only(
+          topLeft: Radius.circular(8),
+          bottomRight: Radius.circular(16),
+        ),
+      );
     });
 
     test('TPopoverThemeData merge 合并', () {
       const base = TPopoverThemeData(
         backgroundColor: Colors.white,
-        borderRadius: 4,
+        borderRadius: BorderRadius.all(Radius.circular(4)),
         boxShadow: [BoxShadow(color: Colors.black)],
       );
-      const override = TPopoverThemeData(borderRadius: 8);
+      const override = TPopoverThemeData(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      );
       final merged = base.merge(override);
       expect(merged.backgroundColor, Colors.white);
-      expect(merged.borderRadius, 8);
+      expect(merged.borderRadius, BorderRadius.circular(8));
       expect(merged.boxShadow, base.boxShadow);
     });
 
@@ -1600,10 +1660,9 @@ void main() {
         minWidth: 80,
         maxWidth: 240,
         maxHeight: 160,
-        borderRadius: 12,
+        borderRadius: BorderRadius.all(Radius.circular(12)),
         barrierColor: Colors.black54,
         arrowSize: 10,
-        showArrow: false,
         offset: 6,
         boxShadow: [BoxShadow(color: Colors.black)],
       );
@@ -1617,7 +1676,6 @@ void main() {
       expect(beforeMidpoint.borderRadius, isNull);
       expect(beforeMidpoint.barrierColor, isNull);
       expect(beforeMidpoint.arrowSize, isNull);
-      expect(beforeMidpoint.showArrow, isNull);
       expect(beforeMidpoint.offset, isNull);
       expect(beforeMidpoint.boxShadow, isNull);
 
@@ -1627,10 +1685,9 @@ void main() {
       expect(afterMidpoint.minWidth, 80);
       expect(afterMidpoint.maxWidth, 240);
       expect(afterMidpoint.maxHeight, 160);
-      expect(afterMidpoint.borderRadius, 12);
+      expect(afterMidpoint.borderRadius, BorderRadius.circular(12));
       expect(afterMidpoint.barrierColor, Colors.black54);
       expect(afterMidpoint.arrowSize, 10);
-      expect(afterMidpoint.showArrow, isFalse);
       expect(afterMidpoint.offset, 6);
       expect(afterMidpoint.boxShadow, explicit.boxShadow);
 
@@ -1646,12 +1703,14 @@ void main() {
         backgroundColor: Colors.black,
         padding: EdgeInsets.all(8),
         maxWidth: 100,
+        borderRadius: BorderRadius.all(Radius.circular(4)),
         arrowSize: 4,
       );
       const end = TPopoverThemeData(
         backgroundColor: Colors.white,
         padding: EdgeInsets.all(16),
         maxWidth: 200,
+        borderRadius: BorderRadius.all(Radius.circular(12)),
         arrowSize: 12,
       );
 
@@ -1662,6 +1721,7 @@ void main() {
       );
       expect(midpoint.padding, const EdgeInsets.all(12));
       expect(midpoint.maxWidth, 150);
+      expect(midpoint.borderRadius, BorderRadius.circular(8));
       expect(midpoint.arrowSize, 8);
     });
   });

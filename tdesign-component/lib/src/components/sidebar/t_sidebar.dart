@@ -38,19 +38,13 @@ class TSideBar extends StatefulWidget {
   const TSideBar({
     Key? key,
     required this.value,
-    this.selectedColor,
     this.children = const [],
     this.onChanged,
     this.height,
-    this.contentPadding,
-    this.selectedTextStyle,
     this.variant = TSideBarVariant.line,
     this.width = 103,
     this.loading = false,
     this.loadingWidget,
-    this.selectedBgColor,
-    this.unSelectedBgColor,
-    this.unSelectedColor,
   }) : assert(width > 0),
        assert(height == null || height >= 0),
        super(key: key);
@@ -64,16 +58,6 @@ class TSideBar extends StatefulWidget {
   /// 选中值变化回调；为 null 时禁用整栏。
   final ValueChanged<int>? onChanged;
 
-  /// 选中文字、图标与指示线颜色；优先于组件 Theme，同层 selectedTextStyle.color 优先。
-  final Color? selectedColor;
-
-  /// 未选中颜色（优先级高于 ThemeData）。
-  final Color? unSelectedColor;
-
-  /// 选中文字样式；按 TextStyle.merge 合并组件 Theme，实例显式字段优先。
-  /// 未指定颜色时依次回退实例 selectedColor、组件 Theme 的文字颜色与 selectedColor、品牌色 Token。
-  final TextStyle? selectedTextStyle;
-
   /// 展示变体；属于组件实例的结构状态，不从 Theme 读取。
   final TSideBarVariant variant;
 
@@ -83,20 +67,11 @@ class TSideBar extends StatefulWidget {
   /// 高度；未设置时占满当前可用屏幕高度，不从 Theme 读取。
   final double? height;
 
-  /// 自定义文本框内边距（优先级高于 ThemeData）。
-  final EdgeInsetsGeometry? contentPadding;
-
   /// 是否展示加载态。
   final bool loading;
 
   /// 自定义加载态内容。
   final Widget? loadingWidget;
-
-  /// 选择的背景颜色（优先级高于 ThemeData）。
-  final Color? selectedBgColor;
-
-  /// 未选择的背景颜色（优先级高于 ThemeData）。
-  final Color? unSelectedBgColor;
 
   @override
   State<TSideBar> createState() => _TSideBarState();
@@ -222,14 +197,8 @@ class _TSideBarState extends State<TSideBar> {
   @override
   Widget build(BuildContext context) {
     final theme = _resolveTheme();
-    final selectedColor =
-        widget.selectedTextStyle?.color ??
-        widget.selectedColor ??
-        theme.selectedTextStyle?.color ??
-        theme.selectedColor;
-    final selectedTextStyle = theme.selectedTextStyle == null
-        ? widget.selectedTextStyle
-        : theme.selectedTextStyle!.merge(widget.selectedTextStyle);
+    final selectedColor = theme.selectedTextStyle?.color ?? theme.selectedColor;
+    final selectedTextStyle = theme.selectedTextStyle;
     if (widget.loading) {
       if (widget.loadingWidget != null) {
         return widget.loadingWidget!;
@@ -267,21 +236,18 @@ class _TSideBarState extends State<TSideBar> {
               textStyle: ele.textStyle,
               selected: currentIndex == ele.index,
               selectedColor: selectedColor,
-              unSelectedColor: widget.unSelectedColor ?? theme.unSelectedColor,
+              unSelectedColor: theme.unSelectedColor,
               selectedTextStyle: selectedTextStyle?.copyWith(
                 color: selectedColor,
               ),
-              contentPadding: widget.contentPadding ?? theme.contentPadding,
+              contentPadding: theme.contentPadding,
               topAdjacent:
                   currentIndex != null && currentIndex! + 1 == ele.index,
               bottomAdjacent:
                   currentIndex != null && currentIndex! - 1 == ele.index,
               selectedBgColor:
-                  widget.selectedBgColor ??
-                  theme.selectedBgColor ??
-                  context.tTheme.bgColorContainer,
+                  theme.selectedBgColor ?? context.tTheme.bgColorContainer,
               unSelectedBgColor:
-                  widget.unSelectedBgColor ??
                   theme.unSelectedBgColor ??
                   context.tTheme.bgColorSecondaryContainer,
               onTap: widget.onChanged == null ? null : () => onSelect(ele),

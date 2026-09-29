@@ -110,7 +110,7 @@ void main() {
     final themeData = TThemeData.defaultData();
     expect(
       tester.widget<Scaffold>(find.byType(Scaffold)).backgroundColor,
-      themeData.bgColorPage,
+      themeData.bgColorSecondaryContainer,
     );
     expect(find.text('用于各个类别行的信息展示。'), findsOneWidget);
     expect(find.text('01 组件类型'), findsOneWidget);
@@ -191,10 +191,7 @@ void main() {
       final boundary = tester.renderObject<RenderRepaintBoundary>(demo);
       final image = await boundary.toImage(pixelRatio: 2);
       addTearDown(image.dispose);
-      await expectLater(
-        image,
-        matchesGoldenFile('goldens/${golden.value}'),
-      );
+      await expectLater(image, matchesGoldenFile('goldens/${golden.value}'));
     }, tags: 'golden');
   }
 }

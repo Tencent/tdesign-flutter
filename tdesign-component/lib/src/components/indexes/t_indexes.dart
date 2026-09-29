@@ -21,7 +21,6 @@ class TIndexes extends StatefulWidget {
     Key? key,
     this.indexList,
     this.initialIndex,
-    this.indexListMaxHeight,
     this.useSafeArea = false,
     this.sticky = true,
     this.stickyOffset = 0,
@@ -33,12 +32,7 @@ class TIndexes extends StatefulWidget {
     required this.builderContent,
     this.builderAnchor,
     this.builderIndex,
-  }) : assert(
-         indexListMaxHeight == null ||
-             indexListMaxHeight > 0 && indexListMaxHeight <= 1,
-         'indexListMaxHeight must be greater than 0 and no greater than 1.',
-       ),
-       super(key: key);
+  }) : super(key: key);
 
   /// 索引字符列表。不传默认 A-Z；默认值要求 [builderContent] 能处理 A-Z 全部索引，自定义数据建议显式传入。
   ///
@@ -49,9 +43,6 @@ class TIndexes extends StatefulWidget {
   ///
   /// 仅在组件首次创建时生效；后续活动索引由滚动位置派生。
   final String? initialIndex;
-
-  /// 索引列表最大高度（父容器高度的百分比，默认 0.8）
-  final double? indexListMaxHeight;
 
   /// 是否避让系统安全区，默认 false。
   ///
@@ -225,8 +216,7 @@ class _TIndexesState extends State<TIndexes> {
             _notifyChange(newIndex);
             _scrollToTarget(newIndex, oldIndex);
           },
-          indexListMaxHeight:
-              widget.indexListMaxHeight ?? theme.indexListMaxHeight ?? 0.8,
+          indexListMaxHeight: theme.indexListMaxHeight ?? 0.8,
           builderIndex: widget.builderIndex,
         ),
       ],
@@ -248,7 +238,7 @@ class _TIndexesState extends State<TIndexes> {
       return SliverStickyHeader.builder(
         sticky: sticky,
         pinnedOffset: isPinnedOffset
-            ? context.tTheme.spacer8 + stickyOffset
+            ? context.tTheme.spacer + stickyOffset
             : stickyOffset,
         builder: (context, state) {
           _anchorKeys[e] = context;
@@ -275,7 +265,7 @@ class _TIndexesState extends State<TIndexes> {
               _contentKeys[e] = context;
               return Padding(
                 padding: isPinnedOffset
-                    ? EdgeInsets.only(top: context.tTheme.spacer8)
+                    ? EdgeInsets.only(top: context.tTheme.spacer)
                     : EdgeInsets.zero,
                 child: widget.builderContent(context, e),
               );

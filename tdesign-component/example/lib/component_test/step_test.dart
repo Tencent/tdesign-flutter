@@ -44,7 +44,7 @@ class TestPage extends StatelessWidget {
               '今天是星期六，下面是拍摄的照片',
               style: TextStyle(
                 fontWeight: FontWeight.w400,
-                color: context.tTheme.fontGyColor3,
+                color: context.tTheme.fontGray3,
                 fontSize: 12,
               ),
             ),

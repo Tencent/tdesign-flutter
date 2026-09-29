@@ -120,8 +120,8 @@ class TUpload extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: Wrap(
-        spacing: theme?.spacing ?? context.tTheme.spacer8,
-        runSpacing: theme?.runSpacing ?? context.tTheme.spacer8,
+        spacing: theme?.spacing ?? context.tTheme.spacer,
+        runSpacing: theme?.runSpacing ?? context.tTheme.spacer,
         alignment: theme?.alignment ?? WrapAlignment.start,
         children: [
           for (var index = 0; index < files.length; index++)
@@ -155,7 +155,7 @@ class TUpload extends StatelessWidget {
         return Column(
           children: [
             for (var index = 0; index < children.length; index++) ...[
-              if (index > 0) SizedBox(height: context.tTheme.spacer12),
+              if (index > 0) SizedBox(height: context.tTheme.spacer1),
               children[index],
             ],
           ],
@@ -208,7 +208,7 @@ class TUpload extends StatelessWidget {
               context.tTheme.bgColorComponentDisabled);
     final foregroundColor = _enabled
         ? (theme?.foregroundColor ?? context.tTheme.textColorPlaceholder)
-        : (theme?.disabledForegroundColor ?? context.tTheme.textDisabledColor);
+        : (theme?.disabledForegroundColor ?? context.tTheme.textColorDisabled);
     return Semantics(
       button: true,
       enabled: _enabled,
@@ -278,7 +278,7 @@ class TUpload extends StatelessWidget {
                     decoration: BoxDecoration(
                       color:
                           theme?.removeButtonColor ??
-                          context.tTheme.textDisabledColor,
+                          context.tTheme.textColorDisabled,
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(
                           _borderRadius(context, theme).topRight.x,
@@ -329,8 +329,8 @@ class TUpload extends StatelessWidget {
       color: theme?.backgroundColor ?? context.tTheme.bgColorSecondaryContainer,
       child: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: context.tTheme.spacer8,
-          horizontal: context.tTheme.spacer4,
+          vertical: context.tTheme.spacer,
+          horizontal: 4.0,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -340,7 +340,7 @@ class TUpload extends StatelessWidget {
               size: 24,
               color: _fileIconColor(context, file.name),
             ),
-            SizedBox(height: context.tTheme.spacer4),
+            const SizedBox(height: 4.0),
             Text(
               file.name,
               maxLines: 1,
@@ -350,7 +350,7 @@ class TUpload extends StatelessWidget {
                 context.tTheme.fontBodySmall,
                 _enabled
                     ? context.tTheme.textColorSecondary
-                    : context.tTheme.textDisabledColor,
+                    : context.tTheme.textColorDisabled,
               ),
             ),
           ],
@@ -373,7 +373,7 @@ class TUpload extends StatelessWidget {
     return theme?.disabledMaskColor ??
         (Theme.of(context).brightness == Brightness.light
             ? context.tTheme.textColorAnti.withValues(alpha: 0.6)
-            : context.tTheme.fontGyColor1.withValues(alpha: 0.6));
+            : context.tTheme.fontGray1.withValues(alpha: 0.6));
   }
 
   Widget _statusOverlay(
@@ -395,7 +395,7 @@ class TUpload extends StatelessWidget {
       key: ValueKey('upload-status-${file.id}'),
       onTap: _enabled && onFileTap != null ? () => onFileTap!(file) : null,
       child: ColoredBox(
-        color: theme?.overlayColor ?? context.tTheme.fontGyColor3,
+        color: theme?.overlayColor ?? context.tTheme.fontGray3,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -487,8 +487,8 @@ class TUpload extends StatelessWidget {
           value: file.progress,
           strokeWidth: 2,
           color: _enabled
-              ? context.tTheme.brandNormalColor
-              : context.tTheme.brandDisabledColor,
+              ? context.tTheme.brandColor
+              : context.tTheme.brandColorDisabled,
         ),
       );
     }
@@ -497,8 +497,8 @@ class TUpload extends StatelessWidget {
         TIcons.error_circle_filled,
         size: 24,
         color: _enabled
-            ? context.tTheme.errorNormalColor
-            : context.tTheme.errorDisabledColor,
+            ? context.tTheme.errorColor
+            : context.tTheme.errorColorDisabled,
       );
     }
     if (file.status == TUploadFileStatus.retryableError) {
@@ -506,8 +506,8 @@ class TUpload extends StatelessWidget {
         TIcons.refresh,
         size: 24,
         color: _enabled
-            ? context.tTheme.errorNormalColor
-            : context.tTheme.errorDisabledColor,
+            ? context.tTheme.errorColor
+            : context.tTheme.errorColorDisabled,
       );
     }
     if (file.bytes != null || file.url != null) {
@@ -578,13 +578,13 @@ class TUpload extends StatelessWidget {
   }) {
     final token = context.tTheme;
     final titleColor = !_enabled
-        ? token.textDisabledColor
+        ? token.textColorDisabled
         : isFailure
-        ? token.errorNormalColor
+        ? token.errorColor
         : token.textColorPrimary;
     final subtitleColor = _enabled
         ? token.textColorPlaceholder
-        : token.textDisabledColor;
+        : token.textColorDisabled;
     return GestureDetector(
       key: key,
       onTap: onTap,
@@ -594,13 +594,13 @@ class TUpload extends StatelessWidget {
           borderRadius: BorderRadius.circular(token.radiusDefault),
         ),
         padding: EdgeInsets.symmetric(
-          vertical: token.spacer8,
-          horizontal: token.spacer12,
+          vertical: token.spacer,
+          horizontal: token.spacer1,
         ),
         child: Row(
           children: [
             SizedBox.square(dimension: 24, child: Center(child: leading)),
-            SizedBox(width: token.spacer12),
+            SizedBox(width: token.spacer1),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -611,7 +611,7 @@ class TUpload extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: _fontStyle(token.fontBodyMedium, titleColor),
                   ),
-                  SizedBox(height: token.spacer4),
+                  const SizedBox(height: 4.0),
                   Text(
                     subtitle,
                     maxLines: 1,
@@ -621,10 +621,7 @@ class TUpload extends StatelessWidget {
                 ],
               ),
             ),
-            if (trailing != null) ...[
-              SizedBox(width: token.spacer12),
-              trailing,
-            ],
+            if (trailing != null) ...[SizedBox(width: token.spacer1), trailing],
           ],
         ),
       ),
@@ -647,18 +644,18 @@ class TUpload extends StatelessWidget {
     final token = context.tTheme;
     if (!_enabled) {
       return switch (extension) {
-        'pdf' || 'mp4' || 'mov' => token.errorDisabledColor,
-        'xls' || 'xlsx' || 'csv' => token.successDisabledColor,
-        'doc' || 'docx' => token.brandDisabledColor,
-        'ppt' || 'pptx' => token.warningDisabledColor,
-        _ => token.textDisabledColor,
+        'pdf' || 'mp4' || 'mov' => token.errorColorDisabled,
+        'xls' || 'xlsx' || 'csv' => token.successColorDisabled,
+        'doc' || 'docx' => token.brandColorDisabled,
+        'ppt' || 'pptx' => token.warningColorDisabled,
+        _ => token.textColorDisabled,
       };
     }
     return switch (extension) {
-      'pdf' || 'mp4' || 'mov' => token.errorNormalColor,
-      'xls' || 'xlsx' || 'csv' => token.successNormalColor,
-      'doc' || 'docx' => token.brandNormalColor,
-      'ppt' || 'pptx' => token.warningNormalColor,
+      'pdf' || 'mp4' || 'mov' => token.errorColor,
+      'xls' || 'xlsx' || 'csv' => token.successColor,
+      'doc' || 'docx' => token.brandColor,
+      'ppt' || 'pptx' => token.warningColor,
       _ => token.textColorPrimary,
     };
   }

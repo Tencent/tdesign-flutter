@@ -77,7 +77,7 @@ Configure theme styles (colors, font sizes, font styles, corner radius, shadows)
 
 ```dart
 // Colors
-TTheme.of(context).brandNormalColor
+TTheme.of(context).brandColor
 
 // Fonts
 TTheme.defaultData().fontBodyLarge
@@ -104,7 +104,7 @@ String themeConfig = '''
 {
   "myTheme": {
     "color": {
-      "brandNormalColor": "#D7B386"
+      "brandColor": "#D7B386"
     },
     "font": {
       "fontBodyMedium": {

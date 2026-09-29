@@ -49,13 +49,13 @@ class _TIconPageState extends State<TIconPage> {
             ),
             ExampleItem(
               desc: 'Theme 默认 size/color:',
-                methodName: 'IconThemeExample',
-                builder: (_) => const IconThemeExample(),
+              methodName: 'IconThemeExample',
+              builder: (_) => const IconThemeExample(),
             ),
             ExampleItem(
               desc: '构造器优先级覆盖 Theme:',
-                methodName: 'IconPriorityExample',
-                builder: (_) => const IconPriorityExample(),
+              methodName: 'IconPriorityExample',
+              builder: (_) => const IconPriorityExample(),
             ),
           ],
         ),

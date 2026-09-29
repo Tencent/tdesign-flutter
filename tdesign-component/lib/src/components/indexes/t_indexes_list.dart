@@ -7,7 +7,6 @@ import 'package:flutter/scheduler.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
-import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/iterable_ext.dart';
@@ -97,11 +96,11 @@ class _TIndexesListState extends State<TIndexesList> {
         const TIndexesThemeData();
     final indexSize = theme.indexItemSize ?? 20;
     final indexSpacing = theme.indexItemSpacing ?? 2;
-    final tipSize = theme.tipSize ?? context.tTheme.spacer48;
+    final tipSize = theme.tipSize ?? context.tTheme.spacer5;
     final tipMaxWidth = max(theme.tipMaxWidth ?? 99, tipSize);
-    final tipGap = theme.tipGap ?? context.tTheme.spacer16;
+    final tipGap = theme.tipGap ?? context.tTheme.spacer2;
     return Positioned(
-      right: theme.sidebarRight ?? context.tTheme.spacer8,
+      right: theme.sidebarRight ?? context.tTheme.spacer,
       top: 0,
       bottom: 0,
       child: Align(
@@ -141,7 +140,7 @@ class _TIndexesListState extends State<TIndexesList> {
                             ),
                             child: SizedBox(
                               key: _containerKeys[e],
-                              width: indexSize + context.tTheme.spacer8,
+                              width: indexSize + context.tTheme.spacer,
                               height: indexSize,
                               child: OverflowBox(
                                 alignment: Alignment.centerRight,
@@ -175,7 +174,7 @@ class _TIndexesListState extends State<TIndexesList> {
                                   top: -tipSize / 2 + indexSize / 2,
                                   right:
                                       indexSize +
-                                      context.tTheme.spacer8 +
+                                      context.tTheme.spacer +
                                       tipGap,
                                   child: Container(
                                     height: tipSize,
@@ -184,15 +183,18 @@ class _TIndexesListState extends State<TIndexesList> {
                                       maxWidth: tipMaxWidth,
                                     ),
                                     padding: EdgeInsets.symmetric(
-                                      horizontal: context.tTheme.spacer16,
+                                      horizontal: context.tTheme.spacer2,
                                     ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                        context.tTheme.radiusCircle,
+                                    decoration: ShapeDecoration(
+                                      // 小程序提示气泡以自身高度作为圆角，而非全局 50%。
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          tipSize,
+                                        ),
                                       ),
                                       color:
                                           theme.tipBackgroundColor ??
-                                          context.tTheme.brandLightColor,
+                                          context.tTheme.brandColorLight,
                                     ),
                                     child: Center(
                                       child: TText(
@@ -202,7 +204,7 @@ class _TIndexesListState extends State<TIndexesList> {
                                             context.tTheme.fontTitleExtraLarge,
                                         textColor:
                                             theme.tipColor ??
-                                            context.tTheme.brandNormalColor,
+                                            context.tTheme.brandColor,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -211,7 +213,7 @@ class _TIndexesListState extends State<TIndexesList> {
                                 ),
                               Container(
                                 key: _containerKeys[e],
-                                width: indexSize + context.tTheme.spacer8,
+                                width: indexSize + context.tTheme.spacer,
                                 height: indexSize,
                                 alignment: Alignment.center,
                                 child: SizedBox(
@@ -219,14 +221,17 @@ class _TIndexesListState extends State<TIndexesList> {
                                   height: indexSize,
                                   child: DecoratedBox(
                                     decoration: isActive
-                                        ? BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              context.tTheme.radiusCircle,
+                                        ? ShapeDecoration(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                    indexSize,
+                                                  ),
                                             ),
                                             color:
                                                 theme
                                                     .activeIndexBackgroundColor ??
-                                                context.tTheme.brandNormalColor,
+                                                context.tTheme.brandColor,
                                           )
                                         : const BoxDecoration(),
                                     child: Center(

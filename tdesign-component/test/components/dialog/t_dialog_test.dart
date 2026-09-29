@@ -474,9 +474,9 @@ void main() {
           TDialog(
             title: const Text('长内容'),
             content: Text(List.filled(40, '内容').join()),
-            maxHeight: 200,
             actions: const [TDialogAction(child: Text('完成'))],
           ),
+          dialogTheme: const TDialogThemeData(maxHeight: 200),
         ),
       );
       expect(
@@ -834,23 +834,15 @@ void main() {
       expect(TDialogThemeData.lerpDouble(null, null, 0.5), isNull);
     });
 
-    testWidgets('实例值优先于 Dialog ThemeExtension', (tester) async {
+    testWidgets('Dialog ThemeExtension 是面板视觉值的唯一组件入口', (tester) async {
       const extension = TDialogThemeData(
-        backgroundColor: Colors.red,
-        width: 280,
-        elevation: 4,
+        backgroundColor: Colors.blue,
+        width: 260,
+        elevation: 8,
         maxHeight: 240,
       );
       await tester.pumpWidget(
-        app(
-          const TDialog(
-            title: Text('主题'),
-            backgroundColor: Colors.blue,
-            width: 260,
-            elevation: 8,
-          ),
-          dialogTheme: extension,
-        ),
+        app(const TDialog(title: Text('主题')), dialogTheme: extension),
       );
       final material = tester
           .widgetList<Material>(
@@ -922,8 +914,8 @@ void main() {
       final custom = defaults.copyWithTThemeData(
         'dialog-action-colors',
         colorMap: {
-          'brandLightColor': Colors.amber,
-          'brandNormalColor': Colors.purple,
+          'brandColorLight': Colors.amber,
+          'brandColor': Colors.purple,
         },
       );
       for (final tokens in [defaults, custom]) {
@@ -948,8 +940,8 @@ void main() {
           final material = tester.widget<Material>(
             find.descendant(of: button, matching: find.byType(Material)),
           );
-          expect(material.color, actualTokens.brandLightColor);
-          expect(material.textStyle?.color, actualTokens.brandNormalColor);
+          expect(material.color, actualTokens.brandColorLight);
+          expect(material.textStyle?.color, actualTokens.brandColor);
         }
       }
     });
@@ -1023,12 +1015,7 @@ void main() {
       final tokens = TThemeData.defaultData().copyWithTThemeData(
         'dialog-token-test',
         radiusMap: {'radiusExtraLarge': 20},
-        marginMap: {
-          'spacer8': 10,
-          'spacer12': 14,
-          'spacer24': 30,
-          'spacer32': 40,
-        },
+        marginMap: {'spacer': 10, 'spacer1': 14, 'spacer3': 30, 'spacer4': 40},
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -1111,7 +1098,7 @@ void main() {
     testWidgets('显式间距不会被数值相同的 token 默认值覆盖', (tester) async {
       final tokens = TThemeData.defaultData().copyWithTThemeData(
         'dialog-explicit-spacing-test',
-        marginMap: {'spacer12': 14, 'spacer24': 30},
+        marginMap: {'spacer1': 14, 'spacer3': 30},
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -1151,7 +1138,7 @@ void main() {
     testWidgets('极小视口与自定义间距 token 不会生成负约束', (tester) async {
       final tokens = TThemeData.defaultData().copyWithTThemeData(
         'dialog-small-viewport-test',
-        marginMap: {'spacer32': 40},
+        marginMap: {'spacer4': 40},
       );
       await tester.pumpWidget(
         MaterialApp(

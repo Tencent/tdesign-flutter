@@ -31,18 +31,12 @@
 | actionSpacing | double? | - | 操作之间的间距。未设置时使用主题 token 默认值。 |
 | actionsPadding | EdgeInsetsGeometry? | - | 操作区内边距。未设置时使用主题 token 默认值。 一到两个操作全部显式使用 `TButtonVariant.text` 时，默认仅保留 32dp 顶部间距，使文字按钮 Footer 横向贴边；显式设置后使用传入的内边距。 |
 | actionsWidget | Widget? | - | 完全自定义操作区。 使用后 `actions` 必须为空；仅在标准操作列表无法表达布局时使用。 |
-| backgroundColor | Color? | - | 面板背景色。 |
 | closeButtonResult | Object? | - | 点击内置关闭按钮并成功关闭时的返回值，默认为 null。 类型应与 `show` 的泛型一致。可与 `TDialogAction.result` 和 `show` 的 `barrierResult` 配合，通过同一个 Future 区分关闭来源。 不影响系统返回或业务调用 Navigator.pop 的返回值。 |
 | content | Widget? | - | 内容槽位。 |
-| contentPadding | EdgeInsetsGeometry? | - | 标题和内容区域内边距。 |
-| elevation | double? | - | 面板阴影高度。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| maxHeight | double? | - | 面板最大高度。 内容超过该高度时，标题保持固定，正文区域显示滚动条并可滚动。 |
 | semanticLabel | String? | - | 无障碍语义标签。 |
-| shape | ShapeBorder? | - | 面板形状。 |
 | showCloseButton | bool | false | 是否显示右上角关闭按钮。 |
 | title | Widget? | - | 标题槽位。 |
-| width | double? | - | 面板宽度。 |
 
 
 ### TDialogAction
@@ -66,24 +60,18 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | - |
 | buttonStyle | ButtonStyle? | - | - |
 | buttonText | String? | - | - |
 | closeButtonResult | Object? | - | 内置关闭按钮成功关闭时返回的值，默认 null；透传至 `TDialog.closeButtonResult`。 |
 | closeOnPressed | bool | true | - |
 | content | String? | - | - |
-| contentPadding | EdgeInsetsGeometry? | - | - |
 | contentWidget | Widget? | - | - |
-| elevation | double? | - | - |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| maxHeight | double? | - | - |
 | onPressed | VoidCallback? | - | - |
 | result | Object? | true | - |
 | semanticLabel | String? | - | - |
-| shape | ShapeBorder? | - | - |
 | showCloseButton | bool | false | - |
 | title | String? | - | - |
-| width | double? | - | - |
 
 
 ### TDialogThemeData

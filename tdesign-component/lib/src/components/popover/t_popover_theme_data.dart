@@ -19,17 +19,14 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
   /// 最大高度
   final double? maxHeight;
 
-  /// 圆角
-  final double? borderRadius;
+  /// 气泡圆角；未设置时回退全局默认圆角。单个气泡可用局部 Theme 覆盖。
+  final BorderRadius? borderRadius;
 
-  /// 蒙层色
+  /// 蒙层色；未设置时透明。单个气泡可用局部 Theme 覆盖。
   final Color? barrierColor;
 
   /// 箭头尺寸
   final double? arrowSize;
-
-  /// 是否显示箭头
-  final bool? showArrow;
 
   /// 弹层与触发元素的间距
   final double? offset;
@@ -46,7 +43,6 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
     this.borderRadius,
     this.barrierColor,
     this.arrowSize,
-    this.showArrow,
     this.offset,
     this.boxShadow,
   });
@@ -64,7 +60,6 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
       borderRadius: other.borderRadius ?? borderRadius,
       barrierColor: other.barrierColor ?? barrierColor,
       arrowSize: other.arrowSize ?? arrowSize,
-      showArrow: other.showArrow ?? showArrow,
       offset: other.offset ?? offset,
       boxShadow: other.boxShadow ?? boxShadow,
     );
@@ -77,10 +72,9 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
     double? minWidth,
     double? maxWidth,
     double? maxHeight,
-    double? borderRadius,
+    BorderRadius? borderRadius,
     Color? barrierColor,
     double? arrowSize,
-    bool? showArrow,
     double? offset,
     List<BoxShadow>? boxShadow,
   }) {
@@ -93,7 +87,6 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
       borderRadius: borderRadius ?? this.borderRadius,
       barrierColor: barrierColor ?? this.barrierColor,
       arrowSize: arrowSize ?? this.arrowSize,
-      showArrow: showArrow ?? this.showArrow,
       offset: offset ?? this.offset,
       boxShadow: boxShadow ?? this.boxShadow,
     );
@@ -117,24 +110,28 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
         t,
         (a, b, value) => EdgeInsetsGeometry.lerp(a, b, value)!,
       ),
-      minWidth: lerpDouble(minWidth, other.minWidth, t),
-      maxWidth: lerpDouble(maxWidth, other.maxWidth, t),
-      maxHeight: lerpDouble(maxHeight, other.maxHeight, t),
-      borderRadius: lerpDouble(borderRadius, other.borderRadius, t),
+      minWidth: _lerpDouble(minWidth, other.minWidth, t),
+      maxWidth: _lerpDouble(maxWidth, other.maxWidth, t),
+      maxHeight: _lerpDouble(maxHeight, other.maxHeight, t),
+      borderRadius: _lerpNullable(
+        borderRadius,
+        other.borderRadius,
+        t,
+        (a, b, value) => BorderRadius.lerp(a, b, value)!,
+      ),
       barrierColor: _lerpNullable(
         barrierColor,
         other.barrierColor,
         t,
         (a, b, value) => Color.lerp(a, b, value)!,
       ),
-      arrowSize: lerpDouble(arrowSize, other.arrowSize, t),
-      showArrow: t < 0.5 ? showArrow : other.showArrow,
-      offset: lerpDouble(offset, other.offset, t),
+      arrowSize: _lerpDouble(arrowSize, other.arrowSize, t),
+      offset: _lerpDouble(offset, other.offset, t),
       boxShadow: t < 0.5 ? boxShadow : other.boxShadow,
     );
   }
 
-  static double? lerpDouble(
+  static double? _lerpDouble(
     /// 起始值。
     double? a,
 

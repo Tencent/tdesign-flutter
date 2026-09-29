@@ -80,7 +80,7 @@ void main() {
     );
     expect(
       tester.widget<Icon>(clearIcon).color,
-      TThemeData.defaultData().errorNormalColor,
+      TThemeData.defaultData().errorColor,
     );
     final label = find.descendant(
       of: find.byWidgetPredicate(
@@ -123,7 +123,7 @@ void main() {
     expect(divider, findsOneWidget);
     expect(
       tester.widget<Container>(divider).color,
-      TThemeData.defaultData().componentStrokeColor,
+      TThemeData.defaultData().componentStroke,
     );
     expect(
       tester.getTopLeft(captchaBox).dx - tester.getTopRight(divider).dx,
@@ -149,7 +149,7 @@ void main() {
     expect(divider, findsOneWidget);
     expect(
       tester.widget<Container>(divider).color,
-      TThemeData.defaultData().componentStrokeColor,
+      TThemeData.defaultData().componentStroke,
     );
     expect(
       tester.getTopLeft(divider).dx,

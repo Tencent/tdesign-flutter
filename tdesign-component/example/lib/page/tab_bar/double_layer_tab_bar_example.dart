@@ -27,6 +27,11 @@ class _DoubleLayerTabBarExampleState extends State<DoubleLayerTabBarExample> {
         4,
         (index) => TTabBarItemConfig(
           tabText: labels[index],
+          allowMultipleTaps: true,
+          onTap: () => TToast.showText(
+            '第 ${index + 1} 项',
+            context: context,
+          ),
           popUpButtonConfig: index == 3
               ? TTabBarPopUpBtnConfig(
                   items: const [

@@ -261,7 +261,7 @@ void main() {
       expect(selectedSemantics, isNotEmpty);
       final indicator = tester.widget<Icon>(find.byIcon(TIcons.check));
       expect(indicator.size, 24);
-      expect(indicator.color, TThemeData.defaultData().brandNormalColor);
+      expect(indicator.color, TThemeData.defaultData().brandColor);
       await tester.tap(find.text('Shenzhen'));
       await tester.pump();
       expect(find.text('Guangzhou'), findsOneWidget);
@@ -318,7 +318,7 @@ void main() {
         ),
       );
       expect(selectedText.style?.color, token.textColorPrimary);
-      expect(selectedText.style?.color, isNot(token.brandNormalColor));
+      expect(selectedText.style?.color, isNot(token.brandColor));
       expect(selectedText.style?.fontWeight, FontWeight.w400);
     });
 
@@ -367,11 +367,9 @@ void main() {
       tester,
     ) async {
       final base = TThemeBuilder.light(TThemeData.defaultData());
-      final theme = base
-          .mergeExtension(
-            const TTextThemeData(textStyle: TextStyle(fontSize: 21)),
-          )
-          .mergeExtension(const TIconThemeData(size: 30));
+      final theme = base.copyWith(
+        textTheme: const TextTheme(bodyLarge: TextStyle(fontSize: 21)),
+      );
       await tester.pumpWidget(
         MaterialApp(
           theme: theme,
@@ -392,6 +390,26 @@ void main() {
       final arrow = tester.widget<Icon>(find.byIcon(TIcons.chevron_right).last);
       expect(arrow.color, Colors.pink);
       expect(arrow.size, 22);
+    });
+
+    testWidgets('保留 TTextThemeData 对级联选项文字的子树默认值', (tester) async {
+      final theme = TThemeBuilder.light(TThemeData.defaultData())
+          .mergeExtension(
+            const TTextThemeData(textStyle: TextStyle(fontSize: 23)),
+          );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: Scaffold(
+            body: TCascader(
+              options: options,
+              value: const [],
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+      expect(tester.widget<Text>(find.text('Guangdong')).style?.fontSize, 23);
     });
 
     testWidgets('applies Material text and active colors by relevant field', (
@@ -541,7 +559,7 @@ void main() {
         );
         expect(
           tester.widget<Icon>(find.byIcon(TIcons.check)).color,
-          TThemeData.defaultData().brandNormalColor,
+          TThemeData.defaultData().brandColor,
         );
       },
     );
@@ -652,7 +670,7 @@ void main() {
       );
       expect(
         tester.widget<Divider>(find.byType(Divider)).color,
-        token.componentStrokeColor,
+        token.componentStroke,
       );
       expect(
         tester.widget<Icon>(find.byIcon(TIcons.chevron_right).last).color,

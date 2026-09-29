@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/text/t_text_resolve.dart';
@@ -24,13 +25,7 @@ void main() {
     final context = await pumpContext(
       tester,
       theme: ThemeData(
-        extensions: [
-          TThemeData.defaultData(),
-          TTextThemeData(
-            font: Font(size: 18, lineHeight: 26),
-            textStyle: const TextStyle(color: Colors.orange),
-          ),
-        ],
+        extensions: [TThemeData.defaultData()],
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Colors.indigo, fontSize: 17),
         ),
@@ -58,6 +53,81 @@ void main() {
     expect(resolved.inherit, isFalse);
   });
 
+  testWidgets('组件 Theme 默认值优先于原生继承，实例 style 再覆盖', (tester) async {
+    final context = await pumpContext(
+      tester,
+      theme: TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+        TTextThemeData(
+          font: Font(size: 20, lineHeight: 28),
+          textStyle: const TextStyle(fontSize: 22, color: Colors.blue),
+        ),
+      ),
+      wrap: (child) => DefaultTextStyle.merge(
+        style: const TextStyle(fontSize: 18, color: Colors.pink),
+        child: child,
+      ),
+    );
+    final defaultStyle = TTextResolve.resolve(context: context);
+    expect(defaultStyle.fontSize, 22);
+    expect(defaultStyle.height, 28 / 20);
+    expect(defaultStyle.color, Colors.blue);
+    final instanceStyle = TTextResolve.resolve(
+      context: context,
+      style: const TextStyle(fontSize: 24, color: Colors.red),
+    );
+    expect(instanceStyle.fontSize, 24);
+    expect(instanceStyle.color, Colors.red);
+  });
+
+  testWidgets('非 Apple 平台解析默认字体栈而不改 Token', (tester) async {
+    final token = TThemeData.defaultData();
+    final context = await pumpContext(
+      tester,
+      theme: TThemeBuilder.light(token),
+    );
+    final resolved = TTextResolve.resolve(context: context);
+    expect(resolved.fontFamily, 'Roboto');
+    expect(resolved.fontFamilyFallback, [
+      'Microsoft YaHei',
+      'Arial Regular',
+      'Roboto',
+    ]);
+    expect(token.fontFamily?.fallback, ['Microsoft YaHei', 'Arial Regular']);
+
+    final custom = token.copyWithTThemeData(
+      'custom-family',
+      fontFamilyMap: {
+        'fontFamily': FontFamily(
+          fontFamily: 'PingFang SC',
+          fallback: ['CustomFallback'],
+        ),
+      },
+    );
+    final customContext = await pumpContext(
+      tester,
+      theme: TThemeBuilder.light(custom),
+    );
+    expect(
+      TTextResolve.resolve(context: customContext).fontFamily,
+      'PingFang SC',
+    );
+  });
+
+  testWidgets('Apple 平台保留 PingFang 主字体', (tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    try {
+      final token = TThemeData.defaultData();
+      final context = await pumpContext(
+        tester,
+        theme: TThemeBuilder.light(token),
+      );
+      expect(TTextResolve.resolve(context: context).fontFamily, 'PingFang SC');
+      expect(token.fontFamily?.fontFamily, 'PingFang SC');
+    } finally {
+      debugDefaultTargetPlatformOverride = null;
+    }
+  });
+
   testWidgets('inherit false 不继承 Theme 与 Token', (tester) async {
     final context = await pumpContext(tester);
     const style = TextStyle(inherit: false, fontSize: 13);
@@ -68,8 +138,8 @@ void main() {
   testWidgets('组合组件默认值低于显式主题且按字段回退', (tester) async {
     final context = await pumpContext(
       tester,
-      theme: TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
-        const TTextThemeData(textStyle: TextStyle(fontSize: 21)),
+      theme: TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+        textTheme: const TextTheme(bodyLarge: TextStyle(fontSize: 21)),
       ),
     );
     final resolved = TTextResolve.resolve(
@@ -231,17 +301,18 @@ void main() {
     expect(resolved.backgroundColor, isNull);
   });
 
-  testWidgets('Theme font 先于 textStyle，实例便利参数继续覆盖', (tester) async {
+  testWidgets('Material TextTheme 提供默认值，实例字体 Token 继续覆盖', (tester) async {
     final context = await pumpContext(
       tester,
       theme: ThemeData(
-        extensions: [
-          TThemeData.defaultData(),
-          TTextThemeData(
-            font: Font(size: 18, lineHeight: 26),
-            textStyle: const TextStyle(fontSize: 21, color: Colors.orange),
+        extensions: [TThemeData.defaultData()],
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+            fontSize: 21,
+            height: 26 / 18,
+            color: Colors.orange,
           ),
-        ],
+        ),
       ),
     );
     final themed = TTextResolve.resolve(context: context);

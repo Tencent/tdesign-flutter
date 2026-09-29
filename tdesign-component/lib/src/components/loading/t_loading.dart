@@ -79,7 +79,7 @@ class TLoading extends StatelessWidget {
     final effectiveAxis = theme.axis ?? Axis.horizontal;
     final defaultIconColor = icon == TLoadingIcon.activity
         ? context.tTheme.textColorPrimary
-        : context.tTheme.brandNormalColor;
+        : context.tTheme.brandColor;
     final effectiveIconColor =
         theme.iconColor ??
         materialTheme.progressIndicatorTheme.color ??

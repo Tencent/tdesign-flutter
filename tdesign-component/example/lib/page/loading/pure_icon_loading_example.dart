@@ -18,14 +18,14 @@ class PureIconLoadingExample extends StatelessWidget {
         const SizedBox(width: 40),
         Theme(
           data: Theme.of(context).mergeExtension(
-            TLoadingThemeData(iconColor: context.tTheme.brandNormalColor),
+            TLoadingThemeData(iconColor: context.tTheme.brandColor),
           ),
           child: const TLoading(size: 40, icon: TLoadingIcon.point),
         ),
         const SizedBox(width: 40),
         Theme(
           data: Theme.of(context).mergeExtension(
-            TLoadingThemeData(iconColor: context.tTheme.brandNormalColor),
+            TLoadingThemeData(iconColor: context.tTheme.brandColor),
           ),
           child: const TLoading(
             customIcon: Image(

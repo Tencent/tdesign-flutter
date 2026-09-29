@@ -7,7 +7,7 @@ class RateVerticalExample extends StatelessWidget {
 
   Widget _buildVertical(BuildContext context) => Container(
     key: const ValueKey('rate-vertical-container'),
-    padding: EdgeInsets.all(context.tTheme.spacer16),
+    padding: EdgeInsets.all(context.tTheme.spacer2),
     color: context.tTheme.bgColorContainer,
     child: const Center(child: RateVerticalExampleVerticalRate()),
   );

@@ -469,7 +469,7 @@ void main() {
       });
     }
 
-    testWidgets('字体与图文间距读取 TDesign token', (tester) async {
+    testWidgets('字体读取全局 Token，图文间距读取组件 Theme', (tester) async {
       final token = TThemeData.defaultData().copyWithTThemeData(
         'button-token-test',
         fontMap: {
@@ -484,7 +484,6 @@ void main() {
             fontWeight: FontWeight.w700,
           ),
         },
-        marginMap: const {'spacer4': 13},
       );
 
       for (final sizeCase in const [
@@ -510,6 +509,7 @@ void main() {
               child: const Text('token 文案'),
             ),
             tTheme: token,
+            buttonTheme: const TButtonThemeData(iconTextSpacing: 13),
           ),
         );
 
@@ -641,11 +641,14 @@ void main() {
       expect(minSize?.height, 40); // medium 的 sideLength
     });
 
-    testWidgets('未传 size 但 Theme 设置了 defaultSize 时读取 Theme 值', (tester) async {
+    testWidgets('实例 size 选择 large 规格', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TButton(child: Text('Theme尺寸'), onPressed: null),
-          buttonTheme: const TButtonThemeData(defaultSize: TButtonSize.large),
+          const TButton(
+            child: Text('Theme尺寸'),
+            size: TButtonSize.large,
+            onPressed: null,
+          ),
         ),
       );
 
@@ -654,7 +657,7 @@ void main() {
       expect(minSize?.height, 48); // large 的 sideLength
     });
 
-    testWidgets('构造器 size 覆盖 Theme defaultSize', (tester) async {
+    testWidgets('实例 size 选择 small 规格', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           const TButton(
@@ -662,7 +665,6 @@ void main() {
             size: TButtonSize.small,
             onPressed: null,
           ),
-          buttonTheme: const TButtonThemeData(defaultSize: TButtonSize.large),
         ),
       );
 
@@ -1709,6 +1711,26 @@ void main() {
   // 交互态验证
   // ============================================================
   group('TButton 交互态', () {
+    testWidgets('默认前景色跟随上游 fontWhite1 Token', (tester) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'button-font-white-test',
+        colorMap: {'fontWhite1': Colors.green},
+      );
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TButton(
+            child: const Text('品牌按钮'),
+            colorScheme: TButtonColorScheme.primary,
+            onPressed: () {},
+          ),
+          tTheme: token,
+        ),
+      );
+
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      expect(button.style?.foregroundColor?.resolve({}), Colors.green);
+    });
+
     testWidgets('disabled 状态使用语义 Token', (tester) async {
       final token = TThemeData.defaultData();
       const cases = <(TButtonVariant, TButtonColorScheme)>[
@@ -1740,12 +1762,12 @@ void main() {
           foreground,
           variant == TButtonVariant.fill && scheme == TButtonColorScheme.primary
               ? token.textColorAnti
-              : token.brandDisabledColor,
+              : token.brandColorDisabled,
         );
         if (variant == TButtonVariant.outline) {
           expect(
             button.style?.side?.resolve({WidgetState.disabled})?.color,
-            token.brandDisabledColor,
+            token.brandColorDisabled,
           );
         }
       }
@@ -1765,7 +1787,83 @@ void main() {
       );
 
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      expect(button.style?.backgroundColor?.resolve({}), token.brandLightColor);
+      expect(button.style?.backgroundColor?.resolve({}), token.brandColorLight);
+    });
+
+    testWidgets('outline 的默认、按压和禁用色沿小程序组件变量回退', (tester) async {
+      final token = TThemeData.defaultData();
+      final cases = <(TButtonColorScheme, Color, Color, Color, Color)>[
+        (
+          TButtonColorScheme.defaultTheme,
+          token.bgColorContainer,
+          token.bgColorContainerActive,
+          token.componentBorder,
+          token.bgColorContainer,
+        ),
+        (
+          TButtonColorScheme.primary,
+          token.bgColorContainer,
+          token.bgColorContainerActive,
+          token.brandColorDisabled,
+          Colors.transparent,
+        ),
+        (
+          TButtonColorScheme.danger,
+          token.bgColorContainer,
+          token.bgColorContainerActive,
+          token.errorColorDisabled,
+          token.bgColorContainer,
+        ),
+        (
+          TButtonColorScheme.light,
+          token.brandColorLight,
+          token.brandColorLightActive,
+          token.brandColorDisabled,
+          token.bgColorContainer,
+        ),
+      ];
+      for (final (scheme, idleBg, pressedBg, disabledColor, disabledBg)
+          in cases) {
+        await tester.pumpWidget(
+          wrapWithTheme(
+            TButton(
+              child: Text(scheme.name),
+              variant: TButtonVariant.outline,
+              colorScheme: scheme,
+              onPressed: () {},
+            ),
+          ),
+        );
+        var button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+        expect(button.style?.backgroundColor?.resolve({}), idleBg);
+        expect(
+          button.style?.backgroundColor?.resolve({WidgetState.pressed}),
+          pressedBg,
+        );
+
+        await tester.pumpWidget(
+          wrapWithTheme(
+            TButton(
+              child: Text(scheme.name),
+              variant: TButtonVariant.outline,
+              colorScheme: scheme,
+            ),
+          ),
+        );
+        button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+        expect(
+          button.style?.backgroundColor?.resolve({WidgetState.disabled}),
+          disabledBg,
+        );
+        expect(
+          button.style?.foregroundColor?.resolve({WidgetState.disabled}),
+          disabledColor,
+        );
+        expect(
+          button.style?.side?.resolve({WidgetState.disabled})?.color,
+          disabledColor,
+        );
+      }
     });
 
     testWidgets('enabled fill 按钮背景色为非透明', (tester) async {
@@ -1796,10 +1894,7 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TButton(child: Text('Theme注入'), onPressed: null),
-          buttonTheme: const TButtonThemeData(
-            defaultVariant: TButtonVariant.outline,
-            defaultSize: TButtonSize.large,
-          ),
+          buttonTheme: const TButtonThemeData(padding: EdgeInsets.all(7)),
         ),
       );
 
@@ -1817,16 +1912,13 @@ void main() {
             size: TButtonSize.small,
             onPressed: null,
           ),
-          buttonTheme: const TButtonThemeData(
-            defaultVariant: TButtonVariant.fill,
-            defaultSize: TButtonSize.large,
-          ),
+          buttonTheme: const TButtonThemeData(padding: EdgeInsets.all(7)),
         ),
       );
 
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
       final minSize = button.style?.minimumSize?.resolve({});
-      // 构造器 small 应覆盖 Theme 的 large (sideLength 32 vs 48)
+      // 实例 small 对应 32dp，不受 Theme padding 影响。
       expect(minSize?.height, 32);
     });
   });

@@ -12,15 +12,12 @@ import 't_avatar_types.dart';
 /// 仅保存视觉默认值，不保存头像内容、回调或头像组成员。
 class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
   const TAvatarThemeData({
-    this.size,
-    this.shape,
-    this.variant,
     this.dimension,
     this.iconSize,
+    this.circleBorderRadius,
     this.squareBorderRadius,
     this.backgroundColor,
     this.foregroundColor,
-    this.textStyle,
     this.groupSpacing,
     this.groupBorderWidth,
     this.groupBorderColor,
@@ -29,6 +26,10 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
        ),
        assert(
          iconSize == null || (iconSize >= 0 && iconSize != double.infinity),
+       ),
+       assert(
+         circleBorderRadius == null ||
+             (circleBorderRadius >= 0 && circleBorderRadius != double.infinity),
        ),
        assert(
          squareBorderRadius == null ||
@@ -51,33 +52,23 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
              groupBorderWidth * 2 <= dimension,
        );
 
-  /// 默认头像尺寸档位。
-  final TAvatarSize? size;
-
-  /// 默认头像形状。
-  final TAvatarShape? shape;
-
-  /// 默认头像形状的旧配置。
-  @Deprecated('Use shape instead. This property will be removed in 1.0.0.')
-  final TAvatarVariant? variant;
-
   /// 自定义头像边长。
   final double? dimension;
 
   /// 默认图标大小。
   final double? iconSize;
 
-  /// 方形头像圆角。
+  /// 方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。
   final double? squareBorderRadius;
 
-  /// 默认背景色。
+  /// 圆形头像圆角；未设置时回退全局 `radiusCircle`（逻辑像素）。
+  final double? circleBorderRadius;
+
+  /// 默认背景色；未设置时回退全局 `brandColorLightActive`。
   final Color? backgroundColor;
 
-  /// 默认前景色。
+  /// 默认图标与继承文字的前景色；未设置时回退全局品牌色。
   final Color? foregroundColor;
-
-  /// 字符头像的默认文字样式。
-  final TextStyle? textStyle;
 
   /// 头像组重叠宽度。
   final double? groupSpacing;
@@ -90,29 +81,23 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
 
   @override
   TAvatarThemeData copyWith({
-    TAvatarSize? size,
-    TAvatarShape? shape,
-    TAvatarVariant? variant,
     double? dimension,
     double? iconSize,
+    double? circleBorderRadius,
     double? squareBorderRadius,
     Color? backgroundColor,
     Color? foregroundColor,
-    TextStyle? textStyle,
     double? groupSpacing,
     double? groupBorderWidth,
     Color? groupBorderColor,
   }) {
     return TAvatarThemeData(
-      size: size ?? this.size,
-      shape: shape ?? this.shape,
-      variant: variant ?? this.variant,
       dimension: dimension ?? this.dimension,
       iconSize: iconSize ?? this.iconSize,
+      circleBorderRadius: circleBorderRadius ?? this.circleBorderRadius,
       squareBorderRadius: squareBorderRadius ?? this.squareBorderRadius,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       foregroundColor: foregroundColor ?? this.foregroundColor,
-      textStyle: textStyle ?? this.textStyle,
       groupSpacing: groupSpacing ?? this.groupSpacing,
       groupBorderWidth: groupBorderWidth ?? this.groupBorderWidth,
       groupBorderColor: groupBorderColor ?? this.groupBorderColor,
@@ -125,22 +110,26 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
       return this;
     }
     return TAvatarThemeData(
-      size: t < 0.5 ? size : other.size,
-      shape: t < 0.5 ? shape : other.shape,
-      variant: t < 0.5 ? variant : other.variant,
       dimension: _lerpNullableDouble(
         dimension,
         other.dimension,
         t,
-        TAvatarDefaults.dimensionFor(size ?? TAvatarSize.medium),
-        TAvatarDefaults.dimensionFor(other.size ?? TAvatarSize.medium),
+        TAvatarDefaults.mediumDimension,
+        TAvatarDefaults.mediumDimension,
       ),
       iconSize: _lerpNullableDouble(
         iconSize,
         other.iconSize,
         t,
-        TAvatarDefaults.iconSizeFor(size ?? TAvatarSize.medium),
-        TAvatarDefaults.iconSizeFor(other.size ?? TAvatarSize.medium),
+        TAvatarDefaults.iconSizeFor(TAvatarSize.medium),
+        TAvatarDefaults.iconSizeFor(TAvatarSize.medium),
+      ),
+      circleBorderRadius: _lerpNullableDouble(
+        circleBorderRadius,
+        other.circleBorderRadius,
+        t,
+        9999,
+        9999,
       ),
       squareBorderRadius: _lerpNullableDouble(
         squareBorderRadius,
@@ -158,13 +147,6 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
         foregroundColor,
         other.foregroundColor,
         t,
-      ),
-      textStyle: _lerpNullableTextStyle(
-        textStyle,
-        other.textStyle,
-        t,
-        TAvatarDefaults.textStyleFor(size ?? TAvatarSize.medium),
-        TAvatarDefaults.textStyleFor(other.size ?? TAvatarSize.medium),
       ),
       groupSpacing: _lerpNullableDouble(
         groupSpacing,
@@ -207,17 +189,4 @@ Color? _lerpTokenColor(Color? begin, Color? end, double t) {
     return t < 0.5 ? begin : end;
   }
   return Color.lerp(begin, end, t);
-}
-
-TextStyle? _lerpNullableTextStyle(
-  TextStyle? begin,
-  TextStyle? end,
-  double t,
-  TextStyle defaultBegin,
-  TextStyle defaultEnd,
-) {
-  if (begin == null && end == null) {
-    return null;
-  }
-  return TextStyle.lerp(begin ?? defaultBegin, end ?? defaultEnd, t);
 }

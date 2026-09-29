@@ -25,21 +25,21 @@ class TLinkResolve {
 
     if (isDisabled) {
       return switch (colorScheme) {
-        TLinkColorScheme.primary => token.brandDisabledColor,
-        TLinkColorScheme.defaultTheme => token.textDisabledColor,
-        TLinkColorScheme.danger => token.errorDisabledColor,
-        TLinkColorScheme.warning => token.warningDisabledColor,
-        TLinkColorScheme.success => token.successDisabledColor,
+        TLinkColorScheme.primary => token.brandColorDisabled,
+        TLinkColorScheme.defaultTheme => token.textColorDisabled,
+        TLinkColorScheme.danger => token.errorColorDisabled,
+        TLinkColorScheme.warning => token.warningColorDisabled,
+        TLinkColorScheme.success => token.successColorDisabled,
       };
     }
 
     if (isActive) {
       return switch (colorScheme) {
         TLinkColorScheme.primary ||
-        TLinkColorScheme.defaultTheme => token.brandClickColor,
-        TLinkColorScheme.danger => token.errorClickColor,
-        TLinkColorScheme.warning => token.warningClickColor,
-        TLinkColorScheme.success => token.successClickColor,
+        TLinkColorScheme.defaultTheme => token.brandColorActive,
+        TLinkColorScheme.danger => token.errorColorActive,
+        TLinkColorScheme.warning => token.warningColorActive,
+        TLinkColorScheme.success => token.successColorActive,
       };
     }
 
@@ -48,12 +48,12 @@ class TLinkResolve {
       return themedColor;
     }
     return switch (colorScheme) {
-      TLinkColorScheme.primary => material?.primary ?? token.brandNormalColor,
+      TLinkColorScheme.primary => material?.primary ?? token.brandColor,
       TLinkColorScheme.defaultTheme =>
         material?.onSurface ?? token.textColorPrimary,
-      TLinkColorScheme.danger => material?.error ?? token.errorNormalColor,
-      TLinkColorScheme.warning => token.warningNormalColor,
-      TLinkColorScheme.success => token.successNormalColor,
+      TLinkColorScheme.danger => material?.error ?? token.errorColor,
+      TLinkColorScheme.warning => token.warningColor,
+      TLinkColorScheme.success => token.successColor,
     };
   }
 
@@ -91,7 +91,7 @@ class TLinkResolve {
     required BuildContext context,
     required TLinkThemeData? theme,
   }) {
-    return theme?.iconGap ?? context.tTheme.spacer4;
+    return theme?.iconGap ?? 4.0;
   }
 
   static Font _fontForSize(BuildContext context, TLinkSize size) {

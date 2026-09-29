@@ -104,11 +104,11 @@ class TCalendarStyle {
         fontSize: context.tTheme.fontTitleMedium?.size,
         height: context.tTheme.fontTitleMedium?.height,
         fontWeight: context.tTheme.fontTitleMedium?.fontWeight,
-        color: context.tTheme.brandNormalColor,
+        color: context.tTheme.brandColor,
       ),
-      verticalGap: context.tTheme.spacer8,
-      bodyPadding: context.tTheme.spacer16,
-      weekdayGap: context.tTheme.spacer4,
+      verticalGap: context.tTheme.spacer,
+      bodyPadding: context.tTheme.spacer2,
+      weekdayGap: 4.0,
     );
   }
 
@@ -121,8 +121,9 @@ class TCalendarStyle {
       fontWeight: context.tTheme.fontTitleMedium?.fontWeight,
       color: context.tTheme.textColorPrimary,
     );
-    final defaultTodayStyle =
-        defaultDayStyle.copyWith(color: context.tTheme.brandNormalColor);
+    final defaultTodayStyle = defaultDayStyle.copyWith(
+      color: context.tTheme.brandColor,
+    );
     final defaultSubtitleStyle = TextStyle(
       fontSize: context.tTheme.fontBodyExtraSmall?.size,
       height: context.tTheme.fontBodyExtraSmall?.height,
@@ -132,7 +133,7 @@ class TCalendarStyle {
     final resolvedDayStyle = dayStyle ?? defaultDayStyle;
     final resolvedTodayStyle = todayDayStyle ?? defaultTodayStyle;
     final resolvedSubtitleStyle = subtitleStyle ?? defaultSubtitleStyle;
-    final rangeCentreColor = centreColor ?? context.tTheme.brandLightColor;
+    final rangeCentreColor = centreColor ?? context.tTheme.brandColorLight;
 
     TCalendarStyle stateStyle({
       required TextStyle dayStyle,
@@ -154,12 +155,13 @@ class TCalendarStyle {
       if (themed == null) {
         return BoxDecoration(
           borderRadius: borderRadius,
-          color: context.tTheme.brandNormalColor,
+          color: context.tTheme.brandColor,
         );
       }
       return BoxDecoration(
-        color: themed.color ??
-            (themed.gradient == null ? context.tTheme.brandNormalColor : null),
+        color:
+            themed.color ??
+            (themed.gradient == null ? context.tTheme.brandColor : null),
         image: themed.image,
         border: themed.border,
         borderRadius: themed.shape == BoxShape.circle
@@ -182,39 +184,38 @@ class TCalendarStyle {
       case DateSelectType.disabled:
         return stateStyle(
           dayStyle: resolvedDayStyle.copyWith(
-              color: context.tTheme.textDisabledColor),
+            color: context.tTheme.textColorDisabled,
+          ),
           todayDayStyle: resolvedTodayStyle.copyWith(
-            color: context.tTheme.brandDisabledColor,
+            color: context.tTheme.brandColorDisabled,
           ),
           subtitleStyle: resolvedSubtitleStyle.copyWith(
-            color: context.tTheme.textDisabledColor,
+            color: context.tTheme.textColorDisabled,
           ),
         );
       case DateSelectType.selected:
-        final selectedDayStyle =
-            resolvedDayStyle.copyWith(color: context.tTheme.textColorAnti);
+        final selectedDayStyle = resolvedDayStyle.copyWith(
+          color: context.tTheme.textColorAnti,
+        );
         return stateStyle(
           dayStyle: selectedDayStyle,
           todayDayStyle: selectedDayStyle,
           subtitleStyle: resolvedSubtitleStyle.copyWith(
             color: context.tTheme.textColorAnti,
           ),
-          cellDecoration: selectedDecoration(
-            BorderRadius.circular(radius6),
-          ),
+          cellDecoration: selectedDecoration(BorderRadius.circular(radius6)),
         );
       case DateSelectType.centre:
         return stateStyle(
           dayStyle: resolvedDayStyle,
           todayDayStyle: resolvedTodayStyle,
           subtitleStyle: resolvedSubtitleStyle,
-          cellDecoration: BoxDecoration(
-            color: rangeCentreColor,
-          ),
+          cellDecoration: BoxDecoration(color: rangeCentreColor),
         );
       case DateSelectType.start:
-        final selectedDayStyle =
-            resolvedDayStyle.copyWith(color: context.tTheme.textColorAnti);
+        final selectedDayStyle = resolvedDayStyle.copyWith(
+          color: context.tTheme.textColorAnti,
+        );
         return stateStyle(
           dayStyle: selectedDayStyle,
           todayDayStyle: selectedDayStyle,
@@ -222,14 +223,13 @@ class TCalendarStyle {
             color: context.tTheme.textColorAnti,
           ),
           cellDecoration: selectedDecoration(
-            BorderRadius.horizontal(
-              left: Radius.circular(radius6),
-            ),
+            BorderRadius.horizontal(left: Radius.circular(radius6)),
           ),
         );
       case DateSelectType.end:
-        final selectedDayStyle =
-            resolvedDayStyle.copyWith(color: context.tTheme.textColorAnti);
+        final selectedDayStyle = resolvedDayStyle.copyWith(
+          color: context.tTheme.textColorAnti,
+        );
         return stateStyle(
           dayStyle: selectedDayStyle,
           todayDayStyle: selectedDayStyle,
@@ -237,9 +237,7 @@ class TCalendarStyle {
             color: context.tTheme.textColorAnti,
           ),
           cellDecoration: selectedDecoration(
-            BorderRadius.horizontal(
-              right: Radius.circular(radius6),
-            ),
+            BorderRadius.horizontal(right: Radius.circular(radius6)),
           ),
         );
       default:

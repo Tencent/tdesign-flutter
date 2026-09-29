@@ -416,23 +416,29 @@ class _TPopoverPage extends State<TPopoverPage> {
     return Container(
       padding: const EdgeInsets.only(top: 0),
       margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.medium,
-            child: const Text('自定义圆角'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                radius: BorderRadius.circular(16),
-                colorScheme: theme,
-                content: const Text('弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容'),
-              );
-            },
-          );
-        },
+      child: Theme(
+        data: Theme.of(context).mergeExtension(
+          const TPopoverThemeData(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+        ),
+        child: Builder(
+          builder: (popoverContext) {
+            return TButton(
+              size: TButtonSize.medium,
+              child: const Text('自定义圆角'),
+              variant: TButtonVariant.outline,
+              colorScheme: TButtonColorScheme.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  colorScheme: theme,
+                  content: const Text('弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容'),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
