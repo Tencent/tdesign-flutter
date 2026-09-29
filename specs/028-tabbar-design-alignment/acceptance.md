@@ -1,19 +1,28 @@
 # 验收记录
 
-## 2026-09-28 胶囊局部校准
+## 2026-09-27 顶边线和安全区 API 收敛
 
-- Figma 浏览器编辑器直接读取副本节点 `26969:14283` 与选中图文项属性，确认
-  尺寸、间距、Token、`app` 图标、`Item` 文本和圆点。选中背景尺寸与颜色不变；
-  圆点 1× 像素边界由旧实现 `(52,6)-(59,13)` 到新实现 `(51,8)-(58,15)`，
-  与 Figma 完全同界。Figma/Flutter 同区域精确像素差 2265 → 2232/19208，
-  强差异像素 947 → 902/19208；剩余文字、图标及阴影差异不直接等同布局缺陷。
-- Flutter 3.32.0 / 3.47.0 TabBar 组件测试各 44/44、Demo 功能测试各 9/9，
-  组件与 Example 双版本 `flutter analyze --fatal-infos` 均零问题；3.47.0
-  TabBar 生产源码覆盖率 528/537（98.32%）。
-- 固定 Linux Flutter 3.32.0、锁定 `tdesign_flutter_icons` 0.0.6 与 `mime`
-  2.0.0：TabBar 组件 Golden 无更新 12/12；Demo 旧基线 8 张各因两处圆点
-  移动产生 129 像素差，更新这 8 张后无更新 11/11 精确通过。未更新 Demo
-  参数或其他组件 Golden；远端 CI 与真机仍需独立核对。
+- 删除 `showTopBorder`、实例与 Theme 的 `topBorder`、`placeholder`。Filled 保持默认 0.5px 顶线，Capsule 仍无顶线；自定义 Demo 现在也使用默认线。`useSafeArea: true` 仍用组件背景填满底部安全区，false 不处理。需要仅避开安全区的场景须在组件外组合 `SafeArea`，此组合尚未作为公开 Demo 验证。
+- Flutter 3.32.0 与 3.47.0：组件测试各 44/44、Demo 测试各 9/9；组件包和 Example 包完整 `flutter analyze --fatal-infos --no-pub` 均零问题。3.32.0 TabBar 生产源码覆盖率 504/513（98.25%），示例代码 `--check` 通过。
+- Linux Flutter 3.32.0：先无更新比对，组件 Golden 14/14 与共享导航矩阵 2/2 通过；公开 Demo 有 8 张仅在自定义实例新增默认顶线的区域发生差异。审查差异后更新该 8 张，随后公开 Demo 无更新严格复跑 11/11 通过；两张文字 Toast Golden 不变。
+
+## 2026-09-27 centerDistance API 删除
+
+- `TTabBar` 构造参数及 `TTabBarThemeData` 字段均已删除，生成的 TabBar API 文档已同步。图文项沿用原默认：上下排列 0px，左右排列 4px，公开 Demo 配置不变；自定义间距无直接替代参数，这是有意的 breaking 收敛。
+- Flutter 3.32.0 与 3.47.0：组件测试各 42/42，Demo 测试各 9/9；组件包与 Example 包 `flutter analyze --fatal-infos --no-pub` 均零问题。3.47.0 TabBar 生产源码 `LH/LF = 514/523 = 98.28%`，示例代码 `--check` 通过。
+- 变更仅移除覆盖入口并保留原内部默认布局；未修改公开 Demo 与绘制默认值，因此本批次跳过 Golden，原有完整 Figma 页面和最终真机逐项验收缺口仍按下节记录。
+
+## 2026-09-27 develop 隔离分支复核
+
+- 本节的图文布局结论替代下方 2026-09-08 对 Figma Horizontal/Vertical 名称的旧解释：可访问组件展板显示该对变体是单项图文的上下/左右排列，两种标签栏都保持水平整栏。
+- 从 `develop@97afb678` 建立独立 worktree，只迁移 TabBar 组件、公开 Demo、测试、Spec 和对应生成产物；原有 Token 重构工作树保持原状。适配 develop 已有 Token 名称，未引入全局 Token 改动。
+- Flutter 3.32.0 与 3.47.0：组件测试各 42/42，公开 Demo 测试各 9/9；组件包与 Example 包完整 analyze 均零问题。3.32.0 TabBar 生产覆盖率 528/538 = 98.14%，示例代码生成 `--check` 通过。
+- Linux Flutter 3.32.0 先运行不带更新参数的 Golden 并检查实际图、旧图和差异；更新 TabBar 组件明暗 14 张（包含新增的左右图文实例）及公开 Demo 明暗和操作后 10 张，随后两组无更新、无像素容差复跑分别 14/14 与 11/11 测试通过。Linux 临时副本使用本地工具依赖覆盖修复镜像缓存，未改工作树依赖声明；图片中的图标包版本与工作树锁文件同为 0.0.7。
+- Draft PR #1146 的首轮 Linux CI 暴露共享导航组件矩阵仍含旧 TabBar 行：明暗分别 0.60%（2712px）、0.59%（2689px）。CI 差异图显示其他导航组件未变；本地相同环境复现相同差异，更新共享矩阵两张 Golden 后无更新严格复跑 2/2 通过。其他依赖该矩阵的 BackTop、Drawer、NavBar、Tabs 分组无需修改生产源码。
+- Flutter 3.32.0 Android 16 真机 debug APK 构建、安装并启动成功；`com.tdesign.tdesign_flutter_example/.MainActivity` 已确认前台，UI 层级可见 TabBar 页面 3 组、9 实例。设备随后锁屏，本轮尚未对最终版逐项手动点击和截图核对。
+- Flutter 3.47.0 Example Web release 构建成功；`synthetic-package` 与 Wasm dry-run 只产生既有提示。`git diff --check` 通过。
+- 可访问的 Figma 副本 `5iZtzla34Rz25j4cK7viAz:25529:22098` 是 1440×2596 组件展板；完整 375px 移动端 Demo 节点 `28591:35219` 不在该副本中，原分支也无读取权限。当前无法据此宣称整页 Figma 逐像素一致，仍待提供可访问页面或导出图。
+
 
 ## 2026-09-08 最终 develop 同步
 
@@ -214,28 +223,3 @@
 - 最新 debug APK 已构建并安装到 Android 16 真机 `40302eeb`；包
   `com.tdesign.tdesign_flutter_example` 的 `MainActivity` 已确认处于前台，detach
   后进程仍在运行。
-
-## 2026-09-27 Token 标准化后的布局与 Golden 复核
-
-- 当前分支 `rss1102/refactor/miniprogram-tokens@97afb678` 的待提交源码按既有
-  Figma 胶囊实例契约核对：375px 画板下外栏 343×56px，外侧 16px、内侧及项间
-  8px，四项各 75.75px，选中背景 75.75×40px。组件以统一可用宽度计算这组
-  几何，公开胶囊 Demo 用四个 `Item` 图文项与首项圆点徽标；没有新增 Demo
-  样式覆盖，也没有为迁就旧 Golden 回退组件布局。
-- 现有旧 Golden 与当前 Linux Flutter 3.32.0 实际图逐像素比较：组件 12 张
-  共 29,094/576,000 像素不同（5.051%）；Demo 10 张共
-  257,902/3,759,000 像素不同（6.861%）。差异含已确认的几何、Demo
-  配置与 Token/字体/阴影变化，不把该比例当作 Figma 误差。
-- 导航组合两张旧图为 420×1084，新图 420×1086。TabBar 区域以外，Steps
-  的文字度量使后续内容整体下移 2px；这是默认正文 Token/解析变化，不是
-  导航组件中的额外位移。两张共 50,997/912,240 像素不同（5.590%，按新图
-  较大面积计），同样不是设计稿像素差。
-- 在固定 Linux Flutter 3.32.0 镜像中，先无更新复现上述差异，再仅更新
-  TabBar 组件 12、Demo 10 和导航组合 2 张图片。更新后不带
-  `--update-goldens` 严格复跑：组件/导航 14/14，Demo 11/11（含 1 个
-  非图片注册测试），对应 24 张与新基线精确差异为 0。
-- 同一环境的功能测试：TabBar/Steps 组件 58/58，TabBar Demo 9/9。
-  本轮没有修改组件公开 API 或布局源码；其余 BackTop/Indexes Token 相关
-  旧基线、Figma 全实例精确数值读取、最终设备复验及双版本全仓门禁不在上述
-  通过结论内。Figma MCP 触及 Starter 额度，浏览器可见画面与已记录的设计
-  数值用于本轮裁定，不宣称跨渲染器逐像素一致。

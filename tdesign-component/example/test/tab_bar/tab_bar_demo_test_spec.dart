@@ -45,5 +45,5 @@ const tabBarDemoPageTestSpec = DemoPageTestSpec(
   expectedComponentCount: 9,
   supplementalCjkFontFamily: 'TabBar Golden CJK',
   supplementalCjkFontPath: 'test/fonts/TabBarGoldenCJK-Regular.otf',
-  goldenTokenFontFamily: 'Roboto',
+  goldenTTextFontFamily: 'Roboto',
 );

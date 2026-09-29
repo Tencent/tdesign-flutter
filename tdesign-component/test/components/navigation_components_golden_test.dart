@@ -115,7 +115,6 @@ class _NavigationComponentsScene extends StatelessWidget {
                         type: TTabBarType.iconText,
                         value: 1,
                         useSafeArea: false,
-                        placeholder: false,
                         onChanged: _ignoreIndex,
                         navigationTabs: [
                           _tab(TIcons.home, 'Home'),

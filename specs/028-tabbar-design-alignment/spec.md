@@ -45,7 +45,7 @@
 - `iconTextLayout` 仅对 `iconText` 生效，默认 `stacked`（图标在上、文字在下），
   可选 `inline`（图标在左、文字在右）；双层级菜单入口固定使用菜单图标在文字
   左侧的结构，不受此参数影响。`inline` 使用 20px 图标、16px/24px 文字及
-  默认 4px 图文间距，显式 `centerDistance` 仍优先。
+  默认 4px 图文间距；上下排列使用 0px。图文间距由组件内部决定，不提供公开覆盖参数。
 - `inline` 图文项的徽标锚定整组图文右上角；默认 `stacked` 仍锚定图标右上角。
   Filled 栏按两侧各 8px、项间 8px 分配，Label 选中底色覆盖整个项宽；
   Capsule 栏沿用同一内部间距并保留 16px 外边距。
@@ -56,6 +56,8 @@
   仍只进入一次选中与回调链路。
 - `itemStyle == label` 时选中项显示品牌浅色背景；`normal` 只改变前景色。
 - `style == capsule` 时标签栏具有 16px 外边距、圆角与顶部阴影，不显示顶部边线。
+- Filled 标签栏始终绘制默认顶边线（组件描边色、0.5px），不提供显隐或样式覆盖参数；自定义 Demo 同样使用该默认线。
+- `useSafeArea` 为 true 时使用标签栏背景填满底部安全区，为 false 时不处理安全区；不提供单独的占位模式。
 - `split` 仅在 Normal 选项样式中绘制分隔线。
 - 单项徽标由可空的 `TBadgeConfig` 唯一表达；`null` 表示不显示，内容、形态和
   可选逐项偏移均由配置提供。TabBar 不再保存重复的显隐开关或定位字段。
@@ -67,12 +69,8 @@
   显式 offset 仅用于逐项自定义。
 - 颜色和字体默认值来自 `TThemeData`；实例参数优先于 `TTabBarThemeData`，
   Theme 优先于全局 Token。
-- Theme 动画中 nullable 尺寸按运行时内置默认值插值；但 `centerDistance`
-  的内置默认值取决于实例 `iconTextLayout`（上下 0px、左右 4px），ThemeData
-  无法获知该布局。该字段两端都显式设置时连续插值；任一端为 null 时保持
-  “未覆盖”语义并在动画中点切换，避免错误地把左右排列的 null 当作 0px。
-  nullable 颜色与边线同样保持“未覆盖”语义，不得插值出透明色或
-  `BorderSide.none` 污染低优先级 Token。
+- Theme 动画中 nullable 尺寸按运行时内置默认值插值；nullable 颜色保持
+  “未覆盖”语义，不得插值出透明色污染低优先级 Token。
 - 内置文字样式使用共享解析器的低优先级 defaults；显式 TTextThemeData、DefaultTextStyle、TextTheme 按字段覆盖，单项 TextStyle 最高优先。
 - 二级菜单通过 InheritedTheme 捕获触发处的局部 Theme；菜单背景配置同时作用于面板和菜单行，不被内部容器背景遮挡。
 - 路由、弹层 Widget、State、绘制器及带徽标的内部单项均为私有实现，不再从包入口公开；使用者通过 TTabBar 和菜单配置组合，属于 breaking 迁移。
@@ -106,26 +104,13 @@
 - 图标项与图文项的内置图标尺寸为 20px，由 `TTabBar` 提供；调用方传入的
   `Icon(size: …)` 仍可显式覆盖。默认 Demo 只提供图标内容，不传尺寸补丁。
 
-### 2026-09-28 胶囊实例局部校准
-
-- 在可访问的 Figma 副本节点 `26969:14283` 中直接核对：胶囊为 343×56px，
-  内边距和项间距均为 8px，外圆角绑定 `--td-radius-round`，背景绑定
-  `--td-bg-color-container`，阴影为 `Shadow-3`。选中图文项使用 `app` 图标、
-  `Item` 文本、0px 图文间距、`--td-brand-color-light` 填充和圆点徽标。
-- 同一 343×56px 区域的 Figma 1× 导出与 Linux Flutter 3.32 截图均有 8px
-  圆点；Flutter 的圆点像素边界比 Figma 右移 1px、上移 2px。上下图文项的
-  圆点默认位置由 TabBar 相对图标锚点校准；显式 `TBadgeConfig.offset` 和
-  `BadgeThemeData.offset` 保持优先，不在 Demo 传位置补丁。
-- 静态选中背景与线性、弹性指示器使用同一 `radiusRound` Token；默认胶囊
-  形状不变，自定义该 Token 时三条路径也保持一致。此项不新增公开 API。
-
 - [x] Demo 的分组、文案、实例顺序与 Figma node `28591:35219` 一致。
-- [ ] 普通图文项同时支持上下和左右排列；双层级菜单入口固定图标在左，并由
+- [x] 普通图文项同时支持上下和左右排列；双层级菜单入口固定图标在左，并由
   组件测试与必要 Golden 覆盖。
 - [x] Normal/Label、Filled/Capsule、split、badge 和 doubleLayer 各自独立。
 - [x] 明暗主题均不使用硬编码业务颜色。
-- [ ] 当前胶囊图文调整后的组件测试、Demo 测试与双版本 analyze/test 通过；
-  Flutter 3.32 Linux 明暗 Golden 仍需审查旧基线差异并无更新复跑。
+- [x] 当前胶囊图文调整后的组件测试、Demo 测试与双版本 analyze/test 通过；
+  Flutter 3.32 Linux 明暗 Golden 已审查并无更新复跑（见 acceptance.md）。
 - [x] 首轮 Demo 已在 iOS Simulator 热重启、逐项操作和明暗主题核对；维护者确认可先以模拟器证据推送。
 - [ ] 本轮补充修复后的最终版本重新进行移动设备逐项视觉操作核对；不以首轮设备证据或本轮 Golden 冒充。
 - [x] 二级菜单默认宽度与 Figma 107px 对齐，并由组件测试及展开态 Golden 覆盖。

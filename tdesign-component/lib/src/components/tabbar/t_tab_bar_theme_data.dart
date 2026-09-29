@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 
 /// 底部标签栏 ThemeExtension
 ///
-/// 管理 TTabBar 的子树级视觉默认值（高度、颜色、间距与分割线等）。
-/// 构造器参数优先级高于 ThemeData。
+/// 管理 TTabBar 的子树级视觉默认值（高度、颜色与分割线等）。
 class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
   /// 默认高度
   final double? barHeight;
@@ -19,11 +18,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
   /// 默认背景颜色
   final Color? backgroundColor;
 
-  /// 图文项的子树级默认间距；null 时交由 TabBar 按布局解析：上下排列为
-  /// 0px，左右排列为 4px。组件实例的 `centerDistance` 优先。
-  /// 动态主题只在两端都显式配置时连续插值；null 与显式值在中点切换。
-  final double? centerDistance;
-
   /// 默认分割线高度
   final double? dividerHeight;
 
@@ -33,19 +27,14 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
   /// 竖向分割线颜色；未设置时读取全局灰阶 3。
   final Color? dividerColor;
 
-  /// 上边线样式；未设置时使用全局 `borderLevel1Color` 的 0.5px 线。
-  final BorderSide? topBorder;
-
   const TTabBarThemeData({
     this.barHeight,
     this.selectedBgColor,
     this.unselectedBgColor,
     this.backgroundColor,
-    this.centerDistance,
     this.dividerHeight,
     this.dividerThickness,
     this.dividerColor,
-    this.topBorder,
   });
 
   @override
@@ -54,22 +43,18 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
     Color? selectedBgColor,
     Color? unselectedBgColor,
     Color? backgroundColor,
-    double? centerDistance,
     double? dividerHeight,
     double? dividerThickness,
     Color? dividerColor,
-    BorderSide? topBorder,
   }) {
     return TTabBarThemeData(
       barHeight: barHeight ?? this.barHeight,
       selectedBgColor: selectedBgColor ?? this.selectedBgColor,
       unselectedBgColor: unselectedBgColor ?? this.unselectedBgColor,
       backgroundColor: backgroundColor ?? this.backgroundColor,
-      centerDistance: centerDistance ?? this.centerDistance,
       dividerHeight: dividerHeight ?? this.dividerHeight,
       dividerThickness: dividerThickness ?? this.dividerThickness,
       dividerColor: dividerColor ?? this.dividerColor,
-      topBorder: topBorder ?? this.topBorder,
     );
   }
 
@@ -95,11 +80,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
         other.backgroundColor,
         t,
       ),
-      centerDistance: _lerpCenterDistance(
-        centerDistance,
-        other.centerDistance,
-        t,
-      ),
       dividerHeight: _lerpDoubleWithDefault(
         dividerHeight,
         other.dividerHeight,
@@ -113,7 +93,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
         t,
       ),
       dividerColor: _lerpOptionalColor(dividerColor, other.dividerColor, t),
-      topBorder: _lerpOptionalBorderSide(topBorder, other.topBorder, t),
     );
   }
 
@@ -129,16 +108,6 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
     return lerpDouble(a ?? defaultValue, b ?? defaultValue, t);
   }
 
-  // The null fallback depends on the consuming TabBar's iconTextLayout.
-  // ThemeData has no access to that layout: interpolating null as 0 would
-  // incorrectly shrink an inline item's 4px default gap during transitions.
-  static double? _lerpCenterDistance(double? a, double? b, double t) {
-    if (a == null || b == null) {
-      return t < 0.5 ? a : b;
-    }
-    return lerpDouble(a, b, t);
-  }
-
   // null delegates to the lower-priority TDesign token. That token is only
   // available from BuildContext, so interpolating it as transparent here would
   // create a false style override during an animated theme transition.
@@ -149,14 +118,4 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
     return Color.lerp(a, b, t);
   }
 
-  static BorderSide? _lerpOptionalBorderSide(
-    BorderSide? a,
-    BorderSide? b,
-    double t,
-  ) {
-    if (a == null || b == null) {
-      return t < 0.5 ? a : b;
-    }
-    return BorderSide.lerp(a, b, t);
-  }
 }

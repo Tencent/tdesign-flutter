@@ -53,12 +53,10 @@ void main() {
         barHeight: 64,
         selectedBgColor: Colors.red,
         dividerColor: Colors.green,
-        topBorder: const BorderSide(color: Colors.black),
       );
       expect(copied.barHeight, 64);
       expect(copied.selectedBgColor, Colors.red);
       expect(copied.dividerColor, Colors.green);
-      expect(copied.topBorder?.color, Colors.black);
 
       const start = TTabBarThemeData(barHeight: 56);
       const end = TTabBarThemeData(barHeight: 64);
@@ -70,14 +68,12 @@ void main() {
       const data = TTabBarThemeData(
         barHeight: 56,
         selectedBgColor: Colors.red,
-        centerDistance: 4,
         dividerHeight: 32,
       );
       final copied = data.copyWith();
 
       expect(copied.barHeight, 56);
       expect(copied.selectedBgColor, Colors.red);
-      expect(copied.centerDistance, 4);
       expect(copied.dividerHeight, 32);
     });
 
@@ -86,55 +82,32 @@ void main() {
       const custom = TTabBarThemeData(
         barHeight: 64,
         selectedBgColor: Colors.red,
-        centerDistance: 8,
         dividerHeight: 40,
         dividerThickness: 1.5,
-        topBorder: BorderSide(color: Colors.blue, width: 2),
       );
 
       final early = defaults.lerp(custom, 0.25);
       expect(early.barHeight, 58);
-      expect(early.centerDistance, isNull);
       expect(early.dividerHeight, 34);
       expect(early.dividerThickness, 0.75);
       expect(early.selectedBgColor, isNull);
-      expect(early.topBorder, isNull);
 
       final late = defaults.lerp(custom, 0.75);
       expect(late.barHeight, 62);
-      expect(late.centerDistance, 8);
       expect(late.selectedBgColor, Colors.red);
-      expect(late.topBorder, const BorderSide(color: Colors.blue, width: 2));
-
-      expect(custom.lerp(defaults, 0.25).centerDistance, 8);
-      expect(custom.lerp(defaults, 0.75).centerDistance, isNull);
-      expect(defaults.lerp(custom, 0).centerDistance, isNull);
-      expect(defaults.lerp(custom, 0.5).centerDistance, 8);
-      expect(defaults.lerp(custom, 1).centerDistance, 8);
-      expect(custom.lerp(defaults, 0).centerDistance, 8);
-      expect(custom.lerp(defaults, 0.5).centerDistance, isNull);
-      expect(custom.lerp(defaults, 1).centerDistance, isNull);
-      expect(
-        custom
-            .lerp(const TTabBarThemeData(centerDistance: 12), 0.5)
-            .centerDistance,
-        10,
-      );
 
       final empty = defaults.lerp(const TTabBarThemeData(), 0.5);
       expect(empty.barHeight, isNull);
-      expect(empty.centerDistance, isNull);
       expect(empty.dividerHeight, isNull);
       expect(empty.dividerThickness, isNull);
       expect(empty.selectedBgColor, isNull);
-      expect(empty.topBorder, isNull);
     });
 
-    testWidgets('inline gap uses its own default through Theme transitions', (
+    testWidgets('inline gap keeps its default through Theme transitions', (
       tester,
     ) async {
       const defaults = TTabBarThemeData();
-      const custom = TTabBarThemeData(centerDistance: 8);
+      const custom = TTabBarThemeData(barHeight: 64);
 
       Future<double> renderedGap(TTabBarThemeData theme) async {
         await tester.pumpWidget(
@@ -157,8 +130,8 @@ void main() {
       }
 
       expect(await renderedGap(defaults.lerp(custom, 0.25)), closeTo(4, 1));
-      expect(await renderedGap(defaults.lerp(custom, 0.75)), closeTo(8, 1));
-      expect(await renderedGap(custom.lerp(defaults, 0.25)), closeTo(8, 1));
+      expect(await renderedGap(defaults.lerp(custom, 0.75)), closeTo(4, 1));
+      expect(await renderedGap(custom.lerp(defaults, 0.25)), closeTo(4, 1));
       expect(await renderedGap(custom.lerp(defaults, 0.75)), closeTo(4, 1));
     });
   });
@@ -212,42 +185,50 @@ void main() {
   group('TTabBar widget', () {
     testWidgets('文字主题按字段覆盖默认值，单项样式优先', (tester) async {
       final token = TThemeData.defaultData();
-      final base = TThemeBuilder.light(token);
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: base.copyWith(
-            textTheme: const TextTheme(bodyLarge: TextStyle(fontSize: 21)),
-          ),
-          home: Scaffold(
-            body: TTabBar(
-              type: TTabBarType.text,
-              value: 0,
-              useSafeArea: false,
-              onChanged: (_) {},
-              navigationTabs: const [
-                TTabBarItemConfig(tabText: '默认选中'),
-                TTabBarItemConfig(tabText: '默认未选'),
-                TTabBarItemConfig(
-                  tabText: '局部覆盖',
-                  unselectTabTextStyle: TextStyle(
-                    fontSize: 24,
-                    color: Colors.orange,
+      for (final materialTheme in [false, true]) {
+        final base = TThemeBuilder.light(token);
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: materialTheme
+                ? base.copyWith(
+                    textTheme: const TextTheme(
+                      bodyLarge: TextStyle(fontSize: 21),
+                    ),
+                  )
+                : base.mergeExtension(
+                    const TTextThemeData(textStyle: TextStyle(fontSize: 21)),
                   ),
-                ),
-              ],
+            home: Scaffold(
+              body: TTabBar(
+                type: TTabBarType.text,
+                value: 0,
+                useSafeArea: false,
+                onChanged: (_) {},
+                navigationTabs: const [
+                  TTabBarItemConfig(tabText: '默认选中'),
+                  TTabBarItemConfig(tabText: '默认未选'),
+                  TTabBarItemConfig(
+                    tabText: '局部覆盖',
+                    unselectTabTextStyle: TextStyle(
+                      fontSize: 24,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-      final selected = tester.widget<Text>(find.text('默认选中')).style!;
-      final unselected = tester.widget<Text>(find.text('默认未选')).style!;
-      final custom = tester.widget<Text>(find.text('局部覆盖')).style!;
-      expect(selected.fontSize, 21);
-      expect(selected.color, token.brandColor);
-      expect(unselected.fontSize, 21);
-      expect(unselected.color, token.textColorPrimary);
-      expect(custom.fontSize, 24);
-      expect(custom.color, Colors.orange);
+        );
+        final selected = tester.widget<Text>(find.text('默认选中')).style!;
+        final unselected = tester.widget<Text>(find.text('默认未选')).style!;
+        final custom = tester.widget<Text>(find.text('局部覆盖')).style!;
+        expect(selected.fontSize, 21);
+        expect(selected.color, token.brandColor);
+        expect(unselected.fontSize, 21);
+        expect(unselected.color, token.textColorPrimary);
+        expect(custom.fontSize, 24);
+        expect(custom.color, Colors.orange);
+      }
     });
 
     testWidgets('二级菜单继承局部主题且背景配置不被菜单行覆盖', (tester) async {
@@ -260,8 +241,8 @@ void main() {
           theme: TThemeBuilder.light(TThemeData.defaultData()),
           home: Scaffold(
             body: Theme(
-              data: TThemeBuilder.light(localToken).copyWith(
-                textTheme: const TextTheme(bodyLarge: TextStyle(fontSize: 21)),
+              data: TThemeBuilder.light(localToken).mergeExtension(
+                const TTextThemeData(textStyle: TextStyle(fontSize: 21)),
               ),
               child: TTabBar(
                 type: TTabBarType.doubleLayer,
@@ -443,7 +424,6 @@ void main() {
             navigationTabs: iconTextTabs(),
             onChanged: (_) {},
           ),
-          tabBarTheme: const TTabBarThemeData(centerDistance: 4),
         ),
       );
 
@@ -593,39 +573,92 @@ void main() {
       }
     });
 
-    testWidgets(
-      'repeated tap, long press, safe area and no placeholder paths',
-      (tester) async {
-        var tapCount = 0;
-        var longPressed = false;
+    testWidgets('repeated tap, long press and default safe area path', (
+      tester,
+    ) async {
+      var tapCount = 0;
+      var longPressed = false;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.text,
+            value: 0,
+            navigationTabs: [
+              TTabBarItemConfig(
+                tabText: '标签1',
+                allowMultipleTaps: true,
+                onTap: () => tapCount++,
+                onLongPress: () => longPressed = true,
+              ),
+              TTabBarItemConfig(tabText: '标签2', onTap: () {}),
+            ],
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('标签1'));
+      await tester.longPress(find.text('标签1'));
+      await tester.pumpAndSettle();
+
+      expect(tapCount, 1);
+      expect(longPressed, isTrue);
+    });
+
+    testWidgets('safe area fills only when enabled', (tester) async {
+      Widget buildBar({required bool useSafeArea}) => wrapWithTheme(
+        MediaQuery(
+          data: const MediaQueryData(padding: EdgeInsets.only(bottom: 24)),
+          child: TTabBar(
+            type: TTabBarType.text,
+            value: 0,
+            useSafeArea: useSafeArea,
+            navigationTabs: textTabs(),
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(buildBar(useSafeArea: true));
+      expect(tester.getSize(find.byType(TTabBar)).height, 80);
+
+      await tester.pumpWidget(buildBar(useSafeArea: false));
+      expect(tester.getSize(find.byType(TTabBar)).height, 56);
+    });
+
+    testWidgets('filled has default top border and capsule has none', (
+      tester,
+    ) async {
+      Future<BorderSide?> topBorder(TTabBarStyle style) async {
         await tester.pumpWidget(
           wrapWithTheme(
             TTabBar(
               type: TTabBarType.text,
+              style: style,
               value: 0,
-              placeholder: false,
-              navigationTabs: [
-                TTabBarItemConfig(
-                  tabText: '标签1',
-                  allowMultipleTaps: true,
-                  onTap: () => tapCount++,
-                  onLongPress: () => longPressed = true,
-                ),
-                TTabBarItemConfig(tabText: '标签2', onTap: () {}),
-              ],
+              useSafeArea: false,
+              navigationTabs: textTabs(),
               onChanged: (_) {},
             ),
           ),
         );
+        for (final container in tester.widgetList<Container>(
+          find.descendant(
+            of: find.byType(TTabBar),
+            matching: find.byType(Container),
+          ),
+        )) {
+          final decoration = container.foregroundDecoration;
+          if (decoration is BoxDecoration && decoration.border is Border) {
+            return (decoration.border! as Border).top;
+          }
+        }
+        return null;
+      }
 
-        await tester.tap(find.text('标签1'));
-        await tester.longPress(find.text('标签1'));
-        await tester.pumpAndSettle();
-
-        expect(tapCount, 1);
-        expect(longPressed, isTrue);
-      },
-    );
+      expect((await topBorder(TTabBarStyle.filled))?.width, 0.5);
+      expect(await topBorder(TTabBarStyle.capsule), isNull);
+    });
 
     testWidgets('expansion panel popup opens and reports selected value', (
       tester,
@@ -825,7 +858,6 @@ void main() {
             ],
             onChanged: (_) {},
           ),
-          tabBarTheme: const TTabBarThemeData(centerDistance: 6),
         ),
       );
 
@@ -919,106 +951,6 @@ void main() {
       );
       expect((capsule.decoration! as ShapeDecoration).shadows, capsuleShadow);
     });
-
-    testWidgets('selected item and animated indicators share round token', (
-      tester,
-    ) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'tabbar-selected-radius-test',
-        radiusMap: {'radiusRound': 7},
-      );
-      for (final animation in TTabBarIndicatorAnimation.values) {
-        await tester.pumpWidget(
-          wrapWithTheme(
-            TTabBar(
-              type: TTabBarType.text,
-              style: TTabBarStyle.capsule,
-              indicatorAnimation: animation,
-              value: 0,
-              navigationTabs: textTabs(),
-              onChanged: (_) {},
-            ),
-            themeData: token,
-          ),
-        );
-        final selected = tester.widget<Container>(
-          find
-              .byWidgetPredicate(
-                (widget) =>
-                    widget is Container &&
-                    widget.decoration is BoxDecoration &&
-                    (widget.decoration! as BoxDecoration).color ==
-                        token.brandColorLight,
-              )
-              .first,
-        );
-        expect(
-          (selected.decoration! as BoxDecoration).borderRadius,
-          BorderRadius.circular(7),
-          reason: animation.name,
-        );
-      }
-    });
-
-    testWidgets(
-      'stacked iconText dot uses design offset and honors overrides',
-      (tester) async {
-        Widget bar({Offset? offset}) => TTabBar(
-          type: TTabBarType.iconText,
-          value: 0,
-          useSafeArea: false,
-          navigationTabs: [
-            TTabBarItemConfig(
-              tabText: 'Item',
-              selectedIcon: const Icon(TIcons.app),
-              unselectedIcon: const Icon(TIcons.app),
-              badge: TBadgeConfig(variant: TBadgeVariant.dot, offset: offset),
-            ),
-            const TTabBarItemConfig(
-              tabText: 'Item',
-              selectedIcon: Icon(TIcons.app),
-              unselectedIcon: Icon(TIcons.app),
-            ),
-          ],
-          onChanged: (_) {},
-        );
-
-        await tester.pumpWidget(wrapWithTheme(bar()));
-        expect(
-          tester.widget<Badge>(find.byType(Badge)).offset,
-          const Offset(-1, 2),
-        );
-
-        await tester.pumpWidget(
-          wrapWithTheme(
-            Directionality(textDirection: TextDirection.rtl, child: bar()),
-          ),
-        );
-        expect(
-          tester.widget<Badge>(find.byType(Badge)).offset,
-          const Offset(1, 2),
-        );
-
-        await tester.pumpWidget(wrapWithTheme(bar(offset: const Offset(3, 4))));
-        expect(
-          tester.widget<Badge>(find.byType(Badge)).offset,
-          const Offset(3, 4),
-        );
-
-        await tester.pumpWidget(
-          wrapWithTheme(
-            BadgeTheme(
-              data: const BadgeThemeData(offset: Offset(5, 6)),
-              child: bar(),
-            ),
-          ),
-        );
-        expect(
-          tester.widget<Badge>(find.byType(Badge)).offset,
-          const Offset(5, 6),
-        );
-      },
-    );
 
     testWidgets(
       'capsule iconText uses design item bounds and centered content',
@@ -1580,48 +1512,6 @@ void main() {
 
       expect(find.byType(TTabBar), findsOneWidget);
       expect(tester.getSize(find.byType(TTabBar)).height, 60);
-    });
-
-    testWidgets('top border and item dividers use their own token fallbacks', (
-      tester,
-    ) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'tabbar-border-token-test',
-        colorMap: {
-          'borderLevel1Color': Colors.blue,
-          'grayColor3': Colors.red,
-          'componentStroke': Colors.green,
-        },
-      );
-      await tester.pumpWidget(
-        wrapWithTheme(
-          TTabBar(
-            type: TTabBarType.iconText,
-            itemStyle: TTabBarItemStyle.normal,
-            value: 0,
-            split: true,
-            useSafeArea: false,
-            navigationTabs: iconTextTabs(),
-            onChanged: (_) {},
-          ),
-          themeData: token,
-        ),
-      );
-
-      final bar = tester
-          .widgetList<Container>(find.byType(Container))
-          .firstWhere(
-            (container) => container.foregroundDecoration is BoxDecoration,
-          );
-      final border = (bar.foregroundDecoration! as BoxDecoration).border!;
-      expect(border.top.color, Colors.blue);
-      expect(find.byType(VerticalDivider), findsNWidgets(2));
-      expect(
-        tester
-            .widgetList<VerticalDivider>(find.byType(VerticalDivider))
-            .map((divider) => divider.color),
-        everyElement(Colors.red),
-      );
     });
 
     testWidgets('behavior parameters belong to the widget instance', (

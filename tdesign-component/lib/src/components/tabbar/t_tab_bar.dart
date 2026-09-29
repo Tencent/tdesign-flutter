@@ -40,6 +40,9 @@ const double _kDefaultTabBarHeight = 56;
 /// 图标项与图文项的默认图标尺寸；显式 Icon.size 仍优先。
 const double _kDefaultTabIconSize = 20;
 
+/// 左右图文项的内置图文间距；上下排列不留额外间距。
+const double _kInlineIconTextGap = 4;
+
 /// 标签栏的内边距与项间距；胶囊栏另有页面侧边距。
 const double _kCapsuleOuterMargin = 16;
 const double _kBarPadding = 8;
@@ -222,9 +225,7 @@ class TTabBar extends StatefulWidget {
     this.style = TTabBarStyle.filled,
     this.iconTextLayout = TTabBarIconTextLayout.stacked,
     this.split = false,
-    this.showTopBorder = true,
     this.useSafeArea = true,
-    this.placeholder = true,
     this.needInkWell = false,
     this.indicatorAnimation = TTabBarIndicatorAnimation.none,
     this.animationDuration,
@@ -287,8 +288,8 @@ class TTabBar extends StatefulWidget {
 
   /// 图文项的图标与文字排列方式；仅当 [type] 为 [TTabBarType.iconText] 时生效。
   ///
-  /// 默认为 [TTabBarIconTextLayout.stacked]。左右排列时默认图文间距为 4px，
-  /// 组件 Theme 的 `centerDistance` 值优先。该参数不改变标签栏
+  /// 默认为 [TTabBarIconTextLayout.stacked]。上下排列时图文间距为 0px，
+  /// 左右排列时为 4px。该参数不改变标签栏
   /// 自身的水平方向，也不影响双层级菜单入口。
   final TTabBarIconTextLayout iconTextLayout;
 
@@ -304,14 +305,9 @@ class TTabBar extends StatefulWidget {
   /// 是否使用竖线分隔；[itemStyle] 为 [TTabBarItemStyle.label] 时不显示。
   final bool split;
 
-  /// 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值，非胶囊型才生效）
-  final bool showTopBorder;
-
-  /// 使用安全区域
+  /// 是否填充底部安全区域；默认 true，使用标签栏背景色填充。
+  /// 嵌入页面内部且不需要底部安全区时可设为 false。
   final bool useSafeArea;
-
-  /// 是否添加安全区域占位
-  final bool placeholder;
 
   /// 是否需要水波纹效果
   final bool needInkWell;
@@ -345,11 +341,9 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
   late Color _effectiveSelectedBgColor;
   late Color? _effectiveUnselectedBgColor;
   late Color _effectiveBackgroundColor;
-  late double _effectiveCenterDistance;
   late double _effectiveDividerHeight;
   late double _effectiveDividerThickness;
   late Color _effectiveDividerColor;
-  late BorderSide? _effectiveTopBorder;
 
   @override
   void initState() {
@@ -392,13 +386,9 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
     _effectiveUnselectedBgColor = theme?.unselectedBgColor;
     _effectiveBackgroundColor =
         theme?.backgroundColor ?? context.tTheme.bgColorContainer;
-    _effectiveCenterDistance =
-        theme?.centerDistance ??
-        (widget.iconTextLayout == TTabBarIconTextLayout.inline ? 4 : 0);
     _effectiveDividerHeight = theme?.dividerHeight ?? 32;
     _effectiveDividerThickness = theme?.dividerThickness ?? 0.5;
     _effectiveDividerColor = theme?.dividerColor ?? context.tTheme.grayColor3;
-    _effectiveTopBorder = theme?.topBorder;
     _animationController.duration =
         widget.animationDuration ?? const Duration(milliseconds: 300);
   }
@@ -453,15 +443,13 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
                     )
                   : BoxDecoration(color: _effectiveBackgroundColor),
               foregroundDecoration:
-                  !isCapsuleOutlineType && widget.showTopBorder
+                  !isCapsuleOutlineType
                   ? BoxDecoration(
                       border: Border(
-                        top:
-                            _effectiveTopBorder ??
-                            BorderSide(
-                              color: context.tTheme.borderLevel1Color,
-                              width: 0.5,
-                            ),
+                        top: BorderSide(
+                          color: context.tTheme.borderLevel1Color,
+                          width: 0.5,
+                        ),
                       ),
                     )
                   : null,
@@ -494,15 +482,11 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
               ),
             );
             if (widget.useSafeArea) {
-              if (widget.placeholder) {
-                result = Container(
-                  padding: EdgeInsets.only(bottom: safeAreaBottomHeight),
-                  color: _effectiveBackgroundColor,
-                  child: result,
-                );
-              } else {
-                result = SafeArea(child: result);
-              }
+              result = Container(
+                padding: EdgeInsets.only(bottom: safeAreaBottomHeight),
+                color: _effectiveBackgroundColor,
+                child: result,
+              );
             }
             final isDisabled = widget.onChanged == null;
             return Semantics(
@@ -690,7 +674,6 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
         itemWidth: itemWidth,
         selectedBgColor: _effectiveSelectedBgColor,
         unselectedBgColor: _effectiveUnselectedBgColor,
-        centerDistance: _effectiveCenterDistance,
         iconTextLayout: widget.iconTextLayout,
         needInkWell: widget.needInkWell,
         showItemBackground:
@@ -739,7 +722,6 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     required this.onTap,
     required this.selectedBgColor,
     required this.unselectedBgColor,
-    required this.centerDistance,
     required this.iconTextLayout,
     this.onLongPress,
     this.needInkWell = false,
@@ -775,9 +757,6 @@ class _TTabBarItemWithBadge extends StatelessWidget {
 
   /// 未选中时背景颜色
   final Color? unselectedBgColor;
-
-  /// icon与文本中间距离
-  final double centerDistance;
 
   /// 图文项内部排列方式。
   final TTabBarIconTextLayout iconTextLayout;
@@ -915,7 +894,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             icon,
-            if (centerDistance > 0) SizedBox(width: centerDistance),
+            const SizedBox(width: _kInlineIconTextGap),
             Flexible(child: text),
           ],
         );
@@ -934,7 +913,6 @@ class _TTabBarItemWithBadge extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             iconWithBadge,
-            if (centerDistance > 0) SizedBox(height: centerDistance),
             text,
           ],
         ),
