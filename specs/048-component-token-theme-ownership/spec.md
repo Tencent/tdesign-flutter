@@ -46,6 +46,7 @@
 - Avatar 默认图标与文字的前景色只由 `TAvatarThemeData.foregroundColor` 控制；移除组件 Theme 中可同时设置颜色的 `textStyle`。字符头像仍按 `size` 使用内置字号与字重，特殊排版由调用方传入带样式的 `child: Text(...)`，不为通用 `Widget child` 再增组件级文字样式入口。
 - Popover 蒙层色和气泡圆角只由 `TPopoverThemeData.barrierColor/borderRadius` 控制；移除 `TPopoverAnchor` 与 `TPopover.showPopover` 的同义实例字段 `overlayColor/radius`。单个气泡可包裹局部 Theme；`borderRadius` 使用 `BorderRadius` 保存原实例圆角的逐角表达能力。默认值仍沿组件原有回退，不以旧 Golden 自动裁定。
 - TabBar 顶部分隔线与 Item 之间的竖线虽然在小程序共用 `--td-tab-bar-border-color` 名称，但未覆盖时分别回退 `borderLevel1Color` 与灰阶 3。Flutter 分别保留上边线、竖线的 Theme 视觉入口，各自只走一条默认回退；不为消除小程序同名变量歧义增加另一套兼容回退。
+- SideBar 的选中前景色只由 `TSideBarThemeData.selectedTextStyle.color` 配置；同一个颜色用于选中文字、图标和指示线。移除同层同义的 `selectedColor`，没有显式颜色时仍读取全局品牌色，字体等文字样式继续由 `selectedTextStyle` 控制。
 
 ## 验收标准
 

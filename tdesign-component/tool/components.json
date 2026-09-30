@@ -161,7 +161,8 @@
       "api": {
         "names": [
           "TSideBar",
-          "TSideBarItem"
+          "TSideBarItem",
+          "TSideBarThemeData"
         ],
         "getComments": false
       }

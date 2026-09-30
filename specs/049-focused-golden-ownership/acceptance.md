@@ -23,5 +23,5 @@
 
 ## 未覆盖项与后续工作
 
-- 远端 CI 尚未运行；本轮未提交或推送。
+- 实现已随 `ec723ec4af094baf9036cca9cd70186eb20eb1ac` 推送至 PR #1146。该提交的远端 Flutter 3.32.0 / latest 分析、测试、APK/iOS/Web 构建及 Linux 3.32.0 视觉回归均已通过；这不等于所有组件 Token 与设计稿差异均已验收。
 - 保留 `m3_isolation_controls`（跨 Material 版本的主题隔离契约）与 `popup_progress_layout`（两个组件的真实约束交互），不把它们用于无关组件的验收。

@@ -1,5 +1,11 @@
 # 验收记录
 
+## 2026-10-01 SideBar 选中前景色单入口（本地检查点）
+
+- `TSideBarThemeData.selectedColor` 已移除；选中文字、图标和指示线共用 `selectedTextStyle.color`，未指定颜色时仍读取全局品牌色。迁移方式见 `migration.md`。
+- Flutter 3.32.0 与 3.47.0 的 SideBar 三份聚焦组件测试各 63/63 通过；3.47.0 的三份公开 Demo 非 Golden 测试 18/18 通过。两个 SDK 的组件包严格分析均为 0 issue。3.32.0 SideBar 生产源码覆盖率 236/236（100%）。
+- 本地 macOS 没有写入 Linux Golden；需在最终提交的 Linux Flutter 3.32.0 CI 上确认默认视觉。当前未完成的 Text 和 SwipeCellAction 单入口、其余组件变量最终消费仍不能宣称已验收。
+
 ## 2026-09-29 Progress/Tag 与外部调用续验
 
 - 固定小程序 `1a1c5ca`，Progress 9 个变量已逐项追到当前 Flutter 默认 Widget/Painter；暗色内圆覆盖引用的 `--bg-color-page` 在冻结源码未定义，宿主未定义时依 CSS 规则透明。Flutter 默认浅色 `bgColorContainer`、暗色透明，组件 Theme 可显式设置 `circleInnerBgColor`；新增浅/暗/覆盖 Widget 断言。其余组件变量仍未完成最终消费与跨端像素验收，见 `component-consumption-review.md`。

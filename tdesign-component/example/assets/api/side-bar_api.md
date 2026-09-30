@@ -26,3 +26,25 @@
 | label | String | '' | 标签 |
 | textStyle | TextStyle? | - | 标签样式 |
 | value | int | -1 | 值 |
+
+
+### TSideBarThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| contentPadding | EdgeInsetsGeometry? | - | 默认自定义文本框内边距 |
+| selectedBgColor | Color? | - | 默认选中背景颜色 |
+| selectedTextStyle | TextStyle? | - | 选中文字样式；其中的 color 同时控制选中图标和指示线。 未指定 color 时读取全局品牌色。 |
+| unSelectedBgColor | Color? | - | 默认未选中背景颜色 |
+| unSelectedColor | Color? | - | 默认未选中颜色 |
+
+
+### TSideBarVariant
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| line | 左侧品牌色指示线样式 |
+| tag | 选中项为圆角标签样式 |

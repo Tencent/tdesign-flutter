@@ -24,7 +24,6 @@ class TWrapSideBarItem extends StatelessWidget {
     this.selectedTextStyle,
     this.value = -1,
     this.selected = false,
-    this.selectedColor,
     this.topAdjacent = false,
     this.bottomAdjacent = false,
     this.onTap,
@@ -43,7 +42,6 @@ class TWrapSideBarItem extends StatelessWidget {
   final TextStyle? selectedTextStyle;
   final int value;
   final bool selected;
-  final Color? selectedColor;
   final Color? selectedBgColor;
   final Color? unSelectedColor;
   final Color? unSelectedBgColor;
@@ -158,10 +156,7 @@ class TWrapSideBarItem extends StatelessWidget {
             width: preLineWidth,
             height: 14,
             decoration: BoxDecoration(
-              color:
-                  selectedTextStyle?.color ??
-                  selectedColor ??
-                  context.tTheme.brandColor,
+              color: selectedTextStyle?.color ?? context.tTheme.brandColor,
               borderRadius: BorderRadius.circular(4),
             ),
           ),
@@ -181,7 +176,7 @@ class TWrapSideBarItem extends StatelessWidget {
       if (selectedTextStyle?.color != null) {
         return selectedTextStyle!.color!;
       }
-      return selectedColor ?? context.tTheme.brandColor;
+      return context.tTheme.brandColor;
     }();
 
     return Visibility(
@@ -205,7 +200,7 @@ class TWrapSideBarItem extends StatelessWidget {
       textColor: disabled
           ? context.tTheme.textColorDisabled
           : selected
-          ? selectedColor ?? context.tTheme.brandColor
+          ? context.tTheme.brandColor
           : unSelectedColor ?? context.tTheme.textColorPrimary,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,

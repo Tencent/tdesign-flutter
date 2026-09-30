@@ -66,25 +66,33 @@ void main() {
   group('TSideBarThemeData', () {
     test('默认构造', () {
       const data = TSideBarThemeData();
-      expect(data.selectedColor, null);
+      expect(data.selectedTextStyle, null);
     });
 
     test('copyWith', () {
       const data = TSideBarThemeData(unSelectedColor: Colors.grey);
-      final copied = data.copyWith(selectedColor: Colors.red);
-      expect(copied.selectedColor, Colors.red);
+      final copied = data.copyWith(
+        selectedTextStyle: const TextStyle(color: Colors.red),
+      );
+      expect(copied.selectedTextStyle?.color, Colors.red);
       expect(copied.unSelectedColor, Colors.grey);
     });
 
     test('lerp', () {
-      const data1 = TSideBarThemeData(selectedColor: Colors.red);
-      const data2 = TSideBarThemeData(selectedColor: Colors.blue);
+      const data1 = TSideBarThemeData(
+        selectedTextStyle: TextStyle(color: Colors.red),
+      );
+      const data2 = TSideBarThemeData(
+        selectedTextStyle: TextStyle(color: Colors.blue),
+      );
       final lerped = data1.lerp(data2, 0.5);
-      expect(lerped.selectedColor, isA<Color>());
+      expect(lerped.selectedTextStyle?.color, isA<Color>());
     });
 
     test('lerp 非 TSideBarThemeData 返回自身', () {
-      const data = TSideBarThemeData(selectedColor: Colors.red);
+      const data = TSideBarThemeData(
+        selectedTextStyle: TextStyle(color: Colors.red),
+      );
       final lerped = data.lerp(null, 0.5);
       expect(lerped, same(data));
     });
@@ -191,26 +199,11 @@ void main() {
         ),
         expected: Colors.red,
       ),
-      '无文字颜色回退 selectedColor': (
+      '显式选中色与字号': (
         theme: const TSideBarThemeData(
-          selectedTextStyle: TextStyle(fontSize: 18),
-          selectedColor: Colors.green,
+          selectedTextStyle: TextStyle(fontSize: 18, color: Colors.green),
         ),
         expected: Colors.green,
-      ),
-      '同层文字颜色优先': (
-        theme: const TSideBarThemeData(
-          selectedTextStyle: TextStyle(fontSize: 18, color: Colors.purple),
-          selectedColor: Colors.red,
-        ),
-        expected: Colors.purple,
-      ),
-      'Theme 字号回退 Theme 颜色': (
-        theme: const TSideBarThemeData(
-          selectedColor: Colors.red,
-          selectedTextStyle: TextStyle(fontSize: 18),
-        ),
-        expected: Colors.red,
       ),
     };
     for (final entry in colorCases.entries) {
@@ -303,11 +296,13 @@ void main() {
         wrapWithTheme(
           TSideBar(value: 0, children: buildItems(), onChanged: (_) {}),
           sideBarTheme: const TSideBarThemeData(
-            selectedColor: Colors.red,
             unSelectedColor: Colors.grey,
             selectedBgColor: Colors.blue,
             unSelectedBgColor: Colors.white,
-            selectedTextStyle: TextStyle(fontWeight: FontWeight.bold),
+            selectedTextStyle: TextStyle(
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+            ),
             contentPadding: EdgeInsets.all(8),
           ),
         ),
@@ -327,7 +322,6 @@ void main() {
             height: 300,
           ),
           sideBarTheme: const TSideBarThemeData(
-            selectedColor: Colors.blue,
             unSelectedColor: Colors.green,
             selectedBgColor: Colors.yellow,
             unSelectedBgColor: Colors.black12,

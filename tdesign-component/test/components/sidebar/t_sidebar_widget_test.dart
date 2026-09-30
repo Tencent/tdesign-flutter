@@ -29,9 +29,7 @@ void main() {
       expect(find.text('选项三'), findsOneWidget);
     });
 
-    testWidgets('tag 样式 / selectedColor / contentPadding / height', (
-      tester,
-    ) async {
+    testWidgets('tag 样式 / 选中前景色 / contentPadding / height', (tester) async {
       await tester.pumpWidget(
         wrap(
           TSideBar(
@@ -42,7 +40,7 @@ void main() {
             onChanged: (_) {},
           ),
           sideBarTheme: const TSideBarThemeData(
-            selectedColor: Colors.red,
+            selectedTextStyle: TextStyle(color: Colors.red),
             unSelectedColor: Colors.grey,
             contentPadding: EdgeInsets.all(8),
           ),

@@ -197,7 +197,6 @@ class _TSideBarState extends State<TSideBar> {
   @override
   Widget build(BuildContext context) {
     final theme = _resolveTheme();
-    final selectedColor = theme.selectedTextStyle?.color ?? theme.selectedColor;
     final selectedTextStyle = theme.selectedTextStyle;
     if (widget.loading) {
       if (widget.loadingWidget != null) {
@@ -235,11 +234,8 @@ class _TSideBarState extends State<TSideBar> {
               badge: ele.badge,
               textStyle: ele.textStyle,
               selected: currentIndex == ele.index,
-              selectedColor: selectedColor,
               unSelectedColor: theme.unSelectedColor,
-              selectedTextStyle: selectedTextStyle?.copyWith(
-                color: selectedColor,
-              ),
+              selectedTextStyle: selectedTextStyle,
               contentPadding: theme.contentPadding,
               topAdjacent:
                   currentIndex != null && currentIndex! + 1 == ele.index,
