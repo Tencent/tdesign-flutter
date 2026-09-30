@@ -337,7 +337,7 @@ void main() {
         (action) => action.role == TDialogActionRole.normal,
       )) {
         expect(action.variant, isNull);
-        expect(action.colorScheme, isNull);
+        expect(action.colorPreset, isNull);
       }
       final buttons = tester.widgetList<TButton>(
         find.descendant(
@@ -352,7 +352,7 @@ void main() {
             (button.child as Text).data != '主要按钮',
       )) {
         expect(button.variant, TButtonVariant.fill, reason: label);
-        expect(button.colorScheme, TButtonColorScheme.light, reason: label);
+        expect(button.colorPreset, TButtonColorPreset.light, reason: label);
       }
       await closeCurrentDialog(tester);
     }
@@ -369,7 +369,7 @@ void main() {
         find.widgetWithText(TButton, '确定'),
       );
       expect(confirm.variant, TButtonVariant.fill, reason: label);
-      expect(confirm.colorScheme, TButtonColorScheme.primary, reason: label);
+      expect(confirm.colorPreset, TButtonColorPreset.primary, reason: label);
       await closeCurrentDialog(tester);
     }
     expect(tester.takeException(), isNull);
@@ -441,7 +441,7 @@ void main() {
       find.widgetWithText(TButton, '取消'),
     );
     expect(cancelButton.variant, TButtonVariant.fill);
-    expect(cancelButton.colorScheme, TButtonColorScheme.light);
+    expect(cancelButton.colorPreset, TButtonColorPreset.light);
     expect(tester.takeException(), isNull);
   });
 }

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 /// 进度条组件级 ThemeExtension
 ///
-/// 通过 Theme 子树注入，控制子树的默认样式。
-/// 构造器参数优先于 Theme。
+/// 通过 Theme 子树注入，控制子树的默认视觉值。
+/// 除进度值、状态与线性渐变等实例语义外，具体绘制值优先读取组件 Theme。
 class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
   /// 进度条粗细
   final double? strokeWidth;
@@ -15,6 +15,10 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
 
   /// 进度条背景色
   final Color? backgroundColor;
+
+  /// 环形进度条内圆背景色。默认浅色读取容器色、暗色透明；
+  /// 宿主如需定义暗色内圆，可在组件 Theme 中显式配置。
+  final Color? circleInnerBgColor;
 
   /// 条形进度条末端圆角
   final BorderRadiusGeometry? linearBorderRadius;
@@ -38,6 +42,7 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
     this.strokeWidth,
     this.color,
     this.backgroundColor,
+    this.circleInnerBgColor,
     this.linearBorderRadius,
     this.circleRadius,
     this.animationDuration,
@@ -59,6 +64,7 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
     double? strokeWidth,
     Color? color,
     Color? backgroundColor,
+    Color? circleInnerBgColor,
     BorderRadiusGeometry? linearBorderRadius,
     double? circleRadius,
     Duration? animationDuration,
@@ -70,6 +76,7 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
       strokeWidth: strokeWidth ?? this.strokeWidth,
       color: color ?? this.color,
       backgroundColor: backgroundColor ?? this.backgroundColor,
+      circleInnerBgColor: circleInnerBgColor ?? this.circleInnerBgColor,
       linearBorderRadius: linearBorderRadius ?? this.linearBorderRadius,
       circleRadius: circleRadius ?? this.circleRadius,
       animationDuration: animationDuration ?? this.animationDuration,
@@ -92,6 +99,11 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
       strokeWidth: lerpDouble(strokeWidth, other.strokeWidth, t),
       color: Color.lerp(color, other.color, t),
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
+      circleInnerBgColor: Color.lerp(
+        circleInnerBgColor,
+        other.circleInnerBgColor,
+        t,
+      ),
       linearBorderRadius: BorderRadiusGeometry.lerp(
         linearBorderRadius,
         other.linearBorderRadius,

@@ -9,7 +9,7 @@ class OperationEmptyExample extends StatelessWidget {
       emptyText: '描述文字',
       operation: TButton(
         size: TButtonSize.large,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: () {},
         child: const Text('操作按钮'),
       ),

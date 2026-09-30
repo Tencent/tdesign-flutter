@@ -22,7 +22,7 @@ class _PopoverCustomContentExampleState
     }
 
     final textStyle = TextStyle(
-      color: theme == TPopoverColorScheme.light
+      color: theme == TPopoverColorPreset.light
           ? context.tTheme.fontGray1
           : context.tTheme.fontWhite1,
     );
@@ -33,7 +33,7 @@ class _PopoverCustomContentExampleState
       ).mergeExtension(const TPopoverThemeData(padding: EdgeInsets.zero)),
       child: TPopoverAnchor(
         controller: _customContentPopoverController,
-        colorScheme: theme,
+        colorPreset: theme,
         width: 150,
         height: 146,
         content: Column(
@@ -84,7 +84,7 @@ class _PopoverCustomContentExampleState
             size: TButtonSize.large,
             child: const Text('自定义内容'),
             variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
             onPressed: controller.open,
           );
         },
@@ -94,7 +94,7 @@ class _PopoverCustomContentExampleState
 
   final _customContentPopoverController = TPopoverController();
 
-  TPopoverColorScheme theme = TPopoverColorScheme.light;
+  TPopoverColorPreset theme = TPopoverColorPreset.light;
 
   @override
   void initState() {
@@ -105,8 +105,8 @@ class _PopoverCustomContentExampleState
       }
       setState(() {
         theme = Theme.of(context).brightness == Brightness.dark
-            ? TPopoverColorScheme.light
-            : TPopoverColorScheme.defaultTheme;
+            ? TPopoverColorPreset.light
+            : TPopoverColorPreset.defaultTheme;
       });
     });
   }

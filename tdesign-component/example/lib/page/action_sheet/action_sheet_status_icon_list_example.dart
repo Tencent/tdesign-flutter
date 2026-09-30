@@ -48,7 +48,7 @@ class ActionSheetStatusIconListExample extends StatelessWidget {
         child: Text(label),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: onPressed,
       ),
     );

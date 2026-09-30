@@ -11,15 +11,11 @@ class BubbleBadgeExample extends StatelessWidget {
     label: '领取积分',
     variant: TBadgeVariant.bubble,
     offset: const Offset(8, 0),
-    child: Theme(
-      data: Theme.of(
-        context,
-      ).mergeExtension(const TButtonThemeData(shape: TButtonShape.square)),
-      child: TButton(
-        size: TButtonSize.large,
-        icon: const Icon(TIcons.shop),
-        onPressed: () {},
-      ),
+    child: TButton(
+      shape: TButtonShape.square,
+      size: TButtonSize.large,
+      icon: const Icon(TIcons.shop),
+      onPressed: () {},
     ),
   );
 

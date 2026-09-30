@@ -16,7 +16,7 @@ class ResultPageExample extends StatelessWidget {
           key: const ValueKey('result-page-example'),
           size: TButtonSize.large,
           variant: TButtonVariant.outline,
-          colorScheme: TButtonColorScheme.primary,
+          colorPreset: TButtonColorPreset.primary,
           child: const Text('页面示例'),
           onPressed: () {
             Navigator.of(context).push(
@@ -43,7 +43,7 @@ class ResultPageExample extends StatelessWidget {
                               key: const ValueKey('result-page-back'),
                               size: TButtonSize.large,
                               variant: TButtonVariant.outline,
-                              colorScheme: TButtonColorScheme.primary,
+                              colorPreset: TButtonColorPreset.primary,
                               child: const Text('返回'),
                               onPressed: () => Navigator.of(context).pop(),
                             ),

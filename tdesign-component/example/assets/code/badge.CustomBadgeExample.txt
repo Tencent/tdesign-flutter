@@ -17,15 +17,11 @@ class CustomBadgeExample extends StatelessWidget {
         textColor: context.tTheme.textColorAnti,
       ),
     ),
-    child: Theme(
-      data: Theme.of(
-        context,
-      ).mergeExtension(const TButtonThemeData(shape: TButtonShape.square)),
-      child: TButton(
-        size: TButtonSize.large,
-        icon: const Icon(TIcons.notification),
-        onPressed: () {},
-      ),
+    child: TButton(
+      shape: TButtonShape.square,
+      size: TButtonSize.large,
+      icon: const Icon(TIcons.notification),
+      onPressed: () {},
     ),
   );
 

@@ -216,9 +216,10 @@ void main() {
 
       await tester.pumpWidget(
         wrap(
-          const TInput(initialValue: 'disabled', enabled: false),
-          inputTheme: const TInputThemeData(
-            textStyle: TextStyle(color: Colors.black),
+          const TInput(
+            initialValue: 'disabled',
+            enabled: false,
+            style: TextStyle(color: Colors.black),
           ),
         ),
       );
@@ -274,40 +275,45 @@ void main() {
       );
     });
 
-    testWidgets('partial component styles preserve token typography', (
-      tester,
-    ) async {
-      final token = TThemeData.defaultData();
-      await tester.pumpWidget(
-        wrap(
-          const TInput(hintText: 'hint', initialValue: 'value'),
-          inputTheme: const TInputThemeData(
-            textStyle: TextStyle(color: Colors.white),
-            hintStyle: TextStyle(color: Colors.grey),
+    testWidgets(
+      'instance text style and component hint style preserve token typography',
+      (tester) async {
+        final token = TThemeData.defaultData();
+        await tester.pumpWidget(
+          wrap(
+            const TInput(
+              hintText: 'hint',
+              initialValue: 'value',
+              style: TextStyle(color: Colors.white),
+            ),
+            inputTheme: const TInputThemeData(
+              hintStyle: TextStyle(color: Colors.grey),
+            ),
           ),
-        ),
-      );
+        );
 
-      final inputStyle = field(tester).style;
-      final hintStyle = field(tester).decoration?.hintStyle;
-      expect(inputStyle?.color, Colors.white);
-      expect(inputStyle?.fontSize, token.fontBodyLarge?.size);
-      expect(inputStyle?.height, token.fontBodyLarge?.height);
-      expect(inputStyle?.fontWeight, token.fontBodyLarge?.fontWeight);
-      expect(hintStyle?.color, Colors.grey);
-      expect(hintStyle?.fontSize, token.fontBodyLarge?.size);
-      expect(hintStyle?.height, token.fontBodyLarge?.height);
-      expect(hintStyle?.fontWeight, token.fontBodyLarge?.fontWeight);
-    });
+        final inputStyle = field(tester).style;
+        final hintStyle = field(tester).decoration?.hintStyle;
+        expect(inputStyle?.color, Colors.white);
+        expect(inputStyle?.fontSize, token.fontBodyLarge?.size);
+        expect(inputStyle?.height, token.fontBodyLarge?.height);
+        expect(inputStyle?.fontWeight, token.fontBodyLarge?.fontWeight);
+        expect(hintStyle?.color, Colors.grey);
+        expect(hintStyle?.fontSize, token.fontBodyLarge?.size);
+        expect(hintStyle?.height, token.fontBodyLarge?.height);
+        expect(hintStyle?.fontWeight, token.fontBodyLarge?.fontWeight);
+      },
+    );
 
-    testWidgets('component text color applies across semantic statuses', (
+    testWidgets('instance text color applies across semantic statuses', (
       tester,
     ) async {
       await tester.pumpWidget(
         wrap(
-          const TInput(initialValue: 'error', status: TInputStatus.error),
-          inputTheme: const TInputThemeData(
-            textStyle: TextStyle(color: Colors.white),
+          const TInput(
+            initialValue: 'error',
+            status: TInputStatus.error,
+            style: TextStyle(color: Colors.white),
           ),
         ),
       );
@@ -319,9 +325,6 @@ void main() {
             initialValue: 'explicit error',
             status: TInputStatus.error,
             style: TextStyle(color: Colors.purple),
-          ),
-          inputTheme: const TInputThemeData(
-            textStyle: TextStyle(color: Colors.white),
           ),
         ),
       );
@@ -590,27 +593,26 @@ void main() {
       expect(find.byIcon(Icons.info), findsOneWidget);
     });
 
-    testWidgets('instance controls visibility; Theme controls clear icon size', (tester) async {
-      await tester.pumpWidget(
-        wrap(
-          const TInput(initialValue: 'content'),
-        ),
-      );
-      expect(find.byIcon(TIcons.close_circle_filled), findsNothing);
+    testWidgets(
+      'instance controls visibility; Theme controls clear icon size',
+      (tester) async {
+        await tester.pumpWidget(wrap(const TInput(initialValue: 'content')));
+        expect(find.byIcon(TIcons.close_circle_filled), findsNothing);
 
-      await tester.pumpWidget(
-        wrap(
-          const TInput(
-            initialValue: 'content',
-            clearButtonMode: TInputClearButtonMode.always,
+        await tester.pumpWidget(
+          wrap(
+            const TInput(
+              initialValue: 'content',
+              clearButtonMode: TInputClearButtonMode.always,
+            ),
+            inputTheme: const TInputThemeData(clearIconSize: 28),
           ),
-          inputTheme: const TInputThemeData(clearIconSize: 28),
-        ),
-      );
-      await tester.pumpAndSettle();
-      expect(tester.widget<IconButton>(find.byType(IconButton)).iconSize, 28);
-      expect(tester.getSize(find.byType(IconButton)), const Size(32, 28));
-    });
+        );
+        await tester.pumpAndSettle();
+        expect(tester.widget<IconButton>(find.byType(IconButton)).iconSize, 28);
+        expect(tester.getSize(find.byType(IconButton)), const Size(32, 28));
+      },
+    );
 
     testWidgets(
       'error status colors the clear icon and theme can override it',

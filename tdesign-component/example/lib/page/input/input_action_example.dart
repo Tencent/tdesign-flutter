@@ -28,7 +28,7 @@ class InputActionExample extends StatelessWidget {
           child: const TInput(borderless: true, hintText: '请输入文字'),
           extra: TButton(
             size: TButtonSize.extraSmall,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
             onPressed: () {},
             child: const Text('操作按钮'),
           ),

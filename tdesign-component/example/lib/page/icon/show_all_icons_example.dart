@@ -34,7 +34,7 @@ class _ShowAllIconsExampleState extends State<ShowAllIconsExample> {
                   child: const Text('https://tdesign.tencent.com/icons'),
                   prefixIcon: const Icon(TIcons.link),
                   suffixIcon: const Icon(TIcons.jump),
-                  colorScheme: TLinkColorScheme.primary,
+                  colorPreset: TLinkColorPreset.primary,
                   semanticLabel: '打开 TDesign 图标官网',
                   onPressed: followLink,
                 ),

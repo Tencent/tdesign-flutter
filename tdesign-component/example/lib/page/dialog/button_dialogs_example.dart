@@ -127,7 +127,7 @@ class ButtonDialogsExample extends StatelessWidget {
       child: TButton(
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: onPressed,
         child: Text(text),
       ),
@@ -139,14 +139,14 @@ class ButtonDialogsExample extends StatelessWidget {
   List<TDialogAction> _actions({
     bool destructive = false,
     TButtonVariant? variant,
-    TButtonColorScheme? primaryColorScheme,
+    TButtonColorPreset? primaryColorScheme,
   }) => [
     TDialogAction(variant: variant, child: const Text('取消'), result: false),
     TDialogAction(
       child: Text(destructive ? '警示操作' : '确定'),
       result: true,
       variant: variant,
-      colorScheme: primaryColorScheme,
+      colorPreset: primaryColorScheme,
       role: destructive
           ? TDialogActionRole.destructive
           : TDialogActionRole.primary,
@@ -161,14 +161,14 @@ class ButtonDialogsExample extends StatelessWidget {
         children: [
           TButton(
             variant: TButtonVariant.fill,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
             onPressed: () => Navigator.pop(context, true),
             child: const Text('确定'),
           ),
           SizedBox(height: context.tTheme.spacer1),
           TButton(
             variant: TButtonVariant.fill,
-            colorScheme: TButtonColorScheme.light,
+            colorPreset: TButtonColorPreset.light,
             onPressed: () => Navigator.pop(context, false),
             child: const Text('取消'),
           ),

@@ -35,7 +35,7 @@ void main() {
           const TButton(
             child: Text('填充'),
             variant: TButtonVariant.fill,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
             onPressed: _noop,
           ),
         ),
@@ -78,7 +78,7 @@ void main() {
               TButton(
                 child: Text('小'),
                 size: TButtonSize.small,
-                colorScheme: TButtonColorScheme.danger,
+                colorPreset: TButtonColorPreset.danger,
                 onPressed: _noop,
               ),
               TButton(

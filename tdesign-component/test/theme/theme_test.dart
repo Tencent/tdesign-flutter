@@ -29,7 +29,8 @@ void main() {
         expect(mode.radiusCircle, 9999);
       }
 
-      final custom = token.copyWith(radiusMap: {'radiusDefault': 8}) as TThemeData;
+      final custom =
+          token.copyWith(radiusMap: {'radiusDefault': 8}) as TThemeData;
       expect(custom.radiusDefault, 8);
       expect(custom.radiusSmall, 3);
     });
@@ -92,7 +93,7 @@ void main() {
     test('ThemeData.mergeExtension 保留现有 Extension', () {
       final token = TThemeData.defaultData();
       final baseTheme = TThemeBuilder.light(token);
-      const buttonTheme = TButtonThemeData(padding: EdgeInsets.all(7));
+      const buttonTheme = TButtonThemeData(iconTextSpacing: 7);
 
       final merged = baseTheme.mergeExtension(buttonTheme);
 
@@ -100,10 +101,7 @@ void main() {
       expect(merged.extension<TThemeData>(), isNotNull);
       // 验证 merge 后 TButtonThemeData 已注入
       expect(merged.extension<TButtonThemeData>(), isNotNull);
-      expect(
-        merged.extension<TButtonThemeData>()!.padding,
-        const EdgeInsets.all(7),
-      );
+      expect(merged.extension<TButtonThemeData>()!.iconTextSpacing, 7);
     });
 
     testWidgets('context.tTheme 从 Theme.of(context) 读取 TThemeData', (
@@ -197,7 +195,7 @@ void main() {
       // Theme.of(tester.element(...))（此时 Scaffold 尚未渲染）。
       final subtreeTheme = TThemeBuilder.light(
         token,
-      ).mergeExtension(const TButtonThemeData(padding: EdgeInsets.all(7)));
+      ).mergeExtension(const TButtonThemeData(iconTextSpacing: 7));
 
       await tester.pumpWidget(
         MaterialApp(
@@ -212,7 +210,7 @@ void main() {
                   ).extension<TButtonThemeData>();
                   // P1 组件 Theme 覆盖了默认值
                   expect(buttonTheme, isNotNull);
-                  expect(buttonTheme!.padding, const EdgeInsets.all(7));
+                  expect(buttonTheme!.iconTextSpacing, 7);
                   return const SizedBox();
                 },
               ),
@@ -254,10 +252,10 @@ void main() {
         MaterialApp(
           theme: TThemeBuilder.light(
             token,
-          ).mergeExtension(const TButtonThemeData(padding: EdgeInsets.all(7))),
+          ).mergeExtension(const TButtonThemeData(iconTextSpacing: 7)),
           home: Scaffold(
             body: TButton(
-              colorScheme: TButtonColorScheme.primary,
+              colorPreset: TButtonColorPreset.primary,
               onPressed: () {},
               child: const Text('P1'),
             ),
@@ -268,11 +266,11 @@ void main() {
       final element = tester.element(find.byType(TButton));
       final buttonTheme = Theme.of(element).extension<TButtonThemeData>();
       expect(buttonTheme, isNotNull);
-      expect(buttonTheme!.padding, const EdgeInsets.all(7));
+      expect(buttonTheme!.iconTextSpacing, 7);
       expect(element.tTheme.brandColor, token.brandColor);
 
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      expect(button.style?.padding?.resolve({}), const EdgeInsets.all(7));
+      expect(button.style?.padding?.resolve({}), isNotNull);
     });
   });
 

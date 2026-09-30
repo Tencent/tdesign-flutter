@@ -35,7 +35,7 @@ class _CalendarInlineExampleState extends State<CalendarInlineExample> {
           child: SizedBox(
             width: double.infinity,
             child: TButton(
-              colorScheme: TButtonColorScheme.primary,
+              colorPreset: TButtonColorPreset.primary,
               size: TButtonSize.large,
               onPressed: _inlineValue.isEmpty
                   ? null

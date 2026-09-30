@@ -251,14 +251,14 @@ class _TDropdownMultiSelectPanelState<T>
 
   Widget _buildOperations(BuildContext context, TDropdownThemeData theme) {
     final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
+    final colorPreset = material.tExplicitColorScheme;
     return Container(
       padding:
           theme.actionAreaPadding ?? EdgeInsets.all(context.tTheme.spacer2),
       decoration: BoxDecoration(
         color:
             theme.panelBackgroundColor ??
-            colorScheme?.surface ??
+            colorPreset?.surface ??
             context.tTheme.bgColorContainer,
         border: Border(
           top: BorderSide(
@@ -274,7 +274,7 @@ class _TDropdownMultiSelectPanelState<T>
         children: [
           Expanded(
             child: TButton(
-              colorScheme: TButtonColorScheme.light,
+              colorPreset: TButtonColorPreset.light,
               onPressed: () => setState(_draft.clear),
               child: Text(context.resource.reset),
             ),
@@ -282,7 +282,7 @@ class _TDropdownMultiSelectPanelState<T>
           SizedBox(width: theme.actionGap ?? context.tTheme.spacer2),
           Expanded(
             child: TButton(
-              colorScheme: TButtonColorScheme.primary,
+              colorPreset: TButtonColorPreset.primary,
               onPressed: () {
                 widget.onConfirm(Set<T>.unmodifiable(_draft));
                 unawaited(
@@ -339,7 +339,7 @@ class _DropdownOptionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
+    final colorPreset = material.tExplicitColorScheme;
     final theme =
         Theme.of(context).extension<TDropdownThemeData>() ??
         const TDropdownThemeData();
@@ -399,7 +399,7 @@ class _DropdownOptionRow extends StatelessWidget {
                     Icon(
                       TIcons.check,
                       size: 24,
-                      color: colorScheme?.primary ?? context.tTheme.brandColor,
+                      color: colorPreset?.primary ?? context.tTheme.brandColor,
                     ),
                 ],
               ),
@@ -429,15 +429,15 @@ class _DropdownOptionChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
+    final colorPreset = material.tExplicitColorScheme;
     final backgroundColor = disabled
         ? theme.disabledOptionColor ?? context.tTheme.bgColorComponentDisabled
         : selected
         ? theme.selectedOptionColor ??
-              colorScheme?.primaryContainer ??
+              colorPreset?.primaryContainer ??
               context.tTheme.brandColorLight
         : theme.optionColor ??
-              colorScheme?.surfaceContainerHighest ??
+              colorPreset?.surfaceContainerHighest ??
               context.tTheme.bgColorSecondaryContainer;
     final tokenFont = context.tTheme.fontBodyMedium;
     final base =
@@ -460,7 +460,7 @@ class _DropdownOptionChip extends StatelessWidget {
         ? theme.selectedOptionTextStyle ??
               base.copyWith(
                 color:
-                    colorScheme?.onPrimaryContainer ??
+                    colorPreset?.onPrimaryContainer ??
                     context.tTheme.brandColor,
               )
         : base;

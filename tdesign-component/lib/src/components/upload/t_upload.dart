@@ -437,7 +437,7 @@ class TUpload extends StatelessWidget {
     return TButton(
       key: const ValueKey('upload-add'),
       size: TButtonSize.medium,
-      colorScheme: TButtonColorScheme.primary,
+      colorPreset: TButtonColorPreset.primary,
       icon: const Icon(TIcons.upload),
       onPressed: _enabled ? () => _pickFiles(context) : null,
       child: const Text('Upload'),

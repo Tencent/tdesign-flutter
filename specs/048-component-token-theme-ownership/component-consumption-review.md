@@ -30,3 +30,29 @@
 | Popover | 13 | 11 | 箭头、偏移和内容内边距需分别核对 Theme 入口与最终布局。 |
 
 验收规则：每个被 Flutter 支持且在小程序实际使用的变量，记录小程序浅/暗最终值、Flutter Theme/Token/常量的有效来源，以及一个实际 Widget/Painter 状态断言；设计稿可访问时再加对应实例的像素比对。`reviewDecision` 记录阶段性裁定；当前未完成跨端最终像素验证，所以 `finalPaintVerified` 仍保持 `false`，不能把 24+7 项阶段性结果误称为完全视觉对齐。
+
+## 2026-09-29：Progress 逐变量消费链复核
+
+以下是 Progress 9 个变量的**实际默认消费**，不是只按同名字段猜测。小程序基线仍为 `1a1c5ca`；Flutter 最终值由当前 Widget 测试和 Linux Golden 复核。完整跨端像素验收尚未完成，故 JSON 的 `finalPaintVerified` 不改为 `true`。
+
+| 小程序组件变量 | 小程序最终消费 | Flutter 最终消费与结论 |
+| --- | --- | --- |
+| `--td-progress-line-stroke-width` | `progress.less` 线性轨道高度，12rpx → 6dp | `linearStrokeWidth=6` → `_ProgressIndicator.strokeWidth` → `progress-track` 高度；组件测试实测 6dp。 |
+| `--td-progress-stroke-plump-width` | plump 高度，40rpx → 20dp | `plumpHeight=20` → 轨道高度；组件测试实测 20dp。 |
+| `--td-progress-stroke-circle-width` | 环形内圆尺寸和 WXS 环宽，12rpx → 6dp；micro 局部覆盖 4rpx → 2dp | `circularStrokeWidth=6` / `microCircularStrokeWidth=2` → `TProgressCircular` painter；圆环中心内径按 `diameter - 2×strokeWidth`，micro 分支亦同。 |
+| `--td-progress-circle-width` | 224rpx → 112dp；micro 局部覆盖 48rpx → 24dp | `circularSize=112` / `microCircularSize=24` → `SizedBox.square`；组件测试实测 112/24dp。组件 Theme 的旧名 `circleRadius` 实际传入直径，属另一个待收敛的 API 命名风险，不能误当几何半径。 |
+| `--td-progress-circle-icon-size` | 默认 96rpx → 48dp；WXML 状态图标直接写 `96rpx`，组件 Less 中声明的变量本身未在该文件消费 | Flutter 圆环状态 `IconTheme.size=48`，默认值与运行结果一致；小程序组件变量的独立覆盖能力并未因此得到证明，不能机械开放同名 Theme 字段。 |
+| `--td-progress-circle-label-font` | `@font-title-extraLarge` → 20dp/28dp、w600 | `fontTitleExtraLarge` → `_buildLabelWidget` → `DefaultTextStyle`；组件测试核对字号、行高、字重。 |
+| `--td-progress-track-bg-color` | `@bg-color-component` → 浅 `#e7e7e7` / 暗 `#383838` | `bgColorComponent` 默认进入线性 `BoxDecoration` 或环形 Painter；显式 `TProgressThemeData.backgroundColor` / Flutter `ProgressIndicatorTheme` 按公开优先级覆盖。 |
+| `--td-progress-inner-bg-color` | `@brand-color`，状态样式另选 warning/error/success | `brandColor` 与状态 Token → 线性填充/环形 Painter；组件测试覆盖四种状态最终线性填充颜色。 |
+| `--td-progress-circle-inner-bg-color` | 浅色未覆盖，Less 回退 `@bg-color-container`；暗色 `_components.less:28` 覆盖为 `var(--bg-color-page)`，但冻结源码未定义**无 `td-` 前缀**的该变量。未由宿主定义时，CSS 背景在计算值阶段失效为透明；宿主可定义它或直接覆盖组件变量 | 浅色 `bgColorContainer`、暗色透明 → 内圆 `DecoratedBox`；`TProgressThemeData.circleInnerBgColor` 是唯一组件级显式覆盖。Widget 测试覆盖浅/暗与覆盖；Linux 暗色两张旧 Golden 无更新通过，浅色两张仍有其他轨道/圆环差异，暂不更新。 |
+
+Tag 字体宽度：固定 Linux Golden 字体、medium `TTag('Tag')`、文字缩放 1 时，实际 `RenderParagraph` 宽 **20.5078125dp**、左右预算各 8dp、组件总宽 **36.5078125dp**，已新增真实字体加载后的 Demo 测试。Figma 实例 38px 减去两侧 8px，反推文字约 22px，但这仍是**间接推算**，不是设计字体的直接字形测量。组件已读取全局字体族并保留 Demo/宿主提供的中文字体回退；四张 Tag Linux Golden 无更新通过。不能用固定宽度或加大 padding 伪造 38px，也不能在未得到同字体测量时宣布与 Figma 逐像素一致。
+
+暗色 CSS 变量的透明判断依据：[W3C CSS Custom Properties §3](https://www.w3.org/TR/css-variables-1/#using-variables)：已定义组件变量中再引用缺失变量，不会重新选用外层 `var()` 的 Less 回退，而会使 `background-color` 在计算值阶段成为初始值 `transparent`。若应用宿主另行定义 `--bg-color-page`，该判断需按宿主实际值重算。
+
+## 2026-09-30：Avatar / AvatarGroup 消费链初核
+
+头像本体的背景、前景、三档边长、文字字号、图标字号和圆/方角，分别走 `TAvatarThemeData` → 全局 Token / `TAvatarDefaults` → `ColoredBox`、`SizedBox.square`、`DefaultTextStyle`、`IconTheme`、`ClipRRect`，默认数值与小程序 `avatar.less` 相同：背景 `brandColorLightActive`、前景 `brandColor`、边长 40/48/64dp、文字 14/16/20dp、图标 20/24/32dp、方角 `radiusDefault=6dp`。`radiusCircle` 的 50% 与固定 999dp 表达差异仍是已批准的平台例外；非正方形内容不得据此宣称像素完全一致。
+
+头像组不能按“字段候选已命中”判为完成。小程序 `avatar-group.less` 的三档偏移都是 -8dp，`line-spacing` 为上下各 2dp，且 `avatar--border` 的 1/2/3dp 描边在组件 WXML 中明确施加于**折叠头像**；Flutter `TAvatarGroup` 当前对**每个可见成员**统一包裹默认 2dp 描边、按 8dp 重叠并用单行 `Stack`，不支持小程序的换行/垂直间距语义，暗色默认描边取 `bgColorContainer` 而小程序 `avatar-border-color` 默认一直是白色。这是实际消费/能力差异，不能通过改全局 Token 或直接更新 Avatar Golden 掩盖。需要先按 AvatarGroup 公开 API 与设计实例裁定：是否引入折叠头像专属描边、三档描边以及换行布局；在此之前保留待审。

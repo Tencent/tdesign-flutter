@@ -4,26 +4,24 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
-import 't_button_theme_data.dart';
 import 't_button_types.dart';
 
 /// 按钮样式解析器
 ///
 /// 优先级链：
-/// Token → ColorScheme → Material ButtonTheme → 组件 ThemeExtension
-/// → 显式实例参数 → P0 style。
-/// 这是唯一的 [ButtonStyle] merge 入口，build 内禁止内联 variant/colorScheme/shape merge。
+/// Token → ColorScheme → Material ButtonTheme → 实例结构选择 → style。
+/// 这是唯一的 [ButtonStyle] merge 入口，build 内禁止内联 variant/colorPreset/shape merge。
 class TButtonResolve {
   TButtonResolve._();
 
   /// 解析最终的 [ButtonStyle]
   ///
   /// [variant] 按钮形态，决定 fill / outline / text / ghost 的基础样式链路。
-  /// [colorScheme] 语义色方案；为 null 时使用默认色方案，仅选择内置色板。
+  /// [colorPreset] 内置配色预设；为 null 时使用默认预设，不是 Material ColorScheme。
   /// [size] 尺寸规格，用于推导最小尺寸、内边距和默认字号。
   /// [icon] 图标内容；与 [hasChild] 一起决定图标尺寸。
   /// [hasChild] 是否存在文本或自定义内容，用于区分纯图标按钮与图文按钮。
-  /// [theme] P1 组件主题，提供默认形态、色板、间距、渐变等配置。
+  /// [shape] 结构形状选择。
   /// [instanceStyle] P0 实例样式，优先级最高，会覆盖所有 resolve 结果。
   /// [context] 当前构建上下文，用于读取 TDesign 全局 Token。
   /// [hasGradient] 是否启用渐变背景；启用时会清理 Material 默认背景和阴影污染。
@@ -31,8 +29,11 @@ class TButtonResolve {
     /// 按钮形态，决定 fill / outline / text / ghost 的基础样式链路。
     required TButtonVariant variant,
 
+    /// 按钮结构形状。
+    required TButtonShape shape,
+
     /// 语义色方案；为 null 时使用默认色方案，仅选择内置色板。
-    required TButtonColorScheme? colorScheme,
+    required TButtonColorPreset? colorPreset,
 
     /// 尺寸规格，用于推导最小尺寸、内边距和默认字号。
     required TButtonSize size,
@@ -42,9 +43,6 @@ class TButtonResolve {
 
     /// 是否存在文本或自定义内容，用于区分纯图标按钮与图文按钮。
     required bool hasChild,
-
-    /// P1 组件主题，提供默认形态、色板、间距、渐变等配置。
-    required TButtonThemeData? theme,
 
     /// P0 实例样式，优先级最高，会覆盖所有 resolve 结果。
     required ButtonStyle? instanceStyle,
@@ -60,35 +58,30 @@ class TButtonResolve {
     final colorStyle = _resolveColors(
       context: context,
       variant: variant,
-      colorScheme: colorScheme ?? TButtonColorScheme.defaultTheme,
+      colorPreset: colorPreset ?? TButtonColorPreset.defaultTheme,
     );
 
     // 2. P2 Material：按 TButton 变体读取对应的 Flutter ButtonTheme。
     final materialPalette = _materialPalette(context, variant);
 
-    // 3. P1 组件 ThemeExtension：只在调用方显式提供字段时覆盖 Material。
-    final componentPalette = _variantPalette(theme, variant);
-
-    // 4. Token 默认 shape；Material 可覆盖，显式组件 shape 再覆盖 Material。
+    // 3. Token 默认 shape；实例形状选择决定布局。
     final tokenShapeStyle = _resolveShape(
       effectiveShape: TButtonShape.rectangle,
       tTheme: tTheme,
     );
-    final componentShapeStyle = theme?.shape == null
-        ? null
-        : _resolveShape(effectiveShape: theme!.shape!, tTheme: tTheme);
+    final selectedShapeStyle = _resolveShape(
+      effectiveShape: shape,
+      tTheme: tTheme,
+    );
 
     // 5. 实例 size 选择组件规格尺寸。
-    final effectiveShape = theme?.shape ?? TButtonShape.rectangle;
     final tapTargetSize =
-        componentPalette?.tapTargetSize ??
-        materialPalette?.tapTargetSize ??
-        MaterialTapTargetSize.shrinkWrap;
+        materialPalette?.tapTargetSize ?? MaterialTapTargetSize.shrinkWrap;
     final sizeStyle = _resolveSize(
       size: size,
       hasIcon: icon != null,
       hasChild: hasChild,
-      effectiveShape: effectiveShape,
+      effectiveShape: shape,
       tapTargetSize: tapTargetSize,
     );
 
@@ -97,25 +90,13 @@ class TButtonResolve {
     final metrics = sizeMetrics(size, tTheme);
     final materialLabelStyle = Theme.of(context).textTheme.labelLarge;
 
-    // 6. P1 Theme padding 覆盖规格默认。
-    final paddingStyle = theme?.padding != null
-        ? ButtonStyle(
-            padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
-              theme!.padding!,
-            ),
-          )
-        : null;
-
-    // 合并：Token shape / P3 ColorScheme → P2 Material → P1 组件 Theme。
+    // 合并：Token shape / ColorScheme → Material → 结构形状。
     var resolved = _overrideWith(tokenShapeStyle, colorStyle);
     if (materialPalette != null) {
       resolved = _overrideWith(resolved, materialPalette);
     }
-    if (componentPalette != null) {
-      resolved = _overrideWith(resolved, componentPalette);
-    }
-    if (componentShapeStyle != null) {
-      resolved = _overrideWith(resolved, componentShapeStyle);
+    if (shape != TButtonShape.rectangle) {
+      resolved = _overrideWith(resolved, selectedShapeStyle);
     }
     resolved = _overrideWith(resolved, sizeStyle);
     final themedTextStyle = resolved.textStyle;
@@ -138,9 +119,6 @@ class TButtonResolve {
       }),
     );
     resolved = _overrideWith(resolved, textStyleStyle);
-    if (paddingStyle != null) {
-      resolved = _overrideWith(resolved, paddingStyle);
-    }
 
     // 渐变存在时强制背景 null（触发 MaterialType.transparency），阻止 M3 默认样式污染渐变效果。
     if (hasGradient) {
@@ -190,20 +168,6 @@ class TButtonResolve {
     return overrideStyle.merge(base);
   }
 
-  /// 获取 variant 对应的 P2 色板
-
-  static ButtonStyle? _variantPalette(
-    TButtonThemeData? theme,
-    TButtonVariant variant,
-  ) {
-    return switch (variant) {
-      TButtonVariant.fill => theme?.filledStyle,
-      TButtonVariant.outline => theme?.outlinedStyle,
-      TButtonVariant.text => theme?.textButtonStyle,
-      TButtonVariant.ghost => theme?.ghostStyle,
-    };
-  }
-
   /// 获取当前变体对应的 Flutter Material ButtonTheme。
   static ButtonStyle? _materialPalette(
     BuildContext context,
@@ -219,13 +183,13 @@ class TButtonResolve {
     return material.tIsTokenProjectedButtonStyle(palette) ? null : palette;
   }
 
-  /// 根据 variant + colorScheme 生成颜色 ButtonStyle
+  /// 根据 variant + colorPreset 生成颜色 ButtonStyle
   static ButtonStyle _resolveColors({
     required BuildContext context,
     required TButtonVariant variant,
-    required TButtonColorScheme colorScheme,
+    required TButtonColorPreset colorPreset,
   }) {
-    final scheme = colorScheme;
+    final scheme = colorPreset;
 
     switch (variant) {
       case TButtonVariant.fill:
@@ -242,7 +206,7 @@ class TButtonResolve {
   /// fill 变体颜色
   static ButtonStyle _resolveFillColors(
     BuildContext context,
-    TButtonColorScheme scheme,
+    TButtonColorPreset scheme,
   ) {
     final tTheme = context.tTheme;
     final colorScheme = Theme.of(context).tExplicitColorScheme;
@@ -250,16 +214,16 @@ class TButtonResolve {
     Color fg;
 
     switch (scheme) {
-      case TButtonColorScheme.primary:
+      case TButtonColorPreset.primary:
         bg = colorScheme?.primary ?? tTheme.brandColor;
         fg = colorScheme?.onPrimary ?? tTheme.textColorAnti;
-      case TButtonColorScheme.danger:
+      case TButtonColorPreset.danger:
         bg = colorScheme?.error ?? tTheme.errorColor;
         fg = colorScheme?.onError ?? tTheme.textColorAnti;
-      case TButtonColorScheme.light:
+      case TButtonColorPreset.light:
         bg = colorScheme?.primaryContainer ?? tTheme.brandColorLight;
         fg = colorScheme?.onPrimaryContainer ?? tTheme.brandColor;
-      case TButtonColorScheme.defaultTheme:
+      case TButtonColorPreset.defaultTheme:
         bg = colorScheme?.surfaceContainerHighest ?? tTheme.bgColorComponent;
         fg = colorScheme?.onSurface ?? tTheme.textColorPrimary;
     }
@@ -293,7 +257,7 @@ class TButtonResolve {
   /// outline 变体颜色
   static ButtonStyle _resolveOutlineColors(
     BuildContext context,
-    TButtonColorScheme scheme,
+    TButtonColorPreset scheme,
   ) {
     final tTheme = context.tTheme;
     final colorScheme = Theme.of(context).tExplicitColorScheme;
@@ -301,16 +265,16 @@ class TButtonResolve {
     Color fg;
 
     switch (scheme) {
-      case TButtonColorScheme.primary:
+      case TButtonColorPreset.primary:
         borderColor = colorScheme?.primary ?? tTheme.brandColor;
         fg = colorScheme?.primary ?? tTheme.brandColor;
-      case TButtonColorScheme.danger:
+      case TButtonColorPreset.danger:
         borderColor = colorScheme?.error ?? tTheme.errorColor;
         fg = colorScheme?.error ?? tTheme.errorColor;
-      case TButtonColorScheme.light:
+      case TButtonColorPreset.light:
         borderColor = colorScheme?.primary ?? tTheme.brandColor;
         fg = colorScheme?.primary ?? tTheme.brandColor;
-      case TButtonColorScheme.defaultTheme:
+      case TButtonColorPreset.defaultTheme:
         borderColor = colorScheme?.outline ?? tTheme.componentBorder;
         fg = colorScheme?.onSurface ?? tTheme.textColorPrimary;
     }
@@ -318,17 +282,17 @@ class TButtonResolve {
     return ButtonStyle(
       backgroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
-          return scheme == TButtonColorScheme.primary
+          return scheme == TButtonColorPreset.primary
               ? Colors.transparent
               : colorScheme?.surface ?? tTheme.bgColorContainer;
         }
         if (states.contains(WidgetState.pressed)) {
-          return scheme == TButtonColorScheme.light
+          return scheme == TButtonColorPreset.light
               ? colorScheme?.primaryContainer ?? tTheme.brandColorLightActive
               : colorScheme?.onSurface.withValues(alpha: 0.08) ??
                     tTheme.bgColorContainerActive;
         }
-        return scheme == TButtonColorScheme.light
+        return scheme == TButtonColorPreset.light
             ? colorScheme?.primaryContainer ?? tTheme.brandColorLight
             : colorScheme?.surface ?? tTheme.bgColorContainer;
       }),
@@ -336,19 +300,19 @@ class TButtonResolve {
         if (states.contains(WidgetState.disabled)) {
           return colorScheme?.onSurface.withValues(alpha: 0.38) ??
               switch (scheme) {
-                TButtonColorScheme.defaultTheme => tTheme.componentBorder,
-                TButtonColorScheme.primary ||
-                TButtonColorScheme.light => tTheme.brandColorDisabled,
-                TButtonColorScheme.danger => tTheme.errorColorDisabled,
+                TButtonColorPreset.defaultTheme => tTheme.componentBorder,
+                TButtonColorPreset.primary ||
+                TButtonColorPreset.light => tTheme.brandColorDisabled,
+                TButtonColorPreset.danger => tTheme.errorColorDisabled,
               };
         }
         if (states.contains(WidgetState.pressed)) {
           return switch (scheme) {
-            TButtonColorScheme.primary || TButtonColorScheme.light =>
+            TButtonColorPreset.primary || TButtonColorPreset.light =>
               colorScheme?.primary ?? tTheme.brandColorActive,
-            TButtonColorScheme.danger =>
+            TButtonColorPreset.danger =>
               colorScheme?.error ?? tTheme.errorColorActive,
-            TButtonColorScheme.defaultTheme => fg,
+            TButtonColorPreset.defaultTheme => fg,
           };
         }
         return fg;
@@ -359,10 +323,10 @@ class TButtonResolve {
             color:
                 colorScheme?.onSurface.withValues(alpha: 0.12) ??
                 switch (scheme) {
-                  TButtonColorScheme.defaultTheme => tTheme.componentBorder,
-                  TButtonColorScheme.primary ||
-                  TButtonColorScheme.light => tTheme.brandColorDisabled,
-                  TButtonColorScheme.danger => tTheme.errorColorDisabled,
+                  TButtonColorPreset.defaultTheme => tTheme.componentBorder,
+                  TButtonColorPreset.primary ||
+                  TButtonColorPreset.light => tTheme.brandColorDisabled,
+                  TButtonColorPreset.danger => tTheme.errorColorDisabled,
                 },
             width: 1,
           );
@@ -370,10 +334,10 @@ class TButtonResolve {
         if (states.contains(WidgetState.pressed)) {
           return BorderSide(
             color: switch (scheme) {
-              TButtonColorScheme.defaultTheme => borderColor,
-              TButtonColorScheme.primary || TButtonColorScheme.light =>
+              TButtonColorPreset.defaultTheme => borderColor,
+              TButtonColorPreset.primary || TButtonColorPreset.light =>
                 colorScheme?.primary ?? tTheme.brandColorActive,
-              TButtonColorScheme.danger =>
+              TButtonColorPreset.danger =>
                 colorScheme?.error ?? tTheme.errorColorActive,
             },
             width: 1,
@@ -390,20 +354,20 @@ class TButtonResolve {
   /// text 变体颜色
   static ButtonStyle _resolveTextColors(
     BuildContext context,
-    TButtonColorScheme scheme,
+    TButtonColorPreset scheme,
   ) {
     final tTheme = context.tTheme;
     final colorScheme = Theme.of(context).tExplicitColorScheme;
     Color fg;
 
     switch (scheme) {
-      case TButtonColorScheme.primary:
+      case TButtonColorPreset.primary:
         fg = colorScheme?.primary ?? tTheme.brandColor;
-      case TButtonColorScheme.danger:
+      case TButtonColorPreset.danger:
         fg = colorScheme?.error ?? tTheme.errorColor;
-      case TButtonColorScheme.light:
+      case TButtonColorPreset.light:
         fg = colorScheme?.primary ?? tTheme.brandColor;
-      case TButtonColorScheme.defaultTheme:
+      case TButtonColorPreset.defaultTheme:
         fg = colorScheme?.onSurface ?? tTheme.textColorPrimary;
     }
 
@@ -431,20 +395,20 @@ class TButtonResolve {
   /// ghost 变体颜色
   static ButtonStyle _resolveGhostColors(
     BuildContext context,
-    TButtonColorScheme scheme,
+    TButtonColorPreset scheme,
   ) {
     final tTheme = context.tTheme;
     final colorScheme = Theme.of(context).tExplicitColorScheme;
     Color fg;
 
     switch (scheme) {
-      case TButtonColorScheme.primary:
+      case TButtonColorPreset.primary:
         fg = colorScheme?.primary ?? tTheme.brandColor;
-      case TButtonColorScheme.danger:
+      case TButtonColorPreset.danger:
         fg = colorScheme?.error ?? tTheme.errorColor;
-      case TButtonColorScheme.light:
+      case TButtonColorPreset.light:
         fg = colorScheme?.primary ?? tTheme.brandColor;
-      case TButtonColorScheme.defaultTheme:
+      case TButtonColorPreset.defaultTheme:
         fg = colorScheme?.onInverseSurface ?? tTheme.fontWhite1;
     }
 
@@ -578,50 +542,50 @@ class TButtonResolve {
   }
 
   static Color _disabledBackgroundColor(
-    TButtonColorScheme scheme,
+    TButtonColorPreset scheme,
     TThemeData tTheme,
   ) {
     return switch (scheme) {
-      TButtonColorScheme.primary => tTheme.brandColorDisabled,
-      TButtonColorScheme.danger => tTheme.errorColorDisabled,
-      TButtonColorScheme.light => tTheme.brandColorLight,
-      TButtonColorScheme.defaultTheme => tTheme.bgColorComponentDisabled,
+      TButtonColorPreset.primary => tTheme.brandColorDisabled,
+      TButtonColorPreset.danger => tTheme.errorColorDisabled,
+      TButtonColorPreset.light => tTheme.brandColorLight,
+      TButtonColorPreset.defaultTheme => tTheme.bgColorComponentDisabled,
     };
   }
 
   static Color _disabledFillForegroundColor(
-    TButtonColorScheme scheme,
+    TButtonColorPreset scheme,
     TThemeData tTheme,
   ) {
     return switch (scheme) {
-      TButtonColorScheme.primary => tTheme.textColorAnti,
-      TButtonColorScheme.light => tTheme.brandColorDisabled,
-      TButtonColorScheme.danger ||
-      TButtonColorScheme.defaultTheme => tTheme.textColorDisabled,
+      TButtonColorPreset.primary => tTheme.textColorAnti,
+      TButtonColorPreset.light => tTheme.brandColorDisabled,
+      TButtonColorPreset.danger ||
+      TButtonColorPreset.defaultTheme => tTheme.textColorDisabled,
     };
   }
 
   static Color _disabledNonFillForegroundColor(
-    TButtonColorScheme scheme,
+    TButtonColorPreset scheme,
     TThemeData tTheme,
   ) {
     return switch (scheme) {
-      TButtonColorScheme.primary ||
-      TButtonColorScheme.light => tTheme.brandColorDisabled,
-      TButtonColorScheme.danger ||
-      TButtonColorScheme.defaultTheme => tTheme.textColorDisabled,
+      TButtonColorPreset.primary ||
+      TButtonColorPreset.light => tTheme.brandColorDisabled,
+      TButtonColorPreset.danger ||
+      TButtonColorPreset.defaultTheme => tTheme.textColorDisabled,
     };
   }
 
   static Color _pressedBackgroundColor(
-    TButtonColorScheme scheme,
+    TButtonColorPreset scheme,
     TThemeData tTheme,
   ) {
     return switch (scheme) {
-      TButtonColorScheme.primary => tTheme.brandColorActive,
-      TButtonColorScheme.danger => tTheme.errorColorActive,
-      TButtonColorScheme.light => tTheme.brandColorFocus,
-      TButtonColorScheme.defaultTheme => tTheme.bgColorComponent,
+      TButtonColorPreset.primary => tTheme.brandColorActive,
+      TButtonColorPreset.danger => tTheme.errorColorActive,
+      TButtonColorPreset.light => tTheme.brandColorFocus,
+      TButtonColorPreset.defaultTheme => tTheme.bgColorComponent,
     };
   }
 

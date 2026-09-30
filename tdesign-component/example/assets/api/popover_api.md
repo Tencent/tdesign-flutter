@@ -18,7 +18,7 @@
 | --- | --- | --- | --- |
 | context | BuildContext | - | - |
 | content | Widget | - | - |
-| colorScheme | TPopoverColorScheme | TPopoverColorScheme.defaultTheme | 气泡预设配色。 |
+| colorPreset | TPopoverColorPreset | TPopoverColorPreset.defaultTheme | 气泡预设配色。 |
 | closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 外部目标仍会接收该次点击，因此可在单次点击中从一个气泡切换到另一个气泡。 |
 | closeOnScroll | bool | true | 页面滚动时是否关闭弹层。 默认为 true，避免触发元素移动后气泡停留在旧坐标。 |
 | placement | TPopoverPlacement | TPopoverPlacement.top | 浮层出现位置，默认为 `TPopoverPlacement.top`。 |
@@ -47,7 +47,7 @@
 | child | Widget? | - | 传递给 `builder` 的可选子组件。 |
 | closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 外部目标仍会接收该次点击，因此可在单次点击中从一个气泡切换到另一个气泡。 |
 | closeOnScroll | bool | true | 页面滚动时是否关闭弹层。 |
-| colorScheme | TPopoverColorScheme | TPopoverColorScheme.defaultTheme | 气泡预设配色。 |
+| colorPreset | TPopoverColorPreset | TPopoverColorPreset.defaultTheme | 气泡预设配色。 |
 | content | Widget | - | 气泡内容。 |
 | controller | TPopoverController? | - | 可选控制器，用于从触发区域外部展开或关闭气泡。 |
 | height | double? | - | 内容外框高度（包含 padding）。 |
@@ -101,9 +101,9 @@ TPopover 组件级 ThemeExtension
 | padding | EdgeInsetsGeometry? | - | 内边距 |
 
 
-### TPopoverColorScheme
+### TPopoverColorPreset
 #### 简介
-弹出气泡预设配色。
+弹出气泡的内置配色预设；不切换全局明暗主题。
 #### 枚举值
 
 

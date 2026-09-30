@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | `TSearchBarThemeData.variant`、`TCollapseThemeData.variant` | 各实例的 `variant` | Theme 子树不能再统一选择形态；批量迁移需在相关实例逐个指定。 |
 | `TTableThemeData.bordered/stripe` | `TTable.bordered/stripe` | 两项控制每张表的结构，不再从 Theme 回退。 |
-| `TLinkThemeData.defaultSize/defaultColorScheme/underline` | `TLink.size/colorScheme/underline` | Theme 中其余字体与图标视觉默认值继续有效。 |
+| `TLinkThemeData.defaultSize/defaultColorScheme/underline` | `TLink.size/colorPreset/underline` | Theme 中其余字体与图标视觉默认值继续有效。旧 `TLink.colorScheme` 也迁至 `colorPreset`。 |
 | `TCellThemeData.align/groupVariant` | `TCell.align`、`TCellGroup.variant` | 对子树的原有统一选择需显式迁到每个实例。 |
 | `TInputThemeData.clearButtonMode/cursorColor/multilineMinLines` | `TInput.clearButtonMode/cursorColor`、`TTextarea.minLines` | 光标默认色仍可从显式 Material 色板或全局 Token 获取；原 Theme 中的统一选择不再生效。 |
 | `TSwitchThemeData.defaultSize/defaultVariant`、`TTimeCounterThemeData.defaultSize/defaultVariant`、`TStepperThemeData.defaultSize/defaultVariant`、`TButtonThemeData.defaultSize/defaultVariant` | 对应实例的 `size/variant` | 保留组件 Theme 中具体颜色、尺寸、间距等可复用视觉值。 |
@@ -25,27 +25,31 @@
 | `TAvatarThemeData.textStyle` | `TAvatarThemeData.foregroundColor` 管默认图标/文字颜色；`TAvatar.child: Text(style: ...)` 管特殊文字排版 | 默认文字的字号/字重仍随 `size` 变化；需要批量特殊排版时在调用方封装带样式的 `child`，不再为任意 `Widget child` 提供组件级 `TextStyle`。|
 | `TPopoverAnchor.overlayColor/radius`、`TPopover.showPopover(overlayColor/radius)` | `TPopoverThemeData.barrierColor/borderRadius` | 单实例自定义用局部 `Theme` 包裹触发上下文；`borderRadius` 从 `double?` 改为 `BorderRadius?`，旧 `borderRadius: 8` 改为 `borderRadius: BorderRadius.circular(8)`，支持逐角圆角。 |
 | `TPopoverThemeData.lerpDouble` | 无需外部调用；组件主题的 `lerp` 已负责插值 | 原公开静态辅助方法仅供内部使用，改为私有。 |
+| `TButtonThemeData.filledStyle/outlinedStyle/textButtonStyle/ghostStyle/padding` | 对应实例 `TButton.style: ButtonStyle(...)` | 具体颜色、描边、内边距、状态层等不再由组件 Theme 批量覆盖；需要批量设置时由调用方构建并复用同一个 `ButtonStyle`。 |
+| `TButtonThemeData.shape` | `TButton.shape` | `shape` 是圆/方等结构选择；边框的具体视觉仍可在 `TButton.style.shape` 指定。 |
+| `TInputThemeData.textStyle` | `TInput.style` | 只迁移已输入文字；占位文字继续由组件 Theme 的 `hintStyle` 控制。禁用态文字仍固定读取禁用 Token。 |
+| `TDialogThemeData.actionButtonStyle` | `TDialogAction.style` 或 `TConfirmDialog.buttonStyle` | 面板外观继续走组件 Theme，单个操作按钮的视觉由操作项持有。 |
+| `TTabsBar.decoration` | `TTabsBarThemeData.backgroundColor/dividerColor/dividerHeight` | 容器背景和底边线由组件 Theme 控制；仅定制一个 TabsBar 时包裹局部 Theme。 |
+| `TTagThemeData.fontWeight` | `TTagThemeData.font` | 字重跟随完整字体 Token；不再与其分别配置。 |
 
-局部 Theme 的迁移形态：
+Button 样式的迁移形态：
 
 ```dart
-Theme(
-  data: Theme.of(context).mergeExtension(
-    const TButtonThemeData(
-      outlinedStyle: ButtonStyle(
-        side: WidgetStatePropertyAll(BorderSide(color: Colors.green)),
-      ),
-    ),
+TButton(
+  variant: TButtonVariant.outline,
+  colorPreset: TButtonColorPreset.primary,
+  style: const ButtonStyle(
+    side: WidgetStatePropertyAll(BorderSide(color: Colors.green)),
   ),
-  child: const TButton(
-    variant: TButtonVariant.outline,
-    colorScheme: TButtonColorScheme.primary,
-    child: Text('按钮'),
-  ),
+  child: const Text('按钮'),
 )
 ```
 
-`colorScheme` 只选择内置预设；组件 Theme 指定的具体描边、前景和背景会覆盖该预设。只有单个按钮要覆盖具体颜色时，使用实例 `style`。`TTextThemeData` 已恢复，没有把已发布的 Text 子树默认能力列为迁移项。
+`colorPreset` 只选择内置预设；具体描边、前景和背景由实例 `style` 控制。`TButtonThemeData` 仅保留 `iconTextSpacing` 和 `gradient` 这两个 `ButtonStyle` 无法等价表达的字段。`TTextThemeData` 当前仍保留旧的字体与文字样式入口；Text 单入口迁移尚未完成。
+
+## 组件内置配色预设改名
+
+`TButton`、`TTag`、`TSelectTag`、`TLink`、`TBackTop`、`TPopoverAnchor`、`TPopover.showPopover` 和 `TDialogAction` 的 `colorScheme:` 改为 `colorPreset:`；对应枚举 `TButton/TTag/TLink/TBackTop/TPopoverColorScheme` 改为 `TButton/TTag/TLink/TBackTop/TPopoverColorPreset`。这是源码级 breaking change，不保留同义别名。枚举成员和默认映射不变；Material 的 `ThemeData.colorScheme: ColorScheme(...)` 及其优先级不变。`variant` 仍控制填充/描边等绘制处理，`colorPreset` 仅选择内置配色，`status` 仍表达业务状态。迁移调用时须同时更改命名参数与枚举类型，不能将 Material `ColorScheme` 实例传给 `colorPreset`。
 
 `TText` 未显式指定字体时的正文回退从 `fontBodyLarge`（16dp/24dp）改为小程序 `fontBodyMedium`（14dp/22dp）。依赖旧默认字号的调用方应在实例 `font`/`style` 或子树 `TTextThemeData.font` 中显式指定 16dp/24dp；这是默认行为变化，即使构造签名未变也须按 breaking change 发布。
 

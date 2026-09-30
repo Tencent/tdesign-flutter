@@ -6,7 +6,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ///
 /// 覆盖：
 /// - 基础渲染（text/icon/size）
-/// - TTagColorScheme 全部语义色
+/// - TTagColorPreset 全部语义色
 /// - TTagShape 形状（square/round/mark）
 /// - TTagSize 尺寸
 /// - 禁用状态（disable）
@@ -16,8 +16,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// - 边界场景
 void main() {
   /// 完整包装，注入 TDesign 全局主题。
-  Widget wrapWithTheme(Widget child, {TTagThemeData? tagTheme}) {
-    var theme = TThemeBuilder.light(TThemeData.defaultData());
+  Widget wrapWithTheme(
+    Widget child, {
+    TTagThemeData? tagTheme,
+    TThemeData? tokenTheme,
+  }) {
+    var theme = TThemeBuilder.light(tokenTheme ?? TThemeData.defaultData());
     if (tagTheme != null) {
       theme = theme.mergeExtension(tagTheme);
     }
@@ -55,6 +59,28 @@ void main() {
       expect(textWidget.style?.height, closeTo(20 / 12, 1e-9));
     });
 
+    testWidgets('Tag 文字消费全局字体族，不固定设计实例宽度', (tester) async {
+      final tokens = TThemeData.defaultData().copyWithTThemeData(
+        'tag-font-family-test',
+        fontFamilyMap: {
+          'fontFamily': FontFamily(
+            fontFamily: 'Custom Tag Font',
+            fallback: ['Arial'],
+          ),
+        },
+      );
+      await tester.pumpWidget(
+        wrapWithTheme(const TTag('Tag'), tokenTheme: tokens),
+      );
+
+      final text = tester.widget<Text>(find.text('Tag'));
+      expect(text.style?.fontFamily, 'Custom Tag Font');
+      expect(text.style?.fontFamilyFallback, ['Arial']);
+      final tagWidth = tester.getSize(find.byType(TTag)).width;
+      final textWidth = tester.getSize(find.text('Tag')).width;
+      expect(tagWidth, closeTo(textWidth + 16, 1));
+    });
+
     testWidgets('带图标的标签渲染', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(const TTag('图标标签', icon: Icons.star)),
@@ -70,9 +96,9 @@ void main() {
   });
 
   // ============================================================
-  // TTagColorScheme 全部语义色
+  // TTagColorPreset 全部语义色
   // ============================================================
-  group('TTag 语义色（colorScheme）', () {
+  group('TTag 预设配色（colorPreset）', () {
     testWidgets('Figma primary/light Tag 使用确定的默认色值和水平内边距', (tester) async {
       // Figma Copy / Tag，实例 26795:11055：primary + light + medium。
       // 仅锁定已核实且当前与全局 token 一致的值；高度、圆角另行裁定。
@@ -80,7 +106,7 @@ void main() {
         wrapWithTheme(
           const TTag(
             'Tag',
-            colorScheme: TTagColorScheme.primary,
+            colorPreset: TTagColorPreset.primary,
             variant: TTagVariant.light,
             size: TTagSize.medium,
           ),
@@ -106,7 +132,7 @@ void main() {
     testWidgets('defaultTheme 色彩渲染', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
+          const TTag('默认', colorPreset: TTagColorPreset.defaultTheme),
         ),
       );
       await tester.pumpAndSettle();
@@ -211,28 +237,28 @@ void main() {
           home: const Scaffold(
             body: Column(
               children: [
-                TTag('主要', colorScheme: TTagColorScheme.primary),
-                TTag('警告', colorScheme: TTagColorScheme.warning),
-                TTag('危险', colorScheme: TTagColorScheme.danger),
-                TTag('成功', colorScheme: TTagColorScheme.success),
+                TTag('主要', colorPreset: TTagColorPreset.primary),
+                TTag('警告', colorPreset: TTagColorPreset.warning),
+                TTag('危险', colorPreset: TTagColorPreset.danger),
+                TTag('成功', colorPreset: TTagColorPreset.success),
                 TTag(
                   '浅色主要',
-                  colorScheme: TTagColorScheme.primary,
+                  colorPreset: TTagColorPreset.primary,
                   variant: TTagVariant.light,
                 ),
                 TTag(
                   '浅色警告',
-                  colorScheme: TTagColorScheme.warning,
+                  colorPreset: TTagColorPreset.warning,
                   variant: TTagVariant.light,
                 ),
                 TTag(
                   '浅色危险',
-                  colorScheme: TTagColorScheme.danger,
+                  colorPreset: TTagColorPreset.danger,
                   variant: TTagVariant.light,
                 ),
                 TTag(
                   '浅色成功',
-                  colorScheme: TTagColorScheme.success,
+                  colorPreset: TTagColorPreset.success,
                   variant: TTagVariant.light,
                 ),
               ],
@@ -289,17 +315,17 @@ void main() {
               children: [
                 TTag(
                   '警告',
-                  colorScheme: TTagColorScheme.warning,
+                  colorPreset: TTagColorPreset.warning,
                   variant: TTagVariant.light,
                 ),
                 TTag(
                   '危险',
-                  colorScheme: TTagColorScheme.danger,
+                  colorPreset: TTagColorPreset.danger,
                   variant: TTagVariant.light,
                 ),
                 TTag(
                   '成功',
-                  colorScheme: TTagColorScheme.success,
+                  colorPreset: TTagColorPreset.success,
                   variant: TTagVariant.light,
                 ),
               ],
@@ -327,28 +353,28 @@ void main() {
 
     testWidgets('primary 色彩渲染', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(const TTag('主要', colorScheme: TTagColorScheme.primary)),
+        wrapWithTheme(const TTag('主要', colorPreset: TTagColorPreset.primary)),
       );
       expect(find.text('主要'), findsOneWidget);
     });
 
     testWidgets('warning 色彩渲染', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(const TTag('警告', colorScheme: TTagColorScheme.warning)),
+        wrapWithTheme(const TTag('警告', colorPreset: TTagColorPreset.warning)),
       );
       expect(find.text('警告'), findsOneWidget);
     });
 
     testWidgets('danger 色彩渲染', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(const TTag('危险', colorScheme: TTagColorScheme.danger)),
+        wrapWithTheme(const TTag('危险', colorPreset: TTagColorPreset.danger)),
       );
       expect(find.text('危险'), findsOneWidget);
     });
 
     testWidgets('success 色彩渲染', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(const TTag('成功', colorScheme: TTagColorScheme.success)),
+        wrapWithTheme(const TTag('成功', colorPreset: TTagColorPreset.success)),
       );
       expect(find.text('成功'), findsOneWidget);
     });
@@ -611,12 +637,12 @@ void main() {
                 TTag('默认浅色描边', variant: TTagVariant.lightOutline),
                 TTag(
                   '主要描边',
-                  colorScheme: TTagColorScheme.primary,
+                  colorPreset: TTagColorPreset.primary,
                   variant: TTagVariant.outline,
                 ),
                 TTag(
                   '浅色描边',
-                  colorScheme: TTagColorScheme.primary,
+                  colorPreset: TTagColorPreset.primary,
                   variant: TTagVariant.lightOutline,
                 ),
               ],
@@ -652,7 +678,7 @@ void main() {
         wrapWithTheme(
           const TTag(
             '浅色',
-            colorScheme: TTagColorScheme.primary,
+            colorPreset: TTagColorPreset.primary,
             variant: TTagVariant.light,
           ),
         ),
@@ -665,7 +691,7 @@ void main() {
         wrapWithTheme(
           const TTag(
             '描边浅色',
-            colorScheme: TTagColorScheme.danger,
+            colorPreset: TTagColorPreset.danger,
             variant: TTagVariant.lightOutline,
           ),
         ),
@@ -734,7 +760,7 @@ void main() {
                 '可关闭',
                 enabled: enabled,
                 needCloseIcon: true,
-                colorScheme: TTagColorScheme.primary,
+                colorPreset: TTagColorPreset.primary,
               ),
             ),
           ),
@@ -912,7 +938,7 @@ void main() {
   // 边界场景
   // ============================================================
   group('TTag 边界场景', () {
-    testWidgets('不传 colorScheme 时使用默认值', (tester) async {
+    testWidgets('不传 colorPreset 时使用默认值', (tester) async {
       await tester.pumpWidget(wrapWithTheme(const TTag('默认色')));
       expect(find.text('默认色'), findsOneWidget);
     });
@@ -1033,9 +1059,9 @@ void main() {
       expect(find.text('禁用'), findsOneWidget);
     });
 
-    testWidgets('colorScheme danger', (tester) async {
+    testWidgets('colorPreset danger', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(const TTag('危险', colorScheme: TTagColorScheme.danger)),
+        wrapWithTheme(const TTag('危险', colorPreset: TTagColorPreset.danger)),
       );
       expect(find.text('危险'), findsOneWidget);
     });
@@ -1052,7 +1078,7 @@ void main() {
         wrapWithTheme(
           const TTag(
             'primary',
-            colorScheme: TTagColorScheme.primary,
+            colorPreset: TTagColorPreset.primary,
             variant: TTagVariant.outline,
           ),
         ),
@@ -1065,7 +1091,7 @@ void main() {
         wrapWithTheme(
           const TTag(
             'warning',
-            colorScheme: TTagColorScheme.warning,
+            colorPreset: TTagColorPreset.warning,
             variant: TTagVariant.outline,
           ),
         ),
@@ -1086,11 +1112,11 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           Wrap(
-            children: TTagColorScheme.values
+            children: TTagColorPreset.values
                 .map(
                   (scheme) => TTag(
                     '$scheme',
-                    colorScheme: scheme,
+                    colorPreset: scheme,
                     variant: TTagVariant.light,
                   ),
                 )
@@ -1098,7 +1124,7 @@ void main() {
           ),
         ),
       );
-      expect(find.byType(TTag), findsNWidgets(TTagColorScheme.values.length));
+      expect(find.byType(TTag), findsNWidgets(TTagColorPreset.values.length));
     });
 
     testWidgets('success outline resolves semantic border', (tester) async {
@@ -1106,7 +1132,7 @@ void main() {
         wrapWithTheme(
           const TTag(
             'success',
-            colorScheme: TTagColorScheme.success,
+            colorPreset: TTagColorPreset.success,
             variant: TTagVariant.outline,
           ),
         ),
@@ -1122,14 +1148,14 @@ void main() {
         wrapWithTheme(
           const Column(
             children: [
-              TTag('危险', colorScheme: TTagColorScheme.danger),
-              TTag('成功', colorScheme: TTagColorScheme.success),
+              TTag('危险', colorPreset: TTagColorPreset.danger),
+              TTag('成功', colorPreset: TTagColorPreset.success),
               TTag(
                 '浅成功',
-                colorScheme: TTagColorScheme.success,
+                colorPreset: TTagColorPreset.success,
                 variant: TTagVariant.light,
               ),
-              TTag('主要', colorScheme: TTagColorScheme.primary),
+              TTag('主要', colorPreset: TTagColorPreset.primary),
             ],
           ),
           tagTheme: const TTagThemeData(
@@ -1164,6 +1190,29 @@ void main() {
       expect(base.lerp(target, 0.25).dangerColor, Colors.red);
       expect(base.lerp(target, 0.75).dangerColor, isNull);
       expect(base.lerp(target, 0.75).successColor, Colors.green);
+    });
+
+    test('组件专属颜色两端都显式配置时逐色插值', () {
+      const start = TTagThemeData(
+        dangerColor: Colors.black,
+        successColor: Colors.black,
+        successLightColor: Colors.black,
+      );
+      const end = TTagThemeData(
+        dangerColor: Colors.white,
+        successColor: Colors.white,
+        successLightColor: Colors.white,
+      );
+      final midpoint = start.lerp(end, 0.5);
+      expect(midpoint.dangerColor, Color.lerp(Colors.black, Colors.white, 0.5));
+      expect(
+        midpoint.successColor,
+        Color.lerp(Colors.black, Colors.white, 0.5),
+      );
+      expect(
+        midpoint.successLightColor,
+        Color.lerp(Colors.black, Colors.white, 0.5),
+      );
     });
 
     testWidgets('all tag variants render', (tester) async {

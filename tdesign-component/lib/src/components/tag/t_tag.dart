@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
-import '../../theme/basic.dart' show Font;
+import '../../theme/basic.dart' show Font, FontFamily;
 import '../../theme/t_colors.dart';
+import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
@@ -14,7 +15,7 @@ import 't_tag_types.dart';
 class TTag extends StatelessWidget {
   const TTag(
     this.text, {
-    this.colorScheme = TTagColorScheme.defaultTheme,
+    this.colorPreset = TTagColorPreset.defaultTheme,
     this.variant = TTagVariant.dark,
     this.icon,
     this.size = TTagSize.medium,
@@ -29,7 +30,7 @@ class TTag extends StatelessWidget {
   final String text;
 
   /// 标签预设配色。
-  final TTagColorScheme colorScheme;
+  final TTagColorPreset colorPreset;
 
   /// 绘制形态。
   final TTagVariant variant;
@@ -74,14 +75,20 @@ class TTag extends StatelessWidget {
     final textColor = theme?.textColor;
     final backgroundColor = theme?.backgroundColor;
     final font = theme?.font;
-    final fontWeight = theme?.fontWeight;
     final maxLines = theme?.maxLines ?? 1;
     final effectiveFont = font ?? _getFont(context);
+    final ambientFontFallback = DefaultTextStyle.of(
+      context,
+    ).style.fontFamilyFallback;
+    final fontFallback = <String>{
+      ...?ambientFontFallback,
+      ...?context.tTheme.fontFamily?.flutterFontFamilyFallback,
+    }.toList();
 
     // 计算样式颜色
     final colors = _resolveColors(
       context,
-      colorScheme,
+      colorPreset,
       isLight,
       isOutline,
       !enabled,
@@ -95,7 +102,9 @@ class TTag extends StatelessWidget {
       // 禁用态应始终使用禁用 token，避免普通 ThemeExtension 的颜色覆盖状态。
       textColor: enabled ? textColor ?? colors.textColor : colors.textColor,
       font: effectiveFont,
-      fontWeight: fontWeight,
+      fontFamily: context.tTheme.fontFamily,
+      fontFamilyFallback: fontFallback.isEmpty ? null : fontFallback,
+      fontWeight: effectiveFont?.fontWeight,
       overflow: overflow ?? TextOverflow.ellipsis,
       maxLines: maxLines,
     );
@@ -162,6 +171,8 @@ class TTag extends StatelessWidget {
   Widget _buildLabel({
     required Color textColor,
     required Font? font,
+    required FontFamily? fontFamily,
+    required List<String>? fontFamilyFallback,
     required FontWeight? fontWeight,
     required TextOverflow overflow,
     required int maxLines,
@@ -175,6 +186,9 @@ class TTag extends StatelessWidget {
         fontSize: font?.size,
         height: font?.height,
         fontWeight: fontWeight ?? font?.fontWeight,
+        fontFamily: fontFamily?.flutterFontFamily,
+        fontFamilyFallback: fontFamilyFallback,
+        package: fontFamily?.package,
       ),
     );
   }
@@ -182,7 +196,7 @@ class TTag extends StatelessWidget {
   /// 解析标签颜色。
   _TagColors _resolveColors(
     BuildContext context,
-    TTagColorScheme colorScheme,
+    TTagColorPreset colorPreset,
     bool isLight,
     bool isOutline,
     bool disable,
@@ -209,8 +223,8 @@ class TTag extends StatelessWidget {
     Color backgroundColor;
     Color borderColor;
 
-    switch (colorScheme) {
-      case TTagColorScheme.primary:
+    switch (colorPreset) {
+      case TTagColorPreset.primary:
         if (isOutline) {
           borderColor = material?.primary ?? token.brandColor;
           textColor = material?.primary ?? token.brandColor;
@@ -227,7 +241,7 @@ class TTag extends StatelessWidget {
           borderColor = backgroundColor;
         }
         break;
-      case TTagColorScheme.warning:
+      case TTagColorPreset.warning:
         if (isOutline) {
           borderColor = token.warningColor;
           textColor = token.warningColor;
@@ -240,7 +254,7 @@ class TTag extends StatelessWidget {
           borderColor = backgroundColor;
         }
         break;
-      case TTagColorScheme.danger:
+      case TTagColorPreset.danger:
         final baseColor = dangerColor ?? material?.error ?? token.errorColor;
         if (isOutline) {
           borderColor = baseColor;
@@ -258,7 +272,7 @@ class TTag extends StatelessWidget {
           borderColor = backgroundColor;
         }
         break;
-      case TTagColorScheme.success:
+      case TTagColorPreset.success:
         final baseColor = successColor ?? token.successColor;
         final lightColor = successLightColor ?? token.successColor1;
         if (isOutline) {
@@ -271,7 +285,7 @@ class TTag extends StatelessWidget {
           borderColor = backgroundColor;
         }
         break;
-      case TTagColorScheme.defaultTheme:
+      case TTagColorPreset.defaultTheme:
         if (isOutline) {
           // 小程序 light-outline/default 单独使用 component-border；普通
           // outline/default 则使用 tag-default-color 的回退 bg-color-component。

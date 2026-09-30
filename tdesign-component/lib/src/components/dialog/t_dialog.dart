@@ -32,7 +32,7 @@ enum TDialogActionRole {
 ///
 /// [role] 表达操作语义，并决定未显式覆盖时的默认配色；[variant] 表达按钮的
 /// 视觉形态。普通、主要和危险操作默认分别渲染为浅色、品牌色和危险色填充按钮。
-/// [colorScheme] 和 [style] 用于确有需要时覆盖单个操作的默认样式。
+/// [colorPreset] 和 [style] 用于确有需要时覆盖单个操作的默认样式。
 ///
 /// 一到两个操作全部显式使用 [TButtonVariant.text] 时，[TDialog] 会使用带分隔线的
 /// 贴边文字按钮 Footer；只改变某一个操作的变体不会切换整个 Footer 布局。
@@ -57,7 +57,7 @@ class TDialogAction {
     this.closeOnPressed = true,
     this.disabled = false,
     this.variant,
-    this.colorScheme,
+    this.colorPreset,
     this.style,
   });
 
@@ -72,9 +72,9 @@ class TDialogAction {
 
   /// 操作语义角色，默认为 [TDialogActionRole.normal]。
   ///
-  /// 未指定 [variant] 时使用填充按钮：普通操作采用 [TButtonColorScheme.light]，
-  /// 主要操作采用 [TButtonColorScheme.primary]，危险操作采用
-  /// [TButtonColorScheme.danger]。显式设置的 [variant]、[colorScheme] 和 [style]
+  /// 未指定 [variant] 时使用填充按钮：普通操作采用 [TButtonColorPreset.light]，
+  /// 主要操作采用 [TButtonColorPreset.primary]，危险操作采用
+  /// [TButtonColorPreset.danger]。显式设置的 [variant]、[colorPreset] 和 [style]
   /// 优先于角色提供的默认值。
   final TDialogActionRole role;
 
@@ -93,10 +93,10 @@ class TDialogAction {
 
   /// 显式按钮配色；未指定时由角色和最终变体解析。
   ///
-  /// 普通操作的填充变体使用 [TButtonColorScheme.light]，其他变体使用
-  /// [TButtonColorScheme.defaultTheme]；主要和危险操作分别使用
-  /// [TButtonColorScheme.primary]、[TButtonColorScheme.danger]。
-  final TButtonColorScheme? colorScheme;
+  /// 普通操作的填充变体使用 [TButtonColorPreset.light]，其他变体使用
+  /// [TButtonColorPreset.defaultTheme]；主要和危险操作分别使用
+  /// [TButtonColorPreset.primary]、[TButtonColorPreset.danger]。
+  final TButtonColorPreset? colorPreset;
 
   /// 显式按钮样式；用于覆盖单个操作，未设置时使用 Dialog Theme 和角色默认样式。
   final ButtonStyle? style;
@@ -344,7 +344,6 @@ class TDialog extends StatelessWidget {
                         actions: actions,
                         spacing: effectiveActionSpacing,
                         textLayout: useTextActionLayout,
-                        defaultStyle: extension?.actionButtonStyle,
                       ),
                     ),
                 ],
@@ -557,13 +556,11 @@ class _DialogActions extends StatelessWidget {
     required this.actions,
     required this.spacing,
     required this.textLayout,
-    this.defaultStyle,
   });
 
   final List<TDialogAction> actions;
   final double spacing;
   final bool textLayout;
-  final ButtonStyle? defaultStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -582,11 +579,11 @@ class _DialogActions extends StatelessWidget {
         : actions;
     final buttons = orderedActions
         .map((action) {
-          final (variant, colorScheme) = _resolveStyle(action);
+          final (variant, colorPreset) = _resolveStyle(action);
           return TButton(
             variant: action.variant ?? variant,
-            colorScheme: action.colorScheme ?? colorScheme,
-            style: action.style ?? defaultStyle,
+            colorPreset: action.colorPreset ?? colorPreset,
+            style: action.style,
             onPressed: action.disabled
                 ? null
                 : () {
@@ -650,21 +647,21 @@ class _DialogActions extends StatelessWidget {
     );
   }
 
-  (TButtonVariant, TButtonColorScheme) _resolveStyle(TDialogAction action) {
+  (TButtonVariant, TButtonColorPreset) _resolveStyle(TDialogAction action) {
     return switch (action.role) {
       TDialogActionRole.normal => (
         TButtonVariant.fill,
         action.variant == null || action.variant == TButtonVariant.fill
-            ? TButtonColorScheme.light
-            : TButtonColorScheme.defaultTheme,
+            ? TButtonColorPreset.light
+            : TButtonColorPreset.defaultTheme,
       ),
       TDialogActionRole.primary => (
         TButtonVariant.fill,
-        TButtonColorScheme.primary,
+        TButtonColorPreset.primary,
       ),
       TDialogActionRole.destructive => (
         TButtonVariant.fill,
-        TButtonColorScheme.danger,
+        TButtonColorPreset.danger,
       ),
     };
   }

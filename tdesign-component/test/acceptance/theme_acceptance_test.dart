@@ -39,7 +39,7 @@ void main() {
           const TButton(
             child: Text('Token测试'),
             variant: TButtonVariant.fill,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
           ),
         ),
       );
@@ -59,7 +59,7 @@ void main() {
 
     testWidgets('TTag 颜色取自 Token 主题', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(const TTag('标签', colorScheme: TTagColorScheme.primary)),
+        wrapWithTheme(const TTag('标签', colorPreset: TTagColorPreset.primary)),
       );
 
       expect(find.byType(TTag), findsOneWidget);
@@ -83,7 +83,7 @@ void main() {
           const TButton(
             child: Text('优先级'),
             variant: TButtonVariant.fill,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
           ),
           buttonTheme: const TButtonThemeData(),
         ),
@@ -105,7 +105,7 @@ void main() {
           const TButton(
             child: Text('Theme覆盖'),
             variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
           ),
           buttonTheme: const TButtonThemeData(),
         ),
@@ -126,7 +126,7 @@ void main() {
         wrapWithTheme(
           const TButton(
             child: Text('默认'),
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
           ),
         ),
       );
@@ -163,13 +163,14 @@ void main() {
                   // 子树注入 TButtonThemeData
                   return Theme(
                     data: Theme.of(context).mergeExtension(
-                      const TButtonThemeData(shape: TButtonShape.circle),
+                      const TButtonThemeData(iconTextSpacing: 4),
                     ),
                     child: TButton(
                       key: buttonKey,
+                      shape: TButtonShape.circle,
                       child: const Text('merge'),
                       variant: TButtonVariant.fill,
-                      colorScheme: TButtonColorScheme.primary,
+                      colorPreset: TButtonColorPreset.primary,
                     ),
                   );
                 },
@@ -202,7 +203,7 @@ void main() {
                     child: const TButton(
                       child: Text('实例优先'),
                       variant: TButtonVariant.fill,
-                      colorScheme: TButtonColorScheme.primary,
+                      colorPreset: TButtonColorPreset.primary,
                     ),
                   );
                 },
@@ -229,7 +230,7 @@ void main() {
           const TButton(
             child: Text('light'),
             variant: TButtonVariant.fill,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
           ),
         ),
       );
@@ -249,7 +250,7 @@ void main() {
           const TButton(
             child: Text('custom'),
             variant: TButtonVariant.fill,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
           ),
           tThemeData: customTheme,
         ),

@@ -20,7 +20,7 @@ Widget _buildIconSimple(BuildContext context) {
     child: TButton(
       size: TButtonSize.large,
       variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
+      colorPreset: TButtonColorPreset.primary,
       onPressed: () {
         showTDrawer(
           context,

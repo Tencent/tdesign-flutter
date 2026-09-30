@@ -15,7 +15,7 @@ class TLinkResolve {
   /// 解析 normal / active / disabled 链接颜色。
   static Color resolveColor({
     required BuildContext context,
-    required TLinkColorScheme colorScheme,
+    required TLinkColorPreset colorPreset,
     required TLinkThemeData? theme,
     required bool isDisabled,
     required bool isActive,
@@ -24,22 +24,22 @@ class TLinkResolve {
     final material = Theme.of(context).tExplicitColorScheme;
 
     if (isDisabled) {
-      return switch (colorScheme) {
-        TLinkColorScheme.primary => token.brandColorDisabled,
-        TLinkColorScheme.defaultTheme => token.textColorDisabled,
-        TLinkColorScheme.danger => token.errorColorDisabled,
-        TLinkColorScheme.warning => token.warningColorDisabled,
-        TLinkColorScheme.success => token.successColorDisabled,
+      return switch (colorPreset) {
+        TLinkColorPreset.primary => token.brandColorDisabled,
+        TLinkColorPreset.defaultTheme => token.textColorDisabled,
+        TLinkColorPreset.danger => token.errorColorDisabled,
+        TLinkColorPreset.warning => token.warningColorDisabled,
+        TLinkColorPreset.success => token.successColorDisabled,
       };
     }
 
     if (isActive) {
-      return switch (colorScheme) {
-        TLinkColorScheme.primary ||
-        TLinkColorScheme.defaultTheme => token.brandColorActive,
-        TLinkColorScheme.danger => token.errorColorActive,
-        TLinkColorScheme.warning => token.warningColorActive,
-        TLinkColorScheme.success => token.successColorActive,
+      return switch (colorPreset) {
+        TLinkColorPreset.primary ||
+        TLinkColorPreset.defaultTheme => token.brandColorActive,
+        TLinkColorPreset.danger => token.errorColorActive,
+        TLinkColorPreset.warning => token.warningColorActive,
+        TLinkColorPreset.success => token.successColorActive,
       };
     }
 
@@ -47,13 +47,13 @@ class TLinkResolve {
     if (themedColor != null) {
       return themedColor;
     }
-    return switch (colorScheme) {
-      TLinkColorScheme.primary => material?.primary ?? token.brandColor,
-      TLinkColorScheme.defaultTheme =>
+    return switch (colorPreset) {
+      TLinkColorPreset.primary => material?.primary ?? token.brandColor,
+      TLinkColorPreset.defaultTheme =>
         material?.onSurface ?? token.textColorPrimary,
-      TLinkColorScheme.danger => material?.error ?? token.errorColor,
-      TLinkColorScheme.warning => token.warningColor,
-      TLinkColorScheme.success => token.successColor,
+      TLinkColorPreset.danger => material?.error ?? token.errorColor,
+      TLinkColorPreset.warning => token.warningColor,
+      TLinkColorPreset.success => token.successColor,
     };
   }
 

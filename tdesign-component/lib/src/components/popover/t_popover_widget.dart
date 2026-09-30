@@ -23,7 +23,7 @@ class TPopoverWidget extends StatefulWidget {
     required this.context,
     required this.content,
     this.offset,
-    this.colorScheme = TPopoverColorScheme.defaultTheme,
+    this.colorPreset = TPopoverColorPreset.defaultTheme,
     this.placement = TPopoverPlacement.top,
     this.showArrow,
     this.arrowSize,
@@ -46,7 +46,7 @@ class TPopoverWidget extends StatefulWidget {
   final double? offset;
 
   /// 弹出气泡预设配色。
-  final TPopoverColorScheme colorScheme;
+  final TPopoverColorPreset colorPreset;
 
   /// 浮层出现位置
   final TPopoverPlacement placement;
@@ -240,28 +240,28 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
 
   /// 初始化主题
   void _initTheme() {
-    switch (widget.colorScheme) {
-      case TPopoverColorScheme.primary:
+    switch (widget.colorPreset) {
+      case TPopoverColorPreset.primary:
         _color = widget.context.tTheme.brandColor;
         _backgroundColor = widget.context.tTheme.brandColorLight;
         break;
-      case TPopoverColorScheme.success:
+      case TPopoverColorPreset.success:
         _color = widget.context.tTheme.successColor;
         _backgroundColor = widget.context.tTheme.successColorLight;
         break;
-      case TPopoverColorScheme.warning:
+      case TPopoverColorPreset.warning:
         _color = widget.context.tTheme.warningColor;
         _backgroundColor = widget.context.tTheme.warningColorLight;
         break;
-      case TPopoverColorScheme.danger:
+      case TPopoverColorPreset.danger:
         _color = widget.context.tTheme.errorColor;
         _backgroundColor = widget.context.tTheme.errorColorLight;
         break;
-      case TPopoverColorScheme.light:
+      case TPopoverColorPreset.light:
         _color = widget.context.tTheme.grayColor14;
         _backgroundColor = widget.context.tTheme.whiteColor1;
         break;
-      case TPopoverColorScheme.defaultTheme:
+      case TPopoverColorPreset.defaultTheme:
         _color = widget.context.tTheme.textColorAnti;
         _backgroundColor = widget.context.tTheme.grayColor14;
         break;

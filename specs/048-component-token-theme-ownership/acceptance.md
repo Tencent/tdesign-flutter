@@ -1,5 +1,18 @@
 # 验收记录
 
+## 2026-09-29 Progress/Tag 与外部调用续验
+
+- 固定小程序 `1a1c5ca`，Progress 9 个变量已逐项追到当前 Flutter 默认 Widget/Painter；暗色内圆覆盖引用的 `--bg-color-page` 在冻结源码未定义，宿主未定义时依 CSS 规则透明。Flutter 默认浅色 `bgColorContainer`、暗色透明，组件 Theme 可显式设置 `circleInnerBgColor`；新增浅/暗/覆盖 Widget 断言。其余组件变量仍未完成最终消费与跨端像素验收，见 `component-consumption-review.md`。
+- Tag medium `TTag('Tag')` 在加载真实 Golden 字体后：正文 20.5078125dp、左右预算各 8dp、外宽 36.5078125dp；Figma 38px 反推的正文约 22px 尚非直接同字体测量。全局字体族已传到 Tag `Text`，并保留宿主 CJK 回退，不为单一实例添加固定宽度。
+- Linux amd64 Flutter 3.32.0、图标包锁定 0.0.6：Tag Demo 全组 10/10（含 4 张 Golden）通过；Progress 暗色 2/2 Golden 通过，浅色 2 张各 15,015px 差异；Button/Form/Input 旧 Golden 7 张仍失败。浅色 Progress 的差异主要沿轨道/圆环，Button 的差异集中两处灰色按钮，Form/Input 多为细边线；均未完成与设计稿/旧实现的责任裁定。本轮**没有更新 Golden**。
+- 仓库外独立 `path` 依赖消费夹具在 Flutter 3.32/3.47 各编译运行 1/1；覆盖迁移后的主要公开 Theme 类型和 Button/Input/Tag/Progress 实例调用，不代表真实第三方业务仓库已编译。两版本完整组件包与 Demo 包 `flutter analyze --fatal-infos` 均零诊断；Progress/Tag/Text/字体 Token 扩展聚焦测试两版本各 191/191。3.32 覆盖率：Progress 443/446、Progress Theme 47/47、Tag 154/162、Tag Theme 39/39、Text 解析 134/135、字体族 14/14，均达生产文件 95% 行覆盖门槛。示例代码生成并 `--check` 通过，57 份 API 文档重新生成，Progress 的公开组件 Theme 已纳入生成清单。
+
+## 2026-09-29 严格单入口本地检查点
+
+- Button/Input/Dialog action/TabsBar/Tag 新收敛范围见 `migration.md`；Flutter 3.32.0 与 3.47.0 完整组件包和公开 Demo 包严格 analyze 均 0 issues，相关非 Golden 功能测试各 398/398。
+- 隔离 Linux 3.32.0 无更新 Golden：TabsBar 组件 2/2 通过；Button/Form/Input/Tag 公开 Demo 混合调度 33 通过、7 旧基线差异。本轮未更新 Golden，隔离副本依赖曾离线重新解析，不能将这些差异归因于本轮 API 改动。
+- 全组件单入口仍未验收：Text、SwipeCellAction、SideBar 等见 `report.md`；外部调用方编译、固定依赖 Linux Golden 归因与 breaking 发布流程仍未完成。
+
 ## 2026-09-29 合并 PR 检查点
 
 - 将 #1147 的组件 Theme 改动与 #1146 的 TabBar 公开布局合入同一提交历史；TabBar 具体视觉值保留组件 Theme 单入口，`centerDistance`、`showTopBorder`、`placeholder` 均不恢复。Tag 保留组件专属 danger/success 色，方角默认回退用户确认的全局 `radiusSmall = 3dp`。
@@ -55,6 +68,13 @@
 - 提交前集中式组件回归首轮只有 Switch 覆盖率与 Theme 测试期望失败：Switch Theme 中间态插值未覆盖，原为 `324/354 = 91.53%`；Theme 测试仍按旧 `fontBodyLarge` 断言新 `fontBodyMedium` 默认。补充插值各字段断言并改正测试 Token 后，Flutter 3.32.0 Switch 33/33、`339/354 = 95.76%`，Theme 96/96、`479/504 = 95.04%`；Flutter 3.47.0 对应测试也通过。最终源码已在 Flutter 3.32.0 下重跑完整集中式组件回归，57/57 组件及各自 `LH/LF >= 95%` 门禁通过；这不替代 Demo、Golden 或远端 CI。
 - Flutter 3.32.0 公开 Demo 功能回归首轮仅 Picker 头部标题测试的 `TextDecoration.none` 原始字段断言失败。最终解析出的 `null` 与 `none` 均不绘制下划线；测试改为断言最终无下划线后，完整 `run_example_regression.dart` **271/271** 通过。缺失示例代码资源的日志来自预期的错误处理测试，并非回归失败。Golden 差异仍未据此裁定。
 - 回归调度器自测 19/19 通过。首次失败仅因新 Text 解析器注释中四个不用于可见文案的字不在测试字体子集中；将注释改为等义、既有字形的表述后通过，未扩充共享字体或改动 Golden。
+
+### 2026-09-30 组件配色预设 API 命名
+
+- 已导出的五个 `T*ColorScheme` 枚举改为 `T*ColorPreset`；对应实例、静态展示方法、Dialog 操作与内部转发统一改用 `colorPreset`，无兼容别名。枚举成员、默认值、颜色解析顺序和绘制逻辑不变；Material `ColorScheme` / `ThemeData.colorScheme` 仍按原用途使用。迁移见 `migration.md`，属于源码级 breaking change。
+- Flutter 3.32.0、3.47.0 完整组件包严格 `flutter analyze --no-pub --fatal-infos` 均 0 issues；受影响的十份组件测试各 370/370。公开 Demo 十份非 Golden 测试各 51/51；3.47 在工作树首次混合测试有 4 项失败，单独复现为旧缓存的 `ink_sparkle.frag` runtime-stage 格式错误，在排除 `build/.dart_tool` 的隔离副本中相同 51 项全部通过，非组件断言失败。
+- 仓库外独立 `path` 消费包用新版 Button、Tag、Link、BackTop、Popover、DialogAction API 在 3.32.0、3.47.0 各编译运行 1/1；不代表真实第三方业务仓库已迁移。API 文档由 57 个 manifest 条目重新生成，五个预设枚举已进入相应文档；Demo 片段生成与 `--check` 通过，Link/Popover “查看代码”入口同步改名。
+- 本次只改公开命名，不改预设映射、默认值或绘制；未据此更新 Golden。历史视觉差异继续按原任务逐项归因，不以命名迁移冒充视觉验收。
 
 - [ ] 已修改组件逐项核对小程序默认表达和 Flutter 最终样式。
 - [ ] Golden 差异有来源分类，未归因项保持阻塞状态。

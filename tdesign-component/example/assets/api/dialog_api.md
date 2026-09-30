@@ -46,11 +46,11 @@
 | --- | --- | --- | --- |
 | child | Widget | - | 按钮内容。 |
 | closeOnPressed | bool | true | 点击后是否自动关闭。 |
-| colorScheme | TButtonColorScheme? | - | 显式按钮配色；未指定时由角色和最终变体解析。 普通操作的填充变体使用 `TButtonColorScheme.light`，其他变体使用 `TButtonColorScheme.defaultTheme`；主要和危险操作分别使用 `TButtonColorScheme.primary`、`TButtonColorScheme.danger`。 |
+| colorPreset | TButtonColorPreset? | - | 显式按钮配色；未指定时由角色和最终变体解析。 普通操作的填充变体使用 `TButtonColorPreset.light`，其他变体使用 `TButtonColorPreset.defaultTheme`；主要和危险操作分别使用 `TButtonColorPreset.primary`、`TButtonColorPreset.danger`。 |
 | disabled | bool | false | 是否禁用。 |
 | onPressed | VoidCallback? | - | 点击回调，在自动关闭前执行。 |
 | result | Object? | - | 关闭 Dialog 时返回的结果。 |
-| role | TDialogActionRole | TDialogActionRole.normal | 操作语义角色，默认为 `TDialogActionRole.normal`。 未指定 `variant` 时使用填充按钮：普通操作采用 `TButtonColorScheme.light`， 主要操作采用 `TButtonColorScheme.primary`，危险操作采用 `TButtonColorScheme.danger`。显式设置的 `variant`、`colorScheme` 和 `style` 优先于角色提供的默认值。 |
+| role | TDialogActionRole | TDialogActionRole.normal | 操作语义角色，默认为 `TDialogActionRole.normal`。 未指定 `variant` 时使用填充按钮：普通操作采用 `TButtonColorPreset.light`， 主要操作采用 `TButtonColorPreset.primary`，危险操作采用 `TButtonColorPreset.danger`。显式设置的 `variant`、`colorPreset` 和 `style` 优先于角色提供的默认值。 |
 | style | ButtonStyle? | - | 显式按钮样式；用于覆盖单个操作，未设置时使用 Dialog Theme 和角色默认样式。 |
 | variant | TButtonVariant? | - | 显式按钮变体；未指定时使用 `TButtonVariant.fill`。 当 `TDialog.actions` 中有一到两个操作，且所有操作都显式使用 `TButtonVariant.text` 时，Dialog 自动切换为带分隔线的贴边文字按钮 Footer。 混合使用不同变体时仍采用普通操作区布局，每个按钮保留各自的变体。 |
 
@@ -92,7 +92,6 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| actionButtonStyle | ButtonStyle? | - | 按钮区样式（对应 Material `TextButtonThemeData`；TDesign 扩展） |
 | backgroundColor | Color? | - | 背景色（对应 Material `DialogThemeData.backgroundColor`） |
 | contentPadding | EdgeInsetsGeometry? | - | 内容内边距（对应 Material `Dialog` 的 contentPadding；TDesign 扩展） |
 | contentTextStyle | TextStyle? | - | 内容文案样式（对应 Material `DialogThemeData.contentTextStyle`） |

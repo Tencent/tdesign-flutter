@@ -1,5 +1,5 @@
-/// 链接语义颜色方案。
-enum TLinkColorScheme {
+/// 链接内置配色预设，不是 Material ColorScheme。
+enum TLinkColorPreset {
   /// 品牌主色链接。
   primary,
 

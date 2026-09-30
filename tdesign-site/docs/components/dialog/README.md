@@ -124,7 +124,7 @@ await TDialog.show<void>(
 
 ### TDialogAction
 
-通过 `child` 定义内容，`result` 定义关闭结果，`role` 定义默认视觉；可使用 `onPressed`、`closeOnPressed`、`disabled`、`variant`、`colorScheme` 和 `style` 控制行为与外观。
+通过 `child` 定义内容，`result` 定义关闭结果，`role` 定义默认视觉；可使用 `onPressed`、`closeOnPressed`、`disabled`、`variant`、`colorPreset` 和 `style` 控制行为与外观。
 
 ### TConfirmDialog
 

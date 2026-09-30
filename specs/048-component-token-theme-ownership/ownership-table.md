@@ -5,7 +5,7 @@
 | 场景 | 唯一所有者 | 判断依据 | 例子 |
 | --- | --- | --- | --- |
 | 内容、受控状态、回调、交互行为 | 实例 API | 随单个组件实例变化；Theme 不应改变业务行为 | `value`、`onChanged`、`clearable` |
-| 离散规格和呈现语义 | 实例 API | 调用方选择哪一种预设，Theme 负责预设的具体外观 | `size: small`、`variant: card`、`colorScheme: danger`、`shape` |
+| 离散规格和呈现语义 | 实例 API | 调用方选择哪一种预设，Theme 负责预设的具体外观；Material `ColorScheme` 仍是实际调色板 | `size: small`、`variant: card`、`colorPreset: danger`、`shape` |
 | 规格对应的视觉数值 | 组件 Theme，未设置则回退 Token | 同一子树复用；不应硬编码冻结全局 Token | small 的高度、字号、内边距；边框色和阴影 |
 | 每实例布局约束或核心视觉输入 | 实例 API，可例外 | 例如图标单体尺寸/颜色与现有 Flutter `IconTheme` 配合；此时不得再有同义组件 Theme 字段 | `TIcon.size/color` 待迁移审计 |
 | 装饰性开关 | 逐项判定 | 离散预设选项归 API；仅配置绘制细节的视觉参数归 Theme | `TTable.bordered/stripe` 归 API，颜色归 Theme |
@@ -17,7 +17,7 @@
 | SearchBar | `TSearchBar.variant` / `TSearchBarThemeData.variant` | 实例 `variant` | Theme `variant` | 未提供实例值时仍为 square；Navbar Demo 显式传 round | 删除已发布 Theme 字段，breaking |
 | Collapse | `TCollapse.variant` / `TCollapseThemeData.variant` | 实例 `variant` | Theme `variant` | 未提供实例值时仍为 block；card 测试改由实例选择 | 删除已发布 Theme 字段，breaking |
 | Table | `TTable.bordered/stripe` / 同名 Theme 字段 | 实例 `bordered/stripe` | Theme `bordered/stripe` | 未提供实例值时仍关闭；Theme 仅保留尺寸和颜色 | 删除已发布 Theme 字段，breaking |
-| Link | 实例 `size/colorScheme/underline` / Theme `defaultSize/defaultColorScheme/underline` | 实例三项选择器 | Theme 三项选择器 | 默认 medium / defaultTheme / 无下划线不变，Theme 继续控制文字和图标视觉值 | 删除已发布 Theme 字段，breaking |
+| Link | 旧实例 `size/colorScheme/underline` / Theme `defaultSize/defaultColorScheme/underline` | 实例 `size/colorPreset/underline` | Theme 三项选择器及旧实例 `colorScheme` | 默认 medium / defaultTheme / 无下划线不变，Theme 继续控制文字和图标视觉值 | 删除已发布 Theme 字段并重命名实例字段，breaking |
 | Cell / CellGroup | 实例 `align/variant` / Theme `align/groupVariant` | 实例两项选择器 | Theme 两项选择器 | 默认居中 / standard 不变，Theme 继续控制尺寸、颜色和间距 | 删除已发布 Theme 字段，breaking |
 | Input / Textarea | 实例 `clearButtonMode/cursorColor/minLines` / Theme `clearButtonMode/cursorColor/multilineMinLines` | 实例三项；光标全局默认可继承显式 Material `ColorScheme.primary` | Theme 三项 | 默认无清除按钮、4 行多行输入和品牌光标色不变；Theme 继续控制清除图标尺寸、颜色等 | 删除已发布 Theme 字段，breaking |
 | Switch | 实例 `size/variant` / Theme `defaultSize/defaultVariant` | 实例两项选择器 | Theme 两项选择器 | 默认 medium / filled 不变；Theme 继续控制轨道和滑块视觉值 | 删除已发布 Theme 字段，breaking |
@@ -36,10 +36,15 @@
 | Drawer、SideBar、NavBar、TabBar | 实例视觉数值与同名组件 Theme | 组件 Theme | 实例视觉字段，TabBar `centerDistance` 仅留 Theme | 默认值不变，局部 Demo Theme 保留定制场景 | 公开实例字段删除，breaking |
 | Dialog / TConfirmDialog | 面板背景、形状、阴影、宽度、高度、内容内边距 | 组件 Theme | 实例对应字段 | Linux 3.32 的 Dialog Demo 16 项功能测试及图片场景浅色 Golden 通过 | 公开实例字段删除，breaking |
 | Form | 标签宽度/文字对齐双入口、表单项区域对齐双入口 | 标签宽度/文字对齐归 Theme；单项区域对齐归实例 | 另一侧同义字段 | 61 项组件测试通过 | 公开字段删除，breaking |
-| Text | 子树组件默认值、Flutter 文字继承、单实例 `style`/段落参数 | 保留 `TTextThemeData` 的字体 Token、文字和段落默认值；实例参数显式覆盖；显式 Flutter 文字主题在组件默认值未提供字段时生效 | 无本轮公开字段删除；同作用域便利参数是否冗余仍待逐项审查 | Text/Cascader/Picker 恢复路径测试通过；默认回退改为 14dp/22dp，Text Demo 两张 Linux Golden 已裁定、更新并严格复跑 | 保留已发布 Theme API；默认字号变化是 breaking；若未来再收敛字段也需评估 |
+| Text（旧阶段结论） | 子树组件默认值、Flutter 文字继承、单实例 `style`/段落参数 | 旧阶段保留 `TTextThemeData` 的字体 Token、文字和段落默认值；最新严格单入口规则下还未迁移 | 实例便利样式与 Theme 字体/文字样式待重新裁定 | 旧阶段 Text/Cascader/Picker 主题路径测试通过；不构成本轮单入口验收 | `font` 等已发布调用点数量大，须先完成替代写法与外部编译 |
 | Popover | 箭头显示和具体视觉数值双入口 | `showArrow` 归实例；偏移、箭头尺寸、内边距归 Theme | 另一侧同义字段 | 65 项组件测试、定制内容浅色 Golden 通过 | 公开字段删除，breaking |
 | Avatar 文字样式 | Theme `foregroundColor` / `textStyle.color` 同时决定默认文字颜色 | Theme `foregroundColor` 控制默认文字与图标前景；特殊文字由 `child: Text(style: ...)` 提供 | Theme `textStyle` 整字段 | 默认字号与字重继续随 `size`；单独文字内容仍可定制 | 删除已发布 Theme 字段，breaking |
 | Popover 蒙层与圆角 | 实例 `overlayColor/radius` / Theme `barrierColor/borderRadius` | Theme `barrierColor/borderRadius`；单实例用局部 Theme | 实例两字段；Theme `borderRadius` 改为 `BorderRadius?` 以保存逐角能力 | 默认透明蒙层与全局圆角回退不变；旧 Golden 差异单独裁定 | 删除已发布实例字段、Theme 字段改型，breaking |
+| Button 完整样式 | 实例 `ButtonStyle` 与 Theme 的四种样式、内边距重叠 | `TButton.style`；离散 `shape` 由实例选择，Theme 仅保留渐变与图文间距 | Theme 的 `filledStyle/outlinedStyle/textButtonStyle/ghostStyle/padding/shape` | 相关非 Golden 功能测试通过 | 子树批量 ButtonStyle 需在调用方共享样式，公开字段删除属于 breaking |
+| Input 已输入文字 | 实例 `style` 与 Theme `textStyle` 重叠 | `TInput.style`，禁用态优先使用禁用 Token | Theme `textStyle` | 相关功能测试通过 | 公开字段删除属于 breaking |
+| Dialog 操作按钮 | action `style` 与 Theme `actionButtonStyle` 重叠 | `TDialogAction.style` / `TConfirmDialog.buttonStyle` | Theme `actionButtonStyle` | 相关功能测试通过 | 公开字段删除属于 breaking |
+| TabsBar 容器装饰 | 实例 `decoration` 与 Theme 背景/分割线重叠 | `TTabsBarThemeData` 对应视觉字段 | 实例 `decoration` | 相关功能测试通过 | 自定义 BoxDecoration 的复杂背景需在外层容器承担，不再是 TabsBar 自身能力 |
+| Tag 字体 | Theme `font` 已含 `fontWeight`，又单独开放字重 | `TTagThemeData.font` | Theme `fontWeight` | 相关功能测试通过 | 公开字段删除属于 breaking |
 
 ## 待逐项裁定
 

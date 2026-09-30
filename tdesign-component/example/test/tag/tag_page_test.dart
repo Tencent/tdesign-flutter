@@ -35,6 +35,24 @@ void main() {
   registerDemoStructureTests(_tagSpec);
   registerDemoGoldenTests(_tagSpec);
 
+  testWidgets('medium Tag 自然宽度由实际文字宽度和左右各 8px 决定', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: withDemoGoldenFonts(
+          TThemeBuilder.light(TThemeData.defaultData()),
+          _tagSpec,
+        ),
+        home: const Scaffold(body: TTag('Tag')),
+      ),
+    );
+
+    final textWidth = tester.getSize(find.text('Tag')).width;
+    final tagWidth = tester.getSize(find.byType(TTag)).width;
+    expect(textWidth, closeTo(20.5078125, 0.02));
+    expect(tagWidth, closeTo(textWidth + 16, 0.02));
+    expect(tagWidth, closeTo(36.5078125, 0.02));
+  }, tags: 'demo');
+
   testWidgets('round Tag Demo includes the mark outline instance', (
     tester,
   ) async {
@@ -100,8 +118,8 @@ void main() {
 
     final tags = tester.widgetList<TTag>(find.byType(TTag)).toList();
     expect(
-      tags.map((tag) => tag.colorScheme).toSet(),
-      containsAll(TTagColorScheme.values),
+      tags.map((tag) => tag.colorPreset).toSet(),
+      containsAll(TTagColorPreset.values),
     );
     expect(
       tags.map((tag) => tag.variant).toSet(),

@@ -152,7 +152,7 @@ class TPopoverAnchor extends StatefulWidget {
     required this.builder,
     this.controller,
     this.child,
-    this.colorScheme = TPopoverColorScheme.defaultTheme,
+    this.colorPreset = TPopoverColorPreset.defaultTheme,
     this.closeOnClickOutside = true,
     this.closeOnScroll = true,
     this.placement = TPopoverPlacement.top,
@@ -180,7 +180,7 @@ class TPopoverAnchor extends StatefulWidget {
   final Widget? child;
 
   /// 气泡预设配色。
-  final TPopoverColorScheme colorScheme;
+  final TPopoverColorPreset colorPreset;
 
   /// 点击气泡外部区域时是否关闭弹层。
   /// 外部目标仍会接收该次点击，因此可在单次点击中从一个气泡切换到另一个气泡。
@@ -262,7 +262,7 @@ class _TPopoverAnchorState extends State<TPopoverAnchor> {
     final session = TPopover._showPopover(
       context: anchorContext,
       content: widget.content,
-      colorScheme: widget.colorScheme,
+      colorPreset: widget.colorPreset,
       closeOnClickOutside: widget.closeOnClickOutside,
       closeOnScroll: widget.closeOnScroll,
       placement: widget.placement,
@@ -359,7 +359,7 @@ class TPopover {
     required Widget content,
 
     /// 气泡预设配色。
-    TPopoverColorScheme colorScheme = TPopoverColorScheme.defaultTheme,
+    TPopoverColorPreset colorPreset = TPopoverColorPreset.defaultTheme,
 
     /// 点击气泡外部区域时是否关闭弹层。
     /// 外部目标仍会接收该次点击，因此可在单次点击中从一个气泡切换到另一个气泡。
@@ -394,7 +394,7 @@ class TPopover {
   }) => _showPopover(
     context: context,
     content: content,
-    colorScheme: colorScheme,
+    colorPreset: colorPreset,
     closeOnClickOutside: closeOnClickOutside,
     closeOnScroll: closeOnScroll,
     placement: placement,
@@ -408,7 +408,7 @@ class TPopover {
   static _PopoverSession _showPopover({
     required BuildContext context,
     required Widget content,
-    required TPopoverColorScheme colorScheme,
+    required TPopoverColorPreset colorPreset,
     required bool closeOnClickOutside,
     required bool closeOnScroll,
     required TPopoverPlacement placement,
@@ -500,7 +500,7 @@ class TPopover {
             context: context,
             content: content,
             offset: theme.offset,
-            colorScheme: colorScheme,
+            colorPreset: colorPreset,
             placement: placement,
             showArrow: showArrow,
             arrowSize: theme.arrowSize,

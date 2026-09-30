@@ -402,21 +402,21 @@ void main() {
           extensions: [
             token,
             const TInputThemeData(
-              textStyle: TextStyle(color: Colors.green, fontSize: 20),
+              hintStyle: TextStyle(color: Colors.green, fontSize: 20),
             ),
           ],
         ),
         const TInput(),
       );
-      expect(component.style?.color, Colors.green);
-      expect(component.style?.fontSize, 20);
+      expect(component.decoration?.hintStyle?.color, Colors.green);
+      expect(component.decoration?.hintStyle?.fontSize, 20);
       expect(component.cursorColor, customScheme.primary);
 
       final instance = await resolve(
         ThemeData(
           extensions: [
             token,
-            const TInputThemeData(textStyle: TextStyle(color: Colors.green)),
+            const TInputThemeData(hintStyle: TextStyle(color: Colors.green)),
           ],
         ),
         const TInput(
@@ -485,13 +485,13 @@ void main() {
           body: Column(
             children: [
               TLink(
-                colorScheme: TLinkColorScheme.success,
+                colorPreset: TLinkColorPreset.success,
                 onPressed: () {},
                 child: const Text('success link'),
               ),
               const TTag(
                 'success tag',
-                colorScheme: TTagColorScheme.success,
+                colorPreset: TTagColorPreset.success,
                 variant: TTagVariant.outline,
               ),
               const TResult(
@@ -499,13 +499,13 @@ void main() {
                 status: TResultStatus.success,
               ),
               TLink(
-                colorScheme: TLinkColorScheme.warning,
+                colorPreset: TLinkColorPreset.warning,
                 onPressed: () {},
                 child: const Text('warning link'),
               ),
               const TTag(
                 'warning tag',
-                colorScheme: TTagColorScheme.warning,
+                colorPreset: TTagColorPreset.warning,
                 variant: TTagVariant.outline,
               ),
               const TResult(

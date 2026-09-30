@@ -40,7 +40,7 @@ class CustomActionDialogExample extends StatelessWidget {
       child: TButton(
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: onPressed,
         child: Text(text),
       ),

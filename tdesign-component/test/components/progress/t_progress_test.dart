@@ -295,6 +295,75 @@ void main() {
   });
 
   group('TProgress Theme', () {
+    testWidgets('暗色环形内圆默认透明，可透出父容器背景', (tester) async {
+      final tokens = TThemeData.defaultData().dark!;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TProgress.circular(value: 0.3),
+          tokenTheme: tokens,
+          materialTheme: ThemeData.dark(),
+        ),
+      );
+
+      final inner = find.byKey(const ValueKey('progress-circle-inner'));
+      expect(tester.getSize(inner), const Size(100, 100));
+      final decoration =
+          tester
+                  .widget<DecoratedBox>(
+                    find.descendant(
+                      of: inner,
+                      matching: find.byType(DecoratedBox),
+                    ),
+                  )
+                  .decoration
+              as BoxDecoration;
+      expect(decoration.color, Colors.transparent);
+    });
+
+    testWidgets('浅色环形内圆默认使用容器背景色', (tester) async {
+      final tokens = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrapWithTheme(TProgress.circular(value: 0.3), tokenTheme: tokens),
+      );
+      final inner = find.byKey(const ValueKey('progress-circle-inner'));
+      final decoration =
+          tester
+                  .widget<DecoratedBox>(
+                    find.descendant(
+                      of: inner,
+                      matching: find.byType(DecoratedBox),
+                    ),
+                  )
+                  .decoration
+              as BoxDecoration;
+      expect(decoration.color, tokens.bgColorContainer);
+    });
+
+    testWidgets('环形内圆只由组件 Theme 覆盖，不影响轨道背景', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TProgress.circular(value: 0.3),
+          progressTheme: const TProgressThemeData(
+            circleInnerBgColor: Colors.purple,
+            backgroundColor: Colors.grey,
+          ),
+        ),
+      );
+
+      final inner = find.byKey(const ValueKey('progress-circle-inner'));
+      final decoration =
+          tester
+                  .widget<DecoratedBox>(
+                    find.descendant(
+                      of: inner,
+                      matching: find.byType(DecoratedBox),
+                    ),
+                  )
+                  .decoration
+              as BoxDecoration;
+      expect(decoration.color, Colors.purple);
+    });
+
     testWidgets('Theme.color 覆盖进度条颜色', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(

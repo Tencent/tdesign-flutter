@@ -142,7 +142,7 @@ class _NavigationComponentsScene extends StatelessWidget {
                               TBackTop(onPressed: _noop),
                               SizedBox(width: 12),
                               TBackTop(
-                                colorScheme: TBackTopColorScheme.dark,
+                                colorPreset: TBackTopColorPreset.dark,
                                 onPressed: _noop,
                               ),
                               SizedBox(width: 12),
@@ -150,7 +150,7 @@ class _NavigationComponentsScene extends StatelessWidget {
                               SizedBox(width: 12),
                               TBackTop(
                                 showText: true,
-                                colorScheme: TBackTopColorScheme.dark,
+                                colorPreset: TBackTopColorPreset.dark,
                                 onPressed: _noop,
                               ),
                             ],
@@ -165,7 +165,7 @@ class _NavigationComponentsScene extends StatelessWidget {
                               SizedBox(width: 12),
                               TBackTop(
                                 shape: TBackTopShape.halfCircle,
-                                colorScheme: TBackTopColorScheme.dark,
+                                colorPreset: TBackTopColorPreset.dark,
                                 onPressed: _noop,
                               ),
                               SizedBox(width: 12),
@@ -178,7 +178,7 @@ class _NavigationComponentsScene extends StatelessWidget {
                               TBackTop(
                                 shape: TBackTopShape.halfCircle,
                                 showText: true,
-                                colorScheme: TBackTopColorScheme.dark,
+                                colorPreset: TBackTopColorPreset.dark,
                                 onPressed: _noop,
                               ),
                             ],

@@ -259,10 +259,10 @@ void main() {
       16,
     );
     expect(tester.getTopLeft(reset).dx, lessThan(tester.getTopLeft(submit).dx));
-    expect(tester.widget<TButton>(reset).colorScheme, TButtonColorScheme.light);
+    expect(tester.widget<TButton>(reset).colorPreset, TButtonColorPreset.light);
     expect(
-      tester.widget<TButton>(submit).colorScheme,
-      TButtonColorScheme.primary,
+      tester.widget<TButton>(submit).colorPreset,
+      TButtonColorPreset.primary,
     );
   });
 

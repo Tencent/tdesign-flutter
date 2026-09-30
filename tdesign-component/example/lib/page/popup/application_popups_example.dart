@@ -16,7 +16,7 @@ class ApplicationPopupsExample extends StatelessWidget {
           onPressed: onPressed,
           size: TButtonSize.large,
           variant: TButtonVariant.outline,
-          colorScheme: TButtonColorScheme.primary,
+          colorPreset: TButtonColorPreset.primary,
           child: TText(label),
         ),
       );

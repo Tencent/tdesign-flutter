@@ -14,7 +14,7 @@ class WarningToastExample extends StatelessWidget {
         child: const Text('警告提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: () {
           TToast.showWarning(
             '警告文案',

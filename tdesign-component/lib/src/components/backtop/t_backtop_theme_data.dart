@@ -14,7 +14,7 @@ enum TBackTopShape {
 /// 返回顶部预设配色。
 ///
 /// 只选择一组协调的背景、边框和内容颜色，不改变组件结构或交互。
-enum TBackTopColorScheme {
+enum TBackTopColorPreset {
   /// 浅色容器配色。
   light,
 

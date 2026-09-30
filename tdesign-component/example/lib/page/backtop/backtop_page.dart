@@ -51,9 +51,9 @@ class _TBackTopPageState extends State<TBackTopPage> {
         controller: controller,
         showText: true,
         shape: shape,
-        colorScheme: shape == TBackTopShape.circle
-            ? TBackTopColorScheme.light
-            : TBackTopColorScheme.dark,
+        colorPreset: shape == TBackTopShape.circle
+            ? TBackTopColorPreset.light
+            : TBackTopColorPreset.dark,
       ),
       floatingActionButtonLocation: shape == TBackTopShape.halfCircle
           ? const _BackTopEdgeLocation()

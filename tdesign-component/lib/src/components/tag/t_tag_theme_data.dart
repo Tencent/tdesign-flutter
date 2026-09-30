@@ -28,9 +28,6 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
   /// 字体尺寸和行高；未设置时随标签尺寸使用对应的全局字体 Token。
   final Font? font;
 
-  /// 字体粗细
-  final FontWeight? fontWeight;
-
   /// 自定义间距
   final EdgeInsets? padding;
 
@@ -59,7 +56,6 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     this.successColor,
     this.successLightColor,
     this.font,
-    this.fontWeight,
     this.padding,
     this.shape,
     this.squareBorderRadius,
@@ -76,7 +72,6 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     Color? successColor,
     Color? successLightColor,
     Font? font,
-    FontWeight? fontWeight,
     EdgeInsets? padding,
     TTagShape? shape,
     double? squareBorderRadius,
@@ -91,7 +86,6 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
       successColor: successColor ?? this.successColor,
       successLightColor: successLightColor ?? this.successLightColor,
       font: font ?? this.font,
-      fontWeight: fontWeight ?? this.fontWeight,
       padding: padding ?? this.padding,
       shape: shape ?? this.shape,
       squareBorderRadius: squareBorderRadius ?? this.squareBorderRadius,
@@ -121,7 +115,6 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
           ? (t < 0.5 ? successLightColor : other.successLightColor)
           : Color.lerp(successLightColor, other.successLightColor, t),
       font: t < 0.5 ? font : other.font,
-      fontWeight: t < 0.5 ? fontWeight : other.fontWeight,
       padding:
           EdgeInsetsGeometry.lerp(padding, other.padding, t) as EdgeInsets?,
       shape: t < 0.5 ? shape : other.shape,

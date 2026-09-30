@@ -31,7 +31,7 @@ class IconSideBarExample extends StatelessWidget {
         child: Text(text),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: () => _openSideBarDemo(context, routeName),
       ),
     );

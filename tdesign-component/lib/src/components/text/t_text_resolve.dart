@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/basic.dart';
@@ -47,8 +46,8 @@ class TTextResolve {
       resolved,
       _fontStyle(tokenFont).copyWith(
         color: token.textColorPrimary,
-        fontFamily: _tokenFontFamily(token.fontFamily),
-        fontFamilyFallback: _tokenFontFallback(token.fontFamily),
+        fontFamily: token.fontFamily?.flutterFontFamily,
+        fontFamilyFallback: token.fontFamily?.flutterFontFamilyFallback,
       ),
     );
     resolved = _merge(resolved, defaults);
@@ -108,41 +107,6 @@ class TTextResolve {
       return style;
     }
     return style == null ? explicit : explicit.merge(style);
-  }
-
-  static List<String>? _tokenFontFallback(FontFamily? family) {
-    if (family == null) {
-      return null;
-    }
-    final fallback = family.fallback;
-    // CSS 字体栈用完后由浏览器选择系统 sans-serif 字体。Flutter 测试环境
-    // 不会为未安装的 PingFang/Microsoft YaHei/Arial Regular 自动补上 Roboto。
-    // 保持 Token 原始列表不变，仅为其默认字体栈追加 Flutter 兜底。
-    if (family.fontFamily != 'PingFang SC' ||
-        (fallback?.contains('Roboto') ?? false)) {
-      return fallback;
-    }
-    return [...?fallback, 'Roboto'];
-  }
-
-  static String? _tokenFontFamily(FontFamily? family) {
-    if (family == null) {
-      return null;
-    }
-    // 小程序 CSS 字体栈最后由浏览器选用系统 sans-serif。Flutter 在非 Apple
-    // 平台上不能依赖未安装的 PingFang 自动跳过；默认栈在这些平台用 Roboto。
-    // Apple 平台与用户显式配置的主字体仍保持 Token 原值。
-    if (family.fontFamily == 'PingFang SC' &&
-        family.package == null &&
-        listEquals(family.fallback, const [
-          'Microsoft YaHei',
-          'Arial Regular',
-        ]) &&
-        defaultTargetPlatform != TargetPlatform.iOS &&
-        defaultTargetPlatform != TargetPlatform.macOS) {
-      return 'Roboto';
-    }
-    return family.fontFamily;
   }
 
   static TextStyle? _explicitMaterialTextStyle(ThemeData material) {

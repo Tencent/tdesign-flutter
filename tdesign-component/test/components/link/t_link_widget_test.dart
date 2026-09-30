@@ -37,10 +37,10 @@ void main() {
       wrap(
         Column(
           children: [
-            for (final scheme in TLinkColorScheme.values)
+            for (final scheme in TLinkColorPreset.values)
               TLink(
                 child: Text(scheme.name),
-                colorScheme: scheme,
+                colorPreset: scheme,
                 onPressed: _noop,
               ),
             for (final size in TLinkSize.values)
@@ -54,7 +54,7 @@ void main() {
     expect(
       find.byType(TLink),
       findsNWidgets(
-        TLinkColorScheme.values.length + TLinkSize.values.length + 1,
+        TLinkColorPreset.values.length + TLinkSize.values.length + 1,
       ),
     );
   });

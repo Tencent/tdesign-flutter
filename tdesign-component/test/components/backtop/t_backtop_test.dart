@@ -550,11 +550,11 @@ void main() {
     });
   });
 
-  group('TBackTopColorScheme 枚举', () {
+  group('TBackTopColorPreset 枚举', () {
     test('枚举值', () {
-      expect(TBackTopColorScheme.values, [
-        TBackTopColorScheme.light,
-        TBackTopColorScheme.dark,
+      expect(TBackTopColorPreset.values, [
+        TBackTopColorPreset.light,
+        TBackTopColorPreset.dark,
       ]);
     });
   });
@@ -598,10 +598,10 @@ void main() {
         wrapWithTheme(
           const Row(
             children: [
-              TBackTop(colorScheme: TBackTopColorScheme.dark),
+              TBackTop(colorPreset: TBackTopColorPreset.dark),
               TBackTop(
                 shape: TBackTopShape.halfCircle,
-                colorScheme: TBackTopColorScheme.dark,
+                colorPreset: TBackTopColorPreset.dark,
               ),
             ],
           ),
@@ -642,10 +642,10 @@ void main() {
           home: const Scaffold(
             body: Row(
               children: [
-                TBackTop(colorScheme: TBackTopColorScheme.dark),
+                TBackTop(colorPreset: TBackTopColorPreset.dark),
                 TBackTop(
                   shape: TBackTopShape.halfCircle,
-                  colorScheme: TBackTopColorScheme.dark,
+                  colorPreset: TBackTopColorPreset.dark,
                   showText: true,
                 ),
               ],

@@ -97,7 +97,7 @@ class TInput extends StatefulWidget {
   /// 输入框语义状态。
   ///
   /// 状态色用于输入壳层、计数器和错误提示；
-  /// 已输入文字仍使用正常正文色，除非通过 [style] 或 [TInputThemeData.textStyle] 显式覆盖。
+  /// 已输入文字仍使用正常正文色，除非通过 [style] 显式覆盖。
   /// 当输入框位于 `TFormField` 中且表单错误需要在输入框内展示时，
   /// 表单错误状态优先于这里显式设置的状态。
   final TInputStatus status;
@@ -157,8 +157,9 @@ class TInput extends StatefulWidget {
 
   /// 输入文本样式。
   ///
-  /// 只覆盖当前输入框；未指定的字段继承组件 [TInputThemeData.textStyle]、
-  /// 显式 Material 文字主题或 TDesign `fontBodyLarge`。显式颜色可覆盖默认正文色。
+  /// 输入文字样式的唯一组件公开配置入口。未指定的字段继承显式
+  /// Material 文字主题或 TDesign `fontBodyLarge`；提示文字由组件 Theme
+  /// 的 `hintStyle` 单独控制。
   final TextStyle? style;
 
   /// 光标颜色。
@@ -235,18 +236,16 @@ class _TInputState extends State<TInput> {
     final inheritedTextStyle = tokenStyle.merge(
       material.tExplicitTextTheme?.bodyLarge,
     );
-    final themeTextStyle = theme?.textStyle;
-    final configuredTextStyle = inheritedTextStyle
-        .merge(themeTextStyle)
-        .merge(widget.style);
+    final configuredTextStyle = inheritedTextStyle.merge(widget.style);
     final configuredTextColor = widget.enabled
-        ? themeTextStyle?.color ??
-              material.tExplicitTextTheme?.bodyLarge?.color ??
+        ? material.tExplicitTextTheme?.bodyLarge?.color ??
               material.tExplicitColorScheme?.onSurface ??
               inputTextColor
         : inputTextColor;
     final textStyle = configuredTextStyle.copyWith(
-      color: widget.style?.color ?? configuredTextColor,
+      color: widget.enabled
+          ? widget.style?.color ?? configuredTextColor
+          : token.textColorDisabled,
     );
     final cursorColor =
         widget.cursorColor ??

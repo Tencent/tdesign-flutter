@@ -8,7 +8,7 @@ class PrimaryGhostButtonExample extends StatelessWidget {
       child: const Text('幽灵按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.ghost,
-      colorScheme: TButtonColorScheme.primary,
+      colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
     );
   }
@@ -18,7 +18,7 @@ class PrimaryGhostButtonExample extends StatelessWidget {
       child: const Text('幽灵按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.ghost,
-      colorScheme: TButtonColorScheme.danger,
+      colorPreset: TButtonColorPreset.danger,
       onPressed: () => _onTap(context),
     );
   }
@@ -28,7 +28,7 @@ class PrimaryGhostButtonExample extends StatelessWidget {
       child: const Text('幽灵按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.ghost,
-      colorScheme: TButtonColorScheme.defaultTheme,
+      colorPreset: TButtonColorPreset.defaultTheme,
       onPressed: () => _onTap(context),
     );
   }

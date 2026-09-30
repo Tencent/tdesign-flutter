@@ -10,7 +10,8 @@
       "api": {
         "names": [
           "TButton",
-          "TButtonStyle"
+          "TButtonStyle",
+          "TButtonColorPreset"
         ],
         "getComments": false
       }
@@ -58,12 +59,13 @@
     {
       "slug": "link",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/link/t_link.dart"
+        "type": "folder",
+        "path": "lib/src/components/link"
       },
       "api": {
         "names": [
-          "TLink"
+          "TLink",
+          "TLinkColorPreset"
         ],
         "getComments": false
       }
@@ -95,7 +97,7 @@
           "TBackTop",
           "TBackTopThemeData",
           "TBackTopShape",
-          "TBackTopColorScheme"
+          "TBackTopColorPreset"
         ],
         "getComments": false
       }
@@ -605,12 +607,13 @@
     {
       "slug": "progress",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/progress/t_progress.dart"
+        "type": "folder",
+        "path": "lib/src/components/progress"
       },
       "api": {
         "names": [
-          "TProgress"
+          "TProgress",
+          "TProgressThemeData"
         ],
         "getComments": false
       }
@@ -701,7 +704,8 @@
           "TTag",
           "TSelectTag",
           "TTagStyle",
-          "TTagThemeData"
+          "TTagThemeData",
+          "TTagColorPreset"
         ],
         "getComments": false
       }
@@ -817,7 +821,7 @@
           "TPopoverAnchor",
           "TPopoverController",
           "TPopoverThemeData",
-          "TPopoverColorScheme",
+          "TPopoverColorPreset",
           "TPopoverPlacement"
         ],
         "getComments": true

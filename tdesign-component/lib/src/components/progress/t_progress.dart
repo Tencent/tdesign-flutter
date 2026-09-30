@@ -251,6 +251,11 @@ class TProgress extends StatelessWidget {
         materialTrackColor ??
         colorScheme?.surfaceContainerHighest ??
         defaultValues.backgroundColor;
+    final circleInnerBgColor =
+        theme?.circleInnerBgColor ??
+        (materialTheme.brightness == Brightness.dark
+            ? Colors.transparent
+            : context.tTheme.bgColorContainer);
     final linearBorderRadius =
         theme?.linearBorderRadius ?? defaultValues.linearBorderRadius;
     final circleRadius = theme?.circleRadius ?? defaultValues.circleRadius;
@@ -286,6 +291,7 @@ class TProgress extends StatelessWidget {
       linearBorderRadius: linearBorderRadius,
       color: color,
       backgroundColor: backgroundColor,
+      circleInnerBgColor: circleInnerBgColor,
       type: variant,
       animationDuration: animationDuration,
       indeterminateAnimationDuration: indeterminateAnimationDuration,
@@ -413,6 +419,7 @@ class _ProgressIndicator extends StatefulWidget {
   final BorderRadiusGeometry linearBorderRadius;
   final Color color;
   final Color backgroundColor;
+  final Color circleInnerBgColor;
   final TProgressVariant type;
   final Duration animationDuration;
   final Duration indeterminateAnimationDuration;
@@ -434,6 +441,7 @@ class _ProgressIndicator extends StatefulWidget {
     required this.circleRadius,
     required this.color,
     required this.backgroundColor,
+    required this.circleInnerBgColor,
     required this.type,
     this.animationDuration = const Duration(milliseconds: 300),
     this.indeterminateAnimationDuration = const Duration(milliseconds: 1200),
@@ -598,16 +606,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
       case TProgressVariant.microButton:
         final progress = RotationTransition(
           turns: _animationController,
-          child: SizedBox.square(
-            dimension: widget.circleRadius,
-            child: TProgressCircular(
-              strokeWidth: widget.strokeWidth,
-              circleRadius: widget.circleRadius,
-              value: widget.indeterminateCircularValue,
-              backgroundColor: widget.backgroundColor,
-              valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
-            ),
-          ),
+          child: _buildCircleCanvas(widget.indeterminateCircularValue),
         );
         if (widget.type == TProgressVariant.microButton) {
           return _buildMicroButtonHitTarget(progress);
@@ -918,17 +917,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
         return Stack(
           alignment: Alignment.center,
           children: [
-            SizedBox(
-              height: widget.circleRadius,
-              width: widget.circleRadius,
-              child: TProgressCircular(
-                strokeWidth: widget.strokeWidth,
-                circleRadius: widget.circleRadius,
-                value: _animation.value,
-                backgroundColor: widget.backgroundColor,
-                valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
-              ),
-            ),
+            _buildCircleCanvas(_animation.value),
             if (_showsLabel) _buildLabelWidget(context.tTheme.textColorPrimary),
           ],
         );
@@ -966,15 +955,36 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
   );
 
   Widget _buildMicroOutline() {
-    return SizedBox(
-      height: widget.circleRadius,
-      width: widget.circleRadius,
-      child: TProgressCircular(
-        strokeWidth: widget.strokeWidth,
-        circleRadius: widget.circleRadius,
-        value: _animation.value,
-        backgroundColor: widget.backgroundColor,
-        valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
+    return _buildCircleCanvas(_animation.value);
+  }
+
+  Widget _buildCircleCanvas(double value) {
+    return SizedBox.square(
+      dimension: widget.circleRadius,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          SizedBox.square(
+            key: const ValueKey('progress-circle-inner'),
+            dimension: (widget.circleRadius - widget.strokeWidth * 2).clamp(
+              0.0,
+              double.infinity,
+            ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: widget.circleInnerBgColor,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          TProgressCircular(
+            strokeWidth: widget.strokeWidth,
+            circleRadius: widget.circleRadius,
+            value: value,
+            backgroundColor: widget.backgroundColor,
+            valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
+          ),
+        ],
       ),
     );
   }

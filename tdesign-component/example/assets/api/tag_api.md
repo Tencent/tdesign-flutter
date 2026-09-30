@@ -5,7 +5,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | text | String | - | 标签内容 |
-| colorScheme | TTagColorScheme | TTagColorScheme.defaultTheme | 标签预设配色。 |
+| colorPreset | TTagColorPreset | TTagColorPreset.defaultTheme | 标签预设配色。 |
 | enabled | bool | true | 是否使用禁用视觉状态。 |
 | icon | IconData? | - | 图标内容，可随状态改变颜色 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
@@ -22,7 +22,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | text | String | - | 标签内容。 |
-| colorScheme | TTagColorScheme | TTagColorScheme.primary | 选中态预设配色。 |
+| colorPreset | TTagColorPreset | TTagColorPreset.primary | 选中态预设配色。 |
 | icon | IconData? | - | 标签图标。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onChanged | ValueChanged<bool>? | - | 选中状态变更回调；为空时禁用交互。 |
@@ -40,7 +40,6 @@
 | dangerColor | Color? | - | danger 预设的基础色；未设置时回退显式 Material error 或全局 errorColor。 |
 | fixedWidth | double? | - | 标签固定宽度 |
 | font | Font? | - | 字体尺寸和行高；未设置时随标签尺寸使用对应的全局字体 Token。 |
-| fontWeight | FontWeight? | - | 字体粗细 |
 | maxLines | int? | - | 文字最大行数。 未设置时组件默认按紧凑标签语义使用单行。 |
 | overflow | TextOverflow? | - | 文字溢出处理 |
 | padding | EdgeInsets? | - | 自定义间距 |
@@ -49,3 +48,16 @@
 | successColor | Color? | - | success 预设的基础色；未设置时回退全局 successColor。 |
 | successLightColor | Color? | - | success 预设的浅色填充；未设置时回退全局 successColor1。 |
 | textColor | Color? | - | 所有启用 Tag 的统一文字颜色；优先于各配色预设的文字色。 |
+
+
+### TTagColorPreset
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| defaultTheme | 默认中性色。 |
+| primary | 品牌主色。 |
+| warning | 警告色。 |
+| danger | 危险色。 |
+| success | 成功色。 |

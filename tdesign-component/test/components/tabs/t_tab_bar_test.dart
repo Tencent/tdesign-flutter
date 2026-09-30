@@ -306,7 +306,7 @@ void main() {
       }
     });
 
-    testWidgets('uses the visual theme and lets decoration override it', (
+    testWidgets('uses the component theme as the only background entry', (
       tester,
     ) async {
       const theme = TTabsBarThemeData(
@@ -330,13 +330,11 @@ void main() {
 
       await tester.pumpWidget(
         wrapWithTheme(
-          TTabsBar(
-            tabs: tabs(),
-            decoration: const BoxDecoration(color: Colors.red),
-          ),
-          tabsBarTheme: theme,
+          TTabsBar(tabs: tabs()),
+          tabsBarTheme: theme.copyWith(backgroundColor: Colors.red),
         ),
       );
+      await tester.pumpAndSettle();
       final overriddenContainer = tester.widget<Container>(
         find.byWidgetPredicate(
           (widget) => widget is Container && widget.child is THorizontalTabBar,

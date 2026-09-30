@@ -34,14 +34,14 @@
 
 - 组件变量未显式覆盖时必须沿小程序原回退表达式取得默认值；若回退全局 Token，不得将当时的颜色或尺寸预填到高优先级 Theme 字段。
 - 形态、状态、交互和功能选择只能有一个公开权威入口；不能同时由 Widget 参数与 ThemeExtension 独立决定。迁移已发布 API 时列出 breaking 风险与替代用法。
-- 用户确认区分配置作用域：组件 Theme 管子树可复用的默认视觉，实例完整 `style` 管单实例显式覆盖；两者可以控制相同绘制字段，但必须有明确的优先级、真实使用需求和测试。不得以此为由再增加同义的独立标量入口；状态、形态和功能选择仍只能有一个权威入口。
-- 统一归属标准：实例 API 选择离散的组件规格与语义（如 `size`、`variant`、`colorScheme`、`shape`）、内容、状态、交互与回调；组件 Theme 优先定义可供子树复用的具体视觉数值（如高度、内边距、字号、颜色、边框宽度、圆角、阴影）。因此 `size: small` 属 API，而 small 对应的高度/字号/间距属于 Theme 或其全局 Token 回退。不得在 Theme 再设 `defaultSize`/`variant`。若具体视觉值本身是每实例的核心输入（如单个图标的颜色/物理尺寸），可由 API 持有，但必须移除组件 Theme 的同义字段并优先复用 Flutter 已有的 `IconTheme` 等标准继承机制；不得两边同时保留。不是所有原始数值都必然开放 Theme 字段，须有稳定定制需求且能保持 Token 回退。
-- 对实际保留的视觉 Theme 字段，解析优先级为实例显式完整 `style` → 显式组件 Theme → 适用的显式 Flutter 主题 → TDesign 全局 Token 或组件内置默认值；独立实例标量与 Theme 同义时须逐项证明其不同作用域或收敛为完整 `style`。Flutter 原生继承与组件 Theme 的重叠默认值同样需要证明组件 Theme 有独特能力。
-- `colorScheme` 预设、业务状态、回调和内容不进入组件 Theme；`size`/`variant`/`shape` 等离散规格选择也不进入组件 Theme。视觉开关若只是渲染装饰且无实例语义，优先 Theme；若改变组件交互或结构，则留在 API 并写明理由。
-- `TButton.colorScheme` 仅选择内置调色预设，不是对各绘制字段的实例样式覆盖。无论是否显式传入，预设均先于显式 Material/组件 Theme 合并；组件 Theme 中逐字段指定的颜色、文字和边框优先，单实例需覆写具体值时使用 `TButton.style`。背景、前景、描边及各交互状态均遵守这一顺序。
+- 同一具体视觉字段只能有一个 TDesign 公开配置入口。已有实例完整 `style` 能表达该字段时，不再在组件 Theme 或独立实例标量中开放同义字段；没有完整 `style` 时由组件 Theme 控制可复用视觉值，实例 API 只保留状态、规格、结构选择与交互。全局 Token 是未配置时的默认来源，不是另一份组件配置入口。
+- 统一归属标准：实例 API 选择离散的组件规格与语义（如 `size`、`variant`、`colorPreset`、`shape`）、内容、状态、交互与回调；组件 Theme 优先定义可供子树复用的具体视觉数值（如高度、内边距、字号、颜色、边框宽度、圆角、阴影）。因此 `size: small` 属 API，而 small 对应的高度/字号/间距属于 Theme 或其全局 Token 回退。不得在 Theme 再设 `defaultSize`/`variant`。若具体视觉值本身是每实例的核心输入（如单个图标的颜色/物理尺寸），可由 API 持有，但必须移除组件 Theme 的同义字段并优先复用 Flutter 已有的 `IconTheme` 等标准继承机制；不得两边同时保留。不是所有原始数值都必然开放 Theme 字段，须有稳定定制需求且能保持 Token 回退。
+- 对每个视觉字段先确定唯一公开所有者，再解析未配置时的显式 Flutter 主题、TDesign 全局 Token 或组件内置默认值；不得靠 `style ?? Theme ?? API` 的优先级链保留同义控制入口。Flutter 原生继承仍用于未配置时的默认来源，不作为额外的 TDesign 字段。
+- `colorPreset` 只选择内置配色，不进入组件 Theme，也不表示 Material `ColorScheme` 实体；`variant` 决定填充、描边等绘制处理，`status` 决定当前业务状态。业务状态、回调和内容不进入组件 Theme；`size`/`variant`/`shape` 等离散规格选择也不进入组件 Theme。视觉开关若只是渲染装饰且无实例语义，优先 Theme；若改变组件交互或结构，则留在 API 并写明理由。
+- `TButton.colorPreset` 仅选择内置调色预设，不是对各绘制字段的实例样式覆盖。预设先于显式 Material 按钮主题合并；单实例的具体背景、前景、描边及交互状态通过 `TButton.style` 覆写。组件 Theme 不再提供与 `ButtonStyle` 同义的字段。
 - 动画时长若直接决定单次组件交互的展开/收起时间，归实例 API；Theme 可承载动画曲线、颜色或尺寸等不与该时长同义的视觉默认值。系统“减少动态效果”始终优先于实例时长。
 - 无法由同值比较证明视觉等价的字体、阴影、百分比几何及响应式尺寸须独立记录；全局 `radiusCircle` 维持已记录的 Flutter 固定半径例外。
-- 当前决定：`TButton`、`TInput` 等组件的完整实例 `style` 与组件 Theme 默认值可以并存，不能机械删除任何一侧；实例选择器仍只负责规格、形态、语义和交互。`TText` 同理保留单实例 `style`，并保留 `TTextThemeData` 提供的 TDesign 字体及原生继承不能完整替代的段落默认能力。`DefaultTextStyle`、显式 Material `TextTheme`、组件 Theme 与实例 `style` 逐字段解析并测试优先级；不能把默认 Demo 的样式补丁当作组件实现。
+- 本轮先收敛 `TButton`、`TInput`、Dialog action 已有完整实例 `style` 所覆盖的视觉字段，并去除 `TTagThemeData.fontWeight` 与 `font` 的重复设置；`TTabsBar` 的容器背景/分割线归组件 Theme，不再保留实例完整装饰入口。`TText`、SwipeCellAction 等其余跨入口重叠仍须单独迁移，不能据此宣称全仓已满足单入口标准。
 - 无显式字体的独立 `TText` 使用小程序 `packages/components/paragraph/paragraph.less` 中 `@font-body-medium` 的 14dp/22dp 语义，而非 `fontBodyLarge` 16dp/24dp；组合组件传入的内置文字默认值、显式 Flutter 主题、组件 Theme 与实例样式仍按既定优先级覆盖。这个默认字号/行高变化属于可见 breaking 行为，须列入迁移与 Golden 审查。
 - Avatar 默认图标与文字的前景色只由 `TAvatarThemeData.foregroundColor` 控制；移除组件 Theme 中可同时设置颜色的 `textStyle`。字符头像仍按 `size` 使用内置字号与字重，特殊排版由调用方传入带样式的 `child: Text(...)`，不为通用 `Widget child` 再增组件级文字样式入口。
 - Popover 蒙层色和气泡圆角只由 `TPopoverThemeData.barrierColor/borderRadius` 控制；移除 `TPopoverAnchor` 与 `TPopover.showPopover` 的同义实例字段 `overlayColor/radius`。单个气泡可包裹局部 Theme；`borderRadius` 使用 `BorderRadius` 保存原实例圆角的逐角表达能力。默认值仍沿组件原有回退，不以旧 Golden 自动裁定。

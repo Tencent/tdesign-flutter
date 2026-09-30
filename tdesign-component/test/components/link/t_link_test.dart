@@ -153,7 +153,7 @@ void main() {
       wrap(
         const TLink(
           child: Text('交互链接'),
-          colorScheme: TLinkColorScheme.primary,
+          colorPreset: TLinkColorPreset.primary,
           onPressed: _noop,
         ),
       ),
@@ -195,7 +195,7 @@ void main() {
         const TLink(
           child: Text('优先级'),
           size: TLinkSize.small,
-          colorScheme: TLinkColorScheme.danger,
+          colorPreset: TLinkColorPreset.danger,
           underline: false,
           onPressed: _noop,
         ),

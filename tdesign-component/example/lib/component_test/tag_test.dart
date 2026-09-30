@@ -12,9 +12,7 @@ class TagTestApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'TTag 宽度测试',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: const TestPage(),
     );
   }
@@ -26,9 +24,7 @@ class TestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const TText('TTag 宽度测试'),
-      ),
+      appBar: AppBar(title: const TText('TTag 宽度测试')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -47,22 +43,22 @@ class TestPage extends StatelessWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TText('不带宽度测试', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        TText(
+          '不带宽度测试',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
         SizedBox(height: 12),
         Wrap(
           spacing: 12,
           runSpacing: 12,
           children: [
-            TTag('1',
-              colorScheme: TTagColorScheme.primary,
+            TTag(
+              '1',
+              colorPreset: TTagColorPreset.primary,
               size: TTagSize.medium,
             ),
-            TTag('1000',
-              colorScheme: TTagColorScheme.warning,
-            ),
-            TTag('文本',
-              colorScheme: TTagColorScheme.success,
-            ),
+            TTag('1000', colorPreset: TTagColorPreset.warning),
+            TTag('文本', colorPreset: TTagColorPreset.success),
           ],
         ),
         SizedBox(height: 24),
@@ -74,22 +70,22 @@ class TestPage extends StatelessWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TText('基础固定宽度测试', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        TText(
+          '基础固定宽度测试',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
         SizedBox(height: 12),
         Wrap(
           spacing: 12,
           runSpacing: 12,
           children: [
-            TTag('1',
-              colorScheme: TTagColorScheme.primary,
+            TTag(
+              '1',
+              colorPreset: TTagColorPreset.primary,
               size: TTagSize.medium,
             ),
-            TTag('1000',
-              colorScheme: TTagColorScheme.warning,
-            ),
-            TTag('文本',
-              colorScheme: TTagColorScheme.success,
-            ),
+            TTag('1000', colorPreset: TTagColorPreset.warning),
+            TTag('文本', colorPreset: TTagColorPreset.success),
           ],
         ),
         SizedBox(height: 24),
@@ -101,23 +97,18 @@ class TestPage extends StatelessWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TText('边界情况测试', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        SizedBox(height: 12),
-        TTag('超长文本测试超长文本测试超长文本测试超长文本测试',
-          colorScheme: TTagColorScheme.warning,
+        TText(
+          '边界情况测试',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 12),
-        TTag('带关闭按钮',
-          colorScheme: TTagColorScheme.danger,
-        ),
+        TTag('超长文本测试超长文本测试超长文本测试超长文本测试', colorPreset: TTagColorPreset.warning),
         SizedBox(height: 12),
-        TTag('动态宽度',
-          colorScheme: TTagColorScheme.success,
-        ),
+        TTag('带关闭按钮', colorPreset: TTagColorPreset.danger),
         SizedBox(height: 12),
-        TTag('极小宽度',
-          colorScheme: TTagColorScheme.primary,
-        ),
+        TTag('动态宽度', colorPreset: TTagColorPreset.success),
+        SizedBox(height: 12),
+        TTag('极小宽度', colorPreset: TTagColorPreset.primary),
       ],
     );
   }

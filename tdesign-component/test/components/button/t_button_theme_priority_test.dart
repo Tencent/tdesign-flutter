@@ -14,7 +14,7 @@ void main() {
     TButtonThemeData componentTheme = const TButtonThemeData(),
     ButtonStyle? materialStyle,
     TButtonVariant variant = TButtonVariant.fill,
-    TButtonColorScheme? instanceColorScheme,
+    TButtonColorPreset? instanceColorPreset,
     ButtonStyle? instanceStyle,
   }) {
     return MaterialApp(
@@ -26,7 +26,7 @@ void main() {
       home: Scaffold(
         body: TButton(
           variant: variant,
-          colorScheme: instanceColorScheme,
+          colorPreset: instanceColorPreset,
           style: instanceStyle,
           onPressed: () {},
           child: const Text('priority'),
@@ -48,10 +48,8 @@ void main() {
     final buttonTheme = theme.extension<TButtonThemeData>();
 
     expect(buttonTheme, isNotNull);
-    expect(buttonTheme?.filledStyle, isNull);
-    expect(buttonTheme?.outlinedStyle, isNull);
-    expect(buttonTheme?.textButtonStyle, isNull);
-    expect(buttonTheme?.ghostStyle, isNull);
+    expect(buttonTheme?.iconTextSpacing, isNull);
+    expect(buttonTheme?.gradient, isNull);
   });
 
   test('默认中性填充色与设计 Token 保持一致', () {
@@ -113,16 +111,14 @@ void main() {
     expect(background(tester), Colors.red);
   });
 
-  testWidgets('P1 组件 ThemeExtension 覆盖 Material Theme', (tester) async {
+  testWidgets('视觉样式由实例 style 覆盖 Material Theme', (tester) async {
     await tester.pumpWidget(
       themedButton(
         materialStyle: const ButtonStyle(
           backgroundColor: WidgetStatePropertyAll(Colors.red),
         ),
-        componentTheme: const TButtonThemeData(
-          filledStyle: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(Colors.green),
-          ),
+        instanceStyle: const ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(Colors.green),
         ),
       ),
     );
@@ -130,31 +126,27 @@ void main() {
     expect(background(tester), Colors.green);
   });
 
-  testWidgets('实例 colorScheme 只选择预设，组件 Theme 具体颜色优先', (tester) async {
+  testWidgets('实例 colorPreset 只选择预设，实例 style 具体颜色优先', (tester) async {
     await tester.pumpWidget(
       themedButton(
-        componentTheme: const TButtonThemeData(
-          filledStyle: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(Colors.green),
-          ),
+        instanceStyle: const ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(Colors.green),
         ),
-        instanceColorScheme: TButtonColorScheme.primary,
+        instanceColorPreset: TButtonColorPreset.primary,
       ),
     );
 
     expect(background(tester), Colors.green);
   });
 
-  testWidgets('outline 的 Theme 描边和文字不被显式 colorScheme 覆盖', (tester) async {
+  testWidgets('outline 的实例描边和文字不被显式 colorPreset 覆盖', (tester) async {
     await tester.pumpWidget(
       themedButton(
         variant: TButtonVariant.outline,
-        instanceColorScheme: TButtonColorScheme.danger,
-        componentTheme: const TButtonThemeData(
-          outlinedStyle: ButtonStyle(
-            side: WidgetStatePropertyAll(BorderSide(color: Colors.green)),
-            foregroundColor: WidgetStatePropertyAll(Colors.purple),
-          ),
+        instanceColorPreset: TButtonColorPreset.danger,
+        instanceStyle: const ButtonStyle(
+          side: WidgetStatePropertyAll(BorderSide(color: Colors.green)),
+          foregroundColor: WidgetStatePropertyAll(Colors.purple),
         ),
       ),
     );
@@ -176,12 +168,7 @@ void main() {
         materialStyle: const ButtonStyle(
           backgroundColor: WidgetStatePropertyAll(Colors.red),
         ),
-        componentTheme: const TButtonThemeData(
-          filledStyle: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(Colors.green),
-          ),
-        ),
-        instanceColorScheme: TButtonColorScheme.primary,
+        instanceColorPreset: TButtonColorPreset.primary,
         instanceStyle: const ButtonStyle(
           backgroundColor: WidgetStatePropertyAll(Colors.purple),
         ),

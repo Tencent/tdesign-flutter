@@ -14,7 +14,7 @@ class LoadingToastExample extends StatelessWidget {
         child: const Text('加载状态'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: () {
           final id = TToast.showLoading(text: '加载中...', context: context);
           // 3 秒后关闭

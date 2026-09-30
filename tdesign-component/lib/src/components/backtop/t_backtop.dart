@@ -22,7 +22,7 @@ class TBackTop extends StatefulWidget {
     this.visibilityOffset = 200,
     this.tooltip,
     this.shape = TBackTopShape.circle,
-    this.colorScheme = TBackTopColorScheme.light,
+    this.colorPreset = TBackTopColorPreset.light,
   }) : assert(visibilityOffset >= 0),
        super(key: key);
 
@@ -53,8 +53,8 @@ class TBackTop extends StatefulWidget {
   /// 结构形态，默认 [TBackTopShape.circle]。
   final TBackTopShape shape;
 
-  /// 预设配色，默认 [TBackTopColorScheme.light]。
-  final TBackTopColorScheme colorScheme;
+  /// 局部配色预设，默认 [TBackTopColorPreset.light]；不切换全局明暗主题。
+  final TBackTopColorPreset colorPreset;
 
   @override
   State<TBackTop> createState() => _TBackTopState();
@@ -179,7 +179,7 @@ class _TBackTopState extends State<TBackTop> {
   _BackTopVisualStyle _resolveStyle(BuildContext context) {
     final token = context.tTheme;
     final theme = _themeData;
-    final isDark = widget.colorScheme == TBackTopColorScheme.dark;
+    final isDark = widget.colorPreset == TBackTopColorPreset.dark;
     final defaultBackground = isDark
         ? widget.shape == TBackTopShape.circle
               ? token.grayColor13

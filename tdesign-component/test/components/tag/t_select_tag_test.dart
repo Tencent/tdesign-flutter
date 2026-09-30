@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-/// 覆盖 [TSelectTag] 的选中/未选中、colorScheme、variant、icon、size 与 onChanged 分支。
+/// 覆盖 [TSelectTag] 的选中/未选中、colorPreset、variant、icon、size 与 onChanged 分支。
 void main() {
   Widget wrap(Widget child, {TTagThemeData? tagTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
@@ -64,7 +64,7 @@ void main() {
           TSelectTag(
             '点击',
             value: false,
-            colorScheme: TTagColorScheme.primary,
+            colorPreset: TTagColorPreset.primary,
             variant: TTagVariant.light,
             icon: Icons.star,
             size: TTagSize.small,
@@ -86,7 +86,7 @@ void main() {
           const TSelectTag(
             '选中',
             value: true,
-            colorScheme: TTagColorScheme.danger,
+            colorPreset: TTagColorPreset.danger,
             icon: Icons.check,
             size: TTagSize.large,
           ),

@@ -1,5 +1,7 @@
 # 组件 Theme/API 收敛与 Golden 复核报告（2026-09-27）
 
+> 2026-09-29 更新：用户已将本报告中“实例完整 style 可与组件 Theme 控制同一视觉值并存”的旧口径改为单入口。下文旧章节保留历史证据，本轮新结论见文末。
+
 ## 结论与口径
 
 本批代码已把公开组件的**同名** Widget API / Theme 字段候选从 64 项收敛到 0（AST 按实际导出过滤）。Button 具体样式优先级已修复；Text 的默认正文回退已按小程序 14dp/22dp 修正。Text 两张 Golden，以及本轮已裁定的 TabBar/导航 24 张 Golden，已在固定 Linux 3.32.0 更新并无更新复跑通过。**这不等于全部组件可合并发布**：同义但异名的便利字段、804 个小程序组件变量的最终消费链、其他旧 Linux Golden 仍未完全验收。不能宣称设计稿像素完全一致；未裁定的 Golden 不批量更新。
@@ -69,3 +71,32 @@
 Avatar 移除了 `TAvatarThemeData.textStyle`，保留 `foregroundColor` 为默认文字和图标的唯一前景色入口；默认字号/字重仍随 `size`，特殊文字排版通过 `child: Text(style: ...)`。Popover 移除了 `TPopoverAnchor` 和 `TPopover.showPopover` 的 `overlayColor/radius`，保留 Theme 的 `barrierColor/borderRadius`；`borderRadius` 改为 `BorderRadius?` 以保留逐角配置。单实例自定义使用局部 Theme。API 生成清单已收录两个 Theme 类，生成文档不再展示被删除的字段和仅供内部使用的插值辅助方法。
 
 两组件的组件测试在 3.32.0 与 3.47.0 各通过 100 项，公开 Demo 功能测试各通过 7 项；两版本的完整组件包和 Demo 包严格分析均为 0 issues。3.32.0 Linux 隔离覆盖率 Avatar 169/173（97.69%）、Popover 620/632（98.10%）。Linux 3.32.0 无更新复跑 Avatar/Popover Demo Golden 共 25 通过、27 差异；Avatar 的浅/暗差分别仍为 16,958px / 20,571px，与本报告先前记录的值相同。Popover 的失败样本仍需逐张做 Token/旧基线/实现归因；本次不更新 Golden、不宣称视觉门禁通过。上述 API 删除与 Theme 字段改型均属 breaking，迁移见 `migration.md`。
+
+## 2026-09-29 严格单入口阶段结果
+
+| 组件 | 去掉的同义入口 | 唯一所有者 | 验证与剩余风险 |
+| --- | --- | --- | --- |
+| Button | Theme 中四种 `ButtonStyle`、`padding`、`shape` | 绘制值由实例 `style`，结构形状由实例 `shape`；Theme 仅保留渐变和图文间距 | 相关非 Golden 功能测试通过；子树统一 ButtonStyle 的旧能力需迁到调用方共享样式。 |
+| Input | Theme `textStyle` | 已输入文字由实例 `style`；提示文字由 Theme `hintStyle` | 禁用态继续强制使用禁用 Token；相关功能测试通过。 |
+| Dialog action | Theme `actionButtonStyle` | 操作项 `style`（便捷确认弹窗透传 `buttonStyle`） | 面板 Theme 与按钮样式分离，功能测试通过。 |
+| TabsBar | 实例 `decoration` | 背景/分隔线由组件 Theme | 相关功能测试通过；旧 Golden 在当前 macOS 环境差异，不能据此更新 Linux 基线。 |
+| Tag | Theme `fontWeight` | Theme 的完整 `font` Token | Tag/TabsBar 非 Golden 测试 87 项通过。 |
+
+Flutter 3.32.0 和 3.47.0 的组件包严格分析均为 0 issues；相同的相关非 Golden 功能测试两版本各通过 398 项。此结果不是全组件单入口验收：`TText` 的实例 `style` 与 `font/fontWeight/fontFamily/textColor/isTextThrough/lineThroughColor`、`TTextThemeData.font/textStyle` 仍重叠；`TSwipeCellAction` 的多项逐项视觉标量与 `TSwipeCellThemeData` 默认值仍重叠；SideBar 的逐项 `textStyle` 与组件 Theme 样式还要按文字、图标和指示线的不同绘制目标拆分。它们涉及外部调用迁移与默认视觉，不能仅凭同名批量删除。公开 API 删除均属 breaking；未完成外部调用方编译、Flutter 3.32/Linux Golden 和全部组件变量最终消费验收，当前不能声明 PR 可合并。
+
+隔离副本在缓存的 Linux Flutter 3.32.0 镜像中无更新复跑：TabsBar 组件 Golden 2/2 通过；Button/Form/Input/Tag 公开 Demo 功能与 Golden 混合测试 33 通过、7 失败。失败图片为 Button 浅色页面/按压、Form 浅色页面/纵向/禁用、Input 浅色页面/无效手机号；Tag 在本次混合调度中通过。该隔离副本 `pub get --offline` 重新解析了依赖（包括 icon 包），这些失败不能直接归因为本轮 API 收敛；未更新任何 Golden。完整固定依赖、develop 对照及 Figma 归因仍待做。
+
+## 2026-09-29 消费链、外部编译和视觉复核续记
+
+- Progress 9 个组件变量已逐项从小程序 Less/WXML/WXS 追到 Flutter Widget/Painter 默认值；详见 [消费链审查](./component-consumption-review.md)。其中暗色内圆的 `--bg-color-page` 缺少 `td-` 前缀且在冻结源码内无定义，宿主未补变量时实际透明。Flutter 现为浅色容器色、暗色透明，新增 `TProgressThemeData.circleInnerBgColor` 单入口覆写；不是简单把暗色固定为全局页面色。组件聚焦测试及双版本严格分析通过。
+- Tag 读取全局字体族，且保留宿主/Golden 的 CJK 字体回退。固定 Linux 中 `Tag` 的 12dp 正文宽 20.5078125dp、组件宽 36.5078125dp；Figma 38px 所隐含的约 22px 字宽尚缺同字体直接测量。四张 Tag 旧 Golden 在修正字体回退后无更新通过，不应更新。
+- 仓库外临时 Flutter 消费包 `/private/tmp/tdesign-token-consumer.cAkdKY` 通过当前库的 `path` 依赖，编译并运行 Button `style/shape`、Input `style`、Avatar/Popover/TabsBar/TabBar/Tag/Progress 的组件 Theme，以及多组已迁移 Theme 类型；Flutter 3.32.0、3.47.0 各 1/1 通过。它是**独立迁移写法夹具**，不是对真实第三方业务仓库的穷尽编译；后者仍需发布方提供具体消费仓库或包反向依赖。
+- 固定 Linux 3.32.0 与图标包 0.0.6 后，Tag 4/4、Progress 暗色 2/2 无更新 Golden 通过；Progress 浅色 2 张各差 15,015px，主要沿轨道/圆环，未裁定整页设计结果。Button/Form/Input 仍为 7 张失败，分别集中在两处灰色按钮、细边线等区域；尚不能据此判断旧基线或当前实现应改。**本轮没有更新 Golden**，避免把未裁定差异写成权威基线。
+- 全量 804 项中原先的 682 项“最终消费待核”没有被静态命中或 Progress 这 9 项阶段性结果自动清零；其他组件和同字体 Figma 像素核验仍是合并门禁。不能宣称“逐组件完成”。
+- 继续逐组件追踪 Avatar/AvatarGroup 时找到明确的能力差：Flutter Group 为每个成员加统一 2dp 描边且仅单行堆叠；小程序的 1/2/3dp 描边在 WXML 明确施加于折叠头像，组可换行且有上下 2dp 行间距。默认暗色边线来源也不同。不能通过 Token 改名或直接更新 Golden 解决，需先确定 Group 的公开语义和设计实例，再改实现。
+
+## 2026-09-30 内置配色选择器与 Material ColorScheme 解耦
+
+用户裁定统一采用 `colorPreset`。Button、Tag、Link、BackTop、Popover 的五个公开 `T*ColorScheme` 枚举与对应字段、DialogAction、SelectTag、Popover 静态入口及全部仓内消费改为 `T*ColorPreset` / `colorPreset`。`variant` 仍表达绘制方式，`status` 仍表达真实状态；`ThemeData.colorScheme` 保留 Material 实际调色板含义。没有旧名兼容桥接。这是 API breaking change，不能以颜色像素未变判断为非 breaking。
+
+双版本组件十份聚焦测试各 370/370、公开 Demo 十份非 Golden 测试各 51/51，完整组件包严格分析均 0 issues；3.47 Demo 需在无跨 SDK build 缓存的隔离副本中运行，工作树复现的四项 `ink_sparkle.frag` 异常与本次实例命名无关。仓库外独立调用夹具两版本各 1/1，通过新版公开 API 编译。文档和片段由源码重新生成并校验。由于没有改颜色映射或绘制，本批没有更新 Golden；先前未裁定视觉差异仍阻塞整体发布。

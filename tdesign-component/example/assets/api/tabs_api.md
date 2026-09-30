@@ -5,7 +5,6 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | controller | TabController? | - | 可选的标签控制器；为空时使用最近的 `DefaultTabController`。 仅在需要读取当前索引、命令式切换或跨组件共享状态时显式传入。 |
-| decoration | Decoration? | - | tabBar 修饰；非空时覆盖 Theme 的背景和分割线。 |
 | isScrollable | bool | false | 是否横向滚动。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onTap | ValueChanged<int>? | - | 点击事件 |

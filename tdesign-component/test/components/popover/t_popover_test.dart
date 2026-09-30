@@ -7,7 +7,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// TPopover 组件 Widget 测试
 ///
-/// 覆盖 TPopoverColorScheme、TPopoverPlacement、内容渲染、箭头、回调等。
+/// 覆盖 TPopoverColorPreset、TPopoverPlacement、内容渲染、箭头、回调等。
 void main() {
   /// 构建带主题的测试壳
   Widget wrapWithTheme(
@@ -36,17 +36,17 @@ void main() {
   // 枚举验证
   // ============================================================
   group('枚举', () {
-    test('TPopoverColorScheme 有六个值', () {
-      expect(TPopoverColorScheme.values.length, 6);
+    test('TPopoverColorPreset 有六个值', () {
+      expect(TPopoverColorPreset.values.length, 6);
       expect(
-        TPopoverColorScheme.values,
-        contains(TPopoverColorScheme.defaultTheme),
+        TPopoverColorPreset.values,
+        contains(TPopoverColorPreset.defaultTheme),
       );
-      expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.light));
-      expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.primary));
-      expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.success));
-      expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.warning));
-      expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.danger));
+      expect(TPopoverColorPreset.values, contains(TPopoverColorPreset.light));
+      expect(TPopoverColorPreset.values, contains(TPopoverColorPreset.primary));
+      expect(TPopoverColorPreset.values, contains(TPopoverColorPreset.success));
+      expect(TPopoverColorPreset.values, contains(TPopoverColorPreset.warning));
+      expect(TPopoverColorPreset.values, contains(TPopoverColorPreset.danger));
     });
 
     test('TPopoverPlacement 有十二个值', () {
@@ -146,9 +146,7 @@ void main() {
       await tester.pumpWidget(wrapWithTheme(subject(), tokens: tokens));
       var decoration =
           tester
-                  .widget<Container>(
-                    find.byKey(const Key('t-popover-content')),
-                  )
+                  .widget<Container>(find.byKey(const Key('t-popover-content')))
                   .decoration!
               as BoxDecoration;
       expect(decoration.borderRadius, BorderRadius.circular(7));
@@ -165,9 +163,7 @@ void main() {
       await tester.pumpAndSettle();
       decoration =
           tester
-                  .widget<Container>(
-                    find.byKey(const Key('t-popover-content')),
-                  )
+                  .widget<Container>(find.byKey(const Key('t-popover-content')))
                   .decoration!
               as BoxDecoration;
       expect(decoration.borderRadius, BorderRadius.circular(16));
@@ -182,7 +178,7 @@ void main() {
                 child: TPopoverWidget(
                   context: context,
                   content: const Text('自定义背景'),
-                  colorScheme: TPopoverColorScheme.primary,
+                  colorPreset: TPopoverColorPreset.primary,
                 ),
               );
             },
@@ -321,11 +317,11 @@ void main() {
   });
 
   // ============================================================
-  // colorScheme 颜色方案
+  // colorPreset 颜色方案
   // ============================================================
-  group('TPopoverWidget colorScheme', () {
-    for (final scheme in TPopoverColorScheme.values) {
-      testWidgets('colorScheme: $scheme 渲染正常', (tester) async {
+  group('TPopoverWidget colorPreset', () {
+    for (final scheme in TPopoverColorPreset.values) {
+      testWidgets('colorPreset: $scheme 渲染正常', (tester) async {
         await tester.pumpWidget(
           wrapWithTheme(
             Builder(
@@ -334,7 +330,7 @@ void main() {
                   child: TPopoverWidget(
                     context: context,
                     content: Text('${scheme.name}气泡'),
-                    colorScheme: scheme,
+                    colorPreset: scheme,
                   ),
                 );
               },
@@ -1032,7 +1028,7 @@ void main() {
       expect(find.text('弹出气泡'), findsOneWidget);
     });
 
-    testWidgets('showPopover 带 colorScheme', (tester) async {
+    testWidgets('showPopover 带 colorPreset', (tester) async {
       late BuildContext ctx;
       await tester.pumpWidget(
         wrapWithTheme(
@@ -1049,7 +1045,7 @@ void main() {
         TPopover.showPopover(
           context: ctx,
           content: const Text('成功气泡'),
-          colorScheme: TPopoverColorScheme.success,
+          colorPreset: TPopoverColorPreset.success,
         ),
       );
       await tester.pumpAndSettle();
@@ -1588,7 +1584,7 @@ void main() {
         TPopover.showPopover(
           context: ctx,
           content: const Text('主题气泡'),
-          colorScheme: TPopoverColorScheme.defaultTheme,
+          colorPreset: TPopoverColorPreset.defaultTheme,
         ),
       );
       await tester.pumpAndSettle();

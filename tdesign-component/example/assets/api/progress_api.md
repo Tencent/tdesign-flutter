@@ -108,6 +108,23 @@
 | variant | TProgressVariant | - | 进度条形态 |
 
 
+### TProgressThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| animationDuration | Duration? | - | 动画持续时间 |
+| backgroundColor | Color? | - | 进度条背景色 |
+| circleInnerBgColor | Color? | - | 环形进度条内圆背景色。默认浅色读取容器色、暗色透明； 宿主如需定义暗色内圆，可在组件 Theme 中显式配置。 |
+| circleRadius | double? | - | 环形进度条半径 |
+| color | Color? | - | 进度条颜色 |
+| indeterminateAnimationDuration | Duration? | - | 不确定进度完成一次循环的时长。 |
+| indeterminateCircularValue | double? | - | 不确定环形进度弧占整圈的比例。 |
+| indeterminateLinearSegmentFraction | double? | - | 不确定线性进度段占轨道宽度的比例。 |
+| linearBorderRadius | BorderRadiusGeometry? | - | 条形进度条末端圆角 |
+| strokeWidth | double? | - | 进度条粗细 |
+
+
 ### TProgressVariant
 #### 枚举值
 

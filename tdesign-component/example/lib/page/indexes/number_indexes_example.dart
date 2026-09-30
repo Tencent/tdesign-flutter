@@ -21,7 +21,7 @@ Widget _buildNumberIndexes(BuildContext context) {
       key: const ValueKey('indexes-number-trigger'),
       child: const TText('数字索引'),
       size: TButtonSize.large,
-      colorScheme: TButtonColorScheme.primary,
+      colorPreset: TButtonColorPreset.primary,
       variant: TButtonVariant.outline,
       onPressed: () {
         TPopup.show(

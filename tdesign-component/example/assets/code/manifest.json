@@ -930,7 +930,7 @@
         "items": [
           {
             "description": "不同主题",
-            "assetKey": "link.ColorSchemeLinksExample"
+            "assetKey": "link.ColorPresetLinksExample"
           },
           {
             "description": "禁用状态",
@@ -1161,7 +1161,7 @@
         "items": [
           {
             "description": "",
-            "assetKey": "popover.PopoverColorSchemesExample"
+            "assetKey": "popover.PopoverColorPresetsExample"
           },
           {
             "description": "顶部弹出气泡",

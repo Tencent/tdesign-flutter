@@ -27,13 +27,13 @@ class _PopoverRightPlacementsExampleState
               size: TButtonSize.large,
               child: const Text('右侧上'),
               variant: TButtonVariant.outline,
-              colorScheme: TButtonColorScheme.primary,
+              colorPreset: TButtonColorPreset.primary,
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
                   content: const Text('气泡内容'),
                   placement: TPopoverPlacement.rightTop,
-                  colorScheme: theme,
+                  colorPreset: theme,
                 );
               },
             ),
@@ -55,13 +55,13 @@ class _PopoverRightPlacementsExampleState
               size: TButtonSize.large,
               child: const Text('右侧中'),
               variant: TButtonVariant.outline,
-              colorScheme: TButtonColorScheme.primary,
+              colorPreset: TButtonColorPreset.primary,
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
                   content: const Text('气泡内容'),
                   placement: TPopoverPlacement.right,
-                  colorScheme: theme,
+                  colorPreset: theme,
                 );
               },
             ),
@@ -83,13 +83,13 @@ class _PopoverRightPlacementsExampleState
               size: TButtonSize.large,
               child: const Text('右侧下'),
               variant: TButtonVariant.outline,
-              colorScheme: TButtonColorScheme.primary,
+              colorPreset: TButtonColorPreset.primary,
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
                   content: const Text('气泡内容'),
                   placement: TPopoverPlacement.rightBottom,
-                  colorScheme: theme,
+                  colorPreset: theme,
                 );
               },
             ),
@@ -99,7 +99,7 @@ class _PopoverRightPlacementsExampleState
     );
   }
 
-  TPopoverColorScheme theme = TPopoverColorScheme.light;
+  TPopoverColorPreset theme = TPopoverColorPreset.light;
 
   @override
   void initState() {
@@ -110,8 +110,8 @@ class _PopoverRightPlacementsExampleState
       }
       setState(() {
         theme = Theme.of(context).brightness == Brightness.dark
-            ? TPopoverColorScheme.light
-            : TPopoverColorScheme.defaultTheme;
+            ? TPopoverColorPreset.light
+            : TPopoverColorPreset.defaultTheme;
       });
     });
   }

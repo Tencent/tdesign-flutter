@@ -138,7 +138,7 @@ class _CalendarDescribedExampleState extends State<CalendarDescribedExample> {
                     child: SizedBox(
                       width: double.infinity,
                       child: TButton(
-                        colorScheme: TButtonColorScheme.primary,
+                        colorPreset: TButtonColorPreset.primary,
                         size: TButtonSize.large,
                         onPressed:
                             draft.isEmpty ||

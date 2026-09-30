@@ -70,16 +70,14 @@ class TFabResolve {
       icon: effectiveIcon,
       size: TFabDefaults.defaultSize,
       variant: TFabDefaults.defaultVariant,
-      colorScheme: TFabDefaults.defaultColorScheme,
+      colorPreset: TFabDefaults.defaultColorPreset,
+      shape: effectiveShape,
       onPressed: onPressed,
     );
 
     // TFab 默认动作层拥有完整规格；完整自定义通过 TFab.child 组合，避免父级
     // TButtonThemeData 的 padding/gradient 等字段意外改变 Fab 基线。
-    final fabBtnTheme = TButtonThemeData(
-      shape: effectiveShape,
-      iconTextSpacing: 4.0,
-    );
+    const fabBtnTheme = TButtonThemeData(iconTextSpacing: 4.0);
 
     final shadowShape = switch (effectiveShape) {
       TButtonShape.circle => const CircleBorder(),

@@ -20,8 +20,8 @@ import 't_button_types.dart';
 ///
 /// **L1 三维正交**：
 /// - [variant]：变体类型（fill / outline / text / ghost）
-/// - [colorScheme]：配色方案（defaultTheme / primary / danger / light）
-/// - shape：由 Theme [TButtonThemeData.shape] 控制
+/// - [colorPreset]：配色方案（defaultTheme / primary / danger / light）
+/// - [shape]：按钮结构形状；具体边框样式由 [style] 控制
 ///
 /// **示例**：
 /// ```dart
@@ -29,7 +29,7 @@ import 't_button_types.dart';
 /// TButton(
 ///   child: Text('填充按钮'),
 ///   variant: TButtonVariant.fill,
-///   colorScheme: TButtonColorScheme.primary,
+///   colorPreset: TButtonColorPreset.primary,
 ///   onPressed: () {},
 /// )
 ///
@@ -58,7 +58,8 @@ class TButton extends StatefulWidget {
     this.child,
     this.size,
     this.variant,
-    this.colorScheme,
+    this.shape = TButtonShape.rectangle,
+    this.colorPreset,
     this.icon,
     this.iconPosition = TButtonIconPosition.left,
     this.onPressed,
@@ -77,11 +78,15 @@ class TButton extends StatefulWidget {
   /// 变体（fill / outline / text / ghost），未传时使用 [TButtonVariant.fill]。
   final TButtonVariant? variant;
 
-  /// 配色方案；未传时使用 [TButtonColorScheme.defaultTheme]。
+  /// 按钮结构形状；纯图标的 square/circle 同时决定等宽高布局。
+  /// 具体边框及圆角仍可通过 [style] 配置。
+  final TButtonShape shape;
+
+  /// 内置配色预设；未传时使用 [TButtonColorPreset.defaultTheme]。
   ///
-  /// 只选择内置调色预设，不覆写 Material/组件 Theme 中显式设置的颜色、
-  /// 边框和文字样式；当前按钮的具体样式可通过 [style] 覆盖。
-  final TButtonColorScheme? colorScheme;
+  /// 不改变 [variant] 的绘制方式，也不覆写显式 Material 按钮主题；
+  /// 当前按钮的具体颜色、边框和文字样式通过 [style] 配置。
+  final TButtonColorPreset? colorPreset;
 
   /// 图标（Widget 类型，IconData 需包裹为 `Icon(...)`）
   final Widget? icon;
@@ -98,8 +103,7 @@ class TButton extends StatefulWidget {
   /// 不会触发点击或长按回调。
   final VoidCallback? onLongPress;
 
-  /// 当前按钮的完整 [ButtonStyle] 覆盖；优先于组件 [TButtonThemeData]
-  /// 提供的子树默认样式，不影响同一子树中的其他按钮。
+  /// 当前按钮的完整 [ButtonStyle] 视觉配置入口，不影响其他按钮。
   ///
   /// 组件默认使用 [MaterialTapTargetSize.shrinkWrap] 保持 TDesign 精确尺寸；
   /// 需要至少 48dp 点击区时可将 [ButtonStyle.tapTargetSize] 设为
@@ -172,11 +176,11 @@ class _TButtonState extends State<TButton> {
     // 解析 ButtonStyle
     final resolvedStyle = TButtonResolve.resolve(
       variant: effectiveVariant,
-      colorScheme: widget.colorScheme,
+      shape: widget.shape,
+      colorPreset: widget.colorPreset,
       size: effectiveSize,
       icon: widget.icon,
       hasChild: widget.child != null,
-      theme: theme,
       instanceStyle: widget.style,
       context: context,
       hasGradient: hasGradient,
@@ -237,9 +241,7 @@ class _TButtonState extends State<TButton> {
           resolvedStyle.shape?.resolve(states) ??
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
-              _borderRadiusForShape(
-                theme?.effectiveShape ?? TButtonShape.rectangle,
-              ),
+              _borderRadiusForShape(widget.shape),
             ),
           );
       final side = resolvedStyle.side?.resolve(states);
@@ -260,8 +262,8 @@ class _TButtonState extends State<TButton> {
           );
       final isIconOnly = widget.icon != null && widget.child == null;
       final isFixedIconShape =
-          theme?.effectiveShape == TButtonShape.square ||
-          theme?.effectiveShape == TButtonShape.circle;
+          widget.shape == TButtonShape.square ||
+          widget.shape == TButtonShape.circle;
       final padding =
           resolvedStyle.padding?.resolve(states) ??
           (isIconOnly && isFixedIconShape

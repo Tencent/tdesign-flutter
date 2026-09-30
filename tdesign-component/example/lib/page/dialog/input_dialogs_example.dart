@@ -57,7 +57,7 @@ class InputDialogsExample extends StatelessWidget {
       child: TButton(
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: onPressed,
         child: Text(text),
       ),
@@ -91,14 +91,14 @@ class InputDialogsExample extends StatelessWidget {
   List<TDialogAction> _actions({
     bool destructive = false,
     TButtonVariant? variant,
-    TButtonColorScheme? primaryColorScheme,
+    TButtonColorPreset? primaryColorScheme,
   }) => [
     TDialogAction(variant: variant, child: const Text('取消'), result: false),
     TDialogAction(
       child: Text(destructive ? '警示操作' : '确定'),
       result: true,
       variant: variant,
-      colorScheme: primaryColorScheme,
+      colorPreset: primaryColorScheme,
       role: destructive
           ? TDialogActionRole.destructive
           : TDialogActionRole.primary,

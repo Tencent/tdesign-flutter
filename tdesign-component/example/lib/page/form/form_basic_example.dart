@@ -95,55 +95,52 @@ class _FormBasicDemoState extends State<FormBasicDemo> {
               bottom: BorderSide(color: context.tTheme.componentStroke),
             ),
           ),
-          child: Theme(
-            data: Theme.of(
-              context,
-            ).mergeExtension(const TButtonThemeData(shape: TButtonShape.round)),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TButton(
-                    key: const ValueKey('form-layout-horizontal'),
-                    size: TButtonSize.small,
-                    variant: TButtonVariant.fill,
-                    colorScheme: _layout == TFormLayout.horizontal
-                        ? TButtonColorScheme.light
-                        : TButtonColorScheme.defaultTheme,
-                    style: _layout == TFormLayout.horizontal
-                        ? null
-                        : ButtonStyle(
-                            backgroundColor: WidgetStatePropertyAll(
-                              context.tTheme.bgColorSecondaryContainer,
-                            ),
+          child: Row(
+            children: [
+              Expanded(
+                child: TButton(
+                  shape: TButtonShape.round,
+                  key: const ValueKey('form-layout-horizontal'),
+                  size: TButtonSize.small,
+                  variant: TButtonVariant.fill,
+                  colorPreset: _layout == TFormLayout.horizontal
+                      ? TButtonColorPreset.light
+                      : TButtonColorPreset.defaultTheme,
+                  style: _layout == TFormLayout.horizontal
+                      ? null
+                      : ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                            context.tTheme.bgColorSecondaryContainer,
                           ),
-                    onPressed: () =>
-                        setState(() => _layout = TFormLayout.horizontal),
-                    child: const TText('水平排布'),
-                  ),
+                        ),
+                  onPressed: () =>
+                      setState(() => _layout = TFormLayout.horizontal),
+                  child: const TText('水平排布'),
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TButton(
-                    key: const ValueKey('form-layout-vertical'),
-                    size: TButtonSize.small,
-                    variant: TButtonVariant.fill,
-                    colorScheme: _layout == TFormLayout.vertical
-                        ? TButtonColorScheme.light
-                        : TButtonColorScheme.defaultTheme,
-                    style: _layout == TFormLayout.vertical
-                        ? null
-                        : ButtonStyle(
-                            backgroundColor: WidgetStatePropertyAll(
-                              context.tTheme.bgColorSecondaryContainer,
-                            ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TButton(
+                  shape: TButtonShape.round,
+                  key: const ValueKey('form-layout-vertical'),
+                  size: TButtonSize.small,
+                  variant: TButtonVariant.fill,
+                  colorPreset: _layout == TFormLayout.vertical
+                      ? TButtonColorPreset.light
+                      : TButtonColorPreset.defaultTheme,
+                  style: _layout == TFormLayout.vertical
+                      ? null
+                      : ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                            context.tTheme.bgColorSecondaryContainer,
                           ),
-                    onPressed: () =>
-                        setState(() => _layout = TFormLayout.vertical),
-                    child: const TText('竖向排布'),
-                  ),
+                        ),
+                  onPressed: () =>
+                      setState(() => _layout = TFormLayout.vertical),
+                  child: const TText('竖向排布'),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         TCell(
@@ -430,7 +427,7 @@ class _FormBasicDemoState extends State<FormBasicDemo> {
               key: const ValueKey('form-reset-button'),
               size: TButtonSize.large,
               variant: TButtonVariant.fill,
-              colorScheme: TButtonColorScheme.light,
+              colorPreset: TButtonColorPreset.light,
               onPressed: _disabled ? null : _reset,
               child: const TText('重置'),
             ),
@@ -441,7 +438,7 @@ class _FormBasicDemoState extends State<FormBasicDemo> {
               key: const ValueKey('form-submit-button'),
               size: TButtonSize.large,
               variant: TButtonVariant.fill,
-              colorScheme: TButtonColorScheme.primary,
+              colorPreset: TButtonColorPreset.primary,
               onPressed: _disabled ? null : _formController.submit,
               child: const TText('提交'),
             ),

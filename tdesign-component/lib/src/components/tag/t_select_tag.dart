@@ -10,7 +10,7 @@ class TSelectTag extends StatelessWidget {
     super.key,
     required this.value,
     this.onChanged,
-    this.colorScheme = TTagColorScheme.primary,
+    this.colorPreset = TTagColorPreset.primary,
     this.variant = TTagVariant.dark,
     this.icon,
     this.size = TTagSize.medium,
@@ -26,7 +26,7 @@ class TSelectTag extends StatelessWidget {
   final ValueChanged<bool>? onChanged;
 
   /// 选中态预设配色。
-  final TTagColorScheme colorScheme;
+  final TTagColorPreset colorPreset;
 
   /// 标签绘制形态。
   final TTagVariant variant;
@@ -39,16 +39,16 @@ class TSelectTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveColorScheme = value
-        ? colorScheme
-        : TTagColorScheme.defaultTheme;
+    final effectiveColorPreset = value
+        ? colorPreset
+        : TTagColorPreset.defaultTheme;
 
     return Semantics(
       enabled: onChanged != null,
       selected: value,
       child: TTag(
         text,
-        colorScheme: effectiveColorScheme,
+        colorPreset: effectiveColorPreset,
         variant: variant,
         icon: icon,
         size: size,

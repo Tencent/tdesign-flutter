@@ -90,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Text(
                             AppLocalizations.of(context)?.defaultTheme ?? '',
                           ),
-                          colorScheme: TButtonColorScheme.primary,
+                          colorPreset: TButtonColorPreset.primary,
                           onPressed: () async {
                             widget.onThemeChange?.call(
                               TThemeData.defaultData(),
@@ -107,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Text(
                             AppLocalizations.of(context)?.greenTheme ?? '',
                           ),
-                          colorScheme: TButtonColorScheme.primary,
+                          colorPreset: TButtonColorPreset.primary,
                           onPressed: () async {
                             var jsonString = await rootBundle.loadString(
                               'assets/theme.json',
@@ -132,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Text(
                             AppLocalizations.of(context)?.redTheme ?? '',
                           ),
-                          colorScheme: TButtonColorScheme.primary,
+                          colorPreset: TButtonColorPreset.primary,
                           onPressed: () async {
                             var jsonString = await rootBundle.loadString(
                               'assets/theme.json',

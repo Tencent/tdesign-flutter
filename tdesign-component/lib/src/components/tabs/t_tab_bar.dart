@@ -24,7 +24,6 @@ class TTabsBar extends StatelessWidget {
     Key? key,
     required this.tabs,
     this.controller,
-    this.decoration,
     this.isScrollable = false,
     this.onTap,
     this.size = TTabsBarSize.small,
@@ -38,9 +37,6 @@ class TTabsBar extends StatelessWidget {
   ///
   /// 仅在需要读取当前索引、命令式切换或跨组件共享状态时显式传入。
   final TabController? controller;
-
-  /// tabBar 修饰；非空时覆盖 Theme 的背景和分割线。
-  final Decoration? decoration;
 
   /// 是否横向滚动。
   final bool isScrollable;
@@ -66,23 +62,21 @@ class TTabsBar extends StatelessWidget {
     final resolvedIndicator = themeData.indicator ?? _defaultIndicator(context);
     return Container(
       height: 48,
-      decoration:
-          decoration ??
-          (variant == TTabsBarVariant.card
-              ? BoxDecoration(color: backgroundColor)
-              : BoxDecoration(
-                  color: backgroundColor,
-                  border: dividerHeight <= 0
-                      ? null
-                      : Border(
-                          bottom: BorderSide(
-                            color:
-                                themeData.dividerColor ??
-                                context.tTheme.componentStroke,
-                            width: dividerHeight,
-                          ),
-                        ),
-                )),
+      decoration: variant == TTabsBarVariant.card
+          ? BoxDecoration(color: backgroundColor)
+          : BoxDecoration(
+              color: backgroundColor,
+              border: dividerHeight <= 0
+                  ? null
+                  : Border(
+                      bottom: BorderSide(
+                        color:
+                            themeData.dividerColor ??
+                            context.tTheme.componentStroke,
+                        width: dividerHeight,
+                      ),
+                    ),
+            ),
       child: THorizontalTabBar(
         isScrollable: isScrollable,
         indicator: resolvedIndicator,

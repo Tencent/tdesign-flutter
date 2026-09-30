@@ -71,7 +71,7 @@ void main() {
       final button = tester.widget<TButton>(find.byType(TButton));
       expect(button.size, TButtonSize.large);
       expect(button.variant, TButtonVariant.fill);
-      expect(button.colorScheme, TButtonColorScheme.primary);
+      expect(button.colorPreset, TButtonColorPreset.primary);
       expect(find.byIcon(TIcons.add), findsOneWidget);
       expect(tester.getSize(find.byType(TButton)), const Size(48, 48));
     });
@@ -80,7 +80,7 @@ void main() {
       final theme = TThemeBuilder.light(TThemeData.defaultData())
           .mergeExtension(
             const TButtonThemeData(
-              padding: EdgeInsets.zero,
+              iconTextSpacing: 0,
               gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
             ),
           );
@@ -94,18 +94,15 @@ void main() {
       final button = tester.widget<TButton>(find.byType(TButton));
       expect(button.size, TButtonSize.large);
       expect(button.variant, TButtonVariant.fill);
-      expect(button.colorScheme, TButtonColorScheme.primary);
+      expect(button.colorPreset, TButtonColorPreset.primary);
+      expect(button.shape, TButtonShape.circle);
       expect(tester.getSize(find.byType(TButton)), const Size(48, 48));
 
       final fabButtonThemes = tester
           .widgetList<Theme>(find.byType(Theme))
           .map((widget) => widget.data.extension<TButtonThemeData>())
           .where(
-            (theme) =>
-                theme?.shape == TButtonShape.circle &&
-                theme?.iconTextSpacing == 4 &&
-                theme?.padding == null &&
-                theme?.gradient == null,
+            (theme) => theme?.iconTextSpacing == 4 && theme?.gradient == null,
           );
       expect(fabButtonThemes, isNotEmpty);
     });
@@ -1122,7 +1119,7 @@ void main() {
     test('默认常量与 shapeForText', () {
       expect(TFabDefaults.defaultSize, TButtonSize.large);
       expect(TFabDefaults.defaultVariant, TButtonVariant.fill);
-      expect(TFabDefaults.defaultColorScheme, TButtonColorScheme.primary);
+      expect(TFabDefaults.defaultColorPreset, TButtonColorPreset.primary);
       expect(TFabDefaults.defaultIconData, TIcons.add);
       expect(TFabDefaults.shapeForText(false), TButtonShape.circle);
       expect(TFabDefaults.shapeForText(true), TButtonShape.round);

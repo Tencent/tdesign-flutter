@@ -26,9 +26,6 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
   /// 面板最大高度。
   final double? maxHeight;
 
-  /// 按钮区样式（对应 Material [TextButtonThemeData]；TDesign 扩展）
-  final ButtonStyle? actionButtonStyle;
-
   /// 弹窗宽度
   final double? width;
 
@@ -40,7 +37,6 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
     this.contentTextStyle,
     this.contentPadding,
     this.maxHeight,
-    this.actionButtonStyle,
     this.width,
   });
 
@@ -57,7 +53,6 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
       contentTextStyle: other.contentTextStyle ?? contentTextStyle,
       contentPadding: other.contentPadding ?? contentPadding,
       maxHeight: other.maxHeight ?? maxHeight,
-      actionButtonStyle: other.actionButtonStyle ?? actionButtonStyle,
       width: other.width ?? width,
     );
   }
@@ -71,7 +66,6 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
     TextStyle? contentTextStyle,
     EdgeInsetsGeometry? contentPadding,
     double? maxHeight,
-    ButtonStyle? actionButtonStyle,
     double? width,
   }) {
     return TDialogThemeData(
@@ -82,7 +76,6 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
       contentTextStyle: contentTextStyle ?? this.contentTextStyle,
       contentPadding: contentPadding ?? this.contentPadding,
       maxHeight: maxHeight ?? this.maxHeight,
-      actionButtonStyle: actionButtonStyle ?? this.actionButtonStyle,
       width: width ?? this.width,
     );
   }
@@ -97,13 +90,17 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
       shape: ShapeBorder.lerp(shape, other.shape, t),
       elevation: lerpDouble(elevation, other.elevation, t),
       titleTextStyle: TextStyle.lerp(titleTextStyle, other.titleTextStyle, t),
-      contentTextStyle:
-          TextStyle.lerp(contentTextStyle, other.contentTextStyle, t),
-      contentPadding:
-          EdgeInsetsGeometry.lerp(contentPadding, other.contentPadding, t),
+      contentTextStyle: TextStyle.lerp(
+        contentTextStyle,
+        other.contentTextStyle,
+        t,
+      ),
+      contentPadding: EdgeInsetsGeometry.lerp(
+        contentPadding,
+        other.contentPadding,
+        t,
+      ),
       maxHeight: lerpDouble(maxHeight, other.maxHeight, t),
-      actionButtonStyle:
-          ButtonStyle.lerp(actionButtonStyle, other.actionButtonStyle, t),
       width: lerpDouble(width, other.width, t),
     );
   }

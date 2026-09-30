@@ -25,7 +25,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | text | String | - | 标签内容 |
-| colorScheme | TTagColorScheme | TTagColorScheme.defaultTheme | 标签预设配色。 |
+| colorPreset | TTagColorPreset | TTagColorPreset.defaultTheme | 标签预设配色。 |
 | enabled | bool | true | 是否使用禁用视觉状态。 |
 | icon | IconData? | - | 图标内容，可随状态改变颜色 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
@@ -42,7 +42,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | text | String | - | 标签内容。 |
-| colorScheme | TTagColorScheme | TTagColorScheme.primary | 选中态预设配色。 |
+| colorPreset | TTagColorPreset | TTagColorPreset.primary | 选中态预设配色。 |
 | icon | IconData? | - | 标签图标。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onChanged | ValueChanged<bool>? | - | 选中状态变更回调；为空时禁用交互。 |
