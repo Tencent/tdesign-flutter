@@ -43,10 +43,15 @@ const double _kDefaultTabIconSize = 20;
 /// 左右图文项的内置图文间距；上下排列不留额外间距。
 const double _kInlineIconTextGap = 4;
 
-/// 标签栏的内边距与项间距；胶囊栏另有页面侧边距。
+/// 标签栏垂直内边距；胶囊栏沿用 8px 横向内边距和项间距。
 const double _kCapsuleOuterMargin = 16;
 const double _kBarPadding = 8;
 const double _kItemGap = 8;
+
+/// 普通栏每项水平内边距：不超过 3 项时 12px，更多项时 8px。
+/// 选中背景位于项的内容盒中，因而宽度随项数变化，而非覆盖整项。
+const double _kRegularItemInset = 12;
+const double _kCrowdedItemInset = 8;
 
 /// 展开项弹窗弹出动画时间
 const Duration _kPopupMenuDuration = Duration(milliseconds: 10);
@@ -411,10 +416,18 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
               constraints.maxWidth -
                   (isCapsuleOutlineType ? 2 * _kCapsuleOuterMargin : 0),
             );
-            final barPadding = math.min(_kBarPadding, barWidth / 2);
+            final itemInset = isCapsuleOutlineType
+                ? _kBarPadding
+                : count > 3
+                ? _kCrowdedItemInset
+                : _kRegularItemInset;
+            final barPadding = math.min(itemInset, barWidth / 2);
             final contentWidth = barWidth - 2 * barPadding;
             final itemGap = count > 1
-                ? math.min(_kItemGap, contentWidth / (count - 1))
+                ? math.min(
+                    isCapsuleOutlineType ? _kItemGap : 2 * itemInset,
+                    contentWidth / (count - 1),
+                  )
                 : 0.0;
             final itemWidth = math.max(
               0.0,
@@ -438,8 +451,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
                       shadows: context.tTheme.shadow3,
                     )
                   : BoxDecoration(color: _effectiveBackgroundColor),
-              foregroundDecoration:
-                  !isCapsuleOutlineType
+              foregroundDecoration: !isCapsuleOutlineType
                   ? BoxDecoration(
                       border: Border(
                         top: BorderSide(
@@ -907,10 +919,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            iconWithBadge,
-            text,
-          ],
+          children: [iconWithBadge, text],
         ),
       );
       return child;

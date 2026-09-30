@@ -11,25 +11,22 @@ class DoubleLayerTabBarExample extends StatefulWidget {
 
 class _DoubleLayerTabBarExampleState extends State<DoubleLayerTabBarExample> {
   /// 核心片段：导入 material.dart 和 tdesign_flutter.dart。
-  /// 在 StatefulWidget 的 State 中声明 `int _doubleLayerValue = 3;`，
+  /// 在 StatefulWidget 的 State 中声明 `int _doubleLayerValue = 2;`，
   /// 从 build 调用本方法；状态由 State 持有并通过 setState 重建。
   Widget _doubleLayerTabBar(BuildContext context) {
-    const labels = ['首页', '应用', '聊天', '我的'];
+    const labels = ['首页', '应用', '我的'];
     return TTabBar(
       type: TTabBarType.doubleLayer,
       useSafeArea: false,
       value: _doubleLayerValue,
       onChanged: (newValue) => setState(() => _doubleLayerValue = newValue),
       navigationTabs: List.generate(
-        4,
+        labels.length,
         (index) => TTabBarItemConfig(
           tabText: labels[index],
           allowMultipleTaps: true,
-          onTap: () => TToast.showText(
-            '第 ${index + 1} 项',
-            context: context,
-          ),
-          popUpButtonConfig: index == 3
+          onTap: () => TToast.showText('第 ${index + 1} 项', context: context),
+          popUpButtonConfig: index == 2
               ? TTabBarPopUpBtnConfig(
                   items: const [
                     TTabBarMenuItem(value: '基本信息'),
@@ -45,7 +42,7 @@ class _DoubleLayerTabBarExampleState extends State<DoubleLayerTabBarExample> {
     );
   }
 
-  int _doubleLayerValue = 3;
+  int _doubleLayerValue = 2;
 
   @override
   Widget build(BuildContext context) {

@@ -96,7 +96,7 @@ class _TTabBarPageState extends State<TTabBarPage> {
   /// 从 build 调用本方法；状态由 State 持有并通过 setState 重建。
 
   /// 核心片段：导入 material.dart 和 tdesign_flutter.dart。
-  /// 在 StatefulWidget 的 State 中声明 `int _doubleLayerValue = 3;`，
+  /// 在 StatefulWidget 的 State 中声明 `int _doubleLayerValue = 2;`，
   /// 从 build 调用本方法；状态由 State 持有并通过 setState 重建。
 
   /// 核心片段：导入 material.dart 和 tdesign_flutter.dart。

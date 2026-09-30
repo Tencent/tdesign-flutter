@@ -496,10 +496,43 @@ void main() {
       final textRect = tester.getRect(find.text('Item').first);
       final badgeCenter = tester.getCenter(find.text('9'));
       expect(selectedRect.left, 8);
-      expect(selectedRect.width, closeTo(83.75, 0.01));
+      expect(selectedRect.width, closeTo(77.75, 0.01));
       expect(selectedRect.height, 40);
       expect(badgeCenter.dx, closeTo(textRect.right, 0.01));
       expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('filled three-item selection uses the design content width', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(375, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TTabBar(
+            type: TTabBarType.doubleLayer,
+            value: 2,
+            useSafeArea: false,
+            navigationTabs: List.generate(
+              3,
+              (index) => TTabBarItemConfig(tabText: 'Item $index'),
+            ),
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      final selected = find.byWidgetPredicate(
+        (widget) =>
+            widget is Container &&
+            widget.decoration is BoxDecoration &&
+            (widget.decoration! as BoxDecoration).color ==
+                const Color(0xFFF2F3FF),
+      );
+      final rect = tester.getRect(selected);
+      expect(rect.left, closeTo(262, 0.01));
+      expect(rect.width, closeTo(101, 0.01));
+      expect(rect.height, 40);
     });
 
     testWidgets('capsule renders every configured icon across selection', (

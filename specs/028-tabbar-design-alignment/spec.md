@@ -47,8 +47,9 @@
   左侧的结构，不受此参数影响。`inline` 使用 20px 图标、16px/24px 文字及
   默认 4px 图文间距；上下排列使用 0px。图文间距由组件内部决定，不提供公开覆盖参数。
 - `inline` 图文项的徽标锚定整组图文右上角；默认 `stacked` 仍锚定图标右上角。
-  Filled 栏按两侧各 8px、项间 8px 分配，Label 选中底色覆盖整个项宽；
-  Capsule 栏沿用同一内部间距并保留 16px 外边距。
+  Filled 栏按项数分配等宽交互区域：不超过 3 项时每项水平内边距 12px，
+  更多项时 8px，Label 选中底色只覆盖内容盒（375px 下 3 项为 101px、
+  4 项为 77.75px）；Capsule 栏仍用两侧各 8px、项间 8px，保留 16px 外边距。
 - `value` 是唯一选中状态；`onChanged == null` 时整栏只读并禁用交互。
 - `indicatorAnimation` 在 none、linear、elastic 间切换时始终与当前 value 对齐；动画中再次切换值从当前位置继续。
 - 每项 `onTap` 是选中变化时的附加动作；重复点击仅在

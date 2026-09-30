@@ -34,7 +34,8 @@ void main() {
     final barFinder = find.byType(TTabBar).at(3);
     final bar = tester.widget<TTabBar>(barFinder);
     expect(bar.type, TTabBarType.doubleLayer);
-    expect(bar.value, 3);
+    expect(bar.value, 2);
+    expect(bar.navigationTabs.map((item) => item.tabText), ['首页', '应用', '我的']);
     await tester.tap(find.descendant(of: barFinder, matching: find.text('我的')));
     await tester.pumpAndSettle();
     for (final label in ['基本信息', '个人主页', '设置']) {
