@@ -91,3 +91,10 @@
 | 严格静态分析 | Flutter 3.32.0 与 3.47.0 的完整组件包、完整 Demo 包均为 0 issues | `flutter analyze --no-pub --fatal-infos`；这是本补充批次的当前结果，替代上文较早的阶段性统计 |
 | 受影响 Demo Golden 无更新复跑 | Linux 3.32.0：Avatar/Popover 合计 25 通过、27 差异；Avatar 浅/暗各差 16,958px/20,571px | Avatar 数值与前批相同；Popover 失败含旧基线/Token 差异，未逐张归因；未更新基线，视觉门禁未通过 |
 | 文档与片段 | 重新生成 Avatar/Popover API 文档；示例代码 `--check` 通过 | API 文档已无被删除的字段；未进行远端 PR/CI 验证 |
+
+### 2026-09-30 Cascader、Theme、Slider Golden 裁定
+
+- 用户确认这三类当前视觉结果符合预期，允许更新相应旧基线；不据此裁定其他组件或共享组合快照。
+- 在隔离的 Linux amd64 / Flutter 3.32.0 副本中先无更新参数复现，再仅更新实际变化的 12 张 Golden：Cascader 组件 1 张、Slider 组件与 Demo 7 张、Theme 组件与 Demo 4 张。Cascader Demo 基线已有最新布局，无需改动。
+- 差异包括 Cascader 组件分隔线 `#E7E7E7 → #E8E8E8`（343×1 像素）、Slider 轨道及 Demo 配色、Theme 色板项目和页面高度；Theme light/dark 页面分别从 375×2991 / 375×2969 变为 375×2837。Theme 的 Popup ActionSheet 共享样例底部分隔区域也随 Token 改变，归入本次 Theme 基线。
+- 更新后立即在相同 Linux 环境移除更新参数复跑：组件相关测试 8/8、Demo 相关测试 28/28 通过。此结果仅证明上述受影响场景的新基线可复现；全量视觉回归和 PR 最终 head 的远端 CI 仍须另验。
