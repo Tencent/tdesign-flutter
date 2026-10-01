@@ -12,6 +12,20 @@ void main() {
           TSwipeCellAction(builder: (_) => const SizedBox(), icon: Icons.edit),
       throwsAssertionError,
     );
+    expect(
+      () => TSwipeCellAction(
+        builder: (_) => const SizedBox(),
+        backgroundColor: Colors.red,
+      ),
+      throwsAssertionError,
+    );
+    expect(
+      () => TSwipeCellAction(
+        builder: (_) => const SizedBox(),
+        labelStyle: const TextStyle(fontSize: 14),
+      ),
+      throwsAssertionError,
+    );
   });
 
   Widget app(Widget child, {TextDirection direction = TextDirection.ltr}) {

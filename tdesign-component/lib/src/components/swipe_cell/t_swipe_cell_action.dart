@@ -14,7 +14,7 @@ import 't_swipe_cell_theme_data.dart';
 /// 同一面板中的操作项可使用不同的颜色和文字样式。
 /// 未指定的图文视觉字段从标准 Flutter 主题或全局 Token 取得默认值；
 /// [TSwipeCellThemeData] 只提供共用内边距。
-/// 使用 [builder] 时由自定义内容负责绘制，内置图文视觉字段不生效。
+/// [builder] 自行绘制操作项，不能同时传入内置背景、图文或图文样式字段。
 class TSwipeCellAction extends StatelessWidget {
   const TSwipeCellAction({
     Key? key,
@@ -32,8 +32,15 @@ class TSwipeCellAction extends StatelessWidget {
          'builder, icon or label must not be null',
        ),
        assert(
-         builder == null || (icon == null && label == null),
-         'builder cannot be combined with icon or label',
+         builder == null ||
+             (backgroundColor == null &&
+                 icon == null &&
+                 iconColor == null &&
+                 iconSize == null &&
+                 iconLabelSpacing == null &&
+                 label == null &&
+                 labelStyle == null),
+         'builder cannot be combined with built-in action visuals',
        ),
        super(key: key);
 
@@ -61,7 +68,8 @@ class TSwipeCellAction extends StatelessWidget {
   /// 操作文字样式。
   final TextStyle? labelStyle;
 
-  /// 自定义操作项。其实际布局宽度会直接用于面板宽度，无需额外指定尺寸。
+  /// 自定义操作项。不可同时传入内置背景、图文或图文样式字段；
+  /// 其实际布局宽度会直接用于面板宽度，无需额外指定尺寸。
   final WidgetBuilder? builder;
 
   TSwipeCellThemeData _effectiveTheme(BuildContext context) {
