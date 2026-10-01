@@ -41,7 +41,7 @@
 - `TButton.colorPreset` 仅选择内置调色预设，不是对各绘制字段的实例样式覆盖。预设先于显式 Material 按钮主题合并；单实例的具体背景、前景、描边及交互状态通过 `TButton.style` 覆写。组件 Theme 不再提供与 `ButtonStyle` 同义的字段。
 - 动画时长若直接决定单次组件交互的展开/收起时间，归实例 API；Theme 可承载动画曲线、颜色或尺寸等不与该时长同义的视觉默认值。系统“减少动态效果”始终优先于实例时长。
 - 无法由同值比较证明视觉等价的字体、阴影、百分比几何及响应式尺寸须独立记录；全局 `radiusCircle` 维持已记录的 Flutter 固定半径例外。
-- 本轮先收敛 `TButton`、`TInput`、Dialog action 已有完整实例 `style` 所覆盖的视觉字段，并去除 `TTagThemeData.fontWeight` 与 `font` 的重复设置；`TTabsBar` 的容器背景/分割线归组件 Theme，不再保留实例完整装饰入口。`TText`、SwipeCellAction 等其余跨入口重叠仍须单独迁移，不能据此宣称全仓已满足单入口标准。
+- 本轮收敛 `TButton`、`TInput`、Dialog action 已有完整实例 `style` 所覆盖的视觉字段，并去除 `TTagThemeData.fontWeight` 与 `font` 的重复设置；`TTabsBar` 的容器背景/分割线归组件 Theme，不再保留实例完整装饰入口。`TText` 的单实例完整样式、SwipeCellAction 的逐项外观和 Popup 蒙层透明度入口已按下文迁移；这仍不等于全仓所有组件都已满足单入口标准。
 - 无显式字体的独立 `TText` 使用小程序 `packages/components/paragraph/paragraph.less` 中 `@font-body-medium` 的 14dp/22dp 语义，而非 `fontBodyLarge` 16dp/24dp；组合组件传入的内置文字默认值、显式 Flutter 主题、组件 Theme 与实例样式仍按既定优先级覆盖。这个默认字号/行高变化属于可见 breaking 行为，须列入迁移与 Golden 审查。
 - Avatar 默认图标与文字的前景色只由 `TAvatarThemeData.foregroundColor` 控制；移除组件 Theme 中可同时设置颜色的 `textStyle`。字符头像仍按 `size` 使用内置字号与字重，特殊排版由调用方传入带样式的 `child: Text(...)`，不为通用 `Widget child` 再增组件级文字样式入口。
 - Avatar 的形状选择只保留 `TAvatar.shape`；移除已弃用且与其一一等价的 `variant` 参数和 `TAvatarVariant`。圆形、方形以及头像组成员裁剪继续由同一 `shape` 结果决定，不改变默认视觉与既有 Golden。

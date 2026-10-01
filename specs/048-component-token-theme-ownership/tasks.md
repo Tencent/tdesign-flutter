@@ -2,7 +2,7 @@
 
 - [ ] DOING 盘点组件 Theme、公开 API 和小程序组件变量的真实消费链；已初筛 116 个同名候选，包导出过滤后的 64 项已降至 0；异名同义及 804 个组件变量最终消费仍未完成。
 - [ ] DOING 逐项确定唯一所有者、迁移路径和 breaking 风险；已确认项见 `ownership-table.md`，P0 未裁定项见 `report.md`。
-- [ ] DOING 收敛确认重复的公开控制入口与 Token 回退；最新规则不再以作用域不同为由保留同义字段。Button、Input、Dialog action、TabsBar、Tag 已处理的字段见 `migration.md`；SideBar 的选中前景色已统一为 `selectedTextStyle.color`，Text、SwipeCellAction 等仍须逐项迁移。
+- [ ] DOING 收敛确认重复的公开控制入口与 Token 回退；已处理的 Button、Input、Dialog action、TabsBar、Tag、SideBar、Text、SwipeCellAction 和 Popup 字段见 `migration.md`。仍须逐组件审查尚未裁定的异名同义入口，不能把已处理组件外推为全仓完成。
 - [x] DONE Avatar/Popover 异名同义入口：移除 Avatar Theme `textStyle` 和 Popover 实例 `overlayColor/radius`，将 Popover 圆角收敛到可逐角配置的 Theme `borderRadius`；双版本组件/Demo 功能测试、生成 API 文档与 3.32.0 Linux 无更新 Golden 已执行。Golden 仍有旧基线差异，列在视觉归因任务中，不视为通过。
 - [x] Text 逐字段恢复 `TTextThemeData` 已发布子树默认能力与 Flutter 文字继承；恢复 Cascader/Picker 消费。默认回退修正为小程序 14dp/22dp，Text Demo 两张 Linux Golden 在固定环境更新后无更新复跑通过；这不代表 Figma 像素验收。
 - [x] 恢复公开 `TText.style` 作为单实例完整视觉入口，将组合组件状态样式留在仅库内使用的解析路径；子树默认仍由 `TTextThemeData.textStyle` 管理。旧检查点的测试与 Golden 结论需以本轮最终源码重新验证。
