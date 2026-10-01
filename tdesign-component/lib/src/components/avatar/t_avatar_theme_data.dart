@@ -81,7 +81,7 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
   /// 头像组成员描边颜色。
   final Color? groupBorderColor;
 
-  /// 头像组成员阴影；未设置时使用设计稿的 1px 水平偏移、2px 模糊和 15% 黑色。
+  /// 头像组成员阴影；未设置时使用 1px 水平偏移、2px `blurRadius` 和 15% 黑色。
   final BoxShadow? groupShadow;
 
   @override
