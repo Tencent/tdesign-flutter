@@ -586,6 +586,35 @@ void main() {
       expect(overridden.groupBorderColor, Colors.white);
     });
 
+    test('groupShadow 的 copyWith 与 lerp 使用同一默认阴影', () {
+      const defaultShadow = BoxShadow(
+        color: Color.fromRGBO(0, 0, 0, 0.15),
+        offset: Offset(1, 0),
+        blurRadius: 2,
+      );
+      const customShadow = BoxShadow(
+        color: Color(0xFFFF0000),
+        offset: Offset(3, 2),
+        blurRadius: 6,
+      );
+      const empty = TAvatarThemeData();
+      const custom = TAvatarThemeData(groupShadow: customShadow);
+
+      expect(
+        empty.copyWith(groupShadow: customShadow).groupShadow,
+        customShadow,
+      );
+      expect(custom.copyWith(dimension: 64).groupShadow, customShadow);
+      expect(empty.lerp(empty, 0.5).groupShadow, isNull);
+
+      final forward = empty.lerp(custom, 0.5).groupShadow;
+      final backward = custom.lerp(empty, 0.5).groupShadow;
+      expect(forward, BoxShadow.lerp(defaultShadow, customShadow, 0.5));
+      expect(backward, BoxShadow.lerp(customShadow, defaultShadow, 0.5));
+      expect(empty.lerp(custom, 1).groupShadow, customShadow);
+      expect(custom.lerp(empty, 1).groupShadow, defaultShadow);
+    });
+
     test('lerp 插值数值和颜色', () {
       final early = first.lerp(second, 0.25);
       final late = first.lerp(second, 0.75);

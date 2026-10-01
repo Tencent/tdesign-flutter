@@ -71,6 +71,8 @@ TButton(
 
 `TText` 未显式指定字体时的正文回退从 `fontBodyLarge`（16dp/24dp）改为小程序 `fontBodyMedium`（14dp/22dp）。依赖旧默认字号的调用方应在实例 `font` 或子树 `TTextThemeData.textStyle` 中显式指定 16dp/24dp；这是默认行为变化，即使构造签名未变也须按 breaking change 发布。
 
+`TAvatarGroup` 默认外观按设计稿调整：全部成员保留原尺寸绘制，不再把头像内容缩进后整体缩放；小/中/大成员分别使用 1/2/3dp 描边，并带默认阴影。未显式设置 `TAvatar.size` 的成员与折叠头像继承组内首个显式尺寸，均未设置时仍为中号。现有调用无需修改构造参数，但依赖旧图像缩放、无阴影效果或混合尺寸布局的应用必须复核实际渲染；组阴影和描边宽度可用 `TAvatarThemeData.groupShadow/groupBorderWidth` 配置。这是默认行为变化，按 breaking 发布。
+
 `TTag` 的浅色 warning/danger/success 现分别跟随 `warningColor1`、`errorColor1`、`successColor1`；仅覆盖 `warningColorLight`、`errorColorLight`、`successColorLight` 的调用方不再改变这些 Tag。普通 outline 改为读取 `bgColorContainer` 背景，默认描边读取 `bgColorComponent`；方角由组件 `squareBorderRadius` 显式覆盖，否则读取全局 `radiusSmall`，不再固定为小程序组件变量的 8rpx。公开 Demo 的四档外盒仍为 20/24/28/40dp，字体大小为 10/12/14/14dp，文字使用相应字体 Token 行高；关闭图标跟随 `textColorPlaceholder`。另一张 Figma“Style 组件样式”页的尺寸不直接套用公开 Demo，须先裁定设计规范版本。这些默认外观和自定义 Token 消费变化都属于用户可感知的行为变更，发布时须列入 breaking 迁移说明。
 
 发布前还需完成：逐字段最终 diff 清单、影响范围的外部调用点搜索、最终 Demo/文档替代示例编译验证、双版本与 CI 门禁。若没有明确的 breaking 版本与迁移发布安排，应停止这批字段删除，不能只靠本文消除兼容性风险。
