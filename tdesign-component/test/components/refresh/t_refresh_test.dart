@@ -378,7 +378,7 @@ void main() {
           matching: find.byType(TText),
         ),
       );
-      expect(loadingText.textColor, Colors.green);
+      expect(loadingText.style?.color, Colors.green);
       completer.complete();
       await tester.pump(const Duration(seconds: 1));
     });
@@ -411,7 +411,7 @@ void main() {
           matching: find.byType(TText),
         ),
       );
-      expect(loadingText.textColor, tokens.dark!.textColorDisabled);
+      expect(loadingText.style?.color, tokens.dark!.textColorDisabled);
 
       completer.complete();
       await tester.pump(const Duration(seconds: 1));

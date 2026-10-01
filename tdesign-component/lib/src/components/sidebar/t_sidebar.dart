@@ -17,7 +17,6 @@ class _SideBarItemData {
     this.icon,
     this.label,
     this.badge,
-    this.textStyle,
   });
 
   final int index;
@@ -27,7 +26,6 @@ class _SideBarItemData {
   final IconData? icon;
   final String? label;
   final TBadgeConfig? badge;
-  final TextStyle? textStyle;
 }
 
 /// 受控的侧边导航栏。
@@ -180,7 +178,6 @@ class _TSideBarState extends State<TSideBar> {
             value: entry.value.value,
             icon: entry.value.icon,
             label: entry.value.label,
-            textStyle: entry.value.textStyle,
             badge: entry.value.badge,
           ),
         )
@@ -232,9 +229,8 @@ class _TSideBarState extends State<TSideBar> {
               disabled: ele.disabled ?? false,
               label: ele.label ?? '',
               badge: ele.badge,
-              textStyle: ele.textStyle,
+              textStyle: theme.textStyle,
               selected: currentIndex == ele.index,
-              unSelectedColor: theme.unSelectedColor,
               selectedTextStyle: selectedTextStyle,
               contentPadding: theme.contentPadding,
               topAdjacent:

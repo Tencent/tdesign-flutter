@@ -72,7 +72,10 @@ void main() {
             steps: [
               TStepsItemData(title: '普通标题'),
               TStepsItemData(
-                customTitle: TText('自定义标题', textColor: Colors.orange),
+                customTitle: TText(
+                  '自定义标题',
+                  style: TextStyle(color: Colors.orange),
+                ),
               ),
             ],
           ),

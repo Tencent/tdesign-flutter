@@ -96,9 +96,11 @@ class TIndexesAnchor extends StatelessWidget {
                 font: isPinned
                     ? theme.activeAnchorFont ?? context.tTheme.fontMarkMedium
                     : theme.anchorFont ?? context.tTheme.fontBodyMedium,
-                textColor: isPinned
-                    ? theme.activeAnchorColor ?? context.tTheme.brandColor
-                    : theme.anchorColor ?? context.tTheme.textColorPrimary,
+                style: TextStyle(
+                  color: isPinned
+                      ? theme.activeAnchorColor ?? context.tTheme.brandColor
+                      : theme.anchorColor ?? context.tTheme.textColorPrimary,
+                ),
               ),
             );
       },

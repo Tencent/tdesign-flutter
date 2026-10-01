@@ -14,7 +14,7 @@ class CustomBadgeExample extends StatelessWidget {
       child: TText(
         'NEW',
         font: context.tTheme.fontMarkExtraSmall,
-        textColor: context.tTheme.textColorAnti,
+        style: TextStyle(color: context.tTheme.textColorAnti),
       ),
     ),
     child: TButton(

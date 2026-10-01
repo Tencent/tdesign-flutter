@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
+import '../../theme/basic.dart';
 import 't_text.dart';
 import 't_text_resolve.dart';
 
@@ -12,13 +13,13 @@ import 't_text_resolve.dart';
 class TTextStyled extends TText {
   const TTextStyled(
     super.data, {
-    required this.style,
+    required super.style,
     super.font,
-    super.fontWeight,
-    super.fontFamily,
-    super.textColor,
-    super.isTextThrough,
-    super.lineThroughColor,
+    this.fontWeight,
+    this.fontFamily,
+    this.textColor,
+    this.isTextThrough,
+    this.lineThroughColor,
     super.strutStyle,
     super.maxLines,
     super.overflow,
@@ -35,7 +36,11 @@ class TTextStyled extends TText {
     super.key,
   });
 
-  final TextStyle? style;
+  final FontWeight? fontWeight;
+  final FontFamily? fontFamily;
+  final Color? textColor;
+  final bool? isTextThrough;
+  final Color? lineThroughColor;
 
   @override
   TextStyle getTextStyle(BuildContext context) => TTextResolve.resolve(

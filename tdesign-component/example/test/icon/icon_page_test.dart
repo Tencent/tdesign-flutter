@@ -86,7 +86,7 @@ void main() {
     );
     expect(firstLabel.font?.size, 12);
     expect(firstLabel.font?.height, 20 / 12);
-    expect(firstLabel.textColor, TThemeData.defaultData().textColorPlaceholder);
+    expect(firstLabel.style?.color, TThemeData.defaultData().textColorPlaceholder);
 
     final fourthItem = find.byKey(
       ValueKey('icon-catalog-item-${icons[3].key}'),

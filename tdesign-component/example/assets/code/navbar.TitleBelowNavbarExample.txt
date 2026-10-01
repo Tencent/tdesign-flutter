@@ -20,7 +20,7 @@ class TitleBelowNavbarExample extends StatelessWidget {
             child: TText(
               '标题文字',
               font: Font(size: 28, lineHeight: 36),
-              fontWeight: FontWeight.w600,
+              style: const TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
           centerTitle: false,

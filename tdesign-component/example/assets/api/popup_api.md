@@ -69,6 +69,8 @@ Popup 标准头部布局。
 关闭浮层。
 生命周期回调见 `onOpened`、`onClosed`、`onVisibleChange`；
 蒙层行为见 `overlay`（`TPopupOverlayConfig`）。
+单次打开的显式尺寸、面板颜色、圆角、动画时长及蒙层颜色优先于
+`TPopupThemeData` 的子树默认值；未指定的字段分别从组件 Theme 补足。
 
 #### 工厂构造方法
 
@@ -208,9 +210,8 @@ Popup 蒙层行为配置（可见遮罩、背景拦截、点击行为）。
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | closeOnClick | bool? | - | 点击可见蒙层是否关闭；省略时在可点击的可见蒙层上默认为 true。 仅当 `showOverlay` 与 `preventTap` 都为 true 时生效；视觉蒙层允许点击穿透时， 不会接收点击事件，也不会关闭 Popup。 |
-| color | Color? | - | 蒙层颜色；为 null 时默认 black54。 |
+| color | Color? | - | 蒙层颜色（含 alpha）；为 null 时默认 black54。 |
 | onClick | VoidCallback? | - | 可见蒙层点击回调；是否关闭取决于 `effectiveCloseOnClick`。 仅当 `showOverlay` 与 `preventTap` 都为 true 时触发。 |
-| opacity | double? | - | 蒙层透明度系数（0–1），与 `color` 的 alpha 相乘后用于绘制；为 null 时不额外调整。 |
 | preventTap | bool | true | 是否拦截背景交互（默认 true）；对应原 `modal` 参数。 |
 | showOverlay | bool | true | 是否显示可见半透明蒙层（默认 true）。 |
 

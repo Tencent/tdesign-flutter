@@ -202,15 +202,8 @@ void main() {
       expect(tester.widget<Text>(find.text('A')).style?.letterSpacing, 2);
     });
 
-    testWidgets('shape 优先且不能和旧 variant 同时传入', (tester) async {
-      expect(
-        () =>
-            TAvatar(shape: TAvatarShape.circle, variant: TAvatarVariant.square),
-        throwsAssertionError,
-      );
-      await tester.pumpWidget(
-        app(const TAvatar(variant: TAvatarVariant.square)),
-      );
+    testWidgets('shape 指定方形并保持既有圆角', (tester) async {
+      await tester.pumpWidget(app(const TAvatar(shape: TAvatarShape.square)));
       expect(
         tester.widget<ClipRRect>(find.byType(ClipRRect)).borderRadius,
         BorderRadius.circular(6),

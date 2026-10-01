@@ -280,18 +280,20 @@ void main() {
       );
     }
 
-    testWidgets('P1 actionBackgroundColor 覆盖 P0 未传背景色', (tester) async {
+    testWidgets('操作项背景色由实例独立控制', (tester) async {
       await tester.pumpWidget(
         wrapSwipe(
           TSwipeCell(
             child: const SizedBox(width: 300, height: 60, child: Text('Row')),
             end: TSwipeCellPanel(
-              children: const [TSwipeCellAction(label: 'Action')],
+              children: const [
+                TSwipeCellAction(
+                  label: 'Action',
+                  backgroundColor: Colors.orange,
+                ),
+              ],
             ),
             initialOpenSide: TSwipeCellSide.end,
-          ),
-          swipeTheme: const TSwipeCellThemeData(
-            actionBackgroundColor: Colors.orange,
           ),
         ),
       );
@@ -304,7 +306,7 @@ void main() {
       expect(container.color, Colors.orange);
     });
 
-    testWidgets('P0 backgroundColor 覆盖 P1 主题背景色', (tester) async {
+    testWidgets('操作项背景色不受共享内边距主题影响', (tester) async {
       await tester.pumpWidget(
         wrapSwipe(
           TSwipeCell(
@@ -317,7 +319,7 @@ void main() {
             initialOpenSide: TSwipeCellSide.end,
           ),
           swipeTheme: const TSwipeCellThemeData(
-            actionBackgroundColor: Colors.orange,
+            actionPadding: EdgeInsets.all(12),
           ),
         ),
       );
@@ -330,19 +332,22 @@ void main() {
       expect(container.color, Colors.red);
     });
 
-    testWidgets('P1 actionIconColor 覆盖 P4 Token 默认色', (tester) async {
+    testWidgets('操作项 iconColor 覆盖 Token 默认色', (tester) async {
       await tester.pumpWidget(
         wrapSwipe(
           TSwipeCell(
             child: const SizedBox(width: 300, height: 60, child: Text('Row')),
             end: TSwipeCellPanel(
               children: const [
-                TSwipeCellAction(icon: Icons.edit, label: 'Action'),
+                TSwipeCellAction(
+                  icon: Icons.edit,
+                  label: 'Action',
+                  iconColor: Colors.teal,
+                ),
               ],
             ),
             initialOpenSide: TSwipeCellSide.end,
           ),
-          swipeTheme: const TSwipeCellThemeData(actionIconColor: Colors.teal),
         ),
       );
       await tester.pumpAndSettle();
@@ -350,22 +355,24 @@ void main() {
       expect(icon.color, Colors.teal);
     });
 
-    testWidgets('P1 actionTextStyle 覆盖 label 文字样式', (tester) async {
+    testWidgets('操作项 labelStyle 覆盖文字样式', (tester) async {
       await tester.pumpWidget(
         wrapSwipe(
           TSwipeCell(
             child: const SizedBox(width: 300, height: 60, child: Text('Row')),
             end: TSwipeCellPanel(
-              children: const [TSwipeCellAction(label: 'Action')],
+              children: const [
+                TSwipeCellAction(
+                  label: 'Action',
+                  labelStyle: TextStyle(
+                    color: Colors.deepPurple,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
             initialOpenSide: TSwipeCellSide.end,
-          ),
-          swipeTheme: const TSwipeCellThemeData(
-            actionTextStyle: TextStyle(
-              color: Colors.deepPurple,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
           ),
         ),
       );
@@ -375,17 +382,18 @@ void main() {
       expect(text.style?.fontSize, 20);
     });
 
-    testWidgets('P1 actionIconSize 覆盖内置默认图标尺寸 20', (tester) async {
+    testWidgets('操作项 iconSize 覆盖内置默认图标尺寸 20', (tester) async {
       await tester.pumpWidget(
         wrapSwipe(
           TSwipeCell(
             child: const SizedBox(width: 300, height: 60, child: Text('Row')),
             end: TSwipeCellPanel(
-              children: const [TSwipeCellAction(icon: Icons.edit)],
+              children: const [
+                TSwipeCellAction(icon: Icons.edit, iconSize: 28),
+              ],
             ),
             initialOpenSide: TSwipeCellSide.end,
           ),
-          swipeTheme: const TSwipeCellThemeData(actionIconSize: 28),
         ),
       );
       await tester.pumpAndSettle();
@@ -393,19 +401,22 @@ void main() {
       expect(icon.size, 28);
     });
 
-    testWidgets('P1 actionSpacing 覆盖内置默认间距 8', (tester) async {
+    testWidgets('操作项 iconLabelSpacing 覆盖内置默认间距 8', (tester) async {
       await tester.pumpWidget(
         wrapSwipe(
           TSwipeCell(
             child: const SizedBox(width: 300, height: 60, child: Text('Row')),
             end: TSwipeCellPanel(
               children: const [
-                TSwipeCellAction(icon: Icons.edit, label: 'Action'),
+                TSwipeCellAction(
+                  icon: Icons.edit,
+                  label: 'Action',
+                  iconLabelSpacing: 12,
+                ),
               ],
             ),
             initialOpenSide: TSwipeCellSide.end,
           ),
-          swipeTheme: const TSwipeCellThemeData(actionSpacing: 12),
         ),
       );
       await tester.pumpAndSettle();

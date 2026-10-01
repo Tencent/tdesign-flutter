@@ -35,8 +35,8 @@ class ApplicationPopupsExample extends StatelessWidget {
                   onTap: close,
                   child: TText(
                     '取消',
-                    textColor: theme.textColorSecondary,
                     font: theme.fontBodyLarge,
+                    style: TextStyle(color: theme.textColorSecondary),
                   ),
                 ),
                 title: const TText('标题文字'),
@@ -44,9 +44,11 @@ class ApplicationPopupsExample extends StatelessWidget {
                   onTap: close,
                   child: TText(
                     '确定',
-                    textColor: theme.brandColor,
                     font: theme.fontTitleMedium,
-                    fontWeight: FontWeight.w600,
+                    style: TextStyle(
+                      color: theme.brandColor,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),

@@ -23,6 +23,12 @@
 | `TFormItem.labelWidth/labelAlign`；`TFormThemeData.verticalAlignment/contentAlignment` | 标签宽度、文字对齐迁入 `TFormThemeData`；纵向/内容对齐留在 `TFormItem` | 子树标签排版与单个表单项区域对齐职责分开。 |
 | `TPopover.offset/arrowSize/padding`；`TPopoverThemeData.showArrow` | 具体视觉尺寸迁入 `TPopoverThemeData`；`TPopover.showArrow` 保留 | 箭头有无是实例选择，尺寸与间距是子树默认值。 |
 | `TAvatarThemeData.textStyle` | `TAvatarThemeData.foregroundColor` 管默认图标/文字颜色；`TAvatar.child: Text(style: ...)` 管特殊文字排版 | 默认文字的字号/字重仍随 `size` 变化；需要批量特殊排版时在调用方封装带样式的 `child`，不再为任意 `Widget child` 提供组件级 `TextStyle`。|
+| `TAvatar.variant: TAvatarVariant.circle/square` | `TAvatar.shape: TAvatarShape.circle/square` | 两组枚举值一一对应；不能继续使用旧枚举类型。省略时仍默认圆形，头像组成员外框随成员 `shape`。 |
+| `TSideBarItem.textStyle` | `TSideBarThemeData.textStyle` 管未选中标签，`selectedTextStyle` 管选中标签 | 原来逐项的样式须迁到 SideBar 子树 Theme；若各项确需不同排版，应使用独立组件组合方案，不再通过 SideBarItem 数据覆盖。 |
+| `TSideBarThemeData.unSelectedColor` | `TSideBarThemeData.textStyle.color` | 未选中标签和图标继续共用同一个颜色；避免与 `textStyle.color` 在同一 Theme 内形成两套控制。 |
+| `TTagThemeData.shape` | `TTag.shape` 或 `TSelectTag.shape` | 对原来由子树 Theme 统一选择的每个标签显式传入形状；默认仍为 `square`，圆角数值继续由 Theme 控制。 |
+| `TTextSpan.font/fontWeight/fontFamily/textColor/isTextThrough/lineThroughColor` | `TTextSpan.style: TextStyle(...)` | Span 的显式样式使用一个 Flutter 原生对象；未配置字段继续从父 Span 继承。 |
+| `TTextThemeData.font` | `TTextThemeData.textStyle: TextStyle(fontSize: ..., height: ..., fontWeight: ...)` | 子树级字体只保留一个样式入口；`Font.height` 是行高与字号之比，可直接用于 `TextStyle.height`。Cascader 和 Picker 继续读取同一组件文字主题。 |
 | `TPopoverAnchor.overlayColor/radius`、`TPopover.showPopover(overlayColor/radius)` | `TPopoverThemeData.barrierColor/borderRadius` | 单实例自定义用局部 `Theme` 包裹触发上下文；`borderRadius` 从 `double?` 改为 `BorderRadius?`，旧 `borderRadius: 8` 改为 `borderRadius: BorderRadius.circular(8)`，支持逐角圆角。 |
 | `TPopoverThemeData.lerpDouble` | 无需外部调用；组件主题的 `lerp` 已负责插值 | 原公开静态辅助方法仅供内部使用，改为私有。 |
 | `TButtonThemeData.filledStyle/outlinedStyle/textButtonStyle/ghostStyle/padding` | 对应实例 `TButton.style: ButtonStyle(...)` | 具体颜色、描边、内边距、状态层等不再由组件 Theme 批量覆盖；需要批量设置时由调用方构建并复用同一个 `ButtonStyle`。 |
@@ -32,17 +38,16 @@
 | `TTabsBar.decoration` | `TTabsBarThemeData.backgroundColor/dividerColor/dividerHeight` | 容器背景和底边线由组件 Theme 控制；仅定制一个 TabsBar 时包裹局部 Theme。 |
 | `TTagThemeData.fontWeight` | `TTagThemeData.font` | 字重跟随完整字体 Token；不再与其分别配置。 |
 | `TSideBarThemeData.selectedColor` | `TSideBarThemeData.selectedTextStyle: TextStyle(color: ...)` | 选中文字、图标与指示线继续共用这一颜色；不设 `color` 时仍回退全局品牌色。已有 `selectedTextStyle` 时将颜色并入该对象，不再同时配置两处。 |
-| `TText.style` | `TTextThemeData.textStyle`；仅一次性局部绘制可用 Flutter 原生 `Text(style: ...)` | 完整文字样式不再同时由实例和组件 Theme 控制；子树级设置通过局部 `Theme` 注入。`TTextSpan.style` 属于富文本 Span 层，仍保留。 |
+| `TText.fontWeight/fontFamily/textColor/isTextThrough/lineThroughColor` | `TText.style: TextStyle(...)` | 实例保留 `font` 选择 TDesign 字体预设，局部颜色、字重、字体族及删除线统一写入 `style`；`TText.rich` 同步迁移。 |
+| `TPopupOverlayConfig.opacity`、`TPopupThemeData.barrierOpacity` | `TPopupOverlayConfig.color` 或 `TPopupThemeData.barrierColor` 的 alpha | 旧颜色与 opacity 相乘时，迁移后在颜色中直接表示最终 alpha；避免两次透明度叠乘。 |
+| `TPopupThemeData.transitionDuration` | `TPopupOptions.animationDuration` | 动画时长由单次打开命令控制，省略时使用内置 240ms。 |
+| `TSwipeCellThemeData.actionBackgroundColor/actionIconColor/actionTextStyle/actionIconSize/actionSpacing` | `TSwipeCellAction.backgroundColor/iconColor/labelStyle/iconSize/iconLabelSpacing` | 逐项视觉由对应操作项控制；子树 Theme 只保留共用的 `actionPadding`。原来仅在 Theme 批量配置的调用需逐操作项迁移。 |
+| `TSwipeCellAction.spacing` | `TSwipeCellAction.iconLabelSpacing` | 含义限定为图标与标签之间的水平间距。 |
 
-仅定制一个 `TText` 时，可将 Theme 限定在该实例的子树，不会影响相邻文本：
+仅定制一个 `TText` 时直接使用实例样式；批量定制子树文字仍使用 `TTextThemeData.textStyle`：
 
 ```dart
-Theme(
-  data: Theme.of(context).mergeExtension(
-    const TTextThemeData(textStyle: TextStyle(color: Colors.red)),
-  ),
-  child: const TText('文本'),
-)
+const TText('文本', style: TextStyle(color: Colors.red))
 ```
 
 Button 样式的迁移形态：
@@ -58,13 +63,13 @@ TButton(
 )
 ```
 
-`colorPreset` 只选择内置预设；具体描边、前景和背景由实例 `style` 控制。`TButtonThemeData` 仅保留 `iconTextSpacing` 和 `gradient` 这两个 `ButtonStyle` 无法等价表达的字段。`TText` 的完整文字样式现由组件 Theme 控制；字体便利参数是否进一步收敛须单独核定。
+`colorPreset` 只选择内置预设；具体描边、前景和背景由实例 `style` 控制。`TButtonThemeData` 仅保留 `iconTextSpacing` 和 `gradient` 这两个 `ButtonStyle` 无法等价表达的字段。`TText` 的子树默认样式由组件 Theme 控制，单实例样式由 `style` 控制；`font` 仅选择 TDesign 字体预设。
 
 ## 组件内置配色预设改名
 
 `TButton`、`TTag`、`TSelectTag`、`TLink`、`TBackTop`、`TPopoverAnchor`、`TPopover.showPopover` 和 `TDialogAction` 的 `colorScheme:` 改为 `colorPreset:`；对应枚举 `TButton/TTag/TLink/TBackTop/TPopoverColorScheme` 改为 `TButton/TTag/TLink/TBackTop/TPopoverColorPreset`。这是源码级 breaking change，不保留同义别名。枚举成员和默认映射不变；Material 的 `ThemeData.colorScheme: ColorScheme(...)` 及其优先级不变。`variant` 仍控制填充/描边等绘制处理，`colorPreset` 仅选择内置配色，`status` 仍表达业务状态。迁移调用时须同时更改命名参数与枚举类型，不能将 Material `ColorScheme` 实例传给 `colorPreset`。
 
-`TText` 未显式指定字体时的正文回退从 `fontBodyLarge`（16dp/24dp）改为小程序 `fontBodyMedium`（14dp/22dp）。依赖旧默认字号的调用方应在实例 `font` 或子树 `TTextThemeData.font/textStyle` 中显式指定 16dp/24dp；这是默认行为变化，即使构造签名未变也须按 breaking change 发布。
+`TText` 未显式指定字体时的正文回退从 `fontBodyLarge`（16dp/24dp）改为小程序 `fontBodyMedium`（14dp/22dp）。依赖旧默认字号的调用方应在实例 `font` 或子树 `TTextThemeData.textStyle` 中显式指定 16dp/24dp；这是默认行为变化，即使构造签名未变也须按 breaking change 发布。
 
 `TTag` 的浅色 warning/danger/success 现分别跟随 `warningColor1`、`errorColor1`、`successColor1`；仅覆盖 `warningColorLight`、`errorColorLight`、`successColorLight` 的调用方不再改变这些 Tag。普通 outline 改为读取 `bgColorContainer` 背景，默认描边读取 `bgColorComponent`；方角由组件 `squareBorderRadius` 显式覆盖，否则读取全局 `radiusSmall`，不再固定为小程序组件变量的 8rpx。公开 Demo 的四档外盒仍为 20/24/28/40dp，字体大小为 10/12/14/14dp，文字使用相应字体 Token 行高；关闭图标跟随 `textColorPlaceholder`。另一张 Figma“Style 组件样式”页的尺寸不直接套用公开 Demo，须先裁定设计规范版本。这些默认外观和自定义 Token 消费变化都属于用户可感知的行为变更，发布时须列入 breaking 迁移说明。
 

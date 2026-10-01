@@ -57,8 +57,7 @@ Padding body(BuildContext context) {
         ),
         TText(
           '测试文案',
-          textColor: context.tTheme.brandColor,
-          fontFamily: FontFamily(fontFamily: 'test1'),
+          style: TextStyle(color: context.tTheme.brandColor, fontFamily: 'test1'),
         ),
         const TFormItem(
           label: '标签文字',

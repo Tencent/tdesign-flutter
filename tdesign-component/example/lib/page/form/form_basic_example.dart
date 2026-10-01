@@ -403,11 +403,13 @@ class _FormBasicDemoState extends State<FormBasicDemo> {
     return TText(
       hasValue ? value! : placeholder,
       font: context.tTheme.fontBodyLarge,
-      textColor: _disabled
-          ? context.tTheme.textColorDisabled
-          : hasValue
-          ? context.tTheme.textColorPrimary
-          : context.tTheme.textColorPlaceholder,
+      style: TextStyle(
+        color: _disabled
+            ? context.tTheme.textColorDisabled
+            : hasValue
+            ? context.tTheme.textColorPrimary
+            : context.tTheme.textColorPlaceholder,
+      ),
     );
   }
 

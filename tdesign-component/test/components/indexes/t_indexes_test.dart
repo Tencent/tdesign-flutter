@@ -251,7 +251,7 @@ void main() {
         ),
       );
       final activeText = tester.widget<TText>(_tTextFinder('A').last);
-      expect(activeText.textColor, token.textColorAnti);
+      expect(activeText.style?.color, token.textColorAnti);
       expect(activeText.font, token.fontBodySmall);
 
       final inactiveDecoration = tester.widget<DecoratedBox>(
@@ -259,7 +259,7 @@ void main() {
       );
       expect(inactiveDecoration.decoration, const BoxDecoration());
       final inactiveText = tester.widget<TText>(_tTextFinder('B').last);
-      expect(inactiveText.textColor, token.textColorPrimary);
+      expect(inactiveText.style?.color, token.textColorPrimary);
       expect(inactiveText.font, token.fontBodySmall);
     });
 
@@ -306,7 +306,7 @@ void main() {
       );
 
       final anchorText = tester.widget<TText>(_tTextFinder('A').last);
-      expect(anchorText.textColor, token.brandColor);
+      expect(anchorText.style?.color, token.brandColor);
       expect(anchorText.font, token.fontMarkMedium);
     });
 
@@ -678,11 +678,11 @@ void main() {
         Colors.red,
       );
       expect(
-        tester.widget<TText>(_tTextFinder('A').last).textColor,
+        tester.widget<TText>(_tTextFinder('A').last).style?.color,
         Colors.yellow,
       );
       expect(
-        tester.widget<TText>(_tTextFinder('B').last).textColor,
+        tester.widget<TText>(_tTextFinder('B').last).style?.color,
         Colors.green,
       );
     });

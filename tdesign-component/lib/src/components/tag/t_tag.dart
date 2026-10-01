@@ -19,6 +19,7 @@ class TTag extends StatelessWidget {
     this.variant = TTagVariant.dark,
     this.icon,
     this.size = TTagSize.medium,
+    this.shape = TTagShape.square,
     this.needCloseIcon = false,
     this.enabled = true,
     this.onTap,
@@ -40,6 +41,9 @@ class TTag extends StatelessWidget {
 
   /// 标签大小
   final TTagSize size;
+
+  /// 标签外形；仅选择形状，具体圆角值由组件 Theme 或全局 Token 决定。
+  final TTagShape shape;
 
   /// 是否显示关闭图标。
   final bool needCloseIcon;
@@ -67,7 +71,7 @@ class TTag extends StatelessWidget {
         variant == TTagVariant.outline || variant == TTagVariant.lightOutline;
     final isLight =
         variant == TTagVariant.light || variant == TTagVariant.lightOutline;
-    final shape = theme?.shape ?? TTagShape.square;
+    final shape = this.shape;
     final overflow = theme?.overflow;
 
     final fixedWidth = theme?.fixedWidth;

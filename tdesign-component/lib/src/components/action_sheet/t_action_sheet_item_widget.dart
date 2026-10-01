@@ -186,7 +186,7 @@ Widget buildCancelButton(
           child: TText(
             cancelText ?? context.resource.cancel,
             font: context.tTheme.fontBodyLarge,
-            textColor: context.tTheme.textColorPrimary,
+            style: TextStyle(color: context.tTheme.textColorPrimary),
           ),
         ),
       ),

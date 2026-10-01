@@ -52,9 +52,11 @@ class TEmpty extends StatelessWidget {
           Padding(padding: EdgeInsets.only(top: image == null ? 22 : 16)),
           TText(
             emptyText ?? '',
-            fontWeight: FontWeight.w400,
             font: emptyTextFont ?? context.tTheme.fontBodyMedium,
-            textColor: emptyTextColor ?? context.tTheme.textColorPlaceholder,
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              color: emptyTextColor ?? context.tTheme.textColorPlaceholder,
+            ),
           ),
           if (operation != null)
             Padding(padding: const EdgeInsets.only(top: 32), child: operation),

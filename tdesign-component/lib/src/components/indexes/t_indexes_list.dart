@@ -202,11 +202,13 @@ class _TIndexesListState extends State<TIndexesList> {
                                         font:
                                             theme.tipFont ??
                                             context.tTheme.fontTitleExtraLarge,
-                                        textColor:
-                                            theme.tipColor ??
-                                            context.tTheme.brandColor,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color:
+                                              theme.tipColor ??
+                                              context.tTheme.brandColor,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -242,13 +244,15 @@ class _TIndexesListState extends State<TIndexesList> {
                                                   context.tTheme.fontBodySmall
                                             : theme.indexFont ??
                                                   context.tTheme.fontBodySmall,
-                                        textColor: isActive
-                                            ? theme.activeIndexColor ??
-                                                  context.tTheme.textColorAnti
-                                            : theme.indexColor ??
-                                                  context
-                                                      .tTheme
-                                                      .textColorPrimary,
+                                        style: TextStyle(
+                                          color: isActive
+                                              ? theme.activeIndexColor ??
+                                                    context.tTheme.textColorAnti
+                                              : theme.indexColor ??
+                                                    context
+                                                        .tTheme
+                                                        .textColorPrimary,
+                                        ),
                                       ),
                                     ),
                                   ),

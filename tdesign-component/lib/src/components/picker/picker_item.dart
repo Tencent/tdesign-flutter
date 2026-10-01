@@ -68,7 +68,6 @@ class PickerItemWidget extends StatelessWidget {
               explicit.fontWeight == theme.fontBodyLarge?.fontWeight &&
               explicit.color == material.colorScheme.onSurface;
           final textTheme = material.extension<TTextThemeData>();
-          final themeFont = textTheme?.font;
           final inherited = context.tExplicitDefaultTextStyle;
           final defaultStyle =
               inherited == material.textTheme.bodyMedium ||
@@ -102,15 +101,6 @@ class PickerItemWidget extends StatelessWidget {
                         : explicit,
                   )
                   .merge(defaultStyle)
-                  .merge(
-                    themeFont == null
-                        ? null
-                        : TextStyle(
-                            fontSize: themeFont.size,
-                            height: themeFont.height,
-                            fontWeight: themeFont.fontWeight,
-                          ),
-                  )
                   .merge(textTheme?.textStyle);
           final centeredStyle = style.copyWith(
             // Figma 使用 16/24 文字行盒并在 40px 选项内上下各留 8px。

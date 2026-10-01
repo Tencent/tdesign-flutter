@@ -120,7 +120,7 @@ void main() {
     });
     expect(contentTexts.map((text) => text.data), everyElement('内容区'));
     expect(
-      contentTexts.map((text) => text.textColor),
+      contentTexts.map((text) => text.style?.color),
       everyElement(element.tTheme.textColorPlaceholder),
     );
 

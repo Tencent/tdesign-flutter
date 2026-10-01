@@ -27,7 +27,7 @@ void main() {
     final text = tText(tester, '暂无数据');
     expect(icon.size, 96);
     expect(icon.color, token.textColorPlaceholder);
-    expect(text.textColor, token.textColorPlaceholder);
+    expect(text.style?.color, token.textColorPlaceholder);
     expect(text.font, token.fontBodyMedium);
   });
 
@@ -82,7 +82,7 @@ void main() {
       ),
     );
     final text = tText(tester, '主题文案');
-    expect(text.textColor, Colors.red);
+    expect(text.style?.color, Colors.red);
     expect(text.font, font);
   });
 

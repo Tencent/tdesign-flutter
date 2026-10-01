@@ -7,10 +7,10 @@ import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_text_theme_source.dart';
 import '../../theme/t_theme.dart';
-import 't_text.dart' show TText, TTextSpan;
+import 't_text.dart' show TText;
 import 't_text_theme_data.dart';
 
-/// TText 与 TTextSpan 的 Flutter 原生样式解析器。
+/// TText 的 Flutter 原生样式解析器。
 class TTextResolve {
   TTextResolve._();
 
@@ -58,11 +58,6 @@ class TTextResolve {
     if (!_isMaterialFallbackStyle(defaultTextStyle)) {
       resolved = _merge(resolved, defaultTextStyle);
     }
-    final themeFont = componentTheme?.font;
-    resolved = _merge(
-      resolved,
-      themeFont == null ? null : _fontStyle(themeFont),
-    );
     resolved = _merge(resolved, componentTheme?.textStyle);
     resolved = _merge(
       resolved,
@@ -81,32 +76,6 @@ class TTextResolve {
     // DefaultTextStyle。否则 MaterialApp 在缺少 Material 祖先时注入的诊断
     // 样式会把黄色双下划线等字段重新带回最终结果。
     return resolved.inherit ? resolved.copyWith(inherit: false) : resolved;
-  }
-
-  /// 解析 [TTextSpan] 的显式样式。
-  ///
-  /// Span 不读取 Theme 或 Token；未指定的字段保持为空并继承父 Span。
-  static TextStyle? resolveSpan({
-    TextStyle? style,
-    Font? font,
-    FontWeight? fontWeight,
-    FontFamily? fontFamily,
-    Color? textColor,
-    bool? isTextThrough,
-    Color? lineThroughColor,
-  }) {
-    final explicit = _explicitStyle(
-      font: font,
-      fontWeight: fontWeight,
-      fontFamily: fontFamily,
-      textColor: textColor,
-      isTextThrough: isTextThrough,
-      lineThroughColor: lineThroughColor,
-    );
-    if (explicit == null) {
-      return style;
-    }
-    return style == null ? explicit : explicit.merge(style);
   }
 
   static TextStyle? _explicitMaterialTextStyle(ThemeData material) {

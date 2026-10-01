@@ -49,14 +49,14 @@ class TFontPage extends StatelessWidget {
                 TText(
                   '不使用数字字体：1234567890abcd',
                   font: TThemeData.defaultData().fontTitleSmall,
-                  textColor: context.tTheme.brandColor,
+                  style: TextStyle(color: context.tTheme.brandColor),
                 ),
                 const SizedBox(height: 16),
                 TText(
                   '使用数字字体：1234567890abcd',
                   font: TThemeData.defaultData().fontTitleSmall,
-                  textColor: context.tTheme.brandColor,
-                  fontFamily: FontFamily(
+                  style: TextStyle(
+                    color: context.tTheme.brandColor,
                     fontFamily: 'TCloudNumber',
                     package: 'tdesign_flutter',
                   ),

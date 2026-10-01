@@ -82,7 +82,7 @@ Avatar 移除了 `TAvatarThemeData.textStyle`，保留 `foregroundColor` 为默�
 | TabsBar | 实例 `decoration` | 背景/分隔线由组件 Theme | 相关功能测试通过；旧 Golden 在当前 macOS 环境差异，不能据此更新 Linux 基线。 |
 | Tag | Theme `fontWeight` | Theme 的完整 `font` Token | Tag/TabsBar 非 Golden 测试 87 项通过。 |
 
-Flutter 3.32.0 和 3.47.0 的组件包严格分析均为 0 issues；相同的相关非 Golden 功能测试两版本各通过 398 项。此结果不是全组件单入口验收：`TText` 的实例 `style` 与 `font/fontWeight/fontFamily/textColor/isTextThrough/lineThroughColor`、`TTextThemeData.font/textStyle` 仍重叠；`TSwipeCellAction` 的多项逐项视觉标量与 `TSwipeCellThemeData` 默认值仍重叠；SideBar 的逐项 `textStyle` 与组件 Theme 样式还要按文字、图标和指示线的不同绘制目标拆分。它们涉及外部调用迁移与默认视觉，不能仅凭同名批量删除。公开 API 删除均属 breaking；未完成外部调用方编译、Flutter 3.32/Linux Golden 和全部组件变量最终消费验收，当前不能声明 PR 可合并。
+旧检查点中 Flutter 3.32.0 和 3.47.0 的组件包严格分析均为 0 issues；相同的相关非 Golden 功能测试两版本各通过 398 项。本轮继续删除 Avatar 的 `variant` 同义别名、SideBarItem 的逐项 `textStyle`、Tag Theme 的形状选择器、TTextSpan 的分散文字样式字段，以及与 `textStyle` 重复的 `TTextThemeData.font`。这些修改需要以本轮最终源码重新完成双版本、生成产物、Linux Golden 和外部迁移验证，不能沿用旧检查点作为通过结论。`TText` 实例字体便利参数、`TSwipeCellAction` 逐项视觉标量及 Popup 命令配置与 Theme 的同义字段仍待逐项裁定；不能把已删除的同层级字段误报为全组件单入口完成。公开 API 删除均属 breaking；未完成外部真实业务调用方编译和全部组件变量最终消费验收，当前不能声明 PR 可合并。
 
 隔离副本在缓存的 Linux Flutter 3.32.0 镜像中无更新复跑：TabsBar 组件 Golden 2/2 通过；Button/Form/Input/Tag 公开 Demo 功能与 Golden 混合测试 33 通过、7 失败。失败图片为 Button 浅色页面/按压、Form 浅色页面/纵向/禁用、Input 浅色页面/无效手机号；Tag 在本次混合调度中通过。该隔离副本 `pub get --offline` 重新解析了依赖（包括 icon 包），这些失败不能直接归因为本轮 API 收敛；未更新任何 Golden。完整固定依赖、develop 对照及 Figma 归因仍待做。
 
@@ -99,4 +99,21 @@ Flutter 3.32.0 和 3.47.0 的组件包严格分析均为 0 issues；相同的相
 
 用户裁定统一采用 `colorPreset`。Button、Tag、Link、BackTop、Popover 的五个公开 `T*ColorScheme` 枚举与对应字段、DialogAction、SelectTag、Popover 静态入口及全部仓内消费改为 `T*ColorPreset` / `colorPreset`。`variant` 仍表达绘制方式，`status` 仍表达真实状态；`ThemeData.colorScheme` 保留 Material 实际调色板含义。没有旧名兼容桥接。这是 API breaking change，不能以颜色像素未变判断为非 breaking。
 
+## 2026-10-01 Avatar 别名与后续单入口收敛
+
+- 已确认 Avatar 浅/暗 Golden 均在 Git 跟踪中。删除 `TAvatar.variant/TAvatarVariant` 后，`shape` 继续决定单头像和头像组成员外框，Linux Flutter 3.32.0 无更新快照均通过；此结论是视觉等价，不是源码兼容，旧调用必须迁移。
+- 同批移除 `TSideBarItem.textStyle`、`TSideBarThemeData.unSelectedColor`、`TTagThemeData.shape`、`TTextSpan` 的分散视觉便捷字段和 `TTextThemeData.font`；Demo、测试、API 文档和示例片段已同步。Flutter 3.32.0/3.47.0 组件包及 Demo 包严格分析均为 0 issues；3.47.0 受影响组件功能测试 249 项、Demo 非视觉测试 22 项通过。3.32.0 对同范围组件功能和 Demo 非视觉测试通过；相关 Linux 3.32.0 无更新 Golden：Avatar/SideBar/Tag/Text 26 项、Cascader/Picker 30 项、Cascader 组件 2 项全部通过。Cascader/Picker 是删除 Theme `font` 后的下游消费者，并非额外修改其默认外观。
+- 这仍不等于全仓单入口完成：`TText` 实例字体便捷字段与组件 Theme 的同义视觉字段仍有高频调用，`TSwipeCellAction` 逐项视觉值、`TPopupOptions` 的圆角/背景/时长与 `TPopupThemeData` 的对应字段仍需明确迁移。Popup 的 `overlay` 还混合交互开关与蒙层视觉，不能机械整字段删除。未获得真实外部消费仓库，不能宣称公开 API 删除对第三方零编译风险；本轮也未更新任何 Golden。
+- 3.32.0 组件测试按受影响清单在临时 LCOV 中 249 项通过；覆盖率按 CI 的生产文件过滤为 Avatar 163/167（97.60%）、SideBar 232/232（100%）、Tag 206/214（96.26%）、Text 216/223（96.86%）、Cascader 304/307（99.02%）、Picker 399/406（98.28%），均达到 95% 阈值。Text/Picker 使用各自登记的完整测试清单计算，未拿只跑部分 Widget 文件的低覆盖率当作最终结论；原仓库 `coverage/` 未被覆盖。
+- 后续复核发现 SideBar 仅配置 `textStyle.color` 时，选中和禁用标签错误继承未选中颜色；已改为标签、图标、指示线共用一次状态色解析，并补选中/禁用/未选中标签与图标的回归断言，以及“只配置选中颜色时保留未选中排版”的断言。修复后 Flutter 3.32.0/3.47.0 聚焦 SideBar Widget 测试各 5 项通过，组件包严格分析两版本均 0 issues；3.32.0 的 SideBar、SwipeCell、Popup Theme 相关测试合计 95 项通过。SwipeCellAction 的实例样式保留：同一面板的不同操作项有已验证的逐项背景色需求，Theme 只提供批量默认值；Popup Options 保留单次打开的显式覆盖，Theme 提供子树默认值；两者均在公开 dartdoc 中说明优先级，不以机械删字段制造能力缺口。`TText` 实例便利参数有大量现有调用，尚未批准大范围删除；其与 Theme 是实例覆盖/子树默认两个作用域，而非本轮新增的同层级别名。以上判断不等于外部编译、Linux Golden 或全仓单入口审查完成。
+- 双 SDK 共用的本地 `.dart_tool` 曾在切到 3.47.0 后仍指向 3.32.0 的 `flutter` 源码，造成 `SemanticsRole` 编译错误；重新用 3.47.0 `flutter pub get` 后，同一受影响清单的 249 项测试通过，随后切回 3.32.0 并重新解析依赖完成上述覆盖率。该错误属于工具链缓存串用，不是组件回归。
+
 双版本组件十份聚焦测试各 370/370、公开 Demo 十份非 Golden 测试各 51/51，完整组件包严格分析均 0 issues；3.47 Demo 需在无跨 SDK build 缓存的隔离副本中运行，工作树复现的四项 `ink_sparkle.frag` 异常与本次实例命名无关。仓库外独立调用夹具两版本各 1/1，通过新版公开 API 编译。文档和片段由源码重新生成并校验。由于没有改颜色映射或绘制，本批没有更新 Golden；先前未裁定视觉差异仍阻塞整体发布。
+
+## 2026-10-02 重复视觉入口收敛与当前源码回归
+
+- `TText` 保留 `font` 字体 Token 预设和实例完整 `style`，删除与 `style` 同义的 `fontWeight/fontFamily/textColor/isTextThrough/lineThroughColor`；`TTextThemeData.textStyle` 只提供子树默认值。仓内调用、Demo、测试已迁移，`TTextStyled` 的分散参数仅库内组合组件使用。旧报告中“已删除实例 `style`”的阶段性判断以本节为准。
+- SwipeCell 的逐项背景、图标和标签视觉归 `TSwipeCellAction`，Theme 只保留共享 `actionPadding`；`spacing` 更名为 `iconLabelSpacing`，`builder` 与内置图文内容互斥。Popup 的蒙层透明度只由颜色 alpha 表示，不再保留独立 `opacity/barrierOpacity`；动画时长只在单次 Options 中配置。Popup Options 的面板圆角/背景暂保留作为 ActionSheet 等组合组件的单次传值，Theme 是子树默认，不新增第三种同义入口。
+- Flutter 3.32.0 与 3.47.0：组件包、Example 包严格分析均 0 issues；Text/Popup/SwipeCell/Theme 聚焦非 Golden 测试分别 249/249 通过。3.32.0 所有非 Golden 测试文件 2736/2736 通过。全量目录运行时未标 `golden` 标签的快照仍会参与测试，Mac 产生 34 张像素差；其中 2 项旧 TResult 断言读取被迁移的字段，现已改为验证最终解析颜色并通过 23/23。不能把 Mac 的 Linux 快照差异当作实现回归。
+- 在临时副本中使用本机固定 `tdesign-flutter-golden-cache:3.32.0` Linux amd64 镜像，无更新复跑 SwipeCell 组件 2/2、Popup/Progress/共享消费者及 M3 隔离 5/5、Text/SwipeCell/Popup 公开 Demo 40/40 通过；仓库权威 PNG 未修改。临时副本的 `pub get` 解析到图标包 0.0.7，与工作树 0.0.6 不同，因此此组结果不能替代 CI 对完整视觉矩阵的最终判定。
+- 公开 API 删除属于 breaking；真实第三方业务调用仓库编译、全部组件变量最终消费复核及全量 Linux 视觉矩阵仍待完成。不能以本轮聚焦回归宣称整个 PR 已可合并。

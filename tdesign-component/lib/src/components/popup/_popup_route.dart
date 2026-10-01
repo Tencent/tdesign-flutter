@@ -40,12 +40,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
     if (!overlay.showOverlay) {
       return Colors.transparent;
     }
-    final base = overlay.color ?? Colors.black54;
-    if (overlay.opacity != null) {
-      final opacity = overlay.opacity!.clamp(0.0, 1.0);
-      return base.withValues(alpha: base.a * opacity);
-    }
-    return base;
+    return overlay.color ?? Colors.black54;
   }
 
   @override

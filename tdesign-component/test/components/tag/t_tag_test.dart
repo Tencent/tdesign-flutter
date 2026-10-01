@@ -386,10 +386,7 @@ void main() {
   group('TTag 形状（shape）', () {
     testWidgets('square 形状渲染', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(
-          const TTag('方形'),
-          tagTheme: const TTagThemeData(shape: TTagShape.square),
-        ),
+        wrapWithTheme(const TTag('方形', shape: TTagShape.square)),
       );
       expect(find.text('方形'), findsOneWidget);
       expect(find.byType(TTag), findsOneWidget);
@@ -449,20 +446,14 @@ void main() {
 
     testWidgets('round 形状渲染', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(
-          const TTag('圆角'),
-          tagTheme: const TTagThemeData(shape: TTagShape.round),
-        ),
+        wrapWithTheme(const TTag('圆角', shape: TTagShape.round)),
       );
       expect(find.text('圆角'), findsOneWidget);
     });
 
     testWidgets('mark 形状渲染', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(
-          const TTag('半圆'),
-          tagTheme: const TTagThemeData(shape: TTagShape.mark),
-        ),
+        wrapWithTheme(const TTag('半圆', shape: TTagShape.mark)),
       );
       expect(find.text('半圆'), findsOneWidget);
     });
@@ -951,24 +942,15 @@ void main() {
     });
 
     test('TTagThemeData copyWith 正确合并', () {
-      const base = TTagThemeData(
-        shape: TTagShape.square,
-        squareBorderRadius: 3,
-      );
-      final merged = base.copyWith(
-        shape: TTagShape.round,
-        squareBorderRadius: 5,
-      );
-      expect(merged.shape, TTagShape.round);
+      const base = TTagThemeData(squareBorderRadius: 3);
+      final merged = base.copyWith(squareBorderRadius: 5);
       expect(merged.squareBorderRadius, 5);
     });
 
     test('TTagThemeData lerp 正确插值', () {
-      const a = TTagThemeData(shape: TTagShape.square, squareBorderRadius: 3);
-      const b = TTagThemeData(shape: TTagShape.round, squareBorderRadius: 5);
+      const a = TTagThemeData(squareBorderRadius: 3);
+      const b = TTagThemeData(squareBorderRadius: 5);
       final result = a.lerp(b, 0.3);
-      // t < 0.5 取 a 的值
-      expect(result.shape, TTagShape.square);
       expect(result.squareBorderRadius, closeTo(3.6, 1e-9));
     });
 
@@ -1022,20 +1004,14 @@ void main() {
 
     testWidgets('shape round', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(
-          const TTag('圆角'),
-          tagTheme: const TTagThemeData(shape: TTagShape.round),
-        ),
+        wrapWithTheme(const TTag('圆角', shape: TTagShape.round)),
       );
       expect(find.text('圆角'), findsOneWidget);
     });
 
     testWidgets('shape mark', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(
-          const TTag('半圆'),
-          tagTheme: const TTagThemeData(shape: TTagShape.mark),
-        ),
+        wrapWithTheme(const TTag('半圆', shape: TTagShape.mark)),
       );
       expect(find.text('半圆'), findsOneWidget);
     });

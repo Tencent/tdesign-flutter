@@ -61,14 +61,14 @@ class _CalendarDoubleDescribedExampleState
                 TText(
                   '${model.date.day}',
                   font: context.tTheme.fontTitleMedium,
-                  textColor: dayColor,
+                  style: TextStyle(color: dayColor),
                 ),
                 Positioned(
                   top: 4.0,
                   child: TText(
                     holidayLabel ?? '',
                     font: context.tTheme.fontBodyExtraSmall,
-                    textColor: dayColor,
+                    style: TextStyle(color: dayColor),
                   ),
                 ),
                 Positioned(
@@ -76,7 +76,7 @@ class _CalendarDoubleDescribedExampleState
                   child: TText(
                     '¥60',
                     font: context.tTheme.fontBodyExtraSmall,
-                    textColor: priceColor,
+                    style: TextStyle(color: priceColor),
                   ),
                 ),
               ],

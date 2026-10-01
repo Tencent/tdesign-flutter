@@ -44,7 +44,6 @@ void main() {
       expect(item.disabled, false);
       expect(item.badge, null);
       expect(item.icon, null);
-      expect(item.textStyle, null);
     });
 
     test('带参数构造', () {
@@ -70,12 +69,12 @@ void main() {
     });
 
     test('copyWith', () {
-      const data = TSideBarThemeData(unSelectedColor: Colors.grey);
+      const data = TSideBarThemeData(textStyle: TextStyle(color: Colors.grey));
       final copied = data.copyWith(
         selectedTextStyle: const TextStyle(color: Colors.red),
       );
       expect(copied.selectedTextStyle?.color, Colors.red);
-      expect(copied.unSelectedColor, Colors.grey);
+      expect(copied.textStyle?.color, Colors.grey);
     });
 
     test('lerp', () {
@@ -296,7 +295,7 @@ void main() {
         wrapWithTheme(
           TSideBar(value: 0, children: buildItems(), onChanged: (_) {}),
           sideBarTheme: const TSideBarThemeData(
-            unSelectedColor: Colors.grey,
+            textStyle: TextStyle(color: Colors.grey),
             selectedBgColor: Colors.blue,
             unSelectedBgColor: Colors.white,
             selectedTextStyle: TextStyle(
@@ -322,7 +321,7 @@ void main() {
             height: 300,
           ),
           sideBarTheme: const TSideBarThemeData(
-            unSelectedColor: Colors.green,
+            textStyle: TextStyle(color: Colors.green),
             selectedBgColor: Colors.yellow,
             unSelectedBgColor: Colors.black12,
             selectedTextStyle: TextStyle(color: Colors.purple),
@@ -533,20 +532,27 @@ void main() {
       expect(find.byType(TWrapSideBarItem), findsOneWidget);
     });
 
-    testWidgets('未选中项应用 item textStyle', (tester) async {
+    testWidgets('未选中项应用组件 Theme textStyle', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TWrapSideBarItem(
-            variant: TSideBarVariant.line,
-            label: '自定义',
-            value: 3,
-            disabled: false,
-            textStyle: TextStyle(fontSize: 18),
+          const TSideBar(
+            value: 1,
+            children: [
+              TSideBarItem(value: 1, label: '选中'),
+              TSideBarItem(value: 2, label: '自定义', icon: Icons.star),
+            ],
+            onChanged: null,
+          ),
+          sideBarTheme: const TSideBarThemeData(
+            textStyle: TextStyle(fontSize: 18, color: Colors.green),
+            selectedTextStyle: TextStyle(color: Colors.red),
           ),
         ),
       );
 
       expect(tester.widget<Text>(find.text('自定义')).style?.fontSize, 18);
+      expect(tester.widget<Text>(find.text('自定义')).style?.color, Colors.green);
+      expect(tester.widget<Text>(find.text('选中')).style?.color, Colors.red);
     });
 
     testWidgets('带图标和 badge 时保留主行内容', (tester) async {

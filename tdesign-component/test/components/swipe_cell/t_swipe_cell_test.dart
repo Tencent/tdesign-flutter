@@ -6,6 +6,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  test('builder 与内置图文内容互斥', () {
+    expect(
+      () =>
+          TSwipeCellAction(builder: (_) => const SizedBox(), icon: Icons.edit),
+      throwsAssertionError,
+    );
+  });
+
   Widget app(Widget child, {TextDirection direction = TextDirection.ltr}) {
     return MaterialApp(
       theme: TThemeBuilder.light(TThemeData.defaultData()),
@@ -162,21 +170,24 @@ void main() {
       expect(tester.getTopLeft(find.byKey(childKey)).dx, closeTo(-90, 0.1));
     });
 
-    testWidgets('图标、文字与主题尺寸共同参与真实布局', (tester) async {
+    testWidgets('图标、文字与操作项尺寸及主题内边距共同参与真实布局', (tester) async {
       await tester.pumpWidget(
         app(
           Theme(
             data: TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
               const TSwipeCellThemeData(
-                actionIconSize: 24,
-                actionSpacing: 12,
                 actionPadding: EdgeInsets.symmetric(horizontal: 20),
               ),
             ),
             child: cell(
               end: TSwipeCellPanel(
                 children: [
-                  const TSwipeCellAction(icon: Icons.edit, label: '编辑'),
+                  const TSwipeCellAction(
+                    icon: Icons.edit,
+                    label: '编辑',
+                    iconSize: 24,
+                    iconLabelSpacing: 12,
+                  ),
                 ],
               ),
             ),
@@ -652,74 +663,26 @@ void main() {
     });
   });
 
-  test('TSwipeCellThemeData merge copyWith and lerp preserve every field', () {
-    const base = TSwipeCellThemeData(
-      actionBackgroundColor: Colors.black,
-      actionIconColor: Colors.white,
-      actionTextStyle: TextStyle(fontSize: 12),
-      actionIconSize: 16,
-      actionSpacing: 4,
-      actionPadding: EdgeInsets.all(8),
-    );
-    const override = TSwipeCellThemeData(
-      actionBackgroundColor: Colors.red,
-      actionIconColor: Colors.blue,
-      actionTextStyle: TextStyle(fontSize: 16),
-      actionIconSize: 24,
-      actionSpacing: 8,
-      actionPadding: EdgeInsets.all(12),
-    );
-
-    expect(identical(base.merge(null), base), isTrue);
-    final merged = base.merge(override);
-    expect(merged.actionBackgroundColor, Colors.red);
-    expect(merged.actionIconColor, Colors.blue);
-    expect(merged.actionTextStyle, const TextStyle(fontSize: 16));
-    expect(merged.actionIconSize, 24);
-    expect(merged.actionSpacing, 8);
-    expect(merged.actionPadding, const EdgeInsets.all(12));
-
-    final copied = base.copyWith(
-      actionBackgroundColor: Colors.green,
-      actionIconColor: Colors.orange,
-      actionTextStyle: const TextStyle(fontSize: 14),
-      actionIconSize: 20,
-      actionSpacing: 6,
-      actionPadding: const EdgeInsets.all(10),
-    );
-    expect(copied.actionBackgroundColor, Colors.green);
-    expect(copied.actionIconColor, Colors.orange);
-    expect(copied.actionTextStyle, const TextStyle(fontSize: 14));
-    expect(copied.actionIconSize, 20);
-    expect(copied.actionSpacing, 6);
-    expect(copied.actionPadding, const EdgeInsets.all(10));
-    final unchanged = base.copyWith();
-    expect(unchanged.actionBackgroundColor, base.actionBackgroundColor);
-    expect(unchanged.actionIconColor, base.actionIconColor);
-    expect(unchanged.actionTextStyle, base.actionTextStyle);
-    expect(unchanged.actionIconSize, base.actionIconSize);
-    expect(unchanged.actionSpacing, base.actionSpacing);
-    expect(unchanged.actionPadding, base.actionPadding);
-
-    final lerped = base.lerp(override, 0.5);
-    expect(
-      lerped.actionBackgroundColor,
-      Color.lerp(Colors.black, Colors.red, 0.5),
-    );
-    expect(lerped.actionIconColor, Color.lerp(Colors.white, Colors.blue, 0.5));
-    expect(
-      lerped.actionTextStyle,
-      TextStyle.lerp(base.actionTextStyle, override.actionTextStyle, 0.5),
-    );
-    expect(lerped.actionIconSize, 20);
-    expect(lerped.actionSpacing, 6);
-    expect(lerped.actionPadding, const EdgeInsets.all(10));
-    expect(identical(base.lerp(null, 0.5), base), isTrue);
-    expect(
-      const TSwipeCellThemeData()
-          .lerp(const TSwipeCellThemeData(), 0.5)
-          .actionIconSize,
-      isNull,
-    );
-  });
+  test(
+    'TSwipeCellThemeData merge copyWith and lerp preserve actionPadding',
+    () {
+      const base = TSwipeCellThemeData(actionPadding: EdgeInsets.all(8));
+      const override = TSwipeCellThemeData(actionPadding: EdgeInsets.all(12));
+      expect(identical(base.merge(null), base), isTrue);
+      expect(base.merge(override).actionPadding, const EdgeInsets.all(12));
+      expect(
+        base.copyWith(actionPadding: const EdgeInsets.all(10)).actionPadding,
+        const EdgeInsets.all(10),
+      );
+      expect(base.copyWith().actionPadding, base.actionPadding);
+      expect(base.lerp(override, 0.5).actionPadding, const EdgeInsets.all(10));
+      expect(identical(base.lerp(null, 0.5), base), isTrue);
+      expect(
+        const TSwipeCellThemeData()
+            .lerp(const TSwipeCellThemeData(), 0.5)
+            .actionPadding,
+        isNull,
+      );
+    },
+  );
 }

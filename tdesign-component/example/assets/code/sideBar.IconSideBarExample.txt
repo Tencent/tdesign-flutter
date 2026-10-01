@@ -503,7 +503,7 @@ class TSideBarCustomPageState extends State<TSideBarCustomPage> {
                 fontWeight: FontWeight.w600,
               ),
               selectedBgColor: context.tTheme.brandColorLight,
-              unSelectedColor: context.tTheme.textColorSecondary,
+              textStyle: TextStyle(color: context.tTheme.textColorSecondary),
             ),
           ),
           child: TSideBar(

@@ -36,7 +36,10 @@
 | Drawer、SideBar、NavBar、TabBar | 实例视觉数值与同名组件 Theme | 组件 Theme | 实例视觉字段，TabBar `centerDistance` 仅留 Theme | 默认值不变，局部 Demo Theme 保留定制场景 | 公开实例字段删除，breaking |
 | Dialog / TConfirmDialog | 面板背景、形状、阴影、宽度、高度、内容内边距 | 组件 Theme | 实例对应字段 | Linux 3.32 的 Dialog Demo 16 项功能测试及图片场景浅色 Golden 通过 | 公开实例字段删除，breaking |
 | Form | 标签宽度/文字对齐双入口、表单项区域对齐双入口 | 标签宽度/文字对齐归 Theme；单项区域对齐归实例 | 另一侧同义字段 | 61 项组件测试通过 | 公开字段删除，breaking |
-| Text（旧阶段结论） | 子树组件默认值、Flutter 文字继承、单实例 `style`/段落参数 | 旧阶段保留 `TTextThemeData` 的字体 Token、文字和段落默认值；最新严格单入口规则下还未迁移 | 实例便利样式与 Theme 字体/文字样式待重新裁定 | 旧阶段 Text/Cascader/Picker 主题路径测试通过；不构成本轮单入口验收 | `font` 等已发布调用点数量大，须先完成替代写法与外部编译 |
+| Text | 子树默认 `textStyle`、实例 `font` 预设和分散便利字段 | 子树 `TTextThemeData.textStyle`，实例 `font` 预设 + 完整 `style`，Span 局部 `style` | Theme `font`、实例 `fontWeight/fontFamily/textColor/isTextThrough/lineThroughColor`、Span 分散字段 | 本轮组件分析通过；Text 功能测试通过，Linux Golden 须以最终源码复跑 | 已发布实例参数删除属 breaking，真实外部编译待验证 |
+| Avatar 形状 | 实例 `shape` 与已弃用的 `variant` 一一对应 | `TAvatar.shape` | `TAvatar.variant` 和 `TAvatarVariant` | 默认及圆/方形头像 Golden 无更新通过 | 已发布别名删除，breaking |
+| SideBar 标签 | 逐项 `TSideBarItem.textStyle` 与组件 Theme 的选中/未选中样式 | `TSideBarThemeData.textStyle/selectedTextStyle` | 逐项 `textStyle`、Theme `unSelectedColor` | 未选中文字与图标共享 `textStyle.color`，选中文字/图标/指示线共享 `selectedTextStyle.color`；既有 Golden 无更新通过 | 不再支持逐项任意文字样式，breaking |
+| Tag 形状 | Theme `shape` 与实例形态选择职责重叠 | `TTag.shape`、`TSelectTag.shape` | `TTagThemeData.shape` | 默认 square 和自定义 Demo 圆弧/标记形状不变，既有 Golden 无更新通过 | 子树统一形状须逐实例显式配置，breaking |
 | Popover | 箭头显示和具体视觉数值双入口 | `showArrow` 归实例；偏移、箭头尺寸、内边距归 Theme | 另一侧同义字段 | 65 项组件测试、定制内容浅色 Golden 通过 | 公开字段删除，breaking |
 | Avatar 文字样式 | Theme `foregroundColor` / `textStyle.color` 同时决定默认文字颜色 | Theme `foregroundColor` 控制默认文字与图标前景；特殊文字由 `child: Text(style: ...)` 提供 | Theme `textStyle` 整字段 | 默认字号与字重继续随 `size`；单独文字内容仍可定制 | 删除已发布 Theme 字段，breaking |
 | Popover 蒙层与圆角 | 实例 `overlayColor/radius` / Theme `barrierColor/borderRadius` | Theme `barrierColor/borderRadius`；单实例用局部 Theme | 实例两字段；Theme `borderRadius` 改为 `BorderRadius?` 以保存逐角能力 | 默认透明蒙层与全局圆角回退不变；旧 Golden 差异单独裁定 | 删除已发布实例字段、Theme 字段改型，breaking |

@@ -57,9 +57,12 @@ void main() {
     final context = await pumpContext(
       tester,
       theme: TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
-        TTextThemeData(
-          font: Font(size: 20, lineHeight: 28),
-          textStyle: const TextStyle(fontSize: 22, color: Colors.blue),
+        const TTextThemeData(
+          textStyle: TextStyle(
+            fontSize: 22,
+            height: 28 / 20,
+            color: Colors.blue,
+          ),
         ),
       ),
       wrap: (child) => DefaultTextStyle.merge(
@@ -328,34 +331,5 @@ void main() {
     expect(instance.fontSize, 24);
     expect(instance.height, 32 / 24);
     expect(instance.color, Colors.blue);
-  });
-
-  test('裸 TTextSpan 不生成样式并继承父 Span', () {
-    expect(TTextResolve.resolveSpan(), isNull);
-  });
-
-  test('TTextSpan 只生成显式字段且 style 最高优先', () {
-    final resolved = TTextResolve.resolveSpan(
-      textColor: Colors.blue,
-      isTextThrough: true,
-      style: const TextStyle(color: Colors.red),
-    );
-    expect(resolved?.color, Colors.red);
-    expect(resolved?.fontSize, isNull);
-    expect(resolved?.decoration, TextDecoration.lineThrough);
-  });
-
-  test('FontFamily 同时透传字体族和 package', () {
-    final resolved = TTextResolve.resolveSpan(
-      fontFamily: FontFamily(
-        fontFamily: 'TDesignTestFont',
-        package: 'tdesign_test_package',
-      ),
-    );
-
-    expect(
-      resolved?.fontFamily,
-      'packages/tdesign_test_package/TDesignTestFont',
-    );
   });
 }

@@ -14,6 +14,7 @@ class TSelectTag extends StatelessWidget {
     this.variant = TTagVariant.dark,
     this.icon,
     this.size = TTagSize.medium,
+    this.shape = TTagShape.square,
   });
 
   /// 标签内容。
@@ -37,6 +38,9 @@ class TSelectTag extends StatelessWidget {
   /// 标签尺寸。
   final TTagSize size;
 
+  /// 标签外形；具体圆角值由组件 Theme 或全局 Token 决定。
+  final TTagShape shape;
+
   @override
   Widget build(BuildContext context) {
     final effectiveColorPreset = value
@@ -52,6 +56,7 @@ class TSelectTag extends StatelessWidget {
         variant: variant,
         icon: icon,
         size: size,
+        shape: shape,
         enabled: onChanged != null,
         onTap: onChanged == null ? null : () => onChanged!(!value),
       ),

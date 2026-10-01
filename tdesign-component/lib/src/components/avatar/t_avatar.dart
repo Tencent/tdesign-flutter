@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
@@ -22,14 +20,10 @@ class TAvatar extends StatelessWidget {
     this.child,
     this.size,
     this.shape,
-    this.variant,
     this.fit = BoxFit.cover,
     this.onTap,
     super.key,
-  }) : assert(
-         shape == null || variant == null,
-         'shape and deprecated variant cannot be used together',
-       );
+  });
 
   /// 头像图片。
   final ImageProvider<Object>? image;
@@ -43,10 +37,6 @@ class TAvatar extends StatelessWidget {
   /// 头像形状；未设置时使用圆形默认值。
   final TAvatarShape? shape;
 
-  /// 头像形状的旧命名。
-  @Deprecated('Use shape instead. This property will be removed in 1.0.0.')
-  final TAvatarVariant? variant;
-
   /// 图片填充方式。
   final BoxFit fit;
 
@@ -57,8 +47,7 @@ class TAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TAvatarThemeData>();
     final resolvedSize = size ?? TAvatarSize.medium;
-    final resolvedShape =
-        shape ?? _avatarShapeFromVariant(variant) ?? TAvatarShape.circle;
+    final resolvedShape = shape ?? TAvatarShape.circle;
     final dimension =
         theme?.dimension ?? TAvatarDefaults.dimensionFor(resolvedSize);
     final radius = resolvedShape == TAvatarShape.circle
@@ -211,7 +200,7 @@ class TAvatarGroup extends StatelessWidget {
     double resolvedDimension,
     double borderWidth,
   ) {
-    final shape = _shapeForChild(child, theme);
+    final shape = _shapeForChild(child);
     final squareRadius =
         theme?.squareBorderRadius ?? context.tTheme.radiusDefault;
     final innerDimension = resolvedDimension - borderWidth * 2;
@@ -244,18 +233,10 @@ class TAvatarGroup extends StatelessWidget {
     );
   }
 
-  TAvatarShape _shapeForChild(Widget child, TAvatarThemeData? theme) {
+  TAvatarShape _shapeForChild(Widget child) {
     if (child is TAvatar) {
-      return child.shape ??
-          _avatarShapeFromVariant(child.variant) ??
-          TAvatarShape.circle;
+      return child.shape ?? TAvatarShape.circle;
     }
     return TAvatarShape.circle;
   }
 }
-
-TAvatarShape? _avatarShapeFromVariant(TAvatarVariant? value) => switch (value) {
-  TAvatarVariant.circle => TAvatarShape.circle,
-  TAvatarVariant.square => TAvatarShape.square,
-  null => null,
-};

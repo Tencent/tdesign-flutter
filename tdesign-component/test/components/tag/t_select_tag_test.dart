@@ -68,6 +68,7 @@ void main() {
             variant: TTagVariant.light,
             icon: Icons.star,
             size: TTagSize.small,
+            shape: TTagShape.round,
             onChanged: (v) => changed = v,
           ),
         ),
@@ -78,6 +79,7 @@ void main() {
       await tester.pump();
       expect(changed, isTrue);
       expect(tester.widget<TTag>(find.byType(TTag)).variant, TTagVariant.light);
+      expect(tester.widget<TTag>(find.byType(TTag)).shape, TTagShape.round);
     });
 
     testWidgets('无 onChanged 时使用禁用态，即使 value 为 true', (tester) async {

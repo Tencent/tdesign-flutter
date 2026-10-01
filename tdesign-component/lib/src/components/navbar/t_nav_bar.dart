@@ -32,7 +32,7 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
   ///
   /// 文本标题可传入 [Text]，用法与 [AppBar.title] 一致。
   /// 标题自身的显式文本样式优先于 NavBar 提供的默认标题样式；例如 `TText`
-  /// 默认会解析正文颜色，如需使用 Theme 的标题颜色，请通过 `TText.textColor`
+  /// 默认会解析正文颜色，如需使用 Theme 的标题颜色，请通过 `TText.style`
   /// 传入相同颜色，或改用未显式设置颜色的 [Text]。
   final Widget? title;
 

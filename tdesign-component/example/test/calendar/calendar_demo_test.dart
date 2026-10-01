@@ -227,12 +227,12 @@ void main() {
     );
     final prices = tester
         .widgetList<TText>(find.widgetWithText(TText, '¥60'))
-        .map((text) => text.textColor)
+        .map((text) => text.style?.color)
         .toList();
     final token = TThemeData.defaultData();
-    expect(normalDay.textColor, token.textColorPrimary);
-    expect(holidayDay.textColor, token.errorColor);
-    expect(selectedDay.textColor, token.textColorAnti);
+    expect(normalDay.style?.color, token.textColorPrimary);
+    expect(holidayDay.style?.color, token.errorColor);
+    expect(selectedDay.style?.color, token.textColorAnti);
     expect(prices, contains(token.textColorPlaceholder));
     expect(prices, contains(token.textColorAnti));
     expect(prices, isNot(contains(token.errorColor)));

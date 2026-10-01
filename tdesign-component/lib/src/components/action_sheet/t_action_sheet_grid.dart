@@ -171,7 +171,7 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
           widget.subtitle!,
           font: context.tTheme.fontBodyMedium,
           textAlign: TextAlign.center,
-          textColor: context.tTheme.textColorPlaceholder,
+          style: TextStyle(color: context.tTheme.textColorPlaceholder),
         ),
       ),
     );
@@ -440,7 +440,7 @@ class TActionSheetSectionGrid<T> extends StatelessWidget {
         child: TText(
           title,
           font: context.tTheme.fontBodyMedium,
-          textColor: context.tTheme.textColorPlaceholder,
+          style: TextStyle(color: context.tTheme.textColorPlaceholder),
         ),
       ),
     );

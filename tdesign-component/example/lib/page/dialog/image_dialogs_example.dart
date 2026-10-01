@@ -105,7 +105,7 @@ class ImageDialogsExample extends StatelessWidget {
             '对话框标题',
             textAlign: TextAlign.center,
             font: token.fontTitleLarge,
-            textColor: token.textColorPrimary,
+            style: TextStyle(color: token.textColorPrimary),
           )
         : null;
     final description = showContent

@@ -40,9 +40,11 @@ class _ThemeOtherColorExampleState extends State<ThemeOtherColorExample> {
             color: entry.value,
             child: TText(
               entry.key,
-              textColor: entry.value.computeLuminance() < 0.5
-                  ? Colors.white
-                  : Colors.black,
+              style: TextStyle(
+                color: entry.value.computeLuminance() < 0.5
+                    ? Colors.white
+                    : Colors.black,
+              ),
             ),
           );
         }

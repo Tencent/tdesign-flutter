@@ -121,7 +121,7 @@ class _TThemeColorsPageState extends State<TThemeColorsPage> {
       child: TText(
         '使用外层默认主题',
         font: context.tTheme.fontBodyLarge, // 字体，业务方使用时，
-        textColor: context.tTheme.brandColor, // 颜色，AS中点击颜色可查看具体设置和显示效果
+        style: TextStyle(color: context.tTheme.brandColor), // 颜色，AS中点击颜色可查看具体设置和显示效果
       ),
     );
   }
@@ -159,12 +159,12 @@ class TestWidget extends StatelessWidget {
           TText(
             '使用内层赋值主题',
             font: context.tTheme.fontBodyLarge, //明确使用内层主题，必须传context
-            textColor: context.tTheme.brandColor, // 明确使用内层主题，必须传context
+            style: TextStyle(color: context.tTheme.brandColor), // 明确使用内层主题，必须传context
           ),
           TText(
             '使用内层不赋值主题',
             font: context.tTheme.fontTitleExtraLarge, //明确使用内层主题，必须传context
-            textColor: context.tTheme.successColor, // 明确使用内层主题，必须传context
+            style: TextStyle(color: context.tTheme.successColor), // 明确使用内层主题，必须传context
           ),
           const TButton(
             child: Text('使用内层赋值主题'),
@@ -174,7 +174,7 @@ class TestWidget extends StatelessWidget {
             '使用默认主题',
             font: TThemeData.defaultData()
                 .fontBodyLarge, //不传context，使用默认主题，此处是外层的主题
-            textColor: TThemeData.defaultData().brandColor,
+            style: TextStyle(color: TThemeData.defaultData().brandColor),
           ),
         ],
       ),

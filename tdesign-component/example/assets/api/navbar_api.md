@@ -12,7 +12,7 @@
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | leading | List<TNavBarItem>? | - | 左侧操作项（对齐 AppBar.leading） |
 | onBack | VoidCallback? | - | 默认返回按钮的点击事件。 仅在 `useDefaultBack` 为 true 时生效。提供该回调时，由调用方完全接管返回 行为；未提供时，默认返回按钮会执行 `Navigator.maybePop`。 |
-| title | Widget? | - | 标题控件。 文本标题可传入 `Text`，用法与 `AppBar.title` 一致。 标题自身的显式文本样式优先于 NavBar 提供的默认标题样式；例如 `TText` 默认会解析正文颜色，如需使用 Theme 的标题颜色，请通过 `TText.textColor` 传入相同颜色，或改用未显式设置颜色的 `Text`。 |
+| title | Widget? | - | 标题控件。 文本标题可传入 `Text`，用法与 `AppBar.title` 一致。 标题自身的显式文本样式优先于 NavBar 提供的默认标题样式；例如 `TText` 默认会解析正文颜色，如需使用 Theme 的标题颜色，请通过 `TText.style` 传入相同颜色，或改用未显式设置颜色的 `Text`。 |
 | useBorderStyle | bool | false | 是否使用边框模式 |
 | useDefaultBack | bool | false | 是否使用默认的返回按钮，默认不显示 |
 | useSafeArea | bool | false | 是否避让顶部系统安全区。 默认为 false。仅当导航栏直接位于页面顶部且外层未处理安全区时开启。 开启后，安全区高度只计入实际渲染高度，不计入 `preferredSize`； `height` 始终表示导航栏内容高度。 |

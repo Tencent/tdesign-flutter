@@ -113,7 +113,7 @@ class ButtonDialogsExample extends StatelessWidget {
         TText(
           label,
           font: context.tTheme.fontBodyMedium,
-          textColor: context.tTheme.textColorSecondary,
+          style: TextStyle(color: context.tTheme.textColorSecondary),
         ),
         SizedBox(height: context.tTheme.spacer2),
         trigger,

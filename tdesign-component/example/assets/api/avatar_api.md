@@ -11,7 +11,6 @@
 | onTap | GestureTapCallback? | - | 点击回调；为空时头像不创建点击行为。 |
 | shape | TAvatarShape? | - | 头像形状；未设置时使用圆形默认值。 |
 | size | TAvatarSize? | - | 头像尺寸；未设置时使用中尺寸默认值。 |
-| variant | TAvatarVariant? | - | 头像形状的旧命名。 |
 
 
 ### TAvatarGroup

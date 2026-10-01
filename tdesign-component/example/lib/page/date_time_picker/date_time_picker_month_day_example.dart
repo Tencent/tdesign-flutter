@@ -93,7 +93,7 @@ class _DateTimePickerMonthDayExampleState
             child: TText(
               '取消',
               font: context.tTheme.fontBodyLarge,
-              textColor: context.tTheme.textColorSecondary,
+              style: TextStyle(color: context.tTheme.textColorSecondary),
             ),
           ),
           title: showTitle
@@ -107,7 +107,7 @@ class _DateTimePickerMonthDayExampleState
             child: TText(
               '确定',
               font: context.tTheme.fontBodyLarge,
-              textColor: context.tTheme.brandColor,
+              style: TextStyle(color: context.tTheme.brandColor),
             ),
           ),
         ),

@@ -11,17 +11,13 @@ import 't_text_theme_data.dart';
 /// Flutter [Text] 的 TDesign Token 薄封装。
 ///
 /// 文字布局、字体 fallback、无障碍缩放和语义均由 Flutter 原生 Text 负责。
-/// 子树级完整文字样式通过 [TTextThemeData.textStyle] 配置。
+/// 子树级默认文字样式通过 [TTextThemeData.textStyle] 配置；单实例完整样式通过 [style] 覆盖。
 /// 固定容器居中与图文 baseline 应由父布局表达。
 class TText extends StatelessWidget {
   const TText(
     String this.data, {
     this.font,
-    this.fontWeight,
-    this.fontFamily,
-    this.textColor,
-    this.isTextThrough,
-    this.lineThroughColor,
+    this.style,
     this.strutStyle,
     this.textAlign,
     this.textDirection,
@@ -42,11 +38,7 @@ class TText extends StatelessWidget {
   const TText.rich(
     InlineSpan this.textSpan, {
     this.font,
-    this.fontWeight,
-    this.fontFamily,
-    this.textColor,
-    this.isTextThrough,
-    this.lineThroughColor,
+    this.style,
     this.strutStyle,
     this.textAlign,
     this.textDirection,
@@ -63,23 +55,11 @@ class TText extends StatelessWidget {
     super.key,
   }) : data = null;
 
-  /// TDesign 字体 Token，包含字号、行高和字重。
+  /// TDesign 字体 Token 预设，包含字号、行高和字重；[style] 的显式字段优先。
   final Font? font;
 
-  /// 字体粗细。
-  final FontWeight? fontWeight;
-
-  /// 字体族及可选资源 package。
-  final FontFamily? fontFamily;
-
-  /// 文字颜色。
-  final Color? textColor;
-
-  /// 是否显示删除线。为 null 时继承 Theme 或父级样式。
-  final bool? isTextThrough;
-
-  /// 删除线颜色。
-  final Color? lineThroughColor;
+  /// 当前实例的完整文字样式；仅覆盖显式字段，优先于 [font] 和子树组件 Theme。
+  final TextStyle? style;
 
   /// 文本内容。
   final String? data;
@@ -136,15 +116,7 @@ class TText extends StatelessWidget {
 
   /// 获取最终 Flutter [TextStyle]。
   TextStyle getTextStyle(BuildContext context) {
-    return TTextResolve.resolve(
-      context: context,
-      font: font,
-      fontWeight: fontWeight,
-      fontFamily: fontFamily,
-      textColor: textColor,
-      isTextThrough: isTextThrough,
-      lineThroughColor: lineThroughColor,
-    );
+    return TTextResolve.resolve(context: context, font: font, style: style);
   }
 
   Text _rawText(BuildContext context, {bool includeKey = false}) {
@@ -200,32 +172,14 @@ class TText extends StatelessWidget {
 ///
 /// 未显式配置的字段保持为空，并继承父 Span 样式。
 class TTextSpan extends TextSpan {
-  TTextSpan({
-    /// TDesign 字体 Token，包含字号、行高和字重。
-    Font? font,
-
-    /// 字体粗细。
-    FontWeight? fontWeight,
-
-    /// 字体族及可选资源 package。
-    FontFamily? fontFamily,
-
-    /// 文字颜色。
-    Color? textColor,
-
-    /// 是否显示删除线。为 null 时继承父 Span。
-    bool? isTextThrough,
-
-    /// 删除线颜色。
-    Color? lineThroughColor,
-
+  const TTextSpan({
     /// 透传至 [TextSpan.text]。
     String? text,
 
     /// 透传至 [TextSpan.children]。
     List<InlineSpan>? children,
 
-    /// Flutter 原生文字样式，具有最高优先级。
+    /// Span 的唯一文字样式入口；未设置的字段继承父 Span。
     TextStyle? style,
 
     /// 透传至 [TextSpan.recognizer]。
@@ -254,15 +208,7 @@ class TTextSpan extends TextSpan {
   }) : super(
          text: text,
          children: children,
-         style: TTextResolve.resolveSpan(
-           style: style,
-           font: font,
-           fontWeight: fontWeight,
-           fontFamily: fontFamily,
-           textColor: textColor,
-           isTextThrough: isTextThrough,
-           lineThroughColor: lineThroughColor,
-         ),
+         style: style,
          recognizer: recognizer,
          mouseCursor: mouseCursor,
          onEnter: onEnter,

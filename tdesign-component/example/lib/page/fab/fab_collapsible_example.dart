@@ -84,7 +84,7 @@ class _CollapsibleAction extends StatelessWidget {
         TText(
           text,
           font: context.tTheme.fontBodySmall,
-          textColor: context.tTheme.textColorPrimary,
+          style: TextStyle(color: context.tTheme.textColorPrimary),
         ),
       ],
     ),

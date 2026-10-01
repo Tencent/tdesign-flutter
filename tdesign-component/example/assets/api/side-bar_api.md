@@ -24,7 +24,6 @@
 | disabled | bool | false | 是否禁用 |
 | icon | IconData? | - | 图标 |
 | label | String | '' | 标签 |
-| textStyle | TextStyle? | - | 标签样式 |
 | value | int | -1 | 值 |
 
 
@@ -35,9 +34,9 @@
 | --- | --- | --- | --- |
 | contentPadding | EdgeInsetsGeometry? | - | 默认自定义文本框内边距 |
 | selectedBgColor | Color? | - | 默认选中背景颜色 |
-| selectedTextStyle | TextStyle? | - | 选中文字样式；其中的 color 同时控制选中图标和指示线。 未指定 color 时读取全局品牌色。 |
+| selectedTextStyle | TextStyle? | - | 选中文字样式；其中的 color 同时控制选中图标和指示线。 未指定 color 时读取全局品牌色；禁用态始终使用全局禁用色。 |
+| textStyle | TextStyle? | - | 未选中标签文字样式；颜色同时用于未选中图标。 选中项只继承排版字段，不继承这里的颜色；禁用态使用全局禁用色。 未指定颜色时使用全局正文色。 |
 | unSelectedBgColor | Color? | - | 默认未选中背景颜色 |
-| unSelectedColor | Color? | - | 默认未选中颜色 |
 
 
 ### TSideBarVariant

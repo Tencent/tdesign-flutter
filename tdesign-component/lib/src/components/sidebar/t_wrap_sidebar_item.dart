@@ -30,7 +30,6 @@ class TWrapSideBarItem extends StatelessWidget {
     this.onTap,
     this.selectedBgColor,
     this.unSelectedBgColor,
-    this.unSelectedColor,
     required this.variant,
   }) : super(key: key);
 
@@ -44,7 +43,6 @@ class TWrapSideBarItem extends StatelessWidget {
   final int value;
   final bool selected;
   final Color? selectedBgColor;
-  final Color? unSelectedColor;
   final Color? unSelectedBgColor;
   final bool topAdjacent;
   final bool bottomAdjacent;
@@ -157,7 +155,7 @@ class TWrapSideBarItem extends StatelessWidget {
             width: preLineWidth,
             height: 14,
             decoration: BoxDecoration(
-              color: selectedTextStyle?.color ?? context.tTheme.brandColor,
+              color: _foregroundColor(context),
               borderRadius: BorderRadius.circular(4),
             ),
           ),
@@ -167,42 +165,37 @@ class TWrapSideBarItem extends StatelessWidget {
   }
 
   Widget renderIcon(BuildContext context) {
-    final iconColor = () {
-      if (disabled) {
-        return context.tTheme.textColorDisabled;
-      }
-      if (!selected) {
-        return unSelectedColor ?? context.tTheme.textColorPrimary;
-      }
-      if (selectedTextStyle?.color != null) {
-        return selectedTextStyle!.color!;
-      }
-      return context.tTheme.brandColor;
-    }();
-
     return Visibility(
       visible: icon != null,
       child: Padding(
         padding: const EdgeInsets.only(right: 2),
-        child: Icon(icon, size: 20, color: iconColor),
+        child: Icon(icon, size: 20, color: _foregroundColor(context)),
       ),
     );
   }
 
+  Color _foregroundColor(BuildContext context) {
+    if (disabled) {
+      return context.tTheme.textColorDisabled;
+    }
+    if (selected) {
+      return selectedTextStyle?.color ?? context.tTheme.brandColor;
+    }
+    return textStyle?.color ?? context.tTheme.textColorPrimary;
+  }
+
   Widget renderLabel(BuildContext context) {
     final effectiveStyle = selected
-        ? selectedTextStyle ?? textStyle
+        ? textStyle?.merge(selectedTextStyle) ?? selectedTextStyle
         : textStyle;
     return TTextStyled(
       label,
       font: context.tTheme.fontBodyLarge,
-      style: effectiveStyle,
+      // 状态前景色与图标、指示线保持一致；未选中样式只为选中态提供排版回退。
+      style: (effectiveStyle ?? const TextStyle()).copyWith(
+        color: _foregroundColor(context),
+      ),
       fontWeight: selected && !disabled ? FontWeight.w600 : FontWeight.w400,
-      textColor: disabled
-          ? context.tTheme.textColorDisabled
-          : selected
-          ? context.tTheme.brandColor
-          : unSelectedColor ?? context.tTheme.textColorPrimary,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

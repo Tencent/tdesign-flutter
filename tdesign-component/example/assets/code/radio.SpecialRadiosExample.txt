@@ -30,7 +30,10 @@ class _SpecialRadiosExampleState extends State<SpecialRadiosExample> {
             context.tTheme.spacer2,
             context.tTheme.spacer2,
           ),
-          child: TText('横向卡片单选框', textColor: context.tTheme.textColorSecondary),
+          child: TText(
+            '横向卡片单选框',
+            style: TextStyle(color: context.tTheme.textColorSecondary),
+          ),
         ),
         TRadioGroup<int>.options(
           key: const ValueKey('radio-horizontal-card-layout'),

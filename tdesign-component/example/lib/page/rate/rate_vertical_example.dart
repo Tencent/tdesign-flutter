@@ -50,7 +50,9 @@ class RateVerticalExampleVerticalRateState
       TText(
         _texts[value.ceil().clamp(1, _texts.length) - 1],
         font: value > 3 ? context.tTheme.fontBodyLarge : null,
-        textColor: value > 3 ? context.tTheme.warningColor5 : null,
+        style: TextStyle(
+          color: value > 3 ? context.tTheme.warningColor5 : null,
+        ),
       ),
     ],
   );

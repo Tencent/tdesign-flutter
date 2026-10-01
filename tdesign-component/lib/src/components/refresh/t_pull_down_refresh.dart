@@ -490,7 +490,7 @@ class _TPullDownRefreshHeader extends Header {
             : TText(
                 text,
                 font: context.tTheme.fontBodyMedium,
-                textColor: context.tTheme.textColorPlaceholder,
+                style: TextStyle(color: context.tTheme.textColorPlaceholder),
               ),
       ),
     );

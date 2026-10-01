@@ -412,7 +412,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
             TText(
               widget.desc,
               font: context.tTheme.fontBodyMedium,
-              textColor: context.tTheme.textColorSecondary,
+              style: TextStyle(color: context.tTheme.textColorSecondary),
             ),
           ],
         ],
@@ -539,7 +539,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
             child: TText(
               widget.desc,
               font: context.tTheme.fontBodyMedium,
-              textColor: context.tTheme.textColorSecondary,
+              style: TextStyle(color: context.tTheme.textColorSecondary),
             ),
           ),
           // Expanded(child: ),
@@ -736,7 +736,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
                 child: TText(
                   widget.data.desc,
                   font: context.tTheme.fontBodyMedium,
-                  textColor: context.tTheme.textColorSecondary,
+                  style: TextStyle(color: context.tTheme.textColorSecondary),
                 ),
               ),
         child,
@@ -828,7 +828,10 @@ class _CodeWrapperState extends State<CodeWrapper> {
               child: Container(
                 color: Colors.black.withValues(alpha: 0.4),
                 alignment: Alignment.center,
-                child: TText('code', textColor: context.tTheme.whiteColor1),
+                child: TText(
+                  'code',
+                  style: TextStyle(color: context.tTheme.whiteColor1),
+                ),
               ),
             ),
           ),

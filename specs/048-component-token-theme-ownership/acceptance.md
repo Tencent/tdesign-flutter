@@ -1,5 +1,13 @@
 # 验收记录
 
+## 2026-10-02 单实例文字样式与 SwipeCell/Popup 入口收敛
+
+- 当前源码：`TText.font` 仅作字体 Token 预设，`style` 控制实例完整文字样式；分散文字字段删除。SwipeCell 逐项视觉归 `TSwipeCellAction`，Theme 仅保留共享 `actionPadding`；Popup 蒙层 alpha 归 `Color`，动画时长归单次 Options。API breaking 迁移记录见 `migration.md`。
+- Flutter 3.32.0、3.47.0 组件包和 Example 包严格 `flutter analyze --fatal-infos --no-pub` 均 0 issues；Text/Popup/SwipeCell/Theme 聚焦功能测试两版各 249/249 通过。Flutter 3.32.0 全部非 Golden 测试文件 2736/2736 通过。
+- 在临时副本中用固定 `tdesign-flutter-golden-cache:3.32.0` Linux amd64 镜像无更新复跑，SwipeCell 组件 2/2、Popup/Progress/共享消费者与 M3 隔离 5/5、Text/SwipeCell/Popup 公开 Demo 40/40 通过。临时容器依赖解析到了图标包 0.0.7，而工作树使用 0.0.6；该结果不能代替当前提交的远端 CI 全量视觉矩阵。
+- `sh ./demo_tool/all_build.sh` 重新生成 57 份 API 文档，保留生成器误删的无关 `showTDrawer` 文档；`dart run tool/generate_example_code.dart` 及 `--check` 通过。生成产物变化均由实际源码 API/Demo 迁移驱动。
+- 真实第三方业务调用仓库的旧 API 编译、完整 Linux Golden 调度、覆盖率和远端 CI 仍须以最终推送 head 核验；上述本地结果不代表 PR 可直接合并。
+
 ## 2026-10-01 TText 完整实例样式移除（本地检查点）
 
 - 公开 `TText`/`TText.rich` 不再接收 `style`；完整子树样式由 `TTextThemeData.textStyle` 持有。组合组件的状态相关逐项文字样式走仅库内使用的解析器，仍交给 Flutter 原生 `Text` 绘制；`TTextSpan.style` 保留其富文本局部语义。

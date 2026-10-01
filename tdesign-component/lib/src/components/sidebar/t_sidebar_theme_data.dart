@@ -17,11 +17,13 @@ class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
   /// 默认自定义文本框内边距
   final EdgeInsetsGeometry? contentPadding;
 
-  /// 默认未选中颜色
-  final Color? unSelectedColor;
+  /// 未选中标签文字样式；颜色同时用于未选中图标。
+  /// 选中项只继承排版字段，不继承这里的颜色；禁用态使用全局禁用色。
+  /// 未指定颜色时使用全局正文色。
+  final TextStyle? textStyle;
 
   /// 选中文字样式；其中的 color 同时控制选中图标和指示线。
-  /// 未指定 color 时读取全局品牌色。
+  /// 未指定 color 时读取全局品牌色；禁用态始终使用全局禁用色。
   final TextStyle? selectedTextStyle;
 
   /// 默认选中背景颜色
@@ -32,7 +34,7 @@ class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
 
   const TSideBarThemeData({
     this.contentPadding,
-    this.unSelectedColor,
+    this.textStyle,
     this.selectedTextStyle,
     this.selectedBgColor,
     this.unSelectedBgColor,
@@ -41,14 +43,14 @@ class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
   @override
   TSideBarThemeData copyWith({
     EdgeInsetsGeometry? contentPadding,
-    Color? unSelectedColor,
+    TextStyle? textStyle,
     TextStyle? selectedTextStyle,
     Color? selectedBgColor,
     Color? unSelectedBgColor,
   }) {
     return TSideBarThemeData(
       contentPadding: contentPadding ?? this.contentPadding,
-      unSelectedColor: unSelectedColor ?? this.unSelectedColor,
+      textStyle: textStyle ?? this.textStyle,
       selectedTextStyle: selectedTextStyle ?? this.selectedTextStyle,
       selectedBgColor: selectedBgColor ?? this.selectedBgColor,
       unSelectedBgColor: unSelectedBgColor ?? this.unSelectedBgColor,
@@ -66,11 +68,7 @@ class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
         other.contentPadding,
         t,
       ),
-      unSelectedColor: _lerpNullableColor(
-        unSelectedColor,
-        other.unSelectedColor,
-        t,
-      ),
+      textStyle: _lerpNullableTextStyle(textStyle, other.textStyle, t),
       selectedTextStyle: _lerpNullableTextStyle(
         selectedTextStyle,
         other.selectedTextStyle,

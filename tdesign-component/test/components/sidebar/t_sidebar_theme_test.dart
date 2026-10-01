@@ -7,7 +7,7 @@ void main() {
   group('TSideBarThemeData 纯函数', () {
     const theme = TSideBarThemeData(
       contentPadding: EdgeInsets.all(8),
-      unSelectedColor: Colors.grey,
+      textStyle: TextStyle(color: Colors.grey),
       selectedTextStyle: TextStyle(fontSize: 14, color: Colors.red),
       selectedBgColor: Colors.blue,
       unSelectedBgColor: Colors.white,
@@ -19,7 +19,7 @@ void main() {
       );
       expect(copied, isA<TSideBarThemeData>());
       expect(copied.selectedTextStyle?.color, Colors.green);
-      expect(copied.unSelectedColor, Colors.grey);
+      expect(copied.textStyle?.color, Colors.grey);
     });
 
     test('copyWith cover padding and backgrounds', () {
@@ -89,7 +89,7 @@ void main() {
       const fallback = TSideBarThemeData();
       const explicit = TSideBarThemeData(
         contentPadding: EdgeInsets.all(16),
-        unSelectedColor: Colors.grey,
+        textStyle: TextStyle(color: Colors.grey),
         selectedTextStyle: TextStyle(
           color: Colors.red,
           fontSize: 16,
@@ -101,14 +101,14 @@ void main() {
 
       final beforeSwitch = fallback.lerp(explicit, 0.25);
       expect(beforeSwitch.contentPadding, isNull);
-      expect(beforeSwitch.unSelectedColor, isNull);
+      expect(beforeSwitch.textStyle, isNull);
       expect(beforeSwitch.selectedTextStyle, isNull);
       expect(beforeSwitch.selectedBgColor, isNull);
       expect(beforeSwitch.unSelectedBgColor, isNull);
 
       final reverseBeforeSwitch = explicit.lerp(fallback, 0.25);
       expect(reverseBeforeSwitch.contentPadding, explicit.contentPadding);
-      expect(reverseBeforeSwitch.unSelectedColor, explicit.unSelectedColor);
+      expect(reverseBeforeSwitch.textStyle, explicit.textStyle);
       expect(reverseBeforeSwitch.selectedTextStyle, explicit.selectedTextStyle);
       expect(reverseBeforeSwitch.selectedBgColor, explicit.selectedBgColor);
       expect(reverseBeforeSwitch.unSelectedBgColor, explicit.unSelectedBgColor);

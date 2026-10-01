@@ -33,7 +33,7 @@ class MessageStylesExample extends StatelessWidget {
           label,
           key: ValueKey('message-status-label-$label'),
           font: context.tTheme.fontBodyMedium,
-          textColor: context.tTheme.textColorSecondary,
+          style: TextStyle(color: context.tTheme.textColorSecondary),
         ),
         const SizedBox(height: 16),
         child,

@@ -481,7 +481,6 @@ class _TCascaderState extends State<TCascader> {
         ? null
         : inherited;
     final textTheme = material.extension<TTextThemeData>();
-    final themeFont = textTheme?.font;
     final normal =
         TextStyle(
               color: context.tTheme.textColorPrimary,
@@ -496,15 +495,6 @@ class _TCascaderState extends State<TCascader> {
                   context.tTheme.textColorPrimary,
             )
             .merge(defaultStyle)
-            .merge(
-              themeFont == null
-                  ? null
-                  : TextStyle(
-                      fontSize: themeFont.size,
-                      height: themeFont.height,
-                      fontWeight: themeFont.fontWeight,
-                    ),
-            )
             .merge(textTheme?.textStyle)
             .merge(theme?.textStyle);
     final active = normal

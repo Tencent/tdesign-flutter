@@ -41,7 +41,14 @@ void main() {
       await tester.pumpWidget(wrapWithTheme(const TResult(title: '操作成功')));
       expect(find.text('操作成功'), findsOneWidget);
       final title = resultTextWidget(tester, '操作成功');
-      expect(title.textColor, token.textColorPrimary);
+      expect(
+        title
+            .getTextStyle(
+              tester.element(find.byKey(const ValueKey('result-title'))),
+            )
+            .color,
+        token.textColorPrimary,
+      );
       expect(title.font, token.fontTitleMedium);
     });
 
@@ -53,7 +60,14 @@ void main() {
       expect(find.text('标题'), findsOneWidget);
       expect(find.text('副标题描述'), findsOneWidget);
       final description = resultTextWidget(tester, '副标题描述');
-      expect(description.textColor, token.textColorSecondary);
+      expect(
+        description
+            .getTextStyle(
+              tester.element(find.byKey(const ValueKey('result-description'))),
+            )
+            .color,
+        token.textColorSecondary,
+      );
       expect(description.font, token.fontBodyMedium);
     });
 

@@ -3,7 +3,6 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 
 import '../../theme/basic.dart' show Font;
-import 't_tag_types.dart';
 
 /// 标签组件级 ThemeExtension
 ///
@@ -31,9 +30,6 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
   /// 自定义间距
   final EdgeInsets? padding;
 
-  /// 标签形状
-  final TTagShape? shape;
-
   /// 方形标签圆角，单位为逻辑像素；未设置时所有尺寸均读取全局
   /// `radiusSmall`（当前默认 3dp）。
   final double? squareBorderRadius;
@@ -57,7 +53,6 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     this.successLightColor,
     this.font,
     this.padding,
-    this.shape,
     this.squareBorderRadius,
     this.overflow,
     this.maxLines,
@@ -73,7 +68,6 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     Color? successLightColor,
     Font? font,
     EdgeInsets? padding,
-    TTagShape? shape,
     double? squareBorderRadius,
     TextOverflow? overflow,
     int? maxLines,
@@ -87,7 +81,6 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
       successLightColor: successLightColor ?? this.successLightColor,
       font: font ?? this.font,
       padding: padding ?? this.padding,
-      shape: shape ?? this.shape,
       squareBorderRadius: squareBorderRadius ?? this.squareBorderRadius,
       overflow: overflow ?? this.overflow,
       maxLines: maxLines ?? this.maxLines,
@@ -117,7 +110,6 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
       font: t < 0.5 ? font : other.font,
       padding:
           EdgeInsetsGeometry.lerp(padding, other.padding, t) as EdgeInsets?,
-      shape: t < 0.5 ? shape : other.shape,
       // null 表示继承当前子树的 radiusSmall，不能当作 0dp 参与插值。
       squareBorderRadius:
           squareBorderRadius == null || other.squareBorderRadius == null

@@ -151,13 +151,15 @@ class TLoading extends StatelessWidget {
   ) {
     Widget result = TText(
       text ?? '',
-      textColor:
-          theme.textColor ??
-          Theme.of(context).tExplicitColorScheme?.onSurface ??
-          context.tTheme.textColorPrimary,
-      fontWeight: FontWeight.w400,
       font: context.tTheme.fontBodyMedium ?? Font(size: 14, lineHeight: 22),
       textAlign: TextAlign.center,
+      style: TextStyle(
+        color:
+            theme.textColor ??
+            Theme.of(context).tExplicitColorScheme?.onSurface ??
+            context.tTheme.textColorPrimary,
+        fontWeight: FontWeight.w400,
+      ),
     );
     if (refreshWidget != null) {
       result = Row(

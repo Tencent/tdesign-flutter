@@ -49,7 +49,7 @@ void main() {
     expect(
       tester
           .widget<TText>(find.widgetWithText(TText, '拖拽该区域演示 顶部下拉刷新'))
-          .textColor,
+          .style?.color,
       TThemeData.defaultData().textColorDisabled,
     );
     expect(find.textContaining('刷新次数'), findsNothing);
@@ -107,7 +107,7 @@ void main() {
 
     expect(find.text('超时刷新次数：0'), findsOneWidget);
     expect(
-      tester.widget<TText>(find.widgetWithText(TText, '超时刷新次数：0')).textColor,
+      tester.widget<TText>(find.widgetWithText(TText, '超时刷新次数：0')).style?.color,
       TThemeData.defaultData().textColorSecondary,
     );
     final refresh = tester.widget<TPullDownRefresh>(
@@ -132,7 +132,7 @@ void main() {
 
     for (final text in ['下拉刷新', '自定义提示语刷新次数：0']) {
       expect(
-        tester.widget<TText>(find.widgetWithText(TText, text)).textColor,
+        tester.widget<TText>(find.widgetWithText(TText, text)).style?.color,
         TThemeData.defaultData().textColorSecondary,
       );
     }

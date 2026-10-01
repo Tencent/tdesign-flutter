@@ -60,9 +60,8 @@ void main() {
 
   testWidgets('组件 Theme 提供子树默认值，实例便利参数只覆盖当前文字', (tester) async {
     final theme = TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
-      TTextThemeData(
-        font: Font(size: 20, lineHeight: 28),
-        textStyle: const TextStyle(color: Colors.blue),
+      const TTextThemeData(
+        textStyle: TextStyle(fontSize: 20, height: 28 / 20, color: Colors.blue),
       ),
     );
     await tester.pumpWidget(
@@ -75,7 +74,7 @@ void main() {
               TText(
                 '单项',
                 font: Font(size: 24, lineHeight: 28),
-                textColor: Colors.red,
+                style: const TextStyle(color: Colors.red),
               ),
             ],
           ),
@@ -235,10 +234,10 @@ void main() {
   });
 
   test('裸 TTextSpan 保持空样式', () {
-    final span = TTextSpan(
+    const span = TTextSpan(
       text: '继承',
       semanticsIdentifier: 'span-id',
-      locale: const Locale('zh', 'CN'),
+      locale: Locale('zh', 'CN'),
       spellOut: false,
     );
     expect(span.style, isNull);
@@ -248,13 +247,16 @@ void main() {
   });
 
   testWidgets('TText.rich 根样式与 TTextSpan 局部样式组合', (tester) async {
-    final child = TTextSpan(text: '子文本', textColor: Colors.red);
+    const child = TTextSpan(
+      text: '子文本',
+      style: TextStyle(color: Colors.red),
+    );
     await tester.pumpWidget(
       wrap(
         TText.rich(
-          TextSpan(children: [child]),
+          const TextSpan(children: [child]),
           font: Font(size: 24, lineHeight: 32),
-          textColor: Colors.blue,
+          style: const TextStyle(color: Colors.blue),
         ),
       ),
     );
@@ -266,10 +268,10 @@ void main() {
   testWidgets('getRawText 复用全部原生参数和样式解析', (tester) async {
     const source = TText(
       '原生 Text',
-      textColor: Colors.teal,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       semanticsIdentifier: 'raw-id',
+      style: TextStyle(color: Colors.teal),
     );
     await tester.pumpWidget(
       wrap(Builder(builder: (context) => source.getRawText(context: context))),

@@ -76,7 +76,7 @@ void main() {
       ]),
     );
 
-    final markContext = tester.element(
+    final markTag = tester.widget<TTag>(
       find
           .descendant(
             of: find.byType(CircleFillTagExample),
@@ -84,10 +84,7 @@ void main() {
           )
           .last,
     );
-    expect(
-      Theme.of(markContext).extension<TTagThemeData>()?.shape,
-      TTagShape.mark,
-    );
+    expect(markTag.shape, TTagShape.mark);
     await disposeDemoPage(tester);
   }, tags: 'demo');
 

@@ -12,7 +12,7 @@ void main() {
       const TNoticeBarThemeData(height: 40),
       const TPopoverThemeData(),
       const TPopupThemeData(panelRadius: 8),
-      const TSwipeCellThemeData(actionIconSize: 20),
+      const TSwipeCellThemeData(actionPadding: EdgeInsets.all(8)),
       const TToastThemeData(maxWidth: 300),
     ];
 
@@ -65,9 +65,9 @@ void main() {
     );
     expect(
       const TSwipeCellThemeData()
-          .merge(const TSwipeCellThemeData(actionSpacing: 12))
-          .actionSpacing,
-      12,
+          .merge(const TSwipeCellThemeData(actionPadding: EdgeInsets.all(12)))
+          .actionPadding,
+      const EdgeInsets.all(12),
     );
     expect(
       const TToastThemeData(

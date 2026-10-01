@@ -10,12 +10,8 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | textSpan | InlineSpan | - | 富文本内容。 |
-| font | Font? | - | TDesign 字体 Token，包含字号、行高和字重。 |
-| fontWeight | FontWeight? | - | 字体粗细。 |
-| fontFamily | FontFamily? | - | 字体族及可选资源 package。 |
-| textColor | Color? | - | 文字颜色。 |
-| isTextThrough | bool? | - | 是否显示删除线。为 null 时继承 Theme 或父级样式。 |
-| lineThroughColor | Color? | - | 删除线颜色。 |
+| font | Font? | - | TDesign 字体 Token 预设，包含字号、行高和字重；`style` 的显式字段优先。 |
+| style | TextStyle? | - | 当前实例的完整文字样式；仅覆盖显式字段，优先于 `font` 和子树组件 Theme。 |
 | strutStyle | StrutStyle? | - | 透传至 `Text.strutStyle`。 |
 | textAlign | TextAlign? | - | 透传至 `Text.textAlign`。 |
 | textDirection | TextDirection? | - | 透传至 `Text.textDirection`。 |
@@ -36,12 +32,8 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | data | String | - | 文本内容。 |
-| font | Font? | - | TDesign 字体 Token，包含字号、行高和字重。 |
-| fontFamily | FontFamily? | - | 字体族及可选资源 package。 |
-| fontWeight | FontWeight? | - | 字体粗细。 |
-| isTextThrough | bool? | - | 是否显示删除线。为 null 时继承 Theme 或父级样式。 |
+| font | Font? | - | TDesign 字体 Token 预设，包含字号、行高和字重；`style` 的显式字段优先。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| lineThroughColor | Color? | - | 删除线颜色。 |
 | locale | Locale? | - | 透传至 `Text.locale`。 |
 | maxLines | int? | - | 透传至 `Text.maxLines`。 |
 | overflow | TextOverflow? | - | 透传至 `Text.overflow`。 |
@@ -50,8 +42,8 @@
 | semanticsLabel | String? | - | 透传至 `Text.semanticsLabel`。 |
 | softWrap | bool? | - | 透传至 `Text.softWrap`。 |
 | strutStyle | StrutStyle? | - | 透传至 `Text.strutStyle`。 |
+| style | TextStyle? | - | 当前实例的完整文字样式；仅覆盖显式字段，优先于 `font` 和子树组件 Theme。 |
 | textAlign | TextAlign? | - | 透传至 `Text.textAlign`。 |
-| textColor | Color? | - | 文字颜色。 |
 | textDirection | TextDirection? | - | 透传至 `Text.textDirection`。 |
 | textHeightBehavior | ui.TextHeightBehavior? | - | 透传至 `Text.textHeightBehavior`。 |
 | textScaler | TextScaler? | - | Flutter 原生文字缩放器；为 null 时继承 MediaQuery。 |
@@ -70,11 +62,6 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | children | List<InlineSpan>? | - | 透传至 `TextSpan.children`。 |
-| font | Font? | - | TDesign 字体 Token，包含字号、行高和字重。 |
-| fontFamily | FontFamily? | - | 字体族及可选资源 package。 |
-| fontWeight | FontWeight? | - | 字体粗细。 |
-| isTextThrough | bool? | - | 是否显示删除线。为 null 时继承父 Span。 |
-| lineThroughColor | Color? | - | 删除线颜色。 |
 | locale | Locale? | - | 透传至 `TextSpan.locale`。 |
 | mouseCursor | MouseCursor? | - | 透传至 `TextSpan.mouseCursor`。 |
 | onEnter | PointerEnterEventListener? | - | 透传至 `TextSpan.onEnter`。 |
@@ -83,9 +70,8 @@
 | semanticsIdentifier | String? | - | 透传至 `TextSpan.semanticsIdentifier`。 |
 | semanticsLabel | String? | - | 透传至 `TextSpan.semanticsLabel`。 |
 | spellOut | bool? | - | 透传至 `TextSpan.spellOut`。 |
-| style | TextStyle? | - | Flutter 原生文字样式，具有最高优先级。 |
+| style | TextStyle? | - | Span 的唯一文字样式入口；未设置的字段继承父 Span。 |
 | text | String? | - | 透传至 `TextSpan.text`。 |
-| textColor | Color? | - | 文字颜色。 |
 
 
 ### TTextThemeData
@@ -93,10 +79,9 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| font | Font? | - | 子树的 TDesign 字体默认值；`textStyle` 的同名字段优先。 |
 | strutStyle | StrutStyle? | - | 子树的段落支柱样式默认值；实例 `TText.strutStyle` 优先。 |
 | textHeightBehavior | ui.TextHeightBehavior? | - | 子树的文字高度行为默认值；实例 `TText.textHeightBehavior` 优先。 |
-| textStyle | TextStyle? | - | 子树的完整文字样式；TText 实例不再提供同名 style 参数。 |
+| textStyle | TextStyle? | - | 子树的完整文字样式；字号、行高和字重也由本字段统一设置。 TText 实例的显式字体参数仍优先于本默认值。 |
 | textWidthBasis | TextWidthBasis? | - | 子树的文字宽度计算默认值；实例 `TText.textWidthBasis` 优先。 |
 
 

@@ -2,26 +2,20 @@ import 'dart:ui' as ui show TextHeightBehavior;
 
 import 'package:flutter/material.dart';
 
-import '../../theme/basic.dart';
-
 /// TText 子树的组件默认值。
 ///
 /// 仅在对应实例参数未指定时生效；实例字体便利参数和段落参数
-/// 优先于这里的默认值。Flutter [DefaultTextStyle] 可提供通用文字继承，
-/// 本主题额外保留 TDesign [Font] 和 [StrutStyle] 等组件默认能力。
+/// 优先于这里的默认值。Flutter [DefaultTextStyle] 可提供通用文字继承。
 class TTextThemeData extends ThemeExtension<TTextThemeData> {
   const TTextThemeData({
-    this.font,
     this.textStyle,
     this.strutStyle,
     this.textWidthBasis,
     this.textHeightBehavior,
   });
 
-  /// 子树的 TDesign 字体默认值；[textStyle] 的同名字段优先。
-  final Font? font;
-
-  /// 子树的完整文字样式；TText 实例不再提供同名 style 参数。
+  /// 子树的完整文字样式；字号、行高和字重也由本字段统一设置。
+  /// TText 实例的显式字体参数仍优先于本默认值。
   final TextStyle? textStyle;
 
   /// 子树的段落支柱样式默认值；实例 `TText.strutStyle` 优先。
@@ -35,14 +29,12 @@ class TTextThemeData extends ThemeExtension<TTextThemeData> {
 
   @override
   TTextThemeData copyWith({
-    Font? font,
     TextStyle? textStyle,
     StrutStyle? strutStyle,
     TextWidthBasis? textWidthBasis,
     ui.TextHeightBehavior? textHeightBehavior,
   }) {
     return TTextThemeData(
-      font: font ?? this.font,
       textStyle: textStyle ?? this.textStyle,
       strutStyle: strutStyle ?? this.strutStyle,
       textWidthBasis: textWidthBasis ?? this.textWidthBasis,
@@ -56,7 +48,6 @@ class TTextThemeData extends ThemeExtension<TTextThemeData> {
       return this;
     }
     return TTextThemeData(
-      font: t < 0.5 ? font : other.font,
       textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
       strutStyle: t < 0.5 ? strutStyle : other.strutStyle,
       textWidthBasis: t < 0.5 ? textWidthBasis : other.textWidthBasis,
