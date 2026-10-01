@@ -70,6 +70,7 @@ class TSwipeCellAction extends StatelessWidget {
 
   /// 自定义操作项。不可同时传入内置背景、图文或图文样式字段；
   /// 其实际布局宽度会直接用于面板宽度，无需额外指定尺寸。
+  /// [onPressed] 仍负责点击回调，随后会自动关闭操作面板。
   final WidgetBuilder? builder;
 
   TSwipeCellThemeData _effectiveTheme(BuildContext context) {

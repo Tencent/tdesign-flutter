@@ -45,7 +45,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 当前操作项背景颜色。 |
-| builder | WidgetBuilder? | - | 自定义操作项。不可同时传入内置背景、图文或图文样式字段； 其实际布局宽度会直接用于面板宽度，无需额外指定尺寸。 |
+| builder | WidgetBuilder? | - | 自定义操作项。不可同时传入内置背景、图文或图文样式字段； 其实际布局宽度会直接用于面板宽度，无需额外指定尺寸。 `onPressed` 仍负责点击回调，随后会自动关闭操作面板。 |
 | icon | IconData? | - | 图标。 |
 | iconColor | Color? | - | 图标颜色。 |
 | iconLabelSpacing | double? | - | 图标和标签之间的水平间距，默认 8。 |
