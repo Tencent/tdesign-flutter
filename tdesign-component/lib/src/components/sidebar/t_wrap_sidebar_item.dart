@@ -7,6 +7,7 @@ import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
 import '../badge/t_badge_internal.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_sidebar_theme_data.dart';
 
 /// 侧边栏单项的内部渲染组件。
@@ -192,7 +193,7 @@ class TWrapSideBarItem extends StatelessWidget {
     final effectiveStyle = selected
         ? selectedTextStyle ?? textStyle
         : textStyle;
-    return TText(
+    return TTextStyled(
       label,
       font: context.tTheme.fontBodyLarge,
       style: effectiveStyle,

@@ -7,7 +7,7 @@
 3. 对受影响的小程序组件变量，记录 CSS `var()` 的回退表达式、明暗及状态分支，再检查 Flutter 是否读取正确的全局 Token、组件常量或必要 Theme 字段。优先审查所有 `@radius-circle` 消费路径：Avatar、BackTop、CountDown/TimeCounter、Skeleton，并验证正方形与非正方形边界；保留已确认的 Flutter 全局 `radiusCircle = 9999dp` API 语义，不把默认例外伪装成 CSS `50%` 同值。
 4. 改动后先验证聚焦功能与覆盖优先级，再在固定 Linux 3.32.0 环境无更新复跑相关 Golden。Golden 按来源做消融：全局 Token 改值、组件 Token 缺失/错误、`radiusCircle` 错用、字体/阴影跨引擎、旧基线或 Demo 布局，逐张给出处置建议。正确 Token 值导致的旧基线差异与组件缺陷分别归因。
 5. TimeCounter 对应小程序 CountDown：移除组件 Theme 的 `defaultSize/defaultVariant`，保留实例选择；为确有组件变量的默认/块文字色、块背景色及方/圆块圆角提供具体 Theme 值。圆块在默认正方形尺寸下使用全局 `radiusCircle`，自定义该 Token 时必须从固定的 `BoxShape.circle` 转成对应 dp 圆角，而不忽略覆盖。
-6. 按最新单入口规则修订前期的 Text/Button/Input 多层样式方案：`TText.style` 承担 TextStyle 能表达的绘制值，`TTextThemeData` 只留不被 TextStyle 表达的段落默认值；`TInput.style` 承担输入文字样式；Button 的实例 `ButtonStyle` 承担可表达的视觉字段，Theme 只留独有视觉配置。Text 尚待跨仓调用点迁移，不能提前视作实施完成。
+6. 按最新单入口规则修订前期的 Text/Button/Input 多层样式方案：`TTextThemeData.textStyle` 承担子树级完整文字样式，移除公开 `TText.style`；组合组件逐项动态样式由内部解析后交给原生 Text。`TInput.style` 承担输入文字样式；Button 的实例 `ButtonStyle` 承担可表达的视觉字段，Theme 只留独有视觉配置。外部调用点与双版本回归仍须核验，不能提前视作实施完成。
 
 ## 影响范围
 

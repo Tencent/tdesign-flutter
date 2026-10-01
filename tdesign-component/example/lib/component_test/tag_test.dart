@@ -43,7 +43,7 @@ class TestPage extends StatelessWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TText(
+        Text(
           '不带宽度测试',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
@@ -70,7 +70,7 @@ class TestPage extends StatelessWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TText(
+        Text(
           '基础固定宽度测试',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
@@ -97,7 +97,7 @@ class TestPage extends StatelessWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TText(
+        Text(
           '边界情况测试',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),

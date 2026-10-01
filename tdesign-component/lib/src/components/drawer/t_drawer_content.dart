@@ -236,7 +236,7 @@ class _DrawerMenuItemState extends State<_DrawerMenuItem> {
                 widget.item.content ??
                 (widget.item.title == null
                     ? const SizedBox.shrink()
-                    : TText(
+                    : TTextStyled(
                         widget.item.title!,
                         style: widget.textStyle,
                         maxLines: 1,

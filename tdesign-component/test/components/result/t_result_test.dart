@@ -60,13 +60,16 @@ void main() {
     testWidgets('title 为空时不渲染标题', (tester) async {
       await tester.pumpWidget(wrapWithTheme(const TResult()));
       // 默认 title='' 不应渲染 Text（title.isEmpty 跳过）
-      expect(find.byType(TText), findsNothing);
+      expect(find.byWidgetPredicate((widget) => widget is TText), findsNothing);
     });
 
     testWidgets('description 为 null 时不渲染', (tester) async {
       await tester.pumpWidget(wrapWithTheme(const TResult(title: '仅有标题')));
       expect(find.text('仅有标题'), findsOneWidget);
-      expect(find.byType(TText), findsOneWidget);
+      expect(
+        find.byWidgetPredicate((widget) => widget is TText),
+        findsOneWidget,
+      );
     });
   });
 
@@ -139,8 +142,9 @@ void main() {
         ),
       );
       final title = resultTextWidget(tester, '主题样式');
-      expect(title.style?.fontSize, 24);
-      expect(title.style?.color, Colors.red);
+      final rendered = tester.widget<Text>(find.text('主题样式'));
+      expect(rendered.style?.fontSize, 24);
+      expect(rendered.style?.color, Colors.red);
       expect(title.font, TThemeData.defaultData().fontTitleMedium);
     });
 
@@ -162,8 +166,9 @@ void main() {
 
       expect(tester.widget<Icon>(find.byIcon(TIcons.info_circle)).size, 64);
       final description = resultTextWidget(tester, '描述样式');
-      expect(description.style?.fontSize, 13);
-      expect(description.style?.color, Colors.purple);
+      final rendered = tester.widget<Text>(find.text('描述样式'));
+      expect(rendered.style?.fontSize, 13);
+      expect(rendered.style?.color, Colors.purple);
       expect(description.font, TThemeData.defaultData().fontBodyMedium);
     });
 
@@ -271,7 +276,10 @@ void main() {
       );
       expect(find.text('标题'), findsOneWidget);
       // 空字符串 description 不应渲染额外的 TText
-      expect(find.byType(TText), findsOneWidget);
+      expect(
+        find.byWidgetPredicate((widget) => widget is TText),
+        findsOneWidget,
+      );
     });
 
     testWidgets('所有参数默认值', (tester) async {

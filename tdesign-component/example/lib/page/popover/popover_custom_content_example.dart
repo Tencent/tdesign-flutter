@@ -22,6 +22,9 @@ class _PopoverCustomContentExampleState
     }
 
     final textStyle = TextStyle(
+      fontSize: context.tTheme.fontBodyMedium?.size,
+      height: context.tTheme.fontBodyMedium?.height,
+      fontWeight: context.tTheme.fontBodyMedium?.fontWeight,
       color: theme == TPopoverColorPreset.light
           ? context.tTheme.fontGray1
           : context.tTheme.fontWhite1,
@@ -47,7 +50,7 @@ class _PopoverCustomContentExampleState
                   vertical: 12,
                   horizontal: 24,
                 ),
-                child: TText('选项1', style: textStyle),
+                child: Text('选项1', style: textStyle),
               ),
             ),
             Container(height: 1, color: dividerColor),
@@ -60,7 +63,7 @@ class _PopoverCustomContentExampleState
                   vertical: 12,
                   horizontal: 24,
                 ),
-                child: TText('选项2', style: textStyle),
+                child: Text('选项2', style: textStyle),
               ),
             ),
             Container(height: 1, color: dividerColor),
@@ -73,7 +76,7 @@ class _PopoverCustomContentExampleState
                   vertical: 12,
                   horizontal: 24,
                 ),
-                child: TText('选项3', style: textStyle),
+                child: Text('选项3', style: textStyle),
               ),
             ),
           ],

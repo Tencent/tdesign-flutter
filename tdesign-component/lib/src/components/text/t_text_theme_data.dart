@@ -6,7 +6,7 @@ import '../../theme/basic.dart';
 
 /// TText 子树的组件默认值。
 ///
-/// 仅在对应实例参数未指定时生效；实例 [TextStyle]、字体及段落参数
+/// 仅在对应实例参数未指定时生效；实例字体便利参数和段落参数
 /// 优先于这里的默认值。Flutter [DefaultTextStyle] 可提供通用文字继承，
 /// 本主题额外保留 TDesign [Font] 和 [StrutStyle] 等组件默认能力。
 class TTextThemeData extends ThemeExtension<TTextThemeData> {
@@ -21,7 +21,7 @@ class TTextThemeData extends ThemeExtension<TTextThemeData> {
   /// 子树的 TDesign 字体默认值；[textStyle] 的同名字段优先。
   final Font? font;
 
-  /// 子树的文字样式默认值；实例 `TText.style` 优先。
+  /// 子树的完整文字样式；TText 实例不再提供同名 style 参数。
   final TextStyle? textStyle;
 
   /// 子树的段落支柱样式默认值；实例 `TText.strutStyle` 优先。

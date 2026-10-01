@@ -14,6 +14,7 @@ import '../badge/t_badge_internal.dart';
 import '../badge/t_badge_layout.dart';
 import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_styled.dart';
 import 't_tab_bar_theme_data.dart';
 
 /// 展开项 向下箭头宽
@@ -953,7 +954,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     Font font, {
     bool singleLine = false,
   }) {
-    return TText(
+    return TTextStyled(
       config.tabText ?? '',
       maxLines: singleLine ? 1 : null,
       overflow: singleLine ? TextOverflow.ellipsis : null,
@@ -1139,7 +1140,7 @@ class TTabBarMenuItem extends StatelessWidget {
       alignment: alignment,
       child:
           itemWidget ??
-          TText(
+          TTextStyled(
             value,
             style: TTextResolve.resolve(
               context: context,

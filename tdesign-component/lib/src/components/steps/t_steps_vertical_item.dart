@@ -6,6 +6,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_styled.dart';
 import 't_steps.dart';
 import 't_steps_mode.dart';
 
@@ -225,7 +226,7 @@ class TStepsVerticalItem extends StatelessWidget {
                             child:
                                 data.customTitle ??
                                 (data.title != null && data.title!.isNotEmpty
-                                    ? TText(
+                                    ? TTextStyled(
                                         data.title!,
                                         style: TTextResolve.resolve(
                                           context: context,
@@ -297,7 +298,7 @@ class TStepsVerticalItem extends StatelessWidget {
         if (data.customContent != null)
           data.customContent!
         else if (data.content != null && data.content!.isNotEmpty)
-          TText(
+          TTextStyled(
             data.content!,
             style: TTextResolve.resolve(
               context: context,

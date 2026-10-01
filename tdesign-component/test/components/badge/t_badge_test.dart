@@ -232,8 +232,8 @@ void main() {
     testWidgets('文字标签使用 10/16 Mark Token 并在 16px 行盒内居中', (tester) async {
       await tester.pumpWidget(app(const TBadge(label: '8')));
 
-      final labelFinder = find.widgetWithText(TText, '8');
-      final label = tester.widget<TText>(labelFinder);
+      final labelFinder = find.text('8');
+      final label = tester.widget<Text>(labelFinder);
       expect(label.style?.fontSize, token.fontMarkExtraSmall?.size);
       expect(label.style?.height, token.fontMarkExtraSmall?.height);
       expect(label.style?.fontWeight, token.fontMarkExtraSmall?.fontWeight);
@@ -258,7 +258,7 @@ void main() {
         ),
       );
 
-      final label = tester.widget<TText>(find.widgetWithText(TText, '12'));
+      final label = tester.widget<Text>(find.text('12'));
       expect(badgeOf(tester).textStyle, textStyle);
       expect(
         label.style?.leadingDistribution,
@@ -294,10 +294,7 @@ void main() {
         (key99Plus, '99+'),
       ]) {
         final badge = find.byKey(key);
-        final label = find.descendant(
-          of: badge,
-          matching: find.widgetWithText(TText, text),
-        );
+        final label = find.descendant(of: badge, matching: find.text(text));
         expect(
           (tester.getCenter(label).dy - tester.getCenter(badge).dy).abs(),
           lessThan(0.01),
@@ -351,7 +348,7 @@ void main() {
 
       expect(badgeOf(tester).largeSize, 20);
       expect(tester.getSize(find.byType(Badge)).height, 20);
-      final label = tester.widget<TText>(find.widgetWithText(TText, '8'));
+      final label = tester.widget<Text>(find.text('8'));
       expect(label.style?.fontSize, token.fontMarkSmall?.size);
       expect(label.style?.height, token.fontMarkSmall?.height);
       expect(
@@ -886,7 +883,7 @@ void main() {
       await tester.pumpWidget(app(const TBadge(label: '16'), theme: theme));
 
       final badge = badgeOf(tester);
-      final label = find.widgetWithText(TText, '16');
+      final label = find.text('16');
       expect(badge.textStyle?.fontSize, token.fontMarkExtraSmall?.size);
       expect(badge.textStyle?.height, token.fontMarkExtraSmall?.height);
       expect(

@@ -40,7 +40,7 @@ class TestPage extends StatelessWidget {
         customContent: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TText(
+            Text(
               '今天是星期六，下面是拍摄的照片',
               style: TextStyle(
                 fontWeight: FontWeight.w400,

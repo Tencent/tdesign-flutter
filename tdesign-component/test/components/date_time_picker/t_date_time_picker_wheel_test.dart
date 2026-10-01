@@ -66,7 +66,7 @@ void main() {
       expect(tester.getSize(_wheelHighlightFinder()), const Size(328, 40));
 
       final selectedText =
-          tester.widget<TText>(_pickerTextFinder('2024年').first);
+          tester.widget<Text>(find.text('2024年').first);
       expect(selectedText.style?.color, token.textColorPrimary);
       expect(selectedText.style?.fontSize, token.fontBodyLarge?.size);
       expect(selectedText.style?.fontWeight, FontWeight.w600);
@@ -291,12 +291,6 @@ void main() {
       handle.dispose();
     });
   });
-}
-
-Finder _pickerTextFinder(String data) {
-  return find.byWidgetPredicate(
-    (widget) => widget is TText && widget.data == data,
-  );
 }
 
 Finder _wheelHighlightFinder() {

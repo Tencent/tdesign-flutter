@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../util/context_extension.dart';
 import '../../util/iterable_ext.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_calendar_cell.dart';
 import 't_calendar_theme_data.dart';
 
@@ -341,7 +342,7 @@ class _TCalendarBodyState extends State<TCalendarBody> {
             SizedBox(
               height: widget.monthTitleHeight,
               child: widget.monthTitleBuilder?.call(context, monthDate) ??
-                  TText(monthDateText, style: widget.monthTitleStyle),
+                  TTextStyled(monthDateText, style: widget.monthTitleStyle),
             ),
             ...List.generate(
               (monthData.length / 7).ceil(),

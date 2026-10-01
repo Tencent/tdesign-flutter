@@ -661,7 +661,7 @@ void main() {
         isTrue,
       );
       expect(
-        tester.widget<TText>(find.byType(TText)).style?.color,
+        tester.widget<Text>(find.byType(Text).first).style?.color,
         token.whiteColor1,
       );
     });
@@ -707,10 +707,7 @@ void main() {
         tester.widget<Icon>(find.byIcon(TIcons.backtop)).color,
         Colors.green,
       );
-      expect(
-        tester.widget<TText>(find.byType(TText)).style?.color,
-        Colors.green,
-      );
+      expect(tester.widget<Text>(find.text('顶部')).style?.color, Colors.green);
     });
 
     testWidgets('半圆形 + showText + Theme 注入', (tester) async {

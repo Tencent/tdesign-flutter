@@ -183,7 +183,7 @@ void main() {
           Builder(
             builder: (context) => TCell(
               title: const TText('Select'),
-              trailing: TText(
+              trailing: Text(
                 value,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),

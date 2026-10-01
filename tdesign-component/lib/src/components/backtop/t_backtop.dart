@@ -7,6 +7,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_backtop_theme_data.dart';
 
 /// 返回顶部组件。
@@ -233,7 +234,7 @@ class _TBackTopState extends State<TBackTop> {
               color: style.contentColor,
             ),
             if (widget.showText)
-              TText(
+              TTextStyled(
                 context.resource.top,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -279,7 +280,7 @@ class _TBackTopState extends State<TBackTop> {
             ),
             if (widget.showText) ...[
               SizedBox(width: style.contentGap),
-              TText(
+              TTextStyled(
                 '${context.resource.back}\n${context.resource.top}',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

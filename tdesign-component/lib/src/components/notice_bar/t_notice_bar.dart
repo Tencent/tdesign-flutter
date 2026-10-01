@@ -9,6 +9,7 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_notice_bar_theme_data.dart';
 import 't_notice_bar_types.dart';
 
@@ -334,7 +335,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
         height: _getTextHeight(),
         child: Align(
           alignment: Alignment.centerLeft,
-          child: TText(
+          child: TTextStyled(
             displayText,
             style: _resolved.textStyle,
             maxLines: widget.marquee ? 1 : widget.maxLines,
@@ -393,7 +394,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
                     height: _effectiveHeight,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: TText(
+                      child: TTextStyled(
                         content[i],
                         style: _resolved.textStyle,
                         maxLines: 1,
@@ -406,7 +407,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
                   height: _effectiveHeight,
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: TText(
+                    child: TTextStyled(
                       content[0],
                       style: _resolved.textStyle,
                       maxLines: 1,

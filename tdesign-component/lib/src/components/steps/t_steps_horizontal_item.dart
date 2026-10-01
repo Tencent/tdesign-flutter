@@ -6,6 +6,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_styled.dart';
 import 't_steps.dart';
 import 't_steps_mode.dart';
 
@@ -242,7 +243,7 @@ class TStepsHorizontalItem extends StatelessWidget {
       alignment: Alignment.center,
       child:
           data.customTitle ??
-          TText(
+          TTextStyled(
             title,
             style: TTextResolve.resolve(
               context: context,
@@ -268,7 +269,7 @@ class TStepsHorizontalItem extends StatelessWidget {
       alignment: Alignment.center,
       child:
           data.customContent ??
-          TText(
+          TTextStyled(
             data.content ?? '',
             style: TTextResolve.resolve(
               context: context,

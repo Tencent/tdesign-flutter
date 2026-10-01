@@ -25,7 +25,8 @@ void main() {
           ),
         )
         .first;
-    expect(tester.widget<TText>(label).style?.fontFamily, 'Roboto');
+    final rendered = find.descendant(of: label, matching: find.byType(Text));
+    expect(tester.widget<Text>(rendered).style?.fontFamily, 'Roboto');
     await disposeDemoPage(tester);
   });
 

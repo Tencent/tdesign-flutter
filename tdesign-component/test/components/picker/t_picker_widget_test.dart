@@ -142,7 +142,14 @@ void main() {
         ),
       ),
     );
-    final labels = tester.widgetList<TText>(find.byType(TText)).toList();
+    final labels = tester
+        .widgetList<Text>(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget is Text && widget.data?.startsWith('item-') == true,
+          ),
+        )
+        .toList();
     expect(labels, hasLength(5));
     expect(labels.map((label) => label.style!.fontSize), everyElement(19));
     expect(labels[2].style!.fontWeight, FontWeight.w800);
@@ -174,8 +181,8 @@ void main() {
         ),
       ),
     );
-    final label = find.byType(TText);
-    final style = tester.widget<TText>(label).style!;
+    final label = find.text('选项');
+    final style = tester.widget<Text>(label).style!;
     expect(style.fontSize, 16);
     expect(style.height, 1.5);
     expect(style.fontWeight, FontWeight.w600);

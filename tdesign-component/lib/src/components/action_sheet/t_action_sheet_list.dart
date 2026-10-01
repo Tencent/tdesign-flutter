@@ -12,6 +12,7 @@ import '../badge/t_badge_internal.dart';
 import '../badge/t_badge_layout.dart';
 import '../badge/t_badge_resolved_style.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_item_widget.dart';
 import 't_action_sheet_theme_data.dart';
@@ -263,7 +264,7 @@ class TActionSheetList<T> extends StatelessWidget {
   }
 
   Widget _buildLabel(BuildContext context, TActionSheetItem<T> item) {
-    final label = TText(
+    final label = TTextStyled(
       item.label,
       font: context.tTheme.fontBodyLarge,
       textColor: item.disabled

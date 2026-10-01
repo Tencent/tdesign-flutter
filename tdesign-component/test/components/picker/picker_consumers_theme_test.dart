@@ -218,10 +218,10 @@ void main() {
               ),
             ),
           );
-          final texts = tester.widgetList<TText>(
+          final texts = tester.widgetList<Text>(
             find.descendant(
               of: find.byType(MultiWheelLayout),
-              matching: find.byType(TText),
+              matching: find.byType(Text),
             ),
           );
           expect(texts, isNotEmpty);

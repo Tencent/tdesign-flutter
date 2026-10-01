@@ -13,6 +13,7 @@ import '../../util/t_toolbar_pressable.dart';
 import '../icon/t_icon.dart';
 import '../loading/t_circle_indicator.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_toast_theme_data.dart';
 
 /// Toast 文案排列方向
@@ -651,7 +652,7 @@ class _TIconTextToast extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Flexible(
-              child: TText(
+              child: TTextStyled(
                 text ?? '',
                 font: toastTheme.textStyle != null
                     ? null
@@ -694,7 +695,7 @@ class _TIconTextToast extends StatelessWidget {
               color: toastTheme.iconColor ?? theme.textColorAnti,
             ),
             const SizedBox(height: 8),
-            TText(
+            TTextStyled(
               text ?? '',
               font: toastTheme.textStyle != null ? null : theme.fontBodyMedium,
               style: toastTheme.textStyle,
@@ -757,7 +758,7 @@ class _TToastLoading extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             customWidget ??
-                TText(
+                TTextStyled(
                   text ?? context.resource.loadingWithPoint,
                   font: toastTheme.textStyle != null
                       ? null
@@ -842,7 +843,7 @@ class _TTextToast extends StatelessWidget {
         ),
         child:
             customWidget ??
-            TText(
+            TTextStyled(
               text ?? '',
               font: toastTheme.textStyle != null ? null : theme.fontBodyMedium,
               style: toastTheme.textStyle,

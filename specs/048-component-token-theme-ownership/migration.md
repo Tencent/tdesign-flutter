@@ -32,6 +32,18 @@
 | `TTabsBar.decoration` | `TTabsBarThemeData.backgroundColor/dividerColor/dividerHeight` | 容器背景和底边线由组件 Theme 控制；仅定制一个 TabsBar 时包裹局部 Theme。 |
 | `TTagThemeData.fontWeight` | `TTagThemeData.font` | 字重跟随完整字体 Token；不再与其分别配置。 |
 | `TSideBarThemeData.selectedColor` | `TSideBarThemeData.selectedTextStyle: TextStyle(color: ...)` | 选中文字、图标与指示线继续共用这一颜色；不设 `color` 时仍回退全局品牌色。已有 `selectedTextStyle` 时将颜色并入该对象，不再同时配置两处。 |
+| `TText.style` | `TTextThemeData.textStyle`；仅一次性局部绘制可用 Flutter 原生 `Text(style: ...)` | 完整文字样式不再同时由实例和组件 Theme 控制；子树级设置通过局部 `Theme` 注入。`TTextSpan.style` 属于富文本 Span 层，仍保留。 |
+
+仅定制一个 `TText` 时，可将 Theme 限定在该实例的子树，不会影响相邻文本：
+
+```dart
+Theme(
+  data: Theme.of(context).mergeExtension(
+    const TTextThemeData(textStyle: TextStyle(color: Colors.red)),
+  ),
+  child: const TText('文本'),
+)
+```
 
 Button 样式的迁移形态：
 
@@ -46,13 +58,13 @@ TButton(
 )
 ```
 
-`colorPreset` 只选择内置预设；具体描边、前景和背景由实例 `style` 控制。`TButtonThemeData` 仅保留 `iconTextSpacing` 和 `gradient` 这两个 `ButtonStyle` 无法等价表达的字段。`TTextThemeData` 当前仍保留旧的字体与文字样式入口；Text 单入口迁移尚未完成。
+`colorPreset` 只选择内置预设；具体描边、前景和背景由实例 `style` 控制。`TButtonThemeData` 仅保留 `iconTextSpacing` 和 `gradient` 这两个 `ButtonStyle` 无法等价表达的字段。`TText` 的完整文字样式现由组件 Theme 控制；字体便利参数是否进一步收敛须单独核定。
 
 ## 组件内置配色预设改名
 
 `TButton`、`TTag`、`TSelectTag`、`TLink`、`TBackTop`、`TPopoverAnchor`、`TPopover.showPopover` 和 `TDialogAction` 的 `colorScheme:` 改为 `colorPreset:`；对应枚举 `TButton/TTag/TLink/TBackTop/TPopoverColorScheme` 改为 `TButton/TTag/TLink/TBackTop/TPopoverColorPreset`。这是源码级 breaking change，不保留同义别名。枚举成员和默认映射不变；Material 的 `ThemeData.colorScheme: ColorScheme(...)` 及其优先级不变。`variant` 仍控制填充/描边等绘制处理，`colorPreset` 仅选择内置配色，`status` 仍表达业务状态。迁移调用时须同时更改命名参数与枚举类型，不能将 Material `ColorScheme` 实例传给 `colorPreset`。
 
-`TText` 未显式指定字体时的正文回退从 `fontBodyLarge`（16dp/24dp）改为小程序 `fontBodyMedium`（14dp/22dp）。依赖旧默认字号的调用方应在实例 `font`/`style` 或子树 `TTextThemeData.font` 中显式指定 16dp/24dp；这是默认行为变化，即使构造签名未变也须按 breaking change 发布。
+`TText` 未显式指定字体时的正文回退从 `fontBodyLarge`（16dp/24dp）改为小程序 `fontBodyMedium`（14dp/22dp）。依赖旧默认字号的调用方应在实例 `font` 或子树 `TTextThemeData.font/textStyle` 中显式指定 16dp/24dp；这是默认行为变化，即使构造签名未变也须按 breaking change 发布。
 
 `TTag` 的浅色 warning/danger/success 现分别跟随 `warningColor1`、`errorColor1`、`successColor1`；仅覆盖 `warningColorLight`、`errorColorLight`、`successColorLight` 的调用方不再改变这些 Tag。普通 outline 改为读取 `bgColorContainer` 背景，默认描边读取 `bgColorComponent`；方角由组件 `squareBorderRadius` 显式覆盖，否则读取全局 `radiusSmall`，不再固定为小程序组件变量的 8rpx。公开 Demo 的四档外盒仍为 20/24/28/40dp，字体大小为 10/12/14/14dp，文字使用相应字体 Token 行高；关闭图标跟随 `textColorPlaceholder`。另一张 Figma“Style 组件样式”页的尺寸不直接套用公开 Demo，须先裁定设计规范版本。这些默认外观和自定义 Token 消费变化都属于用户可感知的行为变更，发布时须列入 breaking 迁移说明。
 

@@ -16,7 +16,6 @@
 | textColor | Color? | - | 文字颜色。 |
 | isTextThrough | bool? | - | 是否显示删除线。为 null 时继承 Theme 或父级样式。 |
 | lineThroughColor | Color? | - | 删除线颜色。 |
-| style | TextStyle? | - | Flutter 原生文字样式，具有最高优先级。 |
 | strutStyle | StrutStyle? | - | 透传至 `Text.strutStyle`。 |
 | textAlign | TextAlign? | - | 透传至 `Text.textAlign`。 |
 | textDirection | TextDirection? | - | 透传至 `Text.textDirection`。 |
@@ -51,7 +50,6 @@
 | semanticsLabel | String? | - | 透传至 `Text.semanticsLabel`。 |
 | softWrap | bool? | - | 透传至 `Text.softWrap`。 |
 | strutStyle | StrutStyle? | - | 透传至 `Text.strutStyle`。 |
-| style | TextStyle? | - | Flutter 原生文字样式，具有最高优先级。 |
 | textAlign | TextAlign? | - | 透传至 `Text.textAlign`。 |
 | textColor | Color? | - | 文字颜色。 |
 | textDirection | TextDirection? | - | 透传至 `Text.textDirection`。 |
@@ -98,7 +96,7 @@
 | font | Font? | - | 子树的 TDesign 字体默认值；`textStyle` 的同名字段优先。 |
 | strutStyle | StrutStyle? | - | 子树的段落支柱样式默认值；实例 `TText.strutStyle` 优先。 |
 | textHeightBehavior | ui.TextHeightBehavior? | - | 子树的文字高度行为默认值；实例 `TText.textHeightBehavior` 优先。 |
-| textStyle | TextStyle? | - | 子树的文字样式默认值；实例 `TText.style` 优先。 |
+| textStyle | TextStyle? | - | 子树的完整文字样式；TText 实例不再提供同名 style 参数。 |
 | textWidthBasis | TextWidthBasis? | - | 子树的文字宽度计算默认值；实例 `TText.textWidthBasis` 优先。 |
 
 

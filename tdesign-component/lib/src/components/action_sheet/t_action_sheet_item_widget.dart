@@ -10,6 +10,7 @@ import '../badge/t_badge.dart';
 import '../badge/t_badge_internal.dart';
 import '../badge/t_badge_layout.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_theme_data.dart';
 import 't_action_sheet_types.dart';
@@ -78,7 +79,7 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
                   _buildIcon(context, iconColor, iconSize, iconExtent),
                   SizedBox(height: context.tTheme.spacer),
                 ],
-                TText(
+                TTextStyled(
                   item.label,
                   font: context.tTheme.fontBodySmall,
                   textColor: context.tTheme.textColorPrimary,

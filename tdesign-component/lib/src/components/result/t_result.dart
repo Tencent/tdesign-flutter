@@ -6,6 +6,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_result_theme_data.dart';
 
 /// 结果状态。
@@ -58,7 +59,7 @@ class TResult extends StatelessWidget {
     final children = <Widget>[
       KeyedSubtree(key: const ValueKey('result-icon'), child: displayIcon),
       if (title.isNotEmpty)
-        TText(
+        TTextStyled(
           title,
           key: const ValueKey('result-title'),
           textColor: material?.onSurface ?? context.tTheme.textColorPrimary,
@@ -67,7 +68,7 @@ class TResult extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
       if (description != null && description!.isNotEmpty)
-        TText(
+        TTextStyled(
           description!,
           key: const ValueKey('result-description'),
           textColor:

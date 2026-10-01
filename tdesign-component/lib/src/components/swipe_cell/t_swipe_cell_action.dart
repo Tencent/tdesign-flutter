@@ -5,6 +5,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_swipe_cell_inherited.dart';
 import 't_swipe_cell_theme_data.dart';
 
@@ -107,7 +108,7 @@ class TSwipeCellAction extends StatelessWidget {
               if (icon != null && label != null)
                 SizedBox(width: effectiveSpacing),
               if (label != null)
-                TText(label!, style: effectiveTextStyle, maxLines: 1),
+                TTextStyled(label!, style: effectiveTextStyle, maxLines: 1),
             ],
           ),
         );

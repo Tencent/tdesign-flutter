@@ -22,15 +22,18 @@ class FontTokenModuleExample extends StatelessWidget {
               ),
             ),
           ),
-          child: TText(
-            '@$key:${value.size.toInt()}px',
-            font: value,
-            style: TextStyle(
-              decoration: key.contains('Link')
-                  ? TextDecoration.underline
-                  : null,
-              decorationColor: context.tTheme.textColorPrimary,
+          child: Theme(
+            data: Theme.of(context).mergeExtension(
+              TTextThemeData(
+                textStyle: TextStyle(
+                  decoration: key.contains('Link')
+                      ? TextDecoration.underline
+                      : null,
+                  decorationColor: context.tTheme.textColorPrimary,
+                ),
+              ),
             ),
+            child: TText('@$key:${value.size.toInt()}px', font: value),
           ),
         ),
       );

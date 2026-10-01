@@ -98,12 +98,12 @@ void main() {
               decorationStyle: TextDecorationStyle.double,
             ),
             child: td.TPopupHeader(
-              title: td.TText(
-                '标题',
-                style: explicit
-                    ? const TextStyle(decoration: TextDecoration.underline)
-                    : null,
-              ),
+              title: explicit
+                  ? const Text(
+                      '标题',
+                      style: TextStyle(decoration: TextDecoration.underline),
+                    )
+                  : const td.TText('标题'),
             ),
           ),
         ),

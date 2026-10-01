@@ -5,6 +5,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../popup/t_popup.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_drawer_theme_data.dart';
 
 part 't_drawer_content.dart';

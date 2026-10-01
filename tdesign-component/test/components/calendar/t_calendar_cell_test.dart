@@ -32,7 +32,7 @@ void main() {
     );
 
     expect(
-      tester.widget<TText>(_calendarTextFinder('8')).style?.color,
+      tester.widget<Text>(_calendarTextFinder('8')).style?.color,
       TThemeData.defaultData().textColorPrimary,
     );
   });
@@ -134,7 +134,7 @@ void main() {
     expect(decoration.color, token.brandColor);
     expect(decoration.borderRadius, BorderRadius.circular(token.radiusDefault));
 
-    final dayText = tester.widget<TText>(_calendarTextFinder('8'));
+    final dayText = tester.widget<Text>(_calendarTextFinder('8'));
     expect(dayText.style?.color, token.textColorAnti);
     expect(dayText.style?.fontSize, token.fontTitleMedium?.size);
     expect(dayText.style?.height, token.fontTitleMedium?.height);
@@ -165,7 +165,7 @@ void main() {
       ),
     );
 
-    final dayText = tester.widget<TText>(
+    final dayText = tester.widget<Text>(
       _calendarTextFinder(today.date.day.toString()),
     );
     expect(dayText.style?.color, token.textColorAnti);
@@ -202,7 +202,7 @@ void main() {
       ),
     );
 
-    final dayText = tester.widget<TText>(_calendarTextFinder('8'));
+    final dayText = tester.widget<Text>(_calendarTextFinder('8'));
     expect(dayText.style?.fontFamily, 'custom');
     expect(dayText.style?.fontSize, 19);
     expect(dayText.style?.fontWeight, FontWeight.w700);
@@ -292,9 +292,7 @@ void main() {
 }
 
 Finder _calendarTextFinder(String data) {
-  return find.byWidgetPredicate(
-    (widget) => widget is TText && widget.data == data,
-  );
+  return find.text(data);
 }
 
 Finder _cellBackgroundFinder() {

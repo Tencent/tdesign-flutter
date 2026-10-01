@@ -10,6 +10,7 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../icon/t_icon.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import '../text/t_text_theme_data.dart';
 import 't_cascader_defaults.dart';
 import 't_cascader_theme_data.dart';
@@ -337,7 +338,7 @@ class _TCascaderState extends State<TCascader> {
             ),
             SizedBox(width: context.tTheme.spacer2),
             Expanded(
-              child: TText(
+              child: TTextStyled(
                 entry.label,
                 style: entry.active ? styles.active : styles.normal,
               ),
@@ -375,7 +376,7 @@ class _TCascaderState extends State<TCascader> {
               : null,
         ),
         alignment: Alignment.center,
-        child: TText(
+        child: TTextStyled(
           entry.label,
           style: entry.active ? styles.active : styles.normal,
         ),
@@ -392,7 +393,7 @@ class _TCascaderState extends State<TCascader> {
         context.tTheme.spacer2,
         context.tTheme.spacer,
       ),
-      child: TText(
+      child: TTextStyled(
         widget.subtitles[_activeLevel],
         key: const ValueKey('cascader-subtitle'),
         style: TextStyle(
@@ -442,7 +443,7 @@ class _TCascaderState extends State<TCascader> {
           child: Row(
             children: [
               Expanded(
-                child: TText(
+                child: TTextStyled(
                   option.label,
                   style: option.disabled
                       ? styles.disabled

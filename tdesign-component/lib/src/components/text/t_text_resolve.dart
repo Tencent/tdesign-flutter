@@ -16,7 +16,7 @@ class TTextResolve {
 
   /// 解析 [TText] 最终样式。
   ///
-  /// 优先级：实例 style > 实例便利参数 > 组件 Theme >
+  /// 优先级：组合组件内部逐项样式 > 实例便利参数 > 组件 Theme >
   /// 显式 DefaultTextStyle > 显式 Material TextTheme >
   /// 组合组件 defaults > TDesign Token。
   ///

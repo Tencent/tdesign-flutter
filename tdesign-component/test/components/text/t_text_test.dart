@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/components/text/t_text_styled.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 class _NonlinearTextScaler extends TextScaler {
@@ -36,7 +37,28 @@ void main() {
     expect(text.style?.color, context.tTheme.textColorPrimary);
   });
 
-  testWidgets('组件 Theme 提供子树默认值，实例 style 只覆盖当前文字', (tester) async {
+  testWidgets('组合组件的逐项动态样式不扩展公开 TText 参数', (tester) async {
+    final theme = TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+      const TTextThemeData(textStyle: TextStyle(color: Colors.blue)),
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: theme,
+        home: const Scaffold(
+          body: TTextStyled(
+            '动态',
+            style: TextStyle(color: Colors.red, fontSize: 18),
+          ),
+        ),
+      ),
+    );
+
+    final rendered = tester.widget<Text>(find.text('动态'));
+    expect(rendered.style?.color, Colors.red);
+    expect(rendered.style?.fontSize, 18);
+  });
+
+  testWidgets('组件 Theme 提供子树默认值，实例便利参数只覆盖当前文字', (tester) async {
     final theme = TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
       TTextThemeData(
         font: Font(size: 20, lineHeight: 28),
@@ -46,11 +68,15 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: theme,
-        home: const Scaffold(
+        home: Scaffold(
           body: Column(
             children: [
-              TText('继承'),
-              TText('单项', style: TextStyle(color: Colors.red, fontSize: 24)),
+              const TText('继承'),
+              TText(
+                '单项',
+                font: Font(size: 24, lineHeight: 28),
+                textColor: Colors.red,
+              ),
             ],
           ),
         ),
@@ -63,7 +89,7 @@ void main() {
     expect(inherited.style?.color, Colors.blue);
     expect(single.style?.fontSize, 24);
     expect(single.style?.color, Colors.red);
-    expect(single.style?.height, 28 / 20);
+    expect(single.style?.height, 28 / 24);
   });
 
   testWidgets('组件 Theme 的段落默认值仅在实例未指定时生效', (tester) async {
@@ -191,15 +217,15 @@ void main() {
     expect(text.textHeightBehavior, heightBehavior);
   });
 
-  testWidgets('实例 style 覆盖便利参数且 Paint 不触发断言', (tester) async {
+  testWidgets('组件 Theme 的 Paint 前景色不触发断言', (tester) async {
     final foreground = Paint()..color = Colors.purple;
+    final theme = TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+      TTextThemeData(textStyle: TextStyle(foreground: foreground)),
+    );
     await tester.pumpWidget(
-      wrap(
-        TText(
-          'Paint',
-          textColor: Colors.blue,
-          style: TextStyle(foreground: foreground),
-        ),
+      MaterialApp(
+        theme: theme,
+        home: const Scaffold(body: TText('Paint')),
       ),
     );
     expect(tester.takeException(), isNull);
@@ -395,12 +421,12 @@ void main() {
   testWidgets('父级 baseline 布局同时支持 TText 与原生 Text', (tester) async {
     await tester.pumpWidget(
       wrap(
-        const Row(
+        Row(
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
           children: [
-            TText('中文 😀', style: TextStyle(fontSize: 24)),
-            Text('English', style: TextStyle(fontSize: 16)),
+            TText('中文 😀', font: Font(size: 24, lineHeight: 24)),
+            const Text('English', style: TextStyle(fontSize: 16)),
           ],
         ),
       ),

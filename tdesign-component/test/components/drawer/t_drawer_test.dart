@@ -296,7 +296,10 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('菜单1'), findsOneWidget);
       expect(find.text('菜单2'), findsOneWidget);
-      expect(find.byType(TText), findsNWidgets(2));
+      expect(
+        find.byWidgetPredicate((widget) => widget is TText),
+        findsNWidgets(2),
+      );
       expect(find.byType(TCell), findsNothing);
       expect(find.byType(TCellGroup), findsNothing);
 

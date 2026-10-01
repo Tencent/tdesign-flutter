@@ -370,7 +370,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      final text = tester.widget<TText>(find.byType(TText));
+      final text = tester.widget<Text>(find.text('Action'));
       expect(text.style?.color, Colors.deepPurple);
       expect(text.style?.fontSize, 20);
     });

@@ -342,17 +342,36 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (hasTitle)
-                  TText(
+                  Text(
                     '${moduleIndex + 1 < 10 ? '0' : ''}${moduleIndex + 1} '
                     '${module.title}',
-                    font: context.tTheme.fontTitleLarge,
-                    textColor: context.tTheme.textColorPrimary,
-                    style: Theme.of(context).tExplicitTextTheme?.titleLarge,
+                    style:
+                        (Theme.of(context).tExplicitTextTheme?.titleLarge ??
+                                const TextStyle())
+                            .copyWith(
+                              fontSize:
+                                  Theme.of(
+                                    context,
+                                  ).tExplicitTextTheme?.titleLarge?.fontSize ??
+                                  context.tTheme.fontTitleLarge?.size,
+                              height:
+                                  Theme.of(
+                                    context,
+                                  ).tExplicitTextTheme?.titleLarge?.height ??
+                                  context.tTheme.fontTitleLarge?.height,
+                              fontWeight:
+                                  Theme.of(context)
+                                      .tExplicitTextTheme
+                                      ?.titleLarge
+                                      ?.fontWeight ??
+                                  context.tTheme.fontTitleLarge?.fontWeight,
+                              color: context.tTheme.textColorPrimary,
+                            ),
                   ),
                 if (item.desc.isNotEmpty)
                   Padding(
                     padding: EdgeInsets.only(top: hasTitle ? 8 : 0),
-                    child: TText(
+                    child: Text(
                       item.desc,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: context.tTheme.textColorSecondary,
@@ -381,7 +400,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TText(
+          Text(
             widget.title,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               color: context.tTheme.textColorPrimary,
@@ -508,7 +527,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TText(
+          Text(
             widget.title,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               color: context.tTheme.textColorPrimary,
@@ -532,7 +551,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   Widget _buildModuleTitle(int index, ExampleModule data) {
     return Container(
       margin: const EdgeInsets.only(left: 16, right: 16, top: 32),
-      child: TText(
+      child: Text(
         '${index < 10 ? "0$index" : index} ${data.title}',
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
           color: context.tTheme.textColorPrimary,

@@ -4,6 +4,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import '../text/t_text_theme_data.dart';
 import 't_picker_types.dart';
 
@@ -121,7 +122,7 @@ class PickerItemWidget extends StatelessWidget {
           return Center(
             child:
                 itemBuilder?.call(context, option, colIndex, index, distance) ??
-                TText(
+                TTextStyled(
                   option.label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

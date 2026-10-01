@@ -6,6 +6,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_tree_select_theme_data.dart';
 
 const _kTreeSelectHeight = 336.0;
@@ -564,7 +565,7 @@ class _TreeOptionTile extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16, right: 12),
-                    child: TText(
+                    child: TTextStyled(
                       label,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

@@ -4,6 +4,7 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/iterable_ext.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_calendar_style.dart';
 import 't_calendar_types.dart';
 
@@ -31,7 +32,7 @@ class TCalendarSubtitleContext {
 /// subtitleBuilder: (context, ctx) {
 ///   final text = lunarLabel(ctx.date);
 ///   if (text == null) return null;
-///   return TText(text, style: TextStyle(fontSize: 9));
+///   return Text(text, style: const TextStyle(fontSize: 9));
 /// },
 /// ```
 typedef TCalendarSubtitleBuilder =
@@ -231,7 +232,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Center(child: TText(dayText, style: dayTextStyle)),
+        Center(child: TTextStyled(dayText, style: dayTextStyle)),
         if (subtitle != null)
           Positioned(
             left: 0,

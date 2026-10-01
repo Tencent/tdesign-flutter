@@ -44,12 +44,13 @@ class _InputPasswordExampleState extends State<InputPasswordExample> {
                   width: 72,
                   height: 24,
                   child: Center(
-                    child: TText(
+                    child: Text(
                       'DwrSe',
                       key: const ValueKey('input-captcha'),
                       style: TextStyle(
                         color: token.successColor,
                         fontSize: 18,
+                        height: token.fontBodyMedium?.height,
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w600,
                         letterSpacing: -1,

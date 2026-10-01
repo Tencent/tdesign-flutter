@@ -1,5 +1,13 @@
 # 验收记录
 
+## 2026-10-01 TText 完整实例样式移除（本地检查点）
+
+- 公开 `TText`/`TText.rich` 不再接收 `style`；完整子树样式由 `TTextThemeData.textStyle` 持有。组合组件的状态相关逐项文字样式走仅库内使用的解析器，仍交给 Flutter 原生 `Text` 绘制；`TTextSpan.style` 保留其富文本局部语义。
+- Flutter 3.32.0 与 3.47.0 全包 `flutter analyze --fatal-infos --no-pub` 均 0 issues；两版公开 Demo 非 Golden 回归各 274/274 通过。首轮全组件调度只有 Text 覆盖率暂为 94.40%；补上内部动态样式用例后，完整 57 套组件测试与各自 95% 生产源码覆盖率门禁全部通过。Text 独立复跑 36/36，生产覆盖率 229/232 = 98.71%。
+- 隔离 Linux amd64 Flutter 3.32.0 无更新运行 `dart run tool/run_visual_regression.dart`，全部视觉回归套件通过。前期 Text、TabBar、Cascader 的 31 项与 Tag、Divider、Input、Calendar、Popover 的 78 项聚焦复跑也通过；首次聚焦调度误填不存在的 `tag_demo_golden_test.dart` 路径，正确路径随后通过。未更新 Golden；这不是与 Figma 的像素验收。
+- Flutter 3.47.0 重新执行 `flutter pub get --offline` 以避免混用 3.32 SDK 的 `.dart_tool` 后，Text/Badge/Calendar/Picker/TabBar/ActionSheet/Theme 聚焦测试 175/175、完整公开 Demo 非 Golden 回归 274/274 均通过。此前 SDK 混用导致的编译错误不属于组件回归。
+- Example 包作为独立 path 依赖调用方通过静态分析；真实第三方仓库的旧 `TText(style: ...)` 调用仍需按 `migration.md` 迁移，本轮没有宣称其无需修改即可编译。
+
 ## 2026-10-01 SideBar 选中前景色单入口（本地检查点）
 
 - `TSideBarThemeData.selectedColor` 已移除；选中文字、图标和指示线共用 `selectedTextStyle.color`，未指定颜色时仍读取全局品牌色。迁移方式见 `migration.md`。
@@ -54,7 +62,7 @@
 | Linux 3.32.0 全 47 张目标 Golden | 12 通过、35 差异 | 本批迁移后无更新重跑；未新增差异，见 `report.md` |
 | Linux 3.32.0 Avatar/BackTop/Skeleton/TimeCounter Demo | 6 通过、8 差异 | `radiusCircle` 相关消费端取样；Avatar/TimeCounter 消融的实际 PNG SHA 不变，不能将差异归于圆角修复 |
 | Linux 3.32.0 Dialog 图片/Popover 定制内容浅色 Golden | 2 通过 | 局部 Theme 迁移后旧基线保持一致，未覆盖所有状态 |
-| Text 组件 Theme 恢复后的双版本 analyze | `lib test` 通过；3.47.0 全包通过，3.32.0 全包未过 | Flutter 3.32.0 与 3.47.0 的 `lib test` 严格检查均 0 issues，3.47.0 全包 0 issues；3.32.0 全包分析另有 20 条示例代码的 `RegExp` 弃用提示。保留 `TTextThemeData` 子树默认值与 `TText.style` 单项覆盖 |
+| Text 组件 Theme 恢复后的双版本 analyze（历史检查点） | `lib test` 通过；3.47.0 全包通过，3.32.0 全包未过 | Flutter 3.32.0 与 3.47.0 的 `lib test` 严格检查均 0 issues，3.47.0 全包 0 issues；3.32.0 全包分析另有 20 条示例代码的 `RegExp` 弃用提示。当时仍保留 `TText.style`，已由上方新检查点取代 |
 | Text/Button/Input 及共享消费者聚焦测试 | 上轮双版本各 187 通过 | 含 Text、Button、Input、Steps、Cascader、Picker、TabBar 和 Theme；本轮另以干净 3.47.0 隔离副本复跑 Button/Text 相关 143 项通过；不是全仓功能测试 |
 | API 文档及 Demo 片段生成 | 通过 | `node tool/generate_api.mjs` 生成 57 份 API 文档；`dart run tool/generate_example_code.dart --check` 通过 |
 | Linux 3.32.0 Text Demo Golden | 2 通过 | 旧图 375×1618；修正隐式 Material `bodyLarge` 错误升格和小程序正文回退后为 375×1616。核对源码与实际图，仅更新这两张；在同一固定 Linux 3.32.0 环境无更新复跑 2/2 通过。不是 Figma 像素验收 |

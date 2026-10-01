@@ -11,6 +11,7 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_rate_theme_data.dart';
 
 /// 自定义评分图标构建器。
@@ -302,7 +303,7 @@ class _TRateState extends State<TRate> {
                   Flexible(
                     child: SizedBox(
                       width: theme?.textWidth,
-                      child: TText(
+                      child: TTextStyled(
                         _resolveText(context, texts: texts),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -317,7 +318,7 @@ class _TRateState extends State<TRate> {
                 else
                   SizedBox(
                     width: theme?.textWidth,
-                    child: TText(
+                    child: TTextStyled(
                       _resolveText(context, texts: texts),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

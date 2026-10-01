@@ -1187,7 +1187,7 @@ void main() {
           ),
         );
 
-        final title = find.widgetWithText(TText, '消息');
+        final title = find.text('消息');
         expect(
           tester.getCenter(find.text('9')),
           tester.getTopRight(title) + const Offset(-6, 0),
@@ -1218,7 +1218,7 @@ void main() {
         ),
       );
 
-      final title = find.widgetWithText(TText, '消息');
+      final title = find.text('消息');
       expect(
         tester.getCenter(find.text('9')),
         tester.getTopLeft(title) + const Offset(6, 0),
@@ -1250,8 +1250,7 @@ void main() {
 
       expect(
         tester.getCenter(find.text('9')),
-        tester.getTopLeft(find.widgetWithText(TText, '消息')) +
-            const Offset(3, 4),
+        tester.getTopLeft(find.text('消息')) + const Offset(3, 4),
       );
     });
 
@@ -1283,8 +1282,7 @@ void main() {
 
       expect(
         tester.getCenter(find.text('9')),
-        tester.getTopRight(find.widgetWithText(TText, '消息')) +
-            const Offset(-6, 0),
+        tester.getTopRight(find.text('消息')) + const Offset(-6, 0),
       );
     });
 
@@ -1316,8 +1314,7 @@ void main() {
 
       expect(
         tester.getCenter(find.text('9')),
-        tester.getTopRight(find.widgetWithText(TText, '消息')) +
-            const Offset(-6, 0),
+        tester.getTopRight(find.text('消息')) + const Offset(-6, 0),
       );
     });
 
@@ -1348,8 +1345,7 @@ void main() {
       expect(badge.offset, isNull);
       expect(
         tester.getCenter(find.text('9')),
-        tester.getTopRight(find.widgetWithText(TText, '消息')) +
-            const Offset(3, 4),
+        tester.getTopRight(find.text('消息')) + const Offset(3, 4),
       );
     });
 

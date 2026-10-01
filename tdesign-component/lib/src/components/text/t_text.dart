@@ -11,6 +11,7 @@ import 't_text_theme_data.dart';
 /// Flutter [Text] 的 TDesign Token 薄封装。
 ///
 /// 文字布局、字体 fallback、无障碍缩放和语义均由 Flutter 原生 Text 负责。
+/// 子树级完整文字样式通过 [TTextThemeData.textStyle] 配置。
 /// 固定容器居中与图文 baseline 应由父布局表达。
 class TText extends StatelessWidget {
   const TText(
@@ -21,7 +22,6 @@ class TText extends StatelessWidget {
     this.textColor,
     this.isTextThrough,
     this.lineThroughColor,
-    this.style,
     this.strutStyle,
     this.textAlign,
     this.textDirection,
@@ -47,7 +47,6 @@ class TText extends StatelessWidget {
     this.textColor,
     this.isTextThrough,
     this.lineThroughColor,
-    this.style,
     this.strutStyle,
     this.textAlign,
     this.textDirection,
@@ -81,9 +80,6 @@ class TText extends StatelessWidget {
 
   /// 删除线颜色。
   final Color? lineThroughColor;
-
-  /// Flutter 原生文字样式，具有最高优先级。
-  final TextStyle? style;
 
   /// 文本内容。
   final String? data;
@@ -142,7 +138,6 @@ class TText extends StatelessWidget {
   TextStyle getTextStyle(BuildContext context) {
     return TTextResolve.resolve(
       context: context,
-      style: style,
       font: font,
       fontWeight: fontWeight,
       fontFamily: fontFamily,
