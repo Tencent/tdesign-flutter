@@ -93,7 +93,7 @@ Avatar 移除了 `TAvatarThemeData.textStyle`，保留 `foregroundColor` 为默�
 - 仓库外临时 Flutter 消费包 `/private/tmp/tdesign-token-consumer.cAkdKY` 通过当前库的 `path` 依赖，编译并运行 Button `style/shape`、Input `style`、Avatar/Popover/TabsBar/TabBar/Tag/Progress 的组件 Theme，以及多组已迁移 Theme 类型；Flutter 3.32.0、3.47.0 各 1/1 通过。它是**独立迁移写法夹具**，不是对真实第三方业务仓库的穷尽编译；后者仍需发布方提供具体消费仓库或包反向依赖。
 - 固定 Linux 3.32.0 与图标包 0.0.6 后，Tag 4/4、Progress 暗色 2/2 无更新 Golden 通过；Progress 浅色 2 张各差 15,015px，主要沿轨道/圆环，未裁定整页设计结果。Button/Form/Input 仍为 7 张失败，分别集中在两处灰色按钮、细边线等区域；尚不能据此判断旧基线或当前实现应改。**本轮没有更新 Golden**，避免把未裁定差异写成权威基线。
 - 全量 804 项中原先的 682 项“最终消费待核”没有被静态命中或 Progress 这 9 项阶段性结果自动清零；其他组件和同字体 Figma 像素核验仍是合并门禁。不能宣称“逐组件完成”。
-- 继续逐组件追踪 Avatar/AvatarGroup 时找到明确的能力差：Flutter Group 为每个成员加统一 2dp 描边且仅单行堆叠；小程序的 1/2/3dp 描边在 WXML 明确施加于折叠头像，组可换行且有上下 2dp 行间距。默认暗色边线来源也不同。不能通过 Token 改名或直接更新 Golden 解决，需先确定 Group 的公开语义和设计实例，再改实现。
+- AvatarGroup 的初核发现旧实现统一 2dp 描边与小程序折叠头像专属描边、换行语义不同。后续已按 Figma 头像组组件集与公开展板裁定：单行、8dp 重叠、全部成员按尺寸 1/2/3dp 描边并带阴影；组件及 Demo 已按此修正。小程序的换行和仅折叠头像描边不是本次 Flutter 公开设计实例的验收目标；同尺寸三方像素比较与 Golden 结果记录在 `acceptance.md`。
 
 ## 2026-09-30 内置配色选择器与 Material ColorScheme 解耦
 

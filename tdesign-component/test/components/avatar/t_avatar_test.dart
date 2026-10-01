@@ -361,10 +361,10 @@ void main() {
         return stack.children
             .map((positioned) => (positioned as PositionedDirectional).child)
             .map((decorated) => (decorated as DecoratedBox).child)
-            .map((padding) => (padding as Padding).child)
+            .map((decorated) => (decorated as DecoratedBox).child)
             .map((clip) => (clip as ClipRRect).child)
             .map((box) => (box as SizedBox).child)
-            .map((fitted) => (fitted as FittedBox).child?.key)
+            .map((scope) => (scope as InheritedWidget).child.key)
             .toList();
       }
 
@@ -413,7 +413,97 @@ void main() {
           .toList();
       expect(memberClips, hasLength(2));
       expect(memberClips[0].borderRadius, BorderRadius.circular(9999));
-      expect(memberClips[1].borderRadius, BorderRadius.circular(4));
+      expect(memberClips[1].borderRadius, BorderRadius.circular(6));
+    });
+
+    testWidgets('三档组尺寸继承成员尺寸并使用设计稿描边', (tester) async {
+      for (final (size, dimension, borderWidth, fontSize) in [
+        (TAvatarSize.small, 40.0, 1.0, 14.0),
+        (TAvatarSize.medium, 48.0, 2.0, 16.0),
+        (TAvatarSize.large, 64.0, 3.0, 20.0),
+      ]) {
+        await tester.pumpWidget(
+          app(
+            TAvatarGroup(
+              children: [
+                TAvatar(size: size, child: const Text('A')),
+                const TAvatar(child: Text('B')),
+              ],
+            ),
+          ),
+        );
+        expect(
+          tester.getSize(find.byType(TAvatarGroup)),
+          Size(dimension * 2 - 8, dimension),
+        );
+        final borders = tester
+            .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+            .map((widget) => widget.decoration)
+            .whereType<BoxDecoration>()
+            .where((decoration) => decoration.border != null)
+            .toList();
+        expect(borders.map((decoration) => decoration.border!.top.width), [
+          borderWidth,
+          borderWidth,
+        ]);
+        final shadows = tester
+            .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+            .map((widget) => widget.decoration)
+            .whereType<BoxDecoration>()
+            .where((decoration) => decoration.boxShadow?.isNotEmpty ?? false)
+            .toList();
+        expect(shadows, hasLength(2));
+        expect(shadows.first.boxShadow!.single.offset, const Offset(1, 0));
+        expect(shadows.first.boxShadow!.single.blurRadius, 2);
+        expect(
+          DefaultTextStyle.of(tester.element(find.text('B'))).style.fontSize,
+          fontSize,
+        );
+      }
+    });
+
+    testWidgets('组描边和阴影可由组件 Theme 独立覆盖', (tester) async {
+      const shadow = BoxShadow(
+        color: Colors.red,
+        offset: Offset(2, 1),
+        blurRadius: 4,
+      );
+      await tester.pumpWidget(
+        app(
+          const TAvatarGroup(
+            children: [
+              TAvatar(size: TAvatarSize.small),
+              TAvatar(),
+            ],
+          ),
+          avatarTheme: const TAvatarThemeData(
+            groupBorderWidth: 4,
+            groupBorderColor: Colors.green,
+            groupShadow: shadow,
+          ),
+        ),
+      );
+      final decorations = tester
+          .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+          .map((widget) => widget.decoration)
+          .whereType<BoxDecoration>()
+          .toList();
+      expect(
+        decorations
+            .where((value) => value.border != null)
+            .every(
+              (value) =>
+                  value.border!.top.width == 4 &&
+                  value.border!.top.color == Colors.green,
+            ),
+        isTrue,
+      );
+      expect(
+        decorations
+            .where((value) => value.boxShadow != null)
+            .every((value) => value.boxShadow!.single == shadow),
+        isTrue,
+      );
     });
 
     testWidgets('极小尺寸会收敛到安全约束', (tester) async {

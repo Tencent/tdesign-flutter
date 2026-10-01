@@ -10,7 +10,7 @@
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onTap | GestureTapCallback? | - | 点击回调；为空时头像不创建点击行为。 |
 | shape | TAvatarShape? | - | 头像形状；未设置时使用圆形默认值。 |
-| size | TAvatarSize? | - | 头像尺寸；未设置时使用中尺寸默认值。 |
+| size | TAvatarSize? | - | 头像尺寸；未设置时继承所在头像组的尺寸，独立使用时默认为中号。 |
 
 
 ### TAvatarGroup
@@ -36,7 +36,8 @@
 | dimension | double? | - | 自定义头像边长。 |
 | foregroundColor | Color? | - | 默认图标与继承文字的前景色；未设置时回退全局品牌色。 |
 | groupBorderColor | Color? | - | 头像组成员描边颜色。 |
-| groupBorderWidth | double? | - | 头像组成员描边宽度。 |
+| groupBorderWidth | double? | - | 头像组成员描边宽度。 未设置时按成员尺寸使用小/中/大 1/2/3 逻辑像素。 |
+| groupShadow | BoxShadow? | - | 头像组成员阴影；未设置时使用设计稿的 1px 水平偏移、2px 模糊和 15% 黑色。 |
 | groupSpacing | double? | - | 头像组重叠宽度。 |
 | iconSize | double? | - | 默认图标大小。 |
 | squareBorderRadius | double? | - | 方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。 |

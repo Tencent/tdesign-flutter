@@ -21,6 +21,7 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
     this.groupSpacing,
     this.groupBorderWidth,
     this.groupBorderColor,
+    this.groupShadow,
   }) : assert(
          dimension == null || (dimension > 0 && dimension != double.infinity),
        ),
@@ -74,10 +75,14 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
   final double? groupSpacing;
 
   /// 头像组成员描边宽度。
+  /// 未设置时按成员尺寸使用小/中/大 1/2/3 逻辑像素。
   final double? groupBorderWidth;
 
   /// 头像组成员描边颜色。
   final Color? groupBorderColor;
+
+  /// 头像组成员阴影；未设置时使用设计稿的 1px 水平偏移、2px 模糊和 15% 黑色。
+  final BoxShadow? groupShadow;
 
   @override
   TAvatarThemeData copyWith({
@@ -90,6 +95,7 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
     double? groupSpacing,
     double? groupBorderWidth,
     Color? groupBorderColor,
+    BoxShadow? groupShadow,
   }) {
     return TAvatarThemeData(
       dimension: dimension ?? this.dimension,
@@ -101,6 +107,7 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
       groupSpacing: groupSpacing ?? this.groupSpacing,
       groupBorderWidth: groupBorderWidth ?? this.groupBorderWidth,
       groupBorderColor: groupBorderColor ?? this.groupBorderColor,
+      groupShadow: groupShadow ?? this.groupShadow,
     );
   }
 
@@ -167,6 +174,13 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
         other.groupBorderColor,
         t,
       ),
+      groupShadow: groupShadow == null && other.groupShadow == null
+          ? null
+          : BoxShadow.lerp(
+              groupShadow ?? TAvatarDefaults.groupShadow,
+              other.groupShadow ?? TAvatarDefaults.groupShadow,
+              t,
+            ),
     );
   }
 }

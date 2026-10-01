@@ -4,6 +4,7 @@
 - [ ] DOING 逐项确定唯一所有者、迁移路径和 breaking 风险；已确认项见 `ownership-table.md`，P0 未裁定项见 `report.md`。
 - [ ] DOING 收敛确认重复的公开控制入口与 Token 回退；已处理的 Button、Input、Dialog action、TabsBar、Tag、SideBar、Text、SwipeCellAction 和 Popup 字段见 `migration.md`。仍须逐组件审查尚未裁定的异名同义入口，不能把已处理组件外推为全仓完成。
 - [x] DONE Avatar/Popover 异名同义入口：移除 Avatar Theme `textStyle` 和 Popover 实例 `overlayColor/radius`，将 Popover 圆角收敛到可逐角配置的 Theme `borderRadius`；双版本组件/Demo 功能测试、生成 API 文档与 3.32.0 Linux 无更新 Golden 已执行。Golden 仍有旧基线差异，列在视觉归因任务中，不视为通过。
+- [x] DONE AvatarGroup 设计稿复核：按 Figma 三档尺寸对齐全部组成员 1/2/3dp 描边和阴影，修正公开 Demo 的顺序、折叠文案与层叠方向；Figma/develop/current 同尺寸像素比较、双版本聚焦测试及 Linux Golden 无更新复跑见 `acceptance.md`。
 - [x] Text 逐字段恢复 `TTextThemeData` 已发布子树默认能力与 Flutter 文字继承；恢复 Cascader/Picker 消费。默认回退修正为小程序 14dp/22dp，Text Demo 两张 Linux Golden 在固定环境更新后无更新复跑通过；这不代表 Figma 像素验收。
 - [x] 恢复公开 `TText.style` 作为单实例完整视觉入口，将组合组件状态样式留在仅库内使用的解析路径；子树默认仍由 `TTextThemeData.textStyle` 管理。旧检查点的测试与 Golden 结论需以本轮最终源码重新验证。
 - [x] 实例保留 `TText.font` 作为 TDesign 字体预设，移除 `fontWeight/fontFamily/textColor/isTextThrough/lineThroughColor` 分散便利字段，迁移仓内调用与测试；外部第三方调用编译仍待验证。

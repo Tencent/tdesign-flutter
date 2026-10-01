@@ -16,7 +16,21 @@ void main() {
     expect(groups, hasLength(2));
     expect(tester.getSize(find.byWidget(groups.first)).height, 48);
     expect(groups.first.maxCount, 5);
-    expect(groups.first.children, hasLength(6));
+    expect(groups.first.cascading, TAvatarGroupCascading.endUp);
+    expect(groups.first.children, hasLength(7));
+    expect(((groups.first.overflow as TAvatar).child as Text).data, '+2');
+    expect(
+      groups.first.children
+          .take(5)
+          .map((child) => ((child as TAvatar).image as AssetImage).assetName),
+      [
+        'assets/img/t_avatar_1.png',
+        'assets/img/t_avatar_3.png',
+        'assets/img/t_avatar_4.png',
+        'assets/img/t_avatar_2.png',
+        'assets/img/t_avatar_5.png',
+      ],
+    );
     expect(tester.getSize(find.byWidget(groups.last)).height, 48);
     expect(groups.last.cascading, TAvatarGroupCascading.endUp);
     expect(groups.last.children, hasLength(6));

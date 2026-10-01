@@ -13,9 +13,9 @@ class OperationAvatarExample extends StatelessWidget {
       cascading: TAvatarGroupCascading.endUp,
       children: [
         const TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),
-        const TAvatar(image: AssetImage('assets/img/t_avatar_2.png')),
         const TAvatar(image: AssetImage('assets/img/t_avatar_3.png')),
         const TAvatar(image: AssetImage('assets/img/t_avatar_4.png')),
+        const TAvatar(image: AssetImage('assets/img/t_avatar_2.png')),
         const TAvatar(image: AssetImage('assets/img/t_avatar_5.png')),
         TAvatar(
           child: const Icon(TIcons.user_add),
