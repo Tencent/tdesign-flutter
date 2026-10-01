@@ -6,6 +6,7 @@
 - Flutter 3.32.0 与 3.47.0 全包 `flutter analyze --fatal-infos --no-pub` 均 0 issues；两版公开 Demo 非 Golden 回归各 274/274 通过。首轮全组件调度只有 Text 覆盖率暂为 94.40%；补上内部动态样式用例后，完整 57 套组件测试与各自 95% 生产源码覆盖率门禁全部通过。Text 独立复跑 36/36，生产覆盖率 229/232 = 98.71%。
 - 隔离 Linux amd64 Flutter 3.32.0 无更新运行 `dart run tool/run_visual_regression.dart`，全部视觉回归套件通过。前期 Text、TabBar、Cascader 的 31 项与 Tag、Divider、Input、Calendar、Popover 的 78 项聚焦复跑也通过；首次聚焦调度误填不存在的 `tag_demo_golden_test.dart` 路径，正确路径随后通过。未更新 Golden；这不是与 Figma 的像素验收。
 - Flutter 3.47.0 重新执行 `flutter pub get --offline` 以避免混用 3.32 SDK 的 `.dart_tool` 后，Text/Badge/Calendar/Picker/TabBar/ActionSheet/Theme 聚焦测试 175/175、完整公开 Demo 非 Golden 回归 274/274 均通过。此前 SDK 混用导致的编译错误不属于组件回归。
+- 首次远端 head `76fec3f5` 的两个 Flutter 测试 job 仅在工具测试的共享 Golden 字形清单断言失败：新增内部注释的“棵”未被测试字体覆盖。注释改成已有字形的等义“个”，未扩充字体、改组件绘制或更新快照；Flutter 3.32.0 与 3.47.0 的该工具测试随后各 9/9 通过。修复提交的新 head CI 须另行确认。
 - Example 包作为独立 path 依赖调用方通过静态分析；真实第三方仓库的旧 `TText(style: ...)` 调用仍需按 `migration.md` 迁移，本轮没有宣称其无需修改即可编译。
 
 ## 2026-10-01 SideBar 选中前景色单入口（本地检查点）
