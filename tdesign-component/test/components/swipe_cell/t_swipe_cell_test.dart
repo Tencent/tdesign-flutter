@@ -5,8 +5,16 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+// 构造参数合法，但运行时字段被覆写，用于单独覆盖 release 也会执行的 build 守卫。
+class _ConflictingBuilderAction extends TSwipeCellAction {
+  _ConflictingBuilderAction() : super(builder: (_) => const SizedBox());
+
+  @override
+  Color? get backgroundColor => Colors.red;
+}
+
 void main() {
-  test('builder 与内置图文内容互斥', () {
+  test('builder 与全部内置视觉字段互斥', () {
     expect(
       () =>
           TSwipeCellAction(builder: (_) => const SizedBox(), icon: Icons.edit),
@@ -37,6 +45,11 @@ void main() {
       ),
     );
   }
+
+  testWidgets('builder 在 build 阶段也拒绝冲突视觉字段', (tester) async {
+    await tester.pumpWidget(app(_ConflictingBuilderAction()));
+    expect(tester.takeException(), isA<FlutterError>());
+  });
 
   TSwipeCellPanel panel(String label, {VoidCallback? onPressed}) {
     return TSwipeCellPanel(

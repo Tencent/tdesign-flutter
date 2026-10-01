@@ -69,6 +69,7 @@ class TSwipeCellAction extends StatelessWidget {
   final TextStyle? labelStyle;
 
   /// 自定义操作项。不可同时传入内置背景、图文或图文样式字段；
+  /// 冲突配置会在构建时抛出 [FlutterError]，包括 release 构建。
   /// 其实际布局宽度会直接用于面板宽度，无需额外指定尺寸。
   /// [onPressed] 仍负责点击回调，随后会自动关闭操作面板。
   final WidgetBuilder? builder;
@@ -80,6 +81,18 @@ class TSwipeCellAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (builder != null &&
+        (backgroundColor != null ||
+            icon != null ||
+            iconColor != null ||
+            iconSize != null ||
+            iconLabelSpacing != null ||
+            label != null ||
+            labelStyle != null)) {
+      throw FlutterError(
+        'builder cannot be combined with built-in action visuals',
+      );
+    }
     final theme = _effectiveTheme(context);
     final effectiveBackgroundColor = backgroundColor;
     final materialTheme = Theme.of(context);

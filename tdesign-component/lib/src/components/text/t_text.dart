@@ -168,7 +168,7 @@ class TText extends StatelessWidget {
   }
 }
 
-/// 支持 TDesign 字体便利参数的 Flutter [TextSpan]。
+/// 使用原生 [TextStyle] 配置局部样式的 Flutter [TextSpan]。
 ///
 /// 未显式配置的字段保持为空，并继承父 Span 样式。
 class TTextSpan extends TextSpan {

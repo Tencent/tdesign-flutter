@@ -1,5 +1,11 @@
 # 验收记录
 
+## 2026-10-02 PR 风险复核：SwipeCell release 互斥
+
+- `TSwipeCellAction.builder` 与内置视觉字段的构造 `assert` 仅在启用断言时运行；现于 `build` 再检查相同冲突，并在 release 也抛出 `FlutterError`，避免背景、图文和图文样式参数被静默忽略。合法配置的绘制链未改变，因此不更新 Golden。
+- Flutter 3.32.0、3.47.0 的 SwipeCell 聚焦测试各 27/27 通过，组件包 `flutter analyze --no-pub --fatal-infos` 各为 0 issues；新增了绕开构造期 `assert`、直接触发运行时 `build` 守卫的 Widget 测试。3.32.0 按组件清单三组测试 31/31，生产源码覆盖率 305/317 = 96.21%，通过 95% 门禁。release 专门运行时截图未执行，本条的 release 行为依据无条件 `build` 检查与两版编译结果，不冒充真机或 Golden 验收。
+- `TButtonThemeData` 的各变体 `ButtonStyle` 移除后，显式 Flutter `ElevatedButtonTheme`、`OutlinedButtonTheme`、`TextButtonTheme` 仍能提供子树默认值；outline 和 ghost 共用 `OutlinedButtonTheme`，不等于保留原先的四套独立 TDesign Theme 字段。迁移文档已说明该能力边界。真实第三方调用迁移和组件变量 682 项最终消费仍待审。
+
 ## 2026-10-02 单实例文字样式与 SwipeCell/Popup 入口收敛
 
 - 当前源码：`TText.font` 仅作字体 Token 预设，`style` 控制实例完整文字样式；分散文字字段删除。SwipeCell 逐项视觉归 `TSwipeCellAction`，Theme 仅保留共享 `actionPadding`；Popup 蒙层 alpha 归 `Color`，动画时长归单次 Options。API breaking 迁移记录见 `migration.md`。

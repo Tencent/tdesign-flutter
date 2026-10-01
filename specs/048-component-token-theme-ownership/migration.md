@@ -31,7 +31,7 @@
 | `TTextThemeData.font` | `TTextThemeData.textStyle: TextStyle(fontSize: ..., height: ..., fontWeight: ...)` | 子树级字体只保留一个样式入口；`Font.height` 是行高与字号之比，可直接用于 `TextStyle.height`。Cascader 和 Picker 继续读取同一组件文字主题。 |
 | `TPopoverAnchor.overlayColor/radius`、`TPopover.showPopover(overlayColor/radius)` | `TPopoverThemeData.barrierColor/borderRadius` | 单实例自定义用局部 `Theme` 包裹触发上下文；`borderRadius` 从 `double?` 改为 `BorderRadius?`，旧 `borderRadius: 8` 改为 `borderRadius: BorderRadius.circular(8)`，支持逐角圆角。 |
 | `TPopoverThemeData.lerpDouble` | 无需外部调用；组件主题的 `lerp` 已负责插值 | 原公开静态辅助方法仅供内部使用，改为私有。 |
-| `TButtonThemeData.filledStyle/outlinedStyle/textButtonStyle/ghostStyle/padding` | 对应实例 `TButton.style: ButtonStyle(...)` | 具体颜色、描边、内边距、状态层等不再由组件 Theme 批量覆盖；需要批量设置时由调用方构建并复用同一个 `ButtonStyle`。 |
+| `TButtonThemeData.filledStyle/outlinedStyle/textButtonStyle/ghostStyle/padding` | 对应实例 `TButton.style: ButtonStyle(...)`；子树批量默认值可使用 Flutter 的 `ElevatedButtonTheme`、`OutlinedButtonTheme`、`TextButtonTheme` | 具体颜色、描边、内边距、状态层等不再由 TDesign 组件 Theme 批量覆盖。Material 按钮主题分别作用于 fill、outline/ghost、text；outline 与 ghost 共用 `OutlinedButtonTheme`，若需分别设置，应在对应实例传入共享的 `ButtonStyle`。 |
 | `TButtonThemeData.shape` | `TButton.shape` | `shape` 是圆/方等结构选择；边框的具体视觉仍可在 `TButton.style.shape` 指定。 |
 | `TInputThemeData.textStyle` | `TInput.style` | 只迁移已输入文字；占位文字继续由组件 Theme 的 `hintStyle` 控制。禁用态文字仍固定读取禁用 Token。 |
 | `TDialogThemeData.actionButtonStyle` | `TDialogAction.style` 或 `TConfirmDialog.buttonStyle` | 面板外观继续走组件 Theme，单个操作按钮的视觉由操作项持有。 |

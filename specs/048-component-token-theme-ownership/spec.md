@@ -54,7 +54,7 @@
 - TabBar 顶部分隔线与 Item 之间的竖线虽然在小程序共用 `--td-tab-bar-border-color` 名称，但未覆盖时分别回退 `borderLevel1Color` 与灰阶 3。Flutter 分别保留上边线、竖线的 Theme 视觉入口，各自只走一条默认回退；不为消除小程序同名变量歧义增加另一套兼容回退。
 - SideBar 的选中前景色只由 `TSideBarThemeData.selectedTextStyle.color` 配置；同一个颜色用于选中文字、图标和指示线。移除同层同义的 `selectedColor`，没有显式颜色时仍读取全局品牌色，字体等文字样式继续由 `selectedTextStyle` 控制。
 - `TText` 通过完整实例 `style` 覆写单项文字，子树级完整文字样式由 `TTextThemeData.textStyle` 提供默认；两者作用范围不同且按字段合并。内部组合组件已按各自状态计算的逐项文字样式继续由私有解析路径交给 Flutter 原生 `Text`。`TTextSpan` 的 Span 局部样式与父文字样式属于不同富文本层级，单独保留其 Flutter `TextSpan` 语义。
-- SwipeCell 的操作项视觉由每个 `TSwipeCellAction` 的实例参数控制；组件 Theme 只保留没有实例同义入口的面板/操作项内边距。操作项的背景、图标、文字默认值从全局 Token 或标准 Flutter 显式主题取得，不再通过同义 Theme 字段配置。`builder` 与内置图文内容互斥，防止静默忽略参数。
+- SwipeCell 的操作项视觉由每个 `TSwipeCellAction` 的实例参数控制；组件 Theme 只保留没有实例同义入口的面板/操作项内边距。操作项的背景、图标、文字默认值从全局 Token 或标准 Flutter 显式主题取得，不再通过同义 Theme 字段配置。`builder` 与全部内置视觉参数互斥；debug 构造及 release 绘制均须拒绝冲突配置，防止静默忽略参数。
 - Popup 的 `TPopupOptions` 管单次方向、尺寸、蒙层行为和生命周期；`TPopupThemeData` 管子树面板背景/圆角及蒙层颜色。蒙层 alpha 只使用 `Color` 自带 alpha，不再叠乘独立 opacity。单次动画时长由 Options 持有，不再在 Theme 保存另一份同义默认。Options 的 `radius/backgroundColor` 暂保留供 ActionSheet 等组合组件传入单次面板外观；其与 Theme 是单次覆盖/子树默认，不另设第三种别名入口。
 
 ## 验收标准
