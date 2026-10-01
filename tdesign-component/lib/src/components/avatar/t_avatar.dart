@@ -111,7 +111,7 @@ class TAvatar extends StatelessWidget {
 /// 头像组只负责布局，不解析图片来源或缓存成员状态。
 /// 当成员是 [TAvatar] 时，其 [TAvatar.shape] 同时决定成员外框与裁剪形状；
 /// 其他 Widget 使用圆形默认值。
-/// 组尺寸由首个显式设置 [TAvatar.size] 的成员确定，未设置时为中号；
+/// 组尺寸由首个可见且显式设置 [TAvatar.size] 的成员确定，未设置时为中号；
 /// 成员自己的显式尺寸始终优先，未设置的成员和折叠头像继承组尺寸。
 /// 默认按 8 逻辑像素重叠，所有成员使用按尺寸区分的描边与阴影；
 /// 可通过 [TAvatarThemeData] 调整这些视觉值。
@@ -155,10 +155,13 @@ class TAvatarGroup extends StatelessWidget {
       visible.add(overflow!);
     }
     final groupSize =
-        children.whereType<TAvatar>().fold<TAvatarSize?>(
-          null,
-          (result, avatar) => result ?? avatar.size,
-        ) ??
+        children
+            .take(count)
+            .whereType<TAvatar>()
+            .fold<TAvatarSize?>(
+              null,
+              (result, avatar) => result ?? avatar.size,
+            ) ??
         TAvatarSize.medium;
     final dimensions = visible.map((child) {
       final size = child is TAvatar ? child.size ?? groupSize : groupSize;

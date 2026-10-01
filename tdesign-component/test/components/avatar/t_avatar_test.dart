@@ -298,6 +298,31 @@ void main() {
       expect(find.byType(TAvatar), findsOneWidget);
     });
 
+    testWidgets('隐藏成员的尺寸不会改变可见组与折叠头像', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TAvatarGroup(
+            maxCount: 1,
+            overflow: TAvatar(child: Text('+1')),
+            children: [
+              TAvatar(child: Text('A')),
+              TAvatar(size: TAvatarSize.large, child: Text('B')),
+            ],
+          ),
+        ),
+      );
+
+      expect(find.text('B'), findsNothing);
+      expect(tester.getSize(find.byType(TAvatarGroup)), const Size(88, 48));
+      expect(
+        [
+          for (var index = 0; index < 2; index++)
+            tester.getSize(find.byType(TAvatar).at(index)),
+        ],
+        [const Size.square(48), const Size.square(48)],
+      );
+    });
+
     testWidgets('Theme 控制组布局和描边', (tester) async {
       await tester.pumpWidget(
         app(
