@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/t_colors.dart';
+import '../../theme/t_theme.dart';
 import 't_field_scope.dart';
+import 't_form_theme_data.dart';
 
 /// TDesign 表单容器。
 ///
@@ -258,16 +261,20 @@ class TFormState extends State<TForm> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<TFormThemeData>();
     return _TFormScope(
       state: this,
       showErrorMessage: widget.showErrorMessage,
       autovalidateMode: _effectiveAutovalidateMode,
       validationVersion: _validationVersion,
-      child: Form(
-        key: _formKey,
-        autovalidateMode: _effectiveAutovalidateMode,
-        onChanged: _handleChanged,
-        child: widget.child,
+      child: ColoredBox(
+        color: theme?.backgroundColor ?? context.tTheme.bgColorContainer,
+        child: Form(
+          key: _formKey,
+          autovalidateMode: _effectiveAutovalidateMode,
+          onChanged: _handleChanged,
+          child: widget.child,
+        ),
       ),
     );
   }

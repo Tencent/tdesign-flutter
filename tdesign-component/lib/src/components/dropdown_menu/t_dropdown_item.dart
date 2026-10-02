@@ -14,6 +14,8 @@ import '../button/t_button_types.dart';
 import 't_dropdown_menu.dart';
 import 't_dropdown_theme_data.dart';
 
+const double _defaultBodyMaxHeight = 280;
+
 /// 下拉筛选面板中的不可变选项。
 class TDropdownMenuOption<T> {
   const TDropdownMenuOption({
@@ -44,6 +46,8 @@ class TDropdownSingleSelectPanel<T> extends StatelessWidget {
   final List<TDropdownMenuOption<T>> options;
   final T? value;
   final ValueChanged<T> onChanged;
+
+  /// 滚动主体的最大高度；默认 280dp。
   final double? maxHeight;
 
   @override
@@ -53,7 +57,7 @@ class TDropdownSingleSelectPanel<T> extends StatelessWidget {
         const TDropdownThemeData();
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxHeight: maxHeight ?? MediaQuery.sizeOf(context).height,
+        maxHeight: maxHeight ?? _defaultBodyMaxHeight,
       ),
       child: ListView.builder(
         padding: EdgeInsets.zero,
@@ -107,6 +111,8 @@ class TDropdownMultiSelectPanel<T> extends StatefulWidget {
   final Set<T> values;
   final ValueChanged<Set<T>> onConfirm;
   final int columns;
+
+  /// 面板最大高度；默认滚动主体最多 280dp，底部操作区另计。
   final double? maxHeight;
 
   @override
@@ -156,41 +162,50 @@ class _TDropdownMultiSelectPanelState<T>
         children: [
           Flexible(
             fit: FlexFit.loose,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(
-                  context.tTheme.spacer2,
-                  context.tTheme.spacer1,
-                  context.tTheme.spacer2,
-                  context.tTheme.spacer2,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (final entry in groups.entries) ...[
-                      if (entry.key != null)
-                        Padding(
-                          padding: EdgeInsets.only(
-                            bottom: context.tTheme.spacer1,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: widget.maxHeight ?? _defaultBodyMaxHeight,
+              ),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    context.tTheme.spacer2,
+                    context.tTheme.spacer1,
+                    context.tTheme.spacer2,
+                    context.tTheme.spacer2,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (final entry in groups.entries) ...[
+                        if (entry.key != null)
+                          Padding(
+                            padding: EdgeInsets.only(
+                              bottom: context.tTheme.spacer1,
+                            ),
+                            child: Text(
+                              entry.key!,
+                              style:
+                                  theme.optionTextStyle ??
+                                  TextStyle(
+                                    color: context.tTheme.textColorPrimary,
+                                    fontSize:
+                                        context.tTheme.fontBodyMedium?.size,
+                                    height:
+                                        context.tTheme.fontBodyMedium?.height,
+                                    fontWeight: context
+                                        .tTheme
+                                        .fontBodyMedium
+                                        ?.fontWeight,
+                                  ),
+                            ),
                           ),
-                          child: Text(
-                            entry.key!,
-                            style:
-                                theme.optionTextStyle ??
-                                TextStyle(
-                                  color: context.tTheme.textColorPrimary,
-                                  fontSize: context.tTheme.fontBodyMedium?.size,
-                                  height: context.tTheme.fontBodyMedium?.height,
-                                  fontWeight:
-                                      context.tTheme.fontBodyMedium?.fontWeight,
-                                ),
-                          ),
-                        ),
-                      ..._buildRows(context, entry.value, theme),
-                      if (entry.key != groups.keys.last)
-                        SizedBox(height: context.tTheme.spacer2),
+                        ..._buildRows(context, entry.value, theme),
+                        if (entry.key != groups.keys.last)
+                          SizedBox(height: context.tTheme.spacer2),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
             ),

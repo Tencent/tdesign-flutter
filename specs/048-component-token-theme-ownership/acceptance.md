@@ -193,3 +193,10 @@
 - 本轮逐项复核发现 `switchUncheckedColor`：小程序回退 `@bg-color-secondarycontainer-active`（浅 `#dcdcdc`、暗 `#383838`），Flutter 却取 `textColorDisabled`。组件现改取 `bgColorSecondaryContainerActive`，保留 `TSwitchThemeData.trackOffColor` 的显式覆盖。Flutter 3.32.0 与 3.47.0 聚焦 Switch 测试各 16/16 通过，新增断言验证最终传入 `TCupertinoSwitch.trackColor` 的浅色为 `#dcdcdc`。
 - 隔离 Linux amd64 / Flutter 3.32.0 无更新完整视觉回归仅在 Switch Demo、Cell Demo、Theme Component 三个套件失败。逐张检查差异集中于未选中轨道的颜色区域，无尺寸或布局位移；仅更新由此变化的 Switch 4 张、Cell 2 张、Theme 1 张 Golden。三套件随后无更新复跑通过；完整矩阵的其他套件在更新前均通过，最终完整矩阵与新 head 远端 CI 仍需验收。
 - 审计脚本在当前源码上重新生成 804 项映射；Switch 此项从 `pending` 移为“回退链与 Widget 已验证，跨端视觉待裁定”，其余 `pending` 为 681 项。静态 getter 分类随此前源码行和 getter 更新为 411 / 286，不把这类自动分类变化计作逐项验收。
+
+### 2026-10-03 Form 与 DropdownItem 默认消费补核
+
+- 小程序 `--td-form-bg-color` 在 Form 根节点消费；Flutter 先前仅 FormItem 读取该回退。根节点现与 FormItem 共用 `TFormThemeData.backgroundColor → bgColorContainer`，无同义实例参数。组件测试检查亮/暗 Token 与组件 Theme 覆盖。Linux Form 六张 Golden 中仅竖向排布亮/暗两张变化：亮色第 1383 行 375px，由 `#ececec` 变 `#eeeeee`；暗色各有一条水平线，共 750px，由 `#2e2e2e` 变 `#2f2f2f`。仅同步这两张。
+- 小程序 `--td-dropdown-body-max-height` 的默认 560rpx 对应 280dp，只约束可滚动主体，不包含多选底部操作区。Flutter 单选/多选默认主体改为 280dp，已有实例 `maxHeight` 继续控制显式上限，不增加同义 Theme 字段。长列表 Widget 测试分别检查主体高度、多选操作区和整面板高度；现有 Dropdown 组件交互测试 95/95 通过。Linux Dropdown 16 张公开 Demo Golden 中仅四张单列/双列多选打开态变化，各约 12.7%–13.0%，由主体收短和操作区上移引起，未改变其余 12 张。
+- Fab 阴影与 PullDownRefresh 提示色核对到最终 Widget，未改渲染源码。两版聚焦测试均通过（Flutter 3.32.0 当前批次 Form/Refresh/Fab 168/168、Dropdown 95/95；Flutter 3.47.0 隔离副本合计 263/263）。两版组件包及 Flutter 3.32.0 Example 的 `flutter analyze --fatal-infos` 均零诊断。固定 Linux amd64 / Flutter 3.32.0 上 Form 与 Dropdown 合计 22 张 Golden 严格无更新复跑通过，随后完整 `dart run tool/run_visual_regression.dart` 无更新参数复跑全部视觉套件通过；远端 CI 仍需以新 head 另验。
+- 审计 JSON 仍有 804 项，`pending` 从 681 降至 677。仅四项新增最终 Widget 证据，不把其余静态命中或现有 Golden 自动判为跨端逐像素通过。

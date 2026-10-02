@@ -112,6 +112,75 @@ void main() {
     expect(option.group, '数字');
   });
 
+  testWidgets('single-select long list uses 280dp body cap', (tester) async {
+    final longOptions = List<TDropdownMenuOption<int>>.generate(
+      10,
+      (index) => TDropdownMenuOption(value: index, label: '选项 $index'),
+    );
+    await tester.pumpWidget(
+      wrap(
+        TDropdownMenu(
+          animationDuration: Duration.zero,
+          items: [
+            TDropdownMenuItem(
+              label: '长单选',
+              panelBuilder: (_, controller) => TDropdownSingleSelectPanel<int>(
+                controller: controller,
+                options: longOptions,
+                value: null,
+                onChanged: (_) {},
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('长单选'));
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(ListView)).height, 280);
+  });
+
+  testWidgets('multi-select body caps at 280dp without clipping footer', (
+    tester,
+  ) async {
+    final longOptions = List<TDropdownMenuOption<int>>.generate(
+      20,
+      (index) => TDropdownMenuOption(value: index, label: '选项 $index'),
+    );
+    await tester.pumpWidget(
+      wrap(
+        TDropdownMenu(
+          animationDuration: Duration.zero,
+          items: [
+            TDropdownMenuItem(
+              label: '长多选',
+              panelBuilder: (_, controller) => TDropdownMultiSelectPanel<int>(
+                controller: controller,
+                options: longOptions,
+                values: const {},
+                onConfirm: (_) {},
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('长多选'));
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(SingleChildScrollView)).height, 280);
+    expect(find.text('确定'), findsOneWidget);
+    expect(
+      tester
+          .getSize(
+            find.byKey(const ValueKey<String>('t-dropdown-menu-panel-surface')),
+          )
+          .height,
+      greaterThan(280),
+    );
+  });
+
   testWidgets('single select reports value and closes with selection reason', (
     tester,
   ) async {

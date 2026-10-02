@@ -68,7 +68,7 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
     /// 错误文案样式。
     this.errorStyle,
 
-    /// 表单项背景色。
+    /// 表单及表单项背景色。
     this.backgroundColor,
 
     /// 表单项底部分隔线颜色。
@@ -117,7 +117,7 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
   /// 错误文案样式。
   final TextStyle? errorStyle;
 
-  /// 表单项背景色。
+  /// 表单及表单项背景色。
   final Color? backgroundColor;
 
   /// 表单项底部分隔线颜色。

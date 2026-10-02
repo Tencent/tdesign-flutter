@@ -150,6 +150,12 @@ const tagWidgetEvidence = new Map([
 const switchWidgetEvidence = new Map([
   ['switchUncheckedColor', ['tdesign-component/test/components/switch/t_switch_test.dart:331']],
 ]);
+const singleVariableWidgetEvidence = new Map([
+  ['dropdownBodyMaxHeight', ['tdesign-component/test/components/dropdown_menu/t_dropdown_item_test.dart:115', 'tdesign-component/test/components/dropdown_menu/t_dropdown_item_test.dart:144']],
+  ['fabShadow', ['tdesign-component/test/components/fab/t_fab_test.dart:123']],
+  ['formBgColor', ['tdesign-component/test/components/form/t_form_test.dart:20']],
+  ['pullDownRefreshColor', ['tdesign-component/test/components/refresh/t_refresh_test.dart:292']],
+]);
 
 const rows = audit.componentVariables.map((variable) => {
   const directory = ownerDirectory(variable);
@@ -192,6 +198,8 @@ const rows = audit.componentVariables.map((variable) => {
           ? 'fallback-widget-verified-visual-pending'
           : switchWidgetEvidence.has(variable.name)
             ? 'fallback-widget-verified-visual-pending'
+            : singleVariableWidgetEvidence.has(variable.name)
+              ? 'fallback-widget-verified-visual-pending'
           : 'pending';
   const reviewEvidence = buttonWidgetValues.has(variable.name)
     ? ['tdesign-component/test/components/button/t_button_test.dart:432']
@@ -201,6 +209,8 @@ const rows = audit.componentVariables.map((variable) => {
       ? tagWidgetEvidence.get(variable.name)
       : switchWidgetEvidence.has(variable.name)
         ? switchWidgetEvidence.get(variable.name)
+        : singleVariableWidgetEvidence.has(variable.name)
+          ? singleVariableWidgetEvidence.get(variable.name)
       : [];
   let staticStatus;
   if (directory == null) {

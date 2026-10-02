@@ -17,6 +17,50 @@ void main() {
   }
 
   group('TForm and TFormField', () {
+    testWidgets('form root background follows the Token and component Theme', (
+      tester,
+    ) async {
+      const form = TForm(child: SizedBox(height: 80));
+
+      await tester.pumpWidget(wrap(form));
+      final rootBackground = find.descendant(
+        of: find.byType(TForm),
+        matching: find.byType(ColoredBox),
+      );
+      expect(
+        tester.widget<ColoredBox>(rootBackground).color,
+        TThemeData.defaultData().bgColorContainer,
+      );
+
+      await tester.pumpWidget(
+        wrap(
+          form,
+          formTheme: const TFormThemeData(backgroundColor: Colors.yellow),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(tester.widget<ColoredBox>(rootBackground).color, Colors.yellow);
+    });
+
+    testWidgets('form root background follows the dark Token', (tester) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.dark(token),
+          home: const Scaffold(body: TForm(child: SizedBox(height: 80))),
+        ),
+      );
+
+      final rootBackground = find.descendant(
+        of: find.byType(TForm),
+        matching: find.byType(ColoredBox),
+      );
+      expect(
+        tester.widget<ColoredBox>(rootBackground).color,
+        tester.element(rootBackground).tTheme.bgColorContainer,
+      );
+    });
+
     testWidgets('valid submit returns registered controlled values', (
       tester,
     ) async {

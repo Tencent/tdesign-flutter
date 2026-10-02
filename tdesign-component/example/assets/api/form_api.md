@@ -70,7 +70,7 @@ TForm 组件级 ThemeExtension。
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 表单项背景色。 |
+| backgroundColor | Color? | - | 表单及表单项背景色。 |
 | borderColor | Color? | - | 表单项底部分隔线颜色。 |
 | errorStyle | TextStyle? | - | 错误文案样式。 |
 | helpStyle | TextStyle? | - | 辅助说明样式。 |

@@ -56,6 +56,16 @@ Tag 字体宽度：固定 Linux Golden 字体、medium `TTag('Tag')`、文字缩
 
 小程序 `--td-switch-unchecked-color` 的默认回退为 `@bg-color-secondarycontainer-active`（浅色 `#dcdcdc`、暗色 `#383838`）。Flutter 此前误用文字禁用色 `textColorDisabled`（浅色 `#42000000`、暗色 `#38ffffff`），属于组件消费 Token 错误，不是平台渲染差异。`TSwitchResolve.trackOffColor` 改用 `bgColorSecondaryContainerActive`；组件 Theme 的显式 `trackOffColor` 仍覆盖该默认值。此项须以 Widget 值和最终 Linux Golden 核验；Switch 其余组件变量不因此自动通过。
 
+## 2026-10-03：单变量组件消费补核
+
+- `--td-fab-shadow`：小程序 `fab.less` 把 `@shadow-2` 用于 Fab 按钮；Flutter `TFabResolve.resolveButton` 将全局 `shadow2` 传给默认动作层的 `ShapeDecoration.shadows`，现有 Widget 测试已核对最终装饰值。`child` 模式是调用者完全自定义的内容，不注入默认 Fab 阴影。
+- `--td-form-bg-color`：小程序 `form.less` 把 `@bg-color-container` 绘制在 Form 根节点；Flutter 之前仅在 `TFormItem` 中消费 `TFormThemeData.backgroundColor ?? bgColorContainer`，而 `TForm` 根节点只有原生 `Form`，造成空白/间隔区域不能继承组件背景。现由 `TForm` 根部读取相同组件 Theme 字段、再回退全局 Token，Widget 测试核对两种最终背景，不新增同义实例参数。
+- `--td-pull-down-refresh-color`：小程序 `pull-down-refresh.less` 用 `@text-color-placeholder` 绘制非加载状态的提示文本；Flutter 非加载提示的 `TText.style.color` 已读取同名全局 Token，真实下拉手势后的 Widget 测试核对该值。加载态由独立 `TLoadingThemeData` 控制，不能与提示色混同。
+
+## 2026-10-03：DropdownItem 主体高度消费
+
+小程序 `dropdown-item.less` 将 `--td-dropdown-body-max-height` 回退到 `560rpx`（280dp），分别约束单选滚动区及多选主体；底部操作区不计入该上限。Flutter 先前单选与多选面板默认使用整屏高度，长选项列表会超过小程序主体上限。修正默认滚动主体上限为 280dp；已有 `maxHeight` 实例尺寸 API 继续作为唯一显式上限入口，不再增加同义 Theme 字段。多选面板的底部操作区仍位于主体之外，整个面板另外受屏幕可用空间约束。需用长列表 Widget 测试和 Linux Golden 核验实际布局。
+
 ## 2026-09-30：Avatar / AvatarGroup 消费链初核
 
 头像本体的背景、前景、三档边长、文字字号、图标字号和圆/方角，分别走 `TAvatarThemeData` → 全局 Token / `TAvatarDefaults` → `ColoredBox`、`SizedBox.square`、`DefaultTextStyle`、`IconTheme`、`ClipRRect`，默认数值与小程序 `avatar.less` 相同：背景 `brandColorLightActive`、前景 `brandColor`、边长 40/48/64dp、文字 14/16/20dp、图标 20/24/32dp、方角 `radiusDefault=6dp`。`radiusCircle` 的 50% 与固定 999dp 表达差异仍是已批准的平台例外；非正方形内容不得据此宣称像素完全一致。

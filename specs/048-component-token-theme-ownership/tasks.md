@@ -15,7 +15,7 @@
 - [x] 既有 Button/Input 层级规则和 outline 状态回退完成测试；本轮进一步移除与完整实例 `style` 重复的组件 Theme 字段，测试需按新的单入口契约复核，旧规则不再作为验收标准。
 - [ ] DOING 更新源码 dartdoc、Demo 用法与组件测试；已迁移范围完成，待全量回归和 breaking 迁移说明。
 - [ ] DOING 双版本分析、聚焦功能和固定 Linux 3.32.0 无更新 Golden 比对；2026-10-03 本地完整组件功能与分析门禁、隔离 Linux 全量 Golden 严格复跑通过，仍待本次提交后的远端 CI 和外部调用方编译确认。历史 47 张的阶段性结果见 `acceptance.md`，不能当作最终源码状态。
-- [ ] DOING 804 项组件变量已按冻结源码逐项建静态证据；纠正 Less 动态消费误判后，10 项未见静态消费者、81 项属于尚无 Flutter 对应组件的已消费变量；Button 12 项、Tag 12 项默认 Widget 值，Tag 7 项及 Switch 未选中轨道 1 项回退路径已裁定，Progress 9 项已另做默认 Widget/Painter 消费链复核（不等于跨端视觉完成），其余项目仍在 681 项待核队列中，不能直接扣减最终视觉待审数。
+- [ ] DOING 804 项组件变量已按冻结源码逐项建静态证据；纠正 Less 动态消费误判后，10 项未见静态消费者、81 项属于尚无 Flutter 对应组件的已消费变量；Button 12 项、Tag 12 项默认 Widget 值，Tag 7 项及 Switch/Fab/Form/PullDownRefresh/DropdownItem 各 1 项回退路径已裁定，Progress 9 项已另做默认 Widget/Painter 消费链复核（不等于跨端视觉完成），其余项目仍在 677 项待核队列中，不能直接扣减最终视觉待审数。
 - [ ] DOING 已记录公开 API 删除及默认行为变化的 breaking 迁移草案，见 `migration.md`；仓库外独立迁移夹具已在 3.32/3.47 各编译运行 1/1，但真实第三方业务调用点尚未提供、不能宣布外部迁移全量验收。
 - [x] DONE 将组件内置配色选择器统一命名为 `colorPreset`：5 个已导出枚举及 Button、Tag、SelectTag、Link、BackTop、Popover、DialogAction 入口均移除旧 `colorScheme` 同义名；Material `ThemeData.colorScheme` 保留原义。Spec、dartdoc、公开 Demo、生成片段、API 文档和聚焦测试同步；真实第三方迁移与全部旧 Golden 仍是独立门禁。
 - [x] 已输出阶段性的修改、风险、Golden 问题与修复顺序报告：`report.md`；最终发布验收仍未完成。
