@@ -233,14 +233,9 @@ class _TInputState extends State<TInput> {
       height: tokenFont?.height,
       fontWeight: tokenFont?.fontWeight,
     );
-    final inheritedTextStyle = tokenStyle.merge(
-      material.tExplicitTextTheme?.bodyLarge,
-    );
-    final configuredTextStyle = inheritedTextStyle.merge(widget.style);
+    final configuredTextStyle = tokenStyle.merge(widget.style);
     final configuredTextColor = widget.enabled
-        ? material.tExplicitTextTheme?.bodyLarge?.color ??
-              material.tExplicitColorScheme?.onSurface ??
-              inputTextColor
+        ? material.tExplicitColorScheme?.onSurface ?? inputTextColor
         : inputTextColor;
     final textStyle = configuredTextStyle.copyWith(
       color: widget.enabled
@@ -266,13 +261,10 @@ class _TInputState extends State<TInput> {
               height: hintFont?.height,
               fontWeight: hintFont?.fontWeight,
             )
-            .merge(material.tExplicitTextTheme?.bodyLarge)
             .merge(themeHintStyle)
             .copyWith(
               color: widget.enabled
-                  ? themeHintStyle?.color ??
-                        material.inputDecorationTheme.hintStyle?.color ??
-                        token.textColorPlaceholder
+                  ? themeHintStyle?.color ?? token.textColorPlaceholder
                   : token.textColorDisabled,
             );
     final innerDecoration = InputDecoration(
@@ -389,15 +381,11 @@ class _TInputState extends State<TInput> {
             padding: const EdgeInsets.only(top: 4),
             child: Text(
               inputErrorText,
-              style:
-                  TextStyle(
-                        fontSize: token.fontBodySmall?.size,
-                        height: token.fontBodySmall?.height,
-                        fontWeight: token.fontBodySmall?.fontWeight,
-                      )
-                      .merge(material.tExplicitTextTheme?.bodySmall)
-                      .copyWith(color: token.errorColor)
-                      .merge(material.inputDecorationTheme.errorStyle),
+              style: TextStyle(
+                fontSize: token.fontBodySmall?.size,
+                height: token.fontBodySmall?.height,
+                fontWeight: token.fontBodySmall?.fontWeight,
+              ).copyWith(color: token.errorColor),
             ),
           );
 

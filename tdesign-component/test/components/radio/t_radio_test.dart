@@ -504,7 +504,7 @@ void main() {
       expect(tester.getCenter(indicator), tester.getCenter(gesture));
     });
 
-    testWidgets('文本样式继承 Material TextTheme 的字号、行高和字重', (tester) async {
+    testWidgets('文本样式读取全局 TDesign 字体 Token', (tester) async {
       const globalStyle = TextStyle(
         fontSize: 22,
         height: 1.4,
@@ -530,9 +530,18 @@ void main() {
 
       final title = tester.widget<Text>(find.text('全局样式'));
       final subTitle = tester.widget<Text>(find.text('副标题'));
-      expect(title.style?.fontSize, 22);
-      expect(title.style?.height, 1.4);
-      expect(title.style?.fontWeight, FontWeight.w600);
+      expect(
+        title.style?.fontSize,
+        TThemeData.defaultData().fontBodyLarge?.size,
+      );
+      expect(
+        title.style?.height,
+        TThemeData.defaultData().fontBodyLarge?.height,
+      );
+      expect(
+        title.style?.fontWeight,
+        TThemeData.defaultData().fontBodyLarge?.fontWeight,
+      );
       expect(subTitle.style?.fontSize, 14);
     });
 

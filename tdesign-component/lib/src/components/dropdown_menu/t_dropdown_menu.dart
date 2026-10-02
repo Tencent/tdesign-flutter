@@ -631,8 +631,6 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     final activeTokenFont = context.tTheme.fontMarkMedium;
     final baseStyle =
         theme.textStyle ??
-        context.tExplicitDefaultTextStyle ??
-        material.tExplicitTextTheme?.bodyMedium ??
         TextStyle(
           color: context.tTheme.textColorPrimary,
           fontSize: tokenFont?.size,

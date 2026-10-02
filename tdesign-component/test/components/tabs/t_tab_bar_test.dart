@@ -95,9 +95,7 @@ void main() {
       }
     });
 
-    testWidgets('default labels inherit ThemeData bodyMedium font family', (
-      tester,
-    ) async {
+    testWidgets('default labels use TDesign font family', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(
@@ -118,8 +116,8 @@ void main() {
       final tabBar = tester.widget<THorizontalTabBar>(
         find.byType(THorizontalTabBar),
       );
-      expect(tabBar.labelStyle?.fontFamily, 'TestFont');
-      expect(tabBar.unselectedLabelStyle?.fontFamily, 'TestFont');
+      expect(tabBar.labelStyle?.fontFamily, 'Roboto');
+      expect(tabBar.unselectedLabelStyle?.fontFamily, 'Roboto');
     });
 
     testWidgets('Material visual themes do not override TDesign defaults', (
@@ -176,7 +174,7 @@ void main() {
       expect(tabBar.indicatorSize, TabBarIndicatorSize.tab);
       expect(tabBar.labelColor, token.brandColor);
       expect(tabBar.unselectedLabelColor, token.textColorPrimary);
-      expect(tabBar.labelStyle?.fontFamily, 'TestFont');
+      expect(tabBar.labelStyle?.fontFamily, 'Roboto');
       expect(tabBar.labelStyle?.fontSize, token.fontBodyMedium?.size);
       expect(tabBar.labelStyle?.height, token.fontBodyMedium?.height);
       expect(tabBar.labelPadding, const EdgeInsets.all(8));

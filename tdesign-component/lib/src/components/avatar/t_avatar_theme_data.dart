@@ -93,6 +93,7 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
   _AvatarDoubleLerp? get _circleBorderRadiusLerp => null;
   _AvatarDoubleLerp? get _squareBorderRadiusLerp => null;
   _AvatarDoubleLerp? get _groupBorderWidthLerp => null;
+  _AvatarDoubleLerp? get _groupSpacingLerp => null;
 
   @internal
   double resolveDimension(TAvatarSize size) =>
@@ -125,6 +126,14 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
       ) ??
       groupBorderWidth ??
       TAvatarDefaults.groupBorderWidthFor(size);
+
+  @internal
+  double resolveGroupSpacing(double dimension) =>
+      (_groupSpacingLerp?.resolve(TAvatarDefaults.groupSpacing) ??
+              groupSpacing ??
+              TAvatarDefaults.groupSpacing)
+          .clamp(0.0, dimension)
+          .toDouble();
 
   @override
   TAvatarThemeData copyWith({
@@ -161,6 +170,7 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
       groupBorderWidthTransition: groupBorderWidth == null
           ? _groupBorderWidthLerp
           : null,
+      groupSpacingTransition: groupSpacing == null ? _groupSpacingLerp : null,
     );
   }
 
@@ -220,12 +230,13 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
         other.foregroundColor,
         t,
       ),
-      groupSpacing: _lerpNullableDouble(
+      groupSpacing: _lerpExplicitDouble(groupSpacing, other.groupSpacing, t),
+      groupSpacingTransition: _AvatarDoubleLerp.whenNeeded(
         groupSpacing,
+        _groupSpacingLerp,
         other.groupSpacing,
+        other._groupSpacingLerp,
         t,
-        TAvatarDefaults.groupSpacing,
-        TAvatarDefaults.groupSpacing,
       ),
       groupBorderWidth: _lerpExplicitDouble(
         groupBorderWidth,
@@ -272,17 +283,20 @@ class _InterpolatedAvatarThemeData extends TAvatarThemeData {
     _AvatarDoubleLerp? circleBorderRadiusTransition,
     _AvatarDoubleLerp? squareBorderRadiusTransition,
     _AvatarDoubleLerp? groupBorderWidthTransition,
+    _AvatarDoubleLerp? groupSpacingTransition,
   }) : _dimensionTransition = dimensionTransition,
        _iconSizeTransition = iconSizeTransition,
        _circleBorderRadiusTransition = circleBorderRadiusTransition,
        _squareBorderRadiusTransition = squareBorderRadiusTransition,
-       _groupBorderWidthTransition = groupBorderWidthTransition;
+       _groupBorderWidthTransition = groupBorderWidthTransition,
+       _groupSpacingTransition = groupSpacingTransition;
 
   final _AvatarDoubleLerp? _dimensionTransition;
   final _AvatarDoubleLerp? _iconSizeTransition;
   final _AvatarDoubleLerp? _circleBorderRadiusTransition;
   final _AvatarDoubleLerp? _squareBorderRadiusTransition;
   final _AvatarDoubleLerp? _groupBorderWidthTransition;
+  final _AvatarDoubleLerp? _groupSpacingTransition;
 
   @override
   _AvatarDoubleLerp? get _dimensionLerp => _dimensionTransition;
@@ -296,6 +310,8 @@ class _InterpolatedAvatarThemeData extends TAvatarThemeData {
       _squareBorderRadiusTransition;
   @override
   _AvatarDoubleLerp? get _groupBorderWidthLerp => _groupBorderWidthTransition;
+  @override
+  _AvatarDoubleLerp? get _groupSpacingLerp => _groupSpacingTransition;
 }
 
 double? _lerpExplicitDouble(double? begin, double? end, double t) =>
@@ -336,19 +352,6 @@ class _AvatarDoubleLerp {
     endTransition?.resolve(fallback) ?? end ?? fallback,
     t,
   )!;
-}
-
-double? _lerpNullableDouble(
-  double? begin,
-  double? end,
-  double t,
-  double defaultBegin,
-  double defaultEnd,
-) {
-  if (begin == null && end == null) {
-    return null;
-  }
-  return lerpDouble(begin ?? defaultBegin, end ?? defaultEnd, t);
 }
 
 Color? _lerpTokenColor(Color? begin, Color? end, double t) {

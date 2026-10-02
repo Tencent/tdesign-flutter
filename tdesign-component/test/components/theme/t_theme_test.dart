@@ -154,35 +154,29 @@ void main() {
   });
 
   group('TStyleResolver', () {
-    testWidgets(
-      'of/token/colorScheme/textTheme/materialTheme/componentExtension',
-      (tester) async {
-        final token = TThemeData.defaultData();
-        final resolverHolder = <TStyleResolver>[];
-        await tester.pumpWidget(
-          MaterialApp(
-            theme: ThemeData(
-              extensions: [token],
-              textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 13)),
-            ),
-            home: Builder(
-              builder: (context) {
-                final r = TStyleResolver.of(context);
-                resolverHolder.add(r);
-                // 触发各 getter
-                expect(r.token, isA<TThemeData>());
-                expect(r.colorScheme, isA<ColorScheme>());
-                expect(r.textTheme, isA<TextTheme>());
-                expect(r.materialTheme, isA<ThemeData>());
-                expect(r.componentExtension<TThemeData>(), isNotNull);
-                return const SizedBox();
-              },
-            ),
+    testWidgets('of/token/componentExtension', (tester) async {
+      final token = TThemeData.defaultData();
+      final resolverHolder = <TStyleResolver>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            extensions: [token],
+            textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 13)),
           ),
-        );
-        expect(resolverHolder, isNotEmpty);
-      },
-    );
+          home: Builder(
+            builder: (context) {
+              final r = TStyleResolver.of(context);
+              resolverHolder.add(r);
+              // 触发各 getter
+              expect(r.token, isA<TThemeData>());
+              expect(r.componentExtension<TThemeData>(), isNotNull);
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      expect(resolverHolder, isNotEmpty);
+    });
 
     testWidgets('token 无 Extension 时回退 defaultData', (tester) async {
       await tester.pumpWidget(

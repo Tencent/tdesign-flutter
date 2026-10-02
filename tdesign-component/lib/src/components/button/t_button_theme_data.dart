@@ -2,6 +2,8 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
+import 't_button_defaults.dart';
+
 /// TButton 组件级 ThemeExtension
 ///
 /// 只承载 [ButtonStyle] 不能表达的按钮子树默认视觉值。
@@ -37,7 +39,13 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
       return this;
     }
     return TButtonThemeData(
-      iconTextSpacing: lerpDouble(iconTextSpacing, other.iconTextSpacing, t),
+      iconTextSpacing: iconTextSpacing == null && other.iconTextSpacing == null
+          ? null
+          : lerpDouble(
+              iconTextSpacing ?? TButtonDefaults.iconTextSpacing,
+              other.iconTextSpacing ?? TButtonDefaults.iconTextSpacing,
+              t,
+            ),
       gradient: t < 0.5 ? gradient : other.gradient,
     );
   }

@@ -255,7 +255,7 @@ void main() {
     expect(fieldRect.left, labelRect.left);
   });
 
-  testWidgets('textarea label uses text theme and disabled semantics', (
+  testWidgets('textarea label uses TDesign token and disabled semantics', (
     tester,
   ) async {
     final token = TThemeData.defaultData();
@@ -274,8 +274,8 @@ void main() {
     );
 
     final enabled = tester.widget<Text>(find.text('enabled')).style;
-    expect(enabled?.color, Colors.purple);
-    expect(enabled?.fontWeight, FontWeight.bold);
+    expect(enabled?.color, token.textColorPrimary);
+    expect(enabled?.fontWeight, token.fontBodyMedium?.fontWeight);
 
     await tester.pumpWidget(
       MaterialApp(

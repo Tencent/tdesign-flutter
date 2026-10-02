@@ -178,7 +178,9 @@ class TAvatarGroup extends StatelessWidget {
     }).toList();
     final resolvedDimension = dimensions.reduce((a, b) => a > b ? a : b);
     final requestedOverlap =
-        spacing ?? theme?.groupSpacing ?? TAvatarDefaults.groupSpacing;
+        spacing ??
+        theme?.resolveGroupSpacing(resolvedDimension) ??
+        TAvatarDefaults.groupSpacing;
     final overlap = requestedOverlap.isFinite
         ? requestedOverlap.clamp(0, resolvedDimension).toDouble()
         : TAvatarDefaults.groupSpacing.clamp(0, resolvedDimension).toDouble();

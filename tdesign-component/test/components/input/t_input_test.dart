@@ -169,7 +169,7 @@ void main() {
       expect(decoration?.hintMaxLines, 1);
     });
 
-    testWidgets('native hint color applies without leaking decoration layout', (
+    testWidgets('native hint style does not override TDesign hint token', (
       tester,
     ) async {
       final theme = TThemeBuilder.light(TThemeData.defaultData()).copyWith(
@@ -189,7 +189,10 @@ void main() {
       );
 
       final decoration = field(tester).decoration;
-      expect(decoration?.hintStyle?.color, Colors.purple);
+      expect(
+        decoration?.hintStyle?.color,
+        TThemeData.defaultData().textColorPlaceholder,
+      );
       expect(decoration?.filled, isFalse);
       expect(decoration?.fillColor, Colors.transparent);
       expect(decoration?.contentPadding, EdgeInsets.zero);
@@ -246,34 +249,47 @@ void main() {
       expect(field(tester).style?.color, token.textColorPrimary);
     });
 
-    testWidgets('explicit Flutter typography precedes token defaults', (
-      tester,
-    ) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: ThemeData(
-            textTheme: const TextTheme(
-              bodyLarge: TextStyle(
-                color: Colors.black,
-                fontSize: 19,
-                height: 1.5,
+    testWidgets(
+      'explicit Flutter typography does not override token defaults',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              textTheme: const TextTheme(
+                bodyLarge: TextStyle(
+                  color: Colors.black,
+                  fontSize: 19,
+                  height: 1.5,
+                ),
               ),
+              extensions: [TThemeData.defaultData()],
             ),
-            extensions: [TThemeData.defaultData()],
+            home: const Scaffold(body: TInput(hintText: 'hint')),
           ),
-          home: const Scaffold(body: TInput(hintText: 'hint')),
-        ),
-      );
+        );
 
-      expect(field(tester).style?.fontSize, 19);
-      expect(field(tester).style?.height, 1.5);
-      expect(field(tester).decoration?.hintStyle?.fontSize, 19);
-      expect(field(tester).decoration?.hintStyle?.height, 1.5);
-      expect(
-        field(tester).decoration?.hintStyle?.color,
-        TThemeData.defaultData().textColorPlaceholder,
-      );
-    });
+        expect(
+          field(tester).style?.fontSize,
+          TThemeData.defaultData().fontBodyLarge?.size,
+        );
+        expect(
+          field(tester).style?.height,
+          TThemeData.defaultData().fontBodyLarge?.height,
+        );
+        expect(
+          field(tester).decoration?.hintStyle?.fontSize,
+          TThemeData.defaultData().fontBodyLarge?.size,
+        );
+        expect(
+          field(tester).decoration?.hintStyle?.height,
+          TThemeData.defaultData().fontBodyLarge?.height,
+        );
+        expect(
+          field(tester).decoration?.hintStyle?.color,
+          TThemeData.defaultData().textColorPlaceholder,
+        );
+      },
+    );
 
     testWidgets(
       'instance text style and component hint style preserve token typography',
@@ -724,7 +740,7 @@ void main() {
       expect(currentBorder().bottom.color, Colors.purple);
     });
 
-    testWidgets('standalone field error uses Material error style', (
+    testWidgets('standalone field error uses TDesign error token', (
       tester,
     ) async {
       final controller = TFormController();
@@ -757,8 +773,11 @@ void main() {
       expect(controller.validate(), isFalse);
       await tester.pump();
       final error = tester.widget<Text>(find.text('required'));
-      expect(error.style?.color, Colors.purple);
-      expect(error.style?.fontWeight, FontWeight.bold);
+      expect(error.style?.color, TThemeData.defaultData().errorColor);
+      expect(
+        error.style?.fontWeight,
+        TThemeData.defaultData().fontBodySmall?.fontWeight,
+      );
       expect(
         error.style?.fontSize,
         TThemeData.defaultData().fontBodySmall?.size,

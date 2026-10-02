@@ -149,3 +149,16 @@
 - 在隔离的 Linux amd64 / Flutter 3.32.0 副本中先无更新参数复现，再仅更新实际变化的 12 张 Golden：Cascader 组件 1 张、Slider 组件与 Demo 7 张、Theme 组件与 Demo 4 张。Cascader Demo 基线已有最新布局，无需改动。
 - 差异包括 Cascader 组件分隔线 `#E7E7E7 → #E8E8E8`（343×1 像素）、Slider 轨道及 Demo 配色、Theme 色板项目和页面高度；Theme light/dark 页面分别从 375×2991 / 375×2969 变为 375×2837。Theme 的 Popup ActionSheet 共享样例底部分隔区域也随 Token 改变，归入本次 Theme 基线。
 - 更新后立即在相同 Linux 环境移除更新参数复跑：组件相关测试 8/8、Demo 相关测试 28/28 通过。此结果仅证明上述受影响场景的新基线可复现；全量视觉回归和 PR 最终 head 的远端 CI 仍须另验。
+
+### 2026-10-02 组件 Theme 插值与 Progress 尺寸命名补充
+
+- Figma Copy 节点 `26805:11064` 返回 Tag 正文 12px/20px、水平/垂直 padding 8px/2px、方角 3px；本轮未修改这些默认视觉值。修正 Tag 通用前景/背景色与 padding 的 nullable 插值，使动画按当前配色和尺寸的有效默认值过渡；自适应与固定宽度之间采用离散切换，不将自适应误作 0 宽。
+- Avatar 组间距在最终成员尺寸下解析并约束，避免两个合法 Theme 端点的中间态违反构造断言；Button 图文间距按内置 4dp 起点插值；Progress 不确定态比例、时长及依赖 variant/状态/Token 的尺寸和绘制字段均按有效默认值插值。`TProgressThemeData.circleRadius` 改名为 `circleSize`，数值含义仍是外框边长，不保留旧名。
+- Flutter 3.32.0 与 3.47.0：Avatar、Progress、Tag、Button 四份组件测试各 289/289；组件包与 Example 包 `flutter analyze --fatal-infos` 均零诊断。57 份 API 文档由生成器重建，仅 Progress 文档保留本次公开字段变化；生成器额外删掉的无关 Drawer 入口已还原。
+- 本轮在 macOS 执行非视觉验证，未生成或更新 Linux Golden；默认静态值未有意更改，但动画中间帧和公开 API 仍需在 PR 最终 head 的 Linux 3.32.0 回归与外部调用方编译中验收。Material `ColorScheme`/`TextTheme` 的字段级显式来源识别仍待单独裁定，不以整体色板比较作为临时兼容桥接。
+
+### 2026-10-02 文字样式单一来源补充（本地未提交）
+
+- 移除 Material `TextTheme` 显式来源推断，以及 `DefaultTextStyle` 到 TDesign 文字样式的自动桥接。默认文字只由全局 `TThemeData`、组件 `ThemeExtension` 和现存的实例样式解析；TThemeBuilder 向 Material `TextTheme` 的投影仍供原生 Material 控件使用，但 TDesign 组件不回读。`TStyleResolver` 不再提供 `textTheme/colorScheme/materialTheme` 转发 getter。
+- Drawer 内置标题若收到 `TText`，由 Drawer 组件 Theme 显式传递标题样式；任意 Flutter `Text` 子节点仍可读取内部 `DefaultTextStyle`，但外层 Material 文字主题不参与 TDesign 解析。Tag 与 Progress 的字体族/回退仅取 TDesign Token。测试专用 Golden 字体通过 `TThemeData.fontFamilyMap` 注入，避免仅配置 Material `TextTheme` 时中文丢字。
+- Flutter 3.32.0 / 3.47.0 严格分析各零诊断；两个版本受影响组件功能测试各 1090/1090 通过，Golden 字体注入单测各 1/1 通过。固定 Linux 3.32.0 使用隔离源码副本无更新跑视觉矩阵，已发现多个旧基线差异：Badge 单页 light/dark 各 0.09%（487/484 像素，集中在 Badge 小字）；Text Demo 高度 1616→1604，Tag/Progress/ActionSheet 等差异集中于文字字形或行盒；BackTop、Cascader 等还出现尺寸差异。不能仅凭功能通过或文字来源变动批量更新 Golden，须按最终源码逐类复核尺寸与像素后再更新并重跑。未修改仓库 Golden。

@@ -983,6 +983,34 @@ void main() {
       expect(result.squareBorderRadius, closeTo(3.6, 1e-9));
     });
 
+    test('统一颜色与内边距从组件有效默认值连续过渡', () {
+      const begin = TTagThemeData();
+      const end = TTagThemeData(
+        textColor: Colors.red,
+        backgroundColor: Colors.blue,
+        padding: EdgeInsets.all(10),
+        fixedWidth: 80,
+      );
+      final middle = begin.lerp(end, 0.5);
+      expect(
+        middle.resolveTextColor(Colors.black),
+        Color.lerp(Colors.black, Colors.red, 0.5),
+      );
+      expect(
+        middle.resolveBackgroundColor(Colors.white),
+        Color.lerp(Colors.white, Colors.blue, 0.5),
+      );
+      expect(
+        middle.resolvePadding(
+          const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        ),
+        const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+      );
+      expect(begin.lerp(end, 0).fixedWidth, isNull);
+      expect(begin.lerp(end, 0.5).fixedWidth, 80);
+      expect(begin.lerp(begin, 0.5).padding, isNull);
+    });
+
     test('方角继承全局 Token 时连续插值，并在消费时读取当前值', () {
       const inherited = TTagThemeData();
       const overridden = TTagThemeData(squareBorderRadius: 6);

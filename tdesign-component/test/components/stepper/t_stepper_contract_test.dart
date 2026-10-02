@@ -257,46 +257,58 @@ void main() {
     }
   });
 
-  testWidgets('inherited text and icon defaults survive nested interpolation', (
-    tester,
-  ) async {
-    const a = TStepperThemeData();
-    const b = TStepperThemeData(controlSize: 40, foregroundColor: Colors.black);
-    final theme = a
-        .lerp(b, 0.5)
-        .lerp(
-          const TStepperThemeData(
-            controlSize: 48,
-            foregroundColor: Colors.white,
+  testWidgets(
+    'TDesign text and inherited icon defaults survive interpolation',
+    (tester) async {
+      const a = TStepperThemeData();
+      const b = TStepperThemeData(
+        controlSize: 40,
+        foregroundColor: Colors.black,
+      );
+      final theme = a
+          .lerp(b, 0.5)
+          .lerp(
+            const TStepperThemeData(
+              controlSize: 48,
+              foregroundColor: Colors.white,
+            ),
+            0.5,
+          );
+      await tester.pumpWidget(
+        host(
+          DefaultTextStyle(
+            style: const TextStyle(color: Colors.red),
+            child: IconTheme(
+              data: const IconThemeData(color: Colors.green),
+              child: TStepper(value: 3, onChanged: (_) {}),
+            ),
           ),
-          0.5,
-        );
-    await tester.pumpWidget(
-      host(
-        DefaultTextStyle(
-          style: const TextStyle(color: Colors.red),
-          child: IconTheme(
-            data: const IconThemeData(color: Colors.green),
-            child: TStepper(value: 3, onChanged: (_) {}),
-          ),
+          theme: theme,
         ),
-        theme: theme,
-      ),
-    );
-    expect(size(tester).height, 40);
-    expect(
-      input(tester).style.color,
-      Color.lerp(Color.lerp(Colors.red, Colors.black, 0.5), Colors.white, 0.5),
-    );
-    expect(
-      tester.widget<Icon>(find.byIcon(TIcons.plus)).color,
-      Color.lerp(
-        Color.lerp(Colors.green, Colors.black, 0.5),
-        Colors.white,
-        0.5,
-      ),
-    );
-  });
+      );
+      expect(size(tester).height, 40);
+      expect(
+        input(tester).style.color,
+        Color.lerp(
+          Color.lerp(
+            TThemeData.defaultData().textColorPrimary,
+            Colors.black,
+            0.5,
+          ),
+          Colors.white,
+          0.5,
+        ),
+      );
+      expect(
+        tester.widget<Icon>(find.byIcon(TIcons.plus)).color,
+        Color.lerp(
+          Color.lerp(Colors.green, Colors.black, 0.5),
+          Colors.white,
+          0.5,
+        ),
+      );
+    },
+  );
 
   testWidgets('AnimatedTheme renders valid endpoint and midpoint geometry', (
     tester,

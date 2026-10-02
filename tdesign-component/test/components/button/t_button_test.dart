@@ -1931,6 +1931,15 @@ void main() {
   // Theme 子树仅注入非 ButtonStyle 字段
   // ============================================================
   group('TButton Theme 子树', () {
+    test('图文间距从内置 4dp 默认值插值', () {
+      const begin = TButtonThemeData();
+      const end = TButtonThemeData(iconTextSpacing: 8);
+      expect(begin.lerp(end, 0).iconTextSpacing, 4);
+      expect(begin.lerp(end, 0.5).iconTextSpacing, 6);
+      expect(end.lerp(begin, 0.5).iconTextSpacing, 6);
+      expect(begin.lerp(begin, 0.5).iconTextSpacing, isNull);
+    });
+
     testWidgets('mergeExtension 覆盖构造器未传项', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(

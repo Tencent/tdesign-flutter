@@ -116,7 +116,7 @@
 | animationDuration | Duration? | - | 动画持续时间 |
 | backgroundColor | Color? | - | 进度条背景色 |
 | circleInnerBgColor | Color? | - | 环形进度条内圆背景色。默认浅色读取容器色、暗色透明； 宿主如需定义暗色内圆，可在组件 Theme 中显式配置。 |
-| circleRadius | double? | - | 环形进度条半径 |
+| circleSize | double? | - | 环形进度条的正方形边长；未设置时由环形规格决定。 |
 | color | Color? | - | 进度条颜色 |
 | indeterminateAnimationDuration | Duration? | - | 不确定进度完成一次循环的时长。 |
 | indeterminateCircularValue | double? | - | 不确定环形进度弧占整圈的比例。 |

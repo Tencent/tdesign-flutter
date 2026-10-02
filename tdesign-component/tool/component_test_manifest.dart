@@ -38,7 +38,10 @@ enum VisualTestKind {
   component,
 }
 
-const sharedExampleTests = ['test/widget_test.dart'];
+const sharedExampleTests = [
+  'test/widget_test.dart',
+  'test/demo_page_test_utils_test.dart',
+];
 
 const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(

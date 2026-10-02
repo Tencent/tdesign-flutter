@@ -113,7 +113,7 @@ SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
           fontSize: token.fontBodyMedium?.size,
           height: token.fontBodyMedium?.height,
           fontWeight: token.fontBodyMedium?.fontWeight,
-        ).merge(material.tExplicitTextTheme?.bodyMedium),
+        ),
   );
 }
 

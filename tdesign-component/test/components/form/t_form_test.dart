@@ -1793,7 +1793,7 @@ void main() {
       );
     });
 
-    testWidgets('explicit Material label typography overrides token defaults', (
+    testWidgets('Material label typography does not override token defaults', (
       tester,
     ) async {
       const materialLabel = TextStyle(
@@ -1813,9 +1813,12 @@ void main() {
       );
 
       final style = tester.widget<Text>(find.text('Material label')).style;
-      expect(style?.color, materialLabel.color);
-      expect(style?.fontSize, materialLabel.fontSize);
-      expect(style?.fontWeight, materialLabel.fontWeight);
+      expect(style?.color, TThemeData.defaultData().textColorPrimary);
+      expect(style?.fontSize, TThemeData.defaultData().fontBodyLarge?.size);
+      expect(
+        style?.fontWeight,
+        TThemeData.defaultData().fontBodyLarge?.fontWeight,
+      );
     });
 
     testWidgets('font fallback does not override default label geometry', (
@@ -1840,7 +1843,7 @@ void main() {
       expect(style?.fontSize, token.fontBodyLarge?.size);
       expect(style?.height, token.fontBodyLarge?.height);
       expect(style?.fontWeight, token.fontBodyLarge?.fontWeight);
-      expect(style?.fontFamilyFallback, contains('TDesign Test Fallback'));
+      expect(style?.fontFamilyFallback, isNull);
     });
 
     testWidgets('required mark theme merges with the semantic error color', (

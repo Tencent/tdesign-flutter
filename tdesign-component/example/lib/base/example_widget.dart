@@ -345,28 +345,12 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
                   Text(
                     '${moduleIndex + 1 < 10 ? '0' : ''}${moduleIndex + 1} '
                     '${module.title}',
-                    style:
-                        (Theme.of(context).tExplicitTextTheme?.titleLarge ??
-                                const TextStyle())
-                            .copyWith(
-                              fontSize:
-                                  Theme.of(
-                                    context,
-                                  ).tExplicitTextTheme?.titleLarge?.fontSize ??
-                                  context.tTheme.fontTitleLarge?.size,
-                              height:
-                                  Theme.of(
-                                    context,
-                                  ).tExplicitTextTheme?.titleLarge?.height ??
-                                  context.tTheme.fontTitleLarge?.height,
-                              fontWeight:
-                                  Theme.of(context)
-                                      .tExplicitTextTheme
-                                      ?.titleLarge
-                                      ?.fontWeight ??
-                                  context.tTheme.fontTitleLarge?.fontWeight,
-                              color: context.tTheme.textColorPrimary,
-                            ),
+                    style: TextStyle(
+                      fontSize: context.tTheme.fontTitleLarge?.size,
+                      height: context.tTheme.fontTitleLarge?.height,
+                      fontWeight: context.tTheme.fontTitleLarge?.fontWeight,
+                      color: context.tTheme.textColorPrimary,
+                    ),
                   ),
                 if (item.desc.isNotEmpty)
                   Padding(

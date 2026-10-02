@@ -1,10 +1,8 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
-import '../../theme/t_text_theme_source.dart';
 import '../../theme/t_theme.dart';
 import 't_field_scope.dart';
 import 't_form.dart';
@@ -97,8 +95,6 @@ class TFormItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TFormThemeData>();
-    final materialTheme = Theme.of(context);
-    final textTheme = materialTheme.tExplicitTextTheme;
     final token = context.tTheme;
     final fieldScope = TFieldScope.maybeOf(context);
     final inheritedErrorText = showErrorMessage ? fieldScope?.errorText : null;
@@ -142,61 +138,18 @@ class TFormItem extends StatelessWidget {
       fontWeight: labelFont?.fontWeight,
       letterSpacing: 0,
     );
-    final materialLabelStyle = textTheme?.bodyMedium;
-    final projectedTextTheme = materialTheme.extensions.values
-        .whereType<TTextThemeSource>()
-        .firstOrNull
-        ?.textTheme;
-    final implicitTextTheme =
-        projectedTextTheme ??
-        ThemeData(
-          brightness: materialTheme.brightness,
-          colorScheme: materialTheme.colorScheme,
-          useMaterial3: materialTheme.useMaterial3,
-        ).textTheme;
-    final typography = materialTheme.useMaterial3
-        ? Typography.material2021(platform: materialTheme.platform)
-        : Typography.material2014(platform: materialTheme.platform);
-    final implicitLabelStyle = typography.englishLike
-        .merge(implicitTextTheme)
-        .bodyMedium;
-    final mergedLabelStyle = labelBaseStyle.merge(materialLabelStyle);
-    // TextTheme.apply(fontFamilyFallback: ...) 只配置字形时，Material 的
-    // bodyMedium 默认字号不能覆盖水平表单项的 bodyLarge Token 尺寸。
-    final labelStyle = mergedLabelStyle
-        .copyWith(
-          color: materialLabelStyle?.color == implicitLabelStyle?.color
-              ? labelBaseStyle.color
-              : mergedLabelStyle.color,
-          fontSize: materialLabelStyle?.fontSize == implicitLabelStyle?.fontSize
-              ? labelBaseStyle.fontSize
-              : mergedLabelStyle.fontSize,
-          height: materialLabelStyle?.height == implicitLabelStyle?.height
-              ? labelBaseStyle.height
-              : mergedLabelStyle.height,
-          fontWeight:
-              materialLabelStyle?.fontWeight == implicitLabelStyle?.fontWeight
-              ? labelBaseStyle.fontWeight
-              : mergedLabelStyle.fontWeight,
-          letterSpacing:
-              materialLabelStyle?.letterSpacing ==
-                  implicitLabelStyle?.letterSpacing
-              ? labelBaseStyle.letterSpacing
-              : mergedLabelStyle.letterSpacing,
-        )
-        .merge(theme?.labelStyle);
+    final labelStyle = labelBaseStyle.merge(theme?.labelStyle);
     final helpFont = token.fontBodySmall;
     final messageTextStyle = TextStyle(
       fontSize: helpFont?.size,
       height: helpFont?.height,
       fontWeight: helpFont?.fontWeight,
-    ).merge(textTheme?.bodySmall);
+    );
     final helpStyle = messageTextStyle
         .copyWith(color: token.textColorPlaceholder)
         .merge(theme?.helpStyle);
     final errorStyle = messageTextStyle
         .copyWith(color: token.errorColor)
-        .merge(materialTheme.inputDecorationTheme.errorStyle)
         .merge(theme?.errorStyle);
     final labelWidget = label == null
         ? null

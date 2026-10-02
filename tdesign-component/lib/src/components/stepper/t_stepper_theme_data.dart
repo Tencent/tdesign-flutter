@@ -54,7 +54,7 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
 
     /// 输入文字样式。
     ///
-    /// 在继承 DefaultTextStyle 和 ThemeData.textTheme 后合并；非空字段可覆盖
+    /// 在继承全局 TDesign Token 和 DefaultTextStyle 后合并；非空字段可覆盖
     /// 默认字号、行高及 [foregroundColor]。仅覆盖字号时会按最终字号重新计算
     /// 默认行高倍数；显式设置的 [TextStyle.height] 始终优先。最终字号或显式
     /// 物理行盒超过控件高度属于无效配置，并会在调试模式触发断言。

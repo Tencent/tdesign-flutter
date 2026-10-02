@@ -365,7 +365,7 @@ void main() {
       expect(spacing.width, 12);
     });
 
-    testWidgets('TextTheme 只继承字体属性且组件语义颜色优先', (tester) async {
+    testWidgets('Material TextTheme 不覆盖字体 Token，组件语义颜色优先', (tester) async {
       final token = TThemeData.defaultData();
       final theme = TThemeBuilder.light(token)
           .copyWith(
@@ -407,13 +407,13 @@ void main() {
       final title = tester.widget<Text>(find.text('标题')).style!;
       final subTitle = tester.widget<Text>(find.text('副标题')).style!;
       expect(title.color, Colors.green);
-      expect(title.fontSize, 18);
-      expect(title.height, 1.4);
-      expect(title.fontWeight, FontWeight.w600);
+      expect(title.fontSize, token.fontBodyLarge?.size);
+      expect(title.height, token.fontBodyLarge?.height);
+      expect(title.fontWeight, token.fontBodyLarge?.fontWeight);
       expect(subTitle.color, Colors.yellow);
-      expect(subTitle.fontSize, 15);
-      expect(subTitle.height, 1.3);
-      expect(subTitle.fontWeight, FontWeight.w500);
+      expect(subTitle.fontSize, token.fontBodyMedium?.size);
+      expect(subTitle.height, token.fontBodyMedium?.height);
+      expect(subTitle.fontWeight, token.fontBodyMedium?.fontWeight);
 
       await tester.pumpWidget(
         MaterialApp(

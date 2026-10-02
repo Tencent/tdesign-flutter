@@ -40,7 +40,7 @@
 | `--td-progress-line-stroke-width` | `progress.less` 线性轨道高度，12rpx → 6dp | `linearStrokeWidth=6` → `_ProgressIndicator.strokeWidth` → `progress-track` 高度；组件测试实测 6dp。 |
 | `--td-progress-stroke-plump-width` | plump 高度，40rpx → 20dp | `plumpHeight=20` → 轨道高度；组件测试实测 20dp。 |
 | `--td-progress-stroke-circle-width` | 环形内圆尺寸和 WXS 环宽，12rpx → 6dp；micro 局部覆盖 4rpx → 2dp | `circularStrokeWidth=6` / `microCircularStrokeWidth=2` → `TProgressCircular` painter；圆环中心内径按 `diameter - 2×strokeWidth`，micro 分支亦同。 |
-| `--td-progress-circle-width` | 224rpx → 112dp；micro 局部覆盖 48rpx → 24dp | `circularSize=112` / `microCircularSize=24` → `SizedBox.square`；组件测试实测 112/24dp。组件 Theme 的旧名 `circleRadius` 实际传入直径，属另一个待收敛的 API 命名风险，不能误当几何半径。 |
+| `--td-progress-circle-width` | 224rpx → 112dp；micro 局部覆盖 48rpx → 24dp | `circularSize=112` / `microCircularSize=24` → `SizedBox.square`；组件测试实测 112/24dp。组件 Theme 使用 `circleSize` 表达外框边长，不再把直径误称为半径。 |
 | `--td-progress-circle-icon-size` | 默认 96rpx → 48dp；WXML 状态图标直接写 `96rpx`，组件 Less 中声明的变量本身未在该文件消费 | Flutter 圆环状态 `IconTheme.size=48`，默认值与运行结果一致；小程序组件变量的独立覆盖能力并未因此得到证明，不能机械开放同名 Theme 字段。 |
 | `--td-progress-circle-label-font` | `@font-title-extraLarge` → 20dp/28dp、w600 | `fontTitleExtraLarge` → `_buildLabelWidget` → `DefaultTextStyle`；组件测试核对字号、行高、字重。 |
 | `--td-progress-track-bg-color` | `@bg-color-component` → 浅 `#e7e7e7` / 暗 `#383838` | `bgColorComponent` 默认进入线性 `BoxDecoration` 或环形 Painter；显式 `TProgressThemeData.backgroundColor` / Flutter `ProgressIndicatorTheme` 按公开优先级覆盖。 |

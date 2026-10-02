@@ -311,19 +311,34 @@ ThemeData withDemoGoldenFonts(ThemeData theme, DemoPageTestSpec spec) {
     if (spec.useAlignmentCjkFont) _alignmentCjkFontFamily,
     if (spec.supplementalCjkFontFamily case final family?) family,
   ];
-  final withFonts = theme.copyWith(
-    textTheme: theme.textTheme.apply(fontFamilyFallback: fallback),
-    primaryTextTheme: theme.primaryTextTheme.apply(
-      fontFamilyFallback: fallback,
-    ),
-    // Golden 字体只用于稳定跨平台字形，不能把全局 labelSmall 的 12/20
-    // 误当成 TBadge 的显式尺寸覆盖；Badge 仍应保留自己的 10/16 Token。
-    badgeTheme: theme.badgeTheme.copyWith(
-      textStyle: theme.badgeTheme.textStyle?.copyWith(
-        fontFamilyFallback: fallback,
+  final token = theme.extension<TThemeData>() ?? TThemeData.defaultData();
+  final goldenToken = token.copyWithTThemeData(
+    '${token.name}-golden',
+    fontFamilyMap: {
+      'fontFamily': FontFamily(
+        // Linux Golden 中 Roboto 用于英文/数字，CJK 字体用于中文。
+        // 这只修正测试字形，不改变产品的全局字体 Token。
+        fontFamily: token.fontFamily?.flutterFontFamily ?? 'Roboto',
+        package: token.fontFamily?.package,
+        fallback: {...fallback, ...?token.fontFamily?.fallback}.toList(),
       ),
-    ),
+    },
   );
+  final withFonts = theme
+      .mergeExtension(goldenToken)
+      .copyWith(
+        textTheme: theme.textTheme.apply(fontFamilyFallback: fallback),
+        primaryTextTheme: theme.primaryTextTheme.apply(
+          fontFamilyFallback: fallback,
+        ),
+        // Golden 字体只用于稳定跨平台字形，不能把全局 labelSmall 的 12/20
+        // 误当成 TBadge 的显式尺寸覆盖；Badge 仍应保留自己的 10/16 Token。
+        badgeTheme: theme.badgeTheme.copyWith(
+          textStyle: theme.badgeTheme.textStyle?.copyWith(
+            fontFamilyFallback: fallback,
+          ),
+        ),
+      );
   if (spec.goldenTTextFontFamily case final family?) {
     // Keep this font override in the Golden theme, not in the public Demo.
     // TTextThemeData supplies only the font fields; TabBar still owns its
@@ -337,7 +352,6 @@ ThemeData withDemoGoldenFonts(ThemeData theme, DemoPageTestSpec spec) {
   if (spec.name != 'dialog') {
     return withFonts;
   }
-  final token = theme.extension<TThemeData>() ?? TThemeData.defaultData();
   return withFonts.mergeExtension(
     TDialogThemeData(
       titleTextStyle: TextStyle(

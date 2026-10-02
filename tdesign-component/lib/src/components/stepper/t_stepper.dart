@@ -566,36 +566,21 @@ class _StepperStyle {
     final variant = widget.variant ?? TStepperVariant.normal;
     final geometry = stepperGeometry(size);
     final controlSize = componentTheme?.controlSize ?? geometry.controlSize;
-    final explicitDefaultTextStyle = context.tExplicitDefaultTextStyle;
-    final defaultTextStyle = explicitDefaultTextStyle == null
-        ? null
-        : _flattenFontPackage(explicitDefaultTextStyle);
-    final materialTextStyle = _flattenFontPackage(
-      materialTheme.tExplicitTextTheme?.bodySmall ?? const TextStyle(),
-    );
     final rawComponentTextStyle = componentTheme?.textStyle;
     final componentTextStyle = rawComponentTextStyle == null
         ? null
         : _flattenFontPackage(rawComponentTextStyle);
     // Flutter asset used by Stepper; not a mini-program global token.
     const resolvedNumberFontFamily = 'packages/tdesign_flutter/TCloudNumber';
-    final inheritedFontFamily =
-        defaultTextStyle?.fontFamily ??
-        materialTextStyle.fontFamily ??
-        resolvedNumberFontFamily;
     final foregroundColor =
-        componentTheme?.foregroundColor ??
-        defaultTextStyle?.color ??
-        materialTextStyle.color ??
-        token.textColorPrimary;
+        componentTheme?.foregroundColor ?? token.textColorPrimary;
     final disabledForegroundColor =
         componentTheme?.disabledForegroundColor ?? token.textColorDisabled;
-    final themedTextStyle = materialTextStyle
-        .merge(defaultTextStyle)
+    final themedTextStyle = const TextStyle()
         .copyWith(
           fontSize: geometry.fontSize,
           color: foregroundColor,
-          fontFamily: inheritedFontFamily,
+          fontFamily: resolvedNumberFontFamily,
           letterSpacing: 0,
         )
         .merge(componentTextStyle);

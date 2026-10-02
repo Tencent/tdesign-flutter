@@ -345,7 +345,7 @@ void main() {
       expect(find.text('主题 panel'), findsOneWidget);
     });
 
-    testWidgets('local DefaultTextStyle and IconTheme precede token fallback', (
+    testWidgets('Token ignores DefaultTextStyle; IconTheme controls icon', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -362,7 +362,10 @@ void main() {
           ),
         ),
       );
-      expect(tester.widget<Text>(find.text('继承主题')).style?.color, Colors.brown);
+      expect(
+        tester.widget<Text>(find.text('继承主题')).style?.color,
+        TThemeData.defaultData().textColorPrimary,
+      );
       final icon = tester.widget<Icon>(
         find.descendant(
           of: find.byType(TDropdownMenu),

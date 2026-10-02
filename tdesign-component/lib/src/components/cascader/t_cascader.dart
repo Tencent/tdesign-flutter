@@ -476,10 +476,6 @@ class _TCascaderState extends State<TCascader> {
   ) {
     final material = Theme.of(context);
     final tokenFont = context.tTheme.fontBodyLarge;
-    final inherited = context.tExplicitDefaultTextStyle;
-    final defaultStyle = _isAutomaticMaterialTextStyle(material, inherited)
-        ? null
-        : inherited;
     final textTheme = material.extension<TTextThemeData>();
     final normal =
         TextStyle(
@@ -488,13 +484,11 @@ class _TCascaderState extends State<TCascader> {
               height: tokenFont?.height,
               fontWeight: tokenFont?.fontWeight,
             )
-            .merge(material.tExplicitTextTheme?.bodyLarge)
             .copyWith(
               color:
                   material.tExplicitColorScheme?.onSurface ??
                   context.tTheme.textColorPrimary,
             )
-            .merge(defaultStyle)
             .merge(textTheme?.textStyle)
             .merge(theme?.textStyle);
     final active = normal
@@ -516,34 +510,6 @@ class _TCascaderState extends State<TCascader> {
       selected: selected,
     );
   }
-}
-
-bool _isAutomaticMaterialTextStyle(ThemeData material, TextStyle? style) {
-  if (style == null ||
-      (style.debugLabel?.contains(
-            'fallback style; consider putting your text in a Material',
-          ) ??
-          false)) {
-    return true;
-  }
-  final textTheme = material.textTheme;
-  return <TextStyle?>[
-    textTheme.displayLarge,
-    textTheme.displayMedium,
-    textTheme.displaySmall,
-    textTheme.headlineLarge,
-    textTheme.headlineMedium,
-    textTheme.headlineSmall,
-    textTheme.titleLarge,
-    textTheme.titleMedium,
-    textTheme.titleSmall,
-    textTheme.bodyLarge,
-    textTheme.bodyMedium,
-    textTheme.bodySmall,
-    textTheme.labelLarge,
-    textTheme.labelMedium,
-    textTheme.labelSmall,
-  ].contains(style);
 }
 
 Color _resolveIconColor(BuildContext context, Color fallback) {

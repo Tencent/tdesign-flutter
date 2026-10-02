@@ -63,9 +63,16 @@ class _TDrawerContent extends StatelessWidget {
                     const EdgeInsets.fromLTRB(16, 24, 16, 8),
                 child: Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: DefaultTextStyle(
-                    style: _titleTextStyle(context, drawerTheme),
-                    child: title!,
+                  child: Theme(
+                    data: Theme.of(context).mergeExtension(
+                      TTextThemeData(
+                        textStyle: _titleTextStyle(context, drawerTheme),
+                      ),
+                    ),
+                    child: DefaultTextStyle(
+                      style: _titleTextStyle(context, drawerTheme),
+                      child: title!,
+                    ),
                   ),
                 ),
               ),
@@ -137,19 +144,13 @@ class _TDrawerContent extends StatelessWidget {
     BuildContext context,
     TDrawerThemeData? drawerTheme,
   ) {
-    final materialStyle = Theme.of(context).tExplicitTextTheme?.bodyLarge;
-    final inheritedStyle = Theme.of(context).textTheme.bodyLarge;
     final tokenFont = context.tTheme.fontBodyLarge;
-    final baseStyle =
-        materialStyle ??
-        TextStyle(
-          color: context.tTheme.textColorPrimary,
-          fontSize: tokenFont?.size ?? 16,
-          height: tokenFont?.height,
-          fontWeight: tokenFont?.fontWeight ?? FontWeight.w400,
-          fontFamily: inheritedStyle?.fontFamily,
-          fontFamilyFallback: inheritedStyle?.fontFamilyFallback,
-        );
+    final baseStyle = TextStyle(
+      color: context.tTheme.textColorPrimary,
+      fontSize: tokenFont?.size ?? 16,
+      height: tokenFont?.height,
+      fontWeight: tokenFont?.fontWeight ?? FontWeight.w400,
+    );
     return baseStyle.merge(drawerTheme?.itemTextStyle);
   }
 
@@ -157,19 +158,13 @@ class _TDrawerContent extends StatelessWidget {
     BuildContext context,
     TDrawerThemeData? drawerTheme,
   ) {
-    final materialStyle = Theme.of(context).tExplicitTextTheme?.titleLarge;
-    final inheritedStyle = Theme.of(context).textTheme.titleLarge;
     final tokenFont = context.tTheme.fontTitleLarge;
-    final baseStyle =
-        materialStyle ??
-        TextStyle(
-          color: context.tTheme.textColorPrimary,
-          fontSize: tokenFont?.size ?? 20,
-          height: tokenFont?.height,
-          fontWeight: tokenFont?.fontWeight ?? FontWeight.w600,
-          fontFamily: inheritedStyle?.fontFamily,
-          fontFamilyFallback: inheritedStyle?.fontFamilyFallback,
-        );
+    final baseStyle = TextStyle(
+      color: context.tTheme.textColorPrimary,
+      fontSize: tokenFont?.size ?? 20,
+      height: tokenFont?.height,
+      fontWeight: tokenFont?.fontWeight ?? FontWeight.w600,
+    );
     return baseStyle.merge(drawerTheme?.titleStyle);
   }
 }

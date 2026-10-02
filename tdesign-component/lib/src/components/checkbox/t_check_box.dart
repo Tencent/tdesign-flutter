@@ -452,25 +452,21 @@ class TCheckbox extends StatelessWidget {
   }
 
   TextStyle _resolveTitleStyle(BuildContext context) {
-    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
-    final materialFallback = Theme.of(context).textTheme.bodyLarge;
     final titleFont = context.tTheme.fontBodyLarge;
     return TextStyle(
-      fontSize: titleFont?.size ?? materialFallback?.fontSize,
-      height: titleFont?.height ?? materialFallback?.height,
-      fontWeight: titleFont?.fontWeight ?? materialFallback?.fontWeight,
-    ).merge(materialTextTheme?.bodyLarge ?? materialTextTheme?.bodyMedium);
+      fontSize: titleFont?.size ?? 16,
+      height: titleFont?.height,
+      fontWeight: titleFont?.fontWeight,
+    );
   }
 
   TextStyle _resolveSubTitleStyle(BuildContext context) {
-    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
-    final materialFallback = Theme.of(context).textTheme.bodyMedium;
     final subtitleFont = context.tTheme.fontBodyMedium;
     return TextStyle(
-      fontSize: subtitleFont?.size ?? materialFallback?.fontSize,
-      height: subtitleFont?.height ?? materialFallback?.height,
-      fontWeight: subtitleFont?.fontWeight ?? materialFallback?.fontWeight,
-    ).merge(materialTextTheme?.bodyMedium ?? materialTextTheme?.bodySmall);
+      fontSize: subtitleFont?.size ?? 14,
+      height: subtitleFont?.height,
+      fontWeight: subtitleFont?.fontWeight,
+    );
   }
 
   Widget? _buildContent(BuildContext context, TCheckboxThemeData? theme) {

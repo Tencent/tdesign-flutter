@@ -275,7 +275,7 @@ void main() {
   });
 
   group('TStyleResolver', () {
-    testWidgets('提供 P0-P4 各层访问', (tester) async {
+    testWidgets('提供全局 Token 和组件 Theme 访问', (tester) async {
       final token = TThemeData.defaultData();
 
       await tester.pumpWidget(
@@ -288,12 +288,6 @@ void main() {
 
                 // P4: Token
                 expect(resolver.token.brandColor, token.brandColor);
-
-                // P3: ColorScheme
-                expect(resolver.colorScheme.primary, token.brandColor);
-
-                // P2: Material ThemeData
-                expect(resolver.materialTheme, isA<ThemeData>());
 
                 // P1: TThemeBuilder 全局注入默认组件 Extension
                 expect(

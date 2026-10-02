@@ -719,7 +719,7 @@ void main() {
   });
 
   group('TDialog 主题', () {
-    testWidgets('默认标题与正文样式继承应用字体', (tester) async {
+    testWidgets('默认标题与正文样式使用 TDesign 全局字体', (tester) async {
       final base = theme();
       const family = 'Test Primary Font';
       const fallback = 'Test CJK Fallback';
@@ -743,10 +743,10 @@ void main() {
       final contentStyle = DefaultTextStyle.of(
         tester.element(find.text('正文')),
       ).style;
-      expect(titleStyle.fontFamily, family);
-      expect(contentStyle.fontFamily, family);
-      expect(titleStyle.fontFamilyFallback, contains(fallback));
-      expect(contentStyle.fontFamilyFallback, contains(fallback));
+      expect(titleStyle.fontFamily, 'Roboto');
+      expect(contentStyle.fontFamily, 'Roboto');
+      expect(titleStyle.fontFamilyFallback, isNot(contains(fallback)));
+      expect(contentStyle.fontFamilyFallback, isNot(contains(fallback)));
     });
 
     test('ThemeData merge/copyWith/lerp 保留所有公开字段', () {

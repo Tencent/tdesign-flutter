@@ -323,7 +323,7 @@ void main() {
       expect(title.overflow, TextOverflow.ellipsis);
     });
 
-    testWidgets('菜单正文继承全局 TextTheme，并由 Drawer Theme 覆盖', (tester) async {
+    testWidgets('菜单正文使用 TDesign Token，并由 Drawer Theme 覆盖', (tester) async {
       const globalStyle = TextStyle(
         color: Colors.red,
         fontWeight: FontWeight.w500,
@@ -343,8 +343,11 @@ void main() {
       await tester.pumpAndSettle();
 
       var title = tester.widget<Text>(find.text('菜单1'));
-      expect(title.style?.color, globalStyle.color);
-      expect(title.style?.fontWeight, globalStyle.fontWeight);
+      expect(title.style?.color, TThemeData.defaultData().textColorPrimary);
+      expect(
+        title.style?.fontWeight,
+        TThemeData.defaultData().fontBodyLarge?.fontWeight,
+      );
 
       const drawerStyle = TextStyle(
         color: Colors.blue,

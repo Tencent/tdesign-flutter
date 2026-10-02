@@ -12,7 +12,7 @@ import 't_swipe_cell_theme_data.dart';
 /// 滑动单元格操作项。
 ///
 /// 同一面板中的操作项可使用不同的颜色和文字样式。
-/// 未指定的图文视觉字段从标准 Flutter 主题或全局 Token 取得默认值；
+/// 未指定的图文视觉字段从全局 TDesign Token 取得默认值；
 /// [TSwipeCellThemeData] 只提供共用内边距。
 /// [builder] 自行绘制操作项，不能同时传入内置背景、图文或图文样式字段。
 class TSwipeCellAction extends StatelessWidget {
@@ -95,7 +95,6 @@ class TSwipeCellAction extends StatelessWidget {
     }
     final theme = _effectiveTheme(context);
     final effectiveBackgroundColor = backgroundColor;
-    final materialTheme = Theme.of(context);
     final explicitIconTheme = context.tExplicitIconTheme;
     final effectiveIconSize = iconSize ?? explicitIconTheme?.size ?? 20;
     final effectiveSpacing = iconLabelSpacing ?? 8;
@@ -112,11 +111,7 @@ class TSwipeCellAction extends StatelessWidget {
       height: fallbackFont.height,
       fontWeight: fallbackFont.fontWeight,
     );
-    final effectiveTextStyle = tokenTextStyle
-        .merge(materialTheme.tExplicitTextTheme?.labelMedium)
-        .merge(context.tExplicitDefaultTextStyle)
-        .copyWith(color: context.tTheme.textColorAnti)
-        .merge(labelStyle);
+    final effectiveTextStyle = tokenTextStyle.merge(labelStyle);
 
     final content =
         builder?.call(context) ??

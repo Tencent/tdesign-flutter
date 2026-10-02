@@ -410,23 +410,21 @@ class TRadio<T> extends StatelessWidget {
   }
 
   TextStyle _resolveTitleStyle(BuildContext context) {
-    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
     final titleFont = context.tTheme.fontBodyLarge;
     return TextStyle(
       fontSize: titleFont?.size ?? 16,
       height: titleFont?.height,
       fontWeight: titleFont?.fontWeight,
-    ).merge(materialTextTheme?.bodyLarge ?? materialTextTheme?.bodyMedium);
+    );
   }
 
   TextStyle _resolveSubTitleStyle(BuildContext context) {
-    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
     final subtitleFont = context.tTheme.fontBodyMedium;
     return TextStyle(
       fontSize: subtitleFont?.size ?? 14,
       height: subtitleFont?.height,
       fontWeight: subtitleFont?.fontWeight,
-    ).merge(materialTextTheme?.bodyMedium ?? materialTextTheme?.bodySmall);
+    );
   }
 
   Widget? _buildContent(

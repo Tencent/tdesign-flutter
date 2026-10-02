@@ -75,19 +75,10 @@ class TTag extends StatelessWidget {
     final overflow = theme?.overflow;
 
     final fixedWidth = theme?.fixedWidth;
-    final padding = theme?.padding;
-    final textColor = theme?.textColor;
-    final backgroundColor = theme?.backgroundColor;
     final font = theme?.font;
     final maxLines = theme?.maxLines ?? 1;
     final effectiveFont = font ?? _getFont(context);
-    final ambientFontFallback = DefaultTextStyle.of(
-      context,
-    ).style.fontFamilyFallback;
-    final fontFallback = <String>{
-      ...?ambientFontFallback,
-      ...?context.tTheme.fontFamily?.flutterFontFamilyFallback,
-    }.toList();
+    final fontFallback = context.tTheme.fontFamily?.flutterFontFamilyFallback;
 
     // 计算样式颜色
     final colors = _resolveColors(
@@ -102,10 +93,12 @@ class TTag extends StatelessWidget {
 
     var child = _buildLabel(
       // 禁用态应始终使用禁用 token，避免普通 ThemeExtension 的颜色覆盖状态。
-      textColor: enabled ? textColor ?? colors.textColor : colors.textColor,
+      textColor: enabled
+          ? theme?.resolveTextColor(colors.textColor) ?? colors.textColor
+          : colors.textColor,
       font: effectiveFont,
       fontFamily: context.tTheme.fontFamily,
-      fontFamilyFallback: fontFallback.isEmpty ? null : fontFallback,
+      fontFamilyFallback: fontFallback,
       fontWeight: effectiveFont?.fontWeight,
       overflow: overflow ?? TextOverflow.ellipsis,
       maxLines: maxLines,
@@ -143,7 +136,9 @@ class TTag extends StatelessWidget {
       child = Row(mainAxisSize: MainAxisSize.min, children: children);
     }
 
-    final effectivePadding = padding ?? _getPadding(isOutline ? 1.0 : 0.0);
+    final defaultPadding = _getPadding(isOutline ? 1.0 : 0.0);
+    final effectivePadding =
+        theme?.resolvePadding(defaultPadding) ?? defaultPadding;
     final result = Container(
       width: fixedWidth,
       height: maxLines == 1
@@ -152,7 +147,8 @@ class TTag extends StatelessWidget {
       padding: effectivePadding,
       decoration: BoxDecoration(
         color: enabled
-            ? backgroundColor ?? colors.backgroundColor
+            ? theme?.resolveBackgroundColor(colors.backgroundColor) ??
+                  colors.backgroundColor
             : colors.backgroundColor,
         border: Border.all(width: isOutline ? 1 : 0, color: colors.borderColor),
         borderRadius: borderRadius,

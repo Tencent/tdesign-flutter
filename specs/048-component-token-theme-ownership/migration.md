@@ -39,6 +39,7 @@
 | `TDialogThemeData.actionButtonStyle` | `TDialogAction.style` 或 `TConfirmDialog.buttonStyle` | 面板外观继续走组件 Theme，单个操作按钮的视觉由操作项持有。 |
 | `TTabsBar.decoration` | `TTabsBarThemeData.backgroundColor/dividerColor/dividerHeight` | 容器背景和底边线由组件 Theme 控制；仅定制一个 TabsBar 时包裹局部 Theme。 |
 | `TTagThemeData.fontWeight` | `TTagThemeData.font` | 字重跟随完整字体 Token；不再与其分别配置。 |
+| `TProgressThemeData.circleRadius` | `TProgressThemeData.circleSize` | 原字段实际作为圆环外框的正方形边长使用，数值保持不变；不再把直径称作半径，不提供旧名兼容入口。 |
 | `TSideBarThemeData.selectedColor` | `TSideBarThemeData.selectedTextStyle: TextStyle(color: ...)` | 选中文字、图标与指示线继续共用这一颜色；不设 `color` 时仍回退全局品牌色。已有 `selectedTextStyle` 时将颜色并入该对象，不再同时配置两处。 |
 | `TText.fontWeight/fontFamily/textColor/isTextThrough/lineThroughColor` | `TText.style: TextStyle(...)` | 实例保留 `font` 选择 TDesign 字体预设，局部颜色、字重、字体族及删除线统一写入 `style`；`TText.rich` 同步迁移。 |
 | `TPopupOverlayConfig.opacity`、`TPopupThemeData.barrierOpacity` | `TPopupOverlayConfig.color` 或 `TPopupThemeData.barrierColor` 的 alpha | 旧颜色与 opacity 相乘时，迁移后在颜色中直接表示最终 alpha；避免两次透明度叠乘。 |
@@ -72,6 +73,8 @@ TButton(
 `TButton`、`TTag`、`TSelectTag`、`TLink`、`TBackTop`、`TPopoverAnchor`、`TPopover.showPopover` 和 `TDialogAction` 的 `colorScheme:` 改为 `colorPreset:`；对应枚举 `TButton/TTag/TLink/TBackTop/TPopoverColorScheme` 改为 `TButton/TTag/TLink/TBackTop/TPopoverColorPreset`。这是源码级 breaking change，不保留同义别名。枚举成员和默认映射不变；Material 的 `ThemeData.colorScheme: ColorScheme(...)` 及其优先级不变。`variant` 仍控制填充/描边等绘制处理，`colorPreset` 仅选择内置配色，`status` 仍表达业务状态。迁移调用时须同时更改命名参数与枚举类型，不能将 Material `ColorScheme` 实例传给 `colorPreset`。
 
 `TText` 未显式指定字体时的正文回退从 `fontBodyLarge`（16dp/24dp）改为小程序 `fontBodyMedium`（14dp/22dp）。依赖旧默认字号的调用方应在实例 `font` 或子树 `TTextThemeData.textStyle` 中显式指定 16dp/24dp；这是默认行为变化，即使构造签名未变也须按 breaking change 发布。
+
+TDesign 组件不再从 Material `ThemeData.textTheme`、`ThemeData.inputDecorationTheme` 的文字字段或子树 `DefaultTextStyle` 猜测文字样式。需要全局字体请配置 `TThemeData` 的字体 Token／字体族；需要同类组件的子树默认请配置其组件 `ThemeExtension`（如 `TTextThemeData.textStyle`、`TInputThemeData`），单个 `TText` 请使用 `style`。原生 Material 控件仍可使用 Material `TextTheme`，但该配置不再自动改变 TDesign 组件。`TStyleResolver` 仅保留 Token 与组件 Theme 访问，移除 `textTheme/colorScheme/materialTheme` 三个 Material 转发 getter；`BuildContext.tExplicitDefaultTextStyle` 同时移除，不保留兼容别名。直接调用这些 getter 的代码应按用途迁移至 TDesign Token／组件 Theme；若确实需要配置原生 Material 控件，可直接使用 Flutter 的 `Theme.of(context)`。
 
 `TAvatarGroup` 默认外观按设计稿调整：全部成员保留原尺寸绘制，不再把头像内容缩进后整体缩放；小/中/大成员分别使用 1/2/3dp 描边，并带默认阴影。未显式设置 `TAvatar.size` 的成员与折叠头像继承组内首个**可见且显式设置尺寸**的成员，均未设置时仍为中号；被 `maxCount` 隐藏的成员不改变可见布局。现有调用无需修改构造参数，但依赖旧图像缩放、无阴影效果或混合尺寸布局的应用必须复核实际渲染；组阴影和描边宽度可用 `TAvatarThemeData.groupShadow/groupBorderWidth` 配置。这是默认行为变化，按 breaking 发布。
 

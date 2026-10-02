@@ -29,52 +29,70 @@ void main() {
     expect(text.style?.color, Colors.purple);
   });
   for (final date in [false, true]) {
-    testWidgets('explicit Material text theme date=$date', (tester) async {
-      final changes = <Object>[];
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: ThemeData(
-            textTheme: const TextTheme(
-              bodyLarge: TextStyle(
-                fontSize: 31,
-                fontWeight: FontWeight.w800,
-                color: Colors.pink,
+    testWidgets(
+      'Material text theme does not override Picker token date=$date',
+      (tester) async {
+        final changes = <Object>[];
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              textTheme: const TextTheme(
+                bodyLarge: TextStyle(
+                  fontSize: 31,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.pink,
+                ),
               ),
             ),
-          ),
-          home: Scaffold(
-            body: date
-                ? TDateTimePicker(
-                    value: const TDateTimePickerValue(
-                      year: 2024,
-                      month: 6,
-                      day: 15,
-                    ),
-                    onChanged: changes.add,
-                  )
-                : TPicker(
-                    items: TPickerColumns([
-                      List.generate(
-                        12,
-                        (i) => TPickerOption(label: 'Item $i', value: i),
+            home: Scaffold(
+              body: date
+                  ? TDateTimePicker(
+                      value: const TDateTimePickerValue(
+                        year: 2024,
+                        month: 6,
+                        day: 15,
                       ),
-                    ]),
-                    value: const [0],
-                    onChanged: changes.add,
-                  ),
+                      onChanged: changes.add,
+                    )
+                  : TPicker(
+                      items: TPickerColumns([
+                        List.generate(
+                          12,
+                          (i) => TPickerOption(label: 'Item $i', value: i),
+                        ),
+                      ]),
+                      value: const [0],
+                      onChanged: changes.add,
+                    ),
+            ),
           ),
-        ),
-      );
-      final wheelFinder = find.byType(ListWheelScrollView).first;
-      final textFinder = find.descendant(
-        of: wheelFinder,
-        matching: find.byType(Text),
-      );
-      final text = tester.widget<Text>(textFinder.first);
-      expect(text.style!.fontSize, 31);
-      expect(text.style!.fontWeight, FontWeight.w800);
-      expect(text.style!.color, Colors.pink);
-    });
+        );
+        final wheelFinder = find.byType(ListWheelScrollView).first;
+        final textFinder = find.descendant(
+          of: wheelFinder,
+          matching: find.byType(Text),
+        );
+        final text = tester.widget<Text>(textFinder.first);
+        expect(
+          text.style!.fontSize,
+          TThemeData.defaultData().fontMarkLarge?.size,
+        );
+        expect(
+          text.style!.fontWeight,
+          isIn([
+            TThemeData.defaultData().fontBodyLarge?.fontWeight,
+            TThemeData.defaultData().fontMarkLarge?.fontWeight,
+          ]),
+        );
+        expect(
+          text.style!.color,
+          isIn([
+            TThemeData.defaultData().textColorPrimary,
+            TThemeData.defaultData().textColorSecondary,
+          ]),
+        );
+      },
+    );
   }
   for (final dateTime in [false, true]) {
     for (final fallback in [false, true]) {
@@ -164,7 +182,7 @@ void main() {
   for (final dateTime in [false, true]) {
     for (final explicit in [false, true]) {
       testWidgets(
-        '${dateTime ? 'DateTimePicker' : 'Picker'} typography respects tokens and explicit TextTheme $explicit',
+        '${dateTime ? 'DateTimePicker' : 'Picker'} typography ignores Material TextTheme $explicit',
         (tester) async {
           final tokens = TThemeData.defaultData().copyWithTThemeData(
             'font-test',
@@ -226,11 +244,9 @@ void main() {
           );
           expect(texts, isNotEmpty);
           for (final text in texts) {
-            expect(text.style?.fontSize, explicit ? 21 : 19);
-            expect(text.style?.height, explicit ? 1.6 : 27 / 19);
-            if (explicit) {
-              expect(text.style?.fontFamily, 'custom');
-            }
+            expect(text.style?.fontSize, 19);
+            expect(text.style?.height, 27 / 19);
+            expect(text.style?.fontFamily, isNot('custom'));
           }
         },
       );

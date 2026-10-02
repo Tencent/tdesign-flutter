@@ -542,7 +542,7 @@ void main() {
       expect(exception.toString(), contains('controlSize (20.0)'));
     });
 
-    testWidgets('DefaultTextStyle and IconTheme control unset foregrounds', (
+    testWidgets('TDesign token ignores DefaultTextStyle; IconTheme controls icons', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -557,8 +557,14 @@ void main() {
         ),
       );
 
-      expect(editableText(tester).style.color, Colors.red);
-      expect(editableText(tester).style.fontFamily, 'TestFont');
+      expect(
+        editableText(tester).style.color,
+        TThemeData.defaultData().textColorPrimary,
+      );
+      expect(
+        editableText(tester).style.fontFamily,
+        'packages/tdesign_flutter/TCloudNumber',
+      );
       expect(tester.widget<Icon>(find.byIcon(TIcons.plus)).color, Colors.green);
     });
 
@@ -620,7 +626,7 @@ void main() {
       expect(editableText(tester).style.fontSize, 18);
     });
 
-    testWidgets('theme-only font size preserves an inherited package font', (
+    testWidgets('theme-only font size retains TDesign number font', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -640,7 +646,7 @@ void main() {
 
       expect(
         editableText(tester).style.fontFamily,
-        'packages/inherited_package/InheritedFont',
+        'packages/tdesign_flutter/TCloudNumber',
       );
       expect(editableText(tester).style.fontSize, 18);
     });

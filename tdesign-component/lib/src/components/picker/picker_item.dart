@@ -58,50 +58,18 @@ class PickerItemWidget extends StatelessWidget {
               ? theme.fontMarkLarge
               : theme.fontBodyLarge;
           final material = Theme.of(context);
-          final explicit = material.tExplicitTextTheme?.bodyLarge;
-          // 字体回退列表等局部配置会使 Flutter 返回完整 TextStyle。
-          // 普通正文的自动补全值不能抹去滚轮的选中/禁用语义。
-          final typographyOnly =
-              explicit != null &&
-              explicit.fontSize == theme.fontBodyLarge?.size &&
-              explicit.height == theme.fontBodyLarge?.height &&
-              explicit.fontWeight == theme.fontBodyLarge?.fontWeight &&
-              explicit.color == material.colorScheme.onSurface;
           final textTheme = material.extension<TTextThemeData>();
-          final inherited = context.tExplicitDefaultTextStyle;
-          final defaultStyle =
-              inherited == material.textTheme.bodyMedium ||
-                  (inherited?.debugLabel?.contains('fallback style;') ?? false)
-              ? null
-              : inherited;
-          // 状态样式是默认值；调用方的文字主题仍有更高优先级。
-          final style =
-              TextStyle(
-                    fontSize: font?.size ?? 16,
-                    height: font?.height,
-                    fontWeight: font?.fontWeight,
-                    color: disabled
-                        ? theme.textColorDisabled
-                        : selected
-                        ? theme.textColorPrimary
-                        : theme.textColorSecondary,
-                  )
-                  .merge(
-                    typographyOnly
-                        ? explicit.copyWith(
-                            fontSize: font?.size,
-                            height: font?.height,
-                            fontWeight: font?.fontWeight,
-                            color: disabled
-                                ? theme.textColorDisabled
-                                : selected
-                                ? theme.textColorPrimary
-                                : theme.textColorSecondary,
-                          )
-                        : explicit,
-                  )
-                  .merge(defaultStyle)
-                  .merge(textTheme?.textStyle);
+          // 状态样式是默认值；组件文字主题仍有更高优先级。
+          final style = TextStyle(
+            fontSize: font?.size ?? 16,
+            height: font?.height,
+            fontWeight: font?.fontWeight,
+            color: disabled
+                ? theme.textColorDisabled
+                : selected
+                ? theme.textColorPrimary
+                : theme.textColorSecondary,
+          ).merge(textTheme?.textStyle);
           final centeredStyle = style.copyWith(
             // Figma 使用 16/24 文字行盒并在 40px 选项内上下各留 8px。
             // 等分额外行高可避免 Android 字体按 ascent/descent 比例分配后

@@ -386,7 +386,10 @@ void main() {
         ),
       );
 
-      expect(tester.widget<Text>(find.text('Guangdong')).style?.fontSize, 21);
+      expect(
+        tester.widget<Text>(find.text('Guangdong')).style?.fontSize,
+        TThemeData.defaultData().fontBodyLarge?.size,
+      );
       final arrow = tester.widget<Icon>(find.byIcon(TIcons.chevron_right).last);
       expect(arrow.color, Colors.pink);
       expect(arrow.size, 22);
@@ -412,46 +415,50 @@ void main() {
       expect(tester.widget<Text>(find.text('Guangdong')).style?.fontSize, 23);
     });
 
-    testWidgets('applies Material text and active colors by relevant field', (
-      tester,
-    ) async {
-      final base = TThemeBuilder.light(TThemeData.defaultData());
-      final originalBodyLarge = base.textTheme.bodyLarge!;
-      final theme = base.copyWith(
-        colorScheme: base.colorScheme.copyWith(
-          primary: Colors.pink,
-          onSurface: Colors.brown,
-        ),
-        textTheme: base.textTheme.copyWith(
-          bodyLarge: originalBodyLarge.copyWith(fontSize: 21),
-          bodySmall: base.textTheme.bodySmall?.copyWith(fontSize: 19),
-        ),
-      );
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: theme,
-          home: Scaffold(
-            body: TCascader(
-              options: options,
-              value: const [],
-              onChanged: (_) {},
+    testWidgets(
+      'ignores Material text but applies active colors by relevant field',
+      (tester) async {
+        final base = TThemeBuilder.light(TThemeData.defaultData());
+        final originalBodyLarge = base.textTheme.bodyLarge!;
+        final theme = base.copyWith(
+          colorScheme: base.colorScheme.copyWith(
+            primary: Colors.pink,
+            onSurface: Colors.brown,
+          ),
+          textTheme: base.textTheme.copyWith(
+            bodyLarge: originalBodyLarge.copyWith(fontSize: 21),
+            bodySmall: base.textTheme.bodySmall?.copyWith(fontSize: 19),
+          ),
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: Scaffold(
+              body: TCascader(
+                options: options,
+                value: const [],
+                onChanged: (_) {},
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      final option = tester.widget<Text>(find.text('Guangdong'));
-      expect(option.style?.fontSize, 21);
-      expect(option.style?.color, Colors.brown);
-      final active = tester.widget<Text>(find.text('请选择'));
-      expect(active.style?.color, Colors.pink);
-      final decoration = tester
-          .widgetList<Container>(find.byType(Container))
-          .map((container) => container.decoration)
-          .whereType<BoxDecoration>()
-          .firstWhere((item) => item.border != null);
-      expect((decoration.border! as Border).bottom.color, Colors.pink);
-    });
+        final option = tester.widget<Text>(find.text('Guangdong'));
+        expect(
+          option.style?.fontSize,
+          TThemeData.defaultData().fontBodyLarge?.size,
+        );
+        expect(option.style?.color, Colors.brown);
+        final active = tester.widget<Text>(find.text('请选择'));
+        expect(active.style?.color, Colors.pink);
+        final decoration = tester
+            .widgetList<Container>(find.byType(Container))
+            .map((container) => container.decoration)
+            .whereType<BoxDecoration>()
+            .firstWhere((item) => item.border != null);
+        expect((decoration.border! as Border).bottom.color, Colors.pink);
+      },
+    );
     testWidgets('step variant renders vertical navigation', (tester) async {
       await tester.pumpWidget(
         wrap(

@@ -267,18 +267,15 @@ class _TTextareaState extends State<TTextarea> {
     final labelFont = token.fontBodyMedium;
     final labelStyle =
         TextStyle(
-              fontSize: labelFont?.size,
-              height: labelFont?.height,
-              fontWeight: labelFont?.fontWeight,
-            )
-            .merge(material.tExplicitTextTheme?.bodyMedium)
-            .copyWith(
-              color: widget.enabled
-                  ? material.tExplicitTextTheme?.bodyMedium?.color ??
-                        material.tExplicitColorScheme?.onSurface ??
-                        token.textColorPrimary
-                  : token.textColorDisabled,
-            );
+          fontSize: labelFont?.size,
+          height: labelFont?.height,
+          fontWeight: labelFont?.fontWeight,
+        ).copyWith(
+          color: widget.enabled
+              ? material.tExplicitColorScheme?.onSurface ??
+                    token.textColorPrimary
+              : token.textColorDisabled,
+        );
     final editor = Theme(
       data: Theme.of(context).mergeExtension(inputTheme),
       child: TInput(

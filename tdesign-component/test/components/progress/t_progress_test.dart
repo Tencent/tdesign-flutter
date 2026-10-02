@@ -469,15 +469,15 @@ void main() {
       expect(find.byType(TProgress), findsOneWidget);
     });
 
-    testWidgets('Theme.circleRadius 覆盖环形半径', (tester) async {
+    testWidgets('Theme.circleSize 覆盖环形边长', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           TProgress.circular(value: 0.5),
-          progressTheme: const TProgressThemeData(circleRadius: 150),
+          progressTheme: const TProgressThemeData(circleSize: 150),
         ),
       );
       await tester.pump();
-      expect(find.byType(TProgress), findsOneWidget);
+      expect(tester.getSize(find.byType(TProgress)), const Size.square(150));
     });
 
     testWidgets('Theme.animationDuration 覆盖动画时长', (tester) async {
@@ -529,13 +529,13 @@ void main() {
       const theme = TProgressThemeData(
         strokeWidth: 5,
         color: Colors.red,
-        circleRadius: 100,
+        circleSize: 100,
         indeterminateLinearSegmentFraction: 0.4,
       );
       final copied = theme.copyWith(strokeWidth: 10);
       expect(copied.strokeWidth, 10);
       expect(copied.color, Colors.red);
-      expect(copied.circleRadius, 100);
+      expect(copied.circleSize, 100);
       expect(copied.indeterminateLinearSegmentFraction, 0.4);
     });
 
@@ -590,6 +590,26 @@ void main() {
       expect(result.indeterminateCircularValue, closeTo(0.3, 0.001));
     });
 
+    test('不确定态比例从内置默认值插值，端点不会触发断言', () {
+      const begin = TProgressThemeData();
+      const end = TProgressThemeData(
+        indeterminateLinearSegmentFraction: 0.6,
+        indeterminateCircularValue: 0.4,
+      );
+      expect(begin.lerp(end, 0).indeterminateLinearSegmentFraction, 0.32);
+      expect(begin.lerp(end, 0).indeterminateCircularValue, 0.25);
+      expect(
+        begin.lerp(end, 0.5).indeterminateLinearSegmentFraction,
+        closeTo(0.46, 1e-9),
+      );
+      expect(
+        begin.lerp(end, 0.5).indeterminateCircularValue,
+        closeTo(0.325, 1e-9),
+      );
+      expect(end.lerp(begin, 1).indeterminateCircularValue, 0.25);
+      expect(begin.lerp(begin, 0.5).indeterminateCircularValue, isNull);
+    });
+
     test('lerp 两端 animationDuration 均为 null 返回 null', () {
       const a = TProgressThemeData();
       const b = TProgressThemeData();
@@ -597,22 +617,52 @@ void main() {
       expect(result.animationDuration, isNull);
     });
 
-    test('lerp a animationDuration 为 null 返回 b 值', () {
+    test('lerp a animationDuration 为 null 时从 300ms 默认值过渡', () {
       const a = TProgressThemeData();
       const b = TProgressThemeData(
         animationDuration: Duration(milliseconds: 200),
       );
       final result = a.lerp(b, 0.5);
-      expect(result.animationDuration?.inMilliseconds, 200);
+      expect(result.animationDuration?.inMilliseconds, 250);
     });
 
-    test('lerp b animationDuration 为 null 返回 a 值', () {
+    test('lerp b animationDuration 为 null 时过渡至 300ms 默认值', () {
       const a = TProgressThemeData(
         animationDuration: Duration(milliseconds: 100),
       );
       const b = TProgressThemeData();
       final result = a.lerp(b, 0.5);
-      expect(result.animationDuration?.inMilliseconds, 100);
+      expect(result.animationDuration?.inMilliseconds, 200);
+    });
+
+    test('尺寸与颜色从组件实际默认值插值，不从零或透明开始', () {
+      const begin = TProgressThemeData();
+      const end = TProgressThemeData(
+        strokeWidth: 10,
+        circleSize: 160,
+        color: Colors.red,
+        backgroundColor: Colors.blue,
+        linearBorderRadius: BorderRadius.all(Radius.circular(8)),
+      );
+      final middle = begin.lerp(end, 0.5);
+      expect(middle.strokeWidth, isNull);
+      expect(middle.resolveStrokeWidth(4), 7);
+      expect(middle.resolveCircleSize(112), 136);
+      expect(middle.resolveCircleSize(24), 92);
+      expect(
+        middle.resolveColor(Colors.black),
+        Color.lerp(Colors.black, Colors.red, 0.5),
+      );
+      expect(
+        middle.resolveBackgroundColor(Colors.white),
+        Color.lerp(Colors.white, Colors.blue, 0.5),
+      );
+      expect(
+        middle.resolveLinearBorderRadius(BorderRadius.circular(4)),
+        BorderRadius.circular(6),
+      );
+      expect(begin.lerp(begin, 0.5).circleSize, isNull);
+      expect(middle.copyWith().resolveCircleSize(112), 136);
     });
   });
 

@@ -5,6 +5,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
+import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
@@ -276,20 +277,20 @@ class TDialog extends StatelessWidget {
           height: token.fontBodyLarge?.height ?? 24 / 16,
           fontWeight: token.fontBodyLarge?.fontWeight ?? FontWeight.w400,
         );
-    final inheritedTextStyle = theme.textTheme.bodyMedium;
+    final tokenFontFamily = token.fontFamily;
     final titleStyle = resolvedTitleStyle.copyWith(
       fontFamily:
-          resolvedTitleStyle.fontFamily ?? inheritedTextStyle?.fontFamily,
+          resolvedTitleStyle.fontFamily ?? tokenFontFamily?.flutterFontFamily,
       fontFamilyFallback:
           resolvedTitleStyle.fontFamilyFallback ??
-          inheritedTextStyle?.fontFamilyFallback,
+          tokenFontFamily?.flutterFontFamilyFallback,
     );
     final contentStyle = resolvedContentStyle.copyWith(
       fontFamily:
-          resolvedContentStyle.fontFamily ?? inheritedTextStyle?.fontFamily,
+          resolvedContentStyle.fontFamily ?? tokenFontFamily?.flutterFontFamily,
       fontFamilyFallback:
           resolvedContentStyle.fontFamilyFallback ??
-          inheritedTextStyle?.fontFamilyFallback,
+          tokenFontFamily?.flutterFontFamilyFallback,
     );
     final useTextActionLayout =
         actions.length <= 2 &&

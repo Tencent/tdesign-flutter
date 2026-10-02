@@ -6,8 +6,11 @@
 - [x] DONE Avatar/Popover 异名同义入口：移除 Avatar Theme `textStyle` 和 Popover 实例 `overlayColor/radius`，将 Popover 圆角收敛到可逐角配置的 Theme `borderRadius`；双版本组件/Demo 功能测试、生成 API 文档与 3.32.0 Linux 无更新 Golden 已执行。Golden 仍有旧基线差异，列在视觉归因任务中，不视为通过。
 - [x] DONE AvatarGroup 设计稿复核：按 Figma 三档尺寸对齐全部组成员 1/2/3dp 描边和阴影，修正公开 Demo 的顺序、折叠文案与层叠方向；Figma/develop/current 同尺寸像素比较、双版本聚焦测试及 Linux Golden 无更新复跑见 `acceptance.md`。
 - [x] DONE Avatar Theme 插值回退按实际小/中/大尺寸和当前全局圆角 Token 延迟解析；头像组描边、阴影与内容裁剪在自定义圆角下保持同形。已删除的 TabBar `topBorder/showTopBorder/centerDistance` 不恢复，组件配色仍仅使用 `colorPreset`，无兼容别名；本轮聚焦验收见 `acceptance.md`。
-- [x] Text 逐字段恢复 `TTextThemeData` 已发布子树默认能力与 Flutter 文字继承；恢复 Cascader/Picker 消费。默认回退修正为小程序 14dp/22dp，Text Demo 两张 Linux Golden 在固定环境更新后无更新复跑通过；这不代表 Figma 像素验收。
+- [x] Text 逐字段恢复 `TTextThemeData` 已发布子树默认能力；恢复 Cascader/Picker 消费。默认回退修正为小程序 14dp/22dp。随后按单一来源规则移除 Material `TextTheme` 与 `DefaultTextStyle` 自动文字继承；旧 Text Demo Golden 结论须以最终源码重新验证，不代表 Figma 像素验收。
 - [x] 恢复公开 `TText.style` 作为单实例完整视觉入口，将组合组件状态样式留在仅库内使用的解析路径；子树默认仍由 `TTextThemeData.textStyle` 管理。旧检查点的测试与 Golden 结论需以本轮最终源码重新验证。
+- [x] 移除 Material `TextTheme` / 外层 `DefaultTextStyle` 对 TDesign 文字的自动推断；显式链路为全局 Token/Theme → 组件 Theme → 已有实例样式。移除 `TStyleResolver` 的 Material 转发 getter；双版本功能与字体注入测试见 `acceptance.md`。
+- [ ] DOING 以最终源码逐类归因 Linux Golden 的文字字形/行盒与尺寸差异；只更新确认符合 TDesign Token 和组件 Theme 语义的基线，不把尺寸错误归作文字变化。
+- [ ] DOING 非文字 Material 视觉回退仍存在：组件源码当前约 58 处 `tExplicitColorScheme`、Material 禁用色／分割线／IconTheme 等读取。需分别判断原生控件投影与 TDesign 组件视觉所有权，不能把本次文字链收敛外推为全组件无 M3 接口。
 - [x] 实例保留 `TText.font` 作为 TDesign 字体预设，移除 `fontWeight/fontFamily/textColor/isTextThrough/lineThroughColor` 分散便利字段，迁移仓内调用与测试；外部第三方调用编译仍待验证。
 - [x] 既有 Button/Input 层级规则和 outline 状态回退完成测试；本轮进一步移除与完整实例 `style` 重复的组件 Theme 字段，测试需按新的单入口契约复核，旧规则不再作为验收标准。
 - [ ] DOING 更新源码 dartdoc、Demo 用法与组件测试；已迁移范围完成，待全量回归和 breaking 迁移说明。

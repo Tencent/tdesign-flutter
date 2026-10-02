@@ -387,9 +387,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       height: font?.height ?? 1.5,
       fontWeight: font?.fontWeight ?? FontWeight.w400,
     );
-    final materialStyle =
-        ListTileTheme.of(context).titleTextStyle ??
-        Theme.of(context).tExplicitTextTheme?.titleMedium;
+    final materialStyle = ListTileTheme.of(context).titleTextStyle;
     return tokenStyle
         .merge(materialStyle)
         .copyWith(fontWeight: FontWeight.w400)
@@ -413,10 +411,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       height: font?.height ?? 1.5,
       fontWeight: font?.fontWeight ?? FontWeight.w400,
     );
-    return tokenStyle
-        .merge(Theme.of(context).tExplicitTextTheme?.bodyMedium)
-        .merge(context.tExplicitDefaultTextStyle)
-        .merge(theme?.contentTextStyle);
+    return tokenStyle.merge(theme?.contentTextStyle);
   }
 
   Color _dividerColor(BuildContext context, TCollapseThemeData? theme) {

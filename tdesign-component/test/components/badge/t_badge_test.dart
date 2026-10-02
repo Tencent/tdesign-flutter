@@ -893,7 +893,7 @@ void main() {
       expect(tester.getSize(find.byType(Badge)).height, 16);
     });
 
-    testWidgets('iOS 显式 TextTheme 仍可覆盖 Badge Mark Token', (tester) async {
+    testWidgets('iOS Material TextTheme 不覆盖 Badge Mark Token', (tester) async {
       const labelStyle = TextStyle(fontSize: 15, height: 1.1);
       final baseTheme = TThemeBuilder.light(
         token,
@@ -907,8 +907,14 @@ void main() {
       );
       await tester.pumpWidget(app(const TBadge(label: '16'), theme: theme));
 
-      expect(badgeOf(tester).textStyle?.fontSize, labelStyle.fontSize);
-      expect(badgeOf(tester).textStyle?.height, labelStyle.height);
+      expect(
+        badgeOf(tester).textStyle?.fontSize,
+        token.fontMarkExtraSmall?.size,
+      );
+      expect(
+        badgeOf(tester).textStyle?.height,
+        token.fontMarkExtraSmall?.height,
+      );
     });
 
     testWidgets('裸 TThemeData 仍兜底颜色和基础尺寸', (tester) async {
@@ -1029,15 +1035,21 @@ void main() {
       expect(badge.offset, globalTheme.offset);
     });
 
-    testWidgets('Flutter textTheme 在 BadgeTheme 未指定文字样式时生效', (tester) async {
+    testWidgets('Flutter TextTheme 不覆盖 Badge Token 字体', (tester) async {
       const labelStyle = TextStyle(fontSize: 15, height: 1.1);
       final theme = bareTokenTheme().copyWith(
         textTheme: const TextTheme(labelSmall: labelStyle),
       );
       await tester.pumpWidget(app(const TBadge(label: '8'), theme: theme));
 
-      expect(badgeOf(tester).textStyle?.fontSize, labelStyle.fontSize);
-      expect(badgeOf(tester).textStyle?.height, labelStyle.height);
+      expect(
+        badgeOf(tester).textStyle?.fontSize,
+        token.fontMarkExtraSmall?.size,
+      );
+      expect(
+        badgeOf(tester).textStyle?.height,
+        token.fontMarkExtraSmall?.height,
+      );
     });
 
     testWidgets('TBadgeThemeData 控制描边，局部 BadgeTheme 控制内容色', (tester) async {

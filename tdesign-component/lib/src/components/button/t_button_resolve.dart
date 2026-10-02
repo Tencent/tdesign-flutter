@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
@@ -88,7 +89,6 @@ class TButtonResolve {
     // 5.5 textStyle 在各主题层合并完成后解析，保留其 stateful 字体字段，
     // 再以组件 size 规格锁定字号、行高与字重。
     final metrics = sizeMetrics(size, tTheme);
-    final materialLabelStyle = Theme.of(context).textTheme.labelLarge;
 
     // 合并：Token shape / ColorScheme → Material → 结构形状。
     var resolved = _overrideWith(tokenShapeStyle, colorStyle);
@@ -104,9 +104,9 @@ class TButtonResolve {
       fontSize: metrics.fontSize,
       height: metrics.fontHeight,
       fontWeight: metrics.fontWeight,
-      fontFamily: materialLabelStyle?.fontFamily,
-      fontFamilyFallback: materialLabelStyle?.fontFamilyFallback,
-    ).merge(Theme.of(context).tExplicitTextTheme?.labelLarge);
+      fontFamily: tTheme.fontFamily?.flutterFontFamily,
+      fontFamilyFallback: tTheme.fontFamily?.flutterFontFamilyFallback,
+    );
     final textStyleStyle = ButtonStyle(
       textStyle: WidgetStateProperty.resolveWith((states) {
         return tokenTextStyle

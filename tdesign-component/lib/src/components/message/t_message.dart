@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
@@ -450,9 +451,13 @@ class _TMessageState extends State<TMessage>
   }
 
   Widget _buildText(BuildContext context) {
-    final style = Theme.of(
-      context,
-    ).textTheme.bodyMedium?.copyWith(color: context.tTheme.textColorPrimary);
+    final font = context.tTheme.fontBodyMedium;
+    final style = TextStyle(
+      color: context.tTheme.textColorPrimary,
+      fontSize: font?.size,
+      height: font?.height,
+      fontWeight: font?.fontWeight,
+    );
     if (widget.marquee == null) {
       return Align(
         alignment: Alignment.centerLeft,

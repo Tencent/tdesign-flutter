@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import 't_horizontal_tab_bar.dart';
@@ -120,13 +121,13 @@ class TTabsBar extends StatelessWidget {
     final tokenFont = size == TTabsBarSize.large
         ? context.tTheme.fontBodyLarge
         : context.tTheme.fontBodyMedium;
-    final inheritedStyle = Theme.of(context).textTheme.bodyMedium;
+    final tokenFontFamily = context.tTheme.fontFamily;
     return TextStyle(
       fontSize: tokenFont?.size,
       height: tokenFont?.height,
       fontWeight: tokenFont?.fontWeight,
-      fontFamily: inheritedStyle?.fontFamily,
-      fontFamilyFallback: inheritedStyle?.fontFamilyFallback,
+      fontFamily: tokenFontFamily?.flutterFontFamily,
+      fontFamilyFallback: tokenFontFamily?.flutterFontFamilyFallback,
     ).copyWith(
       fontWeight: FontWeight.w400,
       color: context.tTheme.textColorPrimary,
@@ -137,13 +138,13 @@ class TTabsBar extends StatelessWidget {
     final tokenFont = size == TTabsBarSize.large
         ? context.tTheme.fontBodyLarge
         : context.tTheme.fontBodyMedium;
-    final inheritedStyle = Theme.of(context).textTheme.bodyMedium;
+    final tokenFontFamily = context.tTheme.fontFamily;
     return TextStyle(
       fontSize: tokenFont?.size,
       height: tokenFont?.height,
       fontWeight: tokenFont?.fontWeight,
-      fontFamily: inheritedStyle?.fontFamily,
-      fontFamilyFallback: inheritedStyle?.fontFamilyFallback,
+      fontFamily: tokenFontFamily?.flutterFontFamily,
+      fontFamilyFallback: tokenFontFamily?.flutterFontFamilyFallback,
     ).copyWith(fontWeight: FontWeight.w600, color: context.tTheme.brandColor);
   }
 }

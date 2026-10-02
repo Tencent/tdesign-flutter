@@ -688,6 +688,16 @@ void main() {
       expect(first.lerp(second, 0.5).groupBorderColor, isNotNull);
     });
 
+    test('小尺寸头像组从默认间距过渡时不生成非法 Theme', () {
+      const begin = TAvatarThemeData(dimension: 4);
+      const end = TAvatarThemeData(dimension: 4, groupSpacing: 4);
+      final middle = begin.lerp(end, 0.5);
+      expect(middle.groupSpacing, isNull);
+      expect(middle.resolveGroupSpacing(4), 4);
+      expect(begin.lerp(end, 0).resolveGroupSpacing(4), 4);
+      expect(end.lerp(begin, 0.5).resolveGroupSpacing(4), 4);
+    });
+
     test('lerp null 返回自身', () {
       expect(first.lerp(null, 0.5), same(first));
     });
@@ -742,7 +752,8 @@ void main() {
       expect(middle.resolveGroupBorderWidth(TAvatarSize.large), 3.5);
       expect(middle.resolveCircleBorderRadius(7), 13.5);
       expect(middle.resolveSquareBorderRadius(3), 6.5);
-      expect(middle.groupSpacing, 12);
+      expect(middle.groupSpacing, isNull);
+      expect(middle.resolveGroupSpacing(80), 12);
       expect(empty.lerp(explicit, 0.25).backgroundColor, isNull);
       expect(middle.backgroundColor, Colors.red);
       expect(explicit.lerp(empty, 0.25).backgroundColor, Colors.red);

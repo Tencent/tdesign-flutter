@@ -9,34 +9,18 @@ import '../../theme/t_theme.dart';
 
 double selectionCardBorderWidth(BuildContext context) => 4.0 * 3 / 8;
 
-double _fontLineHeight(
-  Font? font,
-  TextStyle? explicitStyle,
-  TextStyle? materialFallback,
-) {
+double _fontLineHeight(Font? font, double defaultSize) {
   final style = TextStyle(
-    fontSize: font?.size ?? materialFallback?.fontSize,
-    height: font?.height ?? materialFallback?.height,
-  ).merge(explicitStyle);
+    fontSize: font?.size ?? defaultSize,
+    height: font?.height,
+  );
   return style.fontSize! * (style.height ?? 1);
 }
 
 double _selectionCardHeight(BuildContext context, bool hasSubtitle) {
-  final materialTheme = Theme.of(context);
-  final explicitTextTheme = materialTheme.tExplicitTextTheme;
-  final titleHeight = _fontLineHeight(
-    context.tTheme.fontBodyLarge,
-    explicitTextTheme?.bodyLarge ?? explicitTextTheme?.bodyMedium,
-    materialTheme.textTheme.bodyLarge,
-  );
+  final titleHeight = _fontLineHeight(context.tTheme.fontBodyLarge, 16);
   final contentHeight = hasSubtitle
-      ? titleHeight +
-            4.0 +
-            _fontLineHeight(
-              context.tTheme.fontBodyMedium,
-              explicitTextTheme?.bodyMedium ?? explicitTextTheme?.bodySmall,
-              materialTheme.textTheme.bodyMedium,
-            )
+      ? titleHeight + 4.0 + _fontLineHeight(context.tTheme.fontBodyMedium, 14)
       : titleHeight;
   return contentHeight + context.tTheme.spacer2 * 2;
 }

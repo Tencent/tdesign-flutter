@@ -93,7 +93,7 @@ void main() {
     expect(tester.getSize(find.byType(TPicker)).height, 240);
   });
 
-  testWidgets('滚轮统一字号并继承 TextTheme，禁用项可自定义内容', (tester) async {
+  testWidgets('滚轮统一读取 Token 字号，禁用项可自定义内容', (tester) async {
     final control = FixedExtentScrollController(initialItem: 2);
     addTearDown(control.dispose);
     await tester.pumpWidget(
@@ -151,14 +151,14 @@ void main() {
         )
         .toList();
     expect(labels, hasLength(5));
-    expect(labels.map((label) => label.style!.fontSize), everyElement(19));
-    expect(labels[2].style!.fontWeight, FontWeight.w800);
+    expect(labels.map((label) => label.style!.fontSize), everyElement(16));
+    expect(labels[2].style!.fontWeight, FontWeight.w600);
     expect(
       labels.map((label) => label.style!.leadingDistribution),
       everyElement(TextLeadingDistribution.even),
     );
-    expect(labels[1].style!.fontWeight, FontWeight.w800);
-    expect(labels[1].style!.color, Colors.pink);
+    expect(labels[1].style!.fontWeight, FontWeight.w400);
+    expect(labels[1].style!.color, TThemeData.defaultData().textColorSecondary);
     expect(find.text('custom-disabled'), findsOneWidget);
   });
 

@@ -53,7 +53,7 @@ void main() {
     expect(material.tExplicitColorScheme, isNull);
   });
 
-  testWidgets('Flutter 隐式 Material 字体图标和几何不遮蔽 Token', (tester) async {
+  testWidgets('Flutter 隐式 Material 图标和几何不遮蔽 Token', (tester) async {
     for (final useMaterial3 in [false, true]) {
       late ThemeData material;
       await tester.pumpWidget(
@@ -71,7 +71,6 @@ void main() {
         ),
       );
 
-      expect(material.tExplicitTextTheme, isNull);
       expect(material.tExplicitIconTheme, isNull);
       expect(material.tExplicitDisabledColor, isNull);
       expect(material.tExplicitDividerColor, isNull);
@@ -80,12 +79,11 @@ void main() {
     }
   });
 
-  testWidgets('调用方显式 Material 字段可以进入优先级链', (tester) async {
+  testWidgets('调用方显式 Material 非文字字段可以进入优先级链', (tester) async {
     late ThemeData material;
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(
-          textTheme: const TextTheme(bodyLarge: TextStyle(fontSize: 19)),
           iconTheme: const IconThemeData(color: Colors.teal),
           disabledColor: Colors.grey,
           dividerColor: Colors.orange,
@@ -102,7 +100,6 @@ void main() {
       ),
     );
 
-    expect(material.tExplicitTextTheme?.bodyLarge?.fontSize, 19);
     expect(material.tExplicitIconTheme?.color, Colors.teal);
     expect(material.tExplicitDisabledColor, Colors.grey);
     expect(material.tExplicitDividerColor, Colors.orange);
@@ -172,7 +169,6 @@ void main() {
     );
 
     expect(material.tExplicitColorScheme, isNull);
-    expect(material.tExplicitTextTheme, isNull);
     expect(material.tExplicitIconTheme, isNull);
     expect(inheritedIconTheme, isNull);
     expect(material.tExplicitDividerColor, isNull);
@@ -351,84 +347,83 @@ void main() {
     expect(component.$2, defaults.$2);
   });
 
-  testWidgets(
-    'Input 遵循 Instance > Component > Material > ColorScheme > Token',
-    (tester) async {
-      Future<TextField> resolve(ThemeData theme, TInput input) async {
-        await tester.pumpWidget(
-          MaterialApp(
-            theme: theme,
-            themeAnimationDuration: Duration.zero,
-            home: Scaffold(body: input),
+  testWidgets('Input 文字遵循 Instance > Component > ColorScheme > Token', (
+    tester,
+  ) async {
+    Future<TextField> resolve(ThemeData theme, TInput input) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          themeAnimationDuration: Duration.zero,
+          home: Scaffold(body: input),
+        ),
+      );
+      return tester.widget<TextField>(find.byType(TextField));
+    }
+
+    final token = TThemeData.defaultData();
+    final defaults = await resolve(
+      ThemeData(extensions: [token]),
+      const TInput(),
+    );
+    expect(defaults.style?.color, token.textColorPrimary);
+    expect(defaults.cursorColor, token.brandColor);
+
+    final colorScheme = await resolve(
+      ThemeData(colorScheme: customScheme, extensions: [token]),
+      const TInput(),
+    );
+    expect(colorScheme.style?.color, customScheme.onSurface);
+    expect(colorScheme.cursorColor, customScheme.primary);
+
+    final material = await resolve(
+      ThemeData(
+        colorScheme: customScheme,
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Colors.red, fontSize: 19),
+        ),
+        extensions: [token],
+      ),
+      const TInput(),
+    );
+    expect(material.style?.color, customScheme.onSurface);
+    expect(material.style?.fontSize, token.fontBodyLarge?.size);
+
+    final component = await resolve(
+      ThemeData(
+        colorScheme: customScheme,
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Colors.red, fontSize: 19),
+        ),
+        extensions: [
+          token,
+          const TInputThemeData(
+            hintStyle: TextStyle(color: Colors.green, fontSize: 20),
           ),
-        );
-        return tester.widget<TextField>(find.byType(TextField));
-      }
+        ],
+      ),
+      const TInput(),
+    );
+    expect(component.decoration?.hintStyle?.color, Colors.green);
+    expect(component.decoration?.hintStyle?.fontSize, 20);
+    expect(component.cursorColor, customScheme.primary);
 
-      final token = TThemeData.defaultData();
-      final defaults = await resolve(
-        ThemeData(extensions: [token]),
-        const TInput(),
-      );
-      expect(defaults.style?.color, token.textColorPrimary);
-      expect(defaults.cursorColor, token.brandColor);
-
-      final colorScheme = await resolve(
-        ThemeData(colorScheme: customScheme, extensions: [token]),
-        const TInput(),
-      );
-      expect(colorScheme.style?.color, customScheme.onSurface);
-      expect(colorScheme.cursorColor, customScheme.primary);
-
-      final material = await resolve(
-        ThemeData(
-          colorScheme: customScheme,
-          textTheme: const TextTheme(
-            bodyLarge: TextStyle(color: Colors.red, fontSize: 19),
-          ),
-          extensions: [token],
-        ),
-        const TInput(),
-      );
-      expect(material.style?.color, Colors.red);
-      expect(material.style?.fontSize, 19);
-
-      final component = await resolve(
-        ThemeData(
-          colorScheme: customScheme,
-          textTheme: const TextTheme(
-            bodyLarge: TextStyle(color: Colors.red, fontSize: 19),
-          ),
-          extensions: [
-            token,
-            const TInputThemeData(
-              hintStyle: TextStyle(color: Colors.green, fontSize: 20),
-            ),
-          ],
-        ),
-        const TInput(),
-      );
-      expect(component.decoration?.hintStyle?.color, Colors.green);
-      expect(component.decoration?.hintStyle?.fontSize, 20);
-      expect(component.cursorColor, customScheme.primary);
-
-      final instance = await resolve(
-        ThemeData(
-          extensions: [
-            token,
-            const TInputThemeData(hintStyle: TextStyle(color: Colors.green)),
-          ],
-        ),
-        const TInput(
-          style: TextStyle(color: Colors.purple, fontSize: 21),
-          cursorColor: Colors.purple,
-        ),
-      );
-      expect(instance.style?.color, Colors.purple);
-      expect(instance.style?.fontSize, 21);
-      expect(instance.cursorColor, Colors.purple);
-    },
-  );
+    final instance = await resolve(
+      ThemeData(
+        extensions: [
+          token,
+          const TInputThemeData(hintStyle: TextStyle(color: Colors.green)),
+        ],
+      ),
+      const TInput(
+        style: TextStyle(color: Colors.purple, fontSize: 21),
+        cursorColor: Colors.purple,
+      ),
+    );
+    expect(instance.style?.color, Colors.purple);
+    expect(instance.style?.fontSize, 21);
+    expect(instance.cursorColor, Colors.purple);
+  });
 
   testWidgets('展示组件读取显式 ColorScheme 但不改变默认几何', (tester) async {
     await tester.pumpWidget(

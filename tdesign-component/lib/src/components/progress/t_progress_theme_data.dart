@@ -3,6 +3,8 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
+import 't_progress_defaults.dart';
+
 /// 进度条组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树的默认视觉值。
@@ -24,8 +26,8 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
   /// 条形进度条末端圆角
   final BorderRadiusGeometry? linearBorderRadius;
 
-  /// 环形进度条半径
-  final double? circleRadius;
+  /// 环形进度条的正方形边长；未设置时由环形规格决定。
+  final double? circleSize;
 
   /// 动画持续时间
   final Duration? animationDuration;
@@ -45,7 +47,7 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
     this.backgroundColor,
     this.circleInnerBgColor,
     this.linearBorderRadius,
-    this.circleRadius,
+    this.circleSize,
     this.animationDuration,
     this.indeterminateAnimationDuration,
     this.indeterminateLinearSegmentFraction,
@@ -61,6 +63,35 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
        );
 
   _ProgressColorLerp? get _circleInnerBgLerp => null;
+  _ProgressColorLerp? get _colorLerp => null;
+  _ProgressColorLerp? get _backgroundColorLerp => null;
+  _ProgressDoubleLerp? get _strokeWidthLerp => null;
+  _ProgressDoubleLerp? get _circleSizeLerp => null;
+  _ProgressBorderRadiusLerp? get _linearBorderRadiusLerp => null;
+
+  @internal
+  double resolveStrokeWidth(double fallback) =>
+      _strokeWidthLerp?.resolve(fallback) ?? strokeWidth ?? fallback;
+
+  @internal
+  double resolveCircleSize(double fallback) =>
+      _circleSizeLerp?.resolve(fallback) ?? circleSize ?? fallback;
+
+  @internal
+  Color resolveColor(Color fallback) =>
+      _colorLerp?.resolve(fallback) ?? color ?? fallback;
+
+  @internal
+  Color resolveBackgroundColor(Color fallback) =>
+      _backgroundColorLerp?.resolve(fallback) ?? backgroundColor ?? fallback;
+
+  @internal
+  BorderRadiusGeometry resolveLinearBorderRadius(
+    BorderRadiusGeometry fallback,
+  ) =>
+      _linearBorderRadiusLerp?.resolve(fallback) ??
+      linearBorderRadius ??
+      fallback;
 
   @internal
   Color resolveCircleInnerBgColor(Color fallback) =>
@@ -73,7 +104,7 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
     Color? backgroundColor,
     Color? circleInnerBgColor,
     BorderRadiusGeometry? linearBorderRadius,
-    double? circleRadius,
+    double? circleSize,
     Duration? animationDuration,
     Duration? indeterminateAnimationDuration,
     double? indeterminateLinearSegmentFraction,
@@ -87,8 +118,17 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
       circleInnerBgTransition: circleInnerBgColor == null
           ? _circleInnerBgLerp
           : null,
+      strokeWidthTransition: strokeWidth == null ? _strokeWidthLerp : null,
+      circleSizeTransition: circleSize == null ? _circleSizeLerp : null,
+      colorTransition: color == null ? _colorLerp : null,
+      backgroundColorTransition: backgroundColor == null
+          ? _backgroundColorLerp
+          : null,
+      linearBorderRadiusTransition: linearBorderRadius == null
+          ? _linearBorderRadiusLerp
+          : null,
       linearBorderRadius: linearBorderRadius ?? this.linearBorderRadius,
-      circleRadius: circleRadius ?? this.circleRadius,
+      circleSize: circleSize ?? this.circleSize,
       animationDuration: animationDuration ?? this.animationDuration,
       indeterminateAnimationDuration:
           indeterminateAnimationDuration ?? this.indeterminateAnimationDuration,
@@ -106,9 +146,34 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
       return this;
     }
     return _InterpolatedProgressThemeData(
-      strokeWidth: lerpDouble(strokeWidth, other.strokeWidth, t),
-      color: Color.lerp(color, other.color, t),
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
+      strokeWidth: _lerpExplicitDouble(strokeWidth, other.strokeWidth, t),
+      strokeWidthTransition: _ProgressDoubleLerp.whenNeeded(
+        strokeWidth,
+        _strokeWidthLerp,
+        other.strokeWidth,
+        other._strokeWidthLerp,
+        t,
+      ),
+      color: _lerpExplicitColor(color, other.color, t),
+      colorTransition: _ProgressColorLerp.whenNeeded(
+        color,
+        _colorLerp,
+        other.color,
+        other._colorLerp,
+        t,
+      ),
+      backgroundColor: _lerpExplicitColor(
+        backgroundColor,
+        other.backgroundColor,
+        t,
+      ),
+      backgroundColorTransition: _ProgressColorLerp.whenNeeded(
+        backgroundColor,
+        _backgroundColorLerp,
+        other.backgroundColor,
+        other._backgroundColorLerp,
+        t,
+      ),
       circleInnerBgColor:
           circleInnerBgColor == null || other.circleInnerBgColor == null
           ? null
@@ -120,35 +185,74 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
         other._circleInnerBgLerp,
         t,
       ),
-      linearBorderRadius: BorderRadiusGeometry.lerp(
+      linearBorderRadius:
+          linearBorderRadius == null || other.linearBorderRadius == null
+          ? null
+          : BorderRadiusGeometry.lerp(
+              linearBorderRadius,
+              other.linearBorderRadius,
+              t,
+            ),
+      linearBorderRadiusTransition: _ProgressBorderRadiusLerp.whenNeeded(
         linearBorderRadius,
+        _linearBorderRadiusLerp,
         other.linearBorderRadius,
+        other._linearBorderRadiusLerp,
         t,
       ),
-      circleRadius: lerpDouble(circleRadius, other.circleRadius, t),
-      animationDuration: lerpDuration(
+      circleSize: _lerpExplicitDouble(circleSize, other.circleSize, t),
+      circleSizeTransition: _ProgressDoubleLerp.whenNeeded(
+        circleSize,
+        _circleSizeLerp,
+        other.circleSize,
+        other._circleSizeLerp,
+        t,
+      ),
+      animationDuration: _lerpDurationWithDefault(
         animationDuration,
         other.animationDuration,
         t,
+        TProgressDefaults.animationDuration,
       ),
-      indeterminateAnimationDuration: lerpDuration(
+      indeterminateAnimationDuration: _lerpDurationWithDefault(
         indeterminateAnimationDuration,
         other.indeterminateAnimationDuration,
         t,
+        TProgressDefaults.indeterminateAnimationDuration,
       ),
-      indeterminateLinearSegmentFraction: lerpDouble(
+      indeterminateLinearSegmentFraction: _lerpWithDefault(
         indeterminateLinearSegmentFraction,
         other.indeterminateLinearSegmentFraction,
         t,
+        TProgressDefaults.indeterminateLinearSegmentFraction,
       ),
-      indeterminateCircularValue: lerpDouble(
+      indeterminateCircularValue: _lerpWithDefault(
         indeterminateCircularValue,
         other.indeterminateCircularValue,
         t,
+        TProgressDefaults.indeterminateCircularValue,
       ),
     );
   }
 }
+
+double? _lerpWithDefault(
+  double? begin,
+  double? end,
+  double t,
+  double fallback,
+) {
+  if (begin == null && end == null) {
+    return null;
+  }
+  return lerpDouble(begin ?? fallback, end ?? fallback, t);
+}
+
+double? _lerpExplicitDouble(double? begin, double? end, double t) =>
+    begin == null || end == null ? null : lerpDouble(begin, end, t);
+
+Color? _lerpExplicitColor(Color? begin, Color? end, double t) =>
+    begin == null || end == null ? null : Color.lerp(begin, end, t);
 
 class _InterpolatedProgressThemeData extends TProgressThemeData {
   const _InterpolatedProgressThemeData({
@@ -157,18 +261,121 @@ class _InterpolatedProgressThemeData extends TProgressThemeData {
     super.backgroundColor,
     super.circleInnerBgColor,
     super.linearBorderRadius,
-    super.circleRadius,
+    super.circleSize,
     super.animationDuration,
     super.indeterminateAnimationDuration,
     super.indeterminateLinearSegmentFraction,
     super.indeterminateCircularValue,
     _ProgressColorLerp? circleInnerBgTransition,
-  }) : _circleInnerBgTransition = circleInnerBgTransition;
+    _ProgressColorLerp? colorTransition,
+    _ProgressColorLerp? backgroundColorTransition,
+    _ProgressDoubleLerp? strokeWidthTransition,
+    _ProgressDoubleLerp? circleSizeTransition,
+    _ProgressBorderRadiusLerp? linearBorderRadiusTransition,
+  }) : _circleInnerBgTransition = circleInnerBgTransition,
+       _colorTransition = colorTransition,
+       _backgroundColorTransition = backgroundColorTransition,
+       _strokeWidthTransition = strokeWidthTransition,
+       _circleSizeTransition = circleSizeTransition,
+       _linearBorderRadiusTransition = linearBorderRadiusTransition;
 
   final _ProgressColorLerp? _circleInnerBgTransition;
+  final _ProgressColorLerp? _colorTransition;
+  final _ProgressColorLerp? _backgroundColorTransition;
+  final _ProgressDoubleLerp? _strokeWidthTransition;
+  final _ProgressDoubleLerp? _circleSizeTransition;
+  final _ProgressBorderRadiusLerp? _linearBorderRadiusTransition;
 
   @override
   _ProgressColorLerp? get _circleInnerBgLerp => _circleInnerBgTransition;
+  @override
+  _ProgressColorLerp? get _colorLerp => _colorTransition;
+  @override
+  _ProgressColorLerp? get _backgroundColorLerp => _backgroundColorTransition;
+  @override
+  _ProgressDoubleLerp? get _strokeWidthLerp => _strokeWidthTransition;
+  @override
+  _ProgressDoubleLerp? get _circleSizeLerp => _circleSizeTransition;
+  @override
+  _ProgressBorderRadiusLerp? get _linearBorderRadiusLerp =>
+      _linearBorderRadiusTransition;
+}
+
+class _ProgressBorderRadiusLerp {
+  const _ProgressBorderRadiusLerp(
+    this.begin,
+    this.beginTransition,
+    this.end,
+    this.endTransition,
+    this.t,
+  );
+
+  static _ProgressBorderRadiusLerp? whenNeeded(
+    BorderRadiusGeometry? begin,
+    _ProgressBorderRadiusLerp? beginTransition,
+    BorderRadiusGeometry? end,
+    _ProgressBorderRadiusLerp? endTransition,
+    double t,
+  ) =>
+      beginTransition == null &&
+          endTransition == null &&
+          ((begin == null && end == null) || (begin != null && end != null))
+      ? null
+      : _ProgressBorderRadiusLerp(
+          begin,
+          beginTransition,
+          end,
+          endTransition,
+          t,
+        );
+
+  final BorderRadiusGeometry? begin;
+  final _ProgressBorderRadiusLerp? beginTransition;
+  final BorderRadiusGeometry? end;
+  final _ProgressBorderRadiusLerp? endTransition;
+  final double t;
+
+  BorderRadiusGeometry resolve(BorderRadiusGeometry fallback) =>
+      BorderRadiusGeometry.lerp(
+        beginTransition?.resolve(fallback) ?? begin ?? fallback,
+        endTransition?.resolve(fallback) ?? end ?? fallback,
+        t,
+      )!;
+}
+
+class _ProgressDoubleLerp {
+  const _ProgressDoubleLerp(
+    this.begin,
+    this.beginTransition,
+    this.end,
+    this.endTransition,
+    this.t,
+  );
+
+  static _ProgressDoubleLerp? whenNeeded(
+    double? begin,
+    _ProgressDoubleLerp? beginTransition,
+    double? end,
+    _ProgressDoubleLerp? endTransition,
+    double t,
+  ) =>
+      beginTransition == null &&
+          endTransition == null &&
+          ((begin == null && end == null) || (begin != null && end != null))
+      ? null
+      : _ProgressDoubleLerp(begin, beginTransition, end, endTransition, t);
+
+  final double? begin;
+  final _ProgressDoubleLerp? beginTransition;
+  final double? end;
+  final _ProgressDoubleLerp? endTransition;
+  final double t;
+
+  double resolve(double fallback) => lerpDouble(
+    beginTransition?.resolve(fallback) ?? begin ?? fallback,
+    endTransition?.resolve(fallback) ?? end ?? fallback,
+    t,
+  )!;
 }
 
 class _ProgressColorLerp {
@@ -206,19 +413,20 @@ class _ProgressColorLerp {
   )!;
 }
 
-/// 线性插值两个 [Duration]
-Duration? lerpDuration(Duration? a, Duration? b, double t) {
+Duration? _lerpDurationWithDefault(
+  Duration? a,
+  Duration? b,
+  double t,
+  Duration fallback,
+) {
   if (a == null && b == null) {
     return null;
   }
-  if (a == null) {
-    return b;
-  }
-  if (b == null) {
-    return a;
-  }
+  final begin = a ?? fallback;
+  final end = b ?? fallback;
   return Duration(
-    milliseconds: (a.inMilliseconds + (b.inMilliseconds - a.inMilliseconds) * t)
-        .round(),
+    milliseconds:
+        (begin.inMilliseconds + (end.inMilliseconds - begin.inMilliseconds) * t)
+            .round(),
   );
 }

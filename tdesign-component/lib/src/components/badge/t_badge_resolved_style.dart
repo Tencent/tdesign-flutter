@@ -53,13 +53,8 @@ class TBadgeResolvedStyle {
         globalBadgeTheme?.smallSize ??
         TBadgeDefaults.dotSize;
     final font = large ? token.fontMarkSmall : token.fontMarkExtraSmall;
-    final materialTextStyle = large
-        ? materialTheme.tExplicitTextTheme?.labelMedium
-        : materialTheme.tExplicitTextTheme?.labelSmall;
     final themedTextStyle =
-        localBadgeTheme?.textStyle ??
-        globalBadgeTheme?.textStyle ??
-        materialTextStyle;
+        localBadgeTheme?.textStyle ?? globalBadgeTheme?.textStyle;
     final resolvedTextStyle =
         themedTextStyle ??
         TextStyle(

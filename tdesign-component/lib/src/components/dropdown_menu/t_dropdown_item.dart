@@ -183,10 +183,6 @@ class _TDropdownMultiSelectPanelState<T>
                                   height: context.tTheme.fontBodyMedium?.height,
                                   fontWeight:
                                       context.tTheme.fontBodyMedium?.fontWeight,
-                                ).merge(
-                                  Theme.of(
-                                    context,
-                                  ).tExplicitTextTheme?.bodyMedium,
                                 ),
                           ),
                         ),
@@ -346,7 +342,6 @@ class _DropdownOptionRow extends StatelessWidget {
     final tokenFont = context.tTheme.fontBodyLarge;
     final base =
         theme.optionTextStyle ??
-        material.tExplicitTextTheme?.bodyLarge ??
         TextStyle(
           color: context.tTheme.textColorPrimary,
           fontSize: tokenFont?.size,
@@ -442,7 +437,6 @@ class _DropdownOptionChip extends StatelessWidget {
     final tokenFont = context.tTheme.fontBodyMedium;
     final base =
         theme.optionTextStyle ??
-        material.tExplicitTextTheme?.bodyMedium ??
         TextStyle(
           color: context.tTheme.textColorPrimary,
           fontSize: tokenFont?.size,

@@ -16,15 +16,11 @@ class _NonlinearTextScaler extends TextScaler {
 }
 
 void main() {
-  Widget wrap(Widget child, {TextStyle? defaultTextStyle}) {
+  Widget wrap(Widget child) {
     final theme = TThemeBuilder.light(TThemeData.defaultData());
     return MaterialApp(
       theme: theme,
-      home: Scaffold(
-        body: defaultTextStyle == null
-            ? child
-            : DefaultTextStyle.merge(style: defaultTextStyle, child: child),
-      ),
+      home: Scaffold(body: child),
     );
   }
 
@@ -186,7 +182,7 @@ void main() {
     expect(text.selectionColor, Colors.cyan);
   });
 
-  testWidgets('DefaultTextStyle 和实例段落字段生效', (tester) async {
+  testWidgets('实例 style 和段落字段生效', (tester) async {
     const heightBehavior = TextHeightBehavior(
       applyHeightToFirstAscent: false,
       applyHeightToLastDescent: false,
@@ -196,14 +192,14 @@ void main() {
       wrap(
         const TText(
           '主题',
+          style: TextStyle(
+            fontSize: 18,
+            height: 26 / 18,
+            color: Colors.orange,
+          ),
           strutStyle: strut,
           textWidthBasis: TextWidthBasis.longestLine,
           textHeightBehavior: heightBehavior,
-        ),
-        defaultTextStyle: const TextStyle(
-          fontSize: 18,
-          height: 26 / 18,
-          color: Colors.orange,
         ),
       ),
     );

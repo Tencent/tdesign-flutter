@@ -42,7 +42,7 @@
 - 动画时长若直接决定单次组件交互的展开/收起时间，归实例 API；Theme 可承载动画曲线、颜色或尺寸等不与该时长同义的视觉默认值。系统“减少动态效果”始终优先于实例时长。
 - 无法由同值比较证明视觉等价的字体、阴影、百分比几何及响应式尺寸须独立记录；全局 `radiusCircle` 维持已记录的 Flutter 固定半径例外。
 - 本轮收敛 `TButton`、`TInput`、Dialog action 已有完整实例 `style` 所覆盖的视觉字段，并去除 `TTagThemeData.fontWeight` 与 `font` 的重复设置；`TTabsBar` 的容器背景/分割线归组件 Theme，不再保留实例完整装饰入口。`TText` 的单实例完整样式、SwipeCellAction 的逐项外观和 Popup 蒙层透明度入口已按下文迁移；这仍不等于全仓所有组件都已满足单入口标准。
-- 无显式字体的独立 `TText` 使用小程序 `packages/components/paragraph/paragraph.less` 中 `@font-body-medium` 的 14dp/22dp 语义，而非 `fontBodyLarge` 16dp/24dp；组合组件传入的内置文字默认值、显式 Flutter 主题、组件 Theme 与实例样式仍按既定优先级覆盖。这个默认字号/行高变化属于可见 breaking 行为，须列入迁移与 Golden 审查。
+- 无显式字体的独立 `TText` 使用小程序 `packages/components/paragraph/paragraph.less` 中 `@font-body-medium` 的 14dp/22dp 语义，而非 `fontBodyLarge` 16dp/24dp；文字样式统一由全局 TDesign Token/Theme、组件 Theme 与实例样式逐级覆盖，不从 Material `TextTheme` 或 `DefaultTextStyle` 的最终值推断显式配置。Material 文本主题仅作为原生 Flutter 控件的投影。这个默认字号/行高与继承行为变化属于可见 breaking 行为，须列入迁移与 Golden 审查。
 - Avatar 默认图标与文字的前景色只由 `TAvatarThemeData.foregroundColor` 控制；移除组件 Theme 中可同时设置颜色的 `textStyle`。字符头像仍按 `size` 使用内置字号与字重，特殊排版由调用方传入带样式的 `child: Text(...)`，不为通用 `Widget child` 再增组件级文字样式入口。
 - Avatar 的形状选择只保留 `TAvatar.shape`；移除已弃用且与其一一等价的 `variant` 参数和 `TAvatarVariant`。圆形、方形以及头像组成员裁剪、描边和阴影必须由同一形状及有效圆角决定；默认正圆视觉不变，自定义较小 `radiusCircle` 时组外框不得仍强制绘制为正圆。
 - Avatar Theme 的尺寸、图标尺寸、组描边宽度及圆角存在随成员规格或全局 Token 变化的回退值。与显式 Theme 值插值时须在成员最终规格和全局 Token 已知后解析两端有效值；不能在 `ThemeExtension.lerp` 中预设中号尺寸或固定全局圆角。两端均未配置时继续由组件读取实时回退值。

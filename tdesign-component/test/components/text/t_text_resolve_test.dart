@@ -21,39 +21,42 @@ void main() {
     return tester.element(find.byWidget(child));
   }
 
-  testWidgets('解析优先级遵循 Flutter merge 链', (tester) async {
-    final context = await pumpContext(
-      tester,
-      theme: ThemeData(
-        extensions: [TThemeData.defaultData()],
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: Colors.indigo, fontSize: 17),
+  testWidgets(
+    '实例样式优先于 TDesign Token，忽略 Material TextTheme 和 DefaultTextStyle',
+    (tester) async {
+      final context = await pumpContext(
+        tester,
+        theme: ThemeData(
+          extensions: [TThemeData.defaultData()],
+          textTheme: const TextTheme(
+            bodyLarge: TextStyle(color: Colors.indigo, fontSize: 17),
+          ),
         ),
-      ),
-      wrap: (child) => DefaultTextStyle(
-        style: const TextStyle(
-          color: Colors.pink,
-          fontSize: 19,
-          decoration: TextDecoration.underline,
+        wrap: (child) => DefaultTextStyle(
+          style: const TextStyle(
+            color: Colors.pink,
+            fontSize: 19,
+            decoration: TextDecoration.underline,
+          ),
+          child: child,
         ),
-        child: child,
-      ),
-    );
+      );
 
-    final resolved = TTextResolve.resolve(
-      context: context,
-      font: Font(size: 20, lineHeight: 28),
-      textColor: Colors.green,
-      style: const TextStyle(color: Colors.red, fontSize: 22),
-    );
-    expect(resolved.color, Colors.red);
-    expect(resolved.fontSize, 22);
-    expect(resolved.height, 28 / 20);
-    expect(resolved.decoration, TextDecoration.underline);
-    expect(resolved.inherit, isFalse);
-  });
+      final resolved = TTextResolve.resolve(
+        context: context,
+        font: Font(size: 20, lineHeight: 28),
+        textColor: Colors.green,
+        style: const TextStyle(color: Colors.red, fontSize: 22),
+      );
+      expect(resolved.color, Colors.red);
+      expect(resolved.fontSize, 22);
+      expect(resolved.height, 28 / 20);
+      expect(resolved.decoration, isNull);
+      expect(resolved.inherit, isFalse);
+    },
+  );
 
-  testWidgets('组件 Theme 默认值优先于原生继承，实例 style 再覆盖', (tester) async {
+  testWidgets('组件 Theme 默认值优先于 Token，实例 style 再覆盖', (tester) async {
     final context = await pumpContext(
       tester,
       theme: TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
@@ -138,7 +141,7 @@ void main() {
     expect(resolved, style);
   });
 
-  testWidgets('组合组件默认值低于显式主题且按字段回退', (tester) async {
+  testWidgets('组合组件默认值优先于 Token，但不读取 Material TextTheme', (tester) async {
     final context = await pumpContext(
       tester,
       theme: TThemeBuilder.light(TThemeData.defaultData()).copyWith(
@@ -153,7 +156,7 @@ void main() {
         fontWeight: FontWeight.w600,
       ),
     );
-    expect(resolved.fontSize, 21);
+    expect(resolved.fontSize, 12);
     expect(resolved.color, Colors.red);
     expect(resolved.fontWeight, FontWeight.w600);
     expect(
@@ -166,7 +169,7 @@ void main() {
     );
   });
 
-  testWidgets('部分 Material 主题只覆盖配置字段且不带入投影默认值', (tester) async {
+  testWidgets('Material TextTheme 无论局部或整体配置都不进入 TDesign 文字链', (tester) async {
     final token = TThemeData.defaultData();
     for (final base in [
       ThemeData(),
@@ -188,7 +191,7 @@ void main() {
           fontWeight: FontWeight.w600,
         ),
       );
-      expect(resolved.fontFamily, 'custom-family');
+      expect(resolved.fontFamily, 'Roboto');
       expect(resolved.fontSize, 10);
       expect(resolved.height, 1.6);
       expect(resolved.color, Colors.red);
@@ -207,11 +210,11 @@ void main() {
       context: context,
       defaults: const TextStyle(fontSize: 10, color: Colors.red),
     );
-    expect(resolved.fontSize, 21);
+    expect(resolved.fontSize, 10);
     expect(resolved.color, Colors.red);
   });
 
-  testWidgets('DefaultTextStyle.merge 不把继承的默认色伪装成显式配置', (tester) async {
+  testWidgets('DefaultTextStyle.merge 不进入 TDesign 文字样式链', (tester) async {
     final context = await pumpContext(
       tester,
       wrap: (child) => DefaultTextStyle.merge(
@@ -223,11 +226,11 @@ void main() {
       context: context,
       defaults: const TextStyle(fontSize: 10, color: Colors.red),
     );
-    expect(resolved.fontSize, 21);
+    expect(resolved.fontSize, 10);
     expect(resolved.color, Colors.red);
   });
 
-  testWidgets('组合组件保留完整显式排版字段和绘制配置', (tester) async {
+  testWidgets('组件 Theme 保留完整排版字段和绘制配置', (tester) async {
     const typography = TextStyle(
       color: Colors.orange,
       backgroundColor: Colors.yellow,
@@ -255,7 +258,7 @@ void main() {
         tester,
         theme: ThemeData(
           useMaterial3: useMaterial3,
-          textTheme: const TextTheme(bodyLarge: typography),
+          extensions: const [TTextThemeData(textStyle: typography)],
         ),
       );
       final resolved = TTextResolve.resolve(
@@ -276,9 +279,14 @@ void main() {
     final context = await pumpContext(
       tester,
       theme: ThemeData(
-        textTheme: TextTheme(
-          bodyLarge: TextStyle(foreground: foreground, background: background),
-        ),
+        extensions: [
+          TTextThemeData(
+            textStyle: TextStyle(
+              foreground: foreground,
+              background: background,
+            ),
+          ),
+        ],
       ),
     );
     final resolved = TTextResolve.resolve(
@@ -304,7 +312,7 @@ void main() {
     expect(resolved.backgroundColor, isNull);
   });
 
-  testWidgets('Material TextTheme 提供默认值，实例字体 Token 继续覆盖', (tester) async {
+  testWidgets('Material TextTheme 不覆盖 Token，实例字体仍可覆盖', (tester) async {
     final context = await pumpContext(
       tester,
       theme: ThemeData(
@@ -319,9 +327,9 @@ void main() {
       ),
     );
     final themed = TTextResolve.resolve(context: context);
-    expect(themed.fontSize, 21);
-    expect(themed.height, 26 / 18);
-    expect(themed.color, Colors.orange);
+    expect(themed.fontSize, 14);
+    expect(themed.height, 22 / 14);
+    expect(themed.color, TThemeData.defaultData().textColorPrimary);
 
     final instance = TTextResolve.resolve(
       context: context,

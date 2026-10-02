@@ -63,7 +63,22 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
   _TagColorLerp? get _dangerLerp => null;
   _TagColorLerp? get _successLerp => null;
   _TagColorLerp? get _successLightLerp => null;
+  _TagColorLerp? get _textColorLerp => null;
+  _TagColorLerp? get _backgroundColorLerp => null;
   _TagDoubleLerp? get _squareBorderRadiusLerp => null;
+  _TagPaddingLerp? get _paddingLerp => null;
+
+  @internal
+  Color resolveTextColor(Color fallback) =>
+      _textColorLerp?.resolve(fallback) ?? textColor ?? fallback;
+
+  @internal
+  Color resolveBackgroundColor(Color fallback) =>
+      _backgroundColorLerp?.resolve(fallback) ?? backgroundColor ?? fallback;
+
+  @internal
+  EdgeInsets resolvePadding(EdgeInsets fallback) =>
+      _paddingLerp?.resolve(fallback) ?? padding ?? fallback;
 
   @internal
   Color resolveDangerColor(Color fallback) =>
@@ -117,6 +132,11 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
       squareBorderRadiusTransition: squareBorderRadius == null
           ? _squareBorderRadiusLerp
           : null,
+      textColorTransition: textColor == null ? _textColorLerp : null,
+      backgroundColorTransition: backgroundColor == null
+          ? _backgroundColorLerp
+          : null,
+      paddingTransition: padding == null ? _paddingLerp : null,
     );
   }
 
@@ -126,8 +146,26 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
       return this;
     }
     return _InterpolatedTagThemeData(
-      textColor: Color.lerp(textColor, other.textColor, t),
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
+      textColor: _lerpExplicitColor(textColor, other.textColor, t),
+      textColorTransition: _TagColorLerp.whenNeeded(
+        textColor,
+        _textColorLerp,
+        other.textColor,
+        other._textColorLerp,
+        t,
+      ),
+      backgroundColor: _lerpExplicitColor(
+        backgroundColor,
+        other.backgroundColor,
+        t,
+      ),
+      backgroundColorTransition: _TagColorLerp.whenNeeded(
+        backgroundColor,
+        _backgroundColorLerp,
+        other.backgroundColor,
+        other._backgroundColorLerp,
+        t,
+      ),
       dangerColor: _lerpExplicitColor(dangerColor, other.dangerColor, t),
       dangerTransition: _TagColorLerp.whenNeeded(
         dangerColor,
@@ -157,8 +195,16 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
         t,
       ),
       font: t < 0.5 ? font : other.font,
-      padding:
-          EdgeInsetsGeometry.lerp(padding, other.padding, t) as EdgeInsets?,
+      padding: padding == null || other.padding == null
+          ? null
+          : EdgeInsets.lerp(padding, other.padding, t),
+      paddingTransition: _TagPaddingLerp.whenNeeded(
+        padding,
+        _paddingLerp,
+        other.padding,
+        other._paddingLerp,
+        t,
+      ),
       squareBorderRadius: _lerpExplicitDouble(
         squareBorderRadius,
         other.squareBorderRadius,
@@ -173,7 +219,10 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
       ),
       overflow: t < 0.5 ? overflow : other.overflow,
       maxLines: t < 0.5 ? maxLines : other.maxLines,
-      fixedWidth: lerpDouble(fixedWidth, other.fixedWidth, t),
+      // null means intrinsic width, not a numeric zero-width endpoint.
+      fixedWidth: fixedWidth == null || other.fixedWidth == null
+          ? (t < 0.5 ? fixedWidth : other.fixedWidth)
+          : lerpDouble(fixedWidth, other.fixedWidth, t),
     );
   }
 }
@@ -195,15 +244,24 @@ class _InterpolatedTagThemeData extends TTagThemeData {
     _TagColorLerp? successTransition,
     _TagColorLerp? successLightTransition,
     _TagDoubleLerp? squareBorderRadiusTransition,
+    _TagColorLerp? textColorTransition,
+    _TagColorLerp? backgroundColorTransition,
+    _TagPaddingLerp? paddingTransition,
   }) : _dangerTransition = dangerTransition,
        _successTransition = successTransition,
        _successLightTransition = successLightTransition,
-       _squareBorderRadiusTransition = squareBorderRadiusTransition;
+       _squareBorderRadiusTransition = squareBorderRadiusTransition,
+       _textColorTransition = textColorTransition,
+       _backgroundColorTransition = backgroundColorTransition,
+       _paddingTransition = paddingTransition;
 
   final _TagColorLerp? _dangerTransition;
   final _TagColorLerp? _successTransition;
   final _TagColorLerp? _successLightTransition;
   final _TagDoubleLerp? _squareBorderRadiusTransition;
+  final _TagColorLerp? _textColorTransition;
+  final _TagColorLerp? _backgroundColorTransition;
+  final _TagPaddingLerp? _paddingTransition;
 
   @override
   _TagColorLerp? get _dangerLerp => _dangerTransition;
@@ -213,6 +271,47 @@ class _InterpolatedTagThemeData extends TTagThemeData {
   _TagColorLerp? get _successLightLerp => _successLightTransition;
   @override
   _TagDoubleLerp? get _squareBorderRadiusLerp => _squareBorderRadiusTransition;
+  @override
+  _TagColorLerp? get _textColorLerp => _textColorTransition;
+  @override
+  _TagColorLerp? get _backgroundColorLerp => _backgroundColorTransition;
+  @override
+  _TagPaddingLerp? get _paddingLerp => _paddingTransition;
+}
+
+class _TagPaddingLerp {
+  const _TagPaddingLerp(
+    this.begin,
+    this.beginTransition,
+    this.end,
+    this.endTransition,
+    this.t,
+  );
+
+  static _TagPaddingLerp? whenNeeded(
+    EdgeInsets? begin,
+    _TagPaddingLerp? beginTransition,
+    EdgeInsets? end,
+    _TagPaddingLerp? endTransition,
+    double t,
+  ) =>
+      beginTransition == null &&
+          endTransition == null &&
+          ((begin == null && end == null) || (begin != null && end != null))
+      ? null
+      : _TagPaddingLerp(begin, beginTransition, end, endTransition, t);
+
+  final EdgeInsets? begin;
+  final _TagPaddingLerp? beginTransition;
+  final EdgeInsets? end;
+  final _TagPaddingLerp? endTransition;
+  final double t;
+
+  EdgeInsets resolve(EdgeInsets fallback) => EdgeInsets.lerp(
+    beginTransition?.resolve(fallback) ?? begin ?? fallback,
+    endTransition?.resolve(fallback) ?? end ?? fallback,
+    t,
+  )!;
 }
 
 Color? _lerpExplicitColor(Color? begin, Color? end, double t) =>
