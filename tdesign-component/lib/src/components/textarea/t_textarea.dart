@@ -272,8 +272,7 @@ class _TTextareaState extends State<TTextarea> {
           fontWeight: labelFont?.fontWeight,
         ).copyWith(
           color: widget.enabled
-              ? material.tExplicitColorScheme?.onSurface ??
-                    token.textColorPrimary
+              ? token.textColorPrimary
               : token.textColorDisabled,
         );
     final editor = Theme(

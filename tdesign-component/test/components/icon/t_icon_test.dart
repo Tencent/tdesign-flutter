@@ -4,8 +4,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// TIcon Widget 测试
 ///
-/// 覆盖基础渲染、构造器参数、IconTheme 子树注入、
-/// IconTheme 回退、TIcon.fromName 工厂构造。
+/// 覆盖基础渲染、构造器参数、Material IconTheme 隔离、
+/// TIcon.fromName 工厂构造。
 void main() {
   /// 完整包装，注入 TDesign 全局主题。
   Widget wrapWithTheme(
@@ -82,9 +82,9 @@ void main() {
   });
 
   // ============================================================
-  // T03 – IconTheme 子树注入
+  // T03 – Material IconTheme 不反向控制 TDesign 图标
   // ============================================================
-  testWidgets('T03 - Theme size 默认生效', (tester) async {
+  testWidgets('T03 - IconTheme size 不覆盖默认尺寸', (tester) async {
     const themeSize = 32.0;
     await tester.pumpWidget(
       wrapWithTheme(
@@ -94,10 +94,10 @@ void main() {
     );
 
     final icon = tester.widget<Icon>(find.byType(Icon));
-    expect(icon.size, themeSize);
+    expect(icon.size, 24.0);
   });
 
-  testWidgets('T03b - Theme color 默认生效', (tester) async {
+  testWidgets('T03b - IconTheme color 不覆盖 Token', (tester) async {
     const themeColor = Colors.blue;
     await tester.pumpWidget(
       wrapWithTheme(
@@ -107,7 +107,7 @@ void main() {
     );
 
     final icon = tester.widget<Icon>(find.byType(Icon));
-    expect(icon.color, themeColor);
+    expect(icon.color, TThemeData.defaultData().textColorPrimary);
   });
 
   testWidgets('T03c - 构造器参数优先于 Theme', (tester) async {
@@ -125,9 +125,9 @@ void main() {
   });
 
   // ============================================================
-  // T04 – IconTheme 回退
+  // T04 – 裸 TDesign Token 回退
   // ============================================================
-  testWidgets('T04 - 无 Theme 时回退 IconTheme', (tester) async {
+  testWidgets('T04 - Material IconTheme 不覆盖 TDesign 默认值', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(
@@ -139,8 +139,8 @@ void main() {
     );
 
     final icon = tester.widget<Icon>(find.byType(Icon));
-    expect(icon.size, 28.0);
-    expect(icon.color, Colors.green);
+    expect(icon.size, 24.0);
+    expect(icon.color, TThemeData.defaultData().textColorPrimary);
   });
 
   testWidgets('T04a - 裸 TThemeData 注入时颜色兜底到 token', (tester) async {
@@ -156,7 +156,7 @@ void main() {
     expect(icon.color, token.textColorPrimary);
   });
 
-  testWidgets('T04b - 完整主题下仍尊重局部 IconTheme', (tester) async {
+  testWidgets('T04b - 完整主题忽略局部 Material IconTheme', (tester) async {
     await tester.pumpWidget(
       wrapWithTheme(
         const IconTheme(
@@ -167,11 +167,11 @@ void main() {
     );
 
     final icon = tester.widget<Icon>(find.byType(Icon));
-    expect(icon.size, 30.0);
-    expect(icon.color, Colors.green);
+    expect(icon.size, 24.0);
+    expect(icon.color, TThemeData.defaultData().textColorPrimary);
   });
 
-  testWidgets('T04c - 更近的 IconTheme 覆盖外层 IconTheme', (tester) async {
+  testWidgets('T04c - 嵌套 Material IconTheme 不覆盖 TDesign 默认值', (tester) async {
     await tester.pumpWidget(
       wrapWithTheme(
         const IconTheme(
@@ -183,8 +183,8 @@ void main() {
     );
 
     final icon = tester.widget<Icon>(find.byType(Icon));
-    expect(icon.size, 30);
-    expect(icon.color, Colors.green);
+    expect(icon.size, 24.0);
+    expect(icon.color, TThemeData.defaultData().textColorPrimary);
   });
 
   testWidgets('T04d - 构造器覆盖 IconTheme', (tester) async {
@@ -264,7 +264,7 @@ void main() {
     }
   });
 
-  testWidgets('T07 - IconTheme 为子树提供默认尺寸和颜色', (tester) async {
+  testWidgets('T07 - IconTheme 不为 TDesign 图标提供默认尺寸和颜色', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(extensions: [TThemeData.defaultData()]),
@@ -279,8 +279,8 @@ void main() {
       ),
     );
     final icon = tester.widget<Icon>(find.byIcon(TIcons.home));
-    expect(icon.size, 32.0);
-    expect(icon.color, Colors.green);
+    expect(icon.size, 24.0);
+    expect(icon.color, TThemeData.defaultData().textColorPrimary);
   });
 
   testWidgets('T08 - 多个 TIcon 同时渲染', (tester) async {

@@ -122,12 +122,23 @@ class TCheckbox extends StatelessWidget {
     final content = _buildContent(context, theme);
     final hasContent = content != null;
 
-    final constraints = hasContent
-        ? BoxConstraints(minHeight: _contentMinHeight(context))
-        : _resolveTapTargetConstraints(context);
-
     final tileContent = LayoutBuilder(
       builder: (context, layoutConstraints) {
+        final preferredConstraints = hasContent
+            ? BoxConstraints(minHeight: _contentMinHeight(context))
+            : _resolveTapTargetConstraints(context);
+        // 表格等紧凑容器可限制外盒，但不能让默认独立 Checkbox
+        // 再从外部 Material CheckboxTheme 读取触控尺寸。
+        final constraints = BoxConstraints(
+          minWidth: math.min(
+            preferredConstraints.minWidth,
+            layoutConstraints.maxWidth,
+          ),
+          minHeight: math.min(
+            preferredConstraints.minHeight,
+            layoutConstraints.maxHeight,
+          ),
+        );
         final hasBoundedWidth = layoutConstraints.hasBoundedWidth;
         final padding = hasContent
             ? (theme?.customSpace ??
@@ -204,43 +215,45 @@ class TCheckbox extends StatelessWidget {
           )
         : tileContent;
 
+    final interactiveTile = GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: _disabled ? null : () => onChanged!(value == true ? false : true),
+      child: tile,
+    );
     return Semantics(
       enabled: !_disabled,
       checked: value,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: _disabled
-                ? null
-                : () => onChanged!(value == true ? false : true),
-            child: tile,
-          ),
-          if (showDivider && !cardMode)
-            ColoredBox(
-              color: hasContent
-                  ? context.tTheme.bgColorContainer
-                  : Colors.transparent,
-              child: Padding(
-                padding: EdgeInsetsDirectional.only(
-                  start:
-                      contentDirection == TContentDirection.right && hasContent
-                      ? (theme?.insetSpacing ?? context.tTheme.spacer2) +
-                            _indicatorSize(context) +
-                            (theme?.spacing ?? context.tTheme.spacer)
-                      : theme?.insetSpacing ?? context.tTheme.spacer2,
-                ),
-                child: Theme(
-                  data: Theme.of(context).mergeExtension(
-                    const TDividerThemeData(margin: EdgeInsets.zero),
+      child: !showDivider && !cardMode
+          ? interactiveTile
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                interactiveTile,
+                if (showDivider && !cardMode)
+                  ColoredBox(
+                    color: hasContent
+                        ? context.tTheme.bgColorContainer
+                        : Colors.transparent,
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.only(
+                        start:
+                            contentDirection == TContentDirection.right &&
+                                hasContent
+                            ? (theme?.insetSpacing ?? context.tTheme.spacer2) +
+                                  _indicatorSize(context) +
+                                  (theme?.spacing ?? context.tTheme.spacer)
+                            : theme?.insetSpacing ?? context.tTheme.spacer2,
+                      ),
+                      child: Theme(
+                        data: Theme.of(context).mergeExtension(
+                          const TDividerThemeData(margin: EdgeInsets.zero),
+                        ),
+                        child: const TDivider(),
+                      ),
+                    ),
                   ),
-                  child: const TDivider(),
-                ),
-              ),
+              ],
             ),
-        ],
-      ),
     );
   }
 
@@ -268,16 +281,8 @@ class TCheckbox extends StatelessWidget {
       style.fontSize! * (style.height ?? 1);
 
   BoxConstraints _resolveTapTargetConstraints(BuildContext context) {
-    final materialTheme = CheckboxTheme.of(context);
-    final appTheme = Theme.of(context);
-    final visualDensity =
-        materialTheme.visualDensity ??
-        appTheme.tExplicitVisualDensity ??
-        VisualDensity.standard;
-    final tapTargetSize =
-        materialTheme.materialTapTargetSize ??
-        appTheme.tExplicitMaterialTapTargetSize ??
-        MaterialTapTargetSize.padded;
+    const visualDensity = VisualDensity.standard;
+    const tapTargetSize = MaterialTapTargetSize.padded;
     final indicatorSize = _indicatorSize(context);
     final baseSize = tapTargetSize == MaterialTapTargetSize.padded
         ? kMinInteractiveDimension
@@ -290,15 +295,9 @@ class TCheckbox extends StatelessWidget {
   }
 
   Widget _buildIndicator(BuildContext context, TCheckboxThemeData? theme) {
-    final materialTheme = CheckboxTheme.of(context);
-    final colorScheme = Theme.of(context).tExplicitColorScheme;
     final variant = theme?.variant ?? TCheckboxVariant.circle;
     final selected = value == true;
     final indeterminate = value == null;
-    final states = <WidgetState>{
-      if (selected || indeterminate) WidgetState.selected,
-      if (_disabled) WidgetState.disabled,
-    };
     final icon = switch (variant) {
       TCheckboxVariant.circle =>
         indeterminate
@@ -313,18 +312,10 @@ class TCheckbox extends StatelessWidget {
             : null,
     };
     final color = _disabled
-        ? (theme?.disableColor ??
-              materialTheme.fillColor?.resolve(states) ??
-              colorScheme?.onSurface.withValues(alpha: 0.38) ??
-              context.tTheme.brandColorDisabled)
+        ? (theme?.disableColor ?? context.tTheme.brandColorDisabled)
         : selected || indeterminate
-        ? (theme?.selectColor ??
-              materialTheme.fillColor?.resolve(states) ??
-              colorScheme?.primary ??
-              context.tTheme.brandColor)
-        : (materialTheme.side?.color ??
-              colorScheme?.outline ??
-              context.tTheme.componentBorder);
+        ? (theme?.selectColor ?? context.tTheme.brandColor)
+        : context.tTheme.componentBorder;
     final indicatorSize = _indicatorSize(context);
     if (variant == TCheckboxVariant.square) {
       return _buildSquareIndicator(
@@ -334,28 +325,18 @@ class TCheckbox extends StatelessWidget {
         indeterminate: indeterminate,
         color: color,
         theme: theme,
-        materialTheme: materialTheme,
-        states: states,
       );
     }
     if (_disabled &&
         !selected &&
         !indeterminate &&
         variant != TCheckboxVariant.check) {
-      final fillColor = materialTheme.fillColor?.resolve(states);
-      final materialSide = materialTheme.side;
-      final resolvedMaterialSide = materialSide is WidgetStateBorderSide
-          ? materialSide.resolve(states)
-          : materialSide;
-      final borderColor =
-          theme?.disableColor ??
-          resolvedMaterialSide?.color ??
-          context.tTheme.componentBorder;
+      final borderColor = theme?.disableColor ?? context.tTheme.componentBorder;
       return Container(
         width: indicatorSize,
         height: indicatorSize,
         decoration: BoxDecoration(
-          color: fillColor ?? context.tTheme.bgColorComponentDisabled,
+          color: context.tTheme.bgColorComponentDisabled,
           border: Border.all(color: borderColor),
           shape: variant == TCheckboxVariant.circle
               ? BoxShape.circle
@@ -382,28 +363,19 @@ class TCheckbox extends StatelessWidget {
     required bool indeterminate,
     required Color color,
     required TCheckboxThemeData? theme,
-    required CheckboxThemeData materialTheme,
-    required Set<WidgetState> states,
   }) {
     const radius = BorderRadius.all(Radius.circular(1.5));
     final active = selected || indeterminate;
     final fillColor = _disabled && !active
-        ? materialTheme.fillColor?.resolve(states) ??
-              context.tTheme.bgColorComponentDisabled
+        ? context.tTheme.bgColorComponentDisabled
         : active
         ? color
         : Colors.transparent;
-    final materialSide = materialTheme.side;
-    final resolvedMaterialSide = materialSide is WidgetStateBorderSide
-        ? materialSide.resolve(states)
-        : materialSide;
     final borderColor = _disabled && !active
-        ? theme?.disableColor ??
-              resolvedMaterialSide?.color ??
-              context.tTheme.componentBorder
+        ? theme?.disableColor ?? context.tTheme.componentBorder
         : active
         ? color
-        : resolvedMaterialSide?.color ?? context.tTheme.componentBorder;
+        : context.tTheme.componentBorder;
     final mark = indeterminate
         ? TIcons.minus
         : selected

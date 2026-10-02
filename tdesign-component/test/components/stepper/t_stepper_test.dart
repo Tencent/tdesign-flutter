@@ -542,31 +542,35 @@ void main() {
       expect(exception.toString(), contains('controlSize (20.0)'));
     });
 
-    testWidgets('TDesign token ignores DefaultTextStyle; IconTheme controls icons', (
-      tester,
-    ) async {
-      await tester.pumpWidget(
-        wrap(
-          DefaultTextStyle(
-            style: const TextStyle(color: Colors.red, fontFamily: 'TestFont'),
-            child: IconTheme(
-              data: const IconThemeData(color: Colors.green),
-              child: TStepper(value: 1, onChanged: (_) {}),
+    testWidgets(
+      'TDesign token ignores external DefaultTextStyle and IconTheme',
+      (tester) async {
+        await tester.pumpWidget(
+          wrap(
+            DefaultTextStyle(
+              style: const TextStyle(color: Colors.red, fontFamily: 'TestFont'),
+              child: IconTheme(
+                data: const IconThemeData(color: Colors.green),
+                child: TStepper(value: 1, onChanged: (_) {}),
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(
-        editableText(tester).style.color,
-        TThemeData.defaultData().textColorPrimary,
-      );
-      expect(
-        editableText(tester).style.fontFamily,
-        'packages/tdesign_flutter/TCloudNumber',
-      );
-      expect(tester.widget<Icon>(find.byIcon(TIcons.plus)).color, Colors.green);
-    });
+        expect(
+          editableText(tester).style.color,
+          TThemeData.defaultData().textColorPrimary,
+        );
+        expect(
+          editableText(tester).style.fontFamily,
+          'packages/tdesign_flutter/TCloudNumber',
+        );
+        expect(
+          tester.widget<Icon>(find.byIcon(TIcons.plus)).color,
+          TThemeData.defaultData().textColorPrimary,
+        );
+      },
+    );
 
     testWidgets('component theme keeps an unscoped custom font family', (
       tester,

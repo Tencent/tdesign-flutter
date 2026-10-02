@@ -14,6 +14,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
+import '../icon/t_icon.dart';
 import 't_tab.dart';
 import 't_tab_bar_theme_data.dart';
 
@@ -86,7 +87,7 @@ class _TabStyle extends AnimatedWidget {
       style: textStyle.copyWith(color: color),
       child: IconTheme(
         data: IconThemeData(size: _kTabIconSize, color: color),
-        child: child,
+        child: TIconStyleScope(color: color, size: _kTabIconSize, child: child),
       ),
     );
   }

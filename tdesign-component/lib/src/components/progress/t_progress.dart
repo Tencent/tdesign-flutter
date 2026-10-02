@@ -234,29 +234,16 @@ class TProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = _theme(context);
-    final materialTheme = Theme.of(context);
-    final materialProgress = materialTheme.progressIndicatorTheme;
-    final colorScheme = materialTheme.tExplicitColorScheme;
     final defaultValues = _getDefaultValues(context, variant);
 
     final strokeWidth =
         theme?.resolveStrokeWidth(defaultValues.strokeWidth) ??
         defaultValues.strokeWidth;
-    final materialTrackColor = switch (variant) {
-      TProgressVariant.circular ||
-      TProgressVariant.microCircular ||
-      TProgressVariant.microButton => materialProgress.circularTrackColor,
-      TProgressVariant.linear ||
-      TProgressVariant.plump ||
-      TProgressVariant.button => materialProgress.linearTrackColor,
-    };
-    final trackFallback =
-        materialTrackColor ??
-        colorScheme?.surfaceContainerHighest ??
-        defaultValues.backgroundColor;
+    final trackFallback = defaultValues.backgroundColor;
     final backgroundColor =
         theme?.resolveBackgroundColor(trackFallback) ?? trackFallback;
-    final circleInnerBgFallback = materialTheme.brightness == Brightness.dark
+    final circleInnerBgFallback =
+        Theme.of(context).brightness == Brightness.dark
         ? Colors.transparent
         : context.tTheme.bgColorContainer;
     final circleInnerBgColor =
@@ -268,8 +255,7 @@ class TProgress extends StatelessWidget {
     final circleRadius =
         theme?.resolveCircleSize(defaultValues.circleRadius) ??
         defaultValues.circleRadius;
-    final colorFallback =
-        materialProgress.color ?? _statusColor(context, status);
+    final colorFallback = _statusColor(context, status);
     final color = theme?.resolveColor(colorFallback) ?? colorFallback;
     final animationDuration =
         theme?.animationDuration ?? TProgressDefaults.animationDuration;

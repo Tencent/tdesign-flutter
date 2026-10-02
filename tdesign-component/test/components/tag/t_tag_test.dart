@@ -89,6 +89,87 @@ void main() {
       expect(find.byIcon(Icons.star), findsOneWidget);
     });
 
+    testWidgets('组件文字色同时控制前置图标，禁用态和关闭图标保持独立', (tester) async {
+      const foreground = Color(0xFF765432);
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const Column(
+            children: [
+              TTag('启用', icon: Icons.star, needCloseIcon: true),
+              TTag('禁用', icon: Icons.favorite, enabled: false),
+            ],
+          ),
+          tagTheme: const TTagThemeData(textColor: foreground),
+        ),
+      );
+
+      expect(tester.widget<Text>(find.text('启用')).style?.color, foreground);
+      expect(tester.widget<Icon>(find.byIcon(Icons.star)).color, foreground);
+      expect(
+        tester.widget<Icon>(find.byIcon(Icons.favorite)).color,
+        TThemeData.defaultData().textColorDisabled,
+      );
+      expect(
+        tester.widget<Icon>(find.byIcon(TIcons.close)).color,
+        TThemeData.defaultData().textColorPlaceholder,
+      );
+    });
+
+    testWidgets('前置图标与正文遵循组件 Theme > Token，忽略 Material 色板', (tester) async {
+      const materialColor = Color(0xFF456789);
+      const componentColor = Color(0xFF987654);
+      final base = TThemeBuilder.light(TThemeData.defaultData());
+      final materialTheme = base.copyWith(
+        colorScheme: base.colorScheme.copyWith(primary: materialColor),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: materialTheme,
+          home: Scaffold(
+            body: Column(
+              children: [
+                const TTag(
+                  'Material',
+                  icon: Icons.star,
+                  variant: TTagVariant.light,
+                  colorPreset: TTagColorPreset.primary,
+                ),
+                Theme(
+                  data: materialTheme.mergeExtension(
+                    const TTagThemeData(textColor: componentColor),
+                  ),
+                  child: const TTag(
+                    'Component',
+                    icon: Icons.favorite,
+                    variant: TTagVariant.light,
+                    colorPreset: TTagColorPreset.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        tester.widget<Text>(find.text('Material')).style?.color,
+        TThemeData.defaultData().brandColor,
+      );
+      expect(
+        tester.widget<Icon>(find.byIcon(Icons.star)).color,
+        TThemeData.defaultData().brandColor,
+      );
+      expect(
+        tester.widget<Text>(find.text('Component')).style?.color,
+        componentColor,
+      );
+      expect(
+        tester.widget<Icon>(find.byIcon(Icons.favorite)).color,
+        componentColor,
+      );
+    });
+
     testWidgets('空文字渲染不崩溃', (tester) async {
       await tester.pumpWidget(wrapWithTheme(const TTag('')));
       expect(find.byType(TTag), findsOneWidget);
@@ -181,7 +262,7 @@ void main() {
       expect(fill('深色'), isNot(fill('浅色')));
     });
 
-    testWidgets('defaultTheme background follows an explicit ColorScheme', (
+    testWidgets('defaultTheme background ignores an explicit ColorScheme', (
       tester,
     ) async {
       const surface = Color(0xFFABCDEF);
@@ -201,7 +282,10 @@ void main() {
             .descendant(of: find.byType(TTag), matching: find.byType(Container))
             .first,
       );
-      expect((container.decoration! as BoxDecoration).color, surface);
+      expect(
+        (container.decoration! as BoxDecoration).color,
+        TThemeData.defaultData().bgColorComponent,
+      );
     });
 
     testWidgets('semantic fills follow their global token sources', (

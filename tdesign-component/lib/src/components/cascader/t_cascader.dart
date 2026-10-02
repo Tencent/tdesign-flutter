@@ -172,9 +172,7 @@ class _TCascaderState extends State<TCascader> {
     final selected = _selectedOptions();
     final options = _optionsAt(_activeLevel);
     final backgroundColor =
-        theme?.backgroundColor ??
-        material.tExplicitColorScheme?.surface ??
-        context.tTheme.bgColorContainer;
+        theme?.backgroundColor ?? context.tTheme.bgColorContainer;
     final borderRadius = BorderRadius.circular(
       theme?.borderRadius ?? context.tTheme.radiusDefault,
     );
@@ -201,9 +199,7 @@ class _TCascaderState extends State<TCascader> {
                     height: 1,
                     thickness: 1,
                     color:
-                        theme?.dividerColor ??
-                        material.tExplicitDividerColor ??
-                        context.tTheme.componentStroke,
+                        theme?.dividerColor ?? context.tTheme.componentStroke,
                   ),
                   if (_activeLevel < widget.subtitles.length &&
                       widget.subtitles[_activeLevel].isNotEmpty)
@@ -346,10 +342,7 @@ class _TCascaderState extends State<TCascader> {
             TIcon(
               TIcons.chevron_right,
               size: 22,
-              color: _resolveIconColor(
-                context,
-                context.tTheme.textColorPlaceholder,
-              ),
+              color: context.tTheme.textColorPlaceholder,
             ),
           ],
         ),
@@ -416,11 +409,7 @@ class _TCascaderState extends State<TCascader> {
         _activeLevel < widget.value.length &&
         widget.value[_activeLevel] == option.value;
     final isLeaf = option.children.isEmpty;
-    final material = Theme.of(context);
-    final iconColor = _resolveIconColor(
-      context,
-      material.tExplicitColorScheme?.primary ?? context.tTheme.brandColor,
-    );
+    final iconColor = context.tTheme.brandColor;
     final indicatorColor = theme?.indicatorColor ?? iconColor;
     final onTap = !_enabled || option.disabled
         ? null
@@ -458,10 +447,7 @@ class _TCascaderState extends State<TCascader> {
                 TIcon(
                   TIcons.chevron_right,
                   size: 22,
-                  color: _resolveIconColor(
-                    context,
-                    context.tTheme.textColorPlaceholder,
-                  ),
+                  color: context.tTheme.textColorPlaceholder,
                 ),
             ],
           ),
@@ -474,30 +460,16 @@ class _TCascaderState extends State<TCascader> {
     BuildContext context,
     TCascaderThemeData? theme,
   ) {
-    final material = Theme.of(context);
     final tokenFont = context.tTheme.fontBodyLarge;
-    final textTheme = material.extension<TTextThemeData>();
-    final normal =
-        TextStyle(
-              color: context.tTheme.textColorPrimary,
-              fontSize: tokenFont?.size,
-              height: tokenFont?.height,
-              fontWeight: tokenFont?.fontWeight,
-            )
-            .copyWith(
-              color:
-                  material.tExplicitColorScheme?.onSurface ??
-                  context.tTheme.textColorPrimary,
-            )
-            .merge(textTheme?.textStyle)
-            .merge(theme?.textStyle);
+    final textTheme = Theme.of(context).extension<TTextThemeData>();
+    final normal = TextStyle(
+      color: context.tTheme.textColorPrimary,
+      fontSize: tokenFont?.size,
+      height: tokenFont?.height,
+      fontWeight: tokenFont?.fontWeight,
+    ).merge(textTheme?.textStyle).merge(theme?.textStyle);
     final active = normal
-        .copyWith(
-          color:
-              material.tExplicitColorScheme?.primary ??
-              context.tTheme.brandColor,
-          fontWeight: FontWeight.w600,
-        )
+        .copyWith(color: context.tTheme.brandColor, fontWeight: FontWeight.w600)
         .merge(theme?.activeTextStyle);
     final disabled = normal
         .copyWith(color: context.tTheme.textColorDisabled)
@@ -510,10 +482,6 @@ class _TCascaderState extends State<TCascader> {
       selected: selected,
     );
   }
-}
-
-Color _resolveIconColor(BuildContext context, Color fallback) {
-  return context.tExplicitIconTheme?.color ?? fallback;
 }
 
 class _CascaderPressable extends StatelessWidget {

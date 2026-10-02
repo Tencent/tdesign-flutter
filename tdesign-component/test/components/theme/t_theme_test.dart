@@ -224,14 +224,16 @@ void main() {
       expect(middle.dividerTheme, isA<DividerThemeData>());
     });
 
-    test('BadgeTheme 区分 Token 投影与调用方显式覆盖', () {
-      final projected = TThemeBuilder.light(TThemeData.defaultData());
-      expect(projected.tExplicitBadgeTheme, isNull);
-
+    test('Material BadgeTheme 仅供原生控件消费，不改变 TDesign Token', () {
+      final token = TThemeData.defaultData();
+      final projected = TThemeBuilder.light(token);
       final explicit = projected.copyWith(
         badgeTheme: projected.badgeTheme.copyWith(backgroundColor: Colors.red),
       );
-      expect(explicit.tExplicitBadgeTheme?.backgroundColor, Colors.red);
+
+      expect(projected.badgeTheme.backgroundColor, token.errorColor);
+      expect(explicit.badgeTheme.backgroundColor, Colors.red);
+      expect(explicit.extension<TThemeData>()?.errorColor, token.errorColor);
     });
 
     test('buildLight 注入当前组件 ThemeData 默认定义', () {

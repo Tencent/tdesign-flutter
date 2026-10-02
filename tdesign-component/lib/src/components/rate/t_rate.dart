@@ -142,7 +142,6 @@ class _TRateState extends State<TRate> {
   Widget build(BuildContext context) {
     final material = Theme.of(context);
     final theme = material.extension<TRateThemeData>();
-    final explicitColorScheme = material.tExplicitColorScheme;
     final iconSize = theme?.iconSize ?? context.tTheme.spacer3;
     final iconGap = theme?.iconGap ?? context.tTheme.spacer;
     final texts = widget.texts;
@@ -307,11 +306,7 @@ class _TRateState extends State<TRate> {
                         _resolveText(context, texts: texts),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: _resolveTextStyle(
-                          context,
-                          theme,
-                          explicitColorScheme,
-                        ),
+                        style: _resolveTextStyle(context, theme),
                       ),
                     ),
                   )
@@ -322,11 +317,7 @@ class _TRateState extends State<TRate> {
                       _resolveText(context, texts: texts),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: _resolveTextStyle(
-                        context,
-                        theme,
-                        explicitColorScheme,
-                      ),
+                      style: _resolveTextStyle(context, theme),
                     ),
                   ),
               ],
@@ -337,22 +328,15 @@ class _TRateState extends State<TRate> {
     );
   }
 
-  TextStyle _resolveTextStyle(
-    BuildContext context,
-    TRateThemeData? theme,
-    ColorScheme? explicitColorScheme,
-  ) {
+  TextStyle _resolveTextStyle(BuildContext context, TRateThemeData? theme) {
     final font = context.tTheme.fontBodyLarge;
     final disabledTextColor = context.tTheme.textColorDisabled;
-    final explicitOnSurface = explicitColorScheme?.onSurface;
     final defaultStyle = TextStyle(
       color: _enabled
           ? _effectiveValue <= 0
-                ? explicitOnSurface?.withValues(alpha: disabledTextColor.a) ??
-                      disabledTextColor
-                : explicitOnSurface ?? context.tTheme.textColorPrimary
-          : explicitOnSurface?.withValues(alpha: 0.38) ??
-                context.tTheme.textColorDisabled,
+                ? disabledTextColor
+                : context.tTheme.textColorPrimary
+          : context.tTheme.textColorDisabled,
       fontSize: font?.size ?? 16,
       height: font?.height ?? 1.5,
       fontWeight: font?.fontWeight ?? FontWeight.w400,
@@ -615,9 +599,7 @@ class _TRateState extends State<TRate> {
                   : _valueIndicatorKey,
               padding: const EdgeInsets.all(4.0),
               decoration: BoxDecoration(
-                color:
-                    material.tExplicitColorScheme?.surface ??
-                    token.bgColorContainer,
+                color: token.bgColorContainer,
                 borderRadius: BorderRadius.circular(token.radiusDefault),
                 boxShadow: theme?.overlayBoxShadow ?? token.shadow1 ?? const [],
               ),

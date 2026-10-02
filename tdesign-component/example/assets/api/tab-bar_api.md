@@ -26,7 +26,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | allowMultipleTaps | bool | false | 是否允许重复点击当前选中项时再次调用 `onTap`，默认为 false。 该字段不影响点击未选中项，也不会让 `TTabBar.onChanged` 重复通知当前值。 |
-| badge | TBadgeConfig? | - | 展示在标签内容右上角的徽标；为空时不显示。 徽标内容和样式由 `TBadgeConfig` 描述，`TBadgeConfig.offset` 可用于逐项 调整默认位置。纯文本项未设置实例或 BadgeTheme offset 时使用 TabBar 的 文本徽标默认位置；纯图标项与上下排列的图文项以图标作为锚点， 左右排列的图文项以整组图文作为锚点，均使用徽标的默认右上角位置。 显式 offset 与 BadgeTheme offset 均优先于组件默认值。 TabBar 自己拥有徽标锚点与点击区域；点击行为通过 `onTap` 配置。调用方 已经拥有目标 Widget 时，应直接使用 `TBadge` 包装该 Widget。 |
+| badge | TBadgeConfig? | - | 展示在标签内容右上角的徽标；为空时不显示。 徽标内容和样式由 `TBadgeConfig` 描述，`TBadgeConfig.offset` 可用于逐项 调整默认位置。纯文本项未设置实例 offset 时使用 TabBar 的 文本徽标默认位置；纯图标项与上下排列的图文项以图标作为锚点， 左右排列的图文项以整组图文作为锚点，均使用徽标的默认右上角位置。 显式 offset 优先于组件默认值，不读取 Material BadgeTheme。 TabBar 自己拥有徽标锚点与点击区域；点击行为通过 `onTap` 配置。调用方 已经拥有目标 Widget 时，应直接使用 `TBadge` 包装该 Widget。 |
 | onLongPress | GestureLongPressCallback? | - | 长按事件 |
 | onTap | GestureTapCallback? | - | 标签项被选中时的附加点击回调。 点击未选中项时，在 `TTabBar.onChanged` 之前调用；重复点击当前选中项时， 仅当 `allowMultipleTaps` 为 true 才调用。整栏禁用时不会调用。 |
 | popUpButtonConfig | TTabBarPopUpBtnConfig? | - | 弹窗配置 |

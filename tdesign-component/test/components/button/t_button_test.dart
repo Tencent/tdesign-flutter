@@ -285,6 +285,26 @@ void main() {
       expect(icon.color, Colors.orange);
     });
 
+    testWidgets('TIcon 继承按钮内部已解析的图标样式', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TButton(
+            icon: TIcon(TIcons.add),
+            colorPreset: TButtonColorPreset.primary,
+            child: Text('添加'),
+            onPressed: null,
+          ),
+        ),
+      );
+
+      final element = tester.element(find.byType(TIcon));
+      final icon = tester.widget<Icon>(
+        find.descendant(of: find.byType(TIcon), matching: find.byType(Icon)),
+      );
+      expect(icon.size, IconTheme.of(element).size);
+      expect(icon.color, IconTheme.of(element).color);
+    });
+
     testWidgets('默认图标尺寸通过 IconTheme 注入且保留 Icon 属性', (tester) async {
       const iconKey = Key('semantic-icon');
       const shadow = Shadow(color: Colors.black, blurRadius: 2);
@@ -560,7 +580,7 @@ void main() {
       }
     });
 
-    testWidgets('Material ButtonTheme 可恢复 padded tap target', (tester) async {
+    testWidgets('实例 style 可恢复 padded tap target', (tester) async {
       const key = Key('material-padded-button');
       await tester.pumpWidget(
         wrapWithTheme(
@@ -568,6 +588,9 @@ void main() {
             key: key,
             size: TButtonSize.extraSmall,
             colorPreset: TButtonColorPreset.primary,
+            style: const ButtonStyle(
+              tapTargetSize: MaterialTapTargetSize.padded,
+            ),
             onPressed: () {},
             child: const Text('按钮'),
           ),
@@ -1347,9 +1370,7 @@ void main() {
       );
     });
 
-    testWidgets('Material stateful textStyle 在普通与渐变分支保留且遵循尺寸 token', (
-      tester,
-    ) async {
+    testWidgets('实例 stateful textStyle 在普通与渐变分支保留且遵循尺寸 token', (tester) async {
       final materialStyle = ButtonStyle(
         textStyle: WidgetStateProperty.resolveWith((states) {
           return TextStyle(
@@ -1365,8 +1386,11 @@ void main() {
       for (final gradient in [false, true]) {
         await tester.pumpWidget(
           wrapWithTheme(
-            TButton(child: const Text('字体状态'), onPressed: () {}),
-            materialStyle: materialStyle,
+            TButton(
+              child: const Text('字体状态'),
+              onPressed: () {},
+              style: materialStyle,
+            ),
             buttonTheme: gradient
                 ? const TButtonThemeData(
                     gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
@@ -1387,7 +1411,7 @@ void main() {
             'PressedFont',
           );
           expect(style.resolve({})?.letterSpacing, 1.5);
-          expect(style.resolve({})?.fontSize, 16);
+          expect(style.resolve({})?.fontSize, 99);
           continue;
         }
 
@@ -1395,14 +1419,14 @@ void main() {
             .widgetList<Material>(find.byType(Material))
             .firstWhere((widget) => widget.type == MaterialType.transparency);
         expect(gradientMaterial().textStyle?.fontFamily, 'IdleFont');
-        expect(gradientMaterial().textStyle?.fontSize, 16);
+        expect(gradientMaterial().textStyle?.fontSize, 99);
         final gesture = await tester.startGesture(
           tester.getCenter(find.byType(TButton)),
         );
         await tester.pump();
         expect(gradientMaterial().textStyle?.fontFamily, 'PressedFont');
         expect(gradientMaterial().textStyle?.letterSpacing, 1.5);
-        expect(gradientMaterial().textStyle?.fontSize, 16);
+        expect(gradientMaterial().textStyle?.fontSize, 99);
         await gesture.up();
       }
     });
@@ -2242,7 +2266,7 @@ void main() {
       );
     });
 
-    testWidgets('Material 与实例 overlayColor 保持优先级', (tester) async {
+    testWidgets('Material overlayColor 不控制组件，实例 style 保持优先级', (tester) async {
       const materialOverlay = Color(0x110000FF);
       const instanceOverlay = Color(0x33FF0000);
 
@@ -2262,7 +2286,7 @@ void main() {
       var button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
       expect(
         button.style?.overlayColor?.resolve({WidgetState.pressed}),
-        materialOverlay,
+        isNot(materialOverlay),
       );
 
       await tester.pumpWidget(

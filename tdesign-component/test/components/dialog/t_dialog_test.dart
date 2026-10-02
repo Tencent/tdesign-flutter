@@ -876,7 +876,7 @@ void main() {
       expect(material.color, Colors.green);
     });
 
-    testWidgets('Material DialogTheme 是 Extension 缺失时的兜底', (tester) async {
+    testWidgets('Material DialogTheme 不作为 TDesign 外观兜底', (tester) async {
       final base = theme().copyWith(
         dialogTheme: const DialogThemeData(
           backgroundColor: Colors.purple,
@@ -895,8 +895,8 @@ void main() {
           matching: find.byType(Material),
         ),
       );
-      expect(material.color, Colors.purple);
-      expect(material.elevation, 6);
+      expect(material.color, isNot(Colors.purple));
+      expect(material.elevation, isNot(6));
     });
 
     testWidgets('浅色普通操作实际颜色跟随明暗主题与自定义 token', (tester) async {

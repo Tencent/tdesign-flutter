@@ -9,9 +9,11 @@ class BadgeAvatarExample extends StatelessWidget {
     return Row(
       // spacing: 32,
       children: [
-        const BadgeTheme(
-          data: BadgeThemeData(smallSize: 10),
-          child: TBadge(
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            const TBadgeThemeData(dotSize: 10),
+          ),
+          child: const TBadge(
             variant: TBadgeVariant.dot,
             offset: Offset(-1, 2),
             child: TAvatar(

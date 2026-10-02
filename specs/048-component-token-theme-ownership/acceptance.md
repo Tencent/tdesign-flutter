@@ -170,3 +170,18 @@
 - 固定 Linux amd64 / Flutter 3.32.0 使用隔离副本重现旧 Golden 失败。逐张比较仓库原图与候选图，共有 450 张同尺寸像素差异、102 张尺寸差异；其中 4 张差异在首轮失败清单外，故首轮清单只记录 446 张同尺寸差异。抽查 Indexes、Dialog、Cell、Popup、Steps、Avatar、BackTop、Calendar、Cascader、Tag、Theme、TabBar 等原图与新图，高差异主要是文字字形、行盒及列表逐行累积位移；未通过 Demo 覆盖组件样式。102 张尺寸差异中，100 张仅页面高度变化（最大缩小 30px），BackTop 状态矩阵浅/暗两张宽度各缩小 1px。
 - 在隔离副本中生成候选基线后，完整视觉矩阵以**无更新参数**严格复跑并全部通过，随后只同步 552 张内容变化的 Golden PNG 至仓库。606 张 Golden 中其余 54 张未改动；这验证固定 Linux 基线可复现，不等同于 606 张逐项 Figma 像素验收或最终远端 CI 通过。
 - 推送后远端 Flutter latest Example 功能测试 274 通过、1 失败：`example/test/widget_test.dart` 的紧凑模块标题测试仍期待 Material `TextTheme.titleLarge` 将 TDesign 的 20dp/28dp Token 改写成 22dp/1.5。实际组件壳已显式读取 `fontTitleLarge`，故修正旧断言为两种 Material 配置均保持 20dp/1.4、w500；Flutter 3.32.0 和 3.47.0 聚焦 Example 测试各 8/8 通过。此修正不改渲染源码或 Golden，仍需新 head 远端 CI 复验。
+
+### 2026-10-03 Tag 前景与 Material 色板字段优先级
+
+- 先用两个新增聚焦测试复现原行为：`TTagThemeData.textColor` 只改变正文，前置图标仍取预设色；仅修改 Flutter `ThemeData.colorScheme.primaryContainer` 时，`tExplicitColorScheme` 返回 `null`。两项在修复前均按预期失败。
+- 修复后 Tag 前置图标与正文共用有效前景色，关闭图标仍取独立占位色，禁用态不受普通组件 Theme 覆盖。共享 Material 色板读取器逐字段比较调用方色板与隐式 Material 基准或 TDesign Token 投影；未改动字段返回 `null` 并继续回退组件原有全局 Token。测试锁定“组件 Theme > 显式 Material 字段 > Token”及单字段修改不污染其他颜色。Flutter `ThemeData` 不记录显式赋值来源，显式设置为与基准完全相同的值按未修改处理。
+- Flutter 3.32.0 完整组件回归调度器全部通过，包含各组件生产源码覆盖率门禁；Flutter 3.32.0 与 3.47.0 的 Tag + Material 优先级聚焦测试各 93/93 通过，完整组件包严格 analyze 各 0 issues。57 份 API 文档已运行生成器，保留本次 Tag 文档变更；生成器顺带删除的无关 Drawer 文档段落已恢复。
+- 在隔离临时副本中使用 Linux amd64 / Flutter 3.32.0 执行完整 `dart run tool/run_visual_regression.dart`，未更新 Golden，全部视觉套件通过；原仓库 PNG 未改。镜像离线 `pub get` 将图标包从工作树锁定的 0.0.6 解析为 0.0.7，因此该结果仅为辅助验证，不代替最终 PR head 的 CI 同依赖回归。新增测试不改变公开 Demo 的默认视觉，也未生成新 Golden。
+- `ThemeData.tExplicitColorScheme` 的返回类型由 `ColorScheme?` 改为逐字段可空的 `TExplicitColorSchemeColors?`，属于公开 Dart 类型的 breaking 迁移，见 `migration.md`；Tag 自身仍只通过 `colorPreset` 选择配色，没有恢复组件 `colorScheme` 参数。本地未提交、未推送，远端 CI 未对此批次运行。
+
+### 2026-10-03 全组件单向主题链（替代上一节的 Material 反向优先级方案）
+
+- 最终约定是实例显式样式 → TDesign 组件 Theme → 全局 TDesign Token；Material `ThemeData` 只承载 TDesign 扩展并接收面向原生 Flutter 控件的投影，不反向控制 TDesign 组件。因此上一节的 `tExplicitColorScheme` 字段级读取及其返回类型迁移方案已废弃，代码中不保留相关 getter 或 `TExplicitColorSchemeColors`。
+- 已逐组件移除 Material `ColorScheme`、Material 组件 Theme、`IconTheme` 等外观回读；Badge 与 Slider 的必要子树视觉字段分别由 `TBadgeThemeData`、`TSliderThemeData` 承担。`TIcon` 独立使用时显式采用 24dp/全局文字主色，Button 与 Tabs 的库内图标作用域只转发自身已解析样式。Table 内纯图标 Checkbox 适配父布局的有限约束，避免 37.5dp 行高的 11px 溢出。明暗模式选择和组合组件内部传递已解析样式不属于 Material 外观覆盖。
+- Flutter 3.32.0 与 3.47.0 的组件包及 Example 严格 analyze 均零诊断；3.47.0 的单向主题、Icon、Button、Table 聚焦测试全部通过。3.32.0 全量非 Golden 组件测试 2676/2676 通过。隔离 Linux amd64 环境使用工作树锁定的图标包 0.0.6，7 份受影响组件 Golden 共 26 项严格无更新通过。公开 Demo 的 Avatar 旧 54px 角标差异由无效的 Material `BadgeTheme.smallSize` 示例配置造成，改为组件 `TBadgeThemeData.dotSize` 后严格快照通过。Badge light/dark 两张差异各约 0.41%（2349/2350px），集中于 large ribbon/triangle 角标：旧实现从 Material BadgeTheme 投影强制取 16dp，现按 `fontMarkSmall` 的 20dp 行盒解析。Icon Demo 改为展示 Token 默认值，Theme 页禁用按钮改由 TDesign Token 控制；这三类共八张实际变化的 Linux Golden 已按候选更新。最终仓库基线在隔离 Linux 3.32.0 上执行完整 `dart run tool/run_visual_regression.dart`，**不带更新参数**，全部视觉套件通过。
+- 本节记录提交前的本地验证；提交后的远端 CI 和真实第三方调用方迁移编译须另行验收。本地视觉矩阵通过不等于逐张 Figma 像素验收。

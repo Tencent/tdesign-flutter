@@ -10,7 +10,8 @@ import '../../theme/basic.dart' show Font;
 /// 通过 Theme 子树注入，控制子树的默认样式。
 /// 具体视觉值由组件 Theme 控制，未指定时回退全局 Token。
 class TTagThemeData extends ThemeExtension<TTagThemeData> {
-  /// 所有启用 Tag 的统一文字颜色；优先于各配色预设的文字色。
+  /// 所有启用 Tag 的正文和前置图标颜色；优先于显式 Material 色板及配色预设。
+  /// 禁用态不受此字段影响，关闭图标继续使用独立的占位色 Token。
   final Color? textColor;
 
   /// 所有启用 Tag 的统一背景色；优先于各配色预设的填充色。

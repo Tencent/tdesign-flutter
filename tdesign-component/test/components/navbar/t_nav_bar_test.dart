@@ -324,7 +324,7 @@ void main() {
       expect(style.fontWeight, FontWeight.w400);
     });
 
-    testWidgets('Material AppBarTheme fontSize 优先于默认 Token', (tester) async {
+    testWidgets('Material AppBarTheme fontSize 不覆盖默认 Token', (tester) async {
       final token = TThemeData.defaultData();
       Widget wrapWithMaterial(Widget child) {
         final base = TThemeBuilder.light(token);
@@ -343,11 +343,10 @@ void main() {
       );
 
       final style = effectiveTextStyle(tester, 'Material wins');
-      // 默认回退 Title Large Token，但 Material fontSize 应插在 Token 之前。
-      expect(style.fontSize, 40);
+      expect(style.fontSize, token.fontTitleLarge?.size);
     });
 
-    testWidgets('Material AppBarTheme fontFamily 在未显式配置时生效', (tester) async {
+    testWidgets('Material AppBarTheme fontFamily 不覆盖 Token', (tester) async {
       final token = TThemeData.defaultData();
       final base = TThemeBuilder.light(token);
       await tester.pumpWidget(
@@ -365,7 +364,7 @@ void main() {
       );
 
       final style = effectiveTextStyle(tester, 'Material family');
-      expect(style.fontFamily, 'packages/material_fonts/MaterialFamily');
+      expect(style.fontFamily, isNot('packages/material_fonts/MaterialFamily'));
     });
   });
 

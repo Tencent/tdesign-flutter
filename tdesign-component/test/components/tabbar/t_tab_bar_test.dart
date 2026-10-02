@@ -1286,7 +1286,7 @@ void main() {
       );
     });
 
-    testWidgets('BadgeTheme alignment controls component fallback direction', (
+    testWidgets('Material BadgeTheme alignment 不覆盖 TabBar 逻辑方向', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -1314,11 +1314,11 @@ void main() {
 
       expect(
         tester.getCenter(find.text('9')),
-        tester.getTopRight(find.text('消息')) + const Offset(-6, 0),
+        tester.getTopLeft(find.text('消息')) + const Offset(6, 0),
       );
     });
 
-    testWidgets('local BadgeTheme offset overrides TabBar text default', (
+    testWidgets('local Material BadgeTheme offset 不覆盖 TabBar 默认值', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -1345,47 +1345,48 @@ void main() {
       expect(badge.offset, isNull);
       expect(
         tester.getCenter(find.text('9')),
-        tester.getTopRight(find.text('消息')) + const Offset(3, 4),
+        isNot(tester.getTopRight(find.text('消息')) + const Offset(3, 4)),
       );
     });
 
-    testWidgets('badge inherits theme offset without blocking item onTap', (
-      tester,
-    ) async {
-      var itemTaps = 0;
-      var changedValue = -1;
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: ThemeData(
-            badgeTheme: const BadgeThemeData(offset: Offset(7, 9)),
-            extensions: [TThemeData.defaultData()],
-          ),
-          home: Scaffold(
-            body: TTabBar(
-              type: TTabBarType.text,
-              value: 0,
-              navigationTabs: [
-                const TTabBarItemConfig(tabText: '首页'),
-                TTabBarItemConfig(
-                  tabText: '消息',
-                  badge: const TBadgeConfig(label: '1'),
-                  onTap: () => itemTaps++,
-                ),
-              ],
-              onChanged: (value) => changedValue = value,
+    testWidgets(
+      'badge ignores Material theme offset without blocking item onTap',
+      (tester) async {
+        var itemTaps = 0;
+        var changedValue = -1;
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              badgeTheme: const BadgeThemeData(offset: Offset(7, 9)),
+              extensions: [TThemeData.defaultData()],
+            ),
+            home: Scaffold(
+              body: TTabBar(
+                type: TTabBarType.text,
+                value: 0,
+                navigationTabs: [
+                  const TTabBarItemConfig(tabText: '首页'),
+                  TTabBarItemConfig(
+                    tabText: '消息',
+                    badge: const TBadgeConfig(label: '1'),
+                    onTap: () => itemTaps++,
+                  ),
+                ],
+                onChanged: (value) => changedValue = value,
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      final materialBadge = tester.widget<Badge>(find.byType(Badge));
-      expect(materialBadge.offset, const Offset(7, 9));
+        final materialBadge = tester.widget<Badge>(find.byType(Badge));
+        expect(materialBadge.offset, const Offset(-6, 0));
 
-      await tester.tap(find.text('消息'));
-      await tester.pump();
-      expect(itemTaps, 1);
-      expect(changedValue, 1);
-    });
+        await tester.tap(find.text('消息'));
+        await tester.pump();
+        expect(itemTaps, 1);
+        expect(changedValue, 1);
+      },
+    );
 
     testWidgets('item onTap follows allowMultipleTaps with badge and InkWell', (
       tester,

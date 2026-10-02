@@ -10,7 +10,7 @@
 - [x] 恢复公开 `TText.style` 作为单实例完整视觉入口，将组合组件状态样式留在仅库内使用的解析路径；子树默认仍由 `TTextThemeData.textStyle` 管理。旧检查点的测试与 Golden 结论需以本轮最终源码重新验证。
 - [x] 移除 Material `TextTheme` / 外层 `DefaultTextStyle` 对 TDesign 文字的自动推断；显式链路为全局 Token/Theme → 组件 Theme → 已有实例样式。移除 `TStyleResolver` 的 Material 转发 getter；双版本功能与字体注入测试见 `acceptance.md`。
 - [ ] DOING 以最终源码逐类归因 Linux Golden 的文字字形/行盒与尺寸差异；2026-10-03 已修复 Cell/Popup 组件文字插槽、核对 102 张尺寸变化并在隔离 Linux 环境更新 552 张基线、严格无更新复跑全通过。此结果仍不是逐张 Figma 像素验收，后续新视觉缺陷须单独裁定。
-- [ ] DOING 非文字 Material 视觉回退仍存在：组件源码当前约 58 处 `tExplicitColorScheme`、Material 禁用色／分割线／IconTheme 等读取。需分别判断原生控件投影与 TDesign 组件视觉所有权，不能把本次文字链收敛外推为全组件无 M3 接口。
+- [x] 全组件改为单向主题链：移除 `tExplicit*` 及 Material 组件外观反向读取，保留 TDesign Theme 向原生 Material 控件投影；Tag 前置图标与正文共用有效前景色。组件的内部已解析样式传递与明暗模式选择不等于外部外观入口。非 Golden 组件回归 2676/2676 通过，八张已裁定的 Linux Demo Golden 已更新；最终完整 Linux 视觉矩阵严格无更新通过，3.32.0/3.47.0 组件包和 Example 分析零诊断。
 - [x] 实例保留 `TText.font` 作为 TDesign 字体预设，移除 `fontWeight/fontFamily/textColor/isTextThrough/lineThroughColor` 分散便利字段，迁移仓内调用与测试；外部第三方调用编译仍待验证。
 - [x] 既有 Button/Input 层级规则和 outline 状态回退完成测试；本轮进一步移除与完整实例 `style` 重复的组件 Theme 字段，测试需按新的单入口契约复核，旧规则不再作为验收标准。
 - [ ] DOING 更新源码 dartdoc、Demo 用法与组件测试；已迁移范围完成，待全量回归和 breaking 迁移说明。

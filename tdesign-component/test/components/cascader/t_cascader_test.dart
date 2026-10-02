@@ -363,37 +363,40 @@ void main() {
       expect(text.style?.fontSize, 16);
     });
 
-    testWidgets('preserves component text and local icon subtree themes', (
-      tester,
-    ) async {
-      final base = TThemeBuilder.light(TThemeData.defaultData());
-      final theme = base.copyWith(
-        textTheme: const TextTheme(bodyLarge: TextStyle(fontSize: 21)),
-      );
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: theme,
-          home: Scaffold(
-            body: IconTheme(
-              data: const IconThemeData(color: Colors.pink),
-              child: TCascader(
-                options: options,
-                value: const [],
-                onChanged: (_) {},
+    testWidgets(
+      'preserves component text and ignores external Material IconTheme',
+      (tester) async {
+        final base = TThemeBuilder.light(TThemeData.defaultData());
+        final theme = base.copyWith(
+          textTheme: const TextTheme(bodyLarge: TextStyle(fontSize: 21)),
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: Scaffold(
+              body: IconTheme(
+                data: const IconThemeData(color: Colors.pink),
+                child: TCascader(
+                  options: options,
+                  value: const [],
+                  onChanged: (_) {},
+                ),
               ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(
-        tester.widget<Text>(find.text('Guangdong')).style?.fontSize,
-        TThemeData.defaultData().fontBodyLarge?.size,
-      );
-      final arrow = tester.widget<Icon>(find.byIcon(TIcons.chevron_right).last);
-      expect(arrow.color, Colors.pink);
-      expect(arrow.size, 22);
-    });
+        expect(
+          tester.widget<Text>(find.text('Guangdong')).style?.fontSize,
+          TThemeData.defaultData().fontBodyLarge?.size,
+        );
+        final arrow = tester.widget<Icon>(
+          find.byIcon(TIcons.chevron_right).last,
+        );
+        expect(arrow.color, TThemeData.defaultData().textColorPlaceholder);
+        expect(arrow.size, 22);
+      },
+    );
 
     testWidgets('保留 TTextThemeData 对级联选项文字的子树默认值', (tester) async {
       final theme = TThemeBuilder.light(TThemeData.defaultData())
@@ -416,7 +419,7 @@ void main() {
     });
 
     testWidgets(
-      'ignores Material text but applies active colors by relevant field',
+      'ignores Material text and ColorScheme; active colors follow TDesign Token',
       (tester) async {
         final base = TThemeBuilder.light(TThemeData.defaultData());
         final originalBodyLarge = base.textTheme.bodyLarge!;
@@ -448,15 +451,18 @@ void main() {
           option.style?.fontSize,
           TThemeData.defaultData().fontBodyLarge?.size,
         );
-        expect(option.style?.color, Colors.brown);
+        expect(option.style?.color, TThemeData.defaultData().textColorPrimary);
         final active = tester.widget<Text>(find.text('请选择'));
-        expect(active.style?.color, Colors.pink);
+        expect(active.style?.color, TThemeData.defaultData().brandColor);
         final decoration = tester
             .widgetList<Container>(find.byType(Container))
             .map((container) => container.decoration)
             .whereType<BoxDecoration>()
             .firstWhere((item) => item.border != null);
-        expect((decoration.border! as Border).bottom.color, Colors.pink);
+        expect(
+          (decoration.border! as Border).bottom.color,
+          TThemeData.defaultData().brandColor,
+        );
       },
     );
     testWidgets('step variant renders vertical navigation', (tester) async {

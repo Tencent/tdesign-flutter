@@ -300,14 +300,13 @@ void main() {
         ),
       );
 
-      final defaults = TSwitchResolve.resolve(context: context, enabled: true);
+      final defaults = TSwitchResolve.resolve(context: context);
       final token = TThemeData.defaultData();
       expect(defaults.trackOnColor, context.tTheme.brandColor);
       expect(defaults.thumbContentOnFont.fontSize, token.fontBodyMedium?.size);
 
       final themed = TSwitchResolve.resolve(
         context: context,
-        enabled: true,
         theme: const TSwitchThemeData(
           trackOnColor: Colors.red,
           trackOffColor: Colors.green,

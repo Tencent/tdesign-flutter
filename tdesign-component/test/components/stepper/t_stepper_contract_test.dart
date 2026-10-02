@@ -258,7 +258,7 @@ void main() {
   });
 
   testWidgets(
-    'TDesign text and inherited icon defaults survive interpolation',
+    'TDesign text and icon defaults survive interpolation without Material input',
     (tester) async {
       const a = TStepperThemeData();
       const b = TStepperThemeData(
@@ -302,7 +302,11 @@ void main() {
       expect(
         tester.widget<Icon>(find.byIcon(TIcons.plus)).color,
         Color.lerp(
-          Color.lerp(Colors.green, Colors.black, 0.5),
+          Color.lerp(
+            TThemeData.defaultData().textColorPrimary,
+            Colors.black,
+            0.5,
+          ),
           Colors.white,
           0.5,
         ),

@@ -42,39 +42,15 @@ class TSwitchResolve {
 
   static TSwitchResolvedStyle resolve({
     required BuildContext context,
-    required bool enabled,
     TSwitchThemeData? theme,
   }) {
     final token = context.tTheme;
-    final material = Theme.of(context);
-    final switchTheme = material.switchTheme;
-    final colorScheme = material.tExplicitColorScheme;
-    final onStates = <WidgetState>{
-      WidgetState.selected,
-      if (!enabled) WidgetState.disabled,
-    };
-    final offStates = <WidgetState>{if (!enabled) WidgetState.disabled};
     return TSwitchResolvedStyle(
-      trackOnColor:
-          theme?.trackOnColor ??
-          switchTheme.trackColor?.resolve(onStates) ??
-          colorScheme?.primary ??
-          token.brandColor,
-      trackOffColor:
-          theme?.trackOffColor ??
-          switchTheme.trackColor?.resolve(offStates) ??
-          colorScheme?.surfaceContainerHighest ??
-          token.textColorDisabled,
-      thumbContentOnColor:
-          theme?.thumbContentOnColor ??
-          switchTheme.thumbColor?.resolve(onStates) ??
-          colorScheme?.onPrimary ??
-          token.brandColor,
+      trackOnColor: theme?.trackOnColor ?? token.brandColor,
+      trackOffColor: theme?.trackOffColor ?? token.textColorDisabled,
+      thumbContentOnColor: theme?.thumbContentOnColor ?? token.brandColor,
       thumbContentOffColor:
-          theme?.thumbContentOffColor ??
-          switchTheme.thumbColor?.resolve(offStates) ??
-          colorScheme?.onSurfaceVariant ??
-          token.textColorDisabled,
+          theme?.thumbContentOffColor ?? token.textColorDisabled,
       thumbContentOnFont:
           theme?.thumbContentOnFont ??
           TextStyle(fontSize: token.fontBodyMedium?.size ?? 14),

@@ -24,96 +24,54 @@ const double _kScaleTickRadius = 3;
 const double _kCapsuleTrackInset = 3;
 const double _kCapsuleGapWidth = 2;
 
-SliderThemeData _sliderThemeWithTokenFallback(BuildContext context) {
-  final inherited = SliderTheme.of(context);
-  final material = Theme.of(context);
-  final colorScheme = material.tExplicitColorScheme;
+SliderThemeData _sliderThemeFromTDesign(BuildContext context) {
   final token = context.tTheme;
+  final theme = Theme.of(context).extension<TSliderThemeData>();
   final brand = token.brandColor;
-  final inactiveTrack = token.componentBorder;
+  final activeTrack = theme?.activeTrackColor ?? brand;
+  final inactiveTrack = theme?.inactiveTrackColor ?? token.componentBorder;
   final disabledComponent = token.bgColorComponentDisabled;
   final disabledBrand = token.brandColorDisabled;
-  final thumb = colorScheme?.primary ?? token.textColorAnti;
-  final disabledThumb = colorScheme == null
-      ? token.textColorAnti
-      : colorScheme.onSurface.withValues(alpha: 0.38);
-  final thumbBorder = colorScheme?.outline ?? token.grayColor1;
+  final thumbBorder = theme?.thumbBorderColor ?? token.grayColor1;
   final disabledThumbBorder =
-      colorScheme?.outlineVariant ?? token.bgColorComponentDisabled;
+      theme?.disabledThumbBorderColor ?? token.bgColorComponentDisabled;
 
-  return inherited.copyWith(
-    activeTrackColor:
-        inherited.activeTrackColor ?? colorScheme?.primary ?? brand,
-    inactiveTrackColor:
-        inherited.inactiveTrackColor ??
-        colorScheme?.surfaceContainerHighest ??
-        inactiveTrack,
-    secondaryActiveTrackColor:
-        inherited.secondaryActiveTrackColor ??
-        colorScheme?.primary.withValues(alpha: 0.54) ??
-        brand.withAlpha(0x8a),
-    disabledActiveTrackColor:
-        inherited.disabledActiveTrackColor ??
-        colorScheme?.primary.withValues(alpha: 0.38) ??
-        disabledBrand,
-    disabledInactiveTrackColor:
-        inherited.disabledInactiveTrackColor ??
-        colorScheme?.onSurface.withValues(alpha: 0.12) ??
-        disabledComponent,
-    disabledSecondaryActiveTrackColor:
-        inherited.disabledSecondaryActiveTrackColor ??
-        colorScheme?.primary.withValues(alpha: 0.38) ??
-        disabledBrand,
-    activeTickMarkColor:
-        inherited.activeTickMarkColor ?? colorScheme?.primary ?? brand,
-    inactiveTickMarkColor:
-        inherited.inactiveTickMarkColor ??
-        colorScheme?.surfaceContainerHighest ??
-        inactiveTrack,
-    disabledActiveTickMarkColor:
-        inherited.disabledActiveTickMarkColor ??
-        colorScheme?.primary.withValues(alpha: 0.38) ??
-        disabledBrand,
-    disabledInactiveTickMarkColor:
-        inherited.disabledInactiveTickMarkColor ??
-        colorScheme?.onSurface.withValues(alpha: 0.12) ??
-        disabledComponent,
-    tickMarkShape:
-        inherited.tickMarkShape ??
-        const RoundSliderTickMarkShape(tickMarkRadius: _kScaleTickRadius),
-    rangeTickMarkShape:
-        inherited.rangeTickMarkShape ??
-        const RoundRangeSliderTickMarkShape(tickMarkRadius: _kScaleTickRadius),
-    thumbColor: inherited.thumbColor ?? thumb,
-    disabledThumbColor: inherited.disabledThumbColor ?? disabledThumb,
-    thumbShape:
-        inherited.thumbShape ??
-        _TDesignSliderThumbShape(
-          borderColor: thumbBorder,
-          disabledBorderColor: disabledThumbBorder,
-        ),
-    rangeThumbShape:
-        inherited.rangeThumbShape ??
-        _TDesignRangeSliderThumbShape(
-          borderColor: thumbBorder,
-          disabledBorderColor: disabledThumbBorder,
-        ),
-    overlayColor:
-        inherited.overlayColor ??
-        colorScheme?.primary.withValues(alpha: 0.12) ??
-        brand.withAlpha(0x1f),
-    valueIndicatorColor:
-        inherited.valueIndicatorColor ?? colorScheme?.primary ?? brand,
-    valueIndicatorStrokeColor:
-        inherited.valueIndicatorStrokeColor ?? colorScheme?.primary ?? brand,
-    valueIndicatorTextStyle:
-        inherited.valueIndicatorTextStyle ??
-        TextStyle(
-          color: colorScheme?.onSurface ?? token.textColorPrimary,
-          fontSize: token.fontBodyMedium?.size,
-          height: token.fontBodyMedium?.height,
-          fontWeight: token.fontBodyMedium?.fontWeight,
-        ),
+  return SliderThemeData(
+    activeTrackColor: activeTrack,
+    inactiveTrackColor: inactiveTrack,
+    secondaryActiveTrackColor: activeTrack.withAlpha(0x8a),
+    disabledActiveTrackColor: disabledBrand,
+    disabledInactiveTrackColor: disabledComponent,
+    disabledSecondaryActiveTrackColor: disabledBrand,
+    activeTickMarkColor: activeTrack,
+    inactiveTickMarkColor: inactiveTrack,
+    disabledActiveTickMarkColor: disabledBrand,
+    disabledInactiveTickMarkColor: disabledComponent,
+    tickMarkShape: const RoundSliderTickMarkShape(
+      tickMarkRadius: _kScaleTickRadius,
+    ),
+    rangeTickMarkShape: const RoundRangeSliderTickMarkShape(
+      tickMarkRadius: _kScaleTickRadius,
+    ),
+    thumbColor: theme?.thumbColor ?? token.textColorAnti,
+    disabledThumbColor: theme?.disabledThumbColor ?? token.textColorAnti,
+    thumbShape: _TDesignSliderThumbShape(
+      borderColor: thumbBorder,
+      disabledBorderColor: disabledThumbBorder,
+    ),
+    rangeThumbShape: _TDesignRangeSliderThumbShape(
+      borderColor: thumbBorder,
+      disabledBorderColor: disabledThumbBorder,
+    ),
+    overlayColor: theme?.overlayColor ?? brand.withAlpha(0x1f),
+    valueIndicatorColor: theme?.valueIndicatorColor ?? brand,
+    valueIndicatorStrokeColor: theme?.valueIndicatorColor ?? brand,
+    valueIndicatorTextStyle: TextStyle(
+      color: theme?.valueIndicatorTextColor ?? token.textColorPrimary,
+      fontSize: token.fontBodyMedium?.size,
+      height: token.fontBodyMedium?.height,
+      fontWeight: token.fontBodyMedium?.fontWeight,
+    ),
   );
 }
 
@@ -122,18 +80,16 @@ SliderThemeData _resolveSliderTheme(
   TSliderVariant variant,
   int? divisions,
 ) {
-  final inherited = SliderTheme.of(context);
-  final base = _sliderThemeWithTokenFallback(context);
+  final componentTheme = Theme.of(context).extension<TSliderThemeData>();
+  final base = _sliderThemeFromTDesign(context);
   final token = context.tTheme;
   if (variant == TSliderVariant.normal) {
     return base.copyWith(
-      trackHeight: inherited.trackHeight ?? 4.0,
-      trackShape:
-          inherited.trackShape ??
-          _TDesignSliderTrackShape(horizontalInset: token.spacer2),
-      rangeTrackShape:
-          inherited.rangeTrackShape ??
-          _TDesignRangeSliderTrackShape(horizontalInset: token.spacer2),
+      trackHeight: componentTheme?.trackHeight ?? 4.0,
+      trackShape: _TDesignSliderTrackShape(horizontalInset: token.spacer2),
+      rangeTrackShape: _TDesignRangeSliderTrackShape(
+        horizontalInset: token.spacer2,
+      ),
     );
   }
   return base.copyWith(
@@ -156,13 +112,8 @@ SliderThemeData _resolveSliderTheme(
 }
 
 Color _disabledThumbLabelColor(BuildContext context) {
-  final inheritedColor = SliderTheme.of(context).valueIndicatorTextStyle?.color;
-  if (inheritedColor != null) {
-    return inheritedColor.withValues(alpha: 0.38);
-  }
-  return Theme.of(
-        context,
-      ).tExplicitColorScheme?.onSurface.withValues(alpha: 0.38) ??
+  final theme = Theme.of(context).extension<TSliderThemeData>();
+  return theme?.valueIndicatorTextColor?.withValues(alpha: 0.38) ??
       context.tTheme.textColorDisabled;
 }
 

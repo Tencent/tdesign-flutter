@@ -560,7 +560,6 @@ class _StepperStyle {
         componentTheme.progress,
       );
     }
-    final materialTheme = Theme.of(context);
     final token = context.tTheme;
     final size = widget.size ?? TStepperSize.medium;
     final variant = widget.variant ?? TStepperVariant.normal;
@@ -599,12 +598,7 @@ class _StepperStyle {
           componentTheme?.textStyle?.leadingDistribution ??
           TextLeadingDistribution.even,
     );
-    final inputTheme = materialTheme.inputDecorationTheme;
-    final inputFillColor = inputTheme.fillColor;
-    final borderColor =
-        componentTheme?.borderColor ??
-        inputTheme.enabledBorder?.borderSide.color ??
-        token.componentBorder;
+    final borderColor = componentTheme?.borderColor ?? token.componentBorder;
 
     return _StepperStyle(
       variant: variant,
@@ -618,14 +612,9 @@ class _StepperStyle {
       borderWidth: componentTheme?.borderWidth ?? stepperBorderWidth,
       foregroundColor: foregroundColor,
       disabledForegroundColor: disabledForegroundColor,
-      iconColor:
-          componentTheme?.foregroundColor ??
-          context.tExplicitIconTheme?.color ??
-          foregroundColor,
+      iconColor: foregroundColor,
       backgroundColor:
-          componentTheme?.backgroundColor ??
-          (inputFillColor == Colors.transparent ? null : inputFillColor) ??
-          token.bgColorSecondaryContainer,
+          componentTheme?.backgroundColor ?? token.bgColorSecondaryContainer,
       disabledBackgroundColor:
           componentTheme?.disabledBackgroundColor ??
           token.bgColorComponentDisabled,

@@ -519,8 +519,6 @@ class _TDropdownMenuState extends State<TDropdownMenu>
 
   @override
   Widget build(BuildContext context) {
-    final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
     final theme = _theme;
     final bar = widget.scrollable
         ? SingleChildScrollView(
@@ -580,15 +578,10 @@ class _TDropdownMenuState extends State<TDropdownMenu>
             height: theme.barHeight ?? 48,
             decoration: BoxDecoration(
               color:
-                  theme.barBackgroundColor ??
-                  colorScheme?.surface ??
-                  context.tTheme.bgColorContainer,
+                  theme.barBackgroundColor ?? context.tTheme.bgColorContainer,
               border: Border(
                 bottom: BorderSide(
-                  color:
-                      theme.dividerColor ??
-                      material.tExplicitDividerColor ??
-                      context.tTheme.componentStroke,
+                  color: theme.dividerColor ?? context.tTheme.componentStroke,
                   width: 0.5,
                 ),
               ),
@@ -601,8 +594,6 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   }
 
   Widget _buildTrigger(int index) {
-    final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
     final item = widget.items[index];
     final isOpen = _controller.openIndex == index;
     final onTap = item.enabled ? () => unawaited(_toggle(index)) : null;
@@ -639,31 +630,21 @@ class _TDropdownMenuState extends State<TDropdownMenu>
         );
     final style = !item.enabled
         ? theme.disabledTextStyle ??
-              baseStyle.copyWith(
-                color:
-                    material.tExplicitDisabledColor ??
-                    context.tTheme.textColorDisabled,
-              )
+              baseStyle.copyWith(color: context.tTheme.textColorDisabled)
         : isOpen
         ? theme.activeTextStyle ??
               baseStyle.copyWith(
-                color: colorScheme?.primary ?? context.tTheme.brandColor,
+                color: context.tTheme.brandColor,
                 fontWeight: activeTokenFont?.fontWeight,
               )
         : baseStyle.copyWith(
             color: baseStyle.color ?? context.tTheme.textColorPrimary,
           );
     final iconColor = !item.enabled
-        ? theme.disabledIconColor ??
-              material.tExplicitDisabledColor ??
-              context.tTheme.textColorDisabled
+        ? theme.disabledIconColor ?? context.tTheme.textColorDisabled
         : isOpen
-        ? theme.activeIconColor ??
-              colorScheme?.primary ??
-              context.tTheme.brandColor
-        : theme.iconColor ??
-              context.tExplicitIconTheme?.color ??
-              context.tTheme.textColorPrimary;
+        ? theme.activeIconColor ?? context.tTheme.brandColor
+        : theme.iconColor ?? context.tTheme.textColorPrimary;
     final opensAbove = switch (widget.placement) {
       TDropdownMenuPlacement.above => true,
       TDropdownMenuPlacement.below => false,
@@ -1053,12 +1034,8 @@ class _TDropdownMenuState extends State<TDropdownMenu>
         ? math.max(maxHeight, barrierExtent)
         : barrierExtent;
     final theme = _theme;
-    final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
     final panelBackgroundColor =
-        theme.panelBackgroundColor ??
-        colorScheme?.surface ??
-        context.tTheme.bgColorContainer;
+        theme.panelBackgroundColor ?? context.tTheme.bgColorContainer;
 
     Widget buildPanel({
       required int panelIndex,

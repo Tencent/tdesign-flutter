@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
@@ -85,26 +86,16 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
       Theme.of(context).extension<TNavBarThemeData>() ??
       const TNavBarThemeData();
 
-  // ---- ThemeData 取值辅助（组件 Theme > Flutter Theme > Token） ----
+  // 组件 Theme 未配置时直接回退 TDesign Token。
 
   Color _effectiveTitleColor(BuildContext context) =>
-      _themeData(context).titleColor ??
-      Theme.of(context).appBarTheme.foregroundColor ??
-      Theme.of(context).tExplicitColorScheme?.onSurface ??
-      context.tTheme.textColorPrimary;
+      _themeData(context).titleColor ?? context.tTheme.textColorPrimary;
 
   Color _effectiveBackIconColor(BuildContext context) =>
-      _themeData(context).backIconColor ??
-      Theme.of(context).appBarTheme.iconTheme?.color ??
-      Theme.of(context).appBarTheme.foregroundColor ??
-      Theme.of(context).tExplicitColorScheme?.onSurface ??
-      context.tTheme.textColorPrimary;
+      _themeData(context).backIconColor ?? context.tTheme.textColorPrimary;
 
   Color _effectiveBackgroundColor(BuildContext context) =>
-      _themeData(context).backgroundColor ??
-      Theme.of(context).appBarTheme.backgroundColor ??
-      Theme.of(context).tExplicitColorScheme?.surface ??
-      context.tTheme.bgColorContainer;
+      _themeData(context).backgroundColor ?? context.tTheme.bgColorContainer;
 
   double get _effectiveHeight => preferredSize.height;
 
@@ -217,18 +208,16 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   TextStyle _getTitleStyle(BuildContext context) {
-    var titleColor = _effectiveTitleColor(context);
-
-    final materialStyle = Theme.of(context).appBarTheme.titleTextStyle;
+    final titleColor = _effectiveTitleColor(context);
     final tokenFont = context.tTheme.fontTitleLarge;
 
     return TextStyle(
-      fontSize: materialStyle?.fontSize ?? tokenFont?.size,
-      height: materialStyle?.height ?? tokenFont?.height,
+      fontSize: tokenFont?.size,
+      height: tokenFont?.height,
       color: titleColor,
-      fontWeight: materialStyle?.fontWeight ?? tokenFont?.fontWeight,
+      fontWeight: tokenFont?.fontWeight,
       decoration: TextDecoration.none,
-      fontFamily: materialStyle?.fontFamily,
+      fontFamily: context.tTheme.fontFamily?.flutterFontFamily,
       package: null,
     );
   }

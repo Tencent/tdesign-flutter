@@ -7,7 +7,7 @@
 | text | String | - | 标签内容 |
 | colorPreset | TTagColorPreset | TTagColorPreset.defaultTheme | 标签预设配色。 |
 | enabled | bool | true | 是否使用禁用视觉状态。 |
-| icon | IconData? | - | 图标内容，可随状态改变颜色 |
+| icon | IconData? | - | 前置图标，颜色与正文共用解析后的前景色；关闭图标使用独立颜色。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | needCloseIcon | bool | false | 是否显示关闭图标。 |
 | onCloseTap | GestureTapCallback? | - | 关闭图标点击事件。 标签本身不持有列表状态；需要移除标签时，请在此回调中更新父组件的 数据源并触发重建。 |
@@ -48,7 +48,7 @@
 | squareBorderRadius | double? | - | 方形标签圆角，单位为逻辑像素；未设置时所有尺寸均读取全局 `radiusSmall`（当前默认 3dp）。 |
 | successColor | Color? | - | success 预设的基础色；未设置时回退全局 successColor。 |
 | successLightColor | Color? | - | success 预设的浅色填充；未设置时回退全局 successColor1。 |
-| textColor | Color? | - | 所有启用 Tag 的统一文字颜色；优先于各配色预设的文字色。 |
+| textColor | Color? | - | 所有启用 Tag 的正文和前置图标颜色；优先于显式 Material 色板及配色预设。 禁用态不受此字段影响，关闭图标继续使用独立的占位色 Token。 |
 
 
 ### TTagColorPreset

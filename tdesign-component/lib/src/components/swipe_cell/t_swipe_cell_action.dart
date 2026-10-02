@@ -95,13 +95,11 @@ class TSwipeCellAction extends StatelessWidget {
     }
     final theme = _effectiveTheme(context);
     final effectiveBackgroundColor = backgroundColor;
-    final explicitIconTheme = context.tExplicitIconTheme;
-    final effectiveIconSize = iconSize ?? explicitIconTheme?.size ?? 20;
+    final effectiveIconSize = iconSize ?? 20;
     final effectiveSpacing = iconLabelSpacing ?? 8;
     final effectivePadding =
         theme.actionPadding ?? const EdgeInsets.symmetric(horizontal: 16);
-    final effectiveIconColor =
-        iconColor ?? explicitIconTheme?.color ?? context.tTheme.textColorAnti;
+    final effectiveIconColor = iconColor ?? context.tTheme.textColorAnti;
     final fallbackFont =
         context.tTheme.fontMarkMedium ??
         Font(size: 14, lineHeight: 22, fontWeight: FontWeight.w600);

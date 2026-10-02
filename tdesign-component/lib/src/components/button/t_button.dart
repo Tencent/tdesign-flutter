@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../icon/t_icon.dart';
 import '../loading/t_loading_theme_data.dart';
 import 't_button_defaults.dart';
 import 't_button_resolve.dart';
@@ -236,7 +237,6 @@ class _TButtonState extends State<TButton> {
 
     if (gradient != null) {
       // 渐变按钮保留自绘装饰层，同时复用 resolvedStyle 中的 P0/ButtonStyle 结果。
-      final appTheme = Theme.of(context);
       final isDisabled = !_isEnabled;
       final states = _statesController.value;
       final shape =
@@ -283,7 +283,7 @@ class _TButtonState extends State<TButton> {
       final maximumSize = resolvedStyle.maximumSize?.resolve(states);
       final fixedSize = resolvedStyle.fixedSize?.resolve(states);
       final visualDensity =
-          resolvedStyle.visualDensity ?? appTheme.visualDensity;
+          resolvedStyle.visualDensity ?? VisualDensity.standard;
       final densityAdjustment = visualDensity.baseSizeAdjustment;
       final tapTargetSize = resolvedStyle.tapTargetSize!;
       final elevation = resolvedStyle.elevation?.resolve(states) ?? 0;
@@ -447,16 +447,22 @@ class _TButtonIconTheme extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final loadingTheme = theme.extension<TLoadingThemeData>();
+    final iconTheme = IconTheme.of(context);
+    final scopedChild = TIconStyleScope(
+      color: iconTheme.color,
+      size: iconTheme.size,
+      child: child,
+    );
     if (loadingTheme?.iconColor != null) {
-      return child;
+      return scopedChild;
     }
     final effectiveLoadingTheme = (loadingTheme ?? const TLoadingThemeData())
-        .merge(TLoadingThemeData(iconColor: IconTheme.of(context).color));
+        .merge(TLoadingThemeData(iconColor: iconTheme.color));
     return Theme(
       data: theme
-          .copyWith(iconTheme: IconTheme.of(context))
+          .copyWith(iconTheme: iconTheme)
           .mergeExtension(effectiveLoadingTheme),
-      child: child,
+      child: scopedChild,
     );
   }
 }

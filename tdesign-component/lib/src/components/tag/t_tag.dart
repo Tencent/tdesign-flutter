@@ -36,7 +36,7 @@ class TTag extends StatelessWidget {
   /// 绘制形态。
   final TTagVariant variant;
 
-  /// 图标内容，可随状态改变颜色
+  /// 前置图标，颜色与正文共用解析后的前景色；关闭图标使用独立颜色。
   final IconData? icon;
 
   /// 标签大小
@@ -91,11 +91,13 @@ class TTag extends StatelessWidget {
     );
     final borderRadius = _resolveBorderRadius(context, shape, theme);
 
+    // 前置图标与正文继承同一个前景色；关闭图标使用独立的占位色。
+    final foregroundColor = enabled
+        ? theme?.resolveTextColor(colors.textColor) ?? colors.textColor
+        : colors.textColor;
     var child = _buildLabel(
       // 禁用态应始终使用禁用 token，避免普通 ThemeExtension 的颜色覆盖状态。
-      textColor: enabled
-          ? theme?.resolveTextColor(colors.textColor) ?? colors.textColor
-          : colors.textColor,
+      textColor: foregroundColor,
       font: effectiveFont,
       fontFamily: context.tTheme.fontFamily,
       fontFamilyFallback: fontFallback,
@@ -104,7 +106,7 @@ class TTag extends StatelessWidget {
       maxLines: maxLines,
     );
 
-    var innerIcon = _getIcon(colors.textColor);
+    var innerIcon = _getIcon(foregroundColor);
     if (innerIcon != null || needCloseIcon) {
       var children = <Widget>[];
       if (innerIcon != null) {
@@ -201,16 +203,11 @@ class TTag extends StatelessWidget {
     TTagThemeData? theme,
   ) {
     final token = context.tTheme;
-    final material = Theme.of(context).tExplicitColorScheme;
     if (disable) {
       return _TagColors(
-        textColor:
-            material?.onSurface.withValues(alpha: 0.38) ??
-            token.textColorDisabled,
-        backgroundColor:
-            material?.onSurface.withValues(alpha: 0.12) ??
-            token.bgColorComponentDisabled,
-        borderColor: material?.outline ?? token.componentBorder,
+        textColor: token.textColorDisabled,
+        backgroundColor: token.bgColorComponentDisabled,
+        borderColor: token.componentBorder,
         closeIconColor: token.textColorPlaceholder,
       );
     }
@@ -222,18 +219,14 @@ class TTag extends StatelessWidget {
     switch (colorPreset) {
       case TTagColorPreset.primary:
         if (isOutline) {
-          borderColor = material?.primary ?? token.brandColor;
-          textColor = material?.primary ?? token.brandColor;
+          borderColor = token.brandColor;
+          textColor = token.brandColor;
           backgroundColor = isLight
-              ? material?.primaryContainer ?? token.brandColorLight
+              ? token.brandColorLight
               : token.bgColorContainer;
         } else {
-          textColor = isLight
-              ? material?.primary ?? token.brandColor
-              : material?.onPrimary ?? token.textColorAnti;
-          backgroundColor = isLight
-              ? material?.primaryContainer ?? token.brandColorLight
-              : material?.primary ?? token.brandColor;
+          textColor = isLight ? token.brandColor : token.textColorAnti;
+          backgroundColor = isLight ? token.brandColorLight : token.brandColor;
           borderColor = backgroundColor;
         }
         break;
@@ -251,22 +244,18 @@ class TTag extends StatelessWidget {
         }
         break;
       case TTagColorPreset.danger:
-        final dangerFallback = material?.error ?? token.errorColor;
+        final dangerFallback = token.errorColor;
         final baseColor =
             theme?.resolveDangerColor(dangerFallback) ?? dangerFallback;
         if (isOutline) {
           borderColor = baseColor;
           textColor = baseColor;
           backgroundColor = isLight
-              ? material?.errorContainer ?? token.errorColor1
+              ? token.errorColor1
               : token.bgColorContainer;
         } else {
-          textColor = isLight
-              ? baseColor
-              : material?.onError ?? token.textColorAnti;
-          backgroundColor = isLight
-              ? material?.errorContainer ?? token.errorColor1
-              : baseColor;
+          textColor = isLight ? baseColor : token.textColorAnti;
+          backgroundColor = isLight ? token.errorColor1 : baseColor;
           borderColor = backgroundColor;
         }
         break;
@@ -292,19 +281,17 @@ class TTag extends StatelessWidget {
           // 小程序 light-outline/default 单独使用 component-border；普通
           // outline/default 则使用 tag-default-color 的回退 bg-color-component。
           borderColor = isLight
-              ? material?.outline ?? token.componentBorder
-              : material?.surfaceContainerHighest ?? token.bgColorComponent;
-          textColor = material?.onSurface ?? token.textColorPrimary;
+              ? token.componentBorder
+              : token.bgColorComponent;
+          textColor = token.textColorPrimary;
           backgroundColor = isLight
-              ? material?.surfaceContainerHighest ??
-                    token.bgColorSecondaryContainer
+              ? token.bgColorSecondaryContainer
               : token.bgColorContainer;
         } else {
-          textColor = material?.onSurface ?? token.textColorPrimary;
+          textColor = token.textColorPrimary;
           backgroundColor = isLight
-              ? material?.surfaceContainerHighest ??
-                    token.bgColorSecondaryContainer
-              : material?.surfaceContainerHighest ?? token.bgColorComponent;
+              ? token.bgColorSecondaryContainer
+              : token.bgColorComponent;
           borderColor = backgroundColor;
         }
     }

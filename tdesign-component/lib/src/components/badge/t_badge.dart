@@ -11,6 +11,7 @@ import 't_badge_fallback.dart';
 import 't_badge_label.dart';
 import 't_badge_layout.dart';
 import 't_badge_resolved_style.dart';
+import 't_badge_theme_data.dart';
 
 /// 徽标的结构形态；尺寸与描边分别由 [TBadge.size]、[TBadge.border] 控制。
 enum TBadgeVariant {
@@ -41,7 +42,7 @@ enum TBadgeVariant {
 
 /// 徽标的预设尺寸，控制文本徽标的文字 Token、标签行盒高度与水平内边距。
 ///
-/// [TBadgeVariant.dot] 的直径由 [BadgeThemeData.smallSize] 控制，不读取该值；
+/// [TBadgeVariant.dot] 的直径由 [TBadgeThemeData.dotSize] 控制，不读取该值；
 /// 角标形态会按该值在 32 与 40 逻辑像素两档尺寸之间切换。
 enum TBadgeSize {
   /// 中尺寸，使用 `fontMarkExtraSmall` 与 16 逻辑像素标签行盒。
@@ -115,13 +116,13 @@ class TBadgeConfig {
 
   /// 徽标相对锚点的对齐方式。
   ///
-  /// 为空时依次使用当前 [BadgeThemeData.alignment] 和消费组件的默认值。
+  /// 为空时使用消费组件的默认值。
   /// ribbon、triangle 的方位已编码在 [variant] 中，不读取该字段。
   final AlignmentGeometry? alignment;
 
   /// 在最终对齐位置上追加的偏移。
   ///
-  /// 为空时依次使用当前 [BadgeThemeData.offset] 和消费组件的默认值。
+  /// 为空时使用消费组件的默认值。
   /// 显式值使用物理坐标：正 x 始终向右，RTL 下不会自动镜像；消费组件仅会
   /// 根据最终生效的 [alignment] 转换自己提供的默认偏移。
   /// ribbon、triangle 始终贴住锚点的物理左上角或右上角，但仍读取该偏移。
@@ -196,14 +197,14 @@ class TBadge extends StatelessWidget {
 
   /// 徽标相对 [child] 的对齐方式。
   ///
-  /// 为空时依次读取局部与全局 [BadgeThemeData.alignment]，最终回退为逻辑
+  /// 为空时使用组合组件提供的对齐位置，最终回退为逻辑
   /// 右上角 [AlignmentDirectional.topEnd]，在 RTL 下对应物理左上角。
   /// ribbon、triangle 的方位已编码在 [variant] 中，不读取该字段。
   /// 当 [child] 为空时不参与布局。
   final AlignmentGeometry? alignment;
 
-  /// 相对默认锚点的逐实例位置偏移；未设置时读取 [BadgeThemeData.offset]，
-  /// 再读取组合组件提供的默认偏移，最终回退为 [Offset.zero]。
+  /// 相对默认锚点的逐实例位置偏移；未设置时使用组合组件提供的
+  /// 默认偏移，最终回退为 [Offset.zero]。
   ///
   /// 显式值使用物理坐标：正 x 始终向右，RTL 下不会自动镜像。
   /// 默认徽标以中心点对齐内容的逻辑右上角，在 RTL 下对应物理左上角。

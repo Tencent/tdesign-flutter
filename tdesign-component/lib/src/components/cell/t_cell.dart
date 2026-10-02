@@ -84,9 +84,6 @@ class _TCellState extends State<TCell> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TCellThemeData>();
-    final materialTheme = Theme.of(context);
-    final listTileTheme = materialTheme.listTileTheme;
-    final colorScheme = materialTheme.tExplicitColorScheme;
     final align = widget.align ?? TCellAlign.center;
     final crossAxisAlignment = switch (align) {
       TCellAlign.top => CrossAxisAlignment.start,
@@ -105,10 +102,7 @@ class _TCellState extends State<TCell> {
       decoration: BoxDecoration(
         color: _pressed
             ? theme?.pressedColor ?? context.tTheme.bgColorSecondaryContainer
-            : theme?.backgroundColor ??
-                  listTileTheme.tileColor ??
-                  colorScheme?.surface ??
-                  context.tTheme.bgColorContainer,
+            : theme?.backgroundColor ?? context.tTheme.bgColorContainer,
         border: theme?.showBottomBorder ?? false
             ? Border(
                 bottom: BorderSide(
@@ -147,11 +141,8 @@ class _TCellState extends State<TCell> {
                               softWrap: false,
                               style:
                                   theme?.titleStyle ??
-                                  listTileTheme.titleTextStyle ??
                                   TextStyle(
-                                    color:
-                                        colorScheme?.onSurface ??
-                                        context.tTheme.textColorPrimary,
+                                    color: context.tTheme.textColorPrimary,
                                     fontSize:
                                         context.tTheme.fontBodyLarge?.size ??
                                         16,
@@ -172,11 +163,7 @@ class _TCellState extends State<TCell> {
                               ' *',
                               style:
                                   theme?.requiredStyle ??
-                                  TextStyle(
-                                    color:
-                                        colorScheme?.error ??
-                                        context.tTheme.errorColor,
-                                  ),
+                                  TextStyle(color: context.tTheme.errorColor),
                             ),
                         ],
                       ),
@@ -186,11 +173,8 @@ class _TCellState extends State<TCell> {
                       TTextStyleScope(
                         style:
                             theme?.subtitleStyle ??
-                            listTileTheme.subtitleTextStyle ??
                             TextStyle(
-                              color:
-                                  colorScheme?.onSurfaceVariant ??
-                                  context.tTheme.textColorSecondary,
+                              color: context.tTheme.textColorSecondary,
                               fontSize:
                                   context.tTheme.fontBodyMedium?.size ?? 14,
                               height: context.tTheme.fontBodyMedium?.height,
@@ -219,9 +203,7 @@ class _TCellState extends State<TCell> {
                     style:
                         theme?.noteStyle ??
                         TextStyle(
-                          color:
-                              colorScheme?.onSurfaceVariant ??
-                              context.tTheme.textColorPlaceholder,
+                          color: context.tTheme.textColorPlaceholder,
                           fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
                           height: context.tTheme.fontBodyLarge?.height,
                           fontWeight:
@@ -242,9 +224,7 @@ class _TCellState extends State<TCell> {
                       style:
                           theme?.noteStyle ??
                           TextStyle(
-                            color:
-                                colorScheme?.onSurfaceVariant ??
-                                context.tTheme.textColorPlaceholder,
+                            color: context.tTheme.textColorPlaceholder,
                             fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
                             height: context.tTheme.fontBodyLarge?.height,
                             fontWeight:
@@ -265,11 +245,7 @@ class _TCellState extends State<TCell> {
               Icon(
                 TIcons.chevron_right,
                 size: 24,
-                color:
-                    theme?.arrowColor ??
-                    listTileTheme.iconColor ??
-                    colorScheme?.onSurfaceVariant ??
-                    context.tTheme.textColorPlaceholder,
+                color: theme?.arrowColor ?? context.tTheme.textColorPlaceholder,
               ),
             ],
           ],

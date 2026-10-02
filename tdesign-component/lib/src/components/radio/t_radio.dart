@@ -327,16 +327,8 @@ class TRadio<T> extends StatelessWidget {
       titleStyle.fontSize! * (titleStyle.height ?? 1);
 
   BoxConstraints _resolveTapTargetConstraints(BuildContext context) {
-    final materialTheme = RadioTheme.of(context);
-    final appTheme = Theme.of(context);
-    final visualDensity =
-        materialTheme.visualDensity ??
-        appTheme.tExplicitVisualDensity ??
-        VisualDensity.standard;
-    final tapTargetSize =
-        materialTheme.materialTapTargetSize ??
-        appTheme.tExplicitMaterialTapTargetSize ??
-        MaterialTapTargetSize.padded;
+    const visualDensity = VisualDensity.standard;
+    const tapTargetSize = MaterialTapTargetSize.padded;
     final indicatorSize = _indicatorSize(context);
     final baseSize = tapTargetSize == MaterialTapTargetSize.padded
         ? kMinInteractiveDimension
@@ -360,27 +352,13 @@ class TRadio<T> extends StatelessWidget {
     bool selected,
     bool disabled,
   ) {
-    final materialTheme = RadioTheme.of(context);
-    final colorScheme = Theme.of(context).tExplicitColorScheme;
-    final states = <WidgetState>{
-      if (selected) WidgetState.selected,
-      if (disabled) WidgetState.disabled,
-    };
     final color = disabled
         ? selected
-              ? (theme?.disableColor ??
-                    materialTheme.fillColor?.resolve(states) ??
-                    colorScheme?.onSurface.withValues(alpha: 0.38) ??
-                    context.tTheme.brandColorDisabled)
+              ? (theme?.disableColor ?? context.tTheme.brandColorDisabled)
               : (theme?.disableColor ?? context.tTheme.componentBorder)
         : selected
-        ? (theme?.selectColor ??
-              materialTheme.fillColor?.resolve(states) ??
-              colorScheme?.primary ??
-              context.tTheme.brandColor)
-        : (materialTheme.fillColor?.resolve(states) ??
-              colorScheme?.outline ??
-              context.tTheme.componentBorder);
+        ? (theme?.selectColor ?? context.tTheme.brandColor)
+        : context.tTheme.componentBorder;
     final iconSize = _indicatorSize(context);
     final selectedIcon = selected
         ? switch (iconType) {

@@ -760,11 +760,11 @@
             "assetKey": "icon.IconFromNameExample"
           },
           {
-            "description": "Theme 默认 size/color:",
-            "assetKey": "icon.IconThemeExample"
+            "description": "TDesign Token 默认尺寸与颜色:",
+            "assetKey": "icon.IconTokenExample"
           },
           {
-            "description": "构造器优先级覆盖 Theme:",
+            "description": "构造器参数覆盖默认值:",
             "assetKey": "icon.IconPriorityExample"
           }
         ]

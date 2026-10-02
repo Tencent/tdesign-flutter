@@ -215,7 +215,6 @@ class _TInputState extends State<TInput> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TInputThemeData>();
-    final material = Theme.of(context);
     final token = context.tTheme;
     final fieldScope = TFieldScope.maybeOf(context);
     final formErrorText = fieldScope?.errorText;
@@ -225,7 +224,7 @@ class _TInputState extends State<TInput> {
     final effectiveStatus = inputErrorText != null
         ? TInputStatus.error
         : widget.status;
-    final inputTextColor = _inputTextColor(token, material);
+    final inputTextColor = _inputTextColor(token);
     final tokenFont = token.fontBodyLarge;
     final tokenStyle = TextStyle(
       color: inputTextColor,
@@ -234,18 +233,12 @@ class _TInputState extends State<TInput> {
       fontWeight: tokenFont?.fontWeight,
     );
     final configuredTextStyle = tokenStyle.merge(widget.style);
-    final configuredTextColor = widget.enabled
-        ? material.tExplicitColorScheme?.onSurface ?? inputTextColor
-        : inputTextColor;
     final textStyle = configuredTextStyle.copyWith(
       color: widget.enabled
-          ? widget.style?.color ?? configuredTextColor
+          ? widget.style?.color ?? inputTextColor
           : token.textColorDisabled,
     );
-    final cursorColor =
-        widget.cursorColor ??
-        material.tExplicitColorScheme?.primary ??
-        token.brandColor;
+    final cursorColor = widget.cursorColor ?? token.brandColor;
     final clearMode = widget.clearButtonMode ?? TInputClearButtonMode.never;
     final statusColor = _statusColor(token, effectiveStatus);
     final hintFont = widget._multiline
@@ -343,8 +336,7 @@ class _TInputState extends State<TInput> {
           theme?.clearIconColor ??
           (effectiveStatus == TInputStatus.error
               ? token.errorColor
-              : material.tExplicitColorScheme?.onSurfaceVariant ??
-                    token.textColorPlaceholder),
+              : token.textColorPlaceholder),
       onClear: _clear,
       enabled: widget.enabled,
       readOnly: widget.readOnly,
@@ -428,9 +420,8 @@ class _TInputState extends State<TInput> {
     setState(() => _obscureText = !_obscureText);
   }
 
-  Color _inputTextColor(TThemeData token, ThemeData material) => widget.enabled
-      ? material.tExplicitColorScheme?.onSurface ?? token.textColorPrimary
-      : token.textColorDisabled;
+  Color _inputTextColor(TThemeData token) =>
+      widget.enabled ? token.textColorPrimary : token.textColorDisabled;
 
   Color _statusColor(TThemeData token, TInputStatus status) => switch (status) {
     TInputStatus.normal => token.brandColor,

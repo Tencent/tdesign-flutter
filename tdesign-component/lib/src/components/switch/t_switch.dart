@@ -67,11 +67,7 @@ class TSwitch extends StatelessWidget {
     final resolvedSize = size ?? TSwitchSize.medium;
     final resolvedVariant = variant ?? TSwitchVariant.filled;
     final enabled = onChanged != null && !loading;
-    final resolved = TSwitchResolve.resolve(
-      context: context,
-      enabled: enabled,
-      theme: theme,
-    );
+    final resolved = TSwitchResolve.resolve(context: context, theme: theme);
 
     Widget current = TCupertinoSwitch(
       value: value,

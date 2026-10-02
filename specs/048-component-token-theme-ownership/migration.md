@@ -4,16 +4,17 @@
 
 | 原有写法或字段 | 替代入口 | 迁移要点 |
 | --- | --- | --- |
+| `ThemeData.tExplicitColorScheme` 及其他 `tExplicit*` 辅助 getter | `TThemeData` 全局 Token 或相应组件 `ThemeExtension` | 不再判断 Material 色板、组件主题或文本主题的“显式来源”；TDesign 组件不回读 Material 外观。原生 Material 控件仍可使用 `ThemeData.colorScheme`。 |
 | `TSearchBarThemeData.variant`、`TCollapseThemeData.variant` | 各实例的 `variant` | Theme 子树不能再统一选择形态；批量迁移需在相关实例逐个指定。 |
 | `TTableThemeData.bordered/stripe` | `TTable.bordered/stripe` | 两项控制每张表的结构，不再从 Theme 回退。 |
 | `TLinkThemeData.defaultSize/defaultColorScheme/underline` | `TLink.size/colorPreset/underline` | Theme 中其余字体与图标视觉默认值继续有效。旧 `TLink.colorScheme` 也迁至 `colorPreset`。 |
 | `TCellThemeData.align/groupVariant` | `TCell.align`、`TCellGroup.variant` | 对子树的原有统一选择需显式迁到每个实例。 |
-| `TInputThemeData.clearButtonMode/cursorColor/multilineMinLines` | `TInput.clearButtonMode/cursorColor`、`TTextarea.minLines` | 光标默认色仍可从显式 Material 色板或全局 Token 获取；原 Theme 中的统一选择不再生效。 |
+| `TInputThemeData.clearButtonMode/cursorColor/multilineMinLines` | `TInput.clearButtonMode/cursorColor`、`TTextarea.minLines` | 光标默认色从 TDesign Token 获取；原 Theme 中的统一选择不再生效。 |
 | `TSwitchThemeData.defaultSize/defaultVariant`、`TTimeCounterThemeData.defaultSize/defaultVariant`、`TStepperThemeData.defaultSize/defaultVariant`、`TButtonThemeData.defaultSize/defaultVariant` | 对应实例的 `size/variant` | 保留组件 Theme 中具体颜色、尺寸、间距等可复用视觉值。 |
 | `TDropdownMenuThemeData.animationDuration`、`TCollapseThemeData.animationDuration` | 对应实例的 `animationDuration` | 单次交互时长由实例决定；系统减少动态效果仍有最高优先级。 |
 | `TCollapse.elevation` | `TCollapseThemeData.elevation` | 阴影改为子树级视觉默认值；单实例需使用局部 Theme。 |
 | `TTabsBar.indicator`、`TIndexes.indexListMaxHeight`、`TSwiper.paginationAlignment` | 对应组件 Theme 字段 | 单实例定制通过仅包裹该实例的局部 `Theme`，不要在 Demo 外绘制补丁。 |
-| `TIconThemeData` | Flutter `IconTheme` 与 `TIcon.size/color` | 标准 `IconTheme` 负责子树默认值；实例显式值覆盖。 |
+| `TIconThemeData` | `TIcon.size/color` | 默认尺寸 24dp、默认颜色 `textColorPrimary`；外部 Material `IconTheme` 不再覆盖 `TIcon`。需要逐实例不同的尺寸或颜色时显式传参。 |
 | `TAvatar.backgroundColor/foregroundColor/textStyle`、`TAvatarGroup.dimension`；`TAvatarThemeData.size/shape/variant` | 对应具体值迁至 `TAvatarThemeData`；尺寸、形状及变体选择留在实例 | 同一子树设置颜色、文字与物理边长；逐实例配色可用局部 Theme。 |
 | `TDrawer.width/backgroundColor`、`TDrawerContent.width/backgroundColor` | `TDrawerThemeData` 的宽度和背景字段 | 需用局部 Theme 设置单个抽屉的具体视觉值。 |
 | `TSideBar.selectedColor/unSelectedColor/selectedTextStyle/contentPadding/selectedBgColor/unSelectedBgColor` | `TSideBarThemeData` 对应字段 | 选中项状态仍由实例控制，具体配色与内边距从 Theme 取。 |
@@ -33,7 +34,7 @@
 | `TTextThemeData.font` | `TTextThemeData.textStyle: TextStyle(fontSize: ..., height: ..., fontWeight: ...)` | 子树级字体只保留一个样式入口；`Font.height` 是行高与字号之比，可直接用于 `TextStyle.height`。Cascader 和 Picker 继续读取同一组件文字主题。 |
 | `TPopoverAnchor.overlayColor/radius`、`TPopover.showPopover(overlayColor/radius)` | `TPopoverThemeData.barrierColor/borderRadius` | 单实例自定义用局部 `Theme` 包裹触发上下文；`borderRadius` 从 `double?` 改为 `BorderRadius?`，旧 `borderRadius: 8` 改为 `borderRadius: BorderRadius.circular(8)`，支持逐角圆角。 |
 | `TPopoverThemeData.lerpDouble` | 无需外部调用；组件主题的 `lerp` 已负责插值 | 原公开静态辅助方法仅供内部使用，改为私有。 |
-| `TButtonThemeData.filledStyle/outlinedStyle/textButtonStyle/ghostStyle/padding` | 对应实例 `TButton.style: ButtonStyle(...)`；子树批量默认值可使用 Flutter 的 `ElevatedButtonTheme`、`OutlinedButtonTheme`、`TextButtonTheme` | 具体颜色、描边、内边距、状态层等不再由 TDesign 组件 Theme 批量覆盖。Material 按钮主题分别作用于 fill、outline/ghost、text；outline 与 ghost 共用 `OutlinedButtonTheme`，若需分别设置，应在对应实例传入共享的 `ButtonStyle`。 |
+| `TButtonThemeData.filledStyle/outlinedStyle/textButtonStyle/ghostStyle/padding` | 对应实例 `TButton.style: ButtonStyle(...)` | 具体颜色、描边、内边距、状态层等由实例样式控制；不再从 Material 的 `ElevatedButtonTheme`、`OutlinedButtonTheme`、`TextButtonTheme` 回读。批量复用样式可由调用方封装 `TButton`。 |
 | `TButtonThemeData.shape` | `TButton.shape` | `shape` 是圆/方等结构选择；边框的具体视觉仍可在 `TButton.style.shape` 指定。 |
 | `TInputThemeData.textStyle` | `TInput.style` | 只迁移已输入文字；占位文字继续由组件 Theme 的 `hintStyle` 控制。禁用态文字仍固定读取禁用 Token。 |
 | `TDialogThemeData.actionButtonStyle` | `TDialogAction.style` 或 `TConfirmDialog.buttonStyle` | 面板外观继续走组件 Theme，单个操作按钮的视觉由操作项持有。 |
@@ -66,11 +67,11 @@ TButton(
 )
 ```
 
-`colorPreset` 只选择内置预设；具体描边、前景和背景由实例 `style` 控制。`TButtonThemeData` 仅保留 `iconTextSpacing` 和 `gradient` 这两个 `ButtonStyle` 无法等价表达的字段。`TText` 的子树默认样式由组件 Theme 控制，单实例样式由 `style` 控制；`font` 仅选择 TDesign 字体预设。
+`colorPreset` 只选择内置预设；具体描边、前景和背景由实例 `style` 控制。`TButtonThemeData` 仅保留 `iconTextSpacing` 和 `gradient` 这两个 `ButtonStyle` 无法等价表达的字段。`TText` 的子树默认样式由组件 Theme 控制，单实例样式由 `style` 控制；`font` 仅选择 TDesign 字体预设。Slider 和 Badge 原由 Material 组件 Theme 影响的可配置外观，分别迁至 `TSliderThemeData` 与 `TBadgeThemeData`；无需独立开放的默认值直接读取全局 Token。
 
 ## 组件内置配色预设改名
 
-`TButton`、`TTag`、`TSelectTag`、`TLink`、`TBackTop`、`TPopoverAnchor`、`TPopover.showPopover` 和 `TDialogAction` 的 `colorScheme:` 改为 `colorPreset:`；对应枚举 `TButton/TTag/TLink/TBackTop/TPopoverColorScheme` 改为 `TButton/TTag/TLink/TBackTop/TPopoverColorPreset`。这是源码级 breaking change，不保留同义别名。枚举成员和默认映射不变；Material 的 `ThemeData.colorScheme: ColorScheme(...)` 及其优先级不变。`variant` 仍控制填充/描边等绘制处理，`colorPreset` 仅选择内置配色，`status` 仍表达业务状态。迁移调用时须同时更改命名参数与枚举类型，不能将 Material `ColorScheme` 实例传给 `colorPreset`。
+`TButton`、`TTag`、`TSelectTag`、`TLink`、`TBackTop`、`TPopoverAnchor`、`TPopover.showPopover` 和 `TDialogAction` 的 `colorScheme:` 改为 `colorPreset:`；对应枚举 `TButton/TTag/TLink/TBackTop/TPopoverColorScheme` 改为 `TButton/TTag/TLink/TBackTop/TPopoverColorPreset`。这是源码级 breaking change，不保留同义别名。枚举成员和默认映射不变；Material 的 `ThemeData.colorScheme: ColorScheme(...)` 仍供原生 Material 控件使用，但不再反向覆盖 TDesign 组件。`variant` 仍控制填充/描边等绘制处理，`colorPreset` 仅选择内置配色，`status` 仍表达业务状态。迁移调用时须同时更改命名参数与枚举类型，不能将 Material `ColorScheme` 实例传给 `colorPreset`。
 
 `TText` 未显式指定字体时的正文回退从 `fontBodyLarge`（16dp/24dp）改为小程序 `fontBodyMedium`（14dp/22dp）。依赖旧默认字号的调用方应在实例 `font` 或子树 `TTextThemeData.textStyle` 中显式指定 16dp/24dp；这是默认行为变化，即使构造签名未变也须按 breaking change 发布。
 

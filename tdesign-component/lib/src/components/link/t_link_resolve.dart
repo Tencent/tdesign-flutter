@@ -21,7 +21,6 @@ class TLinkResolve {
     required bool isActive,
   }) {
     final token = context.tTheme;
-    final material = Theme.of(context).tExplicitColorScheme;
 
     if (isDisabled) {
       return switch (colorPreset) {
@@ -48,10 +47,9 @@ class TLinkResolve {
       return themedColor;
     }
     return switch (colorPreset) {
-      TLinkColorPreset.primary => material?.primary ?? token.brandColor,
-      TLinkColorPreset.defaultTheme =>
-        material?.onSurface ?? token.textColorPrimary,
-      TLinkColorPreset.danger => material?.error ?? token.errorColor,
+      TLinkColorPreset.primary => token.brandColor,
+      TLinkColorPreset.defaultTheme => token.textColorPrimary,
+      TLinkColorPreset.danger => token.errorColor,
       TLinkColorPreset.warning => token.warningColor,
       TLinkColorPreset.success => token.successColor,
     };

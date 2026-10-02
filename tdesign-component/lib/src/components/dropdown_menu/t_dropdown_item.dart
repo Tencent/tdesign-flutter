@@ -246,22 +246,14 @@ class _TDropdownMultiSelectPanelState<T>
   }
 
   Widget _buildOperations(BuildContext context, TDropdownThemeData theme) {
-    final material = Theme.of(context);
-    final colorPreset = material.tExplicitColorScheme;
     return Container(
       padding:
           theme.actionAreaPadding ?? EdgeInsets.all(context.tTheme.spacer2),
       decoration: BoxDecoration(
-        color:
-            theme.panelBackgroundColor ??
-            colorPreset?.surface ??
-            context.tTheme.bgColorContainer,
+        color: theme.panelBackgroundColor ?? context.tTheme.bgColorContainer,
         border: Border(
           top: BorderSide(
-            color:
-                theme.dividerColor ??
-                material.tExplicitDividerColor ??
-                context.tTheme.componentStroke,
+            color: theme.dividerColor ?? context.tTheme.componentStroke,
             width: 0.5,
           ),
         ),
@@ -334,8 +326,6 @@ class _DropdownOptionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final material = Theme.of(context);
-    final colorPreset = material.tExplicitColorScheme;
     final theme =
         Theme.of(context).extension<TDropdownThemeData>() ??
         const TDropdownThemeData();
@@ -350,11 +340,7 @@ class _DropdownOptionRow extends StatelessWidget {
         );
     final style = disabled
         ? theme.disabledOptionTextStyle ??
-              base.copyWith(
-                color:
-                    material.tExplicitDisabledColor ??
-                    context.tTheme.textColorDisabled,
-              )
+              base.copyWith(color: context.tTheme.textColorDisabled)
         : selected
         ? theme.selectedOptionTextStyle ?? base
         : base;
@@ -366,10 +352,7 @@ class _DropdownOptionRow extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color:
-                  theme.dividerColor ??
-                  material.tExplicitDividerColor ??
-                  context.tTheme.componentStroke,
+              color: theme.dividerColor ?? context.tTheme.componentStroke,
               width: 0.5,
             ),
           ),
@@ -394,7 +377,7 @@ class _DropdownOptionRow extends StatelessWidget {
                     Icon(
                       TIcons.check,
                       size: 24,
-                      color: colorPreset?.primary ?? context.tTheme.brandColor,
+                      color: context.tTheme.brandColor,
                     ),
                 ],
               ),
@@ -423,17 +406,11 @@ class _DropdownOptionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final material = Theme.of(context);
-    final colorPreset = material.tExplicitColorScheme;
     final backgroundColor = disabled
         ? theme.disabledOptionColor ?? context.tTheme.bgColorComponentDisabled
         : selected
-        ? theme.selectedOptionColor ??
-              colorPreset?.primaryContainer ??
-              context.tTheme.brandColorLight
-        : theme.optionColor ??
-              colorPreset?.surfaceContainerHighest ??
-              context.tTheme.bgColorSecondaryContainer;
+        ? theme.selectedOptionColor ?? context.tTheme.brandColorLight
+        : theme.optionColor ?? context.tTheme.bgColorSecondaryContainer;
     final tokenFont = context.tTheme.fontBodyMedium;
     final base =
         theme.optionTextStyle ??
@@ -445,18 +422,10 @@ class _DropdownOptionChip extends StatelessWidget {
         );
     final style = disabled
         ? theme.disabledOptionTextStyle ??
-              base.copyWith(
-                color:
-                    material.tExplicitDisabledColor ??
-                    context.tTheme.textColorDisabled,
-              )
+              base.copyWith(color: context.tTheme.textColorDisabled)
         : selected
         ? theme.selectedOptionTextStyle ??
-              base.copyWith(
-                color:
-                    colorPreset?.onPrimaryContainer ??
-                    context.tTheme.brandColor,
-              )
+              base.copyWith(color: context.tTheme.brandColor)
         : base;
     return Semantics(
       selected: selected,

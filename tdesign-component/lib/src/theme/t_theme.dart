@@ -24,22 +24,6 @@ extension TThemeContextExtension on BuildContext {
   /// 获取全局 TThemeData（P4 Token），取不到则回退默认值
   TThemeData get tTheme =>
       Theme.of(this).extension<TThemeData>() ?? TThemeData.defaultData();
-
-  /// 返回显式子树或 ThemeData IconTheme，过滤 Flutter 自动默认值。
-  IconThemeData? get tExplicitIconTheme {
-    final material = Theme.of(this);
-    final inherited = IconTheme.of(this);
-    final explicitRoot = material.tExplicitIconTheme;
-    if (explicitRoot != null) {
-      return inherited;
-    }
-    return inherited == material.iconTheme ||
-            inherited ==
-                const IconThemeData.fallback().merge(material.iconTheme) ||
-            inherited == const IconThemeData.fallback()
-        ? null
-        : inherited;
-  }
 }
 
 /// ThemeData 扩展：子树 merge Extension（禁用 copyWith(extensions:) 覆盖）
@@ -65,198 +49,9 @@ extension TThemeDataMergeExtension on ThemeData {
   }
 }
 
-/// 返回调用方显式定制的 [ColorScheme]。
+/// TDesign 样式解析器。
 ///
-/// Flutter 会在没有任何配置时也生成一套 Material 默认色板。组件不能把
-/// 这套隐式默认值当成 P3 配置，否则仅仅升级到 Material 3 就会改变
-/// TDesign 的默认视觉。[TThemeBuilder] 的 Token 投影同样视为默认来源。
-/// 未检测到显式色板时返回 null，由组件继续回退 Token。
-extension TExplicitColorSchemeExtension on ThemeData {
-  bool get tUsesTokenColorScheme {
-    final projection = extension<_TMaterialProjectionThemeData>();
-    return projection != null && colorScheme == projection.colorScheme;
-  }
-
-  ColorScheme? get tExplicitColorScheme {
-    if (tUsesTokenColorScheme) {
-      return null;
-    }
-    final materialDefault = ThemeData(
-      brightness: brightness,
-      useMaterial3: useMaterial3,
-    ).colorScheme;
-    final hasExplicitSemanticColor =
-        colorScheme.primary != materialDefault.primary ||
-        colorScheme.onPrimary != materialDefault.onPrimary ||
-        colorScheme.surface != materialDefault.surface ||
-        colorScheme.onSurface != materialDefault.onSurface ||
-        colorScheme.error != materialDefault.error ||
-        colorScheme.outline != materialDefault.outline;
-    return hasExplicitSemanticColor ? colorScheme : null;
-  }
-}
-
-/// 只暴露调用方显式配置的 Material 默认字段。
-///
-/// [ThemeData] 会根据 Material 版本和 ColorScheme 自动补全
-/// IconTheme、disabledColor 等值。TDesign 组件不能把这些自动值放在 Token
-/// 之前；只有与同配置下的 Flutter 默认主题不同，且不是 [TThemeBuilder]
-/// 的 Token 投影时，才视为显式 Material 配置。
-extension TExplicitMaterialThemeExtension on ThemeData {
-  ThemeData get _tImplicitMaterialDefaults => ThemeData(
-    brightness: brightness,
-    colorScheme: colorScheme,
-    useMaterial3: useMaterial3,
-  );
-
-  IconThemeData? get tExplicitIconTheme {
-    final projection = extension<_TMaterialProjectionThemeData>();
-    if (projection != null && iconTheme == projection.iconTheme) {
-      return null;
-    }
-    if (iconTheme == const IconThemeData() ||
-        iconTheme == const IconThemeData.fallback()) {
-      return null;
-    }
-    return iconTheme == _tImplicitMaterialDefaults.iconTheme ? null : iconTheme;
-  }
-
-  Color? get tExplicitDisabledColor {
-    final defaults = _tImplicitMaterialDefaults;
-    return disabledColor == defaults.disabledColor ? null : disabledColor;
-  }
-
-  Color? get tExplicitDividerColor {
-    final projection = extension<_TMaterialProjectionThemeData>();
-    if (projection != null && dividerTheme == projection.dividerTheme) {
-      return null;
-    }
-    final defaults = _tImplicitMaterialDefaults;
-    if (dividerTheme.color != null &&
-        dividerTheme.color != defaults.dividerTheme.color) {
-      return dividerTheme.color;
-    }
-    return dividerColor == defaults.dividerColor ? null : dividerColor;
-  }
-
-  VisualDensity? get tExplicitVisualDensity {
-    final defaults = _tImplicitMaterialDefaults;
-    return visualDensity == defaults.visualDensity ? null : visualDensity;
-  }
-
-  MaterialTapTargetSize? get tExplicitMaterialTapTargetSize {
-    final defaults = _tImplicitMaterialDefaults;
-    return materialTapTargetSize == defaults.materialTapTargetSize
-        ? null
-        : materialTapTargetSize;
-  }
-}
-
-/// 识别 [TMaterialThemeBuilder] 自动投影的 Material ButtonStyle。
-///
-/// 自动投影用于让原生 Material Button 继承 TDesign Token，但对 TButton
-/// 来说它仍属于 Token 默认值，不能反过来覆盖组件既有视觉。这里记录样式
-/// 来源而不是比较具体颜色，确保调用方 copyWith 后的显式定制仍可被识别。
-extension TMaterialProjectionExtension on ThemeData {
-  bool tIsTokenProjectedButtonStyle(ButtonStyle? style) {
-    final projection = extension<_TMaterialProjectionThemeData>();
-    return style != null &&
-        projection != null &&
-        (style == projection.elevatedButtonStyle ||
-            style == projection.outlinedButtonStyle ||
-            style == projection.textButtonStyle);
-  }
-
-  /// 返回调用方显式配置的 [BadgeThemeData]。
-  ///
-  /// [TThemeBuilder] 会为原生 Material [Badge] 投影一份 TDesign 默认主题，
-  /// 但该投影不能覆盖 `TBadge` 自己的尺寸 Token。这里按来源对象识别投影，
-  /// 避免用字体、内边距等数值相等关系猜测调用方是否显式配置。
-  BadgeThemeData? get tExplicitBadgeTheme {
-    final projection = extension<_TMaterialProjectionThemeData>();
-    return projection != null && identical(badgeTheme, projection.badgeTheme)
-        ? null
-        : badgeTheme;
-  }
-}
-
-class _TMaterialProjectionThemeData
-    extends ThemeExtension<_TMaterialProjectionThemeData> {
-  const _TMaterialProjectionThemeData({
-    required this.colorScheme,
-    required this.iconTheme,
-    required this.dividerTheme,
-    required this.badgeTheme,
-    required this.elevatedButtonStyle,
-    required this.outlinedButtonStyle,
-    required this.textButtonStyle,
-  });
-
-  final ColorScheme colorScheme;
-  final IconThemeData iconTheme;
-  final DividerThemeData dividerTheme;
-  final BadgeThemeData badgeTheme;
-  final ButtonStyle elevatedButtonStyle;
-  final ButtonStyle outlinedButtonStyle;
-  final ButtonStyle textButtonStyle;
-
-  @override
-  _TMaterialProjectionThemeData copyWith({
-    ColorScheme? colorScheme,
-    IconThemeData? iconTheme,
-    DividerThemeData? dividerTheme,
-    BadgeThemeData? badgeTheme,
-    ButtonStyle? elevatedButtonStyle,
-    ButtonStyle? outlinedButtonStyle,
-    ButtonStyle? textButtonStyle,
-  }) {
-    return _TMaterialProjectionThemeData(
-      colorScheme: colorScheme ?? this.colorScheme,
-      iconTheme: iconTheme ?? this.iconTheme,
-      dividerTheme: dividerTheme ?? this.dividerTheme,
-      badgeTheme: badgeTheme ?? this.badgeTheme,
-      elevatedButtonStyle: elevatedButtonStyle ?? this.elevatedButtonStyle,
-      outlinedButtonStyle: outlinedButtonStyle ?? this.outlinedButtonStyle,
-      textButtonStyle: textButtonStyle ?? this.textButtonStyle,
-    );
-  }
-
-  @override
-  _TMaterialProjectionThemeData lerp(
-    covariant _TMaterialProjectionThemeData? other,
-    double t,
-  ) {
-    if (other == null) {
-      return this;
-    }
-    return _TMaterialProjectionThemeData(
-      colorScheme: ColorScheme.lerp(colorScheme, other.colorScheme, t),
-      iconTheme: IconThemeData.lerp(iconTheme, other.iconTheme, t),
-      dividerTheme: DividerThemeData.lerp(dividerTheme, other.dividerTheme, t),
-      badgeTheme: BadgeThemeData.lerp(badgeTheme, other.badgeTheme, t),
-      elevatedButtonStyle: ButtonStyle.lerp(
-        elevatedButtonStyle,
-        other.elevatedButtonStyle,
-        t,
-      )!,
-      outlinedButtonStyle: ButtonStyle.lerp(
-        outlinedButtonStyle,
-        other.outlinedButtonStyle,
-        t,
-      )!,
-      textButtonStyle: ButtonStyle.lerp(
-        textButtonStyle,
-        other.textButtonStyle,
-        t,
-      )!,
-    );
-  }
-}
-
-/// P0–P4 统一样式解析器
-///
-/// 优先级（覆盖方向，强 → 弱）：
-/// **P0 实例 > P1 组件 Theme > P2 Material > P3 ColorScheme > P4 Token**
+/// 实例显式样式、组件 Theme 和全局 Token 是单向样式链。
 ///
 /// 用法：
 /// ```dart
@@ -272,11 +67,11 @@ class TStyleResolver {
   /// 创建解析器实例
   static TStyleResolver of(BuildContext context) => TStyleResolver._(context);
 
-  /// P4: 全局设计 Token（色板 / 间距原始值）
+  /// 全局设计 Token（色板 / 间距原始值）。
   TThemeData get token =>
       Theme.of(_context).extension<TThemeData>() ?? TThemeData.defaultData();
 
-  /// P1: 组件 ThemeExtension
+  /// 组件 ThemeExtension。
   E? componentExtension<E extends ThemeExtension<E>>() =>
       Theme.of(_context).extension<E>();
 }
@@ -380,20 +175,7 @@ class TMaterialThemeBuilder {
       ),
       useMaterial3: true,
     );
-    return base.copyWith(
-      extensions: [
-        ...base.extensions.values,
-        _TMaterialProjectionThemeData(
-          colorScheme: base.colorScheme,
-          iconTheme: base.iconTheme,
-          dividerTheme: base.dividerTheme,
-          badgeTheme: base.badgeTheme,
-          elevatedButtonStyle: base.elevatedButtonTheme.style!,
-          outlinedButtonStyle: base.outlinedButtonTheme.style!,
-          textButtonStyle: base.textButtonTheme.style!,
-        ),
-      ],
-    );
+    return base;
   }
 
   List<ThemeExtension<dynamic>> _themeExtensions(TThemeData token) {

@@ -336,8 +336,8 @@ void main() {
       final icon = tester.widget<Icon>(find.byIcon(Icons.edit));
       expect(text.style?.fontSize, 14);
       expect(text.style?.color, TThemeData.defaultData().textColorAnti);
-      expect(icon.size, 31);
-      expect(icon.color, Colors.green);
+      expect(icon.size, 20);
+      expect(icon.color, TThemeData.defaultData().textColorAnti);
     });
   });
 

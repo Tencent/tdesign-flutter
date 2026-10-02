@@ -387,9 +387,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       height: font?.height ?? 1.5,
       fontWeight: font?.fontWeight ?? FontWeight.w400,
     );
-    final materialStyle = ListTileTheme.of(context).titleTextStyle;
     return tokenStyle
-        .merge(materialStyle)
         .copyWith(fontWeight: FontWeight.w400)
         .merge(theme?.headerTextStyle);
   }
@@ -415,9 +413,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
   }
 
   Color _dividerColor(BuildContext context, TCollapseThemeData? theme) {
-    return theme?.dividerColor ??
-        DividerTheme.of(context).color ??
-        context.tTheme.componentStroke;
+    return theme?.dividerColor ?? context.tTheme.componentStroke;
   }
 
   void _debugAssertValidContract() {

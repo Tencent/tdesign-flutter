@@ -116,7 +116,7 @@ void main() {
       expect(tester.getCenter(indicator), tester.getCenter(gesture));
     });
 
-    testWidgets('纯指示器在紧凑 24×24 热区内居中', (tester) async {
+    testWidgets('纯指示器不随 Material 紧凑主题缩小热区', (tester) async {
       final compactTheme = TThemeBuilder.light(TThemeData.defaultData())
           .copyWith(
             checkboxTheme: const CheckboxThemeData(
@@ -138,7 +138,7 @@ void main() {
       );
       final indicator = find.byIcon(TIcons.circle);
 
-      expect(tester.getSize(gesture), const Size.square(24));
+      expect(tester.getSize(gesture), const Size.square(48));
       expect(tester.getCenter(indicator), tester.getCenter(gesture));
     });
 
@@ -250,7 +250,7 @@ void main() {
       expect(border.top.color, Colors.purple);
     });
 
-    testWidgets('禁用未选保留显式 Material Theme 的填充和描边覆盖', (tester) async {
+    testWidgets('禁用未选忽略 Material Theme 的填充和描边覆盖', (tester) async {
       final theme = TThemeBuilder.light(TThemeData.defaultData()).copyWith(
         checkboxTheme: CheckboxThemeData(
           fillColor: WidgetStateProperty.resolveWith(
@@ -279,12 +279,13 @@ void main() {
           .whereType<BoxDecoration>()
           .singleWhere(
             (decoration) =>
-                decoration.color == Colors.orange &&
+                decoration.color ==
+                    TThemeData.defaultData().bgColorComponentDisabled &&
                 decoration.shape == BoxShape.circle,
           );
       final border = decoration.border! as Border;
 
-      expect(border.top.color, Colors.green);
+      expect(border.top.color, TThemeData.defaultData().componentBorder);
     });
 
     testWidgets('多行文案与指示器顶部对齐且分割线从文案起点开始', (tester) async {

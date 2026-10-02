@@ -841,9 +841,7 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
       tapTargetSize: MaterialTapTargetSize.padded,
       padding: EdgeInsets.zero,
     );
-    final style = fallbackStyle
-        .merge(IconButtonTheme.of(context).style)
-        .merge(theme?.controlStyle);
+    final style = fallbackStyle.merge(theme?.controlStyle);
     return SizedBox(
       width: widget.scrollDirection == Axis.horizontal ? double.infinity : null,
       height: widget.scrollDirection == Axis.vertical ? double.infinity : null,

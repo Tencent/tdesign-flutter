@@ -345,7 +345,7 @@ void main() {
       expect(find.text('主题 panel'), findsOneWidget);
     });
 
-    testWidgets('Token ignores DefaultTextStyle; IconTheme controls icon', (
+    testWidgets('Token ignores external DefaultTextStyle and IconTheme', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -372,7 +372,7 @@ void main() {
           matching: find.byType(Icon),
         ),
       );
-      expect(icon.color, Colors.teal);
+      expect(icon.color, isNot(Colors.teal));
     });
 
     testWidgets('empty menu is safe', (tester) async {

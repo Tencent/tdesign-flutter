@@ -1030,7 +1030,7 @@ void main() {
       expect((value.decoration! as BoxDecoration).color, token.brandColor);
     });
 
-    testWidgets('Material ProgressIndicatorTheme 显式颜色优先于 status', (
+    testWidgets('Material ProgressIndicatorTheme 不覆盖 TDesign status', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -1051,7 +1051,10 @@ void main() {
       final value = tester.widget<Container>(
         find.byKey(const ValueKey('progress-value')),
       );
-      expect((value.decoration! as BoxDecoration).color, Colors.teal);
+      expect(
+        (value.decoration! as BoxDecoration).color,
+        TThemeData.defaultData().errorColor,
+      );
     });
 
     testWidgets('实例 gradient 优先并完整传递到线性填充', (tester) async {

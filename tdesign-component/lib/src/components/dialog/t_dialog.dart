@@ -196,7 +196,6 @@ class TDialog extends StatelessWidget {
       from: context,
       to: navigator.context,
     );
-    final materialBarrierColor = Theme.of(context).dialogTheme.barrierColor;
     return navigator.push<T>(
       _DialogRoute<T>(
         barrierDismissible: barrierDismissible,
@@ -204,7 +203,7 @@ class TDialog extends StatelessWidget {
         barrierLabel: MaterialLocalizations.of(
           context,
         ).modalBarrierDismissLabel,
-        barrierColor: barrierColor ?? materialBarrierColor ?? Colors.black54,
+        barrierColor: barrierColor ?? Colors.black54,
         transitionDuration: const Duration(milliseconds: 240),
         pageBuilder: (routeContext, animation, secondaryAnimation) {
           final centered = Center(child: dialog);
@@ -227,19 +226,15 @@ class TDialog extends StatelessWidget {
     assert(title != null || content != null);
     final theme = Theme.of(context);
     final extension = theme.extension<TDialogThemeData>();
-    final material = theme.dialogTheme;
     final token = context.tTheme;
     final effectiveBackground =
-        extension?.backgroundColor ??
-        material.backgroundColor ??
-        token.bgColorContainer;
+        extension?.backgroundColor ?? token.bgColorContainer;
     final effectiveShape =
         extension?.shape ??
-        material.shape ??
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(token.radiusExtraLarge),
         );
-    final effectiveElevation = extension?.elevation ?? material.elevation ?? 0;
+    final effectiveElevation = extension?.elevation ?? 0;
     final effectiveWidth = extension?.width ?? 311;
     final viewportHeight = MediaQuery.sizeOf(context).height;
     final effectiveMaxHeight = math.max(
@@ -261,7 +256,6 @@ class TDialog extends StatelessWidget {
         EdgeInsets.fromLTRB(token.spacer3, token.spacer3, token.spacer3, 0);
     final resolvedTitleStyle =
         extension?.titleTextStyle ??
-        material.titleTextStyle ??
         TextStyle(
           color: token.textColorPrimary,
           fontSize: token.fontTitleLarge?.size ?? 18,
@@ -270,7 +264,6 @@ class TDialog extends StatelessWidget {
         );
     final resolvedContentStyle =
         extension?.contentTextStyle ??
-        material.contentTextStyle ??
         TextStyle(
           color: token.textColorSecondary,
           fontSize: token.fontBodyLarge?.size ?? 16,

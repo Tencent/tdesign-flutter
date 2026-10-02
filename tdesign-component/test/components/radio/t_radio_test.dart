@@ -464,7 +464,7 @@ void main() {
       expect(tester.getCenter(indicator), tester.getCenter(gesture));
     });
 
-    testWidgets('纯指示器在紧凑 24×24 热区内居中', (tester) async {
+    testWidgets('纯指示器不随 Material 紧凑主题缩小热区', (tester) async {
       final compactTheme = TThemeBuilder.light(TThemeData.defaultData())
           .copyWith(
             radioTheme: const RadioThemeData(
@@ -500,7 +500,7 @@ void main() {
         ),
       );
 
-      expect(tester.getSize(gesture), const Size.square(24));
+      expect(tester.getSize(gesture), const Size.square(48));
       expect(tester.getCenter(indicator), tester.getCenter(gesture));
     });
 

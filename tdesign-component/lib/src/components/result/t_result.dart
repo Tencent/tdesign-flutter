@@ -53,7 +53,6 @@ class TResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = _theme(context);
-    final material = Theme.of(context).tExplicitColorScheme;
     final titleStyle = theme?.titleStyle;
     final displayIcon = icon ?? _getDefaultIcon(context, status);
     final children = <Widget>[
@@ -62,7 +61,7 @@ class TResult extends StatelessWidget {
         TTextStyled(
           title,
           key: const ValueKey('result-title'),
-          textColor: material?.onSurface ?? context.tTheme.textColorPrimary,
+          textColor: context.tTheme.textColorPrimary,
           font: context.tTheme.fontTitleMedium,
           style: titleStyle,
           textAlign: TextAlign.center,
@@ -71,8 +70,7 @@ class TResult extends StatelessWidget {
         TTextStyled(
           description!,
           key: const ValueKey('result-description'),
-          textColor:
-              material?.onSurfaceVariant ?? context.tTheme.textColorSecondary,
+          textColor: context.tTheme.textColorSecondary,
           font: context.tTheme.fontBodyMedium,
           style: theme?.descriptionStyle,
           textAlign: TextAlign.center,
@@ -108,7 +106,6 @@ class TResult extends StatelessWidget {
 
   /// 根据形态返回对应的默认图标组件
   Widget _getDefaultIcon(BuildContext context, TResultStatus status) {
-    final material = Theme.of(context).tExplicitColorScheme;
     final iconSize = _theme(context)?.iconSize ?? 80;
     switch (status) {
       case TResultStatus.success:
@@ -126,13 +123,13 @@ class TResult extends StatelessWidget {
       case TResultStatus.error:
         return Icon(
           TIcons.close_circle,
-          color: material?.error ?? context.tTheme.errorColor,
+          color: context.tTheme.errorColor,
           size: iconSize,
         );
       case TResultStatus.info:
         return Icon(
           TIcons.info_circle,
-          color: material?.primary ?? context.tTheme.brandColor,
+          color: context.tTheme.brandColor,
           size: iconSize,
         );
     }

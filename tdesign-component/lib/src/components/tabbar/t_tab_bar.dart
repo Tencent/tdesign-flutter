@@ -194,10 +194,10 @@ class TTabBarItemConfig {
   /// 展示在标签内容右上角的徽标；为空时不显示。
   ///
   /// 徽标内容和样式由 [TBadgeConfig] 描述，[TBadgeConfig.offset] 可用于逐项
-  /// 调整默认位置。纯文本项未设置实例或 BadgeTheme offset 时使用 TabBar 的
+  /// 调整默认位置。纯文本项未设置实例 offset 时使用 TabBar 的
   /// 文本徽标默认位置；纯图标项与上下排列的图文项以图标作为锚点，
   /// 左右排列的图文项以整组图文作为锚点，均使用徽标的默认右上角位置。
-  /// 显式 offset 与 BadgeTheme offset 均优先于组件默认值。
+  /// 显式 offset 优先于组件默认值，不读取 Material BadgeTheme。
   ///
   /// TabBar 自己拥有徽标锚点与点击区域；点击行为通过 [onTap] 配置。调用方
   /// 已经拥有目标 Widget 时，应直接使用 [TBadge] 包装该 Widget。

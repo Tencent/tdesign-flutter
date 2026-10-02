@@ -56,7 +56,7 @@ void main() {
     expect(TThemeData.defaultData().bgColorComponent, const Color(0xFFE8E8E8));
   });
 
-  testWidgets('TThemeBuilder 自动投影不污染默认样式，显式 copyWith 仍生效', (tester) async {
+  testWidgets('TThemeBuilder 自动投影与 Material 按钮主题不反向改变默认样式', (tester) async {
     Future<Color?> resolve(ThemeData theme) async {
       await tester.pumpWidget(
         MaterialApp(
@@ -79,27 +79,24 @@ void main() {
         style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.red)),
       ),
     );
-    expect(await resolve(customizedTheme), Colors.red);
+    expect(await resolve(customizedTheme), token.bgColorComponent);
   });
 
-  testWidgets('P3 ColorScheme 覆盖 Token 及交互状态', (tester) async {
+  testWidgets('Material ColorScheme 不覆盖 Token 及交互状态', (tester) async {
     await tester.pumpWidget(themedButton());
 
-    expect(background(tester), colorScheme.surfaceContainerHighest);
+    expect(background(tester), TThemeData.defaultData().bgColorComponent);
     expect(
       background(tester, {WidgetState.pressed}),
-      Color.alphaBlend(
-        colorScheme.onSurface.withValues(alpha: 0.12),
-        colorScheme.surfaceContainerHighest,
-      ),
+      isNot(colorScheme.surfaceContainerHighest),
     );
     expect(
       background(tester, {WidgetState.disabled}),
-      colorScheme.onSurface.withValues(alpha: 0.12),
+      isNot(colorScheme.onSurface.withValues(alpha: 0.12)),
     );
   });
 
-  testWidgets('P2 Material Theme 覆盖 ColorScheme', (tester) async {
+  testWidgets('Material ButtonTheme 不覆盖 TDesign Token', (tester) async {
     await tester.pumpWidget(
       themedButton(
         materialStyle: const ButtonStyle(
@@ -108,7 +105,7 @@ void main() {
       ),
     );
 
-    expect(background(tester), Colors.red);
+    expect(background(tester), TThemeData.defaultData().bgColorComponent);
   });
 
   testWidgets('视觉样式由实例 style 覆盖 Material Theme', (tester) async {

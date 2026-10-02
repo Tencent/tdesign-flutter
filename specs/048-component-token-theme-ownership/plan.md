@@ -11,6 +11,9 @@
 7. 修正 Avatar Theme 动画：当插值一端未配置尺寸、图标尺寸、组描边宽度或圆角时，保留内部插值两端与进度，由 `TAvatar`/`TAvatarGroup` 在获知成员 `size` 与当前全局 Token 后求实际数值；公开 nullable 字段不伪装成一个中号或固定 Token 值。两端均显式配置时沿用普通数值插值；默认圆形仍沿用正圆绘制，自定义半径小于边长一半时，内容、描边和阴影共用同一圆角矩形几何。
 8. 组件 Theme 动画使用运行时有效默认值：Avatar 组间距在最终尺寸下解析并约束；Tag 的通用颜色和 padding 在配色、规格已知后插值，固定宽度的自适应态与数值态离散切换；Progress 的尺寸、粗细、轨道/前景色和圆角在 variant 与状态已知后插值，不确定态比例与时长使用内置默认值；Button 图文间距从 4dp 插值。Progress 对外尺寸字段从误称半径的 `circleRadius` 改为 `circleSize`，不添加兼容别名。
 9. 移除 Material `TextTheme` 与 `DefaultTextStyle` 的自动补全/显式来源推断及其组件消费分支。TDesign 文字默认值只从全局 Token/Theme 取得，组件 Theme 提供子树覆盖，已有实例样式负责单项覆盖；Material `ThemeData.textTheme` 仅供原生 Material 控件使用，不再构成 TDesign 文字样式入口。
+10. 为 Tag 前置图标复用正文的有效前景色，保持关闭图标独立；用最小 Widget 用例锁定组件 Theme、全局 Token 和禁用态的优先级。此前为显式 Material 色板加入的字段级推断属于反向桥接，随全仓单向主题链一起删除，不发布新的 `TExplicitColorSchemeColors` 类型。
+11. 按组件逐项移除 Material → TDesign 的视觉输入：ColorScheme、Material 组件 Theme、IconTheme/TextTheme、禁用色与分隔线、AppBar/Dialog/InputDecoration 等。保留 `Theme.of(context).extension<T...>()` 读取、全局 TDesign Token 到原生 Material 控件的投影、平台交互/无障碍机制及组件内部向原生子控件传递已解析样式。每个被移除的子树覆盖入口要核对是否已有组件 Theme 或实例完整样式，缺少真实定制入口时按单入口所有权判断，而非机械增补。
+12. 以静态扫描核对所有组件不存在 Material 外观反向读取，并以显式 Material Theme 注入测试证明其不改变 TDesign 默认样式；验证 TDesign Theme 和实例样式仍生效、原生 Material 控件仍接收投影。重跑双版本组件测试、分析及 Linux 3.32.0 无更新 Golden，逐项归因差异。
 
 ## 影响范围
 

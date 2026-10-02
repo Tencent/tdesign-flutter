@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_theme.dart';
+import '../icon/t_icon.dart';
 import 't_tab_bar_theme_data.dart';
 
 /// Tab 组件
@@ -67,7 +68,11 @@ class TTab extends Tab {
         style: disabledStyle,
         child: IconTheme.merge(
           data: IconThemeData(color: disabledStyle.color),
-          child: content,
+          child: TIconStyleScope(
+            color: disabledStyle.color,
+            size: TIconStyleScope.maybeOf(context)?.size,
+            child: content,
+          ),
         ),
       );
     }
