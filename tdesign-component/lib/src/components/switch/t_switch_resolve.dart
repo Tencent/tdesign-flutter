@@ -47,7 +47,8 @@ class TSwitchResolve {
     final token = context.tTheme;
     return TSwitchResolvedStyle(
       trackOnColor: theme?.trackOnColor ?? token.brandColor,
-      trackOffColor: theme?.trackOffColor ?? token.textColorDisabled,
+      trackOffColor:
+          theme?.trackOffColor ?? token.bgColorSecondaryContainerActive,
       thumbContentOnColor: theme?.thumbContentOnColor ?? token.brandColor,
       thumbContentOffColor:
           theme?.thumbContentOffColor ?? token.textColorDisabled,

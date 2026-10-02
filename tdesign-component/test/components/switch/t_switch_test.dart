@@ -303,6 +303,10 @@ void main() {
       final defaults = TSwitchResolve.resolve(context: context);
       final token = TThemeData.defaultData();
       expect(defaults.trackOnColor, context.tTheme.brandColor);
+      expect(
+        defaults.trackOffColor,
+        context.tTheme.bgColorSecondaryContainerActive,
+      );
       expect(defaults.thumbContentOnFont.fontSize, token.fontBodyMedium?.size);
 
       final themed = TSwitchResolve.resolve(
@@ -322,6 +326,23 @@ void main() {
       expect(themed.thumbContentOffColor, Colors.orange);
       expect(themed.thumbContentOnFont.fontSize, 18);
       expect(themed.thumbContentOffFont.fontSize, 10);
+    });
+
+    testWidgets('unselected track paints with the component Token fallback', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(const TSwitch(value: false, onChanged: _noop)),
+      );
+
+      final track = tester.widget<TCupertinoSwitch>(
+        find.byType(TCupertinoSwitch),
+      );
+      expect(
+        track.trackColor,
+        TThemeData.defaultData().bgColorSecondaryContainerActive,
+      );
+      expect(track.trackColor, const Color(0xffdcdcdc));
     });
 
     test('ThemeData copyWith and lerp cover all fields', () {

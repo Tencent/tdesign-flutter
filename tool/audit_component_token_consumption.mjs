@@ -147,6 +147,9 @@ const tagWidgetEvidence = new Map([
   ['tagDefaultColor', ['tdesign-component/test/components/tag/t_tag_test.dart:508']],
   ['tagCloseIconColor', ['tdesign-component/test/components/tag/t_tag_test.dart:630']],
 ]);
+const switchWidgetEvidence = new Map([
+  ['switchUncheckedColor', ['tdesign-component/test/components/switch/t_switch_test.dart:331']],
+]);
 
 const rows = audit.componentVariables.map((variable) => {
   const directory = ownerDirectory(variable);
@@ -187,6 +190,8 @@ const rows = audit.componentVariables.map((variable) => {
         ? 'default-widget-value-verified'
         : tagWidgetEvidence.has(variable.name)
           ? 'fallback-widget-verified-visual-pending'
+          : switchWidgetEvidence.has(variable.name)
+            ? 'fallback-widget-verified-visual-pending'
           : 'pending';
   const reviewEvidence = buttonWidgetValues.has(variable.name)
     ? ['tdesign-component/test/components/button/t_button_test.dart:432']
@@ -194,6 +199,8 @@ const rows = audit.componentVariables.map((variable) => {
       ? ['tdesign-component/test/components/tag/t_tag_test.dart:431']
     : tagWidgetEvidence.has(variable.name)
       ? tagWidgetEvidence.get(variable.name)
+      : switchWidgetEvidence.has(variable.name)
+        ? switchWidgetEvidence.get(variable.name)
       : [];
   let staticStatus;
   if (directory == null) {

@@ -186,3 +186,10 @@
 - Flutter 3.32.0 与 3.47.0 的组件包及 Example 严格 analyze 均零诊断；3.47.0 的单向主题、Icon、Button、Table 聚焦测试全部通过。3.32.0 全量非 Golden 组件测试 2676/2676 通过。隔离 Linux amd64 环境使用工作树锁定的图标包 0.0.6，7 份受影响组件 Golden 共 26 项严格无更新通过。公开 Demo 的 Avatar 旧 54px 角标差异由无效的 Material `BadgeTheme.smallSize` 示例配置造成，改为组件 `TBadgeThemeData.dotSize` 后严格快照通过。Badge light/dark 两张差异各约 0.41%（2349/2350px），集中于 large ribbon/triangle 角标：旧实现从 Material BadgeTheme 投影强制取 16dp，现按 `fontMarkSmall` 的 20dp 行盒解析。Icon Demo 改为展示 Token 默认值，Theme 页禁用按钮改由 TDesign Token 控制；这三类共八张实际变化的 Linux Golden 已按候选更新。最终仓库基线在隔离 Linux 3.32.0 上执行完整 `dart run tool/run_visual_regression.dart`，**不带更新参数**，全部视觉套件通过。
 - 本节记录提交前的本地验证；提交后的远端 CI 和真实第三方调用方迁移编译须另行验收。本地视觉矩阵通过不等于逐张 Figma 像素验收。
 - PR head `489f01f9` 的远端双版本 analyze、Linux Golden 与全部构建通过，但双版本组件回归均仅因 Icon 生产源码覆盖率 `14/17 = 82.35%` 低于 95% 失败；21 项 Icon 功能断言本身全部通过。补充库内 `TIconStyleScope` 的样式传递、实例优先级和变更通知测试后，Flutter 3.32.0/3.47.0 各 23/23 通过，Icon 生产源码覆盖率各 `17/17 = 100%`，两版组件包严格分析零诊断。该作用域只供组合组件传递已解析样式，已从 `tdesign_flutter.dart` 总导出中排除；修复后的远端 CI 仍须以新 head 复验。
+
+### 2026-10-03 Switch 组件 Token 消费补核
+
+- PR head `36a4e386` 的远端 Flutter 3.32.0/latest 分析、测试、Linux Golden、APK/iOS/Web、Autofix、站点和扫描均通过；但 CLA 因 `autofix-ci[bot]` 未签署而 Pending，PR 仍为 Draft 且缺一位必需 Review。远端通过不等于 804 项组件变量最终消费或真实第三方 breaking 迁移验收。
+- 本轮逐项复核发现 `switchUncheckedColor`：小程序回退 `@bg-color-secondarycontainer-active`（浅 `#dcdcdc`、暗 `#383838`），Flutter 却取 `textColorDisabled`。组件现改取 `bgColorSecondaryContainerActive`，保留 `TSwitchThemeData.trackOffColor` 的显式覆盖。Flutter 3.32.0 与 3.47.0 聚焦 Switch 测试各 16/16 通过，新增断言验证最终传入 `TCupertinoSwitch.trackColor` 的浅色为 `#dcdcdc`。
+- 隔离 Linux amd64 / Flutter 3.32.0 无更新完整视觉回归仅在 Switch Demo、Cell Demo、Theme Component 三个套件失败。逐张检查差异集中于未选中轨道的颜色区域，无尺寸或布局位移；仅更新由此变化的 Switch 4 张、Cell 2 张、Theme 1 张 Golden。三套件随后无更新复跑通过；完整矩阵的其他套件在更新前均通过，最终完整矩阵与新 head 远端 CI 仍需验收。
+- 审计脚本在当前源码上重新生成 804 项映射；Switch 此项从 `pending` 移为“回退链与 Widget 已验证，跨端视觉待裁定”，其余 `pending` 为 681 项。静态 getter 分类随此前源码行和 getter 更新为 411 / 286，不把这类自动分类变化计作逐项验收。

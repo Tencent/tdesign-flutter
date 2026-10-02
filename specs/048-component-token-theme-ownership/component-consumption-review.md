@@ -4,10 +4,10 @@
 
 | 分类 | 数量 | 判定与下一步 |
 | --- | ---: | --- |
-| 同目录全局 getter 候选 | 406 | 验证状态、Theme 覆盖、默认值最终传到 Widget 或 Painter；仅有字段引用不足以通过。 |
+| 同目录全局 getter 候选 | 411 | 验证状态、Theme 覆盖、默认值最终传到 Widget 或 Painter；仅有字段引用不足以通过。 |
 | Theme 字段候选，且有全局 getter | 10 | 验证局部 Theme 的值优先于全局回退，且实例不存在同义样式入口。 |
 | 仅 Theme 字段候选 | 15 | 验证 Theme 为空时小程序默认值和暗色值。 |
-| 同目录无直接字段证据 | 291 | 区分组件能力缺失、等价硬编码、Flutter 原生样式、跨目录封装与小程序未使用变量。 |
+| 同目录无直接字段证据 | 286 | 区分组件能力缺失、等价硬编码、Flutter 原生样式、跨目录封装与小程序未使用变量。 |
 | 无对应 Flutter 组件目录 | 82 | 不机械增加组件 Theme 字段；先确认组件能力是否计划支持。 |
 
 未对应的 82 项来自小程序 `color-picker` 21、`count-down` 5、`grid`/`grid-item` 18、`guide` 29、`overlay` 2、`segmented` 7。BackTop、TabBar、SideBar 等命名不同但确有 Flutter 组件的项目，已通过显式目录别名映射，不计入这 82 项。除其中 1 项在冻结源码中未找到消费，其他 81 项属于 Flutter 当前未实现的组件表面，不应给已有组件硬塞同名 Theme 字段；未来若实现对应组件须重新纳入。
@@ -18,18 +18,19 @@
 | --- | ---: | --- |
 | Button 四档高度、水平内边距、图标尺寸 | 12 | 小程序明暗默认值均等于 Flutter 尺寸表；[组件测试](../../tdesign-component/test/components/button/t_button_test.dart)检查最终按钮高度、padding 和 IconTheme 尺寸。对齐的是 375 宽下默认值，不代表已开放逐项组件 Theme 覆盖。 |
 | Tag 四档字体、图标尺寸、内边距 | 12 | 小程序始终有 1dp 边框；Flutter 无描边态将该边框宽度补入 padding，四档最终边框盒高度、字体、图标及内边距由 [Tag 组件测试](../../tdesign-component/test/components/tag/t_tag_test.dart)验证。没有把原始 CSS padding 误当成 Flutter 的内部 padding。 |
-| Tag 浅色三色、outline 背景/默认描边、square 圆角、关闭图标色 | 7 | 小程序引用链已在组件修正，并由实际 Widget 测试检查；Tag 的四张旧 Linux Golden 仍有像素差，故只记“回退链与 Widget 已验证、视觉待裁定”。 |
+| Tag 浅色三色、outline 背景/默认描边、square 圆角、关闭图标色 | 7 | 小程序引用链已在组件修正，并由实际 Widget 测试检查；阶段性记录为“回退链与 Widget 已验证、跨端视觉待裁定”。 |
+| Switch 未选中轨道色 | 1 | 回退从误用的 `textColorDisabled` 修正为 `bgColorSecondaryContainerActive`，Widget 断言与 Linux 7 张关联 Golden 已核；其余 Switch 状态和变量仍待审。 |
 | 冻结小程序源码无静态消费者 | 10 | 不为了这些声明而给 Flutter 增加 Theme 字段；未来小程序开始消费或发现动态路径时重审。 |
 
 | 优先组件 | 变量总数 | 无直接证据 | 需要重点裁定的差异 |
 | --- | ---: | ---: | --- |
 | Button | 98 | 29 | 四档高度、水平内边距、图标尺寸共 12 项已确认默认 Widget 值；outline 四套配色和默认/按压/禁用状态已补测试。`dashed`/`ghost` 变体及其他字段仍须按实例检查，不能把 2dp Less 边框机械写成 Flutter 2dp。 |
-| Switch | 32 | 30 | 不能从低静态命中率断言视觉错误；应逐项追踪状态/尺寸/滑块的绘制值。 |
+| Switch | 32 | 29 | 未选中轨道回退已修复；其余禁用状态、尺寸与滑块仍须逐项追踪绘制值。 |
 | Tag | 31 | 11 | 12 项尺寸默认值和 7 项回退链/Widget 路径已核对；其余状态组合与 Golden 仍须检查，不能用 Demo 覆盖补齐。 |
 | Avatar | 18 | 15 | `radiusCircle` 的 Flutter 固定半径例外必须保留并按非正方形实例核对。 |
 | Popover | 13 | 11 | 箭头、偏移和内容内边距需分别核对 Theme 入口与最终布局。 |
 
-验收规则：每个被 Flutter 支持且在小程序实际使用的变量，记录小程序浅/暗最终值、Flutter Theme/Token/常量的有效来源，以及一个实际 Widget/Painter 状态断言；设计稿可访问时再加对应实例的像素比对。`reviewDecision` 记录阶段性裁定；当前未完成跨端最终像素验证，所以 `finalPaintVerified` 仍保持 `false`，不能把 24+7 项阶段性结果误称为完全视觉对齐。
+验收规则：每个被 Flutter 支持且在小程序实际使用的变量，记录小程序浅/暗最终值、Flutter Theme/Token/常量的有效来源，以及一个实际 Widget/Painter 状态断言；设计稿可访问时再加对应实例的像素比对。`reviewDecision` 记录阶段性裁定；当前未完成跨端最终像素验证，所以 `finalPaintVerified` 仍保持 `false`，不能把 24+7+1 项阶段性结果误称为完全视觉对齐。
 
 ## 2026-09-29：Progress 逐变量消费链复核
 
@@ -50,6 +51,10 @@
 Tag 字体宽度：固定 Linux Golden 字体、medium `TTag('Tag')`、文字缩放 1 时，实际 `RenderParagraph` 宽 **20.5078125dp**、左右预算各 8dp、组件总宽 **36.5078125dp**，已新增真实字体加载后的 Demo 测试。Figma 实例 38px 减去两侧 8px，反推文字约 22px，但这仍是**间接推算**，不是设计字体的直接字形测量。组件已读取全局字体族并保留 Demo/宿主提供的中文字体回退；四张 Tag Linux Golden 无更新通过。不能用固定宽度或加大 padding 伪造 38px，也不能在未得到同字体测量时宣布与 Figma 逐像素一致。
 
 暗色 CSS 变量的透明判断依据：[W3C CSS Custom Properties §3](https://www.w3.org/TR/css-variables-1/#using-variables)：已定义组件变量中再引用缺失变量，不会重新选用外层 `var()` 的 Less 回退，而会使 `background-color` 在计算值阶段成为初始值 `transparent`。若应用宿主另行定义 `--bg-color-page`，该判断需按宿主实际值重算。
+
+## 2026-10-03：Switch 未选中轨道 Token 复核
+
+小程序 `--td-switch-unchecked-color` 的默认回退为 `@bg-color-secondarycontainer-active`（浅色 `#dcdcdc`、暗色 `#383838`）。Flutter 此前误用文字禁用色 `textColorDisabled`（浅色 `#42000000`、暗色 `#38ffffff`），属于组件消费 Token 错误，不是平台渲染差异。`TSwitchResolve.trackOffColor` 改用 `bgColorSecondaryContainerActive`；组件 Theme 的显式 `trackOffColor` 仍覆盖该默认值。此项须以 Widget 值和最终 Linux Golden 核验；Switch 其余组件变量不因此自动通过。
 
 ## 2026-09-30：Avatar / AvatarGroup 消费链初核
 
