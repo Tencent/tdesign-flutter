@@ -169,3 +169,4 @@
 - Flutter 3.32.0 完整组件回归通过，Text 生产源码覆盖率 132/134 = 98.51%；Flutter 3.47.0 隔离副本的组件回归功能断言全部通过，补充测试后的 Text 聚焦覆盖率 131/134 = 97.76%。两版本完整组件包严格 analyze 均零诊断；3.32.0 受影响的 Example 功能测试 11/11 通过。
 - 固定 Linux amd64 / Flutter 3.32.0 使用隔离副本重现旧 Golden 失败。逐张比较仓库原图与候选图，共有 450 张同尺寸像素差异、102 张尺寸差异；其中 4 张差异在首轮失败清单外，故首轮清单只记录 446 张同尺寸差异。抽查 Indexes、Dialog、Cell、Popup、Steps、Avatar、BackTop、Calendar、Cascader、Tag、Theme、TabBar 等原图与新图，高差异主要是文字字形、行盒及列表逐行累积位移；未通过 Demo 覆盖组件样式。102 张尺寸差异中，100 张仅页面高度变化（最大缩小 30px），BackTop 状态矩阵浅/暗两张宽度各缩小 1px。
 - 在隔离副本中生成候选基线后，完整视觉矩阵以**无更新参数**严格复跑并全部通过，随后只同步 552 张内容变化的 Golden PNG 至仓库。606 张 Golden 中其余 54 张未改动；这验证固定 Linux 基线可复现，不等同于 606 张逐项 Figma 像素验收或最终远端 CI 通过。
+- 推送后远端 Flutter latest Example 功能测试 274 通过、1 失败：`example/test/widget_test.dart` 的紧凑模块标题测试仍期待 Material `TextTheme.titleLarge` 将 TDesign 的 20dp/28dp Token 改写成 22dp/1.5。实际组件壳已显式读取 `fontTitleLarge`，故修正旧断言为两种 Material 配置均保持 20dp/1.4、w500；Flutter 3.32.0 和 3.47.0 聚焦 Example 测试各 8/8 通过。此修正不改渲染源码或 Golden，仍需新 head 远端 CI 复验。

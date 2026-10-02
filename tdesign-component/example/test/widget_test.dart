@@ -53,7 +53,7 @@ void main() {
   });
 
   testWidgets(
-    'compact module titles follow TD tokens and explicit text theme',
+    'compact module titles follow TD tokens despite Material text theme',
     (tester) async {
       final token = TThemeData.defaultData().copyWithTThemeData(
         'compact-title',
@@ -101,9 +101,9 @@ void main() {
         );
         await tester.pumpAndSettle();
         final style = tester.widget<Text>(find.text('01 Module')).style!;
-        expect(style.fontSize, explicit ? 22 : 20);
-        expect(style.height, explicit ? 1.5 : 1.4);
-        expect(style.fontWeight, explicit ? FontWeight.w400 : FontWeight.w500);
+        expect(style.fontSize, 20);
+        expect(style.height, 1.4);
+        expect(style.fontWeight, FontWeight.w500);
       }
     },
   );
