@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/components/icon/t_icon.dart'
+    show TIconStyleScope;
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// TIcon Widget 测试
@@ -303,5 +305,62 @@ void main() {
     expect(find.byIcon(TIcons.home), findsOneWidget);
     expect(find.byIcon(TIcons.search), findsOneWidget);
     expect(find.byIcon(TIcons.user), findsOneWidget);
+  });
+
+  testWidgets('T09 - 库内作用域传递已解析样式且实例参数仍优先', (tester) async {
+    Widget scopedIcons(Color color, double size) => wrapWithTheme(
+      TIconStyleScope(
+        color: color,
+        size: size,
+        child: const Row(
+          children: [
+            TIcon(TIcons.home),
+            TIcon(TIcons.search, size: 30, color: Colors.green),
+          ],
+        ),
+      ),
+    );
+
+    await tester.pumpWidget(scopedIcons(Colors.blue, 18));
+    expect(tester.widget<Icon>(find.byIcon(TIcons.home)).color, Colors.blue);
+    expect(tester.widget<Icon>(find.byIcon(TIcons.home)).size, 18);
+    expect(tester.widget<Icon>(find.byIcon(TIcons.search)).color, Colors.green);
+    expect(tester.widget<Icon>(find.byIcon(TIcons.search)).size, 30);
+
+    await tester.pumpWidget(scopedIcons(Colors.red, 22));
+    expect(tester.widget<Icon>(find.byIcon(TIcons.home)).color, Colors.red);
+    expect(tester.widget<Icon>(find.byIcon(TIcons.home)).size, 22);
+  });
+
+  test('T10 - 库内作用域只在颜色或尺寸改变时通知', () {
+    const original = TIconStyleScope(
+      color: Colors.blue,
+      size: 18,
+      child: SizedBox(),
+    );
+    expect(
+      const TIconStyleScope(
+        color: Colors.blue,
+        size: 18,
+        child: SizedBox(),
+      ).updateShouldNotify(original),
+      isFalse,
+    );
+    expect(
+      const TIconStyleScope(
+        color: Colors.red,
+        size: 18,
+        child: SizedBox(),
+      ).updateShouldNotify(original),
+      isTrue,
+    );
+    expect(
+      const TIconStyleScope(
+        color: Colors.blue,
+        size: 22,
+        child: SizedBox(),
+      ).updateShouldNotify(original),
+      isTrue,
+    );
   });
 }

@@ -66,7 +66,7 @@ export 'src/components/form/t_form_theme_data.dart'
         TFormLayout,
         TFormRequiredMarkPosition,
         TFormThemeData;
-export 'src/components/icon/t_icon.dart';
+export 'src/components/icon/t_icon.dart' show TIcon;
 export 'src/components/image/t_image.dart';
 export 'src/components/image/t_image_theme_data.dart' show TImageThemeData;
 export 'src/components/image_viewer/t_image_viewer.dart';
