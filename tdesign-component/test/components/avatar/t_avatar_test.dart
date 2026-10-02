@@ -716,6 +716,16 @@ void main() {
       );
 
       final middle = empty.lerp(explicit, 0.5);
+      expect(
+        ThemeData(extensions: [middle]).extension<TAvatarThemeData>(),
+        same(middle),
+      );
+      final animatedTheme = ThemeData.lerp(
+        ThemeData(extensions: const [empty]),
+        ThemeData(extensions: const [explicit]),
+        0.5,
+      ).extension<TAvatarThemeData>();
+      expect(animatedTheme?.resolveDimension(TAvatarSize.small), 60);
       expect(middle.dimension, isNull);
       expect(middle.iconSize, isNull);
       expect(middle.circleBorderRadius, isNull);

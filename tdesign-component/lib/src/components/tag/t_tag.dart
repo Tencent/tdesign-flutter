@@ -96,9 +96,7 @@ class TTag extends StatelessWidget {
       isLight,
       isOutline,
       !enabled,
-      theme?.dangerColor,
-      theme?.successColor,
-      theme?.successLightColor,
+      theme,
     );
     final borderRadius = _resolveBorderRadius(context, shape, theme);
 
@@ -204,9 +202,7 @@ class TTag extends StatelessWidget {
     bool isLight,
     bool isOutline,
     bool disable,
-    Color? dangerColor,
-    Color? successColor,
-    Color? successLightColor,
+    TTagThemeData? theme,
   ) {
     final token = context.tTheme;
     final material = Theme.of(context).tExplicitColorScheme;
@@ -259,7 +255,9 @@ class TTag extends StatelessWidget {
         }
         break;
       case TTagColorPreset.danger:
-        final baseColor = dangerColor ?? material?.error ?? token.errorColor;
+        final dangerFallback = material?.error ?? token.errorColor;
+        final baseColor =
+            theme?.resolveDangerColor(dangerFallback) ?? dangerFallback;
         if (isOutline) {
           borderColor = baseColor;
           textColor = baseColor;
@@ -277,8 +275,12 @@ class TTag extends StatelessWidget {
         }
         break;
       case TTagColorPreset.success:
-        final baseColor = successColor ?? token.successColor;
-        final lightColor = successLightColor ?? token.successColor1;
+        final baseColor =
+            theme?.resolveSuccessColor(token.successColor) ??
+            token.successColor;
+        final lightColor =
+            theme?.resolveSuccessLightColor(token.successColor1) ??
+            token.successColor1;
         if (isOutline) {
           borderColor = baseColor;
           textColor = baseColor;
@@ -327,7 +329,8 @@ class TTag extends StatelessWidget {
     switch (shape) {
       case TTagShape.square:
         return BorderRadius.circular(
-          theme?.squareBorderRadius ?? context.tTheme.radiusSmall,
+          theme?.resolveSquareBorderRadius(context.tTheme.radiusSmall) ??
+              context.tTheme.radiusSmall,
         );
       case TTagShape.round:
         return BorderRadius.circular(context.tTheme.radiusRound);

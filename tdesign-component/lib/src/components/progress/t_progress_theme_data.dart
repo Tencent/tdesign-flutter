@@ -1,6 +1,7 @@
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
 /// 进度条组件级 ThemeExtension
 ///
@@ -59,6 +60,12 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
              (indeterminateCircularValue > 0 && indeterminateCircularValue < 1),
        );
 
+  _ProgressColorLerp? get _circleInnerBgLerp => null;
+
+  @internal
+  Color resolveCircleInnerBgColor(Color fallback) =>
+      _circleInnerBgLerp?.resolve(fallback) ?? circleInnerBgColor ?? fallback;
+
   @override
   TProgressThemeData copyWith({
     double? strokeWidth,
@@ -72,11 +79,14 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
     double? indeterminateLinearSegmentFraction,
     double? indeterminateCircularValue,
   }) {
-    return TProgressThemeData(
+    return _InterpolatedProgressThemeData(
       strokeWidth: strokeWidth ?? this.strokeWidth,
       color: color ?? this.color,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       circleInnerBgColor: circleInnerBgColor ?? this.circleInnerBgColor,
+      circleInnerBgTransition: circleInnerBgColor == null
+          ? _circleInnerBgLerp
+          : null,
       linearBorderRadius: linearBorderRadius ?? this.linearBorderRadius,
       circleRadius: circleRadius ?? this.circleRadius,
       animationDuration: animationDuration ?? this.animationDuration,
@@ -95,13 +105,19 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
     if (other is! TProgressThemeData) {
       return this;
     }
-    return TProgressThemeData(
+    return _InterpolatedProgressThemeData(
       strokeWidth: lerpDouble(strokeWidth, other.strokeWidth, t),
       color: Color.lerp(color, other.color, t),
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      circleInnerBgColor: Color.lerp(
+      circleInnerBgColor:
+          circleInnerBgColor == null || other.circleInnerBgColor == null
+          ? null
+          : Color.lerp(circleInnerBgColor, other.circleInnerBgColor, t),
+      circleInnerBgTransition: _ProgressColorLerp.whenNeeded(
         circleInnerBgColor,
+        _circleInnerBgLerp,
         other.circleInnerBgColor,
+        other._circleInnerBgLerp,
         t,
       ),
       linearBorderRadius: BorderRadiusGeometry.lerp(
@@ -132,6 +148,62 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
       ),
     );
   }
+}
+
+class _InterpolatedProgressThemeData extends TProgressThemeData {
+  const _InterpolatedProgressThemeData({
+    super.strokeWidth,
+    super.color,
+    super.backgroundColor,
+    super.circleInnerBgColor,
+    super.linearBorderRadius,
+    super.circleRadius,
+    super.animationDuration,
+    super.indeterminateAnimationDuration,
+    super.indeterminateLinearSegmentFraction,
+    super.indeterminateCircularValue,
+    _ProgressColorLerp? circleInnerBgTransition,
+  }) : _circleInnerBgTransition = circleInnerBgTransition;
+
+  final _ProgressColorLerp? _circleInnerBgTransition;
+
+  @override
+  _ProgressColorLerp? get _circleInnerBgLerp => _circleInnerBgTransition;
+}
+
+class _ProgressColorLerp {
+  const _ProgressColorLerp(
+    this.begin,
+    this.beginTransition,
+    this.end,
+    this.endTransition,
+    this.t,
+  );
+
+  static _ProgressColorLerp? whenNeeded(
+    Color? begin,
+    _ProgressColorLerp? beginTransition,
+    Color? end,
+    _ProgressColorLerp? endTransition,
+    double t,
+  ) =>
+      beginTransition == null &&
+          endTransition == null &&
+          ((begin == null && end == null) || (begin != null && end != null))
+      ? null
+      : _ProgressColorLerp(begin, beginTransition, end, endTransition, t);
+
+  final Color? begin;
+  final _ProgressColorLerp? beginTransition;
+  final Color? end;
+  final _ProgressColorLerp? endTransition;
+  final double t;
+
+  Color resolve(Color fallback) => Color.lerp(
+    beginTransition?.resolve(fallback) ?? begin ?? fallback,
+    endTransition?.resolve(fallback) ?? end ?? fallback,
+    t,
+  )!;
 }
 
 /// 线性插值两个 [Duration]

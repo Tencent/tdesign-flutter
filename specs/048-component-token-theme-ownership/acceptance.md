@@ -1,5 +1,13 @@
 # 验收记录
 
+## 2026-10-02 组件 Theme 动画回退与 API 文档修正
+
+- `TTagThemeData` 的 danger/success 基础色、success 浅色及方角在 nullable 端点之间插值时保留“继承当前 Token/Material 值”的语义；绘制时才用当前配色预设与 `radiusSmall` 的有效回退计算连续中间值。`TProgressThemeData.circleInnerBgColor` 同理，在浅色按 `bgColorContainer`、暗色按透明背景插值，不再把未配置端一律当透明色。
+- 插值中间值使用私有 ThemeExtension 子类型保存延迟解析数据，公开组件 Theme 类型及字段不变；组件测试额外验证 Flutter `ThemeData.lerp` 后仍可通过原类型查找扩展，并检查正向/反向、两端均空、端点、中途再次插值及实际绘制结果。
+- Avatar 的插值状态也移至私有子类型，消除生成器误把 `TAvatarThemeData._interpolated` 和私有 `_AvatarDoubleLerp` 参数写入公开 API 文档的问题。公开构造函数和插值行为不变。生成器曾顺带移除无关 `showTDrawer` 文档，已保留该已有内容；不把这项生成器偏差混入本次 API 变更。
+- Flutter 3.32.0/3.47.0 两版组件包完整 `flutter analyze --no-pub --fatal-infos` 均为 0 issues；Avatar/Tag（含 SelectTag）/Progress 聚焦测试在 3.32.0 共 185/185、3.47.0 改动的三份测试共 181/181 通过。3.32.0 生产源码覆盖率分别为 Avatar 262/273（95.97%）、Tag 264/275（96.00%）、Progress 540/544（99.26%）。
+- 隔离 Linux amd64 Flutter 3.32.0 临时副本使用与工作树相同的 `pubspec.lock` 和图标包 0.0.6，Avatar/Progress Demo 6 项、Tag Demo 4 项及 Progress 共享组件 1 项 Golden 均以**无更新**方式通过；原工作区 Golden 未修改。静态 Golden 不覆盖 Theme 动画中间帧，连续插值由聚焦组件测试检验。此为本地证据，远端最终 PR head 的 CI 仍需单独核对。
+
 ## 2026-10-02 Avatar Theme 插值与已删除入口复核（本地工作区）
 
 - `TAvatarThemeData.lerp` 对 `dimension`、`iconSize`、圆/方圆角及头像组描边宽度，不再将未配置端固定当作中号或固定全局 Token；在具体头像绘制时，分别按成员尺寸与当前全局 Theme 求有效回退，再插值。中途再次插值也保留这一解析路径。测试覆盖 small/medium/large、定制全局 `radiusCircle/radiusDefault`、`copyWith` 和中途切换。这个修复不改变默认设计尺寸，因此无需重新选择 Figma 数值。

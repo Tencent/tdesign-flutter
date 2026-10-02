@@ -444,6 +444,35 @@ void main() {
       }
     });
 
+    testWidgets('Theme 动画中方角和 success 填充消费动态 Token 回退', (tester) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'tag-animated-theme-test',
+        radiusMap: {'radiusSmall': 4},
+      );
+      final animatedTheme = const TTagThemeData().lerp(
+        const TTagThemeData(squareBorderRadius: 8, successColor: Colors.purple),
+        0.5,
+      );
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TTag('成功', colorPreset: TTagColorPreset.success),
+          tokenTheme: token,
+          tagTheme: animatedTheme,
+        ),
+      );
+      final container = tester.widget<Container>(
+        find
+            .descendant(of: find.byType(TTag), matching: find.byType(Container))
+            .first,
+      );
+      final decoration = container.decoration! as BoxDecoration;
+      expect(decoration.borderRadius, BorderRadius.circular(6));
+      expect(
+        decoration.color,
+        Color.lerp(token.successColor, Colors.purple, 0.5),
+      );
+    });
+
     testWidgets('round 形状渲染', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(const TTag('圆角', shape: TTagShape.round)),
@@ -954,14 +983,44 @@ void main() {
       expect(result.squareBorderRadius, closeTo(3.6, 1e-9));
     });
 
-    test('方角继承全局 Token 时插值不把 null 当成 0dp', () {
+    test('方角继承全局 Token 时连续插值，并在消费时读取当前值', () {
       const inherited = TTagThemeData();
       const overridden = TTagThemeData(squareBorderRadius: 6);
       expect(inherited.lerp(overridden, 0.25).squareBorderRadius, isNull);
-      expect(inherited.lerp(overridden, 0.75).squareBorderRadius, 6);
-      expect(overridden.lerp(inherited, 0.25).squareBorderRadius, 6);
+      expect(
+        inherited.lerp(overridden, 0.25).resolveSquareBorderRadius(3),
+        3.75,
+      );
+      expect(inherited.lerp(overridden, 0.75).squareBorderRadius, isNull);
+      expect(
+        inherited.lerp(overridden, 0.75).resolveSquareBorderRadius(3),
+        5.25,
+      );
+      expect(overridden.lerp(inherited, 0.25).squareBorderRadius, isNull);
+      expect(
+        overridden.lerp(inherited, 0.25).resolveSquareBorderRadius(3),
+        5.25,
+      );
       expect(overridden.lerp(inherited, 0.75).squareBorderRadius, isNull);
+      expect(
+        overridden.lerp(inherited, 0.75).resolveSquareBorderRadius(3),
+        3.75,
+      );
       expect(inherited.lerp(inherited, 0.5).squareBorderRadius, isNull);
+      expect(inherited.lerp(inherited, 0.5).resolveSquareBorderRadius(4), 4);
+      final animatedTheme = ThemeData.lerp(
+        ThemeData(extensions: const [inherited]),
+        ThemeData(extensions: const [overridden]),
+        0.5,
+      ).extension<TTagThemeData>();
+      expect(animatedTheme?.resolveSquareBorderRadius(3), 4.5);
+      expect(
+        inherited
+            .lerp(overridden, 0.5)
+            .copyWith(maxLines: 2)
+            .resolveSquareBorderRadius(4),
+        5,
+      );
     });
   });
 
@@ -1163,9 +1222,40 @@ void main() {
         successLightColor: Colors.lightGreen,
       );
       expect(base.copyWith(successColor: Colors.blue).dangerColor, Colors.red);
-      expect(base.lerp(target, 0.25).dangerColor, Colors.red);
-      expect(base.lerp(target, 0.75).dangerColor, isNull);
-      expect(base.lerp(target, 0.75).successColor, Colors.green);
+      final early = base.lerp(target, 0.25);
+      final late = base.lerp(target, 0.75);
+      expect(early.dangerColor, isNull);
+      expect(late.dangerColor, isNull);
+      expect(
+        early.resolveDangerColor(Colors.black),
+        Color.lerp(Colors.red, Colors.black, 0.25),
+      );
+      expect(
+        late.resolveDangerColor(Colors.black),
+        Color.lerp(Colors.red, Colors.black, 0.75),
+      );
+      expect(
+        late.resolveSuccessColor(Colors.black),
+        Color.lerp(Colors.black, Colors.green, 0.75),
+      );
+      expect(
+        late.resolveSuccessLightColor(Colors.white),
+        Color.lerp(Colors.white, Colors.lightGreen, 0.75),
+      );
+      expect(
+        base.lerp(target, 0).resolveDangerColor(Colors.black),
+        Color.lerp(Colors.red, Colors.black, 0),
+      );
+      expect(
+        base.lerp(target, 1).resolveDangerColor(Colors.black),
+        Color.lerp(Colors.red, Colors.black, 1),
+      );
+      expect(
+        const TTagThemeData()
+            .lerp(const TTagThemeData(), 0.5)
+            .resolveDangerColor(Colors.black),
+        Colors.black,
+      );
     });
 
     test('组件专属颜色两端都显式配置时逐色插值', () {

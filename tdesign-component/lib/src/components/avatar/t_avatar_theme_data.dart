@@ -52,34 +52,7 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
          dimension == null ||
              groupBorderWidth == null ||
              groupBorderWidth * 2 <= dimension,
-       ),
-       _dimensionLerp = null,
-       _iconSizeLerp = null,
-       _circleBorderRadiusLerp = null,
-       _squareBorderRadiusLerp = null,
-       _groupBorderWidthLerp = null;
-
-  const TAvatarThemeData._interpolated({
-    this.dimension,
-    this.iconSize,
-    this.circleBorderRadius,
-    this.squareBorderRadius,
-    this.backgroundColor,
-    this.foregroundColor,
-    this.groupSpacing,
-    this.groupBorderWidth,
-    this.groupBorderColor,
-    this.groupShadow,
-    _AvatarDoubleLerp? dimensionTransition,
-    _AvatarDoubleLerp? iconSizeTransition,
-    _AvatarDoubleLerp? circleBorderRadiusTransition,
-    _AvatarDoubleLerp? squareBorderRadiusTransition,
-    _AvatarDoubleLerp? groupBorderWidthTransition,
-  }) : _dimensionLerp = dimensionTransition,
-       _iconSizeLerp = iconSizeTransition,
-       _circleBorderRadiusLerp = circleBorderRadiusTransition,
-       _squareBorderRadiusLerp = squareBorderRadiusTransition,
-       _groupBorderWidthLerp = groupBorderWidthTransition;
+       );
 
   /// 自定义头像边长。
   final double? dimension;
@@ -115,11 +88,11 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
   // A single nullable double cannot encode an interpolation from a fallback
   // that depends on the avatar size or the current global token. Defer those
   // cases until the component knows the effective fallback.
-  final _AvatarDoubleLerp? _dimensionLerp;
-  final _AvatarDoubleLerp? _iconSizeLerp;
-  final _AvatarDoubleLerp? _circleBorderRadiusLerp;
-  final _AvatarDoubleLerp? _squareBorderRadiusLerp;
-  final _AvatarDoubleLerp? _groupBorderWidthLerp;
+  _AvatarDoubleLerp? get _dimensionLerp => null;
+  _AvatarDoubleLerp? get _iconSizeLerp => null;
+  _AvatarDoubleLerp? get _circleBorderRadiusLerp => null;
+  _AvatarDoubleLerp? get _squareBorderRadiusLerp => null;
+  _AvatarDoubleLerp? get _groupBorderWidthLerp => null;
 
   @internal
   double resolveDimension(TAvatarSize size) =>
@@ -166,7 +139,7 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
     Color? groupBorderColor,
     BoxShadow? groupShadow,
   }) {
-    return TAvatarThemeData._interpolated(
+    return _InterpolatedAvatarThemeData(
       dimension: dimension ?? this.dimension,
       iconSize: iconSize ?? this.iconSize,
       circleBorderRadius: circleBorderRadius ?? this.circleBorderRadius,
@@ -196,7 +169,7 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
     if (other == null) {
       return this;
     }
-    return TAvatarThemeData._interpolated(
+    return _InterpolatedAvatarThemeData(
       dimension: _lerpExplicitDouble(dimension, other.dimension, t),
       dimensionTransition: _AvatarDoubleLerp.whenNeeded(
         dimension,
@@ -280,6 +253,49 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
             ),
     );
   }
+}
+
+class _InterpolatedAvatarThemeData extends TAvatarThemeData {
+  const _InterpolatedAvatarThemeData({
+    super.dimension,
+    super.iconSize,
+    super.circleBorderRadius,
+    super.squareBorderRadius,
+    super.backgroundColor,
+    super.foregroundColor,
+    super.groupSpacing,
+    super.groupBorderWidth,
+    super.groupBorderColor,
+    super.groupShadow,
+    _AvatarDoubleLerp? dimensionTransition,
+    _AvatarDoubleLerp? iconSizeTransition,
+    _AvatarDoubleLerp? circleBorderRadiusTransition,
+    _AvatarDoubleLerp? squareBorderRadiusTransition,
+    _AvatarDoubleLerp? groupBorderWidthTransition,
+  }) : _dimensionTransition = dimensionTransition,
+       _iconSizeTransition = iconSizeTransition,
+       _circleBorderRadiusTransition = circleBorderRadiusTransition,
+       _squareBorderRadiusTransition = squareBorderRadiusTransition,
+       _groupBorderWidthTransition = groupBorderWidthTransition;
+
+  final _AvatarDoubleLerp? _dimensionTransition;
+  final _AvatarDoubleLerp? _iconSizeTransition;
+  final _AvatarDoubleLerp? _circleBorderRadiusTransition;
+  final _AvatarDoubleLerp? _squareBorderRadiusTransition;
+  final _AvatarDoubleLerp? _groupBorderWidthTransition;
+
+  @override
+  _AvatarDoubleLerp? get _dimensionLerp => _dimensionTransition;
+  @override
+  _AvatarDoubleLerp? get _iconSizeLerp => _iconSizeTransition;
+  @override
+  _AvatarDoubleLerp? get _circleBorderRadiusLerp =>
+      _circleBorderRadiusTransition;
+  @override
+  _AvatarDoubleLerp? get _squareBorderRadiusLerp =>
+      _squareBorderRadiusTransition;
+  @override
+  _AvatarDoubleLerp? get _groupBorderWidthLerp => _groupBorderWidthTransition;
 }
 
 double? _lerpExplicitDouble(double? begin, double? end, double t) =>

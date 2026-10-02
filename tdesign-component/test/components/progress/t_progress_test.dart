@@ -364,6 +364,78 @@ void main() {
       expect(decoration.color, Colors.purple);
     });
 
+    test('环形内圆在 nullable Theme 端点间按实际背景色连续插值', () {
+      const inherited = TProgressThemeData();
+      const custom = TProgressThemeData(circleInnerBgColor: Colors.purple);
+      final middle = inherited.lerp(custom, 0.5);
+      expect(middle.circleInnerBgColor, isNull);
+      final animatedTheme = ThemeData.lerp(
+        ThemeData(extensions: const [inherited]),
+        ThemeData(extensions: const [custom]),
+        0.5,
+      ).extension<TProgressThemeData>();
+      expect(
+        animatedTheme?.resolveCircleInnerBgColor(Colors.white),
+        Color.lerp(Colors.white, Colors.purple, 0.5),
+      );
+      expect(
+        middle.resolveCircleInnerBgColor(Colors.white),
+        Color.lerp(Colors.white, Colors.purple, 0.5),
+      );
+      expect(
+        middle.resolveCircleInnerBgColor(Colors.transparent),
+        Color.lerp(Colors.transparent, Colors.purple, 0.5),
+      );
+      expect(
+        custom.lerp(inherited, 0.25).resolveCircleInnerBgColor(Colors.white),
+        Color.lerp(Colors.purple, Colors.white, 0.25),
+      );
+      expect(
+        inherited.lerp(inherited, 0.5).resolveCircleInnerBgColor(Colors.white),
+        Colors.white,
+      );
+      expect(
+        middle.copyWith(strokeWidth: 3).resolveCircleInnerBgColor(Colors.white),
+        Color.lerp(Colors.white, Colors.purple, 0.5),
+      );
+      expect(
+        middle.lerp(custom, 0.5).resolveCircleInnerBgColor(Colors.white),
+        Color.lerp(
+          Color.lerp(Colors.white, Colors.purple, 0.5),
+          Colors.purple,
+          0.5,
+        ),
+      );
+    });
+
+    testWidgets('环形内圆实际绘制使用当前 Token 回退插值', (tester) async {
+      const inherited = TProgressThemeData();
+      const custom = TProgressThemeData(circleInnerBgColor: Colors.purple);
+      final tokens = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TProgress.circular(value: 0.3),
+          tokenTheme: tokens,
+          progressTheme: inherited.lerp(custom, 0.5),
+        ),
+      );
+      final inner = find.byKey(const ValueKey('progress-circle-inner'));
+      final decoration =
+          tester
+                  .widget<DecoratedBox>(
+                    find.descendant(
+                      of: inner,
+                      matching: find.byType(DecoratedBox),
+                    ),
+                  )
+                  .decoration
+              as BoxDecoration;
+      expect(
+        decoration.color,
+        Color.lerp(tokens.bgColorContainer, Colors.purple, 0.5),
+      );
+    });
+
     testWidgets('Theme.color 覆盖进度条颜色', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(

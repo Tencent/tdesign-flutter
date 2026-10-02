@@ -1,6 +1,7 @@
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
 import '../../theme/basic.dart' show Font;
 
@@ -59,6 +60,29 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     this.fixedWidth,
   }) : assert(squareBorderRadius == null || squareBorderRadius >= 0);
 
+  _TagColorLerp? get _dangerLerp => null;
+  _TagColorLerp? get _successLerp => null;
+  _TagColorLerp? get _successLightLerp => null;
+  _TagDoubleLerp? get _squareBorderRadiusLerp => null;
+
+  @internal
+  Color resolveDangerColor(Color fallback) =>
+      _dangerLerp?.resolve(fallback) ?? dangerColor ?? fallback;
+
+  @internal
+  Color resolveSuccessColor(Color fallback) =>
+      _successLerp?.resolve(fallback) ?? successColor ?? fallback;
+
+  @internal
+  Color resolveSuccessLightColor(Color fallback) =>
+      _successLightLerp?.resolve(fallback) ?? successLightColor ?? fallback;
+
+  @internal
+  double resolveSquareBorderRadius(double fallback) =>
+      _squareBorderRadiusLerp?.resolve(fallback) ??
+      squareBorderRadius ??
+      fallback;
+
   @override
   TTagThemeData copyWith({
     Color? textColor,
@@ -73,7 +97,7 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     int? maxLines,
     double? fixedWidth,
   }) {
-    return TTagThemeData(
+    return _InterpolatedTagThemeData(
       textColor: textColor ?? this.textColor,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       dangerColor: dangerColor ?? this.dangerColor,
@@ -85,6 +109,14 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
       overflow: overflow ?? this.overflow,
       maxLines: maxLines ?? this.maxLines,
       fixedWidth: fixedWidth ?? this.fixedWidth,
+      dangerTransition: dangerColor == null ? _dangerLerp : null,
+      successTransition: successColor == null ? _successLerp : null,
+      successLightTransition: successLightColor == null
+          ? _successLightLerp
+          : null,
+      squareBorderRadiusTransition: squareBorderRadius == null
+          ? _squareBorderRadiusLerp
+          : null,
     );
   }
 
@@ -93,31 +125,168 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     if (other is! TTagThemeData) {
       return this;
     }
-    return TTagThemeData(
+    return _InterpolatedTagThemeData(
       textColor: Color.lerp(textColor, other.textColor, t),
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      // null 表示继续动态继承 Token，不插值为透明色。
-      dangerColor: dangerColor == null || other.dangerColor == null
-          ? (t < 0.5 ? dangerColor : other.dangerColor)
-          : Color.lerp(dangerColor, other.dangerColor, t),
-      successColor: successColor == null || other.successColor == null
-          ? (t < 0.5 ? successColor : other.successColor)
-          : Color.lerp(successColor, other.successColor, t),
-      successLightColor:
-          successLightColor == null || other.successLightColor == null
-          ? (t < 0.5 ? successLightColor : other.successLightColor)
-          : Color.lerp(successLightColor, other.successLightColor, t),
+      dangerColor: _lerpExplicitColor(dangerColor, other.dangerColor, t),
+      dangerTransition: _TagColorLerp.whenNeeded(
+        dangerColor,
+        _dangerLerp,
+        other.dangerColor,
+        other._dangerLerp,
+        t,
+      ),
+      successColor: _lerpExplicitColor(successColor, other.successColor, t),
+      successTransition: _TagColorLerp.whenNeeded(
+        successColor,
+        _successLerp,
+        other.successColor,
+        other._successLerp,
+        t,
+      ),
+      successLightColor: _lerpExplicitColor(
+        successLightColor,
+        other.successLightColor,
+        t,
+      ),
+      successLightTransition: _TagColorLerp.whenNeeded(
+        successLightColor,
+        _successLightLerp,
+        other.successLightColor,
+        other._successLightLerp,
+        t,
+      ),
       font: t < 0.5 ? font : other.font,
       padding:
           EdgeInsetsGeometry.lerp(padding, other.padding, t) as EdgeInsets?,
-      // null 表示继承当前子树的 radiusSmall，不能当作 0dp 参与插值。
-      squareBorderRadius:
-          squareBorderRadius == null || other.squareBorderRadius == null
-          ? (t < 0.5 ? squareBorderRadius : other.squareBorderRadius)
-          : lerpDouble(squareBorderRadius, other.squareBorderRadius, t),
+      squareBorderRadius: _lerpExplicitDouble(
+        squareBorderRadius,
+        other.squareBorderRadius,
+        t,
+      ),
+      squareBorderRadiusTransition: _TagDoubleLerp.whenNeeded(
+        squareBorderRadius,
+        _squareBorderRadiusLerp,
+        other.squareBorderRadius,
+        other._squareBorderRadiusLerp,
+        t,
+      ),
       overflow: t < 0.5 ? overflow : other.overflow,
       maxLines: t < 0.5 ? maxLines : other.maxLines,
       fixedWidth: lerpDouble(fixedWidth, other.fixedWidth, t),
     );
   }
+}
+
+class _InterpolatedTagThemeData extends TTagThemeData {
+  const _InterpolatedTagThemeData({
+    super.textColor,
+    super.backgroundColor,
+    super.dangerColor,
+    super.successColor,
+    super.successLightColor,
+    super.font,
+    super.padding,
+    super.squareBorderRadius,
+    super.overflow,
+    super.maxLines,
+    super.fixedWidth,
+    _TagColorLerp? dangerTransition,
+    _TagColorLerp? successTransition,
+    _TagColorLerp? successLightTransition,
+    _TagDoubleLerp? squareBorderRadiusTransition,
+  }) : _dangerTransition = dangerTransition,
+       _successTransition = successTransition,
+       _successLightTransition = successLightTransition,
+       _squareBorderRadiusTransition = squareBorderRadiusTransition;
+
+  final _TagColorLerp? _dangerTransition;
+  final _TagColorLerp? _successTransition;
+  final _TagColorLerp? _successLightTransition;
+  final _TagDoubleLerp? _squareBorderRadiusTransition;
+
+  @override
+  _TagColorLerp? get _dangerLerp => _dangerTransition;
+  @override
+  _TagColorLerp? get _successLerp => _successTransition;
+  @override
+  _TagColorLerp? get _successLightLerp => _successLightTransition;
+  @override
+  _TagDoubleLerp? get _squareBorderRadiusLerp => _squareBorderRadiusTransition;
+}
+
+Color? _lerpExplicitColor(Color? begin, Color? end, double t) =>
+    begin == null || end == null ? null : Color.lerp(begin, end, t);
+
+double? _lerpExplicitDouble(double? begin, double? end, double t) =>
+    begin == null || end == null ? null : lerpDouble(begin, end, t);
+
+class _TagColorLerp {
+  const _TagColorLerp(
+    this.begin,
+    this.beginTransition,
+    this.end,
+    this.endTransition,
+    this.t,
+  );
+
+  static _TagColorLerp? whenNeeded(
+    Color? begin,
+    _TagColorLerp? beginTransition,
+    Color? end,
+    _TagColorLerp? endTransition,
+    double t,
+  ) =>
+      beginTransition == null &&
+          endTransition == null &&
+          ((begin == null && end == null) || (begin != null && end != null))
+      ? null
+      : _TagColorLerp(begin, beginTransition, end, endTransition, t);
+
+  final Color? begin;
+  final _TagColorLerp? beginTransition;
+  final Color? end;
+  final _TagColorLerp? endTransition;
+  final double t;
+
+  Color resolve(Color fallback) => Color.lerp(
+    beginTransition?.resolve(fallback) ?? begin ?? fallback,
+    endTransition?.resolve(fallback) ?? end ?? fallback,
+    t,
+  )!;
+}
+
+class _TagDoubleLerp {
+  const _TagDoubleLerp(
+    this.begin,
+    this.beginTransition,
+    this.end,
+    this.endTransition,
+    this.t,
+  );
+
+  static _TagDoubleLerp? whenNeeded(
+    double? begin,
+    _TagDoubleLerp? beginTransition,
+    double? end,
+    _TagDoubleLerp? endTransition,
+    double t,
+  ) =>
+      beginTransition == null &&
+          endTransition == null &&
+          ((begin == null && end == null) || (begin != null && end != null))
+      ? null
+      : _TagDoubleLerp(begin, beginTransition, end, endTransition, t);
+
+  final double? begin;
+  final _TagDoubleLerp? beginTransition;
+  final double? end;
+  final _TagDoubleLerp? endTransition;
+  final double t;
+
+  double resolve(double fallback) => lerpDouble(
+    beginTransition?.resolve(fallback) ?? begin ?? fallback,
+    endTransition?.resolve(fallback) ?? end ?? fallback,
+    t,
+  )!;
 }

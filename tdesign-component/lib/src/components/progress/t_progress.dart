@@ -251,11 +251,12 @@ class TProgress extends StatelessWidget {
         materialTrackColor ??
         colorScheme?.surfaceContainerHighest ??
         defaultValues.backgroundColor;
+    final circleInnerBgFallback = materialTheme.brightness == Brightness.dark
+        ? Colors.transparent
+        : context.tTheme.bgColorContainer;
     final circleInnerBgColor =
-        theme?.circleInnerBgColor ??
-        (materialTheme.brightness == Brightness.dark
-            ? Colors.transparent
-            : context.tTheme.bgColorContainer);
+        theme?.resolveCircleInnerBgColor(circleInnerBgFallback) ??
+        circleInnerBgFallback;
     final linearBorderRadius =
         theme?.linearBorderRadius ?? defaultValues.linearBorderRadius;
     final circleRadius = theme?.circleRadius ?? defaultValues.circleRadius;

@@ -27,29 +27,6 @@
 
 
 ### TAvatarThemeData
-
-#### 工厂构造方法
-
-##### TAvatarThemeData._interpolated
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| dimension | double? | - | 自定义头像边长。 |
-| iconSize | double? | - | 默认图标大小。 |
-| circleBorderRadius | double? | - | 圆形头像圆角；未设置时回退全局 `radiusCircle`（逻辑像素）。 |
-| squareBorderRadius | double? | - | 方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。 |
-| backgroundColor | Color? | - | 默认背景色；未设置时回退全局 `brandColorLightActive`。 |
-| foregroundColor | Color? | - | 默认图标与继承文字的前景色；未设置时回退全局品牌色。 |
-| groupSpacing | double? | - | 头像组重叠宽度。 |
-| groupBorderWidth | double? | - | 头像组成员描边宽度。 未设置时按成员尺寸使用小/中/大 1/2/3 逻辑像素。 |
-| groupBorderColor | Color? | - | 头像组成员描边颜色。 |
-| groupShadow | BoxShadow? | - | 头像组成员阴影；未设置时使用 1px 水平偏移、2px `blurRadius` 和 15% 黑色。 |
-| dimensionTransition | _AvatarDoubleLerp? | - | - |
-| iconSizeTransition | _AvatarDoubleLerp? | - | - |
-| circleBorderRadiusTransition | _AvatarDoubleLerp? | - | - |
-| squareBorderRadiusTransition | _AvatarDoubleLerp? | - | - |
-| groupBorderWidthTransition | _AvatarDoubleLerp? | - | - |
-
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
