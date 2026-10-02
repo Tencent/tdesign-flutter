@@ -1,5 +1,12 @@
 # 验收记录
 
+## 2026-10-02 Avatar Theme 插值与已删除入口复核（本地工作区）
+
+- `TAvatarThemeData.lerp` 对 `dimension`、`iconSize`、圆/方圆角及头像组描边宽度，不再将未配置端固定当作中号或固定全局 Token；在具体头像绘制时，分别按成员尺寸与当前全局 Theme 求有效回退，再插值。中途再次插值也保留这一解析路径。测试覆盖 small/medium/large、定制全局 `radiusCircle/radiusDefault`、`copyWith` 和中途切换。这个修复不改变默认设计尺寸，因此无需重新选择 Figma 数值。
+- 自定义圆形头像圆角不足边长一半时，头像组外框的描边和阴影从完整圆改为与内容相同的圆角矩形；默认 `radiusCircle = 9999` 仍绘制完整圆。圆角参数负值断言有组件测试。
+- 代码与手写 TabBar API 文档确认：`topBorder/showTopBorder/centerDistance` 均无公开入口或兼容字段；内置配色入口仍为 `colorPreset`，仅 Material 使用 `ColorScheme`。旧名仅留在 breaking 迁移记录以帮助用户改代码，不作为 API 保留。
+- Flutter 3.32.0 Avatar 测试 42/42，通过生产源码覆盖率 247/258 = 95.74%；3.47.0 Avatar 与回归工具测试共 61/61 通过，两版完整组件包严格静态分析均 0 issues。Linux amd64 Flutter 3.32.0 使用固定图标包 0.0.6，无更新复跑 Avatar 公开 Demo 浅/暗 Golden 2/2 通过。本地通过不等于远端 PR head 的 CI 结果。
+
 ## 2026-10-02 PR 风险复核：SwipeCell release 互斥
 
 - `TSwipeCellAction.builder` 与内置视觉字段的构造 `assert` 仅在启用断言时运行；现于 `build` 再检查相同冲突，并在 release 也抛出 `FlutterError`，避免背景、图文和图文样式参数被静默忽略。合法配置的绘制链未改变，因此不更新 Golden。

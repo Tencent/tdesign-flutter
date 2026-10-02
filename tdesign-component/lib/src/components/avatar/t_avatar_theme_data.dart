@@ -3,6 +3,7 @@
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
 import 't_avatar_defaults.dart';
 import 't_avatar_types.dart';
@@ -51,7 +52,34 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
          dimension == null ||
              groupBorderWidth == null ||
              groupBorderWidth * 2 <= dimension,
-       );
+       ),
+       _dimensionLerp = null,
+       _iconSizeLerp = null,
+       _circleBorderRadiusLerp = null,
+       _squareBorderRadiusLerp = null,
+       _groupBorderWidthLerp = null;
+
+  const TAvatarThemeData._interpolated({
+    this.dimension,
+    this.iconSize,
+    this.circleBorderRadius,
+    this.squareBorderRadius,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.groupSpacing,
+    this.groupBorderWidth,
+    this.groupBorderColor,
+    this.groupShadow,
+    _AvatarDoubleLerp? dimensionTransition,
+    _AvatarDoubleLerp? iconSizeTransition,
+    _AvatarDoubleLerp? circleBorderRadiusTransition,
+    _AvatarDoubleLerp? squareBorderRadiusTransition,
+    _AvatarDoubleLerp? groupBorderWidthTransition,
+  }) : _dimensionLerp = dimensionTransition,
+       _iconSizeLerp = iconSizeTransition,
+       _circleBorderRadiusLerp = circleBorderRadiusTransition,
+       _squareBorderRadiusLerp = squareBorderRadiusTransition,
+       _groupBorderWidthLerp = groupBorderWidthTransition;
 
   /// 自定义头像边长。
   final double? dimension;
@@ -84,6 +112,47 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
   /// 头像组成员阴影；未设置时使用 1px 水平偏移、2px `blurRadius` 和 15% 黑色。
   final BoxShadow? groupShadow;
 
+  // A single nullable double cannot encode an interpolation from a fallback
+  // that depends on the avatar size or the current global token. Defer those
+  // cases until the component knows the effective fallback.
+  final _AvatarDoubleLerp? _dimensionLerp;
+  final _AvatarDoubleLerp? _iconSizeLerp;
+  final _AvatarDoubleLerp? _circleBorderRadiusLerp;
+  final _AvatarDoubleLerp? _squareBorderRadiusLerp;
+  final _AvatarDoubleLerp? _groupBorderWidthLerp;
+
+  @internal
+  double resolveDimension(TAvatarSize size) =>
+      _dimensionLerp?.resolve(TAvatarDefaults.dimensionFor(size)) ??
+      dimension ??
+      TAvatarDefaults.dimensionFor(size);
+
+  @internal
+  double resolveIconSize(TAvatarSize size) =>
+      _iconSizeLerp?.resolve(TAvatarDefaults.iconSizeFor(size)) ??
+      iconSize ??
+      TAvatarDefaults.iconSizeFor(size);
+
+  @internal
+  double resolveCircleBorderRadius(double tokenRadius) =>
+      _circleBorderRadiusLerp?.resolve(tokenRadius) ??
+      circleBorderRadius ??
+      tokenRadius;
+
+  @internal
+  double resolveSquareBorderRadius(double tokenRadius) =>
+      _squareBorderRadiusLerp?.resolve(tokenRadius) ??
+      squareBorderRadius ??
+      tokenRadius;
+
+  @internal
+  double resolveGroupBorderWidth(TAvatarSize size) =>
+      _groupBorderWidthLerp?.resolve(
+        TAvatarDefaults.groupBorderWidthFor(size),
+      ) ??
+      groupBorderWidth ??
+      TAvatarDefaults.groupBorderWidthFor(size);
+
   @override
   TAvatarThemeData copyWith({
     double? dimension,
@@ -97,7 +166,7 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
     Color? groupBorderColor,
     BoxShadow? groupShadow,
   }) {
-    return TAvatarThemeData(
+    return TAvatarThemeData._interpolated(
       dimension: dimension ?? this.dimension,
       iconSize: iconSize ?? this.iconSize,
       circleBorderRadius: circleBorderRadius ?? this.circleBorderRadius,
@@ -108,6 +177,17 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
       groupBorderWidth: groupBorderWidth ?? this.groupBorderWidth,
       groupBorderColor: groupBorderColor ?? this.groupBorderColor,
       groupShadow: groupShadow ?? this.groupShadow,
+      dimensionTransition: dimension == null ? _dimensionLerp : null,
+      iconSizeTransition: iconSize == null ? _iconSizeLerp : null,
+      circleBorderRadiusTransition: circleBorderRadius == null
+          ? _circleBorderRadiusLerp
+          : null,
+      squareBorderRadiusTransition: squareBorderRadius == null
+          ? _squareBorderRadiusLerp
+          : null,
+      groupBorderWidthTransition: groupBorderWidth == null
+          ? _groupBorderWidthLerp
+          : null,
     );
   }
 
@@ -116,34 +196,46 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
     if (other == null) {
       return this;
     }
-    return TAvatarThemeData(
-      dimension: _lerpNullableDouble(
+    return TAvatarThemeData._interpolated(
+      dimension: _lerpExplicitDouble(dimension, other.dimension, t),
+      dimensionTransition: _AvatarDoubleLerp.whenNeeded(
         dimension,
+        _dimensionLerp,
         other.dimension,
+        other._dimensionLerp,
         t,
-        TAvatarDefaults.mediumDimension,
-        TAvatarDefaults.mediumDimension,
       ),
-      iconSize: _lerpNullableDouble(
+      iconSize: _lerpExplicitDouble(iconSize, other.iconSize, t),
+      iconSizeTransition: _AvatarDoubleLerp.whenNeeded(
         iconSize,
+        _iconSizeLerp,
         other.iconSize,
+        other._iconSizeLerp,
         t,
-        TAvatarDefaults.iconSizeFor(TAvatarSize.medium),
-        TAvatarDefaults.iconSizeFor(TAvatarSize.medium),
       ),
-      circleBorderRadius: _lerpNullableDouble(
+      circleBorderRadius: _lerpExplicitDouble(
         circleBorderRadius,
         other.circleBorderRadius,
         t,
-        9999,
-        9999,
       ),
-      squareBorderRadius: _lerpNullableDouble(
+      circleBorderRadiusTransition: _AvatarDoubleLerp.whenNeeded(
+        circleBorderRadius,
+        _circleBorderRadiusLerp,
+        other.circleBorderRadius,
+        other._circleBorderRadiusLerp,
+        t,
+      ),
+      squareBorderRadius: _lerpExplicitDouble(
         squareBorderRadius,
         other.squareBorderRadius,
         t,
-        TAvatarDefaults.squareBorderRadius,
-        TAvatarDefaults.squareBorderRadius,
+      ),
+      squareBorderRadiusTransition: _AvatarDoubleLerp.whenNeeded(
+        squareBorderRadius,
+        _squareBorderRadiusLerp,
+        other.squareBorderRadius,
+        other._squareBorderRadiusLerp,
+        t,
       ),
       backgroundColor: _lerpTokenColor(
         backgroundColor,
@@ -162,12 +254,17 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
         TAvatarDefaults.groupSpacing,
         TAvatarDefaults.groupSpacing,
       ),
-      groupBorderWidth: _lerpNullableDouble(
+      groupBorderWidth: _lerpExplicitDouble(
         groupBorderWidth,
         other.groupBorderWidth,
         t,
-        TAvatarDefaults.groupBorderWidth,
-        TAvatarDefaults.groupBorderWidth,
+      ),
+      groupBorderWidthTransition: _AvatarDoubleLerp.whenNeeded(
+        groupBorderWidth,
+        _groupBorderWidthLerp,
+        other.groupBorderWidth,
+        other._groupBorderWidthLerp,
+        t,
       ),
       groupBorderColor: _lerpTokenColor(
         groupBorderColor,
@@ -183,6 +280,46 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
             ),
     );
   }
+}
+
+double? _lerpExplicitDouble(double? begin, double? end, double t) =>
+    begin == null || end == null ? null : lerpDouble(begin, end, t);
+
+class _AvatarDoubleLerp {
+  const _AvatarDoubleLerp(
+    this.begin,
+    this.beginTransition,
+    this.end,
+    this.endTransition,
+    this.t,
+  );
+
+  static _AvatarDoubleLerp? whenNeeded(
+    double? begin,
+    _AvatarDoubleLerp? beginTransition,
+    double? end,
+    _AvatarDoubleLerp? endTransition,
+    double t,
+  ) {
+    if (beginTransition == null &&
+        endTransition == null &&
+        (begin == null && end == null || begin != null && end != null)) {
+      return null;
+    }
+    return _AvatarDoubleLerp(begin, beginTransition, end, endTransition, t);
+  }
+
+  final double? begin;
+  final _AvatarDoubleLerp? beginTransition;
+  final double? end;
+  final _AvatarDoubleLerp? endTransition;
+  final double t;
+
+  double resolve(double fallback) => lerpDouble(
+    beginTransition?.resolve(fallback) ?? begin ?? fallback,
+    endTransition?.resolve(fallback) ?? end ?? fallback,
+    t,
+  )!;
 }
 
 double? _lerpNullableDouble(

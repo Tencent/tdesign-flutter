@@ -33,7 +33,7 @@
 | Swiper | 实例 / Theme `paginationAlignment` | Theme 对齐 | 实例字段 | 默认值不变；Demo 自定义对齐改用局部 Theme | 删除已发布实例字段，breaking |
 | Icon | 实例 / 组件 Theme `size/color` | 实例值及 Flutter 标准 `IconTheme` 子树默认值 | `TIconThemeData` 整个扩展 | 默认 Token 颜色和尺寸不变；Cascader 改用显式 `IconTheme` | 删除已发布 Theme 类，breaking |
 | Avatar / Skeleton 圆形块 | 固定宽度一半圆角忽略自定义 `radiusCircle` | 组件 Theme 圆角或全局 `radiusCircle` | 固定宽度一半回退 | 默认正方形视觉逐像素不变；自定义固定 dp 圆角可传导 | 非正方形与 CSS 50% 仍有已批准跨端几何风险 |
-| Drawer、SideBar、NavBar、TabBar | 实例视觉数值与同名组件 Theme | 组件 Theme | 实例视觉字段，TabBar `centerDistance` 仅留 Theme | 默认值不变，局部 Demo Theme 保留定制场景 | 公开实例字段删除，breaking |
+| Drawer、SideBar、NavBar、TabBar | 实例视觉数值与同名组件 Theme | 具体可复用视觉值归组件 Theme；TabBar 顶边线和图文间距采用内置规则 | 实例同义视觉字段；TabBar `topBorder/showTopBorder/centerDistance` 完全删除 | 可配置视觉值可用局部 Theme；TabBar 顶边线默认绘制、图文间距随布局，旧定制能力不保留 | 公开实例字段删除及能力收敛，breaking |
 | Dialog / TConfirmDialog | 面板背景、形状、阴影、宽度、高度、内容内边距 | 组件 Theme | 实例对应字段 | Linux 3.32 的 Dialog Demo 16 项功能测试及图片场景浅色 Golden 通过 | 公开实例字段删除，breaking |
 | Form | 标签宽度/文字对齐双入口、表单项区域对齐双入口 | 标签宽度/文字对齐归 Theme；单项区域对齐归实例 | 另一侧同义字段 | 61 项组件测试通过 | 公开字段删除，breaking |
 | Text | 子树默认 `textStyle`、实例 `font` 预设和分散便利字段 | 子树 `TTextThemeData.textStyle`，实例 `font` 预设 + 完整 `style`，Span 局部 `style` | Theme `font`、实例 `fontWeight/fontFamily/textColor/isTextThrough/lineThroughColor`、Span 分散字段 | 本轮组件分析通过；Text 功能测试通过，Linux Golden 须以最终源码复跑 | 已发布实例参数删除属 breaking，真实外部编译待验证 |

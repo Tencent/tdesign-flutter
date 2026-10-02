@@ -26,18 +26,17 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | animationCurve | Curve? | - | 动画曲线 |
 | animationDuration | Duration? | - | 动画时长 |
+| iconTextLayout | TTabBarIconTextLayout | TTabBarIconTextLayout.stacked | 图文项排列方式：上下排列间距 0px，左右排列间距 4px。仅在 `type: TTabBarType.iconText` 时生效。 |
 | indicatorAnimation | TTabBarIndicatorAnimation | TTabBarIndicatorAnimation.none | 指示器动画类型 |
 | itemStyle | TTabBarItemStyle | TTabBarItemStyle.label | 单个标签项的选中样式。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | navigationTabs | List<TTabBarItemConfig> | - | tabs配置 |
 | needInkWell | bool | false | 是否需要水波纹效果 |
 | onChanged | ValueChanged<int>? | - | 选中项变化；null 时整栏禁用 |
-| placeholder | bool | true | 是否添加安全区域占位 |
-| showTopBorder | bool | true | 是否显示顶部边线，默认显示；胶囊样式不显示。 边线外观由 `TTabBarThemeData.topBorder` 定义，未设置时使用内置默认值。 |
 | split | bool | false | 是否使用竖线分隔；`itemStyle` 为 `TTabBarItemStyle.label` 时不显示。 |
 | style | TTabBarStyle | TTabBarStyle.filled | 标签栏容器样式。 |
 | type | TTabBarType | - | 标签栏内容类型。 |
-| useSafeArea | bool | true | 使用安全区域 |
+| useSafeArea | bool | true | 是否使用标签栏背景色填充底部安全区域；普通标签栏始终绘制默认顶边线，胶囊样式不绘制。 |
 | value | int | - | 选中的 index |
 
 
@@ -47,14 +46,14 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | allowMultipleTaps | bool | false | 是否允许重复点击当前选中项时再次调用 `onTap`，默认为 false。 该字段不影响点击未选中项，也不会让 `TTabBar.onChanged` 重复通知当前值。 |
-| badge | TBadgeConfig? | - | 展示在标签内容右上角的徽标；为空时不显示。 徽标内容和样式由 `TBadgeConfig` 描述，`TBadgeConfig.offset` 可用于逐项 调整默认位置。纯文本项未设置实例或 BadgeTheme offset 时使用 TabBar 的 文本徽标默认位置；纯图标项与图文项均以图标作为锚点，使用徽标的默认 右上角位置；图文项下方的文字宽度不会改变徽标位置。 TabBar 自己拥有徽标锚点与点击区域；点击行为通过 `onTap` 配置。调用方 已经拥有目标 Widget 时，应直接使用 `TBadge` 包装该 Widget。 |
+| badge | TBadgeConfig? | - | 展示在标签内容右上角的徽标；为空时不显示。纯文本项使用文本徽标默认位置；纯图标项和上下排列图文项以图标为锚点，左右排列图文项以整组图文为锚点。`TBadgeConfig.offset` 可覆盖默认位置。 |
 | onLongPress | GestureLongPressCallback? | - | 长按事件 |
 | onTap | GestureTapCallback? | - | 标签项被选中时的附加点击回调。 点击未选中项时，在 `TTabBar.onChanged` 之前调用；重复点击当前选中项时， 仅当 `allowMultipleTaps` 为 true 才调用。整栏禁用时不会调用。 |
 | popUpButtonConfig | TTabBarPopUpBtnConfig? | - | 弹窗配置 |
-| selectedIcon | Widget? | - | 选中时图标 |
+| selectedIcon | Widget? | - | 选中时图标；未显式指定尺寸时默认为 20px。 |
 | selectTabTextStyle | TextStyle? | - | 选中时的文字样式，按字段覆盖继承主题与内置默认值。 |
 | tabText | String? | - | tab 文本 |
-| unselectedIcon | Widget? | - | 未选中时图标 |
+| unselectedIcon | Widget? | - | 未选中时图标；尺寸规则与选中图标相同。 |
 | unselectTabTextStyle | TextStyle? | - | 未选中时的文字样式，按字段覆盖继承主题与内置默认值。 |
 
 
@@ -99,11 +98,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 标签栏容器背景色；未设置时回退全局 `bgColorContainer`。 |
 | barHeight | double? | - | 标签栏高度；未设置时为 56 逻辑像素。 |
-| dividerColor | Color? | - | 竖向分割线颜色；未设置时回退全局 `componentStroke`。 |
+| dividerColor | Color? | - | 竖向分割线颜色；未设置时回退全局 `grayColor3`。 |
 | dividerHeight | double? | - | 竖向分割线高度；未设置时为 32 逻辑像素，仅在实例 `split` 生效时使用。 |
 | dividerThickness | double? | - | 竖向分割线厚度；未设置时为 0.5 逻辑像素，仅在实例 `split` 生效时使用。 |
 | selectedBgColor | Color? | - | Label 选中项背景色；未设置时回退全局 `brandColorLight`。 |
-| topBorder | BorderSide? | - | 顶部边线样式；未设置时使用 `componentStroke`、0.5 逻辑像素。 仅在实例 `showTopBorder` 为 true 且不是胶囊样式时绘制。 |
 | unselectedBgColor | Color? | - | Label 未选中项背景色；未设置时不额外绘制背景。 |
 
 
@@ -127,6 +125,16 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | --- | --- |
 | normal | 仅改变前景色。 |
 | label | 使用浅色胶囊背景强调选中项。 |
+
+
+### TTabBarIconTextLayout
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| stacked | 图标在上、文字在下；默认布局。 |
+| inline | 图标在左、文字在右。 |
 
 
 ### TTabBarStyle

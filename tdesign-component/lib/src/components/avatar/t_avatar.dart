@@ -52,10 +52,13 @@ class TAvatar extends StatelessWidget {
         TAvatarSize.medium;
     final resolvedShape = shape ?? TAvatarShape.circle;
     final dimension =
-        theme?.dimension ?? TAvatarDefaults.dimensionFor(resolvedSize);
+        theme?.resolveDimension(resolvedSize) ??
+        TAvatarDefaults.dimensionFor(resolvedSize);
     final radius = resolvedShape == TAvatarShape.circle
-        ? theme?.circleBorderRadius ?? context.tTheme.radiusCircle
-        : theme?.squareBorderRadius ?? context.tTheme.radiusDefault;
+        ? theme?.resolveCircleBorderRadius(context.tTheme.radiusCircle) ??
+              context.tTheme.radiusCircle
+        : theme?.resolveSquareBorderRadius(context.tTheme.radiusDefault) ??
+              context.tTheme.radiusDefault;
     final resolvedForegroundColor =
         theme?.foregroundColor ?? context.tTheme.brandColor;
     final resolvedTextStyle = TAvatarDefaults.textStyleFor(
@@ -65,7 +68,9 @@ class TAvatar extends StatelessWidget {
         child ??
         Icon(
           TIcons.user,
-          size: theme?.iconSize ?? TAvatarDefaults.iconSizeFor(resolvedSize),
+          size:
+              theme?.resolveIconSize(resolvedSize) ??
+              TAvatarDefaults.iconSizeFor(resolvedSize),
           color: resolvedForegroundColor,
         );
 
@@ -165,7 +170,8 @@ class TAvatarGroup extends StatelessWidget {
         TAvatarSize.medium;
     final dimensions = visible.map((child) {
       final size = child is TAvatar ? child.size ?? groupSize : groupSize;
-      final requested = theme?.dimension ?? TAvatarDefaults.dimensionFor(size);
+      final requested =
+          theme?.resolveDimension(size) ?? TAvatarDefaults.dimensionFor(size);
       return requested.isFinite && requested > 0
           ? requested
           : TAvatarDefaults.dimensionFor(size);
@@ -223,7 +229,7 @@ class TAvatarGroup extends StatelessWidget {
     final shape = _shapeForChild(child);
     final memberSize = child is TAvatar ? child.size ?? groupSize : groupSize;
     final requestedBorderWidth =
-        theme?.groupBorderWidth ??
+        theme?.resolveGroupBorderWidth(memberSize) ??
         TAvatarDefaults.groupBorderWidthFor(memberSize);
     final borderWidth = requestedBorderWidth.isFinite
         ? requestedBorderWidth.clamp(0, resolvedDimension / 2).toDouble()
@@ -231,17 +237,21 @@ class TAvatarGroup extends StatelessWidget {
             memberSize,
           ).clamp(0, resolvedDimension / 2).toDouble();
     final squareRadius =
-        theme?.squareBorderRadius ?? context.tTheme.radiusDefault;
+        theme?.resolveSquareBorderRadius(context.tTheme.radiusDefault) ??
+        context.tTheme.radiusDefault;
     final radius = shape == TAvatarShape.circle
-        ? theme?.circleBorderRadius ?? context.tTheme.radiusCircle
+        ? theme?.resolveCircleBorderRadius(context.tTheme.radiusCircle) ??
+              context.tTheme.radiusCircle
         : squareRadius;
+    final isFullCircle =
+        shape == TAvatarShape.circle && radius >= resolvedDimension / 2;
+    final decorationShape = isFullCircle ? BoxShape.circle : BoxShape.rectangle;
+    final decorationRadius = decorationShape == BoxShape.rectangle
+        ? BorderRadius.circular(radius)
+        : null;
     final borderDecoration = BoxDecoration(
-      shape: shape == TAvatarShape.circle
-          ? BoxShape.circle
-          : BoxShape.rectangle,
-      borderRadius: shape == TAvatarShape.square
-          ? BorderRadius.circular(squareRadius)
-          : null,
+      shape: decorationShape,
+      borderRadius: decorationRadius,
       border: Border.all(
         color: theme?.groupBorderColor ?? context.tTheme.bgColorContainer,
         width: borderWidth,
@@ -249,12 +259,8 @@ class TAvatarGroup extends StatelessWidget {
     );
     return DecoratedBox(
       decoration: BoxDecoration(
-        shape: shape == TAvatarShape.circle
-            ? BoxShape.circle
-            : BoxShape.rectangle,
-        borderRadius: shape == TAvatarShape.square
-            ? BorderRadius.circular(squareRadius)
-            : null,
+        shape: decorationShape,
+        borderRadius: decorationRadius,
         boxShadow: [theme?.groupShadow ?? TAvatarDefaults.groupShadow],
       ),
       child: DecoratedBox(

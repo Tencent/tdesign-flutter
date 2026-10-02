@@ -8,6 +8,7 @@
 4. 改动后先验证聚焦功能与覆盖优先级，再在固定 Linux 3.32.0 环境无更新复跑相关 Golden。Golden 按来源做消融：全局 Token 改值、组件 Token 缺失/错误、`radiusCircle` 错用、字体/阴影跨引擎、旧基线或 Demo 布局，逐张给出处置建议。正确 Token 值导致的旧基线差异与组件缺陷分别归因。
 5. TimeCounter 对应小程序 CountDown：移除组件 Theme 的 `defaultSize/defaultVariant`，保留实例选择；为确有组件变量的默认/块文字色、块背景色及方/圆块圆角提供具体 Theme 值。圆块在默认正方形尺寸下使用全局 `radiusCircle`，自定义该 Token 时必须从固定的 `BoxShape.circle` 转成对应 dp 圆角，而不忽略覆盖。
 6. 按最终单入口规则修订前期的 Text/Button/Input 多层样式方案：`TTextThemeData.textStyle` 承担子树级默认文字样式，公开 `TText.style` 承担单实例完整文字样式，`font` 仅作为字体 Token 预设；移除与 `style` 同义的分散文字参数。组合组件逐项动态样式由内部解析后交给原生 Text。`TInput.style` 承担输入文字样式；Button 的实例 `ButtonStyle` 承担可表达的视觉字段，Theme 只留独有视觉配置。仓内调用与双版本回归已核验，真实外部调用方仍须完成 breaking 迁移编译。
+7. 修正 Avatar Theme 动画：当插值一端未配置尺寸、图标尺寸、组描边宽度或圆角时，保留内部插值两端与进度，由 `TAvatar`/`TAvatarGroup` 在获知成员 `size` 与当前全局 Token 后求实际数值；公开 nullable 字段不伪装成一个中号或固定 Token 值。两端均显式配置时沿用普通数值插值；默认圆形仍沿用正圆绘制，自定义半径小于边长一半时，内容、描边和阴影共用同一圆角矩形几何。
 
 ## 影响范围
 

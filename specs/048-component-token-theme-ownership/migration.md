@@ -18,7 +18,9 @@
 | `TDrawer.width/backgroundColor`、`TDrawerContent.width/backgroundColor` | `TDrawerThemeData` 的宽度和背景字段 | 需用局部 Theme 设置单个抽屉的具体视觉值。 |
 | `TSideBar.selectedColor/unSelectedColor/selectedTextStyle/contentPadding/selectedBgColor/unSelectedBgColor` | `TSideBarThemeData` 对应字段 | 选中项状态仍由实例控制，具体配色与内边距从 Theme 取。 |
 | `TNavBar.titleColor/backIconColor/backgroundColor/padding/titleMargin/opacity/border/boxShadow` | `TNavBarThemeData` 对应字段 | 单个导航栏的定制值须通过局部 Theme 传入。 |
-| `TTabBar.barHeight/dividerHeight/dividerThickness/dividerColor/topBorder/selectedBgColor/unselectedBgColor/backgroundColor/centerDistance` | `TTabBarThemeData` 对应视觉字段 | 分隔线及中心距离的默认值由组件负责；不再由实例重复覆盖。 |
+| `TTabBar.barHeight/dividerHeight/dividerThickness/dividerColor/selectedBgColor/unselectedBgColor/backgroundColor` | `TTabBarThemeData` 对应视觉字段 | 这些具体视觉值由子树组件 Theme 控制；单个标签栏可包裹局部 Theme。 |
+| `TTabBar.topBorder/showTopBorder/centerDistance` | 无同义替代字段 | 普通标签栏默认始终绘制读取全局 `borderLevel1Color` 的顶边线；图文间距由上下/左右布局内置规则决定。这三项能力已删除，不在组件 Theme 恢复。 |
+| `TTabBar.placeholder` | `TTabBar.useSafeArea` | 不再单独切换安全区占位方式；`useSafeArea: true` 时用标签栏背景色填充底部安全区，关闭时不填充。 |
 | `TDialog`、`TConfirmDialog` 的 `backgroundColor/shape/elevation/width/maxHeight/contentPadding` | `TDialogThemeData` 对应字段 | 内容与按钮仍用实例参数；单对话框的面板外观用局部 Theme。 |
 | `TFormItem.labelWidth/labelAlign`；`TFormThemeData.verticalAlignment/contentAlignment` | 标签宽度、文字对齐迁入 `TFormThemeData`；纵向/内容对齐留在 `TFormItem` | 子树标签排版与单个表单项区域对齐职责分开。 |
 | `TPopover.offset/arrowSize/padding`；`TPopoverThemeData.showArrow` | 具体视觉尺寸迁入 `TPopoverThemeData`；`TPopover.showArrow` 保留 | 箭头有无是实例选择，尺寸与间距是子树默认值。 |

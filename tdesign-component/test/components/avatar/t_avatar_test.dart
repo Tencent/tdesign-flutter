@@ -531,6 +531,39 @@ void main() {
       );
     });
 
+    testWidgets('头像组自定义圆角时内容、描边和阴影共用同一形状', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TAvatarGroup(children: [TAvatar(), TAvatar()]),
+          avatarTheme: const TAvatarThemeData(circleBorderRadius: 7),
+        ),
+      );
+
+      final group = find.byType(TAvatarGroup);
+      final decorations = tester
+          .widgetList<DecoratedBox>(
+            find.descendant(of: group, matching: find.byType(DecoratedBox)),
+          )
+          .map((widget) => widget.decoration)
+          .whereType<BoxDecoration>()
+          .where(
+            (decoration) =>
+                decoration.border != null || decoration.boxShadow != null,
+          );
+      expect(decorations, hasLength(4));
+      for (final decoration in decorations) {
+        expect(decoration.shape, BoxShape.rectangle);
+        expect(decoration.borderRadius, BorderRadius.circular(7));
+      }
+      final clips = tester.widgetList<ClipRRect>(
+        find.descendant(of: group, matching: find.byType(ClipRRect)),
+      );
+      expect(clips, hasLength(4));
+      for (final clip in clips) {
+        expect(clip.borderRadius, BorderRadius.circular(7));
+      }
+    });
+
     testWidgets('极小尺寸会收敛到安全约束', (tester) async {
       await tester.pumpWidget(
         app(
@@ -659,11 +692,23 @@ void main() {
       expect(first.lerp(null, 0.5), same(first));
     });
 
-    test('lerp 从空配置按有效默认值插值且不从透明色渐变', () {
+    test('Theme 圆角不接受负数', () {
+      expect(
+        () => TAvatarThemeData(circleBorderRadius: -1),
+        throwsAssertionError,
+      );
+      expect(
+        () => TAvatarThemeData(squareBorderRadius: -1),
+        throwsAssertionError,
+      );
+    });
+
+    test('lerp 延迟解析随尺寸和全局 Token 变化的默认值', () {
       const empty = TAvatarThemeData();
       const explicit = TAvatarThemeData(
         dimension: 80,
         iconSize: 40,
+        circleBorderRadius: 20,
         squareBorderRadius: 10,
         backgroundColor: Colors.red,
         groupSpacing: 16,
@@ -671,15 +716,42 @@ void main() {
       );
 
       final middle = empty.lerp(explicit, 0.5);
-      expect(middle.dimension, 64);
-      expect(middle.iconSize, 32);
-      expect(middle.squareBorderRadius, 8);
+      expect(middle.dimension, isNull);
+      expect(middle.iconSize, isNull);
+      expect(middle.circleBorderRadius, isNull);
+      expect(middle.squareBorderRadius, isNull);
+      expect(middle.groupBorderWidth, isNull);
+      expect(middle.resolveDimension(TAvatarSize.small), 60);
+      expect(middle.resolveDimension(TAvatarSize.medium), 64);
+      expect(middle.resolveDimension(TAvatarSize.large), 72);
+      expect(middle.resolveIconSize(TAvatarSize.small), 30);
+      expect(middle.resolveIconSize(TAvatarSize.medium), 32);
+      expect(middle.resolveIconSize(TAvatarSize.large), 36);
+      expect(middle.resolveGroupBorderWidth(TAvatarSize.small), 2.5);
+      expect(middle.resolveGroupBorderWidth(TAvatarSize.medium), 3);
+      expect(middle.resolveGroupBorderWidth(TAvatarSize.large), 3.5);
+      expect(middle.resolveCircleBorderRadius(7), 13.5);
+      expect(middle.resolveSquareBorderRadius(3), 6.5);
       expect(middle.groupSpacing, 12);
-      expect(middle.groupBorderWidth, 3);
       expect(empty.lerp(explicit, 0.25).backgroundColor, isNull);
       expect(middle.backgroundColor, Colors.red);
       expect(explicit.lerp(empty, 0.25).backgroundColor, Colors.red);
       expect(explicit.lerp(empty, 0.5).backgroundColor, isNull);
+      expect(
+        middle.copyWith(groupSpacing: 10).resolveDimension(TAvatarSize.small),
+        60,
+      );
+      expect(
+        middle.copyWith(dimension: 64).resolveDimension(TAvatarSize.small),
+        64,
+      );
+      final interrupted = middle.lerp(
+        const TAvatarThemeData(dimension: 100, circleBorderRadius: 30),
+        0.5,
+      );
+      expect(interrupted.resolveDimension(TAvatarSize.small), 80);
+      expect(interrupted.resolveDimension(TAvatarSize.large), 86);
+      expect(interrupted.resolveCircleBorderRadius(7), 21.75);
     });
 
     test('lerp 双方均为空时继续交给组件默认值解析', () {
@@ -707,11 +779,82 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData.lerp(beginTheme, endTheme, 0.5),
-          home: const Scaffold(body: TAvatar()),
+          home: const Scaffold(
+            body: Column(
+              children: [
+                TAvatar(size: TAvatarSize.small),
+                TAvatar(size: TAvatarSize.medium),
+                TAvatar(size: TAvatarSize.large),
+              ],
+            ),
+          ),
         ),
       );
 
-      expect(tester.getSize(find.byType(TAvatar)), const Size.square(64));
+      final avatars = find.byType(TAvatar);
+      expect(tester.getSize(avatars.at(0)), const Size.square(60));
+      expect(tester.getSize(avatars.at(1)), const Size.square(64));
+      expect(tester.getSize(avatars.at(2)), const Size.square(72));
+    });
+
+    testWidgets('ThemeData 动画读取小号成员和自定义全局圆角的有效回退', (tester) async {
+      final tokens = TThemeData.defaultData().copyWithTThemeData(
+        'avatar-interpolation-tokens',
+        radiusMap: {'radiusCircle': 7, 'radiusDefault': 3},
+      );
+      final baseTheme = TThemeBuilder.light(tokens);
+      final beginTheme = baseTheme.mergeExtension(const TAvatarThemeData());
+      final endTheme = baseTheme.mergeExtension(
+        const TAvatarThemeData(
+          dimension: 80,
+          iconSize: 40,
+          circleBorderRadius: 20,
+          squareBorderRadius: 10,
+          groupBorderWidth: 4,
+        ),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData.lerp(beginTheme, endTheme, 0.5),
+          home: const Scaffold(
+            body: Column(
+              children: [
+                TAvatarGroup(
+                  children: [
+                    TAvatar(size: TAvatarSize.small),
+                    TAvatar(size: TAvatarSize.small),
+                  ],
+                ),
+                TAvatar(shape: TAvatarShape.square),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      final group = find.byType(TAvatarGroup);
+      expect(tester.getSize(group), const Size(112, 60));
+      final groupBorders = tester
+          .widgetList<DecoratedBox>(
+            find.descendant(of: group, matching: find.byType(DecoratedBox)),
+          )
+          .map((widget) => widget.decoration)
+          .whereType<BoxDecoration>()
+          .where((decoration) => decoration.border != null);
+      expect(groupBorders, hasLength(2));
+      for (final border in groupBorders) {
+        expect(border.border!.top.width, 2.5);
+        expect(border.borderRadius, BorderRadius.circular(13.5));
+      }
+      final square = find.byWidgetPredicate(
+        (widget) => widget is TAvatar && widget.shape == TAvatarShape.square,
+      );
+      expect(tester.getSize(square), const Size.square(64));
+      final squareClip = tester.widget<ClipRRect>(
+        find.descendant(of: square, matching: find.byType(ClipRRect)),
+      );
+      expect(squareClip.borderRadius, BorderRadius.circular(6.5));
     });
 
     test('TAvatarGroup 拒绝非正 maxCount', () {

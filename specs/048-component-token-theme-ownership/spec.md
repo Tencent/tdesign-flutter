@@ -44,14 +44,15 @@
 - 本轮收敛 `TButton`、`TInput`、Dialog action 已有完整实例 `style` 所覆盖的视觉字段，并去除 `TTagThemeData.fontWeight` 与 `font` 的重复设置；`TTabsBar` 的容器背景/分割线归组件 Theme，不再保留实例完整装饰入口。`TText` 的单实例完整样式、SwipeCellAction 的逐项外观和 Popup 蒙层透明度入口已按下文迁移；这仍不等于全仓所有组件都已满足单入口标准。
 - 无显式字体的独立 `TText` 使用小程序 `packages/components/paragraph/paragraph.less` 中 `@font-body-medium` 的 14dp/22dp 语义，而非 `fontBodyLarge` 16dp/24dp；组合组件传入的内置文字默认值、显式 Flutter 主题、组件 Theme 与实例样式仍按既定优先级覆盖。这个默认字号/行高变化属于可见 breaking 行为，须列入迁移与 Golden 审查。
 - Avatar 默认图标与文字的前景色只由 `TAvatarThemeData.foregroundColor` 控制；移除组件 Theme 中可同时设置颜色的 `textStyle`。字符头像仍按 `size` 使用内置字号与字重，特殊排版由调用方传入带样式的 `child: Text(...)`，不为通用 `Widget child` 再增组件级文字样式入口。
-- Avatar 的形状选择只保留 `TAvatar.shape`；移除已弃用且与其一一等价的 `variant` 参数和 `TAvatarVariant`。圆形、方形以及头像组成员裁剪继续由同一 `shape` 结果决定，不改变默认视觉与既有 Golden。
+- Avatar 的形状选择只保留 `TAvatar.shape`；移除已弃用且与其一一等价的 `variant` 参数和 `TAvatarVariant`。圆形、方形以及头像组成员裁剪、描边和阴影必须由同一形状及有效圆角决定；默认正圆视觉不变，自定义较小 `radiusCircle` 时组外框不得仍强制绘制为正圆。
+- Avatar Theme 的尺寸、图标尺寸、组描边宽度及圆角存在随成员规格或全局 Token 变化的回退值。与显式 Theme 值插值时须在成员最终规格和全局 Token 已知后解析两端有效值；不能在 `ThemeExtension.lerp` 中预设中号尺寸或固定全局圆角。两端均未配置时继续由组件读取实时回退值。
 - SideBar 的标签排版由组件 Theme 的未选中、选中样式分别控制；移除 `TSideBarItem.textStyle`，避免选中项上的实例样式被 Theme 的 `selectedTextStyle` 整体替换。每项数据只保留内容、状态和身份信息。
 - SideBar 的 `textStyle.color` 只控制未选中态；选中态优先 `selectedTextStyle.color`，否则品牌色；禁用态始终禁用色。选中态可继承未选中样式的排版字段，但不得继承其颜色。图标、指示线与标签的状态色保持一致。
 - Tag 的方形、圆角、标记形状由 `TTag.shape` 和 `TSelectTag.shape` 选择；Theme 只负责选定形状后的具体圆角等视觉值，不再保存 `shape` 选择器。
 - `TTextSpan` 是独立 Span 局部样式入口，仅保留 Flutter 原生 `style`；移除与 `style` 同义的字体、颜色和删除线便捷参数，未指定样式时继续继承父 Span。
 - `TTextThemeData` 的子树级字号、行高、字重、颜色统一放在 `textStyle`；删除同层级的 `font`，Text、Cascader、Picker 对这一主题使用同一条消费链。实例保留 `font` 作为 TDesign 字体 Token 预设，完整 `style` 用于同一实例的显式覆写；删除与 `style` 同义的 `fontWeight/fontFamily/textColor/isTextThrough/lineThroughColor` 实例字段。解析顺序为实例 `style` > 实例 `font` 预设 > 子树 Theme `textStyle` > 全局字体 Token。
 - Popover 蒙层色和气泡圆角只由 `TPopoverThemeData.barrierColor/borderRadius` 控制；移除 `TPopoverAnchor` 与 `TPopover.showPopover` 的同义实例字段 `overlayColor/radius`。单个气泡可包裹局部 Theme；`borderRadius` 使用 `BorderRadius` 保存原实例圆角的逐角表达能力。默认值仍沿组件原有回退，不以旧 Golden 自动裁定。
-- TabBar 顶部分隔线与 Item 之间的竖线虽然在小程序共用 `--td-tab-bar-border-color` 名称，但未覆盖时分别回退 `borderLevel1Color` 与灰阶 3。Flutter 分别保留上边线、竖线的 Theme 视觉入口，各自只走一条默认回退；不为消除小程序同名变量歧义增加另一套兼容回退。
+- TabBar 顶部分隔线与 Item 之间的竖线虽然在小程序共用 `--td-tab-bar-border-color` 名称，但当前 Flutter 上边线固定读取 `borderLevel1Color`，竖线可由组件 Theme 的 `dividerColor` 覆盖，默认读取灰阶 3。已删除的 `topBorder`、`showTopBorder` 与 `centerDistance` 不在 Theme 中恢复，也不增加兼容回退；迁移文档必须准确说明能力删除。
 - SideBar 的选中前景色只由 `TSideBarThemeData.selectedTextStyle.color` 配置；同一个颜色用于选中文字、图标和指示线。移除同层同义的 `selectedColor`，没有显式颜色时仍读取全局品牌色，字体等文字样式继续由 `selectedTextStyle` 控制。
 - `TText` 通过完整实例 `style` 覆写单项文字，子树级完整文字样式由 `TTextThemeData.textStyle` 提供默认；两者作用范围不同且按字段合并。内部组合组件已按各自状态计算的逐项文字样式继续由私有解析路径交给 Flutter 原生 `Text`。`TTextSpan` 的 Span 局部样式与父文字样式属于不同富文本层级，单独保留其 Flutter `TextSpan` 语义。
 - SwipeCell 的操作项视觉由每个 `TSwipeCellAction` 的实例参数控制；组件 Theme 只保留没有实例同义入口的面板/操作项内边距。操作项的背景、图标、文字默认值从全局 Token 或标准 Flutter 显式主题取得，不再通过同义 Theme 字段配置。`builder` 与全部内置视觉参数互斥；debug 构造及 release 绘制均须拒绝冲突配置，防止静默忽略参数。
