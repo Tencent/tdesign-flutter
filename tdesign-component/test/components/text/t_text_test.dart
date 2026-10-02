@@ -192,11 +192,7 @@ void main() {
       wrap(
         const TText(
           '主题',
-          style: TextStyle(
-            fontSize: 18,
-            height: 26 / 18,
-            color: Colors.orange,
-          ),
+          style: TextStyle(fontSize: 18, height: 26 / 18, color: Colors.orange),
           strutStyle: strut,
           textWidthBasis: TextWidthBasis.longestLine,
           textHeightBehavior: heightBehavior,
@@ -240,6 +236,19 @@ void main() {
     expect(span.semanticsIdentifier, 'span-id');
     expect(span.locale, const Locale('zh', 'CN'));
     expect(span.spellOut, isFalse);
+  });
+
+  test('运行时构建 TTextSpan 保留显式 Span 样式和语义', () {
+    final label = String.fromCharCodes([84, 68]);
+    const style = TextStyle(color: Colors.red, fontSize: 18);
+    final span = TTextSpan(
+      text: label,
+      style: style,
+      semanticsLabel: 'TDesign',
+    );
+    expect(span.text, label);
+    expect(span.style, style);
+    expect(span.semanticsLabel, 'TDesign');
   });
 
   testWidgets('TText.rich 根样式与 TTextSpan 局部样式组合', (tester) async {

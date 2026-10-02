@@ -162,3 +162,10 @@
 - 移除 Material `TextTheme` 显式来源推断，以及 `DefaultTextStyle` 到 TDesign 文字样式的自动桥接。默认文字只由全局 `TThemeData`、组件 `ThemeExtension` 和现存的实例样式解析；TThemeBuilder 向 Material `TextTheme` 的投影仍供原生 Material 控件使用，但 TDesign 组件不回读。`TStyleResolver` 不再提供 `textTheme/colorScheme/materialTheme` 转发 getter。
 - Drawer 内置标题若收到 `TText`，由 Drawer 组件 Theme 显式传递标题样式；任意 Flutter `Text` 子节点仍可读取内部 `DefaultTextStyle`，但外层 Material 文字主题不参与 TDesign 解析。Tag 与 Progress 的字体族/回退仅取 TDesign Token。测试专用 Golden 字体通过 `TThemeData.fontFamilyMap` 注入，避免仅配置 Material `TextTheme` 时中文丢字。
 - Flutter 3.32.0 / 3.47.0 严格分析各零诊断；两个版本受影响组件功能测试各 1090/1090 通过，Golden 字体注入单测各 1/1 通过。固定 Linux 3.32.0 使用隔离源码副本无更新跑视觉矩阵，已发现多个旧基线差异：Badge 单页 light/dark 各 0.09%（487/484 像素，集中在 Badge 小字）；Text Demo 高度 1616→1604，Tag/Progress/ActionSheet 等差异集中于文字字形或行盒；BackTop、Cascader 等还出现尺寸差异。不能仅凭功能通过或文字来源变动批量更新 Golden，须按最终源码逐类复核尺寸与像素后再更新并重跑。未修改仓库 Golden。
+
+### 2026-10-03 文字来源变更后的 CI 修复与 Linux 基线
+
+- Cell、Popup 接收任意标题 Widget 的插槽，在组件内部同时向 `TTextThemeData.textStyle` 与原生 `DefaultTextStyle` 提供局部默认样式；不恢复 `TText` 从外层 Material 字体主题自动推断样式。Steps 旧测试改用显式 TDesign 组件 Theme 验证，实例样式仍优先。新增插槽优先级测试及 Text 字体回退、富文本语义测试。
+- Flutter 3.32.0 完整组件回归通过，Text 生产源码覆盖率 132/134 = 98.51%；Flutter 3.47.0 隔离副本的组件回归功能断言全部通过，补充测试后的 Text 聚焦覆盖率 131/134 = 97.76%。两版本完整组件包严格 analyze 均零诊断；3.32.0 受影响的 Example 功能测试 11/11 通过。
+- 固定 Linux amd64 / Flutter 3.32.0 使用隔离副本重现旧 Golden 失败。逐张比较仓库原图与候选图，共有 450 张同尺寸像素差异、102 张尺寸差异；其中 4 张差异在首轮失败清单外，故首轮清单只记录 446 张同尺寸差异。抽查 Indexes、Dialog、Cell、Popup、Steps、Avatar、BackTop、Calendar、Cascader、Tag、Theme、TabBar 等原图与新图，高差异主要是文字字形、行盒及列表逐行累积位移；未通过 Demo 覆盖组件样式。102 张尺寸差异中，100 张仅页面高度变化（最大缩小 30px），BackTop 状态矩阵浅/暗两张宽度各缩小 1px。
+- 在隔离副本中生成候选基线后，完整视觉矩阵以**无更新参数**严格复跑并全部通过，随后只同步 552 张内容变化的 Golden PNG 至仓库。606 张 Golden 中其余 54 张未改动；这验证固定 Linux 基线可复现，不等同于 606 张逐项 Figma 像素验收或最终远端 CI 通过。

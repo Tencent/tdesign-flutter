@@ -19,6 +19,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
+import '../text/t_text_style_scope.dart';
 import 't_popup_theme_data.dart';
 
 part '_popup_center_close.dart';

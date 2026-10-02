@@ -801,6 +801,7 @@ const componentTestManifests = <ComponentTestManifest>[
     componentTests: [
       'test/components/text/t_font_loader_test.dart',
       'test/components/text/t_text_resolve_test.dart',
+      'test/components/text/t_text_style_scope_test.dart',
       'test/components/text/t_text_test.dart',
     ],
     visualTests: [

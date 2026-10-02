@@ -175,6 +175,29 @@ void main() {
       expect(text.style?.fontWeight, FontWeight.w600);
     });
 
+    testWidgets('TText 副标题与说明采用各自组件样式，实例样式优先', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TCell(
+            title: TText('标题'),
+            subtitle: TText('副标题'),
+            note: TText('说明', style: TextStyle(color: Colors.orange)),
+          ),
+          cellTheme: const TCellThemeData(
+            subtitleStyle: TextStyle(color: Colors.purple, fontSize: 13),
+            noteStyle: TextStyle(color: Colors.blue, fontSize: 15),
+          ),
+        ),
+      );
+
+      final subtitle = tester.widget<Text>(find.text('副标题'));
+      final note = tester.widget<Text>(find.text('说明'));
+      expect(subtitle.style?.color, Colors.purple);
+      expect(subtitle.style?.fontSize, 13);
+      expect(note.style?.color, Colors.orange);
+      expect(note.style?.fontSize, 15);
+    });
+
     testWidgets('trailing 可展示较小字号的普通正文值', (tester) async {
       const value = 'Selected value';
       final token = TThemeData.defaultData();

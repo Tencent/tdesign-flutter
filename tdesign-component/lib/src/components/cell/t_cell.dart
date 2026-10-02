@@ -5,6 +5,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_style_scope.dart';
 import 't_cell_theme_data.dart';
 
 /// 单元格内容垂直对齐方式。
@@ -140,7 +141,7 @@ class _TCellState extends State<TCell> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Flexible(
-                            child: DefaultTextStyle.merge(
+                            child: TTextStyleScope(
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               softWrap: false,
@@ -182,7 +183,7 @@ class _TCellState extends State<TCell> {
                     if (widget.title != null && widget.subtitle != null)
                       const SizedBox(height: 4.0),
                     if (widget.subtitle != null)
-                      DefaultTextStyle.merge(
+                      TTextStyleScope(
                         style:
                             theme?.subtitleStyle ??
                             listTileTheme.subtitleTextStyle ??
@@ -211,7 +212,7 @@ class _TCellState extends State<TCell> {
                         constraints.maxWidth *
                         (constraints.maxWidth < 240 ? 0.5 : 0.75),
                   ),
-                  child: DefaultTextStyle.merge(
+                  child: TTextStyleScope(
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     softWrap: false,
@@ -234,7 +235,7 @@ class _TCellState extends State<TCell> {
                 Expanded(
                   child: Align(
                     alignment: noteAlignment,
-                    child: DefaultTextStyle.merge(
+                    child: TTextStyleScope(
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       softWrap: false,

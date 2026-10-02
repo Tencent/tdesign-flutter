@@ -27,8 +27,8 @@ void main() {
       final theme = TThemeBuilder.light(token);
       await tester.pumpWidget(
         MaterialApp(
-          theme: theme.copyWith(
-            textTheme: const TextTheme(bodyLarge: TextStyle(fontSize: 21)),
+          theme: theme.mergeExtension(
+            const TTextThemeData(textStyle: TextStyle(fontSize: 21)),
           ),
           home: Scaffold(
             body: TSteps.progress(
@@ -62,10 +62,8 @@ void main() {
   testWidgets('显式文字颜色生效且 customTitle 保持实例优先', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
-        theme: TThemeBuilder.light(TThemeData.defaultData()).copyWith(
-          textTheme: const TextTheme(
-            bodyLarge: TextStyle(color: Colors.purple),
-          ),
+        theme: TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+          const TTextThemeData(textStyle: TextStyle(color: Colors.purple)),
         ),
         home: const Scaffold(
           body: TSteps.progress(

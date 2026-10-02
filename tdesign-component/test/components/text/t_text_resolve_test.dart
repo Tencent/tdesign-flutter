@@ -119,6 +119,22 @@ void main() {
     );
   });
 
+  testWidgets('组合组件显式字体族完整传递名称、回退与资源包', (tester) async {
+    final context = await pumpContext(tester);
+    final resolved = TTextResolve.resolve(
+      context: context,
+      fontFamily: FontFamily(
+        fontFamily: 'CustomFont',
+        fallback: ['FallbackFont'],
+        package: 'custom_package',
+      ),
+    );
+    expect(resolved.fontFamily, 'packages/custom_package/CustomFont');
+    expect(resolved.fontFamilyFallback, [
+      'packages/custom_package/FallbackFont',
+    ]);
+  });
+
   testWidgets('Apple 平台保留 PingFang 主字体', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
     try {

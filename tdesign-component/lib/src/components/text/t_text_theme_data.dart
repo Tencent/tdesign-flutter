@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 /// TText 子树的组件默认值。
 ///
-/// 仅在对应实例参数未指定时生效；实例字体便利参数和段落参数
-/// 优先于这里的默认值。Flutter [DefaultTextStyle] 可提供通用文字继承。
+/// 仅在对应实例参数未指定时生效；实例字体预设和段落参数
+/// 优先于这里的默认值。外部 Flutter [DefaultTextStyle] 不会自动覆盖 TDesign 文字。
 class TTextThemeData extends ThemeExtension<TTextThemeData> {
   const TTextThemeData({
     this.textStyle,
