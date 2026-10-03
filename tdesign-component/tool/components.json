@@ -518,7 +518,7 @@
         "names": [
           "TCell",
           "TCellGroup",
-          "TCellStyle"
+          "TCellThemeData"
         ],
         "getComments": true
       }
@@ -705,7 +705,6 @@
         "names": [
           "TTag",
           "TSelectTag",
-          "TTagStyle",
           "TTagThemeData",
           "TTagColorPreset"
         ],

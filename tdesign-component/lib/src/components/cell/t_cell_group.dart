@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_style_scope.dart';
 import 't_cell.dart';
 import 't_cell_theme_data.dart';
 
@@ -79,20 +80,18 @@ class TCellGroup extends StatelessWidget {
         if (title != null)
           Padding(
             padding: theme?.titlePadding ?? const EdgeInsets.all(16),
-            child: DefaultTextStyle.merge(
+            child: TTextStyleScope(
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               softWrap: false,
-              style:
-                  theme?.groupTitleStyle ??
-                  TextStyle(
-                    color: context.tTheme.textColorPrimary,
-                    fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
-                    height: context.tTheme.fontBodyMedium?.height,
-                    fontWeight:
-                        context.tTheme.fontBodyMedium?.fontWeight ??
-                        FontWeight.w400,
-                  ),
+              style: TextStyle(
+                color: context.tTheme.textColorPrimary,
+                fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
+                height: context.tTheme.fontBodyMedium?.height,
+                fontWeight:
+                    context.tTheme.fontBodyMedium?.fontWeight ??
+                    FontWeight.w400,
+              ).merge(theme?.groupTitleStyle),
               child: title!,
             ),
           ),

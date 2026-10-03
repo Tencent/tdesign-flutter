@@ -616,6 +616,35 @@ void main() {
           ),
         ];
     for (final sizeCase in sizeCases) {
+      for (final variant in TTagVariant.values) {
+        testWidgets('${sizeCase.size.name}/${variant.name} 最终边框盒与图标布局', (
+          tester,
+        ) async {
+          await tester.pumpWidget(
+            wrapWithTheme(
+              TTag(
+                '尺寸',
+                size: sizeCase.size,
+                variant: variant,
+                icon: Icons.star,
+                needCloseIcon: true,
+              ),
+            ),
+          );
+          final tagRect = tester.getRect(find.byType(TTag));
+          final textRect = tester.getRect(find.text('尺寸'));
+          final leadingRect = tester.getRect(find.byIcon(Icons.star));
+          final closeRect = tester.getRect(find.byIcon(TIcons.close));
+          final spacing = sizeCase.size == TTagSize.small ? 2.0 : 4.0;
+          expect(tagRect.height, sizeCase.height);
+          expect(textRect.height, sizeCase.height - sizeCase.padding.vertical);
+          expect(textRect.center.dy, closeTo(tagRect.center.dy, 1e-9));
+          expect(leadingRect.size, Size.square(sizeCase.iconSize));
+          expect(closeRect.size, Size.square(sizeCase.iconSize));
+          expect(textRect.left - leadingRect.right, spacing);
+          expect(closeRect.left - textRect.right, spacing);
+        });
+      }
       testWidgets('${sizeCase.size.name} 默认尺寸与小程序边框盒一致', (tester) async {
         await tester.pumpWidget(
           wrapWithTheme(TTag('尺寸', size: sizeCase.size, icon: Icons.star)),
@@ -650,6 +679,20 @@ void main() {
         );
       });
     }
+
+    testWidgets('描边在自定义字体和 padding 外增加边框，不压缩正文', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TTag('自定义描边', variant: TTagVariant.outline),
+          tagTheme: TTagThemeData(
+            font: Font(size: 14, lineHeight: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          ),
+        ),
+      );
+      expect(tester.getSize(find.byType(TTag)).height, 36);
+      expect(tester.getSize(find.text('自定义描边')).height, 24);
+    });
 
     testWidgets('自定义字体行高同时决定文本行盒和单行外盒', (tester) async {
       await tester.pumpWidget(

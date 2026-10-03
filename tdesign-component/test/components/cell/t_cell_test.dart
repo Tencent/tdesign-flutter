@@ -16,6 +16,59 @@ void main() {
   }
 
   group('TCell', () {
+    for (final nativeText in [false, true]) {
+      testWidgets('局部 Theme 只改颜色，保留各插槽字体 Token（原生=$nativeText）', (
+        tester,
+      ) async {
+        Widget text(String value) => nativeText ? Text(value) : TText(value);
+        final token = TThemeData.defaultData();
+        await tester.pumpWidget(
+          app(
+            TCellGroup(
+              title: text('组标题'),
+              cells: [
+                TCell(
+                  title: text('标题'),
+                  subtitle: text('副标题'),
+                  note: text('说明'),
+                  required: true,
+                ),
+                TCell(note: text('独立说明')),
+              ],
+            ),
+            cellTheme: const TCellThemeData(
+              titleStyle: TextStyle(color: Colors.red),
+              subtitleStyle: TextStyle(color: Colors.green),
+              noteStyle: TextStyle(color: Colors.blue),
+              groupTitleStyle: TextStyle(color: Colors.purple),
+              requiredStyle: TextStyle(fontWeight: FontWeight.w700),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        for (final entry in [
+          ('标题', token.fontBodyLarge!, Colors.red),
+          ('副标题', token.fontBodyMedium!, Colors.green),
+          ('说明', token.fontBodyLarge!, Colors.blue),
+          ('独立说明', token.fontBodyLarge!, Colors.blue),
+          ('组标题', token.fontBodyMedium!, Colors.purple),
+        ]) {
+          final finder = find.text(entry.$1);
+          final style = nativeText
+              ? DefaultTextStyle.of(tester.element(finder)).style
+              : tester.widget<Text>(finder).style!;
+          expect(style.color, entry.$3);
+          expect(style.fontSize, entry.$2.size);
+          expect(style.height, entry.$2.height);
+          expect(style.fontWeight, entry.$2.fontWeight);
+        }
+        expect(
+          tester.widget<Text>(find.text(' *')).style?.color,
+          token.errorColor,
+        );
+      });
+    }
+
     testWidgets('单一 Widget 槽位完整渲染', (tester) async {
       await tester.pumpWidget(
         app(

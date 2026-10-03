@@ -220,3 +220,12 @@
 
 - PR #1146 在 `367b7a2b` 的两个版本组件回归均因 Switch 生产覆盖率 352/372 = 94.62%（门槛 95%）失败，原有 Switch 测试断言本身通过。新增禁用图文在开启／关闭状态对组件 Theme 颜色的最终消费断言，覆盖率在 Flutter 3.32.0 Linux 与 3.47.0 均为 356/372 = 95.70%，37 项 Switch 测试通过；两版本 `flutter analyze --fatal-infos` 均零诊断。未降低门槛、未改生产渲染。
 - 同一 CI 的 Linux 视觉回归仅余 Cell、Swiper、Form、Theme 四组失败。用同版本 Linux 3.32.0 和 CI 解析的图标包 0.0.7 无更新复现并逐张查看原图、当前图、差异图：Cell 三张深色页与 Swiper 三张深色页只变 Switch 滑块，Form 三张深色页只变禁用 Switch 滑块，Theme 深色页只变禁用 Button 文案；无尺寸或布局位移。仅更新这 10 张 PNG；四组对应测试在隔离 Linux 中无更新复跑 40/40 通过，随后完整 `dart run tool/run_visual_regression.dart` 严格无更新复跑全部套件通过。最终远端 head 的 CI 仍需另验。
+## 2026-10-03：合并前 Tag / Cell 实测缺陷修复
+
+- Tag `outline` / `lightOutline` 的高度计算补回上下各 1dp 描边；small/medium/large/extraLarge 各变体总高一致为 20/24/28/40dp，文字行框分别为 16/20/22/22dp。默认 padding 扣除描边后，总高必须包含描边；显式组件 padding 保留其内容内边距语义。
+- 前置图标占位和关闭图标统一使用尺寸预设 12/14/16/16dp；small 图文间距 2dp，其余 4dp。16 项尺寸×变体测试直接测量最终 RenderBox，不再仅用 Icon.size 属性证明布局正确。
+- Cell 标题、副标题、两种说明布局、必填标记，以及 CellGroup 标题按字段合并 Token 默认样式与组件 Theme。2 项回归同时覆盖 TText 与原生 Text：仅指定颜色时，不改变各插槽的字号、行高和字重；实例文字样式仍优先。
+- Flutter 3.32.0 / 3.47.0 各 125 项 Tag/SelectTag/Cell 聚焦测试通过，组件包严格 analyze 零诊断。Tag 304/313=97.12%，Cell 188/189=99.47%，均达到 95% 门槛。
+- 本批次未添加 Demo 样式覆盖，未更改公开 API 签名，也未恢复任何兼容别名。默认描边尺寸与图标布局修正属于用户可感知变化，发布说明须记录。
+- 隔离 Linux amd64 Flutter 3.32.0 中，首次无更新复现 Tag 四张快照从 375×1310 变为 375×1318；逐张检查实际图，变化来自描边恢复正确高度及图标尺寸修正。只更新 Tag 默认/选中 light/dark 四张基线，随后 Tag/Cell Demo 与 Golden 严格无更新复跑 21/21 通过；Cell 基线未修改。本批次未执行其他组件完整视觉矩阵，不表示新的 PR head 已通过 CI，也不表示 677 项组件变量已完成最终视觉验收。
+- API 文档从源码重新生成，清单移除不存在的 `TTagStyle`，将 `TCellStyle` 改为实际公开的 `TCellThemeData`，避免 autofix 丢失组件 Theme 文档。

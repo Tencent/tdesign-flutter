@@ -1,5 +1,7 @@
 # 实施任务
 
+- [x] 合并前审查实测修复 Tag 描边总高少算 2dp、图标占位/关闭图标固定 14dp、小号图文间距错误；统一按尺寸预设和边框盒计算。Cell/CellGroup 各文字槽位按字段合并组件 Theme 与 Token 默认样式，覆盖 TText 和原生 Text；清除 Tag Theme 的 Material 回退残留注释及 API 生成清单中已删除的 Style 类型。新增 19 项组件回归，视觉验证状态见 `acceptance.md`。
+
 - [ ] DOING 盘点组件 Theme、公开 API 和小程序组件变量的真实消费链；已初筛 116 个同名候选，包导出过滤后的 64 项已降至 0；异名同义及 804 个组件变量最终消费仍未完成。
 - [ ] DOING 逐项确定唯一所有者、迁移路径和 breaking 风险；已确认项见 `ownership-table.md`，P0 未裁定项见 `report.md`。
 - [ ] DOING 收敛确认重复的公开控制入口与 Token 回退；已处理的 Button、Input、Dialog action、TabsBar、Tag、SideBar、Text、SwipeCellAction 和 Popup 字段见 `migration.md`。仍须逐组件审查尚未裁定的异名同义入口，不能把已处理组件外推为全仓完成。

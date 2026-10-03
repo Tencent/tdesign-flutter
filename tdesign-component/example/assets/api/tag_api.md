@@ -39,7 +39,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 所有启用 Tag 的统一背景色；优先于各配色预设的填充色。 |
-| dangerColor | Color? | - | danger 预设的基础色；未设置时回退显式 Material error 或全局 errorColor。 |
+| dangerColor | Color? | - | danger 预设的基础色；未设置时回退全局 errorColor。 |
 | fixedWidth | double? | - | 标签固定宽度 |
 | font | Font? | - | 字体尺寸和行高；未设置时随标签尺寸使用对应的全局字体 Token。 |
 | maxLines | int? | - | 文字最大行数。 未设置时组件默认按紧凑标签语义使用单行。 |
@@ -48,7 +48,7 @@
 | squareBorderRadius | double? | - | 方形标签圆角，单位为逻辑像素；未设置时所有尺寸均读取全局 `radiusSmall`（当前默认 3dp）。 |
 | successColor | Color? | - | success 预设的基础色；未设置时回退全局 successColor。 |
 | successLightColor | Color? | - | success 预设的浅色填充；未设置时回退全局 successColor1。 |
-| textColor | Color? | - | 所有启用 Tag 的正文和前置图标颜色；优先于显式 Material 色板及配色预设。 禁用态不受此字段影响，关闭图标继续使用独立的占位色 Token。 |
+| textColor | Color? | - | 所有启用 Tag 的正文和前置图标颜色；优先于配色预设的全局 Token。 禁用态不受此字段影响，关闭图标继续使用独立的占位色 Token。 |
 
 
 ### TTagColorPreset

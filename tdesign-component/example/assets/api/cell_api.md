@@ -36,6 +36,35 @@
 | variant | TCellGroupVariant? | - | 组视觉形态；未设置时为 `TCellGroupVariant.standard`。 |
 
 
+### TCellThemeData
+#### 简介
+Cell 与 CellGroup 的组件级 ThemeExtension。
+仅保存视觉和布局默认值，不保存内容、回调或列表数据。
+文字样式按字段覆盖全局 Token 派生的组件默认值；未配置字段保持默认。
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| arrowColor | Color? | - | 箭头颜色。 |
+| backgroundColor | Color? | - | 默认背景色。 |
+| borderColor | Color? | - | 分隔线颜色。 |
+| cardBorderRadius | BorderRadius? | - | 卡片组圆角。 |
+| cardPadding | EdgeInsetsGeometry? | - | 卡片组内边距。 |
+| groupBorderColor | Color? | - | 单元格组边框颜色。 |
+| groupBordered | bool? | - | 是否显示组外边框。 |
+| groupTitleStyle | TextStyle? | - | 单元格组标题样式。 |
+| height | double? | - | Cell 固定高度。 |
+| noteStyle | TextStyle? | - | 右侧说明文字样式。 |
+| padding | EdgeInsetsGeometry? | - | 单元格内边距。 |
+| pressedColor | Color? | - | 按压背景色。 |
+| requiredStyle | TextStyle? | - | 必填标记样式。 |
+| showBottomBorder | bool? | - | 是否显示 Cell 底部分隔线。 |
+| showLastDivider | bool? | - | 是否显示最后一个 Cell 后的分隔线。 |
+| subtitleStyle | TextStyle? | - | 副标题文字样式。 |
+| titlePadding | EdgeInsetsGeometry? | - | 组标题内边距。 |
+| titleStyle | TextStyle? | - | 标题文字样式。 |
+
+
 ### TCellAlign
 #### 简介
 单元格内容垂直对齐方式。
@@ -47,6 +76,18 @@
 | top | 顶部对齐。 |
 | center | 居中对齐。 |
 | bottom | 底部对齐。 |
+
+
+### TCellGroupVariant
+#### 简介
+单元格组视觉形态。
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| standard | 通栏形态。 |
+| card | 卡片形态。 |
 
 
 ### TCellGroupBuilder

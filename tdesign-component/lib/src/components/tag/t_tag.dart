@@ -107,14 +107,16 @@ class TTag extends StatelessWidget {
     );
 
     var innerIcon = _getIcon(foregroundColor);
+    final iconSize = _getIconSize();
+    final iconSpacing = size == TTagSize.small ? 2.0 : 4.0;
     if (innerIcon != null || needCloseIcon) {
       var children = <Widget>[];
       if (innerIcon != null) {
         children.add(
           Container(
-            margin: const EdgeInsets.only(right: 4),
-            width: 14,
-            height: 14,
+            margin: EdgeInsets.only(right: iconSpacing),
+            width: iconSize,
+            height: iconSize,
             child: innerIcon,
           ),
         );
@@ -122,11 +124,11 @@ class TTag extends StatelessWidget {
       children.add(fixedWidth == null ? child : Flexible(child: child));
       if (needCloseIcon) {
         final closeIcon = Container(
-          margin: const EdgeInsets.only(left: 4),
+          margin: EdgeInsets.only(left: iconSpacing),
           child: Icon(
             TIcons.close,
             color: colors.closeIconColor ?? context.tTheme.textColorAnti,
-            size: 14,
+            size: iconSize,
           ),
         );
         children.add(
@@ -138,13 +140,14 @@ class TTag extends StatelessWidget {
       child = Row(mainAxisSize: MainAxisSize.min, children: children);
     }
 
-    final defaultPadding = _getPadding(isOutline ? 1.0 : 0.0);
+    final borderWidth = isOutline ? 1.0 : 0.0;
+    final defaultPadding = _getPadding(borderWidth);
     final effectivePadding =
         theme?.resolvePadding(defaultPadding) ?? defaultPadding;
     final result = Container(
       width: fixedWidth,
       height: maxLines == 1
-          ? _getTagHeight(effectiveFont, effectivePadding)
+          ? _getTagHeight(effectiveFont, effectivePadding, borderWidth)
           : null,
       padding: effectivePadding,
       decoration: BoxDecoration(
@@ -152,7 +155,7 @@ class TTag extends StatelessWidget {
             ? theme?.resolveBackgroundColor(colors.backgroundColor) ??
                   colors.backgroundColor
             : colors.backgroundColor,
-        border: Border.all(width: isOutline ? 1 : 0, color: colors.borderColor),
+        border: Border.all(width: borderWidth, color: colors.borderColor),
         borderRadius: borderRadius,
       ),
       child: Align(
@@ -347,14 +350,19 @@ class TTag extends StatelessWidget {
   }
 
   /// 计算标签高度，只约束纵向布局，不影响标签按内容自适应宽度。
-  double? _getTagHeight(Font? textFont, EdgeInsets padding) {
+  double? _getTagHeight(
+    Font? textFont,
+    EdgeInsets padding,
+    double borderWidth,
+  ) {
     if (size == TTagSize.custom || textFont == null) {
       return null;
     }
-    return textFont.size * textFont.height + padding.vertical;
+    // Container 将描边计入内容 inset；总高需补回两侧描边，避免压缩行框。
+    return textFont.size * textFont.height + padding.vertical + borderWidth * 2;
   }
 
-  /// 计算padding，需去除描边的宽对，对内描边
+  /// 将默认外部间距换算为描边以内的 padding，保持各变体总高一致。
   EdgeInsets _getPadding(double border) {
     var hPadding = 0.0;
     var vPadding = 0.0;

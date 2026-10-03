@@ -84,6 +84,25 @@ class _TCellState extends State<TCell> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TCellThemeData>();
+    final token = context.tTheme;
+    final titleStyle = TextStyle(
+      color: token.textColorPrimary,
+      fontSize: token.fontBodyLarge?.size ?? 16,
+      height: token.fontBodyLarge?.height,
+      fontWeight: token.fontBodyLarge?.fontWeight ?? FontWeight.w400,
+    ).merge(theme?.titleStyle);
+    final subtitleStyle = TextStyle(
+      color: token.textColorSecondary,
+      fontSize: token.fontBodyMedium?.size ?? 14,
+      height: token.fontBodyMedium?.height,
+      fontWeight: token.fontBodyMedium?.fontWeight ?? FontWeight.w400,
+    ).merge(theme?.subtitleStyle);
+    final noteStyle = TextStyle(
+      color: token.textColorPlaceholder,
+      fontSize: token.fontBodyLarge?.size ?? 16,
+      height: token.fontBodyLarge?.height,
+      fontWeight: token.fontBodyLarge?.fontWeight ?? FontWeight.w400,
+    ).merge(theme?.noteStyle);
     final align = widget.align ?? TCellAlign.center;
     final crossAxisAlignment = switch (align) {
       TCellAlign.top => CrossAxisAlignment.start,
@@ -139,31 +158,16 @@ class _TCellState extends State<TCell> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               softWrap: false,
-                              style:
-                                  theme?.titleStyle ??
-                                  TextStyle(
-                                    color: context.tTheme.textColorPrimary,
-                                    fontSize:
-                                        context.tTheme.fontBodyLarge?.size ??
-                                        16,
-                                    height:
-                                        context.tTheme.fontBodyLarge?.height,
-                                    fontWeight:
-                                        context
-                                            .tTheme
-                                            .fontBodyLarge
-                                            ?.fontWeight ??
-                                        FontWeight.w400,
-                                  ),
+                              style: titleStyle,
                               child: widget.title!,
                             ),
                           ),
                           if (widget.required)
                             Text(
                               ' *',
-                              style:
-                                  theme?.requiredStyle ??
-                                  TextStyle(color: context.tTheme.errorColor),
+                              style: TextStyle(
+                                color: token.errorColor,
+                              ).merge(theme?.requiredStyle),
                             ),
                         ],
                       ),
@@ -171,17 +175,7 @@ class _TCellState extends State<TCell> {
                       const SizedBox(height: 4.0),
                     if (widget.subtitle != null)
                       TTextStyleScope(
-                        style:
-                            theme?.subtitleStyle ??
-                            TextStyle(
-                              color: context.tTheme.textColorSecondary,
-                              fontSize:
-                                  context.tTheme.fontBodyMedium?.size ?? 14,
-                              height: context.tTheme.fontBodyMedium?.height,
-                              fontWeight:
-                                  context.tTheme.fontBodyMedium?.fontWeight ??
-                                  FontWeight.w400,
-                            ),
+                        style: subtitleStyle,
                         child: widget.subtitle!,
                       ),
                   ],
@@ -200,16 +194,7 @@ class _TCellState extends State<TCell> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     softWrap: false,
-                    style:
-                        theme?.noteStyle ??
-                        TextStyle(
-                          color: context.tTheme.textColorPlaceholder,
-                          fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
-                          height: context.tTheme.fontBodyLarge?.height,
-                          fontWeight:
-                              context.tTheme.fontBodyLarge?.fontWeight ??
-                              FontWeight.w400,
-                        ),
+                    style: noteStyle,
                     child: widget.note!,
                   ),
                 )
@@ -221,16 +206,7 @@ class _TCellState extends State<TCell> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       softWrap: false,
-                      style:
-                          theme?.noteStyle ??
-                          TextStyle(
-                            color: context.tTheme.textColorPlaceholder,
-                            fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
-                            height: context.tTheme.fontBodyLarge?.height,
-                            fontWeight:
-                                context.tTheme.fontBodyLarge?.fontWeight ??
-                                FontWeight.w400,
-                          ),
+                      style: noteStyle,
                       child: widget.note!,
                     ),
                   ),
