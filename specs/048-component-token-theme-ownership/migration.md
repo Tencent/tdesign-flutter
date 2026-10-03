@@ -1,6 +1,6 @@
-# 公开 API 迁移清单（草案）
+# 公开 API 迁移清单
 
-本分支移除了若干**已发布**构造参数或 `ThemeExtension` 字段，属于 breaking change；默认视觉相近不等于源码兼容。以下清单只记录本分支相对当前 `develop` 基线的迁移方向，不代表已经完成使用方编译回归。发布时须以最终 diff 复核名称、补 `breaking(...)` 提交及用户可感知的迁移说明，不能作为普通 `refactor` 发布。
+本分支移除了若干**已发布**构造参数或 `ThemeExtension` 字段，属于 breaking change；默认视觉相近不等于源码兼容。以下清单记录相对 `develop` 的迁移方向。库的迁移验收要求替代调用能通过公开包接口编译并执行关键行为；具体业务应用仍需按清单升级，不要求所有未知第三方应用升级后才能发布。发布应使用 breaking 版本和用户可感知的迁移说明，不能作为普通 `refactor` 发布。
 
 | 原有写法或字段 | 替代入口 | 迁移要点 |
 | --- | --- | --- |
@@ -15,8 +15,8 @@
 | `TCollapse.elevation` | `TCollapseThemeData.elevation` | 阴影改为子树级视觉默认值；单实例需使用局部 Theme。 |
 | `TTabsBar.indicator`、`TIndexes.indexListMaxHeight`、`TSwiper.paginationAlignment` | 对应组件 Theme 字段 | 单实例定制通过仅包裹该实例的局部 `Theme`，不要在 Demo 外绘制补丁。 |
 | `TIconThemeData` | `TIcon.size/color` | 默认尺寸 24dp、默认颜色 `textColorPrimary`；外部 Material `IconTheme` 不再覆盖 `TIcon`。需要逐实例不同的尺寸或颜色时显式传参。 |
-| `TAvatar.backgroundColor/foregroundColor/textStyle`、`TAvatarGroup.dimension`；`TAvatarThemeData.size/shape/variant` | 对应具体值迁至 `TAvatarThemeData`；尺寸、形状及变体选择留在实例 | 同一子树设置颜色、文字与物理边长；逐实例配色可用局部 Theme。 |
-| `TDrawer.width/backgroundColor`、`TDrawerContent.width/backgroundColor` | `TDrawerThemeData` 的宽度和背景字段 | 需用局部 Theme 设置单个抽屉的具体视觉值。 |
+| `TAvatar.backgroundColor/foregroundColor/textStyle`、`TAvatarGroup.dimension`；`TAvatarThemeData.size/shape/variant` | 颜色与物理边长迁至 `TAvatarThemeData`；特殊文字排版使用 `child: Text(style: ...)`；规格与形状选择留在实例 | 单个头像配色可用局部 Theme；`TAvatarThemeData.textStyle` 已删除，不能作为迁移目标。 |
+| `TDrawer.width/backgroundColor`、公开类型 `TDrawerContent` | `TDrawerThemeData.width/backgroundColor`；内容使用 `TDrawer(child: ...)` | `TDrawerContent` 已收为私有实现，不能再直接创建；局部 Theme 设置单个抽屉的视觉值。 |
 | `TSideBar.selectedColor/unSelectedColor/selectedTextStyle/contentPadding/selectedBgColor/unSelectedBgColor` | `TSideBarThemeData` 对应字段 | 选中项状态仍由实例控制，具体配色与内边距从 Theme 取。 |
 | `TNavBar.titleColor/backIconColor/backgroundColor/padding/titleMargin/opacity/border/boxShadow` | `TNavBarThemeData` 对应字段 | 单个导航栏的定制值须通过局部 Theme 传入。 |
 | `TTabBar.barHeight/dividerHeight/dividerThickness/dividerColor/selectedBgColor/unselectedBgColor/backgroundColor` | `TTabBarThemeData` 对应视觉字段 | 这些具体视觉值由子树组件 Theme 控制；单个标签栏可包裹局部 Theme。 |
@@ -81,4 +81,17 @@ TDesign 组件不再从 Material `ThemeData.textTheme`、`ThemeData.inputDecorat
 
 `TTag` 的浅色 warning/danger/success 现分别跟随 `warningColor1`、`errorColor1`、`successColor1`；仅覆盖 `warningColorLight`、`errorColorLight`、`successColorLight` 的调用方不再改变这些 Tag。普通 outline 改为读取 `bgColorContainer` 背景，默认描边读取 `bgColorComponent`；方角由组件 `squareBorderRadius` 显式覆盖，否则读取全局 `radiusSmall`，不再固定为小程序组件变量的 8rpx。公开 Demo 的四档外盒仍为 20/24/28/40dp，字体大小为 10/12/14/14dp，文字使用相应字体 Token 行高；关闭图标跟随 `textColorPlaceholder`。另一张 Figma“Style 组件样式”页的尺寸不直接套用公开 Demo，须先裁定设计规范版本。这些默认外观和自定义 Token 消费变化都属于用户可感知的行为变更，发布时须列入 breaking 迁移说明。
 
-发布前还需完成：逐字段最终 diff 清单、影响范围的外部调用点搜索、最终 Demo/文档替代示例编译验证、双版本与 CI 门禁。若没有明确的 breaking 版本与迁移发布安排，应停止这批字段删除，不能只靠本文消除兼容性风险。
+## 独立消费验证与发布边界
+
+执行 `cd tdesign-component && dart run tool/run_migration_consumer.dart`。脚本将 [消费夹具](../../tdesign-component/tool/fixtures/token_migration/test/migration_test.dart) 复制到仓库外临时目录，以独立的 pubspec、package_config 和 path 依赖执行 `flutter pub get`、严格分析及测试。夹具只从 `package:tdesign_flutter/tdesign_flutter.dart` 导入本库，禁止 implementation imports；不依赖内部测试 helper 或 Example。
+
+| 迁移类别 | 编译验证 | 关键行为验证 |
+| --- | --- | --- |
+| Theme 的规格／结构／交互字段迁到实例 | SearchBar、Collapse、Table、Link、Cell、Input、Textarea、Switch、TimeCounter、Stepper、Button、Avatar、Tag、Form、Dropdown；Icon 使用实例 size/color | TabBar 点击回调需要 `onChanged` 保持受控可交互语义 |
+| 实例具体视觉字段迁到组件 Theme | Avatar、Drawer、NavBar、TabBar、Dialog、Form、Popover、SideBar、TabsBar、Indexes、Swiper 等公开 Theme 构造 | Avatar 的 dimension 实际生效；TabBar 的 barHeight 实际生效 |
+| `colorScheme` → `colorPreset` | 五种配色枚举以及 Button、Tag、SelectTag、Link、BackTop、Popover 两种展示入口、DialogAction | Popover Anchor 与一次性命令均能展示及关闭 |
+| `style` 与完整字体入口 | TText、TText.rich、TTextSpan、ButtonStyle、Input.style、DialogAction.style、ConfirmDialog.buttonStyle、Tag.font | Text 子树默认与实例覆盖；Tag danger/success 独立覆盖 |
+| Popup 与 SwipeCell | Options.animationDuration、overlay.color、action.iconLabelSpacing 及逐项外观 | Popup 打开／关闭；SwipeCell builder 与内置视觉混用被拒绝 |
+| 无等价替代的删除 | TabBar 顶边开关与 centerDistance、Material 反向读取及公开插值辅助函数不保留兼容入口 | 按本表前面的能力删除说明迁移，不能宣称旧能力原样保留 |
+
+这项检查证明所列替代写法在独立调用方中成立，不承诺旧调用零修改兼容，也不代替第三方业务逻辑测试。真实业务仓库未提供属于应用升级覆盖的边界，不是库接口迁移未完成的证据。组件变量的默认回退／最终绘制审查及 Figma 视觉验收仍独立记录，不能用本项通过关闭剩余 677 项 Token 审查。

@@ -37,9 +37,9 @@ extension TThemeDataMergeExtension on ThemeData {
   /// ```dart
   /// Theme(
   ///   data: Theme.of(context).mergeExtension(
-  ///     TButtonThemeData(defaultVariant: TButtonVariant.outline),
+  ///     const TTagThemeData(squareBorderRadius: 6),
   ///   ),
-  ///   child: TButton(onPressed: () {}, child: Text('描边区')),
+  ///   child: const TTag('局部圆角'),
   /// )
   /// ```
   ThemeData mergeExtension<T extends ThemeExtension<T>>(T extension) {

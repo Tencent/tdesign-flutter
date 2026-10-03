@@ -22,6 +22,10 @@
   name: flutter test (component regression)
   script: cd tdesign-component && dart run tool/run_component_regression.dart
 
+.migration-consumer-tests:
+  name: public API migration (external consumer)
+  script: cd tdesign-component && dart run tool/run_migration_consumer.dart
+
 .regression-tool-tests:
   name: flutter test (regression tooling)
   script: cd tdesign-component && flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
@@ -96,6 +100,7 @@
     - !reference [.install-component]
     - !reference [.install-example]
     - !reference [.component-regression-tests]
+    - !reference [.migration-consumer-tests]
     - !reference [.regression-tool-tests]
     - !reference [.example-regression-tests]
     - !reference [.visual-regression-tests]
@@ -111,6 +116,7 @@
     - !reference [.install-component]
     - !reference [.install-example]
     - !reference [.component-regression-tests]
+    - !reference [.migration-consumer-tests]
     - !reference [.regression-tool-tests]
     - !reference [.example-regression-tests]
 

@@ -1,5 +1,14 @@
 # 验收记录
 
+## 2026-10-03 breaking 迁移独立消费验收与边界修正
+
+- 本节更新下文历史记录中“必须取得真实第三方仓库才算迁移验收”的判断。库需验证公开替代入口和关键行为；未知业务应用的升级进度不属于库发布门禁。组件 Token 最终消费审查仍是另一项任务，当前 677 项未核队列保持不变。
+- 在源码基线 `37ce253b` 上新增 `tool/run_migration_consumer.dart` 与 `tool/fixtures/token_migration`。脚本把夹具复制到仓库外临时目录，独立执行 pub get、严格分析及测试；仅导入库的公开入口，分析将 implementation imports 视为错误。
+- Flutter 3.32.0、3.47.0 各运行 `dart tool/run_migration_consumer.dart`：独立消费包严格 analyze 零诊断，功能／编译测试各 10/10 通过。覆盖 23 个组件构造、21 个组件 Theme、五种配色枚举、Popover Anchor 与静态命令、Text/style 优先级、Avatar 物理尺寸、Tag danger/success、TabBar 高度及点击、Popup 打开关闭、SwipeCell 互斥配置。消费包独立解析到图标资源包 0.0.7，不依赖根包的本地 override。
+- 修正迁移文档中的 Avatar textStyle 替代目标与 TDrawerContent 公开性说明；全局 Theme 的 dartdoc 示例改用真实存在的 Tag Theme 字段。受影响 Dart 文件定向 analyze 无诊断、`git diff --check` 通过。
+- GitHub 两版本 test job 和 CNB 两版本组件 pipeline 已登记本项检查。新增步骤尚未推送执行，不能沿用 `37ce253b` 的远端绿灯作为本次新步骤通过的证据。
+- 本次没有改组件渲染、Token 值或 Golden；无需重新生成视觉基线。不是第三方业务逻辑或全部组件 Figma 的验收。
+
 ## 2026-10-02 组件 Theme 动画回退与 API 文档修正
 
 - `TTagThemeData` 的 danger/success 基础色、success 浅色及方角在 nullable 端点之间插值时保留“继承当前 Token/Material 值”的语义；绘制时才用当前配色预设与 `radiusSmall` 的有效回退计算连续中间值。`TProgressThemeData.circleInnerBgColor` 同理，在浅色按 `bgColorContainer`、暗色按透明背景插值，不再把未配置端一律当透明色。
