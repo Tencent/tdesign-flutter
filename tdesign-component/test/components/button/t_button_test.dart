@@ -1838,6 +1838,29 @@ void main() {
       }
     });
 
+    testWidgets('深色主色填充禁用文字使用 fontWhite4', (tester) async {
+      final token = TThemeData.defaultData();
+      final darkToken = token.dark ?? token;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.dark(token),
+          home: const Scaffold(
+            body: TButton(
+              colorPreset: TButtonColorPreset.primary,
+              onPressed: null,
+              child: Text('禁用'),
+            ),
+          ),
+        ),
+      );
+
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      expect(
+        button.style?.foregroundColor?.resolve({WidgetState.disabled}),
+        darkToken.fontWhite4,
+      );
+    });
+
     testWidgets('light outline 使用品牌浅色背景 Token', (tester) async {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(

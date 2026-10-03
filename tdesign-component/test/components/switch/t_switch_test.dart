@@ -64,6 +64,93 @@ void main() {
       );
     });
 
+    testWidgets('禁用态分别使用小程序轨道和滑块回退色', (tester) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(wrap(const TSwitch(value: true)));
+
+      var widget = tester.widget<TCupertinoSwitch>(
+        find.byType(TCupertinoSwitch),
+      );
+      expect(widget.activeColor, token.brandColorDisabled);
+      expect(widget.trackColor, token.bgColorComponentDisabled);
+      expect(widget.thumbColor, token.fontWhite1);
+      expect(
+        find.descendant(
+          of: find.byType(TSwitch),
+          matching: find.byWidgetPredicate(
+            (child) => child is Opacity && child.opacity == 0.4,
+          ),
+        ),
+        findsNothing,
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.dark(token),
+          home: const Scaffold(body: TSwitch(value: true)),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final darkToken = token.dark ?? token;
+      widget = tester.widget<TCupertinoSwitch>(find.byType(TCupertinoSwitch));
+      expect(widget.activeColor, darkToken.brandColorDisabled);
+      expect(widget.trackColor, darkToken.bgColorComponentDisabled);
+      expect(widget.thumbColor, darkToken.fontWhite2);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.dark(token),
+          home: const Scaffold(body: TSwitch(value: true, onChanged: _noop)),
+        ),
+      );
+      widget = tester.widget<TCupertinoSwitch>(find.byType(TCupertinoSwitch));
+      expect(widget.thumbColor, darkToken.textColorAnti);
+    });
+
+    testWidgets('加载色随明暗模式变化且可由组件 Theme 覆盖', (tester) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(wrap(const TSwitch(value: true, loading: true)));
+      var indicator = tester.widget<TCircleIndicator>(
+        find.byType(TCircleIndicator),
+      );
+      expect(indicator.color, token.brandColor);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.dark(token),
+          home: const Scaffold(body: TSwitch(value: true, loading: true)),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 250));
+      indicator = tester.widget<TCircleIndicator>(
+        find.byType(TCircleIndicator),
+      );
+      expect(indicator.color, (token.dark ?? token).fontWhite1);
+
+      await tester.pumpWidget(
+        wrap(
+          const TSwitch(value: true, loading: true),
+          switchTheme: const TSwitchThemeData(
+            disabledTrackOnColor: Colors.orange,
+            disabledTrackOffColor: Colors.purple,
+            disabledThumbColor: Colors.green,
+            loadingColor: Colors.red,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 250));
+      final widget = tester.widget<TCupertinoSwitch>(
+        find.byType(TCupertinoSwitch),
+      );
+      expect(widget.activeColor, Colors.orange);
+      expect(widget.trackColor, Colors.purple);
+      expect(widget.thumbColor, Colors.green);
+      indicator = tester.widget<TCircleIndicator>(
+        find.byType(TCircleIndicator),
+      );
+      expect(indicator.color, Colors.red);
+    });
+
     testWidgets('loading state is disabled and overrides thumb variant', (
       tester,
     ) async {
@@ -307,6 +394,7 @@ void main() {
         defaults.trackOffColor,
         context.tTheme.bgColorSecondaryContainerActive,
       );
+      expect(defaults.thumbColor, context.tTheme.textColorAnti);
       expect(defaults.thumbContentOnFont.fontSize, token.fontBodyMedium?.size);
 
       final themed = TSwitchResolve.resolve(
@@ -314,6 +402,7 @@ void main() {
         theme: const TSwitchThemeData(
           trackOnColor: Colors.red,
           trackOffColor: Colors.green,
+          thumbColor: Colors.pink,
           thumbContentOnColor: Colors.blue,
           thumbContentOffColor: Colors.orange,
           thumbContentOnFont: TextStyle(fontSize: 18),
@@ -322,6 +411,7 @@ void main() {
       );
       expect(themed.trackOnColor, Colors.red);
       expect(themed.trackOffColor, Colors.green);
+      expect(themed.thumbColor, Colors.pink);
       expect(themed.thumbContentOnColor, Colors.blue);
       expect(themed.thumbContentOffColor, Colors.orange);
       expect(themed.thumbContentOnFont.fontSize, 18);
@@ -349,6 +439,11 @@ void main() {
       const base = TSwitchThemeData(
         trackOnColor: Colors.red,
         trackOffColor: Colors.green,
+        thumbColor: Colors.red,
+        disabledTrackOnColor: Colors.red,
+        disabledTrackOffColor: Colors.green,
+        disabledThumbColor: Colors.blue,
+        loadingColor: Colors.orange,
         thumbContentOnColor: Colors.blue,
         thumbContentOffColor: Colors.orange,
         thumbContentOnFont: TextStyle(fontSize: 12),
@@ -357,6 +452,11 @@ void main() {
       const other = TSwitchThemeData(
         trackOnColor: Colors.black,
         trackOffColor: Colors.white,
+        thumbColor: Colors.black,
+        disabledTrackOnColor: Colors.black,
+        disabledTrackOffColor: Colors.white,
+        disabledThumbColor: Colors.purple,
+        loadingColor: Colors.yellow,
         thumbContentOnColor: Colors.purple,
         thumbContentOffColor: Colors.yellow,
         thumbContentOnFont: TextStyle(fontSize: 20),
@@ -366,6 +466,11 @@ void main() {
       final copied = base.copyWith(
         trackOnColor: Colors.black,
         trackOffColor: Colors.white,
+        thumbColor: Colors.black,
+        disabledTrackOnColor: Colors.black,
+        disabledTrackOffColor: Colors.white,
+        disabledThumbColor: Colors.purple,
+        loadingColor: Colors.yellow,
         thumbContentOnColor: Colors.purple,
         thumbContentOffColor: Colors.yellow,
         thumbContentOnFont: const TextStyle(fontSize: 20),
@@ -373,6 +478,11 @@ void main() {
       );
       expect(copied.trackOnColor, Colors.black);
       expect(copied.trackOffColor, Colors.white);
+      expect(copied.thumbColor, Colors.black);
+      expect(copied.disabledTrackOnColor, Colors.black);
+      expect(copied.disabledTrackOffColor, Colors.white);
+      expect(copied.disabledThumbColor, Colors.purple);
+      expect(copied.loadingColor, Colors.yellow);
       expect(copied.thumbContentOnColor, Colors.purple);
       expect(copied.thumbContentOffColor, Colors.yellow);
       expect(copied.thumbContentOnFont?.fontSize, 20);
@@ -387,6 +497,23 @@ void main() {
         midpoint.trackOffColor,
         Color.lerp(Colors.green, Colors.white, 0.5),
       );
+      expect(midpoint.thumbColor, Color.lerp(Colors.red, Colors.black, 0.5));
+      expect(
+        midpoint.disabledTrackOnColor,
+        Color.lerp(Colors.red, Colors.black, 0.5),
+      );
+      expect(
+        midpoint.disabledTrackOffColor,
+        Color.lerp(Colors.green, Colors.white, 0.5),
+      );
+      expect(
+        midpoint.disabledThumbColor,
+        Color.lerp(Colors.blue, Colors.purple, 0.5),
+      );
+      expect(
+        midpoint.loadingColor,
+        Color.lerp(Colors.orange, Colors.yellow, 0.5),
+      );
       expect(
         midpoint.thumbContentOnColor,
         Color.lerp(Colors.blue, Colors.purple, 0.5),
@@ -397,6 +524,13 @@ void main() {
       );
       expect(midpoint.thumbContentOnFont?.fontSize, 16);
       expect(midpoint.thumbContentOffFont?.fontSize, 14);
+
+      const unset = TSwitchThemeData();
+      expect(unset.lerp(unset, 0.5).disabledThumbColor, isNull);
+      expect(unset.lerp(base, 0.25).disabledThumbColor, isNull);
+      expect(unset.lerp(base, 0.75).disabledThumbColor, Colors.blue);
+      expect(base.lerp(unset, 0.25).disabledThumbColor, Colors.blue);
+      expect(base.lerp(unset, 0.75).disabledThumbColor, isNull);
     });
   });
 

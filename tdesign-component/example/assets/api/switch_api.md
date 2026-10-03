@@ -12,3 +12,21 @@
 | size | TSwitchSize? | - | 开关尺寸；未传时为 `TSwitchSize.medium`。 |
 | value | bool | - | 受控开关状态。 |
 | variant | TSwitchVariant? | - | 开关内容形态；未传时为 `TSwitchVariant.filled`。 |
+
+
+### TSwitchThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| disabledThumbColor | Color? | - | 禁用或加载时滑块填充色。 |
+| disabledTrackOffColor | Color? | - | 禁用时关闭态轨道颜色。 |
+| disabledTrackOnColor | Color? | - | 禁用时开启态轨道颜色。 |
+| loadingColor | Color? | - | 加载指示器颜色。 |
+| thumbColor | Color? | - | 可交互时滑块填充色，不影响内部图标或文字。 |
+| thumbContentOffColor | Color? | - | 关闭态滑块内容颜色。 |
+| thumbContentOffFont | TextStyle? | - | 关闭态滑块内容文本样式。 |
+| thumbContentOnColor | Color? | - | 开启态滑块内容颜色。 |
+| thumbContentOnFont | TextStyle? | - | 开启态滑块内容文本样式。 |
+| trackOffColor | Color? | - | 关闭态轨道颜色。 |
+| trackOnColor | Color? | - | 开启态轨道颜色。 |

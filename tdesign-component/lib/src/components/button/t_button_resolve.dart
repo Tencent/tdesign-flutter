@@ -187,6 +187,7 @@ class TButtonResolve {
     TButtonColorPreset scheme,
   ) {
     final tTheme = context.tTheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     Color bg;
     Color fg;
 
@@ -217,7 +218,7 @@ class TButtonResolve {
       }),
       foregroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
-          return _disabledFillForegroundColor(scheme, tTheme);
+          return _disabledFillForegroundColor(scheme, tTheme, isDark: isDark);
         }
         return fg;
       }),
@@ -515,10 +516,12 @@ class TButtonResolve {
 
   static Color _disabledFillForegroundColor(
     TButtonColorPreset scheme,
-    TThemeData tTheme,
-  ) {
+    TThemeData tTheme, {
+    required bool isDark,
+  }) {
     return switch (scheme) {
-      TButtonColorPreset.primary => tTheme.textColorAnti,
+      TButtonColorPreset.primary =>
+        isDark ? tTheme.fontWhite4 : tTheme.textColorAnti,
       TButtonColorPreset.light => tTheme.brandColorDisabled,
       TButtonColorPreset.danger ||
       TButtonColorPreset.defaultTheme => tTheme.textColorDisabled,

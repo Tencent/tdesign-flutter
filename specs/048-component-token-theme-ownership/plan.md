@@ -14,6 +14,7 @@
 10. 为 Tag 前置图标复用正文的有效前景色，保持关闭图标独立；用最小 Widget 用例锁定组件 Theme、全局 Token 和禁用态的优先级。此前为显式 Material 色板加入的字段级推断属于反向桥接，随全仓单向主题链一起删除，不发布新的 `TExplicitColorSchemeColors` 类型。
 11. 按组件逐项移除 Material → TDesign 的视觉输入：ColorScheme、Material 组件 Theme、IconTheme/TextTheme、禁用色与分隔线、AppBar/Dialog/InputDecoration 等。保留 `Theme.of(context).extension<T...>()` 读取、全局 TDesign Token 到原生 Material 控件的投影、平台交互/无障碍机制及组件内部向原生子控件传递已解析样式。每个被移除的子树覆盖入口要核对是否已有组件 Theme 或实例完整样式，缺少真实定制入口时按单入口所有权判断，而非机械增补。
 12. 以静态扫描核对所有组件不存在 Material 外观反向读取，并以显式 Material Theme 注入测试证明其不改变 TDesign 默认样式；验证 TDesign Theme 和实例样式仍生效、原生 Material 控件仍接收投影。重跑双版本组件测试、分析及 Linux 3.32.0 无更新 Golden，逐项归因差异。
+13. 对本轮已取样的三类状态作定向修复：Button 在 `ButtonStyle` 解析中只对深色主色填充禁用文字采用 `fontWhite4`；Switch 将轨道、滑块填充和加载指示器各自解析到状态色，并由组件 Theme 提供具体颜色覆盖，避免整控件透明度；Slider 浅色禁用滑块描边回退 `componentBorder`，深色保留原 `bgColorComponentDisabled`。固定浅/深色与禁用/加载状态测试，之后在 Linux 3.32.0 对受影响 Golden 无更新复跑。
 
 ## 影响范围
 

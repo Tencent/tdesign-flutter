@@ -123,7 +123,7 @@ void main() {
       expectThumbBorders(
         theme,
         borderColor: TThemeData.defaultData().grayColor1,
-        disabledBorderColor: TThemeData.defaultData().bgColorComponentDisabled,
+        disabledBorderColor: TThemeData.defaultData().componentBorder,
       );
     });
 
@@ -146,6 +146,11 @@ void main() {
         var theme = SliderTheme.of(tester.element(find.byType(Slider)));
         expect(theme.inactiveTrackColor, Colors.purple);
         expect(theme.inactiveTickMarkColor, Colors.purple);
+        expectThumbBorders(
+          theme,
+          borderColor: token.grayColor1,
+          disabledBorderColor: Colors.purple,
+        );
 
         await tester.pumpWidget(const SizedBox.shrink());
         await tester.pumpWidget(
@@ -398,7 +403,7 @@ void main() {
       expectThumbBorders(
         theme,
         borderColor: TThemeData.defaultData().grayColor1,
-        disabledBorderColor: TThemeData.defaultData().bgColorComponentDisabled,
+        disabledBorderColor: TThemeData.defaultData().componentBorder,
       );
     });
 

@@ -421,12 +421,13 @@
     {
       "slug": "switch",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/switch/t_switch.dart"
+        "type": "folder",
+        "path": "lib/src/components/switch"
       },
       "api": {
         "names": [
-          "TSwitch"
+          "TSwitch",
+          "TSwitchThemeData"
         ],
         "getComments": false
       }

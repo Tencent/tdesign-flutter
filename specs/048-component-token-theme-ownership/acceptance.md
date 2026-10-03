@@ -200,3 +200,9 @@
 - 小程序 `--td-dropdown-body-max-height` 的默认 560rpx 对应 280dp，只约束可滚动主体，不包含多选底部操作区。Flutter 单选/多选默认主体改为 280dp，已有实例 `maxHeight` 继续控制显式上限，不增加同义 Theme 字段。长列表 Widget 测试分别检查主体高度、多选操作区和整面板高度；现有 Dropdown 组件交互测试 95/95 通过。Linux Dropdown 16 张公开 Demo Golden 中仅四张单列/双列多选打开态变化，各约 12.7%–13.0%，由主体收短和操作区上移引起，未改变其余 12 张。
 - Fab 阴影与 PullDownRefresh 提示色核对到最终 Widget，未改渲染源码。两版聚焦测试均通过（Flutter 3.32.0 当前批次 Form/Refresh/Fab 168/168、Dropdown 95/95；Flutter 3.47.0 隔离副本合计 263/263）。两版组件包及 Flutter 3.32.0 Example 的 `flutter analyze --fatal-infos` 均零诊断。固定 Linux amd64 / Flutter 3.32.0 上 Form 与 Dropdown 合计 22 张 Golden 严格无更新复跑通过，随后完整 `dart run tool/run_visual_regression.dart` 无更新参数复跑全部视觉套件通过；远端 CI 仍需以新 head 另验。
 - 审计 JSON 仍有 804 项，`pending` 从 681 降至 677。仅四项新增最终 Widget 证据，不把其余静态命中或现有 Golden 自动判为跨端逐像素通过。
+
+### 2026-10-03 Button、Switch 按小程序，Slider 按设计稿裁定
+
+- Button 深色主题 primary 禁用文字取小程序 `fontWhite4`；浅色仍为 `textColorAnti`。Switch 取消整个控件统一 0.4 透明度，分别解析禁用轨道、禁用滑块、加载指示器颜色；这些默认值按小程序的明暗模式 Token，组件 Theme 字段作为各状态的唯一组件级覆盖入口。Slider 浅色禁用滑块描边按设计稿取 `componentBorder`，深色保留 `bgColorComponentDisabled`；既有 `TSliderThemeData.disabledThumbBorderColor` 可显式覆盖。
+- Flutter 3.32.0、3.47.0 的 Button/Switch/Slider 聚焦测试各 152/152 通过；两版本组件包 `flutter analyze --fatal-infos` 各为零诊断。Switch 公开 Theme API 文档由生成器更新。
+- 隔离 Linux amd64 / Flutter 3.32.0 无更新复现旧 Golden 差异：Slider 组件 326px / 0.07%、Slider Demo 浅色 544px / 0.05%（禁用滑块描边）；Button Demo 深色 811px / 0.13%（禁用 primary 字色）；Switch 浅色整页 3664px / 0.72%、深色 changed 5969px / 1.18%（禁用、加载和深色滑块状态）。隔离差异图未见布局位移。只同步 10 张受影响的 Linux PNG：Slider 4、Button 2、Switch 4；隔离副本严格无更新复跑组件 1/1、Demo 26/26 通过。隔离 `pub get` 将图标包由本地 0.0.6 解析为 0.0.7，故仍需以最终提交的 CI 矩阵为准；整页 Figma 像素对齐未在此处宣称完成。804 项组件变量中其余 677 项 `pending` 不因这三个组件的聚焦验证而自动完成。

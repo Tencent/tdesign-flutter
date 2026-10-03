@@ -33,8 +33,10 @@ SliderThemeData _sliderThemeFromTDesign(BuildContext context) {
   final disabledComponent = token.bgColorComponentDisabled;
   final disabledBrand = token.brandColorDisabled;
   final thumbBorder = theme?.thumbBorderColor ?? token.grayColor1;
+  final isDark = Theme.of(context).brightness == Brightness.dark;
   final disabledThumbBorder =
-      theme?.disabledThumbBorderColor ?? token.bgColorComponentDisabled;
+      theme?.disabledThumbBorderColor ??
+      (isDark ? token.bgColorComponentDisabled : token.componentBorder);
 
   return SliderThemeData(
     activeTrackColor: activeTrack,

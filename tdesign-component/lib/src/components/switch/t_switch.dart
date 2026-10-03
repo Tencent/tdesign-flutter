@@ -71,26 +71,28 @@ class TSwitch extends StatelessWidget {
 
     Widget current = TCupertinoSwitch(
       value: value,
-      activeColor: resolved.trackOnColor,
-      trackColor: resolved.trackOffColor,
+      activeColor: enabled
+          ? resolved.trackOnColor
+          : resolved.disabledTrackOnColor,
+      trackColor: enabled
+          ? resolved.trackOffColor
+          : resolved.disabledTrackOffColor,
+      thumbColor: enabled ? resolved.thumbColor : resolved.disabledThumbColor,
       onChanged: enabled ? onChanged : null,
-      // TSwitch owns its disabled appearance below. Avoid multiplying it by
-      // TCupertinoSwitch's standalone disabled opacity.
+      // State colors are resolved independently; never dim the whole switch.
       disabledOpacity: 1,
       thumbView: _buildThumb(
         resolved: resolved,
         variant: resolvedVariant,
         loading: loading,
+        disabled: onChanged == null,
         openText: openText,
         closeText: closeText,
       ),
     );
 
     if (!enabled) {
-      current = Opacity(
-        opacity: 0.4,
-        child: IgnorePointer(ignoring: true, child: current),
-      );
+      current = IgnorePointer(ignoring: true, child: current);
     }
 
     return Semantics(
@@ -108,12 +110,13 @@ class TSwitch extends StatelessWidget {
     required TSwitchResolvedStyle resolved,
     required TSwitchVariant variant,
     required bool loading,
+    required bool disabled,
     required String? openText,
     required String? closeText,
   }) {
     if (loading) {
       return TCircleIndicator(
-        color: resolved.thumbContentOnColor,
+        color: resolved.loadingColor,
         size: 16,
         lineWidth: 3,
       );
@@ -132,8 +135,12 @@ class TSwitch extends StatelessWidget {
                         : resolved.thumbContentOffFont)
                     .copyWith(
                       color: value
-                          ? resolved.thumbContentOnColor
-                          : resolved.thumbContentOffColor,
+                          ? (disabled
+                                ? resolved.disabledTrackOnColor
+                                : resolved.thumbContentOnColor)
+                          : (disabled
+                                ? resolved.disabledTrackOffColor
+                                : resolved.thumbContentOffColor),
                       height: 1,
                       leadingDistribution: TextLeadingDistribution.even,
                     ),
@@ -144,8 +151,12 @@ class TSwitch extends StatelessWidget {
         value ? TIcons.check : TIcons.close,
         size: 16,
         color: value
-            ? resolved.thumbContentOnColor
-            : resolved.thumbContentOffColor,
+            ? (disabled
+                  ? resolved.disabledTrackOnColor
+                  : resolved.thumbContentOnColor)
+            : (disabled
+                  ? resolved.disabledTrackOffColor
+                  : resolved.thumbContentOffColor),
       ),
       TSwitchVariant.filled => null,
     };

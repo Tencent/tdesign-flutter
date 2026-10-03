@@ -39,6 +39,9 @@
 - 所有 TDesign 组件统一使用单向主题链：实例显式样式（若存在）→ 组件 ThemeExtension 显式字段（若不存在同义实例入口）→ 全局 TDesign Theme/Token → 已文档化的内置默认值。Material `ThemeData` 仅承载这些 TDesign ThemeExtension，并可接收 TDesign Token 向原生 Material 控件的投影；`ColorScheme`、`TextTheme`、`IconTheme`、Material 组件 Theme、`DefaultTextStyle` 等外部 Material 样式不反向控制 TDesign 组件。组件内部传递给原生子控件的已解析样式不属于反向输入。避免保留按最终值猜测“显式 Material 配置”的兼容桥接。
 - `colorPreset` 只选择内置配色，不进入组件 Theme，也不表示 Material `ColorScheme` 实体；`variant` 决定填充、描边等绘制处理，`status` 决定当前业务状态。业务状态、回调和内容不进入组件 Theme；`size`/`variant`/`shape` 等离散规格选择也不进入组件 Theme。视觉开关若只是渲染装饰且无实例语义，优先 Theme；若改变组件交互或结构，则留在 API 并写明理由。
 - `TButton.colorPreset` 仅选择内置调色预设，不是对各绘制字段的实例样式覆盖。单实例的具体背景、前景、描边及交互状态通过 `TButton.style` 覆写；不再读取显式 Material 按钮主题。组件 Theme 不再提供与 `ButtonStyle` 同义的字段。
+- Button 主色填充禁用态的浅色前景沿用反色文字，深色前景使用小程序组件变量 `--td-button-primary-disabled-color` 的 `fontWhite4` 回退；实例 `ButtonStyle` 仍是唯一显式覆盖入口。
+- Switch 禁用和加载分别解析轨道、滑块及加载内容颜色，不对整个组件统一施加透明度。可交互滑块填充回退 `textColorAnti`；开启/关闭的禁用轨道分别回退 `brandColorDisabled` / `bgColorComponentDisabled`，禁用滑块浅色回退 `fontWhite1`、深色回退 `fontWhite2`；加载内容浅色回退品牌色、深色回退 `fontWhite1`。这些具体视觉值可由 Switch 组件 Theme 覆盖，不增加状态型实例 API。
+- Slider 禁用滑块的默认描边以已核对的设计稿为准：浅色 `componentBorder`（`#DDD`），深色继续使用 `bgColorComponentDisabled`；已有 `disabledThumbBorderColor` 是唯一组件级显式覆盖入口。设计稿与小程序浅色回退 `#F3F3F3` 的分歧保留在审查报告中，不修改全局 Token。
 - 动画时长若直接决定单次组件交互的展开/收起时间，归实例 API；Theme 可承载动画曲线、颜色或尺寸等不与该时长同义的视觉默认值。系统“减少动态效果”始终优先于实例时长。
 - 无法由同值比较证明视觉等价的字体、阴影、百分比几何及响应式尺寸须独立记录；全局 `radiusCircle` 维持已记录的 Flutter 固定半径例外。
 - 本轮收敛 `TButton`、`TInput`、Dialog action 已有完整实例 `style` 所覆盖的视觉字段，并去除 `TTagThemeData.fontWeight` 与 `font` 的重复设置；`TTabsBar` 的容器背景/分割线归组件 Theme，不再保留实例完整装饰入口。`TText` 的单实例完整样式、SwipeCellAction 的逐项外观和 Popup 蒙层透明度入口已按下文迁移；这仍不等于全仓所有组件都已满足单入口标准。

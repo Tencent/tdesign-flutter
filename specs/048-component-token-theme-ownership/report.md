@@ -117,3 +117,9 @@ Avatar 移除了 `TAvatarThemeData.textStyle`，保留 `foregroundColor` 为默�
 - Flutter 3.32.0 与 3.47.0：组件包、Example 包严格分析均 0 issues；Text/Popup/SwipeCell/Theme 聚焦非 Golden 测试分别 249/249 通过。3.32.0 所有非 Golden 测试文件 2736/2736 通过。全量目录运行时未标 `golden` 标签的快照仍会参与测试，Mac 产生 34 张像素差；其中 2 项旧 TResult 断言读取被迁移的字段，现已改为验证最终解析颜色并通过 23/23。不能把 Mac 的 Linux 快照差异当作实现回归。
 - 在临时副本中使用本机固定 `tdesign-flutter-golden-cache:3.32.0` Linux amd64 镜像，无更新复跑 SwipeCell 组件 2/2、Popup/Progress/共享消费者及 M3 隔离 5/5、Text/SwipeCell/Popup 公开 Demo 40/40 通过；仓库权威 PNG 未修改。临时副本的 `pub get` 解析到图标包 0.0.7，与工作树 0.0.6 不同，因此此组结果不能替代 CI 对完整视觉矩阵的最终判定。
 - 公开 API 删除属于 breaking；真实第三方业务调用仓库编译、全部组件变量最终消费复核及全量 Linux 视觉矩阵仍待完成。不能以本轮聚焦回归宣称整个 PR 已可合并。
+
+## 2026-10-03 Button、Switch 与 Slider 的默认状态色裁定
+
+用户裁定 Slider 以设计稿为准，其他两项以小程序为准。Slider 浅色禁用滑块描边因此改为全局 `componentBorder`，不将小程序该状态的灰色回退照搬；Button 深色 primary 禁用文字和 Switch 禁用/加载各层颜色则按小程序状态变量解析。Switch 不再叠加整个控件的透明度，避免轨道、滑块、图标颜色同时被二次压暗。各状态覆盖保留在组件 Theme，不增加同义实例样式参数。
+
+两版三组件测试各 152/152、静态分析各零诊断。Linux 3.32.0 隔离副本逐张检查差异，更新 10 张精确受影响 Golden 后严格无更新复跑通过（组件 1/1、Demo 26/26）。容器解析的图标包版本与本地不同，最终仍需 PR head 的 CI 矩阵；整页 Figma 像素对齐未在此处宣称完成，也不改变其他 677 项待审查状态。

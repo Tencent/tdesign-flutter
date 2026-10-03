@@ -12,6 +12,11 @@ class TSwitchResolvedStyle {
   const TSwitchResolvedStyle({
     required this.trackOnColor,
     required this.trackOffColor,
+    required this.disabledTrackOnColor,
+    required this.disabledTrackOffColor,
+    required this.thumbColor,
+    required this.disabledThumbColor,
+    required this.loadingColor,
     required this.thumbContentOnColor,
     required this.thumbContentOffColor,
     required this.thumbContentOnFont,
@@ -20,6 +25,11 @@ class TSwitchResolvedStyle {
 
   final Color trackOnColor;
   final Color trackOffColor;
+  final Color disabledTrackOnColor;
+  final Color disabledTrackOffColor;
+  final Color thumbColor;
+  final Color disabledThumbColor;
+  final Color loadingColor;
   final Color thumbContentOnColor;
   final Color thumbContentOffColor;
   final TextStyle thumbContentOnFont;
@@ -45,10 +55,21 @@ class TSwitchResolve {
     TSwitchThemeData? theme,
   }) {
     final token = context.tTheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return TSwitchResolvedStyle(
       trackOnColor: theme?.trackOnColor ?? token.brandColor,
       trackOffColor:
           theme?.trackOffColor ?? token.bgColorSecondaryContainerActive,
+      disabledTrackOnColor:
+          theme?.disabledTrackOnColor ?? token.brandColorDisabled,
+      disabledTrackOffColor:
+          theme?.disabledTrackOffColor ?? token.bgColorComponentDisabled,
+      thumbColor: theme?.thumbColor ?? token.textColorAnti,
+      disabledThumbColor:
+          theme?.disabledThumbColor ??
+          (isDark ? token.fontWhite2 : token.fontWhite1),
+      loadingColor:
+          theme?.loadingColor ?? (isDark ? token.fontWhite1 : token.brandColor),
       thumbContentOnColor: theme?.thumbContentOnColor ?? token.brandColor,
       thumbContentOffColor:
           theme?.thumbContentOffColor ?? token.textColorDisabled,
