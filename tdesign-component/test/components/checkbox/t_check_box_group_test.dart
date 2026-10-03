@@ -380,7 +380,7 @@ void main() {
           'fontBodyLarge': Font(size: 17, lineHeight: 26),
           'fontBodyMedium': Font(size: 15, lineHeight: 23),
         },
-        marginMap: const {'spacer4': 5, 'spacer16': 18, 'spacer24': 27},
+        marginMap: const {'spacer2': 18, 'spacer3': 27},
       );
       Widget selectedCard() => const TSelectionCard(
         selected: true,
@@ -407,15 +407,15 @@ void main() {
 
       expect(
         find.byWidgetPredicate(
-          (widget) => widget is SizedBox && widget.height == 90,
+          (widget) => widget is SizedBox && widget.height == 89,
         ),
         findsOneWidget,
       );
-      expect(tester.widget<Icon>(find.byIcon(TIcons.check)).size, 16);
+      expect(tester.widget<Icon>(find.byIcon(TIcons.check)).size, 15.5);
       expect(
         find.byWidgetPredicate(
           (widget) =>
-              widget is CustomPaint && widget.size == const Size.square(32),
+              widget is CustomPaint && widget.size == const Size.square(31),
         ),
         findsOneWidget,
       );
@@ -437,8 +437,8 @@ void main() {
                         '_SelectionCardMarkPainter',
                   )
               as dynamic;
-      expect((border as Border).top.width, 1.875);
-      expect(markPainter.cornerRadius, 5);
+      expect((border as Border).top.width, 1.5);
+      expect(markPainter.cornerRadius, 4);
 
       await tester.pumpWidget(
         wrap(

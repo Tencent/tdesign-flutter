@@ -55,7 +55,7 @@ void main() {
         matching: find.byType(ColoredBox),
       ),
     );
-    expect(divider.color, TThemeData.defaultData().componentStrokeColor);
+    expect(divider.color, TThemeData.defaultData().componentStroke);
 
     final linkPaddings = tester
         .widgetList<Padding>(
@@ -118,7 +118,7 @@ void main() {
   ) async {
     final token = TThemeData.defaultData().copyWithTThemeData(
       'footer-spacing',
-      marginMap: {'spacer8': 10, 'spacer12': 18},
+      marginMap: {'spacer': 10, 'spacer1': 18},
     );
     await tester.pumpWidget(
       app(

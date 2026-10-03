@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/base/notification_center.dart';
+import 'package:tdesign_flutter_example/page/tag/circle_fill_tag_example.dart';
 import 'package:tdesign_flutter_example/page/tag/tag_page.dart';
 
 import '../demo_page_test_utils.dart';
@@ -34,6 +35,59 @@ void main() {
   registerDemoStructureTests(_tagSpec);
   registerDemoGoldenTests(_tagSpec);
 
+  testWidgets('medium Tag 自然宽度由实际文字宽度和左右各 8px 决定', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: withDemoGoldenFonts(
+          TThemeBuilder.light(TThemeData.defaultData()),
+          _tagSpec,
+        ),
+        home: const Scaffold(body: TTag('Tag')),
+      ),
+    );
+
+    final textWidth = tester.getSize(find.text('Tag')).width;
+    final tagWidth = tester.getSize(find.byType(TTag)).width;
+    expect(textWidth, closeTo(20.5078125, 0.02));
+    expect(tagWidth, closeTo(textWidth + 16, 0.02));
+    expect(tagWidth, closeTo(36.5078125, 0.02));
+  }, tags: 'demo');
+
+  testWidgets('round Tag Demo includes the mark outline instance', (
+    tester,
+  ) async {
+    await pumpFullDemoPage(tester, _tagSpec, ThemeMode.light);
+
+    final tags = tester
+        .widgetList<TTag>(
+          find.descendant(
+            of: find.byType(CircleFillTagExample),
+            matching: find.byType(TTag),
+          ),
+        )
+        .toList();
+    expect(tags, hasLength(3));
+    expect(
+      tags.map((tag) => tag.variant),
+      orderedEquals([
+        TTagVariant.light,
+        TTagVariant.outline,
+        TTagVariant.outline,
+      ]),
+    );
+
+    final markTag = tester.widget<TTag>(
+      find
+          .descendant(
+            of: find.byType(CircleFillTagExample),
+            matching: find.byType(TTag),
+          )
+          .last,
+    );
+    expect(markTag.shape, TTagShape.mark);
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
+
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('tag selected ${mode.name} golden', (tester) async {
       await pumpFullDemoPage(tester, _tagSpec, mode);
@@ -61,8 +115,8 @@ void main() {
 
     final tags = tester.widgetList<TTag>(find.byType(TTag)).toList();
     expect(
-      tags.map((tag) => tag.colorScheme).toSet(),
-      containsAll(TTagColorScheme.values),
+      tags.map((tag) => tag.colorPreset).toSet(),
+      containsAll(TTagColorPreset.values),
     );
     expect(
       tags.map((tag) => tag.variant).toSet(),

@@ -771,14 +771,17 @@ void main() {
       final opts = TPopupOptions.bottom(
         child: const SizedBox(),
         animationDuration: const Duration(milliseconds: 500),
-        overlay: const TPopupOverlayConfig(showOverlay: false, opacity: 0.5),
+        overlay: const TPopupOverlayConfig(
+          showOverlay: false,
+          color: Color(0x80000000),
+        ),
         destroyOnClose: true,
         onVisibleChange: (_, __) => visibleChanges++,
       );
       expect(opts.animationDuration, const Duration(milliseconds: 500));
       expect(opts.overlayConfig.showOverlay, isFalse);
       expect(opts.overlayConfig.effectiveCloseOnClick, isFalse);
-      expect(opts.overlayConfig.opacity, 0.5);
+      expect(opts.overlayConfig.color, const Color(0x80000000));
       expect(opts.destroyOnClose, isTrue);
       opts.onVisibleChange?.call(false, TPopupTrigger.api);
       expect(visibleChanges, 1);

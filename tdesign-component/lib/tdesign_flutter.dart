@@ -8,14 +8,14 @@ export 'src/components/avatar/t_avatar_theme_data.dart' show TAvatarThemeData;
 export 'src/components/avatar/t_avatar_types.dart';
 export 'src/components/backtop/t_backtop.dart';
 export 'src/components/backtop/t_backtop_theme_data.dart'
-    show TBackTopColorScheme, TBackTopShape, TBackTopThemeData;
+    show TBackTopColorPreset, TBackTopShape, TBackTopThemeData;
 export 'src/components/badge/t_badge.dart';
 export 'src/components/badge/t_badge_theme_data.dart' show TBadgeThemeData;
 export 'src/components/button/t_button.dart';
 export 'src/components/button/t_button_theme_data.dart' show TButtonThemeData;
 export 'src/components/button/t_button_types.dart'
     show
-        TButtonColorScheme,
+        TButtonColorPreset,
         TButtonIconPosition,
         TButtonShape,
         TButtonSize,
@@ -66,8 +66,7 @@ export 'src/components/form/t_form_theme_data.dart'
         TFormLayout,
         TFormRequiredMarkPosition,
         TFormThemeData;
-export 'src/components/icon/t_icon.dart';
-export 'src/components/icon/t_icon_theme_data.dart' show TIconThemeData;
+export 'src/components/icon/t_icon.dart' show TIcon;
 export 'src/components/image/t_image.dart';
 export 'src/components/image/t_image_theme_data.dart' show TImageThemeData;
 export 'src/components/image_viewer/t_image_viewer.dart';
@@ -81,7 +80,7 @@ export 'src/components/input/t_input_theme_data.dart' show TInputThemeData;
 export 'src/components/input/t_input_types.dart';
 export 'src/components/link/t_link.dart';
 export 'src/components/link/t_link_theme_data.dart' show TLinkThemeData;
-export 'src/components/link/t_link_types.dart' show TLinkColorScheme, TLinkSize;
+export 'src/components/link/t_link_types.dart' show TLinkColorPreset, TLinkSize;
 export 'src/components/loading/t_loading.dart';
 export 'src/components/loading/t_loading_controller.dart';
 export 'src/components/loading/t_loading_theme_data.dart'
@@ -106,7 +105,7 @@ export 'src/components/popover/t_popover.dart';
 export 'src/components/popover/t_popover_theme_data.dart'
     show TPopoverThemeData;
 export 'src/components/popover/t_popover_types.dart'
-    show TPopoverColorScheme, TPopoverPlacement;
+    show TPopoverColorPreset, TPopoverPlacement;
 export 'src/components/popup/t_popup.dart'
     show
         TPopup,
@@ -182,7 +181,7 @@ export 'src/components/tag/t_select_tag.dart';
 export 'src/components/tag/t_tag.dart';
 export 'src/components/tag/t_tag_theme_data.dart' show TTagThemeData;
 export 'src/components/tag/t_tag_types.dart'
-    show TTagColorScheme, TTagShape, TTagSize, TTagVariant;
+    show TTagColorPreset, TTagShape, TTagSize, TTagVariant;
 export 'src/components/text/t_font_loader.dart';
 export 'src/components/text/t_text.dart';
 export 'src/components/text/t_text_theme_data.dart' show TTextThemeData;

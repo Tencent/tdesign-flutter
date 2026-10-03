@@ -7,18 +7,19 @@ void main() {
   group('TSideBarThemeData 纯函数', () {
     const theme = TSideBarThemeData(
       contentPadding: EdgeInsets.all(8),
-      selectedColor: Colors.red,
-      unSelectedColor: Colors.grey,
-      selectedTextStyle: TextStyle(fontSize: 14),
+      textStyle: TextStyle(color: Colors.grey),
+      selectedTextStyle: TextStyle(fontSize: 14, color: Colors.red),
       selectedBgColor: Colors.blue,
       unSelectedBgColor: Colors.white,
     );
 
     test('copyWith 覆盖字段', () {
-      final copied = theme.copyWith(selectedColor: Colors.green);
+      final copied = theme.copyWith(
+        selectedTextStyle: const TextStyle(color: Colors.green),
+      );
       expect(copied, isA<TSideBarThemeData>());
-      expect(copied.selectedColor, Colors.green);
-      expect(copied.unSelectedColor, Colors.grey);
+      expect(copied.selectedTextStyle?.color, Colors.green);
+      expect(copied.textStyle?.color, Colors.grey);
     });
 
     test('copyWith cover padding and backgrounds', () {
@@ -33,15 +34,20 @@ void main() {
     });
 
     test('lerp 在 t=0 / 0.5 / 1 返回 TSideBarThemeData', () {
-      const other = TSideBarThemeData(selectedColor: Colors.purple);
+      const other = TSideBarThemeData(
+        selectedTextStyle: TextStyle(color: Colors.purple),
+      );
       final at0 = theme.lerp(other, 0);
       final atHalf = theme.lerp(other, 0.5);
       final at1 = theme.lerp(other, 1);
       expect(at0, isA<TSideBarThemeData>());
       expect(atHalf, isA<TSideBarThemeData>());
       expect(at1, isA<TSideBarThemeData>());
-      expect(atHalf.selectedColor, isA<Color>());
-      expect(at1.selectedColor?.toARGB32(), Colors.purple.toARGB32());
+      expect(atHalf.selectedTextStyle?.color, isA<Color>());
+      expect(
+        at1.selectedTextStyle?.color?.toARGB32(),
+        Colors.purple.toARGB32(),
+      );
     });
 
     test('lerp cover remaining fields', () {
@@ -59,18 +65,19 @@ void main() {
     test('lerp 对两端显式值执行连续插值', () {
       const begin = TSideBarThemeData(
         contentPadding: EdgeInsets.all(8),
-        selectedColor: Colors.black,
-        selectedTextStyle: TextStyle(fontSize: 12),
+        selectedTextStyle: TextStyle(fontSize: 12, color: Colors.black),
       );
       const end = TSideBarThemeData(
         contentPadding: EdgeInsets.all(16),
-        selectedColor: Colors.white,
-        selectedTextStyle: TextStyle(fontSize: 16),
+        selectedTextStyle: TextStyle(fontSize: 16, color: Colors.white),
       );
 
       final lerped = begin.lerp(end, 0.5);
       expect(lerped.contentPadding, const EdgeInsets.all(12));
-      expect(lerped.selectedColor, Color.lerp(Colors.black, Colors.white, 0.5));
+      expect(
+        lerped.selectedTextStyle?.color,
+        Color.lerp(Colors.black, Colors.white, 0.5),
+      );
       expect(lerped.selectedTextStyle?.fontSize, 14);
     });
 
@@ -82,8 +89,7 @@ void main() {
       const fallback = TSideBarThemeData();
       const explicit = TSideBarThemeData(
         contentPadding: EdgeInsets.all(16),
-        selectedColor: Colors.red,
-        unSelectedColor: Colors.grey,
+        textStyle: TextStyle(color: Colors.grey),
         selectedTextStyle: TextStyle(
           color: Colors.red,
           fontSize: 16,
@@ -95,23 +101,20 @@ void main() {
 
       final beforeSwitch = fallback.lerp(explicit, 0.25);
       expect(beforeSwitch.contentPadding, isNull);
-      expect(beforeSwitch.selectedColor, isNull);
-      expect(beforeSwitch.unSelectedColor, isNull);
+      expect(beforeSwitch.textStyle, isNull);
       expect(beforeSwitch.selectedTextStyle, isNull);
       expect(beforeSwitch.selectedBgColor, isNull);
       expect(beforeSwitch.unSelectedBgColor, isNull);
 
       final reverseBeforeSwitch = explicit.lerp(fallback, 0.25);
       expect(reverseBeforeSwitch.contentPadding, explicit.contentPadding);
-      expect(reverseBeforeSwitch.selectedColor, explicit.selectedColor);
-      expect(reverseBeforeSwitch.unSelectedColor, explicit.unSelectedColor);
+      expect(reverseBeforeSwitch.textStyle, explicit.textStyle);
       expect(reverseBeforeSwitch.selectedTextStyle, explicit.selectedTextStyle);
       expect(reverseBeforeSwitch.selectedBgColor, explicit.selectedBgColor);
       expect(reverseBeforeSwitch.unSelectedBgColor, explicit.unSelectedBgColor);
 
       final bothFallback = fallback.lerp(const TSideBarThemeData(), 0.5);
       expect(bothFallback.contentPadding, isNull);
-      expect(bothFallback.selectedColor, isNull);
       expect(bothFallback.selectedTextStyle, isNull);
     });
 
@@ -121,7 +124,7 @@ void main() {
         extensions: const [
           TSideBarThemeData(
             contentPadding: EdgeInsets.all(16),
-            selectedColor: Colors.red,
+            selectedTextStyle: TextStyle(color: Colors.red),
           ),
         ],
       );
@@ -129,7 +132,7 @@ void main() {
       final theme = ThemeData.lerp(begin, end, 0.25);
       final sideBarTheme = theme.extension<TSideBarThemeData>()!;
       expect(sideBarTheme.contentPadding, isNull);
-      expect(sideBarTheme.selectedColor, isNull);
+      expect(sideBarTheme.selectedTextStyle, isNull);
     });
   });
 }

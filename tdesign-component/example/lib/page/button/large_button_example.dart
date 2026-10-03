@@ -11,7 +11,7 @@ class LargeButtonExample extends StatelessWidget {
       child: const Text('按钮48'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
+      colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
     );
   }
@@ -21,7 +21,7 @@ class LargeButtonExample extends StatelessWidget {
       child: const Text('按钮40'),
       size: TButtonSize.medium,
       variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
+      colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
     );
   }
@@ -31,7 +31,7 @@ class LargeButtonExample extends StatelessWidget {
       child: const Text('按钮32'),
       size: TButtonSize.small,
       variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
+      colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
     );
   }
@@ -41,7 +41,7 @@ class LargeButtonExample extends StatelessWidget {
       child: const Text('按钮28'),
       size: TButtonSize.extraSmall,
       variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
+      colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
     );
   }

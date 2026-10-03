@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
 
-class PopoverColorSchemesExample extends StatelessWidget {
-  const PopoverColorSchemesExample({super.key});
+@ExampleCode(group: 'popover')
+class PopoverColorPresetsExample extends StatelessWidget {
+  const PopoverColorPresetsExample({super.key});
 
   Widget _buildDarkPopover(BuildContext context) {
     return Container(
@@ -15,7 +18,7 @@ class PopoverColorSchemesExample extends StatelessWidget {
             size: TButtonSize.large,
             child: const Text('深色'),
             variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
@@ -38,12 +41,12 @@ class PopoverColorSchemesExample extends StatelessWidget {
             size: TButtonSize.large,
             child: const Text('浅色'),
             variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
                 content: const Text('弹出气泡内容'),
-                colorScheme: TPopoverColorScheme.light,
+                colorPreset: TPopoverColorPreset.light,
               );
             },
           );
@@ -62,12 +65,12 @@ class PopoverColorSchemesExample extends StatelessWidget {
             size: TButtonSize.large,
             child: const Text('品牌色'),
             variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
                 content: const Text('弹出气泡内容'),
-                colorScheme: TPopoverColorScheme.primary,
+                colorPreset: TPopoverColorPreset.primary,
               );
             },
           );
@@ -86,12 +89,12 @@ class PopoverColorSchemesExample extends StatelessWidget {
             size: TButtonSize.large,
             child: const Text('成功色'),
             variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
                 content: const Text('弹出气泡内容'),
-                colorScheme: TPopoverColorScheme.success,
+                colorPreset: TPopoverColorPreset.success,
               );
             },
           );
@@ -110,12 +113,12 @@ class PopoverColorSchemesExample extends StatelessWidget {
             size: TButtonSize.large,
             child: const Text('警告色'),
             variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
                 content: const Text('弹出气泡内容'),
-                colorScheme: TPopoverColorScheme.warning,
+                colorPreset: TPopoverColorPreset.warning,
               );
             },
           );
@@ -134,12 +137,12 @@ class PopoverColorSchemesExample extends StatelessWidget {
             size: TButtonSize.large,
             child: const Text('错误色'),
             variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
                 content: const Text('弹出气泡内容'),
-                colorScheme: TPopoverColorScheme.danger,
+                colorPreset: TPopoverColorPreset.danger,
               );
             },
           );

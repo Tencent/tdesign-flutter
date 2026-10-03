@@ -6,7 +6,7 @@ void main() {
   Widget wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
   group('TButton widget 级用例', () {
-    testWidgets('默认文字样式继承 ThemeData labelLarge 字体族', (tester) async {
+    testWidgets('默认文字样式使用 TDesign 字体 Token', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(
@@ -26,7 +26,7 @@ void main() {
         tester.element(find.text('Button')),
       );
       expect(text.style, isNull);
-      expect(defaultStyle.style.fontFamily, 'TestFont');
+      expect(defaultStyle.style.fontFamily, 'Roboto');
     });
 
     testWidgets('fill 主色可构建', (tester) async {
@@ -35,7 +35,7 @@ void main() {
           const TButton(
             child: Text('填充'),
             variant: TButtonVariant.fill,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
             onPressed: _noop,
           ),
         ),
@@ -78,7 +78,7 @@ void main() {
               TButton(
                 child: Text('小'),
                 size: TButtonSize.small,
-                colorScheme: TButtonColorScheme.danger,
+                colorPreset: TButtonColorPreset.danger,
                 onPressed: _noop,
               ),
               TButton(

@@ -7,7 +7,6 @@ TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 组件背景颜色；优先级高于 ThemeData 和默认值。 |
 | child | Widget? | - | 自定义内容，优先级高于`items`/`footer`/`title` |
 | enableFeedback | bool | true | 点击时是否显示背景按压反馈，默认 true。 |
 | footer | Widget? | - | 抽屉的底部 |
@@ -17,7 +16,6 @@ TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer
 | showDivider | bool | true | 是否显示菜单项分隔线，默认 true。 |
 | showLastDivider | bool | true | 是否显示最后一行分隔线，默认 true。 |
 | title | Widget? | - | 抽屉的标题组件 |
-| width | double? | - | 宽度；优先级高于 ThemeData，默认使用 280。 |
 
 
 ### TDrawerHandle

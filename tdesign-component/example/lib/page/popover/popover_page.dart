@@ -7,7 +7,7 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 import 'popover_arrow_example.dart';
 import 'popover_bottom_placements_example.dart';
-import 'popover_color_schemes_example.dart';
+import 'popover_color_presets_example.dart';
 import 'popover_custom_content_example.dart';
 import 'popover_left_placements_example.dart';
 import 'popover_no_arrow_example.dart';
@@ -26,7 +26,7 @@ class TPopoverPage extends StatefulWidget {
 }
 
 class _TPopoverPage extends State<TPopoverPage> {
-  TPopoverColorScheme theme = TPopoverColorScheme.light;
+  TPopoverColorPreset theme = TPopoverColorPreset.light;
   String _eventStatus = '点击或长按气泡后查看结果';
   String _lifecycleStatus = '尚未打开生命周期气泡';
   bool _showLifecycleAnchor = true;
@@ -40,8 +40,8 @@ class _TPopoverPage extends State<TPopoverPage> {
       }
       setState(() {
         theme = Theme.of(context).brightness == Brightness.dark
-            ? TPopoverColorScheme.light
-            : TPopoverColorScheme.defaultTheme;
+            ? TPopoverColorPreset.light
+            : TPopoverColorPreset.defaultTheme;
       });
     });
   }
@@ -79,8 +79,8 @@ class _TPopoverPage extends State<TPopoverPage> {
           children: [
             ExampleItem(
               desc: '',
-              methodName: 'PopoverColorSchemesExample',
-              builder: (_) => const PopoverColorSchemesExample(),
+              methodName: 'PopoverColorPresetsExample',
+              builder: (_) => const PopoverColorPresetsExample(),
             ),
             ExampleItem(
               desc: '顶部弹出气泡',
@@ -152,7 +152,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             return TButton(
               key: const Key('popover-event-trigger'),
               variant: TButtonVariant.outline,
-              colorScheme: TButtonColorScheme.primary,
+              colorPreset: TButtonColorPreset.primary,
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
@@ -196,7 +196,7 @@ class _TPopoverPage extends State<TPopoverPage> {
               return TButton(
                 key: const Key('popover-theme-short-trigger'),
                 variant: TButtonVariant.outline,
-                colorScheme: TButtonColorScheme.primary,
+                colorPreset: TButtonColorPreset.primary,
                 onPressed: () {
                   TPopover.showPopover(
                     context: popoverContext,
@@ -213,7 +213,7 @@ class _TPopoverPage extends State<TPopoverPage> {
               return TButton(
                 key: const Key('popover-theme-long-trigger'),
                 variant: TButtonVariant.outline,
-                colorScheme: TButtonColorScheme.primary,
+                colorPreset: TButtonColorPreset.primary,
                 onPressed: () {
                   TPopover.showPopover(
                     context: popoverContext,
@@ -244,7 +244,7 @@ class _TPopoverPage extends State<TPopoverPage> {
               key: Key('popover-boundary-$label'),
               size: TButtonSize.small,
               variant: TButtonVariant.outline,
-              colorScheme: TButtonColorScheme.primary,
+              colorPreset: TButtonColorPreset.primary,
               onPressed: () {
                 TPopover.showPopover(
                   context: popoverContext,
@@ -312,7 +312,7 @@ class _TPopoverPage extends State<TPopoverPage> {
               return TButton(
                 key: const Key('popover-keyboard-trigger'),
                 variant: TButtonVariant.outline,
-                colorScheme: TButtonColorScheme.primary,
+                colorPreset: TButtonColorPreset.primary,
                 onPressed: () {
                   TPopover.showPopover(
                     context: popoverContext,
@@ -343,7 +343,7 @@ class _TPopoverPage extends State<TPopoverPage> {
                   return TButton(
                     key: const Key('popover-lifecycle-anchor'),
                     variant: TButtonVariant.outline,
-                    colorScheme: TButtonColorScheme.primary,
+                    colorPreset: TButtonColorPreset.primary,
                     onPressed: () {
                       setState(() => _lifecycleStatus = 'Popover 展示中');
                       unawaited(
@@ -369,7 +369,7 @@ class _TPopoverPage extends State<TPopoverPage> {
             TButton(
               key: const Key('popover-lifecycle-toggle'),
               variant: TButtonVariant.outline,
-              colorScheme: TButtonColorScheme.primary,
+              colorPreset: TButtonColorPreset.primary,
               onPressed: () {
                 setState(() {
                   _showLifecycleAnchor = !_showLifecycleAnchor;
@@ -398,12 +398,12 @@ class _TPopoverPage extends State<TPopoverPage> {
             size: TButtonSize.medium,
             child: const Text('多行内容'),
             variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
+            colorPreset: TButtonColorPreset.primary,
             onPressed: () {
               TPopover.showPopover(
                 context: popoverContext,
                 content: const Text('弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容'),
-                colorScheme: theme,
+                colorPreset: theme,
               );
             },
           );
@@ -416,23 +416,29 @@ class _TPopoverPage extends State<TPopoverPage> {
     return Container(
       padding: const EdgeInsets.only(top: 0),
       margin: const EdgeInsets.all(8),
-      child: LayoutBuilder(
-        builder: (popoverContext, constraints) {
-          return TButton(
-            size: TButtonSize.medium,
-            child: const Text('自定义圆角'),
-            variant: TButtonVariant.outline,
-            colorScheme: TButtonColorScheme.primary,
-            onPressed: () {
-              TPopover.showPopover(
-                context: popoverContext,
-                radius: BorderRadius.circular(16),
-                colorScheme: theme,
-                content: const Text('弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容'),
-              );
-            },
-          );
-        },
+      child: Theme(
+        data: Theme.of(context).mergeExtension(
+          const TPopoverThemeData(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+        ),
+        child: Builder(
+          builder: (popoverContext) {
+            return TButton(
+              size: TButtonSize.medium,
+              child: const Text('自定义圆角'),
+              variant: TButtonVariant.outline,
+              colorPreset: TButtonColorPreset.primary,
+              onPressed: () {
+                TPopover.showPopover(
+                  context: popoverContext,
+                  colorPreset: theme,
+                  content: const Text('弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容'),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

@@ -34,7 +34,7 @@ class _ShowAllIconsExampleState extends State<ShowAllIconsExample> {
                   child: const Text('https://tdesign.tencent.com/icons'),
                   prefixIcon: const Icon(TIcons.link),
                   suffixIcon: const Icon(TIcons.jump),
-                  colorScheme: TLinkColorScheme.primary,
+                  colorPreset: TLinkColorPreset.primary,
                   semanticLabel: '打开 TDesign 图标官网',
                   onPressed: followLink,
                 ),
@@ -144,10 +144,12 @@ class IconCatalogGrid extends StatelessWidget {
                     TText(
                       item.key,
                       font: context.tTheme.fontBodySmall,
-                      textColor: context.tTheme.textColorPlaceholder,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: context.tTheme.textColorPlaceholder,
+                      ),
                     ),
                   ],
                 ),

@@ -6,6 +6,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_result_theme_data.dart';
 
 /// 结果状态。
@@ -52,26 +53,24 @@ class TResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = _theme(context);
-    final material = Theme.of(context).tExplicitColorScheme;
     final titleStyle = theme?.titleStyle;
     final displayIcon = icon ?? _getDefaultIcon(context, status);
     final children = <Widget>[
       KeyedSubtree(key: const ValueKey('result-icon'), child: displayIcon),
       if (title.isNotEmpty)
-        TText(
+        TTextStyled(
           title,
           key: const ValueKey('result-title'),
-          textColor: material?.onSurface ?? context.tTheme.textColorPrimary,
+          textColor: context.tTheme.textColorPrimary,
           font: context.tTheme.fontTitleMedium,
           style: titleStyle,
           textAlign: TextAlign.center,
         ),
       if (description != null && description!.isNotEmpty)
-        TText(
+        TTextStyled(
           description!,
           key: const ValueKey('result-description'),
-          textColor:
-              material?.onSurfaceVariant ?? context.tTheme.textColorSecondary,
+          textColor: context.tTheme.textColorSecondary,
           font: context.tTheme.fontBodyMedium,
           style: theme?.descriptionStyle,
           textAlign: TextAlign.center,
@@ -87,7 +86,7 @@ class TResult extends StatelessWidget {
             if (index > 0)
               SizedBox(
                 key: ValueKey('result-spacing-$index'),
-                height: context.tTheme.spacer12,
+                height: context.tTheme.spacer1,
               ),
             children[index],
           ],
@@ -107,31 +106,30 @@ class TResult extends StatelessWidget {
 
   /// 根据形态返回对应的默认图标组件
   Widget _getDefaultIcon(BuildContext context, TResultStatus status) {
-    final material = Theme.of(context).tExplicitColorScheme;
     final iconSize = _theme(context)?.iconSize ?? 80;
     switch (status) {
       case TResultStatus.success:
         return Icon(
           TIcons.check_circle,
-          color: context.tTheme.successNormalColor,
+          color: context.tTheme.successColor,
           size: iconSize,
         );
       case TResultStatus.warning:
         return Icon(
           TIcons.error_circle,
-          color: context.tTheme.warningNormalColor,
+          color: context.tTheme.warningColor,
           size: iconSize,
         );
       case TResultStatus.error:
         return Icon(
           TIcons.close_circle,
-          color: material?.error ?? context.tTheme.errorNormalColor,
+          color: context.tTheme.errorColor,
           size: iconSize,
         );
       case TResultStatus.info:
         return Icon(
           TIcons.info_circle,
-          color: material?.primary ?? context.tTheme.brandNormalColor,
+          color: context.tTheme.brandColor,
           size: iconSize,
         );
     }

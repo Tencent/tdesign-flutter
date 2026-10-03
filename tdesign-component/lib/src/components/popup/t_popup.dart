@@ -19,6 +19,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
+import '../text/t_text_style_scope.dart';
 import 't_popup_theme_data.dart';
 
 part '_popup_center_close.dart';
@@ -97,9 +98,7 @@ final class TPopup {
       backgroundColor: options.backgroundColor ?? theme?.panelBackgroundColor,
       overlay: _resolveOverlay(options.overlay, theme),
       animationDuration:
-          options.animationDuration ??
-          theme?.transitionDuration ??
-          const Duration(milliseconds: 240),
+          options.animationDuration ?? const Duration(milliseconds: 240),
     );
     final handle = TPopupHandle._(
       options: resolvedOptions,
@@ -117,20 +116,18 @@ final class TPopup {
     TPopupThemeData? theme,
   ) {
     final themeColor = theme?.barrierColor;
-    final themeOpacity = theme?.barrierOpacity;
     if (overlay == null) {
-      if (themeColor == null && themeOpacity == null) {
+      if (themeColor == null) {
         return null;
       }
-      return TPopupOverlayConfig(color: themeColor, opacity: themeOpacity);
+      return TPopupOverlayConfig(color: themeColor);
     }
-    if (overlay.color != null && overlay.opacity != null) {
+    if (overlay.color != null) {
       return overlay;
     }
     return TPopupOverlayConfig(
       showOverlay: overlay.showOverlay,
       color: overlay.color ?? themeColor,
-      opacity: overlay.opacity ?? themeOpacity,
       preventTap: overlay.preventTap,
       closeOnClick: overlay.closeOnClick,
       onClick: overlay.onClick,

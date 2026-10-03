@@ -1092,13 +1092,11 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('Theme 控制边框、斑马纹、尺寸和颜色', (tester) async {
+    testWidgets('实例选择边框和斑马纹，Theme 控制尺寸和颜色', (tester) async {
       await tester.pumpWidget(
         app(
-          TTable(columns: columns(), data: rows),
+          TTable(columns: columns(), data: rows, bordered: true, stripe: true),
           tableTheme: const TTableThemeData(
-            bordered: true,
-            stripe: true,
             rowHeight: 52,
             headerHeight: 44,
             width: 340,
@@ -1120,7 +1118,7 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('实例 bordered 与 stripe 覆盖 Theme 默认值', (tester) async {
+    testWidgets('未选择边框和斑马纹时保持默认关闭', (tester) async {
       await tester.pumpWidget(
         app(
           TTable(
@@ -1129,7 +1127,6 @@ void main() {
             bordered: false,
             stripe: false,
           ),
-          tableTheme: const TTableThemeData(bordered: true, stripe: true),
         ),
       );
       expect(
@@ -1143,8 +1140,6 @@ void main() {
 
   group('TTableThemeData', () {
     const a = TTableThemeData(
-      bordered: true,
-      stripe: false,
       rowHeight: 40,
       headerHeight: 44,
       width: 300,
@@ -1155,8 +1150,6 @@ void main() {
       cellPadding: EdgeInsets.all(4),
     );
     const b = TTableThemeData(
-      bordered: false,
-      stripe: true,
       rowHeight: 60,
       headerHeight: 64,
       width: 500,
@@ -1168,9 +1161,7 @@ void main() {
     );
 
     test('copyWith 覆盖并保留全部字段', () {
-      final value = a.copyWith(rowHeight: 48, bordered: false);
-      expect(value.bordered, false);
-      expect(value.stripe, a.stripe);
+      final value = a.copyWith(rowHeight: 48);
       expect(value.rowHeight, 48);
       expect(value.headerHeight, a.headerHeight);
       expect(value.width, a.width);
@@ -1180,7 +1171,6 @@ void main() {
       expect(value.borderColor, a.borderColor);
       expect(value.cellPadding, a.cellPadding);
       final all = a.copyWith(
-        stripe: true,
         headerHeight: 50,
         width: 350,
         backgroundColor: Colors.red,
@@ -1189,7 +1179,6 @@ void main() {
         borderColor: Colors.yellow,
         cellPadding: const EdgeInsets.all(9),
       );
-      expect(all.stripe, true);
       expect(all.headerHeight, 50);
       expect(all.width, 350);
       expect(all.backgroundColor, Colors.red);
@@ -1201,8 +1190,6 @@ void main() {
 
     test('lerp 插值全部视觉字段', () {
       final value = a.lerp(b, 0.5);
-      expect(value.bordered, false);
-      expect(value.stripe, true);
       expect(value.rowHeight, 50);
       expect(value.headerHeight, 54);
       expect(value.width, 400);

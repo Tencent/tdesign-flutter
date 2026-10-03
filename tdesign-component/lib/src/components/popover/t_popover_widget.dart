@@ -23,7 +23,7 @@ class TPopoverWidget extends StatefulWidget {
     required this.context,
     required this.content,
     this.offset,
-    this.colorScheme = TPopoverColorScheme.defaultTheme,
+    this.colorPreset = TPopoverColorPreset.defaultTheme,
     this.placement = TPopoverPlacement.top,
     this.showArrow,
     this.arrowSize,
@@ -46,7 +46,7 @@ class TPopoverWidget extends StatefulWidget {
   final double? offset;
 
   /// 弹出气泡预设配色。
-  final TPopoverColorScheme colorScheme;
+  final TPopoverColorPreset colorPreset;
 
   /// 浮层出现位置
   final TPopoverPlacement placement;
@@ -127,7 +127,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
 
   double get _effectiveOffset => widget.offset ?? _theme.offset ?? 4;
 
-  bool get _effectiveShowArrow => widget.showArrow ?? _theme.showArrow ?? true;
+  bool get _effectiveShowArrow => widget.showArrow ?? true;
 
   double get _effectiveArrowSize => widget.arrowSize ?? _theme.arrowSize ?? 8;
 
@@ -138,11 +138,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   EdgeInsetsGeometry get _resolvedPadding =>
       _effectivePadding ?? _kDefaultPopoverPadding;
 
-  BorderRadius? get _effectiveRadius =>
-      widget.radius ??
-      (_theme.borderRadius == null
-          ? null
-          : BorderRadius.circular(_theme.borderRadius!));
+  BorderRadius? get _effectiveRadius => widget.radius ?? _theme.borderRadius;
 
   TextStyle get _defaultContentTextStyle => TextStyle(
     color: _color,
@@ -244,28 +240,28 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
 
   /// 初始化主题
   void _initTheme() {
-    switch (widget.colorScheme) {
-      case TPopoverColorScheme.primary:
-        _color = widget.context.tTheme.brandNormalColor;
-        _backgroundColor = widget.context.tTheme.brandLightColor;
+    switch (widget.colorPreset) {
+      case TPopoverColorPreset.primary:
+        _color = widget.context.tTheme.brandColor;
+        _backgroundColor = widget.context.tTheme.brandColorLight;
         break;
-      case TPopoverColorScheme.success:
-        _color = widget.context.tTheme.successNormalColor;
-        _backgroundColor = widget.context.tTheme.successLightColor;
+      case TPopoverColorPreset.success:
+        _color = widget.context.tTheme.successColor;
+        _backgroundColor = widget.context.tTheme.successColorLight;
         break;
-      case TPopoverColorScheme.warning:
-        _color = widget.context.tTheme.warningNormalColor;
-        _backgroundColor = widget.context.tTheme.warningLightColor;
+      case TPopoverColorPreset.warning:
+        _color = widget.context.tTheme.warningColor;
+        _backgroundColor = widget.context.tTheme.warningColorLight;
         break;
-      case TPopoverColorScheme.danger:
-        _color = widget.context.tTheme.errorNormalColor;
-        _backgroundColor = widget.context.tTheme.errorLightColor;
+      case TPopoverColorPreset.danger:
+        _color = widget.context.tTheme.errorColor;
+        _backgroundColor = widget.context.tTheme.errorColorLight;
         break;
-      case TPopoverColorScheme.light:
+      case TPopoverColorPreset.light:
         _color = widget.context.tTheme.grayColor14;
         _backgroundColor = widget.context.tTheme.whiteColor1;
         break;
-      case TPopoverColorScheme.defaultTheme:
+      case TPopoverColorPreset.defaultTheme:
         _color = widget.context.tTheme.textColorAnti;
         _backgroundColor = widget.context.tTheme.grayColor14;
         break;
@@ -403,7 +399,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
             _effectiveRadius ??
             BorderRadius.circular(context.tTheme.radiusDefault),
         color: _backgroundColor,
-        boxShadow: _theme.boxShadow ?? context.tTheme.shadowsTop ?? const [],
+        boxShadow: _theme.boxShadow ?? context.tTheme.shadow3 ?? const [],
       ),
       child: styledContent,
     );

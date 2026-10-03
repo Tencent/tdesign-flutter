@@ -1,10 +1,8 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
-import '../../theme/t_text_theme_source.dart';
 import '../../theme/t_theme.dart';
 import 't_field_scope.dart';
 import 't_form.dart';
@@ -41,12 +39,6 @@ class TFormItem extends StatelessWidget {
     /// 未传时自动使用最近 [TFormField] 的校验错误。
     this.errorText,
 
-    /// 标签区域宽度；为空时读取 [TFormThemeData.labelWidth]，默认 80dp。
-    this.labelWidth,
-
-    /// 标签文本对齐方式；为空时读取 [TFormThemeData.labelAlign]。
-    this.labelAlign,
-
     /// 表单项尾部的额外内容。
     ///
     /// 该插槽不会被附加内边距、位移或固定尺寸。
@@ -54,12 +46,12 @@ class TFormItem extends StatelessWidget {
 
     /// 水平布局下标签、字段内容和额外内容的纵向对齐方式。
     ///
-    /// 未传时读取 [TFormThemeData.verticalAlignment]，默认顶部对齐。
+    /// 未传时默认顶部对齐；这是单个表单项的结构布局选择。
     this.verticalAlignment,
 
     /// 内容区域的水平方向对齐方式。
     ///
-    /// 未传时读取 [TFormThemeData.contentAlignment]，默认起始侧对齐；影响
+    /// 未传时默认起始侧对齐；影响
     /// 字段控件、help 和 error 的外部位置，不影响输入文本自身的对齐方式。
     this.contentAlignment,
 
@@ -86,12 +78,6 @@ class TFormItem extends StatelessWidget {
   /// 错误文案。
   final String? errorText;
 
-  /// 标签区域宽度。
-  final double? labelWidth;
-
-  /// 标签文本对齐方式。
-  final TextAlign? labelAlign;
-
   /// 表单项尾部的额外内容。
   ///
   /// 该插槽不会被附加内边距、位移或固定尺寸。
@@ -109,26 +95,19 @@ class TFormItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TFormThemeData>();
-    final materialTheme = Theme.of(context);
-    final textTheme = materialTheme.tExplicitTextTheme;
     final token = context.tTheme;
     final fieldScope = TFieldScope.maybeOf(context);
     final inheritedErrorText = showErrorMessage ? fieldScope?.errorText : null;
     final effectiveErrorText = errorText ?? inheritedErrorText;
     final effectiveRequired = required ?? fieldScope?.required ?? false;
     final layout = theme?.layout ?? TFormLayout.horizontal;
-    final effectiveLabelWidth = labelWidth ?? theme?.labelWidth ?? 80;
-    final effectiveLabelAlign =
-        labelAlign ?? theme?.labelAlign ?? TextAlign.start;
-    final effectiveLeadingGap = theme?.leadingGap ?? token.spacer8;
+    final effectiveLabelWidth = theme?.labelWidth ?? 80;
+    final effectiveLabelAlign = theme?.labelAlign ?? TextAlign.start;
+    final effectiveLeadingGap = theme?.leadingGap ?? token.spacer;
     final effectiveVerticalAlignment =
-        verticalAlignment ??
-        theme?.verticalAlignment ??
-        TFormItemVerticalAlignment.start;
+        verticalAlignment ?? TFormItemVerticalAlignment.start;
     final effectiveContentAlignment =
-        contentAlignment ??
-        theme?.contentAlignment ??
-        TFormItemContentAlignment.start;
+        contentAlignment ?? TFormItemContentAlignment.start;
     final horizontalCrossAxisAlignment = switch (effectiveVerticalAlignment) {
       TFormItemVerticalAlignment.start => CrossAxisAlignment.start,
       TFormItemVerticalAlignment.center => CrossAxisAlignment.center,
@@ -159,61 +138,18 @@ class TFormItem extends StatelessWidget {
       fontWeight: labelFont?.fontWeight,
       letterSpacing: 0,
     );
-    final materialLabelStyle = textTheme?.bodyMedium;
-    final projectedTextTheme = materialTheme.extensions.values
-        .whereType<TTextThemeSource>()
-        .firstOrNull
-        ?.textTheme;
-    final implicitTextTheme =
-        projectedTextTheme ??
-        ThemeData(
-          brightness: materialTheme.brightness,
-          colorScheme: materialTheme.colorScheme,
-          useMaterial3: materialTheme.useMaterial3,
-        ).textTheme;
-    final typography = materialTheme.useMaterial3
-        ? Typography.material2021(platform: materialTheme.platform)
-        : Typography.material2014(platform: materialTheme.platform);
-    final implicitLabelStyle = typography.englishLike
-        .merge(implicitTextTheme)
-        .bodyMedium;
-    final mergedLabelStyle = labelBaseStyle.merge(materialLabelStyle);
-    // TextTheme.apply(fontFamilyFallback: ...) 只配置字形时，Material 的
-    // bodyMedium 默认字号不能覆盖水平表单项的 bodyLarge Token 尺寸。
-    final labelStyle = mergedLabelStyle
-        .copyWith(
-          color: materialLabelStyle?.color == implicitLabelStyle?.color
-              ? labelBaseStyle.color
-              : mergedLabelStyle.color,
-          fontSize: materialLabelStyle?.fontSize == implicitLabelStyle?.fontSize
-              ? labelBaseStyle.fontSize
-              : mergedLabelStyle.fontSize,
-          height: materialLabelStyle?.height == implicitLabelStyle?.height
-              ? labelBaseStyle.height
-              : mergedLabelStyle.height,
-          fontWeight:
-              materialLabelStyle?.fontWeight == implicitLabelStyle?.fontWeight
-              ? labelBaseStyle.fontWeight
-              : mergedLabelStyle.fontWeight,
-          letterSpacing:
-              materialLabelStyle?.letterSpacing ==
-                  implicitLabelStyle?.letterSpacing
-              ? labelBaseStyle.letterSpacing
-              : mergedLabelStyle.letterSpacing,
-        )
-        .merge(theme?.labelStyle);
+    final labelStyle = labelBaseStyle.merge(theme?.labelStyle);
     final helpFont = token.fontBodySmall;
     final messageTextStyle = TextStyle(
       fontSize: helpFont?.size,
       height: helpFont?.height,
       fontWeight: helpFont?.fontWeight,
-    ).merge(textTheme?.bodySmall);
+    );
     final helpStyle = messageTextStyle
         .copyWith(color: token.textColorPlaceholder)
         .merge(theme?.helpStyle);
     final errorStyle = messageTextStyle
-        .copyWith(color: token.errorNormalColor)
-        .merge(materialTheme.inputDecorationTheme.errorStyle)
+        .copyWith(color: token.errorColor)
         .merge(theme?.errorStyle);
     final labelWidget = label == null
         ? null
@@ -222,7 +158,7 @@ class TFormItem extends StatelessWidget {
         ? Text(
             '*',
             style: TextStyle(
-              color: context.tTheme.errorNormalColor,
+              color: context.tTheme.errorColor,
             ).merge(theme?.requiredMarkStyle),
           )
         : null;
@@ -269,7 +205,7 @@ class TFormItem extends StatelessWidget {
           ),
         ),
         if (effectiveErrorText != null) ...[
-          SizedBox(height: theme?.messageGap ?? token.spacer4),
+          SizedBox(height: theme?.messageGap ?? 4.0),
           effectiveContentAlignment == TFormItemContentAlignment.end
               ? Align(
                   alignment: contentAreaAlignment,
@@ -281,7 +217,7 @@ class TFormItem extends StatelessWidget {
                 )
               : Text(effectiveErrorText, style: errorStyle),
         ] else if (help != null) ...[
-          SizedBox(height: theme?.messageGap ?? token.spacer4),
+          SizedBox(height: theme?.messageGap ?? 4.0),
           effectiveContentAlignment == TFormItemContentAlignment.end
               ? Align(
                   alignment: contentAreaAlignment,
@@ -305,7 +241,7 @@ class TFormItem extends StatelessWidget {
       foregroundDecoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: theme?.borderColor ?? token.componentStrokeColor,
+            color: theme?.borderColor ?? token.componentStroke,
           ),
         ),
       ),
@@ -329,7 +265,7 @@ class TFormItem extends StatelessWidget {
                     width: effectiveLabelWidth,
                     child: Align(alignment: labelAlignment, child: markedLabel),
                   ),
-                  SizedBox(width: token.spacer16),
+                  SizedBox(width: token.spacer2),
                 ],
                 Expanded(child: content),
                 if (extra != null) extra!,

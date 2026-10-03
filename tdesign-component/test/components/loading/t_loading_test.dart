@@ -65,7 +65,7 @@ void main() {
       expect(find.byType(TLoading), findsOneWidget);
       expect(
         tester.widget<TCircleIndicator>(find.byType(TCircleIndicator)).color,
-        TThemeData.defaultData().brandNormalColor,
+        TThemeData.defaultData().brandColor,
       );
     });
 
@@ -78,7 +78,7 @@ void main() {
         tester
             .widget<TPointBounceIndicator>(find.byType(TPointBounceIndicator))
             .color,
-        TThemeData.defaultData().brandNormalColor,
+        TThemeData.defaultData().brandColor,
       );
     });
 
@@ -169,7 +169,7 @@ void main() {
       );
       expect(find.text('颜色测试'), findsOneWidget);
       expect(
-        tester.widget<TText>(_loadingTextFinder('颜色测试')).textColor,
+        tester.widget<TText>(_loadingTextFinder('颜色测试')).style?.color,
         Colors.blue,
       );
     });
@@ -288,9 +288,9 @@ void main() {
       expect(find.text('默认'), findsOneWidget);
       expect(find.byType(TLoading), findsOneWidget);
       final text = tester.widget<TText>(_loadingTextFinder('默认'));
-      expect(text.textColor, token.textColorPrimary);
+      expect(text.style?.color, token.textColorPrimary);
       expect(text.font, token.fontBodyMedium);
-      expect(text.fontWeight, FontWeight.w400);
+      expect(text.style?.fontWeight, FontWeight.w400);
       expect(text.textAlign, TextAlign.center);
     });
   });

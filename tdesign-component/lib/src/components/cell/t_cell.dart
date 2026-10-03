@@ -5,6 +5,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_style_scope.dart';
 import 't_cell_theme_data.dart';
 
 /// 单元格内容垂直对齐方式。
@@ -83,10 +84,26 @@ class _TCellState extends State<TCell> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TCellThemeData>();
-    final materialTheme = Theme.of(context);
-    final listTileTheme = materialTheme.listTileTheme;
-    final colorScheme = materialTheme.tExplicitColorScheme;
-    final align = widget.align ?? theme?.align ?? TCellAlign.center;
+    final token = context.tTheme;
+    final titleStyle = TextStyle(
+      color: token.textColorPrimary,
+      fontSize: token.fontBodyLarge?.size ?? 16,
+      height: token.fontBodyLarge?.height,
+      fontWeight: token.fontBodyLarge?.fontWeight ?? FontWeight.w400,
+    ).merge(theme?.titleStyle);
+    final subtitleStyle = TextStyle(
+      color: token.textColorSecondary,
+      fontSize: token.fontBodyMedium?.size ?? 14,
+      height: token.fontBodyMedium?.height,
+      fontWeight: token.fontBodyMedium?.fontWeight ?? FontWeight.w400,
+    ).merge(theme?.subtitleStyle);
+    final noteStyle = TextStyle(
+      color: token.textColorPlaceholder,
+      fontSize: token.fontBodyLarge?.size ?? 16,
+      height: token.fontBodyLarge?.height,
+      fontWeight: token.fontBodyLarge?.fontWeight ?? FontWeight.w400,
+    ).merge(theme?.noteStyle);
+    final align = widget.align ?? TCellAlign.center;
     final crossAxisAlignment = switch (align) {
       TCellAlign.top => CrossAxisAlignment.start,
       TCellAlign.center => CrossAxisAlignment.center,
@@ -100,20 +117,16 @@ class _TCellState extends State<TCell> {
     final hasMainContent = widget.title != null || widget.subtitle != null;
     final content = Container(
       height: theme?.height,
-      padding: theme?.padding ?? EdgeInsets.all(context.tTheme.spacer16),
+      padding: theme?.padding ?? EdgeInsets.all(context.tTheme.spacer2),
       decoration: BoxDecoration(
         color: _pressed
-            ? theme?.pressedColor ?? context.tTheme.bgColorContainerHover
-            : theme?.backgroundColor ??
-                  listTileTheme.tileColor ??
-                  colorScheme?.surface ??
-                  context.tTheme.bgColorContainer,
+            ? theme?.pressedColor ?? context.tTheme.bgColorSecondaryContainer
+            : theme?.backgroundColor ?? context.tTheme.bgColorContainer,
         border: theme?.showBottomBorder ?? false
             ? Border(
                 bottom: BorderSide(
                   width: 0.5,
-                  color:
-                      theme?.borderColor ?? context.tTheme.componentStrokeColor,
+                  color: theme?.borderColor ?? context.tTheme.componentStroke,
                 ),
               )
             : null,
@@ -124,11 +137,11 @@ class _TCellState extends State<TCell> {
           children: [
             if (widget.image != null) ...[
               widget.image!,
-              SizedBox(width: context.tTheme.spacer12),
+              SizedBox(width: context.tTheme.spacer1),
             ],
             if (widget.prefix != null) ...[
               widget.prefix!,
-              SizedBox(width: context.tTheme.spacer12),
+              SizedBox(width: context.tTheme.spacer1),
             ],
             if (hasMainContent || widget.note == null)
               Expanded(
@@ -141,70 +154,35 @@ class _TCellState extends State<TCell> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Flexible(
-                            child: DefaultTextStyle.merge(
+                            child: TTextStyleScope(
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               softWrap: false,
-                              style:
-                                  theme?.titleStyle ??
-                                  listTileTheme.titleTextStyle ??
-                                  TextStyle(
-                                    color:
-                                        colorScheme?.onSurface ??
-                                        context.tTheme.textColorPrimary,
-                                    fontSize:
-                                        context.tTheme.fontBodyLarge?.size ??
-                                        16,
-                                    height:
-                                        context.tTheme.fontBodyLarge?.height,
-                                    fontWeight:
-                                        context
-                                            .tTheme
-                                            .fontBodyLarge
-                                            ?.fontWeight ??
-                                        FontWeight.w400,
-                                  ),
+                              style: titleStyle,
                               child: widget.title!,
                             ),
                           ),
                           if (widget.required)
                             Text(
                               ' *',
-                              style:
-                                  theme?.requiredStyle ??
-                                  TextStyle(
-                                    color:
-                                        colorScheme?.error ??
-                                        context.tTheme.errorNormalColor,
-                                  ),
+                              style: TextStyle(
+                                color: token.errorColor,
+                              ).merge(theme?.requiredStyle),
                             ),
                         ],
                       ),
                     if (widget.title != null && widget.subtitle != null)
-                      SizedBox(height: context.tTheme.spacer4),
+                      const SizedBox(height: 4.0),
                     if (widget.subtitle != null)
-                      DefaultTextStyle.merge(
-                        style:
-                            theme?.subtitleStyle ??
-                            listTileTheme.subtitleTextStyle ??
-                            TextStyle(
-                              color:
-                                  colorScheme?.onSurfaceVariant ??
-                                  context.tTheme.textColorSecondary,
-                              fontSize:
-                                  context.tTheme.fontBodyMedium?.size ?? 14,
-                              height: context.tTheme.fontBodyMedium?.height,
-                              fontWeight:
-                                  context.tTheme.fontBodyMedium?.fontWeight ??
-                                  FontWeight.w400,
-                            ),
+                      TTextStyleScope(
+                        style: subtitleStyle,
                         child: widget.subtitle!,
                       ),
                   ],
                 ),
               ),
             if (widget.note != null) ...[
-              if (hasMainContent) SizedBox(width: context.tTheme.spacer4),
+              if (hasMainContent) const SizedBox(width: 4.0),
               if (hasMainContent)
                 ConstrainedBox(
                   constraints: BoxConstraints(
@@ -212,22 +190,11 @@ class _TCellState extends State<TCell> {
                         constraints.maxWidth *
                         (constraints.maxWidth < 240 ? 0.5 : 0.75),
                   ),
-                  child: DefaultTextStyle.merge(
+                  child: TTextStyleScope(
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     softWrap: false,
-                    style:
-                        theme?.noteStyle ??
-                        TextStyle(
-                          color:
-                              colorScheme?.onSurfaceVariant ??
-                              context.tTheme.textColorPlaceholder,
-                          fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
-                          height: context.tTheme.fontBodyLarge?.height,
-                          fontWeight:
-                              context.tTheme.fontBodyLarge?.fontWeight ??
-                              FontWeight.w400,
-                        ),
+                    style: noteStyle,
                     child: widget.note!,
                   ),
                 )
@@ -235,41 +202,26 @@ class _TCellState extends State<TCell> {
                 Expanded(
                   child: Align(
                     alignment: noteAlignment,
-                    child: DefaultTextStyle.merge(
+                    child: TTextStyleScope(
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       softWrap: false,
-                      style:
-                          theme?.noteStyle ??
-                          TextStyle(
-                            color:
-                                colorScheme?.onSurfaceVariant ??
-                                context.tTheme.textColorPlaceholder,
-                            fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
-                            height: context.tTheme.fontBodyLarge?.height,
-                            fontWeight:
-                                context.tTheme.fontBodyLarge?.fontWeight ??
-                                FontWeight.w400,
-                          ),
+                      style: noteStyle,
                       child: widget.note!,
                     ),
                   ),
                 ),
             ],
             if (widget.trailing != null) ...[
-              SizedBox(width: context.tTheme.spacer4),
+              const SizedBox(width: 4.0),
               widget.trailing!,
             ],
             if (widget.arrow) ...[
-              SizedBox(width: context.tTheme.spacer4),
+              const SizedBox(width: 4.0),
               Icon(
                 TIcons.chevron_right,
                 size: 24,
-                color:
-                    theme?.arrowColor ??
-                    listTileTheme.iconColor ??
-                    colorScheme?.onSurfaceVariant ??
-                    context.tTheme.textColorPlaceholder,
+                color: theme?.arrowColor ?? context.tTheme.textColorPlaceholder,
               ),
             ],
           ],

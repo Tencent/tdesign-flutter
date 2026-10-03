@@ -14,6 +14,8 @@ import '../button/t_button_types.dart';
 import 't_dropdown_menu.dart';
 import 't_dropdown_theme_data.dart';
 
+const double _defaultBodyMaxHeight = 280;
+
 /// 下拉筛选面板中的不可变选项。
 class TDropdownMenuOption<T> {
   const TDropdownMenuOption({
@@ -44,6 +46,8 @@ class TDropdownSingleSelectPanel<T> extends StatelessWidget {
   final List<TDropdownMenuOption<T>> options;
   final T? value;
   final ValueChanged<T> onChanged;
+
+  /// 滚动主体的最大高度；默认 280dp。
   final double? maxHeight;
 
   @override
@@ -53,7 +57,7 @@ class TDropdownSingleSelectPanel<T> extends StatelessWidget {
         const TDropdownThemeData();
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxHeight: maxHeight ?? MediaQuery.sizeOf(context).height,
+        maxHeight: maxHeight ?? _defaultBodyMaxHeight,
       ),
       child: ListView.builder(
         padding: EdgeInsets.zero,
@@ -69,7 +73,7 @@ class TDropdownSingleSelectPanel<T> extends StatelessWidget {
             height: theme.optionHeight ?? 56,
             padding:
                 theme.optionPadding ??
-                EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+                EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
             onTap: option.disabled
                 ? null
                 : () {
@@ -107,6 +111,8 @@ class TDropdownMultiSelectPanel<T> extends StatefulWidget {
   final Set<T> values;
   final ValueChanged<Set<T>> onConfirm;
   final int columns;
+
+  /// 面板最大高度；默认滚动主体最多 280dp，底部操作区另计。
   final double? maxHeight;
 
   @override
@@ -156,45 +162,50 @@ class _TDropdownMultiSelectPanelState<T>
         children: [
           Flexible(
             fit: FlexFit.loose,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(
-                  context.tTheme.spacer16,
-                  context.tTheme.spacer12,
-                  context.tTheme.spacer16,
-                  context.tTheme.spacer16,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (final entry in groups.entries) ...[
-                      if (entry.key != null)
-                        Padding(
-                          padding: EdgeInsets.only(
-                            bottom: context.tTheme.spacer12,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: widget.maxHeight ?? _defaultBodyMaxHeight,
+              ),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    context.tTheme.spacer2,
+                    context.tTheme.spacer1,
+                    context.tTheme.spacer2,
+                    context.tTheme.spacer2,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (final entry in groups.entries) ...[
+                        if (entry.key != null)
+                          Padding(
+                            padding: EdgeInsets.only(
+                              bottom: context.tTheme.spacer1,
+                            ),
+                            child: Text(
+                              entry.key!,
+                              style:
+                                  theme.optionTextStyle ??
+                                  TextStyle(
+                                    color: context.tTheme.textColorPrimary,
+                                    fontSize:
+                                        context.tTheme.fontBodyMedium?.size,
+                                    height:
+                                        context.tTheme.fontBodyMedium?.height,
+                                    fontWeight: context
+                                        .tTheme
+                                        .fontBodyMedium
+                                        ?.fontWeight,
+                                  ),
+                            ),
                           ),
-                          child: Text(
-                            entry.key!,
-                            style:
-                                theme.optionTextStyle ??
-                                TextStyle(
-                                  color: context.tTheme.textColorPrimary,
-                                  fontSize: context.tTheme.fontBodyMedium?.size,
-                                  height: context.tTheme.fontBodyMedium?.height,
-                                  fontWeight:
-                                      context.tTheme.fontBodyMedium?.fontWeight,
-                                ).merge(
-                                  Theme.of(
-                                    context,
-                                  ).tExplicitTextTheme?.bodyMedium,
-                                ),
-                          ),
-                        ),
-                      ..._buildRows(context, entry.value, theme),
-                      if (entry.key != groups.keys.last)
-                        SizedBox(height: context.tTheme.spacer16),
+                        ..._buildRows(context, entry.value, theme),
+                        if (entry.key != groups.keys.last)
+                          SizedBox(height: context.tTheme.spacer2),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -219,12 +230,12 @@ class _TDropdownMultiSelectPanelState<T>
           padding: EdgeInsets.only(
             bottom: start + columns >= options.length
                 ? 0
-                : context.tTheme.spacer12,
+                : context.tTheme.spacer1,
           ),
           child: Row(
             children: List<Widget>.generate(columns * 2 - 1, (slot) {
               if (slot.isOdd) {
-                return SizedBox(width: context.tTheme.spacer12);
+                return SizedBox(width: context.tTheme.spacer1);
               }
               final column = slot ~/ 2;
               if (column >= rowOptions.length) {
@@ -250,22 +261,14 @@ class _TDropdownMultiSelectPanelState<T>
   }
 
   Widget _buildOperations(BuildContext context, TDropdownThemeData theme) {
-    final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
     return Container(
       padding:
-          theme.actionAreaPadding ?? EdgeInsets.all(context.tTheme.spacer16),
+          theme.actionAreaPadding ?? EdgeInsets.all(context.tTheme.spacer2),
       decoration: BoxDecoration(
-        color:
-            theme.panelBackgroundColor ??
-            colorScheme?.surface ??
-            context.tTheme.bgColorContainer,
+        color: theme.panelBackgroundColor ?? context.tTheme.bgColorContainer,
         border: Border(
           top: BorderSide(
-            color:
-                theme.dividerColor ??
-                material.tExplicitDividerColor ??
-                context.tTheme.componentStrokeColor,
+            color: theme.dividerColor ?? context.tTheme.componentStroke,
             width: 0.5,
           ),
         ),
@@ -274,15 +277,15 @@ class _TDropdownMultiSelectPanelState<T>
         children: [
           Expanded(
             child: TButton(
-              colorScheme: TButtonColorScheme.light,
+              colorPreset: TButtonColorPreset.light,
               onPressed: () => setState(_draft.clear),
               child: Text(context.resource.reset),
             ),
           ),
-          SizedBox(width: theme.actionGap ?? context.tTheme.spacer16),
+          SizedBox(width: theme.actionGap ?? context.tTheme.spacer2),
           Expanded(
             child: TButton(
-              colorScheme: TButtonColorScheme.primary,
+              colorPreset: TButtonColorPreset.primary,
               onPressed: () {
                 widget.onConfirm(Set<T>.unmodifiable(_draft));
                 unawaited(
@@ -338,15 +341,12 @@ class _DropdownOptionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
     final theme =
         Theme.of(context).extension<TDropdownThemeData>() ??
         const TDropdownThemeData();
     final tokenFont = context.tTheme.fontBodyLarge;
     final base =
         theme.optionTextStyle ??
-        material.tExplicitTextTheme?.bodyLarge ??
         TextStyle(
           color: context.tTheme.textColorPrimary,
           fontSize: tokenFont?.size,
@@ -355,11 +355,7 @@ class _DropdownOptionRow extends StatelessWidget {
         );
     final style = disabled
         ? theme.disabledOptionTextStyle ??
-              base.copyWith(
-                color:
-                    material.tExplicitDisabledColor ??
-                    context.tTheme.textDisabledColor,
-              )
+              base.copyWith(color: context.tTheme.textColorDisabled)
         : selected
         ? theme.selectedOptionTextStyle ?? base
         : base;
@@ -371,10 +367,7 @@ class _DropdownOptionRow extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color:
-                  theme.dividerColor ??
-                  material.tExplicitDividerColor ??
-                  context.tTheme.componentStrokeColor,
+              color: theme.dividerColor ?? context.tTheme.componentStroke,
               width: 0.5,
             ),
           ),
@@ -399,9 +392,7 @@ class _DropdownOptionRow extends StatelessWidget {
                     Icon(
                       TIcons.check,
                       size: 24,
-                      color:
-                          colorScheme?.primary ??
-                          context.tTheme.brandNormalColor,
+                      color: context.tTheme.brandColor,
                     ),
                 ],
               ),
@@ -430,21 +421,14 @@ class _DropdownOptionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
     final backgroundColor = disabled
         ? theme.disabledOptionColor ?? context.tTheme.bgColorComponentDisabled
         : selected
-        ? theme.selectedOptionColor ??
-              colorScheme?.primaryContainer ??
-              context.tTheme.brandLightColor
-        : theme.optionColor ??
-              colorScheme?.surfaceContainerHighest ??
-              context.tTheme.bgColorSecondaryContainer;
+        ? theme.selectedOptionColor ?? context.tTheme.brandColorLight
+        : theme.optionColor ?? context.tTheme.bgColorSecondaryContainer;
     final tokenFont = context.tTheme.fontBodyMedium;
     final base =
         theme.optionTextStyle ??
-        material.tExplicitTextTheme?.bodyMedium ??
         TextStyle(
           color: context.tTheme.textColorPrimary,
           fontSize: tokenFont?.size,
@@ -453,18 +437,10 @@ class _DropdownOptionChip extends StatelessWidget {
         );
     final style = disabled
         ? theme.disabledOptionTextStyle ??
-              base.copyWith(
-                color:
-                    material.tExplicitDisabledColor ??
-                    context.tTheme.textDisabledColor,
-              )
+              base.copyWith(color: context.tTheme.textColorDisabled)
         : selected
         ? theme.selectedOptionTextStyle ??
-              base.copyWith(
-                color:
-                    colorScheme?.onPrimaryContainer ??
-                    context.tTheme.brandNormalColor,
-              )
+              base.copyWith(color: context.tTheme.brandColor)
         : base;
     return Semantics(
       selected: selected,
@@ -486,7 +462,7 @@ class _DropdownOptionChip extends StatelessWidget {
           ),
           padding:
               theme.optionPadding ??
-              EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+              EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
           child: Text(
             label,
             style: style,

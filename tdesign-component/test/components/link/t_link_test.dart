@@ -143,7 +143,7 @@ void main() {
     expect(taps, 1);
     expect(
       linkStyle(tester, '禁用').color,
-      TThemeData.defaultData().textDisabledColor,
+      TThemeData.defaultData().textColorDisabled,
     );
   });
 
@@ -153,7 +153,7 @@ void main() {
       wrap(
         const TLink(
           child: Text('交互链接'),
-          colorScheme: TLinkColorScheme.primary,
+          colorPreset: TLinkColorPreset.primary,
           onPressed: _noop,
         ),
       ),
@@ -164,45 +164,42 @@ void main() {
     await mouse.addPointer(location: Offset.zero);
     await mouse.moveTo(tester.getCenter(link));
     await tester.pump();
-    expect(linkStyle(tester, '交互链接').color, token.brandClickColor);
+    expect(linkStyle(tester, '交互链接').color, token.brandColorActive);
 
     await mouse.moveTo(Offset.zero);
     await tester.pump();
-    expect(linkStyle(tester, '交互链接').color, token.brandNormalColor);
+    expect(linkStyle(tester, '交互链接').color, token.brandColor);
 
     await tester.sendKeyEvent(LogicalKeyboardKey.tab);
     await tester.pump();
-    expect(linkStyle(tester, '交互链接').color, token.brandClickColor);
+    expect(linkStyle(tester, '交互链接').color, token.brandColorActive);
 
     FocusManager.instance.primaryFocus?.unfocus();
     await tester.pump();
-    expect(linkStyle(tester, '交互链接').color, token.brandNormalColor);
+    expect(linkStyle(tester, '交互链接').color, token.brandColor);
 
     final touch = await tester.startGesture(tester.getCenter(link));
     await tester.pump();
-    expect(linkStyle(tester, '交互链接').color, token.brandClickColor);
+    expect(linkStyle(tester, '交互链接').color, token.brandColorActive);
 
     await touch.up();
     await tester.pump();
-    expect(linkStyle(tester, '交互链接').color, token.brandNormalColor);
+    expect(linkStyle(tester, '交互链接').color, token.brandColor);
 
     await mouse.removePointer();
   });
 
-  testWidgets('实例参数覆盖组件 Theme 默认值', (tester) async {
+  testWidgets('实例选择器与 Theme 视觉字段独立生效', (tester) async {
     await tester.pumpWidget(
       wrap(
         const TLink(
           child: Text('优先级'),
           size: TLinkSize.small,
-          colorScheme: TLinkColorScheme.danger,
+          colorPreset: TLinkColorPreset.danger,
           underline: false,
           onPressed: _noop,
         ),
         linkTheme: const TLinkThemeData(
-          defaultSize: TLinkSize.large,
-          defaultColorScheme: TLinkColorScheme.success,
-          underline: true,
           textStyle: TextStyle(fontWeight: FontWeight.w700),
           iconGap: 12,
         ),
@@ -212,7 +209,7 @@ void main() {
     final style = linkStyle(tester, '优先级');
     expect(style.fontSize, 12);
     expect(style.fontWeight, FontWeight.w700);
-    expect(style.color, TThemeData.defaultData().errorNormalColor);
+    expect(style.color, TThemeData.defaultData().errorColor);
   });
 
   testWidgets('保留 child 显式 TextStyle 的 Flutter 原生覆盖语义', (tester) async {

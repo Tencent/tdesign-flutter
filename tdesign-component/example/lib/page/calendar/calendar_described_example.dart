@@ -74,7 +74,7 @@ class _CalendarDescribedExampleState extends State<CalendarDescribedExample> {
                 font: context.tTheme.fontTitleLarge,
               ),
               Positioned(
-                right: context.tTheme.spacer8,
+                right: context.tTheme.spacer,
                 child: IconButton(
                   tooltip: localized ? 'Close' : '关闭',
                   onPressed: close,
@@ -134,11 +134,11 @@ class _CalendarDescribedExampleState extends State<CalendarDescribedExample> {
                         : calendar,
                   ),
                   Padding(
-                    padding: EdgeInsets.all(context.tTheme.spacer16),
+                    padding: EdgeInsets.all(context.tTheme.spacer2),
                     child: SizedBox(
                       width: double.infinity,
                       child: TButton(
-                        colorScheme: TButtonColorScheme.primary,
+                        colorPreset: TButtonColorPreset.primary,
                         size: TButtonSize.large,
                         onPressed:
                             draft.isEmpty ||

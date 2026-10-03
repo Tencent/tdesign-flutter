@@ -18,14 +18,14 @@ class ActionSheetStatusIconListExample extends StatelessWidget {
         TActionSheetItem(
           value: 'important',
           label: 'Mark as important',
-          icon: Icon(TIcons.bookmark, color: context.tTheme.brandNormalColor),
-          textStyle: TextStyle(color: context.tTheme.brandNormalColor),
+          icon: Icon(TIcons.bookmark, color: context.tTheme.brandColor),
+          textStyle: TextStyle(color: context.tTheme.brandColor),
         ),
         TActionSheetItem(
           value: 'unsubscribe',
           label: 'Unsubscribe',
-          icon: Icon(TIcons.pin, color: context.tTheme.errorNormalColor),
-          textStyle: TextStyle(color: context.tTheme.errorNormalColor),
+          icon: Icon(TIcons.pin, color: context.tTheme.errorColor),
+          textStyle: TextStyle(color: context.tTheme.errorColor),
         ),
         const TActionSheetItem(
           value: 'tasks',
@@ -45,7 +45,7 @@ class ActionSheetStatusIconListExample extends StatelessWidget {
         child: Text(label),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: onPressed,
       ),
     );

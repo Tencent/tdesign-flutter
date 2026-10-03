@@ -26,10 +26,18 @@ class TabsItemWithContentExample extends StatelessWidget {
             Expanded(
               child: TTabsBarView(
                 children: [
-                  Center(child: TText('内容区', textColor: contentColor)),
-                  Center(child: TText('内容区', textColor: contentColor)),
-                  Center(child: TText('内容区', textColor: contentColor)),
-                  Center(child: TText('内容区', textColor: contentColor)),
+                  Center(
+                    child: TText('内容区', style: TextStyle(color: contentColor)),
+                  ),
+                  Center(
+                    child: TText('内容区', style: TextStyle(color: contentColor)),
+                  ),
+                  Center(
+                    child: TText('内容区', style: TextStyle(color: contentColor)),
+                  ),
+                  Center(
+                    child: TText('内容区', style: TextStyle(color: contentColor)),
+                  ),
                 ],
               ),
             ),

@@ -242,8 +242,10 @@ void main() {
     ]) {
       await openScenario(tester, label);
       final dialogFinder = find.byType(TDialog);
-      final dialog = tester.widget<TDialog>(dialogFinder);
-      expect(dialog.contentPadding, EdgeInsets.zero, reason: label);
+      final dialogTheme = Theme.of(
+        tester.element(dialogFinder),
+      ).extension<TDialogThemeData>();
+      expect(dialogTheme?.contentPadding, EdgeInsets.zero, reason: label);
       final dialogRect = tester.getRect(dialogFinder);
       final imageRect = tester.getRect(
         find.byKey(const ValueKey('dialog-image')),
@@ -335,7 +337,7 @@ void main() {
         (action) => action.role == TDialogActionRole.normal,
       )) {
         expect(action.variant, isNull);
-        expect(action.colorScheme, isNull);
+        expect(action.colorPreset, isNull);
       }
       final buttons = tester.widgetList<TButton>(
         find.descendant(
@@ -350,7 +352,7 @@ void main() {
             (button.child as Text).data != '主要按钮',
       )) {
         expect(button.variant, TButtonVariant.fill, reason: label);
-        expect(button.colorScheme, TButtonColorScheme.light, reason: label);
+        expect(button.colorPreset, TButtonColorPreset.light, reason: label);
       }
       await closeCurrentDialog(tester);
     }
@@ -367,7 +369,7 @@ void main() {
         find.widgetWithText(TButton, '确定'),
       );
       expect(confirm.variant, TButtonVariant.fill, reason: label);
-      expect(confirm.colorScheme, TButtonColorScheme.primary, reason: label);
+      expect(confirm.colorPreset, TButtonColorPreset.primary, reason: label);
       await closeCurrentDialog(tester);
     }
     expect(tester.takeException(), isNull);
@@ -439,7 +441,7 @@ void main() {
       find.widgetWithText(TButton, '取消'),
     );
     expect(cancelButton.variant, TButtonVariant.fill);
-    expect(cancelButton.colorScheme, TButtonColorScheme.light);
+    expect(cancelButton.colorPreset, TButtonColorPreset.light);
     expect(tester.takeException(), isNull);
   });
 }

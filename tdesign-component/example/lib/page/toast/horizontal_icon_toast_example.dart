@@ -14,7 +14,7 @@ class HorizontalIconToastExample extends StatelessWidget {
         child: const Text('带横向图标'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: () {
           TToast.showIconText(
             '带横向图标',

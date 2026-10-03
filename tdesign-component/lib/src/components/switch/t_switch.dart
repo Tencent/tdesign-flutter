@@ -24,10 +24,10 @@ class TSwitch extends StatelessWidget {
     /// 开关状态变更回调；为 null 时禁用。
     this.onChanged,
 
-    /// 开关尺寸；未传时读取 [TSwitchThemeData.defaultSize]。
+    /// 开关尺寸；未传时为 [TSwitchSize.medium]。
     this.size,
 
-    /// 开关内容形态；未传时读取 [TSwitchThemeData.defaultVariant]。
+    /// 开关内容形态；未传时为 [TSwitchVariant.filled]。
     this.variant,
 
     /// 是否处于加载状态；加载时显示指示器并禁用交互。
@@ -64,38 +64,35 @@ class TSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TSwitchThemeData>();
-    final resolvedSize = size ?? theme?.defaultSize ?? TSwitchSize.medium;
-    final resolvedVariant =
-        variant ?? theme?.defaultVariant ?? TSwitchVariant.filled;
+    final resolvedSize = size ?? TSwitchSize.medium;
+    final resolvedVariant = variant ?? TSwitchVariant.filled;
     final enabled = onChanged != null && !loading;
-    final resolved = TSwitchResolve.resolve(
-      context: context,
-      enabled: enabled,
-      theme: theme,
-    );
+    final resolved = TSwitchResolve.resolve(context: context, theme: theme);
 
     Widget current = TCupertinoSwitch(
       value: value,
-      activeColor: resolved.trackOnColor,
-      trackColor: resolved.trackOffColor,
+      activeColor: enabled
+          ? resolved.trackOnColor
+          : resolved.disabledTrackOnColor,
+      trackColor: enabled
+          ? resolved.trackOffColor
+          : resolved.disabledTrackOffColor,
+      thumbColor: enabled ? resolved.thumbColor : resolved.disabledThumbColor,
       onChanged: enabled ? onChanged : null,
-      // TSwitch owns its disabled appearance below. Avoid multiplying it by
-      // TCupertinoSwitch's standalone disabled opacity.
+      // State colors are resolved independently; never dim the whole switch.
       disabledOpacity: 1,
       thumbView: _buildThumb(
         resolved: resolved,
         variant: resolvedVariant,
         loading: loading,
+        disabled: onChanged == null,
         openText: openText,
         closeText: closeText,
       ),
     );
 
     if (!enabled) {
-      current = Opacity(
-        opacity: 0.4,
-        child: IgnorePointer(ignoring: true, child: current),
-      );
+      current = IgnorePointer(ignoring: true, child: current);
     }
 
     return Semantics(
@@ -113,12 +110,13 @@ class TSwitch extends StatelessWidget {
     required TSwitchResolvedStyle resolved,
     required TSwitchVariant variant,
     required bool loading,
+    required bool disabled,
     required String? openText,
     required String? closeText,
   }) {
     if (loading) {
       return TCircleIndicator(
-        color: resolved.thumbContentOnColor,
+        color: resolved.loadingColor,
         size: 16,
         lineWidth: 3,
       );
@@ -137,8 +135,12 @@ class TSwitch extends StatelessWidget {
                         : resolved.thumbContentOffFont)
                     .copyWith(
                       color: value
-                          ? resolved.thumbContentOnColor
-                          : resolved.thumbContentOffColor,
+                          ? (disabled
+                                ? resolved.disabledTrackOnColor
+                                : resolved.thumbContentOnColor)
+                          : (disabled
+                                ? resolved.disabledTrackOffColor
+                                : resolved.thumbContentOffColor),
                       height: 1,
                       leadingDistribution: TextLeadingDistribution.even,
                     ),
@@ -149,8 +151,12 @@ class TSwitch extends StatelessWidget {
         value ? TIcons.check : TIcons.close,
         size: 16,
         color: value
-            ? resolved.thumbContentOnColor
-            : resolved.thumbContentOffColor,
+            ? (disabled
+                  ? resolved.disabledTrackOnColor
+                  : resolved.thumbContentOnColor)
+            : (disabled
+                  ? resolved.disabledTrackOffColor
+                  : resolved.thumbContentOffColor),
       ),
       TSwitchVariant.filled => null,
     };

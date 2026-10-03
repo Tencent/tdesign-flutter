@@ -52,15 +52,25 @@ void main() {
                   key: const Key('navbar-safe-area-scene'),
                   child: Column(
                     children: [
-                      TNavBar(
-                        title: const Text('Embedded default'),
-                        backgroundColor: context.tTheme.bgColorContainer,
+                      Theme(
+                        data: Theme.of(context).mergeExtension(
+                          TNavBarThemeData(
+                            backgroundColor: context.tTheme.bgColorContainer,
+                          ),
+                        ),
+                        child: const TNavBar(title: Text('Embedded default')),
                       ),
-                      TNavBar(
-                        title: const Text('Top-level opt-in'),
-                        useSafeArea: true,
-                        backgroundColor:
-                            context.tTheme.bgColorSecondaryContainer,
+                      Theme(
+                        data: Theme.of(context).mergeExtension(
+                          TNavBarThemeData(
+                            backgroundColor:
+                                context.tTheme.bgColorSecondaryContainer,
+                          ),
+                        ),
+                        child: const TNavBar(
+                          title: Text('Top-level opt-in'),
+                          useSafeArea: true,
+                        ),
                       ),
                     ],
                   ),

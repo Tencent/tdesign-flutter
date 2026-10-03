@@ -13,6 +13,7 @@ import '../../util/t_toolbar_pressable.dart';
 import '../icon/t_icon.dart';
 import '../loading/t_circle_indicator.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_toast_theme_data.dart';
 
 /// Toast 文案排列方向
@@ -571,22 +572,15 @@ class TToast {
           Stack(
             children: [
               Positioned.fill(child: Container(color: maskColor)),
-              Align(
-                alignment: alignment,
-                child: widget,
-              ),
+              Align(alignment: alignment, child: widget),
             ],
           ),
         ),
       );
     } else {
       overlayEntry = OverlayEntry(
-        builder: (BuildContext context) => captured.wrap(
-          Align(
-            alignment: alignment,
-            child: widget,
-          ),
-        ),
+        builder: (BuildContext context) =>
+            captured.wrap(Align(alignment: alignment, child: widget)),
       );
     }
 
@@ -642,7 +636,7 @@ class _TIconTextToast extends StatelessWidget {
         padding:
             toastTheme.padding ?? const EdgeInsets.fromLTRB(22, 14, 22, 14),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
+          color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
@@ -658,7 +652,7 @@ class _TIconTextToast extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Flexible(
-              child: TText(
+              child: TTextStyled(
                 text ?? '',
                 font: toastTheme.textStyle != null
                     ? null
@@ -686,7 +680,7 @@ class _TIconTextToast extends StatelessWidget {
       child: Container(
         padding: toastTheme.padding ?? const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
+          color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
@@ -701,7 +695,7 @@ class _TIconTextToast extends StatelessWidget {
               color: toastTheme.iconColor ?? theme.textColorAnti,
             ),
             const SizedBox(height: 8),
-            TText(
+            TTextStyled(
               text ?? '',
               font: toastTheme.textStyle != null ? null : theme.fontBodyMedium,
               style: toastTheme.textStyle,
@@ -748,7 +742,7 @@ class _TToastLoading extends StatelessWidget {
         padding:
             toastTheme.padding ?? const EdgeInsets.symmetric(horizontal: 24),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
+          color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
@@ -764,7 +758,7 @@ class _TToastLoading extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             customWidget ??
-                TText(
+                TTextStyled(
                   text ?? context.resource.loadingWithPoint,
                   font: toastTheme.textStyle != null
                       ? null
@@ -798,7 +792,7 @@ class _TToastLoadingWithoutText extends StatelessWidget {
       child: Container(
         padding: toastTheme.padding ?? const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
+          color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
@@ -837,20 +831,19 @@ class _TTextToast extends StatelessWidget {
             .merge(config);
     return ConstrainedBox(
       constraints:
-          constraints ??
-          BoxConstraints(maxWidth: toastTheme.maxWidth ?? 185),
+          constraints ?? BoxConstraints(maxWidth: toastTheme.maxWidth ?? 185),
       child: Container(
         padding:
             toastTheme.padding ?? const EdgeInsets.fromLTRB(22, 14, 22, 14),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
+          color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
         ),
         child:
             customWidget ??
-            TText(
+            TTextStyled(
               text ?? '',
               font: toastTheme.textStyle != null ? null : theme.fontBodyMedium,
               style: toastTheme.textStyle,

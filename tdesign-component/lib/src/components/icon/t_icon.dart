@@ -3,16 +3,35 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_theme.dart';
-import 't_icon_theme_data.dart';
+
+/// 仅供 TDesign 组合组件传递已解析的图标外观；不读取外部 Material IconTheme。
+class TIconStyleScope extends InheritedWidget {
+  const TIconStyleScope({
+    super.key,
+    required this.color,
+    required this.size,
+    required super.child,
+  });
+
+  final Color? color;
+  final double? size;
+
+  static TIconStyleScope? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<TIconStyleScope>();
+
+  @override
+  bool updateShouldNotify(TIconStyleScope oldWidget) =>
+      color != oldWidget.color || size != oldWidget.size;
+}
 
 /// TIcon 图标组件
 ///
-/// Material [Icon] 的薄包装，提供 TDesign 默认颜色和组件级 Theme 注入能力。
+/// Material [Icon] 的薄包装，提供 TDesign 默认尺寸和颜色。
 /// 图标数据由 `tdesign_flutter_icons` 资源包提供，通过 `TIcons.xxx` 常量引用。
 ///
-/// 优先级链：
-/// 构造器参数 > [TIconThemeData] > [IconTheme] > ThemeData.iconTheme >
-/// TDesign token 颜色兜底。
+/// 构造器参数优先，其次使用 TDesign 组合组件的内部样式；独立使用时
+/// 默认尺寸为 24dp，默认颜色读取 TDesign 全局 Token。
+/// 外层 Material [IconTheme] 不控制 TDesign 图标。
 ///
 /// ```dart
 /// // 基础使用
@@ -24,13 +43,6 @@ import 't_icon_theme_data.dart';
 /// // 通过名称引用
 /// TIcon.fromName('home_filled')
 ///
-/// // 子树 Theme 注入
-/// Theme(
-///   data: Theme.of(context).mergeExtension(
-///     const TIconThemeData(size: 20, color: Colors.grey),
-///   ),
-///   child: TIcon(TIcons.home_filled),
-/// )
 /// ```
 class TIcon extends StatelessWidget {
   /// 要绘制的图标数据，通常使用 `tdesign_flutter_icons` 提供的 `TIcons.xxx`。
@@ -38,14 +50,12 @@ class TIcon extends StatelessWidget {
 
   /// 图标尺寸，单位为逻辑像素。
   ///
-  /// 未设置时依次读取 [TIconThemeData.size]、显式 [IconTheme]，最后由 Flutter
-  /// 原生 [Icon] 使用其默认尺寸。
+  /// 未设置时使用 24dp。
   final double? size;
 
   /// 图标颜色。
   ///
-  /// 未设置时依次读取 [TIconThemeData.color]、显式 [IconTheme]，最后回退到
-  /// TDesign 的 `textColorPrimary` Token。
+  /// 未设置时读取 TDesign 的 `textColorPrimary` Token。
   final Color? color;
 
   /// 无障碍语义标签。
@@ -87,17 +97,10 @@ class TIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final materialTheme = Theme.of(context);
-    final theme = materialTheme.extension<TIconThemeData>();
-    final iconTheme = context.tExplicitIconTheme;
-
-    // 尺寸不硬造 token 映射，颜色必须兜到 TDesign token。
-    final effectiveSize = size ?? theme?.size ?? iconTheme?.size;
+    final scope = TIconStyleScope.maybeOf(context);
+    final effectiveSize = size ?? scope?.size ?? 24.0;
     final effectiveColor =
-        color ??
-        theme?.color ??
-        iconTheme?.color ??
-        context.tTheme.textColorPrimary;
+        color ?? scope?.color ?? context.tTheme.textColorPrimary;
 
     return Icon(
       icon,

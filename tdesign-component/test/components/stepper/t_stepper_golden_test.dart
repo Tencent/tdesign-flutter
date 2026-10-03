@@ -109,10 +109,7 @@ void main() {
                           onChanged: _noop,
                         ),
                         SizedBox(width: 12),
-                        TStepper(
-                          value: 5,
-                          variant: TStepperVariant.filled,
-                        ),
+                        TStepper(value: 5, variant: TStepperVariant.filled),
                       ],
                     ),
                   ],

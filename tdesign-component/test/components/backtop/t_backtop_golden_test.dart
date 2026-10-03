@@ -83,18 +83,18 @@ void main() {
 
 List<Widget> _states(TBackTopShape shape) => [
   for (final state in const [
-    (TBackTopColorScheme.light, false),
-    (TBackTopColorScheme.dark, false),
-    (TBackTopColorScheme.light, true),
-    (TBackTopColorScheme.dark, true),
+    (TBackTopColorPreset.light, false),
+    (TBackTopColorPreset.dark, false),
+    (TBackTopColorPreset.light, true),
+    (TBackTopColorPreset.dark, true),
   ]) ...[
     TBackTop(
       shape: shape,
-      colorScheme: state.$1,
+      colorPreset: state.$1,
       showText: state.$2,
       onPressed: _noop,
     ),
-    if (state != const (TBackTopColorScheme.dark, true))
+    if (state != const (TBackTopColorPreset.dark, true))
       const SizedBox(width: 16),
   ],
 ];

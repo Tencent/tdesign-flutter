@@ -4,7 +4,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 import 'basic_links_example.dart';
-import 'color_scheme_links_example.dart';
+import 'color_preset_links_example.dart';
 import 'disabled_links_example.dart';
 import 'link_sizes_example.dart';
 import 'prefix_links_example.dart';
@@ -58,8 +58,8 @@ class _TLinkViewPageState extends State<TLinkViewPage> {
           children: [
             ExampleItem(
               desc: '不同主题',
-              methodName: 'ColorSchemeLinksExample',
-              builder: (_) => const ColorSchemeLinksExample(),
+              methodName: 'ColorPresetLinksExample',
+              builder: (_) => const ColorPresetLinksExample(),
             ),
             ExampleItem(
               desc: '禁用状态',

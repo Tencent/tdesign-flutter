@@ -71,18 +71,16 @@ void main() {
       final button = tester.widget<TButton>(find.byType(TButton));
       expect(button.size, TButtonSize.large);
       expect(button.variant, TButtonVariant.fill);
-      expect(button.colorScheme, TButtonColorScheme.primary);
+      expect(button.colorPreset, TButtonColorPreset.primary);
       expect(find.byIcon(TIcons.add), findsOneWidget);
       expect(tester.getSize(find.byType(TButton)), const Size(48, 48));
     });
 
-    testWidgets('Fab 默认动作规格不受 TButtonTheme 默认值影响', (tester) async {
+    testWidgets('Fab 默认动作规格不受 TButtonTheme 视觉值影响', (tester) async {
       final theme = TThemeBuilder.light(TThemeData.defaultData())
           .mergeExtension(
             const TButtonThemeData(
-              defaultSize: TButtonSize.extraSmall,
-              defaultVariant: TButtonVariant.outline,
-              padding: EdgeInsets.zero,
+              iconTextSpacing: 0,
               gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
             ),
           );
@@ -96,18 +94,15 @@ void main() {
       final button = tester.widget<TButton>(find.byType(TButton));
       expect(button.size, TButtonSize.large);
       expect(button.variant, TButtonVariant.fill);
-      expect(button.colorScheme, TButtonColorScheme.primary);
+      expect(button.colorPreset, TButtonColorPreset.primary);
+      expect(button.shape, TButtonShape.circle);
       expect(tester.getSize(find.byType(TButton)), const Size(48, 48));
 
       final fabButtonThemes = tester
           .widgetList<Theme>(find.byType(Theme))
           .map((widget) => widget.data.extension<TButtonThemeData>())
           .where(
-            (theme) =>
-                theme?.shape == TButtonShape.circle &&
-                theme?.iconTextSpacing == 4 &&
-                theme?.padding == null &&
-                theme?.gradient == null,
+            (theme) => theme?.iconTextSpacing == 4 && theme?.gradient == null,
           );
       expect(fabButtonThemes, isNotEmpty);
     });
@@ -134,10 +129,7 @@ void main() {
           .where((decoration) => decoration.shadows?.isNotEmpty ?? false);
       expect(decorations, hasLength(1));
       expect(decorations.single.shape, isA<CircleBorder>());
-      expect(
-        decorations.single.shadows,
-        TThemeData.defaultData().shadowsMiddle,
-      );
+      expect(decorations.single.shadows, TThemeData.defaultData().shadow2);
 
       await tester.pumpWidget(wrapWithTheme(const TFab(text: '发布')));
       final textDecoration = tester
@@ -1127,7 +1119,7 @@ void main() {
     test('默认常量与 shapeForText', () {
       expect(TFabDefaults.defaultSize, TButtonSize.large);
       expect(TFabDefaults.defaultVariant, TButtonVariant.fill);
-      expect(TFabDefaults.defaultColorScheme, TButtonColorScheme.primary);
+      expect(TFabDefaults.defaultColorPreset, TButtonColorPreset.primary);
       expect(TFabDefaults.defaultIconData, TIcons.add);
       expect(TFabDefaults.shapeForText(false), TButtonShape.circle);
       expect(TFabDefaults.shapeForText(true), TButtonShape.round);

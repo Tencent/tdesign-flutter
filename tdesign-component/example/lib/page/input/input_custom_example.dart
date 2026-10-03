@@ -15,7 +15,6 @@ class InputCustomExample extends StatelessWidget {
             const TInputThemeData(
               backgroundColor: Color(0xff2c2c2c),
               borderColor: Color(0xff4b4b4b),
-              textStyle: TextStyle(color: Colors.white),
               hintStyle: TextStyle(color: Color(0x59ffffff)),
             ),
           )
@@ -28,7 +27,11 @@ class InputCustomExample extends StatelessWidget {
           ),
       child: const TFormItem(
         label: '标签文字',
-        child: TInput(borderless: true, hintText: '请输入文字'),
+        child: TInput(
+          borderless: true,
+          hintText: '请输入文字',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     ),
   );

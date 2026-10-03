@@ -6,7 +6,9 @@ import 'package:flutter/rendering.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../icon/t_icon.dart';
 import '../loading/t_loading_theme_data.dart';
+import 't_button_defaults.dart';
 import 't_button_resolve.dart';
 import 't_button_theme_data.dart';
 import 't_button_types.dart';
@@ -20,8 +22,8 @@ import 't_button_types.dart';
 ///
 /// **L1 三维正交**：
 /// - [variant]：变体类型（fill / outline / text / ghost）
-/// - [colorScheme]：配色方案（defaultTheme / primary / danger / light）
-/// - shape：由 Theme [TButtonThemeData.shape] 控制
+/// - [colorPreset]：配色方案（defaultTheme / primary / danger / light）
+/// - [shape]：按钮结构形状；具体边框样式由 [style] 控制
 ///
 /// **示例**：
 /// ```dart
@@ -29,7 +31,7 @@ import 't_button_types.dart';
 /// TButton(
 ///   child: Text('填充按钮'),
 ///   variant: TButtonVariant.fill,
-///   colorScheme: TButtonColorScheme.primary,
+///   colorPreset: TButtonColorPreset.primary,
 ///   onPressed: () {},
 /// )
 ///
@@ -58,7 +60,8 @@ class TButton extends StatefulWidget {
     this.child,
     this.size,
     this.variant,
-    this.colorScheme,
+    this.shape = TButtonShape.rectangle,
+    this.colorPreset,
     this.icon,
     this.iconPosition = TButtonIconPosition.left,
     this.onPressed,
@@ -69,18 +72,23 @@ class TButton extends StatefulWidget {
   /// 内容（纯文案用 `Text('...')`）
   final Widget? child;
 
-  /// 尺寸，未传时使用 Theme [TButtonThemeData.defaultSize]。
+  /// 尺寸，未传时使用 [TButtonSize.medium]。
   ///
   /// 默认按 48、40、32、28dp 的 TDesign 视觉高度参与布局。
   final TButtonSize? size;
 
-  /// 变体（fill / outline / text / ghost），未传时使用 Theme [TButtonThemeData.defaultVariant]
+  /// 变体（fill / outline / text / ghost），未传时使用 [TButtonVariant.fill]。
   final TButtonVariant? variant;
 
-  /// 配色方案；未传时使用 [TButtonColorScheme.defaultTheme]。
+  /// 按钮结构形状；纯图标的 square/circle 同时决定等宽高布局。
+  /// 具体边框及圆角仍可通过 [style] 配置。
+  final TButtonShape shape;
+
+  /// 内置配色预设；未传时使用 [TButtonColorPreset.defaultTheme]。
   ///
-  /// Theme 提供具体颜色和样式，不选择组件的配色方案。
-  final TButtonColorScheme? colorScheme;
+  /// 不改变 [variant] 的绘制方式，也不覆写显式 Material 按钮主题；
+  /// 当前按钮的具体颜色、边框和文字样式通过 [style] 配置。
+  final TButtonColorPreset? colorPreset;
 
   /// 图标（Widget 类型，IconData 需包裹为 `Icon(...)`）
   final Widget? icon;
@@ -97,7 +105,7 @@ class TButton extends StatefulWidget {
   /// 不会触发点击或长按回调。
   final VoidCallback? onLongPress;
 
-  /// P0 逃逸舱：[ButtonStyle] 覆盖所有 resolve 结果。
+  /// 当前按钮的完整 [ButtonStyle] 视觉配置入口，不影响其他按钮。
   ///
   /// 组件默认使用 [MaterialTapTargetSize.shrinkWrap] 保持 TDesign 精确尺寸；
   /// 需要至少 48dp 点击区时可将 [ButtonStyle.tapTargetSize] 设为
@@ -159,10 +167,8 @@ class _TButtonState extends State<TButton> {
   Widget build(BuildContext context) {
     // 获取 Theme
     final theme = Theme.of(context).extension<TButtonThemeData>();
-    final effectiveVariant =
-        widget.variant ?? theme?.defaultVariant ?? TButtonVariant.fill;
-    final effectiveSize =
-        widget.size ?? theme?.defaultSize ?? TButtonSize.medium;
+    final effectiveVariant = widget.variant ?? TButtonVariant.fill;
+    final effectiveSize = widget.size ?? TButtonSize.medium;
     final sizeMetrics = TButtonResolve.sizeMetrics(
       effectiveSize,
       context.tTheme,
@@ -172,11 +178,11 @@ class _TButtonState extends State<TButton> {
     // 解析 ButtonStyle
     final resolvedStyle = TButtonResolve.resolve(
       variant: effectiveVariant,
-      colorScheme: widget.colorScheme,
+      shape: widget.shape,
+      colorPreset: widget.colorPreset,
       size: effectiveSize,
       icon: widget.icon,
       hasChild: widget.child != null,
-      theme: theme,
       instanceStyle: widget.style,
       context: context,
       hasGradient: hasGradient,
@@ -185,7 +191,8 @@ class _TButtonState extends State<TButton> {
     // 构建带图标的内容
     final hasIcon = widget.icon != null;
     final hasChild = widget.child != null;
-    final iconTextSpacing = theme?.iconTextSpacing ?? context.tTheme.spacer4;
+    final iconTextSpacing =
+        theme?.iconTextSpacing ?? TButtonDefaults.iconTextSpacing;
     final gradient = theme?.gradient;
 
     Widget? content;
@@ -230,16 +237,13 @@ class _TButtonState extends State<TButton> {
 
     if (gradient != null) {
       // 渐变按钮保留自绘装饰层，同时复用 resolvedStyle 中的 P0/ButtonStyle 结果。
-      final appTheme = Theme.of(context);
       final isDisabled = !_isEnabled;
       final states = _statesController.value;
       final shape =
           resolvedStyle.shape?.resolve(states) ??
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
-              _borderRadiusForShape(
-                theme?.effectiveShape ?? TButtonShape.rectangle,
-              ),
+              _borderRadiusForShape(widget.shape),
             ),
           );
       final side = resolvedStyle.side?.resolve(states);
@@ -260,8 +264,8 @@ class _TButtonState extends State<TButton> {
           );
       final isIconOnly = widget.icon != null && widget.child == null;
       final isFixedIconShape =
-          theme?.effectiveShape == TButtonShape.square ||
-          theme?.effectiveShape == TButtonShape.circle;
+          widget.shape == TButtonShape.square ||
+          widget.shape == TButtonShape.circle;
       final padding =
           resolvedStyle.padding?.resolve(states) ??
           (isIconOnly && isFixedIconShape
@@ -279,7 +283,7 @@ class _TButtonState extends State<TButton> {
       final maximumSize = resolvedStyle.maximumSize?.resolve(states);
       final fixedSize = resolvedStyle.fixedSize?.resolve(states);
       final visualDensity =
-          resolvedStyle.visualDensity ?? appTheme.visualDensity;
+          resolvedStyle.visualDensity ?? VisualDensity.standard;
       final densityAdjustment = visualDensity.baseSizeAdjustment;
       final tapTargetSize = resolvedStyle.tapTargetSize!;
       final elevation = resolvedStyle.elevation?.resolve(states) ?? 0;
@@ -443,16 +447,22 @@ class _TButtonIconTheme extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final loadingTheme = theme.extension<TLoadingThemeData>();
+    final iconTheme = IconTheme.of(context);
+    final scopedChild = TIconStyleScope(
+      color: iconTheme.color,
+      size: iconTheme.size,
+      child: child,
+    );
     if (loadingTheme?.iconColor != null) {
-      return child;
+      return scopedChild;
     }
     final effectiveLoadingTheme = (loadingTheme ?? const TLoadingThemeData())
-        .merge(TLoadingThemeData(iconColor: IconTheme.of(context).color));
+        .merge(TLoadingThemeData(iconColor: iconTheme.color));
     return Theme(
       data: theme
-          .copyWith(iconTheme: IconTheme.of(context))
+          .copyWith(iconTheme: iconTheme)
           .mergeExtension(effectiveLoadingTheme),
-      child: child,
+      child: scopedChild,
     );
   }
 }

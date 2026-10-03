@@ -13,13 +13,13 @@ class SwipeCellSwiperIconCellExample extends StatelessWidget {
               _action(
                 context,
                 '编辑',
-                context.tTheme.warningNormalColor,
+                context.tTheme.warningColor,
                 icon: TIcons.edit,
               ),
               _action(
                 context,
                 '删除',
-                context.tTheme.errorNormalColor,
+                context.tTheme.errorColor,
                 icon: TIcons.delete,
               ),
             ],
@@ -31,11 +31,11 @@ class SwipeCellSwiperIconCellExample extends StatelessWidget {
           end: TSwipeCellPanel(
             children: [
               TSwipeCellAction(
-                backgroundColor: context.tTheme.warningNormalColor,
+                backgroundColor: context.tTheme.warningColor,
                 icon: TIcons.edit,
               ),
               TSwipeCellAction(
-                backgroundColor: context.tTheme.errorNormalColor,
+                backgroundColor: context.tTheme.errorColor,
                 icon: TIcons.delete,
               ),
             ],

@@ -15,7 +15,7 @@ class HideToastExample extends StatelessWidget {
         child: const Text('关闭提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: () {
           TToast.dismissToast('manual-close-demo');
         },

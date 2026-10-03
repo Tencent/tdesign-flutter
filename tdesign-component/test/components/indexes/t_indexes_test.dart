@@ -243,13 +243,15 @@ void main() {
       );
       expect(
         activeDecoration.decoration,
-        BoxDecoration(
-          borderRadius: BorderRadius.circular(token.radiusCircle),
-          color: token.brandNormalColor,
+        ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          color: token.brandColor,
         ),
       );
       final activeText = tester.widget<TText>(_tTextFinder('A').last);
-      expect(activeText.textColor, token.textColorAnti);
+      expect(activeText.style?.color, token.textColorAnti);
       expect(activeText.font, token.fontBodySmall);
 
       final inactiveDecoration = tester.widget<DecoratedBox>(
@@ -257,7 +259,7 @@ void main() {
       );
       expect(inactiveDecoration.decoration, const BoxDecoration());
       final inactiveText = tester.widget<TText>(_tTextFinder('B').last);
-      expect(inactiveText.textColor, token.textColorPrimary);
+      expect(inactiveText.style?.color, token.textColorPrimary);
       expect(inactiveText.font, token.fontBodySmall);
     });
 
@@ -281,31 +283,30 @@ void main() {
             (widget) =>
                 widget is Container &&
                 widget.padding != null &&
-                widget.decoration is BoxDecoration,
+                widget.decoration is ShapeDecoration,
           ),
         ),
       );
       expect(
         anchorContainer.padding,
-        EdgeInsets.symmetric(
-          vertical: token.spacer4,
-          horizontal: token.spacer16,
-        ),
+        EdgeInsets.symmetric(vertical: 4.0, horizontal: token.spacer2),
       );
       expect(
         anchorContainer.margin,
-        EdgeInsets.symmetric(horizontal: token.spacer8),
+        EdgeInsets.symmetric(horizontal: token.spacer),
       );
-      final decoration = anchorContainer.decoration! as BoxDecoration;
+      final decoration = anchorContainer.decoration! as ShapeDecoration;
       expect(decoration.color, token.bgColorContainer);
       expect(
-        decoration.borderRadius,
-        BorderRadius.circular(token.radiusCircle),
+        decoration.shape,
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(token.radiusRound),
+          side: BorderSide(color: token.componentStroke),
+        ),
       );
-      expect(decoration.border, Border.all(color: token.componentStrokeColor));
 
       final anchorText = tester.widget<TText>(_tTextFinder('A').last);
-      expect(anchorText.textColor, token.brandNormalColor);
+      expect(anchorText.style?.color, token.brandColor);
       expect(anchorText.font, token.fontMarkMedium);
     });
 
@@ -433,7 +434,7 @@ void main() {
         find.byType(SliverStickyHeader).first,
       );
       expect(header.sticky, isTrue);
-      expect(header.pinnedOffset, TThemeData.defaultData().spacer8);
+      expect(header.pinnedOffset, TThemeData.defaultData().spacer);
     });
 
     testWidgets('滚动方向和 sticky 只由组件实例控制', (tester) async {
@@ -672,16 +673,16 @@ void main() {
       );
       expect(
         (tester.widget<DecoratedBox>(_indexesListDecoratedBox('A')).decoration
-                as BoxDecoration)
+                as ShapeDecoration)
             .color,
         Colors.red,
       );
       expect(
-        tester.widget<TText>(_tTextFinder('A').last).textColor,
+        tester.widget<TText>(_tTextFinder('A').last).style?.color,
         Colors.yellow,
       );
       expect(
-        tester.widget<TText>(_tTextFinder('B').last).textColor,
+        tester.widget<TText>(_tTextFinder('B').last).style?.color,
         Colors.green,
       );
     });
@@ -700,10 +701,7 @@ void main() {
       expect(tester.takeException(), isAssertionError);
       await tester.pumpWidget(const SizedBox());
       expect(
-        () => TIndexes(
-          indexListMaxHeight: 1.1,
-          builderContent: (_, __) => const SizedBox(),
-        ),
+        () => TIndexesThemeData(indexListMaxHeight: 1.1),
         throwsAssertionError,
       );
       await tester.pumpWidget(

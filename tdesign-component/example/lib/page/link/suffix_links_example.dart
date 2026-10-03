@@ -10,7 +10,7 @@ class SuffixLinksExample extends StatelessWidget {
     return _exampleRow(context, [
       _link(
         context,
-        colorScheme: TLinkColorScheme.primary,
+        colorPreset: TLinkColorPreset.primary,
         suffixIcon: const Icon(TIcons.jump),
       ),
       _link(context, suffixIcon: const Icon(TIcons.jump)),
@@ -31,7 +31,7 @@ class SuffixLinksExample extends StatelessWidget {
   TLink _link(
     BuildContext context, {
     String label = '跳转链接',
-    TLinkColorScheme? colorScheme,
+    TLinkColorPreset? colorPreset,
     TLinkSize size = TLinkSize.small,
     bool? underline,
     Widget? prefixIcon,
@@ -40,7 +40,7 @@ class SuffixLinksExample extends StatelessWidget {
   }) {
     return TLink(
       child: Text(label),
-      colorScheme: colorScheme,
+      colorPreset: colorPreset,
       size: size,
       underline: underline,
       prefixIcon: prefixIcon,

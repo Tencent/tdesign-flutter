@@ -123,12 +123,12 @@ class _ControlColumn extends StatelessWidget {
               const Row(
                 children: [
                   TLink(
-                    colorScheme: TLinkColorScheme.success,
+                    colorPreset: TLinkColorPreset.success,
                     onPressed: _tapNoop,
                     child: Text('Success link'),
                   ),
                   SizedBox(width: 12),
-                  TTag('Success tag', colorScheme: TTagColorScheme.success),
+                  TTag('Success tag', colorPreset: TTagColorPreset.success),
                 ],
               ),
               const SizedBox(height: 16),

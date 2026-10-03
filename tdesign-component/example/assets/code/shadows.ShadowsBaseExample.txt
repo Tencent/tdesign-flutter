@@ -8,7 +8,7 @@ class ShadowsBaseExample extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: context.tTheme.bgColorContainer,
-        boxShadow: context.tTheme.shadowsBase,
+        boxShadow: context.tTheme.shadow1,
         borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
       ),
     );

@@ -32,24 +32,28 @@ void main() {
       for (final index in [...List.generate(8, (index) => index + 1), 0]) {
         final bar = bars.at(index);
         final widget = tester.widget<TTabBar>(bar);
-        final target = switch (widget.type) {
-          TTabBarType.text || TTabBarType.iconText || TTabBarType.doubleLayer =>
-            find.descendant(of: bar, matching: find.text('应用')),
-          TTabBarType.icon => find.descendant(
-            of: bar,
-            matching: find.byIcon(TIcons.app),
-          ),
-        };
+        final target = widget.style == TTabBarStyle.capsule
+            ? find.descendant(of: bar, matching: find.text('Item')).at(1)
+            : switch (widget.type) {
+                TTabBarType.text ||
+                TTabBarType.iconText ||
+                TTabBarType.doubleLayer => find.descendant(
+                  of: bar,
+                  matching: find.text('应用'),
+                ),
+                TTabBarType.icon => find.descendant(
+                  of: bar,
+                  matching: find.byIcon(TIcons.app),
+                ),
+              };
         await tester.tap(target);
         await tester.pumpAndSettle();
+        await tester.pump(const Duration(seconds: 3));
       }
-      await tester.pump(const Duration(seconds: 3));
 
       await expectLater(
         find.byKey(const ValueKey('tab_bar-demo-page')),
-        matchesGoldenFile(
-          'goldens/tab_bar_post_action_${mode.name}.png',
-        ),
+        matchesGoldenFile('goldens/tab_bar_post_action_${mode.name}.png'),
       );
       await disposeDemoPage(tester);
     }, tags: 'golden');
@@ -59,13 +63,11 @@ void main() {
       final bar = find.byType(TTabBar).first;
       await tester.tap(find.descendant(of: bar, matching: find.text('应用')));
       await tester.pump(const Duration(milliseconds: 300));
-      expect(find.text('点击了 Item 2'), findsOneWidget);
+      expect(find.text('第 2 项'), findsOneWidget);
 
       await expectLater(
         find.byType(Overlay),
-        matchesGoldenFile(
-          'goldens/tab_bar_text_toast_${mode.name}.png',
-        ),
+        matchesGoldenFile('goldens/tab_bar_text_toast_${mode.name}.png'),
       );
       await tester.pump(const Duration(seconds: 3));
       await disposeDemoPage(tester);
@@ -80,6 +82,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.descendant(of: bar, matching: find.text('我的')));
       await tester.pumpAndSettle();
+      await tester.pump(const Duration(seconds: 3));
       expect(find.text('个人主页'), findsOneWidget);
       expect(
         tester.getBottomLeft(find.text('设置')).dy,
@@ -87,9 +90,7 @@ void main() {
       );
       await expectLater(
         find.byType(Overlay),
-        matchesGoldenFile(
-          'goldens/tab_bar_menu_opened_${mode.name}.png',
-        ),
+        matchesGoldenFile('goldens/tab_bar_menu_opened_${mode.name}.png'),
       );
       await disposeDemoPage(tester);
     }, tags: 'golden');

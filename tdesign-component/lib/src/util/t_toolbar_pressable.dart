@@ -59,11 +59,9 @@ class _TToolbarPressableState extends State<TToolbarPressable> {
   @override
   Widget build(BuildContext context) {
     final theme = context.tTheme;
-    final padding = widget.padding ??
-        EdgeInsets.symmetric(
-          horizontal: theme.spacer8,
-          vertical: theme.spacer12,
-        );
+    final padding =
+        widget.padding ??
+        EdgeInsets.symmetric(horizontal: theme.spacer, vertical: theme.spacer1);
 
     var child = widget.child;
     if (widget.mergeTextStyle != null) {
@@ -73,10 +71,7 @@ class _TToolbarPressableState extends State<TToolbarPressable> {
       );
     }
     if (widget.mergeIconTheme != null) {
-      child = IconTheme.merge(
-        data: widget.mergeIconTheme!,
-        child: child,
-      );
+      child = IconTheme.merge(data: widget.mergeIconTheme!, child: child);
     }
 
     final enabled = widget.enabled && widget.onTap != null;

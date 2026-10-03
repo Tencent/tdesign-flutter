@@ -4,6 +4,9 @@ default.check-filename = true
 "BA" = "BA"
 "PA" = "PA"
 "heping" = "heping"
+# Keep the miniprogram's published tree-select Token identifiers verbatim in audit data.
+"colum" = "colum"
+"Colum" = "Colum"
 
 [files]
 extend-exclude = ["project.pbxproj"]

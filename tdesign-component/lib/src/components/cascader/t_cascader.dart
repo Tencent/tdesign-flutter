@@ -9,8 +9,8 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../icon/t_icon.dart';
-import '../icon/t_icon_theme_data.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import '../text/t_text_theme_data.dart';
 import 't_cascader_defaults.dart';
 import 't_cascader_theme_data.dart';
@@ -172,9 +172,7 @@ class _TCascaderState extends State<TCascader> {
     final selected = _selectedOptions();
     final options = _optionsAt(_activeLevel);
     final backgroundColor =
-        theme?.backgroundColor ??
-        material.tExplicitColorScheme?.surface ??
-        context.tTheme.bgColorContainer;
+        theme?.backgroundColor ?? context.tTheme.bgColorContainer;
     final borderRadius = BorderRadius.circular(
       theme?.borderRadius ?? context.tTheme.radiusDefault,
     );
@@ -201,9 +199,7 @@ class _TCascaderState extends State<TCascader> {
                     height: 1,
                     thickness: 1,
                     color:
-                        theme?.dividerColor ??
-                        material.tExplicitDividerColor ??
-                        context.tTheme.componentStrokeColor,
+                        theme?.dividerColor ?? context.tTheme.componentStroke,
                   ),
                   if (_activeLevel < widget.subtitles.length &&
                       widget.subtitles[_activeLevel].isNotEmpty)
@@ -231,7 +227,7 @@ class _TCascaderState extends State<TCascader> {
     TCascaderThemeData? theme,
   ) {
     final styles = _resolveTextStyles(context, theme);
-    final activeColor = styles.active.color ?? context.tTheme.brandNormalColor;
+    final activeColor = styles.active.color ?? context.tTheme.brandColor;
     final entries = <_CascaderNavigationEntry>[
       for (var index = 0; index < selected.length; index++)
         _CascaderNavigationEntry(
@@ -255,10 +251,10 @@ class _TCascaderState extends State<TCascader> {
         padding:
             theme?.navigationPadding ??
             EdgeInsets.fromLTRB(
-              context.tTheme.spacer16,
+              context.tTheme.spacer2,
               0,
-              context.tTheme.spacer16,
-              context.tTheme.spacer4,
+              context.tTheme.spacer2,
+              4.0,
             ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -336,9 +332,9 @@ class _TCascaderState extends State<TCascader> {
                 ],
               ),
             ),
-            SizedBox(width: context.tTheme.spacer16),
+            SizedBox(width: context.tTheme.spacer2),
             Expanded(
-              child: TText(
+              child: TTextStyled(
                 entry.label,
                 style: entry.active ? styles.active : styles.normal,
               ),
@@ -346,10 +342,7 @@ class _TCascaderState extends State<TCascader> {
             TIcon(
               TIcons.chevron_right,
               size: 22,
-              color: _resolveIconColor(
-                context,
-                context.tTheme.textColorPlaceholder,
-              ),
+              color: context.tTheme.textColorPlaceholder,
             ),
           ],
         ),
@@ -369,14 +362,14 @@ class _TCascaderState extends State<TCascader> {
       selected: entry.active,
       child: Container(
         height: 48,
-        padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+        padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
         decoration: BoxDecoration(
           border: entry.active
               ? Border(bottom: BorderSide(width: 2, color: activeColor))
               : null,
         ),
         alignment: Alignment.center,
-        child: TText(
+        child: TTextStyled(
           entry.label,
           style: entry.active ? styles.active : styles.normal,
         ),
@@ -388,12 +381,12 @@ class _TCascaderState extends State<TCascader> {
     final tokenFont = context.tTheme.fontBodyMedium;
     return Padding(
       padding: EdgeInsets.fromLTRB(
-        context.tTheme.spacer16,
+        context.tTheme.spacer2,
         20,
-        context.tTheme.spacer16,
-        context.tTheme.spacer8,
+        context.tTheme.spacer2,
+        context.tTheme.spacer,
       ),
-      child: TText(
+      child: TTextStyled(
         widget.subtitles[_activeLevel],
         key: const ValueKey('cascader-subtitle'),
         style: TextStyle(
@@ -416,11 +409,7 @@ class _TCascaderState extends State<TCascader> {
         _activeLevel < widget.value.length &&
         widget.value[_activeLevel] == option.value;
     final isLeaf = option.children.isEmpty;
-    final material = Theme.of(context);
-    final iconColor = _resolveIconColor(
-      context,
-      material.tExplicitColorScheme?.primary ?? context.tTheme.brandNormalColor,
-    );
+    final iconColor = context.tTheme.brandColor;
     final indicatorColor = theme?.indicatorColor ?? iconColor;
     final onTap = !_enabled || option.disabled
         ? null
@@ -439,11 +428,11 @@ class _TCascaderState extends State<TCascader> {
       child: SizedBox(
         height: 56,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
           child: Row(
             children: [
               Expanded(
-                child: TText(
+                child: TTextStyled(
                   option.label,
                   style: option.disabled
                       ? styles.disabled
@@ -458,10 +447,7 @@ class _TCascaderState extends State<TCascader> {
                 TIcon(
                   TIcons.chevron_right,
                   size: 22,
-                  color: _resolveIconColor(
-                    context,
-                    context.tTheme.textColorPlaceholder,
-                  ),
+                  color: context.tTheme.textColorPlaceholder,
                 ),
             ],
           ),
@@ -474,49 +460,19 @@ class _TCascaderState extends State<TCascader> {
     BuildContext context,
     TCascaderThemeData? theme,
   ) {
-    final material = Theme.of(context);
     final tokenFont = context.tTheme.fontBodyLarge;
-    final inherited = context.tExplicitDefaultTextStyle;
-    final defaultStyle = _isAutomaticMaterialTextStyle(material, inherited)
-        ? null
-        : inherited;
-    final textTheme = material.extension<TTextThemeData>();
-    final themeFont = textTheme?.font;
-    final normal =
-        TextStyle(
-              color: context.tTheme.textColorPrimary,
-              fontSize: tokenFont?.size,
-              height: tokenFont?.height,
-              fontWeight: tokenFont?.fontWeight,
-            )
-            .merge(material.tExplicitTextTheme?.bodyLarge)
-            .copyWith(
-              color:
-                  material.tExplicitColorScheme?.onSurface ??
-                  context.tTheme.textColorPrimary,
-            )
-            .merge(defaultStyle)
-            .merge(
-              themeFont == null
-                  ? null
-                  : TextStyle(
-                      fontSize: themeFont.size,
-                      height: themeFont.height,
-                      fontWeight: themeFont.fontWeight,
-                    ),
-            )
-            .merge(textTheme?.textStyle)
-            .merge(theme?.textStyle);
+    final textTheme = Theme.of(context).extension<TTextThemeData>();
+    final normal = TextStyle(
+      color: context.tTheme.textColorPrimary,
+      fontSize: tokenFont?.size,
+      height: tokenFont?.height,
+      fontWeight: tokenFont?.fontWeight,
+    ).merge(textTheme?.textStyle).merge(theme?.textStyle);
     final active = normal
-        .copyWith(
-          color:
-              material.tExplicitColorScheme?.primary ??
-              context.tTheme.brandNormalColor,
-          fontWeight: FontWeight.w600,
-        )
+        .copyWith(color: context.tTheme.brandColor, fontWeight: FontWeight.w600)
         .merge(theme?.activeTextStyle);
     final disabled = normal
-        .copyWith(color: context.tTheme.textDisabledColor)
+        .copyWith(color: context.tTheme.textColorDisabled)
         .merge(theme?.disabledTextStyle);
     final selected = normal.merge(theme?.activeTextStyle);
     return _CascaderTextStyles(
@@ -526,41 +482,6 @@ class _TCascaderState extends State<TCascader> {
       selected: selected,
     );
   }
-}
-
-bool _isAutomaticMaterialTextStyle(ThemeData material, TextStyle? style) {
-  if (style == null ||
-      (style.debugLabel?.contains(
-            'fallback style; consider putting your text in a Material',
-          ) ??
-          false)) {
-    return true;
-  }
-  final textTheme = material.textTheme;
-  return <TextStyle?>[
-    textTheme.displayLarge,
-    textTheme.displayMedium,
-    textTheme.displaySmall,
-    textTheme.headlineLarge,
-    textTheme.headlineMedium,
-    textTheme.headlineSmall,
-    textTheme.titleLarge,
-    textTheme.titleMedium,
-    textTheme.titleSmall,
-    textTheme.bodyLarge,
-    textTheme.bodyMedium,
-    textTheme.bodySmall,
-    textTheme.labelLarge,
-    textTheme.labelMedium,
-    textTheme.labelSmall,
-  ].contains(style);
-}
-
-Color _resolveIconColor(BuildContext context, Color fallback) {
-  final material = Theme.of(context);
-  return material.extension<TIconThemeData>()?.color ??
-      context.tExplicitIconTheme?.color ??
-      fallback;
 }
 
 class _CascaderPressable extends StatelessWidget {

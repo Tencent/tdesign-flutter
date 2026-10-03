@@ -28,7 +28,7 @@ class FabCollapsibleExample extends StatelessWidget {
       child: TButton(
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: onSelected,
         child: const Text('带自动收缩功能'),
       ),
@@ -47,9 +47,9 @@ class _ExpandedFabContent extends StatelessWidget {
     decoration: ShapeDecoration(
       color: context.tTheme.bgColorContainer,
       shape: StadiumBorder(
-        side: BorderSide(color: context.tTheme.componentBorderColor),
+        side: BorderSide(color: context.tTheme.componentBorder),
       ),
-      shadows: context.tTheme.shadowsMiddle ?? const [],
+      shadows: context.tTheme.shadow2 ?? const [],
     ),
     child: const Column(
       children: [
@@ -84,7 +84,7 @@ class _CollapsibleAction extends StatelessWidget {
         TText(
           text,
           font: context.tTheme.fontBodySmall,
-          textColor: context.tTheme.textColorPrimary,
+          style: TextStyle(color: context.tTheme.textColorPrimary),
         ),
       ],
     ),
@@ -102,9 +102,9 @@ class _CollapsedFabContent extends StatelessWidget {
       color: context.tTheme.bgColorContainer,
       shape: RoundedRectangleBorder(
         borderRadius: const BorderRadius.horizontal(left: Radius.circular(16)),
-        side: BorderSide(color: context.tTheme.componentBorderColor),
+        side: BorderSide(color: context.tTheme.componentBorder),
       ),
-      shadows: context.tTheme.shadowsMiddle ?? const [],
+      shadows: context.tTheme.shadow2 ?? const [],
     ),
     alignment: Alignment.center,
     child: Icon(

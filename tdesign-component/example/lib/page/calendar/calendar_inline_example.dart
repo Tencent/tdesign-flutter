@@ -19,7 +19,7 @@ class _CalendarInlineExampleState extends State<CalendarInlineExample> {
     child: Column(
       children: [
         Padding(
-          padding: EdgeInsets.all(context.tTheme.spacer16),
+          padding: EdgeInsets.all(context.tTheme.spacer2),
           child: TText('日历标题', font: context.tTheme.fontTitleLarge),
         ),
         TCalendar(
@@ -31,11 +31,11 @@ class _CalendarInlineExampleState extends State<CalendarInlineExample> {
           onChanged: (value) => setState(() => _inlineValue = value),
         ),
         Padding(
-          padding: EdgeInsets.all(context.tTheme.spacer16),
+          padding: EdgeInsets.all(context.tTheme.spacer2),
           child: SizedBox(
             width: double.infinity,
             child: TButton(
-              colorScheme: TButtonColorScheme.primary,
+              colorPreset: TButtonColorPreset.primary,
               size: TButtonSize.large,
               onPressed: _inlineValue.isEmpty
                   ? null

@@ -7,6 +7,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_backtop_theme_data.dart';
 
 /// 返回顶部组件。
@@ -22,7 +23,7 @@ class TBackTop extends StatefulWidget {
     this.visibilityOffset = 200,
     this.tooltip,
     this.shape = TBackTopShape.circle,
-    this.colorScheme = TBackTopColorScheme.light,
+    this.colorPreset = TBackTopColorPreset.light,
   }) : assert(visibilityOffset >= 0),
        super(key: key);
 
@@ -53,8 +54,8 @@ class TBackTop extends StatefulWidget {
   /// 结构形态，默认 [TBackTopShape.circle]。
   final TBackTopShape shape;
 
-  /// 预设配色，默认 [TBackTopColorScheme.light]。
-  final TBackTopColorScheme colorScheme;
+  /// 局部配色预设，默认 [TBackTopColorPreset.light]；不切换全局明暗主题。
+  final TBackTopColorPreset colorPreset;
 
   @override
   State<TBackTop> createState() => _TBackTopState();
@@ -179,7 +180,7 @@ class _TBackTopState extends State<TBackTop> {
   _BackTopVisualStyle _resolveStyle(BuildContext context) {
     final token = context.tTheme;
     final theme = _themeData;
-    final isDark = widget.colorScheme == TBackTopColorScheme.dark;
+    final isDark = widget.colorPreset == TBackTopColorPreset.dark;
     final defaultBackground = isDark
         ? widget.shape == TBackTopShape.circle
               ? token.grayColor13
@@ -190,7 +191,7 @@ class _TBackTopState extends State<TBackTop> {
       backgroundColor: theme.backgroundColor ?? defaultBackground,
       borderColor:
           theme.borderColor ??
-          (isDark ? token.grayColor9 : token.componentBorderColor),
+          (isDark ? token.grayColor9 : token.componentBorder),
       contentColor: theme.contentColor ?? defaultContent,
       roundSize: theme.roundSize ?? 48,
       halfCircleHeight: theme.halfCircleHeight ?? 40,
@@ -199,13 +200,15 @@ class _TBackTopState extends State<TBackTop> {
       borderWidth: theme.borderWidth ?? 0.5,
       halfCircleHorizontalPadding: theme.halfCircleHorizontalPadding ?? 8,
       contentGap: theme.contentGap ?? 2,
-      textStyle: TextStyle(
-        fontSize: token.fontMarkExtraSmall?.size ?? 10,
-        height: 1.2,
-        fontWeight: token.fontMarkExtraSmall?.fontWeight ?? FontWeight.w600,
-      ).merge(theme.textStyle).copyWith(
-        color: theme.contentColor ?? defaultContent,
-      ),
+      textStyle:
+          TextStyle(
+                fontSize: token.fontMarkExtraSmall?.size ?? 10,
+                height: 1.2,
+                fontWeight:
+                    token.fontMarkExtraSmall?.fontWeight ?? FontWeight.w600,
+              )
+              .merge(theme.textStyle)
+              .copyWith(color: theme.contentColor ?? defaultContent),
     );
   }
 
@@ -214,9 +217,11 @@ class _TBackTopState extends State<TBackTop> {
     return Container(
       width: style.roundSize,
       height: style.roundSize,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(context.tTheme.radiusCircle),
-        border: Border.all(color: style.borderColor, width: style.borderWidth),
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(context.tTheme.radiusCircle),
+          side: BorderSide(color: style.borderColor, width: style.borderWidth),
+        ),
         color: style.backgroundColor,
       ),
       child: Center(
@@ -229,7 +234,7 @@ class _TBackTopState extends State<TBackTop> {
               color: style.contentColor,
             ),
             if (widget.showText)
-              TText(
+              TTextStyled(
                 context.resource.top,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -250,15 +255,18 @@ class _TBackTopState extends State<TBackTop> {
         padding: EdgeInsets.symmetric(
           horizontal: style.halfCircleHorizontalPadding,
         ),
-        decoration: BoxDecoration(
+        decoration: ShapeDecoration(
           color: style.backgroundColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(context.tTheme.radiusCircle),
-            bottomLeft: Radius.circular(context.tTheme.radiusCircle),
-          ),
-          border: Border.all(
-            color: style.borderColor,
-            width: style.borderWidth,
+          // 小程序半圆形使用 radius-round；只有正圆形使用 radius-circle (50%)。
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(context.tTheme.radiusRound),
+              bottomLeft: Radius.circular(context.tTheme.radiusRound),
+            ),
+            side: BorderSide(
+              color: style.borderColor,
+              width: style.borderWidth,
+            ),
           ),
         ),
         child: Row(
@@ -272,7 +280,7 @@ class _TBackTopState extends State<TBackTop> {
             ),
             if (widget.showText) ...[
               SizedBox(width: style.contentGap),
-              TText(
+              TTextStyled(
                 '${context.resource.back}\n${context.resource.top}',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

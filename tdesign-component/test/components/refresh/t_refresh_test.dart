@@ -289,6 +289,22 @@ void main() {
   });
 
   group('TPullDownRefresh 交互状态', () {
+    testWidgets('下拉提示文字读取占位色 Token', (tester) async {
+      await tester.pumpWidget(wrap(pullDownRefresh(onRefresh: () async {})));
+      await tester.pump(const Duration(seconds: 1));
+
+      final gesture = await tester.startGesture(const Offset(200, 150));
+      await gesture.moveBy(const Offset(0, 40));
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.byType(TText), findsOneWidget);
+      final tip = tester.widget<TText>(find.byType(TText));
+      expect(tip.style?.color, TThemeData.defaultData().textColorPlaceholder);
+
+      await gesture.cancel();
+      await tester.pumpAndSettle();
+    });
+
     testWidgets('下拉时刷新头与滚动内容同步下移', (tester) async {
       await tester.pumpWidget(
         wrap(pullDownRefresh(onRefresh: () => Completer<void>().future)),
@@ -378,7 +394,7 @@ void main() {
           matching: find.byType(TText),
         ),
       );
-      expect(loadingText.textColor, Colors.green);
+      expect(loadingText.style?.color, Colors.green);
       completer.complete();
       await tester.pump(const Duration(seconds: 1));
     });
@@ -411,7 +427,7 @@ void main() {
           matching: find.byType(TText),
         ),
       );
-      expect(loadingText.textColor, tokens.dark!.textDisabledColor);
+      expect(loadingText.style?.color, tokens.dark!.textColorDisabled);
 
       completer.complete();
       await tester.pump(const Duration(seconds: 1));

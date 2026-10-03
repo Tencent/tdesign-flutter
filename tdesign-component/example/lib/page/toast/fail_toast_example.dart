@@ -14,7 +14,7 @@ class FailToastExample extends StatelessWidget {
         child: const Text('错误提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: () {
           TToast.showFail(
             '错误文案',

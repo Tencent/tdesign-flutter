@@ -67,7 +67,7 @@ void main() {
             duration: null,
             action: TLink(
               child: const Text('详情'),
-              colorScheme: TLinkColorScheme.danger,
+              colorPreset: TLinkColorPreset.danger,
               onPressed: () => pressed = true,
             ),
           ),

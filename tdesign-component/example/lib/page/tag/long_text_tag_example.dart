@@ -20,7 +20,7 @@ class LongTextTagExample extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(width: context.tTheme.spacer16),
+        SizedBox(width: context.tTheme.spacer2),
         Builder(builder: _buildLongTextTag),
       ],
     );

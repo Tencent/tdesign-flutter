@@ -120,7 +120,7 @@ void main() {
     });
     expect(contentTexts.map((text) => text.data), everyElement('内容区'));
     expect(
-      contentTexts.map((text) => text.textColor),
+      contentTexts.map((text) => text.style?.color),
       everyElement(element.tTheme.textColorPlaceholder),
     );
 
@@ -142,8 +142,6 @@ void main() {
     }
     for (final bar in [lineBar, tagBar]) {
       expect(bar.controller, isNull);
-      expect(bar.indicator, isNull);
-      expect(bar.decoration, isNull);
     }
 
     final spacedBar = barAt(0, 4);

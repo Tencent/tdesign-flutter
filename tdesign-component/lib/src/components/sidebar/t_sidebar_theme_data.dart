@@ -12,18 +12,18 @@ enum TSideBarVariant {
 /// 侧边栏组件 ThemeExtension
 ///
 /// 管理 TSideBar 的子树级视觉样式（内边距、选中/未选中颜色等）。
-/// 构造器参数优先级高于 ThemeData。
+/// 实例参数负责选中值、形态和交互；具体视觉值由本组件 Theme 配置。
 class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
   /// 默认自定义文本框内边距
   final EdgeInsetsGeometry? contentPadding;
 
-  /// 默认选中文字、图标与指示线颜色；同层 selectedTextStyle.color 优先，实例显式颜色可覆盖。
-  final Color? selectedColor;
+  /// 未选中标签文字样式；颜色同时用于未选中图标。
+  /// 选中项只继承排版字段，不继承这里的颜色；禁用态使用全局禁用色。
+  /// 未指定颜色时使用全局正文色。
+  final TextStyle? textStyle;
 
-  /// 默认未选中颜色
-  final Color? unSelectedColor;
-
-  /// 默认选中文字样式；实例 selectedTextStyle 按 TextStyle.merge 合并，未指定的字段保留此处配置。
+  /// 选中文字样式；其中的 color 同时控制选中图标和指示线。
+  /// 未指定 color 时读取全局品牌色；禁用态始终使用全局禁用色。
   final TextStyle? selectedTextStyle;
 
   /// 默认选中背景颜色
@@ -34,8 +34,7 @@ class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
 
   const TSideBarThemeData({
     this.contentPadding,
-    this.selectedColor,
-    this.unSelectedColor,
+    this.textStyle,
     this.selectedTextStyle,
     this.selectedBgColor,
     this.unSelectedBgColor,
@@ -44,16 +43,14 @@ class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
   @override
   TSideBarThemeData copyWith({
     EdgeInsetsGeometry? contentPadding,
-    Color? selectedColor,
-    Color? unSelectedColor,
+    TextStyle? textStyle,
     TextStyle? selectedTextStyle,
     Color? selectedBgColor,
     Color? unSelectedBgColor,
   }) {
     return TSideBarThemeData(
       contentPadding: contentPadding ?? this.contentPadding,
-      selectedColor: selectedColor ?? this.selectedColor,
-      unSelectedColor: unSelectedColor ?? this.unSelectedColor,
+      textStyle: textStyle ?? this.textStyle,
       selectedTextStyle: selectedTextStyle ?? this.selectedTextStyle,
       selectedBgColor: selectedBgColor ?? this.selectedBgColor,
       unSelectedBgColor: unSelectedBgColor ?? this.unSelectedBgColor,
@@ -71,12 +68,7 @@ class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
         other.contentPadding,
         t,
       ),
-      selectedColor: _lerpNullableColor(selectedColor, other.selectedColor, t),
-      unSelectedColor: _lerpNullableColor(
-        unSelectedColor,
-        other.unSelectedColor,
-        t,
-      ),
+      textStyle: _lerpNullableTextStyle(textStyle, other.textStyle, t),
       selectedTextStyle: _lerpNullableTextStyle(
         selectedTextStyle,
         other.selectedTextStyle,

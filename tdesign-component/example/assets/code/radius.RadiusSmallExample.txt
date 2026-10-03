@@ -7,7 +7,7 @@ class RadiusSmallExample extends StatelessWidget {
   Widget _buildRadiusSmall(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: context.tTheme.brandNormalColor,
+        color: context.tTheme.brandColor,
         borderRadius: BorderRadius.circular(context.tTheme.radiusSmall),
       ),
     );

@@ -4,12 +4,35 @@ import 'package:flutter/material.dart';
 
 import 't_badge_defaults.dart';
 
-/// Material [BadgeThemeData] 未覆盖的 TDesign 徽标视觉默认值。
+/// TDesign 徽标的子树级视觉默认值。
 ///
-/// 只保存描边的视觉默认值，不保存形态、尺寸、内容或交互状态。
+/// 形态、内容、对齐和偏移由实例 API 控制，不从 Material BadgeTheme 读取。
 @immutable
 class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
-  const TBadgeThemeData({this.borderColor, this.borderWidth});
+  const TBadgeThemeData({
+    this.backgroundColor,
+    this.dotSize,
+    this.labelHeight,
+    this.textStyle,
+    this.padding,
+    this.borderColor,
+    this.borderWidth,
+  });
+
+  /// 徽标背景色；为空时使用全局错误色 Token。
+  final Color? backgroundColor;
+
+  /// 圆点直径；为空时使用组件内置尺寸。
+  final double? dotSize;
+
+  /// 文字徽标高度；为空时由当前尺寸的字体 Token 决定。
+  final double? labelHeight;
+
+  /// 徽标文字的唯一组件级样式入口；未配置字段从字体与反色文字 Token 取得。
+  final TextStyle? textStyle;
+
+  /// 文字徽标内边距；为空时由当前尺寸决定。
+  final EdgeInsetsGeometry? padding;
 
   /// 开启描边时使用的颜色；为空时回退到当前容器背景色。
   final Color? borderColor;
@@ -18,8 +41,21 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
   final double? borderWidth;
 
   @override
-  TBadgeThemeData copyWith({Color? borderColor, double? borderWidth}) {
+  TBadgeThemeData copyWith({
+    Color? backgroundColor,
+    double? dotSize,
+    double? labelHeight,
+    TextStyle? textStyle,
+    EdgeInsetsGeometry? padding,
+    Color? borderColor,
+    double? borderWidth,
+  }) {
     return TBadgeThemeData(
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      dotSize: dotSize ?? this.dotSize,
+      labelHeight: labelHeight ?? this.labelHeight,
+      textStyle: textStyle ?? this.textStyle,
+      padding: padding ?? this.padding,
       borderColor: borderColor ?? this.borderColor,
       borderWidth: borderWidth ?? this.borderWidth,
     );
@@ -31,6 +67,15 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
       return this;
     }
     return TBadgeThemeData(
+      backgroundColor: _lerpContextualColor(
+        backgroundColor,
+        other.backgroundColor,
+        t,
+      ),
+      dotSize: _lerpNullableDouble(dotSize, other.dotSize, t),
+      labelHeight: _lerpNullableDouble(labelHeight, other.labelHeight, t),
+      textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
+      padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
       // null 表示依赖当前上下文的容器背景色，不能把它当作透明色参与
       // 插值；在动画中点切换配置，才能保留两端各自的运行时回退语义。
       borderColor: _lerpContextualColor(borderColor, other.borderColor, t),
@@ -54,5 +99,12 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
       end ?? TBadgeDefaults.borderWidth,
       t,
     );
+  }
+
+  static double? _lerpNullableDouble(double? begin, double? end, double t) {
+    if (begin == null || end == null) {
+      return t < 0.5 ? begin : end;
+    }
+    return lerpDouble(begin, end, t);
   }
 }

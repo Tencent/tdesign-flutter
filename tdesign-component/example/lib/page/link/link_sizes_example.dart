@@ -11,21 +11,21 @@ class LinkSizesExample extends StatelessWidget {
       _link(
         context,
         label: 'S号链接',
-        colorScheme: TLinkColorScheme.primary,
+        colorPreset: TLinkColorPreset.primary,
         size: TLinkSize.small,
         suffixIcon: const Icon(TIcons.jump),
       ),
       _link(
         context,
         label: 'M号链接',
-        colorScheme: TLinkColorScheme.primary,
+        colorPreset: TLinkColorPreset.primary,
         size: TLinkSize.medium,
         suffixIcon: const Icon(TIcons.jump),
       ),
       _link(
         context,
         label: 'L号链接',
-        colorScheme: TLinkColorScheme.primary,
+        colorPreset: TLinkColorPreset.primary,
         size: TLinkSize.large,
         suffixIcon: const Icon(TIcons.jump),
       ),
@@ -46,7 +46,7 @@ class LinkSizesExample extends StatelessWidget {
   TLink _link(
     BuildContext context, {
     String label = '跳转链接',
-    TLinkColorScheme? colorScheme,
+    TLinkColorPreset? colorPreset,
     TLinkSize size = TLinkSize.small,
     bool? underline,
     Widget? prefixIcon,
@@ -55,7 +55,7 @@ class LinkSizesExample extends StatelessWidget {
   }) {
     return TLink(
       child: Text(label),
-      colorScheme: colorScheme,
+      colorPreset: colorPreset,
       size: size,
       underline: underline,
       prefixIcon: prefixIcon,

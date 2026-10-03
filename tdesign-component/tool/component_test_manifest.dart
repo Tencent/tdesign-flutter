@@ -38,7 +38,10 @@ enum VisualTestKind {
   component,
 }
 
-const sharedExampleTests = ['test/widget_test.dart'];
+const sharedExampleTests = [
+  'test/widget_test.dart',
+  'test/demo_page_test_utils_test.dart',
+];
 
 const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(
@@ -120,10 +123,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'BackTop Component',
         workingDirectory: '.',
-        testFiles: [
-          'test/components/backtop/t_backtop_golden_test.dart',
-          'test/components/navigation_components_golden_test.dart',
-        ],
+        testFiles: ['test/components/backtop/t_backtop_golden_test.dart'],
         kind: VisualTestKind.component,
       ),
       VisualTestManifest(
@@ -150,12 +150,6 @@ const componentTestManifests = <ComponentTestManifest>[
           'test/button/button_demo_test.dart',
           'test/button/button_layout_test.dart',
         ],
-      ),
-      VisualTestManifest(
-        name: 'Button shared base components',
-        workingDirectory: '.',
-        testFiles: ['test/components/base_components_golden_test.dart'],
-        kind: VisualTestKind.component,
       ),
     ],
   ),
@@ -346,12 +340,6 @@ const componentTestManifests = <ComponentTestManifest>[
         workingDirectory: 'example',
         testFiles: ['test/divider/divider_demo_test.dart'],
       ),
-      VisualTestManifest(
-        name: 'Divider shared base components',
-        workingDirectory: '.',
-        testFiles: ['test/components/base_components_golden_test.dart'],
-        kind: VisualTestKind.component,
-      ),
     ],
   ),
   ComponentTestManifest(
@@ -416,12 +404,6 @@ const componentTestManifests = <ComponentTestManifest>[
     exampleTests: ['test/drawer/drawer_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
-        name: 'Drawer Component',
-        workingDirectory: '.',
-        testFiles: ['test/components/navigation_components_golden_test.dart'],
-        kind: VisualTestKind.component,
-      ),
-      VisualTestManifest(
         name: 'Drawer Demo',
         workingDirectory: 'example',
         testFiles: ['test/drawer/drawer_demo_golden_test.dart'],
@@ -453,12 +435,6 @@ const componentTestManifests = <ComponentTestManifest>[
           'test/fab/fab_demo_test.dart',
           'test/fab/fab_structure_test.dart',
         ],
-      ),
-      VisualTestManifest(
-        name: 'Fab shared base components',
-        workingDirectory: '.',
-        testFiles: ['test/components/base_components_golden_test.dart'],
-        kind: VisualTestKind.component,
       ),
     ],
   ),
@@ -595,7 +571,6 @@ const componentTestManifests = <ComponentTestManifest>[
         workingDirectory: '.',
         testFiles: [
           'test/components/navbar/t_nav_bar_safe_area_golden_test.dart',
-          'test/components/navigation_components_golden_test.dart',
         ],
         kind: VisualTestKind.component,
       ),
@@ -625,10 +600,7 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Tabs Component',
         workingDirectory: '.',
-        testFiles: [
-          'test/components/tabs/t_tab_golden_test.dart',
-          'test/components/navigation_components_golden_test.dart',
-        ],
+        testFiles: ['test/components/tabs/t_tab_golden_test.dart'],
         kind: VisualTestKind.component,
       ),
       VisualTestManifest(
@@ -693,12 +665,6 @@ const componentTestManifests = <ComponentTestManifest>[
           'test/icon/icon_structure_test.dart',
         ],
       ),
-      VisualTestManifest(
-        name: 'Icon shared base components',
-        workingDirectory: '.',
-        testFiles: ['test/components/base_components_golden_test.dart'],
-        kind: VisualTestKind.component,
-      ),
     ],
   ),
   ComponentTestManifest(
@@ -718,12 +684,6 @@ const componentTestManifests = <ComponentTestManifest>[
           'test/link/link_demo_test.dart',
           'test/link/link_structure_test.dart',
         ],
-      ),
-      VisualTestManifest(
-        name: 'Link shared base components',
-        workingDirectory: '.',
-        testFiles: ['test/components/base_components_golden_test.dart'],
-        kind: VisualTestKind.component,
       ),
     ],
   ),
@@ -841,6 +801,7 @@ const componentTestManifests = <ComponentTestManifest>[
     componentTests: [
       'test/components/text/t_font_loader_test.dart',
       'test/components/text/t_text_resolve_test.dart',
+      'test/components/text/t_text_style_scope_test.dart',
       'test/components/text/t_text_test.dart',
     ],
     visualTests: [
@@ -848,12 +809,6 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Text Demo',
         workingDirectory: 'example',
         testFiles: ['test/text/text_demo_test.dart'],
-      ),
-      VisualTestManifest(
-        name: 'Text shared base components',
-        workingDirectory: '.',
-        testFiles: ['test/components/base_components_golden_test.dart'],
-        kind: VisualTestKind.component,
       ),
     ],
   ),
@@ -887,12 +842,6 @@ const componentTestManifests = <ComponentTestManifest>[
         workingDirectory: 'example',
         testFiles: ['test/steps/steps_demo_golden_test.dart'],
       ),
-      VisualTestManifest(
-        name: 'Steps shared navigation',
-        workingDirectory: '.',
-        testFiles: ['test/components/navigation_components_golden_test.dart'],
-        kind: VisualTestKind.component,
-      ),
     ],
   ),
   ComponentTestManifest(
@@ -913,12 +862,6 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'SideBar Demo',
         workingDirectory: 'example',
         testFiles: ['test/sidebar/sidebar_demo_golden_test.dart'],
-      ),
-      VisualTestManifest(
-        name: 'SideBar shared navigation',
-        workingDirectory: '.',
-        testFiles: ['test/components/navigation_components_golden_test.dart'],
-        kind: VisualTestKind.component,
       ),
     ],
   ),
@@ -1064,7 +1007,10 @@ const componentTestManifests = <ComponentTestManifest>[
   ),
   ComponentTestManifest(
     name: 'theme',
-    coverageTargets: ['lib/src/theme/t_theme.dart'],
+    coverageTargets: [
+      'lib/src/theme/t_theme.dart',
+      'lib/src/theme/t_radius.dart',
+    ],
     componentTests: [
       'test/acceptance/theme_acceptance_test.dart',
       'test/theme/theme_test.dart',

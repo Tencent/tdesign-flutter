@@ -14,9 +14,9 @@ class CombineSkeletonExample extends StatelessWidget {
       (context) => Container(
         alignment: Alignment.topLeft,
         padding: EdgeInsets.fromLTRB(
-          context.tTheme.spacer16,
+          context.tTheme.spacer2,
           0,
-          context.tTheme.spacer16,
+          context.tTheme.spacer2,
           0,
         ),
         child: isFlexible
@@ -53,7 +53,7 @@ class CombineSkeletonExample extends StatelessWidget {
     return Row(
       children: [
         buildRowCols(),
-        SizedBox(width: context.tTheme.spacer16),
+        SizedBox(width: context.tTheme.spacer2),
         buildRowCols(),
       ],
     );

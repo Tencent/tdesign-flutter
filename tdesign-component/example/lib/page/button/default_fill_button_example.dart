@@ -11,7 +11,7 @@ class DefaultFillButtonExample extends StatelessWidget {
       child: const Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.defaultTheme,
+      colorPreset: TButtonColorPreset.defaultTheme,
       onPressed: () => _onTap(context),
     );
   }
@@ -21,7 +21,7 @@ class DefaultFillButtonExample extends StatelessWidget {
       child: const Text('描边按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.defaultTheme,
+      colorPreset: TButtonColorPreset.defaultTheme,
       onPressed: () => _onTap(context),
     );
   }
@@ -31,7 +31,7 @@ class DefaultFillButtonExample extends StatelessWidget {
       child: const Text('文字按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.text,
-      colorScheme: TButtonColorScheme.defaultTheme,
+      colorPreset: TButtonColorPreset.defaultTheme,
       onPressed: () => _onTap(context),
     );
   }
@@ -41,7 +41,7 @@ class DefaultFillButtonExample extends StatelessWidget {
       child: const Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
+      colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
     );
   }
@@ -51,7 +51,7 @@ class DefaultFillButtonExample extends StatelessWidget {
       child: const Text('描边按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
+      colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
     );
   }
@@ -61,7 +61,7 @@ class DefaultFillButtonExample extends StatelessWidget {
       child: const Text('文字按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.text,
-      colorScheme: TButtonColorScheme.primary,
+      colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
     );
   }
@@ -71,7 +71,7 @@ class DefaultFillButtonExample extends StatelessWidget {
       child: const Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.danger,
+      colorPreset: TButtonColorPreset.danger,
       onPressed: () => _onTap(context),
     );
   }
@@ -81,7 +81,7 @@ class DefaultFillButtonExample extends StatelessWidget {
       child: const Text('描边按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.danger,
+      colorPreset: TButtonColorPreset.danger,
       onPressed: () => _onTap(context),
     );
   }
@@ -91,7 +91,7 @@ class DefaultFillButtonExample extends StatelessWidget {
       child: const Text('文字按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.text,
-      colorScheme: TButtonColorScheme.danger,
+      colorPreset: TButtonColorPreset.danger,
       onPressed: () => _onTap(context),
     );
   }
@@ -101,7 +101,7 @@ class DefaultFillButtonExample extends StatelessWidget {
       child: const Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.light,
+      colorPreset: TButtonColorPreset.light,
       onPressed: () => _onTap(context),
     );
   }
@@ -111,7 +111,7 @@ class DefaultFillButtonExample extends StatelessWidget {
       child: const Text('描边按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.light,
+      colorPreset: TButtonColorPreset.light,
       onPressed: () => _onTap(context),
     );
   }
@@ -121,7 +121,7 @@ class DefaultFillButtonExample extends StatelessWidget {
       child: const Text('文字按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.text,
-      colorScheme: TButtonColorScheme.light,
+      colorPreset: TButtonColorPreset.light,
       onPressed: () => _onTap(context),
     );
   }

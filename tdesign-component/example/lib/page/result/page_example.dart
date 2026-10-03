@@ -9,14 +9,14 @@ class ResultPageExample extends StatelessWidget {
 
   Widget _buildResultPageExample(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+      padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
       child: SizedBox(
         width: double.infinity,
         child: TButton(
           key: const ValueKey('result-page-example'),
           size: TButtonSize.large,
           variant: TButtonVariant.outline,
-          colorScheme: TButtonColorScheme.primary,
+          colorPreset: TButtonColorPreset.primary,
           child: const Text('页面示例'),
           onPressed: () {
             Navigator.of(context).push(
@@ -43,7 +43,7 @@ class ResultPageExample extends StatelessWidget {
                               key: const ValueKey('result-page-back'),
                               size: TButtonSize.large,
                               variant: TButtonVariant.outline,
-                              colorScheme: TButtonColorScheme.primary,
+                              colorPreset: TButtonColorPreset.primary,
                               child: const Text('返回'),
                               onPressed: () => Navigator.of(context).pop(),
                             ),

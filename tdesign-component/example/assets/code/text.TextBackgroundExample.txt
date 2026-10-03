@@ -8,13 +8,19 @@ class TextBackgroundExample extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        TText(
-          '字形背景',
-          style: TextStyle(backgroundColor: context.tTheme.brandFocusColor),
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            TTextThemeData(
+              textStyle: TextStyle(
+                backgroundColor: context.tTheme.brandColorFocus,
+              ),
+            ),
+          ),
+          child: const TText('字形背景'),
         ),
         const SizedBox(height: 12),
         ColoredBox(
-          color: context.tTheme.brandFocusColor,
+          color: context.tTheme.brandColorFocus,
           child: const Padding(
             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             child: TText('行盒背景'),

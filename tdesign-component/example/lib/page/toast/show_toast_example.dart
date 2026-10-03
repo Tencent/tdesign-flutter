@@ -15,7 +15,7 @@ class ShowToastExample extends StatelessWidget {
         child: const Text('显示提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: () {
           TToast.showText(
             '轻提示文字内容',

@@ -92,7 +92,7 @@ class _PickerAreaExampleState extends State<PickerAreaExample> {
             child: TText(
               '取消',
               font: context.tTheme.fontBodyLarge,
-              textColor: context.tTheme.textColorSecondary,
+              style: TextStyle(color: context.tTheme.textColorSecondary),
             ),
           ),
           title: title == null
@@ -106,7 +106,7 @@ class _PickerAreaExampleState extends State<PickerAreaExample> {
             child: TText(
               '确定',
               font: context.tTheme.fontBodyLarge,
-              textColor: context.tTheme.brandNormalColor,
+              style: TextStyle(color: context.tTheme.brandColor),
             ),
           ),
         ),

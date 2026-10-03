@@ -7,47 +7,38 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'icon')
-class IconThemeExample extends StatelessWidget {
-  const IconThemeExample({super.key});
+class IconTokenExample extends StatelessWidget {
+  const IconTokenExample({super.key});
 
-  Widget _buildIconThemeExample(BuildContext context) {
-    // 通过 TIconThemeData 统一控制子树 TIcon 默认 size 和 color
-    return Theme(
-      data: Theme.of(context).copyWith(
-        extensions: [
-          ...Theme.of(context).extensions.values,
-          TIconThemeData(size: 36, color: context.tTheme.brandNormalColor),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TIcon(TIcons.home_filled),
-              SizedBox(width: 16),
-              TIcon(TIcons.setting),
-              SizedBox(width: 16),
-              TIcon(TIcons.notification),
-            ],
+  Widget _buildIconTokenExample(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TIcon(TIcons.home_filled),
+            SizedBox(width: 16),
+            TIcon(TIcons.setting),
+            SizedBox(width: 16),
+            TIcon(TIcons.notification),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '↑ 默认 24dp，颜色使用文字主色 Token',
+          style: TextStyle(
+            fontSize: 12,
+            color: context.tTheme.textColorSecondary,
           ),
-          const SizedBox(height: 4),
-          Text(
-            '↑ 继承 TIconThemeData 默认 size=36 和品牌色',
-            style: TextStyle(
-              fontSize: 12,
-              color: context.tTheme.textColorSecondary,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return _buildIconThemeExample(context);
+    return _buildIconTokenExample(context);
   }
 }

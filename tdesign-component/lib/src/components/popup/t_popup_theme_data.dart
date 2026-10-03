@@ -5,14 +5,8 @@ import 'package:flutter/material.dart';
 /// 通过 Theme 子树注入，控制子树的默认浮层样式。
 /// `TPopupOptions` 的对应字段优先于 Theme Extension。
 class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
-  /// 蒙层颜色
+  /// 蒙层颜色，透明度直接由 [Color] 的 alpha 指定。
   final Color? barrierColor;
-
-  /// 蒙层透明度系数
-  final double? barrierOpacity;
-
-  /// 打开/关闭动画时长，默认 240ms（与小程序公开 duration 默认值一致）。
-  final Duration? transitionDuration;
 
   /// 内容区圆角。
   ///
@@ -34,8 +28,6 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
 
   const TPopupThemeData({
     this.barrierColor,
-    this.barrierOpacity,
-    this.transitionDuration,
     this.panelRadius,
     this.panelBackgroundColor,
     this.edgeHeight,
@@ -51,8 +43,6 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
     }
     return TPopupThemeData(
       barrierColor: other.barrierColor ?? barrierColor,
-      barrierOpacity: other.barrierOpacity ?? barrierOpacity,
-      transitionDuration: other.transitionDuration ?? transitionDuration,
       panelRadius: other.panelRadius ?? panelRadius,
       panelBackgroundColor: other.panelBackgroundColor ?? panelBackgroundColor,
       edgeHeight: other.edgeHeight ?? edgeHeight,
@@ -64,8 +54,6 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
   @override
   TPopupThemeData copyWith({
     Color? barrierColor,
-    double? barrierOpacity,
-    Duration? transitionDuration,
     double? panelRadius,
     Color? panelBackgroundColor,
     double? edgeHeight,
@@ -74,8 +62,6 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
   }) {
     return TPopupThemeData(
       barrierColor: barrierColor ?? this.barrierColor,
-      barrierOpacity: barrierOpacity ?? this.barrierOpacity,
-      transitionDuration: transitionDuration ?? this.transitionDuration,
       panelRadius: panelRadius ?? this.panelRadius,
       panelBackgroundColor: panelBackgroundColor ?? this.panelBackgroundColor,
       edgeHeight: edgeHeight ?? this.edgeHeight,
@@ -91,10 +77,6 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
     }
     return TPopupThemeData(
       barrierColor: Color.lerp(barrierColor, other.barrierColor, t),
-      barrierOpacity: lerpDouble(barrierOpacity, other.barrierOpacity, t),
-      transitionDuration: t < 0.5
-          ? transitionDuration
-          : other.transitionDuration,
       panelRadius: lerpDouble(panelRadius, other.panelRadius, t),
       panelBackgroundColor: Color.lerp(
         panelBackgroundColor,

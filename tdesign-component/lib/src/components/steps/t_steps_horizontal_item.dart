@@ -6,6 +6,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_styled.dart';
 import 't_steps.dart';
 import 't_steps_mode.dart';
 
@@ -52,19 +53,19 @@ class TStepsHorizontalItem extends StatelessWidget {
     final theme = context.tTheme;
 
     /// 步骤条数字背景色
-    var stepsNumberBgColor = theme.brandNormalColor;
+    var stepsNumberBgColor = theme.brandColor;
 
     /// 步骤条数字颜色
     var stepsNumberTextColor = theme.textColorAnti;
 
     /// 步骤条标题颜色
-    var stepsTitleColor = theme.brandNormalColor;
+    var stepsTitleColor = theme.brandColor;
 
     /// 步骤条icon颜色
-    var stepsIconColor = theme.brandNormalColor;
+    var stepsIconColor = theme.brandColor;
 
     /// 简略步骤条icon颜色
-    var simpleStepsIconColor = theme.brandNormalColor;
+    var simpleStepsIconColor = theme.brandColor;
 
     /// 是否要设置步骤图标widget的Decoration
     var shouldSetIconWidgetDecoration = true;
@@ -73,13 +74,13 @@ class TStepsHorizontalItem extends StatelessWidget {
 
     /// 已完成步骤条
     if (activeIndex > index) {
-      stepsNumberBgColor = theme.brandLightColor;
-      stepsNumberTextColor = theme.brandNormalColor;
+      stepsNumberBgColor = theme.brandColorLight;
+      stepsNumberTextColor = theme.brandColor;
       stepsTitleColor = theme.textColorPrimary;
 
       completeIconWidget = Icon(
         TIcons.check,
-        color: theme.brandNormalColor,
+        color: theme.brandColor,
         size: 16,
       );
     } else if (activeIndex < index) {
@@ -88,7 +89,7 @@ class TStepsHorizontalItem extends StatelessWidget {
       stepsNumberTextColor = theme.textColorPlaceholder;
       stepsTitleColor = theme.textColorPlaceholder;
       stepsIconColor = theme.textColorPlaceholder;
-      simpleStepsIconColor = theme.componentBorderColor;
+      simpleStepsIconColor = theme.componentBorder;
     }
 
     /// 步骤条icon图标组件，默认为索引文字
@@ -120,16 +121,16 @@ class TStepsHorizontalItem extends StatelessWidget {
     /// 错误状态处理
     /// 激活索引是当前索引，只有当前激活索引才需要显示
     if (status == TStepsStatus.error && activeIndex == index) {
-      stepsNumberBgColor = theme.errorLightColor;
-      stepsTitleColor = theme.errorNormalColor;
+      stepsNumberBgColor = theme.errorColorLight;
+      stepsTitleColor = theme.errorColor;
 
       if (indicator != TStepsIndicator.standard) {
-        simpleStepsIconColor = theme.errorNormalColor;
+        simpleStepsIconColor = theme.errorColor;
       } else {
         shouldSetIconWidgetDecoration = data.errorIcon == null;
         stepsIconWidget = Icon(
           data.errorIcon ?? TIcons.close,
-          color: theme.errorNormalColor,
+          color: theme.errorColor,
           size: shouldSetIconWidgetDecoration ? 16 : 22,
         );
       }
@@ -147,7 +148,7 @@ class TStepsHorizontalItem extends StatelessWidget {
     if (indicator != TStepsIndicator.standard) {
       /// display 纯展示
       if (mode == TStepsMode.display) {
-        simpleStepsIconColor = theme.brandNormalColor;
+        simpleStepsIconColor = theme.brandColor;
         stepsTitleColor = theme.textColorPrimary;
       }
       iconContainerSize = 8;
@@ -169,11 +170,11 @@ class TStepsHorizontalItem extends StatelessWidget {
     }
 
     var leftLineColor = (activeIndex >= index || mode == TStepsMode.display)
-        ? theme.brandNormalColor
-        : theme.componentBorderColor;
+        ? theme.brandColor
+        : theme.componentBorder;
     var rightLineColor = (activeIndex > index || mode == TStepsMode.display)
-        ? theme.brandNormalColor
-        : theme.componentBorderColor;
+        ? theme.brandColor
+        : theme.componentBorder;
 
     final content = Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -242,7 +243,7 @@ class TStepsHorizontalItem extends StatelessWidget {
       alignment: Alignment.center,
       child:
           data.customTitle ??
-          TText(
+          TTextStyled(
             title,
             style: TTextResolve.resolve(
               context: context,
@@ -252,6 +253,7 @@ class TStepsHorizontalItem extends StatelessWidget {
                     : FontWeight.w400,
                 color: stepsTitleColor,
                 fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
+                height: context.tTheme.fontBodyMedium?.height ?? (22 / 14),
               ),
             ),
             maxLines: 1,
@@ -267,7 +269,7 @@ class TStepsHorizontalItem extends StatelessWidget {
       alignment: Alignment.center,
       child:
           data.customContent ??
-          TText(
+          TTextStyled(
             data.content ?? '',
             style: TTextResolve.resolve(
               context: context,
@@ -275,6 +277,7 @@ class TStepsHorizontalItem extends StatelessWidget {
                 fontWeight: FontWeight.w400,
                 color: context.tTheme.textColorPlaceholder,
                 fontSize: context.tTheme.fontBodySmall?.size ?? 12,
+                height: context.tTheme.fontBodySmall?.height ?? (20 / 12),
               ),
             ),
             maxLines: 1,

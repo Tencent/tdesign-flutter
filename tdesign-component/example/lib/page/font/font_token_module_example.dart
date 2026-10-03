@@ -17,20 +17,23 @@ class FontTokenModuleExample extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color: context.tTheme.componentBorderColor,
+                color: context.tTheme.componentBorder,
                 width: 0.5,
               ),
             ),
           ),
-          child: TText(
-            '@$key:${value.size.toInt()}px',
-            font: value,
-            style: TextStyle(
-              decoration: key.contains('Link')
-                  ? TextDecoration.underline
-                  : null,
-              decorationColor: context.tTheme.textColorPrimary,
+          child: Theme(
+            data: Theme.of(context).mergeExtension(
+              TTextThemeData(
+                textStyle: TextStyle(
+                  decoration: key.contains('Link')
+                      ? TextDecoration.underline
+                      : null,
+                  decorationColor: context.tTheme.textColorPrimary,
+                ),
+              ),
             ),
+            child: TText('@$key:${value.size.toInt()}px', font: value),
           ),
         ),
       );

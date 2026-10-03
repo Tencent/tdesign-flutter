@@ -14,7 +14,7 @@ class CoverToastExample extends StatelessWidget {
         child: const Text('禁止滑动和点击'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: () {
           TToast.showText(
             '禁止滑动和点击',

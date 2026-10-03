@@ -43,16 +43,8 @@ void main() {
     );
     await tester.pump();
 
-    final pageTitle = tester.widget<TText>(
-      find.byWidgetPredicate(
-        (widget) => widget is TText && widget.data == '页面标题',
-      ),
-    );
-    final moduleTitle = tester.widget<TText>(
-      find.byWidgetPredicate(
-        (widget) => widget is TText && widget.data == '01 模块标题',
-      ),
-    );
+    final pageTitle = tester.widget<Text>(find.text('页面标题').last);
+    final moduleTitle = tester.widget<Text>(find.text('01 模块标题'));
     expect(pageTitle.style?.fontSize, token.fontHeadlineSmall?.size);
     expect(pageTitle.style?.height, token.fontHeadlineSmall?.height);
     expect(moduleTitle.style?.fontSize, token.fontTitleLarge?.size);
@@ -61,7 +53,7 @@ void main() {
   });
 
   testWidgets(
-    'compact module titles follow TD tokens and explicit text theme',
+    'compact module titles follow TD tokens despite Material text theme',
     (tester) async {
       final token = TThemeData.defaultData().copyWithTThemeData(
         'compact-title',
@@ -109,9 +101,9 @@ void main() {
         );
         await tester.pumpAndSettle();
         final style = tester.widget<Text>(find.text('01 Module')).style!;
-        expect(style.fontSize, explicit ? 22 : 20);
-        expect(style.height, explicit ? 1.5 : 1.4);
-        expect(style.fontWeight, explicit ? FontWeight.w400 : FontWeight.w500);
+        expect(style.fontSize, 20);
+        expect(style.height, 1.4);
+        expect(style.fontWeight, FontWeight.w500);
       }
     },
   );
@@ -155,16 +147,10 @@ void main() {
     );
     await tester.pump();
 
-    final pageTitleFinder = find.byWidgetPredicate(
-      (widget) => widget is TText && widget.data == '页面标题',
-    );
-    final pageDescriptionFinder = find.byWidgetPredicate(
-      (widget) => widget is TText && widget.data == '页面说明',
-    );
-    final pageTitle = tester.widget<TText>(pageTitleFinder);
-    final moduleTitleFinder = find.byWidgetPredicate(
-      (widget) => widget is TText && widget.data == '01 模块标题',
-    );
+    final pageTitleFinder = find.text('页面标题').last;
+    final pageDescriptionFinder = find.text('页面说明');
+    final pageTitle = tester.widget<Text>(pageTitleFinder);
+    final moduleTitleFinder = find.text('01 模块标题');
     expect(pageTitle.style?.fontSize, token.fontHeadlineSmall?.size);
     expect(pageTitle.style?.height, token.fontHeadlineSmall?.height);
     expect(pageTitle.style?.fontWeight, FontWeight.w600);

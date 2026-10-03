@@ -44,49 +44,46 @@ class _StudyDetailState extends State with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('课程详情'),
-        leadingWidth: 40.w,
-      ),
+      appBar: AppBar(title: const Text('课程详情'), leadingWidth: 40.w),
       body: ExtendedNestedScrollView(
         onlyOneScrollInBody: true,
         physics: const ClampingScrollPhysics(),
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            const SliverToBoxAdapter(
-              child: _CourseItemDetail(),
-            )
-          ];
+          return [const SliverToBoxAdapter(child: _CourseItemDetail())];
         },
         body: Column(
           children: [
             Theme(
               data: Theme.of(context).mergeExtension(
                 TTabsBarThemeData(
-                  unselectedLabelStyle:
-                      TextStyle(fontSize: 12.sp, color: Colors.red),
-                  labelStyle:
-                      TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w500),
+                  unselectedLabelStyle: TextStyle(
+                    fontSize: 12.sp,
+                    color: Colors.red,
+                  ),
+                  labelStyle: TextStyle(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  indicator: TTabsBarIndicator(
+                    indicatorColor: context.tTheme.brandColor,
+                    indicatorWidth: 16.w,
+                  ),
                 ),
               ),
               child: TTabsBar(
                 controller: _tabController,
-                indicator: TTabsBarIndicator(
-                  indicatorColor: context.tTheme.brandNormalColor,
-                  indicatorWidth: 16.w,
-                ),
                 tabs: _tabs.map((e) => TTab(text: '$e')).toList(),
               ),
             ),
             Expanded(
-                child: TTabsBarView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    controller: _tabController,
-                    children: _tabs
-                        .map((e) => Center(
-                              child: Text('data$e'),
-                            ))
-                        .toList()))
+              child: TTabsBarView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                controller: _tabController,
+                children: _tabs
+                    .map((e) => Center(child: Text('data$e')))
+                    .toList(),
+              ),
+            ),
           ],
         ),
       ),
@@ -114,30 +111,33 @@ class _CourseItemDetail extends StatelessWidget {
                 alignment: Alignment.center,
                 padding: EdgeInsets.symmetric(horizontal: 6.w),
                 decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(4)),
-                    gradient: LinearGradient(colors: [
-                      Color(0xFFFFB442),
-                      Color(0xFFFF9A00),
-                    ])),
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                  gradient: LinearGradient(
+                    colors: [Color(0xFFFFB442), Color(0xFFFF9A00)],
+                  ),
+                ),
                 child: Text(
                   '数学',
                   style: TextStyle(
-                      color: Colors.white, fontSize: 12.sp, height: 1.h),
+                    color: Colors.white,
+                    fontSize: 12.sp,
+                    height: 1.h,
+                  ),
                 ),
               ),
-              SizedBox(
-                width: 8.w,
-              ),
+              SizedBox(width: 8.w),
               Expanded(
-                  child: Text(
-                '集合图形离开撒娇的案例三等奖集合图形离开撒娇的案例',
-                style: TextStyle(
-                    color: context.tTheme.fontGyColor1,
+                child: Text(
+                  '集合图形离开撒娇的案例三等奖集合图形离开撒娇的案例',
+                  style: TextStyle(
+                    color: context.tTheme.fontGray1,
                     fontSize: 14.sp,
                     overflow: TextOverflow.ellipsis,
-                    height: 1.5.h),
-                maxLines: 2,
-              ))
+                    height: 1.5.h,
+                  ),
+                  maxLines: 2,
+                ),
+              ),
             ],
           ),
           Padding(
@@ -146,7 +146,7 @@ class _CourseItemDetail extends StatelessWidget {
               '2020年8月15日开始，共20节课',
               style: TextStyle(
                 fontSize: 12.sp,
-                color: context.tTheme.fontGyColor2,
+                color: context.tTheme.fontGray2,
               ),
             ),
           ),
@@ -154,24 +154,20 @@ class _CourseItemDetail extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(28.w),
-                child: SizedBox(
-                  width: 28.w,
-                  height: 28.w,
-                ),
+                child: SizedBox(width: 28.w, height: 28.w),
               ),
-              SizedBox(
-                width: 10.w,
-              ),
+              SizedBox(width: 10.w),
               Text(
                 '某某老师',
                 maxLines: 1,
                 style: TextStyle(
-                    fontSize: 12.sp,
-                    color: context.tTheme.fontGyColor2,
-                    overflow: TextOverflow.ellipsis),
-              )
+                  fontSize: 12.sp,
+                  color: context.tTheme.fontGray2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ],
-          )
+          ),
         ],
       ),
     );

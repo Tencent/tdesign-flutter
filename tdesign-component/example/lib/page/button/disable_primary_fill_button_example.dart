@@ -12,7 +12,7 @@ class DisablePrimaryFillButtonExample extends StatelessWidget {
       child: Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.primary,
+      colorPreset: TButtonColorPreset.primary,
       onPressed: null,
     );
   }
@@ -22,7 +22,7 @@ class DisablePrimaryFillButtonExample extends StatelessWidget {
       child: Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.light,
+      colorPreset: TButtonColorPreset.light,
       onPressed: null,
     );
   }
@@ -32,7 +32,7 @@ class DisablePrimaryFillButtonExample extends StatelessWidget {
       child: Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
-      colorScheme: TButtonColorScheme.defaultTheme,
+      colorPreset: TButtonColorPreset.defaultTheme,
       onPressed: null,
     );
   }
@@ -42,7 +42,7 @@ class DisablePrimaryFillButtonExample extends StatelessWidget {
       child: Text('描边按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.outline,
-      colorScheme: TButtonColorScheme.primary,
+      colorPreset: TButtonColorPreset.primary,
       onPressed: null,
     );
   }
@@ -52,7 +52,7 @@ class DisablePrimaryFillButtonExample extends StatelessWidget {
       child: Text('文字按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.text,
-      colorScheme: TButtonColorScheme.primary,
+      colorPreset: TButtonColorPreset.primary,
       onPressed: null,
     );
   }

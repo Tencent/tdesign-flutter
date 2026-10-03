@@ -33,6 +33,8 @@ Never _throwPopupOptionsValidationError(String error) {
 ///
 /// 生命周期回调见 [onOpened]、[onClosed]、[onVisibleChange]；
 /// 蒙层行为见 [overlay]（[TPopupOverlayConfig]）。
+/// 单次打开的显式尺寸、面板颜色、圆角、动画时长及蒙层颜色优先于
+/// [TPopupThemeData] 的子树默认值；未指定的字段分别从组件 Theme 补足。
 class TPopupOptions {
   /// 通用构造；[placement] 在运行时才能确定时使用。
   ///

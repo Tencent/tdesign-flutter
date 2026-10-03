@@ -72,20 +72,20 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
     // 仅在未显式注入时才使用状态默认色，保证 TNoticeBarThemeData 注入生效
     switch (status) {
       case TNoticeBarStatus.warning:
-        resolvedLeftIcon ??= t.warningNormalColor;
-        resolvedBg ??= t.warningLightColor;
+        resolvedLeftIcon ??= t.warningColor;
+        resolvedBg ??= t.warningColorLight;
         break;
       case TNoticeBarStatus.error:
-        resolvedLeftIcon ??= t.errorNormalColor;
-        resolvedBg ??= t.errorLightColor;
+        resolvedLeftIcon ??= t.errorColor;
+        resolvedBg ??= t.errorColorLight;
         break;
       case TNoticeBarStatus.success:
-        resolvedLeftIcon ??= t.successNormalColor;
-        resolvedBg ??= t.successLightColor;
+        resolvedLeftIcon ??= t.successColor;
+        resolvedBg ??= t.successColorLight;
         break;
       case TNoticeBarStatus.info:
-        resolvedLeftIcon ??= t.brandNormalColor;
-        resolvedBg ??= t.brandLightColor;
+        resolvedLeftIcon ??= t.brandColor;
+        resolvedBg ??= t.brandColorLight;
         break;
     }
 
@@ -134,11 +134,7 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
     }
     return TNoticeBarThemeData(
       height: _lerpHeight(height, other.height, t),
-      backgroundColor: _lerpColor(
-        backgroundColor,
-        other.backgroundColor,
-        t,
-      ),
+      backgroundColor: _lerpColor(backgroundColor, other.backgroundColor, t),
       textStyle: _lerpTextStyle(textStyle, other.textStyle, t),
       leftIconColor: _lerpColor(leftIconColor, other.leftIconColor, t),
       rightIconColor: _lerpColor(rightIconColor, other.rightIconColor, t),
@@ -174,8 +170,7 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
       return null;
     }
     const defaultHeight = 22.0;
-    return (a ?? defaultHeight) * (1.0 - t) +
-        (b ?? defaultHeight) * t;
+    return (a ?? defaultHeight) * (1.0 - t) + (b ?? defaultHeight) * t;
   }
 
   static EdgeInsetsGeometry? _lerpPadding(
@@ -186,11 +181,7 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
     if (a == null && b == null) {
       return null;
     }
-    return EdgeInsetsGeometry.lerp(
-      a ?? defaultPadding,
-      b ?? defaultPadding,
-      t,
-    );
+    return EdgeInsetsGeometry.lerp(a ?? defaultPadding, b ?? defaultPadding, t);
   }
 
   static Color? _lerpColor(Color? a, Color? b, double t) {

@@ -210,7 +210,7 @@ void main() {
       expect(gapPadding.padding, const EdgeInsets.symmetric(horizontal: 12));
     });
 
-    testWidgets('显式 Material DividerTheme 参与颜色与间距解析', (tester) async {
+    testWidgets('Material DividerTheme 不覆盖 TDesign 分割线', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(
@@ -230,8 +230,8 @@ void main() {
           matching: find.byType(ColoredBox),
         ),
       );
-      expect(coloredBox.color, Colors.orange);
-      expect(tester.getSize(find.byType(TDivider)).height, 24);
+      expect(coloredBox.color, TThemeData.defaultData().borderLevel1Color);
+      expect(tester.getSize(find.byType(TDivider)).height, isNot(24));
     });
 
     testWidgets('默认内容使用 bodySmall / placeholder Token', (tester) async {

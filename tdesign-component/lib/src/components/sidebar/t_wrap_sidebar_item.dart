@@ -7,6 +7,7 @@ import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
 import '../badge/t_badge_internal.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_sidebar_theme_data.dart';
 
 /// 侧边栏单项的内部渲染组件。
@@ -24,13 +25,11 @@ class TWrapSideBarItem extends StatelessWidget {
     this.selectedTextStyle,
     this.value = -1,
     this.selected = false,
-    this.selectedColor,
     this.topAdjacent = false,
     this.bottomAdjacent = false,
     this.onTap,
     this.selectedBgColor,
     this.unSelectedBgColor,
-    this.unSelectedColor,
     required this.variant,
   }) : super(key: key);
 
@@ -43,9 +42,7 @@ class TWrapSideBarItem extends StatelessWidget {
   final TextStyle? selectedTextStyle;
   final int value;
   final bool selected;
-  final Color? selectedColor;
   final Color? selectedBgColor;
-  final Color? unSelectedColor;
   final Color? unSelectedBgColor;
   final bool topAdjacent;
   final bool bottomAdjacent;
@@ -158,10 +155,7 @@ class TWrapSideBarItem extends StatelessWidget {
             width: preLineWidth,
             height: 14,
             decoration: BoxDecoration(
-              color:
-                  selectedTextStyle?.color ??
-                  selectedColor ??
-                  context.tTheme.brandNormalColor,
+              color: _foregroundColor(context),
               borderRadius: BorderRadius.circular(4),
             ),
           ),
@@ -171,42 +165,37 @@ class TWrapSideBarItem extends StatelessWidget {
   }
 
   Widget renderIcon(BuildContext context) {
-    final iconColor = () {
-      if (disabled) {
-        return context.tTheme.textDisabledColor;
-      }
-      if (!selected) {
-        return unSelectedColor ?? context.tTheme.textColorPrimary;
-      }
-      if (selectedTextStyle?.color != null) {
-        return selectedTextStyle!.color!;
-      }
-      return selectedColor ?? context.tTheme.brandNormalColor;
-    }();
-
     return Visibility(
       visible: icon != null,
       child: Padding(
         padding: const EdgeInsets.only(right: 2),
-        child: Icon(icon, size: 20, color: iconColor),
+        child: Icon(icon, size: 20, color: _foregroundColor(context)),
       ),
     );
   }
 
+  Color _foregroundColor(BuildContext context) {
+    if (disabled) {
+      return context.tTheme.textColorDisabled;
+    }
+    if (selected) {
+      return selectedTextStyle?.color ?? context.tTheme.brandColor;
+    }
+    return textStyle?.color ?? context.tTheme.textColorPrimary;
+  }
+
   Widget renderLabel(BuildContext context) {
     final effectiveStyle = selected
-        ? selectedTextStyle ?? textStyle
+        ? textStyle?.merge(selectedTextStyle) ?? selectedTextStyle
         : textStyle;
-    return TText(
+    return TTextStyled(
       label,
       font: context.tTheme.fontBodyLarge,
-      style: effectiveStyle,
+      // 状态前景色与图标、指示线保持一致；未选中样式只为选中态提供排版回退。
+      style: (effectiveStyle ?? const TextStyle()).copyWith(
+        color: _foregroundColor(context),
+      ),
       fontWeight: selected && !disabled ? FontWeight.w600 : FontWeight.w400,
-      textColor: disabled
-          ? context.tTheme.textDisabledColor
-          : selected
-          ? selectedColor ?? context.tTheme.brandNormalColor
-          : unSelectedColor ?? context.tTheme.textColorPrimary,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

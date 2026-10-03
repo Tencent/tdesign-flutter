@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 't_stepper_theme_interpolation.dart';
-import 't_stepper_types.dart';
 
 /// `TStepper` 的组件级主题。
 ///
 /// 通过 [ThemeData.extensions] 或 `ThemeData.mergeExtension` 注入。实例参数
-/// 优先于此主题；未设置字段继续继承 Flutter 的 DefaultTextStyle、
-/// IconTheme、InputDecorationTheme 和 ThemeData，最后回退 TDesign token。
+/// 优先于此主题；未设置的文字字段使用全局 TDesign Token，图标及输入装饰
+/// 仍按各自 Flutter 主题解析。
 class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
   const TStepperThemeData({
-    /// 默认尺寸；为空时使用 [TStepperSize.medium]。
-    this.size,
-
-    /// 默认形态；为空时使用 [TStepperVariant.normal]。
-    this.variant,
-
     /// 输入段宽度。
     ///
     /// 为空时 small、medium、large 分别使用 34、38、45。
@@ -61,7 +54,7 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
 
     /// 输入文字样式。
     ///
-    /// 在继承 DefaultTextStyle 和 ThemeData.textTheme 后合并；非空字段可覆盖
+    /// 在继承全局 TDesign Token 后合并；非空字段可覆盖
     /// 默认字号、行高及 [foregroundColor]。仅覆盖字号时会按最终字号重新计算
     /// 默认行高倍数；显式设置的 [TextStyle.height] 始终优先。最终字号或显式
     /// 物理行盒超过控件高度属于无效配置，并会在调试模式触发断言。
@@ -71,12 +64,6 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
        assert(iconSize == null || iconSize > 0),
        assert(spacing == null || spacing >= 0),
        assert(borderWidth == null || borderWidth >= 0);
-
-  /// 默认尺寸；为空时使用中尺寸。
-  final TStepperSize? size;
-
-  /// 默认形态；为空时使用 normal。
-  final TStepperVariant? variant;
 
   /// 输入段宽度；为空时 small、medium、large 分别为 34、38、45。
   final double? inputWidth;
@@ -119,8 +106,6 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
 
   @override
   TStepperThemeData copyWith({
-    TStepperSize? size,
-    TStepperVariant? variant,
     double? inputWidth,
     double? controlSize,
     double? iconSize,
@@ -135,8 +120,6 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
     TextStyle? textStyle,
   }) {
     return TStepperThemeData(
-      size: size ?? this.size,
-      variant: variant ?? this.variant,
       inputWidth: inputWidth ?? this.inputWidth,
       controlSize: controlSize ?? this.controlSize,
       iconSize: iconSize ?? this.iconSize,

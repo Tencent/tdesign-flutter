@@ -141,13 +141,13 @@ void main() {
       final activeDecoration = active.decoration! as BoxDecoration;
       final activeGradient = activeDecoration.gradient! as LinearGradient;
 
-      expect(trackDecoration.color, tokens.brandNormalColor);
-      expect(activeGradient.colors.first, tokens.brandNormalColor);
+      expect(trackDecoration.color, tokens.brandColor);
+      expect(activeGradient.colors.first, tokens.brandColor);
       expect(
         activeGradient.colors.last,
         Color.alphaBlend(
-          tokens.fontWhColor1.withValues(alpha: 0.3),
-          tokens.brandNormalColor,
+          tokens.fontWhite1.withValues(alpha: 0.3),
+          tokens.brandColor,
         ),
       );
     });
@@ -295,6 +295,147 @@ void main() {
   });
 
   group('TProgress Theme', () {
+    testWidgets('暗色环形内圆默认透明，可透出父容器背景', (tester) async {
+      final tokens = TThemeData.defaultData().dark!;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TProgress.circular(value: 0.3),
+          tokenTheme: tokens,
+          materialTheme: ThemeData.dark(),
+        ),
+      );
+
+      final inner = find.byKey(const ValueKey('progress-circle-inner'));
+      expect(tester.getSize(inner), const Size(100, 100));
+      final decoration =
+          tester
+                  .widget<DecoratedBox>(
+                    find.descendant(
+                      of: inner,
+                      matching: find.byType(DecoratedBox),
+                    ),
+                  )
+                  .decoration
+              as BoxDecoration;
+      expect(decoration.color, Colors.transparent);
+    });
+
+    testWidgets('浅色环形内圆默认使用容器背景色', (tester) async {
+      final tokens = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrapWithTheme(TProgress.circular(value: 0.3), tokenTheme: tokens),
+      );
+      final inner = find.byKey(const ValueKey('progress-circle-inner'));
+      final decoration =
+          tester
+                  .widget<DecoratedBox>(
+                    find.descendant(
+                      of: inner,
+                      matching: find.byType(DecoratedBox),
+                    ),
+                  )
+                  .decoration
+              as BoxDecoration;
+      expect(decoration.color, tokens.bgColorContainer);
+    });
+
+    testWidgets('环形内圆只由组件 Theme 覆盖，不影响轨道背景', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TProgress.circular(value: 0.3),
+          progressTheme: const TProgressThemeData(
+            circleInnerBgColor: Colors.purple,
+            backgroundColor: Colors.grey,
+          ),
+        ),
+      );
+
+      final inner = find.byKey(const ValueKey('progress-circle-inner'));
+      final decoration =
+          tester
+                  .widget<DecoratedBox>(
+                    find.descendant(
+                      of: inner,
+                      matching: find.byType(DecoratedBox),
+                    ),
+                  )
+                  .decoration
+              as BoxDecoration;
+      expect(decoration.color, Colors.purple);
+    });
+
+    test('环形内圆在 nullable Theme 端点间按实际背景色连续插值', () {
+      const inherited = TProgressThemeData();
+      const custom = TProgressThemeData(circleInnerBgColor: Colors.purple);
+      final middle = inherited.lerp(custom, 0.5);
+      expect(middle.circleInnerBgColor, isNull);
+      final animatedTheme = ThemeData.lerp(
+        ThemeData(extensions: const [inherited]),
+        ThemeData(extensions: const [custom]),
+        0.5,
+      ).extension<TProgressThemeData>();
+      expect(
+        animatedTheme?.resolveCircleInnerBgColor(Colors.white),
+        Color.lerp(Colors.white, Colors.purple, 0.5),
+      );
+      expect(
+        middle.resolveCircleInnerBgColor(Colors.white),
+        Color.lerp(Colors.white, Colors.purple, 0.5),
+      );
+      expect(
+        middle.resolveCircleInnerBgColor(Colors.transparent),
+        Color.lerp(Colors.transparent, Colors.purple, 0.5),
+      );
+      expect(
+        custom.lerp(inherited, 0.25).resolveCircleInnerBgColor(Colors.white),
+        Color.lerp(Colors.purple, Colors.white, 0.25),
+      );
+      expect(
+        inherited.lerp(inherited, 0.5).resolveCircleInnerBgColor(Colors.white),
+        Colors.white,
+      );
+      expect(
+        middle.copyWith(strokeWidth: 3).resolveCircleInnerBgColor(Colors.white),
+        Color.lerp(Colors.white, Colors.purple, 0.5),
+      );
+      expect(
+        middle.lerp(custom, 0.5).resolveCircleInnerBgColor(Colors.white),
+        Color.lerp(
+          Color.lerp(Colors.white, Colors.purple, 0.5),
+          Colors.purple,
+          0.5,
+        ),
+      );
+    });
+
+    testWidgets('环形内圆实际绘制使用当前 Token 回退插值', (tester) async {
+      const inherited = TProgressThemeData();
+      const custom = TProgressThemeData(circleInnerBgColor: Colors.purple);
+      final tokens = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TProgress.circular(value: 0.3),
+          tokenTheme: tokens,
+          progressTheme: inherited.lerp(custom, 0.5),
+        ),
+      );
+      final inner = find.byKey(const ValueKey('progress-circle-inner'));
+      final decoration =
+          tester
+                  .widget<DecoratedBox>(
+                    find.descendant(
+                      of: inner,
+                      matching: find.byType(DecoratedBox),
+                    ),
+                  )
+                  .decoration
+              as BoxDecoration;
+      expect(
+        decoration.color,
+        Color.lerp(tokens.bgColorContainer, Colors.purple, 0.5),
+      );
+    });
+
     testWidgets('Theme.color 覆盖进度条颜色', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
@@ -328,15 +469,15 @@ void main() {
       expect(find.byType(TProgress), findsOneWidget);
     });
 
-    testWidgets('Theme.circleRadius 覆盖环形半径', (tester) async {
+    testWidgets('Theme.circleSize 覆盖环形边长', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           TProgress.circular(value: 0.5),
-          progressTheme: const TProgressThemeData(circleRadius: 150),
+          progressTheme: const TProgressThemeData(circleSize: 150),
         ),
       );
       await tester.pump();
-      expect(find.byType(TProgress), findsOneWidget);
+      expect(tester.getSize(find.byType(TProgress)), const Size.square(150));
     });
 
     testWidgets('Theme.animationDuration 覆盖动画时长', (tester) async {
@@ -388,13 +529,13 @@ void main() {
       const theme = TProgressThemeData(
         strokeWidth: 5,
         color: Colors.red,
-        circleRadius: 100,
+        circleSize: 100,
         indeterminateLinearSegmentFraction: 0.4,
       );
       final copied = theme.copyWith(strokeWidth: 10);
       expect(copied.strokeWidth, 10);
       expect(copied.color, Colors.red);
-      expect(copied.circleRadius, 100);
+      expect(copied.circleSize, 100);
       expect(copied.indeterminateLinearSegmentFraction, 0.4);
     });
 
@@ -449,6 +590,26 @@ void main() {
       expect(result.indeterminateCircularValue, closeTo(0.3, 0.001));
     });
 
+    test('不确定态比例从内置默认值插值，端点不会触发断言', () {
+      const begin = TProgressThemeData();
+      const end = TProgressThemeData(
+        indeterminateLinearSegmentFraction: 0.6,
+        indeterminateCircularValue: 0.4,
+      );
+      expect(begin.lerp(end, 0).indeterminateLinearSegmentFraction, 0.32);
+      expect(begin.lerp(end, 0).indeterminateCircularValue, 0.25);
+      expect(
+        begin.lerp(end, 0.5).indeterminateLinearSegmentFraction,
+        closeTo(0.46, 1e-9),
+      );
+      expect(
+        begin.lerp(end, 0.5).indeterminateCircularValue,
+        closeTo(0.325, 1e-9),
+      );
+      expect(end.lerp(begin, 1).indeterminateCircularValue, 0.25);
+      expect(begin.lerp(begin, 0.5).indeterminateCircularValue, isNull);
+    });
+
     test('lerp 两端 animationDuration 均为 null 返回 null', () {
       const a = TProgressThemeData();
       const b = TProgressThemeData();
@@ -456,22 +617,52 @@ void main() {
       expect(result.animationDuration, isNull);
     });
 
-    test('lerp a animationDuration 为 null 返回 b 值', () {
+    test('lerp a animationDuration 为 null 时从 300ms 默认值过渡', () {
       const a = TProgressThemeData();
       const b = TProgressThemeData(
         animationDuration: Duration(milliseconds: 200),
       );
       final result = a.lerp(b, 0.5);
-      expect(result.animationDuration?.inMilliseconds, 200);
+      expect(result.animationDuration?.inMilliseconds, 250);
     });
 
-    test('lerp b animationDuration 为 null 返回 a 值', () {
+    test('lerp b animationDuration 为 null 时过渡至 300ms 默认值', () {
       const a = TProgressThemeData(
         animationDuration: Duration(milliseconds: 100),
       );
       const b = TProgressThemeData();
       final result = a.lerp(b, 0.5);
-      expect(result.animationDuration?.inMilliseconds, 100);
+      expect(result.animationDuration?.inMilliseconds, 200);
+    });
+
+    test('尺寸与颜色从组件实际默认值插值，不从零或透明开始', () {
+      const begin = TProgressThemeData();
+      const end = TProgressThemeData(
+        strokeWidth: 10,
+        circleSize: 160,
+        color: Colors.red,
+        backgroundColor: Colors.blue,
+        linearBorderRadius: BorderRadius.all(Radius.circular(8)),
+      );
+      final middle = begin.lerp(end, 0.5);
+      expect(middle.strokeWidth, isNull);
+      expect(middle.resolveStrokeWidth(4), 7);
+      expect(middle.resolveCircleSize(112), 136);
+      expect(middle.resolveCircleSize(24), 92);
+      expect(
+        middle.resolveColor(Colors.black),
+        Color.lerp(Colors.black, Colors.red, 0.5),
+      );
+      expect(
+        middle.resolveBackgroundColor(Colors.white),
+        Color.lerp(Colors.white, Colors.blue, 0.5),
+      );
+      expect(
+        middle.resolveLinearBorderRadius(BorderRadius.circular(4)),
+        BorderRadius.circular(6),
+      );
+      expect(begin.lerp(begin, 0.5).circleSize, isNull);
+      expect(middle.copyWith().resolveCircleSize(112), 136);
     });
   });
 
@@ -642,7 +833,7 @@ void main() {
             fontWeight: FontWeight.w500,
           ),
         },
-        marginMap: {'spacer8': 10},
+        marginMap: {'spacer': 10},
       );
       await tester.pumpWidget(
         wrapWithTheme(
@@ -703,10 +894,10 @@ void main() {
     testWidgets('四种状态解析语义颜色与默认标签', (tester) async {
       final token = TThemeData.defaultData();
       final expectedColors = <TProgressStatus, Color>{
-        TProgressStatus.normal: token.brandNormalColor,
-        TProgressStatus.warning: token.warningNormalColor,
-        TProgressStatus.error: token.errorNormalColor,
-        TProgressStatus.success: token.successNormalColor,
+        TProgressStatus.normal: token.brandColor,
+        TProgressStatus.warning: token.warningColor,
+        TProgressStatus.error: token.errorColor,
+        TProgressStatus.success: token.successColor,
       };
 
       for (final entry in expectedColors.entries) {
@@ -836,13 +1027,10 @@ void main() {
       final value = tester.widget<Container>(
         find.byKey(const ValueKey('progress-value')),
       );
-      expect(
-        (value.decoration! as BoxDecoration).color,
-        token.brandNormalColor,
-      );
+      expect((value.decoration! as BoxDecoration).color, token.brandColor);
     });
 
-    testWidgets('Material ProgressIndicatorTheme 显式颜色优先于 status', (
+    testWidgets('Material ProgressIndicatorTheme 不覆盖 TDesign status', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -863,7 +1051,10 @@ void main() {
       final value = tester.widget<Container>(
         find.byKey(const ValueKey('progress-value')),
       );
-      expect((value.decoration! as BoxDecoration).color, Colors.teal);
+      expect(
+        (value.decoration! as BoxDecoration).color,
+        TThemeData.defaultData().errorColor,
+      );
     });
 
     testWidgets('实例 gradient 优先并完整传递到线性填充', (tester) async {

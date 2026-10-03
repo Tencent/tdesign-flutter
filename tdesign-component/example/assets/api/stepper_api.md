@@ -8,10 +8,10 @@
 | max | num | 100 | 最大值，必须大于或等于 `min`。 |
 | min | num | 0 | 最小值，必须小于或等于 `max`。 |
 | onChanged | ValueChanged<num>? | - | 数值变化请求。 点击按钮、提交有效输入或输入框失焦时触发；一次操作最多触发一次。 为 null 时整组禁用。 |
-| size | TStepperSize? | - | 组件尺寸。 为空时依次使用 `TStepperThemeData.size` 和 `TStepperSize.medium`。 |
+| size | TStepperSize? | - | 组件尺寸。 为空时使用 `TStepperSize.medium`。 |
 | step | num | 1 | 加减按钮使用的步长，必须大于 0。 输入提交不要求是步长的整数倍，但会限制在 `min` 与 `max` 之间。 编辑时以合法输入草稿作为步进起点，并据此判断按钮是否达到边界。 |
 | value | num | - | 唯一受控数值，必须位于 `min` 与 `max` 之间。 父组件需要在 `onChanged` 后以新值重建组件，否则输入内容会恢复。 |
-| variant | TStepperVariant? | - | 组件形态。 为空时依次使用 `TStepperThemeData.variant` 和 `TStepperVariant.normal`。 |
+| variant | TStepperVariant? | - | 组件形态。 为空时使用 `TStepperVariant.normal`。 |
 
 
 ### TStepperThemeData
@@ -29,10 +29,8 @@
 | foregroundColor | Color? | - | 输入文字和加减图标的默认前景色。 |
 | iconSize | double? | - | 加减图标尺寸。 为空时 small、medium、large 分别使用 12、16、20。 |
 | inputWidth | double? | - | 输入段宽度。 为空时 small、medium、large 分别使用 34、38、45。 |
-| size | TStepperSize? | - | 默认尺寸；为空时使用 `TStepperSize.medium`。 |
 | spacing | double? | - | normal 和 filled 形态的分段间距，默认 4。 outline 始终连续排列，不使用该值。 |
-| textStyle | TextStyle? | - | 输入文字样式。 在继承 DefaultTextStyle 和 ThemeData.textTheme 后合并；非空字段可覆盖 默认字号、行高及 `foregroundColor`。仅覆盖字号时会按最终字号重新计算 默认行高倍数；显式设置的 `TextStyle.height` 始终优先。最终字号或显式 物理行盒超过控件高度属于无效配置，并会在调试模式触发断言。 |
-| variant | TStepperVariant? | - | 默认形态；为空时使用 `TStepperVariant.normal`。 |
+| textStyle | TextStyle? | - | 输入文字样式。 在继承全局 TDesign Token 后合并；非空字段可覆盖 默认字号、行高及 `foregroundColor`。仅覆盖字号时会按最终字号重新计算 默认行高倍数；显式设置的 `TextStyle.height` 始终优先。最终字号或显式 物理行盒超过控件高度属于无效配置，并会在调试模式触发断言。 |
 
 
 ### TStepperSize

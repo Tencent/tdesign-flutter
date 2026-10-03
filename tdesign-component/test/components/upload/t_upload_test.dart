@@ -295,7 +295,7 @@ void main() {
         (disabledContainer.decoration! as BoxDecoration).color,
         token.bgColorComponentDisabled,
       );
-      expect(disabledIcon.color, token.textDisabledColor);
+      expect(disabledIcon.color, token.textColorDisabled);
       expect((disabledContainer.decoration! as BoxDecoration).border, isNull);
       expect(
         (enabledContainer.decoration! as BoxDecoration).color,
@@ -502,7 +502,7 @@ void main() {
       expect(statusText.style?.color, token.textColorAnti);
       expect(statusText.style?.fontSize, token.fontBodySmall?.size);
       expect(statusText.style?.height, token.fontBodySmall?.height);
-      expect(statusOverlay.color, token.fontGyColor3);
+      expect(statusOverlay.color, token.fontGray3);
       expect(
         statusClip.borderRadius,
         BorderRadius.circular(token.radiusDefault),
@@ -555,10 +555,7 @@ void main() {
       final decoration = container.decoration! as BoxDecoration;
       expect(
         container.padding,
-        EdgeInsets.symmetric(
-          vertical: token.spacer8,
-          horizontal: token.spacer12,
-        ),
+        EdgeInsets.symmetric(vertical: token.spacer, horizontal: token.spacer1),
       );
       expect(decoration.color, token.bgColorSecondaryContainer);
       expect(
@@ -572,7 +569,7 @@ void main() {
       );
       expect(
         tester.widget<Text>(find.text('retry.png')).style?.color,
-        token.errorNormalColor,
+        token.errorColor,
       );
     });
 
@@ -784,7 +781,7 @@ void main() {
       );
       final icon = tester.widget<Icon>(find.byIcon(TIcons.file));
       expect(placeholderBox.color, token.bgColorSecondaryContainer);
-      expect(icon.color, token.textDisabledColor);
+      expect(icon.color, token.textColorDisabled);
     });
 
     testWidgets('theme controls dimensions, shape and status styling', (

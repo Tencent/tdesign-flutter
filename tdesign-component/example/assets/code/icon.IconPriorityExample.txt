@@ -8,42 +8,33 @@ class IconPriorityExample extends StatelessWidget {
   const IconPriorityExample({super.key});
 
   Widget _buildIconPriorityExample(BuildContext context) {
-    // 优先级链：构造器参数 > TIconThemeData > IconTheme
-    // 子树 TIconThemeData 设置 size=36，但构造器指定 size=20 会覆盖
-    return Theme(
-      data: Theme.of(context).copyWith(
-        extensions: [
-          ...Theme.of(context).extensions.values,
-          TIconThemeData(size: 36, color: context.tTheme.brandNormalColor),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // 构造器 size 覆盖 Theme 的 36
-              const TIcon(TIcons.home_filled, size: 20),
-              const SizedBox(width: 16),
-              // 构造器 color 覆盖 Theme 的品牌色
-              TIcon(TIcons.setting, color: context.tTheme.errorNormalColor),
-              const SizedBox(width: 16),
-              // 无构造器参数，继承 Theme 默认
-              const TIcon(TIcons.notification),
-            ],
+    // 构造器显式值覆盖 TDesign Token 默认值。
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 构造器 size 覆盖默认 24dp。
+            const TIcon(TIcons.home_filled, size: 20),
+            const SizedBox(width: 16),
+            // 构造器 color 覆盖文字主色 Token。
+            TIcon(TIcons.setting, color: context.tTheme.errorColor),
+            const SizedBox(width: 16),
+            // 无构造器参数，使用 TDesign Token 默认值。
+            const TIcon(TIcons.notification),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '↑ 前两个图标显式覆盖，第三个使用 Token 默认值',
+          style: TextStyle(
+            fontSize: 12,
+            color: context.tTheme.textColorSecondary,
           ),
-          const SizedBox(height: 4),
-          Text(
-            '↑ 前两个图标构造器覆盖 Theme，第三个继承 Theme',
-            style: TextStyle(
-              fontSize: 12,
-              color: context.tTheme.textColorSecondary,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

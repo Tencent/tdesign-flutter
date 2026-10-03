@@ -73,7 +73,7 @@ class _TCircleIndicatorState extends State<TCircleIndicator>
   @override
   Widget build(BuildContext context) {
     var value = (_animation1.value) * 2 * pi;
-    var paintColor = widget.color ?? context.tTheme.brandNormalColor;
+    var paintColor = widget.color ?? context.tTheme.brandColor;
     return Transform(
       transform: Matrix4.identity()..rotateZ(value),
       alignment: FractionalOffset.center,

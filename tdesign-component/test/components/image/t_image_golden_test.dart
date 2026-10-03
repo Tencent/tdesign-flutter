@@ -112,7 +112,7 @@ class _ImageState extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        TText(label, style: Theme.of(context).textTheme.bodySmall),
+        Text(label, style: Theme.of(context).textTheme.bodySmall),
         const SizedBox(height: 8),
         image,
       ],

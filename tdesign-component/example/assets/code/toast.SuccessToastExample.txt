@@ -11,7 +11,7 @@ class SuccessToastExample extends StatelessWidget {
         child: const Text('成功提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: () {
           TToast.showSuccess(
             '成功文案',

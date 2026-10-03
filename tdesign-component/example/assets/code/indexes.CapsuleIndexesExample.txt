@@ -18,7 +18,7 @@ Widget _buildCapsuleIndexes(BuildContext context) {
       key: const ValueKey('indexes-capsule-trigger'),
       child: const TText('胶囊索引'),
       size: TButtonSize.large,
-      colorScheme: TButtonColorScheme.primary,
+      colorPreset: TButtonColorPreset.primary,
       variant: TButtonVariant.outline,
       onPressed: () {
         TPopup.show(

@@ -12,11 +12,11 @@ class DarkShowTagsExample extends StatelessWidget {
     return const Wrap(
       spacing: 8,
       children: [
-        TTag('默认', colorScheme: TTagColorScheme.defaultTheme),
-        TTag('主要', colorScheme: TTagColorScheme.primary),
-        TTag('警告', colorScheme: TTagColorScheme.warning),
-        TTag('危险', colorScheme: TTagColorScheme.danger),
-        TTag('成功', colorScheme: TTagColorScheme.success),
+        TTag('默认', colorPreset: TTagColorPreset.defaultTheme),
+        TTag('主要', colorPreset: TTagColorPreset.primary),
+        TTag('警告', colorPreset: TTagColorPreset.warning),
+        TTag('危险', colorPreset: TTagColorPreset.danger),
+        TTag('成功', colorPreset: TTagColorPreset.success),
       ],
     );
   }
@@ -28,27 +28,27 @@ class DarkShowTagsExample extends StatelessWidget {
       children: [
         TTag(
           '默认',
-          colorScheme: TTagColorScheme.defaultTheme,
+          colorPreset: TTagColorPreset.defaultTheme,
           variant: TTagVariant.light,
         ),
         TTag(
           '主要',
-          colorScheme: TTagColorScheme.primary,
+          colorPreset: TTagColorPreset.primary,
           variant: TTagVariant.light,
         ),
         TTag(
           '警告',
-          colorScheme: TTagColorScheme.warning,
+          colorPreset: TTagColorPreset.warning,
           variant: TTagVariant.light,
         ),
         TTag(
           '危险',
-          colorScheme: TTagColorScheme.danger,
+          colorPreset: TTagColorPreset.danger,
           variant: TTagVariant.light,
         ),
         TTag(
           '成功',
-          colorScheme: TTagColorScheme.success,
+          colorPreset: TTagColorPreset.success,
           variant: TTagVariant.light,
         ),
       ],
@@ -61,27 +61,27 @@ class DarkShowTagsExample extends StatelessWidget {
       children: [
         TTag(
           '默认',
-          colorScheme: TTagColorScheme.defaultTheme,
+          colorPreset: TTagColorPreset.defaultTheme,
           variant: TTagVariant.outline,
         ),
         TTag(
           '主要',
-          colorScheme: TTagColorScheme.primary,
+          colorPreset: TTagColorPreset.primary,
           variant: TTagVariant.outline,
         ),
         TTag(
           '警告',
-          colorScheme: TTagColorScheme.warning,
+          colorPreset: TTagColorPreset.warning,
           variant: TTagVariant.outline,
         ),
         TTag(
           '危险',
-          colorScheme: TTagColorScheme.danger,
+          colorPreset: TTagColorPreset.danger,
           variant: TTagVariant.outline,
         ),
         TTag(
           '成功',
-          colorScheme: TTagColorScheme.success,
+          colorPreset: TTagColorPreset.success,
           variant: TTagVariant.outline,
         ),
       ],
@@ -94,27 +94,27 @@ class DarkShowTagsExample extends StatelessWidget {
       children: [
         TTag(
           '默认',
-          colorScheme: TTagColorScheme.defaultTheme,
+          colorPreset: TTagColorPreset.defaultTheme,
           variant: TTagVariant.lightOutline,
         ),
         TTag(
           '主要',
-          colorScheme: TTagColorScheme.primary,
+          colorPreset: TTagColorPreset.primary,
           variant: TTagVariant.lightOutline,
         ),
         TTag(
           '警告',
-          colorScheme: TTagColorScheme.warning,
+          colorPreset: TTagColorPreset.warning,
           variant: TTagVariant.lightOutline,
         ),
         TTag(
           '危险',
-          colorScheme: TTagColorScheme.danger,
+          colorPreset: TTagColorPreset.danger,
           variant: TTagVariant.lightOutline,
         ),
         TTag(
           '成功',
-          colorScheme: TTagColorScheme.success,
+          colorPreset: TTagColorPreset.success,
           variant: TTagVariant.lightOutline,
         ),
       ],

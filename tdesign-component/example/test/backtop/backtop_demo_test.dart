@@ -31,7 +31,7 @@ void main() {
     expect(backTop.controller, isNotNull);
     expect(backTop.visibilityOffset, 200);
     expect(backTop.shape, TBackTopShape.circle);
-    expect(backTop.colorScheme, TBackTopColorScheme.light);
+    expect(backTop.colorPreset, TBackTopColorPreset.light);
     expect(backTop.showText, isTrue);
 
     await disposeDemoPage(tester);
@@ -59,7 +59,7 @@ void main() {
     final floating = find.byKey(const Key('backtop-demo-floating'));
     var backTop = tester.widget<TBackTop>(floating);
     expect(backTop.shape, TBackTopShape.halfCircle);
-    expect(backTop.colorScheme, TBackTopColorScheme.dark);
+    expect(backTop.colorPreset, TBackTopColorPreset.dark);
     expect(tester.getSize(floating).height, 40);
     expect(
       tester.getTopRight(floating).dx,
@@ -73,7 +73,7 @@ void main() {
     await tester.pumpAndSettle();
     backTop = tester.widget<TBackTop>(floating);
     expect(backTop.shape, TBackTopShape.circle);
-    expect(backTop.colorScheme, TBackTopColorScheme.light);
+    expect(backTop.colorPreset, TBackTopColorPreset.light);
     expect(tester.getSize(floating), const Size(48, 48));
 
     await disposeDemoPage(tester);

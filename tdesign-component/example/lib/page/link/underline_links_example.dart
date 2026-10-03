@@ -8,7 +8,7 @@ class UnderlineLinksExample extends StatelessWidget {
   const UnderlineLinksExample({super.key});
   Widget _buildUnderlineLinks(BuildContext context) {
     return _exampleRow(context, [
-      _link(context, colorScheme: TLinkColorScheme.primary, underline: true),
+      _link(context, colorPreset: TLinkColorPreset.primary, underline: true),
       _link(context, underline: true),
     ]);
   }
@@ -27,7 +27,7 @@ class UnderlineLinksExample extends StatelessWidget {
   TLink _link(
     BuildContext context, {
     String label = '跳转链接',
-    TLinkColorScheme? colorScheme,
+    TLinkColorPreset? colorPreset,
     TLinkSize size = TLinkSize.small,
     bool? underline,
     Widget? prefixIcon,
@@ -36,7 +36,7 @@ class UnderlineLinksExample extends StatelessWidget {
   }) {
     return TLink(
       child: Text(label),
-      colorScheme: colorScheme,
+      colorPreset: colorPreset,
       size: size,
       underline: underline,
       prefixIcon: prefixIcon,

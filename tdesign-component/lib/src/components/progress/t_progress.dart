@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_progress_circular.dart';
+import 't_progress_defaults.dart';
 import 't_progress_theme_data.dart';
 
 /// 进度条形态
@@ -232,35 +234,34 @@ class TProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = _theme(context);
-    final materialTheme = Theme.of(context);
-    final materialProgress = materialTheme.progressIndicatorTheme;
-    final colorScheme = materialTheme.tExplicitColorScheme;
     final defaultValues = _getDefaultValues(context, variant);
 
-    final strokeWidth = theme?.strokeWidth ?? defaultValues.strokeWidth;
-    final materialTrackColor = switch (variant) {
-      TProgressVariant.circular ||
-      TProgressVariant.microCircular ||
-      TProgressVariant.microButton => materialProgress.circularTrackColor,
-      TProgressVariant.linear ||
-      TProgressVariant.plump ||
-      TProgressVariant.button => materialProgress.linearTrackColor,
-    };
+    final strokeWidth =
+        theme?.resolveStrokeWidth(defaultValues.strokeWidth) ??
+        defaultValues.strokeWidth;
+    final trackFallback = defaultValues.backgroundColor;
     final backgroundColor =
-        theme?.backgroundColor ??
-        materialTrackColor ??
-        colorScheme?.surfaceContainerHighest ??
-        defaultValues.backgroundColor;
+        theme?.resolveBackgroundColor(trackFallback) ?? trackFallback;
+    final circleInnerBgFallback =
+        Theme.of(context).brightness == Brightness.dark
+        ? Colors.transparent
+        : context.tTheme.bgColorContainer;
+    final circleInnerBgColor =
+        theme?.resolveCircleInnerBgColor(circleInnerBgFallback) ??
+        circleInnerBgFallback;
     final linearBorderRadius =
-        theme?.linearBorderRadius ?? defaultValues.linearBorderRadius;
-    final circleRadius = theme?.circleRadius ?? defaultValues.circleRadius;
-    final color =
-        theme?.color ?? materialProgress.color ?? _statusColor(context, status);
+        theme?.resolveLinearBorderRadius(defaultValues.linearBorderRadius) ??
+        defaultValues.linearBorderRadius;
+    final circleRadius =
+        theme?.resolveCircleSize(defaultValues.circleRadius) ??
+        defaultValues.circleRadius;
+    final colorFallback = _statusColor(context, status);
+    final color = theme?.resolveColor(colorFallback) ?? colorFallback;
     final animationDuration =
-        theme?.animationDuration ?? const Duration(milliseconds: 300);
+        theme?.animationDuration ?? TProgressDefaults.animationDuration;
     final indeterminateAnimationDuration =
         theme?.indeterminateAnimationDuration ??
-        const Duration(milliseconds: 1200);
+        TProgressDefaults.indeterminateAnimationDuration;
     if (indeterminateAnimationDuration <= Duration.zero) {
       throw FlutterError(
         'TProgressThemeData.indeterminateAnimationDuration must be '
@@ -268,9 +269,11 @@ class TProgress extends StatelessWidget {
       );
     }
     final indeterminateLinearSegmentFraction =
-        theme?.indeterminateLinearSegmentFraction ?? 0.32;
+        theme?.indeterminateLinearSegmentFraction ??
+        TProgressDefaults.indeterminateLinearSegmentFraction;
     final indeterminateCircularValue =
-        theme?.indeterminateCircularValue ?? 0.25;
+        theme?.indeterminateCircularValue ??
+        TProgressDefaults.indeterminateCircularValue;
 
     final indicator = _ProgressIndicator(
       value: value,
@@ -286,6 +289,7 @@ class TProgress extends StatelessWidget {
       linearBorderRadius: linearBorderRadius,
       color: color,
       backgroundColor: backgroundColor,
+      circleInnerBgColor: circleInnerBgColor,
       type: variant,
       animationDuration: animationDuration,
       indeterminateAnimationDuration: indeterminateAnimationDuration,
@@ -322,37 +326,37 @@ class TProgress extends StatelessWidget {
     switch (type) {
       case TProgressVariant.linear:
         return _DefaultValues(
-          strokeWidth: _ProgressDefaults.linearStrokeWidth,
+          strokeWidth: TProgressDefaults.linearStrokeWidth,
           backgroundColor: context.tTheme.bgColorComponent,
           linearBorderRadius: BorderRadius.circular(context.tTheme.radiusRound),
           circleRadius: 0,
         );
       case TProgressVariant.plump:
         return _DefaultValues(
-          strokeWidth: _ProgressDefaults.plumpHeight,
+          strokeWidth: TProgressDefaults.plumpHeight,
           backgroundColor: context.tTheme.bgColorComponent,
           linearBorderRadius: BorderRadius.circular(context.tTheme.radiusRound),
           circleRadius: 0,
         );
       case TProgressVariant.circular:
         return _DefaultValues(
-          strokeWidth: _ProgressDefaults.circularStrokeWidth,
+          strokeWidth: TProgressDefaults.circularStrokeWidth,
           backgroundColor: context.tTheme.bgColorComponent,
           linearBorderRadius: BorderRadius.circular(context.tTheme.radiusRound),
-          circleRadius: _ProgressDefaults.circularSize,
+          circleRadius: TProgressDefaults.circularSize,
         );
       case TProgressVariant.microCircular:
       case TProgressVariant.microButton:
         return _DefaultValues(
-          strokeWidth: _ProgressDefaults.microCircularStrokeWidth,
+          strokeWidth: TProgressDefaults.microCircularStrokeWidth,
           backgroundColor: context.tTheme.bgColorComponent,
           linearBorderRadius: BorderRadius.circular(context.tTheme.radiusRound),
-          circleRadius: _ProgressDefaults.microCircularSize,
+          circleRadius: TProgressDefaults.microCircularSize,
         );
       case TProgressVariant.button:
         return _DefaultValues(
-          strokeWidth: _ProgressDefaults.buttonHeight,
-          backgroundColor: context.tTheme.brandNormalColor,
+          strokeWidth: TProgressDefaults.buttonHeight,
+          backgroundColor: context.tTheme.brandColor,
           linearBorderRadius: BorderRadius.circular(
             context.tTheme.radiusDefault,
           ),
@@ -363,26 +367,11 @@ class TProgress extends StatelessWidget {
 
   Color _statusColor(BuildContext context, TProgressStatus status) =>
       switch (status) {
-        TProgressStatus.normal => context.tTheme.brandNormalColor,
-        TProgressStatus.warning => context.tTheme.warningNormalColor,
-        TProgressStatus.error => context.tTheme.errorNormalColor,
-        TProgressStatus.success => context.tTheme.successNormalColor,
+        TProgressStatus.normal => context.tTheme.brandColor,
+        TProgressStatus.warning => context.tTheme.warningColor,
+        TProgressStatus.error => context.tTheme.errorColor,
+        TProgressStatus.success => context.tTheme.successColor,
       };
-}
-
-abstract final class _ProgressDefaults {
-  static const linearStrokeWidth = 6.0;
-  static const plumpHeight = 20.0;
-  static const circularStrokeWidth = 6.0;
-  static const circularSize = 112.0;
-  static const microCircularStrokeWidth = 2.0;
-  static const microCircularSize = 24.0;
-  static const buttonHeight = 48.0;
-
-  static const linearStatusIconSize = 22.0;
-  static const plumpStatusIconSize = 20.0;
-  static const circularStatusIconSize = 48.0;
-  static const microButtonHitTarget = 44.0;
 }
 
 class _DefaultValues {
@@ -413,6 +402,7 @@ class _ProgressIndicator extends StatefulWidget {
   final BorderRadiusGeometry linearBorderRadius;
   final Color color;
   final Color backgroundColor;
+  final Color circleInnerBgColor;
   final TProgressVariant type;
   final Duration animationDuration;
   final Duration indeterminateAnimationDuration;
@@ -434,11 +424,15 @@ class _ProgressIndicator extends StatefulWidget {
     required this.circleRadius,
     required this.color,
     required this.backgroundColor,
+    required this.circleInnerBgColor,
     required this.type,
-    this.animationDuration = const Duration(milliseconds: 300),
-    this.indeterminateAnimationDuration = const Duration(milliseconds: 1200),
-    this.indeterminateLinearSegmentFraction = 0.32,
-    this.indeterminateCircularValue = 0.25,
+    this.animationDuration = TProgressDefaults.animationDuration,
+    this.indeterminateAnimationDuration =
+        TProgressDefaults.indeterminateAnimationDuration,
+    this.indeterminateLinearSegmentFraction =
+        TProgressDefaults.indeterminateLinearSegmentFraction,
+    this.indeterminateCircularValue =
+        TProgressDefaults.indeterminateCircularValue,
   }) : super(key: key);
 
   @override
@@ -598,16 +592,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
       case TProgressVariant.microButton:
         final progress = RotationTransition(
           turns: _animationController,
-          child: SizedBox.square(
-            dimension: widget.circleRadius,
-            child: TProgressCircular(
-              strokeWidth: widget.strokeWidth,
-              circleRadius: widget.circleRadius,
-              value: widget.indeterminateCircularValue,
-              backgroundColor: widget.backgroundColor,
-              valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
-            ),
-          ),
+          child: _buildCircleCanvas(widget.indeterminateCircularValue),
         );
         if (widget.type == TProgressVariant.microButton) {
           return _buildMicroButtonHitTarget(progress);
@@ -674,7 +659,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
             return Row(
               children: [
                 Expanded(child: _buildInsideLabel()),
-                SizedBox(width: context.tTheme.spacer8),
+                SizedBox(width: context.tTheme.spacer),
                 _buildExternalStatusIcon(),
               ],
             );
@@ -700,7 +685,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
       icon,
       key: ValueKey('progress-${widget.status.name}'),
       color: _effectiveColor,
-      size: _ProgressDefaults.plumpStatusIconSize,
+      size: TProgressDefaults.plumpStatusIconSize,
     );
   }
 
@@ -751,7 +736,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
           textDirection: TextDirection.rtl,
           children: [
             _buildLabelWidget(context.tTheme.textColorPrimary),
-            SizedBox(width: context.tTheme.spacer8),
+            SizedBox(width: context.tTheme.spacer),
             Expanded(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
@@ -809,7 +794,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
         alignment: Alignment.centerRight,
         child: Padding(
           key: const ValueKey('progress-inside-label-padding'),
-          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer8),
+          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer),
           child: _buildLabelWidget(context.tTheme.textColorAnti),
         ),
       ),
@@ -847,7 +832,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer8),
+          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer),
           child: _buildLabelWidget(context.tTheme.textColorPrimary),
         ),
       ],
@@ -884,9 +869,9 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
       _ => FontWeight.w400,
     };
     final iconSize = switch (widget.type) {
-      TProgressVariant.linear => _ProgressDefaults.linearStatusIconSize,
-      TProgressVariant.plump => _ProgressDefaults.plumpStatusIconSize,
-      TProgressVariant.circular => _ProgressDefaults.circularStatusIconSize,
+      TProgressVariant.linear => TProgressDefaults.linearStatusIconSize,
+      TProgressVariant.plump => TProgressDefaults.plumpStatusIconSize,
+      TProgressVariant.circular => TProgressDefaults.circularStatusIconSize,
       TProgressVariant.microCircular ||
       TProgressVariant.microButton => widget.circleRadius * 0.5,
       TProgressVariant.button => tokenFont?.size ?? fallbackFontSize,
@@ -899,11 +884,14 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
       data: IconThemeData(color: iconColor, size: iconSize),
       child: DefaultTextStyle(
         key: const ValueKey('progress-label-style'),
-        style: DefaultTextStyle.of(context).style.copyWith(
+        style: TextStyle(
           color: labelColor,
           fontSize: tokenFont?.size ?? fallbackFontSize,
           height: tokenFont?.height ?? fallbackLineHeight,
           fontWeight: tokenFont?.fontWeight ?? fallbackFontWeight,
+          fontFamily: context.tTheme.fontFamily?.flutterFontFamily,
+          fontFamilyFallback:
+              context.tTheme.fontFamily?.flutterFontFamilyFallback,
           letterSpacing: 0,
         ),
         child: _effectiveLabel,
@@ -918,17 +906,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
         return Stack(
           alignment: Alignment.center,
           children: [
-            SizedBox(
-              height: widget.circleRadius,
-              width: widget.circleRadius,
-              child: TProgressCircular(
-                strokeWidth: widget.strokeWidth,
-                circleRadius: widget.circleRadius,
-                value: _animation.value,
-                backgroundColor: widget.backgroundColor,
-                valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
-              ),
-            ),
+            _buildCircleCanvas(_animation.value),
             if (_showsLabel) _buildLabelWidget(context.tTheme.textColorPrimary),
           ],
         );
@@ -960,21 +938,42 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
     onLongPress: widget.onLongPress,
     child: SizedBox.square(
       key: const ValueKey('progress-micro-button-hit-target'),
-      dimension: _ProgressDefaults.microButtonHitTarget,
+      dimension: TProgressDefaults.microButtonHitTarget,
       child: Center(child: child),
     ),
   );
 
   Widget _buildMicroOutline() {
-    return SizedBox(
-      height: widget.circleRadius,
-      width: widget.circleRadius,
-      child: TProgressCircular(
-        strokeWidth: widget.strokeWidth,
-        circleRadius: widget.circleRadius,
-        value: _animation.value,
-        backgroundColor: widget.backgroundColor,
-        valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
+    return _buildCircleCanvas(_animation.value);
+  }
+
+  Widget _buildCircleCanvas(double value) {
+    return SizedBox.square(
+      dimension: widget.circleRadius,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          SizedBox.square(
+            key: const ValueKey('progress-circle-inner'),
+            dimension: (widget.circleRadius - widget.strokeWidth * 2).clamp(
+              0.0,
+              double.infinity,
+            ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: widget.circleInnerBgColor,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          TProgressCircular(
+            strokeWidth: widget.strokeWidth,
+            circleRadius: widget.circleRadius,
+            value: value,
+            backgroundColor: widget.backgroundColor,
+            valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
+          ),
+        ],
       ),
     );
   }
@@ -1013,7 +1012,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
       colors: [
         _effectiveColor,
         Color.alphaBlend(
-          context.tTheme.fontWhColor1.withValues(alpha: 0.3),
+          context.tTheme.fontWhite1.withValues(alpha: 0.3),
           _effectiveColor,
         ),
       ],
@@ -1030,7 +1029,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
     return Container(
       height: widget.strokeWidth,
       alignment: Alignment.center,
-      child: _buildLabelWidget(context.tTheme.fontWhColor1),
+      child: _buildLabelWidget(context.tTheme.fontWhite1),
     );
   }
 }

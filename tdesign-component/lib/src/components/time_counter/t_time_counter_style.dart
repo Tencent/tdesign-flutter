@@ -56,8 +56,14 @@ class _TTimeCounterStyle {
     TTimeCounterSize? size,
     TTimeCounterVariant? variant,
     bool? splitWithUnit,
+    TTimeCounterThemeData? componentTheme,
   }) {
-    timeFontFamily = context.tTheme.numberFontFamily;
+    // TimeCounter has no corresponding mini-program global number font token.
+    timeFontFamily = FontFamily(
+      fontFamily: 'TCloudNumber',
+      package: 'tdesign_flutter',
+    );
+    final largeNumberFont = Font(size: 18, lineHeight: 26);
     final effectiveSize = size ?? TTimeCounterSize.medium;
     final effectiveVariant = variant ?? TTimeCounterVariant.plain;
     final hasUnit = splitWithUnit ?? false;
@@ -85,7 +91,7 @@ class _TTimeCounterStyle {
         dotSpace = 3;
         break;
       case TTimeCounterSize.large:
-        defaultFont = context.tTheme.fontBodyExtraLarge;
+        defaultFont = largeNumberFont;
         blockFont = context.tTheme.fontBodyLarge;
         unitFont = context.tTheme.fontBodyMedium;
         blockExtent = 28;
@@ -95,7 +101,7 @@ class _TTimeCounterStyle {
 
     final timeFont = switch (effectiveVariant) {
       TTimeCounterVariant.plain => defaultFont,
-      TTimeCounterVariant.highlight => context.tTheme.fontBodyExtraLarge,
+      TTimeCounterVariant.highlight => largeNumberFont,
       TTimeCounterVariant.round || TTimeCounterVariant.square => blockFont,
     };
     final splitFont = hasUnit
@@ -126,31 +132,40 @@ class _TTimeCounterStyle {
 
     switch (effectiveVariant) {
       case TTimeCounterVariant.round:
+        final radius =
+            componentTheme?.roundBorderRadius ?? context.tTheme.radiusCircle;
         timeBox = BoxDecoration(
-          shape: BoxShape.circle,
-          color: context.tTheme.errorNormalColor,
+          borderRadius: BorderRadius.circular(radius),
+          color:
+              componentTheme?.blockBackgroundColor ?? context.tTheme.errorColor,
         );
-        timeColor = context.tTheme.textColorAnti;
-        splitColor = context.tTheme.errorNormalColor;
+        timeColor =
+            componentTheme?.blockTextColor ?? context.tTheme.textColorAnti;
+        splitColor = context.tTheme.errorColor;
         break;
       case TTimeCounterVariant.square:
         timeBox = BoxDecoration(
           shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(context.tTheme.radiusSmall),
-          color: context.tTheme.errorNormalColor,
+          borderRadius: BorderRadius.circular(
+            componentTheme?.squareBorderRadius ?? context.tTheme.radiusSmall,
+          ),
+          color:
+              componentTheme?.blockBackgroundColor ?? context.tTheme.errorColor,
         );
-        timeColor = context.tTheme.textColorAnti;
-        splitColor = context.tTheme.errorNormalColor;
+        timeColor =
+            componentTheme?.blockTextColor ?? context.tTheme.textColorAnti;
+        splitColor = context.tTheme.errorColor;
         break;
       case TTimeCounterVariant.plain:
         timeBox = null;
-        timeColor = splitColor = context.tTheme.textColorPrimary;
+        timeColor = splitColor =
+            componentTheme?.defaultTextColor ?? context.tTheme.textColorPrimary;
         timeWidth = null;
         timeHeight = null;
         break;
       case TTimeCounterVariant.highlight:
         timeBox = null;
-        timeColor = context.tTheme.errorNormalColor;
+        timeColor = context.tTheme.errorColor;
         splitColor = context.tTheme.textColorPrimary;
         timeWidth = null;
         timeHeight = null;

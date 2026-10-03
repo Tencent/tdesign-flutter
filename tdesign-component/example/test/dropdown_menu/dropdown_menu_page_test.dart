@@ -107,7 +107,7 @@ void main() {
     final selectedIcon = tester.widget<Icon>(find.byIcon(TIcons.check));
     final tokens = TThemeData.defaultData();
     expect(selectedText.style?.color, tokens.textColorPrimary);
-    expect(selectedIcon.color, tokens.brandNormalColor);
+    expect(selectedIcon.color, tokens.brandColor);
   });
 
   testWidgets('三列多选展开态与设计稿一致', (tester) async {

@@ -74,17 +74,11 @@ class TLoading extends StatelessWidget {
 
   Widget _contentWidget(BuildContext context) {
     final theme = _effectiveTheme(context);
-    final materialTheme = Theme.of(context);
-    final colorScheme = materialTheme.tExplicitColorScheme;
     final effectiveAxis = theme.axis ?? Axis.horizontal;
     final defaultIconColor = icon == TLoadingIcon.activity
         ? context.tTheme.textColorPrimary
-        : context.tTheme.brandNormalColor;
-    final effectiveIconColor =
-        theme.iconColor ??
-        materialTheme.progressIndicatorTheme.color ??
-        colorScheme?.primary ??
-        defaultIconColor;
+        : context.tTheme.brandColor;
+    final effectiveIconColor = theme.iconColor ?? defaultIconColor;
     final effectiveCustomIcon = customIcon;
     final effectiveDuration = theme.duration ?? 800;
     final effectiveRefreshWidget = refreshWidget;
@@ -151,13 +145,12 @@ class TLoading extends StatelessWidget {
   ) {
     Widget result = TText(
       text ?? '',
-      textColor:
-          theme.textColor ??
-          Theme.of(context).tExplicitColorScheme?.onSurface ??
-          context.tTheme.textColorPrimary,
-      fontWeight: FontWeight.w400,
       font: context.tTheme.fontBodyMedium ?? Font(size: 14, lineHeight: 22),
       textAlign: TextAlign.center,
+      style: TextStyle(
+        color: theme.textColor ?? context.tTheme.textColorPrimary,
+        fontWeight: FontWeight.w400,
+      ),
     );
     if (refreshWidget != null) {
       result = Row(

@@ -2,8 +2,6 @@ import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 
-import 't_cell.dart' show TCellAlign;
-
 /// 单元格组视觉形态。
 enum TCellGroupVariant {
   /// 通栏形态。
@@ -16,6 +14,7 @@ enum TCellGroupVariant {
 /// Cell 与 CellGroup 的组件级 ThemeExtension。
 ///
 /// 仅保存视觉和布局默认值，不保存内容、回调或列表数据。
+/// 文字样式按字段覆盖全局 Token 派生的组件默认值；未配置字段保持默认。
 class TCellThemeData extends ThemeExtension<TCellThemeData> {
   const TCellThemeData({
     this.titleStyle,
@@ -32,10 +31,8 @@ class TCellThemeData extends ThemeExtension<TCellThemeData> {
     this.cardBorderRadius,
     this.cardPadding,
     this.titlePadding,
-    this.align,
     this.showBottomBorder,
     this.height,
-    this.groupVariant,
     this.groupBordered,
     this.showLastDivider,
   });
@@ -82,17 +79,11 @@ class TCellThemeData extends ThemeExtension<TCellThemeData> {
   /// 组标题内边距。
   final EdgeInsetsGeometry? titlePadding;
 
-  /// 默认内容对齐方式。
-  final TCellAlign? align;
-
   /// 是否显示 Cell 底部分隔线。
   final bool? showBottomBorder;
 
   /// Cell 固定高度。
   final double? height;
-
-  /// CellGroup 默认形态。
-  final TCellGroupVariant? groupVariant;
 
   /// 是否显示组外边框。
   final bool? groupBordered;
@@ -116,10 +107,8 @@ class TCellThemeData extends ThemeExtension<TCellThemeData> {
     BorderRadius? cardBorderRadius,
     EdgeInsetsGeometry? cardPadding,
     EdgeInsetsGeometry? titlePadding,
-    TCellAlign? align,
     bool? showBottomBorder,
     double? height,
-    TCellGroupVariant? groupVariant,
     bool? groupBordered,
     bool? showLastDivider,
   }) {
@@ -138,10 +127,8 @@ class TCellThemeData extends ThemeExtension<TCellThemeData> {
       cardBorderRadius: cardBorderRadius ?? this.cardBorderRadius,
       cardPadding: cardPadding ?? this.cardPadding,
       titlePadding: titlePadding ?? this.titlePadding,
-      align: align ?? this.align,
       showBottomBorder: showBottomBorder ?? this.showBottomBorder,
       height: height ?? this.height,
-      groupVariant: groupVariant ?? this.groupVariant,
       groupBordered: groupBordered ?? this.groupBordered,
       showLastDivider: showLastDivider ?? this.showLastDivider,
     );
@@ -157,23 +144,30 @@ class TCellThemeData extends ThemeExtension<TCellThemeData> {
       requiredStyle: TextStyle.lerp(requiredStyle, other.requiredStyle, t),
       subtitleStyle: TextStyle.lerp(subtitleStyle, other.subtitleStyle, t),
       noteStyle: TextStyle.lerp(noteStyle, other.noteStyle, t),
-      groupTitleStyle:
-          TextStyle.lerp(groupTitleStyle, other.groupTitleStyle, t),
+      groupTitleStyle: TextStyle.lerp(
+        groupTitleStyle,
+        other.groupTitleStyle,
+        t,
+      ),
       arrowColor: Color.lerp(arrowColor, other.arrowColor, t),
       borderColor: Color.lerp(borderColor, other.borderColor, t),
       groupBorderColor: Color.lerp(groupBorderColor, other.groupBorderColor, t),
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
       pressedColor: Color.lerp(pressedColor, other.pressedColor, t),
       padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
-      cardBorderRadius:
-          BorderRadius.lerp(cardBorderRadius, other.cardBorderRadius, t),
+      cardBorderRadius: BorderRadius.lerp(
+        cardBorderRadius,
+        other.cardBorderRadius,
+        t,
+      ),
       cardPadding: EdgeInsetsGeometry.lerp(cardPadding, other.cardPadding, t),
-      titlePadding:
-          EdgeInsetsGeometry.lerp(titlePadding, other.titlePadding, t),
-      align: t < 0.5 ? align : other.align,
+      titlePadding: EdgeInsetsGeometry.lerp(
+        titlePadding,
+        other.titlePadding,
+        t,
+      ),
       showBottomBorder: t < 0.5 ? showBottomBorder : other.showBottomBorder,
       height: lerpDouble(height, other.height, t),
-      groupVariant: t < 0.5 ? groupVariant : other.groupVariant,
       groupBordered: t < 0.5 ? groupBordered : other.groupBordered,
       showLastDivider: t < 0.5 ? showLastDivider : other.showLastDivider,
     );

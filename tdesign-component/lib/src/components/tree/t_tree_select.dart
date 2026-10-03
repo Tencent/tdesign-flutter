@@ -6,6 +6,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_tree_select_theme_data.dart';
 
 const _kTreeSelectHeight = 336.0;
@@ -101,8 +102,8 @@ class _TTreeSelectState extends State<TTreeSelect> {
 
   List<Object?> get _effectiveActivePath =>
       _activePath.isEmpty && widget.value.isEmpty
-          ? _defaultActivePath()
-          : _activePath;
+      ? _defaultActivePath()
+      : _activePath;
 
   @override
   void initState() {
@@ -115,7 +116,8 @@ class _TTreeSelectState extends State<TTreeSelect> {
     super.didUpdateWidget(oldWidget);
     final valueChanged = !_pathsEqual(oldWidget.value, widget.value);
     if (valueChanged) {
-      final reflectsLocalSelection = _lastEmittedValue != null &&
+      final reflectsLocalSelection =
+          _lastEmittedValue != null &&
           _pathsEqual(_lastEmittedValue!, widget.value);
       _lastEmittedValue = null;
       if (!reflectsLocalSelection) {
@@ -331,33 +333,26 @@ class _TTreeSelectState extends State<TTreeSelect> {
         itemCount: options.length,
         itemBuilder: (context, index) {
           final option = options[index];
-          final path = <Object?>[
-            ...activePath.take(level),
-            option.value,
-          ];
+          final path = <Object?>[...activePath.take(level), option.value];
           final isBranch = option.children.isNotEmpty;
           final selected = isBranch
               ? level < activePath.length && activePath[level] == option.value
               : widget.value.any((value) => listEquals(value, path));
-          final previousSelected = level == 0 &&
+          final previousSelected =
+              level == 0 &&
               index > 0 &&
               _isColumnOptionSelected(
                 options[index - 1],
-                [
-                  ...activePath.take(level),
-                  options[index - 1].value,
-                ],
+                [...activePath.take(level), options[index - 1].value],
                 level,
                 activePath,
               );
-          final nextSelected = level == 0 &&
+          final nextSelected =
+              level == 0 &&
               index < options.length - 1 &&
               _isColumnOptionSelected(
                 options[index + 1],
-                [
-                  ...activePath.take(level),
-                  options[index + 1].value,
-                ],
+                [...activePath.take(level), options[index + 1].value],
                 level,
                 activePath,
               );
@@ -404,27 +399,24 @@ class _TTreeSelectState extends State<TTreeSelect> {
     final itemHeight = theme?.itemHeight ?? _kItemHeight;
     final selectedBackgroundColor =
         theme?.selectedBackgroundColor ?? context.tTheme.bgColorContainer;
-    final indicatorColor =
-        theme?.indicatorColor ?? context.tTheme.brandNormalColor;
+    final indicatorColor = theme?.indicatorColor ?? context.tTheme.brandColor;
     final defaultStyle = TextStyle(
       color: context.tTheme.textColorPrimary,
       fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
       fontWeight: FontWeight.w400,
     );
     final selectedStyle = defaultStyle.copyWith(
-      color: context.tTheme.brandNormalColor,
+      color: context.tTheme.brandColor,
       fontWeight: FontWeight.w600,
     );
     final effectiveTextStyle = option.disabled
         ? theme?.disabledTextStyle ??
-            defaultStyle.copyWith(
-              color: context.tTheme.textDisabledColor,
-            )
+              defaultStyle.copyWith(color: context.tTheme.textColorDisabled)
         : selected && theme?.selectedTextStyle != null
-            ? theme!.selectedTextStyle!
-            : selected && (isRoot || isBranch)
-                ? selectedStyle
-                : theme?.textStyle ?? defaultStyle;
+        ? theme!.selectedTextStyle!
+        : selected && (isRoot || isBranch)
+        ? selectedStyle
+        : theme?.textStyle ?? defaultStyle;
     final showIndicator = selected && !isBranch;
     return Semantics(
       selected: selected,
@@ -446,8 +438,8 @@ class _TTreeSelectState extends State<TTreeSelect> {
           onTap: option.disabled
               ? null
               : () => isBranch
-                  ? _openBranch(path)
-                  : _toggleLeaf(List.unmodifiable(path)),
+                    ? _openBranch(path)
+                    : _toggleLeaf(List.unmodifiable(path)),
         ),
       ),
     );
@@ -469,11 +461,7 @@ class _TTreeSelectState extends State<TTreeSelect> {
     if (next.length == widget.value.length) {
       next.add(path);
     }
-    _emitSelection(
-      List.unmodifiable(
-        next.map(List<Object?>.unmodifiable),
-      ),
-    );
+    _emitSelection(List.unmodifiable(next.map(List<Object?>.unmodifiable)));
   }
 
   void _emitSelection(List<List<Object?>> value) {
@@ -534,9 +522,7 @@ class _TreeOptionTile extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           if (selected && root)
-            Positioned.fill(
-              child: ColoredBox(color: selectedBackgroundColor),
-            ),
+            Positioned.fill(child: ColoredBox(color: selectedBackgroundColor)),
           if (selected && root)
             PositionedDirectional(
               start: 0,
@@ -553,10 +539,7 @@ class _TreeOptionTile extends StatelessWidget {
               top: 0,
               right: 0,
               child: CustomPaint(
-                size: const Size(
-                  _kOutwardCornerRadius,
-                  _kOutwardCornerRadius,
-                ),
+                size: const Size(_kOutwardCornerRadius, _kOutwardCornerRadius),
                 painter: _OutwardCornerPainter(
                   color: selectedBackgroundColor,
                   corner: _Corner.topRight,
@@ -568,10 +551,7 @@ class _TreeOptionTile extends StatelessWidget {
               right: 0,
               bottom: 0,
               child: CustomPaint(
-                size: const Size(
-                  _kOutwardCornerRadius,
-                  _kOutwardCornerRadius,
-                ),
+                size: const Size(_kOutwardCornerRadius, _kOutwardCornerRadius),
                 painter: _OutwardCornerPainter(
                   color: selectedBackgroundColor,
                   corner: _Corner.bottomRight,
@@ -585,7 +565,7 @@ class _TreeOptionTile extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16, right: 12),
-                    child: TText(
+                    child: TTextStyled(
                       label,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -597,11 +577,7 @@ class _TreeOptionTile extends StatelessWidget {
                   SizedBox(
                     width: 56,
                     height: height,
-                    child: Icon(
-                      TIcons.check,
-                      size: 24,
-                      color: indicatorColor,
-                    ),
+                    child: Icon(TIcons.check, size: 24, color: indicatorColor),
                   ),
               ],
             ),
@@ -613,16 +589,10 @@ class _TreeOptionTile extends StatelessWidget {
   }
 }
 
-enum _Corner {
-  topRight,
-  bottomRight,
-}
+enum _Corner { topRight, bottomRight }
 
 class _OutwardCornerPainter extends CustomPainter {
-  const _OutwardCornerPainter({
-    required this.color,
-    required this.corner,
-  });
+  const _OutwardCornerPainter({required this.color, required this.corner});
 
   final Color color;
   final _Corner corner;

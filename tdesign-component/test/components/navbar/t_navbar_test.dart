@@ -145,15 +145,17 @@ void main() {
       expect(style.color, Colors.red);
     });
 
-    testWidgets('构造器参数优先级高于 Theme', (tester) async {
+    testWidgets('标题自身 TextStyle 优先于 Theme 默认颜色', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TNavBar(title: Text('优先级测试'), titleColor: Colors.blue),
+          const TNavBar(
+            title: Text('优先级测试', style: TextStyle(color: Colors.blue)),
+          ),
           navBarTheme: const TNavBarThemeData(titleColor: Colors.red),
         ),
       );
       final style = effectiveTextStyle(tester, '优先级测试');
-      // 构造器 titleColor 蓝色应覆盖 Theme 红色
+      // 内容 Widget 的显式颜色优先于 NavBar Theme 默认色。
       expect(style.color, Colors.blue);
     });
 

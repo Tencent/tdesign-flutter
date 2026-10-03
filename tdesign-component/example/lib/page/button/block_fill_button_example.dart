@@ -15,7 +15,7 @@ class BlockFillButtonExample extends StatelessWidget {
           child: const Text('填充按钮'),
           size: TButtonSize.large,
           variant: TButtonVariant.fill,
-          colorScheme: TButtonColorScheme.primary,
+          colorPreset: TButtonColorPreset.primary,
           onPressed: () => _onTap(context),
         ),
       ),

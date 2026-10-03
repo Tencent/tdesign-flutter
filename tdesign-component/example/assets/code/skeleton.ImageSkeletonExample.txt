@@ -11,9 +11,9 @@ class ImageSkeletonExample extends StatelessWidget {
       (context) => Container(
         alignment: Alignment.topLeft,
         padding: EdgeInsets.fromLTRB(
-          context.tTheme.spacer16,
+          context.tTheme.spacer2,
           0,
-          context.tTheme.spacer16,
+          context.tTheme.spacer2,
           0,
         ),
         child: isFlexible

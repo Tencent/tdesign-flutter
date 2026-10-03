@@ -22,7 +22,6 @@ class TCollapse<T extends Object> extends StatefulWidget {
     this.mode = TCollapseMode.multiple,
     this.variant,
     this.animationDuration,
-    this.elevation,
     this.onChanged,
     Key? key,
   }) : super(key: key);
@@ -33,14 +32,11 @@ class TCollapse<T extends Object> extends StatefulWidget {
   /// 折叠面板模式
   final TCollapseMode mode;
 
-  /// 折叠面板视觉形态。未设置时从 [TCollapseThemeData.variant] 读取。
+  /// 折叠面板视觉形态；未设置时为 [TCollapseVariant.block]。
   final TCollapseVariant? variant;
 
-  /// 折叠面板列表的动画时长
+  /// 折叠面板展开和收起的动画时长；未设置时使用 Flutter 主题动画默认值。
   final Duration? animationDuration;
-
-  /// 折叠面板列表的阴影
-  final double? elevation;
 
   /// 当前展开面板的值列表，是所有模式唯一的展开状态源。
   ///
@@ -66,9 +62,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
   bool get _isAccordion => widget.mode == TCollapseMode.accordion;
 
   bool _isCardStyle(BuildContext context) {
-    final theme = _theme(context);
-    return (widget.variant ?? theme?.variant ?? TCollapseVariant.block) ==
-        TCollapseVariant.card;
+    return (widget.variant ?? TCollapseVariant.block) == TCollapseVariant.card;
   }
 
   @override
@@ -87,10 +81,8 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
   Widget build(BuildContext context) {
     final theme = _theme(context);
     final animationDuration =
-        widget.animationDuration ??
-        theme?.animationDuration ??
-        kThemeAnimationDuration;
-    final elevation = widget.elevation ?? theme?.elevation ?? 0;
+        widget.animationDuration ?? kThemeAnimationDuration;
+    final elevation = theme?.elevation ?? 0;
     final panels = <Widget>[];
 
     for (var index = 0; index < widget.children.length; index += 1) {
@@ -160,7 +152,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       collapse = Padding(
         padding:
             theme?.cardMargin ??
-            EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+            EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
         child: collapse,
       );
     }
@@ -277,7 +269,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       style: _contentTextStyle(context, theme),
       child: Padding(
         padding:
-            theme?.contentPadding ?? EdgeInsets.all(context.tTheme.spacer16),
+            theme?.contentPadding ?? EdgeInsets.all(context.tTheme.spacer2),
         child: child.body,
       ),
     );
@@ -315,7 +307,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
         ? _disabledHeaderTextStyle(context, theme)
         : _headerTextStyle(context, theme);
     final iconColor = isDisabled
-        ? theme?.disabledIconColor ?? context.tTheme.textDisabledColor
+        ? theme?.disabledIconColor ?? context.tTheme.textColorDisabled
         : theme?.iconColor ?? context.tTheme.textColorPlaceholder;
     return ListTile(
       leading: child.leadingBuilder == null
@@ -343,7 +335,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     }
     final theme = _theme(context);
     final color = isDisabled
-        ? theme?.disabledIconColor ?? context.tTheme.textDisabledColor
+        ? theme?.disabledIconColor ?? context.tTheme.textColorDisabled
         : theme?.iconColor ?? context.tTheme.textColorPlaceholder;
     return DefaultTextStyle(
       style: _contentTextStyle(context, theme).copyWith(color: color),
@@ -366,20 +358,20 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       if (!hasTrailing) {
         return null;
       }
-      return SizedBox(width: context.tTheme.spacer16);
+      return SizedBox(width: context.tTheme.spacer2);
     }
     final theme = _theme(context);
     final iconColor = isDisabled
-        ? theme?.disabledIconColor ?? context.tTheme.textDisabledColor
+        ? theme?.disabledIconColor ?? context.tTheme.textColorDisabled
         : theme?.iconColor ?? context.tTheme.textColorPlaceholder;
     return Padding(
       padding: hasTrailing
           ? EdgeInsetsDirectional.only(
-              end: context.tTheme.spacer16,
-              top: context.tTheme.spacer16,
-              bottom: context.tTheme.spacer16,
+              end: context.tTheme.spacer2,
+              top: context.tTheme.spacer2,
+              bottom: context.tTheme.spacer2,
             )
-          : EdgeInsets.all(context.tTheme.spacer16),
+          : EdgeInsets.all(context.tTheme.spacer2),
       child: IconTheme(
         data: IconThemeData(color: iconColor, size: 24),
         child: builder(context, isExpanded),
@@ -395,11 +387,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       height: font?.height ?? 1.5,
       fontWeight: font?.fontWeight ?? FontWeight.w400,
     );
-    final materialStyle =
-        ListTileTheme.of(context).titleTextStyle ??
-        Theme.of(context).tExplicitTextTheme?.titleMedium;
     return tokenStyle
-        .merge(materialStyle)
         .copyWith(fontWeight: FontWeight.w400)
         .merge(theme?.headerTextStyle);
   }
@@ -409,7 +397,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     TCollapseThemeData? theme,
   ) {
     return _headerTextStyle(context, theme)
-        .copyWith(color: context.tTheme.textDisabledColor)
+        .copyWith(color: context.tTheme.textColorDisabled)
         .merge(theme?.disabledHeaderTextStyle);
   }
 
@@ -421,16 +409,11 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       height: font?.height ?? 1.5,
       fontWeight: font?.fontWeight ?? FontWeight.w400,
     );
-    return tokenStyle
-        .merge(Theme.of(context).tExplicitTextTheme?.bodyMedium)
-        .merge(context.tExplicitDefaultTextStyle)
-        .merge(theme?.contentTextStyle);
+    return tokenStyle.merge(theme?.contentTextStyle);
   }
 
   Color _dividerColor(BuildContext context, TCollapseThemeData? theme) {
-    return theme?.dividerColor ??
-        DividerTheme.of(context).color ??
-        context.tTheme.componentStrokeColor;
+    return theme?.dividerColor ?? context.tTheme.componentStroke;
   }
 
   void _debugAssertValidContract() {

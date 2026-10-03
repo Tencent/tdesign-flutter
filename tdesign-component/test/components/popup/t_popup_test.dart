@@ -272,7 +272,7 @@ void main() {
       );
     });
 
-    testWidgets('overlayOpacity 与自定义颜色', (tester) async {
+    testWidgets('蒙层颜色直接携带 alpha，不再叠乘透明度', (tester) async {
       await openPopup(
         tester,
         onPressed: () {
@@ -281,7 +281,7 @@ void main() {
             options: const TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 80,
-              overlay: TPopupOverlayConfig(color: Colors.red, opacity: 0.5),
+              overlay: TPopupOverlayConfig(color: Color(0x80FF0000)),
               child: SizedBox(height: 40),
             ),
           );
@@ -289,6 +289,12 @@ void main() {
       );
       await tester.pumpAndSettle();
       await tester.pump();
+      expect(
+        tester
+            .widgetList<Container>(find.byType(Container))
+            .any((container) => container.color == const Color(0x80FF0000)),
+        isTrue,
+      );
     });
 
     testWidgets('right inset.top 可控制顶部留白', (tester) async {

@@ -15,7 +15,7 @@ class TLink extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.underline,
-    this.colorScheme,
+    this.colorPreset,
     this.size,
     this.onPressed,
     this.semanticLabel,
@@ -31,11 +31,11 @@ class TLink extends StatelessWidget {
   /// 后置图标；为 null 时不占位。
   final Widget? suffixIcon;
 
-  /// 是否显示下划线；未设置时读取 [TLinkThemeData.underline]，最终回退 false。
+  /// 是否显示下划线；未设置时为 false。
   final bool? underline;
 
-  /// 语义颜色方案；未设置时默认为 [TLinkColorScheme.defaultTheme]。
-  final TLinkColorScheme? colorScheme;
+  /// 内置配色预设；未设置时默认为 [TLinkColorPreset.defaultTheme]。
+  final TLinkColorPreset? colorPreset;
 
   /// 链接尺寸；未设置时默认为 [TLinkSize.medium]。
   final TLinkSize? size;
@@ -56,12 +56,9 @@ class TLink extends StatelessWidget {
       child: child,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
-      underline: underline ?? theme?.underline ?? false,
-      colorScheme:
-          colorScheme ??
-          theme?.defaultColorScheme ??
-          TLinkColorScheme.defaultTheme,
-      size: size ?? theme?.defaultSize ?? TLinkSize.medium,
+      underline: underline ?? false,
+      colorPreset: colorPreset ?? TLinkColorPreset.defaultTheme,
+      size: size ?? TLinkSize.medium,
       onPressed: onPressed,
       semanticLabel: semanticLabel,
       tooltip: tooltip,
@@ -76,7 +73,7 @@ class _TLinkInteraction extends StatefulWidget {
     required this.prefixIcon,
     required this.suffixIcon,
     required this.underline,
-    required this.colorScheme,
+    required this.colorPreset,
     required this.size,
     required this.onPressed,
     required this.semanticLabel,
@@ -88,7 +85,7 @@ class _TLinkInteraction extends StatefulWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final bool underline;
-  final TLinkColorScheme colorScheme;
+  final TLinkColorPreset colorPreset;
   final TLinkSize size;
   final VoidCallback? onPressed;
   final String? semanticLabel;
@@ -109,7 +106,7 @@ class _TLinkInteractionState extends State<_TLinkInteraction> {
     final disabled = widget.onPressed == null;
     final color = TLinkResolve.resolveColor(
       context: context,
-      colorScheme: widget.colorScheme,
+      colorPreset: widget.colorPreset,
       theme: widget.theme,
       isDisabled: disabled,
       isActive: !disabled && (_hovered || _focused || _pressed),

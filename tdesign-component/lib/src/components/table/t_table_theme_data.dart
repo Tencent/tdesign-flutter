@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 /// 仅保存表格的视觉默认值。
 class TTableThemeData extends ThemeExtension<TTableThemeData> {
   const TTableThemeData({
-    this.bordered,
-    this.stripe,
     this.rowHeight,
     this.headerHeight,
     this.width,
@@ -18,12 +16,6 @@ class TTableThemeData extends ThemeExtension<TTableThemeData> {
     this.borderColor,
     this.cellPadding,
   });
-
-  /// 是否显示单元格边框。
-  final bool? bordered;
-
-  /// 是否显示斑马纹。
-  final bool? stripe;
 
   /// 数据行高度。
   final double? rowHeight;
@@ -51,8 +43,6 @@ class TTableThemeData extends ThemeExtension<TTableThemeData> {
 
   @override
   TTableThemeData copyWith({
-    bool? bordered,
-    bool? stripe,
     double? rowHeight,
     double? headerHeight,
     double? width,
@@ -63,8 +53,6 @@ class TTableThemeData extends ThemeExtension<TTableThemeData> {
     EdgeInsetsGeometry? cellPadding,
   }) {
     return TTableThemeData(
-      bordered: bordered ?? this.bordered,
-      stripe: stripe ?? this.stripe,
       rowHeight: rowHeight ?? this.rowHeight,
       headerHeight: headerHeight ?? this.headerHeight,
       width: width ?? this.width,
@@ -82,8 +70,6 @@ class TTableThemeData extends ThemeExtension<TTableThemeData> {
       return this;
     }
     return TTableThemeData(
-      bordered: t < 0.5 ? bordered : other.bordered,
-      stripe: t < 0.5 ? stripe : other.stripe,
       rowHeight: lerpDouble(rowHeight, other.rowHeight, t),
       headerHeight: lerpDouble(headerHeight, other.headerHeight, t),
       width: lerpDouble(width, other.width, t),

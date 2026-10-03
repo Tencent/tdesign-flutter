@@ -12,6 +12,7 @@ import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../../util/list_ext.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_time_counter_theme_data.dart';
 import 't_time_counter_types.dart';
 
@@ -170,15 +171,14 @@ class _TTimeCounterState extends State<TTimeCounter>
 
   void _resolveStyle() {
     final tTheme = Theme.of(context).extension<TTimeCounterThemeData>();
-    final effectiveSize =
-        widget.size ?? tTheme?.defaultSize ?? TTimeCounterSize.medium;
-    final effectiveVariant =
-        widget.variant ?? tTheme?.defaultVariant ?? TTimeCounterVariant.plain;
+    final effectiveSize = widget.size ?? TTimeCounterSize.medium;
+    final effectiveVariant = widget.variant ?? TTimeCounterVariant.plain;
     _style = _TTimeCounterStyle.generateStyle(
       context,
       size: effectiveSize,
       variant: effectiveVariant,
       splitWithUnit: widget.splitWithUnit,
+      componentTheme: tTheme,
     );
   }
 
@@ -366,7 +366,7 @@ class _TTimeCounterState extends State<TTimeCounter>
         margin: _style.timeMargin,
         decoration: _style.timeBox,
         child: Center(
-          child: TText(
+          child: TTextStyled(
             time,
             style: TextStyle(
               fontFamily: _style.timeFontFamily?.fontFamily,
@@ -383,7 +383,7 @@ class _TTimeCounterState extends State<TTimeCounter>
     if (split.isNotEmpty) {
       children.addAll([
         SizedBox(width: _style.space),
-        TText(
+        TTextStyled(
           split,
           style: TextStyle(
             fontSize: _style.splitFontSize,

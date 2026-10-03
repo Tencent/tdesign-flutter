@@ -25,7 +25,7 @@
 | onSubmitted | ValueChanged<String>? | - | 提交回调。 |
 | readOnly | bool | false | 是否只读。只读时仍可获得焦点和选择文字，但不显示清除按钮。 |
 | textAlignment | TSearchBarAlignment? | - | 文本对齐方式，默认左对齐。 |
-| variant | TSearchBarVariant? | - | 搜索框形态；优先于 `TSearchBarThemeData.variant`。 |
+| variant | TSearchBarVariant? | - | 搜索框形态；未设置时为 `TSearchBarVariant.square`。 |
 
 
 ### TSearchBarThemeData
@@ -43,7 +43,6 @@
 | inputBackgroundColor | Color? | - | 输入区域背景色，默认 `bgColorSecondaryContainer` Token。 |
 | searchIconTheme | IconThemeData? | - | 搜索图标主题。 |
 | textStyle | TextStyle? | - | 输入文字样式，未设置字段继承 `fontBodyLarge` Token。 |
-| variant | TSearchBarVariant? | - | 搜索框形态。 |
 
 
 ### TSearchBarVariant

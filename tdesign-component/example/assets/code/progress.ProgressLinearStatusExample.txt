@@ -19,10 +19,7 @@ class ProgressLinearStatusExample extends StatelessWidget {
         TProgress.linear(
           value: 0.8,
           gradient: LinearGradient(
-            colors: [
-              context.tTheme.brandNormalColor,
-              context.tTheme.successNormalColor,
-            ],
+            colors: [context.tTheme.brandColor, context.tTheme.successColor],
           ),
         ),
       ],

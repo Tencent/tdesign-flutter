@@ -113,7 +113,6 @@ class TSwiper extends StatefulWidget {
     this.animationCurve = Curves.easeInOut,
     this.pagination,
     this.paginationPlacement,
-    this.paginationAlignment,
     this.paginationItemBuilder,
     this.previousIcon,
     this.nextIcon,
@@ -169,13 +168,6 @@ class TSwiper extends StatefulWidget {
 
   /// 指示器位置；为空时默认为覆盖在轮播内容上。
   final TSwiperPaginationPlacement? paginationPlacement;
-
-  /// 指示器对齐；切换按钮默认居中，其他横向指示器默认底部居中，
-  /// 其他竖向指示器默认右侧居中。
-  ///
-  /// 覆盖模式下控制指示器在轮播内容中的位置；外置模式下控制指示器
-  /// 在下方或右侧外部区域内的对齐。
-  final AlignmentGeometry? paginationAlignment;
 
   /// 自定义 dots 和 dotsBar 的单个标记。
   ///
@@ -543,7 +535,6 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
         widget.paginationPlacement ?? TSwiperPaginationPlacement.overlay;
     final effect = widget.pageEffect ?? TSwiperPageEffect.none;
     final alignment =
-        widget.paginationAlignment ??
         theme?.paginationAlignment ??
         (pagination == TSwiperPaginationVariant.controls
             ? Alignment.center
@@ -840,11 +831,9 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
               ? Icons.keyboard_arrow_down
               : Icons.keyboard_arrow_up);
     final fallbackStyle = IconButton.styleFrom(
-      backgroundColor: context.tTheme.fontGyColor3,
+      backgroundColor: context.tTheme.fontGray3,
       foregroundColor: context.tTheme.textColorAnti,
-      disabledBackgroundColor: context.tTheme.fontGyColor3.withValues(
-        alpha: 0.35,
-      ),
+      disabledBackgroundColor: context.tTheme.fontGray3.withValues(alpha: 0.35),
       disabledForegroundColor: context.tTheme.textColorAnti.withValues(
         alpha: 0.55,
       ),
@@ -852,9 +841,7 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
       tapTargetSize: MaterialTapTargetSize.padded,
       padding: EdgeInsets.zero,
     );
-    final style = fallbackStyle
-        .merge(IconButtonTheme.of(context).style)
-        .merge(theme?.controlStyle);
+    final style = fallbackStyle.merge(theme?.controlStyle);
     return SizedBox(
       width: widget.scrollDirection == Axis.horizontal ? double.infinity : null,
       height: widget.scrollDirection == Axis.vertical ? double.infinity : null,

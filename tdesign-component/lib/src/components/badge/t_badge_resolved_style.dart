@@ -33,46 +33,22 @@ class TBadgeResolvedStyle {
     AlignmentGeometry? fallbackAlignment,
     Offset? fallbackOffset,
   }) {
-    final materialTheme = Theme.of(context);
-    final localBadgeTheme = context
-        .dependOnInheritedWidgetOfExactType<BadgeTheme>()
-        ?.data;
-    final globalBadgeTheme = materialTheme.tExplicitBadgeTheme;
-    final tBadgeTheme = materialTheme.extension<TBadgeThemeData>();
+    final tBadgeTheme = Theme.of(context).extension<TBadgeThemeData>();
     final token = context.tTheme;
-    final backgroundColor =
-        localBadgeTheme?.backgroundColor ??
-        globalBadgeTheme?.backgroundColor ??
-        token.errorNormalColor;
-    final textColor =
-        localBadgeTheme?.textColor ??
-        globalBadgeTheme?.textColor ??
-        token.textColorAnti;
-    final smallSize =
-        localBadgeTheme?.smallSize ??
-        globalBadgeTheme?.smallSize ??
-        TBadgeDefaults.dotSize;
+    final backgroundColor = tBadgeTheme?.backgroundColor ?? token.errorColor;
+    final textColor = tBadgeTheme?.textStyle?.color ?? token.textColorAnti;
+    final smallSize = tBadgeTheme?.dotSize ?? TBadgeDefaults.dotSize;
     final font = large ? token.fontMarkSmall : token.fontMarkExtraSmall;
-    final materialTextStyle = large
-        ? materialTheme.tExplicitTextTheme?.labelMedium
-        : materialTheme.tExplicitTextTheme?.labelSmall;
-    final themedTextStyle =
-        localBadgeTheme?.textStyle ??
-        globalBadgeTheme?.textStyle ??
-        materialTextStyle;
-    final resolvedTextStyle =
-        themedTextStyle ??
-        TextStyle(
-          color: textColor,
-          fontSize: font?.size,
-          height: font?.height,
-          fontWeight: font?.fontWeight,
-          letterSpacing: 0,
-        );
+    final themedTextStyle = tBadgeTheme?.textStyle;
+    final resolvedTextStyle = TextStyle(
+      color: textColor,
+      fontSize: font?.size,
+      height: font?.height,
+      fontWeight: font?.fontWeight,
+      letterSpacing: 0,
+    ).merge(themedTextStyle);
     final padding =
-        localBadgeTheme?.padding ??
-        globalBadgeTheme?.padding ??
-        EdgeInsets.symmetric(horizontal: large ? 6 : 4);
+        tBadgeTheme?.padding ?? EdgeInsets.symmetric(horizontal: large ? 6 : 4);
     final tokenHeight = (font?.size ?? 0) * (font?.height ?? 0);
     final defaultLabelHeight = tokenHeight > 0
         ? tokenHeight
@@ -84,10 +60,7 @@ class TBadgeResolvedStyle {
       backgroundColor: backgroundColor,
       textColor: textColor,
       smallSize: smallSize,
-      largeSize:
-          localBadgeTheme?.largeSize ??
-          globalBadgeTheme?.largeSize ??
-          defaultLabelHeight,
+      largeSize: tBadgeTheme?.labelHeight ?? defaultLabelHeight,
       textStyle: resolvedTextStyle,
       padding: padding,
       alignment: resolveAlignment(
@@ -95,36 +68,19 @@ class TBadgeResolvedStyle {
         alignment: alignment,
         fallbackAlignment: fallbackAlignment,
       ),
-      offset:
-          offset ??
-          localBadgeTheme?.offset ??
-          globalBadgeTheme?.offset ??
-          fallbackOffset ??
-          Offset.zero,
-      borderColor:
-          tBadgeTheme?.borderColor ??
-          materialTheme.tExplicitColorScheme?.surface ??
-          token.bgColorContainer,
+      offset: offset ?? fallbackOffset ?? Offset.zero,
+      borderColor: tBadgeTheme?.borderColor ?? token.bgColorContainer,
       borderWidth: tBadgeTheme?.borderWidth ?? TBadgeDefaults.borderWidth,
     );
   }
 
-  /// 按实例、局部主题、显式全局主题和消费组件默认值解析最终对齐方式。
+  /// 按实例和消费组件默认值解析最终对齐方式。
   static AlignmentGeometry resolveAlignment(
     BuildContext context, {
     AlignmentGeometry? alignment,
     AlignmentGeometry? fallbackAlignment,
   }) {
-    final materialTheme = Theme.of(context);
-    final localBadgeTheme = context
-        .dependOnInheritedWidgetOfExactType<BadgeTheme>()
-        ?.data;
-    final globalBadgeTheme = materialTheme.tExplicitBadgeTheme;
-    return alignment ??
-        localBadgeTheme?.alignment ??
-        globalBadgeTheme?.alignment ??
-        fallbackAlignment ??
-        AlignmentDirectional.topEnd;
+    return alignment ?? fallbackAlignment ?? AlignmentDirectional.topEnd;
   }
 
   final Color backgroundColor;

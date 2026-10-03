@@ -249,7 +249,7 @@ class _TCalendarState extends State<TCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    final verticalGap = _style.verticalGap ?? context.tTheme.spacer8;
+    final verticalGap = _style.verticalGap ?? context.tTheme.spacer;
 
     final calendar = Container(
       height:
@@ -261,8 +261,8 @@ class _TCalendarState extends State<TCalendar> {
         children: [
           TCalendarHeader(
             firstDayOfWeek: widget.firstDayOfWeek.index,
-            weekdayGap: _style.weekdayGap ?? context.tTheme.spacer4,
-            padding: _style.bodyPadding ?? context.tTheme.spacer16,
+            weekdayGap: _style.weekdayGap ?? 4.0,
+            padding: _style.bodyPadding ?? context.tTheme.spacer2,
             weekdayStyle: _style.weekdayStyle,
             weekdayHeight: _style.weekdayHeight,
             weekdayNames: weekdayNames,
@@ -289,7 +289,7 @@ class _TCalendarState extends State<TCalendar> {
       minDate: widget.minDate,
       maxDate: widget.maxDate,
       value: widget._value,
-      bodyPadding: _style.bodyPadding ?? context.tTheme.spacer16,
+      bodyPadding: _style.bodyPadding ?? context.tTheme.spacer2,
       monthNames: monthNames,
       monthTitleStyle: _style.monthTitleStyle,
       verticalGap: verticalGap,
@@ -392,7 +392,7 @@ class _TCalendarState extends State<TCalendar> {
     const weekdayHeight = TCalendar._kWeekdayHeight;
     final monthTitleHeight = _style.monthTitleHeight;
     final cellHeight = _style.cellHeight;
-    final bodyPadding = _style.bodyPadding ?? context.tTheme.spacer16;
+    final bodyPadding = _style.bodyPadding ?? context.tTheme.spacer2;
     const visibleRows = 6;
     return weekdayHeight +
         monthTitleHeight +

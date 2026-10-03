@@ -113,9 +113,9 @@ class _TTagPageState extends State<TTagPage> {
     return const Wrap(
       spacing: 8,
       children: [
-        TTag('禁用', colorScheme: TTagColorScheme.defaultTheme, enabled: false),
-        TTag('禁用', colorScheme: TTagColorScheme.primary, enabled: false),
-        TTag('禁用', colorScheme: TTagColorScheme.danger, enabled: false),
+        TTag('禁用', colorPreset: TTagColorPreset.defaultTheme, enabled: false),
+        TTag('禁用', colorPreset: TTagColorPreset.primary, enabled: false),
+        TTag('禁用', colorPreset: TTagColorPreset.danger, enabled: false),
       ],
     );
   }

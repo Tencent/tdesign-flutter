@@ -10,7 +10,8 @@
       "api": {
         "names": [
           "TButton",
-          "TButtonStyle"
+          "TButtonStyle",
+          "TButtonColorPreset"
         ],
         "getComments": false
       }
@@ -58,12 +59,13 @@
     {
       "slug": "link",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/link/t_link.dart"
+        "type": "folder",
+        "path": "lib/src/components/link"
       },
       "api": {
         "names": [
-          "TLink"
+          "TLink",
+          "TLinkColorPreset"
         ],
         "getComments": false
       }
@@ -95,7 +97,7 @@
           "TBackTop",
           "TBackTopThemeData",
           "TBackTopShape",
-          "TBackTopColorScheme"
+          "TBackTopColorPreset"
         ],
         "getComments": false
       }
@@ -159,7 +161,8 @@
       "api": {
         "names": [
           "TSideBar",
-          "TSideBarItem"
+          "TSideBarItem",
+          "TSideBarThemeData"
         ],
         "getComments": false
       }
@@ -190,7 +193,8 @@
           "TTabBarItemConfig",
           "TTabBarPopUpBtnConfig",
           "TTabBarPopUpShapeConfig",
-          "TTabBarMenuItem"
+          "TTabBarMenuItem",
+          "TTabBarThemeData"
         ],
         "getComments": false
       }
@@ -417,12 +421,13 @@
     {
       "slug": "switch",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/switch/t_switch.dart"
+        "type": "folder",
+        "path": "lib/src/components/switch"
       },
       "api": {
         "names": [
-          "TSwitch"
+          "TSwitch",
+          "TSwitchThemeData"
         ],
         "getComments": false
       }
@@ -476,13 +481,14 @@
     {
       "slug": "avatar",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/avatar/t_avatar.dart"
+        "type": "folder",
+        "path": "lib/src/components/avatar"
       },
       "api": {
         "names": [
           "TAvatar",
-          "TAvatarGroup"
+          "TAvatarGroup",
+          "TAvatarThemeData"
         ],
         "getComments": false
       }
@@ -512,7 +518,7 @@
         "names": [
           "TCell",
           "TCellGroup",
-          "TCellStyle"
+          "TCellThemeData"
         ],
         "getComments": true
       }
@@ -603,12 +609,13 @@
     {
       "slug": "progress",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/progress/t_progress.dart"
+        "type": "folder",
+        "path": "lib/src/components/progress"
       },
       "api": {
         "names": [
-          "TProgress"
+          "TProgress",
+          "TProgressThemeData"
         ],
         "getComments": false
       }
@@ -698,7 +705,8 @@
         "names": [
           "TTag",
           "TSelectTag",
-          "TTagStyle"
+          "TTagThemeData",
+          "TTagColorPreset"
         ],
         "getComments": false
       }
@@ -813,7 +821,8 @@
           "TPopover",
           "TPopoverAnchor",
           "TPopoverController",
-          "TPopoverColorScheme",
+          "TPopoverThemeData",
+          "TPopoverColorPreset",
           "TPopoverPlacement"
         ],
         "getComments": true
