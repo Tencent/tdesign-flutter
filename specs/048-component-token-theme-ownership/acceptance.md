@@ -206,3 +206,8 @@
 - Button 深色主题 primary 禁用文字取小程序 `fontWhite4`；浅色仍为 `textColorAnti`。Switch 取消整个控件统一 0.4 透明度，分别解析禁用轨道、禁用滑块、加载指示器颜色；这些默认值按小程序的明暗模式 Token，组件 Theme 字段作为各状态的唯一组件级覆盖入口。Slider 浅色禁用滑块描边按设计稿取 `componentBorder`，深色保留 `bgColorComponentDisabled`；既有 `TSliderThemeData.disabledThumbBorderColor` 可显式覆盖。
 - Flutter 3.32.0、3.47.0 的 Button/Switch/Slider 聚焦测试各 152/152 通过；两版本组件包 `flutter analyze --fatal-infos` 各为零诊断。Switch 公开 Theme API 文档由生成器更新。
 - 隔离 Linux amd64 / Flutter 3.32.0 无更新复现旧 Golden 差异：Slider 组件 326px / 0.07%、Slider Demo 浅色 544px / 0.05%（禁用滑块描边）；Button Demo 深色 811px / 0.13%（禁用 primary 字色）；Switch 浅色整页 3664px / 0.72%、深色 changed 5969px / 1.18%（禁用、加载和深色滑块状态）。隔离差异图未见布局位移。只同步 10 张受影响的 Linux PNG：Slider 4、Button 2、Switch 4；隔离副本严格无更新复跑组件 1/1、Demo 26/26 通过。隔离 `pub get` 将图标包由本地 0.0.6 解析为 0.0.7，故仍需以最终提交的 CI 矩阵为准；整页 Figma 像素对齐未在此处宣称完成。804 项组件变量中其余 677 项 `pending` 不因这三个组件的聚焦验证而自动完成。
+
+### 2026-10-03 推送后 CI 门禁修复
+
+- PR #1146 在 `367b7a2b` 的两个版本组件回归均因 Switch 生产覆盖率 352/372 = 94.62%（门槛 95%）失败，原有 Switch 测试断言本身通过。新增禁用图文在开启／关闭状态对组件 Theme 颜色的最终消费断言，覆盖率在 Flutter 3.32.0 Linux 与 3.47.0 均为 356/372 = 95.70%，37 项 Switch 测试通过；两版本 `flutter analyze --fatal-infos` 均零诊断。未降低门槛、未改生产渲染。
+- 同一 CI 的 Linux 视觉回归仅余 Cell、Swiper、Form、Theme 四组失败。用同版本 Linux 3.32.0 和 CI 解析的图标包 0.0.7 无更新复现并逐张查看原图、当前图、差异图：Cell 三张深色页与 Swiper 三张深色页只变 Switch 滑块，Form 三张深色页只变禁用 Switch 滑块，Theme 深色页只变禁用 Button 文案；无尺寸或布局位移。仅更新这 10 张 PNG；四组对应测试在隔离 Linux 中无更新复跑 40/40 通过，随后完整 `dart run tool/run_visual_regression.dart` 严格无更新复跑全部套件通过。最终远端 head 的 CI 仍需另验。

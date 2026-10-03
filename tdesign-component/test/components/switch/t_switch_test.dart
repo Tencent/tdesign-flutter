@@ -107,6 +107,36 @@ void main() {
       expect(widget.thumbColor, darkToken.textColorAnti);
     });
 
+    testWidgets('禁用图文内容分别跟随开启和关闭轨道色', (tester) async {
+      const switchTheme = TSwitchThemeData(
+        disabledTrackOnColor: Colors.orange,
+        disabledTrackOffColor: Colors.purple,
+      );
+
+      for (final variant in [TSwitchVariant.text, TSwitchVariant.icon]) {
+        for (final value in [false, true]) {
+          await tester.pumpWidget(
+            wrap(
+              TSwitch(value: value, variant: variant),
+              switchTheme: switchTheme,
+            ),
+          );
+          await tester.pumpAndSettle();
+
+          final expectedColor = value ? Colors.orange : Colors.purple;
+          if (variant == TSwitchVariant.text) {
+            final label = tester.widget<Text>(find.text(value ? '开' : '关'));
+            expect(label.style?.color, expectedColor);
+          } else {
+            final icon = tester.widget<Icon>(
+              find.byIcon(value ? TIcons.check : TIcons.close),
+            );
+            expect(icon.color, expectedColor);
+          }
+        }
+      }
+    });
+
     testWidgets('加载色随明暗模式变化且可由组件 Theme 覆盖', (tester) async {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(wrap(const TSwitch(value: true, loading: true)));
