@@ -1,10 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
   Widget wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
+  for (final gradient in [false, true]) {
+    testWidgets('点击/长按/禁用动态切换及语义一致 gradient=$gradient', (tester) async {
+      final handle = tester.ensureSemantics();
+      var taps = 0;
+      var longPresses = 0;
+      Widget build({VoidCallback? onPressed, VoidCallback? onLongPress}) =>
+          MaterialApp(
+            theme: ThemeData(
+              extensions: [
+                TThemeData.defaultData(),
+                if (gradient)
+                  const TButtonThemeData(
+                    gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+                  ),
+              ],
+            ),
+            home: Scaffold(
+              body: TButton(
+                child: const Text('动态按钮'),
+                onPressed: onPressed,
+                onLongPress: onLongPress,
+              ),
+            ),
+          );
+      WidgetStatesController states() => gradient
+          ? tester.widget<InkWell>(find.byType(InkWell)).statesController!
+          : tester
+                .widget<ElevatedButton>(find.byType(ElevatedButton))
+                .statesController!;
+      await tester.pumpWidget(build(onLongPress: () => longPresses++));
+      expect(states().value, isNot(contains(WidgetState.disabled)));
+      expect(
+        tester
+            .getSemantics(find.byType(TButton))
+            // Flutter 3.32 不提供新版 flagsCollection，保留双版本测试入口。
+            // ignore: deprecated_member_use
+            .hasFlag(SemanticsFlag.isEnabled),
+        isTrue,
+      );
+      await tester.tap(find.byType(TButton));
+      expect(taps, 0);
+      expect(longPresses, 0);
+      await tester.longPress(find.byType(TButton));
+      expect(longPresses, 1);
+      expect(taps, 0);
+      await tester.pumpWidget(build());
+      expect(states().value, contains(WidgetState.disabled));
+      expect(states().value, isNot(contains(WidgetState.pressed)));
+      expect(
+        tester
+            .getSemantics(find.byType(TButton))
+            // Flutter 3.32 不提供新版 flagsCollection，保留双版本测试入口。
+            // ignore: deprecated_member_use
+            .hasFlag(SemanticsFlag.isEnabled),
+        isFalse,
+      );
+      await tester.longPress(find.byType(TButton));
+      expect(longPresses, 1);
+      await tester.pumpWidget(build(onPressed: () => taps++));
+      expect(states().value, isNot(contains(WidgetState.disabled)));
+      await tester.tap(find.byType(TButton));
+      expect(taps, 1);
+      await tester.pumpWidget(
+        build(onPressed: () => taps++, onLongPress: () => longPresses++),
+      );
+      await tester.longPress(find.byType(TButton));
+      expect(longPresses, 2);
+      expect(taps, 1);
+      await tester.pumpWidget(const SizedBox.shrink());
+      handle.dispose();
+    });
+  }
   group('TButton widget 级用例', () {
     testWidgets('默认文字样式使用 TDesign 字体 Token', (tester) async {
       await tester.pumpWidget(
@@ -134,11 +207,11 @@ void main() {
       expect(longPresses, 1);
     });
 
-    testWidgets('onPressed 为空时 onLongPress 也保持禁用', (tester) async {
+    testWidgets('仅配置 onLongPress 时启用长按但不产生点击', (tester) async {
       var longPresses = 0;
       await tester.pumpWidget(
         wrap(
-          TButton(child: const Text('禁用长按'), onLongPress: () => longPresses++),
+          TButton(child: const Text('独立长按'), onLongPress: () => longPresses++),
         ),
       );
 
@@ -146,10 +219,10 @@ void main() {
         find.byType(ElevatedButton),
       );
       expect(elevatedButton.onPressed, isNull);
-      expect(elevatedButton.onLongPress, isNull);
+      expect(elevatedButton.onLongPress, isNotNull);
 
       await tester.longPress(find.byType(ElevatedButton));
-      expect(longPresses, 0);
+      expect(longPresses, 1);
     });
 
     testWidgets('渐变按钮也支持长按且不会触发点击', (tester) async {

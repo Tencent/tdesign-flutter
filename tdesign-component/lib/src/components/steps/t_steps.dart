@@ -56,7 +56,7 @@ enum TStepsIndicator {
 
   /// 点状进度指示器；横向与纵向均以当前节点实心表达进度。
   ///
-  /// 在 [TSteps.progress] 中是否传入 [TSteps.onChange] 不改变该视觉语义。
+  /// 在 [TSteps.progress] 中是否传入 [TSteps.onStepTapped] 不改变该视觉语义。
   dot,
 }
 
@@ -73,7 +73,7 @@ enum TStepsStatus {
 class TSteps extends StatelessWidget {
   /// 普通进度步骤条。
   ///
-  /// [onChange] 为空时只读；非空时只报告用户点击的索引；当前进度仍由调用方更新 [value] 控制。
+  /// [onStepTapped] 为空时只读；非空时只报告用户点击的索引；当前进度仍由调用方更新 [value] 控制。
   const TSteps.progress({
     super.key,
     required this.steps,
@@ -81,23 +81,23 @@ class TSteps extends StatelessWidget {
     this.direction = TStepsDirection.horizontal,
     this.status = TStepsStatus.process,
     this.indicator = TStepsIndicator.standard,
-    this.onChange,
+    this.onStepTapped,
   }) : _mode = TStepsMode.progress;
 
   /// 垂直可选择步骤条。
   ///
   /// 固定使用点状指示器并显示右侧箭头：已完成节点实心，
-  /// 当前与未完成节点空心。[onChange] 只报告用户选择的索引，
+  /// 当前与未完成节点空心。[onStepTapped] 只报告用户选择的索引，
   /// 调用方需要更新 [value] 完成受控重建。
   const TSteps.selectable({
     super.key,
     required this.steps,
     required this.value,
-    required ValueChanged<int> onChange,
+    required ValueChanged<int> onStepTapped,
   }) : direction = TStepsDirection.vertical,
        status = TStepsStatus.process,
        indicator = TStepsIndicator.dot,
-       onChange = onChange,
+       onStepTapped = onStepTapped,
        _mode = TStepsMode.selectable;
 
   /// 纯展示步骤条。
@@ -110,7 +110,7 @@ class TSteps extends StatelessWidget {
   }) : value = 0,
        status = TStepsStatus.process,
        indicator = TStepsIndicator.dot,
-       onChange = null,
+       onStepTapped = null,
        _mode = TStepsMode.display;
 
   /// 步骤条数据
@@ -128,11 +128,13 @@ class TSteps extends StatelessWidget {
   /// 进度步骤条的指示器样式。
   final TStepsIndicator indicator;
 
-  /// 用户选择步骤时触发；调用方通过更新 [value] 实现受控模式。
+  /// 用户点按步骤时触发，传入步骤索引，重选当前步骤也通知。
+  ///
+  /// 此事件不表示进度已经变化；调用方通过更新 [value] 实现受控模式。
   ///
   /// [TSteps.progress] 中为空时只读，非空时不改变指示器视觉；
   /// [TSteps.selectable] 中必填。[TSteps.display] 不接收此参数。
-  final ValueChanged<int>? onChange;
+  final ValueChanged<int>? onStepTapped;
 
   final TStepsMode _mode;
 
@@ -158,7 +160,7 @@ class TSteps extends StatelessWidget {
             status: status,
             indicator: indicator,
             mode: _mode,
-            onChange: onChange,
+            onStepTapped: onStepTapped,
           )
         : TStepsVertical(
             steps: steps,
@@ -166,7 +168,7 @@ class TSteps extends StatelessWidget {
             status: status,
             indicator: indicator,
             mode: _mode,
-            onChange: onChange,
+            onStepTapped: onStepTapped,
           );
   }
 }

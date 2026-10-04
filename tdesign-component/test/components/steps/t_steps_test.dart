@@ -21,6 +21,25 @@ void main() {
     );
   }
 
+  for (final direction in TStepsDirection.values) {
+    testWidgets('onStepTapped 包含重选，value 始终由调用方持有 $direction', (tester) async {
+      final requested = <int>[];
+      await tester.pumpWidget(
+        wrap(
+          TSteps.progress(
+            steps: buildSteps(3),
+            value: 1,
+            direction: direction,
+            onStepTapped: requested.add,
+          ),
+        ),
+      );
+      await tester.tap(find.text('步骤2'));
+      await tester.tap(find.text('步骤3'));
+      expect(requested, [1, 2]);
+      expect(tester.widget<TSteps>(find.byType(TSteps)).value, 1);
+    });
+  }
   testWidgets('横纵文字继承显式主题，局部字号不改写状态颜色', (tester) async {
     final token = TThemeData.defaultData();
     for (final direction in TStepsDirection.values) {
@@ -94,7 +113,7 @@ void main() {
             TStepsItemData(content: '仅内容'),
           ],
           value: 0,
-          onChange: (value) => selected = value,
+          onStepTapped: (value) => selected = value,
         ),
       ),
     );
@@ -278,7 +297,7 @@ void main() {
         wrap(
           TSteps.progress(
             steps: buildSteps(3),
-            onChange: (value) => selected = value,
+            onStepTapped: (value) => selected = value,
           ),
         ),
       );
@@ -295,7 +314,7 @@ void main() {
       );
     });
 
-    testWidgets('无 onChange 时步骤不可点击', (tester) async {
+    testWidgets('无 onStepTapped 时步骤不可点击', (tester) async {
       await tester.pumpWidget(wrap(TSteps.progress(steps: buildSteps(2))));
       expect(
         tester
@@ -307,14 +326,14 @@ void main() {
       );
     });
 
-    testWidgets('垂直 onChange 同时提供选择与箭头语义', (tester) async {
+    testWidgets('垂直 onStepTapped 同时提供选择与箭头语义', (tester) async {
       int? selected;
       await tester.pumpWidget(
         wrap(
           TSteps.selectable(
             steps: buildSteps(3),
             value: 0,
-            onChange: (value) => selected = value,
+            onStepTapped: (value) => selected = value,
           ),
         ),
       );
@@ -327,7 +346,7 @@ void main() {
       expect(selected, 2);
     });
 
-    testWidgets('progress onChange 只启用点击，横纵 dot 保持进度视觉', (tester) async {
+    testWidgets('progress onStepTapped 只启用点击，横纵 dot 保持进度视觉', (tester) async {
       for (final direction in TStepsDirection.values) {
         int? selected;
         await tester.pumpWidget(
@@ -337,7 +356,7 @@ void main() {
               value: 1,
               direction: direction,
               indicator: TStepsIndicator.dot,
-              onChange: (value) => selected = value,
+              onStepTapped: (value) => selected = value,
             ),
           ),
         );

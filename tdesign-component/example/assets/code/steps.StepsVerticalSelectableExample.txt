@@ -30,7 +30,7 @@ class _StepsVerticalSelectableExampleState
         ),
       ),
       value: _selectedStep,
-      onChange: (index) {
+      onStepTapped: (index) {
         setState(() => _selectedStep = index);
         TToast.showText('选择了步骤 ${index + 1}', context: context);
       },

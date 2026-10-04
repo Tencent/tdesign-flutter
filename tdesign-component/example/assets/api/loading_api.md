@@ -18,15 +18,18 @@
 
 ##### TLoadingController.dismiss
 
-移除并释放全局加载层；未展示时无副作用。
+移除并释放全局加载层；未展示或已因 Overlay 卸载而清理时无副作用。
 
 返回类型：`void`
 
 ##### TLoadingController.show
 
 在最近的 Overlay 中展示全局唯一加载层。
-重复调用不替换当前加载层；无 Overlay 时忽略请求。调用方应在任务结束
-或所属页面卸载前调用 `dismiss`，静态控制器不属于某个 Widget 的生命周期。
+重复调用不替换当前加载层；无 Overlay 时忽略请求。
+所属 Overlay 卸载后会释放会话，后续可在新的 Overlay 展示。
+普通页面离开但所属 Overlay 尚存时不会自动关闭；调用方应在任务结束
+或需要随页面关闭时调用 `dismiss`。
+尚未首次绘制的加载层随 Overlay 卸载后，在下一次 show/dismiss 时释放。
 
 返回类型：`void`
 

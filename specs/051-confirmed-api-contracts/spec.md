@@ -1,5 +1,7 @@
 # 已确认 API 契约收敛
 
+本 Spec 记录 fcaa77cc 阶段；后续 Button 独立长按、Steps 命名和 Loading 生命周期的最终契约见 [052-api-foundation-contracts](../052-api-foundation-contracts/spec.md)。
+
 基线：PR #1148，c37107882901646af41f84067d883901d56da5cd。
 
 ## 范围及行为契约
