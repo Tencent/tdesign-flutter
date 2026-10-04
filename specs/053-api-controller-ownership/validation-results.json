@@ -16,5 +16,7 @@
     "3.32": 95.53
   },
   "production_source_sha256": "664a97920a58d4e59f5dba693280c6c583c50f1a43d078e69bbe334144a3babe",
-  "linux_golden": "pending new PR head; no local baseline update"
+  "linux_golden": "pending new PR head; no local baseline update",
+  "direct_public_theme_declarations": 12,
+  "public_theme_functions": 1
 }

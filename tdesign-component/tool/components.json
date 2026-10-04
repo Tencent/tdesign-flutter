@@ -992,14 +992,28 @@
     {
       "slug": "theme",
       "source": {
-        "type": "file",
-        "path": "lib/src/theme/t_theme.dart"
+        "type": "folder",
+        "path": "lib/src/theme"
       },
       "api": {
         "names": [
-          "TThemeData"
+          "TThemeData",
+          "Font",
+          "FontFamily",
+          "TResourceBuilder",
+          "TResourceManager",
+          "TResourceDelegate",
+          "TStyleResolver",
+          "TMaterialThemeBuilder",
+          "TThemeBuilder",
+          "TExtraThemeData",
+          "DefaultMapFactory",
+          "TMap"
         ],
-        "getComments": false
+        "getComments": true,
+        "functions": [
+          "setTResourceBuilder"
+        ]
       }
     }
   ]
