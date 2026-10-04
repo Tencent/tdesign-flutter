@@ -1,0 +1,20 @@
+{
+  "flutter": [
+    "3.32.0",
+    "3.47.6"
+  ],
+  "components": 57,
+  "test_files": 116,
+  "functional_passed_each": 2757,
+  "demo_passed_each": 275,
+  "runners_passed": 19,
+  "analyze": "zero diagnostics both versions",
+  "direct_public_component_declarations": 282,
+  "missing_api_headings": 0,
+  "coverage_min": {
+    "latest": 95.53,
+    "3.32": 95.53
+  },
+  "production_source_sha256": "664a97920a58d4e59f5dba693280c6c583c50f1a43d078e69bbe334144a3babe",
+  "linux_golden": "pending new PR head; no local baseline update"
+}
