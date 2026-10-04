@@ -29,3 +29,29 @@
 | iconSize | double? | 24.0 | 图标尺寸，默认 24；显式传入 null 时由当前 `IconTheme` 决定。 |
 | onTap | VoidCallback? | - | 点击回调；`null` 表示禁用 |
 | padding | EdgeInsetsGeometry? | - | 内部填充 |
+
+
+### TNavBarBorder
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| color | Color? | - | 边框颜色 |
+| padding | EdgeInsetsGeometry? | - | 内部填充 |
+| radius | double | 22.0 | 边框圆角 |
+| width | double | 1.0 | 边框宽度 |
+
+
+### TNavBarThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景颜色 |
+| backIconColor | Color? | - | 返回图标颜色 |
+| border | TNavBarBorder? | - | 操作项边框配置，仅在 TNavBar.useBorderStyle 为 true 时生效 |
+| boxShadow | List<BoxShadow>? | - | 底部阴影 |
+| opacity | double? | - | 背景颜色透明度，未配置时为 1 |
+| padding | EdgeInsetsGeometry? | - | 内部填充 |
+| titleColor | Color? | - | 标题的子树默认颜色。 仅在 NavBar 标题未自行提供前景色时生效；标题 Widget 自身的显式颜色优先。 |
+| titleMargin | double? | - | 中间文案左右两边间距 |

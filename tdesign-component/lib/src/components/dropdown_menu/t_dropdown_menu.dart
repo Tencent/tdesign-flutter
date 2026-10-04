@@ -155,11 +155,14 @@ class TDropdownMenuItem {
 }
 
 /// 类型安全的下拉筛选栏控制器。
+/// 单目标菜单控制器；同时绑定多个菜单会抛出 StateError。
+/// 未绑定时命令无副作用，调用方负责 dispose。
 class TDropdownMenuController extends ChangeNotifier {
   Future<void> Function(int index)? _openCallback;
   Future<void> Function(TDropdownMenuCloseReason reason)? _closeCallback;
   Future<void> Function(int index)? _toggleCallback;
   int? _openIndex;
+  Object? _owner;
 
   int? get openIndex => _openIndex;
   bool get isOpen => _openIndex != null;
@@ -177,16 +180,25 @@ class TDropdownMenuController extends ChangeNotifier {
   }
 
   void _attach({
+    required Object owner,
     required Future<void> Function(int index) open,
     required Future<void> Function(TDropdownMenuCloseReason reason) close,
     required Future<void> Function(int index) toggle,
   }) {
+    if (_owner != null && !identical(_owner, owner)) {
+      throw StateError('A TDropdownMenuController supports only one menu.');
+    }
+    _owner = owner;
     _openCallback = open;
     _closeCallback = close;
     _toggleCallback = toggle;
   }
 
-  void _detach() {
+  void _detach(Object owner) {
+    if (!identical(_owner, owner)) {
+      return;
+    }
+    _owner = null;
     _openCallback = null;
     _closeCallback = null;
     _toggleCallback = null;
@@ -271,6 +283,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   late AnimationController _animationController;
   late AnimationController _panelSwitchController;
   late TDropdownMenuController _controller;
+  TDropdownMenuController? _boundExternalController;
   late bool _ownsController;
   List<FocusNode> _triggerFocusNodes = <FocusNode>[];
   OverlayEntry? _overlayEntry;
@@ -353,6 +366,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   @override
   void initState() {
     super.initState();
+    _bindController(widget.controller);
     WidgetsBinding.instance.addObserver(this);
     _animationController = AnimationController(
       vsync: this,
@@ -363,7 +377,6 @@ class _TDropdownMenuState extends State<TDropdownMenu>
       duration: widget.animationDuration,
       value: 1,
     );
-    _bindController(widget.controller);
     _syncFocusNodes();
   }
 
@@ -436,7 +449,9 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   void didUpdateWidget(TDropdownMenu oldWidget) {
     super.didUpdateWidget(oldWidget);
     var controllerWasOpen = false;
-    if (!identical(widget.controller, oldWidget.controller)) {
+    if (!identical(widget.controller, _boundExternalController)) {
+      final next = widget.controller ?? TDropdownMenuController();
+      next._attach(owner: this, open: _open, close: _close, toggle: _toggle);
       controllerWasOpen = _controller.isOpen;
       if (controllerWasOpen) {
         _operationEpoch++;
@@ -450,11 +465,13 @@ class _TDropdownMenuState extends State<TDropdownMenu>
           _activeMenus.remove(navigator);
         }
       }
-      _controller._detach();
+      _controller._detach(this);
       if (_ownsController) {
         _controller.dispose();
       }
-      _bindController(widget.controller);
+      _controller = next;
+      _ownsController = widget.controller == null;
+      _boundExternalController = widget.controller;
       if (controllerWasOpen) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted && !_controller.isOpen) {
@@ -526,7 +543,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     _overlayEntry = null;
     _overlayState = null;
     _capturedThemes = null;
-    _controller._detach();
+    _controller._detach(this);
     if (_ownsController) {
       _controller.dispose();
     }
@@ -541,8 +558,14 @@ class _TDropdownMenuState extends State<TDropdownMenu>
 
   void _bindController(TDropdownMenuController? external) {
     _ownsController = external == null;
+    _boundExternalController = external;
     _controller = external ?? TDropdownMenuController();
-    _controller._attach(open: _open, close: _close, toggle: _toggle);
+    _controller._attach(
+      owner: this,
+      open: _open,
+      close: _close,
+      toggle: _toggle,
+    );
   }
 
   void _syncFocusNodes() {

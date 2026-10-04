@@ -23,6 +23,7 @@ TDesign 表单容器。
 ### TFormController
 #### 简介
 命令式触发表单提交、校验和重置。
+单目标表单控制器；同时绑定多个表单会抛出 StateError。
 
 ### TFormField
 #### 简介

@@ -41,3 +41,34 @@
 | groupSpacing | double? | - | 头像组重叠宽度。 |
 | iconSize | double? | - | 默认图标大小。 |
 | squareBorderRadius | double? | - | 方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。 |
+
+
+### TAvatarSize
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| large | 大尺寸。 |
+| medium | 中尺寸。 |
+| small | 小尺寸。 |
+
+
+### TAvatarShape
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| circle | 圆形头像。 |
+| square | 方形头像。 |
+
+
+### TAvatarGroupCascading
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| startUp | 起始侧头像位于上层。 |
+| endUp | 结束侧头像位于上层。 |

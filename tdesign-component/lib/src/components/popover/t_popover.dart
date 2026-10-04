@@ -79,8 +79,7 @@ typedef TPopoverAnchorBuilder =
 ///
 /// 气泡内容、位置和视觉配置由 [TPopoverAnchor] 声明，控制器只负责展开、关闭
 /// 和查询当前状态，不形成第二份配置来源。
-/// 每个控制器应绑定一个 Anchor。重复绑定会使命令指向最后挂载的 Anchor，
-/// 旧 Anchor 卸载不会解除新绑定；请为同时存在的 Anchor 分别创建控制器。
+/// 每个控制器只能同时绑定一个 Anchor，重复绑定会抛出 StateError。
 class TPopoverController {
   _TPopoverAnchorState? _anchor;
 
@@ -91,11 +90,11 @@ class TPopoverController {
   ///
   /// 控制器必须先通过 [TPopoverAnchor.controller] 绑定到 Widget 树。
   void open() {
-    assert(
-      _anchor != null,
-      'TPopoverController.open() requires a TPopoverAnchor binding.',
-    );
-    _anchor!._open();
+    final anchor = _anchor;
+    if (anchor == null) {
+      throw StateError('TPopoverController.open requires an Anchor binding.');
+    }
+    anchor._open();
   }
 
   /// 关闭与该控制器绑定的气泡。
@@ -103,7 +102,12 @@ class TPopoverController {
   /// 未绑定或已经关闭时无副作用。
   void close() => _anchor?._close();
 
-  void _attach(_TPopoverAnchorState anchor) => _anchor = anchor;
+  void _attach(_TPopoverAnchorState anchor) {
+    if (_anchor != null && !identical(_anchor, anchor)) {
+      throw StateError('A TPopoverController supports only one Anchor.');
+    }
+    _anchor = anchor;
+  }
 
   void _detach(_TPopoverAnchorState anchor) {
     if (_anchor == anchor) {
@@ -223,6 +227,7 @@ class TPopoverAnchor extends StatefulWidget {
 
 class _TPopoverAnchorState extends State<TPopoverAnchor> {
   late TPopoverController _controller;
+  TPopoverController? _boundExternalController;
   BuildContext? _anchorContext;
   _PopoverSession? _session;
   var _isOpen = false;
@@ -233,17 +238,20 @@ class _TPopoverAnchorState extends State<TPopoverAnchor> {
     super.initState();
     _controller = widget.controller ?? TPopoverController();
     _controller._attach(this);
+    _boundExternalController = widget.controller;
   }
 
   @override
   void didUpdateWidget(TPopoverAnchor oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller == widget.controller) {
+    if (identical(widget.controller, _boundExternalController)) {
       return;
     }
+    final next = widget.controller ?? TPopoverController();
+    next._attach(this);
     _controller._detach(this);
-    _controller = widget.controller ?? TPopoverController();
-    _controller._attach(this);
+    _controller = next;
+    _boundExternalController = widget.controller;
     final session = _session;
     if (session != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

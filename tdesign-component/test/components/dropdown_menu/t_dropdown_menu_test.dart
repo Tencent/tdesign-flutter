@@ -39,6 +39,36 @@ void main() {
     );
   }
 
+  testWidgets(
+    'controller replacement rejects shared owner and preserves binding',
+    (tester) async {
+      final first = TDropdownMenuController();
+      final second = TDropdownMenuController();
+      Widget menu(String key, TDropdownMenuController controller) =>
+          TDropdownMenu(
+            key: ValueKey(key),
+            controller: controller,
+            animationDuration: Duration.zero,
+            items: [item(key)],
+          );
+      await tester.pumpWidget(
+        wrap(Column(children: [menu('first', first), menu('second', second)])),
+      );
+      final element = tester.element(find.byKey(const ValueKey('second')));
+      expect(() => element.update(menu('second', first)), throwsStateError);
+      await tester.pumpWidget(wrap(Column(children: [menu('first', first)])));
+      await first.open(0);
+      await tester.pumpAndSettle();
+      expect(first.isOpen, isTrue);
+      expect(find.text('first panel'), findsOneWidget);
+      await second.open(0);
+      expect(second.isOpen, isFalse);
+      await tester.pumpWidget(const SizedBox());
+      first.dispose();
+      second.dispose();
+    },
+  );
+
   group('public models', () {
     test('item and trigger state expose immutable configuration', () {
       final menuItem = item('排序');

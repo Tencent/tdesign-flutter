@@ -58,3 +58,40 @@
 | delay | Duration | Duration.zero | 开始滚动前的延迟 |
 | duration | Duration | const Duration(seconds: 10) | 单次滚动时长 |
 | repeat | bool | false | 是否循环滚动 |
+
+
+### TMessageHandle
+
+### TMessageThemeData
+
+#### 静态方法
+
+##### TMessageThemeData.lerpDouble
+
+返回类型：`double?`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| a | double? | - | - |
+| b | double? | - | - |
+| t | double | - | - |
+
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景色 |
+| elevation | double? | - | 阴影 |
+| shape | ShapeBorder? | - | 形状 |
+
+
+### TMessageStatus
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| info | 信息 |
+| success | 成功 |
+| warning | 警告 |
+| error | 错误 |

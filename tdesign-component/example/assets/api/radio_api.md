@@ -72,6 +72,23 @@
 | value | T | - | 选项值。 |
 
 
+### TRadioThemeData
+#### 简介
+TRadio 组件级 ThemeExtension
+通过 Theme 子树注入，控制子树默认样式。
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 卡片背景颜色。 |
+| disableColor | Color? | - | 禁用态颜色。 |
+| insetSpacing | double? | - | 文案与非指示器侧的内边距。 |
+| selectColor | Color? | - | 选中态颜色。 |
+| spacing | double? | - | 指示器与文案间距。 |
+| subTitleColor | Color? | - | 副标题颜色。 |
+| titleColor | Color? | - | 主标题颜色。 |
+
+
 ### TRadioSize
 #### 简介
 单选框指示器尺寸。

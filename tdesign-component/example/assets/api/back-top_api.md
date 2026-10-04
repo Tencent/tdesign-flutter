@@ -5,7 +5,7 @@
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | colorPreset | TBackTopColorPreset | TBackTopColorPreset.light | 局部配色预设，默认 `TBackTopColorPreset.light`；不切换全局明暗主题。 |
-| controller | ScrollController? | - | 页面滚动控制器。 未传时组件始终可见，点击只触发 `onPressed`；传入后组件监听滚动偏移并 在点击时动画回到该滚动位置的最小边界。 |
+| controller | ScrollController? | - | 页面滚动控制器；必须只绑定一个 ScrollPosition。 未传时组件始终可见，点击只触发 `onPressed`；传入后组件监听滚动偏移并 在点击时动画回到该滚动位置的最小边界。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | onCompleted | VoidCallback? | - | 成功回到顶部后的通知；未到顶就中断动画、解绑或更换 Controller 时不通知。 未传 `controller` 时不触发；与 `onPressed` 的激活动作阶段分离。 只配置此回调但没有 Controller 不会启用组件。 |
 | onPressed | VoidCallback? | - | 被接受的激活动作通知，在开始回顶前触发。 动画进行中的重复点击不通知；是否配置 `controller` 不改变本事件的含义。 `null` 不表示禁用；提供 `controller` 时仍可执行回顶。 原有依赖回顶完成的业务应迁移到 `onCompleted`。 |

@@ -9,6 +9,40 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ///
 /// 覆盖 TPopoverColorPreset、TPopoverPlacement、内容渲染、箭头、回调等。
 void main() {
+  testWidgets('failed controller replacement keeps actual Anchor binding', (
+    tester,
+  ) async {
+    final first = TPopoverController();
+    final second = TPopoverController();
+    TPopoverAnchor anchor(String key, TPopoverController controller) =>
+        TPopoverAnchor(
+          key: ValueKey(key),
+          controller: controller,
+          content: Text('$key content'),
+          builder: (_, __, ___) => Text(key),
+        );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Column(
+            children: [anchor('first', first), anchor('second', second)],
+          ),
+        ),
+      ),
+    );
+    final element = tester.element(find.byKey(const ValueKey('second')));
+    expect(() => element.update(anchor('second', first)), throwsStateError);
+    second.open();
+    await tester.pumpAndSettle();
+    expect(second.isOpen, isTrue);
+    first.open();
+    await tester.pumpAndSettle();
+    expect(first.isOpen, isTrue);
+    await tester.pumpWidget(const SizedBox());
+    expect(first.open, throwsStateError);
+    expect(second.open, throwsStateError);
+  });
+
   /// 构建带主题的测试壳
   Widget wrapWithTheme(
     Widget child, {
@@ -732,7 +766,7 @@ void main() {
     ) async {
       final unboundController = TPopoverController();
       expect(unboundController.close, returnsNormally);
-      expect(unboundController.open, throwsAssertionError);
+      expect(unboundController.open, throwsStateError);
 
       final boundController = TPopoverController();
       await tester.pumpWidget(

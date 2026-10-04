@@ -175,6 +175,44 @@
 | infiniteDuration | Duration | - | 无限时长哨兵值：加载类 Toast 使用，表示"永不自动消失"。 封装为具名常量，避免魔法数字导致用户传入相近的超长 duration 时被误判为无限。 |
 
 
+### TOverlayConfig
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| color | Color? | - | 蒙层颜色；为 null 时由 `opacity` 派生黑色蒙层。 |
+| opacity | double | 0.2 | 蒙层透明度（0~1，默认 0.2）。 |
+| preventTap | bool | false | 是否拦截背景点击（默认 false）。 |
+| showOverlay | bool | false | 是否显示可见半透明蒙层（默认 false）。 |
+
+
+### TToastThemeData
+
+#### 静态方法
+
+##### TToastThemeData.lerpDouble
+
+返回类型：`double?`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| a | double? | - | - |
+| b | double? | - | - |
+| t | double | - | - |
+
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景色 |
+| borderRadius | double? | - | 圆角 |
+| iconColor | Color? | - | 图标颜色 |
+| iconSize | double? | - | 图标尺寸 |
+| maxWidth | double? | - | 最大宽度 |
+| padding | EdgeInsetsGeometry? | - | 内边距 |
+| textStyle | TextStyle? | - | 文案样式 |
+
+
 ### IconTextDirection
 #### 枚举值
 

@@ -43,6 +43,17 @@
 | theme | TLoadingThemeData? | - | 仅覆盖本次加载层的组件主题，null 时继承捕获的主题。 |
 
 
+### TLoadingThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| axis | Axis? | - | 文案和图标相对方向 |
+| duration | int? | - | 一次刷新的时间（毫秒），控制动画速度。 未指定时默认 `800`ms（对齐 TDesign 小程序 / Mobile Vue 的 `duration` 默认值）。 |
+| iconColor | Color? | - | 图标颜色。 未指定时 circle / point 使用品牌主色，activity 使用主文字色； Flutter `ProgressIndicatorThemeData.color` 或显式 `ColorScheme` 仍优先于内置默认色。 |
+| textColor | Color? | - | 文案颜色 |
+
+
 ### TLoadingIcon
 #### 枚举值
 

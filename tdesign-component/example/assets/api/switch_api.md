@@ -30,3 +30,25 @@
 | thumbContentOnFont | TextStyle? | - | 开启态滑块内容文本样式。 |
 | trackOffColor | Color? | - | 关闭态轨道颜色。 |
 | trackOnColor | Color? | - | 开启态轨道颜色。 |
+
+
+### TSwitchSize
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| large | 大尺寸。 |
+| medium | 中尺寸。 |
+| small | 小尺寸。 |
+
+
+### TSwitchVariant
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| filled | 无滑块内容的填充开关。 |
+| text | 滑块内显示开关文案。 |
+| icon | 滑块内显示开关图标。 |

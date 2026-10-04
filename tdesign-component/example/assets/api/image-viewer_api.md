@@ -31,6 +31,20 @@
 | trailingBuilder | TImageViewerItemBuilder? | - | 构建导航栏末尾区域。 |
 
 
+### TImageViewerThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| appBarBackgroundColor | Color? | - | 导航栏背景色 |
+| backgroundColor | Color? | - | 预览页背景色 |
+| iconColor | Color? | - | 图标颜色 |
+| indexStyle | TextStyle? | - | 页码文字样式 |
+| labelStyle | TextStyle? | - | 标签文字样式 |
+| viewerHeight | double? | - | 预览区默认高度 |
+| viewerWidth | double? | - | 预览区默认宽度 |
+
+
 ### TImageViewerItemBuilder
 #### 类型定义
 

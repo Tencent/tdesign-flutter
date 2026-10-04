@@ -33,3 +33,41 @@
 | style | TextStyle? | - | 输入文本样式。 输入文字样式的唯一组件公开配置入口。未指定的字段继承显式 Material 文字主题或 TDesign `fontBodyLarge`；提示文字由组件 Theme 的 `hintStyle` 单独控制。 |
 | suffix | Widget? | - | 后缀组件；传入后不显示内置清除按钮。 |
 | textAlign | TextAlign | TextAlign.start | 文本对齐方式。 |
+
+
+### TInputThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 输入区域背景色。 |
+| borderColor | Color? | - | 输入区域边框颜色。 |
+| borderRadius | double? | - | 输入区域圆角。 对非多行、非无边框输入框设置为大于 0 的值时，输入框使用完整边框； 未设置时保留单行输入框的底部分隔线。 |
+| borderWidth | double? | - | 输入区域边框宽度。 |
+| clearIconColor | Color? | - | 清除图标颜色。 |
+| clearIconSize | double? | - | 清除图标尺寸。 |
+| contentPadding | EdgeInsetsGeometry? | - | 输入区域内边距。 |
+| hintStyle | TextStyle? | - | 占位提示文本样式。 未指定的字段继承 TDesign 输入框提示词 token。 |
+
+
+### TInputClearButtonMode
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| never | 从不显示清除按钮。 |
+| always | 有文本时显示清除按钮。 |
+| focused | 输入框获得焦点且有文本时显示清除按钮。 |
+
+
+### TInputStatus
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| normal | 默认状态。 |
+| success | 成功状态。 |
+| warning | 警告状态。 |
+| error | 错误状态。 |

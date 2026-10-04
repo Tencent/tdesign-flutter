@@ -4,6 +4,31 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  testWidgets('failed controller replacement keeps actual form binding', (
+    tester,
+  ) async {
+    final first = TFormController();
+    final second = TFormController();
+    TForm form(String key, TFormController controller) => TForm(
+      key: ValueKey(key),
+      controller: controller,
+      child: const SizedBox(),
+    );
+    await tester.pumpWidget(
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: Column(children: [form('first', first), form('second', second)]),
+      ),
+    );
+    final element = tester.element(find.byKey(const ValueKey('second')));
+    expect(() => element.update(form('second', first)), throwsStateError);
+    expect(first.validate(), isTrue);
+    expect(second.validate(), isTrue);
+    await tester.pumpWidget(const SizedBox());
+    expect(first.validate(), isFalse);
+    expect(second.validate(), isFalse);
+  });
+
   Widget wrap(Widget child, {TFormThemeData? formTheme}) {
     return MaterialApp(
       theme: ThemeData(
@@ -1445,7 +1470,7 @@ void main() {
         ),
       );
 
-      expect(tester.takeException(), isAssertionError);
+      expect(tester.takeException(), isStateError);
       await tester.pumpWidget(const SizedBox());
       expect(tester.takeException(), isNull);
     });

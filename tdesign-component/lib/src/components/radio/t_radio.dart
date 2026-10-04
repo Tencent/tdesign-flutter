@@ -599,6 +599,7 @@ class TRadioGroup<T> extends StatelessWidget {
   final T? value;
 
   /// 选中值请求回调；重选同一项仍通知，为 null 时整组禁用。
+  /// 用户选择请求；点击当前选中项仍通知，最终值由调用方回写。
   final ValueChanged<T>? onChanged;
 
   /// 包含 [TRadio] 的自定义布局。

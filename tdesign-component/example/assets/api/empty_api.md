@@ -9,3 +9,12 @@
 | image | Widget? | - | 自定义图片或插画；优先于 `icon`。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | operation | Widget? | - | 描述下方的操作内容，通常为按钮。 |
+
+
+### TEmptyThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| emptyTextColor | Color? | - | 描述文字颜色 |
+| emptyTextFont | Font? | - | 描述文字字号 |

@@ -120,6 +120,17 @@
 | isSpacer | bool | - | 是否是透明间隔块。 |
 
 
+### TSkeletonThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| blockColor | Color? | - | 占位块背景色。 |
+| borderRadius | double? | - | 普通占位块圆角。 |
+| highlightColor | Color? | - | 渐变动画高亮色。 |
+| rowSpacing | double? | - | 多行布局的默认行间距。 |
+
+
 ### TSkeletonAnimation
 #### 枚举值
 

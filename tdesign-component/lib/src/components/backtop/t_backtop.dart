@@ -29,7 +29,7 @@ class TBackTop extends StatefulWidget {
   }) : assert(visibilityOffset >= 0),
        super(key: key);
 
-  /// 页面滚动控制器。
+  /// 页面滚动控制器；必须只绑定一个 ScrollPosition。
   ///
   /// 未传时组件始终可见，点击只触发 [onPressed]；传入后组件监听滚动偏移并
   /// 在点击时动画回到该滚动位置的最小边界。

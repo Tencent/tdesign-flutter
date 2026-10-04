@@ -78,6 +78,8 @@ class TCheckbox extends StatelessWidget {
   });
 
   /// 受控选中态；null 表示半选。
+  /// 外部受控选中状态；null 表示聚合半选，点击半选转为 true。
+  /// 用户交互为二态选择，不自动循环产生 null。
   final bool? value;
 
   /// 选中态变更回调；为 null 时禁用。

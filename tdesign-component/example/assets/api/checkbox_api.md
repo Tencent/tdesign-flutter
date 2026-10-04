@@ -15,7 +15,7 @@
 | subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 |
 | title | String? | - | 主标题文案。 |
 | titleMaxLines | int | 3 | 主标题最大行数，默认 3 行。 |
-| value | bool? | - | 受控选中态；null 表示半选。 |
+| value | bool? | - | 受控选中态；null 表示半选。 外部受控选中状态；null 表示聚合半选，点击半选转为 true。 用户交互为二态选择，不自动循环产生 null。 |
 
 
 ### TCheckboxGroup
@@ -38,6 +38,33 @@
 | value | List<T> | - | 受控选中项列表。 |
 
 
+### TCheckboxOption
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| disabled | bool | false | 是否禁用该项。 |
+| label | String | - | 主文案。 |
+| subTitle | String? | - | 副文案。 |
+| value | T | - | 选项值。 |
+
+
+### TCheckboxThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 卡片背景颜色。 |
+| customSpace | EdgeInsetsGeometry? | - | 内容区域内边距。 |
+| disableColor | Color? | - | 禁用态指示器的前景色；未选时用于描边色。 |
+| insetSpacing | double? | - | 文案与非指示器侧的内边距。 |
+| selectColor | Color? | - | 选中态颜色。 |
+| spacing | double? | - | 指示器与文案间距。 |
+| subTitleColor | Color? | - | 副标题颜色。 |
+| titleColor | Color? | - | 主标题颜色。 |
+| variant | TCheckboxVariant? | - | 复选框指示器的默认视觉变体；未设置时使用圆形。 |
+
+
 ### TContentDirection
 #### 枚举值
 
@@ -57,6 +84,17 @@
 | small | 小尺寸。 |
 | medium | 中尺寸。 |
 | large | 大尺寸。 |
+
+
+### TCheckboxVariant
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| circle | 圆形指示器。 |
+| square | 方形指示器。 |
+| check | 仅显示勾选或半选图标。 |
 
 
 ### TCheckboxIconBuilder

@@ -19,6 +19,148 @@
 | useRootOverlay | bool | false | 是否使用根 Overlay，默认 false。 |
 
 
+### TDropdownMenuOption
+#### 简介
+下拉筛选面板中的不可变选项。
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| disabled | bool | false | - |
+| group | String? | - | - |
+| label | String | - | - |
+| value | T | - | - |
+
+
+### TDropdownSingleSelectPanel
+#### 简介
+单选筛选面板。选择有效选项后立即提交并关闭。
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| controller | TDropdownMenuPanelController | - | - |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| maxHeight | double? | - | 滚动主体的最大高度；默认 280dp。 |
+| onChanged | ValueChanged<T> | - | 提交候选选中值；重选同一项仍通知，并请求关闭面板。 最终选中状态由调用方通过 value 回写。 |
+| options | List<TDropdownMenuOption<T>> | - | - |
+| value | T? | - | - |
+
+
+### TDropdownMultiSelectPanel
+#### 简介
+多选筛选面板。
+`values` 表示已提交值，每次打开时用于初始化草稿。选项点击只更新面板内部草稿，
+点击确认后才通过 `onConfirm` 提交。
+打开期间 `values` 变化时，尚未修改的草稿会同步；已有修改的草稿保留用户编辑。
+未确认即关闭会丢弃草稿，再次打开时使用最新的 `values`。
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| columns | int | 1 | - |
+| controller | TDropdownMenuPanelController | - | - |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| maxHeight | double? | - | 面板最大高度；默认滚动主体最多 280dp，底部操作区另计。 |
+| onConfirm | ValueChanged<Set<T>> | - | - |
+| options | List<TDropdownMenuOption<T>> | - | - |
+| values | Set<T> | - | - |
+
+
+### TDropdownMenuTriggerState
+#### 简介
+自定义触发项可读取的不可变状态。
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| enabled | bool | - | - |
+| index | int | - | - |
+| isOpen | bool | - | - |
+| toggle | VoidCallback | - | - |
+
+
+### TDropdownMenuPanelController
+#### 简介
+当前面板可使用的局部控制器。
+#### 公开属性
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| index | int | - | - |
+
+
+### TDropdownMenuItem
+#### 简介
+一个筛选触发项及其对应面板。
+
+#### 工厂构造方法
+
+##### TDropdownMenuItem.custom
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| triggerBuilder | TDropdownMenuTriggerBuilder? | - | - |
+| panelBuilder | TDropdownMenuPanelBuilder | - | - |
+| enabled | bool | true | - |
+| flex | int | 1 | - |
+| width | double? | - | - |
+
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| enabled | bool | true | - |
+| flex | int | 1 | - |
+| label | String? | - | - |
+| panelBuilder | TDropdownMenuPanelBuilder | - | - |
+| width | double? | - | - |
+
+#### 公开属性
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| triggerBuilder | TDropdownMenuTriggerBuilder? | - | - |
+
+
+### TDropdownMenuController
+#### 简介
+类型安全的下拉筛选栏控制器。
+单目标菜单控制器；同时绑定多个菜单会抛出 StateError。
+未绑定时命令无副作用，调用方负责 dispose。
+
+### TDropdownThemeData
+#### 简介
+DropdownMenu 的组件级视觉与布局默认值。
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| actionAreaPadding | EdgeInsetsGeometry? | - | - |
+| actionGap | double? | - | - |
+| activeIconColor | Color? | - | - |
+| activeTextStyle | TextStyle? | - | - |
+| barBackgroundColor | Color? | - | - |
+| barHeight | double? | - | - |
+| disabledIconColor | Color? | - | - |
+| disabledOptionColor | Color? | - | - |
+| disabledOptionTextStyle | TextStyle? | - | - |
+| disabledTextStyle | TextStyle? | - | - |
+| dividerColor | Color? | - | - |
+| iconColor | Color? | - | - |
+| iconSize | double? | - | - |
+| optionBorderRadius | BorderRadius? | - | - |
+| optionColor | Color? | - | - |
+| optionHeight | double? | - | - |
+| optionPadding | EdgeInsetsGeometry? | - | - |
+| optionTextStyle | TextStyle? | - | - |
+| overlayColor | Color? | - | 遮罩颜色，包含透明度。未指定时为黑色 60%，动画按展开进度缩放透明度。 |
+| panelBackgroundColor | Color? | - | - |
+| selectedOptionColor | Color? | - | - |
+| selectedOptionTextStyle | TextStyle? | - | - |
+| textStyle | TextStyle? | - | - |
+
+
 ### TDropdownMenuPlacement
 #### 简介
 下拉筛选面板相对筛选栏的展开位置。
