@@ -173,7 +173,7 @@ void main() {
                                 showOverlay: true,
                                 preventTap: false,
                                 closeOnClick: true,
-                                onClick: () => overlayTapCount++,
+                                onTap: () => overlayTapCount++,
                               ),
                               headerBuilder: null,
                               child: const SizedBox(height: 60),

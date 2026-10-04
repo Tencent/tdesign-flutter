@@ -31,7 +31,7 @@
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | maxSelected | int? | - | 最多可选数量。 |
 | onChanged | ValueChanged<List<T>>? | - | 选中项列表变更回调；为 null 时整组禁用。 |
-| onMaxSelected | VoidCallback? | - | 超过最多可选数量时触发。 |
+| onSelectionLimitExceeded | VoidCallback? | - | 已达到 `maxSelected` 后再次尝试添加未选项时触发；本次不调用 `onChanged`。 |
 | options | List<TCheckboxOption<T>> | - | 复选框数据项。 |
 | showDivider | bool | true | 普通模式是否显示项间分割线，默认显示；卡片模式不显示。 |
 | size | TCheckboxSize | TCheckboxSize.medium | 复选框尺寸。 |

@@ -464,7 +464,7 @@ void main() {
         wrapWithTheme(
           TDrawer(
             items: const [TDrawerItem(title: '菜单1')],
-            onItemClick: (_, __) {},
+            onItemTap: (_, __) {},
           ),
           drawerTheme: const TDrawerThemeData(
             itemBackgroundColor: Colors.white,
@@ -490,7 +490,7 @@ void main() {
           TDrawer(
             enableFeedback: false,
             items: const [TDrawerItem(title: '菜单1')],
-            onItemClick: (_, __) {},
+            onItemTap: (_, __) {},
           ),
           drawerTheme: const TDrawerThemeData(
             itemBackgroundColor: Colors.white,
@@ -637,14 +637,14 @@ void main() {
       expect(container.constraints?.maxWidth, 320);
     });
 
-    testWidgets('点击列表项触发 onItemClick', (tester) async {
+    testWidgets('点击列表项触发 onItemTap', (tester) async {
       int? clickedIndex;
       TDrawerItem? clickedItem;
       await tester.pumpWidget(
         wrapWithTheme(
           TDrawer(
             items: const [TDrawerItem(title: '菜单1')],
-            onItemClick: (index, item) {
+            onItemTap: (index, item) {
               clickedIndex = index;
               clickedItem = item;
             },

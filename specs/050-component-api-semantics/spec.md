@@ -1,5 +1,7 @@
 # 57 项组件 API 语义修复
 
+本 Spec 记录第一阶段（c371078）的修复契约；后续已确认命名迁移及 BackTop 动作/完成拆分见 [051-confirmed-api-contracts](../051-confirmed-api-contracts/spec.md)。涉及该阶段后续变更时，以 051 的最终契约为准。
+
 基线 origin/develop@a0b0d0fec45d50ebe6afc898b3bfb381c12330b7。处理全量审查的 16 项阻塞问题；57 项均执行回归。
 
 衡量顺序：真实事件及阶段、单一状态所有权、Flutter 同类惯例、同义一致性、迁移成本。M3 为交互与设计参考，不要求把所有事件改成 onChanged。

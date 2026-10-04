@@ -35,6 +35,8 @@ TDesign 下拉刷新组件。
 底层刷新控制器的所有权归 `TPullDownRefresh` 的 State 独占管理：
 State 在 `initState` 中创建、在 `dispose` 中释放。本控制器不拥有需要调用方
 释放的资源，因此不提供公开 `dispose()`。
+同时只能绑定一个已挂载的组件；每个组件应使用独立的实例。
+重复绑定会抛出 `StateError`，原绑定保持不变；卸载后可以重新绑定。
 
 ### TPullDownRefreshTexts
 #### 简介

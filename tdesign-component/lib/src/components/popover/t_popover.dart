@@ -164,7 +164,7 @@ class TPopoverAnchor extends StatefulWidget {
     this.width,
     this.height,
     this.onTap,
-    this.onLongTap,
+    this.onLongPress,
     this.onOpen,
     this.onClose,
   });
@@ -209,12 +209,12 @@ class TPopoverAnchor extends StatefulWidget {
   final VoidCallback? onTap;
 
   /// 长按气泡内容时触发。
-  final VoidCallback? onLongTap;
+  final VoidCallback? onLongPress;
 
-  /// 气泡展开后触发。
+  /// 气泡内容成功插入 Overlay 后触发，不表示展开动画完成。
   final VoidCallback? onOpen;
 
-  /// 气泡通过任意路径关闭后触发。
+  /// 气泡展示周期结束时触发，包含主动关闭和锚点卸载。
   final VoidCallback? onClose;
 
   @override
@@ -274,7 +274,7 @@ class _TPopoverAnchorState extends State<TPopoverAnchor> {
       width: widget.width,
       height: widget.height,
       onTap: widget.onTap,
-      onLongTap: widget.onLongTap,
+      onLongPress: widget.onLongPress,
       controllerProvider: () => _controller,
       onDismissed: () => _handleDismissed(operationEpoch),
       throwOnMissingOverlay: true,
@@ -397,7 +397,7 @@ class TPopover {
     VoidCallback? onTap,
 
     /// 长按气泡内容时触发。
-    VoidCallback? onLongTap,
+    VoidCallback? onLongPress,
   }) => _showPopover(
     context: context,
     content: content,
@@ -409,7 +409,7 @@ class TPopover {
     width: width,
     height: height,
     onTap: onTap,
-    onLongTap: onLongTap,
+    onLongPress: onLongPress,
   ).closed;
 
   static _PopoverSession _showPopover({
@@ -423,7 +423,7 @@ class TPopover {
     required double? width,
     required double? height,
     required VoidCallback? onTap,
-    required VoidCallback? onLongTap,
+    required VoidCallback? onLongPress,
     TPopoverController Function()? controllerProvider,
     VoidCallback? onDismissed,
     bool throwOnMissingOverlay = false,
@@ -515,7 +515,7 @@ class TPopover {
             width: width,
             height: height,
             onTap: onTap,
-            onLongTap: onLongTap,
+            onLongPress: onLongPress,
             onTapOutside: closeOnClickOutside ? dismiss : null,
             radius: theme.borderRadius,
           ),

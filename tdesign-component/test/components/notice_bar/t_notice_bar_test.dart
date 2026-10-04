@@ -5,7 +5,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// TNoticeBar Widget 测试
 ///
-/// 覆盖 status 四档、marquee 滚动、prefix/operation/suffix、onPressed 回调、
+/// 覆盖 status 四档、marquee 滚动、prefix/operation/suffix、onTargetTap 回调、
 /// Theme 注入、边界情况。
 void main() {
   for (final mode in [
@@ -27,7 +27,7 @@ void main() {
                 height: 40,
                 child: Text('target'),
               ),
-              onPressed: targets.add,
+              onTargetTap: targets.add,
             ),
           ),
         ),
@@ -80,7 +80,7 @@ void main() {
               onPressed: () => buttonCalls++,
               child: const Text('operation'),
             ),
-            onPressed: targets.add,
+            onTargetTap: targets.add,
           ),
         ),
       ),
@@ -344,8 +344,8 @@ void main() {
     });
   });
 
-  group('TNoticeBar onPressed 回调', () {
-    testWidgets('未提供 onPressed 时内置区域不创建点击手势', (tester) async {
+  group('TNoticeBar onTargetTap 回调', () {
+    testWidgets('未提供 onTargetTap 时内置区域不创建点击手势', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           const TNoticeBar(
@@ -359,13 +359,13 @@ void main() {
       expect(find.byType(GestureDetector), findsNothing);
     });
 
-    testWidgets('点击内容区域触发 onPressed', (tester) async {
+    testWidgets('点击内容区域触发 onTargetTap', (tester) async {
       TNoticeBarTapTarget? triggered;
       await tester.pumpWidget(
         wrapWithTheme(
           TNoticeBar(
             content: '可点击的公告',
-            onPressed: (trigger) => triggered = trigger,
+            onTargetTap: (trigger) => triggered = trigger,
           ),
         ),
       );
@@ -373,14 +373,14 @@ void main() {
       expect(triggered, TNoticeBarTapTarget.content);
     });
 
-    testWidgets('点击 prefix 触发 onPressed', (tester) async {
+    testWidgets('点击 prefix 触发 onTargetTap', (tester) async {
       TNoticeBarTapTarget? triggered;
       await tester.pumpWidget(
         wrapWithTheme(
           TNoticeBar(
             content: '内容',
             prefix: const Icon(Icons.info),
-            onPressed: (trigger) => triggered = trigger,
+            onTargetTap: (trigger) => triggered = trigger,
           ),
         ),
       );
@@ -388,14 +388,14 @@ void main() {
       expect(triggered, TNoticeBarTapTarget.prefix);
     });
 
-    testWidgets('点击 suffixIcon 触发 onPressed', (tester) async {
+    testWidgets('点击 suffixIcon 触发 onTargetTap', (tester) async {
       TNoticeBarTapTarget? triggered;
       await tester.pumpWidget(
         wrapWithTheme(
           TNoticeBar(
             content: '内容',
             suffixIcon: Icons.close,
-            onPressed: (trigger) => triggered = trigger,
+            onTargetTap: (trigger) => triggered = trigger,
           ),
         ),
       );
@@ -411,7 +411,7 @@ void main() {
             content: '内容',
             operation: const Text('详情'),
             suffixIcon: Icons.close,
-            onPressed: triggered.add,
+            onTargetTap: triggered.add,
           ),
         ),
       );
@@ -435,7 +435,7 @@ void main() {
               child: const Text('详情'),
               onPressed: () => operationPressed++,
             ),
-            onPressed: triggered.add,
+            onTargetTap: triggered.add,
           ),
         ),
       );

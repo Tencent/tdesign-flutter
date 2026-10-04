@@ -32,7 +32,7 @@ class TDrawer extends StatelessWidget {
     this.enableFeedback = true,
     this.showLastDivider = true,
     this.title,
-    this.onItemClick,
+    this.onItemTap,
     this.child,
   });
 
@@ -58,7 +58,7 @@ class TDrawer extends StatelessWidget {
   final Widget? title;
 
   /// 点击抽屉里的列表项触发
-  final TDrawerItemClickCallback? onItemClick;
+  final TDrawerItemTapCallback? onItemTap;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class TDrawer extends StatelessWidget {
       showLastDivider: showLastDivider,
       child: child,
       title: title,
-      onItemClick: onItemClick,
+      onItemTap: onItemTap,
     );
   }
 }
@@ -121,7 +121,7 @@ TDrawerHandle showTDrawer(
         showOverlay: showOverlay,
         closeOnClick: closeOnOverlayClick,
         color: showOverlay ? null : Colors.transparent,
-        onClick: onOverlayClick,
+        onTap: onOverlayClick,
       ),
       destroyOnClose: destroyOnClose,
       useSafeArea: useSafeArea,

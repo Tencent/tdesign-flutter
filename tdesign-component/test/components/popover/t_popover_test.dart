@@ -1329,7 +1329,7 @@ void main() {
           content: const Text('回调内容'),
           placement: TPopoverPlacement.bottom,
           onTap: () => tapCount += 1,
-          onLongTap: () => longPressCount += 1,
+          onLongPress: () => longPressCount += 1,
         ),
       );
       await tester.pumpAndSettle();

@@ -43,7 +43,7 @@ class TNoticeBar extends StatefulWidget {
     this.marquee = false,
     this.speed = 50,
     this.interval = const Duration(seconds: 2),
-    this.onPressed,
+    this.onTargetTap,
   }) : assert(speed > 0, 'speed must be greater than zero'),
        assert(maxLines > 0, 'maxLines must be greater than zero');
 
@@ -96,7 +96,7 @@ class TNoticeBar extends StatefulWidget {
   ///
   /// 自定义区域仅报告单指主按钮短按：移动不超过移动距离阈值、未取消且短于长按超时。
   /// 子组件自己的动作仍独立执行，此通知不代表子动作完成。
-  final ValueChanged<TNoticeBarTapTarget>? onPressed;
+  final ValueChanged<TNoticeBarTapTarget>? onTargetTap;
 
   @override
   State<StatefulWidget> createState() => _TNoticeBarState();
@@ -428,21 +428,21 @@ class _TNoticeBarState extends State<TNoticeBar> {
   }
 
   Widget _buildBuiltInTapTarget(TNoticeBarTapTarget target, Widget child) {
-    if (widget.onPressed == null) {
+    if (widget.onTargetTap == null) {
       return child;
     }
     return GestureDetector(
-      onTap: () => widget.onPressed!(target),
+      onTap: () => widget.onTargetTap!(target),
       child: child,
     );
   }
 
   Widget _buildCustomTapTarget(TNoticeBarTapTarget target, Widget child) {
-    if (widget.onPressed == null) {
+    if (widget.onTargetTap == null) {
       return child;
     }
     return _NoticeBarTapObserver(
-      onTap: () => widget.onPressed?.call(target),
+      onTap: () => widget.onTargetTap?.call(target),
       child: child,
     );
   }

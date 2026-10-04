@@ -55,7 +55,7 @@ void main() {
 
     await tester.longPress(find.text('点击或长按我'));
     await tester.pump();
-    expect(find.text('onLongTap：点击或长按我'), findsOneWidget);
+    expect(find.text('onLongPress：点击或长按我'), findsOneWidget);
   });
 
   testWidgets('公开自定义内容每个选项显示 Toast 并关闭', (tester) async {

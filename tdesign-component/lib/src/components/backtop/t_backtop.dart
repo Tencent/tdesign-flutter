@@ -14,12 +14,13 @@ import 't_backtop_theme_data.dart';
 /// 返回顶部组件。
 ///
 /// 绑定 [controller] 后，滚动偏移达到 [visibilityOffset] 时显示；点击时先
-/// 动画回到顶部，再触发可选的 [onPressed] 完成通知。
+/// 触发 [onPressed] 激活通知，再动画回到顶部；成功后触发 [onCompleted]。
 class TBackTop extends StatefulWidget {
   const TBackTop({
     Key? key,
     this.controller,
     this.onPressed,
+    this.onCompleted,
     this.showText = false,
     this.visibilityOffset = 200,
     this.tooltip,
@@ -34,12 +35,18 @@ class TBackTop extends StatefulWidget {
   /// 在点击时动画回到该滚动位置的最小边界。
   final ScrollController? controller;
 
+  /// 被接受的激活动作通知，在开始回顶前触发。
+  ///
+  /// 动画进行中的重复点击不通知；是否配置 [controller] 不改变本事件的含义。
+  /// `null` 不表示禁用；提供 [controller] 时仍可执行回顶。
+  /// 原有依赖回顶完成的业务应迁移到 [onCompleted]。
+  final VoidCallback? onPressed;
+
   /// 成功回到顶部后的通知；未到顶就中断动画、解绑或更换 Controller 时不通知。
   ///
-  /// 未传 Controller 时仅通知激活动作，不表示滚动完成。
-  ///
-  /// `null` 不表示禁用；只要提供 [controller]，组件仍可点击并执行回顶。
-  final VoidCallback? onPressed;
+  /// 未传 [controller] 时不触发；与 [onPressed] 的激活动作阶段分离。
+  /// 只配置此回调但没有 Controller 不会启用组件。
+  final VoidCallback? onCompleted;
 
   /// 是否显示设计内置文案。
   ///
@@ -162,8 +169,14 @@ class _TBackTopState extends State<TBackTop> {
     }
 
     final controller = widget.controller;
+    widget.onPressed?.call();
+    if (!mounted ||
+        !identical(controller, widget.controller) ||
+        controller == null) {
+      return;
+    }
     ScrollPosition? position;
-    if (controller != null && controller.hasClients) {
+    if (controller.hasClients) {
       position = controller.position;
       _isAnimating = true;
       try {
@@ -180,14 +193,13 @@ class _TBackTopState extends State<TBackTop> {
     if (!mounted || !identical(controller, widget.controller)) {
       return;
     }
-    if (controller != null &&
-        (!controller.hasClients ||
-            !identical(position, controller.position) ||
-            (controller.offset - controller.position.minScrollExtent).abs() >
-                precisionErrorTolerance)) {
+    if (!controller.hasClients ||
+        !identical(position, controller.position) ||
+        (controller.offset - controller.position.minScrollExtent).abs() >
+            precisionErrorTolerance) {
       return;
     }
-    widget.onPressed?.call();
+    widget.onCompleted?.call();
   }
 
   _BackTopVisualStyle _resolveStyle(BuildContext context) {

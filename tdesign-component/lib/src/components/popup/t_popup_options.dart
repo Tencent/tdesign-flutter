@@ -290,7 +290,9 @@ class TPopupOptions {
   /// 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。
   final VoidCallback? onClosed;
 
-  /// 显隐变化；第二个参数为 [TPopupTrigger]。
+  /// 显隐流程发起时触发；第二个参数为 [TPopupTrigger]。
+  ///
+  /// 此时动画不一定完成；完成阶段分别见 [onOpened] 与 [onClosed]。
   final TPopupVisibleChangeCallback? onVisibleChange;
 
   /// 是否避让系统安全区，默认 false；center 使用完整安全区，其他方向避让贴边侧及相邻边。

@@ -83,7 +83,7 @@ void main() {
       expect(changed, isNull);
     });
 
-    testWidgets('maxSelected 超限时触发 onMaxSelected 并保持原值', (tester) async {
+    testWidgets('maxSelected 超限时触发 onSelectionLimitExceeded 并保持原值', (tester) async {
       var overloaded = false;
       List<String>? changed;
       await tester.pumpWidget(
@@ -92,7 +92,7 @@ void main() {
             value: const ['a'],
             options: options,
             maxSelected: 1,
-            onMaxSelected: () => overloaded = true,
+            onSelectionLimitExceeded: () => overloaded = true,
             onChanged: (value) => changed = value,
           ),
         ),

@@ -30,7 +30,7 @@ void main() {
                 bottom: 32,
                 child: TBackTop(
                   controller: current,
-                  onPressed: () => notifications++,
+                  onCompleted: () => notifications++,
                 ),
               ),
             ],
@@ -77,7 +77,7 @@ void main() {
                   bottom: 32,
                   child: TBackTop(
                     controller: controller,
-                    onPressed: () => offsets.add(controller.offset),
+                    onCompleted: () => offsets.add(controller.offset),
                   ),
                 ),
               ],
@@ -281,13 +281,13 @@ void main() {
       expect(called, true);
     });
 
-    testWidgets('有 controller 且挂载时先回顶再调 onPressed', (tester) async {
+    testWidgets('有 controller 且挂载时回顶成功后调用 onCompleted', (tester) async {
       final controller = ScrollController(initialScrollOffset: 500);
       var called = false;
 
       await tester.pumpWidget(
         wrapScrollable(
-          TBackTop(controller: controller, onPressed: () => called = true),
+          TBackTop(controller: controller, onCompleted: () => called = true),
           controller,
         ),
       );
@@ -301,7 +301,7 @@ void main() {
 
       // controller 应已滚动到顶部
       expect(controller.offset, lessThan(1));
-      // onPressed 应被调用
+      // onCompleted 应被调用
       expect(called, true);
       controller.dispose();
     });
@@ -318,13 +318,13 @@ void main() {
   });
 
   group('TBackTop 回顶防抖', () {
-    testWidgets('动画进行中重复点击不额外触发 onPressed', (tester) async {
+    testWidgets('动画进行中重复点击不额外触发完成通知', (tester) async {
       final controller = ScrollController(initialScrollOffset: 3000);
       var callCount = 0;
 
       await tester.pumpWidget(
         wrapScrollable(
-          TBackTop(controller: controller, onPressed: () => callCount++),
+          TBackTop(controller: controller, onCompleted: () => callCount++),
           controller,
         ),
       );
@@ -340,7 +340,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      // 防抖应保证 onPressed 只执行一次
+      // 防抖应保证 onCompleted 只执行一次
       expect(callCount, 1);
       controller.dispose();
     });
@@ -448,6 +448,56 @@ void main() {
       firstController.dispose();
       secondController.dispose();
     });
+  });
+
+  testWidgets('激活先通知，完成只在回顶成功后通知；重复点击不重复激活', (tester) async {
+    final controller = ScrollController(initialScrollOffset: 1200);
+    final events = <String>[];
+    await tester.pumpWidget(
+      wrapScrollable(
+        TBackTop(
+          controller: controller,
+          onPressed: () => events.add('pressed:${controller.offset > 0}'),
+          onCompleted: () => events.add(
+            'completed:${controller.offset == controller.position.minScrollExtent}',
+          ),
+        ),
+        controller,
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(TBackTop));
+    expect(events, ['pressed:true']);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.tap(find.byType(TBackTop));
+    expect(events, ['pressed:true']);
+    await tester.pumpAndSettle();
+    expect(events, ['pressed:true', 'completed:true']);
+    await tester.pumpWidget(const SizedBox.shrink());
+    controller.dispose();
+  });
+
+  testWidgets('无 Controller 的激活不报告回顶完成', (tester) async {
+    final events = <String>[];
+    await tester.pumpWidget(
+      wrapWithTheme(
+        TBackTop(
+          onPressed: () => events.add('pressed'),
+          onCompleted: () => events.add('completed'),
+        ),
+      ),
+    );
+    await tester.tap(find.byType(TBackTop));
+    await tester.pumpAndSettle();
+    expect(events, ['pressed']);
+    await tester.pumpWidget(
+      wrapWithTheme(TBackTop(onCompleted: () => events.add('completed'))),
+    );
+    expect(
+      tester.widget<GestureDetector>(find.byType(GestureDetector)).onTap,
+      isNull,
+    );
   });
 
   group('TBackTop 主题颜色', () {

@@ -50,6 +50,55 @@ void main() {
     );
   }
 
+  test('Controller 单绑定保护、失败保留原绑定、身份解绑及重新绑定', () async {
+    final controller = TPullDownRefreshController();
+    final first = Object();
+    final second = Object();
+    var calls = 0;
+    Future<void> refreshFirst() async {
+      calls++;
+    }
+
+    Future<void> refreshSecond() async {
+      calls += 10;
+    }
+
+    controller.bind(first, refreshFirst);
+    expect(() => controller.bind(second, refreshSecond), throwsStateError);
+    await controller.refresh();
+    expect(calls, 1);
+    controller.unbind(second);
+    await controller.refresh();
+    expect(calls, 2);
+    controller.unbind(first);
+    await controller.refresh();
+    expect(calls, 2);
+    controller.bind(second, refreshSecond);
+    controller.unbind(first);
+    await controller.refresh();
+    expect(calls, 12);
+    controller.unbind(second);
+  });
+
+  testWidgets('替换和卸载 Controller 后仅解除对应绑定，实例可再次绑定', (tester) async {
+    final first = TPullDownRefreshController();
+    final second = TPullDownRefreshController();
+    final owner = Object();
+    Future<void> noop() async {}
+    await tester.pumpWidget(wrap(pullDownRefresh(controller: first)));
+    await tester.pump(const Duration(seconds: 1));
+    expect(() => first.bind(owner, noop), throwsStateError);
+    await tester.pumpWidget(wrap(pullDownRefresh(controller: second)));
+    await tester.pump(const Duration(seconds: 1));
+    first.bind(owner, noop);
+    expect(() => second.bind(owner, noop), throwsStateError);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump(const Duration(seconds: 1));
+    second.bind(owner, noop);
+    first.unbind(owner);
+    second.unbind(owner);
+  });
+
   group('TPullDownRefresh 最小化组件', () {
     test('跨端可见行为默认值与小程序一致', () {
       const widget = TPullDownRefresh(child: SizedBox());

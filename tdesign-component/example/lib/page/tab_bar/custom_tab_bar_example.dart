@@ -28,7 +28,7 @@ class _CustomTabBarExampleState extends State<CustomTabBarExample> {
         (index) => TTabBarItemConfig(
           selectedIcon: Icon(icons[index]),
           unselectedIcon: Icon(icons[index]),
-          allowMultipleTaps: true,
+          notifyOnReselect: true,
           onTap: () => TToast.showText('第 ${index + 1} 项', context: context),
         ),
       ),

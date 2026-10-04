@@ -31,7 +31,7 @@ class TPopoverWidget extends StatefulWidget {
     this.width,
     this.height,
     this.onTap,
-    this.onLongTap,
+    this.onLongPress,
     this.onTapOutside,
     this.radius,
   });
@@ -70,7 +70,7 @@ class TPopoverWidget extends StatefulWidget {
   final VoidCallback? onTap;
 
   /// 长按事件
-  final VoidCallback? onLongTap;
+  final VoidCallback? onLongPress;
 
   /// 点击气泡外部时触发。
   final VoidCallback? onTapOutside;
@@ -793,11 +793,11 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     final anchorRect = anchorOffset & anchorBounds.size;
     final mediaQuery = MediaQuery.of(context);
     var popover = _getChild();
-    if (widget.onTap != null || widget.onLongTap != null) {
+    if (widget.onTap != null || widget.onLongPress != null) {
       popover = GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: widget.onTap,
-        onLongPress: widget.onLongTap,
+        onLongPress: widget.onLongPress,
         child: popover,
       );
     }

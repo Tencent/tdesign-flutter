@@ -12,7 +12,7 @@ TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer
 | footer | Widget? | - | 抽屉的底部 |
 | items | List<TDrawerItem>? | - | 抽屉里的列表项 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onItemClick | TDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 |
+| onItemTap | TDrawerItemTapCallback? | - | 点击抽屉里的列表项触发 |
 | showDivider | bool | true | 是否显示菜单项分隔线，默认 true。 |
 | showLastDivider | bool | true | 是否显示最后一行分隔线，默认 true。 |
 | title | Widget? | - | 抽屉的标题组件 |
@@ -96,12 +96,12 @@ TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer
 | right | 从右侧滑出。 |
 
 
-### TDrawerItemClickCallback
+### TDrawerItemTapCallback
 #### 简介
 点击抽屉列表项时的回调。
 `index` 是列表下标，`item` 是被点击的配置项。
 #### 类型定义
 
 ```dart
-typedef TDrawerItemClickCallback = void Function(int index, TDrawerItem item);
+typedef TDrawerItemTapCallback = void Function(int index, TDrawerItem item);
 ```

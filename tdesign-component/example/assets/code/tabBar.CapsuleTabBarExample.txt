@@ -28,7 +28,7 @@ class _CapsuleTabBarExampleState extends State<CapsuleTabBarExample> {
           badge: index == 0
               ? const TBadgeConfig(variant: TBadgeVariant.dot)
               : null,
-          allowMultipleTaps: true,
+          notifyOnReselect: true,
           onTap: () => TToast.showText(
             '第 ${index + 1} 项',
             context: context,

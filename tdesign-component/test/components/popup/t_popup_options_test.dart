@@ -358,7 +358,7 @@ void main() {
       expect(config.color, isNull);
       expect(config.preventTap, isTrue);
       expect(config.closeOnClick, isNull);
-      expect(config.onClick, isNull);
+      expect(config.onTap, isNull);
       expect(config.effectiveCloseOnClick, isTrue);
     });
 

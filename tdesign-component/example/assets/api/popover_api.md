@@ -26,7 +26,7 @@
 | width | double? | - | 内容外框宽度（包含 padding）。 未设置时按 `content` 的实际布局宽度确定，并受组件主题尺寸约束。 |
 | height | double? | - | 内容外框高度（包含 padding）。 未设置时按 `content` 的实际布局高度确定，并受组件主题尺寸约束。 |
 | onTap | VoidCallback? | - | 点击气泡内容时触发。 |
-| onLongTap | VoidCallback? | - | 长按气泡内容时触发。 |
+| onLongPress | VoidCallback? | - | 长按气泡内容时触发。 |
 
 
 ### TPopoverAnchor
@@ -52,9 +52,9 @@
 | controller | TPopoverController? | - | 可选控制器，用于从触发区域外部展开或关闭气泡。 |
 | height | double? | - | 内容外框高度（包含 padding）。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onClose | VoidCallback? | - | 气泡通过任意路径关闭后触发。 |
-| onLongTap | VoidCallback? | - | 长按气泡内容时触发。 |
-| onOpen | VoidCallback? | - | 气泡展开后触发。 |
+| onClose | VoidCallback? | - | 气泡展示周期结束时触发，包含主动关闭和锚点卸载。 |
+| onLongPress | VoidCallback? | - | 长按气泡内容时触发。 |
+| onOpen | VoidCallback? | - | 气泡内容成功插入 Overlay 后触发，不表示展开动画完成。 |
 | onTap | VoidCallback? | - | 点击气泡内容时触发。 |
 | placement | TPopoverPlacement | TPopoverPlacement.top | 浮层出现位置。 |
 | showArrow | bool? | - | 是否显示气泡箭头。 |
