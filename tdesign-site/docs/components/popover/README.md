@@ -45,7 +45,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | context | BuildContext | - | 触发元素的上下文，用于计算气泡锚点位置。 |
 | content | Widget | - | 气泡内容。直接传入未设置样式的 `Text` 时使用气泡默认文字样式；组合内容应自行定义子组件样式和布局。 |
 | offset | double? | - | 弹层与触发元素的间距。 |
-| colorScheme | TPopoverColorScheme | TPopoverColorScheme.defaultTheme | 气泡预设配色。 |
+| colorPreset | TPopoverColorPreset | TPopoverColorPreset.defaultTheme | 气泡预设配色。 |
 | closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 |
 | closeOnScroll | bool | true | 页面滚动时是否关闭弹层。 默认为 true，避免触发元素移动后气泡停留在旧坐标。 |
 | placement | TPopoverPlacement | TPopoverPlacement.top | 浮层出现位置，默认为 `TPopoverPlacement.top`。 |
@@ -59,7 +59,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | onLongTap | VoidCallback? | - | 长按气泡内容时触发。 |
 | radius | BorderRadius? | - | 气泡圆角。 |
 
-### TPopoverColorScheme
+### TPopoverColorPreset
 #### 简介
 弹出气泡预设配色。
 #### 枚举值

@@ -17,11 +17,14 @@ class SizeAvatarExample extends StatelessWidget {
             image: const AssetImage('assets/img/t_avatar_1.png'),
           ),
           const SizedBox(width: 32),
-          TAvatar(
-            size: size,
-            backgroundColor: context.tTheme.brandNormalColor,
-            foregroundColor: context.tTheme.whiteColor1,
-            child: const Text('A'),
+          Theme(
+            data: Theme.of(context).mergeExtension(
+              TAvatarThemeData(
+                backgroundColor: context.tTheme.brandColor,
+                foregroundColor: context.tTheme.whiteColor1,
+              ),
+            ),
+            child: TAvatar(size: size, child: const Text('A')),
           ),
           const SizedBox(width: 32),
           TAvatar(size: size),

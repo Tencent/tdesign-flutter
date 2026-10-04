@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 /// `TSearchBar` 的默认视觉配置。
 class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
   const TSearchBarThemeData({
-    this.variant,
     this.height,
     this.inputBackgroundColor,
     this.contentPadding,
@@ -17,9 +16,6 @@ class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
     this.actionGap,
     this.cursorHeight,
   });
-
-  /// 搜索框形态。
-  final TSearchBarVariant? variant;
 
   /// 搜索框高度，默认 40dp。
   final double? height;
@@ -53,7 +49,6 @@ class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
 
   @override
   TSearchBarThemeData copyWith({
-    TSearchBarVariant? variant,
     double? height,
     Color? inputBackgroundColor,
     EdgeInsetsGeometry? contentPadding,
@@ -66,7 +61,6 @@ class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
     double? cursorHeight,
   }) {
     return TSearchBarThemeData(
-      variant: variant ?? this.variant,
       height: height ?? this.height,
       inputBackgroundColor: inputBackgroundColor ?? this.inputBackgroundColor,
       contentPadding: contentPadding ?? this.contentPadding,
@@ -89,7 +83,6 @@ class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
       return this;
     }
     return TSearchBarThemeData(
-      variant: t < 0.5 ? variant : other.variant,
       height: lerpDouble(height, other.height, t),
       inputBackgroundColor: Color.lerp(
         inputBackgroundColor,

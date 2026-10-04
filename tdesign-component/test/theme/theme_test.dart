@@ -13,9 +13,26 @@ void main() {
     test('TThemeData.defaultData() 返回非空默认 Token', () {
       final token = TThemeData.defaultData();
       expect(token, isNotNull);
-      expect(token.brandNormalColor, isA<Color>());
+      expect(token.brandColor, isA<Color>());
       expect(token.bgColorPage, isA<Color>());
       expect(token.radiusDefault, isA<double>());
+    });
+
+    test('小程序全局圆角变量在明暗主题中取值一致且可覆盖', () {
+      final token = TThemeData.defaultData();
+      for (final mode in [token, token.dark!]) {
+        expect(mode.radiusSmall, 3);
+        expect(mode.radiusDefault, 6);
+        expect(mode.radiusLarge, 9);
+        expect(mode.radiusExtraLarge, 12);
+        expect(mode.radiusRound, 999);
+        expect(mode.radiusCircle, 9999);
+      }
+
+      final custom =
+          token.copyWith(radiusMap: {'radiusDefault': 8}) as TThemeData;
+      expect(custom.radiusDefault, 8);
+      expect(custom.radiusSmall, 3);
     });
 
     test('TThemeBuilder.light/dark 返回完整 ThemeData', () {
@@ -28,9 +45,9 @@ void main() {
       expect(darkTheme.extension<TThemeData>(), isNotNull);
 
       // 验证 ColorScheme 映射
-      expect(lightTheme.colorScheme.primary, token.brandNormalColor);
+      expect(lightTheme.colorScheme.primary, token.brandColor);
       expect(lightTheme.colorScheme.surface, token.bgColorContainer);
-      expect(lightTheme.colorScheme.error, token.errorNormalColor);
+      expect(lightTheme.colorScheme.error, token.errorColor);
       expect(
         lightTheme.textTheme.bodyLarge?.fontSize,
         token.fontBodyLarge?.size,
@@ -39,19 +56,14 @@ void main() {
       expect(lightTheme.inputDecorationTheme.filled, isFalse);
       expect(lightTheme.inputDecorationTheme.fillColor, Colors.transparent);
       expect(lightTheme.extension<TButtonThemeData>(), isNotNull);
-      // 字体 Token 已映射到 Material TextTheme；组件扩展保持为空，
-      // 避免覆盖局部 DefaultTextStyle。
-      expect(lightTheme.extension<TTextThemeData>()?.font, isNull);
-      expect(lightTheme.extension<TIconThemeData>()?.color, isNull);
+      // 字体 Token 映射到 Material TextTheme；组件 Theme 保留子树默认能力。
+      expect(lightTheme.extension<TTextThemeData>(), isNotNull);
       expect(
         lightTheme.filledButtonTheme.style?.backgroundColor?.resolve({}),
-        token.brandNormalColor,
+        token.brandColor,
       );
 
-      expect(
-        darkTheme.colorScheme.primary,
-        (token.dark ?? token).brandNormalColor,
-      );
+      expect(darkTheme.colorScheme.primary, (token.dark ?? token).brandColor);
     });
 
     testWidgets('TThemeBuilder 不用全局主题污染输入和普通图标默认样式', (tester) async {
@@ -75,15 +87,13 @@ void main() {
       expect(capturedInputTheme!.filled, isFalse);
       expect(capturedInputTheme!.fillColor, Colors.transparent);
       expect(capturedIconColor, token.textColorPrimary);
-      expect(capturedIconColor, isNot(token.brandNormalColor));
+      expect(capturedIconColor, isNot(token.brandColor));
     });
 
     test('ThemeData.mergeExtension 保留现有 Extension', () {
       final token = TThemeData.defaultData();
       final baseTheme = TThemeBuilder.light(token);
-      const buttonTheme = TButtonThemeData(
-        defaultVariant: TButtonVariant.outline,
-      );
+      const buttonTheme = TButtonThemeData(iconTextSpacing: 7);
 
       final merged = baseTheme.mergeExtension(buttonTheme);
 
@@ -91,10 +101,7 @@ void main() {
       expect(merged.extension<TThemeData>(), isNotNull);
       // 验证 merge 后 TButtonThemeData 已注入
       expect(merged.extension<TButtonThemeData>(), isNotNull);
-      expect(
-        merged.extension<TButtonThemeData>()!.defaultVariant,
-        TButtonVariant.outline,
-      );
+      expect(merged.extension<TButtonThemeData>()!.iconTextSpacing, 7);
     });
 
     testWidgets('context.tTheme 从 Theme.of(context) 读取 TThemeData', (
@@ -116,7 +123,7 @@ void main() {
       );
 
       expect(capturedToken, isNotNull);
-      expect(capturedToken!.brandNormalColor, token.brandNormalColor);
+      expect(capturedToken!.brandColor, token.brandColor);
     });
 
     testWidgets('context.tTheme 无 Theme 时回退默认值', (tester) async {
@@ -135,10 +142,7 @@ void main() {
 
       expect(capturedToken, isNotNull);
       // 应回退到 TThemeData.defaultData()
-      expect(
-        capturedToken!.brandNormalColor,
-        TThemeData.defaultData().brandNormalColor,
-      );
+      expect(capturedToken!.brandColor, TThemeData.defaultData().brandColor);
     });
   });
 
@@ -152,14 +156,14 @@ void main() {
           theme: TThemeBuilder.light(token),
           home: Builder(
             builder: (context) {
-              capturedColor = context.tTheme.brandNormalColor;
+              capturedColor = context.tTheme.brandColor;
               return const SizedBox();
             },
           ),
         ),
       );
 
-      expect(capturedColor, token.brandNormalColor);
+      expect(capturedColor, token.brandColor);
     });
 
     testWidgets('P3 ColorScheme: TThemeBuilder 映射 Token → ColorScheme', (
@@ -180,18 +184,18 @@ void main() {
         ),
       );
 
-      expect(capturedScheme!.primary, token.brandNormalColor);
+      expect(capturedScheme!.primary, token.brandColor);
       expect(capturedScheme!.surface, token.bgColorContainer);
-      expect(capturedScheme!.error, token.errorNormalColor);
+      expect(capturedScheme!.error, token.errorColor);
     });
 
     testWidgets('P1 组件 Theme: 子树 mergeExtension 覆盖组件默认', (tester) async {
       final token = TThemeData.defaultData();
       // 子树 Theme 数据需在 pumpWidget 之前静态构造，不能在 pumpWidget 参数中调用
       // Theme.of(tester.element(...))（此时 Scaffold 尚未渲染）。
-      final subtreeTheme = TThemeBuilder.light(token).mergeExtension(
-        const TButtonThemeData(defaultVariant: TButtonVariant.outline),
-      );
+      final subtreeTheme = TThemeBuilder.light(
+        token,
+      ).mergeExtension(const TButtonThemeData(iconTextSpacing: 7));
 
       await tester.pumpWidget(
         MaterialApp(
@@ -206,7 +210,7 @@ void main() {
                   ).extension<TButtonThemeData>();
                   // P1 组件 Theme 覆盖了默认值
                   expect(buttonTheme, isNotNull);
-                  expect(buttonTheme!.defaultVariant, TButtonVariant.outline);
+                  expect(buttonTheme!.iconTextSpacing, 7);
                   return const SizedBox();
                 },
               ),
@@ -246,12 +250,12 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          theme: TThemeBuilder.light(token).mergeExtension(
-            const TButtonThemeData(defaultVariant: TButtonVariant.outline),
-          ),
+          theme: TThemeBuilder.light(
+            token,
+          ).mergeExtension(const TButtonThemeData(iconTextSpacing: 7)),
           home: Scaffold(
             body: TButton(
-              colorScheme: TButtonColorScheme.primary,
+              colorPreset: TButtonColorPreset.primary,
               onPressed: () {},
               child: const Text('P1'),
             ),
@@ -262,16 +266,16 @@ void main() {
       final element = tester.element(find.byType(TButton));
       final buttonTheme = Theme.of(element).extension<TButtonThemeData>();
       expect(buttonTheme, isNotNull);
-      expect(buttonTheme!.defaultVariant, TButtonVariant.outline);
-      expect(element.tTheme.brandNormalColor, token.brandNormalColor);
+      expect(buttonTheme!.iconTextSpacing, 7);
+      expect(element.tTheme.brandColor, token.brandColor);
 
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      expect(button.style?.side?.resolve({})?.color, token.brandNormalColor);
+      expect(button.style?.padding?.resolve({}), isNotNull);
     });
   });
 
   group('TStyleResolver', () {
-    testWidgets('提供 P0-P4 各层访问', (tester) async {
+    testWidgets('提供全局 Token 和组件 Theme 访问', (tester) async {
       final token = TThemeData.defaultData();
 
       await tester.pumpWidget(
@@ -283,21 +287,11 @@ void main() {
                 final resolver = TStyleResolver.of(context);
 
                 // P4: Token
-                expect(resolver.token.brandNormalColor, token.brandNormalColor);
-
-                // P3: ColorScheme
-                expect(resolver.colorScheme.primary, token.brandNormalColor);
-
-                // P2: Material ThemeData
-                expect(resolver.materialTheme, isA<ThemeData>());
+                expect(resolver.token.brandColor, token.brandColor);
 
                 // P1: TThemeBuilder 全局注入默认组件 Extension
                 expect(
                   resolver.componentExtension<TButtonThemeData>(),
-                  isNotNull,
-                );
-                expect(
-                  resolver.componentExtension<TTextThemeData>(),
                   isNotNull,
                 );
 

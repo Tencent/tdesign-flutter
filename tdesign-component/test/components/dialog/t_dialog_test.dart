@@ -474,9 +474,9 @@ void main() {
           TDialog(
             title: const Text('长内容'),
             content: Text(List.filled(40, '内容').join()),
-            maxHeight: 200,
             actions: const [TDialogAction(child: Text('完成'))],
           ),
+          dialogTheme: const TDialogThemeData(maxHeight: 200),
         ),
       );
       expect(
@@ -626,17 +626,17 @@ void main() {
         final button = tester.widget<TButton>(find.byType(TButton));
         expect(button.variant, variant ?? TButtonVariant.fill);
         expect(
-          button.colorScheme,
+          button.colorPreset,
           variant == null || variant == TButtonVariant.fill
-              ? TButtonColorScheme.light
-              : TButtonColorScheme.defaultTheme,
+              ? TButtonColorPreset.light
+              : TButtonColorPreset.defaultTheme,
         );
       }
     });
 
     testWidgets('各角色默认配色与显式配色覆盖互不干扰', (tester) async {
       for (final role in TDialogActionRole.values) {
-        for (final scheme in [null, ...TButtonColorScheme.values]) {
+        for (final scheme in [null, ...TButtonColorPreset.values]) {
           await tester.pumpWidget(
             app(
               TDialog(
@@ -645,7 +645,7 @@ void main() {
                   TDialogAction(
                     child: const Text('执行'),
                     role: role,
-                    colorScheme: scheme,
+                    colorPreset: scheme,
                   ),
                 ],
               ),
@@ -654,12 +654,12 @@ void main() {
           final button = tester.widget<TButton>(find.byType(TButton));
           expect(button.variant, TButtonVariant.fill);
           expect(
-            button.colorScheme,
+            button.colorPreset,
             scheme ??
                 switch (role) {
-                  TDialogActionRole.normal => TButtonColorScheme.light,
-                  TDialogActionRole.primary => TButtonColorScheme.primary,
-                  TDialogActionRole.destructive => TButtonColorScheme.danger,
+                  TDialogActionRole.normal => TButtonColorPreset.light,
+                  TDialogActionRole.primary => TButtonColorPreset.primary,
+                  TDialogActionRole.destructive => TButtonColorPreset.danger,
                 },
           );
         }
@@ -685,7 +685,7 @@ void main() {
       final delete = tester.widget<TButton>(
         find.ancestor(of: find.text('删除'), matching: find.byType(TButton)),
       );
-      expect(delete.colorScheme, TButtonColorScheme.danger);
+      expect(delete.colorPreset, TButtonColorPreset.danger);
       expect(delete.onPressed, isNull);
     });
 
@@ -719,7 +719,7 @@ void main() {
   });
 
   group('TDialog 主题', () {
-    testWidgets('默认标题与正文样式继承应用字体', (tester) async {
+    testWidgets('默认标题与正文样式使用 TDesign 全局字体', (tester) async {
       final base = theme();
       const family = 'Test Primary Font';
       const fallback = 'Test CJK Fallback';
@@ -743,10 +743,10 @@ void main() {
       final contentStyle = DefaultTextStyle.of(
         tester.element(find.text('正文')),
       ).style;
-      expect(titleStyle.fontFamily, family);
-      expect(contentStyle.fontFamily, family);
-      expect(titleStyle.fontFamilyFallback, contains(fallback));
-      expect(contentStyle.fontFamilyFallback, contains(fallback));
+      expect(titleStyle.fontFamily, 'Roboto');
+      expect(contentStyle.fontFamily, 'Roboto');
+      expect(titleStyle.fontFamilyFallback, isNot(contains(fallback)));
+      expect(contentStyle.fontFamilyFallback, isNot(contains(fallback)));
     });
 
     test('ThemeData merge/copyWith/lerp 保留所有公开字段', () {
@@ -760,9 +760,6 @@ void main() {
         contentTextStyle: TextStyle(fontSize: 14),
         contentPadding: EdgeInsets.all(16),
         maxHeight: 240,
-        actionButtonStyle: ButtonStyle(
-          foregroundColor: WidgetStatePropertyAll(Colors.red),
-        ),
         width: 280,
       );
       const override = TDialogThemeData(
@@ -782,7 +779,6 @@ void main() {
       expect(merged.contentTextStyle, base.contentTextStyle);
       expect(merged.contentPadding, override.contentPadding);
       expect(merged.maxHeight, base.maxHeight);
-      expect(merged.actionButtonStyle, base.actionButtonStyle);
       expect(merged.width, 320);
 
       final copied = base.copyWith(
@@ -793,9 +789,6 @@ void main() {
         contentTextStyle: const TextStyle(fontSize: 15),
         contentPadding: const EdgeInsets.all(20),
         maxHeight: 300,
-        actionButtonStyle: const ButtonStyle(
-          foregroundColor: WidgetStatePropertyAll(Colors.green),
-        ),
         width: 300,
       );
       expect(copied.backgroundColor, Colors.green);
@@ -805,7 +798,6 @@ void main() {
       expect(copied.contentTextStyle?.fontSize, 15);
       expect(copied.contentPadding, const EdgeInsets.all(20));
       expect(copied.maxHeight, 300);
-      expect(copied.actionButtonStyle, isNotNull);
       expect(copied.width, 300);
 
       final unchanged = base.copyWith();
@@ -816,7 +808,6 @@ void main() {
       expect(unchanged.contentTextStyle, base.contentTextStyle);
       expect(unchanged.contentPadding, base.contentPadding);
       expect(unchanged.maxHeight, base.maxHeight);
-      expect(unchanged.actionButtonStyle, base.actionButtonStyle);
       expect(unchanged.width, base.width);
 
       final interpolated = base.lerp(copied, 0.5);
@@ -829,28 +820,19 @@ void main() {
       expect(interpolated.contentTextStyle?.fontSize, 14.5);
       expect(interpolated.contentPadding, const EdgeInsets.all(18));
       expect(interpolated.maxHeight, 270);
-      expect(interpolated.actionButtonStyle, isNotNull);
       expect(interpolated.width, 290);
       expect(TDialogThemeData.lerpDouble(null, null, 0.5), isNull);
     });
 
-    testWidgets('实例值优先于 Dialog ThemeExtension', (tester) async {
+    testWidgets('Dialog ThemeExtension 是面板视觉值的唯一组件入口', (tester) async {
       const extension = TDialogThemeData(
-        backgroundColor: Colors.red,
-        width: 280,
-        elevation: 4,
+        backgroundColor: Colors.blue,
+        width: 260,
+        elevation: 8,
         maxHeight: 240,
       );
       await tester.pumpWidget(
-        app(
-          const TDialog(
-            title: Text('主题'),
-            backgroundColor: Colors.blue,
-            width: 260,
-            elevation: 8,
-          ),
-          dialogTheme: extension,
-        ),
+        app(const TDialog(title: Text('主题')), dialogTheme: extension),
       );
       final material = tester
           .widgetList<Material>(
@@ -894,7 +876,7 @@ void main() {
       expect(material.color, Colors.green);
     });
 
-    testWidgets('Material DialogTheme 是 Extension 缺失时的兜底', (tester) async {
+    testWidgets('Material DialogTheme 不作为 TDesign 外观兜底', (tester) async {
       final base = theme().copyWith(
         dialogTheme: const DialogThemeData(
           backgroundColor: Colors.purple,
@@ -913,8 +895,8 @@ void main() {
           matching: find.byType(Material),
         ),
       );
-      expect(material.color, Colors.purple);
-      expect(material.elevation, 6);
+      expect(material.color, isNot(Colors.purple));
+      expect(material.elevation, isNot(6));
     });
 
     testWidgets('浅色普通操作实际颜色跟随明暗主题与自定义 token', (tester) async {
@@ -922,8 +904,8 @@ void main() {
       final custom = defaults.copyWithTThemeData(
         'dialog-action-colors',
         colorMap: {
-          'brandLightColor': Colors.amber,
-          'brandNormalColor': Colors.purple,
+          'brandColorLight': Colors.amber,
+          'brandColor': Colors.purple,
         },
       );
       for (final tokens in [defaults, custom]) {
@@ -948,47 +930,32 @@ void main() {
           final material = tester.widget<Material>(
             find.descendant(of: button, matching: find.byType(Material)),
           );
-          expect(material.color, actualTokens.brandLightColor);
-          expect(material.textStyle?.color, actualTokens.brandNormalColor);
+          expect(material.color, actualTokens.brandColorLight);
+          expect(material.textStyle?.color, actualTokens.brandColor);
         }
       }
     });
 
-    testWidgets('普通操作保留实例和 Dialog Theme 按钮样式覆盖', (tester) async {
-      const themeStyle = ButtonStyle(
-        backgroundColor: WidgetStatePropertyAll(Colors.green),
-        foregroundColor: WidgetStatePropertyAll(Colors.white),
-      );
+    testWidgets('普通操作通过 action.style 设置按钮视觉样式', (tester) async {
       const instanceStyle = ButtonStyle(
         backgroundColor: WidgetStatePropertyAll(Colors.orange),
         foregroundColor: WidgetStatePropertyAll(Colors.black),
       );
-      for (final explicit in [false, true]) {
-        await tester.pumpWidget(
-          app(
-            TDialog(
-              title: const Text('覆盖'),
-              actions: [
-                TDialogAction(
-                  child: const Text('取消'),
-                  style: explicit ? instanceStyle : null,
-                ),
-              ],
-            ),
-            dialogTheme: const TDialogThemeData(actionButtonStyle: themeStyle),
+      await tester.pumpWidget(
+        app(
+          const TDialog(
+            title: Text('覆盖'),
+            actions: [TDialogAction(child: Text('取消'), style: instanceStyle)],
           ),
-        );
-        await tester.pumpAndSettle();
-        final button = find.byType(TButton);
-        final material = tester.widget<Material>(
-          find.descendant(of: button, matching: find.byType(Material)),
-        );
-        expect(material.color, explicit ? Colors.orange : Colors.green);
-        expect(
-          material.textStyle?.color,
-          explicit ? Colors.black : Colors.white,
-        );
-      }
+        ),
+      );
+      await tester.pumpAndSettle();
+      final button = find.byType(TButton);
+      final material = tester.widget<Material>(
+        find.descendant(of: button, matching: find.byType(Material)),
+      );
+      expect(material.color, Colors.orange);
+      expect(material.textStyle?.color, Colors.black);
     });
 
     testWidgets('默认内容顶边距与关闭按钮位置对齐官方基线', (tester) async {
@@ -1023,12 +990,7 @@ void main() {
       final tokens = TThemeData.defaultData().copyWithTThemeData(
         'dialog-token-test',
         radiusMap: {'radiusExtraLarge': 20},
-        marginMap: {
-          'spacer8': 10,
-          'spacer12': 14,
-          'spacer24': 30,
-          'spacer32': 40,
-        },
+        marginMap: {'spacer': 10, 'spacer1': 14, 'spacer3': 30, 'spacer4': 40},
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -1111,7 +1073,7 @@ void main() {
     testWidgets('显式间距不会被数值相同的 token 默认值覆盖', (tester) async {
       final tokens = TThemeData.defaultData().copyWithTThemeData(
         'dialog-explicit-spacing-test',
-        marginMap: {'spacer12': 14, 'spacer24': 30},
+        marginMap: {'spacer1': 14, 'spacer3': 30},
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -1151,7 +1113,7 @@ void main() {
     testWidgets('极小视口与自定义间距 token 不会生成负约束', (tester) async {
       final tokens = TThemeData.defaultData().copyWithTThemeData(
         'dialog-small-viewport-test',
-        marginMap: {'spacer32': 40},
+        marginMap: {'spacer4': 40},
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -1205,7 +1167,7 @@ void main() {
       find.ancestor(of: find.text('知道了'), matching: find.byType(TButton)),
     );
     expect(confirmButton.variant, TButtonVariant.fill);
-    expect(confirmButton.colorScheme, TButtonColorScheme.primary);
+    expect(confirmButton.colorPreset, TButtonColorPreset.primary);
     await tester.tap(find.text('知道了'));
     await tester.pumpAndSettle();
     expect(called, isTrue);

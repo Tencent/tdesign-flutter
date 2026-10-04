@@ -171,7 +171,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
               children: [
                 TButton(
                   child: const Text('展示Loading'),
-                  colorScheme: TButtonColorScheme.primary,
+                  colorPreset: TButtonColorPreset.primary,
                   onPressed: () {
                     TLoadingController.show(context);
                   },
@@ -179,7 +179,7 @@ class _TLoadingPageState extends State<TLoadingPage> {
                 const SizedBox(width: 36),
                 const TButton(
                   child: Text('隐藏Loading'),
-                  colorScheme: TButtonColorScheme.primary,
+                  colorPreset: TButtonColorPreset.primary,
                   onPressed: TLoadingController.dismiss,
                 ),
               ],

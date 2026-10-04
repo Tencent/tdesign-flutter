@@ -14,6 +14,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
+import '../icon/t_icon.dart';
 import 't_tab.dart';
 import 't_tab_bar_theme_data.dart';
 
@@ -72,7 +73,7 @@ class _TabStyle extends AnimatedWidget {
           )!;
 
     final selectedColor =
-        labelColor ?? labelStyle?.color ?? context.tTheme.brandNormalColor;
+        labelColor ?? labelStyle?.color ?? context.tTheme.brandColor;
     final unselectedColor =
         unselectedLabelColor ??
         unselectedLabelStyle?.color ??
@@ -86,7 +87,7 @@ class _TabStyle extends AnimatedWidget {
       style: textStyle.copyWith(color: color),
       child: IconTheme(
         data: IconThemeData(size: _kTabIconSize, color: color),
-        child: child,
+        child: TIconStyleScope(color: color, size: _kTabIconSize, child: child),
       ),
     );
   }
@@ -559,7 +560,7 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
     return UnderlineTabIndicator(
       borderSide: BorderSide(
         width: widget.indicatorWeight,
-        color: widget.indicatorColor ?? context.tTheme.brandNormalColor,
+        color: widget.indicatorColor ?? context.tTheme.brandColor,
       ),
     );
   }
@@ -1651,7 +1652,7 @@ class TabPageSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fixColor = color ?? Colors.transparent;
-    final fixSelectedColor = selectedColor ?? context.tTheme.brandNormalColor;
+    final fixSelectedColor = selectedColor ?? context.tTheme.brandColor;
     final selectedColorTween = ColorTween(
       begin: fixColor,
       end: fixSelectedColor,

@@ -12,14 +12,14 @@ class DisabledLinksExample extends StatelessWidget {
         _exampleRow(context, [
           _link(
             context,
-            colorScheme: TLinkColorScheme.primary,
+            colorPreset: TLinkColorPreset.primary,
             suffixIcon: const Icon(TIcons.jump),
             disabled: true,
           ),
           _link(context, suffixIcon: const Icon(TIcons.jump), disabled: true),
           _link(
             context,
-            colorScheme: TLinkColorScheme.danger,
+            colorPreset: TLinkColorPreset.danger,
             suffixIcon: const Icon(TIcons.jump),
             disabled: true,
           ),
@@ -28,13 +28,13 @@ class DisabledLinksExample extends StatelessWidget {
         _exampleRow(context, [
           _link(
             context,
-            colorScheme: TLinkColorScheme.warning,
+            colorPreset: TLinkColorPreset.warning,
             suffixIcon: const Icon(TIcons.jump),
             disabled: true,
           ),
           _link(
             context,
-            colorScheme: TLinkColorScheme.success,
+            colorPreset: TLinkColorPreset.success,
             suffixIcon: const Icon(TIcons.jump),
             disabled: true,
           ),
@@ -57,7 +57,7 @@ class DisabledLinksExample extends StatelessWidget {
   TLink _link(
     BuildContext context, {
     String label = '跳转链接',
-    TLinkColorScheme? colorScheme,
+    TLinkColorPreset? colorPreset,
     TLinkSize size = TLinkSize.small,
     bool? underline,
     Widget? prefixIcon,
@@ -66,7 +66,7 @@ class DisabledLinksExample extends StatelessWidget {
   }) {
     return TLink(
       child: Text(label),
-      colorScheme: colorScheme,
+      colorPreset: colorPreset,
       size: size,
       underline: underline,
       prefixIcon: prefixIcon,

@@ -20,7 +20,7 @@ void main() {
     for (final button in buttons) {
       expect(button.size, TButtonSize.large);
       expect(button.variant, TButtonVariant.outline);
-      expect(button.colorScheme, TButtonColorScheme.primary);
+      expect(button.colorPreset, TButtonColorPreset.primary);
       expect(tester.getSize(find.byWidget(button)).width, 343);
     }
   });

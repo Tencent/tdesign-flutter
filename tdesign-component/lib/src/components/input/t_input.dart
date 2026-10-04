@@ -97,7 +97,7 @@ class TInput extends StatefulWidget {
   /// 输入框语义状态。
   ///
   /// 状态色用于输入壳层、计数器和错误提示；
-  /// 已输入文字仍使用正常正文色，除非通过 [style] 或 [TInputThemeData.textStyle] 显式覆盖。
+  /// 已输入文字仍使用正常正文色，除非通过 [style] 显式覆盖。
   /// 当输入框位于 `TFormField` 中且表单错误需要在输入框内展示时，
   /// 表单错误状态优先于这里显式设置的状态。
   final TInputStatus status;
@@ -157,7 +157,9 @@ class TInput extends StatefulWidget {
 
   /// 输入文本样式。
   ///
-  /// 未指定的字段继承 TDesign `fontBodyLarge`；显式颜色可覆盖默认正文色。
+  /// 输入文字样式的唯一组件公开配置入口。未指定的字段继承显式
+  /// Material 文字主题或 TDesign `fontBodyLarge`；提示文字由组件 Theme
+  /// 的 `hintStyle` 单独控制。
   final TextStyle? style;
 
   /// 光标颜色。
@@ -213,7 +215,6 @@ class _TInputState extends State<TInput> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TInputThemeData>();
-    final material = Theme.of(context);
     final token = context.tTheme;
     final fieldScope = TFieldScope.maybeOf(context);
     final formErrorText = fieldScope?.errorText;
@@ -223,7 +224,7 @@ class _TInputState extends State<TInput> {
     final effectiveStatus = inputErrorText != null
         ? TInputStatus.error
         : widget.status;
-    final inputTextColor = _inputTextColor(token, material);
+    final inputTextColor = _inputTextColor(token);
     final tokenFont = token.fontBodyLarge;
     final tokenStyle = TextStyle(
       color: inputTextColor,
@@ -231,31 +232,14 @@ class _TInputState extends State<TInput> {
       height: tokenFont?.height,
       fontWeight: tokenFont?.fontWeight,
     );
-    final inheritedTextStyle = tokenStyle.merge(
-      material.tExplicitTextTheme?.bodyLarge,
-    );
-    final themeTextStyle = theme?.textStyle;
-    final configuredTextStyle = inheritedTextStyle
-        .merge(themeTextStyle)
-        .merge(widget.style);
-    final configuredTextColor = widget.enabled
-        ? themeTextStyle?.color ??
-              material.tExplicitTextTheme?.bodyLarge?.color ??
-              material.tExplicitColorScheme?.onSurface ??
-              inputTextColor
-        : inputTextColor;
+    final configuredTextStyle = tokenStyle.merge(widget.style);
     final textStyle = configuredTextStyle.copyWith(
-      color: widget.style?.color ?? configuredTextColor,
+      color: widget.enabled
+          ? widget.style?.color ?? inputTextColor
+          : token.textColorDisabled,
     );
-    final cursorColor =
-        widget.cursorColor ??
-        theme?.cursorColor ??
-        material.tExplicitColorScheme?.primary ??
-        token.brandNormalColor;
-    final clearMode =
-        widget.clearButtonMode ??
-        theme?.clearButtonMode ??
-        TInputClearButtonMode.never;
+    final cursorColor = widget.cursorColor ?? token.brandColor;
+    final clearMode = widget.clearButtonMode ?? TInputClearButtonMode.never;
     final statusColor = _statusColor(token, effectiveStatus);
     final hintFont = widget._multiline
         ? token.fontBodyMedium
@@ -265,19 +249,16 @@ class _TInputState extends State<TInput> {
         TextStyle(
               color: widget.enabled
                   ? token.textColorPlaceholder
-                  : token.textDisabledColor,
+                  : token.textColorDisabled,
               fontSize: hintFont?.size,
               height: hintFont?.height,
               fontWeight: hintFont?.fontWeight,
             )
-            .merge(material.tExplicitTextTheme?.bodyLarge)
             .merge(themeHintStyle)
             .copyWith(
               color: widget.enabled
-                  ? themeHintStyle?.color ??
-                        material.inputDecorationTheme.hintStyle?.color ??
-                        token.textColorPlaceholder
-                  : token.textDisabledColor,
+                  ? themeHintStyle?.color ?? token.textColorPlaceholder
+                  : token.textColorDisabled,
             );
     final innerDecoration = InputDecoration(
       hintText: widget.hintText,
@@ -296,8 +277,7 @@ class _TInputState extends State<TInput> {
     );
 
     final configuredMinLines =
-        widget.minLines ??
-        (widget._multiline ? theme?.multilineMinLines ?? 4 : null);
+        widget.minLines ?? (widget._multiline ? 4 : null);
     final minLines = configuredMinLines == null || widget.maxLines == null
         ? configuredMinLines
         : configuredMinLines.clamp(1, widget.maxLines!);
@@ -332,7 +312,7 @@ class _TInputState extends State<TInput> {
     final counterLimit = widget.maxLength ?? widget.maxCharacter;
     final borderSide = BorderSide(
       color: !widget.enabled
-          ? theme?.borderColor ?? token.componentStrokeColor
+          ? theme?.borderColor ?? token.componentStroke
           : theme?.borderColor ?? _borderColor(token, effectiveStatus),
       width: theme?.borderWidth ?? 1,
     );
@@ -355,9 +335,8 @@ class _TInputState extends State<TInput> {
       clearIconColor:
           theme?.clearIconColor ??
           (effectiveStatus == TInputStatus.error
-              ? token.errorNormalColor
-              : material.tExplicitColorScheme?.onSurfaceVariant ??
-                    token.textColorPlaceholder),
+              ? token.errorColor
+              : token.textColorPlaceholder),
       onClear: _clear,
       enabled: widget.enabled,
       readOnly: widget.readOnly,
@@ -366,7 +345,7 @@ class _TInputState extends State<TInput> {
       counterLimit: counterLimit,
       maxCharacter: widget.maxCharacter,
       counterColor: effectiveStatus == TInputStatus.error
-          ? token.errorNormalColor
+          ? token.errorColor
           : widget._multiline
           ? token.textColorPlaceholder
           : token.textColorSecondary,
@@ -386,7 +365,7 @@ class _TInputState extends State<TInput> {
       ),
       borderRadius: borderRadius,
       contentPadding: contentPadding,
-      counterGap: widget._multiline ? token.spacer8 : 2,
+      counterGap: widget._multiline ? token.spacer : 2,
     );
     final error = inputErrorText == null
         ? null
@@ -394,15 +373,11 @@ class _TInputState extends State<TInput> {
             padding: const EdgeInsets.only(top: 4),
             child: Text(
               inputErrorText,
-              style:
-                  TextStyle(
-                        fontSize: token.fontBodySmall?.size,
-                        height: token.fontBodySmall?.height,
-                        fontWeight: token.fontBodySmall?.fontWeight,
-                      )
-                      .merge(material.tExplicitTextTheme?.bodySmall)
-                      .copyWith(color: token.errorNormalColor)
-                      .merge(material.inputDecorationTheme.errorStyle),
+              style: TextStyle(
+                fontSize: token.fontBodySmall?.size,
+                height: token.fontBodySmall?.height,
+                fontWeight: token.fontBodySmall?.fontWeight,
+              ).copyWith(color: token.errorColor),
             ),
           );
 
@@ -445,22 +420,21 @@ class _TInputState extends State<TInput> {
     setState(() => _obscureText = !_obscureText);
   }
 
-  Color _inputTextColor(TThemeData token, ThemeData material) => widget.enabled
-      ? material.tExplicitColorScheme?.onSurface ?? token.textColorPrimary
-      : token.textDisabledColor;
+  Color _inputTextColor(TThemeData token) =>
+      widget.enabled ? token.textColorPrimary : token.textColorDisabled;
 
   Color _statusColor(TThemeData token, TInputStatus status) => switch (status) {
-    TInputStatus.normal => token.brandNormalColor,
-    TInputStatus.success => token.successNormalColor,
-    TInputStatus.warning => token.warningNormalColor,
-    TInputStatus.error => token.errorNormalColor,
+    TInputStatus.normal => token.brandColor,
+    TInputStatus.success => token.successColor,
+    TInputStatus.warning => token.warningColor,
+    TInputStatus.error => token.errorColor,
   };
 
   Color _borderColor(TThemeData token, TInputStatus status) => switch (status) {
-    TInputStatus.normal => token.componentBorderColor,
-    TInputStatus.success => token.successNormalColor,
-    TInputStatus.warning => token.warningNormalColor,
-    TInputStatus.error => token.errorNormalColor,
+    TInputStatus.normal => token.componentBorder,
+    TInputStatus.success => token.successColor,
+    TInputStatus.warning => token.warningColor,
+    TInputStatus.error => token.errorColor,
   };
 }
 
@@ -614,7 +588,7 @@ class _TInputShellState extends State<_TInputShell> {
                 widget.obscureText ? TIcons.browse_off : TIcons.browse,
                 color: widget.enabled
                     ? context.tTheme.textColorPlaceholder
-                    : context.tTheme.textDisabledColor,
+                    : context.tTheme.textColorDisabled,
               ),
             ),
           )
@@ -647,10 +621,10 @@ class _TInputShellState extends State<_TInputShell> {
           _TInputSlot(
             color: widget.enabled
                 ? context.tTheme.textColorPrimary
-                : context.tTheme.textDisabledColor,
+                : context.tTheme.textColorDisabled,
             child: widget.prefix!,
           ),
-          SizedBox(width: context.tTheme.spacer16),
+          SizedBox(width: context.tTheme.spacer2),
         ],
         Expanded(child: widget.editor),
         if (clearButton != null) ...[const SizedBox(width: 4), clearButton],
@@ -659,11 +633,11 @@ class _TInputShellState extends State<_TInputShell> {
           passwordButton,
         ],
         if (widget.suffix != null) ...[
-          SizedBox(width: context.tTheme.spacer8),
+          SizedBox(width: context.tTheme.spacer),
           _TInputSlot(
             color: widget.enabled
                 ? context.tTheme.textColorPlaceholder
-                : context.tTheme.textDisabledColor,
+                : context.tTheme.textColorDisabled,
             child: widget.suffix!,
           ),
         ],

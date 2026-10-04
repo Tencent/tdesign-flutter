@@ -36,11 +36,11 @@ class TPopupHeader extends StatelessWidget {
       children: [
         if (cancelButton != null)
           Padding(
-            padding: EdgeInsets.only(left: theme.spacer8),
+            padding: EdgeInsets.only(left: theme.spacer),
             child: cancelButton,
           )
         else
-          SizedBox(width: theme.spacer16),
+          SizedBox(width: theme.spacer2),
         Expanded(
           child: title == null
               ? const SizedBox.shrink()
@@ -48,18 +48,18 @@ class TPopupHeader extends StatelessWidget {
         ),
         if (confirmButton != null)
           Padding(
-            padding: EdgeInsets.only(right: theme.spacer8),
+            padding: EdgeInsets.only(right: theme.spacer),
             child: confirmButton,
           )
         else
-          SizedBox(width: theme.spacer16),
+          SizedBox(width: theme.spacer2),
       ],
     );
   }
 
   Widget _titleWrap(TThemeData theme, Widget child) {
     // 标题内容由用户插槽决定样式，这里只做布局约束。
-    return DefaultTextStyle.merge(
+    return TTextStyleScope(
       style: TextStyle(
         // 浮层可能没有 Material 祖先，标题不继承路由诊断下划线。
         // 子标题 Widget 的显式 decoration 仍可覆盖此默认值。

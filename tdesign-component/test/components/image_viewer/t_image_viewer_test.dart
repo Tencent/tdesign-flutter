@@ -104,12 +104,12 @@ void main() {
           .first;
       final placeholder = tester.widget<Icon>(placeholderFinder);
       expect(placeholder.icon, TIcons.close);
-      expect(placeholder.size, token.spacer24);
+      expect(placeholder.size, token.spacer3);
       expect(placeholder.color, token.textColorAnti);
-      expect(tester.getSize(placeholderFinder), Size.square(token.spacer24));
+      expect(tester.getSize(placeholderFinder), Size.square(token.spacer3));
       expect(
         tester.getTopLeft(placeholderFinder).dy,
-        greaterThanOrEqualTo(token.spacer48),
+        greaterThanOrEqualTo(token.spacer5),
       );
     });
 
@@ -615,21 +615,21 @@ void main() {
       );
       expect(
         delete.style?.foregroundColor?.resolve(const {WidgetState.disabled}),
-        token.fontWhColor4,
+        token.fontWhite4,
       );
       expect(
         close.style?.overlayColor?.resolve(const {WidgetState.pressed}),
-        token.fontWhColor4,
+        token.fontWhite4,
       );
       expect(
         close.style?.minimumSize?.resolve(const {}),
-        Size.square(token.spacer40),
+        const Size.square(40.0),
       );
       expect(
         close.style?.padding?.resolve(const {}),
-        EdgeInsets.all(token.spacer8),
+        EdgeInsets.all(token.spacer),
       );
-      expect(close.style?.iconSize?.resolve(const {}), token.spacer24);
+      expect(close.style?.iconSize?.resolve(const {}), token.spacer3);
       expect(close.style?.shape?.resolve(const {}), isA<CircleBorder>());
     });
 

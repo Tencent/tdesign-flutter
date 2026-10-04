@@ -20,13 +20,13 @@ class _PopoverNoArrowExampleState extends State<PopoverNoArrowExample> {
           size: TButtonSize.large,
           child: const Text('不带箭头'),
           variant: TButtonVariant.outline,
-          colorScheme: TButtonColorScheme.primary,
+          colorPreset: TButtonColorPreset.primary,
           onPressed: () {
             TPopover.showPopover(
               context: popoverContext,
               content: const Text('弹出气泡内容'),
               showArrow: false,
-              colorScheme: theme,
+              colorPreset: theme,
             );
           },
         );
@@ -34,7 +34,7 @@ class _PopoverNoArrowExampleState extends State<PopoverNoArrowExample> {
     );
   }
 
-  TPopoverColorScheme theme = TPopoverColorScheme.light;
+  TPopoverColorPreset theme = TPopoverColorPreset.light;
 
   @override
   void initState() {
@@ -45,8 +45,8 @@ class _PopoverNoArrowExampleState extends State<PopoverNoArrowExample> {
       }
       setState(() {
         theme = Theme.of(context).brightness == Brightness.dark
-            ? TPopoverColorScheme.light
-            : TPopoverColorScheme.defaultTheme;
+            ? TPopoverColorPreset.light
+            : TPopoverColorPreset.defaultTheme;
       });
     });
   }

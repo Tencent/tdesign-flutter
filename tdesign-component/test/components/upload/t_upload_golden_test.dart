@@ -102,7 +102,7 @@ class _UploadState extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        TText(label, style: Theme.of(context).textTheme.bodyMedium),
+        Text(label, style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: 10),
         SizedBox(
           width: 640,
@@ -152,7 +152,7 @@ class _DisabledUploadState extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TText(
+        Text(
           'Disabled existing image',
           style: Theme.of(context).textTheme.bodyMedium,
         ),

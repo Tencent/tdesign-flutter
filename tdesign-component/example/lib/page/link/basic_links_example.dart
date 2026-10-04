@@ -8,7 +8,7 @@ class BasicLinksExample extends StatelessWidget {
   const BasicLinksExample({super.key});
   Widget _buildBasicLinks(BuildContext context) {
     return _exampleRow(context, [
-      _link(context, colorScheme: TLinkColorScheme.primary),
+      _link(context, colorPreset: TLinkColorPreset.primary),
       _link(context),
     ]);
   }
@@ -27,7 +27,7 @@ class BasicLinksExample extends StatelessWidget {
   TLink _link(
     BuildContext context, {
     String label = '跳转链接',
-    TLinkColorScheme? colorScheme,
+    TLinkColorPreset? colorPreset,
     TLinkSize size = TLinkSize.small,
     bool? underline,
     Widget? prefixIcon,
@@ -36,7 +36,7 @@ class BasicLinksExample extends StatelessWidget {
   }) {
     return TLink(
       child: Text(label),
-      colorScheme: colorScheme,
+      colorPreset: colorPreset,
       size: size,
       underline: underline,
       prefixIcon: prefixIcon,

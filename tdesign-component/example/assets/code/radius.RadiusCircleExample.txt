@@ -8,7 +8,7 @@ class RadiusCircleExample extends StatelessWidget {
     //  圆形与胶囊型一致，如果长宽一致即是圆形
     return Container(
       decoration: BoxDecoration(
-        color: context.tTheme.brandNormalColor,
+        color: context.tTheme.brandColor,
         borderRadius: BorderRadius.circular(context.tTheme.radiusCircle),
       ),
     );

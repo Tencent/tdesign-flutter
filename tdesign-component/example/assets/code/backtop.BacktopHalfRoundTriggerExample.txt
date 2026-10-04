@@ -13,7 +13,7 @@ class BacktopHalfRoundTriggerExample extends StatelessWidget {
       child: TButton(
         key: const Key('backtop-demo-half-round-trigger'),
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         size: TButtonSize.large,
         onPressed: () => onSelected(TBackTopShape.halfCircle),
         child: const TText('半圆形返回顶部'),

@@ -27,7 +27,7 @@ class _CardCheckboxesExampleState extends State<CardCheckboxesExample> {
           child: TText(
             '横向卡片多选框',
             font: context.tTheme.fontBodyMedium,
-            textColor: context.tTheme.textColorSecondary,
+            style: TextStyle(color: context.tTheme.textColorSecondary),
           ),
         ),
         TCheckboxGroup<String>(

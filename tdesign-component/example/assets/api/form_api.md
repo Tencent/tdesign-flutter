@@ -51,18 +51,16 @@ TDesign 表单容器。
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | child | Widget | - | 字段内容。 |
-| contentAlignment | TFormItemContentAlignment? | - | 内容区域的水平方向对齐方式。 未传时读取 `TFormThemeData.contentAlignment`，默认起始侧对齐；影响 字段控件、help 和 error 的外部位置，不影响输入文本自身的对齐方式。 |
+| contentAlignment | TFormItemContentAlignment? | - | 内容区域的水平方向对齐方式。 未传时默认起始侧对齐；影响 字段控件、help 和 error 的外部位置，不影响输入文本自身的对齐方式。 |
 | errorText | String? | - | 错误文案。 未传时自动使用最近 `TFormField` 的校验错误。 |
 | extra | Widget? | - | 表单项尾部的额外内容。 该插槽不会被附加内边距、位移或固定尺寸。 |
 | help | String? | - | 辅助说明文案。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | label | String? | - | 标签文案。 |
-| labelAlign | TextAlign? | - | 标签文本对齐方式；为空时读取 `TFormThemeData.labelAlign`。 |
-| labelWidth | double? | - | 标签区域宽度；为空时读取 `TFormThemeData.labelWidth`，默认 80dp。 |
 | leading | Widget? | - | 标签区域前的内容，通常用于字段行图标。 该插槽属于表单项结构，不会传入输入组件的编辑内容区域。 |
 | required | bool? | - | 是否显示必填标记；仅覆盖展示效果，不会启用或关闭 `TFormField.required` 的校验行为。 未传时继承最近 `TFormField` 的 required 状态。 |
 | showErrorMessage | bool | true | 是否展示继承的校验错误。 |
-| verticalAlignment | TFormItemVerticalAlignment? | - | 水平布局下标签、字段内容和额外内容的纵向对齐方式。 未传时读取 `TFormThemeData.verticalAlignment`，默认顶部对齐。 |
+| verticalAlignment | TFormItemVerticalAlignment? | - | 水平布局下标签、字段内容和额外内容的纵向对齐方式。 未传时默认顶部对齐；这是单个表单项的结构布局选择。 |
 
 
 ### TFormThemeData
@@ -72,9 +70,8 @@ TForm 组件级 ThemeExtension。
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 表单项背景色。 |
+| backgroundColor | Color? | - | 表单及表单项背景色。 |
 | borderColor | Color? | - | 表单项底部分隔线颜色。 |
-| contentAlignment | TFormItemContentAlignment? | - | 表单项内容区域的水平方向对齐方式。 |
 | errorStyle | TextStyle? | - | 错误文案样式。 |
 | helpStyle | TextStyle? | - | 辅助说明样式。 |
 | itemPadding | EdgeInsetsGeometry? | - | 表单项内边距。 |
@@ -89,7 +86,6 @@ TForm 组件级 ThemeExtension。
 | requiredMarkPosition | TFormRequiredMarkPosition? | - | 必填标记位置。 |
 | requiredMarkStyle | TextStyle? | - | 必填标记样式。 |
 | showColon | bool? | - | 是否在标签末尾显示冒号。 |
-| verticalAlignment | TFormItemVerticalAlignment? | - | 水平表单项各区域的纵向对齐方式。 |
 
 
 ### TFormLayout

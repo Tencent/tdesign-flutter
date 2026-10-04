@@ -270,7 +270,7 @@ void main() {
       expect(divider.color, TThemeData.defaultData().bgColorPage);
       expect(
         (divider.padding! as EdgeInsets).top,
-        TThemeData.defaultData().spacer16,
+        TThemeData.defaultData().spacer2,
       );
       await tester.pumpWidget(wrapWithTheme(widget));
       expect(find.text('取消'), findsOneWidget);
@@ -294,7 +294,7 @@ void main() {
       expect(divider.color, TThemeData.defaultData().bgColorPage);
       expect(
         (divider.padding! as EdgeInsets).top,
-        TThemeData.defaultData().spacer8,
+        TThemeData.defaultData().spacer,
       );
       await tester.pumpWidget(wrapWithTheme(widget));
       expect(find.byType(GestureDetector), findsOneWidget);

@@ -94,7 +94,12 @@ void main() {
     );
     expect(swiper.controller, isNull);
     expect(swiper.children, hasLength(6));
-    expect(swiper.paginationAlignment, Alignment.bottomRight);
+    expect(
+      Theme.of(
+        tester.element(find.byWidget(swiper)),
+      ).extension<TSwiperThemeData>()?.paginationAlignment,
+      Alignment.bottomRight,
+    );
 
     await scrollTo(tester, find.text('切换按钮（controls）'));
     swiper = tester.widget<TSwiper>(

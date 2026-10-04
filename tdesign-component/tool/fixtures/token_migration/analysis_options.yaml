@@ -1,0 +1,10 @@
+analyzer:
+  errors:
+    implementation_imports: error
+linter:
+  rules:
+    - implementation_imports
+    - directives_ordering
+    - prefer_const_constructors
+    - prefer_const_declarations
+    - prefer_const_literals_to_create_immutables

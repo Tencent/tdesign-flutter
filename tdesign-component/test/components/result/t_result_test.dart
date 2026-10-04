@@ -33,7 +33,7 @@ void main() {
       await tester.pumpWidget(wrapWithTheme(const TResult()));
       final icon = tester.widget<Icon>(find.byIcon(TIcons.info_circle));
       expect(icon.size, 80);
-      expect(icon.color, token.brandNormalColor);
+      expect(icon.color, token.brandColor);
     });
 
     testWidgets('带 title 渲染', (tester) async {
@@ -41,7 +41,14 @@ void main() {
       await tester.pumpWidget(wrapWithTheme(const TResult(title: '操作成功')));
       expect(find.text('操作成功'), findsOneWidget);
       final title = resultTextWidget(tester, '操作成功');
-      expect(title.textColor, token.textColorPrimary);
+      expect(
+        title
+            .getTextStyle(
+              tester.element(find.byKey(const ValueKey('result-title'))),
+            )
+            .color,
+        token.textColorPrimary,
+      );
       expect(title.font, token.fontTitleMedium);
     });
 
@@ -53,20 +60,30 @@ void main() {
       expect(find.text('标题'), findsOneWidget);
       expect(find.text('副标题描述'), findsOneWidget);
       final description = resultTextWidget(tester, '副标题描述');
-      expect(description.textColor, token.textColorSecondary);
+      expect(
+        description
+            .getTextStyle(
+              tester.element(find.byKey(const ValueKey('result-description'))),
+            )
+            .color,
+        token.textColorSecondary,
+      );
       expect(description.font, token.fontBodyMedium);
     });
 
     testWidgets('title 为空时不渲染标题', (tester) async {
       await tester.pumpWidget(wrapWithTheme(const TResult()));
       // 默认 title='' 不应渲染 Text（title.isEmpty 跳过）
-      expect(find.byType(TText), findsNothing);
+      expect(find.byWidgetPredicate((widget) => widget is TText), findsNothing);
     });
 
     testWidgets('description 为 null 时不渲染', (tester) async {
       await tester.pumpWidget(wrapWithTheme(const TResult(title: '仅有标题')));
       expect(find.text('仅有标题'), findsOneWidget);
-      expect(find.byType(TText), findsOneWidget);
+      expect(
+        find.byWidgetPredicate((widget) => widget is TText),
+        findsOneWidget,
+      );
     });
   });
 
@@ -80,7 +97,7 @@ void main() {
       );
       final icon = tester.widget<Icon>(find.byIcon(TIcons.check_circle));
       expect(icon.size, 80);
-      expect(icon.color, token.successNormalColor);
+      expect(icon.color, token.successColor);
       expect(find.text('成功'), findsOneWidget);
     });
 
@@ -93,7 +110,7 @@ void main() {
       );
       final icon = tester.widget<Icon>(find.byIcon(TIcons.error_circle));
       expect(icon.size, 80);
-      expect(icon.color, token.warningNormalColor);
+      expect(icon.color, token.warningColor);
     });
 
     testWidgets('status: error 显示 close_circle', (tester) async {
@@ -103,7 +120,7 @@ void main() {
       );
       final icon = tester.widget<Icon>(find.byIcon(TIcons.close_circle));
       expect(icon.size, 80);
-      expect(icon.color, token.errorNormalColor);
+      expect(icon.color, token.errorColor);
     });
 
     testWidgets('status: info 显示 info_circle', (tester) async {
@@ -139,8 +156,9 @@ void main() {
         ),
       );
       final title = resultTextWidget(tester, '主题样式');
-      expect(title.style?.fontSize, 24);
-      expect(title.style?.color, Colors.red);
+      final rendered = tester.widget<Text>(find.text('主题样式'));
+      expect(rendered.style?.fontSize, 24);
+      expect(rendered.style?.color, Colors.red);
       expect(title.font, TThemeData.defaultData().fontTitleMedium);
     });
 
@@ -162,24 +180,25 @@ void main() {
 
       expect(tester.widget<Icon>(find.byIcon(TIcons.info_circle)).size, 64);
       final description = resultTextWidget(tester, '描述样式');
-      expect(description.style?.fontSize, 13);
-      expect(description.style?.color, Colors.purple);
+      final rendered = tester.widget<Text>(find.text('描述样式'));
+      expect(rendered.style?.fontSize, 13);
+      expect(rendered.style?.color, Colors.purple);
       expect(description.font, TThemeData.defaultData().fontBodyMedium);
     });
 
     testWidgets('内容间距跟随 spacer12 token', (tester) async {
       final token = TThemeData.defaultData();
-      final originalSpacing = token.spacerMap['spacer12'];
+      final originalSpacing = token.spacerMap['spacer1'];
       void restoreSpacing() {
         if (originalSpacing == null) {
-          token.spacerMap.remove('spacer12');
+          token.spacerMap.remove('spacer1');
         } else {
-          token.spacerMap['spacer12'] = originalSpacing;
+          token.spacerMap['spacer1'] = originalSpacing;
         }
       }
 
       addTearDown(restoreSpacing);
-      token.spacerMap['spacer12'] = 20;
+      token.spacerMap['spacer1'] = 20;
       await tester.pumpWidget(
         MaterialApp(
           theme: TThemeBuilder.light(token),
@@ -271,7 +290,10 @@ void main() {
       );
       expect(find.text('标题'), findsOneWidget);
       // 空字符串 description 不应渲染额外的 TText
-      expect(find.byType(TText), findsOneWidget);
+      expect(
+        find.byWidgetPredicate((widget) => widget is TText),
+        findsOneWidget,
+      );
     });
 
     testWidgets('所有参数默认值', (tester) async {

@@ -16,7 +16,7 @@ class TFabDefaults {
   static const defaultVariant = TButtonVariant.fill;
 
   /// 默认配色：Fab 默认表达主操作。
-  static const defaultColorScheme = TButtonColorScheme.primary;
+  static const defaultColorPreset = TButtonColorPreset.primary;
 
   /// 默认图标
   static const IconData defaultIconData = TIcons.add;

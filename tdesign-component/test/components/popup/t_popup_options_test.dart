@@ -356,7 +356,6 @@ void main() {
       const config = TPopupOverlayConfig();
       expect(config.showOverlay, isTrue);
       expect(config.color, isNull);
-      expect(config.opacity, isNull);
       expect(config.preventTap, isTrue);
       expect(config.closeOnClick, isNull);
       expect(config.onClick, isNull);

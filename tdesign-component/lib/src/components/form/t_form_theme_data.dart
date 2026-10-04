@@ -68,7 +68,7 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
     /// 错误文案样式。
     this.errorStyle,
 
-    /// 表单项背景色。
+    /// 表单及表单项背景色。
     this.backgroundColor,
 
     /// 表单项底部分隔线颜色。
@@ -88,12 +88,6 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
 
     /// 字段与辅助或错误文案的间距。
     this.messageGap,
-
-    /// 水平表单项各区域的纵向对齐方式。
-    this.verticalAlignment,
-
-    /// 表单项内容区域的水平方向对齐方式。
-    this.contentAlignment,
   });
 
   /// 是否在标签末尾显示冒号。
@@ -123,7 +117,7 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
   /// 错误文案样式。
   final TextStyle? errorStyle;
 
-  /// 表单项背景色。
+  /// 表单及表单项背景色。
   final Color? backgroundColor;
 
   /// 表单项底部分隔线颜色。
@@ -144,12 +138,6 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
   /// 字段与辅助或错误文案的间距。
   final double? messageGap;
 
-  /// 水平表单项各区域的纵向对齐方式。
-  final TFormItemVerticalAlignment? verticalAlignment;
-
-  /// 表单项内容区域的水平方向对齐方式。
-  final TFormItemContentAlignment? contentAlignment;
-
   @override
   TFormThemeData copyWith({
     bool? showColon,
@@ -168,8 +156,6 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
     double? labelGap,
     double? leadingGap,
     double? messageGap,
-    TFormItemVerticalAlignment? verticalAlignment,
-    TFormItemContentAlignment? contentAlignment,
   }) {
     return TFormThemeData(
       showColon: showColon ?? this.showColon,
@@ -188,8 +174,6 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
       labelGap: labelGap ?? this.labelGap,
       leadingGap: leadingGap ?? this.leadingGap,
       messageGap: messageGap ?? this.messageGap,
-      verticalAlignment: verticalAlignment ?? this.verticalAlignment,
-      contentAlignment: contentAlignment ?? this.contentAlignment,
     );
   }
 
@@ -242,8 +226,6 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
       labelGap: _lerpDoubleWithDefault(labelGap, other.labelGap, t, 8),
       leadingGap: _lerpNullable(leadingGap, other.leadingGap, t, lerpDouble),
       messageGap: _lerpNullable(messageGap, other.messageGap, t, lerpDouble),
-      verticalAlignment: t < 0.5 ? verticalAlignment : other.verticalAlignment,
-      contentAlignment: t < 0.5 ? contentAlignment : other.contentAlignment,
     );
   }
 }

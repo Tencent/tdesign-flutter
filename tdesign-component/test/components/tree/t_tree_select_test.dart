@@ -60,20 +60,25 @@ void main() {
     );
   }
 
-  testWidgets('single selection is controlled and only leaves emit',
-      (tester) async {
+  testWidgets('single selection is controlled and only leaves emit', (
+    tester,
+  ) async {
     var value = <List<Object?>>[];
     var calls = 0;
-    await tester.pumpWidget(wrap(StatefulBuilder(
-      builder: (context, setState) => TTreeSelect(
-        options: options,
-        value: value,
-        onChanged: (next) {
-          calls += 1;
-          setState(() => value = next);
-        },
+    await tester.pumpWidget(
+      wrap(
+        StatefulBuilder(
+          builder: (context, setState) => TTreeSelect(
+            options: options,
+            value: value,
+            onChanged: (next) {
+              calls += 1;
+              setState(() => value = next);
+            },
+          ),
+        ),
       ),
-    )));
+    );
 
     expect(find.text('Apple'), findsOneWidget);
     expect(calls, 0);
@@ -88,14 +93,18 @@ void main() {
 
   testWidgets('multiple mode toggles complete leaf paths', (tester) async {
     var value = <List<Object?>>[];
-    await tester.pumpWidget(wrap(StatefulBuilder(
-      builder: (context, setState) => TTreeSelect(
-        options: options,
-        value: value,
-        multiple: true,
-        onChanged: (next) => setState(() => value = next),
+    await tester.pumpWidget(
+      wrap(
+        StatefulBuilder(
+          builder: (context, setState) => TTreeSelect(
+            options: options,
+            value: value,
+            multiple: true,
+            onChanged: (next) => setState(() => value = next),
+          ),
+        ),
       ),
-    )));
+    );
     await tester.tap(find.text('Apple'));
     await tester.pump();
     await tester.tap(find.text('Banana'));
@@ -112,54 +121,65 @@ void main() {
     ]);
   });
 
-  testWidgets('multiple selection stays on the active branch after value sync',
-      (tester) async {
-    var value = <List<Object?>>[
-      ['fruit', 'apple'],
-    ];
-    await tester.pumpWidget(wrap(StatefulBuilder(
-      builder: (context, setState) => TTreeSelect(
-        options: List<TTreeSelectOption>.of(options),
-        value: value,
-        multiple: true,
-        onChanged: (next) => setState(() => value = next),
-      ),
-    )));
+  testWidgets(
+    'multiple selection stays on the active branch after value sync',
+    (tester) async {
+      var value = <List<Object?>>[
+        ['fruit', 'apple'],
+      ];
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TTreeSelect(
+              options: List<TTreeSelectOption>.of(options),
+              value: value,
+              multiple: true,
+              onChanged: (next) => setState(() => value = next),
+            ),
+          ),
+        ),
+      );
 
-    await tester.tap(find.text('Region'));
-    await tester.pump();
-    await tester.tap(find.text('China'));
-    await tester.pump();
-    await tester.tap(find.text('Guangdong'));
-    await tester.pump();
-    expect(find.text('Shenzhen'), findsOneWidget);
+      await tester.tap(find.text('Region'));
+      await tester.pump();
+      await tester.tap(find.text('China'));
+      await tester.pump();
+      await tester.tap(find.text('Guangdong'));
+      await tester.pump();
+      expect(find.text('Shenzhen'), findsOneWidget);
 
-    await tester.tap(find.text('Shenzhen'));
-    await tester.pump();
+      await tester.tap(find.text('Shenzhen'));
+      await tester.pump();
 
-    expect(value, [
-      ['fruit', 'apple'],
-      ['region', 'china', 'guangdong', 'shenzhen'],
-    ]);
-    expect(find.text('Shenzhen'), findsOneWidget);
-  });
+      expect(value, [
+        ['fruit', 'apple'],
+        ['region', 'china', 'guangdong', 'shenzhen'],
+      ]);
+      expect(find.text('Shenzhen'), findsOneWidget);
+    },
+  );
 
-  testWidgets('options update resets a navigation path that no longer exists',
-      (tester) async {
+  testWidgets('options update resets a navigation path that no longer exists', (
+    tester,
+  ) async {
     var currentOptions = options;
     late StateSetter rebuild;
-    await tester.pumpWidget(wrap(StatefulBuilder(
-      builder: (context, setState) {
-        rebuild = setState;
-        return TTreeSelect(
-          options: currentOptions,
-          value: const [
-            ['fruit', 'apple'],
-          ],
-          onChanged: _ignore,
-        );
-      },
-    )));
+    await tester.pumpWidget(
+      wrap(
+        StatefulBuilder(
+          builder: (context, setState) {
+            rebuild = setState;
+            return TTreeSelect(
+              options: currentOptions,
+              value: const [
+                ['fruit', 'apple'],
+              ],
+              onChanged: _ignore,
+            );
+          },
+        ),
+      ),
+    );
 
     await tester.tap(find.text('Region'));
     await tester.pump();
@@ -174,11 +194,15 @@ void main() {
 
   testWidgets('supports arbitrary tree depth', (tester) async {
     List<List<Object?>>? changed;
-    await tester.pumpWidget(wrap(TTreeSelect(
-      options: options,
-      value: const [],
-      onChanged: (value) => changed = value,
-    )));
+    await tester.pumpWidget(
+      wrap(
+        TTreeSelect(
+          options: options,
+          value: const [],
+          onChanged: (value) => changed = value,
+        ),
+      ),
+    );
     await tester.tap(find.text('Region'));
     await tester.pump();
     await tester.tap(find.text('China'));
@@ -193,51 +217,64 @@ void main() {
   });
 
   testWidgets('external value chooses the visible branch', (tester) async {
-    await tester.pumpWidget(wrap(const TTreeSelect(
-      options: options,
-      value: [
-        ['fruit', 'banana'],
-      ],
-      onChanged: _ignore,
-    )));
+    await tester.pumpWidget(
+      wrap(
+        const TTreeSelect(
+          options: options,
+          value: [
+            ['fruit', 'banana'],
+          ],
+          onChanged: _ignore,
+        ),
+      ),
+    );
     expect(find.text('Banana'), findsOneWidget);
     expect(find.byIcon(TIcons.check), findsOneWidget);
     expect(
       tester.widget<Text>(find.text('Fruit')).style?.color,
-      TThemeData.defaultData().brandNormalColor,
+      TThemeData.defaultData().brandColor,
     );
     expect(
       tester.widget<Text>(find.text('Banana')).style?.color,
       TThemeData.defaultData().textColorPrimary,
     );
 
-    await tester.pumpWidget(wrap(const TTreeSelect(
-      options: options,
-      value: [
-        ['missing'],
-      ],
-      onChanged: _ignore,
-    )));
-    expect(find.text('Fruit'), findsOneWidget);
-    expect(find.text('Apple'), findsOneWidget);
-  });
-
-  testWidgets('default visual style matches the TreeSelect design layout',
-      (tester) async {
-    final token = TThemeData.defaultData();
-    await tester.pumpWidget(wrap(const Align(
-      alignment: Alignment.topLeft,
-      child: SizedBox(
-        width: 375,
-        child: TTreeSelect(
+    await tester.pumpWidget(
+      wrap(
+        const TTreeSelect(
           options: options,
           value: [
-            ['fruit', 'apple'],
+            ['missing'],
           ],
           onChanged: _ignore,
         ),
       ),
-    )));
+    );
+    expect(find.text('Fruit'), findsOneWidget);
+    expect(find.text('Apple'), findsOneWidget);
+  });
+
+  testWidgets('default visual style matches the TreeSelect design layout', (
+    tester,
+  ) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(
+      wrap(
+        const Align(
+          alignment: Alignment.topLeft,
+          child: SizedBox(
+            width: 375,
+            child: TTreeSelect(
+              options: options,
+              value: [
+                ['fruit', 'apple'],
+              ],
+              onChanged: _ignore,
+            ),
+          ),
+        ),
+      ),
+    );
 
     expect(tester.getSize(find.byType(TTreeSelect)), const Size(375, 336));
     expect(
@@ -261,7 +298,7 @@ void main() {
       findsOneWidget,
     );
     final rootStyle = tester.widget<Text>(find.text('Fruit')).style;
-    expect(rootStyle?.color, token.brandNormalColor);
+    expect(rootStyle?.color, token.brandColor);
     expect(rootStyle?.fontSize, token.fontBodyLarge?.size ?? 16);
     expect(rootStyle?.fontWeight, FontWeight.w600);
     final rootIndicator = tester.widget<SizedBox>(
@@ -269,7 +306,7 @@ void main() {
     );
     expect(rootIndicator.width, 3);
     expect(rootIndicator.height, 16);
-    expect((rootIndicator.child! as ColoredBox).color, token.brandNormalColor);
+    expect((rootIndicator.child! as ColoredBox).color, token.brandColor);
     final leafStyle = tester.widget<Text>(find.text('Apple')).style;
     expect(leafStyle?.color, token.textColorPrimary);
     expect(leafStyle?.fontSize, token.fontBodyLarge?.size ?? 16);
@@ -282,11 +319,11 @@ void main() {
     );
     expect(
       tester.widget<Text>(find.text('Apple')).style?.color,
-      isNot(token.textDisabledColor),
+      isNot(token.textColorDisabled),
     );
     final checkIcon = tester.widget<Icon>(find.byIcon(TIcons.check));
     expect(checkIcon.size, 24);
-    expect(checkIcon.color, token.brandNormalColor);
+    expect(checkIcon.color, token.brandColor);
     expect(
       find.byWidgetPredicate(
         (widget) => widget is CustomPaint && widget.size == const Size(9, 9),
@@ -295,8 +332,9 @@ void main() {
     );
   });
 
-  testWidgets('root indicator follows the directional leading edge',
-      (tester) async {
+  testWidgets('root indicator follows the directional leading edge', (
+    tester,
+  ) async {
     Future<double> indicatorCenter(TextDirection direction) async {
       await tester.pumpWidget(
         wrap(
@@ -324,21 +362,26 @@ void main() {
     expect(rtlCenter, greaterThan(697));
   });
 
-  testWidgets('deep tree keeps narrow intermediate columns and fills leaf',
-      (tester) async {
-    await tester.pumpWidget(wrap(const Align(
-      alignment: Alignment.topLeft,
-      child: SizedBox(
-        width: 375,
-        child: TTreeSelect(
-          options: options,
-          value: [
-            ['region', 'china', 'guangdong', 'shenzhen'],
-          ],
-          onChanged: _ignore,
+  testWidgets('deep tree keeps narrow intermediate columns and fills leaf', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      wrap(
+        const Align(
+          alignment: Alignment.topLeft,
+          child: SizedBox(
+            width: 375,
+            child: TTreeSelect(
+              options: options,
+              value: [
+                ['region', 'china', 'guangdong', 'shenzhen'],
+              ],
+              onChanged: _ignore,
+            ),
+          ),
         ),
       ),
-    )));
+    );
 
     expect(find.text('Shenzhen'), findsOneWidget);
     expect(
@@ -362,50 +405,51 @@ void main() {
   });
 
   testWidgets(
-      'opens the first branch without selecting and null callback disables',
-      (tester) async {
-    await tester.pumpWidget(wrap(const TTreeSelect(
-      options: options,
-      value: [],
-    )));
-    expect(find.text('Apple'), findsOneWidget);
-    expect(find.byIcon(TIcons.check), findsNothing);
-    final tree = find.byType(TTreeSelect);
-    expect(
-      tester
-          .widget<AbsorbPointer>(
-            find.descendant(of: tree, matching: find.byType(AbsorbPointer)),
-          )
-          .absorbing,
-      isTrue,
-    );
-  });
+    'opens the first branch without selecting and null callback disables',
+    (tester) async {
+      await tester.pumpWidget(
+        wrap(const TTreeSelect(options: options, value: [])),
+      );
+      expect(find.text('Apple'), findsOneWidget);
+      expect(find.byIcon(TIcons.check), findsNothing);
+      final tree = find.byType(TTreeSelect);
+      expect(
+        tester
+            .widget<AbsorbPointer>(
+              find.descendant(of: tree, matching: find.byType(AbsorbPointer)),
+            )
+            .absorbing,
+        isTrue,
+      );
+    },
+  );
 
-  testWidgets('empty value skips disabled roots when opening a branch',
-      (tester) async {
+  testWidgets('empty value skips disabled roots when opening a branch', (
+    tester,
+  ) async {
     const disabledFirst = [
       TTreeSelectOption(
         label: 'Disabled branch',
         value: 'disabled-branch',
         disabled: true,
-        children: [
-          TTreeSelectOption(label: 'Hidden leaf', value: 'hidden'),
-        ],
+        children: [TTreeSelectOption(label: 'Hidden leaf', value: 'hidden')],
       ),
       TTreeSelectOption(
         label: 'Enabled branch',
         value: 'enabled-branch',
-        children: [
-          TTreeSelectOption(label: 'Visible leaf', value: 'visible'),
-        ],
+        children: [TTreeSelectOption(label: 'Visible leaf', value: 'visible')],
       ),
     ];
 
-    await tester.pumpWidget(wrap(const TTreeSelect(
-      options: disabledFirst,
-      value: [],
-      onChanged: _ignore,
-    )));
+    await tester.pumpWidget(
+      wrap(
+        const TTreeSelect(
+          options: disabledFirst,
+          value: [],
+          onChanged: _ignore,
+        ),
+      ),
+    );
 
     expect(find.text('Hidden leaf'), findsNothing);
     expect(find.text('Visible leaf'), findsOneWidget);
@@ -414,152 +458,191 @@ void main() {
 
   testWidgets('disabled options do not emit', (tester) async {
     var changed = false;
-    await tester.pumpWidget(wrap(TTreeSelect(
-      options: options,
-      value: const [],
-      onChanged: (_) => changed = true,
-    )));
+    await tester.pumpWidget(
+      wrap(
+        TTreeSelect(
+          options: options,
+          value: const [],
+          onChanged: (_) => changed = true,
+        ),
+      ),
+    );
     await tester.tap(find.text('Disabled'));
     expect(changed, isFalse);
   });
 
-  testWidgets('single mode rejects more than one controlled path in debug',
-      (tester) async {
-    await tester.pumpWidget(wrap(const TTreeSelect(
-      options: options,
-      value: [
-        ['fruit', 'apple'],
-        ['fruit', 'banana'],
-      ],
-      onChanged: _ignore,
-    )));
+  testWidgets('single mode rejects more than one controlled path in debug', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      wrap(
+        const TTreeSelect(
+          options: options,
+          value: [
+            ['fruit', 'apple'],
+            ['fruit', 'banana'],
+          ],
+          onChanged: _ignore,
+        ),
+      ),
+    );
 
     final exception = tester.takeException();
     expect(exception, isA<AssertionError>());
     expect(exception.toString(), contains('at most one path'));
   });
 
-  testWidgets('duplicate sibling option values are rejected in debug',
-      (tester) async {
-    await tester.pumpWidget(wrap(const TTreeSelect(
-      options: [
-        TTreeSelectOption(label: 'First', value: 'duplicate'),
-        TTreeSelectOption(label: 'Second', value: 'duplicate'),
-      ],
-      value: [],
-      onChanged: _ignore,
-    )));
-
-    final exception = tester.takeException();
-    expect(exception, isA<AssertionError>());
-    expect(exception.toString(), contains('unique among siblings'));
-  });
-
-  testWidgets('sibling uniqueness uses the same equality as path matching',
-      (tester) async {
-    await tester.pumpWidget(wrap(const TTreeSelect(
-      options: [
-        TTreeSelectOption(
-          label: 'First',
-          value: _EqualValueWithDifferentHashCode('duplicate', 1),
-        ),
-        TTreeSelectOption(
-          label: 'Second',
-          value: _EqualValueWithDifferentHashCode('duplicate', 2),
-        ),
-      ],
-      value: [],
-      onChanged: _ignore,
-    )));
-
-    final exception = tester.takeException();
-    expect(exception, isA<AssertionError>());
-    expect(exception.toString(), contains('unique among siblings'));
-  });
-
-  testWidgets('duplicate null sibling option values are rejected in debug',
-      (tester) async {
-    await tester.pumpWidget(wrap(const TTreeSelect(
-      options: [
-        TTreeSelectOption(label: 'First', value: null),
-        TTreeSelectOption(label: 'Second', value: null),
-      ],
-      value: [],
-      onChanged: _ignore,
-    )));
-
-    final exception = tester.takeException();
-    expect(exception, isA<AssertionError>());
-    expect(exception.toString(), contains('unique among siblings'));
-  });
-
-  testWidgets('duplicate nested sibling values are rejected in debug',
-      (tester) async {
-    await tester.pumpWidget(wrap(const TTreeSelect(
-      options: [
-        TTreeSelectOption(
-          label: 'Root',
-          value: 'root',
-          children: [
+  testWidgets('duplicate sibling option values are rejected in debug', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      wrap(
+        const TTreeSelect(
+          options: [
             TTreeSelectOption(label: 'First', value: 'duplicate'),
             TTreeSelectOption(label: 'Second', value: 'duplicate'),
           ],
+          value: [],
+          onChanged: _ignore,
         ),
-      ],
-      value: [],
-      onChanged: _ignore,
-    )));
+      ),
+    );
 
     final exception = tester.takeException();
     expect(exception, isA<AssertionError>());
     expect(exception.toString(), contains('unique among siblings'));
   });
 
-  testWidgets('duplicate controlled paths are rejected in debug',
-      (tester) async {
-    await tester.pumpWidget(wrap(const TTreeSelect(
-      options: options,
-      value: [
-        ['fruit', 'apple'],
-        ['fruit', 'apple'],
-      ],
-      multiple: true,
-      onChanged: _ignore,
-    )));
+  testWidgets('sibling uniqueness uses the same equality as path matching', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      wrap(
+        const TTreeSelect(
+          options: [
+            TTreeSelectOption(
+              label: 'First',
+              value: _EqualValueWithDifferentHashCode('duplicate', 1),
+            ),
+            TTreeSelectOption(
+              label: 'Second',
+              value: _EqualValueWithDifferentHashCode('duplicate', 2),
+            ),
+          ],
+          value: [],
+          onChanged: _ignore,
+        ),
+      ),
+    );
+
+    final exception = tester.takeException();
+    expect(exception, isA<AssertionError>());
+    expect(exception.toString(), contains('unique among siblings'));
+  });
+
+  testWidgets('duplicate null sibling option values are rejected in debug', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      wrap(
+        const TTreeSelect(
+          options: [
+            TTreeSelectOption(label: 'First', value: null),
+            TTreeSelectOption(label: 'Second', value: null),
+          ],
+          value: [],
+          onChanged: _ignore,
+        ),
+      ),
+    );
+
+    final exception = tester.takeException();
+    expect(exception, isA<AssertionError>());
+    expect(exception.toString(), contains('unique among siblings'));
+  });
+
+  testWidgets('duplicate nested sibling values are rejected in debug', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      wrap(
+        const TTreeSelect(
+          options: [
+            TTreeSelectOption(
+              label: 'Root',
+              value: 'root',
+              children: [
+                TTreeSelectOption(label: 'First', value: 'duplicate'),
+                TTreeSelectOption(label: 'Second', value: 'duplicate'),
+              ],
+            ),
+          ],
+          value: [],
+          onChanged: _ignore,
+        ),
+      ),
+    );
+
+    final exception = tester.takeException();
+    expect(exception, isA<AssertionError>());
+    expect(exception.toString(), contains('unique among siblings'));
+  });
+
+  testWidgets('duplicate controlled paths are rejected in debug', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      wrap(
+        const TTreeSelect(
+          options: options,
+          value: [
+            ['fruit', 'apple'],
+            ['fruit', 'apple'],
+          ],
+          multiple: true,
+          onChanged: _ignore,
+        ),
+      ),
+    );
 
     final exception = tester.takeException();
     expect(exception, isA<AssertionError>());
     expect(exception.toString(), contains('duplicate paths'));
   });
 
-  testWidgets('theme controls dimensions, colors, and text styles',
-      (tester) async {
+  testWidgets('theme controls dimensions, colors, and text styles', (
+    tester,
+  ) async {
     const selectedStyle = TextStyle(color: Colors.red);
-    await tester.pumpWidget(wrap(
-      const TTreeSelect(
-        options: options,
-        value: [
-          ['fruit', 'apple'],
-        ],
-        onChanged: _ignore,
+    await tester.pumpWidget(
+      wrap(
+        const TTreeSelect(
+          options: options,
+          value: [
+            ['fruit', 'apple'],
+          ],
+          onChanged: _ignore,
+        ),
+        treeTheme: const TTreeSelectThemeData(
+          height: 280,
+          rootColumnWidth: 120,
+          columnWidth: 200,
+          itemHeight: 60,
+          backgroundColor: Colors.white,
+          rootBackgroundColor: Colors.grey,
+          selectedBackgroundColor: Colors.yellow,
+          textStyle: TextStyle(color: Colors.black),
+          selectedTextStyle: selectedStyle,
+          disabledTextStyle: TextStyle(color: Colors.blueGrey),
+          indicatorColor: Colors.green,
+        ),
       ),
-      treeTheme: const TTreeSelectThemeData(
-        height: 280,
-        rootColumnWidth: 120,
-        columnWidth: 200,
-        itemHeight: 60,
-        backgroundColor: Colors.white,
-        rootBackgroundColor: Colors.grey,
-        selectedBackgroundColor: Colors.yellow,
-        textStyle: TextStyle(color: Colors.black),
-        selectedTextStyle: selectedStyle,
-        disabledTextStyle: TextStyle(color: Colors.blueGrey),
-        indicatorColor: Colors.green,
-      ),
-    ));
+    );
 
-    expect(tester.widget<Text>(find.text('Apple')).style?.color,
-        selectedStyle.color);
+    expect(
+      tester.widget<Text>(find.text('Apple')).style?.color,
+      selectedStyle.color,
+    );
     expect(find.byIcon(TIcons.check), findsOneWidget);
     expect(tester.widget<Icon>(find.byIcon(TIcons.check)).color, Colors.green);
     expect(

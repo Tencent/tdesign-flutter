@@ -15,7 +15,7 @@ class CellCardGroupExample extends StatelessWidget {
           prefix: Icon(
             TIcons.service,
             size: 24,
-            color: context.tTheme.brandNormalColor,
+            color: context.tTheme.brandColor,
           ),
           title: const Text('单行标题'),
           arrow: true,
@@ -25,7 +25,7 @@ class CellCardGroupExample extends StatelessWidget {
           prefix: Icon(
             TIcons.internet,
             size: 24,
-            color: context.tTheme.brandNormalColor,
+            color: context.tTheme.brandColor,
           ),
           title: const Text('单行标题'),
           arrow: true,
@@ -35,7 +35,7 @@ class CellCardGroupExample extends StatelessWidget {
           prefix: Icon(
             TIcons.lock_on,
             size: 24,
-            color: context.tTheme.brandNormalColor,
+            color: context.tTheme.brandColor,
           ),
           title: const Text('单行标题'),
           arrow: true,

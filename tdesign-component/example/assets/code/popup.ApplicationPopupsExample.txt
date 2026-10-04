@@ -13,7 +13,7 @@ class ApplicationPopupsExample extends StatelessWidget {
           onPressed: onPressed,
           size: TButtonSize.large,
           variant: TButtonVariant.outline,
-          colorScheme: TButtonColorScheme.primary,
+          colorPreset: TButtonColorPreset.primary,
           child: TText(label),
         ),
       );
@@ -32,8 +32,8 @@ class ApplicationPopupsExample extends StatelessWidget {
                   onTap: close,
                   child: TText(
                     '取消',
-                    textColor: theme.textColorSecondary,
                     font: theme.fontBodyLarge,
+                    style: TextStyle(color: theme.textColorSecondary),
                   ),
                 ),
                 title: const TText('标题文字'),
@@ -41,9 +41,11 @@ class ApplicationPopupsExample extends StatelessWidget {
                   onTap: close,
                   child: TText(
                     '确定',
-                    textColor: theme.brandNormalColor,
                     font: theme.fontTitleMedium,
-                    fontWeight: FontWeight.w600,
+                    style: TextStyle(
+                      color: theme.brandColor,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
@@ -62,7 +64,7 @@ class ApplicationPopupsExample extends StatelessWidget {
                 tooltip: '关闭',
                 icon: Icon(
                   TIcons.close_circle,
-                  color: theme.fontWhColor1,
+                  color: theme.fontWhite1,
                   size: 32,
                 ),
                 onPressed: close,

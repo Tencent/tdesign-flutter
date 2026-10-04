@@ -1,24 +1,30 @@
-import 'dart:ui' show lerpDouble;
-
 import 'package:flutter/material.dart';
-
-import 't_switch_types.dart';
 
 /// TSwitch 组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树默认样式。
 class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
-  /// Widget 未指定尺寸时使用的默认尺寸。
-  final TSwitchSize? defaultSize;
-
-  /// Widget 未指定形态时使用的默认形态。
-  final TSwitchVariant? defaultVariant;
-
   /// 开启时轨道颜色
   final Color? trackOnColor;
 
   /// 关闭时轨道颜色
   final Color? trackOffColor;
+
+  /// 禁用时开启态轨道颜色；未设置时使用全局禁用品牌色。
+  final Color? disabledTrackOnColor;
+
+  /// 禁用时关闭态轨道颜色；未设置时使用全局禁用组件背景色。
+  final Color? disabledTrackOffColor;
+
+  /// 可交互时滑块填充色；未设置时使用全局反色文字 Token。
+  /// 与滑块内图标或文字的颜色无关。
+  final Color? thumbColor;
+
+  /// 禁用或加载时滑块填充色；未设置时随明暗模式取白色层级。
+  final Color? disabledThumbColor;
+
+  /// 加载指示器颜色；未设置时浅色为品牌色、深色为最高层级白色。
+  final Color? loadingColor;
 
   /// 开启时ThumbView的颜色
   final Color? thumbContentOnColor;
@@ -32,18 +38,42 @@ class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
   /// 关闭时ThumbView的字体样式
   final TextStyle? thumbContentOffFont;
 
+  static Color? _lerpColor(Color? a, Color? b, double t) {
+    // null means a live Token fallback, not transparent black.
+    if (a == null || b == null) {
+      return t < 0.5 ? a : b;
+    }
+    return Color.lerp(a, b, t);
+  }
+
+  static TextStyle? _lerpTextStyle(TextStyle? a, TextStyle? b, double t) {
+    if (a == null || b == null) {
+      return t < 0.5 ? a : b;
+    }
+    return TextStyle.lerp(a, b, t);
+  }
+
   const TSwitchThemeData({
-    /// 默认尺寸。
-    this.defaultSize,
-
-    /// 默认内容形态。
-    this.defaultVariant,
-
     /// 开启态轨道颜色。
     this.trackOnColor,
 
     /// 关闭态轨道颜色。
     this.trackOffColor,
+
+    /// 禁用时开启态轨道颜色。
+    this.disabledTrackOnColor,
+
+    /// 禁用时关闭态轨道颜色。
+    this.disabledTrackOffColor,
+
+    /// 可交互时滑块填充色，不影响内部图标或文字。
+    this.thumbColor,
+
+    /// 禁用或加载时滑块填充色。
+    this.disabledThumbColor,
+
+    /// 加载指示器颜色。
+    this.loadingColor,
 
     /// 开启态滑块内容颜色。
     this.thumbContentOnColor,
@@ -60,20 +90,27 @@ class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
 
   @override
   TSwitchThemeData copyWith({
-    TSwitchSize? defaultSize,
-    TSwitchVariant? defaultVariant,
     Color? trackOnColor,
     Color? trackOffColor,
+    Color? disabledTrackOnColor,
+    Color? disabledTrackOffColor,
+    Color? thumbColor,
+    Color? disabledThumbColor,
+    Color? loadingColor,
     Color? thumbContentOnColor,
     Color? thumbContentOffColor,
     TextStyle? thumbContentOnFont,
     TextStyle? thumbContentOffFont,
   }) {
     return TSwitchThemeData(
-      defaultSize: defaultSize ?? this.defaultSize,
-      defaultVariant: defaultVariant ?? this.defaultVariant,
       trackOnColor: trackOnColor ?? this.trackOnColor,
       trackOffColor: trackOffColor ?? this.trackOffColor,
+      disabledTrackOnColor: disabledTrackOnColor ?? this.disabledTrackOnColor,
+      disabledTrackOffColor:
+          disabledTrackOffColor ?? this.disabledTrackOffColor,
+      thumbColor: thumbColor ?? this.thumbColor,
+      disabledThumbColor: disabledThumbColor ?? this.disabledThumbColor,
+      loadingColor: loadingColor ?? this.loadingColor,
       thumbContentOnColor: thumbContentOnColor ?? this.thumbContentOnColor,
       thumbContentOffColor: thumbContentOffColor ?? this.thumbContentOffColor,
       thumbContentOnFont: thumbContentOnFont ?? this.thumbContentOnFont,
@@ -93,26 +130,41 @@ class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
       return other;
     }
     return TSwitchThemeData(
-      defaultSize: t <= 0.5 ? defaultSize : other.defaultSize,
-      defaultVariant: t <= 0.5 ? defaultVariant : other.defaultVariant,
-      trackOnColor: Color.lerp(trackOnColor, other.trackOnColor, t),
-      trackOffColor: Color.lerp(trackOffColor, other.trackOffColor, t),
-      thumbContentOnColor: Color.lerp(
+      trackOnColor: _lerpColor(trackOnColor, other.trackOnColor, t),
+      trackOffColor: _lerpColor(trackOffColor, other.trackOffColor, t),
+      disabledTrackOnColor: _lerpColor(
+        disabledTrackOnColor,
+        other.disabledTrackOnColor,
+        t,
+      ),
+      disabledTrackOffColor: _lerpColor(
+        disabledTrackOffColor,
+        other.disabledTrackOffColor,
+        t,
+      ),
+      thumbColor: _lerpColor(thumbColor, other.thumbColor, t),
+      disabledThumbColor: _lerpColor(
+        disabledThumbColor,
+        other.disabledThumbColor,
+        t,
+      ),
+      loadingColor: _lerpColor(loadingColor, other.loadingColor, t),
+      thumbContentOnColor: _lerpColor(
         thumbContentOnColor,
         other.thumbContentOnColor,
         t,
       ),
-      thumbContentOffColor: Color.lerp(
+      thumbContentOffColor: _lerpColor(
         thumbContentOffColor,
         other.thumbContentOffColor,
         t,
       ),
-      thumbContentOnFont: TextStyle.lerp(
+      thumbContentOnFont: _lerpTextStyle(
         thumbContentOnFont,
         other.thumbContentOnFont,
         t,
       ),
-      thumbContentOffFont: TextStyle.lerp(
+      thumbContentOffFont: _lerpTextStyle(
         thumbContentOffFont,
         other.thumbContentOffFont,
         t,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/components/text/t_text_styled.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 class _NonlinearTextScaler extends TextScaler {
@@ -15,24 +16,135 @@ class _NonlinearTextScaler extends TextScaler {
 }
 
 void main() {
-  Widget wrap(Widget child, {TTextThemeData? textTheme}) {
-    var theme = TThemeBuilder.light(TThemeData.defaultData());
-    if (textTheme != null) {
-      theme = theme.mergeExtension(textTheme);
-    }
+  Widget wrap(Widget child) {
+    final theme = TThemeBuilder.light(TThemeData.defaultData());
     return MaterialApp(
       theme: theme,
       home: Scaffold(body: child),
     );
   }
 
-  testWidgets('默认使用 TDesign bodyLarge Token', (tester) async {
+  testWidgets('默认使用 TDesign bodyMedium Token', (tester) async {
     await tester.pumpWidget(wrap(const TText('文本')));
     final text = tester.widget<Text>(find.text('文本'));
     final context = tester.element(find.text('文本'));
-    expect(text.style?.fontSize, context.tTheme.fontBodyLarge?.size);
-    expect(text.style?.height, context.tTheme.fontBodyLarge?.height);
+    expect(text.style?.fontSize, context.tTheme.fontBodyMedium?.size);
+    expect(text.style?.height, context.tTheme.fontBodyMedium?.height);
     expect(text.style?.color, context.tTheme.textColorPrimary);
+  });
+
+  testWidgets('组合组件的逐项动态样式不扩展公开 TText 参数', (tester) async {
+    final theme = TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+      const TTextThemeData(textStyle: TextStyle(color: Colors.blue)),
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: theme,
+        home: const Scaffold(
+          body: TTextStyled(
+            '动态',
+            style: TextStyle(color: Colors.red, fontSize: 18),
+          ),
+        ),
+      ),
+    );
+
+    final rendered = tester.widget<Text>(find.text('动态'));
+    expect(rendered.style?.color, Colors.red);
+    expect(rendered.style?.fontSize, 18);
+  });
+
+  testWidgets('组件 Theme 提供子树默认值，实例便利参数只覆盖当前文字', (tester) async {
+    final theme = TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+      const TTextThemeData(
+        textStyle: TextStyle(fontSize: 20, height: 28 / 20, color: Colors.blue),
+      ),
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: theme,
+        home: Scaffold(
+          body: Column(
+            children: [
+              const TText('继承'),
+              TText(
+                '单项',
+                font: Font(size: 24, lineHeight: 28),
+                style: const TextStyle(color: Colors.red),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    final inherited = tester.widget<Text>(find.text('继承'));
+    final single = tester.widget<Text>(find.text('单项'));
+    expect(inherited.style?.fontSize, 20);
+    expect(inherited.style?.height, 28 / 20);
+    expect(inherited.style?.color, Colors.blue);
+    expect(single.style?.fontSize, 24);
+    expect(single.style?.color, Colors.red);
+    expect(single.style?.height, 28 / 24);
+  });
+
+  testWidgets('组件 Theme 的段落默认值仅在实例未指定时生效', (tester) async {
+    const themeStrut = StrutStyle(fontSize: 20);
+    const instanceStrut = StrutStyle(fontSize: 24);
+    const themeHeight = TextHeightBehavior(applyHeightToFirstAscent: false);
+    const instanceHeight = TextHeightBehavior(applyHeightToLastDescent: false);
+    final theme = TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+      const TTextThemeData(
+        strutStyle: themeStrut,
+        textWidthBasis: TextWidthBasis.longestLine,
+        textHeightBehavior: themeHeight,
+      ),
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: theme,
+        home: const Scaffold(
+          body: Column(
+            children: [
+              TText('继承段落'),
+              TText(
+                '覆盖段落',
+                strutStyle: instanceStrut,
+                textWidthBasis: TextWidthBasis.parent,
+                textHeightBehavior: instanceHeight,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    final inherited = tester.widget<Text>(find.text('继承段落'));
+    final single = tester.widget<Text>(find.text('覆盖段落'));
+    expect(inherited.strutStyle, themeStrut);
+    expect(inherited.textWidthBasis, TextWidthBasis.longestLine);
+    expect(inherited.textHeightBehavior, themeHeight);
+    expect(single.strutStyle, instanceStrut);
+    expect(single.textWidthBasis, TextWidthBasis.parent);
+    expect(single.textHeightBehavior, instanceHeight);
+  });
+
+  test('TTextThemeData copyWith 与 lerp 保留段落默认字段', () {
+    const base = TTextThemeData(
+      textStyle: TextStyle(color: Colors.red),
+      strutStyle: StrutStyle(fontSize: 16),
+      textWidthBasis: TextWidthBasis.parent,
+    );
+    const other = TTextThemeData(
+      textStyle: TextStyle(color: Colors.blue),
+      strutStyle: StrutStyle(fontSize: 20),
+      textWidthBasis: TextWidthBasis.longestLine,
+    );
+    expect(
+      base.copyWith(textWidthBasis: TextWidthBasis.longestLine).strutStyle,
+      base.strutStyle,
+    );
+    expect(base.lerp(other, 0.5).textStyle?.color, isNotNull);
+    expect(base.lerp(other, 0.25).textWidthBasis, TextWidthBasis.parent);
+    expect(base.lerp(other, 0.75).textWidthBasis, TextWidthBasis.longestLine);
   });
 
   testWidgets('未设置 textScaler 时继承 MediaQuery 非线性缩放器', (tester) async {
@@ -70,7 +182,7 @@ void main() {
     expect(text.selectionColor, Colors.cyan);
   });
 
-  testWidgets('Theme font/textStyle 和段落字段生效', (tester) async {
+  testWidgets('实例 style 和段落字段生效', (tester) async {
     const heightBehavior = TextHeightBehavior(
       applyHeightToFirstAscent: false,
       applyHeightToLastDescent: false,
@@ -78,10 +190,9 @@ void main() {
     const strut = StrutStyle(fontSize: 18, height: 1.3);
     await tester.pumpWidget(
       wrap(
-        const TText('主题'),
-        textTheme: TTextThemeData(
-          font: Font(size: 18, lineHeight: 26),
-          textStyle: const TextStyle(color: Colors.orange),
+        const TText(
+          '主题',
+          style: TextStyle(fontSize: 18, height: 26 / 18, color: Colors.orange),
           strutStyle: strut,
           textWidthBasis: TextWidthBasis.longestLine,
           textHeightBehavior: heightBehavior,
@@ -97,15 +208,15 @@ void main() {
     expect(text.textHeightBehavior, heightBehavior);
   });
 
-  testWidgets('实例 style 覆盖便利参数且 Paint 不触发断言', (tester) async {
+  testWidgets('组件 Theme 的 Paint 前景色不触发断言', (tester) async {
     final foreground = Paint()..color = Colors.purple;
+    final theme = TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+      TTextThemeData(textStyle: TextStyle(foreground: foreground)),
+    );
     await tester.pumpWidget(
-      wrap(
-        TText(
-          'Paint',
-          textColor: Colors.blue,
-          style: TextStyle(foreground: foreground),
-        ),
+      MaterialApp(
+        theme: theme,
+        home: const Scaffold(body: TText('Paint')),
       ),
     );
     expect(tester.takeException(), isNull);
@@ -115,10 +226,10 @@ void main() {
   });
 
   test('裸 TTextSpan 保持空样式', () {
-    final span = TTextSpan(
+    const span = TTextSpan(
       text: '继承',
       semanticsIdentifier: 'span-id',
-      locale: const Locale('zh', 'CN'),
+      locale: Locale('zh', 'CN'),
       spellOut: false,
     );
     expect(span.style, isNull);
@@ -127,14 +238,30 @@ void main() {
     expect(span.spellOut, isFalse);
   });
 
+  test('运行时构建 TTextSpan 保留显式 Span 样式和语义', () {
+    final label = String.fromCharCodes([84, 68]);
+    const style = TextStyle(color: Colors.red, fontSize: 18);
+    final span = TTextSpan(
+      text: label,
+      style: style,
+      semanticsLabel: 'TDesign',
+    );
+    expect(span.text, label);
+    expect(span.style, style);
+    expect(span.semanticsLabel, 'TDesign');
+  });
+
   testWidgets('TText.rich 根样式与 TTextSpan 局部样式组合', (tester) async {
-    final child = TTextSpan(text: '子文本', textColor: Colors.red);
+    const child = TTextSpan(
+      text: '子文本',
+      style: TextStyle(color: Colors.red),
+    );
     await tester.pumpWidget(
       wrap(
         TText.rich(
-          TextSpan(children: [child]),
+          const TextSpan(children: [child]),
           font: Font(size: 24, lineHeight: 32),
-          textColor: Colors.blue,
+          style: const TextStyle(color: Colors.blue),
         ),
       ),
     );
@@ -146,10 +273,10 @@ void main() {
   testWidgets('getRawText 复用全部原生参数和样式解析', (tester) async {
     const source = TText(
       '原生 Text',
-      textColor: Colors.teal,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       semanticsIdentifier: 'raw-id',
+      style: TextStyle(color: Colors.teal),
     );
     await tester.pumpWidget(
       wrap(Builder(builder: (context) => source.getRawText(context: context))),
@@ -301,12 +428,12 @@ void main() {
   testWidgets('父级 baseline 布局同时支持 TText 与原生 Text', (tester) async {
     await tester.pumpWidget(
       wrap(
-        const Row(
+        Row(
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
           children: [
-            TText('中文 😀', style: TextStyle(fontSize: 24)),
-            Text('English', style: TextStyle(fontSize: 16)),
+            TText('中文 😀', font: Font(size: 24, lineHeight: 24)),
+            const Text('English', style: TextStyle(fontSize: 16)),
           ],
         ),
       ),
@@ -330,50 +457,5 @@ void main() {
           TextBaseline.alphabetic,
         )!;
     expect(tTextBaseline, closeTo(nativeBaseline, 0.01));
-  });
-
-  test('TTextThemeData copyWith 与 lerp 使用统一字段', () {
-    const textHeightBehavior = TextHeightBehavior(
-      applyHeightToFirstAscent: false,
-    );
-    final original = TTextThemeData(
-      font: Font(size: 16, lineHeight: 24),
-      textStyle: const TextStyle(color: Colors.red),
-      strutStyle: const StrutStyle(fontSize: 16),
-      textWidthBasis: TextWidthBasis.longestLine,
-      textHeightBehavior: textHeightBehavior,
-    );
-    final copied = original.copyWith(
-      textStyle: const TextStyle(color: Colors.blue),
-    );
-    expect(copied.font, original.font);
-    expect(copied.textStyle?.color, Colors.blue);
-    expect(copied.strutStyle, original.strutStyle);
-    expect(copied.textWidthBasis, original.textWidthBasis);
-    expect(copied.textHeightBehavior, original.textHeightBehavior);
-    expect(original.lerp(null, 0), same(original));
-    final other = TTextThemeData(
-      font: Font(size: 20, lineHeight: 28),
-      textStyle: const TextStyle(color: Colors.blue),
-      strutStyle: const StrutStyle(fontSize: 20),
-      textWidthBasis: TextWidthBasis.parent,
-      textHeightBehavior: const TextHeightBehavior(
-        applyHeightToLastDescent: false,
-      ),
-    );
-    final beforeMidpoint = original.lerp(other, 0.25);
-    expect(beforeMidpoint.font, same(original.font));
-    expect(beforeMidpoint.strutStyle, original.strutStyle);
-    expect(beforeMidpoint.textWidthBasis, original.textWidthBasis);
-    expect(beforeMidpoint.textHeightBehavior, original.textHeightBehavior);
-    expect(
-      original.lerp(other, 1).textStyle?.color,
-      isSameColorAs(Colors.blue),
-    );
-    final afterMidpoint = original.lerp(other, 0.75);
-    expect(afterMidpoint.font, same(other.font));
-    expect(afterMidpoint.strutStyle, other.strutStyle);
-    expect(afterMidpoint.textWidthBasis, other.textWidthBasis);
-    expect(afterMidpoint.textHeightBehavior, other.textHeightBehavior);
   });
 }

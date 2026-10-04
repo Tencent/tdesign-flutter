@@ -5,6 +5,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
+import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
@@ -32,7 +33,7 @@ enum TDialogActionRole {
 ///
 /// [role] 表达操作语义，并决定未显式覆盖时的默认配色；[variant] 表达按钮的
 /// 视觉形态。普通、主要和危险操作默认分别渲染为浅色、品牌色和危险色填充按钮。
-/// [colorScheme] 和 [style] 用于确有需要时覆盖单个操作的默认样式。
+/// [colorPreset] 和 [style] 用于确有需要时覆盖单个操作的默认样式。
 ///
 /// 一到两个操作全部显式使用 [TButtonVariant.text] 时，[TDialog] 会使用带分隔线的
 /// 贴边文字按钮 Footer；只改变某一个操作的变体不会切换整个 Footer 布局。
@@ -57,7 +58,7 @@ class TDialogAction {
     this.closeOnPressed = true,
     this.disabled = false,
     this.variant,
-    this.colorScheme,
+    this.colorPreset,
     this.style,
   });
 
@@ -72,9 +73,9 @@ class TDialogAction {
 
   /// 操作语义角色，默认为 [TDialogActionRole.normal]。
   ///
-  /// 未指定 [variant] 时使用填充按钮：普通操作采用 [TButtonColorScheme.light]，
-  /// 主要操作采用 [TButtonColorScheme.primary]，危险操作采用
-  /// [TButtonColorScheme.danger]。显式设置的 [variant]、[colorScheme] 和 [style]
+  /// 未指定 [variant] 时使用填充按钮：普通操作采用 [TButtonColorPreset.light]，
+  /// 主要操作采用 [TButtonColorPreset.primary]，危险操作采用
+  /// [TButtonColorPreset.danger]。显式设置的 [variant]、[colorPreset] 和 [style]
   /// 优先于角色提供的默认值。
   final TDialogActionRole role;
 
@@ -93,10 +94,10 @@ class TDialogAction {
 
   /// 显式按钮配色；未指定时由角色和最终变体解析。
   ///
-  /// 普通操作的填充变体使用 [TButtonColorScheme.light]，其他变体使用
-  /// [TButtonColorScheme.defaultTheme]；主要和危险操作分别使用
-  /// [TButtonColorScheme.primary]、[TButtonColorScheme.danger]。
-  final TButtonColorScheme? colorScheme;
+  /// 普通操作的填充变体使用 [TButtonColorPreset.light]，其他变体使用
+  /// [TButtonColorPreset.defaultTheme]；主要和危险操作分别使用
+  /// [TButtonColorPreset.primary]、[TButtonColorPreset.danger]。
+  final TButtonColorPreset? colorPreset;
 
   /// 显式按钮样式；用于覆盖单个操作，未设置时使用 Dialog Theme 和角色默认样式。
   final ButtonStyle? style;
@@ -116,12 +117,6 @@ class TDialog extends StatelessWidget {
     this.showCloseButton = false,
     this.closeButtonResult,
     this.semanticLabel,
-    this.backgroundColor,
-    this.shape,
-    this.elevation,
-    this.width,
-    this.maxHeight,
-    this.contentPadding,
 
     /// 操作区内边距。未设置时使用主题 token 默认值。
     ///
@@ -171,26 +166,6 @@ class TDialog extends StatelessWidget {
   /// 无障碍语义标签。
   final String? semanticLabel;
 
-  /// 面板背景色。
-  final Color? backgroundColor;
-
-  /// 面板形状。
-  final ShapeBorder? shape;
-
-  /// 面板阴影高度。
-  final double? elevation;
-
-  /// 面板宽度。
-  final double? width;
-
-  /// 面板最大高度。
-  ///
-  /// 内容超过该高度时，标题保持固定，正文区域显示滚动条并可滚动。
-  final double? maxHeight;
-
-  /// 标题和内容区域内边距。
-  final EdgeInsetsGeometry? contentPadding;
-
   /// 操作区内边距；未设置（`null`）时使用当前主题 token。
   ///
   /// 1～2 个操作全部显式使用 [TButtonVariant.text] 且未覆盖本字段时，自动使用
@@ -221,7 +196,6 @@ class TDialog extends StatelessWidget {
       from: context,
       to: navigator.context,
     );
-    final materialBarrierColor = Theme.of(context).dialogTheme.barrierColor;
     return navigator.push<T>(
       _DialogRoute<T>(
         barrierDismissible: barrierDismissible,
@@ -229,7 +203,7 @@ class TDialog extends StatelessWidget {
         barrierLabel: MaterialLocalizations.of(
           context,
         ).modalBarrierDismissLabel,
-        barrierColor: barrierColor ?? materialBarrierColor ?? Colors.black54,
+        barrierColor: barrierColor ?? Colors.black54,
         transitionDuration: const Duration(milliseconds: 240),
         pageBuilder: (routeContext, animation, secondaryAnimation) {
           final centered = Center(child: dialog);
@@ -252,45 +226,36 @@ class TDialog extends StatelessWidget {
     assert(title != null || content != null);
     final theme = Theme.of(context);
     final extension = theme.extension<TDialogThemeData>();
-    final material = theme.dialogTheme;
     final token = context.tTheme;
     final effectiveBackground =
-        backgroundColor ??
-        extension?.backgroundColor ??
-        material.backgroundColor ??
-        token.bgColorContainer;
+        extension?.backgroundColor ?? token.bgColorContainer;
     final effectiveShape =
-        shape ??
         extension?.shape ??
-        material.shape ??
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(token.radiusExtraLarge),
         );
-    final effectiveElevation =
-        elevation ?? extension?.elevation ?? material.elevation ?? 0;
-    final effectiveWidth = width ?? extension?.width ?? 311;
+    final effectiveElevation = extension?.elevation ?? 0;
+    final effectiveWidth = extension?.width ?? 311;
     final viewportHeight = MediaQuery.sizeOf(context).height;
     final effectiveMaxHeight = math.max(
       0.0,
       math.min(
-        maxHeight ?? extension?.maxHeight ?? viewportHeight * 0.8,
-        viewportHeight - token.spacer32,
+        extension?.maxHeight ?? viewportHeight * 0.8,
+        viewportHeight - token.spacer4,
       ),
     );
     final dialogWidth = math.max(
       0.0,
       math.min(
         effectiveWidth,
-        MediaQuery.sizeOf(context).width - token.spacer32,
+        MediaQuery.sizeOf(context).width - token.spacer4,
       ),
     );
     final effectiveContentPadding =
-        contentPadding ??
         extension?.contentPadding ??
-        EdgeInsets.fromLTRB(token.spacer24, token.spacer24, token.spacer24, 0);
+        EdgeInsets.fromLTRB(token.spacer3, token.spacer3, token.spacer3, 0);
     final resolvedTitleStyle =
         extension?.titleTextStyle ??
-        material.titleTextStyle ??
         TextStyle(
           color: token.textColorPrimary,
           fontSize: token.fontTitleLarge?.size ?? 18,
@@ -299,27 +264,26 @@ class TDialog extends StatelessWidget {
         );
     final resolvedContentStyle =
         extension?.contentTextStyle ??
-        material.contentTextStyle ??
         TextStyle(
           color: token.textColorSecondary,
           fontSize: token.fontBodyLarge?.size ?? 16,
           height: token.fontBodyLarge?.height ?? 24 / 16,
           fontWeight: token.fontBodyLarge?.fontWeight ?? FontWeight.w400,
         );
-    final inheritedTextStyle = theme.textTheme.bodyMedium;
+    final tokenFontFamily = token.fontFamily;
     final titleStyle = resolvedTitleStyle.copyWith(
       fontFamily:
-          resolvedTitleStyle.fontFamily ?? inheritedTextStyle?.fontFamily,
+          resolvedTitleStyle.fontFamily ?? tokenFontFamily?.flutterFontFamily,
       fontFamilyFallback:
           resolvedTitleStyle.fontFamilyFallback ??
-          inheritedTextStyle?.fontFamilyFallback,
+          tokenFontFamily?.flutterFontFamilyFallback,
     );
     final contentStyle = resolvedContentStyle.copyWith(
       fontFamily:
-          resolvedContentStyle.fontFamily ?? inheritedTextStyle?.fontFamily,
+          resolvedContentStyle.fontFamily ?? tokenFontFamily?.flutterFontFamily,
       fontFamilyFallback:
           resolvedContentStyle.fontFamilyFallback ??
-          inheritedTextStyle?.fontFamilyFallback,
+          tokenFontFamily?.flutterFontFamilyFallback,
     );
     final useTextActionLayout =
         actions.length <= 2 &&
@@ -328,10 +292,10 @@ class TDialog extends StatelessWidget {
     final effectiveActionsPadding =
         actionsPadding ??
         (useTextActionLayout
-            ? EdgeInsets.only(top: token.spacer32)
-            : EdgeInsets.all(token.spacer24));
-    final effectiveActionSpacing = actionSpacing ?? token.spacer12;
-    final closeButtonExtent = 24 + token.spacer8 + token.spacer16;
+            ? EdgeInsets.only(top: token.spacer4)
+            : EdgeInsets.all(token.spacer3));
+    final effectiveActionSpacing = actionSpacing ?? token.spacer1;
+    final closeButtonExtent = 24 + token.spacer + token.spacer2;
 
     return Semantics(
       namesRoute: true,
@@ -362,7 +326,7 @@ class TDialog extends StatelessWidget {
                       titleStyle: titleStyle,
                       content: content,
                       contentStyle: contentStyle,
-                      titleContentSpacing: token.spacer8,
+                      titleContentSpacing: token.spacer,
                     ),
                   ),
                   if (actionsWidget != null)
@@ -374,7 +338,6 @@ class TDialog extends StatelessWidget {
                         actions: actions,
                         spacing: effectiveActionSpacing,
                         textLayout: useTextActionLayout,
-                        defaultStyle: extension?.actionButtonStyle,
                       ),
                     ),
                 ],
@@ -386,10 +349,10 @@ class TDialog extends StatelessWidget {
                   child: IconButton(
                     tooltip: context.resource.close,
                     padding: EdgeInsetsDirectional.fromSTEB(
-                      token.spacer16,
-                      token.spacer8,
-                      token.spacer8,
-                      token.spacer16,
+                      token.spacer2,
+                      token.spacer,
+                      token.spacer,
+                      token.spacer2,
                     ),
                     constraints: BoxConstraints.tightFor(
                       width: closeButtonExtent,
@@ -587,13 +550,11 @@ class _DialogActions extends StatelessWidget {
     required this.actions,
     required this.spacing,
     required this.textLayout,
-    this.defaultStyle,
   });
 
   final List<TDialogAction> actions;
   final double spacing;
   final bool textLayout;
-  final ButtonStyle? defaultStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -612,11 +573,11 @@ class _DialogActions extends StatelessWidget {
         : actions;
     final buttons = orderedActions
         .map((action) {
-          final (variant, colorScheme) = _resolveStyle(action);
+          final (variant, colorPreset) = _resolveStyle(action);
           return TButton(
             variant: action.variant ?? variant,
-            colorScheme: action.colorScheme ?? colorScheme,
-            style: action.style ?? defaultStyle,
+            colorPreset: action.colorPreset ?? colorPreset,
+            style: action.style,
             onPressed: action.disabled
                 ? null
                 : () {
@@ -635,7 +596,7 @@ class _DialogActions extends StatelessWidget {
 
     if (textLayout && buttons.length <= 2) {
       final divider = BorderSide(
-        color: context.tTheme.componentBorderColor,
+        color: context.tTheme.componentBorder,
         width: 0.5,
       );
       return DecoratedBox(
@@ -680,21 +641,21 @@ class _DialogActions extends StatelessWidget {
     );
   }
 
-  (TButtonVariant, TButtonColorScheme) _resolveStyle(TDialogAction action) {
+  (TButtonVariant, TButtonColorPreset) _resolveStyle(TDialogAction action) {
     return switch (action.role) {
       TDialogActionRole.normal => (
         TButtonVariant.fill,
         action.variant == null || action.variant == TButtonVariant.fill
-            ? TButtonColorScheme.light
-            : TButtonColorScheme.defaultTheme,
+            ? TButtonColorPreset.light
+            : TButtonColorPreset.defaultTheme,
       ),
       TDialogActionRole.primary => (
         TButtonVariant.fill,
-        TButtonColorScheme.primary,
+        TButtonColorPreset.primary,
       ),
       TDialogActionRole.destructive => (
         TButtonVariant.fill,
-        TButtonColorScheme.danger,
+        TButtonColorPreset.danger,
       ),
     };
   }

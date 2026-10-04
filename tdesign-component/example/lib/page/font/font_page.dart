@@ -49,14 +49,17 @@ class TFontPage extends StatelessWidget {
                 TText(
                   '不使用数字字体：1234567890abcd',
                   font: TThemeData.defaultData().fontTitleSmall,
-                  textColor: context.tTheme.brandNormalColor,
+                  style: TextStyle(color: context.tTheme.brandColor),
                 ),
                 const SizedBox(height: 16),
                 TText(
                   '使用数字字体：1234567890abcd',
                   font: TThemeData.defaultData().fontTitleSmall,
-                  textColor: context.tTheme.brandNormalColor,
-                  fontFamily: TThemeData.defaultData().numberFontFamily,
+                  style: TextStyle(
+                    color: context.tTheme.brandColor,
+                    fontFamily: 'TCloudNumber',
+                    package: 'tdesign_flutter',
+                  ),
                 ),
               ],
             );
@@ -69,34 +72,49 @@ class TFontPage extends StatelessWidget {
             return Column(
               // spacing: 16,
               children: [
-                TText(
+                Text(
                   '延14字号',
-                  style: const TextStyle(fontSize: 14),
-                  font: context.tTheme.fontMarkLarge,
+                  style: TextStyle(
+                    fontSize: 14,
+                    height: context.tTheme.fontMarkLarge?.height,
+                    fontWeight: context.tTheme.fontMarkLarge?.fontWeight,
+                  ),
                 ),
                 const SizedBox(height: 16),
-                TText(
+                Text(
                   '延15字号',
-                  style: const TextStyle(fontSize: 15),
-                  font: context.tTheme.fontMarkLarge,
+                  style: TextStyle(
+                    fontSize: 15,
+                    height: context.tTheme.fontMarkLarge?.height,
+                    fontWeight: context.tTheme.fontMarkLarge?.fontWeight,
+                  ),
                 ),
                 const SizedBox(height: 16),
-                TText(
+                Text(
                   '延16字号',
-                  style: const TextStyle(fontSize: 16),
-                  font: context.tTheme.fontMarkLarge,
+                  style: TextStyle(
+                    fontSize: 16,
+                    height: context.tTheme.fontMarkLarge?.height,
+                    fontWeight: context.tTheme.fontMarkLarge?.fontWeight,
+                  ),
                 ),
                 const SizedBox(height: 16),
-                TText(
+                Text(
                   '延17字号',
-                  style: const TextStyle(fontSize: 17),
-                  font: context.tTheme.fontMarkLarge,
+                  style: TextStyle(
+                    fontSize: 17,
+                    height: context.tTheme.fontMarkLarge?.height,
+                    fontWeight: context.tTheme.fontMarkLarge?.fontWeight,
+                  ),
                 ),
                 const SizedBox(height: 16),
-                TText(
+                Text(
                   '延18字号',
-                  style: const TextStyle(fontSize: 18),
-                  font: context.tTheme.fontMarkLarge,
+                  style: TextStyle(
+                    fontSize: 18,
+                    height: context.tTheme.fontMarkLarge?.height,
+                    fontWeight: context.tTheme.fontMarkLarge?.fontWeight,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 const Text('延-系统字体16字号', style: TextStyle(fontSize: 18)),

@@ -39,9 +39,6 @@ void main() {
           )
           .mergeExtension(
             const TPopupThemeData(edgeHeight: 260, drawerWidth: 280),
-          )
-          .mergeExtension(
-            const TTextThemeData(textStyle: TextStyle(fontFamily: 'Roboto')),
           );
       await tester.pumpWidget(
         MaterialApp(

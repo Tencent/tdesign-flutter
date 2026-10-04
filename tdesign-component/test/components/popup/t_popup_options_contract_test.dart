@@ -98,12 +98,12 @@ void main() {
               decorationStyle: TextDecorationStyle.double,
             ),
             child: td.TPopupHeader(
-              title: td.TText(
-                '标题',
-                style: explicit
-                    ? const TextStyle(decoration: TextDecoration.underline)
-                    : null,
-              ),
+              title: explicit
+                  ? const Text(
+                      '标题',
+                      style: TextStyle(decoration: TextDecoration.underline),
+                    )
+                  : const td.TText('标题'),
             ),
           ),
         ),
@@ -116,6 +116,13 @@ void main() {
         tester.widget<RichText>(rich).text.style?.decoration,
         explicit ? TextDecoration.underline : TextDecoration.none,
       );
+      if (!explicit) {
+        final title = tester.widget<Text>(find.text('标题'));
+        final token = td.TThemeData.defaultData();
+        expect(title.style?.fontSize, token.fontTitleLarge?.size);
+        expect(title.style?.fontWeight, FontWeight.w700);
+        expect(title.style?.color, token.textColorPrimary);
+      }
     }
   });
 

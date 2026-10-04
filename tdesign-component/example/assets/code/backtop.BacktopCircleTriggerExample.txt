@@ -13,7 +13,7 @@ class BacktopCircleTriggerExample extends StatelessWidget {
       child: TButton(
         key: const Key('backtop-demo-circle-trigger'),
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         size: TButtonSize.large,
         onPressed: () => onSelected(TBackTopShape.circle),
         child: const TText('圆形返回顶部'),

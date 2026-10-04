@@ -5,10 +5,16 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_swipe_cell_inherited.dart';
 import 't_swipe_cell_theme_data.dart';
 
 /// 滑动单元格操作项。
+///
+/// 同一面板中的操作项可使用不同的颜色和文字样式。
+/// 未指定的图文视觉字段从全局 TDesign Token 取得默认值；
+/// [TSwipeCellThemeData] 只提供共用内边距。
+/// [builder] 自行绘制操作项，不能同时传入内置背景、图文或图文样式字段。
 class TSwipeCellAction extends StatelessWidget {
   const TSwipeCellAction({
     Key? key,
@@ -17,7 +23,7 @@ class TSwipeCellAction extends StatelessWidget {
     this.icon,
     this.iconColor,
     this.iconSize,
-    this.spacing,
+    this.iconLabelSpacing,
     this.label,
     this.labelStyle,
     this.builder,
@@ -25,9 +31,20 @@ class TSwipeCellAction extends StatelessWidget {
          builder != null || icon != null || label != null,
          'builder, icon or label must not be null',
        ),
+       assert(
+         builder == null ||
+             (backgroundColor == null &&
+                 icon == null &&
+                 iconColor == null &&
+                 iconSize == null &&
+                 iconLabelSpacing == null &&
+                 label == null &&
+                 labelStyle == null),
+         'builder cannot be combined with built-in action visuals',
+       ),
        super(key: key);
 
-  /// 背景颜色；为空时回退到 [TSwipeCellThemeData.actionBackgroundColor]。
+  /// 当前操作项背景颜色。
   final Color? backgroundColor;
 
   /// 点击回调。回调后组件会自动关闭操作面板。
@@ -42,8 +59,8 @@ class TSwipeCellAction extends StatelessWidget {
   /// 图标大小，默认 20。
   final double? iconSize;
 
-  /// 图标和文字的水平间距，默认 8。
-  final double? spacing;
+  /// 图标和标签之间的水平间距，默认 8。
+  final double? iconLabelSpacing;
 
   /// 操作文字。
   final String? label;
@@ -51,7 +68,10 @@ class TSwipeCellAction extends StatelessWidget {
   /// 操作文字样式。
   final TextStyle? labelStyle;
 
-  /// 自定义操作项。其实际布局宽度会直接用于面板宽度，无需额外指定尺寸。
+  /// 自定义操作项。不可同时传入内置背景、图文或图文样式字段；
+  /// 冲突配置会在构建时抛出 [FlutterError]，包括 release 构建。
+  /// 其实际布局宽度会直接用于面板宽度，无需额外指定尺寸。
+  /// [onPressed] 仍负责点击回调，随后会自动关闭操作面板。
   final WidgetBuilder? builder;
 
   TSwipeCellThemeData _effectiveTheme(BuildContext context) {
@@ -61,21 +81,25 @@ class TSwipeCellAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (builder != null &&
+        (backgroundColor != null ||
+            icon != null ||
+            iconColor != null ||
+            iconSize != null ||
+            iconLabelSpacing != null ||
+            label != null ||
+            labelStyle != null)) {
+      throw FlutterError(
+        'builder cannot be combined with built-in action visuals',
+      );
+    }
     final theme = _effectiveTheme(context);
-    final effectiveBackgroundColor =
-        backgroundColor ?? theme.actionBackgroundColor;
-    final materialTheme = Theme.of(context);
-    final explicitIconTheme = context.tExplicitIconTheme;
-    final effectiveIconSize =
-        iconSize ?? theme.actionIconSize ?? explicitIconTheme?.size ?? 20;
-    final effectiveSpacing = spacing ?? theme.actionSpacing ?? 8;
+    final effectiveBackgroundColor = backgroundColor;
+    final effectiveIconSize = iconSize ?? 20;
+    final effectiveSpacing = iconLabelSpacing ?? 8;
     final effectivePadding =
         theme.actionPadding ?? const EdgeInsets.symmetric(horizontal: 16);
-    final effectiveIconColor =
-        iconColor ??
-        theme.actionIconColor ??
-        explicitIconTheme?.color ??
-        context.tTheme.textColorAnti;
+    final effectiveIconColor = iconColor ?? context.tTheme.textColorAnti;
     final fallbackFont =
         context.tTheme.fontMarkMedium ??
         Font(size: 14, lineHeight: 22, fontWeight: FontWeight.w600);
@@ -85,12 +109,7 @@ class TSwipeCellAction extends StatelessWidget {
       height: fallbackFont.height,
       fontWeight: fallbackFont.fontWeight,
     );
-    final effectiveTextStyle = tokenTextStyle
-        .merge(materialTheme.tExplicitTextTheme?.labelMedium)
-        .merge(context.tExplicitDefaultTextStyle)
-        .copyWith(color: context.tTheme.textColorAnti)
-        .merge(theme.actionTextStyle)
-        .merge(labelStyle);
+    final effectiveTextStyle = tokenTextStyle.merge(labelStyle);
 
     final content =
         builder?.call(context) ??
@@ -107,7 +126,7 @@ class TSwipeCellAction extends StatelessWidget {
               if (icon != null && label != null)
                 SizedBox(width: effectiveSpacing),
               if (label != null)
-                TText(label!, style: effectiveTextStyle, maxLines: 1),
+                TTextStyled(label!, style: effectiveTextStyle, maxLines: 1),
             ],
           ),
         );

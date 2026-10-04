@@ -20,6 +20,36 @@ void main() {
       expect(find.text('步骤一'), findsOneWidget);
     });
 
+    testWidgets('横向标题和说明使用各自的字体行高', (tester) async {
+      await tester.pumpWidget(
+        wrap(TSteps.progress(steps: baseSteps, value: 1)),
+      );
+
+      final title = tester.widget<Text>(find.text('步骤二'));
+      final description = tester.widget<Text>(find.text('描述二'));
+      expect(title.style?.fontSize, 14);
+      expect(title.style?.height, closeTo(22 / 14, 0.0001));
+      expect(description.style?.fontSize, 12);
+      expect(description.style?.height, closeTo(20 / 12, 0.0001));
+    });
+
+    testWidgets('横向说明跟随自定义 bodySmall 行高 Token', (tester) async {
+      final token = TThemeData.defaultData().copyWithTThemeData(
+        'steps-custom-line-height',
+        fontMetricMap: {'lineHeightBodySmall': 24},
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(token),
+          home: Scaffold(body: TSteps.progress(steps: baseSteps, value: 1)),
+        ),
+      );
+
+      final description = tester.widget<Text>(find.text('描述二'));
+      expect(description.style?.fontSize, 12);
+      expect(description.style?.height, closeTo(24 / 12, 0.0001));
+    });
+
     testWidgets('横向长标题和内容收口为单行省略', (tester) async {
       const longTitle = '这是一个非常非常非常长的步骤标题用于验证不会换行';
       const longContent = '这是一个非常非常非常长的步骤内容用于验证不会撑高布局';

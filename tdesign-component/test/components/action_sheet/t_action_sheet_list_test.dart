@@ -63,7 +63,7 @@ void main() {
       ),
     );
 
-    final title = find.widgetWithText(TText, '带徽标');
+    final title = find.text('带徽标');
     final badge = find.byKey(badgeKey);
     expect(tester.getCenter(badge), tester.getTopRight(title));
   });
@@ -87,7 +87,7 @@ void main() {
       ),
     );
 
-    final title = find.widgetWithText(TText, '带徽标');
+    final title = find.text('带徽标');
     expect(
       tester.getCenter(find.text('9')),
       tester.getTopLeft(title) + const Offset(-6, 4),
@@ -113,7 +113,7 @@ void main() {
       ),
     );
 
-    final title = find.widgetWithText(TText, '物理右上角');
+    final title = find.text('物理右上角');
     expect(
       tester.getCenter(find.text('9')),
       tester.getTopRight(title) + const Offset(6, 4),
@@ -132,18 +132,12 @@ void main() {
     );
 
     await tester.pumpWidget(wrap(list(TActionSheetAlign.left)));
-    expect(
-      tester.getRect(find.widgetWithText(TText, '面板说明')).left,
-      closeTo(16, 0.01),
-    );
-    expect(
-      tester.getRect(find.widgetWithText(TText, '操作项')).left,
-      closeTo(16, 0.01),
-    );
+    expect(tester.getRect(find.text('面板说明')).left, closeTo(16, 0.01));
+    expect(tester.getRect(find.text('操作项')).left, closeTo(16, 0.01));
 
     await tester.pumpWidget(wrap(list(TActionSheetAlign.right)));
-    final description = find.widgetWithText(TText, '面板说明');
-    final item = find.widgetWithText(TText, '操作项');
+    final description = find.text('面板说明');
+    final item = find.text('操作项');
     expect(tester.getRect(description).right, closeTo(784, 0.01));
     expect(tester.getRect(item).right, closeTo(784, 0.01));
   });
@@ -164,7 +158,7 @@ void main() {
       ),
     );
 
-    final title = find.widgetWithText(TText, '组合字符');
+    final title = find.text('组合字符');
     expect(
       tester.getCenter(find.text('e\u0301')),
       tester.getTopRight(title) + const Offset(6, 4),
@@ -195,8 +189,8 @@ void main() {
     );
 
     expect(tester.takeException(), isNull);
-    final titleFinder = find.widgetWithText(TText, label);
-    final title = tester.widget<TText>(titleFinder);
+    final titleFinder = find.text(label);
+    final title = tester.widget<Text>(titleFinder);
     expect(title.maxLines, 1);
     expect(title.overflow, TextOverflow.ellipsis);
     expect(tester.getRect(find.text('99+')).right, lessThanOrEqualTo(220));
@@ -226,7 +220,7 @@ void main() {
       ),
     );
 
-    final labels = find.widgetWithText(TText, label);
+    final labels = find.text(label);
     expect(labels, findsNWidgets(2));
     expect(
       tester.getSize(labels.at(0)).width,
@@ -363,13 +357,9 @@ void main() {
     expect(itemContainer.constraints?.maxHeight, 84);
 
     final token = TThemeData.defaultData();
-    final panelDescription = tester.widget<TText>(
-      find.widgetWithText(TText, '面板描述'),
-    );
-    final itemDescription = tester.widget<TText>(
-      find.widgetWithText(TText, '选项描述'),
-    );
-    expect(panelDescription.textColor, token.textColorPlaceholder);
-    expect(itemDescription.textColor, token.textColorPlaceholder);
+    final panelDescription = tester.widget<Text>(find.text('面板描述'));
+    final itemDescription = tester.widget<Text>(find.text('选项描述'));
+    expect(panelDescription.style?.color, token.textColorPlaceholder);
+    expect(itemDescription.style?.color, token.textColorPlaceholder);
   });
 }

@@ -72,33 +72,21 @@ class TDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ---- resolve 内联链 ----
-    // 优先级：构造器 L1/L2 > TDividerThemeData > Material DividerTheme (P2) > Token (P4)
+    // 优先级：构造器 > TDividerThemeData > TDesign Token。
     final theme = Theme.of(context).extension<TDividerThemeData>();
-    final materialTheme = Theme.of(context);
-    final dividerTheme = materialTheme.dividerTheme;
     final token = context.tTheme;
 
     final effectiveLayout = layout ?? TDividerLayout.horizontal;
 
     // L4 值按优先级 fallback
-    final effectiveColor =
-        theme?.color ??
-        materialTheme.tExplicitDividerColor ??
-        token.bgColorComponent;
-    final effectiveThickness =
-        theme?.thickness ?? dividerTheme.thickness ?? 0.5;
+    final effectiveColor = theme?.color ?? token.bgColorComponent;
+    final effectiveThickness = theme?.thickness ?? 0.5;
     final effectiveIndent = theme?.indent;
     final effectiveEndIndent = theme?.endIndent;
     final effectiveGapPadding =
-        theme?.gapPadding ?? EdgeInsets.symmetric(horizontal: token.spacer12);
+        theme?.gapPadding ?? EdgeInsets.symmetric(horizontal: token.spacer1);
     final effectiveMargin =
-        theme?.margin ??
-        _defaultMargin(
-          effectiveLayout,
-          dividerTheme.space,
-          effectiveThickness,
-          token.spacer16,
-        );
+        theme?.margin ?? _defaultMargin(effectiveLayout, token.spacer2);
     final contentFont = token.fontBodySmall;
     final defaultTextStyle = TextStyle(
       fontSize: contentFont?.size ?? 12,
@@ -252,20 +240,7 @@ class TDivider extends StatelessWidget {
     );
   }
 
-  EdgeInsetsGeometry _defaultMargin(
-    TDividerLayout layout,
-    double? materialSpace,
-    double thickness,
-    double spacer16,
-  ) {
-    if (materialSpace != null) {
-      final side = ((materialSpace - thickness) / 2)
-          .clamp(0.0, double.infinity)
-          .toDouble();
-      return layout == TDividerLayout.horizontal
-          ? EdgeInsets.symmetric(vertical: side)
-          : EdgeInsets.symmetric(horizontal: side);
-    }
+  EdgeInsetsGeometry _defaultMargin(TDividerLayout layout, double spacer16) {
     return layout == TDividerLayout.horizontal
         ? const EdgeInsets.symmetric(vertical: 10)
         : EdgeInsets.symmetric(horizontal: spacer16);

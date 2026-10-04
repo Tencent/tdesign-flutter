@@ -79,6 +79,10 @@ jobs:
         working-directory: ./tdesign-component
         run: dart run tool/run_component_regression.dart
 
+      - name: Verify public API migration in an external consumer
+        working-directory: ./tdesign-component
+        run: dart run tool/run_migration_consumer.dart
+
       - name: Test regression tooling
         working-directory: ./tdesign-component
         run: flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart

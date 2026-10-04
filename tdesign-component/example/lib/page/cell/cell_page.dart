@@ -17,7 +17,7 @@ class TCellPage extends StatelessWidget {
       title: 'Cell 单元格',
       desc: '用于各个类别行的信息展示。',
       exampleCodeGroup: 'cell',
-      backgroundColor: context.tTheme.bgColorPage,
+      backgroundColor: context.tTheme.bgColorSecondaryContainer,
       showTestModule: false,
       children: [
         ExampleModule(

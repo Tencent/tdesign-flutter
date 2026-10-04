@@ -24,7 +24,7 @@ class _CalendarRangeExampleState extends State<CalendarRangeExample> {
     ),
     child: Container(
       color: context.tTheme.bgColorContainer,
-      padding: EdgeInsets.all(context.tTheme.spacer16),
+      padding: EdgeInsets.all(context.tTheme.spacer2),
       child: Row(
         children: [
           Expanded(
@@ -76,7 +76,7 @@ class _CalendarRangeExampleState extends State<CalendarRangeExample> {
                 font: context.tTheme.fontTitleLarge,
               ),
               Positioned(
-                right: context.tTheme.spacer8,
+                right: context.tTheme.spacer,
                 child: IconButton(
                   tooltip: localized ? 'Close' : '关闭',
                   onPressed: close,
@@ -136,11 +136,11 @@ class _CalendarRangeExampleState extends State<CalendarRangeExample> {
                         : calendar,
                   ),
                   Padding(
-                    padding: EdgeInsets.all(context.tTheme.spacer16),
+                    padding: EdgeInsets.all(context.tTheme.spacer2),
                     child: SizedBox(
                       width: double.infinity,
                       child: TButton(
-                        colorScheme: TButtonColorScheme.primary,
+                        colorPreset: TButtonColorPreset.primary,
                         size: TButtonSize.large,
                         onPressed:
                             draft.isEmpty ||

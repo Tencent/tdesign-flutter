@@ -135,12 +135,12 @@ class TTable<T> extends StatefulWidget {
 
   /// 是否显示完整单元格边框。
   ///
-  /// 为空时读取 [TTableThemeData.bordered]，最后回退为 `false`。
+  /// 未设置时为 `false`。
   final bool? bordered;
 
   /// 是否为奇数数据行显示斑马纹背景。
   ///
-  /// 为空时读取 [TTableThemeData.stripe]，最后回退为 `false`。
+  /// 未设置时为 `false`。
   final bool? stripe;
 
   /// 单元格点击回调，context 同时提供行列索引、行数据和列配置。
@@ -782,7 +782,7 @@ class _TTableState<T> extends State<TTable<T>> {
   }
 
   Color _rowColor(BuildContext context, TTableThemeData? theme, int rowIndex) {
-    final striped = (widget.stripe ?? theme?.stripe ?? false) && rowIndex.isOdd;
+    final striped = (widget.stripe ?? false) && rowIndex.isOdd;
     return striped
         ? theme?.stripeColor ?? context.tTheme.bgColorSecondaryContainer
         : theme?.backgroundColor ?? context.tTheme.bgColorContainer;
@@ -876,10 +876,10 @@ class _TTableState<T> extends State<TTable<T>> {
     final resolvedTheme =
         theme ?? Theme.of(context).extension<TTableThemeData>();
     final side = BorderSide(
-      color: resolvedTheme?.borderColor ?? context.tTheme.componentStrokeColor,
+      color: resolvedTheme?.borderColor ?? context.tTheme.componentStroke,
       width: 0.5,
     );
-    final bordered = widget.bordered ?? resolvedTheme?.bordered ?? false;
+    final bordered = widget.bordered ?? false;
     if (bordered) {
       return Border.all(color: side.color, width: side.width);
     }
@@ -946,7 +946,7 @@ class _SortIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeColor = context.tTheme.brandNormalColor;
+    final activeColor = context.tTheme.brandColor;
     final inactiveColor = context.tTheme.textColorPlaceholder;
     return SizedBox(
       width: 12,

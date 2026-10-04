@@ -20,30 +20,40 @@ class _ThemeTextColorExampleState extends State<ThemeTextColorExample> {
       ..clear()
       ..addEntries(
         context.tTheme.colorMap.entries.where(
-          (entry) => entry.key.startsWith('font'),
+          (entry) => entry.key.startsWith('fontGray'),
+        ),
+      )
+      ..addEntries(
+        context.tTheme.colorMap.entries.where(
+          (entry) => entry.key.startsWith('fontWhite'),
         ),
       );
   }
 
   Widget _buildTextColor(BuildContext context) {
-    var textList = ['Gy', 'Wh'];
+    final entries = fontMap.entries.toList();
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: fontMap.length,
+      itemCount: entries.length,
       shrinkWrap: true,
       itemBuilder: (context, index) {
-        var light = (index - 3).abs() < 2;
-        var type = index ~/ 4;
-        index = index % 4;
-        var function = textList[type];
+        final entry = entries[index];
+        final base = entry.key.startsWith('fontGray')
+            ? Colors.white
+            : Colors.black;
+        final effectiveColor = Color.alphaBlend(entry.value, base);
         return Container(
           padding: const EdgeInsets.only(left: 16, right: 16),
-          color: type == 0 ? Colors.white : Colors.black,
+          color: base,
           child: Container(
-            color: context.tTheme.colorMap['font${function}Color${index + 1}'],
+            color: entry.value,
             child: TText(
-              'font${function}Color${index + 1}',
-              textColor: light ? Colors.black : Colors.white,
+              entry.key,
+              style: TextStyle(
+                color: effectiveColor.computeLuminance() < 0.5
+                    ? Colors.white
+                    : Colors.black,
+              ),
             ),
           ),
         );

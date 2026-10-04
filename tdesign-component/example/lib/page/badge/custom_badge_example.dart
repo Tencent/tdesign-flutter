@@ -11,24 +11,20 @@ class CustomBadgeExample extends StatelessWidget {
     badge: Container(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
-        color: context.tTheme.errorNormalColor,
+        color: context.tTheme.errorColor,
         borderRadius: BorderRadius.circular(999),
       ),
       child: TText(
         'NEW',
         font: context.tTheme.fontMarkExtraSmall,
-        textColor: context.tTheme.textColorAnti,
+        style: TextStyle(color: context.tTheme.textColorAnti),
       ),
     ),
-    child: Theme(
-      data: Theme.of(
-        context,
-      ).mergeExtension(const TButtonThemeData(shape: TButtonShape.square)),
-      child: TButton(
-        size: TButtonSize.large,
-        icon: const Icon(TIcons.notification),
-        onPressed: () {},
-      ),
+    child: TButton(
+      shape: TButtonShape.square,
+      size: TButtonSize.large,
+      icon: const Icon(TIcons.notification),
+      onPressed: () {},
     ),
   );
 

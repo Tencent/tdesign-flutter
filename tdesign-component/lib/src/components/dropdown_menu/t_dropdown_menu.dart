@@ -204,8 +204,7 @@ class TDropdownMenu extends StatefulWidget {
 
   /// 展开、关闭及切换动画时长。
   ///
-  /// 未指定时使用 [TDropdownThemeData.animationDuration]，再回退到 200ms。
-  /// 显式值（包括 [Duration.zero]）优先于主题；系统禁用动画时始终使用零时长。
+  /// 未指定时为 200ms。系统禁用动画时始终使用零时长。
   final Duration? animationDuration;
   final ValueChanged<int>? onOpened;
   final TDropdownMenuClosedCallback? onClosed;
@@ -263,9 +262,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     if (MediaQuery.maybeOf(context)?.disableAnimations ?? false) {
       return Duration.zero;
     }
-    return widget.animationDuration ??
-        _theme.animationDuration ??
-        const Duration(milliseconds: 200);
+    return widget.animationDuration ?? const Duration(milliseconds: 200);
   }
 
   void _resetAutoPlacement({
@@ -522,8 +519,6 @@ class _TDropdownMenuState extends State<TDropdownMenu>
 
   @override
   Widget build(BuildContext context) {
-    final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
     final theme = _theme;
     final bar = widget.scrollable
         ? SingleChildScrollView(
@@ -583,15 +578,10 @@ class _TDropdownMenuState extends State<TDropdownMenu>
             height: theme.barHeight ?? 48,
             decoration: BoxDecoration(
               color:
-                  theme.barBackgroundColor ??
-                  colorScheme?.surface ??
-                  context.tTheme.bgColorContainer,
+                  theme.barBackgroundColor ?? context.tTheme.bgColorContainer,
               border: Border(
                 bottom: BorderSide(
-                  color:
-                      theme.dividerColor ??
-                      material.tExplicitDividerColor ??
-                      context.tTheme.componentStrokeColor,
+                  color: theme.dividerColor ?? context.tTheme.componentStroke,
                   width: 0.5,
                 ),
               ),
@@ -604,8 +594,6 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   }
 
   Widget _buildTrigger(int index) {
-    final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
     final item = widget.items[index];
     final isOpen = _controller.openIndex == index;
     final onTap = item.enabled ? () => unawaited(_toggle(index)) : null;
@@ -634,8 +622,6 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     final activeTokenFont = context.tTheme.fontMarkMedium;
     final baseStyle =
         theme.textStyle ??
-        context.tExplicitDefaultTextStyle ??
-        material.tExplicitTextTheme?.bodyMedium ??
         TextStyle(
           color: context.tTheme.textColorPrimary,
           fontSize: tokenFont?.size,
@@ -644,31 +630,21 @@ class _TDropdownMenuState extends State<TDropdownMenu>
         );
     final style = !item.enabled
         ? theme.disabledTextStyle ??
-              baseStyle.copyWith(
-                color:
-                    material.tExplicitDisabledColor ??
-                    context.tTheme.textDisabledColor,
-              )
+              baseStyle.copyWith(color: context.tTheme.textColorDisabled)
         : isOpen
         ? theme.activeTextStyle ??
               baseStyle.copyWith(
-                color: colorScheme?.primary ?? context.tTheme.brandNormalColor,
+                color: context.tTheme.brandColor,
                 fontWeight: activeTokenFont?.fontWeight,
               )
         : baseStyle.copyWith(
             color: baseStyle.color ?? context.tTheme.textColorPrimary,
           );
     final iconColor = !item.enabled
-        ? theme.disabledIconColor ??
-              material.tExplicitDisabledColor ??
-              context.tTheme.textDisabledColor
+        ? theme.disabledIconColor ?? context.tTheme.textColorDisabled
         : isOpen
-        ? theme.activeIconColor ??
-              colorScheme?.primary ??
-              context.tTheme.brandNormalColor
-        : theme.iconColor ??
-              context.tExplicitIconTheme?.color ??
-              context.tTheme.textColorPrimary;
+        ? theme.activeIconColor ?? context.tTheme.brandColor
+        : theme.iconColor ?? context.tTheme.textColorPrimary;
     final opensAbove = switch (widget.placement) {
       TDropdownMenuPlacement.above => true,
       TDropdownMenuPlacement.below => false,
@@ -695,7 +671,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            SizedBox(width: context.tTheme.spacer4),
+            const SizedBox(width: 4.0),
             AnimatedRotation(
               turns: arrowTurns,
               duration: _duration,
@@ -1058,12 +1034,8 @@ class _TDropdownMenuState extends State<TDropdownMenu>
         ? math.max(maxHeight, barrierExtent)
         : barrierExtent;
     final theme = _theme;
-    final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
     final panelBackgroundColor =
-        theme.panelBackgroundColor ??
-        colorScheme?.surface ??
-        context.tTheme.bgColorContainer;
+        theme.panelBackgroundColor ?? context.tTheme.bgColorContainer;
 
     Widget buildPanel({
       required int panelIndex,

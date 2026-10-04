@@ -5,6 +5,8 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../popup/t_popup.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
+import '../text/t_text_theme_data.dart';
 import 't_drawer_theme_data.dart';
 
 part 't_drawer_content.dart';
@@ -31,10 +33,8 @@ class TDrawer extends StatelessWidget {
     this.showLastDivider = true,
     this.title,
     this.onItemClick,
-    this.width,
     this.child,
-    this.backgroundColor,
-  }) : assert(width == null || width > 0);
+  });
 
   /// 是否显示菜单项分隔线，默认 true。
   final bool showDivider;
@@ -60,12 +60,6 @@ class TDrawer extends StatelessWidget {
   /// 点击抽屉里的列表项触发
   final TDrawerItemClickCallback? onItemClick;
 
-  /// 宽度；优先级高于 ThemeData，默认使用 280。
-  final double? width;
-
-  /// 组件背景颜色；优先级高于 ThemeData 和默认值。
-  final Color? backgroundColor;
-
   @override
   Widget build(BuildContext context) {
     return _TDrawerContent(
@@ -77,8 +71,6 @@ class TDrawer extends StatelessWidget {
       child: child,
       title: title,
       onItemClick: onItemClick,
-      width: width,
-      backgroundColor: backgroundColor,
     );
   }
 }
@@ -123,7 +115,7 @@ TDrawerHandle showTDrawer(
     context,
     options: TPopupOptions(
       placement: popupPlacement,
-      width: drawer.width ?? theme.width ?? 280,
+      width: theme.width ?? 280,
       inset: popupInset,
       overlay: TPopupOverlayConfig(
         showOverlay: showOverlay,

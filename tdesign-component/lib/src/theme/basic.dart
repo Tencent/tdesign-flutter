@@ -6,13 +6,20 @@ class Font {
   late double height;
   late FontWeight fontWeight;
 
-  Font({required int size, required int lineHeight, this.fontWeight = FontWeight.w400}) {
+  Font({
+    required int size,
+    required int lineHeight,
+    this.fontWeight = FontWeight.w400,
+  }) {
     this.size = size.toDouble();
     height = lineHeight.toDouble() / size;
   }
 
-  factory Font.fromJson(Map<String, dynamic> map) =>
-      Font(size: map['size'], lineHeight: map['lineHeight'], fontWeight: _getFontWeight(map));
+  factory Font.fromJson(Map<String, dynamic> map) => Font(
+    size: map['size'],
+    lineHeight: map['lineHeight'],
+    fontWeight: _getFontWeight(map),
+  );
 
   static FontWeight _getFontWeight(Map<String, dynamic> map) {
     int weight = map['fontWeight'] ?? 4;
@@ -24,18 +31,22 @@ class Font {
 class FontFamily {
   late String fontFamily;
   String? package;
+  List<String>? fallback;
 
-  FontFamily({required this.fontFamily, this.package});
+  FontFamily({required this.fontFamily, this.package, this.fallback});
 
-  factory FontFamily.fromJson(Map<String, dynamic> map) =>
-      FontFamily(fontFamily: map['fontFamily'], package: map['package']);
+  factory FontFamily.fromJson(Map<String, dynamic> map) => FontFamily(
+    fontFamily: map['fontFamily'],
+    package: map['package'],
+    fallback: (map['fallback'] as List<dynamic>?)?.cast<String>(),
+  );
 }
 
 /// Font字体宽高的扩展
 extension FontExtensions on Font {
   Font withSize(int newSize) => Font(
-      size: newSize,
-      lineHeight: (height * newSize).round(),
-      fontWeight: fontWeight
+    size: newSize,
+    lineHeight: (height * newSize).round(),
+    fontWeight: fontWeight,
   );
 }

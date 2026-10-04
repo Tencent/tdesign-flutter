@@ -99,14 +99,14 @@ Demo 展示组件能力，不替组件补实现或修复默认样式：
 - 连续尺寸、进度等确有逐实例配置需求的值可以保留为实例参数；“属于可见样式”本身不是迁入 Theme 或删除实例参数的充分理由。
 - 只有存在已验证的子树批量默认需求时，才评估由 Theme 提供默认值。实例参数必须允许未指定，不得同时保留非空实例默认值和同义 Theme 默认值形成两个默认源；视觉字段完整解析链见第 4 节，语义选择器见下节。
 
-### `variant`、`colorScheme`、`status` 与 Theme 的判定模型
+### `variant`、`colorPreset`、`status` 与 Theme 的判定模型
 
 `TButton` 只提供职责拆分参考，不是所有组件枚举取值的命名模板。Web / 小程序的 `theme`、`type` 等名称不能机械映射；必须根据调用者意图和运行效果判断维度，再记录枚举全部取值、默认值、空值语义、有效组合和公开字段类型。
 
 | 维度 | 判定标准 | 示例 | 所有权 |
 |---|---|---|---|
 | `variant` | 改变结构、布局、边框或填充/描边等绘制处理；不是任意色相切换 | fill / outline / text / ghost、solid / tinted、linear / circular | 实例 API；满足严格条件时 Theme 可提供 `defaultVariant` |
-| `colorScheme` | 业务含义和绘制处理不变，只选择一组协调的预设颜色 | defaultTheme / primary / danger，以及组件确有需要的其他调色预设 | 仅实例 API；Theme 不保存该选择器 |
+| `colorPreset` | 业务含义和绘制处理不变，只选择一组协调的内置预设颜色，不传入实际 Material `ColorScheme` | defaultTheme / primary / danger，以及组件确有需要的其他调色预设 | 仅实例 API；Theme 不保存该选择器 |
 | `status` / `state` | 表达组件、内容或数据当前所处的业务或生命周期状态 | normal / info / success / warning / error、ready / uploading | 实例、数据模型或 Controller 中唯一合适的一处；Theme 不拥有状态 |
 | `style` / 具体样式字段 | 完整或局部覆盖最终呈现 | `ButtonStyle`、颜色、文字样式、间距 | 实例完整 style 或组件 Theme；不得再造同义选择器 |
 
@@ -114,17 +114,17 @@ Demo 展示组件能力，不替组件补实现或修复默认样式：
 
 1. 值是否描述“当前发生了什么”，或会决定默认图标、提示语、无障碍语义、交互和生命周期？是则属于 `status` / `state`，即使当前实现暂时只改变颜色。
 2. 值是否改变填充、描边、文本、层级、布局或绘制处理？是则属于 `variant`。例如同一组件的实色、浅色填充和描边可以是不同 variant。
-3. 前两项都不成立，只在相同状态和相同绘制处理中替换协调调色板，才属于 `colorScheme`。
+3. 前两项都不成立，只在相同状态和相同绘制处理中替换内置配色预设，才属于 `colorPreset`。
 
-因此 `info / success / warning / error` 既不能一律判为状态，也不能一律判为配色：输入框校验、上传进度或公告状态属于 `status`；Tag 或 Popover 若只是由调用者选择视觉调色板、没有状态行为和默认内容语义，可以属于 `colorScheme`。`light` 也不是固定维度：表示浅色填充处理时属于 `variant`，表示一套独立调色板时才属于 `colorScheme`。dartdoc 必须写清实际语义，不能让调用者依赖猜测。
+因此 `info / success / warning / error` 既不能一律判为状态，也不能一律判为配色：输入框校验、上传进度或公告状态属于 `status`；Tag 或 Popover 若只是由调用者选择内置配色、没有状态行为和默认内容语义，可以属于 `colorPreset`。`light` 也不是固定维度：表示浅色填充处理时属于 `variant`，表示一套独立配色时才属于 `colorPreset`。dartdoc 必须写清实际语义，不能让调用者依赖猜测。
 
 Theme 与默认值遵循以下所有权规则：
 
-- 组件不得公开 `colorTheme`，也不得在组件 ThemeExtension 中保存组件枚举型 `colorScheme`、`defaultColorScheme`、`status` 或 `defaultStatus`。Flutter 官方 `ThemeData.colorScheme` 与类型 `ColorScheme` 是 Material 实际调色板，不受此限制；内部私有/常量形式的内置默认配色也不是 Theme 选择器。
+- 组件不得公开 `colorTheme`，也不得在组件 ThemeExtension 中保存组件枚举型 `colorPreset`、`defaultColorPreset`、`status` 或 `defaultStatus`。Flutter 官方 `ThemeData.colorScheme` 与类型 `ColorScheme` 是 Material 实际调色板，不受此限制；内部私有/常量形式的内置默认配色也不是 Theme 选择器。
 - ThemeExtension 可以保存具体 `Color`、`TextStyle`、`ButtonStyle`、布局值和按状态派生的样式。`resolve(context, status: instanceStatus)` 接收实例状态计算样式不表示 Theme 拥有状态；Theme 不得自行选择或覆盖当前状态。
 - Theme 仅在 variant 是稳定的呈现偏好、存在真实的子树批量默认需求、且实例 `variant` 为 nullable 时，才可提供 `defaultVariant`。解析顺序必须是 `instance.variant ?? theme.defaultVariant ?? builtInDefault`。实例已经使用非空内置默认值时，不再增加 Theme `defaultVariant` 形成第二默认源。
-- `colorScheme` 与 `status` 不提供 Theme 回退，使用实例值或组件内置默认值。枚举成员词汇按组件语义决定；Button 的取值不是强制全集。已发布的 `defaultTheme` 等名称保持兼容，重命名必须按 breaking change 处理。
-- 只有 `variant`、`colorScheme`、`status` 彼此独立且至少存在两组有意义的交叉组合时，才同时公开。若组合被禁止、没有真实用例或一个维度可由另一个推导，则合并或只保留权威入口。
+- `colorPreset` 与 `status` 不提供 Theme 回退，使用实例值或组件内置默认值。枚举成员词汇按组件语义决定；Button 的取值不是强制全集。已发布的 `defaultTheme` 等名称保持兼容，重命名必须按 breaking change 处理。
+- 只有 `variant`、`colorPreset`、`status` 彼此独立且至少存在两组有意义的交叉组合时，才同时公开。若组合被禁止、没有真实用例或一个维度可由另一个推导，则合并或只保留权威入口。
 - 新增或正在修改的契约必须遵守本模型。未触及的已发布历史 API 若不符合规则，记录为技术债，不自动阻塞无关 PR，也不能作为复制先例；当同一组件契约进入修改范围时，必须评估迁移。若迁移会造成未授权的范围扩大，则明确记录独立 breaking 方案并停止扩散，而不是悄悄删除或继续新增重复入口。
 
 以下情况默认视为冗余：
@@ -143,7 +143,7 @@ Theme 与默认值遵循以下所有权规则：
 API Review 不以“字段有一句 dartdoc”为完成。对本次新增、修改或用于表达公开 Demo 的每项公开契约，建立“公开行为 → 实现与测试 → 源码 dartdoc → 生成 API / 可复制示例”的对应关系，并检查用户是否无需阅读实现即可正确使用。至少覆盖：
 
 - 名称、类型、默认值、空值语义和生效条件；
-- 状态、`variant`、`colorScheme`、style、Theme 与实例参数各自职责及字段级覆盖优先级；
+- 状态、`variant`、`colorPreset`、style、Theme 与实例参数各自职责及字段级覆盖优先级；
 - 会改变父布局、排列、绘制或交互模式的触发条件，以及混合配置时的行为；
 - 参数之间的互斥、依赖、无效组合和断言条件；
 - callback、Future、Controller、自动关闭、返回值和生命周期所有权；

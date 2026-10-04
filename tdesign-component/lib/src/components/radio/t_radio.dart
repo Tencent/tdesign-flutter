@@ -221,7 +221,7 @@ class TRadio<T> extends StatelessWidget {
             SizedBox(
               width: variant == TRadioVariant.card
                   ? 0
-                  : theme?.spacing ?? context.tTheme.spacer8,
+                  : theme?.spacing ?? context.tTheme.spacer,
             ),
           if (content != null)
             if (hasBoundedWidth && variant != TRadioVariant.inline)
@@ -236,8 +236,7 @@ class TRadio<T> extends StatelessWidget {
             TRadioVariant.block =>
               hasContent
                   ? EdgeInsets.symmetric(
-                      horizontal:
-                          theme?.insetSpacing ?? context.tTheme.spacer16,
+                      horizontal: theme?.insetSpacing ?? context.tTheme.spacer2,
                       vertical: _contentVerticalPadding(context, titleStyle),
                     )
                   : EdgeInsets.zero,
@@ -275,10 +274,9 @@ class TRadio<T> extends StatelessWidget {
         ? TSelectionCard(
             selected: selected,
             disabled: effectiveDisabled,
-            selectedColor:
-                theme?.selectColor ?? context.tTheme.brandNormalColor,
+            selectedColor: theme?.selectColor ?? context.tTheme.brandColor,
             disabledColor:
-                theme?.disableColor ?? context.tTheme.brandDisabledColor,
+                theme?.disableColor ?? context.tTheme.brandColorDisabled,
             backgroundColor:
                 theme?.backgroundColor ?? context.tTheme.bgColorContainer,
             borderRadius: context.tTheme.radiusDefault,
@@ -299,9 +297,9 @@ class TRadio<T> extends StatelessWidget {
   }
 
   double _contentMinHeight(BuildContext context) => switch (size) {
-    TRadioSize.small => context.tTheme.spacer48,
-    TRadioSize.medium => context.tTheme.spacer48 + context.tTheme.spacer8,
-    TRadioSize.large => context.tTheme.spacer64,
+    TRadioSize.small => context.tTheme.spacer5,
+    TRadioSize.medium => context.tTheme.spacer5 + context.tTheme.spacer,
+    TRadioSize.large => 64.0,
   };
 
   double _contentVerticalPadding(BuildContext context, TextStyle titleStyle) {
@@ -313,17 +311,15 @@ class TRadio<T> extends StatelessWidget {
   double _cardMinHeight(BuildContext context, TextStyle titleStyle) {
     final titleHeight = _titleLineHeight(titleStyle);
     final contentHeight = subTitle?.isNotEmpty == true
-        ? titleHeight +
-              context.tTheme.spacer4 +
-              _titleLineHeight(_resolveSubTitleStyle(context))
+        ? titleHeight + 4.0 + _titleLineHeight(_resolveSubTitleStyle(context))
         : titleHeight;
-    return contentHeight + context.tTheme.spacer16 * 2;
+    return contentHeight + context.tTheme.spacer2 * 2;
   }
 
   double _cardContentPadding(BuildContext context) {
     return math.max(
       0,
-      context.tTheme.spacer16 - selectionCardBorderWidth(context),
+      context.tTheme.spacer2 - selectionCardBorderWidth(context),
     );
   }
 
@@ -331,16 +327,8 @@ class TRadio<T> extends StatelessWidget {
       titleStyle.fontSize! * (titleStyle.height ?? 1);
 
   BoxConstraints _resolveTapTargetConstraints(BuildContext context) {
-    final materialTheme = RadioTheme.of(context);
-    final appTheme = Theme.of(context);
-    final visualDensity =
-        materialTheme.visualDensity ??
-        appTheme.tExplicitVisualDensity ??
-        VisualDensity.standard;
-    final tapTargetSize =
-        materialTheme.materialTapTargetSize ??
-        appTheme.tExplicitMaterialTapTargetSize ??
-        MaterialTapTargetSize.padded;
+    const visualDensity = VisualDensity.standard;
+    const tapTargetSize = MaterialTapTargetSize.padded;
     final indicatorSize = _indicatorSize(context);
     final baseSize = tapTargetSize == MaterialTapTargetSize.padded
         ? kMinInteractiveDimension
@@ -353,9 +341,9 @@ class TRadio<T> extends StatelessWidget {
   }
 
   double _indicatorSize(BuildContext context) => switch (size) {
-    TRadioSize.small => context.tTheme.spacer16 + context.tTheme.spacer4,
-    TRadioSize.medium => context.tTheme.spacer24,
-    TRadioSize.large => context.tTheme.spacer24 + context.tTheme.spacer4,
+    TRadioSize.small => context.tTheme.spacer2 + 4.0,
+    TRadioSize.medium => context.tTheme.spacer3,
+    TRadioSize.large => context.tTheme.spacer3 + 4.0,
   };
 
   Widget _buildIndicator(
@@ -364,27 +352,13 @@ class TRadio<T> extends StatelessWidget {
     bool selected,
     bool disabled,
   ) {
-    final materialTheme = RadioTheme.of(context);
-    final colorScheme = Theme.of(context).tExplicitColorScheme;
-    final states = <WidgetState>{
-      if (selected) WidgetState.selected,
-      if (disabled) WidgetState.disabled,
-    };
     final color = disabled
         ? selected
-              ? (theme?.disableColor ??
-                    materialTheme.fillColor?.resolve(states) ??
-                    colorScheme?.onSurface.withValues(alpha: 0.38) ??
-                    context.tTheme.brandDisabledColor)
-              : (theme?.disableColor ?? context.tTheme.componentBorderColor)
+              ? (theme?.disableColor ?? context.tTheme.brandColorDisabled)
+              : (theme?.disableColor ?? context.tTheme.componentBorder)
         : selected
-        ? (theme?.selectColor ??
-              materialTheme.fillColor?.resolve(states) ??
-              colorScheme?.primary ??
-              context.tTheme.brandNormalColor)
-        : (materialTheme.fillColor?.resolve(states) ??
-              colorScheme?.outline ??
-              context.tTheme.componentBorderColor);
+        ? (theme?.selectColor ?? context.tTheme.brandColor)
+        : context.tTheme.componentBorder;
     final iconSize = _indicatorSize(context);
     final selectedIcon = selected
         ? switch (iconType) {
@@ -414,23 +388,21 @@ class TRadio<T> extends StatelessWidget {
   }
 
   TextStyle _resolveTitleStyle(BuildContext context) {
-    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
     final titleFont = context.tTheme.fontBodyLarge;
     return TextStyle(
       fontSize: titleFont?.size ?? 16,
       height: titleFont?.height,
       fontWeight: titleFont?.fontWeight,
-    ).merge(materialTextTheme?.bodyLarge ?? materialTextTheme?.bodyMedium);
+    );
   }
 
   TextStyle _resolveSubTitleStyle(BuildContext context) {
-    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
     final subtitleFont = context.tTheme.fontBodyMedium;
     return TextStyle(
       fontSize: subtitleFont?.size ?? 14,
       height: subtitleFont?.height,
       fontWeight: subtitleFont?.fontWeight,
-    ).merge(materialTextTheme?.bodyMedium ?? materialTextTheme?.bodySmall);
+    );
   }
 
   Widget? _buildContent(
@@ -454,12 +426,11 @@ class TRadio<T> extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: titleStyle.copyWith(
               color: disabled
-                  ? context.tTheme.textDisabledColor
+                  ? context.tTheme.textColorDisabled
                   : (theme?.titleColor ?? context.tTheme.textColorPrimary),
             ),
           ),
-        if (title != null && subTitle != null)
-          SizedBox(height: context.tTheme.spacer4),
+        if (title != null && subTitle != null) const SizedBox(height: 4.0),
         if (subTitle != null)
           Text(
             subTitle!,
@@ -467,7 +438,7 @@ class TRadio<T> extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: subTitleStyle.copyWith(
               color: disabled
-                  ? context.tTheme.textDisabledColor
+                  ? context.tTheme.textColorDisabled
                   : (theme?.subTitleColor ?? context.tTheme.textColorSecondary),
             ),
           ),
@@ -676,8 +647,8 @@ class TRadioGroup<T> extends StatelessWidget {
     if (_variant == TRadioVariant.inline && _direction == Axis.horizontal) {
       return Wrap(
         alignment: WrapAlignment.spaceBetween,
-        spacing: context.tTheme.spacer16,
-        runSpacing: context.tTheme.spacer8,
+        spacing: context.tTheme.spacer2,
+        runSpacing: context.tTheme.spacer,
         children: List.generate(options.length, (index) {
           return _buildItem(context, options[index], index);
         }),
@@ -762,12 +733,12 @@ class _TRadioDivider extends StatelessWidget {
           margin: EdgeInsets.zero,
         ) ??
         const TDividerThemeData(margin: EdgeInsets.zero);
-    final insetSpacing = radioTheme?.insetSpacing ?? context.tTheme.spacer16;
-    final contentSpacing = radioTheme?.spacing ?? context.tTheme.spacer8;
+    final insetSpacing = radioTheme?.insetSpacing ?? context.tTheme.spacer2;
+    final contentSpacing = radioTheme?.spacing ?? context.tTheme.spacer;
     final indicatorSize = switch (size) {
-      TRadioSize.small => context.tTheme.spacer16 + context.tTheme.spacer4,
-      TRadioSize.medium => context.tTheme.spacer24,
-      TRadioSize.large => context.tTheme.spacer24 + context.tTheme.spacer4,
+      TRadioSize.small => context.tTheme.spacer2 + 4.0,
+      TRadioSize.medium => context.tTheme.spacer3,
+      TRadioSize.large => context.tTheme.spacer3 + 4.0,
     };
     final start = contentDirection == TContentDirection.right
         ? insetSpacing + indicatorSize + contentSpacing

@@ -53,11 +53,8 @@ class TPopupOverlayConfig {
   /// 是否显示可见半透明蒙层（默认 true）。
   final bool showOverlay;
 
-  /// 蒙层颜色；为 null 时默认 black54。
+  /// 蒙层颜色（含 alpha）；为 null 时默认 black54。
   final Color? color;
-
-  /// 蒙层透明度系数（0–1），与 [color] 的 alpha 相乘后用于绘制；为 null 时不额外调整。
-  final double? opacity;
 
   /// 是否拦截背景交互（默认 true）；对应原 `modal` 参数。
   final bool preventTap;
@@ -77,7 +74,6 @@ class TPopupOverlayConfig {
   const TPopupOverlayConfig({
     this.showOverlay = true,
     this.color,
-    this.opacity,
     this.preventTap = true,
     this.closeOnClick,
     this.onClick,

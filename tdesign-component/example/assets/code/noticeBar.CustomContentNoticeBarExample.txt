@@ -15,7 +15,7 @@ Widget _customContentNoticeBar(BuildContext context) {
     content: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字描述提示文字描述',
     operation: TLink(
       child: const Text('详情'),
-      colorScheme: TLinkColorScheme.primary,
+      colorPreset: TLinkColorPreset.primary,
       onPressed: () => TToast.showText('点击了详情', context: context),
     ),
     suffixIcon: TIcons.close,

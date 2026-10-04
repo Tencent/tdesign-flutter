@@ -101,17 +101,23 @@ class TSideBarCustomPageState extends State<TSideBarCustomPage> {
 
     return Row(
       children: [
-        TSideBar(
-          variant: TSideBarVariant.tag,
-          value: currentValue,
-          children: items,
-          selectedTextStyle: TextStyle(
-            color: context.tTheme.brandNormalColor,
-            fontWeight: FontWeight.w600,
+        Theme(
+          data: Theme.of(context).mergeExtension(
+            TSideBarThemeData(
+              selectedTextStyle: TextStyle(
+                color: context.tTheme.brandColor,
+                fontWeight: FontWeight.w600,
+              ),
+              selectedBgColor: context.tTheme.brandColorLight,
+              textStyle: TextStyle(color: context.tTheme.textColorSecondary),
+            ),
           ),
-          selectedBgColor: context.tTheme.brandLightColor,
-          unSelectedColor: context.tTheme.textColorSecondary,
-          onChanged: setCurrentValue,
+          child: TSideBar(
+            variant: TSideBarVariant.tag,
+            value: currentValue,
+            children: items,
+            onChanged: setCurrentValue,
+          ),
         ),
         Expanded(
           child: PageView.builder(

@@ -34,35 +34,33 @@ void main() {
   group('Theme 档2-1：Token 真读取', () {
     testWidgets('TButton 文字色取自 Token 而非常量', (tester) async {
       // 使用默认 Token 渲染 TButton
-      await tester.pumpWidget(wrapWithTheme(
-        const TButton(
-          child: Text('Token测试'),
-          variant: TButtonVariant.fill,
-          colorScheme: TButtonColorScheme.primary,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TButton(
+            child: Text('Token测试'),
+            variant: TButtonVariant.fill,
+            colorPreset: TButtonColorPreset.primary,
+          ),
         ),
-      ));
+      );
 
       // 验证按钮存在且可渲染
       expect(find.byType(TButton), findsOneWidget);
       expect(find.text('Token测试'), findsOneWidget);
 
-      // 获取 TThemeData，验证 brandNormalColor 存在
+      // 获取 TThemeData，验证 brandColor 存在
       final element = tester.element(find.byType(TButton));
       final tThemeData = Theme.of(element).extension<TThemeData>();
       expect(tThemeData, isNotNull);
-      expect(tThemeData!.brandNormalColor, isNotNull);
+      expect(tThemeData!.brandColor, isNotNull);
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      expect(button.style?.backgroundColor?.resolve({}),
-          tThemeData.brandNormalColor);
+      expect(button.style?.backgroundColor?.resolve({}), tThemeData.brandColor);
     });
 
     testWidgets('TTag 颜色取自 Token 主题', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TTag(
-          '标签',
-          colorScheme: TTagColorScheme.primary,
-        ),
-      ));
+      await tester.pumpWidget(
+        wrapWithTheme(const TTag('标签', colorPreset: TTagColorPreset.primary)),
+      );
 
       expect(find.byType(TTag), findsOneWidget);
       expect(find.text('标签'), findsOneWidget);
@@ -70,7 +68,7 @@ void main() {
       final element = tester.element(find.byType(TTag));
       final tThemeData = Theme.of(element).extension<TThemeData>();
       expect(tThemeData, isNotNull);
-      expect(tThemeData!.brandNormalColor, isNotNull);
+      expect(tThemeData!.brandColor, isNotNull);
     });
   });
 
@@ -79,52 +77,59 @@ void main() {
   // ============================================================
   group('Theme 档2-2：优先级覆盖', () {
     testWidgets('P0 实例参数覆盖 P1 组件 Theme', (tester) async {
-      // 组件 Theme 设置 defaultVariant=outline，实例传 variant=fill
-      // 实例应胜出
-      await tester.pumpWidget(wrapWithTheme(
-        const TButton(
-          child: Text('优先级'),
-          variant: TButtonVariant.fill,
-          colorScheme: TButtonColorScheme.primary,
+      // 实例选择 fill，组件 Theme 只设置该变体的具体颜色。
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TButton(
+            child: Text('优先级'),
+            variant: TButtonVariant.fill,
+            colorPreset: TButtonColorPreset.primary,
+          ),
+          buttonTheme: const TButtonThemeData(),
         ),
-        buttonTheme:
-            const TButtonThemeData(defaultVariant: TButtonVariant.outline),
-      ));
+      );
 
       expect(find.byType(TButton), findsOneWidget);
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      expect(button.style?.backgroundColor?.resolve({}),
-          TThemeData.defaultData().brandNormalColor);
+      expect(
+        button.style?.backgroundColor?.resolve({}),
+        TThemeData.defaultData().brandColor,
+      );
       expect(button.style?.side?.resolve({}), isNull);
     });
 
     testWidgets('P1 组件 Theme 覆盖 P4 Token 默认', (tester) async {
-      // 不传实例 variant，但传组件 Theme defaultVariant
-      // 组件 Theme 应生效
-      await tester.pumpWidget(wrapWithTheme(
-        const TButton(
-          child: Text('Theme覆盖'),
-          colorScheme: TButtonColorScheme.primary,
+      // 实例选择 outline，组件 Theme 设置该变体的具体视觉值。
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TButton(
+            child: Text('Theme覆盖'),
+            variant: TButtonVariant.outline,
+            colorPreset: TButtonColorPreset.primary,
+          ),
+          buttonTheme: const TButtonThemeData(),
         ),
-        buttonTheme:
-            const TButtonThemeData(defaultVariant: TButtonVariant.outline),
-      ));
+      );
 
       expect(find.byType(TButton), findsOneWidget);
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      expect(button.style?.side?.resolve({})?.color,
-          TThemeData.defaultData().brandNormalColor);
+      expect(
+        button.style?.side?.resolve({})?.color,
+        TThemeData.defaultData().brandColor,
+      );
     });
 
     testWidgets('P4 Token 作为最终默认值', (tester) async {
       // 不传实例参数，不传组件 Theme
       // 应使用 Token 默认值
-      await tester.pumpWidget(wrapWithTheme(
-        const TButton(
-          child: Text('默认'),
-          colorScheme: TButtonColorScheme.primary,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TButton(
+            child: Text('默认'),
+            colorPreset: TButtonColorPreset.primary,
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(TButton), findsOneWidget);
       // Token 默认色应存在
@@ -132,8 +137,10 @@ void main() {
       final tThemeData = Theme.of(element).extension<TThemeData>();
       expect(tThemeData, isNotNull);
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-      expect(button.style?.backgroundColor?.resolve({}),
-          tThemeData!.brandNormalColor);
+      expect(
+        button.style?.backgroundColor?.resolve({}),
+        tThemeData!.brandColor,
+      );
     });
   });
 
@@ -156,13 +163,14 @@ void main() {
                   // 子树注入 TButtonThemeData
                   return Theme(
                     data: Theme.of(context).mergeExtension(
-                      const TButtonThemeData(shape: TButtonShape.circle),
+                      const TButtonThemeData(iconTextSpacing: 4),
                     ),
                     child: TButton(
                       key: buttonKey,
+                      shape: TButtonShape.circle,
                       child: const Text('merge'),
                       variant: TButtonVariant.fill,
-                      colorScheme: TButtonColorScheme.primary,
+                      colorPreset: TButtonColorPreset.primary,
                     ),
                   );
                 },
@@ -180,8 +188,7 @@ void main() {
     });
 
     testWidgets('mergeExtension 不覆盖已传实例参数', (tester) async {
-      // 实例传 variant=fill，mergeExtension 传 defaultVariant=outline
-      // 实例应胜出
+      // 实例选择 fill；子树 Theme 不改变组件形态。
       await tester.pumpWidget(
         MaterialApp(
           theme: TThemeBuilder.light(TThemeData.defaultData()),
@@ -190,14 +197,13 @@ void main() {
               child: Builder(
                 builder: (context) {
                   return Theme(
-                    data: Theme.of(context).mergeExtension(
-                      const TButtonThemeData(
-                          defaultVariant: TButtonVariant.outline),
-                    ),
+                    data: Theme.of(
+                      context,
+                    ).mergeExtension(const TButtonThemeData()),
                     child: const TButton(
                       child: Text('实例优先'),
                       variant: TButtonVariant.fill,
-                      colorScheme: TButtonColorScheme.primary,
+                      colorPreset: TButtonColorPreset.primary,
                     ),
                   );
                 },
@@ -219,37 +225,41 @@ void main() {
   // ============================================================
   group('Theme 档2-4：light / dark Token 切换', () {
     testWidgets('light 模式 Token 正常', (tester) async {
-      await tester.pumpWidget(wrapWithTheme(
-        const TButton(
-          child: Text('light'),
-          variant: TButtonVariant.fill,
-          colorScheme: TButtonColorScheme.primary,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TButton(
+            child: Text('light'),
+            variant: TButtonVariant.fill,
+            colorPreset: TButtonColorPreset.primary,
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(TButton), findsOneWidget);
     });
 
     testWidgets('自定义 Token 注入', (tester) async {
-      // 注入自定义 TThemeData（修改 brandNormalColor）
+      // 注入自定义 TThemeData（修改 brandColor）
       final defaultTheme = TThemeData.defaultData();
-      final customTheme = defaultTheme.copyWith(
-        colorMap: {'brandNormalColor': Colors.purple},
-      ) as TThemeData;
+      final customTheme =
+          defaultTheme.copyWith(colorMap: {'brandColor': Colors.purple})
+              as TThemeData;
 
-      await tester.pumpWidget(wrapWithTheme(
-        const TButton(
-          child: Text('custom'),
-          variant: TButtonVariant.fill,
-          colorScheme: TButtonColorScheme.primary,
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TButton(
+            child: Text('custom'),
+            variant: TButtonVariant.fill,
+            colorPreset: TButtonColorPreset.primary,
+          ),
+          tThemeData: customTheme,
         ),
-        tThemeData: customTheme,
-      ));
+      );
 
       expect(find.byType(TButton), findsOneWidget);
       final element = tester.element(find.byType(TButton));
       final tThemeData = Theme.of(element).extension<TThemeData>();
-      expect(tThemeData!.brandNormalColor, Colors.purple);
+      expect(tThemeData!.brandColor, Colors.purple);
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
       expect(button.style?.backgroundColor?.resolve({}), Colors.purple);
     });
@@ -270,139 +280,169 @@ void main() {
       );
     }
 
-    testWidgets('P1 actionBackgroundColor 覆盖 P0 未传背景色', (tester) async {
-      await tester.pumpWidget(wrapSwipe(
-        TSwipeCell(
-          child: const SizedBox(width: 300, height: 60, child: Text('Row')),
-          end: TSwipeCellPanel(
-            children: const [TSwipeCellAction(label: 'Action')],
+    testWidgets('操作项背景色由实例独立控制', (tester) async {
+      await tester.pumpWidget(
+        wrapSwipe(
+          TSwipeCell(
+            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
+            end: TSwipeCellPanel(
+              children: const [
+                TSwipeCellAction(
+                  label: 'Action',
+                  backgroundColor: Colors.orange,
+                ),
+              ],
+            ),
+            initialOpenSide: TSwipeCellSide.end,
           ),
-          initialOpenSide: TSwipeCellSide.end,
         ),
-        swipeTheme: const TSwipeCellThemeData(
-          actionBackgroundColor: Colors.orange,
-        ),
-      ));
+      );
       await tester.pumpAndSettle();
       final container = tester.widget<Container>(
-        find.ancestor(of: find.text('Action'), matching: find.byType(Container)).first,
+        find
+            .ancestor(of: find.text('Action'), matching: find.byType(Container))
+            .first,
       );
       expect(container.color, Colors.orange);
     });
 
-    testWidgets('P0 backgroundColor 覆盖 P1 主题背景色', (tester) async {
-      await tester.pumpWidget(wrapSwipe(
-        TSwipeCell(
-          child: const SizedBox(width: 300, height: 60, child: Text('Row')),
-          end: TSwipeCellPanel(
-            children: const [TSwipeCellAction(label: 'Action', backgroundColor: Colors.red)],
+    testWidgets('操作项背景色不受共享内边距主题影响', (tester) async {
+      await tester.pumpWidget(
+        wrapSwipe(
+          TSwipeCell(
+            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
+            end: TSwipeCellPanel(
+              children: const [
+                TSwipeCellAction(label: 'Action', backgroundColor: Colors.red),
+              ],
+            ),
+            initialOpenSide: TSwipeCellSide.end,
           ),
-          initialOpenSide: TSwipeCellSide.end,
+          swipeTheme: const TSwipeCellThemeData(
+            actionPadding: EdgeInsets.all(12),
+          ),
         ),
-        swipeTheme: const TSwipeCellThemeData(
-          actionBackgroundColor: Colors.orange,
-        ),
-      ));
+      );
       await tester.pumpAndSettle();
       final container = tester.widget<Container>(
-        find.ancestor(of: find.text('Action'), matching: find.byType(Container)).first,
+        find
+            .ancestor(of: find.text('Action'), matching: find.byType(Container))
+            .first,
       );
       expect(container.color, Colors.red);
     });
 
-    testWidgets('P1 actionIconColor 覆盖 P4 Token 默认色', (tester) async {
-      await tester.pumpWidget(wrapSwipe(
-        TSwipeCell(
-          child: const SizedBox(width: 300, height: 60, child: Text('Row')),
-          end: TSwipeCellPanel(
-            children: const [TSwipeCellAction(icon: Icons.edit, label: 'Action')],
+    testWidgets('操作项 iconColor 覆盖 Token 默认色', (tester) async {
+      await tester.pumpWidget(
+        wrapSwipe(
+          TSwipeCell(
+            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
+            end: TSwipeCellPanel(
+              children: const [
+                TSwipeCellAction(
+                  icon: Icons.edit,
+                  label: 'Action',
+                  iconColor: Colors.teal,
+                ),
+              ],
+            ),
+            initialOpenSide: TSwipeCellSide.end,
           ),
-          initialOpenSide: TSwipeCellSide.end,
         ),
-        swipeTheme: const TSwipeCellThemeData(
-          actionIconColor: Colors.teal,
-        ),
-      ));
+      );
       await tester.pumpAndSettle();
       final icon = tester.widget<Icon>(find.byType(Icon));
       expect(icon.color, Colors.teal);
     });
 
-    testWidgets('P1 actionTextStyle 覆盖 label 文字样式', (tester) async {
-      await tester.pumpWidget(wrapSwipe(
-        TSwipeCell(
-          child: const SizedBox(width: 300, height: 60, child: Text('Row')),
-          end: TSwipeCellPanel(
-            children: const [TSwipeCellAction(label: 'Action')],
+    testWidgets('操作项 labelStyle 覆盖文字样式', (tester) async {
+      await tester.pumpWidget(
+        wrapSwipe(
+          TSwipeCell(
+            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
+            end: TSwipeCellPanel(
+              children: const [
+                TSwipeCellAction(
+                  label: 'Action',
+                  labelStyle: TextStyle(
+                    color: Colors.deepPurple,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            initialOpenSide: TSwipeCellSide.end,
           ),
-          initialOpenSide: TSwipeCellSide.end,
         ),
-        swipeTheme: const TSwipeCellThemeData(
-          actionTextStyle: TextStyle(
-            color: Colors.deepPurple,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ));
+      );
       await tester.pumpAndSettle();
-      final text = tester.widget<TText>(find.byType(TText));
+      final text = tester.widget<Text>(find.text('Action'));
       expect(text.style?.color, Colors.deepPurple);
       expect(text.style?.fontSize, 20);
     });
 
-    testWidgets('P1 actionIconSize 覆盖内置默认图标尺寸 20', (tester) async {
-      await tester.pumpWidget(wrapSwipe(
-        TSwipeCell(
-          child: const SizedBox(width: 300, height: 60, child: Text('Row')),
-          end: TSwipeCellPanel(
-            children: const [TSwipeCellAction(icon: Icons.edit)],
+    testWidgets('操作项 iconSize 覆盖内置默认图标尺寸 20', (tester) async {
+      await tester.pumpWidget(
+        wrapSwipe(
+          TSwipeCell(
+            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
+            end: TSwipeCellPanel(
+              children: const [
+                TSwipeCellAction(icon: Icons.edit, iconSize: 28),
+              ],
+            ),
+            initialOpenSide: TSwipeCellSide.end,
           ),
-          initialOpenSide: TSwipeCellSide.end,
         ),
-        swipeTheme: const TSwipeCellThemeData(actionIconSize: 28),
-      ));
+      );
       await tester.pumpAndSettle();
       final icon = tester.widget<Icon>(find.byType(Icon));
       expect(icon.size, 28);
     });
 
-    testWidgets('P1 actionSpacing 覆盖内置默认间距 8', (tester) async {
-      await tester.pumpWidget(wrapSwipe(
-        TSwipeCell(
-          child: const SizedBox(width: 300, height: 60, child: Text('Row')),
-          end: TSwipeCellPanel(
-            children: const [
-              TSwipeCellAction(icon: Icons.edit, label: 'Action'),
-            ],
+    testWidgets('操作项 iconLabelSpacing 覆盖内置默认间距 8', (tester) async {
+      await tester.pumpWidget(
+        wrapSwipe(
+          TSwipeCell(
+            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
+            end: TSwipeCellPanel(
+              children: const [
+                TSwipeCellAction(
+                  icon: Icons.edit,
+                  label: 'Action',
+                  iconLabelSpacing: 12,
+                ),
+              ],
+            ),
+            initialOpenSide: TSwipeCellSide.end,
           ),
-          initialOpenSide: TSwipeCellSide.end,
         ),
-        swipeTheme: const TSwipeCellThemeData(actionSpacing: 12),
-      ));
+      );
       await tester.pumpAndSettle();
       final spacing = tester.widget<SizedBox>(
-        find.byWidgetPredicate(
-          (w) => w is SizedBox && w.width == 12,
-        ),
+        find.byWidgetPredicate((w) => w is SizedBox && w.width == 12),
       );
       expect(spacing.width, 12);
     });
 
     testWidgets('未配置 iconColor 时 icon 颜色回退到 P4 Token', (tester) async {
-      await tester.pumpWidget(wrapSwipe(
-        TSwipeCell(
-          child: const SizedBox(width: 300, height: 60, child: Text('Row')),
-          end: TSwipeCellPanel(
-            children: const [TSwipeCellAction(icon: Icons.edit)],
+      await tester.pumpWidget(
+        wrapSwipe(
+          TSwipeCell(
+            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
+            end: TSwipeCellPanel(
+              children: const [TSwipeCellAction(icon: Icons.edit)],
+            ),
+            initialOpenSide: TSwipeCellSide.end,
           ),
-          initialOpenSide: TSwipeCellSide.end,
         ),
-      ));
+      );
       await tester.pumpAndSettle();
       final icon = tester.widget<Icon>(find.byType(Icon));
-      final tTheme = Theme.of(tester.element(find.byType(Icon)))
-          .extension<TThemeData>()!;
+      final tTheme = Theme.of(
+        tester.element(find.byType(Icon)),
+      ).extension<TThemeData>()!;
       expect(icon.color, tTheme.textColorAnti);
     });
   });

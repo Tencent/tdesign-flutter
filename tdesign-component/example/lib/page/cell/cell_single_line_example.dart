@@ -44,11 +44,7 @@ class _CellSingleLineExampleState extends State<CellSingleLineExample> {
         onTap: () {},
       ),
       TCell(
-        prefix: Icon(
-          TIcons.app,
-          size: 24,
-          color: context.tTheme.brandNormalColor,
-        ),
+        prefix: Icon(TIcons.app, size: 24, color: context.tTheme.brandColor),
         title: const Text('单行标题'),
         arrow: true,
         onTap: () {},
@@ -63,7 +59,7 @@ class _CellSingleLineExampleState extends State<CellSingleLineExample> {
               height: 0.5,
               thickness: 0.5,
               indent: 16,
-              color: context.tTheme.componentStrokeColor,
+              color: context.tTheme.componentStroke,
             ),
         ],
       ],

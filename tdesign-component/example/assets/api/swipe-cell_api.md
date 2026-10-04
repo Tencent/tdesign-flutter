@@ -36,37 +36,35 @@
 ### TSwipeCellAction
 #### 简介
 滑动单元格操作项。
+同一面板中的操作项可使用不同的颜色和文字样式。
+未指定的图文视觉字段从全局 TDesign Token 取得默认值；
+`TSwipeCellThemeData` 只提供共用内边距。
+`builder` 自行绘制操作项，不能同时传入内置背景、图文或图文样式字段。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色；为空时回退到 `TSwipeCellThemeData.actionBackgroundColor`。 |
-| builder | WidgetBuilder? | - | 自定义操作项。其实际布局宽度会直接用于面板宽度，无需额外指定尺寸。 |
+| backgroundColor | Color? | - | 当前操作项背景颜色。 |
+| builder | WidgetBuilder? | - | 自定义操作项。不可同时传入内置背景、图文或图文样式字段； 冲突配置会在构建时抛出 `FlutterError`，包括 release 构建。 其实际布局宽度会直接用于面板宽度，无需额外指定尺寸。 `onPressed` 仍负责点击回调，随后会自动关闭操作面板。 |
 | icon | IconData? | - | 图标。 |
 | iconColor | Color? | - | 图标颜色。 |
+| iconLabelSpacing | double? | - | 图标和标签之间的水平间距，默认 8。 |
 | iconSize | double? | - | 图标大小，默认 20。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | label | String? | - | 操作文字。 |
 | labelStyle | TextStyle? | - | 操作文字样式。 |
 | onPressed | void Function(BuildContext context)? | - | 点击回调。回调后组件会自动关闭操作面板。 |
-| spacing | double? | - | 图标和文字的水平间距，默认 8。 |
 
 
 ### TSwipeCellThemeData
 #### 简介
 TSwipeCell 组件级 ThemeExtension
-通过 Theme 子树注入，控制子树的默认滑动单元格样式。
-遵循多层级主题控制方案：P0 实例参数 > P1 组件 Theme > P4 Token。
+通过 Theme 子树注入操作项共享内边距；逐项图文样式由操作项实例控制。
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| actionBackgroundColor | Color? | - | 操作项默认背景色。 |
-| actionIconColor | Color? | - | 操作项图标默认色。 |
-| actionIconSize | double? | - | 操作项图标默认尺寸。 |
 | actionPadding | EdgeInsetsGeometry? | - | 操作项左右内边距。 |
-| actionSpacing | double? | - | 操作项图标与文字默认间距。 |
-| actionTextStyle | TextStyle? | - | 操作项文字默认样式。 |
 
 
 ### TSwipeCellSide

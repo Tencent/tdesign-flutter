@@ -10,6 +10,7 @@ import '../badge/t_badge.dart';
 import '../badge/t_badge_internal.dart';
 import '../badge/t_badge_layout.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_theme_data.dart';
 import 't_action_sheet_types.dart';
@@ -40,7 +41,7 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
     final iconSize = actionSheetTheme?.iconSize ?? 24;
     final iconExtent = actionSheetTheme?.gridIconExtent ?? 40;
     final iconColor = item.disabled
-        ? context.tTheme.textDisabledColor
+        ? context.tTheme.textColorDisabled
         : (actionSheetTheme?.iconColor ?? context.tTheme.textColorPrimary);
     final content = GestureDetector(
       onTap: item.disabled
@@ -56,29 +57,29 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
               (labelFont?.size ?? 12) * (labelFont?.height ?? (20 / 12));
           final contentHeight = item.icon == null
               ? labelHeight
-              : iconExtent + context.tTheme.spacer8 + labelHeight;
+              : iconExtent + context.tTheme.spacer + labelHeight;
           final availableSpacing = constraints.maxHeight.isFinite
               ? math.max(0.0, constraints.maxHeight - contentHeight)
-              : context.tTheme.spacer16;
+              : context.tTheme.spacer2;
           final topSpacing =
               availableSpacing >=
-                  context.tTheme.spacer16 + context.tTheme.spacer12
-              ? context.tTheme.spacer16
+                  context.tTheme.spacer2 + context.tTheme.spacer1
+              ? context.tTheme.spacer2
               : availableSpacing / 2;
           return Padding(
             padding: EdgeInsets.only(
-              left: context.tTheme.spacer8,
+              left: context.tTheme.spacer,
               top: topSpacing,
-              right: context.tTheme.spacer8,
+              right: context.tTheme.spacer,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 if (item.icon != null) ...[
                   _buildIcon(context, iconColor, iconSize, iconExtent),
-                  SizedBox(height: context.tTheme.spacer8),
+                  SizedBox(height: context.tTheme.spacer),
                 ],
-                TText(
+                TTextStyled(
                   item.label,
                   font: context.tTheme.fontBodySmall,
                   textColor: context.tTheme.textColorPrimary,
@@ -166,7 +167,7 @@ Widget buildCancelButton(
   return Container(
     color: spacingColor ?? context.tTheme.bgColorPage,
     padding: EdgeInsets.only(
-      top: showPagination ? context.tTheme.spacer16 : context.tTheme.spacer8,
+      top: showPagination ? context.tTheme.spacer2 : context.tTheme.spacer,
     ),
     child: GestureDetector(
       onTap: () {
@@ -177,10 +178,7 @@ Widget buildCancelButton(
         decoration: BoxDecoration(
           color: context.tTheme.bgColorContainer,
           border: Border(
-            top: BorderSide(
-              color: context.tTheme.componentStrokeColor,
-              width: 0.5,
-            ),
+            top: BorderSide(color: context.tTheme.componentStroke, width: 0.5),
           ),
         ),
         height: actionSheetCancelButtonHeight,
@@ -188,7 +186,7 @@ Widget buildCancelButton(
           child: TText(
             cancelText ?? context.resource.cancel,
             font: context.tTheme.fontBodyLarge,
-            textColor: context.tTheme.textColorPrimary,
+            style: TextStyle(color: context.tTheme.textColorPrimary),
           ),
         ),
       ),

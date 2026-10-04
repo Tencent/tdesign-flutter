@@ -17,7 +17,7 @@ class ImageViewerWithActionsExample extends StatelessWidget {
       child: TButton(
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: () => TImageViewer.show(
           context: context,
           images: images,
@@ -31,7 +31,7 @@ class ImageViewerWithActionsExample extends StatelessWidget {
               TActionSheetItem(
                 value: 1,
                 label: '删除',
-                textStyle: TextStyle(color: context.tTheme.errorNormalColor),
+                textStyle: TextStyle(color: context.tTheme.errorColor),
               ),
             ],
             onSelected: (_) =>

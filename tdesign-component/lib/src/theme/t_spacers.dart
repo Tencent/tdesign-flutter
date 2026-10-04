@@ -1,26 +1,25 @@
 import 't_theme.dart';
 
-/// 常用的Margin，一般以8为倍数
+/// 小程序全局间距 Token；375 逻辑像素宽下按 2rpx = 1dp 转换。
 extension TSpacers on TThemeData {
-  double get spacer4 => spacerMap['spacer4'] ?? 4.0;
+  /// `--td-spacer`: 16rpx。
+  double get spacer => spacerMap['spacer'] ?? 8.0;
 
-  double get spacer8 => spacerMap['spacer8'] ?? 8.0;
+  /// `--td-spacer-1`: 24rpx。
+  double get spacer1 => spacerMap['spacer1'] ?? 12.0;
 
-  double get spacer12 => spacerMap['spacer12'] ?? 12.0;
+  /// `--td-spacer-2`: 32rpx。
+  double get spacer2 => spacerMap['spacer2'] ?? 16.0;
 
-  double get spacer16 => spacerMap['spacer16'] ?? 16.0;
+  /// `--td-spacer-3`: 48rpx。
+  double get spacer3 => spacerMap['spacer3'] ?? 24.0;
 
-  double get spacer24 => spacerMap['spacer24'] ?? 24.0;
+  /// `--td-spacer-4`: 64rpx。旧 Flutter `spacer4` 的 4dp 语义已移除。
+  double get spacer4 => spacerMap['spacer4'] ?? 32.0;
 
-  double get spacer32 => spacerMap['spacer32'] ?? 32.0;
+  /// `--td-spacer-5`: 96rpx。
+  double get spacer5 => spacerMap['spacer5'] ?? 48.0;
 
-  double get spacer40 => spacerMap['spacer40'] ?? 40.0;
-
-  double get spacer48 => spacerMap['spacer48'] ?? 48.0;
-
-  double get spacer64 => spacerMap['spacer64'] ?? 64.0;
-
-  double get spacer96 => spacerMap['spacer96'] ?? 96.0;
-
-  double get spacer160 => spacerMap['spacer160'] ?? 160.0;
+  /// `--td-spacer-6`: 160rpx。
+  double get spacer6 => spacerMap['spacer6'] ?? 80.0;
 }

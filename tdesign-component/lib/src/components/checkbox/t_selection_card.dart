@@ -7,39 +7,22 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 
-double selectionCardBorderWidth(BuildContext context) =>
-    context.tTheme.spacer4 * 3 / 8;
+double selectionCardBorderWidth(BuildContext context) => 4.0 * 3 / 8;
 
-double _fontLineHeight(
-  Font? font,
-  TextStyle? explicitStyle,
-  TextStyle? materialFallback,
-) {
+double _fontLineHeight(Font? font, double defaultSize) {
   final style = TextStyle(
-    fontSize: font?.size ?? materialFallback?.fontSize,
-    height: font?.height ?? materialFallback?.height,
-  ).merge(explicitStyle);
+    fontSize: font?.size ?? defaultSize,
+    height: font?.height,
+  );
   return style.fontSize! * (style.height ?? 1);
 }
 
 double _selectionCardHeight(BuildContext context, bool hasSubtitle) {
-  final materialTheme = Theme.of(context);
-  final explicitTextTheme = materialTheme.tExplicitTextTheme;
-  final titleHeight = _fontLineHeight(
-    context.tTheme.fontBodyLarge,
-    explicitTextTheme?.bodyLarge ?? explicitTextTheme?.bodyMedium,
-    materialTheme.textTheme.bodyLarge,
-  );
+  final titleHeight = _fontLineHeight(context.tTheme.fontBodyLarge, 16);
   final contentHeight = hasSubtitle
-      ? titleHeight +
-            context.tTheme.spacer4 +
-            _fontLineHeight(
-              context.tTheme.fontBodyMedium,
-              explicitTextTheme?.bodyMedium ?? explicitTextTheme?.bodySmall,
-              materialTheme.textTheme.bodyMedium,
-            )
+      ? titleHeight + 4.0 + _fontLineHeight(context.tTheme.fontBodyMedium, 14)
       : titleHeight;
-  return contentHeight + context.tTheme.spacer16 * 2;
+  return contentHeight + context.tTheme.spacer2 * 2;
 }
 
 /// 复选框或单选框使用的卡片式选择容器。
@@ -69,7 +52,7 @@ class TSelectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final stateColor = disabled ? disabledColor : selectedColor;
     final markStyle = _SelectionCardMarkStyle.maybeOf(context);
-    final defaultMarkSize = context.tTheme.spacer24 + context.tTheme.spacer4;
+    final defaultMarkSize = context.tTheme.spacer3 + 4.0;
     final markSize = markStyle?.size ?? defaultMarkSize;
     return Container(
       constraints: BoxConstraints(minHeight: minHeight),
@@ -124,7 +107,7 @@ class TSelectionCardGroupLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     if (direction == Axis.vertical) {
       return Padding(
-        padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+        padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -135,7 +118,7 @@ class TSelectionCardGroupLayout extends StatelessWidget {
                 child: children[index],
               ),
               if (index < children.length - 1)
-                SizedBox(height: context.tTheme.spacer12),
+                SizedBox(height: context.tTheme.spacer1),
             ],
           ],
         ),
@@ -144,8 +127,8 @@ class TSelectionCardGroupLayout extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final spacing = context.tTheme.spacer12;
-        final horizontalPadding = context.tTheme.spacer16;
+        final spacing = context.tTheme.spacer1;
+        final horizontalPadding = context.tTheme.spacer2;
         final availableWidth = constraints.maxWidth.isFinite
             ? constraints.maxWidth - horizontalPadding * 2
             : null;
@@ -156,7 +139,7 @@ class TSelectionCardGroupLayout extends StatelessWidget {
           context,
           itemHasSubtitles.any((hasSubtitle) => hasSubtitle),
         );
-        final markSize = context.tTheme.spacer24;
+        final markSize = context.tTheme.spacer3;
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
           child: Wrap(
@@ -205,10 +188,7 @@ class _SelectionCardMark extends StatelessWidget {
         children: [
           CustomPaint(
             size: Size.square(size),
-            painter: _SelectionCardMarkPainter(
-              color,
-              cornerRadius: context.tTheme.spacer4,
-            ),
+            painter: _SelectionCardMarkPainter(color, cornerRadius: 4.0),
           ),
           Positioned(
             top: iconOffset.dy,

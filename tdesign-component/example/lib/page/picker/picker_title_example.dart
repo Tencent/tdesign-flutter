@@ -27,7 +27,7 @@ class _PickerTitleExampleState extends State<PickerTitleExample> {
           ),
         ],
       ),
-      SizedBox(height: context.tTheme.spacer16),
+      SizedBox(height: context.tTheme.spacer2),
       TCellGroup(
         cells: [
           _cell(
@@ -110,7 +110,7 @@ class _PickerTitleExampleState extends State<PickerTitleExample> {
             child: TText(
               '取消',
               font: context.tTheme.fontBodyLarge,
-              textColor: context.tTheme.textColorSecondary,
+              style: TextStyle(color: context.tTheme.textColorSecondary),
             ),
           ),
           title: title == null
@@ -124,7 +124,7 @@ class _PickerTitleExampleState extends State<PickerTitleExample> {
             child: TText(
               '确定',
               font: context.tTheme.fontBodyLarge,
-              textColor: context.tTheme.brandNormalColor,
+              style: TextStyle(color: context.tTheme.brandColor),
             ),
           ),
         ),

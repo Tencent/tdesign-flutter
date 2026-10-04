@@ -34,7 +34,7 @@ Widget _buildTitleSimple(BuildContext context) {
         child: TButton(
           size: TButtonSize.large,
           variant: TButtonVariant.outline,
-          colorScheme: TButtonColorScheme.primary,
+          colorPreset: TButtonColorPreset.primary,
           onPressed: () {
             showTDrawer(
               context,
@@ -54,7 +54,7 @@ Widget _buildTitleSimple(BuildContext context) {
         child: TButton(
           size: TButtonSize.large,
           variant: TButtonVariant.outline,
-          colorScheme: TButtonColorScheme.primary,
+          colorPreset: TButtonColorPreset.primary,
           onPressed: () {
             showTDrawer(
               context,

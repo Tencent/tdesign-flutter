@@ -41,7 +41,7 @@ class RateActionExampleRateGroupLabel extends StatelessWidget {
     child: TText(
       text,
       font: context.tTheme.fontBodyMedium,
-      textColor: context.tTheme.textColorSecondary,
+      style: TextStyle(color: context.tTheme.textColorSecondary),
     ),
   );
 }

@@ -13,7 +13,7 @@ class AccessibleTextExample extends StatelessWidget {
         '长按或拖拽选择这段文本',
         semanticsLabel: '可选择的示例文本',
         semanticsIdentifier: 't-text-selection-example',
-        selectionColor: context.tTheme.brandFocusColor,
+        selectionColor: context.tTheme.brandColorFocus,
       ),
     );
   }

@@ -8,9 +8,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 void main() {
   final token = TThemeData.defaultData();
 
-  ThemeData fullTheme({BadgeThemeData? badgeTheme}) {
+  ThemeData fullTheme({TBadgeThemeData? badgeTheme}) {
     final theme = TThemeBuilder.light(token);
-    return badgeTheme == null ? theme : theme.copyWith(badgeTheme: badgeTheme);
+    return badgeTheme == null ? theme : theme.mergeExtension(badgeTheme);
   }
 
   ThemeData bareTokenTheme() => ThemeData(
@@ -20,13 +20,14 @@ void main() {
   Widget app(
     Widget child, {
     ThemeData? theme,
-    BadgeThemeData? localBadgeTheme,
+    TBadgeThemeData? localBadgeTheme,
   }) {
+    final rootTheme = theme ?? fullTheme();
     final content = localBadgeTheme == null
         ? child
-        : BadgeTheme(data: localBadgeTheme, child: child);
+        : Theme(data: rootTheme.mergeExtension(localBadgeTheme), child: child);
     return MaterialApp(
-      theme: theme ?? fullTheme(),
+      theme: rootTheme,
       home: Scaffold(body: Center(child: content)),
     );
   }
@@ -232,8 +233,8 @@ void main() {
     testWidgets('文字标签使用 10/16 Mark Token 并在 16px 行盒内居中', (tester) async {
       await tester.pumpWidget(app(const TBadge(label: '8')));
 
-      final labelFinder = find.widgetWithText(TText, '8');
-      final label = tester.widget<TText>(labelFinder);
+      final labelFinder = find.text('8');
+      final label = tester.widget<Text>(labelFinder);
       expect(label.style?.fontSize, token.fontMarkExtraSmall?.size);
       expect(label.style?.height, token.fontMarkExtraSmall?.height);
       expect(label.style?.fontWeight, token.fontMarkExtraSmall?.fontWeight);
@@ -245,7 +246,7 @@ void main() {
       );
     });
 
-    testWidgets('显式 leadingDistribution 保持 BadgeTheme 配置', (tester) async {
+    testWidgets('显式 leadingDistribution 保持组件 Theme 配置', (tester) async {
       const textStyle = TextStyle(
         fontSize: 11,
         height: 1.4,
@@ -254,12 +255,17 @@ void main() {
       await tester.pumpWidget(
         app(
           const TBadge(label: '12'),
-          localBadgeTheme: const BadgeThemeData(textStyle: textStyle),
+          localBadgeTheme: const TBadgeThemeData(textStyle: textStyle),
         ),
       );
 
-      final label = tester.widget<TText>(find.widgetWithText(TText, '12'));
-      expect(badgeOf(tester).textStyle, textStyle);
+      final label = tester.widget<Text>(find.text('12'));
+      expect(badgeOf(tester).textStyle?.fontSize, textStyle.fontSize);
+      expect(badgeOf(tester).textStyle?.height, textStyle.height);
+      expect(
+        badgeOf(tester).textStyle?.color,
+        TThemeData.defaultData().textColorAnti,
+      );
       expect(
         label.style?.leadingDistribution,
         TextLeadingDistribution.proportional,
@@ -294,10 +300,7 @@ void main() {
         (key99Plus, '99+'),
       ]) {
         final badge = find.byKey(key);
-        final label = find.descendant(
-          of: badge,
-          matching: find.widgetWithText(TText, text),
-        );
+        final label = find.descendant(of: badge, matching: find.text(text));
         expect(
           (tester.getCenter(label).dy - tester.getCenter(badge).dy).abs(),
           lessThan(0.01),
@@ -351,7 +354,7 @@ void main() {
 
       expect(badgeOf(tester).largeSize, 20);
       expect(tester.getSize(find.byType(Badge)).height, 20);
-      final label = tester.widget<TText>(find.widgetWithText(TText, '8'));
+      final label = tester.widget<Text>(find.text('8'));
       expect(label.style?.fontSize, token.fontMarkSmall?.size);
       expect(label.style?.height, token.fontMarkSmall?.height);
       expect(
@@ -360,11 +363,13 @@ void main() {
       );
     });
 
-    testWidgets('实例 offset 优先于 BadgeTheme offset', (tester) async {
+    testWidgets('实例 offset 不受 Material BadgeTheme 影响', (tester) async {
       await tester.pumpWidget(
         app(
           const TBadge(label: '8', offset: Offset(7, 9)),
-          localBadgeTheme: const BadgeThemeData(offset: Offset(1, 2)),
+          theme: fullTheme().copyWith(
+            badgeTheme: const BadgeThemeData(offset: Offset(1, 2)),
+          ),
         ),
       );
 
@@ -698,40 +703,28 @@ void main() {
           const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              BadgeTheme(
-                data: BadgeThemeData(
-                  alignment: AlignmentDirectional.topEnd,
-                  offset: Offset.zero,
-                ),
-                child: TBadge(
-                  key: topEndKey,
-                  label: '8',
-                  child: SizedBox.square(dimension: 40),
-                ),
+              TBadge(
+                key: topEndKey,
+                label: '8',
+                alignment: AlignmentDirectional.topEnd,
+                offset: Offset.zero,
+                child: SizedBox.square(dimension: 40),
               ),
               SizedBox(width: 32),
-              BadgeTheme(
-                data: BadgeThemeData(
-                  alignment: AlignmentDirectional.bottomStart,
-                  offset: Offset.zero,
-                ),
-                child: TBadge(
-                  key: bottomStartKey,
-                  label: '8',
-                  child: SizedBox.square(dimension: 40),
-                ),
+              TBadge(
+                key: bottomStartKey,
+                label: '8',
+                alignment: AlignmentDirectional.bottomStart,
+                offset: Offset.zero,
+                child: SizedBox.square(dimension: 40),
               ),
               SizedBox(width: 32),
-              BadgeTheme(
-                data: BadgeThemeData(
-                  alignment: AlignmentDirectional.bottomStart,
-                  offset: Offset(3, 4),
-                ),
-                child: TBadge(
-                  key: offsetKey,
-                  label: '8',
-                  child: SizedBox.square(dimension: 40),
-                ),
+              TBadge(
+                key: offsetKey,
+                label: '8',
+                alignment: AlignmentDirectional.bottomStart,
+                offset: Offset(3, 4),
+                child: SizedBox.square(dimension: 40),
               ),
             ],
           ),
@@ -865,7 +858,7 @@ void main() {
       await tester.pumpWidget(app(const TBadge(label: '8')));
 
       final badge = badgeOf(tester);
-      expect(badge.backgroundColor, token.errorNormalColor);
+      expect(badge.backgroundColor, token.errorColor);
       expect(badge.textColor, token.textColorAnti);
       expect(badge.largeSize, 16);
       expect(badge.smallSize, 8);
@@ -886,7 +879,7 @@ void main() {
       await tester.pumpWidget(app(const TBadge(label: '16'), theme: theme));
 
       final badge = badgeOf(tester);
-      final label = find.widgetWithText(TText, '16');
+      final label = find.text('16');
       expect(badge.textStyle?.fontSize, token.fontMarkExtraSmall?.size);
       expect(badge.textStyle?.height, token.fontMarkExtraSmall?.height);
       expect(
@@ -896,7 +889,7 @@ void main() {
       expect(tester.getSize(find.byType(Badge)).height, 16);
     });
 
-    testWidgets('iOS 显式 TextTheme 仍可覆盖 Badge Mark Token', (tester) async {
+    testWidgets('iOS Material TextTheme 不覆盖 Badge Mark Token', (tester) async {
       const labelStyle = TextStyle(fontSize: 15, height: 1.1);
       final baseTheme = TThemeBuilder.light(
         token,
@@ -910,8 +903,14 @@ void main() {
       );
       await tester.pumpWidget(app(const TBadge(label: '16'), theme: theme));
 
-      expect(badgeOf(tester).textStyle?.fontSize, labelStyle.fontSize);
-      expect(badgeOf(tester).textStyle?.height, labelStyle.height);
+      expect(
+        badgeOf(tester).textStyle?.fontSize,
+        token.fontMarkExtraSmall?.size,
+      );
+      expect(
+        badgeOf(tester).textStyle?.height,
+        token.fontMarkExtraSmall?.height,
+      );
     });
 
     testWidgets('裸 TThemeData 仍兜底颜色和基础尺寸', (tester) async {
@@ -920,27 +919,29 @@ void main() {
       );
 
       final badge = badgeOf(tester);
-      expect(badge.backgroundColor, token.errorNormalColor);
+      expect(badge.backgroundColor, token.errorColor);
       expect(badge.textColor, token.textColorAnti);
       expect(badge.largeSize, 16);
       expect(badge.smallSize, 8);
       expect(badge.padding, const EdgeInsets.symmetric(horizontal: 4));
     });
 
-    testWidgets('ThemeData.badgeTheme 可控制完整视觉', (tester) async {
-      const badgeTheme = BadgeThemeData(
+    testWidgets('TBadgeThemeData 控制可复用视觉，定位由实例控制', (tester) async {
+      const badgeTheme = TBadgeThemeData(
         backgroundColor: Colors.green,
-        textColor: Colors.yellow,
-        smallSize: 8,
-        largeSize: 20,
-        textStyle: TextStyle(fontSize: 13, height: 1.2),
+        dotSize: 8,
+        labelHeight: 20,
+        textStyle: TextStyle(fontSize: 13, height: 1.2, color: Colors.yellow),
         padding: EdgeInsets.symmetric(horizontal: 7),
-        alignment: AlignmentDirectional.bottomEnd,
-        offset: Offset(2, 3),
       );
       await tester.pumpWidget(
         app(
-          const TBadge(label: '8', child: SizedBox(width: 24, height: 24)),
+          const TBadge(
+            label: '8',
+            alignment: AlignmentDirectional.bottomEnd,
+            offset: Offset(2, 3),
+            child: SizedBox(width: 24, height: 24),
+          ),
           theme: fullTheme(badgeTheme: badgeTheme),
         ),
       );
@@ -948,12 +949,14 @@ void main() {
       final badge = badgeOf(tester);
       expect(badge.backgroundColor, Colors.green);
       expect(badge.textColor, Colors.yellow);
-      expect(badge.smallSize, 8);
-      expect(badge.largeSize, 20);
-      expect(badge.textStyle, badgeTheme.textStyle);
+      expect(badge.smallSize, badgeTheme.dotSize);
+      expect(badge.largeSize, badgeTheme.labelHeight);
+      expect(badge.textStyle?.fontSize, badgeTheme.textStyle?.fontSize);
+      expect(badge.textStyle?.height, badgeTheme.textStyle?.height);
+      expect(badge.textStyle?.color, badgeTheme.textStyle?.color);
       expect(badge.padding, badgeTheme.padding);
-      expect(badge.alignment, badgeTheme.alignment);
-      expect(badge.offset, badgeTheme.offset);
+      expect(badge.alignment, AlignmentDirectional.bottomEnd);
+      expect(badge.offset, const Offset(2, 3));
     });
 
     testWidgets('TThemeBuilder 投影不覆盖 TBadge 两档尺寸 token', (tester) async {
@@ -978,45 +981,42 @@ void main() {
       expect(badges[1].textStyle?.fontSize, token.fontMarkSmall?.size);
     });
 
-    testWidgets('large 保留与中号默认数值相同的显式全局主题', (tester) async {
+    testWidgets('large 使用显式组件 Theme 尺寸和字体', (tester) async {
       final baseTheme = fullTheme();
-      final projectedBadgeTheme = baseTheme.badgeTheme;
-      final explicitBadgeTheme = BadgeThemeData(
-        textStyle: projectedBadgeTheme.textStyle,
-        padding: projectedBadgeTheme.padding,
-        largeSize: 24,
+      const explicitBadgeTheme = TBadgeThemeData(
+        textStyle: TextStyle(fontSize: 12),
+        padding: EdgeInsets.symmetric(horizontal: 4),
+        labelHeight: 24,
       );
       await tester.pumpWidget(
         app(
           const TBadge(label: '8', size: TBadgeSize.large),
-          theme: baseTheme.copyWith(badgeTheme: explicitBadgeTheme),
+          theme: baseTheme.mergeExtension(explicitBadgeTheme),
         ),
       );
 
       final badge = badgeOf(tester);
       expect(badge.largeSize, 24);
-      expect(badge.textStyle, explicitBadgeTheme.textStyle);
+      expect(badge.textStyle?.fontSize, explicitBadgeTheme.textStyle?.fontSize);
+      expect(badge.textStyle?.color, token.textColorAnti);
       expect(badge.padding, explicitBadgeTheme.padding);
     });
 
-    testWidgets('局部 BadgeTheme 按字段覆盖并继承全局未设置字段', (tester) async {
-      const globalTheme = BadgeThemeData(
+    testWidgets('局部组件 Theme 替换全局组件 Theme，未配置字段回退 Token', (tester) async {
+      const globalTheme = TBadgeThemeData(
         backgroundColor: Colors.red,
-        textColor: Colors.yellow,
-        smallSize: 7,
-        largeSize: 18,
+        dotSize: 7,
+        labelHeight: 18,
         textStyle: TextStyle(fontSize: 12),
         padding: EdgeInsets.symmetric(horizontal: 5),
-        alignment: AlignmentDirectional.topStart,
-        offset: Offset(1, 2),
       );
       await tester.pumpWidget(
         app(
           const TBadge(label: '8', child: SizedBox(width: 24, height: 24)),
           theme: fullTheme(badgeTheme: globalTheme),
-          localBadgeTheme: const BadgeThemeData(
+          localBadgeTheme: const TBadgeThemeData(
             backgroundColor: Colors.green,
-            largeSize: 22,
+            labelHeight: 22,
           ),
         ),
       );
@@ -1024,38 +1024,42 @@ void main() {
       final badge = badgeOf(tester);
       expect(badge.backgroundColor, Colors.green);
       expect(badge.largeSize, 22);
-      expect(badge.textColor, globalTheme.textColor);
-      expect(badge.smallSize, globalTheme.smallSize);
-      expect(badge.textStyle, globalTheme.textStyle);
-      expect(badge.padding, globalTheme.padding);
-      expect(badge.alignment, globalTheme.alignment);
-      expect(badge.offset, globalTheme.offset);
+      expect(badge.textColor, token.textColorAnti);
+      expect(badge.smallSize, 8);
+      expect(badge.textStyle?.fontSize, token.fontMarkExtraSmall?.size);
+      expect(badge.padding, const EdgeInsets.symmetric(horizontal: 4));
+      expect(badge.alignment, AlignmentDirectional.topEnd);
+      expect(badge.offset, Offset.zero);
     });
 
-    testWidgets('Flutter textTheme 在 BadgeTheme 未指定文字样式时生效', (tester) async {
+    testWidgets('Flutter TextTheme 不覆盖 Badge Token 字体', (tester) async {
       const labelStyle = TextStyle(fontSize: 15, height: 1.1);
       final theme = bareTokenTheme().copyWith(
         textTheme: const TextTheme(labelSmall: labelStyle),
       );
       await tester.pumpWidget(app(const TBadge(label: '8'), theme: theme));
 
-      expect(badgeOf(tester).textStyle?.fontSize, labelStyle.fontSize);
-      expect(badgeOf(tester).textStyle?.height, labelStyle.height);
+      expect(
+        badgeOf(tester).textStyle?.fontSize,
+        token.fontMarkExtraSmall?.size,
+      );
+      expect(
+        badgeOf(tester).textStyle?.height,
+        token.fontMarkExtraSmall?.height,
+      );
     });
 
-    testWidgets('TBadgeThemeData 控制描边，局部 BadgeTheme 控制内容色', (tester) async {
+    testWidgets('TBadgeThemeData 统一控制描边和内容色', (tester) async {
       const extension = TBadgeThemeData(
         borderColor: Colors.green,
         borderWidth: 2,
+        backgroundColor: Colors.orange,
+        textStyle: TextStyle(color: Colors.black),
       );
       await tester.pumpWidget(
         app(
           const TBadge(label: '2', border: true),
           theme: fullTheme().mergeExtension(extension),
-          localBadgeTheme: const BadgeThemeData(
-            backgroundColor: Colors.orange,
-            textColor: Colors.black,
-          ),
         ),
       );
 

@@ -67,7 +67,7 @@ void main() {
       expect(slider.divisions, 10);
       expect(
         SliderTheme.of(tester.element(find.byType(Slider))).trackHeight,
-        6,
+        4,
       );
 
       await tester.drag(find.byType(Slider), const Offset(80, 0));
@@ -102,15 +102,19 @@ void main() {
         theme.trackShape.runtimeType.toString(),
         '_TDesignSliderTrackShape',
       );
-      expect(theme.activeTrackColor, TThemeData.defaultData().brandNormalColor);
+      expect(theme.activeTrackColor, TThemeData.defaultData().brandColor);
       expect(
         theme.inactiveTrackColor,
-        TThemeData.defaultData().bgColorComponentHover,
+        TThemeData.defaultData().componentBorder,
+      );
+      expect(
+        theme.inactiveTickMarkColor,
+        TThemeData.defaultData().componentBorder,
       );
       expect(theme.thumbColor, TThemeData.defaultData().textColorAnti);
       expect(
         theme.disabledActiveTrackColor,
-        TThemeData.defaultData().brandDisabledColor,
+        TThemeData.defaultData().brandColorDisabled,
       );
       expect(
         theme.disabledInactiveTrackColor,
@@ -119,9 +123,102 @@ void main() {
       expectThumbBorders(
         theme,
         borderColor: TThemeData.defaultData().grayColor1,
-        disabledBorderColor: TThemeData.defaultData().bgColorComponentDisabled,
+        disabledBorderColor: TThemeData.defaultData().componentBorder,
       );
     });
+
+    testWidgets(
+      'inactive track follows componentBorder, then TSliderThemeData',
+      (tester) async {
+        final token = TThemeData.defaultData().copyWithTThemeData(
+          'custom-slider-border',
+          colorMap: {
+            'componentBorder': Colors.purple,
+            'bgColorComponent': Colors.green,
+          },
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(extensions: [token]),
+            home: const Scaffold(body: TSlider(value: 0.5)),
+          ),
+        );
+        var theme = SliderTheme.of(tester.element(find.byType(Slider)));
+        expect(theme.inactiveTrackColor, Colors.purple);
+        expect(theme.inactiveTickMarkColor, Colors.purple);
+        expectThumbBorders(
+          theme,
+          borderColor: token.grayColor1,
+          disabledBorderColor: Colors.purple,
+        );
+
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              sliderTheme: const SliderThemeData(
+                inactiveTrackColor: Colors.red,
+              ),
+              extensions: [
+                token,
+                const TSliderThemeData(inactiveTrackColor: Colors.red),
+              ],
+            ),
+            home: const Scaffold(body: TSlider(value: 0.5)),
+          ),
+        );
+        theme = SliderTheme.of(tester.element(find.byType(Slider)));
+        expect(theme.inactiveTrackColor, Colors.red);
+        expect(theme.inactiveTickMarkColor, Colors.red);
+
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              sliderTheme: const SliderThemeData(
+                inactiveTrackColor: Colors.red,
+              ),
+              extensions: [
+                token,
+                const TSliderThemeData(inactiveTrackColor: Colors.red),
+              ],
+            ),
+            home: const Scaffold(
+              body: TSlider(value: 0.5, variant: TSliderVariant.capsule),
+            ),
+          ),
+        );
+        theme = SliderTheme.of(tester.element(find.byType(Slider)));
+        final dynamic capsuleTrack = theme.trackShape;
+        expect(capsuleTrack.outerColor, Colors.red);
+        expect(capsuleTrack.disabledOuterColor, Colors.green);
+
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              sliderTheme: const SliderThemeData(
+                inactiveTrackColor: Colors.red,
+              ),
+              extensions: [
+                token,
+                const TSliderThemeData(inactiveTrackColor: Colors.red),
+              ],
+            ),
+            home: const Scaffold(
+              body: TRangeSlider(
+                value: RangeValues(0.2, 0.8),
+                variant: TSliderVariant.capsule,
+              ),
+            ),
+          ),
+        );
+        theme = SliderTheme.of(tester.element(find.byType(RangeSlider)));
+        final dynamic capsuleRangeTrack = theme.rangeTrackShape;
+        expect(capsuleRangeTrack.outerColor, Colors.red);
+        expect(capsuleRangeTrack.disabledOuterColor, Colors.green);
+      },
+    );
 
     testWidgets('default track uses the design 16px horizontal inset', (
       tester,
@@ -155,7 +252,7 @@ void main() {
     testWidgets('track geometry follows custom spacing tokens', (tester) async {
       final token = TThemeData.defaultData().copyWithTThemeData(
         'custom-slider-spacing',
-        marginMap: const {'spacer4': 5, 'spacer16': 18, 'spacer24': 28},
+        marginMap: const {'spacer2': 18, 'spacer3': 28},
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -201,7 +298,7 @@ void main() {
         isDiscrete: true,
       );
 
-      expect(normalTheme.trackHeight, 5);
+      expect(normalTheme.trackHeight, 4);
       expect(normalTrackRect.left, 18);
       expect(normalTrackRect.right, normalBox.size.width - 18);
       expect(capsuleTheme.trackHeight, 28);
@@ -231,8 +328,9 @@ void main() {
       );
 
       final theme = SliderTheme.of(tester.element(find.byType(Slider)));
-      expect(theme.activeTrackColor, darkToken.brandNormalColor);
-      expect(theme.inactiveTrackColor, darkToken.bgColorComponentHover);
+      expect(theme.activeTrackColor, darkToken.brandColor);
+      expect(theme.inactiveTrackColor, darkToken.componentBorder);
+      expect(theme.inactiveTickMarkColor, darkToken.componentBorder);
       expect(theme.thumbColor, darkToken.textColorAnti);
       expectThumbBorders(
         theme,
@@ -241,17 +339,23 @@ void main() {
       );
     });
 
-    testWidgets('preserves local SliderTheme color and label overrides', (
+    testWidgets('uses TSliderThemeData color and label overrides', (
       tester,
     ) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(
-            extensions: [TThemeData.defaultData()],
             sliderTheme: const SliderThemeData(
               activeTrackColor: Colors.red,
               valueIndicatorTextStyle: TextStyle(color: Colors.teal),
             ),
+            extensions: [
+              TThemeData.defaultData(),
+              const TSliderThemeData(
+                activeTrackColor: Colors.red,
+                valueIndicatorTextColor: Colors.teal,
+              ),
+            ],
           ),
           home: const Scaffold(
             body: Center(
@@ -270,7 +374,7 @@ void main() {
       expect(theme.valueIndicatorTextStyle?.color, Colors.teal);
     });
 
-    testWidgets('explicit ColorScheme takes priority over TDesign tokens', (
+    testWidgets('explicit ColorScheme cannot override TDesign tokens', (
       tester,
     ) async {
       const scheme = ColorScheme.light(
@@ -290,13 +394,16 @@ void main() {
       );
 
       final theme = SliderTheme.of(tester.element(find.byType(Slider)));
-      expect(theme.activeTrackColor, scheme.primary);
-      expect(theme.inactiveTrackColor, scheme.surfaceContainerHighest);
-      expect(theme.thumbColor, scheme.primary);
+      expect(theme.activeTrackColor, TThemeData.defaultData().brandColor);
+      expect(
+        theme.inactiveTrackColor,
+        TThemeData.defaultData().componentBorder,
+      );
+      expect(theme.thumbColor, TThemeData.defaultData().textColorAnti);
       expectThumbBorders(
         theme,
-        borderColor: scheme.outline,
-        disabledBorderColor: scheme.outlineVariant,
+        borderColor: TThemeData.defaultData().grayColor1,
+        disabledBorderColor: TThemeData.defaultData().componentBorder,
       );
     });
 
@@ -371,7 +478,7 @@ void main() {
 
       final theme = SliderTheme.of(tester.element(find.byType(Slider)));
       expect(theme.trackHeight, 24);
-      expect(theme.activeTickMarkColor, Colors.purple);
+      expect(theme.activeTickMarkColor, TThemeData.defaultData().brandColor);
       expect(
         theme.trackShape.runtimeType.toString(),
         '_CapsuleSliderTrackShape',
@@ -480,7 +587,7 @@ void main() {
           final dividerStep = (visualWidth - 3) / 5;
           final selectedGap = (dividerLeft + 2 * dividerStep).floorToDouble();
           final inactiveGap = (dividerLeft + 4 * dividerStep).floorToDouble();
-          final outerColor = TThemeData.defaultData().bgColorComponent;
+          final outerColor = TThemeData.defaultData().componentBorder;
           expect(pixel(selectedGap), outerColor);
           expect(pixel(inactiveGap), outerColor);
         }

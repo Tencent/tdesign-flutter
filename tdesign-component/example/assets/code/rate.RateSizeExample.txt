@@ -16,7 +16,7 @@ class RateSizeExample extends StatelessWidget {
           child: const RateSizeExampleStatefulRate(initialValue: 3),
         ),
       ),
-      SizedBox(height: context.tTheme.spacer16),
+      SizedBox(height: context.tTheme.spacer2),
       TCell(
         title: const Text('小尺寸 20'),
         note: Theme(

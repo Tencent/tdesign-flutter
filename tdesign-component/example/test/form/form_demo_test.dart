@@ -175,7 +175,7 @@ void main() {
     expect(verticalBackground, token.bgColorSecondaryContainer);
     expect(
       Theme.of(switchContext).extension<TSwitchThemeData>()?.trackOffColor,
-      token.componentBorderColor,
+      token.componentBorder,
     );
 
     await tester.tap(find.byKey(const ValueKey('form-disabled-switch')));
@@ -259,10 +259,10 @@ void main() {
       16,
     );
     expect(tester.getTopLeft(reset).dx, lessThan(tester.getTopLeft(submit).dx));
-    expect(tester.widget<TButton>(reset).colorScheme, TButtonColorScheme.light);
+    expect(tester.widget<TButton>(reset).colorPreset, TButtonColorPreset.light);
     expect(
-      tester.widget<TButton>(submit).colorScheme,
-      TButtonColorScheme.primary,
+      tester.widget<TButton>(submit).colorPreset,
+      TButtonColorPreset.primary,
     );
   });
 

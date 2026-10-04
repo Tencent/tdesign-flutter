@@ -26,7 +26,7 @@ class TFooter extends StatelessWidget {
     final children = logo != null
         ? <Widget>[
             if (text.isNotEmpty) _renderText(context),
-            if (text.isNotEmpty) SizedBox(height: context.tTheme.spacer8),
+            if (text.isNotEmpty) SizedBox(height: context.tTheme.spacer),
             _renderLogo(),
           ]
         : <Widget>[
@@ -70,7 +70,7 @@ class TFooter extends StatelessWidget {
               for (var index = 0; index < links.length; index++) ...[
                 Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: context.tTheme.spacer12,
+                    horizontal: context.tTheme.spacer1,
                   ),
                   child: IntrinsicWidth(child: links[index]),
                 ),
@@ -78,9 +78,7 @@ class TFooter extends StatelessWidget {
                   SizedBox(
                     width: 1,
                     height: 22,
-                    child: ColoredBox(
-                      color: context.tTheme.componentStrokeColor,
-                    ),
+                    child: ColoredBox(color: context.tTheme.componentStroke),
                   ),
               ],
             ],

@@ -23,7 +23,7 @@ class FabIconOnlyExample extends StatelessWidget {
       child: TButton(
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: onSelected,
         child: Text(text),
       ),

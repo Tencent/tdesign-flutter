@@ -44,7 +44,7 @@ class ConfirmDialogsExample extends StatelessWidget {
     return Column(
       children: [
         for (var index = 0; index < children.length; index++) ...[
-          if (index > 0) SizedBox(height: context.tTheme.spacer16),
+          if (index > 0) SizedBox(height: context.tTheme.spacer2),
           children[index],
         ],
       ],
@@ -57,7 +57,7 @@ class ConfirmDialogsExample extends StatelessWidget {
       child: TButton(
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: onPressed,
         child: Text(text),
       ),
@@ -69,14 +69,14 @@ class ConfirmDialogsExample extends StatelessWidget {
   List<TDialogAction> _actions({
     bool destructive = false,
     TButtonVariant? variant,
-    TButtonColorScheme? primaryColorScheme,
+    TButtonColorPreset? primaryColorScheme,
   }) => [
     TDialogAction(variant: variant, child: const Text('取消'), result: false),
     TDialogAction(
       child: Text(destructive ? '警示操作' : '确定'),
       result: true,
       variant: variant,
-      colorScheme: primaryColorScheme,
+      colorPreset: primaryColorScheme,
       role: destructive
           ? TDialogActionRole.destructive
           : TDialogActionRole.primary,

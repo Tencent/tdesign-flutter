@@ -40,16 +40,19 @@ class _TCascaderPageState extends State<TCascaderPage> {
             ExampleItem(
               desc: '垂直级联选择器-带字母定位',
               methodName: 'CascaderInitialExample',
+              compactStyle: const CompactExampleStyle(contentSpacing: 8),
               builder: (_) => const CascaderInitialExample(),
             ),
             ExampleItem(
               desc: '水平级联选择器',
               methodName: 'CascaderTabExample',
+              compactStyle: const CompactExampleStyle(contentSpacing: 8),
               builder: (_) => const CascaderTabExample(),
             ),
             ExampleItem(
               desc: '水平级联选择器-带字母定位',
               methodName: 'CascaderKeysExample',
+              compactStyle: const CompactExampleStyle(contentSpacing: 8),
               builder: (_) => const CascaderKeysExample(),
             ),
           ],
@@ -60,11 +63,13 @@ class _TCascaderPageState extends State<TCascaderPage> {
             ExampleItem(
               desc: '带标题级联选择器',
               methodName: 'CascaderSubtitleExample',
+              compactStyle: const CompactExampleStyle(contentSpacing: 8),
               builder: (_) => const CascaderSubtitleExample(),
             ),
             ExampleItem(
               desc: '无标题级联选择器',
               methodName: 'CascaderAnyExample',
+              compactStyle: const CompactExampleStyle(contentSpacing: 8),
               builder: (_) => const CascaderAnyExample(),
             ),
           ],

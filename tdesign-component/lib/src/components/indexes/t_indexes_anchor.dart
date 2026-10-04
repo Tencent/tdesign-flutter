@@ -49,52 +49,58 @@ class TIndexesAnchor extends StatelessWidget {
       builder: (context, value, child) {
         final isPinned = value == text;
         final customAnchor = builderAnchor?.call(context, text, isPinned);
+        final backgroundColor = isPinned
+            ? theme.activeAnchorBackgroundColor ??
+                  context.tTheme.bgColorContainer
+            : theme.anchorBackgroundColor ??
+                  context.tTheme.bgColorSecondaryContainer;
+        final borderColor =
+            theme.anchorBorderColor ?? context.tTheme.componentStroke;
         return customAnchor ??
             Container(
               padding: EdgeInsets.symmetric(
-                vertical: theme.anchorVerticalPadding ?? context.tTheme.spacer4,
+                vertical: theme.anchorVerticalPadding ?? 4.0,
                 horizontal:
-                    theme.anchorHorizontalPadding ?? context.tTheme.spacer16,
+                    theme.anchorHorizontalPadding ?? context.tTheme.spacer2,
               ),
               margin: capsuleTheme
                   ? EdgeInsets.symmetric(
-                      horizontal: theme.capsuleMargin ?? context.tTheme.spacer8,
+                      horizontal: theme.capsuleMargin ?? context.tTheme.spacer,
                     )
                   : null,
-              decoration: BoxDecoration(
-                color: isPinned
-                    ? theme.activeAnchorBackgroundColor ??
-                          context.tTheme.bgColorContainer
-                    : theme.anchorBackgroundColor ??
-                          context.tTheme.bgColorSecondaryContainer,
-                borderRadius: capsuleTheme
-                    ? BorderRadius.circular(context.tTheme.radiusCircle)
-                    : null,
-                border: isPinned
-                    ? capsuleTheme
-                          ? Border.all(
-                              color:
-                                  theme.anchorBorderColor ??
-                                  context.tTheme.componentStrokeColor,
-                            )
-                          : Border(
+              decoration: capsuleTheme
+                  ? ShapeDecoration(
+                      color: backgroundColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          context.tTheme.radiusRound,
+                        ),
+                        side: isPinned
+                            ? BorderSide(color: borderColor)
+                            : BorderSide.none,
+                      ),
+                    )
+                  : BoxDecoration(
+                      color: backgroundColor,
+                      border: isPinned
+                          ? Border(
                               bottom: BorderSide(
-                                color:
-                                    theme.anchorBorderColor ??
-                                    context.tTheme.componentStrokeColor,
+                                color: borderColor,
                                 width: 0.5,
                               ),
                             )
-                    : null,
-              ),
+                          : null,
+                    ),
               child: TText(
                 text,
                 font: isPinned
                     ? theme.activeAnchorFont ?? context.tTheme.fontMarkMedium
                     : theme.anchorFont ?? context.tTheme.fontBodyMedium,
-                textColor: isPinned
-                    ? theme.activeAnchorColor ?? context.tTheme.brandNormalColor
-                    : theme.anchorColor ?? context.tTheme.textColorPrimary,
+                style: TextStyle(
+                  color: isPinned
+                      ? theme.activeAnchorColor ?? context.tTheme.brandColor
+                      : theme.anchorColor ?? context.tTheme.textColorPrimary,
+                ),
               ),
             );
       },

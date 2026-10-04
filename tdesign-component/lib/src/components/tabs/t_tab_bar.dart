@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import 't_horizontal_tab_bar.dart';
@@ -24,9 +25,7 @@ class TTabsBar extends StatelessWidget {
     Key? key,
     required this.tabs,
     this.controller,
-    this.decoration,
     this.isScrollable = false,
-    this.indicator,
     this.onTap,
     this.size = TTabsBarSize.small,
     this.variant = TTabsBarVariant.line,
@@ -40,17 +39,8 @@ class TTabsBar extends StatelessWidget {
   /// 仅在需要读取当前索引、命令式切换或跨组件共享状态时显式传入。
   final TabController? controller;
 
-  /// tabBar 修饰；非空时覆盖 Theme 的背景和分割线。
-  final Decoration? decoration;
-
   /// 是否横向滚动。
   final bool isScrollable;
-
-  /// 自定义指示器；非空时覆盖 Theme 指示器。
-  ///
-  /// [TTabsBarVariant.line] 默认使用 TDesign 品牌色指示器，Tag 与 Card
-  /// 默认不显示指示器。
-  final Decoration? indicator;
 
   /// 点击事件
   final ValueChanged<int>? onTap;
@@ -70,33 +60,29 @@ class TTabsBar extends StatelessWidget {
     final dividerHeight = themeData.dividerHeight ?? 0.5;
     final backgroundColor =
         themeData.backgroundColor ?? context.tTheme.bgColorContainer;
-    final resolvedIndicator =
-        indicator ?? themeData.indicator ?? _defaultIndicator(context);
+    final resolvedIndicator = themeData.indicator ?? _defaultIndicator(context);
     return Container(
       height: 48,
-      decoration:
-          decoration ??
-          (variant == TTabsBarVariant.card
-              ? BoxDecoration(color: backgroundColor)
-              : BoxDecoration(
-                  color: backgroundColor,
-                  border: dividerHeight <= 0
-                      ? null
-                      : Border(
-                          bottom: BorderSide(
-                            color:
-                                themeData.dividerColor ??
-                                context.tTheme.componentStrokeColor,
-                            width: dividerHeight,
-                          ),
-                        ),
-                )),
+      decoration: variant == TTabsBarVariant.card
+          ? BoxDecoration(color: backgroundColor)
+          : BoxDecoration(
+              color: backgroundColor,
+              border: dividerHeight <= 0
+                  ? null
+                  : Border(
+                      bottom: BorderSide(
+                        color:
+                            themeData.dividerColor ??
+                            context.tTheme.componentStroke,
+                        width: dividerHeight,
+                      ),
+                    ),
+            ),
       child: THorizontalTabBar(
         isScrollable: isScrollable,
         indicator: resolvedIndicator,
         indicatorSize: TabBarIndicatorSize.tab,
-        labelColor:
-            themeData.labelStyle?.color ?? context.tTheme.brandNormalColor,
+        labelColor: themeData.labelStyle?.color ?? context.tTheme.brandColor,
         labelStyle: themeData.labelStyle ?? _getLabelStyle(context),
         labelPadding:
             themeData.labelPadding ??
@@ -128,20 +114,20 @@ class TTabsBar extends StatelessWidget {
     if (variant != TTabsBarVariant.line) {
       return _TNoneIndicator();
     }
-    return TTabsBarIndicator(indicatorColor: context.tTheme.brandNormalColor);
+    return TTabsBarIndicator(indicatorColor: context.tTheme.brandColor);
   }
 
   TextStyle _getUnSelectLabelStyle(BuildContext context) {
     final tokenFont = size == TTabsBarSize.large
         ? context.tTheme.fontBodyLarge
         : context.tTheme.fontBodyMedium;
-    final inheritedStyle = Theme.of(context).textTheme.bodyMedium;
+    final tokenFontFamily = context.tTheme.fontFamily;
     return TextStyle(
       fontSize: tokenFont?.size,
       height: tokenFont?.height,
       fontWeight: tokenFont?.fontWeight,
-      fontFamily: inheritedStyle?.fontFamily,
-      fontFamilyFallback: inheritedStyle?.fontFamilyFallback,
+      fontFamily: tokenFontFamily?.flutterFontFamily,
+      fontFamilyFallback: tokenFontFamily?.flutterFontFamilyFallback,
     ).copyWith(
       fontWeight: FontWeight.w400,
       color: context.tTheme.textColorPrimary,
@@ -152,17 +138,14 @@ class TTabsBar extends StatelessWidget {
     final tokenFont = size == TTabsBarSize.large
         ? context.tTheme.fontBodyLarge
         : context.tTheme.fontBodyMedium;
-    final inheritedStyle = Theme.of(context).textTheme.bodyMedium;
+    final tokenFontFamily = context.tTheme.fontFamily;
     return TextStyle(
       fontSize: tokenFont?.size,
       height: tokenFont?.height,
       fontWeight: tokenFont?.fontWeight,
-      fontFamily: inheritedStyle?.fontFamily,
-      fontFamilyFallback: inheritedStyle?.fontFamilyFallback,
-    ).copyWith(
-      fontWeight: FontWeight.w600,
-      color: context.tTheme.brandNormalColor,
-    );
+      fontFamily: tokenFontFamily?.flutterFontFamily,
+      fontFamilyFallback: tokenFontFamily?.flutterFontFamilyFallback,
+    ).copyWith(fontWeight: FontWeight.w600, color: context.tTheme.brandColor);
   }
 }
 

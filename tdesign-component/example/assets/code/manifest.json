@@ -760,11 +760,11 @@
             "assetKey": "icon.IconFromNameExample"
           },
           {
-            "description": "Theme 默认 size/color:",
-            "assetKey": "icon.IconThemeExample"
+            "description": "TDesign Token 默认尺寸与颜色:",
+            "assetKey": "icon.IconTokenExample"
           },
           {
-            "description": "构造器优先级覆盖 Theme:",
+            "description": "构造器参数覆盖默认值:",
             "assetKey": "icon.IconPriorityExample"
           }
         ]
@@ -930,7 +930,7 @@
         "items": [
           {
             "description": "不同主题",
-            "assetKey": "link.ColorSchemeLinksExample"
+            "assetKey": "link.ColorPresetLinksExample"
           },
           {
             "description": "禁用状态",
@@ -1161,7 +1161,7 @@
         "items": [
           {
             "description": "",
-            "assetKey": "popover.PopoverColorSchemesExample"
+            "assetKey": "popover.PopoverColorPresetsExample"
           },
           {
             "description": "顶部弹出气泡",

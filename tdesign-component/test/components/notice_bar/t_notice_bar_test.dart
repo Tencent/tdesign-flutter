@@ -124,7 +124,7 @@ void main() {
 
       final iconContext = tester.element(find.byIcon(Icons.info));
       final iconTheme = IconTheme.of(iconContext);
-      expect(iconTheme.color, iconContext.tTheme.warningNormalColor);
+      expect(iconTheme.color, iconContext.tTheme.warningColor);
       expect(iconTheme.size, 22);
     });
 
@@ -143,7 +143,7 @@ void main() {
     testWidgets('prefix 与正文间距跟随 spacer8 Token', (tester) async {
       final themeData = TThemeData.defaultData().copyWithTThemeData(
         'notice-bar-spacing-test',
-        marginMap: const {'spacer8': 13},
+        marginMap: const {'spacer': 13},
       );
       await tester.pumpWidget(
         wrapWithTheme(
@@ -442,7 +442,10 @@ void main() {
       const alternate = TNoticeBarThemeData(backgroundColor: Colors.blue);
 
       expect(defaults.lerp(custom, 0).height, 22);
-      expect(defaults.lerp(custom, 0).padding, TNoticeBarThemeData.defaultPadding);
+      expect(
+        defaults.lerp(custom, 0).padding,
+        TNoticeBarThemeData.defaultPadding,
+      );
       expect(defaults.lerp(custom, 1).height, 30);
       expect(defaults.lerp(custom, 1).padding, const EdgeInsets.all(20));
       expect(forwardBeforeSwitch.height, 24);
@@ -475,9 +478,7 @@ void main() {
       expect(TNoticeBarThemeData.lerpDouble(22, 30, 0.5), 26);
     });
 
-    testWidgets('AnimatedTheme 以默认高度 22 平滑过渡到自定义高度', (
-      tester,
-    ) async {
+    testWidgets('AnimatedTheme 以默认高度 22 平滑过渡到自定义高度', (tester) async {
       var useCustomTheme = false;
       late StateSetter setState;
 
@@ -532,9 +533,9 @@ void main() {
       // 校验具体色值：warning 变体应解析为警示色，而非仅断言非空
       expect(
         resolved.backgroundColor,
-        capturedContext.tTheme.warningLightColor,
+        capturedContext.tTheme.warningColorLight,
       );
-      expect(resolved.leftIconColor, capturedContext.tTheme.warningNormalColor);
+      expect(resolved.leftIconColor, capturedContext.tTheme.warningColor);
     });
 
     testWidgets('TNoticeBarThemeData.resolve 各状态色值正确', (tester) async {
@@ -548,19 +549,19 @@ void main() {
 
       expect(
         resolveBg(TNoticeBarStatus.info),
-        capturedContext.tTheme.brandLightColor,
+        capturedContext.tTheme.brandColorLight,
       );
       expect(
         resolveBg(TNoticeBarStatus.success),
-        capturedContext.tTheme.successLightColor,
+        capturedContext.tTheme.successColorLight,
       );
       expect(
         resolveBg(TNoticeBarStatus.warning),
-        capturedContext.tTheme.warningLightColor,
+        capturedContext.tTheme.warningColorLight,
       );
       expect(
         resolveBg(TNoticeBarStatus.error),
-        capturedContext.tTheme.errorLightColor,
+        capturedContext.tTheme.errorColorLight,
       );
     });
   });

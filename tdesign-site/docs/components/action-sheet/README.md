@@ -96,15 +96,15 @@ TActionSheet.showList(
       label: 'Mark as important',
       icon: Icon(
         TIcons.notification,
-        color: context.tTheme.brandNormalColor,
+        color: context.tTheme.brandColor,
       ),
-      textStyle: TextStyle(color: context.tTheme.brandNormalColor),
+      textStyle: TextStyle(color: context.tTheme.brandColor),
     ),
     TActionSheetItem(
       value: 'unsubscribe',
       label: 'Unsubscribe',
-      icon: Icon(TIcons.delete, color: context.tTheme.errorNormalColor),
-      textStyle: TextStyle(color: context.tTheme.errorNormalColor),
+      icon: Icon(TIcons.delete, color: context.tTheme.errorColor),
+      textStyle: TextStyle(color: context.tTheme.errorColor),
     ),
     TActionSheetItem(
       value: 'add-to-tasks',

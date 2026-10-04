@@ -38,22 +38,19 @@ class _InputPasswordExampleState extends State<InputPasswordExample> {
             suffix: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  width: 1,
-                  height: 24,
-                  color: token.componentStrokeColor,
-                ),
+                Container(width: 1, height: 24, color: token.componentStroke),
                 const SizedBox(width: 16),
                 SizedBox(
                   width: 72,
                   height: 24,
                   child: Center(
-                    child: TText(
+                    child: Text(
                       'DwrSe',
                       key: const ValueKey('input-captcha'),
                       style: TextStyle(
-                        color: token.successNormalColor,
+                        color: token.successColor,
                         fontSize: 18,
+                        height: token.fontBodyMedium?.height,
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w600,
                         letterSpacing: -1,
@@ -78,16 +75,12 @@ class _InputPasswordExampleState extends State<InputPasswordExample> {
             suffix: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  width: 1,
-                  height: 24,
-                  color: token.componentStrokeColor,
-                ),
+                Container(width: 1, height: 24, color: token.componentStroke),
                 const SizedBox(width: 16),
                 Text(
                   '发送验证码',
                   style: TextStyle(
-                    color: token.brandNormalColor,
+                    color: token.brandColor,
                     fontSize: token.fontBodyLarge?.size,
                     height: token.fontBodyLarge?.height,
                   ),

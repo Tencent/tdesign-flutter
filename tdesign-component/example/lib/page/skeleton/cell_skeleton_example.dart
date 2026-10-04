@@ -14,9 +14,9 @@ class CellSkeletonExample extends StatelessWidget {
       (context) => Container(
         alignment: Alignment.topLeft,
         padding: EdgeInsets.fromLTRB(
-          context.tTheme.spacer16,
+          context.tTheme.spacer2,
           0,
-          context.tTheme.spacer16,
+          context.tTheme.spacer2,
           0,
         ),
         child: isFlexible
@@ -30,7 +30,7 @@ class CellSkeletonExample extends StatelessWidget {
         Row(
           children: <Widget>[
             const TSkeleton(variant: TSkeletonVariant.avatar),
-            SizedBox(width: context.tTheme.spacer12),
+            SizedBox(width: context.tTheme.spacer1),
             const Expanded(
               child: TSkeleton.custom(
                 layout: TSkeletonLayout(
@@ -43,7 +43,7 @@ class CellSkeletonExample extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: context.tTheme.spacer16),
+        SizedBox(height: context.tTheme.spacer2),
         Row(
           children: <Widget>[
             TSkeleton.custom(
@@ -61,7 +61,7 @@ class CellSkeletonExample extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(width: context.tTheme.spacer12),
+            SizedBox(width: context.tTheme.spacer1),
             const Expanded(
               child: TSkeleton.custom(
                 layout: TSkeletonLayout(

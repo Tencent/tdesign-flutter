@@ -3,7 +3,8 @@
 #### 简介
 气泡弹层
 可通过 `showPopover` 一次性弹出，或通过 `TPopoverAnchor` 建立可控制气泡，
-支持 12 个方向定位和箭头。
+支持 12 个方向定位和箭头。蒙层色与圆角由触发 `BuildContext` 最近的
+`TPopoverThemeData` 控制；单个气泡可包裹局部 Theme。
 
 #### 静态方法
 
@@ -17,20 +18,15 @@
 | --- | --- | --- | --- |
 | context | BuildContext | - | - |
 | content | Widget | - | - |
-| offset | double? | - | 弹层与触发元素的间距。 |
-| colorScheme | TPopoverColorScheme | TPopoverColorScheme.defaultTheme | 气泡预设配色。 |
+| colorPreset | TPopoverColorPreset | TPopoverColorPreset.defaultTheme | 气泡预设配色。 |
 | closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 外部目标仍会接收该次点击，因此可在单次点击中从一个气泡切换到另一个气泡。 |
 | closeOnScroll | bool | true | 页面滚动时是否关闭弹层。 默认为 true，避免触发元素移动后气泡停留在旧坐标。 |
 | placement | TPopoverPlacement | TPopoverPlacement.top | 浮层出现位置，默认为 `TPopoverPlacement.top`。 |
 | showArrow | bool? | - | 是否显示气泡箭头。 |
-| arrowSize | double? | - | 箭头尺寸。 |
-| padding | EdgeInsetsGeometry? | - | 内容内边距。 |
 | width | double? | - | 内容外框宽度（包含 padding）。 未设置时按 `content` 的实际布局宽度确定，并受组件主题尺寸约束。 |
 | height | double? | - | 内容外框高度（包含 padding）。 未设置时按 `content` 的实际布局高度确定，并受组件主题尺寸约束。 |
-| overlayColor | Color? | - | 蒙层颜色。 |
 | onTap | VoidCallback? | - | 点击气泡内容时触发。 |
 | onLongTap | VoidCallback? | - | 长按气泡内容时触发。 |
-| radius | BorderRadius? | - | 气泡圆角。 |
 
 
 ### TPopoverAnchor
@@ -39,6 +35,7 @@
 `TPopoverAnchor` 声明气泡内容、位置和视觉配置，`TPopoverController` 只负责
 `open`、`close` 和 `isOpen`。简单的一次性展示仍可使用
 `TPopover.showPopover`。
+蒙层色与圆角由最近的 `TPopoverThemeData` 控制；单个气泡使用局部 Theme。
 气泡展开时会读取当前的内容、位置、视觉配置和关闭策略；展开期间更新这些
 配置不会刷新已显示的浮层，关闭后再次展开时生效。`builder` 和 `child` 仍按
 普通 Widget 树的更新规则重建。
@@ -46,25 +43,20 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| arrowSize | double? | - | 箭头尺寸。 |
 | builder | TPopoverAnchorBuilder | - | 构建气泡所绑定的触发区域。 构建器会收到当前有效的控制器；未传入 `controller` 时由组件内部创建。 |
 | child | Widget? | - | 传递给 `builder` 的可选子组件。 |
 | closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 外部目标仍会接收该次点击，因此可在单次点击中从一个气泡切换到另一个气泡。 |
 | closeOnScroll | bool | true | 页面滚动时是否关闭弹层。 |
-| colorScheme | TPopoverColorScheme | TPopoverColorScheme.defaultTheme | 气泡预设配色。 |
+| colorPreset | TPopoverColorPreset | TPopoverColorPreset.defaultTheme | 气泡预设配色。 |
 | content | Widget | - | 气泡内容。 |
 | controller | TPopoverController? | - | 可选控制器，用于从触发区域外部展开或关闭气泡。 |
 | height | double? | - | 内容外框高度（包含 padding）。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| offset | double? | - | 弹层与触发元素的间距。 |
 | onClose | VoidCallback? | - | 气泡通过任意路径关闭后触发。 |
 | onLongTap | VoidCallback? | - | 长按气泡内容时触发。 |
 | onOpen | VoidCallback? | - | 气泡展开后触发。 |
 | onTap | VoidCallback? | - | 点击气泡内容时触发。 |
-| overlayColor | Color? | - | 蒙层颜色。 |
-| padding | EdgeInsetsGeometry? | - | 内容内边距。 |
 | placement | TPopoverPlacement | TPopoverPlacement.top | 浮层出现位置。 |
-| radius | BorderRadius? | - | 气泡圆角。 |
 | showArrow | bool? | - | 是否显示气泡箭头。 |
 | width | double? | - | 内容外框宽度（包含 padding）。 |
 
@@ -89,9 +81,29 @@
 | context | BuildContext | - | - |
 
 
-### TPopoverColorScheme
+### TPopoverThemeData
 #### 简介
-弹出气泡预设配色。
+TPopover 组件级 ThemeExtension
+通过 Theme 子树注入，控制子树的默认气泡样式。
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| arrowSize | double? | - | 箭头尺寸 |
+| backgroundColor | Color? | - | 气泡背景色 |
+| barrierColor | Color? | - | 蒙层色；未设置时透明。单个气泡可用局部 Theme 覆盖。 |
+| borderRadius | BorderRadius? | - | 气泡圆角；未设置时回退全局默认圆角。单个气泡可用局部 Theme 覆盖。 |
+| boxShadow | List<BoxShadow>? | - | 气泡阴影 |
+| maxHeight | double? | - | 最大高度 |
+| maxWidth | double? | - | 文本内容的最大宽度 |
+| minWidth | double? | - | 最小宽度 |
+| offset | double? | - | 弹层与触发元素的间距 |
+| padding | EdgeInsetsGeometry? | - | 内边距 |
+
+
+### TPopoverColorPreset
+#### 简介
+弹出气泡的内置配色预设；不切换全局明暗主题。
 #### 枚举值
 
 

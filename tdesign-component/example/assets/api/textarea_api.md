@@ -11,7 +11,7 @@ Textarea 的视觉契约。表单字段标签仍应由 `TFormItem` 提供，`lab
 | --- | --- | --- | --- |
 | autofocus | bool | false | 是否自动聚焦。 |
 | bordered | bool | false | 是否显示外边框。 |
-| clearButtonMode | TInputClearButtonMode? | - | 清除按钮显示模式；未传时读取 `TInputThemeData.clearButtonMode`。 |
+| clearButtonMode | TInputClearButtonMode? | - | 清除按钮显示模式；未传时不显示清除按钮。 |
 | controller | TextEditingController? | - | 文本控制器。 |
 | enabled | bool | true | 是否可交互。 |
 | focusNode | FocusNode? | - | 焦点节点。 |
@@ -27,7 +27,7 @@ Textarea 的视觉契约。表单字段标签仍应由 `TFormItem` 提供，`lab
 | maxCharacter | int? | - | 最大字符权重，按 Unicode code point 计算：ASCII code point 计 1， 非 ASCII code point 计 2。 |
 | maxLength | int? | - | 最大字符数。 |
 | maxLines | int? | - | 最大行数；null 表示不限制。 |
-| minLines | int? | - | 最小行数；未传时读取 Theme 默认值。 |
+| minLines | int? | - | 最小行数；未传时使用输入框内置默认值。 |
 | onChanged | ValueChanged<String>? | - | 文本变化通知。 |
 | onEditingComplete | VoidCallback? | - | 编辑完成回调。 |
 | onSubmitted | ValueChanged<String>? | - | 提交回调。 |

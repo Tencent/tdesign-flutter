@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/text/t_text_resolve.dart';
@@ -20,42 +21,133 @@ void main() {
     return tester.element(find.byWidget(child));
   }
 
-  testWidgets('解析优先级遵循 Flutter merge 链', (tester) async {
+  testWidgets(
+    '实例样式优先于 TDesign Token，忽略 Material TextTheme 和 DefaultTextStyle',
+    (tester) async {
+      final context = await pumpContext(
+        tester,
+        theme: ThemeData(
+          extensions: [TThemeData.defaultData()],
+          textTheme: const TextTheme(
+            bodyLarge: TextStyle(color: Colors.indigo, fontSize: 17),
+          ),
+        ),
+        wrap: (child) => DefaultTextStyle(
+          style: const TextStyle(
+            color: Colors.pink,
+            fontSize: 19,
+            decoration: TextDecoration.underline,
+          ),
+          child: child,
+        ),
+      );
+
+      final resolved = TTextResolve.resolve(
+        context: context,
+        font: Font(size: 20, lineHeight: 28),
+        textColor: Colors.green,
+        style: const TextStyle(color: Colors.red, fontSize: 22),
+      );
+      expect(resolved.color, Colors.red);
+      expect(resolved.fontSize, 22);
+      expect(resolved.height, 28 / 20);
+      expect(resolved.decoration, isNull);
+      expect(resolved.inherit, isFalse);
+    },
+  );
+
+  testWidgets('组件 Theme 默认值优先于 Token，实例 style 再覆盖', (tester) async {
     final context = await pumpContext(
       tester,
-      theme: ThemeData(
-        extensions: [
-          TThemeData.defaultData(),
-          TTextThemeData(
-            font: Font(size: 18, lineHeight: 26),
-            textStyle: const TextStyle(color: Colors.orange),
+      theme: TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+        const TTextThemeData(
+          textStyle: TextStyle(
+            fontSize: 22,
+            height: 28 / 20,
+            color: Colors.blue,
           ),
-        ],
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: Colors.indigo, fontSize: 17),
         ),
       ),
-      wrap: (child) => DefaultTextStyle(
-        style: const TextStyle(
-          color: Colors.pink,
-          fontSize: 19,
-          decoration: TextDecoration.underline,
-        ),
+      wrap: (child) => DefaultTextStyle.merge(
+        style: const TextStyle(fontSize: 18, color: Colors.pink),
         child: child,
       ),
     );
+    final defaultStyle = TTextResolve.resolve(context: context);
+    expect(defaultStyle.fontSize, 22);
+    expect(defaultStyle.height, 28 / 20);
+    expect(defaultStyle.color, Colors.blue);
+    final instanceStyle = TTextResolve.resolve(
+      context: context,
+      style: const TextStyle(fontSize: 24, color: Colors.red),
+    );
+    expect(instanceStyle.fontSize, 24);
+    expect(instanceStyle.color, Colors.red);
+  });
 
+  testWidgets('非 Apple 平台解析默认字体栈而不改 Token', (tester) async {
+    final token = TThemeData.defaultData();
+    final context = await pumpContext(
+      tester,
+      theme: TThemeBuilder.light(token),
+    );
+    final resolved = TTextResolve.resolve(context: context);
+    expect(resolved.fontFamily, 'Roboto');
+    expect(resolved.fontFamilyFallback, [
+      'Microsoft YaHei',
+      'Arial Regular',
+      'Roboto',
+    ]);
+    expect(token.fontFamily?.fallback, ['Microsoft YaHei', 'Arial Regular']);
+
+    final custom = token.copyWithTThemeData(
+      'custom-family',
+      fontFamilyMap: {
+        'fontFamily': FontFamily(
+          fontFamily: 'PingFang SC',
+          fallback: ['CustomFallback'],
+        ),
+      },
+    );
+    final customContext = await pumpContext(
+      tester,
+      theme: TThemeBuilder.light(custom),
+    );
+    expect(
+      TTextResolve.resolve(context: customContext).fontFamily,
+      'PingFang SC',
+    );
+  });
+
+  testWidgets('组合组件显式字体族完整传递名称、回退与资源包', (tester) async {
+    final context = await pumpContext(tester);
     final resolved = TTextResolve.resolve(
       context: context,
-      font: Font(size: 20, lineHeight: 28),
-      textColor: Colors.green,
-      style: const TextStyle(color: Colors.red, fontSize: 22),
+      fontFamily: FontFamily(
+        fontFamily: 'CustomFont',
+        fallback: ['FallbackFont'],
+        package: 'custom_package',
+      ),
     );
-    expect(resolved.color, Colors.red);
-    expect(resolved.fontSize, 22);
-    expect(resolved.height, 28 / 20);
-    expect(resolved.decoration, TextDecoration.underline);
-    expect(resolved.inherit, isFalse);
+    expect(resolved.fontFamily, 'packages/custom_package/CustomFont');
+    expect(resolved.fontFamilyFallback, [
+      'packages/custom_package/FallbackFont',
+    ]);
+  });
+
+  testWidgets('Apple 平台保留 PingFang 主字体', (tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    try {
+      final token = TThemeData.defaultData();
+      final context = await pumpContext(
+        tester,
+        theme: TThemeBuilder.light(token),
+      );
+      expect(TTextResolve.resolve(context: context).fontFamily, 'PingFang SC');
+      expect(token.fontFamily?.fontFamily, 'PingFang SC');
+    } finally {
+      debugDefaultTargetPlatformOverride = null;
+    }
   });
 
   testWidgets('inherit false 不继承 Theme 与 Token', (tester) async {
@@ -65,11 +157,11 @@ void main() {
     expect(resolved, style);
   });
 
-  testWidgets('组合组件默认值低于显式主题且按字段回退', (tester) async {
+  testWidgets('组合组件默认值优先于 Token，但不读取 Material TextTheme', (tester) async {
     final context = await pumpContext(
       tester,
-      theme: TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
-        const TTextThemeData(textStyle: TextStyle(fontSize: 21)),
+      theme: TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+        textTheme: const TextTheme(bodyLarge: TextStyle(fontSize: 21)),
       ),
     );
     final resolved = TTextResolve.resolve(
@@ -80,7 +172,7 @@ void main() {
         fontWeight: FontWeight.w600,
       ),
     );
-    expect(resolved.fontSize, 21);
+    expect(resolved.fontSize, 12);
     expect(resolved.color, Colors.red);
     expect(resolved.fontWeight, FontWeight.w600);
     expect(
@@ -93,7 +185,7 @@ void main() {
     );
   });
 
-  testWidgets('部分 Material 主题只覆盖配置字段且不带入投影默认值', (tester) async {
+  testWidgets('Material TextTheme 无论局部或整体配置都不进入 TDesign 文字链', (tester) async {
     final token = TThemeData.defaultData();
     for (final base in [
       ThemeData(),
@@ -115,7 +207,7 @@ void main() {
           fontWeight: FontWeight.w600,
         ),
       );
-      expect(resolved.fontFamily, 'custom-family');
+      expect(resolved.fontFamily, 'Roboto');
       expect(resolved.fontSize, 10);
       expect(resolved.height, 1.6);
       expect(resolved.color, Colors.red);
@@ -134,11 +226,11 @@ void main() {
       context: context,
       defaults: const TextStyle(fontSize: 10, color: Colors.red),
     );
-    expect(resolved.fontSize, 21);
+    expect(resolved.fontSize, 10);
     expect(resolved.color, Colors.red);
   });
 
-  testWidgets('DefaultTextStyle.merge 不把继承的默认色伪装成显式配置', (tester) async {
+  testWidgets('DefaultTextStyle.merge 不进入 TDesign 文字样式链', (tester) async {
     final context = await pumpContext(
       tester,
       wrap: (child) => DefaultTextStyle.merge(
@@ -150,11 +242,11 @@ void main() {
       context: context,
       defaults: const TextStyle(fontSize: 10, color: Colors.red),
     );
-    expect(resolved.fontSize, 21);
+    expect(resolved.fontSize, 10);
     expect(resolved.color, Colors.red);
   });
 
-  testWidgets('组合组件保留完整显式排版字段和绘制配置', (tester) async {
+  testWidgets('组件 Theme 保留完整排版字段和绘制配置', (tester) async {
     const typography = TextStyle(
       color: Colors.orange,
       backgroundColor: Colors.yellow,
@@ -182,7 +274,7 @@ void main() {
         tester,
         theme: ThemeData(
           useMaterial3: useMaterial3,
-          textTheme: const TextTheme(bodyLarge: typography),
+          extensions: const [TTextThemeData(textStyle: typography)],
         ),
       );
       final resolved = TTextResolve.resolve(
@@ -203,9 +295,14 @@ void main() {
     final context = await pumpContext(
       tester,
       theme: ThemeData(
-        textTheme: TextTheme(
-          bodyLarge: TextStyle(foreground: foreground, background: background),
-        ),
+        extensions: [
+          TTextThemeData(
+            textStyle: TextStyle(
+              foreground: foreground,
+              background: background,
+            ),
+          ),
+        ],
       ),
     );
     final resolved = TTextResolve.resolve(
@@ -231,23 +328,24 @@ void main() {
     expect(resolved.backgroundColor, isNull);
   });
 
-  testWidgets('Theme font 先于 textStyle，实例便利参数继续覆盖', (tester) async {
+  testWidgets('Material TextTheme 不覆盖 Token，实例字体仍可覆盖', (tester) async {
     final context = await pumpContext(
       tester,
       theme: ThemeData(
-        extensions: [
-          TThemeData.defaultData(),
-          TTextThemeData(
-            font: Font(size: 18, lineHeight: 26),
-            textStyle: const TextStyle(fontSize: 21, color: Colors.orange),
+        extensions: [TThemeData.defaultData()],
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+            fontSize: 21,
+            height: 26 / 18,
+            color: Colors.orange,
           ),
-        ],
+        ),
       ),
     );
     final themed = TTextResolve.resolve(context: context);
-    expect(themed.fontSize, 21);
-    expect(themed.height, 26 / 18);
-    expect(themed.color, Colors.orange);
+    expect(themed.fontSize, 14);
+    expect(themed.height, 22 / 14);
+    expect(themed.color, TThemeData.defaultData().textColorPrimary);
 
     final instance = TTextResolve.resolve(
       context: context,
@@ -257,34 +355,5 @@ void main() {
     expect(instance.fontSize, 24);
     expect(instance.height, 32 / 24);
     expect(instance.color, Colors.blue);
-  });
-
-  test('裸 TTextSpan 不生成样式并继承父 Span', () {
-    expect(TTextResolve.resolveSpan(), isNull);
-  });
-
-  test('TTextSpan 只生成显式字段且 style 最高优先', () {
-    final resolved = TTextResolve.resolveSpan(
-      textColor: Colors.blue,
-      isTextThrough: true,
-      style: const TextStyle(color: Colors.red),
-    );
-    expect(resolved?.color, Colors.red);
-    expect(resolved?.fontSize, isNull);
-    expect(resolved?.decoration, TextDecoration.lineThrough);
-  });
-
-  test('FontFamily 同时透传字体族和 package', () {
-    final resolved = TTextResolve.resolveSpan(
-      fontFamily: FontFamily(
-        fontFamily: 'TDesignTestFont',
-        package: 'tdesign_test_package',
-      ),
-    );
-
-    expect(
-      resolved?.fontFamily,
-      'packages/tdesign_test_package/TDesignTestFont',
-    );
   });
 }

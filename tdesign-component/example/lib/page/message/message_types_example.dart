@@ -37,7 +37,7 @@ class MessageTypesExample extends StatelessWidget {
           label,
           key: ValueKey('message-type-label-$label'),
           font: context.tTheme.fontBodyMedium,
-          textColor: context.tTheme.textColorSecondary,
+          style: TextStyle(color: context.tTheme.textColorSecondary),
         ),
         const SizedBox(height: 16),
         child,
@@ -97,7 +97,7 @@ class MessageTypesExample extends StatelessWidget {
         duration: null,
         action: TLink(
           child: const Text('链接'),
-          colorScheme: TLinkColorScheme.primary,
+          colorPreset: TLinkColorPreset.primary,
           onPressed: () {},
         ),
       ),
@@ -122,7 +122,7 @@ class MessageTypesExample extends StatelessWidget {
         child: Text(text),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
-        colorScheme: TButtonColorScheme.primary,
+        colorPreset: TButtonColorPreset.primary,
         onPressed: onPressed,
       ),
     );

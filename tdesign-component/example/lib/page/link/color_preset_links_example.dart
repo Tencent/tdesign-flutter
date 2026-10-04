@@ -4,21 +4,21 @@ import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'link')
-class ColorSchemeLinksExample extends StatelessWidget {
-  const ColorSchemeLinksExample({super.key});
-  Widget _buildColorSchemeLinks(BuildContext context) {
+class ColorPresetLinksExample extends StatelessWidget {
+  const ColorPresetLinksExample({super.key});
+  Widget _buildColorPresetLinks(BuildContext context) {
     return Column(
       children: [
         _exampleRow(context, [
           _link(
             context,
-            colorScheme: TLinkColorScheme.primary,
+            colorPreset: TLinkColorPreset.primary,
             suffixIcon: const Icon(TIcons.jump),
           ),
           _link(context, suffixIcon: const Icon(TIcons.jump)),
           _link(
             context,
-            colorScheme: TLinkColorScheme.danger,
+            colorPreset: TLinkColorPreset.danger,
             suffixIcon: const Icon(TIcons.jump),
           ),
         ]),
@@ -26,12 +26,12 @@ class ColorSchemeLinksExample extends StatelessWidget {
         _exampleRow(context, [
           _link(
             context,
-            colorScheme: TLinkColorScheme.warning,
+            colorPreset: TLinkColorPreset.warning,
             suffixIcon: const Icon(TIcons.jump),
           ),
           _link(
             context,
-            colorScheme: TLinkColorScheme.success,
+            colorPreset: TLinkColorPreset.success,
             suffixIcon: const Icon(TIcons.jump),
           ),
         ]),
@@ -53,7 +53,7 @@ class ColorSchemeLinksExample extends StatelessWidget {
   TLink _link(
     BuildContext context, {
     String label = '跳转链接',
-    TLinkColorScheme? colorScheme,
+    TLinkColorPreset? colorPreset,
     TLinkSize size = TLinkSize.small,
     bool? underline,
     Widget? prefixIcon,
@@ -62,7 +62,7 @@ class ColorSchemeLinksExample extends StatelessWidget {
   }) {
     return TLink(
       child: Text(label),
-      colorScheme: colorScheme,
+      colorPreset: colorPreset,
       size: size,
       underline: underline,
       prefixIcon: prefixIcon,
@@ -77,6 +77,6 @@ class ColorSchemeLinksExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _buildColorSchemeLinks(context);
+    return _buildColorPresetLinks(context);
   }
 }

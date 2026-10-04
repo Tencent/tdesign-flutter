@@ -15,7 +15,7 @@ class VerticalCardRadiosExample extends StatefulWidget {
 class _VerticalCardRadiosExampleState extends State<VerticalCardRadiosExample> {
   Widget _verticalCardRadios(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(context.tTheme.spacer16),
+      padding: EdgeInsets.all(context.tTheme.spacer2),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(context.tTheme.radiusExtraLarge),
         child: TRadioGroup<int>.options(

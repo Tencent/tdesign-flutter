@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 't_stepper_defaults.dart';
 import 't_stepper_theme_data.dart';
-import 't_stepper_types.dart';
 
 // Internal interpolation data, deliberately not exported from the package.
 // Unset visual fields depend on the consuming widget's size, inherited styles,
@@ -13,27 +12,25 @@ import 't_stepper_types.dart';
 class StepperThemeInterpolation extends TStepperThemeData {
   StepperThemeInterpolation(this.begin, this.end, this.progress)
     : super(
-        size: progress < 0.5 ? begin.size : end.size,
-        variant: progress < 0.5 ? begin.variant : end.variant,
         inputWidth: _number(
           begin.inputWidth,
           end.inputWidth,
-          stepperGeometry(begin.size).inputWidth,
-          stepperGeometry(end.size).inputWidth,
+          stepperGeometry(null).inputWidth,
+          stepperGeometry(null).inputWidth,
           progress,
         ),
         controlSize: _number(
           begin.controlSize,
           end.controlSize,
-          stepperGeometry(begin.size).controlSize,
-          stepperGeometry(end.size).controlSize,
+          stepperGeometry(null).controlSize,
+          stepperGeometry(null).controlSize,
           progress,
         ),
         iconSize: _number(
           begin.iconSize,
           end.iconSize,
-          stepperGeometry(begin.size).iconSize,
-          stepperGeometry(end.size).iconSize,
+          stepperGeometry(null).iconSize,
+          stepperGeometry(null).iconSize,
           progress,
         ),
         spacing: _number(
@@ -100,8 +97,6 @@ class StepperThemeInterpolation extends TStepperThemeData {
 
   @override
   TStepperThemeData copyWith({
-    TStepperSize? size,
-    TStepperVariant? variant,
     double? inputWidth,
     double? controlSize,
     double? iconSize,
@@ -116,8 +111,6 @@ class StepperThemeInterpolation extends TStepperThemeData {
     TextStyle? textStyle,
   }) {
     TStepperThemeData copy(TStepperThemeData theme) => theme.copyWith(
-      size: size,
-      variant: variant,
       inputWidth: inputWidth,
       controlSize: controlSize,
       iconSize: iconSize,
