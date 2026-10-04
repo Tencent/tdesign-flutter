@@ -15,17 +15,41 @@ import '../../theme/t_theme.dart';
 import 't_dropdown_theme_data.dart';
 
 /// 下拉筛选面板相对筛选栏的展开位置。
-enum TDropdownMenuPlacement { auto, below, above }
+enum TDropdownMenuPlacement {
+  /// 根据可用空间自动选择，空间变化时避免展开方向反复跳动。
+  auto,
+
+  /// 固定向筛选栏下方展开。
+  below,
+
+  /// 固定向筛选栏上方展开。
+  above,
+}
 
 /// 下拉筛选面板关闭的原因。
 enum TDropdownMenuCloseReason {
+  /// 单选项目提交后关闭。
   selection,
+
+  /// 多选草稿确认后关闭。
   confirm,
+
+  /// 用户取消草稿。
   cancel,
+
+  /// 点按覆盖层或外部区域关闭。
   overlay,
+
+  /// 系统返回关闭。
   back,
+
+  /// 再次激活已展开的触发项关闭。
   trigger,
+
+  /// 命令式控制器发起关闭。
   controller,
+
+  /// 切换到另一筛选项时关闭原面板。
   switchItem,
 }
 
@@ -194,19 +218,36 @@ class TDropdownMenu extends StatefulWidget {
     this.onClosed,
   });
 
+  /// 筛选项，按列表顺序排列。
   final List<TDropdownMenuItem> items;
+
+  /// 可选命令式控制器；未传时组件创建内部控制器。
   final TDropdownMenuController? controller;
+
+  /// 展开位置，默认根据可用空间自动选择。
   final TDropdownMenuPlacement placement;
+
+  /// 是否允许触发栏横向滚动，默认 false。
   final bool scrollable;
+
+  /// 是否显示蒙层，默认 true。
   final bool showOverlay;
+
+  /// 点按蒙层/外部区域是否关闭，默认 true。
   final bool closeOnOverlayTap;
+
+  /// 是否使用根 Overlay，默认 false。
   final bool useRootOverlay;
 
   /// 展开、关闭及切换动画时长。
   ///
   /// 未指定时为 200ms。系统禁用动画时始终使用零时长。
   final Duration? animationDuration;
+
+  /// 展开动画完成后报告筛选项索引。
   final ValueChanged<int>? onOpened;
+
+  /// 关闭动画完成后报告索引及关闭原因。
   final TDropdownMenuClosedCallback? onClosed;
 
   @override

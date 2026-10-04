@@ -7,6 +7,100 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 覆盖：默认渲染、shape 形态、showText、visibilityOffset 显隐、onPressed 回调/禁用、
 /// 回顶动画防抖、ThemeData 子树注入、品牌主题、tooltip。
 void main() {
+  for (final mode in ['replaceController', 'detachPosition', 'dispose']) {
+    testWidgets('BackTop ignores stale scroll completion: $mode', (
+      tester,
+    ) async {
+      final first = ScrollController(initialScrollOffset: 1200);
+      final second = ScrollController();
+      var notifications = 0;
+      var attachList = true;
+      var current = first;
+      Widget build() => MaterialApp(
+        home: Scaffold(
+          body: Stack(
+            children: [
+              if (attachList)
+                ListView(
+                  controller: current,
+                  children: const [SizedBox(height: 4000)],
+                ),
+              Positioned(
+                right: 16,
+                bottom: 32,
+                child: TBackTop(
+                  controller: current,
+                  onPressed: () => notifications++,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+      await tester.pumpWidget(build());
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(TBackTop));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      if (mode == 'replaceController') {
+        current = second;
+      } else if (mode == 'detachPosition') {
+        attachList = false;
+      }
+      await tester.pumpWidget(
+        mode == 'dispose' ? const SizedBox.shrink() : build(),
+      );
+      await tester.pumpAndSettle();
+      expect(notifications, 0);
+      await tester.pumpWidget(const SizedBox.shrink());
+      first.dispose();
+      second.dispose();
+    });
+  }
+
+  testWidgets(
+    'BackTop completion notification requires actually reaching top',
+    (tester) async {
+      final controller = ScrollController(initialScrollOffset: 1200);
+      final offsets = <double>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Stack(
+              children: [
+                ListView(
+                  controller: controller,
+                  children: const [SizedBox(height: 4000)],
+                ),
+                Positioned(
+                  right: 16,
+                  bottom: 32,
+                  child: TBackTop(
+                    controller: controller,
+                    onPressed: () => offsets.add(controller.offset),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(TBackTop));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      controller.jumpTo(900);
+      await tester.pumpAndSettle();
+      final recorded = List<double>.of(offsets);
+      await tester.pumpWidget(const SizedBox.shrink());
+      controller.dispose();
+      expect(
+        recorded,
+        isEmpty,
+        reason: 'Interrupted animation is not successful arrival at top.',
+      );
+    },
+  );
   RoundedRectangleBorder circleBorder(
     TThemeData token, {
     BorderSide side = BorderSide.none,

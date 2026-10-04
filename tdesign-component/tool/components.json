@@ -10,7 +10,6 @@
       "api": {
         "names": [
           "TButton",
-          "TButtonStyle",
           "TButtonColorPreset"
         ],
         "getComments": false
@@ -50,8 +49,7 @@
       },
       "api": {
         "names": [
-          "TIcon",
-          "TIconThemeData"
+          "TIcon"
         ],
         "getComments": true
       }
@@ -226,7 +224,6 @@
       "api": {
         "names": [
           "TCalendar",
-          "TCalendarStyle",
           "TCalendarCellModel",
           "TCalendarSubtitleContext"
         ],
@@ -276,8 +273,7 @@
           "TPickerOption",
           "TPickerValue",
           "TPickerColumns",
-          "TPickerLinked",
-          "TPickerKeys"
+          "TPickerLinked"
         ],
         "getComments": true
       }
@@ -332,8 +328,7 @@
       },
       "api": {
         "names": [
-          "TInput",
-          "TInputSpacer"
+          "TInput"
         ],
         "getComments": false
       }
@@ -600,8 +595,7 @@
       },
       "api": {
         "names": [
-          "TImageViewer",
-          "TImageViewerWidget"
+          "TImageViewer"
         ],
         "getComments": false
       }
@@ -756,11 +750,7 @@
       },
       "api": {
         "names": [
-          "TDropdownMenu",
-          "TDropdownMenuDirection",
-          "TDropdownItem",
-          "TDropdownItemOption",
-          "TDropdownItemController"
+          "TDropdownMenu"
         ],
         "getComments": true
       }
@@ -768,12 +758,13 @@
     {
       "slug": "loading",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/loading/t_loading.dart"
+        "type": "folder",
+        "path": "lib/src/components/loading"
       },
       "api": {
         "names": [
-          "TLoading"
+          "TLoading",
+          "TLoadingController"
         ],
         "getComments": false
       }
@@ -787,9 +778,7 @@
       "api": {
         "names": [
           "TMessage",
-          "MessageTheme",
-          "MessageMarquee",
-          "MessageLink"
+          "TMessageMarquee"
         ],
         "getComments": false
       }
@@ -903,7 +892,6 @@
       },
       "api": {
         "names": [
-          "TTheme",
           "TThemeData"
         ],
         "getComments": false

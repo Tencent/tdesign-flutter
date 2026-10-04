@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -7,6 +8,97 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 覆盖 status 四档、marquee 滚动、prefix/operation/suffix、onPressed 回调、
 /// Theme 注入、边界情况。
 void main() {
+  for (final mode in [
+    'cancel',
+    'longPress',
+    'multiPointer',
+    'secondaryButton',
+    'smallMove',
+  ]) {
+    testWidgets('custom target tap classification: $mode', (tester) async {
+      final targets = <TNoticeBarTapTarget>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TNoticeBar(
+              content: 'notice',
+              operation: const SizedBox(
+                width: 80,
+                height: 40,
+                child: Text('target'),
+              ),
+              onPressed: targets.add,
+            ),
+          ),
+        ),
+      );
+      final position = tester.getCenter(find.text('target'));
+      final gesture = await tester.createGesture(
+        pointer: 1,
+        buttons: mode == 'secondaryButton' ? kSecondaryButton : kPrimaryButton,
+      );
+      await gesture.down(position);
+      switch (mode) {
+        case 'cancel':
+          await gesture.cancel();
+          break;
+        case 'longPress':
+          await tester.pump(const Duration(milliseconds: 600));
+          await gesture.up();
+          break;
+        case 'multiPointer':
+          final second = await tester.startGesture(position, pointer: 2);
+          await second.up();
+          await gesture.up();
+          break;
+        case 'smallMove':
+          await gesture.moveBy(const Offset(2, 2));
+          await gesture.up();
+          break;
+        default:
+          await gesture.up();
+      }
+      await tester.pump();
+      expect(
+        targets,
+        mode == 'smallMove' ? [TNoticeBarTapTarget.operation] : isEmpty,
+      );
+    });
+  }
+
+  testWidgets('NoticeBar custom target does not report a drag as a tap', (
+    tester,
+  ) async {
+    final targets = <TNoticeBarTapTarget>[];
+    var buttonCalls = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: TNoticeBar(
+            content: 'notice',
+            operation: TButton(
+              onPressed: () => buttonCalls++,
+              child: const Text('operation'),
+            ),
+            onPressed: targets.add,
+          ),
+        ),
+      ),
+    );
+    final gesture = await tester.startGesture(
+      tester.getCenter(find.text('operation')),
+    );
+    await gesture.moveBy(const Offset(0, 100));
+    await gesture.up();
+    await tester.pump();
+    expect(buttonCalls, 0);
+    expect(
+      targets,
+      isEmpty,
+      reason: 'A cancelled button gesture must not become a NoticeBar tap.',
+    );
+  });
+
   /// 用 TTheme 包裹以提供基础 Token
   Widget wrapWithTheme(
     Widget child, {

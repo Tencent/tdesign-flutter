@@ -1,0 +1,576 @@
+[
+  {
+    "component": "avatar",
+    "executed": 43,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/avatar/t_avatar_test.dart"
+    ]
+  },
+  {
+    "component": "action_sheet",
+    "executed": 59,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/action_sheet/t_action_sheet_grid_test.dart",
+      "test/components/action_sheet/t_action_sheet_item_widget_test.dart",
+      "test/components/action_sheet/t_action_sheet_list_test.dart",
+      "test/components/action_sheet/t_action_sheet_test.dart"
+    ]
+  },
+  {
+    "component": "badge",
+    "executed": 52,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/badge/t_badge_test.dart"
+    ]
+  },
+  {
+    "component": "cell",
+    "executed": 27,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/cell/t_cell_test.dart"
+    ]
+  },
+  {
+    "component": "backtop",
+    "executed": 54,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/backtop/t_backtop_test.dart",
+      "test/components/backtop/t_backtop_theme_test.dart",
+      "test/components/backtop/t_backtop_widget_test.dart"
+    ]
+  },
+  {
+    "component": "button",
+    "executed": 130,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/button/t_button_test.dart",
+      "test/components/button/t_button_theme_priority_test.dart",
+      "test/components/button/t_button_theme_test.dart",
+      "test/components/button/t_button_widget_test.dart"
+    ]
+  },
+  {
+    "component": "cascader",
+    "executed": 25,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/cascader/t_cascader_test.dart"
+    ]
+  },
+  {
+    "component": "picker",
+    "executed": 56,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/picker/picker_consumers_theme_test.dart",
+      "test/components/picker/t_picker_theme_test.dart",
+      "test/components/picker/t_picker_types_test.dart",
+      "test/components/picker/t_picker_widget_test.dart",
+      "test/components/picker/wheel_column_test.dart",
+      "test/components/date_time_picker/t_date_time_picker_wheel_test.dart"
+    ]
+  },
+  {
+    "component": "progress",
+    "executed": 67,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/progress/t_progress_test.dart"
+    ]
+  },
+  {
+    "component": "date_time_picker",
+    "executed": 154,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/picker/picker_consumers_theme_test.dart",
+      "test/components/date_time_picker/t_date_time_picker_test.dart",
+      "test/components/date_time_picker/t_date_time_picker_wheel_test.dart",
+      "test/components/date_time_picker/t_date_time_picker_integration_test.dart"
+    ]
+  },
+  {
+    "component": "calendar",
+    "executed": 54,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/calendar/t_calendar_body_test.dart",
+      "test/components/calendar/t_calendar_cell_test.dart",
+      "test/components/calendar/t_calendar_theme_test.dart",
+      "test/components/calendar/t_calendar_widget_test.dart",
+      "test/components/calendar/t_calendar_lunar_test.dart",
+      "test/components/calendar/t_calendar_on_change_init_test.dart",
+      "test/components/calendar/t_calendar_test.dart"
+    ]
+  },
+  {
+    "component": "tag",
+    "executed": 98,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/tag/t_select_tag_test.dart",
+      "test/components/tag/t_tag_test.dart"
+    ]
+  },
+  {
+    "component": "popover",
+    "executed": 66,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/popover/t_popover_test.dart"
+    ]
+  },
+  {
+    "component": "checkbox",
+    "executed": 50,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/checkbox/t_check_box_group_test.dart",
+      "test/components/checkbox/t_checkbox_test.dart"
+    ]
+  },
+  {
+    "component": "collapse",
+    "executed": 29,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/collapse/t_collapse_test.dart",
+      "test/components/collapse/t_collapse_misc_test.dart"
+    ]
+  },
+  {
+    "component": "divider",
+    "executed": 39,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/divider/t_divider_test.dart"
+    ]
+  },
+  {
+    "component": "empty",
+    "executed": 6,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/empty/t_empty_test.dart"
+    ]
+  },
+  {
+    "component": "image_viewer",
+    "executed": 25,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/image_viewer/t_image_viewer_test.dart"
+    ]
+  },
+  {
+    "component": "dialog",
+    "executed": 32,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/dialog/t_dialog_test.dart"
+    ]
+  },
+  {
+    "component": "dropdown_menu",
+    "executed": 95,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/dropdown_menu/t_dropdown_item_test.dart",
+      "test/components/dropdown_menu/t_dropdown_menu_test.dart"
+    ]
+  },
+  {
+    "component": "drawer",
+    "executed": 40,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/drawer/t_drawer_test.dart"
+    ]
+  },
+  {
+    "component": "fab",
+    "executed": 72,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/fab/t_fab_layout_test.dart",
+      "test/components/fab/t_fab_test.dart"
+    ]
+  },
+  {
+    "component": "footer",
+    "executed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/footer/t_footer_test.dart"
+    ]
+  },
+  {
+    "component": "indexes",
+    "executed": 71,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/indexes/sticky_header/sticky_header_test.dart",
+      "test/components/indexes/t_indexes_test.dart"
+    ]
+  },
+  {
+    "component": "image",
+    "executed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/image/t_image_test.dart"
+    ]
+  },
+  {
+    "component": "refresh",
+    "executed": 31,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/refresh/t_refresh_test.dart"
+    ]
+  },
+  {
+    "component": "rate",
+    "executed": 38,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/rate/t_rate_test.dart"
+    ]
+  },
+  {
+    "component": "result",
+    "executed": 23,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/result/t_result_test.dart"
+    ]
+  },
+  {
+    "component": "tab_bar",
+    "executed": 45,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/tabbar/t_tab_bar_test.dart"
+    ]
+  },
+  {
+    "component": "navbar",
+    "executed": 62,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/navbar/t_nav_bar_test.dart",
+      "test/components/navbar/t_navbar_test.dart"
+    ]
+  },
+  {
+    "component": "tabs",
+    "executed": 77,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/tabs/t_horizontal_tab_bar_test.dart",
+      "test/components/tabs/t_tab_bar_test.dart",
+      "test/components/tabs/t_tab_test.dart"
+    ]
+  },
+  {
+    "component": "swiper",
+    "executed": 42,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/swiper/t_swiper_test.dart"
+    ]
+  },
+  {
+    "component": "skeleton",
+    "executed": 18,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/skeleton/t_skeleton_test.dart"
+    ]
+  },
+  {
+    "component": "time_counter",
+    "executed": 47,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/time_counter/t_time_counter_test.dart"
+    ]
+  },
+  {
+    "component": "icon",
+    "executed": 23,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/icon/t_icon_test.dart"
+    ]
+  },
+  {
+    "component": "link",
+    "executed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/link/t_link_resolve_test.dart",
+      "test/components/link/t_link_test.dart",
+      "test/components/link/t_link_theme_test.dart",
+      "test/components/link/t_link_widget_test.dart"
+    ]
+  },
+  {
+    "component": "loading",
+    "executed": 39,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/loading/t_loading_test.dart"
+    ]
+  },
+  {
+    "component": "message",
+    "executed": 35,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/message/t_message_test.dart"
+    ]
+  },
+  {
+    "component": "notice_bar",
+    "executed": 56,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/notice_bar/t_notice_bar_test.dart"
+    ]
+  },
+  {
+    "component": "popup",
+    "executed": 170,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/popup/t_feedback_theme_data_test.dart",
+      "test/components/popup/t_popup_options_contract_test.dart",
+      "test/components/popup/t_popup_theme_test.dart",
+      "test/components/popup/t_popup_widget_test.dart",
+      "test/components/popup/t_popup_coverage_test.dart",
+      "test/components/popup/t_popup_layout_test.dart",
+      "test/components/popup/t_popup_options_test.dart",
+      "test/components/popup/t_popup_route_test.dart",
+      "test/components/popup/t_popup_test.dart"
+    ]
+  },
+  {
+    "component": "radio",
+    "executed": 40,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/radio/t_radio_test.dart",
+      "test/components/radio/t_radio_theme_contract_test.dart"
+    ]
+  },
+  {
+    "component": "table",
+    "executed": 51,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/table/t_table_test.dart"
+    ]
+  },
+  {
+    "component": "text",
+    "executed": 37,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/text/t_font_loader_test.dart",
+      "test/components/text/t_text_resolve_test.dart",
+      "test/components/text/t_text_style_scope_test.dart",
+      "test/components/text/t_text_test.dart"
+    ]
+  },
+  {
+    "component": "search",
+    "executed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/search/t_search_test.dart"
+    ]
+  },
+  {
+    "component": "steps",
+    "executed": 30,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/steps/t_steps_test.dart",
+      "test/components/steps/t_steps_vertical_item_test.dart",
+      "test/components/steps/t_steps_widget_test.dart"
+    ]
+  },
+  {
+    "component": "sidebar",
+    "executed": 64,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/sidebar/t_sidebar_test.dart",
+      "test/components/sidebar/t_sidebar_theme_test.dart",
+      "test/components/sidebar/t_sidebar_widget_test.dart"
+    ]
+  },
+  {
+    "component": "slider",
+    "executed": 28,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/slider/t_slider_test.dart"
+    ]
+  },
+  {
+    "component": "stepper",
+    "executed": 44,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/stepper/t_stepper_test.dart",
+      "test/components/stepper/t_stepper_contract_test.dart"
+    ]
+  },
+  {
+    "component": "switch",
+    "executed": 37,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/switch/t_switch_test.dart",
+      "test/components/switch/t_cupertino_switch_test.dart"
+    ]
+  },
+  {
+    "component": "tree_select",
+    "executed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/tree/t_tree_select_test.dart"
+    ]
+  },
+  {
+    "component": "upload",
+    "executed": 29,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/upload/t_upload_test.dart"
+    ]
+  },
+  {
+    "component": "form",
+    "executed": 63,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/form/t_form_test.dart"
+    ]
+  },
+  {
+    "component": "input",
+    "executed": 36,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/input/t_input_test.dart",
+      "test/components/input/t_input_theme_test.dart"
+    ]
+  },
+  {
+    "component": "textarea",
+    "executed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/textarea/t_textarea_test.dart"
+    ]
+  },
+  {
+    "component": "theme",
+    "executed": 89,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/acceptance/theme_acceptance_test.dart",
+      "test/theme/theme_test.dart",
+      "test/theme/t_theme_extensions_test.dart",
+      "test/components/theme/t_colors_test.dart",
+      "test/components/theme/t_material_theme_priority_test.dart",
+      "test/components/theme/t_resource_delegate_test.dart",
+      "test/components/theme/t_theme_test.dart"
+    ]
+  },
+  {
+    "component": "toast",
+    "executed": 48,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/toast/t_toast_test.dart"
+    ]
+  },
+  {
+    "component": "swipe_cell",
+    "executed": 31,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "test/components/swipe_cell/t_swipe_cell_auto_extent_test.dart",
+      "test/components/swipe_cell/t_swipe_cell_inherited_test.dart",
+      "test/components/swipe_cell/t_swipe_cell_test.dart"
+    ]
+  }
+]

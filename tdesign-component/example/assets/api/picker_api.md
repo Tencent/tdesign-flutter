@@ -36,9 +36,9 @@ Picker 专用弹层入口。
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| child | Widget | - | - |
-| headerBuilder | TPickerPopupHeaderBuilder | - | - |
+| context | BuildContext | - | 用于解析主题并查找 Navigator。 |
+| child | Widget | - | Picker 滚轮面板；选中值由调用方管理。 |
+| headerBuilder | TPickerPopupHeaderBuilder | - | 标准 58px 头部构建器，接收弹层上下文和关闭动作。 |
 | inset | TPopupBottomInset? | - | 底部弹层的边缘缩进。 |
 | radius | double? | - | 顶部圆角；null 时使用 Popup 主题或 TDesign 默认值。 |
 | backgroundColor | Color? | - | 面板背景色；null 时使用 Popup 主题或容器色。 |

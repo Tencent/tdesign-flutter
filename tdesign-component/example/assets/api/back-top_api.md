@@ -7,7 +7,7 @@
 | colorPreset | TBackTopColorPreset | TBackTopColorPreset.light | 局部配色预设，默认 `TBackTopColorPreset.light`；不切换全局明暗主题。 |
 | controller | ScrollController? | - | 页面滚动控制器。 未传时组件始终可见，点击只触发 `onPressed`；传入后组件监听滚动偏移并 在点击时动画回到该滚动位置的最小边界。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onPressed | VoidCallback? | - | 回顶动画完成后的通知。 `null` 不表示禁用；只要提供 `controller`，组件仍可点击并执行回顶。 |
+| onPressed | VoidCallback? | - | 成功回到顶部后的通知；未到顶就中断动画、解绑或更换 Controller 时不通知。 未传 Controller 时仅通知激活动作，不表示滚动完成。 `null` 不表示禁用；只要提供 `controller`，组件仍可点击并执行回顶。 |
 | shape | TBackTopShape | TBackTopShape.circle | 结构形态，默认 `TBackTopShape.circle`。 |
 | showText | bool | false | 是否显示设计内置文案。 圆形显示“顶部”，半圆形显示“返回/顶部”，文案来自当前资源代理。 |
 | tooltip | String? | - | 读屏和 Tooltip 提示；未传时使用当前资源代理的“返回顶部”。 |

@@ -45,6 +45,8 @@ class TDropdownSingleSelectPanel<T> extends StatelessWidget {
   final TDropdownMenuPanelController controller;
   final List<TDropdownMenuOption<T>> options;
   final T? value;
+  /// 提交候选选中值；重选同一项仍通知，并请求关闭面板。
+  /// 最终选中状态由调用方通过 value 回写。
   final ValueChanged<T> onChanged;
 
   /// 滚动主体的最大高度；默认 280dp。

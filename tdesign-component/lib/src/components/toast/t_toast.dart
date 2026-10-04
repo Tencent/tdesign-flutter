@@ -125,6 +125,8 @@ class TToast {
   static const Duration infiniteDuration = Duration(seconds: 99999999);
 
   /// 普通文本Toast
+  ///
+  /// [context] 用于查找 Overlay 并捕获当前主题。
   static String showText(
     /// 提示文案；为 null 时只展示自定义内容。
     String? text, {
@@ -156,7 +158,7 @@ class TToast {
     /// Toast 文案样式。
     TextStyle? textStyle,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时使用共享匿名 ID，并替换上一条匿名 Toast。
     String? toastId,
   }) {
     final id = toastId ?? _anonymousToastId;
@@ -181,6 +183,8 @@ class TToast {
   }
 
   /// 带图标的Toast
+  ///
+  /// [context] 用于查找 Overlay 并捕获当前主题。
   static String showIconText(
     /// 提示文案。
     String? text, {
@@ -218,7 +222,7 @@ class TToast {
     /// 图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时使用共享匿名 ID，并替换上一条匿名 Toast。
     String? toastId,
   }) {
     final id = toastId ?? _anonymousToastId;
@@ -245,6 +249,8 @@ class TToast {
   }
 
   /// 成功提示Toast
+  ///
+  /// [context] 用于查找 Overlay 并捕获当前主题。
   static String showSuccess(
     /// 提示文案。
     String? text, {
@@ -279,7 +285,7 @@ class TToast {
     /// 图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时使用共享匿名 ID，并替换上一条匿名 Toast。
     String? toastId,
   }) {
     return showIconText(
@@ -300,6 +306,8 @@ class TToast {
   }
 
   /// 警告Toast
+  ///
+  /// [context] 用于查找 Overlay 并捕获当前主题。
   static String showWarning(
     /// 提示文案。
     String? text, {
@@ -334,7 +342,7 @@ class TToast {
     /// 图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时使用共享匿名 ID，并替换上一条匿名 Toast。
     String? toastId,
   }) {
     return showIconText(
@@ -355,6 +363,8 @@ class TToast {
   }
 
   /// 失败提示Toast
+  ///
+  /// [context] 用于查找 Overlay 并捕获当前主题。
   static String showFail(
     /// 提示文案。
     String? text, {
@@ -389,7 +399,7 @@ class TToast {
     /// 图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时使用共享匿名 ID，并替换上一条匿名 Toast。
     String? toastId,
   }) {
     return showIconText(
@@ -410,6 +420,8 @@ class TToast {
   }
 
   /// 带文案的加载Toast
+  ///
+  /// [context] 用于查找 Overlay 并捕获当前主题。
   static String showLoading({
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
@@ -441,7 +453,7 @@ class TToast {
     /// 加载图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时使用共享匿名 ID，并替换上一条匿名 Toast。
     String? toastId,
   }) {
     final id = toastId ?? _anonymousToastId;
@@ -466,6 +478,8 @@ class TToast {
   }
 
   /// 不带文案的加载Toast
+  ///
+  /// [context] 用于查找 Overlay 并捕获当前主题。
   static String showLoadingWithoutText({
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
@@ -488,7 +502,7 @@ class TToast {
     /// 加载图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时使用共享匿名 ID，并替换上一条匿名 Toast。
     String? toastId,
   }) {
     final id = toastId ?? _anonymousToastId;

@@ -13,7 +13,7 @@
 | end | TSwipeCellPanel? | - | 结束侧操作面板。 |
 | initialOpenSide | TSwipeCellSide? | - | 首次布局后默认展开的面板；为空时保持关闭。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onOpenChanged | TSwipeCellChanged? | - | 面板展开状态变化回调。 |
+| onOpenChanged | TSwipeCellChanged? | - | 目标开合状态变化回调，在动画开始前通知，不表示动画已完成。 从一侧切换到另一侧时先报告原侧关闭，再报告新侧打开；相同状态不重复通知。 |
 | start | TSwipeCellPanel? | - | 起始侧操作面板。 |
 
 
@@ -75,8 +75,8 @@ TSwipeCell 组件级 ThemeExtension
 
 | 名称 | 说明 |
 | --- | --- |
-| start | - |
-| end | - |
+| start | 起始侧：LTR 为左侧，RTL 为右侧。 |
+| end | 结束侧：LTR 为右侧，RTL 为左侧。 |
 
 
 ### TSwipeCellChanged

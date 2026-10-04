@@ -12,6 +12,34 @@
 | text | String? | - | 文案 |
 
 
+### TLoadingController
+
+#### 静态方法
+
+##### TLoadingController.dismiss
+
+移除并释放全局加载层；未展示时无副作用。
+
+返回类型：`void`
+
+##### TLoadingController.show
+
+在最近的 Overlay 中展示全局唯一加载层。
+重复调用不替换当前加载层；无 Overlay 时忽略请求。调用方应在任务结束
+或所属页面卸载前调用 `dismiss`，静态控制器不属于某个 Widget 的生命周期。
+
+返回类型：`void`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | 用于查找 Overlay 并捕获主题。 |
+| child | Widget? | - | 自定义内容；传入后忽略 size、icon 和 text。 |
+| size | double | 20 | 默认加载图标尺寸，默认 20。 |
+| icon | TLoadingIcon? | TLoadingIcon.circle | 默认图标类型，默认 circle；null 时隐藏图标。 |
+| text | String? | - | 默认内容文案，null 时使用当前语言的加载文案。 |
+| theme | TLoadingThemeData? | - | 仅覆盖本次加载层的组件主题，null 时继承捕获的主题。 |
+
+
 ### TLoadingIcon
 #### 枚举值
 

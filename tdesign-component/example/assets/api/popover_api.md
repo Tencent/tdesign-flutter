@@ -10,14 +10,14 @@
 
 ##### TPopover.showPopover
 
-显示气泡弹层
+显示气泡弹层。
 
 返回类型：`Future<void>`
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| content | Widget | - | - |
+| context | BuildContext | - | 触发元素上下文，用于锚点定位、Overlay 与主题解析。 |
+| content | Widget | - | 气泡内容；直接传入未设样式的 Text 使用默认文字样式。 |
 | colorPreset | TPopoverColorPreset | TPopoverColorPreset.defaultTheme | 气泡预设配色。 |
 | closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 外部目标仍会接收该次点击，因此可在单次点击中从一个气泡切换到另一个气泡。 |
 | closeOnScroll | bool | true | 页面滚动时是否关闭弹层。 默认为 true，避免触发元素移动后气泡停留在旧坐标。 |
@@ -66,6 +66,8 @@
 控制与其绑定的 `TPopoverAnchor`。
 气泡内容、位置和视觉配置由 `TPopoverAnchor` 声明，控制器只负责展开、关闭
 和查询当前状态，不形成第二份配置来源。
+每个控制器应绑定一个 Anchor。重复绑定会使命令指向最后挂载的 Anchor，
+旧 Anchor 卸载不会解除新绑定；请为同时存在的 Anchor 分别创建控制器。
 
 #### 静态方法
 
@@ -78,7 +80,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| context | BuildContext | - | - |
+| context | BuildContext | - | 触发区域或气泡内容子树中的上下文。 |
 
 
 ### TPopoverThemeData

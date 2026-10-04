@@ -8,7 +8,13 @@ import 't_swipe_cell_inherited.dart';
 import 't_swipe_cell_panel.dart';
 
 /// 操作面板所在侧。
-enum TSwipeCellSide { start, end }
+enum TSwipeCellSide {
+  /// 起始侧：LTR 为左侧，RTL 为右侧。
+  start,
+
+  /// 结束侧：LTR 为右侧，RTL 为左侧。
+  end,
+}
 
 /// 滑动展开状态变化回调。
 typedef TSwipeCellChanged = void Function(TSwipeCellSide side, bool isOpen);
@@ -78,7 +84,9 @@ class TSwipeCell extends StatefulWidget {
   /// 结束侧操作面板。
   final TSwipeCellPanel? end;
 
-  /// 面板展开状态变化回调。
+  /// 目标开合状态变化回调，在动画开始前通知，不表示动画已完成。
+  ///
+  /// 从一侧切换到另一侧时先报告原侧关闭，再报告新侧打开；相同状态不重复通知。
   final TSwipeCellChanged? onOpenChanged;
 
   /// 命令式控制器。

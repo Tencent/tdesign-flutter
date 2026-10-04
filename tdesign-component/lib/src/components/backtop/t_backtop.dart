@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
@@ -33,7 +34,9 @@ class TBackTop extends StatefulWidget {
   /// 在点击时动画回到该滚动位置的最小边界。
   final ScrollController? controller;
 
-  /// 回顶动画完成后的通知。
+  /// 成功回到顶部后的通知；未到顶就中断动画、解绑或更换 Controller 时不通知。
+  ///
+  /// 未传 Controller 时仅通知激活动作，不表示滚动完成。
   ///
   /// `null` 不表示禁用；只要提供 [controller]，组件仍可点击并执行回顶。
   final VoidCallback? onPressed;
@@ -159,7 +162,9 @@ class _TBackTopState extends State<TBackTop> {
     }
 
     final controller = widget.controller;
+    ScrollPosition? position;
     if (controller != null && controller.hasClients) {
+      position = controller.position;
       _isAnimating = true;
       try {
         await controller.animateTo(
@@ -172,9 +177,17 @@ class _TBackTopState extends State<TBackTop> {
       }
     }
 
-    if (mounted) {
-      widget.onPressed?.call();
+    if (!mounted || !identical(controller, widget.controller)) {
+      return;
     }
+    if (controller != null &&
+        (!controller.hasClients ||
+            !identical(position, controller.position) ||
+            (controller.offset - controller.position.minScrollExtent).abs() >
+                precisionErrorTolerance)) {
+      return;
+    }
+    widget.onPressed?.call();
   }
 
   _BackTopVisualStyle _resolveStyle(BuildContext context) {

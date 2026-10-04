@@ -92,7 +92,10 @@ class TNoticeBar extends StatefulWidget {
   /// 垂直轮播的切换间隔，仅在 [direction] 为 [Axis.vertical] 时生效。
   final Duration interval;
 
-  /// 点击事件
+  /// 用户点按目标区域时通知。
+  ///
+  /// 自定义区域仅报告单指主按钮短按：移动不超过移动距离阈值、未取消且短于长按超时。
+  /// 子组件自己的动作仍独立执行，此通知不代表子动作完成。
   final ValueChanged<TNoticeBarTapTarget>? onPressed;
 
   @override
@@ -438,11 +441,8 @@ class _TNoticeBarState extends State<TNoticeBar> {
     if (widget.onPressed == null) {
       return child;
     }
-    // 自定义 Widget 内部可能拥有自己的手势识别器。使用原始指针
-    // 监听可在子组件处理业务点击的同时，稳定报告 NoticeBar 的自定义区域目标。
-    return Listener(
-      behavior: HitTestBehavior.opaque,
-      onPointerUp: (_) => widget.onPressed!(target),
+    return _NoticeBarTapObserver(
+      onTap: () => widget.onPressed?.call(target),
       child: child,
     );
   }
@@ -548,4 +548,77 @@ class _TNoticeBarState extends State<TNoticeBar> {
       ),
     );
   }
+}
+
+// 观察自定义区域的短按，保留子组件的手势识别和动作。
+class _NoticeBarTapObserver extends StatefulWidget {
+  const _NoticeBarTapObserver({required this.onTap, required this.child});
+
+  final VoidCallback onTap;
+  final Widget child;
+
+  @override
+  State<_NoticeBarTapObserver> createState() => _NoticeBarTapObserverState();
+}
+
+class _NoticeBarTapObserverState extends State<_NoticeBarTapObserver> {
+  final Set<int> _pointers = {};
+  Offset? _origin;
+  Timer? _deadline;
+  bool _valid = false;
+
+  void _down(PointerDownEvent event) {
+    if (_pointers.isEmpty) {
+      _origin = event.position;
+      _deadline?.cancel();
+      _deadline = Timer(kLongPressTimeout, () => _valid = false);
+      _valid = event.buttons == kPrimaryButton;
+    } else {
+      _valid = false;
+    }
+    _pointers.add(event.pointer);
+  }
+
+  void _move(PointerMoveEvent event) {
+    if (_origin != null && (event.position - _origin!).distance > kTouchSlop) {
+      _valid = false;
+    }
+  }
+
+  void _up(PointerUpEvent event) {
+    final notify =
+        _valid &&
+        _pointers.length == 1 &&
+        _pointers.contains(event.pointer) &&
+        _origin != null &&
+        (event.position - _origin!).distance <= kTouchSlop;
+    _pointers.remove(event.pointer);
+    _deadline?.cancel();
+    _valid = false;
+    if (notify) {
+      widget.onTap();
+    }
+  }
+
+  void _cancel(PointerCancelEvent event) {
+    _pointers.remove(event.pointer);
+    _deadline?.cancel();
+    _valid = false;
+  }
+
+  @override
+  void dispose() {
+    _deadline?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => Listener(
+    behavior: HitTestBehavior.opaque,
+    onPointerDown: _down,
+    onPointerMove: _move,
+    onPointerUp: _up,
+    onPointerCancel: _cancel,
+    child: widget.child,
+  );
 }

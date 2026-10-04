@@ -79,6 +79,8 @@ typedef TPopoverAnchorBuilder =
 ///
 /// 气泡内容、位置和视觉配置由 [TPopoverAnchor] 声明，控制器只负责展开、关闭
 /// 和查询当前状态，不形成第二份配置来源。
+/// 每个控制器应绑定一个 Anchor。重复绑定会使命令指向最后挂载的 Anchor，
+/// 旧 Anchor 卸载不会解除新绑定；请为同时存在的 Anchor 分别创建控制器。
 class TPopoverController {
   _TPopoverAnchorState? _anchor;
 
@@ -112,6 +114,8 @@ class TPopoverController {
   /// 返回 [context] 最近的 [TPopoverAnchor] 所关联的控制器。
   ///
   /// 未处于 Anchor 的触发区域或气泡内容子树时返回 null。
+  ///
+  /// [context] 触发区域或气泡内容子树中的上下文。
   static TPopoverController? maybeOf(BuildContext context) {
     return context
         .getInheritedWidgetOfExactType<_TPopoverControllerScope>()
@@ -347,7 +351,10 @@ class _PopoverSession {
 /// 支持 12 个方向定位和箭头。蒙层色与圆角由触发 [BuildContext] 最近的
 /// [TPopoverThemeData] 控制；单个气泡可包裹局部 Theme。
 class TPopover {
-  /// 显示气泡弹层
+  /// 显示气泡弹层。
+  ///
+  /// [context] 触发元素上下文，用于锚点定位、Overlay 与主题解析。
+  /// [content] 气泡内容；直接传入未设样式的 Text 使用默认文字样式。
   static Future<void> showPopover({
     /// 触发元素的上下文，用于计算气泡锚点位置。
     required BuildContext context,

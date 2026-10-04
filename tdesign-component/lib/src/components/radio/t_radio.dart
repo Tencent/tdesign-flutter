@@ -516,7 +516,7 @@ class TRadioGroup<T> extends StatelessWidget {
     /// 受控选中值。
     required this.value,
 
-    /// 选中值变更回调；为 null 时整组禁用。
+    /// 选中值请求回调；重选同一项仍通知，为 null 时整组禁用。
     this.onChanged,
 
     /// 包含 [TRadio] 的自定义布局。
@@ -533,6 +533,8 @@ class TRadioGroup<T> extends StatelessWidget {
        _subTitleMaxLines = 5;
 
   /// 使用数据项生成标准布局的单选框组。
+  ///
+  /// [options] 按顺序生成单选项的数据列表，单项 disabled 仍独立生效。
   const TRadioGroup.options({
     super.key,
 
@@ -542,7 +544,7 @@ class TRadioGroup<T> extends StatelessWidget {
     /// 单选框数据项。
     required List<TRadioOption<T>> options,
 
-    /// 选中值变更回调；为 null 时整组禁用。
+    /// 选中值请求回调；重选同一项仍通知，为 null 时整组禁用。
     this.onChanged,
 
     /// 排列方向，默认纵向。
@@ -596,7 +598,7 @@ class TRadioGroup<T> extends StatelessWidget {
   /// 受控选中值。
   final T? value;
 
-  /// 选中值变更回调；为 null 时整组禁用。
+  /// 选中值请求回调；重选同一项仍通知，为 null 时整组禁用。
   final ValueChanged<T>? onChanged;
 
   /// 包含 [TRadio] 的自定义布局。

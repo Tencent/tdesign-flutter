@@ -1,0 +1,8 @@
+backtop matched files:
+  - lib/src/components/backtop/t_backtop.dart
+  - lib/src/components/backtop/t_backtop_theme_data.dart
+backtop production LH/LF = 182/182 = 100.00%
+notice_bar matched files:
+  - lib/src/components/notice_bar/t_notice_bar.dart
+  - lib/src/components/notice_bar/t_notice_bar_theme_data.dart
+notice_bar production LH/LF = 308/319 = 96.55%

@@ -55,6 +55,8 @@ sealed class TActionSheetGridLayout {
       _TActionSheetPagedGridLayout;
 
   /// 可连续横向滚动的宫格
+  ///
+  /// [itemMinWidth] 单项最小宽度，必须大于 0；null 时按可视项目数计算。
   const factory TActionSheetGridLayout.scroll({
     int count,
     int rows,

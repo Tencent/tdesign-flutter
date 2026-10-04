@@ -37,8 +37,8 @@
 | --- | --- | --- | --- |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | value | T? | - | 受控选中值。 |
-| options | List<TRadioOption<T>> | - | - |
-| onChanged | ValueChanged<T>? | - | 选中值变更回调；为 null 时整组禁用。 |
+| options | List<TRadioOption<T>> | - | 按顺序生成单选项的数据列表，单项 disabled 仍独立生效。 |
+| onChanged | ValueChanged<T>? | - | 选中值请求回调；重选同一项仍通知，为 null 时整组禁用。 |
 | direction | Axis | Axis.vertical | 排列方向，默认纵向。 |
 | columns | int | 1 | 每行列数，默认 1，必须大于 0。 横向 `TRadioVariant.inline` 按内容自然收缩并在行内两端对齐， 不使用该列数等分宽度。 |
 | variant | TRadioVariant | TRadioVariant.block | 生成项的完整视觉结构，默认 `TRadioVariant.block`。 |
@@ -55,7 +55,7 @@
 | --- | --- | --- | --- |
 | child | Widget | - | 包含 `TRadio` 的自定义布局。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onChanged | ValueChanged<T>? | - | 选中值变更回调；为 null 时整组禁用。 |
+| onChanged | ValueChanged<T>? | - | 选中值请求回调；重选同一项仍通知，为 null 时整组禁用。 |
 | value | T? | - | 受控选中值。 |
 
 

@@ -42,7 +42,11 @@ class TTabsBar extends StatelessWidget {
   /// 是否横向滚动。
   final bool isScrollable;
 
-  /// 点击事件
+  /// 用户点按标签时通知索引，包括再次点按已选标签。
+  ///
+  /// 标签栏先调用 Controller.animateTo，再通知此回调；null 不禁用标签。
+  /// 滑动和程序切换不触发此回调，完整索引变化请监听 [controller]
+  /// 或最近的 DefaultTabController，不要在此回调重复切换索引。
   final ValueChanged<int>? onTap;
 
   /// 选项卡文字尺寸，默认为 [TTabsBarSize.small]。
