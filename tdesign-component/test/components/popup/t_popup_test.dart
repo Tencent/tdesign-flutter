@@ -831,7 +831,7 @@ void main() {
       expect(find.text('右'), findsOneWidget);
     });
 
-    testWidgets('destroyOnClose 与自定义 close 组件', (tester) async {
+    testWidgets('maintainState 与自定义 close 组件', (tester) async {
       late BuildContext hostContext;
       await openPopup(
         tester,
@@ -842,7 +842,7 @@ void main() {
             options: TPopupOptions(
               placement: TPopupPlacement.center,
               width: 140,
-              destroyOnClose: true,
+              maintainState: false,
               closeBuilder: (_, close) =>
                   GestureDetector(onTap: close, child: const Text('关')),
               child: const SizedBox(height: 60, width: 120),
@@ -962,7 +962,7 @@ void main() {
       expect(hideTrigger, TPopupTrigger.custom);
     });
 
-    testWidgets('destroyOnClose 路由关闭后可再次 show', (tester) async {
+    testWidgets('maintainState 路由关闭后可再次 show', (tester) async {
       late BuildContext hostContext;
       TPopupHandle? first;
 
@@ -975,7 +975,7 @@ void main() {
             options: const TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 80,
-              destroyOnClose: true,
+              maintainState: false,
               child: SizedBox(height: 40),
             ),
           );
@@ -995,7 +995,7 @@ void main() {
             options: const TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 80,
-              destroyOnClose: true,
+              maintainState: false,
               child: SizedBox(height: 40),
             ),
           );

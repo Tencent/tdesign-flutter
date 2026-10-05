@@ -193,8 +193,11 @@ class TMessage extends StatefulWidget {
         slot?.handle = null;
         _defaultSlots[overlay] = null;
       }
-      if (cause != _TMessageDismissCause.unmounted) {
-        entry.remove();
+      entry.remove();
+      if (cause == _TMessageDismissCause.unmounted) {
+        scheduleMicrotask(entry.dispose);
+      } else {
+        entry.dispose();
       }
       onDismissed?.call();
     }
@@ -233,6 +236,11 @@ class TMessage extends StatefulWidget {
     }
     entry.addListener(entryListener);
     overlay.insert(entry);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!overlay.mounted) {
+        dismissEntry(_TMessageDismissCause.unmounted);
+      }
+    });
     previousHandle?._dismiss?.call(_TMessageDismissCause.replaced);
     return handle;
   }

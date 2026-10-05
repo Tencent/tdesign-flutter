@@ -1,22 +1,640 @@
 {
+  "baseline": "186541d456b96955d037376012111965f2d17d9d",
   "flutter": [
     "3.32.0",
     "3.47.6"
   ],
   "components": 57,
   "test_files": 116,
-  "functional_passed_each": 2757,
+  "functional_passed_each": 2766,
   "demo_passed_each": 275,
-  "runners_passed": 19,
+  "runners_passed": 20,
   "analyze": "zero diagnostics both versions",
+  "production_source_sha256": "5cc9d77a78edc78b7883a0bdbcf4d8d473082ea227cc5bc651ccda33d48f5551",
+  "dart_source_sha256": "8d8d65d663f1836cd510b9227970e44126578f5ffb5740b1b6cf92a5250aece8",
   "direct_public_component_declarations": 282,
-  "missing_api_headings": 0,
-  "coverage_min": {
-    "latest": 95.53,
-    "3.32": 95.53
-  },
-  "production_source_sha256": "664a97920a58d4e59f5dba693280c6c583c50f1a43d078e69bbe334144a3babe",
-  "linux_golden": "pending new PR head; no local baseline update",
   "direct_public_theme_declarations": 12,
-  "public_theme_functions": 1
+  "public_theme_functions": 1,
+  "public_theme_extensions": [
+    "TColors",
+    "FontExtensions",
+    "TSpacers",
+    "TRadius",
+    "TThemeContextExtension",
+    "TThemeDataMergeExtension",
+    "TResolvedFontFamily",
+    "TFontFamilies",
+    "TBoxShadows",
+    "TInsetShadows",
+    "TFontMetrics",
+    "TFonts"
+  ],
+  "document_scope": "direct root declarations and 12 public Theme extensions; transitive export graph not claimed",
+  "versions": {
+    "3.32.0": {
+      "exitCodes": {
+        "analyze": 0,
+        "components": 0,
+        "coverage": 0,
+        "demo": 0,
+        "runners": 0,
+        "snippets": 0
+      },
+      "passed": {
+        "components": 2766,
+        "demo": 275,
+        "runners": 20
+      },
+      "coverage": {
+        "avatar": {
+          "hit": 273,
+          "found": 284,
+          "percentage": 96.13
+        },
+        "action_sheet": {
+          "hit": 498,
+          "found": 516,
+          "percentage": 96.51
+        },
+        "badge": {
+          "hit": 279,
+          "found": 280,
+          "percentage": 99.64
+        },
+        "cell": {
+          "hit": 188,
+          "found": 189,
+          "percentage": 99.47
+        },
+        "backtop": {
+          "hit": 185,
+          "found": 185,
+          "percentage": 100.0
+        },
+        "button": {
+          "hit": 459,
+          "found": 468,
+          "percentage": 98.08
+        },
+        "cascader": {
+          "hit": 263,
+          "found": 266,
+          "percentage": 98.87
+        },
+        "picker": {
+          "hit": 382,
+          "found": 388,
+          "percentage": 98.45
+        },
+        "progress": {
+          "hit": 611,
+          "found": 619,
+          "percentage": 98.71
+        },
+        "date_time_picker": {
+          "hit": 688,
+          "found": 708,
+          "percentage": 97.18
+        },
+        "calendar": {
+          "hit": 622,
+          "found": 630,
+          "percentage": 98.73
+        },
+        "tag": {
+          "hit": 306,
+          "found": 313,
+          "percentage": 97.76
+        },
+        "popover": {
+          "hit": 629,
+          "found": 639,
+          "percentage": 98.44
+        },
+        "checkbox": {
+          "hit": 356,
+          "found": 366,
+          "percentage": 97.27
+        },
+        "collapse": {
+          "hit": 218,
+          "found": 226,
+          "percentage": 96.46
+        },
+        "divider": {
+          "hit": 104,
+          "found": 104,
+          "percentage": 100.0
+        },
+        "empty": {
+          "hit": 33,
+          "found": 33,
+          "percentage": 100.0
+        },
+        "image_viewer": {
+          "hit": 237,
+          "found": 242,
+          "percentage": 97.93
+        },
+        "dialog": {
+          "hit": 285,
+          "found": 289,
+          "percentage": 98.62
+        },
+        "dropdown_menu": {
+          "hit": 957,
+          "found": 965,
+          "percentage": 99.17
+        },
+        "drawer": {
+          "hit": 202,
+          "found": 203,
+          "percentage": 99.51
+        },
+        "fab": {
+          "hit": 210,
+          "found": 212,
+          "percentage": 99.06
+        },
+        "footer": {
+          "hit": 51,
+          "found": 51,
+          "percentage": 100.0
+        },
+        "indexes": {
+          "hit": 706,
+          "found": 739,
+          "percentage": 95.53
+        },
+        "image": {
+          "hit": 131,
+          "found": 131,
+          "percentage": 100.0
+        },
+        "refresh": {
+          "hit": 195,
+          "found": 201,
+          "percentage": 97.01
+        },
+        "rate": {
+          "hit": 355,
+          "found": 361,
+          "percentage": 98.34
+        },
+        "result": {
+          "hit": 66,
+          "found": 67,
+          "percentage": 98.51
+        },
+        "tab_bar": {
+          "hit": 500,
+          "found": 509,
+          "percentage": 98.23
+        },
+        "navbar": {
+          "hit": 160,
+          "found": 160,
+          "percentage": 100.0
+        },
+        "tabs": {
+          "hit": 765,
+          "found": 783,
+          "percentage": 97.7
+        },
+        "swiper": {
+          "hit": 477,
+          "found": 493,
+          "percentage": 96.75
+        },
+        "skeleton": {
+          "hit": 140,
+          "found": 141,
+          "percentage": 99.29
+        },
+        "time_counter": {
+          "hit": 303,
+          "found": 307,
+          "percentage": 98.7
+        },
+        "icon": {
+          "hit": 17,
+          "found": 17,
+          "percentage": 100.0
+        },
+        "link": {
+          "hit": 113,
+          "found": 115,
+          "percentage": 98.26
+        },
+        "loading": {
+          "hit": 274,
+          "found": 278,
+          "percentage": 98.56
+        },
+        "message": {
+          "hit": 248,
+          "found": 251,
+          "percentage": 98.8
+        },
+        "notice_bar": {
+          "hit": 308,
+          "found": 319,
+          "percentage": 96.55
+        },
+        "popup": {
+          "hit": 498,
+          "found": 509,
+          "percentage": 97.84
+        },
+        "radio": {
+          "hit": 272,
+          "found": 272,
+          "percentage": 100.0
+        },
+        "table": {
+          "hit": 428,
+          "found": 428,
+          "percentage": 100.0
+        },
+        "text": {
+          "hit": 132,
+          "found": 134,
+          "percentage": 98.51
+        },
+        "search": {
+          "hit": 190,
+          "found": 195,
+          "percentage": 97.44
+        },
+        "steps": {
+          "hit": 248,
+          "found": 249,
+          "percentage": 99.6
+        },
+        "sidebar": {
+          "hit": 226,
+          "found": 226,
+          "percentage": 100.0
+        },
+        "slider": {
+          "hit": 360,
+          "found": 363,
+          "percentage": 99.17
+        },
+        "stepper": {
+          "hit": 353,
+          "found": 358,
+          "percentage": 98.6
+        },
+        "switch": {
+          "hit": 356,
+          "found": 372,
+          "percentage": 95.7
+        },
+        "tree_select": {
+          "hit": 305,
+          "found": 307,
+          "percentage": 99.35
+        },
+        "upload": {
+          "hit": 396,
+          "found": 411,
+          "percentage": 96.35
+        },
+        "form": {
+          "hit": 385,
+          "found": 390,
+          "percentage": 98.72
+        },
+        "input": {
+          "hit": 315,
+          "found": 319,
+          "percentage": 98.75
+        },
+        "textarea": {
+          "hit": 104,
+          "found": 105,
+          "percentage": 99.05
+        },
+        "theme": {
+          "hit": 307,
+          "found": 315,
+          "percentage": 97.46
+        },
+        "toast": {
+          "hit": 236,
+          "found": 237,
+          "percentage": 99.58
+        },
+        "swipe_cell": {
+          "hit": 303,
+          "found": 314,
+          "percentage": 96.5
+        }
+      }
+    },
+    "3.47.6": {
+      "exitCodes": {
+        "analyze": 0,
+        "components": 0,
+        "coverage": 0,
+        "demo": 0,
+        "runners": 0,
+        "snippets": 0
+      },
+      "passed": {
+        "components": 2766,
+        "demo": 275,
+        "runners": 20
+      },
+      "coverage": {
+        "avatar": {
+          "hit": 273,
+          "found": 284,
+          "percentage": 96.13
+        },
+        "action_sheet": {
+          "hit": 500,
+          "found": 516,
+          "percentage": 96.9
+        },
+        "badge": {
+          "hit": 279,
+          "found": 280,
+          "percentage": 99.64
+        },
+        "cell": {
+          "hit": 188,
+          "found": 189,
+          "percentage": 99.47
+        },
+        "backtop": {
+          "hit": 185,
+          "found": 185,
+          "percentage": 100.0
+        },
+        "button": {
+          "hit": 459,
+          "found": 468,
+          "percentage": 98.08
+        },
+        "cascader": {
+          "hit": 262,
+          "found": 266,
+          "percentage": 98.5
+        },
+        "picker": {
+          "hit": 382,
+          "found": 388,
+          "percentage": 98.45
+        },
+        "progress": {
+          "hit": 611,
+          "found": 619,
+          "percentage": 98.71
+        },
+        "date_time_picker": {
+          "hit": 687,
+          "found": 708,
+          "percentage": 97.03
+        },
+        "calendar": {
+          "hit": 622,
+          "found": 630,
+          "percentage": 98.73
+        },
+        "tag": {
+          "hit": 306,
+          "found": 313,
+          "percentage": 97.76
+        },
+        "popover": {
+          "hit": 629,
+          "found": 639,
+          "percentage": 98.44
+        },
+        "checkbox": {
+          "hit": 355,
+          "found": 366,
+          "percentage": 96.99
+        },
+        "collapse": {
+          "hit": 218,
+          "found": 226,
+          "percentage": 96.46
+        },
+        "divider": {
+          "hit": 104,
+          "found": 104,
+          "percentage": 100.0
+        },
+        "empty": {
+          "hit": 33,
+          "found": 33,
+          "percentage": 100.0
+        },
+        "image_viewer": {
+          "hit": 237,
+          "found": 242,
+          "percentage": 97.93
+        },
+        "dialog": {
+          "hit": 285,
+          "found": 289,
+          "percentage": 98.62
+        },
+        "dropdown_menu": {
+          "hit": 957,
+          "found": 965,
+          "percentage": 99.17
+        },
+        "drawer": {
+          "hit": 201,
+          "found": 203,
+          "percentage": 99.01
+        },
+        "fab": {
+          "hit": 210,
+          "found": 212,
+          "percentage": 99.06
+        },
+        "footer": {
+          "hit": 51,
+          "found": 51,
+          "percentage": 100.0
+        },
+        "indexes": {
+          "hit": 706,
+          "found": 739,
+          "percentage": 95.53
+        },
+        "image": {
+          "hit": 131,
+          "found": 131,
+          "percentage": 100.0
+        },
+        "refresh": {
+          "hit": 195,
+          "found": 201,
+          "percentage": 97.01
+        },
+        "rate": {
+          "hit": 355,
+          "found": 361,
+          "percentage": 98.34
+        },
+        "result": {
+          "hit": 65,
+          "found": 67,
+          "percentage": 97.01
+        },
+        "tab_bar": {
+          "hit": 499,
+          "found": 509,
+          "percentage": 98.04
+        },
+        "navbar": {
+          "hit": 160,
+          "found": 160,
+          "percentage": 100.0
+        },
+        "tabs": {
+          "hit": 765,
+          "found": 783,
+          "percentage": 97.7
+        },
+        "swiper": {
+          "hit": 477,
+          "found": 493,
+          "percentage": 96.75
+        },
+        "skeleton": {
+          "hit": 138,
+          "found": 141,
+          "percentage": 97.87
+        },
+        "time_counter": {
+          "hit": 303,
+          "found": 307,
+          "percentage": 98.7
+        },
+        "icon": {
+          "hit": 17,
+          "found": 17,
+          "percentage": 100.0
+        },
+        "link": {
+          "hit": 113,
+          "found": 115,
+          "percentage": 98.26
+        },
+        "loading": {
+          "hit": 274,
+          "found": 278,
+          "percentage": 98.56
+        },
+        "message": {
+          "hit": 247,
+          "found": 251,
+          "percentage": 98.41
+        },
+        "notice_bar": {
+          "hit": 308,
+          "found": 319,
+          "percentage": 96.55
+        },
+        "popup": {
+          "hit": 496,
+          "found": 509,
+          "percentage": 97.45
+        },
+        "radio": {
+          "hit": 271,
+          "found": 272,
+          "percentage": 99.63
+        },
+        "table": {
+          "hit": 428,
+          "found": 428,
+          "percentage": 100.0
+        },
+        "text": {
+          "hit": 132,
+          "found": 134,
+          "percentage": 98.51
+        },
+        "search": {
+          "hit": 190,
+          "found": 195,
+          "percentage": 97.44
+        },
+        "steps": {
+          "hit": 248,
+          "found": 249,
+          "percentage": 99.6
+        },
+        "sidebar": {
+          "hit": 226,
+          "found": 226,
+          "percentage": 100.0
+        },
+        "slider": {
+          "hit": 360,
+          "found": 363,
+          "percentage": 99.17
+        },
+        "stepper": {
+          "hit": 353,
+          "found": 358,
+          "percentage": 98.6
+        },
+        "switch": {
+          "hit": 356,
+          "found": 372,
+          "percentage": 95.7
+        },
+        "tree_select": {
+          "hit": 304,
+          "found": 307,
+          "percentage": 99.02
+        },
+        "upload": {
+          "hit": 396,
+          "found": 411,
+          "percentage": 96.35
+        },
+        "form": {
+          "hit": 385,
+          "found": 390,
+          "percentage": 98.72
+        },
+        "input": {
+          "hit": 315,
+          "found": 319,
+          "percentage": 98.75
+        },
+        "textarea": {
+          "hit": 104,
+          "found": 105,
+          "percentage": 99.05
+        },
+        "theme": {
+          "hit": 307,
+          "found": 315,
+          "percentage": 97.46
+        },
+        "toast": {
+          "hit": 236,
+          "found": 237,
+          "percentage": 99.58
+        },
+        "swipe_cell": {
+          "hit": 303,
+          "found": 314,
+          "percentage": 96.5
+        }
+      }
+    }
+  },
+  "linux_golden": "pending new head CI; logic/API changes only; no local baseline update"
 }

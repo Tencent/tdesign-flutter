@@ -29,7 +29,6 @@
 所属 Overlay 卸载后会释放会话，后续可在新的 Overlay 展示。
 普通页面离开但所属 Overlay 尚存时不会自动关闭；调用方应在任务结束
 或需要随页面关闭时调用 `dismiss`。
-尚未首次绘制的加载层随 Overlay 卸载后，在下一次 show/dismiss 时释放。
 
 返回类型：`void`
 

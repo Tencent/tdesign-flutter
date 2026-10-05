@@ -4,9 +4,35 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../tool/check_component_coverage.dart';
 import '../../tool/component_test_manifest.dart';
+import '../../tool/generate_theme_extensions.dart' as extension_docs;
 import '../../tool/run_component_regression.dart';
 
 void main() {
+  test('extension API docs honor public filters and hide implementation', () {
+    const source = '''
+/// Public helpers.
+extension Visible on String {
+  /// Character count.
+  int get count => length;
+  String join(String other) { return this + other; }
+  int get _private => 0;
+}
+extension Hidden on String { int get count => length; }
+''';
+    final docs = extension_docs.themeExtensionDocs(source, shown: {'Visible'});
+    expect(docs, contains('## Visible'));
+    expect(docs, contains('Character count.'));
+    expect(docs, contains('int get count'));
+    expect(docs, contains('String join(String other)'));
+    expect(docs, isNot(contains('return this')));
+    expect(docs, isNot(contains('_private')));
+    expect(docs, isNot(contains('## Hidden')));
+    expect(
+      extension_docs.themeExtensionDocs(source, hidden: {'Visible'}),
+      isNot(contains('## Visible')),
+    );
+  });
+
   test('regression suites and coverage targets stay in sync', () {
     final suiteComponents = componentTestSuites
         .map((suite) => suite.name)

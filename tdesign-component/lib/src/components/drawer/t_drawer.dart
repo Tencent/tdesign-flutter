@@ -85,7 +85,7 @@ class TDrawer extends StatelessWidget {
 /// [onOverlayClick] 在蒙层被点击时触发，不受是否自动关闭影响。
 /// [topInset] 设置抽屉相对屏幕顶部的可选偏移，默认 0。
 /// [useSafeArea] 控制浮层是否避让系统安全区域，默认 true。
-/// [destroyOnClose] 控制关闭后是否立即销毁浮层路由，默认 false。
+/// [maintainState] 控制路由不可见时是否保留 State，默认 true；关闭后重新打开会重建 State。
 /// [onClose] 在抽屉浮层关闭后触发。
 ///
 /// 返回的 [TDrawerHandle] 可用于查询显示状态或主动关闭抽屉。
@@ -98,7 +98,7 @@ TDrawerHandle showTDrawer(
   VoidCallback? onOverlayClick,
   double? topInset,
   bool useSafeArea = true,
-  bool destroyOnClose = false,
+  bool maintainState = true,
   VoidCallback? onClose,
 }) {
   assert(topInset == null || topInset >= 0);
@@ -123,7 +123,7 @@ TDrawerHandle showTDrawer(
         color: showOverlay ? null : Colors.transparent,
         onTap: onOverlayClick,
       ),
-      destroyOnClose: destroyOnClose,
+      maintainState: maintainState,
       useSafeArea: useSafeArea,
       onClosed: onClose,
       child: Theme(data: Theme.of(context), child: drawer),

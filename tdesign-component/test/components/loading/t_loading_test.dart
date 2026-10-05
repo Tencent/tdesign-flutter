@@ -10,6 +10,30 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// Tier1 组件：覆盖 Theme 子树 mergeExtension(TLoadingThemeData)。
 /// 覆盖自定义 size、icon 三种、text、axis 方向。
 void main() {
+  testWidgets('unpainted Loading session releases and can be reused', (
+    tester,
+  ) async {
+    late BuildContext anchor;
+    Widget host() => MaterialApp(
+      home: Builder(
+        builder: (context) {
+          anchor = context;
+          return const SizedBox();
+        },
+      ),
+    );
+    await tester.pumpWidget(host());
+    TLoadingController.show(anchor, child: const Text('pending loading'));
+    await tester.pumpWidget(const SizedBox());
+    TLoadingController.dismiss();
+    await tester.pumpWidget(host());
+    TLoadingController.show(anchor, child: const Text('new loading'));
+    await tester.pump();
+    expect(find.text('new loading'), findsOneWidget);
+    TLoadingController.dismiss();
+    await tester.pump();
+  });
+
   Widget wrapWithTheme(Widget child, {TLoadingThemeData? loadingTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
     if (loadingTheme != null) {

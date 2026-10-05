@@ -65,7 +65,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   bool get opaque => false;
 
   @override
-  bool get maintainState => !options.destroyOnClose;
+  bool get maintainState => options.maintainState;
 
   @override
   Widget buildModalBarrier() {

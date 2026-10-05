@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -6,6 +8,63 @@ import '../../helpers/popup_test_helpers.dart';
 import '../../helpers/popup_test_resource.dart' show resetPopupTestResource;
 
 void main() {
+  for (final maintainState in [false, true]) {
+    testWidgets(
+      'maintainState=$maintainState controls covered route, not reopening',
+      (tester) async {
+        final navigator = GlobalKey<NavigatorState>();
+        late BuildContext anchor;
+        var initialized = 0;
+        var disposed = 0;
+        await tester.pumpWidget(
+          MaterialApp(
+            navigatorKey: navigator,
+            home: Builder(
+              builder: (context) {
+                anchor = context;
+                return const SizedBox();
+              },
+            ),
+          ),
+        );
+        final handle = TPopup.show(
+          anchor,
+          options: TPopupOptions.center(
+            child: _RetentionProbe(
+              onInit: () => initialized++,
+              onDispose: () => disposed++,
+            ),
+            maintainState: maintainState,
+            animationDuration: Duration.zero,
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(initialized, 1);
+        unawaited(
+          navigator.currentState!.push<void>(
+            PageRouteBuilder<void>(
+              pageBuilder: (_, __, ___) => const SizedBox(),
+              transitionDuration: Duration.zero,
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(disposed, maintainState ? 0 : 1);
+        navigator.currentState!.pop();
+        await tester.pumpAndSettle();
+        expect(initialized, maintainState ? 1 : 2);
+        handle.close();
+        await tester.pumpAndSettle();
+        final beforeReopen = initialized;
+        handle.open();
+        await tester.pumpAndSettle();
+        expect(initialized, beforeReopen + 1);
+        handle.close();
+        await tester.pumpAndSettle();
+      },
+    );
+  }
+
   tearDown(resetPopupTestResource);
 
   group('Popup 路由层行为（通过 TPopup.show 验证）', () {
@@ -607,4 +666,29 @@ void main() {
       expect(closeCount, 1);
     });
   });
+}
+
+class _RetentionProbe extends StatefulWidget {
+  const _RetentionProbe({required this.onInit, required this.onDispose});
+  final VoidCallback onInit;
+  final VoidCallback onDispose;
+  @override
+  State<_RetentionProbe> createState() => _RetentionProbeState();
+}
+
+class _RetentionProbeState extends State<_RetentionProbe> {
+  @override
+  void initState() {
+    super.initState();
+    widget.onInit();
+  }
+
+  @override
+  void dispose() {
+    widget.onDispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => const SizedBox(width: 100, height: 60);
 }

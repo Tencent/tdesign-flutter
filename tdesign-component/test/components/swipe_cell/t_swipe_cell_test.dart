@@ -14,6 +14,52 @@ class _ConflictingBuilderAction extends TSwipeCellAction {
 }
 
 void main() {
+  testWidgets('SwipeCell preserves actual binding after rejected replacement', (
+    tester,
+  ) async {
+    final first = TSwipeCellController();
+    final second = TSwipeCellController();
+    var events = 0;
+    TSwipeCell cell(String id, TSwipeCellController controller) => TSwipeCell(
+      key: ValueKey(id),
+      controller: controller,
+      start: TSwipeCellPanel(
+        children: [TSwipeCellAction(label: 'action', onPressed: (_) {})],
+      ),
+      onOpenChanged: (_, __) {
+        if (id == 'second') {
+          events++;
+        }
+      },
+      child: SizedBox(width: 240, height: 50, child: Text(id)),
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Column(
+            children: [cell('first', first), cell('second', second)],
+          ),
+        ),
+      ),
+    );
+    final opening = second.open(TSwipeCellSide.start);
+    await tester.pumpAndSettle();
+    await opening;
+    expect(events, 1);
+    final closing = second.close();
+    await tester.pumpAndSettle();
+    await closing;
+    expect(events, 2);
+    final element = tester.element(find.byKey(const ValueKey('second')));
+    expect(() => element.update(cell('second', first)), throwsFlutterError);
+    expect(() => element.update(cell('second', first)), throwsFlutterError);
+    final reopening = second.open(TSwipeCellSide.start);
+    await tester.pumpAndSettle();
+    await reopening;
+    expect(events, 3);
+    await tester.pumpWidget(const SizedBox());
+  });
+
   test('builder 与全部内置视觉字段互斥', () {
     expect(
       () =>

@@ -339,7 +339,7 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
         'must be positive',
       );
     }
-    if (!identical(oldWidget.controller, widget.controller)) {
+    if (!identical(_ownsController ? null : _controller, widget.controller)) {
       if (widget.controller?.hasClients ?? false) {
         throw StateError('TSwiperController can only control one TSwiper.');
       }

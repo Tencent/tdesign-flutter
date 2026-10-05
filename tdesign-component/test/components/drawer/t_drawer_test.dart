@@ -888,7 +888,7 @@ void main() {
       expect(closed, isTrue);
     });
 
-    testWidgets('无遮罩与 destroyOnClose 由展示函数控制', (tester) async {
+    testWidgets('无遮罩与 maintainState 由展示函数控制', (tester) async {
       bool? maintainState;
       await tester.pumpWidget(
         MaterialApp(
@@ -901,7 +901,7 @@ void main() {
                   showTDrawer(
                     context,
                     showOverlay: false,
-                    destroyOnClose: true,
+                    maintainState: false,
                     drawer: TDrawer(
                       child: Builder(
                         builder: (context) {

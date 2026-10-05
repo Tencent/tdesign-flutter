@@ -80,7 +80,7 @@ TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer
 | onOverlayClick | VoidCallback? | - | 在蒙层被点击时触发，不受是否自动关闭影响。 |
 | topInset | double? | - | 设置抽屉相对屏幕顶部的可选偏移，默认 0。 |
 | useSafeArea | bool | true | 控制浮层是否避让系统安全区域，默认 true。 |
-| destroyOnClose | bool | false | 控制关闭后是否立即销毁浮层路由，默认 false。 |
+| maintainState | bool | true | 控制路由不可见时是否保留 State，默认 true；关闭后重新打开会重建 State。 |
 | onClose | VoidCallback? | - | 在抽屉浮层关闭后触发。 |
 
 

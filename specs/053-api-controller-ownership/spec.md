@@ -16,3 +16,9 @@
 
 ## 验收
 双版本严格分析零诊断，全部 57 项现有功能测试及覆盖率门槛通过；三 Controller 失败替换/卸载回归，282 项根入口直接声明有 API 章节；示例与调度登记同步。视觉令牌和 Golden 基线不修改，远端 Linux Golden 单独验证。
+
+## 再次整体 review 的修复契约
+- SwipeCell 和 Swiper 更新以实际绑定对象为准，失败替换保留旧绑定；相同无效配置重试仍拒绝。
+- Message、Loading、Toast 所属 Overlay 在首次绘制前卸载也会释放会话；已挂载后的卸载清理及通知只发生一次。
+- Popup、Picker popup、Drawer 的 destroyOnClose 改为 maintainState，默认 true；表示路由被遮挡时保留 State，不表示关闭后保留。无兼容别名，原 true 迁移为 false。
+- Theme 公开 extension 的用户文档纳入生成清单，并验证实际生成器能力与覆盖边界。

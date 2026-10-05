@@ -49,8 +49,8 @@ final class TPickerPopup {
     /// 蒙层行为；null 时沿用 Popup 默认值。
     TPopupOverlayConfig? overlay,
 
-    /// 关闭后是否销毁弹层内容，默认 false。
-    bool destroyOnClose = false,
+    /// 路由不可见时是否保留 State，默认 true；关闭再打开仍重建 State。
+    bool maintainState = true,
 
     /// 打开和关闭动画时长。
     Duration? animationDuration,
@@ -87,7 +87,7 @@ final class TPickerPopup {
         radius: radius,
         backgroundColor: backgroundColor,
         overlay: overlay,
-        destroyOnClose: destroyOnClose,
+        maintainState: maintainState,
         animationDuration: animationDuration,
         onOpened: onOpened,
         onClosed: onClosed,

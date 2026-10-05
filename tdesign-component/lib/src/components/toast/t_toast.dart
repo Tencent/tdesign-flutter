@@ -77,9 +77,15 @@ class _ToastInstance {
 
   _ToastInstance({required this.overlayEntry, this.timer});
 
+  VoidCallback? entryListener;
+
   void _removeEntry() {
     if (removed) {
       return;
+    }
+    final listener = entryListener;
+    if (listener != null) {
+      overlayEntry.removeListener(listener);
     }
     overlayEntry.remove();
     overlayEntry.dispose();
@@ -613,10 +619,22 @@ class TToast {
       });
     }
 
-    _toastInstances[toastId] = _ToastInstance(
-      overlayEntry: overlayEntry,
-      timer: timer,
-    );
+    final instance = _ToastInstance(overlayEntry: overlayEntry, timer: timer);
+    _toastInstances[toastId] = instance;
+    void releaseUnmounted() {
+      if (overlayState.mounted || instance.removed) {
+        return;
+      }
+      if (identical(_toastInstances[toastId], instance)) {
+        _toastInstances.remove(toastId);
+      }
+      // Unmount notification may still be using the entry notifier.
+      scheduleMicrotask(instance.cancel);
+    }
+
+    instance.entryListener = releaseUnmounted;
+    overlayEntry.addListener(releaseUnmounted);
+    WidgetsBinding.instance.addPostFrameCallback((_) => releaseUnmounted());
   }
 }
 

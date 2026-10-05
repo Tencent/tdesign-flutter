@@ -17,7 +17,6 @@ class TLoadingController {
   /// 所属 Overlay 卸载后会释放会话，后续可在新的 Overlay 展示。
   /// 普通页面离开但所属 Overlay 尚存时不会自动关闭；调用方应在任务结束
   /// 或需要随页面关闭时调用 [dismiss]。
-  /// 尚未首次绘制的加载层随 Overlay 卸载后，在下一次 show/dismiss 时释放。
   /// [context] 用于查找 Overlay 并捕获主题。
   /// [child] 自定义内容；传入后忽略 size、icon 和 text。
   /// [size] 默认加载图标尺寸，默认 20。
@@ -82,6 +81,11 @@ class TLoadingController {
     try {
       overlayState.insert(entry);
       _session = session;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!overlayState.mounted) {
+          _release(session);
+        }
+      });
     } catch (_) {
       entry.removeListener(session.listener);
       entry.dispose();

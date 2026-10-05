@@ -43,7 +43,7 @@ Picker 专用弹层入口。
 | radius | double? | - | 顶部圆角；null 时使用 Popup 主题或 TDesign 默认值。 |
 | backgroundColor | Color? | - | 面板背景色；null 时使用 Popup 主题或容器色。 |
 | overlay | TPopupOverlayConfig? | - | 蒙层行为；null 时沿用 Popup 默认值。 |
-| destroyOnClose | bool | false | 关闭后是否销毁弹层内容，默认 false。 |
+| maintainState | bool | true | 路由不可见时是否保留 State，默认 true；关闭再打开仍重建 State。 |
 | animationDuration | Duration? | - | 打开和关闭动画时长。 |
 | onOpened | VoidCallback? | - | 打开动画完成回调。 |
 | onClosed | VoidCallback? | - | 关闭动画完成回调。 |

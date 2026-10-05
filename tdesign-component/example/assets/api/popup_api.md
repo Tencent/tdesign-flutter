@@ -83,7 +83,7 @@ Popup 标准头部布局。
 | animationDuration | Duration? | - | 打开/关闭动画时长，默认 240ms（与小程序公开 duration 默认值一致）。 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
 | child | Widget | - | 浮层主体内容（必填）。 |
-| destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
+| maintainState | bool | true | 路由不可见时是否保留其 State，默认 true。 false 允许 Flutter 在路由被完全遮挡时释放内容，但不保证一定释放。 关闭弹层会移除路由；再次打开会重新创建 State，与本参数无关。 |
 | onClosed | VoidCallback? | - | 当前展示周期真正结束。 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。 |
 | onOpened | VoidCallback? | - | 打开动画结束。 |
 | onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐流程发起时触发；第二个参数为 `TPopupTrigger`。 此时动画不一定完成；完成阶段分别见 `onOpened` 与 `onClosed`。 |
@@ -167,10 +167,10 @@ Popup 标准头部布局。
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 |
 | child | Widget | - | 浮层主体内容（必填）。 |
 | closeBuilder | TPopupSlotBuilder? | - | center 面板外下方关闭区；仅 `TPopupPlacement.center` 生效，默认不显示。 builder 的 `close` 参数只负责关闭 Popup，不会自动生成关闭按钮。 |
-| destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 |
 | headerBuilder | TPopupHeaderBuilder? | - | bottom 头部；仅 `TPopupPlacement.bottom` 生效，默认不显示。 可返回 `TPopupHeader` 组合取消按钮、标题和确认按钮；builder 的 `close` 参数只负责关闭 Popup，不会自动生成任何按钮。 |
 | height | double? | - | 高度；`TPopupPlacement.top`、`TPopupPlacement.bottom` 生效；`TPopupPlacement.center` 约束面板尺寸。 top / bottom 未传时默认 240；center 未传时默认 240。 |
 | inset | TPopupInset? | - | 交叉轴边缘留白；具体类型由 `placement` 决定。 * `TPopupPlacement.bottom` 使用 `TPopupBottomInset` * `TPopupPlacement.top` 使用 `TPopupTopInset` * `TPopupPlacement.left` 使用 `TPopupLeftInset` * `TPopupPlacement.right` 使用 `TPopupRightInset` * `TPopupPlacement.center` 不支持 |
+| maintainState | bool | true | 路由不可见时是否保留其 State，默认 true。 false 允许 Flutter 在路由被完全遮挡时释放内容，但不保证一定释放。 关闭弹层会移除路由；再次打开会重新创建 State，与本参数无关。 |
 | onClosed | VoidCallback? | - | 当前展示周期真正结束。 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。 |
 | onOpened | VoidCallback? | - | 打开动画结束。 |
 | onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐流程发起时触发；第二个参数为 `TPopupTrigger`。 此时动画不一定完成；完成阶段分别见 `onOpened` 与 `onClosed`。 |
