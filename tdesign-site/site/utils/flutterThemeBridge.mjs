@@ -1,65 +1,58 @@
-const COLOR_TOKEN_PREFIXES = ['brand', 'warning', 'error', 'success', 'gray'];
+const COLOR_TOKEN_PREFIXES = ['primary', 'brand', 'warning', 'error', 'success', 'gray'];
 
 const SEMANTIC_COLOR_TOKENS = {
-  '--td-brand-color': ['brandNormalColor'],
-  '--td-brand-color-hover': ['brandHoverColor'],
-  '--td-brand-color-focus': ['brandFocusColor'],
-  '--td-brand-color-active': ['brandActiveColor', 'brandClickColor'],
-  '--td-brand-color-disabled': ['brandDisabledColor'],
-  '--td-brand-color-light': ['brandLightColor'],
-  '--td-brand-color-light-hover': ['brandColorLightHover'],
-  '--td-brand-color-light-active': ['brandColorLightHover'],
-  '--td-warning-color': ['warningNormalColor'],
-  '--td-warning-color-hover': ['warningHoverColor'],
-  '--td-warning-color-focus': ['warningFocusColor'],
-  '--td-warning-color-active': ['warningActiveColor', 'warningClickColor'],
-  '--td-warning-color-disabled': ['warningDisabledColor'],
-  '--td-warning-color-light': ['warningLightColor'],
-  '--td-warning-color-light-hover': ['warningColorLightHover'],
-  '--td-warning-color-light-active': ['warningColorLightHover'],
-  '--td-error-color': ['errorNormalColor'],
-  '--td-error-color-hover': ['errorHoverColor'],
-  '--td-error-color-focus': ['errorFocusColor'],
-  '--td-error-color-active': ['errorActiveColor', 'errorClickColor'],
-  '--td-error-color-disabled': ['errorDisabledColor'],
-  '--td-error-color-light': ['errorLightColor'],
-  '--td-error-color-light-hover': ['errorColorLightHover'],
-  '--td-error-color-light-active': ['errorColorLightHover'],
-  '--td-success-color': ['successNormalColor'],
-  '--td-success-color-hover': ['successHoverColor'],
-  '--td-success-color-focus': ['successFocusColor'],
-  '--td-success-color-active': ['successActiveColor', 'successClickColor'],
-  '--td-success-color-disabled': ['successDisabledColor'],
-  '--td-success-color-light': ['successLightColor'],
-  '--td-success-color-light-hover': ['successColorLightHover'],
-  '--td-success-color-light-active': ['successColorLightHover'],
+  '--td-brand-color': ['brandColor'],
+  '--td-brand-color-focus': ['brandColorFocus'],
+  '--td-brand-color-active': ['brandColorActive'],
+  '--td-brand-color-disabled': ['brandColorDisabled'],
+  '--td-brand-color-light': ['brandColorLight'],
+  '--td-brand-color-light-hover': ['brandColorLightActive'],
+  '--td-brand-color-light-active': ['brandColorLightActive'],
+  '--td-warning-color': ['warningColor'],
+  '--td-warning-color-focus': ['warningColorFocus'],
+  '--td-warning-color-active': ['warningColorActive'],
+  '--td-warning-color-disabled': ['warningColorDisabled'],
+  '--td-warning-color-light': ['warningColorLight'],
+  '--td-warning-color-light-hover': ['warningColorLightActive'],
+  '--td-warning-color-light-active': ['warningColorLightActive'],
+  '--td-error-color': ['errorColor'],
+  '--td-error-color-focus': ['errorColorFocus'],
+  '--td-error-color-active': ['errorColorActive'],
+  '--td-error-color-disabled': ['errorColorDisabled'],
+  '--td-error-color-light': ['errorColorLight'],
+  '--td-error-color-light-hover': ['errorColorLightActive'],
+  '--td-error-color-light-active': ['errorColorLightActive'],
+  '--td-success-color': ['successColor'],
+  '--td-success-color-focus': ['successColorFocus'],
+  '--td-success-color-active': ['successColorActive'],
+  '--td-success-color-disabled': ['successColorDisabled'],
+  '--td-success-color-light': ['successColorLight'],
+  '--td-success-color-light-hover': ['successColorLightActive'],
+  '--td-success-color-light-active': ['successColorLightActive'],
   '--td-bg-color-page': ['bgColorPage'],
   '--td-bg-color-container': ['bgColorContainer'],
-  '--td-bg-color-container-hover': ['bgColorContainerHover'],
   '--td-bg-color-container-active': ['bgColorContainerActive'],
-  '--td-bg-color-container-select': ['bgColorContainerSelect'],
   '--td-bg-color-secondarycontainer': ['bgColorSecondaryContainer'],
-  '--td-bg-color-secondarycontainer-hover': ['bgColorSecondaryContainerHover'],
   '--td-bg-color-secondarycontainer-active': ['bgColorSecondaryContainerActive'],
   '--td-bg-color-component': ['bgColorComponent'],
-  '--td-bg-color-component-hover': ['bgColorComponentHover'],
   '--td-bg-color-component-active': ['bgColorComponentActive'],
   '--td-bg-color-component-disabled': ['bgColorComponentDisabled'],
   '--td-bg-color-secondarycomponent': ['bgColorSecondaryComponent'],
-  '--td-bg-color-secondarycomponent-hover': ['bgColorSecondaryComponentHover'],
   '--td-bg-color-secondarycomponent-active': ['bgColorSecondaryComponentActive'],
   '--td-bg-color-specialcomponent': ['bgColorSpecialComponent'],
   '--td-text-color-primary': ['textColorPrimary'],
   '--td-text-color-secondary': ['textColorSecondary'],
   '--td-text-color-placeholder': ['textColorPlaceholder'],
-  '--td-text-color-disabled': ['textDisabledColor'],
+  '--td-text-color-disabled': ['textColorDisabled'],
   '--td-text-color-brand': ['textColorBrand'],
   '--td-text-color-link': ['textColorLink'],
   '--td-text-color-anti': ['textColorAnti'],
-  '--td-component-stroke': ['componentStrokeColor'],
-  '--td-component-border': ['componentBorderColor'],
-  '--td-border-level-1-color': ['componentStrokeColor'],
-  '--td-border-level-2-color': ['componentBorderColor'],
+  '--td-mask-active': ['maskActive'],
+  '--td-mask-disabled': ['maskDisabled'],
+  '--td-component-stroke': ['componentStroke'],
+  '--td-component-border': ['componentBorder'],
+  '--td-border-level-1-color': ['borderLevel1Color'],
+  '--td-border-level-2-color': ['borderLevel2Color'],
 };
 
 const FONT_SPECS = [
@@ -74,7 +67,6 @@ const FONT_SPECS = [
   ['fontTitleLarge', 'title-large', -2, 18, 'title-large', 26, 6],
   ['fontTitleMedium', 'title-medium', 0, 16, 'title-medium', 24, 6],
   ['fontTitleSmall', 'title-small', 0, 14, 'title-small', 22, 4],
-  ['fontBodyExtraLarge', 'body-large', 2, 18, 'body-extraLarge', 26, 4],
   ['fontBodyLarge', 'body-large', 0, 16, 'body-large', 24, 4],
   ['fontBodyMedium', 'body-medium', 0, 14, 'body-medium', 22, 4],
   ['fontBodySmall', 'body-small', 0, 12, 'body-small', 20, 4],
@@ -89,30 +81,36 @@ const FONT_SPECS = [
 ];
 
 const RADIUS_TOKENS = {
-  radiusSmall: '--td-radius-default',
-  radiusDefault: '--td-radius-medium',
+  radiusSmall: '--td-radius-small',
+  radiusDefault: '--td-radius-default',
   radiusLarge: '--td-radius-large',
   radiusExtraLarge: '--td-radius-extraLarge',
-  radiusRound: '--td-radius-circle',
+  radiusRound: '--td-radius-round',
   radiusCircle: '--td-radius-circle',
 };
 
 const SHADOW_TOKENS = {
-  shadowsBase: '--td-shadow-1',
-  shadowsMiddle: '--td-shadow-2',
-  shadowsTop: '--td-shadow-3',
+  shadow1: '--td-shadow-1',
+  shadow2: '--td-shadow-2',
+  shadow3: '--td-shadow-3',
+  shadow4: '--td-shadow-4',
 };
 
 const SPACER_SOURCES = {
-  spacer4: '--td-size-2',
-  spacer8: '--td-size-4',
-  spacer12: '--td-size-5',
-  spacer16: '--td-size-6',
-  spacer24: '--td-size-8',
-  spacer32: '--td-size-10',
-  spacer40: '--td-size-12',
-  spacer48: '--td-size-13',
-  spacer64: '--td-size-15',
+  spacer: ['--td-spacer', '--td-size-4'],
+  spacer1: ['--td-spacer-1', '--td-size-5'],
+  spacer2: ['--td-spacer-2', '--td-size-6'],
+  spacer3: ['--td-spacer-3', '--td-size-8'],
+  spacer4: ['--td-spacer-4', '--td-size-10'],
+  spacer5: ['--td-spacer-5', '--td-size-13'],
+  spacer6: ['--td-spacer-6', '--td-size-15', 1.25],
+};
+
+const INSET_SHADOW_TOKENS = {
+  shadowInsetTop: '--td-shadow-inset-top',
+  shadowInsetRight: '--td-shadow-inset-right',
+  shadowInsetBottom: '--td-shadow-inset-bottom',
+  shadowInsetLeft: '--td-shadow-inset-left',
 };
 
 const FLUTTER_EXTRA_DEFAULTS = `
@@ -214,14 +212,14 @@ export function ensureFlutterThemeTokenCoverage(cssText) {
 }
 
 function cssNameToFlutterColor(cssName) {
-  const palette = cssName.match(/^--td-(brand|warning|error|success|gray)-color-(\d+)$/);
+  const palette = cssName.match(/^--td-(primary|brand|warning|error|success|gray)-color-(\d+)$/);
   if (palette && COLOR_TOKEN_PREFIXES.includes(palette[1])) {
     return `${palette[1]}Color${palette[2]}`;
   }
   const white = cssName.match(/^--td-font-white-(\d+)$/);
-  if (white) return `fontWhColor${white[1]}`;
+  if (white) return `fontWhite${white[1]}`;
   const gray = cssName.match(/^--td-font-gray-(\d+)$/);
-  if (gray) return `fontGyColor${gray[1]}`;
+  if (gray) return `fontGray${gray[1]}`;
   return null;
 }
 
@@ -370,6 +368,7 @@ export function parseCssToFlutterTheme(cssText, baselineCssText = null) {
   });
 
   const font = {};
+  const fontMetric = {};
   FONT_SPECS.forEach(
     ([name, sizeSuffix, sizeOffset, defaultSize, lineHeightSuffix, defaultLineHeight, fontWeight]) => {
       const sizeToken = `--td-font-size-${sizeSuffix}`;
@@ -378,7 +377,11 @@ export function parseCssToFlutterTheme(cssText, baselineCssText = null) {
       const sourceSize = parseLength(sizeToken, variables);
       const size = sourceSize === null ? defaultSize : sourceSize + sizeOffset;
       const lineHeight = parseLength(lineHeightToken, variables) ?? defaultLineHeight;
+      if (!(size > 0) || !(lineHeight > 0)) return;
       font[name] = { size, lineHeight, fontWeight };
+      const suffix = name.slice('font'.length);
+      fontMetric[`fontSize${suffix}`] = size;
+      fontMetric[`lineHeight${suffix}`] = lineHeight;
     },
   );
 
@@ -387,8 +390,8 @@ export function parseCssToFlutterTheme(cssText, baselineCssText = null) {
     if (!changed(cssName)) return;
     const rawValue = resolveValue(cssName, variables);
     const value = parseLength(cssName, variables);
-    if (name === 'radiusRound' || name === 'radiusCircle') {
-      if (rawValue) radius[name] = 9999;
+    if (name === 'radiusCircle' && rawValue?.endsWith('%')) {
+      radius[name] = 9999;
     } else if (value !== null && value >= 0) {
       radius[name] = value;
     }
@@ -398,22 +401,34 @@ export function parseCssToFlutterTheme(cssText, baselineCssText = null) {
   Object.entries(SHADOW_TOKENS).forEach(([name, cssName]) => {
     if (!changed(cssName)) return;
     const parsed = parseShadow(resolveValue(cssName, variables), variables);
-    if (parsed.length > 0) shadow[name] = parsed;
+    if (parsed.length > 0 || resolveValue(cssName, variables) === 'none') shadow[name] = parsed;
+  });
+
+  const insetShadow = {};
+  Object.entries(INSET_SHADOW_TOKENS).forEach(([name, cssName]) => {
+    if (!changed(cssName)) return;
+    const raw = resolveValue(cssName, variables);
+    if (raw === 'none') {
+      insetShadow[name] = { color: '#00000000', width: 0 };
+      return;
+    }
+    const parsed = parseShadow(raw?.replace(/^inset\s+/, ''), variables);
+    const edge = parsed[0];
+    if (parsed.length === 1 && edge.blurRadius === 0 && edge.spreadRadius === 0) {
+      insetShadow[name] = { color: edge.color, width: Math.abs(edge.offset.x || edge.offset.y) };
+    }
   });
 
   const margin = {};
-  Object.entries(SPACER_SOURCES).forEach(([name, cssName]) => {
+  Object.entries(SPACER_SOURCES).forEach(([name, [nativeCss, controllerCss, scale = 1]]) => {
+    const explicit = variables.has(nativeCss);
+    const cssName = explicit ? nativeCss : controllerCss;
     if (!changed(cssName)) return;
     const value = parseLength(cssName, variables);
-    if (value !== null && value >= 0) margin[name] = value;
+    if (value !== null && value >= 0) margin[name] = value * (explicit ? 1 : scale);
   });
-  const base = margin.spacer4;
-  if (base !== undefined) {
-    margin.spacer96 = base * 24;
-    margin.spacer160 = base * 40;
-  }
 
-  return { ref, color, font, radius, shadow, margin };
+  return { ref, color, font, fontMetric, radius, shadow, insetShadow, margin };
 }
 
 export function generateFlutterThemeFromParts(lightCss, darkCss, extraCss, baseline = null) {
@@ -443,5 +458,6 @@ export const flutterThemeContract = Object.freeze({
   fontTokens: FONT_SPECS.map(([name]) => name),
   radiusTokens: Object.keys(RADIUS_TOKENS),
   shadowTokens: Object.keys(SHADOW_TOKENS),
-  spacerTokens: [...Object.keys(SPACER_SOURCES), 'spacer96', 'spacer160'],
+  insetShadowTokens: Object.keys(INSET_SHADOW_TOKENS),
+  spacerTokens: Object.keys(SPACER_SOURCES),
 });

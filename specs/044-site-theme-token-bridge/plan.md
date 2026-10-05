@@ -25,7 +25,7 @@
 - Web 尺寸体系比 Flutter Token 更细，不把组件专属尺寸直接塞入全局 Flutter Theme；仅用基础尺寸刻度驱动现有 spacer Token。
 - 浏览器字体族不等于 Flutter 已打包字体，不覆盖 `numberFontFamily`，避免生成无法加载的 Flutter 字体。
 - 控制器包的 mobile 默认 CSS 缺少部分 Flutter 字体层级，由桥接层幂等补齐并从相邻层级推导，避免修改或 fork 上游包。
-- 控制器默认值与 Flutter 默认值存在细微差异，桥接只发送相对初始样式的增量，未调整 Token 继续使用 Flutter 原生 light/dark 默认值。
+- 控制器默认值与 Flutter 默认值存在细微差异，桥接只发送相对控制器包原始默认 CSS 的增量，未调整 Token 继续使用 Flutter 原生 light/dark 默认值。
 
 ## 验证策略
 
@@ -33,3 +33,17 @@
 - 集成或 Widget 测试：消息 JSON 解析为 light/dark `TThemeData`。
 - 静态检查：站点生产构建、Flutter strict analyze、diff check。
 - 人工验收：本地站点连接 Flutter Web 构建，逐面板修改并观察 Demo。
+
+## 当前 Token 的适配表
+
+| 控制器输入 | Flutter 消费字段 |
+| --- | --- |
+| 品牌、功能、primary、gray 色阶及现有语义色 | color / ref；移除无消费者的 hover 等旧名称 |
+| 字号和行高 | fontMetric 与同一层级的复合 font |
+| small/default/large/extraLarge/round 数值圆角 | 同名 radius；circle 百分比保留 9999 例外 |
+| shadow-1..4 / shadow-inset-top/right/bottom/left | shadow / insetShadow；none 清除 |
+| size-4/5/6/8/10/13/15 | spacer/spacer1..6，末项按 80/64 比例；显式 spacer CSS 优先 |
+
+默认 CSS 在 Vite 构建时从当前控制器包的三个 raw-loader 字符串提取，不执行其 bundle；包结构变化时明确失败。页面已保存的定制样式不再被误当作默认基线。默认字体指标、内阴影由 Flutter 解析器保留。
+
+开发入口复用现有 /flutter/example/ 同源代理，代理端口与 dev 脚本共享 VITE_FLUTTER_WEB_PORT。Flutter 首帧注册监听后向父窗口发送 flutter-demo-ready，父窗口校验 origin 与 iframe source 后重发当前主题。

@@ -5,6 +5,7 @@ import { defineConfig, type ConfigEnv, type Plugin, type ViteDevServer } from 'v
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import createTDesignPlugin from './plugin-tdoc';
+import { loadControllerBaseline } from './utils/controllerBaseline.mjs';
 
 // 配置所在目录（等价于 __dirname，兼容 ESM / CJS 两种打包方式）
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
@@ -26,10 +27,10 @@ function flutterExampleDevServer(): Plugin {
         const proxyRequest = http.request(
           {
             hostname: '127.0.0.1',
-            port: 19001,
+            port: Number(process.env.VITE_FLUTTER_WEB_PORT || 19001),
             path: targetPath,
             method: req.method,
-            headers: { ...req.headers, host: '127.0.0.1:19001' },
+            headers: { ...req.headers, host: `127.0.0.1:${process.env.VITE_FLUTTER_WEB_PORT || 19001}` },
           },
           (proxyResponse) => {
             const contentType = proxyResponse.headers['content-type'] || '';
@@ -97,6 +98,17 @@ export default ({ mode }: ConfigEnv) => {
       }),
       vueJsx(),
       flutterExampleDevServer(),
+      {
+        name: 'flutter-controller-baseline',
+        resolveId(id) {
+          if (id === 'virtual:flutter-controller-baseline') return '\0flutter-controller-baseline';
+        },
+        load(id) {
+          if (id === '\0flutter-controller-baseline') {
+            return `export default ${JSON.stringify(loadControllerBaseline())}`;
+          }
+        },
+      },
       createTDesignPlugin(),
     ],
   });

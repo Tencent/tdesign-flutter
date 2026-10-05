@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { readFileSync } from 'node:fs';
+import { loadControllerBaseline } from './controllerBaseline.mjs';
 
 import {
   ensureFlutterThemeTokenCoverage,
@@ -110,14 +112,14 @@ test('emits only overrides relative to the initial controller theme', () => {
     --td-size-2: 4px;
   }`;
   const unchanged = parseCssToFlutterTheme(baseline, baseline);
-  assert.deepEqual(unchanged, { ref: {}, color: {}, font: {}, radius: {}, shadow: {}, margin: {} });
+  assert.deepEqual(unchanged, { ref: {}, color: {}, font: {}, fontMetric: {}, radius: {}, shadow: {}, insetShadow: {}, margin: {} });
 
   const changed = baseline.replace('#0052d9', '#112233').replace('16px', '18px');
   const theme = parseCssToFlutterTheme(changed, baseline);
   assert.deepEqual(theme.color, { brandColor7: '#112233' });
   assert.equal(theme.ref.brandNormalColor, 'brandColor7');
   assert.equal(theme.font.fontBodyLarge.size, 18);
-  assert.equal(theme.font.fontBodyExtraLarge.size, 20);
+  assert.equal(theme.fontMetric.fontSizeBodyLarge, 18);
   assert.deepEqual(theme.radius, {});
   assert.deepEqual(theme.shadow, {});
   assert.deepEqual(theme.margin, {});
@@ -149,4 +151,61 @@ test('builds one complete message for mode and token updates', () => {
     theme,
   });
   assert.equal(createFlutterThemeMessage(theme, 'system').themeMode, 'light');
+});
+
+test('maps the controller size scale to current Flutter spacers', () => {
+  const baseline = { light: '', dark: '', extra: ':root { --td-size-6: 16px; --td-size-15: 64px; }' };
+  const theme = generateFlutterThemeFromParts('', '', ':root { --td-size-6: 24px; --td-size-15: 80px; }', baseline);
+  assert.deepEqual(theme.light.margin, { spacer2: 24, spacer6: 100 });
+  assert.deepEqual(theme.dark.margin, theme.light.margin);
+  assert.equal(parseCssToFlutterTheme(':root { --td-size-6: 24px; --td-spacer-2: 19px; }').margin.spacer2, 19);
+});
+
+test('preserves numeric round radius and clears external and inset shadows', () => {
+  const theme = parseCssToFlutterTheme(`:root {
+    --td-radius-round: 25px;
+    --td-radius-circle: 50%;
+    --td-shadow-1: none;
+    --td-shadow-inset-top: inset 0 2px 0 0 #123;
+    --td-shadow-inset-left: none;
+  }`);
+  assert.equal(theme.radius.radiusRound, 25);
+  assert.equal(theme.radius.radiusCircle, 9999);
+  assert.deepEqual(theme.shadow.shadow1, []);
+  assert.deepEqual(theme.insetShadow.shadowInsetTop, { color: '#112233', width: 2 });
+  assert.deepEqual(theme.insetShadow.shadowInsetLeft, { color: '#00000000', width: 0 });
+});
+
+test('updates independent font metrics used directly by components', () => {
+  const theme = parseCssToFlutterTheme(':root { --td-font-size-body-medium: 18px; --td-line-height-body-medium: 27px; }');
+  assert.equal(theme.fontMetric.fontSizeBodyMedium, 18);
+  assert.equal(theme.fontMetric.lineHeightBodyMedium, 27);
+  assert.deepEqual(theme.font.fontBodyMedium, { size: 18, lineHeight: 27, fontWeight: 4 });
+});
+
+test('compares persisted controller overrides against pristine package defaults', () => {
+  const baseline = loadControllerBaseline();
+  const untouched = generateFlutterThemeFromParts(baseline.light, baseline.dark, baseline.extra, baseline);
+  for (const group of Object.values(untouched.light)) assert.deepEqual(group, {});
+  const persisted = baseline.extra.replace(/(--td-font-size-body-large:\s*)[^;]+;/, '$118px;');
+  const restored = generateFlutterThemeFromParts(baseline.light, baseline.dark, persisted, baseline);
+  assert.equal(restored.light.fontMetric.fontSizeBodyLarge, 18);
+  assert.equal(restored.dark.fontMetric.fontSizeBodyLarge, 18);
+});
+
+test('controller defaults emit only global tokens consumed by current Flutter', () => {
+  const baseline = loadControllerBaseline();
+  const theme = generateFlutterThemeFromParts(baseline.light, baseline.dark, baseline.extra).light;
+  const files = {
+    color: 't_colors.dart', ref: 't_colors.dart', font: 't_fonts.dart',
+    fontMetric: 't_fonts.dart', radius: 't_radius.dart', shadow: 't_shadows.dart',
+    insetShadow: 't_shadows.dart', margin: 't_spacers.dart',
+  };
+  for (const [group, file] of Object.entries(files)) {
+    const source = readFileSync(new URL(`../../../tdesign-component/lib/src/theme/${file}`, import.meta.url), 'utf8');
+    const getters = new Set([...source.matchAll(/\bget (\w+)/g)].map(match => match[1]));
+    for (const key of Object.keys(theme[group])) {
+      assert.ok(getters.has(key), `${group}.${key} has no current Flutter consumer`);
+    }
+  }
 });

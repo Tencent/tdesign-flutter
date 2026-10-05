@@ -12,6 +12,7 @@
 
 <script>
 import siteConfig from './site.config';
+import controllerBaseline from 'virtual:flutter-controller-baseline';
 import '@tdesign/theme-generator';
 import {
   createFlutterThemeMessage,
@@ -42,10 +43,11 @@ export default defineComponent({
       loaded: false,
       themeObservers: {},
       themeStyles: { light: '', dark: '', extra: '' },
-      themeBaselines: { light: '', dark: '', extra: '' },
+      themeBaselines: controllerBaseline,
       themeUpdateTimer: null,
       lastThemeJson: null,
       demoReadyHandler: null,
+      flutterReadyHandler: null,
       themeModeObserver: null,
     };
   },
@@ -82,11 +84,26 @@ export default defineComponent({
       this.sendThemeToFlutterIframe(event.detail?.iframe);
     };
     window.addEventListener('flutter-demo-ready', this.demoReadyHandler);
+    this.flutterReadyHandler = (event) => {
+      if (event.origin !== window.location.origin) return;
+      let data;
+      try {
+        data = JSON.parse(event.data);
+      } catch {
+        return;
+      }
+      if (data?.type !== 'flutter-demo-ready') return;
+      const iframe = [...document.querySelectorAll('iframe[src*="/example/"]')]
+        .find((candidate) => candidate.contentWindow === event.source);
+      if (iframe) this.sendThemeToFlutterIframe(iframe);
+    };
+    window.addEventListener('message', this.flutterReadyHandler);
   },
 
   beforeUnmount() {
     Object.values(this.themeObservers).forEach((observer) => observer?.disconnect());
     this.themeModeObserver?.disconnect();
+    window.removeEventListener('message', this.flutterReadyHandler);
     if (this.themeUpdateTimer) clearTimeout(this.themeUpdateTimer);
     if (this.demoReadyHandler) {
       window.removeEventListener('flutter-demo-ready', this.demoReadyHandler);
@@ -117,9 +134,6 @@ export default defineComponent({
               styleElement.textContent = completedCss;
               cssText = completedCss;
             }
-          }
-          if (!this.themeBaselines[themePart]) {
-            this.themeBaselines[themePart] = cssText;
           }
           this.themeStyles[themePart] = cssText;
           this.scheduleThemeUpdate();

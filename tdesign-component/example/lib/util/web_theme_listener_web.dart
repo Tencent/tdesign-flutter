@@ -1,4 +1,5 @@
 // Web 平台实现：使用 dart:html 监听 postMessage
+import 'dart:convert';
 // ignore: deprecated_member_use, avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
@@ -40,4 +41,8 @@ void setupThemeModeListener(
     }
     _onThemeUpdate?.call(theme);
   });
+  html.window.parent?.postMessage(
+    jsonEncode({'type': 'flutter-demo-ready'}),
+    html.window.location.origin,
+  );
 }

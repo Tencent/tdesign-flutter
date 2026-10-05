@@ -35,7 +35,7 @@ Flutter 官网的主题控制器会把亮色、暗色和公共尺寸样式写入
 ## 行为契约
 
 1. 控制器以 mobile 默认主题初始化，默认颜色、字体、圆角和阴影与 Flutter `TThemeData.defaultData()` 的语义保持一致。
-2. 转换器按字段处理：调色板和直接语义色进入 `color`，CSS 引用解析为叶子颜色后进入 `ref`，字体进入 `font`，圆角进入 `radius`，投影进入 `shadow`，基础尺寸映射为 `margin`。
+2. 转换器按字段处理：调色板和直接语义色进入 `color`，CSS 引用解析为叶子颜色后进入 `ref`，字体进入 `font`，圆角进入 `radius`，投影进入 `shadow`，全局 `--td-spacer[-1..6]` 间距映射为 `margin`。
 3. 字体的字号、行高和字重必须组成同一个 Flutter Font Token；只修改其中一个字段时其余字段保持有效默认值。
 4. CSS `#RGB/#RGBA/#RRGGBB/#RRGGBBAA`、`rgb()`、`rgba()`、百分比 alpha、`transparent` 和嵌套 `var()` 必须得到 Flutter 可解析的 `#AARRGGBB` 或 `#RRGGBB`。
 5. 圆形/胶囊圆角转换为 Flutter 的大半径语义；阴影保留每层 offset、blur、spread 和颜色。
@@ -50,3 +50,18 @@ Flutter 官网的主题控制器会把亮色、暗色和公共尺寸样式写入
 - [x] Flutter 解析测试覆盖全部 JSON 分组以及 dark 主题。
 - [x] 新加载 iframe 能收到当前主题；重复内容不会重复广播。
 - [x] 站点生产构建、Example 聚焦测试、调度器自测和严格 analyze 通过。
+
+## develop 同步适配（2026-10-06）
+
+桥接字段使用当前 develop 的品牌及功能色、componentStroke/componentBorder、textColorDisabled、shadow1..4 和 spacer/spacer1..6 名称；圆角按同名 Token 映射，radiusCircle 保留固定逻辑像素例外。
+
+## 当前 Token 重整契约
+
+- 以 develop 的公开全局 Token 为准，移除已删除语义色别名；控制器 CSS 和 Flutter 字段名称分开映射。
+- 字号与行高同时更新 fontMetric 和对应复合 font；保留默认 fontMetric 与 insetShadow。
+- 尺寸面板 size-4/5/6/8/10/13/15 分别驱动 spacer/spacer1..6，显式 spacer CSS 优先。
+- 数值圆角按逻辑像素传递；仅 radiusCircle 的百分比值使用固定大半径例外。
+- 支持四层外阴影、零模糊定向内阴影与 none 清除阴影。
+- iframe 在开发与生产均走同源路径；Flutter 首帧注册监听后通知父页面 ready，由父页面重发最新配置。
+
+默认比较基线取控制器包原始 CSS。控制器自身选项持久化及重载后恢复 CSS 属于上游交互行为；桥接同步实际生效的 CSS，不从选项名称推断样式。

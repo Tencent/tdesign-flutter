@@ -84,6 +84,24 @@ TThemeData _mergeTheme(
       ..addAll(_declaredValues<Color>(overrides.colorMap, values['color'])),
     fontMap: TMap<String, Font>(factory: () => base.fontMap, refs: refMap)
       ..addAll(_declaredValues<Font>(overrides.fontMap, values['font'])),
+    fontMetricMap:
+        TMap<String, double>(factory: () => base.fontMetricMap, refs: refMap)
+          ..addAll(
+            _declaredValues<double>(
+              overrides.fontMetricMap,
+              values['fontMetric'],
+            ),
+          ),
+    insetShadowMap:
+        TMap<String, BorderSide>(
+          factory: () => base.insetShadowMap,
+          refs: refMap,
+        )..addAll(
+          _declaredValues<BorderSide>(
+            overrides.insetShadowMap,
+            values['insetShadow'],
+          ),
+        ),
     radiusMap: TMap<String, double>(factory: () => base.radiusMap, refs: refMap)
       ..addAll(_declaredValues<double>(overrides.radiusMap, values['radius'])),
     fontFamilyMap:

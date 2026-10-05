@@ -19,6 +19,10 @@ void main() {
     expect(theme!.brandNormalColor, const Color(0xFF112233));
     expect(theme.fontBodyMedium?.size, 18);
     expect(theme.fontBodyMedium?.height, 26 / 18);
+    expect(theme.fontSizeBodyMedium, 18);
+    expect(theme.lineHeightBodyMedium, 26);
+    expect(theme.shadowInsetTop?.width, 2);
+    expect(theme.shadowInsetRight, TThemeData.defaultData().shadowInsetRight);
     expect(theme.radiusDefault, 8);
     expect(theme.shadowsBase?.single.blurRadius, 9);
     expect(theme.spacer16, 21);
@@ -26,6 +30,10 @@ void main() {
     expect(theme.dark?.brandNormalColor, const Color(0xFF445566));
     expect(theme.dark?.fontBodyMedium?.size, 20);
     expect(theme.bgColorPage, TThemeData.defaultData().bgColorPage);
+    expect(
+      theme.fontSizeTitleMedium,
+      TThemeData.defaultData().fontSizeTitleMedium,
+    );
     expect(theme.dark?.bgColorPage, TThemeData.defaultData().dark?.bgColorPage);
     expect(theme.dark?.bgColorPage, isNot(theme.bgColorPage));
   });
@@ -67,6 +75,10 @@ Map<String, dynamic> _theme(String color, int fontSize) {
     'ref': {'brandNormalColor': 'brandColor7'},
     'font': {
       'fontBodyMedium': {'size': fontSize, 'lineHeight': 26, 'fontWeight': 4},
+    },
+    'fontMetric': {'fontSizeBodyMedium': fontSize, 'lineHeightBodyMedium': 26},
+    'insetShadow': {
+      'shadowInsetTop': {'color': '#112233', 'width': 2},
     },
     'fontFamily': {
       'numberFontFamily': {
