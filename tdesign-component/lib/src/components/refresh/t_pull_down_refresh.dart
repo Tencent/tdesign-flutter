@@ -133,6 +133,8 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
   Completer<void>? _activeRefresh;
   Completer<void>? _pendingExternalRefresh;
 
+  TPullDownRefreshController? _boundController;
+
   bool get _refreshEnabled => widget.onRefresh != null;
 
   bool get _loadMoreEnabled => widget.onLoadMore != null;
@@ -143,23 +145,30 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
     assert(widget.refreshTimeout == null || !widget.refreshTimeout!.isNegative);
     super.initState();
     _easyController = EasyRefreshController(controlFinishRefresh: true);
-    widget.controller?.bind(_requestRefresh);
+    _updateController();
   }
 
   @override
   void didUpdateWidget(TPullDownRefresh oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?.unbind();
-      widget.controller?.bind(_requestRefresh);
+    _updateController();
+  }
+
+  void _updateController() {
+    final next = widget.controller;
+    if (identical(next, _boundController)) {
+      return;
     }
+    next?.bind(this, _requestRefresh);
+    _boundController?.unbind(this);
+    _boundController = next;
   }
 
   @override
   void dispose() {
     _timeoutTimer?.cancel();
     _completeRefreshWaiters();
-    widget.controller?.unbind();
+    _boundController?.unbind(this);
     _easyController?.dispose();
     super.dispose();
   }

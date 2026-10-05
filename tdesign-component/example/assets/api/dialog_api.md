@@ -15,13 +15,13 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| dialog | Widget | - | - |
+| context | BuildContext | - | 用于查找 Navigator 并捕获主题。 |
+| dialog | Widget | - | 弹层内容，通常为 TDialog 或 TConfirmDialog。 |
 | barrierDismissible | bool | false | 默认为 false，点击蒙层不会关闭。 |
-| barrierResult | T? | - | - |
-| barrierColor | Color? | - | - |
-| useRootNavigator | bool | true | - |
-| useSafeArea | bool | true | - |
+| barrierResult | T? | - | 蒙层成功关闭时返回的值，默认 null。 |
+| barrierColor | Color? | - | 蒙层颜色，null 时使用 Colors.black54。 |
+| useRootNavigator | bool | true | 是否使用根 Navigator，默认 true。 |
+| useSafeArea | bool | true | 是否避让安全区，默认 true。 |
 
 #### 默认构造方法
 
@@ -60,18 +60,18 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| buttonStyle | ButtonStyle? | - | - |
-| buttonText | String? | - | - |
+| buttonStyle | ButtonStyle? | - | 确认按钮样式覆盖，null 时使用组件主题。 |
+| buttonText | String? | - | 确认按钮文案，null 时使用当前语言默认文案。 |
 | closeButtonResult | Object? | - | 内置关闭按钮成功关闭时返回的值，默认 null；透传至 `TDialog.closeButtonResult`。 |
-| closeOnPressed | bool | true | - |
-| content | String? | - | - |
-| contentWidget | Widget? | - | - |
+| closeOnPressed | bool | true | 确认按钮是否自动关闭，默认 true。 |
+| content | String? | - | 正文文字，与 contentWidget 互斥。 |
+| contentWidget | Widget? | - | 自定义正文，与 content 互斥。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onPressed | VoidCallback? | - | - |
-| result | Object? | true | - |
-| semanticLabel | String? | - | - |
-| showCloseButton | bool | false | - |
-| title | String? | - | - |
+| onPressed | VoidCallback? | - | 确认按钮动作，在自动关闭前调用；null 不禁用按钮。 |
+| result | Object? | true | 确认按钮自动关闭时返回的结果，默认 true。 |
+| semanticLabel | String? | - | 无障碍标签，null 时回退到标题。 |
+| showCloseButton | bool | false | 是否显示右上角关闭按钮，默认 false。 |
+| title | String? | - | 标题文字，null 时不展示。 |
 
 
 ### TDialogThemeData
@@ -80,13 +80,15 @@
 
 ##### TDialogThemeData.lerpDouble
 
+插值可空数值，两端均为 null 时返回 null，单端 null 按 0 计算。
+
 返回类型：`double?`
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| a | double? | - | - |
-| b | double? | - | - |
-| t | double | - | - |
+| a | double? | - | 起始数值。 |
+| b | double? | - | 结束数值。 |
+| t | double | - | 插值比例，可用于外插。 |
 
 #### 默认构造方法
 

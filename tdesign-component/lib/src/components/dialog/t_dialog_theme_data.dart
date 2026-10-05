@@ -105,6 +105,11 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
     );
   }
 
+  /// 插值可空数值，两端均为 null 时返回 null，单端 null 按 0 计算。
+  ///
+  /// [a] 起始数值。
+  /// [b] 结束数值。
+  /// [t] 插值比例，可用于外插。
   static double? lerpDouble(double? a, double? b, double t) {
     if (a == null && b == null) {
       return null;

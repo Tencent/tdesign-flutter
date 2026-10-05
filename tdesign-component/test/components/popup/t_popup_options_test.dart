@@ -3,6 +3,29 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  test(
+    'maintainState defaults and transformations preserve route capability',
+    () {
+      const child = SizedBox();
+      final options = [
+        const TPopupOptions(child: child),
+        TPopupOptions.center(child: child),
+        TPopupOptions.bottom(child: child),
+        TPopupOptions.top(child: child),
+        TPopupOptions.left(child: child),
+        TPopupOptions.right(child: child),
+      ];
+      for (final option in options) {
+        expect(option.maintainState, isTrue);
+        expect(option.normalized().maintainState, isTrue);
+        expect(
+          option.copyWith(maintainState: false).normalized().maintainState,
+          isFalse,
+        );
+      }
+    },
+  );
+
   group('TPopupOptions', () {
     test('默认 placement 为 bottom，内容 builder 默认均为空', () {
       final options = const TPopupOptions(child: SizedBox()).normalized();
@@ -358,7 +381,7 @@ void main() {
       expect(config.color, isNull);
       expect(config.preventTap, isTrue);
       expect(config.closeOnClick, isNull);
-      expect(config.onClick, isNull);
+      expect(config.onTap, isNull);
       expect(config.effectiveCloseOnClick, isTrue);
     });
 

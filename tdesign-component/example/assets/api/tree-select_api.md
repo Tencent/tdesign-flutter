@@ -20,3 +20,21 @@
 | disabled | bool | false | 是否禁用。 |
 | label | String | - | 展示文案。 |
 | value | Object? | - | 业务值；同一层级的选项必须保持唯一。 值可为 null，但同一层级最多只能有一个 null 值。 |
+
+
+### TTreeSelectThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 面板背景色。 |
+| columnWidth | double? | - | 所有非根列的固定宽度；为 null 时由组件按可用宽度自动布局。 |
+| disabledTextStyle | TextStyle? | - | 禁用文案样式。 |
+| height | double? | - | 面板高度。 |
+| indicatorColor | Color? | - | 选中图标颜色。 |
+| itemHeight | double? | - | 单项最小高度。 |
+| rootBackgroundColor | Color? | - | 根列背景色。 |
+| rootColumnWidth | double? | - | 根列宽度。 |
+| selectedBackgroundColor | Color? | - | 选中项背景色。 |
+| selectedTextStyle | TextStyle? | - | 选中文案样式。 |
+| textStyle | TextStyle? | - | 普通文案样式。 |

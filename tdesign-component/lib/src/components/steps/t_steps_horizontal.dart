@@ -22,7 +22,7 @@ class TStepsHorizontal extends StatelessWidget {
   final TStepsMode mode;
 
   /// 选择步骤回调。
-  final ValueChanged<int>? onChange;
+  final ValueChanged<int>? onStepTapped;
 
   const TStepsHorizontal({
     super.key,
@@ -31,7 +31,7 @@ class TStepsHorizontal extends StatelessWidget {
     required this.status,
     required this.indicator,
     required this.mode,
-    this.onChange,
+    this.onStepTapped,
   });
 
   @override
@@ -49,7 +49,9 @@ class TStepsHorizontal extends StatelessWidget {
           status: status,
           indicator: indicator,
           mode: mode,
-          onTap: onChange == null ? null : () => onChange?.call(item.key),
+          onTap: onStepTapped == null
+              ? null
+              : () => onStepTapped?.call(item.key),
         ),
       );
     }).toList();

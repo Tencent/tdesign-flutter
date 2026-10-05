@@ -24,6 +24,10 @@ final class TPickerPopup {
   /// 弹层总高为当前 [TPickerThemeData.height]（默认 200）加
   /// [TPopupHeader.headerHeight]（58）。[child] 通常为 `TPicker` 或
   /// `TDateTimePicker`，其受控值、确认和取消状态仍由调用方管理。
+  ///
+  /// [context] 用于解析主题并查找 Navigator。
+  /// [child] Picker 滚轮面板；选中值由调用方管理。
+  /// [headerBuilder] 标准 58px 头部构建器，接收弹层上下文和关闭动作。
   static TPopupHandle show(
     BuildContext context, {
 
@@ -45,8 +49,8 @@ final class TPickerPopup {
     /// 蒙层行为；null 时沿用 Popup 默认值。
     TPopupOverlayConfig? overlay,
 
-    /// 关闭后是否销毁弹层内容，默认 false。
-    bool destroyOnClose = false,
+    /// 路由不可见时是否保留 State，默认 true；关闭再打开仍重建 State。
+    bool maintainState = true,
 
     /// 打开和关闭动画时长。
     Duration? animationDuration,
@@ -83,7 +87,7 @@ final class TPickerPopup {
         radius: radius,
         backgroundColor: backgroundColor,
         overlay: overlay,
-        destroyOnClose: destroyOnClose,
+        maintainState: maintainState,
         animationDuration: animationDuration,
         onOpened: onOpened,
         onClosed: onClosed,

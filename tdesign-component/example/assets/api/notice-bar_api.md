@@ -13,7 +13,7 @@
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
 | marquee | bool | false | 是否启用横向跑马灯展示。 |
 | maxLines | int | 1 | 文本行数（仅静态有效） |
-| onPressed | ValueChanged<TNoticeBarTapTarget>? | - | 点击事件 |
+| onTargetTap | ValueChanged<TNoticeBarTapTarget>? | - | 用户点按目标区域时通知。 自定义区域仅报告单指主按钮短按：移动不超过移动距离阈值、未取消且短于长按超时。 子组件自己的动作仍独立执行，此通知不代表子动作完成。 |
 | operation | Widget? | - | 内容右侧、`suffixIcon` 左侧的自定义操作区。 可以和 `suffixIcon` 同时显示。 |
 | prefix | Widget? | - | 自定义前缀区域。 为 null 时根据 `status` 显示默认图标；传入 `SizedBox.shrink` 可隐藏 前缀区域。组件统一在非空前缀与正文之间保留 `TSpacers.spacer` 间距 （默认 8 逻辑像素）；自定义 `Icon` 中未显式指定的颜色或尺寸会继承公告栏 状态色和标准图标尺寸。 |
 | speed | double | 50 | 横向跑马灯每秒滚动的逻辑像素，仅在 `direction` 为 `Axis.horizontal` 且 `marquee` 为 true 时生效。 |

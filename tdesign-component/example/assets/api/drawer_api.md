@@ -12,7 +12,7 @@ TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer
 | footer | Widget? | - | 抽屉的底部 |
 | items | List<TDrawerItem>? | - | 抽屉里的列表项 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onItemClick | TDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 |
+| onItemTap | TDrawerItemTapCallback? | - | 点击抽屉里的列表项触发 |
 | showDivider | bool | true | 是否显示菜单项分隔线，默认 true。 |
 | showLastDivider | bool | true | 是否显示最后一行分隔线，默认 true。 |
 | title | Widget? | - | 抽屉的标题组件 |
@@ -80,7 +80,7 @@ TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer
 | onOverlayClick | VoidCallback? | - | 在蒙层被点击时触发，不受是否自动关闭影响。 |
 | topInset | double? | - | 设置抽屉相对屏幕顶部的可选偏移，默认 0。 |
 | useSafeArea | bool | true | 控制浮层是否避让系统安全区域，默认 true。 |
-| destroyOnClose | bool | false | 控制关闭后是否立即销毁浮层路由，默认 false。 |
+| maintainState | bool | true | 控制路由不可见时是否保留 State，默认 true；关闭后重新打开会重建 State。 |
 | onClose | VoidCallback? | - | 在抽屉浮层关闭后触发。 |
 
 
@@ -96,12 +96,12 @@ TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer
 | right | 从右侧滑出。 |
 
 
-### TDrawerItemClickCallback
+### TDrawerItemTapCallback
 #### 简介
 点击抽屉列表项时的回调。
 `index` 是列表下标，`item` 是被点击的配置项。
 #### 类型定义
 
 ```dart
-typedef TDrawerItemClickCallback = void Function(int index, TDrawerItem item);
+typedef TDrawerItemTapCallback = void Function(int index, TDrawerItem item);
 ```

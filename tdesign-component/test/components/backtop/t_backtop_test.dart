@@ -7,6 +7,100 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 覆盖：默认渲染、shape 形态、showText、visibilityOffset 显隐、onPressed 回调/禁用、
 /// 回顶动画防抖、ThemeData 子树注入、品牌主题、tooltip。
 void main() {
+  for (final mode in ['replaceController', 'detachPosition', 'dispose']) {
+    testWidgets('BackTop ignores stale scroll completion: $mode', (
+      tester,
+    ) async {
+      final first = ScrollController(initialScrollOffset: 1200);
+      final second = ScrollController();
+      var notifications = 0;
+      var attachList = true;
+      var current = first;
+      Widget build() => MaterialApp(
+        home: Scaffold(
+          body: Stack(
+            children: [
+              if (attachList)
+                ListView(
+                  controller: current,
+                  children: const [SizedBox(height: 4000)],
+                ),
+              Positioned(
+                right: 16,
+                bottom: 32,
+                child: TBackTop(
+                  controller: current,
+                  onCompleted: () => notifications++,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+      await tester.pumpWidget(build());
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(TBackTop));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      if (mode == 'replaceController') {
+        current = second;
+      } else if (mode == 'detachPosition') {
+        attachList = false;
+      }
+      await tester.pumpWidget(
+        mode == 'dispose' ? const SizedBox.shrink() : build(),
+      );
+      await tester.pumpAndSettle();
+      expect(notifications, 0);
+      await tester.pumpWidget(const SizedBox.shrink());
+      first.dispose();
+      second.dispose();
+    });
+  }
+
+  testWidgets(
+    'BackTop completion notification requires actually reaching top',
+    (tester) async {
+      final controller = ScrollController(initialScrollOffset: 1200);
+      final offsets = <double>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Stack(
+              children: [
+                ListView(
+                  controller: controller,
+                  children: const [SizedBox(height: 4000)],
+                ),
+                Positioned(
+                  right: 16,
+                  bottom: 32,
+                  child: TBackTop(
+                    controller: controller,
+                    onCompleted: () => offsets.add(controller.offset),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(TBackTop));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      controller.jumpTo(900);
+      await tester.pumpAndSettle();
+      final recorded = List<double>.of(offsets);
+      await tester.pumpWidget(const SizedBox.shrink());
+      controller.dispose();
+      expect(
+        recorded,
+        isEmpty,
+        reason: 'Interrupted animation is not successful arrival at top.',
+      );
+    },
+  );
   RoundedRectangleBorder circleBorder(
     TThemeData token, {
     BorderSide side = BorderSide.none,
@@ -187,13 +281,13 @@ void main() {
       expect(called, true);
     });
 
-    testWidgets('有 controller 且挂载时先回顶再调 onPressed', (tester) async {
+    testWidgets('有 controller 且挂载时回顶成功后调用 onCompleted', (tester) async {
       final controller = ScrollController(initialScrollOffset: 500);
       var called = false;
 
       await tester.pumpWidget(
         wrapScrollable(
-          TBackTop(controller: controller, onPressed: () => called = true),
+          TBackTop(controller: controller, onCompleted: () => called = true),
           controller,
         ),
       );
@@ -207,7 +301,7 @@ void main() {
 
       // controller 应已滚动到顶部
       expect(controller.offset, lessThan(1));
-      // onPressed 应被调用
+      // onCompleted 应被调用
       expect(called, true);
       controller.dispose();
     });
@@ -224,13 +318,13 @@ void main() {
   });
 
   group('TBackTop 回顶防抖', () {
-    testWidgets('动画进行中重复点击不额外触发 onPressed', (tester) async {
+    testWidgets('动画进行中重复点击不额外触发完成通知', (tester) async {
       final controller = ScrollController(initialScrollOffset: 3000);
       var callCount = 0;
 
       await tester.pumpWidget(
         wrapScrollable(
-          TBackTop(controller: controller, onPressed: () => callCount++),
+          TBackTop(controller: controller, onCompleted: () => callCount++),
           controller,
         ),
       );
@@ -246,7 +340,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      // 防抖应保证 onPressed 只执行一次
+      // 防抖应保证 onCompleted 只执行一次
       expect(callCount, 1);
       controller.dispose();
     });
@@ -354,6 +448,56 @@ void main() {
       firstController.dispose();
       secondController.dispose();
     });
+  });
+
+  testWidgets('激活先通知，完成只在回顶成功后通知；重复点击不重复激活', (tester) async {
+    final controller = ScrollController(initialScrollOffset: 1200);
+    final events = <String>[];
+    await tester.pumpWidget(
+      wrapScrollable(
+        TBackTop(
+          controller: controller,
+          onPressed: () => events.add('pressed:${controller.offset > 0}'),
+          onCompleted: () => events.add(
+            'completed:${controller.offset == controller.position.minScrollExtent}',
+          ),
+        ),
+        controller,
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(TBackTop));
+    expect(events, ['pressed:true']);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.tap(find.byType(TBackTop));
+    expect(events, ['pressed:true']);
+    await tester.pumpAndSettle();
+    expect(events, ['pressed:true', 'completed:true']);
+    await tester.pumpWidget(const SizedBox.shrink());
+    controller.dispose();
+  });
+
+  testWidgets('无 Controller 的激活不报告回顶完成', (tester) async {
+    final events = <String>[];
+    await tester.pumpWidget(
+      wrapWithTheme(
+        TBackTop(
+          onPressed: () => events.add('pressed'),
+          onCompleted: () => events.add('completed'),
+        ),
+      ),
+    );
+    await tester.tap(find.byType(TBackTop));
+    await tester.pumpAndSettle();
+    expect(events, ['pressed']);
+    await tester.pumpWidget(
+      wrapWithTheme(TBackTop(onCompleted: () => events.add('completed'))),
+    );
+    expect(
+      tester.widget<GestureDetector>(find.byType(GestureDetector)).onTap,
+      isNull,
+    );
   });
 
   group('TBackTop 主题颜色', () {

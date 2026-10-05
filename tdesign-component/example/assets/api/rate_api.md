@@ -16,6 +16,21 @@
 | value | double | - | 受控评分值。 |
 
 
+### TRateThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| iconGap | double? | - | 图标间距。 |
+| iconSize | double? | - | 图标尺寸。 |
+| inactiveStarColor | Color? | - | 未选中星标颜色。 |
+| overlayBoxShadow | List<BoxShadow>? | - | 当前值提示与半星选择浮层阴影。 |
+| starColor | Color? | - | 选中星标颜色。 |
+| textGap | double? | - | 图标与文案间距。 |
+| textStyle | TextStyle? | - | 文案样式。 |
+| textWidth | double? | - | 文案宽度。 |
+
+
 ### TRateIconBuilder
 #### 类型定义
 

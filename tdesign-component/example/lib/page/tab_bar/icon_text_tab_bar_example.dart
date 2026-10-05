@@ -29,7 +29,7 @@ class _IconTextTabBarExampleState extends State<IconTextTabBarExample> {
           tabText: labels[index],
           selectedIcon: Icon(icons[index]),
           unselectedIcon: Icon(icons[index]),
-          allowMultipleTaps: true,
+          notifyOnReselect: true,
           onTap: () => TToast.showText(
             '第 ${index + 1} 项',
             context: context,

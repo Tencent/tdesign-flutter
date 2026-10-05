@@ -139,7 +139,7 @@ TActionSheet 组件级视觉 ThemeExtension
 | --- | --- | --- | --- |
 | count | int | - | 一个可视面板期望容纳的项目数 |
 | rows | int | - | 行数 |
-| itemMinWidth | double? | - | - |
+| itemMinWidth | double? | - | 单项最小宽度，必须大于 0；null 时按可视项目数计算。 |
 
 #### 公开属性
 

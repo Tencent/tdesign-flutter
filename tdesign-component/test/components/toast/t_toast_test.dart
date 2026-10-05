@@ -12,6 +12,39 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 用 `tester.pump(Duration)` 推进假时钟即可触发 Toast 显示/自动消失，
 /// 避免 `runAsync` + `pumpAndSettle` 在 Windows/WSL 跨平台时序不一致导致失败。
 void main() {
+  for (final painted in [false, true]) {
+    testWidgets('Toast owner unmount cleanup, painted=$painted', (
+      tester,
+    ) async {
+      late BuildContext anchor;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              anchor = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TToast.showText(
+        'old toast',
+        context: anchor,
+        toastId: 'owner',
+        duration: const Duration(milliseconds: 50),
+      );
+      if (painted) {
+        await tester.pump();
+      }
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump(const Duration(seconds: 1));
+      expect(tester.takeException(), isNull);
+      TToast.dismissToast('owner');
+      TToast.dismissAll();
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   /// 用 TTheme 包裹以提供基础 Token，含可定位的 Key 节点
   ThemeData fullTheme({TToastThemeData? toastTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());

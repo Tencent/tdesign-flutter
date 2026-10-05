@@ -28,6 +28,19 @@
 | width | double? | - | 图片宽度，未指定时为 72。 |
 
 
+### TImageThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| centerSlice | Rect? | - | 九宫格中心切片。 |
+| color | Color? | - | 图片叠加色。 |
+| colorBlendMode | BlendMode? | - | 颜色混合模式。 |
+| gaplessPlayback | bool? | - | 更新 provider 时是否保留上一帧。 |
+| isAntiAlias | bool? | - | 是否启用抗锯齿。 |
+| matchTextDirection | bool? | - | 是否匹配文字方向。 |
+
+
 ### TImageShape
 #### 枚举值
 

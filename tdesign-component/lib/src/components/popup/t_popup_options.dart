@@ -48,7 +48,7 @@ class TPopupOptions {
     this.radius,
     this.backgroundColor,
     this.overlay,
-    this.destroyOnClose = false,
+    this.maintainState = true,
     this.animationDuration,
     this.headerBuilder,
     this.closeBuilder,
@@ -70,7 +70,7 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     TPopupOverlayConfig? overlay,
-    bool destroyOnClose = false,
+    bool maintainState = true,
     Duration? animationDuration,
     VoidCallback? onOpened,
     VoidCallback? onClosed,
@@ -85,7 +85,7 @@ class TPopupOptions {
     radius: radius,
     backgroundColor: backgroundColor,
     overlay: overlay,
-    destroyOnClose: destroyOnClose,
+    maintainState: maintainState,
     animationDuration: animationDuration,
     onOpened: onOpened,
     onClosed: onClosed,
@@ -104,7 +104,7 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     TPopupOverlayConfig? overlay,
-    bool destroyOnClose = false,
+    bool maintainState = true,
     Duration? animationDuration,
     VoidCallback? onOpened,
     VoidCallback? onClosed,
@@ -119,7 +119,7 @@ class TPopupOptions {
     radius: radius,
     backgroundColor: backgroundColor,
     overlay: overlay,
-    destroyOnClose: destroyOnClose,
+    maintainState: maintainState,
     animationDuration: animationDuration,
     onOpened: onOpened,
     onClosed: onClosed,
@@ -137,7 +137,7 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     TPopupOverlayConfig? overlay,
-    bool destroyOnClose = false,
+    bool maintainState = true,
     Duration? animationDuration,
     VoidCallback? onOpened,
     VoidCallback? onClosed,
@@ -151,7 +151,7 @@ class TPopupOptions {
     radius: radius,
     backgroundColor: backgroundColor,
     overlay: overlay,
-    destroyOnClose: destroyOnClose,
+    maintainState: maintainState,
     animationDuration: animationDuration,
     onOpened: onOpened,
     onClosed: onClosed,
@@ -169,7 +169,7 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     TPopupOverlayConfig? overlay,
-    bool destroyOnClose = false,
+    bool maintainState = true,
     Duration? animationDuration,
     VoidCallback? onOpened,
     VoidCallback? onClosed,
@@ -183,7 +183,7 @@ class TPopupOptions {
     radius: radius,
     backgroundColor: backgroundColor,
     overlay: overlay,
-    destroyOnClose: destroyOnClose,
+    maintainState: maintainState,
     animationDuration: animationDuration,
     onOpened: onOpened,
     onClosed: onClosed,
@@ -201,7 +201,7 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     TPopupOverlayConfig? overlay,
-    bool destroyOnClose = false,
+    bool maintainState = true,
     Duration? animationDuration,
     VoidCallback? onOpened,
     VoidCallback? onClosed,
@@ -215,7 +215,7 @@ class TPopupOptions {
     radius: radius,
     backgroundColor: backgroundColor,
     overlay: overlay,
-    destroyOnClose: destroyOnClose,
+    maintainState: maintainState,
     animationDuration: animationDuration,
     onOpened: onOpened,
     onClosed: onClosed,
@@ -266,8 +266,11 @@ class TPopupOptions {
   TPopupOverlayConfig get overlayConfig =>
       overlay ?? const TPopupOverlayConfig();
 
-  /// 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。
-  final bool destroyOnClose;
+  /// 路由不可见时是否保留其 State，默认 true。
+  ///
+  /// false 允许 Flutter 在路由被完全遮挡时释放内容，但不保证一定释放。
+  /// 关闭弹层会移除路由；再次打开会重新创建 State，与本参数无关。
+  final bool maintainState;
 
   /// 打开/关闭动画时长，默认 240ms（与小程序公开 duration 默认值一致）。
   final Duration? animationDuration;
@@ -290,7 +293,9 @@ class TPopupOptions {
   /// 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。
   final VoidCallback? onClosed;
 
-  /// 显隐变化；第二个参数为 [TPopupTrigger]。
+  /// 显隐流程发起时触发；第二个参数为 [TPopupTrigger]。
+  ///
+  /// 此时动画不一定完成；完成阶段分别见 [onOpened] 与 [onClosed]。
   final TPopupVisibleChangeCallback? onVisibleChange;
 
   /// 是否避让系统安全区，默认 false；center 使用完整安全区，其他方向避让贴边侧及相邻边。
@@ -312,7 +317,7 @@ class TPopupOptions {
     Object? radius = _unset,
     Object? backgroundColor = _unset,
     Object? overlay = _unset,
-    bool? destroyOnClose,
+    bool? maintainState,
     Duration? animationDuration,
     Object? headerBuilder = _unset,
     Object? closeBuilder = _unset,
@@ -340,7 +345,7 @@ class TPopupOptions {
       overlay: identical(overlay, _unset)
           ? this.overlay
           : overlay as TPopupOverlayConfig?,
-      destroyOnClose: destroyOnClose ?? this.destroyOnClose,
+      maintainState: maintainState ?? this.maintainState,
       animationDuration: animationDuration ?? this.animationDuration,
       headerBuilder: identical(headerBuilder, _unset)
           ? this.headerBuilder
@@ -374,7 +379,7 @@ class TPopupOptions {
       radius: radius,
       backgroundColor: backgroundColor,
       overlay: overlay,
-      destroyOnClose: destroyOnClose,
+      maintainState: maintainState,
       animationDuration: animationDuration,
       headerBuilder: isBottom ? headerBuilder : null,
       closeBuilder: isCenter ? closeBuilder : null,

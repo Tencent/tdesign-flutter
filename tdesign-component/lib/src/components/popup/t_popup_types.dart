@@ -68,7 +68,7 @@ class TPopupOverlayConfig {
   /// 可见蒙层点击回调；是否关闭取决于 [effectiveCloseOnClick]。
   ///
   /// 仅当 [showOverlay] 与 [preventTap] 都为 true 时触发。
-  final VoidCallback? onClick;
+  final VoidCallback? onTap;
 
   /// 创建蒙层配置。
   const TPopupOverlayConfig({
@@ -76,7 +76,7 @@ class TPopupOverlayConfig {
     this.color,
     this.preventTap = true,
     this.closeOnClick,
-    this.onClick,
+    this.onTap,
   });
 
   /// 解析后的点击可见蒙层是否关闭。

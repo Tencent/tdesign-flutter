@@ -10,6 +10,30 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// Tier1 组件：覆盖 Theme 子树 mergeExtension(TLoadingThemeData)。
 /// 覆盖自定义 size、icon 三种、text、axis 方向。
 void main() {
+  testWidgets('unpainted Loading session releases and can be reused', (
+    tester,
+  ) async {
+    late BuildContext anchor;
+    Widget host() => MaterialApp(
+      home: Builder(
+        builder: (context) {
+          anchor = context;
+          return const SizedBox();
+        },
+      ),
+    );
+    await tester.pumpWidget(host());
+    TLoadingController.show(anchor, child: const Text('pending loading'));
+    await tester.pumpWidget(const SizedBox());
+    TLoadingController.dismiss();
+    await tester.pumpWidget(host());
+    TLoadingController.show(anchor, child: const Text('new loading'));
+    await tester.pump();
+    expect(find.text('new loading'), findsOneWidget);
+    TLoadingController.dismiss();
+    await tester.pump();
+  });
+
   Widget wrapWithTheme(Widget child, {TLoadingThemeData? loadingTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
     if (loadingTheme != null) {
@@ -299,6 +323,129 @@ void main() {
   // TLoadingController
   // ============================================================
   group('TLoadingController', () {
+    testWidgets('所属 Overlay 卸载后可在新 Overlay 展示，无需主动 dismiss', (tester) async {
+      late BuildContext current;
+      Widget app() => wrapWithTheme(
+        Builder(
+          builder: (context) {
+            current = context;
+            return const SizedBox();
+          },
+        ),
+      );
+      await tester.pumpWidget(app());
+      TLoadingController.show(current, text: '旧加载');
+      await tester.pump();
+      expect(find.text('旧加载'), findsOneWidget);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpWidget(app());
+      TLoadingController.show(current, text: '新加载');
+      await tester.pump();
+      expect(find.text('新加载'), findsOneWidget);
+      TLoadingController.dismiss();
+      TLoadingController.dismiss();
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('首次绘制前 Overlay 卸载不阻塞新展示', (tester) async {
+      late BuildContext current;
+      Widget app() => wrapWithTheme(
+        Builder(
+          builder: (context) {
+            current = context;
+            return const SizedBox();
+          },
+        ),
+      );
+      await tester.pumpWidget(app());
+      TLoadingController.show(current, text: '未绘制');
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpWidget(app());
+      TLoadingController.show(current, text: '已恢复');
+      await tester.pump();
+      expect(find.text('已恢复'), findsOneWidget);
+      TLoadingController.dismiss();
+      await tester.pump();
+    });
+
+    testWidgets('旧 Entry 延迟卸载不会清除新展示', (tester) async {
+      late BuildContext current;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              current = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TLoadingController.show(current, text: '第一次');
+      await tester.pump();
+      TLoadingController.dismiss();
+      TLoadingController.show(current, text: '第二次');
+      await tester.pump();
+      TLoadingController.show(current, text: '不能替换');
+      await tester.pump();
+      expect(find.text('第二次'), findsOneWidget);
+      expect(find.text('不能替换'), findsNothing);
+      TLoadingController.dismiss();
+      await tester.pump();
+    });
+
+    testWidgets('普通页面离开但根 Overlay 尚存时保持全局加载', (tester) async {
+      late BuildContext current;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              current = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TLoadingController.show(current, text: '全局任务');
+      await tester.pump();
+      await tester.pumpWidget(wrapWithTheme(const Text('新的页面')));
+      expect(find.text('全局任务'), findsOneWidget);
+      TLoadingController.dismiss();
+      await tester.pump();
+    });
+
+    testWidgets('不透明覆盖层遮挡不视为所属 Overlay 卸载', (tester) async {
+      late BuildContext current;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              current = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TLoadingController.show(current, text: '保留加载');
+      await tester.pump();
+      final cover = OverlayEntry(
+        opaque: true,
+        builder: (context) =>
+            const ColoredBox(color: Colors.white, child: Text('覆盖层')),
+      );
+      Overlay.of(current).insert(cover);
+      await tester.pump();
+      expect(find.text('保留加载'), findsNothing);
+      TLoadingController.show(current, text: '不能替换');
+      cover.remove();
+      cover.dispose();
+      await tester.pump();
+      expect(find.text('保留加载'), findsOneWidget);
+      expect(find.text('不能替换'), findsNothing);
+      TLoadingController.dismiss();
+      await tester.pump();
+    });
+
     testWidgets('缺少 Overlay 时不污染后续显示状态', (tester) async {
       late BuildContext bareContext;
       await tester.pumpWidget(

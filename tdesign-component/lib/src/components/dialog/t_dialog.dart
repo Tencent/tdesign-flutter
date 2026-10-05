@@ -182,6 +182,13 @@ class TDialog extends StatelessWidget {
   /// 操作按钮与内置关闭按钮分别返回各自配置的结果。
   /// 蒙层与内置关闭按钮通过 Navigator.maybePop 关闭，遵守 PopScope。
   /// 系统返回及未携带结果的 Navigator.pop 仍返回 null，不使用 [barrierResult]。
+  ///
+  /// [context] 用于查找 Navigator 并捕获主题。
+  /// [dialog] 弹层内容，通常为 TDialog 或 TConfirmDialog。
+  /// [barrierResult] 蒙层成功关闭时返回的值，默认 null。
+  /// [barrierColor] 蒙层颜色，null 时使用 Colors.black54。
+  /// [useRootNavigator] 是否使用根 Navigator，默认 true。
+  /// [useSafeArea] 是否避让安全区，默认 true。
   static Future<T?> show<T>(
     BuildContext context, {
     required Widget dialog,

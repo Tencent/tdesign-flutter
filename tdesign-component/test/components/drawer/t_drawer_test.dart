@@ -464,7 +464,7 @@ void main() {
         wrapWithTheme(
           TDrawer(
             items: const [TDrawerItem(title: '菜单1')],
-            onItemClick: (_, __) {},
+            onItemTap: (_, __) {},
           ),
           drawerTheme: const TDrawerThemeData(
             itemBackgroundColor: Colors.white,
@@ -490,7 +490,7 @@ void main() {
           TDrawer(
             enableFeedback: false,
             items: const [TDrawerItem(title: '菜单1')],
-            onItemClick: (_, __) {},
+            onItemTap: (_, __) {},
           ),
           drawerTheme: const TDrawerThemeData(
             itemBackgroundColor: Colors.white,
@@ -637,14 +637,14 @@ void main() {
       expect(container.constraints?.maxWidth, 320);
     });
 
-    testWidgets('点击列表项触发 onItemClick', (tester) async {
+    testWidgets('点击列表项触发 onItemTap', (tester) async {
       int? clickedIndex;
       TDrawerItem? clickedItem;
       await tester.pumpWidget(
         wrapWithTheme(
           TDrawer(
             items: const [TDrawerItem(title: '菜单1')],
-            onItemClick: (index, item) {
+            onItemTap: (index, item) {
               clickedIndex = index;
               clickedItem = item;
             },
@@ -888,7 +888,7 @@ void main() {
       expect(closed, isTrue);
     });
 
-    testWidgets('无遮罩与 destroyOnClose 由展示函数控制', (tester) async {
+    testWidgets('无遮罩与 maintainState 由展示函数控制', (tester) async {
       bool? maintainState;
       await tester.pumpWidget(
         MaterialApp(
@@ -901,7 +901,7 @@ void main() {
                   showTDrawer(
                     context,
                     showOverlay: false,
-                    destroyOnClose: true,
+                    maintainState: false,
                     drawer: TDrawer(
                       child: Builder(
                         builder: (context) {

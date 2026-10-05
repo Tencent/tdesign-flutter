@@ -11,6 +11,16 @@
 | title | String | '' | 标题文本，显示结果的主要信息，默认标题为空字符串 |
 
 
+### TResultThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| descriptionStyle | TextStyle? | - | 描述文字样式 |
+| iconSize | double? | - | 默认状态图标尺寸；自定义 icon 不使用该字段。 |
+| titleStyle | TextStyle? | - | 标题文字样式 |
+
+
 ### TResultStatus
 #### 枚举值
 

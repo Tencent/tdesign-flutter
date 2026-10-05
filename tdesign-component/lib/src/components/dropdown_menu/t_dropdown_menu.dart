@@ -15,17 +15,41 @@ import '../../theme/t_theme.dart';
 import 't_dropdown_theme_data.dart';
 
 /// 下拉筛选面板相对筛选栏的展开位置。
-enum TDropdownMenuPlacement { auto, below, above }
+enum TDropdownMenuPlacement {
+  /// 根据可用空间自动选择，空间变化时避免展开方向反复跳动。
+  auto,
+
+  /// 固定向筛选栏下方展开。
+  below,
+
+  /// 固定向筛选栏上方展开。
+  above,
+}
 
 /// 下拉筛选面板关闭的原因。
 enum TDropdownMenuCloseReason {
+  /// 单选项目提交后关闭。
   selection,
+
+  /// 多选草稿确认后关闭。
   confirm,
+
+  /// 用户取消草稿。
   cancel,
+
+  /// 点按覆盖层或外部区域关闭。
   overlay,
+
+  /// 系统返回关闭。
   back,
+
+  /// 再次激活已展开的触发项关闭。
   trigger,
+
+  /// 命令式控制器发起关闭。
   controller,
+
+  /// 切换到另一筛选项时关闭原面板。
   switchItem,
 }
 
@@ -131,11 +155,14 @@ class TDropdownMenuItem {
 }
 
 /// 类型安全的下拉筛选栏控制器。
+/// 单目标菜单控制器；同时绑定多个菜单会抛出 StateError。
+/// 未绑定时命令无副作用，调用方负责 dispose。
 class TDropdownMenuController extends ChangeNotifier {
   Future<void> Function(int index)? _openCallback;
   Future<void> Function(TDropdownMenuCloseReason reason)? _closeCallback;
   Future<void> Function(int index)? _toggleCallback;
   int? _openIndex;
+  Object? _owner;
 
   int? get openIndex => _openIndex;
   bool get isOpen => _openIndex != null;
@@ -153,16 +180,25 @@ class TDropdownMenuController extends ChangeNotifier {
   }
 
   void _attach({
+    required Object owner,
     required Future<void> Function(int index) open,
     required Future<void> Function(TDropdownMenuCloseReason reason) close,
     required Future<void> Function(int index) toggle,
   }) {
+    if (_owner != null && !identical(_owner, owner)) {
+      throw StateError('A TDropdownMenuController supports only one menu.');
+    }
+    _owner = owner;
     _openCallback = open;
     _closeCallback = close;
     _toggleCallback = toggle;
   }
 
-  void _detach() {
+  void _detach(Object owner) {
+    if (!identical(_owner, owner)) {
+      return;
+    }
+    _owner = null;
     _openCallback = null;
     _closeCallback = null;
     _toggleCallback = null;
@@ -194,19 +230,36 @@ class TDropdownMenu extends StatefulWidget {
     this.onClosed,
   });
 
+  /// 筛选项，按列表顺序排列。
   final List<TDropdownMenuItem> items;
+
+  /// 可选命令式控制器；未传时组件创建内部控制器。
   final TDropdownMenuController? controller;
+
+  /// 展开位置，默认根据可用空间自动选择。
   final TDropdownMenuPlacement placement;
+
+  /// 是否允许触发栏横向滚动，默认 false。
   final bool scrollable;
+
+  /// 是否显示蒙层，默认 true。
   final bool showOverlay;
+
+  /// 点按蒙层/外部区域是否关闭，默认 true。
   final bool closeOnOverlayTap;
+
+  /// 是否使用根 Overlay，默认 false。
   final bool useRootOverlay;
 
   /// 展开、关闭及切换动画时长。
   ///
   /// 未指定时为 200ms。系统禁用动画时始终使用零时长。
   final Duration? animationDuration;
+
+  /// 展开动画完成后报告筛选项索引。
   final ValueChanged<int>? onOpened;
+
+  /// 关闭动画完成后报告索引及关闭原因。
   final TDropdownMenuClosedCallback? onClosed;
 
   @override
@@ -230,6 +283,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   late AnimationController _animationController;
   late AnimationController _panelSwitchController;
   late TDropdownMenuController _controller;
+  TDropdownMenuController? _boundExternalController;
   late bool _ownsController;
   List<FocusNode> _triggerFocusNodes = <FocusNode>[];
   OverlayEntry? _overlayEntry;
@@ -312,6 +366,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   @override
   void initState() {
     super.initState();
+    _bindController(widget.controller);
     WidgetsBinding.instance.addObserver(this);
     _animationController = AnimationController(
       vsync: this,
@@ -322,7 +377,6 @@ class _TDropdownMenuState extends State<TDropdownMenu>
       duration: widget.animationDuration,
       value: 1,
     );
-    _bindController(widget.controller);
     _syncFocusNodes();
   }
 
@@ -395,7 +449,9 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   void didUpdateWidget(TDropdownMenu oldWidget) {
     super.didUpdateWidget(oldWidget);
     var controllerWasOpen = false;
-    if (!identical(widget.controller, oldWidget.controller)) {
+    if (!identical(widget.controller, _boundExternalController)) {
+      final next = widget.controller ?? TDropdownMenuController();
+      next._attach(owner: this, open: _open, close: _close, toggle: _toggle);
       controllerWasOpen = _controller.isOpen;
       if (controllerWasOpen) {
         _operationEpoch++;
@@ -409,11 +465,13 @@ class _TDropdownMenuState extends State<TDropdownMenu>
           _activeMenus.remove(navigator);
         }
       }
-      _controller._detach();
+      _controller._detach(this);
       if (_ownsController) {
         _controller.dispose();
       }
-      _bindController(widget.controller);
+      _controller = next;
+      _ownsController = widget.controller == null;
+      _boundExternalController = widget.controller;
       if (controllerWasOpen) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted && !_controller.isOpen) {
@@ -485,7 +543,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     _overlayEntry = null;
     _overlayState = null;
     _capturedThemes = null;
-    _controller._detach();
+    _controller._detach(this);
     if (_ownsController) {
       _controller.dispose();
     }
@@ -500,8 +558,14 @@ class _TDropdownMenuState extends State<TDropdownMenu>
 
   void _bindController(TDropdownMenuController? external) {
     _ownsController = external == null;
+    _boundExternalController = external;
     _controller = external ?? TDropdownMenuController();
-    _controller._attach(open: _open, close: _close, toggle: _toggle);
+    _controller._attach(
+      owner: this,
+      open: _open,
+      close: _close,
+      toggle: _toggle,
+    );
   }
 
   void _syncFocusNodes() {

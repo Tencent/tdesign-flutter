@@ -99,5 +99,5 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| name | String | - | - |
-| fontFamilyUrl | String | - | - |
+| name | String | - | 注册到 Flutter 的字体族名称。 |
+| fontFamilyUrl | String | - | 可下载的字体资源 URL；同名字体不能切换 URL。 |

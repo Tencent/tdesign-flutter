@@ -29,13 +29,13 @@ void main() {
 
     expect(steps[10].direction, TStepsDirection.vertical);
     expect(steps[10].indicator, TStepsIndicator.dot);
-    expect(steps[10].onChange, isNotNull);
+    expect(steps[10].onStepTapped, isNotNull);
     expect(steps[10].value, 3);
     expect(find.text('已完成步骤'), findsNWidgets(3));
     expect(find.text('当前步骤'), findsOneWidget);
     expect(find.text('未完成步骤'), findsNothing);
     expect(steps[11].indicator, TStepsIndicator.dot);
-    expect(steps[11].onChange, isNull);
+    expect(steps[11].onStepTapped, isNull);
     expect(steps[11].direction, TStepsDirection.vertical);
 
     final selectable = find.byType(TSteps).at(10);

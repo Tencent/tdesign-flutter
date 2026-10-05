@@ -277,12 +277,12 @@ class _ThemeModeSettingsPageState extends State<ThemeModeSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    var themeModeProvider = Provider.of<ThemeModeProvider>(context);
+    final themeModeProvider = Provider.of<ThemeModeProvider>(context);
 
     // 获取系统主题
-    Brightness systemBrightness = MediaQuery.platformBrightnessOf(context);
+    final systemBrightness = MediaQuery.platformBrightnessOf(context);
 
-    enabledModeCheckIcon(ThemeMode mode) {
+    IconData? enabledModeCheckIcon(ThemeMode mode) {
       return themeModeProvider.themeMode == mode ||
               (themeModeProvider.themeMode == ThemeMode.system &&
                   systemBrightness ==
@@ -302,13 +302,13 @@ class _ThemeModeSettingsPageState extends State<ThemeModeSettingsPage> {
         child: Column(
           children: [
             TCellGroup(
-              theme: TCellGroupTheme.cardTheme,
+              variant: TCellGroupVariant.card,
               cells: [
                 TCell(
-                  title: '跟随系统',
-                  description: '开启后，将跟随系统打开或关闭深色模式。',
-                  rightIconWidget: TSwitch(
-                    isOn: themeModeProvider.themeMode == ThemeMode.system,
+                  title: const Text('跟随系统'),
+                  subtitle: const Text('开启后，将跟随系统打开或关闭深色模式。'),
+                  trailing: TSwitch(
+                    value: themeModeProvider.themeMode == ThemeMode.system,
                     onChanged: (isOn) {
                       if (isOn) {
                         themeModeProvider.themeMode = ThemeMode.system;
@@ -317,30 +317,28 @@ class _ThemeModeSettingsPageState extends State<ThemeModeSettingsPage> {
                       } else {
                         themeModeProvider.themeMode = ThemeMode.light;
                       }
-                      return isOn;
                     },
                   ),
-                  disabled: true,
                 ),
               ],
             ),
             TCellGroup(
-              theme: TCellGroupTheme.cardTheme,
-              title: '手动选择',
+              variant: TCellGroupVariant.card,
+              title: const Text('手动选择'),
               cells: [
                 TCell(
-                  title: '浅色模式',
-                  leftIcon: TIcons.mode_light,
-                  rightIcon: enabledModeCheckIcon(ThemeMode.light),
-                  onClick: (cell) {
+                  title: const Text('浅色模式'),
+                  prefix: const Icon(TIcons.mode_light),
+                  trailing: Icon(enabledModeCheckIcon(ThemeMode.light)),
+                  onTap: () {
                     themeModeProvider.themeMode = ThemeMode.light;
                   },
                 ),
                 TCell(
-                  title: '深色模式',
-                  leftIcon: TIcons.mode_dark,
-                  rightIcon: enabledModeCheckIcon(ThemeMode.dark),
-                  onClick: (cell) {
+                  title: const Text('深色模式'),
+                  prefix: const Icon(TIcons.mode_dark),
+                  trailing: Icon(enabledModeCheckIcon(ThemeMode.dark)),
+                  onTap: () {
                     themeModeProvider.themeMode = ThemeMode.dark;
                   },
                 ),

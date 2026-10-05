@@ -36,14 +36,14 @@ Picker 专用弹层入口。
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| child | Widget | - | - |
-| headerBuilder | TPickerPopupHeaderBuilder | - | - |
+| context | BuildContext | - | 用于解析主题并查找 Navigator。 |
+| child | Widget | - | Picker 滚轮面板；选中值由调用方管理。 |
+| headerBuilder | TPickerPopupHeaderBuilder | - | 标准 58px 头部构建器，接收弹层上下文和关闭动作。 |
 | inset | TPopupBottomInset? | - | 底部弹层的边缘缩进。 |
 | radius | double? | - | 顶部圆角；null 时使用 Popup 主题或 TDesign 默认值。 |
 | backgroundColor | Color? | - | 面板背景色；null 时使用 Popup 主题或容器色。 |
 | overlay | TPopupOverlayConfig? | - | 蒙层行为；null 时沿用 Popup 默认值。 |
-| destroyOnClose | bool | false | 关闭后是否销毁弹层内容，默认 false。 |
+| maintainState | bool | true | 路由不可见时是否保留 State，默认 true；关闭再打开仍重建 State。 |
 | animationDuration | Duration? | - | 打开和关闭动画时长。 |
 | onOpened | VoidCallback? | - | 打开动画完成回调。 |
 | onClosed | VoidCallback? | - | 关闭动画完成回调。 |
@@ -101,6 +101,22 @@ const 构造不会复制或冻结传入的 `selectedOptions` 和 `indexes`。
 | --- | --- | --- | --- |
 | options | List<TPickerOption> | - | 根选项。 |
 
+
+### TPickerThemeData
+#### 简介
+TPicker 组件级 ThemeExtension
+被 TPicker 和 TDateTimePicker 共用。
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| height | double? | - | 滚轮视窗高度，默认 200 逻辑像素。 |
+| itemCount | int? | - | 每屏显示项数，默认 5。 |
+
+
+### TPickerItems
+#### 简介
+选择器数据源。
 
 ### TPickerPopupHeaderBuilder
 #### 简介

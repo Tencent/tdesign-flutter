@@ -69,6 +69,10 @@ for (const component of manifest.components) {
   if (result.status !== 0) {
     process.exit(result.status ?? 1);
   }
+  if (component.slug === 'theme') {
+    const extensions = spawnSync('dart', ['run', 'tool/generate_theme_extensions.dart'], { cwd: componentRoot, stdio: 'inherit' });
+    if (extensions.status !== 0) process.exit(extensions.status ?? 1);
+  }
 }
 
 console.log(`[generate-api] generated ${manifest.components.length} API documents`);

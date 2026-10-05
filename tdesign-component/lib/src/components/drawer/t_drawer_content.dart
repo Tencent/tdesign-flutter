@@ -3,7 +3,7 @@ part of 't_drawer.dart';
 /// 点击抽屉列表项时的回调。
 ///
 /// [index] 是列表下标，[item] 是被点击的配置项。
-typedef TDrawerItemClickCallback = void Function(int index, TDrawerItem item);
+typedef TDrawerItemTapCallback = void Function(int index, TDrawerItem item);
 
 /// `TDrawer` 的内部内容布局。
 class _TDrawerContent extends StatelessWidget {
@@ -12,7 +12,7 @@ class _TDrawerContent extends StatelessWidget {
     this.items,
     this.child,
     this.title,
-    this.onItemClick,
+    this.onItemTap,
     this.enableFeedback = true,
     this.showDivider = true,
     this.showLastDivider = true,
@@ -31,7 +31,7 @@ class _TDrawerContent extends StatelessWidget {
   final Widget? title;
 
   /// 点击抽屉里的列表项触发
-  final TDrawerItemClickCallback? onItemClick;
+  final TDrawerItemTapCallback? onItemTap;
 
   /// 宽度；优先级高于 ThemeData，默认使用 280。
 
@@ -84,9 +84,9 @@ class _TDrawerContent extends StatelessWidget {
                   final item = items![index];
                   return _DrawerMenuItem(
                     item: item,
-                    onTap: onItemClick == null
+                    onTap: onItemTap == null
                         ? null
-                        : () => onItemClick!(index, item),
+                        : () => onItemTap!(index, item),
                     enableFeedback: enableFeedback,
                     textStyle: _itemTextStyle(context, drawerTheme),
                     backgroundColor:

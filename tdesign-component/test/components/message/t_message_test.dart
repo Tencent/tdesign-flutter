@@ -3,6 +3,36 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  testWidgets('Message releases an unpainted session with its Overlay', (
+    tester,
+  ) async {
+    late BuildContext messageContext;
+    var dismissed = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            messageContext = context;
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+    final handle = TMessage.show(
+      context: messageContext,
+      content: 'pending',
+      duration: null,
+      onDismissed: () => dismissed++,
+    );
+    expect(handle.isShowing, isTrue);
+    await tester.pumpWidget(const SizedBox());
+    expect(handle.isShowing, isFalse);
+    expect(dismissed, 1);
+    handle.dismiss();
+    expect(handle.isShowing, isFalse);
+    expect(dismissed, 1);
+  });
+
   Widget wrap(
     Widget child, {
     TMessageThemeData? messageTheme,

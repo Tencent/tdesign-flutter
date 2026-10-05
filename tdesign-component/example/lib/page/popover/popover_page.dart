@@ -161,8 +161,8 @@ class _TPopoverPage extends State<TPopoverPage> {
                   onTap: () {
                     setState(() => _eventStatus = 'onTap：点击或长按我');
                   },
-                  onLongTap: () {
-                    setState(() => _eventStatus = 'onLongTap：点击或长按我');
+                  onLongPress: () {
+                    setState(() => _eventStatus = 'onLongPress：点击或长按我');
                   },
                 );
               },

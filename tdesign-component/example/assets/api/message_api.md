@@ -13,7 +13,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| context | BuildContext | - | - |
+| context | BuildContext | - | 用于查找 Overlay 并捕获当前主题。 |
 | content | String | '' | 通知内容 |
 | duration | Duration? | const Duration(seconds: 3) | 自动关闭时长；必须为正数，null 表示不自动关闭。 |
 | showIcon | bool | true | 是否显示前置图标 |
@@ -48,3 +48,50 @@
 | showIcon | bool | true | 是否显示前置图标 |
 | status | TMessageStatus | TMessageStatus.info | 消息语义状态 |
 | useSafeArea | bool | true | 是否避让系统安全区，默认为 true。设为 false 时显式 `offset` 保持绝对坐标， 消息宽度仍使用扣除 16 像素水平外间距后的默认宽度。 |
+
+
+### TMessageMarquee
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| delay | Duration | Duration.zero | 开始滚动前的延迟 |
+| duration | Duration | const Duration(seconds: 10) | 单次滚动时长 |
+| repeat | bool | false | 是否循环滚动 |
+
+
+### TMessageHandle
+
+### TMessageThemeData
+
+#### 静态方法
+
+##### TMessageThemeData.lerpDouble
+
+返回类型：`double?`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| a | double? | - | - |
+| b | double? | - | - |
+| t | double | - | - |
+
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景色 |
+| elevation | double? | - | 阴影 |
+| shape | ShapeBorder? | - | 形状 |
+
+
+### TMessageStatus
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| info | 信息 |
+| success | 成功 |
+| warning | 警告 |
+| error | 错误 |

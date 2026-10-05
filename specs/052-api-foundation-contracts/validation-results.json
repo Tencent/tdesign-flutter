@@ -1,0 +1,1019 @@
+{
+  "baseline": "fcaa77ccbdbdf3eff752494ac4b35fd20149ce1a",
+  "versions": {
+    "3.32.0": {
+      "finalExitCodes": {
+        "analyze": 0,
+        "components": 0,
+        "coverage-button": 0,
+        "coverage-loading": 0,
+        "coverage-steps": 0,
+        "demo": 0,
+        "runners": 0,
+        "snippets": 0
+      },
+      "runnerReportedPassCounts": {
+        "components": 2754,
+        "demo": 275,
+        "runners": 19
+      },
+      "coverage": {
+        "avatar": {
+          "hit": 273,
+          "found": 284,
+          "percentage": 96.13
+        },
+        "action_sheet": {
+          "hit": 498,
+          "found": 516,
+          "percentage": 96.51
+        },
+        "badge": {
+          "hit": 279,
+          "found": 280,
+          "percentage": 99.64
+        },
+        "cell": {
+          "hit": 188,
+          "found": 189,
+          "percentage": 99.47
+        },
+        "backtop": {
+          "hit": 185,
+          "found": 185,
+          "percentage": 100.0
+        },
+        "button": {
+          "hit": 459,
+          "found": 468,
+          "percentage": 98.08
+        },
+        "cascader": {
+          "hit": 263,
+          "found": 266,
+          "percentage": 98.87
+        },
+        "picker": {
+          "hit": 382,
+          "found": 388,
+          "percentage": 98.45
+        },
+        "progress": {
+          "hit": 611,
+          "found": 619,
+          "percentage": 98.71
+        },
+        "date_time_picker": {
+          "hit": 688,
+          "found": 708,
+          "percentage": 97.18
+        },
+        "calendar": {
+          "hit": 622,
+          "found": 630,
+          "percentage": 98.73
+        },
+        "tag": {
+          "hit": 306,
+          "found": 313,
+          "percentage": 97.76
+        },
+        "popover": {
+          "hit": 622,
+          "found": 632,
+          "percentage": 98.42
+        },
+        "checkbox": {
+          "hit": 356,
+          "found": 366,
+          "percentage": 97.27
+        },
+        "collapse": {
+          "hit": 218,
+          "found": 226,
+          "percentage": 96.46
+        },
+        "divider": {
+          "hit": 104,
+          "found": 104,
+          "percentage": 100.0
+        },
+        "empty": {
+          "hit": 33,
+          "found": 33,
+          "percentage": 100.0
+        },
+        "image_viewer": {
+          "hit": 237,
+          "found": 242,
+          "percentage": 97.93
+        },
+        "dialog": {
+          "hit": 285,
+          "found": 289,
+          "percentage": 98.62
+        },
+        "dropdown_menu": {
+          "hit": 944,
+          "found": 952,
+          "percentage": 99.16
+        },
+        "drawer": {
+          "hit": 202,
+          "found": 203,
+          "percentage": 99.51
+        },
+        "fab": {
+          "hit": 210,
+          "found": 212,
+          "percentage": 99.06
+        },
+        "footer": {
+          "hit": 51,
+          "found": 51,
+          "percentage": 100.0
+        },
+        "indexes": {
+          "hit": 706,
+          "found": 739,
+          "percentage": 95.53
+        },
+        "image": {
+          "hit": 131,
+          "found": 131,
+          "percentage": 100.0
+        },
+        "refresh": {
+          "hit": 195,
+          "found": 201,
+          "percentage": 97.01
+        },
+        "rate": {
+          "hit": 355,
+          "found": 361,
+          "percentage": 98.34
+        },
+        "result": {
+          "hit": 66,
+          "found": 67,
+          "percentage": 98.51
+        },
+        "tab_bar": {
+          "hit": 500,
+          "found": 509,
+          "percentage": 98.23
+        },
+        "navbar": {
+          "hit": 160,
+          "found": 160,
+          "percentage": 100.0
+        },
+        "tabs": {
+          "hit": 765,
+          "found": 783,
+          "percentage": 97.7
+        },
+        "swiper": {
+          "hit": 476,
+          "found": 493,
+          "percentage": 96.55
+        },
+        "skeleton": {
+          "hit": 140,
+          "found": 141,
+          "percentage": 99.29
+        },
+        "time_counter": {
+          "hit": 303,
+          "found": 307,
+          "percentage": 98.7
+        },
+        "icon": {
+          "hit": 17,
+          "found": 17,
+          "percentage": 100.0
+        },
+        "link": {
+          "hit": 113,
+          "found": 115,
+          "percentage": 98.26
+        },
+        "loading": {
+          "hit": 271,
+          "found": 275,
+          "percentage": 98.55
+        },
+        "message": {
+          "hit": 243,
+          "found": 246,
+          "percentage": 98.78
+        },
+        "notice_bar": {
+          "hit": 308,
+          "found": 319,
+          "percentage": 96.55
+        },
+        "popup": {
+          "hit": 498,
+          "found": 509,
+          "percentage": 97.84
+        },
+        "radio": {
+          "hit": 272,
+          "found": 272,
+          "percentage": 100.0
+        },
+        "table": {
+          "hit": 428,
+          "found": 428,
+          "percentage": 100.0
+        },
+        "text": {
+          "hit": 132,
+          "found": 134,
+          "percentage": 98.51
+        },
+        "search": {
+          "hit": 190,
+          "found": 195,
+          "percentage": 97.44
+        },
+        "steps": {
+          "hit": 248,
+          "found": 249,
+          "percentage": 99.6
+        },
+        "sidebar": {
+          "hit": 226,
+          "found": 226,
+          "percentage": 100.0
+        },
+        "slider": {
+          "hit": 360,
+          "found": 363,
+          "percentage": 99.17
+        },
+        "stepper": {
+          "hit": 353,
+          "found": 358,
+          "percentage": 98.6
+        },
+        "switch": {
+          "hit": 356,
+          "found": 372,
+          "percentage": 95.7
+        },
+        "tree_select": {
+          "hit": 305,
+          "found": 307,
+          "percentage": 99.35
+        },
+        "upload": {
+          "hit": 396,
+          "found": 411,
+          "percentage": 96.35
+        },
+        "form": {
+          "hit": 382,
+          "found": 387,
+          "percentage": 98.71
+        },
+        "input": {
+          "hit": 315,
+          "found": 319,
+          "percentage": 98.75
+        },
+        "textarea": {
+          "hit": 104,
+          "found": 105,
+          "percentage": 99.05
+        },
+        "theme": {
+          "hit": 307,
+          "found": 315,
+          "percentage": 97.46
+        },
+        "toast": {
+          "hit": 225,
+          "found": 226,
+          "percentage": 99.56
+        },
+        "swipe_cell": {
+          "hit": 300,
+          "found": 312,
+          "percentage": 96.15
+        }
+      }
+    },
+    "3.47.6": {
+      "finalExitCodes": {
+        "analyze": 0,
+        "components": 0,
+        "coverage-button": 0,
+        "coverage-loading": 0,
+        "coverage-steps": 0,
+        "demo": 0,
+        "runners": 0,
+        "snippets": 0
+      },
+      "runnerReportedPassCounts": {
+        "components": 2754,
+        "demo": 275,
+        "runners": 19
+      },
+      "coverage": {
+        "avatar": {
+          "hit": 273,
+          "found": 284,
+          "percentage": 96.13
+        },
+        "action_sheet": {
+          "hit": 500,
+          "found": 516,
+          "percentage": 96.9
+        },
+        "badge": {
+          "hit": 279,
+          "found": 280,
+          "percentage": 99.64
+        },
+        "cell": {
+          "hit": 188,
+          "found": 189,
+          "percentage": 99.47
+        },
+        "backtop": {
+          "hit": 185,
+          "found": 185,
+          "percentage": 100.0
+        },
+        "button": {
+          "hit": 459,
+          "found": 468,
+          "percentage": 98.08
+        },
+        "cascader": {
+          "hit": 262,
+          "found": 266,
+          "percentage": 98.5
+        },
+        "picker": {
+          "hit": 382,
+          "found": 388,
+          "percentage": 98.45
+        },
+        "progress": {
+          "hit": 611,
+          "found": 619,
+          "percentage": 98.71
+        },
+        "date_time_picker": {
+          "hit": 687,
+          "found": 708,
+          "percentage": 97.03
+        },
+        "calendar": {
+          "hit": 622,
+          "found": 630,
+          "percentage": 98.73
+        },
+        "tag": {
+          "hit": 306,
+          "found": 313,
+          "percentage": 97.76
+        },
+        "popover": {
+          "hit": 622,
+          "found": 632,
+          "percentage": 98.42
+        },
+        "checkbox": {
+          "hit": 355,
+          "found": 366,
+          "percentage": 96.99
+        },
+        "collapse": {
+          "hit": 218,
+          "found": 226,
+          "percentage": 96.46
+        },
+        "divider": {
+          "hit": 104,
+          "found": 104,
+          "percentage": 100.0
+        },
+        "empty": {
+          "hit": 33,
+          "found": 33,
+          "percentage": 100.0
+        },
+        "image_viewer": {
+          "hit": 237,
+          "found": 242,
+          "percentage": 97.93
+        },
+        "dialog": {
+          "hit": 285,
+          "found": 289,
+          "percentage": 98.62
+        },
+        "dropdown_menu": {
+          "hit": 944,
+          "found": 952,
+          "percentage": 99.16
+        },
+        "drawer": {
+          "hit": 201,
+          "found": 203,
+          "percentage": 99.01
+        },
+        "fab": {
+          "hit": 210,
+          "found": 212,
+          "percentage": 99.06
+        },
+        "footer": {
+          "hit": 51,
+          "found": 51,
+          "percentage": 100.0
+        },
+        "indexes": {
+          "hit": 706,
+          "found": 739,
+          "percentage": 95.53
+        },
+        "image": {
+          "hit": 131,
+          "found": 131,
+          "percentage": 100.0
+        },
+        "refresh": {
+          "hit": 195,
+          "found": 201,
+          "percentage": 97.01
+        },
+        "rate": {
+          "hit": 355,
+          "found": 361,
+          "percentage": 98.34
+        },
+        "result": {
+          "hit": 65,
+          "found": 67,
+          "percentage": 97.01
+        },
+        "tab_bar": {
+          "hit": 499,
+          "found": 509,
+          "percentage": 98.04
+        },
+        "navbar": {
+          "hit": 160,
+          "found": 160,
+          "percentage": 100.0
+        },
+        "tabs": {
+          "hit": 765,
+          "found": 783,
+          "percentage": 97.7
+        },
+        "swiper": {
+          "hit": 476,
+          "found": 493,
+          "percentage": 96.55
+        },
+        "skeleton": {
+          "hit": 138,
+          "found": 141,
+          "percentage": 97.87
+        },
+        "time_counter": {
+          "hit": 303,
+          "found": 307,
+          "percentage": 98.7
+        },
+        "icon": {
+          "hit": 17,
+          "found": 17,
+          "percentage": 100.0
+        },
+        "link": {
+          "hit": 113,
+          "found": 115,
+          "percentage": 98.26
+        },
+        "loading": {
+          "hit": 271,
+          "found": 275,
+          "percentage": 98.55
+        },
+        "message": {
+          "hit": 242,
+          "found": 246,
+          "percentage": 98.37
+        },
+        "notice_bar": {
+          "hit": 308,
+          "found": 319,
+          "percentage": 96.55
+        },
+        "popup": {
+          "hit": 496,
+          "found": 509,
+          "percentage": 97.45
+        },
+        "radio": {
+          "hit": 271,
+          "found": 272,
+          "percentage": 99.63
+        },
+        "table": {
+          "hit": 428,
+          "found": 428,
+          "percentage": 100.0
+        },
+        "text": {
+          "hit": 132,
+          "found": 134,
+          "percentage": 98.51
+        },
+        "search": {
+          "hit": 190,
+          "found": 195,
+          "percentage": 97.44
+        },
+        "steps": {
+          "hit": 248,
+          "found": 249,
+          "percentage": 99.6
+        },
+        "sidebar": {
+          "hit": 226,
+          "found": 226,
+          "percentage": 100.0
+        },
+        "slider": {
+          "hit": 360,
+          "found": 363,
+          "percentage": 99.17
+        },
+        "stepper": {
+          "hit": 353,
+          "found": 358,
+          "percentage": 98.6
+        },
+        "switch": {
+          "hit": 356,
+          "found": 372,
+          "percentage": 95.7
+        },
+        "tree_select": {
+          "hit": 304,
+          "found": 307,
+          "percentage": 99.02
+        },
+        "upload": {
+          "hit": 396,
+          "found": 411,
+          "percentage": 96.35
+        },
+        "form": {
+          "hit": 382,
+          "found": 387,
+          "percentage": 98.71
+        },
+        "input": {
+          "hit": 315,
+          "found": 319,
+          "percentage": 98.75
+        },
+        "textarea": {
+          "hit": 104,
+          "found": 105,
+          "percentage": 99.05
+        },
+        "theme": {
+          "hit": 307,
+          "found": 315,
+          "percentage": 97.46
+        },
+        "toast": {
+          "hit": 225,
+          "found": 226,
+          "percentage": 99.56
+        },
+        "swipe_cell": {
+          "hit": 300,
+          "found": 312,
+          "percentage": 96.15
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "name": "avatar",
+      "tests": [
+        "test/components/avatar/t_avatar_test.dart"
+      ]
+    },
+    {
+      "name": "action_sheet",
+      "tests": [
+        "test/components/action_sheet/t_action_sheet_grid_test.dart",
+        "test/components/action_sheet/t_action_sheet_item_widget_test.dart",
+        "test/components/action_sheet/t_action_sheet_list_test.dart",
+        "test/components/action_sheet/t_action_sheet_test.dart"
+      ]
+    },
+    {
+      "name": "badge",
+      "tests": [
+        "test/components/badge/t_badge_test.dart"
+      ]
+    },
+    {
+      "name": "cell",
+      "tests": [
+        "test/components/cell/t_cell_test.dart"
+      ]
+    },
+    {
+      "name": "backtop",
+      "tests": [
+        "test/components/backtop/t_backtop_test.dart",
+        "test/components/backtop/t_backtop_theme_test.dart",
+        "test/components/backtop/t_backtop_widget_test.dart"
+      ]
+    },
+    {
+      "name": "button",
+      "tests": [
+        "test/components/button/t_button_test.dart",
+        "test/components/button/t_button_theme_priority_test.dart",
+        "test/components/button/t_button_theme_test.dart",
+        "test/components/button/t_button_widget_test.dart"
+      ]
+    },
+    {
+      "name": "cascader",
+      "tests": [
+        "test/components/cascader/t_cascader_test.dart"
+      ]
+    },
+    {
+      "name": "picker",
+      "tests": [
+        "test/components/picker/picker_consumers_theme_test.dart",
+        "test/components/picker/t_picker_theme_test.dart",
+        "test/components/picker/t_picker_types_test.dart",
+        "test/components/picker/t_picker_widget_test.dart",
+        "test/components/picker/wheel_column_test.dart",
+        "test/components/date_time_picker/t_date_time_picker_wheel_test.dart"
+      ]
+    },
+    {
+      "name": "progress",
+      "tests": [
+        "test/components/progress/t_progress_test.dart"
+      ]
+    },
+    {
+      "name": "date_time_picker",
+      "tests": [
+        "test/components/picker/picker_consumers_theme_test.dart",
+        "test/components/date_time_picker/t_date_time_picker_test.dart",
+        "test/components/date_time_picker/t_date_time_picker_wheel_test.dart",
+        "test/components/date_time_picker/t_date_time_picker_integration_test.dart"
+      ]
+    },
+    {
+      "name": "calendar",
+      "tests": [
+        "test/components/calendar/t_calendar_body_test.dart",
+        "test/components/calendar/t_calendar_cell_test.dart",
+        "test/components/calendar/t_calendar_theme_test.dart",
+        "test/components/calendar/t_calendar_widget_test.dart",
+        "test/components/calendar/t_calendar_lunar_test.dart",
+        "test/components/calendar/t_calendar_on_change_init_test.dart",
+        "test/components/calendar/t_calendar_test.dart"
+      ]
+    },
+    {
+      "name": "tag",
+      "tests": [
+        "test/components/tag/t_select_tag_test.dart",
+        "test/components/tag/t_tag_test.dart"
+      ]
+    },
+    {
+      "name": "popover",
+      "tests": [
+        "test/components/popover/t_popover_test.dart"
+      ]
+    },
+    {
+      "name": "checkbox",
+      "tests": [
+        "test/components/checkbox/t_check_box_group_test.dart",
+        "test/components/checkbox/t_checkbox_test.dart"
+      ]
+    },
+    {
+      "name": "collapse",
+      "tests": [
+        "test/components/collapse/t_collapse_test.dart",
+        "test/components/collapse/t_collapse_misc_test.dart"
+      ]
+    },
+    {
+      "name": "divider",
+      "tests": [
+        "test/components/divider/t_divider_test.dart"
+      ]
+    },
+    {
+      "name": "empty",
+      "tests": [
+        "test/components/empty/t_empty_test.dart"
+      ]
+    },
+    {
+      "name": "image_viewer",
+      "tests": [
+        "test/components/image_viewer/t_image_viewer_test.dart"
+      ]
+    },
+    {
+      "name": "dialog",
+      "tests": [
+        "test/components/dialog/t_dialog_test.dart"
+      ]
+    },
+    {
+      "name": "dropdown_menu",
+      "tests": [
+        "test/components/dropdown_menu/t_dropdown_item_test.dart",
+        "test/components/dropdown_menu/t_dropdown_menu_test.dart"
+      ]
+    },
+    {
+      "name": "drawer",
+      "tests": [
+        "test/components/drawer/t_drawer_test.dart"
+      ]
+    },
+    {
+      "name": "fab",
+      "tests": [
+        "test/components/fab/t_fab_layout_test.dart",
+        "test/components/fab/t_fab_test.dart"
+      ]
+    },
+    {
+      "name": "footer",
+      "tests": [
+        "test/components/footer/t_footer_test.dart"
+      ]
+    },
+    {
+      "name": "indexes",
+      "tests": [
+        "test/components/indexes/sticky_header/sticky_header_test.dart",
+        "test/components/indexes/t_indexes_test.dart"
+      ]
+    },
+    {
+      "name": "image",
+      "tests": [
+        "test/components/image/t_image_test.dart"
+      ]
+    },
+    {
+      "name": "refresh",
+      "tests": [
+        "test/components/refresh/t_refresh_test.dart"
+      ]
+    },
+    {
+      "name": "rate",
+      "tests": [
+        "test/components/rate/t_rate_test.dart"
+      ]
+    },
+    {
+      "name": "result",
+      "tests": [
+        "test/components/result/t_result_test.dart"
+      ]
+    },
+    {
+      "name": "tab_bar",
+      "tests": [
+        "test/components/tabbar/t_tab_bar_test.dart"
+      ]
+    },
+    {
+      "name": "navbar",
+      "tests": [
+        "test/components/navbar/t_nav_bar_test.dart",
+        "test/components/navbar/t_navbar_test.dart"
+      ]
+    },
+    {
+      "name": "tabs",
+      "tests": [
+        "test/components/tabs/t_horizontal_tab_bar_test.dart",
+        "test/components/tabs/t_tab_bar_test.dart",
+        "test/components/tabs/t_tab_test.dart"
+      ]
+    },
+    {
+      "name": "swiper",
+      "tests": [
+        "test/components/swiper/t_swiper_test.dart"
+      ]
+    },
+    {
+      "name": "skeleton",
+      "tests": [
+        "test/components/skeleton/t_skeleton_test.dart"
+      ]
+    },
+    {
+      "name": "time_counter",
+      "tests": [
+        "test/components/time_counter/t_time_counter_test.dart"
+      ]
+    },
+    {
+      "name": "icon",
+      "tests": [
+        "test/components/icon/t_icon_test.dart"
+      ]
+    },
+    {
+      "name": "link",
+      "tests": [
+        "test/components/link/t_link_resolve_test.dart",
+        "test/components/link/t_link_test.dart",
+        "test/components/link/t_link_theme_test.dart",
+        "test/components/link/t_link_widget_test.dart"
+      ]
+    },
+    {
+      "name": "loading",
+      "tests": [
+        "test/components/loading/t_loading_test.dart"
+      ]
+    },
+    {
+      "name": "message",
+      "tests": [
+        "test/components/message/t_message_test.dart"
+      ]
+    },
+    {
+      "name": "notice_bar",
+      "tests": [
+        "test/components/notice_bar/t_notice_bar_test.dart"
+      ]
+    },
+    {
+      "name": "popup",
+      "tests": [
+        "test/components/popup/t_feedback_theme_data_test.dart",
+        "test/components/popup/t_popup_options_contract_test.dart",
+        "test/components/popup/t_popup_theme_test.dart",
+        "test/components/popup/t_popup_widget_test.dart",
+        "test/components/popup/t_popup_coverage_test.dart",
+        "test/components/popup/t_popup_layout_test.dart",
+        "test/components/popup/t_popup_options_test.dart",
+        "test/components/popup/t_popup_route_test.dart",
+        "test/components/popup/t_popup_test.dart"
+      ]
+    },
+    {
+      "name": "radio",
+      "tests": [
+        "test/components/radio/t_radio_test.dart",
+        "test/components/radio/t_radio_theme_contract_test.dart"
+      ]
+    },
+    {
+      "name": "table",
+      "tests": [
+        "test/components/table/t_table_test.dart"
+      ]
+    },
+    {
+      "name": "text",
+      "tests": [
+        "test/components/text/t_font_loader_test.dart",
+        "test/components/text/t_text_resolve_test.dart",
+        "test/components/text/t_text_style_scope_test.dart",
+        "test/components/text/t_text_test.dart"
+      ]
+    },
+    {
+      "name": "search",
+      "tests": [
+        "test/components/search/t_search_test.dart"
+      ]
+    },
+    {
+      "name": "steps",
+      "tests": [
+        "test/components/steps/t_steps_test.dart",
+        "test/components/steps/t_steps_vertical_item_test.dart",
+        "test/components/steps/t_steps_widget_test.dart"
+      ]
+    },
+    {
+      "name": "sidebar",
+      "tests": [
+        "test/components/sidebar/t_sidebar_test.dart",
+        "test/components/sidebar/t_sidebar_theme_test.dart",
+        "test/components/sidebar/t_sidebar_widget_test.dart"
+      ]
+    },
+    {
+      "name": "slider",
+      "tests": [
+        "test/components/slider/t_slider_test.dart"
+      ]
+    },
+    {
+      "name": "stepper",
+      "tests": [
+        "test/components/stepper/t_stepper_test.dart",
+        "test/components/stepper/t_stepper_contract_test.dart"
+      ]
+    },
+    {
+      "name": "switch",
+      "tests": [
+        "test/components/switch/t_switch_test.dart",
+        "test/components/switch/t_cupertino_switch_test.dart"
+      ]
+    },
+    {
+      "name": "tree_select",
+      "tests": [
+        "test/components/tree/t_tree_select_test.dart"
+      ]
+    },
+    {
+      "name": "upload",
+      "tests": [
+        "test/components/upload/t_upload_test.dart"
+      ]
+    },
+    {
+      "name": "form",
+      "tests": [
+        "test/components/form/t_form_test.dart"
+      ]
+    },
+    {
+      "name": "input",
+      "tests": [
+        "test/components/input/t_input_test.dart",
+        "test/components/input/t_input_theme_test.dart"
+      ]
+    },
+    {
+      "name": "textarea",
+      "tests": [
+        "test/components/textarea/t_textarea_test.dart"
+      ]
+    },
+    {
+      "name": "theme",
+      "tests": [
+        "test/acceptance/theme_acceptance_test.dart",
+        "test/theme/theme_test.dart",
+        "test/theme/t_theme_extensions_test.dart",
+        "test/components/theme/t_colors_test.dart",
+        "test/components/theme/t_material_theme_priority_test.dart",
+        "test/components/theme/t_resource_delegate_test.dart",
+        "test/components/theme/t_theme_test.dart"
+      ]
+    },
+    {
+      "name": "toast",
+      "tests": [
+        "test/components/toast/t_toast_test.dart"
+      ]
+    },
+    {
+      "name": "swipe_cell",
+      "tests": [
+        "test/components/swipe_cell/t_swipe_cell_auto_extent_test.dart",
+        "test/components/swipe_cell/t_swipe_cell_inherited_test.dart",
+        "test/components/swipe_cell/t_swipe_cell_test.dart"
+      ]
+    }
+  ],
+  "dartSourceFingerprint": "408c110449cfeb247ac10f64db8240405591e9721fb8eab1a4fd7d95831ea080"
+}

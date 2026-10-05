@@ -155,7 +155,7 @@ void main() {
       const item = TTabBarMenuItem(value: '更多');
       final popup = TTabBarPopUpBtnConfig(
         items: [item],
-        onChanged: (_) {},
+        onSelected: (_) {},
         popUpDialogConfig: TTabBarPopUpShapeConfig(popUpWidth: 120),
       );
       expect(popup.items.single.value, '更多');
@@ -254,7 +254,7 @@ void main() {
                     tabText: '菜单入口',
                     popUpButtonConfig: TTabBarPopUpBtnConfig(
                       items: const [TTabBarMenuItem(value: '菜单项')],
-                      onChanged: (_) {},
+                      onSelected: (_) {},
                       popUpDialogConfig: TTabBarPopUpShapeConfig(
                         backgroundColor: Colors.orange,
                       ),
@@ -619,7 +619,7 @@ void main() {
             navigationTabs: [
               TTabBarItemConfig(
                 tabText: '标签1',
-                allowMultipleTaps: true,
+                notifyOnReselect: true,
                 onTap: () => tapCount++,
                 onLongPress: () => longPressed = true,
               ),
@@ -711,7 +711,7 @@ void main() {
                     TTabBarMenuItem(value: '选项A'),
                     TTabBarMenuItem(value: '选项B'),
                   ],
-                  onChanged: (value) => selected = value,
+                  onSelected: (value) => selected = value,
                   popUpDialogConfig: TTabBarPopUpShapeConfig(
                     popUpWidth: 120,
                     radius: 4,
@@ -759,7 +759,7 @@ void main() {
                 tabText: '更多',
                 popUpButtonConfig: TTabBarPopUpBtnConfig(
                   items: const [TTabBarMenuItem(value: '选项A')],
-                  onChanged: (_) {},
+                  onSelected: (_) {},
                 ),
               ),
               const TTabBarItemConfig(tabText: '普通'),
@@ -808,7 +808,7 @@ void main() {
                           TTabBarMenuItem(value: '个人主页'),
                           TTabBarMenuItem(value: '设置'),
                         ],
-                        onChanged: (_) {},
+                        onSelected: (_) {},
                       )
                     : null,
               ),
@@ -844,7 +844,7 @@ void main() {
                 onTap: () => itemTapCount++,
                 popUpButtonConfig: TTabBarPopUpBtnConfig(
                   items: const [TTabBarMenuItem(value: '选项A')],
-                  onChanged: (value) => selected = value,
+                  onSelected: (value) => selected = value,
                 ),
               ),
             ],
@@ -1388,7 +1388,7 @@ void main() {
       },
     );
 
-    testWidgets('item onTap follows allowMultipleTaps with badge and InkWell', (
+    testWidgets('item onTap follows notifyOnReselect with badge and InkWell', (
       tester,
     ) async {
       var itemTaps = 0;
@@ -1409,7 +1409,7 @@ void main() {
                 ),
                 TTabBarItemConfig(
                   tabText: '消息',
-                  allowMultipleTaps: true,
+                  notifyOnReselect: true,
                   badge: const TBadgeConfig(label: '2'),
                   onTap: () => itemTaps++,
                 ),
@@ -1515,7 +1515,7 @@ void main() {
       expect(
         () => TTabBarPopUpBtnConfig(
           items: const [TTabBarMenuItem(value: 'x')],
-          onChanged: (_) {},
+          onSelected: (_) {},
           popUpDialogConfig: TTabBarPopUpShapeConfig(arrowHeight: 0),
         ),
         throwsFlutterError,

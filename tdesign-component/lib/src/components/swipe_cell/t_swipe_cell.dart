@@ -8,7 +8,13 @@ import 't_swipe_cell_inherited.dart';
 import 't_swipe_cell_panel.dart';
 
 /// 操作面板所在侧。
-enum TSwipeCellSide { start, end }
+enum TSwipeCellSide {
+  /// 起始侧：LTR 为左侧，RTL 为右侧。
+  start,
+
+  /// 结束侧：LTR 为右侧，RTL 为左侧。
+  end,
+}
 
 /// 滑动展开状态变化回调。
 typedef TSwipeCellChanged = void Function(TSwipeCellSide side, bool isOpen);
@@ -17,6 +23,7 @@ typedef TSwipeCellChanged = void Function(TSwipeCellSide side, bool isOpen);
 ///
 /// 一个控制器同一时间只能绑定一个 [TSwipeCell]。通常无需使用控制器，用户拖动、
 /// 点击操作项、点击单元格外部或滚动列表时，组件会自行管理展开状态。
+/// 替换为已占用的控制器会抛出 FlutterError，失败时保留原有绑定。
 class TSwipeCellController {
   _TSwipeCellControllerBinding? _binding;
 
@@ -78,7 +85,9 @@ class TSwipeCell extends StatefulWidget {
   /// 结束侧操作面板。
   final TSwipeCellPanel? end;
 
-  /// 面板展开状态变化回调。
+  /// 目标开合状态变化回调，在动画开始前通知，不表示动画已完成。
+  ///
+  /// 从一侧切换到另一侧时先报告原侧关闭，再报告新侧打开；相同状态不重复通知。
   final TSwipeCellChanged? onOpenChanged;
 
   /// 命令式控制器。
@@ -107,6 +116,7 @@ class _TSwipeCellState extends State<TSwipeCell>
   final _endPanelKey = GlobalKey();
 
   late final AnimationController _offsetController;
+  TSwipeCellController? _boundController;
   ScrollPosition? _scrollPosition;
   ModalRoute<dynamic>? _route;
   TextDirection? _textDirection;
@@ -135,6 +145,7 @@ class _TSwipeCellState extends State<TSwipeCell>
     super.initState();
     _offsetController = AnimationController.unbounded(vsync: this);
     widget.controller?._attach(this);
+    _boundController = widget.controller;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) {
         return;
@@ -164,9 +175,10 @@ class _TSwipeCellState extends State<TSwipeCell>
   @override
   void didUpdateWidget(covariant TSwipeCell oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?._detach(this);
+    if (!identical(_boundController, widget.controller)) {
       widget.controller?._attach(this);
+      _boundController?._detach(this);
+      _boundController = widget.controller;
     }
     if (oldWidget.closeOnScroll != widget.closeOnScroll) {
       _bindScrollable();
@@ -177,7 +189,7 @@ class _TSwipeCellState extends State<TSwipeCell>
   @override
   void dispose() {
     _unbindRoute();
-    widget.controller?._detach(this);
+    _boundController?._detach(this);
     _unbindScrollable();
     _unregisterTapOutsideListener();
     _offsetController.dispose();

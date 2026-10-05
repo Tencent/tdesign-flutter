@@ -27,7 +27,7 @@ class _DoubleLayerTabBarExampleState extends State<DoubleLayerTabBarExample> {
         labels.length,
         (index) => TTabBarItemConfig(
           tabText: labels[index],
-          allowMultipleTaps: true,
+          notifyOnReselect: true,
           onTap: () => TToast.showText('第 ${index + 1} 项', context: context),
           popUpButtonConfig: index == 2
               ? TTabBarPopUpBtnConfig(
@@ -36,7 +36,7 @@ class _DoubleLayerTabBarExampleState extends State<DoubleLayerTabBarExample> {
                     TTabBarMenuItem(value: '个人主页'),
                     TTabBarMenuItem(value: '设置'),
                   ],
-                  onChanged: (item) =>
+                  onSelected: (item) =>
                       TToast.showText('选择了$item', context: context),
                 )
               : null,

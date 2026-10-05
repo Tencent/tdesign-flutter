@@ -10,14 +10,14 @@
 
 ##### TPopover.showPopover
 
-显示气泡弹层
+显示气泡弹层。
 
 返回类型：`Future<void>`
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| content | Widget | - | - |
+| context | BuildContext | - | 触发元素上下文，用于锚点定位、Overlay 与主题解析。 |
+| content | Widget | - | 气泡内容；直接传入未设样式的 Text 使用默认文字样式。 |
 | colorPreset | TPopoverColorPreset | TPopoverColorPreset.defaultTheme | 气泡预设配色。 |
 | closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 外部目标仍会接收该次点击，因此可在单次点击中从一个气泡切换到另一个气泡。 |
 | closeOnScroll | bool | true | 页面滚动时是否关闭弹层。 默认为 true，避免触发元素移动后气泡停留在旧坐标。 |
@@ -26,7 +26,7 @@
 | width | double? | - | 内容外框宽度（包含 padding）。 未设置时按 `content` 的实际布局宽度确定，并受组件主题尺寸约束。 |
 | height | double? | - | 内容外框高度（包含 padding）。 未设置时按 `content` 的实际布局高度确定，并受组件主题尺寸约束。 |
 | onTap | VoidCallback? | - | 点击气泡内容时触发。 |
-| onLongTap | VoidCallback? | - | 长按气泡内容时触发。 |
+| onLongPress | VoidCallback? | - | 长按气泡内容时触发。 |
 
 
 ### TPopoverAnchor
@@ -52,9 +52,9 @@
 | controller | TPopoverController? | - | 可选控制器，用于从触发区域外部展开或关闭气泡。 |
 | height | double? | - | 内容外框高度（包含 padding）。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onClose | VoidCallback? | - | 气泡通过任意路径关闭后触发。 |
-| onLongTap | VoidCallback? | - | 长按气泡内容时触发。 |
-| onOpen | VoidCallback? | - | 气泡展开后触发。 |
+| onClose | VoidCallback? | - | 气泡展示周期结束时触发，包含主动关闭和锚点卸载。 |
+| onLongPress | VoidCallback? | - | 长按气泡内容时触发。 |
+| onOpen | VoidCallback? | - | 气泡内容成功插入 Overlay 后触发，不表示展开动画完成。 |
 | onTap | VoidCallback? | - | 点击气泡内容时触发。 |
 | placement | TPopoverPlacement | TPopoverPlacement.top | 浮层出现位置。 |
 | showArrow | bool? | - | 是否显示气泡箭头。 |
@@ -66,6 +66,7 @@
 控制与其绑定的 `TPopoverAnchor`。
 气泡内容、位置和视觉配置由 `TPopoverAnchor` 声明，控制器只负责展开、关闭
 和查询当前状态，不形成第二份配置来源。
+每个控制器只能同时绑定一个 Anchor，重复绑定会抛出 StateError。
 
 #### 静态方法
 
@@ -78,7 +79,7 @@
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| context | BuildContext | - | - |
+| context | BuildContext | - | 触发区域或气泡内容子树中的上下文。 |
 
 
 ### TPopoverThemeData

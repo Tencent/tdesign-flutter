@@ -26,7 +26,7 @@ Widget _entranceNoticeBar(BuildContext context) {
       TNoticeBar(
         content: '这是一条普通的通知信息',
         suffixIcon: TIcons.chevron_right,
-        onPressed: (target) {
+        onTargetTap: (target) {
           if (target == TNoticeBarTapTarget.suffix) {
             TToast.showText('点击了入口图标', context: context);
           }

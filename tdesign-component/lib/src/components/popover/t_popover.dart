@@ -79,6 +79,7 @@ typedef TPopoverAnchorBuilder =
 ///
 /// 气泡内容、位置和视觉配置由 [TPopoverAnchor] 声明，控制器只负责展开、关闭
 /// 和查询当前状态，不形成第二份配置来源。
+/// 每个控制器只能同时绑定一个 Anchor，重复绑定会抛出 StateError。
 class TPopoverController {
   _TPopoverAnchorState? _anchor;
 
@@ -89,11 +90,11 @@ class TPopoverController {
   ///
   /// 控制器必须先通过 [TPopoverAnchor.controller] 绑定到 Widget 树。
   void open() {
-    assert(
-      _anchor != null,
-      'TPopoverController.open() requires a TPopoverAnchor binding.',
-    );
-    _anchor!._open();
+    final anchor = _anchor;
+    if (anchor == null) {
+      throw StateError('TPopoverController.open requires an Anchor binding.');
+    }
+    anchor._open();
   }
 
   /// 关闭与该控制器绑定的气泡。
@@ -101,7 +102,12 @@ class TPopoverController {
   /// 未绑定或已经关闭时无副作用。
   void close() => _anchor?._close();
 
-  void _attach(_TPopoverAnchorState anchor) => _anchor = anchor;
+  void _attach(_TPopoverAnchorState anchor) {
+    if (_anchor != null && !identical(_anchor, anchor)) {
+      throw StateError('A TPopoverController supports only one Anchor.');
+    }
+    _anchor = anchor;
+  }
 
   void _detach(_TPopoverAnchorState anchor) {
     if (_anchor == anchor) {
@@ -112,6 +118,8 @@ class TPopoverController {
   /// 返回 [context] 最近的 [TPopoverAnchor] 所关联的控制器。
   ///
   /// 未处于 Anchor 的触发区域或气泡内容子树时返回 null。
+  ///
+  /// [context] 触发区域或气泡内容子树中的上下文。
   static TPopoverController? maybeOf(BuildContext context) {
     return context
         .getInheritedWidgetOfExactType<_TPopoverControllerScope>()
@@ -160,7 +168,7 @@ class TPopoverAnchor extends StatefulWidget {
     this.width,
     this.height,
     this.onTap,
-    this.onLongTap,
+    this.onLongPress,
     this.onOpen,
     this.onClose,
   });
@@ -205,12 +213,12 @@ class TPopoverAnchor extends StatefulWidget {
   final VoidCallback? onTap;
 
   /// 长按气泡内容时触发。
-  final VoidCallback? onLongTap;
+  final VoidCallback? onLongPress;
 
-  /// 气泡展开后触发。
+  /// 气泡内容成功插入 Overlay 后触发，不表示展开动画完成。
   final VoidCallback? onOpen;
 
-  /// 气泡通过任意路径关闭后触发。
+  /// 气泡展示周期结束时触发，包含主动关闭和锚点卸载。
   final VoidCallback? onClose;
 
   @override
@@ -219,6 +227,7 @@ class TPopoverAnchor extends StatefulWidget {
 
 class _TPopoverAnchorState extends State<TPopoverAnchor> {
   late TPopoverController _controller;
+  TPopoverController? _boundExternalController;
   BuildContext? _anchorContext;
   _PopoverSession? _session;
   var _isOpen = false;
@@ -229,17 +238,20 @@ class _TPopoverAnchorState extends State<TPopoverAnchor> {
     super.initState();
     _controller = widget.controller ?? TPopoverController();
     _controller._attach(this);
+    _boundExternalController = widget.controller;
   }
 
   @override
   void didUpdateWidget(TPopoverAnchor oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller == widget.controller) {
+    if (identical(widget.controller, _boundExternalController)) {
       return;
     }
+    final next = widget.controller ?? TPopoverController();
+    next._attach(this);
     _controller._detach(this);
-    _controller = widget.controller ?? TPopoverController();
-    _controller._attach(this);
+    _controller = next;
+    _boundExternalController = widget.controller;
     final session = _session;
     if (session != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -270,7 +282,7 @@ class _TPopoverAnchorState extends State<TPopoverAnchor> {
       width: widget.width,
       height: widget.height,
       onTap: widget.onTap,
-      onLongTap: widget.onLongTap,
+      onLongPress: widget.onLongPress,
       controllerProvider: () => _controller,
       onDismissed: () => _handleDismissed(operationEpoch),
       throwOnMissingOverlay: true,
@@ -347,7 +359,10 @@ class _PopoverSession {
 /// 支持 12 个方向定位和箭头。蒙层色与圆角由触发 [BuildContext] 最近的
 /// [TPopoverThemeData] 控制；单个气泡可包裹局部 Theme。
 class TPopover {
-  /// 显示气泡弹层
+  /// 显示气泡弹层。
+  ///
+  /// [context] 触发元素上下文，用于锚点定位、Overlay 与主题解析。
+  /// [content] 气泡内容；直接传入未设样式的 Text 使用默认文字样式。
   static Future<void> showPopover({
     /// 触发元素的上下文，用于计算气泡锚点位置。
     required BuildContext context,
@@ -390,7 +405,7 @@ class TPopover {
     VoidCallback? onTap,
 
     /// 长按气泡内容时触发。
-    VoidCallback? onLongTap,
+    VoidCallback? onLongPress,
   }) => _showPopover(
     context: context,
     content: content,
@@ -402,7 +417,7 @@ class TPopover {
     width: width,
     height: height,
     onTap: onTap,
-    onLongTap: onLongTap,
+    onLongPress: onLongPress,
   ).closed;
 
   static _PopoverSession _showPopover({
@@ -416,7 +431,7 @@ class TPopover {
     required double? width,
     required double? height,
     required VoidCallback? onTap,
-    required VoidCallback? onLongTap,
+    required VoidCallback? onLongPress,
     TPopoverController Function()? controllerProvider,
     VoidCallback? onDismissed,
     bool throwOnMissingOverlay = false,
@@ -508,7 +523,7 @@ class TPopover {
             width: width,
             height: height,
             onTap: onTap,
-            onLongTap: onLongTap,
+            onLongPress: onLongPress,
             onTapOutside: closeOnClickOutside ? dismiss : null,
             radius: theme.borderRadius,
           ),

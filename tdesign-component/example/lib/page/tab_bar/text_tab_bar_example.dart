@@ -26,7 +26,7 @@ class _TextTabBarExampleState extends State<TextTabBarExample> {
         4,
         (index) => TTabBarItemConfig(
           tabText: labels[index],
-          allowMultipleTaps: true,
+          notifyOnReselect: true,
           onTap: () => TToast.showText(
             '第 ${index + 1} 项',
             context: context,

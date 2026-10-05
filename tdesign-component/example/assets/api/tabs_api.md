@@ -7,7 +7,7 @@
 | controller | TabController? | - | 可选的标签控制器；为空时使用最近的 `DefaultTabController`。 仅在需要读取当前索引、命令式切换或跨组件共享状态时显式传入。 |
 | isScrollable | bool | false | 是否横向滚动。 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onTap | ValueChanged<int>? | - | 点击事件 |
+| onTap | ValueChanged<int>? | - | 用户点按标签时通知索引，包括再次点按已选标签。 标签栏先调用 Controller.animateTo，再通知此回调；null 不禁用标签。 滑动和程序切换不触发此回调，完整索引变化请监听 `controller` 或最近的 DefaultTabController，不要在此回调重复切换索引。 |
 | size | TTabsBarSize | TTabsBarSize.small | 选项卡文字尺寸，默认为 `TTabsBarSize.small`。 |
 | tabs | List<TTab> | - | tab数组 |
 | variant | TTabsBarVariant | TTabsBarVariant.line | 选项卡结构形态，默认为 `TTabsBarVariant.line`。 |

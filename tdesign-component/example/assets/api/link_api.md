@@ -16,6 +16,16 @@
 | underline | bool? | - | 是否显示下划线；未设置时为 false。 |
 
 
+### TLinkThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| iconGap | double? | - | 前/后图标与内容之间的间距。 |
+| iconSize | double? | - | 图标尺寸。 |
+| textStyle | TextStyle? | - | 链接文字样式；字号、行高与字重默认由实例尺寸对应 Token 提供。 |
+
+
 ### TLinkColorPreset
 #### 枚举值
 
@@ -27,3 +37,14 @@
 | danger | 危险操作链接。 |
 | warning | 警告提示链接。 |
 | success | 成功状态链接。 |
+
+
+### TLinkSize
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| small | 小尺寸链接。 |
+| medium | 中尺寸链接。 |
+| large | 大尺寸链接。 |

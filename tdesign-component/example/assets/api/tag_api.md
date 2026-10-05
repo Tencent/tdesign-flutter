@@ -62,3 +62,39 @@
 | warning | 警告色。 |
 | danger | 危险色。 |
 | success | 成功色。 |
+
+
+### TTagSize
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| extraLarge | 超大尺寸。 |
+| large | 大尺寸。 |
+| medium | 中等尺寸。 |
+| small | 小尺寸。 |
+| custom | 由 Theme padding 和字体决定尺寸。 |
+
+
+### TTagShape
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| square | 小圆角矩形。 |
+| round | 胶囊形。 |
+| mark | 右侧胶囊标记形。 |
+
+
+### TTagVariant
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| dark | 深色填充。 |
+| light | 浅色填充。 |
+| outline | 描边。 |
+| lightOutline | 浅色描边。 |

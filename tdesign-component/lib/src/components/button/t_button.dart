@@ -17,8 +17,8 @@ import 't_button_types.dart';
 
 /// TD 常规按钮
 ///
-/// Material 薄包装，`onPressed: null` 表示禁用；禁用时不会触发
-/// [onLongPress]。
+/// Material 薄包装，[onPressed] 与 [onLongPress] 可以独立使用；
+/// 两个回调都为空时禁用。
 ///
 /// **L1 三维正交**：
 /// - [variant]：变体类型（fill / outline / text / ghost）
@@ -96,13 +96,13 @@ class TButton extends StatefulWidget {
   /// 图标位置
   final TButtonIconPosition iconPosition;
 
-  /// 点击回调，`null` 表示禁用
+  /// 点击动作回调；与 [onLongPress] 均为空时禁用。
   final VoidCallback? onPressed;
 
   /// 长按回调。
   ///
-  /// 仅在 [onPressed] 非空时生效；当 [onPressed] 为空时按钮保持禁用态，
-  /// 不会触发点击或长按回调。
+  /// 可以独立于 [onPressed] 使用，长按不会同时触发点击。
+  /// 禁用按钮须同时将 [onPressed] 和本回调置空。
   final VoidCallback? onLongPress;
 
   /// 当前按钮的完整 [ButtonStyle] 视觉配置入口，不影响其他按钮。
@@ -120,7 +120,7 @@ class _TButtonState extends State<TButton> {
   late final WidgetStatesController _statesController;
   bool _usesGradient = false;
 
-  bool get _isEnabled => widget.onPressed != null;
+  bool get _isEnabled => widget.onPressed != null || widget.onLongPress != null;
 
   @override
   void initState() {
@@ -133,7 +133,8 @@ class _TButtonState extends State<TButton> {
   @override
   void didUpdateWidget(TButton oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if ((oldWidget.onPressed != null) != _isEnabled) {
+    if ((oldWidget.onPressed != null || oldWidget.onLongPress != null) !=
+        _isEnabled) {
       _statesController.update(WidgetState.disabled, !_isEnabled);
       if (!_isEnabled) {
         _statesController.update(WidgetState.pressed, false);
@@ -358,7 +359,7 @@ class _TButtonState extends State<TButton> {
             splashFactory: resolvedStyle.splashFactory,
             statesController: _statesController,
             onTap: widget.onPressed,
-            onLongPress: widget.onPressed == null ? null : widget.onLongPress,
+            onLongPress: widget.onLongPress,
             child: result,
           ),
         ),
@@ -414,7 +415,7 @@ class _TButtonState extends State<TButton> {
     } else {
       button = ElevatedButton(
         onPressed: widget.onPressed,
-        onLongPress: widget.onPressed == null ? null : widget.onLongPress,
+        onLongPress: widget.onLongPress,
         statesController: _statesController,
         style: resolvedStyle,
         child: content,

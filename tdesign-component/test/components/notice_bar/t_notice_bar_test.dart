@@ -1,12 +1,104 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// TNoticeBar Widget 测试
 ///
-/// 覆盖 status 四档、marquee 滚动、prefix/operation/suffix、onPressed 回调、
+/// 覆盖 status 四档、marquee 滚动、prefix/operation/suffix、onTargetTap 回调、
 /// Theme 注入、边界情况。
 void main() {
+  for (final mode in [
+    'cancel',
+    'longPress',
+    'multiPointer',
+    'secondaryButton',
+    'smallMove',
+  ]) {
+    testWidgets('custom target tap classification: $mode', (tester) async {
+      final targets = <TNoticeBarTapTarget>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TNoticeBar(
+              content: 'notice',
+              operation: const SizedBox(
+                width: 80,
+                height: 40,
+                child: Text('target'),
+              ),
+              onTargetTap: targets.add,
+            ),
+          ),
+        ),
+      );
+      final position = tester.getCenter(find.text('target'));
+      final gesture = await tester.createGesture(
+        pointer: 1,
+        buttons: mode == 'secondaryButton' ? kSecondaryButton : kPrimaryButton,
+      );
+      await gesture.down(position);
+      switch (mode) {
+        case 'cancel':
+          await gesture.cancel();
+          break;
+        case 'longPress':
+          await tester.pump(const Duration(milliseconds: 600));
+          await gesture.up();
+          break;
+        case 'multiPointer':
+          final second = await tester.startGesture(position, pointer: 2);
+          await second.up();
+          await gesture.up();
+          break;
+        case 'smallMove':
+          await gesture.moveBy(const Offset(2, 2));
+          await gesture.up();
+          break;
+        default:
+          await gesture.up();
+      }
+      await tester.pump();
+      expect(
+        targets,
+        mode == 'smallMove' ? [TNoticeBarTapTarget.operation] : isEmpty,
+      );
+    });
+  }
+
+  testWidgets('NoticeBar custom target does not report a drag as a tap', (
+    tester,
+  ) async {
+    final targets = <TNoticeBarTapTarget>[];
+    var buttonCalls = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: TNoticeBar(
+            content: 'notice',
+            operation: TButton(
+              onPressed: () => buttonCalls++,
+              child: const Text('operation'),
+            ),
+            onTargetTap: targets.add,
+          ),
+        ),
+      ),
+    );
+    final gesture = await tester.startGesture(
+      tester.getCenter(find.text('operation')),
+    );
+    await gesture.moveBy(const Offset(0, 100));
+    await gesture.up();
+    await tester.pump();
+    expect(buttonCalls, 0);
+    expect(
+      targets,
+      isEmpty,
+      reason: 'A cancelled button gesture must not become a NoticeBar tap.',
+    );
+  });
+
   /// 用 TTheme 包裹以提供基础 Token
   Widget wrapWithTheme(
     Widget child, {
@@ -252,8 +344,8 @@ void main() {
     });
   });
 
-  group('TNoticeBar onPressed 回调', () {
-    testWidgets('未提供 onPressed 时内置区域不创建点击手势', (tester) async {
+  group('TNoticeBar onTargetTap 回调', () {
+    testWidgets('未提供 onTargetTap 时内置区域不创建点击手势', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           const TNoticeBar(
@@ -267,13 +359,13 @@ void main() {
       expect(find.byType(GestureDetector), findsNothing);
     });
 
-    testWidgets('点击内容区域触发 onPressed', (tester) async {
+    testWidgets('点击内容区域触发 onTargetTap', (tester) async {
       TNoticeBarTapTarget? triggered;
       await tester.pumpWidget(
         wrapWithTheme(
           TNoticeBar(
             content: '可点击的公告',
-            onPressed: (trigger) => triggered = trigger,
+            onTargetTap: (trigger) => triggered = trigger,
           ),
         ),
       );
@@ -281,14 +373,14 @@ void main() {
       expect(triggered, TNoticeBarTapTarget.content);
     });
 
-    testWidgets('点击 prefix 触发 onPressed', (tester) async {
+    testWidgets('点击 prefix 触发 onTargetTap', (tester) async {
       TNoticeBarTapTarget? triggered;
       await tester.pumpWidget(
         wrapWithTheme(
           TNoticeBar(
             content: '内容',
             prefix: const Icon(Icons.info),
-            onPressed: (trigger) => triggered = trigger,
+            onTargetTap: (trigger) => triggered = trigger,
           ),
         ),
       );
@@ -296,14 +388,14 @@ void main() {
       expect(triggered, TNoticeBarTapTarget.prefix);
     });
 
-    testWidgets('点击 suffixIcon 触发 onPressed', (tester) async {
+    testWidgets('点击 suffixIcon 触发 onTargetTap', (tester) async {
       TNoticeBarTapTarget? triggered;
       await tester.pumpWidget(
         wrapWithTheme(
           TNoticeBar(
             content: '内容',
             suffixIcon: Icons.close,
-            onPressed: (trigger) => triggered = trigger,
+            onTargetTap: (trigger) => triggered = trigger,
           ),
         ),
       );
@@ -319,7 +411,7 @@ void main() {
             content: '内容',
             operation: const Text('详情'),
             suffixIcon: Icons.close,
-            onPressed: triggered.add,
+            onTargetTap: triggered.add,
           ),
         ),
       );
@@ -343,7 +435,7 @@ void main() {
               child: const Text('详情'),
               onPressed: () => operationPressed++,
             ),
-            onPressed: triggered.add,
+            onTargetTap: triggered.add,
           ),
         ),
       );

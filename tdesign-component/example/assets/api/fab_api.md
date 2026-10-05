@@ -20,3 +20,16 @@
 | useSafeArea | bool | true | 是否避让系统安全区。 默认为 true。固定定位的 `right`、`bottom` 从安全边界起算； 拖拽与吸附范围同时避让四侧安全区。 |
 | xBounds | TFabBounds? | - | 水平拖拽边界限制 |
 | yBounds | TFabBounds? | - | 垂直拖拽边界限制 |
+
+
+### TFabThemeData
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| defaultBottom | double? | - | 默认距屏幕底部偏移（逻辑像素） |
+| defaultRight | double? | - | 默认距屏幕右侧偏移（逻辑像素） |
+| defaultXBounds | TFabBounds? | - | 默认水平拖拽边界限制 |
+| defaultYBounds | TFabBounds? | - | 默认垂直拖拽边界限制 |
+| dragTapSlop | double? | - | 点击与拖拽的判定阈值（位移逻辑像素）。 按手势起点到当前位置的屏幕全方向最大位移判定，与 `TFabDragAxis` 限制的 位置更新轴向无关。 |
+| magnetAnimationDuration | Duration? | - | 吸附动画时长 |

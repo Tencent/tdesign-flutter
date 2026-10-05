@@ -77,8 +77,8 @@ class TCheckboxGroup<T> extends StatelessWidget {
     /// 最多可选数量。
     this.maxSelected,
 
-    /// 超过最多可选数量时触发。
-    this.onMaxSelected,
+    /// 已达到 [maxSelected] 后再次尝试添加未选项时触发；本次不调用 [onChanged]。
+    this.onSelectionLimitExceeded,
 
     /// 自定义数据项视觉；交互仍由组接管。
     this.itemBuilder,
@@ -114,8 +114,8 @@ class TCheckboxGroup<T> extends StatelessWidget {
   /// 最多可选数量。
   final int? maxSelected;
 
-  /// 超过最多可选数量时触发。
-  final VoidCallback? onMaxSelected;
+  /// 已达到 [maxSelected] 后再次尝试添加未选项时触发；本次不调用 [onChanged]。
+  final VoidCallback? onSelectionLimitExceeded;
 
   /// 自定义数据项视觉；交互仍由组接管。
   final TCheckboxOptionBuilder<T>? itemBuilder;
@@ -191,7 +191,7 @@ class TCheckboxGroup<T> extends StatelessWidget {
       next.remove(option.value);
     } else {
       if (maxSelected != null && next.length >= maxSelected!) {
-        onMaxSelected?.call();
+        onSelectionLimitExceeded?.call();
         return;
       }
       next.add(option.value);
