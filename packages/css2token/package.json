@@ -1,0 +1,13 @@
+{
+  "name": "@tdesign-flutter/css2token",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Convert TDesign CSS custom properties to Flutter theme token overrides",
+  "exports": { ".": { "types": "./index.d.ts", "import": "./index.mjs" } },
+  "types": "./index.d.ts",
+  "files": ["index.mjs", "index.d.ts", "README.md", "LICENSE"],
+  "scripts": { "test": "node --test test/*.test.mjs" },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}

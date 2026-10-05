@@ -2,7 +2,7 @@
 
 ## 技术方案
 
-在站点新增纯函数 Theme Bridge：解析主题控制器维护的三个 CSS 样式表，按 Flutter 现有 Token 名称生成 `light/dark` JSON。转换过程递归解析 CSS 引用，显式维护跨端语义名称映射，并为 mobile 控制器补齐其面板会读取但默认样式未声明的行高和尺寸基础 Token。
+新增零运行时依赖的独立 ESM 库 `packages/css2token`（暂时 private，不发布），入口、类型声明、README 与测试均可整体移出仓库。库只接收调用方提供的 CSS 和可选默认基线，不读取 DOM、文件系统或控制器包，不管理预设及持久化。站点 Theme Bridge 作为适配器：解析主题控制器维护的三个 CSS 样式表，按 Flutter 现有 Token 名称生成 `light/dark` JSON。转换过程递归解析 CSS 引用，显式维护跨端语义名称映射，并为 mobile 控制器补齐其面板会读取但默认样式未声明的行高和尺寸基础 Token。
 
 站点根组件观察样式表内容并对转换结果去重，通过同源 `postMessage` 发送 JSON 字符串。组件文档 iframe 加载后发出 ready 事件，根组件重发最新主题。Flutter Web 监听器验证来源并兼容 JSON 字符串与历史 Map 数据，跨平台纯 Dart 解析器把增量消息合并到 Flutter 自身的 light/dark 默认主题，再由 `MyApp` 更新 `TThemeBuilder.light/dark`。
 
@@ -47,3 +47,12 @@
 默认 CSS 在 Vite 构建时从当前控制器包的三个 raw-loader 字符串提取，不执行其 bundle；包结构变化时明确失败。页面已保存的定制样式不再被误当作默认基线。默认字体指标、内阴影由 Flutter 解析器保留。
 
 开发入口复用现有 /flutter/example/ 同源代理，代理端口与 dev 脚本共享 VITE_FLUTTER_WEB_PORT。Flutter 首帧注册监听后向父窗口发送 flutter-demo-ready，父窗口校验 origin 与 iframe source 后重发当前主题。
+
+## 独立库契约
+
+- `parseCssToFlutterTheme(css, baseline?)` 转换一个模式；`generateFlutterThemeFromParts(light, dark, extra, baseline?)` 转换双模式。共享 CSS 在各模式后合并，最后声明优先。
+- 支持 td 变量引用、嵌套 fallback 与循环检测；未知或无法解析的值跳过，不猜测浏览器计算样式。输入按声明集合处理，不计算选择器优先级。
+- 未提供的 Token 不输出。仅提供字号或行高时，复合 font 的另一维使用 Flutter 当前映射默认值；输入已有另一维则使用输入值。
+- 颜色转换、字体层级、圆角、外阴影、边缘内阴影与 spacing 映射保持现有 Flutter JSON 契约。
+- 控制器 CSS 补齐、包默认值提取及 postMessage 协议留在站点适配器；控制器预设刷新和面板展示问题不属于独立库职责。
+- 独立 Node 测试进入站点现有 CI 命令；增加脱离站点目录的运行验证和 Light/Dark 浏览器验收。

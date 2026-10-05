@@ -41,22 +41,20 @@ test('converts palette, semantic, typography, radius, shadow and spacing tokens'
       --td-radius-round: 999px;
       --td-radius-circle: 50%;
       --td-shadow-1: 0 1px 10px rgba(0, 0, 0, 5%), 0 4px 5px -1px #11223344;
-      --td-size-2: 5px;
-      --td-size-4: 10px;
-      --td-size-5: 15px;
-      --td-size-6: 20px;
-      --td-size-8: 30px;
-      --td-size-10: 40px;
-      --td-size-12: 50px;
-      --td-size-13: 60px;
-      --td-size-15: 80px;
+      --td-spacer: 5px;
+      --td-spacer-1: 15px;
+      --td-spacer-2: 20px;
+      --td-spacer-3: 30px;
+      --td-spacer-4: 40px;
+      --td-spacer-5: 60px;
+      --td-spacer-6: 200px;
     }
   `);
 
   assert.equal(theme.color.brandColor1, '#112233');
   assert.equal(theme.color.brandColor7, '#80010203');
-  assert.equal(theme.ref.brandNormalColor, 'brandColor7');
-  assert.equal(theme.ref.componentStrokeColor, 'brandColor7');
+  assert.equal(theme.ref.brandColor, 'brandColor7');
+  assert.equal(theme.ref.componentStroke, 'brandColor7');
   assert.equal(theme.color.bgColorContainer, '#ABCDEF');
   assert.equal(theme.ref.bgColorContainer, 'bgColorContainer');
   assert.deepEqual(theme.font.fontTitleLarge, {
@@ -65,12 +63,12 @@ test('converts palette, semantic, typography, radius, shadow and spacing tokens'
     fontWeight: 6,
   });
   assert.equal(theme.font.fontTitleExtraLarge.size, 21);
-  assert.equal(Object.keys(theme.font).length, flutterThemeContract.fontTokens.length);
+  assert.deepEqual(Object.keys(theme.font), ['fontTitleExtraLarge', 'fontTitleLarge']);
   assert.deepEqual(Object.keys(theme.radius), flutterThemeContract.radiusTokens);
-  assert.equal(theme.radius.radiusSmall, 8);
-  assert.equal(theme.radius.radiusDefault, 10);
+  assert.equal(theme.radius.radiusSmall, 4);
+  assert.equal(theme.radius.radiusDefault, 8);
   assert.equal(theme.radius.radiusCircle, 9999);
-  assert.deepEqual(theme.shadow.shadowsBase, [
+  assert.deepEqual(theme.shadow.shadow1, [
     {
       color: '#0D000000',
       blurRadius: 10,
@@ -85,17 +83,13 @@ test('converts palette, semantic, typography, radius, shadow and spacing tokens'
     },
   ]);
   assert.deepEqual(theme.margin, {
-    spacer4: 5,
-    spacer8: 10,
-    spacer12: 15,
-    spacer16: 20,
-    spacer24: 30,
-    spacer32: 40,
-    spacer40: 50,
-    spacer48: 60,
-    spacer64: 80,
-    spacer96: 120,
-    spacer160: 200,
+    spacer: 5,
+    spacer1: 15,
+    spacer2: 20,
+    spacer3: 30,
+    spacer4: 40,
+    spacer5: 60,
+    spacer6: 200,
   });
 });
 
@@ -117,7 +111,7 @@ test('emits only overrides relative to the initial controller theme', () => {
   const changed = baseline.replace('#0052d9', '#112233').replace('16px', '18px');
   const theme = parseCssToFlutterTheme(changed, baseline);
   assert.deepEqual(theme.color, { brandColor7: '#112233' });
-  assert.equal(theme.ref.brandNormalColor, 'brandColor7');
+  assert.equal(theme.ref.brandColor, 'brandColor7');
   assert.equal(theme.font.fontBodyLarge.size, 18);
   assert.equal(theme.fontMetric.fontSizeBodyLarge, 18);
   assert.deepEqual(theme.radius, {});

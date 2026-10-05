@@ -22,7 +22,7 @@ Flutter 官网的主题控制器会把亮色、暗色和公共尺寸样式写入
 ### 涉及
 
 - 官网主题控制器依赖及挂载。
-- CSS Token 到 `TThemeData` JSON 的转换和 iframe 消息同步。
+- 独立 `packages/css2token` 库负责 CSS Token 到 `TThemeData` JSON 转换；站点适配器负责控制器补齐及 iframe 消息同步。
 - Flutter Web Demo 的主题消息解析、应用和安全边界。
 - 转换单元测试、Demo 消息解析测试和 CI 回归登记。
 
@@ -65,3 +65,7 @@ Flutter 官网的主题控制器会把亮色、暗色和公共尺寸样式写入
 - iframe 在开发与生产均走同源路径；Flutter 首帧注册监听后通知父页面 ready，由父页面重发最新配置。
 
 默认比较基线取控制器包原始 CSS。控制器自身选项持久化及重载后恢复 CSS 属于上游交互行为；桥接同步实际生效的 CSS，不从选项名称推断样式。
+
+## 独立库交付
+
+转换库零运行时依赖，提供 ESM 入口、TypeScript 声明、使用说明与独立测试，可整体移出仓库。当前 private，不发布；保留现有 Flutter JSON 协议，无组件公开 API 变化。未提供或无效的 Token 不生成默认覆盖，站点的控制器 CSS 补齐不进入转换库。库不管理控制器预设、持久化或刷新恢复。

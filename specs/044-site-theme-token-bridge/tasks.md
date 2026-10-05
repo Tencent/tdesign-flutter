@@ -7,3 +7,6 @@
 - [x] DONE 补充并登记 Node / Flutter 测试
 - [x] DONE 执行构建、测试、analyze 与代表性浏览器验收
 - [x] DONE 重整当前 Token 映射、消息握手并重新验证最终源码；上游整页恢复限制见 acceptance
+
+- [x] 独立 css2token 库、声明及说明，站点改为适配器
+- [x] 稀疏输入、引用边界和双模式独立测试及浏览器验证

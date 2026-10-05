@@ -16,7 +16,7 @@ void main() {
     final theme = parseWebThemeUpdateMessage(message);
 
     expect(theme, isNotNull);
-    expect(theme!.brandNormalColor, const Color(0xFF112233));
+    expect(theme!.brandColor, const Color(0xFF112233));
     expect(theme.fontBodyMedium?.size, 18);
     expect(theme.fontBodyMedium?.height, 26 / 18);
     expect(theme.fontSizeBodyMedium, 18);
@@ -24,10 +24,10 @@ void main() {
     expect(theme.shadowInsetTop?.width, 2);
     expect(theme.shadowInsetRight, TThemeData.defaultData().shadowInsetRight);
     expect(theme.radiusDefault, 8);
-    expect(theme.shadowsBase?.single.blurRadius, 9);
-    expect(theme.spacer16, 21);
-    expect(theme.numberFontFamily?.fontFamily, 'TCloudNumber');
-    expect(theme.dark?.brandNormalColor, const Color(0xFF445566));
+    expect(theme.shadow1?.single.blurRadius, 9);
+    expect(theme.spacer2, 21);
+    expect(theme.fontFamilyMap['numberFontFamily']?.fontFamily, 'TCloudNumber');
+    expect(theme.dark?.brandColor, const Color(0xFF445566));
     expect(theme.dark?.fontBodyMedium?.size, 20);
     expect(theme.bgColorPage, TThemeData.defaultData().bgColorPage);
     expect(
@@ -72,7 +72,7 @@ void main() {
 Map<String, dynamic> _theme(String color, int fontSize) {
   return {
     'color': {'brandColor7': color},
-    'ref': {'brandNormalColor': 'brandColor7'},
+    'ref': {'brandColor': 'brandColor7'},
     'font': {
       'fontBodyMedium': {'size': fontSize, 'lineHeight': 26, 'fontWeight': 4},
     },
@@ -88,7 +88,7 @@ Map<String, dynamic> _theme(String color, int fontSize) {
     },
     'radius': {'radiusDefault': 8},
     'shadow': {
-      'shadowsBase': [
+      'shadow1': [
         {
           'color': '#22000000',
           'blurRadius': 9,
@@ -97,6 +97,6 @@ Map<String, dynamic> _theme(String color, int fontSize) {
         },
       ],
     },
-    'margin': {'spacer16': 21},
+    'margin': {'spacer2': 21},
   };
 }
