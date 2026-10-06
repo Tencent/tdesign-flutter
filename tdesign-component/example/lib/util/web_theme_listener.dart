@@ -1,6 +1,3 @@
-// Web 平台主题模式监听器
-// 使用条件导入，避免在非 Web 平台编译时出错
-// 条件导入：Web 平台使用 dart:html，非 Web 平台使用 stub
+// 浏览器 API 仅在 Web 平台加载，其他平台使用空实现。
 export 'web_theme_listener_stub.dart'
-    if (dart.library.html) 'web_theme_listener_web.dart';
-
+    if (dart.library.js_interop) 'web_theme_listener_web.dart';

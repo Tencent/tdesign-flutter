@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -42,14 +41,44 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late TThemeData _themeData;
-  bool _webThemeListenerSetup = false;
+  late final ThemeModeProvider _themeModeProvider;
+  VoidCallback? _stopWebThemeListener;
 
   @override
   void initState() {
     super.initState();
     _themeData = TThemeData.defaultData();
+    _themeModeProvider = ThemeModeProvider();
+    WidgetsBinding.instance.addPostFrameCallback(_initializeTheme);
     print(
         '_darkThemeData.bgColorPage： ${_themeData.bgColorPage}，_themeData.dark?.bgColorPage: ${_themeData.dark?.bgColorPage}');
+  }
+
+  @override
+  void dispose() {
+    _stopWebThemeListener?.call();
+    _themeModeProvider.dispose();
+    super.dispose();
+  }
+
+  void _initializeTheme(Duration _) async {
+    if (!mounted) {
+      return;
+    }
+    _stopWebThemeListener = listenToWebThemeUpdates(onUpdate: _applyWebTheme);
+    if (_themeModeProvider.themeMode == ThemeMode.system) {
+      await _themeModeProvider.initThemeMode();
+    }
+  }
+
+  void _applyWebTheme(TThemeData themeData, ThemeMode? mode) {
+    if (!mounted) {
+      return;
+    }
+    if (mode != null) {
+      _themeModeProvider.themeMode = mode;
+    }
+    setState(() => _themeData = themeData);
   }
 
   @override
@@ -57,17 +86,7 @@ class _MyAppState extends State<MyApp> {
     var delegate = IntlResourceDelegate(context);
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) {
-            final provider = ThemeModeProvider();
-            WidgetsBinding.instance.addPostFrameCallback((_) async {
-              if (provider.themeMode == ThemeMode.system) {
-                await provider.initThemeMode();
-              }
-            });
-            return provider;
-          },
-        ),
+        ChangeNotifierProvider.value(value: _themeModeProvider),
         ChangeNotifierProvider(
           create: (_) {
             final provider = LocaleProvider();
@@ -80,25 +99,6 @@ class _MyAppState extends State<MyApp> {
       ],
       child: Consumer2<ThemeModeProvider, LocaleProvider>(
         builder: (context, themeModeProvider, localeProvider, child) {
-          // 在 Web 平台设置 postMessage 监听
-          if (PlatformUtil.isWeb && !_webThemeListenerSetup) {
-            _webThemeListenerSetup = true;
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              // 仅在 Web 平台执行
-              if (!kIsWeb) {
-                return;
-              }
-              setupThemeModeListener(
-                themeModeProvider,
-                onThemeUpdate: (themeData) {
-                  if (mounted && !identical(_themeData, themeData)) {
-                    setState(() => _themeData = themeData);
-                  }
-                },
-              );
-            });
-          }
-
           return MaterialApp(
             title: 'TDesign Flutter Example',
             theme: TThemeBuilder.light(_themeData),

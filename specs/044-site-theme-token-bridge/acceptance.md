@@ -113,3 +113,11 @@
 - 官网本机联调 `127.0.0.1:19000` 使用本轮 3.47.0 release 构建：Light/Dark 均操作字体，Button 小号宽度 100、大号 107.9921875；主题色蓝/黄、圆角全直角/超大、尺寸 size-6 24/20px、阴影超轻/超深均实际操作，TabBar 悬浮胶囊阴影已双模式截图。
 - 浏览器发现递增行高产生 22.5px 等小数，现有 Font JSON 的 int 参数会使整条主题消息失效。已在 Example 字体适配层保留 double size 与精确 lineHeight/size；8 项消息测试含 15.5px/23.25px、双模式及其余字段保留断言。最终构建的 Light/Dark 均重新应用递增模式、检查真实 22.5px CSS，再操作字号仍能更新 Flutter。
 - 转换的 42 项浏览器契约验收不等价于所有组件 Token 逐像素验收。历史记录中上游整页刷新恢复和 Dark 字体颜色面板说明问题仍保留；本轮不修改控制器上游或组件公开 API。Light 往返 Divider/Button 后新 iframe 的按钮宽度仍为 107.9921875。GitHub/CNB 双版本 CI 已登记独立 Dart 测试，远端结果以推送后 head 为准。
+
+## Web 监听器生命周期优化（2026-10-07）
+
+- 验证基线：`26f6278b`；七个实现/测试/清单文件合并 SHA-256：`d399710c9b01ea069382f76c5383e28e4271cc545f2050b0e52b90cda06548cd`。
+- Flutter 3.32.0 / 3.47.0 的消息、生命周期及 Example smoke 测试各 26/26 通过；Example 全量 `flutter analyze --no-pub --fatal-infos` 均无诊断。生命周期测试已登记 GitHub/CNB 共用的 sharedExampleTests。
+- 调度器自测 19/19、示例生成器 `--check` 及 Flutter 3.47.0 Web release 构建通过。
+- Chrome 直接运行生产监听器：父窗口消息、来源过滤、非法消息、CSS Light/Dark、释放和重新注册 10/10，独立窗口及重复释放 2/2 通过；两次注册均收到 ready。
+- 本机官网与最终 Example 联调：Light/Dark 小号与大号字体（15px/17px）、刷新及 Button→Divider→Button 后的模式与主题色同步通过。浏览器证据覆盖受影响通信链路，不代表所有组件逐像素验收或远端 CI 浏览器验收。

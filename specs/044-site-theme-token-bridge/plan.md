@@ -69,3 +69,9 @@
 2. 删除 Dart 字体映射表中的默认字号、行高和字重，只保留名称、CSS 后缀及派生字号偏移。baseline 下独立比较各维度，只输出变化。
 3. 新 CSS 消息字体在 Example 结合 pristine light/dark 默认 fontMap 构造 Font；旧 JSON 消息的校验保持严格。
 4. 扩充稀疏字体、基线单维变化、小数、全部映射名称和上游 CSS 保留测试；验证两版本、构建与 Light/Dark 浏览器。
+
+## Web 监听器优化（2026-10-07）
+
+条件导出改用 `dart.library.js_interop`；Web 实现使用 `package:web` 与 `dart:js_interop`，每次监听返回取消函数。通信层通过回调传出主题及模式，不依赖 ThemeModeProvider。MyApp 在 initState 创建并持有 ThemeModeProvider，通过 ChangeNotifierProvider.value 提供状态；首帧注册前检查 mounted，保存取消函数，dispose 时先取消监听再释放 Provider。build 不再注册监听或创建主题状态。ThemeModeProvider 使用模式修订号及释放状态，防止异步偏好初始化覆盖更新后的模式或通知已释放对象。
+
+验证覆盖双版本消息解析、Provider 初始化竞争及释放、Example smoke、strict analyze、Web release 构建和真实浏览器的来源过滤、释放重注册、首次握手与 Light/Dark 同步。该改动不改变组件绘制，不更新 Golden。

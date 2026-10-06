@@ -1,48 +1,49 @@
-// Web 平台实现：使用 dart:html 监听 postMessage
 import 'dart:convert';
-// ignore: deprecated_member_use, avoid_web_libraries_in_flutter
-import 'dart:html' as html;
+import 'dart:js_interop';
 
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:web/web.dart' as web;
 
-import '../provider/theme_mode_provider.dart';
 import 'web_theme_message.dart';
 
-bool _listenerSetup = false;
-ValueChanged<TThemeData>? _onThemeUpdate;
-
-/// Web 平台的主题模式与 Token 监听器实现。
-void setupThemeModeListener(
-  ThemeModeProvider themeModeProvider, {
-  ValueChanged<TThemeData>? onThemeUpdate,
+/// 接收同源父窗口的主题更新；调用返回的函数可取消本次监听。
+///
+/// 独立打开 Example 时不注册监听，也不向自身发送 ready 消息。
+VoidCallback listenToWebThemeUpdates({
+  required void Function(TThemeData theme, ThemeMode? mode) onUpdate,
 }) {
-  _onThemeUpdate = onThemeUpdate;
-  if (_listenerSetup) {
-    return;
+  final parent = web.window.parent;
+  if (parent == null || parent == web.window) {
+    return _noop;
   }
-  _listenerSetup = true;
+  final origin = web.window.location.origin;
 
-  html.window.onMessage.listen((event) {
-    if (event.origin != html.window.location.origin) {
+  void handleMessage(web.Event event) {
+    final message = event as web.MessageEvent;
+    if (message.origin != origin || message.source != parent) {
       return;
     }
-    final data = decodeWebThemeMessageData(event.data);
-    if (data is! Map) {
+    final Object? rawData;
+    try {
+      rawData = message.data.dartify();
+    } on Object {
       return;
     }
+    final data = decodeWebThemeMessageData(rawData);
     final theme = parseWebThemeUpdateMessage(data);
-    if (theme == null) {
-      return;
+    if (theme != null) {
+      onUpdate(theme, parseWebThemeMode(data));
     }
-    final themeMode = parseWebThemeMode(data);
-    if (themeMode != null) {
-      themeModeProvider.themeMode = themeMode;
-    }
-    _onThemeUpdate?.call(theme);
-  });
-  html.window.parent?.postMessage(
-    jsonEncode({'type': 'flutter-demo-ready'}),
-    html.window.location.origin,
+  }
+
+  final listener = handleMessage.toJS;
+  web.window.addEventListener('message', listener);
+  parent.postMessage(
+    jsonEncode({'type': 'flutter-demo-ready'}).toJS,
+    origin.toJS,
   );
+  return () => web.window.removeEventListener('message', listener);
 }
+
+void _noop() {}
