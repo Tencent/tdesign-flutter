@@ -79,6 +79,13 @@ jobs:
         working-directory: ./tdesign-component
         run: dart run tool/run_component_regression.dart
 
+      - name: Test and analyze standalone css2token package
+        working-directory: ./packages/css2token
+        run: |
+          dart pub get
+          dart test
+          dart analyze --fatal-infos
+
       - name: Verify public API migration in an external consumer
         working-directory: ./tdesign-component
         run: dart run tool/run_migration_consumer.dart

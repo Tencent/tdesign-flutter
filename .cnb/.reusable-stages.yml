@@ -35,6 +35,10 @@
   name: flutter test (example shared regression)
   script: cd tdesign-component && dart run tool/run_example_regression.dart
 
+.css2token-tests:
+  name: dart test and analyze (css2token)
+  script: cd packages/css2token && dart pub get && dart test && dart analyze --fatal-infos
+
 # Demo 结构与 Golden 固定在 Flutter 3.32.0 Linux 执行，测试清单由 Dart 统一维护。
 .visual-regression-tests:
   name: flutter test (visual regression)
@@ -103,6 +107,7 @@
     - !reference [.migration-consumer-tests]
     - !reference [.regression-tool-tests]
     - !reference [.example-regression-tests]
+    - !reference [.css2token-tests]
     - !reference [.visual-regression-tests]
 
 # 测试 + 覆盖率：flutter latest
@@ -119,6 +124,7 @@
     - !reference [.migration-consumer-tests]
     - !reference [.regression-tool-tests]
     - !reference [.example-regression-tests]
+    - !reference [.css2token-tests]
 
 # 构建 APK：flutter 3.32.0
 .build-apk-332:

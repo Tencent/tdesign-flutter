@@ -2,23 +2,23 @@
 
 ## 技术方案
 
-新增零运行时依赖的独立 ESM 库 `packages/css2token`（暂时 private，不发布），入口、类型声明、README 与测试均可整体移出仓库。库只接收调用方提供的 CSS 和可选默认基线，不读取 DOM、文件系统或控制器包，不管理预设及持久化。站点 Theme Bridge 作为适配器：解析主题控制器维护的三个 CSS 样式表，按 Flutter 现有 Token 名称生成 `light/dark` JSON。转换过程递归解析 CSS 引用，显式维护跨端语义名称映射，并为 mobile 控制器补齐其面板会读取但默认样式未声明的行高和尺寸基础 Token。
+新增零运行时依赖的纯 Dart package `packages/css2token`（`publish_to: none`，暂不发布），Dart 源码、pubspec、README 与测试均可整体移出仓库。库只接收调用方提供的 CSS 和可选默认基线，不读取 DOM、文件系统或控制器包，不管理预设及持久化。站点 Theme Bridge 作为适配器，读取主题控制器维护的三个 CSS 样式表并发送原始 CSS；Example 通过 path 依赖调用 Dart 转换库，按 Flutter 现有 Token 名称生成 `light/dark` JSON。转换过程递归解析 CSS 引用，显式维护跨端语义名称映射，并为 mobile 控制器补齐其面板会读取但默认样式未声明的行高和尺寸基础 Token。
 
-站点根组件观察样式表内容并对转换结果去重，通过同源 `postMessage` 发送 JSON 字符串。组件文档 iframe 加载后发出 ready 事件，根组件重发最新主题。Flutter Web 监听器验证来源并兼容 JSON 字符串与历史 Map 数据，跨平台纯 Dart 解析器把增量消息合并到 Flutter 自身的 light/dark 默认主题，再由 `MyApp` 更新 `TThemeBuilder.light/dark`。
+站点根组件观察样式表内容并对 CSS 消息去重，通过同源 `postMessage` 发送 JSON 字符串。组件文档 iframe 加载后发出 ready 事件，根组件重发最新主题。Flutter Web 监听器验证来源并兼容 JSON 字符串与历史 Map 数据，跨平台纯 Dart 解析器把增量消息合并到 Flutter 自身的 light/dark 默认主题，复合 Font 在 Example 单独适配以保留控制器递增模式产生的小数行高，再由 `MyApp` 更新 `TThemeBuilder.light/dark`。
 
 ## 影响范围
 
 | 范围 | 文件或模块 | 影响 |
 | --- | --- | --- |
-| 站点 | `tdesign-site/site/app.vue`、Theme Bridge | 挂载控制器并转换、广播全部兼容 Token |
-| Demo | Web theme listener、`main.dart` | 动态替换 Demo 的 `TThemeData` |
-| 测试 | Node 单测、Example Flutter 测试、manifest | 固化转换与解析契约 |
+| 站点 | `tdesign-site/site/app.vue`、Theme Bridge | 挂载控制器、补齐 CSS、广播原始 CSS 和基线 |
+| Demo | Web theme listener、`main.dart` | 调用纯 Dart 转换库，合并并替换 Demo 的 `TThemeData` |
+| 测试 | Dart 独立测试、Node 适配测试、Example Flutter 测试及双版本 CI | 固化转换与解析契约 |
 | 依赖 | `@tdesign/theme-generator` | 使用当前 1.2.6 控制器 |
 
 ## API 变化
 
 - 无公开组件 API 变化。
-- 新增站点内部消息协议 `flutter-theme-update`，仅用于同源官网与其 Flutter iframe。
+- 新增站点内部 CSS 消息协议 `flutter-css-theme-update`，兼容旧 `flutter-theme-update` Token JSON 协议，仅用于同源官网与其 Flutter iframe。
 
 ## 风险与取舍
 
@@ -50,9 +50,15 @@
 
 ## 独立库契约
 
-- `parseCssToFlutterTheme(css, baseline?)` 转换一个模式；`generateFlutterThemeFromParts(light, dark, extra, baseline?)` 转换双模式。共享 CSS 在各模式后合并，最后声明优先。
+### Dart 迁移方案（2026-10-06）
+
+最终转换端调整为 Flutter iframe：`packages/css2token` 改为纯 Dart package，零运行时依赖，`publish_to: none`，Example 通过 path 依赖调用。官网只发送完整 light/dark/extra CSS、控制器原始默认基线和模式；保留控制器 CSS 补齐、去重、同源通信及 ready 握手。纯库输出可 JSON 序列化的 Token Map，不依赖 Flutter、DOM 或控制器；Example 负责合并为 TThemeData。
+
+使用独立 `flutter-css-theme-update` 协议承载原始 CSS；旧 `flutter-theme-update` Token JSON 协议兼容保留。消息校验 CSS 结构后再转换，缺失/非法结构不更新主题。删除 JS 转换实现、npm 包元数据、类型声明及 JS 转换测试，避免两份映射；JS 测试只验证控制器适配和消息。Dart 独立测试进入双版本 CI，同时验证官网实际发送 CSS 后由 Dart 应用 Light/Dark。
+
+- `parseCssToFlutterTokens(css, baselineCss: ...)` 转换一个模式；`cssToFlutterTokens(lightCss: ..., darkCss: ..., extraCss: ..., baseline: ...)` 转换双模式。共享 CSS 在各模式后合并，最后声明优先。
 - 支持 td 变量引用、嵌套 fallback 与循环检测；未知或无法解析的值跳过，不猜测浏览器计算样式。输入按声明集合处理，不计算选择器优先级。
 - 未提供的 Token 不输出。仅提供字号或行高时，复合 font 的另一维使用 Flutter 当前映射默认值；输入已有另一维则使用输入值。
 - 颜色转换、字体层级、圆角、外阴影、边缘内阴影与 spacing 映射保持现有 Flutter JSON 契约。
 - 控制器 CSS 补齐、包默认值提取及 postMessage 协议留在站点适配器；控制器预设刷新和面板展示问题不属于独立库职责。
-- 独立 Node 测试进入站点现有 CI 命令；增加脱离站点目录的运行验证和 Light/Dark 浏览器验收。
+- 独立 Dart 测试与严格 analyze 进入 Flutter 双版本 CI；Dart 编译成 JS 后执行 Light/Dark 浏览器契约验收，官网联调验证真实 CSS 消息。

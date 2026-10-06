@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:css2token/css2token.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -19,7 +20,11 @@ dynamic decodeWebThemeMessageData(dynamic data) {
 }
 
 ThemeMode? parseWebThemeMode(dynamic message) {
-  if (message is! Map || message['type'] != 'flutter-theme-update') {
+  if (message is! Map ||
+      !const {
+        'flutter-theme-update',
+        'flutter-css-theme-update',
+      }.contains(message['type'])) {
     return null;
   }
   return switch (message['themeMode']) {
@@ -31,15 +36,38 @@ ThemeMode? parseWebThemeMode(dynamic message) {
 
 /// Parses a decoded website message into a Flutter theme.
 TThemeData? parseWebThemeUpdateMessage(dynamic message) {
-  if (message is! Map || message['type'] != 'flutter-theme-update') {
+  if (message is! Map ||
+      !const {
+        'flutter-theme-update',
+        'flutter-css-theme-update',
+      }.contains(message['type'])) {
     return null;
   }
-  final theme = message['theme'];
-  if (theme is! Map || theme['light'] is! Map || theme['dark'] is! Map) {
-    return null;
-  }
-
   try {
+    final Map theme;
+    if (message['type'] == 'flutter-css-theme-update') {
+      final css = _cssParts(message['css']);
+      final baseline = _cssParts(message['baseline']);
+      if (css == null ||
+          baseline == null ||
+          parseWebThemeMode(message) == null) {
+        return null;
+      }
+      theme = cssToFlutterTokens(
+        lightCss: css.light,
+        darkCss: css.dark,
+        extraCss: css.extra,
+        baseline: baseline,
+      ).toJson();
+    } else {
+      final supplied = message['theme'];
+      if (supplied is! Map ||
+          supplied['light'] is! Map ||
+          supplied['dark'] is! Map) {
+        return null;
+      }
+      theme = supplied;
+    }
     final lightOverrides = _parseThemePart('custom', theme['light'] as Map);
     final darkOverrides = _parseThemePart('customDark', theme['dark'] as Map);
     if (lightOverrides == null || darkOverrides == null) {
@@ -66,7 +94,39 @@ TThemeData? parseWebThemeUpdateMessage(dynamic message) {
 }
 
 TThemeData? _parseThemePart(String name, Map<dynamic, dynamic> values) {
-  return TThemeData.fromJson(name, jsonEncode(<String, dynamic>{name: values}));
+  final groups = Map<dynamic, dynamic>.of(values);
+  final fonts = groups.remove('font');
+  final theme = TThemeData.fromJson(name, jsonEncode({name: groups}));
+  if (theme == null) {
+    return null;
+  }
+  if (fonts != null) {
+    for (final entry in (fonts as Map).entries) {
+      final font = entry.value as Map;
+      final size = (font['size'] as num).toDouble();
+      final lineHeight = (font['lineHeight'] as num).toDouble();
+      final weight = (font['fontWeight'] ?? 4) as int;
+      if (!size.isFinite ||
+          !lineHeight.isFinite ||
+          size <= 0 ||
+          lineHeight <= 0 ||
+          weight < 1 ||
+          weight > FontWeight.values.length) {
+        return null;
+      }
+      // The controller emits fractional metrics in incremental height mode.
+      // Font's JSON constructor takes ints, but its stored metrics are doubles.
+      theme.fontMap[entry.key as String] =
+          Font(
+              size: 1,
+              lineHeight: 1,
+              fontWeight: FontWeight.values[weight - 1],
+            )
+            ..size = size
+            ..height = lineHeight / size;
+    }
+  }
+  return theme;
 }
 
 TThemeData _mergeTheme(
@@ -139,4 +199,18 @@ Map<String, T> _declaredValues<T>(Map<String, T> parsed, dynamic values) {
     for (final key in values.keys.whereType<String>())
       if (parsed[key] case final T value) key: value,
   };
+}
+
+CssThemeParts? _cssParts(dynamic value) {
+  if (value is! Map ||
+      value['light'] is! String ||
+      value['dark'] is! String ||
+      value['extra'] is! String) {
+    return null;
+  }
+  return CssThemeParts(
+    light: value['light'] as String,
+    dark: value['dark'] as String,
+    extra: value['extra'] as String,
+  );
 }

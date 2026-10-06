@@ -1,9 +1,11 @@
 # 验收记录
 
+以下保留历史验收过程；当前实现及验证以最后的「纯 Dart 迁移验收」为准，历史 JS 测试不代表当前包。
+
 ## 验证环境
 
 - 分支：`rss1102/fix/site-theme-all-tokens`
-- 基线：`origin/develop` (`b8a4bec7d`)
+- 基线：`origin/develop` (`a0b0d0fec`)
 - Flutter/Dart：Flutter 3.32.0 与 3.47.0
 - Node/pnpm：Node 24.15.0 / pnpm 11.20.0
 
@@ -87,3 +89,15 @@
 - 尺寸入口纠正：点击 comp-size-xxxs 打开数值输入器；Light 通过键盘替换把实际 `--td-size-6` 从16px改为24px，Dark 从24px改为20px。应输入数值，由控件格式化 px；此前“没有编辑入口”的判断错误。面板初次数值为空时打开编辑器后刷新显示。
 - 未修改 Flutter 源码、组件公开 API、默认主题或 Golden；本轮无 breaking change。Flutter 双版本的既有解析协议保持不变；最终远端 CI 以新 head 为准。
 - 上游控制器整页刷新预设恢复、Dark 字体颜色面板说明仍不在本库职责内，不宣称已修复。
+
+## 纯 Dart 迁移验收（2026-10-06）
+
+- 代码基于已 rebase 的 `f346023f`，新增纯 Dart `packages/css2token`，删除 JS 转换实现及 npm 元数据。版本 0.0.0、`publish_to: none`，零运行时依赖；未发布。
+- 官网发送 `flutter-css-theme-update`：完整 light/dark/extra CSS、控制器原始基线和 themeMode。Example path 依赖调用 Dart 库，旧 `flutter-theme-update` JSON 消息继续兼容；来源校验和 ready 握手保持。
+- Flutter 3.32.0 / 3.47.0 对应 Dart 独立测试各 23 项通过，独立包 strict analyze 无诊断；Example 消息测试各 8 项通过，strict analyze 无诊断。
+- 整包复制到不含官网或 Flutter 目录的 `/tmp/pr1132-css2token-standalone-dart`，offline pub get、23 项测试、strict analyze 均通过。包的 lib 不依赖 Flutter、DOM、文件系统或控制器。
+- `pnpm site` 通过：4 项 JS 控制器消息适配测试、10 项文档适配测试、57 份组件文档检查以及 Vite 生产构建；既有 chunk/资源警告保留。Flutter 3.47.0 Web 子路径构建通过；未更新 Golden。
+- 纯 Dart 测试程序 `test/browser_probe.dart` 编译成 JS 后，浏览器实际执行双模式转换 42/42 通过。涵盖所有转换分组、字体层级、引用/fallback/循环、清除、基线及模式分离；页面 Light/Dark 均检查。截图 `/tmp/pr1132-dart-{light,dark}.jpg`。
+- 官网本机联调 `127.0.0.1:19000` 使用本轮 3.47.0 release 构建：Light/Dark 均操作字体，Button 小号宽度 100、大号 107.9921875；主题色蓝/黄、圆角全直角/超大、尺寸 size-6 24/20px、阴影超轻/超深均实际操作，TabBar 悬浮胶囊阴影已双模式截图。
+- 浏览器发现递增行高产生 22.5px 等小数，现有 Font JSON 的 int 参数会使整条主题消息失效。已在 Example 字体适配层保留 double size 与精确 lineHeight/size；8 项消息测试含 15.5px/23.25px、双模式及其余字段保留断言。最终构建的 Light/Dark 均重新应用递增模式、检查真实 22.5px CSS，再操作字号仍能更新 Flutter。
+- 转换的 42 项浏览器契约验收不等价于所有组件 Token 逐像素验收。历史记录中上游整页刷新恢复和 Dark 字体颜色面板说明问题仍保留；本轮不修改控制器上游或组件公开 API。Light 往返 Divider/Button 后新 iframe 的按钮宽度仍为 107.9921875。GitHub/CNB 双版本 CI 已登记独立 Dart 测试，远端结果以推送后 head 为准。

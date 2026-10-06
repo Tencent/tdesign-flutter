@@ -15,9 +15,8 @@ import siteConfig from './site.config';
 import controllerBaseline from 'virtual:flutter-controller-baseline';
 import '@tdesign/theme-generator';
 import {
-  createFlutterThemeMessage,
+  createFlutterCssThemeMessage,
   ensureFlutterThemeTokenCoverage,
-  generateFlutterThemeFromParts,
 } from './utils/flutterThemeBridge.mjs';
 
 import { defineComponent } from 'vue';
@@ -166,15 +165,10 @@ export default defineComponent({
       if (this.themeUpdateTimer) clearTimeout(this.themeUpdateTimer);
       this.themeUpdateTimer = setTimeout(() => {
         if (!this.themeStyles.light || !this.themeStyles.dark) return;
-        const themeJson = generateFlutterThemeFromParts(
-          this.themeStyles.light,
-          this.themeStyles.dark,
-          this.themeStyles.extra,
-          this.themeBaselines,
-        );
-        const message = createFlutterThemeMessage(
-          themeJson,
+        const message = createFlutterCssThemeMessage(
+          this.themeStyles,
           document.documentElement.getAttribute('theme-mode') === 'dark' ? 'dark' : 'light',
+          this.themeBaselines,
         );
         const serialized = JSON.stringify(message);
         if (serialized === this.lastThemeJson) return;

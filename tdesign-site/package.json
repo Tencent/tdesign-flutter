@@ -4,7 +4,7 @@
   "packageManager": "pnpm@11.20.0",
   "scripts": {
     "copy:readme": "node script/copy-readme.js",
-    "test:theme": "node --test ../packages/css2token/test/*.test.mjs site/utils/flutterThemeBridge.test.mjs && tsc --strict --noEmit --skipLibCheck --target es2020 --moduleResolution node ../packages/css2token/test/types.ts",
+    "test:theme": "node --test site/utils/flutterThemeBridge.test.mjs",
     "test:example-code": "node --test site/flutter-example-docs/*.test.mjs && node site/flutter-example-docs/check-docs.mjs",
     "site": "pnpm test:theme && pnpm test:example-code && cd site && vite build",
     "presite:dev": "npm run copy:readme",

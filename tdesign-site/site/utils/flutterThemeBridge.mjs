@@ -1,16 +1,4 @@
-// Site-only controller adapter. The converter itself has no controller dependencies.
-import {
-  generateFlutterThemeFromParts as convertParts,
-  parseCssVariables,
-} from '../../../packages/css2token/index.mjs';
-
-export {
-  flutterThemeContract,
-  normalizeCssColor,
-  parseCssToFlutterTheme,
-  parseCssVariables,
-} from '../../../packages/css2token/index.mjs';
-
+// Controller CSS completion and browser message adaptation only.
 const FLUTTER_EXTRA_DEFAULTS = `
   --td-line-height-link-small: 20px;
   --td-line-height-link-medium: 22px;
@@ -91,32 +79,19 @@ const FLUTTER_EXTRA_DEFAULTS = `
 `;
 
 export function ensureFlutterThemeTokenCoverage(cssText) {
-  const variables = parseCssVariables(cssText);
-  const defaults = parseCssVariables(`:root {${FLUTTER_EXTRA_DEFAULTS}}`);
+  const variables = new Map([...cssText.matchAll(/(--td-[\w-]+)\s*:/g)].map((match) => [match[1], true]));
+  const defaults = new Map([...FLUTTER_EXTRA_DEFAULTS.matchAll(/(--td-[\w-]+)\s*:\s*([^;]+);/g)].map((match) => [match[1], match[2].trim()]));
   const missing = [...defaults].filter(([name]) => !variables.has(name));
   if (missing.length === 0) return cssText;
   const declarations = missing.map(([name, value]) => `  ${name}: ${value};`).join('\n');
   return `${cssText || ''}\n:root {\n${declarations}\n}\n`;
 }
 
-export function generateFlutterThemeFromParts(lightCss, darkCss, extraCss, baseline = null) {
-  return convertParts(
-    lightCss,
-    darkCss,
-    ensureFlutterThemeTokenCoverage(extraCss),
-    baseline
-      ? {
-          ...baseline,
-          extra: ensureFlutterThemeTokenCoverage(baseline.extra),
-        }
-      : null,
-  );
-}
-
-export function createFlutterThemeMessage(theme, themeMode = 'light') {
+export function createFlutterCssThemeMessage(css, themeMode, baseline) {
   return {
-    type: 'flutter-theme-update',
+    type: 'flutter-css-theme-update',
     themeMode: themeMode === 'dark' ? 'dark' : 'light',
-    theme,
+    css: { ...css, extra: ensureFlutterThemeTokenCoverage(css.extra || '') },
+    baseline: { ...baseline, extra: ensureFlutterThemeTokenCoverage(baseline.extra || '') },
   };
 }

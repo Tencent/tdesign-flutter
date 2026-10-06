@@ -22,7 +22,7 @@ Flutter 官网的主题控制器会把亮色、暗色和公共尺寸样式写入
 ### 涉及
 
 - 官网主题控制器依赖及挂载。
-- 独立 `packages/css2token` 库负责 CSS Token 到 `TThemeData` JSON 转换；站点适配器负责控制器补齐及 iframe 消息同步。
+- 独立纯 Dart `packages/css2token` 库负责 CSS Token 到 Flutter Token JSON 转换；Example path 依赖并调用，站点适配器负责控制器补齐及原始 CSS 消息同步。
 - Flutter Web Demo 的主题消息解析、应用和安全边界。
 - 转换单元测试、Demo 消息解析测试和 CI 回归登记。
 
@@ -39,7 +39,7 @@ Flutter 官网的主题控制器会把亮色、暗色和公共尺寸样式写入
 3. 字体的字号、行高和字重必须组成同一个 Flutter Font Token；只修改其中一个字段时其余字段保持有效默认值。
 4. CSS `#RGB/#RGBA/#RRGGBB/#RRGGBBAA`、`rgb()`、`rgba()`、百分比 alpha、`transparent` 和嵌套 `var()` 必须得到 Flutter 可解析的 `#AARRGGBB` 或 `#RRGGBB`。
 5. 圆形/胶囊圆角转换为 Flutter 的大半径语义；阴影保留每层 offset、blur、spread 和颜色。
-6. 每次有效 Token 变化只发送一次去重后的 JSON 字符串 `flutter-theme-update`；iframe load 后重发当前配置。
+6. 每次有效 CSS 变化只发送一次去重后的 JSON 字符串 `flutter-css-theme-update`，包含 light/dark/extra CSS、原始控制器基线及主题模式；iframe load 后重发当前配置。
 7. Flutter 仅接受同源、结构完整的消息。解析失败时保留当前主题，不抛出导致 Demo 中断。
 
 ## 验收标准
@@ -68,4 +68,4 @@ Flutter 官网的主题控制器会把亮色、暗色和公共尺寸样式写入
 
 ## 独立库交付
 
-转换库零运行时依赖，提供 ESM 入口、TypeScript 声明、使用说明与独立测试，可整体移出仓库。当前 private，不发布；保留现有 Flutter JSON 协议，无组件公开 API 变化。未提供或无效的 Token 不生成默认覆盖，站点的控制器 CSS 补齐不进入转换库。库不管理控制器预设、持久化或刷新恢复。
+转换库为零运行时依赖的纯 Dart package，提供 Dart 入口、类型、使用说明与独立测试，可整体移出仓库。当前 `publish_to: none`，不发布；官网发送原始 CSS，由 Example 调用库转换，兼容旧 Flutter Token JSON 消息，无组件公开 API 变化。未提供或无效的 Token 不生成默认覆盖，站点的控制器 CSS 补齐不进入转换库。库不管理控制器预设、持久化或刷新恢复。
