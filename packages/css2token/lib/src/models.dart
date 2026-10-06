@@ -17,7 +17,7 @@ class CssThemeParts {
   final String extra;
 }
 
-/// Sparse overrides in the JSON format consumed by TDesign Flutter.
+/// Sparse overrides for TDesign Flutter theme adapters.
 ///
 /// Absent or unsupported CSS values are omitted. Merge each result into the
 /// receiver's pristine default theme rather than the previous override result.
@@ -40,7 +40,9 @@ class FlutterThemeTokens {
   /// Colors in Flutter #RRGGBB or #AARRGGBB notation.
   final Map<String, Object> color;
 
-  /// Composite font size, lineHeight and Flutter weight index.
+  /// Sparse composite font fields: size and/or lineHeight.
+  ///
+  /// The receiver fills omitted fields and weight from its own default theme.
   final Map<String, Object> font;
 
   /// Independent font size and line-height metrics.

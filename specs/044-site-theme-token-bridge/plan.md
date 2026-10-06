@@ -58,7 +58,14 @@
 
 - `parseCssToFlutterTokens(css, baselineCss: ...)` 转换一个模式；`cssToFlutterTokens(lightCss: ..., darkCss: ..., extraCss: ..., baseline: ...)` 转换双模式。共享 CSS 在各模式后合并，最后声明优先。
 - 支持 td 变量引用、嵌套 fallback 与循环检测；未知或无法解析的值跳过，不猜测浏览器计算样式。输入按声明集合处理，不计算选择器优先级。
-- 未提供的 Token 不输出。仅提供字号或行高时，复合 font 的另一维使用 Flutter 当前映射默认值；输入已有另一维则使用输入值。
+- 未提供的 Token 不输出。字体只输出已修改维度；Example 读取当前模式 Flutter 默认 fontMap 补齐另一维及字重。
 - 颜色转换、字体层级、圆角、外阴影、边缘内阴影与 spacing 映射保持现有 Flutter JSON 契约。
 - 控制器 CSS 补齐、包默认值提取及 postMessage 协议留在站点适配器；控制器预设刷新和面板展示问题不属于独立库职责。
 - 独立 Dart 测试与严格 analyze 进入 Flutter 双版本 CI；Dart 编译成 JS 后执行 Light/Dark 浏览器契约验收，官网联调验证真实 CSS 消息。
+
+## 默认值来源收敛方案（2026-10-07）
+
+1. 复用构建期 CSS 提取器读取 web extra，并通过现有虚拟模块导出给官网。JS 补齐函数显式接收上游 CSS，仅追加缺失声明。
+2. 删除 Dart 字体映射表中的默认字号、行高和字重，只保留名称、CSS 后缀及派生字号偏移。baseline 下独立比较各维度，只输出变化。
+3. 新 CSS 消息字体在 Example 结合 pristine light/dark 默认 fontMap 构造 Font；旧 JSON 消息的校验保持严格。
+4. 扩充稀疏字体、基线单维变化、小数、全部映射名称和上游 CSS 保留测试；验证两版本、构建与 Light/Dark 浏览器。

@@ -5,7 +5,7 @@ import { defineConfig, type ConfigEnv, type Plugin, type ViteDevServer } from 'v
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import createTDesignPlugin from './plugin-tdoc';
-import { loadControllerBaseline } from './utils/controllerBaseline.mjs';
+import { loadControllerBaseline, loadControllerExtraDefaults } from './utils/controllerBaseline.mjs';
 
 // 配置所在目录（等价于 __dirname，兼容 ESM / CJS 两种打包方式）
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
@@ -105,7 +105,8 @@ export default ({ mode }: ConfigEnv) => {
         },
         load(id) {
           if (id === '\0flutter-controller-baseline') {
-            return `export default ${JSON.stringify(loadControllerBaseline())}`;
+            return `export default ${JSON.stringify(loadControllerBaseline())};
+              export const controllerExtraDefaults = ${JSON.stringify(loadControllerExtraDefaults())};`;
           }
         },
       },

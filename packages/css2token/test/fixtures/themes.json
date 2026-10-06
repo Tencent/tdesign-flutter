@@ -210,21 +210,15 @@
         "color": {},
         "font": {
           "fontTitleExtraLarge": {
-            "size": 22,
-            "lineHeight": 28,
-            "fontWeight": 6
+            "size": 22
           },
           "fontTitleLarge": {
-            "size": 20,
-            "lineHeight": 26,
-            "fontWeight": 6
+            "size": 20
           }
         },
         "fontMetric": {
           "fontSizeTitleExtraLarge": 22,
-          "lineHeightTitleExtraLarge": 28,
-          "fontSizeTitleLarge": 20,
-          "lineHeightTitleLarge": 26
+          "fontSizeTitleLarge": 20
         },
         "radius": {},
         "shadow": {},
@@ -236,21 +230,15 @@
         "color": {},
         "font": {
           "fontTitleExtraLarge": {
-            "size": 22,
-            "lineHeight": 28,
-            "fontWeight": 6
+            "size": 22
           },
           "fontTitleLarge": {
-            "size": 20,
-            "lineHeight": 26,
-            "fontWeight": 6
+            "size": 20
           }
         },
         "fontMetric": {
           "fontSizeTitleExtraLarge": 22,
-          "lineHeightTitleExtraLarge": 28,
-          "fontSizeTitleLarge": 20,
-          "lineHeightTitleLarge": 26
+          "fontSizeTitleLarge": 20
         },
         "radius": {},
         "shadow": {},
@@ -270,13 +258,10 @@
         "color": {},
         "font": {
           "fontBodyMedium": {
-            "size": 14,
-            "lineHeight": 30,
-            "fontWeight": 4
+            "lineHeight": 30
           }
         },
         "fontMetric": {
-          "fontSizeBodyMedium": 14,
           "lineHeightBodyMedium": 30
         },
         "radius": {},
@@ -289,13 +274,10 @@
         "color": {},
         "font": {
           "fontBodyMedium": {
-            "size": 14,
-            "lineHeight": 30,
-            "fontWeight": 4
+            "lineHeight": 30
           }
         },
         "fontMetric": {
-          "fontSizeBodyMedium": 14,
           "lineHeightBodyMedium": 30
         },
         "radius": {},
@@ -316,147 +298,87 @@
         "color": {},
         "font": {
           "fontDisplayLarge": {
-            "size": 20,
-            "lineHeight": 72,
-            "fontWeight": 6
+            "size": 20
           },
           "fontDisplayMedium": {
-            "size": 20,
-            "lineHeight": 56,
-            "fontWeight": 6
+            "size": 20
           },
           "fontHeadlineLarge": {
-            "size": 20,
-            "lineHeight": 44,
-            "fontWeight": 6
+            "size": 20
           },
           "fontHeadlineMedium": {
-            "size": 20,
-            "lineHeight": 36,
-            "fontWeight": 6
+            "size": 20
           },
           "fontHeadlineSmall": {
-            "size": 20,
-            "lineHeight": 32,
-            "fontWeight": 6
+            "size": 20
           },
           "fontTitleExtraLarge": {
-            "size": 20,
-            "lineHeight": 28,
-            "fontWeight": 6
+            "size": 20
           },
           "fontTitleLarge": {
-            "size": 18,
-            "lineHeight": 26,
-            "fontWeight": 6
+            "size": 18
           },
           "fontTitleMedium": {
-            "size": 20,
-            "lineHeight": 24,
-            "fontWeight": 6
+            "size": 20
           },
           "fontTitleSmall": {
-            "size": 20,
-            "lineHeight": 22,
-            "fontWeight": 4
+            "size": 20
           },
           "fontBodyLarge": {
-            "size": 20,
-            "lineHeight": 24,
-            "fontWeight": 4
+            "size": 20
           },
           "fontBodyMedium": {
-            "size": 20,
-            "lineHeight": 22,
-            "fontWeight": 4
+            "size": 20
           },
           "fontBodySmall": {
-            "size": 20,
-            "lineHeight": 20,
-            "fontWeight": 4
+            "size": 20
           },
           "fontBodyExtraSmall": {
-            "size": 18,
-            "lineHeight": 16,
-            "fontWeight": 4
+            "size": 18
           },
           "fontMarkLarge": {
-            "size": 22,
-            "lineHeight": 24,
-            "fontWeight": 6
+            "size": 22
           },
           "fontMarkMedium": {
-            "size": 20,
-            "lineHeight": 22,
-            "fontWeight": 6
+            "size": 20
           },
           "fontMarkSmall": {
-            "size": 20,
-            "lineHeight": 20,
-            "fontWeight": 6
+            "size": 20
           },
           "fontMarkExtraSmall": {
-            "size": 18,
-            "lineHeight": 16,
-            "fontWeight": 6
+            "size": 18
           },
           "fontLinkLarge": {
-            "size": 20,
-            "lineHeight": 24,
-            "fontWeight": 4
+            "size": 20
           },
           "fontLinkMedium": {
-            "size": 20,
-            "lineHeight": 22,
-            "fontWeight": 4
+            "size": 20
           },
           "fontLinkSmall": {
-            "size": 20,
-            "lineHeight": 20,
-            "fontWeight": 4
+            "size": 20
           }
         },
         "fontMetric": {
           "fontSizeDisplayLarge": 20,
-          "lineHeightDisplayLarge": 72,
           "fontSizeDisplayMedium": 20,
-          "lineHeightDisplayMedium": 56,
           "fontSizeHeadlineLarge": 20,
-          "lineHeightHeadlineLarge": 44,
           "fontSizeHeadlineMedium": 20,
-          "lineHeightHeadlineMedium": 36,
           "fontSizeHeadlineSmall": 20,
-          "lineHeightHeadlineSmall": 32,
           "fontSizeTitleExtraLarge": 20,
-          "lineHeightTitleExtraLarge": 28,
           "fontSizeTitleLarge": 18,
-          "lineHeightTitleLarge": 26,
           "fontSizeTitleMedium": 20,
-          "lineHeightTitleMedium": 24,
           "fontSizeTitleSmall": 20,
-          "lineHeightTitleSmall": 22,
           "fontSizeBodyLarge": 20,
-          "lineHeightBodyLarge": 24,
           "fontSizeBodyMedium": 20,
-          "lineHeightBodyMedium": 22,
           "fontSizeBodySmall": 20,
-          "lineHeightBodySmall": 20,
           "fontSizeBodyExtraSmall": 18,
-          "lineHeightBodyExtraSmall": 16,
           "fontSizeMarkLarge": 22,
-          "lineHeightMarkLarge": 24,
           "fontSizeMarkMedium": 20,
-          "lineHeightMarkMedium": 22,
           "fontSizeMarkSmall": 20,
-          "lineHeightMarkSmall": 20,
           "fontSizeMarkExtraSmall": 18,
-          "lineHeightMarkExtraSmall": 16,
           "fontSizeLinkLarge": 20,
-          "lineHeightLinkLarge": 24,
           "fontSizeLinkMedium": 20,
-          "lineHeightLinkMedium": 22,
-          "fontSizeLinkSmall": 20,
-          "lineHeightLinkSmall": 20
+          "fontSizeLinkSmall": 20
         },
         "radius": {},
         "shadow": {},
@@ -468,147 +390,87 @@
         "color": {},
         "font": {
           "fontDisplayLarge": {
-            "size": 20,
-            "lineHeight": 72,
-            "fontWeight": 6
+            "size": 20
           },
           "fontDisplayMedium": {
-            "size": 20,
-            "lineHeight": 56,
-            "fontWeight": 6
+            "size": 20
           },
           "fontHeadlineLarge": {
-            "size": 20,
-            "lineHeight": 44,
-            "fontWeight": 6
+            "size": 20
           },
           "fontHeadlineMedium": {
-            "size": 20,
-            "lineHeight": 36,
-            "fontWeight": 6
+            "size": 20
           },
           "fontHeadlineSmall": {
-            "size": 20,
-            "lineHeight": 32,
-            "fontWeight": 6
+            "size": 20
           },
           "fontTitleExtraLarge": {
-            "size": 20,
-            "lineHeight": 28,
-            "fontWeight": 6
+            "size": 20
           },
           "fontTitleLarge": {
-            "size": 18,
-            "lineHeight": 26,
-            "fontWeight": 6
+            "size": 18
           },
           "fontTitleMedium": {
-            "size": 20,
-            "lineHeight": 24,
-            "fontWeight": 6
+            "size": 20
           },
           "fontTitleSmall": {
-            "size": 20,
-            "lineHeight": 22,
-            "fontWeight": 4
+            "size": 20
           },
           "fontBodyLarge": {
-            "size": 20,
-            "lineHeight": 24,
-            "fontWeight": 4
+            "size": 20
           },
           "fontBodyMedium": {
-            "size": 20,
-            "lineHeight": 22,
-            "fontWeight": 4
+            "size": 20
           },
           "fontBodySmall": {
-            "size": 20,
-            "lineHeight": 20,
-            "fontWeight": 4
+            "size": 20
           },
           "fontBodyExtraSmall": {
-            "size": 18,
-            "lineHeight": 16,
-            "fontWeight": 4
+            "size": 18
           },
           "fontMarkLarge": {
-            "size": 22,
-            "lineHeight": 24,
-            "fontWeight": 6
+            "size": 22
           },
           "fontMarkMedium": {
-            "size": 20,
-            "lineHeight": 22,
-            "fontWeight": 6
+            "size": 20
           },
           "fontMarkSmall": {
-            "size": 20,
-            "lineHeight": 20,
-            "fontWeight": 6
+            "size": 20
           },
           "fontMarkExtraSmall": {
-            "size": 18,
-            "lineHeight": 16,
-            "fontWeight": 6
+            "size": 18
           },
           "fontLinkLarge": {
-            "size": 20,
-            "lineHeight": 24,
-            "fontWeight": 4
+            "size": 20
           },
           "fontLinkMedium": {
-            "size": 20,
-            "lineHeight": 22,
-            "fontWeight": 4
+            "size": 20
           },
           "fontLinkSmall": {
-            "size": 20,
-            "lineHeight": 20,
-            "fontWeight": 4
+            "size": 20
           }
         },
         "fontMetric": {
           "fontSizeDisplayLarge": 20,
-          "lineHeightDisplayLarge": 72,
           "fontSizeDisplayMedium": 20,
-          "lineHeightDisplayMedium": 56,
           "fontSizeHeadlineLarge": 20,
-          "lineHeightHeadlineLarge": 44,
           "fontSizeHeadlineMedium": 20,
-          "lineHeightHeadlineMedium": 36,
           "fontSizeHeadlineSmall": 20,
-          "lineHeightHeadlineSmall": 32,
           "fontSizeTitleExtraLarge": 20,
-          "lineHeightTitleExtraLarge": 28,
           "fontSizeTitleLarge": 18,
-          "lineHeightTitleLarge": 26,
           "fontSizeTitleMedium": 20,
-          "lineHeightTitleMedium": 24,
           "fontSizeTitleSmall": 20,
-          "lineHeightTitleSmall": 22,
           "fontSizeBodyLarge": 20,
-          "lineHeightBodyLarge": 24,
           "fontSizeBodyMedium": 20,
-          "lineHeightBodyMedium": 22,
           "fontSizeBodySmall": 20,
-          "lineHeightBodySmall": 20,
           "fontSizeBodyExtraSmall": 18,
-          "lineHeightBodyExtraSmall": 16,
           "fontSizeMarkLarge": 22,
-          "lineHeightMarkLarge": 24,
           "fontSizeMarkMedium": 20,
-          "lineHeightMarkMedium": 22,
           "fontSizeMarkSmall": 20,
-          "lineHeightMarkSmall": 20,
           "fontSizeMarkExtraSmall": 18,
-          "lineHeightMarkExtraSmall": 16,
           "fontSizeLinkLarge": 20,
-          "lineHeightLinkLarge": 24,
           "fontSizeLinkMedium": 20,
-          "lineHeightLinkMedium": 22,
-          "fontSizeLinkSmall": 20,
-          "lineHeightLinkSmall": 20
+          "fontSizeLinkSmall": 20
         },
         "radius": {},
         "shadow": {},
@@ -1166,14 +1028,11 @@
         "color": {},
         "font": {
           "fontBodyLarge": {
-            "size": 18,
-            "lineHeight": 24,
-            "fontWeight": 4
+            "size": 18
           }
         },
         "fontMetric": {
-          "fontSizeBodyLarge": 18,
-          "lineHeightBodyLarge": 24
+          "fontSizeBodyLarge": 18
         },
         "radius": {},
         "shadow": {},
@@ -1185,14 +1044,11 @@
         "color": {},
         "font": {
           "fontBodyLarge": {
-            "size": 18,
-            "lineHeight": 24,
-            "fontWeight": 4
+            "size": 18
           }
         },
         "fontMetric": {
-          "fontSizeBodyLarge": 18,
-          "lineHeightBodyLarge": 24
+          "fontSizeBodyLarge": 18
         },
         "radius": {},
         "shadow": {},
@@ -1235,6 +1091,169 @@
         "insetShadow": {},
         "margin": {}
       }
+    }
+  },
+  {
+    "name": "sparse fractional font preserves missing height",
+    "light": "--td-font-size-body-medium:15.5px;",
+    "dark": "--td-font-size-body-medium:15.5px;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyMedium": {
+            "size": 15.5
+          }
+        },
+        "fontMetric": {
+          "fontSizeBodyMedium": 15.5
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyMedium": {
+            "size": 15.5
+          }
+        },
+        "fontMetric": {
+          "fontSizeBodyMedium": 15.5
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "baseline size change preserves receiver height",
+    "light": "--td-font-size-body-medium:18px; --td-line-height-body-medium:99px;",
+    "dark": "--td-font-size-body-medium:18px; --td-line-height-body-medium:99px;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyMedium": {
+            "size": 18
+          }
+        },
+        "fontMetric": {
+          "fontSizeBodyMedium": 18
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyMedium": {
+            "size": 18
+          }
+        },
+        "fontMetric": {
+          "fontSizeBodyMedium": 18
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    },
+    "baseline": {
+      "light": "--td-font-size-body-medium:14px; --td-line-height-body-medium:99px;",
+      "dark": "--td-font-size-body-medium:14px; --td-line-height-body-medium:99px;",
+      "extra": ""
+    }
+  },
+  {
+    "name": "baseline height change preserves receiver size",
+    "light": "--td-font-size-body-medium:99px; --td-line-height-body-medium:23.25px;",
+    "dark": "--td-font-size-body-medium:99px; --td-line-height-body-medium:23.25px;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyMedium": {
+            "lineHeight": 23.25
+          }
+        },
+        "fontMetric": {
+          "lineHeightBodyMedium": 23.25
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyMedium": {
+            "lineHeight": 23.25
+          }
+        },
+        "fontMetric": {
+          "lineHeightBodyMedium": 23.25
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    },
+    "baseline": {
+      "light": "--td-font-size-body-medium:99px; --td-line-height-body-medium:22px;",
+      "dark": "--td-font-size-body-medium:99px; --td-line-height-body-medium:22px;",
+      "extra": ""
+    }
+  },
+  {
+    "name": "removed font dimension emits no default override",
+    "light": "",
+    "dark": "",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    },
+    "baseline": {
+      "light": "--td-font-size-body-medium:14px;",
+      "dark": "--td-font-size-body-medium:14px;",
+      "extra": ""
     }
   }
 ]

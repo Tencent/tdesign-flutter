@@ -34,9 +34,9 @@ Flutter 官网的主题控制器会把亮色、暗色和公共尺寸样式写入
 
 ## 行为契约
 
-1. 控制器以 mobile 默认主题初始化，默认颜色、字体、圆角和阴影与 Flutter `TThemeData.defaultData()` 的语义保持一致。
+1. 控制器以 mobile 默认主题初始化；未经用户修改的 Token 保留 Flutter `TThemeData.defaultData()` 的原生默认外观。
 2. 转换器按字段处理：调色板和直接语义色进入 `color`，CSS 引用解析为叶子颜色后进入 `ref`，字体进入 `font`，圆角进入 `radius`，投影进入 `shadow`，全局 `--td-spacer[-1..6]` 间距映射为 `margin`。
-3. 字体的字号、行高和字重必须组成同一个 Flutter Font Token；只修改其中一个字段时其余字段保持有效默认值。
+3. 转换器只输出实际修改的字号和行高；Example 以当前 Flutter 默认字体补齐复合 Font 的其余字段和字重，不在独立库复制 Flutter 默认值。
 4. CSS `#RGB/#RGBA/#RRGGBB/#RRGGBBAA`、`rgb()`、`rgba()`、百分比 alpha、`transparent` 和嵌套 `var()` 必须得到 Flutter 可解析的 `#AARRGGBB` 或 `#RRGGBB`。
 5. 圆形/胶囊圆角转换为 Flutter 的大半径语义；阴影保留每层 offset、blur、spread 和颜色。
 6. 每次有效 CSS 变化只发送一次去重后的 JSON 字符串 `flutter-css-theme-update`，包含 light/dark/extra CSS、原始控制器基线及主题模式；iframe load 后重发当前配置。
@@ -58,7 +58,7 @@ Flutter 官网的主题控制器会把亮色、暗色和公共尺寸样式写入
 ## 当前 Token 重整契约
 
 - 以 develop 的公开全局 Token 为准，移除已删除语义色别名；控制器 CSS 和 Flutter 字段名称分开映射。
-- 字号与行高同时更新 fontMetric 和对应复合 font；保留默认 fontMetric 与 insetShadow。
+- 字号与行高各自输出稀疏 fontMetric 和对应复合 font 的字段；Example 补齐其余默认值，保留默认 fontMetric 与 insetShadow。
 - 尺寸面板 size-4/5/6/8/10/13/15 分别驱动 spacer/spacer1..6，显式 spacer CSS 优先。
 - 数值圆角按逻辑像素传递；仅 radiusCircle 的百分比值使用固定大半径例外。
 - 支持四层外阴影、零模糊定向内阴影与 none 清除阴影。
@@ -69,3 +69,10 @@ Flutter 官网的主题控制器会把亮色、暗色和公共尺寸样式写入
 ## 独立库交付
 
 转换库为零运行时依赖的纯 Dart package，提供 Dart 入口、类型、使用说明与独立测试，可整体移出仓库。当前 `publish_to: none`，不发布；官网发送原始 CSS，由 Example 调用库转换，兼容旧 Flutter Token JSON 消息，无组件公开 API 变化。未提供或无效的 Token 不生成默认覆盖，站点的控制器 CSS 补齐不进入转换库。库不管理控制器预设、持久化或刷新恢复。
+
+## 默认值来源收敛（2026-10-07）
+
+- 官网的 mobile 基线与补齐用 web extra CSS 均从安装的控制器包构建时提取；已有 mobile 声明优先，不再维护手写数值表或无消费者的扩展声明。
+- 独立库只维护 CSS 到 Flutter 名称及派生偏移映射；font 输出允许仅含 size 或 lineHeight，不输出默认字重或补齐另一维，fontMetric 只输出实际变化字段。
+- Example 对新 CSS 协议使用各模式当前 Flutter 默认 fontMap 补齐未提供维度及字重，保留小数精度；旧 JSON 协议仍要求完整字体尺寸，兼容行为不变。
+- 映射一致性检查覆盖全部显式映射输出，不依赖控制器默认 CSS 是否恰好声明某个字段。独立库未发布，此次调整内部输出契约，不改变组件公开 API。

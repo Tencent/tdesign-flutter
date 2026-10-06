@@ -44,6 +44,8 @@ TThemeData? parseWebThemeUpdateMessage(dynamic message) {
     return null;
   }
   try {
+    final defaults = TThemeData.defaultData();
+    final isCss = message['type'] == 'flutter-css-theme-update';
     final Map theme;
     if (message['type'] == 'flutter-css-theme-update') {
       final css = _cssParts(message['css']);
@@ -68,13 +70,20 @@ TThemeData? parseWebThemeUpdateMessage(dynamic message) {
       }
       theme = supplied;
     }
-    final lightOverrides = _parseThemePart('custom', theme['light'] as Map);
-    final darkOverrides = _parseThemePart('customDark', theme['dark'] as Map);
+    final lightOverrides = _parseThemePart(
+      'custom',
+      theme['light'] as Map,
+      fontDefaults: isCss ? defaults : null,
+    );
+    final darkOverrides = _parseThemePart(
+      'customDark',
+      theme['dark'] as Map,
+      fontDefaults: isCss ? defaults.dark ?? defaults : null,
+    );
     if (lightOverrides == null || darkOverrides == null) {
       return null;
     }
 
-    final defaults = TThemeData.defaultData();
     final lightValues = theme['light'] as Map;
     final darkValues = theme['dark'] as Map;
     final light = _mergeTheme(defaults, lightOverrides, lightValues, 'custom');
@@ -93,7 +102,11 @@ TThemeData? parseWebThemeUpdateMessage(dynamic message) {
   }
 }
 
-TThemeData? _parseThemePart(String name, Map<dynamic, dynamic> values) {
+TThemeData? _parseThemePart(
+  String name,
+  Map<dynamic, dynamic> values, {
+  TThemeData? fontDefaults,
+}) {
   final groups = Map<dynamic, dynamic>.of(values);
   final fonts = groups.remove('font');
   final theme = TThemeData.fromJson(name, jsonEncode({name: groups}));
@@ -103,15 +116,20 @@ TThemeData? _parseThemePart(String name, Map<dynamic, dynamic> values) {
   if (fonts != null) {
     for (final entry in (fonts as Map).entries) {
       final font = entry.value as Map;
-      final size = (font['size'] as num).toDouble();
-      final lineHeight = (font['lineHeight'] as num).toDouble();
-      final weight = (font['fontWeight'] ?? 4) as int;
-      if (!size.isFinite ||
+      final base = fontDefaults?.fontMap[entry.key];
+      final size = (font['size'] as num?)?.toDouble() ?? base?.size;
+      final lineHeight =
+          (font['lineHeight'] as num?)?.toDouble() ??
+          (base == null ? null : base.size * base.height);
+      final weightIndex = font['fontWeight'] as int?;
+      if (size == null ||
+          lineHeight == null ||
+          !size.isFinite ||
           !lineHeight.isFinite ||
           size <= 0 ||
           lineHeight <= 0 ||
-          weight < 1 ||
-          weight > FontWeight.values.length) {
+          (weightIndex != null &&
+              (weightIndex < 1 || weightIndex > FontWeight.values.length))) {
         return null;
       }
       // The controller emits fractional metrics in incremental height mode.
@@ -120,7 +138,9 @@ TThemeData? _parseThemePart(String name, Map<dynamic, dynamic> values) {
           Font(
               size: 1,
               lineHeight: 1,
-              fontWeight: FontWeight.values[weight - 1],
+              fontWeight: weightIndex == null
+                  ? base?.fontWeight ?? FontWeight.w400
+                  : FontWeight.values[weightIndex - 1],
             )
             ..size = size
             ..height = lineHeight / size;

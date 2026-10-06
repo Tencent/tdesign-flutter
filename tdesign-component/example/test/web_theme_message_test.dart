@@ -127,46 +127,168 @@ void main() {
     },
   );
 
-  test(
-    'real controller output contains only currently consumed Flutter tokens',
-    () {
-      final css =
-          jsonDecode(
-                File(
-                  '../../packages/css2token/test/fixtures/controller-defaults.json',
-                ).readAsStringSync(),
-              )
-              as Map;
-      final result = cssToFlutterTokens(
-        lightCss: css['light'] as String,
-        darkCss: css['dark'] as String,
-        extraCss: css['extra'] as String,
-      );
-      const files = {
-        'ref': 't_colors.dart',
-        'color': 't_colors.dart',
-        'font': 't_fonts.dart',
-        'fontMetric': 't_fonts.dart',
-        'radius': 't_radius.dart',
-        'shadow': 't_shadows.dart',
-        'insetShadow': 't_shadows.dart',
-        'margin': 't_spacers.dart',
-      };
-      for (final mode in [result.light, result.dark]) {
-        for (final group in mode.toJson().entries) {
-          final source = File(
-            '../lib/src/theme/${files[group.key]}',
-          ).readAsStringSync();
-          final getters = RegExp(
-            r'\bget (\w+)',
-          ).allMatches(source).map((m) => m[1]).toSet();
-          for (final key in (group.value as Map).keys) {
-            expect(getters, contains(key), reason: '${group.key}.$key');
-          }
+  test('every explicit CSS mapping targets an existing Flutter token', () {
+    final source = File(
+      '../../packages/css2token/lib/src/converter.dart',
+    ).readAsStringSync();
+    final cssNames = RegExp(
+      r"'(--td-[\w-]+)'",
+    ).allMatches(source).map((m) => m[1]!).toSet();
+    final fonts = RegExp(
+      r"_FontSpec\(\s*'([^']+)',\s*'([^']+)',\s*-?\d+,\s*'([^']+)'",
+    ).allMatches(source).toList();
+    expect(fonts, hasLength(20));
+    for (final font in fonts) {
+      cssNames.add('--td-font-size-${font[2]}');
+      cssNames.add('--td-line-height-${font[3]}');
+    }
+    final css = cssNames
+        .map((name) {
+          final value = name.contains('shadow')
+              ? 'none'
+              : name.contains('color') ||
+                    name.contains('mask') ||
+                    name.contains('stroke') ||
+                    name.contains('border')
+              ? '#123'
+              : '30px';
+          return '$name:$value;';
+        })
+        .join('\n');
+    final result = cssToFlutterTokens(lightCss: css, darkCss: css);
+    expect(result.light.font, hasLength(20));
+    expect(result.light.fontMetric, hasLength(40));
+    expect(result.light.radius, hasLength(6));
+    expect(result.light.shadow, hasLength(4));
+    expect(result.light.insetShadow, hasLength(4));
+    expect(result.light.margin, hasLength(7));
+    const files = {
+      'ref': 't_colors.dart',
+      'color': 't_colors.dart',
+      'font': 't_fonts.dart',
+      'fontMetric': 't_fonts.dart',
+      'radius': 't_radius.dart',
+      'shadow': 't_shadows.dart',
+      'insetShadow': 't_shadows.dart',
+      'margin': 't_spacers.dart',
+    };
+    final gettersByGroup = {
+      for (final entry in files.entries)
+        entry.key: RegExp(r'\bget (\w+)')
+            .allMatches(
+              File('../lib/src/theme/${entry.value}').readAsStringSync(),
+            )
+            .map((match) => match[1])
+            .toSet(),
+    };
+    // Check declarations separately too: aliases and fallback mappings must
+    // not disappear behind another declaration with higher priority.
+    final outputs = [
+      result.light,
+      result.dark,
+      for (final declaration in css.split('\n'))
+        parseCssToFlutterTokens(declaration),
+    ];
+    for (final output in outputs) {
+      for (final group in output.toJson().entries) {
+        for (final key in (group.value as Map).keys) {
+          expect(
+            gettersByGroup[group.key],
+            contains(key),
+            reason: '${group.key}.$key',
+          );
         }
       }
-    },
-  );
+    }
+  });
+
+  test('sparse font dimensions use each mode current Flutter defaults', () {
+    final defaults = TThemeData.defaultData();
+    for (final change in ['size', 'height']) {
+      final message = _cssMessage();
+      message['baseline'] = {
+        'light':
+            '--td-font-size-body-medium:99px; --td-line-height-body-medium:99px;',
+        'dark':
+            '--td-font-size-body-medium:99px; --td-line-height-body-medium:99px;',
+        'extra': '',
+      };
+      final css = change == 'size'
+          ? '--td-font-size-body-medium:15.5px; --td-line-height-body-medium:99px;'
+          : '--td-font-size-body-medium:99px; --td-line-height-body-medium:23.25px;';
+      message['css'] = {'light': css, 'dark': css, 'extra': ''};
+      final theme = parseWebThemeUpdateMessage(message)!;
+      for (final pair in [(theme, defaults), (theme.dark!, defaults.dark!)]) {
+        final (actual, base) = pair;
+        final baseFont = base.fontBodyMedium!;
+        final size = change == 'size' ? 15.5 : baseFont.size;
+        final height = change == 'height'
+            ? 23.25
+            : baseFont.size * baseFont.height;
+        expect(actual.fontBodyMedium!.size, size);
+        expect(actual.fontBodyMedium!.height, height / size);
+        expect(actual.fontBodyMedium!.fontWeight, baseFont.fontWeight);
+        expect(actual.fontSizeBodyMedium, size);
+        expect(actual.lineHeightBodyMedium, height);
+      }
+    }
+  });
+
+  test('all mapped sparse fonts retain receiver height and weight', () {
+    final defaults = TThemeData.defaultData();
+    final message = _cssMessage();
+    const levels = [
+      'display-large',
+      'display-medium',
+      'headline-large',
+      'headline-medium',
+      'headline-small',
+      'title-large',
+      'title-medium',
+      'title-small',
+      'body-large',
+      'body-medium',
+      'body-small',
+      'mark-medium',
+      'mark-small',
+      'link-large',
+      'link-medium',
+      'link-small',
+    ];
+    final css = levels.map((level) => '--td-font-size-$level:31.5px;').join();
+    message['css'] = {'light': css, 'dark': css, 'extra': ''};
+    final converted = parseCssToFlutterTokens(css);
+    expect(converted.font, hasLength(20));
+    final theme = parseWebThemeUpdateMessage(message)!;
+    for (final pair in [(theme, defaults), (theme.dark!, defaults.dark!)]) {
+      final (actual, base) = pair;
+      for (final entry in converted.font.entries) {
+        final original = base.fontMap[entry.key]!;
+        final applied = actual.fontMap[entry.key]!;
+        expect(applied.size, (entry.value as Map)['size']);
+        expect(
+          applied.height * applied.size,
+          closeTo(original.height * original.size, 0.000001),
+        );
+        expect(applied.fontWeight, original.fontWeight);
+      }
+    }
+  });
+
+  test('legacy JSON still rejects incomplete fonts', () {
+    final message = {
+      'type': 'flutter-theme-update',
+      'theme': {
+        'light': {
+          'font': {
+            'fontBodyMedium': {'size': 18},
+          },
+        },
+        'dark': {},
+      },
+    };
+    expect(parseWebThemeUpdateMessage(message), isNull);
+  });
 
   test('rejects unrelated or incomplete messages', () {
     expect(parseWebThemeUpdateMessage(null), isNull);

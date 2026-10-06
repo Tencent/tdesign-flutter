@@ -1,6 +1,18 @@
 # 验收记录
 
-以下保留历史验收过程；当前实现及验证以最后的「纯 Dart 迁移验收」为准，历史 JS 测试不代表当前包。
+## 默认值来源收敛验收（2026-10-07）
+
+- 删除 JS 的 76 项手写默认值表，构建期从控制器 1.2.6 的 web extra 提取补齐声明；逐声明检查 web 缺失值可补齐、mobile 已有值不覆盖。移除无 Flutter 消费者的 body-extraLarge 行高及另外三个手写扩展默认值，缺失字体维度由 Flutter 侧补齐。
+- 删除纯 Dart 字体映射中的默认字号、行高和字重；只保留 CSS/Flutter 名称与派生偏移。font / fontMetric 仅输出实际提供且相对基线变化的维度。Example 读取各模式默认 fontMap 构造完整 Font，直接保留默认 FontWeight 对象、小数尺寸与行高。旧 Token JSON 协议仍拒绝不完整字体。
+- 独立包输出契约调整：font 不再包含默认 fontWeight 或补齐未修改维度。包未发布（0.0.0 / publish_to: none），组件公开 API 无 breaking change；独立包调用方须按 README 使用接收端默认字体补齐，不能直接交给要求完整字段的 Font.fromJson。
+- Node 适配测试 6 项通过，含安装依赖的所有 extra 声明及默认值变化后无本地旧副本；官网生产构建通过，文档适配 10 项及 57 份文档检查通过。
+- Flutter 3.32.0 / 3.47.0 对应 Dart 独立测试各 27 项与严格 analyze 通过；Example 消息测试各 11 项与严格 analyze 通过。逐声明分别检查全部显式映射，避免别名/回退被优先级掩盖；字体覆盖 20 个层级和 40 个指标，含稀疏输入、基线中 99px 未修改维度、实际 Flutter 默认值、字重、小数和旧协议校验。既有 sharedExampleTests 与双版本 css2token CI 入口继续执行这些测试；调度器自测 19 项通过。
+- Flutter 3.47.0 release Web 子路径构建通过。首次 no-pub 误用了 3.32 的 package_config 导致引擎与 Flutter 源码不匹配，使用对应 SDK offline pub get 后重跑通过，该环境失败不归为源码缺陷。
+- 浏览器执行当前 Dart 编译产物，25 个案例 × light/dark = 50/50 通过，涵盖所有转换分组、稀疏字体和单维基线变更；Light/Dark 展示均检查。
+- 本机官网 127.0.0.1:19000 与当前 Flutter Web 构建联调：Light/Dark 小号/大号按钮语义宽度分别 100 / 107.9921875；固定模式与递增模式切换产生 body-medium 22.5px 小数行高，随后字号仍可更新。两模式尺寸编辑入口分别将实际 size-6 调整为 Dark 20px / Light 24px。Light 往返 Divider/Button 后新 iframe 保留 107.9921875。浏览器截图已在本次交互中展示。
+- 此次浏览器验收为转换契约及上述受影响官网路径，不等于全部组件逐像素验收；上游预设刷新恢复及面板初次数值显示问题沿用历史限制。没有修改组件默认 Token 或 Golden，也未发布独立包或推送远端。
+
+以下保留历史验收过程；当前实现及验证以本页「默认值来源收敛验收」为准，历史 JS 转换测试不代表当前包。
 
 ## 验证环境
 

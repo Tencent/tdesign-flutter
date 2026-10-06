@@ -12,7 +12,7 @@
 
 <script>
 import siteConfig from './site.config';
-import controllerBaseline from 'virtual:flutter-controller-baseline';
+import controllerBaseline, { controllerExtraDefaults } from 'virtual:flutter-controller-baseline';
 import '@tdesign/theme-generator';
 import {
   createFlutterCssThemeMessage,
@@ -128,7 +128,7 @@ export default defineComponent({
         const update = () => {
           let cssText = styleElement.textContent || '';
           if (themePart === 'extra') {
-            const completedCss = ensureFlutterThemeTokenCoverage(cssText);
+            const completedCss = ensureFlutterThemeTokenCoverage(cssText, controllerExtraDefaults);
             if (completedCss !== cssText) {
               styleElement.textContent = completedCss;
               cssText = completedCss;
@@ -169,6 +169,7 @@ export default defineComponent({
           this.themeStyles,
           document.documentElement.getAttribute('theme-mode') === 'dark' ? 'dark' : 'light',
           this.themeBaselines,
+          controllerExtraDefaults,
         );
         const serialized = JSON.stringify(message);
         if (serialized === this.lastThemeJson) return;

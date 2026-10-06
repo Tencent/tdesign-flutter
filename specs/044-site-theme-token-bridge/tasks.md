@@ -14,3 +14,7 @@
 - [x] 将独立转换库迁移为纯 Dart，删除 JS 转换实现
 - [x] 官网传 CSS，Example path 依赖转换，保留旧 JSON 消息兼容
 - [x] 双版本独立测试、消息集成、analyze、构建与 Light/Dark 浏览器验收
+
+- [x] 收敛官网上游 CSS 来源，移除手写默认表
+- [x] 删除转换器字体默认值，由 Example 补齐
+- [x] 完整映射和默认值漂移回归、双版本与 Light/Dark 浏览器验收

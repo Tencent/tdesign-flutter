@@ -60,97 +60,32 @@ const _semanticColors = <String, List<String>>{
 };
 
 class _FontSpec {
-  const _FontSpec(
-    this.name,
-    this.sizeSuffix,
-    this.offset,
-    this.defaultSize,
-    this.heightSuffix,
-    this.defaultHeight,
-    this.weight,
-  );
+  const _FontSpec(this.name, this.sizeSuffix, this.offset, this.heightSuffix);
   final String name, sizeSuffix, heightSuffix;
-  final double offset, defaultSize, defaultHeight;
-  final int weight;
+  final double offset;
 }
 
 const _fonts = [
-  _FontSpec('fontDisplayLarge', 'display-large', 0, 64, 'display-large', 72, 6),
-  _FontSpec(
-    'fontDisplayMedium',
-    'display-medium',
-    0,
-    48,
-    'display-medium',
-    56,
-    6,
-  ),
-  _FontSpec(
-    'fontHeadlineLarge',
-    'headline-large',
-    0,
-    36,
-    'headline-large',
-    44,
-    6,
-  ),
-  _FontSpec(
-    'fontHeadlineMedium',
-    'headline-medium',
-    0,
-    28,
-    'headline-medium',
-    36,
-    6,
-  ),
-  _FontSpec(
-    'fontHeadlineSmall',
-    'headline-small',
-    0,
-    24,
-    'headline-small',
-    32,
-    6,
-  ),
-  _FontSpec(
-    'fontTitleExtraLarge',
-    'title-large',
-    0,
-    20,
-    'title-extraLarge',
-    28,
-    6,
-  ),
-  _FontSpec('fontTitleLarge', 'title-large', -2, 18, 'title-large', 26, 6),
-  _FontSpec('fontTitleMedium', 'title-medium', 0, 16, 'title-medium', 24, 6),
-  _FontSpec('fontTitleSmall', 'title-small', 0, 14, 'title-small', 22, 4),
-  _FontSpec('fontBodyLarge', 'body-large', 0, 16, 'body-large', 24, 4),
-  _FontSpec('fontBodyMedium', 'body-medium', 0, 14, 'body-medium', 22, 4),
-  _FontSpec('fontBodySmall', 'body-small', 0, 12, 'body-small', 20, 4),
-  _FontSpec(
-    'fontBodyExtraSmall',
-    'body-small',
-    -2,
-    10,
-    'body-extraSmall',
-    16,
-    4,
-  ),
-  _FontSpec('fontMarkLarge', 'mark-medium', 2, 16, 'mark-large', 24, 6),
-  _FontSpec('fontMarkMedium', 'mark-medium', 0, 14, 'mark-medium', 22, 6),
-  _FontSpec('fontMarkSmall', 'mark-small', 0, 12, 'mark-small', 20, 6),
-  _FontSpec(
-    'fontMarkExtraSmall',
-    'mark-small',
-    -2,
-    10,
-    'mark-extraSmall',
-    16,
-    6,
-  ),
-  _FontSpec('fontLinkLarge', 'link-large', 0, 16, 'link-large', 24, 4),
-  _FontSpec('fontLinkMedium', 'link-medium', 0, 14, 'link-medium', 22, 4),
-  _FontSpec('fontLinkSmall', 'link-small', 0, 12, 'link-small', 20, 4),
+  _FontSpec('fontDisplayLarge', 'display-large', 0, 'display-large'),
+  _FontSpec('fontDisplayMedium', 'display-medium', 0, 'display-medium'),
+  _FontSpec('fontHeadlineLarge', 'headline-large', 0, 'headline-large'),
+  _FontSpec('fontHeadlineMedium', 'headline-medium', 0, 'headline-medium'),
+  _FontSpec('fontHeadlineSmall', 'headline-small', 0, 'headline-small'),
+  _FontSpec('fontTitleExtraLarge', 'title-large', 0, 'title-extraLarge'),
+  _FontSpec('fontTitleLarge', 'title-large', -2, 'title-large'),
+  _FontSpec('fontTitleMedium', 'title-medium', 0, 'title-medium'),
+  _FontSpec('fontTitleSmall', 'title-small', 0, 'title-small'),
+  _FontSpec('fontBodyLarge', 'body-large', 0, 'body-large'),
+  _FontSpec('fontBodyMedium', 'body-medium', 0, 'body-medium'),
+  _FontSpec('fontBodySmall', 'body-small', 0, 'body-small'),
+  _FontSpec('fontBodyExtraSmall', 'body-small', -2, 'body-extraSmall'),
+  _FontSpec('fontMarkLarge', 'mark-medium', 2, 'mark-large'),
+  _FontSpec('fontMarkMedium', 'mark-medium', 0, 'mark-medium'),
+  _FontSpec('fontMarkSmall', 'mark-small', 0, 'mark-small'),
+  _FontSpec('fontMarkExtraSmall', 'mark-small', -2, 'mark-extraSmall'),
+  _FontSpec('fontLinkLarge', 'link-large', 0, 'link-large'),
+  _FontSpec('fontLinkMedium', 'link-medium', 0, 'link-medium'),
+  _FontSpec('fontLinkSmall', 'link-small', 0, 'link-small'),
 ];
 
 const _radii = <String, String>{
@@ -365,8 +300,9 @@ class _Resolver {
 ///
 /// With [baselineCss], only changes against the pristine full CSS are emitted,
 /// including changes in referenced dependencies. Missing tokens are omitted.
-/// For a font with only size or height, the other dimension uses the current
-/// Flutter profile's default. Invalid supplied dimensions omit that font.
+/// Font fields and metrics are sparse: only changed, supplied dimensions are
+/// emitted. The receiver supplies its own defaults and weight when constructing
+/// a composite font. Invalid supplied dimensions omit that font.
 FlutterThemeTokens parseCssToFlutterTokens(String css, {String? baselineCss}) {
   final variables = parseCssVariables(css);
   final resolver = _Resolver(
@@ -417,19 +353,22 @@ FlutterThemeTokens parseCssToFlutterTokens(String css, {String? baselineCss}) {
         (variables.containsKey(heightToken) && sourceHeight == null)) {
       continue;
     }
-    final size =
-        sourceSize == null ? spec.defaultSize : sourceSize + spec.offset;
-    final height = sourceHeight ?? spec.defaultHeight;
-    if (size <= 0 || height <= 0) continue;
-    font[spec.name] = {
-      // Flutter's composite Font JSON contract uses integral dimensions.
-      'size': size == size.roundToDouble() ? size.toInt() : size,
-      'lineHeight': height == height.roundToDouble() ? height.toInt() : height,
-      'fontWeight': spec.weight,
-    };
+    final size = sourceSize == null ? null : sourceSize + spec.offset;
+    if ((size != null && size <= 0) ||
+        (sourceHeight != null && sourceHeight <= 0)) {
+      continue;
+    }
     final suffix = spec.name.substring(4);
-    metrics['fontSize$suffix'] = size;
-    metrics['lineHeight$suffix'] = height;
+    final fields = <String, Object>{};
+    if (size != null && resolver.changed(sizeToken)) {
+      fields['size'] = size;
+      metrics['fontSize$suffix'] = size;
+    }
+    if (sourceHeight != null && resolver.changed(heightToken)) {
+      fields['lineHeight'] = sourceHeight;
+      metrics['lineHeight$suffix'] = sourceHeight;
+    }
+    if (fields.isNotEmpty) font[spec.name] = fields;
   }
   final radius = <String, Object>{};
   for (final entry in _radii.entries) {

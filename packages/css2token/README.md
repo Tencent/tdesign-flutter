@@ -23,7 +23,7 @@ final theme = cssToFlutterTokens(
 final json = theme.toJson(); // {light: {...}, dark: {...}}
 ```
 
-单模式使用 `parseCssToFlutterTokens(css, baselineCss: baseline)`。输出含 ref、color、font、fontMetric、radius、shadow、insetShadow、margin，均为可 JSON 序列化的数据，不含 Flutter 对象。
+单模式使用 `parseCssToFlutterTokens(css, baselineCss: baseline)`。输出含 ref、color、font、fontMetric、radius、shadow、insetShadow、margin，均为可 JSON 序列化的数据，不含 Flutter 对象。font 是稀疏字段集，不能直接传给要求完整尺寸的 Font.fromJson；Example 展示了结合默认 fontMap 构造完整 Font 的适配方式。
 
 保留 Flutter 默认外观时传入控制器原始完整 CSS 基线：
 
@@ -38,7 +38,7 @@ final theme = cssToFlutterTokens(
 
 基线只用于比较，不补齐当前输入。每次结果与接收端自己的原始默认主题合并，不能累加上次覆盖，否则恢复默认时会保留旧值。
 
-官网 JS 负责观察、补齐控制器需要的 CSS 和发送 `flutter-css-theme-update`（css、baseline、themeMode）；Example 收到后调用本库，再适配为 TThemeData 并更新界面。核心映射只有 Dart 一份。原生 Dart/Flutter 使用方可以直接调用转换函数，不需要浏览器。
+官网 JS 负责观察、补齐控制器需要的 CSS 和发送 `flutter-css-theme-update`（css、baseline、themeMode）；Example 收到后调用本库，再适配为 TThemeData 并更新界面。核心映射只有 Dart 一份。官网补齐所用的 extra CSS 在构建时从安装的控制器包提取，不复制默认值表；Flutter 字体的默认值由 Example 从自身主题读取。原生 Dart/Flutter 使用方可以直接调用转换函数，不需要浏览器。
 
 ## 转换边界
 
@@ -47,7 +47,7 @@ final theme = cssToFlutterTokens(
 - 颜色支持 #RGB/#RGBA/#RRGGBB/#RRGGBBAA、rgb/rgba 数值和百分比、transparent。CSS RGBA 转 Flutter ARGB；不支持命名色、hsl、color-mix。
 - 长度支持 px 和无单位数值；不计算 rem、em、calc。圆角 circle 百分比映射为 Flutter 的 9999；其他百分比长度不转换。
 - 品牌、功能色、primary/gray 色阶与现有语义色映射为 color/ref。直接语义颜色同时输出自引用。
-- 字体输出复合 font 与独立 fontMetric。只提供字号或行高时另一维取当前 Flutter 映射默认值；小数字号与行高保留精度，Example 的 Font 适配层负责处理；weight 使用 Flutter 索引（4=w400，6=w600）。mobile title-large 派生 TitleExtraLarge/TitleLarge(-2)，body-small 派生 BodySmall/BodyExtraSmall(-2)，mark-medium 派生 MarkMedium/MarkLarge(+2)，mark-small 派生 MarkSmall/MarkExtraSmall(-2)。其余支持层级按同名映射。
+- 字体输出稀疏 font 字段（size / lineHeight）与独立 fontMetric。只输出实际提供且相对基线变化的维度，不补默认值、不输出字重；接收端从自己的当前默认字体补齐另一维和字重，小数字号与行高保留精度。mobile title-large 派生 TitleExtraLarge/TitleLarge(-2)，body-small 派生 BodySmall/BodyExtraSmall(-2)，mark-medium 派生 MarkMedium/MarkLarge(+2)，mark-small 派生 MarkSmall/MarkExtraSmall(-2)。其余支持层级按同名映射。
 - 圆角支持 small/default/large/extraLarge/round/circle。shadow-1..4 支持多层外阴影与 none 清除；四方向 inset 仅支持单层、零 blur/spread 的边缘阴影，转成 color/width。
 - 显式 spacer/spacer-1..6 优先，否则使用 size-4/5/6/8/10/13/15，末项乘1.25。组件专属尺寸不机械扩展为 Flutter 全局 Token。
 
@@ -56,7 +56,7 @@ final theme = cssToFlutterTokens(
 在包目录执行 `dart pub get`、`dart test` 和 `dart analyze --fatal-infos`。
 测试样本包括迁移前转换结果以及主题控制器 1.2.6 的真实 CSS。
 
-浏览器验证实际运行 Dart 编译产物（Light/Dark 共 42 项）：
+浏览器验证实际运行 Dart 编译产物（Light/Dark 共 50 项）：
 
 ```sh
 mkdir -p /tmp/css2token-browser
