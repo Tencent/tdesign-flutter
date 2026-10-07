@@ -18,4 +18,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 {{ flutter-example-group PullDownRefresh }}
 
+## 主题配置
+
+默认刷新头的背景及提示文字使用 [TThemeData](/flutter/components/theme?tab=api#tthemedata) 的全局 Token。刷新中复用 [TLoadingThemeData](/flutter/components/loading?tab=api#tloadingthemedata)，布局固定为横向；未设置 `textColor` 时使用禁用文字色，其余 Loading 主题配置继续继承。
+
 {{ flutter-api pull-down-refresh }}

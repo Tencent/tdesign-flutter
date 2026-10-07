@@ -6,7 +6,36 @@
 #### 简介
 严格受控的日历面板，不包含弹窗、工具栏或确认操作。
 `value` 与 `onChanged` 构成受控选择状态；`onChanged` 为 null 时禁用。
+
+#### 声明
+
+```dart
+class TCalendar extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+TCalendar({
+  super.key,
+  required this.value,
+  this.firstDayOfWeek = TCalendarFirstDayOfWeek.sunday,
+  DateTime? minDate,
+  DateTime? maxDate,
+  this.variant = TCalendarVariant.single,
+  this.onChanged,
+  this.onMonthChanged,
+  TCalendarMonthTitleBuilder? monthTitleBuilder,
+  this.weekdayNames,
+  this.cellBuilder,
+  this.subtitleBuilder,
+  this.animateTo = false,
+  this.anchorDate,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -31,7 +60,25 @@
 单个日期格的不可变展示快照，由日历的受控 value 派生。
 自定义构建器通过 `selectType` 读取状态；选择更新由日历的 onChanged
 通知调用方，再通过 value 重建，不直接修改日期格。
+
+#### 声明
+
+```dart
+class TCalendarCellModel
+```
+
 #### 默认构造方法
+
+
+```dart
+const TCalendarCellModel({
+  required this.date,
+  required this.selectType,
+  required this.isLastDayOfMonth,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -43,7 +90,24 @@
 ### TCalendarSubtitleContext
 #### 简介
 副标题构建上下文：告知 `TCalendarSubtitleBuilder` 当前渲染哪一格。
+
+#### 声明
+
+```dart
+class TCalendarSubtitleContext
+```
+
 #### 默认构造方法
+
+
+```dart
+const TCalendarSubtitleContext({
+  required this.date,
+  required this.selectType,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -56,7 +120,36 @@
 TCalendar 组件级 ThemeExtension
 包含日历样式默认（装饰、字体、布局参数）。
 样式字段通过 mergeExtension 子树覆盖，无需构造器 P0 `style` 参数。
+
+#### 声明
+
+```dart
+class TCalendarThemeData extends ThemeExtension<TCalendarThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TCalendarThemeData({
+  this.height,
+  this.decoration,
+  this.weekdayStyle,
+  this.monthTitleStyle,
+  this.dayStyle,
+  this.todayDayStyle,
+  this.cellDecoration,
+  this.subtitleStyle,
+  this.cellHeight,
+  this.monthTitleHeight,
+  this.verticalGap,
+  this.bodyPadding,
+  this.weekdayGap,
+  this.centreColor,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -74,6 +167,73 @@ TCalendar 组件级 ThemeExtension
 | verticalGap | double? | - | 日期格垂直间距，水平间距为 `verticalGap` / 2 | 否 |
 | weekdayGap | double? | - | 星期之间的水平间距 | 否 |
 | weekdayStyle | TextStyle? | - | 星期文字样式 | 否 |
+
+
+#### 实例方法
+
+##### TCalendarThemeData.copyWith
+
+```dart
+TCalendarThemeData copyWith({
+  double? height,
+  BoxDecoration? decoration,
+  TextStyle? weekdayStyle,
+  TextStyle? monthTitleStyle,
+  TextStyle? dayStyle,
+  TextStyle? todayDayStyle,
+  BoxDecoration? cellDecoration,
+  TextStyle? subtitleStyle,
+  double? cellHeight,
+  double? monthTitleHeight,
+  double? verticalGap,
+  double? bodyPadding,
+  double? weekdayGap,
+  Color? centreColor,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TCalendarThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| height | double? | - | 高度 | 否 |
+| decoration | BoxDecoration? | - | 组件容器装饰 | 否 |
+| weekdayStyle | TextStyle? | - | 星期文字样式 | 否 |
+| monthTitleStyle | TextStyle? | - | 月份标题文字样式 | 否 |
+| dayStyle | TextStyle? | - | 日期数字样式 | 否 |
+| todayDayStyle | TextStyle? | - | 今天日期数字样式 | 否 |
+| cellDecoration | BoxDecoration? | - | 日期单元格装饰（选中状态） | 否 |
+| subtitleStyle | TextStyle? | - | 副标题样式 | 否 |
+| cellHeight | double? | - | 日期单元格高度，默认 60 | 否 |
+| monthTitleHeight | double? | - | 月份标题高度，默认 22 | 否 |
+| verticalGap | double? | - | 日期格垂直间距，水平间距为 `verticalGap` / 2 | 否 |
+| bodyPadding | double? | - | 内边距 | 否 |
+| weekdayGap | double? | - | 星期之间的水平间距 | 否 |
+| centreColor | Color? | - | 区间中间格背景与格间衔接条颜色 | 否 |
+
+
+##### TCalendarThemeData.lerp
+
+```dart
+TCalendarThemeData lerp(
+  ThemeExtension<TCalendarThemeData>? other,
+  double t,
+)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TCalendarThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TCalendarThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### DateSelectType

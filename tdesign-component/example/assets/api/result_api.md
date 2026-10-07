@@ -5,7 +5,27 @@
 ### TResult
 #### 简介
 用于展示成功、警告、失败或默认结果状态的内容块。
+
+#### 声明
+
+```dart
+class TResult extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TResult({
+  Key? key,
+  this.description,
+  this.icon,
+  this.status = TResultStatus.info,
+  this.title = '',
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -19,13 +39,73 @@
 ### TResultThemeData
 #### 简介
 结果组件级 ThemeExtension
+
+#### 声明
+
+```dart
+class TResultThemeData extends ThemeExtension<TResultThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TResultThemeData({
+  this.iconSize,
+  this.titleStyle,
+  this.descriptionStyle,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | descriptionStyle | TextStyle? | - | 描述文字样式 | 否 |
 | iconSize | double? | - | 默认状态图标尺寸；自定义 icon 不使用该字段。 | 否 |
 | titleStyle | TextStyle? | - | 标题文字样式 | 否 |
+
+
+#### 实例方法
+
+##### TResultThemeData.copyWith
+
+```dart
+TResultThemeData copyWith({
+  double? iconSize,
+  TextStyle? titleStyle,
+  TextStyle? descriptionStyle,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TResultThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| iconSize | double? | - | 默认状态图标尺寸；自定义 icon 不使用该字段。 | 否 |
+| titleStyle | TextStyle? | - | 标题文字样式 | 否 |
+| descriptionStyle | TextStyle? | - | 描述文字样式 | 否 |
+
+
+##### TResultThemeData.lerp
+
+```dart
+TResultThemeData lerp(ThemeExtension<TResultThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TResultThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TResultThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TResultStatus

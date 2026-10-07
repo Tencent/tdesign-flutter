@@ -5,7 +5,34 @@
 ### TCheckbox
 #### 简介
 严格受控的复选框；`onChanged` 为 null 时禁用。
+
+#### 声明
+
+```dart
+class TCheckbox extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TCheckbox({
+  super.key,
+  required this.value,
+  this.onChanged,
+  this.title,
+  this.subTitle,
+  this.size = TCheckboxSize.medium,
+  this.cardMode = false,
+  this.showDivider = true,
+  this.contentDirection = TContentDirection.right,
+  this.titleMaxLines = 3,
+  this.subTitleMaxLines = 5,
+  this.customIconBuilder,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -26,7 +53,35 @@
 ### TCheckboxGroup
 #### 简介
 数据驱动且严格受控的复选框组。
+
+#### 声明
+
+```dart
+class TCheckboxGroup<T> extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TCheckboxGroup({
+  super.key,
+  required this.value,
+  required this.options,
+  this.onChanged,
+  this.direction = Axis.vertical,
+  this.columns = 1,
+  this.cardMode = false,
+  this.showDivider = true,
+  this.contentDirection = TContentDirection.right,
+  this.size = TCheckboxSize.medium,
+  this.maxSelected,
+  this.onMaxSelected,
+  this.itemBuilder,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -48,7 +103,26 @@
 ### TCheckboxOption
 #### 简介
 复选框组的数据项。
+
+#### 声明
+
+```dart
+class TCheckboxOption<T>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TCheckboxOption({
+  required this.value,
+  required this.label,
+  this.subTitle,
+  this.disabled = false,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -63,7 +137,31 @@
 TCheckbox 组件级 ThemeExtension
 通过 Theme 子树注入，控制子树默认样式。
 被 TCheckbox 和 TCheckboxGroup 共用。
+
+#### 声明
+
+```dart
+class TCheckboxThemeData extends ThemeExtension<TCheckboxThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TCheckboxThemeData({
+  this.variant,
+  this.selectColor,
+  this.disableColor,
+  this.titleColor,
+  this.subTitleColor,
+  this.backgroundColor,
+  this.spacing,
+  this.insetSpacing,
+  this.customSpace,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -76,6 +174,63 @@ TCheckbox 组件级 ThemeExtension
 | subTitleColor | Color? | - | 副标题颜色。 | 否 |
 | titleColor | Color? | - | 主标题颜色。 | 否 |
 | variant | TCheckboxVariant? | - | 复选框指示器的默认视觉变体；未设置时使用圆形。 | 否 |
+
+
+#### 实例方法
+
+##### TCheckboxThemeData.copyWith
+
+```dart
+TCheckboxThemeData copyWith({
+  TCheckboxVariant? variant,
+  Color? selectColor,
+  Color? disableColor,
+  Color? titleColor,
+  Color? subTitleColor,
+  Color? backgroundColor,
+  double? spacing,
+  double? insetSpacing,
+  EdgeInsetsGeometry? customSpace,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TCheckboxThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| variant | TCheckboxVariant? | - | 复选框指示器的默认视觉变体；未设置时使用圆形。 | 否 |
+| selectColor | Color? | - | 选择颜色 | 否 |
+| disableColor | Color? | - | 禁用态指示器的前景色；未选时用于描边色。 | 否 |
+| titleColor | Color? | - | 标题文字颜色 | 否 |
+| subTitleColor | Color? | - | 副标题文字颜色 | 否 |
+| backgroundColor | Color? | - | 背景颜色 | 否 |
+| spacing | double? | - | icon和文字的距离 | 否 |
+| insetSpacing | double? | - | 文字和非图标侧的距离 | 否 |
+| customSpace | EdgeInsetsGeometry? | - | 自定义组件间距 | 否 |
+
+
+##### TCheckboxThemeData.lerp
+
+```dart
+TCheckboxThemeData lerp(
+  ThemeExtension<TCheckboxThemeData>? other,
+  double t,
+)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TCheckboxThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TCheckboxThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TContentDirection

@@ -6,9 +6,21 @@
 #### 简介
 主题数据
 
+#### 声明
+
+```dart
+class TThemeData extends ThemeExtension<TThemeData>
+```
+
+
 #### 静态方法
 
 ##### TThemeData.defaultData
+
+```dart
+static TThemeData defaultData({TExtraThemeData? extraThemeData})
+```
+
 
 获取默认Data，一个App里只有一个，用于没有context的地方
 
@@ -16,10 +28,21 @@
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| extraThemeData | TExtraThemeData? | - | 额外定义的结构 | 否 |
+| extraThemeData | TExtraThemeData? | - | 扩展主题数据；默认主题仅在首次初始化时读取。 | 否 |
 
 
 ##### TThemeData.fromJson
+
+```dart
+static TThemeData? fromJson(
+  String name,
+  String themeJson, {
+  String? darkName,
+  bool recoverDefault = false,
+  TExtraThemeData? extraThemeData,
+})
+```
+
 
 解析配置的json文件为主题数据
 
@@ -36,17 +59,45 @@
 
 ##### TThemeData.parseThemeData
 
+```dart
+static TThemeData parseThemeData(
+  String name,
+  dynamic themeConfig,
+  TExtraThemeData? extraThemeData,
+)
+```
+
+
 从已解析的 `themeConfig` 读取 `name` 对应的主题；不存在或为空时返回空主题。
 
 返回类型：`TThemeData`
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| name | String | - | 名称 | 是 |
+| name | String | - | 待解析的主题名称。 | 是 |
 | themeConfig | dynamic | - | 已解析的主题 JSON 配置。 | 是 |
 | extraThemeData | TExtraThemeData? | - | 非空时参与扩展数据解析。 | 是 |
 
 #### 默认构造方法
+
+
+```dart
+TThemeData({
+  required this.name,
+  required this.colorMap,
+  required this.fontMap,
+  TMap<String, double>? fontMetricMap,
+  required this.radiusMap,
+  required this.fontFamilyMap,
+  required this.shadowMap,
+  TMap<String, BorderSide>? insetShadowMap,
+  required this.spacerMap,
+  required this.refMap,
+  this.extraThemeData,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -72,15 +123,32 @@
 
 #### 实例方法
 
-##### TThemeData.copyWithTThemeData
+##### TThemeData.copyWith
 
-从父类拷贝
+```dart
+ThemeExtension<TThemeData> copyWith({
+  String? name,
+  Map<String, Color>? colorMap,
+  Map<String, Font>? fontMap,
+  Map<String, double>? fontMetricMap,
+  Map<String, double>? radiusMap,
+  Map<String, FontFamily>? fontFamilyMap,
+  Map<String, List<BoxShadow>>? shadowMap,
+  Map<String, BorderSide>? insetShadowMap,
+  Map<String, double>? marginMap,
+  TExtraThemeData? extraThemeData,
+})
+```
 
-返回类型：`TThemeData`
+
+复制 Token 主题并合并传入的映射；未传入的映射值沿用当前配置。
+name 为空时使用 default；extraThemeData 为空时保留当前扩展数据。
+
+返回类型：`ThemeExtension<TThemeData>`
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| name | String | - | 名称 | 是 |
+| name | String? | - | 名称 | 否 |
 | colorMap | Map&lt;String, Color&gt;? | - | 颜色 | 否 |
 | fontMap | Map&lt;String, Font&gt;? | - | 字体尺寸 | 否 |
 | fontMetricMap | Map&lt;String, double&gt;? | - | 小程序独立字号与行高 Token，单位为 Flutter 逻辑像素。 | 否 |
@@ -88,11 +156,73 @@
 | fontFamilyMap | Map&lt;String, FontFamily&gt;? | - | 字体样式 | 否 |
 | shadowMap | Map&lt;String, List&lt;BoxShadow&gt;&gt;? | - | 阴影 | 否 |
 | insetShadowMap | Map&lt;String, BorderSide&gt;? | - | 小程序 blur=0 的内投影在 Flutter 中对应的内侧边线。 | 否 |
-| marginMap | Map&lt;String, double&gt;? | - | 间距 Token 的增量配置；沿用 marginMap 参数名，合并到 spacerMap。 | 否 |
+| marginMap | Map&lt;String, double&gt;? | - | 间距 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
 | extraThemeData | TExtraThemeData? | - | 额外定义的结构 | 否 |
 
 
+##### TThemeData.copyWithTThemeData
+
+```dart
+TThemeData copyWithTThemeData(
+  String name, {
+  Map<String, Color>? colorMap,
+  Map<String, Font>? fontMap,
+  Map<String, double>? fontMetricMap,
+  Map<String, double>? radiusMap,
+  Map<String, FontFamily>? fontFamilyMap,
+  Map<String, List<BoxShadow>>? shadowMap,
+  Map<String, BorderSide>? insetShadowMap,
+  Map<String, double>? marginMap,
+  TExtraThemeData? extraThemeData,
+})
+```
+
+
+从父类拷贝
+
+返回类型：`TThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| name | String | - | 副本的主题名称。 | 是 |
+| colorMap | Map&lt;String, Color&gt;? | - | 颜色 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
+| fontMap | Map&lt;String, Font&gt;? | - | 复合字体 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
+| fontMetricMap | Map&lt;String, double&gt;? | - | 字号与行高 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
+| radiusMap | Map&lt;String, double&gt;? | - | 圆角 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
+| fontFamilyMap | Map&lt;String, FontFamily&gt;? | - | 字体栈 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
+| shadowMap | Map&lt;String, List&lt;BoxShadow&gt;&gt;? | - | 外投影 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
+| insetShadowMap | Map&lt;String, BorderSide&gt;? | - | 内侧边线 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
+| marginMap | Map&lt;String, double&gt;? | - | 间距 Token 的增量配置；沿用 marginMap 参数名，合并到 spacerMap。 | 否 |
+| extraThemeData | TExtraThemeData? | - | 扩展主题数据；为空时沿用当前配置。 | 否 |
+
+
+##### TThemeData.lerp
+
+```dart
+ThemeExtension<TThemeData> lerp(
+  ThemeExtension<TThemeData>? other,
+  double t,
+)
+```
+
+
+返回使用目标主题 Token 映射的新主题；此实现不使用 t 做连续插值。
+other 为空或类型不匹配时返回当前主题。
+
+返回类型：`ThemeExtension<TThemeData>`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 保留 ThemeExtension 接口的进度参数；当前实现忽略该值。 | 是 |
+
+
 ##### TThemeData.ofColor
+
+```dart
+Color? ofColor(String? key)
+```
+
 
 按 `key` 读取颜色 Token；没有本地配置且无法解析引用或默认映射时返回 null。
 
@@ -100,10 +230,15 @@
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| key | String? | - | 组件标识，用于区分或保留组件状态。 | 是 |
+| key | String? | - | 要查询的 Token 键；为空或未命中时返回 null。 | 是 |
 
 
 ##### TThemeData.ofCorner
+
+```dart
+double? ofCorner(String? key)
+```
+
 
 按 `key` 读取圆角 Token，单位为逻辑像素；找不到时返回 null。
 
@@ -111,10 +246,15 @@
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| key | String? | - | 组件标识，用于区分或保留组件状态。 | 是 |
+| key | String? | - | 要查询的 Token 键；为空或未命中时返回 null。 | 是 |
 
 
 ##### TThemeData.ofExtra
+
+```dart
+T? ofExtra<T extends TExtraThemeData>()
+```
+
 
 读取指定 TExtraThemeData 子类型的扩展数据；未配置或类型不匹配时返回 null。
 
@@ -122,16 +262,26 @@
 
 ##### TThemeData.ofFont
 
+```dart
+Font? ofFont(String? key)
+```
+
+
 按 `key` 读取复合字体 Token；没有本地配置且无法解析引用或默认映射时返回 null。
 
 返回类型：`Font?`
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| key | String? | - | 组件标识，用于区分或保留组件状态。 | 是 |
+| key | String? | - | 要查询的 Token 键；为空或未命中时返回 null。 | 是 |
 
 
 ##### TThemeData.ofFontFamily
+
+```dart
+FontFamily? ofFontFamily(String? key)
+```
+
 
 按 `key` 读取字体栈 Token；找不到时返回 null。
 
@@ -139,10 +289,15 @@
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| key | String? | - | 组件标识，用于区分或保留组件状态。 | 是 |
+| key | String? | - | 要查询的 Token 键；为空或未命中时返回 null。 | 是 |
 
 
 ##### TThemeData.ofShadow
+
+```dart
+List<BoxShadow>? ofShadow(String? key)
+```
+
 
 按 `key` 读取外投影列表；找不到时返回 null。
 
@@ -150,22 +305,45 @@
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| key | String? | - | 组件标识，用于区分或保留组件状态。 | 是 |
+| key | String? | - | 要查询的 Token 键；为空或未命中时返回 null。 | 是 |
 
 
 ### Font
 #### 简介
 字体宽高数据
 
+#### 声明
+
+```dart
+class Font
+```
+
+
 #### 工厂构造方法
 
 ##### Font.fromJson
+
+```dart
+factory Font.fromJson(Map<String, dynamic> map)
+```
+
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | map | Map&lt;String, dynamic&gt; | - | 字体 JSON 配置，包含 size、lineHeight 和可选的 fontWeight（1 至 9，默认 4）。 | 是 |
 
 #### 默认构造方法
+
+
+```dart
+Font({
+  required int size,
+  required int lineHeight,
+  this.fontWeight = FontWeight.w400,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -184,15 +362,34 @@
 #### 简介
 字体样式
 
+#### 声明
+
+```dart
+class FontFamily
+```
+
+
 #### 工厂构造方法
 
 ##### FontFamily.fromJson
+
+```dart
+factory FontFamily.fromJson(Map<String, dynamic> map)
+```
+
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | map | Map&lt;String, dynamic&gt; | - | 字体栈 JSON 配置，包含 fontFamily、可选 package 和 fallback。 | 是 |
 
 #### 默认构造方法
+
+
+```dart
+FontFamily({required this.fontFamily, this.package, this.fallback})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -204,8 +401,19 @@
 ### TResourceManager
 #### 简介
 资源管理器
+
+#### 声明
+
+```dart
+class TResourceManager
+```
+
 #### 默认构造方法
-`TResourceManager()`
+
+
+```dart
+TResourceManager()
+```
 
 #### 静态成员
 
@@ -218,6 +426,11 @@
 
 ##### TResourceManager.delegate
 
+```dart
+TResourceDelegate delegate(BuildContext context)
+```
+
+
 获取资源
 
 返回类型：`TResourceDelegate`
@@ -228,6 +441,11 @@
 
 
 ##### TResourceManager.setResourceBuilder
+
+```dart
+void setResourceBuilder(TResourceBuilder delegate, needAlwaysBuild)
+```
+
 
 设置资源代理
 
@@ -242,6 +460,13 @@
 ### TResourceDelegate
 #### 简介
 资源管理器，允许外部重写，设计成抽象类，防止有新增字段时，用户没有感知
+
+#### 声明
+
+```dart
+abstract class TResourceDelegate
+```
+
 #### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -310,6 +535,11 @@
 
 ##### TResourceDelegate.pickerColumn
 
+```dart
+String pickerColumn(int colIndex)
+```
+
+
 `TPicker` 第 `colIndex` 列（1-based）的无障碍 label
 
 返回类型：`String`
@@ -325,9 +555,21 @@ TDesign 样式解析器。
 实例显式样式、组件 Theme 和全局 Token 是单向样式链。
 用法：
 
+#### 声明
+
+```dart
+class TStyleResolver
+```
+
+
 #### 静态方法
 
 ##### TStyleResolver.of
+
+```dart
+static TStyleResolver of(BuildContext context)
+```
+
 
 创建解析器实例
 
@@ -348,6 +590,11 @@ TDesign 样式解析器。
 
 ##### TStyleResolver.componentExtension
 
+```dart
+E? componentExtension<E extends ThemeExtension<E>>()
+```
+
+
 组件 ThemeExtension。
 
 返回类型：`E?`
@@ -359,7 +606,21 @@ Token → 完整 ThemeData 的构建器
 内部完成 Token → ColorScheme 映射、Token Font → TextTheme、
 Token 颜色 → M3 子主题，同时将 `TThemeData` 自身作为 Extension 注入。
 通常不直接使用，通过 `TThemeBuilder.light` / `TThemeBuilder.dark` 入口。
+
+#### 声明
+
+```dart
+class TMaterialThemeBuilder
+```
+
 #### 默认构造方法
+
+
+```dart
+const TMaterialThemeBuilder(this.token)
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -370,11 +631,21 @@ Token 颜色 → M3 子主题，同时将 `TThemeData` 自身作为 Extension �
 
 ##### TMaterialThemeBuilder.buildDark
 
+```dart
+ThemeData buildDark()
+```
+
+
 构建暗色 ThemeData
 
 返回类型：`ThemeData`
 
 ##### TMaterialThemeBuilder.buildLight
+
+```dart
+ThemeData buildLight()
+```
+
 
 构建亮色 ThemeData
 
@@ -386,9 +657,21 @@ Token 颜色 → M3 子主题，同时将 `TThemeData` 自身作为 Extension �
 对齐 `MaterialApp.theme` / `darkTheme` / `themeMode` 三参数模式。
 用法：
 
+#### 声明
+
+```dart
+class TThemeBuilder
+```
+
+
 #### 静态方法
 
 ##### TThemeBuilder.dark
+
+```dart
+static ThemeData dark(TThemeData token)
+```
+
 
 暗色主题
 
@@ -400,6 +683,11 @@ Token 颜色 → M3 子主题，同时将 `TThemeData` 自身作为 Extension �
 
 
 ##### TThemeBuilder.light
+
+```dart
+static ThemeData light(TThemeData token)
+```
+
 
 亮色主题
 
@@ -414,9 +702,21 @@ Token 颜色 → M3 子主题，同时将 `TThemeData` 自身作为 Extension �
 #### 简介
 扩展主题数据
 
+#### 声明
+
+```dart
+abstract class TExtraThemeData
+```
+
+
 #### 实例方法
 
 ##### TExtraThemeData.parse
+
+```dart
+void parse(String name, Map<String, dynamic> curThemeMap)
+```
+
 
 解析json
 
@@ -431,7 +731,21 @@ Token 颜色 → M3 子主题，同时将 `TThemeData` 自身作为 Extension �
 ### TMap
 #### 简介
 自定义Map
+
+#### 声明
+
+```dart
+class TMap<K, V> extends DelegatingMap<K, V>
+```
+
 #### 默认构造方法
+
+
+```dart
+TMap({this.factory, this.refs})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -441,7 +755,29 @@ Token 颜色 → M3 子主题，同时将 `TThemeData` 自身作为 Extension �
 
 #### 实例方法
 
+##### TMap.[]
+
+```dart
+V? operator [](Object? key)
+```
+
+
+读取 Token 值：依次尝试本地显式值、引用链和默认映射。
+循环引用会中止该引用链；仍可尝试默认映射，全部未命中时返回 null。
+
+返回类型：`V?`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| key | Object? | - | 要查询的 Token 键；支持当前映射的键类型。 | 是 |
+
+
 ##### TMap.get
+
+```dart
+V? get(Object? key)
+```
+
 
 仅读取 `key` 的本地存储值，不解析引用或默认映射。
 
@@ -449,14 +785,25 @@ Token 颜色 → M3 子主题，同时将 `TThemeData` 自身作为 Extension �
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| key | Object? | - | 组件标识，用于区分或保留组件状态。 | 是 |
+| key | Object? | - | 要读取本地存储值的键；不解析引用或默认映射。 | 是 |
 
 
 ### PlatformUtil
 #### 简介
 区分 Flutter Web 与原生宿主平台的工具。
+
+#### 声明
+
+```dart
+class PlatformUtil
+```
+
 #### 默认构造方法
-`PlatformUtil()`
+
+
+```dart
+PlatformUtil()
+```
 
 #### 静态成员
 
@@ -476,7 +823,31 @@ Token 颜色 → M3 子主题，同时将 `TThemeData` 自身作为 Extension �
 #### 简介
 工具栏文字/图标按钮统一按压反馈：按下时整体透明度动画。
 用于 `TPicker`、`TPopup` 等「取消 | 标题 | 确认」类工具栏，后续组件请复用。
+
+#### 声明
+
+```dart
+class TToolbarPressable extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TToolbarPressable({
+  super.key,
+  required this.child,
+  this.onTap,
+  this.padding,
+  this.enabled = true,
+  this.pressDuration = kToolbarPressDuration,
+  this.pressedOpacity = kToolbarPressedOpacity,
+  this.mergeTextStyle,
+  this.mergeIconTheme,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -502,9 +873,21 @@ Token 颜色 → M3 子主题，同时将 `TThemeData` 自身作为 Extension �
 #### 简介
 Font字体宽高的扩展
 
+#### 声明
+
+```dart
+extension FontExtensions on Font
+```
+
+
 #### 实例方法
 
 ##### FontExtensions.withSize
+
+```dart
+Font withSize(int newSize)
+```
+
 
 返回使用 `newSize` 字号的字体副本，保留字重，并按当前行高比例计算新行高后取整。
 
@@ -523,6 +906,13 @@ Font字体宽高的扩展
 如果业务需要扩展，可以按以下方式定义自己的ColorData，只要key在主题中能找到对应颜色即可
 TDesign主题包含的颜色，这是一个大而全的色值。业务可以选择自己需要的色值进行二次封装，方便使用。
 不过有的色值是内部使用的，必传，否则可能显示异常。
+
+#### 声明
+
+```dart
+extension TColors on TThemeData
+```
+
 #### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -659,6 +1049,13 @@ TDesign主题包含的颜色，这是一个大而全的色值。业务可以选�
 #### 简介
 将小程序的 CSS 字体栈转换为当前 Flutter 平台可绘制的字体选择。
 保留 Token 原值；非 Apple 平台对默认栈使用 Roboto 作为主字体。
+
+#### 声明
+
+```dart
+extension TResolvedFontFamily on FontFamily
+```
+
 #### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -670,6 +1067,13 @@ TDesign主题包含的颜色，这是一个大而全的色值。业务可以选�
 ### TFontFamilies
 #### 简介
 按主题 Token 读取主字体与中等字重字体栈。
+
+#### 声明
+
+```dart
+extension TFontFamilies on TThemeData
+```
+
 #### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -681,6 +1085,13 @@ TDesign主题包含的颜色，这是一个大而全的色值。业务可以选�
 ### TFontMetrics
 #### 简介
 小程序独立字号与行高 Token。CSS 中 `--td-font-*` 由这些变量组合而成。
+
+#### 声明
+
+```dart
+extension TFontMetrics on TThemeData
+```
+
 #### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -738,6 +1149,13 @@ TDesign主题包含的颜色，这是一个大而全的色值。业务可以选�
 ### TFonts
 #### 简介
 小程序复合字体 Token。显式覆盖复合 `Font` 时以它为准；否则随独立字号和行高变化。
+
+#### 声明
+
+```dart
+extension TFonts on TThemeData
+```
+
 #### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -767,6 +1185,13 @@ TDesign主题包含的颜色，这是一个大而全的色值。业务可以选�
 ### TRadius
 #### 简介
 内置圆角数据
+
+#### 声明
+
+```dart
+extension TRadius on TThemeData
+```
+
 #### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -782,6 +1207,13 @@ TDesign主题包含的颜色，这是一个大而全的色值。业务可以选�
 ### TBoxShadows
 #### 简介
 小程序全局外投影 Token；CSS 内投影不能直接由 Flutter `BoxShadow` 表达。
+
+#### 声明
+
+```dart
+extension TBoxShadows on TThemeData
+```
+
 #### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -796,6 +1228,13 @@ TDesign主题包含的颜色，这是一个大而全的色值。业务可以选�
 #### 简介
 小程序当前的四个 blur=0 的 inset 阴影在 Flutter 中用定向内侧边线表达。
 使用方应把对应 `BorderSide` 放入 `Border.top` / right / bottom / left。
+
+#### 声明
+
+```dart
+extension TInsetShadows on TThemeData
+```
+
 #### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -809,6 +1248,13 @@ TDesign主题包含的颜色，这是一个大而全的色值。业务可以选�
 ### TSpacers
 #### 简介
 小程序全局间距 Token；375 逻辑像素宽下按 2rpx = 1dp 转换。
+
+#### 声明
+
+```dart
+extension TSpacers on TThemeData
+```
+
 #### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -827,6 +1273,13 @@ TDesign主题包含的颜色，这是一个大而全的色值。业务可以选�
 BuildContext 扩展：便捷获取全局 TThemeData Token
 统一走 Material 的 `Theme.of(context)`。
 全库读取全局 Token（色板/间距/圆角/字体）统一用 `context.tTheme`。
+
+#### 声明
+
+```dart
+extension TThemeContextExtension on BuildContext
+```
+
 #### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -840,9 +1293,21 @@ ThemeData 扩展：子树 merge Extension（禁用 copyWith(extensions:) 覆盖�
 子树覆盖统一用 `mergeExtension(...)`，
 禁止 `copyWith(extensions: [...])`（会覆盖其它 Extension）。
 
+#### 声明
+
+```dart
+extension TThemeDataMergeExtension on ThemeData
+```
+
+
 #### 实例方法
 
 ##### TThemeDataMergeExtension.mergeExtension
+
+```dart
+ThemeData mergeExtension<T extends ThemeExtension<T>>(T extension)
+```
+
 
 合并 Extension：保留现有所有 Extension，仅替换指定类型
 示例：
@@ -871,6 +1336,11 @@ Theme(
 `needAlwaysBuild`=false: 返回 delegate 为 null，则每次都会走 build 方法。
 
 返回类型：`void`
+
+```dart
+void setTResourceBuilder( TResourceBuilder delegate, { bool needAlwaysBuild = false, })
+```
+
 
 #### 参数
 

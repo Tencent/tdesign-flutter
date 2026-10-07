@@ -11,7 +11,33 @@ Material 薄包装，`onPressed: null` 表示禁用；禁用时不会触发
 - `variant`：变体类型（fill / outline / text / ghost）
 - `colorPreset`：配色方案（defaultTheme / primary / danger / light）
 - `shape`：按钮结构形状；具体边框样式由 `style` 控制
+
+#### 声明
+
+```dart
+class TButton extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TButton({
+  Key? key,
+  this.child,
+  this.size,
+  this.variant,
+  this.shape = TButtonShape.rectangle,
+  this.colorPreset,
+  this.icon,
+  this.iconPosition = TButtonIconPosition.left,
+  this.onPressed,
+  this.onLongPress,
+  this.style,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -32,12 +58,63 @@ Material 薄包装，`onPressed: null` 表示禁用；禁用时不会触发
 #### 简介
 TButton 组件级 ThemeExtension
 只承载 `ButtonStyle` 不能表达的按钮子树默认视觉值。
+
+#### 声明
+
+```dart
+class TButtonThemeData extends ThemeExtension<TButtonThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TButtonThemeData({this.iconTextSpacing, this.gradient})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | gradient | Gradient? | - | 渐变背景色（装饰层，非 ButtonStyle 字段） | 否 |
 | iconTextSpacing | double? | - | 图标与文案之间的间距，单位为逻辑像素。 仅在按钮同时提供 icon 和 child 时生效；该值控制两者 之间的实际间隔，不会改变按钮整体内边距。为空时使用组件内置 默认值 4dp；全局 `spacer4` 对应 32dp，不用于此间距。 | 否 |
+
+
+#### 实例方法
+
+##### TButtonThemeData.copyWith
+
+```dart
+TButtonThemeData copyWith({double? iconTextSpacing, Gradient? gradient})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TButtonThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| iconTextSpacing | double? | - | 图标与文案之间的间距，单位为逻辑像素。 仅在按钮同时提供 icon 和 child 时生效；该值控制两者 之间的实际间隔，不会改变按钮整体内边距。为空时使用组件内置 默认值 4dp；全局 `spacer4` 对应 32dp，不用于此间距。 | 否 |
+| gradient | Gradient? | - | 渐变背景色（装饰层，非 ButtonStyle 字段） | 否 |
+
+
+##### TButtonThemeData.lerp
+
+```dart
+TButtonThemeData lerp(ThemeExtension<TButtonThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TButtonThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TButtonThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TButtonColorPreset

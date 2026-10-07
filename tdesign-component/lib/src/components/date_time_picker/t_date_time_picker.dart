@@ -18,6 +18,9 @@ export 't_date_time_picker_model.dart';
 ///
 /// 纯滚轮组件，不包含工具栏、确认按钮或弹窗。
 /// [value] 与 [onChanged] 构成严格受控状态；[onChanged] 为 null 时禁用。
+///
+/// 滚轮高度与可见项数复用 [TPickerThemeData] 的 `height`、`itemCount`；
+/// 通过 Flutter `ThemeData.extensions` 配置，没有独立的日期时间选择器 Theme。
 class TDateTimePicker extends StatefulWidget {
   TDateTimePicker({
     super.key,

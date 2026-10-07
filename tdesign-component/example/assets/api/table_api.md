@@ -5,7 +5,45 @@
 ### TTable
 #### 简介
 强类型、受控排序与选择的表格组件。
+
+#### 声明
+
+```dart
+class TTable<T> extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TTable({
+  required this.columns,
+  required this.data,
+  this.rowKey,
+  this.cellSpanBuilder,
+  this.selectionMode = TTableSelectionMode.none,
+  this.selectedRows = const {},
+  this.onSelectionChanged,
+  this.rowSelectable,
+  this.sort,
+  this.onSortChanged,
+  this.loading = false,
+  this.loadingWidget,
+  this.empty,
+  this.footer,
+  this.showHeader = true,
+  this.height,
+  this.maxHeight,
+  this.bordered,
+  this.stripe,
+  this.onCellTap,
+  this.onRowTap,
+  this.onScroll,
+  super.key,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -37,7 +75,30 @@
 ### TTableColumn
 #### 简介
 强类型表格列配置。
+
+#### 声明
+
+```dart
+class TTableColumn<T>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TTableColumn({
+  required this.id,
+  required this.header,
+  required this.cellBuilder,
+  this.width,
+  this.minWidth,
+  this.fixed = TTableColumnFixed.none,
+  this.align = TTableColumnAlign.left,
+  this.comparator,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -55,7 +116,30 @@
 #### 简介
 表格组件级 ThemeExtension。
 仅保存表格的视觉默认值。
+
+#### 声明
+
+```dart
+class TTableThemeData extends ThemeExtension<TTableThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TTableThemeData({
+  this.rowHeight,
+  this.headerHeight,
+  this.width,
+  this.backgroundColor,
+  this.headerColor,
+  this.stripeColor,
+  this.borderColor,
+  this.cellPadding,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -69,10 +153,76 @@
 | width | double? | - | 表格宽度。 | 否 |
 
 
+#### 实例方法
+
+##### TTableThemeData.copyWith
+
+```dart
+TTableThemeData copyWith({
+  double? rowHeight,
+  double? headerHeight,
+  double? width,
+  Color? backgroundColor,
+  Color? headerColor,
+  Color? stripeColor,
+  Color? borderColor,
+  EdgeInsetsGeometry? cellPadding,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TTableThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| rowHeight | double? | - | 数据行高度。 | 否 |
+| headerHeight | double? | - | 表头高度。 | 否 |
+| width | double? | - | 表格宽度。 | 否 |
+| backgroundColor | Color? | - | 默认行背景色。 | 否 |
+| headerColor | Color? | - | 表头背景色。 | 否 |
+| stripeColor | Color? | - | 斑马纹背景色。 | 否 |
+| borderColor | Color? | - | 边框颜色。 | 否 |
+| cellPadding | EdgeInsetsGeometry? | - | 单元格内边距。 | 否 |
+
+
+##### TTableThemeData.lerp
+
+```dart
+TTableThemeData lerp(TTableThemeData? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TTableThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | TTableThemeData? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
+
+
 ### TTableSort
 #### 简介
 受控排序值。
+
+#### 声明
+
+```dart
+class TTableSort
+```
+
 #### 默认构造方法
+
+
+```dart
+const TTableSort({required this.columnId, required this.direction})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -83,7 +233,26 @@
 ### TTableCellContext
 #### 简介
 表格逻辑单元格上下文。
+
+#### 声明
+
+```dart
+class TTableCellContext<T>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TTableCellContext({
+  required this.row,
+  required this.rowIndex,
+  required this.column,
+  required this.columnIndex,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -96,7 +265,21 @@
 ### TTableCellSpan
 #### 简介
 单元格跨越的逻辑行列数。
+
+#### 声明
+
+```dart
+class TTableCellSpan
+```
+
 #### 默认构造方法
+
+
+```dart
+const TTableCellSpan({this.rowSpan = 1, this.columnSpan = 1})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |

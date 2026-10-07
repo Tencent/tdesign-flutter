@@ -154,6 +154,8 @@ class TMessage extends StatefulWidget {
     TMessageStatus status = TMessageStatus.info,
     VoidCallback? onCloseButtonPressed,
     VoidCallback? onDurationEnd,
+
+    /// 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发；每次展示最多一次。
     VoidCallback? onDismissed,
     bool useSafeArea = true,
   }) {

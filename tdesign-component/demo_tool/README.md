@@ -16,13 +16,14 @@ node tool/generate_api.mjs --check
 
 `tool/components.json` 登记组件及其公开类、枚举、typedef、扩展和顶层函数。公开范围以 `lib/tdesign_flutter.dart` 的导出为准，包括 `part`、转导出和 `show` / `hide`；`@internal` 和 `@visibleForTesting` 成员不作为使用方 API。
 
-生成文档分别展示默认、命名和 factory 构造函数、参数及必填项、字段和访问器、静态/实例方法、控制器、辅助类型及 Theme。公开扩展也会生成属性和方法说明。主题配置说明随对应 ThemeData 一起生成，不另写参数表。
+生成文档分别展示默认、命名和 factory 构造函数、参数及必填项、字段和访问器、静态/实例方法、控制器、辅助类型及 Theme。公开扩展也会生成属性和方法说明。主题配置说明随对应 ThemeData 一起生成，不另写参数表。没有独立 Theme 的组件在类注释及站点使用说明中写明其共用 Theme 或全局 Token。
 
 - 使用标准 `///` dartdoc；构造函数可以有注释，也不限制成员声明顺序。
 - 类注释说明用途；字段注释说明语义、生效条件、空值含义、相关字段和优先关系。
 - 声明默认值由 analyzer 提取。运行时的组件 Theme / 全局 Token 回退写在注释中，不能把它当作构造默认值。
 - `this.field` 参数复用字段注释；没有对应字段的参数使用参数内 `///`，或在可调用成员注释中以 `[parameterName]` 开头单独说明。
 - 公开方法说明返回值、状态变化、完成时机和重复调用语义。标注 `@override` 的继承契约不需要重复拷贝框架文档；有自定义行为时应单独说明。
+- 方法参数不能仅凭同名字段推断说明；自定义 `copyWith` / `lerp` / Token 查询运算符也必须有 dartdoc。声明签名保留泛型约束与位置/命名参数，参数表独立展示各可调用成员的完整契约。
 - `getComments` 只控制类简介；参数与成员说明始终读取 dartdoc。
 - 不编辑 `example/assets/api/*_api.md`，修复应来自源码、manifest 或独立生成工具。
 

@@ -10,9 +10,37 @@ Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 
 移除父级状态。全局 Overlay 消息使用 `TMessage.show`，并通过返回的
 `TMessageHandle` 关闭。
 
+#### 声明
+
+```dart
+class TMessage extends StatefulWidget
+```
+
+
 #### 静态方法
 
 ##### TMessage.show
+
+```dart
+static TMessageHandle show({
+  required BuildContext context,
+  String content = '',
+  Duration? duration = const Duration(seconds: 3),
+  bool showIcon = true,
+  Widget? icon,
+  Widget? action,
+  bool showCloseButton = false,
+  Widget? closeButton,
+  TMessageMarquee? marquee,
+  Offset? offset,
+  TMessageStatus status = TMessageStatus.info,
+  VoidCallback? onCloseButtonPressed,
+  VoidCallback? onDurationEnd,
+  VoidCallback? onDismissed,
+  bool useSafeArea = true,
+})
+```
+
 
 在 Overlay 中显示消息并返回控制句柄。
 未显式传入 `offset` 时，新消息会替换同一 Overlay 中上一条默认位置的消息；
@@ -35,10 +63,33 @@ Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 
 | status | TMessageStatus | TMessageStatus.info | 消息语义状态 | 否 |
 | onCloseButtonPressed | VoidCallback? | - | 点击关闭按钮时触发 | 否 |
 | onDurationEnd | VoidCallback? | - | 自动展示时长结束且关闭动画完成时触发 | 否 |
-| onDismissed | VoidCallback? | - | 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发。 每次展示最多触发一次。 | 否 |
+| onDismissed | VoidCallback? | - | 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发；每次展示最多一次。 | 否 |
 | useSafeArea | bool | true | 是否避让系统安全区，默认为 true。设为 false 时显式 `offset` 保持绝对坐标， 消息宽度仍使用扣除 16 像素水平外间距后的默认宽度。 | 否 |
 
 #### 默认构造方法
+
+
+```dart
+const TMessage({
+  super.key,
+  this.content = '',
+  this.duration = const Duration(seconds: 3),
+  this.showIcon = true,
+  this.icon,
+  this.action,
+  this.showCloseButton = false,
+  this.closeButton,
+  this.marquee,
+  this.offset,
+  this.status = TMessageStatus.info,
+  this.onCloseButtonPressed,
+  this.onDurationEnd,
+  this.onDismissed,
+  this.useSafeArea = true,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -62,7 +113,25 @@ Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 
 ### TMessageMarquee
 #### 简介
 跑马灯配置
+
+#### 声明
+
+```dart
+class TMessageMarquee
+```
+
 #### 默认构造方法
+
+
+```dart
+const TMessageMarquee({
+  this.duration = const Duration(seconds: 10),
+  this.repeat = false,
+  this.delay = Duration.zero,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -74,6 +143,13 @@ Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 
 ### TMessageHandle
 #### 简介
 命令式消息句柄
+
+#### 声明
+
+```dart
+final class TMessageHandle
+```
+
 #### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -85,6 +161,11 @@ Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 
 
 ##### TMessageHandle.dismiss
 
+```dart
+void dismiss()
+```
+
+
 立即移除消息；重复调用不会重复触发 `onDismissed`。
 
 返回类型：`void`
@@ -93,9 +174,21 @@ Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 
 #### 简介
 TMessage 组件级 ThemeExtension
 
+#### 声明
+
+```dart
+class TMessageThemeData extends ThemeExtension<TMessageThemeData>
+```
+
+
 #### 静态方法
 
 ##### TMessageThemeData.lerpDouble
+
+```dart
+static double? lerpDouble(double? a, double? b, double t)
+```
+
 
 对 `a` 和 `b` 按 `t` 线性插值；两端均为 null 时返回 null，仅一端为 null 时按 0 参与计算。
 
@@ -109,6 +202,13 @@ TMessage 组件级 ThemeExtension
 
 #### 默认构造方法
 
+
+```dart
+const TMessageThemeData({this.backgroundColor, this.shape, this.elevation})
+```
+
+#### 参数
+
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 背景色 | 否 |
@@ -118,7 +218,52 @@ TMessage 组件级 ThemeExtension
 
 #### 实例方法
 
+##### TMessageThemeData.copyWith
+
+```dart
+TMessageThemeData copyWith({
+  Color? backgroundColor,
+  ShapeBorder? shape,
+  double? elevation,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TMessageThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景色 | 否 |
+| shape | ShapeBorder? | - | 形状 | 否 |
+| elevation | double? | - | 阴影 | 否 |
+
+
+##### TMessageThemeData.lerp
+
+```dart
+TMessageThemeData lerp(ThemeExtension<TMessageThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TMessageThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TMessageThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
+
+
 ##### TMessageThemeData.merge
+
+```dart
+TMessageThemeData merge(TMessageThemeData? other)
+```
+
 
 返回合并后的主题；`other` 的非空字段覆盖当前字段，other 为空时返回当前主题。
 

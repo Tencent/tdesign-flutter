@@ -5,7 +5,44 @@
 ### TImage
 #### 简介
 统一展示网络、asset 或本地文件图片。
+
+#### 声明
+
+```dart
+class TImage extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TImage({
+  super.key,
+  this.src,
+  this.imageFile,
+  this.shape = TImageShape.square,
+  this.errorWidget,
+  this.loadingWidget,
+  this.width,
+  this.height,
+  this.fit = BoxFit.fill,
+  this.frameBuilder,
+  this.loadingBuilder,
+  this.errorBuilder,
+  this.onLoad,
+  this.onError,
+  this.semanticLabel,
+  this.excludeFromSemantics = false,
+  this.cacheWidth,
+  this.cacheHeight,
+  this.filterQuality = FilterQuality.low,
+  this.alignment = Alignment.center,
+  this.repeat = ImageRepeat.noRepeat,
+  this.onTap,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -36,7 +73,28 @@
 ### TImageThemeData
 #### 简介
 图片组件的视觉默认值。
+
+#### 声明
+
+```dart
+class TImageThemeData extends ThemeExtension<TImageThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TImageThemeData({
+  this.color,
+  this.colorBlendMode,
+  this.centerSlice,
+  this.matchTextDirection,
+  this.gaplessPlayback,
+  this.isAntiAlias,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -46,6 +104,54 @@
 | gaplessPlayback | bool? | - | 更新 provider 时是否保留上一帧。 | 否 |
 | isAntiAlias | bool? | - | 是否启用抗锯齿。 | 否 |
 | matchTextDirection | bool? | - | 是否匹配文字方向。 | 否 |
+
+
+#### 实例方法
+
+##### TImageThemeData.copyWith
+
+```dart
+TImageThemeData copyWith({
+  Color? color,
+  BlendMode? colorBlendMode,
+  Rect? centerSlice,
+  bool? matchTextDirection,
+  bool? gaplessPlayback,
+  bool? isAntiAlias,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TImageThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| color | Color? | - | 图片叠加色。 | 否 |
+| colorBlendMode | BlendMode? | - | 颜色混合模式。 | 否 |
+| centerSlice | Rect? | - | 九宫格中心切片。 | 否 |
+| matchTextDirection | bool? | - | 是否匹配文字方向。 | 否 |
+| gaplessPlayback | bool? | - | 更新 provider 时是否保留上一帧。 | 否 |
+| isAntiAlias | bool? | - | 是否启用抗锯齿。 | 否 |
+
+
+##### TImageThemeData.lerp
+
+```dart
+TImageThemeData lerp(ThemeExtension<TImageThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TImageThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TImageThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TImageShape

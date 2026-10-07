@@ -7,7 +7,32 @@
 文字超链接用于跳转一个新页面，如当前项目跳转、友情链接等。
 下划线、前置图标和后置图标可独立组合；路由行为由 `onPressed` 与 Flutter
 Navigator / Router 组合。
+
+#### 声明
+
+```dart
+class TLink extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TLink({
+  super.key,
+  this.child,
+  this.prefixIcon,
+  this.suffixIcon,
+  this.underline,
+  this.colorPreset,
+  this.size,
+  this.onPressed,
+  this.semanticLabel,
+  this.tooltip,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -28,13 +53,69 @@ Navigator / Router 组合。
 TLink 组件级主题。
 通过 Theme 子树注入链接字号样式、图标尺寸和间距等具体视觉值。
 尺寸档位、配色预设和下划线选择仅由 `TLink` 实例控制。
+
+#### 声明
+
+```dart
+class TLinkThemeData extends ThemeExtension<TLinkThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TLinkThemeData({this.textStyle, this.iconSize, this.iconGap})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | iconGap | double? | - | 前/后图标与内容之间的间距。 | 否 |
 | iconSize | double? | - | 图标尺寸。 | 否 |
 | textStyle | TextStyle? | - | 链接文字样式；字号、行高与字重默认由实例尺寸对应 Token 提供。 | 否 |
+
+
+#### 实例方法
+
+##### TLinkThemeData.copyWith
+
+```dart
+TLinkThemeData copyWith({
+  TextStyle? textStyle,
+  double? iconSize,
+  double? iconGap,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TLinkThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| textStyle | TextStyle? | - | 链接文字样式；字号、行高与字重默认由实例尺寸对应 Token 提供。 | 否 |
+| iconSize | double? | - | 图标尺寸。 | 否 |
+| iconGap | double? | - | 前/后图标与内容之间的间距。 | 否 |
+
+
+##### TLinkThemeData.lerp
+
+```dart
+TLinkThemeData lerp(ThemeExtension<TLinkThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TLinkThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TLinkThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TLinkColorPreset

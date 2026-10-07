@@ -9,7 +9,29 @@
 `child` 会作为图片加载失败前的背景内容。默认图标与文字前景色由
 `TAvatarThemeData.foregroundColor` 控制；特殊文字排版可在 `child` 中使用
 `Text(style: ...)`，组件不再额外提供文字样式入口。
+
+#### 声明
+
+```dart
+class TAvatar extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TAvatar({
+  this.image,
+  this.child,
+  this.size,
+  this.shape,
+  this.fit = BoxFit.cover,
+  this.onTap,
+  super.key,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -32,7 +54,28 @@
 成员自己的显式尺寸始终优先，未设置的成员和折叠头像继承组尺寸。
 默认按 8 逻辑像素重叠，所有成员使用按尺寸区分的描边与阴影；
 可通过 `TAvatarThemeData` 调整这些视觉值。
+
+#### 声明
+
+```dart
+class TAvatarGroup extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TAvatarGroup({
+  required this.children,
+  this.maxCount,
+  this.overflow,
+  this.spacing,
+  this.cascading = TAvatarGroupCascading.endUp,
+  super.key,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -48,7 +91,32 @@
 #### 简介
 头像组件级 ThemeExtension。
 仅保存视觉默认值，不保存头像内容、回调或头像组成员。
+
+#### 声明
+
+```dart
+class TAvatarThemeData extends ThemeExtension<TAvatarThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TAvatarThemeData({
+  this.dimension,
+  this.iconSize,
+  this.circleBorderRadius,
+  this.squareBorderRadius,
+  this.backgroundColor,
+  this.foregroundColor,
+  this.groupSpacing,
+  this.groupBorderWidth,
+  this.groupBorderColor,
+  this.groupShadow,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -62,6 +130,62 @@
 | groupSpacing | double? | - | 头像组重叠宽度。 | 否 |
 | iconSize | double? | - | 默认图标大小。 | 否 |
 | squareBorderRadius | double? | - | 方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。 | 否 |
+
+
+#### 实例方法
+
+##### TAvatarThemeData.copyWith
+
+```dart
+TAvatarThemeData copyWith({
+  double? dimension,
+  double? iconSize,
+  double? circleBorderRadius,
+  double? squareBorderRadius,
+  Color? backgroundColor,
+  Color? foregroundColor,
+  double? groupSpacing,
+  double? groupBorderWidth,
+  Color? groupBorderColor,
+  BoxShadow? groupShadow,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TAvatarThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| dimension | double? | - | 自定义头像边长。 | 否 |
+| iconSize | double? | - | 默认图标大小。 | 否 |
+| circleBorderRadius | double? | - | 圆形头像圆角；未设置时回退全局 `radiusCircle`（逻辑像素）。 | 否 |
+| squareBorderRadius | double? | - | 方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。 | 否 |
+| backgroundColor | Color? | - | 默认背景色；未设置时回退全局 `brandColorLightActive`。 | 否 |
+| foregroundColor | Color? | - | 默认图标与继承文字的前景色；未设置时回退全局品牌色。 | 否 |
+| groupSpacing | double? | - | 头像组重叠宽度。 | 否 |
+| groupBorderWidth | double? | - | 头像组成员描边宽度。 未设置时按成员尺寸使用小/中/大 1/2/3 逻辑像素。 | 否 |
+| groupBorderColor | Color? | - | 头像组成员描边颜色。 | 否 |
+| groupShadow | BoxShadow? | - | 头像组成员阴影；未设置时使用 1px 水平偏移、2px `blurRadius` 和 15% 黑色。 | 否 |
+
+
+##### TAvatarThemeData.lerp
+
+```dart
+TAvatarThemeData lerp(TAvatarThemeData? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TAvatarThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | TAvatarThemeData? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TAvatarSize

@@ -5,7 +5,48 @@
 ### TSwiper
 #### 简介
 Controller 驱动的轮播组件。
+
+#### 声明
+
+```dart
+class TSwiper extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TSwiper({
+  this.children,
+  this.itemBuilder,
+  this.itemCount,
+  this.controller,
+  this.onChanged,
+  this.loop = false,
+  this.autoplay = false,
+  this.autoplayInterval = const Duration(seconds: 3),
+  this.animationDuration = kThemeAnimationDuration,
+  this.animationCurve = Curves.easeInOut,
+  this.pagination,
+  this.paginationPlacement,
+  this.paginationItemBuilder,
+  this.previousIcon,
+  this.nextIcon,
+  this.pageEffect,
+  this.viewportFraction = 1,
+  this.scrollDirection = Axis.horizontal,
+  this.physics,
+  this.pageSnapping = true,
+  this.padEnds = true,
+  this.clipBehavior = Clip.hardEdge,
+  this.reverse = false,
+  this.dragStartBehavior = DragStartBehavior.start,
+  this.allowImplicitScrolling = false,
+  super.key,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -43,7 +84,21 @@ Controller 驱动的轮播组件。
 使用 `jumpTo`、`animateTo`、`next` 和 `previous` 发起切换，通过 `index`
 或监听 Controller 获取当前业务索引。一个 Controller 同时只能附加一个
 `TSwiper`，由调用方创建的实例也由调用方负责释放。
+
+#### 声明
+
+```dart
+class TSwiperController extends ChangeNotifier
+```
+
 #### 默认构造方法
+
+
+```dart
+TSwiperController({this.initialIndex = 0})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -61,6 +116,11 @@ Controller 驱动的轮播组件。
 
 ##### TSwiperController.animateTo
 
+```dart
+Future<void> animateTo(int index, {Duration? duration, Curve? curve})
+```
+
+
 动画切换到目标页；循环模式始终向前到达目标。
 未提供 `duration` 或 `curve` 时，继承所附加 `TSwiper` 的动画配置。
 
@@ -68,12 +128,17 @@ Controller 驱动的轮播组件。
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| index | int | - | 当前实际展示的业务索引。 | 是 |
+| index | int | - | 目标页面的业务索引，从 0 开始；循环模式向前切换到该页面。 | 是 |
 | duration | Duration? | - | 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。 | 否 |
 | curve | Curve? | - | 本次切换动画曲线；为空时使用绑定 Swiper 的动画配置。 | 否 |
 
 
 ##### TSwiperController.jumpTo
+
+```dart
+void jumpTo(int index)
+```
+
 
 立即跳转到目标页。
 
@@ -81,10 +146,15 @@ Controller 驱动的轮播组件。
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| index | int | - | 当前实际展示的业务索引。 | 是 |
+| index | int | - | 目标页面的业务索引，从 0 开始；超出范围时按绑定 Swiper 的规则归一化。 | 是 |
 
 
 ##### TSwiperController.next
+
+```dart
+Future<void> next({Duration? duration, Curve? curve})
+```
+
 
 切换到下一页。
 未提供 `duration` 或 `curve` 时，继承所附加 `TSwiper` 的动画配置。
@@ -98,6 +168,11 @@ Controller 驱动的轮播组件。
 
 
 ##### TSwiperController.previous
+
+```dart
+Future<void> previous({Duration? duration, Curve? curve})
+```
+
 
 切换到上一页。
 未提供 `duration` 或 `curve` 时，继承所附加 `TSwiper` 的动画配置。
@@ -114,7 +189,34 @@ Controller 驱动的轮播组件。
 #### 简介
 轮播组件级 ThemeExtension。
 保存指示器、内容圆角和切换按钮的视觉默认值。
+
+#### 声明
+
+```dart
+class TSwiperThemeData extends ThemeExtension<TSwiperThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TSwiperThemeData({
+  this.paginationAlignment,
+  this.paginationMargin,
+  this.borderRadius,
+  this.activeColor,
+  this.inactiveColor,
+  this.dotSize,
+  this.activeDotExtent,
+  this.dotSpacing,
+  this.fractionStyle,
+  this.fractionBackgroundColor,
+  this.controlStyle,
+  this.controlIconSize,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -132,10 +234,89 @@ Controller 驱动的轮播组件。
 | paginationMargin | EdgeInsetsGeometry? | - | 指示器外边距。 | 否 |
 
 
+#### 实例方法
+
+##### TSwiperThemeData.copyWith
+
+```dart
+TSwiperThemeData copyWith({
+  AlignmentGeometry? paginationAlignment,
+  EdgeInsetsGeometry? paginationMargin,
+  BorderRadiusGeometry? borderRadius,
+  Color? activeColor,
+  Color? inactiveColor,
+  double? dotSize,
+  double? activeDotExtent,
+  double? dotSpacing,
+  TextStyle? fractionStyle,
+  Color? fractionBackgroundColor,
+  ButtonStyle? controlStyle,
+  double? controlIconSize,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TSwiperThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| paginationAlignment | AlignmentGeometry? | - | 默认指示器对齐方式。 | 否 |
+| paginationMargin | EdgeInsetsGeometry? | - | 指示器外边距。 | 否 |
+| borderRadius | BorderRadiusGeometry? | - | 轮播内容圆角。 | 否 |
+| activeColor | Color? | - | 激活项颜色。 | 否 |
+| inactiveColor | Color? | - | 未激活项颜色。 | 否 |
+| dotSize | double? | - | 圆点直径。 | 否 |
+| activeDotExtent | double? | - | 长条激活项在滚动主轴上的长度。 | 否 |
+| dotSpacing | double? | - | 圆点间距。 | 否 |
+| fractionStyle | TextStyle? | - | 数字指示器文字样式。 | 否 |
+| fractionBackgroundColor | Color? | - | 数字指示器背景色。 | 否 |
+| controlStyle | ButtonStyle? | - | 控制按钮样式。 | 否 |
+| controlIconSize | double? | - | 控制按钮图标尺寸。 | 否 |
+
+
+##### TSwiperThemeData.lerp
+
+```dart
+TSwiperThemeData lerp(TSwiperThemeData? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TSwiperThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | TSwiperThemeData? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
+
+
 ### TSwiperPaginationItemDetails
 #### 简介
 单个轮播指示器标记的状态信息。
+
+#### 声明
+
+```dart
+class TSwiperPaginationItemDetails
+```
+
 #### 默认构造方法
+
+
+```dart
+const TSwiperPaginationItemDetails({
+  required this.index,
+  required this.currentIndex,
+  required this.itemCount,
+  required this.axis,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |

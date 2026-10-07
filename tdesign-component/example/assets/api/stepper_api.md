@@ -11,7 +11,30 @@ TDesign 数值步进器。
 `onChanged` 为 null 时输入框和两个按钮整组禁用。样式优先级为实例
 `size`/`variant`、`TStepperThemeData`、Flutter 子树及全局 ThemeData，
 最后回退 TDesign token。
+
+#### 声明
+
+```dart
+class TStepper extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TStepper({
+  super.key,
+  required this.value,
+  this.onChanged,
+  this.min = 0,
+  this.max = 100,
+  this.step = 1,
+  this.size,
+  this.variant,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -31,7 +54,34 @@ TDesign 数值步进器。
 通过 `ThemeData.extensions` 或 `ThemeData.mergeExtension` 注入。实例参数
 优先于此主题；未设置的文字字段使用全局 TDesign Token，图标及输入装饰
 仍按各自 Flutter 主题解析。
+
+#### 声明
+
+```dart
+class TStepperThemeData extends ThemeExtension<TStepperThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TStepperThemeData({
+  this.inputWidth,
+  this.controlSize,
+  this.iconSize,
+  this.spacing,
+  this.borderRadius,
+  this.borderWidth,
+  this.foregroundColor,
+  this.disabledForegroundColor,
+  this.backgroundColor,
+  this.disabledBackgroundColor,
+  this.borderColor,
+  this.textStyle,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -51,7 +101,52 @@ TDesign 数值步进器。
 
 #### 实例方法
 
+##### TStepperThemeData.copyWith
+
+```dart
+TStepperThemeData copyWith({
+  double? inputWidth,
+  double? controlSize,
+  double? iconSize,
+  double? spacing,
+  BorderRadius? borderRadius,
+  double? borderWidth,
+  Color? foregroundColor,
+  Color? disabledForegroundColor,
+  Color? backgroundColor,
+  Color? disabledBackgroundColor,
+  Color? borderColor,
+  TextStyle? textStyle,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TStepperThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| inputWidth | double? | - | 输入段宽度；为空时 small、medium、large 分别为 34、38、45。 | 否 |
+| controlSize | double? | - | 控件高度及按钮宽度；为空时三档尺寸分别为 20、24、26。 | 否 |
+| iconSize | double? | - | 加减图标尺寸；为空时三档尺寸分别为 12、16、20。 | 否 |
+| spacing | double? | - | normal 和 filled 形态的分段间距，默认 4；outline 不使用。 | 否 |
+| borderRadius | BorderRadius? | - | 分段圆角，默认使用 TDesign `radiusSmall`。 | 否 |
+| borderWidth | double? | - | outline 形态的描边宽度，默认 1。 | 否 |
+| foregroundColor | Color? | - | 输入文字和加减图标的默认前景色。 | 否 |
+| disabledForegroundColor | Color? | - | 边界按钮及整组禁用时的前景色。 | 否 |
+| backgroundColor | Color? | - | filled 形态各段的背景色。 | 否 |
+| disabledBackgroundColor | Color? | - | 整组禁用时 filled 和 outline 形态各段的背景色。 | 否 |
+| borderColor | Color? | - | outline 形态的描边颜色。 | 否 |
+| textStyle | TextStyle? | - | 输入文本样式，可覆盖继承样式中的字号、行高和前景色。 仅覆盖字号时会按最终字号重新计算默认行高倍数；显式行高始终优先。最终 字号或显式物理行盒超过控件高度属于无效配置，并会在调试模式触发断言。 | 否 |
+
+
 ##### TStepperThemeData.lerp
+
+```dart
+TStepperThemeData lerp(ThemeExtension<TStepperThemeData>? other, double t)
+```
+
 
 插值保留未指定字段的继承语义，由组件结合当前实例尺寸与主题解析。
 两端均未指定的字段仍为 null；端点返回原始配置。

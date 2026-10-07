@@ -6,7 +6,29 @@
 #### 简介
 TDesign 表单容器。
 校验和字段生命周期委托给 Flutter `Form` 与 `FormState`。
+
+#### 声明
+
+```dart
+class TForm extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TForm({
+  super.key,
+  required this.child,
+  this.controller,
+  this.autovalidateMode,
+  this.onChanged,
+  this.onSubmit,
+  this.showErrorMessage = true,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -22,8 +44,19 @@ TDesign 表单容器。
 ### TFormState
 #### 简介
 `TForm` 的公开状态。
+
+#### 声明
+
+```dart
+class TFormState extends State<TForm>
+```
+
 #### 默认构造方法
-`TFormState()`
+
+
+```dart
+TFormState()
+```
 
 #### 公开属性（字段与访问器）
 
@@ -35,6 +68,11 @@ TDesign 表单容器。
 #### 实例方法
 
 ##### TFormState.clearValidate
+
+```dart
+void clearValidate({Iterable<String>? fields})
+```
+
 
 清除全部或指定字段的校验状态。
 同时清除通过 `setValidateMessage` 注入的外部错误。
@@ -48,12 +86,22 @@ TDesign 表单容器。
 
 ##### TFormState.reset
 
+```dart
+void reset()
+```
+
+
 重置 Flutter 字段的交互和校验状态，并清除外部错误。
 字段值由业务受控状态所有；调用方应自行恢复 `TFormField.value`。
 
 返回类型：`void`
 
 ##### TFormState.setValidateMessage
+
+```dart
+void setValidateMessage(Map<String, String?> messages)
+```
+
 
 设置字段的外部校验错误。
 常用于服务端校验。传入 `null` 的字段会清除对应外部错误；外部错误
@@ -68,11 +116,21 @@ TDesign 表单容器。
 
 ##### TFormState.submit
 
+```dart
+bool submit()
+```
+
+
 校验并在成功时触发 `TForm.onSubmit`。
 
 返回类型：`bool`
 
 ##### TFormState.validate
+
+```dart
+bool validate({Iterable<String>? fields})
+```
+
 
 运行表单字段校验。
 未注册或尚未构建完成的字段视为校验失败。
@@ -87,8 +145,19 @@ TDesign 表单容器。
 ### TFormController
 #### 简介
 命令式触发表单提交、校验和重置。
+
+#### 声明
+
+```dart
+class TFormController
+```
+
 #### 默认构造方法
-`TFormController()`
+
+
+```dart
+TFormController()
+```
 
 #### 公开属性（字段与访问器）
 
@@ -101,6 +170,11 @@ TDesign 表单容器。
 
 ##### TFormController.clearValidate
 
+```dart
+void clearValidate({Iterable<String>? fields})
+```
+
+
 清除全部或指定字段的校验状态。
 
 返回类型：`void`
@@ -112,11 +186,21 @@ TDesign 表单容器。
 
 ##### TFormController.reset
 
+```dart
+void reset()
+```
+
+
 重置表单。
 
 返回类型：`void`
 
 ##### TFormController.setValidateMessage
+
+```dart
+void setValidateMessage(Map<String, String?> messages)
+```
+
 
 设置字段的外部校验错误。
 
@@ -129,11 +213,21 @@ TDesign 表单容器。
 
 ##### TFormController.submit
 
+```dart
+bool submit()
+```
+
+
 校验并提交表单。
 
 返回类型：`bool`
 
 ##### TFormController.validate
+
+```dart
+bool validate({Iterable<String>? fields})
+```
+
 
 运行表单字段校验。
 
@@ -147,7 +241,32 @@ TDesign 表单容器。
 ### TFormField
 #### 简介
 将严格受控组件接入 Flutter `FormField` 的字段桥接组件。
+
+#### 声明
+
+```dart
+class TFormField<T> extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TFormField({
+  super.key,
+  required this.name,
+  required this.value,
+  required this.builder,
+  this.onChanged,
+  this.required = false,
+  this.requiredMessage = '此项不能为空',
+  this.validator,
+  this.onSaved,
+  this.autovalidateMode,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -166,7 +285,33 @@ TDesign 表单容器。
 ### TFormItem
 #### 简介
 表单项的标签和字段布局容器。
+
+#### 声明
+
+```dart
+class TFormItem extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TFormItem({
+  super.key,
+  required this.child,
+  this.label,
+  this.leading,
+  this.required,
+  this.help,
+  this.errorText,
+  this.extra,
+  this.verticalAlignment,
+  this.contentAlignment,
+  this.showErrorMessage = true,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -186,7 +331,38 @@ TDesign 表单容器。
 ### TFormThemeData
 #### 简介
 TForm 组件级 ThemeExtension。
+
+#### 声明
+
+```dart
+class TFormThemeData extends ThemeExtension<TFormThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TFormThemeData({
+  this.showColon,
+  this.labelWidth,
+  this.layout,
+  this.labelAlign,
+  this.requiredMarkPosition,
+  this.labelStyle,
+  this.requiredMarkStyle,
+  this.helpStyle,
+  this.errorStyle,
+  this.backgroundColor,
+  this.borderColor,
+  this.itemPadding,
+  this.itemSpacing,
+  this.labelGap,
+  this.leadingGap,
+  this.messageGap,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -206,6 +382,74 @@ TForm 组件级 ThemeExtension。
 | requiredMarkPosition | TFormRequiredMarkPosition? | - | 必填标记位置。 | 否 |
 | requiredMarkStyle | TextStyle? | - | 必填标记样式。 | 否 |
 | showColon | bool? | - | 是否在标签末尾显示冒号。 | 否 |
+
+
+#### 实例方法
+
+##### TFormThemeData.copyWith
+
+```dart
+TFormThemeData copyWith({
+  bool? showColon,
+  double? labelWidth,
+  TFormLayout? layout,
+  TextAlign? labelAlign,
+  TFormRequiredMarkPosition? requiredMarkPosition,
+  TextStyle? labelStyle,
+  TextStyle? requiredMarkStyle,
+  TextStyle? helpStyle,
+  TextStyle? errorStyle,
+  Color? backgroundColor,
+  Color? borderColor,
+  EdgeInsetsGeometry? itemPadding,
+  double? itemSpacing,
+  double? labelGap,
+  double? leadingGap,
+  double? messageGap,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TFormThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| showColon | bool? | - | 是否在标签末尾显示冒号。 | 否 |
+| labelWidth | double? | - | 默认标签宽度；为空时表单项使用 80dp。 | 否 |
+| layout | TFormLayout? | - | 表单项布局方向。 | 否 |
+| labelAlign | TextAlign? | - | 标签对齐方式。 | 否 |
+| requiredMarkPosition | TFormRequiredMarkPosition? | - | 必填标记位置。 | 否 |
+| labelStyle | TextStyle? | - | 标签样式。 | 否 |
+| requiredMarkStyle | TextStyle? | - | 必填标记样式。 | 否 |
+| helpStyle | TextStyle? | - | 辅助说明样式。 | 否 |
+| errorStyle | TextStyle? | - | 错误文案样式。 | 否 |
+| backgroundColor | Color? | - | 表单及表单项背景色。 | 否 |
+| borderColor | Color? | - | 表单项底部分隔线颜色。 | 否 |
+| itemPadding | EdgeInsetsGeometry? | - | 表单项内边距。 | 否 |
+| itemSpacing | double? | - | 表单项间距。 | 否 |
+| labelGap | double? | - | 标签与字段的垂直间距。 | 否 |
+| leadingGap | double? | - | 前置内容与标签区域的间距。 | 否 |
+| messageGap | double? | - | 字段与辅助或错误文案的间距。 | 否 |
+
+
+##### TFormThemeData.lerp
+
+```dart
+TFormThemeData lerp(ThemeExtension<TFormThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TFormThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TFormThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TFormLayout

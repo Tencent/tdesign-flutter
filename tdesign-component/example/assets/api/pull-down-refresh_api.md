@@ -9,8 +9,38 @@ TDesign 下拉刷新组件。
 （小程序 / mobile-vue）PullDownRefresh 的行为表现：
 下拉 → 松手 → 刷新 → 完成四态，支持触底加载、超时、
 四态文案自定义与受控刷新。
+默认刷新头的背景和提示文字读取 `TThemeData` 的全局 Token。
+刷新中复用 `TLoadingThemeData`：强制横向布局，未设置 `textColor` 时
+使用禁用文字色；其他 Loading 主题配置继续继承。
 典型用法：
+
+#### 声明
+
+```dart
+class TPullDownRefresh extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TPullDownRefresh({
+  super.key,
+  required this.child,
+  this.onRefresh,
+  this.onLoadMore,
+  this.lowerThreshold = 50,
+  this.controller,
+  this.texts,
+  this.refreshTimeout = const Duration(milliseconds: 3000),
+  this.loadingBarHeight = 50,
+  this.maxBarHeight = 80,
+  this.successDuration = const Duration(milliseconds: 500),
+  this.onStateChanged,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -38,13 +68,29 @@ TDesign 下拉刷新组件。
 底层刷新控制器的所有权归 `TPullDownRefresh` 的 State 独占管理：
 State 在 `initState` 中创建、在 `dispose` 中释放。本控制器不拥有需要调用方
 释放的资源，因此不提供公开 `dispose()`。
+
+#### 声明
+
+```dart
+class TPullDownRefreshController
+```
+
 #### 默认构造方法
-`TPullDownRefreshController()`
+
+
+```dart
+TPullDownRefreshController()
+```
 
 
 #### 实例方法
 
 ##### TPullDownRefreshController.refresh
+
+```dart
+Future<void> refresh()
+```
+
 
 从页面外部主动触发一次下拉刷新。
 `await refresh()` 表示这次刷新流程已经结束，不代表业务一定成功；
@@ -58,7 +104,26 @@ State 在 `initState` 中创建、在 `dispose` 中释放。本控制器不拥�
 下拉刷新四态提示语。
 对应官方（小程序 / mobile-vue）`loadingTexts: string[]` 数组，
 覆盖「下拉刷新 / 松手刷新 / 正在刷新 / 刷新完成」四个阶段的文案。
+
+#### 声明
+
+```dart
+class TPullDownRefreshTexts
+```
+
 #### 默认构造方法
+
+
+```dart
+const TPullDownRefreshTexts({
+  required this.pullToRefresh,
+  required this.releaseToRefresh,
+  required this.refreshing,
+  required this.refreshComplete,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |

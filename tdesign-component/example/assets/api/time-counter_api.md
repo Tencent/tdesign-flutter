@@ -5,7 +5,34 @@
 ### TTimeCounter
 #### 简介
 通用计时器组件，支持正向计时与倒计时。
+
+#### 声明
+
+```dart
+class TTimeCounter extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TTimeCounter({
+  super.key,
+  this.autoStart = true,
+  this.content,
+  this.format = 'HH:mm:ss',
+  this.size,
+  this.splitWithUnit = false,
+  this.variant,
+  required this.time,
+  this.onChanged,
+  this.onFinish,
+  this.direction = TTimeCounterDirection.down,
+  this.controller,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -28,19 +55,40 @@
 计时器控制器，可控制开始、暂停和重置。
 Controller 由调用方创建并负责释放。绑定多个 `TTimeCounter` 时，
 每条命令会广播给所有已绑定组件。
+
+#### 声明
+
+```dart
+class TTimeCounterController extends ChangeNotifier
+```
+
 #### 默认构造方法
-`TTimeCounterController()`
+
+
+```dart
+TTimeCounterController()
+```
 
 
 #### 实例方法
 
 ##### TTimeCounterController.pause
 
+```dart
+void pause()
+```
+
+
 暂停计时。
 
 返回类型：`void`
 
 ##### TTimeCounterController.reset
+
+```dart
+void reset([int? time])
+```
+
 
 重置计时并保持暂停；`time` 为空时恢复为组件当前配置的时长。
 重置后如需继续计时，请显式调用 `start`。
@@ -55,6 +103,11 @@ Controller 由调用方创建并负责释放。绑定多个 `TTimeCounter` 时�
 
 ##### TTimeCounterController.start
 
+```dart
+void start()
+```
+
+
 开始或继续计时。
 
 返回类型：`void`
@@ -64,7 +117,27 @@ Controller 由调用方创建并负责释放。绑定多个 `TTimeCounter` 时�
 计时器组件的具体视觉默认值。
 尺寸档位与形态由 `TTimeCounter.size` / `variant` 唯一选择；未设置的视觉值
 在使用时回退当前 TDesign 全局 Token，而不是在 Theme 中冻结默认值。
+
+#### 声明
+
+```dart
+class TTimeCounterThemeData extends ThemeExtension<TTimeCounterThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TTimeCounterThemeData({
+  this.defaultTextColor,
+  this.blockTextColor,
+  this.blockBackgroundColor,
+  this.squareBorderRadius,
+  this.roundBorderRadius,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -73,6 +146,55 @@ Controller 由调用方创建并负责释放。绑定多个 `TTimeCounter` 时�
 | defaultTextColor | Color? | - | 纯文本计时数字颜色；未设置时回退 `textColorPrimary`。 | 否 |
 | roundBorderRadius | double? | - | 圆形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusCircle`。 默认数字块宽高相等，故固定大半径显示为正圆。自定义较小半径时显示 对应的圆角方块，不再被固定 `BoxShape.circle` 忽略。 | 否 |
 | squareBorderRadius | double? | - | 方形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusSmall`。 | 否 |
+
+
+#### 实例方法
+
+##### TTimeCounterThemeData.copyWith
+
+```dart
+TTimeCounterThemeData copyWith({
+  Color? defaultTextColor,
+  Color? blockTextColor,
+  Color? blockBackgroundColor,
+  double? squareBorderRadius,
+  double? roundBorderRadius,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TTimeCounterThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| defaultTextColor | Color? | - | 纯文本计时数字颜色；未设置时回退 `textColorPrimary`。 | 否 |
+| blockTextColor | Color? | - | 圆形、方形数字块的文字颜色；未设置时回退 `textColorAnti`。 | 否 |
+| blockBackgroundColor | Color? | - | 圆形、方形数字块的背景色；未设置时回退 `errorColor`。 | 否 |
+| squareBorderRadius | double? | - | 方形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusSmall`。 | 否 |
+| roundBorderRadius | double? | - | 圆形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusCircle`。 默认数字块宽高相等，故固定大半径显示为正圆。自定义较小半径时显示 对应的圆角方块，不再被固定 `BoxShape.circle` 忽略。 | 否 |
+
+
+##### TTimeCounterThemeData.lerp
+
+```dart
+TTimeCounterThemeData lerp(
+  ThemeExtension<TTimeCounterThemeData>? other,
+  double t,
+)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TTimeCounterThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TTimeCounterThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TTimeCounterDirection

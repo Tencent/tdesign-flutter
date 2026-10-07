@@ -6,9 +6,26 @@
 #### 简介
 在内容加载前展示页面结构的占位组件。
 
+#### 声明
+
+```dart
+class TSkeleton extends StatefulWidget
+```
+
+
 #### 命名构造方法
 
 ##### TSkeleton.custom
+
+```dart
+const TSkeleton.custom({
+  super.key,
+  required TSkeletonLayout layout,
+  this.animation,
+  this.delay = Duration.zero,
+})
+```
+
 
 使用自定义行列布局创建骨架屏。
 
@@ -20,6 +37,18 @@
 | delay | Duration | Duration.zero | 骨架屏的延迟显示时间，用于避免短请求产生闪烁。 | 否 |
 
 #### 默认构造方法
+
+
+```dart
+const TSkeleton({
+  super.key,
+  TSkeletonVariant variant = TSkeletonVariant.text,
+  this.animation,
+  this.delay = Duration.zero,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -38,7 +67,21 @@
 ### TSkeletonLayout
 #### 简介
 骨架屏的行列布局。
+
+#### 声明
+
+```dart
+class TSkeletonLayout
+```
+
 #### 默认构造方法
+
+
+```dart
+const TSkeletonLayout({required this.rows, this.rowSpacing})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -49,7 +92,25 @@
 ### TSkeletonBlockStyle
 #### 简介
 单个骨架块的视觉样式。
+
+#### 声明
+
+```dart
+class TSkeletonBlockStyle
+```
+
 #### 默认构造方法
+
+
+```dart
+const TSkeletonBlockStyle({
+  this.color,
+  this.borderRadius,
+  this.shape = TSkeletonBlockShape.rounded,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -62,9 +123,27 @@
 #### 简介
 骨架屏中的一个占位块。
 
+#### 声明
+
+```dart
+class TSkeletonBlock
+```
+
+
 #### 命名构造方法
 
 ##### TSkeletonBlock.circle
+
+```dart
+const TSkeletonBlock.circle({
+  this.width = 48,
+  this.height = 48,
+  this.flex,
+  this.margin = EdgeInsets.zero,
+  this.style = const TSkeletonBlockStyle(shape: TSkeletonBlockShape.circle),
+})
+```
+
 
 圆形占位块。
 
@@ -79,6 +158,17 @@
 
 ##### TSkeletonBlock.line
 
+```dart
+const TSkeletonBlock.line({
+  this.width,
+  this.height = 16,
+  this.flex = 1,
+  this.margin = EdgeInsets.zero,
+  this.style = const TSkeletonBlockStyle(),
+})
+```
+
+
 文本行占位块。
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
@@ -91,6 +181,19 @@
 
 
 ##### TSkeletonBlock.rectangle
+
+```dart
+const TSkeletonBlock.rectangle({
+  this.width,
+  this.height = 16,
+  this.flex = 1,
+  this.margin = EdgeInsets.zero,
+  this.style = const TSkeletonBlockStyle(
+    shape: TSkeletonBlockShape.rectangle,
+  ),
+})
+```
+
 
 无圆角矩形占位块。
 
@@ -105,6 +208,16 @@
 
 ##### TSkeletonBlock.spacer
 
+```dart
+const TSkeletonBlock.spacer({
+  this.width,
+  this.height,
+  this.flex,
+  this.margin = EdgeInsets.zero,
+})
+```
+
+
 透明间隔块。
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
@@ -115,6 +228,19 @@
 | margin | EdgeInsets | EdgeInsets.zero | 外边距。 | 否 |
 
 #### 默认构造方法
+
+
+```dart
+const TSkeletonBlock({
+  this.width,
+  this.height = 16,
+  this.flex = 1,
+  this.margin = EdgeInsets.zero,
+  this.style = const TSkeletonBlockStyle(),
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -135,7 +261,26 @@
 #### 简介
 骨架屏组件级 ThemeExtension。
 仅保存占位块的视觉和布局默认值；动画、延迟与具体布局由实例决定。
+
+#### 声明
+
+```dart
+class TSkeletonThemeData extends ThemeExtension<TSkeletonThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TSkeletonThemeData({
+  this.blockColor,
+  this.highlightColor,
+  this.borderRadius,
+  this.rowSpacing,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -143,6 +288,50 @@
 | borderRadius | double? | - | 普通占位块圆角。 | 否 |
 | highlightColor | Color? | - | 渐变动画高亮色。 | 否 |
 | rowSpacing | double? | - | 多行布局的默认行间距。 | 否 |
+
+
+#### 实例方法
+
+##### TSkeletonThemeData.copyWith
+
+```dart
+TSkeletonThemeData copyWith({
+  Color? blockColor,
+  Color? highlightColor,
+  double? borderRadius,
+  double? rowSpacing,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TSkeletonThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| blockColor | Color? | - | 占位块背景色。 | 否 |
+| highlightColor | Color? | - | 渐变动画高亮色。 | 否 |
+| borderRadius | double? | - | 普通占位块圆角。 | 否 |
+| rowSpacing | double? | - | 多行布局的默认行间距。 | 否 |
+
+
+##### TSkeletonThemeData.lerp
+
+```dart
+TSkeletonThemeData lerp(TSkeletonThemeData? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TSkeletonThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | TSkeletonThemeData? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TSkeletonAnimation

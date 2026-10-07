@@ -5,7 +5,32 @@
 ### TRate
 #### 简介
 严格受控的评分组件。
+
+#### 声明
+
+```dart
+class TRate extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TRate({
+  super.key,
+  required this.value,
+  this.onChanged,
+  this.onChangeStart,
+  this.onChangeEnd,
+  this.count = 5,
+  this.allowHalf = false,
+  this.showValueIndicator = true,
+  this.icon,
+  this.texts,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -24,7 +49,30 @@
 ### TRateThemeData
 #### 简介
 TRate 组件级 ThemeExtension。
+
+#### 声明
+
+```dart
+class TRateThemeData extends ThemeExtension<TRateThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TRateThemeData({
+  this.starColor,
+  this.inactiveStarColor,
+  this.iconSize,
+  this.iconGap,
+  this.textWidth,
+  this.textGap,
+  this.textStyle,
+  this.overlayBoxShadow,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -36,6 +84,58 @@ TRate 组件级 ThemeExtension。
 | textGap | double? | - | 图标与文案间距。 | 否 |
 | textStyle | TextStyle? | - | 文案样式。 | 否 |
 | textWidth | double? | - | 文案宽度。 | 否 |
+
+
+#### 实例方法
+
+##### TRateThemeData.copyWith
+
+```dart
+TRateThemeData copyWith({
+  Color? starColor,
+  Color? inactiveStarColor,
+  double? iconSize,
+  double? iconGap,
+  double? textWidth,
+  double? textGap,
+  TextStyle? textStyle,
+  List<BoxShadow>? overlayBoxShadow,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TRateThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| starColor | Color? | - | 选中星标颜色。 | 否 |
+| inactiveStarColor | Color? | - | 未选中星标颜色。 | 否 |
+| iconSize | double? | - | 图标尺寸。 | 否 |
+| iconGap | double? | - | 图标间距。 | 否 |
+| textWidth | double? | - | 文案宽度。 | 否 |
+| textGap | double? | - | 图标与文案间距。 | 否 |
+| textStyle | TextStyle? | - | 文案样式。 | 否 |
+| overlayBoxShadow | List&lt;BoxShadow&gt;? | - | 当前值提示与半星选择浮层阴影。 | 否 |
+
+
+##### TRateThemeData.lerp
+
+```dart
+TRateThemeData lerp(ThemeExtension<TRateThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TRateThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TRateThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TRateIconBuilder

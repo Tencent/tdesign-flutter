@@ -104,6 +104,7 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
   /// 字号或显式物理行盒超过控件高度属于无效配置，并会在调试模式触发断言。
   final TextStyle? textStyle;
 
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TStepperThemeData copyWith({
     double? inputWidth,

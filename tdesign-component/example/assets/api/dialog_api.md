@@ -8,9 +8,29 @@
 组件负责面板内容和操作区；使用 `show` 时，通过 Flutter 模态路由处理
 蒙层、动画和安全区。
 
+#### 声明
+
+```dart
+class TDialog extends StatelessWidget
+```
+
+
 #### 静态方法
 
 ##### TDialog.show
+
+```dart
+static Future<T?> show<T>(
+  BuildContext context, {
+  required Widget dialog,
+  bool barrierDismissible = false,
+  T? barrierResult,
+  Color? barrierColor,
+  bool useRootNavigator = true,
+  bool useSafeArea = true,
+})
+```
+
 
 使用居中模态路由展示 Dialog。
 显式开启后，蒙层关闭成功时返回 `barrierResult`（默认 null）；
@@ -31,6 +51,24 @@
 | useSafeArea | bool | true | 是否使用 SafeArea 避让系统区域，默认 true。 | 否 |
 
 #### 默认构造方法
+
+
+```dart
+const TDialog({
+  super.key,
+  this.title,
+  this.content,
+  this.actions = const <TDialogAction>[],
+  this.actionsWidget,
+  this.showCloseButton = false,
+  this.closeButtonResult,
+  this.semanticLabel,
+  EdgeInsetsGeometry? actionsPadding,
+  double? actionSpacing,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -54,7 +92,31 @@ Dialog 操作项。
 `colorPreset` 和 `style` 用于确有需要时覆盖单个操作的默认样式。
 一到两个操作全部显式使用 `TButtonVariant.text` 时，`TDialog` 会使用带分隔线的
 贴边文字按钮 Footer；只改变某一个操作的变体不会切换整个 Footer 布局。
+
+#### 声明
+
+```dart
+class TDialogAction
+```
+
 #### 默认构造方法
+
+
+```dart
+const TDialogAction({
+  required this.child,
+  this.result,
+  this.onPressed,
+  this.role = TDialogActionRole.normal,
+  this.closeOnPressed = true,
+  this.disabled = false,
+  this.variant,
+  this.colorPreset,
+  this.style,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -75,7 +137,34 @@ Dialog 操作项。
 内置操作使用 `TDialogActionRole.primary`，默认渲染为品牌色填充按钮。需要多个
 操作、文字按钮 Footer 或其他按钮变体时，使用 `TDialog` 和
 `TDialog.actions` 组合 `TDialogAction`。
+
+#### 声明
+
+```dart
+class TConfirmDialog extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TConfirmDialog({
+  super.key,
+  this.title,
+  this.content,
+  this.contentWidget,
+  this.buttonText,
+  this.onPressed,
+  this.result = true,
+  this.closeOnPressed = true,
+  this.showCloseButton = false,
+  this.closeButtonResult,
+  this.semanticLabel,
+  this.buttonStyle,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -99,9 +188,21 @@ TDialog 组件级 ThemeExtension
 通过 Theme 子树注入，控制子树的默认对话框样式。
 面板视觉值由本扩展统一配置；未设置时回退 Flutter DialogTheme 与全局 Token。
 
+#### 声明
+
+```dart
+class TDialogThemeData extends ThemeExtension<TDialogThemeData>
+```
+
+
 #### 静态方法
 
 ##### TDialogThemeData.lerpDouble
+
+```dart
+static double? lerpDouble(double? a, double? b, double t)
+```
+
 
 对 `a` 和 `b` 按 `t` 线性插值；两端均为 null 时返回 null，仅一端为 null 时按 0 参与计算。
 
@@ -114,6 +215,22 @@ TDialog 组件级 ThemeExtension
 | t | double | - | 插值进度；0 表示起点，1 表示终点。 | 是 |
 
 #### 默认构造方法
+
+
+```dart
+const TDialogThemeData({
+  this.backgroundColor,
+  this.shape,
+  this.elevation,
+  this.titleTextStyle,
+  this.contentTextStyle,
+  this.contentPadding,
+  this.maxHeight,
+  this.width,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -129,7 +246,62 @@ TDialog 组件级 ThemeExtension
 
 #### 实例方法
 
+##### TDialogThemeData.copyWith
+
+```dart
+TDialogThemeData copyWith({
+  Color? backgroundColor,
+  ShapeBorder? shape,
+  double? elevation,
+  TextStyle? titleTextStyle,
+  TextStyle? contentTextStyle,
+  EdgeInsetsGeometry? contentPadding,
+  double? maxHeight,
+  double? width,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TDialogThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景色（对应 Material `DialogThemeData.backgroundColor`） | 否 |
+| shape | ShapeBorder? | - | 形状（圆角；对应 Material `DialogThemeData.shape`） | 否 |
+| elevation | double? | - | 阴影（对应 Material `DialogThemeData.elevation`） | 否 |
+| titleTextStyle | TextStyle? | - | 标题文案样式（对应 Material `DialogThemeData.titleTextStyle`） | 否 |
+| contentTextStyle | TextStyle? | - | 内容文案样式（对应 Material `DialogThemeData.contentTextStyle`） | 否 |
+| contentPadding | EdgeInsetsGeometry? | - | 内容内边距（对应 Material `Dialog` 的 contentPadding；TDesign 扩展） | 否 |
+| maxHeight | double? | - | 面板最大高度。 | 否 |
+| width | double? | - | 弹窗宽度 | 否 |
+
+
+##### TDialogThemeData.lerp
+
+```dart
+TDialogThemeData lerp(ThemeExtension<TDialogThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TDialogThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TDialogThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
+
+
 ##### TDialogThemeData.merge
+
+```dart
+TDialogThemeData merge(TDialogThemeData? other)
+```
+
 
 合并两个 ThemeExtension，`other` 优先于 this
 

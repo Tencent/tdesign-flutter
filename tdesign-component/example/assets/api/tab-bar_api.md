@@ -6,7 +6,36 @@
 #### 简介
 底部标签栏
 支持文本、图文、图标与双层级内容，并将选项样式与容器外形作为独立配置。
+
+#### 声明
+
+```dart
+class TTabBar extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+TTabBar({
+  Key? key,
+  required this.type,
+  required this.navigationTabs,
+  this.itemStyle = TTabBarItemStyle.label,
+  this.style = TTabBarStyle.filled,
+  this.iconTextLayout = TTabBarIconTextLayout.stacked,
+  this.split = false,
+  this.useSafeArea = true,
+  this.needInkWell = false,
+  this.indicatorAnimation = TTabBarIndicatorAnimation.none,
+  this.animationDuration,
+  this.animationCurve,
+  required this.value,
+  this.onChanged,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -29,7 +58,32 @@
 ### TTabBarItemConfig
 #### 简介
 单个 tab 配置
+
+#### 声明
+
+```dart
+class TTabBarItemConfig
+```
+
 #### 默认构造方法
+
+
+```dart
+const TTabBarItemConfig({
+  this.onTap,
+  this.selectedIcon,
+  this.unselectedIcon,
+  this.tabText,
+  this.selectTabTextStyle,
+  this.unselectTabTextStyle,
+  this.badge,
+  this.popUpButtonConfig,
+  this.onLongPress,
+  this.allowMultipleTaps = false,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -48,7 +102,25 @@
 ### TTabBarPopUpBtnConfig
 #### 简介
 展开项配置
+
+#### 声明
+
+```dart
+class TTabBarPopUpBtnConfig
+```
+
 #### 默认构造方法
+
+
+```dart
+TTabBarPopUpBtnConfig({
+  required this.items,
+  required this.onChanged,
+  this.popUpDialogConfig,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -60,7 +132,28 @@
 ### TTabBarPopUpShapeConfig
 #### 简介
 弹窗UI配置
+
+#### 声明
+
+```dart
+class TTabBarPopUpShapeConfig
+```
+
 #### 默认构造方法
+
+
+```dart
+TTabBarPopUpShapeConfig({
+  this.popUpWidth,
+  this.popUpItemHeight = _kDefaultMenuItemHeight,
+  this.backgroundColor,
+  this.radius,
+  this.arrowWidth,
+  this.arrowHeight,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -75,7 +168,26 @@
 ### TTabBarMenuItem
 #### 简介
 弹窗菜单item
+
+#### 声明
+
+```dart
+class TTabBarMenuItem extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TTabBarMenuItem({
+  Key? key,
+  this.itemWidget,
+  required this.value,
+  this.alignment = AlignmentDirectional.center,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -89,7 +201,29 @@
 #### 简介
 底部标签栏 ThemeExtension
 管理 TTabBar 的子树级视觉默认值（高度、颜色与分割线等）。
+
+#### 声明
+
+```dart
+class TTabBarThemeData extends ThemeExtension<TTabBarThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TTabBarThemeData({
+  this.barHeight,
+  this.selectedBgColor,
+  this.unselectedBgColor,
+  this.backgroundColor,
+  this.dividerHeight,
+  this.dividerThickness,
+  this.dividerColor,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -100,6 +234,56 @@
 | dividerThickness | double? | - | 默认分割线厚度 | 否 |
 | selectedBgColor | Color? | - | 默认选中时背景颜色 | 否 |
 | unselectedBgColor | Color? | - | 默认未选中时背景颜色 | 否 |
+
+
+#### 实例方法
+
+##### TTabBarThemeData.copyWith
+
+```dart
+TTabBarThemeData copyWith({
+  double? barHeight,
+  Color? selectedBgColor,
+  Color? unselectedBgColor,
+  Color? backgroundColor,
+  double? dividerHeight,
+  double? dividerThickness,
+  Color? dividerColor,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TTabBarThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| barHeight | double? | - | 默认高度 | 否 |
+| selectedBgColor | Color? | - | 默认选中时背景颜色 | 否 |
+| unselectedBgColor | Color? | - | 默认未选中时背景颜色 | 否 |
+| backgroundColor | Color? | - | 默认背景颜色 | 否 |
+| dividerHeight | double? | - | 默认分割线高度 | 否 |
+| dividerThickness | double? | - | 默认分割线厚度 | 否 |
+| dividerColor | Color? | - | 竖向分割线颜色；未设置时读取全局灰阶 3。 | 否 |
+
+
+##### TTabBarThemeData.lerp
+
+```dart
+TTabBarThemeData lerp(ThemeExtension<TTabBarThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TTabBarThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TTabBarThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TTabBarType

@@ -11,9 +11,26 @@
 
 配置项见 `TPopupOptions`；方向见 `TPopupPlacement`。
 
+#### 声明
+
+```dart
+final class TPopup
+```
+
+
 #### 静态方法
 
 ##### TPopup.show
+
+```dart
+static TPopupHandle show(
+  BuildContext context, {
+  required TPopupOptions options,
+  BuildContext? navigatorContext,
+  bool useRootNavigator = false,
+})
+```
+
 
 打开浮层并压入独立 `PopupRoute`。
 返回 `TPopupHandle`，可用 `TPopupHandle.close`、`TPopupHandle.open`、
@@ -35,7 +52,26 @@
 Popup 标准头部布局。
 本组件只负责取消按钮、标题和确认按钮的布局，不注入默认内容或业务行为。
 需要关闭 Popup 时，在 `TPopupOptions.headerBuilder` 中构建按钮并调用其 `close` 参数。
+
+#### 声明
+
+```dart
+class TPopupHeader extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TPopupHeader({
+  super.key,
+  this.cancelButton,
+  this.title,
+  this.confirmButton,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -75,94 +111,239 @@ Popup 标准头部布局。
 单次打开的显式尺寸、面板颜色、圆角、动画时长及蒙层颜色优先于
 `TPopupThemeData` 的子树默认值；未指定的字段分别从组件 Theme 补足。
 
+#### 声明
+
+```dart
+class TPopupOptions
+```
+
+
 #### 工厂构造方法
 
-##### 通用参数
-
-以下参数由各命名工厂统一透传，含义一致：
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
-| --- | --- | --- | --- | --- |
-| animationDuration | Duration? | - | 打开/关闭动画时长，默认 240ms（与小程序公开 duration 默认值一致）。 | 否 |
-| backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 | 否 |
-| child | Widget | - | 浮层主体内容（必填）。 | 是 |
-| destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 | 否 |
-| onClosed | VoidCallback? | - | 当前展示周期真正结束。 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。 | 否 |
-| onOpened | VoidCallback? | - | 打开动画结束。 | 否 |
-| onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 `TPopupTrigger`。 | 否 |
-| overlay | TPopupOverlayConfig? | - | 蒙层行为配置；为 null 时使用 `TPopupOverlayConfig` 默认值（标准模态弹层）。 | 否 |
-| radius | double? | - | 内容区圆角。 `TPopupPlacement.top`、`TPopupPlacement.bottom`、`TPopupPlacement.center` 默认取主题大圆角；`TPopupPlacement.left`、`TPopupPlacement.right` 默认**无圆角**（对齐官方全高矩形），仅当显式设置本字段或通过 `TPopupThemeData.panelRadius` 注入时应用圆角。 | 否 |
-| useSafeArea | bool | false | 是否避让系统安全区，默认 false；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。需要避让时显式设为 true； 也可以在 `child` 内使用 Flutter 原生 `SafeArea`，只约束内容而保留面板背景贴边。 | 否 |
-
-
 ##### TPopupOptions.bottom
+
+```dart
+factory TPopupOptions.bottom({
+  required Widget child,
+  double? height,
+  TPopupBottomInset? inset,
+  TPopupHeaderBuilder? headerBuilder,
+  double? radius,
+  Color? backgroundColor,
+  TPopupOverlayConfig? overlay,
+  bool destroyOnClose = false,
+  Duration? animationDuration,
+  VoidCallback? onOpened,
+  VoidCallback? onClosed,
+  TPopupVisibleChangeCallback? onVisibleChange,
+  bool useSafeArea = false,
+})
+```
+
 
 创建 `TPopupPlacement.bottom` 配置。
 固定 `placement` 为 `TPopupPlacement.bottom`；默认不显示头部。
 蒙层、动画、生命周期等字段语义见同名成员文档。
 
-其余参数见「通用参数」。
-
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
+| child | Widget | - | 浮层主体内容（必填）。 | 是 |
 | height | double? | - | 高度；`TPopupPlacement.top`、`TPopupPlacement.bottom` 生效；`TPopupPlacement.center` 约束面板尺寸。 top / bottom 未传时默认 240；center 未传时默认 240。 | 否 |
 | inset | TPopupBottomInset? | - | 交叉轴边缘留白；具体类型由 `placement` 决定。 * `TPopupPlacement.bottom` 使用 `TPopupBottomInset` * `TPopupPlacement.top` 使用 `TPopupTopInset` * `TPopupPlacement.left` 使用 `TPopupLeftInset` * `TPopupPlacement.right` 使用 `TPopupRightInset` * `TPopupPlacement.center` 不支持 | 否 |
 | headerBuilder | TPopupHeaderBuilder? | - | bottom 头部；仅 `TPopupPlacement.bottom` 生效，默认不显示。 可返回 `TPopupHeader` 组合取消按钮、标题和确认按钮；builder 的 `close` 参数只负责关闭 Popup，不会自动生成任何按钮。 | 否 |
+| radius | double? | - | 内容区圆角。 `TPopupPlacement.top`、`TPopupPlacement.bottom`、`TPopupPlacement.center` 默认取主题大圆角；`TPopupPlacement.left`、`TPopupPlacement.right` 默认**无圆角**（对齐官方全高矩形），仅当显式设置本字段或通过 `TPopupThemeData.panelRadius` 注入时应用圆角。 | 否 |
+| backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 | 否 |
+| overlay | TPopupOverlayConfig? | - | 蒙层行为配置；为 null 时使用 `TPopupOverlayConfig` 默认值（标准模态弹层）。 | 否 |
+| destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 | 否 |
+| animationDuration | Duration? | - | 打开/关闭动画时长，默认 240ms（与小程序公开 duration 默认值一致）。 | 否 |
+| onOpened | VoidCallback? | - | 打开动画结束。 | 否 |
+| onClosed | VoidCallback? | - | 当前展示周期真正结束。 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。 | 否 |
+| onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 `TPopupTrigger`。 | 否 |
+| useSafeArea | bool | false | 是否避让系统安全区，默认 false；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。需要避让时显式设为 true； 也可以在 `child` 内使用 Flutter 原生 `SafeArea`，只约束内容而保留面板背景贴边。 | 否 |
 
 
 ##### TPopupOptions.center
 
+```dart
+factory TPopupOptions.center({
+  required Widget child,
+  double? width,
+  double? height,
+  TPopupSlotBuilder? closeBuilder,
+  double? radius,
+  Color? backgroundColor,
+  TPopupOverlayConfig? overlay,
+  bool destroyOnClose = false,
+  Duration? animationDuration,
+  VoidCallback? onOpened,
+  VoidCallback? onClosed,
+  TPopupVisibleChangeCallback? onVisibleChange,
+  bool useSafeArea = false,
+})
+```
+
+
 创建 `TPopupPlacement.center` 配置。
 固定 `placement` 为 `TPopupPlacement.center`；默认不显示关闭按钮。
 
-其余参数见「通用参数」。
-
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
+| child | Widget | - | 浮层主体内容（必填）。 | 是 |
 | width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 left / right 未传时默认 280；center 未传时默认 240。 | 否 |
 | height | double? | - | 高度；`TPopupPlacement.top`、`TPopupPlacement.bottom` 生效；`TPopupPlacement.center` 约束面板尺寸。 top / bottom 未传时默认 240；center 未传时默认 240。 | 否 |
 | closeBuilder | TPopupSlotBuilder? | - | center 面板外下方关闭区；仅 `TPopupPlacement.center` 生效，默认不显示。 builder 的 `close` 参数只负责关闭 Popup，不会自动生成关闭按钮。 | 否 |
+| radius | double? | - | 内容区圆角。 `TPopupPlacement.top`、`TPopupPlacement.bottom`、`TPopupPlacement.center` 默认取主题大圆角；`TPopupPlacement.left`、`TPopupPlacement.right` 默认**无圆角**（对齐官方全高矩形），仅当显式设置本字段或通过 `TPopupThemeData.panelRadius` 注入时应用圆角。 | 否 |
+| backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 | 否 |
+| overlay | TPopupOverlayConfig? | - | 蒙层行为配置；为 null 时使用 `TPopupOverlayConfig` 默认值（标准模态弹层）。 | 否 |
+| destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 | 否 |
+| animationDuration | Duration? | - | 打开/关闭动画时长，默认 240ms（与小程序公开 duration 默认值一致）。 | 否 |
+| onOpened | VoidCallback? | - | 打开动画结束。 | 否 |
+| onClosed | VoidCallback? | - | 当前展示周期真正结束。 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。 | 否 |
+| onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 `TPopupTrigger`。 | 否 |
+| useSafeArea | bool | false | 是否避让系统安全区，默认 false；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。需要避让时显式设为 true； 也可以在 `child` 内使用 Flutter 原生 `SafeArea`，只约束内容而保留面板背景贴边。 | 否 |
 
 
 ##### TPopupOptions.left
 
+```dart
+factory TPopupOptions.left({
+  required Widget child,
+  double? width,
+  TPopupLeftInset? inset,
+  double? radius,
+  Color? backgroundColor,
+  TPopupOverlayConfig? overlay,
+  bool destroyOnClose = false,
+  Duration? animationDuration,
+  VoidCallback? onOpened,
+  VoidCallback? onClosed,
+  TPopupVisibleChangeCallback? onVisibleChange,
+  bool useSafeArea = false,
+})
+```
+
+
 创建 `TPopupPlacement.left` 配置。
 固定 `placement` 为 `TPopupPlacement.left`；未传 `width` 时布局默认宽度 280。
 
-其余参数见「通用参数」。
-
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
+| child | Widget | - | 浮层主体内容（必填）。 | 是 |
 | width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 left / right 未传时默认 280；center 未传时默认 240。 | 否 |
 | inset | TPopupLeftInset? | - | 交叉轴边缘留白；具体类型由 `placement` 决定。 * `TPopupPlacement.bottom` 使用 `TPopupBottomInset` * `TPopupPlacement.top` 使用 `TPopupTopInset` * `TPopupPlacement.left` 使用 `TPopupLeftInset` * `TPopupPlacement.right` 使用 `TPopupRightInset` * `TPopupPlacement.center` 不支持 | 否 |
+| radius | double? | - | 内容区圆角。 `TPopupPlacement.top`、`TPopupPlacement.bottom`、`TPopupPlacement.center` 默认取主题大圆角；`TPopupPlacement.left`、`TPopupPlacement.right` 默认**无圆角**（对齐官方全高矩形），仅当显式设置本字段或通过 `TPopupThemeData.panelRadius` 注入时应用圆角。 | 否 |
+| backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 | 否 |
+| overlay | TPopupOverlayConfig? | - | 蒙层行为配置；为 null 时使用 `TPopupOverlayConfig` 默认值（标准模态弹层）。 | 否 |
+| destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 | 否 |
+| animationDuration | Duration? | - | 打开/关闭动画时长，默认 240ms（与小程序公开 duration 默认值一致）。 | 否 |
+| onOpened | VoidCallback? | - | 打开动画结束。 | 否 |
+| onClosed | VoidCallback? | - | 当前展示周期真正结束。 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。 | 否 |
+| onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 `TPopupTrigger`。 | 否 |
+| useSafeArea | bool | false | 是否避让系统安全区，默认 false；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。需要避让时显式设为 true； 也可以在 `child` 内使用 Flutter 原生 `SafeArea`，只约束内容而保留面板背景贴边。 | 否 |
 
 
 ##### TPopupOptions.right
 
+```dart
+factory TPopupOptions.right({
+  required Widget child,
+  double? width,
+  TPopupRightInset? inset,
+  double? radius,
+  Color? backgroundColor,
+  TPopupOverlayConfig? overlay,
+  bool destroyOnClose = false,
+  Duration? animationDuration,
+  VoidCallback? onOpened,
+  VoidCallback? onClosed,
+  TPopupVisibleChangeCallback? onVisibleChange,
+  bool useSafeArea = false,
+})
+```
+
+
 创建 `TPopupPlacement.right` 配置。
 固定 `placement` 为 `TPopupPlacement.right`；未传 `width` 时布局默认宽度 280。
 
-其余参数见「通用参数」。
-
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
+| child | Widget | - | 浮层主体内容（必填）。 | 是 |
 | width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 left / right 未传时默认 280；center 未传时默认 240。 | 否 |
 | inset | TPopupRightInset? | - | 交叉轴边缘留白；具体类型由 `placement` 决定。 * `TPopupPlacement.bottom` 使用 `TPopupBottomInset` * `TPopupPlacement.top` 使用 `TPopupTopInset` * `TPopupPlacement.left` 使用 `TPopupLeftInset` * `TPopupPlacement.right` 使用 `TPopupRightInset` * `TPopupPlacement.center` 不支持 | 否 |
+| radius | double? | - | 内容区圆角。 `TPopupPlacement.top`、`TPopupPlacement.bottom`、`TPopupPlacement.center` 默认取主题大圆角；`TPopupPlacement.left`、`TPopupPlacement.right` 默认**无圆角**（对齐官方全高矩形），仅当显式设置本字段或通过 `TPopupThemeData.panelRadius` 注入时应用圆角。 | 否 |
+| backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 | 否 |
+| overlay | TPopupOverlayConfig? | - | 蒙层行为配置；为 null 时使用 `TPopupOverlayConfig` 默认值（标准模态弹层）。 | 否 |
+| destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 | 否 |
+| animationDuration | Duration? | - | 打开/关闭动画时长，默认 240ms（与小程序公开 duration 默认值一致）。 | 否 |
+| onOpened | VoidCallback? | - | 打开动画结束。 | 否 |
+| onClosed | VoidCallback? | - | 当前展示周期真正结束。 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。 | 否 |
+| onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 `TPopupTrigger`。 | 否 |
+| useSafeArea | bool | false | 是否避让系统安全区，默认 false；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。需要避让时显式设为 true； 也可以在 `child` 内使用 Flutter 原生 `SafeArea`，只约束内容而保留面板背景贴边。 | 否 |
 
 
 ##### TPopupOptions.top
 
+```dart
+factory TPopupOptions.top({
+  required Widget child,
+  double? height,
+  TPopupTopInset? inset,
+  double? radius,
+  Color? backgroundColor,
+  TPopupOverlayConfig? overlay,
+  bool destroyOnClose = false,
+  Duration? animationDuration,
+  VoidCallback? onOpened,
+  VoidCallback? onClosed,
+  TPopupVisibleChangeCallback? onVisibleChange,
+  bool useSafeArea = false,
+})
+```
+
+
 创建 `TPopupPlacement.top` 配置。
 固定 `placement` 为 `TPopupPlacement.top`；无内置头部。
 
-其余参数见「通用参数」。
-
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
+| child | Widget | - | 浮层主体内容（必填）。 | 是 |
 | height | double? | - | 高度；`TPopupPlacement.top`、`TPopupPlacement.bottom` 生效；`TPopupPlacement.center` 约束面板尺寸。 top / bottom 未传时默认 240；center 未传时默认 240。 | 否 |
 | inset | TPopupTopInset? | - | 交叉轴边缘留白；具体类型由 `placement` 决定。 * `TPopupPlacement.bottom` 使用 `TPopupBottomInset` * `TPopupPlacement.top` 使用 `TPopupTopInset` * `TPopupPlacement.left` 使用 `TPopupLeftInset` * `TPopupPlacement.right` 使用 `TPopupRightInset` * `TPopupPlacement.center` 不支持 | 否 |
+| radius | double? | - | 内容区圆角。 `TPopupPlacement.top`、`TPopupPlacement.bottom`、`TPopupPlacement.center` 默认取主题大圆角；`TPopupPlacement.left`、`TPopupPlacement.right` 默认**无圆角**（对齐官方全高矩形），仅当显式设置本字段或通过 `TPopupThemeData.panelRadius` 注入时应用圆角。 | 否 |
+| backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 | 否 |
+| overlay | TPopupOverlayConfig? | - | 蒙层行为配置；为 null 时使用 `TPopupOverlayConfig` 默认值（标准模态弹层）。 | 否 |
+| destroyOnClose | bool | false | 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。 | 否 |
+| animationDuration | Duration? | - | 打开/关闭动画时长，默认 240ms（与小程序公开 duration 默认值一致）。 | 否 |
+| onOpened | VoidCallback? | - | 打开动画结束。 | 否 |
+| onClosed | VoidCallback? | - | 当前展示周期真正结束。 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。 | 否 |
+| onVisibleChange | TPopupVisibleChangeCallback? | - | 显隐变化；第二个参数为 `TPopupTrigger`。 | 否 |
+| useSafeArea | bool | false | 是否避让系统安全区，默认 false；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。需要避让时显式设为 true； 也可以在 `child` 内使用 Flutter 原生 `SafeArea`，只约束内容而保留面板背景贴边。 | 否 |
 
 #### 默认构造方法
+
+
+```dart
+const TPopupOptions({
+  required this.child,
+  this.placement = TPopupPlacement.bottom,
+  this.width,
+  this.height,
+  this.inset,
+  this.radius,
+  this.backgroundColor,
+  this.overlay,
+  this.destroyOnClose = false,
+  this.animationDuration,
+  this.headerBuilder,
+  this.closeBuilder,
+  this.onOpened,
+  this.onClosed,
+  this.onVisibleChange,
+  this.useSafeArea = false,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -194,11 +375,38 @@ Popup 标准头部布局。
 
 ##### TPopupOptions.assertPlacementParams
 
+```dart
+void assertPlacementParams()
+```
+
+
 在 debug 模式检查方向与宽高、inset 组合；无效组合抛出校验异常，release 模式不执行。
 
 返回类型：`void`
 
 ##### TPopupOptions.copyWith
+
+```dart
+TPopupOptions copyWith({
+  Widget? child,
+  TPopupPlacement? placement,
+  Object? width = _unset,
+  Object? height = _unset,
+  Object? inset = _unset,
+  Object? radius = _unset,
+  Object? backgroundColor = _unset,
+  Object? overlay = _unset,
+  bool? destroyOnClose,
+  Duration? animationDuration,
+  Object? headerBuilder = _unset,
+  Object? closeBuilder = _unset,
+  Object? onOpened = _unset,
+  Object? onClosed = _unset,
+  Object? onVisibleChange = _unset,
+  bool? useSafeArea,
+})
+```
+
 
 返回配置副本。
 未传入的字段保持原值；对头部/关闭 builder 显式传入 `null` 表示隐藏该区域。
@@ -227,6 +435,11 @@ Popup 标准头部布局。
 
 ##### TPopupOptions.normalized
 
+```dart
+TPopupOptions normalized()
+```
+
+
 返回按展示方向归一化的配置副本：仅 bottom 保留 headerBuilder，仅 center 保留 closeBuilder。
 
 返回类型：`TPopupOptions`
@@ -234,6 +447,13 @@ Popup 标准头部布局。
 ### TPopupHandle
 #### 简介
 `TPopup.show` 的返回值，用于控制同一份 `TPopupOptions` 的多次打开与关闭。
+
+#### 声明
+
+```dart
+class TPopupHandle
+```
+
 #### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -250,6 +470,11 @@ Popup 标准头部布局。
 
 ##### TPopupHandle.close
 
+```dart
+void close([Object? result])
+```
+
+
 关闭当前展示的浮层；`TPopupOptions.onVisibleChange` 的 `TPopupTrigger` 为
 `TPopupTrigger.api`。
 已关闭或未展示时调用无副作用。
@@ -259,10 +484,15 @@ Popup 标准头部布局。
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| result | Object? | - | 当前这次打开结束后的路由结果。 每次 `open` 都会创建新的 Future；应在对应的 `open` 之后读取。 | 否 |
+| result | Object? | - | 关闭浮层时返回的业务结果；通过该句柄的 result Future 接收。 | 否 |
 
 
 ##### TPopupHandle.open
+
+```dart
+void open([BuildContext? context])
+```
+
 
 打开或重新打开浮层。
 `navigatorContext`）；后续可省略，优先复用缓存的 `NavigatorState`。
@@ -288,7 +518,27 @@ Popup 蒙层行为配置（可见遮罩、背景拦截、点击行为）。
 * `showOverlay=true, preventTap=false`：显示蒙层但不拦截背景交互；
 * `showOverlay=false, preventTap=true`：透明模态弹层（拦截交互但不显示蒙层）；
 * `showOverlay=false, preventTap=false`：非模态浮层（不显示蒙层也不拦截交互）。
+
+#### 声明
+
+```dart
+class TPopupOverlayConfig
+```
+
 #### 默认构造方法
+
+
+```dart
+const TPopupOverlayConfig({
+  this.showOverlay = true,
+  this.color,
+  this.preventTap = true,
+  this.closeOnClick,
+  this.onClick,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -308,14 +558,39 @@ Popup 蒙层行为配置（可见遮罩、背景拦截、点击行为）。
 ### TPopupInset
 #### 简介
 Popup 在交叉轴方向的边缘留白基类。
+
+#### 声明
+
+```dart
+abstract class TPopupInset
+```
+
 #### 默认构造方法
-`TPopupInset()`
+
+
+```dart
+const TPopupInset()
+```
 
 
 ### TPopupBottomInset
 #### 简介
 bottom 方向的左右留白。
+
+#### 声明
+
+```dart
+class TPopupBottomInset extends TPopupInset
+```
+
 #### 默认构造方法
+
+
+```dart
+const TPopupBottomInset({this.left = 0, this.right = 0})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -326,7 +601,21 @@ bottom 方向的左右留白。
 ### TPopupTopInset
 #### 简介
 top 方向的左右留白。
+
+#### 声明
+
+```dart
+class TPopupTopInset extends TPopupInset
+```
+
 #### 默认构造方法
+
+
+```dart
+const TPopupTopInset({this.left = 0, this.right = 0})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -337,7 +626,21 @@ top 方向的左右留白。
 ### TPopupLeftInset
 #### 简介
 left 方向的上下留白。
+
+#### 声明
+
+```dart
+class TPopupLeftInset extends TPopupInset
+```
+
 #### 默认构造方法
+
+
+```dart
+const TPopupLeftInset({this.top = 0, this.bottom = 0})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -348,7 +651,21 @@ left 方向的上下留白。
 ### TPopupRightInset
 #### 简介
 right 方向的上下留白。
+
+#### 声明
+
+```dart
+class TPopupRightInset extends TPopupInset
+```
+
 #### 默认构造方法
+
+
+```dart
+const TPopupRightInset({this.top = 0, this.bottom = 0})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -362,9 +679,21 @@ TPopup 组件级 ThemeExtension
 通过 Theme 子树注入，控制子树的默认浮层样式。
 `TPopupOptions` 的对应字段优先于 Theme Extension。
 
+#### 声明
+
+```dart
+class TPopupThemeData extends ThemeExtension<TPopupThemeData>
+```
+
+
 #### 静态方法
 
 ##### TPopupThemeData.lerpDouble
+
+```dart
+static double? lerpDouble(double? a, double? b, double t)
+```
+
 
 对 `a` 和 `b` 按 `t` 线性插值；两端均为 null 时返回 null，仅一端为 null 时按 0 参与计算。
 
@@ -378,6 +707,20 @@ TPopup 组件级 ThemeExtension
 
 #### 默认构造方法
 
+
+```dart
+const TPopupThemeData({
+  this.barrierColor,
+  this.panelRadius,
+  this.panelBackgroundColor,
+  this.edgeHeight,
+  this.drawerWidth,
+  this.centerSize,
+})
+```
+
+#### 参数
+
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | barrierColor | Color? | - | 蒙层颜色，透明度直接由 `Color` 的 alpha 指定。 | 否 |
@@ -390,7 +733,58 @@ TPopup 组件级 ThemeExtension
 
 #### 实例方法
 
+##### TPopupThemeData.copyWith
+
+```dart
+TPopupThemeData copyWith({
+  Color? barrierColor,
+  double? panelRadius,
+  Color? panelBackgroundColor,
+  double? edgeHeight,
+  double? drawerWidth,
+  Size? centerSize,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TPopupThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| barrierColor | Color? | - | 蒙层颜色，透明度直接由 `Color` 的 alpha 指定。 | 否 |
+| panelRadius | double? | - | 内容区圆角。 top/bottom/center 默认取全局主题大圆角； left/right 默认**无圆角**（对齐官方全高矩形），仅当设置本字段时应用圆角。 | 否 |
+| panelBackgroundColor | Color? | - | 内容区背景色 | 否 |
+| edgeHeight | double? | - | top / bottom 未显式传入高度时的默认面板高度 | 否 |
+| drawerWidth | double? | - | left / right 未显式传入宽度时的默认抽屉宽度 | 否 |
+| centerSize | Size? | - | center 未显式传入宽高时的默认面板尺寸 | 否 |
+
+
+##### TPopupThemeData.lerp
+
+```dart
+TPopupThemeData lerp(ThemeExtension<TPopupThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TPopupThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TPopupThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
+
+
 ##### TPopupThemeData.merge
+
+```dart
+TPopupThemeData merge(TPopupThemeData? other)
+```
+
 
 合并两个 ThemeExtension，`other` 优先于 this
 

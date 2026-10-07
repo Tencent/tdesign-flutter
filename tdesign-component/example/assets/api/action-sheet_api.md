@@ -5,7 +5,29 @@
 ### TActionSheetItem
 #### 简介
 动作面板项目
+
+#### 声明
+
+```dart
+class TActionSheetItem<T>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TActionSheetItem({
+  required this.value,
+  required this.label,
+  this.textStyle,
+  this.icon,
+  this.badge,
+  this.subtitle,
+  this.disabled = false,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -22,9 +44,35 @@
 #### 简介
 动作面板命令式入口
 
+#### 声明
+
+```dart
+final class TActionSheet
+```
+
+
 #### 静态方法
 
 ##### TActionSheet.showGrid
+
+```dart
+static TPopupHandle showGrid<T>(
+  BuildContext context, {
+  required List<TActionSheetItem<T>> items,
+  TActionSheetGridLayout layout = const TActionSheetGridLayout.fixed(),
+  String? cancelText,
+  String? subtitle,
+  bool showCancel = true,
+  bool showOverlay = true,
+  bool closeOnOverlayClick = true,
+  bool useSafeArea = true,
+  double? itemHeight,
+  VoidCallback? onCancel,
+  VoidCallback? onClosed,
+  TActionSheetOnSelected<T>? onSelected,
+})
+```
+
 
 显示宫格动作面板
 
@@ -49,6 +97,24 @@
 
 ##### TActionSheet.showGridSections
 
+```dart
+static TPopupHandle showGridSections<T>(
+  BuildContext context, {
+  required List<TActionSheetGridSection<T>> sections,
+  String? cancelText,
+  bool showCancel = true,
+  bool showOverlay = true,
+  bool closeOnOverlayClick = true,
+  bool useSafeArea = true,
+  double itemWidth = 80,
+  double? itemHeight,
+  VoidCallback? onCancel,
+  VoidCallback? onClosed,
+  TActionSheetOnSelected<T>? onSelected,
+})
+```
+
+
 显示带标题分组的横向滚动宫格动作面板。
 
 返回类型：`TPopupHandle`
@@ -70,6 +136,24 @@
 
 
 ##### TActionSheet.showList
+
+```dart
+static TPopupHandle showList<T>(
+  BuildContext context, {
+  required List<TActionSheetItem<T>> items,
+  TActionSheetAlign align = TActionSheetAlign.center,
+  String? cancelText,
+  String? subtitle,
+  bool showCancel = true,
+  bool showOverlay = true,
+  bool closeOnOverlayClick = true,
+  bool useSafeArea = true,
+  VoidCallback? onCancel,
+  VoidCallback? onClosed,
+  TActionSheetOnSelected<T>? onSelected,
+})
+```
+
 
 显示列表动作面板
 
@@ -94,7 +178,28 @@
 ### TActionSheetThemeData
 #### 简介
 TActionSheet 组件级视觉 ThemeExtension
+
+#### 声明
+
+```dart
+class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TActionSheetThemeData({
+  this.gridItemHeight,
+  this.barrierColor,
+  this.panelRadius,
+  this.iconSize,
+  this.gridIconExtent,
+  this.iconColor,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -108,7 +213,61 @@ TActionSheet 组件级视觉 ThemeExtension
 
 #### 实例方法
 
+##### TActionSheetThemeData.copyWith
+
+```dart
+TActionSheetThemeData copyWith({
+  double? gridItemHeight,
+  Color? barrierColor,
+  double? panelRadius,
+  double? iconSize,
+  double? gridIconExtent,
+  Color? iconColor,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TActionSheetThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| gridItemHeight | double? | - | 宫格项目高度 | 否 |
+| barrierColor | Color? | - | 蒙层颜色 | 否 |
+| panelRadius | double? | - | 面板圆角 | 否 |
+| iconSize | double? | - | 默认图标字形尺寸；同时作为列表图标槽位尺寸。 | 否 |
+| gridIconExtent | double? | - | 宫格布局的图标槽位尺寸；未设置时默认 40dp。 | 否 |
+| iconColor | Color? | - | 默认图标颜色。 | 否 |
+
+
+##### TActionSheetThemeData.lerp
+
+```dart
+TActionSheetThemeData lerp(
+  ThemeExtension<TActionSheetThemeData>? other,
+  double t,
+)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TActionSheetThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TActionSheetThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
+
+
 ##### TActionSheetThemeData.merge
+
+```dart
+TActionSheetThemeData merge(TActionSheetThemeData? other)
+```
+
 
 返回合并后的主题；`other` 的非空字段覆盖当前字段，other 为空时返回当前主题。
 
@@ -125,9 +284,21 @@ TActionSheet 组件级视觉 ThemeExtension
 使用 `TActionSheetGridLayout.fixed`、`TActionSheetGridLayout.paged` 或
 `TActionSheetGridLayout.scroll` 创建互斥的布局配置。
 
+#### 声明
+
+```dart
+sealed class TActionSheetGridLayout
+```
+
+
 #### 工厂构造方法
 
 ##### TActionSheetGridLayout.fixed
+
+```dart
+const factory TActionSheetGridLayout.fixed({int count, int rows})
+```
+
 
 普通固定宫格
 
@@ -139,6 +310,11 @@ TActionSheet 组件级视觉 ThemeExtension
 
 ##### TActionSheetGridLayout.paged
 
+```dart
+const factory TActionSheetGridLayout.paged({int count, int rows})
+```
+
+
 整页切换并显示分页指示器的宫格
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
@@ -148,6 +324,15 @@ TActionSheet 组件级视觉 ThemeExtension
 
 
 ##### TActionSheetGridLayout.scroll
+
+```dart
+const factory TActionSheetGridLayout.scroll({
+  int count,
+  int rows,
+  double? itemMinWidth,
+})
+```
+
 
 可连续横向滚动的宫格
 
@@ -172,7 +357,21 @@ TActionSheet 组件级视觉 ThemeExtension
 横向滚动宫格中的一个带标题分组。
 通过 `TActionSheet.showGridSections` 展示。每个分组独立横向滚动，
 `title` 显示在该组项目上方；`items` 为空时仍保留标题。
+
+#### 声明
+
+```dart
+class TActionSheetGridSection<T>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TActionSheetGridSection({required this.title, required this.items})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |

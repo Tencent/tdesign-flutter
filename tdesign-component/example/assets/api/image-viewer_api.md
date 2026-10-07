@@ -6,9 +6,38 @@
 #### 简介
 命令式图片预览工具。
 
+#### 声明
+
+```dart
+class TImageViewer
+```
+
+
 #### 静态方法
 
 ##### TImageViewer.show
+
+```dart
+static Future<void> show({
+  required BuildContext context,
+  required List<ImageProvider<Object>> images,
+  List<String>? labels,
+  int initialIndex = 0,
+  bool showClose = true,
+  bool showDelete = false,
+  bool showIndex = true,
+  bool loop = false,
+  bool autoplay = false,
+  Duration autoplayInterval = const Duration(seconds: 3),
+  ValueChanged<int>? onIndexChanged,
+  ValueChanged<int>? onDelete,
+  ValueChanged<int>? onTap,
+  ValueChanged<int>? onLongPress,
+  TImageViewerItemBuilder? leadingBuilder,
+  TImageViewerItemBuilder? trailingBuilder,
+})
+```
+
 
 显示全屏图片预览。
 调用方需要主动关闭时，可通过持有的 `NavigatorState` 调用
@@ -39,7 +68,29 @@
 ### TImageViewerThemeData
 #### 简介
 图片预览组件级 ThemeExtension
+
+#### 声明
+
+```dart
+class TImageViewerThemeData extends ThemeExtension<TImageViewerThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TImageViewerThemeData({
+  this.backgroundColor,
+  this.appBarBackgroundColor,
+  this.iconColor,
+  this.labelStyle,
+  this.indexStyle,
+  this.viewerWidth,
+  this.viewerHeight,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -50,6 +101,59 @@
 | labelStyle | TextStyle? | - | 标签文字样式 | 否 |
 | viewerHeight | double? | - | 预览区默认高度 | 否 |
 | viewerWidth | double? | - | 预览区默认宽度 | 否 |
+
+
+#### 实例方法
+
+##### TImageViewerThemeData.copyWith
+
+```dart
+TImageViewerThemeData copyWith({
+  Color? backgroundColor,
+  Color? appBarBackgroundColor,
+  Color? iconColor,
+  TextStyle? labelStyle,
+  TextStyle? indexStyle,
+  double? viewerWidth,
+  double? viewerHeight,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TImageViewerThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 预览页背景色 | 否 |
+| appBarBackgroundColor | Color? | - | 导航栏背景色 | 否 |
+| iconColor | Color? | - | 图标颜色 | 否 |
+| labelStyle | TextStyle? | - | 标签文字样式 | 否 |
+| indexStyle | TextStyle? | - | 页码文字样式 | 否 |
+| viewerWidth | double? | - | 预览区默认宽度 | 否 |
+| viewerHeight | double? | - | 预览区默认高度 | 否 |
+
+
+##### TImageViewerThemeData.lerp
+
+```dart
+TImageViewerThemeData lerp(
+  ThemeExtension<TImageViewerThemeData>? other,
+  double t,
+)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TImageViewerThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TImageViewerThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TImageViewerItemBuilder

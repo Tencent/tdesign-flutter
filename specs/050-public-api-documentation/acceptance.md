@@ -2,32 +2,32 @@
 
 ## 当前交付状态
 
-组件基础 develop@dacc279e；本地分支 `rss1102/docs/component-api-completeness`。生成器基础 main@86b5cf0；候选提交 `b956df93cc0837fcb1d50516ca32b7cf086f5a17`，独立 [工具 PR #28](https://github.com/TDesignOteam/tdesign-flutter-tools/pull/28)。
+组件基础 `develop@dacc279e`；分支 `rss1102/docs/component-api-completeness`。独立 [工具 PR #28](https://github.com/TDesignOteam/tdesign-flutter-tools/pull/28) 最终候选提交 `a797b97ff03cdf52346b5ccbcd1f89dd63827383`。
 
-以下为最终源码与候选工具的本地验收。消费仓库仍声明正式 `main`，无临时 override / PR 分支依赖。工具 PR 尚未合并；**正式 main 重新解析、全量生成与 `--check` 尚待完成**。本地候选结果不代表正式生成链已完成。
-
-工具 b956df9 的远端 [多平台构建](https://github.com/TDesignOteam/tdesign-flutter-tools/actions/runs/37656523787)（Linux / Windows / macOS Intel / macOS ARM）与 [预览站构建](https://github.com/TDesignOteam/tdesign-flutter-tools/actions/runs/37656523376) 全部通过，PR 已转为可审核状态。
+消费仓库保持正式 `main` 依赖，无临时 path override 或 PR 分支依赖。工具 PR 当前 6 项远端检查通过、合并状态 CLEAN，尚未执行合并。因此正式 main 重新解析、全量生成、幂等校验及消费仓库最新 head 的 CI 仍是最终门禁，不能以候选验收代替。
 
 ## 全量结果
 
-- 57 个组件（含全局 Theme）、369 个本仓库公开声明；递归导出、part、show/hide 与命名扩展均纳入。
-- 补全 238 项声明/字段/枚举/方法注释及 72 项参数注释；修正已发现的默认值、生效条件、引用回退与字体行高说明。
-- 缺注释、失效/重复/错误归属、输出类型/成员/构造缺口、空白说明/类型检查均为 0。
-- 候选工具重复生成 57 份 API，字节完全一致；资产只来自源码和工具。
-- 36 个改动组件源码文件经 analyzer token 对比，与基础代码一致（排除注释及格式化逗号），无签名或行为变动。
-- 官方 Flutter 3.32.0 / Dart 3.8.0 与当前官方 stable Flutter 3.47.6@5fc346839b / Dart 3.13.5 均严格 analyze 零问题；文档检查两版本均 0 issue。检查前分别重新 pub get，避免混用 SDK 配置。
-- 工具两版本均 45 项测试通过、严格 analyze 零问题。
-- `pnpm site` 通过，文档测试 12 项通过（含所有页面路由、共享资产和重复标题）；构建仅有现存体积提示。
-- 浏览器逐页打开 API 标签：57/57 页通过；可见公开声明标题共 369，与每页 manifest 数量对应。泛型 `List<TDrawerItem>?` 真实可见，Popup 旧表已去重，Theme 有导航/路由入口。
-- 检查器负例试验：干净副本通过；人为制造缺注释、失效/重复/错误归属、导出未登记和空白说明时，全部被识别且退出码为 1。GitHub 与 CNB analyze 均登记该检查。
-- 组件契约检查通过：57 个官网入口均有源码、示例注册与 API 资产；现有 Theme 示例页已注册。Demo 结构检查与示例代码 `--check` 通过。
-- Flutter 3.32 临时 widget smoke test 实际加载 Drawer / Theme API，确认泛型完整、句柄方法与全局 Theme 文档可渲染且无异常。
+- 57 个组件（含全局 Theme）、369 个公开声明、434 个可调用声明、2509 个参数与 analyzer AST 逐项对应。
+- 递归导出、part、show/hide、命名扩展、普通实例方法、访问器、控制器、构造函数、枚举和 typedef 纳入文档。
+- 自定义 Theme 的 copyWith/lerp 与 TMap.[] 已展示并补注释。声明保留泛型及约束、位置/命名参数、const/factory 标记和默认值；各方法参数表独立完整展示。
+- 最终候选工具重复生成 57 份 API，字节完全一致。
+- 公开声明/字段/枚举值/方法无缺注释；参数说明、类型和默认值非空，签名及参数清单、类型、默认值、必填状态无缺口。检查结果为 0 issue。
+- 修复 Swiper 目标索引误复用当前索引说明；Token 查询 key 不使用 Widget key 的说明；普通方法参数不再凭同名字段推测说明。补充 Popup 返回值、Message 关闭回调及 Theme 查询/复制参数的实际语义。
+- 没有独立 Theme 的五个组件说明实际共用的 Theme 或全局 Token；官网链接直接打开 API 标签并定位到对应类型。
+- 84 个修改的组件生产源码文件与 develop 基础逐 Token 对比，排除注释和格式化尾逗号后完全一致，无签名/默认行为改变，无 breaking change。
+- Flutter 3.32.0 / Dart 3.8.0 与官方 stable Flutter 3.47.6@5fc346839b / Dart 3.13.5 分别重新解析依赖，严格 analyze 零问题。
+- 工具两版本各 45 项测试通过、严格 analyze 零问题。工具候选最终 head 的四个平台二进制、预览站和产物评论共 6 项远端检查均通过。
+- 消费仓库新增 14 项审计器 CLI 正反例：缺参数、错类型/默认值/必填、重复/多余参数、泛型约束和位置/命名参数丢失、转义竖线后的空类型、自定义覆盖方法缺注释、JSON 退出码、新增导出未登记及内部声明过滤。加入 GitHub / CNB 同一工具回归入口，两版本均实际执行该入口且 33 项测试通过。
+- `pnpm site` 的 18 项测试及站点构建通过，仅有既存构建提示。
+- 最终构建逐页打开 API 标签，57/57 页面通过；可见公开声明标题共 369，每页数量与 manifest 对应，Dart 签名代码块非空。DateTimePicker → TPickerThemeData 链接实际定位成功。
+- 组件契约检查、Demo 结构检查与示例代码 `--check` 通过；现有 Theme Demo 已注册。
 
-## 注释语义与验证边界
+## 语义检查与边界
 
-新增说明依据实现核对：Theme 空值合并与 Token 回退、Dropdown 受约束/滚动布局与 24px 箭头、Dialog 操作与路由返回值、Form 字段范围与错误清除、Swiper 动画继承、TimeCounter 重置、DateTimePicker partial 值补齐、Indexes sticky 状态、Font 字号和行高换算。TMap 循环引用说明仅描述引用链中止，保留后续默认映射的回退语义。
+逐组件清单、签名、参数表、注释非空及官网输出均已检查。新增/修改的语义说明按实现核对：Theme 空值保留与插值规则、Token 引用/默认映射回退、Dropdown 布局和关闭时机、Dialog/Popup 路由结果、Form 校验与错误清除、Swiper 索引和动画、TimeCounter 重置、DateTimePicker partial 补齐、Indexes sticky 状态、Font 字号和行高以及五个组件的共用主题。
 
-自动非空检查不证明所有自然语言注释的语义永远正确；上述缺失及已发现错误已按实现修复。每个组件均核对清单、构造/成员覆盖和页面输出，未宣称全量视觉对齐、Golden 或设备验收。无组件行为改动，无 Golden 基线变更。
+TThemeData.lerp 明确记录不使用 t 做连续插值；TMap 循环引用中止后仍可走默认映射。自动非空检查不等同于自然语言语义证明。本次没有组件视觉行为变更，不更新 Golden 基线，不宣称设计对齐或设备验收。
 
 ## 复现与最终门禁
 
@@ -37,6 +37,7 @@ cd tdesign-component
 flutter pub get
 flutter analyze --no-pub --fatal-infos
 dart run tool/audit_api_docs.dart
+flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart test/tool/audit_api_docs_test.dart
 
 # 工具正式 main 包含 #28 后执行
 flutter pub upgrade tdesign_flutter_tools
@@ -44,73 +45,72 @@ node tool/generate_api.mjs
 node tool/generate_api.mjs --check
 dart run tool/audit_api_docs.dart
 
-# 站点
 cd ../tdesign-site
 pnpm site
 ```
 
-正式工具合并后的 CI、autofix 最新 head 与产物 diff 另行记录。
+正式工具合并后记录实际解析提交、幂等结果、消费 PR 最新 CI/head 与 autofix 产物 diff。
 
 ## 逐组件记录
 
-下表“通过”指公开声明/构造/成员/注释非空检查及官网可见标题检查；声明包含对应枚举、typedef、Theme、控制器及函数。
+“可调用声明”包含默认/命名/factory 构造及公开方法、顶层函数，包含公开类的隐式构造；标准框架生命周期方法不计入。主题归属按当前实现记录。每行“通过”包括清单、成员、声明签名及参数类型/默认值/必填的 AST 检查和浏览器可见输出；非独立组件 Theme 不虚构新类。
 
-| 组件 | 公开声明 | 公开成员/枚举值 | 已声明公开构造 | 清单与源码/输出 | 官网 API |
-| --- | ---: | ---: | ---: | --- | --- |
-| button | 7 | 30 | 2 | 通过 | 通过 |
-| divider | 4 | 16 | 2 | 通过 | 通过 |
-| fab | 7 | 31 | 4 | 通过 | 通过 |
-| icon | 1 | 4 | 2 | 通过 | 通过 |
-| link | 4 | 20 | 2 | 通过 | 通过 |
-| text | 4 | 24 | 4 | 通过 | 通过 |
-| back-top | 4 | 22 | 2 | 通过 | 通过 |
-| drawer | 7 | 30 | 3 | 通过 | 通过 |
-| indexes | 10 | 60 | 9 | 通过 | 通过 |
-| navbar | 4 | 30 | 4 | 通过 | 通过 |
-| side-bar | 4 | 20 | 3 | 通过 | 通过 |
-| steps | 5 | 18 | 4 | 通过 | 通过 |
-| tab-bar | 11 | 55 | 6 | 通过 | 通过 |
-| tabs | 7 | 31 | 5 | 通过 | 通过 |
-| calendar | 10 | 48 | 4 | 通过 | 通过 |
-| cascader | 4 | 21 | 3 | 通过 | 通过 |
-| checkbox | 9 | 44 | 4 | 通过 | 通过 |
-| picker | 10 | 18 | 7 | 通过 | 通过 |
-| date-time-picker | 8 | 36 | 4 | 通过 | 通过 |
-| form | 11 | 61 | 4 | 通过 | 通过 |
-| input | 4 | 43 | 2 | 通过 | 通过 |
-| radio | 8 | 34 | 5 | 通过 | 通过 |
-| rate | 3 | 17 | 2 | 通过 | 通过 |
-| search | 4 | 35 | 2 | 通过 | 通过 |
-| slider | 5 | 37 | 3 | 通过 | 通过 |
-| stepper | 4 | 26 | 2 | 通过 | 通过 |
-| switch | 4 | 24 | 2 | 通过 | 通过 |
-| textarea | 2 | 28 | 1 | 通过 | 通过 |
-| tree-select | 3 | 19 | 3 | 通过 | 通过 |
-| upload | 9 | 52 | 3 | 通过 | 通过 |
-| avatar | 6 | 28 | 3 | 通过 | 通过 |
-| badge | 5 | 36 | 5 | 通过 | 通过 |
-| cell | 6 | 40 | 3 | 通过 | 通过 |
-| time-counter | 7 | 28 | 2 | 通过 | 通过 |
-| collapse | 7 | 35 | 3 | 通过 | 通过 |
-| empty | 2 | 6 | 2 | 通过 | 通过 |
-| footer | 2 | 4 | 2 | 通过 | 通过 |
-| image | 3 | 30 | 2 | 通过 | 通过 |
-| image-viewer | 3 | 8 | 1 | 通过 | 通过 |
-| progress | 4 | 29 | 7 | 通过 | 通过 |
-| result | 3 | 11 | 2 | 通过 | 通过 |
-| skeleton | 8 | 28 | 10 | 通过 | 通过 |
-| swiper | 8 | 60 | 4 | 通过 | 通过 |
-| table | 15 | 56 | 6 | 通过 | 通过 |
-| tag | 7 | 46 | 3 | 通过 | 通过 |
-| action-sheet | 8 | 29 | 6 | 通过 | 通过 |
-| dialog | 5 | 43 | 4 | 通过 | 通过 |
-| dropdown-menu | 14 | 77 | 8 | 通过 | 通过 |
-| loading | 4 | 15 | 2 | 通过 | 通过 |
-| message | 5 | 29 | 3 | 通过 | 通过 |
-| notice-bar | 4 | 30 | 2 | 通过 | 通过 |
-| popover | 7 | 49 | 2 | 通过 | 通过 |
-| popup | 16 | 65 | 14 | 通过 | 通过 |
-| pull-down-refresh | 4 | 22 | 3 | 通过 | 通过 |
-| swipe-cell | 7 | 24 | 4 | 通过 | 通过 |
-| toast | 5 | 28 | 2 | 通过 | 通过 |
-| theme | 27 | 343 | 8 | 通过 | 通过 |
+| 组件 | 公开声明 | 可调用声明 | 参数 | 主题归属 | 源码与 API 契约 | 官网 API |
+| --- | ---: | ---: | ---: | --- | --- | --- |
+| button | 7 | 4 | 17 | TButtonThemeData | 通过 | 通过 |
+| divider | 4 | 4 | 21 | TDividerThemeData | 通过 | 通过 |
+| fab | 7 | 6 | 35 | TFabThemeData | 通过 | 通过 |
+| icon | 1 | 2 | 10 | 全局 Token + size/color | 通过 | 通过 |
+| link | 4 | 4 | 18 | TLinkThemeData | 通过 | 通过 |
+| text | 4 | 9 | 59 | TTextThemeData | 通过 | 通过 |
+| back-top | 4 | 4 | 32 | TBackTopThemeData | 通过 | 通过 |
+| drawer | 7 | 7 | 54 | TDrawerThemeData | 通过 | 通过 |
+| indexes | 10 | 13 | 98 | TIndexesThemeData | 通过 | 通过 |
+| navbar | 4 | 6 | 40 | TNavBarThemeData | 通过 | 通过 |
+| side-bar | 4 | 5 | 26 | TSideBarThemeData | 通过 | 通过 |
+| steps | 5 | 4 | 20 | 全局 Token | 通过 | 通过 |
+| tab-bar | 11 | 8 | 53 | TTabBarThemeData | 通过 | 通过 |
+| tabs | 7 | 7 | 41 | TTabsBarThemeData | 通过 | 通过 |
+| calendar | 10 | 6 | 49 | TCalendarThemeData | 通过 | 通过 |
+| cascader | 4 | 5 | 31 | TCascaderThemeData | 通过 | 通过 |
+| checkbox | 9 | 6 | 49 | TCheckboxThemeData | 通过 | 通过 |
+| picker | 10 | 10 | 35 | TPickerThemeData | 通过 | 通过 |
+| date-time-picker | 8 | 5 | 24 | TPickerThemeData | 通过 | 通过 |
+| form | 11 | 18 | 68 | TFormThemeData | 通过 | 通过 |
+| input | 4 | 4 | 47 | TInputThemeData | 通过 | 通过 |
+| radio | 8 | 7 | 49 | TRadioThemeData | 通过 | 通过 |
+| rate | 3 | 4 | 28 | TRateThemeData | 通过 | 通过 |
+| search | 4 | 4 | 44 | TSearchBarThemeData | 通过 | 通过 |
+| slider | 5 | 5 | 50 | TSliderThemeData | 通过 | 通过 |
+| stepper | 4 | 4 | 34 | TStepperThemeData | 通过 | 通过 |
+| switch | 4 | 4 | 32 | TSwitchThemeData | 通过 | 通过 |
+| textarea | 2 | 1 | 27 | TInputThemeData + 全局 Token | 通过 | 通过 |
+| tree-select | 3 | 5 | 33 | TTreeSelectThemeData | 通过 | 通过 |
+| upload | 9 | 6 | 68 | TUploadThemeData | 通过 | 通过 |
+| avatar | 6 | 5 | 35 | TAvatarThemeData | 通过 | 通过 |
+| badge | 5 | 7 | 42 | TBadgeThemeData | 通过 | 通过 |
+| cell | 6 | 5 | 57 | TCellThemeData | 通过 | 通过 |
+| time-counter | 7 | 8 | 25 | TTimeCounterThemeData | 通过 | 通过 |
+| collapse | 7 | 5 | 43 | TCollapseThemeData | 通过 | 通过 |
+| empty | 2 | 4 | 11 | TEmptyThemeData | 通过 | 通过 |
+| footer | 2 | 4 | 8 | TFooterThemeData | 通过 | 通过 |
+| image | 3 | 4 | 36 | TImageThemeData | 通过 | 通过 |
+| image-viewer | 3 | 4 | 32 | TImageViewerThemeData | 通过 | 通过 |
+| progress | 4 | 9 | 65 | TProgressThemeData | 通过 | 通过 |
+| result | 3 | 4 | 13 | TResultThemeData | 通过 | 通过 |
+| skeleton | 8 | 12 | 47 | TSkeletonThemeData | 通过 | 通过 |
+| swiper | 8 | 10 | 65 | TSwiperThemeData | 通过 | 通过 |
+| table | 15 | 8 | 57 | TTableThemeData | 通过 | 通过 |
+| tag | 7 | 5 | 44 | TTagThemeData | 通过 | 通过 |
+| action-sheet | 8 | 12 | 68 | TActionSheetThemeData | 通过 | 通过 |
+| dialog | 5 | 9 | 60 | TDialogThemeData | 通过 | 通过 |
+| dropdown-menu | 14 | 16 | 94 | TDropdownThemeData | 通过 | 通过 |
+| loading | 4 | 8 | 23 | TLoadingThemeData | 通过 | 通过 |
+| message | 5 | 9 | 45 | TMessageThemeData | 通过 | 通过 |
+| notice-bar | 4 | 7 | 33 | TNoticeBarThemeData | 通过 | 通过 |
+| popover | 7 | 11 | 51 | TPopoverThemeData | 通过 | 通过 |
+| popup | 16 | 24 | 135 | TPopupThemeData | 通过 | 通过 |
+| pull-down-refresh | 4 | 4 | 16 | TLoadingThemeData + 全局 Token | 通过 | 通过 |
+| swipe-cell | 7 | 10 | 26 | TSwipeCellThemeData | 通过 | 通过 |
+| toast | 5 | 16 | 104 | TToastThemeData | 通过 | 通过 |
+| theme | 27 | 37 | 82 | 全局 Token / Material 扩展 | 通过 | 通过 |

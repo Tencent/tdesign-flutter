@@ -5,7 +5,35 @@
 ### TSlider
 #### 简介
 基于 Material `Slider` 的严格受控单值滑块。
+
+#### 声明
+
+```dart
+class TSlider extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TSlider({
+  super.key,
+  required this.value,
+  this.onChanged,
+  this.onChangeStart,
+  this.onChangeEnd,
+  this.min = 0,
+  this.max = 1,
+  this.divisions,
+  this.showThumbValue = false,
+  this.thumbFormatter,
+  this.showScaleValue = false,
+  this.scaleFormatter,
+  this.variant = TSliderVariant.normal,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -27,7 +55,35 @@
 ### TRangeSlider
 #### 简介
 基于 Material `RangeSlider` 的严格受控范围滑块。
+
+#### 声明
+
+```dart
+class TRangeSlider extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TRangeSlider({
+  super.key,
+  required this.value,
+  this.onChanged,
+  this.onChangeStart,
+  this.onChangeEnd,
+  this.min = 0,
+  this.max = 1,
+  this.divisions,
+  this.showThumbValue = false,
+  this.thumbFormatter,
+  this.showScaleValue = false,
+  this.scaleFormatter,
+  this.variant = TSliderVariant.normal,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -50,7 +106,33 @@
 #### 简介
 TSlider 与 TRangeSlider 共用的组件级 ThemeExtension。
 轨道、滑块和提示标签由组件 Theme 控制，不读取 Material SliderTheme。
+
+#### 声明
+
+```dart
+class TSliderThemeData extends ThemeExtension<TSliderThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TSliderThemeData({
+  this.activeTrackColor,
+  this.inactiveTrackColor,
+  this.thumbColor,
+  this.disabledThumbColor,
+  this.thumbBorderColor,
+  this.disabledThumbBorderColor,
+  this.overlayColor,
+  this.valueIndicatorColor,
+  this.valueIndicatorTextColor,
+  this.trackHeight,
+  this.decoration,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -65,6 +147,64 @@ TSlider 与 TRangeSlider 共用的组件级 ThemeExtension。
 | trackHeight | double? | - | 普通轨道粗细；胶囊形态仍使用其内置规格。 | 否 |
 | valueIndicatorColor | Color? | - | 数值提示背景颜色；为空时使用全局品牌色。 | 否 |
 | valueIndicatorTextColor | Color? | - | 数值提示文字颜色；为空时使用全局主要文字色。 | 否 |
+
+
+#### 实例方法
+
+##### TSliderThemeData.copyWith
+
+```dart
+TSliderThemeData copyWith({
+  Color? activeTrackColor,
+  Color? inactiveTrackColor,
+  Color? thumbColor,
+  Color? disabledThumbColor,
+  Color? thumbBorderColor,
+  Color? disabledThumbBorderColor,
+  Color? overlayColor,
+  Color? valueIndicatorColor,
+  Color? valueIndicatorTextColor,
+  double? trackHeight,
+  Decoration? decoration,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TSliderThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| activeTrackColor | Color? | - | 选中轨道颜色；为空时使用全局品牌色。 | 否 |
+| inactiveTrackColor | Color? | - | 未选中轨道颜色；为空时使用全局组件边框色。 | 否 |
+| thumbColor | Color? | - | 滑块填充颜色；为空时使用全局反色文字色。 | 否 |
+| disabledThumbColor | Color? | - | 禁用滑块填充颜色；为空时使用全局反色文字色。 | 否 |
+| thumbBorderColor | Color? | - | 滑块描边颜色；为空时使用全局灰阶色。 | 否 |
+| disabledThumbBorderColor | Color? | - | 禁用滑块描边颜色；为空时使用全局禁用背景色。 | 否 |
+| overlayColor | Color? | - | 交互反馈颜色；为空时使用品牌色的透明层。 | 否 |
+| valueIndicatorColor | Color? | - | 数值提示背景颜色；为空时使用全局品牌色。 | 否 |
+| valueIndicatorTextColor | Color? | - | 数值提示文字颜色；为空时使用全局主要文字色。 | 否 |
+| trackHeight | double? | - | 普通轨道粗细；胶囊形态仍使用其内置规格。 | 否 |
+| decoration | Decoration? | - | 滑块外层装饰。 | 否 |
+
+
+##### TSliderThemeData.lerp
+
+```dart
+TSliderThemeData lerp(ThemeExtension<TSliderThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TSliderThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TSliderThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TSliderVariant

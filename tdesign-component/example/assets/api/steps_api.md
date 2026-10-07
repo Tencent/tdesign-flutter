@@ -4,11 +4,29 @@
 
 ### TSteps
 #### 简介
-Steps步骤条
+TDesign 步骤条。
+颜色、字号与连线默认读取 `TThemeData` 的全局 Token；
+没有独立的 Steps Theme。步骤状态与内容通过构造参数及 `TStepsItemData` 配置。
+
+#### 声明
+
+```dart
+class TSteps extends StatelessWidget
+```
+
 
 #### 命名构造方法
 
 ##### TSteps.display
+
+```dart
+const TSteps.display({
+  super.key,
+  required this.steps,
+  this.direction = TStepsDirection.vertical,
+})
+```
+
 
 纯展示步骤条。
 所有节点和连线均使用完成态，不接收进度、状态或交互参数。
@@ -21,6 +39,19 @@ Steps步骤条
 
 
 ##### TSteps.progress
+
+```dart
+const TSteps.progress({
+  super.key,
+  required this.steps,
+  this.value = 0,
+  this.direction = TStepsDirection.horizontal,
+  this.status = TStepsStatus.process,
+  this.indicator = TStepsIndicator.standard,
+  this.onChange,
+})
+```
+
 
 普通进度步骤条。
 
@@ -36,6 +67,16 @@ Steps步骤条
 
 
 ##### TSteps.selectable
+
+```dart
+const TSteps.selectable({
+  super.key,
+  required this.steps,
+  required this.value,
+  required ValueChanged<int> onChange,
+})
+```
+
 
 垂直可选择步骤条。
 固定使用点状指示器并显示右侧箭头：已完成节点实心，
@@ -63,8 +104,29 @@ Steps步骤条
 
 ### TStepsItemData
 #### 简介
-Steps步骤条数据类型
+步骤条的数据模型。
+
+#### 声明
+
+```dart
+class TStepsItemData
+```
+
 #### 默认构造方法
+
+
+```dart
+const TStepsItemData({
+  this.title,
+  this.content,
+  this.icon,
+  this.errorIcon,
+  this.customContent,
+  this.customTitle,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |

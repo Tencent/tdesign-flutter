@@ -10,9 +10,28 @@
 TabBar、SideBar、ActionSheet 等内部拥有锚点的组合组件使用
 `TBadgeConfig`，调用方不应向这些组件传入一个待拆解的 `TBadge`。
 
+#### 声明
+
+```dart
+class TBadge extends StatelessWidget
+```
+
+
 #### 命名构造方法
 
 ##### TBadge.custom
+
+```dart
+const TBadge.custom({
+  super.key,
+  required this.badge,
+  this.alignment,
+  this.offset,
+  this.child,
+  this.onTap,
+})
+```
+
 
 创建完全自定义外观的徽标；`badge` 是徽标本体，`child` 是可选锚点，未提供锚点时直接展示徽标本体。
 
@@ -26,6 +45,24 @@ TabBar、SideBar、ActionSheet 等内部拥有锚点的组合组件使用
 | onTap | GestureTapCallback? | - | 点击徽标及其 `child` 时触发；为空时不创建点击语义。 | 否 |
 
 #### 默认构造方法
+
+
+```dart
+const TBadge({
+  super.key,
+  this.label = '0',
+  this.variant = TBadgeVariant.circle,
+  this.size = TBadgeSize.medium,
+  this.border = false,
+  this.showZero = true,
+  this.alignment,
+  this.offset,
+  this.child,
+  this.onTap,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -58,9 +95,21 @@ ActionSheet 等组件在内部创建徽标锚点时使用；组件会把配置�
 完全自定义徽标外观时使用 `TBadgeConfig.custom`。传入的 `badge` 是徽标本体，
 不应包含锚点或自行使用 `Positioned` 定位。
 
+#### 声明
+
+```dart
+class TBadgeConfig
+```
+
+
 #### 命名构造方法
 
 ##### TBadgeConfig.custom
+
+```dart
+const TBadgeConfig.custom({required this.badge, this.alignment, this.offset})
+```
+
 
 创建完全自定义外观的徽标配置。
 
@@ -71,6 +120,21 @@ ActionSheet 等组件在内部创建徽标锚点时使用；组件会把配置�
 | offset | Offset? | - | 在最终对齐位置上追加的偏移。 为空时使用消费组件的默认值。 显式值使用物理坐标：正 x 始终向右，RTL 下不会自动镜像；消费组件仅会 根据最终生效的 `alignment` 转换自己提供的默认偏移。 ribbon、triangle 始终贴住锚点的物理左上角或右上角，但仍读取该偏移。 | 否 |
 
 #### 默认构造方法
+
+
+```dart
+const TBadgeConfig({
+  this.label = '0',
+  this.variant = TBadgeVariant.circle,
+  this.size = TBadgeSize.medium,
+  this.border = false,
+  this.showZero = true,
+  this.alignment,
+  this.offset,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -94,7 +158,29 @@ ActionSheet 等组件在内部创建徽标锚点时使用；组件会把配置�
 #### 简介
 TDesign 徽标的子树级视觉默认值。
 形态、内容、对齐和偏移由实例 API 控制，不从 Material BadgeTheme 读取。
+
+#### 声明
+
+```dart
+class TBadgeThemeData extends ThemeExtension<TBadgeThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TBadgeThemeData({
+  this.backgroundColor,
+  this.dotSize,
+  this.labelHeight,
+  this.textStyle,
+  this.padding,
+  this.borderColor,
+  this.borderWidth,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -105,6 +191,56 @@ TDesign 徽标的子树级视觉默认值。
 | labelHeight | double? | - | 文字徽标高度；为空时由当前尺寸的字体 Token 决定。 | 否 |
 | padding | EdgeInsetsGeometry? | - | 文字徽标内边距；为空时由当前尺寸决定。 | 否 |
 | textStyle | TextStyle? | - | 徽标文字的唯一组件级样式入口；未配置字段从字体与反色文字 Token 取得。 | 否 |
+
+
+#### 实例方法
+
+##### TBadgeThemeData.copyWith
+
+```dart
+TBadgeThemeData copyWith({
+  Color? backgroundColor,
+  double? dotSize,
+  double? labelHeight,
+  TextStyle? textStyle,
+  EdgeInsetsGeometry? padding,
+  Color? borderColor,
+  double? borderWidth,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TBadgeThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 徽标背景色；为空时使用全局错误色 Token。 | 否 |
+| dotSize | double? | - | 圆点直径；为空时使用组件内置尺寸。 | 否 |
+| labelHeight | double? | - | 文字徽标高度；为空时由当前尺寸的字体 Token 决定。 | 否 |
+| textStyle | TextStyle? | - | 徽标文字的唯一组件级样式入口；未配置字段从字体与反色文字 Token 取得。 | 否 |
+| padding | EdgeInsetsGeometry? | - | 文字徽标内边距；为空时由当前尺寸决定。 | 否 |
+| borderColor | Color? | - | 开启描边时使用的颜色；为空时回退到当前容器背景色。 | 否 |
+| borderWidth | double? | - | 开启描边时使用的宽度；为空时使用 1 逻辑像素。 | 否 |
+
+
+##### TBadgeThemeData.lerp
+
+```dart
+TBadgeThemeData lerp(ThemeExtension<TBadgeThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TBadgeThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TBadgeThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TBadgeVariant

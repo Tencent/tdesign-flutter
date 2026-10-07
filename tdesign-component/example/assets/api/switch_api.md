@@ -8,7 +8,30 @@
 `value` 由父级持有；`onChanged` 为 null 时禁用；`loading` 为 true 时
 显示加载指示器并禁用交互。文字、图标和加载内容无法由 Material Switch
 完整表达，因此底层保留 TDesign 自定义开关实现。
+
+#### 声明
+
+```dart
+class TSwitch extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TSwitch({
+  super.key,
+  required this.value,
+  this.onChanged,
+  this.size,
+  this.variant,
+  this.loading = false,
+  this.openText,
+  this.closeText,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -26,7 +49,33 @@
 #### 简介
 TSwitch 组件级 ThemeExtension
 通过 Theme 子树注入，控制子树默认样式。
+
+#### 声明
+
+```dart
+class TSwitchThemeData extends ThemeExtension<TSwitchThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TSwitchThemeData({
+  this.trackOnColor,
+  this.trackOffColor,
+  this.disabledTrackOnColor,
+  this.disabledTrackOffColor,
+  this.thumbColor,
+  this.disabledThumbColor,
+  this.loadingColor,
+  this.thumbContentOnColor,
+  this.thumbContentOffColor,
+  this.thumbContentOnFont,
+  this.thumbContentOffFont,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -41,6 +90,64 @@ TSwitch 组件级 ThemeExtension
 | thumbContentOnFont | TextStyle? | - | 开启态滑块内容文本样式。 | 否 |
 | trackOffColor | Color? | - | 关闭态轨道颜色。 | 否 |
 | trackOnColor | Color? | - | 开启态轨道颜色。 | 否 |
+
+
+#### 实例方法
+
+##### TSwitchThemeData.copyWith
+
+```dart
+TSwitchThemeData copyWith({
+  Color? trackOnColor,
+  Color? trackOffColor,
+  Color? disabledTrackOnColor,
+  Color? disabledTrackOffColor,
+  Color? thumbColor,
+  Color? disabledThumbColor,
+  Color? loadingColor,
+  Color? thumbContentOnColor,
+  Color? thumbContentOffColor,
+  TextStyle? thumbContentOnFont,
+  TextStyle? thumbContentOffFont,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TSwitchThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| trackOnColor | Color? | - | 开启时轨道颜色 | 否 |
+| trackOffColor | Color? | - | 关闭时轨道颜色 | 否 |
+| disabledTrackOnColor | Color? | - | 禁用时开启态轨道颜色；未设置时使用全局禁用品牌色。 | 否 |
+| disabledTrackOffColor | Color? | - | 禁用时关闭态轨道颜色；未设置时使用全局禁用组件背景色。 | 否 |
+| thumbColor | Color? | - | 可交互时滑块填充色；未设置时使用全局反色文字 Token。 与滑块内图标或文字的颜色无关。 | 否 |
+| disabledThumbColor | Color? | - | 禁用或加载时滑块填充色；未设置时随明暗模式取白色层级。 | 否 |
+| loadingColor | Color? | - | 加载指示器颜色；未设置时浅色为品牌色、深色为最高层级白色。 | 否 |
+| thumbContentOnColor | Color? | - | 开启时ThumbView的颜色 | 否 |
+| thumbContentOffColor | Color? | - | 关闭时ThumbView的颜色 | 否 |
+| thumbContentOnFont | TextStyle? | - | 开启时ThumbView的字体样式 | 否 |
+| thumbContentOffFont | TextStyle? | - | 关闭时ThumbView的字体样式 | 否 |
+
+
+##### TSwitchThemeData.lerp
+
+```dart
+TSwitchThemeData lerp(ThemeExtension<TSwitchThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TSwitchThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TSwitchThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TSwitchSize

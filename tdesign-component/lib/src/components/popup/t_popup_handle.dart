@@ -139,7 +139,10 @@ class TPopupHandle {
   ///
   /// 已关闭或未展示时调用无副作用。
   /// 嵌套浮层场景下会关闭当前 handle 对应的那一层，而不会误关栈顶其它浮层。
-  void close([Object? result]) {
+  void close([
+    /// 关闭浮层时返回的业务结果；通过该句柄的 result Future 接收。
+    Object? result,
+  ]) {
     final route = _route;
     final navigator = route?.navigator ?? _lastNavigator;
     if (!isShowing || route == null || navigator == null) {

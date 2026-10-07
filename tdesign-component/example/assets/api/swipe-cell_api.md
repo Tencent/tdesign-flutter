@@ -5,7 +5,31 @@
 ### TSwipeCell
 #### 简介
 滑动单元格组件。
+
+#### 声明
+
+```dart
+class TSwipeCell extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TSwipeCell({
+  Key? key,
+  required this.child,
+  this.enabled = true,
+  this.start,
+  this.end,
+  this.onOpenChanged,
+  this.controller,
+  this.initialOpenSide,
+  this.closeOnScroll = true,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -25,19 +49,40 @@
 `TSwipeCell` 的命令式控制器。
 一个控制器同一时间只能绑定一个 `TSwipeCell`。通常无需使用控制器，用户拖动、
 点击操作项、点击单元格外部或滚动列表时，组件会自行管理展开状态。
+
+#### 声明
+
+```dart
+class TSwipeCellController
+```
+
 #### 默认构造方法
-`TSwipeCellController()`
+
+
+```dart
+TSwipeCellController()
+```
 
 
 #### 实例方法
 
 ##### TSwipeCellController.close
 
+```dart
+Future<void> close()
+```
+
+
 关闭当前展开的操作面板。
 
 返回类型：`Future<void>`
 
 ##### TSwipeCellController.open
+
+```dart
+Future<void> open(TSwipeCellSide side)
+```
+
 
 展开指定侧的操作面板。
 
@@ -51,7 +96,21 @@
 ### TSwipeCellPanel
 #### 简介
 滑动单元格操作面板。
+
+#### 声明
+
+```dart
+class TSwipeCellPanel
+```
+
 #### 默认构造方法
+
+
+```dart
+TSwipeCellPanel({required this.children})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -65,7 +124,32 @@
 未指定的图文视觉字段从全局 TDesign Token 取得默认值；
 `TSwipeCellThemeData` 只提供共用内边距。
 `builder` 自行绘制操作项，不能同时传入内置背景、图文或图文样式字段。
+
+#### 声明
+
+```dart
+class TSwipeCellAction extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TSwipeCellAction({
+  Key? key,
+  this.backgroundColor,
+  this.onPressed,
+  this.icon,
+  this.iconColor,
+  this.iconSize,
+  this.iconLabelSpacing,
+  this.label,
+  this.labelStyle,
+  this.builder,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -85,7 +169,21 @@
 #### 简介
 TSwipeCell 组件级 ThemeExtension
 通过 Theme 子树注入操作项共享内边距；逐项图文样式由操作项实例控制。
+
+#### 声明
+
+```dart
+class TSwipeCellThemeData extends ThemeExtension<TSwipeCellThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TSwipeCellThemeData({this.actionPadding})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -94,7 +192,49 @@ TSwipeCell 组件级 ThemeExtension
 
 #### 实例方法
 
+##### TSwipeCellThemeData.copyWith
+
+```dart
+TSwipeCellThemeData copyWith({EdgeInsetsGeometry? actionPadding})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TSwipeCellThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| actionPadding | EdgeInsetsGeometry? | - | 操作项左右内边距。 | 否 |
+
+
+##### TSwipeCellThemeData.lerp
+
+```dart
+TSwipeCellThemeData lerp(
+  ThemeExtension<TSwipeCellThemeData>? other,
+  double t,
+)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TSwipeCellThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TSwipeCellThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
+
+
 ##### TSwipeCellThemeData.merge
+
+```dart
+TSwipeCellThemeData merge(TSwipeCellThemeData? other)
+```
+
 
 合并两个 ThemeExtension，`other` 优先于 this
 

@@ -32,6 +32,8 @@ class TIconStyleScope extends InheritedWidget {
 /// 构造器参数优先，其次使用 TDesign 组合组件的内部样式；独立使用时
 /// 默认尺寸为 24dp，默认颜色读取 TDesign 全局 Token。
 /// 外层 Material [IconTheme] 不控制 TDesign 图标。
+/// 没有独立的 Icon Theme，独立使用时可配置 [size]、[color]，
+/// 默认颜色来自 [TThemeData] 的 `textColorPrimary` Token。
 ///
 /// ```dart
 /// // 基础使用
@@ -50,12 +52,12 @@ class TIcon extends StatelessWidget {
 
   /// 图标尺寸，单位为逻辑像素。
   ///
-  /// 未设置时使用 24dp。
+  /// 未设置时继承 TDesign 组合组件的图标尺寸；独立使用时为 24dp。
   final double? size;
 
   /// 图标颜色。
   ///
-  /// 未设置时读取 TDesign 的 `textColorPrimary` Token。
+  /// 未设置时继承 TDesign 组合组件的图标颜色；独立使用时读取 `textColorPrimary` Token。
   final Color? color;
 
   /// 无障碍语义标签。

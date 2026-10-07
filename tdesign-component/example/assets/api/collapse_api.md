@@ -5,7 +5,29 @@
 ### TCollapse
 #### 简介
 折叠面板列表组件，需配合 `TCollapsePanel` 使用
+
+#### 声明
+
+```dart
+class TCollapse<T extends Object> extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TCollapse({
+  required this.children,
+  required this.value,
+  this.mode = TCollapseMode.multiple,
+  this.variant,
+  this.animationDuration,
+  this.onChanged,
+  Key? key,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -21,7 +43,34 @@
 ### TCollapsePanel
 #### 简介
 折叠面板配置。
+
+#### 声明
+
+```dart
+class TCollapsePanel<T extends Object>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TCollapsePanel({
+  required this.value,
+  required this.headerBuilder,
+  required this.body,
+  this.bodyHeight,
+  this.key,
+  this.disabled = false,
+  this.placement = TCollapsePlacement.bottom,
+  this.semanticsLabel,
+  this.leadingBuilder,
+  this.trailingBuilder,
+  this.expandIconBuilder = _defaultExpandIconBuilder,
+  this.backgroundColor,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -42,7 +91,33 @@
 ### TCollapseThemeData
 #### 简介
 折叠面板组件级 ThemeExtension
+
+#### 声明
+
+```dart
+class TCollapseThemeData extends ThemeExtension<TCollapseThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TCollapseThemeData({
+  this.backgroundColor,
+  this.elevation,
+  this.headerTextStyle,
+  this.contentTextStyle,
+  this.disabledHeaderTextStyle,
+  this.iconColor,
+  this.disabledIconColor,
+  this.dividerColor,
+  this.contentPadding,
+  this.cardMargin,
+  this.cardBorderRadius,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -57,6 +132,67 @@
 | elevation | double? | - | 阴影 | 否 |
 | headerTextStyle | TextStyle? | - | 标题文字样式。 | 否 |
 | iconColor | Color? | - | 展开图标颜色。 | 否 |
+
+
+#### 实例方法
+
+##### TCollapseThemeData.copyWith
+
+```dart
+TCollapseThemeData copyWith({
+  Color? backgroundColor,
+  double? elevation,
+  TextStyle? headerTextStyle,
+  TextStyle? contentTextStyle,
+  TextStyle? disabledHeaderTextStyle,
+  Color? iconColor,
+  Color? disabledIconColor,
+  Color? dividerColor,
+  EdgeInsetsGeometry? contentPadding,
+  EdgeInsetsGeometry? cardMargin,
+  BorderRadius? cardBorderRadius,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TCollapseThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 默认面板背景色 | 否 |
+| elevation | double? | - | 阴影 | 否 |
+| headerTextStyle | TextStyle? | - | 标题文字样式。 | 否 |
+| contentTextStyle | TextStyle? | - | 内容文字样式。 | 否 |
+| disabledHeaderTextStyle | TextStyle? | - | 禁用状态标题文字样式。 | 否 |
+| iconColor | Color? | - | 展开图标颜色。 | 否 |
+| disabledIconColor | Color? | - | 禁用状态展开图标颜色。 | 否 |
+| dividerColor | Color? | - | 分隔线颜色。 | 否 |
+| contentPadding | EdgeInsetsGeometry? | - | 内容内边距。 | 否 |
+| cardMargin | EdgeInsetsGeometry? | - | 卡片外边距。 | 否 |
+| cardBorderRadius | BorderRadius? | - | 卡片圆角。 | 否 |
+
+
+##### TCollapseThemeData.lerp
+
+```dart
+TCollapseThemeData lerp(
+  ThemeExtension<TCollapseThemeData>? other,
+  double t,
+)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TCollapseThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TCollapseThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TCollapseMode

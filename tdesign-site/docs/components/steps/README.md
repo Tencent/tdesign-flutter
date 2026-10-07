@@ -15,6 +15,10 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 {{ flutter-example-group steps }}
 
+## 主题配置
+
+步骤状态与内容通过构造参数和 `TStepsItemData` 配置；颜色、字号与连线默认读取 [TThemeData](/flutter/components/theme?tab=api#tthemedata) 的全局 Token，没有独立的 Steps Theme 类。
+
 {{ flutter-api steps }}
 
 ## Breaking Change 迁移

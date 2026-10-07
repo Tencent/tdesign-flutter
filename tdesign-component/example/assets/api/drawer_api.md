@@ -6,7 +6,31 @@
 #### 简介
 TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer`。
 需要通过浮层展示时，使用 `showTDrawer`。
+
+#### 声明
+
+```dart
+class TDrawer extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TDrawer({
+  super.key,
+  this.showDivider = true,
+  this.footer,
+  this.items,
+  this.enableFeedback = true,
+  this.showLastDivider = true,
+  this.title,
+  this.onItemClick,
+  this.child,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -24,6 +48,13 @@ TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer
 ### TDrawerHandle
 #### 简介
 `showTDrawer` 返回的抽屉生命周期控制句柄。
+
+#### 声明
+
+```dart
+class TDrawerHandle
+```
+
 #### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -35,6 +66,11 @@ TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer
 
 ##### TDrawerHandle.close
 
+```dart
+void close()
+```
+
+
 关闭当前抽屉；重复调用安全。
 
 返回类型：`void`
@@ -44,7 +80,37 @@ TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer
 抽屉组件 ThemeExtension。
 只保存子树级具体视觉默认值。方向、蒙层与展示生命周期由 `showTDrawer`
 负责；分隔线和按压反馈由组件实例负责；构造器具体视觉参数优先级高于 ThemeData。
+
+#### 声明
+
+```dart
+class TDrawerThemeData extends ThemeExtension<TDrawerThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TDrawerThemeData({
+  this.width,
+  this.backgroundColor,
+  this.titleStyle,
+  this.titlePadding,
+  this.itemTextStyle,
+  this.itemBackgroundColor,
+  this.itemPressedColor,
+  this.itemPadding,
+  this.itemIconColor,
+  this.itemIconSize,
+  this.itemIconGap,
+  this.dividerColor,
+  this.dividerIndent,
+  this.dividerThickness,
+  this.footerPadding,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -65,10 +131,90 @@ TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer
 | width | double? | - | 默认宽度，默认 280。 | 否 |
 
 
+#### 实例方法
+
+##### TDrawerThemeData.copyWith
+
+```dart
+TDrawerThemeData copyWith({
+  double? width,
+  Color? backgroundColor,
+  TextStyle? titleStyle,
+  EdgeInsetsGeometry? titlePadding,
+  TextStyle? itemTextStyle,
+  Color? itemBackgroundColor,
+  Color? itemPressedColor,
+  EdgeInsetsGeometry? itemPadding,
+  Color? itemIconColor,
+  double? itemIconSize,
+  double? itemIconGap,
+  Color? dividerColor,
+  double? dividerIndent,
+  double? dividerThickness,
+  EdgeInsetsGeometry? footerPadding,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TDrawerThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| width | double? | - | 默认宽度，默认 280。 | 否 |
+| backgroundColor | Color? | - | 默认背景颜色。 | 否 |
+| titleStyle | TextStyle? | - | 抽屉标题样式。 | 否 |
+| titlePadding | EdgeInsetsGeometry? | - | 标题内边距，默认 `EdgeInsets.fromLTRB(16, 24, 16, 8)`。 | 否 |
+| itemTextStyle | TextStyle? | - | 菜单正文样式。 | 否 |
+| itemBackgroundColor | Color? | - | 菜单项背景色。 | 否 |
+| itemPressedColor | Color? | - | 菜单项按压背景色。 | 否 |
+| itemPadding | EdgeInsetsGeometry? | - | 菜单项内边距，默认 `EdgeInsets.fromLTRB(16, 16, 0, 16)`。 | 否 |
+| itemIconColor | Color? | - | 菜单项图标颜色。 | 否 |
+| itemIconSize | double? | - | 菜单项图标尺寸，默认 24。 | 否 |
+| itemIconGap | double? | - | 菜单项图标与正文间距，默认 8。 | 否 |
+| dividerColor | Color? | - | 菜单项分隔线颜色。 | 否 |
+| dividerIndent | double? | - | 菜单项分隔线起始缩进，默认 16。 | 否 |
+| dividerThickness | double? | - | 菜单项分隔线厚度，默认 0.5。 | 否 |
+| footerPadding | EdgeInsetsGeometry? | - | 底部区内边距，默认仅保留 20 的底边距。 | 否 |
+
+
+##### TDrawerThemeData.lerp
+
+```dart
+TDrawerThemeData lerp(ThemeExtension<TDrawerThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TDrawerThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TDrawerThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
+
+
 ### TDrawerItem
 #### 简介
 抽屉里的列表项。
+
+#### 声明
+
+```dart
+class TDrawerItem
+```
+
 #### 默认构造方法
+
+
+```dart
+const TDrawerItem({this.title, this.icon, this.content})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -84,6 +230,11 @@ TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer
 返回的 `TDrawerHandle` 可用于查询显示状态或主动关闭抽屉。
 
 返回类型：`TDrawerHandle`
+
+```dart
+TDrawerHandle showTDrawer( BuildContext context, { required TDrawer drawer, TDrawerPlacement placement = TDrawerPlacement.right, bool showOverlay = true, bool closeOnOverlayClick = true, VoidCallback? onOverlayClick, double? topInset, bool useSafeArea = true, bool destroyOnClose = false, VoidCallback? onClose, })
+```
+
 
 #### 参数
 

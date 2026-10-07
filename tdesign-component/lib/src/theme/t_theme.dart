@@ -519,7 +519,10 @@ class TThemeData extends ThemeExtension<TThemeData> {
   }
 
   /// 获取默认Data，一个App里只有一个，用于没有context的地方
-  static TThemeData defaultData({TExtraThemeData? extraThemeData}) {
+  static TThemeData defaultData({
+    /// 扩展主题数据；默认主题仅在首次初始化时读取。
+    TExtraThemeData? extraThemeData,
+  }) {
     _defaultThemeData ??= fromJson(
       _defaultThemeName,
       TDefaultTheme.defaultThemeConfig,
@@ -540,17 +543,34 @@ class TThemeData extends ThemeExtension<TThemeData> {
 
   /// 从父类拷贝
   TThemeData copyWithTThemeData(
+    /// 副本的主题名称。
     String name, {
+
+    /// 颜色 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
     Map<String, Color>? colorMap,
+
+    /// 复合字体 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
     Map<String, Font>? fontMap,
+
+    /// 字号与行高 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
     Map<String, double>? fontMetricMap,
+
+    /// 圆角 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
     Map<String, double>? radiusMap,
+
+    /// 字体栈 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
     Map<String, FontFamily>? fontFamilyMap,
+
+    /// 外投影 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
     Map<String, List<BoxShadow>>? shadowMap,
+
+    /// 内侧边线 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
     Map<String, BorderSide>? insetShadowMap,
 
     /// 间距 Token 的增量配置；沿用 marginMap 参数名，合并到 spacerMap。
     Map<String, double>? marginMap,
+
+    /// 扩展主题数据；为空时沿用当前配置。
     TExtraThemeData? extraThemeData,
   }) {
     return copyWith(
@@ -568,6 +588,8 @@ class TThemeData extends ThemeExtension<TThemeData> {
         as TThemeData;
   }
 
+  /// 复制 Token 主题并合并传入的映射；未传入的映射值沿用当前配置。
+  /// name 为空时使用 default；extraThemeData 为空时保留当前扩展数据。
   @override
   ThemeExtension<TThemeData> copyWith({
     String? name,
@@ -578,6 +600,8 @@ class TThemeData extends ThemeExtension<TThemeData> {
     Map<String, FontFamily>? fontFamilyMap,
     Map<String, List<BoxShadow>>? shadowMap,
     Map<String, BorderSide>? insetShadowMap,
+
+    /// 间距 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
     Map<String, double>? marginMap,
     TExtraThemeData? extraThemeData,
   }) {
@@ -715,6 +739,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
   /// 从已解析的 [themeConfig] 读取 [name] 对应的主题；不存在或为空时返回空主题。
   /// [extraThemeData] 非空时参与扩展数据解析。
   static TThemeData parseThemeData(
+    /// 待解析的主题名称。
     String name,
 
     /// 已解析的主题 JSON 配置。
@@ -810,27 +835,42 @@ class TThemeData extends ThemeExtension<TThemeData> {
   }
 
   /// 按 [key] 读取颜色 Token；没有本地配置且无法解析引用或默认映射时返回 null。
-  Color? ofColor(String? key) {
+  Color? ofColor(
+    /// 要查询的 Token 键；为空或未命中时返回 null。
+    String? key,
+  ) {
     return colorMap[key];
   }
 
   /// 按 [key] 读取复合字体 Token；没有本地配置且无法解析引用或默认映射时返回 null。
-  Font? ofFont(String? key) {
+  Font? ofFont(
+    /// 要查询的 Token 键；为空或未命中时返回 null。
+    String? key,
+  ) {
     return fontMap[key];
   }
 
   /// 按 [key] 读取圆角 Token，单位为逻辑像素；找不到时返回 null。
-  double? ofCorner(String? key) {
+  double? ofCorner(
+    /// 要查询的 Token 键；为空或未命中时返回 null。
+    String? key,
+  ) {
     return radiusMap[key];
   }
 
   /// 按 [key] 读取字体栈 Token；找不到时返回 null。
-  FontFamily? ofFontFamily(String? key) {
+  FontFamily? ofFontFamily(
+    /// 要查询的 Token 键；为空或未命中时返回 null。
+    String? key,
+  ) {
     return fontFamilyMap[key];
   }
 
   /// 按 [key] 读取外投影列表；找不到时返回 null。
-  List<BoxShadow>? ofShadow(String? key) {
+  List<BoxShadow>? ofShadow(
+    /// 要查询的 Token 键；为空或未命中时返回 null。
+    String? key,
+  ) {
     return shadowMap[key];
   }
 
@@ -844,8 +884,16 @@ class TThemeData extends ThemeExtension<TThemeData> {
     return null;
   }
 
+  /// 返回使用目标主题 Token 映射的新主题；此实现不使用 t 做连续插值。
+  /// other 为空或类型不匹配时返回当前主题。
   @override
-  ThemeExtension<TThemeData> lerp(ThemeExtension<TThemeData>? other, double t) {
+  ThemeExtension<TThemeData> lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    ThemeExtension<TThemeData>? other,
+
+    /// 保留 ThemeExtension 接口的进度参数；当前实现忽略该值。
+    double t,
+  ) {
     if (other is! TThemeData) {
       return this;
     }
@@ -889,8 +937,13 @@ class TMap<K, V> extends DelegatingMap<K, V> {
   /// Token 名称到引用名称的映射；本地显式值优先于引用，循环引用会中止该引用链的解析。
   TMap? refs;
 
+  /// 读取 Token 值：依次尝试本地显式值、引用链和默认映射。
+  /// 循环引用会中止该引用链；仍可尝试默认映射，全部未命中时返回 null。
   @override
-  V? operator [](Object? key) {
+  V? operator [](
+    /// 要查询的 Token 键；支持当前映射的键类型。
+    Object? key,
+  ) {
     return _resolve(key, <Object?>{});
   }
 
@@ -920,7 +973,10 @@ class TMap<K, V> extends DelegatingMap<K, V> {
   }
 
   /// 仅读取 [key] 的本地存储值，不解析引用或默认映射。
-  V? get(Object? key) {
+  V? get(
+    /// 要读取本地存储值的键；不解析引用或默认映射。
+    Object? key,
+  ) {
     return super[key];
   }
 }

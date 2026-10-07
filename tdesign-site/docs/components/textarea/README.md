@@ -21,4 +21,8 @@ Textarea 不再透传 Material `InputDecoration`。外置表单标签迁移到 `
 
 完整 API 以 `TTextarea` dartdoc 和 Example API 面板为准。
 
+## 主题配置
+
+Textarea 复用 [TInputThemeData](/flutter/components/input?tab=api#tinputthemedata)：容器读取 `contentPadding` 和 `borderColor`；内部编辑器的内边距固定为零、背景透明，其余输入主题配置继续传给 `TInput`。标题和默认状态颜色使用 [TThemeData](/flutter/components/theme?tab=api#tthemedata) 的全局 Token。
+
 {{ flutter-api textarea }}

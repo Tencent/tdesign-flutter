@@ -18,4 +18,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 {{ flutter-example-group date-time-picker }}
 
+## 主题配置
+
+滚轮复用 [TPickerThemeData](/flutter/components/picker?tab=api#tpickerthemedata) 的 `height` 和 `itemCount`，通过 `ThemeData.extensions` 配置。日期时间选择器没有独立的 Theme 类。
+
 {{ flutter-api date-time-picker }}

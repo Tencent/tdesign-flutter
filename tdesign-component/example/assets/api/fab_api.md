@@ -10,7 +10,38 @@ T2 组合模式：定位层（右下角悬浮 + 可选拖拽/吸附/边界）+ �
 默认动作层不继承父级 `TButtonThemeData`；完整视觉定制请使用 `child`。
 `TFab` 返回 `Positioned`，应作为 `Stack` 的直接子组件使用。
 示例：
+
+#### 声明
+
+```dart
+class TFab extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TFab({
+  super.key,
+  this.text = '',
+  this.icon,
+  this.child,
+  this.onPressed,
+  this.tooltip,
+  this.semanticLabel,
+  this.right,
+  this.bottom,
+  this.draggable,
+  this.magnet,
+  this.xBounds,
+  this.yBounds,
+  this.onDragStart,
+  this.onDragEnd,
+  this.useSafeArea = true,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -36,7 +67,21 @@ T2 组合模式：定位层（右下角悬浮 + 可选拖拽/吸附/边界）+ �
 #### 简介
 拖拽边界限制
 `start` 和 `end` 必须是非负有限值。
+
+#### 声明
+
+```dart
+class TFabBounds
+```
+
 #### 默认构造方法
+
+
+```dart
+const TFabBounds({required this.start, required this.end})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -47,7 +92,21 @@ T2 组合模式：定位层（右下角悬浮 + 可选拖拽/吸附/边界）+ �
 ### TFabDragDetails
 #### 简介
 拖拽回调详情
+
+#### 声明
+
+```dart
+class TFabDragDetails
+```
+
 #### 默认构造方法
+
+
+```dart
+const TFabDragDetails({required this.position, this.start, this.end})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -62,7 +121,28 @@ Fab 定位层 ThemeExtension
 仅管理 Fab 定位层的默认值（偏移、边界、拖拽阈值等）。
 默认动作层固定使用 large / fill / primary；需要完整自定义动作层时使用
 `TFab.child`。
+
+#### 声明
+
+```dart
+class TFabThemeData extends ThemeExtension<TFabThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TFabThemeData({
+  this.defaultRight,
+  this.defaultBottom,
+  this.defaultXBounds,
+  this.defaultYBounds,
+  this.magnetAnimationDuration,
+  this.dragTapSlop,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -72,6 +152,54 @@ Fab 定位层 ThemeExtension
 | defaultYBounds | TFabBounds? | - | 默认垂直拖拽边界限制 | 否 |
 | dragTapSlop | double? | - | 点击与拖拽的判定阈值（位移逻辑像素）。 按手势起点到当前位置的屏幕全方向最大位移判定，与 `TFabDragAxis` 限制的 位置更新轴向无关。 | 否 |
 | magnetAnimationDuration | Duration? | - | 吸附动画时长 | 否 |
+
+
+#### 实例方法
+
+##### TFabThemeData.copyWith
+
+```dart
+TFabThemeData copyWith({
+  double? defaultRight,
+  double? defaultBottom,
+  TFabBounds? defaultXBounds,
+  TFabBounds? defaultYBounds,
+  Duration? magnetAnimationDuration,
+  double? dragTapSlop,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TFabThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| defaultRight | double? | - | 默认距屏幕右侧偏移（逻辑像素） | 否 |
+| defaultBottom | double? | - | 默认距屏幕底部偏移（逻辑像素） | 否 |
+| defaultXBounds | TFabBounds? | - | 默认水平拖拽边界限制 | 否 |
+| defaultYBounds | TFabBounds? | - | 默认垂直拖拽边界限制 | 否 |
+| magnetAnimationDuration | Duration? | - | 吸附动画时长 | 否 |
+| dragTapSlop | double? | - | 点击与拖拽的判定阈值（位移逻辑像素）。 按手势起点到当前位置的屏幕全方向最大位移判定，与 `TFabDragAxis` 限制的 位置更新轴向无关。 | 否 |
+
+
+##### TFabThemeData.lerp
+
+```dart
+TFabThemeData lerp(ThemeExtension<TFabThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TFabThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TFabThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TFabDragAxis

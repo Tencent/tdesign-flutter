@@ -5,7 +5,29 @@
 ### TCascader
 #### 简介
 严格受控的级联选择器。
+
+#### 声明
+
+```dart
+class TCascader extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TCascader({
+  super.key,
+  required this.options,
+  required this.value,
+  this.onChanged,
+  this.variant = TCascaderVariant.tab,
+  this.placeholder = '请选择',
+  this.subtitles = const [],
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -23,7 +45,26 @@
 级联选项。
 `children` 应按 Flutter Widget 配置的不可变约定使用。数据变化时请创建新的
 `TCascaderOption` 和列表，不要原地修改已有列表。
+
+#### 声明
+
+```dart
+class TCascaderOption
+```
+
 #### 默认构造方法
+
+
+```dart
+const TCascaderOption({
+  required this.label,
+  required this.value,
+  this.children = const [],
+  this.disabled = false,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -36,7 +77,31 @@
 ### TCascaderThemeData
 #### 简介
 TCascader 组件级 ThemeExtension。
+
+#### 声明
+
+```dart
+class TCascaderThemeData extends ThemeExtension<TCascaderThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TCascaderThemeData({
+  this.height,
+  this.backgroundColor,
+  this.borderRadius,
+  this.textStyle,
+  this.activeTextStyle,
+  this.disabledTextStyle,
+  this.indicatorColor,
+  this.navigationPadding,
+  this.dividerColor,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -49,6 +114,63 @@ TCascader 组件级 ThemeExtension。
 | indicatorColor | Color? | - | 末级选中图标颜色。 | 否 |
 | navigationPadding | EdgeInsetsGeometry? | - | 导航区域内边距。 | 否 |
 | textStyle | TextStyle? | - | 普通文案样式。 | 否 |
+
+
+#### 实例方法
+
+##### TCascaderThemeData.copyWith
+
+```dart
+TCascaderThemeData copyWith({
+  double? height,
+  Color? backgroundColor,
+  double? borderRadius,
+  TextStyle? textStyle,
+  TextStyle? activeTextStyle,
+  TextStyle? disabledTextStyle,
+  Color? indicatorColor,
+  EdgeInsetsGeometry? navigationPadding,
+  Color? dividerColor,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TCascaderThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| height | double? | - | 组件高度。 | 否 |
+| backgroundColor | Color? | - | 背景色。 | 否 |
+| borderRadius | double? | - | 圆角。 | 否 |
+| textStyle | TextStyle? | - | 普通文案样式。 | 否 |
+| activeTextStyle | TextStyle? | - | 当前活动导航及已选选项文案样式。 | 否 |
+| disabledTextStyle | TextStyle? | - | 禁用文案样式。 | 否 |
+| indicatorColor | Color? | - | 末级选中图标颜色。 | 否 |
+| navigationPadding | EdgeInsetsGeometry? | - | 导航区域内边距。 | 否 |
+| dividerColor | Color? | - | 分隔线颜色。 | 否 |
+
+
+##### TCascaderThemeData.lerp
+
+```dart
+TCascaderThemeData lerp(
+  ThemeExtension<TCascaderThemeData>? other,
+  double t,
+)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TCascaderThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TCascaderThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TCascaderVariant

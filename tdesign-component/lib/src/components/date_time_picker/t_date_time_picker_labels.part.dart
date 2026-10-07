@@ -1,13 +1,14 @@
 part of 't_date_time_picker_internal.dart';
 
 /// 自定义滚轮列展示文案；返回 null 时使用默认文案。
-typedef DateTimePickerRenderLabel = String? Function(
-  /// 当前列，见 `DateTimeColumn`。
-  DateTimeColumn column,
+typedef DateTimePickerRenderLabel =
+    String? Function(
+      /// 当前列，见 `DateTimeColumn`。
+      DateTimeColumn column,
 
-  /// 列数值。
-  int value,
-);
+      /// 列数值。
+      int value,
+    );
 
 /// `TDateTimePickerValue.toDateTime` 未传 fallback 时的缺省补齐值。
 @internal
@@ -79,13 +80,11 @@ class DateTimePickerLabels {
 
   @override
   int get hashCode => Object.hash(
-        Object.hashAll(
-          unitSuffix.entries.map(
-            (entry) => Object.hash(entry.key, entry.value),
-          ),
-        ),
-        Object.hashAll(weekLabels),
-      );
+    Object.hashAll(
+      unitSuffix.entries.map((entry) => Object.hash(entry.key, entry.value)),
+    ),
+    Object.hashAll(weekLabels),
+  );
 }
 
 /// 包内读取 `DateTimePickerMode` 展开后的列列表。
@@ -131,9 +130,6 @@ List<DateTimeColumn> _expand(DateMode? date, TimeMode? time) {
     case null:
       break;
   }
-  assert(
-    cols.isNotEmpty,
-    'DateTimePickerMode: dateMode 与 timeMode 不能同时为 null',
-  );
+  assert(cols.isNotEmpty, 'DateTimePickerMode: dateMode 与 timeMode 不能同时为 null');
   return List<DateTimeColumn>.unmodifiable(cols);
 }

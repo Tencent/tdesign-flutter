@@ -7,7 +7,30 @@
 返回顶部组件。
 绑定 `controller` 后，滚动偏移达到 `visibilityOffset` 时显示；点击时先
 动画回到顶部，再触发可选的 `onPressed` 完成通知。
+
+#### 声明
+
+```dart
+class TBackTop extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TBackTop({
+  Key? key,
+  this.controller,
+  this.onPressed,
+  this.showText = false,
+  this.visibilityOffset = 200,
+  this.tooltip,
+  this.shape = TBackTopShape.circle,
+  this.colorPreset = TBackTopColorPreset.light,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -26,7 +49,33 @@
 返回顶部组件 ThemeExtension。
 只承载子树级具体视觉默认值；结构形态、配色选择和滚动显隐行为由
 `TBackTop` 实例唯一拥有。
+
+#### 声明
+
+```dart
+class TBackTopThemeData extends ThemeExtension<TBackTopThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TBackTopThemeData({
+  this.backgroundColor,
+  this.borderColor,
+  this.contentColor,
+  this.roundSize,
+  this.halfCircleHeight,
+  this.halfCircleMinWidth,
+  this.iconSize,
+  this.borderWidth,
+  this.halfCircleHorizontalPadding,
+  this.contentGap,
+  this.textStyle,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -41,6 +90,64 @@
 | iconSize | double? | - | 图标尺寸，默认 20。 | 否 |
 | roundSize | double? | - | 圆形宽高，默认 48。 | 否 |
 | textStyle | TextStyle? | - | 文案字体样式；未设置字段回退 Mark Extra Small 字体。 文字颜色与图标颜色统一由 `contentColor` 控制，传入样式中的 `color` 不参与解析，避免同一内容色存在两个 Theme 状态源。 | 否 |
+
+
+#### 实例方法
+
+##### TBackTopThemeData.copyWith
+
+```dart
+TBackTopThemeData copyWith({
+  Color? backgroundColor,
+  Color? borderColor,
+  Color? contentColor,
+  double? roundSize,
+  double? halfCircleHeight,
+  double? halfCircleMinWidth,
+  double? iconSize,
+  double? borderWidth,
+  double? halfCircleHorizontalPadding,
+  double? contentGap,
+  TextStyle? textStyle,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TBackTopThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景色；未设置时根据实例配色读取 TDesign 语义 Token。 | 否 |
+| borderColor | Color? | - | 边框色；未设置时根据实例配色读取 TDesign 语义 Token。 | 否 |
+| contentColor | Color? | - | 图标和文字颜色；未设置时根据实例配色读取 TDesign 语义 Token。 | 否 |
+| roundSize | double? | - | 圆形宽高，默认 48。 | 否 |
+| halfCircleHeight | double? | - | 半圆形高度，默认 40。 | 否 |
+| halfCircleMinWidth | double? | - | 半圆形无文字时的最小宽度，默认 38。 | 否 |
+| iconSize | double? | - | 图标尺寸，默认 20。 | 否 |
+| borderWidth | double? | - | 边框宽度，默认 0.5。 | 否 |
+| halfCircleHorizontalPadding | double? | - | 半圆形水平内边距，默认 8。 | 否 |
+| contentGap | double? | - | 半圆形图标与文字间距，默认 2。 | 否 |
+| textStyle | TextStyle? | - | 文案字体样式；未设置字段回退 Mark Extra Small 字体。 文字颜色与图标颜色统一由 `contentColor` 控制，传入样式中的 `color` 不参与解析，避免同一内容色存在两个 Theme 状态源。 | 否 |
+
+
+##### TBackTopThemeData.lerp
+
+```dart
+TBackTopThemeData lerp(ThemeExtension<TBackTopThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TBackTopThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TBackTopThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TBackTopShape

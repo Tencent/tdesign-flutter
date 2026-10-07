@@ -13,15 +13,32 @@
 - 指定不同 `toastId` 时，可多实例并存；
 - 指定相同 `toastId` 时，后一次替换前一次。
 
+#### 声明
+
+```dart
+class TToast
+```
+
+
 #### 静态方法
 
 ##### TToast.dismissAll
+
+```dart
+static void dismissAll()
+```
+
 
 关闭所有Toast
 
 返回类型：`void`
 
 ##### TToast.dismissToast
+
+```dart
+static void dismissToast(String toastId)
+```
+
 
 关闭指定的Toast
 
@@ -33,6 +50,24 @@
 
 
 ##### TToast.showFail
+
+```dart
+static String showFail(
+  String? text, {
+  IconTextDirection direction = IconTextDirection.horizontal,
+  required BuildContext context,
+  Duration duration = const Duration(milliseconds: 2000),
+  TOverlayConfig? overlay,
+  TToastPlacement placement = TToastPlacement.middle,
+  Color? backgroundColor,
+  int? maxLines,
+  TextStyle? textStyle,
+  double? iconSize,
+  Color? iconColor,
+  String? toastId,
+})
+```
+
 
 失败提示Toast
 
@@ -55,6 +90,25 @@
 
 
 ##### TToast.showIconText
+
+```dart
+static String showIconText(
+  String? text, {
+  IconData? icon,
+  IconTextDirection direction = IconTextDirection.horizontal,
+  required BuildContext context,
+  Duration duration = const Duration(milliseconds: 2000),
+  TOverlayConfig? overlay,
+  TToastPlacement placement = TToastPlacement.middle,
+  Color? backgroundColor,
+  int? maxLines,
+  TextStyle? textStyle,
+  double? iconSize,
+  Color? iconColor,
+  String? toastId,
+})
+```
+
 
 带图标的Toast
 
@@ -79,6 +133,23 @@
 
 ##### TToast.showLoading
 
+```dart
+static String showLoading({
+  required BuildContext context,
+  String? text,
+  Duration duration = TToast.infiniteDuration,
+  TOverlayConfig? overlay,
+  TToastPlacement placement = TToastPlacement.middle,
+  Widget? customWidget,
+  Color? backgroundColor,
+  TextStyle? textStyle,
+  double? iconSize,
+  Color? iconColor,
+  String? toastId,
+})
+```
+
+
 带文案的加载Toast
 
 返回类型：`String`
@@ -100,6 +171,20 @@
 
 ##### TToast.showLoadingWithoutText
 
+```dart
+static String showLoadingWithoutText({
+  required BuildContext context,
+  Duration duration = TToast.infiniteDuration,
+  TOverlayConfig? overlay,
+  TToastPlacement placement = TToastPlacement.middle,
+  Color? backgroundColor,
+  double? iconSize,
+  Color? iconColor,
+  String? toastId,
+})
+```
+
+
 不带文案的加载Toast
 
 返回类型：`String`
@@ -117,6 +202,24 @@
 
 
 ##### TToast.showSuccess
+
+```dart
+static String showSuccess(
+  String? text, {
+  IconTextDirection direction = IconTextDirection.horizontal,
+  required BuildContext context,
+  Duration duration = const Duration(milliseconds: 2000),
+  TOverlayConfig? overlay,
+  TToastPlacement placement = TToastPlacement.middle,
+  Color? backgroundColor,
+  int? maxLines,
+  TextStyle? textStyle,
+  double? iconSize,
+  Color? iconColor,
+  String? toastId,
+})
+```
+
 
 成功提示Toast
 
@@ -140,6 +243,23 @@
 
 ##### TToast.showText
 
+```dart
+static String showText(
+  String? text, {
+  required BuildContext context,
+  Duration duration = const Duration(milliseconds: 2000),
+  int? maxLines,
+  BoxConstraints? constraints,
+  TOverlayConfig? overlay,
+  TToastPlacement placement = TToastPlacement.middle,
+  Widget? customWidget,
+  Color? backgroundColor,
+  TextStyle? textStyle,
+  String? toastId,
+})
+```
+
+
 普通文本Toast
 
 返回类型：`String`
@@ -161,6 +281,24 @@
 
 ##### TToast.showWarning
 
+```dart
+static String showWarning(
+  String? text, {
+  IconTextDirection direction = IconTextDirection.horizontal,
+  required BuildContext context,
+  Duration duration = const Duration(milliseconds: 2000),
+  TOverlayConfig? overlay,
+  TToastPlacement placement = TToastPlacement.middle,
+  Color? backgroundColor,
+  int? maxLines,
+  TextStyle? textStyle,
+  double? iconSize,
+  Color? iconColor,
+  String? toastId,
+})
+```
+
+
 警告Toast
 
 返回类型：`String`
@@ -181,7 +319,11 @@
 | toastId | String? | - | 指定实例 ID；不传时自动生成。 | 否 |
 
 #### 默认构造方法
-`TToast()`
+
+
+```dart
+TToast()
+```
 
 #### 静态成员
 
@@ -200,7 +342,26 @@
 `Colors.black.withValues(alpha: opacity)` 派生黑色蒙层；
 - `preventTap`：是否拦截背景点击（与蒙层是否可见解耦，
 `true` 时展示期间背景不可点击）。
+
+#### 声明
+
+```dart
+class TOverlayConfig
+```
+
 #### 默认构造方法
+
+
+```dart
+const TOverlayConfig({
+  this.showOverlay = false,
+  this.color,
+  this.opacity = 0.2,
+  this.preventTap = false,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -214,9 +375,21 @@
 #### 简介
 TToast 组件级 ThemeExtension
 
+#### 声明
+
+```dart
+class TToastThemeData extends ThemeExtension<TToastThemeData>
+```
+
+
 #### 静态方法
 
 ##### TToastThemeData.lerpDouble
+
+```dart
+static double? lerpDouble(double? a, double? b, double t)
+```
+
 
 对 `a` 和 `b` 按 `t` 线性插值；两端均为 null 时返回 null，仅一端为 null 时按 0 参与计算。
 
@@ -229,6 +402,21 @@ TToast 组件级 ThemeExtension
 | t | double | - | 插值进度；0 表示起点，1 表示终点。 | 是 |
 
 #### 默认构造方法
+
+
+```dart
+const TToastThemeData({
+  this.backgroundColor,
+  this.textStyle,
+  this.iconSize,
+  this.iconColor,
+  this.borderRadius,
+  this.padding,
+  this.maxWidth,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -243,7 +431,60 @@ TToast 组件级 ThemeExtension
 
 #### 实例方法
 
+##### TToastThemeData.copyWith
+
+```dart
+TToastThemeData copyWith({
+  Color? backgroundColor,
+  TextStyle? textStyle,
+  double? iconSize,
+  Color? iconColor,
+  double? borderRadius,
+  EdgeInsetsGeometry? padding,
+  double? maxWidth,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TToastThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景色 | 否 |
+| textStyle | TextStyle? | - | 文案样式 | 否 |
+| iconSize | double? | - | 图标尺寸 | 否 |
+| iconColor | Color? | - | 图标颜色 | 否 |
+| borderRadius | double? | - | 圆角 | 否 |
+| padding | EdgeInsetsGeometry? | - | 内边距 | 否 |
+| maxWidth | double? | - | 最大宽度 | 否 |
+
+
+##### TToastThemeData.lerp
+
+```dart
+TToastThemeData lerp(ThemeExtension<TToastThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TToastThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TToastThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
+
+
 ##### TToastThemeData.merge
+
+```dart
+TToastThemeData merge(TToastThemeData? other)
+```
+
 
 合并其他 ThemeData，非空字段优先取 `other`
 

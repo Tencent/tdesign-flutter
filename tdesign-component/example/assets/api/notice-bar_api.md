@@ -5,7 +5,35 @@
 ### TNoticeBar
 #### 简介
 公告栏
+
+#### 声明
+
+```dart
+class TNoticeBar extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TNoticeBar({
+  super.key,
+  this.content = '',
+  this.items = const <String>[],
+  this.status = TNoticeBarStatus.info,
+  this.prefix,
+  this.operation,
+  this.suffixIcon,
+  this.direction = Axis.horizontal,
+  this.maxLines = 1,
+  this.marquee = false,
+  this.speed = 50,
+  this.interval = const Duration(seconds: 2),
+  this.onPressed,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -29,9 +57,21 @@
 TNoticeBar 组件级 ThemeExtension
 通过 Theme 子树注入，控制子树的默认公告栏样式。
 
+#### 声明
+
+```dart
+class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData>
+```
+
+
 #### 静态方法
 
 ##### TNoticeBarThemeData.lerpDouble
+
+```dart
+static double? lerpDouble(double? a, double? b, double t)
+```
+
 
 在两个可选数值之间插值。
 当仅一端有值时采用离散切换，避免把缺省值错误地当作 0。组件已知默认值
@@ -46,6 +86,20 @@ TNoticeBar 组件级 ThemeExtension
 | t | double | - | 插值进度。 | 是 |
 
 #### 默认构造方法
+
+
+```dart
+const TNoticeBarThemeData({
+  this.height,
+  this.backgroundColor,
+  this.textStyle,
+  this.leftIconColor,
+  this.rightIconColor,
+  this.padding,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -65,7 +119,61 @@ TNoticeBar 组件级 ThemeExtension
 
 #### 实例方法
 
+##### TNoticeBarThemeData.copyWith
+
+```dart
+TNoticeBarThemeData copyWith({
+  double? height,
+  Color? backgroundColor,
+  TextStyle? textStyle,
+  Color? leftIconColor,
+  Color? rightIconColor,
+  EdgeInsetsGeometry? padding,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TNoticeBarThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| height | double? | - | 文字高度 | 否 |
+| backgroundColor | Color? | - | 公告栏背景色 | 否 |
+| textStyle | TextStyle? | - | 公告栏内容样式 | 否 |
+| leftIconColor | Color? | - | 公告栏左侧图标颜色 | 否 |
+| rightIconColor | Color? | - | 公告栏右侧图标颜色 | 否 |
+| padding | EdgeInsetsGeometry? | - | 公告栏内边距 | 否 |
+
+
+##### TNoticeBarThemeData.lerp
+
+```dart
+TNoticeBarThemeData lerp(
+  ThemeExtension<TNoticeBarThemeData>? other,
+  double t,
+)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TNoticeBarThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TNoticeBarThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
+
+
 ##### TNoticeBarThemeData.merge
+
+```dart
+TNoticeBarThemeData merge(TNoticeBarThemeData? other)
+```
+
 
 合并两个 ThemeExtension，`other` 优先于 this
 
@@ -77,6 +185,14 @@ TNoticeBar 组件级 ThemeExtension
 
 
 ##### TNoticeBarThemeData.resolve
+
+```dart
+TNoticeBarThemeData resolve(
+  BuildContext context, {
+  TNoticeBarStatus status = TNoticeBarStatus.info,
+})
+```
+
 
 根据状态和上下文解析出完整的样式（颜色等）
 

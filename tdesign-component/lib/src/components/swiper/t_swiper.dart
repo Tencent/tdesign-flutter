@@ -43,12 +43,16 @@ class TSwiperController extends ChangeNotifier {
   bool get hasClients => _jumpTo != null;
 
   /// 立即跳转到目标页。
-  void jumpTo(int index) => _jumpTo?.call(index);
+  void jumpTo(
+    /// 目标页面的业务索引，从 0 开始；超出范围时按绑定 Swiper 的规则归一化。
+    int index,
+  ) => _jumpTo?.call(index);
 
   /// 动画切换到目标页；循环模式始终向前到达目标。
   ///
   /// 未提供 [duration] 或 [curve] 时，继承所附加 [TSwiper] 的动画配置。
   Future<void> animateTo(
+    /// 目标页面的业务索引，从 0 开始；循环模式向前切换到该页面。
     int index, {
 
     /// 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。

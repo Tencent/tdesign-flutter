@@ -5,6 +5,8 @@ import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:path/path.dart' as p;
 
+import 'api_doc_contract.dart';
+
 /// Checks the API manifest against this package's public exports and dartdoc.
 /// Run with --json for a source-location inventory, or --sync to update scope.
 void main(List<String> args) {
@@ -24,6 +26,25 @@ void main(List<String> args) {
     void collect(String source) {
       final parsed = unit(source);
       for (final node in parsed.declarations) {
+        if (node.metadata.any(
+          (annotation) => const {
+            'internal',
+            'visibleForTesting',
+          }.contains(annotation.name.name),
+        )) {
+          continue;
+        }
+        if (node is TopLevelVariableDeclaration) {
+          for (final variable in node.variables.variables) {
+            final name = variable.name.lexeme;
+            if (name.startsWith('_')) {
+              continue;
+            }
+            result[name] = source;
+            nodes[name] = node;
+          }
+          continue;
+        }
         String? name;
         if (node is NamedCompilationUnitMember) {
           name = node.name.lexeme;
@@ -95,7 +116,15 @@ void main(List<String> args) {
     });
   }
 
-  const frameworkMethods = {'build', 'createState', 'debugFillProperties'};
+  const frameworkMethods = {
+    'build',
+    'createState',
+    'debugFillProperties',
+    'hashCode',
+    '==',
+    'toString',
+  };
+  const customOverrides = {'copyWith', 'lerp', '[]'};
   for (final entry in exports.entries) {
     final name = entry.key;
     final path = entry.value;
@@ -113,23 +142,50 @@ void main(List<String> args) {
       'members': members,
       'constructors': constructors,
       'parameters': <Map<String, dynamic>>[],
+      'callables': <String, Map<String, dynamic>>{},
+      'declaration': node is ClassDeclaration
+          ? signatureTokens(node, node.leftBracket.offset)
+          : node is ExtensionDeclaration
+          ? signatureTokens(node, node.leftBracket.offset)
+          : null,
     };
-    void captureParameters(String callable, FormalParameterList? parameters) {
+    void captureParameters(
+      String callable,
+      FormalParameterList? parameters, {
+      AnnotatedNode? declaration,
+    }) {
       if (parameters == null) {
         return;
       }
+      final captured = <Map<String, dynamic>>[];
+      (declarations[name]!['callables'] as Map)[callable] = {
+        'parameters': captured,
+        'signature': declaration == null
+            ? null
+            : signatureTokens(declaration, parameters.end),
+      };
       for (final parameter in parameters.parameters) {
-        (declarations[name]!['parameters'] as List).add({
+        final row = <String, dynamic>{
           'callable': callable,
           'name': parameter.name?.lexeme,
           'offset': parameter.offset,
           'source': parameter.toSource(),
-        });
+          'type': parameterType(parameter, node, nodes),
+          'default': parameterDefault(parameter, node, nodes),
+          'required': parameter.isRequired,
+          'named': parameter.isNamed,
+        };
+        captured.add(row);
+        (declarations[name]!['parameters'] as List).add(row);
       }
     }
 
     if (node is FunctionDeclaration) {
-      captureParameters(name, node.functionExpression.parameters);
+      captureParameters(
+        name,
+        node.functionExpression.parameters,
+        declaration: node,
+      );
     }
     if (node.documentationComment == null) {
       issue('comment', name, path, node.offset);
@@ -148,7 +204,14 @@ void main(List<String> args) {
           continue;
         }
         if (member is ConstructorDeclaration) {
-          captureParameters(member.name?.lexeme ?? '', member.parameters);
+          if (member.name?.lexeme.startsWith('_') ?? false) {
+            continue;
+          }
+          captureParameters(
+            member.name?.lexeme ?? '',
+            member.parameters,
+            declaration: member,
+          );
           if (member.name == null) {
             constructors.add('');
           }
@@ -175,17 +238,34 @@ void main(List<String> args) {
             continue;
           }
           if (member.metadata.any((a) => a.name.name == 'override') &&
-              member.documentationComment == null) {
+              member.documentationComment == null &&
+              !customOverrides.contains(memberName)) {
             continue;
           }
-          captureParameters(memberName, member.parameters);
+          if (!member.isGetter && !member.isSetter) {
+            captureParameters(
+              memberName,
+              member.parameters,
+              declaration: member,
+            );
+          }
           members.add(memberName);
           if (member.documentationComment == null &&
-              !member.metadata.any((a) => a.name.name == 'override')) {
+              (!member.metadata.any((a) => a.name.name == 'override') ||
+                  customOverrides.contains(memberName))) {
             issue('comment', '$name.$memberName', path, member.offset);
           }
         }
       }
+    }
+    if (node is ClassDeclaration &&
+        node.abstractKeyword == null &&
+        !node.members.any((m) => m is ConstructorDeclaration)) {
+      constructors.add('');
+      (declarations[name]!['callables'] as Map)[''] = {
+        'parameters': <Map<String, dynamic>>[],
+        'signature': lexicalTokens('$name()'),
+      };
     }
     if (node is EnumDeclaration) {
       for (final constant in node.constants) {
@@ -273,11 +353,7 @@ void main(List<String> args) {
       if (!line.startsWith('|')) {
         continue;
       }
-      final cells = line
-          .substring(1, line.length - 1)
-          .split('|')
-          .map((cell) => cell.trim())
-          .toList();
+      final cells = tableCells(line);
       if (cells.isNotEmpty && const {'参数', '名称', '属性'}.contains(cells.first)) {
         headers = cells;
         continue;
@@ -321,6 +397,94 @@ void main(List<String> args) {
       }
       final next = doc.indexOf('\n### ', start + 1);
       final section = doc.substring(start, next < 0 ? doc.length : next);
+      final declarationTokens = declaration['declaration'] as List<String>?;
+      if (declarationTokens != null &&
+          !containsSignature(section, declarationTokens)) {
+        issue('output-signature', name, exports[name]!, nodes[name]!.offset);
+      }
+      for (final entry in (declaration['callables'] as Map).entries) {
+        final callable = entry.key as String;
+        String callableSection;
+        if (declaration['kind'] == 'function') {
+          callableSection = section;
+        } else {
+          final heading = callable.isEmpty
+              ? '#### 默认构造方法'
+              : '##### $name.$callable';
+          final pos = section.indexOf('$heading\n');
+          if (pos < 0) {
+            issue(
+              'output-callable',
+              '$name.$callable',
+              exports[name]!,
+              nodes[name]!.offset,
+            );
+            continue;
+          }
+          final tail = section.substring(pos + heading.length + 1);
+          final boundary = RegExp(
+            r'^####(?:#)? (?!参数$)',
+            multiLine: true,
+          ).firstMatch(tail);
+          callableSection = boundary == null
+              ? tail
+              : tail.substring(0, boundary.start);
+        }
+        final expected = entry.value['parameters'] as List;
+        final expectedSignature = entry.value['signature'] as List<String>?;
+        if (expectedSignature != null &&
+            !containsSignature(callableSection, expectedSignature)) {
+          issue(
+            'output-signature',
+            '$name.$callable',
+            exports[name]!,
+            nodes[name]!.offset,
+          );
+        }
+        final rows = parameterRows(callableSection);
+        for (final parameter in expected.cast<Map<String, dynamic>>()) {
+          final paramName = parameter['name'];
+          final found = rows.where((r) => r['参数'] == paramName).toList();
+          final label = '$name.$callable.$paramName';
+          if (found.length != 1) {
+            issue(
+              'output-parameter-count',
+              label,
+              exports[name]!,
+              parameter['offset'] as int,
+            );
+            continue;
+          }
+          for (final column in const ['类型', '默认值', '必填']) {
+            final value = column == '类型'
+                ? parameter['type'] as String
+                : column == '默认值'
+                ? parameter['default'] as String
+                : parameter['required'] == true
+                ? '是'
+                : '否';
+            if (!sameCode(found.single[column] ?? '', value)) {
+              issue(
+                'output-parameter-$column',
+                label,
+                exports[name]!,
+                parameter['offset'] as int,
+              );
+            }
+          }
+        }
+        final expectedNames = expected.map((p) => p['name']).toSet();
+        for (final row in rows) {
+          if (!expectedNames.contains(row['参数'])) {
+            issue(
+              'output-extra-parameter',
+              '$name.$callable.${row['参数']}',
+              exports[name]!,
+              nodes[name]!.offset,
+            );
+          }
+        }
+      }
       for (final member in declaration['members'] as List<String>) {
         if (!section.contains('| $member |') &&
             !section.contains('##### $name.$member\n')) {
@@ -364,8 +528,8 @@ void main(List<String> args) {
     stdout.writeln(
       '${components.length} components; ${exports.length} public declarations; ${issues.length} issues',
     );
-    if (issues.isNotEmpty) {
-      exitCode = 1;
-    }
+  }
+  if (issues.isNotEmpty) {
+    exitCode = 1;
   }
 }

@@ -6,7 +6,34 @@
 #### 简介
 由最近的 `TRadioGroup` 控制选中状态的单选框。
 必须作为同类型 `TRadioGroup` 的后代使用：
+
+#### 声明
+
+```dart
+class TRadio<T> extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TRadio({
+  super.key,
+  required this.value,
+  this.title,
+  this.subTitle,
+  this.size = TRadioSize.medium,
+  this.iconType = TRadioIconType.fill,
+  this.variant = TRadioVariant.block,
+  this.disabled = false,
+  this.contentDirection = TContentDirection.right,
+  this.titleMaxLines = 3,
+  this.subTitleMaxLines = 5,
+  this.customIconBuilder,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -30,9 +57,35 @@
 默认构造通过 `child` 接收调用方布局；标准数据列表使用
 `TRadioGroup.options`。组内的 `TRadio` 从该组件读取选中值和变更回调。
 
+#### 声明
+
+```dart
+class TRadioGroup<T> extends StatelessWidget
+```
+
+
 #### 命名构造方法
 
 ##### TRadioGroup.options
+
+```dart
+const TRadioGroup.options({
+  super.key,
+  required this.value,
+  required List<TRadioOption<T>> options,
+  this.onChanged,
+  Axis direction = Axis.vertical,
+  int columns = 1,
+  TRadioVariant variant = TRadioVariant.block,
+  bool? showDivider,
+  TContentDirection contentDirection = TContentDirection.right,
+  TRadioSize size = TRadioSize.medium,
+  TRadioIconType iconType = TRadioIconType.fill,
+  int titleMaxLines = 3,
+  int subTitleMaxLines = 5,
+})
+```
+
 
 使用数据项生成标准布局的单选框组。
 
@@ -54,6 +107,18 @@
 
 #### 默认构造方法
 
+
+```dart
+const TRadioGroup({
+  super.key,
+  required this.value,
+  this.onChanged,
+  required this.child,
+})
+```
+
+#### 参数
+
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | child | Widget | - | 包含 `TRadio` 的自定义布局。 | 是 |
@@ -65,7 +130,26 @@
 ### TRadioOption
 #### 简介
 单选框组的数据项。
+
+#### 声明
+
+```dart
+class TRadioOption<T>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TRadioOption({
+  required this.value,
+  required this.label,
+  this.subTitle,
+  this.disabled = false,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -79,7 +163,29 @@
 #### 简介
 TRadio 组件级 ThemeExtension
 通过 Theme 子树注入，控制子树默认样式。
+
+#### 声明
+
+```dart
+class TRadioThemeData extends ThemeExtension<TRadioThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TRadioThemeData({
+  this.selectColor,
+  this.disableColor,
+  this.titleColor,
+  this.subTitleColor,
+  this.backgroundColor,
+  this.spacing,
+  this.insetSpacing,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -90,6 +196,56 @@ TRadio 组件级 ThemeExtension
 | spacing | double? | - | 指示器与文案间距。 | 否 |
 | subTitleColor | Color? | - | 副标题颜色。 | 否 |
 | titleColor | Color? | - | 主标题颜色。 | 否 |
+
+
+#### 实例方法
+
+##### TRadioThemeData.copyWith
+
+```dart
+TRadioThemeData copyWith({
+  Color? selectColor,
+  Color? disableColor,
+  Color? titleColor,
+  Color? subTitleColor,
+  Color? backgroundColor,
+  double? spacing,
+  double? insetSpacing,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TRadioThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| selectColor | Color? | - | 选择颜色 | 否 |
+| disableColor | Color? | - | 禁用颜色 | 否 |
+| titleColor | Color? | - | 标题文字颜色 | 否 |
+| subTitleColor | Color? | - | 副标题文字颜色 | 否 |
+| backgroundColor | Color? | - | 背景颜色 | 否 |
+| spacing | double? | - | icon和文字的距离 | 否 |
+| insetSpacing | double? | - | 文字和非图标侧的距离 | 否 |
+
+
+##### TRadioThemeData.lerp
+
+```dart
+TRadioThemeData lerp(ThemeExtension<TRadioThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TRadioThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TRadioThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TRadioSize

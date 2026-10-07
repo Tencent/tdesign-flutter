@@ -6,9 +6,31 @@
 #### 简介
 展示确定或不确定任务进度的组件。
 
+#### 声明
+
+```dart
+class TProgress extends StatelessWidget
+```
+
+
 #### 命名构造方法
 
 ##### TProgress.button
+
+```dart
+TProgress.button({
+  Key? key,
+  double? value,
+  TProgressStatus status = TProgressStatus.normal,
+  Widget? label,
+  LinearGradient? gradient,
+  String? semanticsLabel,
+  String? semanticsValue,
+  VoidCallback? onTap,
+  VoidCallback? onLongPress,
+})
+```
+
 
 创建按钮外观的线性进度条。
 
@@ -27,6 +49,18 @@
 
 ##### TProgress.circular
 
+```dart
+TProgress.circular({
+  Key? key,
+  double? value,
+  TProgressStatus status = TProgressStatus.normal,
+  Widget? label,
+  String? semanticsLabel,
+  String? semanticsValue,
+})
+```
+
+
 创建环形进度条。
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
@@ -40,6 +74,19 @@
 
 
 ##### TProgress.linear
+
+```dart
+TProgress.linear({
+  Key? key,
+  double? value,
+  TProgressStatus status = TProgressStatus.normal,
+  Widget? label,
+  LinearGradient? gradient,
+  String? semanticsLabel,
+  String? semanticsValue,
+})
+```
+
 
 创建线性进度条。
 
@@ -55,6 +102,20 @@
 
 
 ##### TProgress.microButton
+
+```dart
+TProgress.microButton({
+  Key? key,
+  double? value,
+  TProgressStatus status = TProgressStatus.normal,
+  Widget? label,
+  String? semanticsLabel,
+  String? semanticsValue,
+  VoidCallback? onTap,
+  VoidCallback? onLongPress,
+})
+```
+
 
 创建带按钮语义和紧凑圆环外观的进度操作。
 
@@ -72,6 +133,18 @@
 
 ##### TProgress.microCircular
 
+```dart
+TProgress.microCircular({
+  Key? key,
+  double? value,
+  TProgressStatus status = TProgressStatus.normal,
+  Widget? label,
+  String? semanticsLabel,
+  String? semanticsValue,
+})
+```
+
+
 创建紧凑、只读的环形进度条。
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
@@ -85,6 +158,19 @@
 
 
 ##### TProgress.plump
+
+```dart
+TProgress.plump({
+  Key? key,
+  double? value,
+  TProgressStatus status = TProgressStatus.normal,
+  Widget? label,
+  LinearGradient? gradient,
+  String? semanticsLabel,
+  String? semanticsValue,
+})
+```
+
 
 创建百分比显示在进度条内部的胶囊形进度条。
 
@@ -118,7 +204,32 @@
 进度条组件级 ThemeExtension
 通过 Theme 子树注入，控制子树的默认视觉值。
 除进度值、状态与线性渐变等实例语义外，具体绘制值优先读取组件 Theme。
+
+#### 声明
+
+```dart
+class TProgressThemeData extends ThemeExtension<TProgressThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TProgressThemeData({
+  this.strokeWidth,
+  this.color,
+  this.backgroundColor,
+  this.circleInnerBgColor,
+  this.linearBorderRadius,
+  this.circleSize,
+  this.animationDuration,
+  this.indeterminateAnimationDuration,
+  this.indeterminateLinearSegmentFraction,
+  this.indeterminateCircularValue,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -132,6 +243,65 @@
 | indeterminateLinearSegmentFraction | double? | - | 不确定线性进度段占轨道宽度的比例。 | 否 |
 | linearBorderRadius | BorderRadiusGeometry? | - | 条形进度条末端圆角 | 否 |
 | strokeWidth | double? | - | 进度条粗细 | 否 |
+
+
+#### 实例方法
+
+##### TProgressThemeData.copyWith
+
+```dart
+TProgressThemeData copyWith({
+  double? strokeWidth,
+  Color? color,
+  Color? backgroundColor,
+  Color? circleInnerBgColor,
+  BorderRadiusGeometry? linearBorderRadius,
+  double? circleSize,
+  Duration? animationDuration,
+  Duration? indeterminateAnimationDuration,
+  double? indeterminateLinearSegmentFraction,
+  double? indeterminateCircularValue,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TProgressThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| strokeWidth | double? | - | 进度条粗细 | 否 |
+| color | Color? | - | 进度条颜色 | 否 |
+| backgroundColor | Color? | - | 进度条背景色 | 否 |
+| circleInnerBgColor | Color? | - | 环形进度条内圆背景色。默认浅色读取容器色、暗色透明； 宿主如需定义暗色内圆，可在组件 Theme 中显式配置。 | 否 |
+| linearBorderRadius | BorderRadiusGeometry? | - | 条形进度条末端圆角 | 否 |
+| circleSize | double? | - | 环形进度条的正方形边长；未设置时由环形规格决定。 | 否 |
+| animationDuration | Duration? | - | 动画持续时间 | 否 |
+| indeterminateAnimationDuration | Duration? | - | 不确定进度完成一次循环的时长。 | 否 |
+| indeterminateLinearSegmentFraction | double? | - | 不确定线性进度段占轨道宽度的比例。 | 否 |
+| indeterminateCircularValue | double? | - | 不确定环形进度弧占整圈的比例。 | 否 |
+
+
+##### TProgressThemeData.lerp
+
+```dart
+TProgressThemeData lerp(
+  ThemeExtension<TProgressThemeData>? other,
+  double t,
+)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TProgressThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TProgressThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TProgressVariant

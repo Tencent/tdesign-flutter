@@ -5,7 +5,36 @@
 ### TIndexes
 #### 简介
 索引
+
+#### 声明
+
+```dart
+class TIndexes extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TIndexes({
+  Key? key,
+  this.indexList,
+  this.initialIndex,
+  this.useSafeArea = false,
+  this.sticky = true,
+  this.stickyOffset = 0,
+  this.capsuleTheme = false,
+  this.reverse = false,
+  this.scrollController,
+  this.onChanged,
+  this.onSelect,
+  required this.builderContent,
+  this.builderAnchor,
+  this.builderIndex,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -28,7 +57,28 @@
 ### TIndexesAnchor
 #### 简介
 索引锚点
+
+#### 声明
+
+```dart
+class TIndexesAnchor extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TIndexesAnchor({
+  Key? key,
+  required this.sticky,
+  required this.text,
+  required this.capsuleTheme,
+  this.builderAnchor,
+  required this.activeIndex,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -43,7 +93,28 @@
 ### TIndexesList
 #### 简介
 索引
+
+#### 声明
+
+```dart
+class TIndexesList extends StatefulWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TIndexesList({
+  Key? key,
+  required this.indexList,
+  this.indexListMaxHeight = 0.8,
+  required this.activeIndex,
+  required this.onSelect,
+  this.builderIndex,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -59,7 +130,47 @@
 #### 简介
 索引组件的子树级视觉主题。
 仅管理尺寸、颜色和字体。吸顶、滚动方向与胶囊模式属于组件实例行为。
+
+#### 声明
+
+```dart
+class TIndexesThemeData extends ThemeExtension<TIndexesThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TIndexesThemeData({
+  this.indexListMaxHeight,
+  this.sidebarRight,
+  this.indexItemSize,
+  this.indexItemSpacing,
+  this.tipSize,
+  this.tipMaxWidth,
+  this.tipGap,
+  this.indexColor,
+  this.activeIndexColor,
+  this.activeIndexBackgroundColor,
+  this.tipColor,
+  this.tipBackgroundColor,
+  this.indexFont,
+  this.activeIndexFont,
+  this.tipFont,
+  this.anchorColor,
+  this.activeAnchorColor,
+  this.anchorBackgroundColor,
+  this.activeAnchorBackgroundColor,
+  this.anchorBorderColor,
+  this.anchorFont,
+  this.activeAnchorFont,
+  this.anchorVerticalPadding,
+  this.anchorHorizontalPadding,
+  this.capsuleMargin,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -90,11 +201,108 @@
 | tipSize | double? | - | 按压提示的最小尺寸。 | 否 |
 
 
+#### 实例方法
+
+##### TIndexesThemeData.copyWith
+
+```dart
+TIndexesThemeData copyWith({
+  double? indexListMaxHeight,
+  double? sidebarRight,
+  double? indexItemSize,
+  double? indexItemSpacing,
+  double? tipSize,
+  double? tipMaxWidth,
+  double? tipGap,
+  Color? indexColor,
+  Color? activeIndexColor,
+  Color? activeIndexBackgroundColor,
+  Color? tipColor,
+  Color? tipBackgroundColor,
+  Font? indexFont,
+  Font? activeIndexFont,
+  Font? tipFont,
+  Color? anchorColor,
+  Color? activeAnchorColor,
+  Color? anchorBackgroundColor,
+  Color? activeAnchorBackgroundColor,
+  Color? anchorBorderColor,
+  Font? anchorFont,
+  Font? activeAnchorFont,
+  double? anchorVerticalPadding,
+  double? anchorHorizontalPadding,
+  double? capsuleMargin,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TIndexesThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| indexListMaxHeight | double? | - | 索引列表最大高度占父容器高度的比例。 | 否 |
+| sidebarRight | double? | - | 侧栏距容器右侧的距离。 | 否 |
+| indexItemSize | double? | - | 单个索引的尺寸。 | 否 |
+| indexItemSpacing | double? | - | 相邻索引之间的距离。 | 否 |
+| tipSize | double? | - | 按压提示的最小尺寸。 | 否 |
+| tipMaxWidth | double? | - | 按压提示的最大宽度。 | 否 |
+| tipGap | double? | - | 按压提示与索引之间的距离。 | 否 |
+| indexColor | Color? | - | 普通索引文字颜色。 | 否 |
+| activeIndexColor | Color? | - | 激活索引文字颜色。 | 否 |
+| activeIndexBackgroundColor | Color? | - | 激活索引背景色。 | 否 |
+| tipColor | Color? | - | 按压提示文字颜色。 | 否 |
+| tipBackgroundColor | Color? | - | 按压提示背景色。 | 否 |
+| indexFont | Font? | - | 普通索引字体。 | 否 |
+| activeIndexFont | Font? | - | 激活索引字体。 | 否 |
+| tipFont | Font? | - | 按压提示字体。 | 否 |
+| anchorColor | Color? | - | 普通锚点文字颜色。 | 否 |
+| activeAnchorColor | Color? | - | 激活锚点文字颜色。 | 否 |
+| anchorBackgroundColor | Color? | - | 普通锚点背景色。 | 否 |
+| activeAnchorBackgroundColor | Color? | - | 激活锚点背景色。 | 否 |
+| anchorBorderColor | Color? | - | 激活锚点边框颜色。 | 否 |
+| anchorFont | Font? | - | 普通锚点字体。 | 否 |
+| activeAnchorFont | Font? | - | 激活锚点字体。 | 否 |
+| anchorVerticalPadding | double? | - | 锚点垂直内边距。 | 否 |
+| anchorHorizontalPadding | double? | - | 锚点水平内边距。 | 否 |
+| capsuleMargin | double? | - | 胶囊锚点的水平外边距。 | 否 |
+
+
+##### TIndexesThemeData.lerp
+
+```dart
+TIndexesThemeData lerp(ThemeExtension<TIndexesThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TIndexesThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TIndexesThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
+
+
 ### StickyHeaderController
 #### 简介
 吸顶 Sliver 的滚动位置控制器；位置变化时通知监听者。
+
+#### 声明
+
+```dart
+class StickyHeaderController with ChangeNotifier
+```
+
 #### 默认构造方法
-`StickyHeaderController()`
+
+
+```dart
+StickyHeaderController()
+```
 
 #### 公开属性（字段与访问器）
 
@@ -113,9 +321,21 @@ explicitly created `StickyHeaderController` isn't convenient because the sticky
 headers are created by a stateless parent widget or by different parent
 widgets.
 
+#### 声明
+
+```dart
+class DefaultStickyHeaderController extends StatefulWidget
+```
+
+
 #### 静态方法
 
 ##### DefaultStickyHeaderController.of
+
+```dart
+static StickyHeaderController? of(BuildContext context)
+```
+
 
 The closest instance of this class that encloses the given context.
 Typical usage:
@@ -131,6 +351,13 @@ StickyHeaderController controller = DefaultStickyHeaderController.of(context);
 
 #### 默认构造方法
 
+
+```dart
+const DefaultStickyHeaderController({Key? key, required this.child})
+```
+
+#### 参数
+
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | child | Widget | - | The widget below this widget in the tree. Typically a `Scaffold` whose `AppBar` includes a `TabBar`. {@macro flutter.widgets.child} | 是 |
@@ -140,7 +367,21 @@ StickyHeaderController controller = DefaultStickyHeaderController.of(context);
 ### SliverStickyHeaderState
 #### 简介
 State describing how a sticky header is rendered.
+
+#### 声明
+
+```dart
+class SliverStickyHeaderState
+```
+
 #### 默认构造方法
+
+
+```dart
+const SliverStickyHeaderState(this.scrollPercentage, this.isPinned)
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -154,9 +395,29 @@ A sliver that displays a header before its sliver.
 The header scrolls off the viewport only when the sliver does.
 Place this widget inside a `CustomScrollView` or similar.
 
+#### 声明
+
+```dart
+class SliverStickyHeader extends RenderObjectWidget
+```
+
+
 #### 命名构造方法
 
 ##### SliverStickyHeader.builder
+
+```dart
+SliverStickyHeader.builder({
+  Key? key,
+  required SliverStickyHeaderWidgetBuilder builder,
+  Widget? sliver,
+  bool overlapsContent = false,
+  bool sticky = true,
+  double pinnedOffset = 0.0,
+  StickyHeaderController? controller,
+})
+```
+
 
 Creates a widget that builds the header of a `SliverStickyHeader`
 each time its scroll percentage changes.
@@ -176,6 +437,21 @@ If a `StickyHeaderController` is not provided, then the value of
 
 #### 默认构造方法
 
+
+```dart
+const SliverStickyHeader({
+  Key? key,
+  this.header,
+  this.sliver,
+  this.overlapsContent = false,
+  this.sticky = true,
+  this.pinnedOffset = 0.0,
+  this.controller,
+})
+```
+
+#### 参数
+
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | controller | StickyHeaderController? | - | The controller used to interact with this sliver. If a `StickyHeaderController` is not provided, then the value of `DefaultStickyHeaderController.of` will be used. | 否 |
@@ -190,7 +466,21 @@ If a `StickyHeaderController` is not provided, then the value of
 ### SliverStickyHeaderRenderObjectElement
 #### 简介
 管理吸顶标题和内容 Sliver 子元素的 RenderObjectElement。
+
+#### 声明
+
+```dart
+class SliverStickyHeaderRenderObjectElement extends RenderObjectElement
+```
+
 #### 默认构造方法
+
+
+```dart
+SliverStickyHeaderRenderObjectElement(SliverStickyHeader widget)
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |

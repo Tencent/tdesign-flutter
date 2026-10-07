@@ -5,7 +5,34 @@
 ### TUpload
 #### 简介
 严格受控的文件选择与上传状态展示组件。
+
+#### 声明
+
+```dart
+class TUpload extends StatelessWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TUpload({
+  super.key,
+  required this.files,
+  this.onChanged,
+  this.mediaType = TUploadMediaType.image,
+  this.layout = TUploadLayout.grid,
+  this.draggable = false,
+  this.maxFiles = 1,
+  this.maxFileSize,
+  this.picker,
+  this.onFileTap,
+  this.onValidationError,
+  this.onError,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -26,7 +53,31 @@
 ### TUploadFile
 #### 简介
 不可变的上传文件数据。
+
+#### 声明
+
+```dart
+class TUploadFile
+```
+
 #### 默认构造方法
+
+
+```dart
+const TUploadFile({
+  required this.id,
+  required this.name,
+  this.url,
+  this.bytes,
+  this.size,
+  this.status = TUploadFileStatus.ready,
+  this.progress,
+  this.errorText,
+  this.canRemove = true,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -44,6 +95,21 @@
 #### 实例方法
 
 ##### TUploadFile.copyWith
+
+```dart
+TUploadFile copyWith({
+  String? id,
+  String? name,
+  String? url,
+  Uint8List? bytes,
+  int? size,
+  TUploadFileStatus? status,
+  double? progress,
+  String? errorText,
+  bool? canRemove,
+})
+```
+
 
 创建部分字段变化的新实例。
 
@@ -65,7 +131,40 @@
 ### TUploadThemeData
 #### 简介
 TUpload 组件级 ThemeExtension。
+
+#### 声明
+
+```dart
+class TUploadThemeData extends ThemeExtension<TUploadThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TUploadThemeData({
+  this.variant,
+  this.itemSize,
+  this.spacing,
+  this.runSpacing,
+  this.alignment,
+  this.backgroundColor,
+  this.foregroundColor,
+  this.disabledBackgroundColor,
+  this.disabledForegroundColor,
+  this.overlayColor,
+  this.statusTextStyle,
+  this.borderRadius,
+  this.addIconSize,
+  this.statusIconSize,
+  this.removeButtonSize,
+  this.removeButtonColor,
+  this.removeIconSize,
+  this.disabledMaskColor,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -87,6 +186,78 @@ TUpload 组件级 ThemeExtension。
 | statusIconSize | double? | - | 状态图标尺寸。 | 否 |
 | statusTextStyle | TextStyle? | - | 状态文案样式。 | 否 |
 | variant | TUploadVariant? | - | 上传项形状。 | 否 |
+
+
+#### 实例方法
+
+##### TUploadThemeData.copyWith
+
+```dart
+TUploadThemeData copyWith({
+  TUploadVariant? variant,
+  double? itemSize,
+  double? spacing,
+  double? runSpacing,
+  WrapAlignment? alignment,
+  Color? backgroundColor,
+  Color? foregroundColor,
+  Color? disabledBackgroundColor,
+  Color? disabledForegroundColor,
+  Color? overlayColor,
+  TextStyle? statusTextStyle,
+  double? borderRadius,
+  double? addIconSize,
+  double? statusIconSize,
+  double? removeButtonSize,
+  Color? removeButtonColor,
+  double? removeIconSize,
+  Color? disabledMaskColor,
+})
+```
+
+
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TUploadThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| variant | TUploadVariant? | - | 上传项形状。 | 否 |
+| itemSize | double? | - | 上传项尺寸。 | 否 |
+| spacing | double? | - | 横向间距。 | 否 |
+| runSpacing | double? | - | 纵向间距。 | 否 |
+| alignment | WrapAlignment? | - | Wrap 对齐方式。 | 否 |
+| backgroundColor | Color? | - | 默认背景色。 | 否 |
+| foregroundColor | Color? | - | 默认前景色。 | 否 |
+| disabledBackgroundColor | Color? | - | 禁用背景色。 | 否 |
+| disabledForegroundColor | Color? | - | 禁用前景色。 | 否 |
+| overlayColor | Color? | - | 状态遮罩颜色。 | 否 |
+| statusTextStyle | TextStyle? | - | 状态文案样式。 | 否 |
+| borderRadius | double? | - | 方形上传项圆角。 | 否 |
+| addIconSize | double? | - | 添加图标尺寸。 | 否 |
+| statusIconSize | double? | - | 状态图标尺寸。 | 否 |
+| removeButtonSize | double? | - | 移除按钮尺寸。 | 否 |
+| removeButtonColor | Color? | - | 移除按钮颜色。 | 否 |
+| removeIconSize | double? | - | 移除图标尺寸。 | 否 |
+| disabledMaskColor | Color? | - | 禁用文件遮罩颜色。 | 否 |
+
+
+##### TUploadThemeData.lerp
+
+```dart
+TUploadThemeData lerp(ThemeExtension<TUploadThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TUploadThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TUploadThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
 ### TUploadFileStatus

@@ -8,7 +8,34 @@ NavBar 组件
 Material AppBar 薄包装（NavigationToolbar 实现）。
 - A 类禁用：操作项 `onTap: null`。
 - L4 样式（标题颜色、背景、内边距等）→ `TNavBarThemeData`。
+
+#### 声明
+
+```dart
+class TNavBar extends StatelessWidget implements PreferredSizeWidget
+```
+
 #### 默认构造方法
+
+
+```dart
+const TNavBar({
+  Key? key,
+  this.title,
+  this.leading,
+  this.actions,
+  this.centerTitle = true,
+  this.useDefaultBack = false,
+  this.onBack,
+  this.belowTitleWidget,
+  this.flexibleSpace,
+  this.height = 48,
+  this.useBorderStyle = false,
+  this.useSafeArea = false,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -29,7 +56,28 @@ Material AppBar 薄包装（NavigationToolbar 实现）。
 ### TNavBarItem
 #### 简介
 NavBar 操作项
+
+#### 声明
+
+```dart
+class TNavBarItem
+```
+
 #### 默认构造方法
+
+
+```dart
+const TNavBarItem({
+  this.icon,
+  this.iconColor,
+  this.onTap,
+  this.iconSize = 24.0,
+  this.padding,
+  this.customWidget,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -44,7 +92,26 @@ NavBar 操作项
 ### TNavBarBorder
 #### 简介
 NavBar 边框配置（迁入 ThemeData）
+
+#### 声明
+
+```dart
+class TNavBarBorder
+```
+
 #### 默认构造方法
+
+
+```dart
+const TNavBarBorder({
+  this.width = 1.0,
+  this.radius = 22.0,
+  this.color,
+  this.padding,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -59,7 +126,30 @@ NavBar 边框配置（迁入 ThemeData）
 NavBar 组件 ThemeExtension
 管理 TNavBar 的子树级默认样式（标题颜色、背景、内边距、阴影、边框等）。
 构造器参数优先级高于 ThemeData。高度属于 PreferredSizeWidget 契约，只能通过 TNavBar.height 设置。
+
+#### 声明
+
+```dart
+class TNavBarThemeData extends ThemeExtension<TNavBarThemeData>
+```
+
 #### 默认构造方法
+
+
+```dart
+const TNavBarThemeData({
+  this.titleColor,
+  this.backIconColor,
+  this.backgroundColor,
+  this.padding,
+  this.titleMargin,
+  this.opacity,
+  this.border,
+  this.boxShadow,
+})
+```
+
+#### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -76,6 +166,20 @@ NavBar 组件 ThemeExtension
 #### 实例方法
 
 ##### TNavBarThemeData.copyWith
+
+```dart
+TNavBarThemeData copyWith({
+  Color? titleColor,
+  Color? backIconColor,
+  Color? backgroundColor,
+  EdgeInsetsGeometry? padding,
+  double? titleMargin,
+  double? opacity,
+  TNavBarBorder? border,
+  List<BoxShadow>? boxShadow,
+})
+```
+
 
 返回只替换非空参数的新主题。
 参数省略或传入 `null` 都会保留原值，符合 Flutter `copyWith` 的常见语义。
@@ -94,3 +198,21 @@ NavBar 组件 ThemeExtension
 | opacity | double? | - | 背景颜色透明度，未配置时为 1 | 否 |
 | border | TNavBarBorder? | - | 操作项边框配置，仅在 TNavBar.useBorderStyle 为 true 时生效 | 否 |
 | boxShadow | List&lt;BoxShadow&gt;? | - | 底部阴影 | 否 |
+
+
+##### TNavBarThemeData.lerp
+
+```dart
+TNavBarThemeData lerp(ThemeExtension<TNavBarThemeData>? other, double t)
+```
+
+
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TNavBarThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TNavBarThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
