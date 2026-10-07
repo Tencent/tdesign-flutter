@@ -25,7 +25,7 @@ const TEmpty({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -53,7 +53,7 @@ class TEmptyThemeData extends ThemeExtension<TEmptyThemeData>
 const TEmptyThemeData({this.emptyTextColor, this.emptyTextFont})
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |

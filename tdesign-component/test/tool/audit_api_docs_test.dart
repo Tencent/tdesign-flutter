@@ -124,6 +124,85 @@ void main() {
     expect(result.stdout, contains('comment: Sample.copyWith'));
   });
 
+  test('business build methods cannot disappear from documentation', () async {
+    source.writeAsStringSync(
+      _source.replaceFirst(
+        '  /// 复制配置。',
+        '  /// 构建业务结果。\n  void build() {}\n  /// 复制配置。',
+      ),
+    );
+    final result = await audit();
+    expect(result.exitCode, 1);
+    expect(result.stdout, contains('output-callable: Sample.build'));
+  });
+
+  test('ordinary custom overrides without comments are reported', () async {
+    source.writeAsStringSync(
+      _source.replaceFirst(
+        '  /// 复制配置。',
+        '  @override\n  void close() {}\n  /// 复制配置。',
+      ),
+    );
+    final result = await audit();
+    expect(result.exitCode, 1);
+    expect(result.stdout, contains('comment: Sample.close'));
+  });
+
+  test(
+    'function typed callback is accepted and dynamic substitution fails',
+    () async {
+      source.writeAsStringSync(
+        _source.replaceFirst('E item,', 'void callback(int value), E item,'),
+      );
+      final markdown = _api
+          .replaceFirst('E item,', 'void callback(int value), E item,')
+          .replaceFirst(
+            '| item | E |',
+            '| callback | void Function(int value) | - | 回调。 | 是 |\n| item | E |',
+          );
+      asset.writeAsStringSync(markdown);
+      final valid = await audit();
+      expect(valid.exitCode, 0, reason: '${valid.stdout}${valid.stderr}');
+      asset.writeAsStringSync(
+        markdown.replaceFirst(
+          '| callback | void Function(int value) |',
+          '| callback | dynamic |',
+        ),
+      );
+      final invalid = await audit();
+      expect(invalid.exitCode, 1);
+      expect(
+        invalid.stdout,
+        contains('output-parameter-类型: Sample.read.callback'),
+      );
+    },
+  );
+
+  test(
+    'child parameter headings and multiline defaults preserve the contract',
+    () async {
+      const literal = "'''line1\n  line2'''";
+      source.writeAsStringSync(_source.replaceAll("'a b'", literal));
+      asset.writeAsStringSync(
+        _api
+            .replaceFirst('#### 参数', '##### 参数')
+            .replaceFirst("this.label = 'a b'", 'this.label = $literal')
+            .replaceFirst(
+              "| label | String | 'a b' |",
+              "| label | String | '''line1&#10;  line2''' |",
+            ),
+      );
+      final valid = await audit();
+      expect(valid.exitCode, 0, reason: '${valid.stdout}${valid.stderr}');
+      asset.writeAsStringSync(
+        asset.readAsStringSync().replaceFirst('&#10;  line2', '&#10;line2'),
+      );
+      final invalid = await audit();
+      expect(invalid.exitCode, 1);
+      expect(invalid.stdout, contains('output-parameter-默认值'));
+    },
+  );
+
   test(
     'JSON inventory also exits unsuccessfully for a missing parameter',
     () async {

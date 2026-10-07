@@ -37,7 +37,7 @@ const TButton({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -72,7 +72,7 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData>
 const TButtonThemeData({this.iconTextSpacing, this.gradient})
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |

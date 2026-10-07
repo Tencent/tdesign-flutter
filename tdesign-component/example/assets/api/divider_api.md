@@ -25,7 +25,7 @@ class TDivider extends StatelessWidget
 const TDivider({super.key, this.layout, this.align, this.dashed, this.child})
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -63,7 +63,7 @@ const TDividerThemeData({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |

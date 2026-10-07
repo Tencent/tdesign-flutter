@@ -89,7 +89,9 @@ const TMessage({
 })
 ```
 
-#### 参数
+创建消息组件
+
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -131,7 +133,9 @@ const TMessageMarquee({
 })
 ```
 
-#### 参数
+创建跑马灯配置
+
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -207,7 +211,7 @@ static double? lerpDouble(double? a, double? b, double t)
 const TMessageThemeData({this.backgroundColor, this.shape, this.elevation})
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |

@@ -46,7 +46,7 @@ const TSwiper({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -98,7 +98,7 @@ class TSwiperController extends ChangeNotifier
 TSwiperController({this.initialIndex = 0})
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -216,7 +216,7 @@ const TSwiperThemeData({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -316,7 +316,7 @@ const TSwiperPaginationItemDetails({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |

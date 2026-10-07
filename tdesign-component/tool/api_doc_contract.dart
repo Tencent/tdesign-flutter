@@ -44,10 +44,215 @@ bool containsSignature(String section, List<String> expected) =>
         );
 
 String _decodeCell(String text) => text
+    .replaceAll('&#10;', '\n')
+    .replaceAll('&#13;', '\r')
+    .replaceAll('&#9;', '\t')
     .replaceAll('&lt;', '<')
     .replaceAll('&gt;', '>')
     .replaceAll('&amp;', '&')
     .replaceAll(r'\|', '|');
+
+/// Exclude standard framework hooks only when the declaration's owner has
+/// the relevant framework ancestry. Custom overrides remain auditable APIs.
+bool isFrameworkApiHook(
+  MethodDeclaration method,
+  Declaration owner,
+  Map<String, Declaration> declarations,
+) {
+  final name = method.name.lexeme;
+  final hasDocs = method.documentationComment != null;
+  if (!hasDocs && const {'hashCode', '==', 'toString'}.contains(name)) {
+    return true;
+  }
+  final unit = owner.parent;
+  final local = <String, Declaration>{
+    ...declarations,
+    if (unit is CompilationUnit)
+      for (final declaration in unit.declarations.whereType<ClassDeclaration>())
+        declaration.name.lexeme: declaration,
+  };
+  final roots = <String>{};
+  final visited = <String>{};
+  void ancestors(ClassDeclaration type) {
+    final parents = [
+      if (type.extendsClause != null) type.extendsClause!.superclass,
+      ...?type.implementsClause?.interfaces,
+      ...?type.withClause?.mixinTypes,
+    ];
+    for (final parent in parents) {
+      final name = parent.name2.lexeme;
+      if (!visited.add(name)) {
+        continue;
+      }
+      final declaration = local[name];
+      if (declaration is ClassDeclaration) {
+        ancestors(declaration);
+      } else {
+        roots.add(name);
+      }
+    }
+  }
+
+  if (owner is ClassDeclaration) {
+    ancestors(owner);
+  }
+  if (roots.intersection({
+        'Widget',
+        'StatefulWidget',
+        'StatelessWidget',
+        'State',
+        'Tab',
+        'RenderObjectWidget',
+        'SingleChildRenderObjectWidget',
+        'MultiChildRenderObjectWidget',
+        'LeafRenderObjectWidget',
+      }).isNotEmpty &&
+      const {
+        'build',
+        'createState',
+        'createElement',
+        'debugFillProperties',
+      }.contains(name)) {
+    return true;
+  }
+  if (hasDocs) {
+    return false;
+  }
+  const standard = {
+    'PreferredSizeWidget': {'preferredSize'},
+    'Tab': {'preferredSize'},
+    'RenderObjectWidget': {
+      'createRenderObject',
+      'updateRenderObject',
+      'didUnmountRenderObject',
+    },
+    'Element': {
+      'widget',
+      'renderObject',
+      'slot',
+      'visitChildren',
+      'forgetChild',
+      'mount',
+      'update',
+      'unmount',
+      'activate',
+      'deactivate',
+      'insertRenderObjectChild',
+      'moveRenderObjectChild',
+      'removeRenderObjectChild',
+      'attachRenderObject',
+      'detachRenderObject',
+      'performRebuild',
+      'debugFillProperties',
+    },
+    'Decoration': {
+      'createBoxPainter',
+      'hitTest',
+      'isComplex',
+      'debugFillProperties',
+    },
+    'State': {
+      'initState',
+      'dispose',
+      'setState',
+      'didChangeDependencies',
+      'didUpdateWidget',
+      'deactivate',
+      'activate',
+      'reassemble',
+    },
+    'ChangeNotifier': {
+      'addListener',
+      'removeListener',
+      'notifyListeners',
+      'dispose',
+      'hasListeners',
+    },
+    'LocalizationsDelegate': {'isSupported', 'load', 'shouldReload'},
+    'ThemeExtension': {'type'},
+    'Map': {
+      '[]=',
+      'keys',
+      'values',
+      'length',
+      'isEmpty',
+      'isNotEmpty',
+      'containsKey',
+      'containsValue',
+      'clear',
+      'remove',
+      'addAll',
+      'addEntries',
+      'cast',
+      'forEach',
+      'map',
+      'putIfAbsent',
+      'removeWhere',
+      'update',
+      'updateAll',
+    },
+    'Iterable': {
+      'iterator',
+      'length',
+      'isEmpty',
+      'isNotEmpty',
+      'first',
+      'last',
+      'single',
+      'cast',
+      'contains',
+      'elementAt',
+      'toList',
+      'toSet',
+      'map',
+      'where',
+      'expand',
+      'fold',
+      'reduce',
+      'forEach',
+      'any',
+      'every',
+      'join',
+      'skip',
+      'take',
+      'skipWhile',
+      'takeWhile',
+      'firstWhere',
+      'lastWhere',
+      'singleWhere',
+      'followedBy',
+      'whereType',
+    },
+  };
+  String frameworkBase(String root) {
+    if (const {
+      'SingleChildRenderObjectWidget',
+      'MultiChildRenderObjectWidget',
+      'LeafRenderObjectWidget',
+    }.contains(root)) {
+      return 'RenderObjectWidget';
+    }
+    if (const {
+      'ComponentElement',
+      'RenderObjectElement',
+      'SingleChildRenderObjectElement',
+      'MultiChildRenderObjectElement',
+    }.contains(root)) {
+      return 'Element';
+    }
+    if (root == 'MapBase' || root == 'DelegatingMap') {
+      return 'Map';
+    }
+    if (root == 'IterableBase') {
+      return 'Iterable';
+    }
+    return root;
+  }
+
+  return roots.any(
+    (root) => (standard[frameworkBase(root)] ?? {}).contains(name),
+  );
+}
 
 /// Compare types/defaults while retaining significant string literal content.
 bool sameCode(String a, String b) =>

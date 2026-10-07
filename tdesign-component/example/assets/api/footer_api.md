@@ -19,7 +19,7 @@ class TFooter extends StatelessWidget
 const TFooter({Key? key, this.logo, this.text = '', this.links = const []})
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -47,7 +47,7 @@ class TFooterThemeData extends ThemeExtension<TFooterThemeData>
 const TFooterThemeData({this.height})
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |

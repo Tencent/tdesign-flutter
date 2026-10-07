@@ -29,7 +29,7 @@ const TSwipeCell({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -110,11 +110,30 @@ class TSwipeCellPanel
 TSwipeCellPanel({required this.children})
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | children | List&lt;TSwipeCellAction&gt; | - | 操作项列表。面板宽度由所有操作项的实际布局宽度自动确定。 | 是 |
+
+
+#### 实例方法
+
+##### TSwipeCellPanel.build
+
+```dart
+Widget build(BuildContext context)
+```
+
+
+构建操作项的横向布局，宽度由 `children` 的实际布局宽度决定。
+操作项沿交叉轴拉伸；返回的布局由调用方放入滑动单元格。
+
+返回类型：`Widget`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | 调用方的构建上下文；当前布局不读取其中的主题或尺寸。 | 是 |
 
 
 ### TSwipeCellAction
@@ -149,7 +168,7 @@ const TSwipeCellAction({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -183,7 +202,7 @@ class TSwipeCellThemeData extends ThemeExtension<TSwipeCellThemeData>
 const TSwipeCellThemeData({this.actionPadding})
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |

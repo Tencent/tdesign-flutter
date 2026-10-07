@@ -116,15 +116,6 @@ void main(List<String> args) {
     });
   }
 
-  const frameworkMethods = {
-    'build',
-    'createState',
-    'debugFillProperties',
-    'hashCode',
-    '==',
-    'toString',
-  };
-  const customOverrides = {'copyWith', 'lerp', '[]'};
   for (final entry in exports.entries) {
     final name = entry.key;
     final path = entry.value;
@@ -234,12 +225,7 @@ void main(List<String> args) {
         if (member is MethodDeclaration) {
           final memberName = member.name.lexeme;
           if (memberName.startsWith('_') ||
-              frameworkMethods.contains(memberName)) {
-            continue;
-          }
-          if (member.metadata.any((a) => a.name.name == 'override') &&
-              member.documentationComment == null &&
-              !customOverrides.contains(memberName)) {
+              isFrameworkApiHook(member, node, nodes)) {
             continue;
           }
           if (!member.isGetter && !member.isSetter) {
@@ -250,9 +236,7 @@ void main(List<String> args) {
             );
           }
           members.add(memberName);
-          if (member.documentationComment == null &&
-              (!member.metadata.any((a) => a.name.name == 'override') ||
-                  customOverrides.contains(memberName))) {
+          if (member.documentationComment == null) {
             issue('comment', '$name.$memberName', path, member.offset);
           }
         }

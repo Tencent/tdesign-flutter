@@ -34,7 +34,7 @@ const TIndexes({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -78,7 +78,7 @@ const TIndexesAnchor({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -114,7 +114,7 @@ const TIndexesList({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -170,7 +170,7 @@ const TIndexesThemeData({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -356,7 +356,7 @@ StickyHeaderController controller = DefaultStickyHeaderController.of(context);
 const DefaultStickyHeaderController({Key? key, required this.child})
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -381,7 +381,7 @@ class SliverStickyHeaderState
 const SliverStickyHeaderState(this.scrollPercentage, this.isPinned)
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -450,7 +450,15 @@ const SliverStickyHeader({
 })
 ```
 
-#### 参数
+Creates a sliver that displays the `header` before its `sliver`, unless
+`overlapsContent` it's true.
+The `header` stays pinned when it hits the start of the viewport until
+the `sliver` scrolls off the viewport.
+The `overlapsContent` and `sticky` arguments must not be null.
+If a `StickyHeaderController` is not provided, then the value of
+`DefaultStickyHeaderController.of` will be used.
+
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -480,7 +488,9 @@ class SliverStickyHeaderRenderObjectElement extends RenderObjectElement
 SliverStickyHeaderRenderObjectElement(SliverStickyHeader widget)
 ```
 
-#### 参数
+Creates an element that uses the given widget as its configuration.
+
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |

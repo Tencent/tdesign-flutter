@@ -71,7 +71,7 @@ const TPopupHeader({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -343,7 +343,10 @@ const TPopupOptions({
 })
 ```
 
-#### 参数
+通用构造；`placement` 在运行时才能确定时使用。
+方向已知时请优先使用 `TPopupOptions.bottom` 等命名工厂。
+
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -538,7 +541,9 @@ const TPopupOverlayConfig({
 })
 ```
 
-#### 参数
+创建蒙层配置。
+
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -590,7 +595,7 @@ class TPopupBottomInset extends TPopupInset
 const TPopupBottomInset({this.left = 0, this.right = 0})
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -615,7 +620,7 @@ class TPopupTopInset extends TPopupInset
 const TPopupTopInset({this.left = 0, this.right = 0})
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -640,7 +645,7 @@ class TPopupLeftInset extends TPopupInset
 const TPopupLeftInset({this.top = 0, this.bottom = 0})
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -665,7 +670,7 @@ class TPopupRightInset extends TPopupInset
 const TPopupRightInset({this.top = 0, this.bottom = 0})
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -719,7 +724,7 @@ const TPopupThemeData({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |

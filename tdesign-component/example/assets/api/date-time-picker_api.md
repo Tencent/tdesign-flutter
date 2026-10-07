@@ -33,7 +33,7 @@ TDateTimePicker({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -68,7 +68,9 @@ class DateTimePickerMode
 factory DateTimePickerMode({DateMode? dateMode, TimeMode? timeMode})
 ```
 
-#### 参数
+创建滚轮列结构；`dateMode`、`timeMode` 至少传其一。
+
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -102,7 +104,7 @@ const TDateTimePickerValue({
 })
 ```
 
-#### 参数
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -159,7 +161,9 @@ const DateTimePickerSteps({
 })
 ```
 
-#### 参数
+创建步进配置。
+
+##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
