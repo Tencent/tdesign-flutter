@@ -22,6 +22,8 @@
 - `pnpm site` 的 18 项测试及站点构建通过，仅有既存构建提示。
 - 最终构建逐页打开 API 标签，57/57 页面通过；可见公开声明标题共 369，每页数量与 manifest 对应，Dart 签名代码块非空。DateTimePicker → TPickerThemeData 链接实际定位成功。
 - 组件契约检查、Demo 结构检查与示例代码 `--check` 通过；现有 Theme Demo 已注册。
+- Demo API 页面使用真实 AssetManifest 解析 API 资产，修复 12 组路由名与文件 slug 不一致；57 个组件的全部公开声明在真实 ApiPage 上显示。旧注册名和 canonical slug 共 69 个入口及缺失文档切换共 70 项测试，两版本全部通过，修改文件两版本严格 analyze 零问题。测试已加入 sharedExampleTests，进入 GitHub / CNB 双版本共享功能回归。
+- PR #1149 首轮 head d357be79 的远端双版本 analyze、双版本功能回归、站点预览构建和 Linux Golden 已通过；六个构建与 autofix 日志均确认仅在生成 API 阶段报正式工具不认识 --strict-names；没有自动修改 head。Demo 入口修复后的 head 必须重新读 CI，首轮结果不能代替最终 head。
 
 ## 语义检查与边界
 
@@ -53,64 +55,64 @@ pnpm site
 
 ## 逐组件记录
 
-“可调用声明”包含默认/命名/factory 构造及公开方法、顶层函数，包含公开类的隐式构造；标准框架生命周期方法不计入。主题归属按当前实现记录。每行“通过”包括清单、成员、声明签名及参数类型/默认值/必填的 AST 检查和浏览器可见输出；非独立组件 Theme 不虚构新类。
+“可调用声明”包含默认/命名/factory 构造及公开方法、顶层函数，包含公开类的隐式构造；标准框架生命周期方法不计入。主题归属按当前实现记录。每行“通过”包括清单、成员、声明签名及参数类型/默认值/必填的 AST 检查和浏览器可见输出；非独立组件 Theme 不虚构新类。所有组件另经过真实 Flutter ApiPage 加载及标题渲染测试；12 组旧名/slug 入口均验证。
 
-| 组件 | 公开声明 | 可调用声明 | 参数 | 主题归属 | 源码与 API 契约 | 官网 API |
-| --- | ---: | ---: | ---: | --- | --- | --- |
-| button | 7 | 4 | 17 | TButtonThemeData | 通过 | 通过 |
-| divider | 4 | 4 | 21 | TDividerThemeData | 通过 | 通过 |
-| fab | 7 | 6 | 35 | TFabThemeData | 通过 | 通过 |
-| icon | 1 | 2 | 10 | 全局 Token + size/color | 通过 | 通过 |
-| link | 4 | 4 | 18 | TLinkThemeData | 通过 | 通过 |
-| text | 4 | 9 | 59 | TTextThemeData | 通过 | 通过 |
-| back-top | 4 | 4 | 32 | TBackTopThemeData | 通过 | 通过 |
-| drawer | 7 | 7 | 54 | TDrawerThemeData | 通过 | 通过 |
-| indexes | 10 | 13 | 98 | TIndexesThemeData | 通过 | 通过 |
-| navbar | 4 | 6 | 40 | TNavBarThemeData | 通过 | 通过 |
-| side-bar | 4 | 5 | 26 | TSideBarThemeData | 通过 | 通过 |
-| steps | 5 | 4 | 20 | 全局 Token | 通过 | 通过 |
-| tab-bar | 11 | 8 | 53 | TTabBarThemeData | 通过 | 通过 |
-| tabs | 7 | 7 | 41 | TTabsBarThemeData | 通过 | 通过 |
-| calendar | 10 | 6 | 49 | TCalendarThemeData | 通过 | 通过 |
-| cascader | 4 | 5 | 31 | TCascaderThemeData | 通过 | 通过 |
-| checkbox | 9 | 6 | 49 | TCheckboxThemeData | 通过 | 通过 |
-| picker | 10 | 10 | 35 | TPickerThemeData | 通过 | 通过 |
-| date-time-picker | 8 | 5 | 24 | TPickerThemeData | 通过 | 通过 |
-| form | 11 | 18 | 68 | TFormThemeData | 通过 | 通过 |
-| input | 4 | 4 | 47 | TInputThemeData | 通过 | 通过 |
-| radio | 8 | 7 | 49 | TRadioThemeData | 通过 | 通过 |
-| rate | 3 | 4 | 28 | TRateThemeData | 通过 | 通过 |
-| search | 4 | 4 | 44 | TSearchBarThemeData | 通过 | 通过 |
-| slider | 5 | 5 | 50 | TSliderThemeData | 通过 | 通过 |
-| stepper | 4 | 4 | 34 | TStepperThemeData | 通过 | 通过 |
-| switch | 4 | 4 | 32 | TSwitchThemeData | 通过 | 通过 |
-| textarea | 2 | 1 | 27 | TInputThemeData + 全局 Token | 通过 | 通过 |
-| tree-select | 3 | 5 | 33 | TTreeSelectThemeData | 通过 | 通过 |
-| upload | 9 | 6 | 68 | TUploadThemeData | 通过 | 通过 |
-| avatar | 6 | 5 | 35 | TAvatarThemeData | 通过 | 通过 |
-| badge | 5 | 7 | 42 | TBadgeThemeData | 通过 | 通过 |
-| cell | 6 | 5 | 57 | TCellThemeData | 通过 | 通过 |
-| time-counter | 7 | 8 | 25 | TTimeCounterThemeData | 通过 | 通过 |
-| collapse | 7 | 5 | 43 | TCollapseThemeData | 通过 | 通过 |
-| empty | 2 | 4 | 11 | TEmptyThemeData | 通过 | 通过 |
-| footer | 2 | 4 | 8 | TFooterThemeData | 通过 | 通过 |
-| image | 3 | 4 | 36 | TImageThemeData | 通过 | 通过 |
-| image-viewer | 3 | 4 | 32 | TImageViewerThemeData | 通过 | 通过 |
-| progress | 4 | 9 | 65 | TProgressThemeData | 通过 | 通过 |
-| result | 3 | 4 | 13 | TResultThemeData | 通过 | 通过 |
-| skeleton | 8 | 12 | 47 | TSkeletonThemeData | 通过 | 通过 |
-| swiper | 8 | 10 | 65 | TSwiperThemeData | 通过 | 通过 |
-| table | 15 | 8 | 57 | TTableThemeData | 通过 | 通过 |
-| tag | 7 | 5 | 44 | TTagThemeData | 通过 | 通过 |
-| action-sheet | 8 | 12 | 68 | TActionSheetThemeData | 通过 | 通过 |
-| dialog | 5 | 9 | 60 | TDialogThemeData | 通过 | 通过 |
-| dropdown-menu | 14 | 16 | 94 | TDropdownThemeData | 通过 | 通过 |
-| loading | 4 | 8 | 23 | TLoadingThemeData | 通过 | 通过 |
-| message | 5 | 9 | 45 | TMessageThemeData | 通过 | 通过 |
-| notice-bar | 4 | 7 | 33 | TNoticeBarThemeData | 通过 | 通过 |
-| popover | 7 | 11 | 51 | TPopoverThemeData | 通过 | 通过 |
-| popup | 16 | 24 | 135 | TPopupThemeData | 通过 | 通过 |
-| pull-down-refresh | 4 | 4 | 16 | TLoadingThemeData + 全局 Token | 通过 | 通过 |
-| swipe-cell | 7 | 10 | 26 | TSwipeCellThemeData | 通过 | 通过 |
-| toast | 5 | 16 | 104 | TToastThemeData | 通过 | 通过 |
-| theme | 27 | 37 | 82 | 全局 Token / Material 扩展 | 通过 | 通过 |
+| 组件 | 公开声明 | 公开构造 | 可调用声明 | 参数 | 主题归属 | 源码与 API 契约 | 官网 API | Demo API |
+| --- | ---: | ---: | ---: | ---: | --- | --- | --- | --- |
+| button | 7 | 2 | 4 | 17 | TButtonThemeData | 通过 | 通过 | 通过 |
+| divider | 4 | 2 | 4 | 21 | TDividerThemeData | 通过 | 通过 | 通过 |
+| fab | 7 | 4 | 6 | 35 | TFabThemeData | 通过 | 通过 | 通过 |
+| icon | 1 | 2 | 2 | 10 | 全局 Token + size/color | 通过 | 通过 | 通过 |
+| link | 4 | 2 | 4 | 18 | TLinkThemeData | 通过 | 通过 | 通过 |
+| text | 4 | 4 | 9 | 59 | TTextThemeData | 通过 | 通过 | 通过 |
+| back-top | 4 | 2 | 4 | 32 | TBackTopThemeData | 通过 | 通过 | 通过 |
+| drawer | 7 | 3 | 7 | 54 | TDrawerThemeData | 通过 | 通过 | 通过 |
+| indexes | 10 | 10 | 13 | 98 | TIndexesThemeData | 通过 | 通过 | 通过 |
+| navbar | 4 | 4 | 6 | 40 | TNavBarThemeData | 通过 | 通过 | 通过 |
+| side-bar | 4 | 3 | 5 | 26 | TSideBarThemeData | 通过 | 通过 | 通过 |
+| steps | 5 | 4 | 4 | 20 | 全局 Token | 通过 | 通过 | 通过 |
+| tab-bar | 11 | 6 | 8 | 53 | TTabBarThemeData | 通过 | 通过 | 通过 |
+| tabs | 7 | 5 | 7 | 41 | TTabsBarThemeData | 通过 | 通过 | 通过 |
+| calendar | 10 | 4 | 6 | 49 | TCalendarThemeData | 通过 | 通过 | 通过 |
+| cascader | 4 | 3 | 5 | 31 | TCascaderThemeData | 通过 | 通过 | 通过 |
+| checkbox | 9 | 4 | 6 | 49 | TCheckboxThemeData | 通过 | 通过 | 通过 |
+| picker | 10 | 7 | 10 | 35 | TPickerThemeData | 通过 | 通过 | 通过 |
+| date-time-picker | 8 | 4 | 5 | 24 | TPickerThemeData | 通过 | 通过 | 通过 |
+| form | 11 | 6 | 18 | 68 | TFormThemeData | 通过 | 通过 | 通过 |
+| input | 4 | 2 | 4 | 47 | TInputThemeData | 通过 | 通过 | 通过 |
+| radio | 8 | 5 | 7 | 49 | TRadioThemeData | 通过 | 通过 | 通过 |
+| rate | 3 | 2 | 4 | 28 | TRateThemeData | 通过 | 通过 | 通过 |
+| search | 4 | 2 | 4 | 44 | TSearchBarThemeData | 通过 | 通过 | 通过 |
+| slider | 5 | 3 | 5 | 50 | TSliderThemeData | 通过 | 通过 | 通过 |
+| stepper | 4 | 2 | 4 | 34 | TStepperThemeData | 通过 | 通过 | 通过 |
+| switch | 4 | 2 | 4 | 32 | TSwitchThemeData | 通过 | 通过 | 通过 |
+| textarea | 2 | 1 | 1 | 27 | TInputThemeData + 全局 Token | 通过 | 通过 | 通过 |
+| tree-select | 3 | 3 | 5 | 33 | TTreeSelectThemeData | 通过 | 通过 | 通过 |
+| upload | 9 | 3 | 6 | 68 | TUploadThemeData | 通过 | 通过 | 通过 |
+| avatar | 6 | 3 | 5 | 35 | TAvatarThemeData | 通过 | 通过 | 通过 |
+| badge | 5 | 5 | 7 | 42 | TBadgeThemeData | 通过 | 通过 | 通过 |
+| cell | 6 | 3 | 5 | 57 | TCellThemeData | 通过 | 通过 | 通过 |
+| time-counter | 7 | 3 | 8 | 25 | TTimeCounterThemeData | 通过 | 通过 | 通过 |
+| collapse | 7 | 3 | 5 | 43 | TCollapseThemeData | 通过 | 通过 | 通过 |
+| empty | 2 | 2 | 4 | 11 | TEmptyThemeData | 通过 | 通过 | 通过 |
+| footer | 2 | 2 | 4 | 8 | TFooterThemeData | 通过 | 通过 | 通过 |
+| image | 3 | 2 | 4 | 36 | TImageThemeData | 通过 | 通过 | 通过 |
+| image-viewer | 3 | 1 | 4 | 32 | TImageViewerThemeData | 通过 | 通过 | 通过 |
+| progress | 4 | 7 | 9 | 65 | TProgressThemeData | 通过 | 通过 | 通过 |
+| result | 3 | 2 | 4 | 13 | TResultThemeData | 通过 | 通过 | 通过 |
+| skeleton | 8 | 10 | 12 | 47 | TSkeletonThemeData | 通过 | 通过 | 通过 |
+| swiper | 8 | 4 | 10 | 65 | TSwiperThemeData | 通过 | 通过 | 通过 |
+| table | 15 | 6 | 8 | 57 | TTableThemeData | 通过 | 通过 | 通过 |
+| tag | 7 | 3 | 5 | 44 | TTagThemeData | 通过 | 通过 | 通过 |
+| action-sheet | 8 | 6 | 12 | 68 | TActionSheetThemeData | 通过 | 通过 | 通过 |
+| dialog | 5 | 4 | 9 | 60 | TDialogThemeData | 通过 | 通过 | 通过 |
+| dropdown-menu | 14 | 9 | 16 | 94 | TDropdownThemeData | 通过 | 通过 | 通过 |
+| loading | 4 | 3 | 8 | 23 | TLoadingThemeData | 通过 | 通过 | 通过 |
+| message | 5 | 3 | 9 | 45 | TMessageThemeData | 通过 | 通过 | 通过 |
+| notice-bar | 4 | 2 | 7 | 33 | TNoticeBarThemeData | 通过 | 通过 | 通过 |
+| popover | 7 | 4 | 11 | 51 | TPopoverThemeData | 通过 | 通过 | 通过 |
+| popup | 16 | 14 | 24 | 135 | TPopupThemeData | 通过 | 通过 | 通过 |
+| pull-down-refresh | 4 | 3 | 4 | 16 | TLoadingThemeData + 全局 Token | 通过 | 通过 | 通过 |
+| swipe-cell | 7 | 5 | 10 | 26 | TSwipeCellThemeData | 通过 | 通过 | 通过 |
+| toast | 5 | 3 | 16 | 104 | TToastThemeData | 通过 | 通过 | 通过 |
+| theme | 27 | 10 | 37 | 82 | 全局 Token / Material 扩展 | 通过 | 通过 | 通过 |

@@ -27,10 +27,7 @@ class ApiPage extends StatelessWidget {
 }
 
 class ApiWidget extends StatefulWidget {
-  const ApiWidget({
-    Key? key,
-    required this.apiName,
-  }) : super(key: key);
+  const ApiWidget({Key? key, required this.apiName}) : super(key: key);
 
   final String? apiName;
 
@@ -66,8 +63,9 @@ class _ApiWidgetState extends State<ApiWidget> {
           return Center(
             child: Theme(
               // TLoading 已移除 themeData 构造参数，改用 mergeExtension 注入子树主题
-              data: Theme.of(context)
-                  .mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
+              data: Theme.of(
+                context,
+              ).mergeExtension(const TLoadingThemeData(axis: Axis.horizontal)),
               child: const TLoading(
                 size: 32,
                 icon: TLoadingIcon.circle,
@@ -86,18 +84,43 @@ class _ApiWidgetState extends State<ApiWidget> {
 
 暂无对应api
     ''';
-    if (widget.apiName == lastApiName &&
+    final requestedName = widget.apiName;
+    if (requestedName == lastApiName &&
         result != null &&
         result != defaultResult) {
       return result!;
     }
     try {
-      var apiName = widget.apiName ?? 'default';
-      result = await rootBundle.loadString('assets/api/${apiName}_api.md');
-      lastApiName = widget.apiName;
+      // Demo route names predate the canonical API slugs (backtop/back-top,
+      // tabBar/tab-bar). Resolve the real asset without maintaining aliases.
+      String normalize(String name) =>
+          name.replaceAll(RegExp('[-_]'), '').toLowerCase();
+      const prefix = 'assets/api/';
+      const suffix = '_api.md';
+      final name = normalize(requestedName ?? 'default');
+      final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+      final asset = manifest.listAssets().singleWhere(
+        (asset) =>
+            asset.startsWith(prefix) &&
+            asset.endsWith(suffix) &&
+            normalize(
+                  asset.substring(prefix.length, asset.length - suffix.length),
+                ) ==
+                name,
+      );
+      final data = await rootBundle.loadString(asset);
+      if (widget.apiName == requestedName) {
+        result = data;
+        lastApiName = requestedName;
+      }
+      return data;
     } catch (e) {
       debugPrint('getApiData error: $e');
+      if (widget.apiName == requestedName) {
+        result = defaultResult;
+        lastApiName = requestedName;
+      }
+      return defaultResult;
     }
-    return result ?? defaultResult;
   }
 }

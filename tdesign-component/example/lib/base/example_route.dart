@@ -22,9 +22,10 @@ class TExampleRoute {
     });
     // 添加关于页路由
     pageModelList[aboutPath] = ExamplePageModel(
-        text: '设置',
-        name: 'settingPage',
-        pageBuilder: (context, model) => const SettingPage());
+      text: '设置',
+      name: 'settingPage',
+      pageBuilder: (context, model) => const SettingPage(),
+    );
   }
 
   static void add(ExamplePageModel model) {
@@ -36,15 +37,18 @@ class TExampleRoute {
   static String _normalize(String name) =>
       name.replaceAll('-', '').toLowerCase();
 
+  static ExamplePageModel? _modelFor(String name) =>
+      pageModelList[name] ??
+      pageModelList.entries
+          .where((entry) => _normalize(entry.key) == _normalize(name))
+          .map((entry) => entry.value)
+          .firstOrNull;
+
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     final url = settings.name ?? 'unknown';
     var strings = url.split('?');
     var name = strings[0];
-    var model = pageModelList[name] ??
-        pageModelList.entries
-            .where((e) => _normalize(e.key) == _normalize(name))
-            .map((e) => e.value)
-            .firstOrNull;
+    final model = _modelFor(name);
     var paramsMap = <String, String>{};
     if (strings.length > 1) {
       var params = strings[1].split('&');
@@ -63,26 +67,25 @@ class TExampleRoute {
         model.showAction = true;
       }
       final Route route = MaterialPageRoute(
-          settings: settings,
-          builder: (context) => model.pageBuilder(context, model));
+        settings: settings,
+        builder: (context) => model.pageBuilder(context, model),
+      );
       return route;
     } else {
       if (name.startsWith(apiPath)) {
         if (strings.length > 1) {
           var component = strings[1];
           final Route route = MaterialPageRoute(
-              settings: settings,
-              builder: (context) => ApiPage(
-                    model: pageModelList[component],
-                  ));
+            settings: settings,
+            builder: (context) => ApiPage(model: _modelFor(component)),
+          );
           return route;
         }
       }
       return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => Center(
-                child: Text('error, url:${url}'),
-              ));
+        settings: settings,
+        builder: (context) => Center(child: Text('error, url:${url}')),
+      );
     }
   }
 }

@@ -14,7 +14,7 @@
 | 文档 | example/assets/api 与 demo_tool/README.md | 自动生成 API、更新说明 |
 | 校验 | tool/audit_api_docs.dart、CI | 检查声明与文档缺口 |
 | 官网 | flutter-api 指令、57 页 Markdown、Theme 路由 | 读取 Demo 同一 API 资产，避免旧表重复维护 |
-| Demo | example/lib/config.dart | 注册现有 Theme 示例页，提供官网示例与 API 的实际入口 |
+| Demo | example/lib/config.dart、base/api_widget.dart、base/example_route.dart | 注册 Theme；按实际资产清单兼容路由名与 API slug，保持两个文档入口一致 |
 
 ## API 变化
 
@@ -27,3 +27,5 @@
 ## 验证策略
 
 工具单元测试，声明/成员完整性检查，生成幂等性，双 Flutter 严格 analyze，站点构建，浏览器文档验收。无视觉行为变化，不更新 Golden。
+
+Demo 加载验证使用真实 AssetBundle 与真实 ApiPage，逐个匹配 57 个组件的既有注册名和 canonical slug。该测试登记到 sharedExampleTests，进入 GitHub / CNB 双版本功能回归。
