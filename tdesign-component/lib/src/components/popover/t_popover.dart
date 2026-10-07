@@ -112,7 +112,10 @@ class TPopoverController {
   /// 返回 [context] 最近的 [TPopoverAnchor] 所关联的控制器。
   ///
   /// 未处于 Anchor 的触发区域或气泡内容子树时返回 null。
-  static TPopoverController? maybeOf(BuildContext context) {
+  static TPopoverController? maybeOf(
+    /// 当前构建上下文，用于读取祖先配置。
+    BuildContext context,
+  ) {
     return context
         .getInheritedWidgetOfExactType<_TPopoverControllerScope>()
         ?.controller;

@@ -6,24 +6,42 @@ import 't_theme.dart';
 ///
 /// 业务使用时有两种方法替换主题：
 /// 第一种：有独立设计风格的app，明确知道哪些色值用到，哪些设置没用到，有自己设计规范，则可单独配置色值。
-/// 第二中：直接接入TDesign，配置所有色值组，此时不需再自定义key-value，可以直接使用。
+/// 第二种：直接接入TDesign，配置所有色值组，此时不需再自定义key-value，可以直接使用。
 ///
-/// 如果业务需要扩展，可以按一下方式定义自己的ColorData，只要key在主题中能找到对应颜色即可
-/// TDesign主题包含的颜色，这是一个大而全的色值。业务可以选择自己自己需要的色值进行二次封装，方便使用。
+/// 如果业务需要扩展，可以按以下方式定义自己的ColorData，只要key在主题中能找到对应颜色即可
+/// TDesign主题包含的颜色，这是一个大而全的色值。业务可以选择自己需要的色值进行二次封装，方便使用。
 /// 不过有的色值是内部使用的，必传，否则可能显示异常。
 extension TColors on TThemeData {
   /// 功能色组----------------------------------------------------
 
   /// 小程序 `--td-primary-color-*` 色阶；默认分别引用同级品牌色阶。
   Color get primaryColor1 => colorMap['primaryColor1'] ?? brandColor1;
+
+  /// 主色第 2 级色阶；未配置时使用 [brandColor2]。
   Color get primaryColor2 => colorMap['primaryColor2'] ?? brandColor2;
+
+  /// 主色第 3 级色阶；未配置时使用 [brandColor3]。
   Color get primaryColor3 => colorMap['primaryColor3'] ?? brandColor3;
+
+  /// 主色第 4 级色阶；未配置时使用 [brandColor4]。
   Color get primaryColor4 => colorMap['primaryColor4'] ?? brandColor4;
+
+  /// 主色第 5 级色阶；未配置时使用 [brandColor5]。
   Color get primaryColor5 => colorMap['primaryColor5'] ?? brandColor5;
+
+  /// 主色第 6 级色阶；未配置时使用 [brandColor6]。
   Color get primaryColor6 => colorMap['primaryColor6'] ?? brandColor6;
+
+  /// 主色第 7 级色阶；未配置时使用 [brandColor7]。
   Color get primaryColor7 => colorMap['primaryColor7'] ?? brandColor7;
+
+  /// 主色第 8 级色阶；未配置时使用 [brandColor8]。
   Color get primaryColor8 => colorMap['primaryColor8'] ?? brandColor8;
+
+  /// 主色第 9 级色阶；未配置时使用 [brandColor9]。
   Color get primaryColor9 => colorMap['primaryColor9'] ?? brandColor9;
+
+  /// 主色第 10 级色阶；未配置时使用 [brandColor10]。
   Color get primaryColor10 => colorMap['primaryColor10'] ?? brandColor10;
 
   ///#F2F3FF
@@ -389,12 +407,15 @@ extension TColors on TThemeData {
   /// 小程序 `--td-bg-color-container`；浅色默认引用 [fontWhite1]。
   Color get bgColorContainer => colorMap['bgColorContainer'] ?? fontWhite1;
 
+  /// 容器背景的按压态颜色；优先读取同名颜色 Token，否则使用内置回退色。
   Color get bgColorContainerActive =>
       colorMap['bgColorContainerActive'] ?? grayColor3;
 
+  /// 次级容器背景色；优先读取同名颜色 Token，否则使用内置回退色。
   Color get bgColorSecondaryContainer =>
       colorMap['bgColorSecondaryContainer'] ?? grayColor1;
 
+  /// 次级容器背景的按压态颜色；优先读取同名颜色 Token，否则使用内置回退色。
   Color get bgColorSecondaryContainerActive =>
       colorMap['bgColorSecondaryContainerActive'] ?? grayColor4;
 
@@ -410,16 +431,21 @@ extension TColors on TThemeData {
   Color get bgColorSpecialComponent =>
       colorMap['bgColorSpecialComponent'] ?? whiteColor1;
 
+  /// 组件默认背景色；优先读取同名颜色 Token，否则使用内置回退色。
   Color get bgColorComponent => colorMap['bgColorComponent'] ?? grayColor3;
 
+  /// 组件按压态背景色；优先读取同名颜色 Token，否则使用内置回退色。
   Color get bgColorComponentActive =>
       colorMap['bgColorComponentActive'] ?? grayColor6; // coverage:ignore-line
 
+  /// 组件禁用态背景色；优先读取同名颜色 Token，否则使用内置回退色。
   Color get bgColorComponentDisabled =>
       colorMap['bgColorComponentDisabled'] ?? grayColor2;
 
+  /// 组件分隔线颜色；优先读取同名颜色 Token，否则使用内置回退色。
   Color get componentStroke => colorMap['componentStroke'] ?? grayColor3;
 
+  /// 组件边框颜色；优先读取同名颜色 Token，否则使用内置回退色。
   Color get componentBorder => colorMap['componentBorder'] ?? grayColor4;
 
   /// 小程序一级分割线颜色，默认与 [componentStroke] 使用同一色阶。
@@ -434,19 +460,24 @@ extension TColors on TThemeData {
 
   Color get textColorPrimary => colorMap['textColorPrimary'] ?? fontGray1;
 
+  /// 次要文字颜色；优先读取同名颜色 Token，否则使用内置回退色。
   Color get textColorSecondary => colorMap['textColorSecondary'] ?? fontGray2;
 
+  /// 占位文字颜色；优先读取同名颜色 Token，否则使用内置回退色。
   Color get textColorPlaceholder =>
       colorMap['textColorPlaceholder'] ?? fontGray3;
 
+  /// 禁用文字颜色；优先读取同名颜色 Token，否则使用内置回退色。
   Color get textColorDisabled => colorMap['textColorDisabled'] ?? fontGray4;
 
   /// 小程序 `--td-text-color-anti`，默认引用 [fontWhite1]。
   Color get textColorAnti => colorMap['textColorAnti'] ?? fontWhite1;
 
+  /// 品牌文字颜色；优先读取同名颜色 Token，否则使用内置回退色。
   Color get textColorBrand =>
       colorMap['textColorBrand'] ?? brandColor; // coverage:ignore-line
 
+  /// 链接文字颜色；优先读取同名颜色 Token，否则使用内置回退色。
   Color get textColorLink =>
       colorMap['textColorLink'] ?? brandColor; // coverage:ignore-line
 

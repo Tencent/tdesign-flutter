@@ -15,17 +15,41 @@ import '../../theme/t_theme.dart';
 import 't_dropdown_theme_data.dart';
 
 /// 下拉筛选面板相对筛选栏的展开位置。
-enum TDropdownMenuPlacement { auto, below, above }
+enum TDropdownMenuPlacement {
+  /// 根据触发栏上下可用空间自动选择展开方向。
+  auto,
+
+  /// 向触发栏下方展开。
+  below,
+
+  /// 向触发栏上方展开。
+  above,
+}
 
 /// 下拉筛选面板关闭的原因。
 enum TDropdownMenuCloseReason {
+  /// 单选面板提交选项后关闭。
   selection,
+
+  /// 多选面板确认草稿后关闭。
   confirm,
+
+  /// 面板取消操作或局部控制器默认关闭。
   cancel,
+
+  /// 点击面板外部区域触发关闭。
   overlay,
+
+  /// 返回键或路由返回操作触发关闭。
   back,
+
+  /// 再次点击当前触发项关闭。
   trigger,
+
+  /// 全局控制器请求关闭。
   controller,
+
+  /// 切换到其他筛选项时关闭原面板。
   switchItem,
 }
 
@@ -81,9 +105,16 @@ class TDropdownMenuTriggerState {
     required this.toggle,
   });
 
+  /// 当前触发项在筛选栏中的下标。
   final int index;
+
+  /// 当前触发项对应面板是否打开。
   final bool isOpen;
+
+  /// 当前触发项是否允许交互。
   final bool enabled;
+
+  /// 切换当前面板开关状态的操作；禁用时不会打开面板。
   final VoidCallback toggle;
 }
 
@@ -94,10 +125,13 @@ class TDropdownMenuPanelController {
     required Future<void> Function(TDropdownMenuCloseReason reason) close,
   }) : _close = close;
 
+  /// 当前面板所属筛选项的下标。
   final int index;
   final Future<void> Function(TDropdownMenuCloseReason reason) _close;
 
+  /// 请求关闭当前面板；[reason] 默认 cancel。返回的 Future 在关闭流程结束后完成。
   Future<void> close([
+    /// 关闭原因，默认 cancel。
     TDropdownMenuCloseReason reason = TDropdownMenuCloseReason.cancel,
   ]) => _close(reason);
 }
@@ -122,11 +156,23 @@ class TDropdownMenuItem {
   }) : label = null,
        assert(flex > 0);
 
+  /// 默认触发项文案；使用 custom 构造时为空。
   final String? label;
+
+  /// 自定义触发项构建器；默认构造时为空。
   final TDropdownMenuTriggerBuilder? triggerBuilder;
+
+  /// 面板构建器，接收当前面板的局部控制器。
   final TDropdownMenuPanelBuilder panelBuilder;
+
+  /// 是否启用触发项，默认 true。
   final bool enabled;
+
+  /// 非滚动且父级宽度有界时的宽度分配权重，默认 1，必须大于 0。
   final int flex;
+
+  /// 滚动模式或父级宽度无界时的触发项宽度，默认 112 逻辑像素；
+  /// 非滚动且宽度有界时使用 [flex] 分配宽度，此字段不生效。
   final double? width;
 }
 
@@ -137,18 +183,30 @@ class TDropdownMenuController extends ChangeNotifier {
   Future<void> Function(int index)? _toggleCallback;
   int? _openIndex;
 
+  /// 当前打开项的下标；没有打开的面板时为 null。
   int? get openIndex => _openIndex;
+
+  /// 当前是否有打开的面板。
   bool get isOpen => _openIndex != null;
 
-  Future<void> open(int index) async {
+  /// 打开 [index] 对应面板；未绑定筛选栏时不执行操作。Future 等待打开流程完成。
+  Future<void> open(
+    /// 目标筛选项下标，从 0 开始。
+    int index,
+  ) async {
     await _openCallback?.call(index);
   }
 
+  /// 关闭当前面板；未绑定筛选栏时不执行操作。Future 等待关闭流程完成。
   Future<void> close() async {
     await _closeCallback?.call(TDropdownMenuCloseReason.controller);
   }
 
-  Future<void> toggle(int index) async {
+  /// 切换 [index] 对应面板；未绑定筛选栏时不执行操作。Future 等待切换流程完成。
+  Future<void> toggle(
+    /// 目标筛选项下标，从 0 开始。
+    int index,
+  ) async {
     await _toggleCallback?.call(index);
   }
 
@@ -194,19 +252,36 @@ class TDropdownMenu extends StatefulWidget {
     this.onClosed,
   });
 
+  /// 按顺序展示的筛选触发项和对应面板。
   final List<TDropdownMenuItem> items;
+
+  /// 外部筛选栏控制器；为空时由组件创建和释放内部控制器。
   final TDropdownMenuController? controller;
+
+  /// 面板展开方向，默认 auto，根据上下可用空间决定。
   final TDropdownMenuPlacement placement;
+
+  /// 筛选栏是否支持横向滚动，默认 false。
   final bool scrollable;
+
+  /// 是否绘制外部区域遮罩，默认 true。
   final bool showOverlay;
+
+  /// 点击外部区域是否关闭面板，默认 true；不依赖遮罩是否绘制。
   final bool closeOnOverlayTap;
+
+  /// 是否使用根 Overlay，默认 false。
   final bool useRootOverlay;
 
   /// 展开、关闭及切换动画时长。
   ///
   /// 未指定时为 200ms。系统禁用动画时始终使用零时长。
   final Duration? animationDuration;
+
+  /// 面板打开动画完成后回调，参数为筛选项下标。
   final ValueChanged<int>? onOpened;
+
+  /// 面板关闭流程完成后回调，携带筛选项下标和关闭原因。
   final TDropdownMenuClosedCallback? onClosed;
 
   @override

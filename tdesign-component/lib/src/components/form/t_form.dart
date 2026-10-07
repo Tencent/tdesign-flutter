@@ -132,7 +132,10 @@ class TFormState extends State<TForm> {
   /// 清除全部或指定字段的校验状态。
   ///
   /// 同时清除通过 [setValidateMessage] 注入的外部错误。
-  void clearValidate({Iterable<String>? fields}) {
+  void clearValidate({
+    /// 本次操作的字段名；为空时操作全部已注册字段。
+    Iterable<String>? fields,
+  }) {
     final names = fields?.toSet();
     final callbacks = names == null
         ? _clearValidateCallbacks.entries
@@ -159,7 +162,10 @@ class TFormState extends State<TForm> {
   ///
   /// 常用于服务端校验。传入 `null` 的字段会清除对应外部错误；外部错误
   /// 会覆盖字段本地校验错误，直到调用 [clearValidate] 或再次设置。
-  void setValidateMessage(Map<String, String?> messages) {
+  void setValidateMessage(
+    /// 字段名与外部校验消息的映射；消息为 null 或空字符串时清除对应错误。
+    Map<String, String?> messages,
+  ) {
     for (final entry in messages.entries) {
       final message = entry.value;
       if (message == null || message.isEmpty) {
@@ -288,8 +294,10 @@ class TFormController {
   Map<String, Object?> get values => _state?.values ?? const {};
 
   /// 运行表单字段校验。
-  bool validate({Iterable<String>? fields}) =>
-      _state?.validate(fields: fields) ?? false;
+  bool validate({
+    /// 本次操作的字段名；为空时操作全部已注册字段。
+    Iterable<String>? fields,
+  }) => _state?.validate(fields: fields) ?? false;
 
   /// 校验并提交表单。
   bool submit() => _state?.submit() ?? false;
@@ -298,12 +306,16 @@ class TFormController {
   void reset() => _state?.reset();
 
   /// 清除全部或指定字段的校验状态。
-  void clearValidate({Iterable<String>? fields}) =>
-      _state?.clearValidate(fields: fields);
+  void clearValidate({
+    /// 本次操作的字段名；为空时操作全部已注册字段。
+    Iterable<String>? fields,
+  }) => _state?.clearValidate(fields: fields);
 
   /// 设置字段的外部校验错误。
-  void setValidateMessage(Map<String, String?> messages) =>
-      _state?.setValidateMessage(messages);
+  void setValidateMessage(
+    /// 字段名与外部校验消息的映射；消息为 null 或空字符串时清除对应错误。
+    Map<String, String?> messages,
+  ) => _state?.setValidateMessage(messages);
 
   void _attach(TFormState state) {
     assert(

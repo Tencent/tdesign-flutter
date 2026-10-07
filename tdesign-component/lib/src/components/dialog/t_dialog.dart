@@ -183,12 +183,23 @@ class TDialog extends StatelessWidget {
   /// 蒙层与内置关闭按钮通过 Navigator.maybePop 关闭，遵守 PopScope。
   /// 系统返回及未携带结果的 Navigator.pop 仍返回 null，不使用 [barrierResult]。
   static Future<T?> show<T>(
+    /// 当前构建上下文，用于读取祖先配置。
     BuildContext context, {
+
+    /// 要放入模态路由的弹窗内容。
     required Widget dialog,
     bool barrierDismissible = false,
+
+    /// 开启蒙层关闭后，由蒙层成功关闭路由时返回的结果；默认 null。
     T? barrierResult,
+
+    /// 蒙层颜色；为空时使用 Colors.black54。
     Color? barrierColor,
+
+    /// 是否将弹窗推入根 Navigator，默认 true。
     bool useRootNavigator = true,
+
+    /// 是否使用 SafeArea 避让系统区域，默认 true。
     bool useSafeArea = true,
   }) {
     final navigator = Navigator.of(context, rootNavigator: useRootNavigator);

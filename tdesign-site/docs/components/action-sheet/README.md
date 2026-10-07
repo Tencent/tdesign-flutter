@@ -147,3 +147,5 @@ TActionSheet.showList(
 - `textStyle.color` 不再隐式覆盖图标颜色；需要同色时请同时设置 `Icon.color`。
 
 示例源码：[t_action_sheet_page.dart](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-component/example/lib/page/t_action_sheet_page.dart)
+
+{{ flutter-api action-sheet }}

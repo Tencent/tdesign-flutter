@@ -1,29 +1,34 @@
 ## API
-### TSkeleton
 
-#### 工厂构造方法
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
+### TSkeleton
+#### 简介
+在内容加载前展示页面结构的占位组件。
+
+#### 命名构造方法
 
 ##### TSkeleton.custom
 
 使用自定义行列布局创建骨架屏。
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| layout | TSkeletonLayout | - | 自定义布局；预设形态时为空。 |
-| animation | TSkeletonAnimation? | - | 动画效果；为 null 时保持静态。 |
-| delay | Duration | Duration.zero | 骨架屏的延迟显示时间，用于避免短请求产生闪烁。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| layout | TSkeletonLayout | - | 自定义布局；预设形态时为空。 | 是 |
+| animation | TSkeletonAnimation? | - | 动画效果；为 null 时保持静态。 | 否 |
+| delay | Duration | Duration.zero | 骨架屏的延迟显示时间，用于避免短请求产生闪烁。 | 否 |
 
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| animation | TSkeletonAnimation? | - | 动画效果；为 null 时保持静态。 |
-| delay | Duration | Duration.zero | 骨架屏的延迟显示时间，用于避免短请求产生闪烁。 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| variant | TSkeletonVariant | TSkeletonVariant.text | 预设形态；自定义布局时为空。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| animation | TSkeletonAnimation? | - | 动画效果；为 null 时保持静态。 | 否 |
+| delay | Duration | Duration.zero | 骨架屏的延迟显示时间，用于避免短请求产生闪烁。 | 否 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| variant | TSkeletonVariant | TSkeletonVariant.text | 预设形态；自定义布局时为空。 | 否 |
 
-#### 公开属性
+#### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
@@ -31,96 +36,118 @@
 
 
 ### TSkeletonLayout
+#### 简介
+骨架屏的行列布局。
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| rows | List<List<TSkeletonBlock>> | - | 每个内层列表表示一行骨架块。 |
-| rowSpacing | double? | - | 行间距；未设置时读取组件主题和 TDesign token。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| rows | List&lt;List&lt;TSkeletonBlock&gt;&gt; | - | 每个内层列表表示一行骨架块。 | 是 |
+| rowSpacing | double? | - | 行间距；未设置时读取组件主题和 TDesign token。 | 否 |
 
 
 ### TSkeletonBlockStyle
+#### 简介
+单个骨架块的视觉样式。
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| borderRadius | double? | - | 骨架块圆角；优先于 `shape` 和组件主题。 |
-| color | Color? | - | 骨架块颜色；优先于组件主题。 |
-| shape | TSkeletonBlockShape | TSkeletonBlockShape.rounded | 骨架块形状。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| borderRadius | double? | - | 骨架块圆角；优先于 `shape` 和组件主题。 | 否 |
+| color | Color? | - | 骨架块颜色；优先于组件主题。 | 否 |
+| shape | TSkeletonBlockShape | TSkeletonBlockShape.rounded | 骨架块形状。 | 否 |
 
 
 ### TSkeletonBlock
+#### 简介
+骨架屏中的一个占位块。
 
-#### 工厂构造方法
+#### 命名构造方法
 
 ##### TSkeletonBlock.circle
 
 圆形占位块。
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| width | double? | 48 | 宽度。 |
-| height | double? | 48 | 高度。 |
-| flex | int? | - | 同一行内的弹性因子；为 null 时按固定宽度布局。 |
-| margin | EdgeInsets | EdgeInsets.zero | 外边距。 |
-| style | TSkeletonBlockStyle | const TSkeletonBlockStyle(shape: TSkeletonBlockShape.circle) | 视觉样式。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| width | double? | 48 | 宽度。 | 否 |
+| height | double? | 48 | 高度。 | 否 |
+| flex | int? | - | 同一行内的弹性因子；为 null 时按固定宽度布局。 | 否 |
+| margin | EdgeInsets | EdgeInsets.zero | 外边距。 | 否 |
+| style | TSkeletonBlockStyle | const TSkeletonBlockStyle(shape: TSkeletonBlockShape.circle) | 视觉样式。 | 否 |
 
 
 ##### TSkeletonBlock.line
 
 文本行占位块。
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| width | double? | - | 宽度。 |
-| height | double? | 16 | 高度。 |
-| flex | int? | 1 | 同一行内的弹性因子；为 null 时按固定宽度布局。 |
-| margin | EdgeInsets | EdgeInsets.zero | 外边距。 |
-| style | TSkeletonBlockStyle | const TSkeletonBlockStyle() | 视觉样式。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| width | double? | - | 宽度。 | 否 |
+| height | double? | 16 | 高度。 | 否 |
+| flex | int? | 1 | 同一行内的弹性因子；为 null 时按固定宽度布局。 | 否 |
+| margin | EdgeInsets | EdgeInsets.zero | 外边距。 | 否 |
+| style | TSkeletonBlockStyle | const TSkeletonBlockStyle() | 视觉样式。 | 否 |
 
 
 ##### TSkeletonBlock.rectangle
 
 无圆角矩形占位块。
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| width | double? | - | 宽度。 |
-| height | double? | 16 | 高度。 |
-| flex | int? | 1 | 同一行内的弹性因子；为 null 时按固定宽度布局。 |
-| margin | EdgeInsets | EdgeInsets.zero | 外边距。 |
-| style | TSkeletonBlockStyle | const TSkeletonBlockStyle(shape: TSkeletonBlockShape.rectangle) | 视觉样式。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| width | double? | - | 宽度。 | 否 |
+| height | double? | 16 | 高度。 | 否 |
+| flex | int? | 1 | 同一行内的弹性因子；为 null 时按固定宽度布局。 | 否 |
+| margin | EdgeInsets | EdgeInsets.zero | 外边距。 | 否 |
+| style | TSkeletonBlockStyle | const TSkeletonBlockStyle(shape: TSkeletonBlockShape.rectangle) | 视觉样式。 | 否 |
 
 
 ##### TSkeletonBlock.spacer
 
 透明间隔块。
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| width | double? | - | 宽度。 |
-| height | double? | - | 高度。 |
-| flex | int? | - | 同一行内的弹性因子；为 null 时按固定宽度布局。 |
-| margin | EdgeInsets | EdgeInsets.zero | 外边距。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| width | double? | - | 宽度。 | 否 |
+| height | double? | - | 高度。 | 否 |
+| flex | int? | - | 同一行内的弹性因子；为 null 时按固定宽度布局。 | 否 |
+| margin | EdgeInsets | EdgeInsets.zero | 外边距。 | 否 |
 
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| flex | int? | 1 | 同一行内的弹性因子；为 null 时按固定宽度布局。 |
-| height | double? | 16 | 高度。 |
-| margin | EdgeInsets | EdgeInsets.zero | 外边距。 |
-| style | TSkeletonBlockStyle | const TSkeletonBlockStyle() | 视觉样式。 |
-| width | double? | - | 宽度。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| flex | int? | 1 | 同一行内的弹性因子；为 null 时按固定宽度布局。 | 否 |
+| height | double? | 16 | 高度。 | 否 |
+| margin | EdgeInsets | EdgeInsets.zero | 外边距。 | 否 |
+| style | TSkeletonBlockStyle | const TSkeletonBlockStyle() | 视觉样式。 | 否 |
+| width | double? | - | 宽度。 | 否 |
 
-#### 公开属性
+#### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | isSpacer | bool | - | 是否是透明间隔块。 |
 
 
+### TSkeletonThemeData
+#### 简介
+骨架屏组件级 ThemeExtension。
+仅保存占位块的视觉和布局默认值；动画、延迟与具体布局由实例决定。
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| blockColor | Color? | - | 占位块背景色。 | 否 |
+| borderRadius | double? | - | 普通占位块圆角。 | 否 |
+| highlightColor | Color? | - | 渐变动画高亮色。 | 否 |
+| rowSpacing | double? | - | 多行布局的默认行间距。 | 否 |
+
+
 ### TSkeletonAnimation
+#### 简介
+骨架屏动画。
 #### 枚举值
 
 
@@ -131,6 +158,8 @@
 
 
 ### TSkeletonVariant
+#### 简介
+骨架屏预设形态。
 #### 枚举值
 
 
@@ -143,6 +172,8 @@
 
 
 ### TSkeletonBlockShape
+#### 简介
+骨架块形状。
 #### 枚举值
 
 

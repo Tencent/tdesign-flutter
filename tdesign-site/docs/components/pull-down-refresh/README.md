@@ -17,3 +17,5 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ## 代码演示
 
 {{ flutter-example-group PullDownRefresh }}
+
+{{ flutter-api pull-down-refresh }}

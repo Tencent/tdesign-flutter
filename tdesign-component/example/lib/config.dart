@@ -57,6 +57,7 @@ import 'page/tabs/tabs_page.dart';
 import 'page/tag/tag_page.dart';
 import 'page/text/text_page.dart';
 import 'page/textarea/textarea_page.dart';
+import 'page/theme/theme_page.dart';
 import 'page/time_counter/time_counter_page.dart';
 import 'page/toast/toast_page.dart';
 import 'page/tree_select/tree_select_page.dart';
@@ -72,6 +73,13 @@ PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
 List<ExamplePageModel> examplePageList = [];
 
 Map<String, List<ExamplePageModel>> exampleMap = {
+  '全局配置': [
+    ExamplePageModel(
+      text: 'Theme 主题',
+      name: 'theme',
+      pageBuilder: _wrapInheritedTheme((context) => const TThemeColorsPage()),
+    ),
+  ],
   '基础': [
     ExamplePageModel(
       text: 'Button 按钮',

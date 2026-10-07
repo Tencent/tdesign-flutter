@@ -37,7 +37,10 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
        assert(drawerWidth == null || drawerWidth > 0);
 
   /// 合并两个 ThemeExtension，[other] 优先于 this
-  TPopupThemeData merge(TPopupThemeData? other) {
+  TPopupThemeData merge(
+    /// 要合并的目标主题；为空时保留当前配置。
+    TPopupThemeData? other,
+  ) {
     if (other == null) {
       return this;
     }
@@ -89,6 +92,7 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
     );
   }
 
+  /// 对 [a] 和 [b] 按 [t] 线性插值；两端均为 null 时返回 null，仅一端为 null 时按 0 参与计算。
   static double? lerpDouble(
     /// 起始值。
     double? a,

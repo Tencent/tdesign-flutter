@@ -25,6 +25,7 @@ final class TPickerPopup {
   /// [TPopupHeader.headerHeight]（58）。[child] 通常为 `TPicker` 或
   /// `TDateTimePicker`，其受控值、确认和取消状态仍由调用方管理。
   static TPopupHandle show(
+    /// 当前构建上下文，用于读取祖先配置。
     BuildContext context, {
 
     /// Picker 滚轮面板。

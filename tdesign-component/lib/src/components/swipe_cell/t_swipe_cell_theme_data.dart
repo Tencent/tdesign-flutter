@@ -10,7 +10,10 @@ class TSwipeCellThemeData extends ThemeExtension<TSwipeCellThemeData> {
   const TSwipeCellThemeData({this.actionPadding});
 
   /// 合并两个 ThemeExtension，[other] 优先于 this
-  TSwipeCellThemeData merge(TSwipeCellThemeData? other) {
+  TSwipeCellThemeData merge(
+    /// 要合并的目标主题；为空时保留当前配置。
+    TSwipeCellThemeData? other,
+  ) {
     if (other == null) {
       return this;
     }

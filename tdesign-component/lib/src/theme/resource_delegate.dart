@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 
 import '../../tdesign_flutter.dart';
 
+/// 根据当前构建上下文提供资源代理；返回 null 时使用默认文案。
 typedef TResourceBuilder = TResourceDelegate? Function(BuildContext context);
 
 /// 资源管理器
@@ -16,7 +17,10 @@ class TResourceManager {
   TResourceDelegate? _delegate;
 
   /// 获取资源
-  TResourceDelegate delegate(BuildContext context) {
+  TResourceDelegate delegate(
+    /// 当前构建上下文，用于读取祖先配置。
+    BuildContext context,
+  ) {
     if (_builder == null) {
       return _defaultDelegate;
     }
@@ -47,7 +51,13 @@ class TResourceManager {
   static TResourceDelegate get defaultDelegate => _defaultDelegate;
 
   /// 设置资源代理
-  void setResourceBuilder(TResourceBuilder delegate, needAlwaysBuild) {
+  void setResourceBuilder(
+    /// 根据构建上下文提供资源代理的回调。
+    TResourceBuilder delegate,
+
+    /// 是否每次读取资源时调用构建器；false 时复用首次成功构建的缓存，返回 null 时继续尝试构建。
+    needAlwaysBuild,
+  ) {
     _builder = delegate;
     _needAlwaysBuild = needAlwaysBuild;
   }
@@ -230,7 +240,10 @@ abstract class TResourceDelegate {
   String get picker;
 
   /// [TPicker] 第 [colIndex] 列（1-based）的无障碍 label
-  String pickerColumn(int colIndex);
+  String pickerColumn(
+    /// 从 1 开始的滚轮列序号。
+    int colIndex,
+  );
 }
 
 /// 如果用户要重写，就应该全部重写，不开放只重新部分资源

@@ -63,3 +63,5 @@ Theme(
 - 表单项视觉继续由 `TFormItem` 负责，不把 label、help、error 等参数复制到输入组件。
 
 完整示例以以上 Example App 生成代码为准，完整 API 以组件 dartdoc 和 Example API 面板为准。
+
+{{ flutter-api form }}

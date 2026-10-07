@@ -18,14 +18,4 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 {{ flutter-example-group icon }}
 
-## API
-### TIcons
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TIcons._  | 私有构造方法，不支持外部创建，仅提供静态常量给外部使用 |
-
-
-  
+{{ flutter-api icon }}

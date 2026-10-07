@@ -48,21 +48,41 @@ class TSwiperController extends ChangeNotifier {
   /// 动画切换到目标页；循环模式始终向前到达目标。
   ///
   /// 未提供 [duration] 或 [curve] 时，继承所附加 [TSwiper] 的动画配置。
-  Future<void> animateTo(int index, {Duration? duration, Curve? curve}) async {
+  Future<void> animateTo(
+    int index, {
+
+    /// 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。
+    Duration? duration,
+
+    /// 本次切换动画曲线；为空时使用绑定 Swiper 的动画配置。
+    Curve? curve,
+  }) async {
     await _animateTo?.call(index, duration, curve);
   }
 
   /// 切换到下一页。
   ///
   /// 未提供 [duration] 或 [curve] 时，继承所附加 [TSwiper] 的动画配置。
-  Future<void> next({Duration? duration, Curve? curve}) async {
+  Future<void> next({
+    /// 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。
+    Duration? duration,
+
+    /// 本次切换动画曲线；为空时使用绑定 Swiper 的动画配置。
+    Curve? curve,
+  }) async {
     await _next?.call(duration, curve);
   }
 
   /// 切换到上一页。
   ///
   /// 未提供 [duration] 或 [curve] 时，继承所附加 [TSwiper] 的动画配置。
-  Future<void> previous({Duration? duration, Curve? curve}) async {
+  Future<void> previous({
+    /// 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。
+    Duration? duration,
+
+    /// 本次切换动画曲线；为空时使用绑定 Swiper 的动画配置。
+    Curve? curve,
+  }) async {
     await _previous?.call(duration, curve);
   }
 

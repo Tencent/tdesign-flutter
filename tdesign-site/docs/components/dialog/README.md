@@ -97,37 +97,4 @@ await TDialog.show<void>(
 
 `TDialogThemeData` 支持背景色、shape、elevation、标题/内容文字样式、内容内边距、最大高度、action 按钮样式和宽度。蒙层样式由共享的 `TPopupThemeData` 控制，也可在 `TDialog.show` 中显式传入 `barrierColor`。
 
-## API
-
-### TDialog
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| title | Widget? | - | 标题槽位。 |
-| content | Widget? | - | 内容槽位。 |
-| actions | List&lt;TDialogAction&gt; | const [] | 操作列表。 |
-| actionsWidget | Widget? | - | 完全自定义操作区，与 actions 互斥。 |
-| showCloseButton | bool | false | 是否显示右上角关闭按钮。 |
-| semanticLabel | String? | - | 对话框语义标签。 |
-| backgroundColor | Color? | - | 面板背景色。 |
-| shape | ShapeBorder? | - | 面板形状。 |
-| elevation | double? | - | 阴影高度。 |
-| width | double? | - | 面板宽度。 |
-| maxHeight | double? | - | 面板最大高度。 |
-| contentPadding | EdgeInsetsGeometry? | - | 标题和内容区域内边距。 |
-| actionsPadding | EdgeInsetsGeometry | EdgeInsets.fromLTRB(24, 24, 24, 24) | 操作区内边距。 |
-| actionSpacing | double | 12 | 操作间距。 |
-
-### TDialog.show
-
-返回 `Future<T?>`。支持 `barrierDismissible`、`barrierColor`、`useRootNavigator` 和 `useSafeArea`。
-
-### TDialogAction
-
-通过 `child` 定义内容，`result` 定义关闭结果，`role` 定义默认视觉；可使用 `onPressed`、`closeOnPressed`、`disabled`、`variant`、`colorPreset` 和 `style` 控制行为与外观。
-
-### TConfirmDialog
-
-单操作便捷层，支持字符串标题、字符串或 Widget 内容、按钮文字/回调/结果，以及 `TDialog` 的主要视觉与布局参数。
-
-v1 不提供历史专用 Dialog 类型或旧按钮配置对象的兼容别名。
+{{ flutter-api dialog }}

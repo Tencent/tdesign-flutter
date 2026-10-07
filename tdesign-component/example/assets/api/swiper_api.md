@@ -1,37 +1,40 @@
 ## API
+
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
 ### TSwiper
 #### 简介
 Controller 驱动的轮播组件。
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| allowImplicitScrolling | bool | false | 是否允许无障碍服务请求将未显示的页面滚动到可见区域。 |
-| animationCurve | Curve | Curves.easeInOut | 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画曲线。 |
-| animationDuration | Duration | kThemeAnimationDuration | 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画时长。 |
-| autoplay | bool | false | 是否自动播放。 |
-| autoplayInterval | Duration | const Duration(seconds: 3) | 自动播放每次页面稳定后重新等待的完整间隔，必须大于零。 |
-| children | List<Widget>? | - | 静态页面列表；与 `itemBuilder` 二选一，且不能为空。 |
-| clipBehavior | Clip | Clip.hardEdge | 页面内容超出轮播边界时的裁剪方式。 |
-| controller | TSwiperController? | - | 外部控制器；未提供时组件会创建并自行释放内部控制器。 |
-| dragStartBehavior | DragStartBehavior | DragStartBehavior.start | 拖拽手势开始时的坐标解析方式。 |
-| itemBuilder | IndexedWidgetBuilder? | - | 按需构建页面；使用时必须同时提供正数 `itemCount`。 |
-| itemCount | int? | - | `itemBuilder` 模式下的页面数量。 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| loop | bool | false | 是否循环滚动。 |
-| nextIcon | Widget? | - | next 控制按钮的自定义图标。 仅替换图标内容；点击热区、禁用状态、Tooltip 和切页行为仍由组件管理。 |
-| onChanged | ValueChanged<int>? | - | 当前实际展示页发生变化时触发。 |
-| padEnds | bool | true | 当 `viewportFraction` 小于 1 时，首尾页面是否保留端部留白。 |
-| pageEffect | TSwiperPageEffect? | - | 页面视觉效果；为空时默认为 `TSwiperPageEffect.none`。 |
-| pageSnapping | bool | true | 页面停止滚动时是否自动对齐到整页。 |
-| pagination | TSwiperPaginationVariant? | - | 指示器形态；为空时默认为 `TSwiperPaginationVariant.dots`。 |
-| paginationItemBuilder | TSwiperPaginationItemBuilder? | - | 自定义 dots 和 dotsBar 的单个标记。 组件仍负责排列、间距、选中语义和业务下标更新。 |
-| paginationPlacement | TSwiperPaginationPlacement? | - | 指示器位置；为空时默认为覆盖在轮播内容上。 |
-| physics | ScrollPhysics? | - | 页面视图使用的滚动物理效果。 未指定时使用 `PageView` 的默认物理效果。 |
-| previousIcon | Widget? | - | previous 控制按钮的自定义图标。 仅替换图标内容；点击热区、禁用状态、Tooltip 和切页行为仍由组件管理。 |
-| reverse | bool | false | 是否反转页面的视觉顺序和滚动方向。 |
-| scrollDirection | Axis | Axis.horizontal | 页面滚动方向。 |
-| viewportFraction | double | 1 | 每个页面占视口主轴的比例，必须大于零。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| allowImplicitScrolling | bool | false | 是否允许无障碍服务请求将未显示的页面滚动到可见区域。 | 否 |
+| animationCurve | Curve | Curves.easeInOut | 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画曲线。 | 否 |
+| animationDuration | Duration | kThemeAnimationDuration | 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画时长。 | 否 |
+| autoplay | bool | false | 是否自动播放。 | 否 |
+| autoplayInterval | Duration | const Duration(seconds: 3) | 自动播放每次页面稳定后重新等待的完整间隔，必须大于零。 | 否 |
+| children | List&lt;Widget&gt;? | - | 静态页面列表；与 `itemBuilder` 二选一，且不能为空。 | 否 |
+| clipBehavior | Clip | Clip.hardEdge | 页面内容超出轮播边界时的裁剪方式。 | 否 |
+| controller | TSwiperController? | - | 外部控制器；未提供时组件会创建并自行释放内部控制器。 | 否 |
+| dragStartBehavior | DragStartBehavior | DragStartBehavior.start | 拖拽手势开始时的坐标解析方式。 | 否 |
+| itemBuilder | IndexedWidgetBuilder? | - | 按需构建页面；使用时必须同时提供正数 `itemCount`。 | 否 |
+| itemCount | int? | - | `itemBuilder` 模式下的页面数量。 | 否 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| loop | bool | false | 是否循环滚动。 | 否 |
+| nextIcon | Widget? | - | next 控制按钮的自定义图标。 仅替换图标内容；点击热区、禁用状态、Tooltip 和切页行为仍由组件管理。 | 否 |
+| onChanged | ValueChanged&lt;int&gt;? | - | 当前实际展示页发生变化时触发。 | 否 |
+| padEnds | bool | true | 当 `viewportFraction` 小于 1 时，首尾页面是否保留端部留白。 | 否 |
+| pageEffect | TSwiperPageEffect? | - | 页面视觉效果；为空时默认为 `TSwiperPageEffect.none`。 | 否 |
+| pageSnapping | bool | true | 页面停止滚动时是否自动对齐到整页。 | 否 |
+| pagination | TSwiperPaginationVariant? | - | 指示器形态；为空时默认为 `TSwiperPaginationVariant.dots`。 | 否 |
+| paginationItemBuilder | TSwiperPaginationItemBuilder? | - | 自定义 dots 和 dotsBar 的单个标记。 组件仍负责排列、间距、选中语义和业务下标更新。 | 否 |
+| paginationPlacement | TSwiperPaginationPlacement? | - | 指示器位置；为空时默认为覆盖在轮播内容上。 | 否 |
+| physics | ScrollPhysics? | - | 页面视图使用的滚动物理效果。 未指定时使用 `PageView` 的默认物理效果。 | 否 |
+| previousIcon | Widget? | - | previous 控制按钮的自定义图标。 仅替换图标内容；点击热区、禁用状态、Tooltip 和切页行为仍由组件管理。 | 否 |
+| reverse | bool | false | 是否反转页面的视觉顺序和滚动方向。 | 否 |
+| scrollDirection | Axis | Axis.horizontal | 页面滚动方向。 | 否 |
+| viewportFraction | double | 1 | 每个页面占视口主轴的比例，必须大于零。 | 否 |
 
 
 ### TSwiperController
@@ -42,9 +45,69 @@ Controller 驱动的轮播组件。
 `TSwiper`，由调用方创建的实例也由调用方负责释放。
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| initialIndex | int | 0 | 首次附加时展示的页面。 | 否 |
+
+#### 公开属性（字段与访问器）
+
+| 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| initialIndex | int | 0 | 首次附加时展示的页面。 |
+| hasClients | bool | - | 是否已附加到一个 Swiper。 |
+| index | int | - | 当前实际展示的业务索引。 |
+
+
+#### 实例方法
+
+##### TSwiperController.animateTo
+
+动画切换到目标页；循环模式始终向前到达目标。
+未提供 `duration` 或 `curve` 时，继承所附加 `TSwiper` 的动画配置。
+
+返回类型：`Future<void>`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| index | int | - | 当前实际展示的业务索引。 | 是 |
+| duration | Duration? | - | 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。 | 否 |
+| curve | Curve? | - | 本次切换动画曲线；为空时使用绑定 Swiper 的动画配置。 | 否 |
+
+
+##### TSwiperController.jumpTo
+
+立即跳转到目标页。
+
+返回类型：`void`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| index | int | - | 当前实际展示的业务索引。 | 是 |
+
+
+##### TSwiperController.next
+
+切换到下一页。
+未提供 `duration` 或 `curve` 时，继承所附加 `TSwiper` 的动画配置。
+
+返回类型：`Future<void>`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| duration | Duration? | - | 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。 | 否 |
+| curve | Curve? | - | 本次切换动画曲线；为空时使用绑定 Swiper 的动画配置。 | 否 |
+
+
+##### TSwiperController.previous
+
+切换到上一页。
+未提供 `duration` 或 `curve` 时，继承所附加 `TSwiper` 的动画配置。
+
+返回类型：`Future<void>`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| duration | Duration? | - | 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。 | 否 |
+| curve | Curve? | - | 本次切换动画曲线；为空时使用绑定 Swiper 的动画配置。 | 否 |
 
 
 ### TSwiperThemeData
@@ -53,20 +116,20 @@ Controller 驱动的轮播组件。
 保存指示器、内容圆角和切换按钮的视觉默认值。
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| activeColor | Color? | - | 激活项颜色。 |
-| activeDotExtent | double? | - | 长条激活项在滚动主轴上的长度。 |
-| borderRadius | BorderRadiusGeometry? | - | 轮播内容圆角。 |
-| controlIconSize | double? | - | 控制按钮图标尺寸。 |
-| controlStyle | ButtonStyle? | - | 控制按钮样式。 |
-| dotSize | double? | - | 圆点直径。 |
-| dotSpacing | double? | - | 圆点间距。 |
-| fractionBackgroundColor | Color? | - | 数字指示器背景色。 |
-| fractionStyle | TextStyle? | - | 数字指示器文字样式。 |
-| inactiveColor | Color? | - | 未激活项颜色。 |
-| paginationAlignment | AlignmentGeometry? | - | 默认指示器对齐方式。 |
-| paginationMargin | EdgeInsetsGeometry? | - | 指示器外边距。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| activeColor | Color? | - | 激活项颜色。 | 否 |
+| activeDotExtent | double? | - | 长条激活项在滚动主轴上的长度。 | 否 |
+| borderRadius | BorderRadiusGeometry? | - | 轮播内容圆角。 | 否 |
+| controlIconSize | double? | - | 控制按钮图标尺寸。 | 否 |
+| controlStyle | ButtonStyle? | - | 控制按钮样式。 | 否 |
+| dotSize | double? | - | 圆点直径。 | 否 |
+| dotSpacing | double? | - | 圆点间距。 | 否 |
+| fractionBackgroundColor | Color? | - | 数字指示器背景色。 | 否 |
+| fractionStyle | TextStyle? | - | 数字指示器文字样式。 | 否 |
+| inactiveColor | Color? | - | 未激活项颜色。 | 否 |
+| paginationAlignment | AlignmentGeometry? | - | 默认指示器对齐方式。 | 否 |
+| paginationMargin | EdgeInsetsGeometry? | - | 指示器外边距。 | 否 |
 
 
 ### TSwiperPaginationItemDetails
@@ -74,12 +137,18 @@ Controller 驱动的轮播组件。
 单个轮播指示器标记的状态信息。
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| axis | Axis | - | 轮播滚动主轴。 | 是 |
+| currentIndex | int | - | 当前实际展示页的业务下标。 | 是 |
+| index | int | - | 当前标记对应的业务下标。 | 是 |
+| itemCount | int | - | 轮播项总数。 | 是 |
+
+#### 公开属性（字段与访问器）
+
+| 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| axis | Axis | - | 轮播滚动主轴。 |
-| currentIndex | int | - | 当前实际展示页的业务下标。 |
-| index | int | - | 当前标记对应的业务下标。 |
-| itemCount | int | - | 轮播项总数。 |
+| isActive | bool | - | 当前标记是否对应实际展示页。 |
 
 
 ### TSwiperPaginationVariant

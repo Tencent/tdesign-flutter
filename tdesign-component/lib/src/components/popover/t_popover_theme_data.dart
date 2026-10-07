@@ -47,7 +47,11 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
     this.boxShadow,
   });
 
-  TPopoverThemeData merge(TPopoverThemeData? other) {
+  /// 返回合并后的主题；[other] 的非空字段覆盖当前字段，other 为空时返回当前主题。
+  TPopoverThemeData merge(
+    /// 要合并的目标主题；为空时保留当前配置。
+    TPopoverThemeData? other,
+  ) {
     if (other == null) {
       return this;
     }

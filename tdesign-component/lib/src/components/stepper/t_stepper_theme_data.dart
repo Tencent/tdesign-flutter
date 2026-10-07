@@ -141,7 +141,13 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
   ///
   /// 两端均未指定的字段仍为 null；端点返回原始配置。
   @override
-  TStepperThemeData lerp(ThemeExtension<TStepperThemeData>? other, double t) {
+  TStepperThemeData lerp(
+    /// 插值目标主题；为空或类型不匹配时返回当前主题。
+    ThemeExtension<TStepperThemeData>? other,
+
+    /// 插值进度；0 表示起点，1 表示终点。
+    double t,
+  ) {
     if (other is! TStepperThemeData) {
       return this;
     }

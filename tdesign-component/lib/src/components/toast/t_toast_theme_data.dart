@@ -34,7 +34,10 @@ class TToastThemeData extends ThemeExtension<TToastThemeData> {
   });
 
   /// 合并其他 ThemeData，非空字段优先取 [other]
-  TToastThemeData merge(TToastThemeData? other) {
+  TToastThemeData merge(
+    /// 要合并的目标主题；为空时保留当前配置。
+    TToastThemeData? other,
+  ) {
     if (other == null) {
       return this;
     }
@@ -86,7 +89,17 @@ class TToastThemeData extends ThemeExtension<TToastThemeData> {
     );
   }
 
-  static double? lerpDouble(double? a, double? b, double t) {
+  /// 对 [a] 和 [b] 按 [t] 线性插值；两端均为 null 时返回 null，仅一端为 null 时按 0 参与计算。
+  static double? lerpDouble(
+    /// 插值起始值；单端为空时按 0 参与插值。
+    double? a,
+
+    /// 插值目标值；单端为空时按 0 参与插值。
+    double? b,
+
+    /// 插值进度；0 表示起点，1 表示终点。
+    double t,
+  ) {
     if (a == null && b == null) {
       return null;
     }

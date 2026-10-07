@@ -28,7 +28,10 @@ class TLoadingThemeData extends ThemeExtension<TLoadingThemeData> {
   });
 
   /// 合并两个 ThemeExtension，[other] 优先于 this
-  TLoadingThemeData merge(TLoadingThemeData? other) {
+  TLoadingThemeData merge(
+    /// 要合并的目标主题；为空时保留当前配置。
+    TLoadingThemeData? other,
+  ) {
     if (other == null) {
       return this;
     }

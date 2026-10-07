@@ -42,7 +42,10 @@ extension TThemeDataMergeExtension on ThemeData {
   ///   child: const TTag('局部圆角'),
   /// )
   /// ```
-  ThemeData mergeExtension<T extends ThemeExtension<T>>(T extension) {
+  ThemeData mergeExtension<T extends ThemeExtension<T>>(
+    /// 要安装到主题中的扩展；仅替换同类型扩展，其他扩展保持不变。
+    T extension,
+  ) {
     final merged = Map<Type, ThemeExtension<dynamic>>.from(extensions);
     merged[T] = extension;
     return copyWith(extensions: merged.values.toList());
@@ -65,7 +68,10 @@ class TStyleResolver {
   final BuildContext _context;
 
   /// 创建解析器实例
-  static TStyleResolver of(BuildContext context) => TStyleResolver._(context);
+  static TStyleResolver of(
+    /// 当前构建上下文，用于读取祖先配置。
+    BuildContext context,
+  ) => TStyleResolver._(context);
 
   /// 全局设计 Token（色板 / 间距原始值）。
   TThemeData get token =>
@@ -418,12 +424,16 @@ class TThemeBuilder {
   const TThemeBuilder._();
 
   /// 亮色主题
-  static ThemeData light(TThemeData token) =>
-      TMaterialThemeBuilder(token).buildLight();
+  static ThemeData light(
+    /// 用于构建完整 Material 主题的 Token 数据源。
+    TThemeData token,
+  ) => TMaterialThemeBuilder(token).buildLight();
 
   /// 暗色主题
-  static ThemeData dark(TThemeData token) =>
-      TMaterialThemeBuilder(token).buildDark();
+  static ThemeData dark(
+    /// 用于构建完整 Material 主题的 Token 数据源。
+    TThemeData token,
+  ) => TMaterialThemeBuilder(token).buildDark();
 }
 
 /// 设置全局资源代理。
@@ -432,7 +442,10 @@ class TThemeBuilder {
 /// 需要区分情况去获取，则可以设置 needAlwaysBuild 为 true，业务自己判断返回哪个 delegate。
 /// [needAlwaysBuild]=false: 返回 delegate 为 null，则每次都会走 build 方法。
 void setTResourceBuilder(
+  /// 根据构建上下文提供资源代理的回调。
   TResourceBuilder delegate, {
+
+  /// 是否每次读取资源时调用构建器；false 时复用首次成功构建的缓存，返回 null 时继续尝试构建。
   bool needAlwaysBuild = false,
 }) {
   TResourceManager.instance.setResourceBuilder(delegate, needAlwaysBuild);
@@ -535,6 +548,8 @@ class TThemeData extends ThemeExtension<TThemeData> {
     Map<String, FontFamily>? fontFamilyMap,
     Map<String, List<BoxShadow>>? shadowMap,
     Map<String, BorderSide>? insetShadowMap,
+
+    /// 间距 Token 的增量配置；沿用 marginMap 参数名，合并到 spacerMap。
     Map<String, double>? marginMap,
     TExtraThemeData? extraThemeData,
   }) {
@@ -697,6 +712,8 @@ class TThemeData extends ThemeExtension<TThemeData> {
     }
   }
 
+  /// 从已解析的 [themeConfig] 读取 [name] 对应的主题；不存在或为空时返回空主题。
+  /// [extraThemeData] 非空时参与扩展数据解析。
   static TThemeData parseThemeData(
     String name,
 
@@ -792,26 +809,32 @@ class TThemeData extends ThemeExtension<TThemeData> {
     return theme;
   }
 
+  /// 按 [key] 读取颜色 Token；没有本地配置且无法解析引用或默认映射时返回 null。
   Color? ofColor(String? key) {
     return colorMap[key];
   }
 
+  /// 按 [key] 读取复合字体 Token；没有本地配置且无法解析引用或默认映射时返回 null。
   Font? ofFont(String? key) {
     return fontMap[key];
   }
 
+  /// 按 [key] 读取圆角 Token，单位为逻辑像素；找不到时返回 null。
   double? ofCorner(String? key) {
     return radiusMap[key];
   }
 
+  /// 按 [key] 读取字体栈 Token；找不到时返回 null。
   FontFamily? ofFontFamily(String? key) {
     return fontFamilyMap[key];
   }
 
+  /// 按 [key] 读取外投影列表；找不到时返回 null。
   List<BoxShadow>? ofShadow(String? key) {
     return shadowMap[key];
   }
 
+  /// 读取指定 TExtraThemeData 子类型的扩展数据；未配置或类型不匹配时返回 null。
   T? ofExtra<T extends TExtraThemeData>() {
     try {
       return extraThemeData as T;
@@ -844,15 +867,26 @@ class TThemeData extends ThemeExtension<TThemeData> {
 /// 扩展主题数据
 abstract class TExtraThemeData {
   /// 解析json
-  void parse(String name, Map<String, dynamic> curThemeMap);
+  void parse(
+    /// 待解析主题的名称。
+    String name,
+
+    /// 当前主题对应的已解析 JSON 映射。
+    Map<String, dynamic> curThemeMap,
+  );
 }
 
+/// 创建默认 Token 映射的回调；返回 null 时不提供默认值。
 typedef DefaultMapFactory = TMap? Function();
 
 /// 自定义Map
 class TMap<K, V> extends DelegatingMap<K, V> {
   TMap({this.factory, this.refs}) : super({});
+
+  /// 查不到本地值或引用值时获取默认映射的回调；为空时不使用默认映射。
   DefaultMapFactory? factory;
+
+  /// Token 名称到引用名称的映射；本地显式值优先于引用，循环引用会中止该引用链的解析。
   TMap? refs;
 
   @override
@@ -885,6 +919,7 @@ class TMap<K, V> extends DelegatingMap<K, V> {
     return defaultValue is V ? defaultValue : null;
   }
 
+  /// 仅读取 [key] 的本地存储值，不解析引用或默认映射。
   V? get(Object? key) {
     return super[key];
   }

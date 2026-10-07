@@ -8,7 +8,13 @@ import 't_swipe_cell_inherited.dart';
 import 't_swipe_cell_panel.dart';
 
 /// 操作面板所在侧。
-enum TSwipeCellSide { start, end }
+enum TSwipeCellSide {
+  /// 沿当前文字方向的起始侧；LTR 为左侧，RTL 为右侧。
+  start,
+
+  /// 沿当前文字方向的结束侧；LTR 为右侧，RTL 为左侧。
+  end,
+}
 
 /// 滑动展开状态变化回调。
 typedef TSwipeCellChanged = void Function(TSwipeCellSide side, bool isOpen);
@@ -21,7 +27,10 @@ class TSwipeCellController {
   _TSwipeCellControllerBinding? _binding;
 
   /// 展开指定侧的操作面板。
-  Future<void> open(TSwipeCellSide side) async {
+  Future<void> open(
+    /// 需要展开的操作面板侧；该侧没有面板时关闭当前面板。
+    TSwipeCellSide side,
+  ) async {
     await _binding?.open(side);
   }
 

@@ -110,12 +110,18 @@ class TText extends StatelessWidget {
   Widget build(BuildContext context) => _rawText(context);
 
   /// 获取与当前 TText 配置等价的 Flutter 原生 [Text]。
-  Text getRawText({required BuildContext context}) {
+  Text getRawText({
+    /// 当前构建上下文，用于读取祖先配置。
+    required BuildContext context,
+  }) {
     return _rawText(context, includeKey: true);
   }
 
   /// 获取最终 Flutter [TextStyle]。
-  TextStyle getTextStyle(BuildContext context) {
+  TextStyle getTextStyle(
+    /// 当前构建上下文，用于读取祖先配置。
+    BuildContext context,
+  ) {
     return TTextResolve.resolve(context: context, font: font, style: style);
   }
 

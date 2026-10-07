@@ -361,6 +361,7 @@ class TPopupOptions {
     );
   }
 
+  /// 返回按展示方向归一化的配置副本：仅 bottom 保留 headerBuilder，仅 center 保留 closeBuilder。
   TPopupOptions normalized() {
     final isBottom = placement == TPopupPlacement.bottom;
     final isCenter = placement == TPopupPlacement.center;
@@ -385,6 +386,7 @@ class TPopupOptions {
     );
   }
 
+  /// 在 debug 模式检查方向与宽高、inset 组合；无效组合抛出校验异常，release 模式不执行。
   void assertPlacementParams() {
     assert(() {
       final err = _validatePlacementParams();

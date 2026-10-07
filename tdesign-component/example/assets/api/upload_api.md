@@ -1,65 +1,97 @@
 ## API
+
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
 ### TUpload
+#### 简介
+严格受控的文件选择与上传状态展示组件。
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| draggable | bool | false | 是否支持长按拖拽排序；禁用时不生效。 |
-| files | List<TUploadFile> | - | 受控文件列表。 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| layout | TUploadLayout | TUploadLayout.grid | 文件布局方式。 |
-| maxFiles | int? | 1 | 最大文件数量；null 表示不限制。 |
-| maxFileSize | int? | - | 单个文件最大字节数；null 表示不限制。 |
-| mediaType | TUploadMediaType | TUploadMediaType.image | 允许选择的媒体类型。 |
-| onChanged | ValueChanged<List<TUploadFile>>? | - | 文件列表变化回调；为 null 时禁用。 |
-| onError | ValueChanged<Object>? | - | 文件选择失败时触发。 |
-| onFileTap | ValueChanged<TUploadFile>? | - | 点击任意状态的已有文件时触发；组件不会自动预览或重新上传。 |
-| onValidationError | ValueChanged<TUploadValidationError>? | - | 文件校验失败时触发。 |
-| picker | TUploadPicker? | - | 自定义文件选择器；为空时使用 image_picker。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| draggable | bool | false | 是否支持长按拖拽排序；禁用时不生效。 | 否 |
+| files | List&lt;TUploadFile&gt; | - | 受控文件列表。 | 是 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| layout | TUploadLayout | TUploadLayout.grid | 文件布局方式。 | 否 |
+| maxFiles | int? | 1 | 最大文件数量；null 表示不限制。 | 否 |
+| maxFileSize | int? | - | 单个文件最大字节数；null 表示不限制。 | 否 |
+| mediaType | TUploadMediaType | TUploadMediaType.image | 允许选择的媒体类型。 | 否 |
+| onChanged | ValueChanged&lt;List&lt;TUploadFile&gt;&gt;? | - | 文件列表变化回调；为 null 时禁用。 | 否 |
+| onError | ValueChanged&lt;Object&gt;? | - | 文件选择失败时触发。 | 否 |
+| onFileTap | ValueChanged&lt;TUploadFile&gt;? | - | 点击任意状态的已有文件时触发；组件不会自动预览或重新上传。 | 否 |
+| onValidationError | ValueChanged&lt;TUploadValidationError&gt;? | - | 文件校验失败时触发。 | 否 |
+| picker | TUploadPicker? | - | 自定义文件选择器；为空时使用 image_picker。 | 否 |
 
 
 ### TUploadFile
+#### 简介
+不可变的上传文件数据。
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| bytes | Uint8List? | - | 本地预览字节。 |
-| canRemove | bool | true | 是否允许移除。 |
-| errorText | String? | - | 失败状态文案。 |
-| id | String | - | 文件唯一标识。 |
-| name | String | - | 文件名。 |
-| progress | double? | - | 上传进度，范围为 0 到 1。 |
-| size | int? | - | 文件字节数。 |
-| status | TUploadFileStatus | TUploadFileStatus.ready | 上传状态。 |
-| url | String? | - | 远程预览地址。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| bytes | Uint8List? | - | 本地预览字节。 | 否 |
+| canRemove | bool | true | 是否允许移除。 | 否 |
+| errorText | String? | - | 失败状态文案。 | 否 |
+| id | String | - | 文件唯一标识。 | 是 |
+| name | String | - | 文件名。 | 是 |
+| progress | double? | - | 上传进度，范围为 0 到 1。 | 否 |
+| size | int? | - | 文件字节数。 | 否 |
+| status | TUploadFileStatus | TUploadFileStatus.ready | 上传状态。 | 否 |
+| url | String? | - | 远程预览地址。 | 否 |
+
+
+#### 实例方法
+
+##### TUploadFile.copyWith
+
+创建部分字段变化的新实例。
+
+返回类型：`TUploadFile`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| id | String? | - | 文件唯一标识。 | 否 |
+| name | String? | - | 文件名。 | 否 |
+| url | String? | - | 远程预览地址。 | 否 |
+| bytes | Uint8List? | - | 本地预览字节。 | 否 |
+| size | int? | - | 文件字节数。 | 否 |
+| status | TUploadFileStatus? | - | 上传状态。 | 否 |
+| progress | double? | - | 上传进度，范围为 0 到 1。 | 否 |
+| errorText | String? | - | 失败状态文案。 | 否 |
+| canRemove | bool? | - | 是否允许移除。 | 否 |
 
 
 ### TUploadThemeData
+#### 简介
+TUpload 组件级 ThemeExtension。
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| addIconSize | double? | - | 添加图标尺寸。 |
-| alignment | WrapAlignment? | - | Wrap 对齐方式。 |
-| backgroundColor | Color? | - | 默认背景色。 |
-| borderRadius | double? | - | 方形上传项圆角。 |
-| disabledBackgroundColor | Color? | - | 禁用背景色。 |
-| disabledForegroundColor | Color? | - | 禁用前景色。 |
-| disabledMaskColor | Color? | - | 禁用文件遮罩颜色。 |
-| foregroundColor | Color? | - | 默认前景色。 |
-| itemSize | double? | - | 上传项尺寸。 |
-| overlayColor | Color? | - | 状态遮罩颜色。 |
-| removeButtonColor | Color? | - | 移除按钮颜色。 |
-| removeButtonSize | double? | - | 移除按钮尺寸。 |
-| removeIconSize | double? | - | 移除图标尺寸。 |
-| runSpacing | double? | - | 纵向间距。 |
-| spacing | double? | - | 横向间距。 |
-| statusIconSize | double? | - | 状态图标尺寸。 |
-| statusTextStyle | TextStyle? | - | 状态文案样式。 |
-| variant | TUploadVariant? | - | 上传项形状。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| addIconSize | double? | - | 添加图标尺寸。 | 否 |
+| alignment | WrapAlignment? | - | Wrap 对齐方式。 | 否 |
+| backgroundColor | Color? | - | 默认背景色。 | 否 |
+| borderRadius | double? | - | 方形上传项圆角。 | 否 |
+| disabledBackgroundColor | Color? | - | 禁用背景色。 | 否 |
+| disabledForegroundColor | Color? | - | 禁用前景色。 | 否 |
+| disabledMaskColor | Color? | - | 禁用文件遮罩颜色。 | 否 |
+| foregroundColor | Color? | - | 默认前景色。 | 否 |
+| itemSize | double? | - | 上传项尺寸。 | 否 |
+| overlayColor | Color? | - | 状态遮罩颜色。 | 否 |
+| removeButtonColor | Color? | - | 移除按钮颜色。 | 否 |
+| removeButtonSize | double? | - | 移除按钮尺寸。 | 否 |
+| removeIconSize | double? | - | 移除图标尺寸。 | 否 |
+| runSpacing | double? | - | 纵向间距。 | 否 |
+| spacing | double? | - | 横向间距。 | 否 |
+| statusIconSize | double? | - | 状态图标尺寸。 | 否 |
+| statusTextStyle | TextStyle? | - | 状态文案样式。 | 否 |
+| variant | TUploadVariant? | - | 上传项形状。 | 否 |
 
 
 ### TUploadFileStatus
+#### 简介
+上传文件展示状态。
 #### 枚举值
 
 
@@ -73,6 +105,8 @@
 
 
 ### TUploadLayout
+#### 简介
+上传文件的布局方式。
 #### 枚举值
 
 
@@ -83,6 +117,8 @@
 
 
 ### TUploadVariant
+#### 简介
+上传项形状。
 #### 枚举值
 
 
@@ -93,6 +129,8 @@
 
 
 ### TUploadMediaType
+#### 简介
+可选择的上传媒体类型。
 #### 枚举值
 
 
@@ -103,6 +141,8 @@
 
 
 ### TUploadValidationError
+#### 简介
+上传文件校验错误。
 #### 枚举值
 
 
@@ -113,6 +153,8 @@
 
 
 ### TUploadPicker
+#### 简介
+自定义文件选择器。
 #### 类型定义
 
 ```dart

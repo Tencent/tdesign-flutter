@@ -1,5 +1,10 @@
 ## API
+
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
 ### TImageViewer
+#### 简介
+命令式图片预览工具。
 
 #### 静态方法
 
@@ -11,27 +16,45 @@
 
 返回类型：`Future<void>`
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | 用于展示预览弹窗。 |
-| images | List<ImageProvider<Object>> | - | 是待预览的图片列表，不能为空。 |
-| labels | List<String>? | - | 是与图片一一对应的标签文案。 |
-| initialIndex | int | 0 | 设置初始展示的图片索引。 |
-| showClose | bool | true | 控制关闭按钮是否显示。 |
-| showDelete | bool | false | 控制删除按钮是否显示。 |
-| showIndex | bool | true | 控制当前页码是否显示。 |
-| loop | bool | false | 控制是否循环切换图片。 |
-| autoplay | bool | false | 控制是否自动切换图片；图片放大时暂停，还原后恢复。 |
-| autoplayInterval | Duration | const Duration(seconds: 3) | 设置自动切换图片的时间间隔。 |
-| onIndexChanged | ValueChanged<int>? | - | 在当前图片索引变化时触发。 |
-| onDelete | ValueChanged<int>? | - | 在点击删除按钮时触发，仅通知当前索引。 |
-| onTap | ValueChanged<int>? | - | 在点击当前全屏预览区、关闭预览前触发。 |
-| onLongPress | ValueChanged<int>? | - | 在长按当前图片时触发。 |
-| leadingBuilder | TImageViewerItemBuilder? | - | 构建导航栏起始区域。 |
-| trailingBuilder | TImageViewerItemBuilder? | - | 构建导航栏末尾区域。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | 用于展示预览弹窗。 | 是 |
+| images | List&lt;ImageProvider&lt;Object&gt;&gt; | - | 是待预览的图片列表，不能为空。 | 是 |
+| labels | List&lt;String&gt;? | - | 是与图片一一对应的标签文案。 | 否 |
+| initialIndex | int | 0 | 设置初始展示的图片索引。 | 否 |
+| showClose | bool | true | 控制关闭按钮是否显示。 | 否 |
+| showDelete | bool | false | 控制删除按钮是否显示。 | 否 |
+| showIndex | bool | true | 控制当前页码是否显示。 | 否 |
+| loop | bool | false | 控制是否循环切换图片。 | 否 |
+| autoplay | bool | false | 控制是否自动切换图片；图片放大时暂停，还原后恢复。 | 否 |
+| autoplayInterval | Duration | const Duration(seconds: 3) | 设置自动切换图片的时间间隔。 | 否 |
+| onIndexChanged | ValueChanged&lt;int&gt;? | - | 在当前图片索引变化时触发。 | 否 |
+| onDelete | ValueChanged&lt;int&gt;? | - | 在点击删除按钮时触发，仅通知当前索引。 | 否 |
+| onTap | ValueChanged&lt;int&gt;? | - | 在点击当前全屏预览区、关闭预览前触发。 | 否 |
+| onLongPress | ValueChanged&lt;int&gt;? | - | 在长按当前图片时触发。 | 否 |
+| leadingBuilder | TImageViewerItemBuilder? | - | 构建导航栏起始区域。 | 否 |
+| trailingBuilder | TImageViewerItemBuilder? | - | 构建导航栏末尾区域。 | 否 |
+
+
+### TImageViewerThemeData
+#### 简介
+图片预览组件级 ThemeExtension
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| appBarBackgroundColor | Color? | - | 导航栏背景色 | 否 |
+| backgroundColor | Color? | - | 预览页背景色 | 否 |
+| iconColor | Color? | - | 图标颜色 | 否 |
+| indexStyle | TextStyle? | - | 页码文字样式 | 否 |
+| labelStyle | TextStyle? | - | 标签文字样式 | 否 |
+| viewerHeight | double? | - | 预览区默认高度 | 否 |
+| viewerWidth | double? | - | 预览区默认宽度 | 否 |
 
 
 ### TImageViewerItemBuilder
+#### 简介
+图片预览导航栏槽位构建器。
 #### 类型定义
 
 ```dart

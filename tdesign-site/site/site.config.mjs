@@ -60,6 +60,13 @@ export default {
       type: 'document', // 普通文档
       children: [
         {
+          title: 'Theme 主题',
+          name: 'theme',
+          meta: { docType: 'base' },
+          path: '/flutter/components/theme',
+          component: () => import('@component-docs/theme/README.md'),
+        },
+        {
           title: '深色模式',
           name: 'dark-mode',
           meta: { docType: 'explain' },

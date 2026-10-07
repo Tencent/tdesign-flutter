@@ -45,7 +45,10 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
   );
 
   /// 合并两个 ThemeExtension，[other] 优先于 this
-  TNoticeBarThemeData merge(TNoticeBarThemeData? other) {
+  TNoticeBarThemeData merge(
+    /// 要合并的目标主题；为空时保留当前配置。
+    TNoticeBarThemeData? other,
+  ) {
     if (other == null) {
       return this;
     }
@@ -61,7 +64,10 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
 
   /// 根据状态和上下文解析出完整的样式（颜色等）
   TNoticeBarThemeData resolve(
+    /// 当前构建上下文，用于读取祖先配置。
     BuildContext context, {
+
+    /// 公告栏语义状态，默认 info，用于解析状态对应的颜色。
     TNoticeBarStatus status = TNoticeBarStatus.info,
   }) {
     final t = context.tTheme;

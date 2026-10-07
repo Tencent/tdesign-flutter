@@ -7,78 +7,40 @@ API 生成配置统一维护在 [`../tool/components.json`](../tool/components.j
 ```bash
 bash demo_tool/all_build.sh
 node tool/generate_api.mjs --dry-run
+node tool/generate_api.mjs --check
 ```
 
 `all_build.sh` 仅保留为兼容入口，实际调用 `tool/generate_api.mjs`。新增或迁移组件时先更新 `tool/components.json`，再生成并提交 `example/assets/api/<component>_api.md`。
 
-## 旧 api_tool 说明
+## 文档范围与注释规范
 
-## 组件注释规范
+`tool/components.json` 登记组件及其公开类、枚举、typedef、扩展和顶层函数。公开范围以 `lib/tdesign_flutter.dart` 的导出为准，包括 `part`、转导出和 `show` / `hide`；`@internal` 和 `@visibleForTesting` 成员不作为使用方 API。
 
-**注意：** 生成工具有待完善，目前先按工具代码规范编写代码，如有不满足的场景，再修改工具。
+生成文档分别展示默认、命名和 factory 构造函数、参数及必填项、字段和访问器、静态/实例方法、控制器、辅助类型及 Theme。公开扩展也会生成属性和方法说明。主题配置说明随对应 ThemeData 一起生成，不另写参数表。
 
-编写规范需注意：
+- 使用标准 `///` dartdoc；构造函数可以有注释，也不限制成员声明顺序。
+- 类注释说明用途；字段注释说明语义、生效条件、空值含义、相关字段和优先关系。
+- 声明默认值由 analyzer 提取。运行时的组件 Theme / 全局 Token 回退写在注释中，不能把它当作构造默认值。
+- `this.field` 参数复用字段注释；没有对应字段的参数使用参数内 `///`，或在可调用成员注释中以 `[parameterName]` 开头单独说明。
+- 公开方法说明返回值、状态变化、完成时机和重复调用语义。标注 `@override` 的继承契约不需要重复拷贝框架文档；有自定义行为时应单独说明。
+- `getComments` 只控制类简介；参数与成员说明始终读取 dartdoc。
+- 不编辑 `example/assets/api/*_api.md`，修复应来自源码、manifest 或独立生成工具。
 
-- 构造方法为类名下的第一行代码，且不能有注释。成员字段需写在构造方法后面。
-- 成员变量的注释需要用 `///`，不能用 `//`。
-- 构造方法不能标注 `@override`。
-
-### 组件widget注释示例
-
-```dart
-/// 组件简介（必须）
-```
-
-### 组件属性注释示例
-
-```dart
-/// 属性简介（必须）
-```
-
-## 组件库工具使用方法
-
-### 初始化工具调用命令
+核对清单和生成结果：
 
 ```bash
-./bin/api_tool_xxx generate \
-    --file                相对ui_component目录的组件文件路径 \
-    --folder              相对ui_component目录的组件文件夹路径 \
-    --name                组件名，多个组件名之间用英文,分割 \
-    --folder-name         [可选]生成的组件示例文件夹名称，默认生成的文件夹名称是第一个name参数的下划线表示 \
-    --[no-]only-api       是否只更新api文件 \
-    --[no-]use-grammar    是否采用语法分析器，默认采用词法分析
+dart run tool/audit_api_docs.dart
+dart run tool/audit_api_docs.dart --json
 ```
 
-### 初始化命令
+`generate_api.mjs --check` 在临时目录生成并比较资产，不改写已提交文件；正式工具版本需支持当前清单。
 
-**前置条件：** 在 `demo_tool/version` 中填入对应 Dart SDK 的版本号。
+`--sync` 可按公开导出更新组件归属和声明清单，但仍需 Review 注释语义和生成差异。
+站点通过 `{{ flutter-api <component-slug> }}` 读取同一份 API assets；示例和使用说明仍维护在站点 Markdown。
 
-初始化命令有以下 3 种使用方式：
+## 历史入口
 
-1. **初始化一个组件文件中的一个组件示例**  
-   如果没有指定 `--folder-name`，默认文件夹名称是第一个 `name` 参数的下划线表示。示例：
-
-   ```bash
-   ./demo_tool/bin/api_tool_xxx generate --file lib/src/components/tags/t_tag.dart --name TTag --folder-name tag --only-api
-   ```
-
-2. **把一个文件中的多个组件合并生成一份示例数据**  
-   API 说明生成在一个文件中。如果没有指定 `--folder-name`，默认文件夹名称是第一个 `name` 参数的下划线表示。
-
-   ```bash
-   ./demo_tool/bin/api_tool_xxx generate --file lib/checkbox/custom_check_box.dart --name SquareCheckbox,TECheckBox --folder-name checkbox2
-   ```
-
-3. **把一个文件夹中的多个组件合并生成一份示例数据**  
-   API 说明生成在一个文件中。如果没有指定 `--folder-name`，默认文件夹名称是第一个 `name` 参数的下划线表示。
-
-   ```bash
-   ./demo_tool/bin/api_tool_xxx generate --folder lib/setting --name SettingItemWidget,SettingTowRowCellWidget,SettingLeftTextCellWidget,SettingCheckBoxCellWidget,SettingTowTextCellWidget,SettingTowLineTextCellWidget,SettingGroupWidget,SettingGroupTextWidget --folder-name setting
-   ```
-
-如果想只更新 API 文档，那么在上述初始化的命令之后增加参数 `--only-api` 即可。
-
-默认采用词法分析，如果想采用语法分析的方式生成代码，那么在上述初始化的命令之后增加参数 `--use-grammar` 即可。
+`demo_tool/all_build.sh` 兼容原有调用方式；旧二进制 `api_tool_xxx`、`demo_tool/version` 和词法解析限制不再用于当前生成流程。解析或展示能力应在独立 `tdesign_flutter_tools` 仓库修复，正式版本进入声明的 ref 后再生成本仓库产物。
 
 ## 演示代码
 

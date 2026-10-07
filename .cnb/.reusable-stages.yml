@@ -16,7 +16,7 @@
 # （存量 deprecated 告警已在本 PR 逐项清零，故可开启严格模式。）
 .analyze:
   name: flutter analyze
-  script: cd tdesign-component && flutter analyze --fatal-infos
+  script: cd tdesign-component && flutter analyze --fatal-infos && dart run tool/audit_api_docs.dart
 
 .component-regression-tests:
   name: flutter test (component regression)

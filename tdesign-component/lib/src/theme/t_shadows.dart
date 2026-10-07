@@ -19,8 +19,15 @@ extension TBoxShadows on TThemeData {
 /// 小程序当前的四个 blur=0 的 inset 阴影在 Flutter 中用定向内侧边线表达。
 /// 使用方应把对应 [BorderSide] 放入 [Border.top] / right / bottom / left。
 extension TInsetShadows on TThemeData {
+  /// 顶部内投影对应的边线 Token；未配置时返回 null。
   BorderSide? get shadowInsetTop => insetShadowMap['shadowInsetTop'];
+
+  /// 右侧内投影对应的边线 Token；未配置时返回 null。
   BorderSide? get shadowInsetRight => insetShadowMap['shadowInsetRight'];
+
+  /// 底部内投影对应的边线 Token；未配置时返回 null。
   BorderSide? get shadowInsetBottom => insetShadowMap['shadowInsetBottom'];
+
+  /// 左侧内投影对应的边线 Token；未配置时返回 null。
   BorderSide? get shadowInsetLeft => insetShadowMap['shadowInsetLeft'];
 }
