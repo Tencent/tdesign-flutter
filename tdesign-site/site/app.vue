@@ -6,11 +6,18 @@
     <td-doc-aside ref="tdDocAside" title="Flutter"></td-doc-aside>
 
     <router-view :style="contentStyle" @loaded="contentLoaded" :docType="docType" />
+    <td-theme-generator device="mobile"></td-theme-generator>
   </td-doc-layout>
 </template>
 
 <script>
 import siteConfig from './site.config';
+import controllerBaseline, { controllerExtraDefaults } from 'virtual:flutter-controller-baseline';
+import '@tdesign/theme-generator';
+import {
+  createFlutterCssThemeMessage,
+  ensureFlutterThemeTokenCoverage,
+} from './utils/flutterThemeBridge.mjs';
 
 import { defineComponent } from 'vue';
 
@@ -33,6 +40,14 @@ export default defineComponent({
     return {
       docType: '',
       loaded: false,
+      themeObservers: {},
+      themeStyles: { light: '', dark: '', extra: '' },
+      themeBaselines: controllerBaseline,
+      themeUpdateTimer: null,
+      lastThemeJson: null,
+      demoReadyHandler: null,
+      flutterReadyHandler: null,
+      themeModeObserver: null,
     };
   },
 
@@ -55,6 +70,43 @@ export default defineComponent({
       window.scrollTo(0, 0);
     };
     this.$refs.tdDocSearch.docsearchInfo = { indexName: 'tdesign_doc_flutter' };
+
+    this.observeThemeStyle('custom-theme', 'light');
+    this.observeThemeStyle('custom-theme-dark', 'dark');
+    this.observeThemeStyle('custom-theme-extra', 'extra');
+    this.themeModeObserver = new MutationObserver(() => this.scheduleThemeUpdate());
+    this.themeModeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['theme-mode'],
+    });
+    this.demoReadyHandler = (event) => {
+      this.sendThemeToFlutterIframe(event.detail?.iframe);
+    };
+    window.addEventListener('flutter-demo-ready', this.demoReadyHandler);
+    this.flutterReadyHandler = (event) => {
+      if (event.origin !== window.location.origin) return;
+      let data;
+      try {
+        data = JSON.parse(event.data);
+      } catch {
+        return;
+      }
+      if (data?.type !== 'flutter-demo-ready') return;
+      const iframe = [...document.querySelectorAll('iframe[src*="/example/"]')]
+        .find((candidate) => candidate.contentWindow === event.source);
+      if (iframe) this.sendThemeToFlutterIframe(iframe);
+    };
+    window.addEventListener('message', this.flutterReadyHandler);
+  },
+
+  beforeUnmount() {
+    Object.values(this.themeObservers).forEach((observer) => observer?.disconnect());
+    this.themeModeObserver?.disconnect();
+    window.removeEventListener('message', this.flutterReadyHandler);
+    if (this.themeUpdateTimer) clearTimeout(this.themeUpdateTimer);
+    if (this.demoReadyHandler) {
+      window.removeEventListener('flutter-demo-ready', this.demoReadyHandler);
+    }
   },
 
   watch: {
@@ -70,6 +122,71 @@ export default defineComponent({
         this.loaded = true;
         callback();
       });
+    },
+    observeThemeStyle(styleId, themePart) {
+      const attach = (styleElement) => {
+        const update = () => {
+          let cssText = styleElement.textContent || '';
+          if (themePart === 'extra') {
+            const completedCss = ensureFlutterThemeTokenCoverage(cssText, controllerExtraDefaults);
+            if (completedCss !== cssText) {
+              styleElement.textContent = completedCss;
+              cssText = completedCss;
+            }
+          }
+          this.themeStyles[themePart] = cssText;
+          this.scheduleThemeUpdate();
+        };
+        update();
+        const observer = new MutationObserver(update);
+        observer.observe(styleElement, {
+          childList: true,
+          characterData: true,
+          subtree: true,
+        });
+        this.themeObservers[styleId] = observer;
+      };
+
+      const styleElement = document.getElementById(styleId);
+      if (styleElement) {
+        attach(styleElement);
+        return;
+      }
+      const headObserver = new MutationObserver(() => {
+        const addedStyle = document.getElementById(styleId);
+        if (!addedStyle) return;
+        headObserver.disconnect();
+        attach(addedStyle);
+      });
+      headObserver.observe(document.head, { childList: true });
+      this.themeObservers[`${styleId}-head`] = headObserver;
+    },
+    scheduleThemeUpdate() {
+      if (this.themeUpdateTimer) clearTimeout(this.themeUpdateTimer);
+      this.themeUpdateTimer = setTimeout(() => {
+        if (!this.themeStyles.light || !this.themeStyles.dark) return;
+        const message = createFlutterCssThemeMessage(
+          this.themeStyles,
+          document.documentElement.getAttribute('theme-mode') === 'dark' ? 'dark' : 'light',
+          this.themeBaselines,
+          controllerExtraDefaults,
+        );
+        const serialized = JSON.stringify(message);
+        if (serialized === this.lastThemeJson) return;
+        this.lastThemeJson = serialized;
+        document.querySelectorAll('iframe[src*="/example/"]').forEach((iframe) => {
+          this.sendThemeToFlutterIframe(iframe, message);
+        });
+      }, 80);
+    },
+    sendThemeToFlutterIframe(iframe, message = null) {
+      if (!iframe?.contentWindow) return;
+      const currentMessage = message || (this.lastThemeJson && JSON.parse(this.lastThemeJson));
+      if (!currentMessage) return;
+      iframe.contentWindow.postMessage(
+        JSON.stringify(currentMessage),
+        window.location.origin,
+      );
     },
   },
 });

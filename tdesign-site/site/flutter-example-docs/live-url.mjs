@@ -8,8 +8,6 @@ export function flutterExampleLiveUrl(
     throw new Error('Missing Flutter example component name');
   }
 
-  const base = dev
-    ? `http://${hostname}:${devServerPort}/`
-    : '/flutter/example/';
+  const base = '/flutter/example/';
   return `${base}#${encodeURIComponent(componentName)}`;
 }

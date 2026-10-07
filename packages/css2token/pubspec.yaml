@@ -1,0 +1,11 @@
+name: css2token
+description: Convert TDesign CSS custom properties into Flutter theme token overrides.
+version: 0.0.0
+publish_to: none
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dev_dependencies:
+  lints: ^3.0.0
+  test: ^1.25.8

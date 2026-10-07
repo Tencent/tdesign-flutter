@@ -10,14 +10,14 @@ test('uses the bundled Flutter Web path in production', () => {
   );
 });
 
-test('uses the colocated Flutter Web dev server in development', () => {
+test('uses the same-origin Flutter proxy in development', () => {
   assert.equal(
     flutterExampleLiveUrl('side-bar', {
       dev: true,
       hostname: 'localhost',
       devServerPort: '29001',
     }),
-    'http://localhost:29001/#side-bar',
+    '/flutter/example/#side-bar',
   );
 });
 
