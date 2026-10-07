@@ -4,7 +4,7 @@
 
 组件基础 `develop@dacc279e`；分支 `rss1102/docs/component-api-completeness`。独立 [工具 PR #28](https://github.com/TDesignOteam/tdesign-flutter-tools/pull/28) 最终候选提交 `dc679da608cd69df857ec882812bcc9eba9e8244`。
 
-消费仓库保持正式 `main` 依赖，无临时 path override 或 PR 分支依赖。工具 PR 最新 head 的 8 项检查全部通过，含双版本完整回归、四个二进制构建、预览站及产物评论，尚未执行合并。因此正式 main 重新解析、全量生成、幂等校验及消费仓库最新 head 的 CI 仍是最终门禁，不能以候选验收代替。
+工具 PR #28 已于 2026-10-07 22:07:56 UTC 合入 main，合并提交为 `96f1c693a2d61ae6c135db4d52530bb28dfc2462`。消费仓库继续声明正式 `main`，无临时 path override 或 PR 分支依赖。Flutter 3.32.0 与 latest 均重新解析并确认 resolved-ref 为该合并提交。正式命令生成 57 份 API 后无产物差异；两版本 `node tool/generate_api.mjs --check`、独立 AST 审计、默认 manifest 全量 validate 和严格 analyze 均通过。合并后消费 PR 的最新 CI/head 及 autofix diff 在 PR 描述和检查页登记，不使用工具合并前的失败运行作为最终结论。
 
 ## 全量结果
 
@@ -24,7 +24,7 @@
 - 最终构建逐页打开 API 标签，57/57 页面通过；可见公开声明标题共 369，每页数量与 manifest 对应，Dart 签名代码块非空。DateTimePicker → TPickerThemeData 链接实际定位成功。
 - 组件契约检查、Demo 结构检查与示例代码 `--check` 通过；现有 Theme Demo 已注册。
 - Demo API 页面使用真实 AssetManifest 解析 API 资产，修复 12 组路由名与文件 slug 不一致；57 个组件的全部公开声明在真实 ApiPage 上显示。旧注册名和 canonical slug 共 69 个入口及缺失文档切换共 70 项测试，两版本全部通过，修改文件两版本严格 analyze 零问题。测试已加入 sharedExampleTests，进入 GitHub / CNB 双版本共享功能回归。
-- PR #1149 首轮 head d357be79 的远端双版本 analyze、双版本功能回归、站点预览构建和 Linux Golden 已通过；六个构建与 autofix 日志均确认仅在生成 API 阶段报正式工具不认识 --strict-names；没有自动修改 head。Demo 入口修复后的旧 head 结果不能代替当前 head。代码提交 54212274 的双版本 analyze 和代码扫描已通过，双版本功能回归及站点/Golden 当时仍在运行；六个构建与 autofix 均逐项读取日志，确认仍是正式 main 旧工具不支持 --strict-names。该提交后的验收记录更新不改变实现，正式依赖门禁仍保留。
+- PR #1149 首轮 head d357be79 的远端双版本 analyze、双版本功能回归、站点预览构建和 Linux Golden 已通过；六个构建与 autofix 日志均确认仅在生成 API 阶段报正式工具不认识 --strict-names；没有自动修改 head。Demo 入口修复后的旧 head 结果不能代替当前 head。代码提交 54212274 的双版本 analyze 和代码扫描已通过，双版本功能回归及站点/Golden 当时仍在运行；六个构建与 autofix 均逐项读取日志，确认仍是正式 main 旧工具不支持 --strict-names。这些运行均发生在工具合并前；合并后按正式依赖重新触发 CI，不沿用旧失败状态。
 
 ## 语义检查与边界
 
@@ -52,7 +52,7 @@ cd ../tdesign-site
 pnpm site
 ```
 
-正式工具合并后记录实际解析提交、幂等结果、消费 PR 最新 CI/head 与 autofix 产物 diff。
+正式依赖已确认解析到 96f1c693，两个 SDK 的 57 份生成结果均与提交资产一致，审计结果仍为 369 个声明、435 个可调用声明、2510 个参数及 0 issue；validate 均 ERROR=0、WARN=0。最新 CI/head 与 autofix 产物 diff 以 [PR #1149 的检查和描述](https://github.com/Tencent/tdesign-flutter/pull/1149) 为准，autofix 修改 head 时必须重新检查自动提交内容和最终检查。
 
 ## 逐组件记录
 

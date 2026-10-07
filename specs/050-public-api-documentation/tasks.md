@@ -8,5 +8,5 @@
 - [x] 双版本 analyze、站点构建和 57 页浏览器验收。
 - [x] 保存 57 个组件逐项签名/参数/Theme/页面验收清单；85 个生产源码文件与基础代码 Token 等价。
 - [x] 修复 Demo 注册名与 API 文件 slug 不一致；真实页面双版本各 70 项测试通过并登记共享 CI 入口。
-- [ ] 工具 #28 经审核及 CI 后合入正式 main，重新解析依赖、生成并执行 --check。
-- [ ] 核对正式链最新 CI/head 与 autofix 产物 diff，再完成消费仓库交付。
+- [x] 工具 #28 已合入正式 main@96f1c693；双版本重新解析依赖，全量生成、--check、AST 审计、validate 及严格 analyze 通过，资产无差异。
+- [ ] PR 经维护者审核后合入 develop；正式链最新 CI/head 与 autofix 产物 diff 在 PR 描述和检查页记录。
