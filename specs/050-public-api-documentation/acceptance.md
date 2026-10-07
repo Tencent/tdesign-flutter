@@ -2,9 +2,9 @@
 
 ## 当前交付状态
 
-组件基础 `develop@dacc279e`；分支 `rss1102/docs/component-api-completeness`。独立 [工具 PR #28](https://github.com/TDesignOteam/tdesign-flutter-tools/pull/28) 最终候选提交 `7ebbfbb4ddefce10fbfc73df9acd53a66e529bb2`。
+组件基础 `develop@dacc279e`；分支 `rss1102/docs/component-api-completeness`。独立 [工具 PR #28](https://github.com/TDesignOteam/tdesign-flutter-tools/pull/28) 最终候选提交 `dc679da608cd69df857ec882812bcc9eba9e8244`。
 
-消费仓库保持正式 `main` 依赖，无临时 path override 或 PR 分支依赖。工具 PR 新增双版本完整工具回归，当前候选 head 的远端检查正在执行，尚未执行合并。因此正式 main 重新解析、全量生成、幂等校验及消费仓库最新 head 的 CI 仍是最终门禁，不能以候选验收代替。
+消费仓库保持正式 `main` 依赖，无临时 path override 或 PR 分支依赖。工具 PR 最新 head 的 8 项检查全部通过，含双版本完整回归、四个二进制构建、预览站及产物评论，尚未执行合并。因此正式 main 重新解析、全量生成、幂等校验及消费仓库最新 head 的 CI 仍是最终门禁，不能以候选验收代替。
 
 ## 全量结果
 
@@ -18,13 +18,13 @@
 - 没有独立 Theme 的五个组件说明实际共用的 Theme 或全局 Token；官网链接直接打开 API 标签并定位到对应类型。
 - 85 个修改的组件生产源码文件与 develop 基础逐 Token 对比，排除注释和格式化尾逗号后完全一致，无签名/默认行为改变，无 breaking change。
 - Flutter 3.32.0 / Dart 3.8.0 与官方 stable Flutter 3.47.6@5fc346839b / Dart 3.13.5 分别重新解析依赖，严格 analyze 零问题。
-- 工具两版本各 60 项测试通过、严格 analyze 零问题。当前 head 的远端结果在全部检查完成后记录，旧 head 的通过结果不替代当前验收。
+- 工具两版本各 60 项测试通过、严格 analyze 零问题。工具最终 head dc679da 的 8 项远端检查均通过：[双版本完整回归](https://github.com/TDesignOteam/tdesign-flutter-tools/actions/runs/37682677923)、[二进制构建](https://github.com/TDesignOteam/tdesign-flutter-tools/actions/runs/37682678142)；回归日志确认各 60 项测试通过、严格分析零问题。CLI 四次冷启动回归采用两分钟测试上限，正反例断言完整保留。
 - 消费仓库新增 18 项审计器 CLI 正反例：缺参数、错类型/默认值/必填、重复/多余参数、泛型约束和位置/命名参数丢失、转义竖线后的空类型、自定义覆盖方法缺注释、JSON 退出码、新增导出未登记及内部声明过滤。加入 GitHub / CNB 同一工具回归入口，两版本均实际执行该入口且 37 项测试通过。
 - `pnpm site` 的 18 项测试及站点构建通过，仅有既存构建提示。
 - 最终构建逐页打开 API 标签，57/57 页面通过；可见公开声明标题共 369，每页数量与 manifest 对应，Dart 签名代码块非空。DateTimePicker → TPickerThemeData 链接实际定位成功。
 - 组件契约检查、Demo 结构检查与示例代码 `--check` 通过；现有 Theme Demo 已注册。
 - Demo API 页面使用真实 AssetManifest 解析 API 资产，修复 12 组路由名与文件 slug 不一致；57 个组件的全部公开声明在真实 ApiPage 上显示。旧注册名和 canonical slug 共 69 个入口及缺失文档切换共 70 项测试，两版本全部通过，修改文件两版本严格 analyze 零问题。测试已加入 sharedExampleTests，进入 GitHub / CNB 双版本共享功能回归。
-- PR #1149 首轮 head d357be79 的远端双版本 analyze、双版本功能回归、站点预览构建和 Linux Golden 已通过；六个构建与 autofix 日志均确认仅在生成 API 阶段报正式工具不认识 --strict-names；没有自动修改 head。Demo 入口修复后的 head 必须重新读 CI，首轮结果不能代替最终 head。
+- PR #1149 首轮 head d357be79 的远端双版本 analyze、双版本功能回归、站点预览构建和 Linux Golden 已通过；六个构建与 autofix 日志均确认仅在生成 API 阶段报正式工具不认识 --strict-names；没有自动修改 head。Demo 入口修复后的旧 head 结果不能代替当前 head。代码提交 54212274 的双版本 analyze 和代码扫描已通过，双版本功能回归及站点/Golden 当时仍在运行；六个构建与 autofix 均逐项读取日志，确认仍是正式 main 旧工具不支持 --strict-names。该提交后的验收记录更新不改变实现，正式依赖门禁仍保留。
 
 ## 语义检查与边界
 
