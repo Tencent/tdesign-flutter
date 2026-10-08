@@ -165,13 +165,20 @@ void main() {
             '位置参数：`item, fallback`\n'
             '返回类型：`T?`',
       )
-      .replaceFirst('```dart\nSample<T> copyWith()\n```', '返回类型：`Sample<T>`');
+      .replaceFirst('```dart\nSample<T> copyWith()\n```', '返回类型：`Sample<T>`')
+      .replaceAll('| 参数 | 类型 | 默认值 | 说明 | 必填 |', '| 名称 | 类型 | 默认值 | 说明 | 必传 |');
   test('accepts uniformly compact callable contracts', () async {
     asset.writeAsStringSync(compactMethods);
     final result = await audit();
     expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
   });
-  for (final defect in ['none', 'missing', 'wrong type', 'extra']) {
+  for (final defect in [
+    'none',
+    'missing',
+    'wrong type',
+    'wrong required',
+    'extra',
+  ]) {
     test(
       'grouped constructors retain isolated parameter contracts $defect',
       () async {
@@ -191,7 +198,7 @@ void main() {
         content = content.replaceFirst(
           '#### 实例方法',
           '##### Sample.named\n位置参数：`value`\n'
-              '| 参数 | 类型 | 默认值 | 说明 | 必填 |\n'
+              '| 名称 | 类型 | 默认值 | 说明 | 必传 |\n'
               '| --- | --- | --- | --- | --- |\n'
               '| value | int | - | 内容。 | 是 |\n'
               '#### 实例方法',
@@ -205,6 +212,11 @@ void main() {
           content = content.replaceFirst(
             '| value | int |',
             '| value | String |',
+          );
+        } else if (defect == 'wrong required') {
+          content = content.replaceFirst(
+            '| value | int | - | 内容。 | 是 |',
+            '| value | int | - | 内容。 | 否 |',
           );
         } else if (defect == 'extra') {
           content = content.replaceFirst(
@@ -223,7 +235,11 @@ void main() {
           expect(
             result.stdout,
             contains(
-              defect == 'extra' ? 'output-extra-parameter' : 'output-parameter',
+              defect == 'extra'
+                  ? 'output-extra-parameter'
+                  : defect == 'wrong required'
+                  ? 'output-parameter-必填'
+                  : 'output-parameter',
             ),
           );
         }

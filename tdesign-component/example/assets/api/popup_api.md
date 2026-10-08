@@ -25,7 +25,7 @@
 
 返回类型：`TPopupHandle`
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | context | BuildContext | - | 用于查找 `Navigator` 并展示浮层。 | 是 |
 | options | TPopupOptions | - | 浮层配置；方向固定时推荐 `TPopupOptions.bottom` 等命名工厂。 | 是 |
@@ -44,7 +44,7 @@ Popup 标准头部布局。
 
 ##### TPopupHeader
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | cancelButton | Widget? | - | 左侧取消操作；为 null 时不显示。 | 否 |
 | confirmButton | Widget? | - | 右侧确认操作；为 null 时不显示。 | 否 |
@@ -100,7 +100,7 @@ Popup 标准头部布局。
 
 方向已知时请优先使用 `TPopupOptions.bottom` 等命名工厂。
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | animationDuration | Duration? | - | 打开/关闭动画时长，默认 240ms（与小程序公开 duration 默认值一致）。 | 否 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 | 否 |
@@ -127,7 +127,7 @@ Popup 标准头部布局。
 固定 `placement` 为 `TPopupPlacement.bottom`；默认不显示头部。
 蒙层、动画、生命周期等字段语义见同名成员文档。
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | child | Widget | - | 浮层主体内容（必填）。 | 是 |
 | height | double? | - | 高度；`TPopupPlacement.top`、`TPopupPlacement.bottom` 生效；`TPopupPlacement.center` 约束面板尺寸。 top / bottom 未传时默认 240；center 未传时默认 240。 | 否 |
@@ -150,7 +150,7 @@ Popup 标准头部布局。
 
 固定 `placement` 为 `TPopupPlacement.center`；默认不显示关闭按钮。
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | child | Widget | - | 浮层主体内容（必填）。 | 是 |
 | width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 left / right 未传时默认 280；center 未传时默认 240。 | 否 |
@@ -173,7 +173,7 @@ Popup 标准头部布局。
 
 固定 `placement` 为 `TPopupPlacement.left`；未传 `width` 时布局默认宽度 280。
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | child | Widget | - | 浮层主体内容（必填）。 | 是 |
 | width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 left / right 未传时默认 280；center 未传时默认 240。 | 否 |
@@ -195,7 +195,7 @@ Popup 标准头部布局。
 
 固定 `placement` 为 `TPopupPlacement.right`；未传 `width` 时布局默认宽度 280。
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | child | Widget | - | 浮层主体内容（必填）。 | 是 |
 | width | double? | - | 宽度；`TPopupPlacement.left`、`TPopupPlacement.right`、`TPopupPlacement.center` 生效。 left / right 未传时默认 280；center 未传时默认 240。 | 否 |
@@ -217,7 +217,7 @@ Popup 标准头部布局。
 
 固定 `placement` 为 `TPopupPlacement.top`；无内置头部。
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | child | Widget | - | 浮层主体内容（必填）。 | 是 |
 | height | double? | - | 高度；`TPopupPlacement.top`、`TPopupPlacement.bottom` 生效；`TPopupPlacement.center` 约束面板尺寸。 top / bottom 未传时默认 240；center 未传时默认 240。 | 否 |
@@ -258,7 +258,7 @@ Popup 标准头部布局。
 
 返回类型：`TPopupOptions`
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | child | Widget? | - | 非空值替换原配置；不传或 null 保留原值。 | 否 |
 | placement | TPopupPlacement? | - | 非空值替换原配置；不传或 null 保留原值。 | 否 |
@@ -317,7 +317,7 @@ Popup 标准头部布局。
 
 返回类型：`void`
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | result | Object? | - | 关闭浮层时返回的业务结果；通过该句柄的 result Future 接收。 | 否 |
 
@@ -336,7 +336,7 @@ release 下静默返回。
 
 返回类型：`void`
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | context | BuildContext? | - | 可选。首次调用须能解析 `Navigator`（传入 `context` 或依赖 `navigatorContext`）；后续可省略，优先复用缓存的 `NavigatorState`。 | 否 |
 
@@ -359,7 +359,7 @@ Popup 蒙层行为配置（可见遮罩、背景拦截、点击行为）。
 
 创建蒙层配置。
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | closeOnClick | bool? | - | 点击可见蒙层是否关闭；省略时在可点击的可见蒙层上默认为 true。 仅当 `showOverlay` 与 `preventTap` 都为 true 时生效；视觉蒙层允许点击穿透时， 不会接收点击事件，也不会关闭 Popup。 | 否 |
 | color | Color? | - | 蒙层颜色（含 alpha）；为 null 时默认 black54。 | 否 |
@@ -393,7 +393,7 @@ bottom 方向的左右留白。
 
 ##### TPopupBottomInset
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | left | double | 0 | 左侧留白 | 否 |
 | right | double | 0 | 右侧留白 | 否 |
@@ -407,7 +407,7 @@ top 方向的左右留白。
 
 ##### TPopupTopInset
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | left | double | 0 | 左侧留白 | 否 |
 | right | double | 0 | 右侧留白 | 否 |
@@ -421,7 +421,7 @@ left 方向的上下留白。
 
 ##### TPopupLeftInset
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | bottom | double | 0 | 底部留白 | 否 |
 | top | double | 0 | 顶部留白 | 否 |
@@ -435,7 +435,7 @@ right 方向的上下留白。
 
 ##### TPopupRightInset
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | bottom | double | 0 | 底部留白 | 否 |
 | top | double | 0 | 顶部留白 | 否 |
@@ -452,7 +452,7 @@ TPopup 组件级 ThemeExtension
 
 ##### TPopupThemeData
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | barrierColor | Color? | - | 蒙层颜色，透明度直接由 `Color` 的 alpha 指定。 | 否 |
 | centerSize | Size? | - | center 未显式传入宽高时的默认面板尺寸 | 否 |
@@ -473,7 +473,7 @@ TPopup 组件级 ThemeExtension
 
 返回类型：`double?`
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | a | double? | - | 起始值。 | 是 |
 | b | double? | - | 目标值。 | 是 |
@@ -488,7 +488,7 @@ TPopup 组件级 ThemeExtension
 
 返回类型：`TPopupThemeData`
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | barrierColor | Color? | - | 字段含义：蒙层颜色，透明度直接由 `Color` 的 alpha 指定。 调用时的空值行为见方法说明。 | 否 |
 | panelRadius | double? | - | 字段含义：内容区圆角。 top/bottom/center 默认取全局主题大圆角； left/right 默认**无圆角**（对齐官方全高矩形），仅当设置本字段时应用圆角。 调用时的空值行为见方法说明。 | 否 |
@@ -508,7 +508,7 @@ other 为空或类型不匹配时返回当前主题；字段各自采用其类�
 
 返回类型：`TPopupThemeData`
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TPopupThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
 | t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
@@ -523,7 +523,7 @@ other 为空或类型不匹配时返回当前主题；字段各自采用其类�
 
 返回类型：`TPopupThemeData`
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | TPopupThemeData? | - | 要合并的目标主题；为空时保留当前配置。 | 是 |
 

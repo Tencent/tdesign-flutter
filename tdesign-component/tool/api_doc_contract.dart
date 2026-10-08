@@ -320,8 +320,17 @@ List<Map<String, String>> parameterRows(String section) {
       continue;
     }
     final cells = tableCells(line);
-    if (cells.first == '参数') {
-      headers = cells;
+    if (cells.first == '参数' || (cells.first == '名称' && cells.contains('必传'))) {
+      // Normalize presentation labels to the contract keys used by the audit.
+      headers = cells.map((column) {
+        if (column == '名称') {
+          return '参数';
+        }
+        if (column == '必传') {
+          return '必填';
+        }
+        return column;
+      }).toList();
       continue;
     }
     if (headers.isEmpty || cells.first.replaceAll('-', '').isEmpty) {
