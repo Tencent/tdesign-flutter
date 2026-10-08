@@ -153,3 +153,9 @@ pnpm site
 全工具测试中的既有 CJK 字体清单检查仍失败，缺“逆、批”，HEAD 同样缺失，未放宽门禁。逐组件结构结果不等于本轮重跑全部字段语义、Demo 交互、设计或 Golden。正式工具 ref 解析、正式 --check、推送后当前 head 的 CI/autofix 与 review 未复验；维护者随后已要求推送，交付记录见 all-presentation.md。示例补充与类型跳转继续暂缓。
 
 证据：`/tmp/tdesign-api-all-20261008/`。
+
+## 语义合理性修复复核（2026-10-08）
+
+本轮修正六个组件的已证实文档缺口：Calendar、DateTimePicker、Form、Picker、PullDownRefresh、Theme。全部 57 份资产重新由当前源码双 SDK 生成并逐份比对，AST 审计无 issue；两版各 2707 项非 Golden 组件测试、70 项 API 页面测试、115 项文档专项测试通过。该结果证明当前资产、公开契约和回归稳定，不等于全部 Golden、Demo、设备、Figma 或每个业务边界均已完成语义验收。`TThemeData.lerp` 的 extraThemeData 丢失仍作为实现风险单列。
+
+最新逐组件状态、经验和未完成门禁见 [reasonableness-repair.md](reasonableness-repair.md)。

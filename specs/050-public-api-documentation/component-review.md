@@ -6,6 +6,9 @@
 
 ## 判断与交付范围
 
+> **状态更新（2026-10-08）**：本文历史逐组件审查不能单独证明当前文档合理性已完成。最新修复、全量回归和经验以 [reasonableness-repair.md](reasonableness-repair.md) 为准。
+
+
 57/57 个组件（包含全局 Theme）已逐一对照实现审查，并在候选工具下重新生成、核对和展示。发现的注释及生成问题已修复。**正式依赖交付仍待工具 PR #29 合入 main，消费 PR 暂不能按本轮候选产物声明可合并。**
 
 本轮起点为消费 PR head `9d99f92f47269ed1e8e2337701d6bc0b6db315a8`，基础为 `develop@dacc279ec96c601c8ba690b3baee2c7f6bdadab8`。工具候选见 [TDesignOteam/tdesign-flutter-tools #29](https://github.com/TDesignOteam/tdesign-flutter-tools/pull/29)，消费仓库声明的正式 main 当前仍为 `96f1c693a2d61ae6c135db4d52530bb28dfc2462`。无提交的 path override 或工具 PR ref。

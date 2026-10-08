@@ -36,9 +36,9 @@ import 't_pull_down_refresh_texts.dart';
 class TPullDownRefresh extends StatefulWidget {
   /// 必填：滚动内容（对应官方默认 slot）。
   ///
-  /// 必须为**有界、可滚动**的内容（如 `ListView` / `GridView` / `CustomScrollView`）。
-  /// 若内容自身不可滚动，请用 `SizedBox` 等为其指定固定高度，否则下拉 / 触底
-  /// 手势无法生效。
+  /// 必须为**有界且可滚动**的内容（如 `ListView` / `GridView` / `CustomScrollView`）。
+  /// `SizedBox` 等只能提供尺寸约束，不能把静态内容变成可滚动内容；若内容自身不可滚动，
+  /// 下拉 / 触底手势仍无法生效，应将内容放入可滚动容器。
   final Widget child;
 
   /// 下拉触发刷新回调（对应官方 `refresh` 事件）。

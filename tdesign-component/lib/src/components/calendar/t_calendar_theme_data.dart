@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 /// TCalendar 组件级 ThemeExtension
 ///
-/// 包含日历样式默认（装饰、字体、布局参数）。
-/// 样式字段通过 mergeExtension 子树覆盖，无需构造器 P0 `style` 参数。
+/// 包含日历的装饰、字体和布局默认值。
+/// 样式字段通过 `ThemeData.mergeExtension` 在子树覆盖，不需要额外的实例 style 参数。
 class TCalendarThemeData extends ThemeExtension<TCalendarThemeData> {
-  /// 高度
+  /// 日历整体高度；为 null 时由组件根据星期栏、月份标题、日期行、间距和内边距计算默认高度。
   final double? height;
 
   /// 组件容器装饰
@@ -31,19 +31,19 @@ class TCalendarThemeData extends ThemeExtension<TCalendarThemeData> {
   /// 副标题样式
   final TextStyle? subtitleStyle;
 
-  /// 日期单元格高度，默认 60
+  /// 日期单元格高度；为 null 时使用 60 逻辑像素。
   final double? cellHeight;
 
-  /// 月份标题高度，默认 22
+  /// 月份标题高度；为 null 时使用 22 逻辑像素。
   final double? monthTitleHeight;
 
-  /// 日期格垂直间距，水平间距为 [verticalGap] / 2
+  /// 日期格垂直间距；为 null 时使用全局 spacer Token，水平间距为该值的一半。
   final double? verticalGap;
 
-  /// 内边距
+  /// 日历主体内边距；为 null 时使用全局 spacer2 Token。
   final double? bodyPadding;
 
-  /// 星期之间的水平间距
+  /// 星期之间的水平间距；为 null 时使用组件默认值 4 逻辑像素。
   final double? weekdayGap;
 
   /// 区间中间格背景与格间衔接条颜色

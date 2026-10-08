@@ -26,10 +26,10 @@ extension TThemeContextExtension on BuildContext {
       Theme.of(this).extension<TThemeData>() ?? TThemeData.defaultData();
 }
 
-/// ThemeData 扩展：子树 merge Extension（禁用 copyWith(extensions:) 覆盖）
+/// ThemeData 扩展：在子树中替换一个组件 ThemeExtension，同时保留其他扩展。
 ///
-/// 子树覆盖统一用 `mergeExtension(...)`，
-/// 禁止 `copyWith(extensions: [...])`（会覆盖其它 Extension）。
+/// 子树覆盖统一用 `mergeExtension(...)`；直接使用 `copyWith(extensions: [...])` 时，
+/// 调用方需要自行保留未修改的其他扩展。
 extension TThemeDataMergeExtension on ThemeData {
   /// 合并指定类型的主题扩展。
   ///
@@ -768,17 +768,21 @@ class TThemeData extends ThemeExtension<TThemeData> {
     }
   }
 
-  /// 从已解析的 [themeConfig] 读取 [name] 对应的主题；不存在或为空时返回空主题。
-  /// [extraThemeData] 非空时参与扩展数据解析。
+  /// 从已解析的 [themeConfig] 读取 [name] 对应的主题。
+  /// 配置不存在或对应映射为空时，返回本地映射为空但仍可通过默认 Token 回退解析的主题；
+  /// 此时不会解析或安装 [extraThemeData]。仅当对应配置存在且非空时，非空 [extraThemeData]
+  /// 才会参与解析并安装到返回主题。
   ///
   /// ## 返回值
-  /// 指定名称的 Token 主题；配置不存在或为空时返回该名称的空主题。
+  /// 指定名称的 Token 主题；缺失配置时返回带默认映射回退的空本地主题。
   static TThemeData parseThemeData(
     /// 待解析的主题名称。
     String name,
 
     /// 已解析的主题 JSON 配置。
     dynamic themeConfig,
+
+    /// 可选的额外主题数据；仅在 name 对应的配置存在且非空时解析并安装。
     TExtraThemeData? extraThemeData,
   ) {
     var theme = _emptyData(name);
@@ -941,7 +945,8 @@ class TThemeData extends ThemeExtension<TThemeData> {
   ///
   /// ## 返回值
   /// 返回使用目标主题 Token 映射的新主题；此实现不使用 t 做连续插值。
-  /// other 为空或类型不匹配时返回当前主题。
+  /// other 为空或类型不匹配时返回当前主题。当前实现不会保留 [extraThemeData]，
+  /// 业务扩展数据需要由调用方在主题切换后重新注入。
   @override
   ThemeExtension<TThemeData> lerp(
     /// 目标主题；为空或类型不匹配时保留当前主题。

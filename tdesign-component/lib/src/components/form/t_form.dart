@@ -86,10 +86,11 @@ class TFormState extends State<TForm> {
     return valid;
   }
 
-  /// 校验并在成功时触发 [TForm.onSubmit]。
+  /// 校验表单；校验成功后保存字段，并在配置 [TForm.onSubmit] 时触发提交回调。
   ///
   /// ## 返回值
-  /// 表单校验结果；true 时已保存字段并调用 onSubmit，false 时不提交。
+  /// 表单校验结果；true 仅表示校验通过并已保存字段，不表示业务请求成功。
+  /// 若未配置 [TForm.onSubmit]，不会触发业务提交回调。
   bool submit() {
     final valid = validate();
     if (valid) {

@@ -63,3 +63,12 @@
 - [x] 从 AST 提取回调参数与返回类型，以标准 dartdoc 维护说明，移除重复 typedef 源码。
 - [x] 独立审计类型别名契约，覆盖泛型、可空性、参数顺序和旧资产兼容。
 - [x] 双 SDK 检查与生成一致，确认其余 Popup 章节不变，并实际页面验收。
+
+## 语义合理性修复复核（2026-10-08）
+
+- [x] 修正抽查确认的 Calendar、DateTimePicker、Form、Picker、PullDownRefresh、Theme 文档缺口。
+- [x] 全量重新生成 57 份 API；两 SDK 生成字节一致，当前资产无差异，AST 审计 0 issue。
+- [x] 两 SDK 各 2707 项非 Golden 组件测试、70 项 API 页面测试、115 项文档专项测试通过。
+- [x] 记录结构验收与语义验收的区别、测试误导风险、Theme.lerp 实现风险和正式工具/autofix 门禁，见 reasonableness-repair.md。
+- [ ] 工具 PR #29 合入正式 main 后重新解析 resolved ref、生成/--check 并复验 autofix；当前不将本轮候选结果声明为最终可合并。
+- [ ] 单独决定并测试 TThemeData.lerp 是否保留 extraThemeData；本轮仅补准确说明，未改变运行行为。

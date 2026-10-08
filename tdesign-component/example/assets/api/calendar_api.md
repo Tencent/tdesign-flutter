@@ -64,8 +64,8 @@
 
 TCalendar 组件级 ThemeExtension
 
-包含日历样式默认（装饰、字体、布局参数）。
-样式字段通过 mergeExtension 子树覆盖，无需构造器 P0 `style` 参数。
+包含日历的装饰、字体和布局默认值。
+样式字段通过 `ThemeData.mergeExtension` 在子树覆盖，不需要额外的实例 style 参数。
 
 #### 构造方法
 
@@ -73,19 +73,19 @@ TCalendar 组件级 ThemeExtension
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| bodyPadding | double? | - | 内边距 | 否 |
+| bodyPadding | double? | - | 日历主体内边距；为 null 时使用全局 spacer2 Token。 | 否 |
 | cellDecoration | BoxDecoration? | - | 日期单元格装饰（选中状态） | 否 |
-| cellHeight | double? | - | 日期单元格高度，默认 60 | 否 |
+| cellHeight | double? | - | 日期单元格高度；为 null 时使用 60 逻辑像素。 | 否 |
 | centreColor | Color? | - | 区间中间格背景与格间衔接条颜色 | 否 |
 | dayStyle | TextStyle? | - | 日期数字样式 | 否 |
 | decoration | BoxDecoration? | - | 组件容器装饰 | 否 |
-| height | double? | - | 高度 | 否 |
-| monthTitleHeight | double? | - | 月份标题高度，默认 22 | 否 |
+| height | double? | - | 日历整体高度；为 null 时由组件根据星期栏、月份标题、日期行、间距和内边距计算默认高度。 | 否 |
+| monthTitleHeight | double? | - | 月份标题高度；为 null 时使用 22 逻辑像素。 | 否 |
 | monthTitleStyle | TextStyle? | - | 月份标题文字样式 | 否 |
 | subtitleStyle | TextStyle? | - | 副标题样式 | 否 |
 | todayDayStyle | TextStyle? | - | 今天日期数字样式 | 否 |
-| verticalGap | double? | - | 日期格垂直间距，水平间距为 `verticalGap` / 2 | 否 |
-| weekdayGap | double? | - | 星期之间的水平间距 | 否 |
+| verticalGap | double? | - | 日期格垂直间距；为 null 时使用全局 spacer Token，水平间距为该值的一半。 | 否 |
+| weekdayGap | double? | - | 星期之间的水平间距；为 null 时使用组件默认值 4 逻辑像素。 | 否 |
 | weekdayStyle | TextStyle? | - | 星期文字样式 | 否 |
 
 
@@ -97,7 +97,7 @@ TCalendar 组件级 ThemeExtension
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| height | double? | - | 字段含义：高度 调用时的空值行为见方法说明。 | 否 |
+| height | double? | - | 字段含义：日历整体高度；为 null 时由组件根据星期栏、月份标题、日期行、间距和内边距计算默认高度。 调用时的空值行为见方法说明。 | 否 |
 | decoration | BoxDecoration? | - | 字段含义：组件容器装饰 调用时的空值行为见方法说明。 | 否 |
 | weekdayStyle | TextStyle? | - | 字段含义：星期文字样式 调用时的空值行为见方法说明。 | 否 |
 | monthTitleStyle | TextStyle? | - | 字段含义：月份标题文字样式 调用时的空值行为见方法说明。 | 否 |
@@ -105,11 +105,11 @@ TCalendar 组件级 ThemeExtension
 | todayDayStyle | TextStyle? | - | 字段含义：今天日期数字样式 调用时的空值行为见方法说明。 | 否 |
 | cellDecoration | BoxDecoration? | - | 字段含义：日期单元格装饰（选中状态） 调用时的空值行为见方法说明。 | 否 |
 | subtitleStyle | TextStyle? | - | 字段含义：副标题样式 调用时的空值行为见方法说明。 | 否 |
-| cellHeight | double? | - | 字段含义：日期单元格高度，默认 60 调用时的空值行为见方法说明。 | 否 |
-| monthTitleHeight | double? | - | 字段含义：月份标题高度，默认 22 调用时的空值行为见方法说明。 | 否 |
-| verticalGap | double? | - | 字段含义：日期格垂直间距，水平间距为 `verticalGap` / 2 调用时的空值行为见方法说明。 | 否 |
-| bodyPadding | double? | - | 字段含义：内边距 调用时的空值行为见方法说明。 | 否 |
-| weekdayGap | double? | - | 字段含义：星期之间的水平间距 调用时的空值行为见方法说明。 | 否 |
+| cellHeight | double? | - | 字段含义：日期单元格高度；为 null 时使用 60 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| monthTitleHeight | double? | - | 字段含义：月份标题高度；为 null 时使用 22 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| verticalGap | double? | - | 字段含义：日期格垂直间距；为 null 时使用全局 spacer Token，水平间距为该值的一半。 调用时的空值行为见方法说明。 | 否 |
+| bodyPadding | double? | - | 字段含义：日历主体内边距；为 null 时使用全局 spacer2 Token。 调用时的空值行为见方法说明。 | 否 |
+| weekdayGap | double? | - | 字段含义：星期之间的水平间距；为 null 时使用组件默认值 4 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
 | centreColor | Color? | - | 字段含义：区间中间格背景与格间衔接条颜色 调用时的空值行为见方法说明。 | 否 |
 
 

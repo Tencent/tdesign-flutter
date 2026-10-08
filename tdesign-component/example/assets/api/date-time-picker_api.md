@@ -76,7 +76,9 @@
 
 - **完整值**：六元组均有值时直接构造
 - **partial 值**：缺字段用 `fallback` 补齐；未传 `fallback` 时抛出 `ArgumentError`
-- **典型用法**：提交后端前调用；partial 值须传入业务基准 `fallback`
+- **日期归一化**：按 Dart `DateTime` 构造规则组合字段；例如 2 月配合 31 日
+的 fallback 会跨月归一化，不会自动按 Picker 范围裁剪。
+- **典型用法**：提交后端前调用；partial 值须传入能组成业务合法日期的 `fallback`
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
@@ -87,7 +89,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | DateTime | - | 以六个时间字段构造的本地 DateTime；缺失字段由 fallback 补齐，未提供所需 fallback 时抛出 ArgumentError。 | - |
+| 返回值 | DateTime | - | 以六个时间字段构造的本地 DateTime；缺失字段由 fallback 补齐，未提供所需 fallback 时抛出 ArgumentError， 日期字段按 Dart DateTime 规则归一化。 | - |
 
 
 ### DateTimePickerSteps

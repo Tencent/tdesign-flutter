@@ -77,20 +77,23 @@
 位置参数：`name, themeConfig, extraThemeData`
 
 
-从已解析的 `themeConfig` 读取 `name` 对应的主题；不存在或为空时返回空主题。
+从已解析的 `themeConfig` 读取 `name` 对应的主题。
+配置不存在或对应映射为空时，返回本地映射为空但仍可通过默认 Token 回退解析的主题；
+此时不会解析或安装 `extraThemeData`。仅当对应配置存在且非空时，非空 `extraThemeData`
+才会参与解析并安装到返回主题。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | name | String | - | 待解析的主题名称。 | 是 |
 | themeConfig | dynamic | - | 已解析的主题 JSON 配置。 | 是 |
-| extraThemeData | TExtraThemeData? | - | 非空时参与扩展数据解析。 | 是 |
+| extraThemeData | TExtraThemeData? | - | 可选的额外主题数据；仅在 name 对应的配置存在且非空时解析并安装。 | 是 |
 
 
 ###### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | TThemeData | - | 指定名称的 Token 主题；配置不存在或为空时返回该名称的空主题。 | - |
+| 返回值 | TThemeData | - | 指定名称的 Token 主题；缺失配置时返回带默认映射回退的空本地主题。 | - |
 
 
 #### 实例方法
@@ -165,7 +168,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | ThemeExtension&lt;TThemeData&gt; | - | 返回使用目标主题 Token 映射的新主题；此实现不使用 t 做连续插值。 other 为空或类型不匹配时返回当前主题。 | - |
+| 返回值 | ThemeExtension&lt;TThemeData&gt; | - | 返回使用目标主题 Token 映射的新主题；此实现不使用 t 做连续插值。 other 为空或类型不匹配时返回当前主题。当前实现不会保留 `extraThemeData`， 业务扩展数据需要由调用方在主题切换后重新注入。 | - |
 
 
 ##### TThemeData.ofColor
@@ -796,9 +799,9 @@ Font字体宽高的扩展
 第一种：有独立设计风格的app，明确知道哪些色值用到，哪些设置没用到，有自己设计规范，则可单独配置色值。
 第二种：直接接入TDesign，配置所有色值组，此时不需再自定义key-value，可以直接使用。
 
-如果业务需要扩展，可以按以下方式定义自己的ColorData，只要key在主题中能找到对应颜色即可
-TDesign主题包含的颜色，这是一个大而全的色值。业务可以选择自己需要的色值进行二次封装，方便使用。
-不过有的色值是内部使用的，必传，否则可能显示异常。
+如果业务需要扩展，可以按以下方式定义自己的 ColorData；只要 key 能在主题中找到对应颜色即可。
+TDesign 主题包含完整色值组，业务可以按需二次封装。未显式配置的颜色通常会按各 getter
+的 Token 回退规则取默认值；只有依赖特定业务语义的自定义组件才需要额外保证对应 key 存在。
 
 #### 属性
 
@@ -1153,10 +1156,10 @@ BuildContext 扩展：便捷获取全局 TThemeData Token
 适用类型：`ThemeData`
 
 
-ThemeData 扩展：子树 merge Extension（禁用 copyWith(extensions:) 覆盖）
+ThemeData 扩展：在子树中替换一个组件 ThemeExtension，同时保留其他扩展。
 
-子树覆盖统一用 `mergeExtension(...)`，
-禁止 `copyWith(extensions: [...])`（会覆盖其它 Extension）。
+子树覆盖统一用 `mergeExtension(...)`；直接使用 `copyWith(extensions: [...])` 时，
+调用方需要自行保留未修改的其他扩展。
 
 #### 实例方法
 

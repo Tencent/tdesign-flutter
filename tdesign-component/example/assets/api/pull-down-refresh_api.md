@@ -21,7 +21,7 @@ TDesign 下拉刷新组件。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| child | Widget | - | 必填：滚动内容（对应官方默认 slot）。 必须为**有界、可滚动**的内容（如 `ListView` / `GridView` / `CustomScrollView`）。 若内容自身不可滚动，请用 `SizedBox` 等为其指定固定高度，否则下拉 / 触底 手势无法生效。 | 是 |
+| child | Widget | - | 必填：滚动内容（对应官方默认 slot）。 必须为**有界且可滚动**的内容（如 `ListView` / `GridView` / `CustomScrollView`）。 `SizedBox` 等只能提供尺寸约束，不能把静态内容变成可滚动内容；若内容自身不可滚动， 下拉 / 触底手势仍无法生效，应将内容放入可滚动容器。 | 是 |
 | controller | TPullDownRefreshController? | - | 外部主动刷新控制器。 通过 `TPullDownRefreshController.refresh` 从页面外部触发刷新。刷新完成时机 由 `onRefresh` 返回的 Future、异常或 `refreshTimeout` 共同决定；超时后 控制器 Future 也会完成，迟到的原始 Future 不会再次改变刷新状态。 刷新资源由组件管理；外部控制器无需也不提供 dispose （详见 `TPullDownRefreshController` 文档）。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | loadingBarHeight | double | 50 | Header 容器高度与触发阈值，默认 50 逻辑像素，必须大于 0。 | 否 |
