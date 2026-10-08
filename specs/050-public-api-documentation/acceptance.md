@@ -125,3 +125,7 @@ pnpm site
 | swipe-cell | 7 | 5 | 11 | 27 | TSwipeCellThemeData | 通过 | 通过 | 通过 |
 | toast | 5 | 3 | 16 | 104 | TToastThemeData | 通过 | 通过 | 通过 |
 | theme | 27 | 10 | 37 | 82 | 全局 Token / Material 扩展 | 通过 | 通过 | 通过 |
+
+## Popup 表格优先追加验收
+
+已精简六个 Popup 源文件的 dartdoc 并生成本地候选。双 SDK 静态分析、运行 token 等价、生成/validate、全量 AST 契约审计和真实 Popup API 页面测试通过；官网 18 项测试、生产构建和 Flutter Web 构建通过。16 类型、24 可调用 API、135 参数和 3 typedef 保留。具体内容与边界见 [popup-presentation.md](./popup-presentation.md) 最新候选章节；仍待维护者确认，不扩大到其他组件，不推送。

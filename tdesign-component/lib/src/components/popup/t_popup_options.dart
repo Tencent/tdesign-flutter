@@ -9,38 +9,21 @@ Never _throwPopupOptionsValidationError(String error) {
 
 /// [TPopup.show] 的配置对象。
 ///
-/// ## 使用说明
+/// | 构造方法 | 方向 | 方向专用参数 |
+/// | --- | --- | --- |
+/// | [TPopupOptions] | 由 [placement] 指定 | 按对应方向使用下列参数 |
+/// | [TPopupOptions.bottom] | 底部 | [height]、[inset]（[TPopupBottomInset]）、[headerBuilder] |
+/// | [TPopupOptions.center] | 居中 | [width]、[height]、[closeBuilder] |
+/// | [TPopupOptions.top] | 顶部 | [height]、[inset]（[TPopupTopInset]） |
+/// | [TPopupOptions.left] | 左侧 | [width]、[inset]（[TPopupLeftInset]） |
+/// | [TPopupOptions.right] | 右侧 | [width]、[inset]（[TPopupRightInset]） |
 ///
-/// 生命周期回调见 [onOpened]、[onClosed]、[onVisibleChange]；
-/// 蒙层行为见 [overlay]（[TPopupOverlayConfig]）。
-/// 单次打开的显式尺寸、面板颜色、圆角及蒙层颜色优先于
-/// [TPopupThemeData] 的子树默认值；动画时长未指定时使用 240 毫秒。
-///
-/// ### 构造方式选择
-///
-/// | 场景 | 推荐用法 |
-/// |------|----------|
-/// | 弹出方向已知 | [TPopupOptions.bottom]、[TPopupOptions.center]、[TPopupOptions.top]、[TPopupOptions.left]、[TPopupOptions.right] |
-/// | 方向由变量决定 | 默认构造并设置 [placement]；传错字段会在 [TPopup.show] / [TPopupHandle.open] 时抛 [FlutterError] |
-///
-/// 命名工厂只暴露当前方向生效的字段（例如 [TPopupOptions.bottom] 无 [width] 参数）。
-///
-/// ### 不同弹出方向的可用参数
-///
-/// | [TPopupPlacement] | 头部 / 关闭区 | 尺寸 |
-/// |-------------------|-------------|------|
-/// | [TPopupPlacement.bottom] | [headerBuilder] | [height]、[inset] |
-/// | [TPopupPlacement.center] | [closeBuilder] | [width]、[height] |
-/// | [TPopupPlacement.top] | — | [height]、[inset] |
-/// | [TPopupPlacement.left]、[TPopupPlacement.right] | — | [width]、[inset] |
-///
-/// [headerBuilder] 与 [closeBuilder] 默认均为 `null`，基础 Popup 只渲染
-/// [child]。显式提供 builder 时才会渲染相应区域，builder 可调用 `close`
-/// 关闭浮层。
+/// | 条件 | 行为 |
+/// | --- | --- |
+/// | 显式设置尺寸、圆角、面板颜色或蒙层颜色 | 优先于 [TPopupThemeData] |
+/// | 参数与方向不匹配 | [TPopup.show] / [TPopupHandle.open] 抛出 [FlutterError] |
 class TPopupOptions {
-  /// 通用构造；[placement] 在运行时才能确定时使用。
-  ///
-  /// 方向已知时请优先使用 [TPopupOptions.bottom] 等命名工厂。
+  /// 通过 [placement] 指定方向。
   const TPopupOptions({
     required this.child,
     this.placement = TPopupPlacement.bottom,
@@ -60,10 +43,7 @@ class TPopupOptions {
     this.useSafeArea = false,
   });
 
-  /// 创建 [TPopupPlacement.bottom] 配置。
-  ///
-  /// 固定 [placement] 为 [TPopupPlacement.bottom]；默认不显示头部。
-  /// 蒙层、动画、生命周期等字段语义见同名成员文档。
+  /// 底部弹出配置。
   factory TPopupOptions.bottom({
     required Widget child,
     double? height,
@@ -95,9 +75,7 @@ class TPopupOptions {
     useSafeArea: useSafeArea,
   );
 
-  /// 创建 [TPopupPlacement.center] 配置。
-  ///
-  /// 固定 [placement] 为 [TPopupPlacement.center]；默认不显示关闭按钮。
+  /// 居中弹出配置。
   factory TPopupOptions.center({
     required Widget child,
     double? width,
@@ -129,9 +107,7 @@ class TPopupOptions {
     useSafeArea: useSafeArea,
   );
 
-  /// 创建 [TPopupPlacement.top] 配置。
-  ///
-  /// 固定 [placement] 为 [TPopupPlacement.top]；无内置头部。
+  /// 顶部弹出配置。
   factory TPopupOptions.top({
     required Widget child,
     double? height,
@@ -161,9 +137,7 @@ class TPopupOptions {
     useSafeArea: useSafeArea,
   );
 
-  /// 创建 [TPopupPlacement.left] 配置。
-  ///
-  /// 固定 [placement] 为 [TPopupPlacement.left]；未传 [width] 时布局默认宽度 280。
+  /// 左侧弹出配置。
   factory TPopupOptions.left({
     required Widget child,
     double? width,
@@ -193,9 +167,7 @@ class TPopupOptions {
     useSafeArea: useSafeArea,
   );
 
-  /// 创建 [TPopupPlacement.right] 配置。
-  ///
-  /// 固定 [placement] 为 [TPopupPlacement.right]；未传 [width] 时布局默认宽度 280。
+  /// 右侧弹出配置。
   factory TPopupOptions.right({
     required Widget child,
     double? width,
@@ -225,87 +197,59 @@ class TPopupOptions {
     useSafeArea: useSafeArea,
   );
 
-  /// 浮层主体内容（必填）。
+  /// 弹出内容。
   final Widget child;
 
-  /// 出现位置，默认 [TPopupPlacement.bottom]。
+  /// 弹出方向。
   final TPopupPlacement placement;
 
-  /// 宽度；[TPopupPlacement.left]、[TPopupPlacement.right]、[TPopupPlacement.center] 生效。
-  ///
-  /// left / right 未传时默认 280；center 未传时默认 240。
+  /// 左侧/右侧默认 280，居中默认 240；其他方向不支持。
   final double? width;
 
-  /// 高度；[TPopupPlacement.top]、[TPopupPlacement.bottom] 生效；[TPopupPlacement.center] 约束面板尺寸。
-  ///
-  /// top / bottom 未传时默认 240；center 未传时默认 240。
+  /// 顶部/底部/居中默认 240；其他方向不支持。
   final double? height;
 
-  /// 交叉轴边缘留白；具体类型由 [placement] 决定。
-  ///
-  /// * [TPopupPlacement.bottom] 使用 [TPopupBottomInset]
-  /// * [TPopupPlacement.top] 使用 [TPopupTopInset]
-  /// * [TPopupPlacement.left] 使用 [TPopupLeftInset]
-  /// * [TPopupPlacement.right] 使用 [TPopupRightInset]
-  /// * [TPopupPlacement.center] 不支持
+  /// 交叉轴留白；须使用当前方向的 Inset 类型，居中不支持。
   final TPopupInset? inset;
 
-  /// 内容区圆角。
-  ///
-  /// [TPopupPlacement.top]、[TPopupPlacement.bottom]、[TPopupPlacement.center]
-  /// 默认取主题大圆角；[TPopupPlacement.left]、[TPopupPlacement.right]
-  /// 默认**无圆角**（对齐官方全高矩形），仅当显式设置本字段或通过
-  /// [TPopupThemeData.panelRadius] 注入时应用圆角。
+  /// 顶部/底部/居中默认取主题大圆角，左侧/右侧默认无圆角；显式值或 [TPopupThemeData.panelRadius] 可覆盖。
   final double? radius;
 
   /// 内容区背景色，默认主题容器色。
   final Color? backgroundColor;
 
-  /// 蒙层行为配置；为 null 时使用 [TPopupOverlayConfig] 默认值（标准模态弹层）。
+  /// 蒙层配置；未指定时显示蒙层、拦截背景交互并支持点击关闭。
   final TPopupOverlayConfig? overlay;
 
   /// 解析后的蒙层配置；未传时使用默认值。
   TPopupOverlayConfig get overlayConfig =>
       overlay ?? const TPopupOverlayConfig();
 
-  /// 为 true 时路由 maintainState 为 false，被其他不透明路由覆盖时可释放内容 State。
-  /// 关闭路由后无论本字段取值如何，内容 State 都会释放；再次打开会创建新 State。
+  /// 为 true 时，被其他不透明路由覆盖可释放内容状态；关闭后始终释放，再次打开创建新状态。
   final bool destroyOnClose;
 
-  /// 打开/关闭动画时长，默认 240ms（与小程序公开 duration 默认值一致）。
+  /// 打开/关闭动画时长；未指定时使用 240ms。
   final Duration? animationDuration;
 
-  /// bottom 头部；仅 [TPopupPlacement.bottom] 生效，默认不显示。
-  ///
-  /// 可返回 [TPopupHeader] 组合取消按钮、标题和确认按钮；builder 的 `close`
-  /// 参数只负责关闭 Popup，不会自动生成任何按钮。
+  /// 底部头部；未指定时不显示，可用 [TPopupHeader] 组合标题与操作按钮。
   final TPopupHeaderBuilder? headerBuilder;
 
-  /// center 面板外下方关闭区；仅 [TPopupPlacement.center] 生效，默认不显示。
-  /// builder 的 `close` 参数只负责关闭 Popup，不会自动生成关闭按钮。
+  /// 居中面板外下方关闭区；未指定时不显示，按钮由 builder 提供。
   final TPopupSlotBuilder? closeBuilder;
 
   /// 打开动画结束。
   final VoidCallback? onOpened;
 
-  /// 当前展示周期真正结束。
-  ///
-  /// 大多数场景下会在关闭动画结束后触发；非栈顶路由被直接移除时不保证存在关闭动画。
+  /// 当前展示周期结束时触发；通常在关闭动画结束后，非栈顶路由直接移除时可能没有关闭动画。
   final VoidCallback? onClosed;
 
   /// 显隐变化；第二个参数为 [TPopupTrigger]。
   final TPopupVisibleChangeCallback? onVisibleChange;
 
-  /// 是否避让系统安全区，默认 false；center 使用完整安全区，其他方向避让贴边侧及相邻边。
-  ///
-  /// 为 true 时通过 [Positioned] 偏移使面板不侵入刘海、Home Indicator 等区域；
-  /// top/bottom/left/right 还会与对应 [inset] 叠加。需要避让时显式设为 true；
-  /// 也可以在 [child] 内使用 Flutter 原生 [SafeArea]，只约束内容而保留面板背景贴边。
+  /// 避让安全区；居中避让全部边，其他方向避让贴边侧及相邻边，并与 [inset] 叠加。仅内容需避让时可在 [child] 中使用 [SafeArea]。
   final bool useSafeArea;
 
   /// 返回配置副本。
-  ///
-  /// 未传入的字段保持原值；对头部/关闭 builder 显式传入 `null` 表示隐藏该区域。
   TPopupOptions copyWith({
     /// 非空值替换原配置；不传或 null 保留原值。
     Widget? child,
@@ -395,7 +339,13 @@ class TPopupOptions {
     );
   }
 
-  /// 返回按展示方向归一化的配置副本：仅 bottom 保留 headerBuilder，仅 center 保留 closeBuilder。
+  /// 返回按方向整理的配置副本。
+  ///
+  /// | 字段 | 保留条件 | 不满足时 |
+  /// | --- | --- | --- |
+  /// | [headerBuilder] | 底部 | 清除 |
+  /// | [closeBuilder] | 居中 | 清除 |
+  /// | 其他参数 | 所有方向 | 保持原值 |
   TPopupOptions normalized() {
     final isBottom = placement == TPopupPlacement.bottom;
     final isCenter = placement == TPopupPlacement.center;
@@ -420,7 +370,12 @@ class TPopupOptions {
     );
   }
 
-  /// 在 debug 模式检查方向与宽高、inset 组合；无效组合抛出校验异常，release 模式不执行。
+  /// 检查参数与方向是否匹配。
+  ///
+  /// | 模式 | 行为 |
+  /// | --- | --- |
+  /// | debug | 无效组合抛出 [FlutterError] |
+  /// | release | 不执行检查 |
   void assertPlacementParams() {
     assert(() {
       final err = _validatePlacementParams();

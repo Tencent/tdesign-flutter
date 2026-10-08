@@ -1,9 +1,6 @@
 part of 't_popup.dart';
 
-/// Popup 标准头部布局。
-///
-/// 本组件只负责取消按钮、标题和确认按钮的布局，不注入默认内容或业务行为。
-/// 需要关闭 Popup 时，在 [TPopupOptions.headerBuilder] 中构建按钮并调用其 `close` 参数。
+/// 底部头部布局，提供取消按钮、标题和确认按钮三个插槽；按钮行为由调用方设置。
 class TPopupHeader extends StatelessWidget {
   const TPopupHeader({
     super.key,

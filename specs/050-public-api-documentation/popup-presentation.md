@@ -5,23 +5,22 @@
 ## 当前信息结构
 
 - 三级标题：公开类型或顶层函数。类型用途直接放在类型名下，不重复「简介」标题。
-- 四级标题：使用说明、构造方法、属性、静态成员、静态方法、实例方法、枚举值或类型定义。按此顺序显示实际存在的分组，无空分组。
-- 五级标题：使用说明的子节，或具体构造/方法的实际名称。默认构造、命名构造及工厂构造统一置于「构造方法」，默认构造优先，其余按名称排序。
+- 四级标题：构造方法、属性、静态成员、静态方法、实例方法、枚举值或类型定义。按此顺序显示实际存在的分组，无空分组。
+- 五级标题：具体构造/方法的实际名称。默认构造、命名构造及工厂构造统一置于「构造方法」，默认构造优先，其余按名称排序。
 - 六级标题：构造/方法内部说明；继续嵌套时使用加粗段落，避免越过所属 API。
 - 构造、方法及顶层函数参数表统一为「名称、类型、默认值、说明、必传」五列；必传值保持源码 required 语义。
 - 参数表直接接在构造/方法说明之后，不再重复「参数」标题。「公开属性（字段与访问器）」精简为「属性」。
 - 构造、静态/实例方法及顶层函数统一去掉完整签名代码块和 const 标识；保留参数类型、默认值、必填、位置/命名区别、返回类型、泛型约束及必要行为说明。无参 API 明示无参数。typedef 保留完整类型定义。
 - API 页去掉完整示例、孤立示例标题和独立类型「声明」章节；专门示例页保留。
 
-`TPopupOptions` 的「如何创建」改为「构造方式选择」，「字段与 TPopupPlacement」改为「不同弹出方向的可用参数」，两者均属于「使用说明」。生命周期、蒙层、Theme 优先级和默认动画时长作为共用说明放在两个子节之前，避免错误归属于方向参数表。
-
+`TPopupOptions` 将构造方式和方向专用参数合并为一张表，用中文标明方向；`TPopupPlacement` 仅列枚举方向，不重复构造推荐和尺寸说明。类型用途保留一句，蒙层组合、开关状态、归一化、插值和回调参数使用表格，无「使用说明」及两个组织性子标题。
 上述构造分组与层级规则在工具渲染层统一实现；默认构造转为临时渲染对象，复用同一正文入口，不改解析模型。工具校验器和消费审计器同时支持旧默认构造章节及新分组，按下一个同级 API 截断，避免借用后续命名构造的参数表。
 
 ## 修改范围与源码影响
 
-本轮两个 Popup 源文件仅修改 dartdoc：`t_popup_options.dart` 调整标题和说明段落位置，`t_popup_types.dart` 同步引用标题。与本轮起点 HEAD 的 Dart token 对比完全一致；组件运行实现、API 签名、默认值和使用方式未改变，无 breaking change。本轮不需要更新日志。
+最新追加轮只修改六个 Popup 源文件的 dartdoc：`t_popup.dart`、`_popup_header.dart`、`t_popup_options.dart`、`t_popup_handle.dart`、`t_popup_types.dart`、`t_popup_theme_data.dart`。逐文件与本轮起点 `770e444a` 的 Dart token 比对完全一致；组件实现、API 签名、默认值与调用方式未改变，无 breaking change，不需要更新日志。
 
-只重新生成 `popup_api.md`，其余 56 份 API 资产未改。参数、属性和枚举的表体数据行完整保留；此前随构造排序重新组织，本次仅改参数表头。源码注释中的完整示例未删除，渲染层决定 API 页展示范围。
+只重新生成 `popup_api.md`，其余 56 份资产未改。135 个参数的名称、类型、声明默认值、必传状态以及位置参数顺序和返回类型与修改前完全一致；说明文字经过精简。源码完整示例保留。工具代码、正式依赖 ref 和锁文件均未修改。共用参数去重和类型链接仍属于待讨论方案，本次未实现。
 
 官网只调整类型标题重复检查：原子串检查会把五级默认构造标题也算成三级类型标题，改为匹配完整三级标题行。未改站点运行逻辑。正式依赖 ref 和工具锁文件未改。
 
@@ -84,6 +83,34 @@
 
 证据：`tools-columns-*.log`、`columns-audit-*.log`、`columns-*-analyze-*.log`、`columns-inventory-*.json`、`columns-generate-*.log`、`columns-validate-*.log`、`columns-output-contract.log`、`columns-site-build.log`、`columns-web-build.log`、`columns-browser-check.json` 及 `popup-table-columns.jpg`。本次未重新运行完整消费 40 项套件，不沿用此前 39 项结果充当本次完整回归。
 
+## 表格优先与重复文案精简（最新候选）
+
+| 内容 | 调整 |
+| --- | --- |
+| 构造与方向 | 合并为「构造方法 / 方向 / 方向专用参数」表，避免两份方向概览 |
+| 蒙层 | 四种 showOverlay / preventTap 组合用表格表达 |
+| open / close | 状态与行为对照表，保留重复调用、嵌套关闭、异常与模式差异 |
+| normalized / lerpDouble | 字段保留条件和 null 输入行为表 |
+| typedef 回调 | 参数说明表，保留关闭来源及显隐语义 |
+| Theme | 优先级表；copyWith 参数直接描述用途，移除工具回退文案「字段含义」「调用时的空值行为见方法说明」 |
+| 字段与枚举 | 短说明保留运行时默认、空值、方向限制、安全区和回调时机；删除内部引用和重复推荐 |
+
+核对实际实现后保留的关键契约：配置与方向不匹配在打开时抛 FlutterError；无 Navigator 的 debug/release 差异；非栈顶 Popup 直接移除；copyWith 显式 null 与未传的区别；destroyOnClose 覆盖时的释放与关闭后始终释放；蒙层点击的生效条件；Theme 优先级、尺寸与圆角回退；header/close builder 的触发来源。
+
+| 验证 | Flutter 3.32.0 | Flutter 3.47.6 |
+| --- | --- | --- |
+| Popup 最终源码 analyze | 零问题 | 零问题 |
+| 六个文件运行 token | 全部不变 | 全部不变 |
+| Popup generate / validate | ERROR=0 / WARN=0 | ERROR=0 / WARN=0 |
+| 全量源码/资产 AST 契约审计 | 零问题 | 零问题 |
+| 真实 Flutter Popup API 页面测试 | 1 项通过 | 1 项通过 |
+
+双 SDK 输出字节一致。浏览器实际页面包含 16 个类型、24 个构造/方法、21 张五列参数表、135 个参数及 3 个 typedef 代码块；无旧「使用说明」或回退提示。官网 18 项测试与生产构建通过，Flutter Web 重新构建并装配。本轮工具逻辑未改变，没有重复运行工具 75 项与消费审计 CLI 完整套件。
+
+当前窄窗口中长表格沿用官网横向滚动；本次没有改站点表格样式或宣称窄屏所有列同时可见。示例交互未重验。
+
+证据：`tables-generate-*.log`、`tables-validate-*.log`、`tables-analyze-*.log`、`tables-tokens-*.log`、`tables-inventory-*.json`、`tables-demo-*.log`、`tables-output-contract.json`、`tables-browser-check.json`、`tables-site-build.log`、`tables-web-build.log`、`popup-tables.jpg`。当前产物 SHA256：`6d6a79b26051e128ed36083cb656e44fa8328eaecf2174ca185a41edc78dfb18`。
+
 ## 本地预览与证据
 
 [Popup API](http://127.0.0.1:4173/flutter/components/popup?tab=api#tpopupoptions)，[Popup 示例](http://127.0.0.1:4173/flutter/components/popup?tab=demo)。
@@ -109,7 +136,7 @@ cp -a tdesign-component/example/build/web/. tdesign-site/_site/example/
 - `organization-source-contract.log`、`organization-site-build.log`、`organization-web-build.log`：注释修改的 token 等价、官网构建及 Web 构建。
 - `popup-organization.jpg`、`popup-placement-organization.jpg`、`popup-constructor-organization.jpg`：实际布局截图。
 
-此前 69/33 项统一精简与 73/35 项标题归属测试属于历史候选；本报告以本次 75/39 项结果为准。历史 Web 场景截图仍为 `web-popup-center.jpg`、`web-popup-header.jpg`。
+此前 69/33 项统一精简与 73/35 项标题归属测试属于历史候选；各历史结果仅适用于对应候选，最新表格优先阶段的结果见上节。历史 Web 场景截图仍为 `web-popup-center.jpg`、`web-popup-header.jpg`。
 
 ## 交付边界
 
