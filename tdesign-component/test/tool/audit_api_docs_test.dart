@@ -171,6 +171,33 @@ void main() {
     final result = await audit();
     expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
   });
+  for (final correctType in [true, false]) {
+    test(
+      'compact default constructor retains nested headings $correctType',
+      () async {
+        var content = compactMethods.replaceFirst(
+          '#### 参数\n',
+          '##### Defaults\nNull uses the default.\n\n##### 参数\n',
+        );
+        if (!correctType) {
+          content = content.replaceFirst(
+            '| value | int |',
+            '| value | String |',
+          );
+        }
+        asset.writeAsStringSync(content);
+        final result = await audit();
+        expect(
+          result.exitCode,
+          correctType ? 0 : 1,
+          reason: '${result.stdout}${result.stderr}',
+        );
+        if (!correctType) {
+          expect(result.stdout, contains('output-parameter-类型'));
+        }
+      },
+    );
+  }
   for (final entry in {
     'method parameter order': ('item, fallback', 'fallback, item'),
     'method parameter group': ('item, fallback', 'item, {fallback}'),

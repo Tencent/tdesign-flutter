@@ -457,7 +457,7 @@ void main(List<String> args) {
           }
           final tail = section.substring(pos + heading.length + 1);
           final boundary = RegExp(
-            r'^####(?:#)? (?!参数$)',
+            callable.isEmpty ? r'^#### (?!参数$)' : r'^####(?:#)? (?!参数$)',
             multiLine: true,
           ).firstMatch(tail);
           callableSection = boundary == null

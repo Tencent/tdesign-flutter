@@ -3,7 +3,7 @@
 默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。参数默认按名称传入；位置参数按列出的顺序传入。
 
 ### TPopup
-#### 简介
+
 弹出层入口：五向滑入 / 居中弹出，支持蒙层、可选 bottom 头部和
 可选 center 面板外下方关闭区。
 
@@ -36,7 +36,7 @@
 
 
 ### TPopupHeader
-#### 简介
+
 Popup 标准头部布局。
 
 本组件只负责取消按钮、标题和确认按钮的布局，不注入默认内容或业务行为。
@@ -60,10 +60,10 @@ Popup 标准头部布局。
 
 
 ### TPopupOptions
-#### 简介
+
 `TPopup.show` 的配置对象。
 
-## 如何创建
+#### 如何创建
 
 | 场景 | 推荐用法 |
 |------|----------|
@@ -72,7 +72,7 @@ Popup 标准头部布局。
 
 命名工厂只暴露当前方向生效的字段（例如 `TPopupOptions.bottom` 无 `width` 参数）。
 
-## 字段与 `TPopupPlacement`
+#### 字段与 `TPopupPlacement`
 
 | `TPopupPlacement` | 头部 / 关闭区 | 尺寸 |
 |-------------------|-------------|------|
@@ -285,7 +285,7 @@ Popup 标准头部布局。
 返回类型：`TPopupOptions`
 
 ### TPopupHandle
-#### 简介
+
 `TPopup.show` 的返回值，用于控制同一份 `TPopupOptions` 的多次打开与关闭。
 #### 公开属性（字段与访问器）
 
@@ -339,7 +339,7 @@ release 下静默返回。
 
 
 ### TPopupOverlayConfig
-#### 简介
+
 Popup 蒙层行为配置（可见遮罩、背景拦截、点击行为）。
 
 通过 `TPopupOptions.overlay` 配置蒙层颜色、背景点击拦截、关闭行为和点击回调。
@@ -371,7 +371,7 @@ Popup 蒙层行为配置（可见遮罩、背景拦截、点击行为）。
 
 
 ### TPopupInset
-#### 简介
+
 Popup 在交叉轴方向的边缘留白基类。
 #### 默认构造方法
 
@@ -379,7 +379,7 @@ Popup 在交叉轴方向的边缘留白基类。
 
 
 ### TPopupBottomInset
-#### 简介
+
 bottom 方向的左右留白。
 #### 默认构造方法
 
@@ -392,7 +392,7 @@ bottom 方向的左右留白。
 
 
 ### TPopupTopInset
-#### 简介
+
 top 方向的左右留白。
 #### 默认构造方法
 
@@ -405,7 +405,7 @@ top 方向的左右留白。
 
 
 ### TPopupLeftInset
-#### 简介
+
 left 方向的上下留白。
 #### 默认构造方法
 
@@ -418,7 +418,7 @@ left 方向的上下留白。
 
 
 ### TPopupRightInset
-#### 简介
+
 right 方向的上下留白。
 #### 默认构造方法
 
@@ -431,7 +431,7 @@ right 方向的上下留白。
 
 
 ### TPopupThemeData
-#### 简介
+
 TPopup 组件级 ThemeExtension
 
 通过 Theme 子树注入，控制子树的默认浮层样式。
@@ -517,7 +517,7 @@ other 为空或类型不匹配时返回当前主题；字段各自采用其类�
 
 
 ### TPopupPlacement
-#### 简介
+
 浮层出现方向；决定 `TPopupOptions` 中哪些字段生效。
 
 与 `TPopupOptions` 类文档中的「字段与 placement」表对应。
@@ -535,7 +535,7 @@ other 为空或类型不匹配时返回当前主题；字段各自采用其类�
 
 
 ### TPopupTrigger
-#### 简介
+
 浮层关闭或显隐变化时的触发来源。
 
 作为 `TPopupVisibleChangeCallback` 的第二个参数，以及关闭流程中的语义标记。
@@ -558,7 +558,7 @@ other 为空或类型不匹配时返回当前主题；字段各自采用其类�
 
 
 ### TPopupHeaderBuilder
-#### 简介
+
 bottom 整行头部自定义构建器。
 
 * `context` 构建上下文
@@ -571,7 +571,7 @@ typedef TPopupHeaderBuilder = Widget Function(BuildContext context, VoidCallback
 
 
 ### TPopupSlotBuilder
-#### 简介
+
 center 面板外关闭区构建器。
 
 * `context` 构建上下文
@@ -586,7 +586,7 @@ typedef TPopupSlotBuilder = Widget Function(BuildContext context, VoidCallback c
 
 
 ### TPopupVisibleChangeCallback
-#### 简介
+
 浮层显隐变化回调。
 
 * `visible` 为 true 表示打开，false 表示开始关闭

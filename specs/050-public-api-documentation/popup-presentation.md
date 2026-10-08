@@ -1,6 +1,6 @@
 # Popup API 精简展示验收
 
-日期：2026-10-08。按维护者要求仅验收 Popup，确认后再扩大范围。当前为本地候选，尚未推送这些展示调整。工具候选提交 `36c4f4cd71330ea3bf46e6352f19ab5856123bc0`，包含此前类型声明、示例与构造精简候选；远端工具 PR #29 的 CI 不包含本地展示调整。
+日期：2026-10-08。按维护者要求仅验收 Popup，确认后再扩大范围。当前为本地候选，尚未推送这些展示调整。工具候选提交 `ab09c82841d02ed559b65786a3916c5b3ee35b1d`，包含此前类型声明、示例与构造精简候选；远端工具 PR #29 的 CI 不包含本地展示调整。
 
 ## 展示规则
 
@@ -59,7 +59,7 @@
 - 官网 18 项测试及生产构建通过（保留既有大 chunk 提示）；浏览器核对 16 个类型、135 个参数，逐类型与 AST 数量相同。API 无独立声明、完整示例和任何可调用 API 的完整签名，剩余 3 个 typedef 代码块；专门示例页的 BasePopupsExample / ApplicationPopupsExample 保留。
 - 生成产物仅修改 Popup；未改组件实现、使用方式或正式依赖 ref。SDK 切换引起的工具锁文件变化已还原，不纳入候选。
 
-产物 SHA256：`033ab5a70ef09a8fe76de354f7a3e37fdfecae1fbd60050bb969720a529d0ed9`。
+产物 SHA256：`66accb661ded150fc8b40cbe0ffcc8f9649c8594dad9ace340c06f894d8a8bd2`。
 
 预览：[Popup API](http://127.0.0.1:4173/flutter/components/popup?tab=api)，[Popup 示例](http://127.0.0.1:4173/flutter/components/popup?tab=demo)。
 
@@ -90,4 +90,17 @@ cp -a tdesign-component/example/build/web/. tdesign-site/_site/example/
 
 在桌面断点实际验证：中间弹出打开后显示面板，点击蒙层关闭；带标题及操作的底部弹出显示标题、取消、确定，点击取消关闭。证据为 `web-preview-build.log`、`web-popup-preview.jpg`、`web-popup-center.jpg`、`web-popup-header.jpg`，位于上述临时证据目录。本次浏览器交互仅覆盖这两个场景，其余五个未逐一点击。窄屏站点会隐藏右侧嵌入手机，可直接访问 `/flutter/example/#popup` 查看。
 
-API 简介复核建议：类型用途和必要行为契约保留，重复的「简介」标题可删除；长篇使用流程适合独立说明。此建议尚未实现，本轮没有进一步改动生成规则或组件源码。
+## 注释标题归属修复
+
+实际页面发现 `TPopupOptions` 下「如何创建」及「字段与 TPopupPlacement」原为二级标题，越过所属三级类型标题。生成器此前直接复制 dartdoc 的 Markdown 标题，是层级错误的来源。
+
+修复统一置于渲染层：类型说明从四级开始，默认构造和顶层函数说明从五级开始，命名构造与方法说明从六级开始；内部标题保留相对深度，超出六级改为加粗段落。类型用途说明直接放在类型名下，删除全部 16 处重复「简介」标题。保留原说明内容和标题文字，组件源码 dartdoc 未修改。
+
+审计器同步调整默认构造的章节边界，允许五级说明标题，仍核验其后的参数类型；增加接受正确类型和拒绝错误类型的两个 CLI 回归用例。
+
+浏览器实际定位到 `TPopupOptions` 核验：类型为三级，「如何创建」「字段与 TPopupPlacement」「工厂构造方法」为四级，各命名构造为五级。右侧目录仅有 16 个类型；API 区没有二级标题或「简介」标题，逐类型参数合计仍为 135，三个 typedef 定义完整。参数、属性及枚举表格行与上一候选逐字相同。只重新生成 Popup，其余 56 份资产未改。
+
+标题修复的证据：`headings-browser-audit.json`、`popup-heading-hierarchy.jpg`、`tools-headings-*.log`、`headings-tools-analyze-*.log`、`headings-audit-*.log`、`headings-consumer-analyze-*.log`、`headings-demo-*.log`、`headings-site-build.log` 与 `headings-web-build.log`。之前的 69/33 项结果对应上一轮候选。
+
+
+本轮修复完成后的验证：Flutter 3.32.0 与 3.47.6 的工具完整回归各 73 项、审计 CLI 各 35 项、真实 Popup API 页面测试各 1 项全部通过；工具与消费审计器的严格静态分析均零问题。两 SDK 生成字节一致，validate 均 ERROR=0/WARN=0，源码清单审计零问题；官网 18 项测试与生产构建通过，Flutter Web 重新构建并装配至本地预览。修复已保存为本地提交，尚未推送，未进行其余组件的新规则验收。
