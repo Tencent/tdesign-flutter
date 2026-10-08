@@ -1,66 +1,218 @@
 ## API
+
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
 ### TTabsBar
+
+#### 声明
+
+```dart
+class TTabsBar extends StatelessWidget
+```
+
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| controller | TabController? | - | 可选的标签控制器；为空时使用最近的 `DefaultTabController`。 仅在需要读取当前索引、命令式切换或跨组件共享状态时显式传入。 |
-| isScrollable | bool | false | 是否横向滚动。 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onTap | ValueChanged<int>? | - | 点击事件 |
-| size | TTabsBarSize | TTabsBarSize.small | 选项卡文字尺寸，默认为 `TTabsBarSize.small`。 |
-| tabs | List<TTab> | - | tab数组 |
-| variant | TTabsBarVariant | TTabsBarVariant.line | 选项卡结构形态，默认为 `TTabsBarVariant.line`。 |
+
+```dart
+const TTabsBar({
+  Key? key,
+  required this.tabs,
+  this.controller,
+  this.isScrollable = false,
+  this.onTap,
+  this.size = TTabsBarSize.small,
+  this.variant = TTabsBarVariant.line,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| controller | TabController? | - | 可选的标签控制器；为空时使用最近的 `DefaultTabController`。 仅在需要读取当前索引、命令式切换或跨组件共享状态时显式传入。 | 否 |
+| isScrollable | bool | false | 是否横向滚动。 | 否 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| onTap | ValueChanged&lt;int&gt;? | - | 点击事件 | 否 |
+| size | TTabsBarSize | TTabsBarSize.small | 选项卡文字尺寸，默认为 `TTabsBarSize.small`。 | 否 |
+| tabs | List&lt;TTab&gt; | - | tab数组 | 是 |
+| variant | TTabsBarVariant | TTabsBarVariant.line | 选项卡结构形态，默认为 `TTabsBarVariant.line`。 | 否 |
 
 
 ### TTab
+
+#### 声明
+
+```dart
+class TTab extends Tab
+```
+
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| child | Widget? | - | 子widget |
-| enabled | bool | true | 是否可用，默认 true。 设为 `false` 时使用禁用样式，并由 `TTabsBar` 阻止该项被选择。 Material `TabBar` 不识别此扩展字段；直接将 `TTab` 用作 Material `TabBar.tabs` 时只会呈现禁用样式，不会阻止其切换。 |
-| icon | Widget? | - | 图标 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| text | String? | - | 文字内容 |
+
+```dart
+const TTab({Key? key, this.text, this.child, this.icon, this.enabled = true})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| child | Widget? | - | 子widget | 否 |
+| enabled | bool | true | 是否可用，默认 true。 设为 `false` 时使用禁用样式，并由 `TTabsBar` 阻止该项被选择。 Material `TabBar` 不识别此扩展字段；直接将 `TTab` 用作 Material `TabBar.tabs` 时只会呈现禁用样式，不会阻止其切换。 | 否 |
+| icon | Widget? | - | 图标 | 否 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| text | String? | - | 文字内容 | 否 |
 
 
 ### TTabsBarView
+
+#### 声明
+
+```dart
+class TTabsBarView extends StatelessWidget
+```
+
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| children | List<Widget> | - | 子widget列表 |
-| controller | TabController? | - | 可选的内容区控制器；为空时使用最近的 `DefaultTabController`。 与 `TTabsBar` 放在同一 `DefaultTabController` 下即可共享选中状态。 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| physics | ScrollPhysics? | - | 滑动物理特性；未传时默认不可滑动。 |
+
+```dart
+const TTabsBarView({
+  Key? key,
+  required this.children,
+  this.controller,
+  this.physics,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| children | List&lt;Widget&gt; | - | 子widget列表 | 是 |
+| controller | TabController? | - | 可选的内容区控制器；为空时使用最近的 `DefaultTabController`。 与 `TTabsBar` 放在同一 `DefaultTabController` 下即可共享选中状态。 | 否 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| physics | ScrollPhysics? | - | 滑动物理特性；未传时默认不可滑动。 | 否 |
 
 
 ### TTabsBarIndicator
+
+#### 声明
+
+```dart
+class TTabsBarIndicator extends Decoration
+```
+
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| indicatorColor | Color | - | 指示器颜色 |
-| indicatorHeight | double? | - | 指示器高度 |
-| indicatorWidth | double? | - | 指示器宽度 |
+
+```dart
+const TTabsBarIndicator({
+  required this.indicatorColor,
+  this.indicatorWidth,
+  this.indicatorHeight,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| indicatorColor | Color | - | 指示器颜色 | 是 |
+| indicatorHeight | double? | - | 指示器高度 | 否 |
+| indicatorWidth | double? | - | 指示器宽度 | 否 |
 
 
 ### TTabsBarThemeData
+
+#### 声明
+
+```dart
+class TTabsBarThemeData extends ThemeExtension<TTabsBarThemeData>
+```
+
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 栏背景色。 |
-| disabledLabelStyle | TextStyle? | - | 禁用标签文字和图标样式。 |
-| dividerColor | Color? | - | 分割线颜色。 |
-| dividerHeight | double? | - | 分割线高度；小于等于 0 时不展示。 |
-| indicator | Decoration? | - | 组件主题指示器；非空时覆盖内置形态指示器。 为空时 Line 使用 TDesign 默认指示器，Tag 与 Card 不展示指示器。 |
-| labelPadding | EdgeInsetsGeometry? | - | 标签内容边距。 |
-| labelStyle | TextStyle? | - | 选中标签文字样式。 |
-| selectedTagBackgroundColor | Color? | - | Tag 形态下的选中背景色。 |
-| tagBackgroundColor | Color? | - | Tag 形态下的默认背景色。 |
-| unselectedLabelStyle | TextStyle? | - | 未选中标签文字样式。 |
+
+```dart
+const TTabsBarThemeData({
+  this.backgroundColor,
+  this.labelStyle,
+  this.unselectedLabelStyle,
+  this.disabledLabelStyle,
+  this.labelPadding,
+  this.indicator,
+  this.dividerColor,
+  this.dividerHeight,
+  this.selectedTagBackgroundColor,
+  this.tagBackgroundColor,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 栏背景色。 | 否 |
+| disabledLabelStyle | TextStyle? | - | 禁用标签文字和图标样式。 | 否 |
+| dividerColor | Color? | - | 分割线颜色。 | 否 |
+| dividerHeight | double? | - | 分割线高度；小于等于 0 时不展示。 | 否 |
+| indicator | Decoration? | - | 组件主题指示器；非空时覆盖内置形态指示器。 为空时 Line 使用 TDesign 默认指示器，Tag 与 Card 不展示指示器。 | 否 |
+| labelPadding | EdgeInsetsGeometry? | - | 标签内容边距。 | 否 |
+| labelStyle | TextStyle? | - | 选中标签文字样式。 | 否 |
+| selectedTagBackgroundColor | Color? | - | Tag 形态下的选中背景色。 | 否 |
+| tagBackgroundColor | Color? | - | Tag 形态下的默认背景色。 | 否 |
+| unselectedLabelStyle | TextStyle? | - | 未选中标签文字样式。 | 否 |
+
+
+#### 实例方法
+
+##### TTabsBarThemeData.copyWith
+
+```dart
+TTabsBarThemeData copyWith({
+  Color? backgroundColor,
+  TextStyle? labelStyle,
+  TextStyle? unselectedLabelStyle,
+  TextStyle? disabledLabelStyle,
+  EdgeInsetsGeometry? labelPadding,
+  Decoration? indicator,
+  Color? dividerColor,
+  double? dividerHeight,
+  Color? selectedTagBackgroundColor,
+  Color? tagBackgroundColor,
+})
+```
+
+
+返回类型：`TTabsBarThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 栏背景色。 | 否 |
+| labelStyle | TextStyle? | - | 选中标签文字样式。 | 否 |
+| unselectedLabelStyle | TextStyle? | - | 未选中标签文字样式。 | 否 |
+| disabledLabelStyle | TextStyle? | - | 禁用标签文字和图标样式。 | 否 |
+| labelPadding | EdgeInsetsGeometry? | - | 标签内容边距。 | 否 |
+| indicator | Decoration? | - | 组件主题指示器；非空时覆盖内置形态指示器。 为空时 Line 使用 TDesign 默认指示器，Tag 与 Card 不展示指示器。 | 否 |
+| dividerColor | Color? | - | 分割线颜色。 | 否 |
+| dividerHeight | double? | - | 分割线高度；小于等于 0 时不展示。 | 否 |
+| selectedTagBackgroundColor | Color? | - | Tag 形态下的选中背景色。 | 否 |
+| tagBackgroundColor | Color? | - | Tag 形态下的默认背景色。 | 否 |
+
+
+##### TTabsBarThemeData.lerp
+
+```dart
+TTabsBarThemeData lerp(ThemeExtension<TTabsBarThemeData>? other, double t)
+```
+
+
+返回类型：`TTabsBarThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TTabsBarThemeData&gt;? | - | - | 是 |
+| t | double | - | - | 是 |
 
 
 ### TTabsBarVariant
