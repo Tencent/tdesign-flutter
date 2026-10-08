@@ -1,18 +1,55 @@
 ## API
 
-### TImageViewer
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
 
+### TImageViewer
+#### 简介
 命令式图片预览工具。
+
+#### 声明
+
+```dart
+class TImageViewer
+```
+
 
 #### 静态方法
 
 ##### TImageViewer.show
 
-显示全屏图片预览。
+```dart
+static Future<void> show({
+  required BuildContext context,
+  required List<ImageProvider<Object>> images,
+  List<String>? labels,
+  int initialIndex = 0,
+  bool showClose = true,
+  bool showDelete = false,
+  bool showIndex = true,
+  bool loop = false,
+  bool autoplay = false,
+  Duration autoplayInterval = const Duration(seconds: 3),
+  ValueChanged<int>? onIndexChanged,
+  ValueChanged<int>? onDelete,
+  ValueChanged<int>? onTap,
+  ValueChanged<int>? onLongPress,
+  TImageViewerItemBuilder? leadingBuilder,
+  TImageViewerItemBuilder? trailingBuilder,
+})
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+
+显示全屏图片预览。
+调用方需要主动关闭时，可通过持有的 `NavigatorState` 调用
+`NavigatorState.pop`；返回的 Future 会在路由关闭后完成一次。
+## 返回值
+预览路由被弹出时完成，不等待关闭动画结束；参数不合法时在展示前同步抛出异常。
+
+返回类型：`Future<void>`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| context | BuildContext | - | 用于展示预览弹窗。 调用方需要主动关闭时，可通过持有的 `NavigatorState` 调用 `NavigatorState.pop`；返回的 Future 会在路由关闭后完成一次。 | 是 |
+| context | BuildContext | - | 用于展示预览弹窗。 | 是 |
 | images | List&lt;ImageProvider&lt;Object&gt;&gt; | - | 是待预览的图片列表，不能为空。 | 是 |
 | labels | List&lt;String&gt;? | - | 是与图片一一对应的标签文案；非空时长度必须等于 images，否则抛出 ArgumentError。 | 否 |
 | initialIndex | int | 0 | 设置初始展示的图片索引，必须在 0 到 images.length - 1 之间；否则抛出 RangeError。 | 否 |
@@ -30,22 +67,34 @@
 | trailingBuilder | TImageViewerItemBuilder? | - | 构建导航栏末尾区域。 | 否 |
 
 
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | Future&lt;void&gt; | - | 预览路由被弹出时完成，不等待关闭动画结束；参数不合法时在展示前同步抛出异常。 | - |
-
-
 ### TImageViewerThemeData
-
+#### 简介
 图片预览组件级 ThemeExtension
 
-#### 构造方法
+#### 声明
 
-##### TImageViewerThemeData
+```dart
+class TImageViewerThemeData extends ThemeExtension<TImageViewerThemeData>
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TImageViewerThemeData({
+  this.backgroundColor,
+  this.appBarBackgroundColor,
+  this.iconColor,
+  this.labelStyle,
+  this.indexStyle,
+  this.viewerWidth,
+  this.viewerHeight,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | appBarBackgroundColor | Color? | - | 导航栏背景色 | 否 |
 | backgroundColor | Color? | - | 预览页背景色 | 否 |
@@ -60,63 +109,68 @@
 
 ##### TImageViewerThemeData.copyWith
 
+```dart
+TImageViewerThemeData copyWith({
+  Color? backgroundColor,
+  Color? appBarBackgroundColor,
+  Color? iconColor,
+  TextStyle? labelStyle,
+  TextStyle? indexStyle,
+  double? viewerWidth,
+  double? viewerHeight,
+})
+```
+
+
 复制主题配置。
+## 返回值
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+返回类型：`TImageViewerThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 字段含义：预览页背景色 调用时的空值行为见方法说明。 | 否 |
-| appBarBackgroundColor | Color? | - | 字段含义：导航栏背景色 调用时的空值行为见方法说明。 | 否 |
-| iconColor | Color? | - | 字段含义：图标颜色 调用时的空值行为见方法说明。 | 否 |
-| labelStyle | TextStyle? | - | 字段含义：标签文字样式 调用时的空值行为见方法说明。 | 否 |
-| indexStyle | TextStyle? | - | 字段含义：页码文字样式 调用时的空值行为见方法说明。 | 否 |
-| viewerWidth | double? | - | 字段含义：预览区默认宽度 调用时的空值行为见方法说明。 | 否 |
-| viewerHeight | double? | - | 字段含义：预览区默认高度 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TImageViewerThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
+| backgroundColor | Color? | - | 预览页背景色 | 否 |
+| appBarBackgroundColor | Color? | - | 导航栏背景色 | 否 |
+| iconColor | Color? | - | 图标颜色 | 否 |
+| labelStyle | TextStyle? | - | 标签文字样式 | 否 |
+| indexStyle | TextStyle? | - | 页码文字样式 | 否 |
+| viewerWidth | double? | - | 预览区默认宽度 | 否 |
+| viewerHeight | double? | - | 预览区默认高度 | 否 |
 
 
 ##### TImageViewerThemeData.lerp
 
-位置参数：`other, t`
+```dart
+TImageViewerThemeData lerp(
+  ThemeExtension<TImageViewerThemeData>? other,
+  double t,
+)
+```
 
 
 生成主题过渡配置。
+## 返回值
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+返回类型：`TImageViewerThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TImageViewerThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
 | t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TImageViewerThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
 ### TImageViewerItemBuilder
-
+#### 简介
 图片预览导航栏槽位构建器。
+`context` 图片预览导航栏的构建上下文。
+`index` 当前图片索引，从 0 开始。
+## 返回值
+导航栏对应槽位的内容。
+#### 类型定义
 
-位置参数：`context, index`
-
-
-#### 回调参数
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| context | BuildContext | - | 图片预览导航栏的构建上下文。 | 是 |
-| index | int | - | 当前图片索引，从 0 开始。 | 是 |
-
-
-#### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | Widget | - | 导航栏对应槽位的内容。 | - |
+```dart
+typedef TImageViewerItemBuilder = Widget Function(BuildContext context, int index);
+```

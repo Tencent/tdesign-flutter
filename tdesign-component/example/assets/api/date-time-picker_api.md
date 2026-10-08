@@ -1,20 +1,41 @@
 ## API
 
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
 ### TDateTimePicker
-
+#### 简介
 日期/时间滚轮选择器。
-
 纯滚轮组件，不包含工具栏、确认按钮或弹窗。
 `value` 与 `onChanged` 构成严格受控状态；`onChanged` 为 null 时禁用。
-
 滚轮高度与可见项数复用 `TPickerThemeData` 的 `height`、`itemCount`；
 通过 Flutter `ThemeData.extensions` 配置，没有独立的日期时间选择器 Theme。
 
-#### 构造方法
+#### 声明
 
-##### TDateTimePicker
+```dart
+class TDateTimePicker extends StatefulWidget
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+TDateTimePicker({
+  super.key,
+  required this.value,
+  DateTimePickerMode? mode,
+  this.renderLabel,
+  this.start,
+  this.end,
+  this.steps,
+  this.showWeek = false,
+  this.onChanged,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | end | TDateTimePickerValue? | - | 可选范围上限。未指定时，年列最大值为初始选中年份加 10。 start 不应晚于 end；debug 模式会断言，release 模式遇到逆序范围时忽略 end。 - **类型**：`TDateTimePickerValue`，仅传当前 mode 涉及的字段即可 - **语义**：超出范围的候选项会被裁剪；变更会触发列重建 - **月日模式**：未传 year 时使用 `value` 的计算年，value 也未传 year 时使用 2000 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
@@ -28,37 +49,64 @@
 
 
 ### DateTimePickerMode
-
+#### 简介
 滚轮列结构，由 `DateMode`、`TimeMode` 组合。
-
 通过 `DateTimePickerMode(dateMode:, timeMode:)` 构造，至少传其一：
 - `dateMode`：日期段粒度（年 / 年月 / 年月日 / 月日）；不传则不展示日期列
 - `timeMode`：时间段粒度（时 / 时分 / 时分秒）；不传则不展示时间列
 
-#### 构造方法
+#### 声明
 
-##### DateTimePickerMode
+```dart
+class DateTimePickerMode
+```
+
+#### 默认构造方法
+
+
+```dart
+factory DateTimePickerMode({DateMode? dateMode, TimeMode? timeMode})
+```
 
 创建滚轮列结构；`dateMode`、`timeMode` 至少传其一。
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | dateMode | DateMode? | - | 日期段粒度；为 null 时不展示日期列。 | 否 |
 | timeMode | TimeMode? | - | 时间段粒度；为 null 时不展示时间列。 | 否 |
 
 
 ### TDateTimePickerValue
-
+#### 简介
 `TDateTimePicker.onChanged` 返回值；`null` 字段表示当前 mode 不含该列。
-
 初始化 `TDateTimePicker.value`、`start`、`end` 时仅传相关字段即可；
 提交后端时使用 `toDateTime`，partial 值须显式传入 `fallback`。
 
-#### 构造方法
+#### 声明
 
-##### TDateTimePickerValue
+```dart
+class TDateTimePickerValue
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TDateTimePickerValue({
+  this.year,
+  this.month,
+  this.day,
+  this.hour,
+  this.minute,
+  this.second,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | day | int? | - | 日（1–31）；当前 mode 不含日列或未赋值时为 null。 | 否 |
 | hour | int? | - | 时（0–23）；当前 mode 不含时列或未赋值时为 null。 | 否 |
@@ -72,37 +120,57 @@
 
 ##### TDateTimePickerValue.toDateTime
 
-转为 `DateTime`
+```dart
+DateTime toDateTime({DateTime? fallback})
+```
 
+
+转为 `DateTime`
 - **完整值**：六元组均有值时直接构造
 - **partial 值**：缺字段用 `fallback` 补齐；未传 `fallback` 时抛出 `ArgumentError`
 - **日期归一化**：按 Dart `DateTime` 构造规则组合字段；例如 2 月配合 31 日
 的 fallback 会跨月归一化，不会自动按 Picker 范围裁剪。
 - **典型用法**：提交后端前调用；partial 值须传入能组成业务合法日期的 `fallback`
+## 返回值
+以六个时间字段构造的本地 DateTime；缺失字段由 fallback 补齐，未提供所需 fallback 时抛出 ArgumentError，
+日期字段按 Dart DateTime 规则归一化。
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+返回类型：`DateTime`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | fallback | DateTime? | - | 补齐未指定日期时间字段的业务基准；partial 值未提供它时抛出 ArgumentError。 | 否 |
 
 
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | DateTime | - | 以六个时间字段构造的本地 DateTime；缺失字段由 fallback 补齐，未提供所需 fallback 时抛出 ArgumentError， 日期字段按 Dart DateTime 规则归一化。 | - |
-
-
 ### DateTimePickerSteps
-
+#### 简介
 各列选项步进，未配置或小于等于 1 的列步进按 1 处理。
 
-#### 构造方法
+#### 声明
 
-##### DateTimePickerSteps
+```dart
+class DateTimePickerSteps
+```
+
+#### 默认构造方法
+
+
+```dart
+const DateTimePickerSteps({
+  this.year,
+  this.month,
+  this.day,
+  this.hour,
+  this.minute,
+  this.second,
+})
+```
 
 创建步进配置。
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | day | int? | - | 日列步进。 | 否 |
 | hour | int? | - | 时列步进。 | 否 |
@@ -113,62 +181,57 @@
 
 
 ### DateMode
-
+#### 简介
 日期段粒度，用于 `DateTimePickerMode` 的 `DateMode` 参数。
 #### 枚举值
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| year | DateMode | - | 年。 | - |
-| month | DateMode | - | 年 + 月。 | - |
-| date | DateMode | - | 年 + 月 + 日。 | - |
-| monthDay | DateMode | - | 月 + 日，不显示年份。缺省年份按 2000 年计算，允许选择 2 月 29 日。 可通过受控值的 year 指定计算年；回调的 year 仍为 null。 若业务绑定特定年份，接收回调后应继续在 value 中传入该年份。 | - |
+
+| 名称 | 说明 |
+| --- | --- |
+| year | 年。 |
+| month | 年 + 月。 |
+| date | 年 + 月 + 日。 |
+| monthDay | 月 + 日，不显示年份。缺省年份按 2000 年计算，允许选择 2 月 29 日。 可通过受控值的 year 指定计算年；回调的 year 仍为 null。 若业务绑定特定年份，接收回调后应继续在 value 中传入该年份。 |
 
 
 ### TimeMode
-
+#### 简介
 时间段粒度，用于 `DateTimePickerMode` 的 `TimeMode` 参数。
 #### 枚举值
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| hour | TimeMode | - | 时。 | - |
-| minute | TimeMode | - | 时 + 分。 | - |
-| second | TimeMode | - | 时 + 分 + 秒。 | - |
+
+| 名称 | 说明 |
+| --- | --- |
+| hour | 时。 |
+| minute | 时 + 分。 |
+| second | 时 + 分 + 秒。 |
 
 
 ### DateTimeColumn
-
+#### 简介
 滚轮列标识，用于 `DateTimePickerRenderLabel` 回调与 `DateTimePickerMode` 列展开。
 #### 枚举值
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| year | DateTimeColumn | - | 年列。 | - |
-| month | DateTimeColumn | - | 月列。 | - |
-| day | DateTimeColumn | - | 日列。 | - |
-| hour | DateTimeColumn | - | 时列。 | - |
-| minute | DateTimeColumn | - | 分列。 | - |
-| second | DateTimeColumn | - | 秒列。 | - |
+
+| 名称 | 说明 |
+| --- | --- |
+| year | 年列。 |
+| month | 月列。 |
+| day | 日列。 |
+| hour | 时列。 |
+| minute | 分列。 |
+| second | 秒列。 |
 
 
 ### DateTimePickerRenderLabel
-
+#### 简介
 自定义滚轮列展示文案。
+`column` 当前时间列类型。
+`value` 当前选项的时间数值。
+## 返回值
+选项展示文案；返回 null 时使用该列默认文案。
+#### 类型定义
 
-位置参数：`column, value`
-
-
-#### 回调参数
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| column | DateTimeColumn | - | 当前列，见 `DateTimeColumn`。 | 是 |
-| value | int | - | 列数值。 | 是 |
-
-
-#### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | String? | - | 选项展示文案；返回 null 时使用该列默认文案。 | - |
+```dart
+typedef DateTimePickerRenderLabel = String? Function(DateTimeColumn column, int value);
+```
