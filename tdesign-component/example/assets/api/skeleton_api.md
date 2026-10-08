@@ -1,29 +1,61 @@
 ## API
+
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
 ### TSkeleton
 
-#### 工厂构造方法
+#### 声明
+
+```dart
+class TSkeleton extends StatefulWidget
+```
+
+
+#### 命名构造方法
 
 ##### TSkeleton.custom
 
+```dart
+const TSkeleton.custom({
+  super.key,
+  required TSkeletonLayout layout,
+  this.animation,
+  this.delay = Duration.zero,
+})
+```
+
+
 使用自定义行列布局创建骨架屏。
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| layout | TSkeletonLayout | - | 自定义布局；预设形态时为空。 |
-| animation | TSkeletonAnimation? | - | 动画效果；为 null 时保持静态。 |
-| delay | Duration | Duration.zero | 骨架屏的延迟显示时间，用于避免短请求产生闪烁。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| layout | TSkeletonLayout | - | 自定义布局；预设形态时为空。 | 是 |
+| animation | TSkeletonAnimation? | - | 动画效果；为 null 时保持静态。 | 否 |
+| delay | Duration | Duration.zero | 骨架屏的延迟显示时间，用于避免短请求产生闪烁。 | 否 |
 
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| animation | TSkeletonAnimation? | - | 动画效果；为 null 时保持静态。 |
-| delay | Duration | Duration.zero | 骨架屏的延迟显示时间，用于避免短请求产生闪烁。 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| variant | TSkeletonVariant | TSkeletonVariant.text | 预设形态；自定义布局时为空。 |
 
-#### 公开属性
+```dart
+const TSkeleton({
+  super.key,
+  TSkeletonVariant variant = TSkeletonVariant.text,
+  this.animation,
+  this.delay = Duration.zero,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| animation | TSkeletonAnimation? | - | 动画效果；为 null 时保持静态。 | 否 |
+| delay | Duration | Duration.zero | 骨架屏的延迟显示时间，用于避免短请求产生闪烁。 | 否 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| variant | TSkeletonVariant | TSkeletonVariant.text | 预设形态；自定义布局时为空。 | 否 |
+
+#### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
@@ -31,89 +63,186 @@
 
 
 ### TSkeletonLayout
+
+#### 声明
+
+```dart
+class TSkeletonLayout
+```
+
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| rows | List<List<TSkeletonBlock>> | - | 每个内层列表表示一行骨架块。 |
-| rowSpacing | double? | - | 行间距；未设置时读取组件主题和 TDesign token。 |
+
+```dart
+const TSkeletonLayout({required this.rows, this.rowSpacing})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| rows | List&lt;List&lt;TSkeletonBlock&gt;&gt; | - | 每个内层列表表示一行骨架块。 | 是 |
+| rowSpacing | double? | - | 行间距；未设置时读取组件主题和 TDesign token。 | 否 |
 
 
 ### TSkeletonBlockStyle
+
+#### 声明
+
+```dart
+class TSkeletonBlockStyle
+```
+
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| borderRadius | double? | - | 骨架块圆角；优先于 `shape` 和组件主题。 |
-| color | Color? | - | 骨架块颜色；优先于组件主题。 |
-| shape | TSkeletonBlockShape | TSkeletonBlockShape.rounded | 骨架块形状。 |
+
+```dart
+const TSkeletonBlockStyle({
+  this.color,
+  this.borderRadius,
+  this.shape = TSkeletonBlockShape.rounded,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| borderRadius | double? | - | 骨架块圆角；优先于 `shape` 和组件主题。 | 否 |
+| color | Color? | - | 骨架块颜色；优先于组件主题。 | 否 |
+| shape | TSkeletonBlockShape | TSkeletonBlockShape.rounded | 骨架块形状。 | 否 |
 
 
 ### TSkeletonBlock
 
-#### 工厂构造方法
+#### 声明
+
+```dart
+class TSkeletonBlock
+```
+
+
+#### 命名构造方法
 
 ##### TSkeletonBlock.circle
 
+```dart
+const TSkeletonBlock.circle({
+  this.width = 48,
+  this.height = 48,
+  this.flex,
+  this.margin = EdgeInsets.zero,
+  this.style = const TSkeletonBlockStyle(shape: TSkeletonBlockShape.circle),
+})
+```
+
+
 圆形占位块。
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| width | double? | 48 | 宽度。 |
-| height | double? | 48 | 高度。 |
-| flex | int? | - | 同一行内的弹性因子；为 null 时按固定宽度布局。 |
-| margin | EdgeInsets | EdgeInsets.zero | 外边距。 |
-| style | TSkeletonBlockStyle | const TSkeletonBlockStyle(shape: TSkeletonBlockShape.circle) | 视觉样式。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| width | double? | 48 | 宽度。 | 否 |
+| height | double? | 48 | 高度。 | 否 |
+| flex | int? | - | 同一行内的弹性因子；为 null 时按固定宽度布局。 | 否 |
+| margin | EdgeInsets | EdgeInsets.zero | 外边距。 | 否 |
+| style | TSkeletonBlockStyle | const TSkeletonBlockStyle(shape: TSkeletonBlockShape.circle) | 视觉样式。 | 否 |
 
 
 ##### TSkeletonBlock.line
 
+```dart
+const TSkeletonBlock.line({
+  this.width,
+  this.height = 16,
+  this.flex = 1,
+  this.margin = EdgeInsets.zero,
+  this.style = const TSkeletonBlockStyle(),
+})
+```
+
+
 文本行占位块。
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| width | double? | - | 宽度。 |
-| height | double? | 16 | 高度。 |
-| flex | int? | 1 | 同一行内的弹性因子；为 null 时按固定宽度布局。 |
-| margin | EdgeInsets | EdgeInsets.zero | 外边距。 |
-| style | TSkeletonBlockStyle | const TSkeletonBlockStyle() | 视觉样式。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| width | double? | - | 宽度。 | 否 |
+| height | double? | 16 | 高度。 | 否 |
+| flex | int? | 1 | 同一行内的弹性因子；为 null 时按固定宽度布局。 | 否 |
+| margin | EdgeInsets | EdgeInsets.zero | 外边距。 | 否 |
+| style | TSkeletonBlockStyle | const TSkeletonBlockStyle() | 视觉样式。 | 否 |
 
 
 ##### TSkeletonBlock.rectangle
 
+```dart
+const TSkeletonBlock.rectangle({
+  this.width,
+  this.height = 16,
+  this.flex = 1,
+  this.margin = EdgeInsets.zero,
+  this.style = const TSkeletonBlockStyle(
+    shape: TSkeletonBlockShape.rectangle,
+  ),
+})
+```
+
+
 无圆角矩形占位块。
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| width | double? | - | 宽度。 |
-| height | double? | 16 | 高度。 |
-| flex | int? | 1 | 同一行内的弹性因子；为 null 时按固定宽度布局。 |
-| margin | EdgeInsets | EdgeInsets.zero | 外边距。 |
-| style | TSkeletonBlockStyle | const TSkeletonBlockStyle(shape: TSkeletonBlockShape.rectangle) | 视觉样式。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| width | double? | - | 宽度。 | 否 |
+| height | double? | 16 | 高度。 | 否 |
+| flex | int? | 1 | 同一行内的弹性因子；为 null 时按固定宽度布局。 | 否 |
+| margin | EdgeInsets | EdgeInsets.zero | 外边距。 | 否 |
+| style | TSkeletonBlockStyle | const TSkeletonBlockStyle(shape: TSkeletonBlockShape.rectangle) | 视觉样式。 | 否 |
 
 
 ##### TSkeletonBlock.spacer
 
+```dart
+const TSkeletonBlock.spacer({
+  this.width,
+  this.height,
+  this.flex,
+  this.margin = EdgeInsets.zero,
+})
+```
+
+
 透明间隔块。
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| width | double? | - | 宽度。 |
-| height | double? | - | 高度。 |
-| flex | int? | - | 同一行内的弹性因子；为 null 时按固定宽度布局。 |
-| margin | EdgeInsets | EdgeInsets.zero | 外边距。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| width | double? | - | 宽度。 | 否 |
+| height | double? | - | 高度。 | 否 |
+| flex | int? | - | 同一行内的弹性因子；为 null 时按固定宽度布局。 | 否 |
+| margin | EdgeInsets | EdgeInsets.zero | 外边距。 | 否 |
 
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| flex | int? | 1 | 同一行内的弹性因子；为 null 时按固定宽度布局。 |
-| height | double? | 16 | 高度。 |
-| margin | EdgeInsets | EdgeInsets.zero | 外边距。 |
-| style | TSkeletonBlockStyle | const TSkeletonBlockStyle() | 视觉样式。 |
-| width | double? | - | 宽度。 |
 
-#### 公开属性
+```dart
+const TSkeletonBlock({
+  this.width,
+  this.height = 16,
+  this.flex = 1,
+  this.margin = EdgeInsets.zero,
+  this.style = const TSkeletonBlockStyle(),
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| flex | int? | 1 | 同一行内的弹性因子；为 null 时按固定宽度布局。 | 否 |
+| height | double? | 16 | 高度。 | 否 |
+| margin | EdgeInsets | EdgeInsets.zero | 外边距。 | 否 |
+| style | TSkeletonBlockStyle | const TSkeletonBlockStyle() | 视觉样式。 | 否 |
+| width | double? | - | 宽度。 | 否 |
+
+#### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |

@@ -1,9 +1,32 @@
 ## API
+
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
 ### TDialog
+
+#### 声明
+
+```dart
+class TDialog extends StatelessWidget
+```
+
 
 #### 静态方法
 
 ##### TDialog.show
+
+```dart
+static Future<T?> show<T>(
+  BuildContext context, {
+  required Widget dialog,
+  bool barrierDismissible = false,
+  T? barrierResult,
+  Color? barrierColor,
+  bool useRootNavigator = true,
+  bool useSafeArea = true,
+})
+```
+
 
 使用居中模态路由展示 Dialog。
 显式开启后，蒙层关闭成功时返回 `barrierResult`（默认 null）；
@@ -13,93 +36,253 @@
 
 返回类型：`Future<T?>`
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | - |
-| dialog | Widget | - | - |
-| barrierDismissible | bool | false | 默认为 false，点击蒙层不会关闭。 |
-| barrierResult | T? | - | - |
-| barrierColor | Color? | - | - |
-| useRootNavigator | bool | true | - |
-| useSafeArea | bool | true | - |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | - | 是 |
+| dialog | Widget | - | - | 是 |
+| barrierDismissible | bool | false | 默认为 false，点击蒙层不会关闭。 | 否 |
+| barrierResult | T? | - | - | 否 |
+| barrierColor | Color? | - | - | 否 |
+| useRootNavigator | bool | true | - | 否 |
+| useSafeArea | bool | true | - | 否 |
 
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| actions | List<TDialogAction> | const <TDialogAction>[] | 操作列表；一到两个操作横向排列，更多操作纵向排列。 一到两个操作全部显式使用 `TButtonVariant.text` 时，操作区使用带分隔线的 贴边文字按钮 Footer；其他情况使用带内边距的普通操作区。 纵向排列时，`TDialogAction.role` 为 `TDialogActionRole.primary` 或 `TDialogActionRole.destructive` 的强调操作优先展示，同类操作保持声明顺序。 |
-| actionSpacing | double? | - | 操作之间的间距。未设置时使用主题 token 默认值。 |
-| actionsPadding | EdgeInsetsGeometry? | - | 操作区内边距。未设置时使用主题 token 默认值。 一到两个操作全部显式使用 `TButtonVariant.text` 时，默认仅保留 32dp 顶部间距，使文字按钮 Footer 横向贴边；显式设置后使用传入的内边距。 |
-| actionsWidget | Widget? | - | 完全自定义操作区。 使用后 `actions` 必须为空；仅在标准操作列表无法表达布局时使用。 |
-| closeButtonResult | Object? | - | 点击内置关闭按钮并成功关闭时的返回值，默认为 null。 类型应与 `show` 的泛型一致。可与 `TDialogAction.result` 和 `show` 的 `barrierResult` 配合，通过同一个 Future 区分关闭来源。 不影响系统返回或业务调用 Navigator.pop 的返回值。 |
-| content | Widget? | - | 内容槽位。 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| semanticLabel | String? | - | 无障碍语义标签。 |
-| showCloseButton | bool | false | 是否显示右上角关闭按钮。 |
-| title | Widget? | - | 标题槽位。 |
+
+```dart
+const TDialog({
+  super.key,
+  this.title,
+  this.content,
+  this.actions = const <TDialogAction>[],
+  this.actionsWidget,
+  this.showCloseButton = false,
+  this.closeButtonResult,
+  this.semanticLabel,
+  EdgeInsetsGeometry? actionsPadding,
+  double? actionSpacing,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| actions | List&lt;TDialogAction&gt; | const &lt;TDialogAction&gt;[] | 操作列表；一到两个操作横向排列，更多操作纵向排列。 一到两个操作全部显式使用 `TButtonVariant.text` 时，操作区使用带分隔线的 贴边文字按钮 Footer；其他情况使用带内边距的普通操作区。 纵向排列时，`TDialogAction.role` 为 `TDialogActionRole.primary` 或 `TDialogActionRole.destructive` 的强调操作优先展示，同类操作保持声明顺序。 | 否 |
+| actionSpacing | double? | - | 操作之间的间距。未设置时使用主题 token 默认值。 | 否 |
+| actionsPadding | EdgeInsetsGeometry? | - | 操作区内边距。未设置时使用主题 token 默认值。 一到两个操作全部显式使用 `TButtonVariant.text` 时，默认仅保留 32dp 顶部间距，使文字按钮 Footer 横向贴边；显式设置后使用传入的内边距。 | 否 |
+| actionsWidget | Widget? | - | 完全自定义操作区。 使用后 `actions` 必须为空；仅在标准操作列表无法表达布局时使用。 | 否 |
+| closeButtonResult | Object? | - | 点击内置关闭按钮并成功关闭时的返回值，默认为 null。 类型应与 `show` 的泛型一致。可与 `TDialogAction.result` 和 `show` 的 `barrierResult` 配合，通过同一个 Future 区分关闭来源。 不影响系统返回或业务调用 Navigator.pop 的返回值。 | 否 |
+| content | Widget? | - | 内容槽位。 | 否 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| semanticLabel | String? | - | 无障碍语义标签。 | 否 |
+| showCloseButton | bool | false | 是否显示右上角关闭按钮。 | 否 |
+| title | Widget? | - | 标题槽位。 | 否 |
 
 
 ### TDialogAction
+
+#### 声明
+
+```dart
+class TDialogAction
+```
+
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| child | Widget | - | 按钮内容。 |
-| closeOnPressed | bool | true | 点击后是否自动关闭。 |
-| colorPreset | TButtonColorPreset? | - | 显式按钮配色；未指定时由角色和最终变体解析。 普通操作的填充变体使用 `TButtonColorPreset.light`，其他变体使用 `TButtonColorPreset.defaultTheme`；主要和危险操作分别使用 `TButtonColorPreset.primary`、`TButtonColorPreset.danger`。 |
-| disabled | bool | false | 是否禁用。 |
-| onPressed | VoidCallback? | - | 点击回调，在自动关闭前执行。 |
-| result | Object? | - | 关闭 Dialog 时返回的结果。 |
-| role | TDialogActionRole | TDialogActionRole.normal | 操作语义角色，默认为 `TDialogActionRole.normal`。 未指定 `variant` 时使用填充按钮：普通操作采用 `TButtonColorPreset.light`， 主要操作采用 `TButtonColorPreset.primary`，危险操作采用 `TButtonColorPreset.danger`。显式设置的 `variant`、`colorPreset` 和 `style` 优先于角色提供的默认值。 |
-| style | ButtonStyle? | - | 显式按钮样式；用于覆盖单个操作，未设置时使用 Dialog Theme 和角色默认样式。 |
-| variant | TButtonVariant? | - | 显式按钮变体；未指定时使用 `TButtonVariant.fill`。 当 `TDialog.actions` 中有一到两个操作，且所有操作都显式使用 `TButtonVariant.text` 时，Dialog 自动切换为带分隔线的贴边文字按钮 Footer。 混合使用不同变体时仍采用普通操作区布局，每个按钮保留各自的变体。 |
+
+```dart
+const TDialogAction({
+  required this.child,
+  this.result,
+  this.onPressed,
+  this.role = TDialogActionRole.normal,
+  this.closeOnPressed = true,
+  this.disabled = false,
+  this.variant,
+  this.colorPreset,
+  this.style,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| child | Widget | - | 按钮内容。 | 是 |
+| closeOnPressed | bool | true | 点击后是否自动关闭。 | 否 |
+| colorPreset | TButtonColorPreset? | - | 显式按钮配色；未指定时由角色和最终变体解析。 普通操作的填充变体使用 `TButtonColorPreset.light`，其他变体使用 `TButtonColorPreset.defaultTheme`；主要和危险操作分别使用 `TButtonColorPreset.primary`、`TButtonColorPreset.danger`。 | 否 |
+| disabled | bool | false | 是否禁用。 | 否 |
+| onPressed | VoidCallback? | - | 点击回调，在自动关闭前执行。 | 否 |
+| result | Object? | - | 关闭 Dialog 时返回的结果。 | 否 |
+| role | TDialogActionRole | TDialogActionRole.normal | 操作语义角色，默认为 `TDialogActionRole.normal`。 未指定 `variant` 时使用填充按钮：普通操作采用 `TButtonColorPreset.light`， 主要操作采用 `TButtonColorPreset.primary`，危险操作采用 `TButtonColorPreset.danger`。显式设置的 `variant`、`colorPreset` 和 `style` 优先于角色提供的默认值。 | 否 |
+| style | ButtonStyle? | - | 显式按钮样式；用于覆盖单个操作，未设置时使用 Dialog Theme 和角色默认样式。 | 否 |
+| variant | TButtonVariant? | - | 显式按钮变体；未指定时使用 `TButtonVariant.fill`。 当 `TDialog.actions` 中有一到两个操作，且所有操作都显式使用 `TButtonVariant.text` 时，Dialog 自动切换为带分隔线的贴边文字按钮 Footer。 混合使用不同变体时仍采用普通操作区布局，每个按钮保留各自的变体。 | 否 |
 
 
 ### TConfirmDialog
+
+#### 声明
+
+```dart
+class TConfirmDialog extends StatelessWidget
+```
+
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| buttonStyle | ButtonStyle? | - | - |
-| buttonText | String? | - | - |
-| closeButtonResult | Object? | - | 内置关闭按钮成功关闭时返回的值，默认 null；透传至 `TDialog.closeButtonResult`。 |
-| closeOnPressed | bool | true | - |
-| content | String? | - | - |
-| contentWidget | Widget? | - | - |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onPressed | VoidCallback? | - | - |
-| result | Object? | true | - |
-| semanticLabel | String? | - | - |
-| showCloseButton | bool | false | - |
-| title | String? | - | - |
+
+```dart
+const TConfirmDialog({
+  super.key,
+  this.title,
+  this.content,
+  this.contentWidget,
+  this.buttonText,
+  this.onPressed,
+  this.result = true,
+  this.closeOnPressed = true,
+  this.showCloseButton = false,
+  this.closeButtonResult,
+  this.semanticLabel,
+  this.buttonStyle,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| buttonStyle | ButtonStyle? | - | - | 否 |
+| buttonText | String? | - | - | 否 |
+| closeButtonResult | Object? | - | 内置关闭按钮成功关闭时返回的值，默认 null；透传至 `TDialog.closeButtonResult`。 | 否 |
+| closeOnPressed | bool | true | - | 否 |
+| content | String? | - | - | 否 |
+| contentWidget | Widget? | - | - | 否 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| onPressed | VoidCallback? | - | - | 否 |
+| result | Object? | true | - | 否 |
+| semanticLabel | String? | - | - | 否 |
+| showCloseButton | bool | false | - | 否 |
+| title | String? | - | - | 否 |
 
 
 ### TDialogThemeData
+
+#### 声明
+
+```dart
+class TDialogThemeData extends ThemeExtension<TDialogThemeData>
+```
+
 
 #### 静态方法
 
 ##### TDialogThemeData.lerpDouble
 
+```dart
+static double? lerpDouble(double? a, double? b, double t)
+```
+
+
 返回类型：`double?`
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| a | double? | - | - |
-| b | double? | - | - |
-| t | double | - | - |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| a | double? | - | - | 是 |
+| b | double? | - | - | 是 |
+| t | double | - | - | 是 |
 
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景色（对应 Material `DialogThemeData.backgroundColor`） |
-| contentPadding | EdgeInsetsGeometry? | - | 内容内边距（对应 Material `Dialog` 的 contentPadding；TDesign 扩展） |
-| contentTextStyle | TextStyle? | - | 内容文案样式（对应 Material `DialogThemeData.contentTextStyle`） |
-| elevation | double? | - | 阴影（对应 Material `DialogThemeData.elevation`） |
-| maxHeight | double? | - | 面板最大高度。 |
-| shape | ShapeBorder? | - | 形状（圆角；对应 Material `DialogThemeData.shape`） |
-| titleTextStyle | TextStyle? | - | 标题文案样式（对应 Material `DialogThemeData.titleTextStyle`） |
-| width | double? | - | 弹窗宽度 |
+
+```dart
+const TDialogThemeData({
+  this.backgroundColor,
+  this.shape,
+  this.elevation,
+  this.titleTextStyle,
+  this.contentTextStyle,
+  this.contentPadding,
+  this.maxHeight,
+  this.width,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景色（对应 Material `DialogThemeData.backgroundColor`） | 否 |
+| contentPadding | EdgeInsetsGeometry? | - | 内容内边距（对应 Material `Dialog` 的 contentPadding；TDesign 扩展） | 否 |
+| contentTextStyle | TextStyle? | - | 内容文案样式（对应 Material `DialogThemeData.contentTextStyle`） | 否 |
+| elevation | double? | - | 阴影（对应 Material `DialogThemeData.elevation`） | 否 |
+| maxHeight | double? | - | 面板最大高度。 | 否 |
+| shape | ShapeBorder? | - | 形状（圆角；对应 Material `DialogThemeData.shape`） | 否 |
+| titleTextStyle | TextStyle? | - | 标题文案样式（对应 Material `DialogThemeData.titleTextStyle`） | 否 |
+| width | double? | - | 弹窗宽度 | 否 |
+
+
+#### 实例方法
+
+##### TDialogThemeData.copyWith
+
+```dart
+TDialogThemeData copyWith({
+  Color? backgroundColor,
+  ShapeBorder? shape,
+  double? elevation,
+  TextStyle? titleTextStyle,
+  TextStyle? contentTextStyle,
+  EdgeInsetsGeometry? contentPadding,
+  double? maxHeight,
+  double? width,
+})
+```
+
+
+返回类型：`TDialogThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景色（对应 Material `DialogThemeData.backgroundColor`） | 否 |
+| shape | ShapeBorder? | - | 形状（圆角；对应 Material `DialogThemeData.shape`） | 否 |
+| elevation | double? | - | 阴影（对应 Material `DialogThemeData.elevation`） | 否 |
+| titleTextStyle | TextStyle? | - | 标题文案样式（对应 Material `DialogThemeData.titleTextStyle`） | 否 |
+| contentTextStyle | TextStyle? | - | 内容文案样式（对应 Material `DialogThemeData.contentTextStyle`） | 否 |
+| contentPadding | EdgeInsetsGeometry? | - | 内容内边距（对应 Material `Dialog` 的 contentPadding；TDesign 扩展） | 否 |
+| maxHeight | double? | - | 面板最大高度。 | 否 |
+| width | double? | - | 弹窗宽度 | 否 |
+
+
+##### TDialogThemeData.lerp
+
+```dart
+TDialogThemeData lerp(ThemeExtension<TDialogThemeData>? other, double t)
+```
+
+
+返回类型：`TDialogThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TDialogThemeData&gt;? | - | - | 是 |
+| t | double | - | - | 是 |
+
+
+##### TDialogThemeData.merge
+
+```dart
+TDialogThemeData merge(TDialogThemeData? other)
+```
+
+
+合并两个 ThemeExtension，`other` 优先于 this
+
+返回类型：`TDialogThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | TDialogThemeData? | - | - | 是 |
 
 
 ### TDialogActionRole
