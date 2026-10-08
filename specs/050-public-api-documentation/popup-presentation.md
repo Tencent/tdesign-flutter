@@ -1,6 +1,6 @@
 # Popup API 展示验收
 
-日期：2026-10-08。仅验收 Popup，维护者确认后再扩大范围。以下结论对应本地候选，未推送；工具提交 `ab75bdb0d2af5f730024d1f455d5936d81fff507`，远端工具 PR #29 的 CI 不包含本次展示调整。
+日期：2026-10-08。仅验收 Popup，维护者确认后再扩大范围。以下结论对应本地候选，未推送；工具提交 `da425675e8eba15b76e77d772b3ce0c3f8187ab9`，远端工具 PR #29 的 CI 不包含本次展示调整。
 
 ## 当前信息结构
 
@@ -49,7 +49,7 @@
 
 合计：16 个类型、14 个构造、10 个方法、135 个参数及 3 个 typedef 定义，均完整。所有构造/方法无完整源码签名，API 区无二级说明标题、重复简介、旧方向标题或冗余参数标题。
 
-## 当前候选验证
+## 信息结构候选验证（移除开场说明前）
 
 | 项目 | Flutter 3.32.0 / Dart 3.8.0 | Flutter 3.47.6 / Dart 3.13.5 |
 | --- | --- | --- |
@@ -63,7 +63,15 @@
 
 官网 18 项测试与生产构建通过，保留既有大 chunk 提示。Flutter Web 重新构建并装配到本地预览。新增回归覆盖统一构造顺序、默认构造说明的六级标题、后续命名构造的参数不得补足默认构造缺失、错误/多余参数继续被拒绝、CLI 生成及正反例验证。
 
-产物 SHA256：`2adc5faa4aa62b79772f169f8667e76618fd8bf6d27d2aff3e28967e18688787`。
+产物 SHA256：`78f06d7c2530d790713c53cff8c34af8ae40e5c526fc71dfb260845dac2e408c`。
+
+## 移除统一开场说明（维护者追加反馈）
+
+移除每页 API 顶部的默认值列含义、Theme/Token 回退阅读规则、必填列阅读规则和参数传入规则总述。规则从生成器统一移除，仅重新生成 Popup。具体 API 的默认值、必填列、位置参数顺序及必要行为说明保留；与上一个候选逐字比较，仅删除这一个开场段落，其余正文完全一致。
+
+追加验证：两 SDK 的既有展示回归各 8 项通过，修改的生成器严格 analyze 均零问题；Popup 双 SDK 输出完全一致，validate 均 ERROR=0/WARN=0。官网 18 项测试、生产构建及 Flutter Web 构建通过，预览已重新装配；浏览器确认开场说明消失、16 个类型仍在。没有重新运行上节完整 75/39 项套件，因为可调用 API、表格及审计逻辑均未改。
+
+追加证据：`preamble-test-*.log`、`preamble-analyze-*.log`、`preamble-generate-*.log`、`preamble-validate-*.log`、`preamble-output-contract.log`、`preamble-site-build.log`、`preamble-web-build.log`、`preamble-browser-check.json` 及 `popup-without-preamble.jpg`。
 
 ## 本地预览与证据
 
