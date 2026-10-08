@@ -98,6 +98,7 @@ class TTable<T> extends StatefulWidget {
   final Set<T> selectedRows;
 
   /// 请求更新选中行集合。
+  /// 启用 selectionMode 时必须提供本回调；父组件需回传 selectedRows。
   final ValueChanged<Set<T>>? onSelectionChanged;
 
   /// 判断指定行是否可选。
@@ -107,6 +108,7 @@ class TTable<T> extends StatefulWidget {
   final TTableSort? sort;
 
   /// 请求更新排序值。
+  /// 为 null 时表头不产生排序请求，仍按外部传入的 sort 渲染；父组件需回传新 sort。
   final ValueChanged<TTableSort?>? onSortChanged;
 
   /// 是否在表体上显示加载遮罩。

@@ -44,15 +44,16 @@ const TTimeCounter({
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | onChanged | ValueChanged&lt;int&gt;? | - | 格式化后的可见值变化时触发，回调值为当前毫秒数。 `format` 包含毫秒段时按绘制帧触发，否则仅在可见时间段变化时触发。 | 否 |
 | onFinish | VoidCallback? | - | 计时到达终点时触发一次回调。 初始值或重置值已在终点时不会自动触发；此时显式调用 `TTimeCounterController.start` 会触发一次。 | 否 |
-| size | TTimeCounterSize? | - | 计时器尺寸；优先于组件 Theme。 | 否 |
+| size | TTimeCounterSize? | - | 计时器尺寸；null 时使用 TTimeCounterSize.medium。 | 否 |
 | splitWithUnit | bool | false | 是否使用本地化时间单位分隔，默认为 false。 | 否 |
-| time | int | - | 必需；计时时长，单位毫秒。 父组件更新该值时会按新的声明式配置重置计时，并覆盖此前 `TTimeCounterController.reset` 传入的临时目标时长。 | 是 |
-| variant | TTimeCounterVariant? | - | 视觉形态；优先于组件 Theme。 | 否 |
+| time | int | - | 必需；计时时长，单位毫秒。 父组件更新该值时会按新的声明式配置重置计时，并覆盖此前 `TTimeCounterController.reset` 传入的临时目标时长。 必须大于或等于 0。 | 是 |
+| variant | TTimeCounterVariant? | - | 视觉形态；null 时使用 TTimeCounterVariant.plain。 | 否 |
 
 
 ### TTimeCounterController
 #### 简介
 计时器控制器，可控制开始、暂停和重置。
+
 Controller 由调用方创建并负责释放。绑定多个 `TTimeCounter` 时，
 每条命令会广播给所有已绑定组件。
 
@@ -91,6 +92,7 @@ void reset([int? time])
 
 
 重置计时并保持暂停；`time` 为空时恢复为组件当前配置的时长。
+
 重置后如需继续计时，请显式调用 `start`。
 父组件后续更新 `TTimeCounter.time` 时，新的声明式配置优先。
 
@@ -115,6 +117,7 @@ void start()
 ### TTimeCounterThemeData
 #### 简介
 计时器组件的具体视觉默认值。
+
 尺寸档位与形态由 `TTimeCounter.size` / `variant` 唯一选择；未设置的视觉值
 在使用时回退当前 TDesign 全局 Token，而不是在 Theme 中冻结默认值。
 
@@ -169,11 +172,11 @@ TTimeCounterThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| defaultTextColor | Color? | - | 纯文本计时数字颜色；未设置时回退 `textColorPrimary`。 | 否 |
-| blockTextColor | Color? | - | 圆形、方形数字块的文字颜色；未设置时回退 `textColorAnti`。 | 否 |
-| blockBackgroundColor | Color? | - | 圆形、方形数字块的背景色；未设置时回退 `errorColor`。 | 否 |
-| squareBorderRadius | double? | - | 方形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusSmall`。 | 否 |
-| roundBorderRadius | double? | - | 圆形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusCircle`。 默认数字块宽高相等，故固定大半径显示为正圆。自定义较小半径时显示 对应的圆角方块，不再被固定 `BoxShape.circle` 忽略。 | 否 |
+| defaultTextColor | Color? | - | 字段含义：纯文本计时数字颜色；未设置时回退 `textColorPrimary`。 调用时的空值行为见方法说明。 | 否 |
+| blockTextColor | Color? | - | 字段含义：圆形、方形数字块的文字颜色；未设置时回退 `textColorAnti`。 调用时的空值行为见方法说明。 | 否 |
+| blockBackgroundColor | Color? | - | 字段含义：圆形、方形数字块的背景色；未设置时回退 `errorColor`。 调用时的空值行为见方法说明。 | 否 |
+| squareBorderRadius | double? | - | 字段含义：方形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusSmall`。 调用时的空值行为见方法说明。 | 否 |
+| roundBorderRadius | double? | - | 字段含义：圆形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusCircle`。 默认数字块宽高相等，故固定大半径显示为正圆。自定义较小半径时显示 对应的圆角方块，不再被固定 `BoxShape.circle` 忽略。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TTimeCounterThemeData.lerp

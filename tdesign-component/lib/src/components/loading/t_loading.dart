@@ -41,7 +41,7 @@ class TLoading extends StatelessWidget {
   }) : assert(size > 0),
        super(key: key);
 
-  /// 加载指示器的外部尺寸，单位为逻辑像素，默认为 20。
+  /// 加载指示器的外部尺寸，单位为逻辑像素，默认为 20，必须大于 0。
   final double size;
 
   /// 预设图标，支持圆形、点状、菊花状；为 null 时不显示预设图标。

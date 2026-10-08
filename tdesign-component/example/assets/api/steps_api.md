@@ -5,6 +5,7 @@
 ### TSteps
 #### 简介
 TDesign 步骤条。
+
 颜色、字号与连线默认读取 `TThemeData` 的全局 Token；
 没有独立的 Steps Theme。步骤状态与内容通过构造参数及 `TStepsItemData` 配置。
 
@@ -29,6 +30,7 @@ const TSteps.display({
 
 
 纯展示步骤条。
+
 所有节点和连线均使用完成态，不接收进度、状态或交互参数。
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
@@ -79,6 +81,7 @@ const TSteps.selectable({
 
 
 垂直可选择步骤条。
+
 固定使用点状指示器并显示右侧箭头：已完成节点实心，
 当前与未完成节点空心。`onChange` 只报告用户选择的索引，
 调用方需要更新 `value` 完成受控重建。

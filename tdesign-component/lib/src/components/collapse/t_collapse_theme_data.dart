@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 /// 折叠面板组件级 ThemeExtension
 class TCollapseThemeData extends ThemeExtension<TCollapseThemeData> {
   /// 默认面板背景色
+  /// 未配置时使用 bgColorContainer Token；单个面板的 backgroundColor 优先。
   final Color? backgroundColor;
 
   /// 阴影
+  /// 未配置时为 0。
   final double? elevation;
 
   /// 标题文字样式。
@@ -18,21 +20,27 @@ class TCollapseThemeData extends ThemeExtension<TCollapseThemeData> {
   final TextStyle? disabledHeaderTextStyle;
 
   /// 展开图标颜色。
+  /// 未配置时使用 textColorPlaceholder Token。
   final Color? iconColor;
 
   /// 禁用状态展开图标颜色。
+  /// 未配置时使用 textColorDisabled Token。
   final Color? disabledIconColor;
 
   /// 分隔线颜色。
+  /// 未配置时使用 componentStroke Token。
   final Color? dividerColor;
 
   /// 内容内边距。
+  /// 未配置时四边均使用 spacer2 Token。
   final EdgeInsetsGeometry? contentPadding;
 
   /// 卡片外边距。
+  /// 仅卡片形态生效，未配置时左右均使用 spacer2 Token。
   final EdgeInsetsGeometry? cardMargin;
 
   /// 卡片圆角。
+  /// 仅卡片形态生效，未配置时使用 radiusLarge Token。
   final BorderRadius? cardBorderRadius;
 
   const TCollapseThemeData({

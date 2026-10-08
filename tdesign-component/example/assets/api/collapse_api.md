@@ -76,7 +76,7 @@ const TCollapsePanel({
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 折叠面板的背景色。 | 否 |
 | body | Widget | - | 折叠面板的内容组件。 | 是 |
-| bodyHeight | double? | - | 展开内容区域的固定高度（包含内容内边距）。 适用于 `ListView` 等需要有界高度的内容；为空时由内容自然决定高度。 | 否 |
+| bodyHeight | double? | - | 展开内容区域的固定高度（包含内容内边距）。 适用于 `ListView` 等需要有界高度的内容；为空时由内容自然决定高度。 非空时必须是有限且大于 0 的值。 | 否 |
 | disabled | bool | false | 是否禁用面板交互。 | 否 |
 | expandIconBuilder | TCollapsePanelBuilder? | _defaultExpandIconBuilder | 构建展开图标。 省略时使用 TDesign 默认箭头；显式传入 null 时隐藏箭头；传入 builder 时以其返回的 Widget 替换默认箭头。Widget 会继承组件解析出的图标主题。 | 否 |
 | headerBuilder | ExpansionPanelHeaderBuilder | - | 折叠面板的头部组件构造函数。 | 是 |
@@ -121,17 +121,17 @@ const TCollapseThemeData({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 默认面板背景色 | 否 |
-| cardBorderRadius | BorderRadius? | - | 卡片圆角。 | 否 |
-| cardMargin | EdgeInsetsGeometry? | - | 卡片外边距。 | 否 |
-| contentPadding | EdgeInsetsGeometry? | - | 内容内边距。 | 否 |
+| backgroundColor | Color? | - | 默认面板背景色 未配置时使用 bgColorContainer Token；单个面板的 backgroundColor 优先。 | 否 |
+| cardBorderRadius | BorderRadius? | - | 卡片圆角。 仅卡片形态生效，未配置时使用 radiusLarge Token。 | 否 |
+| cardMargin | EdgeInsetsGeometry? | - | 卡片外边距。 仅卡片形态生效，未配置时左右均使用 spacer2 Token。 | 否 |
+| contentPadding | EdgeInsetsGeometry? | - | 内容内边距。 未配置时四边均使用 spacer2 Token。 | 否 |
 | contentTextStyle | TextStyle? | - | 内容文字样式。 | 否 |
 | disabledHeaderTextStyle | TextStyle? | - | 禁用状态标题文字样式。 | 否 |
-| disabledIconColor | Color? | - | 禁用状态展开图标颜色。 | 否 |
-| dividerColor | Color? | - | 分隔线颜色。 | 否 |
-| elevation | double? | - | 阴影 | 否 |
+| disabledIconColor | Color? | - | 禁用状态展开图标颜色。 未配置时使用 textColorDisabled Token。 | 否 |
+| dividerColor | Color? | - | 分隔线颜色。 未配置时使用 componentStroke Token。 | 否 |
+| elevation | double? | - | 阴影 未配置时为 0。 | 否 |
 | headerTextStyle | TextStyle? | - | 标题文字样式。 | 否 |
-| iconColor | Color? | - | 展开图标颜色。 | 否 |
+| iconColor | Color? | - | 展开图标颜色。 未配置时使用 textColorPlaceholder Token。 | 否 |
 
 
 #### 实例方法
@@ -161,17 +161,17 @@ TCollapseThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 默认面板背景色 | 否 |
-| elevation | double? | - | 阴影 | 否 |
-| headerTextStyle | TextStyle? | - | 标题文字样式。 | 否 |
-| contentTextStyle | TextStyle? | - | 内容文字样式。 | 否 |
-| disabledHeaderTextStyle | TextStyle? | - | 禁用状态标题文字样式。 | 否 |
-| iconColor | Color? | - | 展开图标颜色。 | 否 |
-| disabledIconColor | Color? | - | 禁用状态展开图标颜色。 | 否 |
-| dividerColor | Color? | - | 分隔线颜色。 | 否 |
-| contentPadding | EdgeInsetsGeometry? | - | 内容内边距。 | 否 |
-| cardMargin | EdgeInsetsGeometry? | - | 卡片外边距。 | 否 |
-| cardBorderRadius | BorderRadius? | - | 卡片圆角。 | 否 |
+| backgroundColor | Color? | - | 字段含义：默认面板背景色 未配置时使用 bgColorContainer Token；单个面板的 backgroundColor 优先。 调用时的空值行为见方法说明。 | 否 |
+| elevation | double? | - | 字段含义：阴影 未配置时为 0。 调用时的空值行为见方法说明。 | 否 |
+| headerTextStyle | TextStyle? | - | 字段含义：标题文字样式。 调用时的空值行为见方法说明。 | 否 |
+| contentTextStyle | TextStyle? | - | 字段含义：内容文字样式。 调用时的空值行为见方法说明。 | 否 |
+| disabledHeaderTextStyle | TextStyle? | - | 字段含义：禁用状态标题文字样式。 调用时的空值行为见方法说明。 | 否 |
+| iconColor | Color? | - | 字段含义：展开图标颜色。 未配置时使用 textColorPlaceholder Token。 调用时的空值行为见方法说明。 | 否 |
+| disabledIconColor | Color? | - | 字段含义：禁用状态展开图标颜色。 未配置时使用 textColorDisabled Token。 调用时的空值行为见方法说明。 | 否 |
+| dividerColor | Color? | - | 字段含义：分隔线颜色。 未配置时使用 componentStroke Token。 调用时的空值行为见方法说明。 | 否 |
+| contentPadding | EdgeInsetsGeometry? | - | 字段含义：内容内边距。 未配置时四边均使用 spacer2 Token。 调用时的空值行为见方法说明。 | 否 |
+| cardMargin | EdgeInsetsGeometry? | - | 字段含义：卡片外边距。 仅卡片形态生效，未配置时左右均使用 spacer2 Token。 调用时的空值行为见方法说明。 | 否 |
+| cardBorderRadius | BorderRadius? | - | 字段含义：卡片圆角。 仅卡片形态生效，未配置时使用 radiusLarge Token。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TCollapseThemeData.lerp

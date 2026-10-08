@@ -44,7 +44,7 @@ static TThemeData? fromJson(
 ```
 
 
-解析配置的json文件为主题数据
+解析主题 JSON；空字符串、格式错误或缺少 name 对应配置时返回 null。
 
 返回类型：`TThemeData?`
 
@@ -53,7 +53,7 @@ static TThemeData? fromJson(
 | name | String | - | 主题名称，目前只支持一级键 | 是 |
 | themeJson | String | - | 主题json字符串，要求json配置必须正确 | 是 |
 | darkName | String? | - | 暗色主题名称；为空时使用 `${name}Dark`。 | 否 |
-| recoverDefault | bool | false | 是否恢复为默认主题数据 | 否 |
+| recoverDefault | bool | false | 解析成功后是否将结果设为全局默认主题，默认 false | 否 |
 | extraThemeData | TExtraThemeData? | - | 额外扩展的主题数据 | 否 |
 
 
@@ -148,16 +148,16 @@ name 为空时使用 default；extraThemeData 为空时保留当前扩展数据�
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| name | String? | - | 名称 | 否 |
-| colorMap | Map&lt;String, Color&gt;? | - | 颜色 | 否 |
-| fontMap | Map&lt;String, Font&gt;? | - | 字体尺寸 | 否 |
-| fontMetricMap | Map&lt;String, double&gt;? | - | 小程序独立字号与行高 Token，单位为 Flutter 逻辑像素。 | 否 |
-| radiusMap | Map&lt;String, double&gt;? | - | 圆角 | 否 |
-| fontFamilyMap | Map&lt;String, FontFamily&gt;? | - | 字体样式 | 否 |
-| shadowMap | Map&lt;String, List&lt;BoxShadow&gt;&gt;? | - | 阴影 | 否 |
-| insetShadowMap | Map&lt;String, BorderSide&gt;? | - | 小程序 blur=0 的内投影在 Flutter 中对应的内侧边线。 | 否 |
+| name | String? | - | 字段含义：名称 调用时的空值行为见方法说明。 | 否 |
+| colorMap | Map&lt;String, Color&gt;? | - | 字段含义：颜色 调用时的空值行为见方法说明。 | 否 |
+| fontMap | Map&lt;String, Font&gt;? | - | 字段含义：字体尺寸 调用时的空值行为见方法说明。 | 否 |
+| fontMetricMap | Map&lt;String, double&gt;? | - | 字段含义：小程序独立字号与行高 Token，单位为 Flutter 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| radiusMap | Map&lt;String, double&gt;? | - | 字段含义：圆角 调用时的空值行为见方法说明。 | 否 |
+| fontFamilyMap | Map&lt;String, FontFamily&gt;? | - | 字段含义：字体样式 调用时的空值行为见方法说明。 | 否 |
+| shadowMap | Map&lt;String, List&lt;BoxShadow&gt;&gt;? | - | 字段含义：阴影 调用时的空值行为见方法说明。 | 否 |
+| insetShadowMap | Map&lt;String, BorderSide&gt;? | - | 字段含义：小程序 blur=0 的内投影在 Flutter 中对应的内侧边线。 调用时的空值行为见方法说明。 | 否 |
 | marginMap | Map&lt;String, double&gt;? | - | 间距 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
-| extraThemeData | TExtraThemeData? | - | 额外定义的结构 | 否 |
+| extraThemeData | TExtraThemeData? | - | 字段含义：额外定义的结构 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TThemeData.copyWithTThemeData
@@ -552,8 +552,15 @@ String pickerColumn(int colIndex)
 ### TStyleResolver
 #### 简介
 TDesign 样式解析器。
+
 实例显式样式、组件 Theme 和全局 Token 是单向样式链。
+
 用法：
+```dart
+final resolver = TStyleResolver.of(context);
+final token = resolver.token;              // P4
+final buttonTheme = resolver.componentExtension<TButtonThemeData>(); // P1
+```
 
 #### 声明
 
@@ -602,9 +609,11 @@ E? componentExtension<E extends ThemeExtension<E>>()
 ### TMaterialThemeBuilder
 #### 简介
 Token → 完整 ThemeData 的构建器
+
 四层架构的 L2 层：接收 `TThemeData` token，产出完整 `ThemeData`。
 内部完成 Token → ColorScheme 映射、Token Font → TextTheme、
 Token 颜色 → M3 子主题，同时将 `TThemeData` 自身作为 Extension 注入。
+
 通常不直接使用，通过 `TThemeBuilder.light` / `TThemeBuilder.dark` 入口。
 
 #### 声明
@@ -654,8 +663,17 @@ ThemeData buildLight()
 ### TThemeBuilder
 #### 简介
 应用入口：Token → 完整 ThemeData
+
 对齐 `MaterialApp.theme` / `darkTheme` / `themeMode` 三参数模式。
+
 用法：
+```dart
+MaterialApp(
+  theme: TThemeBuilder.light(token),
+  darkTheme: TThemeBuilder.dark(token),
+  themeMode: ThemeMode.system,
+)
+```
 
 #### 声明
 
@@ -822,6 +840,7 @@ PlatformUtil()
 ### TToolbarPressable
 #### 简介
 工具栏文字/图标按钮统一按压反馈：按下时整体透明度动画。
+
 用于 `TPicker`、`TPopup` 等「取消 | 标题 | 确认」类工具栏，后续组件请复用。
 
 #### 声明
@@ -903,6 +922,7 @@ Font withSize(int newSize)
 业务使用时有两种方法替换主题：
 第一种：有独立设计风格的app，明确知道哪些色值用到，哪些设置没用到，有自己设计规范，则可单独配置色值。
 第二种：直接接入TDesign，配置所有色值组，此时不需再自定义key-value，可以直接使用。
+
 如果业务需要扩展，可以按以下方式定义自己的ColorData，只要key在主题中能找到对应颜色即可
 TDesign主题包含的颜色，这是一个大而全的色值。业务可以选择自己需要的色值进行二次封装，方便使用。
 不过有的色值是内部使用的，必传，否则可能显示异常。
@@ -922,7 +942,7 @@ extension TColors on TThemeData
 | bgColorComponentDisabled | Color | - | 组件禁用态背景色；优先读取同名颜色 Token，否则使用内置回退色。 |
 | bgColorContainer | Color | - | 小程序 `--td-bg-color-container`；浅色默认引用 `fontWhite1`。 |
 | bgColorContainerActive | Color | - | 容器背景的按压态颜色；优先读取同名颜色 Token，否则使用内置回退色。 |
-| bgColorPage | Color | - | 组件颜色配置---------------------------------------------------- |
+| bgColorPage | Color | - | 页面背景色；优先同名 Token，未解析到时回退 grayColor1。 |
 | bgColorSecondaryComponent | Color | - | 小程序 `--td-bg-color-secondarycomponent`，默认引用灰阶 4。 |
 | bgColorSecondaryComponentActive | Color | - | 小程序 `--td-bg-color-secondarycomponent-active`，默认引用灰阶 6。 |
 | bgColorSecondaryContainer | Color | - | 次级容器背景色；优先读取同名颜色 Token，否则使用内置回退色。 |
@@ -930,66 +950,66 @@ extension TColors on TThemeData
 | bgColorSpecialComponent | Color | - | 小程序 `--td-bg-color-specialcomponent`；暗色主题默认透明。 |
 | borderLevel1Color | Color | - | 小程序一级分割线颜色，默认与 `componentStroke` 使用同一色阶。 |
 | borderLevel2Color | Color | - | 小程序二级边框颜色，默认与 `componentBorder` 使用同一色阶。 |
-| brandColor | Color | - | #0052D9 |
-| brandColor1 | Color | - | #F2F3FF |
-| brandColor10 | Color | - | #001A57 |
-| brandColor2 | Color | - | #D9E1FF |
-| brandColor3 | Color | - | #B5C7FF |
-| brandColor4 | Color | - | #8EABFF |
-| brandColor5 | Color | - | #618DFF |
-| brandColor6 | Color | - | #366EF4 |
-| brandColor7 | Color | - | #0052D9 |
-| brandColor8 | Color | - | #003CAB |
-| brandColor9 | Color | - | #002A7C |
-| brandColorActive | Color | - | #003CAB |
-| brandColorDisabled | Color | - | #B5C7FF |
-| brandColorFocus | Color | - | #F2F3FF |
-| brandColorLight | Color | - | #F2F3FF |
+| brandColor | Color | - | 未解析到同名 Token 时的回退色：#0052D9。 |
+| brandColor1 | Color | - | 未解析到同名 Token 时的回退色：#F2F3FF。 |
+| brandColor10 | Color | - | 未解析到同名 Token 时的回退色：#001A57。 |
+| brandColor2 | Color | - | 未解析到同名 Token 时的回退色：#D9E1FF。 |
+| brandColor3 | Color | - | 未解析到同名 Token 时的回退色：#B5C7FF。 |
+| brandColor4 | Color | - | 未解析到同名 Token 时的回退色：#8EABFF。 |
+| brandColor5 | Color | - | 未解析到同名 Token 时的回退色：#618DFF。 |
+| brandColor6 | Color | - | 未解析到同名 Token 时的回退色：#366EF4。 |
+| brandColor7 | Color | - | 未解析到同名 Token 时的回退色：#0052D9。 |
+| brandColor8 | Color | - | 未解析到同名 Token 时的回退色：#003CAB。 |
+| brandColor9 | Color | - | 未解析到同名 Token 时的回退色：#002A7C。 |
+| brandColorActive | Color | - | 未解析到同名 Token 时的回退色：#003CAB。 |
+| brandColorDisabled | Color | - | 未解析到同名 Token 时的回退色：#B5C7FF。 |
+| brandColorFocus | Color | - | 未解析到同名 Token 时的回退色：#F2F3FF。 |
+| brandColorLight | Color | - | 未解析到同名 Token 时的回退色：#F2F3FF。 |
 | brandColorLightActive | Color | - | 浅色品牌色点击态，默认使用品牌色阶 2。 |
 | componentBorder | Color | - | 组件边框颜色；优先读取同名颜色 Token，否则使用内置回退色。 |
 | componentStroke | Color | - | 组件分隔线颜色；优先读取同名颜色 Token，否则使用内置回退色。 |
-| errorColor | Color | - | #D54941 |
-| errorColor1 | Color | - | 错误色组---------------------------------------------------- #FFF0ED |
-| errorColor10 | Color | - | #490002 |
-| errorColor2 | Color | - | #FFD8D2 |
-| errorColor3 | Color | - | #FFB9B0 |
-| errorColor4 | Color | - | #FF9285 |
-| errorColor5 | Color | - | #F6685D |
-| errorColor6 | Color | - | #D54941 |
-| errorColor7 | Color | - | #AD352F |
-| errorColor8 | Color | - | #881F1C |
-| errorColor9 | Color | - | #68070A |
-| errorColorActive | Color | - | #AD352F |
-| errorColorDisabled | Color | - | #FFB9B0 |
-| errorColorFocus | Color | - | #FFD8D2 |
-| errorColorLight | Color | - | #FFF0ED |
+| errorColor | Color | - | 未解析到同名 Token 时的回退色：#D54941。 |
+| errorColor1 | Color | - | 未解析到同名 Token 时的回退色：#FFF0ED。 |
+| errorColor10 | Color | - | 未解析到同名 Token 时的回退色：#490002。 |
+| errorColor2 | Color | - | 未解析到同名 Token 时的回退色：#FFD8D2。 |
+| errorColor3 | Color | - | 未解析到同名 Token 时的回退色：#FFB9B0。 |
+| errorColor4 | Color | - | 未解析到同名 Token 时的回退色：#FF9285。 |
+| errorColor5 | Color | - | 未解析到同名 Token 时的回退色：#F6685D。 |
+| errorColor6 | Color | - | 未解析到同名 Token 时的回退色：#D54941。 |
+| errorColor7 | Color | - | 未解析到同名 Token 时的回退色：#AD352F。 |
+| errorColor8 | Color | - | 未解析到同名 Token 时的回退色：#881F1C。 |
+| errorColor9 | Color | - | 未解析到同名 Token 时的回退色：#68070A。 |
+| errorColorActive | Color | - | 未解析到同名 Token 时的回退色：#AD352F。 |
+| errorColorDisabled | Color | - | 未解析到同名 Token 时的回退色：#FFB9B0。 |
+| errorColorFocus | Color | - | 未解析到同名 Token 时的回退色：#FFD8D2。 |
+| errorColorLight | Color | - | 未解析到同名 Token 时的回退色：#FFF0ED。 |
 | errorColorLightActive | Color | - | 浅色错误色点击态，默认使用错误色阶 2。 |
-| fontGray1 | Color | - | 文字色组---------------------------------------------------- #e6000000 |
-| fontGray2 | Color | - | #99000000 |
-| fontGray3 | Color | - | #66000000 |
-| fontGray4 | Color | - | #42000000 |
-| fontWhite1 | Color | - | #FFFFFFFF |
-| fontWhite2 | Color | - | #8CFFFFFF |
-| fontWhite3 | Color | - | #59FFFFFF |
-| fontWhite4 | Color | - | #38FFFFFF |
-| grayColor1 | Color | - | #F3F3F3 |
-| grayColor10 | Color | - | #4B4B4B |
-| grayColor11 | Color | - | #383838 |
-| grayColor12 | Color | - | #2C2C2C |
-| grayColor13 | Color | - | #242424 |
-| grayColor14 | Color | - | #181818 |
-| grayColor2 | Color | - | #EEEEEE |
-| grayColor3 | Color | - | #E8E8E8 |
-| grayColor4 | Color | - | #DCDCDC |
-| grayColor5 | Color | - | #C5C5C5 |
-| grayColor6 | Color | - | #A6A6A6 |
-| grayColor7 | Color | - | #8B8B8B |
-| grayColor8 | Color | - | #777777 |
-| grayColor9 | Color | - | #5E5E5E |
+| fontGray1 | Color | - | 未解析到同名 Token 时的回退色：#e6000000。 |
+| fontGray2 | Color | - | 未解析到同名 Token 时的回退色：#99000000。 |
+| fontGray3 | Color | - | 未解析到同名 Token 时的回退色：#66000000。 |
+| fontGray4 | Color | - | 未解析到同名 Token 时的回退色：#42000000。 |
+| fontWhite1 | Color | - | 未解析到同名 Token 时的回退色：#FFFFFFFF。 |
+| fontWhite2 | Color | - | 未解析到同名 Token 时的回退色：#8CFFFFFF。 |
+| fontWhite3 | Color | - | 未解析到同名 Token 时的回退色：#59FFFFFF。 |
+| fontWhite4 | Color | - | 未解析到同名 Token 时的回退色：#38FFFFFF。 |
+| grayColor1 | Color | - | 未解析到同名 Token 时的回退色：#F3F3F3。 |
+| grayColor10 | Color | - | 未解析到同名 Token 时的回退色：#4B4B4B。 |
+| grayColor11 | Color | - | 未解析到同名 Token 时的回退色：#383838。 |
+| grayColor12 | Color | - | 未解析到同名 Token 时的回退色：#2C2C2C。 |
+| grayColor13 | Color | - | 未解析到同名 Token 时的回退色：#242424。 |
+| grayColor14 | Color | - | 未解析到同名 Token 时的回退色：#181818。 |
+| grayColor2 | Color | - | 未解析到同名 Token 时的回退色：#EEEEEE。 |
+| grayColor3 | Color | - | 未解析到同名 Token 时的回退色：#E8E8E8。 |
+| grayColor4 | Color | - | 未解析到同名 Token 时的回退色：#DCDCDC。 |
+| grayColor5 | Color | - | 未解析到同名 Token 时的回退色：#C5C5C5。 |
+| grayColor6 | Color | - | 未解析到同名 Token 时的回退色：#A6A6A6。 |
+| grayColor7 | Color | - | 未解析到同名 Token 时的回退色：#8B8B8B。 |
+| grayColor8 | Color | - | 未解析到同名 Token 时的回退色：#777777。 |
+| grayColor9 | Color | - | 未解析到同名 Token 时的回退色：#5E5E5E。 |
 | maskActive | Color | - | 弹层遮罩色。 |
 | maskBackground | Color | - | 二维码等背景遮罩色。 |
 | maskDisabled | Color | - | 禁用态遮罩色。 |
-| primaryColor1 | Color | - | 功能色组---------------------------------------------------- 小程序 `--td-primary-color-*` 色阶；默认分别引用同级品牌色阶。 |
+| primaryColor1 | Color | - | 小程序 `--td-primary-color-*` 色阶；默认分别引用同级品牌色阶。 |
 | primaryColor10 | Color | - | 主色第 10 级色阶；未配置时使用 `brandColor10`。 |
 | primaryColor2 | Color | - | 主色第 2 级色阶；未配置时使用 `brandColor2`。 |
 | primaryColor3 | Color | - | 主色第 3 级色阶；未配置时使用 `brandColor3`。 |
@@ -1002,21 +1022,21 @@ extension TColors on TThemeData
 | scrollbarColor | Color | - | 滚动条颜色。 |
 | scrollbarHoverColor | Color | - | 滚动条悬停颜色。 |
 | scrollTrackColor | Color | - | 滚动条轨道颜色。 |
-| successColor | Color | - | #2BA471 |
-| successColor1 | Color | - | 成功色组---------------------------------------------------- #E3F9E9 |
-| successColor10 | Color | - | #002515 |
-| successColor2 | Color | - | #C6F3D7 |
-| successColor3 | Color | - | #92DAB2 |
-| successColor4 | Color | - | #56C08D |
-| successColor5 | Color | - | #2BA471 |
-| successColor6 | Color | - | #008858 |
-| successColor7 | Color | - | #006C45 |
-| successColor8 | Color | - | #005334 |
-| successColor9 | Color | - | #003B23 |
-| successColorActive | Color | - | #008858 |
-| successColorDisabled | Color | - | #92DAB2 |
-| successColorFocus | Color | - | #C6F3D7 |
-| successColorLight | Color | - | #E3F9E9 |
+| successColor | Color | - | 未解析到同名 Token 时的回退色：#2BA471。 |
+| successColor1 | Color | - | 未解析到同名 Token 时的回退色：#E3F9E9。 |
+| successColor10 | Color | - | 未解析到同名 Token 时的回退色：#002515。 |
+| successColor2 | Color | - | 未解析到同名 Token 时的回退色：#C6F3D7。 |
+| successColor3 | Color | - | 未解析到同名 Token 时的回退色：#92DAB2。 |
+| successColor4 | Color | - | 未解析到同名 Token 时的回退色：#56C08D。 |
+| successColor5 | Color | - | 未解析到同名 Token 时的回退色：#2BA471。 |
+| successColor6 | Color | - | 未解析到同名 Token 时的回退色：#008858。 |
+| successColor7 | Color | - | 未解析到同名 Token 时的回退色：#006C45。 |
+| successColor8 | Color | - | 未解析到同名 Token 时的回退色：#005334。 |
+| successColor9 | Color | - | 未解析到同名 Token 时的回退色：#003B23。 |
+| successColorActive | Color | - | 未解析到同名 Token 时的回退色：#008858。 |
+| successColorDisabled | Color | - | 未解析到同名 Token 时的回退色：#92DAB2。 |
+| successColorFocus | Color | - | 未解析到同名 Token 时的回退色：#C6F3D7。 |
+| successColorLight | Color | - | 未解析到同名 Token 时的回退色：#E3F9E9。 |
 | successColorLightActive | Color | - | 浅色成功色点击态，默认使用成功色阶 2。 |
 | tableShadowColor | Color | - | 表格专用阴影色。 |
 | textColorAnti | Color | - | 小程序 `--td-text-color-anti`，默认引用 `fontWhite1`。 |
@@ -1024,25 +1044,25 @@ extension TColors on TThemeData
 | textColorDisabled | Color | - | 禁用文字颜色；优先读取同名颜色 Token，否则使用内置回退色。 |
 | textColorLink | Color | - | 链接文字颜色；优先读取同名颜色 Token，否则使用内置回退色。 |
 | textColorPlaceholder | Color | - | 占位文字颜色；优先读取同名颜色 Token，否则使用内置回退色。 |
-| textColorPrimary | Color | - | 文字颜色配置---------------------------------------------------- |
+| textColorPrimary | Color | - | 主要文字颜色；优先同名 Token，未解析到时回退 fontGray1。 |
 | textColorSecondary | Color | - | 次要文字颜色；优先读取同名颜色 Token，否则使用内置回退色。 |
-| warningColor | Color | - | #E37318 |
-| warningColor1 | Color | - | 警告色组---------------------------------------------------- #FFF1E9 |
-| warningColor10 | Color | - | #3B1700 |
-| warningColor2 | Color | - | #FFD9C2 |
-| warningColor3 | Color | - | #FFB98C |
-| warningColor4 | Color | - | #FA9550 |
-| warningColor5 | Color | - | #E37318 |
-| warningColor6 | Color | - | #BE5A00 |
-| warningColor7 | Color | - | #954500 |
-| warningColor8 | Color | - | #713300 |
-| warningColor9 | Color | - | #532300 |
-| warningColorActive | Color | - | #BE5A00 |
-| warningColorDisabled | Color | - | #FFB98C |
-| warningColorFocus | Color | - | #FFD9C2 |
-| warningColorLight | Color | - | #FFF1E9 |
+| warningColor | Color | - | 未解析到同名 Token 时的回退色：#E37318。 |
+| warningColor1 | Color | - | 未解析到同名 Token 时的回退色：#FFF1E9。 |
+| warningColor10 | Color | - | 未解析到同名 Token 时的回退色：#3B1700。 |
+| warningColor2 | Color | - | 未解析到同名 Token 时的回退色：#FFD9C2。 |
+| warningColor3 | Color | - | 未解析到同名 Token 时的回退色：#FFB98C。 |
+| warningColor4 | Color | - | 未解析到同名 Token 时的回退色：#FA9550。 |
+| warningColor5 | Color | - | 未解析到同名 Token 时的回退色：#E37318。 |
+| warningColor6 | Color | - | 未解析到同名 Token 时的回退色：#BE5A00。 |
+| warningColor7 | Color | - | 未解析到同名 Token 时的回退色：#954500。 |
+| warningColor8 | Color | - | 未解析到同名 Token 时的回退色：#713300。 |
+| warningColor9 | Color | - | 未解析到同名 Token 时的回退色：#532300。 |
+| warningColorActive | Color | - | 未解析到同名 Token 时的回退色：#BE5A00。 |
+| warningColorDisabled | Color | - | 未解析到同名 Token 时的回退色：#FFB98C。 |
+| warningColorFocus | Color | - | 未解析到同名 Token 时的回退色：#FFD9C2。 |
+| warningColorLight | Color | - | 未解析到同名 Token 时的回退色：#FFF1E9。 |
 | warningColorLightActive | Color | - | 浅色警告色点击态，默认使用警告色阶 2。 |
-| whiteColor1 | Color | - | 中性面板色组---------------------------------------------------- #FFFFFF |
+| whiteColor1 | Color | - | 未解析到同名 Token 时的回退色：#FFFFFF。 |
 
 
 ### TResolvedFontFamily
@@ -1271,6 +1291,7 @@ extension TSpacers on TThemeData
 ### TThemeContextExtension
 #### 简介
 BuildContext 扩展：便捷获取全局 TThemeData Token
+
 统一走 Material 的 `Theme.of(context)`。
 全库读取全局 Token（色板/间距/圆角/字体）统一用 `context.tTheme`。
 
@@ -1290,6 +1311,7 @@ extension TThemeContextExtension on BuildContext
 ### TThemeDataMergeExtension
 #### 简介
 ThemeData 扩展：子树 merge Extension（禁用 copyWith(extensions:) 覆盖）
+
 子树覆盖统一用 `mergeExtension(...)`，
 禁止 `copyWith(extensions: [...])`（会覆盖其它 Extension）。
 
@@ -1310,6 +1332,7 @@ ThemeData mergeExtension<T extends ThemeExtension<T>>(T extension)
 
 
 合并 Extension：保留现有所有 Extension，仅替换指定类型
+
 示例：
 ```dart
 Theme(
@@ -1331,6 +1354,7 @@ Theme(
 #### 顶层函数
 
 设置全局资源代理。
+
 `needAlwaysBuild`=true: 每次都会走 build 方法；如果全局有多个 Delegate，
 需要区分情况去获取，则可以设置 needAlwaysBuild 为 true，业务自己判断返回哪个 delegate。
 `needAlwaysBuild`=false: 返回 delegate 为 null，则每次都会走 build 方法。

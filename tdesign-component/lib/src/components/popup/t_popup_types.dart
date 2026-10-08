@@ -40,9 +40,7 @@ typedef TPopupSlotBuilder =
 
 /// Popup 蒙层行为配置（可见遮罩、背景拦截、点击行为）。
 ///
-/// 统一收敛 [TPopupOptions] 上散落的蒙层参数（`showOverlay` / `modal` /
-/// `closeOnOverlayClick` / `overlayColor` / `overlayOpacity` / `onOverlayClick`），
-/// 与 Toast 的 `TOverlayConfig` 命名风格一脉相承，作为蒙层行为的单一真源。
+/// 通过 [TPopupOptions.overlay] 配置蒙层颜色、背景点击拦截、关闭行为和点击回调。
 ///
 /// [showOverlay] 与 [preventTap] 解耦，可独立配置：
 /// * `showOverlay=true, preventTap=true`（默认）：标准模态弹层（显示蒙层 + 拦截背景）；

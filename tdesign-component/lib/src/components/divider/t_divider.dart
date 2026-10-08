@@ -30,7 +30,7 @@ enum TDividerAlign {
 
 /// 分割线组件
 ///
-/// T3 自绘层级，不包装 Material [Divider]。包含两种绘制模式：
+/// 包含两种绘制模式：
 /// - 模式 A（纯线）：[child] 为空，横线可虚线、竖线强制实线
 /// - 模式 B（线 + 中间）：[layout] 为 horizontal 且 [child] 非空
 ///

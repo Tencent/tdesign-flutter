@@ -192,7 +192,8 @@ class TProgress extends StatelessWidget {
 
   /// 当前任务状态，决定默认颜色和状态标签，默认为 [TProgressStatus.normal]。
   ///
-  /// 显式的组件 Theme 或 Flutter ProgressIndicatorTheme 颜色仍可覆盖状态默认色。
+  /// 显式的 TProgressThemeData.color 可以覆盖状态默认色，线性渐变优先于两者。
+  /// 不从 Flutter ProgressIndicatorTheme 读取颜色。
   final TProgressStatus status;
 
   /// 进度条标签。

@@ -7,44 +7,25 @@ const _kDefaultItemHeight = 56.0;
 /// TTreeSelect 组件级 ThemeExtension。
 class TTreeSelectThemeData extends ThemeExtension<TTreeSelectThemeData> {
   const TTreeSelectThemeData({
-    /// 面板高度。
     this.height,
-
-    /// 根列宽度。
     this.rootColumnWidth,
-
-    /// 所有非根列的固定宽度；为 null 时由组件按可用宽度自动布局。
     this.columnWidth,
-
-    /// 单项最小高度。
     this.itemHeight,
-
-    /// 面板背景色。
     this.backgroundColor,
-
-    /// 根列背景色。
     this.rootBackgroundColor,
-
-    /// 选中项背景色。
     this.selectedBackgroundColor,
-
-    /// 普通文案样式。
     this.textStyle,
-
-    /// 选中文案样式。
     this.selectedTextStyle,
-
-    /// 禁用文案样式。
     this.disabledTextStyle,
-
-    /// 选中图标颜色。
     this.indicatorColor,
   });
 
   /// 面板高度。
+  /// 未配置时为 336 逻辑像素。
   final double? height;
 
   /// 根列宽度。
+  /// 未配置时为 103 逻辑像素。
   final double? rootColumnWidth;
 
   /// 所有非根列的固定宽度；为 null 时由组件按可用宽度自动布局。
@@ -53,6 +34,7 @@ class TTreeSelectThemeData extends ThemeExtension<TTreeSelectThemeData> {
   final double? columnWidth;
 
   /// 单项最小高度。
+  /// 未配置时为 56 逻辑像素。
   final double? itemHeight;
 
   /// 面板背景色。

@@ -5,9 +5,11 @@ import '../../theme/basic.dart' show Font;
 /// 空态组件级 ThemeExtension
 class TEmptyThemeData extends ThemeExtension<TEmptyThemeData> {
   /// 描述文字颜色
+  /// 未配置时使用 textColorPlaceholder Token。
   final Color? emptyTextColor;
 
   /// 描述文字字号
+  /// 未配置时使用 fontBodyMedium Token。
   final Font? emptyTextFont;
 
   const TEmptyThemeData({this.emptyTextColor, this.emptyTextFont});

@@ -14,58 +14,23 @@ enum TUploadVariant {
 /// TUpload 组件级 ThemeExtension。
 class TUploadThemeData extends ThemeExtension<TUploadThemeData> {
   const TUploadThemeData({
-    /// 上传项形状。
     this.variant,
-
-    /// 上传项尺寸。
     this.itemSize,
-
-    /// 横向间距。
     this.spacing,
-
-    /// 纵向间距。
     this.runSpacing,
-
-    /// Wrap 对齐方式。
     this.alignment,
-
-    /// 默认背景色。
     this.backgroundColor,
-
-    /// 默认前景色。
     this.foregroundColor,
-
-    /// 禁用背景色。
     this.disabledBackgroundColor,
-
-    /// 禁用前景色。
     this.disabledForegroundColor,
-
-    /// 状态遮罩颜色。
     this.overlayColor,
-
-    /// 状态文案样式。
     this.statusTextStyle,
-
-    /// 方形上传项圆角。
     this.borderRadius,
-
-    /// 添加图标尺寸。
     this.addIconSize,
-
-    /// 状态图标尺寸。
     this.statusIconSize,
-
-    /// 移除按钮尺寸。
     this.removeButtonSize,
-
-    /// 移除按钮颜色。
     this.removeButtonColor,
-
-    /// 移除图标尺寸。
     this.removeIconSize,
-
-    /// 禁用文件遮罩颜色。
     this.disabledMaskColor,
   });
 

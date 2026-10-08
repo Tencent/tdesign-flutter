@@ -12,6 +12,8 @@ class TFontLoader {
   ///
   /// 同一 [name] 和 [fontFamilyUrl] 的并发调用共享同一个 Future。加载失败会
   /// 清除缓存并允许重试；已经注册或正在注册的字体不能切换 URL。
+  /// 返回 true 表示字体已成功注册；空名称、空 URL、URL 冲突或下载/注册失败
+  /// 返回 false。重复加载相同资源返回其加载结果。
   static Future<bool> load({
     /// 注册到 Flutter 字体系统中的字体族名称。
     required String name,

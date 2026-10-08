@@ -94,19 +94,20 @@ class TTimeCounter extends StatefulWidget {
   /// 使用 [content] 时，该字段仍决定计时更新精度。
   final String format;
 
-  /// 计时器尺寸；优先于组件 Theme。
+  /// 计时器尺寸；null 时使用 TTimeCounterSize.medium。
   final TTimeCounterSize? size;
 
   /// 是否使用本地化时间单位分隔，默认为 false。
   final bool splitWithUnit;
 
-  /// 视觉形态；优先于组件 Theme。
+  /// 视觉形态；null 时使用 TTimeCounterVariant.plain。
   final TTimeCounterVariant? variant;
 
   /// 必需；计时时长，单位毫秒。
   ///
   /// 父组件更新该值时会按新的声明式配置重置计时，并覆盖此前
   /// [TTimeCounterController.reset] 传入的临时目标时长。
+  /// 必须大于或等于 0。
   final int time;
 
   /// 格式化后的可见值变化时触发，回调值为当前毫秒数。

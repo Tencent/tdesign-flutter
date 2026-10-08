@@ -20,16 +20,9 @@ const _kOutwardCornerRadius = 9.0;
 @immutable
 class TTreeSelectOption {
   const TTreeSelectOption({
-    /// 展示文案。
     required this.label,
-
-    /// 业务值；同一层级的选项必须保持唯一。
     required this.value,
-
-    /// 子选项。
     this.children = const [],
-
-    /// 是否禁用。
     this.disabled = false,
   });
 
@@ -55,20 +48,9 @@ class TTreeSelectOption {
 class TTreeSelect extends StatefulWidget {
   const TTreeSelect({
     super.key,
-
-    /// 根选项。
     required this.options,
-
-    /// 受控选中路径；每一项应为从根到叶子的完整 [TTreeSelectOption.value] 路径。
-    /// 单选模式最多传入一条，多选模式可传入多条且不得重复。
     required this.value,
-
-    /// 选中路径变化回调；为 null 时禁用。
     this.onChanged,
-
-    /// 是否允许选择多个叶子节点。
-    ///
-    /// 为 false 时，[value] 最多包含一条路径。
     this.multiple = false,
   });
 

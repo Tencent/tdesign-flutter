@@ -10,6 +10,7 @@ import 't_notice_bar_types.dart';
 /// 通过 Theme 子树注入，控制子树的默认公告栏样式。
 class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
   /// 文字高度
+  /// 未配置时为 22 逻辑像素，表示正文区域高度，外层内边距另计。
   final double? height;
 
   /// 公告栏背景色
@@ -25,6 +26,7 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
   final Color? rightIconColor;
 
   /// 公告栏内边距
+  /// 未配置时使用 defaultPadding，即上/下 13、左 16、右 12 逻辑像素。
   final EdgeInsetsGeometry? padding;
 
   const TNoticeBarThemeData({

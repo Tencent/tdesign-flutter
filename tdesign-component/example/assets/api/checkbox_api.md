@@ -91,8 +91,8 @@ const TCheckboxGroup({
 | direction | Axis | Axis.vertical | 排列方向。 | 否 |
 | itemBuilder | TCheckboxOptionBuilder&lt;T&gt;? | - | 自定义数据项视觉；交互仍由组接管。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| maxSelected | int? | - | 最多可选数量。 | 否 |
-| onChanged | ValueChanged&lt;List&lt;T&gt;&gt;? | - | 选中项列表变更回调；为 null 时整组禁用。 | 否 |
+| maxSelected | int? | - | 最多可选数量。 null 时不限制；达到上限后阻止新增选择，但仍允许取消。设为 0 时不能新增选择。 | 否 |
+| onChanged | ValueChanged&lt;List&lt;T&gt;&gt;? | - | 选中项列表变更回调；为 null 时整组禁用。 回调提供完整选中列表，按 options 的顺序排列；父组件需回传新的 value。 | 否 |
 | onMaxSelected | VoidCallback? | - | 超过最多可选数量时触发。 | 否 |
 | options | List&lt;TCheckboxOption&lt;T&gt;&gt; | - | 复选框数据项。 | 是 |
 | showDivider | bool | true | 普通模式是否显示项间分割线，默认显示；卡片模式不显示。 | 否 |
@@ -135,6 +135,7 @@ const TCheckboxOption({
 ### TCheckboxThemeData
 #### 简介
 TCheckbox 组件级 ThemeExtension
+
 通过 Theme 子树注入，控制子树默认样式。
 被 TCheckbox 和 TCheckboxGroup 共用。
 
@@ -201,15 +202,15 @@ TCheckboxThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| variant | TCheckboxVariant? | - | 复选框指示器的默认视觉变体；未设置时使用圆形。 | 否 |
-| selectColor | Color? | - | 选择颜色 | 否 |
-| disableColor | Color? | - | 禁用态指示器的前景色；未选时用于描边色。 | 否 |
-| titleColor | Color? | - | 标题文字颜色 | 否 |
-| subTitleColor | Color? | - | 副标题文字颜色 | 否 |
-| backgroundColor | Color? | - | 背景颜色 | 否 |
-| spacing | double? | - | icon和文字的距离 | 否 |
-| insetSpacing | double? | - | 文字和非图标侧的距离 | 否 |
-| customSpace | EdgeInsetsGeometry? | - | 自定义组件间距 | 否 |
+| variant | TCheckboxVariant? | - | 字段含义：复选框指示器的默认视觉变体；未设置时使用圆形。 调用时的空值行为见方法说明。 | 否 |
+| selectColor | Color? | - | 字段含义：选中态颜色。 调用时的空值行为见方法说明。 | 否 |
+| disableColor | Color? | - | 字段含义：禁用态指示器的前景色；未选时用于描边色。 调用时的空值行为见方法说明。 | 否 |
+| titleColor | Color? | - | 字段含义：主标题颜色。 调用时的空值行为见方法说明。 | 否 |
+| subTitleColor | Color? | - | 字段含义：副标题颜色。 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 字段含义：卡片背景颜色。 调用时的空值行为见方法说明。 | 否 |
+| spacing | double? | - | 字段含义：指示器与文案间距。 调用时的空值行为见方法说明。 | 否 |
+| insetSpacing | double? | - | 字段含义：文案与非指示器侧的内边距。 调用时的空值行为见方法说明。 | 否 |
+| customSpace | EdgeInsetsGeometry? | - | 字段含义：内容区域内边距。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TCheckboxThemeData.lerp

@@ -5,6 +5,7 @@
 ### TText
 #### 简介
 Flutter `Text` 的 TDesign Token 薄封装。
+
 文字布局、字体 fallback、无障碍缩放和语义均由 Flutter 原生 Text 负责。
 子树级默认文字样式通过 `TTextThemeData.textStyle` 配置；单实例完整样式通过 `style` 覆盖。
 固定容器居中与图文 baseline 应由父布局表达。
@@ -156,6 +157,7 @@ TextStyle getTextStyle(BuildContext context)
 ### TTextSpan
 #### 简介
 使用原生 `TextStyle` 配置局部样式的 Flutter `TextSpan`。
+
 未显式配置的字段保持为空，并继承父 Span 样式。
 
 #### 声明
@@ -203,6 +205,7 @@ const TTextSpan({
 ### TTextThemeData
 #### 简介
 TText 子树的组件默认值。
+
 仅在对应实例参数未指定时生效；实例字体预设和段落参数
 优先于这里的默认值。外部 Flutter `DefaultTextStyle` 不会自动覆盖 TDesign 文字。
 
@@ -254,10 +257,10 @@ TTextThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| textStyle | TextStyle? | - | 子树的完整文字样式；字号、行高和字重也由本字段统一设置。 TText 实例的显式字体参数仍优先于本默认值。 | 否 |
-| strutStyle | StrutStyle? | - | 子树的段落支柱样式默认值；实例 `TText.strutStyle` 优先。 | 否 |
-| textWidthBasis | TextWidthBasis? | - | 子树的文字宽度计算默认值；实例 `TText.textWidthBasis` 优先。 | 否 |
-| textHeightBehavior | ui.TextHeightBehavior? | - | 子树的文字高度行为默认值；实例 `TText.textHeightBehavior` 优先。 | 否 |
+| textStyle | TextStyle? | - | 字段含义：子树的完整文字样式；字号、行高和字重也由本字段统一设置。 TText 实例的显式字体参数仍优先于本默认值。 调用时的空值行为见方法说明。 | 否 |
+| strutStyle | StrutStyle? | - | 字段含义：子树的段落支柱样式默认值；实例 `TText.strutStyle` 优先。 调用时的空值行为见方法说明。 | 否 |
+| textWidthBasis | TextWidthBasis? | - | 字段含义：子树的文字宽度计算默认值；实例 `TText.textWidthBasis` 优先。 调用时的空值行为见方法说明。 | 否 |
+| textHeightBehavior | ui.TextHeightBehavior? | - | 字段含义：子树的文字高度行为默认值；实例 `TText.textHeightBehavior` 优先。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TTextThemeData.lerp
@@ -281,6 +284,7 @@ other 为空或类型不匹配时返回当前主题；字段各自采用其类�
 ### TFontLoader
 #### 简介
 Flutter 动态字体注册工具。
+
 字体应在构建 Text 前加载完成；组件不会在绘制过程中隐式下载字体。
 
 #### 声明
@@ -303,8 +307,11 @@ static Future<bool> load({
 
 
 下载并注册字体。
+
 同一 `name` 和 `fontFamilyUrl` 的并发调用共享同一个 Future。加载失败会
 清除缓存并允许重试；已经注册或正在注册的字体不能切换 URL。
+返回 true 表示字体已成功注册；空名称、空 URL、URL 冲突或下载/注册失败
+返回 false。重复加载相同资源返回其加载结果。
 
 返回类型：`Future<bool>`
 

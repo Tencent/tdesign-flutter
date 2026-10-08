@@ -12,7 +12,7 @@ import 't_theme.dart';
 /// TDesign主题包含的颜色，这是一个大而全的色值。业务可以选择自己需要的色值进行二次封装，方便使用。
 /// 不过有的色值是内部使用的，必传，否则可能显示异常。
 extension TColors on TThemeData {
-  /// 功能色组----------------------------------------------------
+  // 功能色组----------------------------------------------------
 
   /// 小程序 `--td-primary-color-*` 色阶；默认分别引用同级品牌色阶。
   Color get primaryColor1 => colorMap['primaryColor1'] ?? brandColor1;
@@ -44,364 +44,365 @@ extension TColors on TThemeData {
   /// 主色第 10 级色阶；未配置时使用 [brandColor10]。
   Color get primaryColor10 => colorMap['primaryColor10'] ?? brandColor10;
 
-  ///#F2F3FF
+  /// 未解析到同名 Token 时的回退色：#F2F3FF。
   Color get brandColor1 => colorMap['brandColor1'] ?? const Color(0xFFF2F3FF);
 
-  ///#D9E1FF
+  /// 未解析到同名 Token 时的回退色：#D9E1FF。
   Color get brandColor2 =>
       colorMap['brandColor2'] ??
       const Color(0xFFD9E1FF); // coverage:ignore-line
 
-  ///#B5C7FF
+  /// 未解析到同名 Token 时的回退色：#B5C7FF。
   Color get brandColor3 => colorMap['brandColor3'] ?? const Color(0xFFB5C7FF);
 
-  ///#8EABFF
+  /// 未解析到同名 Token 时的回退色：#8EABFF。
   Color get brandColor4 =>
       colorMap['brandColor4'] ??
       const Color(0xFF8EABFF); // coverage:ignore-line
 
-  ///#618DFF
+  /// 未解析到同名 Token 时的回退色：#618DFF。
   Color get brandColor5 =>
       colorMap['brandColor5'] ??
       const Color(0xFF618DFF); // coverage:ignore-line
 
-  ///#366EF4
+  /// 未解析到同名 Token 时的回退色：#366EF4。
   Color get brandColor6 => colorMap['brandColor6'] ?? const Color(0xFF366EF4);
 
-  ///#0052D9
+  /// 未解析到同名 Token 时的回退色：#0052D9。
   Color get brandColor7 => colorMap['brandColor7'] ?? const Color(0xFF0052D9);
 
-  ///#003CAB
+  /// 未解析到同名 Token 时的回退色：#003CAB。
   Color get brandColor8 => colorMap['brandColor8'] ?? const Color(0xFF003CAB);
 
-  ///#002A7C
+  /// 未解析到同名 Token 时的回退色：#002A7C。
   Color get brandColor9 =>
       colorMap['brandColor9'] ??
       const Color(0xFF002A7C); // coverage:ignore-line
 
-  ///#001A57
+  /// 未解析到同名 Token 时的回退色：#001A57。
   Color get brandColor10 =>
       colorMap['brandColor10'] ??
       const Color(0xFF001A57); // coverage:ignore-line
 
-  ///#F2F3FF
+  /// 未解析到同名 Token 时的回退色：#F2F3FF。
   Color get brandColorLight => colorMap['brandColorLight'] ?? brandColor1;
 
   /// 浅色品牌色点击态，默认使用品牌色阶 2。
   Color get brandColorLightActive =>
       colorMap['brandColorLightActive'] ?? brandColor2;
 
-  ///#F2F3FF
+  /// 未解析到同名 Token 时的回退色：#F2F3FF。
   Color get brandColorFocus => colorMap['brandColorFocus'] ?? brandColor1;
 
-  ///#B5C7FF
+  /// 未解析到同名 Token 时的回退色：#B5C7FF。
   Color get brandColorDisabled => colorMap['brandColorDisabled'] ?? brandColor3;
 
-  ///#0052D9
+  /// 未解析到同名 Token 时的回退色：#0052D9。
   Color get brandColor => colorMap['brandColor'] ?? brandColor7;
 
-  ///#003CAB
+  /// 未解析到同名 Token 时的回退色：#003CAB。
   Color get brandColorActive => colorMap['brandColorActive'] ?? brandColor8;
 
-  /// 错误色组----------------------------------------------------
+  // 错误色组----------------------------------------------------
 
-  ///#FFF0ED
+  /// 未解析到同名 Token 时的回退色：#FFF0ED。
   Color get errorColor1 => colorMap['errorColor1'] ?? const Color(0xFFFFF0ED);
 
-  ///#FFD8D2
+  /// 未解析到同名 Token 时的回退色：#FFD8D2。
   Color get errorColor2 =>
       colorMap['errorColor2'] ??
       const Color(0xFFFFD8D2); // coverage:ignore-line
 
-  ///#FFB9B0
+  /// 未解析到同名 Token 时的回退色：#FFB9B0。
   Color get errorColor3 =>
       colorMap['errorColor3'] ??
       const Color(0xFFFFB9B0); // coverage:ignore-line
 
-  ///#FF9285
+  /// 未解析到同名 Token 时的回退色：#FF9285。
   Color get errorColor4 =>
       colorMap['errorColor4'] ??
       const Color(0xFFFF9285); // coverage:ignore-line
 
-  ///#F6685D
+  /// 未解析到同名 Token 时的回退色：#F6685D。
   Color get errorColor5 =>
       colorMap['errorColor5'] ??
       const Color(0xFFF6685D); // coverage:ignore-line
 
-  ///#D54941
+  /// 未解析到同名 Token 时的回退色：#D54941。
   Color get errorColor6 => colorMap['errorColor6'] ?? const Color(0xFFD54941);
 
-  ///#AD352F
+  /// 未解析到同名 Token 时的回退色：#AD352F。
   Color get errorColor7 => colorMap['errorColor7'] ?? const Color(0xFFAD352F);
 
-  ///#881F1C
+  /// 未解析到同名 Token 时的回退色：#881F1C。
   Color get errorColor8 =>
       colorMap['errorColor8'] ??
       const Color(0xFF881F1C); // coverage:ignore-line
 
-  ///#68070A
+  /// 未解析到同名 Token 时的回退色：#68070A。
   Color get errorColor9 =>
       colorMap['errorColor9'] ??
       const Color(0xFF68070A); // coverage:ignore-line
 
-  ///#490002
+  /// 未解析到同名 Token 时的回退色：#490002。
   Color get errorColor10 =>
       colorMap['errorColor10'] ??
       const Color(0xFF490002); // coverage:ignore-line
 
-  ///#FFF0ED
+  /// 未解析到同名 Token 时的回退色：#FFF0ED。
   Color get errorColorLight => colorMap['errorColorLight'] ?? errorColor1;
 
   /// 浅色错误色点击态，默认使用错误色阶 2。
   Color get errorColorLightActive =>
       colorMap['errorColorLightActive'] ?? errorColor2;
 
-  ///#FFD8D2
+  /// 未解析到同名 Token 时的回退色：#FFD8D2。
   Color get errorColorFocus =>
       colorMap['errorColorFocus'] ?? errorColor2; // coverage:ignore-line
 
-  ///#FFB9B0
+  /// 未解析到同名 Token 时的回退色：#FFB9B0。
   Color get errorColorDisabled => colorMap['errorColorDisabled'] ?? errorColor3;
 
-  ///#D54941
+  /// 未解析到同名 Token 时的回退色：#D54941。
   Color get errorColor => colorMap['errorColor'] ?? errorColor6;
 
-  ///#AD352F
+  /// 未解析到同名 Token 时的回退色：#AD352F。
   Color get errorColorActive => colorMap['errorColorActive'] ?? errorColor7;
 
-  /// 警告色组----------------------------------------------------
+  // 警告色组----------------------------------------------------
 
-  ///#FFF1E9
+  /// 未解析到同名 Token 时的回退色：#FFF1E9。
   Color get warningColor1 =>
       colorMap['warningColor1'] ?? const Color(0xFFFFF1E9);
 
-  ///#FFD9C2
+  /// 未解析到同名 Token 时的回退色：#FFD9C2。
   Color get warningColor2 =>
       colorMap['warningColor2'] ??
       const Color(0xFFFFD9C2); // coverage:ignore-line
 
-  ///#FFB98C
+  /// 未解析到同名 Token 时的回退色：#FFB98C。
   Color get warningColor3 =>
       colorMap['warningColor3'] ??
       const Color(0xFFFFB98C); // coverage:ignore-line
 
-  ///#FA9550
+  /// 未解析到同名 Token 时的回退色：#FA9550。
   Color get warningColor4 =>
       colorMap['warningColor4'] ??
       const Color(0xFFFA9550); // coverage:ignore-line
 
-  ///#E37318
+  /// 未解析到同名 Token 时的回退色：#E37318。
   Color get warningColor5 =>
       colorMap['warningColor5'] ?? const Color(0xFFE37318);
 
-  ///#BE5A00
+  /// 未解析到同名 Token 时的回退色：#BE5A00。
   Color get warningColor6 =>
       colorMap['warningColor6'] ??
       const Color(0xFFBE5A00); // coverage:ignore-line
 
-  ///#954500
+  /// 未解析到同名 Token 时的回退色：#954500。
   Color get warningColor7 =>
       colorMap['warningColor7'] ??
       const Color(0xFF954500); // coverage:ignore-line
 
-  ///#713300
+  /// 未解析到同名 Token 时的回退色：#713300。
   Color get warningColor8 =>
       colorMap['warningColor8'] ??
       const Color(0xFF713300); // coverage:ignore-line
 
-  ///#532300
+  /// 未解析到同名 Token 时的回退色：#532300。
   Color get warningColor9 =>
       colorMap['warningColor9'] ??
       const Color(0xFF532300); // coverage:ignore-line
 
-  ///#3B1700
+  /// 未解析到同名 Token 时的回退色：#3B1700。
   Color get warningColor10 =>
       colorMap['warningColor10'] ??
       const Color(0xFF3B1700); // coverage:ignore-line
 
-  ///#FFF1E9
+  /// 未解析到同名 Token 时的回退色：#FFF1E9。
   Color get warningColorLight => colorMap['warningColorLight'] ?? warningColor1;
 
   /// 浅色警告色点击态，默认使用警告色阶 2。
   Color get warningColorLightActive =>
       colorMap['warningColorLightActive'] ?? warningColor2;
 
-  ///#FFD9C2
+  /// 未解析到同名 Token 时的回退色：#FFD9C2。
   Color get warningColorFocus =>
       colorMap['warningColorFocus'] ?? warningColor2; // coverage:ignore-line
 
-  ///#FFB98C
+  /// 未解析到同名 Token 时的回退色：#FFB98C。
   Color get warningColorDisabled =>
       colorMap['warningColorDisabled'] ?? warningColor3; // coverage:ignore-line
 
-  ///#E37318
+  /// 未解析到同名 Token 时的回退色：#E37318。
   Color get warningColor => colorMap['warningColor'] ?? warningColor5;
 
-  ///#BE5A00
+  /// 未解析到同名 Token 时的回退色：#BE5A00。
   Color get warningColorActive =>
       colorMap['warningColorActive'] ?? warningColor6; // coverage:ignore-line
 
-  /// 成功色组----------------------------------------------------
+  // 成功色组----------------------------------------------------
 
-  ///#E3F9E9
+  /// 未解析到同名 Token 时的回退色：#E3F9E9。
   Color get successColor1 =>
       colorMap['successColor1'] ??
       const Color(0xFFE3F9E9); // coverage:ignore-line
 
-  ///#C6F3D7
+  /// 未解析到同名 Token 时的回退色：#C6F3D7。
   Color get successColor2 =>
       colorMap['successColor2'] ??
       const Color(0xFFC6F3D7); // coverage:ignore-line
 
-  ///#92DAB2
+  /// 未解析到同名 Token 时的回退色：#92DAB2。
   Color get successColor3 =>
       colorMap['successColor3'] ??
       const Color(0xFF92DAB2); // coverage:ignore-line
 
-  ///#56C08D
+  /// 未解析到同名 Token 时的回退色：#56C08D。
   Color get successColor4 =>
       colorMap['successColor4'] ??
       const Color(0xFF56C08D); // coverage:ignore-line
 
-  ///#2BA471
+  /// 未解析到同名 Token 时的回退色：#2BA471。
   Color get successColor5 =>
       colorMap['successColor5'] ??
       const Color(0xFF2BA471); // coverage:ignore-line
 
-  ///#008858
+  /// 未解析到同名 Token 时的回退色：#008858。
   Color get successColor6 =>
       colorMap['successColor6'] ??
       const Color(0xFF008858); // coverage:ignore-line
 
-  ///#006C45
+  /// 未解析到同名 Token 时的回退色：#006C45。
   Color get successColor7 =>
       colorMap['successColor7'] ??
       const Color(0xFF006C45); // coverage:ignore-line
 
-  ///#005334
+  /// 未解析到同名 Token 时的回退色：#005334。
   Color get successColor8 =>
       colorMap['successColor8'] ??
       const Color(0xFF005334); // coverage:ignore-line
 
-  ///#003B23
+  /// 未解析到同名 Token 时的回退色：#003B23。
   Color get successColor9 =>
       colorMap['successColor9'] ??
       const Color(0xFF003B23); // coverage:ignore-line
 
-  ///#002515
+  /// 未解析到同名 Token 时的回退色：#002515。
   Color get successColor10 =>
       colorMap['successColor10'] ??
       const Color(0xFF002515); // coverage:ignore-line
 
-  ///#E3F9E9
+  /// 未解析到同名 Token 时的回退色：#E3F9E9。
   Color get successColorLight => colorMap['successColorLight'] ?? successColor1;
 
   /// 浅色成功色点击态，默认使用成功色阶 2。
   Color get successColorLightActive =>
       colorMap['successColorLightActive'] ?? successColor2;
 
-  ///#C6F3D7
+  /// 未解析到同名 Token 时的回退色：#C6F3D7。
   Color get successColorFocus =>
       colorMap['successColorFocus'] ?? successColor2; // coverage:ignore-line
 
-  ///#92DAB2
+  /// 未解析到同名 Token 时的回退色：#92DAB2。
   Color get successColorDisabled =>
       colorMap['successColorDisabled'] ?? successColor3; // coverage:ignore-line
 
-  ///#2BA471
+  /// 未解析到同名 Token 时的回退色：#2BA471。
   Color get successColor => colorMap['successColor'] ?? successColor5;
 
-  ///#008858
+  /// 未解析到同名 Token 时的回退色：#008858。
   Color get successColorActive =>
       colorMap['successColorActive'] ?? successColor6; // coverage:ignore-line
 
-  /// 文字色组----------------------------------------------------
+  // 文字色组----------------------------------------------------
 
-  ///#e6000000
+  /// 未解析到同名 Token 时的回退色：#e6000000。
   Color get fontGray1 => colorMap['fontGray1'] ?? const Color(0xE6000000);
 
-  ///#99000000
+  /// 未解析到同名 Token 时的回退色：#99000000。
   Color get fontGray2 => colorMap['fontGray2'] ?? const Color(0x99000000);
 
-  ///#66000000
+  /// 未解析到同名 Token 时的回退色：#66000000。
   Color get fontGray3 => colorMap['fontGray3'] ?? const Color(0x66000000);
 
-  ///#42000000
+  /// 未解析到同名 Token 时的回退色：#42000000。
   Color get fontGray4 => colorMap['fontGray4'] ?? const Color(0x42000000);
 
-  ///#FFFFFFFF
+  /// 未解析到同名 Token 时的回退色：#FFFFFFFF。
   Color get fontWhite1 => colorMap['fontWhite1'] ?? const Color(0xFFFFFFFF);
 
-  ///#8CFFFFFF
+  /// 未解析到同名 Token 时的回退色：#8CFFFFFF。
   Color get fontWhite2 => colorMap['fontWhite2'] ?? const Color(0x8CFFFFFF);
 
-  ///#59FFFFFF
+  /// 未解析到同名 Token 时的回退色：#59FFFFFF。
   Color get fontWhite3 =>
       colorMap['fontWhite3'] ?? const Color(0x59FFFFFF); // coverage:ignore-line
 
-  ///#38FFFFFF
+  /// 未解析到同名 Token 时的回退色：#38FFFFFF。
   Color get fontWhite4 => colorMap['fontWhite4'] ?? const Color(0x38FFFFFF);
 
-  /// 中性面板色组----------------------------------------------------
+  // 中性面板色组----------------------------------------------------
 
-  ///#FFFFFF
+  /// 未解析到同名 Token 时的回退色：#FFFFFF。
   Color get whiteColor1 => colorMap['whiteColor1'] ?? const Color(0xFFFFFFFF);
 
-  ///#F3F3F3
+  /// 未解析到同名 Token 时的回退色：#F3F3F3。
   Color get grayColor1 => colorMap['grayColor1'] ?? const Color(0xFFF3F3F3);
 
-  ///#EEEEEE
+  /// 未解析到同名 Token 时的回退色：#EEEEEE。
   Color get grayColor2 =>
       colorMap['grayColor2'] ?? const Color(0xFFEEEEEE); // coverage:ignore-line
 
-  ///#E8E8E8
+  /// 未解析到同名 Token 时的回退色：#E8E8E8。
   Color get grayColor3 => colorMap['grayColor3'] ?? const Color(0xFFE8E8E8);
 
-  ///#DCDCDC
+  /// 未解析到同名 Token 时的回退色：#DCDCDC。
   Color get grayColor4 => colorMap['grayColor4'] ?? const Color(0xFFDCDCDC);
 
-  ///#C5C5C5
+  /// 未解析到同名 Token 时的回退色：#C5C5C5。
   Color get grayColor5 =>
       colorMap['grayColor5'] ?? const Color(0xFFC5C5C5); // coverage:ignore-line
 
-  ///#A6A6A6
+  /// 未解析到同名 Token 时的回退色：#A6A6A6。
   Color get grayColor6 =>
       colorMap['grayColor6'] ?? const Color(0xFFA6A6A6); // coverage:ignore-line
 
-  ///#8B8B8B
+  /// 未解析到同名 Token 时的回退色：#8B8B8B。
   Color get grayColor7 =>
       colorMap['grayColor7'] ?? const Color(0xFF8B8B8B); // coverage:ignore-line
 
-  ///#777777
+  /// 未解析到同名 Token 时的回退色：#777777。
   Color get grayColor8 =>
       colorMap['grayColor8'] ?? const Color(0xFF777777); // coverage:ignore-line
 
-  ///#5E5E5E
+  /// 未解析到同名 Token 时的回退色：#5E5E5E。
   Color get grayColor9 => colorMap['grayColor9'] ?? const Color(0xFF5E5E5E);
 
-  ///#4B4B4B
+  /// 未解析到同名 Token 时的回退色：#4B4B4B。
   Color get grayColor10 =>
       colorMap['grayColor10'] ??
       const Color(0xFF4B4B4B); // coverage:ignore-line
 
-  ///#383838
+  /// 未解析到同名 Token 时的回退色：#383838。
   Color get grayColor11 =>
       colorMap['grayColor11'] ??
       const Color(0xFF383838); // coverage:ignore-line
 
-  ///#2C2C2C
+  /// 未解析到同名 Token 时的回退色：#2C2C2C。
   Color get grayColor12 =>
       colorMap['grayColor12'] ??
       const Color(0xFF2C2C2C); // coverage:ignore-line
 
-  ///#242424
+  /// 未解析到同名 Token 时的回退色：#242424。
   Color get grayColor13 => colorMap['grayColor13'] ?? const Color(0xFF242424);
 
-  ///#181818
+  /// 未解析到同名 Token 时的回退色：#181818。
   Color get grayColor14 => colorMap['grayColor14'] ?? const Color(0xFF181818);
 
-  /// 组件颜色配置----------------------------------------------------
+  // 组件颜色配置----------------------------------------------------
 
+  /// 页面背景色；优先同名 Token，未解析到时回退 grayColor1。
   Color get bgColorPage => colorMap['bgColorPage'] ?? grayColor1;
 
   /// 小程序 `--td-bg-color-container`；浅色默认引用 [fontWhite1]。
@@ -456,8 +457,9 @@ extension TColors on TThemeData {
   Color get borderLevel2Color =>
       colorMap['borderLevel2Color'] ?? componentBorder;
 
-  /// 文字颜色配置----------------------------------------------------
+  // 文字颜色配置----------------------------------------------------
 
+  /// 主要文字颜色；优先同名 Token，未解析到时回退 fontGray1。
   Color get textColorPrimary => colorMap['textColorPrimary'] ?? fontGray1;
 
   /// 次要文字颜色；优先读取同名颜色 Token，否则使用内置回退色。

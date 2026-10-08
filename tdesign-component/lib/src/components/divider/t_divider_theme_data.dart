@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 /// TDivider 组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树的默认样式。
-/// 构造器参数优先于 Theme（L1/L2 > Theme > DividerTheme > Token）。
+/// 布局、内容和虚线选择由实例控制；视觉值从本主题读取，未配置时回退
+/// TDesign Token 或组件内置值，不读取 Material DividerTheme。
 class TDividerThemeData extends ThemeExtension<TDividerThemeData> {
-  /// 线条颜色
+  /// 线条颜色；未设置时使用 `bgColorComponent` Token。
   final Color? color;
 
   /// 线粗：横线 = 高度，竖线 = 宽度（默认 0.5）
@@ -22,10 +23,10 @@ class TDividerThemeData extends ThemeExtension<TDividerThemeData> {
   /// child 为文本时的默认样式，覆盖 `fontBodySmall` / `textColorPlaceholder` Token。
   final TextStyle? textStyle;
 
-  /// 左缩进（对齐 Material [DividerThemeData.indent] 语义）
+  /// 纯水平线起始侧缩进；未设置时为 0，带内容或垂直线时不生效。
   final double? indent;
 
-  /// 右缩进（对齐 Material [DividerThemeData.endIndent] 语义）
+  /// 纯水平线结束侧缩进；未设置时为 0，带内容或垂直线时不生效。
   final double? endIndent;
 
   const TDividerThemeData({

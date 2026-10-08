@@ -22,12 +22,15 @@ class TImageThemeData extends ThemeExtension<TImageThemeData> {
   final Rect? centerSlice;
 
   /// 是否匹配文字方向。
+  /// 未配置时为 false。
   final bool? matchTextDirection;
 
   /// 更新 provider 时是否保留上一帧。
+  /// 未配置时为 false。
   final bool? gaplessPlayback;
 
   /// 是否启用抗锯齿。
+  /// 未配置时为 false。
   final bool? isAntiAlias;
 
   /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。

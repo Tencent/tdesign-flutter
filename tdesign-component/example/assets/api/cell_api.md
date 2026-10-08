@@ -37,7 +37,7 @@ const TCell({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| align | TCellAlign? | - | 内容垂直对齐方式。 | 否 |
+| align | TCellAlign? | - | 内容垂直对齐方式；未设置时为 `TCellAlign.center`。 | 否 |
 | arrow | bool | false | 是否显示右箭头。 | 否 |
 | enableFeedback | bool | true | 点击时是否显示背景反馈。 | 否 |
 | image | Widget? | - | 单元格左侧图片区。 | 否 |
@@ -91,6 +91,7 @@ const TCellGroup({
 ### TCellThemeData
 #### 简介
 Cell 与 CellGroup 的组件级 ThemeExtension。
+
 仅保存视觉和布局默认值，不保存内容、回调或列表数据。
 文字样式按字段覆盖全局 Token 派生的组件默认值；未配置字段保持默认。
 
@@ -130,24 +131,24 @@ const TCellThemeData({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| arrowColor | Color? | - | 箭头颜色。 | 否 |
-| backgroundColor | Color? | - | 默认背景色。 | 否 |
-| borderColor | Color? | - | 分隔线颜色。 | 否 |
-| cardBorderRadius | BorderRadius? | - | 卡片组圆角。 | 否 |
-| cardPadding | EdgeInsetsGeometry? | - | 卡片组内边距。 | 否 |
-| groupBorderColor | Color? | - | 单元格组边框颜色。 | 否 |
-| groupBordered | bool? | - | 是否显示组外边框。 | 否 |
-| groupTitleStyle | TextStyle? | - | 单元格组标题样式。 | 否 |
-| height | double? | - | Cell 固定高度。 | 否 |
-| noteStyle | TextStyle? | - | 右侧说明文字样式。 | 否 |
-| padding | EdgeInsetsGeometry? | - | 单元格内边距。 | 否 |
-| pressedColor | Color? | - | 按压背景色。 | 否 |
+| arrowColor | Color? | - | 箭头颜色。 未配置时使用 textColorPlaceholder Token。 | 否 |
+| backgroundColor | Color? | - | 默认背景色。 未配置时使用 bgColorContainer Token。 | 否 |
+| borderColor | Color? | - | 分隔线颜色。 未配置时使用 componentStroke Token。 | 否 |
+| cardBorderRadius | BorderRadius? | - | 卡片组圆角。 仅卡片形态生效，未配置时为 8 逻辑像素圆角。 | 否 |
+| cardPadding | EdgeInsetsGeometry? | - | 卡片组内边距。 仅卡片形态生效，未配置时为左右 16 逻辑像素。 | 否 |
+| groupBorderColor | Color? | - | 单元格组边框颜色。 未配置时使用 componentStroke Token。 | 否 |
+| groupBordered | bool? | - | 是否显示组外边框。 未配置时为 false。 | 否 |
+| groupTitleStyle | TextStyle? | - | 单元格组标题样式。 默认使用 fontBodyMedium / textColorPrimary Token，按字段合并本样式。 | 否 |
+| height | double? | - | Cell 固定高度。 未配置时由内容和内边距自然决定高度。 | 否 |
+| noteStyle | TextStyle? | - | 右侧说明文字样式。 默认使用 fontBodyLarge / textColorPlaceholder Token，按字段合并本样式。 | 否 |
+| padding | EdgeInsetsGeometry? | - | 单元格内边距。 未配置时四边均使用 spacer2 Token。 | 否 |
+| pressedColor | Color? | - | 按压背景色。 未配置时使用 bgColorSecondaryContainer Token；交互反馈由实例 enableFeedback 控制。 | 否 |
 | requiredStyle | TextStyle? | - | 必填标记样式。 | 否 |
-| showBottomBorder | bool? | - | 是否显示 Cell 底部分隔线。 | 否 |
-| showLastDivider | bool? | - | 是否显示最后一个 Cell 后的分隔线。 | 否 |
-| subtitleStyle | TextStyle? | - | 副标题文字样式。 | 否 |
-| titlePadding | EdgeInsetsGeometry? | - | 组标题内边距。 | 否 |
-| titleStyle | TextStyle? | - | 标题文字样式。 | 否 |
+| showBottomBorder | bool? | - | 是否显示 Cell 底部分隔线。 未配置时为 false，组内分隔线由 CellGroup 独立绘制。 | 否 |
+| showLastDivider | bool? | - | 是否显示最后一个 Cell 后的分隔线。 未配置时为 false。 | 否 |
+| subtitleStyle | TextStyle? | - | 副标题文字样式。 默认使用 fontBodyMedium / textColorSecondary Token，按字段合并本样式。 | 否 |
+| titlePadding | EdgeInsetsGeometry? | - | 组标题内边距。 未配置时四边均为 16 逻辑像素。 | 否 |
+| titleStyle | TextStyle? | - | 标题文字样式。 默认使用 fontBodyLarge / textColorPrimary Token，按字段合并本样式。 | 否 |
 
 
 #### 实例方法
@@ -184,24 +185,24 @@ TCellThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| titleStyle | TextStyle? | - | 标题文字样式。 | 否 |
-| requiredStyle | TextStyle? | - | 必填标记样式。 | 否 |
-| subtitleStyle | TextStyle? | - | 副标题文字样式。 | 否 |
-| noteStyle | TextStyle? | - | 右侧说明文字样式。 | 否 |
-| groupTitleStyle | TextStyle? | - | 单元格组标题样式。 | 否 |
-| arrowColor | Color? | - | 箭头颜色。 | 否 |
-| borderColor | Color? | - | 分隔线颜色。 | 否 |
-| groupBorderColor | Color? | - | 单元格组边框颜色。 | 否 |
-| backgroundColor | Color? | - | 默认背景色。 | 否 |
-| pressedColor | Color? | - | 按压背景色。 | 否 |
-| padding | EdgeInsetsGeometry? | - | 单元格内边距。 | 否 |
-| cardBorderRadius | BorderRadius? | - | 卡片组圆角。 | 否 |
-| cardPadding | EdgeInsetsGeometry? | - | 卡片组内边距。 | 否 |
-| titlePadding | EdgeInsetsGeometry? | - | 组标题内边距。 | 否 |
-| showBottomBorder | bool? | - | 是否显示 Cell 底部分隔线。 | 否 |
-| height | double? | - | Cell 固定高度。 | 否 |
-| groupBordered | bool? | - | 是否显示组外边框。 | 否 |
-| showLastDivider | bool? | - | 是否显示最后一个 Cell 后的分隔线。 | 否 |
+| titleStyle | TextStyle? | - | 字段含义：标题文字样式。 默认使用 fontBodyLarge / textColorPrimary Token，按字段合并本样式。 调用时的空值行为见方法说明。 | 否 |
+| requiredStyle | TextStyle? | - | 字段含义：必填标记样式。 调用时的空值行为见方法说明。 | 否 |
+| subtitleStyle | TextStyle? | - | 字段含义：副标题文字样式。 默认使用 fontBodyMedium / textColorSecondary Token，按字段合并本样式。 调用时的空值行为见方法说明。 | 否 |
+| noteStyle | TextStyle? | - | 字段含义：右侧说明文字样式。 默认使用 fontBodyLarge / textColorPlaceholder Token，按字段合并本样式。 调用时的空值行为见方法说明。 | 否 |
+| groupTitleStyle | TextStyle? | - | 字段含义：单元格组标题样式。 默认使用 fontBodyMedium / textColorPrimary Token，按字段合并本样式。 调用时的空值行为见方法说明。 | 否 |
+| arrowColor | Color? | - | 字段含义：箭头颜色。 未配置时使用 textColorPlaceholder Token。 调用时的空值行为见方法说明。 | 否 |
+| borderColor | Color? | - | 字段含义：分隔线颜色。 未配置时使用 componentStroke Token。 调用时的空值行为见方法说明。 | 否 |
+| groupBorderColor | Color? | - | 字段含义：单元格组边框颜色。 未配置时使用 componentStroke Token。 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 字段含义：默认背景色。 未配置时使用 bgColorContainer Token。 调用时的空值行为见方法说明。 | 否 |
+| pressedColor | Color? | - | 字段含义：按压背景色。 未配置时使用 bgColorSecondaryContainer Token；交互反馈由实例 enableFeedback 控制。 调用时的空值行为见方法说明。 | 否 |
+| padding | EdgeInsetsGeometry? | - | 字段含义：单元格内边距。 未配置时四边均使用 spacer2 Token。 调用时的空值行为见方法说明。 | 否 |
+| cardBorderRadius | BorderRadius? | - | 字段含义：卡片组圆角。 仅卡片形态生效，未配置时为 8 逻辑像素圆角。 调用时的空值行为见方法说明。 | 否 |
+| cardPadding | EdgeInsetsGeometry? | - | 字段含义：卡片组内边距。 仅卡片形态生效，未配置时为左右 16 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| titlePadding | EdgeInsetsGeometry? | - | 字段含义：组标题内边距。 未配置时四边均为 16 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| showBottomBorder | bool? | - | 字段含义：是否显示 Cell 底部分隔线。 未配置时为 false，组内分隔线由 CellGroup 独立绘制。 调用时的空值行为见方法说明。 | 否 |
+| height | double? | - | 字段含义：Cell 固定高度。 未配置时由内容和内边距自然决定高度。 调用时的空值行为见方法说明。 | 否 |
+| groupBordered | bool? | - | 字段含义：是否显示组外边框。 未配置时为 false。 调用时的空值行为见方法说明。 | 否 |
+| showLastDivider | bool? | - | 字段含义：是否显示最后一个 Cell 后的分隔线。 未配置时为 false。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TCellThemeData.lerp

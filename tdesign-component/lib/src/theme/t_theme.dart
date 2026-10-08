@@ -680,13 +680,13 @@ class TThemeData extends ThemeExtension<TThemeData> {
     );
   }
 
-  /// 解析配置的json文件为主题数据
+  /// 解析主题 JSON；空字符串、格式错误或缺少 name 对应配置时返回 null。
   ///
   /// [name] 主题名称，目前只支持一级键
   ///
   /// [themeJson] 主题json字符串，要求json配置必须正确
   ///
-  /// [recoverDefault] 是否恢复为默认主题数据
+  /// [recoverDefault] 解析成功后是否将结果设为全局默认主题，默认 false
   ///
   /// [extraThemeData] 额外扩展的主题数据
   static TThemeData? fromJson(

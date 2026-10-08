@@ -1,0 +1,427 @@
+{
+  "date": "2026-10-08",
+  "consumerStartHead": "9d99f92f47269ed1e8e2337701d6bc0b6db315a8",
+  "componentBase": "dacc279ec96c601c8ba690b3baee2c7f6bdadab8",
+  "candidateToolHead": "f599fcc83bc52c86917bdf643a9bfbd9965a7fb4",
+  "candidateToolPR": "https://github.com/TDesignOteam/tdesign-flutter-tools/pull/29",
+  "formalToolResolvedRef": "96f1c693a2d61ae6c135db4d52530bb28dfc2462",
+  "formalDelivery": "pending tool PR merge and consumer regeneration",
+  "declarations": 369,
+  "callables": 435,
+  "parameters": 2510,
+  "astIssues": [],
+  "productionTokenComparison": {
+    "base": "dacc279ec96c601c8ba690b3baee2c7f6bdadab8",
+    "files": 128,
+    "mismatches": [],
+    "rule": "all non-comment Dart tokens identical except formatter commas"
+  },
+  "sdkVersions": [
+    "Flutter 3.32.0 / Dart 3.8.0",
+    "Flutter 3.47.6 / Dart 3.13.5"
+  ],
+  "toolTestsPerSdk": 65,
+  "auditorTestsPerSdk": 18,
+  "demoApiTestsPerSdk": 70,
+  "siteTests": 18,
+  "crossSdkDocumentDifferences": [],
+  "documents": [
+    {
+      "slug": "button",
+      "sha256": "89174496fde20f01fbc2376c108f34191d196e7dd2c7a7ae6c673a586d86d2b1",
+      "declarations": 7,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "divider",
+      "sha256": "755a46b83e37087a854e02c29eb372b9bb887c6d9d8830a857dc0dda7527b0ef",
+      "declarations": 4,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "fab",
+      "sha256": "37bd882e9c818260b855b9ba987ac621fceebc3e178250ea00deced7b5160737",
+      "declarations": 7,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "icon",
+      "sha256": "7a9bf5c3139139be052ef1588292c03a328544adf39cf20340462e37e55f2f65",
+      "declarations": 1,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "link",
+      "sha256": "3e6a060a583c95bd90ae1853cb4d4fe7f7f0abbf095399906c1d4109ad241c60",
+      "declarations": 4,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "text",
+      "sha256": "21638f2bb6380ef36f21021bedbe538a68ffdfb5c37daeb485b56e2ef8239ff2",
+      "declarations": 4,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "back-top",
+      "sha256": "02b7e84970f22be28db9f3ee464515cd4e0dbb785f821725dd8bf60b55eca447",
+      "declarations": 4,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "drawer",
+      "sha256": "fc4cb1be6a0ef3d1db5a1ac336ae757269d978c96a2e828853cd6764731ca9d4",
+      "declarations": 7,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "indexes",
+      "sha256": "c522c362099e9316c8a7f26e7fa5fa11957bb8194885bd75b0f6617f23b8fa98",
+      "declarations": 10,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "navbar",
+      "sha256": "375c7beb306bce6e0d43f9d149757de29438ac8d7f8446328ffe67e7e2da1ac3",
+      "declarations": 4,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "side-bar",
+      "sha256": "335b8096a79c15d897ff724af380d19d7cf3ef8ab4839c86a39098bb4f970854",
+      "declarations": 4,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "steps",
+      "sha256": "88ac4f36b0ea5bcd7e93210f41b5bd58288e27826fe47d1ca66e11cbc7971889",
+      "declarations": 5,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "tab-bar",
+      "sha256": "e07933f888cd854538eea240e53dcd81345dab3433bd5c363dff297692f62e3f",
+      "declarations": 11,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "tabs",
+      "sha256": "1a6941538fd6c0fde90c61d12eac8cf7f1cb078bc5092b28923f1c1e3f7c6094",
+      "declarations": 7,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "calendar",
+      "sha256": "541228303bfca56e776e3d4dd122dd86f28199c8f9313b9fb743cdeab9ca993a",
+      "declarations": 10,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "cascader",
+      "sha256": "c28bc36b5107a9a266d3c62b5d8fb8e2172f0370942ac98cd0be5e62d78ff378",
+      "declarations": 4,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "checkbox",
+      "sha256": "763b104e75d7eced0c07dc5a3c50d265ed0e22fff6414edf4c2b8f1cfe96e88d",
+      "declarations": 9,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "picker",
+      "sha256": "f39777a1a0b4da691c440a7fad82ed5f5691c7e9325f6df01b494c1e9c167faa",
+      "declarations": 10,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "date-time-picker",
+      "sha256": "9074a57c1555a739f4d381683d9cc528a693083e362673e7f2090e00525053ad",
+      "declarations": 8,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "form",
+      "sha256": "72ab2817bb12fa3a5a24697be0593c624e103e9d666ff85cf6a4673ad4b81db4",
+      "declarations": 11,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "input",
+      "sha256": "ebb4ca648e8f170faa541d43ba01ce583393e06f649d72dba05e1dc463961f80",
+      "declarations": 4,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "radio",
+      "sha256": "039c17273ad4ff42283a2489a0e5c84a3607a1e12681bca65973e7d195dce2f4",
+      "declarations": 8,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "rate",
+      "sha256": "712be8cc4e11aa6c9dd1b18e8f50aa5e174f72ec8ee7dc5e6c8d6c35d213e101",
+      "declarations": 3,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "search",
+      "sha256": "85e83fc9978e86f4c13f6eaa6ae90044a2842c5db29b0c291b280d02d34e3f46",
+      "declarations": 4,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "slider",
+      "sha256": "2069ffa905ea1739f1c2c97cc45226053511db31276c415915c63e55494221a2",
+      "declarations": 5,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "stepper",
+      "sha256": "639d4b079a03b8dfd84f3ed408932be7b743c522222cb0e70562d2e0ff5bd42c",
+      "declarations": 4,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "switch",
+      "sha256": "be92d367c0af38425a853a5a85d0530d9a078a7058878436dfd07dc8d705df23",
+      "declarations": 4,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "textarea",
+      "sha256": "bfb9ca820714699b2869c28522c06e352e0f442ceb8b7e643e1002bee5cc04d8",
+      "declarations": 2,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "tree-select",
+      "sha256": "32b3af9df05d661917fc346a97bf0d710b94e4885f0ef6ba6974ca1c50765413",
+      "declarations": 3,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "upload",
+      "sha256": "426efcf8447807fc024af0d2a28e276e689c41e8ed1e35ea492e9760e80a2979",
+      "declarations": 9,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "avatar",
+      "sha256": "4c8cce1ab3283ef380e3bdbe76bc4be34246130d283da00e86bbd69bd4d3d372",
+      "declarations": 6,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "badge",
+      "sha256": "5880a212848b229aa1b0321affaf4234684a83622588728e5c71962d8002700c",
+      "declarations": 5,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "cell",
+      "sha256": "e49f27e211a128c2beb05ec4d4a15d2d50ff00ccbaabf057a358ad05b3423842",
+      "declarations": 6,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "time-counter",
+      "sha256": "baf880adc65c949dcd67d4244244352cfd082a9b49ae97f4be0d4440abb0f9f2",
+      "declarations": 7,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "collapse",
+      "sha256": "267d8b2f0ac401be28c3f500fe7ef5e555425d097425c29cab74e81cdc24d9a8",
+      "declarations": 7,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "empty",
+      "sha256": "029e841fa4d007a84f34e6cfd960664eb3fe212ed1132bf05d53911adcbd7990",
+      "declarations": 2,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "footer",
+      "sha256": "c1a1fca73d78f336cad638a3e8080042513f9cc39dc7c88fb24c866eb9d1b099",
+      "declarations": 2,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "image",
+      "sha256": "72b37f27d028b7e2e6811a19a63a533f11ce4d85a487ee677bf5aaf40d78ee40",
+      "declarations": 3,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "image-viewer",
+      "sha256": "d295f3615c33644b2aa910d7fb963493fa8f928d868a9fe3d677a78f55c151c6",
+      "declarations": 3,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "progress",
+      "sha256": "199de53af1e0ca9f9c198042f7bc87f6f4cd33d01eb30347763e2eab6dc9da52",
+      "declarations": 4,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "result",
+      "sha256": "ae99ee688c1dcc020db4a9ae83fc67c719f896372e81b5a17115d29b15c0d8c9",
+      "declarations": 3,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "skeleton",
+      "sha256": "f426ae512ef1f0e898f1e7e8c7ba29a1c30904ff9be5e41b21d84c7a1ca5280e",
+      "declarations": 8,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "swiper",
+      "sha256": "05855bc1a742b0ed59619cb0fe6f138f31d4eecf6da69955e304027b6d670a6f",
+      "declarations": 8,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "table",
+      "sha256": "fb37147ae840a27728ba3aed9b9a30589cbe12e17cd6acc160a463c75758b7a6",
+      "declarations": 15,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "tag",
+      "sha256": "79365abe06578190f2055c5e32915cf78ff5e2c6110e304f9f308eaf1edcf74a",
+      "declarations": 7,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "action-sheet",
+      "sha256": "6a93001abd6bdef585fc4e6bb2946df608b17610801a44b7ddb1ac1d614d402c",
+      "declarations": 8,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "dialog",
+      "sha256": "d3f42b28e50444df524fc9542b9b60c7621fcca9f3a7e2075777d92454dcec63",
+      "declarations": 5,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "dropdown-menu",
+      "sha256": "72a6c72138582b9fd536bb02754c1cf1ee0ffcee9f59315e8b7de28a7d7a93c2",
+      "declarations": 14,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "loading",
+      "sha256": "d0d5f05497ea7e7f11107fdb0bd418cb1b96d8134217f33db88eabe2f190b4ed",
+      "declarations": 4,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "message",
+      "sha256": "39f0b5c3ce852f26c946465ab0a8f9ff6b0f1956ef09c78e4bd1c765e5b01209",
+      "declarations": 5,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "notice-bar",
+      "sha256": "107963de62fbfde7cd36f9359ca957dd78305261bbac549276bacb2714f133ba",
+      "declarations": 4,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "popover",
+      "sha256": "7a0ee9fcb0c3cd5e3d43bc3b330d1193a875033307cda2d474c5b18e7e06d8f4",
+      "declarations": 7,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "popup",
+      "sha256": "b381f983fdeb62512cbee268cd78f549097ecd2ec94da74316965ee4fefff941",
+      "declarations": 16,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "pull-down-refresh",
+      "sha256": "22d1e23c790483c638f751383d92244d12369a0295c369e5971255d1db627400",
+      "declarations": 4,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "swipe-cell",
+      "sha256": "8a087a1e5d947e5500cb4566d39c53a5416b37cd77d80c31bf0da88fc4b733bb",
+      "declarations": 7,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "toast",
+      "sha256": "78cbf405e49c58ca95c75c1b1433dfa45d7a3d7fc5c77aceb9befa95db3d27d4",
+      "declarations": 5,
+      "contentReview": "reviewed against implementation"
+    },
+    {
+      "slug": "theme",
+      "sha256": "02305e9efe478ea740f98a0aff0d8d9e744a1f62176f3626b9771b4919f3887a",
+      "declarations": 27,
+      "contentReview": "reviewed against implementation"
+    }
+  ],
+  "browser": {
+    "pages": 57,
+    "visibleDeclarations": 369,
+    "visibleCodeBlocks": 713,
+    "emptyCodeBlocks": 0,
+    "pagesWithoutCodeBlocks": []
+  },
+  "candidateToolChecks": [
+    {
+      "name": "build-macos-intel / build",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/TDesignOteam/tdesign-flutter-tools/actions/runs/37717368630/job/113116837993"
+    },
+    {
+      "name": "构建预览站",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/TDesignOteam/tdesign-flutter-tools/actions/runs/37717368334/job/113116836531"
+    },
+    {
+      "name": "test (3.32.0)",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/TDesignOteam/tdesign-flutter-tools/actions/runs/37717368286/job/113116835733"
+    },
+    {
+      "name": "test (latest)",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/TDesignOteam/tdesign-flutter-tools/actions/runs/37717368286/job/113116835990"
+    },
+    {
+      "name": "build-macos-arm64 / build",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/TDesignOteam/tdesign-flutter-tools/actions/runs/37717368630/job/113116837972"
+    },
+    {
+      "name": "build-linux-x64 / build",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/TDesignOteam/tdesign-flutter-tools/actions/runs/37717368630/job/113116837960"
+    },
+    {
+      "name": "build-windows-x64 / build",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/TDesignOteam/tdesign-flutter-tools/actions/runs/37717368630/job/113116837846"
+    },
+    {
+      "name": "更新二进制产物 PR 评论",
+      "conclusion": "SUCCESS",
+      "url": "https://github.com/TDesignOteam/tdesign-flutter-tools/actions/runs/37717368630/job/113117651032"
+    }
+  ],
+  "candidateToolMergeState": "CLEAN",
+  "candidateWrapperCheck": {
+    "3.32.0": "passed",
+    "latest": "passed",
+    "formalMain": "pending merge; currently produces different output"
+  }
+}

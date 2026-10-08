@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 /// TActionSheet 组件级视觉 ThemeExtension
 class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
   /// 宫格项目高度
+  /// 未配置时为 96 逻辑像素，show 方法的 itemHeight 优先。
   final double? gridItemHeight;
 
   /// 蒙层颜色
@@ -12,12 +13,14 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
   final double? panelRadius;
 
   /// 默认图标字形尺寸；同时作为列表图标槽位尺寸。
+  /// 未配置时为 24 逻辑像素。
   final double? iconSize;
 
   /// 宫格布局的图标槽位尺寸；未设置时默认 40dp。
   final double? gridIconExtent;
 
   /// 默认图标颜色。
+  /// 未配置时使用 textColorPrimary Token；禁用项使用 textColorDisabled。
   final Color? iconColor;
 
   const TActionSheetThemeData({

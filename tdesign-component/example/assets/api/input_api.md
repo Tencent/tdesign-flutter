@@ -5,6 +5,7 @@
 ### TInput
 #### 简介
 基于 Flutter `TextField` 编辑内核的 TDesign 文本输入框。
+
 `controller` 是主控制路径；未传时由组件创建内部 controller，并使用
 `initialValue` 初始化一次。两者不能同时传入。输入框外层由 TDesign
 自有布局绘制，Material `InputDecorationTheme` 不会覆盖默认边框和内边距。
@@ -58,11 +59,11 @@ const TInput({
 | --- | --- | --- | --- | --- |
 | autofocus | bool | false | 是否自动聚焦。 | 否 |
 | borderless | bool | false | 是否隐藏输入框边框。 | 否 |
-| clearButtonMode | TInputClearButtonMode? | - | 清除按钮显示模式。 | 否 |
-| controller | TextEditingController? | - | 文本控制器。 | 否 |
+| clearButtonMode | TInputClearButtonMode? | - | 清除按钮显示模式；为空时为 TInputClearButtonMode.never。 点击清除会清空 controller 并触发 onChanged；suffix 非空时隐藏清除按钮。 | 否 |
+| controller | TextEditingController? | - | 文本控制器；与 initialValue 互斥。外部控制器由调用方释放， 未提供时由组件创建并释放内部控制器。 | 否 |
 | cursorColor | Color? | - | 光标颜色。 | 否 |
 | enabled | bool | true | 是否可交互。 设为 `false` 时表示禁用输入框，禁止编辑、聚焦和选择，并使用禁用态文字颜色。 | 否 |
-| focusNode | FocusNode? | - | 焦点节点。 | 否 |
+| focusNode | FocusNode? | - | 焦点节点；外部节点由调用方释放，未提供时由组件管理内部节点。 | 否 |
 | hintText | String? | - | 占位提示文案。 | 否 |
 | indicator | bool | false | 是否显示当前字符计数。 多行场景优先使用 `TTextarea`；未配置长度限制时不会显示。 | 否 |
 | initialValue | String? | - | 内部控制器的初始文本，仅初始化一次。 | 否 |
@@ -70,11 +71,11 @@ const TInput({
 | inputFormatters | List&lt;TextInputFormatter&gt;? | - | 输入格式化器。 | 否 |
 | inputType | TextInputType | TextInputType.text | 键盘类型。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| maxCharacter | int? | - | 最大字符权重，按 Unicode code point 计算：ASCII code point 计 1， 非 ASCII code point 计 2。 与 `maxLength` 二选一。提交中的文本超过限制时，保留不超过限制的 最长前缀；输入法正在 composing 时暂不截断，在 composing 结束后执行。 | 否 |
-| maxLength | int? | - | 最大字符数，使用 Flutter grapheme 计数语义。 | 否 |
+| maxCharacter | int? | - | 最大字符权重，按 Unicode code point 计算：ASCII code point 计 1， 非 ASCII code point 计 2。 非空时必须大于或等于 0，与 maxLength 二选一。提交中的文本超过限制时，保留不超过限制的 最长前缀；输入法正在 composing 时暂不截断，在 composing 结束后执行。 | 否 |
+| maxLength | int? | - | 最大字符数，使用 Flutter grapheme 计数语义；非空时必须大于或等于 0， 与 maxCharacter 互斥。 | 否 |
 | maxLines | int? | 1 | 最大行数。 | 否 |
-| minLines | int? | - | 最小行数。 | 否 |
-| obscureText | bool | false | 是否隐藏输入文本。 | 否 |
+| minLines | int? | - | 最小行数；为空时单行为 null，多行默认为 4，并限制到非空 maxLines。 | 否 |
+| obscureText | bool | false | 是否隐藏输入文本；为 true 时仅支持 maxLines 为 1、minLines 为 null。 | 否 |
 | onChanged | ValueChanged&lt;String&gt;? | - | 文本变化通知。 | 否 |
 | onEditingComplete | VoidCallback? | - | 编辑完成回调。 | 否 |
 | onSubmitted | ValueChanged&lt;String&gt;? | - | 提交回调。 | 否 |
@@ -90,6 +91,7 @@ const TInput({
 ### TInputThemeData
 #### 简介
 TInput 与 TTextarea 共用的组件级 ThemeExtension。
+
 输入组件的外层边框、颜色、内边距和提示文字样式在这里提供组件级默认值；
 默认状态不继承全局填充色，避免输入区被 `ThemeData.inputDecorationTheme`
 污染。
@@ -154,14 +156,14 @@ TInputThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| clearIconSize | double? | - | 清除图标尺寸。 | 否 |
-| hintStyle | TextStyle? | - | 占位提示文本样式。 未指定的字段继承 TDesign 输入框提示词 token。 | 否 |
-| clearIconColor | Color? | - | 清除图标颜色。 | 否 |
-| contentPadding | EdgeInsetsGeometry? | - | 输入区域内边距。 | 否 |
-| borderRadius | double? | - | 输入区域圆角。 | 否 |
-| backgroundColor | Color? | - | 输入区域背景色。 | 否 |
-| borderColor | Color? | - | 输入区域边框颜色。 | 否 |
-| borderWidth | double? | - | 输入区域边框宽度。 | 否 |
+| clearIconSize | double? | - | 字段含义：清除图标尺寸。 调用时的空值行为见方法说明。 | 否 |
+| hintStyle | TextStyle? | - | 字段含义：占位提示文本样式。 未指定的字段继承 TDesign 输入框提示词 token。 调用时的空值行为见方法说明。 | 否 |
+| clearIconColor | Color? | - | 字段含义：清除图标颜色。 调用时的空值行为见方法说明。 | 否 |
+| contentPadding | EdgeInsetsGeometry? | - | 字段含义：输入区域内边距。 调用时的空值行为见方法说明。 | 否 |
+| borderRadius | double? | - | 字段含义：输入区域圆角。 对非多行、非无边框输入框设置为大于 0 的值时，输入框使用完整边框； 未设置时保留单行输入框的底部分隔线。 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 字段含义：输入区域背景色。 调用时的空值行为见方法说明。 | 否 |
+| borderColor | Color? | - | 字段含义：输入区域边框颜色。 调用时的空值行为见方法说明。 | 否 |
+| borderWidth | double? | - | 字段含义：输入区域边框宽度。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TInputThemeData.lerp
@@ -198,6 +200,7 @@ other 为空或类型不匹配时返回当前主题；字段各自采用其类�
 ### TInputStatus
 #### 简介
 输入框的语义状态。
+
 状态不改变已输入文字的正文色。
 #### 枚举值
 

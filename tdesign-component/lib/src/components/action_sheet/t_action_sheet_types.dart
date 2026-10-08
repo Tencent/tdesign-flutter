@@ -64,10 +64,11 @@ sealed class TActionSheetGridLayout {
   /// 布局模式
   final TActionSheetGridMode mode;
 
-  /// 一个可视面板期望容纳的项目数
+  /// 一个可视面板期望容纳的项目数，默认 8。必须大于 0、不得小于 rows，
+  /// 且能被 rows 整除。
   final int count;
 
-  /// 行数
+  /// 行数，默认 2；必须大于 0。
   final int rows;
 
   /// 横向滚动项目的最小宽度；仅滚动布局可能返回非空值。

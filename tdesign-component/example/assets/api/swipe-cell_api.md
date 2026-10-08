@@ -36,17 +36,18 @@ const TSwipeCell({
 | child | Widget | - | 要增强为可滑动单元格的内容。 | 是 |
 | closeOnScroll | bool | true | 祖先滚动容器开始滚动时是否关闭面板，默认为 true。 | 否 |
 | controller | TSwipeCellController? | - | 命令式控制器。 | 否 |
-| enabled | bool | true | 是否允许用户拖动，默认为 true。 | 否 |
+| enabled | bool | true | 是否允许用户拖动，默认为 true。 仅控制用户拖动，不阻止控制器命令。 | 否 |
 | end | TSwipeCellPanel? | - | 结束侧操作面板。 | 否 |
 | initialOpenSide | TSwipeCellSide? | - | 首次布局后默认展开的面板；为空时保持关闭。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| onOpenChanged | TSwipeCellChanged? | - | 面板展开状态变化回调。 | 否 |
+| onOpenChanged | TSwipeCellChanged? | - | 面板展开状态变化回调。 在展开状态改变时通知，早于动画结束；切换侧时先通知旧侧关闭，再通知新侧打开。 | 否 |
 | start | TSwipeCellPanel? | - | 起始侧操作面板。 | 否 |
 
 
 ### TSwipeCellController
 #### 简介
 `TSwipeCell` 的命令式控制器。
+
 一个控制器同一时间只能绑定一个 `TSwipeCell`。通常无需使用控制器，用户拖动、
 点击操作项、点击单元格外部或滚动列表时，组件会自行管理展开状态。
 
@@ -74,6 +75,7 @@ Future<void> close()
 
 
 关闭当前展开的操作面板。
+返回的 Future 在动画结束后完成；未绑定组件时立即完成且不执行操作。
 
 返回类型：`Future<void>`
 
@@ -85,6 +87,7 @@ Future<void> open(TSwipeCellSide side)
 
 
 展开指定侧的操作面板。
+返回的 Future 在动画结束后完成；未绑定组件时立即完成且不执行操作。
 
 返回类型：`Future<void>`
 
@@ -114,7 +117,7 @@ TSwipeCellPanel({required this.children})
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| children | List&lt;TSwipeCellAction&gt; | - | 操作项列表。面板宽度由所有操作项的实际布局宽度自动确定。 | 是 |
+| children | List&lt;TSwipeCellAction&gt; | - | 操作项列表。面板宽度由所有操作项的实际布局宽度自动确定。 列表必须非空。 | 是 |
 
 
 #### 实例方法
@@ -127,6 +130,7 @@ Widget build(BuildContext context)
 
 
 构建操作项的横向布局，宽度由 `children` 的实际布局宽度决定。
+
 操作项沿交叉轴拉伸；返回的布局由调用方放入滑动单元格。
 
 返回类型：`Widget`
@@ -139,6 +143,7 @@ Widget build(BuildContext context)
 ### TSwipeCellAction
 #### 简介
 滑动单元格操作项。
+
 同一面板中的操作项可使用不同的颜色和文字样式。
 未指定的图文视觉字段从全局 TDesign Token 取得默认值；
 `TSwipeCellThemeData` 只提供共用内边距。
@@ -187,6 +192,7 @@ const TSwipeCellAction({
 ### TSwipeCellThemeData
 #### 简介
 TSwipeCell 组件级 ThemeExtension
+
 通过 Theme 子树注入操作项共享内边距；逐项图文样式由操作项实例控制。
 
 #### 声明
@@ -224,7 +230,7 @@ TSwipeCellThemeData copyWith({EdgeInsetsGeometry? actionPadding})
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| actionPadding | EdgeInsetsGeometry? | - | 操作项左右内边距。 | 否 |
+| actionPadding | EdgeInsetsGeometry? | - | 字段含义：操作项左右内边距。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TSwipeCellThemeData.lerp

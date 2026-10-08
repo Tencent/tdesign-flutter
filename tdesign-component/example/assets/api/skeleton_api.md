@@ -260,6 +260,7 @@ const TSkeletonBlock({
 ### TSkeletonThemeData
 #### 简介
 骨架屏组件级 ThemeExtension。
+
 仅保存占位块的视觉和布局默认值；动画、延迟与具体布局由实例决定。
 
 #### 声明
@@ -284,10 +285,10 @@ const TSkeletonThemeData({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| blockColor | Color? | - | 占位块背景色。 | 否 |
-| borderRadius | double? | - | 普通占位块圆角。 | 否 |
-| highlightColor | Color? | - | 渐变动画高亮色。 | 否 |
-| rowSpacing | double? | - | 多行布局的默认行间距。 | 否 |
+| blockColor | Color? | - | 占位块背景色。 未配置时使用 bgColorSecondaryContainer Token。 | 否 |
+| borderRadius | double? | - | 普通占位块圆角。 未配置时使用 radiusSmall Token，必须大于或等于 0。 | 否 |
+| highlightColor | Color? | - | 渐变动画高亮色。 未配置时使用 bgColorSecondaryContainerActive Token。 | 否 |
+| rowSpacing | double? | - | 多行布局的默认行间距。 未配置时使用 spacer2 Token，必须大于或等于 0。 | 否 |
 
 
 #### 实例方法
@@ -310,10 +311,10 @@ TSkeletonThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| blockColor | Color? | - | 占位块背景色。 | 否 |
-| highlightColor | Color? | - | 渐变动画高亮色。 | 否 |
-| borderRadius | double? | - | 普通占位块圆角。 | 否 |
-| rowSpacing | double? | - | 多行布局的默认行间距。 | 否 |
+| blockColor | Color? | - | 字段含义：占位块背景色。 未配置时使用 bgColorSecondaryContainer Token。 调用时的空值行为见方法说明。 | 否 |
+| highlightColor | Color? | - | 字段含义：渐变动画高亮色。 未配置时使用 bgColorSecondaryContainerActive Token。 调用时的空值行为见方法说明。 | 否 |
+| borderRadius | double? | - | 字段含义：普通占位块圆角。 未配置时使用 radiusSmall Token，必须大于或等于 0。 调用时的空值行为见方法说明。 | 否 |
+| rowSpacing | double? | - | 字段含义：多行布局的默认行间距。 未配置时使用 spacer2 Token，必须大于或等于 0。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TSkeletonThemeData.lerp

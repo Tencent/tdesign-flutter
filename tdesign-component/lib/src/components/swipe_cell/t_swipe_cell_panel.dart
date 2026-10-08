@@ -8,6 +8,7 @@ class TSwipeCellPanel {
     : assert(children.isNotEmpty, 'children must not be empty.');
 
   /// 操作项列表。面板宽度由所有操作项的实际布局宽度自动确定。
+  /// 列表必须非空。
   final List<TSwipeCellAction> children;
 
   /// 构建操作项的横向布局，宽度由 [children] 的实际布局宽度决定。

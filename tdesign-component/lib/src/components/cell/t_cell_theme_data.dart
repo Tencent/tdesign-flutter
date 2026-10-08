@@ -38,57 +38,74 @@ class TCellThemeData extends ThemeExtension<TCellThemeData> {
   });
 
   /// 标题文字样式。
+  /// 默认使用 fontBodyLarge / textColorPrimary Token，按字段合并本样式。
   final TextStyle? titleStyle;
 
   /// 必填标记样式。
   final TextStyle? requiredStyle;
 
   /// 副标题文字样式。
+  /// 默认使用 fontBodyMedium / textColorSecondary Token，按字段合并本样式。
   final TextStyle? subtitleStyle;
 
   /// 右侧说明文字样式。
+  /// 默认使用 fontBodyLarge / textColorPlaceholder Token，按字段合并本样式。
   final TextStyle? noteStyle;
 
   /// 单元格组标题样式。
+  /// 默认使用 fontBodyMedium / textColorPrimary Token，按字段合并本样式。
   final TextStyle? groupTitleStyle;
 
   /// 箭头颜色。
+  /// 未配置时使用 textColorPlaceholder Token。
   final Color? arrowColor;
 
   /// 分隔线颜色。
+  /// 未配置时使用 componentStroke Token。
   final Color? borderColor;
 
   /// 单元格组边框颜色。
+  /// 未配置时使用 componentStroke Token。
   final Color? groupBorderColor;
 
   /// 默认背景色。
+  /// 未配置时使用 bgColorContainer Token。
   final Color? backgroundColor;
 
   /// 按压背景色。
+  /// 未配置时使用 bgColorSecondaryContainer Token；交互反馈由实例 enableFeedback 控制。
   final Color? pressedColor;
 
   /// 单元格内边距。
+  /// 未配置时四边均使用 spacer2 Token。
   final EdgeInsetsGeometry? padding;
 
   /// 卡片组圆角。
+  /// 仅卡片形态生效，未配置时为 8 逻辑像素圆角。
   final BorderRadius? cardBorderRadius;
 
   /// 卡片组内边距。
+  /// 仅卡片形态生效，未配置时为左右 16 逻辑像素。
   final EdgeInsetsGeometry? cardPadding;
 
   /// 组标题内边距。
+  /// 未配置时四边均为 16 逻辑像素。
   final EdgeInsetsGeometry? titlePadding;
 
   /// 是否显示 Cell 底部分隔线。
+  /// 未配置时为 false，组内分隔线由 CellGroup 独立绘制。
   final bool? showBottomBorder;
 
   /// Cell 固定高度。
+  /// 未配置时由内容和内边距自然决定高度。
   final double? height;
 
   /// 是否显示组外边框。
+  /// 未配置时为 false。
   final bool? groupBordered;
 
   /// 是否显示最后一个 Cell 后的分隔线。
+  /// 未配置时为 false。
   final bool? showLastDivider;
 
   /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。

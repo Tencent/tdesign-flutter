@@ -21,16 +21,9 @@ import 't_cascader_theme_data.dart';
 /// [TCascaderOption] 和列表，不要原地修改已有列表。
 class TCascaderOption {
   const TCascaderOption({
-    /// 展示文案。
     required this.label,
-
-    /// 选项值。
     required this.value,
-
-    /// 子选项。
     this.children = const [],
-
-    /// 是否禁用。
     this.disabled = false,
   });
 
@@ -51,28 +44,11 @@ class TCascaderOption {
 class TCascader extends StatefulWidget {
   const TCascader({
     super.key,
-
-    /// 根选项列表。
     required this.options,
-
-    /// 受控选中路径。
     required this.value,
-
-    /// 选中路径变化回调；为 null 时禁用。
-    ///
-    /// 分支点击只发出候选路径；调用方需回写 [value]，组件才会推进活动层级。
     this.onChanged,
-
-    /// 导航展示形态。
     this.variant = TCascaderVariant.tab,
-
-    /// 未选择层级的占位文案。
     this.placeholder = '请选择',
-
-    /// 各层级的次级标题。
-    ///
-    /// 组件按内部活动层级读取对应内容，因此调用方无需持有或控制层级状态；
-    /// 列表没有对应层级或对应内容为空时不显示次级标题。
     this.subtitles = const [],
   });
 
@@ -94,6 +70,9 @@ class TCascader extends StatefulWidget {
   final String placeholder;
 
   /// 各层级的次级标题。
+  ///
+  /// 组件按内部活动层级读取对应内容，因此调用方无需持有或控制层级状态；
+  /// 列表没有对应层级或对应内容为空时不显示次级标题。
   final List<String> subtitles;
 
   @override

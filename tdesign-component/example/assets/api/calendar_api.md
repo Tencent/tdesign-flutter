@@ -5,6 +5,7 @@
 ### TCalendar
 #### 简介
 严格受控的日历面板，不包含弹窗、工具栏或确认操作。
+
 `value` 与 `onChanged` 构成受控选择状态；`onChanged` 为 null 时禁用。
 
 #### 声明
@@ -39,25 +40,26 @@ TCalendar({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| anchorDate | DateTime? | - | 滚动锚点日期。 | 否 |
-| animateTo | bool | false | 锚点滚动是否使用动画。 | 否 |
-| cellBuilder | TCalendarCellBuilder? | - | 日期格构建器。 | 否 |
+| anchorDate | DateTime? | - | 滚动锚点日期：将列表定位到该日**所在月份**的首屏位置。 **不**自动把该日设为选中。运行期更新本参数会重新滚动（见 `animateTo`）。 未设置时：有非空 `value` 则滚到其中最早一日所在月，否则滚到 `minDate` 首月。 | 否 |
+| animateTo | bool | false | `anchorDate` 或首屏定位变更导致滚动时，是否使用动画，默认 false。 | 否 |
+| cellBuilder | TCalendarCellBuilder? | - | 整格自定义构建器；返回非 null 时替换该格默认布局（主数字 + 副标题均不渲染）。 返回非 null 时优先于 `subtitleBuilder`；返回 null 时使用默认日期格及副标题。 | 否 |
 | firstDayOfWeek | TCalendarFirstDayOfWeek | TCalendarFirstDayOfWeek.sunday | 每周从星期几开始，默认从星期日开始。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| maxDate | DateTime? | - | 最大可选日期。 | 否 |
-| minDate | DateTime? | - | 最小可选日期。 | 否 |
+| maxDate | DateTime? | - | 最大可选日期；未传时为 2100-12-31，取日期部分，不得早于 minDate。 | 否 |
+| minDate | DateTime? | - | 最小可选日期；未传时为 1970-01-01，取日期部分，不得晚于 maxDate。 | 否 |
 | monthTitleBuilder | TCalendarMonthTitleBuilder? | - | 月标题构建器。 | 否 |
-| onChanged | ValueChanged&lt;List&lt;DateTime&gt;&gt;? | - | 选中日期变化回调；为 null 时禁用。 | 否 |
-| onMonthChanged | ValueChanged&lt;DateTime&gt;? | - | 可见月份变化回调。 | 否 |
-| subtitleBuilder | TCalendarSubtitleBuilder? | - | 日期副标题构建器。 | 否 |
-| value | List&lt;DateTime&gt; | - | 受控选中日期。 | 是 |
-| variant | TCalendarVariant | TCalendarVariant.single | 选择模式。 | 否 |
-| weekdayNames | List&lt;String&gt;? | - | 星期标题。未设置时使用当前资源代理中的文案。 | 否 |
+| onChanged | ValueChanged&lt;List&lt;DateTime&gt;&gt;? | - | 选中结果变化时触发；为 null 时整个日历禁用。 单选立即触发，多选每次切换，区间在端点变化时触发。父组件应在回调中 更新 `value`。组件挂载时不会调用本回调。 | 否 |
+| onMonthChanged | ValueChanged&lt;DateTime&gt;? | - | 可见月份变化且不处于程序化动画滚动期间时触发，参数为当月 1 日。 程序化动画滚动不保证在结束时通知；外置控制栏应自行同步 anchorDate 对应的目标月份，用户滑动时再根据本回调更新文案。 | 否 |
+| subtitleBuilder | TCalendarSubtitleBuilder? | - | 副标题构建器，在日期主数字下方渲染自定义内容。 `TCalendarSubtitleContext.date` 为当前格日期； `TCalendarSubtitleContext.selectType` 为选中/区间/禁用等态。返回 null 不显示副标题行。 | 否 |
+| value | List&lt;DateTime&gt; | - | 受控选中日期列表。 空列表表示未选择；single 通常使用 1 个元素，multiple 使用所有选中日期， range 使用 1 个起始日期或 2 个起止日期。日期会去除时分秒、去重并排序。 | 是 |
+| variant | TCalendarVariant | TCalendarVariant.single | 日历的选择模式（保留 variant 命名，不表示视觉变体），决定点击后的行为： - `TCalendarVariant.single`：单选，点击新日期取消旧选中 - `TCalendarVariant.multiple`：多选，点击切换选中/取消 - `TCalendarVariant.range`：区间选择，依次选起止日期 | 否 |
+| weekdayNames | List&lt;String&gt;? | - | 星期标题，按星期日到星期六排列。 未设置时使用 `TResourceManager` 提供的当前语言文案。 必须按星期日到星期六提供 7 个文案，与 firstDayOfWeek 无关。 | 否 |
 
 
 ### TCalendarCellModel
 #### 简介
 单个日期格的不可变展示快照，由日历的受控 value 派生。
+
 自定义构建器通过 `selectType` 读取状态；选择更新由日历的 onChanged
 通知调用方，再通过 value 重建，不直接修改日期格。
 
@@ -118,6 +120,7 @@ const TCalendarSubtitleContext({
 ### TCalendarThemeData
 #### 简介
 TCalendar 组件级 ThemeExtension
+
 包含日历样式默认（装饰、字体、布局参数）。
 样式字段通过 mergeExtension 子树覆盖，无需构造器 P0 `style` 参数。
 
@@ -199,20 +202,20 @@ TCalendarThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| height | double? | - | 高度 | 否 |
-| decoration | BoxDecoration? | - | 组件容器装饰 | 否 |
-| weekdayStyle | TextStyle? | - | 星期文字样式 | 否 |
-| monthTitleStyle | TextStyle? | - | 月份标题文字样式 | 否 |
-| dayStyle | TextStyle? | - | 日期数字样式 | 否 |
-| todayDayStyle | TextStyle? | - | 今天日期数字样式 | 否 |
-| cellDecoration | BoxDecoration? | - | 日期单元格装饰（选中状态） | 否 |
-| subtitleStyle | TextStyle? | - | 副标题样式 | 否 |
-| cellHeight | double? | - | 日期单元格高度，默认 60 | 否 |
-| monthTitleHeight | double? | - | 月份标题高度，默认 22 | 否 |
-| verticalGap | double? | - | 日期格垂直间距，水平间距为 `verticalGap` / 2 | 否 |
-| bodyPadding | double? | - | 内边距 | 否 |
-| weekdayGap | double? | - | 星期之间的水平间距 | 否 |
-| centreColor | Color? | - | 区间中间格背景与格间衔接条颜色 | 否 |
+| height | double? | - | 字段含义：高度 调用时的空值行为见方法说明。 | 否 |
+| decoration | BoxDecoration? | - | 字段含义：组件容器装饰 调用时的空值行为见方法说明。 | 否 |
+| weekdayStyle | TextStyle? | - | 字段含义：星期文字样式 调用时的空值行为见方法说明。 | 否 |
+| monthTitleStyle | TextStyle? | - | 字段含义：月份标题文字样式 调用时的空值行为见方法说明。 | 否 |
+| dayStyle | TextStyle? | - | 字段含义：日期数字样式 调用时的空值行为见方法说明。 | 否 |
+| todayDayStyle | TextStyle? | - | 字段含义：今天日期数字样式 调用时的空值行为见方法说明。 | 否 |
+| cellDecoration | BoxDecoration? | - | 字段含义：日期单元格装饰（选中状态） 调用时的空值行为见方法说明。 | 否 |
+| subtitleStyle | TextStyle? | - | 字段含义：副标题样式 调用时的空值行为见方法说明。 | 否 |
+| cellHeight | double? | - | 字段含义：日期单元格高度，默认 60 调用时的空值行为见方法说明。 | 否 |
+| monthTitleHeight | double? | - | 字段含义：月份标题高度，默认 22 调用时的空值行为见方法说明。 | 否 |
+| verticalGap | double? | - | 字段含义：日期格垂直间距，水平间距为 `verticalGap` / 2 调用时的空值行为见方法说明。 | 否 |
+| bodyPadding | double? | - | 字段含义：内边距 调用时的空值行为见方法说明。 | 否 |
+| weekdayGap | double? | - | 字段含义：星期之间的水平间距 调用时的空值行为见方法说明。 | 否 |
+| centreColor | Color? | - | 字段含义：区间中间格背景与格间衔接条颜色 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TCalendarThemeData.lerp
@@ -285,7 +288,16 @@ other 为空或类型不匹配时返回当前主题；字段各自采用其类�
 ### TCalendarSubtitleBuilder
 #### 简介
 副标题构建器；每个日期格渲染时调用一次。
+
 通过 `TCalendarSubtitleContext` 获取日期与选中态；返回 `null` 表示不显示副标题行。
+
+```dart
+subtitleBuilder: (context, ctx) {
+  final text = lunarLabel(ctx.date);
+  if (text == null) return null;
+  return Text(text, style: const TextStyle(fontSize: 9));
+},
+```
 #### 类型定义
 
 ```dart

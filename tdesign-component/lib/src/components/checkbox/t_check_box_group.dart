@@ -4,20 +4,12 @@ import 't_check_box.dart';
 import 't_selection_card.dart';
 
 @immutable
-
 /// 复选框组的数据项。
 class TCheckboxOption<T> {
   const TCheckboxOption({
-    /// 选项值。
     required this.value,
-
-    /// 主文案。
     required this.label,
-
-    /// 副文案。
     this.subTitle,
-
-    /// 是否禁用该项。
     this.disabled = false,
   });
 
@@ -35,52 +27,29 @@ class TCheckboxOption<T> {
 }
 
 /// 自定义复选框组数据项构建器。
-typedef TCheckboxOptionBuilder<T> = Widget Function(
-  BuildContext context,
-  TCheckboxOption<T> option,
-  bool selected,
-  bool disabled,
-);
+typedef TCheckboxOptionBuilder<T> =
+    Widget Function(
+      BuildContext context,
+      TCheckboxOption<T> option,
+      bool selected,
+      bool disabled,
+    );
 
 /// 数据驱动且严格受控的复选框组。
 class TCheckboxGroup<T> extends StatelessWidget {
   const TCheckboxGroup({
     super.key,
-
-    /// 受控选中项列表。
     required this.value,
-
-    /// 复选框数据项。
     required this.options,
-
-    /// 选中项列表变更回调；为 null 时整组禁用。
     this.onChanged,
-
-    /// 排列方向。
     this.direction = Axis.vertical,
-
-    /// 每行列数，必须大于 0。
     this.columns = 1,
-
-    /// 是否使用卡片模式。
     this.cardMode = false,
-
-    /// 普通模式是否显示项间分割线，默认显示；卡片模式不显示。
     this.showDivider = true,
-
-    /// 控件与文案排列方向。
     this.contentDirection = TContentDirection.right,
-
-    /// 复选框尺寸。
     this.size = TCheckboxSize.medium,
-
-    /// 最多可选数量。
     this.maxSelected,
-
-    /// 超过最多可选数量时触发。
     this.onMaxSelected,
-
-    /// 自定义数据项视觉；交互仍由组接管。
     this.itemBuilder,
   }) : assert(columns > 0);
 
@@ -91,12 +60,13 @@ class TCheckboxGroup<T> extends StatelessWidget {
   final List<TCheckboxOption<T>> options;
 
   /// 选中项列表变更回调；为 null 时整组禁用。
+  /// 回调提供完整选中列表，按 options 的顺序排列；父组件需回传新的 value。
   final ValueChanged<List<T>>? onChanged;
 
   /// 排列方向。
   final Axis direction;
 
-  /// 每行列数。
+  /// 每行列数，必须大于 0。
   final int columns;
 
   /// 是否使用卡片模式。
@@ -112,6 +82,7 @@ class TCheckboxGroup<T> extends StatelessWidget {
   final TCheckboxSize size;
 
   /// 最多可选数量。
+  /// null 时不限制；达到上限后阻止新增选择，但仍允许取消。设为 0 时不能新增选择。
   final int? maxSelected;
 
   /// 超过最多可选数量时触发。
@@ -158,7 +129,10 @@ class TCheckboxGroup<T> extends StatelessWidget {
   }
 
   Widget _buildItem(
-      BuildContext context, TCheckboxOption<T> option, int index) {
+    BuildContext context,
+    TCheckboxOption<T> option,
+    int index,
+  ) {
     final selected = value.contains(option.value);
     final disabled = onChanged == null || option.disabled;
     if (itemBuilder != null) {

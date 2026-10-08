@@ -27,36 +27,12 @@ export 't_stepper_types.dart';
 class TStepper extends StatefulWidget {
   const TStepper({
     super.key,
-
-    /// 受控数值，必须位于 [min] 与 [max] 之间。
     required this.value,
-
-    /// 数值变化请求。
-    ///
-    /// 点击按钮、提交有效输入或输入框失焦时触发；一次操作最多触发一次。
-    /// 为 null 时整组禁用。
     this.onChanged,
-
-    /// 最小值，必须小于或等于 [max]。
     this.min = 0,
-
-    /// 最大值，必须大于或等于 [min]。
     this.max = 100,
-
-    /// 加减按钮使用的步长，必须大于 0。
-    ///
-    /// 输入提交不要求是步长的整数倍，但会限制在 [min] 与 [max] 之间。
-    /// 编辑时以合法输入草稿作为步进起点，并据此判断按钮是否达到边界。
     this.step = 1,
-
-    /// 组件尺寸。
-    ///
-    /// 为空时使用 [TStepperSize.medium]。
     this.size,
-
-    /// 组件形态。
-    ///
-    /// 为空时使用 [TStepperVariant.normal]。
     this.variant,
   }) : assert(min <= max),
        assert(value >= min && value <= max),
@@ -67,7 +43,10 @@ class TStepper extends StatefulWidget {
   /// 父组件需要在 [onChanged] 后以新值重建组件，否则输入内容会恢复。
   final num value;
 
-  /// 数值变化请求；一次操作最多触发一次，为 null 时整组禁用。
+  /// 数值变化请求。
+  ///
+  /// 点击按钮、提交有效输入或输入框失焦时触发；一次操作最多触发一次。
+  /// 为 null 时整组禁用。
   final ValueChanged<num>? onChanged;
 
   /// 最小值，必须小于或等于 [max]。
@@ -76,15 +55,20 @@ class TStepper extends StatefulWidget {
   /// 最大值，必须大于或等于 [min]。
   final num max;
 
-  /// 加减按钮使用的正数步长；直接输入不要求是步长的整数倍。
+  /// 加减按钮使用的步长，必须大于 0。
   ///
-  /// 编辑时合法草稿同时决定步进起点与按钮的边界状态。
+  /// 输入提交不要求是步长的整数倍，但会限制在 [min] 与 [max] 之间。
+  /// 编辑时以合法输入草稿作为步进起点，并据此判断按钮是否达到边界。
   final num step;
 
-  /// 组件尺寸；为空时使用 [TStepperSize.medium]。
+  /// 组件尺寸。
+  ///
+  /// 为空时使用 [TStepperSize.medium]。
   final TStepperSize? size;
 
-  /// 组件形态；为空时使用 [TStepperVariant.normal]。
+  /// 组件形态。
+  ///
+  /// 为空时使用 [TStepperVariant.normal]。
   final TStepperVariant? variant;
 
   @override

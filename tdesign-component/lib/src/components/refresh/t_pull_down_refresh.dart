@@ -62,7 +62,7 @@ class TPullDownRefresh extends StatefulWidget {
   /// （不吞掉）。若需在失败时做业务处理，请在回调内部自行 try/catch。
   final FutureOr<void> Function()? onLoadMore;
 
-  /// 距离底部多少逻辑像素时触发加载（默认 50，对齐官方 `lowerThreshold`）。
+  /// 距离底部多少逻辑像素时触发加载，默认 50，必须大于 0。
   final double lowerThreshold;
 
   /// 外部主动刷新控制器。
@@ -87,10 +87,10 @@ class TPullDownRefresh extends StatefulWidget {
   /// 必须为非负时长。
   final Duration? refreshTimeout;
 
-  /// Header 容器高度 = 触发阈值（默认 50，对齐官方 `loadingBarHeight`）。
+  /// Header 容器高度与触发阈值，默认 50 逻辑像素，必须大于 0。
   final double loadingBarHeight;
 
-  /// 最大下拉高度（默认 80，对齐官方 `maxBarHeight`）。
+  /// 最大下拉高度，默认 80 逻辑像素，不得小于 loadingBarHeight。
   final double maxBarHeight;
 
   /// 刷新完成提示的展示时长（默认 500ms，对齐官方 `successDuration`）。

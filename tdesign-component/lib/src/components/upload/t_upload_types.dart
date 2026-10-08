@@ -53,31 +53,14 @@ typedef TUploadPicker = Future<List<TUploadFile>> Function();
 /// 不可变的上传文件数据。
 class TUploadFile {
   const TUploadFile({
-    /// 文件唯一标识。
     required this.id,
-
-    /// 文件名。
     required this.name,
-
-    /// 远程预览地址。
     this.url,
-
-    /// 本地预览字节。
     this.bytes,
-
-    /// 文件字节数。
     this.size,
-
-    /// 上传状态。
     this.status = TUploadFileStatus.ready,
-
-    /// 上传进度，范围为 0 到 1。
     this.progress,
-
-    /// 失败状态文案。
     this.errorText,
-
-    /// 是否允许移除。
     this.canRemove = true,
   }) : assert(progress == null || (progress >= 0 && progress <= 1));
 

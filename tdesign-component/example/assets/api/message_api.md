@@ -5,6 +5,7 @@
 ### TMessage
 #### 简介
 顶部消息组件。
+
 直接构造即渲染消息，并应作为 `Stack` 的子组件使用。页面内的展示与隐藏由父级
 Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 `onDismissed` 中同步
 移除父级状态。全局 Overlay 消息使用 `TMessage.show`，并通过返回的
@@ -43,6 +44,7 @@ static TMessageHandle show({
 
 
 在 Overlay 中显示消息并返回控制句柄。
+
 未显式传入 `offset` 时，新消息会替换同一 Overlay 中上一条默认位置的消息；
 显式传入不同 `offset` 的消息可以同时展示。
 
@@ -215,9 +217,9 @@ const TMessageThemeData({this.backgroundColor, this.shape, this.elevation})
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景色 | 否 |
-| elevation | double? | - | 阴影 | 否 |
-| shape | ShapeBorder? | - | 形状 | 否 |
+| backgroundColor | Color? | - | 背景色 未配置时使用 bgColorContainer Token。 | 否 |
+| elevation | double? | - | 阴影 未配置时使用全局 shadow1 绘制阴影；非空时改用 Material elevation。 | 否 |
+| shape | ShapeBorder? | - | 形状 未配置时使用 radiusDefault Token 构造圆角矩形。 | 否 |
 
 
 #### 实例方法
@@ -239,9 +241,9 @@ TMessageThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景色 | 否 |
-| shape | ShapeBorder? | - | 形状 | 否 |
-| elevation | double? | - | 阴影 | 否 |
+| backgroundColor | Color? | - | 字段含义：背景色 未配置时使用 bgColorContainer Token。 调用时的空值行为见方法说明。 | 否 |
+| shape | ShapeBorder? | - | 字段含义：形状 未配置时使用 radiusDefault Token 构造圆角矩形。 调用时的空值行为见方法说明。 | 否 |
+| elevation | double? | - | 字段含义：阴影 未配置时使用全局 shadow1 绘制阴影；非空时改用 Material elevation。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TMessageThemeData.lerp

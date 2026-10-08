@@ -27,6 +27,7 @@ class TSwipeCellController {
   _TSwipeCellControllerBinding? _binding;
 
   /// 展开指定侧的操作面板。
+  /// 返回的 Future 在动画结束后完成；未绑定组件时立即完成且不执行操作。
   Future<void> open(
     /// 需要展开的操作面板侧；该侧没有面板时关闭当前面板。
     TSwipeCellSide side,
@@ -35,6 +36,7 @@ class TSwipeCellController {
   }
 
   /// 关闭当前展开的操作面板。
+  /// 返回的 Future 在动画结束后完成；未绑定组件时立即完成且不执行操作。
   Future<void> close() async {
     await _binding?.close();
   }
@@ -79,6 +81,7 @@ class TSwipeCell extends StatefulWidget {
   final Widget child;
 
   /// 是否允许用户拖动，默认为 true。
+  /// 仅控制用户拖动，不阻止控制器命令。
   final bool enabled;
 
   /// 起始侧操作面板。
@@ -88,6 +91,7 @@ class TSwipeCell extends StatefulWidget {
   final TSwipeCellPanel? end;
 
   /// 面板展开状态变化回调。
+  /// 在展开状态改变时通知，早于动画结束；切换侧时先通知旧侧关闭，再通知新侧打开。
   final TSwipeCellChanged? onOpenChanged;
 
   /// 命令式控制器。

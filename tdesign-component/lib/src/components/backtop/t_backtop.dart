@@ -30,7 +30,8 @@ class TBackTop extends StatefulWidget {
   /// 页面滚动控制器。
   ///
   /// 未传时组件始终可见，点击只触发 [onPressed]；传入后组件监听滚动偏移并
-  /// 在点击时动画回到该滚动位置的最小边界。
+  /// 在点击时以 500 毫秒、Curves.easeIn 动画回到该滚动位置的最小边界。
+  /// 控制器由调用方创建和释放，组件只管理自己的滚动监听。
   final ScrollController? controller;
 
   /// 回顶动画完成后的通知。
@@ -43,7 +44,7 @@ class TBackTop extends StatefulWidget {
   /// 圆形显示“顶部”，半圆形显示“返回/顶部”，文案来自当前资源代理。
   final bool showText;
 
-  /// 绑定 [controller] 时的显示阈值，默认 200。
+  /// 绑定 [controller] 时的显示阈值，默认 200；必须大于或等于 0。
   ///
   /// 滚动偏移大于或等于该值时显示；未绑定 [controller] 时不参与显隐。
   final double visibilityOffset;

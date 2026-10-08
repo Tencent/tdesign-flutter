@@ -54,10 +54,10 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
              groupBorderWidth * 2 <= dimension,
        );
 
-  /// 自定义头像边长。
+  /// 自定义头像边长；未设置时小、中、大尺寸分别为 40、48、64 逻辑像素。
   final double? dimension;
 
-  /// 默认图标大小。
+  /// 默认图标大小；未设置时小、中、大尺寸分别为 20、24、32 逻辑像素。
   final double? iconSize;
 
   /// 方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。
@@ -72,14 +72,14 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
   /// 默认图标与继承文字的前景色；未设置时回退全局品牌色。
   final Color? foregroundColor;
 
-  /// 头像组重叠宽度。
+  /// 头像组重叠宽度；未设置时为 8 逻辑像素，实例 spacing 优先。
   final double? groupSpacing;
 
   /// 头像组成员描边宽度。
   /// 未设置时按成员尺寸使用小/中/大 1/2/3 逻辑像素。
   final double? groupBorderWidth;
 
-  /// 头像组成员描边颜色。
+  /// 头像组成员描边颜色；未设置时使用 `bgColorContainer` Token。
   final Color? groupBorderColor;
 
   /// 头像组成员阴影；未设置时使用 1px 水平偏移、2px `blurRadius` 和 15% 黑色。

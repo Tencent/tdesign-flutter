@@ -33,8 +33,8 @@ Never _throwPopupOptionsValidationError(String error) {
 ///
 /// 生命周期回调见 [onOpened]、[onClosed]、[onVisibleChange]；
 /// 蒙层行为见 [overlay]（[TPopupOverlayConfig]）。
-/// 单次打开的显式尺寸、面板颜色、圆角、动画时长及蒙层颜色优先于
-/// [TPopupThemeData] 的子树默认值；未指定的字段分别从组件 Theme 补足。
+/// 单次打开的显式尺寸、面板颜色、圆角及蒙层颜色优先于
+/// [TPopupThemeData] 的子树默认值；动画时长未指定时使用 240 毫秒。
 class TPopupOptions {
   /// 通用构造；[placement] 在运行时才能确定时使用。
   ///
@@ -266,7 +266,8 @@ class TPopupOptions {
   TPopupOverlayConfig get overlayConfig =>
       overlay ?? const TPopupOverlayConfig();
 
-  /// 为 true 时路由 `maintainState` 为 false，关闭后不保留路由内 State。
+  /// 为 true 时路由 maintainState 为 false，被其他不透明路由覆盖时可释放内容 State。
+  /// 关闭路由后无论本字段取值如何，内容 State 都会释放；再次打开会创建新 State。
   final bool destroyOnClose;
 
   /// 打开/关闭动画时长，默认 240ms（与小程序公开 duration 默认值一致）。
@@ -304,21 +305,52 @@ class TPopupOptions {
   ///
   /// 未传入的字段保持原值；对头部/关闭 builder 显式传入 `null` 表示隐藏该区域。
   TPopupOptions copyWith({
+    /// 非空值替换原配置；不传或 null 保留原值。
     Widget? child,
+
+    /// 非空值替换原配置；不传或 null 保留原值。
     TPopupPlacement? placement,
+
+    /// 不传时保留原值；显式 null 清除本字段，非空值须为 num。
     Object? width = _unset,
+
+    /// 不传时保留原值；显式 null 清除本字段，非空值须为 num。
     Object? height = _unset,
+
+    /// 不传时保留原值；显式 null 清除本字段，非空值须为 TPopupInset。
     Object? inset = _unset,
+
+    /// 不传时保留原值；显式 null 清除本字段，非空值须为 num。
     Object? radius = _unset,
+
+    /// 不传时保留原值；显式 null 清除本字段，非空值须为 Color。
     Object? backgroundColor = _unset,
+
+    /// 不传时保留原值；显式 null 清除本字段，非空值须为 TPopupOverlayConfig。
     Object? overlay = _unset,
+
+    /// 非空值替换原配置；不传或 null 保留原值。
     bool? destroyOnClose,
+
+    /// 非空值替换原配置；不传或 null 保留原值。
     Duration? animationDuration,
+
+    /// 不传时保留原值；显式 null 清除本字段，非空值须为 TPopupHeaderBuilder。
     Object? headerBuilder = _unset,
+
+    /// 不传时保留原值；显式 null 清除本字段，非空值须为 TPopupSlotBuilder。
     Object? closeBuilder = _unset,
+
+    /// 不传时保留原值；显式 null 清除本字段，非空值须为 VoidCallback。
     Object? onOpened = _unset,
+
+    /// 不传时保留原值；显式 null 清除本字段，非空值须为 VoidCallback。
     Object? onClosed = _unset,
+
+    /// 不传时保留原值；显式 null 清除本字段，非空值须为 TPopupVisibleChangeCallback。
     Object? onVisibleChange = _unset,
+
+    /// 非空值替换原配置；不传或 null 保留原值。
     bool? useSafeArea,
   }) {
     return TPopupOptions(

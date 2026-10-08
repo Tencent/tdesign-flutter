@@ -52,7 +52,7 @@ const TSwiper({
 | --- | --- | --- | --- | --- |
 | allowImplicitScrolling | bool | false | 是否允许无障碍服务请求将未显示的页面滚动到可见区域。 | 否 |
 | animationCurve | Curve | Curves.easeInOut | 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画曲线。 | 否 |
-| animationDuration | Duration | kThemeAnimationDuration | 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画时长。 | 否 |
+| animationDuration | Duration | kThemeAnimationDuration | 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画时长。 必须大于 Duration.zero，否则抛出 ArgumentError。 | 否 |
 | autoplay | bool | false | 是否自动播放。 | 否 |
 | autoplayInterval | Duration | const Duration(seconds: 3) | 自动播放每次页面稳定后重新等待的完整间隔，必须大于零。 | 否 |
 | children | List&lt;Widget&gt;? | - | 静态页面列表；与 `itemBuilder` 二选一，且不能为空。 | 否 |
@@ -81,6 +81,7 @@ const TSwiper({
 ### TSwiperController
 #### 简介
 控制 `TSwiper` 当前页和程序化切换。
+
 使用 `jumpTo`、`animateTo`、`next` 和 `previous` 发起切换，通过 `index`
 或监听 Controller 获取当前业务索引。一个 Controller 同时只能附加一个
 `TSwiper`，由调用方创建的实例也由调用方负责释放。
@@ -102,7 +103,7 @@ TSwiperController({this.initialIndex = 0})
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| initialIndex | int | 0 | 首次附加时展示的页面。 | 否 |
+| initialIndex | int | 0 | 首次附加时展示的页面；必须大于或等于 0 且小于页面数，否则抛出参数或范围异常。 | 否 |
 
 #### 公开属性（字段与访问器）
 
@@ -122,6 +123,7 @@ Future<void> animateTo(int index, {Duration? duration, Curve? curve})
 
 
 动画切换到目标页；循环模式始终向前到达目标。
+
 未提供 `duration` 或 `curve` 时，继承所附加 `TSwiper` 的动画配置。
 
 返回类型：`Future<void>`
@@ -157,6 +159,7 @@ Future<void> next({Duration? duration, Curve? curve})
 
 
 切换到下一页。
+
 未提供 `duration` 或 `curve` 时，继承所附加 `TSwiper` 的动画配置。
 
 返回类型：`Future<void>`
@@ -175,6 +178,7 @@ Future<void> previous({Duration? duration, Curve? curve})
 
 
 切换到上一页。
+
 未提供 `duration` 或 `curve` 时，继承所附加 `TSwiper` 的动画配置。
 
 返回类型：`Future<void>`
@@ -188,6 +192,7 @@ Future<void> previous({Duration? duration, Curve? curve})
 ### TSwiperThemeData
 #### 简介
 轮播组件级 ThemeExtension。
+
 保存指示器、内容圆角和切换按钮的视觉默认值。
 
 #### 声明
@@ -221,17 +226,17 @@ const TSwiperThemeData({
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | activeColor | Color? | - | 激活项颜色。 | 否 |
-| activeDotExtent | double? | - | 长条激活项在滚动主轴上的长度。 | 否 |
+| activeDotExtent | double? | - | 长条激活项在滚动主轴上的长度。 未配置时为 20 逻辑像素，必须大于 0。 | 否 |
 | borderRadius | BorderRadiusGeometry? | - | 轮播内容圆角。 | 否 |
-| controlIconSize | double? | - | 控制按钮图标尺寸。 | 否 |
+| controlIconSize | double? | - | 控制按钮图标尺寸。 未配置时为 18 逻辑像素，必须大于 0。 | 否 |
 | controlStyle | ButtonStyle? | - | 控制按钮样式。 | 否 |
-| dotSize | double? | - | 圆点直径。 | 否 |
-| dotSpacing | double? | - | 圆点间距。 | 否 |
+| dotSize | double? | - | 圆点直径。 未配置时为 6 逻辑像素，必须大于 0。 | 否 |
+| dotSpacing | double? | - | 圆点间距。 未配置时为 5 逻辑像素，必须大于或等于 0。 | 否 |
 | fractionBackgroundColor | Color? | - | 数字指示器背景色。 | 否 |
 | fractionStyle | TextStyle? | - | 数字指示器文字样式。 | 否 |
 | inactiveColor | Color? | - | 未激活项颜色。 | 否 |
-| paginationAlignment | AlignmentGeometry? | - | 默认指示器对齐方式。 | 否 |
-| paginationMargin | EdgeInsetsGeometry? | - | 指示器外边距。 | 否 |
+| paginationAlignment | AlignmentGeometry? | - | 默认指示器对齐方式。 未配置时 controls 居中，其他类型横向轮播为 bottomCenter、纵向轮播为 centerRight。 | 否 |
+| paginationMargin | EdgeInsetsGeometry? | - | 指示器外边距。 未配置时普通指示器四边为 12；controls 沿滚动轴两端为 15 逻辑像素。 | 否 |
 
 
 #### 实例方法
@@ -262,18 +267,18 @@ TSwiperThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| paginationAlignment | AlignmentGeometry? | - | 默认指示器对齐方式。 | 否 |
-| paginationMargin | EdgeInsetsGeometry? | - | 指示器外边距。 | 否 |
-| borderRadius | BorderRadiusGeometry? | - | 轮播内容圆角。 | 否 |
-| activeColor | Color? | - | 激活项颜色。 | 否 |
-| inactiveColor | Color? | - | 未激活项颜色。 | 否 |
-| dotSize | double? | - | 圆点直径。 | 否 |
-| activeDotExtent | double? | - | 长条激活项在滚动主轴上的长度。 | 否 |
-| dotSpacing | double? | - | 圆点间距。 | 否 |
-| fractionStyle | TextStyle? | - | 数字指示器文字样式。 | 否 |
-| fractionBackgroundColor | Color? | - | 数字指示器背景色。 | 否 |
-| controlStyle | ButtonStyle? | - | 控制按钮样式。 | 否 |
-| controlIconSize | double? | - | 控制按钮图标尺寸。 | 否 |
+| paginationAlignment | AlignmentGeometry? | - | 字段含义：默认指示器对齐方式。 未配置时 controls 居中，其他类型横向轮播为 bottomCenter、纵向轮播为 centerRight。 调用时的空值行为见方法说明。 | 否 |
+| paginationMargin | EdgeInsetsGeometry? | - | 字段含义：指示器外边距。 未配置时普通指示器四边为 12；controls 沿滚动轴两端为 15 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| borderRadius | BorderRadiusGeometry? | - | 字段含义：轮播内容圆角。 调用时的空值行为见方法说明。 | 否 |
+| activeColor | Color? | - | 字段含义：激活项颜色。 调用时的空值行为见方法说明。 | 否 |
+| inactiveColor | Color? | - | 字段含义：未激活项颜色。 调用时的空值行为见方法说明。 | 否 |
+| dotSize | double? | - | 字段含义：圆点直径。 未配置时为 6 逻辑像素，必须大于 0。 调用时的空值行为见方法说明。 | 否 |
+| activeDotExtent | double? | - | 字段含义：长条激活项在滚动主轴上的长度。 未配置时为 20 逻辑像素，必须大于 0。 调用时的空值行为见方法说明。 | 否 |
+| dotSpacing | double? | - | 字段含义：圆点间距。 未配置时为 5 逻辑像素，必须大于或等于 0。 调用时的空值行为见方法说明。 | 否 |
+| fractionStyle | TextStyle? | - | 字段含义：数字指示器文字样式。 调用时的空值行为见方法说明。 | 否 |
+| fractionBackgroundColor | Color? | - | 字段含义：数字指示器背景色。 调用时的空值行为见方法说明。 | 否 |
+| controlStyle | ButtonStyle? | - | 字段含义：控制按钮样式。 调用时的空值行为见方法说明。 | 否 |
+| controlIconSize | double? | - | 字段含义：控制按钮图标尺寸。 未配置时为 18 逻辑像素，必须大于 0。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TSwiperThemeData.lerp

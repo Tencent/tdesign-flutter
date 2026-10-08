@@ -42,13 +42,13 @@ const TIndexes({
 | builderContent | Widget? Function(BuildContext context, String index) | - | 内容自定义构建 | 是 |
 | builderIndex | Widget Function(BuildContext context, String index, bool isActive)? | - | 索引文本自定义构建，包括索引激活左侧提示 | 否 |
 | capsuleTheme | bool | false | 锚点是否为胶囊式样式 | 否 |
-| indexList | List&lt;String&gt;? | - | 索引字符列表。不传默认 A-Z；默认值要求 `builderContent` 能处理 A-Z 全部索引，自定义数据建议显式传入。 列表更新后若不再包含当前活动项，组件回退到新列表首项、同步滚动位置并触发 `onChanged`。 | 否 |
-| initialIndex | String? | - | 初始激活索引。为空时使用 `indexList` 的第一项 仅在组件首次创建时生效；后续活动索引由滚动位置派生。 | 否 |
+| indexList | List&lt;String&gt;? | - | 索引字符列表，字符必须唯一。不传默认 A-Z；默认值要求 builderContent 能处理 A-Z 全部索引，自定义数据建议显式传入。 列表更新后若不再包含当前活动项，组件回退到新列表首项、同步滚动位置并触发 `onChanged`。 | 否 |
+| initialIndex | String? | - | 初始激活索引，非空时必须属于 indexList；为空时使用 indexList 的第一项。 仅在组件首次创建时生效；后续活动索引由滚动位置派生。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | onChanged | void Function(String index)? | - | 当前激活索引发生变更时触发（含滚动吸顶派生与用户侧栏选择） | 否 |
 | onSelect | void Function(String index)? | - | 用户在侧边栏点击或拖动选择索引（激活索引变化）时触发；滚动吸顶派生不会触发本回调 | 否 |
 | reverse | bool | false | 是否反向滚动 | 否 |
-| scrollController | ScrollController? | - | 滚动控制器 | 否 |
+| scrollController | ScrollController? | - | 滚动控制器；外部控制器由调用方释放，未提供时组件管理内部控制器。 | 否 |
 | sticky | bool | true | 锚点是否吸顶 | 否 |
 | stickyOffset | double | 0 | 锚点吸顶时与顶部的距离 | 否 |
 | useSafeArea | bool | false | 是否避让系统安全区，默认 false。 仅在组件自身负责屏幕边缘布局时开启；若外层 Popup 或页面壳已经处理安全区， 应保持关闭，避免重复避让。 | 否 |
@@ -129,6 +129,7 @@ const TIndexesList({
 ### TIndexesThemeData
 #### 简介
 索引组件的子树级视觉主题。
+
 仅管理尺寸、颜色和字体。吸顶、滚动方向与胶囊模式属于组件实例行为。
 
 #### 声明
@@ -242,31 +243,31 @@ TIndexesThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| indexListMaxHeight | double? | - | 索引列表最大高度占父容器高度的比例。 | 否 |
-| sidebarRight | double? | - | 侧栏距容器右侧的距离。 | 否 |
-| indexItemSize | double? | - | 单个索引的尺寸。 | 否 |
-| indexItemSpacing | double? | - | 相邻索引之间的距离。 | 否 |
-| tipSize | double? | - | 按压提示的最小尺寸。 | 否 |
-| tipMaxWidth | double? | - | 按压提示的最大宽度。 | 否 |
-| tipGap | double? | - | 按压提示与索引之间的距离。 | 否 |
-| indexColor | Color? | - | 普通索引文字颜色。 | 否 |
-| activeIndexColor | Color? | - | 激活索引文字颜色。 | 否 |
-| activeIndexBackgroundColor | Color? | - | 激活索引背景色。 | 否 |
-| tipColor | Color? | - | 按压提示文字颜色。 | 否 |
-| tipBackgroundColor | Color? | - | 按压提示背景色。 | 否 |
-| indexFont | Font? | - | 普通索引字体。 | 否 |
-| activeIndexFont | Font? | - | 激活索引字体。 | 否 |
-| tipFont | Font? | - | 按压提示字体。 | 否 |
-| anchorColor | Color? | - | 普通锚点文字颜色。 | 否 |
-| activeAnchorColor | Color? | - | 激活锚点文字颜色。 | 否 |
-| anchorBackgroundColor | Color? | - | 普通锚点背景色。 | 否 |
-| activeAnchorBackgroundColor | Color? | - | 激活锚点背景色。 | 否 |
-| anchorBorderColor | Color? | - | 激活锚点边框颜色。 | 否 |
-| anchorFont | Font? | - | 普通锚点字体。 | 否 |
-| activeAnchorFont | Font? | - | 激活锚点字体。 | 否 |
-| anchorVerticalPadding | double? | - | 锚点垂直内边距。 | 否 |
-| anchorHorizontalPadding | double? | - | 锚点水平内边距。 | 否 |
-| capsuleMargin | double? | - | 胶囊锚点的水平外边距。 | 否 |
+| indexListMaxHeight | double? | - | 字段含义：索引列表最大高度占父容器高度的比例。 调用时的空值行为见方法说明。 | 否 |
+| sidebarRight | double? | - | 字段含义：侧栏距容器右侧的距离。 调用时的空值行为见方法说明。 | 否 |
+| indexItemSize | double? | - | 字段含义：单个索引的尺寸。 调用时的空值行为见方法说明。 | 否 |
+| indexItemSpacing | double? | - | 字段含义：相邻索引之间的距离。 调用时的空值行为见方法说明。 | 否 |
+| tipSize | double? | - | 字段含义：按压提示的最小尺寸。 调用时的空值行为见方法说明。 | 否 |
+| tipMaxWidth | double? | - | 字段含义：按压提示的最大宽度。 调用时的空值行为见方法说明。 | 否 |
+| tipGap | double? | - | 字段含义：按压提示与索引之间的距离。 调用时的空值行为见方法说明。 | 否 |
+| indexColor | Color? | - | 字段含义：普通索引文字颜色。 调用时的空值行为见方法说明。 | 否 |
+| activeIndexColor | Color? | - | 字段含义：激活索引文字颜色。 调用时的空值行为见方法说明。 | 否 |
+| activeIndexBackgroundColor | Color? | - | 字段含义：激活索引背景色。 调用时的空值行为见方法说明。 | 否 |
+| tipColor | Color? | - | 字段含义：按压提示文字颜色。 调用时的空值行为见方法说明。 | 否 |
+| tipBackgroundColor | Color? | - | 字段含义：按压提示背景色。 调用时的空值行为见方法说明。 | 否 |
+| indexFont | Font? | - | 字段含义：普通索引字体。 调用时的空值行为见方法说明。 | 否 |
+| activeIndexFont | Font? | - | 字段含义：激活索引字体。 调用时的空值行为见方法说明。 | 否 |
+| tipFont | Font? | - | 字段含义：按压提示字体。 调用时的空值行为见方法说明。 | 否 |
+| anchorColor | Color? | - | 字段含义：普通锚点文字颜色。 调用时的空值行为见方法说明。 | 否 |
+| activeAnchorColor | Color? | - | 字段含义：激活锚点文字颜色。 调用时的空值行为见方法说明。 | 否 |
+| anchorBackgroundColor | Color? | - | 字段含义：普通锚点背景色。 调用时的空值行为见方法说明。 | 否 |
+| activeAnchorBackgroundColor | Color? | - | 字段含义：激活锚点背景色。 调用时的空值行为见方法说明。 | 否 |
+| anchorBorderColor | Color? | - | 字段含义：激活锚点边框颜色。 调用时的空值行为见方法说明。 | 否 |
+| anchorFont | Font? | - | 字段含义：普通锚点字体。 调用时的空值行为见方法说明。 | 否 |
+| activeAnchorFont | Font? | - | 字段含义：激活锚点字体。 调用时的空值行为见方法说明。 | 否 |
+| anchorVerticalPadding | double? | - | 字段含义：锚点垂直内边距。 调用时的空值行为见方法说明。 | 否 |
+| anchorHorizontalPadding | double? | - | 字段含义：锚点水平内边距。 调用时的空值行为见方法说明。 | 否 |
+| capsuleMargin | double? | - | 字段含义：胶囊锚点的水平外边距。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TIndexesThemeData.lerp
@@ -315,6 +316,7 @@ StickyHeaderController()
 #### 简介
 The `StickyHeaderController` for descendant widgets that don't specify one
 explicitly.
+
 `DefaultStickyHeaderController` is an inherited widget that is used to share a
 `StickyHeaderController` with `SliverStickyHeader`s. It's used when sharing an
 explicitly created `StickyHeaderController` isn't convenient because the sticky
@@ -338,7 +340,9 @@ static StickyHeaderController? of(BuildContext context)
 
 
 The closest instance of this class that encloses the given context.
+
 Typical usage:
+
 ```dart
 StickyHeaderController controller = DefaultStickyHeaderController.of(context);
 ```
@@ -360,7 +364,7 @@ const DefaultStickyHeaderController({Key? key, required this.child})
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| child | Widget | - | The widget below this widget in the tree. Typically a `Scaffold` whose `AppBar` includes a `TabBar`. {@macro flutter.widgets.child} | 是 |
+| child | Widget | - | The widget below this widget in the tree. Typically a `Scaffold` whose `AppBar` includes a `TabBar`. | 是 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 
 
@@ -393,6 +397,7 @@ const SliverStickyHeaderState(this.scrollPercentage, this.isPinned)
 #### 简介
 A sliver that displays a header before its sliver.
 The header scrolls off the viewport only when the sliver does.
+
 Place this widget inside a `CustomScrollView` or similar.
 
 #### 声明
@@ -421,7 +426,9 @@ SliverStickyHeader.builder({
 
 Creates a widget that builds the header of a `SliverStickyHeader`
 each time its scroll percentage changes.
+
 The `builder`, `overlapsContent` and `sticky` arguments must not be null.
+
 If a `StickyHeaderController` is not provided, then the value of
 `DefaultStickyHeaderController.of` will be used.
 
@@ -451,10 +458,12 @@ const SliverStickyHeader({
 ```
 
 Creates a sliver that displays the `header` before its `sliver`, unless
-`overlapsContent` it's true.
+overlapsContent is true.
 The `header` stays pinned when it hits the start of the viewport until
 the `sliver` scrolls off the viewport.
+
 The `overlapsContent` and `sticky` arguments must not be null.
+
 If a `StickyHeaderController` is not provided, then the value of
 `DefaultStickyHeaderController.of` will be used.
 
@@ -465,7 +474,7 @@ If a `StickyHeaderController` is not provided, then the value of
 | controller | StickyHeaderController? | - | The controller used to interact with this sliver. If a `StickyHeaderController` is not provided, then the value of `DefaultStickyHeaderController.of` will be used. | 否 |
 | header | Widget? | - | The header to display before the sliver. | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| overlapsContent | bool | false | it's true. | 否 |
+| overlapsContent | bool | false | Whether the header should be drawn on top of the sliver instead of before. | 否 |
 | pinnedOffset | double | 0.0 | The offset at which to pin the header. Defaults to 0.0. | 否 |
 | sliver | Widget? | - | The sliver to display after the header. | 否 |
 | sticky | bool | true | Whether to stick the header. Defaults to true. | 否 |

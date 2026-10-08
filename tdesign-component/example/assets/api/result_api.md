@@ -61,9 +61,9 @@ const TResultThemeData({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| descriptionStyle | TextStyle? | - | 描述文字样式 | 否 |
-| iconSize | double? | - | 默认状态图标尺寸；自定义 icon 不使用该字段。 | 否 |
-| titleStyle | TextStyle? | - | 标题文字样式 | 否 |
+| descriptionStyle | TextStyle? | - | 描述文字样式 未配置时使用 fontBodyMedium / textColorSecondary Token。 | 否 |
+| iconSize | double? | - | 默认状态图标尺寸；自定义 icon 不使用该字段。 未配置时为 80 逻辑像素，必须大于 0。 | 否 |
+| titleStyle | TextStyle? | - | 标题文字样式；默认使用 fontTitleMedium / textColorPrimary Token。 | 否 |
 
 
 #### 实例方法
@@ -85,9 +85,9 @@ TResultThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| iconSize | double? | - | 默认状态图标尺寸；自定义 icon 不使用该字段。 | 否 |
-| titleStyle | TextStyle? | - | 标题文字样式 | 否 |
-| descriptionStyle | TextStyle? | - | 描述文字样式 | 否 |
+| iconSize | double? | - | 字段含义：默认状态图标尺寸；自定义 icon 不使用该字段。 未配置时为 80 逻辑像素，必须大于 0。 调用时的空值行为见方法说明。 | 否 |
+| titleStyle | TextStyle? | - | 字段含义：标题文字样式；默认使用 fontTitleMedium / textColorPrimary Token。 调用时的空值行为见方法说明。 | 否 |
+| descriptionStyle | TextStyle? | - | 字段含义：描述文字样式 未配置时使用 fontBodyMedium / textColorSecondary Token。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TResultThemeData.lerp

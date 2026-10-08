@@ -23,42 +23,19 @@ typedef TRateIconBuilder = Widget Function(bool filled);
 class TRate extends StatefulWidget {
   const TRate({
     super.key,
-
-    /// 受控评分值。
     required this.value,
-
-    /// 评分变更回调；为 null 时禁用。
     this.onChanged,
-
-    /// 开始交互时触发；同一次指针或语义交互只触发一次。
     this.onChangeStart,
-
-    /// 结束交互时触发；指针取消时以当前受控值结束。
     this.onChangeEnd,
-
-    /// 评分项数量。
     this.count = 5,
-
-    /// 是否允许半星。
     this.allowHalf = false,
-
-    /// 是否在整星点击、长按以及拖动评分时显示当前值提示。
-    ///
-    /// 默认为 true。半星点击的精确选择浮层不受此参数控制。
     this.showValueIndicator = true,
-
-    /// 自定义评分图标。
     this.icon,
-
-    /// 各评分对应的辅助文案。
-    ///
-    /// 为 null 时不显示辅助文案；非 null 时显示。当当前评分
-    /// 没有对应文案时，显示本地化的“未评分”。
     this.texts,
   }) : assert(count > 0),
        assert(value >= 0 && value <= count);
 
-  /// 受控评分值。
+  /// 受控评分值，必须位于 0 到 count 之间；父组件需在 onChanged 中更新该值。
   final double value;
 
   /// 评分变更回调；为 null 时禁用。
@@ -70,7 +47,7 @@ class TRate extends StatefulWidget {
   /// 结束交互时触发；指针取消时以当前受控值结束。
   final ValueChanged<double>? onChangeEnd;
 
-  /// 评分项数量。
+  /// 评分项数量，必须大于 0。
   final int count;
 
   /// 是否允许半星。

@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 /// TMessage 组件级 ThemeExtension
 class TMessageThemeData extends ThemeExtension<TMessageThemeData> {
   /// 背景色
+  /// 未配置时使用 bgColorContainer Token。
   final Color? backgroundColor;
 
   /// 形状
+  /// 未配置时使用 radiusDefault Token 构造圆角矩形。
   final ShapeBorder? shape;
 
   /// 阴影
+  /// 未配置时使用全局 shadow1 绘制阴影；非空时改用 Material elevation。
   final double? elevation;
 
   const TMessageThemeData({this.backgroundColor, this.shape, this.elevation});

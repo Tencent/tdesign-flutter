@@ -32,6 +32,7 @@ const TFooter({Key? key, this.logo, this.text = '', this.links = const []})
 ### TFooterThemeData
 #### 简介
 页脚组件级 ThemeExtension。
+
 未配置 `height` 时，页脚按内容自然撑开；配置后才会约束外层高度。
 
 #### 声明
@@ -69,7 +70,7 @@ TFooterThemeData copyWith({double? height})
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| height | double? | - | 页脚外层高度。 默认值为 null，表示由 logo、链接或文字内容自然决定高度；这与 TDesign 小程序 Footer 的内容驱动布局一致。 | 否 |
+| height | double? | - | 字段含义：页脚外层高度。 默认值为 null，表示由 logo、链接或文字内容自然决定高度；这与 TDesign 小程序 Footer 的内容驱动布局一致。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TFooterThemeData.lerp

@@ -57,7 +57,8 @@ class TInput extends StatefulWidget {
        assert(maxLength == null || maxLength >= 0),
        assert(maxCharacter == null || maxCharacter >= 0);
 
-  /// 文本控制器。
+  /// 文本控制器；与 initialValue 互斥。外部控制器由调用方释放，
+  /// 未提供时由组件创建并释放内部控制器。
   final TextEditingController? controller;
 
   /// 内部控制器的初始文本，仅初始化一次。
@@ -91,7 +92,8 @@ class TInput extends StatefulWidget {
   /// 后缀组件；传入后不显示内置清除按钮。
   final Widget? suffix;
 
-  /// 清除按钮显示模式。
+  /// 清除按钮显示模式；为空时为 TInputClearButtonMode.never。
+  /// 点击清除会清空 controller 并触发 onChanged；suffix 非空时隐藏清除按钮。
   final TInputClearButtonMode? clearButtonMode;
 
   /// 输入框语义状态。
@@ -108,16 +110,17 @@ class TInput extends StatefulWidget {
   /// 最大行数。
   final int? maxLines;
 
-  /// 最小行数。
+  /// 最小行数；为空时单行为 null，多行默认为 4，并限制到非空 maxLines。
   final int? minLines;
 
-  /// 最大字符数，使用 Flutter grapheme 计数语义。
+  /// 最大字符数，使用 Flutter grapheme 计数语义；非空时必须大于或等于 0，
+  /// 与 maxCharacter 互斥。
   final int? maxLength;
 
   /// 最大字符权重，按 Unicode code point 计算：ASCII code point 计 1，
   /// 非 ASCII code point 计 2。
   ///
-  /// 与 [maxLength] 二选一。提交中的文本超过限制时，保留不超过限制的
+  /// 非空时必须大于或等于 0，与 maxLength 二选一。提交中的文本超过限制时，保留不超过限制的
   /// 最长前缀；输入法正在 composing 时暂不截断，在 composing 结束后执行。
   final int? maxCharacter;
 
@@ -129,7 +132,7 @@ class TInput extends StatefulWidget {
   /// 是否自动聚焦。
   final bool autofocus;
 
-  /// 焦点节点。
+  /// 焦点节点；外部节点由调用方释放，未提供时由组件管理内部节点。
   final FocusNode? focusNode;
 
   /// 键盘类型。
@@ -141,7 +144,7 @@ class TInput extends StatefulWidget {
   /// 文本对齐方式。
   final TextAlign textAlign;
 
-  /// 是否隐藏输入文本。
+  /// 是否隐藏输入文本；为 true 时仅支持 maxLines 为 1、minLines 为 null。
   final bool obscureText;
 
   /// 是否在后置插槽显示内置密码显隐按钮。

@@ -256,6 +256,7 @@ class TDropdownMenu extends StatefulWidget {
   final List<TDropdownMenuItem> items;
 
   /// 外部筛选栏控制器；为空时由组件创建和释放内部控制器。
+  /// 外部控制器由调用方释放，应只绑定一个筛选栏。
   final TDropdownMenuController? controller;
 
   /// 面板展开方向，默认 auto，根据上下可用空间决定。

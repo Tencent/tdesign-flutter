@@ -3,30 +3,39 @@ import 'package:flutter/material.dart';
 /// TDialog 组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树的默认对话框样式。
-/// 面板视觉值由本扩展统一配置；未设置时回退 Flutter DialogTheme 与全局 Token。
+/// 面板视觉值由本扩展统一配置；未设置时回退 TDesign Token 或组件内置值，
+/// 不从 Flutter DialogTheme 读取。
 class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
   /// 背景色（对应 Material [DialogThemeData.backgroundColor]）
+  /// 未配置时使用 bgColorContainer Token。
   final Color? backgroundColor;
 
   /// 形状（圆角；对应 Material [DialogThemeData.shape]）
+  /// 未配置时使用 radiusExtraLarge Token 构造圆角矩形。
   final ShapeBorder? shape;
 
   /// 阴影（对应 Material [DialogThemeData.elevation]）
+  /// 未配置时为 0。
   final double? elevation;
 
   /// 标题文案样式（对应 Material [DialogThemeData.titleTextStyle]）
+  /// 未配置时使用 fontTitleLarge / textColorPrimary Token。
   final TextStyle? titleTextStyle;
 
   /// 内容文案样式（对应 Material [DialogThemeData.contentTextStyle]）
+  /// 未配置时使用 fontBodyLarge / textColorSecondary Token。
   final TextStyle? contentTextStyle;
 
   /// 内容内边距（对应 Material [Dialog] 的 contentPadding；TDesign 扩展）
+  /// 未配置时左、上、右均使用 spacer3，底部为 0。
   final EdgeInsetsGeometry? contentPadding;
 
   /// 面板最大高度。
+  /// 未配置时为视口高度的 80%；同时不超过视口高度减 spacer4，最小为 0。
   final double? maxHeight;
 
   /// 弹窗宽度
+  /// 未配置时为 311 逻辑像素，实际布局仍受可用宽度限制。
   final double? width;
 
   const TDialogThemeData({

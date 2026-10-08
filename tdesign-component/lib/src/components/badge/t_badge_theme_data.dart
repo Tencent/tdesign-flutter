@@ -22,7 +22,7 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
   /// 徽标背景色；为空时使用全局错误色 Token。
   final Color? backgroundColor;
 
-  /// 圆点直径；为空时使用组件内置尺寸。
+  /// 圆点直径；为空时使用 8 逻辑像素。
   final double? dotSize;
 
   /// 文字徽标高度；为空时由当前尺寸的字体 Token 决定。
@@ -31,7 +31,7 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
   /// 徽标文字的唯一组件级样式入口；未配置字段从字体与反色文字 Token 取得。
   final TextStyle? textStyle;
 
-  /// 文字徽标内边距；为空时由当前尺寸决定。
+  /// 文字徽标内边距；为空时中、大尺寸分别使用左右 4、6 逻辑像素。
   final EdgeInsetsGeometry? padding;
 
   /// 开启描边时使用的颜色；为空时回退到当前容器背景色。

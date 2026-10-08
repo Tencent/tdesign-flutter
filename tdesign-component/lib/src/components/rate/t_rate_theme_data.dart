@@ -5,28 +5,13 @@ import 'package:flutter/material.dart';
 /// TRate 组件级 ThemeExtension。
 class TRateThemeData extends ThemeExtension<TRateThemeData> {
   const TRateThemeData({
-    /// 选中星标颜色。
     this.starColor,
-
-    /// 未选中星标颜色。
     this.inactiveStarColor,
-
-    /// 图标尺寸。
     this.iconSize,
-
-    /// 图标间距。
     this.iconGap,
-
-    /// 文案宽度。
     this.textWidth,
-
-    /// 图标与文案间距。
     this.textGap,
-
-    /// 文案样式。
     this.textStyle,
-
-    /// 当前值提示与半星选择浮层阴影。
     this.overlayBoxShadow,
   });
 

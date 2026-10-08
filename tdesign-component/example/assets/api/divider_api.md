@@ -5,12 +5,28 @@
 ### TDivider
 #### 简介
 分割线组件
-T3 自绘层级，不包装 Material `Divider`。包含两种绘制模式：
+
+包含两种绘制模式：
 - 模式 A（纯线）：`child` 为空，横线可虚线、竖线强制实线
 - 模式 B（线 + 中间）：`layout` 为 horizontal 且 `child` 非空
+
 竖线（`TDividerLayout.vertical`）时强制忽略 `dashed`、`align`、`child`，
 默认高度 14dp，左右外边距 16dp。
+
 示例：
+```dart
+// 水平分割线
+TDivider()
+
+// 带文字的水平分割线
+TDivider(child: Text('文字信息'))
+
+// 虚线 + 文字靠左
+TDivider(dashed: true, align: TDividerAlign.left, child: Text('靠左'))
+
+// 竖线
+TDivider(layout: TDividerLayout.vertical)
+```
 
 #### 声明
 
@@ -39,8 +55,10 @@ const TDivider({super.key, this.layout, this.align, this.dashed, this.child})
 ### TDividerThemeData
 #### 简介
 TDivider 组件级 ThemeExtension
+
 通过 Theme 子树注入，控制子树的默认样式。
-构造器参数优先于 Theme（L1/L2 > Theme > DividerTheme > Token）。
+布局、内容和虚线选择由实例控制；视觉值从本主题读取，未配置时回退
+TDesign Token 或组件内置值，不读取 Material DividerTheme。
 
 #### 声明
 
@@ -67,10 +85,10 @@ const TDividerThemeData({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| color | Color? | - | 线条颜色 | 否 |
-| endIndent | double? | - | 右缩进（对齐 Material `DividerThemeData.endIndent` 语义） | 否 |
+| color | Color? | - | 线条颜色；未设置时使用 `bgColorComponent` Token。 | 否 |
+| endIndent | double? | - | 纯水平线结束侧缩进；未设置时为 0，带内容或垂直线时不生效。 | 否 |
 | gapPadding | EdgeInsetsGeometry? | - | 线与中间内容之间的间距，默认左右各使用 `spacer1`（12dp）。 | 否 |
-| indent | double? | - | 左缩进（对齐 Material `DividerThemeData.indent` 语义） | 否 |
+| indent | double? | - | 纯水平线起始侧缩进；未设置时为 0，带内容或垂直线时不生效。 | 否 |
 | margin | EdgeInsetsGeometry? | - | 外边距。未设置时，水平分割线使用上下 10dp，垂直分割线使用左右 16dp。 | 否 |
 | textStyle | TextStyle? | - | child 为文本时的默认样式，覆盖 `fontBodySmall` / `textColorPlaceholder` Token。 | 否 |
 | thickness | double? | - | 线粗：横线 = 高度，竖线 = 宽度（默认 0.5） | 否 |
@@ -99,13 +117,13 @@ TDividerThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| color | Color? | - | 线条颜色 | 否 |
-| thickness | double? | - | 线粗：横线 = 高度，竖线 = 宽度（默认 0.5） | 否 |
-| margin | EdgeInsetsGeometry? | - | 外边距。未设置时，水平分割线使用上下 10dp，垂直分割线使用左右 16dp。 | 否 |
-| gapPadding | EdgeInsetsGeometry? | - | 线与中间内容之间的间距，默认左右各使用 `spacer1`（12dp）。 | 否 |
-| textStyle | TextStyle? | - | child 为文本时的默认样式，覆盖 `fontBodySmall` / `textColorPlaceholder` Token。 | 否 |
-| indent | double? | - | 左缩进（对齐 Material `DividerThemeData.indent` 语义） | 否 |
-| endIndent | double? | - | 右缩进（对齐 Material `DividerThemeData.endIndent` 语义） | 否 |
+| color | Color? | - | 字段含义：线条颜色；未设置时使用 `bgColorComponent` Token。 调用时的空值行为见方法说明。 | 否 |
+| thickness | double? | - | 字段含义：线粗：横线 = 高度，竖线 = 宽度（默认 0.5） 调用时的空值行为见方法说明。 | 否 |
+| margin | EdgeInsetsGeometry? | - | 字段含义：外边距。未设置时，水平分割线使用上下 10dp，垂直分割线使用左右 16dp。 调用时的空值行为见方法说明。 | 否 |
+| gapPadding | EdgeInsetsGeometry? | - | 字段含义：线与中间内容之间的间距，默认左右各使用 `spacer1`（12dp）。 调用时的空值行为见方法说明。 | 否 |
+| textStyle | TextStyle? | - | 字段含义：child 为文本时的默认样式，覆盖 `fontBodySmall` / `textColorPlaceholder` Token。 调用时的空值行为见方法说明。 | 否 |
+| indent | double? | - | 字段含义：纯水平线起始侧缩进；未设置时为 0，带内容或垂直线时不生效。 调用时的空值行为见方法说明。 | 否 |
+| endIndent | double? | - | 字段含义：纯水平线结束侧缩进；未设置时为 0，带内容或垂直线时不生效。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TDividerThemeData.lerp

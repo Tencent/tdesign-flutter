@@ -37,7 +37,7 @@ const TDropdownMenu({
 | --- | --- | --- | --- | --- |
 | animationDuration | Duration? | - | 展开、关闭及切换动画时长。 未指定时为 200ms。系统禁用动画时始终使用零时长。 | 否 |
 | closeOnOverlayTap | bool | true | 点击外部区域是否关闭面板，默认 true；不依赖遮罩是否绘制。 | 否 |
-| controller | TDropdownMenuController? | - | 外部筛选栏控制器；为空时由组件创建和释放内部控制器。 | 否 |
+| controller | TDropdownMenuController? | - | 外部筛选栏控制器；为空时由组件创建和释放内部控制器。 外部控制器由调用方释放，应只绑定一个筛选栏。 | 否 |
 | items | List&lt;TDropdownMenuItem&gt; | - | 按顺序展示的筛选触发项和对应面板。 | 是 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | onClosed | TDropdownMenuClosedCallback? | - | 面板关闭流程完成后回调，携带筛选项下标和关闭原因。 | 否 |
@@ -119,6 +119,7 @@ const TDropdownSingleSelectPanel({
 ### TDropdownMultiSelectPanel
 #### 简介
 多选筛选面板。
+
 `values` 表示已提交值，每次打开时用于初始化草稿。选项点击只更新面板内部草稿，
 点击确认后才通过 `onConfirm` 提交。
 打开期间 `values` 变化时，尚未修改的草稿会同步；已有修改的草稿保留用户编辑。
@@ -470,29 +471,29 @@ TDropdownThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| barHeight | double? | - | 筛选栏高度，默认 48 逻辑像素。 | 否 |
-| barBackgroundColor | Color? | - | 筛选栏背景色；为空时读取全局 bgColorContainer。 | 否 |
-| dividerColor | Color? | - | 筛选栏底部分隔线颜色；为空时读取全局 componentStroke。 | 否 |
-| textStyle | TextStyle? | - | 默认触发项文本样式。 | 否 |
-| activeTextStyle | TextStyle? | - | 打开面板的触发项文本样式。 | 否 |
-| disabledTextStyle | TextStyle? | - | 禁用触发项文本样式。 | 否 |
-| iconColor | Color? | - | 默认触发项箭头颜色。 | 否 |
-| activeIconColor | Color? | - | 打开面板的触发项箭头颜色。 | 否 |
-| disabledIconColor | Color? | - | 禁用触发项箭头颜色。 | 否 |
-| iconSize | double? | - | 触发项箭头尺寸，默认 24 逻辑像素。 | 否 |
-| panelBackgroundColor | Color? | - | 面板背景色；为空时读取全局 bgColorContainer。 | 否 |
-| overlayColor | Color? | - | 遮罩颜色，包含透明度。未指定时为黑色 60%，动画按展开进度缩放透明度。 | 否 |
-| optionHeight | double? | - | 单选列表行高度，默认 56 逻辑像素。 | 否 |
-| optionPadding | EdgeInsetsGeometry? | - | 选项内边距；为空时使用全局 spacer2 水平间距。 | 否 |
-| optionTextStyle | TextStyle? | - | 选项默认文本样式。 | 否 |
-| selectedOptionTextStyle | TextStyle? | - | 选中选项文本样式。 | 否 |
-| disabledOptionTextStyle | TextStyle? | - | 禁用选项文本样式。 | 否 |
-| optionColor | Color? | - | 多列选项默认背景色。 | 否 |
-| selectedOptionColor | Color? | - | 多列选项选中背景色。 | 否 |
-| disabledOptionColor | Color? | - | 多列选项禁用背景色。 | 否 |
-| optionBorderRadius | BorderRadius? | - | 多列选项圆角；为空时读取全局 radiusDefault。 | 否 |
-| actionAreaPadding | EdgeInsetsGeometry? | - | 多选面板底部操作区内边距。 | 否 |
-| actionGap | double? | - | 多选面板底部按钮之间的间距；为空时读取全局 spacer2。 | 否 |
+| barHeight | double? | - | 字段含义：筛选栏高度，默认 48 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| barBackgroundColor | Color? | - | 字段含义：筛选栏背景色；为空时读取全局 bgColorContainer。 调用时的空值行为见方法说明。 | 否 |
+| dividerColor | Color? | - | 字段含义：筛选栏底部分隔线颜色；为空时读取全局 componentStroke。 调用时的空值行为见方法说明。 | 否 |
+| textStyle | TextStyle? | - | 字段含义：默认触发项文本样式。 调用时的空值行为见方法说明。 | 否 |
+| activeTextStyle | TextStyle? | - | 字段含义：打开面板的触发项文本样式。 调用时的空值行为见方法说明。 | 否 |
+| disabledTextStyle | TextStyle? | - | 字段含义：禁用触发项文本样式。 调用时的空值行为见方法说明。 | 否 |
+| iconColor | Color? | - | 字段含义：默认触发项箭头颜色。 调用时的空值行为见方法说明。 | 否 |
+| activeIconColor | Color? | - | 字段含义：打开面板的触发项箭头颜色。 调用时的空值行为见方法说明。 | 否 |
+| disabledIconColor | Color? | - | 字段含义：禁用触发项箭头颜色。 调用时的空值行为见方法说明。 | 否 |
+| iconSize | double? | - | 字段含义：触发项箭头尺寸，默认 24 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| panelBackgroundColor | Color? | - | 字段含义：面板背景色；为空时读取全局 bgColorContainer。 调用时的空值行为见方法说明。 | 否 |
+| overlayColor | Color? | - | 字段含义：遮罩颜色，包含透明度。未指定时为黑色 60%，动画按展开进度缩放透明度。 调用时的空值行为见方法说明。 | 否 |
+| optionHeight | double? | - | 字段含义：单选列表行高度，默认 56 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| optionPadding | EdgeInsetsGeometry? | - | 字段含义：选项内边距；为空时使用全局 spacer2 水平间距。 调用时的空值行为见方法说明。 | 否 |
+| optionTextStyle | TextStyle? | - | 字段含义：选项默认文本样式。 调用时的空值行为见方法说明。 | 否 |
+| selectedOptionTextStyle | TextStyle? | - | 字段含义：选中选项文本样式。 调用时的空值行为见方法说明。 | 否 |
+| disabledOptionTextStyle | TextStyle? | - | 字段含义：禁用选项文本样式。 调用时的空值行为见方法说明。 | 否 |
+| optionColor | Color? | - | 字段含义：多列选项默认背景色。 调用时的空值行为见方法说明。 | 否 |
+| selectedOptionColor | Color? | - | 字段含义：多列选项选中背景色。 调用时的空值行为见方法说明。 | 否 |
+| disabledOptionColor | Color? | - | 字段含义：多列选项禁用背景色。 调用时的空值行为见方法说明。 | 否 |
+| optionBorderRadius | BorderRadius? | - | 字段含义：多列选项圆角；为空时读取全局 radiusDefault。 调用时的空值行为见方法说明。 | 否 |
+| actionAreaPadding | EdgeInsetsGeometry? | - | 字段含义：多选面板底部操作区内边距。 调用时的空值行为见方法说明。 | 否 |
+| actionGap | double? | - | 字段含义：多选面板底部按钮之间的间距；为空时读取全局 spacer2。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TDropdownThemeData.lerp

@@ -61,6 +61,7 @@ class TDateTimePicker extends StatefulWidget {
   final TDateTimePickerValue? start;
 
   /// 可选范围上限。未指定时，年列最大值为初始选中年份加 10。
+  /// start 不应晚于 end；debug 模式会断言，release 模式遇到逆序范围时忽略 end。
   ///
   /// - **类型**：[TDateTimePickerValue]，仅传当前 mode 涉及的字段即可
   /// - **语义**：超出范围的候选项会被裁剪；变更会触发列重建
@@ -69,7 +70,7 @@ class TDateTimePicker extends StatefulWidget {
 
   /// 各列选项步进
   ///
-  /// - **类型**：[DateTimePickerSteps]；未配置的列步进为 1
+  /// - **类型**：[DateTimePickerSteps]；未配置或小于等于 1 的列步进按 1 处理
   /// - **变更语义**：变更会触发列重建，保留当前选中时刻（在合法范围内 clamp）
   final DateTimePickerSteps? steps;
 

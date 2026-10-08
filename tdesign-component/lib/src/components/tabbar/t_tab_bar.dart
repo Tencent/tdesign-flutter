@@ -318,9 +318,11 @@ class TTabBar extends StatefulWidget {
   final TTabBarIndicatorAnimation indicatorAnimation;
 
   /// 动画时长
+  /// null 时为 300 毫秒。
   final Duration? animationDuration;
 
   /// 动画曲线
+  /// null 时使用 Curves.easeInOutCubic。
   final Curve? animationCurve;
 
   /// 选中的 index

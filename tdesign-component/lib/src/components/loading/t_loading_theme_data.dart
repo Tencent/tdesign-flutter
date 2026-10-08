@@ -7,17 +7,20 @@ class TLoadingThemeData extends ThemeExtension<TLoadingThemeData> {
   /// 图标颜色。
   ///
   /// 未指定时 circle / point 使用品牌主色，activity 使用主文字色；
-  /// Flutter [ProgressIndicatorThemeData.color] 或显式 [ColorScheme] 仍优先于内置默认色。
+  /// 不读取 Flutter ProgressIndicatorTheme 或 ColorScheme 的默认颜色。
   final Color? iconColor;
 
   /// 文案颜色
+  /// 未配置时使用 textColorPrimary Token。
   final Color? textColor;
 
   /// 文案和图标相对方向
+  /// 未配置时为 Axis.horizontal。
   final Axis? axis;
 
   /// 一次刷新的时间（毫秒），控制动画速度。
   /// 未指定时默认 `800`ms（对齐 TDesign 小程序 / Mobile Vue 的 `duration` 默认值）。
+  /// 小于或等于 0 时归一化为 1 毫秒。
   final int? duration;
 
   const TLoadingThemeData({

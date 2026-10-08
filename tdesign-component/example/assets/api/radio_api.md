@@ -5,7 +5,16 @@
 ### TRadio
 #### 简介
 由最近的 `TRadioGroup` 控制选中状态的单选框。
+
 必须作为同类型 `TRadioGroup` 的后代使用：
+
+```dart
+TRadioGroup<String>(
+  value: value,
+  onChanged: onChanged,
+  child: const TRadio<String>(value: 'a', title: '选项 A'),
+)
+```
 
 #### 声明
 
@@ -54,6 +63,7 @@ const TRadio({
 ### TRadioGroup
 #### 简介
 严格受控的单选组。
+
 默认构造通过 `child` 接收调用方布局；标准数据列表使用
 `TRadioGroup.options`。组内的 `TRadio` 从该组件读取选中值和变更回调。
 
@@ -162,6 +172,7 @@ const TRadioOption({
 ### TRadioThemeData
 #### 简介
 TRadio 组件级 ThemeExtension
+
 通过 Theme 子树注入，控制子树默认样式。
 
 #### 声明
@@ -221,13 +232,13 @@ TRadioThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| selectColor | Color? | - | 选择颜色 | 否 |
-| disableColor | Color? | - | 禁用颜色 | 否 |
-| titleColor | Color? | - | 标题文字颜色 | 否 |
-| subTitleColor | Color? | - | 副标题文字颜色 | 否 |
-| backgroundColor | Color? | - | 背景颜色 | 否 |
-| spacing | double? | - | icon和文字的距离 | 否 |
-| insetSpacing | double? | - | 文字和非图标侧的距离 | 否 |
+| selectColor | Color? | - | 字段含义：选中态颜色。 调用时的空值行为见方法说明。 | 否 |
+| disableColor | Color? | - | 字段含义：禁用态颜色。 调用时的空值行为见方法说明。 | 否 |
+| titleColor | Color? | - | 字段含义：主标题颜色。 调用时的空值行为见方法说明。 | 否 |
+| subTitleColor | Color? | - | 字段含义：副标题颜色。 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 字段含义：卡片背景颜色。 调用时的空值行为见方法说明。 | 否 |
+| spacing | double? | - | 字段含义：指示器与文案间距。 调用时的空值行为见方法说明。 | 否 |
+| insetSpacing | double? | - | 字段含义：文案与非指示器侧的内边距。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TRadioThemeData.lerp

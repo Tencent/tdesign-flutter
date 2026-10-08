@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 ///
 /// 通过 Theme 子树注入，控制子树默认样式。
 class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
-  /// 开启时轨道颜色
+  /// 开启态轨道颜色。
+  /// 未配置时使用 brandColor Token。
   final Color? trackOnColor;
 
-  /// 关闭时轨道颜色
+  /// 关闭态轨道颜色。
+  /// 未配置时使用 bgColorSecondaryContainerActive Token。
   final Color? trackOffColor;
 
   /// 禁用时开启态轨道颜色；未设置时使用全局禁用品牌色。
@@ -26,16 +28,20 @@ class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
   /// 加载指示器颜色；未设置时浅色为品牌色、深色为最高层级白色。
   final Color? loadingColor;
 
-  /// 开启时ThumbView的颜色
+  /// 开启态滑块内容颜色。
+  /// 未配置时使用 brandColor Token。
   final Color? thumbContentOnColor;
 
-  /// 关闭时ThumbView的颜色
+  /// 关闭态滑块内容颜色。
+  /// 未配置时使用 textColorDisabled Token。
   final Color? thumbContentOffColor;
 
-  /// 开启时ThumbView的字体样式
+  /// 开启态滑块内容文本样式。
+  /// 未配置时使用 fontBodyMedium 字号 Token，Token 为空时回退为 14 逻辑像素。
   final TextStyle? thumbContentOnFont;
 
-  /// 关闭时ThumbView的字体样式
+  /// 关闭态滑块内容文本样式。
+  /// 未配置时使用 fontBodyMedium 字号 Token，Token 为空时回退为 14 逻辑像素。
   final TextStyle? thumbContentOffFont;
 
   static Color? _lerpColor(Color? a, Color? b, double t) {
@@ -54,37 +60,16 @@ class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
   }
 
   const TSwitchThemeData({
-    /// 开启态轨道颜色。
     this.trackOnColor,
-
-    /// 关闭态轨道颜色。
     this.trackOffColor,
-
-    /// 禁用时开启态轨道颜色。
     this.disabledTrackOnColor,
-
-    /// 禁用时关闭态轨道颜色。
     this.disabledTrackOffColor,
-
-    /// 可交互时滑块填充色，不影响内部图标或文字。
     this.thumbColor,
-
-    /// 禁用或加载时滑块填充色。
     this.disabledThumbColor,
-
-    /// 加载指示器颜色。
     this.loadingColor,
-
-    /// 开启态滑块内容颜色。
     this.thumbContentOnColor,
-
-    /// 关闭态滑块内容颜色。
     this.thumbContentOffColor,
-
-    /// 开启态滑块内容文本样式。
     this.thumbContentOnFont,
-
-    /// 关闭态滑块内容文本样式。
     this.thumbContentOffFont,
   });
 

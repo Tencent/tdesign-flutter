@@ -2,13 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 /// 选择器子项构建器。
-typedef TPickerItemBuilder = Widget? Function(
-  BuildContext context,
-  TPickerOption option,
-  int columnIndex,
-  int itemIndex,
-  double distance,
-);
+typedef TPickerItemBuilder =
+    Widget? Function(
+      BuildContext context,
+      TPickerOption option,
+      int columnIndex,
+      int itemIndex,
+      double distance,
+    );
 
 /// 选择器选项。
 ///
@@ -16,16 +17,9 @@ typedef TPickerItemBuilder = Widget? Function(
 @immutable
 class TPickerOption {
   const TPickerOption({
-    /// 展示文案。
     required this.label,
-
-    /// 业务值。
     required this.value,
-
-    /// 是否禁用。
     this.disabled = false,
-
-    /// 联动模式下的子选项。
     this.children = const [],
   });
 
@@ -69,10 +63,7 @@ sealed class TPickerItems {
 /// [columns] 及每列列表不得原地修改；变更时传入新的数据源和列表。
 @immutable
 class TPickerColumns extends TPickerItems {
-  const TPickerColumns(
-    /// 各列选项。
-    this.columns,
-  );
+  const TPickerColumns(this.columns);
 
   /// 各列选项。
   final List<List<TPickerOption>> columns;
@@ -102,10 +93,7 @@ class TPickerColumns extends TPickerItems {
 /// [options] 及所有子选项列表不得原地修改；变更时创建新的数据源。
 @immutable
 class TPickerLinked extends TPickerItems {
-  const TPickerLinked(
-    /// 根选项。
-    this.options,
-  );
+  const TPickerLinked(this.options);
 
   /// 根选项。
   final List<TPickerOption> options;
@@ -125,13 +113,7 @@ class TPickerLinked extends TPickerItems {
 /// const 构造不会复制或冻结传入的 [selectedOptions] 和 [indexes]。
 @immutable
 class TPickerValue {
-  const TPickerValue({
-    /// 各列选中的完整选项。
-    required this.selectedOptions,
-
-    /// 各列选中索引。
-    required this.indexes,
-  });
+  const TPickerValue({required this.selectedOptions, required this.indexes});
 
   /// 各列选中的完整选项。
   final List<TPickerOption> selectedOptions;

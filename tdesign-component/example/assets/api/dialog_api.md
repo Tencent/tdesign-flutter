@@ -5,6 +5,9 @@
 ### TDialog
 #### 简介
 通用居中模态对话框。
+
+title 与 content 至少提供一个；actionsWidget 与非空 actions 互斥。
+
 组件负责面板内容和操作区；使用 `show` 时，通过 Flutter 模态路由处理
 蒙层、动画和安全区。
 
@@ -33,10 +36,6 @@ static Future<T?> show<T>(
 
 
 使用居中模态路由展示 Dialog。
-显式开启后，蒙层关闭成功时返回 `barrierResult`（默认 null）；
-操作按钮与内置关闭按钮分别返回各自配置的结果。
-蒙层与内置关闭按钮通过 Navigator.maybePop 关闭，遵守 PopScope。
-系统返回及未携带结果的 Navigator.pop 仍返回 null，不使用 `barrierResult`。
 
 返回类型：`Future<T?>`
 
@@ -44,7 +43,7 @@ static Future<T?> show<T>(
 | --- | --- | --- | --- | --- |
 | context | BuildContext | - | 当前构建上下文，用于读取祖先配置。 | 是 |
 | dialog | Widget | - | 要放入模态路由的弹窗内容。 | 是 |
-| barrierDismissible | bool | false | 默认为 false，点击蒙层不会关闭。 | 否 |
+| barrierDismissible | bool | false | 默认为 false，点击蒙层不会关闭。 显式开启后，蒙层关闭成功时返回 `barrierResult`（默认 null）； 操作按钮与内置关闭按钮分别返回各自配置的结果。 蒙层与内置关闭按钮通过 Navigator.maybePop 关闭，遵守 PopScope。 系统返回及未携带结果的 Navigator.pop 仍返回 null，不使用 `barrierResult`。 | 否 |
 | barrierResult | T? | - | 开启蒙层关闭后，由蒙层成功关闭路由时返回的结果；默认 null。 | 否 |
 | barrierColor | Color? | - | 蒙层颜色；为空时使用 Colors.black54。 | 否 |
 | useRootNavigator | bool | true | 是否将弹窗推入根 Navigator，默认 true。 | 否 |
@@ -87,11 +86,25 @@ const TDialog({
 ### TDialogAction
 #### 简介
 Dialog 操作项。
+
 `role` 表达操作语义，并决定未显式覆盖时的默认配色；`variant` 表达按钮的
 视觉形态。普通、主要和危险操作默认分别渲染为浅色、品牌色和危险色填充按钮。
 `colorPreset` 和 `style` 用于确有需要时覆盖单个操作的默认样式。
+
 一到两个操作全部显式使用 `TButtonVariant.text` 时，`TDialog` 会使用带分隔线的
 贴边文字按钮 Footer；只改变某一个操作的变体不会切换整个 Footer 布局。
+
+```dart
+const TDialog(
+  actions: [
+    TDialogAction(child: Text('取消')),
+    TDialogAction(
+      child: Text('确定'),
+      role: TDialogActionRole.primary,
+    ),
+  ],
+);
+```
 
 #### 声明
 
@@ -134,6 +147,7 @@ const TDialogAction({
 ### TConfirmDialog
 #### 简介
 单操作确认弹窗，是 `TDialog` 的便捷封装。
+
 内置操作使用 `TDialogActionRole.primary`，默认渲染为品牌色填充按钮。需要多个
 操作、文字按钮 Footer 或其他按钮变体时，使用 `TDialog` 和
 `TDialog.actions` 组合 `TDialogAction`。
@@ -185,8 +199,10 @@ const TConfirmDialog({
 ### TDialogThemeData
 #### 简介
 TDialog 组件级 ThemeExtension
+
 通过 Theme 子树注入，控制子树的默认对话框样式。
-面板视觉值由本扩展统一配置；未设置时回退 Flutter DialogTheme 与全局 Token。
+面板视觉值由本扩展统一配置；未设置时回退 TDesign Token 或组件内置值，
+不从 Flutter DialogTheme 读取。
 
 #### 声明
 
@@ -234,14 +250,14 @@ const TDialogThemeData({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景色（对应 Material `DialogThemeData.backgroundColor`） | 否 |
-| contentPadding | EdgeInsetsGeometry? | - | 内容内边距（对应 Material `Dialog` 的 contentPadding；TDesign 扩展） | 否 |
-| contentTextStyle | TextStyle? | - | 内容文案样式（对应 Material `DialogThemeData.contentTextStyle`） | 否 |
-| elevation | double? | - | 阴影（对应 Material `DialogThemeData.elevation`） | 否 |
-| maxHeight | double? | - | 面板最大高度。 | 否 |
-| shape | ShapeBorder? | - | 形状（圆角；对应 Material `DialogThemeData.shape`） | 否 |
-| titleTextStyle | TextStyle? | - | 标题文案样式（对应 Material `DialogThemeData.titleTextStyle`） | 否 |
-| width | double? | - | 弹窗宽度 | 否 |
+| backgroundColor | Color? | - | 背景色（对应 Material `DialogThemeData.backgroundColor`） 未配置时使用 bgColorContainer Token。 | 否 |
+| contentPadding | EdgeInsetsGeometry? | - | 内容内边距（对应 Material `Dialog` 的 contentPadding；TDesign 扩展） 未配置时左、上、右均使用 spacer3，底部为 0。 | 否 |
+| contentTextStyle | TextStyle? | - | 内容文案样式（对应 Material `DialogThemeData.contentTextStyle`） 未配置时使用 fontBodyLarge / textColorSecondary Token。 | 否 |
+| elevation | double? | - | 阴影（对应 Material `DialogThemeData.elevation`） 未配置时为 0。 | 否 |
+| maxHeight | double? | - | 面板最大高度。 未配置时为视口高度的 80%；同时不超过视口高度减 spacer4，最小为 0。 | 否 |
+| shape | ShapeBorder? | - | 形状（圆角；对应 Material `DialogThemeData.shape`） 未配置时使用 radiusExtraLarge Token 构造圆角矩形。 | 否 |
+| titleTextStyle | TextStyle? | - | 标题文案样式（对应 Material `DialogThemeData.titleTextStyle`） 未配置时使用 fontTitleLarge / textColorPrimary Token。 | 否 |
+| width | double? | - | 弹窗宽度 未配置时为 311 逻辑像素，实际布局仍受可用宽度限制。 | 否 |
 
 
 #### 实例方法
@@ -268,14 +284,14 @@ TDialogThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景色（对应 Material `DialogThemeData.backgroundColor`） | 否 |
-| shape | ShapeBorder? | - | 形状（圆角；对应 Material `DialogThemeData.shape`） | 否 |
-| elevation | double? | - | 阴影（对应 Material `DialogThemeData.elevation`） | 否 |
-| titleTextStyle | TextStyle? | - | 标题文案样式（对应 Material `DialogThemeData.titleTextStyle`） | 否 |
-| contentTextStyle | TextStyle? | - | 内容文案样式（对应 Material `DialogThemeData.contentTextStyle`） | 否 |
-| contentPadding | EdgeInsetsGeometry? | - | 内容内边距（对应 Material `Dialog` 的 contentPadding；TDesign 扩展） | 否 |
-| maxHeight | double? | - | 面板最大高度。 | 否 |
-| width | double? | - | 弹窗宽度 | 否 |
+| backgroundColor | Color? | - | 字段含义：背景色（对应 Material `DialogThemeData.backgroundColor`） 未配置时使用 bgColorContainer Token。 调用时的空值行为见方法说明。 | 否 |
+| shape | ShapeBorder? | - | 字段含义：形状（圆角；对应 Material `DialogThemeData.shape`） 未配置时使用 radiusExtraLarge Token 构造圆角矩形。 调用时的空值行为见方法说明。 | 否 |
+| elevation | double? | - | 字段含义：阴影（对应 Material `DialogThemeData.elevation`） 未配置时为 0。 调用时的空值行为见方法说明。 | 否 |
+| titleTextStyle | TextStyle? | - | 字段含义：标题文案样式（对应 Material `DialogThemeData.titleTextStyle`） 未配置时使用 fontTitleLarge / textColorPrimary Token。 调用时的空值行为见方法说明。 | 否 |
+| contentTextStyle | TextStyle? | - | 字段含义：内容文案样式（对应 Material `DialogThemeData.contentTextStyle`） 未配置时使用 fontBodyLarge / textColorSecondary Token。 调用时的空值行为见方法说明。 | 否 |
+| contentPadding | EdgeInsetsGeometry? | - | 字段含义：内容内边距（对应 Material `Dialog` 的 contentPadding；TDesign 扩展） 未配置时左、上、右均使用 spacer3，底部为 0。 调用时的空值行为见方法说明。 | 否 |
+| maxHeight | double? | - | 字段含义：面板最大高度。 未配置时为视口高度的 80%；同时不超过视口高度减 spacer4，最小为 0。 调用时的空值行为见方法说明。 | 否 |
+| width | double? | - | 字段含义：弹窗宽度 未配置时为 311 逻辑像素，实际布局仍受可用宽度限制。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TDialogThemeData.lerp

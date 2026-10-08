@@ -2,11 +2,15 @@
 
 ## 当前交付状态
 
-组件基础 `develop@dacc279e`；分支 `rss1102/docs/component-api-completeness`。独立 [工具 PR #28](https://github.com/TDesignOteam/tdesign-flutter-tools/pull/28) 最终候选提交 `dc679da608cd69df857ec882812bcc9eba9e8244`。
+本轮全量内容复检详见 [逐组件审查与影响报告](./component-review.md)。57 个组件逐一对照实现，修复错误、缺失和重复的源码注释；组件生产源码相对 develop 的 128 文件 Token 等价，Demo 使用方式的改动单独列在报告中。
 
-工具 PR #28 已于 2026-10-07 22:07:56 UTC 合入 main，合并提交为 `96f1c693a2d61ae6c135db4d52530bb28dfc2462`。消费仓库继续声明正式 `main`，无临时 path override 或 PR 分支依赖。Flutter 3.32.0 与 latest 均重新解析并确认 resolved-ref 为该合并提交。正式命令生成 57 份 API 后无产物差异；两版本 `node tool/generate_api.mjs --check`、独立 AST 审计、默认 manifest 全量 validate 和严格 analyze 均通过。合并后消费 PR 的最新 CI/head 及 autofix diff 在 PR 描述和检查页登记，不使用工具合并前的失败运行作为最终结论。
+**本轮最终产物依赖工具 PR #29，尚不能声明正式链可合并。** 候选工具已完成本地全量生成和页面验收；正式 main 当前仍为 #28 的合并提交 96f1c693。本轮修复保存为本地候选提交，待 #29 合并后重新解析正式依赖、生成/--check、推送 #1149 并核对最新 CI/autofix。不得用起点 head 的绿色 CI 代替本轮交付。
 
-## 全量结果
+## 历史结构与页面验收（#29 之前）
+
+下列记录针对工具 #28 与消费 PR 原 head，保留用于复现和对比。结构非空与页面可见不能证明自然语言内容正确；此前全量语义通过结论已撤回，本轮以 component-review.md 为准。
+
+
 
 - 57 个组件（含全局 Theme）、369 个公开声明、435 个可调用声明、2510 个参数与 analyzer AST 逐项对应。
 - 递归导出、part、show/hide、命名扩展、普通实例方法、访问器、控制器、构造函数、枚举和 typedef 纳入文档。
@@ -26,13 +30,13 @@
 - Demo API 页面使用真实 AssetManifest 解析 API 资产，修复 12 组路由名与文件 slug 不一致；57 个组件的全部公开声明在真实 ApiPage 上显示。旧注册名和 canonical slug 共 69 个入口及缺失文档切换共 70 项测试，两版本全部通过，修改文件两版本严格 analyze 零问题。测试已加入 sharedExampleTests，进入 GitHub / CNB 双版本共享功能回归。
 - PR #1149 首轮 head d357be79 的远端双版本 analyze、双版本功能回归、站点预览构建和 Linux Golden 已通过；六个构建与 autofix 日志均确认仅在生成 API 阶段报正式工具不认识 --strict-names；没有自动修改 head。Demo 入口修复后的旧 head 结果不能代替当前 head。代码提交 54212274 的双版本 analyze 和代码扫描已通过，双版本功能回归及站点/Golden 当时仍在运行；六个构建与 autofix 均逐项读取日志，确认仍是正式 main 旧工具不支持 --strict-names。这些运行均发生在工具合并前；合并后按正式依赖重新触发 CI，不沿用旧失败状态。
 
-## 语义检查与边界
+## 历史语义检查范围（全量通过结论已撤回）
 
 逐组件清单、签名、参数表、注释非空及官网输出均已检查。新增/修改的语义说明按实现核对：Theme 空值保留与插值规则、Token 引用/默认映射回退、Dropdown 布局和关闭时机、Dialog/Popup 路由结果、Form 校验与错误清除、Swiper 索引和动画、TimeCounter 重置、DateTimePicker partial 补齐、Indexes sticky 状态、Font 字号和行高以及五个组件的共用主题。
 
 TThemeData.lerp 明确记录不使用 t 做连续插值；TMap 循环引用中止后仍可走默认映射。自动非空检查不等同于自然语言语义证明。本次没有组件视觉行为变更，不更新 Golden 基线，不宣称设计对齐或设备验收。
 
-## 复现与最终门禁
+## 历史复现命令与门禁
 
 ```bash
 # 各 Flutter 版本分别执行，先重新解析依赖
@@ -54,7 +58,7 @@ pnpm site
 
 正式依赖已确认解析到 96f1c693，两个 SDK 的 57 份生成结果均与提交资产一致，审计结果仍为 369 个声明、435 个可调用声明、2510 个参数及 0 issue；validate 均 ERROR=0、WARN=0。最新 CI/head 与 autofix 产物 diff 以 [PR #1149 的检查和描述](https://github.com/Tencent/tdesign-flutter/pull/1149) 为准，autofix 修改 head 时必须重新检查自动提交内容和最终检查。
 
-## 逐组件记录
+## 历史逐组件结构记录
 
 “可调用声明”包含默认/命名/factory 构造及公开方法、顶层函数，包含公开类的隐式构造；标准框架生命周期方法不计入。主题归属按当前实现记录。每行“通过”包括清单、成员、声明签名及参数类型/默认值/必填的 AST 检查和浏览器可见输出；非独立组件 Theme 不虚构新类。所有组件另经过真实 Flutter ApiPage 加载及标题渲染测试；12 组旧名/slug 入口均验证。
 

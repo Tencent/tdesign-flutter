@@ -13,49 +13,15 @@ import 't_form_theme_data.dart';
 class TFormItem extends StatelessWidget {
   const TFormItem({
     super.key,
-
-    /// 字段内容。
     required this.child,
-
-    /// 标签文案。
     this.label,
-
-    /// 标签区域前的内容，通常用于字段行图标。
-    ///
-    /// 该插槽属于表单项结构，不会传入输入组件的编辑内容区域。
     this.leading,
-
-    /// 是否显示必填标记；仅覆盖展示效果，不会启用或关闭
-    /// [TFormField.required] 的校验行为。
-    ///
-    /// 未传时继承最近 [TFormField] 的 required 状态。
     this.required,
-
-    /// 辅助说明文案。
     this.help,
-
-    /// 错误文案。
-    ///
-    /// 未传时自动使用最近 [TFormField] 的校验错误。
     this.errorText,
-
-    /// 表单项尾部的额外内容。
-    ///
-    /// 该插槽不会被附加内边距、位移或固定尺寸。
     this.extra,
-
-    /// 水平布局下标签、字段内容和额外内容的纵向对齐方式。
-    ///
-    /// 未传时默认顶部对齐；这是单个表单项的结构布局选择。
     this.verticalAlignment,
-
-    /// 内容区域的水平方向对齐方式。
-    ///
-    /// 未传时默认起始侧对齐；影响
-    /// 字段控件、help 和 error 的外部位置，不影响输入文本自身的对齐方式。
     this.contentAlignment,
-
-    /// 是否展示继承的校验错误。
     this.showErrorMessage = true,
   });
 
@@ -66,16 +32,22 @@ class TFormItem extends StatelessWidget {
   final String? label;
 
   /// 标签区域前的内容，通常用于字段行图标。
+  ///
+  /// 该插槽属于表单项结构，不会传入输入组件的编辑内容区域。
   final Widget? leading;
 
   /// 是否显示必填标记；仅覆盖展示效果，不会启用或关闭
-  /// [TFormField.required] 的校验行为。未设置时继承最近的 [TFormField.required]。
+  /// [TFormField.required] 的校验行为。
+  ///
+  /// 未传时继承最近 [TFormField] 的 required 状态。
   final bool? required;
 
   /// 辅助说明文案。
   final String? help;
 
   /// 错误文案。
+  ///
+  /// 未传时自动使用最近 [TFormField] 的校验错误。
   final String? errorText;
 
   /// 表单项尾部的额外内容。
@@ -84,12 +56,17 @@ class TFormItem extends StatelessWidget {
   final Widget? extra;
 
   /// 水平布局下标签、字段内容和额外内容的纵向对齐方式。
+  ///
+  /// 未传时默认顶部对齐；这是单个表单项的结构布局选择。
   final TFormItemVerticalAlignment? verticalAlignment;
 
   /// 内容区域的水平方向对齐方式。
+  ///
+  /// 未传时默认起始侧对齐；影响
+  /// 字段控件、help 和 error 的外部位置，不影响输入文本自身的对齐方式。
   final TFormItemContentAlignment? contentAlignment;
 
-  /// 是否展示从 [TFormField] 继承的校验错误。
+  /// 是否展示继承的校验错误。
   final bool showErrorMessage;
 
   @override

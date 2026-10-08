@@ -25,13 +25,13 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
   /// 蒙层色；未设置时透明。单个气泡可用局部 Theme 覆盖。
   final Color? barrierColor;
 
-  /// 箭头尺寸
+  /// 箭头尺寸；未配置时为 8 逻辑像素。
   final double? arrowSize;
 
-  /// 弹层与触发元素的间距
+  /// 弹层与触发元素的间距；未配置时为 4 逻辑像素。
   final double? offset;
 
-  /// 气泡阴影
+  /// 气泡阴影；未配置时使用 shadow3 Token，Token 为空时无阴影。
   final List<BoxShadow>? boxShadow;
 
   const TPopoverThemeData({

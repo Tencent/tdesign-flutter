@@ -23,14 +23,14 @@ class TImageViewer {
   /// 调用方需要主动关闭时，可通过持有的 [NavigatorState] 调用
   /// [NavigatorState.pop]；返回的 Future 会在路由关闭后完成一次。
   /// [images] 是待预览的图片列表，不能为空。
-  /// [labels] 是与图片一一对应的标签文案。
-  /// [initialIndex] 设置初始展示的图片索引。
+  /// [labels] 是与图片一一对应的标签文案；非空时长度必须等于 images，否则抛出 ArgumentError。
+  /// [initialIndex] 设置初始展示的图片索引，必须在 0 到 images.length - 1 之间；否则抛出 RangeError。
   /// [showClose] 控制关闭按钮是否显示。
   /// [showDelete] 控制删除按钮是否显示。
   /// [showIndex] 控制当前页码是否显示。
   /// [loop] 控制是否循环切换图片。
   /// [autoplay] 控制是否自动切换图片；图片放大时暂停，还原后恢复。
-  /// [autoplayInterval] 设置自动切换图片的时间间隔。
+  /// [autoplayInterval] 设置自动切换图片的时间间隔，必须大于 Duration.zero；否则抛出 ArgumentError。
   /// [onIndexChanged] 在当前图片索引变化时触发。
   /// [onDelete] 在点击删除按钮时触发，仅通知当前索引。
   /// [onTap] 在点击当前全屏预览区、关闭预览前触发。

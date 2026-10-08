@@ -33,93 +33,39 @@ enum TTextareaLayout {
 class TTextarea extends StatefulWidget {
   const TTextarea({
     super.key,
-
-    /// 文本控制器。
     this.controller,
-
-    /// 内部控制器的初始文本，仅初始化一次。
     this.initialValue,
-
-    /// 文本变化通知。
     this.onChanged,
-
-    /// 提交回调。
     this.onSubmitted,
-
-    /// 编辑完成回调。
     this.onEditingComplete,
-
-    /// 是否可交互。
     this.enabled = true,
-
-    /// 是否只读。
     this.readOnly = false,
-
-    /// 占位提示文案。
     this.hintText,
-
-    /// 输入框内部标题。
-    ///
-    /// 表单中的字段标签请使用 `TFormItem.label`，避免与表单必填、校验语义重复。
     this.label,
-
-    /// 内部标题与编辑区的排列方式。
     this.layout = TTextareaLayout.horizontal,
-
-    /// 前缀组件。
     this.prefix,
-
-    /// 后缀组件。
     this.suffix,
-
-    /// 清除按钮显示模式；未传时不显示清除按钮。
     this.clearButtonMode,
-
-    /// 输入框语义状态。
     this.status = TInputStatus.normal,
-
-    /// 是否显示外边框。
     this.bordered = false,
-
-    /// 最大行数；null 表示不限制。
     this.maxLines,
-
-    /// 最小行数；未传时使用输入框内置默认值。
     this.minLines,
-
-    /// 最大字符数。
     this.maxLength,
-
-    /// 最大字符权重，按 Unicode code point 计算：ASCII code point 计 1，
-    /// 非 ASCII code point 计 2。
     this.maxCharacter,
-
-    /// 是否显示当前字符计数。
     this.indicator = false,
-
-    /// 是否自动聚焦。
     this.autofocus = false,
-
-    /// 焦点节点。
     this.focusNode,
-
-    /// 键盘类型。
     this.inputType = TextInputType.multiline,
-
-    /// 键盘动作。
     this.inputAction,
-
-    /// 文本对齐方式。
     this.textAlign = TextAlign.start,
-
-    /// 输入格式化器。
     this.inputFormatters,
   }) : assert(controller == null || initialValue == null),
        assert(maxLength == null || maxCharacter == null),
        assert(maxLength == null || maxLength >= 0),
        assert(maxCharacter == null || maxCharacter >= 0);
 
-  /// 文本控制器。
+  /// 文本控制器；与 initialValue 互斥。外部控制器由调用方释放，
+  /// 未提供时由组件创建并释放内部控制器。
   final TextEditingController? controller;
 
   /// 内部控制器的初始文本，仅初始化一次。
@@ -143,7 +89,9 @@ class TTextarea extends StatefulWidget {
   /// 占位提示文案。
   final String? hintText;
 
-  /// 输入框内部标题；表单字段标签应由 `TFormItem` 提供。
+  /// 输入框内部标题。
+  ///
+  /// 表单中的字段标签请使用 `TFormItem.label`，避免与表单必填、校验语义重复。
   final String? label;
 
   /// 内部标题与编辑区的排列方式。
@@ -155,7 +103,7 @@ class TTextarea extends StatefulWidget {
   /// 后缀组件。
   final Widget? suffix;
 
-  /// 清除按钮显示模式。
+  /// 清除按钮显示模式；未传时不显示清除按钮。
   final TInputClearButtonMode? clearButtonMode;
 
   /// 输入框语义状态。
@@ -167,14 +115,14 @@ class TTextarea extends StatefulWidget {
   /// 最大行数；null 表示不限制。
   final int? maxLines;
 
-  /// 最小行数；未传时读取 Theme 默认值。
+  /// 最小行数；未传时使用 4 行，并限制到非空 maxLines。
   final int? minLines;
 
-  /// 最大字符数。
+  /// 最大字符数；非空时必须大于或等于 0，与 maxCharacter 互斥。
   final int? maxLength;
 
   /// 最大字符权重，按 Unicode code point 计算：ASCII code point 计 1，
-  /// 非 ASCII code point 计 2。
+  /// 非 ASCII code point 计 2；非空时必须大于或等于 0，与 maxLength 互斥。
   final int? maxCharacter;
 
   /// 是否显示当前字符计数。
@@ -183,7 +131,7 @@ class TTextarea extends StatefulWidget {
   /// 是否自动聚焦。
   final bool autofocus;
 
-  /// 焦点节点。
+  /// 焦点节点；外部节点由调用方释放，未提供时由组件管理内部节点。
   final FocusNode? focusNode;
 
   /// 键盘类型。

@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 /// 结果组件级 ThemeExtension
 class TResultThemeData extends ThemeExtension<TResultThemeData> {
   /// 默认状态图标尺寸；自定义 icon 不使用该字段。
+  /// 未配置时为 80 逻辑像素，必须大于 0。
   final double? iconSize;
 
-  /// 标题文字样式
+  /// 标题文字样式；默认使用 fontTitleMedium / textColorPrimary Token。
   final TextStyle? titleStyle;
 
   /// 描述文字样式
+  /// 未配置时使用 fontBodyMedium / textColorSecondary Token。
   final TextStyle? descriptionStyle;
 
   const TResultThemeData({

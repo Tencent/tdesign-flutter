@@ -42,38 +42,16 @@ typedef TCheckboxIconBuilder =
 class TCheckbox extends StatelessWidget {
   const TCheckbox({
     super.key,
-
-    /// 受控选中态；null 表示半选。
     required this.value,
-
-    /// 选中态变更回调；为 null 时禁用。
     this.onChanged,
-
-    /// 主标题文案。
     this.title,
-
-    /// 副标题文案。
     this.subTitle,
-
-    /// 复选框尺寸。
     this.size = TCheckboxSize.medium,
-
-    /// 是否使用卡片模式。
     this.cardMode = false,
-
-    /// 普通模式是否显示底部分割线，默认显示；卡片模式不显示。
     this.showDivider = true,
-
-    /// 控件与文案排列方向。
     this.contentDirection = TContentDirection.right,
-
-    /// 主标题最大行数，默认 3 行。
     this.titleMaxLines = 3,
-
-    /// 副标题最大行数，默认 5 行。
     this.subTitleMaxLines = 5,
-
-    /// 自定义复选框指示器。
     this.customIconBuilder,
   });
 

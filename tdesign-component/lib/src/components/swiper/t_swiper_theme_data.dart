@@ -30,9 +30,11 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
        assert(controlIconSize == null || controlIconSize > 0);
 
   /// 默认指示器对齐方式。
+  /// 未配置时 controls 居中，其他类型横向轮播为 bottomCenter、纵向轮播为 centerRight。
   final AlignmentGeometry? paginationAlignment;
 
   /// 指示器外边距。
+  /// 未配置时普通指示器四边为 12；controls 沿滚动轴两端为 15 逻辑像素。
   final EdgeInsetsGeometry? paginationMargin;
 
   /// 轮播内容圆角。
@@ -45,12 +47,15 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
   final Color? inactiveColor;
 
   /// 圆点直径。
+  /// 未配置时为 6 逻辑像素，必须大于 0。
   final double? dotSize;
 
   /// 长条激活项在滚动主轴上的长度。
+  /// 未配置时为 20 逻辑像素，必须大于 0。
   final double? activeDotExtent;
 
   /// 圆点间距。
+  /// 未配置时为 5 逻辑像素，必须大于或等于 0。
   final double? dotSpacing;
 
   /// 数字指示器文字样式。
@@ -63,6 +68,7 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
   final ButtonStyle? controlStyle;
 
   /// 控制按钮图标尺寸。
+  /// 未配置时为 18 逻辑像素，必须大于 0。
   final double? controlIconSize;
 
   /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。

@@ -30,7 +30,7 @@ const TEmpty({
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | emptyText | String? | - | 描述文字。 | 否 |
-| icon | IconData? | TIcons.info_circle_filled | 默认图标；`image` 非空时不显示。 | 否 |
+| icon | IconData? | TIcons.info_circle_filled | 默认图标；image 非空时不显示，显式 null 仍回退为 info_circle_filled。 | 否 |
 | image | Widget? | - | 自定义图片或插画；优先于 `icon`。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | operation | Widget? | - | 描述下方的操作内容，通常为按钮。 | 否 |
@@ -57,8 +57,8 @@ const TEmptyThemeData({this.emptyTextColor, this.emptyTextFont})
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| emptyTextColor | Color? | - | 描述文字颜色 | 否 |
-| emptyTextFont | Font? | - | 描述文字字号 | 否 |
+| emptyTextColor | Color? | - | 描述文字颜色 未配置时使用 textColorPlaceholder Token。 | 否 |
+| emptyTextFont | Font? | - | 描述文字字号 未配置时使用 fontBodyMedium Token。 | 否 |
 
 
 #### 实例方法
@@ -76,8 +76,8 @@ TEmptyThemeData copyWith({Color? emptyTextColor, Font? emptyTextFont})
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| emptyTextColor | Color? | - | 描述文字颜色 | 否 |
-| emptyTextFont | Font? | - | 描述文字字号 | 否 |
+| emptyTextColor | Color? | - | 字段含义：描述文字颜色 未配置时使用 textColorPlaceholder Token。 调用时的空值行为见方法说明。 | 否 |
+| emptyTextFont | Font? | - | 字段含义：描述文字字号 未配置时使用 fontBodyMedium Token。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TEmptyThemeData.lerp

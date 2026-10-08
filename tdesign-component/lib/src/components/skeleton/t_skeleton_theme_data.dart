@@ -13,15 +13,19 @@ class TSkeletonThemeData extends ThemeExtension<TSkeletonThemeData> {
        assert(rowSpacing == null || rowSpacing >= 0);
 
   /// 占位块背景色。
+  /// 未配置时使用 bgColorSecondaryContainer Token。
   final Color? blockColor;
 
   /// 渐变动画高亮色。
+  /// 未配置时使用 bgColorSecondaryContainerActive Token。
   final Color? highlightColor;
 
   /// 普通占位块圆角。
+  /// 未配置时使用 radiusSmall Token，必须大于或等于 0。
   final double? borderRadius;
 
   /// 多行布局的默认行间距。
+  /// 未配置时使用 spacer2 Token，必须大于或等于 0。
   final double? rowSpacing;
 
   /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。

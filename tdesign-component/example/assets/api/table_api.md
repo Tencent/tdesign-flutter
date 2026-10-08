@@ -6,6 +6,25 @@
 #### 简介
 强类型、受控排序与选择的表格组件。
 
+```dart
+TTable<Map<String, Object>>(
+  data: const [
+    {'id': 1, 'name': 'Alice'},
+    {'id': 2, 'name': 'Bob'},
+  ],
+  rowKey: (row) => row['id']!,
+  columns: [
+    TTableColumn(
+      id: 'name',
+      header: const Text('Name'),
+      minWidth: 120,
+      cellBuilder: (_, row, __) => Text(row['name']! as String),
+    ),
+  ],
+  onCellTap: (cell) => debugPrint('${cell.columnIndex}: ${cell.row}'),
+)
+```
+
 #### 声明
 
 ```dart
@@ -61,8 +80,8 @@ const TTable({
 | onCellTap | TTableCellTap&lt;T&gt;? | - | 单元格点击回调，context 同时提供行列索引、行数据和列配置。 | 否 |
 | onRowTap | TTableRowTap&lt;T&gt;? | - | 行点击回调。 点击普通单元格时，会在 `onCellTap` 之后调用该回调；点击选择控件时不触发。 | 否 |
 | onScroll | ValueChanged&lt;ScrollNotification&gt;? | - | 垂直滚动通知。 | 否 |
-| onSelectionChanged | ValueChanged&lt;Set&lt;T&gt;&gt;? | - | 请求更新选中行集合。 | 否 |
-| onSortChanged | ValueChanged&lt;TTableSort?&gt;? | - | 请求更新排序值。 | 否 |
+| onSelectionChanged | ValueChanged&lt;Set&lt;T&gt;&gt;? | - | 请求更新选中行集合。 启用 selectionMode 时必须提供本回调；父组件需回传 selectedRows。 | 否 |
+| onSortChanged | ValueChanged&lt;TTableSort?&gt;? | - | 请求更新排序值。 为 null 时表头不产生排序请求，仍按外部传入的 sort 渲染；父组件需回传新 sort。 | 否 |
 | rowKey | TTableRowKey&lt;T&gt;? | - | 返回行数据的稳定唯一标识。 为空时直接使用行对象及其 `==`、`hashCode` 语义。提供后，受控选择会按 key 匹配、替换和移除行，并稳定标识单元格子树，使数据刷新或排序后新建的 行对象仍能命中同一业务行。同一份 `data` 中的 key 必须唯一；未提供时单元格 子树按可见行位置标识。 | 否 |
 | rowSelectable | bool Function(T row, int index)? | - | 判断指定行是否可选。 | 否 |
 | selectedRows | Set&lt;T&gt; | const {} | 当前受控选中行。 | 否 |
@@ -115,6 +134,7 @@ const TTableColumn({
 ### TTableThemeData
 #### 简介
 表格组件级 ThemeExtension。
+
 仅保存表格的视觉默认值。
 
 #### 声明
@@ -177,14 +197,14 @@ TTableThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| rowHeight | double? | - | 数据行高度。 | 否 |
-| headerHeight | double? | - | 表头高度。 | 否 |
-| width | double? | - | 表格宽度。 | 否 |
-| backgroundColor | Color? | - | 默认行背景色。 | 否 |
-| headerColor | Color? | - | 表头背景色。 | 否 |
-| stripeColor | Color? | - | 斑马纹背景色。 | 否 |
-| borderColor | Color? | - | 边框颜色。 | 否 |
-| cellPadding | EdgeInsetsGeometry? | - | 单元格内边距。 | 否 |
+| rowHeight | double? | - | 字段含义：数据行高度。 调用时的空值行为见方法说明。 | 否 |
+| headerHeight | double? | - | 字段含义：表头高度。 调用时的空值行为见方法说明。 | 否 |
+| width | double? | - | 字段含义：表格宽度。 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 字段含义：默认行背景色。 调用时的空值行为见方法说明。 | 否 |
+| headerColor | Color? | - | 字段含义：表头背景色。 调用时的空值行为见方法说明。 | 否 |
+| stripeColor | Color? | - | 字段含义：斑马纹背景色。 调用时的空值行为见方法说明。 | 否 |
+| borderColor | Color? | - | 字段含义：边框颜色。 调用时的空值行为见方法说明。 | 否 |
+| cellPadding | EdgeInsetsGeometry? | - | 字段含义：单元格内边距。 调用时的空值行为见方法说明。 | 否 |
 
 
 ##### TTableThemeData.lerp
@@ -340,6 +360,7 @@ const TTableCellSpan({this.rowSpan = 1, this.columnSpan = 1})
 ### TTableCellSpanBuilder
 #### 简介
 单元格跨度构建器。
+
 仅为未被其他合并区域覆盖的逻辑单元格调用。该回调会在组件构建期间执行，
 应保持同步且无副作用。
 #### 类型定义

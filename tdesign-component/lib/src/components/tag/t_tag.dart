@@ -48,7 +48,7 @@ class TTag extends StatelessWidget {
   /// 是否显示关闭图标。
   final bool needCloseIcon;
 
-  /// 是否使用禁用视觉状态。
+  /// 是否启用标签；false 时使用禁用样式并阻止标签点击与关闭图标回调。
   final bool enabled;
 
   /// 标签点击回调；为空时不创建标签点击行为。

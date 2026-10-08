@@ -15,8 +15,6 @@ class TSliderThemeData extends ThemeExtension<TSliderThemeData> {
     this.valueIndicatorColor,
     this.valueIndicatorTextColor,
     this.trackHeight,
-
-    /// 滑块外层装饰。
     this.decoration,
   });
 
@@ -35,7 +33,8 @@ class TSliderThemeData extends ThemeExtension<TSliderThemeData> {
   /// 滑块描边颜色；为空时使用全局灰阶色。
   final Color? thumbBorderColor;
 
-  /// 禁用滑块描边颜色；为空时使用全局禁用背景色。
+  /// 禁用滑块描边颜色；为空时浅色使用 componentBorder Token，
+  /// 暗色使用 bgColorComponentDisabled Token。
   final Color? disabledThumbBorderColor;
 
   /// 交互反馈颜色；为空时使用品牌色的透明层。

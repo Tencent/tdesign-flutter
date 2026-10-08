@@ -9,33 +9,13 @@ import 'package:flutter/material.dart';
 /// 污染。
 class TInputThemeData extends ThemeExtension<TInputThemeData> {
   const TInputThemeData({
-    /// 清除图标尺寸。
     this.clearIconSize,
-
-    /// 占位提示文本样式。
-    ///
-    /// 未指定的字段继承 TDesign 输入框提示词 token。
     this.hintStyle,
-
-    /// 清除图标颜色。
     this.clearIconColor,
-
-    /// 输入区域内边距。
     this.contentPadding,
-
-    /// 输入区域圆角。
-    ///
-    /// 对非多行、非无边框输入框设置为大于 0 的值时，输入框使用完整边框；
-    /// 未设置时保留单行输入框的底部分隔线。
     this.borderRadius,
-
-    /// 输入区域背景色。
     this.backgroundColor,
-
-    /// 输入区域边框颜色。
     this.borderColor,
-
-    /// 输入区域边框宽度。
     this.borderWidth,
   });
 
@@ -54,6 +34,9 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
   final EdgeInsetsGeometry? contentPadding;
 
   /// 输入区域圆角。
+  ///
+  /// 对非多行、非无边框输入框设置为大于 0 的值时，输入框使用完整边框；
+  /// 未设置时保留单行输入框的底部分隔线。
   final double? borderRadius;
 
   /// 输入区域背景色。

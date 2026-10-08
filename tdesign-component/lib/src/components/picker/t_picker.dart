@@ -17,20 +17,10 @@ const double _disabledOpacity = 0.5;
 class TPicker extends StatefulWidget {
   const TPicker({
     super.key,
-
-    /// 数据源。
     required this.items,
-
-    /// 各列受控值。
     required this.value,
-
-    /// 值变化回调；为 null 时禁用。
     this.onChanged,
-
-    /// 某列滚动结束回调。
     this.onColumnScrollEnd,
-
-    /// 自定义选项构建器。
     this.itemBuilder,
   });
 

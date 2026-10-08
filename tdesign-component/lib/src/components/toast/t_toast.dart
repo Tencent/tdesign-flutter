@@ -132,7 +132,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长。
+    /// 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。
     Duration duration = const Duration(milliseconds: 2000),
 
     /// 文案最大行数。
@@ -156,7 +156,7 @@ class TToast {
     /// Toast 文案样式。
     TextStyle? textStyle,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时共用固定匿名 ID toast_anonymous，后一次展示替换前一次。
     String? toastId,
   }) {
     final id = toastId ?? _anonymousToastId;
@@ -194,7 +194,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长。
+    /// 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。
     Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
@@ -218,7 +218,7 @@ class TToast {
     /// 图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时共用固定匿名 ID toast_anonymous，后一次展示替换前一次。
     String? toastId,
   }) {
     final id = toastId ?? _anonymousToastId;
@@ -255,7 +255,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长。
+    /// 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。
     Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
@@ -279,7 +279,7 @@ class TToast {
     /// 图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时共用固定匿名 ID toast_anonymous，后一次展示替换前一次。
     String? toastId,
   }) {
     return showIconText(
@@ -310,7 +310,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长。
+    /// 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。
     Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
@@ -334,7 +334,7 @@ class TToast {
     /// 图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时共用固定匿名 ID toast_anonymous，后一次展示替换前一次。
     String? toastId,
   }) {
     return showIconText(
@@ -365,7 +365,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长。
+    /// 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。
     Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
@@ -389,7 +389,7 @@ class TToast {
     /// 图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时共用固定匿名 ID toast_anonymous，后一次展示替换前一次。
     String? toastId,
   }) {
     return showIconText(
@@ -417,7 +417,7 @@ class TToast {
     /// 加载提示文案。
     String? text,
 
-    /// 自动关闭时长。
+    /// 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。
     Duration duration = TToast.infiniteDuration,
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
@@ -426,7 +426,7 @@ class TToast {
     /// Toast 展示位置。
     TToastPlacement placement = TToastPlacement.middle,
 
-    /// 自定义加载内容；传入后优先展示。
+    /// 自定义加载文案区域；传入后替换 text 对应内容，加载指示器仍显示。
     Widget? customWidget,
 
     /// Toast 背景色。
@@ -441,7 +441,7 @@ class TToast {
     /// 加载图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时共用固定匿名 ID toast_anonymous，后一次展示替换前一次。
     String? toastId,
   }) {
     final id = toastId ?? _anonymousToastId;
@@ -470,7 +470,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长。
+    /// 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。
     Duration duration = TToast.infiniteDuration,
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
@@ -488,7 +488,7 @@ class TToast {
     /// 加载图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时共用固定匿名 ID toast_anonymous，后一次展示替换前一次。
     String? toastId,
   }) {
     final id = toastId ?? _anonymousToastId;

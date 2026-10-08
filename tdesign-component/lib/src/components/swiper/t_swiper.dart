@@ -26,7 +26,7 @@ class TSwiperController extends ChangeNotifier {
     }
   }
 
-  /// 首次附加时展示的页面。
+  /// 首次附加时展示的页面；必须大于或等于 0 且小于页面数，否则抛出参数或范围异常。
   final int initialIndex;
 
   int _index;
@@ -182,6 +182,7 @@ class TSwiper extends StatefulWidget {
   final Duration autoplayInterval;
 
   /// 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画时长。
+  /// 必须大于 Duration.zero，否则抛出 ArgumentError。
   final Duration animationDuration;
 
   /// 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画曲线。

@@ -41,52 +41,21 @@ enum TFormItemContentAlignment {
 /// TForm 组件级 ThemeExtension。
 class TFormThemeData extends ThemeExtension<TFormThemeData> {
   const TFormThemeData({
-    /// 是否在标签末尾显示冒号。
     this.showColon,
-
-    /// 默认标签宽度。
     this.labelWidth,
-
-    /// 表单项布局方向。
     this.layout,
-
-    /// 标签对齐方式；默认左对齐。
     this.labelAlign,
-
-    /// 必填标记位置。
     this.requiredMarkPosition,
-
-    /// 标签样式。
     this.labelStyle,
-
-    /// 必填标记样式。
     this.requiredMarkStyle,
-
-    /// 辅助说明样式。
     this.helpStyle,
-
-    /// 错误文案样式。
     this.errorStyle,
-
-    /// 表单及表单项背景色。
     this.backgroundColor,
-
-    /// 表单项底部分隔线颜色。
     this.borderColor,
-
-    /// 表单项内边距。
     this.itemPadding,
-
-    /// 表单项间距。
     this.itemSpacing,
-
-    /// 标签与字段的垂直间距。
     this.labelGap,
-
-    /// 前置内容与标签区域的间距。
     this.leadingGap,
-
-    /// 字段与辅助或错误文案的间距。
     this.messageGap,
   });
 
@@ -97,9 +66,10 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
   final double? labelWidth;
 
   /// 表单项布局方向。
+  /// 未配置时为 TFormLayout.horizontal。
   final TFormLayout? layout;
 
-  /// 标签对齐方式。
+  /// 标签对齐方式；默认 TextAlign.start，随文字方向对齐起始侧。
   final TextAlign? labelAlign;
 
   /// 必填标记位置。
@@ -124,18 +94,23 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
   final Color? borderColor;
 
   /// 表单项内边距。
+  /// 未配置时左右为 16 逻辑像素；水平布局上下为 14，垂直布局上下为 16。
   final EdgeInsetsGeometry? itemPadding;
 
   /// 表单项间距。
+  /// 未配置时为 0。
   final double? itemSpacing;
 
   /// 标签与字段的垂直间距。
+  /// 未配置时为 8 逻辑像素。
   final double? labelGap;
 
   /// 前置内容与标签区域的间距。
+  /// 未配置时使用 spacer Token。
   final double? leadingGap;
 
   /// 字段与辅助或错误文案的间距。
+  /// 未配置时为 4 逻辑像素。
   final double? messageGap;
 
   /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。

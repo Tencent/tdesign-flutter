@@ -11,26 +11,11 @@ import 't_form_theme_data.dart';
 class TForm extends StatefulWidget {
   const TForm({
     super.key,
-
-    /// 表单内容。
     required this.child,
-
-    /// 表单控制器。
     this.controller,
-
-    /// 自动校验时机。
     this.autovalidateMode,
-
-    /// 用户通过 [TFormField] 提交字段值变化时触发。
-    ///
-    /// 回调执行时 [TFormController.values] 已包含本次变化。仅同步外部受控值、
-    /// 清除校验状态或外部错误时不会触发。
     this.onChanged,
-
-    /// 校验通过后触发，参数为各 [TFormField] 注册的字段值。
     this.onSubmit,
-
-    /// 是否向字段 builder 暴露错误文案。
     this.showErrorMessage = true,
   });
 
@@ -53,7 +38,7 @@ class TForm extends StatefulWidget {
   /// 清除校验状态或外部错误时不会触发。
   final VoidCallback? onChanged;
 
-  /// 校验通过后触发。
+  /// 校验通过后触发，参数为各 [TFormField] 注册的字段值。
   final ValueChanged<Map<String, Object?>>? onSubmit;
 
   /// 是否向字段 builder 暴露错误文案。
@@ -372,36 +357,18 @@ typedef TFormFieldBuilder<T> =
 class TFormField<T> extends StatefulWidget {
   const TFormField({
     super.key,
-
-    /// 字段名，在表单提交数据中作为 key。
     required this.name,
-
-    /// 受控字段值。
     required this.value,
-
-    /// 字段内容 builder。
     required this.builder,
-
-    /// 字段值变化回调；为 null 时禁用字段。
     this.onChanged,
-
-    /// 是否执行内置必填校验，并让表单项默认显示必填标记。
     this.required = false,
-
-    /// 内置必填校验失败时的错误文案。
     this.requiredMessage = '此项不能为空',
-
-    /// 字段校验器。
     this.validator,
-
-    /// 保存字段时触发。
     this.onSaved,
-
-    /// 自动校验时机；为空时继承 [TForm]。
     this.autovalidateMode,
   });
 
-  /// 字段名。
+  /// 字段名，在表单提交数据中作为 key。
   final String name;
 
   /// 受控字段值。
@@ -410,7 +377,7 @@ class TFormField<T> extends StatefulWidget {
   /// 字段值变化回调；为 null 时禁用字段。
   final ValueChanged<T>? onChanged;
 
-  /// 是否执行内置必填校验。
+  /// 是否执行内置必填校验，并让表单项默认显示必填标记。
   ///
   /// 内置规则仅将 null、空白字符串、空 [Iterable] 和空 [Map] 视为未填写；
   /// false 与 0 均是有效值。对象内部的未选择状态应通过 [validator] 描述。
@@ -428,7 +395,7 @@ class TFormField<T> extends StatefulWidget {
   /// 保存字段时触发。
   final FormFieldSetter<T>? onSaved;
 
-  /// 自动校验时机。
+  /// 自动校验时机；为空时继承 [TForm]。
   final AutovalidateMode? autovalidateMode;
 
   @override

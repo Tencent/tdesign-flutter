@@ -45,7 +45,6 @@ class DefaultStickyHeaderController extends StatefulWidget {
   ///
   /// Typically a [Scaffold] whose [AppBar] includes a [TabBar].
   ///
-  /// {@macro flutter.widgets.child}
   final Widget child;
 
   /// The closest instance of this class that encloses the given context.
@@ -145,7 +144,7 @@ class SliverStickyHeaderState {
 /// Place this widget inside a [CustomScrollView] or similar.
 class SliverStickyHeader extends RenderObjectWidget {
   /// Creates a sliver that displays the [header] before its [sliver], unless
-  /// [overlapsContent] it's true.
+  /// overlapsContent is true.
   /// The [header] stays pinned when it hits the start of the viewport until
   /// the [sliver] scrolls off the viewport.
   ///

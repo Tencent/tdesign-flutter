@@ -27,18 +27,23 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
   final BorderRadiusGeometry? linearBorderRadius;
 
   /// 环形进度条的正方形边长；未设置时由环形规格决定。
+  /// 未配置时 circular 为 112、microCircular / microButton 为 24 逻辑像素。
   final double? circleSize;
 
   /// 动画持续时间
+  /// 未配置时为 300 毫秒。
   final Duration? animationDuration;
 
   /// 不确定进度完成一次循环的时长。
+  /// 未配置时为 1200 毫秒；必须大于 Duration.zero，否则抛出 FlutterError。
   final Duration? indeterminateAnimationDuration;
 
   /// 不确定线性进度段占轨道宽度的比例。
+  /// 未配置时为 0.32；必须大于 0 且不大于 1。
   final double? indeterminateLinearSegmentFraction;
 
   /// 不确定环形进度弧占整圈的比例。
+  /// 未配置时为 0.25；必须大于 0 且小于 1。
   final double? indeterminateCircularValue;
 
   const TProgressThemeData({

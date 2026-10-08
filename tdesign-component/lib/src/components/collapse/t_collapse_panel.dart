@@ -45,6 +45,7 @@ class TCollapsePanel<T extends Object> {
   /// 展开内容区域的固定高度（包含内容内边距）。
   ///
   /// 适用于 [ListView] 等需要有界高度的内容；为空时由内容自然决定高度。
+  /// 非空时必须是有限且大于 0 的值。
   final double? bodyHeight;
 
   /// 是否禁用面板交互。
