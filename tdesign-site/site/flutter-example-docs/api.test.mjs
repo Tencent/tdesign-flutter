@@ -18,9 +18,9 @@ test('every component page renders the complete Demo API, including Theme and co
     const rendered = replaceFlutterApiDirectives(source);
     const api = fs.readFileSync(path.join(defaultApiDirectory, `${component.slug}_api.md`), 'utf8').trimEnd();
     assert.ok(rendered.includes(api), component.slug);
+    const typeHeadings = rendered.split('\n').filter((line) => line.startsWith('### '));
     for (const name of [...component.api.names, ...(component.api.functions || [])]) {
-      assert.ok(rendered.includes(`### ${name}\n`), `${component.slug}: ${name}`);
-      assert.equal(rendered.split(`### ${name}\n`).length - 1, 1, `${component.slug}: duplicate ${name}`);
+      assert.equal(typeHeadings.filter((line) => line === `### ${name}`).length, 1, `${component.slug}: missing or duplicate ${name}`);
     }
     assert.equal((rendered.match(/^## API$/gm) || []).length, 1);
   }

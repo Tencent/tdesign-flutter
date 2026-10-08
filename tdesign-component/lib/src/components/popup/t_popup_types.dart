@@ -2,7 +2,7 @@ part of 't_popup.dart';
 
 /// 浮层出现方向；决定 [TPopupOptions] 中哪些字段生效。
 ///
-/// 与 [TPopupOptions] 类文档中的「字段与 placement」表对应。
+/// 各方向的可用参数见 [TPopupOptions] 的「不同弹出方向的可用参数」说明。
 /// 方向固定时请用 [TPopupOptions.bottom]、[TPopupOptions.center] 等命名工厂。
 enum TPopupPlacement {
   /// 自顶部滑入；默认高 240，使用 [TPopupOptions.height]、[TPopupOptions.inset]（[TPopupTopInset]）覆盖。

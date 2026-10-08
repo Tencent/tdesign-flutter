@@ -9,7 +9,14 @@ Never _throwPopupOptionsValidationError(String error) {
 
 /// [TPopup.show] 的配置对象。
 ///
-/// ## 如何创建
+/// ## 使用说明
+///
+/// 生命周期回调见 [onOpened]、[onClosed]、[onVisibleChange]；
+/// 蒙层行为见 [overlay]（[TPopupOverlayConfig]）。
+/// 单次打开的显式尺寸、面板颜色、圆角及蒙层颜色优先于
+/// [TPopupThemeData] 的子树默认值；动画时长未指定时使用 240 毫秒。
+///
+/// ### 构造方式选择
 ///
 /// | 场景 | 推荐用法 |
 /// |------|----------|
@@ -18,7 +25,7 @@ Never _throwPopupOptionsValidationError(String error) {
 ///
 /// 命名工厂只暴露当前方向生效的字段（例如 [TPopupOptions.bottom] 无 [width] 参数）。
 ///
-/// ## 字段与 [TPopupPlacement]
+/// ### 不同弹出方向的可用参数
 ///
 /// | [TPopupPlacement] | 头部 / 关闭区 | 尺寸 |
 /// |-------------------|-------------|------|
@@ -30,11 +37,6 @@ Never _throwPopupOptionsValidationError(String error) {
 /// [headerBuilder] 与 [closeBuilder] 默认均为 `null`，基础 Popup 只渲染
 /// [child]。显式提供 builder 时才会渲染相应区域，builder 可调用 `close`
 /// 关闭浮层。
-///
-/// 生命周期回调见 [onOpened]、[onClosed]、[onVisibleChange]；
-/// 蒙层行为见 [overlay]（[TPopupOverlayConfig]）。
-/// 单次打开的显式尺寸、面板颜色、圆角及蒙层颜色优先于
-/// [TPopupThemeData] 的子树默认值；动画时长未指定时使用 240 毫秒。
 class TPopupOptions {
   /// 通用构造；[placement] 在运行时才能确定时使用。
   ///

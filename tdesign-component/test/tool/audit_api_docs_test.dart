@@ -171,6 +171,65 @@ void main() {
     final result = await audit();
     expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
   });
+  for (final defect in ['none', 'missing', 'wrong type', 'extra']) {
+    test(
+      'grouped constructors retain isolated parameter contracts $defect',
+      () async {
+        source.writeAsStringSync(
+          _source.replaceFirst(
+            '  /// 内容。',
+            '  /// 使用指定内容。\n  /// [value] 内容。\n'
+                '  Sample.named(int value) : this(value: value);\n  /// 内容。',
+          ),
+        );
+        var content = compactMethods
+            .replaceFirst(
+              '#### 默认构造方法\n',
+              '#### 构造方法\n##### Sample\n###### Defaults\nNull uses the default.\n',
+            )
+            .replaceFirst('#### 参数\n', '');
+        content = content.replaceFirst(
+          '#### 实例方法',
+          '##### Sample.named\n位置参数：`value`\n'
+              '| 参数 | 类型 | 默认值 | 说明 | 必填 |\n'
+              '| --- | --- | --- | --- | --- |\n'
+              '| value | int | - | 内容。 | 是 |\n'
+              '#### 实例方法',
+        );
+        if (defect == 'missing') {
+          content = content.replaceFirst(
+            RegExp(r'^\| value \|.*\n', multiLine: true),
+            '',
+          );
+        } else if (defect == 'wrong type') {
+          content = content.replaceFirst(
+            '| value | int |',
+            '| value | String |',
+          );
+        } else if (defect == 'extra') {
+          content = content.replaceFirst(
+            '##### Sample.named',
+            '| unexpected | int | - | Extra. | 否 |\n##### Sample.named',
+          );
+        }
+        asset.writeAsStringSync(content);
+        final result = await audit();
+        expect(
+          result.exitCode,
+          defect == 'none' ? 0 : 1,
+          reason: '${result.stdout}${result.stderr}',
+        );
+        if (defect != 'none') {
+          expect(
+            result.stdout,
+            contains(
+              defect == 'extra' ? 'output-extra-parameter' : 'output-parameter',
+            ),
+          );
+        }
+      },
+    );
+  }
   for (final correctType in [true, false]) {
     test(
       'compact default constructor retains nested headings $correctType',

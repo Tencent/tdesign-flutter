@@ -16,7 +16,7 @@ node tool/generate_api.mjs --check
 
 `tool/components.json` 登记组件及其公开类、枚举、typedef、扩展和顶层函数。公开范围以 `lib/tdesign_flutter.dart` 的导出为准，包括 `part`、转导出和 `show` / `hide`；`@internal` 和 `@visibleForTesting` 成员不作为使用方 API。
 
-生成文档分别展示默认、命名和 factory 构造函数、参数及必填项、字段和访问器、静态/实例方法、控制器、辅助类型及 Theme。公开扩展也会生成属性和方法说明。主题配置说明随对应 ThemeData 一起生成，不另写参数表。没有独立 Theme 的组件在类注释及站点使用说明中写明其共用 Theme 或全局 Token。
+生成文档按用途说明、必要使用说明、构造方法、属性/静态成员、静态/实例方法组织；默认、命名和 factory 构造统一按实际名称分节，参数与必填项直接用表格展示。控制器、辅助类型及 Theme 随对应类型一起展示。公开扩展也会生成属性和方法说明。主题配置说明随对应 ThemeData 一起生成，不另写参数表。没有独立 Theme 的组件在类注释及站点使用说明中写明其共用 Theme 或全局 Token。
 
 - 使用标准 `///` dartdoc；构造函数可以有注释，也不限制成员声明顺序。
 - 类注释说明用途；字段注释说明语义、生效条件、空值含义、相关字段和优先关系。

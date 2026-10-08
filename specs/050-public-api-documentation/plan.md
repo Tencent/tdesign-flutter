@@ -31,3 +31,6 @@
 工具单元测试，声明/成员完整性检查，生成幂等性，双 Flutter 严格 analyze，站点构建，浏览器文档验收。无视觉行为变化，不更新 Golden。
 
 Demo 加载验证使用真实 AssetBundle 与真实 ApiPage，逐个匹配 57 个组件的既有注册名和 canonical slug。该测试登记到 sharedExampleTests，进入 GitHub / CNB 双版本功能回归。
+
+
+Popup 信息组织复审：标题语义在源码 dartdoc 维护，生成器只统一 API 分组、顺序与相对层级；默认构造复用构造/方法正文渲染，以实际名称为五级标题。工具 validate 与消费审计器均兼容旧资产，识别新默认构造标题并按同级构造边界截取参数。只生成 Popup，保留其他组件资产，双版本校验和浏览器全类型结构复核完成后记录结果。

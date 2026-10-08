@@ -442,8 +442,12 @@ void main(List<String> args) {
         if (declaration['kind'] == 'function') {
           callableSection = section;
         } else {
+          final groupedDefault =
+              callable.isEmpty && section.contains('##### $name\n');
           final heading = callable.isEmpty
-              ? '#### 默认构造方法'
+              ? groupedDefault
+                    ? '##### $name'
+                    : '#### 默认构造方法'
               : '##### $name.$callable';
           final pos = section.indexOf('$heading\n');
           if (pos < 0) {
@@ -457,7 +461,9 @@ void main(List<String> args) {
           }
           final tail = section.substring(pos + heading.length + 1);
           final boundary = RegExp(
-            callable.isEmpty ? r'^#### (?!参数$)' : r'^####(?:#)? (?!参数$)',
+            callable.isEmpty && !groupedDefault
+                ? r'^#### (?!参数$)'
+                : r'^####(?:#)? (?!参数$)',
             multiLine: true,
           ).firstMatch(tail);
           callableSection = boundary == null
@@ -557,7 +563,8 @@ void main(List<String> args) {
       }
       for (final constructor in declaration['constructors'] as List<String>) {
         if (!(constructor.isEmpty
-            ? section.contains('#### 默认构造方法')
+            ? section.contains('##### $name\n') ||
+                  section.contains('#### 默认构造方法')
             : section.contains('##### $name.$constructor\n'))) {
           issue(
             'output-constructor',
