@@ -485,5 +485,19 @@ void main() {
       final a = TThemeData.defaultData();
       expect(a.lerp(null, 0.5), same(a));
     });
+
+    test('preserves extraThemeData from the target theme', () {
+      final extra = _TestExtra();
+      final a = TThemeData.defaultData().copyWithTThemeData(
+        'a',
+        extraThemeData: _TestExtra2(),
+      );
+      final b = TThemeData.defaultData().copyWithTThemeData(
+        'b',
+        extraThemeData: extra,
+      );
+      final result = a.lerp(b, 0) as TThemeData;
+      expect(result.ofExtra<_TestExtra>(), same(extra));
+    });
   });
 }

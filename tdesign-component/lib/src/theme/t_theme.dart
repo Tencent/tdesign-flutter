@@ -837,6 +837,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
       insetShadowMap: other.insetShadowMap,
       spacerMap: other.spacerMap,
       refMap: other.refMap,
+      extraThemeData: other.extraThemeData,
     );
   }
 }
