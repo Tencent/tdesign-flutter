@@ -70,4 +70,24 @@
 - [ ] 确认后生成并逐页验收其余组件，更新全量报告。
 - [ ] 工具和消费仓库正式交付及最终 CI/autofix 复验。
 
-证据保存在 `/tmp/tdesign-api-full-review/popup-presentation/unified-*.log`、`unified-browser-audit.json`；截图 `popup-show-unified.jpg`。本轮不含组件设计/Golden 或 Flutter Web 示例交互验收。
+证据保存在 `/tmp/tdesign-api-full-review/popup-presentation/unified-*.log`、`unified-browser-audit.json`；截图 `popup-show-unified.jpg`。本轮不含组件设计/Golden 验收。
+
+## 本地 Flutter Web 预览复核
+
+维护者反馈示例仅有两个代码块、手机预览未显示后，核对 `popup_page.dart` 与代码片段 manifest：两组源码片段完整对应当前公开 Demo，基础组含五个方向，应用组含标题操作与自定义关闭按钮，共七个可操作场景。这个数量反映现有 Demo 结构，不等同于全部 API、主题及生命周期行为均有公开示例。
+
+此前仅启动 Vite preview，没有装配 Flutter Web 产物。`/flutter/example/flutter_bootstrap.js` 被 SPA fallback 返回为官网 HTML，导致 iframe 显示错误页面。使用当前源码通过 Flutter 3.32.0 构建 Web，并将产物放入 `_site/example/`；Vite preview 的 `/flutter/` base 会映射这个目录。JavaScript 响应随后为正确的 `text/javascript`，浏览器实际显示 Popup Demo。本地装配步骤：
+
+```sh
+cd tdesign-component/example
+flutter build web --no-pub --base-href /flutter/example/ --no-web-resources-cdn --pwa-strategy=none
+cd ../../
+mkdir -p tdesign-site/_site/example
+cp -a tdesign-component/example/build/web/. tdesign-site/_site/example/
+```
+
+站点再次构建会清理 `_site`，须再次装配 Flutter 产物。正式发布仍使用已有 `preview-build.yml` 的站点与 Web 合并流程，没有修改发布配置。
+
+在桌面断点实际验证：中间弹出打开后显示面板，点击蒙层关闭；带标题及操作的底部弹出显示标题、取消、确定，点击取消关闭。证据为 `web-preview-build.log`、`web-popup-preview.jpg`、`web-popup-center.jpg`、`web-popup-header.jpg`，位于上述临时证据目录。本次浏览器交互仅覆盖这两个场景，其余五个未逐一点击。窄屏站点会隐藏右侧嵌入手机，可直接访问 `/flutter/example/#popup` 查看。
+
+API 简介复核建议：类型用途和必要行为契约保留，重复的「简介」标题可删除；长篇使用流程适合独立说明。此建议尚未实现，本轮没有进一步改动生成规则或组件源码。
