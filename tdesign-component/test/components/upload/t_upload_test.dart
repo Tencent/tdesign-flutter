@@ -361,6 +361,27 @@ void main() {
       expect(error, isA<StateError>());
     });
 
+    testWidgets('business callback errors are not reported as picker errors', (
+      tester,
+    ) async {
+      Object? pickerError;
+      var changed = false;
+      await tester.pumpWidget(
+        wrap(
+          TUpload(
+            files: const [],
+            picker: () async => [file('picked')],
+            onChanged: (_) => changed = true,
+            onError: (value) => pickerError = value,
+          ),
+        ),
+      );
+      await tester.tap(find.byKey(const ValueKey('upload-add')));
+      await tester.pump();
+      expect(changed, isTrue);
+      expect(pickerError, isNull);
+    });
+
     testWidgets('remove emits the remaining files', (tester) async {
       List<TUploadFile>? changed;
       final first = file('a');
