@@ -2,6 +2,8 @@
 
 日期：2026-10-08。消费 PR：[Tencent/tdesign-flutter #1149](https://github.com/Tencent/tdesign-flutter/pull/1149)。
 
+后续维护者要求精简 API 展示，先仅验收 Popup；当前本地 Popup 资产和展示结果见 [popup-presentation.md](popup-presentation.md)。本文及 review-evidence.json 记录此前全量语义审查，不代表新展示规则已经全量验收。
+
 ## 判断与交付范围
 
 57/57 个组件（包含全局 Theme）已逐一对照实现审查，并在候选工具下重新生成、核对和展示。发现的注释及生成问题已修复。**正式依赖交付仍待工具 PR #29 合入 main，消费 PR 暂不能按本轮候选产物声明可合并。**

@@ -10,30 +10,7 @@
 通过 `show` 命令式打开；返回 `TPopupHandle` 用于关闭与再次打开。
 多次调用 `show` 会继续压入新的浮层路由，可用于叠加展示。
 
-**示例**
-
-```dart
-final handle = TPopup.show(
-  context,
-  options: TPopupOptions.bottom(
-    headerBuilder: (context, close) => TPopupHeader(
-      title: const Text('标题'),
-    ),
-    child: MyPanel(),
-  ),
-);
-handle.close();
-handle.open();
-```
-
 配置项见 `TPopupOptions`；方向见 `TPopupPlacement`。
-
-#### 声明
-
-```dart
-final class TPopup
-```
-
 
 #### 静态方法
 
@@ -71,13 +48,6 @@ Popup 标准头部布局。
 
 本组件只负责取消按钮、标题和确认按钮的布局，不注入默认内容或业务行为。
 需要关闭 Popup 时，在 `TPopupOptions.headerBuilder` 中构建按钮并调用其 `close` 参数。
-
-#### 声明
-
-```dart
-class TPopupHeader extends StatelessWidget
-```
-
 #### 默认构造方法
 
 
@@ -136,13 +106,6 @@ const TPopupHeader({
 蒙层行为见 `overlay`（`TPopupOverlayConfig`）。
 单次打开的显式尺寸、面板颜色、圆角及蒙层颜色优先于
 `TPopupThemeData` 的子树默认值；动画时长未指定时使用 240 毫秒。
-
-#### 声明
-
-```dart
-class TPopupOptions
-```
-
 
 #### 工厂构造方法
 
@@ -483,24 +446,6 @@ TPopupOptions normalized()
 ### TPopupHandle
 #### 简介
 `TPopup.show` 的返回值，用于控制同一份 `TPopupOptions` 的多次打开与关闭。
-
-**示例**
-
-```dart
-final handle = TPopup.show(
-  context,
-  options: TPopupOptions.bottom(child: panel),
-);
-handle.close();
-handle.open(); // 可省略 context，复用已缓存的 Navigator
-```
-
-#### 声明
-
-```dart
-class TPopupHandle
-```
-
 #### 公开属性（字段与访问器）
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -567,13 +512,6 @@ Popup 蒙层行为配置（可见遮罩、背景拦截、点击行为）。
 * `showOverlay=true, preventTap=false`：显示蒙层但不拦截背景交互；
 * `showOverlay=false, preventTap=true`：透明模态弹层（拦截交互但不显示蒙层）；
 * `showOverlay=false, preventTap=false`：非模态浮层（不显示蒙层也不拦截交互）。
-
-#### 声明
-
-```dart
-class TPopupOverlayConfig
-```
-
 #### 默认构造方法
 
 
@@ -609,13 +547,6 @@ const TPopupOverlayConfig({
 ### TPopupInset
 #### 简介
 Popup 在交叉轴方向的边缘留白基类。
-
-#### 声明
-
-```dart
-abstract class TPopupInset
-```
-
 #### 默认构造方法
 
 
@@ -627,13 +558,6 @@ const TPopupInset()
 ### TPopupBottomInset
 #### 简介
 bottom 方向的左右留白。
-
-#### 声明
-
-```dart
-class TPopupBottomInset extends TPopupInset
-```
-
 #### 默认构造方法
 
 
@@ -652,13 +576,6 @@ const TPopupBottomInset({this.left = 0, this.right = 0})
 ### TPopupTopInset
 #### 简介
 top 方向的左右留白。
-
-#### 声明
-
-```dart
-class TPopupTopInset extends TPopupInset
-```
-
 #### 默认构造方法
 
 
@@ -677,13 +594,6 @@ const TPopupTopInset({this.left = 0, this.right = 0})
 ### TPopupLeftInset
 #### 简介
 left 方向的上下留白。
-
-#### 声明
-
-```dart
-class TPopupLeftInset extends TPopupInset
-```
-
 #### 默认构造方法
 
 
@@ -702,13 +612,6 @@ const TPopupLeftInset({this.top = 0, this.bottom = 0})
 ### TPopupRightInset
 #### 简介
 right 方向的上下留白。
-
-#### 声明
-
-```dart
-class TPopupRightInset extends TPopupInset
-```
-
 #### 默认构造方法
 
 
@@ -730,13 +633,6 @@ TPopup 组件级 ThemeExtension
 
 通过 Theme 子树注入，控制子树的默认浮层样式。
 `TPopupOptions` 的对应字段优先于 Theme Extension。
-
-#### 声明
-
-```dart
-class TPopupThemeData extends ThemeExtension<TPopupThemeData>
-```
-
 
 #### 静态方法
 

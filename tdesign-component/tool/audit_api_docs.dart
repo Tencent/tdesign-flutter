@@ -139,6 +139,18 @@ void main(List<String> args) {
           : node is ExtensionDeclaration
           ? signatureTokens(node, node.leftBracket.offset)
           : null,
+      'typeParameters': node is ClassDeclaration
+          ? node.typeParameters?.typeParameters
+                .map((p) => p.toSource())
+                .join(', ')
+          : node is ExtensionDeclaration
+          ? node.typeParameters?.typeParameters
+                .map((p) => p.toSource())
+                .join(', ')
+          : null,
+      'onType': node is ExtensionDeclaration
+          ? node.onClause?.extendedType.toSource()
+          : null,
     };
     void captureParameters(
       String callable,
@@ -382,9 +394,36 @@ void main(List<String> args) {
       final next = doc.indexOf('\n### ', start + 1);
       final section = doc.substring(start, next < 0 ? doc.length : next);
       final declarationTokens = declaration['declaration'] as List<String>?;
-      if (declarationTokens != null &&
+      // Legacy assets contain full declarations. Compact API pages retain only
+      // type parameters and extension receivers; callable signatures below are
+      // still mandatory and independently compared against the source.
+      if (section.contains('#### 声明\n') &&
+          declarationTokens != null &&
           !containsSignature(section, declarationTokens)) {
         issue('output-signature', name, exports[name]!, nodes[name]!.offset);
+      }
+      if (!section.contains('#### 声明\n')) {
+        for (final entry in {
+          'typeParameters': '类型参数',
+          'onType': '适用类型',
+        }.entries) {
+          final expected = declaration[entry.key] as String?;
+          if (expected == null || expected.isEmpty) {
+            continue;
+          }
+          final actual = RegExp(
+            '^${entry.value}：`([^`]+)`',
+            multiLine: true,
+          ).firstMatch(section)?.group(1);
+          if (actual == null || !sameCode(actual, expected)) {
+            issue(
+              'output-signature',
+              name,
+              exports[name]!,
+              nodes[name]!.offset,
+            );
+          }
+        }
       }
       for (final entry in (declaration['callables'] as Map).entries) {
         final callable = entry.key as String;

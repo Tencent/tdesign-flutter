@@ -63,6 +63,32 @@ void main() {
     },
   );
 
+  test(
+    'accepts compact type contracts without a standalone declaration',
+    () async {
+      asset.writeAsStringSync(
+        _api.replaceFirst(
+          '#### 声明\n```dart\nclass Sample<T extends Object>\n```',
+          '类型参数：`T extends Object`',
+        ),
+      );
+      final result = await audit();
+      expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+    },
+  );
+
+  test('rejects a missing type bound on compact API pages', () async {
+    asset.writeAsStringSync(
+      _api.replaceFirst(
+        '#### 声明\n```dart\nclass Sample<T extends Object>\n```',
+        '类型参数：`T`',
+      ),
+    );
+    final result = await audit();
+    expect(result.exitCode, 1, reason: '${result.stdout}${result.stderr}');
+    expect(result.stdout, contains('output-signature'));
+  });
+
   final cases = <String, (String, String, String)>{
     'missing method parameter': (_fallbackRow, '', 'output-parameter-count'),
     'wrong parameter type': (
