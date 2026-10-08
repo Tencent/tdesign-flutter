@@ -1,6 +1,6 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。构造参数默认按名称传入；含位置参数的构造方法另列「参数形式」。
 
 ### TPopup
 #### 简介
@@ -49,16 +49,6 @@ Popup 标准头部布局。
 本组件只负责取消按钮、标题和确认按钮的布局，不注入默认内容或业务行为。
 需要关闭 Popup 时，在 `TPopupOptions.headerBuilder` 中构建按钮并调用其 `close` 参数。
 #### 默认构造方法
-
-
-```dart
-const TPopupHeader({
-  super.key,
-  this.cancelButton,
-  this.title,
-  this.confirmButton,
-})
-```
 
 ##### 参数
 
@@ -111,25 +101,6 @@ const TPopupHeader({
 
 ##### TPopupOptions.bottom
 
-```dart
-factory TPopupOptions.bottom({
-  required Widget child,
-  double? height,
-  TPopupBottomInset? inset,
-  TPopupHeaderBuilder? headerBuilder,
-  double? radius,
-  Color? backgroundColor,
-  TPopupOverlayConfig? overlay,
-  bool destroyOnClose = false,
-  Duration? animationDuration,
-  VoidCallback? onOpened,
-  VoidCallback? onClosed,
-  TPopupVisibleChangeCallback? onVisibleChange,
-  bool useSafeArea = false,
-})
-```
-
-
 创建 `TPopupPlacement.bottom` 配置。
 
 固定 `placement` 为 `TPopupPlacement.bottom`；默认不显示头部。
@@ -154,25 +125,6 @@ factory TPopupOptions.bottom({
 
 ##### TPopupOptions.center
 
-```dart
-factory TPopupOptions.center({
-  required Widget child,
-  double? width,
-  double? height,
-  TPopupSlotBuilder? closeBuilder,
-  double? radius,
-  Color? backgroundColor,
-  TPopupOverlayConfig? overlay,
-  bool destroyOnClose = false,
-  Duration? animationDuration,
-  VoidCallback? onOpened,
-  VoidCallback? onClosed,
-  TPopupVisibleChangeCallback? onVisibleChange,
-  bool useSafeArea = false,
-})
-```
-
-
 创建 `TPopupPlacement.center` 配置。
 
 固定 `placement` 为 `TPopupPlacement.center`；默认不显示关闭按钮。
@@ -196,24 +148,6 @@ factory TPopupOptions.center({
 
 ##### TPopupOptions.left
 
-```dart
-factory TPopupOptions.left({
-  required Widget child,
-  double? width,
-  TPopupLeftInset? inset,
-  double? radius,
-  Color? backgroundColor,
-  TPopupOverlayConfig? overlay,
-  bool destroyOnClose = false,
-  Duration? animationDuration,
-  VoidCallback? onOpened,
-  VoidCallback? onClosed,
-  TPopupVisibleChangeCallback? onVisibleChange,
-  bool useSafeArea = false,
-})
-```
-
-
 创建 `TPopupPlacement.left` 配置。
 
 固定 `placement` 为 `TPopupPlacement.left`；未传 `width` 时布局默认宽度 280。
@@ -235,24 +169,6 @@ factory TPopupOptions.left({
 
 
 ##### TPopupOptions.right
-
-```dart
-factory TPopupOptions.right({
-  required Widget child,
-  double? width,
-  TPopupRightInset? inset,
-  double? radius,
-  Color? backgroundColor,
-  TPopupOverlayConfig? overlay,
-  bool destroyOnClose = false,
-  Duration? animationDuration,
-  VoidCallback? onOpened,
-  VoidCallback? onClosed,
-  TPopupVisibleChangeCallback? onVisibleChange,
-  bool useSafeArea = false,
-})
-```
-
 
 创建 `TPopupPlacement.right` 配置。
 
@@ -276,24 +192,6 @@ factory TPopupOptions.right({
 
 ##### TPopupOptions.top
 
-```dart
-factory TPopupOptions.top({
-  required Widget child,
-  double? height,
-  TPopupTopInset? inset,
-  double? radius,
-  Color? backgroundColor,
-  TPopupOverlayConfig? overlay,
-  bool destroyOnClose = false,
-  Duration? animationDuration,
-  VoidCallback? onOpened,
-  VoidCallback? onClosed,
-  TPopupVisibleChangeCallback? onVisibleChange,
-  bool useSafeArea = false,
-})
-```
-
-
 创建 `TPopupPlacement.top` 配置。
 
 固定 `placement` 为 `TPopupPlacement.top`；无内置头部。
@@ -314,28 +212,6 @@ factory TPopupOptions.top({
 | useSafeArea | bool | false | 是否避让系统安全区，默认 false；center 使用完整安全区，其他方向避让贴边侧及相邻边。 为 true 时通过 `Positioned` 偏移使面板不侵入刘海、Home Indicator 等区域； top/bottom/left/right 还会与对应 `inset` 叠加。需要避让时显式设为 true； 也可以在 `child` 内使用 Flutter 原生 `SafeArea`，只约束内容而保留面板背景贴边。 | 否 |
 
 #### 默认构造方法
-
-
-```dart
-const TPopupOptions({
-  required this.child,
-  this.placement = TPopupPlacement.bottom,
-  this.width,
-  this.height,
-  this.inset,
-  this.radius,
-  this.backgroundColor,
-  this.overlay,
-  this.destroyOnClose = false,
-  this.animationDuration,
-  this.headerBuilder,
-  this.closeBuilder,
-  this.onOpened,
-  this.onClosed,
-  this.onVisibleChange,
-  this.useSafeArea = false,
-})
-```
 
 通用构造；`placement` 在运行时才能确定时使用。
 
@@ -514,17 +390,6 @@ Popup 蒙层行为配置（可见遮罩、背景拦截、点击行为）。
 * `showOverlay=false, preventTap=false`：非模态浮层（不显示蒙层也不拦截交互）。
 #### 默认构造方法
 
-
-```dart
-const TPopupOverlayConfig({
-  this.showOverlay = true,
-  this.color,
-  this.preventTap = true,
-  this.closeOnClick,
-  this.onClick,
-})
-```
-
 创建蒙层配置。
 
 ##### 参数
@@ -549,21 +414,13 @@ const TPopupOverlayConfig({
 Popup 在交叉轴方向的边缘留白基类。
 #### 默认构造方法
 
-
-```dart
-const TPopupInset()
-```
+无参数。
 
 
 ### TPopupBottomInset
 #### 简介
 bottom 方向的左右留白。
 #### 默认构造方法
-
-
-```dart
-const TPopupBottomInset({this.left = 0, this.right = 0})
-```
 
 ##### 参数
 
@@ -578,11 +435,6 @@ const TPopupBottomInset({this.left = 0, this.right = 0})
 top 方向的左右留白。
 #### 默认构造方法
 
-
-```dart
-const TPopupTopInset({this.left = 0, this.right = 0})
-```
-
 ##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
@@ -596,11 +448,6 @@ const TPopupTopInset({this.left = 0, this.right = 0})
 left 方向的上下留白。
 #### 默认构造方法
 
-
-```dart
-const TPopupLeftInset({this.top = 0, this.bottom = 0})
-```
-
 ##### 参数
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
@@ -613,11 +460,6 @@ const TPopupLeftInset({this.top = 0, this.bottom = 0})
 #### 简介
 right 方向的上下留白。
 #### 默认构造方法
-
-
-```dart
-const TPopupRightInset({this.top = 0, this.bottom = 0})
-```
 
 ##### 参数
 
@@ -654,18 +496,6 @@ static double? lerpDouble(double? a, double? b, double t)
 | t | double | - | 插值进度。 | 是 |
 
 #### 默认构造方法
-
-
-```dart
-const TPopupThemeData({
-  this.barrierColor,
-  this.panelRadius,
-  this.panelBackgroundColor,
-  this.edgeHeight,
-  this.drawerWidth,
-  this.centerSize,
-})
-```
 
 ##### 参数
 

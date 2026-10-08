@@ -89,6 +89,74 @@ void main() {
     expect(result.stdout, contains('output-signature'));
   });
 
+  test(
+    'accepts named constructor tables without a repeated signature',
+    () async {
+      asset.writeAsStringSync(_api.replaceFirst(_constructorSignature, ''));
+      final result = await audit();
+      expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+    },
+  );
+
+  test('compact constructor tables still reject incorrect types', () async {
+    asset.writeAsStringSync(
+      _api
+          .replaceFirst(_constructorSignature, '')
+          .replaceFirst('| value | int |', '| value | String |'),
+    );
+    final result = await audit();
+    expect(result.exitCode, 1);
+    expect(result.stdout, contains('output-parameter-类型'));
+  });
+
+  for (final shape in {
+    'Sample(value, [label])': true,
+    'Sample(label, [value])': false,
+    'Sample(value, {label})': false,
+    '': false,
+  }.entries) {
+    test('checks positional constructor shape ${shape.key}', () async {
+      source.writeAsStringSync(
+        _source.replaceFirst(
+          "{required this.value, this.label = 'a b'}",
+          "this.value, [this.label = 'a b']",
+        ),
+      );
+      asset.writeAsStringSync(
+        _api.replaceFirst(
+          _constructorSignature,
+          shape.key.isEmpty ? '' : '参数形式：`${shape.key}`',
+        ),
+      );
+      final result = await audit();
+      expect(
+        result.exitCode,
+        shape.value ? 0 : 1,
+        reason: '${result.stdout}${result.stderr}',
+      );
+      if (!shape.value) {
+        expect(result.stdout, contains('output-signature'));
+      }
+    });
+  }
+
+  test(
+    'method signatures remain required beside compact constructors',
+    () async {
+      asset.writeAsStringSync(
+        _api
+            .replaceFirst(_constructorSignature, '')
+            .replaceFirst(
+              '```dart\nT? read<E extends Object>(E item, [T? fallback])\n```',
+              '',
+            ),
+      );
+      final result = await audit();
+      expect(result.exitCode, 1);
+      expect(result.stdout, contains('output-signature: Sample.read'));
+    },
+  );
+
   final cases = <String, (String, String, String)>{
     'missing method parameter': (_fallbackRow, '', 'output-parameter-count'),
     'wrong parameter type': (
@@ -296,6 +364,8 @@ class Sample<T extends Object> {
 }
 ''';
 const _fallbackRow = '| fallback | T? | - | 回退内容。 | 否 |';
+const _constructorSignature =
+    "```dart\nconst Sample({required this.value, this.label = 'a b'})\n```";
 const _api = r'''## API
 ### Sample
 #### 简介

@@ -31,6 +31,33 @@ List<String> signatureTokens(AnnotatedNode node, int end) {
   return result;
 }
 
+/// Compact constructor parameter order and grouping, derived from source AST.
+/// Named-only and empty constructors are fully described by their tables.
+String constructorParameterShape(String owner, ConstructorDeclaration node) {
+  final parameters = node.parameters.parameters;
+  if (parameters.every((parameter) => parameter.isNamed)) {
+    return '';
+  }
+  final required = <String>[];
+  final optional = <String>[];
+  final named = <String>[];
+  for (final parameter in parameters) {
+    final target = parameter.isNamed
+        ? named
+        : parameter.isRequiredPositional
+        ? required
+        : optional;
+    target.add(parameter.name!.lexeme);
+  }
+  final groups = [
+    ...required,
+    if (optional.isNotEmpty) '[${optional.join(', ')}]',
+    if (named.isNotEmpty) '{${named.join(', ')}}',
+  ];
+  final name = node.name?.lexeme;
+  return '$owner${name == null ? '' : '.$name'}(${groups.join(', ')})';
+}
+
 /// Find a complete signature in a Dart code block, never in descriptive prose.
 bool containsSignature(String section, List<String> expected) =>
     RegExp(r'^```dart\n([\s\S]*?)^```', multiLine: true)

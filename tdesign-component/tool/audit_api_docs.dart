@@ -166,6 +166,8 @@ void main(List<String> args) {
         'signature': declaration == null
             ? null
             : signatureTokens(declaration, parameters.end),
+        if (declaration is ConstructorDeclaration)
+          'constructorShape': constructorParameterShape(name, declaration),
       };
       for (final parameter in parameters.parameters) {
         final row = <String, dynamic>{
@@ -261,6 +263,7 @@ void main(List<String> args) {
       (declarations[name]!['callables'] as Map)[''] = {
         'parameters': <Map<String, dynamic>>[],
         'signature': lexicalTokens('$name()'),
+        'constructorShape': '',
       };
     }
     if (node is EnumDeclaration) {
@@ -395,8 +398,8 @@ void main(List<String> args) {
       final section = doc.substring(start, next < 0 ? doc.length : next);
       final declarationTokens = declaration['declaration'] as List<String>?;
       // Legacy assets contain full declarations. Compact API pages retain only
-      // type parameters and extension receivers; callable signatures below are
-      // still mandatory and independently compared against the source.
+      // type parameters and extension receivers. Method/function signatures and
+      // compact constructor shapes are independently compared with the source.
       if (section.contains('#### 声明\n') &&
           declarationTokens != null &&
           !containsSignature(section, declarationTokens)) {
@@ -455,8 +458,23 @@ void main(List<String> args) {
         }
         final expected = entry.value['parameters'] as List;
         final expectedSignature = entry.value['signature'] as List<String>?;
-        if (expectedSignature != null &&
-            !containsSignature(callableSection, expectedSignature)) {
+        final constructorShape = entry.value['constructorShape'] as String?;
+        final hasSignature = RegExp(
+          r'^```dart\n',
+          multiLine: true,
+        ).hasMatch(callableSection);
+        final actualShape = RegExp(
+          r'^参数形式：`([^`]+)`',
+          multiLine: true,
+        ).firstMatch(callableSection)?.group(1);
+        final validContract = constructorShape != null && !hasSignature
+            ? constructorShape.isEmpty
+                  ? actualShape == null
+                  : actualShape != null &&
+                        sameCode(actualShape, constructorShape)
+            : expectedSignature == null ||
+                  containsSignature(callableSection, expectedSignature);
+        if (!validContract) {
           issue(
             'output-signature',
             '$name.$callable',
