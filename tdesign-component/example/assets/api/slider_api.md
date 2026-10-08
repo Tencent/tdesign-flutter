@@ -1,14 +1,41 @@
 ## API
 
-### TSlider
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
 
+### TSlider
+#### 简介
 基于 Material `Slider` 的严格受控单值滑块。
 
-#### 构造方法
+#### 声明
 
-##### TSlider
+```dart
+class TSlider extends StatelessWidget
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TSlider({
+  super.key,
+  required this.value,
+  this.onChanged,
+  this.onChangeStart,
+  this.onChangeEnd,
+  this.min = 0,
+  this.max = 1,
+  this.divisions,
+  this.showThumbValue = false,
+  this.thumbFormatter,
+  this.showScaleValue = false,
+  this.scaleFormatter,
+  this.variant = TSliderVariant.normal,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | divisions | int? | - | 离散刻度数；null 表示连续。 非 null 时必须大于 0。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
@@ -26,14 +53,39 @@
 
 
 ### TRangeSlider
-
+#### 简介
 基于 Material `RangeSlider` 的严格受控范围滑块。
 
-#### 构造方法
+#### 声明
 
-##### TRangeSlider
+```dart
+class TRangeSlider extends StatelessWidget
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TRangeSlider({
+  super.key,
+  required this.value,
+  this.onChanged,
+  this.onChangeStart,
+  this.onChangeEnd,
+  this.min = 0,
+  this.max = 1,
+  this.divisions,
+  this.showThumbValue = false,
+  this.thumbFormatter,
+  this.showScaleValue = false,
+  this.scaleFormatter,
+  this.variant = TSliderVariant.normal,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | divisions | int? | - | 离散刻度数；null 表示连续。 非 null 时必须大于 0。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
@@ -51,16 +103,38 @@
 
 
 ### TSliderThemeData
-
+#### 简介
 TSlider 与 TRangeSlider 共用的组件级 ThemeExtension。
-
 轨道、滑块和提示标签由组件 Theme 控制，不读取 Material SliderTheme。
 
-#### 构造方法
+#### 声明
 
-##### TSliderThemeData
+```dart
+class TSliderThemeData extends ThemeExtension<TSliderThemeData>
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TSliderThemeData({
+  this.activeTrackColor,
+  this.inactiveTrackColor,
+  this.thumbColor,
+  this.disabledThumbColor,
+  this.thumbBorderColor,
+  this.disabledThumbBorderColor,
+  this.overlayColor,
+  this.valueIndicatorColor,
+  this.valueIndicatorTextColor,
+  this.trackHeight,
+  this.decoration,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | activeTrackColor | Color? | - | 选中轨道颜色；为空时使用全局品牌色。 | 否 |
 | decoration | Decoration? | - | 滑块外层装饰。 | 否 |
@@ -79,77 +153,84 @@ TSlider 与 TRangeSlider 共用的组件级 ThemeExtension。
 
 ##### TSliderThemeData.copyWith
 
+```dart
+TSliderThemeData copyWith({
+  Color? activeTrackColor,
+  Color? inactiveTrackColor,
+  Color? thumbColor,
+  Color? disabledThumbColor,
+  Color? thumbBorderColor,
+  Color? disabledThumbBorderColor,
+  Color? overlayColor,
+  Color? valueIndicatorColor,
+  Color? valueIndicatorTextColor,
+  double? trackHeight,
+  Decoration? decoration,
+})
+```
+
+
 复制主题配置。
+## 返回值
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+返回类型：`TSliderThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| activeTrackColor | Color? | - | 字段含义：选中轨道颜色；为空时使用全局品牌色。 调用时的空值行为见方法说明。 | 否 |
-| inactiveTrackColor | Color? | - | 字段含义：未选中轨道颜色；为空时使用全局组件边框色。 调用时的空值行为见方法说明。 | 否 |
-| thumbColor | Color? | - | 字段含义：滑块填充颜色；为空时使用全局反色文字色。 调用时的空值行为见方法说明。 | 否 |
-| disabledThumbColor | Color? | - | 字段含义：禁用滑块填充颜色；为空时使用全局反色文字色。 调用时的空值行为见方法说明。 | 否 |
-| thumbBorderColor | Color? | - | 字段含义：滑块描边颜色；为空时使用全局灰阶色。 调用时的空值行为见方法说明。 | 否 |
-| disabledThumbBorderColor | Color? | - | 字段含义：禁用滑块描边颜色；为空时浅色使用 componentBorder Token， 暗色使用 bgColorComponentDisabled Token。 调用时的空值行为见方法说明。 | 否 |
-| overlayColor | Color? | - | 字段含义：交互反馈颜色；为空时使用品牌色的透明层。 调用时的空值行为见方法说明。 | 否 |
-| valueIndicatorColor | Color? | - | 字段含义：数值提示背景颜色；为空时使用全局品牌色。 调用时的空值行为见方法说明。 | 否 |
-| valueIndicatorTextColor | Color? | - | 字段含义：数值提示文字颜色；为空时使用全局主要文字色。 调用时的空值行为见方法说明。 | 否 |
-| trackHeight | double? | - | 字段含义：普通轨道粗细；胶囊形态仍使用其内置规格。 调用时的空值行为见方法说明。 | 否 |
-| decoration | Decoration? | - | 字段含义：滑块外层装饰。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TSliderThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
+| activeTrackColor | Color? | - | 选中轨道颜色；为空时使用全局品牌色。 | 否 |
+| inactiveTrackColor | Color? | - | 未选中轨道颜色；为空时使用全局组件边框色。 | 否 |
+| thumbColor | Color? | - | 滑块填充颜色；为空时使用全局反色文字色。 | 否 |
+| disabledThumbColor | Color? | - | 禁用滑块填充颜色；为空时使用全局反色文字色。 | 否 |
+| thumbBorderColor | Color? | - | 滑块描边颜色；为空时使用全局灰阶色。 | 否 |
+| disabledThumbBorderColor | Color? | - | 禁用滑块描边颜色；为空时浅色使用 componentBorder Token， 暗色使用 bgColorComponentDisabled Token。 | 否 |
+| overlayColor | Color? | - | 交互反馈颜色；为空时使用品牌色的透明层。 | 否 |
+| valueIndicatorColor | Color? | - | 数值提示背景颜色；为空时使用全局品牌色。 | 否 |
+| valueIndicatorTextColor | Color? | - | 数值提示文字颜色；为空时使用全局主要文字色。 | 否 |
+| trackHeight | double? | - | 普通轨道粗细；胶囊形态仍使用其内置规格。 | 否 |
+| decoration | Decoration? | - | 滑块外层装饰。 | 否 |
 
 
 ##### TSliderThemeData.lerp
 
-位置参数：`other, t`
+```dart
+TSliderThemeData lerp(ThemeExtension<TSliderThemeData>? other, double t)
+```
 
 
 生成主题过渡配置。
+## 返回值
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+返回类型：`TSliderThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TSliderThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
 | t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TSliderThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
 ### TSliderVariant
-
+#### 简介
 Slider visual structure.
 #### 枚举值
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| normal | TSliderVariant | - | Standard thin track. | - |
-| capsule | TSliderVariant | - | Capsule track with a 3px inset active segment and 20px thumbs. | - |
+
+| 名称 | 说明 |
+| --- | --- |
+| normal | Standard thin track. |
+| capsule | Capsule track with a 3px inset active segment and 20px thumbs. |
 
 
 ### TSliderThumbFormatter
-
+#### 简介
 格式化滑块提示文案。
+`value` 当前滑块数值。
+## 返回值
+显示在滑块提示中的格式化文案。
+#### 类型定义
 
-位置参数：`value`
-
-
-#### 回调参数
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| value | double | - | 当前滑块数值。 | 是 |
-
-
-#### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | String | - | 显示在滑块提示中的格式化文案。 | - |
+```dart
+typedef TSliderThumbFormatter = String Function(double value);
+```
