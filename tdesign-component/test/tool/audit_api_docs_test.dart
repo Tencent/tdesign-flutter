@@ -110,9 +110,9 @@ void main() {
   });
 
   for (final shape in {
-    'Sample(value, [label])': true,
-    'Sample(label, [value])': false,
-    'Sample(value, {label})': false,
+    'value, label': true,
+    'label, value': false,
+    'value, {label}': false,
     '': false,
   }.entries) {
     test('checks positional constructor shape ${shape.key}', () async {
@@ -125,7 +125,7 @@ void main() {
       asset.writeAsStringSync(
         _api.replaceFirst(
           _constructorSignature,
-          shape.key.isEmpty ? '' : '参数形式：`${shape.key}`',
+          shape.key.isEmpty ? '' : '位置参数：`${shape.key}`',
         ),
       );
       final result = await audit();
@@ -156,6 +156,37 @@ void main() {
       expect(result.stdout, contains('output-signature: Sample.read'));
     },
   );
+
+  final compactMethods = _api
+      .replaceFirst(_constructorSignature, '')
+      .replaceFirst(
+        '```dart\nT? read<E extends Object>(E item, [T? fallback])\n```',
+        '类型参数：`E extends Object`\n'
+            '位置参数：`item, fallback`\n'
+            '返回类型：`T?`',
+      )
+      .replaceFirst('```dart\nSample<T> copyWith()\n```', '返回类型：`Sample<T>`');
+  test('accepts uniformly compact callable contracts', () async {
+    asset.writeAsStringSync(compactMethods);
+    final result = await audit();
+    expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+  });
+  for (final entry in {
+    'method parameter order': ('item, fallback', 'fallback, item'),
+    'method parameter group': ('item, fallback', 'item, {fallback}'),
+    'method generic bound': ('E extends Object', 'E'),
+    'method return type': ('返回类型：`T?`', '返回类型：`Object?`'),
+    'missing method return': ('返回类型：`Sample<T>`', ''),
+  }.entries) {
+    test('rejects compact ${entry.key}', () async {
+      asset.writeAsStringSync(
+        compactMethods.replaceFirst(entry.value.$1, entry.value.$2),
+      );
+      final result = await audit();
+      expect(result.exitCode, 1);
+      expect(result.stdout, contains('output-signature'));
+    });
+  }
 
   final cases = <String, (String, String, String)>{
     'missing method parameter': (_fallbackRow, '', 'output-parameter-count'),

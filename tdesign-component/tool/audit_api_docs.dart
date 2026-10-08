@@ -161,13 +161,19 @@ void main(List<String> args) {
         return;
       }
       final captured = <Map<String, dynamic>>[];
+      final contract = declaration == null
+          ? null
+          : callableContract(declaration);
       (declarations[name]!['callables'] as Map)[callable] = {
         'parameters': captured,
         'signature': declaration == null
             ? null
             : signatureTokens(declaration, parameters.end),
+        'parameterShape': contract?.shape,
+        'typeParameters': contract?.typeParameters,
+        'returnType': contract?.returnType,
         if (declaration is ConstructorDeclaration)
-          'constructorShape': constructorParameterShape(name, declaration),
+          'constructorShape': contract!.shape,
       };
       for (final parameter in parameters.parameters) {
         final row = <String, dynamic>{
@@ -264,6 +270,8 @@ void main(List<String> args) {
         'parameters': <Map<String, dynamic>>[],
         'signature': lexicalTokens('$name()'),
         'constructorShape': '',
+        'parameterShape': '',
+        'typeParameters': '',
       };
     }
     if (node is EnumDeclaration) {
@@ -398,8 +406,8 @@ void main(List<String> args) {
       final section = doc.substring(start, next < 0 ? doc.length : next);
       final declarationTokens = declaration['declaration'] as List<String>?;
       // Legacy assets contain full declarations. Compact API pages retain only
-      // type parameters and extension receivers. Method/function signatures and
-      // compact constructor shapes are independently compared with the source.
+      // type parameters and extension receivers. Compact callable contracts
+      // and legacy signatures are independently compared with the source.
       if (section.contains('#### 声明\n') &&
           declarationTokens != null &&
           !containsSignature(section, declarationTokens)) {
@@ -458,22 +466,32 @@ void main(List<String> args) {
         }
         final expected = entry.value['parameters'] as List;
         final expectedSignature = entry.value['signature'] as List<String>?;
-        final constructorShape = entry.value['constructorShape'] as String?;
         final hasSignature = RegExp(
           r'^```dart\n',
           multiLine: true,
         ).hasMatch(callableSection);
-        final actualShape = RegExp(
-          r'^参数形式：`([^`]+)`',
-          multiLine: true,
-        ).firstMatch(callableSection)?.group(1);
-        final validContract = constructorShape != null && !hasSignature
-            ? constructorShape.isEmpty
-                  ? actualShape == null
-                  : actualShape != null &&
-                        sameCode(actualShape, constructorShape)
-            : expectedSignature == null ||
-                  containsSignature(callableSection, expectedSignature);
+        bool matchesInline(String label, String? expected) {
+          if (expected == null) {
+            return true;
+          }
+          final actual = RegExp(
+            '^$label：`([^`]+)`',
+            multiLine: true,
+          ).firstMatch(callableSection)?.group(1);
+          return expected.isEmpty
+              ? actual == null
+              : actual != null && sameCode(actual, expected);
+        }
+
+        final validContract = hasSignature
+            ? expectedSignature == null ||
+                  containsSignature(callableSection, expectedSignature)
+            : matchesInline('位置参数', entry.value['parameterShape'] as String?) &&
+                  matchesInline(
+                    '类型参数',
+                    entry.value['typeParameters'] as String?,
+                  ) &&
+                  matchesInline('返回类型', entry.value['returnType'] as String?);
         if (!validContract) {
           issue(
             'output-signature',

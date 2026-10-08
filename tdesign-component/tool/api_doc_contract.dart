@@ -31,31 +31,38 @@ List<String> signatureTokens(AnnotatedNode node, int end) {
   return result;
 }
 
-/// Compact constructor parameter order and grouping, derived from source AST.
-/// Named-only and empty constructors are fully described by their tables.
-String constructorParameterShape(String owner, ConstructorDeclaration node) {
-  final parameters = node.parameters.parameters;
-  if (parameters.every((parameter) => parameter.isNamed)) {
-    return '';
+/// Read the compact callable contract directly from its source AST.
+({String shape, String typeParameters, String? returnType}) callableContract(
+  AnnotatedNode node,
+) {
+  final FormalParameterList parameters;
+  final TypeParameterList? typeParameters;
+  final String? returnType;
+  if (node is ConstructorDeclaration) {
+    parameters = node.parameters;
+    typeParameters = null;
+    returnType = null;
+  } else if (node is MethodDeclaration) {
+    parameters = node.parameters!;
+    typeParameters = node.typeParameters;
+    returnType = node.returnType?.toSource() ?? 'dynamic';
+  } else {
+    final function = node as FunctionDeclaration;
+    parameters = function.functionExpression.parameters!;
+    typeParameters = function.functionExpression.typeParameters;
+    returnType = function.returnType?.toSource() ?? 'dynamic';
   }
-  final required = <String>[];
-  final optional = <String>[];
-  final named = <String>[];
-  for (final parameter in parameters) {
-    final target = parameter.isNamed
-        ? named
-        : parameter.isRequiredPositional
-        ? required
-        : optional;
-    target.add(parameter.name!.lexeme);
-  }
-  final groups = [
-    ...required,
-    if (optional.isNotEmpty) '[${optional.join(', ')}]',
-    if (named.isNotEmpty) '{${named.join(', ')}}',
-  ];
-  final name = node.name?.lexeme;
-  return '$owner${name == null ? '' : '.$name'}(${groups.join(', ')})';
+  final positional = parameters.parameters
+      .where((parameter) => !parameter.isNamed)
+      .map((parameter) => parameter.name!.lexeme)
+      .join(', ');
+  return (
+    shape: positional,
+    typeParameters:
+        typeParameters?.typeParameters.map((p) => p.toSource()).join(', ') ??
+        '',
+    returnType: returnType,
+  );
 }
 
 /// Find a complete signature in a Dart code block, never in descriptive prose.

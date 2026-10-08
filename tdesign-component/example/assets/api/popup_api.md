@@ -1,6 +1,6 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。构造参数默认按名称传入；含位置参数的构造方法另列「参数形式」。
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。参数默认按名称传入；位置参数按列出的顺序传入。
 
 ### TPopup
 #### 简介
@@ -16,14 +16,7 @@
 
 ##### TPopup.show
 
-```dart
-static TPopupHandle show(
-  BuildContext context, {
-  required TPopupOptions options,
-  BuildContext? navigatorContext,
-  bool useRootNavigator = false,
-})
-```
+位置参数：`context`
 
 
 打开浮层并压入独立 `PopupRoute`。
@@ -249,38 +242,13 @@ Popup 标准头部布局。
 
 ##### TPopupOptions.assertPlacementParams
 
-```dart
-void assertPlacementParams()
-```
-
+无参数。
 
 在 debug 模式检查方向与宽高、inset 组合；无效组合抛出校验异常，release 模式不执行。
 
 返回类型：`void`
 
 ##### TPopupOptions.copyWith
-
-```dart
-TPopupOptions copyWith({
-  Widget? child,
-  TPopupPlacement? placement,
-  Object? width = _unset,
-  Object? height = _unset,
-  Object? inset = _unset,
-  Object? radius = _unset,
-  Object? backgroundColor = _unset,
-  Object? overlay = _unset,
-  bool? destroyOnClose,
-  Duration? animationDuration,
-  Object? headerBuilder = _unset,
-  Object? closeBuilder = _unset,
-  Object? onOpened = _unset,
-  Object? onClosed = _unset,
-  Object? onVisibleChange = _unset,
-  bool? useSafeArea,
-})
-```
-
 
 返回配置副本。
 
@@ -310,10 +278,7 @@ TPopupOptions copyWith({
 
 ##### TPopupOptions.normalized
 
-```dart
-TPopupOptions normalized()
-```
-
+无参数。
 
 返回按展示方向归一化的配置副本：仅 bottom 保留 headerBuilder，仅 center 保留 closeBuilder。
 
@@ -338,9 +303,7 @@ TPopupOptions normalized()
 
 ##### TPopupHandle.close
 
-```dart
-void close([Object? result])
-```
+位置参数：`result`
 
 
 关闭当前展示的浮层；`TPopupOptions.onVisibleChange` 的 `TPopupTrigger` 为
@@ -358,9 +321,7 @@ void close([Object? result])
 
 ##### TPopupHandle.open
 
-```dart
-void open([BuildContext? context])
-```
+位置参数：`context`
 
 
 打开或重新打开浮层。
@@ -480,9 +441,7 @@ TPopup 组件级 ThemeExtension
 
 ##### TPopupThemeData.lerpDouble
 
-```dart
-static double? lerpDouble(double? a, double? b, double t)
-```
+位置参数：`a, b, t`
 
 
 对 `a` 和 `b` 按 `t` 线性插值；两端均为 null 时返回 null，仅一端为 null 时按 0 参与计算。
@@ -513,18 +472,6 @@ static double? lerpDouble(double? a, double? b, double t)
 
 ##### TPopupThemeData.copyWith
 
-```dart
-TPopupThemeData copyWith({
-  Color? barrierColor,
-  double? panelRadius,
-  Color? panelBackgroundColor,
-  double? edgeHeight,
-  double? drawerWidth,
-  Size? centerSize,
-})
-```
-
-
 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
 
 返回类型：`TPopupThemeData`
@@ -541,9 +488,7 @@ TPopupThemeData copyWith({
 
 ##### TPopupThemeData.lerp
 
-```dart
-TPopupThemeData lerp(ThemeExtension<TPopupThemeData>? other, double t)
-```
+位置参数：`other, t`
 
 
 按 t 在当前主题和目标主题之间生成过渡主题。
@@ -559,9 +504,7 @@ other 为空或类型不匹配时返回当前主题；字段各自采用其类�
 
 ##### TPopupThemeData.merge
 
-```dart
-TPopupThemeData merge(TPopupThemeData? other)
-```
+位置参数：`other`
 
 
 合并两个 ThemeExtension，`other` 优先于 this
