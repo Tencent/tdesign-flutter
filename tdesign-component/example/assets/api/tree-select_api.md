@@ -5,7 +5,6 @@
 ### TTreeSelect
 #### 简介
 严格受控的树形选择器。
-
 `value` 中每一项都是从根到叶子的完整路径。单选模式最多保留一条路径，
 多选模式可同时保留多条路径。
 
@@ -144,17 +143,17 @@ TTreeSelectThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| height | double? | - | 字段含义：面板高度。 未配置时为 336 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| rootColumnWidth | double? | - | 字段含义：根列宽度。 未配置时为 103 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| columnWidth | double? | - | 字段含义：所有非根列的固定宽度；为 null 时由组件按可用宽度自动布局。 设置后每个非根列均使用该宽度，面板总宽度超过可用宽度时可横向滚动。 调用时的空值行为见方法说明。 | 否 |
-| itemHeight | double? | - | 字段含义：单项最小高度。 未配置时为 56 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：面板背景色。 调用时的空值行为见方法说明。 | 否 |
-| rootBackgroundColor | Color? | - | 字段含义：根列背景色。 调用时的空值行为见方法说明。 | 否 |
-| selectedBackgroundColor | Color? | - | 字段含义：选中项背景色。 调用时的空值行为见方法说明。 | 否 |
-| textStyle | TextStyle? | - | 字段含义：普通文案样式。 调用时的空值行为见方法说明。 | 否 |
-| selectedTextStyle | TextStyle? | - | 字段含义：选中文案样式。 调用时的空值行为见方法说明。 | 否 |
-| disabledTextStyle | TextStyle? | - | 字段含义：禁用文案样式。 调用时的空值行为见方法说明。 | 否 |
-| indicatorColor | Color? | - | 字段含义：选中图标颜色。 调用时的空值行为见方法说明。 | 否 |
+| height | double? | - | 面板高度。 未配置时为 336 逻辑像素。 | 否 |
+| rootColumnWidth | double? | - | 根列宽度。 未配置时为 103 逻辑像素。 | 否 |
+| columnWidth | double? | - | 所有非根列的固定宽度；为 null 时由组件按可用宽度自动布局。 设置后每个非根列均使用该宽度，面板总宽度超过可用宽度时可横向滚动。 | 否 |
+| itemHeight | double? | - | 单项最小高度。 未配置时为 56 逻辑像素。 | 否 |
+| backgroundColor | Color? | - | 面板背景色。 | 否 |
+| rootBackgroundColor | Color? | - | 根列背景色。 | 否 |
+| selectedBackgroundColor | Color? | - | 选中项背景色。 | 否 |
+| textStyle | TextStyle? | - | 普通文案样式。 | 否 |
+| selectedTextStyle | TextStyle? | - | 选中文案样式。 | 否 |
+| disabledTextStyle | TextStyle? | - | 禁用文案样式。 | 否 |
+| indicatorColor | Color? | - | 选中图标颜色。 | 否 |
 
 
 ##### TTreeSelectThemeData.lerp

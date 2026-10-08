@@ -5,10 +5,8 @@
 ### TBadge
 #### 简介
 在内容边角或独立位置展示短文本、圆点或角标状态。
-
 默认使用 `TBadgeVariant.circle` 与 `TBadgeSize.medium`。当 `child` 非空时，
 徽标叠加在 `child` 上；当 `child` 为空时，只渲染徽标本体。
-
 TabBar、SideBar、ActionSheet 等内部拥有锚点的组合组件使用
 `TBadgeConfig`，调用方不应向这些组件传入一个待拆解的 `TBadge`。
 
@@ -89,16 +87,10 @@ const TBadge({
 ### TBadgeConfig
 #### 简介
 由组合组件消费的徽标配置。
-
 该对象不参与 Widget 树，也不拥有被标记的内容。仅当 TabBar、SideBar、
 ActionSheet 等组件在内部创建徽标锚点时使用；组件会把配置和自己的锚点交给
 与 `TBadge` 相同的渲染实现。
-
 调用方已经拥有锚点 Widget 时，应直接使用 `TBadge`：
-
-```dart
-TBadge(label: '8', child: icon)
-```
 
 完全自定义徽标外观时使用 `TBadgeConfig.custom`。传入的 `badge` 是徽标本体，
 不应包含锚点或自行使用 `Positioned` 定位。
@@ -165,7 +157,6 @@ const TBadgeConfig({
 ### TBadgeThemeData
 #### 简介
 TDesign 徽标的子树级视觉默认值。
-
 形态、内容、对齐和偏移由实例 API 控制，不从 Material BadgeTheme 读取。
 
 #### 声明
@@ -225,13 +216,13 @@ TBadgeThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 字段含义：徽标背景色；为空时使用全局错误色 Token。 调用时的空值行为见方法说明。 | 否 |
-| dotSize | double? | - | 字段含义：圆点直径；为空时使用 8 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| labelHeight | double? | - | 字段含义：文字徽标高度；为空时由当前尺寸的字体 Token 决定。 调用时的空值行为见方法说明。 | 否 |
-| textStyle | TextStyle? | - | 字段含义：徽标文字的唯一组件级样式入口；未配置字段从字体与反色文字 Token 取得。 调用时的空值行为见方法说明。 | 否 |
-| padding | EdgeInsetsGeometry? | - | 字段含义：文字徽标内边距；为空时中、大尺寸分别使用左右 4、6 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| borderColor | Color? | - | 字段含义：开启描边时使用的颜色；为空时回退到当前容器背景色。 调用时的空值行为见方法说明。 | 否 |
-| borderWidth | double? | - | 字段含义：开启描边时使用的宽度；为空时使用 1 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 徽标背景色；为空时使用全局错误色 Token。 | 否 |
+| dotSize | double? | - | 圆点直径；为空时使用 8 逻辑像素。 | 否 |
+| labelHeight | double? | - | 文字徽标高度；为空时由当前尺寸的字体 Token 决定。 | 否 |
+| textStyle | TextStyle? | - | 徽标文字的唯一组件级样式入口；未配置字段从字体与反色文字 Token 取得。 | 否 |
+| padding | EdgeInsetsGeometry? | - | 文字徽标内边距；为空时中、大尺寸分别使用左右 4、6 逻辑像素。 | 否 |
+| borderColor | Color? | - | 开启描边时使用的颜色；为空时回退到当前容器背景色。 | 否 |
+| borderWidth | double? | - | 开启描边时使用的宽度；为空时使用 1 逻辑像素。 | 否 |
 
 
 ##### TBadgeThemeData.lerp
@@ -273,7 +264,6 @@ other 为空或类型不匹配时返回当前主题；字段各自采用其类�
 ### TBadgeSize
 #### 简介
 徽标的预设尺寸，控制文本徽标的文字 Token、标签行盒高度与水平内边距。
-
 `TBadgeVariant.dot` 的直径由 `TBadgeThemeData.dotSize` 控制，不读取该值；
 角标形态会按该值在 32 与 40 逻辑像素两档尺寸之间切换。
 #### 枚举值

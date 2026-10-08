@@ -5,11 +5,9 @@
 ### TTextarea
 #### 简介
 TDesign 多行文本输入框。
-
 编辑能力复用 `TInput`；容器、内部标题、提示词和计数器遵循
 Textarea 的视觉契约。表单字段标签仍应由 `TFormItem` 提供，`label` 仅用于
 独立 Textarea 自身的内部标题。
-
 主题复用 `TInputThemeData`，容器读取其中的 `contentPadding` 和 `borderColor`。
 内部编辑器的内边距固定为零、背景透明，其余输入主题配置继续传给 `TInput`；
 标题、状态颜色等默认外观读取 `TThemeData` 的全局 Token。

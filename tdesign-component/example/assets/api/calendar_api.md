@@ -5,7 +5,6 @@
 ### TCalendar
 #### 简介
 严格受控的日历面板，不包含弹窗、工具栏或确认操作。
-
 `value` 与 `onChanged` 构成受控选择状态；`onChanged` 为 null 时禁用。
 
 #### 声明
@@ -59,7 +58,6 @@ TCalendar({
 ### TCalendarCellModel
 #### 简介
 单个日期格的不可变展示快照，由日历的受控 value 派生。
-
 自定义构建器通过 `selectType` 读取状态；选择更新由日历的 onChanged
 通知调用方，再通过 value 重建，不直接修改日期格。
 
@@ -120,7 +118,6 @@ const TCalendarSubtitleContext({
 ### TCalendarThemeData
 #### 简介
 TCalendar 组件级 ThemeExtension
-
 包含日历样式默认（装饰、字体、布局参数）。
 样式字段通过 mergeExtension 子树覆盖，无需构造器 P0 `style` 参数。
 
@@ -202,20 +199,20 @@ TCalendarThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| height | double? | - | 字段含义：高度 调用时的空值行为见方法说明。 | 否 |
-| decoration | BoxDecoration? | - | 字段含义：组件容器装饰 调用时的空值行为见方法说明。 | 否 |
-| weekdayStyle | TextStyle? | - | 字段含义：星期文字样式 调用时的空值行为见方法说明。 | 否 |
-| monthTitleStyle | TextStyle? | - | 字段含义：月份标题文字样式 调用时的空值行为见方法说明。 | 否 |
-| dayStyle | TextStyle? | - | 字段含义：日期数字样式 调用时的空值行为见方法说明。 | 否 |
-| todayDayStyle | TextStyle? | - | 字段含义：今天日期数字样式 调用时的空值行为见方法说明。 | 否 |
-| cellDecoration | BoxDecoration? | - | 字段含义：日期单元格装饰（选中状态） 调用时的空值行为见方法说明。 | 否 |
-| subtitleStyle | TextStyle? | - | 字段含义：副标题样式 调用时的空值行为见方法说明。 | 否 |
-| cellHeight | double? | - | 字段含义：日期单元格高度，默认 60 调用时的空值行为见方法说明。 | 否 |
-| monthTitleHeight | double? | - | 字段含义：月份标题高度，默认 22 调用时的空值行为见方法说明。 | 否 |
-| verticalGap | double? | - | 字段含义：日期格垂直间距，水平间距为 `verticalGap` / 2 调用时的空值行为见方法说明。 | 否 |
-| bodyPadding | double? | - | 字段含义：内边距 调用时的空值行为见方法说明。 | 否 |
-| weekdayGap | double? | - | 字段含义：星期之间的水平间距 调用时的空值行为见方法说明。 | 否 |
-| centreColor | Color? | - | 字段含义：区间中间格背景与格间衔接条颜色 调用时的空值行为见方法说明。 | 否 |
+| height | double? | - | 高度 | 否 |
+| decoration | BoxDecoration? | - | 组件容器装饰 | 否 |
+| weekdayStyle | TextStyle? | - | 星期文字样式 | 否 |
+| monthTitleStyle | TextStyle? | - | 月份标题文字样式 | 否 |
+| dayStyle | TextStyle? | - | 日期数字样式 | 否 |
+| todayDayStyle | TextStyle? | - | 今天日期数字样式 | 否 |
+| cellDecoration | BoxDecoration? | - | 日期单元格装饰（选中状态） | 否 |
+| subtitleStyle | TextStyle? | - | 副标题样式 | 否 |
+| cellHeight | double? | - | 日期单元格高度，默认 60 | 否 |
+| monthTitleHeight | double? | - | 月份标题高度，默认 22 | 否 |
+| verticalGap | double? | - | 日期格垂直间距，水平间距为 `verticalGap` / 2 | 否 |
+| bodyPadding | double? | - | 内边距 | 否 |
+| weekdayGap | double? | - | 星期之间的水平间距 | 否 |
+| centreColor | Color? | - | 区间中间格背景与格间衔接条颜色 | 否 |
 
 
 ##### TCalendarThemeData.lerp
@@ -288,16 +285,7 @@ other 为空或类型不匹配时返回当前主题；字段各自采用其类�
 ### TCalendarSubtitleBuilder
 #### 简介
 副标题构建器；每个日期格渲染时调用一次。
-
 通过 `TCalendarSubtitleContext` 获取日期与选中态；返回 `null` 表示不显示副标题行。
-
-```dart
-subtitleBuilder: (context, ctx) {
-  final text = lunarLabel(ctx.date);
-  if (text == null) return null;
-  return Text(text, style: const TextStyle(fontSize: 9));
-},
-```
 #### 类型定义
 
 ```dart

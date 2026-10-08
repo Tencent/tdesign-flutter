@@ -6,25 +6,6 @@
 #### 简介
 强类型、受控排序与选择的表格组件。
 
-```dart
-TTable<Map<String, Object>>(
-  data: const [
-    {'id': 1, 'name': 'Alice'},
-    {'id': 2, 'name': 'Bob'},
-  ],
-  rowKey: (row) => row['id']!,
-  columns: [
-    TTableColumn(
-      id: 'name',
-      header: const Text('Name'),
-      minWidth: 120,
-      cellBuilder: (_, row, __) => Text(row['name']! as String),
-    ),
-  ],
-  onCellTap: (cell) => debugPrint('${cell.columnIndex}: ${cell.row}'),
-)
-```
-
 #### 声明
 
 ```dart
@@ -134,7 +115,6 @@ const TTableColumn({
 ### TTableThemeData
 #### 简介
 表格组件级 ThemeExtension。
-
 仅保存表格的视觉默认值。
 
 #### 声明
@@ -197,14 +177,14 @@ TTableThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| rowHeight | double? | - | 字段含义：数据行高度。 调用时的空值行为见方法说明。 | 否 |
-| headerHeight | double? | - | 字段含义：表头高度。 调用时的空值行为见方法说明。 | 否 |
-| width | double? | - | 字段含义：表格宽度。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：默认行背景色。 调用时的空值行为见方法说明。 | 否 |
-| headerColor | Color? | - | 字段含义：表头背景色。 调用时的空值行为见方法说明。 | 否 |
-| stripeColor | Color? | - | 字段含义：斑马纹背景色。 调用时的空值行为见方法说明。 | 否 |
-| borderColor | Color? | - | 字段含义：边框颜色。 调用时的空值行为见方法说明。 | 否 |
-| cellPadding | EdgeInsetsGeometry? | - | 字段含义：单元格内边距。 调用时的空值行为见方法说明。 | 否 |
+| rowHeight | double? | - | 数据行高度。 | 否 |
+| headerHeight | double? | - | 表头高度。 | 否 |
+| width | double? | - | 表格宽度。 | 否 |
+| backgroundColor | Color? | - | 默认行背景色。 | 否 |
+| headerColor | Color? | - | 表头背景色。 | 否 |
+| stripeColor | Color? | - | 斑马纹背景色。 | 否 |
+| borderColor | Color? | - | 边框颜色。 | 否 |
+| cellPadding | EdgeInsetsGeometry? | - | 单元格内边距。 | 否 |
 
 
 ##### TTableThemeData.lerp
@@ -360,7 +340,6 @@ const TTableCellSpan({this.rowSpan = 1, this.columnSpan = 1})
 ### TTableCellSpanBuilder
 #### 简介
 单元格跨度构建器。
-
 仅为未被其他合并区域覆盖的逻辑单元格调用。该回调会在组件构建期间执行，
 应保持同步且无副作用。
 #### 类型定义

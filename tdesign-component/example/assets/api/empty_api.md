@@ -76,8 +76,8 @@ TEmptyThemeData copyWith({Color? emptyTextColor, Font? emptyTextFont})
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| emptyTextColor | Color? | - | 字段含义：描述文字颜色 未配置时使用 textColorPlaceholder Token。 调用时的空值行为见方法说明。 | 否 |
-| emptyTextFont | Font? | - | 字段含义：描述文字字号 未配置时使用 fontBodyMedium Token。 调用时的空值行为见方法说明。 | 否 |
+| emptyTextColor | Color? | - | 描述文字颜色 未配置时使用 textColorPlaceholder Token。 | 否 |
+| emptyTextFont | Font? | - | 描述文字字号 未配置时使用 fontBodyMedium Token。 | 否 |
 
 
 ##### TEmptyThemeData.lerp

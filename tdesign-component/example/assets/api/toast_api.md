@@ -5,9 +5,7 @@
 ### TToast
 #### 简介
 轻提示组件
-
 支持文本、图标、加载中等样式。
-
 实例语义：
 - 未指定 `toastId` 时，所有匿名 Toast 共用同一个内部实例，
 后一次展示会替换前一次，避免重复点击叠加多个 Toast 导致半透明背景
@@ -337,7 +335,6 @@ TToast()
 ### TOverlayConfig
 #### 简介
 蒙层行为配置
-
 统一收敛 Toast 展示期间遮罩层的各项行为：
 - `showOverlay`：是否显示可见半透明蒙层（与 `preventTap` 解耦，
 `true` 时展示半透明黑色蒙层遮住背景）；
@@ -455,13 +452,13 @@ TToastThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 字段含义：背景色 调用时的空值行为见方法说明。 | 否 |
-| textStyle | TextStyle? | - | 字段含义：文案样式 调用时的空值行为见方法说明。 | 否 |
-| iconSize | double? | - | 字段含义：图标尺寸 调用时的空值行为见方法说明。 | 否 |
-| iconColor | Color? | - | 字段含义：图标颜色 调用时的空值行为见方法说明。 | 否 |
-| borderRadius | double? | - | 字段含义：圆角 调用时的空值行为见方法说明。 | 否 |
-| padding | EdgeInsetsGeometry? | - | 字段含义：内边距 调用时的空值行为见方法说明。 | 否 |
-| maxWidth | double? | - | 字段含义：最大宽度 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 背景色 | 否 |
+| textStyle | TextStyle? | - | 文案样式 | 否 |
+| iconSize | double? | - | 图标尺寸 | 否 |
+| iconColor | Color? | - | 图标颜色 | 否 |
+| borderRadius | double? | - | 圆角 | 否 |
+| padding | EdgeInsetsGeometry? | - | 内边距 | 否 |
+| maxWidth | double? | - | 最大宽度 | 否 |
 
 
 ##### TToastThemeData.lerp

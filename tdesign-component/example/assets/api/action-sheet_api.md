@@ -43,7 +43,6 @@ const TActionSheetItem({
 ### TActionSheet
 #### 简介
 动作面板命令式入口。
-
 点击启用项目时先调用 onSelected，再请求关闭；回调为空时仍会关闭。
 点击取消按钮先调用 onCancel，再请求关闭；onClosed 在关闭流程完成后通知。
 各方法返回 TPopupHandle，可主动关闭面板。
@@ -237,12 +236,12 @@ TActionSheetThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| gridItemHeight | double? | - | 字段含义：宫格项目高度 未配置时为 96 逻辑像素，show 方法的 itemHeight 优先。 调用时的空值行为见方法说明。 | 否 |
-| barrierColor | Color? | - | 字段含义：蒙层颜色 调用时的空值行为见方法说明。 | 否 |
-| panelRadius | double? | - | 字段含义：面板圆角 调用时的空值行为见方法说明。 | 否 |
-| iconSize | double? | - | 字段含义：默认图标字形尺寸；同时作为列表图标槽位尺寸。 未配置时为 24 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| gridIconExtent | double? | - | 字段含义：宫格布局的图标槽位尺寸；未设置时默认 40dp。 调用时的空值行为见方法说明。 | 否 |
-| iconColor | Color? | - | 字段含义：默认图标颜色。 未配置时使用 textColorPrimary Token；禁用项使用 textColorDisabled。 调用时的空值行为见方法说明。 | 否 |
+| gridItemHeight | double? | - | 宫格项目高度 未配置时为 96 逻辑像素，show 方法的 itemHeight 优先。 | 否 |
+| barrierColor | Color? | - | 蒙层颜色 | 否 |
+| panelRadius | double? | - | 面板圆角 | 否 |
+| iconSize | double? | - | 默认图标字形尺寸；同时作为列表图标槽位尺寸。 未配置时为 24 逻辑像素。 | 否 |
+| gridIconExtent | double? | - | 宫格布局的图标槽位尺寸；未设置时默认 40dp。 | 否 |
+| iconColor | Color? | - | 默认图标颜色。 未配置时使用 textColorPrimary Token；禁用项使用 textColorDisabled。 | 否 |
 
 
 ##### TActionSheetThemeData.lerp
@@ -285,7 +284,6 @@ TActionSheetThemeData merge(TActionSheetThemeData? other)
 ### TActionSheetGridLayout
 #### 简介
 动作面板宫格布局
-
 使用 `TActionSheetGridLayout.fixed`、`TActionSheetGridLayout.paged` 或
 `TActionSheetGridLayout.scroll` 创建互斥的布局配置。
 
@@ -360,7 +358,6 @@ const factory TActionSheetGridLayout.scroll({
 ### TActionSheetGridSection
 #### 简介
 横向滚动宫格中的一个带标题分组。
-
 通过 `TActionSheet.showGridSections` 展示。每个分组独立横向滚动，
 `title` 显示在该组项目上方；`items` 为空时仍保留标题。
 

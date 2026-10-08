@@ -43,7 +43,6 @@ const TCascader({
 ### TCascaderOption
 #### 简介
 级联选项。
-
 `children` 应按 Flutter Widget 配置的不可变约定使用。数据变化时请创建新的
 `TCascaderOption` 和列表，不要原地修改已有列表。
 
@@ -142,15 +141,15 @@ TCascaderThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| height | double? | - | 字段含义：组件高度。 未配置时为 360 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：背景色。 未配置时使用 bgColorContainer Token。 调用时的空值行为见方法说明。 | 否 |
-| borderRadius | double? | - | 字段含义：圆角。 未配置时使用 radiusDefault Token。 调用时的空值行为见方法说明。 | 否 |
-| textStyle | TextStyle? | - | 字段含义：普通文案样式。 调用时的空值行为见方法说明。 | 否 |
-| activeTextStyle | TextStyle? | - | 字段含义：当前活动导航及已选选项文案样式。 调用时的空值行为见方法说明。 | 否 |
-| disabledTextStyle | TextStyle? | - | 字段含义：禁用文案样式。 调用时的空值行为见方法说明。 | 否 |
-| indicatorColor | Color? | - | 字段含义：末级选中图标颜色。 未配置时使用 brandColor Token。 调用时的空值行为见方法说明。 | 否 |
-| navigationPadding | EdgeInsetsGeometry? | - | 字段含义：导航区域内边距。 调用时的空值行为见方法说明。 | 否 |
-| dividerColor | Color? | - | 字段含义：分隔线颜色。 未配置时使用 componentStroke Token。 调用时的空值行为见方法说明。 | 否 |
+| height | double? | - | 组件高度。 未配置时为 360 逻辑像素。 | 否 |
+| backgroundColor | Color? | - | 背景色。 未配置时使用 bgColorContainer Token。 | 否 |
+| borderRadius | double? | - | 圆角。 未配置时使用 radiusDefault Token。 | 否 |
+| textStyle | TextStyle? | - | 普通文案样式。 | 否 |
+| activeTextStyle | TextStyle? | - | 当前活动导航及已选选项文案样式。 | 否 |
+| disabledTextStyle | TextStyle? | - | 禁用文案样式。 | 否 |
+| indicatorColor | Color? | - | 末级选中图标颜色。 未配置时使用 brandColor Token。 | 否 |
+| navigationPadding | EdgeInsetsGeometry? | - | 导航区域内边距。 | 否 |
+| dividerColor | Color? | - | 分隔线颜色。 未配置时使用 componentStroke Token。 | 否 |
 
 
 ##### TCascaderThemeData.lerp

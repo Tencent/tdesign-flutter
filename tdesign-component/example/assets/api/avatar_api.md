@@ -5,7 +5,6 @@
 ### TAvatar
 #### 简介
 头像。
-
 `image` 负责图片内容，`child` 负责文字、图标等自定义内容。两者同时提供时，
 `child` 会作为图片加载失败前的背景内容。默认图标与文字前景色由
 `TAvatarThemeData.foregroundColor` 控制；特殊文字排版可在 `child` 中使用
@@ -48,7 +47,6 @@ const TAvatar({
 ### TAvatarGroup
 #### 简介
 叠放头像组。
-
 头像组只负责布局，不解析图片来源或缓存成员状态。
 当成员是 `TAvatar` 时，其 `TAvatar.shape` 同时决定成员外框与裁剪形状；
 其他 Widget 使用圆形默认值。
@@ -92,7 +90,6 @@ const TAvatarGroup({
 ### TAvatarThemeData
 #### 简介
 头像组件级 ThemeExtension。
-
 仅保存视觉默认值，不保存头像内容、回调或头像组成员。
 
 #### 声明
@@ -161,16 +158,16 @@ TAvatarThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| dimension | double? | - | 字段含义：自定义头像边长；未设置时小、中、大尺寸分别为 40、48、64 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| iconSize | double? | - | 字段含义：默认图标大小；未设置时小、中、大尺寸分别为 20、24、32 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| circleBorderRadius | double? | - | 字段含义：圆形头像圆角；未设置时回退全局 `radiusCircle`（逻辑像素）。 调用时的空值行为见方法说明。 | 否 |
-| squareBorderRadius | double? | - | 字段含义：方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：默认背景色；未设置时回退全局 `brandColorLightActive`。 调用时的空值行为见方法说明。 | 否 |
-| foregroundColor | Color? | - | 字段含义：默认图标与继承文字的前景色；未设置时回退全局品牌色。 调用时的空值行为见方法说明。 | 否 |
-| groupSpacing | double? | - | 字段含义：头像组重叠宽度；未设置时为 8 逻辑像素，实例 spacing 优先。 调用时的空值行为见方法说明。 | 否 |
-| groupBorderWidth | double? | - | 字段含义：头像组成员描边宽度。 未设置时按成员尺寸使用小/中/大 1/2/3 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| groupBorderColor | Color? | - | 字段含义：头像组成员描边颜色；未设置时使用 `bgColorContainer` Token。 调用时的空值行为见方法说明。 | 否 |
-| groupShadow | BoxShadow? | - | 字段含义：头像组成员阴影；未设置时使用 1px 水平偏移、2px `blurRadius` 和 15% 黑色。 调用时的空值行为见方法说明。 | 否 |
+| dimension | double? | - | 自定义头像边长；未设置时小、中、大尺寸分别为 40、48、64 逻辑像素。 | 否 |
+| iconSize | double? | - | 默认图标大小；未设置时小、中、大尺寸分别为 20、24、32 逻辑像素。 | 否 |
+| circleBorderRadius | double? | - | 圆形头像圆角；未设置时回退全局 `radiusCircle`（逻辑像素）。 | 否 |
+| squareBorderRadius | double? | - | 方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。 | 否 |
+| backgroundColor | Color? | - | 默认背景色；未设置时回退全局 `brandColorLightActive`。 | 否 |
+| foregroundColor | Color? | - | 默认图标与继承文字的前景色；未设置时回退全局品牌色。 | 否 |
+| groupSpacing | double? | - | 头像组重叠宽度；未设置时为 8 逻辑像素，实例 spacing 优先。 | 否 |
+| groupBorderWidth | double? | - | 头像组成员描边宽度。 未设置时按成员尺寸使用小/中/大 1/2/3 逻辑像素。 | 否 |
+| groupBorderColor | Color? | - | 头像组成员描边颜色；未设置时使用 `bgColorContainer` Token。 | 否 |
+| groupShadow | BoxShadow? | - | 头像组成员阴影；未设置时使用 1px 水平偏移、2px `blurRadius` 和 15% 黑色。 | 否 |
 
 
 ##### TAvatarThemeData.lerp

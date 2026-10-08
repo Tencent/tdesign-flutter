@@ -5,7 +5,6 @@
 ### TTabsBar
 #### 简介
 标签栏
-
 支持滚动、指示器自定义，以及 Line、Tag、Card 三种 TDesign 形态。
 
 #### 声明
@@ -45,7 +44,6 @@ const TTabsBar({
 ### TTab
 #### 简介
 Tab 组件
-
 TDesign 选项卡标签，通常作为 `TTabsBar.tabs` 的子项使用。
 
 #### 声明
@@ -75,7 +73,6 @@ const TTab({Key? key, this.text, this.child, this.icon, this.enabled = true})
 ### TTabsBarView
 #### 简介
 TabBarView 组件
-
 Material TabBarView 薄包装。
 `physics` 为空时默认不可滑动。
 
@@ -140,7 +137,6 @@ const TTabsBarIndicator({
 ### TTabsBarThemeData
 #### 简介
 TabBar 组件 ThemeExtension
-
 管理 TTabsBar 的子树级视觉默认样式。
 
 #### 声明
@@ -209,16 +205,16 @@ TTabsBarThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 字段含义：栏背景色。 调用时的空值行为见方法说明。 | 否 |
-| labelStyle | TextStyle? | - | 字段含义：选中标签文字样式。 调用时的空值行为见方法说明。 | 否 |
-| unselectedLabelStyle | TextStyle? | - | 字段含义：未选中标签文字样式。 调用时的空值行为见方法说明。 | 否 |
-| disabledLabelStyle | TextStyle? | - | 字段含义：禁用标签文字和图标样式。 调用时的空值行为见方法说明。 | 否 |
-| labelPadding | EdgeInsetsGeometry? | - | 字段含义：标签内容边距。 调用时的空值行为见方法说明。 | 否 |
-| indicator | Decoration? | - | 字段含义：组件主题指示器；非空时覆盖内置形态指示器。 为空时 Line 使用 TDesign 默认指示器，Tag 与 Card 不展示指示器。 调用时的空值行为见方法说明。 | 否 |
-| dividerColor | Color? | - | 字段含义：分割线颜色。 调用时的空值行为见方法说明。 | 否 |
-| dividerHeight | double? | - | 字段含义：分割线高度；小于等于 0 时不展示。 调用时的空值行为见方法说明。 | 否 |
-| selectedTagBackgroundColor | Color? | - | 字段含义：Tag 形态下的选中背景色。 调用时的空值行为见方法说明。 | 否 |
-| tagBackgroundColor | Color? | - | 字段含义：Tag 形态下的默认背景色。 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 栏背景色。 | 否 |
+| labelStyle | TextStyle? | - | 选中标签文字样式。 | 否 |
+| unselectedLabelStyle | TextStyle? | - | 未选中标签文字样式。 | 否 |
+| disabledLabelStyle | TextStyle? | - | 禁用标签文字和图标样式。 | 否 |
+| labelPadding | EdgeInsetsGeometry? | - | 标签内容边距。 | 否 |
+| indicator | Decoration? | - | 组件主题指示器；非空时覆盖内置形态指示器。 为空时 Line 使用 TDesign 默认指示器，Tag 与 Card 不展示指示器。 | 否 |
+| dividerColor | Color? | - | 分割线颜色。 | 否 |
+| dividerHeight | double? | - | 分割线高度；小于等于 0 时不展示。 | 否 |
+| selectedTagBackgroundColor | Color? | - | Tag 形态下的选中背景色。 | 否 |
+| tagBackgroundColor | Color? | - | Tag 形态下的默认背景色。 | 否 |
 
 
 ##### TTabsBarThemeData.lerp

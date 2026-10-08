@@ -5,7 +5,6 @@
 ### TPopover
 #### 简介
 气泡弹层
-
 可通过 `showPopover` 一次性弹出，或通过 `TPopoverAnchor` 建立可控制气泡，
 支持 12 个方向定位和箭头。蒙层色与圆角由触发 `BuildContext` 最近的
 `TPopoverThemeData` 控制；单个气泡可包裹局部 Theme。
@@ -67,12 +66,10 @@ TPopover()
 ### TPopoverAnchor
 #### 简介
 将可控制的气泡与 Widget 树中的触发区域绑定。
-
 `TPopoverAnchor` 声明气泡内容、位置和视觉配置，`TPopoverController` 只负责
 `open`、`close` 和 `isOpen`。简单的一次性展示仍可使用
 `TPopover.showPopover`。
 蒙层色与圆角由最近的 `TPopoverThemeData` 控制；单个气泡使用局部 Theme。
-
 气泡展开时会读取当前的内容、位置、视觉配置和关闭策略；展开期间更新这些
 配置不会刷新已显示的浮层，关闭后再次展开时生效。`builder` 和 `child` 仍按
 普通 Widget 树的更新规则重建。
@@ -132,7 +129,6 @@ const TPopoverAnchor({
 ### TPopoverController
 #### 简介
 控制与其绑定的 `TPopoverAnchor`。
-
 气泡内容、位置和视觉配置由 `TPopoverAnchor` 声明，控制器只负责展开、关闭
 和查询当前状态，不形成第二份配置来源。
 
@@ -153,7 +149,6 @@ static TPopoverController? maybeOf(BuildContext context)
 
 
 返回 `context` 最近的 `TPopoverAnchor` 所关联的控制器。
-
 未处于 Anchor 的触发区域或气泡内容子树时返回 null。
 
 返回类型：`TPopoverController?`
@@ -186,7 +181,6 @@ void close()
 
 
 关闭与该控制器绑定的气泡。
-
 未绑定或已经关闭时无副作用。
 
 返回类型：`void`
@@ -199,7 +193,6 @@ void open()
 
 
 展开与该控制器绑定的气泡。
-
 控制器必须先通过 `TPopoverAnchor.controller` 绑定到 Widget 树。
 
 返回类型：`void`
@@ -207,7 +200,6 @@ void open()
 ### TPopoverThemeData
 #### 简介
 TPopover 组件级 ThemeExtension
-
 通过 Theme 子树注入，控制子树的默认气泡样式。
 
 #### 声明
@@ -276,16 +268,16 @@ TPopoverThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 字段含义：气泡背景色 调用时的空值行为见方法说明。 | 否 |
-| padding | EdgeInsetsGeometry? | - | 字段含义：内边距 调用时的空值行为见方法说明。 | 否 |
-| minWidth | double? | - | 字段含义：最小宽度 调用时的空值行为见方法说明。 | 否 |
-| maxWidth | double? | - | 字段含义：文本内容的最大宽度 调用时的空值行为见方法说明。 | 否 |
-| maxHeight | double? | - | 字段含义：最大高度 调用时的空值行为见方法说明。 | 否 |
-| borderRadius | BorderRadius? | - | 字段含义：气泡圆角；未设置时回退全局默认圆角。单个气泡可用局部 Theme 覆盖。 调用时的空值行为见方法说明。 | 否 |
-| barrierColor | Color? | - | 字段含义：蒙层色；未设置时透明。单个气泡可用局部 Theme 覆盖。 调用时的空值行为见方法说明。 | 否 |
-| arrowSize | double? | - | 字段含义：箭头尺寸；未配置时为 8 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| offset | double? | - | 字段含义：弹层与触发元素的间距；未配置时为 4 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| boxShadow | List&lt;BoxShadow&gt;? | - | 字段含义：气泡阴影；未配置时使用 shadow3 Token，Token 为空时无阴影。 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 气泡背景色 | 否 |
+| padding | EdgeInsetsGeometry? | - | 内边距 | 否 |
+| minWidth | double? | - | 最小宽度 | 否 |
+| maxWidth | double? | - | 文本内容的最大宽度 | 否 |
+| maxHeight | double? | - | 最大高度 | 否 |
+| borderRadius | BorderRadius? | - | 气泡圆角；未设置时回退全局默认圆角。单个气泡可用局部 Theme 覆盖。 | 否 |
+| barrierColor | Color? | - | 蒙层色；未设置时透明。单个气泡可用局部 Theme 覆盖。 | 否 |
+| arrowSize | double? | - | 箭头尺寸；未配置时为 8 逻辑像素。 | 否 |
+| offset | double? | - | 弹层与触发元素的间距；未配置时为 4 逻辑像素。 | 否 |
+| boxShadow | List&lt;BoxShadow&gt;? | - | 气泡阴影；未配置时使用 shadow3 Token，Token 为空时无阴影。 | 否 |
 
 
 ##### TPopoverThemeData.lerp
@@ -363,7 +355,6 @@ TPopoverThemeData merge(TPopoverThemeData? other)
 ### TPopoverAnchorBuilder
 #### 简介
 `TPopoverAnchor` 的触发区域构建器。
-
 `controller` 用于展开、关闭气泡和查询展开状态；`child` 是传给
 `TPopoverAnchor.child` 的可选、不依赖展开状态的子组件。
 #### 类型定义

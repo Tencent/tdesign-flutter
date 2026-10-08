@@ -5,44 +5,12 @@
 ### TButton
 #### 简介
 TD 常规按钮
-
 Material 薄包装，`onPressed: null` 表示禁用；禁用时不会触发
 `onLongPress`。
-
 外观分别由以下选项控制：
 - `variant`：变体类型（fill / outline / text / ghost）
 - `colorPreset`：配色方案（defaultTheme / primary / danger / light）
 - `shape`：按钮结构形状；具体边框样式由 `style` 控制
-
-**示例**：
-```dart
-// 基本用法
-TButton(
-  child: Text('填充按钮'),
-  variant: TButtonVariant.fill,
-  colorPreset: TButtonColorPreset.primary,
-  onPressed: () {},
-)
-
-// 图标按钮
-TButton(
-  icon: Icon(TIcons.app),
-  child: Text('按钮'),
-  onPressed: () {},
-)
-
-// 禁用
-TButton(
-  child: Text('禁用'),
-  onPressed: null,
-)
-
-// 通栏（外包布局）
-SizedBox(
-  width: double.infinity,
-  child: TButton(child: Text('通栏'), onPressed: () {}),
-)
-```
 
 #### 声明
 
@@ -89,7 +57,6 @@ const TButton({
 ### TButtonThemeData
 #### 简介
 TButton 组件级 ThemeExtension
-
 只承载 `ButtonStyle` 不能表达的按钮子树默认视觉值。
 
 #### 声明
@@ -128,8 +95,8 @@ TButtonThemeData copyWith({double? iconTextSpacing, Gradient? gradient})
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| iconTextSpacing | double? | - | 字段含义：图标与文案之间的间距，单位为逻辑像素。 仅在按钮同时提供 icon 和 child 时生效；该值控制两者 之间的实际间隔，不会改变按钮整体内边距。为空时使用组件内置 默认值 4dp；全局 `spacer4` 对应 32dp，不用于此间距。 调用时的空值行为见方法说明。 | 否 |
-| gradient | Gradient? | - | 字段含义：渐变背景色（装饰层，非 ButtonStyle 字段） 调用时的空值行为见方法说明。 | 否 |
+| iconTextSpacing | double? | - | 图标与文案之间的间距，单位为逻辑像素。 仅在按钮同时提供 icon 和 child 时生效；该值控制两者 之间的实际间隔，不会改变按钮整体内边距。为空时使用组件内置 默认值 4dp；全局 `spacer4` 对应 32dp，不用于此间距。 | 否 |
+| gradient | Gradient? | - | 渐变背景色（装饰层，非 ButtonStyle 字段） | 否 |
 
 
 ##### TButtonThemeData.lerp

@@ -5,7 +5,6 @@
 ### TDrawer
 #### 简介
 TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer`。
-
 需要通过浮层展示时，使用 `showTDrawer`。
 
 #### 声明
@@ -79,7 +78,6 @@ void close()
 ### TDrawerThemeData
 #### 简介
 抽屉组件 ThemeExtension。
-
 只保存子树级具体视觉默认值。方向、蒙层与展示生命周期由 `showTDrawer`
 负责；分隔线和按压反馈由组件实例负责；构造器具体视觉参数优先级高于 ThemeData。
 
@@ -164,21 +162,21 @@ TDrawerThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| width | double? | - | 字段含义：默认宽度，默认 280。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：默认背景颜色。 调用时的空值行为见方法说明。 | 否 |
-| titleStyle | TextStyle? | - | 字段含义：抽屉标题样式。 调用时的空值行为见方法说明。 | 否 |
-| titlePadding | EdgeInsetsGeometry? | - | 字段含义：标题内边距，默认 `EdgeInsets.fromLTRB(16, 24, 16, 8)`。 调用时的空值行为见方法说明。 | 否 |
-| itemTextStyle | TextStyle? | - | 字段含义：菜单正文样式。 调用时的空值行为见方法说明。 | 否 |
-| itemBackgroundColor | Color? | - | 字段含义：菜单项背景色。 调用时的空值行为见方法说明。 | 否 |
-| itemPressedColor | Color? | - | 字段含义：菜单项按压背景色。 调用时的空值行为见方法说明。 | 否 |
-| itemPadding | EdgeInsetsGeometry? | - | 字段含义：菜单项内边距，默认 `EdgeInsets.fromLTRB(16, 16, 0, 16)`。 调用时的空值行为见方法说明。 | 否 |
-| itemIconColor | Color? | - | 字段含义：菜单项图标颜色。 调用时的空值行为见方法说明。 | 否 |
-| itemIconSize | double? | - | 字段含义：菜单项图标尺寸，默认 24。 调用时的空值行为见方法说明。 | 否 |
-| itemIconGap | double? | - | 字段含义：菜单项图标与正文间距，默认 8。 调用时的空值行为见方法说明。 | 否 |
-| dividerColor | Color? | - | 字段含义：菜单项分隔线颜色。 调用时的空值行为见方法说明。 | 否 |
-| dividerIndent | double? | - | 字段含义：菜单项分隔线起始缩进，默认 16。 调用时的空值行为见方法说明。 | 否 |
-| dividerThickness | double? | - | 字段含义：菜单项分隔线厚度，默认 0.5。 调用时的空值行为见方法说明。 | 否 |
-| footerPadding | EdgeInsetsGeometry? | - | 字段含义：底部区内边距，默认仅保留 20 的底边距。 调用时的空值行为见方法说明。 | 否 |
+| width | double? | - | 默认宽度，默认 280。 | 否 |
+| backgroundColor | Color? | - | 默认背景颜色。 | 否 |
+| titleStyle | TextStyle? | - | 抽屉标题样式。 | 否 |
+| titlePadding | EdgeInsetsGeometry? | - | 标题内边距，默认 `EdgeInsets.fromLTRB(16, 24, 16, 8)`。 | 否 |
+| itemTextStyle | TextStyle? | - | 菜单正文样式。 | 否 |
+| itemBackgroundColor | Color? | - | 菜单项背景色。 | 否 |
+| itemPressedColor | Color? | - | 菜单项按压背景色。 | 否 |
+| itemPadding | EdgeInsetsGeometry? | - | 菜单项内边距，默认 `EdgeInsets.fromLTRB(16, 16, 0, 16)`。 | 否 |
+| itemIconColor | Color? | - | 菜单项图标颜色。 | 否 |
+| itemIconSize | double? | - | 菜单项图标尺寸，默认 24。 | 否 |
+| itemIconGap | double? | - | 菜单项图标与正文间距，默认 8。 | 否 |
+| dividerColor | Color? | - | 菜单项分隔线颜色。 | 否 |
+| dividerIndent | double? | - | 菜单项分隔线起始缩进，默认 16。 | 否 |
+| dividerThickness | double? | - | 菜单项分隔线厚度，默认 0.5。 | 否 |
+| footerPadding | EdgeInsetsGeometry? | - | 底部区内边距，默认仅保留 20 的底边距。 | 否 |
 
 
 ##### TDrawerThemeData.lerp
@@ -229,7 +227,7 @@ const TDrawerItem({this.title, this.icon, this.content})
 #### 顶层函数
 
 通过 Popup 展示一个 `TDrawer`。
-
+被其他不透明路由覆盖时可释放内容 State。关闭路由后内容始终会释放。
 返回的 `TDrawerHandle` 可用于查询显示状态或主动关闭抽屉。
 
 返回类型：`TDrawerHandle`
@@ -251,7 +249,7 @@ TDrawerHandle showTDrawer( BuildContext context, { required TDrawer drawer, TDra
 | onOverlayClick | VoidCallback? | - | 在蒙层被点击时触发，不受是否自动关闭影响。 | 否 |
 | topInset | double? | - | 设置抽屉相对屏幕顶部的可选偏移，默认 0，必须大于或等于 0。 | 否 |
 | useSafeArea | bool | true | 控制浮层是否避让系统安全区域，默认 true。 | 否 |
-| destroyOnClose | bool | false | 默认 false；为 true 时路由 maintainState 为 false， 被其他不透明路由覆盖时可释放内容 State。关闭路由后内容始终会释放。 | 否 |
+| destroyOnClose | bool | false | 默认 false；为 true 时路由 maintainState 为 false， | 否 |
 | onClose | VoidCallback? | - | 在抽屉浮层关闭后触发。 | 否 |
 
 
@@ -270,7 +268,6 @@ TDrawerHandle showTDrawer( BuildContext context, { required TDrawer drawer, TDra
 ### TDrawerItemClickCallback
 #### 简介
 点击抽屉列表项时的回调。
-
 `index` 是列表下标，`item` 是被点击的配置项。
 #### 类型定义
 

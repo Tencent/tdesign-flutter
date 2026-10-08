@@ -148,16 +148,16 @@ name 为空时使用 default；extraThemeData 为空时保留当前扩展数据�
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| name | String? | - | 字段含义：名称 调用时的空值行为见方法说明。 | 否 |
-| colorMap | Map&lt;String, Color&gt;? | - | 字段含义：颜色 调用时的空值行为见方法说明。 | 否 |
-| fontMap | Map&lt;String, Font&gt;? | - | 字段含义：字体尺寸 调用时的空值行为见方法说明。 | 否 |
-| fontMetricMap | Map&lt;String, double&gt;? | - | 字段含义：小程序独立字号与行高 Token，单位为 Flutter 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| radiusMap | Map&lt;String, double&gt;? | - | 字段含义：圆角 调用时的空值行为见方法说明。 | 否 |
-| fontFamilyMap | Map&lt;String, FontFamily&gt;? | - | 字段含义：字体样式 调用时的空值行为见方法说明。 | 否 |
-| shadowMap | Map&lt;String, List&lt;BoxShadow&gt;&gt;? | - | 字段含义：阴影 调用时的空值行为见方法说明。 | 否 |
-| insetShadowMap | Map&lt;String, BorderSide&gt;? | - | 字段含义：小程序 blur=0 的内投影在 Flutter 中对应的内侧边线。 调用时的空值行为见方法说明。 | 否 |
+| name | String? | - | 名称 | 否 |
+| colorMap | Map&lt;String, Color&gt;? | - | 颜色 | 否 |
+| fontMap | Map&lt;String, Font&gt;? | - | 字体尺寸 | 否 |
+| fontMetricMap | Map&lt;String, double&gt;? | - | 小程序独立字号与行高 Token，单位为 Flutter 逻辑像素。 | 否 |
+| radiusMap | Map&lt;String, double&gt;? | - | 圆角 | 否 |
+| fontFamilyMap | Map&lt;String, FontFamily&gt;? | - | 字体样式 | 否 |
+| shadowMap | Map&lt;String, List&lt;BoxShadow&gt;&gt;? | - | 阴影 | 否 |
+| insetShadowMap | Map&lt;String, BorderSide&gt;? | - | 小程序 blur=0 的内投影在 Flutter 中对应的内侧边线。 | 否 |
 | marginMap | Map&lt;String, double&gt;? | - | 间距 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
-| extraThemeData | TExtraThemeData? | - | 字段含义：额外定义的结构 调用时的空值行为见方法说明。 | 否 |
+| extraThemeData | TExtraThemeData? | - | 额外定义的结构 | 否 |
 
 
 ##### TThemeData.copyWithTThemeData
@@ -552,15 +552,8 @@ String pickerColumn(int colIndex)
 ### TStyleResolver
 #### 简介
 TDesign 样式解析器。
-
 实例显式样式、组件 Theme 和全局 Token 是单向样式链。
-
 用法：
-```dart
-final resolver = TStyleResolver.of(context);
-final token = resolver.token;              // P4
-final buttonTheme = resolver.componentExtension<TButtonThemeData>(); // P1
-```
 
 #### 声明
 
@@ -609,11 +602,9 @@ E? componentExtension<E extends ThemeExtension<E>>()
 ### TMaterialThemeBuilder
 #### 简介
 Token → 完整 ThemeData 的构建器
-
 四层架构的 L2 层：接收 `TThemeData` token，产出完整 `ThemeData`。
 内部完成 Token → ColorScheme 映射、Token Font → TextTheme、
 Token 颜色 → M3 子主题，同时将 `TThemeData` 自身作为 Extension 注入。
-
 通常不直接使用，通过 `TThemeBuilder.light` / `TThemeBuilder.dark` 入口。
 
 #### 声明
@@ -663,17 +654,8 @@ ThemeData buildLight()
 ### TThemeBuilder
 #### 简介
 应用入口：Token → 完整 ThemeData
-
 对齐 `MaterialApp.theme` / `darkTheme` / `themeMode` 三参数模式。
-
 用法：
-```dart
-MaterialApp(
-  theme: TThemeBuilder.light(token),
-  darkTheme: TThemeBuilder.dark(token),
-  themeMode: ThemeMode.system,
-)
-```
 
 #### 声明
 
@@ -840,7 +822,6 @@ PlatformUtil()
 ### TToolbarPressable
 #### 简介
 工具栏文字/图标按钮统一按压反馈：按下时整体透明度动画。
-
 用于 `TPicker`、`TPopup` 等「取消 | 标题 | 确认」类工具栏，后续组件请复用。
 
 #### 声明
@@ -922,7 +903,6 @@ Font withSize(int newSize)
 业务使用时有两种方法替换主题：
 第一种：有独立设计风格的app，明确知道哪些色值用到，哪些设置没用到，有自己设计规范，则可单独配置色值。
 第二种：直接接入TDesign，配置所有色值组，此时不需再自定义key-value，可以直接使用。
-
 如果业务需要扩展，可以按以下方式定义自己的ColorData，只要key在主题中能找到对应颜色即可
 TDesign主题包含的颜色，这是一个大而全的色值。业务可以选择自己需要的色值进行二次封装，方便使用。
 不过有的色值是内部使用的，必传，否则可能显示异常。
@@ -1291,7 +1271,6 @@ extension TSpacers on TThemeData
 ### TThemeContextExtension
 #### 简介
 BuildContext 扩展：便捷获取全局 TThemeData Token
-
 统一走 Material 的 `Theme.of(context)`。
 全库读取全局 Token（色板/间距/圆角/字体）统一用 `context.tTheme`。
 
@@ -1311,7 +1290,6 @@ extension TThemeContextExtension on BuildContext
 ### TThemeDataMergeExtension
 #### 简介
 ThemeData 扩展：子树 merge Extension（禁用 copyWith(extensions:) 覆盖）
-
 子树覆盖统一用 `mergeExtension(...)`，
 禁止 `copyWith(extensions: [...])`（会覆盖其它 Extension）。
 
@@ -1332,7 +1310,6 @@ ThemeData mergeExtension<T extends ThemeExtension<T>>(T extension)
 
 
 合并 Extension：保留现有所有 Extension，仅替换指定类型
-
 示例：
 ```dart
 Theme(
@@ -1354,7 +1331,6 @@ Theme(
 #### 顶层函数
 
 设置全局资源代理。
-
 `needAlwaysBuild`=true: 每次都会走 build 方法；如果全局有多个 Delegate，
 需要区分情况去获取，则可以设置 needAlwaysBuild 为 true，业务自己判断返回哪个 delegate。
 `needAlwaysBuild`=false: 返回 delegate 为 null，则每次都会走 build 方法。

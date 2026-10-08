@@ -202,7 +202,6 @@ TProgress.plump({
 ### TProgressThemeData
 #### 简介
 进度条组件级 ThemeExtension
-
 通过 Theme 子树注入，控制子树的默认视觉值。
 除进度值、状态与线性渐变等实例语义外，具体绘制值优先读取组件 Theme。
 
@@ -272,16 +271,16 @@ TProgressThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| strokeWidth | double? | - | 字段含义：进度条粗细 调用时的空值行为见方法说明。 | 否 |
-| color | Color? | - | 字段含义：进度条颜色 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：进度条背景色 调用时的空值行为见方法说明。 | 否 |
-| circleInnerBgColor | Color? | - | 字段含义：环形进度条内圆背景色。默认浅色读取容器色、暗色透明； 宿主如需定义暗色内圆，可在组件 Theme 中显式配置。 调用时的空值行为见方法说明。 | 否 |
-| linearBorderRadius | BorderRadiusGeometry? | - | 字段含义：条形进度条末端圆角 调用时的空值行为见方法说明。 | 否 |
-| circleSize | double? | - | 字段含义：环形进度条的正方形边长；未设置时由环形规格决定。 未配置时 circular 为 112、microCircular / microButton 为 24 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| animationDuration | Duration? | - | 字段含义：动画持续时间 未配置时为 300 毫秒。 调用时的空值行为见方法说明。 | 否 |
-| indeterminateAnimationDuration | Duration? | - | 字段含义：不确定进度完成一次循环的时长。 未配置时为 1200 毫秒；必须大于 Duration.zero，否则抛出 FlutterError。 调用时的空值行为见方法说明。 | 否 |
-| indeterminateLinearSegmentFraction | double? | - | 字段含义：不确定线性进度段占轨道宽度的比例。 未配置时为 0.32；必须大于 0 且不大于 1。 调用时的空值行为见方法说明。 | 否 |
-| indeterminateCircularValue | double? | - | 字段含义：不确定环形进度弧占整圈的比例。 未配置时为 0.25；必须大于 0 且小于 1。 调用时的空值行为见方法说明。 | 否 |
+| strokeWidth | double? | - | 进度条粗细 | 否 |
+| color | Color? | - | 进度条颜色 | 否 |
+| backgroundColor | Color? | - | 进度条背景色 | 否 |
+| circleInnerBgColor | Color? | - | 环形进度条内圆背景色。默认浅色读取容器色、暗色透明； 宿主如需定义暗色内圆，可在组件 Theme 中显式配置。 | 否 |
+| linearBorderRadius | BorderRadiusGeometry? | - | 条形进度条末端圆角 | 否 |
+| circleSize | double? | - | 环形进度条的正方形边长；未设置时由环形规格决定。 未配置时 circular 为 112、microCircular / microButton 为 24 逻辑像素。 | 否 |
+| animationDuration | Duration? | - | 动画持续时间 未配置时为 300 毫秒。 | 否 |
+| indeterminateAnimationDuration | Duration? | - | 不确定进度完成一次循环的时长。 未配置时为 1200 毫秒；必须大于 Duration.zero，否则抛出 FlutterError。 | 否 |
+| indeterminateLinearSegmentFraction | double? | - | 不确定线性进度段占轨道宽度的比例。 未配置时为 0.32；必须大于 0 且不大于 1。 | 否 |
+| indeterminateCircularValue | double? | - | 不确定环形进度弧占整圈的比例。 未配置时为 0.25；必须大于 0 且小于 1。 | 否 |
 
 
 ##### TProgressThemeData.lerp

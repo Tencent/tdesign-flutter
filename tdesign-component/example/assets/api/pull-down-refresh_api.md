@@ -5,25 +5,14 @@
 ### TPullDownRefresh
 #### 简介
 TDesign 下拉刷新组件。
-
 以**最小、Flutter 惯用**的 API 封装 `EasyRefresh`，对齐官方
 （小程序 / mobile-vue）PullDownRefresh 的行为表现：
 下拉 → 松手 → 刷新 → 完成四态，支持触底加载、超时、
 四态文案自定义与受控刷新。
-
 默认刷新头的背景和提示文字读取 `TThemeData` 的全局 Token。
 刷新中复用 `TLoadingThemeData`：强制横向布局，未设置 `textColor` 时
 使用禁用文字色；其他 Loading 主题配置继续继承。
-
 典型用法：
-```dart
-TPullDownRefresh(
-  onRefresh: () async {
-    await _fetchData();
-  },
-  child: ListView.builder(...),
-)
-```
 
 #### 声明
 
@@ -74,13 +63,10 @@ const TPullDownRefresh({
 ### TPullDownRefreshController
 #### 简介
 `TPullDownRefresh` 的外部刷新控制器。
-
 使用 Flutter 惯用的控制器模式，从页面外部通过 `refresh` 主动触发一次刷新。
 返回的 Future 会在本次刷新成功、回调失败或超时复位后完成；它不返回业务结果。
 回调异常仍由 `TPullDownRefresh` 通过 `FlutterError.reportError` 上报。
-
 ## 生命周期（所有权）
-
 底层刷新控制器的所有权归 `TPullDownRefresh` 的 State 独占管理：
 State 在 `initState` 中创建、在 `dispose` 中释放。本控制器不拥有需要调用方
 释放的资源，因此不提供公开 `dispose()`。
@@ -109,7 +95,6 @@ Future<void> refresh()
 
 
 从页面外部主动触发一次下拉刷新。
-
 `await refresh()` 表示这次刷新流程已经结束，不代表业务一定成功；
 成功、回调失败和超时都会完成 Future。组件未挂载或未配置刷新回调
 时，该方法立即完成。
@@ -119,7 +104,6 @@ Future<void> refresh()
 ### TPullDownRefreshTexts
 #### 简介
 下拉刷新四态提示语。
-
 对应官方（小程序 / mobile-vue）`loadingTexts: string[]` 数组，
 覆盖「下拉刷新 / 松手刷新 / 正在刷新 / 刷新完成」四个阶段的文案。
 

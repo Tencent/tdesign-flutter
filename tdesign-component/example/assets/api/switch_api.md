@@ -5,7 +5,6 @@
 ### TSwitch
 #### 简介
 严格受控的开关组件。
-
 `value` 由父级持有；`onChanged` 为 null 时禁用；`loading` 为 true 时
 显示加载指示器并禁用交互。文字、图标和加载内容无法由 Material Switch
 完整表达，因此底层保留 TDesign 自定义开关实现。
@@ -49,7 +48,6 @@ const TSwitch({
 ### TSwitchThemeData
 #### 简介
 TSwitch 组件级 ThemeExtension
-
 通过 Theme 子树注入，控制子树默认样式。
 
 #### 声明
@@ -121,17 +119,17 @@ TSwitchThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| trackOnColor | Color? | - | 字段含义：开启态轨道颜色。 未配置时使用 brandColor Token。 调用时的空值行为见方法说明。 | 否 |
-| trackOffColor | Color? | - | 字段含义：关闭态轨道颜色。 未配置时使用 bgColorSecondaryContainerActive Token。 调用时的空值行为见方法说明。 | 否 |
-| disabledTrackOnColor | Color? | - | 字段含义：禁用时开启态轨道颜色；未设置时使用全局禁用品牌色。 调用时的空值行为见方法说明。 | 否 |
-| disabledTrackOffColor | Color? | - | 字段含义：禁用时关闭态轨道颜色；未设置时使用全局禁用组件背景色。 调用时的空值行为见方法说明。 | 否 |
-| thumbColor | Color? | - | 字段含义：可交互时滑块填充色；未设置时使用全局反色文字 Token。 与滑块内图标或文字的颜色无关。 调用时的空值行为见方法说明。 | 否 |
-| disabledThumbColor | Color? | - | 字段含义：禁用或加载时滑块填充色；未设置时随明暗模式取白色层级。 调用时的空值行为见方法说明。 | 否 |
-| loadingColor | Color? | - | 字段含义：加载指示器颜色；未设置时浅色为品牌色、深色为最高层级白色。 调用时的空值行为见方法说明。 | 否 |
-| thumbContentOnColor | Color? | - | 字段含义：开启态滑块内容颜色。 未配置时使用 brandColor Token。 调用时的空值行为见方法说明。 | 否 |
-| thumbContentOffColor | Color? | - | 字段含义：关闭态滑块内容颜色。 未配置时使用 textColorDisabled Token。 调用时的空值行为见方法说明。 | 否 |
-| thumbContentOnFont | TextStyle? | - | 字段含义：开启态滑块内容文本样式。 未配置时使用 fontBodyMedium 字号 Token，Token 为空时回退为 14 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| thumbContentOffFont | TextStyle? | - | 字段含义：关闭态滑块内容文本样式。 未配置时使用 fontBodyMedium 字号 Token，Token 为空时回退为 14 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| trackOnColor | Color? | - | 开启态轨道颜色。 未配置时使用 brandColor Token。 | 否 |
+| trackOffColor | Color? | - | 关闭态轨道颜色。 未配置时使用 bgColorSecondaryContainerActive Token。 | 否 |
+| disabledTrackOnColor | Color? | - | 禁用时开启态轨道颜色；未设置时使用全局禁用品牌色。 | 否 |
+| disabledTrackOffColor | Color? | - | 禁用时关闭态轨道颜色；未设置时使用全局禁用组件背景色。 | 否 |
+| thumbColor | Color? | - | 可交互时滑块填充色；未设置时使用全局反色文字 Token。 与滑块内图标或文字的颜色无关。 | 否 |
+| disabledThumbColor | Color? | - | 禁用或加载时滑块填充色；未设置时随明暗模式取白色层级。 | 否 |
+| loadingColor | Color? | - | 加载指示器颜色；未设置时浅色为品牌色、深色为最高层级白色。 | 否 |
+| thumbContentOnColor | Color? | - | 开启态滑块内容颜色。 未配置时使用 brandColor Token。 | 否 |
+| thumbContentOffColor | Color? | - | 关闭态滑块内容颜色。 未配置时使用 textColorDisabled Token。 | 否 |
+| thumbContentOnFont | TextStyle? | - | 开启态滑块内容文本样式。 未配置时使用 fontBodyMedium 字号 Token，Token 为空时回退为 14 逻辑像素。 | 否 |
+| thumbContentOffFont | TextStyle? | - | 关闭态滑块内容文本样式。 未配置时使用 fontBodyMedium 字号 Token，Token 为空时回退为 14 逻辑像素。 | 否 |
 
 
 ##### TSwitchThemeData.lerp

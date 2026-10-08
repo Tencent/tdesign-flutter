@@ -5,7 +5,6 @@
 ### TNavBar
 #### 简介
 NavBar 组件
-
 Material AppBar 薄包装（NavigationToolbar 实现）。
 - A 类禁用：操作项 `onTap: null`。
 - L4 样式（标题颜色、背景、内边距等）→ `TNavBarThemeData`。
@@ -125,7 +124,6 @@ const TNavBarBorder({
 ### TNavBarThemeData
 #### 简介
 NavBar 组件 ThemeExtension
-
 管理 TNavBar 的子树级默认样式（标题颜色、背景、内边距、阴影、边框等）。
 构造器参数优先级高于 ThemeData。高度属于 PreferredSizeWidget 契约，只能通过 TNavBar.height 设置。
 
@@ -184,7 +182,6 @@ TNavBarThemeData copyWith({
 
 
 返回只替换非空参数的新主题。
-
 参数省略或传入 `null` 都会保留原值，符合 Flutter `copyWith` 的常见语义。
 如需清除某个配置并恢复下层 Theme 或 Token，请重新构造
 `TNavBarThemeData`，只传入仍需保留的字段。
@@ -193,14 +190,14 @@ TNavBarThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| titleColor | Color? | - | 字段含义：标题的子树默认颜色。 仅在 NavBar 标题未自行提供前景色时生效；标题 Widget 自身的显式颜色优先。 调用时的空值行为见方法说明。 | 否 |
-| backIconColor | Color? | - | 字段含义：返回图标颜色 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：背景颜色 调用时的空值行为见方法说明。 | 否 |
-| padding | EdgeInsetsGeometry? | - | 字段含义：内部填充 调用时的空值行为见方法说明。 | 否 |
-| titleMargin | double? | - | 字段含义：中间文案左右两边间距 调用时的空值行为见方法说明。 | 否 |
-| opacity | double? | - | 字段含义：背景颜色透明度，未配置时为 1 调用时的空值行为见方法说明。 | 否 |
-| border | TNavBarBorder? | - | 字段含义：操作项边框配置，仅在 TNavBar.useBorderStyle 为 true 时生效 调用时的空值行为见方法说明。 | 否 |
-| boxShadow | List&lt;BoxShadow&gt;? | - | 字段含义：底部阴影 调用时的空值行为见方法说明。 | 否 |
+| titleColor | Color? | - | 标题的子树默认颜色。 仅在 NavBar 标题未自行提供前景色时生效；标题 Widget 自身的显式颜色优先。 | 否 |
+| backIconColor | Color? | - | 返回图标颜色 | 否 |
+| backgroundColor | Color? | - | 背景颜色 | 否 |
+| padding | EdgeInsetsGeometry? | - | 内部填充 | 否 |
+| titleMargin | double? | - | 中间文案左右两边间距 | 否 |
+| opacity | double? | - | 背景颜色透明度，未配置时为 1 | 否 |
+| border | TNavBarBorder? | - | 操作项边框配置，仅在 TNavBar.useBorderStyle 为 true 时生效 | 否 |
+| boxShadow | List&lt;BoxShadow&gt;? | - | 底部阴影 | 否 |
 
 
 ##### TNavBarThemeData.lerp

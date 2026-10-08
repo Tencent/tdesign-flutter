@@ -5,10 +5,8 @@
 ### TDateTimePicker
 #### 简介
 日期/时间滚轮选择器。
-
 纯滚轮组件，不包含工具栏、确认按钮或弹窗。
 `value` 与 `onChanged` 构成严格受控状态；`onChanged` 为 null 时禁用。
-
 滚轮高度与可见项数复用 `TPickerThemeData` 的 `height`、`itemCount`；
 通过 Flutter `ThemeData.extensions` 配置，没有独立的日期时间选择器 Theme。
 
@@ -53,7 +51,6 @@ TDateTimePicker({
 ### DateTimePickerMode
 #### 简介
 滚轮列结构，由 `DateMode`、`TimeMode` 组合。
-
 通过 `DateTimePickerMode(dateMode:, timeMode:)` 构造，至少传其一：
 - `dateMode`：日期段粒度（年 / 年月 / 年月日 / 月日）；不传则不展示日期列
 - `timeMode`：时间段粒度（时 / 时分 / 时分秒）；不传则不展示时间列
@@ -84,7 +81,6 @@ factory DateTimePickerMode({DateMode? dateMode, TimeMode? timeMode})
 ### TDateTimePickerValue
 #### 简介
 `TDateTimePicker.onChanged` 返回值；`null` 字段表示当前 mode 不含该列。
-
 初始化 `TDateTimePicker.value`、`start`、`end` 时仅传相关字段即可；
 提交后端时使用 `toDateTime`，partial 值须显式传入 `fallback`。
 
@@ -130,7 +126,6 @@ DateTime toDateTime({DateTime? fallback})
 
 
 转为 `DateTime`
-
 - **完整值**：六元组均有值时直接构造
 - **partial 值**：缺字段用 `fallback` 补齐；未传 `fallback` 时抛出 `ArgumentError`
 - **典型用法**：提交后端前调用；partial 值须传入业务基准 `fallback`

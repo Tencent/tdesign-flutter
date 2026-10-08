@@ -40,12 +40,14 @@ static Future<void> show({
 
 
 显示全屏图片预览。
+调用方需要主动关闭时，可通过持有的 `NavigatorState` 调用
+`NavigatorState.pop`；返回的 Future 会在路由关闭后完成一次。
 
 返回类型：`Future<void>`
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| context | BuildContext | - | 用于展示预览弹窗。 调用方需要主动关闭时，可通过持有的 `NavigatorState` 调用 `NavigatorState.pop`；返回的 Future 会在路由关闭后完成一次。 | 是 |
+| context | BuildContext | - | 用于展示预览弹窗。 | 是 |
 | images | List&lt;ImageProvider&lt;Object&gt;&gt; | - | 是待预览的图片列表，不能为空。 | 是 |
 | labels | List&lt;String&gt;? | - | 是与图片一一对应的标签文案；非空时长度必须等于 images，否则抛出 ArgumentError。 | 否 |
 | initialIndex | int | 0 | 设置初始展示的图片索引，必须在 0 到 images.length - 1 之间；否则抛出 RangeError。 | 否 |
@@ -124,13 +126,13 @@ TImageViewerThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 字段含义：预览页背景色 调用时的空值行为见方法说明。 | 否 |
-| appBarBackgroundColor | Color? | - | 字段含义：导航栏背景色 调用时的空值行为见方法说明。 | 否 |
-| iconColor | Color? | - | 字段含义：图标颜色 调用时的空值行为见方法说明。 | 否 |
-| labelStyle | TextStyle? | - | 字段含义：标签文字样式 调用时的空值行为见方法说明。 | 否 |
-| indexStyle | TextStyle? | - | 字段含义：页码文字样式 调用时的空值行为见方法说明。 | 否 |
-| viewerWidth | double? | - | 字段含义：预览区默认宽度 调用时的空值行为见方法说明。 | 否 |
-| viewerHeight | double? | - | 字段含义：预览区默认高度 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 预览页背景色 | 否 |
+| appBarBackgroundColor | Color? | - | 导航栏背景色 | 否 |
+| iconColor | Color? | - | 图标颜色 | 否 |
+| labelStyle | TextStyle? | - | 标签文字样式 | 否 |
+| indexStyle | TextStyle? | - | 页码文字样式 | 否 |
+| viewerWidth | double? | - | 预览区默认宽度 | 否 |
+| viewerHeight | double? | - | 预览区默认高度 | 否 |
 
 
 ##### TImageViewerThemeData.lerp

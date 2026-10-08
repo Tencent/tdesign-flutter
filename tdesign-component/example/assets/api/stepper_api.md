@@ -5,11 +5,9 @@
 ### TStepper
 #### 简介
 TDesign 数值步进器。
-
 组件严格受控：`value` 是唯一数据源，按钮、输入提交及失焦只通过
 `onChanged` 请求变更，父组件需要以新 `value` 重建组件。若父组件不接受
 新值，输入内容会恢复为当前 `value`。
-
 `onChanged` 为 null 时输入框和两个按钮整组禁用。样式优先级为实例
 `size`/`variant`、`TStepperThemeData`、Flutter 子树及全局 ThemeData，
 最后回退 TDesign token。
@@ -53,7 +51,6 @@ const TStepper({
 ### TStepperThemeData
 #### 简介
 `TStepper` 的组件级主题。
-
 通过 `ThemeData.extensions` 或 `ThemeData.mergeExtension` 注入。实例参数
 优先于此主题；未设置的文字字段使用全局 TDesign Token，图标及输入装饰
 仍按各自 Flutter 主题解析。
@@ -130,18 +127,18 @@ TStepperThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| inputWidth | double? | - | 字段含义：输入段宽度。 为空时 small、medium、large 分别使用 34、38、45。 调用时的空值行为见方法说明。 | 否 |
-| controlSize | double? | - | 字段含义：控件高度及单个按钮宽度。 为空时 small、medium、large 分别使用 20、24、26。 调用时的空值行为见方法说明。 | 否 |
-| iconSize | double? | - | 字段含义：加减图标尺寸。 为空时 small、medium、large 分别使用 12、16、20。 调用时的空值行为见方法说明。 | 否 |
-| spacing | double? | - | 字段含义：normal 和 filled 形态的分段间距，默认 4。 outline 始终连续排列，不使用该值。 调用时的空值行为见方法说明。 | 否 |
-| borderRadius | BorderRadius? | - | 字段含义：分段圆角，默认使用 TDesign `radiusSmall`。 normal 和 filled 应用于每一段；outline 仅保留整组外侧圆角。 调用时的空值行为见方法说明。 | 否 |
-| borderWidth | double? | - | 字段含义：outline 形态的描边宽度，默认 1。 调用时的空值行为见方法说明。 | 否 |
-| foregroundColor | Color? | - | 字段含义：输入文字和加减图标的默认前景色。 调用时的空值行为见方法说明。 | 否 |
-| disabledForegroundColor | Color? | - | 字段含义：边界不可操作按钮及整组禁用时的前景色。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：filled 形态各段的背景色。 调用时的空值行为见方法说明。 | 否 |
-| disabledBackgroundColor | Color? | - | 字段含义：整组禁用时 filled 和 outline 形态各段的背景色。 调用时的空值行为见方法说明。 | 否 |
-| borderColor | Color? | - | 字段含义：outline 形态的描边颜色。 调用时的空值行为见方法说明。 | 否 |
-| textStyle | TextStyle? | - | 字段含义：输入文字样式。 在继承全局 TDesign Token 后合并；非空字段可覆盖 默认字号、行高及 `foregroundColor`。仅覆盖字号时会按最终字号重新计算 默认行高倍数；显式设置的 `TextStyle.height` 始终优先。最终字号或显式 物理行盒超过控件高度属于无效配置，并会在调试模式触发断言。 调用时的空值行为见方法说明。 | 否 |
+| inputWidth | double? | - | 输入段宽度。 为空时 small、medium、large 分别使用 34、38、45。 | 否 |
+| controlSize | double? | - | 控件高度及单个按钮宽度。 为空时 small、medium、large 分别使用 20、24、26。 | 否 |
+| iconSize | double? | - | 加减图标尺寸。 为空时 small、medium、large 分别使用 12、16、20。 | 否 |
+| spacing | double? | - | normal 和 filled 形态的分段间距，默认 4。 outline 始终连续排列，不使用该值。 | 否 |
+| borderRadius | BorderRadius? | - | 分段圆角，默认使用 TDesign `radiusSmall`。 normal 和 filled 应用于每一段；outline 仅保留整组外侧圆角。 | 否 |
+| borderWidth | double? | - | outline 形态的描边宽度，默认 1。 | 否 |
+| foregroundColor | Color? | - | 输入文字和加减图标的默认前景色。 | 否 |
+| disabledForegroundColor | Color? | - | 边界不可操作按钮及整组禁用时的前景色。 | 否 |
+| backgroundColor | Color? | - | filled 形态各段的背景色。 | 否 |
+| disabledBackgroundColor | Color? | - | 整组禁用时 filled 和 outline 形态各段的背景色。 | 否 |
+| borderColor | Color? | - | outline 形态的描边颜色。 | 否 |
+| textStyle | TextStyle? | - | 输入文字样式。 在继承全局 TDesign Token 后合并；非空字段可覆盖 默认字号、行高及 `foregroundColor`。仅覆盖字号时会按最终字号重新计算 默认行高倍数；显式设置的 `TextStyle.height` 始终优先。最终字号或显式 物理行盒超过控件高度属于无效配置，并会在调试模式触发断言。 | 否 |
 
 
 ##### TStepperThemeData.lerp
@@ -152,7 +149,6 @@ TStepperThemeData lerp(ThemeExtension<TStepperThemeData>? other, double t)
 
 
 插值保留未指定字段的继承语义，由组件结合当前实例尺寸与主题解析。
-
 两端均未指定的字段仍为 null；端点返回原始配置。
 
 返回类型：`TStepperThemeData`

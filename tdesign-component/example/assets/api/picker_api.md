@@ -5,7 +5,6 @@
 ### TPicker
 #### 简介
 严格受控的滚轮选择器。
-
 独立多列使用 `TPickerColumns`，层级联动使用 `TPickerLinked`。弹层和确认
 操作由调用方组合，组件本身只负责滚轮选择。标准弹层使用 `TPickerPopup.show`。
 
@@ -44,7 +43,6 @@ const TPicker({
 ### TPickerPopup
 #### 简介
 Picker 专用弹层入口。
-
 `TPicker` 与 `TDateTimePicker` 的滚轮仍是可独立组合的纯面板；需要设计稿中的
 底部弹层时使用 `show`。该入口统一为标准 `TPopupHeader` 和完整滚轮视窗预留
 高度，避免调用方按通用 Popup 默认高度拼装后压缩或裁切滚轮。
@@ -82,7 +80,6 @@ static TPopupHandle show(
 
 
 打开包含标准头部和 Picker 滚轮的底部弹层。
-
 弹层总高为当前 `TPickerThemeData.height`（默认 200）加
 `TPopupHeader.headerHeight`（58）。`child` 通常为 `TPicker` 或
 `TDateTimePicker`，其受控值、确认和取消状态仍由调用方管理。
@@ -111,7 +108,6 @@ static TPopupHandle show(
 ### TPickerOption
 #### 简介
 选择器选项。
-
 选项及 `children` 按不可变数据使用；更新时创建新选项和新列表。
 
 #### 声明
@@ -145,7 +141,6 @@ const TPickerOption({
 ### TPickerValue
 #### 简介
 各列当前选中项的只读快照。
-
 组件回调产生的列表不可修改。手工构造时，调用方须提供不可变列表；
 const 构造不会复制或冻结传入的 `selectedOptions` 和 `indexes`。
 
@@ -180,7 +175,6 @@ const TPickerValue({required this.selectedOptions, required this.indexes})
 ### TPickerColumns
 #### 简介
 互不联动的多列数据源。
-
 `columns` 及每列列表不得原地修改；变更时传入新的数据源和列表。
 
 #### 声明
@@ -206,7 +200,6 @@ const TPickerColumns(this.columns)
 ### TPickerLinked
 #### 简介
 由 `TPickerOption.children` 描述层级关系的联动数据源。
-
 `options` 及所有子选项列表不得原地修改；变更时创建新的数据源。
 
 #### 声明
@@ -232,7 +225,6 @@ const TPickerLinked(this.options)
 ### TPickerThemeData
 #### 简介
 TPicker 组件级 ThemeExtension
-
 被 TPicker 和 TDateTimePicker 共用。
 
 #### 声明
@@ -271,8 +263,8 @@ TPickerThemeData copyWith({double? height, int? itemCount})
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| height | double? | - | 字段含义：滚轮视窗高度，单位为逻辑像素；null 时使用默认值 200。 必须为有限正数，行高由此高度除以 `itemCount`（默认 5）得到。 调用时的空值行为见方法说明。 | 否 |
-| itemCount | int? | - | 字段含义：每屏显示项数，null 时使用默认值 5；必须大于零。 调用时的空值行为见方法说明。 | 否 |
+| height | double? | - | 滚轮视窗高度，单位为逻辑像素；null 时使用默认值 200。 必须为有限正数，行高由此高度除以 `itemCount`（默认 5）得到。 | 否 |
+| itemCount | int? | - | 每屏显示项数，null 时使用默认值 5；必须大于零。 | 否 |
 
 
 ##### TPickerThemeData.lerp
@@ -314,7 +306,6 @@ const TPickerItems()
 ### TPickerPopupHeaderBuilder
 #### 简介
 构建 Picker 标准弹层头部。
-
 返回类型限定为 `TPopupHeader`，使弹层尺寸计算与实际头部的
 `TPopupHeader.headerHeight` 保持一致。
 #### 类型定义

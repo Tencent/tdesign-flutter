@@ -5,7 +5,6 @@
 ### TSideBar
 #### 简介
 受控的侧边导航栏。
-
 `value` 由调用方持有；用户选择可用项时通过 `onChanged` 报告新的值。
 未提供 `onChanged` 时，整个侧边栏以禁用态展示。
 
@@ -50,7 +49,6 @@ const TSideBar({
 ### TSideBarItem
 #### 简介
 侧边导航栏的不可变配置项。
-
 这是数据配置而非 Widget，不参与 Flutter Key 匹配。
 `value` 应在同一个侧边导航栏的 children 列表中保持唯一，以便组件稳定地
 保留选中状态和滚动目标。
@@ -88,7 +86,6 @@ const TSideBarItem({
 ### TSideBarThemeData
 #### 简介
 侧边栏组件 ThemeExtension
-
 管理 TSideBar 的子树级视觉样式（内边距、选中/未选中颜色等）。
 实例参数负责选中值、形态和交互；具体视觉值由本组件 Theme 配置。
 
@@ -143,11 +140,11 @@ TSideBarThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| contentPadding | EdgeInsetsGeometry? | - | 字段含义：默认自定义文本框内边距 调用时的空值行为见方法说明。 | 否 |
-| textStyle | TextStyle? | - | 字段含义：未选中标签文字样式；颜色同时用于未选中图标。 选中项只继承排版字段，不继承这里的颜色；禁用态使用全局禁用色。 未指定颜色时使用全局正文色。 调用时的空值行为见方法说明。 | 否 |
-| selectedTextStyle | TextStyle? | - | 字段含义：选中文字样式；其中的 color 同时控制选中图标和指示线。 未指定 color 时读取全局品牌色；禁用态始终使用全局禁用色。 调用时的空值行为见方法说明。 | 否 |
-| selectedBgColor | Color? | - | 字段含义：默认选中背景颜色 调用时的空值行为见方法说明。 | 否 |
-| unSelectedBgColor | Color? | - | 字段含义：默认未选中背景颜色 调用时的空值行为见方法说明。 | 否 |
+| contentPadding | EdgeInsetsGeometry? | - | 默认自定义文本框内边距 | 否 |
+| textStyle | TextStyle? | - | 未选中标签文字样式；颜色同时用于未选中图标。 选中项只继承排版字段，不继承这里的颜色；禁用态使用全局禁用色。 未指定颜色时使用全局正文色。 | 否 |
+| selectedTextStyle | TextStyle? | - | 选中文字样式；其中的 color 同时控制选中图标和指示线。 未指定 color 时读取全局品牌色；禁用态始终使用全局禁用色。 | 否 |
+| selectedBgColor | Color? | - | 默认选中背景颜色 | 否 |
+| unSelectedBgColor | Color? | - | 默认未选中背景颜色 | 否 |
 
 
 ##### TSideBarThemeData.lerp

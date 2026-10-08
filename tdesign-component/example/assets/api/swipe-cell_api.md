@@ -47,7 +47,6 @@ const TSwipeCell({
 ### TSwipeCellController
 #### 简介
 `TSwipeCell` 的命令式控制器。
-
 一个控制器同一时间只能绑定一个 `TSwipeCell`。通常无需使用控制器，用户拖动、
 点击操作项、点击单元格外部或滚动列表时，组件会自行管理展开状态。
 
@@ -130,7 +129,6 @@ Widget build(BuildContext context)
 
 
 构建操作项的横向布局，宽度由 `children` 的实际布局宽度决定。
-
 操作项沿交叉轴拉伸；返回的布局由调用方放入滑动单元格。
 
 返回类型：`Widget`
@@ -143,7 +141,6 @@ Widget build(BuildContext context)
 ### TSwipeCellAction
 #### 简介
 滑动单元格操作项。
-
 同一面板中的操作项可使用不同的颜色和文字样式。
 未指定的图文视觉字段从全局 TDesign Token 取得默认值；
 `TSwipeCellThemeData` 只提供共用内边距。
@@ -192,7 +189,6 @@ const TSwipeCellAction({
 ### TSwipeCellThemeData
 #### 简介
 TSwipeCell 组件级 ThemeExtension
-
 通过 Theme 子树注入操作项共享内边距；逐项图文样式由操作项实例控制。
 
 #### 声明
@@ -230,7 +226,7 @@ TSwipeCellThemeData copyWith({EdgeInsetsGeometry? actionPadding})
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| actionPadding | EdgeInsetsGeometry? | - | 字段含义：操作项左右内边距。 调用时的空值行为见方法说明。 | 否 |
+| actionPadding | EdgeInsetsGeometry? | - | 操作项左右内边距。 | 否 |
 
 
 ##### TSwipeCellThemeData.lerp

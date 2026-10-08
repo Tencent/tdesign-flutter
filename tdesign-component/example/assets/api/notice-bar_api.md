@@ -55,7 +55,6 @@ const TNoticeBar({
 ### TNoticeBarThemeData
 #### 简介
 TNoticeBar 组件级 ThemeExtension
-
 通过 Theme 子树注入，控制子树的默认公告栏样式。
 
 #### 声明
@@ -75,7 +74,6 @@ static double? lerpDouble(double? a, double? b, double t)
 
 
 在两个可选数值之间插值。
-
 当仅一端有值时采用离散切换，避免把缺省值错误地当作 0。组件已知默认值
 的字段会在 `lerp` 内使用其实际默认值平滑插值。
 
@@ -141,12 +139,12 @@ TNoticeBarThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| height | double? | - | 字段含义：文字高度 未配置时为 22 逻辑像素，表示正文区域高度，外层内边距另计。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：公告栏背景色 调用时的空值行为见方法说明。 | 否 |
-| textStyle | TextStyle? | - | 字段含义：公告栏内容样式 调用时的空值行为见方法说明。 | 否 |
-| leftIconColor | Color? | - | 字段含义：公告栏左侧图标颜色 调用时的空值行为见方法说明。 | 否 |
-| rightIconColor | Color? | - | 字段含义：公告栏右侧图标颜色 调用时的空值行为见方法说明。 | 否 |
-| padding | EdgeInsetsGeometry? | - | 字段含义：公告栏内边距 未配置时使用 defaultPadding，即上/下 13、左 16、右 12 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| height | double? | - | 文字高度 未配置时为 22 逻辑像素，表示正文区域高度，外层内边距另计。 | 否 |
+| backgroundColor | Color? | - | 公告栏背景色 | 否 |
+| textStyle | TextStyle? | - | 公告栏内容样式 | 否 |
+| leftIconColor | Color? | - | 公告栏左侧图标颜色 | 否 |
+| rightIconColor | Color? | - | 公告栏右侧图标颜色 | 否 |
+| padding | EdgeInsetsGeometry? | - | 公告栏内边距 未配置时使用 defaultPadding，即上/下 13、左 16、右 12 逻辑像素。 | 否 |
 
 
 ##### TNoticeBarThemeData.lerp

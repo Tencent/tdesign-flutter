@@ -117,15 +117,15 @@ TUploadFile copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| id | String? | - | 字段含义：文件唯一标识。 调用时的空值行为见方法说明。 | 否 |
-| name | String? | - | 字段含义：文件名。 调用时的空值行为见方法说明。 | 否 |
-| url | String? | - | 字段含义：远程预览地址。 调用时的空值行为见方法说明。 | 否 |
-| bytes | Uint8List? | - | 字段含义：本地预览字节。 调用时的空值行为见方法说明。 | 否 |
-| size | int? | - | 字段含义：文件字节数。 调用时的空值行为见方法说明。 | 否 |
-| status | TUploadFileStatus? | - | 字段含义：上传状态。 调用时的空值行为见方法说明。 | 否 |
-| progress | double? | - | 字段含义：上传进度，范围为 0 到 1。 调用时的空值行为见方法说明。 | 否 |
-| errorText | String? | - | 字段含义：失败状态文案。 调用时的空值行为见方法说明。 | 否 |
-| canRemove | bool? | - | 字段含义：是否允许移除。 调用时的空值行为见方法说明。 | 否 |
+| id | String? | - | 文件唯一标识。 | 否 |
+| name | String? | - | 文件名。 | 否 |
+| url | String? | - | 远程预览地址。 | 否 |
+| bytes | Uint8List? | - | 本地预览字节。 | 否 |
+| size | int? | - | 文件字节数。 | 否 |
+| status | TUploadFileStatus? | - | 上传状态。 | 否 |
+| progress | double? | - | 上传进度，范围为 0 到 1。 | 否 |
+| errorText | String? | - | 失败状态文案。 | 否 |
+| canRemove | bool? | - | 是否允许移除。 | 否 |
 
 
 ### TUploadThemeData
@@ -222,24 +222,24 @@ TUploadThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| variant | TUploadVariant? | - | 字段含义：上传项形状。 调用时的空值行为见方法说明。 | 否 |
-| itemSize | double? | - | 字段含义：上传项尺寸。 调用时的空值行为见方法说明。 | 否 |
-| spacing | double? | - | 字段含义：横向间距。 调用时的空值行为见方法说明。 | 否 |
-| runSpacing | double? | - | 字段含义：纵向间距。 调用时的空值行为见方法说明。 | 否 |
-| alignment | WrapAlignment? | - | 字段含义：Wrap 对齐方式。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：默认背景色。 调用时的空值行为见方法说明。 | 否 |
-| foregroundColor | Color? | - | 字段含义：默认前景色。 调用时的空值行为见方法说明。 | 否 |
-| disabledBackgroundColor | Color? | - | 字段含义：禁用背景色。 调用时的空值行为见方法说明。 | 否 |
-| disabledForegroundColor | Color? | - | 字段含义：禁用前景色。 调用时的空值行为见方法说明。 | 否 |
-| overlayColor | Color? | - | 字段含义：状态遮罩颜色。 调用时的空值行为见方法说明。 | 否 |
-| statusTextStyle | TextStyle? | - | 字段含义：状态文案样式。 调用时的空值行为见方法说明。 | 否 |
-| borderRadius | double? | - | 字段含义：方形上传项圆角。 调用时的空值行为见方法说明。 | 否 |
-| addIconSize | double? | - | 字段含义：添加图标尺寸。 调用时的空值行为见方法说明。 | 否 |
-| statusIconSize | double? | - | 字段含义：状态图标尺寸。 调用时的空值行为见方法说明。 | 否 |
-| removeButtonSize | double? | - | 字段含义：移除按钮尺寸。 调用时的空值行为见方法说明。 | 否 |
-| removeButtonColor | Color? | - | 字段含义：移除按钮颜色。 调用时的空值行为见方法说明。 | 否 |
-| removeIconSize | double? | - | 字段含义：移除图标尺寸。 调用时的空值行为见方法说明。 | 否 |
-| disabledMaskColor | Color? | - | 字段含义：禁用文件遮罩颜色。 调用时的空值行为见方法说明。 | 否 |
+| variant | TUploadVariant? | - | 上传项形状。 | 否 |
+| itemSize | double? | - | 上传项尺寸。 | 否 |
+| spacing | double? | - | 横向间距。 | 否 |
+| runSpacing | double? | - | 纵向间距。 | 否 |
+| alignment | WrapAlignment? | - | Wrap 对齐方式。 | 否 |
+| backgroundColor | Color? | - | 默认背景色。 | 否 |
+| foregroundColor | Color? | - | 默认前景色。 | 否 |
+| disabledBackgroundColor | Color? | - | 禁用背景色。 | 否 |
+| disabledForegroundColor | Color? | - | 禁用前景色。 | 否 |
+| overlayColor | Color? | - | 状态遮罩颜色。 | 否 |
+| statusTextStyle | TextStyle? | - | 状态文案样式。 | 否 |
+| borderRadius | double? | - | 方形上传项圆角。 | 否 |
+| addIconSize | double? | - | 添加图标尺寸。 | 否 |
+| statusIconSize | double? | - | 状态图标尺寸。 | 否 |
+| removeButtonSize | double? | - | 移除按钮尺寸。 | 否 |
+| removeButtonColor | Color? | - | 移除按钮颜色。 | 否 |
+| removeIconSize | double? | - | 移除图标尺寸。 | 否 |
+| disabledMaskColor | Color? | - | 禁用文件遮罩颜色。 | 否 |
 
 
 ##### TUploadThemeData.lerp

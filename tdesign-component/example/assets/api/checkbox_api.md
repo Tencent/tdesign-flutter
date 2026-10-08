@@ -135,7 +135,6 @@ const TCheckboxOption({
 ### TCheckboxThemeData
 #### 简介
 TCheckbox 组件级 ThemeExtension
-
 通过 Theme 子树注入，控制子树默认样式。
 被 TCheckbox 和 TCheckboxGroup 共用。
 
@@ -202,15 +201,15 @@ TCheckboxThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| variant | TCheckboxVariant? | - | 字段含义：复选框指示器的默认视觉变体；未设置时使用圆形。 调用时的空值行为见方法说明。 | 否 |
-| selectColor | Color? | - | 字段含义：选中态颜色。 调用时的空值行为见方法说明。 | 否 |
-| disableColor | Color? | - | 字段含义：禁用态指示器的前景色；未选时用于描边色。 调用时的空值行为见方法说明。 | 否 |
-| titleColor | Color? | - | 字段含义：主标题颜色。 调用时的空值行为见方法说明。 | 否 |
-| subTitleColor | Color? | - | 字段含义：副标题颜色。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：卡片背景颜色。 调用时的空值行为见方法说明。 | 否 |
-| spacing | double? | - | 字段含义：指示器与文案间距。 调用时的空值行为见方法说明。 | 否 |
-| insetSpacing | double? | - | 字段含义：文案与非指示器侧的内边距。 调用时的空值行为见方法说明。 | 否 |
-| customSpace | EdgeInsetsGeometry? | - | 字段含义：内容区域内边距。 调用时的空值行为见方法说明。 | 否 |
+| variant | TCheckboxVariant? | - | 复选框指示器的默认视觉变体；未设置时使用圆形。 | 否 |
+| selectColor | Color? | - | 选中态颜色。 | 否 |
+| disableColor | Color? | - | 禁用态指示器的前景色；未选时用于描边色。 | 否 |
+| titleColor | Color? | - | 主标题颜色。 | 否 |
+| subTitleColor | Color? | - | 副标题颜色。 | 否 |
+| backgroundColor | Color? | - | 卡片背景颜色。 | 否 |
+| spacing | double? | - | 指示器与文案间距。 | 否 |
+| insetSpacing | double? | - | 文案与非指示器侧的内边距。 | 否 |
+| customSpace | EdgeInsetsGeometry? | - | 内容区域内边距。 | 否 |
 
 
 ##### TCheckboxThemeData.lerp

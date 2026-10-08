@@ -110,14 +110,14 @@ TRateThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| starColor | Color? | - | 字段含义：选中星标颜色。 调用时的空值行为见方法说明。 | 否 |
-| inactiveStarColor | Color? | - | 字段含义：未选中星标颜色。 调用时的空值行为见方法说明。 | 否 |
-| iconSize | double? | - | 字段含义：图标尺寸。 调用时的空值行为见方法说明。 | 否 |
-| iconGap | double? | - | 字段含义：图标间距。 调用时的空值行为见方法说明。 | 否 |
-| textWidth | double? | - | 字段含义：文案宽度。 调用时的空值行为见方法说明。 | 否 |
-| textGap | double? | - | 字段含义：图标与文案间距。 调用时的空值行为见方法说明。 | 否 |
-| textStyle | TextStyle? | - | 字段含义：文案样式。 调用时的空值行为见方法说明。 | 否 |
-| overlayBoxShadow | List&lt;BoxShadow&gt;? | - | 字段含义：当前值提示与半星选择浮层阴影。 调用时的空值行为见方法说明。 | 否 |
+| starColor | Color? | - | 选中星标颜色。 | 否 |
+| inactiveStarColor | Color? | - | 未选中星标颜色。 | 否 |
+| iconSize | double? | - | 图标尺寸。 | 否 |
+| iconGap | double? | - | 图标间距。 | 否 |
+| textWidth | double? | - | 文案宽度。 | 否 |
+| textGap | double? | - | 图标与文案间距。 | 否 |
+| textStyle | TextStyle? | - | 文案样式。 | 否 |
+| overlayBoxShadow | List&lt;BoxShadow&gt;? | - | 当前值提示与半星选择浮层阴影。 | 否 |
 
 
 ##### TRateThemeData.lerp
@@ -141,7 +141,6 @@ other 为空或类型不匹配时返回当前主题；字段各自采用其类�
 ### TRateIconBuilder
 #### 简介
 自定义评分图标构建器。
-
 `filled` 表示构建选中或未选中图标；半星由组件裁剪选中图标实现。
 #### 类型定义
 

@@ -5,7 +5,6 @@
 ### TInput
 #### 简介
 基于 Flutter `TextField` 编辑内核的 TDesign 文本输入框。
-
 `controller` 是主控制路径；未传时由组件创建内部 controller，并使用
 `initialValue` 初始化一次。两者不能同时传入。输入框外层由 TDesign
 自有布局绘制，Material `InputDecorationTheme` 不会覆盖默认边框和内边距。
@@ -91,7 +90,6 @@ const TInput({
 ### TInputThemeData
 #### 简介
 TInput 与 TTextarea 共用的组件级 ThemeExtension。
-
 输入组件的外层边框、颜色、内边距和提示文字样式在这里提供组件级默认值；
 默认状态不继承全局填充色，避免输入区被 `ThemeData.inputDecorationTheme`
 污染。
@@ -156,14 +154,14 @@ TInputThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| clearIconSize | double? | - | 字段含义：清除图标尺寸。 调用时的空值行为见方法说明。 | 否 |
-| hintStyle | TextStyle? | - | 字段含义：占位提示文本样式。 未指定的字段继承 TDesign 输入框提示词 token。 调用时的空值行为见方法说明。 | 否 |
-| clearIconColor | Color? | - | 字段含义：清除图标颜色。 调用时的空值行为见方法说明。 | 否 |
-| contentPadding | EdgeInsetsGeometry? | - | 字段含义：输入区域内边距。 调用时的空值行为见方法说明。 | 否 |
-| borderRadius | double? | - | 字段含义：输入区域圆角。 对非多行、非无边框输入框设置为大于 0 的值时，输入框使用完整边框； 未设置时保留单行输入框的底部分隔线。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：输入区域背景色。 调用时的空值行为见方法说明。 | 否 |
-| borderColor | Color? | - | 字段含义：输入区域边框颜色。 调用时的空值行为见方法说明。 | 否 |
-| borderWidth | double? | - | 字段含义：输入区域边框宽度。 调用时的空值行为见方法说明。 | 否 |
+| clearIconSize | double? | - | 清除图标尺寸。 | 否 |
+| hintStyle | TextStyle? | - | 占位提示文本样式。 未指定的字段继承 TDesign 输入框提示词 token。 | 否 |
+| clearIconColor | Color? | - | 清除图标颜色。 | 否 |
+| contentPadding | EdgeInsetsGeometry? | - | 输入区域内边距。 | 否 |
+| borderRadius | double? | - | 输入区域圆角。 对非多行、非无边框输入框设置为大于 0 的值时，输入框使用完整边框； 未设置时保留单行输入框的底部分隔线。 | 否 |
+| backgroundColor | Color? | - | 输入区域背景色。 | 否 |
+| borderColor | Color? | - | 输入区域边框颜色。 | 否 |
+| borderWidth | double? | - | 输入区域边框宽度。 | 否 |
 
 
 ##### TInputThemeData.lerp
@@ -200,7 +198,6 @@ other 为空或类型不匹配时返回当前主题；字段各自采用其类�
 ### TInputStatus
 #### 简介
 输入框的语义状态。
-
 状态不改变已输入文字的正文色。
 #### 枚举值
 

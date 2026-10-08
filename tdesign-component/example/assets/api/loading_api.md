@@ -77,7 +77,6 @@ static void show(
 
 
 在 `context` 的 Overlay 中显示全局加载层。
-
 已有加载层或找不到 Overlay 时不重复创建。`child` 非空时替代内置 TLoading；
 否则使用 `size`、`icon` 和 `text` 构建加载内容，text 为空时读取资源代理。
 
@@ -103,7 +102,6 @@ TLoadingController()
 ### TLoadingThemeData
 #### 简介
 TLoading 组件级 ThemeExtension
-
 通过 Theme 子树注入，控制子树的默认加载样式。
 
 #### 声明
@@ -154,10 +152,10 @@ TLoadingThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| iconColor | Color? | - | 字段含义：图标颜色。 未指定时 circle / point 使用品牌主色，activity 使用主文字色； 不读取 Flutter ProgressIndicatorTheme 或 ColorScheme 的默认颜色。 调用时的空值行为见方法说明。 | 否 |
-| textColor | Color? | - | 字段含义：文案颜色 未配置时使用 textColorPrimary Token。 调用时的空值行为见方法说明。 | 否 |
-| axis | Axis? | - | 字段含义：文案和图标相对方向 未配置时为 Axis.horizontal。 调用时的空值行为见方法说明。 | 否 |
-| duration | int? | - | 字段含义：一次刷新的时间（毫秒），控制动画速度。 未指定时默认 `800`ms（对齐 TDesign 小程序 / Mobile Vue 的 `duration` 默认值）。 小于或等于 0 时归一化为 1 毫秒。 调用时的空值行为见方法说明。 | 否 |
+| iconColor | Color? | - | 图标颜色。 未指定时 circle / point 使用品牌主色，activity 使用主文字色； 不读取 Flutter ProgressIndicatorTheme 或 ColorScheme 的默认颜色。 | 否 |
+| textColor | Color? | - | 文案颜色 未配置时使用 textColorPrimary Token。 | 否 |
+| axis | Axis? | - | 文案和图标相对方向 未配置时为 Axis.horizontal。 | 否 |
+| duration | int? | - | 一次刷新的时间（毫秒），控制动画速度。 未指定时默认 `800`ms（对齐 TDesign 小程序 / Mobile Vue 的 `duration` 默认值）。 小于或等于 0 时归一化为 1 毫秒。 | 否 |
 
 
 ##### TLoadingThemeData.lerp

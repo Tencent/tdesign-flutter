@@ -129,7 +129,6 @@ const TIndexesList({
 ### TIndexesThemeData
 #### 简介
 索引组件的子树级视觉主题。
-
 仅管理尺寸、颜色和字体。吸顶、滚动方向与胶囊模式属于组件实例行为。
 
 #### 声明
@@ -243,31 +242,31 @@ TIndexesThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| indexListMaxHeight | double? | - | 字段含义：索引列表最大高度占父容器高度的比例。 调用时的空值行为见方法说明。 | 否 |
-| sidebarRight | double? | - | 字段含义：侧栏距容器右侧的距离。 调用时的空值行为见方法说明。 | 否 |
-| indexItemSize | double? | - | 字段含义：单个索引的尺寸。 调用时的空值行为见方法说明。 | 否 |
-| indexItemSpacing | double? | - | 字段含义：相邻索引之间的距离。 调用时的空值行为见方法说明。 | 否 |
-| tipSize | double? | - | 字段含义：按压提示的最小尺寸。 调用时的空值行为见方法说明。 | 否 |
-| tipMaxWidth | double? | - | 字段含义：按压提示的最大宽度。 调用时的空值行为见方法说明。 | 否 |
-| tipGap | double? | - | 字段含义：按压提示与索引之间的距离。 调用时的空值行为见方法说明。 | 否 |
-| indexColor | Color? | - | 字段含义：普通索引文字颜色。 调用时的空值行为见方法说明。 | 否 |
-| activeIndexColor | Color? | - | 字段含义：激活索引文字颜色。 调用时的空值行为见方法说明。 | 否 |
-| activeIndexBackgroundColor | Color? | - | 字段含义：激活索引背景色。 调用时的空值行为见方法说明。 | 否 |
-| tipColor | Color? | - | 字段含义：按压提示文字颜色。 调用时的空值行为见方法说明。 | 否 |
-| tipBackgroundColor | Color? | - | 字段含义：按压提示背景色。 调用时的空值行为见方法说明。 | 否 |
-| indexFont | Font? | - | 字段含义：普通索引字体。 调用时的空值行为见方法说明。 | 否 |
-| activeIndexFont | Font? | - | 字段含义：激活索引字体。 调用时的空值行为见方法说明。 | 否 |
-| tipFont | Font? | - | 字段含义：按压提示字体。 调用时的空值行为见方法说明。 | 否 |
-| anchorColor | Color? | - | 字段含义：普通锚点文字颜色。 调用时的空值行为见方法说明。 | 否 |
-| activeAnchorColor | Color? | - | 字段含义：激活锚点文字颜色。 调用时的空值行为见方法说明。 | 否 |
-| anchorBackgroundColor | Color? | - | 字段含义：普通锚点背景色。 调用时的空值行为见方法说明。 | 否 |
-| activeAnchorBackgroundColor | Color? | - | 字段含义：激活锚点背景色。 调用时的空值行为见方法说明。 | 否 |
-| anchorBorderColor | Color? | - | 字段含义：激活锚点边框颜色。 调用时的空值行为见方法说明。 | 否 |
-| anchorFont | Font? | - | 字段含义：普通锚点字体。 调用时的空值行为见方法说明。 | 否 |
-| activeAnchorFont | Font? | - | 字段含义：激活锚点字体。 调用时的空值行为见方法说明。 | 否 |
-| anchorVerticalPadding | double? | - | 字段含义：锚点垂直内边距。 调用时的空值行为见方法说明。 | 否 |
-| anchorHorizontalPadding | double? | - | 字段含义：锚点水平内边距。 调用时的空值行为见方法说明。 | 否 |
-| capsuleMargin | double? | - | 字段含义：胶囊锚点的水平外边距。 调用时的空值行为见方法说明。 | 否 |
+| indexListMaxHeight | double? | - | 索引列表最大高度占父容器高度的比例。 | 否 |
+| sidebarRight | double? | - | 侧栏距容器右侧的距离。 | 否 |
+| indexItemSize | double? | - | 单个索引的尺寸。 | 否 |
+| indexItemSpacing | double? | - | 相邻索引之间的距离。 | 否 |
+| tipSize | double? | - | 按压提示的最小尺寸。 | 否 |
+| tipMaxWidth | double? | - | 按压提示的最大宽度。 | 否 |
+| tipGap | double? | - | 按压提示与索引之间的距离。 | 否 |
+| indexColor | Color? | - | 普通索引文字颜色。 | 否 |
+| activeIndexColor | Color? | - | 激活索引文字颜色。 | 否 |
+| activeIndexBackgroundColor | Color? | - | 激活索引背景色。 | 否 |
+| tipColor | Color? | - | 按压提示文字颜色。 | 否 |
+| tipBackgroundColor | Color? | - | 按压提示背景色。 | 否 |
+| indexFont | Font? | - | 普通索引字体。 | 否 |
+| activeIndexFont | Font? | - | 激活索引字体。 | 否 |
+| tipFont | Font? | - | 按压提示字体。 | 否 |
+| anchorColor | Color? | - | 普通锚点文字颜色。 | 否 |
+| activeAnchorColor | Color? | - | 激活锚点文字颜色。 | 否 |
+| anchorBackgroundColor | Color? | - | 普通锚点背景色。 | 否 |
+| activeAnchorBackgroundColor | Color? | - | 激活锚点背景色。 | 否 |
+| anchorBorderColor | Color? | - | 激活锚点边框颜色。 | 否 |
+| anchorFont | Font? | - | 普通锚点字体。 | 否 |
+| activeAnchorFont | Font? | - | 激活锚点字体。 | 否 |
+| anchorVerticalPadding | double? | - | 锚点垂直内边距。 | 否 |
+| anchorHorizontalPadding | double? | - | 锚点水平内边距。 | 否 |
+| capsuleMargin | double? | - | 胶囊锚点的水平外边距。 | 否 |
 
 
 ##### TIndexesThemeData.lerp
@@ -316,7 +315,6 @@ StickyHeaderController()
 #### 简介
 The `StickyHeaderController` for descendant widgets that don't specify one
 explicitly.
-
 `DefaultStickyHeaderController` is an inherited widget that is used to share a
 `StickyHeaderController` with `SliverStickyHeader`s. It's used when sharing an
 explicitly created `StickyHeaderController` isn't convenient because the sticky
@@ -340,9 +338,7 @@ static StickyHeaderController? of(BuildContext context)
 
 
 The closest instance of this class that encloses the given context.
-
 Typical usage:
-
 ```dart
 StickyHeaderController controller = DefaultStickyHeaderController.of(context);
 ```
@@ -397,7 +393,6 @@ const SliverStickyHeaderState(this.scrollPercentage, this.isPinned)
 #### 简介
 A sliver that displays a header before its sliver.
 The header scrolls off the viewport only when the sliver does.
-
 Place this widget inside a `CustomScrollView` or similar.
 
 #### 声明
@@ -426,9 +421,7 @@ SliverStickyHeader.builder({
 
 Creates a widget that builds the header of a `SliverStickyHeader`
 each time its scroll percentage changes.
-
 The `builder`, `overlapsContent` and `sticky` arguments must not be null.
-
 If a `StickyHeaderController` is not provided, then the value of
 `DefaultStickyHeaderController.of` will be used.
 
@@ -461,9 +454,7 @@ Creates a sliver that displays the `header` before its `sliver`, unless
 overlapsContent is true.
 The `header` stays pinned when it hits the start of the viewport until
 the `sliver` scrolls off the viewport.
-
 The `overlapsContent` and `sticky` arguments must not be null.
-
 If a `StickyHeaderController` is not provided, then the value of
 `DefaultStickyHeaderController.of` will be used.
 

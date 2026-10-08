@@ -5,31 +5,11 @@
 ### TFab
 #### 简介
 悬浮操作按钮组件
-
 T2 组合模式：定位层（右下角悬浮 + 可选拖拽/吸附/边界）+ 动作层（默认内嵌 TButton）
 默认动作层使用 large / fill / primary 规格；纯图标为圆形，图文为胶囊形。
 默认动作层不继承父级 `TButtonThemeData`；完整视觉定制请使用 `child`。
 `TFab` 返回 `Positioned`，应作为 `Stack` 的直接子组件使用。
-
 示例：
-```dart
-// 纯图标悬浮按钮
-Stack(fit: StackFit.expand, children: [
-  // 页面内容 ...
-  const TFab(),
-])
-
-// 图标 + 文字
-TFab(
-  text: '发布',
-)
-
-// 可拖拽悬浮按钮
-TFab(
-  draggable: TFabDragAxis.all,
-  magnet: TFabMagnet.right,
-)
-```
 
 #### 声明
 
@@ -86,7 +66,6 @@ const TFab({
 ### TFabBounds
 #### 简介
 拖拽边界限制
-
 `start` 和 `end` 必须是非负有限值。
 
 #### 声明
@@ -139,7 +118,6 @@ const TFabDragDetails({required this.position, this.start, this.end})
 ### TFabThemeData
 #### 简介
 Fab 定位层 ThemeExtension
-
 仅管理 Fab 定位层的默认值（偏移、边界、拖拽阈值等）。
 默认动作层固定使用 large / fill / primary；需要完整自定义动作层时使用
 `TFab.child`。
@@ -198,12 +176,12 @@ TFabThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| defaultRight | double? | - | 字段含义：距父级 Stack 右侧的默认偏移；未设置时为 16 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| defaultBottom | double? | - | 字段含义：距父级 Stack 底部的默认偏移；未设置时为 32 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| defaultXBounds | TFabBounds? | - | 字段含义：默认水平拖拽边界；未设置时左右各保留 16 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| defaultYBounds | TFabBounds? | - | 字段含义：默认垂直拖拽边界；未设置时上下边界均为 0。 调用时的空值行为见方法说明。 | 否 |
-| magnetAnimationDuration | Duration? | - | 字段含义：吸附动画时长；未设置时为 200 毫秒。 调用时的空值行为见方法说明。 | 否 |
-| dragTapSlop | double? | - | 字段含义：点击与拖拽的判定阈值；未设置时为 18 逻辑像素。 按手势起点到当前位置的屏幕全方向最大位移判定，与 `TFabDragAxis` 限制的 位置更新轴向无关。 调用时的空值行为见方法说明。 | 否 |
+| defaultRight | double? | - | 距父级 Stack 右侧的默认偏移；未设置时为 16 逻辑像素。 | 否 |
+| defaultBottom | double? | - | 距父级 Stack 底部的默认偏移；未设置时为 32 逻辑像素。 | 否 |
+| defaultXBounds | TFabBounds? | - | 默认水平拖拽边界；未设置时左右各保留 16 逻辑像素。 | 否 |
+| defaultYBounds | TFabBounds? | - | 默认垂直拖拽边界；未设置时上下边界均为 0。 | 否 |
+| magnetAnimationDuration | Duration? | - | 吸附动画时长；未设置时为 200 毫秒。 | 否 |
+| dragTapSlop | double? | - | 点击与拖拽的判定阈值；未设置时为 18 逻辑像素。 按手势起点到当前位置的屏幕全方向最大位移判定，与 `TFabDragAxis` 限制的 位置更新轴向无关。 | 否 |
 
 
 ##### TFabThemeData.lerp

@@ -128,12 +128,12 @@ TImageThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| color | Color? | - | 字段含义：图片叠加色。 调用时的空值行为见方法说明。 | 否 |
-| colorBlendMode | BlendMode? | - | 字段含义：颜色混合模式。 调用时的空值行为见方法说明。 | 否 |
-| centerSlice | Rect? | - | 字段含义：九宫格中心切片。 调用时的空值行为见方法说明。 | 否 |
-| matchTextDirection | bool? | - | 字段含义：是否匹配文字方向。 未配置时为 false。 调用时的空值行为见方法说明。 | 否 |
-| gaplessPlayback | bool? | - | 字段含义：更新 provider 时是否保留上一帧。 未配置时为 false。 调用时的空值行为见方法说明。 | 否 |
-| isAntiAlias | bool? | - | 字段含义：是否启用抗锯齿。 未配置时为 false。 调用时的空值行为见方法说明。 | 否 |
+| color | Color? | - | 图片叠加色。 | 否 |
+| colorBlendMode | BlendMode? | - | 颜色混合模式。 | 否 |
+| centerSlice | Rect? | - | 九宫格中心切片。 | 否 |
+| matchTextDirection | bool? | - | 是否匹配文字方向。 未配置时为 false。 | 否 |
+| gaplessPlayback | bool? | - | 更新 provider 时是否保留上一帧。 未配置时为 false。 | 否 |
+| isAntiAlias | bool? | - | 是否启用抗锯齿。 未配置时为 false。 | 否 |
 
 
 ##### TImageThemeData.lerp

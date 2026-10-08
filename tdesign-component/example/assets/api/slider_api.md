@@ -105,7 +105,6 @@ const TRangeSlider({
 ### TSliderThemeData
 #### 简介
 TSlider 与 TRangeSlider 共用的组件级 ThemeExtension。
-
 轨道、滑块和提示标签由组件 Theme 控制，不读取 Material SliderTheme。
 
 #### 声明
@@ -177,17 +176,17 @@ TSliderThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| activeTrackColor | Color? | - | 字段含义：选中轨道颜色；为空时使用全局品牌色。 调用时的空值行为见方法说明。 | 否 |
-| inactiveTrackColor | Color? | - | 字段含义：未选中轨道颜色；为空时使用全局组件边框色。 调用时的空值行为见方法说明。 | 否 |
-| thumbColor | Color? | - | 字段含义：滑块填充颜色；为空时使用全局反色文字色。 调用时的空值行为见方法说明。 | 否 |
-| disabledThumbColor | Color? | - | 字段含义：禁用滑块填充颜色；为空时使用全局反色文字色。 调用时的空值行为见方法说明。 | 否 |
-| thumbBorderColor | Color? | - | 字段含义：滑块描边颜色；为空时使用全局灰阶色。 调用时的空值行为见方法说明。 | 否 |
-| disabledThumbBorderColor | Color? | - | 字段含义：禁用滑块描边颜色；为空时浅色使用 componentBorder Token， 暗色使用 bgColorComponentDisabled Token。 调用时的空值行为见方法说明。 | 否 |
-| overlayColor | Color? | - | 字段含义：交互反馈颜色；为空时使用品牌色的透明层。 调用时的空值行为见方法说明。 | 否 |
-| valueIndicatorColor | Color? | - | 字段含义：数值提示背景颜色；为空时使用全局品牌色。 调用时的空值行为见方法说明。 | 否 |
-| valueIndicatorTextColor | Color? | - | 字段含义：数值提示文字颜色；为空时使用全局主要文字色。 调用时的空值行为见方法说明。 | 否 |
-| trackHeight | double? | - | 字段含义：普通轨道粗细；胶囊形态仍使用其内置规格。 调用时的空值行为见方法说明。 | 否 |
-| decoration | Decoration? | - | 字段含义：滑块外层装饰。 调用时的空值行为见方法说明。 | 否 |
+| activeTrackColor | Color? | - | 选中轨道颜色；为空时使用全局品牌色。 | 否 |
+| inactiveTrackColor | Color? | - | 未选中轨道颜色；为空时使用全局组件边框色。 | 否 |
+| thumbColor | Color? | - | 滑块填充颜色；为空时使用全局反色文字色。 | 否 |
+| disabledThumbColor | Color? | - | 禁用滑块填充颜色；为空时使用全局反色文字色。 | 否 |
+| thumbBorderColor | Color? | - | 滑块描边颜色；为空时使用全局灰阶色。 | 否 |
+| disabledThumbBorderColor | Color? | - | 禁用滑块描边颜色；为空时浅色使用 componentBorder Token， 暗色使用 bgColorComponentDisabled Token。 | 否 |
+| overlayColor | Color? | - | 交互反馈颜色；为空时使用品牌色的透明层。 | 否 |
+| valueIndicatorColor | Color? | - | 数值提示背景颜色；为空时使用全局品牌色。 | 否 |
+| valueIndicatorTextColor | Color? | - | 数值提示文字颜色；为空时使用全局主要文字色。 | 否 |
+| trackHeight | double? | - | 普通轨道粗细；胶囊形态仍使用其内置规格。 | 否 |
+| decoration | Decoration? | - | 滑块外层装饰。 | 否 |
 
 
 ##### TSliderThemeData.lerp

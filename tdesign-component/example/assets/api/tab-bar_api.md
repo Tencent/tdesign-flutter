@@ -5,7 +5,6 @@
 ### TTabBar
 #### 简介
 底部标签栏
-
 支持文本、图文、图标与双层级内容，并将选项样式与容器外形作为独立配置。
 
 #### 声明
@@ -201,7 +200,6 @@ const TTabBarMenuItem({
 ### TTabBarThemeData
 #### 简介
 底部标签栏 ThemeExtension
-
 管理 TTabBar 的子树级视觉默认值（高度、颜色与分割线等）。
 
 #### 声明
@@ -261,13 +259,13 @@ TTabBarThemeData copyWith({
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| barHeight | double? | - | 字段含义：默认高度 调用时的空值行为见方法说明。 | 否 |
-| selectedBgColor | Color? | - | 字段含义：默认选中时背景颜色 调用时的空值行为见方法说明。 | 否 |
-| unselectedBgColor | Color? | - | 字段含义：默认未选中时背景颜色 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：默认背景颜色 调用时的空值行为见方法说明。 | 否 |
-| dividerHeight | double? | - | 字段含义：默认分割线高度 调用时的空值行为见方法说明。 | 否 |
-| dividerThickness | double? | - | 字段含义：默认分割线厚度 调用时的空值行为见方法说明。 | 否 |
-| dividerColor | Color? | - | 字段含义：竖向分割线颜色；未设置时读取全局灰阶 3。 调用时的空值行为见方法说明。 | 否 |
+| barHeight | double? | - | 默认高度 | 否 |
+| selectedBgColor | Color? | - | 默认选中时背景颜色 | 否 |
+| unselectedBgColor | Color? | - | 默认未选中时背景颜色 | 否 |
+| backgroundColor | Color? | - | 默认背景颜色 | 否 |
+| dividerHeight | double? | - | 默认分割线高度 | 否 |
+| dividerThickness | double? | - | 默认分割线厚度 | 否 |
+| dividerColor | Color? | - | 竖向分割线颜色；未设置时读取全局灰阶 3。 | 否 |
 
 
 ##### TTabBarThemeData.lerp
