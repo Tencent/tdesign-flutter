@@ -1,9 +1,7 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TDivider
-#### 简介
+
 分割线组件
 
 包含两种绘制模式：
@@ -13,37 +11,11 @@
 竖线（`TDividerLayout.vertical`）时强制忽略 `dashed`、`align`、`child`，
 默认高度 14dp，左右外边距 16dp。
 
-示例：
-```dart
-// 水平分割线
-TDivider()
+#### 构造方法
 
-// 带文字的水平分割线
-TDivider(child: Text('文字信息'))
+##### TDivider
 
-// 虚线 + 文字靠左
-TDivider(dashed: true, align: TDividerAlign.left, child: Text('靠左'))
-
-// 竖线
-TDivider(layout: TDividerLayout.vertical)
-```
-
-#### 声明
-
-```dart
-class TDivider extends StatelessWidget
-```
-
-#### 默认构造方法
-
-
-```dart
-const TDivider({super.key, this.layout, this.align, this.dashed, this.child})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | align | TDividerAlign? | - | 中间内容在线条中的位置，默认 `TDividerAlign.center` 仅 `TDividerLayout.horizontal` 生效 | 否 |
 | child | Widget? | - | 中间子元素 纯文案用 `child: Text('……')` | 否 |
@@ -53,37 +25,18 @@ const TDivider({super.key, this.layout, this.align, this.dashed, this.child})
 
 
 ### TDividerThemeData
-#### 简介
+
 TDivider 组件级 ThemeExtension
 
 通过 Theme 子树注入，控制子树的默认样式。
 布局、内容和虚线选择由实例控制；视觉值从本主题读取，未配置时回退
 TDesign Token 或组件内置值，不读取 Material DividerTheme。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TDividerThemeData extends ThemeExtension<TDividerThemeData>
-```
+##### TDividerThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TDividerThemeData({
-  this.color,
-  this.thickness,
-  this.margin,
-  this.gapPadding,
-  this.textStyle,
-  this.indent,
-  this.endIndent,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | color | Color? | - | 线条颜色；未设置时使用 `bgColorComponent` Token。 | 否 |
 | endIndent | double? | - | 纯水平线结束侧缩进；未设置时为 0，带内容或垂直线时不生效。 | 否 |
@@ -98,24 +51,9 @@ const TDividerThemeData({
 
 ##### TDividerThemeData.copyWith
 
-```dart
-TDividerThemeData copyWith({
-  Color? color,
-  double? thickness,
-  EdgeInsetsGeometry? margin,
-  EdgeInsetsGeometry? gapPadding,
-  TextStyle? textStyle,
-  double? indent,
-  double? endIndent,
-})
-```
+复制主题配置。
 
-
-返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
-
-返回类型：`TDividerThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | color | Color? | - | 字段含义：线条颜色；未设置时使用 `bgColorComponent` Token。 调用时的空值行为见方法说明。 | 否 |
 | thickness | double? | - | 字段含义：线粗：横线 = 高度，竖线 = 宽度（默认 0.5） 调用时的空值行为见方法说明。 | 否 |
@@ -126,44 +64,51 @@ TDividerThemeData copyWith({
 | endIndent | double? | - | 字段含义：纯水平线结束侧缩进；未设置时为 0，带内容或垂直线时不生效。 调用时的空值行为见方法说明。 | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TDividerThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
+
+
 ##### TDividerThemeData.lerp
 
-```dart
-TDividerThemeData lerp(ThemeExtension<TDividerThemeData>? other, double t)
-```
+位置参数：`other, t`
 
 
-按 t 在当前主题和目标主题之间生成过渡主题。
-other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+生成主题过渡配置。
 
-返回类型：`TDividerThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TDividerThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
 | t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TDividerThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
+
+
 ### TDividerLayout
-#### 简介
+
 分割线布局方向
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| horizontal | 水平分割线 |
-| vertical | 垂直分割线 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| horizontal | TDividerLayout | - | 水平分割线 | - |
+| vertical | TDividerLayout | - | 垂直分割线 | - |
 
 
 ### TDividerAlign
-#### 简介
+
 中间内容在线条中的位置（仅 `TDividerLayout.horizontal` 生效）
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| left | 内容靠左 |
-| center | 内容居中 |
-| right | 内容靠右 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| left | TDividerAlign | - | 内容靠左 | - |
+| center | TDividerAlign | - | 内容居中 | - |
+| right | TDividerAlign | - | 内容靠右 | - |

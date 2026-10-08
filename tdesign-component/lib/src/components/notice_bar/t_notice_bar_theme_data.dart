@@ -46,7 +46,10 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
     right: 12,
   );
 
-  /// 合并两个 ThemeExtension，[other] 优先于 this
+  /// 合并主题配置。
+  ///
+  /// ## 返回值
+  /// other 的非空字段优先的合并主题；other 为 null 时返回当前主题。
   TNoticeBarThemeData merge(
     /// 要合并的目标主题；为空时保留当前配置。
     TNoticeBarThemeData? other,
@@ -65,6 +68,9 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
   }
 
   /// 根据状态和上下文解析出完整的样式（颜色等）
+  ///
+  /// ## 返回值
+  /// 将状态预设与当前主题覆盖合并后的 NoticeBar 视觉配置。
   TNoticeBarThemeData resolve(
     /// 当前构建上下文，用于读取祖先配置。
     BuildContext context, {
@@ -113,6 +119,9 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
     );
   }
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
   /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TNoticeBarThemeData copyWith({
@@ -133,6 +142,9 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
   /// 按 t 在当前主题和目标主题之间生成过渡主题。
   /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
@@ -160,6 +172,9 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
   ///
   /// 当仅一端有值时采用离散切换，避免把缺省值错误地当作 0。组件已知默认值
   /// 的字段会在 [lerp] 内使用其实际默认值平滑插值。
+  ///
+  /// ## 返回值
+  /// 按 t 线性插值的数值；两端均为 null 时为 null，仅一端为 null 时将该端按 0 计算。
   static double? lerpDouble(
     /// 起始值。
     double? a,

@@ -1,39 +1,14 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TDropdownMenu
-#### 简介
+
 用于页面内容排序、筛选的横向下拉筛选栏。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TDropdownMenu extends StatefulWidget
-```
+##### TDropdownMenu
 
-#### 默认构造方法
-
-
-```dart
-const TDropdownMenu({
-  super.key,
-  required this.items,
-  this.controller,
-  this.placement = TDropdownMenuPlacement.auto,
-  this.scrollable = false,
-  this.showOverlay = true,
-  this.closeOnOverlayTap = true,
-  this.useRootOverlay = false,
-  this.animationDuration,
-  this.onOpened,
-  this.onClosed,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | animationDuration | Duration? | - | 展开、关闭及切换动画时长。 未指定时为 200ms。系统禁用动画时始终使用零时长。 | 否 |
 | closeOnOverlayTap | bool | true | 点击外部区域是否关闭面板，默认 true；不依赖遮罩是否绘制。 | 否 |
@@ -49,30 +24,17 @@ const TDropdownMenu({
 
 
 ### TDropdownMenuOption
-#### 简介
+
+类型参数：`T`
+
+
 下拉筛选面板中的不可变选项。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TDropdownMenuOption<T>
-```
+##### TDropdownMenuOption
 
-#### 默认构造方法
-
-
-```dart
-const TDropdownMenuOption({
-  required this.value,
-  required this.label,
-  this.disabled = false,
-  this.group,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | disabled | bool | false | 是否禁用该选项，默认 false；禁用选项不能通过点击提交。 | 否 |
 | group | String? | - | 多选面板中的分组标题；为空时归入无标题分组。 | 否 |
@@ -81,32 +43,17 @@ const TDropdownMenuOption({
 
 
 ### TDropdownSingleSelectPanel
-#### 简介
+
+类型参数：`T`
+
+
 单选筛选面板。选择有效选项后立即提交并关闭。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TDropdownSingleSelectPanel<T> extends StatelessWidget
-```
+##### TDropdownSingleSelectPanel
 
-#### 默认构造方法
-
-
-```dart
-const TDropdownSingleSelectPanel({
-  super.key,
-  required this.controller,
-  required this.options,
-  required this.value,
-  required this.onChanged,
-  this.maxHeight,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | controller | TDropdownMenuPanelController | - | 当前面板的局部控制器；选择后用它关闭面板。 | 是 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
@@ -117,7 +64,10 @@ const TDropdownSingleSelectPanel({
 
 
 ### TDropdownMultiSelectPanel
-#### 简介
+
+类型参数：`T`
+
+
 多选筛选面板。
 
 `values` 表示已提交值，每次打开时用于初始化草稿。选项点击只更新面板内部草稿，
@@ -125,30 +75,11 @@ const TDropdownSingleSelectPanel({
 打开期间 `values` 变化时，尚未修改的草稿会同步；已有修改的草稿保留用户编辑。
 未确认即关闭会丢弃草稿，再次打开时使用最新的 `values`。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TDropdownMultiSelectPanel<T> extends StatefulWidget
-```
+##### TDropdownMultiSelectPanel
 
-#### 默认构造方法
-
-
-```dart
-const TDropdownMultiSelectPanel({
-  super.key,
-  required this.controller,
-  required this.options,
-  required this.values,
-  required this.onConfirm,
-  this.columns = 1,
-  this.maxHeight,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | columns | int | 1 | 每行选项列数，默认 1；支持 1 至 3 列。 | 否 |
 | controller | TDropdownMenuPanelController | - | 当前面板的局部控制器，用于确认或取消时关闭面板。 | 是 |
@@ -160,30 +91,14 @@ const TDropdownMultiSelectPanel({
 
 
 ### TDropdownMenuTriggerState
-#### 简介
+
 自定义触发项可读取的不可变状态。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TDropdownMenuTriggerState
-```
+##### TDropdownMenuTriggerState
 
-#### 默认构造方法
-
-
-```dart
-const TDropdownMenuTriggerState({
-  required this.index,
-  required this.isOpen,
-  required this.enabled,
-  required this.toggle,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | enabled | bool | - | 当前触发项是否允许交互。 | 是 |
 | index | int | - | 当前触发项在筛选栏中的下标。 | 是 |
@@ -192,92 +107,46 @@ const TDropdownMenuTriggerState({
 
 
 ### TDropdownMenuPanelController
-#### 简介
+
 当前面板可使用的局部控制器。
 
-#### 声明
+#### 属性
 
-```dart
-class TDropdownMenuPanelController
-```
-
-#### 公开属性（字段与访问器）
-
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| index | int | - | 当前面板所属筛选项的下标。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| index | int | - | 当前面板所属筛选项的下标。 | - |
 
 
 #### 实例方法
 
 ##### TDropdownMenuPanelController.close
 
-```dart
-Future<void> close([
-  TDropdownMenuCloseReason reason = TDropdownMenuCloseReason.cancel,
-])
-```
+位置参数：`reason`
 
 
-请求关闭当前面板；`reason` 默认 cancel。返回的 Future 在关闭流程结束后完成。
+请求关闭当前面板；`reason` 默认 cancel。返回的 Future 表示本次关闭请求处理结束。
 
-返回类型：`Future<void>`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | reason | TDropdownMenuCloseReason | TDropdownMenuCloseReason.cancel | 关闭原因，默认 cancel。 | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Future&lt;void&gt; | - | 当前关闭请求处理完毕时完成；被新操作打断时也可能提前完成，不保证面板已经关闭。 | - |
+
+
 ### TDropdownMenuItem
-#### 简介
+
 一个筛选触发项及其对应面板。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TDropdownMenuItem
-```
+##### TDropdownMenuItem
 
-
-#### 命名构造方法
-
-##### TDropdownMenuItem.custom
-
-```dart
-const TDropdownMenuItem.custom({
-  required this.triggerBuilder,
-  required this.panelBuilder,
-  this.enabled = true,
-  this.flex = 1,
-  this.width,
-})
-```
-
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
-| --- | --- | --- | --- | --- |
-| triggerBuilder | TDropdownMenuTriggerBuilder? | - | 自定义触发项构建器；默认构造时为空。 | 是 |
-| panelBuilder | TDropdownMenuPanelBuilder | - | 面板构建器，接收当前面板的局部控制器。 | 是 |
-| enabled | bool | true | 是否启用触发项，默认 true。 | 否 |
-| flex | int | 1 | 非滚动且父级宽度有界时的宽度分配权重，默认 1，必须大于 0。 | 否 |
-| width | double? | - | 滚动模式或父级宽度无界时的触发项宽度，默认 112 逻辑像素； 非滚动且宽度有界时使用 `flex` 分配宽度，此字段不生效。 | 否 |
-
-#### 默认构造方法
-
-
-```dart
-const TDropdownMenuItem({
-  required this.label,
-  required this.panelBuilder,
-  this.enabled = true,
-  this.flex = 1,
-  this.width,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | enabled | bool | true | 是否启用触发项，默认 true。 | 否 |
 | flex | int | 1 | 非滚动且父级宽度有界时的宽度分配权重，默认 1，必须大于 0。 | 否 |
@@ -285,127 +154,105 @@ const TDropdownMenuItem({
 | panelBuilder | TDropdownMenuPanelBuilder | - | 面板构建器，接收当前面板的局部控制器。 | 是 |
 | width | double? | - | 滚动模式或父级宽度无界时的触发项宽度，默认 112 逻辑像素； 非滚动且宽度有界时使用 `flex` 分配宽度，此字段不生效。 | 否 |
 
-#### 公开属性（字段与访问器）
 
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| triggerBuilder | TDropdownMenuTriggerBuilder? | - | 自定义触发项构建器；默认构造时为空。 |
+##### TDropdownMenuItem.custom
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| triggerBuilder | TDropdownMenuTriggerBuilder? | - | 自定义触发项构建器；默认构造时为空。 | 是 |
+| panelBuilder | TDropdownMenuPanelBuilder | - | 面板构建器，接收当前面板的局部控制器。 | 是 |
+| enabled | bool | true | 是否启用触发项，默认 true。 | 否 |
+| flex | int | 1 | 非滚动且父级宽度有界时的宽度分配权重，默认 1，必须大于 0。 | 否 |
+| width | double? | - | 滚动模式或父级宽度无界时的触发项宽度，默认 112 逻辑像素； 非滚动且宽度有界时使用 `flex` 分配宽度，此字段不生效。 | 否 |
+
+
+#### 属性
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| triggerBuilder | TDropdownMenuTriggerBuilder? | - | 自定义触发项构建器；默认构造时为空。 | - |
 
 
 ### TDropdownMenuController
-#### 简介
+
 类型安全的下拉筛选栏控制器。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TDropdownMenuController extends ChangeNotifier
-```
+##### TDropdownMenuController
 
-#### 默认构造方法
+无参数。
 
+#### 属性
 
-```dart
-TDropdownMenuController()
-```
-
-#### 公开属性（字段与访问器）
-
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| isOpen | bool | - | 当前是否有打开的面板。 |
-| openIndex | int? | - | 当前打开项的下标；没有打开的面板时为 null。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| isOpen | bool | - | 当前是否有打开的面板。 | - |
+| openIndex | int? | - | 当前打开项的下标；没有打开的面板时为 null。 | - |
 
 
 #### 实例方法
 
 ##### TDropdownMenuController.close
 
-```dart
-Future<void> close()
-```
+无参数。
 
+关闭当前面板；未绑定筛选栏时不执行操作。Future 等待本次关闭请求处理结束。
 
-关闭当前面板；未绑定筛选栏时不执行操作。Future 等待关闭流程完成。
+###### 返回值
 
-返回类型：`Future<void>`
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Future&lt;void&gt; | - | 当前关闭请求处理完毕时完成；未绑定或被后续操作打断时也会完成，不代表面板一定已经关闭。 | - |
+
 
 ##### TDropdownMenuController.open
 
-```dart
-Future<void> open(int index)
-```
+位置参数：`index`
 
 
-打开 `index` 对应面板；未绑定筛选栏时不执行操作。Future 等待打开流程完成。
+打开 `index` 对应面板；未绑定筛选栏时不执行操作。Future 等待本次打开请求处理结束。
 
-返回类型：`Future<void>`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | index | int | - | 目标筛选项下标，从 0 开始。 | 是 |
+
+
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Future&lt;void&gt; | - | 当前打开请求处理完毕时完成；未绑定、索引无效、项目禁用或请求被打断时也会完成，不代表一定打开成功。 | - |
 
 
 ##### TDropdownMenuController.toggle
 
-```dart
-Future<void> toggle(int index)
-```
+位置参数：`index`
 
 
-切换 `index` 对应面板；未绑定筛选栏时不执行操作。Future 等待切换流程完成。
+切换 `index` 对应面板；未绑定筛选栏时不执行操作。Future 等待本次切换请求处理结束。
 
-返回类型：`Future<void>`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | index | int | - | 目标筛选项下标，从 0 开始。 | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Future&lt;void&gt; | - | 当前切换请求处理完毕时完成；未绑定或请求无效、被打断时也会完成，不代表目标状态一定已达成。 | - |
+
+
 ### TDropdownThemeData
-#### 简介
+
 DropdownMenu 的组件级视觉与布局默认值。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TDropdownThemeData extends ThemeExtension<TDropdownThemeData>
-```
+##### TDropdownThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TDropdownThemeData({
-  this.barHeight,
-  this.barBackgroundColor,
-  this.dividerColor,
-  this.textStyle,
-  this.activeTextStyle,
-  this.disabledTextStyle,
-  this.iconColor,
-  this.activeIconColor,
-  this.disabledIconColor,
-  this.iconSize,
-  this.panelBackgroundColor,
-  this.overlayColor,
-  this.optionHeight,
-  this.optionPadding,
-  this.optionTextStyle,
-  this.selectedOptionTextStyle,
-  this.disabledOptionTextStyle,
-  this.optionColor,
-  this.selectedOptionColor,
-  this.disabledOptionColor,
-  this.optionBorderRadius,
-  this.actionAreaPadding,
-  this.actionGap,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | actionAreaPadding | EdgeInsetsGeometry? | - | 多选面板底部操作区内边距。 | 否 |
 | actionGap | double? | - | 多选面板底部按钮之间的间距；为空时读取全局 spacer2。 | 否 |
@@ -436,40 +283,9 @@ const TDropdownThemeData({
 
 ##### TDropdownThemeData.copyWith
 
-```dart
-TDropdownThemeData copyWith({
-  double? barHeight,
-  Color? barBackgroundColor,
-  Color? dividerColor,
-  TextStyle? textStyle,
-  TextStyle? activeTextStyle,
-  TextStyle? disabledTextStyle,
-  Color? iconColor,
-  Color? activeIconColor,
-  Color? disabledIconColor,
-  double? iconSize,
-  Color? panelBackgroundColor,
-  Color? overlayColor,
-  double? optionHeight,
-  EdgeInsetsGeometry? optionPadding,
-  TextStyle? optionTextStyle,
-  TextStyle? selectedOptionTextStyle,
-  TextStyle? disabledOptionTextStyle,
-  Color? optionColor,
-  Color? selectedOptionColor,
-  Color? disabledOptionColor,
-  BorderRadius? optionBorderRadius,
-  EdgeInsetsGeometry? actionAreaPadding,
-  double? actionGap,
-})
-```
+复制主题配置。
 
-
-返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
-
-返回类型：`TDropdownThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | barHeight | double? | - | 字段含义：筛选栏高度，默认 48 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
 | barBackgroundColor | Color? | - | 字段含义：筛选栏背景色；为空时读取全局 bgColorContainer。 调用时的空值行为见方法说明。 | 否 |
@@ -496,99 +312,142 @@ TDropdownThemeData copyWith({
 | actionGap | double? | - | 字段含义：多选面板底部按钮之间的间距；为空时读取全局 spacer2。 调用时的空值行为见方法说明。 | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TDropdownThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
+
+
 ##### TDropdownThemeData.lerp
 
-```dart
-TDropdownThemeData lerp(
-  covariant ThemeExtension<TDropdownThemeData>? other,
-  double t,
-)
-```
+位置参数：`other, t`
 
 
-按 t 在当前主题和目标主题之间生成过渡主题。
-other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+生成主题过渡配置。
 
-返回类型：`TDropdownThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TDropdownThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
 | t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TDropdownThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
+
+
 ##### TDropdownThemeData.merge
 
-```dart
-TDropdownThemeData merge(TDropdownThemeData? other)
-```
+位置参数：`other`
 
 
-返回合并后的主题；`other` 的非空字段覆盖当前字段，other 为空时返回当前主题。
+合并主题配置。
 
-返回类型：`TDropdownThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | TDropdownThemeData? | - | 要合并的目标主题；为空时保留当前配置。 | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TDropdownThemeData | - | 返回合并后的主题；`other` 的非空字段覆盖当前字段，other 为空时返回当前主题。 | - |
+
+
 ### TDropdownMenuPlacement
-#### 简介
+
 下拉筛选面板相对筛选栏的展开位置。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| auto | 根据触发栏上下可用空间自动选择展开方向。 |
-| below | 向触发栏下方展开。 |
-| above | 向触发栏上方展开。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| auto | TDropdownMenuPlacement | - | 根据触发栏上下可用空间自动选择展开方向。 | - |
+| below | TDropdownMenuPlacement | - | 向触发栏下方展开。 | - |
+| above | TDropdownMenuPlacement | - | 向触发栏上方展开。 | - |
 
 
 ### TDropdownMenuCloseReason
-#### 简介
+
 下拉筛选面板关闭的原因。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| selection | 单选面板提交选项后关闭。 |
-| confirm | 多选面板确认草稿后关闭。 |
-| cancel | 面板取消操作或局部控制器默认关闭。 |
-| overlay | 点击面板外部区域触发关闭。 |
-| back | 返回键或路由返回操作触发关闭。 |
-| trigger | 再次点击当前触发项关闭。 |
-| controller | 全局控制器请求关闭。 |
-| switchItem | 切换到其他筛选项时关闭原面板。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| selection | TDropdownMenuCloseReason | - | 单选面板提交选项后关闭。 | - |
+| confirm | TDropdownMenuCloseReason | - | 多选面板确认草稿后关闭。 | - |
+| cancel | TDropdownMenuCloseReason | - | 面板取消操作或局部控制器默认关闭。 | - |
+| overlay | TDropdownMenuCloseReason | - | 点击面板外部区域触发关闭。 | - |
+| back | TDropdownMenuCloseReason | - | 返回键或路由返回操作触发关闭。 | - |
+| trigger | TDropdownMenuCloseReason | - | 再次点击当前触发项关闭。 | - |
+| controller | TDropdownMenuCloseReason | - | 全局控制器请求关闭。 | - |
+| switchItem | TDropdownMenuCloseReason | - | 切换到其他筛选项时关闭原面板。 | - |
 
 
 ### TDropdownMenuClosedCallback
-#### 简介
-下拉筛选面板关闭回调。
-#### 类型定义
 
-```dart
-typedef TDropdownMenuClosedCallback = void Function(int index, TDropdownMenuCloseReason reason);
-```
+下拉筛选面板关闭回调。
+
+位置参数：`index, reason`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| index | int | - | 关闭面板对应的筛选项索引，从 0 开始。 | 是 |
+| reason | TDropdownMenuCloseReason | - | 本次面板关闭的原因。 | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | void | - | 无返回值。 | - |
 
 
 ### TDropdownMenuPanelBuilder
-#### 简介
-默认触发项的面板构建器。
-#### 类型定义
 
-```dart
-typedef TDropdownMenuPanelBuilder = Widget Function(BuildContext context, TDropdownMenuPanelController controller);
-```
+默认触发项的面板构建器。
+
+位置参数：`context, controller`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | 筛选面板的构建上下文。 | 是 |
+| controller | TDropdownMenuPanelController | - | 当前面板控制器，用于请求关闭该面板。 | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | 当前筛选项的面板内容。 | - |
 
 
 ### TDropdownMenuTriggerBuilder
-#### 简介
-自定义触发项构建器。
-#### 类型定义
 
-```dart
-typedef TDropdownMenuTriggerBuilder = Widget Function(BuildContext context, TDropdownMenuTriggerState state);
-```
+自定义触发项构建器。
+
+位置参数：`context, state`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | 筛选触发项的构建上下文。 | 是 |
+| state | TDropdownMenuTriggerState | - | 当前触发项的状态及操作入口。 | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | 自定义筛选触发项内容。 | - |

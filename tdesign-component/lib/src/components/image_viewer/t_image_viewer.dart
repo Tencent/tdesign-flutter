@@ -10,6 +10,11 @@ import '../swiper/t_swiper_types.dart';
 import 't_image_viewer_theme_data.dart';
 
 /// 图片预览导航栏槽位构建器。
+/// [context] 图片预览导航栏的构建上下文。
+/// [index] 当前图片索引，从 0 开始。
+///
+/// ## 返回值
+/// 导航栏对应槽位的内容。
 typedef TImageViewerItemBuilder =
     Widget Function(BuildContext context, int index);
 
@@ -37,6 +42,9 @@ class TImageViewer {
   /// [onLongPress] 在长按当前图片时触发。
   /// [leadingBuilder] 构建导航栏起始区域。
   /// [trailingBuilder] 构建导航栏末尾区域。
+  ///
+  /// ## 返回值
+  /// 预览路由被弹出时完成，不等待关闭动画结束；参数不合法时在展示前同步抛出异常。
   static Future<void> show({
     required BuildContext context,
     required List<ImageProvider<Object>> images,

@@ -20,7 +20,7 @@ class TPopupHandle {
     this.useRootNavigator = false,
   });
 
-  /// 创建时传入的配置；每次 [open] 会按 [TPopupOptions.placement] 裁剪无效字段后使用。
+  /// [TPopup.show] 合并显式配置与 [TPopupThemeData] 后的配置；重新 [open] 不重新解析已合并的主题值，并按 [TPopupOptions.placement] 裁剪无效字段。
   final TPopupOptions options;
 
   /// 用于捕获调用点局部 Theme 的 context。
@@ -38,9 +38,9 @@ class TPopupHandle {
   int _openEpoch = 0;
   Completer<Object?>? _resultCompleter;
 
-  /// 当前这次打开结束后的路由结果。
+  /// 本次打开的路由结果；关闭时完成，不等待关闭动画结束，动画完成通知见 [TPopupOptions.onClosed]。
   ///
-  /// 每次 [open] 都会创建新的 Future；应在对应的 [open] 之后读取。
+  /// 每次成功 [open] 都会创建新的 Future；应在对应的 [open] 之后读取。
   Future<Object?> get result =>
       (_resultCompleter ??= Completer<Object?>()).future;
 
@@ -57,7 +57,7 @@ class TPopupHandle {
   /// | 无可用 Navigator | debug 触发断言，release 返回 |
   /// | 参数与方向不匹配 | debug / release 均抛出 [FlutterError] |
   ///
-  /// [context] 导航上下文；未指定或无效时依次尝试缓存的 Navigator、[navigatorContext]。
+  /// [context] 导航上下文；未指定或无效时依次尝试缓存的 Navigator、[navigatorContext]。有效时重新捕获此处的内容 Theme，否则使用 [themeContext]；不重新解析 [options] 中已合并的 Popup 主题值。
   void open([BuildContext? context]) {
     if (isShowing) {
       return;

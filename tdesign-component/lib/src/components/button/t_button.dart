@@ -17,7 +17,7 @@ import 't_button_types.dart';
 
 /// TD 常规按钮
 ///
-/// Material 薄包装，`onPressed: null` 表示禁用；禁用时不会触发
+/// `onPressed: null` 表示禁用；禁用时不会触发
 /// [onLongPress]。
 ///
 /// 外观分别由以下选项控制：

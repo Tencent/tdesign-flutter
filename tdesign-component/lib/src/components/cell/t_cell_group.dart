@@ -8,6 +8,12 @@ import 't_cell.dart';
 import 't_cell_theme_data.dart';
 
 /// 单元格包装构建器。
+/// [context] 单元格组的构建上下文。
+/// [cell] 当前待包装的单元格。
+/// [index] 单元格在组内的索引，从 0 开始。
+///
+/// ## 返回值
+/// 包装后的单元格内容。
 typedef TCellGroupBuilder =
     Widget Function(BuildContext context, TCell cell, int index);
 

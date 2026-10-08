@@ -17,6 +17,11 @@ enum TSwipeCellSide {
 }
 
 /// 滑动展开状态变化回调。
+/// [side] 发生变化的操作面板侧。
+/// [isOpen] 该侧面板是否展开。
+///
+/// ## 返回值
+/// 无返回值。
 typedef TSwipeCellChanged = void Function(TSwipeCellSide side, bool isOpen);
 
 /// [TSwipeCell] 的命令式控制器。
@@ -28,6 +33,9 @@ class TSwipeCellController {
 
   /// 展开指定侧的操作面板。
   /// 返回的 Future 在动画结束后完成；未绑定组件时立即完成且不执行操作。
+  ///
+  /// ## 返回值
+  /// 展开请求的动画结束时完成；未绑定组件时立即完成且不执行操作。
   Future<void> open(
     /// 需要展开的操作面板侧；该侧没有面板时关闭当前面板。
     TSwipeCellSide side,
@@ -37,6 +45,9 @@ class TSwipeCellController {
 
   /// 关闭当前展开的操作面板。
   /// 返回的 Future 在动画结束后完成；未绑定组件时立即完成且不执行操作。
+  ///
+  /// ## 返回值
+  /// 关闭请求的动画结束时完成；未绑定组件时立即完成且不执行操作。
   Future<void> close() async {
     await _binding?.close();
   }

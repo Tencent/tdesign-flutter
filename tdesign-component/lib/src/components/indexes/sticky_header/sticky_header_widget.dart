@@ -5,8 +5,12 @@ import 'package:flutter/widgets.dart';
 import 'sticky_header_layout_builder.dart';
 import 'sticky_header_render.dart';
 
-/// Signature used by [SliverStickyHeader.builder] to build the header
-/// when the sticky header state has changed.
+/// 根据吸顶状态构建头部内容。
+/// [context] 吸顶头部的构建上下文。
+/// [state] 当前吸顶及滚动进度状态。
+///
+/// ## 返回值
+/// 当前状态下的头部内容。
 typedef SliverStickyHeaderWidgetBuilder =
     Widget Function(BuildContext context, SliverStickyHeaderState state);
 
@@ -54,6 +58,9 @@ class DefaultStickyHeaderController extends StatefulWidget {
   /// ```dart
   /// StickyHeaderController controller = DefaultStickyHeaderController.of(context);
   /// ```
+  ///
+  /// ## 返回值
+  /// 最近的吸顶头部控制器；上下文中没有对应作用域时为 null。
   static StickyHeaderController? of(
     /// 当前构建上下文，用于读取祖先配置。
     BuildContext context,

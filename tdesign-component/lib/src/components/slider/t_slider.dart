@@ -8,7 +8,11 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_slider_theme.dart';
 
-/// Formats the value shown above a slider thumb.
+/// 格式化滑块提示文案。
+/// [value] 当前滑块数值。
+///
+/// ## 返回值
+/// 显示在滑块提示中的格式化文案。
 typedef TSliderThumbFormatter = String Function(double value);
 
 /// Slider visual structure.

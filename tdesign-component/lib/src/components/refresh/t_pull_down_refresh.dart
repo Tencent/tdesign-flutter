@@ -70,8 +70,8 @@ class TPullDownRefresh extends StatefulWidget {
   /// 通过 [TPullDownRefreshController.refresh] 从页面外部触发刷新。刷新完成时机
   /// 由 [onRefresh] 返回的 Future、异常或 [refreshTimeout] 共同决定；超时后
   /// 控制器 Future 也会完成，迟到的原始 Future 不会再次改变刷新状态。
-  /// 底层 [EasyRefreshController] 由 State 创建并释放；外部控制器仅持有引用，
-  /// 无需也不能重复 dispose（详见 [TPullDownRefreshController] 文档）。
+  /// 刷新资源由组件管理；外部控制器无需也不提供 dispose
+  /// （详见 [TPullDownRefreshController] 文档）。
   final TPullDownRefreshController? controller;
 
   /// 四态提示语；为空时回退 l10n（默认中文与官方 `loadingTexts` 一致）。

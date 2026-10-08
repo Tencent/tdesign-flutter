@@ -1,9 +1,7 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TStepper
-#### 简介
+
 TDesign 数值步进器。
 
 组件严格受控：`value` 是唯一数据源，按钮、输入提交及失焦只通过
@@ -14,31 +12,11 @@ TDesign 数值步进器。
 `size`/`variant`、`TStepperThemeData`、Flutter 子树及全局 ThemeData，
 最后回退 TDesign token。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TStepper extends StatefulWidget
-```
+##### TStepper
 
-#### 默认构造方法
-
-
-```dart
-const TStepper({
-  super.key,
-  required this.value,
-  this.onChanged,
-  this.min = 0,
-  this.max = 100,
-  this.step = 1,
-  this.size,
-  this.variant,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | max | num | 100 | 最大值，必须大于或等于 `min`。 | 否 |
@@ -51,42 +29,18 @@ const TStepper({
 
 
 ### TStepperThemeData
-#### 简介
+
 `TStepper` 的组件级主题。
 
 通过 `ThemeData.extensions` 或 `ThemeData.mergeExtension` 注入。实例参数
 优先于此主题；未设置的文字字段使用全局 TDesign Token，图标及输入装饰
 仍按各自 Flutter 主题解析。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TStepperThemeData extends ThemeExtension<TStepperThemeData>
-```
+##### TStepperThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TStepperThemeData({
-  this.inputWidth,
-  this.controlSize,
-  this.iconSize,
-  this.spacing,
-  this.borderRadius,
-  this.borderWidth,
-  this.foregroundColor,
-  this.disabledForegroundColor,
-  this.backgroundColor,
-  this.disabledBackgroundColor,
-  this.borderColor,
-  this.textStyle,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | filled 形态各段的背景色。 | 否 |
 | borderColor | Color? | - | outline 形态的描边颜色。 | 否 |
@@ -106,29 +60,9 @@ const TStepperThemeData({
 
 ##### TStepperThemeData.copyWith
 
-```dart
-TStepperThemeData copyWith({
-  double? inputWidth,
-  double? controlSize,
-  double? iconSize,
-  double? spacing,
-  BorderRadius? borderRadius,
-  double? borderWidth,
-  Color? foregroundColor,
-  Color? disabledForegroundColor,
-  Color? backgroundColor,
-  Color? disabledBackgroundColor,
-  Color? borderColor,
-  TextStyle? textStyle,
-})
-```
+复制主题配置。
 
-
-返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
-
-返回类型：`TStepperThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | inputWidth | double? | - | 字段含义：输入段宽度。 为空时 small、medium、large 分别使用 34、38、45。 调用时的空值行为见方法说明。 | 否 |
 | controlSize | double? | - | 字段含义：控件高度及单个按钮宽度。 为空时 small、medium、large 分别使用 20、24、26。 调用时的空值行为见方法说明。 | 否 |
@@ -144,46 +78,52 @@ TStepperThemeData copyWith({
 | textStyle | TextStyle? | - | 字段含义：输入文字样式。 在继承全局 TDesign Token 后合并；非空字段可覆盖 默认字号、行高及 `foregroundColor`。仅覆盖字号时会按最终字号重新计算 默认行高倍数；显式设置的 `TextStyle.height` 始终优先。最终字号或显式 物理行盒超过控件高度属于无效配置，并会在调试模式触发断言。 调用时的空值行为见方法说明。 | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TStepperThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
+
+
 ##### TStepperThemeData.lerp
 
-```dart
-TStepperThemeData lerp(ThemeExtension<TStepperThemeData>? other, double t)
-```
+位置参数：`other, t`
 
 
-插值保留未指定字段的继承语义，由组件结合当前实例尺寸与主题解析。
+生成主题过渡配置。
 
-两端均未指定的字段仍为 null；端点返回原始配置。
-
-返回类型：`TStepperThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TStepperThemeData&gt;? | - | 插值目标主题；为空或类型不匹配时返回当前主题。 | 是 |
 | t | double | - | 插值进度；0 表示起点，1 表示终点。 | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TStepperThemeData | - | 插值保留未指定字段的继承语义，由组件结合当前实例尺寸与主题解析。 两端均未指定的字段仍为 null；端点返回原始配置。 | - |
+
+
 ### TStepperSize
-#### 简介
+
 步进器尺寸。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| small | 小尺寸：控件高度 20，输入段宽度 34，图标尺寸 12。 |
-| medium | 中尺寸：控件高度 24，输入段宽度 38，图标尺寸 16。 这是默认尺寸。 |
-| large | 大尺寸：控件高度 26，输入段宽度 45，图标尺寸 20。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| small | TStepperSize | - | 小尺寸：控件高度 20，输入段宽度 34，图标尺寸 12。 | - |
+| medium | TStepperSize | - | 中尺寸：控件高度 24，输入段宽度 38，图标尺寸 16。 这是默认尺寸。 | - |
+| large | TStepperSize | - | 大尺寸：控件高度 26，输入段宽度 45，图标尺寸 20。 | - |
 
 
 ### TStepperVariant
-#### 简介
+
 步进器形态。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| normal | 透明分段形态，段间默认保留 4px 间距。 这是默认形态。 |
-| filled | 填充分段形态，三段使用背景色并保留默认 4px 间距。 |
-| outline | 连续描边形态，三段之间不保留间距。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| normal | TStepperVariant | - | 透明分段形态，段间默认保留 4px 间距。 这是默认形态。 | - |
+| filled | TStepperVariant | - | 填充分段形态，三段使用背景色并保留默认 4px 间距。 | - |
+| outline | TStepperVariant | - | 连续描边形态，三段之间不保留间距。 | - |

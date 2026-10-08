@@ -90,6 +90,9 @@ class TDateTimePickerValue {
   /// - **完整值**：六元组均有值时直接构造
   /// - **partial 值**：缺字段用 [fallback] 补齐；未传 [fallback] 时抛出 [ArgumentError]
   /// - **典型用法**：提交后端前调用；partial 值须传入业务基准 [fallback]
+  ///
+  /// ## 返回值
+  /// 以六个时间字段构造的本地 DateTime；缺失字段由 fallback 补齐，未提供所需 fallback 时抛出 ArgumentError。
   DateTime toDateTime({
     /// 补齐未指定日期时间字段的业务基准；partial 值未提供它时抛出 ArgumentError。
     DateTime? fallback,

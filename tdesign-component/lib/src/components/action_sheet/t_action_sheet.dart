@@ -34,6 +34,9 @@ final class TActionSheet {
   /// [onCancel] 点击取消时回调。
   /// [onClosed] 面板关闭后回调。
   /// [onSelected] 点击动作时回调。
+  ///
+  /// ## 返回值
+  /// 已经发起打开的动作面板控制句柄，可用于查询状态与关闭面板。
   static TPopupHandle showList<T>(
     BuildContext context, {
     required List<TActionSheetItem<T>> items,
@@ -79,6 +82,9 @@ final class TActionSheet {
   /// [onCancel] 点击取消时回调。
   /// [onClosed] 面板关闭后回调。
   /// [onSelected] 点击动作时回调。
+  ///
+  /// ## 返回值
+  /// 已经发起打开的动作面板控制句柄，可用于查询状态与关闭面板。
   static TPopupHandle showGrid<T>(
     BuildContext context, {
     required List<TActionSheetItem<T>> items,
@@ -125,6 +131,9 @@ final class TActionSheet {
   /// [onCancel] 点击取消时回调。
   /// [onClosed] 面板关闭后回调。
   /// [onSelected] 点击项目时回传原始项目。
+  ///
+  /// ## 返回值
+  /// 已经发起打开的动作面板控制句柄，可用于查询状态与关闭面板。
   static TPopupHandle showGridSections<T>(
     BuildContext context, {
     required List<TActionSheetGridSection<T>> sections,

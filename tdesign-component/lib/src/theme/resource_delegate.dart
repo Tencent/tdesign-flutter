@@ -4,6 +4,10 @@ import 'package:meta/meta.dart';
 import '../../tdesign_flutter.dart';
 
 /// 根据当前构建上下文提供资源代理；返回 null 时使用默认文案。
+/// [context] 当前资源查询的构建上下文。
+///
+/// ## 返回值
+/// 资源代理；返回 null 时使用默认资源文案。
 typedef TResourceBuilder = TResourceDelegate? Function(BuildContext context);
 
 /// 资源管理器
@@ -17,6 +21,9 @@ class TResourceManager {
   TResourceDelegate? _delegate;
 
   /// 获取资源
+  ///
+  /// ## 返回值
+  /// 当前上下文的资源代理；构建器不存在或返回 null 时使用默认资源代理。
   TResourceDelegate delegate(
     /// 当前构建上下文，用于读取祖先配置。
     BuildContext context,
@@ -240,6 +247,9 @@ abstract class TResourceDelegate {
   String get picker;
 
   /// [TPicker] 第 [colIndex] 列（1-based）的无障碍 label
+  ///
+  /// ## 返回值
+  /// 第 colIndex 列的本地化无障碍标签；列序号从 1 开始。
   String pickerColumn(
     /// 从 1 开始的滚轮列序号。
     int colIndex,

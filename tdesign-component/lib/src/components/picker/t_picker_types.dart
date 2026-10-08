@@ -2,6 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 /// 选择器子项构建器。
+/// [context] 滚轮选项的构建上下文。
+/// [option] 当前选项数据。
+/// [columnIndex] 当前列索引，从 0 开始。
+/// [itemIndex] 当前选项在列中的索引，从 0 开始。
+/// [distance] 当前选项距滚轮中心的绝对距离，以选项高度为单位。
+///
+/// ## 返回值
+/// 当前选项内容；返回 null 时使用默认文字渲染。
 typedef TPickerItemBuilder =
     Widget? Function(
       BuildContext context,

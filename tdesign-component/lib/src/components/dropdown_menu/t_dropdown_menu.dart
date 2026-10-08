@@ -54,10 +54,20 @@ enum TDropdownMenuCloseReason {
 }
 
 /// 下拉筛选面板关闭回调。
+/// [index] 关闭面板对应的筛选项索引，从 0 开始。
+/// [reason] 本次面板关闭的原因。
+///
+/// ## 返回值
+/// 无返回值。
 typedef TDropdownMenuClosedCallback =
     void Function(int index, TDropdownMenuCloseReason reason);
 
 /// 默认触发项的面板构建器。
+/// [context] 筛选面板的构建上下文。
+/// [controller] 当前面板控制器，用于请求关闭该面板。
+///
+/// ## 返回值
+/// 当前筛选项的面板内容。
 typedef TDropdownMenuPanelBuilder =
     Widget Function(
       BuildContext context,
@@ -65,6 +75,11 @@ typedef TDropdownMenuPanelBuilder =
     );
 
 /// 自定义触发项构建器。
+/// [context] 筛选触发项的构建上下文。
+/// [state] 当前触发项的状态及操作入口。
+///
+/// ## 返回值
+/// 自定义筛选触发项内容。
 typedef TDropdownMenuTriggerBuilder =
     Widget Function(BuildContext context, TDropdownMenuTriggerState state);
 
@@ -129,7 +144,10 @@ class TDropdownMenuPanelController {
   final int index;
   final Future<void> Function(TDropdownMenuCloseReason reason) _close;
 
-  /// 请求关闭当前面板；[reason] 默认 cancel。返回的 Future 在关闭流程结束后完成。
+  /// 请求关闭当前面板；[reason] 默认 cancel。返回的 Future 表示本次关闭请求处理结束。
+  ///
+  /// ## 返回值
+  /// 当前关闭请求处理完毕时完成；被新操作打断时也可能提前完成，不保证面板已经关闭。
   Future<void> close([
     /// 关闭原因，默认 cancel。
     TDropdownMenuCloseReason reason = TDropdownMenuCloseReason.cancel,
@@ -189,7 +207,10 @@ class TDropdownMenuController extends ChangeNotifier {
   /// 当前是否有打开的面板。
   bool get isOpen => _openIndex != null;
 
-  /// 打开 [index] 对应面板；未绑定筛选栏时不执行操作。Future 等待打开流程完成。
+  /// 打开 [index] 对应面板；未绑定筛选栏时不执行操作。Future 等待本次打开请求处理结束。
+  ///
+  /// ## 返回值
+  /// 当前打开请求处理完毕时完成；未绑定、索引无效、项目禁用或请求被打断时也会完成，不代表一定打开成功。
   Future<void> open(
     /// 目标筛选项下标，从 0 开始。
     int index,
@@ -197,12 +218,18 @@ class TDropdownMenuController extends ChangeNotifier {
     await _openCallback?.call(index);
   }
 
-  /// 关闭当前面板；未绑定筛选栏时不执行操作。Future 等待关闭流程完成。
+  /// 关闭当前面板；未绑定筛选栏时不执行操作。Future 等待本次关闭请求处理结束。
+  ///
+  /// ## 返回值
+  /// 当前关闭请求处理完毕时完成；未绑定或被后续操作打断时也会完成，不代表面板一定已经关闭。
   Future<void> close() async {
     await _closeCallback?.call(TDropdownMenuCloseReason.controller);
   }
 
-  /// 切换 [index] 对应面板；未绑定筛选栏时不执行操作。Future 等待切换流程完成。
+  /// 切换 [index] 对应面板；未绑定筛选栏时不执行操作。Future 等待本次切换请求处理结束。
+  ///
+  /// ## 返回值
+  /// 当前切换请求处理完毕时完成；未绑定或请求无效、被打断时也会完成，不代表目标状态一定已达成。
   Future<void> toggle(
     /// 目标筛选项下标，从 0 开始。
     int index,

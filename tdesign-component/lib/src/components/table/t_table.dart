@@ -14,6 +14,11 @@ import 't_table_theme_data.dart';
 import 't_table_types.dart';
 
 /// 行点击回调。
+/// [rowIndex] 当前行在排序后可见数据中的索引，从 0 开始。
+/// [row] 当前行的原始数据。
+///
+/// ## 返回值
+/// 无返回值。
 typedef TTableRowTap<T> = void Function(int rowIndex, T row);
 
 /// 强类型、受控排序与选择的表格组件。

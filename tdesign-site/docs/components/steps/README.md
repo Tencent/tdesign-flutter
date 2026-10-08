@@ -23,15 +23,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## Breaking Change 迁移
 
-| 旧 API | 新 API |
-| --- | --- |
-| `activeIndex` | `value` |
-| `TStepsStatus.success` | `TStepsStatus.process` |
-| `successIcon` | `icon` |
-| `TSteps(...)` | 进度用 `TSteps.progress(...)`，垂直选择用 `TSteps.selectable(...)`，纯展示用 `TSteps.display(...)` |
-| `simple: true` | `TSteps.progress(indicator: TStepsIndicator.dot)` |
-| `readOnly` | 使用 `TSteps.progress` 并省略 `onChange` |
-| `verticalSelect: true` | `TSteps.selectable(...)` |
-| `TStepsVariant.defaultTheme` / `TStepsVariant.dot` | `TStepsIndicator.standard` / `TStepsIndicator.dot` |
-| `TStepsVariant.display` | `TSteps.display(...)` |
-| `TStepsThemeData` 中的业务开关 | 改用对应的命名构造 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| `activeIndex` | - | - | 迁移为 `value` | - |
+| `TStepsStatus.success` | - | - | 迁移为 `TStepsStatus.process` | - |
+| `successIcon` | - | - | 迁移为 `icon` | - |
+| `TSteps(...)` | - | - | 迁移为 进度用 `TSteps.progress(...)`，垂直选择用 `TSteps.selectable(...)`，纯展示用 `TSteps.display(...)` | - |
+| `simple: true` | - | - | 迁移为 `TSteps.progress(indicator: TStepsIndicator.dot)` | - |
+| `readOnly` | - | - | 迁移为 使用 `TSteps.progress` 并省略 `onChange` | - |
+| `verticalSelect: true` | - | - | 迁移为 `TSteps.selectable(...)` | - |
+| `TStepsVariant.defaultTheme` / `TStepsVariant.dot` | - | - | 迁移为 `TStepsIndicator.standard` / `TStepsIndicator.dot` | - |
+| `TStepsVariant.display` | - | - | 迁移为 `TSteps.display(...)` | - |
+| `TStepsThemeData` 中的业务开关 | - | - | 迁移为 改用对应的命名构造 | - |

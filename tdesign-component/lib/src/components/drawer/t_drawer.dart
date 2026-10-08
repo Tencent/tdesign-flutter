@@ -90,6 +90,9 @@ class TDrawer extends StatelessWidget {
 /// [onClose] 在抽屉浮层关闭后触发。
 ///
 /// 返回的 [TDrawerHandle] 可用于查询显示状态或主动关闭抽屉。
+///
+/// ## 返回值
+/// 已经发起打开的抽屉控制句柄，可用于查询状态与关闭抽屉。
 TDrawerHandle showTDrawer(
   BuildContext context, {
   required TDrawer drawer,

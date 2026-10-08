@@ -15,6 +15,9 @@ class TSwipeCellPanel {
   ///
   /// 操作项沿交叉轴拉伸；返回的布局由调用方放入滑动单元格。
   /// [context] 调用方的构建上下文；当前布局不读取其中的主题或尺寸。
+  ///
+  /// ## 返回值
+  /// 由 children 横向排列、沿交叉轴拉伸的操作面板布局。
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,

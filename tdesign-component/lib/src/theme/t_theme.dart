@@ -21,7 +21,7 @@ import 't_fonts.dart';
 /// 统一走 Material 的 `Theme.of(context)`。
 /// 全库读取全局 Token（色板/间距/圆角/字体）统一用 `context.tTheme`。
 extension TThemeContextExtension on BuildContext {
-  /// 获取全局 TThemeData（P4 Token），取不到则回退默认值
+  /// 获取当前主题中的全局 Token；未配置时回退默认主题。
   TThemeData get tTheme =>
       Theme.of(this).extension<TThemeData>() ?? TThemeData.defaultData();
 }
@@ -31,7 +31,10 @@ extension TThemeContextExtension on BuildContext {
 /// 子树覆盖统一用 `mergeExtension(...)`，
 /// 禁止 `copyWith(extensions: [...])`（会覆盖其它 Extension）。
 extension TThemeDataMergeExtension on ThemeData {
-  /// 合并 Extension：保留现有所有 Extension，仅替换指定类型
+  /// 合并指定类型的主题扩展。
+  ///
+  /// ## 返回值
+  /// 保留当前其他主题配置与扩展、仅替换指定类型扩展的新 ThemeData。
   ///
   /// 示例：
   /// ```dart
@@ -68,6 +71,9 @@ class TStyleResolver {
   final BuildContext _context;
 
   /// 创建解析器实例
+  ///
+  /// ## 返回值
+  /// 绑定当前 context 的样式解析器。
   static TStyleResolver of(
     /// 当前构建上下文，用于读取祖先配置。
     BuildContext context,
@@ -78,15 +84,17 @@ class TStyleResolver {
       Theme.of(_context).extension<TThemeData>() ?? TThemeData.defaultData();
 
   /// 组件 ThemeExtension。
+  ///
+  /// ## 返回值
+  /// 上下文主题中的指定 ThemeExtension；未配置时为 null。
   E? componentExtension<E extends ThemeExtension<E>>() =>
       Theme.of(_context).extension<E>();
 }
 
 /// Token → 完整 ThemeData 的构建器
 ///
-/// 四层架构的 L2 层：接收 [TThemeData] token，产出完整 [ThemeData]。
-/// 内部完成 Token → ColorScheme 映射、Token Font → TextTheme、
-/// Token 颜色 → M3 子主题，同时将 [TThemeData] 自身作为 Extension 注入。
+/// 将 [TThemeData] 的颜色与字体映射为 Material 配色、文字样式和组件主题，
+/// 同时保留该 Token 主题作为 ThemeExtension。
 ///
 /// 通常不直接使用，通过 [TThemeBuilder.light] / [TThemeBuilder.dark] 入口。
 class TMaterialThemeBuilder {
@@ -96,6 +104,9 @@ class TMaterialThemeBuilder {
   final TThemeData token;
 
   /// 构建亮色 ThemeData
+  ///
+  /// ## 返回值
+  /// 由亮色 Token 构建的 Material ThemeData。
   ThemeData buildLight() {
     final light = token.light;
     return _buildBase(
@@ -106,6 +117,9 @@ class TMaterialThemeBuilder {
   }
 
   /// 构建暗色 ThemeData
+  ///
+  /// ## 返回值
+  /// 由暗色 Token 构建的 Material ThemeData；无暗色配置时回退当前 Token。
   ThemeData buildDark() {
     final dark = token.dark ?? token;
     return _buildBase(
@@ -424,12 +438,18 @@ class TThemeBuilder {
   const TThemeBuilder._();
 
   /// 亮色主题
+  ///
+  /// ## 返回值
+  /// 由指定 Token 构建的亮色 Material ThemeData。
   static ThemeData light(
     /// 用于构建完整 Material 主题的 Token 数据源。
     TThemeData token,
   ) => TMaterialThemeBuilder(token).buildLight();
 
   /// 暗色主题
+  ///
+  /// ## 返回值
+  /// 由指定 Token 构建的暗色 Material ThemeData。
   static ThemeData dark(
     /// 用于构建完整 Material 主题的 Token 数据源。
     TThemeData token,
@@ -519,6 +539,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
   }
 
   /// 获取默认Data，一个App里只有一个，用于没有context的地方
+  ///
+  /// ## 返回值
+  /// 全局默认 Token 主题；首次调用时创建并缓存，后续调用返回同一默认主题。
   static TThemeData defaultData({
     /// 扩展主题数据；默认主题仅在首次初始化时读取。
     TExtraThemeData? extraThemeData,
@@ -542,6 +565,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
   }
 
   /// 从父类拷贝
+  ///
+  /// ## 返回值
+  /// 复制并合并指定映射后的 TThemeData；未传入的映射沿用当前配置。
   TThemeData copyWithTThemeData(
     /// 副本的主题名称。
     String name, {
@@ -588,6 +614,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
         as TThemeData;
   }
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
   /// 复制 Token 主题并合并传入的映射；未传入的映射值沿用当前配置。
   /// name 为空时使用 default；extraThemeData 为空时保留当前扩展数据。
   @override
@@ -689,6 +718,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
   /// [recoverDefault] 解析成功后是否将结果设为全局默认主题，默认 false
   ///
   /// [extraThemeData] 额外扩展的主题数据
+  ///
+  /// ## 返回值
+  /// 解析成功的 Token 主题；空字符串、格式错误或缺少指定配置时为 null。
   static TThemeData? fromJson(
     String name,
     String themeJson, {
@@ -738,6 +770,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
 
   /// 从已解析的 [themeConfig] 读取 [name] 对应的主题；不存在或为空时返回空主题。
   /// [extraThemeData] 非空时参与扩展数据解析。
+  ///
+  /// ## 返回值
+  /// 指定名称的 Token 主题；配置不存在或为空时返回该名称的空主题。
   static TThemeData parseThemeData(
     /// 待解析的主题名称。
     String name,
@@ -835,6 +870,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
   }
 
   /// 按 [key] 读取颜色 Token；没有本地配置且无法解析引用或默认映射时返回 null。
+  ///
+  /// ## 返回值
+  /// 命中的颜色 Token；本地、引用链和默认映射都未命中时为 null。
   Color? ofColor(
     /// 要查询的 Token 键；为空或未命中时返回 null。
     String? key,
@@ -843,6 +881,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
   }
 
   /// 按 [key] 读取复合字体 Token；没有本地配置且无法解析引用或默认映射时返回 null。
+  ///
+  /// ## 返回值
+  /// 命中的复合字体 Token；本地、引用链和默认映射都未命中时为 null。
   Font? ofFont(
     /// 要查询的 Token 键；为空或未命中时返回 null。
     String? key,
@@ -851,6 +892,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
   }
 
   /// 按 [key] 读取圆角 Token，单位为逻辑像素；找不到时返回 null。
+  ///
+  /// ## 返回值
+  /// 命中的圆角值，单位为逻辑像素；未命中时为 null。
   double? ofCorner(
     /// 要查询的 Token 键；为空或未命中时返回 null。
     String? key,
@@ -859,6 +903,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
   }
 
   /// 按 [key] 读取字体栈 Token；找不到时返回 null。
+  ///
+  /// ## 返回值
+  /// 命中的字体栈 Token；未命中时为 null。
   FontFamily? ofFontFamily(
     /// 要查询的 Token 键；为空或未命中时返回 null。
     String? key,
@@ -867,6 +914,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
   }
 
   /// 按 [key] 读取外投影列表；找不到时返回 null。
+  ///
+  /// ## 返回值
+  /// 命中的外投影列表；未命中时为 null。
   List<BoxShadow>? ofShadow(
     /// 要查询的 Token 键；为空或未命中时返回 null。
     String? key,
@@ -875,6 +925,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
   }
 
   /// 读取指定 TExtraThemeData 子类型的扩展数据；未配置或类型不匹配时返回 null。
+  ///
+  /// ## 返回值
+  /// 指定类型的额外主题数据；未配置或类型不匹配时为 null。
   T? ofExtra<T extends TExtraThemeData>() {
     try {
       return extraThemeData as T;
@@ -884,6 +937,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
     return null;
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
   /// 返回使用目标主题 Token 映射的新主题；此实现不使用 t 做连续插值。
   /// other 为空或类型不匹配时返回当前主题。
   @override
@@ -925,6 +981,9 @@ abstract class TExtraThemeData {
 }
 
 /// 创建默认 Token 映射的回调；返回 null 时不提供默认值。
+///
+/// ## 返回值
+/// 默认 Token 映射；返回 null 时不提供默认映射。
 typedef DefaultMapFactory = TMap? Function();
 
 /// 自定义Map
@@ -939,6 +998,9 @@ class TMap<K, V> extends DelegatingMap<K, V> {
 
   /// 读取 Token 值：依次尝试本地显式值、引用链和默认映射。
   /// 循环引用会中止该引用链；仍可尝试默认映射，全部未命中时返回 null。
+  ///
+  /// ## 返回值
+  /// 依次查找本地值、引用链和默认映射得到的 Token；全部未命中时为 null。
   @override
   V? operator [](
     /// 要查询的 Token 键；支持当前映射的键类型。
@@ -973,6 +1035,9 @@ class TMap<K, V> extends DelegatingMap<K, V> {
   }
 
   /// 仅读取 [key] 的本地存储值，不解析引用或默认映射。
+  ///
+  /// ## 返回值
+  /// 本地存储的 Token 值；不存在时为 null，不解析引用链或默认映射。
   V? get(
     /// 要读取本地存储值的键；不解析引用或默认映射。
     Object? key,

@@ -128,6 +128,35 @@ export default defineComponent({
 </script>
 
 <style lang="less">
+div[name='API'] {
+  h6 {
+    font-size: 1em;
+    line-height: 1.5;
+  }
+
+  table:has(th:nth-child(5):last-child) {
+    width: 100%;
+    table-layout: fixed;
+    overflow-wrap: anywhere;
+
+    :is(th, td):nth-child(1) {
+      width: 18%;
+    }
+    :is(th, td):nth-child(2) {
+      width: 22%;
+    }
+    :is(th, td):nth-child(3) {
+      width: 12%;
+    }
+    :is(th, td):nth-child(4) {
+      width: 40%;
+    }
+    :is(th, td):nth-child(5) {
+      width: 8%;
+    }
+  }
+}
+
 .td-doc {
   // &-main {
   //   position: relative;

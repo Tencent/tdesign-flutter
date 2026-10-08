@@ -184,6 +184,9 @@ class TDialog extends StatelessWidget {
   /// 操作按钮与内置关闭按钮分别返回各自配置的结果。
   /// 蒙层与内置关闭按钮通过 Navigator.maybePop 关闭，遵守 PopScope。
   /// 系统返回及未携带结果的 Navigator.pop 仍返回 null，不使用 [barrierResult]。
+  ///
+  /// ## 返回值
+  /// 路由被弹出时完成并提供关闭结果；未携带结果时为 null，不等待关闭动画结束。
   static Future<T?> show<T>(
     /// 当前构建上下文，用于读取祖先配置。
     BuildContext context, {

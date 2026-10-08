@@ -51,6 +51,9 @@ class TSwiperController extends ChangeNotifier {
   /// 动画切换到目标页；循环模式始终向前到达目标。
   ///
   /// 未提供 [duration] 或 [curve] 时，继承所附加 [TSwiper] 的动画配置。
+  ///
+  /// ## 返回值
+  /// 所绑定轮播的切换请求完成时结束；未绑定时立即完成，不执行切换。
   Future<void> animateTo(
     /// 目标页面的业务索引，从 0 开始；循环模式向前切换到该页面。
     int index, {
@@ -67,6 +70,9 @@ class TSwiperController extends ChangeNotifier {
   /// 切换到下一页。
   ///
   /// 未提供 [duration] 或 [curve] 时，继承所附加 [TSwiper] 的动画配置。
+  ///
+  /// ## 返回值
+  /// 所绑定轮播的切换请求完成时结束；未绑定时立即完成，不执行切换。
   Future<void> next({
     /// 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。
     Duration? duration,
@@ -80,6 +86,9 @@ class TSwiperController extends ChangeNotifier {
   /// 切换到上一页。
   ///
   /// 未提供 [duration] 或 [curve] 时，继承所附加 [TSwiper] 的动画配置。
+  ///
+  /// ## 返回值
+  /// 所绑定轮播的切换请求完成时结束；未绑定时立即完成，不执行切换。
   Future<void> previous({
     /// 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。
     Duration? duration,

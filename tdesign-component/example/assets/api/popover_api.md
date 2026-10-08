@@ -1,48 +1,26 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TPopover
-#### 简介
+
 气泡弹层
 
 可通过 `showPopover` 一次性弹出，或通过 `TPopoverAnchor` 建立可控制气泡，
 支持 12 个方向定位和箭头。蒙层色与圆角由触发 `BuildContext` 最近的
 `TPopoverThemeData` 控制；单个气泡可包裹局部 Theme。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TPopover
-```
+##### TPopover
 
+无参数。
 
 #### 静态方法
 
 ##### TPopover.showPopover
 
-```dart
-static Future<void> showPopover({
-  required BuildContext context,
-  required Widget content,
-  TPopoverColorPreset colorPreset = TPopoverColorPreset.defaultTheme,
-  bool closeOnClickOutside = true,
-  bool closeOnScroll = true,
-  TPopoverPlacement placement = TPopoverPlacement.top,
-  bool? showArrow,
-  double? width,
-  double? height,
-  VoidCallback? onTap,
-  VoidCallback? onLongTap,
-})
-```
-
-
 显示气泡弹层
 
-返回类型：`Future<void>`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | context | BuildContext | - | 触发元素的上下文，用于计算气泡锚点位置。 | 是 |
 | content | Widget | - | 气泡内容。 直接传入未设置样式的 `Text` 时使用气泡默认文字样式；组合内容应自行定义 子组件样式和布局。 | 是 |
@@ -56,16 +34,16 @@ static Future<void> showPopover({
 | onTap | VoidCallback? | - | 点击气泡内容时触发。 | 否 |
 | onLongTap | VoidCallback? | - | 长按气泡内容时触发。 | 否 |
 
-#### 默认构造方法
 
+###### 返回值
 
-```dart
-TPopover()
-```
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Future&lt;void&gt; | - | 气泡关闭时完成的 Future；不是打开完成通知。 | - |
 
 
 ### TPopoverAnchor
-#### 简介
+
 将可控制的气泡与 Widget 树中的触发区域绑定。
 
 `TPopoverAnchor` 声明气泡内容、位置和视觉配置，`TPopoverController` 只负责
@@ -77,39 +55,11 @@ TPopover()
 配置不会刷新已显示的浮层，关闭后再次展开时生效。`builder` 和 `child` 仍按
 普通 Widget 树的更新规则重建。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TPopoverAnchor extends StatefulWidget
-```
+##### TPopoverAnchor
 
-#### 默认构造方法
-
-
-```dart
-const TPopoverAnchor({
-  super.key,
-  required this.content,
-  required this.builder,
-  this.controller,
-  this.child,
-  this.colorPreset = TPopoverColorPreset.defaultTheme,
-  this.closeOnClickOutside = true,
-  this.closeOnScroll = true,
-  this.placement = TPopoverPlacement.top,
-  this.showArrow,
-  this.width,
-  this.height,
-  this.onTap,
-  this.onLongTap,
-  this.onOpen,
-  this.onClose,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | builder | TPopoverAnchorBuilder | - | 构建气泡所绑定的触发区域。 构建器会收到当前有效的控制器；未传入 `controller` 时由组件内部创建。 | 是 |
 | child | Widget? | - | 传递给 `builder` 的可选子组件。 | 否 |
@@ -130,113 +80,77 @@ const TPopoverAnchor({
 
 
 ### TPopoverController
-#### 简介
+
 控制与其绑定的 `TPopoverAnchor`。
 
 气泡内容、位置和视觉配置由 `TPopoverAnchor` 声明，控制器只负责展开、关闭
 和查询当前状态，不形成第二份配置来源。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TPopoverController
-```
+##### TPopoverController
+
+无参数。
+
+#### 属性
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| isOpen | bool | - | 与该控制器绑定的气泡是否已展开。 | - |
 
 
 #### 静态方法
 
 ##### TPopoverController.maybeOf
 
-```dart
-static TPopoverController? maybeOf(BuildContext context)
-```
+位置参数：`context`
 
 
 返回 `context` 最近的 `TPopoverAnchor` 所关联的控制器。
 
 未处于 Anchor 的触发区域或气泡内容子树时返回 null。
 
-返回类型：`TPopoverController?`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | context | BuildContext | - | 当前构建上下文，用于读取祖先配置。 | 是 |
 
-#### 默认构造方法
 
+###### 返回值
 
-```dart
-TPopoverController()
-```
-
-#### 公开属性（字段与访问器）
-
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| isOpen | bool | - | 与该控制器绑定的气泡是否已展开。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TPopoverController? | - | 最近的 PopoverAnchor 控制器；不在其触发区域或气泡内容子树时为 null。 | - |
 
 
 #### 实例方法
 
 ##### TPopoverController.close
 
-```dart
-void close()
-```
-
+无参数。
 
 关闭与该控制器绑定的气泡。
 
 未绑定或已经关闭时无副作用。
 
-返回类型：`void`
-
 ##### TPopoverController.open
 
-```dart
-void open()
-```
-
+无参数。
 
 展开与该控制器绑定的气泡。
 
 控制器必须先通过 `TPopoverAnchor.controller` 绑定到 Widget 树。
 
-返回类型：`void`
-
 ### TPopoverThemeData
-#### 简介
+
 TPopover 组件级 ThemeExtension
 
 通过 Theme 子树注入，控制子树的默认气泡样式。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TPopoverThemeData extends ThemeExtension<TPopoverThemeData>
-```
+##### TPopoverThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TPopoverThemeData({
-  this.backgroundColor,
-  this.padding,
-  this.minWidth,
-  this.maxWidth,
-  this.maxHeight,
-  this.borderRadius,
-  this.barrierColor,
-  this.arrowSize,
-  this.offset,
-  this.boxShadow,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | arrowSize | double? | - | 箭头尺寸；未配置时为 8 逻辑像素。 | 否 |
 | backgroundColor | Color? | - | 气泡背景色 | 否 |
@@ -254,27 +168,9 @@ const TPopoverThemeData({
 
 ##### TPopoverThemeData.copyWith
 
-```dart
-TPopoverThemeData copyWith({
-  Color? backgroundColor,
-  EdgeInsetsGeometry? padding,
-  double? minWidth,
-  double? maxWidth,
-  double? maxHeight,
-  BorderRadius? borderRadius,
-  Color? barrierColor,
-  double? arrowSize,
-  double? offset,
-  List<BoxShadow>? boxShadow,
-})
-```
+复制主题配置。
 
-
-返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
-
-返回类型：`TPopoverThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 字段含义：气泡背景色 调用时的空值行为见方法说明。 | 否 |
 | padding | EdgeInsetsGeometry? | - | 字段含义：内边距 调用时的空值行为见方法说明。 | 否 |
@@ -288,86 +184,106 @@ TPopoverThemeData copyWith({
 | boxShadow | List&lt;BoxShadow&gt;? | - | 字段含义：气泡阴影；未配置时使用 shadow3 Token，Token 为空时无阴影。 调用时的空值行为见方法说明。 | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TPopoverThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
+
+
 ##### TPopoverThemeData.lerp
 
-```dart
-TPopoverThemeData lerp(ThemeExtension<TPopoverThemeData>? other, double t)
-```
+位置参数：`other, t`
 
 
-按 t 在当前主题和目标主题之间生成过渡主题。
-other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+生成主题过渡配置。
 
-返回类型：`TPopoverThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TPopoverThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
 | t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TPopoverThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
+
+
 ##### TPopoverThemeData.merge
 
-```dart
-TPopoverThemeData merge(TPopoverThemeData? other)
-```
+位置参数：`other`
 
 
-返回合并后的主题；`other` 的非空字段覆盖当前字段，other 为空时返回当前主题。
+合并主题配置。
 
-返回类型：`TPopoverThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | TPopoverThemeData? | - | 要合并的目标主题；为空时保留当前配置。 | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TPopoverThemeData | - | 返回合并后的主题；`other` 的非空字段覆盖当前字段，other 为空时返回当前主题。 | - |
+
+
 ### TPopoverColorPreset
-#### 简介
+
 弹出气泡的内置配色预设；不切换全局明暗主题。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| defaultTheme | 默认深色配色。 |
-| light | 浅色。 |
-| primary | 品牌主色。 |
-| success | 成功。 |
-| warning | 警告。 |
-| danger | 危险色。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| defaultTheme | TPopoverColorPreset | - | 默认深色配色。 | - |
+| light | TPopoverColorPreset | - | 浅色。 | - |
+| primary | TPopoverColorPreset | - | 品牌主色。 | - |
+| success | TPopoverColorPreset | - | 成功。 | - |
+| warning | TPopoverColorPreset | - | 警告。 | - |
+| danger | TPopoverColorPreset | - | 危险色。 | - |
 
 
 ### TPopoverPlacement
-#### 简介
+
 气泡弹层定位方向。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| topLeft | 上左。 |
-| top | 上方。 |
-| topRight | 上右。 |
-| rightTop | 右上。 |
-| right | 右侧。 |
-| rightBottom | 右下。 |
-| bottomRight | 下右。 |
-| bottom | 下方。 |
-| bottomLeft | 下左。 |
-| leftBottom | 左下。 |
-| left | 左侧。 |
-| leftTop | 左上。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| topLeft | TPopoverPlacement | - | 上左。 | - |
+| top | TPopoverPlacement | - | 上方。 | - |
+| topRight | TPopoverPlacement | - | 上右。 | - |
+| rightTop | TPopoverPlacement | - | 右上。 | - |
+| right | TPopoverPlacement | - | 右侧。 | - |
+| rightBottom | TPopoverPlacement | - | 右下。 | - |
+| bottomRight | TPopoverPlacement | - | 下右。 | - |
+| bottom | TPopoverPlacement | - | 下方。 | - |
+| bottomLeft | TPopoverPlacement | - | 下左。 | - |
+| leftBottom | TPopoverPlacement | - | 左下。 | - |
+| left | TPopoverPlacement | - | 左侧。 | - |
+| leftTop | TPopoverPlacement | - | 左上。 | - |
 
 
 ### TPopoverAnchorBuilder
-#### 简介
+
 `TPopoverAnchor` 的触发区域构建器。
 
-`controller` 用于展开、关闭气泡和查询展开状态；`child` 是传给
-`TPopoverAnchor.child` 的可选、不依赖展开状态的子组件。
-#### 类型定义
+位置参数：`context, controller, child`
 
-```dart
-typedef TPopoverAnchorBuilder = Widget Function(BuildContext context, TPopoverController controller, Widget? child);
-```
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | 触发区域的构建上下文。 | 是 |
+| controller | TPopoverController | - | 关联气泡控制器，用于开关气泡与查询状态。 | 是 |
+| child | Widget? | - | 传入 Anchor 的可选静态子组件。 | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | 气泡触发区域内容。 | - |

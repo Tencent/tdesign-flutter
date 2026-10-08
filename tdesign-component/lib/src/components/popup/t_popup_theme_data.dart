@@ -37,6 +37,10 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
        assert(drawerWidth == null || drawerWidth > 0);
 
   /// 合并主题；[other] 的非空字段优先，空字段保留当前值。
+  ///
+  /// ## 返回值
+  ///
+  /// 合并后的主题；[other] 为空时返回当前对象。
   TPopupThemeData merge(
     /// 要合并的目标主题；为空时保留当前配置。
     TPopupThemeData? other,
@@ -54,19 +58,28 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
     );
   }
 
-  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+  /// 复制主题；非空参数替换对应配置，null 参数保留当前配置。
+  ///
+  /// ## 返回值
+  ///
+  /// 应用指定参数后的主题副本。
   @override
   TPopupThemeData copyWith({
     /// 蒙层颜色（含透明度）。
     Color? barrierColor,
+
     /// 面板圆角。
     double? panelRadius,
+
     /// 面板背景色。
     Color? panelBackgroundColor,
+
     /// 顶部/底部面板高度。
     double? edgeHeight,
+
     /// 左侧/右侧面板宽度。
     double? drawerWidth,
+
     /// 居中面板尺寸。
     Size? centerSize,
   }) {
@@ -80,7 +93,11 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
     );
   }
 
-  /// 按 t 生成过渡主题；目标为空或类型不匹配时返回当前主题。
+  /// 按 [t] 对主题进行插值。
+  ///
+  /// ## 返回值
+  ///
+  /// 过渡主题；目标为空或类型不匹配时返回当前对象。
   @override
   TPopupThemeData lerp(
     /// 目标主题；为空或类型不匹配时保留当前主题。
@@ -113,6 +130,10 @@ class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
   /// | 两端均为 null | null |
   /// | 一端为 null | 该端按 0 计算 |
   /// | 两端均非空 | 按 [t] 线性插值 |
+  ///
+  /// ## 返回值
+  ///
+  /// 插值结果；两端均为 null 时返回 null。
   static double? lerpDouble(
     /// 起始值。
     double? a,

@@ -20,19 +20,23 @@ enum TPopupPlacement {
 
 /// 底部头部构建器。
 ///
-/// | 回调参数 | 说明 |
-/// | --- | --- |
-/// | [context] | 构建上下文 |
-/// | [close] | 关闭 Popup，触发源为 [TPopupTrigger.custom] |
+/// [context] 构建上下文。
+///
+/// [close] 关闭 Popup，触发源为 [TPopupTrigger.custom]。
+///
+/// ## 返回值
+/// 构建的底部头部内容。
 typedef TPopupHeaderBuilder =
     Widget Function(BuildContext context, VoidCallback close);
 
 /// 居中面板外关闭区构建器；交互与无障碍语义由 builder 提供。
 ///
-/// | 回调参数 | 说明 |
-/// | --- | --- |
-/// | [context] | 构建上下文 |
-/// | [close] | 关闭 Popup，触发源为 [TPopupTrigger.close] |
+/// [context] 构建上下文。
+///
+/// [close] 关闭 Popup，触发源为 [TPopupTrigger.close]。
+///
+/// ## 返回值
+/// 构建的面板外关闭区内容。
 typedef TPopupSlotBuilder =
     Widget Function(BuildContext context, VoidCallback close);
 
@@ -94,9 +98,11 @@ enum TPopupTrigger {
 
 /// 浮层显隐变化回调。
 ///
-/// | 回调参数 | 说明 |
-/// | --- | --- |
-/// | [visible] | true 表示打开，false 表示开始关闭 |
-/// | [trigger] | 触发来源；打开时为 [TPopupTrigger.api] |
+/// [visible] true 表示打开，false 表示开始关闭。
+///
+/// [trigger] 触发来源；打开时为 [TPopupTrigger.api]。
+///
+/// ## 返回值
+/// 无返回值。
 typedef TPopupVisibleChangeCallback =
     void Function(bool visible, TPopupTrigger trigger);

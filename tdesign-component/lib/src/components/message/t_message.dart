@@ -137,6 +137,9 @@ class TMessage extends StatefulWidget {
   ///
   /// 未显式传入 [offset] 时，新消息会替换同一 Overlay 中上一条默认位置的消息；
   /// 显式传入不同 [offset] 的消息可以同时展示。
+  ///
+  /// ## 返回值
+  /// 已插入 Overlay 的消息控制句柄，可用于查询显示状态与主动关闭。
   static TMessageHandle show({
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,

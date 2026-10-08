@@ -1,38 +1,14 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TRate
-#### 简介
+
 严格受控的评分组件。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TRate extends StatefulWidget
-```
+##### TRate
 
-#### 默认构造方法
-
-
-```dart
-const TRate({
-  super.key,
-  required this.value,
-  this.onChanged,
-  this.onChangeStart,
-  this.onChangeEnd,
-  this.count = 5,
-  this.allowHalf = false,
-  this.showValueIndicator = true,
-  this.icon,
-  this.texts,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | allowHalf | bool | false | 是否允许半星。 | 否 |
 | count | int | 5 | 评分项数量，必须大于 0。 | 否 |
@@ -47,34 +23,14 @@ const TRate({
 
 
 ### TRateThemeData
-#### 简介
+
 TRate 组件级 ThemeExtension。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TRateThemeData extends ThemeExtension<TRateThemeData>
-```
+##### TRateThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TRateThemeData({
-  this.starColor,
-  this.inactiveStarColor,
-  this.iconSize,
-  this.iconGap,
-  this.textWidth,
-  this.textGap,
-  this.textStyle,
-  this.overlayBoxShadow,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | iconGap | double? | - | 图标间距。 | 否 |
 | iconSize | double? | - | 图标尺寸。 | 否 |
@@ -90,25 +46,9 @@ const TRateThemeData({
 
 ##### TRateThemeData.copyWith
 
-```dart
-TRateThemeData copyWith({
-  Color? starColor,
-  Color? inactiveStarColor,
-  double? iconSize,
-  double? iconGap,
-  double? textWidth,
-  double? textGap,
-  TextStyle? textStyle,
-  List<BoxShadow>? overlayBoxShadow,
-})
-```
+复制主题配置。
 
-
-返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
-
-返回类型：`TRateThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | starColor | Color? | - | 字段含义：选中星标颜色。 调用时的空值行为见方法说明。 | 否 |
 | inactiveStarColor | Color? | - | 字段含义：未选中星标颜色。 调用时的空值行为见方法说明。 | 否 |
@@ -120,31 +60,49 @@ TRateThemeData copyWith({
 | overlayBoxShadow | List&lt;BoxShadow&gt;? | - | 字段含义：当前值提示与半星选择浮层阴影。 调用时的空值行为见方法说明。 | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TRateThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
+
+
 ##### TRateThemeData.lerp
 
-```dart
-TRateThemeData lerp(ThemeExtension<TRateThemeData>? other, double t)
-```
+位置参数：`other, t`
 
 
-按 t 在当前主题和目标主题之间生成过渡主题。
-other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+生成主题过渡配置。
 
-返回类型：`TRateThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TRateThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
 | t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TRateThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
+
+
 ### TRateIconBuilder
-#### 简介
+
 自定义评分图标构建器。
 
-`filled` 表示构建选中或未选中图标；半星由组件裁剪选中图标实现。
-#### 类型定义
+位置参数：`filled`
 
-```dart
-typedef TRateIconBuilder = Widget Function(bool filled);
-```
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| filled | bool | - | 是否构建选中图标；半星由组件裁剪选中图标实现。 | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | 指定选中状态的评分图标。 | - |

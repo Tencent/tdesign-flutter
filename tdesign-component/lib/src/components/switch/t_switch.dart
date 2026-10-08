@@ -12,8 +12,7 @@ export 't_switch_types.dart';
 /// 严格受控的开关组件。
 ///
 /// [value] 由父级持有；[onChanged] 为 null 时禁用；[loading] 为 true 时
-/// 显示加载指示器并禁用交互。文字、图标和加载内容无法由 Material Switch
-/// 完整表达，因此底层保留 TDesign 自定义开关实现。
+/// 显示加载指示器并禁用交互。支持开关文字、图标与加载内容配置。
 class TSwitch extends StatelessWidget {
   const TSwitch({
     super.key,

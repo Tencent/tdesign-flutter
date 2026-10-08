@@ -1,53 +1,17 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TSearchBar
-#### 简介
+
 基于 Material `TextField` 的搜索输入框。
 
 `controller` 是主控制路径；未传时组件创建内部 controller，并使用
 `initialValue` 初始化一次。搜索结果由调用方在组件外组合。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TSearchBar extends StatefulWidget
-```
+##### TSearchBar
 
-#### 默认构造方法
-
-
-```dart
-const TSearchBar({
-  super.key,
-  this.controller,
-  this.initialValue,
-  this.onChanged,
-  this.onSubmitted,
-  this.onFocusChanged,
-  this.enabled = true,
-  this.readOnly = false,
-  this.hintText,
-  this.actionText,
-  this.onActionPressed,
-  this.onClearPressed,
-  this.clearable = true,
-  this.autofocus = false,
-  this.inputType = TextInputType.text,
-  this.inputAction = TextInputAction.search,
-  this.maxLength,
-  this.maxCharacter,
-  this.inputFormatters,
-  this.variant,
-  this.textAlignment,
-  this.focusNode,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | actionText | String? | - | 右侧操作文案；为空时不占据布局空间。 | 否 |
 | autofocus | bool | false | 是否自动聚焦。 | 否 |
@@ -74,36 +38,14 @@ const TSearchBar({
 
 
 ### TSearchBarThemeData
-#### 简介
+
 `TSearchBar` 的默认视觉配置。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData>
-```
+##### TSearchBarThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TSearchBarThemeData({
-  this.height,
-  this.inputBackgroundColor,
-  this.contentPadding,
-  this.textStyle,
-  this.hintStyle,
-  this.searchIconTheme,
-  this.clearIconTheme,
-  this.actionTextStyle,
-  this.actionGap,
-  this.cursorHeight,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | actionGap | double? | - | 搜索框与右侧操作文字的间距，默认 15dp。 | 否 |
 | actionTextStyle | TextStyle? | - | 右侧操作文字样式。 | 否 |
@@ -121,27 +63,9 @@ const TSearchBarThemeData({
 
 ##### TSearchBarThemeData.copyWith
 
-```dart
-TSearchBarThemeData copyWith({
-  double? height,
-  Color? inputBackgroundColor,
-  EdgeInsetsGeometry? contentPadding,
-  TextStyle? textStyle,
-  TextStyle? hintStyle,
-  IconThemeData? searchIconTheme,
-  IconThemeData? clearIconTheme,
-  TextStyle? actionTextStyle,
-  double? actionGap,
-  double? cursorHeight,
-})
-```
+复制主题配置。
 
-
-返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
-
-返回类型：`TSearchBarThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | height | double? | - | 字段含义：搜索框高度，默认 40dp。 调用时的空值行为见方法说明。 | 否 |
 | inputBackgroundColor | Color? | - | 字段含义：输入区域背景色，默认 `bgColorSecondaryContainer` Token。 调用时的空值行为见方法说明。 | 否 |
@@ -155,46 +79,50 @@ TSearchBarThemeData copyWith({
 | cursorHeight | double? | - | 字段含义：光标高度。 调用时的空值行为见方法说明。 | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TSearchBarThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
+
+
 ##### TSearchBarThemeData.lerp
 
-```dart
-TSearchBarThemeData lerp(
-  ThemeExtension<TSearchBarThemeData>? other,
-  double t,
-)
-```
+位置参数：`other, t`
 
 
-按 t 在当前主题和目标主题之间生成过渡主题。
-other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+生成主题过渡配置。
 
-返回类型：`TSearchBarThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TSearchBarThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
 | t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TSearchBarThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
+
+
 ### TSearchBarVariant
-#### 简介
+
 搜索框形态。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| square | 方形搜索框。 |
-| round | 圆角搜索框。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| square | TSearchBarVariant | - | 方形搜索框。 | - |
+| round | TSearchBarVariant | - | 圆角搜索框。 | - |
 
 
 ### TSearchBarAlignment
-#### 简介
+
 搜索框文本对齐方式。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| left | 左对齐。 |
-| center | 居中对齐。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| left | TSearchBarAlignment | - | 左对齐。 | - |
+| center | TSearchBarAlignment | - | 居中对齐。 | - |

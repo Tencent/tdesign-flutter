@@ -1,40 +1,14 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TCheckbox
-#### 简介
+
 严格受控的复选框；`onChanged` 为 null 时禁用。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TCheckbox extends StatelessWidget
-```
+##### TCheckbox
 
-#### 默认构造方法
-
-
-```dart
-const TCheckbox({
-  super.key,
-  required this.value,
-  this.onChanged,
-  this.title,
-  this.subTitle,
-  this.size = TCheckboxSize.medium,
-  this.cardMode = false,
-  this.showDivider = true,
-  this.contentDirection = TContentDirection.right,
-  this.titleMaxLines = 3,
-  this.subTitleMaxLines = 5,
-  this.customIconBuilder,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | cardMode | bool | false | 是否使用卡片模式。 | 否 |
 | contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向。 | 否 |
@@ -51,39 +25,17 @@ const TCheckbox({
 
 
 ### TCheckboxGroup
-#### 简介
+
+类型参数：`T`
+
+
 数据驱动且严格受控的复选框组。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TCheckboxGroup<T> extends StatelessWidget
-```
+##### TCheckboxGroup
 
-#### 默认构造方法
-
-
-```dart
-const TCheckboxGroup({
-  super.key,
-  required this.value,
-  required this.options,
-  this.onChanged,
-  this.direction = Axis.vertical,
-  this.columns = 1,
-  this.cardMode = false,
-  this.showDivider = true,
-  this.contentDirection = TContentDirection.right,
-  this.size = TCheckboxSize.medium,
-  this.maxSelected,
-  this.onMaxSelected,
-  this.itemBuilder,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | cardMode | bool | false | 是否使用卡片模式。 | 否 |
 | columns | int | 1 | 每行列数，必须大于 0。 | 否 |
@@ -101,30 +53,17 @@ const TCheckboxGroup({
 
 
 ### TCheckboxOption
-#### 简介
+
+类型参数：`T`
+
+
 复选框组的数据项。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TCheckboxOption<T>
-```
+##### TCheckboxOption
 
-#### 默认构造方法
-
-
-```dart
-const TCheckboxOption({
-  required this.value,
-  required this.label,
-  this.subTitle,
-  this.disabled = false,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | disabled | bool | false | 是否禁用该项。 | 否 |
 | label | String | - | 主文案。 | 是 |
@@ -133,38 +72,17 @@ const TCheckboxOption({
 
 
 ### TCheckboxThemeData
-#### 简介
+
 TCheckbox 组件级 ThemeExtension
 
 通过 Theme 子树注入，控制子树默认样式。
 被 TCheckbox 和 TCheckboxGroup 共用。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TCheckboxThemeData extends ThemeExtension<TCheckboxThemeData>
-```
+##### TCheckboxThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TCheckboxThemeData({
-  this.variant,
-  this.selectColor,
-  this.disableColor,
-  this.titleColor,
-  this.subTitleColor,
-  this.backgroundColor,
-  this.spacing,
-  this.insetSpacing,
-  this.customSpace,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 卡片背景颜色。 | 否 |
 | customSpace | EdgeInsetsGeometry? | - | 内容区域内边距。 | 否 |
@@ -181,26 +99,9 @@ const TCheckboxThemeData({
 
 ##### TCheckboxThemeData.copyWith
 
-```dart
-TCheckboxThemeData copyWith({
-  TCheckboxVariant? variant,
-  Color? selectColor,
-  Color? disableColor,
-  Color? titleColor,
-  Color? subTitleColor,
-  Color? backgroundColor,
-  double? spacing,
-  double? insetSpacing,
-  EdgeInsetsGeometry? customSpace,
-})
-```
+复制主题配置。
 
-
-返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
-
-返回类型：`TCheckboxThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | variant | TCheckboxVariant? | - | 字段含义：复选框指示器的默认视觉变体；未设置时使用圆形。 调用时的空值行为见方法说明。 | 否 |
 | selectColor | Color? | - | 字段含义：选中态颜色。 调用时的空值行为见方法说明。 | 否 |
@@ -213,80 +114,113 @@ TCheckboxThemeData copyWith({
 | customSpace | EdgeInsetsGeometry? | - | 字段含义：内容区域内边距。 调用时的空值行为见方法说明。 | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TCheckboxThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
+
+
 ##### TCheckboxThemeData.lerp
 
-```dart
-TCheckboxThemeData lerp(
-  ThemeExtension<TCheckboxThemeData>? other,
-  double t,
-)
-```
+位置参数：`other, t`
 
 
-按 t 在当前主题和目标主题之间生成过渡主题。
-other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+生成主题过渡配置。
 
-返回类型：`TCheckboxThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TCheckboxThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
 | t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TCheckboxThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
+
+
 ### TContentDirection
-#### 简介
+
 选择控件相对于文案的排列方向。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| left | 控件位于文案右侧。 |
-| right | 控件位于文案左侧。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| left | TContentDirection | - | 控件位于文案右侧。 | - |
+| right | TContentDirection | - | 控件位于文案左侧。 | - |
 
 
 ### TCheckboxSize
-#### 简介
+
 复选框指示器尺寸。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| small | 小尺寸。 |
-| medium | 中尺寸。 |
-| large | 大尺寸。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| small | TCheckboxSize | - | 小尺寸。 | - |
+| medium | TCheckboxSize | - | 中尺寸。 | - |
+| large | TCheckboxSize | - | 大尺寸。 | - |
 
 
 ### TCheckboxVariant
-#### 简介
+
 复选框指示器的视觉变体。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| circle | 圆形指示器。 |
-| square | 方形指示器。 |
-| check | 仅显示勾选或半选图标。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| circle | TCheckboxVariant | - | 圆形指示器。 | - |
+| square | TCheckboxVariant | - | 方形指示器。 | - |
+| check | TCheckboxVariant | - | 仅显示勾选或半选图标。 | - |
 
 
 ### TCheckboxIconBuilder
-#### 简介
-自定义复选框指示器构建器。
-#### 类型定义
 
-```dart
-typedef TCheckboxIconBuilder = Widget Function(BuildContext context, bool? value, bool disabled);
-```
+自定义复选框指示器构建器。
+
+位置参数：`context, value, disabled`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | 复选框指示器的构建上下文。 | 是 |
+| value | bool? | - | 当前选中状态；null 表示半选。 | 是 |
+| disabled | bool | - | 当前复选框是否禁用。 | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | 替换内置指示器的组件。 | - |
 
 
 ### TCheckboxOptionBuilder
-#### 简介
-自定义复选框组数据项构建器。
-#### 类型定义
 
-```dart
-typedef TCheckboxOptionBuilder<T> = Widget Function(BuildContext context, TCheckboxOption<T> option, bool selected, bool disabled);
-```
+类型参数：`T`
+
+
+自定义复选框组数据项构建器。
+
+位置参数：`context, option, selected, disabled`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | 复选框组选项的构建上下文。 | 是 |
+| option | TCheckboxOption&lt;T&gt; | - | 当前数据项。 | 是 |
+| selected | bool | - | 当前数据项是否选中。 | 是 |
+| disabled | bool | - | 当前数据项是否禁用。 | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | 当前数据项的自定义内容。 | - |

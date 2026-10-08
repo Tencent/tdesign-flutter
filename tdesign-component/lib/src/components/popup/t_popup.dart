@@ -54,20 +54,19 @@ final class TPopup {
   // 私有构造器：工具类仅暴露静态方法，无外部调用，标记为覆盖率例外（不可达死代码）。
   const TPopup._(); // coverage:ignore-line
 
-  /// 打开浮层，返回用于关闭、重新打开和查询状态的 [TPopupHandle]。
-  ///
-  /// | 调用情况 | 行为 |
-  /// | --- | --- |
-  /// | 重复调用 | 每次创建独立浮层，可叠加展示 |
-  /// | 参数与方向不匹配 | 抛出 [FlutterError] |
+  /// 每次调用打开独立浮层，可叠加展示；参数与方向不匹配时抛出 [FlutterError]。
   ///
   /// [context] 用于查找 [Navigator] 并获取局部主题。
   ///
-  /// [options] 浮层配置。
+  /// [options] 浮层配置；创建句柄时合并 [context] 的 [TPopupThemeData]，重新打开不重新解析已合并的主题值。
   ///
   /// [navigatorContext] 承载浮层的导航上下文；未指定时使用 [context]。
   ///
   /// [useRootNavigator] 是否使用根 [Navigator]。
+  ///
+  /// ## 返回值
+  ///
+  /// 用于控制当前浮层的关闭、重新打开及状态查询。
   static TPopupHandle show(
     BuildContext context, {
     required TPopupOptions options,

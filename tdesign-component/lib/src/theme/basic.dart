@@ -62,7 +62,10 @@ class FontFamily {
 
 /// Font字体宽高的扩展
 extension FontExtensions on Font {
-  /// 返回使用 [newSize] 字号的字体副本，保留字重，并按当前行高比例计算新行高后取整。
+  /// 调整字体大小。
+  ///
+  /// ## 返回值
+  /// 使用 [newSize] 字号的字体副本，保留字重，并按当前行高比例计算新行高后取整。
   Font withSize(int newSize) => Font(
     size: newSize,
     lineHeight: (height * newSize).round(),

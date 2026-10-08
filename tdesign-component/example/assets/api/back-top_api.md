@@ -1,39 +1,17 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TBackTop
-#### 简介
+
 返回顶部组件。
 
 绑定 `controller` 后，滚动偏移达到 `visibilityOffset` 时显示；点击时先
 动画回到顶部，再触发可选的 `onPressed` 完成通知。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TBackTop extends StatefulWidget
-```
+##### TBackTop
 
-#### 默认构造方法
-
-
-```dart
-const TBackTop({
-  Key? key,
-  this.controller,
-  this.onPressed,
-  this.showText = false,
-  this.visibilityOffset = 200,
-  this.tooltip,
-  this.shape = TBackTopShape.circle,
-  this.colorPreset = TBackTopColorPreset.light,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | colorPreset | TBackTopColorPreset | TBackTopColorPreset.light | 局部配色预设，默认 `TBackTopColorPreset.light`；不切换全局明暗主题。 | 否 |
 | controller | ScrollController? | - | 页面滚动控制器。 未传时组件始终可见，点击只触发 `onPressed`；传入后组件监听滚动偏移并 在点击时以 500 毫秒、Curves.easeIn 动画回到该滚动位置的最小边界。 控制器由调用方创建和释放，组件只管理自己的滚动监听。 | 否 |
@@ -46,40 +24,17 @@ const TBackTop({
 
 
 ### TBackTopThemeData
-#### 简介
+
 返回顶部组件 ThemeExtension。
 
 只承载子树级具体视觉默认值；结构形态、配色选择和滚动显隐行为由
 `TBackTop` 实例唯一拥有。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TBackTopThemeData extends ThemeExtension<TBackTopThemeData>
-```
+##### TBackTopThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TBackTopThemeData({
-  this.backgroundColor,
-  this.borderColor,
-  this.contentColor,
-  this.roundSize,
-  this.halfCircleHeight,
-  this.halfCircleMinWidth,
-  this.iconSize,
-  this.borderWidth,
-  this.halfCircleHorizontalPadding,
-  this.contentGap,
-  this.textStyle,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 背景色；未设置时根据实例配色读取 TDesign 语义 Token。 | 否 |
 | borderColor | Color? | - | 边框色；未设置时根据实例配色读取 TDesign 语义 Token。 | 否 |
@@ -98,28 +53,9 @@ const TBackTopThemeData({
 
 ##### TBackTopThemeData.copyWith
 
-```dart
-TBackTopThemeData copyWith({
-  Color? backgroundColor,
-  Color? borderColor,
-  Color? contentColor,
-  double? roundSize,
-  double? halfCircleHeight,
-  double? halfCircleMinWidth,
-  double? iconSize,
-  double? borderWidth,
-  double? halfCircleHorizontalPadding,
-  double? contentGap,
-  TextStyle? textStyle,
-})
-```
+复制主题配置。
 
-
-返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
-
-返回类型：`TBackTopThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 字段含义：背景色；未设置时根据实例配色读取 TDesign 语义 Token。 调用时的空值行为见方法说明。 | 否 |
 | borderColor | Color? | - | 字段含义：边框色；未设置时根据实例配色读取 TDesign 语义 Token。 调用时的空值行为见方法说明。 | 否 |
@@ -134,45 +70,52 @@ TBackTopThemeData copyWith({
 | textStyle | TextStyle? | - | 字段含义：文案字体样式；未设置字段回退 Mark Extra Small 字体。 文字颜色与图标颜色统一由 `contentColor` 控制，传入样式中的 `color` 不参与解析，避免同一内容色存在两个 Theme 状态源。 调用时的空值行为见方法说明。 | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TBackTopThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
+
+
 ##### TBackTopThemeData.lerp
 
-```dart
-TBackTopThemeData lerp(ThemeExtension<TBackTopThemeData>? other, double t)
-```
+位置参数：`other, t`
 
 
-按 t 在当前主题和目标主题之间生成过渡主题。
-other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+生成主题过渡配置。
 
-返回类型：`TBackTopThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TBackTopThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
 | t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TBackTopThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
+
+
 ### TBackTopShape
-#### 简介
+
 返回顶部结构形态。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| circle | 48 × 48 的圆形返回顶部。 |
-| halfCircle | 贴靠屏幕右侧的半圆形返回顶部。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| circle | TBackTopShape | - | 48 × 48 的圆形返回顶部。 | - |
+| halfCircle | TBackTopShape | - | 贴靠屏幕右侧的半圆形返回顶部。 | - |
 
 
 ### TBackTopColorPreset
-#### 简介
+
 返回顶部预设配色。
 
 只选择一组协调的背景、边框和内容颜色，不改变组件结构或交互。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| light | 浅色容器配色。 |
-| dark | 深色容器配色。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| light | TBackTopColorPreset | - | 浅色容器配色。 | - |
+| dark | TBackTopColorPreset | - | 深色容器配色。 | - |

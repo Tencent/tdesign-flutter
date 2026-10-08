@@ -47,6 +47,9 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
     this.boxShadow,
   });
 
+  /// 合并主题配置。
+  ///
+  /// ## 返回值
   /// 返回合并后的主题；[other] 的非空字段覆盖当前字段，other 为空时返回当前主题。
   TPopoverThemeData merge(
     /// 要合并的目标主题；为空时保留当前配置。
@@ -69,6 +72,9 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
     );
   }
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
   /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TPopoverThemeData copyWith({
@@ -97,6 +103,9 @@ class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
   /// 按 t 在当前主题和目标主题之间生成过渡主题。
   /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override

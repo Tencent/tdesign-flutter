@@ -16,7 +16,10 @@ import 't_rate_theme_data.dart';
 
 /// 自定义评分图标构建器。
 ///
-/// [filled] 表示构建选中或未选中图标；半星由组件裁剪选中图标实现。
+/// [filled] 是否构建选中图标；半星由组件裁剪选中图标实现。
+///
+/// ## 返回值
+/// 指定选中状态的评分图标。
 typedef TRateIconBuilder = Widget Function(bool filled);
 
 /// 严格受控的评分组件。

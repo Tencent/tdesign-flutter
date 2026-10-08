@@ -8,6 +8,11 @@ import 't_picker_theme_data.dart';
 ///
 /// 返回类型限定为 [TPopupHeader]，使弹层尺寸计算与实际头部的
 /// [TPopupHeader.headerHeight] 保持一致。
+/// [context] 弹层头部的构建上下文。
+/// [close] 请求关闭当前 Picker 弹层的回调。
+///
+/// ## 返回值
+/// 标准弹层头部；其 headerHeight 参与弹层总高度计算。
 typedef TPickerPopupHeaderBuilder =
     TPopupHeader Function(BuildContext context, VoidCallback close);
 
@@ -24,6 +29,9 @@ final class TPickerPopup {
   /// 弹层总高为当前 [TPickerThemeData.height]（默认 200）加
   /// [TPopupHeader.headerHeight]（58）。[child] 通常为 `TPicker` 或
   /// `TDateTimePicker`，其受控值、确认和取消状态仍由调用方管理。
+  ///
+  /// ## 返回值
+  /// 已经发起打开的 Popup 控制句柄，可用于查询状态和关闭弹层。
   static TPopupHandle show(
     /// 当前构建上下文，用于读取祖先配置。
     BuildContext context, {

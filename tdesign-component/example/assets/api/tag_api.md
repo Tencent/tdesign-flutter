@@ -1,40 +1,18 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TTag
-#### 简介
+
 展示型标签组件，仅展示，内部不可更改自身状态
 支持样式：方形/圆角/半圆/带关闭图标
 
-#### 声明
+#### 构造方法
 
-```dart
-class TTag extends StatelessWidget
-```
+##### TTag
 
-#### 默认构造方法
+位置参数：`text`
 
 
-```dart
-const TTag(
-  this.text, {
-  this.colorPreset = TTagColorPreset.defaultTheme,
-  this.variant = TTagVariant.dark,
-  this.icon,
-  this.size = TTagSize.medium,
-  this.shape = TTagShape.square,
-  this.needCloseIcon = false,
-  this.enabled = true,
-  this.onTap,
-  this.onCloseTap,
-  Key? key,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | text | String | - | 标签内容 | 是 |
 | colorPreset | TTagColorPreset | TTagColorPreset.defaultTheme | 标签预设配色。 | 否 |
@@ -50,35 +28,17 @@ const TTag(
 
 
 ### TSelectTag
-#### 简介
+
 严格受控的可选标签。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TSelectTag extends StatelessWidget
-```
+##### TSelectTag
 
-#### 默认构造方法
+位置参数：`text`
 
 
-```dart
-const TSelectTag(
-  this.text, {
-  super.key,
-  required this.value,
-  this.onChanged,
-  this.colorPreset = TTagColorPreset.primary,
-  this.variant = TTagVariant.dark,
-  this.icon,
-  this.size = TTagSize.medium,
-  this.shape = TTagShape.square,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | text | String | - | 标签内容。 | 是 |
 | colorPreset | TTagColorPreset | TTagColorPreset.primary | 选中态预设配色。 | 否 |
@@ -92,40 +52,17 @@ const TSelectTag(
 
 
 ### TTagThemeData
-#### 简介
+
 标签组件级 ThemeExtension
 
 通过 Theme 子树注入，控制子树的默认样式。
 具体视觉值由组件 Theme 控制，未指定时回退全局 Token。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TTagThemeData extends ThemeExtension<TTagThemeData>
-```
+##### TTagThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TTagThemeData({
-  this.textColor,
-  this.backgroundColor,
-  this.dangerColor,
-  this.successColor,
-  this.successLightColor,
-  this.font,
-  this.padding,
-  this.squareBorderRadius,
-  this.overflow,
-  this.maxLines,
-  this.fixedWidth,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 所有启用 Tag 的统一背景色；优先于各配色预设的填充色。 | 否 |
 | dangerColor | Color? | - | danger 预设的基础色；未设置时回退全局 errorColor。 | 否 |
@@ -144,28 +81,9 @@ const TTagThemeData({
 
 ##### TTagThemeData.copyWith
 
-```dart
-TTagThemeData copyWith({
-  Color? textColor,
-  Color? backgroundColor,
-  Color? dangerColor,
-  Color? successColor,
-  Color? successLightColor,
-  Font? font,
-  EdgeInsets? padding,
-  double? squareBorderRadius,
-  TextOverflow? overflow,
-  int? maxLines,
-  double? fixedWidth,
-})
-```
+复制主题配置。
 
-
-返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
-
-返回类型：`TTagThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | textColor | Color? | - | 字段含义：所有启用 Tag 的正文和前置图标颜色；优先于配色预设的全局 Token。 禁用态不受此字段影响，关闭图标继续使用独立的占位色 Token。 调用时的空值行为见方法说明。 | 否 |
 | backgroundColor | Color? | - | 字段含义：所有启用 Tag 的统一背景色；优先于各配色预设的填充色。 调用时的空值行为见方法说明。 | 否 |
@@ -180,76 +98,81 @@ TTagThemeData copyWith({
 | fixedWidth | double? | - | 字段含义：标签固定宽度 调用时的空值行为见方法说明。 | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TTagThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
+
+
 ##### TTagThemeData.lerp
 
-```dart
-TTagThemeData lerp(ThemeExtension<TTagThemeData>? other, double t)
-```
+位置参数：`other, t`
 
 
-按 t 在当前主题和目标主题之间生成过渡主题。
-other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+生成主题过渡配置。
 
-返回类型：`TTagThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TTagThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
 | t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TTagThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
+
+
 ### TTagColorPreset
-#### 简介
+
 标签内置配色预设；绘制形态由 `TTagVariant` 单独选择。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| defaultTheme | 默认中性色。 |
-| primary | 品牌主色。 |
-| warning | 警告色。 |
-| danger | 危险色。 |
-| success | 成功色。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| defaultTheme | TTagColorPreset | - | 默认中性色。 | - |
+| primary | TTagColorPreset | - | 品牌主色。 | - |
+| warning | TTagColorPreset | - | 警告色。 | - |
+| danger | TTagColorPreset | - | 危险色。 | - |
+| success | TTagColorPreset | - | 成功色。 | - |
 
 
 ### TTagSize
-#### 简介
+
 标签尺寸。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| extraLarge | 超大尺寸。 |
-| large | 大尺寸。 |
-| medium | 中等尺寸。 |
-| small | 小尺寸。 |
-| custom | 由 Theme padding 和字体决定尺寸。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| extraLarge | TTagSize | - | 超大尺寸。 | - |
+| large | TTagSize | - | 大尺寸。 | - |
+| medium | TTagSize | - | 中等尺寸。 | - |
+| small | TTagSize | - | 小尺寸。 | - |
+| custom | TTagSize | - | 由 Theme padding 和字体决定尺寸。 | - |
 
 
 ### TTagShape
-#### 简介
+
 标签形状。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| square | 小圆角矩形。 |
-| round | 胶囊形。 |
-| mark | 右侧胶囊标记形。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| square | TTagShape | - | 小圆角矩形。 | - |
+| round | TTagShape | - | 胶囊形。 | - |
+| mark | TTagShape | - | 右侧胶囊标记形。 | - |
 
 
 ### TTagVariant
-#### 简介
+
 标签绘制形态。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| dark | 深色填充。 |
-| light | 浅色填充。 |
-| outline | 描边。 |
-| lightOutline | 浅色描边。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| dark | TTagVariant | - | 深色填充。 | - |
+| light | TTagVariant | - | 浅色填充。 | - |
+| outline | TTagVariant | - | 描边。 | - |
+| lightOutline | TTagVariant | - | 浅色描边。 | - |

@@ -56,6 +56,51 @@ void main() {
       ]);
 
   test(
+    'audits typedef tables against exported source and accepts legacy aliases',
+    () async {
+      const alias = 'typedef Changed = void Function(bool visible);';
+      source.writeAsStringSync(
+        '${source.readAsStringSync()}\n/// Visibility changed.\n$alias\n',
+      );
+      final manifestFile = File(p.join(fixture.path, 'tool/components.json'));
+      final manifest = jsonDecode(manifestFile.readAsStringSync()) as Map;
+      (manifest['components'][0]['api']['names'] as List).add('Changed');
+      manifestFile.writeAsStringSync(jsonEncode(manifest));
+      const tables = '''
+### Changed
+Visibility changed.
+位置参数：`visible`
+#### 回调参数
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| visible | bool | - | Visibility. | 是 |
+#### 返回值
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | void | - | No result. | - |
+''';
+      asset.writeAsStringSync('$_api\n$tables');
+      final accepted = await audit();
+      expect(
+        accepted.exitCode,
+        0,
+        reason: '${accepted.stdout}${accepted.stderr}',
+      );
+      asset.writeAsStringSync(
+        '$_api\n${tables.replaceFirst('| visible | bool |', '| visible | String |')}',
+      );
+      final rejected = await audit();
+      expect(rejected.exitCode, 1);
+      expect(rejected.stdout, contains('output-typedef-parameter-visible'));
+      asset.writeAsStringSync(
+        '$_api\n### Changed\n#### 类型定义\n```dart\n$alias\n```\n',
+      );
+      final legacy = await audit();
+      expect(legacy.exitCode, 0, reason: '${legacy.stdout}${legacy.stderr}');
+    },
+  );
+
+  test(
     'accepts complete signatures, positional parameters and escaped pipes',
     () async {
       final result = await audit();
@@ -167,6 +212,152 @@ void main() {
       )
       .replaceFirst('```dart\nSample<T> copyWith()\n```', '返回类型：`Sample<T>`')
       .replaceAll('| 参数 | 类型 | 默认值 | 说明 | 必填 |', '| 名称 | 类型 | 默认值 | 说明 | 必传 |');
+  final tableReturns = compactMethods
+      .replaceFirst(
+        '返回类型：`T?`',
+        '###### 返回值\n\n| 类型 | 说明 |\n| --- | --- |\n| T? | Selected value. |',
+      )
+      .replaceFirst(
+        '###### 返回值\n\n| 类型 | 说明 |\n| --- | --- |\n| T? | Selected value. |',
+        '',
+      )
+      .replaceFirst(
+        '##### Sample.copyWith',
+        '###### 返回值\n\n| 类型 | 说明 |\n| --- | --- |\n| T? | Selected value. |\n\n##### Sample.copyWith',
+      )
+      .replaceFirst(
+        '返回类型：`Sample<T>`',
+        '###### 返回值\n\n| 类型 | 说明 |\n| --- | --- |\n| Sample&lt;T&gt; | A copy. |',
+      );
+
+  final uniformReturns = tableReturns
+      .replaceAll(
+        '| 类型 | 说明 |\n| --- | --- |',
+        '| 名称 | 类型 | 默认值 | 说明 | 必传 |\n| --- | --- | --- | --- | --- |',
+      )
+      .replaceFirst(
+        '| T? | Selected value. |',
+        '| 返回值 | T? | - | Selected value. | - |',
+      )
+      .replaceFirst(
+        '| Sample&lt;T&gt; | A copy. |',
+        '| 返回值 | Sample&lt;T&gt; | - | A copy. | - |',
+      );
+  for (final wrong in [false, true]) {
+    test('uniform return tables are isolated and checked $wrong', () async {
+      asset.writeAsStringSync(
+        wrong
+            ? uniformReturns.replaceFirst('| 返回值 | T? |', '| 返回值 | Object? |')
+            : uniformReturns,
+      );
+      final result = await audit();
+      expect(
+        result.exitCode,
+        wrong ? 1 : 0,
+        reason: '${result.stdout}${result.stderr}',
+      );
+      if (wrong) {
+        expect(result.stdout, contains('output-signature: Sample.read'));
+      }
+    });
+  }
+
+  for (final missing in [false, true]) {
+    test(
+      'uniform notes cannot supply a constructor parameter $missing',
+      () async {
+        var content = uniformReturns;
+        if (missing) {
+          content = content.replaceFirst('| value | int | - | 内容。 | 是 |', '');
+        }
+        content = content.replaceFirst(
+          '#### 参数',
+          '<!-- api-table: details -->\n'
+              '| 名称 | 类型 | 默认值 | 说明 | 必传 |\n'
+              '| --- | --- | --- | --- | --- |\n'
+              '| value | int | - | Description only. | 是 |\n'
+              '| Condition | - | - | Behaviour only. | - |\n\n#### 参数',
+        );
+        asset.writeAsStringSync(content);
+        final result = await audit();
+        expect(
+          result.exitCode,
+          missing ? 1 : 0,
+          reason: '${result.stdout}${result.stderr}',
+        );
+        if (missing) {
+          expect(result.stdout, contains('output-parameter-count'));
+        }
+      },
+    );
+  }
+
+  for (final invalid in [false, true]) {
+    test(
+      'void methods omit returns but reject malformed returns $invalid',
+      () async {
+        source.writeAsStringSync(
+          _source.replaceFirst(
+            '  /// 复制配置。',
+            '  /// 完成操作。\n  void finish() {}\n  /// 复制配置。',
+          ),
+        );
+        asset.writeAsStringSync(
+          '$tableReturns\n##### Sample.finish\n'
+          '${invalid ? "###### 返回值\n\n| 类型 | 说明 |\n| --- | --- |" : ""}',
+        );
+        final result = await audit();
+        expect(
+          result.exitCode,
+          invalid ? 1 : 0,
+          reason: '${result.stdout}${result.stderr}',
+        );
+        if (invalid) {
+          expect(result.stdout, contains('output-signature: Sample.finish'));
+        }
+      },
+    );
+  }
+
+  test(
+    'accepts return tables without mixing their rows into parameters',
+    () async {
+      asset.writeAsStringSync(tableReturns);
+      final result = await audit();
+      expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+    },
+  );
+  for (final defect in ['wrong', 'missing', 'duplicate', 'neighbour']) {
+    test('rejects $defect return table contracts', () async {
+      var content = tableReturns;
+      if (defect == 'wrong') {
+        content = content.replaceFirst(
+          '| T? | Selected value. |',
+          '| Object? | Selected value. |',
+        );
+      }
+      if (defect == 'missing') {
+        content = content.replaceFirst('| T? | Selected value. |', '');
+      }
+      if (defect == 'duplicate') {
+        content = content.replaceFirst(
+          '| T? | Selected value. |',
+          '| T? | Selected value. |\n| T? | Again. |',
+        );
+      }
+      if (defect == 'neighbour') {
+        content = content.replaceFirst(
+          '###### 返回值',
+          '##### Sample.unrelated\n###### 返回值',
+        );
+      }
+      asset.writeAsStringSync(content);
+      final result = await audit();
+      expect(result.exitCode, 1, reason: '${result.stdout}${result.stderr}');
+      expect(result.stdout, contains('output-signature'));
+    });
+  }
+
   test('accepts uniformly compact callable contracts', () async {
     asset.writeAsStringSync(compactMethods);
     final result = await audit();

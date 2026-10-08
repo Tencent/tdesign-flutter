@@ -1,6 +1,11 @@
 part of 't_date_time_picker_internal.dart';
 
-/// 自定义滚轮列展示文案；返回 null 时使用默认文案。
+/// 自定义滚轮列展示文案。
+/// [column] 当前时间列类型。
+/// [value] 当前选项的时间数值。
+///
+/// ## 返回值
+/// 选项展示文案；返回 null 时使用该列默认文案。
 typedef DateTimePickerRenderLabel =
     String? Function(
       /// 当前列，见 `DateTimeColumn`。

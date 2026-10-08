@@ -15,6 +15,12 @@ import '../divider/t_divider_theme_data.dart';
 import 't_radio_theme_data.dart';
 
 /// 自定义单选框指示器构建器。
+/// [context] 单选框指示器的构建上下文。
+/// [selected] 当前选项是否选中。
+/// [disabled] 当前选项是否禁用。
+///
+/// ## 返回值
+/// 替换内置单选指示器的组件。
 typedef TRadioIconBuilder =
     Widget Function(BuildContext context, bool selected, bool disabled);
 

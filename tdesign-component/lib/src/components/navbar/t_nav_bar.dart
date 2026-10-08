@@ -10,9 +10,9 @@ import 't_nav_bar_theme_data.dart';
 
 /// NavBar 组件
 ///
-/// Material AppBar 薄包装（NavigationToolbar 实现）。
-/// - A 类禁用：操作项 `onTap: null`。
-/// - L4 样式（标题颜色、背景、内边距等）→ [TNavBarThemeData]。
+/// 展示页面标题、起始内容与操作项，可作为 Scaffold 的 appBar。
+/// 操作项 `onTap: null` 时禁用；标题颜色、背景与内边距通过
+/// [TNavBarThemeData] 配置。
 class TNavBar extends StatelessWidget implements PreferredSizeWidget {
   const TNavBar({
     Key? key,

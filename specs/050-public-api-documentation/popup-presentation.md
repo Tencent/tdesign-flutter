@@ -1,16 +1,16 @@
 # Popup API 展示验收
 
-日期：2026-10-08。仅验收 Popup，维护者确认后再扩大范围。以下结论对应本地候选，未推送；工具提交 `ea7734b853872ccc4d65b19848538a5b921abbff`，远端工具 PR #29 的 CI 不包含本次展示调整。
+日期：2026-10-08。仅验收 Popup，维护者确认后再扩大范围。以下结论对应本地候选，未推送；工具候选基于本地提交 `ea7734b853872ccc4d65b19848538a5b921abbff`，本次返回值及表格统一调整仍为工作区改动，远端工具 PR #29 的 CI 不包含本次展示调整。
 
 ## 当前信息结构
 
 - 三级标题：公开类型或顶层函数。类型用途直接放在类型名下，不重复「简介」标题。
-- 四级标题：构造方法、属性、静态成员、静态方法、实例方法、枚举值或类型定义。按此顺序显示实际存在的分组，无空分组。
+- 四级标题：构造方法、属性、静态成员、静态方法、实例方法、枚举值，以及类型别名的回调参数/返回值或目标类型定义。按此顺序显示实际存在的分组，无空分组。
 - 五级标题：具体构造/方法的实际名称。默认构造、命名构造及工厂构造统一置于「构造方法」，默认构造优先，其余按名称排序。
-- 六级标题：构造/方法内部说明；继续嵌套时使用加粗段落，避免越过所属 API。
-- 构造、方法及顶层函数参数表统一为「名称、类型、默认值、说明、必传」五列；必传值保持源码 required 语义。
+- 六级标题：方法返回值及构造/方法内部说明；继续嵌套时使用加粗段落，避免越过所属 API。
+- 全部表格统一为「名称、类型、默认值、说明、必传」五列；参数必传保持源码 required 语义，不适用值用 `-`。
 - 参数表直接接在构造/方法说明之后，不再重复「参数」标题。「公开属性（字段与访问器）」精简为「属性」。
-- 构造、静态/实例方法及顶层函数统一去掉完整签名代码块和 const 标识；保留参数类型、默认值、必填、位置/命名区别、返回类型、泛型约束及必要行为说明。无参 API 明示无参数。typedef 保留完整类型定义。
+- 构造、静态/实例方法及顶层函数统一去掉完整签名代码块和 const 标识；保留参数类型、默认值、必填、位置/命名区别、非 void 返回类型、泛型约束及必要行为说明。无参 API 明示无参数。typedef 以参数/返回值或目标类型表保留类型契约，不重复源码声明。
 - API 页去掉完整示例、孤立示例标题和独立类型「声明」章节；专门示例页保留。
 
 `TPopupOptions` 将构造方式和方向专用参数合并为一张表，用中文标明方向；`TPopupPlacement` 仅列枚举方向，不重复构造推荐和尺寸说明。类型用途保留一句，蒙层组合、开关状态、归一化、插值和回调参数使用表格，无「使用说明」及两个组织性子标题。
@@ -18,11 +18,11 @@
 
 ## 修改范围与源码影响
 
-最新追加轮只修改六个 Popup 源文件的 dartdoc：`t_popup.dart`、`_popup_header.dart`、`t_popup_options.dart`、`t_popup_handle.dart`、`t_popup_types.dart`、`t_popup_theme_data.dart`。逐文件与本轮起点 `770e444a` 的 Dart token 比对完全一致；组件实现、API 签名、默认值与调用方式未改变，无 breaking change，不需要更新日志。
+此前表格优先阶段修改六个 Popup 源文件的 dartdoc；本次返回值阶段仅修改 `t_popup.dart`、`t_popup_options.dart`、`t_popup_theme_data.dart` 的注释（以及格式化产生的空行）。运行 token 与本轮起点 `0eb6a054` 一致；组件实现、API 签名、默认值与调用方式未改变，无 breaking change，不需要更新日志。
 
-只重新生成 `popup_api.md`，其余 56 份资产未改。135 个参数的名称、类型、声明默认值、必传状态以及位置参数顺序和返回类型与修改前完全一致；说明文字经过精简。源码完整示例保留。工具代码、正式依赖 ref 和锁文件均未修改。共用参数去重和类型链接仍属于待讨论方案，本次未实现。
+只重新生成 `popup_api.md`，其余 56 份资产未改。135 个参数的名称、类型、声明默认值、必传状态以及位置参数顺序和实际返回类型保持一致；源码完整示例保留。生成器统一将 AST 返回类型与 authored 返回说明渲染为表格；工具顶层函数校验和消费审计同步支持新表格与旧格式。正式依赖 ref 和锁文件未改，共用参数去重和类型链接未实现。
 
-官网只调整类型标题重复检查：原子串检查会把五级默认构造标题也算成三级类型标题，改为匹配完整三级标题行。未改站点运行逻辑。正式依赖 ref 和工具锁文件未改。
+官网在此前阶段调整类型标题重复检查，本次仅补 API 六级标题的字号与行高，以及其下表格的宽度、列宽和换行，保证新返回分组可读；未改站点运行逻辑。
 
 ## 逐类型验收
 
@@ -83,7 +83,7 @@
 
 证据：`tools-columns-*.log`、`columns-audit-*.log`、`columns-*-analyze-*.log`、`columns-inventory-*.json`、`columns-generate-*.log`、`columns-validate-*.log`、`columns-output-contract.log`、`columns-site-build.log`、`columns-web-build.log`、`columns-browser-check.json` 及 `popup-table-columns.jpg`。本次未重新运行完整消费 40 项套件，不沿用此前 39 项结果充当本次完整回归。
 
-## 表格优先与重复文案精简（最新候选）
+## 表格优先与重复文案精简（上一候选）
 
 | 内容 | 调整 |
 | --- | --- |
@@ -109,7 +109,58 @@
 
 当前窄窗口中长表格沿用官网横向滚动；本次没有改站点表格样式或宣称窄屏所有列同时可见。示例交互未重验。
 
-证据：`tables-generate-*.log`、`tables-validate-*.log`、`tables-analyze-*.log`、`tables-tokens-*.log`、`tables-inventory-*.json`、`tables-demo-*.log`、`tables-output-contract.json`、`tables-browser-check.json`、`tables-site-build.log`、`tables-web-build.log`、`popup-tables.jpg`。当前产物 SHA256：`6d6a79b26051e128ed36083cb656e44fa8328eaecf2174ca185a41edc78dfb18`。
+证据：`tables-generate-*.log`、`tables-validate-*.log`、`tables-analyze-*.log`、`tables-tokens-*.log`、`tables-inventory-*.json`、`tables-demo-*.log`、`tables-output-contract.json`、`tables-browser-check.json`、`tables-site-build.log`、`tables-web-build.log`、`popup-tables.jpg`。该阶段产物 SHA256：`6d6a79b26051e128ed36083cb656e44fa8328eaecf2174ca185a41edc78dfb18`。
+
+## 返回值结构（上一候选）
+
+`TPopup.show` 的「调用情况 / 行为」两行表合并为一句：每次调用打开独立浮层，可叠加展示；参数与方向不匹配时抛出 FlutterError。参数表之后显示六级「返回值」标题及「类型 / 说明」表，展示 TPopupHandle 及其控制当前浮层的用途。
+
+规则在工具渲染层统一处理静态/实例/扩展方法及顶层函数，构造没有返回值分组，void API 不生成空表格。官网将 API 六级标题字号设为正文大小，避免浏览器默认 h6 字号过小；不改变语义层级；其后的返回表跟随内容区宽度，类型列占 30%，说明换行，避免窄窗口横向截断。源码的返回值章节被提取至表格，其他同级说明保留；缺失说明不会由工具推断。Popup 七个非 void 方法均补齐真实返回说明，泛型及可空类型来自 AST，三个 void 方法没有返回标题。审计器保留旧签名/行内格式兼容，拒绝缺失、错误、重复或借用相邻 API 的返回类型；显式写错 void 返回表仍报错。
+
+参数表严格维持五列，返回表不会被误读为参数。双 SDK 生成字节一致，16 类型、24 可调用入口、21 张参数表及 135 参数保持一致，新增 7 张返回表。
+
+双 SDK 工具完整回归各 77 项、消费审计正反例各 47 项和真实 Popup API 页面各 1 项通过；修改文件严格 analyze 均零问题。六个 Popup 文件运行 token 不变；全量源码/新旧资产 AST 契约审计零问题，Popup validate 均 ERROR=0/WARN=0。官网 18 项测试及生产构建通过，Flutter Web 构建与本地装配完成。实际页面确认参数之后的返回标题、七张有说明的返回表及三个 void API 无空分组；窄窗口下 TPopup.show 返回表与内容区同宽（约 695px），标题字号为 14px，说明完整可读。未重验七个 Demo 交互场景，不宣称全量组件展示验收或远端 CI 通过。当前产物 SHA256：`31a16bddd641e548bd331d82daa407be0959d2fe60657714db699b076bdc1ac3`。
+
+证据：`tools-returns-final-*.log`、`returns-tools-analyze-*.log`、`returns-audit-*.log`、`returns-analyze-*.log`、`returns-inventory-*.json`、`returns-tokens-*.log`、`returns-demo-*.log`、`returns-generate-*.log`、`returns-validate-*.log`、`returns-output-contract.json`、`returns-site-build.log`、`returns-web-build.log`、`returns-browser-check.json`、`popup-return-value.jpg`。
+
+## 所有表统一五列（上一候选）
+
+维护者确认所有表统一为「名称 / 类型 / 默认值 / 说明 / 必传」，不适用项使用 `-`。统一规则在工具渲染层实现，参数、返回值、属性、静态成员、枚举及 dartdoc 说明表均使用同一表头；枚举类型取声明名，返回类型取 AST。说明表原有的条件、方向及结果合并到名称/说明，保留转义竖线和全部关系；已有五列的 authored 表保持数据不变。渲染时标记说明表角色，消费审计与工具 validate 均忽略其数据契约，避免说明行补足缺失参数或误报空类型。
+
+只生成 Popup：46 张表包含 21 张参数表、7 张返回表、4 张属性/静态成员表、2 张枚举表和 12 张说明表。16 个类型、24 个调用入口、135 个参数及 7 个返回类型/说明与上一候选一致。官网五列列宽统一为 18% / 22% / 12% / 40% / 8%，表格跟随内容区宽度，长文本换行。实际 Chrome 页面确认 46 张表头完全一致；TPopup.show 参数表与返回表各列对齐，截图为 `popup-uniform-tables.png`。内置浏览器标签连接不可用，本轮改用已打开的 Chrome 本地页面验收。
+
+本轮未改变组件实现或调用方式，未推送；其他 56 份 API 资产和正式工具依赖 ref 未修改。两版 SDK 的工具完整回归各 78 项、消费审计正反例各 51 项及真实 Popup API 页面各 1 项通过，相关严格 analyze 均零问题。全量新旧资产契约审计均零问题；Popup validate 均 ERROR=0/WARN=0。双版生成字节一致，六个 Popup 源文件运行 token 与 `0eb6a054` 相同，46 张表的数据与关系逐项对比保持完整。官网 18 项测试及生产构建通过，Flutter Web 构建并装配完成，嵌入 API 文件与源码资产字节相同。示例交互未重新验收，远端 CI 未复验。
+
+证据：`tools-uniform-*.log`、`uniform-tools-analyze-*.log`、`uniform-audit-*.log`、`uniform-analyze-*.log`、`uniform-inventory-*.json`、`uniform-tokens-*.log`、`uniform-demo-*.log`、`uniform-generate-*.log`、`uniform-validate-*.log`、`uniform-output-contract.json`、`uniform-site-build.log`、`uniform-web-build.log`、`uniform-browser-check.json`。产物 SHA256：`99112737d0cb1fac746f2416ef40d4bd61e0fcd0d2349dd24a5ec5cfcff3fa90`。
+
+## 回调类型定义改为表格（上一候选）
+
+三个 Popup 回调 typedef 的说明表和源码声明合并为「回调参数」与「返回值」五列表格。参数说明改用标准 dartdoc 参数段落，Widget/void 返回说明由源码维护；生成器沿用可调用成员模型，不在渲染层解析签名文本或猜测参数语义。别名泛型、回调泛型、可空性和位置参数顺序保留；非函数别名以目标类型表呈现。消费审计独立从导出的 AST 比对契约，兼容旧声明资产；正反例涵盖错误类型、必传、顺序、重复/缺失参数、泛型、可空性和错误返回值，说明表不能补足参数。
+
+只生成 Popup：49 张表统一五列，三个回调共 6 个参数及 3 个返回表；原有 16 类型、24 调用入口和 135 个调用参数不变。与上一份五列候选相比，仅三个回调章节变化，另外 13 个类型章节字节相同，页面无源码代码块。六个 Popup 文件运行 token 与 `0eb6a054` 相同，本轮新增组件源码修改只涉及 `t_popup_types.dart` 注释，不改变 API 或组件行为。
+
+双 SDK 工具完整回归各 83 项，新增消费 typedef 契约单元测试各 6 项与真实审计 CLI 正反例各 1 项、Popup API 页面测试各 1 项通过；工具和相关消费源码严格 analyze 零问题。全量 57 份新旧资产 AST 契约审计零问题；Popup validate ERROR=0/WARN=0，双版生成字节相同。此前消费 51 项完整回归属于上一候选，本轮针对 typedef 新分支验证。官网 18 项测试及生产构建、Flutter Web 构建通过，装配后的嵌入 API 与消费资产字节相同。实际 Chrome 页面逐一检查三个回调表的参数类型、说明、必传及 Widget/void 返回值，全部 49 表表头一致，截图 `popup-typedef-tables.png`。
+
+未推送，正式依赖 ref 和其他 56 个组件资产未改动；远端 CI 与示例交互未复验。当前资产 SHA256：`86e4c4d28cb7c93b56a2fd91b1dcb319a20ad33ed80462efe52feb5828085688`。证据：`tools-typedef-*.log`、`typedef-tools-analyze-*.log`、`typedef-consumer-*.log`、`typedef-cli-test-*.log`、`typedef-analyze-*.log`、`typedef-demo-*.log`、`typedef-inventory-*.json`、`typedef-generate-*.log`、`typedef-validate-*.log`、`typedef-tokens-332.log`、`typedef-output-contract.json`、`typedef-browser-check.json`、`typedef-site-build.log`、`typedef-web-build.log`。
+
+## 使用契约说明修正（当前验收范围）
+
+维护者要求先修正 Review 中的安全区、关闭时序、重新打开时的主题配置和尺寸/内容布局说明；示例与类型跳转暂不处理。仅修改公开 dartdoc 并重新生成 Popup，不改组件实现、公开签名、默认行为或其他组件资产，不新增 API 示例、源码声明或组织性说明表。
+
+- 安全区按方向说明实际避让边：top 仅上、bottom 仅下、left 为左/上/下、right 为右/上/下、center 为全部边。
+- 区分显隐变化、路由结果和动画完成；关闭完成前重新打开时，旧周期不触发 onClosed。
+- handle.options 为 show 时合并后的配置；重新打开重新捕获内容 Theme，但不重新解析已经合并的 Popup Theme 配置。
+- 面板尺寸受可用空间约束；底部高度包含头部，居中面板高度不包含外部关闭区，长内容由调用方提供滚动布局。
+
+本轮仅修改 `t_popup.dart`、`t_popup_handle.dart`、`t_popup_options.dart` 的注释，以及生成资产与验收记录。双 SDK 生成字节一致、Popup validate ERROR=0/WARN=0，全量 57 份新旧资产 AST 契约审计零问题，Popup 严格 analyze 零问题，六个 Popup 源文件运行 token 与 HEAD 不变，无 breaking change。
+
+双 SDK 各 10 项现有定向行为测试、2 项临时业务行为验证和 1 项真实 API 页面测试通过。临时验证确认 result 在关闭动画完成前返回、显隐开始通知同步触发、重新打开保留已解析 Popup 配置但内容捕获新 Theme、底部头部占用总面板高度；测试位于证据目录，不新增仓库测试。新版初次测试遇到旧 SDK 遗留的 ink_sparkle 编译资产不可解码，清理生成的 unit_test_assets 后重新运行全部本轮新版检查通过；未改组件或测试来规避。
+
+49 张表继续统一五列，16 个类型及调用契约保留；与本轮起点逐行对比，仅说明单元格变化，名称、类型、默认值、必传与顺序不变，其他 56 份资产不变。实际 Chrome 页面核对了安全区、生命周期、结果、主题及布局说明，旧错误安全区描述消失；未新增源码代码块。
+
+官网 18 项测试与生产构建、最新 SDK Flutter Web 构建通过。Web 已重新装配到预览，嵌入和 HTTP 返回的 Popup API 与源码资产字节相同。示例及跳转暂缓，未重验七个示例交互，未推送或复验远端 CI。
+
+本轮证据目录：`/tmp/tdesign-api-full-review/popup-presentation/usage-contract/`，含 `generate-*.log`、`validate-*.log`、`behavior-*.log`、`characterization-*.log`、`analyze-*.log`、`inventory-*.json`、`tokens-*.log`、`api-page-*.log`、`site-build.log`、`web-build.log`、`output-contract.json`、`browser-check.json`、`preview-assets.json`、`popup-handle-contract.png`。当前资产 SHA256：`6c9d92f47d144e8a7a1909ba15e636ea0770112c3fd1334e74ac6197c06883d1`。
 
 ## 本地预览与证据
 
@@ -136,11 +187,11 @@ cp -a tdesign-component/example/build/web/. tdesign-site/_site/example/
 - `organization-source-contract.log`、`organization-site-build.log`、`organization-web-build.log`：注释修改的 token 等价、官网构建及 Web 构建。
 - `popup-organization.jpg`、`popup-placement-organization.jpg`、`popup-constructor-organization.jpg`：实际布局截图。
 
-此前 69/33 项统一精简与 73/35 项标题归属测试属于历史候选；各历史结果仅适用于对应候选，最新表格优先阶段的结果见上节。历史 Web 场景截图仍为 `web-popup-center.jpg`、`web-popup-header.jpg`。
+此前 69/33 项统一精简与 73/35 项标题归属测试属于历史候选；各历史结果仅适用于对应候选，当前候选的结果见「回调类型定义改为表格」一节。历史 Web 场景截图仍为 `web-popup-center.jpg`、`web-popup-header.jpg`。
 
 ## 交付边界
 
 - [x] Popup 信息组织修复及本地程序、实际页面逐类型验收完成。
-- [ ] 维护者确认 Popup 信息组织合理。
-- [ ] 确认后生成并逐页验收其余组件，更新全量报告。
+- [x] 维护者已授权以当前 Popup 方案推广全部组件。
+- [x] 已推广全量生成与 API 页面结构验收，逐组件记录见 all-presentation.md；正式工具/远端门禁仍单列。
 - [ ] 工具和消费仓库正式交付及最终 head 的 CI/autofix 复验。

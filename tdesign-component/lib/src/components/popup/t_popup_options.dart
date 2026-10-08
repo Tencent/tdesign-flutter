@@ -197,16 +197,16 @@ class TPopupOptions {
     useSafeArea: useSafeArea,
   );
 
-  /// 弹出内容。
+  /// 面板内容，占用面板内可用空间；底部有头部时占用剩余高度。长内容需自行使用滚动组件。
   final Widget child;
 
   /// 弹出方向。
   final TPopupPlacement placement;
 
-  /// 左侧/右侧默认 280，居中默认 240；其他方向不支持。
+  /// 面板宽度，受可用宽度约束；未传时取方向对应的 Popup 主题值，再回退到左侧/右侧 280、居中 240。其他方向不支持。
   final double? width;
 
-  /// 顶部/底部/居中默认 240；其他方向不支持。
+  /// 面板高度，受可用高度约束；底部包含头部，居中不包含面板外关闭区。未传时取方向对应的 Popup 主题值，再回退到 240；仅顶部/底部/居中支持。
   final double? height;
 
   /// 交叉轴留白；须使用当前方向的 Inset 类型，居中不支持。
@@ -231,25 +231,29 @@ class TPopupOptions {
   /// 打开/关闭动画时长；未指定时使用 240ms。
   final Duration? animationDuration;
 
-  /// 底部头部；未指定时不显示，可用 [TPopupHeader] 组合标题与操作按钮。
+  /// 底部头部，占用 [height] 内的空间；未指定时不显示，可用 [TPopupHeader] 组合标题与操作按钮。
   final TPopupHeaderBuilder? headerBuilder;
 
-  /// 居中面板外下方关闭区；未指定时不显示，按钮由 builder 提供。
+  /// 居中面板外下方关闭区，不计入 [height]，与间距一起占用额外高度；未指定时不显示，按钮由 builder 提供。
   final TPopupSlotBuilder? closeBuilder;
 
-  /// 打开动画结束。
+  /// 打开动画结束后触发。
   final VoidCallback? onOpened;
 
-  /// 当前展示周期结束时触发；通常在关闭动画结束后，非栈顶路由直接移除时可能没有关闭动画。
+  /// 关闭动画结束后触发；非栈顶浮层直接移除时在路由释放时触发。关闭完成前重新 [TPopupHandle.open]，旧周期不触发。
   final VoidCallback? onClosed;
 
-  /// 显隐变化；第二个参数为 [TPopupTrigger]。
+  /// 打开时同步触发 true，开始关闭时触发 false，均不等待动画结束；第二个参数为 [TPopupTrigger]。
   final TPopupVisibleChangeCallback? onVisibleChange;
 
-  /// 避让安全区；居中避让全部边，其他方向避让贴边侧及相邻边，并与 [inset] 叠加。仅内容需避让时可在 [child] 中使用 [SafeArea]。
+  /// 避让安全区：顶部仅上边，底部仅下边，左侧避让左/上/下边，右侧避让右/上/下边，居中避让全部边；与 [inset] 叠加。仅内容需避让时可在 [child] 中使用 [SafeArea]。
   final bool useSafeArea;
 
-  /// 返回配置副本。
+  /// 复制配置。
+  ///
+  /// ## 返回值
+  ///
+  /// 应用指定参数后的配置副本。
   TPopupOptions copyWith({
     /// 非空值替换原配置；不传或 null 保留原值。
     Widget? child,
@@ -339,13 +343,17 @@ class TPopupOptions {
     );
   }
 
-  /// 返回按方向整理的配置副本。
+  /// 按方向整理配置。
   ///
   /// | 字段 | 保留条件 | 不满足时 |
   /// | --- | --- | --- |
   /// | [headerBuilder] | 底部 | 清除 |
   /// | [closeBuilder] | 居中 | 清除 |
   /// | 其他参数 | 所有方向 | 保持原值 |
+  ///
+  /// ## 返回值
+  ///
+  /// 保留当前方向适用插槽的配置副本。
   TPopupOptions normalized() {
     final isBottom = placement == TPopupPlacement.bottom;
     final isCenter = placement == TPopupPlacement.center;

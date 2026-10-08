@@ -35,6 +35,12 @@ enum TCheckboxSize {
 }
 
 /// 自定义复选框指示器构建器。
+/// [context] 复选框指示器的构建上下文。
+/// [value] 当前选中状态；null 表示半选。
+/// [disabled] 当前复选框是否禁用。
+///
+/// ## 返回值
+/// 替换内置指示器的组件。
 typedef TCheckboxIconBuilder =
     Widget Function(BuildContext context, bool? value, bool disabled);
 

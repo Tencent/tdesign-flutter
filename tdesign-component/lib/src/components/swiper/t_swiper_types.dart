@@ -28,6 +28,11 @@ enum TSwiperPaginationPlacement {
 }
 
 /// 单个轮播指示器标记的构建器。
+/// [context] 轮播指示器的构建上下文。
+/// [details] 当前标记的索引、选中态及指示器配置。
+///
+/// ## 返回值
+/// 当前轮播指示器标记内容。
 typedef TSwiperPaginationItemBuilder =
     Widget Function(BuildContext context, TSwiperPaginationItemDetails details);
 

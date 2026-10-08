@@ -27,6 +27,13 @@ class TCheckboxOption<T> {
 }
 
 /// 自定义复选框组数据项构建器。
+/// [context] 复选框组选项的构建上下文。
+/// [option] 当前数据项。
+/// [selected] 当前数据项是否选中。
+/// [disabled] 当前数据项是否禁用。
+///
+/// ## 返回值
+/// 当前数据项的自定义内容。
 typedef TCheckboxOptionBuilder<T> =
     Widget Function(
       BuildContext context,

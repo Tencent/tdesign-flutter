@@ -78,6 +78,9 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
   /// 物理行盒超过控件高度属于无效配置，并会在调试模式触发断言。
   final TextStyle? textStyle;
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
   /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TStepperThemeData copyWith({
@@ -112,6 +115,9 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
   /// 插值保留未指定字段的继承语义，由组件结合当前实例尺寸与主题解析。
   ///
   /// 两端均未指定的字段仍为 null；端点返回原始配置。

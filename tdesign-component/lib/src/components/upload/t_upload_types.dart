@@ -48,6 +48,9 @@ enum TUploadValidationError {
 }
 
 /// 自定义文件选择器。
+///
+/// ## 返回值
+/// 文件选择完成时提供选择的文件列表；空列表表示没有新增文件。
 typedef TUploadPicker = Future<List<TUploadFile>> Function();
 
 /// 不可变的上传文件数据。
@@ -92,6 +95,9 @@ class TUploadFile {
   final bool canRemove;
 
   /// 创建部分字段变化的新实例。
+  ///
+  /// ## 返回值
+  /// 用非空参数替换对应字段的新文件对象；null 参数保留当前字段。
   TUploadFile copyWith({
     String? id,
     String? name,

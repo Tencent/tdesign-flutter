@@ -49,7 +49,10 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
     this.width,
   });
 
-  /// 合并两个 ThemeExtension，[other] 优先于 this
+  /// 合并主题配置。
+  ///
+  /// ## 返回值
+  /// other 的非空字段优先的合并主题；other 为 null 时返回当前主题。
   TDialogThemeData merge(
     /// 要合并的目标主题；为空时保留当前配置。
     TDialogThemeData? other,
@@ -69,6 +72,9 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
     );
   }
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
   /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TDialogThemeData copyWith({
@@ -93,6 +99,9 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
   /// 按 t 在当前主题和目标主题之间生成过渡主题。
   /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
@@ -127,6 +136,9 @@ class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
   }
 
   /// 对 [a] 和 [b] 按 [t] 线性插值；两端均为 null 时返回 null，仅一端为 null 时按 0 参与计算。
+  ///
+  /// ## 返回值
+  /// 按 t 线性插值的数值；两端均为 null 时为 null，仅一端为 null 时将该端按 0 计算。
   static double? lerpDouble(
     /// 插值起始值；单端为空时按 0 参与插值。
     double? a,

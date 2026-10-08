@@ -51,6 +51,10 @@ List<RegExpMatch>? _parseTimeFormat(String format) {
 }
 
 /// 自定义计时内容构建器。
+/// [time] 当前计时值，单位为毫秒。
+///
+/// ## 返回值
+/// 自定义计时展示内容。
 typedef TTimeCounterBuilder = Widget Function(int time);
 
 String _toDigits(int n, int l) => n.toString().padLeft(l, '0');

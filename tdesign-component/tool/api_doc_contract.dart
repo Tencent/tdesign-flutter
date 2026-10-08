@@ -18,6 +18,99 @@ List<String> lexicalTokens(String source) {
   return result;
 }
 
+/// Independently check alias tables against the exported source AST.
+/// Existing assets may instead carry the complete typedef declaration.
+List<String> typedefDocumentationIssues(
+  GenericTypeAlias alias,
+  String section,
+) {
+  final signature = signatureTokens(alias, alias.end);
+  if (containsSignature(section, signature)) {
+    return [];
+  }
+  final issues = <String>[];
+  bool matchesInline(String label, String expected) {
+    final actual = RegExp(
+      '^$label：`([^`]+)`',
+      multiLine: true,
+    ).firstMatch(section)?.group(1);
+    return expected.isEmpty
+        ? actual == null
+        : actual != null && sameCode(actual, expected);
+  }
+
+  if (!matchesInline(
+    '类型参数',
+    alias.typeParameters?.typeParameters
+            .map((parameter) => parameter.toSource())
+            .join(', ') ??
+        '',
+  )) {
+    issues.add('generics');
+  }
+  final type = alias.type;
+  if (type is! GenericFunctionType) {
+    final rows = parameterRows(section);
+    if (rows.length != 1 ||
+        rows.single['参数'] != alias.name.lexeme ||
+        !sameCode(rows.single['类型'] ?? '', type.toSource()) ||
+        rows.single['默认值'] != '-' ||
+        rows.single['必填'] != '-') {
+      issues.add('target');
+    }
+    return issues;
+  }
+  if (!section.contains('#### 回调参数\n')) {
+    issues.add('parameters');
+  }
+  final parameters = type.parameters.parameters;
+  String name(int index) => parameters[index].name?.lexeme ?? '参数 ${index + 1}';
+  final positional = [
+    for (var index = 0; index < parameters.length; index++)
+      if (!parameters[index].isNamed) name(index),
+  ].join(', ');
+  if (!matchesInline('位置参数', positional)) {
+    issues.add('order');
+  }
+  if (!matchesInline(
+    '回调类型参数',
+    type.typeParameters?.typeParameters
+            .map((parameter) => parameter.toSource())
+            .join(', ') ??
+        '',
+  )) {
+    issues.add('callback-generics');
+  }
+  if (section.contains('可空：是。') != (type.question != null)) {
+    issues.add('nullable');
+  }
+  final returnType = documentedReturnType(section);
+  if (returnType == null ||
+      !sameCode(returnType, type.returnType?.toSource() ?? 'dynamic')) {
+    issues.add('return');
+  }
+  final rows = parameterRows(section);
+  if (rows.length != parameters.length) {
+    issues.add('count');
+  }
+  for (var index = 0; index < parameters.length; index++) {
+    final found = rows.where((row) => row['参数'] == name(index)).toList();
+    final parameter = parameters[index];
+    if (index >= rows.length ||
+        rows[index]['参数'] != name(index) ||
+        found.length != 1 ||
+        !sameCode(
+          found.single['类型'] ?? '',
+          parameterType(parameter, alias, {}),
+        ) ||
+        found.single['默认值'] != '-' ||
+        found.single['必填'] != (parameter.isRequired ? '是' : '否')) {
+      issues.add('parameter-${name(index)}');
+    }
+  }
+  return issues;
+}
+
 /// Declaration prefix through the parameter list, excluding annotations.
 List<String> signatureTokens(AnnotatedNode node, int end) {
   final result = <String>[];
@@ -311,12 +404,100 @@ List<String> tableCells(String line) {
   return cells;
 }
 
+/// Read a return contract without borrowing a neighbouring API's table.
+String? documentedReturnType(String section) {
+  final headings = RegExp(
+    r'^#{4,6} 返回值[ \t]*$',
+    multiLine: true,
+  ).allMatches(section).toList();
+  if (headings.isEmpty) {
+    return RegExp(
+      r'^返回类型：`([^`]+)`',
+      multiLine: true,
+    ).firstMatch(section)?.group(1);
+  }
+  if (headings.length != 1) {
+    return null;
+  }
+  final heading = headings.single;
+  final depth = heading.group(0)!.split(' ').first.length;
+  final tail = section.substring(heading.end);
+  final boundary = RegExp('^#{1,$depth} ', multiLine: true).firstMatch(tail);
+  final block = boundary == null ? tail : tail.substring(0, boundary.start);
+  final lines = block.split('\n');
+  final start = lines.indexWhere(
+    (line) =>
+        line.trim() == '| 类型 | 说明 |' ||
+        line.trim() == '| 名称 | 类型 | 默认值 | 说明 | 必传 |',
+  );
+  if (start < 0) {
+    return null;
+  }
+  final rows = <List<String>>[];
+  for (final line in lines.skip(start + 1)) {
+    if (!line.startsWith('|') || !line.endsWith('|')) {
+      break;
+    }
+    final cells = tableCells(line);
+    if (cells.every((cell) => RegExp(r'^:?-+:?$').hasMatch(cell))) {
+      continue;
+    }
+    rows.add(cells);
+  }
+  if (rows.length != 1) {
+    return null;
+  }
+  final compact = lines[start].trim() == '| 类型 | 说明 |';
+  final row = rows.single;
+  if (compact) {
+    return row.length == 2 ? row.first : null;
+  }
+  return row.length == 5 && row.first == '返回值' && row[2] == '-' && row[4] == '-'
+      ? row[1]
+      : null;
+}
+
+/// Omit authored relationship tables when auditing API data contracts.
+Iterable<String> apiContractLines(String section) sync* {
+  var details = false;
+  var inTable = false;
+  for (final line in section.split('\n')) {
+    if (line == '<!-- api-table: details -->') {
+      details = true;
+      continue;
+    }
+    if (line.startsWith('|')) {
+      inTable = true;
+      if (!details) {
+        yield line;
+      }
+    } else {
+      if (inTable) {
+        details = false;
+      }
+      inTable = false;
+      yield line;
+    }
+  }
+}
+
 /// Parameter rows within one callable's section.
 List<Map<String, String>> parameterRows(String section) {
   var headers = <String>[];
+  var inReturns = false;
   final rows = <Map<String, String>>[];
-  for (final line in section.split('\n')) {
+  for (final line in apiContractLines(section)) {
+    if (RegExp(r'^#{4,6} 返回值[ \t]*$').hasMatch(line)) {
+      inReturns = true;
+    } else if (RegExp(r'^#{1,5} ').hasMatch(line)) {
+      inReturns = false;
+    }
+    if (inReturns) {
+      headers = <String>[];
+      continue;
+    }
     if (!line.startsWith('|') || !line.endsWith('|')) {
+      headers = <String>[];
       continue;
     }
     final cells = tableCells(line);

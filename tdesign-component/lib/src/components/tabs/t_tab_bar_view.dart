@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// TabBarView 组件
 ///
-/// Material TabBarView 薄包装。
+/// 展示与标签栏控制器同步的分页内容。
 /// `physics` 为空时默认不可滑动。
 class TTabsBarView extends StatelessWidget {
   /// 子widget列表

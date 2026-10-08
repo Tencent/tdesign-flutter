@@ -66,6 +66,9 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
     this.boxShadow,
   });
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
   /// 返回只替换非空参数的新主题。
   ///
   /// 参数省略或传入 `null` 都会保留原值，符合 Flutter `copyWith` 的常见语义。
@@ -94,6 +97,9 @@ class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
   /// 按 t 在当前主题和目标主题之间生成过渡主题。
   /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override

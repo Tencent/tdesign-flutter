@@ -96,7 +96,7 @@ jobs:
 
       - name: Test regression tooling
         working-directory: ./tdesign-component
-        run: flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart test/tool/audit_api_docs_test.dart
+        run: flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart test/tool/audit_api_docs_test.dart test/tool/typedef_docs_test.dart test/tool/api_presentation_test.dart
 
       - name: Check example structure and copied snippets
         working-directory: ./tdesign-component

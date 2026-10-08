@@ -67,6 +67,9 @@ class TFormState extends State<TForm> {
   ///
   /// [fields] 为空时校验所有已注册字段；传入字段名后只校验指定字段。
   /// 未注册或尚未构建完成的字段视为校验失败。
+  ///
+  /// ## 返回值
+  /// 所有参与校验的字段均通过时为 true；未注册或尚未构建完成的指定字段视为失败。
   bool validate({Iterable<String>? fields}) {
     return fields == null
         ? _formKey.currentState?.validate() ?? false
@@ -84,6 +87,9 @@ class TFormState extends State<TForm> {
   }
 
   /// 校验并在成功时触发 [TForm.onSubmit]。
+  ///
+  /// ## 返回值
+  /// 表单校验结果；true 时已保存字段并调用 onSubmit，false 时不提交。
   bool submit() {
     final valid = validate();
     if (valid) {
@@ -279,12 +285,18 @@ class TFormController {
   Map<String, Object?> get values => _state?.values ?? const {};
 
   /// 运行表单字段校验。
+  ///
+  /// ## 返回值
+  /// 绑定表单的校验结果；未绑定表单时为 false。
   bool validate({
     /// 本次操作的字段名；为空时操作全部已注册字段。
     Iterable<String>? fields,
   }) => _state?.validate(fields: fields) ?? false;
 
   /// 校验并提交表单。
+  ///
+  /// ## 返回值
+  /// 绑定表单的校验与提交结果；未绑定表单或校验失败时为 false。
   bool submit() => _state?.submit() ?? false;
 
   /// 重置表单。
@@ -345,6 +357,13 @@ class _TFormScope extends InheritedWidget {
 }
 
 /// TDesign 字段 builder。
+/// [context] 表单字段的构建上下文。
+/// [value] 当前字段值。
+/// [onChanged] 更新字段值的回调；为 null 时字段不可编辑。
+/// [errorText] 当前字段校验错误；为 null 时无错误文案。
+///
+/// ## 返回值
+/// 表单字段的输入与展示内容。
 typedef TFormFieldBuilder<T> =
     Widget Function(
       BuildContext context,

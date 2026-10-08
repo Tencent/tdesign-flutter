@@ -1,70 +1,17 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TTable
-#### 简介
+
+类型参数：`T`
+
+
 强类型、受控排序与选择的表格组件。
 
-```dart
-TTable<Map<String, Object>>(
-  data: const [
-    {'id': 1, 'name': 'Alice'},
-    {'id': 2, 'name': 'Bob'},
-  ],
-  rowKey: (row) => row['id']!,
-  columns: [
-    TTableColumn(
-      id: 'name',
-      header: const Text('Name'),
-      minWidth: 120,
-      cellBuilder: (_, row, __) => Text(row['name']! as String),
-    ),
-  ],
-  onCellTap: (cell) => debugPrint('${cell.columnIndex}: ${cell.row}'),
-)
-```
+#### 构造方法
 
-#### 声明
+##### TTable
 
-```dart
-class TTable<T> extends StatefulWidget
-```
-
-#### 默认构造方法
-
-
-```dart
-const TTable({
-  required this.columns,
-  required this.data,
-  this.rowKey,
-  this.cellSpanBuilder,
-  this.selectionMode = TTableSelectionMode.none,
-  this.selectedRows = const {},
-  this.onSelectionChanged,
-  this.rowSelectable,
-  this.sort,
-  this.onSortChanged,
-  this.loading = false,
-  this.loadingWidget,
-  this.empty,
-  this.footer,
-  this.showHeader = true,
-  this.height,
-  this.maxHeight,
-  this.bordered,
-  this.stripe,
-  this.onCellTap,
-  this.onRowTap,
-  this.onScroll,
-  super.key,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | bordered | bool? | - | 是否显示完整单元格边框。 未设置时为 `false`。 | 否 |
 | cellSpanBuilder | TTableCellSpanBuilder&lt;T&gt;? | - | 返回逻辑单元格的行列跨度。 为空时所有单元格跨度均为 `1 × 1`。该回调仅为尚未被其他合并区域覆盖的 坐标调用；返回 `null` 等同于 `TTableCellSpan` 的默认值。跨度不得越界、重叠， 也不得跨越左固定区、水平滚动区和右固定区。 | 否 |
@@ -92,34 +39,17 @@ const TTable({
 
 
 ### TTableColumn
-#### 简介
+
+类型参数：`T`
+
+
 强类型表格列配置。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TTableColumn<T>
-```
+##### TTableColumn
 
-#### 默认构造方法
-
-
-```dart
-const TTableColumn({
-  required this.id,
-  required this.header,
-  required this.cellBuilder,
-  this.width,
-  this.minWidth,
-  this.fixed = TTableColumnFixed.none,
-  this.align = TTableColumnAlign.left,
-  this.comparator,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | align | TTableColumnAlign | TTableColumnAlign.left | 内容对齐方式。 | 否 |
 | cellBuilder | TTableCellBuilder&lt;T&gt; | - | 单元格构建器。 | 是 |
@@ -132,36 +62,16 @@ const TTableColumn({
 
 
 ### TTableThemeData
-#### 简介
+
 表格组件级 ThemeExtension。
 
 仅保存表格的视觉默认值。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TTableThemeData extends ThemeExtension<TTableThemeData>
-```
+##### TTableThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TTableThemeData({
-  this.rowHeight,
-  this.headerHeight,
-  this.width,
-  this.backgroundColor,
-  this.headerColor,
-  this.stripeColor,
-  this.borderColor,
-  this.cellPadding,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 默认行背景色。 | 否 |
 | borderColor | Color? | - | 边框颜色。 | 否 |
@@ -177,25 +87,9 @@ const TTableThemeData({
 
 ##### TTableThemeData.copyWith
 
-```dart
-TTableThemeData copyWith({
-  double? rowHeight,
-  double? headerHeight,
-  double? width,
-  Color? backgroundColor,
-  Color? headerColor,
-  Color? stripeColor,
-  Color? borderColor,
-  EdgeInsetsGeometry? cellPadding,
-})
-```
+复制主题配置。
 
-
-返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
-
-返回类型：`TTableThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | rowHeight | double? | - | 字段含义：数据行高度。 调用时的空值行为见方法说明。 | 否 |
 | headerHeight | double? | - | 字段含义：表头高度。 调用时的空值行为见方法说明。 | 否 |
@@ -207,74 +101,59 @@ TTableThemeData copyWith({
 | cellPadding | EdgeInsetsGeometry? | - | 字段含义：单元格内边距。 调用时的空值行为见方法说明。 | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TTableThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
+
+
 ##### TTableThemeData.lerp
 
-```dart
-TTableThemeData lerp(TTableThemeData? other, double t)
-```
+位置参数：`other, t`
 
 
-按 t 在当前主题和目标主题之间生成过渡主题。
-other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+生成主题过渡配置。
 
-返回类型：`TTableThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | TTableThemeData? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
 | t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TTableThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
+
+
 ### TTableSort
-#### 简介
+
 受控排序值。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TTableSort
-```
+##### TTableSort
 
-#### 默认构造方法
-
-
-```dart
-const TTableSort({required this.columnId, required this.direction})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | columnId | String | - | 排序列标识。 | 是 |
 | direction | TTableSortDirection | - | 排序方向。 | 是 |
 
 
 ### TTableCellContext
-#### 简介
+
+类型参数：`T`
+
+
 表格逻辑单元格上下文。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TTableCellContext<T>
-```
+##### TTableCellContext
 
-#### 默认构造方法
-
-
-```dart
-const TTableCellContext({
-  required this.row,
-  required this.rowIndex,
-  required this.column,
-  required this.columnIndex,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | column | TTableColumn&lt;T&gt; | - | 当前列配置。 | 是 |
 | columnIndex | int | - | 当前列在 `TTable.columns` 中的索引。 | 是 |
@@ -283,128 +162,186 @@ const TTableCellContext({
 
 
 ### TTableCellSpan
-#### 简介
+
 单元格跨越的逻辑行列数。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TTableCellSpan
-```
+##### TTableCellSpan
 
-#### 默认构造方法
-
-
-```dart
-const TTableCellSpan({this.rowSpan = 1, this.columnSpan = 1})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | columnSpan | int | 1 | 跨越的逻辑列数，默认为 `1`。 | 否 |
 | rowSpan | int | 1 | 跨越的逻辑行数，默认为 `1`。 | 否 |
 
 
 ### TTableSelectionMode
-#### 简介
+
 表格选择模式。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| none | 不显示选择列。 |
-| multiple | 支持多行选择。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| none | TTableSelectionMode | - | 不显示选择列。 | - |
+| multiple | TTableSelectionMode | - | 支持多行选择。 | - |
 
 
 ### TTableSortDirection
-#### 简介
+
 排序方向。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| ascending | 升序。 |
-| descending | 降序。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| ascending | TTableSortDirection | - | 升序。 | - |
+| descending | TTableSortDirection | - | 降序。 | - |
 
 
 ### TTableColumnFixed
-#### 简介
+
 固定列位置。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| left | 固定在左侧。 |
-| right | 固定在右侧。 |
-| none | 跟随中间区域水平滚动。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| left | TTableColumnFixed | - | 固定在左侧。 | - |
+| right | TTableColumnFixed | - | 固定在右侧。 | - |
+| none | TTableColumnFixed | - | 跟随中间区域水平滚动。 | - |
 
 
 ### TTableColumnAlign
-#### 简介
+
 列内容对齐方式。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| left | 左对齐。 |
-| center | 居中对齐。 |
-| right | 右对齐。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| left | TTableColumnAlign | - | 左对齐。 | - |
+| center | TTableColumnAlign | - | 居中对齐。 | - |
+| right | TTableColumnAlign | - | 右对齐。 | - |
 
 
 ### TTableCellSpanBuilder
-#### 简介
+
+类型参数：`T`
+
+
 单元格跨度构建器。
 
 仅为未被其他合并区域覆盖的逻辑单元格调用。该回调会在组件构建期间执行，
 应保持同步且无副作用。
-#### 类型定义
 
-```dart
-typedef TTableCellSpanBuilder<T> = TTableCellSpan? Function(TTableCellContext<T> context);
-```
+位置参数：`context`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | TTableCellContext&lt;T&gt; | - | 当前逻辑单元格的行列数据与索引。 | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TTableCellSpan? | - | 单元格跨越的行列数；返回 null 时按一行一列布局。 | - |
 
 
 ### TTableCellTap
-#### 简介
-单元格点击回调。
-#### 类型定义
 
-```dart
-typedef TTableCellTap<T> = void Function(TTableCellContext<T> context);
-```
+类型参数：`T`
+
+
+单元格点击回调。
+
+位置参数：`context`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | TTableCellContext&lt;T&gt; | - | 被点击的逻辑单元格行列数据与索引。 | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | void | - | 无返回值。 | - |
 
 
 ### TTableRowKey
-#### 简介
-返回行数据的稳定唯一标识。
-#### 类型定义
 
-```dart
-typedef TTableRowKey<T> = Object Function(T row);
-```
+类型参数：`T`
+
+
+行唯一标识构建器。
+
+位置参数：`row`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| row | T | - | 待获取标识的行数据。 | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Object | - | 当前行的稳定唯一标识，用于跨排序或重建保持行身份。 | - |
 
 
 ### TTableRowTap
-#### 简介
-行点击回调。
-#### 类型定义
 
-```dart
-typedef TTableRowTap<T> = void Function(int rowIndex, T row);
-```
+类型参数：`T`
+
+
+行点击回调。
+
+位置参数：`rowIndex, row`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| rowIndex | int | - | 当前行在排序后可见数据中的索引，从 0 开始。 | 是 |
+| row | T | - | 当前行的原始数据。 | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | void | - | 无返回值。 | - |
 
 
 ### TTableCellBuilder
-#### 简介
-单元格构建器。
-#### 类型定义
 
-```dart
-typedef TTableCellBuilder<T> = Widget Function(BuildContext context, T row, int rowIndex);
-```
+类型参数：`T`
+
+
+单元格构建器。
+
+位置参数：`context, row, rowIndex`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | 单元格的构建上下文。 | 是 |
+| row | T | - | 当前行数据。 | 是 |
+| rowIndex | int | - | 当前行在排序后可见数据中的索引，从 0 开始。 | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | 当前单元格内容。 | - |

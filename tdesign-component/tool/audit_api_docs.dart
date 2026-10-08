@@ -353,11 +353,12 @@ void main(List<String> args) {
     final doc = docFile.existsSync() ? docFile.readAsStringSync() : '';
     var headers = <String>[];
     var outputOwner = component['slug'] as String;
-    for (final line in doc.split('\n')) {
+    for (final line in apiContractLines(doc)) {
       if (line.startsWith('### ')) {
         outputOwner = line.substring(4);
       }
       if (!line.startsWith('|')) {
+        headers = <String>[];
         continue;
       }
       final cells = tableCells(line);
@@ -404,6 +405,18 @@ void main(List<String> args) {
       }
       final next = doc.indexOf('\n### ', start + 1);
       final section = doc.substring(start, next < 0 ? doc.length : next);
+      final sourceNode = nodes[name];
+      if (sourceNode is GenericTypeAlias) {
+        for (final failure in typedefDocumentationIssues(sourceNode, section)) {
+          issue(
+            'output-typedef-$failure',
+            name,
+            exports[name]!,
+            sourceNode.offset,
+          );
+        }
+        continue;
+      }
       final declarationTokens = declaration['declaration'] as List<String>?;
       // Legacy assets contain full declarations. Compact API pages retain only
       // type parameters and extension receivers. Compact callable contracts
@@ -489,6 +502,17 @@ void main(List<String> args) {
               : actual != null && sameCode(actual, expected);
         }
 
+        final expectedReturnType = entry.value['returnType'] as String?;
+        final actualReturnType = documentedReturnType(callableSection);
+        final hasReturnContract = RegExp(
+          r'^#{4,6} 返回值[ \t]*$|^返回类型：`',
+          multiLine: true,
+        ).hasMatch(callableSection);
+        final validReturn =
+            expectedReturnType == null ||
+            (expectedReturnType == 'void' && !hasReturnContract) ||
+            (actualReturnType != null &&
+                sameCode(actualReturnType, expectedReturnType));
         final validContract = hasSignature
             ? expectedSignature == null ||
                   containsSignature(callableSection, expectedSignature)
@@ -497,7 +521,7 @@ void main(List<String> args) {
                     '类型参数',
                     entry.value['typeParameters'] as String?,
                   ) &&
-                  matchesInline('返回类型', entry.value['returnType'] as String?);
+                  validReturn;
         if (!validContract) {
           issue(
             'output-signature',

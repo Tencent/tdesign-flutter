@@ -6,6 +6,11 @@ import 'package:flutter/material.dart';
 import 't_collapse_types.dart';
 
 /// 根据折叠状态构建面板头部区域内容的回调。
+/// [context] 折叠面板头部的构建上下文。
+/// [isExpanded] 当前面板是否展开。
+///
+/// ## 返回值
+/// 面板头部内容。
 typedef TCollapsePanelBuilder =
     Widget Function(BuildContext context, bool isExpanded);
 
