@@ -1,20 +1,54 @@
 ## API
 
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
 ### TImage
-
+#### 简介
 统一展示网络、asset 或本地文件图片。
-
-#### 主题配置
-
+### 主题配置
 组件主题通过 `TImageThemeData` 配置，放入 Flutter `ThemeData.extensions`
 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
 `TImageThemeData` 说明。
 
-#### 构造方法
+#### 声明
 
-##### TImage
+```dart
+class TImage extends StatelessWidget
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TImage({
+  super.key,
+  this.src,
+  this.imageFile,
+  this.shape = TImageShape.square,
+  this.errorWidget,
+  this.loadingWidget,
+  this.width,
+  this.height,
+  this.fit = BoxFit.fill,
+  this.frameBuilder,
+  this.loadingBuilder,
+  this.errorBuilder,
+  this.onLoad,
+  this.onError,
+  this.semanticLabel,
+  this.excludeFromSemantics = false,
+  this.cacheWidth,
+  this.cacheHeight,
+  this.filterQuality = FilterQuality.low,
+  this.alignment = Alignment.center,
+  this.repeat = ImageRepeat.noRepeat,
+  this.onTap,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | alignment | AlignmentGeometry | Alignment.center | 图片对齐方式。 | 否 |
 | cacheHeight | int? | - | 解码缓存高度。 | 否 |
@@ -41,14 +75,32 @@
 
 
 ### TImageThemeData
-
+#### 简介
 图片组件的视觉默认值。
 
-#### 构造方法
+#### 声明
 
-##### TImageThemeData
+```dart
+class TImageThemeData extends ThemeExtension<TImageThemeData>
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TImageThemeData({
+  this.color,
+  this.colorBlendMode,
+  this.centerSlice,
+  this.matchTextDirection,
+  this.gaplessPlayback,
+  this.isAntiAlias,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | centerSlice | Rect? | - | 九宫格中心切片。 | 否 |
 | color | Color? | - | 图片叠加色。 | 否 |
@@ -62,52 +114,62 @@
 
 ##### TImageThemeData.copyWith
 
+```dart
+TImageThemeData copyWith({
+  Color? color,
+  BlendMode? colorBlendMode,
+  Rect? centerSlice,
+  bool? matchTextDirection,
+  bool? gaplessPlayback,
+  bool? isAntiAlias,
+})
+```
+
+
 复制主题配置。
+## 返回值
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+返回类型：`TImageThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| color | Color? | - | 字段含义：图片叠加色。 调用时的空值行为见方法说明。 | 否 |
-| colorBlendMode | BlendMode? | - | 字段含义：颜色混合模式。 调用时的空值行为见方法说明。 | 否 |
-| centerSlice | Rect? | - | 字段含义：九宫格中心切片。 调用时的空值行为见方法说明。 | 否 |
-| matchTextDirection | bool? | - | 字段含义：是否匹配文字方向。 未配置时为 false。 调用时的空值行为见方法说明。 | 否 |
-| gaplessPlayback | bool? | - | 字段含义：更新 provider 时是否保留上一帧。 未配置时为 false。 调用时的空值行为见方法说明。 | 否 |
-| isAntiAlias | bool? | - | 字段含义：是否启用抗锯齿。 未配置时为 false。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TImageThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
+| color | Color? | - | 图片叠加色。 | 否 |
+| colorBlendMode | BlendMode? | - | 颜色混合模式。 | 否 |
+| centerSlice | Rect? | - | 九宫格中心切片。 | 否 |
+| matchTextDirection | bool? | - | 是否匹配文字方向。 未配置时为 false。 | 否 |
+| gaplessPlayback | bool? | - | 更新 provider 时是否保留上一帧。 未配置时为 false。 | 否 |
+| isAntiAlias | bool? | - | 是否启用抗锯齿。 未配置时为 false。 | 否 |
 
 
 ##### TImageThemeData.lerp
 
-位置参数：`other, t`
+```dart
+TImageThemeData lerp(ThemeExtension<TImageThemeData>? other, double t)
+```
 
 
 生成主题过渡配置。
+## 返回值
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+返回类型：`TImageThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TImageThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
 | t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TImageThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
 ### TImageShape
-
+#### 简介
 图片形状。
 #### 枚举值
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| square | TImageShape | - | 方形。 | - |
-| roundedSquare | TImageShape | - | 圆角方形。 | - |
-| circle | TImageShape | - | 圆形。 | - |
+
+| 名称 | 说明 |
+| --- | --- |
+| square | 方形。 |
+| roundedSquare | 圆角方形。 |
+| circle | 圆形。 |

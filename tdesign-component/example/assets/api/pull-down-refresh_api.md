@@ -1,27 +1,51 @@
 ## API
 
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
 ### TPullDownRefresh
-
+#### 简介
 TDesign 下拉刷新组件。
-
 以**最小、Flutter 惯用**的 API 封装 `EasyRefresh`，对齐官方
 （小程序 / mobile-vue）PullDownRefresh 的行为表现：
 下拉 → 松手 → 刷新 → 完成四态，支持触底加载、超时、
 四态文案自定义与受控刷新。
-
-#### 主题配置
-
+### 主题配置
 默认刷新头的背景和提示文字读取 `TThemeData` 的全局 Token。
 刷新中复用 `TLoadingThemeData`：强制横向布局，未设置 `textColor` 时
 使用禁用文字色；其他 Loading 主题配置继续继承。
+典型用法：
 
-#### 构造方法
+#### 声明
 
-##### TPullDownRefresh
+```dart
+class TPullDownRefresh extends StatefulWidget
+```
+
+#### 默认构造方法
+
+
+```dart
+const TPullDownRefresh({
+  super.key,
+  required this.child,
+  this.onRefresh,
+  this.onLoadMore,
+  this.lowerThreshold = 50,
+  this.controller,
+  this.texts,
+  this.refreshTimeout = const Duration(milliseconds: 3000),
+  this.loadingBarHeight = 50,
+  this.maxBarHeight = 80,
+  this.successDuration = const Duration(milliseconds: 500),
+  this.onStateChanged,
+})
+```
 
 构造 `TPullDownRefresh`。
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | child | Widget | - | 必填：滚动内容（对应官方默认 slot）。 必须为**有界且可滚动**的内容（如 `ListView` / `GridView` / `CustomScrollView`）。 `SizedBox` 等只能提供尺寸约束，不能把静态内容变成可滚动内容；若内容自身不可滚动， 下拉 / 触底手势仍无法生效，应将内容放入可滚动容器。 | 是 |
 | controller | TPullDownRefreshController? | - | 外部主动刷新控制器。 通过 `TPullDownRefreshController.refresh` 从页面外部触发刷新。刷新完成时机 由 `onRefresh` 返回的 Future、异常或 `refreshTimeout` 共同决定；超时后 控制器 Future 也会完成，迟到的原始 Future 不会再次改变刷新状态。 刷新资源由组件管理；外部控制器无需也不提供 dispose （详见 `TPullDownRefreshController` 文档）。 | 否 |
@@ -38,57 +62,76 @@ TDesign 下拉刷新组件。
 
 
 ### TPullDownRefreshController
-
+#### 简介
 `TPullDownRefresh` 的外部刷新控制器。
-
 使用 Flutter 惯用的控制器模式，从页面外部通过 `refresh` 主动触发一次刷新。
 返回的 Future 会在本次刷新成功、回调失败或超时复位后完成；它不返回业务结果。
 回调异常仍由 `TPullDownRefresh` 通过 `FlutterError.reportError` 上报。
-
-#### 生命周期（所有权）
-
+## 生命周期（所有权）
 刷新资源由 `TPullDownRefresh` 随挂载和卸载管理；本控制器不拥有
 需要调用方释放的资源，因此无需也不提供公开 `dispose()`。
 
-#### 构造方法
+#### 声明
 
-##### TPullDownRefreshController
+```dart
+class TPullDownRefreshController
+```
 
-无参数。
+#### 默认构造方法
+
+
+```dart
+TPullDownRefreshController()
+```
+
 
 #### 实例方法
 
 ##### TPullDownRefreshController.refresh
 
-无参数。
+```dart
+Future<void> refresh()
+```
+
 
 从页面外部主动触发一次下拉刷新。
-
 `await refresh()` 表示这次刷新流程已经结束，不代表业务一定成功；
 成功、回调失败和超时都会完成 Future。组件未挂载或未配置刷新回调
 时，该方法立即完成。
+## 返回值
+刷新流程结束时完成；业务失败或超时也会完成，未挂载或无刷新回调时立即完成。
 
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | Future&lt;void&gt; | - | 刷新流程结束时完成；业务失败或超时也会完成，未挂载或无刷新回调时立即完成。 | - |
-
+返回类型：`Future<void>`
 
 ### TPullDownRefreshTexts
-
+#### 简介
 下拉刷新四态提示语。
-
 对应官方（小程序 / mobile-vue）`loadingTexts: string[]` 数组，
 覆盖「下拉刷新 / 松手刷新 / 正在刷新 / 刷新完成」四个阶段的文案。
 
-#### 构造方法
+#### 声明
 
-##### TPullDownRefreshTexts
+```dart
+class TPullDownRefreshTexts
+```
+
+#### 默认构造方法
+
+
+```dart
+const TPullDownRefreshTexts({
+  required this.pullToRefresh,
+  required this.releaseToRefresh,
+  required this.refreshing,
+  required this.refreshComplete,
+})
+```
 
 构造四态文案。
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | pullToRefresh | String | - | 下拉未达阈值时的提示语（官方默认「下拉刷新」）。 | 是 |
 | refreshComplete | String | - | 刷新完成时的提示语（官方默认「刷新完成」）。 | 是 |
@@ -97,15 +140,16 @@ TDesign 下拉刷新组件。
 
 
 ### TPullDownRefreshState
-
+#### 简介
 下拉刷新状态。
 #### 枚举值
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| inactive | TPullDownRefreshState | - | 未触发（初始 / 完成复位后）。 | - |
-| dragging | TPullDownRefreshState | - | 下拉中，未达到触发阈值。 | - |
-| ready | TPullDownRefreshState | - | 已达阈值、松手即触发刷新。 | - |
-| refreshing | TPullDownRefreshState | - | 刷新进行中。 | - |
-| done | TPullDownRefreshState | - | 刷新完成、展示完成态。 | - |
-| timeout | TPullDownRefreshState | - | 刷新超时的一次性通知，随后回到 `TPullDownRefreshState.inactive`。 | - |
+
+| 名称 | 说明 |
+| --- | --- |
+| inactive | 未触发（初始 / 完成复位后）。 |
+| dragging | 下拉中，未达到触发阈值。 |
+| ready | 已达阈值、松手即触发刷新。 |
+| refreshing | 刷新进行中。 |
+| done | 刷新完成、展示完成态。 |
+| timeout | 刷新超时的一次性通知，随后回到 `TPullDownRefreshState.inactive`。 |

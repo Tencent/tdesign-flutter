@@ -1,25 +1,46 @@
 ## API
 
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
 ### TRadio
-
-类型参数：`T`
-
-
+#### 简介
 由最近的 `TRadioGroup` 控制选中状态的单选框。
-
 必须作为同类型 `TRadioGroup` 的后代使用：
 
-#### 主题配置
-
+### 主题配置
 组件主题通过 `TRadioThemeData` 配置，放入 Flutter `ThemeData.extensions`
 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
 `TRadioThemeData` 说明。
 
-#### 构造方法
+#### 声明
 
-##### TRadio
+```dart
+class TRadio<T> extends StatelessWidget
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TRadio({
+  super.key,
+  required this.value,
+  this.title,
+  this.subTitle,
+  this.size = TRadioSize.medium,
+  this.iconType = TRadioIconType.fill,
+  this.variant = TRadioVariant.block,
+  this.disabled = false,
+  this.contentDirection = TContentDirection.right,
+  this.titleMaxLines = 3,
+  this.subTitleMaxLines = 5,
+  this.customIconBuilder,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向。 | 否 |
 | customIconBuilder | TRadioIconBuilder? | - | 自定义单选框指示器。 | 否 |
@@ -36,32 +57,44 @@
 
 
 ### TRadioGroup
-
-类型参数：`T`
-
-
+#### 简介
 严格受控的单选组。
-
 默认构造通过 `child` 接收调用方布局；标准数据列表使用
 `TRadioGroup.options`。组内的 `TRadio` 从该组件读取选中值和变更回调。
 
-#### 构造方法
+#### 声明
 
-##### TRadioGroup
+```dart
+class TRadioGroup<T> extends StatelessWidget
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| child | Widget | - | 包含 `TRadio` 的自定义布局。 | 是 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| onChanged | ValueChanged&lt;T&gt;? | - | 启用项被点选时通知其值；重复点选已选项也会通知，不自动去重。 为 null 时整组禁用；父组件须回传新 value 才能改变选中状态。 | 否 |
-| value | T? | - | 受控选中值。 | 是 |
 
+#### 命名构造方法
 
 ##### TRadioGroup.options
 
+```dart
+const TRadioGroup.options({
+  super.key,
+  required this.value,
+  required List<TRadioOption<T>> options,
+  this.onChanged,
+  Axis direction = Axis.vertical,
+  int columns = 1,
+  TRadioVariant variant = TRadioVariant.block,
+  bool? showDivider,
+  TContentDirection contentDirection = TContentDirection.right,
+  TRadioSize size = TRadioSize.medium,
+  TRadioIconType iconType = TRadioIconType.fill,
+  int titleMaxLines = 3,
+  int subTitleMaxLines = 5,
+})
+```
+
+
 使用数据项生成标准布局的单选框组。
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | value | T? | - | 受控选中值。 | 是 |
@@ -77,19 +110,53 @@
 | titleMaxLines | int | 3 | 主标题最大行数，默认 3 行。 | 否 |
 | subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 | 否 |
 
+#### 默认构造方法
+
+
+```dart
+const TRadioGroup({
+  super.key,
+  required this.value,
+  this.onChanged,
+  required this.child,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| child | Widget | - | 包含 `TRadio` 的自定义布局。 | 是 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| onChanged | ValueChanged&lt;T&gt;? | - | 启用项被点选时通知其值；重复点选已选项也会通知，不自动去重。 为 null 时整组禁用；父组件须回传新 value 才能改变选中状态。 | 否 |
+| value | T? | - | 受控选中值。 | 是 |
+
 
 ### TRadioOption
-
-类型参数：`T`
-
-
+#### 简介
 单选框组的数据项。
 
-#### 构造方法
+#### 声明
 
-##### TRadioOption
+```dart
+class TRadioOption<T>
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TRadioOption({
+  required this.value,
+  required this.label,
+  this.subTitle,
+  this.disabled = false,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | disabled | bool | false | 是否禁用该项。 | 否 |
 | label | String | - | 主文案。 | 是 |
@@ -98,16 +165,34 @@
 
 
 ### TRadioThemeData
-
+#### 简介
 TRadio 组件级 ThemeExtension
-
 通过 Theme 子树注入，控制子树默认样式。
 
-#### 构造方法
+#### 声明
 
-##### TRadioThemeData
+```dart
+class TRadioThemeData extends ThemeExtension<TRadioThemeData>
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TRadioThemeData({
+  this.selectColor,
+  this.disableColor,
+  this.titleColor,
+  this.subTitleColor,
+  this.backgroundColor,
+  this.spacing,
+  this.insetSpacing,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 卡片背景颜色。 卡片模式下生效；null 时使用 bgColorContainer Token。 | 否 |
 | disableColor | Color? | - | 禁用态颜色。 null 时选中禁用态使用 brandColorDisabled，未选中禁用态描边使用 componentBorder Token。 | 否 |
@@ -122,100 +207,105 @@ TRadio 组件级 ThemeExtension
 
 ##### TRadioThemeData.copyWith
 
+```dart
+TRadioThemeData copyWith({
+  Color? selectColor,
+  Color? disableColor,
+  Color? titleColor,
+  Color? subTitleColor,
+  Color? backgroundColor,
+  double? spacing,
+  double? insetSpacing,
+})
+```
+
+
 复制主题配置。
+## 返回值
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+返回类型：`TRadioThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| selectColor | Color? | - | 字段含义：选中态颜色。 null 时使用 brandColor Token。 调用时的空值行为见方法说明。 | 否 |
-| disableColor | Color? | - | 字段含义：禁用态颜色。 null 时选中禁用态使用 brandColorDisabled，未选中禁用态描边使用 componentBorder Token。 调用时的空值行为见方法说明。 | 否 |
-| titleColor | Color? | - | 字段含义：主标题颜色。 启用态 null 时使用 textColorPrimary Token；禁用态始终使用 textColorDisabled。 调用时的空值行为见方法说明。 | 否 |
-| subTitleColor | Color? | - | 字段含义：副标题颜色。 启用态 null 时使用 textColorSecondary Token；禁用态始终使用 textColorDisabled。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：卡片背景颜色。 卡片模式下生效；null 时使用 bgColorContainer Token。 调用时的空值行为见方法说明。 | 否 |
-| spacing | double? | - | 字段含义：指示器与文案间距。 null 时使用 spacer Token。 调用时的空值行为见方法说明。 | 否 |
-| insetSpacing | double? | - | 字段含义：文案与非指示器侧的内边距。 null 时使用 spacer2 Token。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TRadioThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
+| selectColor | Color? | - | 选中态颜色。 null 时使用 brandColor Token。 | 否 |
+| disableColor | Color? | - | 禁用态颜色。 null 时选中禁用态使用 brandColorDisabled，未选中禁用态描边使用 componentBorder Token。 | 否 |
+| titleColor | Color? | - | 主标题颜色。 启用态 null 时使用 textColorPrimary Token；禁用态始终使用 textColorDisabled。 | 否 |
+| subTitleColor | Color? | - | 副标题颜色。 启用态 null 时使用 textColorSecondary Token；禁用态始终使用 textColorDisabled。 | 否 |
+| backgroundColor | Color? | - | 卡片背景颜色。 卡片模式下生效；null 时使用 bgColorContainer Token。 | 否 |
+| spacing | double? | - | 指示器与文案间距。 null 时使用 spacer Token。 | 否 |
+| insetSpacing | double? | - | 文案与非指示器侧的内边距。 null 时使用 spacer2 Token。 | 否 |
 
 
 ##### TRadioThemeData.lerp
 
-位置参数：`other, t`
+```dart
+TRadioThemeData lerp(ThemeExtension<TRadioThemeData>? other, double t)
+```
 
 
 生成主题过渡配置。
+## 返回值
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+返回类型：`TRadioThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TRadioThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
 | t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
 
 
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TRadioThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
 ### TRadioSize
-
+#### 简介
 单选框指示器尺寸。
 #### 枚举值
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| small | TRadioSize | - | 小尺寸。 | - |
-| medium | TRadioSize | - | 中尺寸。 | - |
-| large | TRadioSize | - | 大尺寸。 | - |
+
+| 名称 | 说明 |
+| --- | --- |
+| small | 小尺寸。 |
+| medium | 中尺寸。 |
+| large | 大尺寸。 |
 
 
 ### TRadioIconType
-
+#### 简介
 单选框内置指示器样式。
 #### 枚举值
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| dot | TRadioIconType | - | 圆环内显示实心圆点。 | - |
-| check | TRadioIconType | - | 选中时显示勾选标记。 | - |
-| fill | TRadioIconType | - | 选中时显示带反色勾选标记的实心圆。 | - |
+
+| 名称 | 说明 |
+| --- | --- |
+| dot | 圆环内显示实心圆点。 |
+| check | 选中时显示勾选标记。 |
+| fill | 选中时显示带反色勾选标记的实心圆。 |
 
 
 ### TRadioVariant
-
+#### 简介
 单选框的完整视觉结构。
 #### 枚举值
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| inline | TRadioVariant | - | 行内结构，不绘制通栏背景、外围内边距或标准块高。 | - |
-| block | TRadioVariant | - | 通栏结构，使用标准块高、容器背景和外围内边距。 | - |
-| card | TRadioVariant | - | 卡片结构。 | - |
+
+| 名称 | 说明 |
+| --- | --- |
+| inline | 行内结构，不绘制通栏背景、外围内边距或标准块高。 |
+| block | 通栏结构，使用标准块高、容器背景和外围内边距。 |
+| card | 卡片结构。 |
 
 
 ### TRadioIconBuilder
-
+#### 简介
 自定义单选框指示器构建器。
+`context` 单选框指示器的构建上下文。
+`selected` 当前选项是否选中。
+`disabled` 当前选项是否禁用。
+## 返回值
+替换内置单选指示器的组件。
+#### 类型定义
 
-位置参数：`context, selected, disabled`
-
-
-#### 回调参数
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| context | BuildContext | - | 单选框指示器的构建上下文。 | 是 |
-| selected | bool | - | 当前选项是否选中。 | 是 |
-| disabled | bool | - | 当前选项是否禁用。 | 是 |
-
-
-#### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | Widget | - | 替换内置单选指示器的组件。 | - |
+```dart
+typedef TRadioIconBuilder = Widget Function(BuildContext context, bool selected, bool disabled);
+```
