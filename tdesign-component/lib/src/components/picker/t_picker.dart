@@ -14,6 +14,12 @@ const double _disabledOpacity = 0.5;
 ///
 /// 独立多列使用 [TPickerColumns]，层级联动使用 [TPickerLinked]。弹层和确认
 /// 操作由调用方组合，组件本身只负责滚轮选择。标准弹层使用 `TPickerPopup.show`。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TPickerThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TPickerThemeData` 说明。
 class TPicker extends StatefulWidget {
   const TPicker({
     super.key,

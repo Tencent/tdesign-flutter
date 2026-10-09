@@ -4,6 +4,12 @@
 
 基于 Material `Slider` 的严格受控单值滑块。
 
+#### 主题配置
+
+组件主题通过 `TSliderThemeData` 配置，放入 Flutter `ThemeData.extensions`
+后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+`TSliderThemeData` 说明。
+
 #### 构造方法
 
 ##### TSlider
@@ -70,7 +76,7 @@ TSlider 与 TRangeSlider 共用的组件级 ThemeExtension。
 | overlayColor | Color? | - | 交互反馈颜色；为空时使用品牌色的透明层。 | 否 |
 | thumbBorderColor | Color? | - | 滑块描边颜色；为空时使用全局灰阶色。 | 否 |
 | thumbColor | Color? | - | 滑块填充颜色；为空时使用全局反色文字色。 | 否 |
-| trackHeight | double? | - | 普通轨道粗细；胶囊形态仍使用其内置规格。 | 否 |
+| trackHeight | double? | - | 普通轨道粗细；胶囊形态仍使用其内置规格。 null 时为 4 逻辑像素。 | 否 |
 | valueIndicatorColor | Color? | - | 数值提示背景颜色；为空时使用全局品牌色。 | 否 |
 | valueIndicatorTextColor | Color? | - | 数值提示文字颜色；为空时使用全局主要文字色。 | 否 |
 
@@ -92,7 +98,7 @@ TSlider 与 TRangeSlider 共用的组件级 ThemeExtension。
 | overlayColor | Color? | - | 字段含义：交互反馈颜色；为空时使用品牌色的透明层。 调用时的空值行为见方法说明。 | 否 |
 | valueIndicatorColor | Color? | - | 字段含义：数值提示背景颜色；为空时使用全局品牌色。 调用时的空值行为见方法说明。 | 否 |
 | valueIndicatorTextColor | Color? | - | 字段含义：数值提示文字颜色；为空时使用全局主要文字色。 调用时的空值行为见方法说明。 | 否 |
-| trackHeight | double? | - | 字段含义：普通轨道粗细；胶囊形态仍使用其内置规格。 调用时的空值行为见方法说明。 | 否 |
+| trackHeight | double? | - | 字段含义：普通轨道粗细；胶囊形态仍使用其内置规格。 null 时为 4 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
 | decoration | Decoration? | - | 字段含义：滑块外层装饰。 调用时的空值行为见方法说明。 | 否 |
 
 

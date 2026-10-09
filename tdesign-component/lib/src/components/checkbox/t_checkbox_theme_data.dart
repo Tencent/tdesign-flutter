@@ -11,27 +11,34 @@ class TCheckboxThemeData extends ThemeExtension<TCheckboxThemeData> {
   final TCheckboxVariant? variant;
 
   /// 选中态颜色。
+  /// null 时使用 brandColor Token。
   final Color? selectColor;
 
   /// 禁用态指示器的前景色；未选时用于描边色。
   final Color? disableColor;
 
   /// 主标题颜色。
+  /// 启用态 null 时使用 textColorPrimary Token；禁用态始终使用 textColorDisabled。
   final Color? titleColor;
 
   /// 副标题颜色。
+  /// 启用态 null 时使用 textColorSecondary Token；禁用态始终使用 textColorDisabled。
   final Color? subTitleColor;
 
   /// 卡片背景颜色。
+  /// 卡片模式下生效；null 时使用 bgColorContainer Token。
   final Color? backgroundColor;
 
   /// 指示器与文案间距。
+  /// null 时使用 spacer Token。
   final double? spacing;
 
   /// 文案与非指示器侧的内边距。
+  /// null 时使用 spacer2 Token。
   final double? insetSpacing;
 
   /// 内容区域内边距。
+  /// null 时按是否有文案、卡片模式及当前字号计算内边距；纯指示器不增加文案内边距。
   final EdgeInsetsGeometry? customSpace;
 
   const TCheckboxThemeData({

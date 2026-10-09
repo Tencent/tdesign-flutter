@@ -20,6 +20,12 @@ enum TTabsBarSize {
 /// 标签栏
 ///
 /// 支持滚动、指示器自定义，以及 Line、Tag、Card 三种 TDesign 形态。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TTabsBarThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TTabsBarThemeData` 说明。
 class TTabsBar extends StatelessWidget {
   const TTabsBar({
     Key? key,

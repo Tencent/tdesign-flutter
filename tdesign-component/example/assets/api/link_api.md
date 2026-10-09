@@ -7,6 +7,12 @@
 下划线、前置图标和后置图标可独立组合；路由行为由 `onPressed` 与 Flutter
 Navigator / Router 组合。
 
+#### 主题配置
+
+组件主题通过 `TLinkThemeData` 配置，放入 Flutter `ThemeData.extensions`
+后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+`TLinkThemeData` 说明。
+
 #### 构造方法
 
 ##### TLink

@@ -45,6 +45,12 @@ class TTreeSelectOption {
 ///
 /// [value] 中每一项都是从根到叶子的完整路径。单选模式最多保留一条路径，
 /// 多选模式可同时保留多条路径。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TTreeSelectThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TTreeSelectThemeData` 说明。
 class TTreeSelect extends StatefulWidget {
   const TTreeSelect({
     super.key,

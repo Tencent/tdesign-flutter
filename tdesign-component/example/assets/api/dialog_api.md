@@ -9,6 +9,12 @@ title 与 content 至少提供一个；actionsWidget 与非空 actions 互斥。
 组件负责面板内容和操作区；使用 `show` 时，通过 Flutter 模态路由处理
 蒙层、动画和安全区。
 
+#### 主题配置
+
+组件主题通过 `TDialogThemeData` 配置，放入 Flutter `ThemeData.extensions`
+后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+`TDialogThemeData` 说明。
+
 #### 构造方法
 
 ##### TDialog

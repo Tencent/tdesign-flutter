@@ -72,3 +72,17 @@
 - [x] 记录结构验收与语义验收的区别、测试误导风险、Theme.lerp 实现风险和正式工具/autofix 门禁，见 reasonableness-repair.md。
 - [ ] 工具 PR #29 合入正式 main 后重新解析 resolved ref、生成/--check 并复验 autofix；当前不将本轮候选结果声明为最终可合并。
 - [ ] 单独决定并测试 TThemeData.lerp 是否保留 extraThemeData；本轮仅补准确说明，未改变运行行为。
+
+
+## 当前逐组件文档核查（2026-10-09）
+
+本轮不再以历史审查作为当前逐组件结论。57/57 组件均记录具体公开契约、当前源码哈希与消费用例，三批共 82 项两版通过。确认的文档缺口已直接修正，并补充 14 个目录 66 个主题字段的回退。两版各 2707 项组件非 Golden、115 项文档专项、70 项 API 页面通过，严格 analyze 零问题；26 个生产 Dart 文件运行 token 不变。浏览器 57 页、369 类型、812 张表结构通过。当前证据与边界见 [full-semantic-repair.md](full-semantic-repair.md)，正式依赖/autofix/远端 CI 尚未复验，组件风险单列；不据此宣称全业务/全视觉边界穷尽。
+
+## 组件 Theme 文档入口（2026-10-09）
+
+- [x] 从主入口 dartdoc 生成 57 页主题配置说明；51 个独立 Theme、3 个复用 Theme、2 个无独立 Theme 与全局 Theme 分别处理。
+- [x] 双 SDK 重新生成、内容比对与文档/API 页面回归。
+- [ ] 同步本轮源码注释与生成产物到文档 PR #1149。
+- [ ] 工具 #29 合入正式 main 后复验正式生成链和最终 CI/autofix。
+
+方案、证据及阻塞原因见 [theme-presentation.md](theme-presentation.md)。

@@ -18,27 +18,34 @@ class TTableThemeData extends ThemeExtension<TTableThemeData> {
   });
 
   /// 数据行高度。
+  /// null 时为 38 逻辑像素。
   final double? rowHeight;
 
   /// 表头高度。
+  /// null 时为 38 逻辑像素。
   final double? headerHeight;
 
   /// 表格宽度。
+  /// null 时有界布局使用可用宽度，无界布局使用列配置计算的自然宽度。
   final double? width;
 
   /// 默认行背景色。
   final Color? backgroundColor;
 
   /// 表头背景色。
+  /// null 时使用 bgColorContainer Token。
   final Color? headerColor;
 
   /// 斑马纹背景色。
+  /// 启用 stripe 时生效；null 时使用 bgColorSecondaryContainer Token。
   final Color? stripeColor;
 
   /// 边框颜色。
+  /// null 时使用 componentStroke Token。
   final Color? borderColor;
 
   /// 单元格内边距。
+  /// null 时左右各 16 逻辑像素。
   final EdgeInsetsGeometry? cellPadding;
 
   /// 复制主题配置。

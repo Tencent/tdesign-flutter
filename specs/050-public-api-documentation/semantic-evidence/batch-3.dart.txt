@@ -1,0 +1,591 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
+
+Widget host(Widget child) => MaterialApp(
+  theme: TThemeBuilder.light(TThemeData.defaultData()),
+  home: Scaffold(
+    body: Center(child: SizedBox(width: 360, child: child)),
+  ),
+);
+Future<void> mount(WidgetTester t, Widget w) async {
+  await t.pumpWidget(host(w));
+  await t.pump();
+}
+
+void main() {
+  testWidgets('[button] null pressed disables long press', (t) async {
+    var n = 0;
+    await mount(
+      t,
+      TButton(onLongPress: () => n++, child: const Text('button')),
+    );
+    await t.longPress(find.text('button'));
+    expect(n, 0);
+  });
+  testWidgets('[divider] vertical ignores dashed and child', (t) async {
+    await mount(
+      t,
+      const TDivider(
+        layout: TDividerLayout.vertical,
+        dashed: true,
+        child: Text('ignored'),
+      ),
+    );
+    expect(find.text('ignored'), findsNothing);
+    expect(t.getSize(find.byType(TDivider)).height, 14);
+  });
+  testWidgets('[fab] explicit position and custom child in Stack', (t) async {
+    await mount(
+      t,
+      SizedBox(
+        height: 200,
+        child: Stack(
+          children: [TFab(right: 12, bottom: 18, child: const Text('custom'))],
+        ),
+      ),
+    );
+    final p = t.widget<Positioned>(
+      find
+          .descendant(of: find.byType(TFab), matching: find.byType(Positioned))
+          .first,
+    );
+    expect(p.right, 12);
+    expect(p.bottom, 18);
+    expect(find.text('custom'), findsOneWidget);
+  });
+  testWidgets(
+    '[icon] native IconTheme does not replace independent default size',
+    (t) async {
+      await mount(
+        t,
+        const IconTheme(data: IconThemeData(size: 99), child: TIcon(Icons.add)),
+      );
+      final icon = t.widget<Icon>(
+        find
+            .descendant(of: find.byType(TIcon), matching: find.byType(Icon))
+            .first,
+      );
+      expect(icon.size, 24);
+    },
+  );
+  testWidgets('[link] provided pressed callback owns navigation', (t) async {
+    var n = 0;
+    await mount(t, TLink(child: const Text('link'), onPressed: () => n++));
+    await t.tap(find.text('link'));
+    expect(n, 1);
+  });
+  testWidgets(
+    '[text] raw Text and explicit style preserve public configuration',
+    (t) async {
+      late BuildContext c;
+      const text = TText(
+        'txt',
+        maxLines: 2,
+        style: TextStyle(color: Colors.red),
+      );
+      await mount(
+        t,
+        Builder(
+          builder: (x) {
+            c = x;
+            return text;
+          },
+        ),
+      );
+      expect(text.getRawText(context: c).data, 'txt');
+      expect(text.getRawText(context: c).maxLines, 2);
+      expect(text.getTextStyle(c).color, Colors.red);
+      expect(await TFontLoader.load(name: '', fontFamilyUrl: ''), isFalse);
+    },
+  );
+  testWidgets('[back-top] standalone callback does not require controller', (
+    t,
+  ) async {
+    var n = 0;
+    await mount(t, TBackTop(onPressed: () => n++));
+    await t.tap(find.byType(TBackTop));
+    await t.pump();
+    expect(n, 1);
+  });
+  testWidgets('[drawer] show returns live handle and close removes drawer', (
+    t,
+  ) async {
+    late BuildContext c;
+    await mount(
+      t,
+      Builder(
+        builder: (x) {
+          c = x;
+          return const Text('host');
+        },
+      ),
+    );
+    final h = showTDrawer(c, drawer: const TDrawer(child: Text('drawer')));
+    await t.pumpAndSettle();
+    expect(h.isShowing, isTrue);
+    expect(find.text('drawer'), findsOneWidget);
+    h.close();
+    await t.pumpAndSettle();
+    expect(h.isShowing, isFalse);
+  });
+  testWidgets('[indexes] external scroll controller is borrowed', (t) async {
+    final c = ScrollController();
+    await mount(
+      t,
+      SizedBox(
+        height: 350,
+        child: TIndexes(
+          indexList: const ['A', 'B'],
+          scrollController: c,
+          builderContent: (_, i) =>
+              SizedBox(height: 200, child: Text('content:$i')),
+        ),
+      ),
+    );
+    await t.pumpAndSettle();
+    expect(c.hasClients, isTrue);
+    await t.pumpWidget(const SizedBox());
+    c.addListener(() {});
+    c.dispose();
+  });
+  testWidgets('[navbar] safe area off keeps declared preferred height', (
+    t,
+  ) async {
+    const bar = TNavBar(height: 48, useSafeArea: false, title: Text('Nav'));
+    await mount(t, bar);
+    expect(bar.preferredSize.height, 48);
+    expect(find.text('Nav'), findsOneWidget);
+  });
+  testWidgets(
+    '[side-bar] click is request and does not replace controlled value',
+    (t) async {
+      final values = <int>[];
+      await mount(
+        t,
+        TSideBar(
+          value: 0,
+          onChanged: values.add,
+          children: const [
+            TSideBarItem(label: 'A', value: 0),
+            TSideBarItem(label: 'B', value: 1),
+          ],
+        ),
+      );
+      await t.tap(find.text('B'));
+      await t.pump();
+      expect(values, [1]);
+      expect(t.widget<TSideBar>(find.byType(TSideBar)).value, 0);
+    },
+  );
+  testWidgets('[steps] progress callback is a controlled request', (t) async {
+    final values = <int>[];
+    await mount(
+      t,
+      TSteps.progress(
+        steps: const [
+          TStepsItemData(title: 'A'),
+          TStepsItemData(title: 'B'),
+        ],
+        value: 0,
+        onChange: values.add,
+      ),
+    );
+    await t.tap(find.text('B'));
+    await t.pump();
+    expect(values, [1]);
+    expect(t.widget<TSteps>(find.byType(TSteps)).value, 0);
+  });
+  testWidgets(
+    '[tab-bar] null onChanged disables the whole bar including item callbacks',
+    (t) async {
+      var n = 0;
+      await mount(
+        t,
+        TTabBar(
+          type: TTabBarType.text,
+          value: 0,
+          navigationTabs: [
+            TTabBarItemConfig(tabText: 'A'),
+            TTabBarItemConfig(tabText: 'B', onTap: () => n++),
+          ],
+        ),
+      );
+      await t.tap(find.text('B'));
+      await t.pumpAndSettle();
+      expect(n, 0);
+    },
+  );
+  testWidgets('[tabs] DefaultTabController switches without onTap callback', (
+    t,
+  ) async {
+    late BuildContext c;
+    await mount(
+      t,
+      DefaultTabController(
+        length: 2,
+        child: Builder(
+          builder: (x) {
+            c = x;
+            return const TTabsBar(
+              tabs: [
+                TTab(text: 'A'),
+                TTab(text: 'B'),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+    await t.tap(find.text('B'));
+    await t.pumpAndSettle();
+    expect(DefaultTabController.of(c).index, 1);
+  });
+  testWidgets(
+    '[cascader] branch click emits path but parent retains accepted value',
+    (t) async {
+      final values = <List<Object?>>[];
+      await mount(
+        t,
+        TCascader(
+          options: const [
+            TCascaderOption(
+              label: 'Root',
+              value: 'r',
+              children: [TCascaderOption(label: 'Leaf', value: 'l')],
+            ),
+          ],
+          value: const [],
+          onChanged: values.add,
+        ),
+      );
+      await t.tap(find.text('Root'));
+      await t.pump();
+      expect(values.single, ['r']);
+      expect(t.widget<TCascader>(find.byType(TCascader)).value, isEmpty);
+    },
+  );
+  test('[rate] count and value constructor constraints are explicit', () {
+    expect(() => TRate(value: 1, count: 0), throwsAssertionError);
+    expect(() => TRate(value: 6, count: 5), throwsAssertionError);
+  });
+  testWidgets(
+    '[slider] value is controlled and null callback disables native slider',
+    (t) async {
+      await mount(t, const TSlider(value: 25, min: 0, max: 100));
+      final s = t.widget<Slider>(find.byType(Slider));
+      expect(s.value, 25);
+      expect(s.onChanged, isNull);
+    },
+  );
+  testWidgets('[stepper] null callback disables editing as documented', (
+    t,
+  ) async {
+    await mount(t, const TStepper(value: 3));
+    await t.tap(find.text('3')); await t.pump(); expect(t.widget<EditableText>(find.byType(EditableText)).readOnly, isTrue);
+  });
+  testWidgets(
+    '[switch] callback does not mutate value without parent acceptance',
+    (t) async {
+      final v = <bool>[];
+      await mount(t, TSwitch(value: false, onChanged: v.add));
+      await t.tap(find.byType(TSwitch));
+      await t.pump();
+      expect(v, [true]);
+      expect(t.widget<TSwitch>(find.byType(TSwitch)).value, isFalse);
+    },
+  );
+  testWidgets('[tree-select] single mode rejects multiple controlled paths', (
+    t,
+  ) async {
+    await mount(
+      t,
+      TTreeSelect(
+        options: const [TTreeSelectOption(value: 'a', label: 'A')],
+        value: const [
+          ['a'],
+          ['b'],
+        ],
+      ),
+    );
+    expect(t.takeException(), isNotNull);
+  });
+  testWidgets('[avatar] custom child and tap use independent medium default', (
+    t,
+  ) async {
+    var n = 0;
+    await mount(t, TAvatar(child: const Text('avatar'), onTap: () => n++));
+    expect(t.getSize(find.byType(TAvatar)).height, 48);
+    await t.tap(find.text('avatar'));
+    expect(n, 1);
+  });
+  testWidgets('[badge] null label hides text badge while dot ignores label', (
+    t,
+  ) async {
+    await mount(t, const TBadge(label: null, child: Text('anchor')));
+    expect(find.text('anchor'), findsOneWidget);
+    expect(find.text('0'), findsNothing);
+    await mount(
+      t,
+      const TBadge(
+        variant: TBadgeVariant.dot,
+        label: null,
+        child: Text('anchor'),
+      ),
+    );
+    expect(t.takeException(), isNull);
+  });
+  testWidgets('[cell] cell callback is explicit and retained', (t) async {
+    var n = 0;
+    await mount(t, TCell(title: const Text('cell'), onTap: () => n++));
+    await t.tap(find.text('cell'));
+    await t.pump();
+    expect(n, 1);
+  });
+  testWidgets('[collapse] controlled value is not updated implicitly', (
+    t,
+  ) async {
+    final vals = <List<String>>[];
+    await mount(
+      t,
+      TCollapse<String>(
+        value: const [],
+        onChanged: vals.add,
+        children: [
+          TCollapsePanel(
+            value: 'a',
+            headerBuilder: (_, expanded) => const Text('Header'),
+            body: const Text('Body'),
+          ),
+        ],
+      ),
+    );
+    await t.tap(find.text('Header'));
+    await t.pumpAndSettle();
+    expect(vals.single, ['a']);
+    expect(
+      t.widget<TCollapse<String>>(find.byType(TCollapse<String>)).value,
+      isEmpty,
+    );
+  });
+  testWidgets('[empty] explicit null icon falls back to builtin', (t) async {
+    await mount(t, const TEmpty(icon: null, emptyText: 'empty'));
+    expect(find.byIcon(TIcons.info_circle_filled), findsOneWidget);
+    expect(find.text('empty'), findsOneWidget);
+  });
+  testWidgets('[footer] links combine with text and logo overrides links', (
+    t,
+  ) async {
+    await mount(t, const TFooter(text: 'copyright', links: [Text('link')]));
+    expect(find.text('link'), findsOneWidget);
+    expect(find.text('copyright'), findsOneWidget);
+    await mount(
+      t,
+      const TFooter(
+        logo: Text('logo'),
+        text: 'copyright',
+        links: [Text('link')],
+      ),
+    );
+    expect(find.text('logo'), findsOneWidget);
+    expect(find.text('copyright'), findsOneWidget);
+    expect(find.text('link'), findsNothing);
+  });
+  testWidgets('[image] null source loads placeholder and empty source fails', (
+    t,
+  ) async {
+    await mount(
+      t,
+      const TImage(
+        src: null,
+        loadingWidget: Text('Loading'),
+        errorWidget: Text('Error'),
+      ),
+    );
+    expect(find.text('Loading'), findsOneWidget);
+    await mount(
+      t,
+      const TImage(
+        src: '',
+        loadingWidget: Text('Loading'),
+        errorWidget: Text('Error'),
+      ),
+    );
+    await t.pump();
+    expect(find.text('Error'), findsOneWidget);
+  });
+  testWidgets('[image-viewer] invalid image list fails synchronously', (
+    t,
+  ) async {
+    late BuildContext c;
+    await mount(
+      t,
+      Builder(
+        builder: (x) {
+          c = x;
+          return const Text('host');
+        },
+      ),
+    );
+    expect(
+      () => TImageViewer.show(context: c, images: const []),
+      throwsArgumentError,
+    );
+  });
+  testWidgets('[progress] normalized fraction produces percentage', (t) async {
+    await mount(t, TProgress.linear(value: 0.25));
+    expect(find.text('25%'), findsOneWidget);
+  });
+  testWidgets('[result] custom icon replaces status-derived icon', (t) async {
+    await mount(
+      t,
+      const TResult(
+        title: 'result',
+        status: TResultStatus.error,
+        icon: Text('custom'),
+      ),
+    );
+    expect(find.text('custom'), findsOneWidget);
+    expect(find.text('result'), findsOneWidget);
+  });
+  testWidgets('[skeleton] delay defers placeholder visibility', (t) async {
+    await mount(t, const TSkeleton(delay: Duration(milliseconds: 100)));
+    expect(t.getSize(find.byType(TSkeleton)).height, 0);
+    await t.pump(const Duration(milliseconds: 120));
+    expect(t.getSize(find.byType(TSkeleton)).height, greaterThan(0));
+  });
+  testWidgets('[action-sheet] selection notifies then closes returned handle', (
+    t,
+  ) async {
+    late BuildContext c;
+    final events = <String>[];
+    await mount(
+      t,
+      Builder(
+        builder: (x) {
+          c = x;
+          return const Text('host');
+        },
+      ),
+    );
+    final h = TActionSheet.showList<String>(
+      c,
+      items: const [TActionSheetItem(value: 'a', label: 'Pick')],
+      onSelected: (item) => events.add(item.value),
+    );
+    await t.pumpAndSettle();
+    await t.tap(find.text('Pick'));
+    await t.pump();
+    expect(events, ['a']);
+    expect(h.isShowing, isFalse);
+    await t.pumpAndSettle();
+  });
+  testWidgets('[loading] singleton show does not duplicate Overlay layers', (
+    t,
+  ) async {
+    late BuildContext c;
+    await mount(
+      t,
+      Builder(
+        builder: (x) {
+          c = x;
+          return const Text('host');
+        },
+      ),
+    );
+    TLoadingController.show(c, child: const Text('first'));
+    await t.pump();
+    TLoadingController.show(c, child: const Text('second'));
+    await t.pump();
+    expect(find.text('first'), findsOneWidget);
+    expect(find.text('second'), findsNothing);
+    TLoadingController.dismiss();
+    await t.pump();
+    expect(find.text('first'), findsNothing);
+  });
+  testWidgets(
+    '[message] new default Overlay message replaces previous handle',
+    (t) async {
+      late BuildContext c;
+      var ended = 0;
+      await mount(
+        t,
+        Builder(
+          builder: (x) {
+            c = x;
+            return const Text('host');
+          },
+        ),
+      );
+      final a = TMessage.show(
+        context: c,
+        content: 'first',
+        duration: null,
+        onDismissed: () => ended++,
+      );
+      await t.pumpAndSettle();
+      final b = TMessage.show(context: c, content: 'second', duration: null);
+      await t.pumpAndSettle();
+      expect(a.isShowing, isFalse);
+      expect(b.isShowing, isTrue);
+      expect(ended, 1);
+      b.dismiss();
+      await t.pumpAndSettle();
+      expect(b.isShowing, isFalse);
+    },
+  );
+  testWidgets(
+    '[notice-bar] items override content and content tap is distinct target',
+    (t) async {
+      final events = <TNoticeBarTapTarget>[];
+      await mount(
+        t,
+        TNoticeBar(
+          content: 'ignored',
+          items: const ['item'],
+          onPressed: events.add,
+        ),
+      );
+      expect(find.text('ignored'), findsNothing);
+      await t.tap(find.text('item'));
+      expect(events, [TNoticeBarTapTarget.content]);
+    },
+  );
+  testWidgets('[popover] bound controller owns open-close state', (t) async {
+    final c = TPopoverController();
+    await mount(
+      t,
+      TPopoverAnchor(
+        controller: c,
+        content: const Text('popup'),
+        builder: (_, controller, child) => const Text('anchor'),
+      ),
+    );
+    c.open();
+    await t.pumpAndSettle();
+    expect(c.isOpen, isTrue);
+    expect(find.text('popup'), findsOneWidget);
+    c.close();
+    await t.pumpAndSettle();
+    expect(c.isOpen, isFalse);
+  });
+  testWidgets('[tag] disabled suppresses label and close callbacks', (t) async {
+    var n = 0;
+    await mount(
+      t,
+      TTag(
+        'tag',
+        enabled: false,
+        needCloseIcon: true,
+        onTap: () => n++,
+        onCloseTap: () => n++,
+      ),
+    );
+    await t.tap(find.text('tag'));
+    await t.pump();
+    expect(n, 0);
+  });
+}

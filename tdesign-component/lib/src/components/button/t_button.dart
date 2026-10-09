@@ -54,6 +54,12 @@ import 't_button_types.dart';
 ///   child: TButton(child: Text('通栏'), onPressed: () {}),
 /// )
 /// ```
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TButtonThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TButtonThemeData` 说明。
 class TButton extends StatefulWidget {
   const TButton({
     Key? key,

@@ -4,6 +4,12 @@
 
 严格受控的评分组件。
 
+#### 主题配置
+
+组件主题通过 `TRateThemeData` 配置，放入 Flutter `ThemeData.extensions`
+后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+`TRateThemeData` 说明。
+
 #### 构造方法
 
 ##### TRate
@@ -32,12 +38,12 @@ TRate 组件级 ThemeExtension。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| iconGap | double? | - | 图标间距。 | 否 |
-| iconSize | double? | - | 图标尺寸。 | 否 |
+| iconGap | double? | - | 图标间距。 null 时使用 spacer Token。 | 否 |
+| iconSize | double? | - | 图标尺寸。 null 时使用 spacer3 Token。 | 否 |
 | inactiveStarColor | Color? | - | 未选中星标颜色。 | 否 |
-| overlayBoxShadow | List&lt;BoxShadow&gt;? | - | 当前值提示与半星选择浮层阴影。 | 否 |
-| starColor | Color? | - | 选中星标颜色。 | 否 |
-| textGap | double? | - | 图标与文案间距。 | 否 |
+| overlayBoxShadow | List&lt;BoxShadow&gt;? | - | 当前值提示与半星选择浮层阴影。 null 时使用 shadow1 Token；该 Token 缺失时无阴影。 | 否 |
+| starColor | Color? | - | 选中星标颜色。 null 时使用 warningColor5 Token。 | 否 |
+| textGap | double? | - | 图标与文案间距。 null 时使用 spacer2 Token。 | 否 |
 | textStyle | TextStyle? | - | 文案样式。 | 否 |
 | textWidth | double? | - | 文案宽度。 | 否 |
 
@@ -50,14 +56,14 @@ TRate 组件级 ThemeExtension。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| starColor | Color? | - | 字段含义：选中星标颜色。 调用时的空值行为见方法说明。 | 否 |
+| starColor | Color? | - | 字段含义：选中星标颜色。 null 时使用 warningColor5 Token。 调用时的空值行为见方法说明。 | 否 |
 | inactiveStarColor | Color? | - | 字段含义：未选中星标颜色。 调用时的空值行为见方法说明。 | 否 |
-| iconSize | double? | - | 字段含义：图标尺寸。 调用时的空值行为见方法说明。 | 否 |
-| iconGap | double? | - | 字段含义：图标间距。 调用时的空值行为见方法说明。 | 否 |
+| iconSize | double? | - | 字段含义：图标尺寸。 null 时使用 spacer3 Token。 调用时的空值行为见方法说明。 | 否 |
+| iconGap | double? | - | 字段含义：图标间距。 null 时使用 spacer Token。 调用时的空值行为见方法说明。 | 否 |
 | textWidth | double? | - | 字段含义：文案宽度。 调用时的空值行为见方法说明。 | 否 |
-| textGap | double? | - | 字段含义：图标与文案间距。 调用时的空值行为见方法说明。 | 否 |
+| textGap | double? | - | 字段含义：图标与文案间距。 null 时使用 spacer2 Token。 调用时的空值行为见方法说明。 | 否 |
 | textStyle | TextStyle? | - | 字段含义：文案样式。 调用时的空值行为见方法说明。 | 否 |
-| overlayBoxShadow | List&lt;BoxShadow&gt;? | - | 字段含义：当前值提示与半星选择浮层阴影。 调用时的空值行为见方法说明。 | 否 |
+| overlayBoxShadow | List&lt;BoxShadow&gt;? | - | 字段含义：当前值提示与半星选择浮层阴影。 null 时使用 shadow1 Token；该 Token 缺失时无阴影。 调用时的空值行为见方法说明。 | 否 |
 
 
 ###### 返回值

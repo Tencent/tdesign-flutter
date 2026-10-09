@@ -159,3 +159,12 @@ pnpm site
 本轮修正六个组件的已证实文档缺口：Calendar、DateTimePicker、Form、Picker、PullDownRefresh、Theme。全部 57 份资产重新由当前源码双 SDK 生成并逐份比对，AST 审计无 issue；两版各 2707 项非 Golden 组件测试、70 项 API 页面测试、115 项文档专项测试通过。该结果证明当前资产、公开契约和回归稳定，不等于全部 Golden、Demo、设备、Figma 或每个业务边界均已完成语义验收。`TThemeData.lerp` 的 extraThemeData 丢失仍作为实现风险单列。
 
 最新逐组件状态、经验和未完成门禁见 [reasonableness-repair.md](reasonableness-repair.md)。
+
+
+## 当前逐组件文档核查（2026-10-09）
+
+本轮不再以历史审查作为当前逐组件结论。57/57 组件均记录具体公开契约、当前源码哈希与消费用例，三批共 82 项两版通过。确认的文档缺口已直接修正，并补充 14 个目录 66 个主题字段的回退。两版各 2707 项组件非 Golden、115 项文档专项、70 项 API 页面通过，严格 analyze 零问题；26 个生产 Dart 文件运行 token 不变。浏览器 57 页、369 类型、812 张表结构通过。当前证据与边界见 [full-semantic-repair.md](full-semantic-repair.md)，正式依赖/autofix/远端 CI 尚未复验，组件风险单列；不据此宣称全业务/全视觉边界穷尽。
+
+## 组件 Theme 文档入口（2026-10-09）
+
+57 页主入口 dartdoc 增加主题配置：51 个独立 Theme、3 个复用 Theme、2 个无独立 Theme 与全局 Theme 分别处理。双 SDK 生成与工作区字节一致，各 115 项文档专项、70 项真实 API 页面测试及严格分析通过；validate 零问题，73 个生产文件非注释 Token 不变。候选工具 #29 仍未合入 main，正式依赖/--check/最终 CI 与 autofix 仍为独立门禁。详见 [theme-presentation.md](theme-presentation.md)。

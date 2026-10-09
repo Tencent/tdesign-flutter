@@ -32,6 +32,12 @@ class _SideBarItemData {
 ///
 /// [value] 由调用方持有；用户选择可用项时通过 [onChanged] 报告新的值。
 /// 未提供 [onChanged] 时，整个侧边栏以禁用态展示。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TSideBarThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TSideBarThemeData` 说明。
 class TSideBar extends StatefulWidget {
   const TSideBar({
     Key? key,

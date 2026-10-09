@@ -112,6 +112,12 @@ class _ToastInstance {
 ///   不断加深；
 /// - 指定不同 `toastId` 时，可多实例并存；
 /// - 指定相同 `toastId` 时，后一次替换前一次。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TToastThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TToastThemeData` 说明。
 class TToast {
   static final Map<String, _ToastInstance> _toastInstances = {};
 
@@ -127,7 +133,7 @@ class TToast {
   /// 普通文本Toast
   ///
   /// ## 返回值
-  /// 本次 Toast 的标识，可传给 dismiss；未传 toastId 时使用共享匿名标识并复用匿名提示。
+  /// 本次 Toast 的标识，可传给 [dismissToast]；未传 toastId 时使用共享匿名标识并复用匿名提示。
   static String showText(
     /// 提示文案；为 null 时只展示自定义内容。
     String? text, {
@@ -186,7 +192,7 @@ class TToast {
   /// 带图标的Toast
   ///
   /// ## 返回值
-  /// 本次 Toast 的标识，可传给 dismiss；未传 toastId 时使用共享匿名标识并复用匿名提示。
+  /// 本次 Toast 的标识，可传给 [dismissToast]；未传 toastId 时使用共享匿名标识并复用匿名提示。
   static String showIconText(
     /// 提示文案。
     String? text, {
@@ -253,7 +259,7 @@ class TToast {
   /// 成功提示Toast
   ///
   /// ## 返回值
-  /// 本次 Toast 的标识，可传给 dismiss；未传 toastId 时使用共享匿名标识并复用匿名提示。
+  /// 本次 Toast 的标识，可传给 [dismissToast]；未传 toastId 时使用共享匿名标识并复用匿名提示。
   static String showSuccess(
     /// 提示文案。
     String? text, {
@@ -311,7 +317,7 @@ class TToast {
   /// 警告Toast
   ///
   /// ## 返回值
-  /// 本次 Toast 的标识，可传给 dismiss；未传 toastId 时使用共享匿名标识并复用匿名提示。
+  /// 本次 Toast 的标识，可传给 [dismissToast]；未传 toastId 时使用共享匿名标识并复用匿名提示。
   static String showWarning(
     /// 提示文案。
     String? text, {
@@ -369,7 +375,7 @@ class TToast {
   /// 失败提示Toast
   ///
   /// ## 返回值
-  /// 本次 Toast 的标识，可传给 dismiss；未传 toastId 时使用共享匿名标识并复用匿名提示。
+  /// 本次 Toast 的标识，可传给 [dismissToast]；未传 toastId 时使用共享匿名标识并复用匿名提示。
   static String showFail(
     /// 提示文案。
     String? text, {
@@ -427,7 +433,7 @@ class TToast {
   /// 带文案的加载Toast
   ///
   /// ## 返回值
-  /// 本次 Toast 的标识，可传给 dismiss；未传 toastId 时使用共享匿名标识并复用匿名提示。
+  /// 本次 Toast 的标识，可传给 [dismissToast]；未传 toastId 时使用共享匿名标识并复用匿名提示。
   static String showLoading({
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
@@ -486,7 +492,7 @@ class TToast {
   /// 不带文案的加载Toast
   ///
   /// ## 返回值
-  /// 本次 Toast 的标识，可传给 dismiss；未传 toastId 时使用共享匿名标识并复用匿名提示。
+  /// 本次 Toast 的标识，可传给 [dismissToast]；未传 toastId 时使用共享匿名标识并复用匿名提示。
   static String showLoadingWithoutText({
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,

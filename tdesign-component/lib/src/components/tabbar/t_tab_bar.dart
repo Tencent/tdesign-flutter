@@ -218,6 +218,12 @@ class TTabBarItemConfig {
 /// 底部标签栏
 ///
 /// 支持文本、图文、图标与双层级内容，并将选项样式与容器外形作为独立配置。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TTabBarThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TTabBarThemeData` 说明。
 class TTabBar extends StatefulWidget {
   TTabBar({
     Key? key,

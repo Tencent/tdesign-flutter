@@ -16,27 +16,32 @@ class TRateThemeData extends ThemeExtension<TRateThemeData> {
   });
 
   /// 选中星标颜色。
+  /// null 时使用 warningColor5 Token。
   final Color? starColor;
 
   /// 未选中星标颜色。
   final Color? inactiveStarColor;
 
   /// 图标尺寸。
+  /// null 时使用 spacer3 Token。
   final double? iconSize;
 
   /// 图标间距。
+  /// null 时使用 spacer Token。
   final double? iconGap;
 
   /// 文案宽度。
   final double? textWidth;
 
   /// 图标与文案间距。
+  /// null 时使用 spacer2 Token。
   final double? textGap;
 
   /// 文案样式。
   final TextStyle? textStyle;
 
   /// 当前值提示与半星选择浮层阴影。
+  /// null 时使用 shadow1 Token；该 Token 缺失时无阴影。
   final List<BoxShadow>? overlayBoxShadow;
 
   /// 复制主题配置。

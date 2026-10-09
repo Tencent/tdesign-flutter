@@ -12,6 +12,12 @@ TD 常规按钮
 - `colorPreset`：配色方案（defaultTheme / primary / danger / light）
 - `shape`：按钮结构形状；具体边框样式由 `style` 控制
 
+#### 主题配置
+
+组件主题通过 `TButtonThemeData` 配置，放入 Flutter `ThemeData.extensions`
+后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+`TButtonThemeData` 说明。
+
 #### 构造方法
 
 ##### TButton

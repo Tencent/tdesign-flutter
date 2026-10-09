@@ -5,18 +5,23 @@ import 'package:flutter/material.dart';
 /// 图片预览组件级 ThemeExtension
 class TImageViewerThemeData extends ThemeExtension<TImageViewerThemeData> {
   /// 预览页背景色
+  /// null 时由 fontGray1 与 bgColorContainer 叠加得到默认背景色。
   final Color? backgroundColor;
 
   /// 导航栏背景色
+  /// null 时使用不透明 fontGray1 Token。
   final Color? appBarBackgroundColor;
 
   /// 图标颜色
+  /// null 时使用 textColorAnti Token。
   final Color? iconColor;
 
   /// 标签文字样式
+  /// null 时使用 textColorAnti 作为标签文字颜色。
   final TextStyle? labelStyle;
 
   /// 页码文字样式
+  /// null 时使用 textColorAnti 和 fontBodyMedium 字号，字号最终回退 14。
   final TextStyle? indexStyle;
 
   /// 预览区默认宽度

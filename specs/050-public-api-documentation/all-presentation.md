@@ -1,5 +1,7 @@
 # 全量 API 展示推广验收（2026-10-08）
 
+> **2026-10-09 状态更正**：此文为前一阶段记录；“沿用历史审查并回归”不能证明当前逐组件语义完成。本轮不再沿用该结论，当前核对范围和证据以 `current-semantic-ledger.json`、`full-semantic-repair.md` 为准。
+
 ## 结论与边界
 
 已将 Popup 确认的候选规则推广到 manifest 的 57 个组件（含 Theme），当前工作分支 `rss1102/docs/component-api-completeness`，起点 HEAD `0eb6a054f0638ddab248d8a1b54d4db233d9f5a2`。组件运行代码、API 签名、默认值及 Demo 用法不变，无 breaking change。本节验收发生于本轮提交推送前；维护者已于 2026-10-08 要求交付到现有 PR。正式工具 ref、推送后 head 的 CI/autofix 与 review 必须独立核对，不能据此声明 PR 可合并。

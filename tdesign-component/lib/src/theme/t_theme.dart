@@ -476,6 +476,12 @@ void setTResourceBuilder(
 // ============================================================
 
 /// 主题数据
+///
+/// ### 主题配置
+///
+/// 全局颜色、字体、圆角、阴影和间距 Token 在本页集中定义。
+/// 使用 [TMaterialThemeBuilder] 构建主题，或将 [TThemeData] 放入 Flutter
+/// [ThemeData.extensions]；组件级 ThemeExtension 的字段与回退见各组件 API 页。
 class TThemeData extends ThemeExtension<TThemeData> {
   static const String _defaultThemeName = 'default';
   static const String _defaultDartThemeName = 'defaultDark';

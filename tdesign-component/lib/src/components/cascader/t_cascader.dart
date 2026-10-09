@@ -41,6 +41,12 @@ class TCascaderOption {
 }
 
 /// 严格受控的级联选择器。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TCascaderThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TCascaderThemeData` 说明。
 class TCascader extends StatefulWidget {
   const TCascader({
     super.key,

@@ -18,6 +18,12 @@ enum _TActionSheetLayout { list, grid }
 /// 点击启用项目时先调用 onSelected，再请求关闭；回调为空时仍会关闭。
 /// 点击取消按钮先调用 onCancel，再请求关闭；onClosed 在关闭流程完成后通知。
 /// 各方法返回 TPopupHandle，可主动关闭面板。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TActionSheetThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TActionSheetThemeData` 说明。
 final class TActionSheet {
   const TActionSheet._();
 

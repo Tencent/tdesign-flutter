@@ -32,10 +32,11 @@ class TSwipeCellController {
   _TSwipeCellControllerBinding? _binding;
 
   /// 展开指定侧的操作面板。
-  /// 返回的 Future 在动画结束后完成；未绑定组件时立即完成且不执行操作。
+  /// 动画结束、被后续命令打断或组件卸载取消时，Future 均会完成；不表示当前仍处于请求的目标状态。
+  /// 未绑定组件时立即完成且不执行操作。
   ///
   /// ## 返回值
-  /// 展开请求的动画结束时完成；未绑定组件时立即完成且不执行操作。
+  /// 本次展开动画完成或取消时结束；未绑定时立即完成。完成后面板可能已被后续命令关闭。
   Future<void> open(
     /// 需要展开的操作面板侧；该侧没有面板时关闭当前面板。
     TSwipeCellSide side,
@@ -44,10 +45,11 @@ class TSwipeCellController {
   }
 
   /// 关闭当前展开的操作面板。
-  /// 返回的 Future 在动画结束后完成；未绑定组件时立即完成且不执行操作。
+  /// 动画结束、被后续命令打断或组件卸载取消时，Future 均会完成；不表示当前仍处于请求的目标状态。
+  /// 未绑定组件时立即完成且不执行操作。
   ///
   /// ## 返回值
-  /// 关闭请求的动画结束时完成；未绑定组件时立即完成且不执行操作。
+  /// 本次关闭动画完成或取消时结束；未绑定时立即完成。完成后面板可能已被后续命令重新打开。
   Future<void> close() async {
     await _binding?.close();
   }
@@ -75,6 +77,12 @@ abstract interface class _TSwipeCellControllerBinding {
 }
 
 /// 滑动单元格组件。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 `TSwipeCellThemeData` 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TSwipeCellThemeData` 说明。
 class TSwipeCell extends StatefulWidget {
   const TSwipeCell({
     Key? key,

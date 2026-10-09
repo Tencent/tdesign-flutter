@@ -23,15 +23,18 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
   final TextStyle? itemTextStyle;
 
   /// 菜单项背景色。
+  /// null 时沿用抽屉实际面板背景色。
   final Color? itemBackgroundColor;
 
   /// 菜单项按压背景色。
+  /// null 时使用 bgColorSecondaryContainer Token。
   final Color? itemPressedColor;
 
   /// 菜单项内边距，默认 `EdgeInsets.fromLTRB(16, 16, 0, 16)`。
   final EdgeInsetsGeometry? itemPadding;
 
   /// 菜单项图标颜色。
+  /// null 时使用 textColorPrimary Token。
   final Color? itemIconColor;
 
   /// 菜单项图标尺寸，默认 24。
@@ -41,6 +44,7 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
   final double? itemIconGap;
 
   /// 菜单项分隔线颜色。
+  /// null 时使用 componentStroke Token。
   final Color? dividerColor;
 
   /// 菜单项分隔线起始缩进，默认 16。

@@ -6,6 +6,12 @@ TDesign 表单容器。
 
 校验和字段生命周期委托给 Flutter `Form` 与 `FormState`。
 
+#### 主题配置
+
+组件主题通过 `TFormThemeData` 配置，放入 Flutter `ThemeData.extensions`
+后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+`TFormThemeData` 说明。
+
 #### 构造方法
 
 ##### TForm
@@ -236,8 +242,8 @@ TForm 组件级 ThemeExtension。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 表单及表单项背景色。 | 否 |
-| borderColor | Color? | - | 表单项底部分隔线颜色。 | 否 |
+| backgroundColor | Color? | - | 表单及表单项背景色。 null 时使用 bgColorContainer Token。 | 否 |
+| borderColor | Color? | - | 表单项底部分隔线颜色。 null 时使用 componentStroke Token。 | 否 |
 | errorStyle | TextStyle? | - | 错误文案样式。 | 否 |
 | helpStyle | TextStyle? | - | 辅助说明样式。 | 否 |
 | itemPadding | EdgeInsetsGeometry? | - | 表单项内边距。 未配置时左右为 16 逻辑像素；水平布局上下为 14，垂直布局上下为 16。 | 否 |
@@ -249,7 +255,7 @@ TForm 组件级 ThemeExtension。
 | layout | TFormLayout? | - | 表单项布局方向。 未配置时为 TFormLayout.horizontal。 | 否 |
 | leadingGap | double? | - | 前置内容与标签区域的间距。 未配置时使用 spacer Token。 | 否 |
 | messageGap | double? | - | 字段与辅助或错误文案的间距。 未配置时为 4 逻辑像素。 | 否 |
-| requiredMarkPosition | TFormRequiredMarkPosition? | - | 必填标记位置。 | 否 |
+| requiredMarkPosition | TFormRequiredMarkPosition? | - | 必填标记位置。 null 时使用 TFormRequiredMarkPosition.left。 | 否 |
 | requiredMarkStyle | TextStyle? | - | 必填标记样式。 | 否 |
 | showColon | bool? | - | 是否在标签末尾显示冒号。 | 否 |
 
@@ -266,13 +272,13 @@ TForm 组件级 ThemeExtension。
 | labelWidth | double? | - | 字段含义：默认标签宽度；为空时表单项使用 80dp。 调用时的空值行为见方法说明。 | 否 |
 | layout | TFormLayout? | - | 字段含义：表单项布局方向。 未配置时为 TFormLayout.horizontal。 调用时的空值行为见方法说明。 | 否 |
 | labelAlign | TextAlign? | - | 字段含义：标签对齐方式；默认 TextAlign.start，随文字方向对齐起始侧。 调用时的空值行为见方法说明。 | 否 |
-| requiredMarkPosition | TFormRequiredMarkPosition? | - | 字段含义：必填标记位置。 调用时的空值行为见方法说明。 | 否 |
+| requiredMarkPosition | TFormRequiredMarkPosition? | - | 字段含义：必填标记位置。 null 时使用 TFormRequiredMarkPosition.left。 调用时的空值行为见方法说明。 | 否 |
 | labelStyle | TextStyle? | - | 字段含义：标签样式。 调用时的空值行为见方法说明。 | 否 |
 | requiredMarkStyle | TextStyle? | - | 字段含义：必填标记样式。 调用时的空值行为见方法说明。 | 否 |
 | helpStyle | TextStyle? | - | 字段含义：辅助说明样式。 调用时的空值行为见方法说明。 | 否 |
 | errorStyle | TextStyle? | - | 字段含义：错误文案样式。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：表单及表单项背景色。 调用时的空值行为见方法说明。 | 否 |
-| borderColor | Color? | - | 字段含义：表单项底部分隔线颜色。 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 字段含义：表单及表单项背景色。 null 时使用 bgColorContainer Token。 调用时的空值行为见方法说明。 | 否 |
+| borderColor | Color? | - | 字段含义：表单项底部分隔线颜色。 null 时使用 componentStroke Token。 调用时的空值行为见方法说明。 | 否 |
 | itemPadding | EdgeInsetsGeometry? | - | 字段含义：表单项内边距。 未配置时左右为 16 逻辑像素；水平布局上下为 14，垂直布局上下为 16。 调用时的空值行为见方法说明。 | 否 |
 | itemSpacing | double? | - | 字段含义：表单项间距。 未配置时为 0。 调用时的空值行为见方法说明。 | 否 |
 | labelGap | double? | - | 字段含义：标签与字段的垂直间距。 未配置时为 8 逻辑像素。 调用时的空值行为见方法说明。 | 否 |

@@ -62,12 +62,15 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
   final Color? disabledForegroundColor;
 
   /// filled 形态各段的背景色。
+  /// null 时使用 bgColorSecondaryContainer Token。
   final Color? backgroundColor;
 
   /// 整组禁用时 filled 和 outline 形态各段的背景色。
+  /// null 时使用 bgColorComponentDisabled Token。
   final Color? disabledBackgroundColor;
 
   /// outline 形态的描边颜色。
+  /// null 时使用 componentBorder Token。
   final Color? borderColor;
 
   /// 输入文字样式。

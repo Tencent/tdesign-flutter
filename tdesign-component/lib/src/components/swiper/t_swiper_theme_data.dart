@@ -38,9 +38,11 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
   final EdgeInsetsGeometry? paginationMargin;
 
   /// 轮播内容圆角。
+  /// null 时使用 radiusLarge Token 构造圆角。
   final BorderRadiusGeometry? borderRadius;
 
   /// 激活项颜色。
+  /// null 时使用 textColorAnti Token。
   final Color? activeColor;
 
   /// 未激活项颜色。
@@ -62,6 +64,7 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
   final TextStyle? fractionStyle;
 
   /// 数字指示器背景色。
+  /// null 时使用 textColorPlaceholder Token。
   final Color? fractionBackgroundColor;
 
   /// 控制按钮样式。

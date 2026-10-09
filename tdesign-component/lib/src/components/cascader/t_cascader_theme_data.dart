@@ -53,6 +53,7 @@ class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
   final Color? indicatorColor;
 
   /// 导航区域内边距。
+  /// null 时 step 形态左右使用 spacer2、上方为 0、下方为 4；tab 形态不增加导航内边距。
   final EdgeInsetsGeometry? navigationPadding;
 
   /// 分隔线颜色。

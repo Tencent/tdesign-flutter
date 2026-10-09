@@ -20,6 +20,7 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
   });
 
   /// 清除图标尺寸。
+  /// null 时为 20 逻辑像素。
   final double? clearIconSize;
 
   /// 占位提示文本样式。
@@ -28,9 +29,11 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
   final TextStyle? hintStyle;
 
   /// 清除图标颜色。
+  /// null 时错误态使用 errorColor，其他状态使用 textColorPlaceholder Token。
   final Color? clearIconColor;
 
   /// 输入区域内边距。
+  /// null 时在 TFormItem 作用域内为零，独立输入框为四周 16 逻辑像素；Textarea 组合有独立的容器分工。
   final EdgeInsetsGeometry? contentPadding;
 
   /// 输入区域圆角。
@@ -40,12 +43,15 @@ class TInputThemeData extends ThemeExtension<TInputThemeData> {
   final double? borderRadius;
 
   /// 输入区域背景色。
+  /// null 时在 TFormItem 作用域内透明，独立输入框使用 bgColorContainer Token。
   final Color? backgroundColor;
 
   /// 输入区域边框颜色。
+  /// null 时按启用、焦点与语义状态解析边框颜色；禁用态使用 componentStroke Token。
   final Color? borderColor;
 
   /// 输入区域边框宽度。
+  /// null 时为 1 逻辑像素。
   final double? borderWidth;
 
   /// 复制主题配置。

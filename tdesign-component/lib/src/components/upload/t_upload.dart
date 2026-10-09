@@ -19,6 +19,12 @@ import 't_upload_types.dart';
 export 't_upload_types.dart';
 
 /// 严格受控的文件选择与上传状态展示组件。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TUploadThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TUploadThemeData` 说明。
 class TUpload extends StatelessWidget {
   const TUpload({
     super.key,
@@ -77,7 +83,9 @@ class TUpload extends StatelessWidget {
   /// 新增批次超出数量或大小限制时整批拒绝，不触发 onChanged。
   final ValueChanged<TUploadValidationError>? onValidationError;
 
-  /// 文件选择失败时触发。
+  /// 新增文件流程出现异常时触发，包括选择器失败，以及该流程中
+  /// onChanged、onValidationError 同步抛出的业务异常。
+  /// 不表示网络上传失败；组件不执行网络上传。其他点击、删除、排序回调的异常不在此流程内捕获。
   final ValueChanged<Object>? onError;
 
   bool get _enabled => onChanged != null;

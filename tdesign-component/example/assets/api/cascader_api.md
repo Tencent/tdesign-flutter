@@ -4,6 +4,12 @@
 
 严格受控的级联选择器。
 
+#### 主题配置
+
+组件主题通过 `TCascaderThemeData` 配置，放入 Flutter `ThemeData.extensions`
+后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+`TCascaderThemeData` 说明。
+
 #### 构造方法
 
 ##### TCascader
@@ -55,7 +61,7 @@ TCascader 组件级 ThemeExtension。
 | dividerColor | Color? | - | 分隔线颜色。 未配置时使用 componentStroke Token。 | 否 |
 | height | double? | - | 组件高度。 未配置时为 360 逻辑像素。 | 否 |
 | indicatorColor | Color? | - | 末级选中图标颜色。 未配置时使用 brandColor Token。 | 否 |
-| navigationPadding | EdgeInsetsGeometry? | - | 导航区域内边距。 | 否 |
+| navigationPadding | EdgeInsetsGeometry? | - | 导航区域内边距。 null 时 step 形态左右使用 spacer2、上方为 0、下方为 4；tab 形态不增加导航内边距。 | 否 |
 | textStyle | TextStyle? | - | 普通文案样式。 | 否 |
 
 
@@ -74,7 +80,7 @@ TCascader 组件级 ThemeExtension。
 | activeTextStyle | TextStyle? | - | 字段含义：当前活动导航及已选选项文案样式。 调用时的空值行为见方法说明。 | 否 |
 | disabledTextStyle | TextStyle? | - | 字段含义：禁用文案样式。 调用时的空值行为见方法说明。 | 否 |
 | indicatorColor | Color? | - | 字段含义：末级选中图标颜色。 未配置时使用 brandColor Token。 调用时的空值行为见方法说明。 | 否 |
-| navigationPadding | EdgeInsetsGeometry? | - | 字段含义：导航区域内边距。 调用时的空值行为见方法说明。 | 否 |
+| navigationPadding | EdgeInsetsGeometry? | - | 字段含义：导航区域内边距。 null 时 step 形态左右使用 spacer2、上方为 0、下方为 4；tab 形态不增加导航内边距。 调用时的空值行为见方法说明。 | 否 |
 | dividerColor | Color? | - | 字段含义：分隔线颜色。 未配置时使用 componentStroke Token。 调用时的空值行为见方法说明。 | 否 |
 
 

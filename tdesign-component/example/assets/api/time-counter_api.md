@@ -4,6 +4,12 @@
 
 通用计时器组件，支持正向计时与倒计时。
 
+#### 主题配置
+
+组件主题通过 `TTimeCounterThemeData` 配置，放入 Flutter `ThemeData.extensions`
+后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+`TTimeCounterThemeData` 说明。
+
 #### 构造方法
 
 ##### TTimeCounter
@@ -16,7 +22,7 @@
 | direction | TTimeCounterDirection | TTimeCounterDirection.down | 计时方向，默认倒计时。 | 否 |
 | format | String | 'HH:mm:ss' | 时间格式，D-日、H-时、m-分、s-秒、S-毫秒，默认为 `HH:mm:ss`。 每段可重复字符控制最小位数，相邻时间段之间仅允许一个非空白分隔符； 最后一段后可追加一个单位字符。例如 `HH:mm:ss`、`mmmm分sss秒`。 两位 `H`、`m`、`s` 分别按 24、60、60 取余；需要展示累计值时， 可将对应时间段扩展为三位及以上，例如 `HHH:mm:ss` 会展示累计小时数。 包含 `S` 段时按绘制帧更新，否则仅在格式化后的可见值变化时更新。 使用 `content` 时，该字段仍决定计时更新精度。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| onChanged | ValueChanged&lt;int&gt;? | - | 格式化后的可见值变化时触发，回调值为当前毫秒数。 `format` 包含毫秒段时按绘制帧触发，否则仅在可见时间段变化时触发。 | 否 |
+| onChanged | ValueChanged&lt;int&gt;? | - | 计时推进或控制器 reset 导致格式化后的可见值变化时触发，回调值为当前毫秒数。 `format` 包含毫秒段时随绘制帧更新，否则仅在可见时间段变化时通知。 父组件更新 time 或 direction 导致的声明式重置不触发本回调；初始化也不触发。 | 否 |
 | onFinish | VoidCallback? | - | 计时到达终点时触发一次回调。 初始值或重置值已在终点时不会自动触发；此时显式调用 `TTimeCounterController.start` 会触发一次。 | 否 |
 | size | TTimeCounterSize? | - | 计时器尺寸；null 时使用 TTimeCounterSize.medium。 | 否 |
 | splitWithUnit | bool | false | 是否使用本地化时间单位分隔，默认为 false。 | 否 |

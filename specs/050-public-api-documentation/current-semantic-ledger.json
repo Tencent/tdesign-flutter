@@ -1,0 +1,1476 @@
+[
+  {
+    "component": "button",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "onPressed=null 禁用长按；size/variant/colorPreset/style 独立职责",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/button/t_button.dart",
+      "tdesign-component/lib/src/components/button/t_button_defaults.dart",
+      "tdesign-component/lib/src/components/button/t_button_resolve.dart",
+      "tdesign-component/lib/src/components/button/t_button_theme_data.dart",
+      "tdesign-component/lib/src/components/button/t_button_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/button/t_button.dart": "61a7b703e4f91e7b0786ef507bf8b1df042a2c9c39a68f95437e0df47b01cda5",
+      "tdesign-component/lib/src/components/button/t_button_defaults.dart": "b4f0ad7379eefc2c562782ac0c1c48abe14d9ac59679d639c66a5790c38559f9",
+      "tdesign-component/lib/src/components/button/t_button_resolve.dart": "5c6c7200b95f11aa36268a7548420a13843ed2433060d861077295e3f50af889",
+      "tdesign-component/lib/src/components/button/t_button_theme_data.dart": "de2b30b36062829a4594b6bd4eab12aef14494bcd3972eb8db22781b362e6258",
+      "tdesign-component/lib/src/components/button/t_button_types.dart": "e223af1e6f201b93f5723500a4ae052836075abd45c635de230ae076491e22f5"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[button] null pressed disables long press"
+      }
+    ]
+  },
+  {
+    "component": "divider",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "竖线忽略 child/dashed；14dp 高度和方向约束",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/divider/t_divider.dart",
+      "tdesign-component/lib/src/components/divider/t_divider_painter.dart",
+      "tdesign-component/lib/src/components/divider/t_divider_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/divider/t_divider.dart": "d7e89b4f9feee62da605538181160c700ffe6e5ac1fe270d68cc879c3c79b344",
+      "tdesign-component/lib/src/components/divider/t_divider_painter.dart": "4ed3c0208e7270a00fe7c068212271425636c2acc61d60937eda5b2774400880",
+      "tdesign-component/lib/src/components/divider/t_divider_theme_data.dart": "d0c97d5d3e080a2c78dcdaeca78631a989fe5afc225fd5d359d82d6cf97683b0"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[divider] vertical ignores dashed and child"
+      }
+    ]
+  },
+  {
+    "component": "fab",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "Stack 直接子级与 Positioned 坐标；默认动作与自定义 child",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/fab/t_fab.dart",
+      "tdesign-component/lib/src/components/fab/t_fab_defaults.dart",
+      "tdesign-component/lib/src/components/fab/t_fab_drag.dart",
+      "tdesign-component/lib/src/components/fab/t_fab_layout.dart",
+      "tdesign-component/lib/src/components/fab/t_fab_resolve.dart",
+      "tdesign-component/lib/src/components/fab/t_fab_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/fab/t_fab.dart": "a06fe0ae8a8fe5985ae3cd8a15bd9319e382fb75ffe18417b0e0a5c7405f33c6",
+      "tdesign-component/lib/src/components/fab/t_fab_defaults.dart": "873b45453a6128a832b30885bde84e67b800475824811882530bf7e08305bf18",
+      "tdesign-component/lib/src/components/fab/t_fab_drag.dart": "4ccd88fd8e58de4c56bfc8b73ed26c76161a8540cf0af68e2e727109553d6303",
+      "tdesign-component/lib/src/components/fab/t_fab_layout.dart": "059004be0b8d307f08e0f78605e2056f2376e031b85c84acdccc7a4f979f12c1",
+      "tdesign-component/lib/src/components/fab/t_fab_resolve.dart": "50c8103dcf1d3059a5af6dab2778553690ff18d286b817111722042157175343",
+      "tdesign-component/lib/src/components/fab/t_fab_theme_data.dart": "d24aad7859a92f9e1c1b66707071e3ace6782066aaf5b4ddda98603acef630b1"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[fab] explicit position and custom child in Stack"
+      }
+    ]
+  },
+  {
+    "component": "icon",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "独立 24dp 默认、显式参数与 IconTheme 的区别",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/icon/t_icon.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/icon/t_icon.dart": "b7d2e44b460a20e346d9470d0a4562135f5ad2dd60b3eda8f2c46093ca600eaa"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[icon] native IconTheme does not replace independent default size"
+      }
+    ]
+  },
+  {
+    "component": "link",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "回调归调用方；子内容与前后图标的布局职责",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/link/t_link.dart",
+      "tdesign-component/lib/src/components/link/t_link_resolve.dart",
+      "tdesign-component/lib/src/components/link/t_link_theme_data.dart",
+      "tdesign-component/lib/src/components/link/t_link_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/link/t_link.dart": "632df8f703a35d9c19f25011c10b4080cf14858e765ea5169db0b036dbef29f1",
+      "tdesign-component/lib/src/components/link/t_link_resolve.dart": "96b4b12425fef1fb489fc60c59121fcf5a95aeaa76456e2c5a93df1a2e4f99bd",
+      "tdesign-component/lib/src/components/link/t_link_theme_data.dart": "5604a3f32e85c62e6332e11ac0ce54d74183513b549a74022222428ec1b2da5c",
+      "tdesign-component/lib/src/components/link/t_link_types.dart": "ff5f34ab0302cd6ed966585cf63036b076f14e6dde38711f16017b0e75443630"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[link] provided pressed callback owns navigation"
+      }
+    ]
+  },
+  {
+    "component": "text",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "原生 Text 配置和显式样式保留；字体加载不在绘制时隐式发生",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/text/t_font_loader.dart",
+      "tdesign-component/lib/src/components/text/t_text.dart",
+      "tdesign-component/lib/src/components/text/t_text_resolve.dart",
+      "tdesign-component/lib/src/components/text/t_text_style_scope.dart",
+      "tdesign-component/lib/src/components/text/t_text_styled.dart",
+      "tdesign-component/lib/src/components/text/t_text_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/text/t_font_loader.dart": "fca1fe8128238820b8ac4529e798a64065e5ee280523bdf3b91cfed393c4e845",
+      "tdesign-component/lib/src/components/text/t_text.dart": "beaea19202c851de6b1607c459ccfc3a97293aeb2746ddc8fba7d41ba8eaa4ec",
+      "tdesign-component/lib/src/components/text/t_text_resolve.dart": "24eaea48dbe356bce5c51780445fc3c75c7f9ef494f76eab012ed6e6e92fb84c",
+      "tdesign-component/lib/src/components/text/t_text_style_scope.dart": "077b563267cc1bc2f8df627c0f3b87011d71af43202875fd2495fefd8ce6bc83",
+      "tdesign-component/lib/src/components/text/t_text_styled.dart": "500024f020f96d680f86d80576cab09a1c1e6df8595e6b54475419dfbc54c77d",
+      "tdesign-component/lib/src/components/text/t_text_theme_data.dart": "ac7bef5160b01256e8181f6e19dc713b112ce7a018fbb25ed6b85f68b9c85cae"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[text] raw Text and explicit style preserve public configuration"
+      }
+    ]
+  },
+  {
+    "component": "back-top",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "无 controller 的回调模式；有 controller 时先滚动后完成回调",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/backtop/t_backtop.dart",
+      "tdesign-component/lib/src/components/backtop/t_backtop_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/backtop/t_backtop.dart": "07436abd8b51f2d2ad6fcbbacb94b1b3fedbfa6634fc172269a9d7dc197d6047",
+      "tdesign-component/lib/src/components/backtop/t_backtop_theme_data.dart": "7e0f1f2d55fd2b1b533404aeb863f02828cc2995024cd90fd078ad78e1f63662"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[back-top] standalone callback does not require controller"
+      }
+    ]
+  },
+  {
+    "component": "drawer",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "showTDrawer 返回句柄的生命周期；面板主题与项目主题的回退",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/drawer/t_drawer.dart",
+      "tdesign-component/lib/src/components/drawer/t_drawer_content.dart",
+      "tdesign-component/lib/src/components/drawer/t_drawer_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/drawer/t_drawer.dart": "7958425a66198f4e9c01c000810282e7f430925f3bc6c371c5d1da251ee99365",
+      "tdesign-component/lib/src/components/drawer/t_drawer_content.dart": "609108faaacbdd2bd6c09f13103e152ab3de1245606af38f170a940037102896",
+      "tdesign-component/lib/src/components/drawer/t_drawer_theme_data.dart": "8a3bcae7aca84a7eeb57d4ccbeba2bee68440af40e403295ed439a05c74c00e6"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[drawer] show returns live handle and close removes drawer"
+      }
+    ]
+  },
+  {
+    "component": "indexes",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "外部 ScrollController 的借用/释放；索引唯一性与 builder 内容",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/indexes/t_indexes.dart",
+      "tdesign-component/lib/src/components/indexes/t_indexes_anchor.dart",
+      "tdesign-component/lib/src/components/indexes/t_indexes_list.dart",
+      "tdesign-component/lib/src/components/indexes/t_indexes_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/indexes/t_indexes.dart": "ecb78573566a4e5da23cf5a4b74fe7e4d39b019d79e117e86a158095e5c0c069",
+      "tdesign-component/lib/src/components/indexes/t_indexes_anchor.dart": "26934564047b0324fb46dcffc6e657b0c80450a38e384e4d8b0a7a4753071e65",
+      "tdesign-component/lib/src/components/indexes/t_indexes_list.dart": "096bdea15bcb009a4820f2396be4027cf36fa02caa3151105de314263fcba6bc",
+      "tdesign-component/lib/src/components/indexes/t_indexes_theme_data.dart": "c5dc7111ee44d5c0d88a71638fff348e889707a83d1f8861f76d8f6aecca1271"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[indexes] external scroll controller is borrowed"
+      }
+    ]
+  },
+  {
+    "component": "navbar",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "PreferredSizeWidget 高度与安全区；操作项及返回回调",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/navbar/t_nav_bar.dart",
+      "tdesign-component/lib/src/components/navbar/t_nav_bar_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/navbar/t_nav_bar.dart": "f4e0e892554c47e0d247ba38d2a4e9556cf7e4e47a96f9f24eac505c09412015",
+      "tdesign-component/lib/src/components/navbar/t_nav_bar_theme_data.dart": "1940d8610fec2117243cf05665150738948c32f189820b03f877d7cb717ae444"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[navbar] safe area off keeps declared preferred height"
+      }
+    ]
+  },
+  {
+    "component": "side-bar",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "条目业务值不自动生成索引；受控回调与整栏禁用",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/sidebar/t_sidebar.dart",
+      "tdesign-component/lib/src/components/sidebar/t_sidebar_item.dart",
+      "tdesign-component/lib/src/components/sidebar/t_sidebar_theme_data.dart",
+      "tdesign-component/lib/src/components/sidebar/t_wrap_sidebar_item.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/sidebar/t_sidebar.dart": "187524b8839fcdfae4e90f044856f0b3e3410003d94b42b891ab7cabd561d5f5",
+      "tdesign-component/lib/src/components/sidebar/t_sidebar_item.dart": "ec4d1e773e677ba7307ac3d7f67db98bb6cc18684cce23df1fed1d46dd8823b1",
+      "tdesign-component/lib/src/components/sidebar/t_sidebar_theme_data.dart": "674fba5772a3c714156969ca070b6d568dda60a42c3add5011ba7286a23e32e4",
+      "tdesign-component/lib/src/components/sidebar/t_wrap_sidebar_item.dart": "c48fe1c9d984a200fe18be67fd32e3c13bd3b5291007a71bbdc407cd9e44c31d"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[side-bar] click is request and does not replace controlled value"
+      }
+    ]
+  },
+  {
+    "component": "steps",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "命名构造对应只读/进度/可选；点击请求不隐式更新 value",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/steps/t_steps.dart",
+      "tdesign-component/lib/src/components/steps/t_steps_horizontal.dart",
+      "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart",
+      "tdesign-component/lib/src/components/steps/t_steps_mode.dart",
+      "tdesign-component/lib/src/components/steps/t_steps_vertical.dart",
+      "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/steps/t_steps.dart": "3cbf632fe4259761473b89b744ebbb8d35b68f05acfa637a3147bbd78f962d9e",
+      "tdesign-component/lib/src/components/steps/t_steps_horizontal.dart": "e1ba9a44db6b8772adc6e0b0d1a210242873353834125cded007e4e2fac716db",
+      "tdesign-component/lib/src/components/steps/t_steps_horizontal_item.dart": "df6a789cda7b55d03dc8bd7dc9318183b370766709e2122454998a7c29905e9b",
+      "tdesign-component/lib/src/components/steps/t_steps_mode.dart": "f96975092611043583629bc5d790fd9f3e5d13ff169aac1a216c2925a961810f",
+      "tdesign-component/lib/src/components/steps/t_steps_vertical.dart": "298c164b53a66b4bcc27d15b380ade52fb44bc2f4830628059cd83c8a6e7cb1c",
+      "tdesign-component/lib/src/components/steps/t_steps_vertical_item.dart": "49a2cb02d419d0e5a971b7c0b1003c250785cbf84dae104f0f6134f45d44062b"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[steps] progress callback is a controlled request"
+      }
+    ]
+  },
+  {
+    "component": "tab-bar",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "null onChanged 整栏禁用且屏蔽 item 回调；300ms 默认动画",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart",
+      "tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart": "842108f3408a208d30b3e6c2c2764519b36685557129d44127967445abe75981",
+      "tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart": "e814e92cbc4518a60255769a07cb34e8cd81a920efb79b4303aa772d70e29a79"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[tab-bar] null onChanged disables the whole bar including item callbacks"
+      }
+    ]
+  },
+  {
+    "component": "tabs",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "DefaultTabController 依赖；onTap=null 不禁用原生标签切换",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/tabs/t_horizontal_tab_bar.dart",
+      "tdesign-component/lib/src/components/tabs/t_tab.dart",
+      "tdesign-component/lib/src/components/tabs/t_tab_bar.dart",
+      "tdesign-component/lib/src/components/tabs/t_tab_bar_theme_data.dart",
+      "tdesign-component/lib/src/components/tabs/t_tab_bar_view.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/tabs/t_horizontal_tab_bar.dart": "3e30f2b94126810bbdc679054730374ebb5dda0c08b0fbfc606ca4f8b5218e99",
+      "tdesign-component/lib/src/components/tabs/t_tab.dart": "8424c975127c188d35f8afbc180cd1429624f22d7514e5f976af0f60bf5fdcd2",
+      "tdesign-component/lib/src/components/tabs/t_tab_bar.dart": "7e315b470685e433fa8fbf0296d5118078665b3a6b9a16a32475a385a6ecd70c",
+      "tdesign-component/lib/src/components/tabs/t_tab_bar_theme_data.dart": "ee569bfeb076a7d4b534e6d9880d49306d950ea9c39188bcd1ad481b00c0af8e",
+      "tdesign-component/lib/src/components/tabs/t_tab_bar_view.dart": "262d681558421d9693a71a589b3fa96bf32cb419558a8ea77c8000ff5bcec6ff"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[tabs] DefaultTabController switches without onTap callback"
+      }
+    ]
+  },
+  {
+    "component": "calendar",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "cellBuilder/subtitleBuilder 的 null 区别；六行默认视窗与 Token 回退",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/calendar/t_calendar.dart",
+      "tdesign-component/lib/src/components/calendar/t_calendar_body.dart",
+      "tdesign-component/lib/src/components/calendar/t_calendar_cell.dart",
+      "tdesign-component/lib/src/components/calendar/t_calendar_header.dart",
+      "tdesign-component/lib/src/components/calendar/t_calendar_style.dart",
+      "tdesign-component/lib/src/components/calendar/t_calendar_theme_data.dart",
+      "tdesign-component/lib/src/components/calendar/t_calendar_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/calendar/t_calendar.dart": "2137dd69876a9f39541a4257539c63ac662680453b458b57077f3b6427440fe1",
+      "tdesign-component/lib/src/components/calendar/t_calendar_body.dart": "4fbb033a93ceb8427cdc0b4b48061d0fe3fb79462020c47cd0b8664f728425c2",
+      "tdesign-component/lib/src/components/calendar/t_calendar_cell.dart": "f8dfbf6ff2e41da9ada25ab56e227d7de16e9c5732a7cd4ef2d8dc73fa0f5a92",
+      "tdesign-component/lib/src/components/calendar/t_calendar_header.dart": "7d572234a145e7a71ab5332f2b34689ff04a34a269422879e54083794edd85b4",
+      "tdesign-component/lib/src/components/calendar/t_calendar_style.dart": "6127fdf26ecfd57fc19e73b29ec225773e9ebd0dca21ce246cfd871b1be9daaf",
+      "tdesign-component/lib/src/components/calendar/t_calendar_theme_data.dart": "a06cad37054578a6c5532dcb2d45552fad64c84a0a55554a6c367e370cf057ea",
+      "tdesign-component/lib/src/components/calendar/t_calendar_types.dart": "59cb92666699dc56a4ecb1c9e32c17015a63a782bb8ba653bf5ca2d9840e7938"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Calendar null full-cell builder falls back to subtitles"
+      },
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Calendar full custom cells suppress subtitle builder"
+      },
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Calendar omitted height is calculated not unconstrained or zero"
+      }
+    ]
+  },
+  {
+    "component": "cascader",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "分支路径仅为候选；父级回传才推进层级；step/tab 导航 padding 区别",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/cascader/t_cascader.dart",
+      "tdesign-component/lib/src/components/cascader/t_cascader_defaults.dart",
+      "tdesign-component/lib/src/components/cascader/t_cascader_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/cascader/t_cascader.dart": "540430f003462e7bf5bdd45e3ade1929d71bec795c530217250fe3d3b6215e29",
+      "tdesign-component/lib/src/components/cascader/t_cascader_defaults.dart": "7523883d1e9c8b55632c153d52915ac9aef18fe7e424cad9f156de2adaa079b9",
+      "tdesign-component/lib/src/components/cascader/t_cascader_theme_data.dart": "c46494df007261fd53b31695273cda501b040e05d1066a55ab7992b236690e5a"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[cascader] branch click emits path but parent retains accepted value"
+      }
+    ]
+  },
+  {
+    "component": "checkbox",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "选择上限阻止新增但允许取消；受控回传与禁用文字 Token",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/checkbox/t_check_box.dart",
+      "tdesign-component/lib/src/components/checkbox/t_check_box_group.dart",
+      "tdesign-component/lib/src/components/checkbox/t_checkbox_theme_data.dart",
+      "tdesign-component/lib/src/components/checkbox/t_selection_card.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/checkbox/t_check_box.dart": "8b1049ce847b0d1f6a2a26b68cbcf36bf1090ff3632f4063344e7e2c408627cb",
+      "tdesign-component/lib/src/components/checkbox/t_check_box_group.dart": "f7fcfacb70d71ce63f621bccf5b01b48033363d4bd13233a5458d775f4bdd1a7",
+      "tdesign-component/lib/src/components/checkbox/t_checkbox_theme_data.dart": "63e9c23ce2b5919ad3b5019e9d088097d89337d4f442684bdc933c46e4993b9a",
+      "tdesign-component/lib/src/components/checkbox/t_selection_card.dart": "951680691be6f7c7f29491fcb7734c76431ced352e5289030746dce2a2d4522f"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Checkbox group limit rejects additions but permits cancel and remains controlled"
+      }
+    ]
+  },
+  {
+    "component": "picker",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "null itemBuilder 回退；Popup 头部占位及 show 时高度快照",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/picker/multi_wheel_layout.dart",
+      "tdesign-component/lib/src/components/picker/picker_defaults.dart",
+      "tdesign-component/lib/src/components/picker/picker_item.dart",
+      "tdesign-component/lib/src/components/picker/t_picker.dart",
+      "tdesign-component/lib/src/components/picker/t_picker_popup.dart",
+      "tdesign-component/lib/src/components/picker/t_picker_theme_data.dart",
+      "tdesign-component/lib/src/components/picker/t_picker_types.dart",
+      "tdesign-component/lib/src/components/picker/wheel_behavior.dart",
+      "tdesign-component/lib/src/components/picker/wheel_column.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/picker/multi_wheel_layout.dart": "e2c0cf62b68afdbb7712f8775a4bfd6b5e5b1610a21538041afff1a9e1f5465d",
+      "tdesign-component/lib/src/components/picker/picker_defaults.dart": "8a8430428fe67150d09305612e4294ee9b4dc0e0f0defb6aa8e7058eb0a6b6fd",
+      "tdesign-component/lib/src/components/picker/picker_item.dart": "84a52759688b1cf04b59e9e60e9f1ab7d5dec885fa66ebc75345560ffb59205f",
+      "tdesign-component/lib/src/components/picker/t_picker.dart": "8aba6cf9686dc6cc05d27ab5d2d4b892028158d60fe5b7e842c6861d6b2afaf8",
+      "tdesign-component/lib/src/components/picker/t_picker_popup.dart": "c998cc5855406f10304977662bc6305bcd6fb5ab574f323e0acfdd5b10534f4d",
+      "tdesign-component/lib/src/components/picker/t_picker_theme_data.dart": "cf75124f7d139c4c045c242969bcec3637754d8ab2d6915f3d8712a2beb4c084",
+      "tdesign-component/lib/src/components/picker/t_picker_types.dart": "c30fe1fbdc492a983fb7405c9a4ce15aa7ccaa833582685001185e6ed8da9cf2",
+      "tdesign-component/lib/src/components/picker/wheel_behavior.dart": "41eea09f4777db71675787e570b806fd2633e5045df0b336d313fccbf2d2ebf0",
+      "tdesign-component/lib/src/components/picker/wheel_column.dart": "e33eb509b2a73cee6e651aa6f608b718ad3f3bf5d3218f8b807f14d40f3eb2c0"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Picker null item builder uses default text"
+      }
+    ]
+  },
+  {
+    "component": "date-time-picker",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "模式字段与 partial 值；fallback 按 DateTime 规则归一化",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker.dart",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_bounds.part.dart",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_column.dart",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_enums.dart",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_internal.dart",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_labels.part.dart",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_model.dart",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_snapshot.part.dart",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_wheel.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker.dart": "5e244270b28533e13c6ee816d2bd203d52372ae44ddbac6be383e64419c03ca1",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_bounds.part.dart": "c2951704c1cdabe6d3e86e0ea0038c2bcbfa3fda264f7cd473284a10858e7f88",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_column.dart": "6e9e3c38cb2ed477ac22719d5a0e54744ed19f1e159961d10a829559c54091d2",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_enums.dart": "ea2d87d4af86d434db925b02fb482c3b0a8d4b4e76160b1f41b1e669759f5d3e",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_internal.dart": "3e228df7d76ddcec64172747f25ded8f1cc00cc91250f9a6bcba84d5e46fc143",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_labels.part.dart": "174a8c502b904564689b27335ba8b52520f26169d53e6c9e2fc1a75d19e49bdd",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_model.dart": "9c17e31a5229662366ebebfbfdc2489ee942f07992d9f4a7f6e6958b199b922b",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_snapshot.part.dart": "919ec53de51add20de5f6a6b3bf939617ef9d9adeb957f5e1c8219f625c5810d",
+      "tdesign-component/lib/src/components/date_time_picker/t_date_time_picker_wheel.dart": "a286fe26803f90e25917977191a364e5b3ff49e8c95647a5903f73cea4435acd"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "DateTime partial requires fallback and can normalize across months"
+      },
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "DateTime label null fallback and controlled mode compile from docs"
+      }
+    ]
+  },
+  {
+    "component": "form",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "校验成功不等于业务提交；外部错误与 reset 不替业务重置受控值",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/form/t_field_scope.dart",
+      "tdesign-component/lib/src/components/form/t_form.dart",
+      "tdesign-component/lib/src/components/form/t_form_item.dart",
+      "tdesign-component/lib/src/components/form/t_form_item_scope.dart",
+      "tdesign-component/lib/src/components/form/t_form_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/form/t_field_scope.dart": "a3a8f393c67eb66610d67c376c3931f2e2b074b838613f54378ef21fd32e0964",
+      "tdesign-component/lib/src/components/form/t_form.dart": "181cd4449520bc071b6ed45db967bb9f0fbb831a91f3e49997d1367258af2fec",
+      "tdesign-component/lib/src/components/form/t_form_item.dart": "a2a91fe928517fe4f9fd1b1f067dfad1f3a345be9c2a42d0e71e5c4a223ae32d",
+      "tdesign-component/lib/src/components/form/t_form_item_scope.dart": "011a3c6e16bc78e6f2868d73c9efec1d31eaae615eb3b2e9f69717af788e6b19",
+      "tdesign-component/lib/src/components/form/t_form_theme_data.dart": "cfea628c86ec6ab4fe9622d6a8baaaec9347873d48a914077770b40f020845ce"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Form and refresh unbound controllers follow documented fallbacks"
+      },
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Form submit true is validation success even without onSubmit"
+      },
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Form external error reset preserves controlled value"
+      }
+    ]
+  },
+  {
+    "component": "input",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "controller/focus 借用；清除与密码互斥；加权输入与状态样式回退",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/input/t_input.dart",
+      "tdesign-component/lib/src/components/input/t_input_theme_data.dart",
+      "tdesign-component/lib/src/components/input/t_input_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/input/t_input.dart": "f32e95889f5388392a044f7bb3daaa3ad1c94e13f9bf862066bc5f6f969b9040",
+      "tdesign-component/lib/src/components/input/t_input_theme_data.dart": "a3910deb591c0212057f0bbfe9d9c38dcadb47554c3589d7ef69a39e6ee3f231",
+      "tdesign-component/lib/src/components/input/t_input_types.dart": "1feaa3b1f38f6a73880523ba2762b7e3c408ba30f22406d960524d1a108b247c"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Input initialValue is read once"
+      },
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Input borrowed controller and focus node survive unmount"
+      },
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Input password toggle suppresses always clear button without suffix"
+      },
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Input controller changes are silent while clear notifies"
+      },
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Input weighted limit counts non ASCII code points rather than UTF16 units"
+      }
+    ]
+  },
+  {
+    "component": "radio",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "空组回调禁用；重复已选项仍通知；启用/禁用颜色优先级",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/radio/t_radio.dart",
+      "tdesign-component/lib/src/components/radio/t_radio_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/radio/t_radio.dart": "17a69e790db868d9f3b876070d5497114d792bcf09a68bb802175390650bb699",
+      "tdesign-component/lib/src/components/radio/t_radio_theme_data.dart": "84bfe7b2f21f6226b22c21e57ea8ae789b119a6344726e89ac24714c18a240d5"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Radio selecting the current value still invokes group onChanged"
+      },
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Radio group null onChanged disables all items"
+      }
+    ]
+  },
+  {
+    "component": "rate",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "count/value 约束；图标尺寸/间距和提示阴影的 Token 回退",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/rate/t_rate.dart",
+      "tdesign-component/lib/src/components/rate/t_rate_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/rate/t_rate.dart": "c398417be8319c74004982e336eaf3127af57c93cf66c818b868c06e1df72f64",
+      "tdesign-component/lib/src/components/rate/t_rate_theme_data.dart": "f45f937090cbcbbc38f251d499b353f2596b4b9d02502e988a128d533401b422"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[rate] count and value constructor constraints are explicit"
+      }
+    ]
+  },
+  {
+    "component": "search",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "无焦点可清除；clear 的通知顺序；只读可聚焦不显示清除",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/search/t_search_bar.dart",
+      "tdesign-component/lib/src/components/search/t_search_bar_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/search/t_search_bar.dart": "84582fe123416762bd6e5f80505b5c7f61a8e9d786c01acfeb060571dfde72e8",
+      "tdesign-component/lib/src/components/search/t_search_bar_theme_data.dart": "2e6f4a1e615b6cddd72ecffd841e1af04b92c8978ca69d382588f48f80eb8f5d"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Search clear works unfocused and follows controller then clear then changed order"
+      },
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Search readOnly hides clear while remaining focusable"
+      }
+    ]
+  },
+  {
+    "component": "slider",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "null onChanged 禁用；受控 value 与 trackHeight 默认 4",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/slider/t_slider.dart",
+      "tdesign-component/lib/src/components/slider/t_slider_theme.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/slider/t_slider.dart": "54caa36227801baf355d62b6daf2773fdc0dfc2376789e783dfdc61f3b7942e6",
+      "tdesign-component/lib/src/components/slider/t_slider_theme.dart": "8f1386ddbc43e64beaa246ded62aec81b6ddd1cd95c2e328dcf0d761d7d9a304"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[slider] value is controlled and null callback disables native slider"
+      }
+    ]
+  },
+  {
+    "component": "stepper",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "受控值；null 回调禁用按钮并使编辑器只读；背景/边框回退",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/stepper/t_stepper.dart",
+      "tdesign-component/lib/src/components/stepper/t_stepper_defaults.dart",
+      "tdesign-component/lib/src/components/stepper/t_stepper_theme_data.dart",
+      "tdesign-component/lib/src/components/stepper/t_stepper_theme_interpolation.dart",
+      "tdesign-component/lib/src/components/stepper/t_stepper_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/stepper/t_stepper.dart": "08a875c9faa653813a5e8cb2b143b726a9656fac50c09507a7386223506d26ef",
+      "tdesign-component/lib/src/components/stepper/t_stepper_defaults.dart": "a538967b6abba1080899c70cddc8f1cebb5fe3f6b4788c2de6b1ee3d3cb99558",
+      "tdesign-component/lib/src/components/stepper/t_stepper_theme_data.dart": "f535aea6d3c4a1e9a091c4e689fadfdb916c8129b2a542c1ccbe1b9d15eca1f8",
+      "tdesign-component/lib/src/components/stepper/t_stepper_theme_interpolation.dart": "1decd5487909342c3baacb1e98efc46382cf9e8a7277948c12d4256f7874bf62",
+      "tdesign-component/lib/src/components/stepper/t_stepper_types.dart": "feba5fbfe83c7b283da1fdf332156d086bd0f60c834453fbd54fe9bed85a79fb"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[stepper] null callback disables editing as documented"
+      }
+    ]
+  },
+  {
+    "component": "switch",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "点击只报告候选，不改变 value；loading/null 回调阻止编辑",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/switch/t_cupertino_switch.dart",
+      "tdesign-component/lib/src/components/switch/t_switch.dart",
+      "tdesign-component/lib/src/components/switch/t_switch_resolve.dart",
+      "tdesign-component/lib/src/components/switch/t_switch_theme_data.dart",
+      "tdesign-component/lib/src/components/switch/t_switch_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/switch/t_cupertino_switch.dart": "80001f11e88b8c8131f754f023588d76973158a40d3bcaca4cada48c3e87f177",
+      "tdesign-component/lib/src/components/switch/t_switch.dart": "d0344d3c4d92d1e81de165ede20f2887347262cccf06dd1c5c0031124635d2ca",
+      "tdesign-component/lib/src/components/switch/t_switch_resolve.dart": "75f4bc2353098292fee80cf7959ddd118cd0c806008c1152fb3b4cdd3d6bd2c1",
+      "tdesign-component/lib/src/components/switch/t_switch_theme_data.dart": "f8475cb9a8b076b4e6f75f635d8773f2001cfbca695fc3b779387023cf407d34",
+      "tdesign-component/lib/src/components/switch/t_switch_types.dart": "48776a87e0bb52ad72f53ed6ae04474e8a1ddc98f23e71495feb0751fb80418d"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[switch] callback does not mutate value without parent acceptance"
+      }
+    ]
+  },
+  {
+    "component": "textarea",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "复用 Input；minLines 被 maxLines 收敛；标题与表单标签职责",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/textarea/t_textarea.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/textarea/t_textarea.dart": "94bc77eb3c91231218187ff722dc2d2bd6d99902bb7350fa3a32cf40cfb74545"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Textarea clamps implicit minLines and shares weighted formatter"
+      }
+    ]
+  },
+  {
+    "component": "tree-select",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "单选路径数量和叶子解析；root/selected/disabled Token 回退",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/tree/t_tree_select.dart",
+      "tdesign-component/lib/src/components/tree/t_tree_select_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/tree/t_tree_select.dart": "a16470f41bd16421143a77cef3803fd70b7de9e53c9b6b33306ff838109dc3ed",
+      "tdesign-component/lib/src/components/tree/t_tree_select_theme_data.dart": "17efa56f3c81017b281401a01bae36af1724eb405317bf3d0e0af01a765a4116"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[tree-select] single mode rejects multiple controlled paths"
+      }
+    ]
+  },
+  {
+    "component": "upload",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "整批校验/缺 size 跳过；只读列表；选择流程内同步回调错误范围；80dp 网格默认",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/upload/t_upload.dart",
+      "tdesign-component/lib/src/components/upload/t_upload_theme_data.dart",
+      "tdesign-component/lib/src/components/upload/t_upload_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/upload/t_upload.dart": "9f46a51602682a2ce9e07ce242a9fd53428837c45aaf87ee339813d012474bca",
+      "tdesign-component/lib/src/components/upload/t_upload_theme_data.dart": "48fb25e1a44bdaee531249ef97d75ea040a867da0e5f02c86429c9c28de7e765",
+      "tdesign-component/lib/src/components/upload/t_upload_types.dart": "82aeb54e6193b17f7856b5fc02127ac52ecacb90eeb0fe5b99497f3960ec993a"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Upload rejects the whole batch if one selected file exceeds size"
+      },
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Upload cannot enforce file size for files without size metadata"
+      },
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Upload onError also catches business onChanged exceptions"
+      },
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Upload nullable itemSize actually falls back to eighty logical pixels"
+      }
+    ]
+  },
+  {
+    "component": "avatar",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "图片/child 优先级；中号 48dp 与点击行为",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/avatar/t_avatar.dart",
+      "tdesign-component/lib/src/components/avatar/t_avatar_defaults.dart",
+      "tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart",
+      "tdesign-component/lib/src/components/avatar/t_avatar_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/avatar/t_avatar.dart": "521044bf60e3e9c07664c9e1ab6e1bd5cfa066378f31ce5f968e4269c4654e7a",
+      "tdesign-component/lib/src/components/avatar/t_avatar_defaults.dart": "e90f48ca3ffbcd128914ba5ba688ff46913bb3acbb0a1b6ca20bfed22f964716",
+      "tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart": "f97571a881e652c5dfbeb62f76907fe5c4fcea776998b6b1cbddbcc4c043efbb",
+      "tdesign-component/lib/src/components/avatar/t_avatar_types.dart": "cd04d4ea83c659d6016ce5c67738678999d913d141a8132e04cd5b7686c56c96"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[avatar] custom child and tap use independent medium default"
+      }
+    ]
+  },
+  {
+    "component": "badge",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "null label 隐藏文字徽标而 dot 不读 label；锚点与配置职责",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/badge/t_badge.dart",
+      "tdesign-component/lib/src/components/badge/t_badge_defaults.dart",
+      "tdesign-component/lib/src/components/badge/t_badge_fallback.dart",
+      "tdesign-component/lib/src/components/badge/t_badge_internal.dart",
+      "tdesign-component/lib/src/components/badge/t_badge_label.dart",
+      "tdesign-component/lib/src/components/badge/t_badge_layout.dart",
+      "tdesign-component/lib/src/components/badge/t_badge_resolved_style.dart",
+      "tdesign-component/lib/src/components/badge/t_badge_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/badge/t_badge.dart": "d46efcee842399d197561ed2ed76541f2a29fdb339a86da0846f4eee4393c2e7",
+      "tdesign-component/lib/src/components/badge/t_badge_defaults.dart": "26df77972945bf1d6b7f1bc19a921011d40cc6f8aa30b6dbe9ddbb0d8d705772",
+      "tdesign-component/lib/src/components/badge/t_badge_fallback.dart": "b93bbf2d4d92b5baee8334133cfc184d5602f092a223415cd38c95242cfdbc75",
+      "tdesign-component/lib/src/components/badge/t_badge_internal.dart": "e178e81e3562f70354aa51db944529e65b1e1ac213b1d0864b909f4d4fcc647e",
+      "tdesign-component/lib/src/components/badge/t_badge_label.dart": "9705e282965abd1367a106a2e40d2f57a9125b567940f6a2e1f252c48314533f",
+      "tdesign-component/lib/src/components/badge/t_badge_layout.dart": "ea2048a7e8ee8113f006554205f0c3ef865c95372afc9350832563dc229f474a",
+      "tdesign-component/lib/src/components/badge/t_badge_resolved_style.dart": "2dc6b205d476eaffd0bd118de66d66eaa10c79788b075975f95c43ff6856ce58",
+      "tdesign-component/lib/src/components/badge/t_badge_theme_data.dart": "bb01acff3ebdb9f1f7e757076778c792a2aa7776c94950736ad58aa3d7be33bc"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[badge] null label hides text badge while dot ignores label"
+      }
+    ]
+  },
+  {
+    "component": "cell",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "单元格点击；对齐/分隔线与 CellGroup 的职责",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/cell/t_cell.dart",
+      "tdesign-component/lib/src/components/cell/t_cell_group.dart",
+      "tdesign-component/lib/src/components/cell/t_cell_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/cell/t_cell.dart": "df5e1c8ca3de7a3333a3bc2530107973327be67ff152143c4fcb9e05a823b33d",
+      "tdesign-component/lib/src/components/cell/t_cell_group.dart": "b4103e8c7bf670d2497a9e3426154d33a81543a0722ffd36fbc9a5b139f7f2cf",
+      "tdesign-component/lib/src/components/cell/t_cell_theme_data.dart": "9b23ca9e9a6dd2e6cf7e0ed92c033a44d078efe490a3ddbfbd0ec02a2bea9331"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[cell] cell callback is explicit and retained"
+      }
+    ]
+  },
+  {
+    "component": "time-counter",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "零值结束的显式 start；reset 暂停与广播；声明式 time/direction 重置不通知",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/time_counter/t_time_counter.dart",
+      "tdesign-component/lib/src/components/time_counter/t_time_counter_controller.dart",
+      "tdesign-component/lib/src/components/time_counter/t_time_counter_style.dart",
+      "tdesign-component/lib/src/components/time_counter/t_time_counter_theme_data.dart",
+      "tdesign-component/lib/src/components/time_counter/t_time_counter_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/time_counter/t_time_counter.dart": "0f95992ebedb49676de41a202834a0556b1bb67b44397be796181fc26b237fb7",
+      "tdesign-component/lib/src/components/time_counter/t_time_counter_controller.dart": "61419d95bb649590492c3dc3d592dcef60c399af0cc7bb03b0c2d7fc26c11bb8",
+      "tdesign-component/lib/src/components/time_counter/t_time_counter_style.dart": "5857aee87b17a1a0ecfbf0ffb75bda0d062c6a5a731dfaf5d51912f12a625dd2",
+      "tdesign-component/lib/src/components/time_counter/t_time_counter_theme_data.dart": "c2959e5bce0ac1591ea75272f53eb0b940ef5dbc56063efadf00302c95d2f3de",
+      "tdesign-component/lib/src/components/time_counter/t_time_counter_types.dart": "9bfc7e5e372081380a80a14c20d3ab8d11439b838bdabd23c5e30aad39b34583"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "TimeCounter zero start fires finish once but mount and reset do not"
+      },
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "TimeCounter shared controller broadcasts reset and reset remains paused"
+      },
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "TimeCounter declarative time change resets display without onChanged notification"
+      }
+    ]
+  },
+  {
+    "component": "collapse",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "展开请求不隐式接受 value；bodyHeight 包含 padding 与有限值约束",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/collapse/t_collapse.dart",
+      "tdesign-component/lib/src/components/collapse/t_collapse_panel.dart",
+      "tdesign-component/lib/src/components/collapse/t_collapse_theme_data.dart",
+      "tdesign-component/lib/src/components/collapse/t_collapse_types.dart",
+      "tdesign-component/lib/src/components/collapse/t_inset_divider.dart",
+      "tdesign-component/lib/src/components/collapse/t_nonanimated_expand_icon.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/collapse/t_collapse.dart": "badeff66c31ad567182f9f37c2df81cb90698b028038c732a9f37bf3978a511e",
+      "tdesign-component/lib/src/components/collapse/t_collapse_panel.dart": "0f2b2184c22b079a82a06c99554f62c117c5280fd995936bcaf1eb208f4d4103",
+      "tdesign-component/lib/src/components/collapse/t_collapse_theme_data.dart": "88ecf01b5e198e70534b0472758c952d02c4461037901b65859914334d7681e2",
+      "tdesign-component/lib/src/components/collapse/t_collapse_types.dart": "8cf810fc56a98375b0eb82ef1f489d7a70c9bea46d43c969b1457e968f240332",
+      "tdesign-component/lib/src/components/collapse/t_inset_divider.dart": "66c1160ef5926acc233d520024a4fbe5801be9992fc9d327945864fb38a3e39b",
+      "tdesign-component/lib/src/components/collapse/t_nonanimated_expand_icon.dart": "bef7c81aa6de16ae1a97399468198bd86228e81ba7914f749d927eb3251d1ea9"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[collapse] controlled value is not updated implicitly"
+      }
+    ]
+  },
+  {
+    "component": "empty",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "显式 null icon 回退；image 优先与文本 Token",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/empty/t_empty.dart",
+      "tdesign-component/lib/src/components/empty/t_empty_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/empty/t_empty.dart": "0da72d9186b2b58de59e628bf68f8d31886731ff2c8a1d8d3929d4b40cc3649f",
+      "tdesign-component/lib/src/components/empty/t_empty_theme_data.dart": "502d5bfca8712dba90a1861a6822130755cbf7087e9bee17a97f797b51e550b8"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[empty] explicit null icon falls back to builtin"
+      }
+    ]
+  },
+  {
+    "component": "footer",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "links 与 text 组合；logo 优先于 links，仍可与 text 组合",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/footer/t_footer.dart",
+      "tdesign-component/lib/src/components/footer/t_footer_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/footer/t_footer.dart": "549f43a35a0302946002cbe71b2c3fbcc3d6249060d8460c9f649288a5c5519e",
+      "tdesign-component/lib/src/components/footer/t_footer_theme_data.dart": "373db30f71f1cf1d81df0abe00ebb99a757580e26514d1aa315b5e8feb29e63a"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[footer] links combine with text and logo overrides links"
+      }
+    ]
+  },
+  {
+    "component": "image",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "src=null 加载占位、空串失败占位；imageFile 互斥与尺寸",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/image/t_image.dart",
+      "tdesign-component/lib/src/components/image/t_image_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/image/t_image.dart": "523187ccf3787c439935d41320e1e402516f60e1fe01158ff919e16f56e84179",
+      "tdesign-component/lib/src/components/image/t_image_theme_data.dart": "3a3b7acb045debbca2d235352ca4d986e8378a12f293d85cbf71b6da993df706"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[image] null source loads placeholder and empty source fails"
+      }
+    ]
+  },
+  {
+    "component": "image-viewer",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "空 images 同步抛错；路由 Future 时机；导航槽位与暗色背景回退",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/image_viewer/t_image_viewer.dart",
+      "tdesign-component/lib/src/components/image_viewer/t_image_viewer_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/image_viewer/t_image_viewer.dart": "c7c03f5e8ec9dc61b12d35852c7be60ea225d88de3b1d8152e0c9e22cacc8a61",
+      "tdesign-component/lib/src/components/image_viewer/t_image_viewer_theme_data.dart": "92bf51c85d084cc394d15b559c7ad0c0c7873f8dd8a41686473639ac02f542f3"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[image-viewer] invalid image list fails synchronously"
+      }
+    ]
+  },
+  {
+    "component": "progress",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "0..1 分数与百分比标签；状态/渐变优先级与可交互变体",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/progress/t_progress.dart",
+      "tdesign-component/lib/src/components/progress/t_progress_circular.dart",
+      "tdesign-component/lib/src/components/progress/t_progress_defaults.dart",
+      "tdesign-component/lib/src/components/progress/t_progress_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/progress/t_progress.dart": "bf35f2c6bf5da9a15fe5b0dd228e552729e66891059e9c20627cf9430a5efbb3",
+      "tdesign-component/lib/src/components/progress/t_progress_circular.dart": "377b6b349fe97743c28d768f62b4838478cc80c841343823d6ca403800299609",
+      "tdesign-component/lib/src/components/progress/t_progress_defaults.dart": "d9e8f51807288f6271fd2fcf7c47e2ce9b48e34ad55c5b9cb75ad24ea030a66f",
+      "tdesign-component/lib/src/components/progress/t_progress_theme_data.dart": "8e2ea2cbf7b6eaac1b91a1a1544640fe8514a1fe77c70ec79dc081bc728d73c8"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[progress] normalized fraction produces percentage"
+      }
+    ]
+  },
+  {
+    "component": "result",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "自定义 icon 替代状态图标；默认 iconSize 及字体 Token",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/result/t_result.dart",
+      "tdesign-component/lib/src/components/result/t_result_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/result/t_result.dart": "a527f4ef08ff137fd2f576c61e1ec275966fb299d6f5456518a5e3f7c56fba88",
+      "tdesign-component/lib/src/components/result/t_result_theme_data.dart": "272ee9ac31250650b0569abb5eedc977d09a8b205493f438fd4ec504d2c5e413"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[result] custom icon replaces status-derived icon"
+      }
+    ]
+  },
+  {
+    "component": "skeleton",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "延迟显示；null 动画静态；预设与 custom 布局互斥",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/skeleton/t_skeleton.dart",
+      "tdesign-component/lib/src/components/skeleton/t_skeleton_layout.dart",
+      "tdesign-component/lib/src/components/skeleton/t_skeleton_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/skeleton/t_skeleton.dart": "211fb3c95744fc55ca3045b06831a8a470a0c07e2f3773292470baff02e9bb25",
+      "tdesign-component/lib/src/components/skeleton/t_skeleton_layout.dart": "cf2b697b3ad300bbc580ee1d05840504ec32668d083795b598cc488ee7601554",
+      "tdesign-component/lib/src/components/skeleton/t_skeleton_theme_data.dart": "98cc38ecf498fa201b0a5ac909f0186be43879564f82017cebd1e77fbb89417d"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[skeleton] delay defers placeholder visibility"
+      }
+    ]
+  },
+  {
+    "component": "swiper",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "未附加命令无操作；实际业务索引与自动播放；尺寸/分页颜色回退",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/swiper/t_swiper.dart",
+      "tdesign-component/lib/src/components/swiper/t_swiper_theme_data.dart",
+      "tdesign-component/lib/src/components/swiper/t_swiper_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/swiper/t_swiper.dart": "a1b673768840c9ee26226f5f497f5c564c52cf0aa459f844018ff7813ff12860",
+      "tdesign-component/lib/src/components/swiper/t_swiper_theme_data.dart": "241a138b429034d56bdcc2d60b6f72185b9441a4d4a3e8ff71454dca7f997af3",
+      "tdesign-component/lib/src/components/swiper/t_swiper_types.dart": "a0658544128a021628cde6bdee28e9e9f93d791c039f6400b0b04f09294be5e4"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Swiper unbound Futures complete without changing index"
+      },
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Swiper controller animateTo actually updates visible business index"
+      }
+    ]
+  },
+  {
+    "component": "table",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "排序回传、可见索引和点击顺序；跨度约束；38dp 行/表头与无界宽度",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/table/t_table.dart",
+      "tdesign-component/lib/src/components/table/t_table_col.dart",
+      "tdesign-component/lib/src/components/table/t_table_theme_data.dart",
+      "tdesign-component/lib/src/components/table/t_table_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/table/t_table.dart": "9a952b378eeaeb6a7420193a829a133824de7d6b425906f87e091b6dba285340",
+      "tdesign-component/lib/src/components/table/t_table_col.dart": "2d4a73d7c21f42e432cf3e8c22ee2ab2d861ef7458ab6ad31605a23217c70ead",
+      "tdesign-component/lib/src/components/table/t_table_theme_data.dart": "6c3ac45e07236668cb00dfdc200782eb48387c08b628e56d627c0937c5400d4f",
+      "tdesign-component/lib/src/components/table/t_table_types.dart": "421e8c13cc6ec6ef27204ac17e3ccd7414648267e68fbb5c2c18ee40bf73b4ee"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Table sorts without onSortChanged and taps cell before row"
+      }
+    ]
+  },
+  {
+    "component": "tag",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "enabled=false 阻止正文与关闭点击；关闭不代替父级移除",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/tag/t_select_tag.dart",
+      "tdesign-component/lib/src/components/tag/t_tag.dart",
+      "tdesign-component/lib/src/components/tag/t_tag_theme_data.dart",
+      "tdesign-component/lib/src/components/tag/t_tag_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/tag/t_select_tag.dart": "5b8b82f610345dc9b6ec021b8de97d6cf69560795b3edd0619cf0e82bf9cafe4",
+      "tdesign-component/lib/src/components/tag/t_tag.dart": "5cf39cc8e60774869708e346a2d3ca64ae1184a439079a99bab4f309f04261d4",
+      "tdesign-component/lib/src/components/tag/t_tag_theme_data.dart": "1a1ffcede4d2631f32ab38086758495d30411efa542ca3d3921751cdf36b3a21",
+      "tdesign-component/lib/src/components/tag/t_tag_types.dart": "ce68263caea41285873253427d0158e1ce71a885e80645c5af1156f7a0a5e225"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[tag] disabled suppresses label and close callbacks"
+      }
+    ]
+  },
+  {
+    "component": "action-sheet",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "选中回调先于关闭；返回 Popup 句柄与网格配置限制",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/action_sheet/t_action_sheet.dart",
+      "tdesign-component/lib/src/components/action_sheet/t_action_sheet_grid.dart",
+      "tdesign-component/lib/src/components/action_sheet/t_action_sheet_item.dart",
+      "tdesign-component/lib/src/components/action_sheet/t_action_sheet_item_widget.dart",
+      "tdesign-component/lib/src/components/action_sheet/t_action_sheet_list.dart",
+      "tdesign-component/lib/src/components/action_sheet/t_action_sheet_theme_data.dart",
+      "tdesign-component/lib/src/components/action_sheet/t_action_sheet_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/action_sheet/t_action_sheet.dart": "bf71270450dfb310ad14febbfffb1db5bab98568a6afa5cfae41f159cd6f41f4",
+      "tdesign-component/lib/src/components/action_sheet/t_action_sheet_grid.dart": "8b0da24840ed3353feb3818ace22678c6f0ad7d31ee28c5fa6fd4f36c591afe2",
+      "tdesign-component/lib/src/components/action_sheet/t_action_sheet_item.dart": "f8c1072a3902ff338ea1ec8936042e3ec0708ecf45b2c867fdfcf66229ee3f5b",
+      "tdesign-component/lib/src/components/action_sheet/t_action_sheet_item_widget.dart": "8dec17d14c6f734f3f288094a677ea2f4bddd21c5ddbaafe4569735a717f54e6",
+      "tdesign-component/lib/src/components/action_sheet/t_action_sheet_list.dart": "2960731d0ea349c298372bd36431f867fafa18f07df91d51cac6f0cd7899a365",
+      "tdesign-component/lib/src/components/action_sheet/t_action_sheet_theme_data.dart": "b0058a87880510bdd6165dcc8664722eb3e2fe834af157e892fc2a0a4afd25cc",
+      "tdesign-component/lib/src/components/action_sheet/t_action_sheet_types.dart": "bc953484f3fbcda85b2265e6da1f26359f5e1a7f0f6c79a36da400645bf744ce"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[action-sheet] selection notifies then closes returned handle"
+      }
+    ]
+  },
+  {
+    "component": "dialog",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "typed result 与动画时机；null 动作回调不等于禁用；PopScope 关闭范围",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/dialog/t_confirm_dialog.dart",
+      "tdesign-component/lib/src/components/dialog/t_dialog.dart",
+      "tdesign-component/lib/src/components/dialog/t_dialog_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/dialog/t_confirm_dialog.dart": "4723551e155b2da16169b1d5ac44b841eddac9468303375dcacc2f216801eb48",
+      "tdesign-component/lib/src/components/dialog/t_dialog.dart": "89216dbe35b9009163849c3fe6ea0c069c0c50ae879a00d3e131293a1e641ec2",
+      "tdesign-component/lib/src/components/dialog/t_dialog_theme_data.dart": "507da922e21bce11921e80cce541df46f7f2aa402583143dcf094cdde1742c80"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Dialog typed result completes after callback before reverse animation ends"
+      },
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Dialog action without callback is not disabled and can auto close"
+      }
+    ]
+  },
+  {
+    "component": "dropdown-menu",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "取消请求也完成 Future；草稿不自动提交；面板高度与控制器所有权",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/dropdown_menu/t_dropdown_item.dart",
+      "tdesign-component/lib/src/components/dropdown_menu/t_dropdown_menu.dart",
+      "tdesign-component/lib/src/components/dropdown_menu/t_dropdown_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/dropdown_menu/t_dropdown_item.dart": "c3a063f6dce9517af43baafb0ab2d1564060dfbcc6dfb6fee8bd21344569d511",
+      "tdesign-component/lib/src/components/dropdown_menu/t_dropdown_menu.dart": "39a06133c83811a97a621cd22388d6d576c1e52865a7a70a64f781d5aec32544",
+      "tdesign-component/lib/src/components/dropdown_menu/t_dropdown_theme_data.dart": "bef1d73ba28872cdede90055d7b262d3daa34f53a5e3eaa4107318074e40a1f1"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Dropdown interrupted open Future completes without opened callback"
+      }
+    ]
+  },
+  {
+    "component": "loading",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "全局层不重复创建；没有 Overlay 不创建；图标/文案默认",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/loading/t_activity_indicator.dart",
+      "tdesign-component/lib/src/components/loading/t_circle_indicator.dart",
+      "tdesign-component/lib/src/components/loading/t_loading.dart",
+      "tdesign-component/lib/src/components/loading/t_loading_controller.dart",
+      "tdesign-component/lib/src/components/loading/t_loading_theme_data.dart",
+      "tdesign-component/lib/src/components/loading/t_point_indicator.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/loading/t_activity_indicator.dart": "677fcbebf230e7f1348b3360e82376446977621f04b0ccb3f61e08736f6835c8",
+      "tdesign-component/lib/src/components/loading/t_circle_indicator.dart": "2b4bb519ad3cba2686623e6caf31e379721183b3a40ac7cfe9930dc2121faec8",
+      "tdesign-component/lib/src/components/loading/t_loading.dart": "6eb5e69f861205b4f9bb032d1b44926fc29be65a00eafc81476faeafbe521d76",
+      "tdesign-component/lib/src/components/loading/t_loading_controller.dart": "20f537456edcb5b3ae3a20e9e60a1ecf98dfcf166173d519ed873aa37e622a55",
+      "tdesign-component/lib/src/components/loading/t_loading_theme_data.dart": "ef26bedb1655942e171316ea6cfe37ebcc06afaa4809deabda8800649ec6a36d",
+      "tdesign-component/lib/src/components/loading/t_point_indicator.dart": "39c95d73d54fa810c95a28929b03d05c2c6f1dcf612cc34087431f1e17a3bd79"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[loading] singleton show does not duplicate Overlay layers"
+      }
+    ]
+  },
+  {
+    "component": "message",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "默认位置替换旧句柄；dismiss 通知一次；直接 Widget 与 Overlay 模式区别",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/message/t_message.dart",
+      "tdesign-component/lib/src/components/message/t_message_theme_data.dart",
+      "tdesign-component/lib/src/components/message/t_message_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/message/t_message.dart": "da5a940b4890e5b1c0fd79cc58a246d58f8aed87789bdd0fbc7cee0e5f78e8b4",
+      "tdesign-component/lib/src/components/message/t_message_theme_data.dart": "65391903f49b3998844a6d5de5173cc1b2d605bc2d89f3690c14e23d0efd68d9",
+      "tdesign-component/lib/src/components/message/t_message_types.dart": "5e6c06b34b8668a4553e58920b92aaaa34739ac0f9dfe91cdd5db0181c28d52a"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[message] new default Overlay message replaces previous handle"
+      }
+    ]
+  },
+  {
+    "component": "notice-bar",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "items 优先于 content；点击区域 target 与静态/marquee 行数",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/notice_bar/t_notice_bar.dart",
+      "tdesign-component/lib/src/components/notice_bar/t_notice_bar_theme_data.dart",
+      "tdesign-component/lib/src/components/notice_bar/t_notice_bar_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/notice_bar/t_notice_bar.dart": "b7ad27a88dcc040d531e32fe7c9af386b68a08d2804cd43e47dca7087dfcaea2",
+      "tdesign-component/lib/src/components/notice_bar/t_notice_bar_theme_data.dart": "688ff493a72df8613bd9199fb03dfc4dfd612b05ff369577ace6eee2df9f0dff",
+      "tdesign-component/lib/src/components/notice_bar/t_notice_bar_types.dart": "57bfe5b5b3148720a4f5241cea2e317fc30ac42fa4188ef99a064544c9d024a2"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[notice-bar] items override content and content tap is distinct target"
+      }
+    ]
+  },
+  {
+    "component": "popover",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "Anchor 的展开配置快照；控制器绑定开关与关闭 Future",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/popover/t_popover.dart",
+      "tdesign-component/lib/src/components/popover/t_popover_theme_data.dart",
+      "tdesign-component/lib/src/components/popover/t_popover_types.dart",
+      "tdesign-component/lib/src/components/popover/t_popover_widget.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/popover/t_popover.dart": "80e38e0468ead4bd6ad02821c5dabd002179e68e58e5dbdd76e6fdf8fec9fee7",
+      "tdesign-component/lib/src/components/popover/t_popover_theme_data.dart": "a759e6ad569d454f5e0eb6b4bd707b07bbc58926add8a71d19ed7f2f2856b776",
+      "tdesign-component/lib/src/components/popover/t_popover_types.dart": "7df3d8b79e7b8e21722da58a24bdbcbbeb4099b25391cc0c9b1f9114faad9f2c",
+      "tdesign-component/lib/src/components/popover/t_popover_widget.dart": "3e269f8b991d981bb3c65538ff8da13096dfedfdbb18ca1e02a0720cb1c535ec"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-full-semantic-20261009/remaining37_test.dart",
+        "case": "[popover] bound controller owns open-close state"
+      }
+    ]
+  },
+  {
+    "component": "popup",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "result 早于关闭动画；安全区方向、主题快照、重复打开与无 Navigator",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/popup/_popup_center_close.dart",
+      "tdesign-component/lib/src/components/popup/_popup_header.dart",
+      "tdesign-component/lib/src/components/popup/_popup_layout.dart",
+      "tdesign-component/lib/src/components/popup/_popup_route.dart",
+      "tdesign-component/lib/src/components/popup/_popup_shell.dart",
+      "tdesign-component/lib/src/components/popup/_popup_tracker.dart",
+      "tdesign-component/lib/src/components/popup/t_popup.dart",
+      "tdesign-component/lib/src/components/popup/t_popup_handle.dart",
+      "tdesign-component/lib/src/components/popup/t_popup_inset.dart",
+      "tdesign-component/lib/src/components/popup/t_popup_options.dart",
+      "tdesign-component/lib/src/components/popup/t_popup_theme_data.dart",
+      "tdesign-component/lib/src/components/popup/t_popup_types.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/popup/_popup_center_close.dart": "133784217a629e14358a099d67d8a07e7a3ade133767b20fd43bef5d964db620",
+      "tdesign-component/lib/src/components/popup/_popup_header.dart": "21955e2c211e2e45b92dfa561e5b26ed3f37eb860957d94de198cdef329b79a4",
+      "tdesign-component/lib/src/components/popup/_popup_layout.dart": "304894e147421324df5e2daa787e2e7e9d27f0c2f5797fb23a9ca899a1a0d050",
+      "tdesign-component/lib/src/components/popup/_popup_route.dart": "7660fd75e5157ec70c40a41f77fdf59c8d5c052034ac2f0e3a18242845afe90e",
+      "tdesign-component/lib/src/components/popup/_popup_shell.dart": "0eedcd8c228bd91589c784a5b45f5ad58e78c47d7e26639ca434c4f1efec2091",
+      "tdesign-component/lib/src/components/popup/_popup_tracker.dart": "84c7692faae29ba8b67eccb364265c60d06f5758d31cb7b264e0fcb8712e9039",
+      "tdesign-component/lib/src/components/popup/t_popup.dart": "0fe6e0be7668d14a416e87a70a96008bf2c0f54ede75ad41c6c04d471364aa91",
+      "tdesign-component/lib/src/components/popup/t_popup_handle.dart": "2423e31d4f31839f8729212ddb6b118a08606ef5fa61f4499ca39f7e336c17e0",
+      "tdesign-component/lib/src/components/popup/t_popup_inset.dart": "6db46ece40ddf554b29cf32ea95aed01a363d0665557ef78770909e06be637f3",
+      "tdesign-component/lib/src/components/popup/t_popup_options.dart": "4fb5d1d4499b2933e45f14b7e1312dbc933ded37e519f9406e6867134e164c40",
+      "tdesign-component/lib/src/components/popup/t_popup_theme_data.dart": "1ccba5e34f31d407c5e8534660f7bed8b6d22e0a51d117ad872921be0e359fbb",
+      "tdesign-component/lib/src/components/popup/t_popup_types.dart": "b29f14246b271b5a7c5e26f4cb78ab42b44d7342341ee3b10de43aea5b60de3c"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Popup result precedes close animation completion"
+      }
+    ]
+  },
+  {
+    "component": "pull-down-refresh",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "静态有界内容不等于可滚动；异常/超时 Future 与资源释放",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/refresh/t_pull_down_refresh.dart",
+      "tdesign-component/lib/src/components/refresh/t_pull_down_refresh_controller.dart",
+      "tdesign-component/lib/src/components/refresh/t_pull_down_refresh_texts.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/refresh/t_pull_down_refresh.dart": "5da37474eeed7ff4b493b4422ade7eb65f8d159674e16e0c38af15cdfb8570c8",
+      "tdesign-component/lib/src/components/refresh/t_pull_down_refresh_controller.dart": "e0e9552f863c46815ee14675e9f26c2277fb246c1e26bd89f3e4143c81f7bbbb",
+      "tdesign-component/lib/src/components/refresh/t_pull_down_refresh_texts.dart": "439b642924cb33860625d8b9c6748d12c5bab769c84e47d10a37ea7f401a0331"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Refresh fixed non-scrollable content does not become refreshable"
+      },
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Refresh scrollable counterpart accepts the same user gesture"
+      }
+    ]
+  },
+  {
+    "component": "swipe-cell",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "控制器不受 enabled 限制；取消动画 Future 正常结束；状态回调早于动画",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/swipe_cell/t_swipe_cell.dart",
+      "tdesign-component/lib/src/components/swipe_cell/t_swipe_cell_action.dart",
+      "tdesign-component/lib/src/components/swipe_cell/t_swipe_cell_inherited.dart",
+      "tdesign-component/lib/src/components/swipe_cell/t_swipe_cell_panel.dart",
+      "tdesign-component/lib/src/components/swipe_cell/t_swipe_cell_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/swipe_cell/t_swipe_cell.dart": "a4ccfbcd2e11b0d6bd95d12294776f3e8ef81a1b5a1d66e75a6916a9a595928a",
+      "tdesign-component/lib/src/components/swipe_cell/t_swipe_cell_action.dart": "d4f628ddeb02cdf5a21437bee8ea2cb9a55d6f768a741150e8359f2e362fa074",
+      "tdesign-component/lib/src/components/swipe_cell/t_swipe_cell_inherited.dart": "42b7417a77fa75282c05c7af10990db9981e87503abc91b84b68603b4ff9f3b1",
+      "tdesign-component/lib/src/components/swipe_cell/t_swipe_cell_panel.dart": "2e60fb03f8e4ec818bdbabd98e9ec5f0af95715ac784381bb1a7840620600622",
+      "tdesign-component/lib/src/components/swipe_cell/t_swipe_cell_theme_data.dart": "3a811cf294426f5a9d4255ee3ab5610bc31b499693d5bd789f906c36c6403387"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "SwipeCell unbound Future completes without dispose obligation"
+      },
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "SwipeCell cancelled opening Future completes while closing is still animated"
+      },
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "SwipeCell enabled false does not block controller commands"
+      }
+    ]
+  },
+  {
+    "component": "toast",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "返回 ID 指向 dismissToast；匿名复用与具名共存；duration 哨兵",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/components/toast/t_toast.dart",
+      "tdesign-component/lib/src/components/toast/t_toast_theme_data.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/components/toast/t_toast.dart": "26392beb354a03038fe495dbd1c2fea93554c4f533b08a31e80fd2b1e009219e",
+      "tdesign-component/lib/src/components/toast/t_toast_theme_data.dart": "42b0266fda1a34a2ee60cfb3d1d443634dc19d4dfddd10174ef7642f997138af"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-sample2-20261009/consumer_test.dart",
+        "case": "Toast reuses anonymous ID while explicit IDs coexist and dismissToast is public close API"
+      }
+    ]
+  },
+  {
+    "component": "theme",
+    "currentHead": "f203cedf703158454a330bc4cf8613d897b573c7",
+    "checkedContracts": "parse 默认映射回退与额外数据条件；copyWith null；lerp 的现有数据丢失风险",
+    "currentSourceFiles": [
+      "tdesign-component/lib/src/theme/t_colors.dart",
+      "tdesign-component/lib/src/theme/basic.dart",
+      "tdesign-component/lib/src/theme/t_spacers.dart",
+      "tdesign-component/lib/src/theme/t_component_theme_data.dart",
+      "tdesign-component/lib/src/theme/t_radius.dart",
+      "tdesign-component/lib/src/theme/resource_delegate.dart",
+      "tdesign-component/lib/src/theme/t_theme.dart",
+      "tdesign-component/lib/src/theme/t_font_family.dart",
+      "tdesign-component/lib/src/theme/t_shadows.dart",
+      "tdesign-component/lib/src/theme/t_fonts.dart",
+      "tdesign-component/lib/src/theme/t_default_theme.dart"
+    ],
+    "scope": "listed public contracts; not every business or visual scenario",
+    "sourceHashes": {
+      "tdesign-component/lib/src/theme/t_colors.dart": "5aa4e83683dd00551df323ac8c62ea71dfc0a7579242dc4c5c45d1185583bfcf",
+      "tdesign-component/lib/src/theme/basic.dart": "82176cb7a416e2882fe22b4c9f3e011607a916345687986231759cb79f049250",
+      "tdesign-component/lib/src/theme/t_spacers.dart": "d1164b255283cf960499f996f09f22b387eef098e99b29d753514513c121fee4",
+      "tdesign-component/lib/src/theme/t_component_theme_data.dart": "4f3252da9acdd54dc181716db277d2aeee409b3efea3d188d286029edae9125d",
+      "tdesign-component/lib/src/theme/t_radius.dart": "ae6d95f44902eeefb63988884548897344f79e64b47fe3852ffa5a767e549926",
+      "tdesign-component/lib/src/theme/resource_delegate.dart": "0e5d41437814ca37b2a33bd0460a811a2ccfa9a6f4d1cad21cb5f8d4cbd72d3b",
+      "tdesign-component/lib/src/theme/t_theme.dart": "7b0fda2952d1f23c1ebde498ae77585c42c83604a297e68cd87e362479c2a323",
+      "tdesign-component/lib/src/theme/t_font_family.dart": "0110943f0393d5d622f03ed49fef6b65b92a7d8f6095a16783f790691b38dc11",
+      "tdesign-component/lib/src/theme/t_shadows.dart": "e921f39cc76c8027eb55dcc60e0b170e5aa848eb2c451f4c91931fe8cd30fea2",
+      "tdesign-component/lib/src/theme/t_fonts.dart": "91a9946976db8c51658aab9631bb589b81a0b76554ebe093fb748fd6cdb14d73",
+      "tdesign-component/lib/src/theme/t_default_theme.dart": "743894c68e5877861c11e517d5836efe0253b25d3cc48bb2389fe9e126d8be36"
+    },
+    "consumptionCases": [
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Theme empty parsed config still resolves default Tokens"
+      },
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Theme lerp switches Token maps even at zero and drops extra data"
+      },
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Theme absent config does not parse or install supplied extra data"
+      },
+      {
+        "file": "/tmp/tdesign-doc-reasonableness-20261008/consumer_test.dart",
+        "case": "Theme copyWith cannot clear nullable component fields with null"
+      }
+    ]
+  }
+]

@@ -73,6 +73,7 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
   final TextAlign? labelAlign;
 
   /// 必填标记位置。
+  /// null 时使用 TFormRequiredMarkPosition.left。
   final TFormRequiredMarkPosition? requiredMarkPosition;
 
   /// 标签样式。
@@ -88,9 +89,11 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
   final TextStyle? errorStyle;
 
   /// 表单及表单项背景色。
+  /// null 时使用 bgColorContainer Token。
   final Color? backgroundColor;
 
   /// 表单项底部分隔线颜色。
+  /// null 时使用 componentStroke Token。
   final Color? borderColor;
 
   /// 表单项内边距。

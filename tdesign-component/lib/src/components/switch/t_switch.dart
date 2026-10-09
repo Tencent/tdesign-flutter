@@ -13,6 +13,12 @@ export 't_switch_types.dart';
 ///
 /// [value] 由父级持有；[onChanged] 为 null 时禁用；[loading] 为 true 时
 /// 显示加载指示器并禁用交互。支持开关文字、图标与加载内容配置。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TSwitchThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TSwitchThemeData` 说明。
 class TSwitch extends StatelessWidget {
   const TSwitch({
     super.key,

@@ -23,6 +23,12 @@ import 't_rate_theme_data.dart';
 typedef TRateIconBuilder = Widget Function(bool filled);
 
 /// 严格受控的评分组件。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TRateThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TRateThemeData` 说明。
 class TRate extends StatefulWidget {
   const TRate({
     super.key,

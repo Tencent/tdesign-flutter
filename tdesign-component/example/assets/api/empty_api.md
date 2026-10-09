@@ -4,6 +4,12 @@
 
 用于空数据、网络异常和操作引导的空状态组件。
 
+#### 主题配置
+
+组件主题通过 `TEmptyThemeData` 配置，放入 Flutter `ThemeData.extensions`
+后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+`TEmptyThemeData` 说明。
+
 #### 构造方法
 
 ##### TEmpty

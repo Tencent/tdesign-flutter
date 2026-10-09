@@ -26,6 +26,12 @@ export 't_calendar_types.dart' show DateSelectType, TCalendarFirstDayOfWeek;
 /// 严格受控的日历面板，不包含弹窗、工具栏或确认操作。
 ///
 /// [value] 与 [onChanged] 构成受控选择状态；[onChanged] 为 null 时禁用。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TCalendarThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TCalendarThemeData` 说明。
 class TCalendar extends StatefulWidget {
   TCalendar({
     super.key,

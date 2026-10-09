@@ -7,6 +7,8 @@ TIcon 图标组件
 提供 TDesign 默认尺寸和颜色，并支持 Flutter `Icon` 的常用配置。
 图标数据由 `tdesign_flutter_icons` 资源包提供，通过 `TIcons.xxx` 常量引用。
 
+#### 主题配置
+
 构造器参数优先，其次使用 TDesign 组合组件的内部样式；独立使用时
 默认尺寸为 24dp，默认颜色读取 TDesign 全局 Token。
 外层 Material `IconTheme` 不控制 TDesign 图标。

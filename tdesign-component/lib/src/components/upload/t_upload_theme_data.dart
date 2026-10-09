@@ -34,58 +34,58 @@ class TUploadThemeData extends ThemeExtension<TUploadThemeData> {
     this.disabledMaskColor,
   });
 
-  /// 上传项形状。
+  /// 上传项形状；null 时使用圆角方形。
   final TUploadVariant? variant;
 
-  /// 上传项尺寸。
+  /// 网格上传项的宽高，单位为逻辑像素；null 时为 80。
   final double? itemSize;
 
-  /// 横向间距。
+  /// 网格项横向间距；null 时使用全局 spacer Token。
   final double? spacing;
 
-  /// 纵向间距。
+  /// 网格项纵向间距；null 时使用全局 spacer Token。列表项间距由全局 spacer1 决定。
   final double? runSpacing;
 
-  /// Wrap 对齐方式。
+  /// 网格 Wrap 对齐方式；null 时为 WrapAlignment.start。
   final WrapAlignment? alignment;
 
-  /// 默认背景色。
+  /// 启用项背景色；null 时使用 bgColorSecondaryContainer Token。
   final Color? backgroundColor;
 
-  /// 默认前景色。
+  /// 启用项前景色；null 时使用 textColorPlaceholder Token。
   final Color? foregroundColor;
 
-  /// 禁用背景色。
+  /// 禁用添加项背景色；null 时使用 bgColorComponentDisabled Token。
   final Color? disabledBackgroundColor;
 
-  /// 禁用前景色。
+  /// 禁用添加项前景色；null 时使用 textColorDisabled Token。
   final Color? disabledForegroundColor;
 
-  /// 状态遮罩颜色。
+  /// 上传中/失败状态的遮罩色；null 时使用 fontGray3 Token。
   final Color? overlayColor;
 
-  /// 状态文案样式。
+  /// 状态文案样式；null 时使用反色前景色与 fontBodySmall，字号最终回退 12。
   final TextStyle? statusTextStyle;
 
-  /// 方形上传项圆角。
+  /// 方形上传项圆角，单位为逻辑像素；null 时使用 radiusDefault Token，圆形变体不使用该值。
   final double? borderRadius;
 
-  /// 添加图标尺寸。
+  /// 网格添加图标尺寸；null 时为 28 逻辑像素。
   final double? addIconSize;
 
-  /// 状态图标尺寸。
+  /// 上传状态图标尺寸；null 时为 24 逻辑像素。
   final double? statusIconSize;
 
-  /// 移除按钮尺寸。
+  /// 移除按钮宽高；null 时为 20 逻辑像素。
   final double? removeButtonSize;
 
-  /// 移除按钮颜色。
+  /// 移除按钮背景色；null 时使用 textColorDisabled Token。
   final Color? removeButtonColor;
 
-  /// 移除图标尺寸。
+  /// 移除图标尺寸；null 时为 16 逻辑像素。
   final double? removeIconSize;
 
-  /// 禁用文件遮罩颜色。
+  /// 有图片预览且处于 ready/success 的禁用文件遮罩色；null 时亮色使用 textColorAnti、暗色使用 fontGray1，alpha 均为 0.6。
   final Color? disabledMaskColor;
 
   /// 复制主题配置。

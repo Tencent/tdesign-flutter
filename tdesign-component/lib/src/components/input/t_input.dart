@@ -19,6 +19,12 @@ import 't_input_types.dart';
 /// [controller] 是主控制路径；未传时由组件创建内部 controller，并使用
 /// [initialValue] 初始化一次。两者不能同时传入。输入框外层由 TDesign
 /// 自有布局绘制，Material [InputDecorationTheme] 不会覆盖默认边框和内边距。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TInputThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TInputThemeData` 说明。
 class TInput extends StatefulWidget {
   const TInput({
     super.key,
@@ -93,7 +99,7 @@ class TInput extends StatefulWidget {
   final Widget? suffix;
 
   /// 清除按钮显示模式；为空时为 TInputClearButtonMode.never。
-  /// 点击清除会清空 controller 并触发 onChanged；suffix 非空时隐藏清除按钮。
+  /// 点击清除会清空 controller 并触发 onChanged；suffix 非空或 showPasswordToggle 为 true 时隐藏清除按钮。
   final TInputClearButtonMode? clearButtonMode;
 
   /// 输入框语义状态。
@@ -152,7 +158,7 @@ class TInput extends StatefulWidget {
   /// 初始显隐状态由 [obscureText] 决定，按钮点击后的显隐状态由输入框
   /// 自身维护。启用后会使用 TDesign 的浏览图标和 24dp 图标槽，且不会
   /// 额外撑高输入框；仅支持单行输入。如果同时传入 [suffix]，自定义后置内容
-  /// 会紧跟在该按钮之后。
+  /// 会紧跟在该按钮之后。启用密码显隐按钮时，不同时显示内置清除按钮。
   final bool showPasswordToggle;
 
   /// 输入格式化器。

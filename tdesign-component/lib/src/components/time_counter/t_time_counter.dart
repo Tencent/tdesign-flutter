@@ -63,6 +63,12 @@ String _getMark(String format, RegExpMatch match) =>
     match.end < format.length ? format.substring(match.end, match.end + 1) : '';
 
 /// 通用计时器组件，支持正向计时与倒计时。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TTimeCounterThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TTimeCounterThemeData` 说明。
 class TTimeCounter extends StatefulWidget {
   const TTimeCounter({
     super.key,
@@ -114,9 +120,10 @@ class TTimeCounter extends StatefulWidget {
   /// 必须大于或等于 0。
   final int time;
 
-  /// 格式化后的可见值变化时触发，回调值为当前毫秒数。
+  /// 计时推进或控制器 reset 导致格式化后的可见值变化时触发，回调值为当前毫秒数。
   ///
-  /// [format] 包含毫秒段时按绘制帧触发，否则仅在可见时间段变化时触发。
+  /// [format] 包含毫秒段时随绘制帧更新，否则仅在可见时间段变化时通知。
+  /// 父组件更新 time 或 direction 导致的声明式重置不触发本回调；初始化也不触发。
   final ValueChanged<int>? onChanged;
 
   /// 计时到达终点时触发一次回调。

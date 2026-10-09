@@ -38,24 +38,30 @@ class TTreeSelectThemeData extends ThemeExtension<TTreeSelectThemeData> {
   final double? itemHeight;
 
   /// 面板背景色。
+  /// null 时使用 bgColorContainer Token。
   final Color? backgroundColor;
 
   /// 根列背景色。
+  /// null 时使用 bgColorSecondaryContainer Token。
   final Color? rootBackgroundColor;
 
   /// 选中项背景色。
+  /// null 时使用 bgColorContainer Token。
   final Color? selectedBackgroundColor;
 
   /// 普通文案样式。
+  /// null 时使用当前全局 Token 解析的文字样式。
   final TextStyle? textStyle;
 
   /// 选中文案样式。
   final TextStyle? selectedTextStyle;
 
   /// 禁用文案样式。
+  /// null 时沿用默认文字样式并使用 textColorDisabled Token。
   final TextStyle? disabledTextStyle;
 
   /// 选中图标颜色。
+  /// null 时使用 brandColor Token。
   final Color? indicatorColor;
 
   /// 复制主题配置。

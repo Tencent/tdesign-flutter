@@ -12,6 +12,12 @@ import 't_tag_types.dart';
 
 /// 展示型标签组件，仅展示，内部不可更改自身状态
 /// 支持样式：方形/圆角/半圆/带关闭图标
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TTagThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TTagThemeData` 说明。
 class TTag extends StatelessWidget {
   const TTag(
     this.text, {

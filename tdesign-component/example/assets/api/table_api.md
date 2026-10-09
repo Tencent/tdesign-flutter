@@ -7,6 +7,12 @@
 
 强类型、受控排序与选择的表格组件。
 
+#### 主题配置
+
+组件主题通过 `TTableThemeData` 配置，放入 Flutter `ThemeData.extensions`
+后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+`TTableThemeData` 说明。
+
 #### 构造方法
 
 ##### TTable
@@ -74,13 +80,13 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 默认行背景色。 | 否 |
-| borderColor | Color? | - | 边框颜色。 | 否 |
-| cellPadding | EdgeInsetsGeometry? | - | 单元格内边距。 | 否 |
-| headerColor | Color? | - | 表头背景色。 | 否 |
-| headerHeight | double? | - | 表头高度。 | 否 |
-| rowHeight | double? | - | 数据行高度。 | 否 |
-| stripeColor | Color? | - | 斑马纹背景色。 | 否 |
-| width | double? | - | 表格宽度。 | 否 |
+| borderColor | Color? | - | 边框颜色。 null 时使用 componentStroke Token。 | 否 |
+| cellPadding | EdgeInsetsGeometry? | - | 单元格内边距。 null 时左右各 16 逻辑像素。 | 否 |
+| headerColor | Color? | - | 表头背景色。 null 时使用 bgColorContainer Token。 | 否 |
+| headerHeight | double? | - | 表头高度。 null 时为 38 逻辑像素。 | 否 |
+| rowHeight | double? | - | 数据行高度。 null 时为 38 逻辑像素。 | 否 |
+| stripeColor | Color? | - | 斑马纹背景色。 启用 stripe 时生效；null 时使用 bgColorSecondaryContainer Token。 | 否 |
+| width | double? | - | 表格宽度。 null 时有界布局使用可用宽度，无界布局使用列配置计算的自然宽度。 | 否 |
 
 
 #### 实例方法
@@ -91,14 +97,14 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| rowHeight | double? | - | 字段含义：数据行高度。 调用时的空值行为见方法说明。 | 否 |
-| headerHeight | double? | - | 字段含义：表头高度。 调用时的空值行为见方法说明。 | 否 |
-| width | double? | - | 字段含义：表格宽度。 调用时的空值行为见方法说明。 | 否 |
+| rowHeight | double? | - | 字段含义：数据行高度。 null 时为 38 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| headerHeight | double? | - | 字段含义：表头高度。 null 时为 38 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| width | double? | - | 字段含义：表格宽度。 null 时有界布局使用可用宽度，无界布局使用列配置计算的自然宽度。 调用时的空值行为见方法说明。 | 否 |
 | backgroundColor | Color? | - | 字段含义：默认行背景色。 调用时的空值行为见方法说明。 | 否 |
-| headerColor | Color? | - | 字段含义：表头背景色。 调用时的空值行为见方法说明。 | 否 |
-| stripeColor | Color? | - | 字段含义：斑马纹背景色。 调用时的空值行为见方法说明。 | 否 |
-| borderColor | Color? | - | 字段含义：边框颜色。 调用时的空值行为见方法说明。 | 否 |
-| cellPadding | EdgeInsetsGeometry? | - | 字段含义：单元格内边距。 调用时的空值行为见方法说明。 | 否 |
+| headerColor | Color? | - | 字段含义：表头背景色。 null 时使用 bgColorContainer Token。 调用时的空值行为见方法说明。 | 否 |
+| stripeColor | Color? | - | 字段含义：斑马纹背景色。 启用 stripe 时生效；null 时使用 bgColorSecondaryContainer Token。 调用时的空值行为见方法说明。 | 否 |
+| borderColor | Color? | - | 字段含义：边框颜色。 null 时使用 componentStroke Token。 调用时的空值行为见方法说明。 | 否 |
+| cellPadding | EdgeInsetsGeometry? | - | 字段含义：单元格内边距。 null 时左右各 16 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
 
 
 ###### 返回值

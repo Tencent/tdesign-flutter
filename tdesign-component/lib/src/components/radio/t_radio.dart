@@ -94,6 +94,12 @@ class TRadioOption<T> {
 ///   child: const TRadio<String>(value: 'a', title: '选项 A'),
 /// )
 /// ```
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TRadioThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TRadioThemeData` 说明。
 class TRadio<T> extends StatelessWidget {
   const TRadio({
     super.key,
@@ -563,7 +569,8 @@ class TRadioGroup<T> extends StatelessWidget {
   /// 受控选中值。
   final T? value;
 
-  /// 选中值变更回调；为 null 时整组禁用。
+  /// 启用项被点选时通知其值；重复点选已选项也会通知，不自动去重。
+  /// 为 null 时整组禁用；父组件须回传新 value 才能改变选中状态。
   final ValueChanged<T>? onChanged;
 
   /// 包含 [TRadio] 的自定义布局。

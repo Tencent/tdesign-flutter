@@ -59,6 +59,12 @@ enum _TMessageDismissCause { programmatic, replaced, widget, unmounted }
 /// Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 [onDismissed] 中同步
 /// 移除父级状态。全局 Overlay 消息使用 [TMessage.show]，并通过返回的
 /// [TMessageHandle] 关闭。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TMessageThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TMessageThemeData` 说明。
 class TMessage extends StatefulWidget {
   static final Expando<_TMessageSlot> _defaultSlots = Expando<_TMessageSlot>(
     'TMessage.defaultSlots',

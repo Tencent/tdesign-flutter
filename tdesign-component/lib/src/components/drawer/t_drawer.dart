@@ -23,6 +23,12 @@ enum TDrawerPlacement {
 /// TDesign 抽屉内容组件，可放入 [Scaffold.drawer] 或 [Scaffold.endDrawer]。
 ///
 /// 需要通过浮层展示时，使用 [showTDrawer]。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TDrawerThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TDrawerThemeData` 说明。
 class TDrawer extends StatelessWidget {
   const TDrawer({
     super.key,

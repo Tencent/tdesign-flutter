@@ -4,6 +4,12 @@
 
 命令式图片预览工具。
 
+#### 主题配置
+
+组件主题通过 `TImageViewerThemeData` 配置，放入 Flutter `ThemeData.extensions`
+后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+`TImageViewerThemeData` 说明。
+
 #### 静态方法
 
 ##### TImageViewer.show
@@ -47,11 +53,11 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| appBarBackgroundColor | Color? | - | 导航栏背景色 | 否 |
-| backgroundColor | Color? | - | 预览页背景色 | 否 |
-| iconColor | Color? | - | 图标颜色 | 否 |
-| indexStyle | TextStyle? | - | 页码文字样式 | 否 |
-| labelStyle | TextStyle? | - | 标签文字样式 | 否 |
+| appBarBackgroundColor | Color? | - | 导航栏背景色 null 时使用不透明 fontGray1 Token。 | 否 |
+| backgroundColor | Color? | - | 预览页背景色 null 时由 fontGray1 与 bgColorContainer 叠加得到默认背景色。 | 否 |
+| iconColor | Color? | - | 图标颜色 null 时使用 textColorAnti Token。 | 否 |
+| indexStyle | TextStyle? | - | 页码文字样式 null 时使用 textColorAnti 和 fontBodyMedium 字号，字号最终回退 14。 | 否 |
+| labelStyle | TextStyle? | - | 标签文字样式 null 时使用 textColorAnti 作为标签文字颜色。 | 否 |
 | viewerHeight | double? | - | 预览区默认高度 | 否 |
 | viewerWidth | double? | - | 预览区默认宽度 | 否 |
 
@@ -64,11 +70,11 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 字段含义：预览页背景色 调用时的空值行为见方法说明。 | 否 |
-| appBarBackgroundColor | Color? | - | 字段含义：导航栏背景色 调用时的空值行为见方法说明。 | 否 |
-| iconColor | Color? | - | 字段含义：图标颜色 调用时的空值行为见方法说明。 | 否 |
-| labelStyle | TextStyle? | - | 字段含义：标签文字样式 调用时的空值行为见方法说明。 | 否 |
-| indexStyle | TextStyle? | - | 字段含义：页码文字样式 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 字段含义：预览页背景色 null 时由 fontGray1 与 bgColorContainer 叠加得到默认背景色。 调用时的空值行为见方法说明。 | 否 |
+| appBarBackgroundColor | Color? | - | 字段含义：导航栏背景色 null 时使用不透明 fontGray1 Token。 调用时的空值行为见方法说明。 | 否 |
+| iconColor | Color? | - | 字段含义：图标颜色 null 时使用 textColorAnti Token。 调用时的空值行为见方法说明。 | 否 |
+| labelStyle | TextStyle? | - | 字段含义：标签文字样式 null 时使用 textColorAnti 作为标签文字颜色。 调用时的空值行为见方法说明。 | 否 |
+| indexStyle | TextStyle? | - | 字段含义：页码文字样式 null 时使用 textColorAnti 和 fontBodyMedium 字号，字号最终回退 14。 调用时的空值行为见方法说明。 | 否 |
 | viewerWidth | double? | - | 字段含义：预览区默认宽度 调用时的空值行为见方法说明。 | 否 |
 | viewerHeight | double? | - | 字段含义：预览区默认高度 调用时的空值行为见方法说明。 | 否 |
 

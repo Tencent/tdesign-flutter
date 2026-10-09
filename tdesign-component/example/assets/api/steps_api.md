@@ -4,6 +4,8 @@
 
 TDesign 步骤条。
 
+#### 主题配置
+
 颜色、字号与连线默认读取 `TThemeData` 的全局 Token；
 没有独立的 Steps Theme。步骤状态与内容通过构造参数及 `TStepsItemData` 配置。
 

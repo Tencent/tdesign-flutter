@@ -21,6 +21,12 @@ enum TImageShape {
 }
 
 /// 统一展示网络、asset 或本地文件图片。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TImageThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TImageThemeData` 说明。
 class TImage extends StatelessWidget {
   const TImage({
     super.key,

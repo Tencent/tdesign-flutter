@@ -25,6 +25,12 @@ enum TResultStatus {
 }
 
 /// 用于展示成功、警告、失败或默认结果状态的内容块。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TResultThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TResultThemeData` 说明。
 class TResult extends StatelessWidget {
   const TResult({
     Key? key,

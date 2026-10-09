@@ -50,6 +50,12 @@ part 't_popup_types.dart';
 /// handle.close();
 /// handle.open();
 /// ```
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TPopupThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TPopupThemeData` 说明。
 final class TPopup {
   // 私有构造器：工具类仅暴露静态方法，无外部调用，标记为覆盖率例外（不可达死代码）。
   const TPopup._(); // coverage:ignore-line

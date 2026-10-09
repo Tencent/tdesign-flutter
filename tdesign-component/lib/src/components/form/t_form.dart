@@ -8,6 +8,12 @@ import 't_form_theme_data.dart';
 /// TDesign 表单容器。
 ///
 /// 校验和字段生命周期委托给 Flutter [Form] 与 [FormState]。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TFormThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TFormThemeData` 说明。
 class TForm extends StatefulWidget {
   const TForm({
     super.key,

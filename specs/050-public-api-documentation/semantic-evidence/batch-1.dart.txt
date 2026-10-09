@@ -1,0 +1,524 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class ConsumerExtra extends TExtraThemeData {
+  ConsumerExtra(this.label);
+  final String label;
+  bool parsed = false;
+  @override
+  void parse(String name, Map<String, dynamic> config) {
+    parsed = true;
+  }
+}
+
+Widget shell(Widget child, {List<ThemeExtension<dynamic>> extra = const []}) =>
+    MaterialApp(
+      theme: ThemeData(extensions: [TThemeData.defaultData(), ...extra]),
+      home: Scaffold(body: child),
+    );
+
+const pickerData = TPickerColumns([
+  [
+    TPickerOption(label: 'Alpha', value: 'a'),
+    TPickerOption(label: 'Beta', value: 'b'),
+  ],
+]);
+
+void main() {
+  test(
+    'Form and refresh unbound controllers follow documented fallbacks',
+    () async {
+      final form = TFormController();
+      expect(form.validate(), isFalse);
+      expect(form.submit(), isFalse);
+      expect(form.values, isEmpty);
+      await TPullDownRefreshController().refresh();
+    },
+  );
+
+  testWidgets('Form submit true is validation success even without onSubmit', (
+    tester,
+  ) async {
+    final controller = TFormController();
+    var saves = 0;
+    await tester.pumpWidget(
+      shell(
+        TForm(
+          controller: controller,
+          child: TFormField<String>(
+            name: 'name',
+            value: 'valid',
+            onChanged: (_) {},
+            onSaved: (_) => saves++,
+            builder: (_, value, __, ___) => Text(value),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(controller.submit(), isTrue);
+    expect(saves, 1);
+    // No onSubmit exists: true cannot mean the business submission ran.
+  });
+
+  testWidgets('Form external error reset preserves controlled value', (
+    tester,
+  ) async {
+    final controller = TFormController();
+    await tester.pumpWidget(
+      shell(
+        TForm(
+          controller: controller,
+          child: TFormField<String>(
+            name: 'name',
+            value: 'kept',
+            onChanged: (_) {},
+            builder: (_, value, __, error) =>
+                Text('$value:${error ?? "clear"}'),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    controller.setValidateMessage({'name': 'server'});
+    await tester.pump();
+    expect(controller.validate(), isFalse);
+    controller.reset();
+    await tester.pumpAndSettle();
+    expect(controller.values['name'], 'kept');
+    expect(find.text('kept:clear'), findsOneWidget);
+    expect(controller.validate(), isTrue);
+    expect(controller.validate(fields: ['unknown']), isFalse);
+  });
+
+  test(
+    'DateTime partial requires fallback and can normalize across months',
+    () {
+      const value = TDateTimePickerValue(year: 2024, month: 2);
+      expect(() => value.toDateTime(), throwsArgumentError);
+      expect(
+        value.toDateTime(fallback: DateTime(2024, 1, 1)),
+        DateTime(2024, 2, 1),
+      );
+      expect(
+        value.toDateTime(fallback: DateTime(2024, 1, 31)),
+        DateTime(2024, 3, 2),
+      );
+    },
+  );
+
+  testWidgets(
+    'DateTime label null fallback and controlled mode compile from docs',
+    (tester) async {
+      var calls = 0;
+      await tester.pumpWidget(
+        shell(
+          TDateTimePicker(
+            value: const TDateTimePickerValue(hour: 10, minute: 30),
+            mode: DateTimePickerMode(timeMode: TimeMode.minute),
+            onChanged: (_) {},
+            renderLabel: (_, __) {
+              calls++;
+              return null;
+            },
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(calls, greaterThan(0));
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('Calendar null full-cell builder falls back to subtitles', (
+    tester,
+  ) async {
+    var subtitles = 0;
+    await tester.pumpWidget(
+      shell(
+        TCalendar(
+          value: const [],
+          minDate: DateTime(2026, 6, 1),
+          maxDate: DateTime(2026, 6, 30),
+          onChanged: (_) {},
+          cellBuilder: (_, __) => null,
+          subtitleBuilder: (_, date) {
+            subtitles++;
+            return Text('sub-${date.date.day}');
+          },
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(subtitles, greaterThan(0));
+    expect(find.text('sub-15'), findsOneWidget);
+  });
+
+  testWidgets('Calendar full custom cells suppress subtitle builder', (
+    tester,
+  ) async {
+    var subtitles = 0;
+    await tester.pumpWidget(
+      shell(
+        TCalendar(
+          value: const [],
+          minDate: DateTime(2026, 6, 1),
+          maxDate: DateTime(2026, 6, 30),
+          onChanged: (_) {},
+          cellBuilder: (_, cell) => Text('cell-${cell.date.day}'),
+          subtitleBuilder: (_, __) {
+            subtitles++;
+            return const Text('unused');
+          },
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(subtitles, 0);
+    expect(find.text('cell-15'), findsOneWidget);
+  });
+
+  testWidgets(
+    'Calendar omitted height is calculated not unconstrained or zero',
+    (tester) async {
+      await tester.pumpWidget(
+        shell(
+          TCalendar(
+            value: const [],
+            minDate: DateTime(2026, 6, 1),
+            maxDate: DateTime(2026, 6, 30),
+            onChanged: (_) {},
+          ),
+          extra: [
+            const TCalendarThemeData(
+              cellHeight: 60,
+              monthTitleHeight: 22,
+              verticalGap: 10,
+              bodyPadding: 24,
+            ),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(tester.getSize(find.byType(TCalendar)).height, 536);
+    },
+  );
+
+  testWidgets('Picker null item builder uses default text', (tester) async {
+    var calls = 0;
+    await tester.pumpWidget(
+      shell(
+        TPicker(
+          items: pickerData,
+          value: const ['a'],
+          onChanged: (_) {},
+          itemBuilder: (_, __, column, item, distance) {
+            expect(column, 0);
+            expect(item, greaterThanOrEqualTo(0));
+            expect(distance, greaterThanOrEqualTo(0));
+            calls++;
+            return null;
+          },
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(calls, greaterThan(0));
+    expect(find.text('Alpha'), findsWidgets);
+  });
+
+  testWidgets('PickerPopup height has show-time snapshot on handle reuse', (
+    tester,
+  ) async {
+    var height = 200.0;
+    late StateSetter change;
+    late BuildContext context;
+    await tester.pumpWidget(
+      shell(
+        StatefulBuilder(
+          builder: (root, setState) {
+            change = setState;
+            return Theme(
+              data: Theme.of(root)
+                  .mergeExtension(TPickerThemeData(height: height)),
+              child: Builder(
+                builder: (c) {
+                  context = c;
+                  return const Text('host');
+                },
+              ),
+            );
+          },
+        ),
+      ),
+    );
+    final handle = TPickerPopup.show(
+      context,
+      headerBuilder: (_, close) => const TPopupHeader(title: Text('title')),
+      child: TPicker(items: pickerData, value: const ['a'], onChanged: (_) {}),
+    );
+    await tester.pumpAndSettle();
+    expect(handle.options.height, 258);
+    handle.close();
+    await tester.pumpAndSettle();
+    change(() => height = 300);
+    await tester.pump();
+    expect(Theme.of(context).extension<TPickerThemeData>()!.height, 300);
+    handle.open(context);
+    await tester.pumpAndSettle();
+    expect(handle.options.height, 258);
+    handle.close();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('Popup result precedes close animation completion', (
+    tester,
+  ) async {
+    late BuildContext context;
+    var closed = false;
+    Object? result;
+    await tester.pumpWidget(
+      shell(
+        Builder(
+          builder: (c) {
+            context = c;
+            return const Text('host');
+          },
+        ),
+      ),
+    );
+    final handle = TPopup.show(
+      context,
+      options: TPopupOptions.bottom(
+        height: 180,
+        animationDuration: const Duration(milliseconds: 300),
+        onClosed: () => closed = true,
+        child: const Text('popup'),
+      ),
+    );
+    await tester.pumpAndSettle();
+    unawaited(handle.result.then((value) => result = value));
+    handle.close('done');
+    await tester.pump();
+    expect(result, 'done');
+    expect(closed, isFalse);
+    await tester.pumpAndSettle();
+    expect(closed, isTrue);
+  });
+
+  testWidgets(
+    'Dropdown interrupted open Future completes without opened callback',
+    (tester) async {
+      final controller = TDropdownMenuController();
+      var completed = false;
+      var opened = 0;
+      await tester.pumpWidget(
+        shell(
+          TDropdownMenu(
+            controller: controller,
+            animationDuration: const Duration(milliseconds: 300),
+            onOpened: (_) => opened++,
+            items: [
+              TDropdownMenuItem(
+                label: 'item',
+                panelBuilder: (_, __) =>
+                    const SizedBox(height: 100, child: Text('panel')),
+              ),
+            ],
+          ),
+        ),
+      );
+      unawaited(controller.open(0).then((_) => completed = true));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 30));
+      unawaited(controller.close());
+      await tester.pumpAndSettle();
+      expect(completed, isTrue);
+      expect(opened, 0);
+      expect(controller.isOpen, isFalse);
+      await tester.pumpWidget(const SizedBox.shrink());
+      controller.dispose();
+    },
+  );
+
+  testWidgets('Table sorts without onSortChanged and taps cell before row', (
+    tester,
+  ) async {
+    final taps = <String>[];
+    final seen = <String>[];
+    await tester.pumpWidget(
+      shell(
+        TTable<int>(
+          height: 200,
+          columns: [
+            TTableColumn<int>(
+              id: 'value',
+              header: const Text('value'),
+              comparator: (a, b) => a.compareTo(b),
+              cellBuilder: (_, row, index) {
+                seen.add('$index:$row');
+                return Text('row-$row');
+              },
+            ),
+          ],
+          data: const [2, 1],
+          sort: const TTableSort(
+            columnId: 'value',
+            direction: TTableSortDirection.ascending,
+          ),
+          onCellTap: (context) =>
+              taps.add('cell:${context.rowIndex}:${context.row}'),
+          onRowTap: (index, row) => taps.add('row:$index:$row'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(seen, contains('0:1'));
+    await tester.tap(find.text('row-1'));
+    expect(taps, ['cell:0:1', 'row:0:1']);
+  });
+
+  test('Swiper unbound Futures complete without changing index', () async {
+    final controller = TSwiperController();
+    await controller.next();
+    await controller.previous();
+    await controller.animateTo(1);
+    expect(controller.index, 0);
+    controller.dispose();
+  });
+
+  testWidgets(
+    'Swiper controller animateTo actually updates visible business index',
+    (tester) async {
+      final controller = TSwiperController();
+      await tester.pumpWidget(
+        shell(
+          SizedBox(
+            height: 160,
+            child: TSwiper(
+              controller: controller,
+              children: const [Text('page-a'), Text('page-b')],
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      var complete = false;
+      unawaited(controller.animateTo(1).then((_) => complete = true));
+      await tester.pumpAndSettle();
+      expect(complete, isTrue);
+      expect(controller.index, 1);
+      await tester.pumpWidget(const SizedBox.shrink());
+      controller.dispose();
+    },
+  );
+
+  testWidgets(
+    'Refresh fixed non-scrollable content does not become refreshable',
+    (tester) async {
+      var calls = 0;
+      await tester.pumpWidget(
+        shell(
+          SizedBox(
+            height: 300,
+            child: TPullDownRefresh(
+              onRefresh: () {
+                calls++;
+              },
+              successDuration: Duration.zero,
+              child: const SizedBox(
+                height: 200,
+                child: Center(child: Text('static-content')),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.drag(find.text('static-content'), const Offset(0, 200));
+      await tester.pumpAndSettle();
+      expect(calls, 0);
+    },
+  );
+
+  testWidgets('Refresh scrollable counterpart accepts the same user gesture', (
+    tester,
+  ) async {
+    var calls = 0;
+    await tester.pumpWidget(
+      shell(
+        SizedBox(
+          height: 300,
+          child: TPullDownRefresh(
+            onRefresh: () {
+              calls++;
+            },
+            successDuration: Duration.zero,
+            child: ListView(
+              children: const [
+                SizedBox(height: 900, child: Text('scrollable-content')),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.drag(find.byType(ListView), const Offset(0, 200));
+    await tester.pumpAndSettle();
+    expect(calls, 1);
+  });
+
+  test('Theme empty parsed config still resolves default Tokens', () {
+    final empty = TThemeData.parseThemeData(
+      'absent',
+      <String, dynamic>{},
+      null,
+    );
+    expect(empty.colorMap.isEmpty, isTrue);
+    expect(empty.ofColor('brandColor'), isNotNull);
+    expect(
+      empty.ofColor('brandColor'),
+      TThemeData.defaultData().ofColor('brandColor'),
+    );
+  });
+
+  test('Theme lerp switches Token maps even at zero and drops extra data', () {
+    final base = TThemeData.defaultData();
+    final extra = ConsumerExtra('business');
+    final first = base.copyWithTThemeData('first', extraThemeData: extra);
+    final second = base.copyWithTThemeData(
+      'second',
+      colorMap: {'brandColor': Colors.red},
+      extraThemeData: extra,
+    );
+    expect(first.ofExtra<ConsumerExtra>(), same(extra));
+    final result = first.lerp(second, 0) as TThemeData;
+    expect(result.ofColor('brandColor'), Colors.red);
+    expect(result.ofExtra<ConsumerExtra>(), isNull);
+  });
+
+  test('Theme absent config does not parse or install supplied extra data', () {
+    final extra = ConsumerExtra('business');
+    final theme = TThemeData.parseThemeData(
+      'absent',
+      <String, dynamic>{},
+      extra,
+    );
+    expect(extra.parsed, isFalse);
+    expect(theme.ofExtra<ConsumerExtra>(), isNull);
+    final configured = TThemeData.parseThemeData('present', <String, dynamic>{
+      'present': {'color': <String, dynamic>{}},
+    }, extra);
+    expect(extra.parsed, isTrue);
+    expect(configured.ofExtra<ConsumerExtra>(), same(extra));
+  });
+
+  test('Theme copyWith cannot clear nullable component fields with null', () {
+    const picker = TPickerThemeData(height: 250);
+    expect(picker.copyWith(height: null).height, 250);
+    const calendar = TCalendarThemeData(height: 400);
+    expect(calendar.copyWith(height: null).height, 400);
+  });
+}

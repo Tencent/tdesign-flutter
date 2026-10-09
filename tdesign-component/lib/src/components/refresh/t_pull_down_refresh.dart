@@ -20,6 +20,8 @@ import 't_pull_down_refresh_texts.dart';
 /// 下拉 → 松手 → 刷新 → 完成四态，支持触底加载、超时、
 /// 四态文案自定义与受控刷新。
 ///
+/// ### 主题配置
+///
 /// 默认刷新头的背景和提示文字读取 [TThemeData] 的全局 Token。
 /// 刷新中复用 [TLoadingThemeData]：强制横向布局，未设置 `textColor` 时
 /// 使用禁用文字色；其他 Loading 主题配置继续继承。

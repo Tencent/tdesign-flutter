@@ -4,10 +4,16 @@
 
 悬浮操作按钮组件
 
-T2 组合模式：定位层（右下角悬浮 + 可选拖拽/吸附/边界）+ 动作层（默认内嵌 TButton）
+支持右下角悬浮定位及可选拖拽、吸附与边界限制；未提供 child 时使用默认按钮
 默认动作层使用 large / fill / primary 规格；纯图标为圆形，图文为胶囊形。
 默认动作层不继承父级 `TButtonThemeData`；完整视觉定制请使用 `child`。
 `TFab` 返回 `Positioned`，应作为 `Stack` 的直接子组件使用。
+
+#### 主题配置
+
+组件主题通过 `TFabThemeData` 配置，放入 Flutter `ThemeData.extensions`
+后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+`TFabThemeData` 说明。
 
 #### 构造方法
 

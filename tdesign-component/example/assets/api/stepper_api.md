@@ -8,9 +8,15 @@ TDesign 数值步进器。
 `onChanged` 请求变更，父组件需要以新 `value` 重建组件。若父组件不接受
 新值，输入内容会恢复为当前 `value`。
 
-`onChanged` 为 null 时输入框和两个按钮整组禁用。样式优先级为实例
+`onChanged` 为 null 时加减按钮禁用，编辑器只读且不发出数值变更请求。样式优先级为实例
 `size`/`variant`、`TStepperThemeData`、Flutter 子树及全局 ThemeData，
 最后回退 TDesign token。
+
+#### 主题配置
+
+组件主题通过 `TStepperThemeData` 配置，放入 Flutter `ThemeData.extensions`
+后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+`TStepperThemeData` 说明。
 
 #### 构造方法
 
@@ -21,7 +27,7 @@ TDesign 数值步进器。
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | max | num | 100 | 最大值，必须大于或等于 `min`。 | 否 |
 | min | num | 0 | 最小值，必须小于或等于 `max`。 | 否 |
-| onChanged | ValueChanged&lt;num&gt;? | - | 数值变化请求。 点击按钮、提交有效输入或输入框失焦时触发；一次操作最多触发一次。 为 null 时整组禁用。 | 否 |
+| onChanged | ValueChanged&lt;num&gt;? | - | 数值变化请求。 点击按钮、提交有效输入或输入框失焦时触发；一次操作最多触发一次。 为 null 时加减按钮禁用、编辑器只读；不发出数值变化请求。 | 否 |
 | size | TStepperSize? | - | 组件尺寸。 为空时使用 `TStepperSize.medium`。 | 否 |
 | step | num | 1 | 加减按钮使用的步长，必须大于 0。 输入提交不要求是步长的整数倍，但会限制在 `min` 与 `max` 之间。 编辑时以合法输入草稿作为步进起点，并据此判断按钮是否达到边界。 | 否 |
 | value | num | - | 唯一受控数值，必须位于 `min` 与 `max` 之间。 父组件需要在 `onChanged` 后以新值重建组件，否则输入内容会恢复。 | 是 |
@@ -42,12 +48,12 @@ TDesign 数值步进器。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | filled 形态各段的背景色。 | 否 |
-| borderColor | Color? | - | outline 形态的描边颜色。 | 否 |
+| backgroundColor | Color? | - | filled 形态各段的背景色。 null 时使用 bgColorSecondaryContainer Token。 | 否 |
+| borderColor | Color? | - | outline 形态的描边颜色。 null 时使用 componentBorder Token。 | 否 |
 | borderRadius | BorderRadius? | - | 分段圆角，默认使用 TDesign `radiusSmall`。 normal 和 filled 应用于每一段；outline 仅保留整组外侧圆角。 | 否 |
 | borderWidth | double? | - | outline 形态的描边宽度，默认 1。 | 否 |
 | controlSize | double? | - | 控件高度及单个按钮宽度。 为空时 small、medium、large 分别使用 20、24、26。 | 否 |
-| disabledBackgroundColor | Color? | - | 整组禁用时 filled 和 outline 形态各段的背景色。 | 否 |
+| disabledBackgroundColor | Color? | - | 整组禁用时 filled 和 outline 形态各段的背景色。 null 时使用 bgColorComponentDisabled Token。 | 否 |
 | disabledForegroundColor | Color? | - | 边界不可操作按钮及整组禁用时的前景色。 | 否 |
 | foregroundColor | Color? | - | 输入文字和加减图标的默认前景色。 | 否 |
 | iconSize | double? | - | 加减图标尺寸。 为空时 small、medium、large 分别使用 12、16、20。 | 否 |
@@ -72,9 +78,9 @@ TDesign 数值步进器。
 | borderWidth | double? | - | 字段含义：outline 形态的描边宽度，默认 1。 调用时的空值行为见方法说明。 | 否 |
 | foregroundColor | Color? | - | 字段含义：输入文字和加减图标的默认前景色。 调用时的空值行为见方法说明。 | 否 |
 | disabledForegroundColor | Color? | - | 字段含义：边界不可操作按钮及整组禁用时的前景色。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：filled 形态各段的背景色。 调用时的空值行为见方法说明。 | 否 |
-| disabledBackgroundColor | Color? | - | 字段含义：整组禁用时 filled 和 outline 形态各段的背景色。 调用时的空值行为见方法说明。 | 否 |
-| borderColor | Color? | - | 字段含义：outline 形态的描边颜色。 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 字段含义：filled 形态各段的背景色。 null 时使用 bgColorSecondaryContainer Token。 调用时的空值行为见方法说明。 | 否 |
+| disabledBackgroundColor | Color? | - | 字段含义：整组禁用时 filled 和 outline 形态各段的背景色。 null 时使用 bgColorComponentDisabled Token。 调用时的空值行为见方法说明。 | 否 |
+| borderColor | Color? | - | 字段含义：outline 形态的描边颜色。 null 时使用 componentBorder Token。 调用时的空值行为见方法说明。 | 否 |
 | textStyle | TextStyle? | - | 字段含义：输入文字样式。 在继承全局 TDesign Token 后合并；非空字段可覆盖 默认字号、行高及 `foregroundColor`。仅覆盖字号时会按最终字号重新计算 默认行高倍数；显式设置的 `TextStyle.height` 始终优先。最终字号或显式 物理行盒超过控件高度属于无效配置，并会在调试模式触发断言。 调用时的空值行为见方法说明。 | 否 |
 
 

@@ -124,6 +124,12 @@ Color _disabledThumbLabelColor(BuildContext context) {
 }
 
 /// 基于 Material [Slider] 的严格受控单值滑块。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TSliderThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TSliderThemeData` 说明。
 class TSlider extends StatelessWidget {
   const TSlider({
     super.key,

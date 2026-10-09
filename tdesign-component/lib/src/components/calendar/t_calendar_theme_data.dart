@@ -7,28 +7,35 @@ import 'package:flutter/material.dart';
 /// 包含日历的装饰、字体和布局默认值。
 /// 样式字段通过 `ThemeData.mergeExtension` 在子树覆盖，不需要额外的实例 style 参数。
 class TCalendarThemeData extends ThemeExtension<TCalendarThemeData> {
-  /// 日历整体高度；为 null 时由组件根据星期栏、月份标题、日期行、间距和内边距计算默认高度。
+  /// 日历整体高度；为 null 时由星期栏、月份标题、六行日期、间距和内边距计算视窗高度，不按全部月份展开。
   final double? height;
 
   /// 组件容器装饰
+  /// null 时继承当前全局 Token 解析的容器装饰。
   final BoxDecoration? decoration;
 
   /// 星期文字样式
+  /// null 时继承当前全局 Token 解析的星期样式。
   final TextStyle? weekdayStyle;
 
   /// 月份标题文字样式
+  /// null 时继承当前全局 Token 解析的月份标题样式。
   final TextStyle? monthTitleStyle;
 
   /// 日期数字样式
+  /// null 时继承当前全局 Token 与日期格状态解析的样式。
   final TextStyle? dayStyle;
 
   /// 今天日期数字样式
+  /// null 时继承当前全局 Token 解析的今天样式。
   final TextStyle? todayDayStyle;
 
   /// 日期单元格装饰（选中状态）
+  /// null 时按日期格选择状态与全局 Token 解析默认装饰。
   final BoxDecoration? cellDecoration;
 
   /// 副标题样式
+  /// null 时继承当前全局 Token 与选择状态解析的副标题样式。
   final TextStyle? subtitleStyle;
 
   /// 日期单元格高度；为 null 时使用 60 逻辑像素。
@@ -47,6 +54,7 @@ class TCalendarThemeData extends ThemeExtension<TCalendarThemeData> {
   final double? weekdayGap;
 
   /// 区间中间格背景与格间衔接条颜色
+  /// null 时按区间格的选择状态与当前 Token 解析区间背景。
   final Color? centreColor;
 
   const TCalendarThemeData({

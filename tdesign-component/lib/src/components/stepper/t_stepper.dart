@@ -21,9 +21,15 @@ export 't_stepper_types.dart';
 /// [onChanged] 请求变更，父组件需要以新 [value] 重建组件。若父组件不接受
 /// 新值，输入内容会恢复为当前 [value]。
 ///
-/// [onChanged] 为 null 时输入框和两个按钮整组禁用。样式优先级为实例
+/// [onChanged] 为 null 时加减按钮禁用，编辑器只读且不发出数值变更请求。样式优先级为实例
 /// [size]/[variant]、[TStepperThemeData]、Flutter 子树及全局 ThemeData，
 /// 最后回退 TDesign token。
+///
+/// ### 主题配置
+///
+/// 组件主题通过 [TStepperThemeData] 配置，放入 Flutter [ThemeData.extensions]
+/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
+/// `TStepperThemeData` 说明。
 class TStepper extends StatefulWidget {
   const TStepper({
     super.key,
@@ -46,7 +52,7 @@ class TStepper extends StatefulWidget {
   /// 数值变化请求。
   ///
   /// 点击按钮、提交有效输入或输入框失焦时触发；一次操作最多触发一次。
-  /// 为 null 时整组禁用。
+  /// 为 null 时加减按钮禁用、编辑器只读；不发出数值变化请求。
   final ValueChanged<num>? onChanged;
 
   /// 最小值，必须小于或等于 [max]。
