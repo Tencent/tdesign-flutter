@@ -3,8 +3,6 @@
 默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
 
 ### TThemeData
-#### 简介
-主题数据
 
 #### 声明
 
@@ -151,3 +149,11 @@ TThemeData lerp(ThemeExtension<TThemeData>? other, double t)
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TThemeData&gt;? | - | - | 是 |
 | t | double | - | - | 是 |
+
+
+### DefaultMapFactory
+#### 类型定义
+
+```dart
+typedef DefaultMapFactory = TMap? Function();
+```
