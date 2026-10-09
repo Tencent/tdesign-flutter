@@ -1,37 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TButton
 
-#### 声明
+#### 构造方法
 
-```dart
-class TButton extends StatefulWidget
-```
+##### TButton
 
-#### 默认构造方法
-
-
-```dart
-const TButton({
-  Key? key,
-  this.child,
-  this.size,
-  this.variant,
-  this.shape = TButtonShape.rectangle,
-  this.colorPreset,
-  this.icon,
-  this.iconPosition = TButtonIconPosition.left,
-  this.onPressed,
-  this.onLongPress,
-  this.style,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | child | Widget? | - | 内容（纯文案用 `Text('...')`） | 否 |
 | colorPreset | TButtonColorPreset? | - | 内置配色预设；未传时使用 `TButtonColorPreset.defaultTheme`。 不改变 `variant` 的绘制方式，也不覆写显式 Material 按钮主题； 当前按钮的具体颜色、边框和文字样式通过 `style` 配置。 | 否 |
@@ -49,10 +24,9 @@ const TButton({
 ### TButtonColorPreset
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| defaultTheme | 默认配色 |
-| primary | 品牌主色 |
-| danger | 危险操作配色 |
-| light | 浅色品牌配色；不改变填充/描边等 `TButtonVariant` 绘制方式。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| defaultTheme | TButtonColorPreset | - | 默认配色 | - |
+| primary | TButtonColorPreset | - | 品牌主色 | - |
+| danger | TButtonColorPreset | - | 危险操作配色 | - |
+| light | TButtonColorPreset | - | 浅色品牌配色；不改变填充/描边等 `TButtonVariant` 绘制方式。 | - |

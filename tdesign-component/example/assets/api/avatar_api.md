@@ -1,33 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TAvatar
 
-#### 声明
+#### 构造方法
 
-```dart
-class TAvatar extends StatelessWidget
-```
+##### TAvatar
 
-#### 默认构造方法
-
-
-```dart
-const TAvatar({
-  this.image,
-  this.child,
-  this.size,
-  this.shape,
-  this.fit = BoxFit.cover,
-  this.onTap,
-  super.key,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | child | Widget? | - | 自定义头像内容。 | 否 |
 | fit | BoxFit | BoxFit.cover | 图片填充方式。 | 否 |
@@ -40,29 +19,11 @@ const TAvatar({
 
 ### TAvatarGroup
 
-#### 声明
+#### 构造方法
 
-```dart
-class TAvatarGroup extends StatelessWidget
-```
+##### TAvatarGroup
 
-#### 默认构造方法
-
-
-```dart
-const TAvatarGroup({
-  required this.children,
-  this.maxCount,
-  this.overflow,
-  this.spacing,
-  this.cascading = TAvatarGroupCascading.endUp,
-  super.key,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | cascading | TAvatarGroupCascading | TAvatarGroupCascading.endUp | 头像组成员的层叠方向，使用 start/end 语义并跟随文字方向。 | 否 |
 | children | List&lt;Widget&gt; | - | 头像列表。 | 是 |
@@ -74,33 +35,11 @@ const TAvatarGroup({
 
 ### TAvatarThemeData
 
-#### 声明
+#### 构造方法
 
-```dart
-class TAvatarThemeData extends ThemeExtension<TAvatarThemeData>
-```
+##### TAvatarThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TAvatarThemeData({
-  this.dimension,
-  this.iconSize,
-  this.circleBorderRadius,
-  this.squareBorderRadius,
-  this.backgroundColor,
-  this.foregroundColor,
-  this.groupSpacing,
-  this.groupBorderWidth,
-  this.groupBorderColor,
-  this.groupShadow,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 默认背景色；未设置时回退全局 `brandColorLightActive`。 | 否 |
 | circleBorderRadius | double? | - | 圆形头像圆角；未设置时回退全局 `radiusCircle`（逻辑像素）。 | 否 |
@@ -118,48 +57,40 @@ const TAvatarThemeData({
 
 ##### TAvatarThemeData.copyWith
 
-```dart
-TAvatarThemeData copyWith({
-  double? dimension,
-  double? iconSize,
-  double? circleBorderRadius,
-  double? squareBorderRadius,
-  Color? backgroundColor,
-  Color? foregroundColor,
-  double? groupSpacing,
-  double? groupBorderWidth,
-  Color? groupBorderColor,
-  BoxShadow? groupShadow,
-})
-```
-
-
-返回类型：`TAvatarThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| dimension | double? | - | 自定义头像边长。 | 否 |
-| iconSize | double? | - | 默认图标大小。 | 否 |
-| circleBorderRadius | double? | - | 圆形头像圆角；未设置时回退全局 `radiusCircle`（逻辑像素）。 | 否 |
-| squareBorderRadius | double? | - | 方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。 | 否 |
-| backgroundColor | Color? | - | 默认背景色；未设置时回退全局 `brandColorLightActive`。 | 否 |
-| foregroundColor | Color? | - | 默认图标与继承文字的前景色；未设置时回退全局品牌色。 | 否 |
-| groupSpacing | double? | - | 头像组重叠宽度。 | 否 |
-| groupBorderWidth | double? | - | 头像组成员描边宽度。 未设置时按成员尺寸使用小/中/大 1/2/3 逻辑像素。 | 否 |
-| groupBorderColor | Color? | - | 头像组成员描边颜色。 | 否 |
-| groupShadow | BoxShadow? | - | 头像组成员阴影；未设置时使用 1px 水平偏移、2px `blurRadius` 和 15% 黑色。 | 否 |
+| dimension | double? | - | 字段含义：自定义头像边长。 调用时的空值行为见方法说明。 | 否 |
+| iconSize | double? | - | 字段含义：默认图标大小。 调用时的空值行为见方法说明。 | 否 |
+| circleBorderRadius | double? | - | 字段含义：圆形头像圆角；未设置时回退全局 `radiusCircle`（逻辑像素）。 调用时的空值行为见方法说明。 | 否 |
+| squareBorderRadius | double? | - | 字段含义：方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 字段含义：默认背景色；未设置时回退全局 `brandColorLightActive`。 调用时的空值行为见方法说明。 | 否 |
+| foregroundColor | Color? | - | 字段含义：默认图标与继承文字的前景色；未设置时回退全局品牌色。 调用时的空值行为见方法说明。 | 否 |
+| groupSpacing | double? | - | 字段含义：头像组重叠宽度。 调用时的空值行为见方法说明。 | 否 |
+| groupBorderWidth | double? | - | 字段含义：头像组成员描边宽度。 未设置时按成员尺寸使用小/中/大 1/2/3 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| groupBorderColor | Color? | - | 字段含义：头像组成员描边颜色。 调用时的空值行为见方法说明。 | 否 |
+| groupShadow | BoxShadow? | - | 字段含义：头像组成员阴影；未设置时使用 1px 水平偏移、2px `blurRadius` 和 15% 黑色。 调用时的空值行为见方法说明。 | 否 |
+
+
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TAvatarThemeData | - | - | - |
 
 
 ##### TAvatarThemeData.lerp
 
-```dart
-TAvatarThemeData lerp(TAvatarThemeData? other, double t)
-```
+位置参数：`other, t`
 
 
-返回类型：`TAvatarThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | TAvatarThemeData? | - | - | 是 |
 | t | double | - | - | 是 |
+
+
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TAvatarThemeData | - | - | - |

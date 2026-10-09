@@ -1,36 +1,17 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TPicker
-#### 简介
+
 严格受控的滚轮选择器。
+
 独立多列使用 `TPickerColumns`，层级联动使用 `TPickerLinked`。弹层和确认
 操作由调用方组合，组件本身只负责滚轮选择。标准弹层使用 `TPickerPopup.show`。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TPicker extends StatefulWidget
-```
+##### TPicker
 
-#### 默认构造方法
-
-
-```dart
-const TPicker({
-  super.key,
-  required this.items,
-  required this.value,
-  this.onChanged,
-  this.onColumnScrollEnd,
-  this.itemBuilder,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | itemBuilder | TPickerItemBuilder? | - | 自定义选项构建器。 | 否 |
 | items | TPickerItems | - | 数据源。 | 是 |
@@ -41,52 +22,27 @@ const TPicker({
 
 
 ### TPickerPopup
-#### 简介
+
 Picker 专用弹层入口。
+
 `TPicker` 与 `TDateTimePicker` 的滚轮仍是可独立组合的纯面板；需要设计稿中的
 底部弹层时使用 `show`。该入口统一为标准 `TPopupHeader` 和完整滚轮视窗预留
 高度，避免调用方按通用 Popup 默认高度拼装后压缩或裁切滚轮。
-
-#### 声明
-
-```dart
-final class TPickerPopup
-```
-
 
 #### 静态方法
 
 ##### TPickerPopup.show
 
-```dart
-static TPopupHandle show(
-  BuildContext context, {
-  required Widget child,
-  required TPickerPopupHeaderBuilder headerBuilder,
-  TPopupBottomInset? inset,
-  double? radius,
-  Color? backgroundColor,
-  TPopupOverlayConfig? overlay,
-  bool destroyOnClose = false,
-  Duration? animationDuration,
-  VoidCallback? onOpened,
-  VoidCallback? onClosed,
-  TPopupVisibleChangeCallback? onVisibleChange,
-  bool useSafeArea = false,
-  BuildContext? navigatorContext,
-  bool useRootNavigator = false,
-})
-```
+位置参数：`context`
 
 
 打开包含标准头部和 Picker 滚轮的底部弹层。
+
 弹层总高为当前 `TPickerThemeData.height`（默认 200）加
 `TPopupHeader.headerHeight`（58）。`child` 通常为 `TPicker` 或
 `TDateTimePicker`，其受控值、确认和取消状态仍由调用方管理。
 
-返回类型：`TPopupHandle`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | context | BuildContext | - | - | 是 |
 | child | Widget | - | Picker 滚轮面板。 | 是 |
@@ -105,32 +61,24 @@ static TPopupHandle show(
 | useRootNavigator | bool | false | 是否使用根 Navigator，默认 false。 | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TPopupHandle | - | - | - |
+
+
 ### TPickerOption
-#### 简介
+
 选择器选项。
+
 选项及 `children` 按不可变数据使用；更新时创建新选项和新列表。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TPickerOption
-```
+##### TPickerOption
 
-#### 默认构造方法
-
-
-```dart
-const TPickerOption({
-  required this.label,
-  required this.value,
-  this.disabled = false,
-  this.children = const [],
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | children | List&lt;TPickerOption&gt; | const [] | 联动模式下的子选项。 | 否 |
 | disabled | bool | false | 是否禁用。 | 否 |
@@ -139,106 +87,111 @@ const TPickerOption({
 
 
 ### TPickerValue
-#### 简介
+
 各列当前选中项的只读快照。
+
 组件回调产生的列表不可修改。手工构造时，调用方须提供不可变列表；
 const 构造不会复制或冻结传入的 `selectedOptions` 和 `indexes`。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TPickerValue
-```
+##### TPickerValue
 
-#### 默认构造方法
-
-
-```dart
-const TPickerValue({required this.selectedOptions, required this.indexes})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | indexes | List&lt;int&gt; | - | 各列选中索引。 | 是 |
 | selectedOptions | List&lt;TPickerOption&gt; | - | 各列选中的完整选项。 | 是 |
 
-#### 公开属性（字段与访问器）
 
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| labels | List&lt;String&gt; | - | 各列展示文案。 |
-| values | List&lt;Object?&gt; | - | 各列业务值。 |
+#### 属性
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| labels | List&lt;String&gt; | - | 各列展示文案。 | - |
+| values | List&lt;Object?&gt; | - | 各列业务值。 | - |
 
 
 ### TPickerColumns
-#### 简介
+
 互不联动的多列数据源。
+
 `columns` 及每列列表不得原地修改；变更时传入新的数据源和列表。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TPickerColumns extends TPickerItems
-```
+##### TPickerColumns
 
-#### 默认构造方法
+位置参数：`columns`
 
 
-```dart
-const TPickerColumns(this.columns)
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | columns | List&lt;List&lt;TPickerOption&gt;&gt; | - | 各列选项。 | 是 |
 
 
 ### TPickerLinked
-#### 简介
+
 由 `TPickerOption.children` 描述层级关系的联动数据源。
+
 `options` 及所有子选项列表不得原地修改；变更时创建新的数据源。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TPickerLinked extends TPickerItems
-```
+##### TPickerLinked
 
-#### 默认构造方法
+位置参数：`options`
 
 
-```dart
-const TPickerLinked(this.options)
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | options | List&lt;TPickerOption&gt; | - | 根选项。 | 是 |
 
 
 ### TPickerPopupHeaderBuilder
-#### 简介
+
 构建 Picker 标准弹层头部。
+
 返回类型限定为 `TPopupHeader`，使弹层尺寸计算与实际头部的
 `TPopupHeader.headerHeight` 保持一致。
-#### 类型定义
 
-```dart
-typedef TPickerPopupHeaderBuilder = TPopupHeader Function(BuildContext context, VoidCallback close);
-```
+位置参数：`context, close`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | - | 是 |
+| close | VoidCallback | - | - | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TPopupHeader | - | - | - |
 
 
 ### TPickerItemBuilder
-#### 简介
-选择器子项构建器。
-#### 类型定义
 
-```dart
-typedef TPickerItemBuilder = Widget? Function(BuildContext context, TPickerOption option, int columnIndex, int itemIndex, double distance);
-```
+选择器子项构建器。
+
+位置参数：`context, option, columnIndex, itemIndex, distance`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | - | 是 |
+| option | TPickerOption | - | - | 是 |
+| columnIndex | int | - | - | 是 |
+| itemIndex | int | - | - | 是 |
+| distance | double | - | - | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget? | - | - | - |

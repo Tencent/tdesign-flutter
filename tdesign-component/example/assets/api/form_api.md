@@ -1,36 +1,16 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TForm
-#### 简介
+
 TDesign 表单容器。
+
 校验和字段生命周期委托给 Flutter `Form` 与 `FormState`。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TForm extends StatefulWidget
-```
+##### TForm
 
-#### 默认构造方法
-
-
-```dart
-const TForm({
-  super.key,
-  required this.child,
-  this.controller,
-  this.autovalidateMode,
-  this.onChanged,
-  this.onSubmit,
-  this.showErrorMessage = true,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | autovalidateMode | AutovalidateMode? | - | 自动校验时机。 | 否 |
 | child | Widget | - | 表单内容。 | 是 |
@@ -42,233 +22,174 @@ const TForm({
 
 
 ### TFormState
-#### 简介
+
 `TForm` 的公开状态。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TFormState extends State<TForm>
-```
+##### TFormState
 
-#### 默认构造方法
+无参数。
 
+#### 属性
 
-```dart
-TFormState()
-```
-
-#### 公开属性（字段与访问器）
-
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| values | Map&lt;String, Object?&gt; | - | 当前字段值的只读快照。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| values | Map&lt;String, Object?&gt; | - | 当前字段值的只读快照。 | - |
 
 
 #### 实例方法
 
 ##### TFormState.clearValidate
 
-```dart
-void clearValidate({Iterable<String>? fields})
-```
-
-
 清除全部或指定字段的校验状态。
+
 同时清除通过 `setValidateMessage` 注入的外部错误。
 
-返回类型：`void`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | fields | Iterable&lt;String&gt;? | - | - | 否 |
 
 
 ##### TFormState.reset
 
-```dart
-void reset()
-```
-
+无参数。
 
 重置 Flutter 字段的交互和校验状态，并清除外部错误。
-字段值由业务受控状态所有；调用方应自行恢复 `TFormField.value`。
 
-返回类型：`void`
+字段值由业务受控状态所有；调用方应自行恢复 `TFormField.value`。
 
 ##### TFormState.setValidateMessage
 
-```dart
-void setValidateMessage(Map<String, String?> messages)
-```
+位置参数：`messages`
 
 
 设置字段的外部校验错误。
+
 常用于服务端校验。传入 `null` 的字段会清除对应外部错误；外部错误
 会覆盖字段本地校验错误，直到调用 `clearValidate` 或再次设置。
 
-返回类型：`void`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | messages | Map&lt;String, String?&gt; | - | - | 是 |
 
 
 ##### TFormState.submit
 
-```dart
-bool submit()
-```
-
+无参数。
 
 校验并在成功时触发 `TForm.onSubmit`。
 
-返回类型：`bool`
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | bool | - | - | - |
+
 
 ##### TFormState.validate
 
-```dart
-bool validate({Iterable<String>? fields})
-```
-
-
 运行表单字段校验。
-未注册或尚未构建完成的字段视为校验失败。
 
-返回类型：`bool`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| fields | Iterable&lt;String&gt;? | - | 为空时校验所有已注册字段；传入字段名后只校验指定字段。 | 否 |
+| fields | Iterable&lt;String&gt;? | - | 为空时校验所有已注册字段；传入字段名后只校验指定字段。 未注册或尚未构建完成的字段视为校验失败。 | 否 |
+
+
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | bool | - | - | - |
 
 
 ### TFormController
-#### 简介
+
 命令式触发表单提交、校验和重置。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TFormController
-```
+##### TFormController
 
-#### 默认构造方法
+无参数。
 
+#### 属性
 
-```dart
-TFormController()
-```
-
-#### 公开属性（字段与访问器）
-
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| values | Map&lt;String, Object?&gt; | - | 当前字段值的只读快照。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| values | Map&lt;String, Object?&gt; | - | 当前字段值的只读快照。 | - |
 
 
 #### 实例方法
 
 ##### TFormController.clearValidate
 
-```dart
-void clearValidate({Iterable<String>? fields})
-```
-
-
 清除全部或指定字段的校验状态。
 
-返回类型：`void`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | fields | Iterable&lt;String&gt;? | - | - | 否 |
 
 
 ##### TFormController.reset
 
-```dart
-void reset()
-```
-
+无参数。
 
 重置表单。
 
-返回类型：`void`
-
 ##### TFormController.setValidateMessage
 
-```dart
-void setValidateMessage(Map<String, String?> messages)
-```
+位置参数：`messages`
 
 
 设置字段的外部校验错误。
 
-返回类型：`void`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | messages | Map&lt;String, String?&gt; | - | - | 是 |
 
 
 ##### TFormController.submit
 
-```dart
-bool submit()
-```
-
+无参数。
 
 校验并提交表单。
 
-返回类型：`bool`
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | bool | - | - | - |
+
 
 ##### TFormController.validate
 
-```dart
-bool validate({Iterable<String>? fields})
-```
-
-
 运行表单字段校验。
 
-返回类型：`bool`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | fields | Iterable&lt;String&gt;? | - | - | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | bool | - | - | - |
+
+
 ### TFormField
-#### 简介
+
+类型参数：`T`
+
+
 将严格受控组件接入 Flutter `FormField` 的字段桥接组件。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TFormField<T> extends StatefulWidget
-```
+##### TFormField
 
-#### 默认构造方法
-
-
-```dart
-const TFormField({
-  super.key,
-  required this.name,
-  required this.value,
-  required this.builder,
-  this.onChanged,
-  this.required = false,
-  this.requiredMessage = '此项不能为空',
-  this.validator,
-  this.onSaved,
-  this.autovalidateMode,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | autovalidateMode | AutovalidateMode? | - | 自动校验时机；为空时继承 `TForm`。 | 否 |
 | builder | TFormFieldBuilder&lt;T&gt; | - | 字段内容 builder。 | 是 |
@@ -283,37 +204,14 @@ const TFormField({
 
 
 ### TFormItem
-#### 简介
+
 表单项的标签和字段布局容器。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TFormItem extends StatelessWidget
-```
+##### TFormItem
 
-#### 默认构造方法
-
-
-```dart
-const TFormItem({
-  super.key,
-  required this.child,
-  this.label,
-  this.leading,
-  this.required,
-  this.help,
-  this.errorText,
-  this.extra,
-  this.verticalAlignment,
-  this.contentAlignment,
-  this.showErrorMessage = true,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | child | Widget | - | 字段内容。 | 是 |
 | contentAlignment | TFormItemContentAlignment? | - | 内容区域的水平方向对齐方式。 未传时默认起始侧对齐；影响 字段控件、help 和 error 的外部位置，不影响输入文本自身的对齐方式。 | 否 |
@@ -329,42 +227,14 @@ const TFormItem({
 
 
 ### TFormThemeData
-#### 简介
+
 TForm 组件级 ThemeExtension。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TFormThemeData extends ThemeExtension<TFormThemeData>
-```
+##### TFormThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TFormThemeData({
-  this.showColon,
-  this.labelWidth,
-  this.layout,
-  this.labelAlign,
-  this.requiredMarkPosition,
-  this.labelStyle,
-  this.requiredMarkStyle,
-  this.helpStyle,
-  this.errorStyle,
-  this.backgroundColor,
-  this.borderColor,
-  this.itemPadding,
-  this.itemSpacing,
-  this.labelGap,
-  this.leadingGap,
-  this.messageGap,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 表单及表单项背景色。 | 否 |
 | borderColor | Color? | - | 表单项底部分隔线颜色。 | 否 |
@@ -388,118 +258,117 @@ const TFormThemeData({
 
 ##### TFormThemeData.copyWith
 
-```dart
-TFormThemeData copyWith({
-  bool? showColon,
-  double? labelWidth,
-  TFormLayout? layout,
-  TextAlign? labelAlign,
-  TFormRequiredMarkPosition? requiredMarkPosition,
-  TextStyle? labelStyle,
-  TextStyle? requiredMarkStyle,
-  TextStyle? helpStyle,
-  TextStyle? errorStyle,
-  Color? backgroundColor,
-  Color? borderColor,
-  EdgeInsetsGeometry? itemPadding,
-  double? itemSpacing,
-  double? labelGap,
-  double? leadingGap,
-  double? messageGap,
-})
-```
-
-
-返回类型：`TFormThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| showColon | bool? | - | 是否在标签末尾显示冒号。 | 否 |
-| labelWidth | double? | - | 默认标签宽度；为空时表单项使用 80dp。 | 否 |
-| layout | TFormLayout? | - | 表单项布局方向。 | 否 |
-| labelAlign | TextAlign? | - | 标签对齐方式。 | 否 |
-| requiredMarkPosition | TFormRequiredMarkPosition? | - | 必填标记位置。 | 否 |
-| labelStyle | TextStyle? | - | 标签样式。 | 否 |
-| requiredMarkStyle | TextStyle? | - | 必填标记样式。 | 否 |
-| helpStyle | TextStyle? | - | 辅助说明样式。 | 否 |
-| errorStyle | TextStyle? | - | 错误文案样式。 | 否 |
-| backgroundColor | Color? | - | 表单及表单项背景色。 | 否 |
-| borderColor | Color? | - | 表单项底部分隔线颜色。 | 否 |
-| itemPadding | EdgeInsetsGeometry? | - | 表单项内边距。 | 否 |
-| itemSpacing | double? | - | 表单项间距。 | 否 |
-| labelGap | double? | - | 标签与字段的垂直间距。 | 否 |
-| leadingGap | double? | - | 前置内容与标签区域的间距。 | 否 |
-| messageGap | double? | - | 字段与辅助或错误文案的间距。 | 否 |
+| showColon | bool? | - | 字段含义：是否在标签末尾显示冒号。 调用时的空值行为见方法说明。 | 否 |
+| labelWidth | double? | - | 字段含义：默认标签宽度；为空时表单项使用 80dp。 调用时的空值行为见方法说明。 | 否 |
+| layout | TFormLayout? | - | 字段含义：表单项布局方向。 调用时的空值行为见方法说明。 | 否 |
+| labelAlign | TextAlign? | - | 字段含义：标签对齐方式。 调用时的空值行为见方法说明。 | 否 |
+| requiredMarkPosition | TFormRequiredMarkPosition? | - | 字段含义：必填标记位置。 调用时的空值行为见方法说明。 | 否 |
+| labelStyle | TextStyle? | - | 字段含义：标签样式。 调用时的空值行为见方法说明。 | 否 |
+| requiredMarkStyle | TextStyle? | - | 字段含义：必填标记样式。 调用时的空值行为见方法说明。 | 否 |
+| helpStyle | TextStyle? | - | 字段含义：辅助说明样式。 调用时的空值行为见方法说明。 | 否 |
+| errorStyle | TextStyle? | - | 字段含义：错误文案样式。 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 字段含义：表单及表单项背景色。 调用时的空值行为见方法说明。 | 否 |
+| borderColor | Color? | - | 字段含义：表单项底部分隔线颜色。 调用时的空值行为见方法说明。 | 否 |
+| itemPadding | EdgeInsetsGeometry? | - | 字段含义：表单项内边距。 调用时的空值行为见方法说明。 | 否 |
+| itemSpacing | double? | - | 字段含义：表单项间距。 调用时的空值行为见方法说明。 | 否 |
+| labelGap | double? | - | 字段含义：标签与字段的垂直间距。 调用时的空值行为见方法说明。 | 否 |
+| leadingGap | double? | - | 字段含义：前置内容与标签区域的间距。 调用时的空值行为见方法说明。 | 否 |
+| messageGap | double? | - | 字段含义：字段与辅助或错误文案的间距。 调用时的空值行为见方法说明。 | 否 |
+
+
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TFormThemeData | - | - | - |
 
 
 ##### TFormThemeData.lerp
 
-```dart
-TFormThemeData lerp(ThemeExtension<TFormThemeData>? other, double t)
-```
+位置参数：`other, t`
 
 
-返回类型：`TFormThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TFormThemeData&gt;? | - | - | 是 |
 | t | double | - | - | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TFormThemeData | - | - | - |
+
+
 ### TFormLayout
-#### 简介
+
 表单项布局方向。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| horizontal | 标签与字段水平排列。 |
-| vertical | 标签与字段垂直排列。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| horizontal | TFormLayout | - | 标签与字段水平排列。 | - |
+| vertical | TFormLayout | - | 标签与字段垂直排列。 | - |
 
 
 ### TFormRequiredMarkPosition
-#### 简介
+
 表单必填标记的位置。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| left | 显示在标签左侧。 |
-| right | 显示在标签右侧。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| left | TFormRequiredMarkPosition | - | 显示在标签左侧。 | - |
+| right | TFormRequiredMarkPosition | - | 显示在标签右侧。 | - |
 
 
 ### TFormItemVerticalAlignment
-#### 简介
+
 水平表单项各区域的纵向对齐方式。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| start | 标签、字段内容和额外内容从顶部对齐。 |
-| center | 标签、字段内容和额外内容垂直居中。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| start | TFormItemVerticalAlignment | - | 标签、字段内容和额外内容从顶部对齐。 | - |
+| center | TFormItemVerticalAlignment | - | 标签、字段内容和额外内容垂直居中。 | - |
 
 
 ### TFormItemContentAlignment
-#### 简介
+
 表单项内容区域的水平方向对齐方式。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| start | 内容靠起始侧对齐。 |
-| end | 内容靠结束侧对齐。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| start | TFormItemContentAlignment | - | 内容靠起始侧对齐。 | - |
+| end | TFormItemContentAlignment | - | 内容靠结束侧对齐。 | - |
 
 
 ### TFormFieldBuilder
-#### 简介
-TDesign 字段 builder。
-#### 类型定义
 
-```dart
-typedef TFormFieldBuilder<T> = Widget Function(BuildContext context, T value, ValueChanged<T>? onChanged, String? errorText);
-```
+类型参数：`T`
+
+
+TDesign 字段 builder。
+
+位置参数：`context, value, onChanged, errorText`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | - | 是 |
+| value | T | - | - | 是 |
+| onChanged | ValueChanged&lt;T&gt;? | - | - | 是 |
+| errorText | String? | - | - | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | - | - |

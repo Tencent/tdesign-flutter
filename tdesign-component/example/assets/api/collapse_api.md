@@ -1,35 +1,17 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TCollapse
-#### 简介
+
+类型参数：`T extends Object`
+
+
 折叠面板列表组件，需配合 `TCollapsePanel` 使用
 
-#### 声明
+#### 构造方法
 
-```dart
-class TCollapse<T extends Object> extends StatefulWidget
-```
+##### TCollapse
 
-#### 默认构造方法
-
-
-```dart
-const TCollapse({
-  required this.children,
-  required this.value,
-  this.mode = TCollapseMode.multiple,
-  this.variant,
-  this.animationDuration,
-  this.onChanged,
-  Key? key,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | animationDuration | Duration? | - | 折叠面板展开和收起的动画时长；未设置时使用 Flutter 主题动画默认值。 | 否 |
 | children | List&lt;TCollapsePanel&lt;T&gt;&gt; | - | 折叠面板列表的子组件 | 是 |

@@ -1,38 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TUpload
 
-#### 声明
+#### 构造方法
 
-```dart
-class TUpload extends StatelessWidget
-```
+##### TUpload
 
-#### 默认构造方法
-
-
-```dart
-const TUpload({
-  super.key,
-  required this.files,
-  this.onChanged,
-  this.mediaType = TUploadMediaType.image,
-  this.layout = TUploadLayout.grid,
-  this.draggable = false,
-  this.maxFiles = 1,
-  this.maxFileSize,
-  this.picker,
-  this.onFileTap,
-  this.onValidationError,
-  this.onError,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | draggable | bool | false | 是否支持长按拖拽排序；禁用时不生效。 | 否 |
 | files | List&lt;TUploadFile&gt; | - | 受控文件列表。 | 是 |
@@ -50,32 +24,11 @@ const TUpload({
 
 ### TUploadFile
 
-#### 声明
+#### 构造方法
 
-```dart
-class TUploadFile
-```
+##### TUploadFile
 
-#### 默认构造方法
-
-
-```dart
-const TUploadFile({
-  required this.id,
-  required this.name,
-  this.url,
-  this.bytes,
-  this.size,
-  this.status = TUploadFileStatus.ready,
-  this.progress,
-  this.errorText,
-  this.canRemove = true,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | bytes | Uint8List? | - | 本地预览字节。 | 否 |
 | canRemove | bool | true | 是否允许移除。 | 否 |
@@ -92,75 +45,35 @@ const TUploadFile({
 
 ##### TUploadFile.copyWith
 
-```dart
-TUploadFile copyWith({
-  String? id,
-  String? name,
-  String? url,
-  Uint8List? bytes,
-  int? size,
-  TUploadFileStatus? status,
-  double? progress,
-  String? errorText,
-  bool? canRemove,
-})
-```
-
-
 创建部分字段变化的新实例。
 
-返回类型：`TUploadFile`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| id | String? | - | 文件唯一标识。 | 否 |
-| name | String? | - | 文件名。 | 否 |
-| url | String? | - | 远程预览地址。 | 否 |
-| bytes | Uint8List? | - | 本地预览字节。 | 否 |
-| size | int? | - | 文件字节数。 | 否 |
-| status | TUploadFileStatus? | - | 上传状态。 | 否 |
-| progress | double? | - | 上传进度，范围为 0 到 1。 | 否 |
-| errorText | String? | - | 失败状态文案。 | 否 |
-| canRemove | bool? | - | 是否允许移除。 | 否 |
+| id | String? | - | 字段含义：文件唯一标识。 调用时的空值行为见方法说明。 | 否 |
+| name | String? | - | 字段含义：文件名。 调用时的空值行为见方法说明。 | 否 |
+| url | String? | - | 字段含义：远程预览地址。 调用时的空值行为见方法说明。 | 否 |
+| bytes | Uint8List? | - | 字段含义：本地预览字节。 调用时的空值行为见方法说明。 | 否 |
+| size | int? | - | 字段含义：文件字节数。 调用时的空值行为见方法说明。 | 否 |
+| status | TUploadFileStatus? | - | 字段含义：上传状态。 调用时的空值行为见方法说明。 | 否 |
+| progress | double? | - | 字段含义：上传进度，范围为 0 到 1。 调用时的空值行为见方法说明。 | 否 |
+| errorText | String? | - | 字段含义：失败状态文案。 调用时的空值行为见方法说明。 | 否 |
+| canRemove | bool? | - | 字段含义：是否允许移除。 调用时的空值行为见方法说明。 | 否 |
+
+
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TUploadFile | - | - | - |
 
 
 ### TUploadThemeData
 
-#### 声明
+#### 构造方法
 
-```dart
-class TUploadThemeData extends ThemeExtension<TUploadThemeData>
-```
+##### TUploadThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TUploadThemeData({
-  this.variant,
-  this.itemSize,
-  this.spacing,
-  this.runSpacing,
-  this.alignment,
-  this.backgroundColor,
-  this.foregroundColor,
-  this.disabledBackgroundColor,
-  this.disabledForegroundColor,
-  this.overlayColor,
-  this.statusTextStyle,
-  this.borderRadius,
-  this.addIconSize,
-  this.statusIconSize,
-  this.removeButtonSize,
-  this.removeButtonColor,
-  this.removeIconSize,
-  this.disabledMaskColor,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | addIconSize | double? | - | 添加图标尺寸。 | 否 |
 | alignment | WrapAlignment? | - | Wrap 对齐方式。 | 否 |
@@ -186,125 +99,110 @@ const TUploadThemeData({
 
 ##### TUploadThemeData.copyWith
 
-```dart
-TUploadThemeData copyWith({
-  TUploadVariant? variant,
-  double? itemSize,
-  double? spacing,
-  double? runSpacing,
-  WrapAlignment? alignment,
-  Color? backgroundColor,
-  Color? foregroundColor,
-  Color? disabledBackgroundColor,
-  Color? disabledForegroundColor,
-  Color? overlayColor,
-  TextStyle? statusTextStyle,
-  double? borderRadius,
-  double? addIconSize,
-  double? statusIconSize,
-  double? removeButtonSize,
-  Color? removeButtonColor,
-  double? removeIconSize,
-  Color? disabledMaskColor,
-})
-```
-
-
-返回类型：`TUploadThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| variant | TUploadVariant? | - | 上传项形状。 | 否 |
-| itemSize | double? | - | 上传项尺寸。 | 否 |
-| spacing | double? | - | 横向间距。 | 否 |
-| runSpacing | double? | - | 纵向间距。 | 否 |
-| alignment | WrapAlignment? | - | Wrap 对齐方式。 | 否 |
-| backgroundColor | Color? | - | 默认背景色。 | 否 |
-| foregroundColor | Color? | - | 默认前景色。 | 否 |
-| disabledBackgroundColor | Color? | - | 禁用背景色。 | 否 |
-| disabledForegroundColor | Color? | - | 禁用前景色。 | 否 |
-| overlayColor | Color? | - | 状态遮罩颜色。 | 否 |
-| statusTextStyle | TextStyle? | - | 状态文案样式。 | 否 |
-| borderRadius | double? | - | 方形上传项圆角。 | 否 |
-| addIconSize | double? | - | 添加图标尺寸。 | 否 |
-| statusIconSize | double? | - | 状态图标尺寸。 | 否 |
-| removeButtonSize | double? | - | 移除按钮尺寸。 | 否 |
-| removeButtonColor | Color? | - | 移除按钮颜色。 | 否 |
-| removeIconSize | double? | - | 移除图标尺寸。 | 否 |
-| disabledMaskColor | Color? | - | 禁用文件遮罩颜色。 | 否 |
+| variant | TUploadVariant? | - | 字段含义：上传项形状。 调用时的空值行为见方法说明。 | 否 |
+| itemSize | double? | - | 字段含义：上传项尺寸。 调用时的空值行为见方法说明。 | 否 |
+| spacing | double? | - | 字段含义：横向间距。 调用时的空值行为见方法说明。 | 否 |
+| runSpacing | double? | - | 字段含义：纵向间距。 调用时的空值行为见方法说明。 | 否 |
+| alignment | WrapAlignment? | - | 字段含义：Wrap 对齐方式。 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 字段含义：默认背景色。 调用时的空值行为见方法说明。 | 否 |
+| foregroundColor | Color? | - | 字段含义：默认前景色。 调用时的空值行为见方法说明。 | 否 |
+| disabledBackgroundColor | Color? | - | 字段含义：禁用背景色。 调用时的空值行为见方法说明。 | 否 |
+| disabledForegroundColor | Color? | - | 字段含义：禁用前景色。 调用时的空值行为见方法说明。 | 否 |
+| overlayColor | Color? | - | 字段含义：状态遮罩颜色。 调用时的空值行为见方法说明。 | 否 |
+| statusTextStyle | TextStyle? | - | 字段含义：状态文案样式。 调用时的空值行为见方法说明。 | 否 |
+| borderRadius | double? | - | 字段含义：方形上传项圆角。 调用时的空值行为见方法说明。 | 否 |
+| addIconSize | double? | - | 字段含义：添加图标尺寸。 调用时的空值行为见方法说明。 | 否 |
+| statusIconSize | double? | - | 字段含义：状态图标尺寸。 调用时的空值行为见方法说明。 | 否 |
+| removeButtonSize | double? | - | 字段含义：移除按钮尺寸。 调用时的空值行为见方法说明。 | 否 |
+| removeButtonColor | Color? | - | 字段含义：移除按钮颜色。 调用时的空值行为见方法说明。 | 否 |
+| removeIconSize | double? | - | 字段含义：移除图标尺寸。 调用时的空值行为见方法说明。 | 否 |
+| disabledMaskColor | Color? | - | 字段含义：禁用文件遮罩颜色。 调用时的空值行为见方法说明。 | 否 |
+
+
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TUploadThemeData | - | - | - |
 
 
 ##### TUploadThemeData.lerp
 
-```dart
-TUploadThemeData lerp(ThemeExtension<TUploadThemeData>? other, double t)
-```
+位置参数：`other, t`
 
 
-返回类型：`TUploadThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TUploadThemeData&gt;? | - | - | 是 |
 | t | double | - | - | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TUploadThemeData | - | - | - |
+
+
 ### TUploadFileStatus
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| ready | 已选择，等待业务上传。 |
-| uploading | 上传中。 |
-| success | 上传成功。 |
-| error | 上传失败。 |
-| retryableError | 上传失败且允许重试。 该状态只控制刷新图标和“重新上传”文案；组件不会自动重试。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| ready | TUploadFileStatus | - | 已选择，等待业务上传。 | - |
+| uploading | TUploadFileStatus | - | 上传中。 | - |
+| success | TUploadFileStatus | - | 上传成功。 | - |
+| error | TUploadFileStatus | - | 上传失败。 | - |
+| retryableError | TUploadFileStatus | - | 上传失败且允许重试。 该状态只控制刷新图标和“重新上传”文案；组件不会自动重试。 | - |
 
 
 ### TUploadLayout
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| grid | 宫格布局。 |
-| list | 列表布局。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| grid | TUploadLayout | - | 宫格布局。 | - |
+| list | TUploadLayout | - | 列表布局。 | - |
 
 
 ### TUploadVariant
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| square | 圆角方形。 |
-| circle | 圆形。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| square | TUploadVariant | - | 圆角方形。 | - |
+| circle | TUploadVariant | - | 圆形。 | - |
 
 
 ### TUploadMediaType
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| image | 图片。 |
-| video | 视频。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| image | TUploadMediaType | - | 图片。 | - |
+| video | TUploadMediaType | - | 视频。 | - |
 
 
 ### TUploadValidationError
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| maxFiles | 超出最大文件数量。 |
-| fileSize | 文件大小超出限制。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| maxFiles | TUploadValidationError | - | 超出最大文件数量。 | - |
+| fileSize | TUploadValidationError | - | 文件大小超出限制。 | - |
 
 
 ### TUploadPicker
-#### 类型定义
 
-```dart
-typedef TUploadPicker = Future<List<TUploadFile>> Function();
-```
+#### 回调参数
+
+无参数。
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Future&lt;List&lt;TUploadFile&gt;&gt; | - | - | - |

@@ -1,39 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TSlider
 
-#### 声明
+#### 构造方法
 
-```dart
-class TSlider extends StatelessWidget
-```
+##### TSlider
 
-#### 默认构造方法
-
-
-```dart
-const TSlider({
-  super.key,
-  required this.value,
-  this.onChanged,
-  this.onChangeStart,
-  this.onChangeEnd,
-  this.min = 0,
-  this.max = 1,
-  this.divisions,
-  this.showThumbValue = false,
-  this.thumbFormatter,
-  this.showScaleValue = false,
-  this.scaleFormatter,
-  this.variant = TSliderVariant.normal,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | divisions | int? | - | 离散刻度数；null 表示连续。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
@@ -52,36 +25,11 @@ const TSlider({
 
 ### TRangeSlider
 
-#### 声明
+#### 构造方法
 
-```dart
-class TRangeSlider extends StatelessWidget
-```
+##### TRangeSlider
 
-#### 默认构造方法
-
-
-```dart
-const TRangeSlider({
-  super.key,
-  required this.value,
-  this.onChanged,
-  this.onChangeStart,
-  this.onChangeEnd,
-  this.min = 0,
-  this.max = 1,
-  this.divisions,
-  this.showThumbValue = false,
-  this.thumbFormatter,
-  this.showScaleValue = false,
-  this.scaleFormatter,
-  this.variant = TSliderVariant.normal,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | divisions | int? | - | 离散刻度数；null 表示连续。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
@@ -101,16 +49,26 @@ const TRangeSlider({
 ### TSliderVariant
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| normal | Standard thin track. |
-| capsule | Capsule track with a 3px inset active segment and 20px thumbs. |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| normal | TSliderVariant | - | Standard thin track. | - |
+| capsule | TSliderVariant | - | Capsule track with a 3px inset active segment and 20px thumbs. | - |
 
 
 ### TSliderThumbFormatter
-#### 类型定义
 
-```dart
-typedef TSliderThumbFormatter = String Function(double value);
-```
+位置参数：`value`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| value | double | - | - | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | String | - | - | - |

@@ -1,51 +1,16 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TImageViewer
-
-#### 声明
-
-```dart
-class TImageViewer
-```
-
 
 #### 静态方法
 
 ##### TImageViewer.show
 
-```dart
-static Future<void> show({
-  required BuildContext context,
-  required List<ImageProvider<Object>> images,
-  List<String>? labels,
-  int initialIndex = 0,
-  bool showClose = true,
-  bool showDelete = false,
-  bool showIndex = true,
-  bool loop = false,
-  bool autoplay = false,
-  Duration autoplayInterval = const Duration(seconds: 3),
-  ValueChanged<int>? onIndexChanged,
-  ValueChanged<int>? onDelete,
-  ValueChanged<int>? onTap,
-  ValueChanged<int>? onLongPress,
-  TImageViewerItemBuilder? leadingBuilder,
-  TImageViewerItemBuilder? trailingBuilder,
-})
-```
-
-
 显示全屏图片预览。
-调用方需要主动关闭时，可通过持有的 `NavigatorState` 调用
-`NavigatorState.pop`；返回的 Future 会在路由关闭后完成一次。
 
-返回类型：`Future<void>`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| context | BuildContext | - | 用于展示预览弹窗。 | 是 |
+| context | BuildContext | - | 用于展示预览弹窗。 调用方需要主动关闭时，可通过持有的 `NavigatorState` 调用 `NavigatorState.pop`；返回的 Future 会在路由关闭后完成一次。 | 是 |
 | images | List&lt;ImageProvider&lt;Object&gt;&gt; | - | 是待预览的图片列表，不能为空。 | 是 |
 | labels | List&lt;String&gt;? | - | 是与图片一一对应的标签文案。 | 否 |
 | initialIndex | int | 0 | 设置初始展示的图片索引。 | 否 |
@@ -63,9 +28,28 @@ static Future<void> show({
 | trailingBuilder | TImageViewerItemBuilder? | - | 构建导航栏末尾区域。 | 否 |
 
 
-### TImageViewerItemBuilder
-#### 类型定义
+###### 返回值
 
-```dart
-typedef TImageViewerItemBuilder = Widget Function(BuildContext context, int index);
-```
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Future&lt;void&gt; | - | - | - |
+
+
+### TImageViewerItemBuilder
+
+位置参数：`context, index`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | - | 是 |
+| index | int | - | - | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | - | - |

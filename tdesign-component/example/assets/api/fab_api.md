@@ -1,42 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TFab
 
-#### 声明
+#### 构造方法
 
-```dart
-class TFab extends StatelessWidget
-```
+##### TFab
 
-#### 默认构造方法
-
-
-```dart
-const TFab({
-  super.key,
-  this.text = '',
-  this.icon,
-  this.child,
-  this.onPressed,
-  this.tooltip,
-  this.semanticLabel,
-  this.right,
-  this.bottom,
-  this.draggable,
-  this.magnet,
-  this.xBounds,
-  this.yBounds,
-  this.onDragStart,
-  this.onDragEnd,
-  this.useSafeArea = true,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | bottom | double? | - | 距父级 Stack 内容区底部偏移（默认 32） | 否 |
 | child | Widget? | - | 自定义内容；有则替代默认内嵌 TButton。 自定义内容自行负责尺寸、形状、颜色和投影；`TFab` 继续负责定位、拖拽、 点击和禁用语义。 | 否 |

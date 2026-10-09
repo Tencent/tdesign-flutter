@@ -1,36 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TRate
 
-#### 声明
+#### 构造方法
 
-```dart
-class TRate extends StatefulWidget
-```
+##### TRate
 
-#### 默认构造方法
-
-
-```dart
-const TRate({
-  super.key,
-  required this.value,
-  this.onChanged,
-  this.onChangeStart,
-  this.onChangeEnd,
-  this.count = 5,
-  this.allowHalf = false,
-  this.showValueIndicator = true,
-  this.icon,
-  this.texts,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | allowHalf | bool | false | 是否允许半星。 | 否 |
 | count | int | 5 | 评分项数量。 | 否 |
@@ -45,8 +21,19 @@ const TRate({
 
 
 ### TRateIconBuilder
-#### 类型定义
 
-```dart
-typedef TRateIconBuilder = Widget Function(bool filled);
-```
+位置参数：`filled`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| filled | bool | - | 表示构建选中或未选中图标；半星由组件裁剪选中图标实现。 | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | - | - |

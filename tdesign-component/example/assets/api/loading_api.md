@@ -1,32 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TLoading
 
-#### 声明
+#### 构造方法
 
-```dart
-class TLoading extends StatelessWidget
-```
+##### TLoading
 
-#### 默认构造方法
-
-
-```dart
-const TLoading({
-  Key? key,
-  this.size = 20,
-  this.icon = TLoadingIcon.circle,
-  this.text,
-  this.customIcon,
-  this.refreshWidget,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | customIcon | Widget? | - | 自定义加载图标，优先于 `icon`，并按当前 Loading 动画时长持续旋转。 | 否 |
 | icon | TLoadingIcon? | TLoadingIcon.circle | 预设图标，支持圆形、点状、菊花状；为 null 时不显示预设图标。 `customIcon` 不为 null 时仍优先显示自定义图标。 | 否 |
@@ -39,9 +19,8 @@ const TLoading({
 ### TLoadingIcon
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| circle | 圆形 |
-| point | 点状 |
-| activity | 菊花状 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| circle | TLoadingIcon | - | 圆形 | - |
+| point | TLoadingIcon | - | 点状 | - |
+| activity | TLoadingIcon | - | 菊花状 | - |
