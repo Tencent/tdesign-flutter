@@ -514,6 +514,174 @@ void main() {
   });
 
   group('TThemeData.lerp', () {
+    test('连续 Token 在端点和中间值正确插值，不修改源主题', () {
+      final extraA = _TestExtra();
+      final extraB = _TestExtra();
+      final a = TThemeData.defaultData().copyWith(
+        name: 'a',
+        colorMap: {'motion': Colors.black},
+        fontMap: {'motion': Font(size: 10, lineHeight: 16)},
+        fontMetricMap: {'motion': 10},
+        radiusMap: {'motion': 2},
+        fontFamilyMap: {'motion': FontFamily(fontFamily: 'A')},
+        shadowMap: {
+          'motion': [const BoxShadow(color: Colors.black, blurRadius: 2)],
+        },
+        insetShadowMap: {
+          'motion': const BorderSide(color: Colors.black, width: 2),
+        },
+        spacerMap: {'motion': 10, 'sourceOnly': 7},
+        extraThemeData: extraA,
+      );
+      final b = a.copyWith(
+        name: 'b',
+        colorMap: {'motion': Colors.white},
+        fontMap: {
+          'motion': Font(size: 13, lineHeight: 21, fontWeight: FontWeight.w800),
+        },
+        fontMetricMap: {'motion': 14},
+        radiusMap: {'motion': 6},
+        fontFamilyMap: {'motion': FontFamily(fontFamily: 'B')},
+        shadowMap: {
+          'motion': [const BoxShadow(color: Colors.white, blurRadius: 6)],
+        },
+        insetShadowMap: {
+          'motion': const BorderSide(color: Colors.white, width: 6),
+        },
+        spacerMap: {'motion': 14, 'targetOnly': 9},
+        extraThemeData: extraB,
+      );
+      expect(a.lerp(b, 0), same(a));
+      expect(a.lerp(b, 1), same(b));
+      expect(a.lerp(a, 0.4), same(a));
+      final middle = a.lerp(b, 0.5);
+      expect(
+        middle.colorMap['motion'],
+        Color.lerp(Colors.black, Colors.white, 0.5),
+      );
+      expect(middle.fontMap['motion']!.size, 11.5);
+      expect(
+        middle.fontMap['motion']!.size * middle.fontMap['motion']!.height,
+        18.5,
+      );
+      expect(middle.fontMap['motion']!.fontWeight, FontWeight.w600);
+      expect(middle.fontMetricMap['motion'], 12);
+      expect(middle.radiusMap['motion'], 4);
+      expect(middle.spacerMap['motion'], 12);
+      expect(middle.spacerMap['sourceOnly'], 7);
+      expect(middle.spacerMap['targetOnly'], 9);
+      expect(middle.shadowMap['motion']!.single.blurRadius, 4);
+      expect(middle.insetShadowMap['motion']!.width, 4);
+      expect(middle.fontFamilyMap['motion']!.fontFamily, 'B');
+      expect(middle.extraThemeData, same(extraB));
+      expect(a.lerp(b, 0.25).extraThemeData, same(extraA));
+      expect(a.lerp(b, 0.25).name, 'a');
+      middle.spacerMap['motion'] = 999;
+      expect(a.spacerMap['motion'], 10);
+      expect(b.spacerMap['motion'], 14);
+    });
+
+    test('解析引用与默认回退，并保留同义引用的覆盖能力', () {
+      final a = TThemeData.fromJson(
+        'a',
+        '{"a":{"color":{"base":"#000000"},"ref":{"alias":"base"}}}',
+      )!;
+      final b = TThemeData.fromJson(
+        'b',
+        '{"b":{"color":{"base":"#ffffff"},"ref":{"alias":"base"}}}',
+      )!;
+      final middle = a.lerp(b, 0.5);
+      expect(
+        middle.colorMap['alias'],
+        Color.lerp(Colors.black, Colors.white, 0.5),
+      );
+      expect(middle.spacer2, TThemeData.defaultData().spacer2);
+      expect(
+        middle.copyWith(colorMap: {'base': Colors.red}).colorMap['alias'],
+        Colors.red,
+      );
+      final different = TThemeData.fromJson(
+        'c',
+        '{"c":{"color":{"next":"#ff0000"},"ref":{"alias":"next"}}}',
+      )!;
+      expect(
+        a.lerp(different, 0.5).colorMap['alias'],
+        Color.lerp(Colors.black, const Color(0xFFFF0000), 0.5),
+      );
+      final explicit = b.copyWith(colorMap: {'alias': Colors.blue});
+      expect(
+        a.lerp(explicit, 0.5).colorMap['alias'],
+        Color.lerp(Colors.black, Colors.blue, 0.5),
+      );
+    });
+
+    test('Flutter ThemeData.lerp 保留扩展并驱动全局 Token 过渡', () {
+      final a = TThemeData.defaultData().copyWith(
+        colorMap: {'brandColor': Colors.black},
+      );
+      final extra = _TestExtra();
+      final b = a.copyWith(
+        colorMap: {'brandColor': Colors.white},
+        extraThemeData: extra,
+      );
+      final middle = ThemeData.lerp(
+        ThemeData(extensions: [a]),
+        ThemeData(extensions: [b]),
+        0.5,
+      ).extension<TThemeData>()!;
+      expect(middle.brandColor, Color.lerp(Colors.black, Colors.white, 0.5));
+      expect(middle.extraThemeData, same(extra));
+      final darkMiddle = TThemeData.defaultData().lerp(
+        TThemeData.defaultData().dark,
+        0.5,
+      );
+      expect(darkMiddle.light, same(TThemeData.defaultData()));
+    });
+
+    testWidgets('AnimatedTheme 驱动 Token 中间帧且不丢失业务扩展', (tester) async {
+      final source = TThemeData.defaultData().copyWith(
+        colorMap: {'brandColor': Colors.black},
+        extraThemeData: _TestExtra(),
+      );
+      final target = source.copyWith(colorMap: {'brandColor': Colors.white});
+      final data = ValueNotifier(ThemeData(extensions: [source]));
+      addTearDown(data.dispose);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ValueListenableBuilder<ThemeData>(
+            valueListenable: data,
+            builder: (context, value, child) => AnimatedTheme(
+              data: value,
+              duration: const Duration(milliseconds: 100),
+              curve: Curves.linear,
+              child: Builder(
+                builder: (context) {
+                  final token = Theme.of(context).extension<TThemeData>()!;
+                  expect(token.extraThemeData, same(source.extraThemeData));
+                  return Text(
+                    'theme',
+                    style: TextStyle(color: token.brandColor),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+      data.value = ThemeData(extensions: [target]);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(
+        tester.widget<Text>(find.text('theme')).style!.color,
+        Color.lerp(Colors.black, Colors.white, 0.5),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<Text>(find.text('theme')).style!.color,
+        Colors.white,
+      );
+    });
+
     test('other 为同类型时返回 other 各映射', () {
       final a = TThemeData.defaultData();
       final b = TThemeData.defaultData();
