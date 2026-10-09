@@ -82,7 +82,7 @@
 
 - [x] 从主入口 dartdoc 生成 57 页主题配置说明；51 个独立 Theme、3 个复用 Theme、2 个无独立 Theme 与全局 Theme 分别处理。
 - [x] 双 SDK 重新生成、内容比对与文档/API 页面回归。
-- [ ] 同步本轮源码注释与生成产物到文档 PR #1149。
+- [x] 同步本轮源码注释与生成产物到文档 PR #1149（源码提交 86e7dbf5；同步远端 autofix 后 e5adcf8b 已普通推送）。
 - [ ] 工具 #29 合入正式 main 后复验正式生成链和最终 CI/autofix。
 
 方案、证据及阻塞原因见 [theme-presentation.md](theme-presentation.md)。
