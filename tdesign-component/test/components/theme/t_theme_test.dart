@@ -13,11 +13,6 @@ class _TestExtra extends TExtraThemeData {
   void parse(String name, Map<String, dynamic> curThemeMap) {}
 }
 
-class _TestExtra2 extends TExtraThemeData {
-  @override
-  void parse(String name, Map<String, dynamic> curThemeMap) {}
-}
-
 void main() {
   RoundedRectangleBorder circleBorder(
     TThemeData token, {
@@ -398,9 +393,6 @@ void main() {
         extraThemeData: _TestExtra(),
       )!;
       expect(theme.extraThemeData, isA<_TestExtra>());
-      expect(theme.ofExtra<_TestExtra>(), isA<_TestExtra>());
-      // 类型不匹配时返回 null
-      expect(theme.ofExtra<_TestExtra2>(), isNull);
     });
   });
 
@@ -451,10 +443,6 @@ void main() {
       expect(chained.name, 'renamed');
       expect(chained.spacerMap['spacer'], 10);
       expect(chained.light, same(chained));
-    });
-
-    test('ofExtra 未配置时返回 null', () {
-      expect(TThemeData.defaultData().ofExtra<_TestExtra>(), isNull);
     });
 
     test('copyWith 覆盖并保留未覆盖字段', () {

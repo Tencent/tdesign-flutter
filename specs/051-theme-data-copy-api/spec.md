@@ -10,7 +10,7 @@ copyWith 返回 ThemeExtension<TThemeData>，调用方需要强制转换或使�
 - 移除 copyWithTThemeData 和 ofColor/ofFont/ofCorner/ofFontFamily/ofShadow；动态查询统一通过相应 Token Map。
 - parseThemeData 收为私有；公开 JSON 解析统一 fromJson。
 - 间距复制参数 marginMap 改为 spacerMap，与字段一致；省略或传 null 的 name 保留原名。
-- ofExtra 保留：现有业务扩展按泛型安全查询，缺失/类型不符返回 null，不通过异常控制正常分支。
+- 移除非必要的 ofExtra 泛型查询包装；业务扩展通过 extraThemeData 字段读取并判断类型。
 - 仓库消费者迁移至 copyWith(name: ...)，删除可证明冗余的复制/过渡结果强制转换。
 - Token 增量合并、引用链解析、默认回退、空值行为、extraThemeData 继承保持；原 default 名称重置修正为保留当前名称。
 - lerp 的既有目标切换、不插值和 extraThemeData 行为保持；本 PR 不修复其他主题议题。

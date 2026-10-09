@@ -3,6 +3,8 @@
 默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
 
 ### TThemeData
+#### 简介
+主题数据
 
 #### 声明
 
@@ -143,31 +145,9 @@ TThemeData lerp(ThemeExtension<TThemeData>? other, double t)
 ```
 
 
-返回目标 Token 配置；other 为空或类型不匹配时保留当前主题。
-当前实现不使用 t 连续插值，也不复制目标 extraThemeData。
-
 返回类型：`TThemeData`
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TThemeData&gt;? | - | - | 是 |
 | t | double | - | - | 是 |
-
-
-##### TThemeData.ofExtra
-
-```dart
-T? ofExtra<T extends TExtraThemeData>()
-```
-
-
-读取指定类型的业务扩展主题；未配置或类型不匹配时返回 null。
-
-返回类型：`T?`
-
-### DefaultMapFactory
-#### 类型定义
-
-```dart
-typedef DefaultMapFactory = TMap? Function();
-```

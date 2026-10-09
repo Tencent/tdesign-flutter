@@ -537,6 +537,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
     Map<String, FontFamily>? fontFamilyMap,
     Map<String, List<BoxShadow>>? shadowMap,
     Map<String, BorderSide>? insetShadowMap,
+
     /// 间距 Token 的增量映射；非空值覆盖同名 Token，其他间距沿用当前配置。
     Map<String, double>? spacerMap,
     TExtraThemeData? extraThemeData,
@@ -771,14 +772,6 @@ class TThemeData extends ThemeExtension<TThemeData> {
     return theme;
   }
 
-  /// 读取指定类型的业务扩展主题；未配置或类型不匹配时返回 null。
-  T? ofExtra<T extends TExtraThemeData>() {
-    final extra = extraThemeData;
-    return extra is T ? extra : null;
-  }
-
-  /// 返回目标 Token 配置；other 为空或类型不匹配时保留当前主题。
-  /// 当前实现不使用 t 连续插值，也不复制目标 extraThemeData。
   @override
   TThemeData lerp(ThemeExtension<TThemeData>? other, double t) {
     if (other is! TThemeData) {

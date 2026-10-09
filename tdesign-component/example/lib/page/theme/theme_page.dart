@@ -191,9 +191,15 @@ class TestWidget extends StatelessWidget {
 /// 扩展主题属性示例
 extension TGLayouts on TThemeData {
   /// 因为扩展中不能声明字段，只能借助TExtraThemeData
-  double get layout1 => ofExtra<LayoutExtra>()?.layouts['layout1'] ?? 0;
+  double get layout1 =>
+      (extraThemeData is LayoutExtra
+          ? (extraThemeData as LayoutExtra).layouts['layout1']
+          : null) ??
+      0;
 
-  Data2? get data2 => ofExtra<LayoutExtra>()?.data2;
+  Data2? get data2 => (extraThemeData is LayoutExtra
+      ? (extraThemeData as LayoutExtra).data2
+      : null);
 }
 
 class LayoutExtra extends TExtraThemeData {
