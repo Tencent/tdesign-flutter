@@ -1,33 +1,15 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TCollapse
 
-#### 声明
-
-```dart
-class TCollapse<T extends Object> extends StatefulWidget
-```
-
-#### 默认构造方法
+类型参数：`T extends Object`
 
 
-```dart
-const TCollapse({
-  required this.children,
-  required this.value,
-  this.mode = TCollapseMode.multiple,
-  this.variant,
-  this.animationDuration,
-  this.onChanged,
-  Key? key,
-})
-```
+#### 构造方法
 
-##### 参数
+##### TCollapse
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | animationDuration | Duration? | - | 折叠面板展开和收起的动画时长；未设置时使用 Flutter 主题动画默认值。 | 否 |
 | children | List&lt;TCollapsePanel&lt;T&gt;&gt; | - | 折叠面板列表的子组件 | 是 |
@@ -39,38 +21,17 @@ const TCollapse({
 
 
 ### TCollapsePanel
-#### 简介
+
+类型参数：`T extends Object`
+
+
 折叠面板配置。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TCollapsePanel<T extends Object>
-```
+##### TCollapsePanel
 
-#### 默认构造方法
-
-
-```dart
-const TCollapsePanel({
-  required this.value,
-  required this.headerBuilder,
-  required this.body,
-  this.bodyHeight,
-  this.key,
-  this.disabled = false,
-  this.placement = TCollapsePlacement.bottom,
-  this.semanticsLabel,
-  this.leadingBuilder,
-  this.trailingBuilder,
-  this.expandIconBuilder = _defaultExpandIconBuilder,
-  this.backgroundColor,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 折叠面板的背景色。 | 否 |
 | body | Widget | - | 折叠面板的内容组件。 | 是 |
@@ -86,163 +47,80 @@ const TCollapsePanel({
 | value | T | - | 面板唯一标识，用于匹配父级 `TCollapse.value` 中的展开值。 | 是 |
 
 
-### TCollapseThemeData
-#### 简介
-折叠面板组件级 ThemeExtension
-{@category ComponentTheme}
-
-#### 声明
-
-```dart
-class TCollapseThemeData extends ThemeExtension<TCollapseThemeData>
-```
-
-#### 默认构造方法
-
-
-```dart
-const TCollapseThemeData({
-  this.backgroundColor,
-  this.elevation,
-  this.headerTextStyle,
-  this.contentTextStyle,
-  this.disabledHeaderTextStyle,
-  this.iconColor,
-  this.disabledIconColor,
-  this.dividerColor,
-  this.contentPadding,
-  this.cardMargin,
-  this.cardBorderRadius,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 默认面板背景色 未配置时使用 bgColorContainer Token；单个面板的 backgroundColor 优先。 | 否 |
-| cardBorderRadius | BorderRadius? | - | 卡片圆角。 仅卡片形态生效，未配置时使用 radiusLarge Token。 | 否 |
-| cardMargin | EdgeInsetsGeometry? | - | 卡片外边距。 仅卡片形态生效，未配置时左右均使用 spacer2 Token。 | 否 |
-| contentPadding | EdgeInsetsGeometry? | - | 内容内边距。 未配置时四边均使用 spacer2 Token。 | 否 |
-| contentTextStyle | TextStyle? | - | 内容文字样式。 | 否 |
-| disabledHeaderTextStyle | TextStyle? | - | 禁用状态标题文字样式。 | 否 |
-| disabledIconColor | Color? | - | 禁用状态展开图标颜色。 未配置时使用 textColorDisabled Token。 | 否 |
-| dividerColor | Color? | - | 分隔线颜色。 未配置时使用 componentStroke Token。 | 否 |
-| elevation | double? | - | 阴影 未配置时为 0。 | 否 |
-| headerTextStyle | TextStyle? | - | 标题文字样式。 | 否 |
-| iconColor | Color? | - | 展开图标颜色。 未配置时使用 textColorPlaceholder Token。 | 否 |
-
-
-#### 实例方法
-
-##### TCollapseThemeData.copyWith
-
-```dart
-TCollapseThemeData copyWith({
-  Color? backgroundColor,
-  double? elevation,
-  TextStyle? headerTextStyle,
-  TextStyle? contentTextStyle,
-  TextStyle? disabledHeaderTextStyle,
-  Color? iconColor,
-  Color? disabledIconColor,
-  Color? dividerColor,
-  EdgeInsetsGeometry? contentPadding,
-  EdgeInsetsGeometry? cardMargin,
-  BorderRadius? cardBorderRadius,
-})
-```
-
-
-复制主题配置。
-## 返回值
-返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
-
-返回类型：`TCollapseThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 默认面板背景色 未配置时使用 bgColorContainer Token；单个面板的 backgroundColor 优先。 | 否 |
-| elevation | double? | - | 阴影 未配置时为 0。 | 否 |
-| headerTextStyle | TextStyle? | - | 标题文字样式。 | 否 |
-| contentTextStyle | TextStyle? | - | 内容文字样式。 | 否 |
-| disabledHeaderTextStyle | TextStyle? | - | 禁用状态标题文字样式。 | 否 |
-| iconColor | Color? | - | 展开图标颜色。 未配置时使用 textColorPlaceholder Token。 | 否 |
-| disabledIconColor | Color? | - | 禁用状态展开图标颜色。 未配置时使用 textColorDisabled Token。 | 否 |
-| dividerColor | Color? | - | 分隔线颜色。 未配置时使用 componentStroke Token。 | 否 |
-| contentPadding | EdgeInsetsGeometry? | - | 内容内边距。 未配置时四边均使用 spacer2 Token。 | 否 |
-| cardMargin | EdgeInsetsGeometry? | - | 卡片外边距。 仅卡片形态生效，未配置时左右均使用 spacer2 Token。 | 否 |
-| cardBorderRadius | BorderRadius? | - | 卡片圆角。 仅卡片形态生效，未配置时使用 radiusLarge Token。 | 否 |
-
-
-##### TCollapseThemeData.lerp
-
-```dart
-TCollapseThemeData lerp(
-  ThemeExtension<TCollapseThemeData>? other,
-  double t,
-)
-```
-
-
-生成主题过渡配置。
-## 返回值
-按 t 在当前主题和目标主题之间生成过渡主题。
-other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
-
-返回类型：`TCollapseThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TCollapseThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
 ### TCollapseMode
-#### 简介
+
 折叠面板展开模式。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| multiple | 多个面板可同时展开。 |
-| accordion | 最多展开一个面板。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| multiple | TCollapseMode | - | 多个面板可同时展开。 | - |
+| accordion | TCollapseMode | - | 最多展开一个面板。 | - |
 
 
 ### TCollapseVariant
-#### 简介
+
 折叠面板视觉形态。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| block | 通栏形态。 |
-| card | 卡片形态。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| block | TCollapseVariant | - | 通栏形态。 | - |
+| card | TCollapseVariant | - | 卡片形态。 | - |
 
 
 ### TCollapsePlacement
-#### 简介
+
 折叠内容相对标题的展开方向。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| bottom | 内容在标题下方展开。 |
-| top | 内容在标题上方展开。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| bottom | TCollapsePlacement | - | 内容在标题下方展开。 | - |
+| top | TCollapsePlacement | - | 内容在标题上方展开。 | - |
 
 
 ### TCollapsePanelBuilder
-#### 简介
-根据折叠状态构建面板头部区域内容的回调。
-`context` 折叠面板头部的构建上下文。
-`isExpanded` 当前面板是否展开。
-## 返回值
-面板头部内容。
-#### 类型定义
 
-```dart
-typedef TCollapsePanelBuilder = Widget Function(BuildContext context, bool isExpanded);
-```
+根据折叠状态构建面板头部区域内容的回调。
+
+位置参数：`context, isExpanded`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | 折叠面板头部的构建上下文。 | 是 |
+| isExpanded | bool | - | 当前面板是否展开。 | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | 面板头部内容。 | - |
+
+
+### TCollapseThemeData
+
+折叠面板组件级 ThemeExtension
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 默认面板背景色 未配置时使用 bgColorContainer Token；单个面板的 backgroundColor 优先。 | 否 |
+| cardBorderRadius | BorderRadius? | - | 卡片圆角。 仅卡片形态生效，未配置时使用 radiusLarge Token。 | 否 |
+| cardMargin | EdgeInsetsGeometry? | - | 卡片外边距。 仅卡片形态生效，未配置时左右均使用 spacer2 Token。 | 否 |
+| contentPadding | EdgeInsetsGeometry? | - | 内容内边距。 未配置时四边均使用 spacer2 Token。 | 否 |
+| contentTextStyle | TextStyle? | - | 内容文字样式。 | 否 |
+| disabledHeaderTextStyle | TextStyle? | - | 禁用状态标题文字样式。 | 否 |
+| disabledIconColor | Color? | - | 禁用状态展开图标颜色。 未配置时使用 textColorDisabled Token。 | 否 |
+| dividerColor | Color? | - | 分隔线颜色。 未配置时使用 componentStroke Token。 | 否 |
+| elevation | double? | - | 阴影 未配置时为 0。 | 否 |
+| headerTextStyle | TextStyle? | - | 标题文字样式。 | 否 |
+| iconColor | Color? | - | 展开图标颜色。 未配置时使用 textColorPlaceholder Token。 | 否 |

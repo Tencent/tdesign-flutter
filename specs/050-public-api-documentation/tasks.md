@@ -115,3 +115,11 @@
 - [ ] 工具 #29 合入正式 ref 后复验最终生成链和 CI/autofix。
 
 当前验收见 [direct-api-presentation.md](direct-api-presentation.md)。
+
+## 正式工具交付
+
+- [x] 工具 #29 合入 main，消费依赖重新解析到正式提交。
+- [x] 正式工具生成与双 SDK --check、AST 审计及展示回归完成。
+- [ ] 本次推送后核对最终 CI/autofix；PullDownRefresh Golden 差异仍待独立处理。
+
+记录见 [formal-tool-delivery.md](formal-tool-delivery.md)。

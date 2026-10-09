@@ -1,53 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TTextarea
 
-#### 声明
+#### 构造方法
 
-```dart
-class TTextarea extends StatefulWidget
-```
+##### TTextarea
 
-#### 默认构造方法
-
-
-```dart
-const TTextarea({
-  super.key,
-  this.controller,
-  this.initialValue,
-  this.onChanged,
-  this.onSubmitted,
-  this.onEditingComplete,
-  this.enabled = true,
-  this.readOnly = false,
-  this.hintText,
-  this.label,
-  this.layout = TTextareaLayout.horizontal,
-  this.prefix,
-  this.suffix,
-  this.clearButtonMode,
-  this.status = TInputStatus.normal,
-  this.bordered = false,
-  this.maxLines,
-  this.minLines,
-  this.maxLength,
-  this.maxCharacter,
-  this.indicator = false,
-  this.autofocus = false,
-  this.focusNode,
-  this.inputType = TextInputType.multiline,
-  this.inputAction,
-  this.textAlign = TextAlign.start,
-  this.inputFormatters,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | autofocus | bool | false | 是否自动聚焦。 | 否 |
 | bordered | bool | false | 是否显示外边框。 | 否 |
@@ -79,12 +38,11 @@ const TTextarea({
 
 
 ### TTextareaLayout
-#### 简介
+
 多行文本框内部标题与编辑区的排列方式。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| horizontal | 标题与编辑区横向排列。 |
-| vertical | 标题与编辑区竖向排列。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| horizontal | TTextareaLayout | - | 标题与编辑区横向排列。 | - |
+| vertical | TTextareaLayout | - | 标题与编辑区竖向排列。 | - |

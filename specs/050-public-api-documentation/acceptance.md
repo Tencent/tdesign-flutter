@@ -184,3 +184,7 @@ pnpm site
 ## 全组件直接 API 展示
 
 57 页已采用 Input 的直接 API 入口，完整证据见 [direct-api-presentation.md](direct-api-presentation.md) 和逐组件记录。正式工具门禁仍待完成。
+
+## 正式工具交付
+
+#29 已合入 main，正式依赖与生成复验见 [formal-tool-delivery.md](formal-tool-delivery.md)。远端 CI 和 Golden 待办单独保留。
