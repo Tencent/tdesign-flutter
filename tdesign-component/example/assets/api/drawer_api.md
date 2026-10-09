@@ -1,63 +1,221 @@
 ## API
+
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
 ### TDrawer
 #### 简介
 TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer`。
 需要通过浮层展示时，使用 `showTDrawer`。
+
+#### 声明
+
+```dart
+class TDrawer extends StatelessWidget
+```
+
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| child | Widget? | - | 自定义内容，优先级高于`items`/`footer`/`title` |
-| enableFeedback | bool | true | 点击时是否显示背景按压反馈，默认 true。 |
-| footer | Widget? | - | 抽屉的底部 |
-| items | List<TDrawerItem>? | - | 抽屉里的列表项 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onItemClick | TDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 |
-| showDivider | bool | true | 是否显示菜单项分隔线，默认 true。 |
-| showLastDivider | bool | true | 是否显示最后一行分隔线，默认 true。 |
-| title | Widget? | - | 抽屉的标题组件 |
+
+```dart
+const TDrawer({
+  super.key,
+  this.showDivider = true,
+  this.footer,
+  this.items,
+  this.enableFeedback = true,
+  this.showLastDivider = true,
+  this.title,
+  this.onItemClick,
+  this.child,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| child | Widget? | - | 自定义内容，优先级高于`items`/`footer`/`title` | 否 |
+| enableFeedback | bool | true | 点击时是否显示背景按压反馈，默认 true。 | 否 |
+| footer | Widget? | - | 抽屉的底部 | 否 |
+| items | List&lt;TDrawerItem&gt;? | - | 抽屉里的列表项 | 否 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| onItemClick | TDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 | 否 |
+| showDivider | bool | true | 是否显示菜单项分隔线，默认 true。 | 否 |
+| showLastDivider | bool | true | 是否显示最后一行分隔线，默认 true。 | 否 |
+| title | Widget? | - | 抽屉的标题组件 | 否 |
 
 
 ### TDrawerHandle
 #### 简介
 `showTDrawer` 返回的抽屉生命周期控制句柄。
 
+#### 声明
+
+```dart
+class TDrawerHandle
+```
+
+#### 公开属性（字段与访问器）
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| isShowing | bool | - | 当前抽屉是否仍显示在路由中。 |
+
+
+#### 实例方法
+
+##### TDrawerHandle.close
+
+```dart
+void close()
+```
+
+
+关闭当前抽屉；重复调用安全。
+
+返回类型：`void`
+
 ### TDrawerThemeData
 #### 简介
 抽屉组件 ThemeExtension。
 只保存子树级具体视觉默认值。方向、蒙层与展示生命周期由 `showTDrawer`
 负责；分隔线和按压反馈由组件实例负责；构造器具体视觉参数优先级高于 ThemeData。
+
+#### 声明
+
+```dart
+class TDrawerThemeData extends ThemeExtension<TDrawerThemeData>
+```
+
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 默认背景颜色。 |
-| dividerColor | Color? | - | 菜单项分隔线颜色。 |
-| dividerIndent | double? | - | 菜单项分隔线起始缩进，默认 16。 |
-| dividerThickness | double? | - | 菜单项分隔线厚度，默认 0.5。 |
-| footerPadding | EdgeInsetsGeometry? | - | 底部区内边距，默认仅保留 20 的底边距。 |
-| itemBackgroundColor | Color? | - | 菜单项背景色。 |
-| itemIconColor | Color? | - | 菜单项图标颜色。 |
-| itemIconGap | double? | - | 菜单项图标与正文间距，默认 8。 |
-| itemIconSize | double? | - | 菜单项图标尺寸，默认 24。 |
-| itemPadding | EdgeInsetsGeometry? | - | 菜单项内边距，默认 `EdgeInsets.fromLTRB(16, 16, 0, 16)`。 |
-| itemPressedColor | Color? | - | 菜单项按压背景色。 |
-| itemTextStyle | TextStyle? | - | 菜单正文样式。 |
-| titlePadding | EdgeInsetsGeometry? | - | 标题内边距，默认 `EdgeInsets.fromLTRB(16, 24, 16, 8)`。 |
-| titleStyle | TextStyle? | - | 抽屉标题样式。 |
-| width | double? | - | 默认宽度，默认 280。 |
+
+```dart
+const TDrawerThemeData({
+  this.width,
+  this.backgroundColor,
+  this.titleStyle,
+  this.titlePadding,
+  this.itemTextStyle,
+  this.itemBackgroundColor,
+  this.itemPressedColor,
+  this.itemPadding,
+  this.itemIconColor,
+  this.itemIconSize,
+  this.itemIconGap,
+  this.dividerColor,
+  this.dividerIndent,
+  this.dividerThickness,
+  this.footerPadding,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 默认背景颜色。 | 否 |
+| dividerColor | Color? | - | 菜单项分隔线颜色。 | 否 |
+| dividerIndent | double? | - | 菜单项分隔线起始缩进，默认 16。 | 否 |
+| dividerThickness | double? | - | 菜单项分隔线厚度，默认 0.5。 | 否 |
+| footerPadding | EdgeInsetsGeometry? | - | 底部区内边距，默认仅保留 20 的底边距。 | 否 |
+| itemBackgroundColor | Color? | - | 菜单项背景色。 | 否 |
+| itemIconColor | Color? | - | 菜单项图标颜色。 | 否 |
+| itemIconGap | double? | - | 菜单项图标与正文间距，默认 8。 | 否 |
+| itemIconSize | double? | - | 菜单项图标尺寸，默认 24。 | 否 |
+| itemPadding | EdgeInsetsGeometry? | - | 菜单项内边距，默认 `EdgeInsets.fromLTRB(16, 16, 0, 16)`。 | 否 |
+| itemPressedColor | Color? | - | 菜单项按压背景色。 | 否 |
+| itemTextStyle | TextStyle? | - | 菜单正文样式。 | 否 |
+| titlePadding | EdgeInsetsGeometry? | - | 标题内边距，默认 `EdgeInsets.fromLTRB(16, 24, 16, 8)`。 | 否 |
+| titleStyle | TextStyle? | - | 抽屉标题样式。 | 否 |
+| width | double? | - | 默认宽度，默认 280。 | 否 |
+
+
+#### 实例方法
+
+##### TDrawerThemeData.copyWith
+
+```dart
+TDrawerThemeData copyWith({
+  double? width,
+  Color? backgroundColor,
+  TextStyle? titleStyle,
+  EdgeInsetsGeometry? titlePadding,
+  TextStyle? itemTextStyle,
+  Color? itemBackgroundColor,
+  Color? itemPressedColor,
+  EdgeInsetsGeometry? itemPadding,
+  Color? itemIconColor,
+  double? itemIconSize,
+  double? itemIconGap,
+  Color? dividerColor,
+  double? dividerIndent,
+  double? dividerThickness,
+  EdgeInsetsGeometry? footerPadding,
+})
+```
+
+
+返回类型：`TDrawerThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| width | double? | - | 默认宽度，默认 280。 | 否 |
+| backgroundColor | Color? | - | 默认背景颜色。 | 否 |
+| titleStyle | TextStyle? | - | 抽屉标题样式。 | 否 |
+| titlePadding | EdgeInsetsGeometry? | - | 标题内边距，默认 `EdgeInsets.fromLTRB(16, 24, 16, 8)`。 | 否 |
+| itemTextStyle | TextStyle? | - | 菜单正文样式。 | 否 |
+| itemBackgroundColor | Color? | - | 菜单项背景色。 | 否 |
+| itemPressedColor | Color? | - | 菜单项按压背景色。 | 否 |
+| itemPadding | EdgeInsetsGeometry? | - | 菜单项内边距，默认 `EdgeInsets.fromLTRB(16, 16, 0, 16)`。 | 否 |
+| itemIconColor | Color? | - | 菜单项图标颜色。 | 否 |
+| itemIconSize | double? | - | 菜单项图标尺寸，默认 24。 | 否 |
+| itemIconGap | double? | - | 菜单项图标与正文间距，默认 8。 | 否 |
+| dividerColor | Color? | - | 菜单项分隔线颜色。 | 否 |
+| dividerIndent | double? | - | 菜单项分隔线起始缩进，默认 16。 | 否 |
+| dividerThickness | double? | - | 菜单项分隔线厚度，默认 0.5。 | 否 |
+| footerPadding | EdgeInsetsGeometry? | - | 底部区内边距，默认仅保留 20 的底边距。 | 否 |
+
+
+##### TDrawerThemeData.lerp
+
+```dart
+TDrawerThemeData lerp(ThemeExtension<TDrawerThemeData>? other, double t)
+```
+
+
+返回类型：`TDrawerThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TDrawerThemeData&gt;? | - | - | 是 |
+| t | double | - | - | 是 |
 
 
 ### TDrawerItem
 #### 简介
 抽屉里的列表项。
+
+#### 声明
+
+```dart
+class TDrawerItem
+```
+
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| content | Widget? | - | 自定义菜单项正文，优先于 `title`；仍与 `icon`、菜单项间距和分隔线组合。 |
-| icon | Widget? | - | 每列图标 |
-| title | String? | - | 每列标题 |
+
+```dart
+const TDrawerItem({this.title, this.icon, this.content})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| content | Widget? | - | 自定义菜单项正文，优先于 `title`；仍与 `icon`、菜单项间距和分隔线组合。 | 否 |
+| icon | Widget? | - | 每列图标 | 否 |
+| title | String? | - | 每列标题 | 否 |
 
 
 ### showTDrawer
@@ -68,20 +226,25 @@ TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer
 
 返回类型：`TDrawerHandle`
 
+```dart
+TDrawerHandle showTDrawer( BuildContext context, { required TDrawer drawer, TDrawerPlacement placement = TDrawerPlacement.right, bool showOverlay = true, bool closeOnOverlayClick = true, VoidCallback? onOverlayClick, double? topInset, bool useSafeArea = true, bool destroyOnClose = false, VoidCallback? onClose, })
+```
+
+
 #### 参数
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| context | BuildContext | - | 用于查找承载抽屉浮层的 Navigator。 |
-| drawer | TDrawer | - | 只描述抽屉内容；方向、蒙层、顶部偏移和生命周期由本函数负责。 |
-| placement | TDrawerPlacement | TDrawerPlacement.right | 控制抽屉从左侧或右侧滑出，默认从右侧滑出。 |
-| showOverlay | bool | true | 控制是否显示蒙层，默认 true。 |
-| closeOnOverlayClick | bool | true | 控制点击蒙层时是否关闭抽屉，默认 true。 |
-| onOverlayClick | VoidCallback? | - | 在蒙层被点击时触发，不受是否自动关闭影响。 |
-| topInset | double? | - | 设置抽屉相对屏幕顶部的可选偏移，默认 0。 |
-| useSafeArea | bool | true | 控制浮层是否避让系统安全区域，默认 true。 |
-| destroyOnClose | bool | false | 控制关闭后是否立即销毁浮层路由，默认 false。 |
-| onClose | VoidCallback? | - | 在抽屉浮层关闭后触发。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | 用于查找承载抽屉浮层的 Navigator。 | 是 |
+| drawer | TDrawer | - | 只描述抽屉内容；方向、蒙层、顶部偏移和生命周期由本函数负责。 | 是 |
+| placement | TDrawerPlacement | TDrawerPlacement.right | 控制抽屉从左侧或右侧滑出，默认从右侧滑出。 | 否 |
+| showOverlay | bool | true | 控制是否显示蒙层，默认 true。 | 否 |
+| closeOnOverlayClick | bool | true | 控制点击蒙层时是否关闭抽屉，默认 true。 | 否 |
+| onOverlayClick | VoidCallback? | - | 在蒙层被点击时触发，不受是否自动关闭影响。 | 否 |
+| topInset | double? | - | 设置抽屉相对屏幕顶部的可选偏移，默认 0。 | 否 |
+| useSafeArea | bool | true | 控制浮层是否避让系统安全区域，默认 true。 | 否 |
+| destroyOnClose | bool | false | 控制关闭后是否立即销毁浮层路由，默认 false。 | 否 |
+| onClose | VoidCallback? | - | 在抽屉浮层关闭后触发。 | 否 |
 
 
 ### TDrawerPlacement

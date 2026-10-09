@@ -232,8 +232,8 @@ void main() {
     });
 
     testWidgets('二级菜单继承局部主题且背景配置不被菜单行覆盖', (tester) async {
-      final localToken = TThemeData.defaultData().copyWithTThemeData(
-        'popup-local',
+      final localToken = TThemeData.defaultData().copyWith(
+        name: 'popup-local',
         colorMap: {'bgColorContainer': Colors.purple},
       );
       await tester.pumpWidget(
@@ -745,8 +745,8 @@ void main() {
     });
 
     testWidgets('popup defaults to the theme radius', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'tabbar-popup-radius-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'tabbar-popup-radius-test',
         radiusMap: {'radiusDefault': 9},
       );
       await tester.pumpWidget(
@@ -955,8 +955,8 @@ void main() {
       const capsuleShadow = [
         BoxShadow(color: Colors.blue, blurRadius: 7, offset: Offset(0, 3)),
       ];
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'tabbar-capsule-shadow-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'tabbar-capsule-shadow-test',
         shadowMap: {
           'shadow1': const [BoxShadow(color: Colors.red)],
           'shadow3': capsuleShadow,

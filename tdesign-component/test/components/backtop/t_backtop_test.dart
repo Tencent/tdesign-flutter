@@ -79,11 +79,9 @@ void main() {
     });
 
     testWidgets('半圆形跟随 radiusRound，不受 radiusCircle 覆盖影响', (tester) async {
-      final token =
-          TThemeData.defaultData().copyWith(
-                radiusMap: {'radiusRound': 12, 'radiusCircle': 8},
-              )
-              as TThemeData;
+      final token = TThemeData.defaultData().copyWith(
+        radiusMap: {'radiusRound': 12, 'radiusCircle': 8},
+      );
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(extensions: [token]),

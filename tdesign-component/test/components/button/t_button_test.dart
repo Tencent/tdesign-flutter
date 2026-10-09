@@ -523,8 +523,8 @@ void main() {
     }
 
     testWidgets('字体读取全局 Token，图文间距读取组件 Theme', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'button-token-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'button-token-test',
         fontMap: {
           'fontMarkLarge': Font(
             size: 17,
@@ -1777,8 +1777,8 @@ void main() {
   // ============================================================
   group('TButton 交互态', () {
     testWidgets('默认前景色跟随上游 fontWhite1 Token', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'button-font-white-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'button-font-white-test',
         colorMap: {'fontWhite1': Colors.green},
       );
       await tester.pumpWidget(

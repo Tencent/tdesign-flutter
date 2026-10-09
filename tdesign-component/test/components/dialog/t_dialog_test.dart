@@ -901,8 +901,8 @@ void main() {
 
     testWidgets('浅色普通操作实际颜色跟随明暗主题与自定义 token', (tester) async {
       final defaults = TThemeData.defaultData();
-      final custom = defaults.copyWithTThemeData(
-        'dialog-action-colors',
+      final custom = defaults.copyWith(
+        name: 'dialog-action-colors',
         colorMap: {
           'brandColorLight': Colors.amber,
           'brandColor': Colors.purple,
@@ -987,10 +987,10 @@ void main() {
     });
 
     testWidgets('默认间距与圆角跟随 TDesign token', (tester) async {
-      final tokens = TThemeData.defaultData().copyWithTThemeData(
-        'dialog-token-test',
+      final tokens = TThemeData.defaultData().copyWith(
+        name: 'dialog-token-test',
         radiusMap: {'radiusExtraLarge': 20},
-        marginMap: {'spacer': 10, 'spacer1': 14, 'spacer3': 30, 'spacer4': 40},
+        spacerMap: {'spacer': 10, 'spacer1': 14, 'spacer3': 30, 'spacer4': 40},
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -1071,9 +1071,9 @@ void main() {
     });
 
     testWidgets('显式间距不会被数值相同的 token 默认值覆盖', (tester) async {
-      final tokens = TThemeData.defaultData().copyWithTThemeData(
-        'dialog-explicit-spacing-test',
-        marginMap: {'spacer1': 14, 'spacer3': 30},
+      final tokens = TThemeData.defaultData().copyWith(
+        name: 'dialog-explicit-spacing-test',
+        spacerMap: {'spacer1': 14, 'spacer3': 30},
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -1111,9 +1111,9 @@ void main() {
     });
 
     testWidgets('极小视口与自定义间距 token 不会生成负约束', (tester) async {
-      final tokens = TThemeData.defaultData().copyWithTThemeData(
-        'dialog-small-viewport-test',
-        marginMap: {'spacer4': 40},
+      final tokens = TThemeData.defaultData().copyWith(
+        name: 'dialog-small-viewport-test',
+        spacerMap: {'spacer4': 40},
       );
       await tester.pumpWidget(
         MaterialApp(

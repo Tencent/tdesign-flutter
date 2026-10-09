@@ -721,16 +721,14 @@ void main() {
     testWidgets('default colors follow TDesign rate and text tokens', (
       tester,
     ) async {
-      final token =
-          TThemeData.defaultData().copyWith(
-                colorMap: {
-                  'warningColor5': Colors.red,
-                  'bgColorComponent': Colors.blue,
-                  'textColorPrimary': Colors.green,
-                },
-                marginMap: {'spacer3': 30},
-              )
-              as TThemeData;
+      final token = TThemeData.defaultData().copyWith(
+        colorMap: {
+          'warningColor5': Colors.red,
+          'bgColorComponent': Colors.blue,
+          'textColorPrimary': Colors.green,
+        },
+        spacerMap: {'spacer3': 30},
+      );
       final colorScheme = ColorScheme.fromSeed(
         seedColor: Colors.teal,
       ).copyWith(onSurface: Colors.purple);
@@ -806,11 +804,9 @@ void main() {
     testWidgets('disabled text color follows the TDesign token', (
       tester,
     ) async {
-      final token =
-          TThemeData.defaultData().copyWith(
-                colorMap: {'textColorDisabled': Colors.orange},
-              )
-              as TThemeData;
+      final token = TThemeData.defaultData().copyWith(
+        colorMap: {'textColorDisabled': Colors.orange},
+      );
 
       await tester.pumpWidget(
         wrap(

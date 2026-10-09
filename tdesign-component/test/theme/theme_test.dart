@@ -29,8 +29,7 @@ void main() {
         expect(mode.radiusCircle, 9999);
       }
 
-      final custom =
-          token.copyWith(radiusMap: {'radiusDefault': 8}) as TThemeData;
+      final custom = token.copyWith(radiusMap: {'radiusDefault': 8});
       expect(custom.radiusDefault, 8);
       expect(custom.radiusSmall, 3);
     });

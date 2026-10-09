@@ -239,8 +239,8 @@ void main() {
     });
 
     testWidgets('highlight 响应全局语义色和仍存在的字体 token', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'time-counter-highlight-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'time-counter-highlight-test',
         colorMap: {
           'errorColor': Colors.purple,
           'textColorPrimary': Colors.green,
@@ -362,9 +362,9 @@ void main() {
     });
 
     testWidgets('圆块读取自定义全局 radiusCircle，不被固定 circle 形状遮蔽', (tester) async {
-      final token =
-          TThemeData.defaultData().copyWith(radiusMap: {'radiusCircle': 6})
-              as TThemeData;
+      final token = TThemeData.defaultData().copyWith(
+        radiusMap: {'radiusCircle': 6},
+      );
       await tester.pumpWidget(
         wrapWithTheme(
           const TTimeCounter(
@@ -889,8 +889,8 @@ void main() {
 
   group('TTimeCounter 计时契约', () {
     testWidgets('方形尺寸和圆角读取设计值与 TDesign token', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'time-counter-square-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'time-counter-square-test',
         radiusMap: {'radiusSmall': 7},
       );
       await tester.pumpWidget(

@@ -658,8 +658,8 @@ void main() {
     testWidgets('bare TThemeData supplies token background fallback', (
       tester,
     ) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'stepper-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'stepper-test',
         colorMap: {'bgColorSecondaryContainer': Colors.orange},
       );
       await tester.pumpWidget(

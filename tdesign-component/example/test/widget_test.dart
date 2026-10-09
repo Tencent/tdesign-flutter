@@ -55,8 +55,8 @@ void main() {
   testWidgets(
     'compact module titles follow TD tokens despite Material text theme',
     (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'compact-title',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'compact-title',
         fontMap: {
           'fontTitleLarge': Font(
             size: 20,

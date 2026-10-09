@@ -15,7 +15,22 @@ Widget host(
   );
 }
 
+TThemeData copyTheme(TThemeData theme) =>
+    theme.copyWith(spacerMap: {'spacer': 10});
+
+TThemeData transitionTheme(TThemeData theme, TThemeData other) =>
+    theme.lerp(other, 0.5);
+
 void main() {
+  test('TThemeData operations return the public concrete type', () {
+    final token = TThemeData.defaultData().copyWith(name: 'consumer');
+    final copied = copyTheme(token).copyWith(radiusMap: {'radiusDefault': 20});
+    expect(copied.name, 'consumer');
+    expect(copied.spacerMap['spacer'], 10);
+    expect(copied.radiusMap['radiusDefault'], 20);
+    expect(transitionTheme(token, copied).name, 'consumer');
+  });
+
   test('moved specification and interaction choices compile on instances', () {
     final widgets = <Widget>[
       const TSearchBar(variant: TSearchBarVariant.round),

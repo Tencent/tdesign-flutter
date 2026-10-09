@@ -132,9 +132,9 @@ void main() {
     });
 
     testWidgets('圆角未配置时跟随全局 Token，组件 Theme 可以覆盖', (tester) async {
-      final tokens =
-          TThemeData.defaultData().copyWith(radiusMap: {'radiusDefault': 7})
-              as TThemeData;
+      final tokens = TThemeData.defaultData().copyWith(
+        radiusMap: {'radiusDefault': 7},
+      );
       const content = Center(child: Text('圆角 Token'));
 
       Widget subject() => Builder(

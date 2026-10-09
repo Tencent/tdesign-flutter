@@ -241,9 +241,9 @@ void main() {
     testWidgets('自定义 Token 注入', (tester) async {
       // 注入自定义 TThemeData（修改 brandColor）
       final defaultTheme = TThemeData.defaultData();
-      final customTheme =
-          defaultTheme.copyWith(colorMap: {'brandColor': Colors.purple})
-              as TThemeData;
+      final customTheme = defaultTheme.copyWith(
+        colorMap: {'brandColor': Colors.purple},
+      );
 
       await tester.pumpWidget(
         wrapWithTheme(
