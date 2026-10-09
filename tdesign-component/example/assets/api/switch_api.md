@@ -1,34 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TSwitch
 
-#### 声明
+#### 构造方法
 
-```dart
-class TSwitch extends StatelessWidget
-```
+##### TSwitch
 
-#### 默认构造方法
-
-
-```dart
-const TSwitch({
-  super.key,
-  required this.value,
-  this.onChanged,
-  this.size,
-  this.variant,
-  this.loading = false,
-  this.openText,
-  this.closeText,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | closeText | String? | - | text 形态的关闭文案。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
@@ -42,34 +20,11 @@ const TSwitch({
 
 ### TSwitchThemeData
 
-#### 声明
+#### 构造方法
 
-```dart
-class TSwitchThemeData extends ThemeExtension<TSwitchThemeData>
-```
+##### TSwitchThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TSwitchThemeData({
-  this.trackOnColor,
-  this.trackOffColor,
-  this.disabledTrackOnColor,
-  this.disabledTrackOffColor,
-  this.thumbColor,
-  this.disabledThumbColor,
-  this.loadingColor,
-  this.thumbContentOnColor,
-  this.thumbContentOffColor,
-  this.thumbContentOnFont,
-  this.thumbContentOffFont,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | disabledThumbColor | Color? | - | 禁用或加载时滑块填充色。 | 否 |
 | disabledTrackOffColor | Color? | - | 禁用时关闭态轨道颜色。 | 否 |
@@ -88,50 +43,41 @@ const TSwitchThemeData({
 
 ##### TSwitchThemeData.copyWith
 
-```dart
-TSwitchThemeData copyWith({
-  Color? trackOnColor,
-  Color? trackOffColor,
-  Color? disabledTrackOnColor,
-  Color? disabledTrackOffColor,
-  Color? thumbColor,
-  Color? disabledThumbColor,
-  Color? loadingColor,
-  Color? thumbContentOnColor,
-  Color? thumbContentOffColor,
-  TextStyle? thumbContentOnFont,
-  TextStyle? thumbContentOffFont,
-})
-```
-
-
-返回类型：`TSwitchThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| trackOnColor | Color? | - | 开启时轨道颜色 | 否 |
-| trackOffColor | Color? | - | 关闭时轨道颜色 | 否 |
-| disabledTrackOnColor | Color? | - | 禁用时开启态轨道颜色；未设置时使用全局禁用品牌色。 | 否 |
-| disabledTrackOffColor | Color? | - | 禁用时关闭态轨道颜色；未设置时使用全局禁用组件背景色。 | 否 |
-| thumbColor | Color? | - | 可交互时滑块填充色；未设置时使用全局反色文字 Token。 与滑块内图标或文字的颜色无关。 | 否 |
-| disabledThumbColor | Color? | - | 禁用或加载时滑块填充色；未设置时随明暗模式取白色层级。 | 否 |
-| loadingColor | Color? | - | 加载指示器颜色；未设置时浅色为品牌色、深色为最高层级白色。 | 否 |
-| thumbContentOnColor | Color? | - | 开启时ThumbView的颜色 | 否 |
-| thumbContentOffColor | Color? | - | 关闭时ThumbView的颜色 | 否 |
-| thumbContentOnFont | TextStyle? | - | 开启时ThumbView的字体样式 | 否 |
-| thumbContentOffFont | TextStyle? | - | 关闭时ThumbView的字体样式 | 否 |
+| trackOnColor | Color? | - | 字段含义：开启时轨道颜色 调用时的空值行为见方法说明。 | 否 |
+| trackOffColor | Color? | - | 字段含义：关闭时轨道颜色 调用时的空值行为见方法说明。 | 否 |
+| disabledTrackOnColor | Color? | - | 字段含义：禁用时开启态轨道颜色；未设置时使用全局禁用品牌色。 调用时的空值行为见方法说明。 | 否 |
+| disabledTrackOffColor | Color? | - | 字段含义：禁用时关闭态轨道颜色；未设置时使用全局禁用组件背景色。 调用时的空值行为见方法说明。 | 否 |
+| thumbColor | Color? | - | 字段含义：可交互时滑块填充色；未设置时使用全局反色文字 Token。 与滑块内图标或文字的颜色无关。 调用时的空值行为见方法说明。 | 否 |
+| disabledThumbColor | Color? | - | 字段含义：禁用或加载时滑块填充色；未设置时随明暗模式取白色层级。 调用时的空值行为见方法说明。 | 否 |
+| loadingColor | Color? | - | 字段含义：加载指示器颜色；未设置时浅色为品牌色、深色为最高层级白色。 调用时的空值行为见方法说明。 | 否 |
+| thumbContentOnColor | Color? | - | 字段含义：开启时ThumbView的颜色 调用时的空值行为见方法说明。 | 否 |
+| thumbContentOffColor | Color? | - | 字段含义：关闭时ThumbView的颜色 调用时的空值行为见方法说明。 | 否 |
+| thumbContentOnFont | TextStyle? | - | 字段含义：开启时ThumbView的字体样式 调用时的空值行为见方法说明。 | 否 |
+| thumbContentOffFont | TextStyle? | - | 字段含义：关闭时ThumbView的字体样式 调用时的空值行为见方法说明。 | 否 |
+
+
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TSwitchThemeData | - | - | - |
 
 
 ##### TSwitchThemeData.lerp
 
-```dart
-TSwitchThemeData lerp(ThemeExtension<TSwitchThemeData>? other, double t)
-```
+位置参数：`other, t`
 
 
-返回类型：`TSwitchThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TSwitchThemeData&gt;? | - | - | 是 |
 | t | double | - | - | 是 |
+
+
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TSwitchThemeData | - | - | - |

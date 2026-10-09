@@ -1,55 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TInput
 
-#### 声明
+#### 构造方法
 
-```dart
-class TInput extends StatefulWidget
-```
+##### TInput
 
-#### 默认构造方法
-
-
-```dart
-const TInput({
-  super.key,
-  this.controller,
-  this.initialValue,
-  this.onChanged,
-  this.onSubmitted,
-  this.onEditingComplete,
-  this.enabled = true,
-  this.readOnly = false,
-  this.hintText,
-  this.prefix,
-  this.suffix,
-  this.clearButtonMode,
-  this.status = TInputStatus.normal,
-  this.borderless = false,
-  this.maxLines = 1,
-  this.minLines,
-  this.maxLength,
-  this.maxCharacter,
-  this.indicator = false,
-  this.autofocus = false,
-  this.focusNode,
-  this.inputType = TextInputType.text,
-  this.inputAction,
-  this.textAlign = TextAlign.start,
-  this.obscureText = false,
-  this.showPasswordToggle = false,
-  this.inputFormatters,
-  this.style,
-  this.cursorColor,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | autofocus | bool | false | 是否自动聚焦。 | 否 |
 | borderless | bool | false | 是否隐藏输入框边框。 | 否 |

@@ -1,31 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TEmpty
 
-#### 声明
+#### 构造方法
 
-```dart
-class TEmpty extends StatelessWidget
-```
+##### TEmpty
 
-#### 默认构造方法
-
-
-```dart
-const TEmpty({
-  this.icon = TIcons.info_circle_filled,
-  this.image,
-  this.emptyText,
-  this.operation,
-  Key? key,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | emptyText | String? | - | 描述文字。 | 否 |
 | icon | IconData? | TIcons.info_circle_filled | 默认图标；`image` 非空时不显示。 | 否 |

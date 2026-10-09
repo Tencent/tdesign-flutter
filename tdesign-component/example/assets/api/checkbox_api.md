@@ -1,38 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TCheckbox
 
-#### 声明
+#### 构造方法
 
-```dart
-class TCheckbox extends StatelessWidget
-```
+##### TCheckbox
 
-#### 默认构造方法
-
-
-```dart
-const TCheckbox({
-  super.key,
-  required this.value,
-  this.onChanged,
-  this.title,
-  this.subTitle,
-  this.size = TCheckboxSize.medium,
-  this.cardMode = false,
-  this.showDivider = true,
-  this.contentDirection = TContentDirection.right,
-  this.titleMaxLines = 3,
-  this.subTitleMaxLines = 5,
-  this.customIconBuilder,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | cardMode | bool | false | 是否使用卡片模式。 | 否 |
 | contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向。 | 否 |
@@ -50,36 +24,14 @@ const TCheckbox({
 
 ### TCheckboxGroup
 
-#### 声明
-
-```dart
-class TCheckboxGroup<T> extends StatelessWidget
-```
-
-#### 默认构造方法
+类型参数：`T`
 
 
-```dart
-const TCheckboxGroup({
-  super.key,
-  required this.value,
-  required this.options,
-  this.onChanged,
-  this.direction = Axis.vertical,
-  this.columns = 1,
-  this.cardMode = false,
-  this.showDivider = true,
-  this.contentDirection = TContentDirection.right,
-  this.size = TCheckboxSize.medium,
-  this.maxSelected,
-  this.onMaxSelected,
-  this.itemBuilder,
-})
-```
+#### 构造方法
 
-##### 参数
+##### TCheckboxGroup
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | cardMode | bool | false | 是否使用卡片模式。 | 否 |
 | columns | int | 1 | 每行列数，必须大于 0。 | 否 |
@@ -99,35 +51,63 @@ const TCheckboxGroup({
 ### TContentDirection
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| left | 控件位于文案右侧。 |
-| right | 控件位于文案左侧。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| left | TContentDirection | - | 控件位于文案右侧。 | - |
+| right | TContentDirection | - | 控件位于文案左侧。 | - |
 
 
 ### TCheckboxSize
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| small | 小尺寸。 |
-| medium | 中尺寸。 |
-| large | 大尺寸。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| small | TCheckboxSize | - | 小尺寸。 | - |
+| medium | TCheckboxSize | - | 中尺寸。 | - |
+| large | TCheckboxSize | - | 大尺寸。 | - |
 
 
 ### TCheckboxIconBuilder
-#### 类型定义
 
-```dart
-typedef TCheckboxIconBuilder = Widget Function(BuildContext context, bool? value, bool disabled);
-```
+位置参数：`context, value, disabled`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | - | 是 |
+| value | bool? | - | - | 是 |
+| disabled | bool | - | - | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | - | - |
 
 
 ### TCheckboxOptionBuilder
-#### 类型定义
 
-```dart
-typedef TCheckboxOptionBuilder<T> = Widget Function(BuildContext context, TCheckboxOption<T> option, bool selected, bool disabled);
-```
+类型参数：`T`
+
+
+位置参数：`context, option, selected, disabled`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | - | 是 |
+| option | TCheckboxOption&lt;T&gt; | - | - | 是 |
+| selected | bool | - | - | 是 |
+| disabled | bool | - | - | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | - | - |

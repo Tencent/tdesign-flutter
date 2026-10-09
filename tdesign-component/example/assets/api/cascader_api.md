@@ -1,33 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TCascader
 
-#### 声明
+#### 构造方法
 
-```dart
-class TCascader extends StatefulWidget
-```
+##### TCascader
 
-#### 默认构造方法
-
-
-```dart
-const TCascader({
-  super.key,
-  required this.options,
-  required this.value,
-  this.onChanged,
-  this.variant = TCascaderVariant.tab,
-  this.placeholder = '请选择',
-  this.subtitles = const [],
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | onChanged | ValueChanged&lt;List&lt;Object?&gt;&gt;? | - | 选中路径变化回调；为 null 时禁用。 分支点击只发出候选路径；调用方需回写 `value`，组件才会推进活动层级。 | 否 |
@@ -40,27 +19,11 @@ const TCascader({
 
 ### TCascaderOption
 
-#### 声明
+#### 构造方法
 
-```dart
-class TCascaderOption
-```
+##### TCascaderOption
 
-#### 默认构造方法
-
-
-```dart
-const TCascaderOption({
-  required this.label,
-  required this.value,
-  this.children = const [],
-  this.disabled = false,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | children | List&lt;TCascaderOption&gt; | const [] | 子选项。 | 否 |
 | disabled | bool | false | 是否禁用。 | 否 |
@@ -70,32 +33,11 @@ const TCascaderOption({
 
 ### TCascaderThemeData
 
-#### 声明
+#### 构造方法
 
-```dart
-class TCascaderThemeData extends ThemeExtension<TCascaderThemeData>
-```
+##### TCascaderThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TCascaderThemeData({
-  this.height,
-  this.backgroundColor,
-  this.borderRadius,
-  this.textStyle,
-  this.activeTextStyle,
-  this.disabledTextStyle,
-  this.indicatorColor,
-  this.navigationPadding,
-  this.dividerColor,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | activeTextStyle | TextStyle? | - | 当前活动导航及已选选项文案样式。 | 否 |
 | backgroundColor | Color? | - | 背景色。 | 否 |
@@ -112,59 +54,48 @@ const TCascaderThemeData({
 
 ##### TCascaderThemeData.copyWith
 
-```dart
-TCascaderThemeData copyWith({
-  double? height,
-  Color? backgroundColor,
-  double? borderRadius,
-  TextStyle? textStyle,
-  TextStyle? activeTextStyle,
-  TextStyle? disabledTextStyle,
-  Color? indicatorColor,
-  EdgeInsetsGeometry? navigationPadding,
-  Color? dividerColor,
-})
-```
-
-
-返回类型：`TCascaderThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| height | double? | - | 组件高度。 | 否 |
-| backgroundColor | Color? | - | 背景色。 | 否 |
-| borderRadius | double? | - | 圆角。 | 否 |
-| textStyle | TextStyle? | - | 普通文案样式。 | 否 |
-| activeTextStyle | TextStyle? | - | 当前活动导航及已选选项文案样式。 | 否 |
-| disabledTextStyle | TextStyle? | - | 禁用文案样式。 | 否 |
-| indicatorColor | Color? | - | 末级选中图标颜色。 | 否 |
-| navigationPadding | EdgeInsetsGeometry? | - | 导航区域内边距。 | 否 |
-| dividerColor | Color? | - | 分隔线颜色。 | 否 |
+| height | double? | - | 字段含义：组件高度。 调用时的空值行为见方法说明。 | 否 |
+| backgroundColor | Color? | - | 字段含义：背景色。 调用时的空值行为见方法说明。 | 否 |
+| borderRadius | double? | - | 字段含义：圆角。 调用时的空值行为见方法说明。 | 否 |
+| textStyle | TextStyle? | - | 字段含义：普通文案样式。 调用时的空值行为见方法说明。 | 否 |
+| activeTextStyle | TextStyle? | - | 字段含义：当前活动导航及已选选项文案样式。 调用时的空值行为见方法说明。 | 否 |
+| disabledTextStyle | TextStyle? | - | 字段含义：禁用文案样式。 调用时的空值行为见方法说明。 | 否 |
+| indicatorColor | Color? | - | 字段含义：末级选中图标颜色。 调用时的空值行为见方法说明。 | 否 |
+| navigationPadding | EdgeInsetsGeometry? | - | 字段含义：导航区域内边距。 调用时的空值行为见方法说明。 | 否 |
+| dividerColor | Color? | - | 字段含义：分隔线颜色。 调用时的空值行为见方法说明。 | 否 |
+
+
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TCascaderThemeData | - | - | - |
 
 
 ##### TCascaderThemeData.lerp
 
-```dart
-TCascaderThemeData lerp(
-  ThemeExtension<TCascaderThemeData>? other,
-  double t,
-)
-```
+位置参数：`other, t`
 
 
-返回类型：`TCascaderThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TCascaderThemeData&gt;? | - | - | 是 |
 | t | double | - | - | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TCascaderThemeData | - | - | - |
+
+
 ### TCascaderVariant
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| step | 纵向步骤导航。 |
-| tab | 横向标签导航。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| step | TCascaderVariant | - | 纵向步骤导航。 | - |
+| tab | TCascaderVariant | - | 横向标签导航。 | - |

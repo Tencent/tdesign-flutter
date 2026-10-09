@@ -1,54 +1,14 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TSwiper
-#### 简介
+
 Controller 驱动的轮播组件。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TSwiper extends StatefulWidget
-```
+##### TSwiper
 
-#### 默认构造方法
-
-
-```dart
-const TSwiper({
-  this.children,
-  this.itemBuilder,
-  this.itemCount,
-  this.controller,
-  this.onChanged,
-  this.loop = false,
-  this.autoplay = false,
-  this.autoplayInterval = const Duration(seconds: 3),
-  this.animationDuration = kThemeAnimationDuration,
-  this.animationCurve = Curves.easeInOut,
-  this.pagination,
-  this.paginationPlacement,
-  this.paginationItemBuilder,
-  this.previousIcon,
-  this.nextIcon,
-  this.pageEffect,
-  this.viewportFraction = 1,
-  this.scrollDirection = Axis.horizontal,
-  this.physics,
-  this.pageSnapping = true,
-  this.padEnds = true,
-  this.clipBehavior = Clip.hardEdge,
-  this.reverse = false,
-  this.dragStartBehavior = DragStartBehavior.start,
-  this.allowImplicitScrolling = false,
-  super.key,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | allowImplicitScrolling | bool | false | 是否允许无障碍服务请求将未显示的页面滚动到可见区域。 | 否 |
 | animationCurve | Curve | Curves.easeInOut | 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画曲线。 | 否 |
@@ -79,146 +39,116 @@ const TSwiper({
 
 
 ### TSwiperController
-#### 简介
+
 控制 `TSwiper` 当前页和程序化切换。
+
 使用 `jumpTo`、`animateTo`、`next` 和 `previous` 发起切换，通过 `index`
 或监听 Controller 获取当前业务索引。一个 Controller 同时只能附加一个
 `TSwiper`，由调用方创建的实例也由调用方负责释放。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TSwiperController extends ChangeNotifier
-```
+##### TSwiperController
 
-#### 默认构造方法
-
-
-```dart
-TSwiperController({this.initialIndex = 0})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | initialIndex | int | 0 | 首次附加时展示的页面。 | 否 |
 
-#### 公开属性（字段与访问器）
 
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| hasClients | bool | - | 是否已附加到一个 Swiper。 |
-| index | int | - | 当前实际展示的业务索引。 |
+#### 属性
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| hasClients | bool | - | 是否已附加到一个 Swiper。 | - |
+| index | int | - | 当前实际展示的业务索引。 | - |
 
 
 #### 实例方法
 
 ##### TSwiperController.animateTo
 
-```dart
-Future<void> animateTo(int index, {Duration? duration, Curve? curve})
-```
+位置参数：`index`
 
 
 动画切换到目标页；循环模式始终向前到达目标。
+
 未提供 `duration` 或 `curve` 时，继承所附加 `TSwiper` 的动画配置。
 
-返回类型：`Future<void>`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | index | int | - | - | 是 |
 | duration | Duration? | - | - | 否 |
 | curve | Curve? | - | - | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Future&lt;void&gt; | - | - | - |
+
+
 ##### TSwiperController.jumpTo
 
-```dart
-void jumpTo(int index)
-```
+位置参数：`index`
 
 
 立即跳转到目标页。
 
-返回类型：`void`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | index | int | - | - | 是 |
 
 
 ##### TSwiperController.next
 
-```dart
-Future<void> next({Duration? duration, Curve? curve})
-```
-
-
 切换到下一页。
+
 未提供 `duration` 或 `curve` 时，继承所附加 `TSwiper` 的动画配置。
 
-返回类型：`Future<void>`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | duration | Duration? | - | - | 否 |
 | curve | Curve? | - | - | 否 |
+
+
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Future&lt;void&gt; | - | - | - |
 
 
 ##### TSwiperController.previous
 
-```dart
-Future<void> previous({Duration? duration, Curve? curve})
-```
-
-
 切换到上一页。
+
 未提供 `duration` 或 `curve` 时，继承所附加 `TSwiper` 的动画配置。
 
-返回类型：`Future<void>`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | duration | Duration? | - | - | 否 |
 | curve | Curve? | - | - | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Future&lt;void&gt; | - | - | - |
+
+
 ### TSwiperThemeData
-#### 简介
+
 轮播组件级 ThemeExtension。
+
 保存指示器、内容圆角和切换按钮的视觉默认值。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TSwiperThemeData extends ThemeExtension<TSwiperThemeData>
-```
+##### TSwiperThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TSwiperThemeData({
-  this.paginationAlignment,
-  this.paginationMargin,
-  this.borderRadius,
-  this.activeColor,
-  this.inactiveColor,
-  this.dotSize,
-  this.activeDotExtent,
-  this.dotSpacing,
-  this.fractionStyle,
-  this.fractionBackgroundColor,
-  this.controlStyle,
-  this.controlIconSize,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | activeColor | Color? | - | 激活项颜色。 | 否 |
 | activeDotExtent | double? | - | 长条激活项在滚动主轴上的长度。 | 否 |
@@ -238,141 +168,125 @@ const TSwiperThemeData({
 
 ##### TSwiperThemeData.copyWith
 
-```dart
-TSwiperThemeData copyWith({
-  AlignmentGeometry? paginationAlignment,
-  EdgeInsetsGeometry? paginationMargin,
-  BorderRadiusGeometry? borderRadius,
-  Color? activeColor,
-  Color? inactiveColor,
-  double? dotSize,
-  double? activeDotExtent,
-  double? dotSpacing,
-  TextStyle? fractionStyle,
-  Color? fractionBackgroundColor,
-  ButtonStyle? controlStyle,
-  double? controlIconSize,
-})
-```
-
-
-返回类型：`TSwiperThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| paginationAlignment | AlignmentGeometry? | - | 默认指示器对齐方式。 | 否 |
-| paginationMargin | EdgeInsetsGeometry? | - | 指示器外边距。 | 否 |
-| borderRadius | BorderRadiusGeometry? | - | 轮播内容圆角。 | 否 |
-| activeColor | Color? | - | 激活项颜色。 | 否 |
-| inactiveColor | Color? | - | 未激活项颜色。 | 否 |
-| dotSize | double? | - | 圆点直径。 | 否 |
-| activeDotExtent | double? | - | 长条激活项在滚动主轴上的长度。 | 否 |
-| dotSpacing | double? | - | 圆点间距。 | 否 |
-| fractionStyle | TextStyle? | - | 数字指示器文字样式。 | 否 |
-| fractionBackgroundColor | Color? | - | 数字指示器背景色。 | 否 |
-| controlStyle | ButtonStyle? | - | 控制按钮样式。 | 否 |
-| controlIconSize | double? | - | 控制按钮图标尺寸。 | 否 |
+| paginationAlignment | AlignmentGeometry? | - | 字段含义：默认指示器对齐方式。 调用时的空值行为见方法说明。 | 否 |
+| paginationMargin | EdgeInsetsGeometry? | - | 字段含义：指示器外边距。 调用时的空值行为见方法说明。 | 否 |
+| borderRadius | BorderRadiusGeometry? | - | 字段含义：轮播内容圆角。 调用时的空值行为见方法说明。 | 否 |
+| activeColor | Color? | - | 字段含义：激活项颜色。 调用时的空值行为见方法说明。 | 否 |
+| inactiveColor | Color? | - | 字段含义：未激活项颜色。 调用时的空值行为见方法说明。 | 否 |
+| dotSize | double? | - | 字段含义：圆点直径。 调用时的空值行为见方法说明。 | 否 |
+| activeDotExtent | double? | - | 字段含义：长条激活项在滚动主轴上的长度。 调用时的空值行为见方法说明。 | 否 |
+| dotSpacing | double? | - | 字段含义：圆点间距。 调用时的空值行为见方法说明。 | 否 |
+| fractionStyle | TextStyle? | - | 字段含义：数字指示器文字样式。 调用时的空值行为见方法说明。 | 否 |
+| fractionBackgroundColor | Color? | - | 字段含义：数字指示器背景色。 调用时的空值行为见方法说明。 | 否 |
+| controlStyle | ButtonStyle? | - | 字段含义：控制按钮样式。 调用时的空值行为见方法说明。 | 否 |
+| controlIconSize | double? | - | 字段含义：控制按钮图标尺寸。 调用时的空值行为见方法说明。 | 否 |
+
+
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TSwiperThemeData | - | - | - |
 
 
 ##### TSwiperThemeData.lerp
 
-```dart
-TSwiperThemeData lerp(TSwiperThemeData? other, double t)
-```
+位置参数：`other, t`
 
 
-返回类型：`TSwiperThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | TSwiperThemeData? | - | - | 是 |
 | t | double | - | - | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TSwiperThemeData | - | - | - |
+
+
 ### TSwiperPaginationItemDetails
-#### 简介
+
 单个轮播指示器标记的状态信息。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TSwiperPaginationItemDetails
-```
+##### TSwiperPaginationItemDetails
 
-#### 默认构造方法
-
-
-```dart
-const TSwiperPaginationItemDetails({
-  required this.index,
-  required this.currentIndex,
-  required this.itemCount,
-  required this.axis,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | axis | Axis | - | 轮播滚动主轴。 | 是 |
 | currentIndex | int | - | 当前实际展示页的业务下标。 | 是 |
 | index | int | - | 当前标记对应的业务下标。 | 是 |
 | itemCount | int | - | 轮播项总数。 | 是 |
 
-#### 公开属性（字段与访问器）
 
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| isActive | bool | - | 当前标记是否对应实际展示页。 |
+#### 属性
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| isActive | bool | - | 当前标记是否对应实际展示页。 | - |
 
 
 ### TSwiperPaginationVariant
-#### 简介
+
 轮播指示器形态。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| none | 不显示指示器。 |
-| dots | 圆点指示器。 |
-| dotsBar | 当前项使用长条的圆点指示器。 |
-| fraction | 数字指示器。 |
-| controls | 前后切换按钮。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| none | TSwiperPaginationVariant | - | 不显示指示器。 | - |
+| dots | TSwiperPaginationVariant | - | 圆点指示器。 | - |
+| dotsBar | TSwiperPaginationVariant | - | 当前项使用长条的圆点指示器。 | - |
+| fraction | TSwiperPaginationVariant | - | 数字指示器。 | - |
+| controls | TSwiperPaginationVariant | - | 前后切换按钮。 | - |
 
 
 ### TSwiperPaginationPlacement
-#### 简介
+
 指示器相对于轮播内容的位置。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| overlay | 覆盖在轮播内容上。 |
-| outside | 放在轮播内容外部；横向轮播放在下方，竖向轮播放在右侧。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| overlay | TSwiperPaginationPlacement | - | 覆盖在轮播内容上。 | - |
+| outside | TSwiperPaginationPlacement | - | 放在轮播内容外部；横向轮播放在下方，竖向轮播放在右侧。 | - |
 
 
 ### TSwiperPageEffect
-#### 简介
+
 页面切换视觉效果。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| none | 无额外效果。 |
-| cardMargin | 卡片间距效果。 |
-| scale | 相邻卡片等比缩放，当前页保持完整尺寸。 |
-| scaleAndFade | 相邻卡片等比缩放、淡化并向当前页两侧叠放。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| none | TSwiperPageEffect | - | 无额外效果。 | - |
+| cardMargin | TSwiperPageEffect | - | 卡片间距效果。 | - |
+| scale | TSwiperPageEffect | - | 相邻卡片等比缩放，当前页保持完整尺寸。 | - |
+| scaleAndFade | TSwiperPageEffect | - | 相邻卡片等比缩放、淡化并向当前页两侧叠放。 | - |
 
 
 ### TSwiperPaginationItemBuilder
-#### 简介
-单个轮播指示器标记的构建器。
-#### 类型定义
 
-```dart
-typedef TSwiperPaginationItemBuilder = Widget Function(BuildContext context, TSwiperPaginationItemDetails details);
-```
+单个轮播指示器标记的构建器。
+
+位置参数：`context, details`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | - | 是 |
+| details | TSwiperPaginationItemDetails | - | - | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | - | - |

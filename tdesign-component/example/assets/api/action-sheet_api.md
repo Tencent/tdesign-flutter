@@ -1,35 +1,17 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TActionSheetItem
-#### 简介
+
+类型参数：`T`
+
+
 动作面板项目
 
-#### 声明
+#### 构造方法
 
-```dart
-class TActionSheetItem<T>
-```
+##### TActionSheetItem
 
-#### 默认构造方法
-
-
-```dart
-const TActionSheetItem({
-  required this.value,
-  required this.label,
-  this.textStyle,
-  this.icon,
-  this.badge,
-  this.subtitle,
-  this.disabled = false,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | badge | TBadgeConfig? | - | 展示在项目内容上的徽标配置；为空时不显示。 列表模式下以标题为锚点；宫格模式下以 `icon` 为锚点，因此宫格模式仅在 `icon` 非空时展示。默认位置由 ActionSheet 管理，`TBadgeConfig.alignment` 与 `TBadgeConfig.offset` 可逐项覆盖；完全自定义外观使用 `TBadgeConfig.custom`。 | 否 |
 | disabled | bool | false | 是否禁用 | 否 |
@@ -41,44 +23,22 @@ const TActionSheetItem({
 
 
 ### TActionSheet
-#### 简介
+
 动作面板命令式入口
-
-#### 声明
-
-```dart
-final class TActionSheet
-```
-
 
 #### 静态方法
 
 ##### TActionSheet.showGrid
 
-```dart
-static TPopupHandle showGrid<T>(
-  BuildContext context, {
-  required List<TActionSheetItem<T>> items,
-  TActionSheetGridLayout layout = const TActionSheetGridLayout.fixed(),
-  String? cancelText,
-  String? subtitle,
-  bool showCancel = true,
-  bool showOverlay = true,
-  bool closeOnOverlayClick = true,
-  bool useSafeArea = true,
-  double? itemHeight,
-  VoidCallback? onCancel,
-  VoidCallback? onClosed,
-  TActionSheetOnSelected<T>? onSelected,
-})
-```
+类型参数：`T`
+
+
+位置参数：`context`
 
 
 显示宫格动作面板
 
-返回类型：`TPopupHandle`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | context | BuildContext | - | 用于查找承载弹层的 Navigator。 | 是 |
 | items | List&lt;TActionSheetItem&lt;T&gt;&gt; | - | 宫格中的动作项目。 | 是 |
@@ -95,31 +55,24 @@ static TPopupHandle showGrid<T>(
 | onSelected | TActionSheetOnSelected&lt;T&gt;? | - | 点击动作时回调。 | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TPopupHandle | - | - | - |
+
+
 ##### TActionSheet.showGridSections
 
-```dart
-static TPopupHandle showGridSections<T>(
-  BuildContext context, {
-  required List<TActionSheetGridSection<T>> sections,
-  String? cancelText,
-  bool showCancel = true,
-  bool showOverlay = true,
-  bool closeOnOverlayClick = true,
-  bool useSafeArea = true,
-  double itemWidth = 80,
-  double? itemHeight,
-  VoidCallback? onCancel,
-  VoidCallback? onClosed,
-  TActionSheetOnSelected<T>? onSelected,
-})
-```
+类型参数：`T`
+
+
+位置参数：`context`
 
 
 显示带标题分组的横向滚动宫格动作面板。
 
-返回类型：`TPopupHandle`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | context | BuildContext | - | 用于查找承载弹层的 Navigator。 | 是 |
 | sections | List&lt;TActionSheetGridSection&lt;T&gt;&gt; | - | 带标题的分组列表，每组独立横向滚动。 | 是 |
@@ -135,31 +88,24 @@ static TPopupHandle showGridSections<T>(
 | onSelected | TActionSheetOnSelected&lt;T&gt;? | - | 点击项目时回传原始项目。 | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TPopupHandle | - | - | - |
+
+
 ##### TActionSheet.showList
 
-```dart
-static TPopupHandle showList<T>(
-  BuildContext context, {
-  required List<TActionSheetItem<T>> items,
-  TActionSheetAlign align = TActionSheetAlign.center,
-  String? cancelText,
-  String? subtitle,
-  bool showCancel = true,
-  bool showOverlay = true,
-  bool closeOnOverlayClick = true,
-  bool useSafeArea = true,
-  VoidCallback? onCancel,
-  VoidCallback? onClosed,
-  TActionSheetOnSelected<T>? onSelected,
-})
-```
+类型参数：`T`
+
+
+位置参数：`context`
 
 
 显示列表动作面板
 
-返回类型：`TPopupHandle`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | context | BuildContext | - | 用于查找承载弹层的 Navigator。 | 是 |
 | items | List&lt;TActionSheetItem&lt;T&gt;&gt; | - | 列表中的动作项目。 | 是 |
@@ -175,33 +121,22 @@ static TPopupHandle showList<T>(
 | onSelected | TActionSheetOnSelected&lt;T&gt;? | - | 点击动作时回调。 | 否 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TPopupHandle | - | - | - |
+
+
 ### TActionSheetThemeData
-#### 简介
+
 TActionSheet 组件级视觉 ThemeExtension
 
-#### 声明
+#### 构造方法
 
-```dart
-class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData>
-```
+##### TActionSheetThemeData
 
-#### 默认构造方法
-
-
-```dart
-const TActionSheetThemeData({
-  this.gridItemHeight,
-  this.barrierColor,
-  this.panelRadius,
-  this.iconSize,
-  this.gridIconExtent,
-  this.iconColor,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | barrierColor | Color? | - | 蒙层颜色 | 否 |
 | gridIconExtent | double? | - | 宫格布局的图标槽位尺寸；未设置时默认 40dp。 | 否 |
@@ -215,87 +150,72 @@ const TActionSheetThemeData({
 
 ##### TActionSheetThemeData.copyWith
 
-```dart
-TActionSheetThemeData copyWith({
-  double? gridItemHeight,
-  Color? barrierColor,
-  double? panelRadius,
-  double? iconSize,
-  double? gridIconExtent,
-  Color? iconColor,
-})
-```
-
-
-返回类型：`TActionSheetThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| gridItemHeight | double? | - | 宫格项目高度 | 否 |
-| barrierColor | Color? | - | 蒙层颜色 | 否 |
-| panelRadius | double? | - | 面板圆角 | 否 |
-| iconSize | double? | - | 默认图标字形尺寸；同时作为列表图标槽位尺寸。 | 否 |
-| gridIconExtent | double? | - | 宫格布局的图标槽位尺寸；未设置时默认 40dp。 | 否 |
-| iconColor | Color? | - | 默认图标颜色。 | 否 |
+| gridItemHeight | double? | - | 字段含义：宫格项目高度 调用时的空值行为见方法说明。 | 否 |
+| barrierColor | Color? | - | 字段含义：蒙层颜色 调用时的空值行为见方法说明。 | 否 |
+| panelRadius | double? | - | 字段含义：面板圆角 调用时的空值行为见方法说明。 | 否 |
+| iconSize | double? | - | 字段含义：默认图标字形尺寸；同时作为列表图标槽位尺寸。 调用时的空值行为见方法说明。 | 否 |
+| gridIconExtent | double? | - | 字段含义：宫格布局的图标槽位尺寸；未设置时默认 40dp。 调用时的空值行为见方法说明。 | 否 |
+| iconColor | Color? | - | 字段含义：默认图标颜色。 调用时的空值行为见方法说明。 | 否 |
+
+
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TActionSheetThemeData | - | - | - |
 
 
 ##### TActionSheetThemeData.lerp
 
-```dart
-TActionSheetThemeData lerp(
-  ThemeExtension<TActionSheetThemeData>? other,
-  double t,
-)
-```
+位置参数：`other, t`
 
 
-返回类型：`TActionSheetThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TActionSheetThemeData&gt;? | - | - | 是 |
 | t | double | - | - | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TActionSheetThemeData | - | - | - |
+
+
 ##### TActionSheetThemeData.merge
 
-```dart
-TActionSheetThemeData merge(TActionSheetThemeData? other)
-```
+位置参数：`other`
 
 
-返回类型：`TActionSheetThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | other | TActionSheetThemeData? | - | - | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TActionSheetThemeData | - | - | - |
+
+
 ### TActionSheetGridLayout
-#### 简介
+
 动作面板宫格布局
+
 使用 `TActionSheetGridLayout.fixed`、`TActionSheetGridLayout.paged` 或
 `TActionSheetGridLayout.scroll` 创建互斥的布局配置。
 
-#### 声明
-
-```dart
-sealed class TActionSheetGridLayout
-```
-
-
-#### 工厂构造方法
+#### 构造方法
 
 ##### TActionSheetGridLayout.fixed
 
-```dart
-const factory TActionSheetGridLayout.fixed({int count, int rows})
-```
-
-
 普通固定宫格
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | count | int | - | 一个可视面板期望容纳的项目数 | 否 |
 | rows | int | - | 行数 | 否 |
@@ -303,14 +223,9 @@ const factory TActionSheetGridLayout.fixed({int count, int rows})
 
 ##### TActionSheetGridLayout.paged
 
-```dart
-const factory TActionSheetGridLayout.paged({int count, int rows})
-```
-
-
 整页切换并显示分页指示器的宫格
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | count | int | - | 一个可视面板期望容纳的项目数 | 否 |
 | rows | int | - | 行数 | 否 |
@@ -318,91 +233,88 @@ const factory TActionSheetGridLayout.paged({int count, int rows})
 
 ##### TActionSheetGridLayout.scroll
 
-```dart
-const factory TActionSheetGridLayout.scroll({
-  int count,
-  int rows,
-  double? itemMinWidth,
-})
-```
-
-
 可连续横向滚动的宫格
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | count | int | - | 一个可视面板期望容纳的项目数 | 否 |
 | rows | int | - | 行数 | 否 |
 | itemMinWidth | double? | - | 横向滚动项目的最小宽度；仅滚动布局可能返回非空值。 | 否 |
 
-#### 公开属性（字段与访问器）
 
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| count | int | - | 一个可视面板期望容纳的项目数 |
-| itemMinWidth | double? | - | 横向滚动项目的最小宽度；仅滚动布局可能返回非空值。 |
-| mode | TActionSheetGridMode | - | 布局模式 |
-| rows | int | - | 行数 |
+#### 属性
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| count | int | - | 一个可视面板期望容纳的项目数 | - |
+| itemMinWidth | double? | - | 横向滚动项目的最小宽度；仅滚动布局可能返回非空值。 | - |
+| mode | TActionSheetGridMode | - | 布局模式 | - |
+| rows | int | - | 行数 | - |
 
 
 ### TActionSheetGridSection
-#### 简介
+
+类型参数：`T`
+
+
 横向滚动宫格中的一个带标题分组。
+
 通过 `TActionSheet.showGridSections` 展示。每个分组独立横向滚动，
 `title` 显示在该组项目上方；`items` 为空时仍保留标题。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TActionSheetGridSection<T>
-```
+##### TActionSheetGridSection
 
-#### 默认构造方法
-
-
-```dart
-const TActionSheetGridSection({required this.title, required this.items})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | items | List&lt;TActionSheetItem&lt;T&gt;&gt; | - | 该分组中的宫格项目。 | 是 |
 | title | String | - | 分组标题。 | 是 |
 
 
 ### TActionSheetAlign
-#### 简介
+
 动作面板列表内容的物理对齐方式，不随文字方向交换左右。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| center | 居中对齐 |
-| left | 左对齐 |
-| right | 右对齐 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| center | TActionSheetAlign | - | 居中对齐 | - |
+| left | TActionSheetAlign | - | 左对齐 | - |
+| right | TActionSheetAlign | - | 右对齐 | - |
 
 
 ### TActionSheetGridMode
-#### 简介
+
 宫格布局模式
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| fixed | 固定宫格 |
-| paged | 分页宫格 |
-| scroll | 横向滚动宫格 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| fixed | TActionSheetGridMode | - | 固定宫格 | - |
+| paged | TActionSheetGridMode | - | 分页宫格 | - |
+| scroll | TActionSheetGridMode | - | 横向滚动宫格 | - |
 
 
 ### TActionSheetOnSelected
-#### 简介
-选择动作面板项目时触发
-#### 类型定义
 
-```dart
-typedef TActionSheetOnSelected<T> = void Function(TActionSheetItem<T> item);
-```
+类型参数：`T`
+
+
+选择动作面板项目时触发
+
+位置参数：`item`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| item | TActionSheetItem&lt;T&gt; | - | - | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | void | - | - | - |

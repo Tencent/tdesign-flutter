@@ -1,48 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TImage
 
-#### 声明
+#### 构造方法
 
-```dart
-class TImage extends StatelessWidget
-```
+##### TImage
 
-#### 默认构造方法
-
-
-```dart
-const TImage({
-  super.key,
-  this.src,
-  this.imageFile,
-  this.shape = TImageShape.square,
-  this.errorWidget,
-  this.loadingWidget,
-  this.width,
-  this.height,
-  this.fit = BoxFit.fill,
-  this.frameBuilder,
-  this.loadingBuilder,
-  this.errorBuilder,
-  this.onLoad,
-  this.onError,
-  this.semanticLabel,
-  this.excludeFromSemantics = false,
-  this.cacheWidth,
-  this.cacheHeight,
-  this.filterQuality = FilterQuality.low,
-  this.alignment = Alignment.center,
-  this.repeat = ImageRepeat.noRepeat,
-  this.onTap,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | alignment | AlignmentGeometry | Alignment.center | 图片对齐方式。 | 否 |
 | cacheHeight | int? | - | 解码缓存高度。 | 否 |
@@ -71,9 +35,8 @@ const TImage({
 ### TImageShape
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| square | 方形。 |
-| roundedSquare | 圆角方形。 |
-| circle | 圆形。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| square | TImageShape | - | 方形。 | - |
+| roundedSquare | TImageShape | - | 圆角方形。 | - |
+| circle | TImageShape | - | 圆形。 | - |

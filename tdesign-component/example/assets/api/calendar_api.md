@@ -1,40 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TCalendar
 
-#### 声明
+#### 构造方法
 
-```dart
-class TCalendar extends StatefulWidget
-```
+##### TCalendar
 
-#### 默认构造方法
-
-
-```dart
-TCalendar({
-  super.key,
-  required this.value,
-  this.firstDayOfWeek = TCalendarFirstDayOfWeek.sunday,
-  DateTime? minDate,
-  DateTime? maxDate,
-  this.variant = TCalendarVariant.single,
-  this.onChanged,
-  this.onMonthChanged,
-  TCalendarMonthTitleBuilder? monthTitleBuilder,
-  this.weekdayNames,
-  this.cellBuilder,
-  this.subtitleBuilder,
-  this.animateTo = false,
-  this.anchorDate,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | anchorDate | DateTime? | - | 滚动锚点日期。 | 否 |
 | animateTo | bool | false | 锚点滚动是否使用动画。 | 否 |
@@ -54,54 +26,11 @@ TCalendar({
 
 ### TCalendarStyle
 
-#### 声明
+#### 构造方法
 
-```dart
-class TCalendarStyle
-```
+##### TCalendarStyle
 
-
-#### 静态方法
-
-##### TCalendarStyle.generateStyle
-
-```dart
-static TCalendarStyle generateStyle({BuildContext? context})
-```
-
-
-生成默认样式
-
-返回类型：`TCalendarStyle`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
-| --- | --- | --- | --- | --- |
-| context | BuildContext? | - | - | 否 |
-
-#### 默认构造方法
-
-
-```dart
-const TCalendarStyle({
-  this.decoration,
-  this.weekdayStyle,
-  this.monthTitleStyle,
-  this.dayStyle,
-  this.todayDayStyle,
-  this.cellDecoration,
-  this.subtitleStyle,
-  this.cellHeight = 60,
-  this.monthTitleHeight = 22,
-  this.verticalGap,
-  this.bodyPadding,
-  this.weekdayGap,
-  this.centreColor,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | bodyPadding | double? | - | 内边距 | 否 |
 | cellDecoration | BoxDecoration? | - | 日期单元格装饰（选中状态） | 否 |
@@ -117,54 +46,61 @@ const TCalendarStyle({
 | weekdayGap | double? | - | 星期之间的水平间距 | 否 |
 | weekdayStyle | TextStyle? | - | 星期文字样式 | 否 |
 
-#### 公开属性（字段与访问器）
 
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| weekdayHeight | double | - | 星期标题高度 |
+#### 属性
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| weekdayHeight | double | - | 星期标题高度 | - |
+
+
+#### 静态方法
+
+##### TCalendarStyle.generateStyle
+
+生成默认样式
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext? | - | - | 否 |
+
+
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TCalendarStyle | - | - | - |
 
 
 #### 实例方法
 
 ##### TCalendarStyle.forSelectType
 
-```dart
-TCalendarStyle forSelectType(BuildContext context, DateSelectType? type)
-```
+位置参数：`context, type`
 
 
 按选中态生成单元格样式
 
-返回类型：`TCalendarStyle`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | context | BuildContext | - | - | 是 |
 | type | DateSelectType? | - | - | 是 |
 
 
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | TCalendarStyle | - | - | - |
+
+
 ### TCalendarCellModel
 
-#### 声明
+#### 构造方法
 
-```dart
-class TCalendarCellModel
-```
+##### TCalendarCellModel
 
-#### 默认构造方法
-
-
-```dart
-const TCalendarCellModel({
-  required this.date,
-  required this.selectType,
-  required this.isLastDayOfMonth,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | date | DateTime | - | 当前日期。 | 是 |
 | isLastDayOfMonth | bool | - | 是否为当月最后一天。 | 是 |
@@ -173,49 +109,71 @@ const TCalendarCellModel({
 
 ### TCalendarSubtitleContext
 
-#### 声明
+#### 构造方法
 
-```dart
-class TCalendarSubtitleContext
-```
+##### TCalendarSubtitleContext
 
-#### 默认构造方法
-
-
-```dart
-const TCalendarSubtitleContext({
-  required this.date,
-  required this.selectType,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | date | DateTime | - | 当前格子的阳历日期（仅年月日，无时分秒）。 | 是 |
 | selectType | DateSelectType | - | 当前格的选中/区间/禁用等展示状态，便于按态设置副标题样式。 | 是 |
 
 
 ### TCalendarSubtitleBuilder
-#### 类型定义
 
-```dart
-typedef TCalendarSubtitleBuilder = Widget? Function(BuildContext context, TCalendarSubtitleContext subtitleContext);
-```
+位置参数：`context, subtitleContext`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | - | 是 |
+| subtitleContext | TCalendarSubtitleContext | - | - | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget? | - | - | - |
 
 
 ### TCalendarCellBuilder
-#### 类型定义
 
-```dart
-typedef TCalendarCellBuilder = Widget? Function(BuildContext context, TCalendarCellModel cell);
-```
+位置参数：`context, cell`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | - | 是 |
+| cell | TCalendarCellModel | - | - | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget? | - | - | - |
 
 
 ### TCalendarMonthTitleBuilder
-#### 类型定义
 
-```dart
-typedef TCalendarMonthTitleBuilder = Widget Function(BuildContext context, DateTime monthDate);
-```
+位置参数：`context, monthDate`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | - | 是 |
+| monthDate | DateTime | - | - | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | - | - |

@@ -1,38 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TNavBar
 
-#### 声明
+#### 构造方法
 
-```dart
-class TNavBar extends StatelessWidget implements PreferredSizeWidget
-```
+##### TNavBar
 
-#### 默认构造方法
-
-
-```dart
-const TNavBar({
-  Key? key,
-  this.title,
-  this.leading,
-  this.actions,
-  this.centerTitle = true,
-  this.useDefaultBack = false,
-  this.onBack,
-  this.belowTitleWidget,
-  this.flexibleSpace,
-  this.height = 48,
-  this.useBorderStyle = false,
-  this.useSafeArea = false,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | actions | List&lt;TNavBarItem&gt;? | - | 右侧操作项（对齐 AppBar.actions） | 否 |
 | belowTitleWidget | Widget? | - | NavBar 标题区域下方的 Widget。 该内容位于 `height` 所定义的内容高度内；内容较高时，调用方需要同步增大 `height`，避免挤压标题栏。 | 否 |
@@ -50,29 +24,11 @@ const TNavBar({
 
 ### TNavBarItem
 
-#### 声明
+#### 构造方法
 
-```dart
-class TNavBarItem
-```
+##### TNavBarItem
 
-#### 默认构造方法
-
-
-```dart
-const TNavBarItem({
-  this.icon,
-  this.iconColor,
-  this.onTap,
-  this.iconSize = 24.0,
-  this.padding,
-  this.customWidget,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | customWidget | Widget? | - | 自定义组件，优先级高于 icon，可以是任意 Widget | 否 |
 | icon | IconData? | - | 图标 | 否 |

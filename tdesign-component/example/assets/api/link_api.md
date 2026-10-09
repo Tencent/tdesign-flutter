@@ -1,36 +1,12 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TLink
 
-#### 声明
+#### 构造方法
 
-```dart
-class TLink extends StatelessWidget
-```
+##### TLink
 
-#### 默认构造方法
-
-
-```dart
-const TLink({
-  super.key,
-  this.child,
-  this.prefixIcon,
-  this.suffixIcon,
-  this.underline,
-  this.colorPreset,
-  this.size,
-  this.onPressed,
-  this.semanticLabel,
-  this.tooltip,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | child | Widget? | - | 链接内容，通常为 `Text`。 | 否 |
 | colorPreset | TLinkColorPreset? | - | 内置配色预设；未设置时默认为 `TLinkColorPreset.defaultTheme`。 | 否 |
@@ -47,11 +23,10 @@ const TLink({
 ### TLinkColorPreset
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| primary | 品牌主色链接。 |
-| defaultTheme | 默认文本色链接。 |
-| danger | 危险操作链接。 |
-| warning | 警告提示链接。 |
-| success | 成功状态链接。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| primary | TLinkColorPreset | - | 品牌主色链接。 | - |
+| defaultTheme | TLinkColorPreset | - | 默认文本色链接。 | - |
+| danger | TLinkColorPreset | - | 危险操作链接。 | - |
+| warning | TLinkColorPreset | - | 警告提示链接。 | - |
+| success | TLinkColorPreset | - | 成功状态链接。 | - |

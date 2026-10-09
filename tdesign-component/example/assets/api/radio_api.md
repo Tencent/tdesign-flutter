@@ -1,41 +1,19 @@
 ## API
 
-默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
-
 ### TRadio
-#### 简介
+
+类型参数：`T`
+
+
 由最近的 `TRadioGroup` 控制选中状态的单选框。
+
 必须作为同类型 `TRadioGroup` 的后代使用：
 
-#### 声明
+#### 构造方法
 
-```dart
-class TRadio<T> extends StatelessWidget
-```
+##### TRadio
 
-#### 默认构造方法
-
-
-```dart
-const TRadio({
-  super.key,
-  required this.value,
-  this.title,
-  this.subTitle,
-  this.size = TRadioSize.medium,
-  this.iconType = TRadioIconType.fill,
-  this.variant = TRadioVariant.block,
-  this.disabled = false,
-  this.contentDirection = TContentDirection.right,
-  this.titleMaxLines = 3,
-  this.subTitleMaxLines = 5,
-  this.customIconBuilder,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向。 | 否 |
 | customIconBuilder | TRadioIconBuilder? | - | 自定义单选框指示器。 | 否 |
@@ -52,44 +30,32 @@ const TRadio({
 
 
 ### TRadioGroup
-#### 简介
+
+类型参数：`T`
+
+
 严格受控的单选组。
+
 默认构造通过 `child` 接收调用方布局；标准数据列表使用
 `TRadioGroup.options`。组内的 `TRadio` 从该组件读取选中值和变更回调。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TRadioGroup<T> extends StatelessWidget
-```
+##### TRadioGroup
 
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| child | Widget | - | 包含 `TRadio` 的自定义布局。 | 是 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| onChanged | ValueChanged&lt;T&gt;? | - | 选中值变更回调；为 null 时整组禁用。 | 否 |
+| value | T? | - | 受控选中值。 | 是 |
 
-#### 命名构造方法
 
 ##### TRadioGroup.options
 
-```dart
-const TRadioGroup.options({
-  super.key,
-  required this.value,
-  required List<TRadioOption<T>> options,
-  this.onChanged,
-  Axis direction = Axis.vertical,
-  int columns = 1,
-  TRadioVariant variant = TRadioVariant.block,
-  bool? showDivider,
-  TContentDirection contentDirection = TContentDirection.right,
-  TRadioSize size = TRadioSize.medium,
-  TRadioIconType iconType = TRadioIconType.fill,
-  int titleMaxLines = 3,
-  int subTitleMaxLines = 5,
-})
-```
-
-
 使用数据项生成标准布局的单选框组。
 
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | value | T? | - | 受控选中值。 | 是 |
@@ -105,53 +71,19 @@ const TRadioGroup.options({
 | titleMaxLines | int | 3 | 主标题最大行数，默认 3 行。 | 否 |
 | subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 | 否 |
 
-#### 默认构造方法
-
-
-```dart
-const TRadioGroup({
-  super.key,
-  required this.value,
-  this.onChanged,
-  required this.child,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
-| --- | --- | --- | --- | --- |
-| child | Widget | - | 包含 `TRadio` 的自定义布局。 | 是 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| onChanged | ValueChanged&lt;T&gt;? | - | 选中值变更回调；为 null 时整组禁用。 | 否 |
-| value | T? | - | 受控选中值。 | 是 |
-
 
 ### TRadioOption
-#### 简介
+
+类型参数：`T`
+
+
 单选框组的数据项。
 
-#### 声明
+#### 构造方法
 
-```dart
-class TRadioOption<T>
-```
+##### TRadioOption
 
-#### 默认构造方法
-
-
-```dart
-const TRadioOption({
-  required this.value,
-  required this.label,
-  this.subTitle,
-  this.disabled = false,
-})
-```
-
-##### 参数
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | disabled | bool | false | 是否禁用该项。 | 否 |
 | label | String | - | 主文案。 | 是 |
@@ -160,49 +92,59 @@ const TRadioOption({
 
 
 ### TRadioSize
-#### 简介
+
 单选框指示器尺寸。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| small | 小尺寸。 |
-| medium | 中尺寸。 |
-| large | 大尺寸。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| small | TRadioSize | - | 小尺寸。 | - |
+| medium | TRadioSize | - | 中尺寸。 | - |
+| large | TRadioSize | - | 大尺寸。 | - |
 
 
 ### TRadioIconType
-#### 简介
+
 单选框内置指示器样式。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| dot | 圆环内显示实心圆点。 |
-| check | 选中时显示勾选标记。 |
-| fill | 选中时显示带反色勾选标记的实心圆。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| dot | TRadioIconType | - | 圆环内显示实心圆点。 | - |
+| check | TRadioIconType | - | 选中时显示勾选标记。 | - |
+| fill | TRadioIconType | - | 选中时显示带反色勾选标记的实心圆。 | - |
 
 
 ### TRadioVariant
-#### 简介
+
 单选框的完整视觉结构。
 #### 枚举值
 
-
-| 名称 | 说明 |
-| --- | --- |
-| inline | 行内结构，不绘制通栏背景、外围内边距或标准块高。 |
-| block | 通栏结构，使用标准块高、容器背景和外围内边距。 |
-| card | 卡片结构。 |
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| inline | TRadioVariant | - | 行内结构，不绘制通栏背景、外围内边距或标准块高。 | - |
+| block | TRadioVariant | - | 通栏结构，使用标准块高、容器背景和外围内边距。 | - |
+| card | TRadioVariant | - | 卡片结构。 | - |
 
 
 ### TRadioIconBuilder
-#### 简介
-自定义单选框指示器构建器。
-#### 类型定义
 
-```dart
-typedef TRadioIconBuilder = Widget Function(BuildContext context, bool selected, bool disabled);
-```
+自定义单选框指示器构建器。
+
+位置参数：`context, selected, disabled`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | - | 是 |
+| selected | bool | - | - | 是 |
+| disabled | bool | - | - | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | - | - |
