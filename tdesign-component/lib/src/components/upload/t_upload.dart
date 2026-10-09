@@ -651,29 +651,31 @@ class TUpload extends StatelessWidget {
   );
 
   Future<void> _pickFiles(BuildContext context) async {
+    late final List<TUploadFile> selected;
     try {
-      final selected = await (picker?.call() ?? _pickWithImagePicker());
-      if (!context.mounted || selected.isEmpty) {
-        return;
-      }
-      final limit = maxFiles;
-      if (limit != null && files.length + selected.length > limit) {
-        onValidationError?.call(TUploadValidationError.maxFiles);
-        return;
-      }
-      if (maxFileSize != null &&
-          selected.any(
-            (file) => file.size != null && file.size! > maxFileSize!,
-          )) {
-        onValidationError?.call(TUploadValidationError.fileSize);
-        return;
-      }
-      onChanged?.call(List.unmodifiable([...files, ...selected]));
+      selected = await (picker?.call() ?? _pickWithImagePicker());
     } catch (error) {
       if (context.mounted) {
         onError?.call(error);
       }
+      return;
     }
+    if (!context.mounted || selected.isEmpty) {
+      return;
+    }
+    final limit = maxFiles;
+    if (limit != null && files.length + selected.length > limit) {
+      onValidationError?.call(TUploadValidationError.maxFiles);
+      return;
+    }
+    if (maxFileSize != null &&
+        selected.any(
+          (file) => file.size != null && file.size! > maxFileSize!,
+        )) {
+      onValidationError?.call(TUploadValidationError.fileSize);
+      return;
+    }
+    onChanged?.call(List.unmodifiable([...files, ...selected]));
   }
 
   Future<List<TUploadFile>> _pickWithImagePicker() async {
