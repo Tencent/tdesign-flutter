@@ -5,10 +5,6 @@
 类型参数：`T`
 
 
-由最近的 `TRadioGroup` 控制选中状态的单选框。
-
-必须作为同类型 `TRadioGroup` 的后代使用：
-
 #### 构造方法
 
 ##### TRadio
@@ -25,7 +21,7 @@
 | subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 | 否 |
 | title | String? | - | 主标题文案。 | 否 |
 | titleMaxLines | int | 3 | 主标题最大行数，默认 3 行。 | 否 |
-| value | T | - | 当前选项值。 | 是 |
+| value | T | - | 当前选项值；必须作为同类型 `TRadioGroup` 的后代，选中状态由最近的组控制。 | 是 |
 | variant | TRadioVariant | TRadioVariant.block | 完整视觉结构，默认使用通栏结构。 | 否 |
 
 

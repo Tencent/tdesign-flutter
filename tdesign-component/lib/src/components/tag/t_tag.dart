@@ -10,8 +10,6 @@ import '../../theme/t_theme.dart';
 import 't_tag_theme_data.dart';
 import 't_tag_types.dart';
 
-/// 展示型标签组件，仅展示，内部不可更改自身状态
-/// 支持样式：方形/圆角/半圆/带关闭图标
 class TTag extends StatelessWidget {
   const TTag(
     this.text, {

@@ -2,8 +2,6 @@
 
 ### TImageViewer
 
-命令式图片预览工具。
-
 #### 静态方法
 
 ##### TImageViewer.show

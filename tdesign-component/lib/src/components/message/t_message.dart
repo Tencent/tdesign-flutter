@@ -53,12 +53,6 @@ final class _TMessageSlot {
 
 enum _TMessageDismissCause { programmatic, replaced, widget, unmounted }
 
-/// 顶部消息组件。
-///
-/// 直接构造即渲染消息，并应作为 [Stack] 的子组件使用。页面内的展示与隐藏由父级
-/// Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 [onDismissed] 中同步
-/// 移除父级状态。全局 Overlay 消息使用 [TMessage.show]，并通过返回的
-/// [TMessageHandle] 关闭。
 class TMessage extends StatefulWidget {
   static final Expando<_TMessageSlot> _defaultSlots = Expando<_TMessageSlot>(
     'TMessage.defaultSlots',
@@ -130,7 +124,7 @@ class TMessage extends StatefulWidget {
 
   /// 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发。
   ///
-  /// 每次展示最多触发一次。
+  /// 每次展示最多触发一次；直接构造的消息应放在 Stack 中，关闭后由父级移除组件。
   final VoidCallback? onDismissed;
 
   /// 在 Overlay 中显示消息并返回控制句柄。

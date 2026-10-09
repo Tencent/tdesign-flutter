@@ -18,7 +18,6 @@ import 't_image_viewer_theme_data.dart';
 typedef TImageViewerItemBuilder =
     Widget Function(BuildContext context, int index);
 
-/// 命令式图片预览工具。
 class TImageViewer {
   const TImageViewer._();
 

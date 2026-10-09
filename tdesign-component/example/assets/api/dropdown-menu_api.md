@@ -2,8 +2,6 @@
 
 ### TDropdownMenu
 
-用于页面内容排序、筛选的横向下拉筛选栏。
-
 #### 构造方法
 
 ##### TDropdownMenu

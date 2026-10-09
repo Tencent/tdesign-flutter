@@ -15,7 +15,6 @@ export 'sticky_header/sticky_header_widget.dart';
 export 't_indexes_anchor.dart';
 export 't_indexes_list.dart';
 
-/// 索引
 class TIndexes extends StatefulWidget {
   const TIndexes({
     Key? key,

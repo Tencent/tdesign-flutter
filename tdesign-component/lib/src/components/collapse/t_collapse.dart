@@ -14,7 +14,6 @@ import 't_collapse_theme_data.dart';
 import 't_collapse_types.dart';
 import 't_inset_divider.dart';
 
-/// 折叠面板列表组件，需配合 [TCollapsePanel] 使用
 class TCollapse<T extends Object> extends StatefulWidget {
   const TCollapse({
     required this.children,

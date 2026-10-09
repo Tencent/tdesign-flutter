@@ -2,8 +2,6 @@
 
 ### TThemeData
 
-主题数据
-
 #### 构造方法
 
 ##### TThemeData

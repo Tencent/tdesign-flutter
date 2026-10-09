@@ -20,9 +20,6 @@ enum TDrawerPlacement {
   right,
 }
 
-/// TDesign 抽屉内容组件，可放入 [Scaffold.drawer] 或 [Scaffold.endDrawer]。
-///
-/// 需要通过浮层展示时，使用 [showTDrawer]。
 class TDrawer extends StatelessWidget {
   const TDrawer({
     super.key,

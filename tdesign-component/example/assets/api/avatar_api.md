@@ -2,13 +2,6 @@
 
 ### TAvatar
 
-头像。
-
-`image` 负责图片内容，`child` 负责文字、图标等自定义内容。两者同时提供时，
-`child` 会作为图片加载失败前的背景内容。默认图标与文字前景色由
-`TAvatarThemeData.foregroundColor` 控制；特殊文字排版可在 `child` 中使用
-`Text(style: ...)`，组件不再额外提供文字样式入口。
-
 #### 构造方法
 
 ##### TAvatar

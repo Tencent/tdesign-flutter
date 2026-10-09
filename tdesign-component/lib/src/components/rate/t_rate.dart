@@ -22,7 +22,6 @@ import 't_rate_theme_data.dart';
 /// 指定选中状态的评分图标。
 typedef TRateIconBuilder = Widget Function(bool filled);
 
-/// 严格受控的评分组件。
 class TRate extends StatefulWidget {
   const TRate({
     super.key,

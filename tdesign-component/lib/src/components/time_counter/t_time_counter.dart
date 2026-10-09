@@ -62,7 +62,6 @@ String _toDigits(int n, int l) => n.toString().padLeft(l, '0');
 String _getMark(String format, RegExpMatch match) =>
     match.end < format.length ? format.substring(match.end, match.end + 1) : '';
 
-/// 通用计时器组件，支持正向计时与倒计时。
 class TTimeCounter extends StatefulWidget {
   const TTimeCounter({
     super.key,

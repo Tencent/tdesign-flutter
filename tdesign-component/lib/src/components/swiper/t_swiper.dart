@@ -131,7 +131,6 @@ class TSwiperController extends ChangeNotifier {
   }
 }
 
-/// Controller 驱动的轮播组件。
 class TSwiper extends StatefulWidget {
   const TSwiper({
     this.children,

@@ -263,7 +263,6 @@ class TDropdownMenuController extends ChangeNotifier {
   }
 }
 
-/// 用于页面内容排序、筛选的横向下拉筛选栏。
 class TDropdownMenu extends StatefulWidget {
   const TDropdownMenu({
     super.key,

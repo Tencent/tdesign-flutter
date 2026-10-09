@@ -29,7 +29,6 @@ enum TLoadingIcon {
   activity,
 }
 
-/// 展示局部或全屏加载状态的组件。
 class TLoading extends StatelessWidget {
   const TLoading({
     Key? key,

@@ -2,11 +2,6 @@
 
 ### TSideBar
 
-受控的侧边导航栏。
-
-`value` 由调用方持有；用户选择可用项时通过 `onChanged` 报告新的值。
-未提供 `onChanged` 时，整个侧边栏以禁用态展示。
-
 #### 构造方法
 
 ##### TSideBar

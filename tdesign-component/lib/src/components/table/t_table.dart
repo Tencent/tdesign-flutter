@@ -21,26 +21,6 @@ import 't_table_types.dart';
 /// 无返回值。
 typedef TTableRowTap<T> = void Function(int rowIndex, T row);
 
-/// 强类型、受控排序与选择的表格组件。
-///
-/// ```dart
-/// TTable<Map<String, Object>>(
-///   data: const [
-///     {'id': 1, 'name': 'Alice'},
-///     {'id': 2, 'name': 'Bob'},
-///   ],
-///   rowKey: (row) => row['id']!,
-///   columns: [
-///     TTableColumn(
-///       id: 'name',
-///       header: const Text('Name'),
-///       minWidth: 120,
-///       cellBuilder: (_, row, __) => Text(row['name']! as String),
-///     ),
-///   ],
-///   onCellTap: (cell) => debugPrint('${cell.columnIndex}: ${cell.row}'),
-/// )
-/// ```
 class TTable<T> extends StatefulWidget {
   const TTable({
     required this.columns,

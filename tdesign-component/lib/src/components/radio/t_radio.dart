@@ -83,17 +83,6 @@ class TRadioOption<T> {
   final bool disabled;
 }
 
-/// 由最近的 [TRadioGroup] 控制选中状态的单选框。
-///
-/// 必须作为同类型 [TRadioGroup] 的后代使用：
-///
-/// ```dart
-/// TRadioGroup<String>(
-///   value: value,
-///   onChanged: onChanged,
-///   child: const TRadio<String>(value: 'a', title: '选项 A'),
-/// )
-/// ```
 class TRadio<T> extends StatelessWidget {
   const TRadio({
     super.key,
@@ -110,7 +99,7 @@ class TRadio<T> extends StatelessWidget {
     this.customIconBuilder,
   });
 
-  /// 当前选项值。
+  /// 当前选项值；必须作为同类型 [TRadioGroup] 的后代，选中状态由最近的组控制。
   final T value;
 
   /// 主标题文案。

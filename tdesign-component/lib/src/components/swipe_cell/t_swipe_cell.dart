@@ -76,7 +76,6 @@ abstract interface class _TSwipeCellControllerBinding {
   Future<void> close();
 }
 
-/// 滑动单元格组件。
 class TSwipeCell extends StatefulWidget {
   const TSwipeCell({
     Key? key,

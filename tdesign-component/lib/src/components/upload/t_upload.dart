@@ -18,7 +18,6 @@ import 't_upload_types.dart';
 
 export 't_upload_types.dart';
 
-/// 严格受控的文件选择与上传状态展示组件。
 class TUpload extends StatelessWidget {
   const TUpload({
     super.key,

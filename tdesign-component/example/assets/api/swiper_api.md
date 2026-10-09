@@ -2,8 +2,6 @@
 
 ### TSwiper
 
-Controller 驱动的轮播组件。
-
 #### 构造方法
 
 ##### TSwiper

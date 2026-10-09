@@ -47,7 +47,6 @@ enum TProgressStatus {
   success,
 }
 
-/// 展示确定或不确定任务进度的组件。
 class TProgress extends StatelessWidget {
   /// 创建线性进度条。
   TProgress.linear({

@@ -2,10 +2,6 @@
 
 ### TTabsBar
 
-标签栏
-
-支持滚动、指示器自定义，以及 Line、Tag、Card 三种 TDesign 形态。
-
 #### 构造方法
 
 ##### TTabsBar

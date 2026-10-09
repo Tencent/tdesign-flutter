@@ -33,23 +33,6 @@ part 't_popup_inset.dart';
 part 't_popup_options.dart';
 part 't_popup_types.dart';
 
-/// 弹出层入口。
-///
-/// **示例**
-///
-/// ```dart
-/// final handle = TPopup.show(
-///   context,
-///   options: TPopupOptions.bottom(
-///     headerBuilder: (context, close) => TPopupHeader(
-///       title: const Text('标题'),
-///     ),
-///     child: MyPanel(),
-///   ),
-/// );
-/// handle.close();
-/// handle.open();
-/// ```
 final class TPopup {
   // 私有构造器：工具类仅暴露静态方法，无外部调用，标记为覆盖率例外（不可达死代码）。
   const TPopup._(); // coverage:ignore-line

@@ -5,9 +5,6 @@ import '../../theme/t_theme.dart';
 import 't_field_scope.dart';
 import 't_form_theme_data.dart';
 
-/// TDesign 表单容器。
-///
-/// 校验和字段生命周期委托给 Flutter [Form] 与 [FormState]。
 class TForm extends StatefulWidget {
   const TForm({
     super.key,

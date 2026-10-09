@@ -44,7 +44,6 @@ enum TCheckboxSize {
 typedef TCheckboxIconBuilder =
     Widget Function(BuildContext context, bool? value, bool disabled);
 
-/// 严格受控的复选框；[onChanged] 为 null 时禁用。
 class TCheckbox extends StatelessWidget {
   const TCheckbox({
     super.key,

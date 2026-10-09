@@ -2,8 +2,6 @@
 
 ### TSwipeCell
 
-滑动单元格组件。
-
 #### 构造方法
 
 ##### TSwipeCell

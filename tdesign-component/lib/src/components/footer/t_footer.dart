@@ -6,7 +6,6 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_footer_theme_data.dart';
 
-/// 页面底部的版权、链接和品牌信息区域。
 class TFooter extends StatelessWidget {
   const TFooter({Key? key, this.logo, this.text = '', this.links = const []})
     : super(key: key);

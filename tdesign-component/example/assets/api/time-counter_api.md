@@ -2,8 +2,6 @@
 
 ### TTimeCounter
 
-通用计时器组件，支持正向计时与倒计时。
-
 #### 构造方法
 
 ##### TTimeCounter

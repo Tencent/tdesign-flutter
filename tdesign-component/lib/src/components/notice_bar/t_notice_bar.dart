@@ -28,7 +28,6 @@ enum TNoticeBarTapTarget {
   suffix,
 }
 
-/// 公告栏
 class TNoticeBar extends StatefulWidget {
   const TNoticeBar({
     super.key,

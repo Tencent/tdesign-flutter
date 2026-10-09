@@ -475,7 +475,6 @@ void setTResourceBuilder(
 // L1: TThemeData（JSON Token）—— 保持不变
 // ============================================================
 
-/// 主题数据
 class TThemeData extends ThemeExtension<TThemeData> {
   static const String _defaultThemeName = 'default';
   static const String _defaultDartThemeName = 'defaultDark';

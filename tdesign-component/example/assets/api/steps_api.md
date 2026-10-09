@@ -2,8 +2,6 @@
 
 ### TSteps
 
-TDesign 步骤条。
-
 #### 构造方法
 
 ##### TSteps.display

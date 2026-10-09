@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../badge/t_badge.dart';
 import 't_action_sheet_theme_data.dart';
 
-/// 动作面板项目
 class TActionSheetItem<T> {
   const TActionSheetItem({
     required this.value,

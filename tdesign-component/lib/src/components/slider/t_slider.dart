@@ -123,7 +123,6 @@ Color _disabledThumbLabelColor(BuildContext context) {
       context.tTheme.textColorDisabled;
 }
 
-/// 基于 Material [Slider] 的严格受控单值滑块。
 class TSlider extends StatelessWidget {
   const TSlider({
     super.key,

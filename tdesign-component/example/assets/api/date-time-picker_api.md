@@ -2,11 +2,6 @@
 
 ### TDateTimePicker
 
-日期/时间滚轮选择器。
-
-纯滚轮组件，不包含工具栏、确认按钮或弹窗。
-`value` 与 `onChanged` 构成严格受控状态；`onChanged` 为 null 时禁用。
-
 #### 构造方法
 
 ##### TDateTimePicker

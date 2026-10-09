@@ -2,13 +2,6 @@
 
 ### TDialog
 
-通用居中模态对话框。
-
-title 与 content 至少提供一个；actionsWidget 与非空 actions 互斥。
-
-组件负责面板内容和操作区；使用 `show` 时，通过 Flutter 模态路由处理
-蒙层、动画和安全区。
-
 #### 构造方法
 
 ##### TDialog
@@ -20,11 +13,11 @@ title 与 content 至少提供一个；actionsWidget 与非空 actions 互斥。
 | actionsPadding | EdgeInsetsGeometry? | - | 操作区内边距。未设置时使用主题 token 默认值。 一到两个操作全部显式使用 `TButtonVariant.text` 时，默认仅保留 32dp 顶部间距，使文字按钮 Footer 横向贴边；显式设置后使用传入的内边距。 | 否 |
 | actionsWidget | Widget? | - | 完全自定义操作区。 使用后 `actions` 必须为空；仅在标准操作列表无法表达布局时使用。 | 否 |
 | closeButtonResult | Object? | - | 点击内置关闭按钮并成功关闭时的返回值，默认为 null。 类型应与 `show` 的泛型一致。可与 `TDialogAction.result` 和 `show` 的 `barrierResult` 配合，通过同一个 Future 区分关闭来源。 不影响系统返回或业务调用 Navigator.pop 的返回值。 | 否 |
-| content | Widget? | - | 内容槽位。 | 否 |
+| content | Widget? | - | 内容槽位；`title` 与 `content` 至少提供一个。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | semanticLabel | String? | - | 无障碍语义标签。 | 否 |
 | showCloseButton | bool | false | 是否显示右上角关闭按钮。 | 否 |
-| title | Widget? | - | 标题槽位。 | 否 |
+| title | Widget? | - | 标题槽位；`title` 与 `content` 至少提供一个。 | 否 |
 
 
 #### 静态方法

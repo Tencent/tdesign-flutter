@@ -215,9 +215,6 @@ class TTabBarItemConfig {
   final GestureLongPressCallback? onLongPress;
 }
 
-/// 底部标签栏
-///
-/// 支持文本、图文、图标与双层级内容，并将选项样式与容器外形作为独立配置。
 class TTabBar extends StatefulWidget {
   TTabBar({
     Key? key,

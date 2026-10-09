@@ -40,7 +40,6 @@ class TCascaderOption {
   final bool disabled;
 }
 
-/// 严格受控的级联选择器。
 class TCascader extends StatefulWidget {
   const TCascader({
     super.key,

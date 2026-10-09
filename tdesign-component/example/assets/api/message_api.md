@@ -2,13 +2,6 @@
 
 ### TMessage
 
-顶部消息组件。
-
-直接构造即渲染消息，并应作为 `Stack` 的子组件使用。页面内的展示与隐藏由父级
-Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 `onDismissed` 中同步
-移除父级状态。全局 Overlay 消息使用 `TMessage.show`，并通过返回的
-`TMessageHandle` 关闭。
-
 #### 构造方法
 
 ##### TMessage
@@ -26,7 +19,7 @@ Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 
 | marquee | TMessageMarquee? | - | 跑马灯配置 | 否 |
 | offset | Offset? | - | 期望的屏幕绝对坐标。 未显式传入时，消息保留 16 逻辑像素水平外间距；`useSafeArea` 为 true 时， 显式坐标也会被约束在含该外间距的系统安全可视区域内。 | 否 |
 | onCloseButtonPressed | VoidCallback? | - | 点击关闭按钮时触发 | 否 |
-| onDismissed | VoidCallback? | - | 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发。 每次展示最多触发一次。 | 否 |
+| onDismissed | VoidCallback? | - | 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发。 每次展示最多触发一次；直接构造的消息应放在 Stack 中，关闭后由父级移除组件。 | 否 |
 | onDurationEnd | VoidCallback? | - | 自动展示时长结束且关闭动画完成时触发 | 否 |
 | showCloseButton | bool | false | 是否显示关闭按钮 | 否 |
 | showIcon | bool | true | 是否显示前置图标 | 否 |

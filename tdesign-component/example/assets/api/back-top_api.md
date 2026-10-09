@@ -2,11 +2,6 @@
 
 ### TBackTop
 
-返回顶部组件。
-
-绑定 `controller` 后，滚动偏移达到 `visibilityOffset` 时显示；点击时先
-动画回到顶部，再触发可选的 `onPressed` 完成通知。
-
 #### 构造方法
 
 ##### TBackTop

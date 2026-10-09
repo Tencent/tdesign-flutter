@@ -1,0 +1,515 @@
+[
+  {
+    "component": "button",
+    "entry": "TButton",
+    "source": "lib/src/components/button/t_button.dart",
+    "removedIntroduction": "/// TD 常规按钮\n///\n/// `onPressed: null` 表示禁用；禁用时不会触发\n/// [onLongPress]。\n///\n/// 外观分别由以下选项控制：\n/// - [variant]：变体类型（fill / outline / text / ghost）\n/// - [colorPreset]：配色方案（defaultTheme / primary / danger / light）\n/// - [shape]：按钮结构形状；具体边框样式由 [style] 控制\n///\n/// **示例**：\n/// ```dart\n/// // 基本用法\n/// TButton(\n///   child: Text('填充按钮'),\n///   variant: TButtonVariant.fill,\n///   colorPreset: TButtonColorPreset.primary,\n///   onPressed: () {},\n/// )\n///\n/// // 图标按钮\n/// TButton(\n///   icon: Icon(TIcons.app),\n///   child: Text('按钮'),\n///   onPressed: () {},\n/// )\n///\n/// // 禁用\n/// TButton(\n///   child: Text('禁用'),\n///   onPressed: null,\n/// )\n///\n/// // 通栏（外包布局）\n/// SizedBox(\n///   width: double.infinity,\n///   child: TButton(child: Text('通栏'), onPressed: () {}),\n/// )\n/// ```\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "divider",
+    "entry": "TDivider",
+    "source": "lib/src/components/divider/t_divider.dart",
+    "removedIntroduction": "/// 分割线组件\n///\n/// 包含两种绘制模式：\n/// - 模式 A（纯线）：[child] 为空，横线可虚线、竖线强制实线\n/// - 模式 B（线 + 中间）：[layout] 为 horizontal 且 [child] 非空\n///\n/// 竖线（[TDividerLayout.vertical]）时强制忽略 [dashed]、[align]、[child]，\n/// 默认高度 14dp，左右外边距 16dp。\n///\n/// 示例：\n/// ```dart\n/// // 水平分割线\n/// TDivider()\n///\n/// // 带文字的水平分割线\n/// TDivider(child: Text('文字信息'))\n///\n/// // 虚线 + 文字靠左\n/// TDivider(dashed: true, align: TDividerAlign.left, child: Text('靠左'))\n///\n/// // 竖线\n/// TDivider(layout: TDividerLayout.vertical)\n/// ```\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "fab",
+    "entry": "TFab",
+    "source": "lib/src/components/fab/t_fab.dart",
+    "removedIntroduction": "/// 悬浮操作按钮组件\n///\n/// 支持右下角悬浮定位及可选拖拽、吸附与边界限制；未提供 child 时使用默认按钮\n/// 默认动作层使用 large / fill / primary 规格；纯图标为圆形，图文为胶囊形。\n/// 默认动作层不继承父级 `TButtonThemeData`；完整视觉定制请使用 [child]。\n/// [TFab] 返回 [Positioned]，应作为 [Stack] 的直接子组件使用。\n///\n/// 示例：\n/// ```dart\n/// // 纯图标悬浮按钮\n/// Stack(fit: StackFit.expand, children: [\n///   // 页面内容 ...\n///   const TFab(),\n/// ])\n///\n/// // 图标 + 文字\n/// TFab(\n///   text: '发布',\n/// )\n///\n/// // 可拖拽悬浮按钮\n/// TFab(\n///   draggable: TFabDragAxis.all,\n///   magnet: TFabMagnet.right,\n/// )\n/// ```\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "icon",
+    "entry": "TIcon",
+    "source": "lib/src/components/icon/t_icon.dart",
+    "removedIntroduction": "/// TIcon 图标组件\n///\n/// 提供 TDesign 默认尺寸和颜色，并支持 Flutter [Icon] 的常用配置。\n/// 图标数据由 `tdesign_flutter_icons` 资源包提供，通过 `TIcons.xxx` 常量引用。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "link",
+    "entry": "TLink",
+    "source": "lib/src/components/link/t_link.dart",
+    "removedIntroduction": "/// 文字超链接用于跳转一个新页面，如当前项目跳转、友情链接等。\n///\n/// 下划线、前置图标和后置图标可独立组合；路由行为由 [onPressed] 与 Flutter\n/// Navigator / Router 组合。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "text",
+    "entry": "TText",
+    "source": "lib/src/components/text/t_text.dart",
+    "removedIntroduction": "/// 使用 TDesign Token 的 Flutter [Text]，保留原生文字布局与语义能力。\n///\n/// 文字布局、字体 fallback、无障碍缩放和语义均由 Flutter 原生 Text 负责。\n/// 子树级默认文字样式通过 [TTextThemeData.textStyle] 配置；单实例完整样式通过 [style] 覆盖。\n/// 固定容器居中与图文 baseline 应由父布局表达。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "back-top",
+    "entry": "TBackTop",
+    "source": "lib/src/components/backtop/t_backtop.dart",
+    "removedIntroduction": "/// 返回顶部组件。\n///\n/// 绑定 [controller] 后，滚动偏移达到 [visibilityOffset] 时显示；点击时先\n/// 动画回到顶部，再触发可选的 [onPressed] 完成通知。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "drawer",
+    "entry": "TDrawer",
+    "source": "lib/src/components/drawer/t_drawer.dart",
+    "removedIntroduction": "/// TDesign 抽屉内容组件，可放入 [Scaffold.drawer] 或 [Scaffold.endDrawer]。\n///\n/// 需要通过浮层展示时，使用 [showTDrawer]。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "indexes",
+    "entry": "TIndexes",
+    "source": "lib/src/components/indexes/t_indexes.dart",
+    "removedIntroduction": "/// 索引\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "navbar",
+    "entry": "TNavBar",
+    "source": "lib/src/components/navbar/t_nav_bar.dart",
+    "removedIntroduction": "/// NavBar 组件\n///\n/// 展示页面标题、起始内容与操作项，可作为 Scaffold 的 appBar。\n/// 操作项 `onTap: null` 时禁用；标题颜色、背景与内边距通过\n/// [TNavBarThemeData] 配置。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "side-bar",
+    "entry": "TSideBar",
+    "source": "lib/src/components/sidebar/t_sidebar.dart",
+    "removedIntroduction": "/// 受控的侧边导航栏。\n///\n/// [value] 由调用方持有；用户选择可用项时通过 [onChanged] 报告新的值。\n/// 未提供 [onChanged] 时，整个侧边栏以禁用态展示。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "steps",
+    "entry": "TSteps",
+    "source": "lib/src/components/steps/t_steps.dart",
+    "removedIntroduction": "/// TDesign 步骤条。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "tab-bar",
+    "entry": "TTabBar",
+    "source": "lib/src/components/tabbar/t_tab_bar.dart",
+    "removedIntroduction": "/// 底部标签栏\n///\n/// 支持文本、图文、图标与双层级内容，并将选项样式与容器外形作为独立配置。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "tabs",
+    "entry": "TTabsBar",
+    "source": "lib/src/components/tabs/t_tab_bar.dart",
+    "removedIntroduction": "/// 标签栏\n///\n/// 支持滚动、指示器自定义，以及 Line、Tag、Card 三种 TDesign 形态。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "calendar",
+    "entry": "TCalendar",
+    "source": "lib/src/components/calendar/t_calendar.dart",
+    "removedIntroduction": "/// 严格受控的日历面板，不包含弹窗、工具栏或确认操作。\n///\n/// [value] 与 [onChanged] 构成受控选择状态；[onChanged] 为 null 时禁用。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "cascader",
+    "entry": "TCascader",
+    "source": "lib/src/components/cascader/t_cascader.dart",
+    "removedIntroduction": "/// 严格受控的级联选择器。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "checkbox",
+    "entry": "TCheckbox",
+    "source": "lib/src/components/checkbox/t_check_box.dart",
+    "removedIntroduction": "/// 严格受控的复选框；[onChanged] 为 null 时禁用。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "picker",
+    "entry": "TPicker",
+    "source": "lib/src/components/picker/t_picker.dart",
+    "removedIntroduction": "/// 严格受控的滚轮选择器。\n///\n/// 独立多列使用 [TPickerColumns]，层级联动使用 [TPickerLinked]。弹层和确认\n/// 操作由调用方组合，组件本身只负责滚轮选择。标准弹层使用 `TPickerPopup.show`。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "date-time-picker",
+    "entry": "TDateTimePicker",
+    "source": "lib/src/components/date_time_picker/t_date_time_picker.dart",
+    "removedIntroduction": "/// 日期/时间滚轮选择器。\n///\n/// 纯滚轮组件，不包含工具栏、确认按钮或弹窗。\n/// [value] 与 [onChanged] 构成严格受控状态；[onChanged] 为 null 时禁用。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "form",
+    "entry": "TForm",
+    "source": "lib/src/components/form/t_form.dart",
+    "removedIntroduction": "/// TDesign 表单容器。\n///\n/// 校验和字段生命周期委托给 Flutter [Form] 与 [FormState]。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "input",
+    "entry": "TInput",
+    "source": null,
+    "removedIntroduction": "",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "radio",
+    "entry": "TRadio",
+    "source": "lib/src/components/radio/t_radio.dart",
+    "removedIntroduction": "/// 由最近的 [TRadioGroup] 控制选中状态的单选框。\n///\n/// 必须作为同类型 [TRadioGroup] 的后代使用：\n///\n/// ```dart\n/// TRadioGroup<String>(\n///   value: value,\n///   onChanged: onChanged,\n///   child: const TRadio<String>(value: 'a', title: '选项 A'),\n/// )\n/// ```\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "rate",
+    "entry": "TRate",
+    "source": "lib/src/components/rate/t_rate.dart",
+    "removedIntroduction": "/// 严格受控的评分组件。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "search",
+    "entry": "TSearchBar",
+    "source": "lib/src/components/search/t_search_bar.dart",
+    "removedIntroduction": "/// 基于 Material [TextField] 的搜索输入框。\n///\n/// [controller] 是主控制路径；未传时组件创建内部 controller，并使用\n/// [initialValue] 初始化一次。搜索结果由调用方在组件外组合。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "slider",
+    "entry": "TSlider",
+    "source": "lib/src/components/slider/t_slider.dart",
+    "removedIntroduction": "/// 基于 Material [Slider] 的严格受控单值滑块。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "stepper",
+    "entry": "TStepper",
+    "source": "lib/src/components/stepper/t_stepper.dart",
+    "removedIntroduction": "/// TDesign 数值步进器。\n///\n/// 组件严格受控：[value] 是唯一数据源，按钮、输入提交及失焦只通过\n/// [onChanged] 请求变更，父组件需要以新 [value] 重建组件。若父组件不接受\n/// 新值，输入内容会恢复为当前 [value]。\n///\n/// [onChanged] 为 null 时加减按钮禁用，编辑器只读且不发出数值变更请求。样式优先级为实例\n/// [size]/[variant]、[TStepperThemeData]、Flutter 子树及全局 ThemeData，\n/// 最后回退 TDesign token。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "switch",
+    "entry": "TSwitch",
+    "source": "lib/src/components/switch/t_switch.dart",
+    "removedIntroduction": "/// 严格受控的开关组件。\n///\n/// [value] 由父级持有；[onChanged] 为 null 时禁用；[loading] 为 true 时\n/// 显示加载指示器并禁用交互。支持开关文字、图标与加载内容配置。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "textarea",
+    "entry": "TTextarea",
+    "source": "lib/src/components/textarea/t_textarea.dart",
+    "removedIntroduction": "/// TDesign 多行文本输入框。\n///\n/// 编辑能力复用 [TInput]；容器、内部标题、提示词和计数器遵循\n/// Textarea 的视觉契约。表单字段标签仍应由 `TFormItem` 提供，[label] 仅用于\n/// 独立 Textarea 自身的内部标题。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "tree-select",
+    "entry": "TTreeSelect",
+    "source": "lib/src/components/tree/t_tree_select.dart",
+    "removedIntroduction": "/// 严格受控的树形选择器。\n///\n/// [value] 中每一项都是从根到叶子的完整路径。单选模式最多保留一条路径，\n/// 多选模式可同时保留多条路径。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "upload",
+    "entry": "TUpload",
+    "source": "lib/src/components/upload/t_upload.dart",
+    "removedIntroduction": "/// 严格受控的文件选择与上传状态展示组件。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "avatar",
+    "entry": "TAvatar",
+    "source": "lib/src/components/avatar/t_avatar.dart",
+    "removedIntroduction": "/// 头像。\n///\n/// [image] 负责图片内容，[child] 负责文字、图标等自定义内容。两者同时提供时，\n/// [child] 会作为图片加载失败前的背景内容。默认图标与文字前景色由\n/// [TAvatarThemeData.foregroundColor] 控制；特殊文字排版可在 [child] 中使用\n/// `Text(style: ...)`，组件不再额外提供文字样式入口。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "badge",
+    "entry": "TBadge",
+    "source": "lib/src/components/badge/t_badge.dart",
+    "removedIntroduction": "/// 在内容边角或独立位置展示短文本、圆点或角标状态。\n///\n/// 默认使用 [TBadgeVariant.circle] 与 [TBadgeSize.medium]。当 [child] 非空时，\n/// 徽标叠加在 [child] 上；当 [child] 为空时，只渲染徽标本体。\n///\n/// TabBar、SideBar、ActionSheet 等内部拥有锚点的组合组件使用\n/// [TBadgeConfig]，调用方不应向这些组件传入一个待拆解的 [TBadge]。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "cell",
+    "entry": "TCell",
+    "source": "lib/src/components/cell/t_cell.dart",
+    "removedIntroduction": "/// 单元格组件。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "time-counter",
+    "entry": "TTimeCounter",
+    "source": "lib/src/components/time_counter/t_time_counter.dart",
+    "removedIntroduction": "/// 通用计时器组件，支持正向计时与倒计时。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "collapse",
+    "entry": "TCollapse",
+    "source": "lib/src/components/collapse/t_collapse.dart",
+    "removedIntroduction": "/// 折叠面板列表组件，需配合 [TCollapsePanel] 使用\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "empty",
+    "entry": "TEmpty",
+    "source": "lib/src/components/empty/t_empty.dart",
+    "removedIntroduction": "/// 用于空数据、网络异常和操作引导的空状态组件。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "footer",
+    "entry": "TFooter",
+    "source": "lib/src/components/footer/t_footer.dart",
+    "removedIntroduction": "/// 页面底部的版权、链接和品牌信息区域。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "image",
+    "entry": "TImage",
+    "source": "lib/src/components/image/t_image.dart",
+    "removedIntroduction": "/// 统一展示网络、asset 或本地文件图片。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "image-viewer",
+    "entry": "TImageViewer",
+    "source": "lib/src/components/image_viewer/t_image_viewer.dart",
+    "removedIntroduction": "/// 命令式图片预览工具。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "progress",
+    "entry": "TProgress",
+    "source": "lib/src/components/progress/t_progress.dart",
+    "removedIntroduction": "/// 展示确定或不确定任务进度的组件。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "result",
+    "entry": "TResult",
+    "source": "lib/src/components/result/t_result.dart",
+    "removedIntroduction": "/// 用于展示成功、警告、失败或默认结果状态的内容块。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "skeleton",
+    "entry": "TSkeleton",
+    "source": "lib/src/components/skeleton/t_skeleton.dart",
+    "removedIntroduction": "/// 在内容加载前展示页面结构的占位组件。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "swiper",
+    "entry": "TSwiper",
+    "source": "lib/src/components/swiper/t_swiper.dart",
+    "removedIntroduction": "/// Controller 驱动的轮播组件。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "table",
+    "entry": "TTable",
+    "source": "lib/src/components/table/t_table.dart",
+    "removedIntroduction": "/// 强类型、受控排序与选择的表格组件。\n///\n/// ```dart\n/// TTable<Map<String, Object>>(\n///   data: const [\n///     {'id': 1, 'name': 'Alice'},\n///     {'id': 2, 'name': 'Bob'},\n///   ],\n///   rowKey: (row) => row['id']!,\n///   columns: [\n///     TTableColumn(\n///       id: 'name',\n///       header: const Text('Name'),\n///       minWidth: 120,\n///       cellBuilder: (_, row, __) => Text(row['name']! as String),\n///     ),\n///   ],\n///   onCellTap: (cell) => debugPrint('${cell.columnIndex}: ${cell.row}'),\n/// )\n/// ```\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "tag",
+    "entry": "TTag",
+    "source": "lib/src/components/tag/t_tag.dart",
+    "removedIntroduction": "/// 展示型标签组件，仅展示，内部不可更改自身状态\n/// 支持样式：方形/圆角/半圆/带关闭图标\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "action-sheet",
+    "entry": "TActionSheetItem",
+    "source": "lib/src/components/action_sheet/t_action_sheet_item.dart",
+    "removedIntroduction": "/// 动作面板项目\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "dialog",
+    "entry": "TDialog",
+    "source": "lib/src/components/dialog/t_dialog.dart",
+    "removedIntroduction": "/// 通用居中模态对话框。\n///\n/// title 与 content 至少提供一个；actionsWidget 与非空 actions 互斥。\n///\n/// 组件负责面板内容和操作区；使用 [show] 时，通过 Flutter 模态路由处理\n/// 蒙层、动画和安全区。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "dropdown-menu",
+    "entry": "TDropdownMenu",
+    "source": "lib/src/components/dropdown_menu/t_dropdown_menu.dart",
+    "removedIntroduction": "/// 用于页面内容排序、筛选的横向下拉筛选栏。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "loading",
+    "entry": "TLoading",
+    "source": "lib/src/components/loading/t_loading.dart",
+    "removedIntroduction": "/// 展示局部或全屏加载状态的组件。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "message",
+    "entry": "TMessage",
+    "source": "lib/src/components/message/t_message.dart",
+    "removedIntroduction": "/// 顶部消息组件。\n///\n/// 直接构造即渲染消息，并应作为 [Stack] 的子组件使用。页面内的展示与隐藏由父级\n/// Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 [onDismissed] 中同步\n/// 移除父级状态。全局 Overlay 消息使用 [TMessage.show]，并通过返回的\n/// [TMessageHandle] 关闭。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "notice-bar",
+    "entry": "TNoticeBar",
+    "source": "lib/src/components/notice_bar/t_notice_bar.dart",
+    "removedIntroduction": "/// 公告栏\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "popover",
+    "entry": "TPopover",
+    "source": "lib/src/components/popover/t_popover.dart",
+    "removedIntroduction": "/// 气泡弹层\n///\n/// 可通过 [showPopover] 一次性弹出，或通过 [TPopoverAnchor] 建立可控制气泡，\n/// 支持 12 个方向定位和箭头。蒙层色与圆角由触发 [BuildContext] 最近的\n/// [TPopoverThemeData] 控制；单个气泡可包裹局部 Theme。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "popup",
+    "entry": "TPopup",
+    "source": "lib/src/components/popup/t_popup.dart",
+    "removedIntroduction": "/// 弹出层入口。\n///\n/// **示例**\n///\n/// ```dart\n/// final handle = TPopup.show(\n///   context,\n///   options: TPopupOptions.bottom(\n///     headerBuilder: (context, close) => TPopupHeader(\n///       title: const Text('标题'),\n///     ),\n///     child: MyPanel(),\n///   ),\n/// );\n/// handle.close();\n/// handle.open();\n/// ```\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "pull-down-refresh",
+    "entry": "TPullDownRefresh",
+    "source": "lib/src/components/refresh/t_pull_down_refresh.dart",
+    "removedIntroduction": "/// TDesign 下拉刷新组件。\n///\n/// 通过 [EasyRefresh] 提供下拉刷新能力：\n/// 下拉 → 松手 → 刷新 → 完成四态，支持触底加载、超时、\n/// 四态文案自定义与受控刷新。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "swipe-cell",
+    "entry": "TSwipeCell",
+    "source": "lib/src/components/swipe_cell/t_swipe_cell.dart",
+    "removedIntroduction": "/// 滑动单元格组件。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "toast",
+    "entry": "TToast",
+    "source": "lib/src/components/toast/t_toast.dart",
+    "removedIntroduction": "/// 轻提示组件\n///\n/// 支持文本、图标、加载中等样式。\n///\n/// 实例语义：\n/// - 未指定 `toastId` 时，所有匿名 Toast 共用同一个内部实例，\n///   后一次展示会替换前一次，避免重复点击叠加多个 Toast 导致半透明背景\n///   不断加深；\n/// - 指定不同 `toastId` 时，可多实例并存；\n/// - 指定相同 `toastId` 时，后一次替换前一次。\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  },
+  {
+    "component": "theme",
+    "entry": "TThemeData",
+    "source": "lib/src/theme/t_theme.dart",
+    "removedIntroduction": "/// 主题数据\n",
+    "declarationsPreserved": true,
+    "tableRowCountPreserved": true,
+    "directApiEntry": true
+  }
+]

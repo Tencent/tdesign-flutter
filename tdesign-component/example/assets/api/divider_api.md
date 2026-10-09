@@ -2,15 +2,6 @@
 
 ### TDivider
 
-分割线组件
-
-包含两种绘制模式：
-- 模式 A（纯线）：`child` 为空，横线可虚线、竖线强制实线
-- 模式 B（线 + 中间）：`layout` 为 horizontal 且 `child` 非空
-
-竖线（`TDividerLayout.vertical`）时强制忽略 `dashed`、`align`、`child`，
-默认高度 14dp，左右外边距 16dp。
-
 #### 构造方法
 
 ##### TDivider
@@ -21,7 +12,7 @@
 | child | Widget? | - | 中间子元素 纯文案用 `child: Text('……')` | 否 |
 | dashed | bool? | - | 是否为虚线，默认 false 仅 `TDividerLayout.horizontal` 生效 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| layout | TDividerLayout? | - | 横/竖分割线，默认 `TDividerLayout.horizontal` | 否 |
+| layout | TDividerLayout? | - | 横/竖分割线，默认 `TDividerLayout.horizontal`。 竖向强制实线并忽略 align、child，默认高度 14、左右外边距 16 逻辑像素。 | 否 |
 
 
 ### TDividerLayout

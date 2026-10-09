@@ -10,10 +10,6 @@ import '../text/t_text.dart';
 import '../text/t_text_styled.dart';
 import 't_backtop_theme_data.dart';
 
-/// 返回顶部组件。
-///
-/// 绑定 [controller] 后，滚动偏移达到 [visibilityOffset] 时显示；点击时先
-/// 动画回到顶部，再触发可选的 [onPressed] 完成通知。
 class TBackTop extends StatefulWidget {
   const TBackTop({
     Key? key,

@@ -2,8 +2,6 @@
 
 ### TCheckbox
 
-严格受控的复选框；`onChanged` 为 null 时禁用。
-
 #### 构造方法
 
 ##### TCheckbox

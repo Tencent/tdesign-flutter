@@ -2,11 +2,6 @@
 
 ### TIcon
 
-TIcon 图标组件
-
-提供 TDesign 默认尺寸和颜色，并支持 Flutter `Icon` 的常用配置。
-图标数据由 `tdesign_flutter_icons` 资源包提供，通过 `TIcons.xxx` 常量引用。
-
 #### 构造方法
 
 ##### TIcon

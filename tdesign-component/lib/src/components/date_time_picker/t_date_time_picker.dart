@@ -14,10 +14,6 @@ export 't_date_time_picker_enums.dart';
 export 't_date_time_picker_internal.dart' show DateTimePickerRenderLabel;
 export 't_date_time_picker_model.dart';
 
-/// 日期/时间滚轮选择器。
-///
-/// 纯滚轮组件，不包含工具栏、确认按钮或弹窗。
-/// [value] 与 [onChanged] 构成严格受控状态；[onChanged] 为 null 时禁用。
 class TDateTimePicker extends StatefulWidget {
   TDateTimePicker({
     super.key,

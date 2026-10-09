@@ -41,10 +41,6 @@ class TTreeSelectOption {
   final bool disabled;
 }
 
-/// 严格受控的树形选择器。
-///
-/// [value] 中每一项都是从根到叶子的完整路径。单选模式最多保留一条路径，
-/// 多选模式可同时保留多条路径。
 class TTreeSelect extends StatefulWidget {
   const TTreeSelect({
     super.key,

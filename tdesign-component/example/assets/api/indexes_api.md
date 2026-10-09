@@ -2,8 +2,6 @@
 
 ### TIndexes
 
-索引
-
 #### 构造方法
 
 ##### TIndexes

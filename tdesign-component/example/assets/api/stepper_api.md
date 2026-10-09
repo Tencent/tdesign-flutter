@@ -2,16 +2,6 @@
 
 ### TStepper
 
-TDesign 数值步进器。
-
-组件严格受控：`value` 是唯一数据源，按钮、输入提交及失焦只通过
-`onChanged` 请求变更，父组件需要以新 `value` 重建组件。若父组件不接受
-新值，输入内容会恢复为当前 `value`。
-
-`onChanged` 为 null 时加减按钮禁用，编辑器只读且不发出数值变更请求。样式优先级为实例
-`size`/`variant`、`TStepperThemeData`、Flutter 子树及全局 ThemeData，
-最后回退 TDesign token。
-
 #### 构造方法
 
 ##### TStepper

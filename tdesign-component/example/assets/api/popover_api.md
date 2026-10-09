@@ -2,12 +2,6 @@
 
 ### TPopover
 
-气泡弹层
-
-可通过 `showPopover` 一次性弹出，或通过 `TPopoverAnchor` 建立可控制气泡，
-支持 12 个方向定位和箭头。蒙层色与圆角由触发 `BuildContext` 最近的
-`TPopoverThemeData` 控制；单个气泡可包裹局部 Theme。
-
 #### 构造方法
 
 ##### TPopover

@@ -8,11 +8,6 @@ import '../../theme/basic.dart';
 import 't_text_resolve.dart';
 import 't_text_theme_data.dart';
 
-/// 使用 TDesign Token 的 Flutter [Text]，保留原生文字布局与语义能力。
-///
-/// 文字布局、字体 fallback、无障碍缩放和语义均由 Flutter 原生 Text 负责。
-/// 子树级默认文字样式通过 [TTextThemeData.textStyle] 配置；单实例完整样式通过 [style] 覆盖。
-/// 固定容器居中与图文 baseline 应由父布局表达。
 class TText extends StatelessWidget {
   const TText(
     String this.data, {

@@ -28,33 +28,11 @@ enum TDividerAlign {
   right,
 }
 
-/// 分割线组件
-///
-/// 包含两种绘制模式：
-/// - 模式 A（纯线）：[child] 为空，横线可虚线、竖线强制实线
-/// - 模式 B（线 + 中间）：[layout] 为 horizontal 且 [child] 非空
-///
-/// 竖线（[TDividerLayout.vertical]）时强制忽略 [dashed]、[align]、[child]，
-/// 默认高度 14dp，左右外边距 16dp。
-///
-/// 示例：
-/// ```dart
-/// // 水平分割线
-/// TDivider()
-///
-/// // 带文字的水平分割线
-/// TDivider(child: Text('文字信息'))
-///
-/// // 虚线 + 文字靠左
-/// TDivider(dashed: true, align: TDividerAlign.left, child: Text('靠左'))
-///
-/// // 竖线
-/// TDivider(layout: TDividerLayout.vertical)
-/// ```
 class TDivider extends StatelessWidget {
   const TDivider({super.key, this.layout, this.align, this.dashed, this.child});
 
-  /// 横/竖分割线，默认 [TDividerLayout.horizontal]
+  /// 横/竖分割线，默认 [TDividerLayout.horizontal]。
+  /// 竖向强制实线并忽略 align、child，默认高度 14、左右外边距 16 逻辑像素。
   final TDividerLayout? layout;
 
   /// 中间内容在线条中的位置，默认 [TDividerAlign.center]

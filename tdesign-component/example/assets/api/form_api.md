@@ -2,10 +2,6 @@
 
 ### TForm
 
-TDesign 表单容器。
-
-校验和字段生命周期委托给 Flutter `Form` 与 `FormState`。
-
 #### 构造方法
 
 ##### TForm

@@ -2,8 +2,6 @@
 
 ### TProgress
 
-展示确定或不确定任务进度的组件。
-
 #### 构造方法
 
 ##### TProgress.button

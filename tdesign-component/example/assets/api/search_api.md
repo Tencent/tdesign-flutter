@@ -2,11 +2,6 @@
 
 ### TSearchBar
 
-基于 Material `TextField` 的搜索输入框。
-
-`controller` 是主控制路径；未传时组件创建内部 controller，并使用
-`initialValue` 初始化一次。搜索结果由调用方在组件外组合。
-
 #### 构造方法
 
 ##### TSearchBar

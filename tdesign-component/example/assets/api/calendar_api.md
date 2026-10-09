@@ -2,10 +2,6 @@
 
 ### TCalendar
 
-严格受控的日历面板，不包含弹窗、工具栏或确认操作。
-
-`value` 与 `onChanged` 构成受控选择状态；`onChanged` 为 null 时禁用。
-
 #### 构造方法
 
 ##### TCalendar

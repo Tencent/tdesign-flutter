@@ -20,7 +20,6 @@ enum TCellAlign {
   bottom,
 }
 
-/// 单元格组件。
 class TCell extends StatefulWidget {
   const TCell({
     this.title,

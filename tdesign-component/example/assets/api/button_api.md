@@ -2,16 +2,6 @@
 
 ### TButton
 
-TD 常规按钮
-
-`onPressed: null` 表示禁用；禁用时不会触发
-`onLongPress`。
-
-外观分别由以下选项控制：
-- `variant`：变体类型（fill / outline / text / ghost）
-- `colorPreset`：配色方案（defaultTheme / primary / danger / light）
-- `shape`：按钮结构形状；具体边框样式由 `style` 控制
-
 #### 构造方法
 
 ##### TButton

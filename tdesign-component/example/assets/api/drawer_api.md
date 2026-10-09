@@ -2,10 +2,6 @@
 
 ### TDrawer
 
-TDesign 抽屉内容组件，可放入 `Scaffold.drawer` 或 `Scaffold.endDrawer`。
-
-需要通过浮层展示时，使用 `showTDrawer`。
-
 #### 构造方法
 
 ##### TDrawer

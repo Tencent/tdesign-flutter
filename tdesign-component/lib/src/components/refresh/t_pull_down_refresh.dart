@@ -13,11 +13,6 @@ import '../text/t_text.dart';
 import 't_pull_down_refresh_controller.dart';
 import 't_pull_down_refresh_texts.dart';
 
-/// TDesign 下拉刷新组件。
-///
-/// 通过 [EasyRefresh] 提供下拉刷新能力：
-/// 下拉 → 松手 → 刷新 → 完成四态，支持触底加载、超时、
-/// 四态文案自定义与受控刷新。
 class TPullDownRefresh extends StatefulWidget {
   /// 必填：滚动内容（对应官方默认 slot）。
   ///

@@ -7,7 +7,6 @@ import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
 import 't_empty_theme_data.dart';
 
-/// 用于空数据、网络异常和操作引导的空状态组件。
 class TEmpty extends StatelessWidget {
   const TEmpty({
     this.icon = TIcons.info_circle_filled,

@@ -69,7 +69,6 @@ enum TStepsStatus {
   error,
 }
 
-/// TDesign 步骤条。
 class TSteps extends StatelessWidget {
   /// 普通进度步骤条。
   ///

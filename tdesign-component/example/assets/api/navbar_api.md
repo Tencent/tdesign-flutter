@@ -2,12 +2,6 @@
 
 ### TNavBar
 
-NavBar 组件
-
-展示页面标题、起始内容与操作项，可作为 Scaffold 的 appBar。
-操作项 `onTap: null` 时禁用；标题颜色、背景与内边距通过
-`TNavBarThemeData` 配置。
-
 #### 构造方法
 
 ##### TNavBar

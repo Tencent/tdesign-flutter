@@ -14,10 +14,6 @@ const double _kIconGap = 5;
 const double _kActionGap = 15;
 const EdgeInsets _kContentPadding = EdgeInsets.symmetric(horizontal: 12);
 
-/// 基于 Material [TextField] 的搜索输入框。
-///
-/// [controller] 是主控制路径；未传时组件创建内部 controller，并使用
-/// [initialValue] 初始化一次。搜索结果由调用方在组件外组合。
 class TSearchBar extends StatefulWidget {
   const TSearchBar({
     super.key,

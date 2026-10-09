@@ -5,8 +5,6 @@
 类型参数：`T extends Object`
 
 
-折叠面板列表组件，需配合 `TCollapsePanel` 使用
-
 #### 构造方法
 
 ##### TCollapse

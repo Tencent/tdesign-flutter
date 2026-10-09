@@ -33,7 +33,6 @@ enum TSkeletonVariant {
   paragraph,
 }
 
-/// 在内容加载前展示页面结构的占位组件。
 class TSkeleton extends StatefulWidget {
   const TSkeleton({
     super.key,

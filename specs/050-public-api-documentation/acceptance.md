@@ -180,3 +180,7 @@ pnpm site
 ## 同步已合入的 Theme API
 
 当前基线与双 SDK 复验见 [synchronized-develop.md](synchronized-develop.md)。正式工具交付门禁仍保留。
+
+## 全组件直接 API 展示
+
+57 页已采用 Input 的直接 API 入口，完整证据见 [direct-api-presentation.md](direct-api-presentation.md) 和逐组件记录。正式工具门禁仍待完成。

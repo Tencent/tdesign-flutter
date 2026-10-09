@@ -103,12 +103,6 @@ class TDialogAction {
   final ButtonStyle? style;
 }
 
-/// 通用居中模态对话框。
-///
-/// title 与 content 至少提供一个；actionsWidget 与非空 actions 互斥。
-///
-/// 组件负责面板内容和操作区；使用 [show] 时，通过 Flutter 模态路由处理
-/// 蒙层、动画和安全区。
 class TDialog extends StatelessWidget {
   const TDialog({
     super.key,
@@ -135,10 +129,10 @@ class TDialog extends StatelessWidget {
          'actions and actionsWidget cannot be used together.',
        );
 
-  /// 标题槽位。
+  /// 标题槽位；[title] 与 [content] 至少提供一个。
   final Widget? title;
 
-  /// 内容槽位。
+  /// 内容槽位；[title] 与 [content] 至少提供一个。
   final Widget? content;
 
   /// 操作列表；一到两个操作横向排列，更多操作纵向排列。

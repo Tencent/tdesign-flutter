@@ -2,11 +2,6 @@
 
 ### TSwitch
 
-严格受控的开关组件。
-
-`value` 由父级持有；`onChanged` 为 null 时禁用；`loading` 为 true 时
-显示加载指示器并禁用交互。支持开关文字、图标与加载内容配置。
-
 #### 构造方法
 
 ##### TSwitch

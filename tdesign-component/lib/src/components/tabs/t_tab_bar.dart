@@ -17,9 +17,6 @@ enum TTabsBarSize {
   large,
 }
 
-/// 标签栏
-///
-/// 支持滚动、指示器自定义，以及 Line、Tag、Card 三种 TDesign 形态。
 class TTabsBar extends StatelessWidget {
   const TTabsBar({
     Key? key,

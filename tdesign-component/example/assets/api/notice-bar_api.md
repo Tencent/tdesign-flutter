@@ -2,8 +2,6 @@
 
 ### TNoticeBar
 
-公告栏
-
 #### 构造方法
 
 ##### TNoticeBar

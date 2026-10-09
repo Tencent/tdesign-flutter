@@ -95,6 +95,25 @@ void main() {
       final api = component['api'] as Map<String, dynamic>;
       final names = [...api['names'] as List, ...?api['functions'] as List?];
       expect(headings, unorderedEquals(names));
+      final entryIndex = nodes.indexWhere(
+        (node) =>
+            node is md.Element &&
+            node.tag == 'h3' &&
+            node.textContent == names.first,
+      );
+      expect(entryIndex, greaterThanOrEqualTo(0));
+      final preamble = nodes
+          .skip(entryIndex + 1)
+          .takeWhile((node) => node is! md.Element || node.tag != 'h4');
+      for (final node in preamble) {
+        expect(
+          node.textContent.trim().startsWith('类型参数：'),
+          isTrue,
+          reason:
+              '$slug must open directly with API tables, without a class introduction',
+        );
+      }
+
       var seenTheme = false;
       for (final name in headings) {
         final theme = themes[name];

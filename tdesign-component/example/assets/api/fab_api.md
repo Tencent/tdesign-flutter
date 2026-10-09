@@ -2,13 +2,6 @@
 
 ### TFab
 
-悬浮操作按钮组件
-
-支持右下角悬浮定位及可选拖拽、吸附与边界限制；未提供 child 时使用默认按钮
-默认动作层使用 large / fill / primary 规格；纯图标为圆形，图文为胶囊形。
-默认动作层不继承父级 `TButtonThemeData`；完整视觉定制请使用 `child`。
-`TFab` 返回 `Positioned`，应作为 `Stack` 的直接子组件使用。
-
 #### 构造方法
 
 ##### TFab
@@ -26,7 +19,7 @@
 | onPressed | VoidCallback? | - | 点击回调，null 时禁用 | 否 |
 | right | double? | - | 距父级 Stack 内容区右侧偏移（默认 16） | 否 |
 | semanticLabel | String? | - | 读屏标签 | 否 |
-| text | String | '' | 图标 + 文字形态；非空时内嵌 TButton 为 round 形状 | 否 |
+| text | String | '' | 应作为 `Stack` 的直接子组件使用；默认动作层使用 large / fill / primary， 纯图标为圆形，图文为胶囊形，且不继承父级 TButtonThemeData。 图标 + 文字形态；非空时内嵌 TButton 为 round 形状 | 否 |
 | tooltip | String? | - | 纯图标 Fab 的 tooltip 提示 | 否 |
 | useSafeArea | bool | true | 是否避让系统安全区。 默认为 true。固定定位的 `right`、`bottom` 从安全边界起算； 拖拽与吸附范围同时避让四侧安全区。 | 否 |
 | xBounds | TFabBounds? | - | 水平拖拽边界限制 | 否 |
