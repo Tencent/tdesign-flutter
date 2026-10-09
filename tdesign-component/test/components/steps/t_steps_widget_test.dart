@@ -34,8 +34,8 @@ void main() {
     });
 
     testWidgets('横向说明跟随自定义 bodySmall 行高 Token', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'steps-custom-line-height',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'steps-custom-line-height',
         fontMetricMap: {'lineHeightBodySmall': 24},
       );
       await tester.pumpWidget(

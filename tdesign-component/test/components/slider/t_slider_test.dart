@@ -130,8 +130,8 @@ void main() {
     testWidgets(
       'inactive track follows componentBorder, then TSliderThemeData',
       (tester) async {
-        final token = TThemeData.defaultData().copyWithTThemeData(
-          'custom-slider-border',
+        final token = TThemeData.defaultData().copyWith(
+          name: 'custom-slider-border',
           colorMap: {
             'componentBorder': Colors.purple,
             'bgColorComponent': Colors.green,
@@ -250,9 +250,9 @@ void main() {
     });
 
     testWidgets('track geometry follows custom spacing tokens', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'custom-slider-spacing',
-        marginMap: const {'spacer2': 18, 'spacer3': 28},
+      final token = TThemeData.defaultData().copyWith(
+        name: 'custom-slider-spacing',
+        spacerMap: const {'spacer2': 18, 'spacer3': 28},
       );
       await tester.pumpWidget(
         MaterialApp(

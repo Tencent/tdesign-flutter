@@ -54,26 +54,6 @@ static TThemeData? fromJson(
 | recoverDefault | bool | false | 是否恢复为默认主题数据 | 否 |
 | extraThemeData | TExtraThemeData? | - | 额外扩展的主题数据 | 否 |
 
-
-##### TThemeData.parseThemeData
-
-```dart
-static TThemeData parseThemeData(
-  String name,
-  dynamic themeConfig,
-  TExtraThemeData? extraThemeData,
-)
-```
-
-
-返回类型：`TThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
-| --- | --- | --- | --- | --- |
-| name | String | - | - | 是 |
-| themeConfig | dynamic | - | 已解析的主题 JSON 配置。 | 是 |
-| extraThemeData | TExtraThemeData? | - | - | 是 |
-
 #### 默认构造方法
 
 
@@ -122,7 +102,7 @@ TThemeData({
 ##### TThemeData.copyWith
 
 ```dart
-ThemeExtension<TThemeData> copyWith({
+TThemeData copyWith({
   String? name,
   Map<String, Color>? colorMap,
   Map<String, Font>? fontMap,
@@ -131,13 +111,16 @@ ThemeExtension<TThemeData> copyWith({
   Map<String, FontFamily>? fontFamilyMap,
   Map<String, List<BoxShadow>>? shadowMap,
   Map<String, BorderSide>? insetShadowMap,
-  Map<String, double>? marginMap,
+  Map<String, double>? spacerMap,
   TExtraThemeData? extraThemeData,
 })
 ```
 
 
-返回类型：`ThemeExtension<TThemeData>`
+复制 Token 主题并合并非空映射，返回具体的 `TThemeData`。
+未传入的映射值、名称和扩展数据保留。
+
+返回类型：`TThemeData`
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
@@ -149,141 +132,31 @@ ThemeExtension<TThemeData> copyWith({
 | fontFamilyMap | Map&lt;String, FontFamily&gt;? | - | 字体样式 | 否 |
 | shadowMap | Map&lt;String, List&lt;BoxShadow&gt;&gt;? | - | 阴影 | 否 |
 | insetShadowMap | Map&lt;String, BorderSide&gt;? | - | 小程序 blur=0 的内投影在 Flutter 中对应的内侧边线。 | 否 |
-| marginMap | Map&lt;String, double&gt;? | - | - | 否 |
+| spacerMap | Map&lt;String, double&gt;? | - | 间距 Token 的增量映射；非空值覆盖同名 Token，其他间距沿用当前配置。 | 否 |
 | extraThemeData | TExtraThemeData? | - | 额外定义的结构 | 否 |
-
-
-##### TThemeData.copyWithTThemeData
-
-```dart
-TThemeData copyWithTThemeData(
-  String name, {
-  Map<String, Color>? colorMap,
-  Map<String, Font>? fontMap,
-  Map<String, double>? fontMetricMap,
-  Map<String, double>? radiusMap,
-  Map<String, FontFamily>? fontFamilyMap,
-  Map<String, List<BoxShadow>>? shadowMap,
-  Map<String, BorderSide>? insetShadowMap,
-  Map<String, double>? marginMap,
-  TExtraThemeData? extraThemeData,
-})
-```
-
-
-从父类拷贝
-
-返回类型：`TThemeData`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
-| --- | --- | --- | --- | --- |
-| name | String | - | - | 是 |
-| colorMap | Map&lt;String, Color&gt;? | - | - | 否 |
-| fontMap | Map&lt;String, Font&gt;? | - | - | 否 |
-| fontMetricMap | Map&lt;String, double&gt;? | - | - | 否 |
-| radiusMap | Map&lt;String, double&gt;? | - | - | 否 |
-| fontFamilyMap | Map&lt;String, FontFamily&gt;? | - | - | 否 |
-| shadowMap | Map&lt;String, List&lt;BoxShadow&gt;&gt;? | - | - | 否 |
-| insetShadowMap | Map&lt;String, BorderSide&gt;? | - | - | 否 |
-| marginMap | Map&lt;String, double&gt;? | - | - | 否 |
-| extraThemeData | TExtraThemeData? | - | - | 否 |
 
 
 ##### TThemeData.lerp
 
 ```dart
-ThemeExtension<TThemeData> lerp(
-  ThemeExtension<TThemeData>? other,
-  double t,
-)
+TThemeData lerp(ThemeExtension<TThemeData>? other, double t)
 ```
 
 
-返回类型：`ThemeExtension<TThemeData>`
+在当前主题与目标主题间生成过渡配置。
+t 为 0 或 1 时返回对应端点；目标为空时返回当前主题。
+颜色、字号、行高、圆角、阴影和间距按有效 Token 值插值，
+单侧存在的 Token 保留；名称、字体族、业务扩展和明暗关联在 t=0.5 切换。
+相同且未显式覆盖的 Token 引用继续沿用，其他值保存在新的映射中。
+## 返回值
+两端之间的 Token 主题；端点返回原主题，中间值返回独立映射。
+
+返回类型：`TThemeData`
 
 | 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TThemeData&gt;? | - | - | 是 |
-| t | double | - | - | 是 |
-
-
-##### TThemeData.ofColor
-
-```dart
-Color? ofColor(String? key)
-```
-
-
-返回类型：`Color?`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
-| --- | --- | --- | --- | --- |
-| key | String? | - | - | 是 |
-
-
-##### TThemeData.ofCorner
-
-```dart
-double? ofCorner(String? key)
-```
-
-
-返回类型：`double?`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
-| --- | --- | --- | --- | --- |
-| key | String? | - | - | 是 |
-
-
-##### TThemeData.ofExtra
-
-```dart
-T? ofExtra<T extends TExtraThemeData>()
-```
-
-
-返回类型：`T?`
-
-##### TThemeData.ofFont
-
-```dart
-Font? ofFont(String? key)
-```
-
-
-返回类型：`Font?`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
-| --- | --- | --- | --- | --- |
-| key | String? | - | - | 是 |
-
-
-##### TThemeData.ofFontFamily
-
-```dart
-FontFamily? ofFontFamily(String? key)
-```
-
-
-返回类型：`FontFamily?`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
-| --- | --- | --- | --- | --- |
-| key | String? | - | - | 是 |
-
-
-##### TThemeData.ofShadow
-
-```dart
-List<BoxShadow>? ofShadow(String? key)
-```
-
-
-返回类型：`List<BoxShadow>?`
-
-| 参数 | 类型 | 默认值 | 说明 | 必填 |
-| --- | --- | --- | --- | --- |
-| key | String? | - | - | 是 |
+| other | ThemeExtension&lt;TThemeData&gt;? | - | 目标主题；为空或类型不匹配时返回当前主题。 | 是 |
+| t | double | - | 过渡进度；0 为当前主题，1 为目标主题，离散配置在 0.5 切换。 | 是 |
 
 
 ### DefaultMapFactory

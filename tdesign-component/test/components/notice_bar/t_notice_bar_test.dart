@@ -141,9 +141,9 @@ void main() {
     });
 
     testWidgets('prefix 与正文间距跟随 spacer8 Token', (tester) async {
-      final themeData = TThemeData.defaultData().copyWithTThemeData(
-        'notice-bar-spacing-test',
-        marginMap: const {'spacer': 13},
+      final themeData = TThemeData.defaultData().copyWith(
+        name: 'notice-bar-spacing-test',
+        spacerMap: const {'spacer': 13},
       );
       await tester.pumpWidget(
         wrapWithTheme(

@@ -200,8 +200,8 @@ void main() {
     });
 
     testWidgets('禁用未选跟随自定义组件描边色和禁用填充色', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'checkbox-disabled-color-token-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'checkbox-disabled-color-token-test',
         colorMap: const {
           'componentBorder': Colors.purple,
           'bgColorComponentDisabled': Colors.orange,
@@ -545,13 +545,13 @@ void main() {
     });
 
     testWidgets('块高、指示器和卡片高度均读取 TDesign token', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'checkbox-size-token-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'checkbox-size-token-test',
         fontMap: {
           'fontBodyLarge': Font(size: 17, lineHeight: 26),
           'fontBodyMedium': Font(size: 15, lineHeight: 23),
         },
-        marginMap: const {
+        spacerMap: const {
           'spacer': 9,
           'spacer2': 18,
           'spacer3': 27,

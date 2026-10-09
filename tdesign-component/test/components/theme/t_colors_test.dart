@@ -147,30 +147,23 @@ void main() {
 
     test('浅色背景和文字引用上游 Token，直接覆盖优先', () {
       final base = TThemeData.defaultData();
-      final customized =
-          base.copyWith(
-                colorMap: {
-                  'fontWhite1': Colors.green,
-                  'brandColor': Colors.orange,
-                },
-              )
-              as TThemeData;
+      final customized = base.copyWith(
+        colorMap: {'fontWhite1': Colors.green, 'brandColor': Colors.orange},
+      );
 
       expect(customized.bgColorContainer, Colors.green);
       expect(customized.textColorAnti, Colors.green);
       expect(customized.textColorBrand, Colors.orange);
       expect(customized.textColorLink, Colors.orange);
 
-      final direct =
-          customized.copyWith(
-                colorMap: {
-                  'bgColorContainer': Colors.red,
-                  'textColorAnti': Colors.blue,
-                  'textColorBrand': Colors.purple,
-                  'textColorLink': Colors.teal,
-                },
-              )
-              as TThemeData;
+      final direct = customized.copyWith(
+        colorMap: {
+          'bgColorContainer': Colors.red,
+          'textColorAnti': Colors.blue,
+          'textColorBrand': Colors.purple,
+          'textColorLink': Colors.teal,
+        },
+      );
       expect(direct.bgColorContainer, Colors.red);
       expect(direct.textColorAnti, Colors.blue);
       expect(direct.textColorBrand, Colors.purple);
@@ -179,30 +172,26 @@ void main() {
 
     test('暗色反色文字与品牌文字保持各自的引用链', () {
       final base = TThemeData.defaultData().dark!;
-      final customized =
-          base.copyWith(
-                colorMap: {
-                  'fontWhite1': Colors.green,
-                  'brandColor': Colors.orange,
-                  'primaryColor8': Colors.purple,
-                },
-              )
-              as TThemeData;
+      final customized = base.copyWith(
+        colorMap: {
+          'fontWhite1': Colors.green,
+          'brandColor': Colors.orange,
+          'primaryColor8': Colors.purple,
+        },
+      );
 
       expect(customized.textColorAnti, Colors.green);
       expect(customized.textColorBrand, Colors.purple);
       expect(customized.textColorLink, Colors.purple);
       expect(customized.bgColorContainer, base.grayColor13);
 
-      final direct =
-          customized.copyWith(
-                colorMap: {
-                  'textColorAnti': Colors.blue,
-                  'textColorBrand': Colors.red,
-                  'textColorLink': Colors.teal,
-                },
-              )
-              as TThemeData;
+      final direct = customized.copyWith(
+        colorMap: {
+          'textColorAnti': Colors.blue,
+          'textColorBrand': Colors.red,
+          'textColorLink': Colors.teal,
+        },
+      );
       expect(direct.textColorAnti, Colors.blue);
       expect(direct.textColorBrand, Colors.red);
       expect(direct.textColorLink, Colors.teal);
@@ -218,15 +207,13 @@ void main() {
       expect(dark.bgColorSecondaryComponentActive, dark.grayColor8);
       expect(dark.bgColorSpecialComponent, Colors.transparent);
 
-      final customized =
-          light.copyWith(
-                colorMap: {
-                  'bgColorSecondaryComponent': Colors.red,
-                  'bgColorSecondaryComponentActive': Colors.blue,
-                  'bgColorSpecialComponent': Colors.green,
-                },
-              )
-              as TThemeData;
+      final customized = light.copyWith(
+        colorMap: {
+          'bgColorSecondaryComponent': Colors.red,
+          'bgColorSecondaryComponentActive': Colors.blue,
+          'bgColorSpecialComponent': Colors.green,
+        },
+      );
       expect(customized.bgColorSecondaryComponent, Colors.red);
       expect(customized.bgColorSecondaryComponentActive, Colors.blue);
       expect(customized.bgColorSpecialComponent, Colors.green);

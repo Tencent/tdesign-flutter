@@ -525,36 +525,10 @@ class TThemeData extends ThemeExtension<TThemeData> {
     return _defaultThemeData!;
   }
 
-  /// 从父类拷贝
-  TThemeData copyWithTThemeData(
-    String name, {
-    Map<String, Color>? colorMap,
-    Map<String, Font>? fontMap,
-    Map<String, double>? fontMetricMap,
-    Map<String, double>? radiusMap,
-    Map<String, FontFamily>? fontFamilyMap,
-    Map<String, List<BoxShadow>>? shadowMap,
-    Map<String, BorderSide>? insetShadowMap,
-    Map<String, double>? marginMap,
-    TExtraThemeData? extraThemeData,
-  }) {
-    return copyWith(
-          name: name,
-          colorMap: colorMap,
-          fontMap: fontMap,
-          fontMetricMap: fontMetricMap,
-          radiusMap: radiusMap,
-          fontFamilyMap: fontFamilyMap,
-          shadowMap: shadowMap,
-          insetShadowMap: insetShadowMap,
-          marginMap: marginMap,
-          extraThemeData: extraThemeData,
-        )
-        as TThemeData;
-  }
-
+  /// 复制 Token 主题并合并非空映射，返回具体的 [TThemeData]。
+  /// 未传入的映射值、名称和扩展数据保留。
   @override
-  ThemeExtension<TThemeData> copyWith({
+  TThemeData copyWith({
     String? name,
     Map<String, Color>? colorMap,
     Map<String, Font>? fontMap,
@@ -563,12 +537,14 @@ class TThemeData extends ThemeExtension<TThemeData> {
     Map<String, FontFamily>? fontFamilyMap,
     Map<String, List<BoxShadow>>? shadowMap,
     Map<String, BorderSide>? insetShadowMap,
-    Map<String, double>? marginMap,
+
+    /// 间距 Token 的增量映射；非空值覆盖同名 Token，其他间距沿用当前配置。
+    Map<String, double>? spacerMap,
     TExtraThemeData? extraThemeData,
   }) {
     final copiedRefs = _copyMap<String>(refMap, null);
     return TThemeData(
-      name: name ?? 'default',
+      name: name ?? this.name,
       colorMap: _copyMap<Color>(this.colorMap, colorMap, copiedRefs),
       fontMap: _copyMap<Font>(this.fontMap, fontMap, copiedRefs),
       fontMetricMap: _copyMap<double>(
@@ -592,7 +568,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
         insetShadowMap,
         copiedRefs,
       ),
-      spacerMap: _copyMap<double>(spacerMap, marginMap, copiedRefs),
+      spacerMap: _copyMap<double>(this.spacerMap, spacerMap, copiedRefs),
       refMap: copiedRefs,
       extraThemeData: extraThemeData ?? this.extraThemeData,
     );
@@ -667,12 +643,16 @@ class TThemeData extends ThemeExtension<TThemeData> {
       /// 要求json配置必须正确
       final themeConfig = json.decode(themeJson);
       if (themeConfig.containsKey(name)) {
-        var theme = parseThemeData(name, themeConfig, extraThemeData);
+        var theme = _parseThemeData(name, themeConfig, extraThemeData);
         theme.light = theme;
         darkName ??= '${name}Dark';
         if (themeConfig[darkName] != null) {
           // 解析暗色模式
-          var darkTheme = parseThemeData(darkName, themeConfig, extraThemeData);
+          var darkTheme = _parseThemeData(
+            darkName,
+            themeConfig,
+            extraThemeData,
+          );
           darkTheme.light = theme;
           theme.dark = darkTheme;
           // 填充暗色模式缺失数据
@@ -697,7 +677,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
     }
   }
 
-  static TThemeData parseThemeData(
+  static TThemeData _parseThemeData(
     String name,
 
     /// 已解析的主题 JSON 配置。
@@ -792,52 +772,147 @@ class TThemeData extends ThemeExtension<TThemeData> {
     return theme;
   }
 
-  Color? ofColor(String? key) {
-    return colorMap[key];
-  }
-
-  Font? ofFont(String? key) {
-    return fontMap[key];
-  }
-
-  double? ofCorner(String? key) {
-    return radiusMap[key];
-  }
-
-  FontFamily? ofFontFamily(String? key) {
-    return fontFamilyMap[key];
-  }
-
-  List<BoxShadow>? ofShadow(String? key) {
-    return shadowMap[key];
-  }
-
-  T? ofExtra<T extends TExtraThemeData>() {
-    try {
-      return extraThemeData as T;
-    } catch (e) {
-      Log.e('TThemeData ofExtra error: $e');
-    }
-    return null;
-  }
-
+  /// 在当前主题与目标主题间生成过渡配置。
+  ///
+  /// t 为 0 或 1 时返回对应端点；目标为空时返回当前主题。
+  /// 颜色、字号、行高、圆角、阴影和间距按有效 Token 值插值，
+  /// 单侧存在的 Token 保留；名称、字体族、业务扩展和明暗关联在 t=0.5 切换。
+  /// 相同且未显式覆盖的 Token 引用继续沿用，其他值保存在新的映射中。
+  ///
+  /// ## 返回值
+  /// 两端之间的 Token 主题；端点返回原主题，中间值返回独立映射。
   @override
-  ThemeExtension<TThemeData> lerp(ThemeExtension<TThemeData>? other, double t) {
-    if (other is! TThemeData) {
+  TThemeData lerp(
+    /// 目标主题；为空或类型不匹配时返回当前主题。
+    ThemeExtension<TThemeData>? other,
+
+    /// 过渡进度；0 为当前主题，1 为目标主题，离散配置在 0.5 切换。
+    double t,
+  ) {
+    if (other is! TThemeData || identical(this, other) || t == 0) {
       return this;
     }
-    return TThemeData(
-      name: other.name,
-      colorMap: other.colorMap,
-      fontMap: other.fontMap,
-      fontMetricMap: other.fontMetricMap,
-      radiusMap: other.radiusMap,
-      fontFamilyMap: other.fontFamilyMap,
-      shadowMap: other.shadowMap,
-      insetShadowMap: other.insetShadowMap,
-      spacerMap: other.spacerMap,
-      refMap: other.refMap,
+    if (t == 1) {
+      return other;
+    }
+    final selected = t < 0.5 ? this : other;
+    final refs = _copyMap<String>(selected.refMap, null);
+    final result = TThemeData(
+      name: selected.name,
+      colorMap: _lerpMap(
+        colorMap,
+        other.colorMap,
+        refs,
+        t,
+        (a, b, t) => Color.lerp(a, b, t)!,
+      ),
+      fontMap: _lerpMap(fontMap, other.fontMap, refs, t, _lerpFont),
+      fontMetricMap: _lerpMap(
+        fontMetricMap,
+        other.fontMetricMap,
+        refs,
+        t,
+        _lerpNumber,
+      ),
+      radiusMap: _lerpMap(radiusMap, other.radiusMap, refs, t, _lerpNumber),
+      fontFamilyMap: _lerpMap(
+        fontFamilyMap,
+        other.fontFamilyMap,
+        refs,
+        t,
+        (a, b, t) => t < 0.5 ? a : b,
+      ),
+      shadowMap: _lerpMap(
+        shadowMap,
+        other.shadowMap,
+        refs,
+        t,
+        (a, b, t) => BoxShadow.lerpList(a, b, t)!,
+      ),
+      insetShadowMap: _lerpMap(
+        insetShadowMap,
+        other.insetShadowMap,
+        refs,
+        t,
+        BorderSide.lerp,
+      ),
+      spacerMap: _lerpMap(spacerMap, other.spacerMap, refs, t, _lerpNumber),
+      refMap: refs,
+      extraThemeData: selected.extraThemeData,
     );
+    result.light = identical(selected.light, selected)
+        ? result
+        : selected.light;
+    result.dark = selected.dark;
+    return result;
+  }
+
+  static double _lerpNumber(double a, double b, double t) => a + (b - a) * t;
+
+  static Font _lerpFont(Font a, Font b, double t) {
+    final result = Font(
+      size: 1,
+      lineHeight: 1,
+      fontWeight: FontWeight.lerp(a.fontWeight, b.fontWeight, t)!,
+    );
+    result.size = _lerpNumber(a.size, b.size, t);
+    final lineHeight = _lerpNumber(a.size * a.height, b.size * b.height, t);
+    result.height = result.size == 0
+        ? _lerpNumber(a.height, b.height, t)
+        : lineHeight / result.size;
+    return result;
+  }
+
+  static Set<String> _tokenKeys(TMap<dynamic, dynamic> map) {
+    final keys = <String>{};
+    final visited = <TMap<dynamic, dynamic>>{};
+    void collect(TMap<dynamic, dynamic> current) {
+      if (!visited.add(current)) {
+        return;
+      }
+      keys.addAll(current.keys.whereType<String>());
+      final refs = current.refs;
+      if (refs != null) {
+        collect(refs);
+      }
+      final fallback = current.factory?.call();
+      if (fallback != null) {
+        collect(fallback);
+      }
+    }
+
+    collect(map);
+    return keys;
+  }
+
+  TMap<String, V> _lerpMap<V>(
+    TMap<String, V> a,
+    TMap<String, V> b,
+    TMap<String, String> refs,
+    double t,
+    V Function(V, V, double) interpolate,
+  ) {
+    final result = TMap<String, V>(refs: refs);
+    for (final key in {..._tokenKeys(a), ..._tokenKeys(b)}) {
+      final reference = a.refs?[key];
+      if (reference != null &&
+          reference == b.refs?[key] &&
+          a.get(key) == null &&
+          b.get(key) == null) {
+        continue;
+      }
+      final first = a[key];
+      final second = b[key];
+      final value = first == null
+          ? second
+          : second == null
+          ? first
+          : interpolate(first, second, t);
+      if (value != null) {
+        result[key] = value;
+      }
+    }
+    return result;
   }
 }
 

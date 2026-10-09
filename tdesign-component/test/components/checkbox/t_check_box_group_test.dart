@@ -374,13 +374,13 @@ void main() {
     });
 
     testWidgets('卡片高度与角标尺寸读取 TDesign token', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'selection-card-token-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'selection-card-token-test',
         fontMap: {
           'fontBodyLarge': Font(size: 17, lineHeight: 26),
           'fontBodyMedium': Font(size: 15, lineHeight: 23),
         },
-        marginMap: const {'spacer2': 18, 'spacer3': 27},
+        spacerMap: const {'spacer2': 18, 'spacer3': 27},
       );
       Widget selectedCard() => const TSelectionCard(
         selected: true,

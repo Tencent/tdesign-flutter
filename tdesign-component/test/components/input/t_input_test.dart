@@ -479,9 +479,9 @@ void main() {
     testWidgets('prefix and suffix use their intended token spacing', (
       tester,
     ) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'input-slot-spacing',
-        marginMap: {'spacer': 10, 'spacer2': 20},
+      final token = TThemeData.defaultData().copyWith(
+        name: 'input-slot-spacing',
+        spacerMap: {'spacer': 10, 'spacer2': 20},
       );
       await tester.pumpWidget(
         MaterialApp(

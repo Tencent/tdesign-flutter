@@ -99,8 +99,8 @@ void main() {
       testWidgets(
         'semantic font tokens dateTime=$dateTime fallback=$fallback',
         (tester) async {
-          final tokens = TThemeData.defaultData().copyWithTThemeData(
-            'semantic-font',
+          final tokens = TThemeData.defaultData().copyWith(
+            name: 'semantic-font',
             fontMap: {
               'fontBodyLarge': Font(
                 size: 18,
@@ -184,8 +184,8 @@ void main() {
       testWidgets(
         '${dateTime ? 'DateTimePicker' : 'Picker'} typography ignores Material TextTheme $explicit',
         (tester) async {
-          final tokens = TThemeData.defaultData().copyWithTThemeData(
-            'font-test',
+          final tokens = TThemeData.defaultData().copyWith(
+            name: 'font-test',
             fontMap: {
               'fontBodyLarge': Font(size: 19, lineHeight: 27),
               'fontMarkLarge': Font(
@@ -256,13 +256,13 @@ void main() {
         '${dateTime ? 'DateTimePicker' : 'Picker'} shell follows ${custom ? 'custom' : 'default'} tokens',
         (tester) async {
           final tokens = custom
-              ? TThemeData.defaultData().copyWithTThemeData(
-                  'wheel-test',
+              ? TThemeData.defaultData().copyWith(
+                  name: 'wheel-test',
                   colorMap: {
                     'bgColorContainer': const Color(0xFF123456),
                     'bgColorSecondaryContainer': const Color(0xFF456789),
                   },
-                  marginMap: {'spacer5': 24},
+                  spacerMap: {'spacer5': 24},
                 )
               : TThemeData.defaultData();
           await tester.pumpWidget(

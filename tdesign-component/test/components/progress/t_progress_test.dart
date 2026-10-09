@@ -824,8 +824,8 @@ void main() {
     });
 
     testWidgets('plump 字体和内边距响应全局 Token', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'progress-token-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'progress-token-test',
         fontMap: {
           'fontMarkSmall': Font(
             size: 13,
@@ -833,7 +833,7 @@ void main() {
             fontWeight: FontWeight.w500,
           ),
         },
-        marginMap: {'spacer': 10},
+        spacerMap: {'spacer': 10},
       );
       await tester.pumpWidget(
         wrapWithTheme(
