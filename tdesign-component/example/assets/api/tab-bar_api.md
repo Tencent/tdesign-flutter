@@ -1,12 +1,40 @@
 ## API
 
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
 ### TTabBar
 
-#### 构造方法
+#### 声明
 
-##### TTabBar
+```dart
+class TTabBar extends StatefulWidget
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+TTabBar({
+  Key? key,
+  required this.type,
+  required this.navigationTabs,
+  this.itemStyle = TTabBarItemStyle.label,
+  this.style = TTabBarStyle.filled,
+  this.iconTextLayout = TTabBarIconTextLayout.stacked,
+  this.split = false,
+  this.useSafeArea = true,
+  this.needInkWell = false,
+  this.indicatorAnimation = TTabBarIndicatorAnimation.none,
+  this.animationDuration,
+  this.animationCurve,
+  required this.value,
+  this.onChanged,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | animationCurve | Curve? | - | 动画曲线 null 时使用 Curves.easeInOutCubic。 | 否 |
 | animationDuration | Duration? | - | 动画时长 null 时为 300 毫秒。 | 否 |
@@ -25,14 +53,36 @@
 
 
 ### TTabBarItemConfig
-
+#### 简介
 单个 tab 配置
 
-#### 构造方法
+#### 声明
 
-##### TTabBarItemConfig
+```dart
+class TTabBarItemConfig
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TTabBarItemConfig({
+  this.onTap,
+  this.selectedIcon,
+  this.unselectedIcon,
+  this.tabText,
+  this.selectTabTextStyle,
+  this.unselectTabTextStyle,
+  this.badge,
+  this.popUpButtonConfig,
+  this.onLongPress,
+  this.allowMultipleTaps = false,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | allowMultipleTaps | bool | false | 是否允许重复点击当前选中项时再次调用 `onTap`，默认为 false。 该字段不影响点击未选中项，也不会让 `TTabBar.onChanged` 重复通知当前值。 | 否 |
 | badge | TBadgeConfig? | - | 展示在标签内容右上角的徽标；为空时不显示。 徽标内容和样式由 `TBadgeConfig` 描述，`TBadgeConfig.offset` 可用于逐项 调整默认位置。纯文本项未设置实例 offset 时使用 TabBar 的 文本徽标默认位置；纯图标项与上下排列的图文项以图标作为锚点， 左右排列的图文项以整组图文作为锚点，均使用徽标的默认右上角位置。 显式 offset 优先于组件默认值，不读取 Material BadgeTheme。 TabBar 自己拥有徽标锚点与点击区域；点击行为通过 `onTap` 配置。调用方 已经拥有目标 Widget 时，应直接使用 `TBadge` 包装该 Widget。 | 否 |
@@ -47,14 +97,29 @@
 
 
 ### TTabBarPopUpBtnConfig
-
+#### 简介
 展开项配置
 
-#### 构造方法
+#### 声明
 
-##### TTabBarPopUpBtnConfig
+```dart
+class TTabBarPopUpBtnConfig
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+TTabBarPopUpBtnConfig({
+  required this.items,
+  required this.onChanged,
+  this.popUpDialogConfig,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | items | List&lt;TTabBarMenuItem&gt; | - | 选项list | 是 |
 | onChanged | ValueChanged&lt;String&gt; | - | 统一在 onChanged 中处理各item点击事件 | 是 |
@@ -62,14 +127,32 @@
 
 
 ### TTabBarPopUpShapeConfig
-
+#### 简介
 弹窗UI配置
 
-#### 构造方法
+#### 声明
 
-##### TTabBarPopUpShapeConfig
+```dart
+class TTabBarPopUpShapeConfig
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+TTabBarPopUpShapeConfig({
+  this.popUpWidth,
+  this.popUpItemHeight = _kDefaultMenuItemHeight,
+  this.backgroundColor,
+  this.radius,
+  this.arrowWidth,
+  this.arrowHeight,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | arrowHeight | double? | - | 箭头高度 默认8 | 否 |
 | arrowWidth | double? | - | 箭头宽度 默认13.5 | 否 |
@@ -80,14 +163,30 @@
 
 
 ### TTabBarMenuItem
-
+#### 简介
 弹窗菜单item
 
-#### 构造方法
+#### 声明
 
-##### TTabBarMenuItem
+```dart
+class TTabBarMenuItem extends StatelessWidget
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TTabBarMenuItem({
+  Key? key,
+  this.itemWidget,
+  required this.value,
+  this.alignment = AlignmentDirectional.center,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | alignment | AlignmentGeometry | AlignmentDirectional.center | 对齐方式 | 否 |
 | itemWidget | Widget? | - | 选项widget | 否 |
@@ -95,77 +194,36 @@
 | value | String | - | 选项值 | 是 |
 
 
-### TTabBarType
-
-底部标签栏内容类型。
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| text | TTabBarType | - | 纯文本标签栏。 | - |
-| iconText | TTabBarType | - | 图标加文本标签栏。 | - |
-| icon | TTabBarType | - | 纯图标标签栏。 | - |
-| doubleLayer | TTabBarType | - | 带弹出菜单的双层级文本标签栏。 | - |
-
-
-### TTabBarItemStyle
-
-单个标签项的选中样式。
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| normal | TTabBarItemStyle | - | 仅改变前景色。 | - |
-| label | TTabBarItemStyle | - | 使用浅色胶囊背景强调选中项。 | - |
-
-
-### TTabBarStyle
-
-标签栏容器样式。
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| filled | TTabBarStyle | - | 铺满父容器。 | - |
-| capsule | TTabBarStyle | - | 带外边距、圆角和阴影的悬浮胶囊。 | - |
-
-
-### TTabBarIconTextLayout
-
-图文标签项中图标与文字的排列方式，仅对 `TTabBarType.iconText` 生效。
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| stacked | TTabBarIconTextLayout | - | 图标在上、文字在下；默认布局。 | - |
-| inline | TTabBarIconTextLayout | - | 图标在左、文字在右。 | - |
-
-
-### TTabBarIndicatorAnimation
-
-底部标签栏组件样式
-指示器动画类型
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| none | TTabBarIndicatorAnimation | - | 无动画，瞬间切换 | - |
-| linear | TTabBarIndicatorAnimation | - | 线性滑动：指示器匀速从一个 tab 滑到另一个 | - |
-| elastic | TTabBarIndicatorAnimation | - | 弹性动画：指示器先拉伸后收缩 | - |
-
-
 ### TTabBarThemeData
-
+#### 简介
 底部标签栏 ThemeExtension
-
 管理 TTabBar 的子树级视觉默认值（高度、颜色与分割线等）。
+{@category ComponentTheme}
 
-<!-- api-theme: fields -->
+#### 声明
 
-#### 配置项
+```dart
+class TTabBarThemeData extends ThemeExtension<TTabBarThemeData>
+```
+
+#### 默认构造方法
 
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+```dart
+const TTabBarThemeData({
+  this.barHeight,
+  this.selectedBgColor,
+  this.unselectedBgColor,
+  this.backgroundColor,
+  this.dividerHeight,
+  this.dividerThickness,
+  this.dividerColor,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 默认背景颜色 | 否 |
 | barHeight | double? | - | 默认高度 | 否 |
@@ -174,3 +232,121 @@
 | dividerThickness | double? | - | 默认分割线厚度 | 否 |
 | selectedBgColor | Color? | - | 默认选中时背景颜色 | 否 |
 | unselectedBgColor | Color? | - | 默认未选中时背景颜色 | 否 |
+
+
+#### 实例方法
+
+##### TTabBarThemeData.copyWith
+
+```dart
+TTabBarThemeData copyWith({
+  double? barHeight,
+  Color? selectedBgColor,
+  Color? unselectedBgColor,
+  Color? backgroundColor,
+  double? dividerHeight,
+  double? dividerThickness,
+  Color? dividerColor,
+})
+```
+
+
+复制主题配置。
+## 返回值
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TTabBarThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| barHeight | double? | - | 默认高度 | 否 |
+| selectedBgColor | Color? | - | 默认选中时背景颜色 | 否 |
+| unselectedBgColor | Color? | - | 默认未选中时背景颜色 | 否 |
+| backgroundColor | Color? | - | 默认背景颜色 | 否 |
+| dividerHeight | double? | - | 默认分割线高度 | 否 |
+| dividerThickness | double? | - | 默认分割线厚度 | 否 |
+| dividerColor | Color? | - | 竖向分割线颜色；未设置时读取全局灰阶 3。 | 否 |
+
+
+##### TTabBarThemeData.lerp
+
+```dart
+TTabBarThemeData lerp(ThemeExtension<TTabBarThemeData>? other, double t)
+```
+
+
+生成主题过渡配置。
+## 返回值
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TTabBarThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TTabBarThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
+
+
+### TTabBarType
+#### 简介
+底部标签栏内容类型。
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| text | 纯文本标签栏。 |
+| iconText | 图标加文本标签栏。 |
+| icon | 纯图标标签栏。 |
+| doubleLayer | 带弹出菜单的双层级文本标签栏。 |
+
+
+### TTabBarItemStyle
+#### 简介
+单个标签项的选中样式。
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| normal | 仅改变前景色。 |
+| label | 使用浅色胶囊背景强调选中项。 |
+
+
+### TTabBarStyle
+#### 简介
+标签栏容器样式。
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| filled | 铺满父容器。 |
+| capsule | 带外边距、圆角和阴影的悬浮胶囊。 |
+
+
+### TTabBarIconTextLayout
+#### 简介
+图文标签项中图标与文字的排列方式，仅对 `TTabBarType.iconText` 生效。
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| stacked | 图标在上、文字在下；默认布局。 |
+| inline | 图标在左、文字在右。 |
+
+
+### TTabBarIndicatorAnimation
+#### 简介
+底部标签栏组件样式
+指示器动画类型
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| none | 无动画，瞬间切换 |
+| linear | 线性滑动：指示器匀速从一个 tab 滑到另一个 |
+| elastic | 弹性动画：指示器先拉伸后收缩 |

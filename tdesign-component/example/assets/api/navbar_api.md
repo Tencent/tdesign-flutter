@@ -1,12 +1,38 @@
 ## API
 
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
 ### TNavBar
 
-#### 构造方法
+#### 声明
 
-##### TNavBar
+```dart
+class TNavBar extends StatelessWidget implements PreferredSizeWidget
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TNavBar({
+  Key? key,
+  this.title,
+  this.leading,
+  this.actions,
+  this.centerTitle = true,
+  this.useDefaultBack = false,
+  this.onBack,
+  this.belowTitleWidget,
+  this.flexibleSpace,
+  this.height = 48,
+  this.useBorderStyle = false,
+  this.useSafeArea = false,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | actions | List&lt;TNavBarItem&gt;? | - | 右侧操作项（对齐 AppBar.actions） | 否 |
 | belowTitleWidget | Widget? | - | NavBar 标题区域下方的 Widget。 该内容位于 `height` 所定义的内容高度内；内容较高时，调用方需要同步增大 `height`，避免挤压标题栏。 | 否 |
@@ -23,14 +49,32 @@
 
 
 ### TNavBarItem
-
+#### 简介
 NavBar 操作项
 
-#### 构造方法
+#### 声明
 
-##### TNavBarItem
+```dart
+class TNavBarItem
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TNavBarItem({
+  this.icon,
+  this.iconColor,
+  this.onTap,
+  this.iconSize = 24.0,
+  this.padding,
+  this.customWidget,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | customWidget | Widget? | - | 自定义组件，优先级高于 icon，可以是任意 Widget | 否 |
 | icon | IconData? | - | 图标 | 否 |
@@ -41,14 +85,30 @@ NavBar 操作项
 
 
 ### TNavBarBorder
-
+#### 简介
 NavBar 边框配置（迁入 ThemeData）
 
-#### 构造方法
+#### 声明
 
-##### TNavBarBorder
+```dart
+class TNavBarBorder
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TNavBarBorder({
+  this.width = 1.0,
+  this.radius = 22.0,
+  this.color,
+  this.padding,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | color | Color? | - | 边框颜色 | 否 |
 | padding | EdgeInsetsGeometry? | - | 内部填充 | 否 |
@@ -57,21 +117,39 @@ NavBar 边框配置（迁入 ThemeData）
 
 
 ### TNavBarThemeData
-
+#### 简介
 NavBar 组件 ThemeExtension
-
 管理 TNavBar 的子树级默认样式（标题颜色、背景、内边距、阴影、边框等）。
 构造器参数优先级高于 ThemeData。高度属于 PreferredSizeWidget 契约，只能通过 TNavBar.height 设置。
-
 复制配置时，省略或传入 null 会保留原值；恢复下层 Theme 或 Token 时，
 重新构造主题并只传入仍需保留的字段。
+{@category ComponentTheme}
 
-<!-- api-theme: fields -->
+#### 声明
 
-#### 配置项
+```dart
+class TNavBarThemeData extends ThemeExtension<TNavBarThemeData>
+```
+
+#### 默认构造方法
 
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+```dart
+const TNavBarThemeData({
+  this.titleColor,
+  this.backIconColor,
+  this.backgroundColor,
+  this.padding,
+  this.titleMargin,
+  this.opacity,
+  this.border,
+  this.boxShadow,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 背景颜色 | 否 |
 | backIconColor | Color? | - | 返回图标颜色 | 否 |
@@ -81,3 +159,62 @@ NavBar 组件 ThemeExtension
 | padding | EdgeInsetsGeometry? | - | 内部填充 | 否 |
 | titleColor | Color? | - | 标题的子树默认颜色。 仅在 NavBar 标题未自行提供前景色时生效；标题 Widget 自身的显式颜色优先。 | 否 |
 | titleMargin | double? | - | 中间文案左右两边间距 | 否 |
+
+
+#### 实例方法
+
+##### TNavBarThemeData.copyWith
+
+```dart
+TNavBarThemeData copyWith({
+  Color? titleColor,
+  Color? backIconColor,
+  Color? backgroundColor,
+  EdgeInsetsGeometry? padding,
+  double? titleMargin,
+  double? opacity,
+  TNavBarBorder? border,
+  List<BoxShadow>? boxShadow,
+})
+```
+
+
+复制主题配置。
+## 返回值
+返回只替换非空参数的新主题。
+参数省略或传入 `null` 都会保留原值，符合 Flutter `copyWith` 的常见语义。
+如需清除某个配置并恢复下层 Theme 或 Token，请重新构造
+`TNavBarThemeData`，只传入仍需保留的字段。
+
+返回类型：`TNavBarThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| titleColor | Color? | - | 标题的子树默认颜色。 仅在 NavBar 标题未自行提供前景色时生效；标题 Widget 自身的显式颜色优先。 | 否 |
+| backIconColor | Color? | - | 返回图标颜色 | 否 |
+| backgroundColor | Color? | - | 背景颜色 | 否 |
+| padding | EdgeInsetsGeometry? | - | 内部填充 | 否 |
+| titleMargin | double? | - | 中间文案左右两边间距 | 否 |
+| opacity | double? | - | 背景颜色透明度，未配置时为 1 | 否 |
+| border | TNavBarBorder? | - | 操作项边框配置，仅在 TNavBar.useBorderStyle 为 true 时生效 | 否 |
+| boxShadow | List&lt;BoxShadow&gt;? | - | 底部阴影 | 否 |
+
+
+##### TNavBarThemeData.lerp
+
+```dart
+TNavBarThemeData lerp(ThemeExtension<TNavBarThemeData>? other, double t)
+```
+
+
+生成主题过渡配置。
+## 返回值
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TNavBarThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TNavBarThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |

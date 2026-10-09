@@ -1,12 +1,55 @@
 ## API
 
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
 ### TInput
 
-#### 构造方法
+#### 声明
 
-##### TInput
+```dart
+class TInput extends StatefulWidget
+```
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+#### 默认构造方法
+
+
+```dart
+const TInput({
+  super.key,
+  this.controller,
+  this.initialValue,
+  this.onChanged,
+  this.onSubmitted,
+  this.onEditingComplete,
+  this.enabled = true,
+  this.readOnly = false,
+  this.hintText,
+  this.prefix,
+  this.suffix,
+  this.clearButtonMode,
+  this.status = TInputStatus.normal,
+  this.borderless = false,
+  this.maxLines = 1,
+  this.minLines,
+  this.maxLength,
+  this.maxCharacter,
+  this.indicator = false,
+  this.autofocus = false,
+  this.focusNode,
+  this.inputType = TextInputType.text,
+  this.inputAction,
+  this.textAlign = TextAlign.start,
+  this.obscureText = false,
+  this.showPasswordToggle = false,
+  this.inputFormatters,
+  this.style,
+  this.cursorColor,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | autofocus | bool | false | 是否自动聚焦。 | 否 |
 | borderless | bool | false | 是否隐藏输入框边框。 | 否 |
@@ -39,47 +82,39 @@
 | textAlign | TextAlign | TextAlign.start | 文本对齐方式。 | 否 |
 
 
-### TInputClearButtonMode
-
-输入框清除按钮的显示模式。
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| never | TInputClearButtonMode | - | 从不显示清除按钮。 | - |
-| always | TInputClearButtonMode | - | 有文本时显示清除按钮。 | - |
-| focused | TInputClearButtonMode | - | 输入框获得焦点且有文本时显示清除按钮。 | - |
-
-
-### TInputStatus
-
-输入框的语义状态。
-
-状态不改变已输入文字的正文色。
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| normal | TInputStatus | - | 默认状态。 | - |
-| success | TInputStatus | - | 成功状态。 | - |
-| warning | TInputStatus | - | 警告状态。 | - |
-| error | TInputStatus | - | 错误状态。 | - |
-
-
 ### TInputThemeData
-
+#### 简介
 TInput 与 TTextarea 共用的组件级 ThemeExtension。
-
+{@category ComponentTheme}
 输入组件的外层边框、颜色、内边距和提示文字样式在这里提供组件级默认值；
 默认状态不继承全局填充色，避免输入区被 `ThemeData.inputDecorationTheme`
 污染。
 
-<!-- api-theme: fields -->
+#### 声明
 
-#### 配置项
+```dart
+class TInputThemeData extends ThemeExtension<TInputThemeData>
+```
+
+#### 默认构造方法
 
 
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
+```dart
+const TInputThemeData({
+  this.clearIconSize,
+  this.hintStyle,
+  this.clearIconColor,
+  this.contentPadding,
+  this.borderRadius,
+  this.backgroundColor,
+  this.borderColor,
+  this.borderWidth,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 输入区域背景色。 null 时在 TFormItem 作用域内透明，独立输入框使用 bgColorContainer Token。 | 否 |
 | borderColor | Color? | - | 输入区域边框颜色。 null 时按启用、焦点与语义状态解析边框颜色；禁用态使用 componentStroke Token。 | 否 |
@@ -89,3 +124,87 @@ TInput 与 TTextarea 共用的组件级 ThemeExtension。
 | clearIconSize | double? | - | 清除图标尺寸。 null 时为 20 逻辑像素。 | 否 |
 | contentPadding | EdgeInsetsGeometry? | - | 输入区域内边距。 null 时在 TFormItem 作用域内为零，独立输入框为四周 16 逻辑像素；Textarea 组合有独立的容器分工。 | 否 |
 | hintStyle | TextStyle? | - | 占位提示文本样式。 未指定的字段继承 TDesign 输入框提示词 token。 | 否 |
+
+
+#### 实例方法
+
+##### TInputThemeData.copyWith
+
+```dart
+TInputThemeData copyWith({
+  double? clearIconSize,
+  TextStyle? hintStyle,
+  Color? clearIconColor,
+  EdgeInsetsGeometry? contentPadding,
+  double? borderRadius,
+  Color? backgroundColor,
+  Color? borderColor,
+  double? borderWidth,
+})
+```
+
+
+复制主题配置。
+## 返回值
+返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
+
+返回类型：`TInputThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| clearIconSize | double? | - | 清除图标尺寸。 null 时为 20 逻辑像素。 | 否 |
+| hintStyle | TextStyle? | - | 占位提示文本样式。 未指定的字段继承 TDesign 输入框提示词 token。 | 否 |
+| clearIconColor | Color? | - | 清除图标颜色。 null 时错误态使用 errorColor，其他状态使用 textColorPlaceholder Token。 | 否 |
+| contentPadding | EdgeInsetsGeometry? | - | 输入区域内边距。 null 时在 TFormItem 作用域内为零，独立输入框为四周 16 逻辑像素；Textarea 组合有独立的容器分工。 | 否 |
+| borderRadius | double? | - | 输入区域圆角。 对非多行、非无边框输入框设置为大于 0 的值时，输入框使用完整边框； 未设置时保留单行输入框的底部分隔线。 | 否 |
+| backgroundColor | Color? | - | 输入区域背景色。 null 时在 TFormItem 作用域内透明，独立输入框使用 bgColorContainer Token。 | 否 |
+| borderColor | Color? | - | 输入区域边框颜色。 null 时按启用、焦点与语义状态解析边框颜色；禁用态使用 componentStroke Token。 | 否 |
+| borderWidth | double? | - | 输入区域边框宽度。 null 时为 1 逻辑像素。 | 否 |
+
+
+##### TInputThemeData.lerp
+
+```dart
+TInputThemeData lerp(ThemeExtension<TInputThemeData>? other, double t)
+```
+
+
+生成主题过渡配置。
+## 返回值
+按 t 在当前主题和目标主题之间生成过渡主题。
+other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
+
+返回类型：`TInputThemeData`
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| other | ThemeExtension&lt;TInputThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
+| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
+
+
+### TInputClearButtonMode
+#### 简介
+输入框清除按钮的显示模式。
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| never | 从不显示清除按钮。 |
+| always | 有文本时显示清除按钮。 |
+| focused | 输入框获得焦点且有文本时显示清除按钮。 |
+
+
+### TInputStatus
+#### 简介
+输入框的语义状态。
+状态不改变已输入文字的正文色。
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| normal | 默认状态。 |
+| success | 成功状态。 |
+| warning | 警告状态。 |
+| error | 错误状态。 |
