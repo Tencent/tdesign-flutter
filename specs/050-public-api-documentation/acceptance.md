@@ -176,3 +176,7 @@ pnpm site
 ## Theme API 与平台描述核查
 
 本轮职责分析、清理范围与全仓库剩余引用清单见 [theme-api-and-platform-descriptions.md](theme-api-and-platform-descriptions.md)。未删除公开 API，历史来源与真实生态链接保留。
+
+## 同步已合入的 Theme API
+
+当前基线与双 SDK 复验见 [synchronized-develop.md](synchronized-develop.md)。正式工具交付门禁仍保留。

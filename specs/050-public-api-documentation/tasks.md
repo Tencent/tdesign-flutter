@@ -71,7 +71,7 @@
 - [x] 两 SDK 各 2707 项非 Golden 组件测试、70 项 API 页面测试、115 项文档专项测试通过。
 - [x] 记录结构验收与语义验收的区别、测试误导风险、Theme.lerp 实现风险和正式工具/autofix 门禁，见 reasonableness-repair.md。
 - [ ] 工具 PR #29 合入正式 main 后重新解析 resolved ref、生成/--check 并复验 autofix；当前不将本轮候选结果声明为最终可合并。
-- [ ] 单独决定并测试 TThemeData.lerp 是否保留 extraThemeData；本轮仅补准确说明，未改变运行行为。
+- [x] TThemeData.lerp 的完整插值与 extraThemeData 离散切换已由 #1152 修复并合入 develop。
 
 
 ## 当前逐组件文档核查（2026-10-09）
@@ -104,5 +104,5 @@
 ## 跟随 TThemeData API 收敛 PR
 
 - [x] 独立 API PR #1152 已提交并附双 SDK 功能证据。
-- [x] 文档工作区按五个必要操作同步源码契约、消费者和生成资产。
-- [ ] API PR 合入后同步正式基线，再交付文档与工具生成链。
+- [x] 文档工作区按四个必要操作同步源码契约、消费者和生成资产。
+- [x] API PR #1152 已合入 develop，文档分支同步正式基线；工具生成链正式复验仍待 #29。

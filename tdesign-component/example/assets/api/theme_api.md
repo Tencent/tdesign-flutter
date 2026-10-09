@@ -344,8 +344,6 @@ TDesign 样式解析器。
 
 实例显式样式、组件 Theme 和全局 Token 是单向样式链。
 
-用法：
-
 #### 属性
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -446,8 +444,6 @@ Token → 完整 ThemeData 的构建器
 应用入口：Token → 完整 ThemeData
 
 对齐 `MaterialApp.theme` / `darkTheme` / `themeMode` 三参数模式。
-
-用法：
 
 #### 静态方法
 
