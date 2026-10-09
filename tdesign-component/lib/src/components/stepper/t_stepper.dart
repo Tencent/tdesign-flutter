@@ -24,12 +24,6 @@ export 't_stepper_types.dart';
 /// [onChanged] 为 null 时加减按钮禁用，编辑器只读且不发出数值变更请求。样式优先级为实例
 /// [size]/[variant]、[TStepperThemeData]、Flutter 子树及全局 ThemeData，
 /// 最后回退 TDesign token。
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TStepperThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TStepperThemeData` 配置项。
 class TStepper extends StatefulWidget {
   const TStepper({
     super.key,

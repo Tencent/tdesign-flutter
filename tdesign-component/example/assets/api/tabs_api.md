@@ -6,12 +6,6 @@
 
 支持滚动、指示器自定义，以及 Line、Tag、Card 三种 TDesign 形态。
 
-#### 主题配置
-
-组件主题通过 `TTabsBarThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。可配置字段和未设置时的回退见本页的
-`TTabsBarThemeData` 配置项。
-
 #### 构造方法
 
 ##### TTabsBar

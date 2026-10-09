@@ -19,12 +19,6 @@ import 't_upload_types.dart';
 export 't_upload_types.dart';
 
 /// 严格受控的文件选择与上传状态展示组件。
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TUploadThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TUploadThemeData` 配置项。
 class TUpload extends StatelessWidget {
   const TUpload({
     super.key,

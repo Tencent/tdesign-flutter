@@ -4,12 +4,6 @@
 
 用于展示成功、警告、失败或默认结果状态的内容块。
 
-#### 主题配置
-
-组件主题通过 `TResultThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。可配置字段和未设置时的回退见本页的
-`TResultThemeData` 配置项。
-
 #### 构造方法
 
 ##### TResult

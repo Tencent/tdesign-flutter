@@ -30,12 +30,6 @@
 点击取消按钮先调用 onCancel，再请求关闭；onClosed 在关闭流程完成后通知。
 各方法返回 TPopupHandle，可主动关闭面板。
 
-#### 主题配置
-
-组件主题通过 `TActionSheetThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。可配置字段和未设置时的回退见本页的
-`TActionSheetThemeData` 配置项。
-
 #### 静态方法
 
 ##### TActionSheet.showGrid

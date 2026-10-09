@@ -40,12 +40,6 @@ export 't_fab_layout.dart'
 ///   magnet: TFabMagnet.right,
 /// )
 /// ```
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TFabThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TFabThemeData` 配置项。
 class TFab extends StatelessWidget {
   const TFab({
     super.key,

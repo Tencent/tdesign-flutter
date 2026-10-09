@@ -144,12 +144,6 @@ class TBadgeConfig {
 ///
 /// TabBar、SideBar、ActionSheet 等内部拥有锚点的组合组件使用
 /// [TBadgeConfig]，调用方不应向这些组件传入一个待拆解的 [TBadge]。
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TBadgeThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TBadgeThemeData` 配置项。
 class TBadge extends StatelessWidget {
   const TBadge({
     super.key,

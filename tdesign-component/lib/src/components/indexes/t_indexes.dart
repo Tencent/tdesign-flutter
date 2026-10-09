@@ -16,12 +16,6 @@ export 't_indexes_anchor.dart';
 export 't_indexes_list.dart';
 
 /// 索引
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TIndexesThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TIndexesThemeData` 配置项。
 class TIndexes extends StatefulWidget {
   const TIndexes({
     Key? key,

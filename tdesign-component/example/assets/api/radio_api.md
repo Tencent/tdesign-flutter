@@ -9,12 +9,6 @@
 
 必须作为同类型 `TRadioGroup` 的后代使用：
 
-#### 主题配置
-
-组件主题通过 `TRadioThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。可配置字段和未设置时的回退见本页的
-`TRadioThemeData` 配置项。
-
 #### 构造方法
 
 ##### TRadio

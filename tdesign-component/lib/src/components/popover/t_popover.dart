@@ -356,12 +356,6 @@ class _PopoverSession {
 /// 可通过 [showPopover] 一次性弹出，或通过 [TPopoverAnchor] 建立可控制气泡，
 /// 支持 12 个方向定位和箭头。蒙层色与圆角由触发 [BuildContext] 最近的
 /// [TPopoverThemeData] 控制；单个气泡可包裹局部 Theme。
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TPopoverThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TPopoverThemeData` 配置项。
 class TPopover {
   /// 显示气泡弹层
   ///

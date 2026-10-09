@@ -30,12 +30,6 @@ enum TLoadingIcon {
 }
 
 /// 展示局部或全屏加载状态的组件。
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TLoadingThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TLoadingThemeData` 配置项。
 class TLoading extends StatelessWidget {
   const TLoading({
     Key? key,

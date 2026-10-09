@@ -7,12 +7,6 @@ import '../../theme/t_theme.dart';
 import 't_footer_theme_data.dart';
 
 /// 页面底部的版权、链接和品牌信息区域。
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TFooterThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TFooterThemeData` 配置项。
 class TFooter extends StatelessWidget {
   const TFooter({Key? key, this.logo, this.text = '', this.links = const []})
     : super(key: key);

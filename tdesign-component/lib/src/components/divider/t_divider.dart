@@ -51,12 +51,6 @@ enum TDividerAlign {
 /// // 竖线
 /// TDivider(layout: TDividerLayout.vertical)
 /// ```
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TDividerThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TDividerThemeData` 配置项。
 class TDivider extends StatelessWidget {
   const TDivider({super.key, this.layout, this.align, this.dashed, this.child});
 

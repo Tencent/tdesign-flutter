@@ -48,12 +48,6 @@ enum TProgressStatus {
 }
 
 /// 展示确定或不确定任务进度的组件。
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TProgressThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TProgressThemeData` 配置项。
 class TProgress extends StatelessWidget {
   /// 创建线性进度条。
   TProgress.linear({

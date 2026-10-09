@@ -13,12 +13,6 @@ import 't_text_theme_data.dart';
 /// 文字布局、字体 fallback、无障碍缩放和语义均由 Flutter 原生 Text 负责。
 /// 子树级默认文字样式通过 [TTextThemeData.textStyle] 配置；单实例完整样式通过 [style] 覆盖。
 /// 固定容器居中与图文 baseline 应由父布局表达。
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TTextThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TTextThemeData` 配置项。
 class TText extends StatelessWidget {
   const TText(
     String this.data, {

@@ -109,12 +109,6 @@ class TDialogAction {
 ///
 /// 组件负责面板内容和操作区；使用 [show] 时，通过 Flutter 模态路由处理
 /// 蒙层、动画和安全区。
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TDialogThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TDialogThemeData` 配置项。
 class TDialog extends StatelessWidget {
   const TDialog({
     super.key,

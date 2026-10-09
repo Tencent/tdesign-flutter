@@ -4,12 +4,6 @@
 
 命令式图片预览工具。
 
-#### 主题配置
-
-组件主题通过 `TImageViewerThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。可配置字段和未设置时的回退见本页的
-`TImageViewerThemeData` 配置项。
-
 #### 静态方法
 
 ##### TImageViewer.show

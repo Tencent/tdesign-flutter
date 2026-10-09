@@ -63,12 +63,6 @@ String _getMark(String format, RegExpMatch match) =>
     match.end < format.length ? format.substring(match.end, match.end + 1) : '';
 
 /// 通用计时器组件，支持正向计时与倒计时。
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TTimeCounterThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TTimeCounterThemeData` 配置项。
 class TTimeCounter extends StatefulWidget {
   const TTimeCounter({
     super.key,

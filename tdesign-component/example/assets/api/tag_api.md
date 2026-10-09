@@ -5,12 +5,6 @@
 展示型标签组件，仅展示，内部不可更改自身状态
 支持样式：方形/圆角/半圆/带关闭图标
 
-#### 主题配置
-
-组件主题通过 `TTagThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。可配置字段和未设置时的回退见本页的
-`TTagThemeData` 配置项。
-
 #### 构造方法
 
 ##### TTag

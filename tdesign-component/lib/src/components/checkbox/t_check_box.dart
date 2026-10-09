@@ -45,12 +45,6 @@ typedef TCheckboxIconBuilder =
     Widget Function(BuildContext context, bool? value, bool disabled);
 
 /// 严格受控的复选框；[onChanged] 为 null 时禁用。
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TCheckboxThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TCheckboxThemeData` 配置项。
 class TCheckbox extends StatelessWidget {
   const TCheckbox({
     super.key,

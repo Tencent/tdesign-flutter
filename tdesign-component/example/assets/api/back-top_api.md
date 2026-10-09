@@ -7,12 +7,6 @@
 绑定 `controller` 后，滚动偏移达到 `visibilityOffset` 时显示；点击时先
 动画回到顶部，再触发可选的 `onPressed` 完成通知。
 
-#### 主题配置
-
-组件主题通过 `TBackTopThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。可配置字段和未设置时的回退见本页的
-`TBackTopThemeData` 配置项。
-
 #### 构造方法
 
 ##### TBackTop

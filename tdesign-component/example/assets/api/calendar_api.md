@@ -6,12 +6,6 @@
 
 `value` 与 `onChanged` 构成受控选择状态；`onChanged` 为 null 时禁用。
 
-#### 主题配置
-
-组件主题通过 `TCalendarThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。可配置字段和未设置时的回退见本页的
-`TCalendarThemeData` 配置项。
-
 #### 构造方法
 
 ##### TCalendar

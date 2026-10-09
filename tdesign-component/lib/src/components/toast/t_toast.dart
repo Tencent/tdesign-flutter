@@ -112,12 +112,6 @@ class _ToastInstance {
 ///   不断加深；
 /// - 指定不同 `toastId` 时，可多实例并存；
 /// - 指定相同 `toastId` 时，后一次替换前一次。
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TToastThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TToastThemeData` 配置项。
 class TToast {
   static final Map<String, _ToastInstance> _toastInstances = {};
 

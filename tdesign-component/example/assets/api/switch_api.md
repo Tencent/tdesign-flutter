@@ -7,12 +7,6 @@
 `value` 由父级持有；`onChanged` 为 null 时禁用；`loading` 为 true 时
 显示加载指示器并禁用交互。支持开关文字、图标与加载内容配置。
 
-#### 主题配置
-
-组件主题通过 `TSwitchThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。可配置字段和未设置时的回退见本页的
-`TSwitchThemeData` 配置项。
-
 #### 构造方法
 
 ##### TSwitch

@@ -6,12 +6,6 @@
 
 支持文本、图文、图标与双层级内容，并将选项样式与容器外形作为独立配置。
 
-#### 主题配置
-
-组件主题通过 `TTabBarThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。可配置字段和未设置时的回退见本页的
-`TTabBarThemeData` 配置项。
-
 #### 构造方法
 
 ##### TTabBar

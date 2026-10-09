@@ -132,12 +132,6 @@ class TSwiperController extends ChangeNotifier {
 }
 
 /// Controller 驱动的轮播组件。
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TSwiperThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TSwiperThemeData` 配置项。
 class TSwiper extends StatefulWidget {
   const TSwiper({
     this.children,

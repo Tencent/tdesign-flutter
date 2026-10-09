@@ -8,12 +8,6 @@ import '../text/t_text.dart';
 import 't_empty_theme_data.dart';
 
 /// 用于空数据、网络异常和操作引导的空状态组件。
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TEmptyThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TEmptyThemeData` 配置项。
 class TEmpty extends StatelessWidget {
   const TEmpty({
     this.icon = TIcons.info_circle_filled,

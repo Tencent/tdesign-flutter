@@ -9,12 +9,6 @@
 默认动作层不继承父级 `TButtonThemeData`；完整视觉定制请使用 `child`。
 `TFab` 返回 `Positioned`，应作为 `Stack` 的直接子组件使用。
 
-#### 主题配置
-
-组件主题通过 `TFabThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。可配置字段和未设置时的回退见本页的
-`TFabThemeData` 配置项。
-
 #### 构造方法
 
 ##### TFab

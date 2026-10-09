@@ -7,12 +7,6 @@
 
 强类型、受控排序与选择的表格组件。
 
-#### 主题配置
-
-组件主题通过 `TTableThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。可配置字段和未设置时的回退见本页的
-`TTableThemeData` 配置项。
-
 #### 构造方法
 
 ##### TTable

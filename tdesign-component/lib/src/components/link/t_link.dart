@@ -8,12 +8,6 @@ import 't_link_types.dart';
 ///
 /// 下划线、前置图标和后置图标可独立组合；路由行为由 [onPressed] 与 Flutter
 /// Navigator / Router 组合。
-///
-/// ### 主题配置
-///
-/// 组件主题通过 [TLinkThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
-/// `TLinkThemeData` 配置项。
 class TLink extends StatelessWidget {
   const TLink({
     super.key,
