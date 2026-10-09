@@ -55,6 +55,20 @@ void main() {
         if (json) '--json',
       ]);
 
+  test(
+    'class introduction is optional while API contracts remain checked',
+    () async {
+      source.writeAsStringSync(
+        source.readAsStringSync().replaceFirst(
+          RegExp(r'///[^\n]*\n(?=class Sample)'),
+          '',
+        ),
+      );
+      final result = await audit();
+      expect(result.exitCode, 0, reason: '${result.stdout} ${result.stderr}');
+    },
+  );
+
   for (final variant in [
     'valid',
     'missing field',

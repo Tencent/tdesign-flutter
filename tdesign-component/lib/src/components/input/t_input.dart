@@ -14,11 +14,6 @@ import '../form/t_form_item_scope.dart';
 import 't_input_theme_data.dart';
 import 't_input_types.dart';
 
-/// 基于 Flutter [TextField] 编辑内核的 TDesign 文本输入框。
-///
-/// [controller] 是主控制路径；未传时由组件创建内部 controller，并使用
-/// [initialValue] 初始化一次。两者不能同时传入。输入框外层由 TDesign
-/// 自有布局绘制，Material [InputDecorationTheme] 不会覆盖默认边框和内边距。
 class TInput extends StatefulWidget {
   const TInput({
     super.key,

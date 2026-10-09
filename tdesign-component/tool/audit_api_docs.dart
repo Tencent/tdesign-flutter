@@ -212,7 +212,8 @@ void main(List<String> args) {
         declaration: node,
       );
     }
-    if (node.documentationComment == null) {
+    // 类入口可以直接展示参数表；字段和可调用契约仍逐项检查。
+    if (node is! ClassDeclaration && node.documentationComment == null) {
       issue('comment', name, path, node.offset);
     }
     final membersToCheck = node is ClassDeclaration
