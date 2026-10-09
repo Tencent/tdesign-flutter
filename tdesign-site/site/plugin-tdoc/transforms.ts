@@ -7,21 +7,11 @@ import { replaceFlutterApiDirectives } from '../flutter-example-docs/api.mjs';
 let demoCodesImports: Record<string, string> = {};
 
 export default {
-  before({ source, file, md }: any) {
+  before({ source, file }: any) {
     const resourceDir = path.dirname(file);
     const reg = file.match(/docs\/components\/(\S*)(?=\/\S*.md)/);
     const name = reg && reg[1];
     demoCodesImports = {};
-
-    // 增加渲染规则
-    md.renderer.rules.html_block = function (tokens: string, idx: number) {
-      const { content } = tokens[idx];
-      if (content.startsWith('<img') && content.indexOf('qrcode') === -1) {
-        return '';
-      }
-
-      return content;
-    };
 
     // Flutter Web 文档直接读取 Example App 生成的唯一代码资产。
     source = replaceFlutterExampleDirectives(source);

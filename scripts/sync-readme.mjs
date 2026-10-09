@@ -17,7 +17,8 @@ const rootDir = `${__dirname}/..`;
 const transforms = {
   // 移除语言切换链接: [English](./README.md) | 简体中文
   removeLangLink: (content) => {
-    return content.replace(/\[English\]\(\.\/README\.md\) \| 简体中文\n?/g, '');
+    return content.replace(/\[English\]\(\.\/README\.md\) \| 简体中文\n?/g, '')
+      .replace('https://raw.githubusercontent.com/Tencent/tdesign-flutter/develop/tdesign-site/site/public/assets/qrcode/t_apk_qrcode.png', `data:image/png;base64,${readFileSync(`${rootDir}/tdesign-site/site/public/assets/qrcode/t_apk_qrcode.png`).toString('base64')}`);
   },
 };
 
