@@ -20,7 +20,6 @@ enum TImageShape {
   circle,
 }
 
-/// 统一展示网络、asset 或本地文件图片。
 class TImage extends StatelessWidget {
   const TImage({
     super.key,

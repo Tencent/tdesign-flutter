@@ -11,11 +11,21 @@ class TLoadingController {
   static bool _isShowing = false;
 
   // 展示
+  /// 在 [context] 的 Overlay 中显示全局加载层。
+  ///
+  /// 已有加载层或找不到 Overlay 时不重复创建。[child] 非空时替代内置 TLoading；
+  /// 否则使用 [size]、[icon] 和 [text] 构建加载内容，text 为空时读取资源代理。
+  /// [theme] 仅作用于本次加载层，未提供时保留捕获的祖先主题。
   static void show(
+    /// 当前构建上下文，用于读取祖先配置。
     BuildContext context, {
+
+    /// 替代默认加载内容的自定义组件；为空时由 size、icon 和 text 构建 TLoading。
     Widget? child,
     double size = 20,
     TLoadingIcon? icon = TLoadingIcon.circle,
+
+    /// 加载文案；为空时使用资源代理的 loading 文案。
     String? text,
     TLoadingThemeData? theme,
   }) {
@@ -66,6 +76,7 @@ class TLoadingController {
   }
 
   // 消失
+  /// 移除并释放全局加载层；没有加载层时调用无效，可重复调用。
   static void dismiss() {
     if (_isShowing) {
       if (_overlayEntry != null) {

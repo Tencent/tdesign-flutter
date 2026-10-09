@@ -8,11 +8,6 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_nav_bar_theme_data.dart';
 
-/// NavBar 组件
-///
-/// Material AppBar 薄包装（NavigationToolbar 实现）。
-/// - A 类禁用：操作项 `onTap: null`。
-/// - L4 样式（标题颜色、背景、内边距等）→ [TNavBarThemeData]。
 class TNavBar extends StatelessWidget implements PreferredSizeWidget {
   const TNavBar({
     Key? key,

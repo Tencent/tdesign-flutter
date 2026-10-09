@@ -9,34 +9,15 @@ import 't_switch_types.dart';
 
 export 't_switch_types.dart';
 
-/// 严格受控的开关组件。
-///
-/// [value] 由父级持有；[onChanged] 为 null 时禁用；[loading] 为 true 时
-/// 显示加载指示器并禁用交互。文字、图标和加载内容无法由 Material Switch
-/// 完整表达，因此底层保留 TDesign 自定义开关实现。
 class TSwitch extends StatelessWidget {
   const TSwitch({
     super.key,
-
-    /// 受控开关状态。
     required this.value,
-
-    /// 开关状态变更回调；为 null 时禁用。
     this.onChanged,
-
-    /// 开关尺寸；未传时为 [TSwitchSize.medium]。
     this.size,
-
-    /// 开关内容形态；未传时为 [TSwitchVariant.filled]。
     this.variant,
-
-    /// 是否处于加载状态；加载时显示指示器并禁用交互。
     this.loading = false,
-
-    /// text 形态的开启文案。
     this.openText,
-
-    /// text 形态的关闭文案。
     this.closeText,
   });
 
@@ -46,19 +27,21 @@ class TSwitch extends StatelessWidget {
   /// 开关状态变更回调；为 null 时禁用。
   final ValueChanged<bool>? onChanged;
 
-  /// 开关尺寸。
+  /// 开关尺寸；未传时为 [TSwitchSize.medium]。
   final TSwitchSize? size;
 
-  /// 开关内容形态。
+  /// 开关内容形态；未传时为 [TSwitchVariant.filled]。
   final TSwitchVariant? variant;
 
   /// 是否处于加载状态；加载时显示指示器并禁用交互。
   final bool loading;
 
   /// text 形态的开启文案。
+  /// null 时显示“开”；仅开启态文本内容形态使用。
   final String? openText;
 
   /// text 形态的关闭文案。
+  /// null 时显示“关”；仅关闭态文本内容形态使用。
   final String? closeText;
 
   @override

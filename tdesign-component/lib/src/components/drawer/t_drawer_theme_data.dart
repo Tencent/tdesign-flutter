@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 ///
 /// 只保存子树级具体视觉默认值。方向、蒙层与展示生命周期由 `showTDrawer`
 /// 负责；分隔线和按压反馈由组件实例负责；构造器具体视觉参数优先级高于 ThemeData。
+///
+/// {@category ComponentTheme}
 class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
   /// 默认宽度，默认 280。
   final double? width;
@@ -23,15 +25,18 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
   final TextStyle? itemTextStyle;
 
   /// 菜单项背景色。
+  /// null 时沿用抽屉实际面板背景色。
   final Color? itemBackgroundColor;
 
   /// 菜单项按压背景色。
+  /// null 时使用 bgColorSecondaryContainer Token。
   final Color? itemPressedColor;
 
   /// 菜单项内边距，默认 `EdgeInsets.fromLTRB(16, 16, 0, 16)`。
   final EdgeInsetsGeometry? itemPadding;
 
   /// 菜单项图标颜色。
+  /// null 时使用 textColorPrimary Token。
   final Color? itemIconColor;
 
   /// 菜单项图标尺寸，默认 24。
@@ -41,6 +46,7 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
   final double? itemIconGap;
 
   /// 菜单项分隔线颜色。
+  /// null 时使用 componentStroke Token。
   final Color? dividerColor;
 
   /// 菜单项分隔线起始缩进，默认 16。
@@ -74,6 +80,10 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
        assert(dividerIndent == null || dividerIndent >= 0),
        assert(dividerThickness == null || dividerThickness >= 0);
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TDrawerThemeData copyWith({
     double? width,
@@ -111,8 +121,19 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TDrawerThemeData lerp(ThemeExtension<TDrawerThemeData>? other, double t) {
+  TDrawerThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    ThemeExtension<TDrawerThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other is! TDrawerThemeData) {
       return this;
     }

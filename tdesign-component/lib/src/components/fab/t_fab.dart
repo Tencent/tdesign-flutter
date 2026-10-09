@@ -14,32 +14,6 @@ export 't_fab_layout.dart'
         TFabDragDetails,
         TFabDragCallback;
 
-/// 悬浮操作按钮组件
-///
-/// T2 组合模式：定位层（右下角悬浮 + 可选拖拽/吸附/边界）+ 动作层（默认内嵌 TButton）
-/// 默认动作层使用 large / fill / primary 规格；纯图标为圆形，图文为胶囊形。
-/// 默认动作层不继承父级 `TButtonThemeData`；完整视觉定制请使用 [child]。
-/// [TFab] 返回 [Positioned]，应作为 [Stack] 的直接子组件使用。
-///
-/// 示例：
-/// ```dart
-/// // 纯图标悬浮按钮
-/// Stack(fit: StackFit.expand, children: [
-///   // 页面内容 ...
-///   const TFab(),
-/// ])
-///
-/// // 图标 + 文字
-/// TFab(
-///   text: '发布',
-/// )
-///
-/// // 可拖拽悬浮按钮
-/// TFab(
-///   draggable: TFabDragAxis.all,
-///   magnet: TFabMagnet.right,
-/// )
-/// ```
 class TFab extends StatelessWidget {
   const TFab({
     super.key,
@@ -60,6 +34,8 @@ class TFab extends StatelessWidget {
     this.useSafeArea = true,
   });
 
+  /// 应作为 [Stack] 的直接子组件使用；默认动作层使用 large / fill / primary，
+  /// 纯图标为圆形，图文为胶囊形，且不继承父级 TButtonThemeData。
   /// 图标 + 文字形态；非空时内嵌 TButton 为 round 形状
   final String text;
 

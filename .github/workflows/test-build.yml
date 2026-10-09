@@ -46,6 +46,10 @@ jobs:
         working-directory: ./tdesign-component
         run: flutter analyze --no-pub --fatal-infos
 
+      - name: Verify public API documentation coverage
+        working-directory: ./tdesign-component
+        run: dart run tool/audit_api_docs.dart
+
   test:
     name: test (flutter ${{ matrix.flutter-version }})
     strategy:
@@ -92,7 +96,7 @@ jobs:
 
       - name: Test regression tooling
         working-directory: ./tdesign-component
-        run: flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
+        run: flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart test/tool/audit_api_docs_test.dart test/tool/typedef_docs_test.dart test/tool/api_presentation_test.dart
 
       - name: Check example structure and copied snippets
         working-directory: ./tdesign-component

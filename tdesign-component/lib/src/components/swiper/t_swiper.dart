@@ -26,7 +26,7 @@ class TSwiperController extends ChangeNotifier {
     }
   }
 
-  /// 首次附加时展示的页面。
+  /// 首次附加时展示的页面；必须大于或等于 0 且小于页面数，否则抛出参数或范围异常。
   final int initialIndex;
 
   int _index;
@@ -43,26 +43,59 @@ class TSwiperController extends ChangeNotifier {
   bool get hasClients => _jumpTo != null;
 
   /// 立即跳转到目标页。
-  void jumpTo(int index) => _jumpTo?.call(index);
+  void jumpTo(
+    /// 目标页面的业务索引，从 0 开始；超出范围时按绑定 Swiper 的规则归一化。
+    int index,
+  ) => _jumpTo?.call(index);
 
   /// 动画切换到目标页；循环模式始终向前到达目标。
   ///
   /// 未提供 [duration] 或 [curve] 时，继承所附加 [TSwiper] 的动画配置。
-  Future<void> animateTo(int index, {Duration? duration, Curve? curve}) async {
+  ///
+  /// ## 返回值
+  /// 所绑定轮播的切换请求完成时结束；未绑定时立即完成，不执行切换。
+  Future<void> animateTo(
+    /// 目标页面的业务索引，从 0 开始；循环模式向前切换到该页面。
+    int index, {
+
+    /// 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。
+    Duration? duration,
+
+    /// 本次切换动画曲线；为空时使用绑定 Swiper 的动画配置。
+    Curve? curve,
+  }) async {
     await _animateTo?.call(index, duration, curve);
   }
 
   /// 切换到下一页。
   ///
   /// 未提供 [duration] 或 [curve] 时，继承所附加 [TSwiper] 的动画配置。
-  Future<void> next({Duration? duration, Curve? curve}) async {
+  ///
+  /// ## 返回值
+  /// 所绑定轮播的切换请求完成时结束；未绑定时立即完成，不执行切换。
+  Future<void> next({
+    /// 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。
+    Duration? duration,
+
+    /// 本次切换动画曲线；为空时使用绑定 Swiper 的动画配置。
+    Curve? curve,
+  }) async {
     await _next?.call(duration, curve);
   }
 
   /// 切换到上一页。
   ///
   /// 未提供 [duration] 或 [curve] 时，继承所附加 [TSwiper] 的动画配置。
-  Future<void> previous({Duration? duration, Curve? curve}) async {
+  ///
+  /// ## 返回值
+  /// 所绑定轮播的切换请求完成时结束；未绑定时立即完成，不执行切换。
+  Future<void> previous({
+    /// 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。
+    Duration? duration,
+
+    /// 本次切换动画曲线；为空时使用绑定 Swiper 的动画配置。
+    Curve? curve,
+  }) async {
     await _previous?.call(duration, curve);
   }
 
@@ -98,7 +131,6 @@ class TSwiperController extends ChangeNotifier {
   }
 }
 
-/// Controller 驱动的轮播组件。
 class TSwiper extends StatefulWidget {
   const TSwiper({
     this.children,
@@ -158,6 +190,7 @@ class TSwiper extends StatefulWidget {
   final Duration autoplayInterval;
 
   /// 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画时长。
+  /// 必须大于 Duration.zero，否则抛出 ArgumentError。
   final Duration animationDuration;
 
   /// 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画曲线。

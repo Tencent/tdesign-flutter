@@ -15,7 +15,6 @@ export 'sticky_header/sticky_header_widget.dart';
 export 't_indexes_anchor.dart';
 export 't_indexes_list.dart';
 
-/// 索引
 class TIndexes extends StatefulWidget {
   const TIndexes({
     Key? key,
@@ -34,12 +33,12 @@ class TIndexes extends StatefulWidget {
     this.builderIndex,
   }) : super(key: key);
 
-  /// 索引字符列表。不传默认 A-Z；默认值要求 [builderContent] 能处理 A-Z 全部索引，自定义数据建议显式传入。
+  /// 索引字符列表，字符必须唯一。不传默认 A-Z；默认值要求 builderContent 能处理 A-Z 全部索引，自定义数据建议显式传入。
   ///
   /// 列表更新后若不再包含当前活动项，组件回退到新列表首项、同步滚动位置并触发 [onChanged]。
   final List<String>? indexList;
 
-  /// 初始激活索引。为空时使用 [indexList] 的第一项
+  /// 初始激活索引，非空时必须属于 indexList；为空时使用 indexList 的第一项。
   ///
   /// 仅在组件首次创建时生效；后续活动索引由滚动位置派生。
   final String? initialIndex;
@@ -62,7 +61,7 @@ class TIndexes extends StatefulWidget {
   /// 是否反向滚动
   final bool reverse;
 
-  /// 滚动控制器
+  /// 滚动控制器；外部控制器由调用方释放，未提供时组件管理内部控制器。
   final ScrollController? scrollController;
 
   /// 当前激活索引发生变更时触发（含滚动吸顶派生与用户侧栏选择）

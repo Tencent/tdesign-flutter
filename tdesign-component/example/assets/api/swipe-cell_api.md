@@ -2,8 +2,6 @@
 
 ### TSwipeCell
 
-滑动单元格组件。
-
 #### 构造方法
 
 ##### TSwipeCell
@@ -13,11 +11,11 @@
 | child | Widget | - | 要增强为可滑动单元格的内容。 | 是 |
 | closeOnScroll | bool | true | 祖先滚动容器开始滚动时是否关闭面板，默认为 true。 | 否 |
 | controller | TSwipeCellController? | - | 命令式控制器。 | 否 |
-| enabled | bool | true | 是否允许用户拖动，默认为 true。 | 否 |
+| enabled | bool | true | 是否允许用户拖动，默认为 true。 仅控制用户拖动，不阻止控制器命令。 | 否 |
 | end | TSwipeCellPanel? | - | 结束侧操作面板。 | 否 |
 | initialOpenSide | TSwipeCellSide? | - | 首次布局后默认展开的面板；为空时保持关闭。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| onOpenChanged | TSwipeCellChanged? | - | 面板展开状态变化回调。 | 否 |
+| onOpenChanged | TSwipeCellChanged? | - | 面板展开状态变化回调。 在展开状态改变时通知，早于动画结束；切换侧时先通知旧侧关闭，再通知新侧打开。 | 否 |
 | start | TSwipeCellPanel? | - | 起始侧操作面板。 | 否 |
 
 
@@ -41,12 +39,14 @@
 无参数。
 
 关闭当前展开的操作面板。
+动画结束、被后续命令打断或组件卸载取消时，Future 均会完成；不表示当前仍处于请求的目标状态。
+未绑定组件时立即完成且不执行操作。
 
 ###### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | Future&lt;void&gt; | - | - | - |
+| 返回值 | Future&lt;void&gt; | - | 本次关闭动画完成或取消时结束；未绑定时立即完成。完成后面板可能已被后续命令重新打开。 | - |
 
 
 ##### TSwipeCellController.open
@@ -55,17 +55,19 @@
 
 
 展开指定侧的操作面板。
+动画结束、被后续命令打断或组件卸载取消时，Future 均会完成；不表示当前仍处于请求的目标状态。
+未绑定组件时立即完成且不执行操作。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| side | TSwipeCellSide | - | - | 是 |
+| side | TSwipeCellSide | - | 需要展开的操作面板侧；该侧没有面板时关闭当前面板。 | 是 |
 
 
 ###### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | Future&lt;void&gt; | - | - | - |
+| 返回值 | Future&lt;void&gt; | - | 本次展开动画完成或取消时结束；未绑定时立即完成。完成后面板可能已被后续命令关闭。 | - |
 
 
 ### TSwipeCellPanel
@@ -78,7 +80,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| children | List&lt;TSwipeCellAction&gt; | - | 操作项列表。面板宽度由所有操作项的实际布局宽度自动确定。 | 是 |
+| children | List&lt;TSwipeCellAction&gt; | - | 操作项列表。面板宽度由所有操作项的实际布局宽度自动确定。 列表必须非空。 | 是 |
 
 
 #### 实例方法
@@ -88,16 +90,20 @@
 位置参数：`context`
 
 
+构建操作项的横向布局，宽度由 `children` 的实际布局宽度决定。
+
+操作项沿交叉轴拉伸；返回的布局由调用方放入滑动单元格。
+
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| context | BuildContext | - | - | 是 |
+| context | BuildContext | - | 调用方的构建上下文；当前布局不读取其中的主题或尺寸。 | 是 |
 
 
 ###### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | Widget | - | - | - |
+| 返回值 | Widget | - | 由 children 横向排列、沿交叉轴拉伸的操作面板布局。 | - |
 
 
 ### TSwipeCellAction
@@ -127,74 +133,6 @@
 | onPressed | void Function(BuildContext context)? | - | 点击回调。回调后组件会自动关闭操作面板。 | 否 |
 
 
-### TSwipeCellThemeData
-
-TSwipeCell 组件级 ThemeExtension
-
-通过 Theme 子树注入操作项共享内边距；逐项图文样式由操作项实例控制。
-
-#### 构造方法
-
-##### TSwipeCellThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| actionPadding | EdgeInsetsGeometry? | - | 操作项左右内边距。 | 否 |
-
-
-#### 实例方法
-
-##### TSwipeCellThemeData.copyWith
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| actionPadding | EdgeInsetsGeometry? | - | 字段含义：操作项左右内边距。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TSwipeCellThemeData | - | - | - |
-
-
-##### TSwipeCellThemeData.lerp
-
-位置参数：`other, t`
-
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TSwipeCellThemeData&gt;? | - | - | 是 |
-| t | double | - | - | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TSwipeCellThemeData | - | - | - |
-
-
-##### TSwipeCellThemeData.merge
-
-位置参数：`other`
-
-
-合并两个 ThemeExtension，`other` 优先于 this
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | TSwipeCellThemeData? | - | - | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TSwipeCellThemeData | - | - | - |
-
-
 ### TSwipeCellSide
 
 操作面板所在侧。
@@ -202,8 +140,8 @@ TSwipeCell 组件级 ThemeExtension
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| start | TSwipeCellSide | - | - | - |
-| end | TSwipeCellSide | - | - | - |
+| start | TSwipeCellSide | - | 沿当前文字方向的起始侧；LTR 为左侧，RTL 为右侧。 | - |
+| end | TSwipeCellSide | - | 沿当前文字方向的结束侧；LTR 为右侧，RTL 为左侧。 | - |
 
 
 ### TSwipeCellChanged
@@ -217,12 +155,28 @@ TSwipeCell 组件级 ThemeExtension
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| side | TSwipeCellSide | - | - | 是 |
-| isOpen | bool | - | - | 是 |
+| side | TSwipeCellSide | - | 发生变化的操作面板侧。 | 是 |
+| isOpen | bool | - | 该侧面板是否展开。 | 是 |
 
 
 #### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | void | - | - | - |
+| 返回值 | void | - | 无返回值。 | - |
+
+
+### TSwipeCellThemeData
+
+TSwipeCell 组件级 ThemeExtension
+
+通过 Theme 子树注入操作项共享内边距；逐项图文样式由操作项实例控制。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| actionPadding | EdgeInsetsGeometry? | - | 操作项左右内边距。 | 否 |

@@ -1,25 +1,25 @@
 import 't_theme.dart';
 
-/// 小程序全局间距 Token；375 逻辑像素宽下按 2rpx = 1dp 转换。
+/// 全局间距 Token，单位为 Flutter 逻辑像素。
 extension TSpacers on TThemeData {
-  /// `--td-spacer`: 16rpx。
+  /// 间距 Token，未配置时回退为 8 逻辑像素。
   double get spacer => spacerMap['spacer'] ?? 8.0;
 
-  /// `--td-spacer-1`: 24rpx。
+  /// 间距 Token，未配置时回退为 12 逻辑像素。
   double get spacer1 => spacerMap['spacer1'] ?? 12.0;
 
-  /// `--td-spacer-2`: 32rpx。
+  /// 间距 Token，未配置时回退为 16 逻辑像素。
   double get spacer2 => spacerMap['spacer2'] ?? 16.0;
 
-  /// `--td-spacer-3`: 48rpx。
+  /// 间距 Token，未配置时回退为 24 逻辑像素。
   double get spacer3 => spacerMap['spacer3'] ?? 24.0;
 
-  /// `--td-spacer-4`: 64rpx。旧 Flutter `spacer4` 的 4dp 语义已移除。
+  /// 间距 Token，未配置时回退为 32 逻辑像素。
   double get spacer4 => spacerMap['spacer4'] ?? 32.0;
 
-  /// `--td-spacer-5`: 96rpx。
+  /// 间距 Token，未配置时回退为 48 逻辑像素。
   double get spacer5 => spacerMap['spacer5'] ?? 48.0;
 
-  /// `--td-spacer-6`: 160rpx。
+  /// 间距 Token，未配置时回退为 80 逻辑像素。
   double get spacer6 => spacerMap['spacer6'] ?? 80.0;
 }

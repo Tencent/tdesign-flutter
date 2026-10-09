@@ -66,8 +66,12 @@ class _PopoverAnchorLifecycleState extends State<_PopoverAnchorLifecycle> {
 
 /// [TPopoverAnchor] 的触发区域构建器。
 ///
-/// [controller] 用于展开、关闭气泡和查询展开状态；[child] 是传给
-/// [TPopoverAnchor.child] 的可选、不依赖展开状态的子组件。
+/// [context] 触发区域的构建上下文。
+/// [controller] 关联气泡控制器，用于开关气泡与查询状态。
+/// [child] 传入 Anchor 的可选静态子组件。
+///
+/// ## 返回值
+/// 气泡触发区域内容。
 typedef TPopoverAnchorBuilder =
     Widget Function(
       BuildContext context,
@@ -112,7 +116,13 @@ class TPopoverController {
   /// 返回 [context] 最近的 [TPopoverAnchor] 所关联的控制器。
   ///
   /// 未处于 Anchor 的触发区域或气泡内容子树时返回 null。
-  static TPopoverController? maybeOf(BuildContext context) {
+  ///
+  /// ## 返回值
+  /// 最近的 PopoverAnchor 控制器；不在其触发区域或气泡内容子树时为 null。
+  static TPopoverController? maybeOf(
+    /// 当前构建上下文，用于读取祖先配置。
+    BuildContext context,
+  ) {
     return context
         .getInheritedWidgetOfExactType<_TPopoverControllerScope>()
         ?.controller;
@@ -341,13 +351,11 @@ class _PopoverSession {
   final VoidCallback markNeedsBuild;
 }
 
-/// 气泡弹层
-///
-/// 可通过 [showPopover] 一次性弹出，或通过 [TPopoverAnchor] 建立可控制气泡，
-/// 支持 12 个方向定位和箭头。蒙层色与圆角由触发 [BuildContext] 最近的
-/// [TPopoverThemeData] 控制；单个气泡可包裹局部 Theme。
 class TPopover {
   /// 显示气泡弹层
+  ///
+  /// ## 返回值
+  /// 气泡关闭时完成的 Future；不是打开完成通知。
   static Future<void> showPopover({
     /// 触发元素的上下文，用于计算气泡锚点位置。
     required BuildContext context,

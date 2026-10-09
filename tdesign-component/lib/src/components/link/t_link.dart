@@ -4,10 +4,6 @@ import 't_link_resolve.dart';
 import 't_link_theme_data.dart';
 import 't_link_types.dart';
 
-/// 文字超链接用于跳转一个新页面，如当前项目跳转、友情链接等。
-///
-/// 下划线、前置图标和后置图标可独立组合；路由行为由 [onPressed] 与 Flutter
-/// Navigator / Router 组合。
 class TLink extends StatelessWidget {
   const TLink({
     super.key,

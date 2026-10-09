@@ -16,7 +16,7 @@
 # （存量 deprecated 告警已在本 PR 逐项清零，故可开启严格模式。）
 .analyze:
   name: flutter analyze
-  script: cd tdesign-component && flutter analyze --fatal-infos
+  script: cd tdesign-component && flutter analyze --fatal-infos && dart run tool/audit_api_docs.dart
 
 .component-regression-tests:
   name: flutter test (component regression)
@@ -28,7 +28,7 @@
 
 .regression-tool-tests:
   name: flutter test (regression tooling)
-  script: cd tdesign-component && flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
+  script: cd tdesign-component && flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart test/tool/audit_api_docs_test.dart test/tool/typedef_docs_test.dart test/tool/api_presentation_test.dart
 
 # Example 页面共享功能回归，双 Flutter 版本共用；不包含 Golden。
 .example-regression-tests:

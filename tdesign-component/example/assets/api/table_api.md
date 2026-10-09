@@ -5,8 +5,6 @@
 类型参数：`T`
 
 
-强类型、受控排序与选择的表格组件。
-
 #### 构造方法
 
 ##### TTable
@@ -27,8 +25,8 @@
 | onCellTap | TTableCellTap&lt;T&gt;? | - | 单元格点击回调，context 同时提供行列索引、行数据和列配置。 | 否 |
 | onRowTap | TTableRowTap&lt;T&gt;? | - | 行点击回调。 点击普通单元格时，会在 `onCellTap` 之后调用该回调；点击选择控件时不触发。 | 否 |
 | onScroll | ValueChanged&lt;ScrollNotification&gt;? | - | 垂直滚动通知。 | 否 |
-| onSelectionChanged | ValueChanged&lt;Set&lt;T&gt;&gt;? | - | 请求更新选中行集合。 | 否 |
-| onSortChanged | ValueChanged&lt;TTableSort?&gt;? | - | 请求更新排序值。 | 否 |
+| onSelectionChanged | ValueChanged&lt;Set&lt;T&gt;&gt;? | - | 请求更新选中行集合。 启用 selectionMode 时必须提供本回调；父组件需回传 selectedRows。 | 否 |
+| onSortChanged | ValueChanged&lt;TTableSort?&gt;? | - | 请求更新排序值。 为 null 时表头不产生排序请求，仍按外部传入的 sort 渲染；父组件需回传新 sort。 | 否 |
 | rowKey | TTableRowKey&lt;T&gt;? | - | 返回行数据的稳定唯一标识。 为空时直接使用行对象及其 `==`、`hashCode` 语义。提供后，受控选择会按 key 匹配、替换和移除行，并稳定标识单元格子树，使数据刷新或排序后新建的 行对象仍能命中同一业务行。同一份 `data` 中的 key 必须唯一；未提供时单元格 子树按可见行位置标识。 | 否 |
 | rowSelectable | bool Function(T row, int index)? | - | 判断指定行是否可选。 | 否 |
 | selectedRows | Set&lt;T&gt; | const {} | 当前受控选中行。 | 否 |
@@ -59,69 +57,6 @@
 | id | String | - | 列唯一标识，用于受控排序。 | 是 |
 | minWidth | double? | - | 列宽下限。 指定 `width` 时实际宽度不小于该值；`width` 为空时，自动均分会先满足 每列的最小宽度。所有列宽之和超出表格时，中间非固定列可横向滚动。 | 否 |
 | width | double? | - | 列宽。 为空时与其他未指定宽度的列均分表格剩余宽度；显式宽度超出可用区域时， 中间非固定列可横向滚动。 | 否 |
-
-
-### TTableThemeData
-
-表格组件级 ThemeExtension。
-
-仅保存表格的视觉默认值。
-
-#### 构造方法
-
-##### TTableThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 默认行背景色。 | 否 |
-| borderColor | Color? | - | 边框颜色。 | 否 |
-| cellPadding | EdgeInsetsGeometry? | - | 单元格内边距。 | 否 |
-| headerColor | Color? | - | 表头背景色。 | 否 |
-| headerHeight | double? | - | 表头高度。 | 否 |
-| rowHeight | double? | - | 数据行高度。 | 否 |
-| stripeColor | Color? | - | 斑马纹背景色。 | 否 |
-| width | double? | - | 表格宽度。 | 否 |
-
-
-#### 实例方法
-
-##### TTableThemeData.copyWith
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| rowHeight | double? | - | 字段含义：数据行高度。 调用时的空值行为见方法说明。 | 否 |
-| headerHeight | double? | - | 字段含义：表头高度。 调用时的空值行为见方法说明。 | 否 |
-| width | double? | - | 字段含义：表格宽度。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：默认行背景色。 调用时的空值行为见方法说明。 | 否 |
-| headerColor | Color? | - | 字段含义：表头背景色。 调用时的空值行为见方法说明。 | 否 |
-| stripeColor | Color? | - | 字段含义：斑马纹背景色。 调用时的空值行为见方法说明。 | 否 |
-| borderColor | Color? | - | 字段含义：边框颜色。 调用时的空值行为见方法说明。 | 否 |
-| cellPadding | EdgeInsetsGeometry? | - | 字段含义：单元格内边距。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TTableThemeData | - | - | - |
-
-
-##### TTableThemeData.lerp
-
-位置参数：`other, t`
-
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | TTableThemeData? | - | - | 是 |
-| t | double | - | - | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TTableThemeData | - | - | - |
 
 
 ### TTableSort
@@ -234,14 +169,14 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| context | TTableCellContext&lt;T&gt; | - | - | 是 |
+| context | TTableCellContext&lt;T&gt; | - | 当前逻辑单元格的行列数据与索引。 | 是 |
 
 
 #### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | TTableCellSpan? | - | - | - |
+| 返回值 | TTableCellSpan? | - | 单元格跨越的行列数；返回 null 时按一行一列布局。 | - |
 
 
 ### TTableCellTap
@@ -258,14 +193,14 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| context | TTableCellContext&lt;T&gt; | - | - | 是 |
+| context | TTableCellContext&lt;T&gt; | - | 被点击的逻辑单元格行列数据与索引。 | 是 |
 
 
 #### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | void | - | - | - |
+| 返回值 | void | - | 无返回值。 | - |
 
 
 ### TTableRowKey
@@ -273,7 +208,7 @@
 类型参数：`T`
 
 
-返回行数据的稳定唯一标识。
+行唯一标识构建器。
 
 位置参数：`row`
 
@@ -282,14 +217,14 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| row | T | - | - | 是 |
+| row | T | - | 待获取标识的行数据。 | 是 |
 
 
 #### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | Object | - | - | - |
+| 返回值 | Object | - | 当前行的稳定唯一标识，用于跨排序或重建保持行身份。 | - |
 
 
 ### TTableRowTap
@@ -306,15 +241,15 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| rowIndex | int | - | - | 是 |
-| row | T | - | - | 是 |
+| rowIndex | int | - | 当前行在排序后可见数据中的索引，从 0 开始。 | 是 |
+| row | T | - | 当前行的原始数据。 | 是 |
 
 
 #### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | void | - | - | - |
+| 返回值 | void | - | 无返回值。 | - |
 
 
 ### TTableCellBuilder
@@ -331,13 +266,36 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| context | BuildContext | - | - | 是 |
-| row | T | - | - | 是 |
-| rowIndex | int | - | - | 是 |
+| context | BuildContext | - | 单元格的构建上下文。 | 是 |
+| row | T | - | 当前行数据。 | 是 |
+| rowIndex | int | - | 当前行在排序后可见数据中的索引，从 0 开始。 | 是 |
 
 
 #### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | Widget | - | - | - |
+| 返回值 | Widget | - | 当前单元格内容。 | - |
+
+
+### TTableThemeData
+
+表格组件级 ThemeExtension。
+
+仅保存表格的视觉默认值。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 默认行背景色。 | 否 |
+| borderColor | Color? | - | 边框颜色。 null 时使用 componentStroke Token。 | 否 |
+| cellPadding | EdgeInsetsGeometry? | - | 单元格内边距。 null 时左右各 16 逻辑像素。 | 否 |
+| headerColor | Color? | - | 表头背景色。 null 时使用 bgColorContainer Token。 | 否 |
+| headerHeight | double? | - | 表头高度。 null 时为 38 逻辑像素。 | 否 |
+| rowHeight | double? | - | 数据行高度。 null 时为 38 逻辑像素。 | 否 |
+| stripeColor | Color? | - | 斑马纹背景色。 启用 stripe 时生效；null 时使用 bgColorSecondaryContainer Token。 | 否 |
+| width | double? | - | 表格宽度。 null 时有界布局使用可用宽度，无界布局使用列配置计算的自然宽度。 | 否 |

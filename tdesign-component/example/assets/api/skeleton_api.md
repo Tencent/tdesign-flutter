@@ -35,6 +35,8 @@
 
 ### TSkeletonLayout
 
+骨架屏的行列布局。
+
 #### 构造方法
 
 ##### TSkeletonLayout
@@ -46,6 +48,8 @@
 
 
 ### TSkeletonBlockStyle
+
+单个骨架块的视觉样式。
 
 #### 构造方法
 
@@ -59,6 +63,8 @@
 
 
 ### TSkeletonBlock
+
+骨架屏中的一个占位块。
 
 #### 构造方法
 
@@ -132,6 +138,8 @@
 
 
 ### TSkeletonAnimation
+
+骨架屏动画。
 #### 枚举值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -141,6 +149,8 @@
 
 
 ### TSkeletonVariant
+
+骨架屏预设形态。
 #### 枚举值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -152,6 +162,8 @@
 
 
 ### TSkeletonBlockShape
+
+骨架块形状。
 #### 枚举值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -159,3 +171,22 @@
 | rounded | TSkeletonBlockShape | - | 使用组件主题或 TDesign token 提供的圆角。 | - |
 | circle | TSkeletonBlockShape | - | 圆形或胶囊形。 | - |
 | rectangle | TSkeletonBlockShape | - | 无圆角矩形。 | - |
+
+
+### TSkeletonThemeData
+
+骨架屏组件级 ThemeExtension。
+
+仅保存占位块的视觉和布局默认值；动画、延迟与具体布局由实例决定。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| blockColor | Color? | - | 占位块背景色。 未配置时使用 bgColorSecondaryContainer Token。 | 否 |
+| borderRadius | double? | - | 普通占位块圆角。 未配置时使用 radiusSmall Token，必须大于或等于 0。 | 否 |
+| highlightColor | Color? | - | 渐变动画高亮色。 未配置时使用 bgColorSecondaryContainerActive Token。 | 否 |
+| rowSpacing | double? | - | 多行布局的默认行间距。 未配置时使用 spacer2 Token，必须大于或等于 0。 | 否 |

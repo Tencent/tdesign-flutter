@@ -26,7 +26,7 @@ class TCalendarSubtitleContext {
 
 /// 副标题构建器；每个日期格渲染时调用一次。
 ///
-/// 通过 [TCalendarSubtitleContext] 获取日期与选中态；返回 `null` 表示不显示副标题行。
+/// 通过 [TCalendarSubtitleContext] 获取日期与选中态。
 ///
 /// ```dart
 /// subtitleBuilder: (context, ctx) {
@@ -35,17 +35,32 @@ class TCalendarSubtitleContext {
 ///   return Text(text, style: const TextStyle(fontSize: 9));
 /// },
 /// ```
+/// [context] 日期格的构建上下文。
+/// [subtitleContext] 当前日期及日期格的选中、区间和禁用状态。
+///
+/// ## 返回值
+/// 日期格副标题内容；返回 null 时不显示副标题行。
 typedef TCalendarSubtitleBuilder =
     Widget? Function(
       BuildContext context,
       TCalendarSubtitleContext subtitleContext,
     );
 
-/// 整格自定义构建器；返回非 null 时该格由接入方完全绘制（含主数字与副标题）。
+/// 整格自定义构建器。
+/// [context] 日期格的构建上下文。
+/// [cell] 当前日期格的数据与状态。
+///
+/// ## 返回值
+/// 完整日期格内容，包含主数字与副标题；返回 null 时使用默认日期格及副标题。
 typedef TCalendarCellBuilder =
     Widget? Function(BuildContext context, TCalendarCellModel cell);
 
-/// 月标题构建器；[monthDate] 为当月 1 日。
+/// 月标题构建器。
+/// [context] 月份标题的构建上下文。
+/// [monthDate] 当前月份的第一天。
+///
+/// ## 返回值
+/// 当前月份的标题内容。
 typedef TCalendarMonthTitleBuilder =
     Widget Function(BuildContext context, DateTime monthDate);
 

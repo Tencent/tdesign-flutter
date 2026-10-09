@@ -73,14 +73,14 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| context | BuildContext | - | - | 是 |
+| context | BuildContext | - | 当前构建上下文，用于读取祖先配置。 | 是 |
 
 
 ###### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | Text | - | - | - |
+| 返回值 | Text | - | 保留当前文本配置和 key 的原生 Text。 | - |
 
 
 ##### TText.getTextStyle
@@ -92,17 +92,21 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| context | BuildContext | - | - | 是 |
+| context | BuildContext | - | 当前构建上下文，用于读取祖先配置。 | 是 |
 
 
 ###### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | TextStyle | - | - | - |
+| 返回值 | TextStyle | - | 结合当前组件配置与上下文主题解析出的最终 TextStyle。 | - |
 
 
 ### TTextSpan
+
+使用原生 `TextStyle` 配置局部样式的 Flutter `TextSpan`。
+
+未显式配置的字段保持为空，并继承父 Span 样式。
 
 #### 构造方法
 
@@ -123,58 +127,11 @@
 | text | String? | - | 透传至 `TextSpan.text`。 | 否 |
 
 
-### TTextThemeData
-
-#### 构造方法
-
-##### TTextThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| strutStyle | StrutStyle? | - | 子树的段落支柱样式默认值；实例 `TText.strutStyle` 优先。 | 否 |
-| textHeightBehavior | ui.TextHeightBehavior? | - | 子树的文字高度行为默认值；实例 `TText.textHeightBehavior` 优先。 | 否 |
-| textStyle | TextStyle? | - | 子树的完整文字样式；字号、行高和字重也由本字段统一设置。 TText 实例的显式字体参数仍优先于本默认值。 | 否 |
-| textWidthBasis | TextWidthBasis? | - | 子树的文字宽度计算默认值；实例 `TText.textWidthBasis` 优先。 | 否 |
-
-
-#### 实例方法
-
-##### TTextThemeData.copyWith
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| textStyle | TextStyle? | - | 字段含义：子树的完整文字样式；字号、行高和字重也由本字段统一设置。 TText 实例的显式字体参数仍优先于本默认值。 调用时的空值行为见方法说明。 | 否 |
-| strutStyle | StrutStyle? | - | 字段含义：子树的段落支柱样式默认值；实例 `TText.strutStyle` 优先。 调用时的空值行为见方法说明。 | 否 |
-| textWidthBasis | TextWidthBasis? | - | 字段含义：子树的文字宽度计算默认值；实例 `TText.textWidthBasis` 优先。 调用时的空值行为见方法说明。 | 否 |
-| textHeightBehavior | ui.TextHeightBehavior? | - | 字段含义：子树的文字高度行为默认值；实例 `TText.textHeightBehavior` 优先。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TTextThemeData | - | - | - |
-
-
-##### TTextThemeData.lerp
-
-位置参数：`other, t`
-
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TTextThemeData&gt;? | - | - | 是 |
-| t | double | - | - | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TTextThemeData | - | - | - |
-
-
 ### TFontLoader
+
+Flutter 动态字体注册工具。
+
+字体应在构建 Text 前加载完成；组件不会在绘制过程中隐式下载字体。
 
 #### 静态方法
 
@@ -184,6 +141,8 @@
 
 同一 `name` 和 `fontFamilyUrl` 的并发调用共享同一个 Future。加载失败会
 清除缓存并允许重试；已经注册或正在注册的字体不能切换 URL。
+返回 true 表示字体已成功注册；空名称、空 URL、URL 冲突或下载/注册失败
+返回 false。重复加载相同资源返回其加载结果。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
@@ -195,4 +154,24 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | Future&lt;bool&gt; | - | - | - |
+| 返回值 | Future&lt;bool&gt; | - | 字体成功注册时为 true；空名称、空 URL、URL 冲突或下载/注册失败时为 false。同一资源的重复调用共享加载结果。 | - |
+
+
+### TTextThemeData
+
+TText 子树的组件默认值。
+
+仅在对应实例参数未指定时生效；实例字体预设和段落参数
+优先于这里的默认值。外部 Flutter `DefaultTextStyle` 不会自动覆盖 TDesign 文字。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| strutStyle | StrutStyle? | - | 子树的段落支柱样式默认值；实例 `TText.strutStyle` 优先。 | 否 |
+| textHeightBehavior | ui.TextHeightBehavior? | - | 子树的文字高度行为默认值；实例 `TText.textHeightBehavior` 优先。 | 否 |
+| textStyle | TextStyle? | - | 子树的完整文字样式；字号、行高和字重也由本字段统一设置。 TText 实例的显式字体参数仍优先于本默认值。 | 否 |
+| textWidthBasis | TextWidthBasis? | - | 子树的文字宽度计算默认值；实例 `TText.textWidthBasis` 优先。 | 否 |

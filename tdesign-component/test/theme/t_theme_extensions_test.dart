@@ -42,7 +42,7 @@ void main() {
   });
 
   group('TSpacers extension', () {
-    test('小程序间距等级使用 2rpx = 1dp 的默认值', () {
+    test('间距等级使用逻辑像素默认值', () {
       final theme = TThemeData.defaultData();
       expect(theme.spacer, 8);
       expect(theme.spacer1, 12);
@@ -71,7 +71,7 @@ void main() {
       expect(text.style?.height, 29 / 19);
     });
 
-    test('小程序字体族保留 Flutter 字体回退列表', () {
+    test('字体族保留 Flutter 字体回退列表', () {
       final theme = TThemeData.defaultData();
       expect(theme.fontFamily?.fontFamily, 'PingFang SC');
       expect(theme.fontFamily?.fallback, ['Microsoft YaHei', 'Arial Regular']);

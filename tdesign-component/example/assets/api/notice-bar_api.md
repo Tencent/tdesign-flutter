@@ -2,8 +2,6 @@
 
 ### TNoticeBar
 
-公告栏
-
 #### 构造方法
 
 ##### TNoticeBar
@@ -16,13 +14,39 @@
 | items | List&lt;String&gt; | const &lt;String&gt;[] | 多条公告内容，主要用于垂直轮播。 非空时作为内容数据源，并优先于 `content`。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | marquee | bool | false | 是否启用横向跑马灯展示。 | 否 |
-| maxLines | int | 1 | 文本行数（仅静态有效） | 否 |
+| maxLines | int | 1 | 文本行数（仅静态有效），必须大于 0。 | 否 |
 | onPressed | ValueChanged&lt;TNoticeBarTapTarget&gt;? | - | 点击事件 | 否 |
 | operation | Widget? | - | 内容右侧、`suffixIcon` 左侧的自定义操作区。 可以和 `suffixIcon` 同时显示。 | 否 |
 | prefix | Widget? | - | 自定义前缀区域。 为 null 时根据 `status` 显示默认图标；传入 `SizedBox.shrink` 可隐藏 前缀区域。组件统一在非空前缀与正文之间保留 `TSpacers.spacer` 间距 （默认 8 逻辑像素）；自定义 `Icon` 中未显式指定的颜色或尺寸会继承公告栏 状态色和标准图标尺寸。 | 否 |
-| speed | double | 50 | 横向跑马灯每秒滚动的逻辑像素，仅在 `direction` 为 `Axis.horizontal` 且 `marquee` 为 true 时生效。 | 否 |
+| speed | double | 50 | 横向跑马灯每秒滚动的逻辑像素，仅在 `direction` 为 `Axis.horizontal` 且 marquee 为 true 时生效；必须大于 0。 | 否 |
 | status | TNoticeBarStatus | TNoticeBarStatus.info | 公告栏业务状态，决定默认配色和默认前缀图标。 | 否 |
 | suffixIcon | IconData? | - | 尾部图标，可以和 `operation` 同时显示。 | 否 |
+
+
+### TNoticeBarTapTarget
+
+公告栏点击区域
+#### 枚举值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| prefix | TNoticeBarTapTarget | - | 前缀区域 | - |
+| content | TNoticeBarTapTarget | - | 公告内容 | - |
+| operation | TNoticeBarTapTarget | - | 右侧操作区 | - |
+| suffix | TNoticeBarTapTarget | - | 尾部图标 | - |
+
+
+### TNoticeBarStatus
+
+公告栏业务状态。
+#### 枚举值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| info | TNoticeBarStatus | - | 普通信息（默认）。 | - |
+| success | TNoticeBarStatus | - | 成功信息。 | - |
+| warning | TNoticeBarStatus | - | 警示信息。 | - |
+| error | TNoticeBarStatus | - | 错误信息。 | - |
 
 
 ### TNoticeBarThemeData
@@ -31,16 +55,17 @@ TNoticeBar 组件级 ThemeExtension
 
 通过 Theme 子树注入，控制子树的默认公告栏样式。
 
-#### 构造方法
+<!-- api-theme: fields -->
 
-##### TNoticeBarThemeData
+#### 配置项
+
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 公告栏背景色 | 否 |
-| height | double? | - | 文字高度 | 否 |
+| height | double? | - | 文字高度 未配置时为 22 逻辑像素，表示正文区域高度，外层内边距另计。 | 否 |
 | leftIconColor | Color? | - | 公告栏左侧图标颜色 | 否 |
-| padding | EdgeInsetsGeometry? | - | 公告栏内边距 | 否 |
+| padding | EdgeInsetsGeometry? | - | 公告栏内边距 未配置时使用 defaultPadding，即上/下 13、左 16、右 12 逻辑像素。 | 否 |
 | rightIconColor | Color? | - | 公告栏右侧图标颜色 | 否 |
 | textStyle | TextStyle? | - | 公告栏内容样式 | 否 |
 
@@ -75,66 +100,10 @@ TNoticeBar 组件级 ThemeExtension
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | double? | - | - | - |
+| 返回值 | double? | - | 按 t 线性插值的数值；两端均为 null 时为 null，仅一端为 null 时将该端按 0 计算。 | - |
 
 
 #### 实例方法
-
-##### TNoticeBarThemeData.copyWith
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| height | double? | - | 字段含义：文字高度 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：公告栏背景色 调用时的空值行为见方法说明。 | 否 |
-| textStyle | TextStyle? | - | 字段含义：公告栏内容样式 调用时的空值行为见方法说明。 | 否 |
-| leftIconColor | Color? | - | 字段含义：公告栏左侧图标颜色 调用时的空值行为见方法说明。 | 否 |
-| rightIconColor | Color? | - | 字段含义：公告栏右侧图标颜色 调用时的空值行为见方法说明。 | 否 |
-| padding | EdgeInsetsGeometry? | - | 字段含义：公告栏内边距 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TNoticeBarThemeData | - | - | - |
-
-
-##### TNoticeBarThemeData.lerp
-
-位置参数：`other, t`
-
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TNoticeBarThemeData&gt;? | - | - | 是 |
-| t | double | - | - | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TNoticeBarThemeData | - | - | - |
-
-
-##### TNoticeBarThemeData.merge
-
-位置参数：`other`
-
-
-合并两个 ThemeExtension，`other` 优先于 this
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | TNoticeBarThemeData? | - | - | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TNoticeBarThemeData | - | - | - |
-
 
 ##### TNoticeBarThemeData.resolve
 
@@ -145,38 +114,12 @@ TNoticeBar 组件级 ThemeExtension
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| context | BuildContext | - | - | 是 |
-| status | TNoticeBarStatus | TNoticeBarStatus.info | - | 否 |
+| context | BuildContext | - | 当前构建上下文，用于读取祖先配置。 | 是 |
+| status | TNoticeBarStatus | TNoticeBarStatus.info | 公告栏语义状态，默认 info，用于解析状态对应的颜色。 | 否 |
 
 
 ###### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | TNoticeBarThemeData | - | - | - |
-
-
-### TNoticeBarTapTarget
-
-公告栏点击区域
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| prefix | TNoticeBarTapTarget | - | 前缀区域 | - |
-| content | TNoticeBarTapTarget | - | 公告内容 | - |
-| operation | TNoticeBarTapTarget | - | 右侧操作区 | - |
-| suffix | TNoticeBarTapTarget | - | 尾部图标 | - |
-
-
-### TNoticeBarStatus
-
-公告栏业务状态。
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| info | TNoticeBarStatus | - | 普通信息（默认）。 | - |
-| success | TNoticeBarStatus | - | 成功信息。 | - |
-| warning | TNoticeBarStatus | - | 警示信息。 | - |
-| error | TNoticeBarStatus | - | 错误信息。 | - |
+| 返回值 | TNoticeBarThemeData | - | 将状态预设与当前主题覆盖合并后的 NoticeBar 视觉配置。 | - |

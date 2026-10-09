@@ -2,28 +2,20 @@ import path from 'path';
 import fs from 'fs';
 import mdToVue from '../scripts/md-to-vue';
 import { replaceFlutterExampleDirectives } from '../flutter-example-docs/transform.mjs';
+import { replaceFlutterApiDirectives } from '../flutter-example-docs/api.mjs';
 
 let demoCodesImports: Record<string, string> = {};
 
 export default {
-  before({ source, file, md }: any) {
+  before({ source, file }: any) {
     const resourceDir = path.dirname(file);
     const reg = file.match(/docs\/components\/(\S*)(?=\/\S*.md)/);
     const name = reg && reg[1];
     demoCodesImports = {};
 
-    // 增加渲染规则
-    md.renderer.rules.html_block = function (tokens: string, idx: number) {
-      const { content } = tokens[idx];
-      if (content.startsWith('<img') && content.indexOf('qrcode') === -1) {
-        return '';
-      }
-
-      return content;
-    };
-
     // Flutter Web 文档直接读取 Example App 生成的唯一代码资产。
     source = replaceFlutterExampleDirectives(source);
+    source = replaceFlutterApiDirectives(source);
 
     // 兼容历史小程序 demo 文件占位符。
     source = source.replace(/{{\s+(.+)\s+}}/g, (_: string, demoDirName: string) => {

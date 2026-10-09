@@ -51,6 +51,10 @@ class TFabDragDetails {
 }
 
 /// 拖拽回调
+/// [details] 当前 right/bottom 定位偏移及对应手势详情。
+///
+/// ## 返回值
+/// 无返回值。
 typedef TFabDragCallback = void Function(TFabDragDetails details);
 
 /// Fab 定位层内部模型

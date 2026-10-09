@@ -22,6 +22,8 @@
 
 
 ### TButtonColorPreset
+
+按钮内置配色预设，不是 Material ColorScheme。
 #### 枚举值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -30,3 +32,70 @@
 | primary | TButtonColorPreset | - | 品牌主色 | - |
 | danger | TButtonColorPreset | - | 危险操作配色 | - |
 | light | TButtonColorPreset | - | 浅色品牌配色；不改变填充/描边等 `TButtonVariant` 绘制方式。 | - |
+
+
+### TButtonSize
+
+按钮尺寸
+#### 枚举值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| large | TButtonSize | - | 大尺寸按钮 | - |
+| medium | TButtonSize | - | 中尺寸按钮 | - |
+| small | TButtonSize | - | 小尺寸按钮 | - |
+| extraSmall | TButtonSize | - | 超小尺寸按钮 | - |
+
+
+### TButtonVariant
+
+按钮变体（fill / outline / text / ghost）
+#### 枚举值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| fill | TButtonVariant | - | 填充按钮 | - |
+| outline | TButtonVariant | - | 描边按钮 | - |
+| text | TButtonVariant | - | 文字按钮 | - |
+| ghost | TButtonVariant | - | 幽灵按钮 | - |
+
+
+### TButtonIconPosition
+
+图标位置
+#### 枚举值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| left | TButtonIconPosition | - | 图标在文本左侧 | - |
+| right | TButtonIconPosition | - | 图标在文本右侧 | - |
+
+
+### TButtonShape
+
+按钮形状
+#### 枚举值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| rectangle | TButtonShape | - | 矩形按钮 | - |
+| round | TButtonShape | - | 圆角按钮 | - |
+| square | TButtonShape | - | 纯图标场景保持等宽高和默认圆角；图文内容不会被裁剪。 | - |
+| circle | TButtonShape | - | 圆形按钮 | - |
+
+
+### TButtonThemeData
+
+TButton 组件级 ThemeExtension
+
+只承载 `ButtonStyle` 不能表达的按钮子树默认视觉值。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| gradient | Gradient? | - | 渐变背景色（装饰层，非 ButtonStyle 字段） | 否 |
+| iconTextSpacing | double? | - | 图标与文案之间的间距，单位为逻辑像素。 仅在按钮同时提供 icon 和 child 时生效；该值控制两者 之间的实际间隔，不会改变按钮整体内边距。为空时使用组件内置 默认值 4dp；全局 `spacer4` 对应 32dp，不用于此间距。 | 否 |

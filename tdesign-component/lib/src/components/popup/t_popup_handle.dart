@@ -20,7 +20,7 @@ class TPopupHandle {
     this.useRootNavigator = false,
   });
 
-  /// 创建时传入的配置；每次 [open] 会按 [TPopupOptions.placement] 裁剪无效字段后使用。
+  /// [TPopup.show] 合并显式配置与 [TPopupThemeData] 后的配置；重新 [open] 不重新解析已合并的主题值，并按 [TPopupOptions.placement] 裁剪无效字段。
   final TPopupOptions options;
 
   /// 用于捕获调用点局部 Theme 的 context。
@@ -38,29 +38,26 @@ class TPopupHandle {
   int _openEpoch = 0;
   Completer<Object?>? _resultCompleter;
 
-  /// 当前这次打开结束后的路由结果。
+  /// 本次打开的路由结果；关闭时完成，不等待关闭动画结束，动画完成通知见 [TPopupOptions.onClosed]。
   ///
-  /// 每次 [open] 都会创建新的 Future；应在对应的 [open] 之后读取。
+  /// 每次成功 [open] 都会创建新的 Future；应在对应的 [open] 之后读取。
   Future<Object?> get result =>
       (_resultCompleter ??= Completer<Object?>()).future;
 
-  /// 浮层是否仍在展示（路由在栈中且未进入关闭流程）。
-  ///
-  /// 额外校验 [Route.isActive]：当路由被外部移除（如 Navigator 被销毁或
-  /// 路由被直接 pop）时，[_route] 引用可能残留，此时应视为未展示，
-  /// 避免句柄常驻为“展示中”而阻断后续 open。
+  /// 浮层仍在路由栈中且未开始关闭时为 true。
   bool get isShowing =>
       _route != null && !_isClosed && (_route?.isActive ?? false);
 
   /// 打开或重新打开浮层。
   ///
-  /// [context] 可选。首次调用须能解析 [Navigator]（传入 [context] 或依赖
-  /// [navigatorContext]）；后续可省略，优先复用缓存的 [NavigatorState]。
+  /// | 状态 | 行为 |
+  /// | --- | --- |
+  /// | 已展示 | 不重复打开 |
+  /// | Navigator 可用 | 打开浮层，创建新的 [result] Future |
+  /// | 无可用 Navigator | debug 触发断言，release 返回 |
+  /// | 参数与方向不匹配 | debug / release 均抛出 [FlutterError] |
   ///
-  /// 已展示时调用无副作用。Navigator 已销毁且未提供新 [context] 时，debug 下 assert，
-  /// release 下静默返回。
-  ///
-  /// 配置非法时会直接抛出 [FlutterError]，debug / release 行为一致。
+  /// [context] 导航上下文；未指定或无效时依次尝试缓存的 Navigator、[navigatorContext]。有效时重新捕获此处的内容 Theme，否则使用 [themeContext]；不重新解析 [options] 中已合并的 Popup 主题值。
   void open([BuildContext? context]) {
     if (isShowing) {
       return;
@@ -134,12 +131,17 @@ class TPopupHandle {
         });
   }
 
-  /// 关闭当前展示的浮层；[TPopupOptions.onVisibleChange] 的 [TPopupTrigger] 为
-  /// [TPopupTrigger.api]。
+  /// 关闭此句柄对应的浮层，触发源为 [TPopupTrigger.api]。
   ///
-  /// 已关闭或未展示时调用无副作用。
-  /// 嵌套浮层场景下会关闭当前 handle 对应的那一层，而不会误关栈顶其它浮层。
-  void close([Object? result]) {
+  /// | 状态 | 行为 |
+  /// | --- | --- |
+  /// | 未展示或已开始关闭 | 不执行操作 |
+  /// | 位于栈顶 | 返回上一层，执行关闭动画 |
+  /// | 位于其他浮层下方 | 直接移除此层，保留其他浮层 |
+  void close([
+    /// 关闭浮层时返回的业务结果；通过该句柄的 result Future 接收。
+    Object? result,
+  ]) {
     final route = _route;
     final navigator = route?.navigator ?? _lastNavigator;
     if (!isShowing || route == null || navigator == null) {

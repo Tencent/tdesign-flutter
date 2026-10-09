@@ -612,7 +612,7 @@ void main() {
       expect(find.text('District'), findsNothing);
     });
 
-    testWidgets('omits an empty subtitle like the public mini-program demo', (
+    testWidgets('omits an empty subtitle', (
       tester,
     ) async {
       await tester.pumpWidget(

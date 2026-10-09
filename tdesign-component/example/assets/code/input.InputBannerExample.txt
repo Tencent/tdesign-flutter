@@ -7,7 +7,7 @@ class InputBannerExample extends StatelessWidget {
   Widget _buildBanner(BuildContext context) => Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16),
     child: ClipRRect(
-      // MiniProgram demo: border-radius: 18rpx.
+      // Banner radius is 9 logical pixels.
       borderRadius: BorderRadius.circular(9),
       child: Theme(
         data: Theme.of(

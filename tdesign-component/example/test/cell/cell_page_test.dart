@@ -104,7 +104,7 @@ void main() {
         .toList();
   }
 
-  testWidgets('Cell 公开 Demo 与小程序 6 + 9 + 3 个实例逐项对应', (tester) async {
+  testWidgets('Cell 公开 Demo 展示 6 + 9 + 3 个实例', (tester) async {
     await pumpPage(tester);
 
     final themeData = TThemeData.defaultData();
@@ -169,7 +169,7 @@ void main() {
     ]);
   });
 
-  testWidgets('开关场景保持小程序默认开启并可交互', (tester) async {
+  testWidgets('开关场景默认开启并可交互', (tester) async {
     await pumpPage(tester);
 
     expect(tester.widget<TSwitch>(find.byType(TSwitch).first).value, isTrue);

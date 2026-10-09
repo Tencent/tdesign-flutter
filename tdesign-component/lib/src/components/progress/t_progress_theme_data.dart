@@ -9,6 +9,8 @@ import 't_progress_defaults.dart';
 ///
 /// 通过 Theme 子树注入，控制子树的默认视觉值。
 /// 除进度值、状态与线性渐变等实例语义外，具体绘制值优先读取组件 Theme。
+///
+/// {@category ComponentTheme}
 class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
   /// 进度条粗细
   final double? strokeWidth;
@@ -27,18 +29,23 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
   final BorderRadiusGeometry? linearBorderRadius;
 
   /// 环形进度条的正方形边长；未设置时由环形规格决定。
+  /// 未配置时 circular 为 112、microCircular / microButton 为 24 逻辑像素。
   final double? circleSize;
 
   /// 动画持续时间
+  /// 未配置时为 300 毫秒。
   final Duration? animationDuration;
 
   /// 不确定进度完成一次循环的时长。
+  /// 未配置时为 1200 毫秒；必须大于 Duration.zero，否则抛出 FlutterError。
   final Duration? indeterminateAnimationDuration;
 
   /// 不确定线性进度段占轨道宽度的比例。
+  /// 未配置时为 0.32；必须大于 0 且不大于 1。
   final double? indeterminateLinearSegmentFraction;
 
   /// 不确定环形进度弧占整圈的比例。
+  /// 未配置时为 0.25；必须大于 0 且小于 1。
   final double? indeterminateCircularValue;
 
   const TProgressThemeData({
@@ -97,6 +104,10 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
   Color resolveCircleInnerBgColor(Color fallback) =>
       _circleInnerBgLerp?.resolve(fallback) ?? circleInnerBgColor ?? fallback;
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TProgressThemeData copyWith({
     double? strokeWidth,
@@ -140,8 +151,19 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TProgressThemeData lerp(ThemeExtension<TProgressThemeData>? other, double t) {
+  TProgressThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    ThemeExtension<TProgressThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other is! TProgressThemeData) {
       return this;
     }

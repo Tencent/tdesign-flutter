@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 /// TSlider 与 TRangeSlider 共用的组件级 ThemeExtension。
 ///
 /// 轨道、滑块和提示标签由组件 Theme 控制，不读取 Material SliderTheme。
+///
+/// {@category ComponentTheme}
 class TSliderThemeData extends ThemeExtension<TSliderThemeData> {
   const TSliderThemeData({
     this.activeTrackColor,
@@ -15,8 +17,6 @@ class TSliderThemeData extends ThemeExtension<TSliderThemeData> {
     this.valueIndicatorColor,
     this.valueIndicatorTextColor,
     this.trackHeight,
-
-    /// 滑块外层装饰。
     this.decoration,
   });
 
@@ -35,7 +35,8 @@ class TSliderThemeData extends ThemeExtension<TSliderThemeData> {
   /// 滑块描边颜色；为空时使用全局灰阶色。
   final Color? thumbBorderColor;
 
-  /// 禁用滑块描边颜色；为空时使用全局禁用背景色。
+  /// 禁用滑块描边颜色；为空时浅色使用 componentBorder Token，
+  /// 暗色使用 bgColorComponentDisabled Token。
   final Color? disabledThumbBorderColor;
 
   /// 交互反馈颜色；为空时使用品牌色的透明层。
@@ -48,11 +49,16 @@ class TSliderThemeData extends ThemeExtension<TSliderThemeData> {
   final Color? valueIndicatorTextColor;
 
   /// 普通轨道粗细；胶囊形态仍使用其内置规格。
+  /// null 时为 4 逻辑像素。
   final double? trackHeight;
 
   /// 滑块外层装饰。
   final Decoration? decoration;
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TSliderThemeData copyWith({
     Color? activeTrackColor,
@@ -84,8 +90,19 @@ class TSliderThemeData extends ThemeExtension<TSliderThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TSliderThemeData lerp(ThemeExtension<TSliderThemeData>? other, double t) {
+  TSliderThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    ThemeExtension<TSliderThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other is! TSliderThemeData) {
       return this;
     }

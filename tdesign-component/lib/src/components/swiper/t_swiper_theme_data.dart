@@ -10,6 +10,8 @@ const _defaultControlIconSize = 18.0;
 /// 轮播组件级 ThemeExtension。
 ///
 /// 保存指示器、内容圆角和切换按钮的视觉默认值。
+///
+/// {@category ComponentTheme}
 class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
   const TSwiperThemeData({
     this.paginationAlignment,
@@ -30,41 +32,54 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
        assert(controlIconSize == null || controlIconSize > 0);
 
   /// 默认指示器对齐方式。
+  /// 未配置时 controls 居中，其他类型横向轮播为 bottomCenter、纵向轮播为 centerRight。
   final AlignmentGeometry? paginationAlignment;
 
   /// 指示器外边距。
+  /// 未配置时普通指示器四边为 12；controls 沿滚动轴两端为 15 逻辑像素。
   final EdgeInsetsGeometry? paginationMargin;
 
   /// 轮播内容圆角。
+  /// null 时使用 radiusLarge Token 构造圆角。
   final BorderRadiusGeometry? borderRadius;
 
   /// 激活项颜色。
+  /// null 时使用 textColorAnti Token。
   final Color? activeColor;
 
   /// 未激活项颜色。
   final Color? inactiveColor;
 
   /// 圆点直径。
+  /// 未配置时为 6 逻辑像素，必须大于 0。
   final double? dotSize;
 
   /// 长条激活项在滚动主轴上的长度。
+  /// 未配置时为 20 逻辑像素，必须大于 0。
   final double? activeDotExtent;
 
   /// 圆点间距。
+  /// 未配置时为 5 逻辑像素，必须大于或等于 0。
   final double? dotSpacing;
 
   /// 数字指示器文字样式。
   final TextStyle? fractionStyle;
 
   /// 数字指示器背景色。
+  /// null 时使用 textColorPlaceholder Token。
   final Color? fractionBackgroundColor;
 
   /// 控制按钮样式。
   final ButtonStyle? controlStyle;
 
   /// 控制按钮图标尺寸。
+  /// 未配置时为 18 逻辑像素，必须大于 0。
   final double? controlIconSize;
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TSwiperThemeData copyWith({
     AlignmentGeometry? paginationAlignment,
@@ -97,8 +112,19 @@ class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TSwiperThemeData lerp(TSwiperThemeData? other, double t) {
+  TSwiperThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    TSwiperThemeData? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other == null) {
       return this;
     }

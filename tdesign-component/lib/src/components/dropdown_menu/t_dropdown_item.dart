@@ -25,9 +25,16 @@ class TDropdownMenuOption<T> {
     this.group,
   });
 
+  /// 选项对应的业务值，用于选中判断和提交回调。
   final T value;
+
+  /// 选项显示文案。
   final String label;
+
+  /// 是否禁用该选项，默认 false；禁用选项不能通过点击提交。
   final bool disabled;
+
+  /// 多选面板中的分组标题；为空时归入无标题分组。
   final String? group;
 }
 
@@ -42,9 +49,16 @@ class TDropdownSingleSelectPanel<T> extends StatelessWidget {
     this.maxHeight,
   });
 
+  /// 当前面板的局部控制器；选择后用它关闭面板。
   final TDropdownMenuPanelController controller;
+
+  /// 按显示顺序排列的选项。
   final List<TDropdownMenuOption<T>> options;
+
+  /// 受控选中值；为空时不主动指定选中项。
   final T? value;
+
+  /// 点击启用选项时提交其业务值，然后请求关闭面板；由使用方更新 [value]。
   final ValueChanged<T> onChanged;
 
   /// 滚动主体的最大高度；默认 280dp。
@@ -106,10 +120,19 @@ class TDropdownMultiSelectPanel<T> extends StatefulWidget {
     this.maxHeight,
   }) : assert(columns >= 1 && columns <= 3);
 
+  /// 当前面板的局部控制器，用于确认或取消时关闭面板。
   final TDropdownMenuPanelController controller;
+
+  /// 可选择的选项；[TDropdownMenuOption.group] 决定显示分组。
   final List<TDropdownMenuOption<T>> options;
+
+  /// 已提交的受控值集合；打开时初始化草稿，未确认关闭不会提交草稿。
   final Set<T> values;
+
+  /// 点击确认时提交草稿集合，再请求关闭面板；由使用方更新 [values]。
   final ValueChanged<Set<T>> onConfirm;
+
+  /// 每行选项列数，默认 1；支持 1 至 3 列。
   final int columns;
 
   /// 面板最大高度；默认滚动主体最多 280dp，底部操作区另计。

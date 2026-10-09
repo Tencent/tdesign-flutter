@@ -1,0 +1,665 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
+
+Widget shell(Widget child, {List<ThemeExtension<dynamic>> extra = const []}) =>
+    MaterialApp(
+      theme: TThemeBuilder.light(TThemeData.defaultData())
+          .copyWith(extensions: [TThemeData.defaultData(), ...extra]),
+      home: Scaffold(
+        body: Center(child: SizedBox(width: 360, child: child)),
+      ),
+    );
+
+Future<void> remove(WidgetTester tester) async {
+  await tester.pumpWidget(const SizedBox.shrink());
+  await tester.pump();
+}
+
+TSwipeCellPanel panel() => TSwipeCellPanel(
+  children: [TSwipeCellAction(label: 'Delete', onPressed: (_) {})],
+);
+
+void main() {
+  testWidgets('Input initialValue is read once', (tester) async {
+    await tester.pumpWidget(shell(const TInput(initialValue: 'first')));
+    await tester.pumpWidget(shell(const TInput(initialValue: 'second')));
+    expect(
+      tester.widget<TextField>(find.byType(TextField)).controller!.text,
+      'first',
+    );
+  });
+
+  testWidgets('Input borrowed controller and focus node survive unmount', (
+    tester,
+  ) async {
+    final controller = TextEditingController(text: 'borrowed');
+    final focus = FocusNode();
+    await tester.pumpWidget(
+      shell(TInput(controller: controller, focusNode: focus)),
+    );
+    await remove(tester);
+    controller.text = 'still-live';
+    void listener() {}
+    focus.addListener(listener);
+    focus.removeListener(listener);
+    expect(controller.text, 'still-live');
+    controller.dispose();
+    focus.dispose();
+  });
+
+  testWidgets(
+    'Input password toggle suppresses always clear button without suffix',
+    (tester) async {
+      final controller = TextEditingController(text: 'secret');
+      await tester.pumpWidget(
+        shell(
+          TInput(
+            controller: controller,
+            clearButtonMode: TInputClearButtonMode.always,
+          ),
+        ),
+      );
+      expect(find.byTooltip('清除'), findsOneWidget);
+      await tester.pumpWidget(
+        shell(
+          TInput(
+            controller: controller,
+            obscureText: true,
+            showPasswordToggle: true,
+            clearButtonMode: TInputClearButtonMode.always,
+          ),
+        ),
+      );
+      expect(find.byTooltip('清除'), findsNothing);
+      expect(find.byTooltip('显示密码'), findsOneWidget);
+      await remove(tester);
+      controller.dispose();
+    },
+  );
+
+  testWidgets('Input controller changes are silent while clear notifies', (
+    tester,
+  ) async {
+    final controller = TextEditingController(text: 'start');
+    final events = <String>[];
+    await tester.pumpWidget(
+      shell(
+        TInput(
+          controller: controller,
+          onChanged: events.add,
+          clearButtonMode: TInputClearButtonMode.always,
+        ),
+      ),
+    );
+    controller.text = 'programmatic';
+    await tester.pump();
+    expect(events, isEmpty);
+    await tester.tap(find.byTooltip('清除'));
+    await tester.pump();
+    expect(controller.text, '');
+    expect(events, ['']);
+    await remove(tester);
+    controller.dispose();
+  });
+
+  testWidgets(
+    'Input weighted limit counts non ASCII code points rather than UTF16 units',
+    (tester) async {
+      final controller = TextEditingController();
+      await tester.pumpWidget(
+        shell(TInput(controller: controller, maxCharacter: 3)),
+      );
+      await tester.enterText(find.byType(TextField), 'a😀b');
+      expect(controller.text, 'a😀');
+      await remove(tester);
+      controller.dispose();
+    },
+  );
+
+  testWidgets(
+    'Textarea clamps implicit minLines and shares weighted formatter',
+    (tester) async {
+      final controller = TextEditingController();
+      await tester.pumpWidget(
+        shell(TTextarea(controller: controller, maxLines: 2, maxCharacter: 3)),
+      );
+      final editor = tester.widget<TextField>(find.byType(TextField));
+      expect(editor.minLines, 2);
+      expect(editor.maxLines, 2);
+      await tester.enterText(find.byType(TextField), 'a😀b');
+      expect(controller.text, 'a😀');
+      await remove(tester);
+      controller.dispose();
+    },
+  );
+
+  testWidgets(
+    'Search clear works unfocused and follows controller then clear then changed order',
+    (tester) async {
+      final controller = TextEditingController(text: 'query');
+      final focus = FocusNode();
+      final events = <String>[];
+      controller.addListener(() => events.add('controller:${controller.text}'));
+      await tester.pumpWidget(
+        shell(
+          TSearchBar(
+            controller: controller,
+            focusNode: focus,
+            onClearPressed: () => events.add('clear:${controller.text}'),
+            onChanged: (v) => events.add('changed:$v'),
+          ),
+        ),
+      );
+      expect(focus.hasFocus, isFalse);
+      expect(find.byIcon(TIcons.close_circle_filled), findsOneWidget);
+      await tester.tap(find.byIcon(TIcons.close_circle_filled));
+      await tester.pump();
+      expect(events, ['controller:', 'clear:', 'changed:']);
+      await remove(tester);
+      controller.dispose();
+      focus.dispose();
+    },
+  );
+
+  testWidgets('Search readOnly hides clear while remaining focusable', (
+    tester,
+  ) async {
+    final controller = TextEditingController(text: 'query');
+    final focus = FocusNode();
+    await tester.pumpWidget(
+      shell(
+        TSearchBar(controller: controller, focusNode: focus, readOnly: true),
+      ),
+    );
+    expect(find.byIcon(TIcons.close_circle_filled), findsNothing);
+    await tester.tap(find.byType(TextField));
+    await tester.pump();
+    expect(focus.hasFocus, isTrue);
+    await remove(tester);
+    controller.dispose();
+    focus.dispose();
+  });
+
+  testWidgets(
+    'Checkbox group limit rejects additions but permits cancel and remains controlled',
+    (tester) async {
+      final events = <List<String>>[];
+      var limits = 0;
+      await tester.pumpWidget(
+        shell(
+          TCheckboxGroup<String>(
+            value: const ['a'],
+            maxSelected: 1,
+            options: const [
+              TCheckboxOption(value: 'a', label: 'A'),
+              TCheckboxOption(value: 'b', label: 'B'),
+            ],
+            onChanged: events.add,
+            onMaxSelected: () => limits++,
+          ),
+        ),
+      );
+      await tester.tap(find.text('B'));
+      await tester.pump();
+      expect(limits, 1);
+      expect(events, isEmpty);
+      await tester.tap(find.text('A'));
+      await tester.pump();
+      expect(events.single, isEmpty);
+      expect(
+        tester.widgetList<TCheckbox>(find.byType(TCheckbox)).first.value,
+        isTrue,
+      );
+    },
+  );
+
+  testWidgets(
+    'Radio selecting the current value still invokes group onChanged',
+    (tester) async {
+      final events = <String>[];
+      await tester.pumpWidget(
+        shell(
+          TRadioGroup<String>.options(
+            value: 'a',
+            onChanged: events.add,
+            options: const [
+              TRadioOption(value: 'a', label: 'A'),
+              TRadioOption(value: 'b', label: 'B'),
+            ],
+          ),
+        ),
+      );
+      await tester.tap(find.text('A'));
+      await tester.pump();
+      expect(events, ['a']);
+    },
+  );
+
+  testWidgets('Radio group null onChanged disables all items', (tester) async {
+    await tester.pumpWidget(
+      shell(
+        TRadioGroup<String>.options(
+          value: 'a',
+          options: const [
+            TRadioOption(value: 'a', label: 'A'),
+            TRadioOption(value: 'b', label: 'B'),
+          ],
+        ),
+      ),
+    );
+    await tester.tap(find.text('B'));
+    await tester.pump();
+    expect(
+      tester
+          .widget<TRadioGroup<String>>(find.byType(TRadioGroup<String>))
+          .value,
+      'a',
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
+    'Upload rejects the whole batch if one selected file exceeds size',
+    (tester) async {
+      final changed = <List<TUploadFile>>[];
+      final errors = <TUploadValidationError>[];
+      await tester.pumpWidget(
+        shell(
+          TUpload(
+            files: const [],
+            maxFiles: 2,
+            maxFileSize: 10,
+            picker: () async => const [
+              TUploadFile(id: 'a', name: 'small', size: 5),
+              TUploadFile(id: 'b', name: 'large', size: 50),
+            ],
+            onChanged: changed.add,
+            onValidationError: errors.add,
+          ),
+        ),
+      );
+      await tester.tap(find.byKey(const ValueKey('upload-add')));
+      await tester.pumpAndSettle();
+      expect(changed, isEmpty);
+      expect(errors, [TUploadValidationError.fileSize]);
+    },
+  );
+
+  testWidgets(
+    'Upload cannot enforce file size for files without size metadata',
+    (tester) async {
+      List<TUploadFile>? changed;
+      await tester.pumpWidget(
+        shell(
+          TUpload(
+            files: const [],
+            maxFileSize: 1,
+            picker: () async => const [TUploadFile(id: 'a', name: 'unknown')],
+            onChanged: (v) => changed = v,
+          ),
+        ),
+      );
+      await tester.tap(find.byKey(const ValueKey('upload-add')));
+      await tester.pumpAndSettle();
+      expect(changed!.single.id, 'a');
+      expect(
+        () => changed!.add(const TUploadFile(id: 'b', name: 'extra')),
+        throwsUnsupportedError,
+      );
+    },
+  );
+
+  testWidgets('Upload onError also catches business onChanged exceptions', (
+    tester,
+  ) async {
+    final failure = StateError('business callback failed');
+    final errors = <Object>[];
+    await tester.pumpWidget(
+      shell(
+        TUpload(
+          files: const [],
+          picker: () async => const [TUploadFile(id: 'a', name: 'picked')],
+          onChanged: (_) => throw failure,
+          onError: errors.add,
+        ),
+      ),
+    );
+    await tester.tap(find.byKey(const ValueKey('upload-add')));
+    await tester.pumpAndSettle();
+    expect(errors.single, same(failure));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
+    'Upload nullable itemSize actually falls back to eighty logical pixels',
+    (tester) async {
+      await tester.pumpWidget(
+        shell(TUpload(files: const [], onChanged: (_) {})),
+      );
+      expect(
+        tester.getSize(find.byKey(const ValueKey('upload-add'))),
+        const Size(80, 80),
+      );
+      await tester.pumpWidget(
+        shell(
+          TUpload(files: const [], onChanged: (_) {}),
+          extra: [const TUploadThemeData(itemSize: 92)],
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        tester.getSize(find.byKey(const ValueKey('upload-add'))),
+        const Size(92, 92),
+      );
+    },
+  );
+
+  testWidgets(
+    'Toast reuses anonymous ID while explicit IDs coexist and dismissToast is public close API',
+    (tester) async {
+      late BuildContext context;
+      await tester.pumpWidget(
+        shell(
+          Builder(
+            builder: (c) {
+              context = c;
+              return const Text('host');
+            },
+          ),
+        ),
+      );
+      final first = TToast.showText(
+        'first',
+        context: context,
+        duration: TToast.infiniteDuration,
+      );
+      await tester.pumpAndSettle();
+      final second = TToast.showText(
+        'second',
+        context: context,
+        duration: TToast.infiniteDuration,
+      );
+      await tester.pumpAndSettle();
+      expect(second, first);
+      expect(find.text('first'), findsNothing);
+      TToast.showText(
+        'named',
+        context: context,
+        toastId: 'named-id',
+        duration: TToast.infiniteDuration,
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('second'), findsOneWidget);
+      expect(find.text('named'), findsOneWidget);
+      TToast.dismissToast(second);
+      await tester.pumpAndSettle();
+      expect(find.text('second'), findsNothing);
+      expect(find.text('named'), findsOneWidget);
+      TToast.dismissAll();
+      await tester.pumpAndSettle();
+    },
+  );
+
+  testWidgets(
+    'Dialog typed result completes after callback before reverse animation ends',
+    (tester) async {
+      late BuildContext context;
+      final events = <String>[];
+      String? result;
+      await tester.pumpWidget(
+        shell(
+          Builder(
+            builder: (c) {
+              context = c;
+              return const Text('host');
+            },
+          ),
+        ),
+      );
+      final future = TDialog.show<String>(
+        context,
+        dialog: TDialog(
+          title: const Text('Dialog'),
+          content: const Text('Body'),
+          actions: [
+            TDialogAction(
+              child: const Text('OK'),
+              result: 'ok',
+              onPressed: () => events.add('pressed'),
+            ),
+          ],
+        ),
+      );
+      unawaited(
+        future.then((v) {
+          result = v;
+          events.add('result');
+        }),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('OK'));
+      await tester.pump();
+      expect(result, 'ok');
+      expect(events, ['pressed', 'result']);
+      expect(find.byType(TDialog), findsOneWidget);
+      await tester.pumpAndSettle();
+      expect(find.byType(TDialog), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Dialog action without callback is not disabled and can auto close',
+    (tester) async {
+      late BuildContext context;
+      bool? result;
+      await tester.pumpWidget(
+        shell(
+          Builder(
+            builder: (c) {
+              context = c;
+              return const Text('host');
+            },
+          ),
+        ),
+      );
+      final future = TDialog.show<bool>(
+        context,
+        dialog: TDialog(
+          title: const Text('Dialog'),
+          actions: const [TDialogAction(child: Text('Close'), result: true)],
+        ),
+      );
+      unawaited(future.then((v) => result = v));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Close'));
+      await tester.pumpAndSettle();
+      expect(result, isTrue);
+    },
+  );
+
+  test(
+    'SwipeCell unbound Future completes without dispose obligation',
+    () async {
+      final controller = TSwipeCellController();
+      await controller.open(TSwipeCellSide.end);
+      await controller.close();
+    },
+  );
+
+  testWidgets(
+    'SwipeCell cancelled opening Future completes while closing is still animated',
+    (tester) async {
+      final controller = TSwipeCellController();
+      final events = <String>[];
+      await tester.pumpWidget(
+        shell(
+          SizedBox(
+            height: 64,
+            child: TSwipeCell(
+              controller: controller,
+              end: panel(),
+              onOpenChanged: (side, open) => events.add('${side.name}:$open'),
+              child: const Text('Cell'),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      var openingDone = false;
+      var closingDone = false;
+      unawaited(
+        controller.open(TSwipeCellSide.end).then((_) => openingDone = true),
+      );
+      expect(events, ['end:true']);
+      expect(openingDone, isFalse);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 30));
+      unawaited(controller.close().then((_) => closingDone = true));
+      await tester.pump();
+      expect(openingDone, isTrue);
+      expect(closingDone, isFalse);
+      expect(events, ['end:true', 'end:false']);
+      await tester.pumpAndSettle();
+      expect(closingDone, isTrue);
+    },
+  );
+
+  testWidgets('SwipeCell enabled false does not block controller commands', (
+    tester,
+  ) async {
+    final controller = TSwipeCellController();
+    final events = <bool>[];
+    await tester.pumpWidget(
+      shell(
+        SizedBox(
+          height: 64,
+          child: TSwipeCell(
+            controller: controller,
+            enabled: false,
+            end: panel(),
+            onOpenChanged: (_, open) => events.add(open),
+            child: const Text('Cell'),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    unawaited(controller.open(TSwipeCellSide.end));
+    await tester.pumpAndSettle();
+    expect(events, [true]);
+    unawaited(controller.close());
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets(
+    'TimeCounter zero start fires finish once but mount and reset do not',
+    (tester) async {
+      final controller = TTimeCounterController();
+      var finished = 0;
+      await tester.pumpWidget(
+        shell(
+          TTimeCounter(
+            time: 0,
+            autoStart: false,
+            controller: controller,
+            onFinish: () => finished++,
+          ),
+        ),
+      );
+      expect(finished, 0);
+      controller.start();
+      await tester.pump();
+      expect(finished, 1);
+      controller.start();
+      await tester.pump();
+      expect(finished, 1);
+      controller.reset(0);
+      await tester.pump();
+      expect(finished, 1);
+      controller.start();
+      await tester.pump();
+      expect(finished, 2);
+      await remove(tester);
+      controller.dispose();
+    },
+  );
+
+  testWidgets(
+    'TimeCounter shared controller broadcasts reset and reset remains paused',
+    (tester) async {
+      final controller = TTimeCounterController();
+      await tester.pumpWidget(
+        shell(
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TTimeCounter(
+                time: 5000,
+                autoStart: false,
+                controller: controller,
+                content: (n) => Text('a:$n'),
+              ),
+              TTimeCounter(
+                time: 6000,
+                autoStart: false,
+                controller: controller,
+                content: (n) => Text('b:$n'),
+              ),
+            ],
+          ),
+        ),
+      );
+      controller.reset(1000);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 1200));
+      expect(find.text('a:1000'), findsOneWidget);
+      expect(find.text('b:1000'), findsOneWidget);
+      controller.start();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 1100));
+      expect(find.text('a:0'), findsOneWidget);
+      expect(find.text('b:0'), findsOneWidget);
+      await remove(tester);
+      controller.dispose();
+    },
+  );
+
+  testWidgets(
+    'TimeCounter declarative time change resets display without onChanged notification',
+    (tester) async {
+      final controller = TTimeCounterController();
+      var time = 5000;
+      late StateSetter update;
+      final events = <int>[];
+      await tester.pumpWidget(
+        shell(
+          StatefulBuilder(
+            builder: (_, setState) {
+              update = setState;
+              return TTimeCounter(
+                time: time,
+                autoStart: false,
+                controller: controller,
+                onChanged: events.add,
+                content: (n) => Text('value:$n'),
+              );
+            },
+          ),
+        ),
+      );
+      controller.reset(1000);
+      await tester.pump();
+      expect(events, [1000]);
+      update(() => time = 6000);
+      await tester.pump();
+      expect(find.text('value:6000'), findsOneWidget);
+      expect(events, [1000]);
+      await remove(tester);
+      controller.dispose();
+    },
+  );
+}

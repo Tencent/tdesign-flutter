@@ -7,7 +7,7 @@ import '../demo_page_test_utils.dart';
 import 'notice_bar_demo_test_spec.dart';
 
 void main() {
-  testWidgets('公开 Demo 按小程序页面边界组合', (tester) async {
+  testWidgets('公开 Demo 按示例分组组合', (tester) async {
     await pumpFullDemoPage(tester, noticeBarDemoPageTestSpec, ThemeMode.light);
 
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));

@@ -8,8 +8,11 @@ import 't_notice_bar_types.dart';
 /// TNoticeBar 组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树的默认公告栏样式。
+///
+/// {@category ComponentTheme}
 class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
   /// 文字高度
+  /// 未配置时为 22 逻辑像素，表示正文区域高度，外层内边距另计。
   final double? height;
 
   /// 公告栏背景色
@@ -25,6 +28,7 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
   final Color? rightIconColor;
 
   /// 公告栏内边距
+  /// 未配置时使用 defaultPadding，即上/下 13、左 16、右 12 逻辑像素。
   final EdgeInsetsGeometry? padding;
 
   const TNoticeBarThemeData({
@@ -44,8 +48,14 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
     right: 12,
   );
 
-  /// 合并两个 ThemeExtension，[other] 优先于 this
-  TNoticeBarThemeData merge(TNoticeBarThemeData? other) {
+  /// 合并主题配置。
+  ///
+  /// ## 返回值
+  /// other 的非空字段优先的合并主题；other 为 null 时返回当前主题。
+  TNoticeBarThemeData merge(
+    /// 要合并的目标主题；为空时保留当前配置。
+    TNoticeBarThemeData? other,
+  ) {
     if (other == null) {
       return this;
     }
@@ -60,8 +70,14 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
   }
 
   /// 根据状态和上下文解析出完整的样式（颜色等）
+  ///
+  /// ## 返回值
+  /// 将状态预设与当前主题覆盖合并后的 NoticeBar 视觉配置。
   TNoticeBarThemeData resolve(
+    /// 当前构建上下文，用于读取祖先配置。
     BuildContext context, {
+
+    /// 公告栏语义状态，默认 info，用于解析状态对应的颜色。
     TNoticeBarStatus status = TNoticeBarStatus.info,
   }) {
     final t = context.tTheme;
@@ -105,6 +121,10 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
     );
   }
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TNoticeBarThemeData copyWith({
     double? height,
@@ -124,9 +144,17 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
   TNoticeBarThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
     ThemeExtension<TNoticeBarThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
     double t,
   ) {
     if (other is! TNoticeBarThemeData) {
@@ -146,6 +174,9 @@ class TNoticeBarThemeData extends ThemeExtension<TNoticeBarThemeData> {
   ///
   /// 当仅一端有值时采用离散切换，避免把缺省值错误地当作 0。组件已知默认值
   /// 的字段会在 [lerp] 内使用其实际默认值平滑插值。
+  ///
+  /// ## 返回值
+  /// 按 t 线性插值的数值；两端均为 null 时为 null，仅一端为 null 时将该端按 0 计算。
   static double? lerpDouble(
     /// 起始值。
     double? a,

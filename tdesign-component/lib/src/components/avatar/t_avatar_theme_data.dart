@@ -11,6 +11,8 @@ import 't_avatar_types.dart';
 /// 头像组件级 ThemeExtension。
 ///
 /// 仅保存视觉默认值，不保存头像内容、回调或头像组成员。
+///
+/// {@category ComponentTheme}
 class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
   const TAvatarThemeData({
     this.dimension,
@@ -54,10 +56,10 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
              groupBorderWidth * 2 <= dimension,
        );
 
-  /// 自定义头像边长。
+  /// 自定义头像边长；未设置时小、中、大尺寸分别为 40、48、64 逻辑像素。
   final double? dimension;
 
-  /// 默认图标大小。
+  /// 默认图标大小；未设置时小、中、大尺寸分别为 20、24、32 逻辑像素。
   final double? iconSize;
 
   /// 方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。
@@ -72,14 +74,14 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
   /// 默认图标与继承文字的前景色；未设置时回退全局品牌色。
   final Color? foregroundColor;
 
-  /// 头像组重叠宽度。
+  /// 头像组重叠宽度；未设置时为 8 逻辑像素，实例 spacing 优先。
   final double? groupSpacing;
 
   /// 头像组成员描边宽度。
   /// 未设置时按成员尺寸使用小/中/大 1/2/3 逻辑像素。
   final double? groupBorderWidth;
 
-  /// 头像组成员描边颜色。
+  /// 头像组成员描边颜色；未设置时使用 `bgColorContainer` Token。
   final Color? groupBorderColor;
 
   /// 头像组成员阴影；未设置时使用 1px 水平偏移、2px `blurRadius` 和 15% 黑色。
@@ -135,6 +137,10 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
           .clamp(0.0, dimension)
           .toDouble();
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TAvatarThemeData copyWith({
     double? dimension,
@@ -174,8 +180,19 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TAvatarThemeData lerp(TAvatarThemeData? other, double t) {
+  TAvatarThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    TAvatarThemeData? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other == null) {
       return this;
     }

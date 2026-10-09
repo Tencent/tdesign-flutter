@@ -16,6 +16,8 @@
 
 
 ### TResultStatus
+
+结果状态。
 #### 枚举值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -24,3 +26,19 @@
 | success | TResultStatus | - | 成功结果状态。 | - |
 | warning | TResultStatus | - | 警告结果状态。 | - |
 | error | TResultStatus | - | 错误结果状态。 | - |
+
+
+### TResultThemeData
+
+结果组件级 ThemeExtension
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| descriptionStyle | TextStyle? | - | 描述文字样式 未配置时使用 fontBodyMedium / textColorSecondary Token。 | 否 |
+| iconSize | double? | - | 默认状态图标尺寸；自定义 icon 不使用该字段。 未配置时为 80 逻辑像素，必须大于 0。 | 否 |
+| titleStyle | TextStyle? | - | 标题文字样式；默认使用 fontTitleMedium / textColorPrimary Token。 | 否 |

@@ -1,2 +1,2 @@
-// TCascader 是平铺面板；小程序的 78vh 属于外层 Popup，不是面板默认值。
+// TCascader 是平铺面板；面板默认高度由其内容和父级约束决定。
 const double defaultCascaderHeight = 360;

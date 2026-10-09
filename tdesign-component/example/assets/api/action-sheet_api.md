@@ -5,8 +5,6 @@
 类型参数：`T`
 
 
-动作面板项目
-
 #### 构造方法
 
 ##### TActionSheetItem
@@ -24,7 +22,11 @@
 
 ### TActionSheet
 
-动作面板命令式入口
+动作面板命令式入口。
+
+点击启用项目时先调用 onSelected，再请求关闭；回调为空时仍会关闭。
+点击取消按钮先调用 onCancel，再请求关闭；onClosed 在关闭流程完成后通知。
+各方法返回 TPopupHandle，可主动关闭面板。
 
 #### 静态方法
 
@@ -59,7 +61,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | TPopupHandle | - | - | - |
+| 返回值 | TPopupHandle | - | 已经发起打开的动作面板控制句柄，可用于查询状态与关闭面板。 | - |
 
 
 ##### TActionSheet.showGridSections
@@ -92,7 +94,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | TPopupHandle | - | - | - |
+| 返回值 | TPopupHandle | - | 已经发起打开的动作面板控制句柄，可用于查询状态与关闭面板。 | - |
 
 
 ##### TActionSheet.showList
@@ -125,81 +127,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | TPopupHandle | - | - | - |
-
-
-### TActionSheetThemeData
-
-TActionSheet 组件级视觉 ThemeExtension
-
-#### 构造方法
-
-##### TActionSheetThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| barrierColor | Color? | - | 蒙层颜色 | 否 |
-| gridIconExtent | double? | - | 宫格布局的图标槽位尺寸；未设置时默认 40dp。 | 否 |
-| gridItemHeight | double? | - | 宫格项目高度 | 否 |
-| iconColor | Color? | - | 默认图标颜色。 | 否 |
-| iconSize | double? | - | 默认图标字形尺寸；同时作为列表图标槽位尺寸。 | 否 |
-| panelRadius | double? | - | 面板圆角 | 否 |
-
-
-#### 实例方法
-
-##### TActionSheetThemeData.copyWith
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| gridItemHeight | double? | - | 字段含义：宫格项目高度 调用时的空值行为见方法说明。 | 否 |
-| barrierColor | Color? | - | 字段含义：蒙层颜色 调用时的空值行为见方法说明。 | 否 |
-| panelRadius | double? | - | 字段含义：面板圆角 调用时的空值行为见方法说明。 | 否 |
-| iconSize | double? | - | 字段含义：默认图标字形尺寸；同时作为列表图标槽位尺寸。 调用时的空值行为见方法说明。 | 否 |
-| gridIconExtent | double? | - | 字段含义：宫格布局的图标槽位尺寸；未设置时默认 40dp。 调用时的空值行为见方法说明。 | 否 |
-| iconColor | Color? | - | 字段含义：默认图标颜色。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TActionSheetThemeData | - | - | - |
-
-
-##### TActionSheetThemeData.lerp
-
-位置参数：`other, t`
-
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TActionSheetThemeData&gt;? | - | - | 是 |
-| t | double | - | - | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TActionSheetThemeData | - | - | - |
-
-
-##### TActionSheetThemeData.merge
-
-位置参数：`other`
-
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | TActionSheetThemeData? | - | - | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TActionSheetThemeData | - | - | - |
+| 返回值 | TPopupHandle | - | 已经发起打开的动作面板控制句柄，可用于查询状态与关闭面板。 | - |
 
 
 ### TActionSheetGridLayout
@@ -217,8 +145,8 @@ TActionSheet 组件级视觉 ThemeExtension
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| count | int | - | 一个可视面板期望容纳的项目数 | 否 |
-| rows | int | - | 行数 | 否 |
+| count | int | - | 一个可视面板期望容纳的项目数，默认 8。必须大于 0、不得小于 rows， 且能被 rows 整除。 | 否 |
+| rows | int | - | 行数，默认 2；必须大于 0。 | 否 |
 
 
 ##### TActionSheetGridLayout.paged
@@ -227,8 +155,8 @@ TActionSheet 组件级视觉 ThemeExtension
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| count | int | - | 一个可视面板期望容纳的项目数 | 否 |
-| rows | int | - | 行数 | 否 |
+| count | int | - | 一个可视面板期望容纳的项目数，默认 8。必须大于 0、不得小于 rows， 且能被 rows 整除。 | 否 |
+| rows | int | - | 行数，默认 2；必须大于 0。 | 否 |
 
 
 ##### TActionSheetGridLayout.scroll
@@ -237,8 +165,8 @@ TActionSheet 组件级视觉 ThemeExtension
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| count | int | - | 一个可视面板期望容纳的项目数 | 否 |
-| rows | int | - | 行数 | 否 |
+| count | int | - | 一个可视面板期望容纳的项目数，默认 8。必须大于 0、不得小于 rows， 且能被 rows 整除。 | 否 |
+| rows | int | - | 行数，默认 2；必须大于 0。 | 否 |
 | itemMinWidth | double? | - | 横向滚动项目的最小宽度；仅滚动布局可能返回非空值。 | 否 |
 
 
@@ -246,10 +174,10 @@ TActionSheet 组件级视觉 ThemeExtension
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| count | int | - | 一个可视面板期望容纳的项目数 | - |
+| count | int | - | 一个可视面板期望容纳的项目数，默认 8。必须大于 0、不得小于 rows， 且能被 rows 整除。 | - |
 | itemMinWidth | double? | - | 横向滚动项目的最小宽度；仅滚动布局可能返回非空值。 | - |
 | mode | TActionSheetGridMode | - | 布局模式 | - |
-| rows | int | - | 行数 | - |
+| rows | int | - | 行数，默认 2；必须大于 0。 | - |
 
 
 ### TActionSheetGridSection
@@ -310,11 +238,30 @@ TActionSheet 组件级视觉 ThemeExtension
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| item | TActionSheetItem&lt;T&gt; | - | - | 是 |
+| item | TActionSheetItem&lt;T&gt; | - | 被点击的原始动作项目。 | 是 |
 
 
 #### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | void | - | - | - |
+| 返回值 | void | - | 无返回值。 | - |
+
+
+### TActionSheetThemeData
+
+TActionSheet 组件级视觉 ThemeExtension
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| barrierColor | Color? | - | 蒙层颜色 | 否 |
+| gridIconExtent | double? | - | 宫格布局的图标槽位尺寸；未设置时默认 40dp。 | 否 |
+| gridItemHeight | double? | - | 宫格项目高度 未配置时为 96 逻辑像素，show 方法的 itemHeight 优先。 | 否 |
+| iconColor | Color? | - | 默认图标颜色。 未配置时使用 textColorPrimary Token；禁用项使用 textColorDisabled。 | 否 |
+| iconSize | double? | - | 默认图标字形尺寸；同时作为列表图标槽位尺寸。 未配置时为 24 逻辑像素。 | 否 |
+| panelRadius | double? | - | 面板圆角 | 否 |

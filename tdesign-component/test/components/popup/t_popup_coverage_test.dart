@@ -1079,7 +1079,7 @@ void main() {
       }
     });
 
-    testWidgets('默认动画时长为 240ms（对齐小程序公开属性）', (tester) async {
+    testWidgets('默认动画时长为 240ms', (tester) async {
       bindPopupTestResource(PopupTestResourceDelegate.zh());
       final observer = _CapturingNavigatorObserver();
       await tester.pumpWidget(

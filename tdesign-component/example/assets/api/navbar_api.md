@@ -24,6 +24,8 @@
 
 ### TNavBarItem
 
+NavBar 操作项
+
 #### 构造方法
 
 ##### TNavBarItem
@@ -36,3 +38,46 @@
 | iconSize | double? | 24.0 | 图标尺寸，默认 24；显式传入 null 时由当前 `IconTheme` 决定。 | 否 |
 | onTap | VoidCallback? | - | 点击回调；`null` 表示禁用 | 否 |
 | padding | EdgeInsetsGeometry? | - | 内部填充 | 否 |
+
+
+### TNavBarBorder
+
+NavBar 边框配置（迁入 ThemeData）
+
+#### 构造方法
+
+##### TNavBarBorder
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| color | Color? | - | 边框颜色 | 否 |
+| padding | EdgeInsetsGeometry? | - | 内部填充 | 否 |
+| radius | double | 22.0 | 边框圆角 | 否 |
+| width | double | 1.0 | 边框宽度 | 否 |
+
+
+### TNavBarThemeData
+
+NavBar 组件 ThemeExtension
+
+管理 TNavBar 的子树级默认样式（标题颜色、背景、内边距、阴影、边框等）。
+构造器参数优先级高于 ThemeData。高度属于 PreferredSizeWidget 契约，只能通过 TNavBar.height 设置。
+
+复制配置时，省略或传入 null 会保留原值；恢复下层 Theme 或 Token 时，
+重新构造主题并只传入仍需保留的字段。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 背景颜色 | 否 |
+| backIconColor | Color? | - | 返回图标颜色 | 否 |
+| border | TNavBarBorder? | - | 操作项边框配置，仅在 TNavBar.useBorderStyle 为 true 时生效 | 否 |
+| boxShadow | List&lt;BoxShadow&gt;? | - | 底部阴影 | 否 |
+| opacity | double? | - | 背景颜色透明度，未配置时为 1 | 否 |
+| padding | EdgeInsetsGeometry? | - | 内部填充 | 否 |
+| titleColor | Color? | - | 标题的子树默认颜色。 仅在 NavBar 标题未自行提供前景色时生效；标题 Widget 自身的显式颜色优先。 | 否 |
+| titleMargin | double? | - | 中间文案左右两边间距 | 否 |

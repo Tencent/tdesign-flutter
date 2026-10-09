@@ -26,11 +26,22 @@ class TToolbarPressable extends StatefulWidget {
   /// 按下时的目标透明度。
   static const double kToolbarPressedOpacity = 0.5;
 
+  /// 工具栏按钮内容。
   final Widget child;
+
+  /// 点击回调；为空时不响应点击或显示按压反馈。
   final VoidCallback? onTap;
+
+  /// 内容内边距；为空时使用全局 spacer 水平间距和 spacer1 垂直间距。
   final EdgeInsetsGeometry? padding;
+
+  /// 是否允许交互，默认 true；还需要 [onTap] 非空。
   final bool enabled;
+
+  /// 按压透明度动画时长，默认 100ms。
   final Duration pressDuration;
+
+  /// 按下时整体透明度，默认 0.5。
   final double pressedOpacity;
 
   /// 为子树 [Text] 提供默认样式（merge 语义，子控件已有样式优先）。

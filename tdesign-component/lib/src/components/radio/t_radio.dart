@@ -15,6 +15,12 @@ import '../divider/t_divider_theme_data.dart';
 import 't_radio_theme_data.dart';
 
 /// 自定义单选框指示器构建器。
+/// [context] 单选框指示器的构建上下文。
+/// [selected] 当前选项是否选中。
+/// [disabled] 当前选项是否禁用。
+///
+/// ## 返回值
+/// 替换内置单选指示器的组件。
 typedef TRadioIconBuilder =
     Widget Function(BuildContext context, bool selected, bool disabled);
 
@@ -58,16 +64,9 @@ enum TRadioVariant {
 /// 单选框组的数据项。
 class TRadioOption<T> {
   const TRadioOption({
-    /// 选项值。
     required this.value,
-
-    /// 主文案。
     required this.label,
-
-    /// 副文案。
     this.subTitle,
-
-    /// 是否禁用该项。
     this.disabled = false,
   });
 
@@ -84,56 +83,23 @@ class TRadioOption<T> {
   final bool disabled;
 }
 
-/// 由最近的 [TRadioGroup] 控制选中状态的单选框。
-///
-/// 必须作为同类型 [TRadioGroup] 的后代使用：
-///
-/// ```dart
-/// TRadioGroup<String>(
-///   value: value,
-///   onChanged: onChanged,
-///   child: const TRadio<String>(value: 'a', title: '选项 A'),
-/// )
-/// ```
 class TRadio<T> extends StatelessWidget {
   const TRadio({
     super.key,
-
-    /// 当前选项值。
     required this.value,
-
-    /// 主标题文案。
     this.title,
-
-    /// 副标题文案。
     this.subTitle,
-
-    /// 单选框尺寸。
     this.size = TRadioSize.medium,
-
-    /// 内置指示器样式；[customIconBuilder] 非空时以自定义指示器为准。
     this.iconType = TRadioIconType.fill,
-
-    /// 完整视觉结构，默认使用通栏结构。
     this.variant = TRadioVariant.block,
-
-    /// 是否禁用当前选项。
     this.disabled = false,
-
-    /// 控件与文案排列方向。
     this.contentDirection = TContentDirection.right,
-
-    /// 主标题最大行数，默认 3 行。
     this.titleMaxLines = 3,
-
-    /// 副标题最大行数，默认 5 行。
     this.subTitleMaxLines = 5,
-
-    /// 自定义单选框指示器。
     this.customIconBuilder,
   });
 
-  /// 当前选项值。
+  /// 当前选项值；必须作为同类型 [TRadioGroup] 的后代，选中状态由最近的组控制。
   final T value;
 
   /// 主标题文案。
@@ -145,10 +111,10 @@ class TRadio<T> extends StatelessWidget {
   /// 单选框尺寸。
   final TRadioSize size;
 
-  /// 内置指示器样式。
+  /// 内置指示器样式；[customIconBuilder] 非空时以自定义指示器为准。
   final TRadioIconType iconType;
 
-  /// 完整视觉结构。
+  /// 完整视觉结构，默认使用通栏结构。
   final TRadioVariant variant;
 
   /// 是否禁用当前选项。
@@ -512,14 +478,8 @@ class _TRadioIndicatorPainter extends CustomPainter {
 class TRadioGroup<T> extends StatelessWidget {
   const TRadioGroup({
     super.key,
-
-    /// 受控选中值。
     required this.value,
-
-    /// 选中值变更回调；为 null 时整组禁用。
     this.onChanged,
-
-    /// 包含 [TRadio] 的自定义布局。
     required this.child,
   }) : _options = null,
        _direction = Axis.vertical,
@@ -535,14 +495,10 @@ class TRadioGroup<T> extends StatelessWidget {
   /// 使用数据项生成标准布局的单选框组。
   const TRadioGroup.options({
     super.key,
-
-    /// 受控选中值。
     required this.value,
 
     /// 单选框数据项。
     required List<TRadioOption<T>> options,
-
-    /// 选中值变更回调；为 null 时整组禁用。
     this.onChanged,
 
     /// 排列方向，默认纵向。
@@ -596,7 +552,8 @@ class TRadioGroup<T> extends StatelessWidget {
   /// 受控选中值。
   final T? value;
 
-  /// 选中值变更回调；为 null 时整组禁用。
+  /// 启用项被点选时通知其值；重复点选已选项也会通知，不自动去重。
+  /// 为 null 时整组禁用；父组件须回传新 value 才能改变选中状态。
   final ValueChanged<T>? onChanged;
 
   /// 包含 [TRadio] 的自定义布局。

@@ -13,6 +13,8 @@ enum TSideBarVariant {
 ///
 /// 管理 TSideBar 的子树级视觉样式（内边距、选中/未选中颜色等）。
 /// 实例参数负责选中值、形态和交互；具体视觉值由本组件 Theme 配置。
+///
+/// {@category ComponentTheme}
 class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
   /// 默认自定义文本框内边距
   final EdgeInsetsGeometry? contentPadding;
@@ -40,6 +42,10 @@ class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
     this.unSelectedBgColor,
   });
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TSideBarThemeData copyWith({
     EdgeInsetsGeometry? contentPadding,
@@ -57,8 +63,19 @@ class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TSideBarThemeData lerp(ThemeExtension<TSideBarThemeData>? other, double t) {
+  TSideBarThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    ThemeExtension<TSideBarThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other is! TSideBarThemeData) {
       return this;
     }

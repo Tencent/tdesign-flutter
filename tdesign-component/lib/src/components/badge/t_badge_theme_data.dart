@@ -7,6 +7,8 @@ import 't_badge_defaults.dart';
 /// TDesign 徽标的子树级视觉默认值。
 ///
 /// 形态、内容、对齐和偏移由实例 API 控制，不从 Material BadgeTheme 读取。
+///
+/// {@category ComponentTheme}
 @immutable
 class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
   const TBadgeThemeData({
@@ -22,7 +24,7 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
   /// 徽标背景色；为空时使用全局错误色 Token。
   final Color? backgroundColor;
 
-  /// 圆点直径；为空时使用组件内置尺寸。
+  /// 圆点直径；为空时使用 8 逻辑像素。
   final double? dotSize;
 
   /// 文字徽标高度；为空时由当前尺寸的字体 Token 决定。
@@ -31,7 +33,7 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
   /// 徽标文字的唯一组件级样式入口；未配置字段从字体与反色文字 Token 取得。
   final TextStyle? textStyle;
 
-  /// 文字徽标内边距；为空时由当前尺寸决定。
+  /// 文字徽标内边距；为空时中、大尺寸分别使用左右 4、6 逻辑像素。
   final EdgeInsetsGeometry? padding;
 
   /// 开启描边时使用的颜色；为空时回退到当前容器背景色。
@@ -40,6 +42,10 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
   /// 开启描边时使用的宽度；为空时使用 1 逻辑像素。
   final double? borderWidth;
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TBadgeThemeData copyWith({
     Color? backgroundColor,
@@ -61,8 +67,19 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TBadgeThemeData lerp(ThemeExtension<TBadgeThemeData>? other, double t) {
+  TBadgeThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    ThemeExtension<TBadgeThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other is! TBadgeThemeData) {
       return this;
     }

@@ -2,12 +2,6 @@
 
 ### TPopover
 
-气泡弹层
-
-可通过 `showPopover` 一次性弹出，或通过 `TPopoverAnchor` 建立可控制气泡，
-支持 12 个方向定位和箭头。蒙层色与圆角由触发 `BuildContext` 最近的
-`TPopoverThemeData` 控制；单个气泡可包裹局部 Theme。
-
 #### 构造方法
 
 ##### TPopover
@@ -39,7 +33,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | Future&lt;void&gt; | - | - | - |
+| 返回值 | Future&lt;void&gt; | - | 气泡关闭时完成的 Future；不是打开完成通知。 | - |
 
 
 ### TPopoverAnchor
@@ -112,14 +106,14 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| context | BuildContext | - | - | 是 |
+| context | BuildContext | - | 当前构建上下文，用于读取祖先配置。 | 是 |
 
 
 ###### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | TPopoverController? | - | - | - |
+| 返回值 | TPopoverController? | - | 最近的 PopoverAnchor 控制器；不在其触发区域或气泡内容子树时为 null。 | - |
 
 
 #### 实例方法
@@ -139,90 +133,6 @@
 展开与该控制器绑定的气泡。
 
 控制器必须先通过 `TPopoverAnchor.controller` 绑定到 Widget 树。
-
-### TPopoverThemeData
-
-TPopover 组件级 ThemeExtension
-
-通过 Theme 子树注入，控制子树的默认气泡样式。
-
-#### 构造方法
-
-##### TPopoverThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| arrowSize | double? | - | 箭头尺寸 | 否 |
-| backgroundColor | Color? | - | 气泡背景色 | 否 |
-| barrierColor | Color? | - | 蒙层色；未设置时透明。单个气泡可用局部 Theme 覆盖。 | 否 |
-| borderRadius | BorderRadius? | - | 气泡圆角；未设置时回退全局默认圆角。单个气泡可用局部 Theme 覆盖。 | 否 |
-| boxShadow | List&lt;BoxShadow&gt;? | - | 气泡阴影 | 否 |
-| maxHeight | double? | - | 最大高度 | 否 |
-| maxWidth | double? | - | 文本内容的最大宽度 | 否 |
-| minWidth | double? | - | 最小宽度 | 否 |
-| offset | double? | - | 弹层与触发元素的间距 | 否 |
-| padding | EdgeInsetsGeometry? | - | 内边距 | 否 |
-
-
-#### 实例方法
-
-##### TPopoverThemeData.copyWith
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 字段含义：气泡背景色 调用时的空值行为见方法说明。 | 否 |
-| padding | EdgeInsetsGeometry? | - | 字段含义：内边距 调用时的空值行为见方法说明。 | 否 |
-| minWidth | double? | - | 字段含义：最小宽度 调用时的空值行为见方法说明。 | 否 |
-| maxWidth | double? | - | 字段含义：文本内容的最大宽度 调用时的空值行为见方法说明。 | 否 |
-| maxHeight | double? | - | 字段含义：最大高度 调用时的空值行为见方法说明。 | 否 |
-| borderRadius | BorderRadius? | - | 字段含义：气泡圆角；未设置时回退全局默认圆角。单个气泡可用局部 Theme 覆盖。 调用时的空值行为见方法说明。 | 否 |
-| barrierColor | Color? | - | 字段含义：蒙层色；未设置时透明。单个气泡可用局部 Theme 覆盖。 调用时的空值行为见方法说明。 | 否 |
-| arrowSize | double? | - | 字段含义：箭头尺寸 调用时的空值行为见方法说明。 | 否 |
-| offset | double? | - | 字段含义：弹层与触发元素的间距 调用时的空值行为见方法说明。 | 否 |
-| boxShadow | List&lt;BoxShadow&gt;? | - | 字段含义：气泡阴影 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TPopoverThemeData | - | - | - |
-
-
-##### TPopoverThemeData.lerp
-
-位置参数：`other, t`
-
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TPopoverThemeData&gt;? | - | - | 是 |
-| t | double | - | - | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TPopoverThemeData | - | - | - |
-
-
-##### TPopoverThemeData.merge
-
-位置参数：`other`
-
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | TPopoverThemeData? | - | - | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TPopoverThemeData | - | - | - |
-
 
 ### TPopoverColorPreset
 
@@ -271,13 +181,38 @@ TPopover 组件级 ThemeExtension
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| context | BuildContext | - | - | 是 |
-| controller | TPopoverController | - | 用于展开、关闭气泡和查询展开状态；`child` 是传给 `TPopoverAnchor.child` 的可选、不依赖展开状态的子组件。 | 是 |
-| child | Widget? | - | - | 是 |
+| context | BuildContext | - | 触发区域的构建上下文。 | 是 |
+| controller | TPopoverController | - | 关联气泡控制器，用于开关气泡与查询状态。 | 是 |
+| child | Widget? | - | 传入 Anchor 的可选静态子组件。 | 是 |
 
 
 #### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | Widget | - | - | - |
+| 返回值 | Widget | - | 气泡触发区域内容。 | - |
+
+
+### TPopoverThemeData
+
+TPopover 组件级 ThemeExtension
+
+通过 Theme 子树注入，控制子树的默认气泡样式。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| arrowSize | double? | - | 箭头尺寸；未配置时为 8 逻辑像素。 | 否 |
+| backgroundColor | Color? | - | 气泡背景色 | 否 |
+| barrierColor | Color? | - | 蒙层色；未设置时透明。单个气泡可用局部 Theme 覆盖。 | 否 |
+| borderRadius | BorderRadius? | - | 气泡圆角；未设置时回退全局默认圆角。单个气泡可用局部 Theme 覆盖。 | 否 |
+| boxShadow | List&lt;BoxShadow&gt;? | - | 气泡阴影；未配置时使用 shadow3 Token，Token 为空时无阴影。 | 否 |
+| maxHeight | double? | - | 最大高度 | 否 |
+| maxWidth | double? | - | 文本内容的最大宽度 | 否 |
+| minWidth | double? | - | 最小宽度 | 否 |
+| offset | double? | - | 弹层与触发元素的间距；未配置时为 4 逻辑像素。 | 否 |
+| padding | EdgeInsetsGeometry? | - | 内边距 | 否 |

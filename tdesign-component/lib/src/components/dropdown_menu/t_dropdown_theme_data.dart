@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// DropdownMenu 的组件级视觉与布局默认值。
+///
+/// {@category ComponentTheme}
 class TDropdownThemeData extends ThemeExtension<TDropdownThemeData> {
   const TDropdownThemeData({
     this.barHeight,
@@ -28,33 +30,83 @@ class TDropdownThemeData extends ThemeExtension<TDropdownThemeData> {
     this.actionGap,
   });
 
+  /// 筛选栏高度，默认 48 逻辑像素。
   final double? barHeight;
+
+  /// 筛选栏背景色；为空时读取全局 bgColorContainer。
   final Color? barBackgroundColor;
+
+  /// 筛选栏底部分隔线颜色；为空时读取全局 componentStroke。
   final Color? dividerColor;
+
+  /// 默认触发项文本样式。
   final TextStyle? textStyle;
+
+  /// 打开面板的触发项文本样式。
   final TextStyle? activeTextStyle;
+
+  /// 禁用触发项文本样式。
   final TextStyle? disabledTextStyle;
+
+  /// 默认触发项箭头颜色。
   final Color? iconColor;
+
+  /// 打开面板的触发项箭头颜色。
   final Color? activeIconColor;
+
+  /// 禁用触发项箭头颜色。
   final Color? disabledIconColor;
+
+  /// 触发项箭头尺寸，默认 24 逻辑像素。
   final double? iconSize;
+
+  /// 面板背景色；为空时读取全局 bgColorContainer。
   final Color? panelBackgroundColor;
 
   /// 遮罩颜色，包含透明度。未指定时为黑色 60%，动画按展开进度缩放透明度。
   final Color? overlayColor;
+
+  /// 单选列表行高度，默认 56 逻辑像素。
   final double? optionHeight;
+
+  /// 选项内边距；为空时使用全局 spacer2 水平间距。
   final EdgeInsetsGeometry? optionPadding;
+
+  /// 选项默认文本样式。
   final TextStyle? optionTextStyle;
+
+  /// 选中选项文本样式。
   final TextStyle? selectedOptionTextStyle;
+
+  /// 禁用选项文本样式。
   final TextStyle? disabledOptionTextStyle;
+
+  /// 多列选项默认背景色。
   final Color? optionColor;
+
+  /// 多列选项选中背景色。
   final Color? selectedOptionColor;
+
+  /// 多列选项禁用背景色。
   final Color? disabledOptionColor;
+
+  /// 多列选项圆角；为空时读取全局 radiusDefault。
   final BorderRadius? optionBorderRadius;
+
+  /// 多选面板底部操作区内边距。
   final EdgeInsetsGeometry? actionAreaPadding;
+
+  /// 多选面板底部按钮之间的间距；为空时读取全局 spacer2。
   final double? actionGap;
 
-  TDropdownThemeData merge(TDropdownThemeData? other) {
+  /// 合并主题配置。
+  ///
+  /// ## 返回值
+  /// 返回合并后的主题；[other] 的非空字段覆盖当前字段，other 为空时返回当前主题。
+  TDropdownThemeData merge(
+    /// 要合并的目标主题；为空时保留当前配置。
+    TDropdownThemeData? other,
+  ) {
     if (other == null) {
       return this;
     }
@@ -85,6 +137,10 @@ class TDropdownThemeData extends ThemeExtension<TDropdownThemeData> {
     );
   }
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TDropdownThemeData copyWith({
     double? barHeight,
@@ -140,9 +196,17 @@ class TDropdownThemeData extends ThemeExtension<TDropdownThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
   TDropdownThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
     covariant ThemeExtension<TDropdownThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
     double t,
   ) {
     if (other is! TDropdownThemeData) {

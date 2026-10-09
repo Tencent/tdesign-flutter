@@ -2,17 +2,29 @@ import 'package:flutter/foundation.dart' show immutable;
 
 import 't_table_col.dart';
 
-/// 返回行数据的稳定唯一标识。
+/// 行唯一标识构建器。
+/// [row] 待获取标识的行数据。
+///
+/// ## 返回值
+/// 当前行的稳定唯一标识，用于跨排序或重建保持行身份。
 typedef TTableRowKey<T> = Object Function(T row);
 
 /// 单元格跨度构建器。
 ///
 /// 仅为未被其他合并区域覆盖的逻辑单元格调用。该回调会在组件构建期间执行，
 /// 应保持同步且无副作用。
+/// [context] 当前逻辑单元格的行列数据与索引。
+///
+/// ## 返回值
+/// 单元格跨越的行列数；返回 null 时按一行一列布局。
 typedef TTableCellSpanBuilder<T> =
     TTableCellSpan? Function(TTableCellContext<T> context);
 
 /// 单元格点击回调。
+/// [context] 被点击的逻辑单元格行列数据与索引。
+///
+/// ## 返回值
+/// 无返回值。
 typedef TTableCellTap<T> = void Function(TTableCellContext<T> context);
 
 /// 表格逻辑单元格上下文。

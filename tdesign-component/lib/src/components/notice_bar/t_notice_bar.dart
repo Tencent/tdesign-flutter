@@ -28,7 +28,6 @@ enum TNoticeBarTapTarget {
   suffix,
 }
 
-/// 公告栏
 class TNoticeBar extends StatefulWidget {
   const TNoticeBar({
     super.key,
@@ -79,14 +78,14 @@ class TNoticeBar extends StatefulWidget {
   /// 滚动方向
   final Axis direction;
 
-  /// 文本行数（仅静态有效）
+  /// 文本行数（仅静态有效），必须大于 0。
   final int maxLines;
 
   /// 是否启用横向跑马灯展示。
   final bool marquee;
 
   /// 横向跑马灯每秒滚动的逻辑像素，仅在 [direction] 为 [Axis.horizontal]
-  /// 且 [marquee] 为 true 时生效。
+  /// 且 marquee 为 true 时生效；必须大于 0。
   final double speed;
 
   /// 垂直轮播的切换间隔，仅在 [direction] 为 [Axis.vertical] 时生效。

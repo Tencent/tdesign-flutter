@@ -8,11 +8,6 @@ import '../../theme/basic.dart';
 import 't_text_resolve.dart';
 import 't_text_theme_data.dart';
 
-/// Flutter [Text] 的 TDesign Token 薄封装。
-///
-/// 文字布局、字体 fallback、无障碍缩放和语义均由 Flutter 原生 Text 负责。
-/// 子树级默认文字样式通过 [TTextThemeData.textStyle] 配置；单实例完整样式通过 [style] 覆盖。
-/// 固定容器居中与图文 baseline 应由父布局表达。
 class TText extends StatelessWidget {
   const TText(
     String this.data, {
@@ -110,12 +105,24 @@ class TText extends StatelessWidget {
   Widget build(BuildContext context) => _rawText(context);
 
   /// 获取与当前 TText 配置等价的 Flutter 原生 [Text]。
-  Text getRawText({required BuildContext context}) {
+  ///
+  /// ## 返回值
+  /// 保留当前文本配置和 key 的原生 Text。
+  Text getRawText({
+    /// 当前构建上下文，用于读取祖先配置。
+    required BuildContext context,
+  }) {
     return _rawText(context, includeKey: true);
   }
 
   /// 获取最终 Flutter [TextStyle]。
-  TextStyle getTextStyle(BuildContext context) {
+  ///
+  /// ## 返回值
+  /// 结合当前组件配置与上下文主题解析出的最终 TextStyle。
+  TextStyle getTextStyle(
+    /// 当前构建上下文，用于读取祖先配置。
+    BuildContext context,
+  ) {
     return TTextResolve.resolve(context: context, font: font, style: style);
   }
 

@@ -14,43 +14,31 @@ enum TCascaderVariant {
 }
 
 /// TCascader 组件级 ThemeExtension。
+///
+/// {@category ComponentTheme}
 class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
   const TCascaderThemeData({
-    /// 组件高度。
     this.height,
-
-    /// 背景色。
     this.backgroundColor,
-
-    /// 圆角。
     this.borderRadius,
-
-    /// 普通文案样式。
     this.textStyle,
-
-    /// 当前活动导航及已选选项文案样式。
     this.activeTextStyle,
-
-    /// 禁用文案样式。
     this.disabledTextStyle,
-
-    /// 末级选中图标颜色。
     this.indicatorColor,
-
-    /// 导航区域内边距。
     this.navigationPadding,
-
-    /// 分隔线颜色。
     this.dividerColor,
   });
 
   /// 组件高度。
+  /// 未配置时为 360 逻辑像素。
   final double? height;
 
   /// 背景色。
+  /// 未配置时使用 bgColorContainer Token。
   final Color? backgroundColor;
 
   /// 圆角。
+  /// 未配置时使用 radiusDefault Token。
   final double? borderRadius;
 
   /// 普通文案样式。
@@ -63,14 +51,21 @@ class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
   final TextStyle? disabledTextStyle;
 
   /// 末级选中图标颜色。
+  /// 未配置时使用 brandColor Token。
   final Color? indicatorColor;
 
   /// 导航区域内边距。
+  /// null 时 step 形态左右使用 spacer2、上方为 0、下方为 4；tab 形态不增加导航内边距。
   final EdgeInsetsGeometry? navigationPadding;
 
   /// 分隔线颜色。
+  /// 未配置时使用 componentStroke Token。
   final Color? dividerColor;
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TCascaderThemeData copyWith({
     double? height,
@@ -96,8 +91,19 @@ class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TCascaderThemeData lerp(ThemeExtension<TCascaderThemeData>? other, double t) {
+  TCascaderThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    ThemeExtension<TCascaderThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other is! TCascaderThemeData) {
       return this;
     }

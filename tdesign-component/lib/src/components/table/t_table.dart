@@ -14,28 +14,13 @@ import 't_table_theme_data.dart';
 import 't_table_types.dart';
 
 /// 行点击回调。
+/// [rowIndex] 当前行在排序后可见数据中的索引，从 0 开始。
+/// [row] 当前行的原始数据。
+///
+/// ## 返回值
+/// 无返回值。
 typedef TTableRowTap<T> = void Function(int rowIndex, T row);
 
-/// 强类型、受控排序与选择的表格组件。
-///
-/// ```dart
-/// TTable<Map<String, Object>>(
-///   data: const [
-///     {'id': 1, 'name': 'Alice'},
-///     {'id': 2, 'name': 'Bob'},
-///   ],
-///   rowKey: (row) => row['id']!,
-///   columns: [
-///     TTableColumn(
-///       id: 'name',
-///       header: const Text('Name'),
-///       minWidth: 120,
-///       cellBuilder: (_, row, __) => Text(row['name']! as String),
-///     ),
-///   ],
-///   onCellTap: (cell) => debugPrint('${cell.columnIndex}: ${cell.row}'),
-/// )
-/// ```
 class TTable<T> extends StatefulWidget {
   const TTable({
     required this.columns,
@@ -98,6 +83,7 @@ class TTable<T> extends StatefulWidget {
   final Set<T> selectedRows;
 
   /// 请求更新选中行集合。
+  /// 启用 selectionMode 时必须提供本回调；父组件需回传 selectedRows。
   final ValueChanged<Set<T>>? onSelectionChanged;
 
   /// 判断指定行是否可选。
@@ -107,6 +93,7 @@ class TTable<T> extends StatefulWidget {
   final TTableSort? sort;
 
   /// 请求更新排序值。
+  /// 为 null 时表头不产生排序请求，仍按外部传入的 sort 渲染；父组件需回传新 sort。
   final ValueChanged<TTableSort?>? onSortChanged;
 
   /// 是否在表体上显示加载遮罩。

@@ -103,10 +103,6 @@ class TDialogAction {
   final ButtonStyle? style;
 }
 
-/// 通用居中模态对话框。
-///
-/// 组件负责面板内容和操作区；使用 [show] 时，通过 Flutter 模态路由处理
-/// 蒙层、动画和安全区。
 class TDialog extends StatelessWidget {
   const TDialog({
     super.key,
@@ -133,10 +129,10 @@ class TDialog extends StatelessWidget {
          'actions and actionsWidget cannot be used together.',
        );
 
-  /// 标题槽位。
+  /// 标题槽位；[title] 与 [content] 至少提供一个。
   final Widget? title;
 
-  /// 内容槽位。
+  /// 内容槽位；[title] 与 [content] 至少提供一个。
   final Widget? content;
 
   /// 操作列表；一到两个操作横向排列，更多操作纵向排列。
@@ -182,13 +178,27 @@ class TDialog extends StatelessWidget {
   /// 操作按钮与内置关闭按钮分别返回各自配置的结果。
   /// 蒙层与内置关闭按钮通过 Navigator.maybePop 关闭，遵守 PopScope。
   /// 系统返回及未携带结果的 Navigator.pop 仍返回 null，不使用 [barrierResult]。
+  ///
+  /// ## 返回值
+  /// 路由被弹出时完成并提供关闭结果；未携带结果时为 null，不等待关闭动画结束。
   static Future<T?> show<T>(
+    /// 当前构建上下文，用于读取祖先配置。
     BuildContext context, {
+
+    /// 要放入模态路由的弹窗内容。
     required Widget dialog,
     bool barrierDismissible = false,
+
+    /// 开启蒙层关闭后，由蒙层成功关闭路由时返回的结果；默认 null。
     T? barrierResult,
+
+    /// 蒙层颜色；为空时使用 Colors.black54。
     Color? barrierColor,
+
+    /// 是否将弹窗推入根 Navigator，默认 true。
     bool useRootNavigator = true,
+
+    /// 是否使用 SafeArea 避让系统区域，默认 true。
     bool useSafeArea = true,
   }) {
     final navigator = Navigator.of(context, rootNavigator: useRootNavigator);

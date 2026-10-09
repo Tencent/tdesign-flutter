@@ -9,11 +9,11 @@ import 't_tab_bar_theme_data.dart';
 ///
 /// TDesign 选项卡标签，通常作为 `TTabsBar.tabs` 的子项使用。
 class TTab extends Tab {
-  /// 文字内容
+  /// 文字内容；与 child 互斥，text、child、icon 至少提供一个。
   @override
   final String? text;
 
-  /// 子widget
+  /// 自定义标签内容；与 text 互斥，可与 icon 同时提供。
   @override
   final Widget? child;
 

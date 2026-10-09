@@ -57,7 +57,7 @@ void main() {
     expect(renderedIcons, lessThan(icons.length));
   });
 
-  testWidgets('图标目录使用接近小程序的四列密度和响应式列宽', (tester) async {
+  testWidgets('图标目录使用四列密度和响应式列宽', (tester) async {
     tester.view.physicalSize = const Size(360, 800);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);

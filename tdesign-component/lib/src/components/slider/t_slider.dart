@@ -8,7 +8,11 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_slider_theme.dart';
 
-/// Formats the value shown above a slider thumb.
+/// 格式化滑块提示文案。
+/// [value] 当前滑块数值。
+///
+/// ## 返回值
+/// 显示在滑块提示中的格式化文案。
 typedef TSliderThumbFormatter = String Function(double value);
 
 /// Slider visual structure.
@@ -119,52 +123,27 @@ Color _disabledThumbLabelColor(BuildContext context) {
       context.tTheme.textColorDisabled;
 }
 
-/// 基于 Material [Slider] 的严格受控单值滑块。
 class TSlider extends StatelessWidget {
   const TSlider({
     super.key,
-
-    /// 受控滑块值。
     required this.value,
-
-    /// 值变更回调；为 null 时禁用。
     this.onChanged,
-
-    /// 开始拖动时触发。
     this.onChangeStart,
-
-    /// 结束拖动时触发。
     this.onChangeEnd,
-
-    /// 最小值。
     this.min = 0,
-
-    /// 最大值。
     this.max = 1,
-
-    /// 离散刻度数；null 表示连续。
     this.divisions,
-
-    /// 是否持续显示拇指上方数值。
     this.showThumbValue = false,
-
-    /// 拇指上方数值格式化回调。
     this.thumbFormatter,
-
-    /// 是否显示刻度值。
     this.showScaleValue = false,
-
-    /// 刻度值格式化回调。
     this.scaleFormatter,
-
-    /// 滑块视觉结构，默认使用标准细轨道。
     this.variant = TSliderVariant.normal,
   }) : assert(max > min),
        assert(value >= min && value <= max),
        assert(divisions == null || divisions > 0),
        assert(!showScaleValue || divisions != null);
 
-  /// 受控滑块值。
+  /// 受控滑块值；应处于 min 与 max 指定的范围内，父组件需回传新值。
   final double value;
 
   /// 值变更回调；为 null 时禁用。
@@ -177,12 +156,15 @@ class TSlider extends StatelessWidget {
   final ValueChanged<double>? onChangeEnd;
 
   /// 最小值。
+  /// max 必须大于 min。
   final double min;
 
   /// 最大值。
+  /// 必须大于 min。
   final double max;
 
   /// 离散刻度数；null 表示连续。
+  /// 非 null 时必须大于 0。
   final int? divisions;
 
   /// 是否持续显示拇指上方数值。
@@ -197,7 +179,7 @@ class TSlider extends StatelessWidget {
   /// 刻度值格式化回调。
   final TSliderThumbFormatter? scaleFormatter;
 
-  /// 滑块视觉结构。
+  /// 滑块视觉结构，默认使用标准细轨道。
   final TSliderVariant variant;
 
   @override
@@ -258,47 +240,23 @@ class TSlider extends StatelessWidget {
 class TRangeSlider extends StatelessWidget {
   const TRangeSlider({
     super.key,
-
-    /// 受控范围值。
     required this.value,
-
-    /// 范围变更回调；为 null 时禁用。
     this.onChanged,
-
-    /// 开始拖动时触发。
     this.onChangeStart,
-
-    /// 结束拖动时触发。
     this.onChangeEnd,
-
-    /// 最小值。
     this.min = 0,
-
-    /// 最大值。
     this.max = 1,
-
-    /// 离散刻度数；null 表示连续。
     this.divisions,
-
-    /// 是否持续显示拇指上方数值。
     this.showThumbValue = false,
-
-    /// 拇指上方数值格式化回调。
     this.thumbFormatter,
-
-    /// 是否显示刻度值。
     this.showScaleValue = false,
-
-    /// 刻度值格式化回调。
     this.scaleFormatter,
-
-    /// 滑块视觉结构，默认使用标准细轨道。
     this.variant = TSliderVariant.normal,
   }) : assert(max > min),
        assert(divisions == null || divisions > 0),
        assert(!showScaleValue || divisions != null);
 
-  /// 受控范围值。
+  /// 受控范围值；两端值应处于 min 与 max 指定的范围内，父组件需回传新值。
   final RangeValues value;
 
   /// 范围变更回调；为 null 时禁用。
@@ -311,12 +269,15 @@ class TRangeSlider extends StatelessWidget {
   final ValueChanged<RangeValues>? onChangeEnd;
 
   /// 最小值。
+  /// max 必须大于 min。
   final double min;
 
   /// 最大值。
+  /// 必须大于 min。
   final double max;
 
   /// 离散刻度数；null 表示连续。
+  /// 非 null 时必须大于 0。
   final int? divisions;
 
   /// 是否持续显示拇指上方数值。
@@ -331,7 +292,7 @@ class TRangeSlider extends StatelessWidget {
   /// 刻度值格式化回调。
   final TSliderThumbFormatter? scaleFormatter;
 
-  /// 滑块视觉结构。
+  /// 滑块视觉结构，默认使用标准细轨道。
   final TSliderVariant variant;
 
   @override

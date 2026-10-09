@@ -51,7 +51,7 @@ void main() {
   }
 
   group('TPullDownRefresh 最小化组件', () {
-    test('跨端可见行为默认值与小程序一致', () {
+    test('可见行为默认值符合组件契约', () {
       const widget = TPullDownRefresh(child: SizedBox());
       expect(widget.loadingBarHeight, 50);
       expect(widget.maxBarHeight, 80);
@@ -462,7 +462,7 @@ void main() {
   });
 
   group('loadMore 触底事件', () {
-    testWidgets('触底加载不渲染小程序未定义的可见 footer', (tester) async {
+    testWidgets('触底加载不渲染可见 footer', (tester) async {
       final loadCompleter = Completer<void>();
       await tester.pumpWidget(
         wrap(

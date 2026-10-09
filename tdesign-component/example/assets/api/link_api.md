@@ -21,6 +21,8 @@
 
 
 ### TLinkColorPreset
+
+链接内置配色预设，不是 Material ColorScheme。
 #### 枚举值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -30,3 +32,34 @@
 | danger | TLinkColorPreset | - | 危险操作链接。 | - |
 | warning | TLinkColorPreset | - | 警告提示链接。 | - |
 | success | TLinkColorPreset | - | 成功状态链接。 | - |
+
+
+### TLinkSize
+
+链接尺寸。
+#### 枚举值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| small | TLinkSize | - | 小尺寸链接。 | - |
+| medium | TLinkSize | - | 中尺寸链接。 | - |
+| large | TLinkSize | - | 大尺寸链接。 | - |
+
+
+### TLinkThemeData
+
+TLink 组件级主题。
+
+通过 Theme 子树注入链接字号样式、图标尺寸和间距等具体视觉值。
+尺寸档位、配色预设和下划线选择仅由 `TLink` 实例控制。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| iconGap | double? | - | 前/后图标与内容之间的间距；未设置时为 4 逻辑像素。 | 否 |
+| iconSize | double? | - | 图标尺寸；未设置时小、中、大尺寸分别为 14、16、18 逻辑像素。 | 否 |
+| textStyle | TextStyle? | - | 链接文字样式；字号、行高与字重默认由实例尺寸对应 Token 提供。 | 否 |

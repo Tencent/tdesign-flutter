@@ -18,48 +18,26 @@ import 't_upload_types.dart';
 
 export 't_upload_types.dart';
 
-/// 严格受控的文件选择与上传状态展示组件。
 class TUpload extends StatelessWidget {
   const TUpload({
     super.key,
-
-    /// 受控文件列表。
     required this.files,
-
-    /// 文件列表变化回调；为 null 时禁用。
     this.onChanged,
-
-    /// 允许选择的媒体类型。
     this.mediaType = TUploadMediaType.image,
-
-    /// 文件布局方式。
     this.layout = TUploadLayout.grid,
-
-    /// 是否支持长按拖拽排序；禁用时不生效。
     this.draggable = false,
-
-    /// 最大文件数量；null 表示不限制。
     this.maxFiles = 1,
-
-    /// 单个文件最大字节数；null 表示不限制。
     this.maxFileSize,
-
-    /// 自定义文件选择器；为空时使用 image_picker。
     this.picker,
-
-    /// 点击任意状态的已有文件时触发；组件不会自动预览或重新上传。
     this.onFileTap,
-
-    /// 文件校验失败时触发。
     this.onValidationError,
-
-    /// 文件选择失败时触发。
     this.onError,
   }) : assert(maxFiles == null || maxFiles > 0),
        assert(maxFiles == null || files.length <= maxFiles),
        assert(mediaType == TUploadMediaType.image || maxFiles == 1);
 
   /// 受控文件列表。
+  /// 长度不能超过 maxFiles；各文件 id 应唯一。组件不执行网络上传，由业务更新上传状态。
   final List<TUploadFile> files;
 
   /// 文件列表变化回调；为 null 时禁用。
@@ -78,12 +56,14 @@ class TUpload extends StatelessWidget {
   final bool draggable;
 
   /// 最大文件数量；null 表示不限制。
+  /// 非 null 时必须大于 0；video 模式必须设为 1，包括使用自定义 picker 时。
   final int? maxFiles;
 
   /// 单个文件最大字节数；null 表示不限制。
+  /// 自定义 picker 返回的文件未提供 size 时跳过大小校验，调用方需自行保证大小限制。
   final int? maxFileSize;
 
-  /// 自定义文件选择器。
+  /// 自定义文件选择器；为空时使用 image_picker。
   final TUploadPicker? picker;
 
   /// 点击任意状态的已有文件时触发。
@@ -93,9 +73,12 @@ class TUpload extends StatelessWidget {
   final ValueChanged<TUploadFile>? onFileTap;
 
   /// 文件校验失败时触发。
+  /// 新增批次超出数量或大小限制时整批拒绝，不触发 onChanged。
   final ValueChanged<TUploadValidationError>? onValidationError;
 
-  /// 文件选择失败时触发。
+  /// 新增文件流程出现异常时触发，包括选择器失败，以及该流程中
+  /// onChanged、onValidationError 同步抛出的业务异常。
+  /// 不表示网络上传失败；组件不执行网络上传。其他点击、删除、排序回调的异常不在此流程内捕获。
   final ValueChanged<Object>? onError;
 
   bool get _enabled => onChanged != null;

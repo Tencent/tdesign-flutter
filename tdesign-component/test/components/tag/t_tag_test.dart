@@ -645,7 +645,7 @@ void main() {
           expect(closeRect.left - textRect.right, spacing);
         });
       }
-      testWidgets('${sizeCase.size.name} 默认尺寸与小程序边框盒一致', (tester) async {
+      testWidgets('${sizeCase.size.name} 默认尺寸包含边框盒', (tester) async {
         await tester.pumpWidget(
           wrapWithTheme(TTag('尺寸', size: sizeCase.size, icon: Icons.star)),
         );

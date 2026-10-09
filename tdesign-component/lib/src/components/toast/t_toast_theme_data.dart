@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// TToast 组件级 ThemeExtension
+///
+/// {@category ComponentTheme}
 class TToastThemeData extends ThemeExtension<TToastThemeData> {
   /// 背景色
   final Color? backgroundColor;
@@ -33,8 +35,14 @@ class TToastThemeData extends ThemeExtension<TToastThemeData> {
     this.maxWidth,
   });
 
-  /// 合并其他 ThemeData，非空字段优先取 [other]
-  TToastThemeData merge(TToastThemeData? other) {
+  /// 合并主题配置。
+  ///
+  /// ## 返回值
+  /// other 的非空字段优先的合并主题；other 为 null 时返回当前主题。
+  TToastThemeData merge(
+    /// 要合并的目标主题；为空时保留当前配置。
+    TToastThemeData? other,
+  ) {
     if (other == null) {
       return this;
     }
@@ -49,6 +57,10 @@ class TToastThemeData extends ThemeExtension<TToastThemeData> {
     );
   }
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TToastThemeData copyWith({
     Color? backgroundColor,
@@ -70,8 +82,19 @@ class TToastThemeData extends ThemeExtension<TToastThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TToastThemeData lerp(ThemeExtension<TToastThemeData>? other, double t) {
+  TToastThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    ThemeExtension<TToastThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other is! TToastThemeData) {
       return this;
     }
@@ -86,7 +109,20 @@ class TToastThemeData extends ThemeExtension<TToastThemeData> {
     );
   }
 
-  static double? lerpDouble(double? a, double? b, double t) {
+  /// 对 [a] 和 [b] 按 [t] 线性插值；两端均为 null 时返回 null，仅一端为 null 时按 0 参与计算。
+  ///
+  /// ## 返回值
+  /// 按 t 线性插值的数值；两端均为 null 时为 null，仅一端为 null 时将该端按 0 计算。
+  static double? lerpDouble(
+    /// 插值起始值；单端为空时按 0 参与插值。
+    double? a,
+
+    /// 插值目标值；单端为空时按 0 参与插值。
+    double? b,
+
+    /// 插值进度；0 表示起点，1 表示终点。
+    double t,
+  ) {
     if (a == null && b == null) {
       return null;
     }

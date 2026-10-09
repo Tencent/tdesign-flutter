@@ -27,7 +27,10 @@ class TTimeCounterController extends ChangeNotifier {
   ///
   /// 重置后如需继续计时，请显式调用 [start]。
   /// 父组件后续更新 [TTimeCounter.time] 时，新的声明式配置优先。
-  void reset([int? time]) {
+  void reset([
+    /// 重置时长，单位为毫秒；为空时恢复组件当前时长，负数抛出 ArgumentError。
+    int? time,
+  ]) {
     if (time != null && time < 0) {
       throw ArgumentError.value(time, 'time', 'must not be negative');
     }

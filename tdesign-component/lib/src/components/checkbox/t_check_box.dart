@@ -35,45 +35,28 @@ enum TCheckboxSize {
 }
 
 /// 自定义复选框指示器构建器。
+/// [context] 复选框指示器的构建上下文。
+/// [value] 当前选中状态；null 表示半选。
+/// [disabled] 当前复选框是否禁用。
+///
+/// ## 返回值
+/// 替换内置指示器的组件。
 typedef TCheckboxIconBuilder =
     Widget Function(BuildContext context, bool? value, bool disabled);
 
-/// 严格受控的复选框；[onChanged] 为 null 时禁用。
 class TCheckbox extends StatelessWidget {
   const TCheckbox({
     super.key,
-
-    /// 受控选中态；null 表示半选。
     required this.value,
-
-    /// 选中态变更回调；为 null 时禁用。
     this.onChanged,
-
-    /// 主标题文案。
     this.title,
-
-    /// 副标题文案。
     this.subTitle,
-
-    /// 复选框尺寸。
     this.size = TCheckboxSize.medium,
-
-    /// 是否使用卡片模式。
     this.cardMode = false,
-
-    /// 普通模式是否显示底部分割线，默认显示；卡片模式不显示。
     this.showDivider = true,
-
-    /// 控件与文案排列方向。
     this.contentDirection = TContentDirection.right,
-
-    /// 主标题最大行数，默认 3 行。
     this.titleMaxLines = 3,
-
-    /// 副标题最大行数，默认 5 行。
     this.subTitleMaxLines = 5,
-
-    /// 自定义复选框指示器。
     this.customIconBuilder,
   });
 

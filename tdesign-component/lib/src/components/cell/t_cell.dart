@@ -20,7 +20,6 @@ enum TCellAlign {
   bottom,
 }
 
-/// 单元格组件。
 class TCell extends StatefulWidget {
   const TCell({
     this.title,
@@ -62,7 +61,7 @@ class TCell extends StatefulWidget {
   /// 是否显示必填标记。
   final bool required;
 
-  /// 内容垂直对齐方式。
+  /// 内容垂直对齐方式；未设置时为 [TCellAlign.center]。
   final TCellAlign? align;
 
   /// 点击时是否显示背景反馈。

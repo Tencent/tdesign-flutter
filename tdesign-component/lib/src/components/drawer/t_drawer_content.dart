@@ -2,7 +2,11 @@ part of 't_drawer.dart';
 
 /// 点击抽屉列表项时的回调。
 ///
-/// [index] 是列表下标，[item] 是被点击的配置项。
+/// [index] 被点击项在列表中的索引，从 0 开始。
+/// [item] 被点击的配置项。
+///
+/// ## 返回值
+/// 无返回值。
 typedef TDrawerItemClickCallback = void Function(int index, TDrawerItem item);
 
 /// `TDrawer` 的内部内容布局。

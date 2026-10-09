@@ -8,12 +8,6 @@ import 't_avatar_defaults.dart';
 import 't_avatar_theme_data.dart';
 import 't_avatar_types.dart';
 
-/// 头像。
-///
-/// [image] 负责图片内容，[child] 负责文字、图标等自定义内容。两者同时提供时，
-/// [child] 会作为图片加载失败前的背景内容。默认图标与文字前景色由
-/// [TAvatarThemeData.foregroundColor] 控制；特殊文字排版可在 [child] 中使用
-/// `Text(style: ...)`，组件不再额外提供文字样式入口。
 class TAvatar extends StatelessWidget {
   const TAvatar({
     this.image,
@@ -134,13 +128,15 @@ class TAvatarGroup extends StatelessWidget {
   /// 头像列表。
   final List<Widget> children;
 
-  /// 最多显示的头像数量。
+  /// 最多显示的原始头像数量；为空时显示全部，非空时必须大于 0。
+  /// 若发生截断且提供了 [overflow]，会额外显示一个折叠头像。
   final int? maxCount;
 
   /// 发生截断时显示在末尾的内容。
   final Widget? overflow;
 
-  /// 相邻头像的重叠宽度；有效范围为 0 到成员外框边长。
+  /// 相邻头像的重叠宽度；非空时必须是有限、非负值，布局时限制到成员边长。
+  /// 为空时使用组件主题，最终回退为 8 逻辑像素。
   final double? spacing;
 
   /// 头像组成员的层叠方向，使用 start/end 语义并跟随文字方向。

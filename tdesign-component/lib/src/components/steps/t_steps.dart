@@ -4,7 +4,7 @@ import 't_steps_horizontal.dart';
 import 't_steps_mode.dart';
 import 't_steps_vertical.dart';
 
-/// Steps步骤条数据类型
+/// 步骤条的数据模型。
 class TStepsItemData {
   const TStepsItemData({
     this.title,
@@ -69,7 +69,6 @@ enum TStepsStatus {
   error,
 }
 
-/// Steps步骤条
 class TSteps extends StatelessWidget {
   /// 普通进度步骤条。
   ///

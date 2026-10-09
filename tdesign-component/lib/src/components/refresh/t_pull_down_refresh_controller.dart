@@ -8,9 +8,8 @@ import 'package:meta/meta.dart';
 ///
 /// ## 生命周期（所有权）
 ///
-/// 底层刷新控制器的所有权归 `TPullDownRefresh` 的 State 独占管理：
-/// State 在 `initState` 中创建、在 `dispose` 中释放。本控制器不拥有需要调用方
-/// 释放的资源，因此不提供公开 `dispose()`。
+/// 刷新资源由 `TPullDownRefresh` 随挂载和卸载管理；本控制器不拥有
+/// 需要调用方释放的资源，因此无需也不提供公开 `dispose()`。
 class TPullDownRefreshController {
   Future<void> Function()? _refresh;
 
@@ -33,6 +32,9 @@ class TPullDownRefreshController {
   /// `await refresh()` 表示这次刷新流程已经结束，不代表业务一定成功；
   /// 成功、回调失败和超时都会完成 Future。组件未挂载或未配置刷新回调
   /// 时，该方法立即完成。
+  ///
+  /// ## 返回值
+  /// 刷新流程结束时完成；业务失败或超时也会完成，未挂载或无刷新回调时立即完成。
   Future<void> refresh() async {
     await _refresh?.call();
   }

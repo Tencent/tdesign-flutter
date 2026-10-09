@@ -8,6 +8,11 @@ import 't_picker_theme_data.dart';
 ///
 /// 返回类型限定为 [TPopupHeader]，使弹层尺寸计算与实际头部的
 /// [TPopupHeader.headerHeight] 保持一致。
+/// [context] 弹层头部的构建上下文。
+/// [close] 请求关闭当前 Picker 弹层的回调。
+///
+/// ## 返回值
+/// 标准弹层头部；其 headerHeight 参与弹层总高度计算。
 typedef TPickerPopupHeaderBuilder =
     TPopupHeader Function(BuildContext context, VoidCallback close);
 
@@ -15,7 +20,8 @@ typedef TPickerPopupHeaderBuilder =
 ///
 /// `TPicker` 与 `TDateTimePicker` 的滚轮仍是可独立组合的纯面板；需要设计稿中的
 /// 底部弹层时使用 [show]。该入口统一为标准 [TPopupHeader] 和完整滚轮视窗预留
-/// 高度，避免调用方按通用 Popup 默认高度拼装后压缩或裁切滚轮。
+/// 高度，避免调用方按通用 Popup 默认高度拼装后压缩或裁切滚轮。弹层高度在每次 [show]
+/// 时读取主题；复用已有句柄重新打开不会重新计算高度。
 final class TPickerPopup {
   const TPickerPopup._();
 
@@ -24,7 +30,11 @@ final class TPickerPopup {
   /// 弹层总高为当前 [TPickerThemeData.height]（默认 200）加
   /// [TPopupHeader.headerHeight]（58）。[child] 通常为 `TPicker` 或
   /// `TDateTimePicker`，其受控值、确认和取消状态仍由调用方管理。
+  ///
+  /// ## 返回值
+  /// 已经发起打开的 Popup 控制句柄，可用于查询状态和关闭弹层。
   static TPopupHandle show(
+    /// 当前构建上下文，用于读取祖先配置。
     BuildContext context, {
 
     /// Picker 滚轮面板。
@@ -45,7 +55,8 @@ final class TPickerPopup {
     /// 蒙层行为；null 时沿用 Popup 默认值。
     TPopupOverlayConfig? overlay,
 
-    /// 关闭后是否销毁弹层内容，默认 false。
+    /// 默认 false；为 true 时路由被其他不透明路由覆盖可释放内容 State。
+    /// 关闭路由后内容始终释放，再次打开会创建新 State。
     bool destroyOnClose = false,
 
     /// 打开和关闭动画时长。

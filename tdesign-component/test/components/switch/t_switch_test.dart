@@ -64,7 +64,7 @@ void main() {
       );
     });
 
-    testWidgets('禁用态分别使用小程序轨道和滑块回退色', (tester) async {
+    testWidgets('禁用态分别使用轨道和滑块回退色', (tester) async {
       final token = TThemeData.defaultData();
       await tester.pumpWidget(wrap(const TSwitch(value: true)));
 

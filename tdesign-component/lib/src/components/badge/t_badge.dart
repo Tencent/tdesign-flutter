@@ -137,13 +137,6 @@ class TBadgeConfig {
   bool get isCustom => badge != null;
 }
 
-/// 在内容边角或独立位置展示短文本、圆点或角标状态。
-///
-/// 默认使用 [TBadgeVariant.circle] 与 [TBadgeSize.medium]。当 [child] 非空时，
-/// 徽标叠加在 [child] 上；当 [child] 为空时，只渲染徽标本体。
-///
-/// TabBar、SideBar、ActionSheet 等内部拥有锚点的组合组件使用
-/// [TBadgeConfig]，调用方不应向这些组件传入一个待拆解的 [TBadge]。
 class TBadge extends StatelessWidget {
   const TBadge({
     super.key,

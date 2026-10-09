@@ -29,7 +29,7 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
   }
 
-  testWidgets('基础 Demo 与小程序公开骨架结构对应', (tester) async {
+  testWidgets('基础 Demo 展示下拉刷新与滚动内容', (tester) async {
     configurePhone(tester);
     await tester.pumpWidget(buildPage());
     await tester.pump();

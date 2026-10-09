@@ -15,7 +15,7 @@ void main() {
   );
   registerDemoPageTests(spec);
 
-  testWidgets('普通文本 Demo 使用小程序 body-medium 字号和行高', (tester) async {
+  testWidgets('普通文本 Demo 使用 body-medium 字号和行高', (tester) async {
     await pumpFullDemoPage(tester, spec, ThemeMode.light);
     final text = tester.widget<Text>(find.text('文本 Text').first);
     expect(text.style?.fontSize, 14);

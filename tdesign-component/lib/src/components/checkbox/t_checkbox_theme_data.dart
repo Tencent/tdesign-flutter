@@ -6,63 +6,59 @@ import 'package:flutter/material.dart';
 ///
 /// 通过 Theme 子树注入，控制子树默认样式。
 /// 被 TCheckbox 和 TCheckboxGroup 共用。
+///
+/// {@category ComponentTheme}
 class TCheckboxThemeData extends ThemeExtension<TCheckboxThemeData> {
   /// 复选框指示器的默认视觉变体；未设置时使用圆形。
   final TCheckboxVariant? variant;
 
-  /// 选择颜色
+  /// 选中态颜色。
+  /// null 时使用 brandColor Token。
   final Color? selectColor;
 
   /// 禁用态指示器的前景色；未选时用于描边色。
   final Color? disableColor;
 
-  /// 标题文字颜色
+  /// 主标题颜色。
+  /// 启用态 null 时使用 textColorPrimary Token；禁用态始终使用 textColorDisabled。
   final Color? titleColor;
 
-  /// 副标题文字颜色
+  /// 副标题颜色。
+  /// 启用态 null 时使用 textColorSecondary Token；禁用态始终使用 textColorDisabled。
   final Color? subTitleColor;
 
-  /// 背景颜色
+  /// 卡片背景颜色。
+  /// 卡片模式下生效；null 时使用 bgColorContainer Token。
   final Color? backgroundColor;
 
-  /// icon和文字的距离
+  /// 指示器与文案间距。
+  /// null 时使用 spacer Token。
   final double? spacing;
 
-  /// 文字和非图标侧的距离
+  /// 文案与非指示器侧的内边距。
+  /// null 时使用 spacer2 Token。
   final double? insetSpacing;
 
-  /// 自定义组件间距
+  /// 内容区域内边距。
+  /// null 时按是否有文案、卡片模式及当前字号计算内边距；纯指示器不增加文案内边距。
   final EdgeInsetsGeometry? customSpace;
 
   const TCheckboxThemeData({
-    /// 复选框指示器的默认视觉变体；未设置时使用圆形。
     this.variant,
-
-    /// 选中态颜色。
     this.selectColor,
-
-    /// 禁用态指示器的前景色；未选时用于描边色。
     this.disableColor,
-
-    /// 主标题颜色。
     this.titleColor,
-
-    /// 副标题颜色。
     this.subTitleColor,
-
-    /// 卡片背景颜色。
     this.backgroundColor,
-
-    /// 指示器与文案间距。
     this.spacing,
-
-    /// 文案与非指示器侧的内边距。
     this.insetSpacing,
-
-    /// 内容区域内边距。
     this.customSpace,
   });
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TCheckboxThemeData copyWith({
     TCheckboxVariant? variant,
@@ -97,8 +93,19 @@ class TCheckboxThemeData extends ThemeExtension<TCheckboxThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TCheckboxThemeData lerp(ThemeExtension<TCheckboxThemeData>? other, double t) {
+  TCheckboxThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    ThemeExtension<TCheckboxThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other is! TCheckboxThemeData) {
       return this;
     }

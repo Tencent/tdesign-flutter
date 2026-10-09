@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 /// 表格组件级 ThemeExtension。
 ///
 /// 仅保存表格的视觉默认值。
+///
+/// {@category ComponentTheme}
 class TTableThemeData extends ThemeExtension<TTableThemeData> {
   const TTableThemeData({
     this.rowHeight,
@@ -18,29 +20,40 @@ class TTableThemeData extends ThemeExtension<TTableThemeData> {
   });
 
   /// 数据行高度。
+  /// null 时为 38 逻辑像素。
   final double? rowHeight;
 
   /// 表头高度。
+  /// null 时为 38 逻辑像素。
   final double? headerHeight;
 
   /// 表格宽度。
+  /// null 时有界布局使用可用宽度，无界布局使用列配置计算的自然宽度。
   final double? width;
 
   /// 默认行背景色。
   final Color? backgroundColor;
 
   /// 表头背景色。
+  /// null 时使用 bgColorContainer Token。
   final Color? headerColor;
 
   /// 斑马纹背景色。
+  /// 启用 stripe 时生效；null 时使用 bgColorSecondaryContainer Token。
   final Color? stripeColor;
 
   /// 边框颜色。
+  /// null 时使用 componentStroke Token。
   final Color? borderColor;
 
   /// 单元格内边距。
+  /// null 时左右各 16 逻辑像素。
   final EdgeInsetsGeometry? cellPadding;
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TTableThemeData copyWith({
     double? rowHeight,
@@ -64,8 +77,19 @@ class TTableThemeData extends ThemeExtension<TTableThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TTableThemeData lerp(TTableThemeData? other, double t) {
+  TTableThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    TTableThemeData? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other == null) {
       return this;
     }

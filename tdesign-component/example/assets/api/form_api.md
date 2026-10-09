@@ -2,17 +2,13 @@
 
 ### TForm
 
-TDesign 表单容器。
-
-校验和字段生命周期委托给 Flutter `Form` 与 `FormState`。
-
 #### 构造方法
 
 ##### TForm
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| autovalidateMode | AutovalidateMode? | - | 自动校验时机。 | 否 |
+| autovalidateMode | AutovalidateMode? | - | 自动校验时机。 未传时，首次 `TFormController.submit` 校验失败后会切换为 `AutovalidateMode.onUserInteraction`；显式传入时完全遵循 Flutter `Form` 的校验语义。 | 否 |
 | child | Widget | - | 表单内容。 | 是 |
 | controller | TFormController? | - | 表单控制器。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
@@ -48,7 +44,7 @@ TDesign 表单容器。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| fields | Iterable&lt;String&gt;? | - | - | 否 |
+| fields | Iterable&lt;String&gt;? | - | 本次操作的字段名；为空时操作全部已注册字段。 | 否 |
 
 
 ##### TFormState.reset
@@ -71,20 +67,20 @@ TDesign 表单容器。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| messages | Map&lt;String, String?&gt; | - | - | 是 |
+| messages | Map&lt;String, String?&gt; | - | 字段名与外部校验消息的映射；消息为 null 或空字符串时清除对应错误。 | 是 |
 
 
 ##### TFormState.submit
 
 无参数。
 
-校验并在成功时触发 `TForm.onSubmit`。
+校验表单；校验成功后保存字段，并在配置 `TForm.onSubmit` 时触发提交回调。
 
 ###### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | bool | - | - | - |
+| 返回值 | bool | - | 表单校验结果；true 仅表示校验通过并已保存字段，不表示业务请求成功。 若未配置 `TForm.onSubmit`，不会触发业务提交回调。 | - |
 
 
 ##### TFormState.validate
@@ -100,7 +96,7 @@ TDesign 表单容器。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | bool | - | - | - |
+| 返回值 | bool | - | 所有参与校验的字段均通过时为 true；未注册或尚未构建完成的指定字段视为失败。 | - |
 
 
 ### TFormController
@@ -128,7 +124,7 @@ TDesign 表单容器。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| fields | Iterable&lt;String&gt;? | - | - | 否 |
+| fields | Iterable&lt;String&gt;? | - | 本次操作的字段名；为空时操作全部已注册字段。 | 否 |
 
 
 ##### TFormController.reset
@@ -146,7 +142,7 @@ TDesign 表单容器。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| messages | Map&lt;String, String?&gt; | - | - | 是 |
+| messages | Map&lt;String, String?&gt; | - | 字段名与外部校验消息的映射；消息为 null 或空字符串时清除对应错误。 | 是 |
 
 
 ##### TFormController.submit
@@ -159,7 +155,7 @@ TDesign 表单容器。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | bool | - | - | - |
+| 返回值 | bool | - | 绑定表单的校验与提交结果；未绑定表单或校验失败时为 false。 | - |
 
 
 ##### TFormController.validate
@@ -168,14 +164,14 @@ TDesign 表单容器。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| fields | Iterable&lt;String&gt;? | - | - | 否 |
+| fields | Iterable&lt;String&gt;? | - | 本次操作的字段名；为空时操作全部已注册字段。 | 否 |
 
 
 ###### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | bool | - | - | - |
+| 返回值 | bool | - | 绑定表单的校验结果；未绑定表单时为 false。 | - |
 
 
 ### TFormField
@@ -197,7 +193,7 @@ TDesign 表单容器。
 | name | String | - | 字段名，在表单提交数据中作为 key。 | 是 |
 | onChanged | ValueChanged&lt;T&gt;? | - | 字段值变化回调；为 null 时禁用字段。 | 否 |
 | onSaved | FormFieldSetter&lt;T&gt;? | - | 保存字段时触发。 | 否 |
-| required | bool | false | 是否执行内置必填校验，并让表单项默认显示必填标记。 | 否 |
+| required | bool | false | 是否执行内置必填校验，并让表单项默认显示必填标记。 内置规则仅将 null、空白字符串、空 `Iterable` 和空 `Map` 视为未填写； false 与 0 均是有效值。对象内部的未选择状态应通过 `validator` 描述。 | 否 |
 | requiredMessage | String | '此项不能为空' | 内置必填校验失败时的错误文案。 | 否 |
 | validator | FormFieldValidator&lt;T&gt;? | - | 字段校验器。 | 否 |
 | value | T | - | 受控字段值。 | 是 |
@@ -224,83 +220,6 @@ TDesign 表单容器。
 | required | bool? | - | 是否显示必填标记；仅覆盖展示效果，不会启用或关闭 `TFormField.required` 的校验行为。 未传时继承最近 `TFormField` 的 required 状态。 | 否 |
 | showErrorMessage | bool | true | 是否展示继承的校验错误。 | 否 |
 | verticalAlignment | TFormItemVerticalAlignment? | - | 水平布局下标签、字段内容和额外内容的纵向对齐方式。 未传时默认顶部对齐；这是单个表单项的结构布局选择。 | 否 |
-
-
-### TFormThemeData
-
-TForm 组件级 ThemeExtension。
-
-#### 构造方法
-
-##### TFormThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 表单及表单项背景色。 | 否 |
-| borderColor | Color? | - | 表单项底部分隔线颜色。 | 否 |
-| errorStyle | TextStyle? | - | 错误文案样式。 | 否 |
-| helpStyle | TextStyle? | - | 辅助说明样式。 | 否 |
-| itemPadding | EdgeInsetsGeometry? | - | 表单项内边距。 | 否 |
-| itemSpacing | double? | - | 表单项间距。 | 否 |
-| labelAlign | TextAlign? | - | 标签对齐方式；默认左对齐。 | 否 |
-| labelGap | double? | - | 标签与字段的垂直间距。 | 否 |
-| labelStyle | TextStyle? | - | 标签样式。 | 否 |
-| labelWidth | double? | - | 默认标签宽度。 | 否 |
-| layout | TFormLayout? | - | 表单项布局方向。 | 否 |
-| leadingGap | double? | - | 前置内容与标签区域的间距。 | 否 |
-| messageGap | double? | - | 字段与辅助或错误文案的间距。 | 否 |
-| requiredMarkPosition | TFormRequiredMarkPosition? | - | 必填标记位置。 | 否 |
-| requiredMarkStyle | TextStyle? | - | 必填标记样式。 | 否 |
-| showColon | bool? | - | 是否在标签末尾显示冒号。 | 否 |
-
-
-#### 实例方法
-
-##### TFormThemeData.copyWith
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| showColon | bool? | - | 字段含义：是否在标签末尾显示冒号。 调用时的空值行为见方法说明。 | 否 |
-| labelWidth | double? | - | 字段含义：默认标签宽度；为空时表单项使用 80dp。 调用时的空值行为见方法说明。 | 否 |
-| layout | TFormLayout? | - | 字段含义：表单项布局方向。 调用时的空值行为见方法说明。 | 否 |
-| labelAlign | TextAlign? | - | 字段含义：标签对齐方式。 调用时的空值行为见方法说明。 | 否 |
-| requiredMarkPosition | TFormRequiredMarkPosition? | - | 字段含义：必填标记位置。 调用时的空值行为见方法说明。 | 否 |
-| labelStyle | TextStyle? | - | 字段含义：标签样式。 调用时的空值行为见方法说明。 | 否 |
-| requiredMarkStyle | TextStyle? | - | 字段含义：必填标记样式。 调用时的空值行为见方法说明。 | 否 |
-| helpStyle | TextStyle? | - | 字段含义：辅助说明样式。 调用时的空值行为见方法说明。 | 否 |
-| errorStyle | TextStyle? | - | 字段含义：错误文案样式。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：表单及表单项背景色。 调用时的空值行为见方法说明。 | 否 |
-| borderColor | Color? | - | 字段含义：表单项底部分隔线颜色。 调用时的空值行为见方法说明。 | 否 |
-| itemPadding | EdgeInsetsGeometry? | - | 字段含义：表单项内边距。 调用时的空值行为见方法说明。 | 否 |
-| itemSpacing | double? | - | 字段含义：表单项间距。 调用时的空值行为见方法说明。 | 否 |
-| labelGap | double? | - | 字段含义：标签与字段的垂直间距。 调用时的空值行为见方法说明。 | 否 |
-| leadingGap | double? | - | 字段含义：前置内容与标签区域的间距。 调用时的空值行为见方法说明。 | 否 |
-| messageGap | double? | - | 字段含义：字段与辅助或错误文案的间距。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TFormThemeData | - | - | - |
-
-
-##### TFormThemeData.lerp
-
-位置参数：`other, t`
-
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TFormThemeData&gt;? | - | - | 是 |
-| t | double | - | - | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TFormThemeData | - | - | - |
 
 
 ### TFormLayout
@@ -361,14 +280,47 @@ TDesign 字段 builder。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| context | BuildContext | - | - | 是 |
-| value | T | - | - | 是 |
-| onChanged | ValueChanged&lt;T&gt;? | - | - | 是 |
-| errorText | String? | - | - | 是 |
+| context | BuildContext | - | 表单字段的构建上下文。 | 是 |
+| value | T | - | 当前字段值。 | 是 |
+| onChanged | ValueChanged&lt;T&gt;? | - | 更新字段值的回调；为 null 时字段不可编辑。 | 是 |
+| errorText | String? | - | 当前字段校验错误；为 null 时无错误文案。 | 是 |
 
 
 #### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | Widget | - | - | - |
+| 返回值 | Widget | - | 表单字段的输入与展示内容。 | - |
+
+
+### TFormThemeData
+
+TForm 组件级 ThemeExtension。
+
+主题过渡中，布局、对齐和必填标记位置在进度 0.5 处切换；
+标签宽度、表单项内边距、项间距和标签间距分别按 80、四周 16、0、8
+逻辑像素补空值后插值。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 表单及表单项背景色。 null 时使用 bgColorContainer Token。 | 否 |
+| borderColor | Color? | - | 表单项底部分隔线颜色。 null 时使用 componentStroke Token。 | 否 |
+| errorStyle | TextStyle? | - | 错误文案样式。 | 否 |
+| helpStyle | TextStyle? | - | 辅助说明样式。 | 否 |
+| itemPadding | EdgeInsetsGeometry? | - | 表单项内边距。 未配置时左右为 16 逻辑像素；水平布局上下为 14，垂直布局上下为 16。 | 否 |
+| itemSpacing | double? | - | 表单项间距。 未配置时为 0。 | 否 |
+| labelAlign | TextAlign? | - | 标签对齐方式；默认 TextAlign.start，随文字方向对齐起始侧。 | 否 |
+| labelGap | double? | - | 标签与字段的垂直间距。 未配置时为 8 逻辑像素。 | 否 |
+| labelStyle | TextStyle? | - | 标签样式。 | 否 |
+| labelWidth | double? | - | 默认标签宽度；为空时表单项使用 80dp。 | 否 |
+| layout | TFormLayout? | - | 表单项布局方向。 未配置时为 TFormLayout.horizontal。 | 否 |
+| leadingGap | double? | - | 前置内容与标签区域的间距。 未配置时使用 spacer Token。 | 否 |
+| messageGap | double? | - | 字段与辅助或错误文案的间距。 未配置时为 4 逻辑像素。 | 否 |
+| requiredMarkPosition | TFormRequiredMarkPosition? | - | 必填标记位置。 null 时使用 TFormRequiredMarkPosition.left。 | 否 |
+| requiredMarkStyle | TextStyle? | - | 必填标记样式。 | 否 |
+| showColon | bool? | - | 是否在标签末尾显示冒号。 | 否 |

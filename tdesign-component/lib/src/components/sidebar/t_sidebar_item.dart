@@ -34,6 +34,7 @@ class TSideBarItem {
   /// 标签
   final String label;
 
-  /// 值
+  /// 条目的业务值；由调用方指定，默认 -1，不自动使用 children 中的位置。
+  /// 父组件通过相同的值指定选中项；选择回调返回该值。
   final int value;
 }

@@ -215,9 +215,6 @@ class TTabBarItemConfig {
   final GestureLongPressCallback? onLongPress;
 }
 
-/// 底部标签栏
-///
-/// 支持文本、图文、图标与双层级内容，并将选项样式与容器外形作为独立配置。
 class TTabBar extends StatefulWidget {
   TTabBar({
     Key? key,
@@ -318,9 +315,11 @@ class TTabBar extends StatefulWidget {
   final TTabBarIndicatorAnimation indicatorAnimation;
 
   /// 动画时长
+  /// null 时为 300 毫秒。
   final Duration? animationDuration;
 
   /// 动画曲线
+  /// null 时使用 Curves.easeInOutCubic。
   final Curve? animationCurve;
 
   /// 选中的 index

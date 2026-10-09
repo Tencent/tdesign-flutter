@@ -5,9 +5,12 @@ import 'package:flutter/material.dart';
 /// TDivider 组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树的默认样式。
-/// 构造器参数优先于 Theme（L1/L2 > Theme > DividerTheme > Token）。
+/// 布局、内容和虚线选择由实例控制；视觉值从本主题读取，未配置时回退
+/// TDesign Token 或组件内置值，不读取 Material DividerTheme。
+///
+/// {@category ComponentTheme}
 class TDividerThemeData extends ThemeExtension<TDividerThemeData> {
-  /// 线条颜色
+  /// 线条颜色；未设置时使用 `bgColorComponent` Token。
   final Color? color;
 
   /// 线粗：横线 = 高度，竖线 = 宽度（默认 0.5）
@@ -22,10 +25,10 @@ class TDividerThemeData extends ThemeExtension<TDividerThemeData> {
   /// child 为文本时的默认样式，覆盖 `fontBodySmall` / `textColorPlaceholder` Token。
   final TextStyle? textStyle;
 
-  /// 左缩进（对齐 Material [DividerThemeData.indent] 语义）
+  /// 纯水平线起始侧缩进；未设置时为 0，带内容或垂直线时不生效。
   final double? indent;
 
-  /// 右缩进（对齐 Material [DividerThemeData.endIndent] 语义）
+  /// 纯水平线结束侧缩进；未设置时为 0，带内容或垂直线时不生效。
   final double? endIndent;
 
   const TDividerThemeData({
@@ -38,6 +41,10 @@ class TDividerThemeData extends ThemeExtension<TDividerThemeData> {
     this.endIndent,
   });
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TDividerThemeData copyWith({
     Color? color,
@@ -59,8 +66,19 @@ class TDividerThemeData extends ThemeExtension<TDividerThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TDividerThemeData lerp(ThemeExtension<TDividerThemeData>? other, double t) {
+  TDividerThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    ThemeExtension<TDividerThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other is! TDividerThemeData) {
       return this;
     }

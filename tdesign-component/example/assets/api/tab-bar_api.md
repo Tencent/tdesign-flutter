@@ -8,8 +8,8 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| animationCurve | Curve? | - | 动画曲线 | 否 |
-| animationDuration | Duration? | - | 动画时长 | 否 |
+| animationCurve | Curve? | - | 动画曲线 null 时使用 Curves.easeInOutCubic。 | 否 |
+| animationDuration | Duration? | - | 动画时长 null 时为 300 毫秒。 | 否 |
 | iconTextLayout | TTabBarIconTextLayout | TTabBarIconTextLayout.stacked | 图文项的图标与文字排列方式；仅当 `type` 为 `TTabBarType.iconText` 时生效。 默认为 `TTabBarIconTextLayout.stacked`。上下排列时图文间距为 0px， 左右排列时为 4px。该参数不改变标签栏 自身的水平方向，也不影响双层级菜单入口。 | 否 |
 | indicatorAnimation | TTabBarIndicatorAnimation | TTabBarIndicatorAnimation.none | 指示器动画类型 | 否 |
 | itemStyle | TTabBarItemStyle | TTabBarItemStyle.label | 单个标签项的选中样式。 | 否 |
@@ -25,6 +25,8 @@
 
 
 ### TTabBarItemConfig
+
+单个 tab 配置
 
 #### 构造方法
 
@@ -46,6 +48,8 @@
 
 ### TTabBarPopUpBtnConfig
 
+展开项配置
+
 #### 构造方法
 
 ##### TTabBarPopUpBtnConfig
@@ -58,6 +62,8 @@
 
 
 ### TTabBarPopUpShapeConfig
+
+弹窗UI配置
 
 #### 构造方法
 
@@ -75,6 +81,8 @@
 
 ### TTabBarMenuItem
 
+弹窗菜单item
+
 #### 构造方法
 
 ##### TTabBarMenuItem
@@ -87,64 +95,9 @@
 | value | String | - | 选项值 | 是 |
 
 
-### TTabBarThemeData
-
-#### 构造方法
-
-##### TTabBarThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 默认背景颜色 | 否 |
-| barHeight | double? | - | 默认高度 | 否 |
-| dividerColor | Color? | - | 竖向分割线颜色；未设置时读取全局灰阶 3。 | 否 |
-| dividerHeight | double? | - | 默认分割线高度 | 否 |
-| dividerThickness | double? | - | 默认分割线厚度 | 否 |
-| selectedBgColor | Color? | - | 默认选中时背景颜色 | 否 |
-| unselectedBgColor | Color? | - | 默认未选中时背景颜色 | 否 |
-
-
-#### 实例方法
-
-##### TTabBarThemeData.copyWith
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| barHeight | double? | - | 字段含义：默认高度 调用时的空值行为见方法说明。 | 否 |
-| selectedBgColor | Color? | - | 字段含义：默认选中时背景颜色 调用时的空值行为见方法说明。 | 否 |
-| unselectedBgColor | Color? | - | 字段含义：默认未选中时背景颜色 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：默认背景颜色 调用时的空值行为见方法说明。 | 否 |
-| dividerHeight | double? | - | 字段含义：默认分割线高度 调用时的空值行为见方法说明。 | 否 |
-| dividerThickness | double? | - | 字段含义：默认分割线厚度 调用时的空值行为见方法说明。 | 否 |
-| dividerColor | Color? | - | 字段含义：竖向分割线颜色；未设置时读取全局灰阶 3。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TTabBarThemeData | - | - | - |
-
-
-##### TTabBarThemeData.lerp
-
-位置参数：`other, t`
-
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TTabBarThemeData&gt;? | - | - | 是 |
-| t | double | - | - | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TTabBarThemeData | - | - | - |
-
-
 ### TTabBarType
+
+底部标签栏内容类型。
 #### 枚举值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -156,6 +109,8 @@
 
 
 ### TTabBarItemStyle
+
+单个标签项的选中样式。
 #### 枚举值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -165,6 +120,8 @@
 
 
 ### TTabBarStyle
+
+标签栏容器样式。
 #### 枚举值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -174,6 +131,8 @@
 
 
 ### TTabBarIconTextLayout
+
+图文标签项中图标与文字的排列方式，仅对 `TTabBarType.iconText` 生效。
 #### 枚举值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -183,6 +142,9 @@
 
 
 ### TTabBarIndicatorAnimation
+
+底部标签栏组件样式
+指示器动画类型
 #### 枚举值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -190,3 +152,25 @@
 | none | TTabBarIndicatorAnimation | - | 无动画，瞬间切换 | - |
 | linear | TTabBarIndicatorAnimation | - | 线性滑动：指示器匀速从一个 tab 滑到另一个 | - |
 | elastic | TTabBarIndicatorAnimation | - | 弹性动画：指示器先拉伸后收缩 | - |
+
+
+### TTabBarThemeData
+
+底部标签栏 ThemeExtension
+
+管理 TTabBar 的子树级视觉默认值（高度、颜色与分割线等）。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 默认背景颜色 | 否 |
+| barHeight | double? | - | 默认高度 | 否 |
+| dividerColor | Color? | - | 竖向分割线颜色；未设置时读取全局灰阶 3。 | 否 |
+| dividerHeight | double? | - | 默认分割线高度 | 否 |
+| dividerThickness | double? | - | 默认分割线厚度 | 否 |
+| selectedBgColor | Color? | - | 默认选中时背景颜色 | 否 |
+| unselectedBgColor | Color? | - | 默认未选中时背景颜色 | 否 |

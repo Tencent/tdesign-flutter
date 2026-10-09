@@ -29,14 +29,14 @@ const pullDownRefreshDemoScenarios = [
   PullDownRefreshDemoScenario(
     id: 'custom_text',
     group: '自定义提示语',
-    label: 'loadingTexts（小程序已有公开 props 的新增 API 演示，Demo 形态仅参考 Mobile Vue）',
+    label: '通过 loadingTexts 自定义四个刷新阶段的提示语',
     operation: 'pull',
     expectedResult: 'custom refreshing text',
   ),
   PullDownRefreshDemoScenario(
     id: 'timeout',
     group: '刷新超时',
-    label: 'refreshTimeout（小程序已有公开 props 的新增 API 演示，Demo 形态仅参考 Mobile Vue）',
+    label: '通过 refreshTimeout 设置刷新超时时间',
     operation: 'pull and wait',
     expectedResult: 'timeout feedback',
   ),

@@ -14,10 +14,6 @@ const double _kIconGap = 5;
 const double _kActionGap = 15;
 const EdgeInsets _kContentPadding = EdgeInsets.symmetric(horizontal: 12);
 
-/// 基于 Material [TextField] 的搜索输入框。
-///
-/// [controller] 是主控制路径；未传时组件创建内部 controller，并使用
-/// [initialValue] 初始化一次。搜索结果由调用方在组件外组合。
 class TSearchBar extends StatefulWidget {
   const TSearchBar({
     super.key,
@@ -51,7 +47,8 @@ class TSearchBar extends StatefulWidget {
          'maxLength 与 maxCharacter 不能同时设置',
        );
 
-  /// 文本控制器。
+  /// 文本控制器；与 initialValue 互斥。外部控制器由调用方释放，
+  /// 未提供时由组件创建并释放内部控制器。
   final TextEditingController? controller;
 
   /// 内部控制器的初始文本，仅初始化一次。
@@ -81,10 +78,10 @@ class TSearchBar extends StatefulWidget {
   /// 右侧操作点击回调。组件不会隐式清空输入或释放焦点。
   final VoidCallback? onActionPressed;
 
-  /// 清除按钮点击回调。
+  /// 清除按钮点击回调；先清空 controller，再调用本回调，最后触发 onChanged('')。
   final VoidCallback? onClearPressed;
 
-  /// 是否在聚焦且存在文本时显示清除按钮。
+  /// 是否在存在文本、enabled 为 true 且非只读时显示清除按钮；无需聚焦。
   final bool clearable;
 
   /// 是否自动聚焦。
@@ -96,7 +93,7 @@ class TSearchBar extends StatefulWidget {
   /// 键盘动作。
   final TextInputAction inputAction;
 
-  /// 最大字符数；不显示 Material 计数器。
+  /// 最大字符数；不显示 Material 计数器，与 maxCharacter 互斥。
   final int? maxLength;
 
   /// 最大加权字符数，ASCII 字符计 1，非 ASCII 字符计 2。
@@ -111,7 +108,7 @@ class TSearchBar extends StatefulWidget {
   /// 文本对齐方式，默认左对齐。
   final TSearchBarAlignment? textAlignment;
 
-  /// 自定义焦点节点。
+  /// 焦点节点；外部节点由调用方释放，未提供时由组件管理内部节点。
   final FocusNode? focusNode;
 
   @override

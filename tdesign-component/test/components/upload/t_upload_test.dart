@@ -689,7 +689,7 @@ void main() {
       );
     });
 
-    testWidgets('list add uses the miniprogram button content and semantics', (
+    testWidgets('list add uses the expected button content and semantics', (
       tester,
     ) async {
       final semantics = tester.ensureSemantics();

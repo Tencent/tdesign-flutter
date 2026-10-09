@@ -33,6 +33,8 @@
 
 
 ### TImageShape
+
+图片形状。
 #### 枚举值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -40,3 +42,22 @@
 | square | TImageShape | - | 方形。 | - |
 | roundedSquare | TImageShape | - | 圆角方形。 | - |
 | circle | TImageShape | - | 圆形。 | - |
+
+
+### TImageThemeData
+
+图片组件的视觉默认值。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| centerSlice | Rect? | - | 九宫格中心切片。 | 否 |
+| color | Color? | - | 图片叠加色。 | 否 |
+| colorBlendMode | BlendMode? | - | 颜色混合模式。 | 否 |
+| gaplessPlayback | bool? | - | 更新 provider 时是否保留上一帧。 未配置时为 false。 | 否 |
+| isAntiAlias | bool? | - | 是否启用抗锯齿。 未配置时为 false。 | 否 |
+| matchTextDirection | bool? | - | 是否匹配文字方向。 未配置时为 false。 | 否 |

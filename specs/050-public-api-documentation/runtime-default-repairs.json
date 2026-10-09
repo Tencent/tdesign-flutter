@@ -1,0 +1,464 @@
+[
+  {
+    "folder": "calendar",
+    "field": "decoration",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/calendar/t_calendar_theme_data.dart",
+    "addition": "null 时继承当前全局 Token 解析的容器装饰。",
+    "finalDartdoc": "/// 组件容器装饰\n  /// null 时继承当前全局 Token 解析的容器装饰。"
+  },
+  {
+    "folder": "calendar",
+    "field": "weekdayStyle",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/calendar/t_calendar_theme_data.dart",
+    "addition": "null 时继承当前全局 Token 解析的星期样式。",
+    "finalDartdoc": "/// 星期文字样式\n  /// null 时继承当前全局 Token 解析的星期样式。"
+  },
+  {
+    "folder": "calendar",
+    "field": "monthTitleStyle",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/calendar/t_calendar_theme_data.dart",
+    "addition": "null 时继承当前全局 Token 解析的月份标题样式。",
+    "finalDartdoc": "/// 月份标题文字样式\n  /// null 时继承当前全局 Token 解析的月份标题样式。"
+  },
+  {
+    "folder": "calendar",
+    "field": "dayStyle",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/calendar/t_calendar_theme_data.dart",
+    "addition": "null 时继承当前全局 Token 与日期格状态解析的样式。",
+    "finalDartdoc": "/// 日期数字样式\n  /// null 时继承当前全局 Token 与日期格状态解析的样式。"
+  },
+  {
+    "folder": "calendar",
+    "field": "todayDayStyle",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/calendar/t_calendar_theme_data.dart",
+    "addition": "null 时继承当前全局 Token 解析的今天样式。",
+    "finalDartdoc": "/// 今天日期数字样式\n  /// null 时继承当前全局 Token 解析的今天样式。"
+  },
+  {
+    "folder": "calendar",
+    "field": "cellDecoration",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/calendar/t_calendar_theme_data.dart",
+    "addition": "null 时按日期格选择状态与全局 Token 解析默认装饰。",
+    "finalDartdoc": "/// 日期单元格装饰（选中状态）\n  /// null 时按日期格选择状态与全局 Token 解析默认装饰。"
+  },
+  {
+    "folder": "calendar",
+    "field": "subtitleStyle",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/calendar/t_calendar_theme_data.dart",
+    "addition": "null 时继承当前全局 Token 与选择状态解析的副标题样式。",
+    "finalDartdoc": "/// 副标题样式\n  /// null 时继承当前全局 Token 与选择状态解析的副标题样式。"
+  },
+  {
+    "folder": "calendar",
+    "field": "centreColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/calendar/t_calendar_theme_data.dart",
+    "addition": "null 时按区间格的选择状态与当前 Token 解析区间背景。",
+    "finalDartdoc": "/// 区间中间格背景与格间衔接条颜色\n  /// null 时按区间格的选择状态与当前 Token 解析区间背景。"
+  },
+  {
+    "folder": "cascader",
+    "field": "navigationPadding",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/cascader/t_cascader_theme_data.dart",
+    "addition": "null 时 step 形态左右使用 spacer2、上方为 0、下方为 4；tab 形态不增加导航内边距。",
+    "finalDartdoc": "/// 导航区域内边距。\n  /// null 时 step 形态左右使用 spacer2、上方为 0、下方为 4；tab 形态不增加导航内边距。"
+  },
+  {
+    "folder": "checkbox",
+    "field": "selectColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/checkbox/t_checkbox_theme_data.dart",
+    "addition": "null 时使用 brandColor Token。",
+    "finalDartdoc": "/// 选中态颜色。\n  /// null 时使用 brandColor Token。"
+  },
+  {
+    "folder": "checkbox",
+    "field": "titleColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/checkbox/t_checkbox_theme_data.dart",
+    "addition": "null 时使用 textColorPrimary Token。",
+    "finalDartdoc": "/// 主标题颜色。\n  /// 启用态 null 时使用 textColorPrimary Token；禁用态始终使用 textColorDisabled。"
+  },
+  {
+    "folder": "checkbox",
+    "field": "subTitleColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/checkbox/t_checkbox_theme_data.dart",
+    "addition": "null 时使用 textColorSecondary Token。",
+    "finalDartdoc": "/// 副标题颜色。\n  /// 启用态 null 时使用 textColorSecondary Token；禁用态始终使用 textColorDisabled。"
+  },
+  {
+    "folder": "checkbox",
+    "field": "backgroundColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/checkbox/t_checkbox_theme_data.dart",
+    "addition": "卡片模式下生效；null 时使用 bgColorContainer Token。",
+    "finalDartdoc": "/// 卡片背景颜色。\n  /// 卡片模式下生效；null 时使用 bgColorContainer Token。"
+  },
+  {
+    "folder": "checkbox",
+    "field": "spacing",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/checkbox/t_checkbox_theme_data.dart",
+    "addition": "null 时使用 spacer Token。",
+    "finalDartdoc": "/// 指示器与文案间距。\n  /// null 时使用 spacer Token。"
+  },
+  {
+    "folder": "checkbox",
+    "field": "insetSpacing",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/checkbox/t_checkbox_theme_data.dart",
+    "addition": "null 时使用 spacer2 Token。",
+    "finalDartdoc": "/// 文案与非指示器侧的内边距。\n  /// null 时使用 spacer2 Token。"
+  },
+  {
+    "folder": "checkbox",
+    "field": "customSpace",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/checkbox/t_checkbox_theme_data.dart",
+    "addition": "null 时按是否有文案、卡片模式及当前字号计算内边距；纯指示器不增加文案内边距。",
+    "finalDartdoc": "/// 内容区域内边距。\n  /// null 时按是否有文案、卡片模式及当前字号计算内边距；纯指示器不增加文案内边距。"
+  },
+  {
+    "folder": "drawer",
+    "field": "itemBackgroundColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/drawer/t_drawer_theme_data.dart",
+    "addition": "null 时沿用抽屉实际面板背景色。",
+    "finalDartdoc": "/// 菜单项背景色。\n  /// null 时沿用抽屉实际面板背景色。"
+  },
+  {
+    "folder": "drawer",
+    "field": "itemPressedColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/drawer/t_drawer_theme_data.dart",
+    "addition": "null 时使用 bgColorSecondaryContainer Token。",
+    "finalDartdoc": "/// 菜单项按压背景色。\n  /// null 时使用 bgColorSecondaryContainer Token。"
+  },
+  {
+    "folder": "drawer",
+    "field": "itemIconColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/drawer/t_drawer_theme_data.dart",
+    "addition": "null 时使用 textColorPrimary Token。",
+    "finalDartdoc": "/// 菜单项图标颜色。\n  /// null 时使用 textColorPrimary Token。"
+  },
+  {
+    "folder": "drawer",
+    "field": "dividerColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/drawer/t_drawer_theme_data.dart",
+    "addition": "null 时使用 componentStroke Token。",
+    "finalDartdoc": "/// 菜单项分隔线颜色。\n  /// null 时使用 componentStroke Token。"
+  },
+  {
+    "folder": "form",
+    "field": "requiredMarkPosition",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/form/t_form_theme_data.dart",
+    "addition": "null 时使用 TFormRequiredMarkPosition.left。",
+    "finalDartdoc": "/// 必填标记位置。\n  /// null 时使用 TFormRequiredMarkPosition.left。"
+  },
+  {
+    "folder": "form",
+    "field": "backgroundColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/form/t_form_theme_data.dart",
+    "addition": "null 时使用 bgColorContainer Token。",
+    "finalDartdoc": "/// 表单及表单项背景色。\n  /// null 时使用 bgColorContainer Token。"
+  },
+  {
+    "folder": "form",
+    "field": "borderColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/form/t_form_theme_data.dart",
+    "addition": "null 时使用 componentStroke Token。",
+    "finalDartdoc": "/// 表单项底部分隔线颜色。\n  /// null 时使用 componentStroke Token。"
+  },
+  {
+    "folder": "image_viewer",
+    "field": "backgroundColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/image_viewer/t_image_viewer_theme_data.dart",
+    "addition": "null 时由 fontGray1 与 bgColorSpecialComponent 叠加得到默认背景色。",
+    "finalDartdoc": "/// 预览页背景色\n  /// null 时由 fontGray1 与 bgColorContainer 叠加得到默认背景色。"
+  },
+  {
+    "folder": "image_viewer",
+    "field": "appBarBackgroundColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/image_viewer/t_image_viewer_theme_data.dart",
+    "addition": "null 时使用不透明 fontGray1 Token。",
+    "finalDartdoc": "/// 导航栏背景色\n  /// null 时使用不透明 fontGray1 Token。"
+  },
+  {
+    "folder": "image_viewer",
+    "field": "iconColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/image_viewer/t_image_viewer_theme_data.dart",
+    "addition": "null 时使用 textColorAnti Token。",
+    "finalDartdoc": "/// 图标颜色\n  /// null 时使用 textColorAnti Token。"
+  },
+  {
+    "folder": "image_viewer",
+    "field": "labelStyle",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/image_viewer/t_image_viewer_theme_data.dart",
+    "addition": "null 时使用 textColorAnti 作为标签文字颜色。",
+    "finalDartdoc": "/// 标签文字样式\n  /// null 时使用 textColorAnti 作为标签文字颜色。"
+  },
+  {
+    "folder": "image_viewer",
+    "field": "indexStyle",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/image_viewer/t_image_viewer_theme_data.dart",
+    "addition": "null 时使用 textColorAnti 和 fontBodyMedium 字号，字号最终回退 14。",
+    "finalDartdoc": "/// 页码文字样式\n  /// null 时使用 textColorAnti 和 fontBodyMedium 字号，字号最终回退 14。"
+  },
+  {
+    "folder": "input",
+    "field": "clearIconSize",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/input/t_input_theme_data.dart",
+    "addition": "null 时为 20 逻辑像素。",
+    "finalDartdoc": "/// 清除图标尺寸。\n  /// null 时为 20 逻辑像素。"
+  },
+  {
+    "folder": "input",
+    "field": "clearIconColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/input/t_input_theme_data.dart",
+    "addition": "null 时错误态使用 errorColor，其他状态使用 textColorPlaceholder Token。",
+    "finalDartdoc": "/// 清除图标颜色。\n  /// null 时错误态使用 errorColor，其他状态使用 textColorPlaceholder Token。"
+  },
+  {
+    "folder": "input",
+    "field": "contentPadding",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/input/t_input_theme_data.dart",
+    "addition": "null 时在 TFormItem 作用域内为零，独立输入框为四周 16 逻辑像素；Textarea 组合有独立的容器分工。",
+    "finalDartdoc": "/// 输入区域内边距。\n  /// null 时在 TFormItem 作用域内为零，独立输入框为四周 16 逻辑像素；Textarea 组合有独立的容器分工。"
+  },
+  {
+    "folder": "input",
+    "field": "backgroundColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/input/t_input_theme_data.dart",
+    "addition": "null 时在 TFormItem 作用域内透明，独立输入框使用 bgColorContainer Token。",
+    "finalDartdoc": "/// 输入区域背景色。\n  /// null 时在 TFormItem 作用域内透明，独立输入框使用 bgColorContainer Token。"
+  },
+  {
+    "folder": "input",
+    "field": "borderColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/input/t_input_theme_data.dart",
+    "addition": "null 时按启用、焦点与语义状态解析边框颜色；禁用态使用 componentStroke Token。",
+    "finalDartdoc": "/// 输入区域边框颜色。\n  /// null 时按启用、焦点与语义状态解析边框颜色；禁用态使用 componentStroke Token。"
+  },
+  {
+    "folder": "input",
+    "field": "borderWidth",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/input/t_input_theme_data.dart",
+    "addition": "null 时为 1 逻辑像素。",
+    "finalDartdoc": "/// 输入区域边框宽度。\n  /// null 时为 1 逻辑像素。"
+  },
+  {
+    "folder": "radio",
+    "field": "selectColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/radio/t_radio_theme_data.dart",
+    "addition": "null 时使用 brandColor Token。",
+    "finalDartdoc": "/// 选中态颜色。\n  /// null 时使用 brandColor Token。"
+  },
+  {
+    "folder": "radio",
+    "field": "disableColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/radio/t_radio_theme_data.dart",
+    "addition": "null 时选中禁用态使用 brandColorDisabled，未选中禁用态描边使用 componentBorder Token。",
+    "finalDartdoc": "/// 禁用态颜色。\n  /// null 时选中禁用态使用 brandColorDisabled，未选中禁用态描边使用 componentBorder Token。"
+  },
+  {
+    "folder": "radio",
+    "field": "titleColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/radio/t_radio_theme_data.dart",
+    "addition": "null 时使用 textColorPrimary Token。",
+    "finalDartdoc": "/// 主标题颜色。\n  /// 启用态 null 时使用 textColorPrimary Token；禁用态始终使用 textColorDisabled。"
+  },
+  {
+    "folder": "radio",
+    "field": "subTitleColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/radio/t_radio_theme_data.dart",
+    "addition": "null 时使用 textColorSecondary Token。",
+    "finalDartdoc": "/// 副标题颜色。\n  /// 启用态 null 时使用 textColorSecondary Token；禁用态始终使用 textColorDisabled。"
+  },
+  {
+    "folder": "radio",
+    "field": "backgroundColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/radio/t_radio_theme_data.dart",
+    "addition": "卡片模式下生效；null 时使用 bgColorContainer Token。",
+    "finalDartdoc": "/// 卡片背景颜色。\n  /// 卡片模式下生效；null 时使用 bgColorContainer Token。"
+  },
+  {
+    "folder": "radio",
+    "field": "spacing",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/radio/t_radio_theme_data.dart",
+    "addition": "null 时使用 spacer Token。",
+    "finalDartdoc": "/// 指示器与文案间距。\n  /// null 时使用 spacer Token。"
+  },
+  {
+    "folder": "radio",
+    "field": "insetSpacing",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/radio/t_radio_theme_data.dart",
+    "addition": "null 时使用 spacer2 Token。",
+    "finalDartdoc": "/// 文案与非指示器侧的内边距。\n  /// null 时使用 spacer2 Token。"
+  },
+  {
+    "folder": "rate",
+    "field": "starColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/rate/t_rate_theme_data.dart",
+    "addition": "null 时使用 warningColor5 Token。",
+    "finalDartdoc": "/// 选中星标颜色。\n  /// null 时使用 warningColor5 Token。"
+  },
+  {
+    "folder": "rate",
+    "field": "iconSize",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/rate/t_rate_theme_data.dart",
+    "addition": "null 时使用 spacer3 Token。",
+    "finalDartdoc": "/// 图标尺寸。\n  /// null 时使用 spacer3 Token。"
+  },
+  {
+    "folder": "rate",
+    "field": "iconGap",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/rate/t_rate_theme_data.dart",
+    "addition": "null 时使用 spacer Token。",
+    "finalDartdoc": "/// 图标间距。\n  /// null 时使用 spacer Token。"
+  },
+  {
+    "folder": "rate",
+    "field": "textGap",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/rate/t_rate_theme_data.dart",
+    "addition": "null 时使用 spacer2 Token。",
+    "finalDartdoc": "/// 图标与文案间距。\n  /// null 时使用 spacer2 Token。"
+  },
+  {
+    "folder": "rate",
+    "field": "overlayBoxShadow",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/rate/t_rate_theme_data.dart",
+    "addition": "null 时使用 shadow1 Token；该 Token 缺失时无阴影。",
+    "finalDartdoc": "/// 当前值提示与半星选择浮层阴影。\n  /// null 时使用 shadow1 Token；该 Token 缺失时无阴影。"
+  },
+  {
+    "folder": "slider",
+    "field": "trackHeight",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/slider/t_slider_theme.dart",
+    "addition": "null 时为 4 逻辑像素。",
+    "finalDartdoc": "/// 普通轨道粗细；胶囊形态仍使用其内置规格。\n  /// null 时为 4 逻辑像素。"
+  },
+  {
+    "folder": "stepper",
+    "field": "backgroundColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/stepper/t_stepper_theme_data.dart",
+    "addition": "null 时使用 bgColorSecondaryContainer Token。",
+    "finalDartdoc": "/// filled 形态各段的背景色。\n  /// null 时使用 bgColorSecondaryContainer Token。"
+  },
+  {
+    "folder": "stepper",
+    "field": "disabledBackgroundColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/stepper/t_stepper_theme_data.dart",
+    "addition": "null 时使用 bgColorComponentDisabled Token。",
+    "finalDartdoc": "/// 整组禁用时 filled 和 outline 形态各段的背景色。\n  /// null 时使用 bgColorComponentDisabled Token。"
+  },
+  {
+    "folder": "stepper",
+    "field": "borderColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/stepper/t_stepper_theme_data.dart",
+    "addition": "null 时使用 componentBorder Token。",
+    "finalDartdoc": "/// outline 形态的描边颜色。\n  /// null 时使用 componentBorder Token。"
+  },
+  {
+    "folder": "swiper",
+    "field": "borderRadius",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/swiper/t_swiper_theme_data.dart",
+    "addition": "null 时使用 radiusLarge Token 构造圆角。",
+    "finalDartdoc": "/// 轮播内容圆角。\n  /// null 时使用 radiusLarge Token 构造圆角。"
+  },
+  {
+    "folder": "swiper",
+    "field": "activeColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/swiper/t_swiper_theme_data.dart",
+    "addition": "null 时使用 textColorAnti Token。",
+    "finalDartdoc": "/// 激活项颜色。\n  /// null 时使用 textColorAnti Token。"
+  },
+  {
+    "folder": "swiper",
+    "field": "fractionBackgroundColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/swiper/t_swiper_theme_data.dart",
+    "addition": "null 时使用 textColorPlaceholder Token。",
+    "finalDartdoc": "/// 数字指示器背景色。\n  /// null 时使用 textColorPlaceholder Token。"
+  },
+  {
+    "folder": "table",
+    "field": "rowHeight",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/table/t_table_theme_data.dart",
+    "addition": "null 时为 38 逻辑像素。",
+    "finalDartdoc": "/// 数据行高度。\n  /// null 时为 38 逻辑像素。"
+  },
+  {
+    "folder": "table",
+    "field": "headerHeight",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/table/t_table_theme_data.dart",
+    "addition": "null 时为 38 逻辑像素。",
+    "finalDartdoc": "/// 表头高度。\n  /// null 时为 38 逻辑像素。"
+  },
+  {
+    "folder": "table",
+    "field": "width",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/table/t_table_theme_data.dart",
+    "addition": "null 时有界布局使用可用宽度，无界布局使用列配置计算的自然宽度。",
+    "finalDartdoc": "/// 表格宽度。\n  /// null 时有界布局使用可用宽度，无界布局使用列配置计算的自然宽度。"
+  },
+  {
+    "folder": "table",
+    "field": "headerColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/table/t_table_theme_data.dart",
+    "addition": "null 时使用 bgColorContainer Token。",
+    "finalDartdoc": "/// 表头背景色。\n  /// null 时使用 bgColorContainer Token。"
+  },
+  {
+    "folder": "table",
+    "field": "stripeColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/table/t_table_theme_data.dart",
+    "addition": "启用 stripe 时生效；null 时使用 bgColorSecondaryContainer Token。",
+    "finalDartdoc": "/// 斑马纹背景色。\n  /// 启用 stripe 时生效；null 时使用 bgColorSecondaryContainer Token。"
+  },
+  {
+    "folder": "table",
+    "field": "borderColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/table/t_table_theme_data.dart",
+    "addition": "null 时使用 componentStroke Token。",
+    "finalDartdoc": "/// 边框颜色。\n  /// null 时使用 componentStroke Token。"
+  },
+  {
+    "folder": "table",
+    "field": "cellPadding",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/table/t_table_theme_data.dart",
+    "addition": "null 时左右各 16 逻辑像素。",
+    "finalDartdoc": "/// 单元格内边距。\n  /// null 时左右各 16 逻辑像素。"
+  },
+  {
+    "folder": "tree",
+    "field": "backgroundColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/tree/t_tree_select_theme_data.dart",
+    "addition": "null 时使用 bgColorContainer Token。",
+    "finalDartdoc": "/// 面板背景色。\n  /// null 时使用 bgColorContainer Token。"
+  },
+  {
+    "folder": "tree",
+    "field": "rootBackgroundColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/tree/t_tree_select_theme_data.dart",
+    "addition": "null 时使用 bgColorSecondaryContainer Token。",
+    "finalDartdoc": "/// 根列背景色。\n  /// null 时使用 bgColorSecondaryContainer Token。"
+  },
+  {
+    "folder": "tree",
+    "field": "selectedBackgroundColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/tree/t_tree_select_theme_data.dart",
+    "addition": "null 时使用 bgColorContainer Token。",
+    "finalDartdoc": "/// 选中项背景色。\n  /// null 时使用 bgColorContainer Token。"
+  },
+  {
+    "folder": "tree",
+    "field": "textStyle",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/tree/t_tree_select_theme_data.dart",
+    "addition": "null 时使用当前全局 Token 解析的文字样式。",
+    "finalDartdoc": "/// 普通文案样式。\n  /// null 时使用当前全局 Token 解析的文字样式。"
+  },
+  {
+    "folder": "tree",
+    "field": "disabledTextStyle",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/tree/t_tree_select_theme_data.dart",
+    "addition": "null 时沿用默认文字样式并使用 textColorDisabled Token。",
+    "finalDartdoc": "/// 禁用文案样式。\n  /// null 时沿用默认文字样式并使用 textColorDisabled Token。"
+  },
+  {
+    "folder": "tree",
+    "field": "indicatorColor",
+    "source": "/Users/rs/Documents/ChatGPT/tdesign-flutter/tdesign-component/lib/src/components/tree/t_tree_select_theme_data.dart",
+    "addition": "null 时使用 brandColor Token。",
+    "finalDartdoc": "/// 选中图标颜色。\n  /// null 时使用 brandColor Token。"
+  }
+]

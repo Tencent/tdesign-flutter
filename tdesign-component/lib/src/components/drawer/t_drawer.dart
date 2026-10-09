@@ -20,9 +20,6 @@ enum TDrawerPlacement {
   right,
 }
 
-/// TDesign 抽屉内容组件，可放入 [Scaffold.drawer] 或 [Scaffold.endDrawer]。
-///
-/// 需要通过浮层展示时，使用 [showTDrawer]。
 class TDrawer extends StatelessWidget {
   const TDrawer({
     super.key,
@@ -83,12 +80,16 @@ class TDrawer extends StatelessWidget {
 /// [showOverlay] 控制是否显示蒙层，默认 true。
 /// [closeOnOverlayClick] 控制点击蒙层时是否关闭抽屉，默认 true。
 /// [onOverlayClick] 在蒙层被点击时触发，不受是否自动关闭影响。
-/// [topInset] 设置抽屉相对屏幕顶部的可选偏移，默认 0。
+/// [topInset] 设置抽屉相对屏幕顶部的可选偏移，默认 0，必须大于或等于 0。
 /// [useSafeArea] 控制浮层是否避让系统安全区域，默认 true。
-/// [destroyOnClose] 控制关闭后是否立即销毁浮层路由，默认 false。
+/// [destroyOnClose] 默认 false；为 true 时路由 maintainState 为 false，
+/// 被其他不透明路由覆盖时可释放内容 State。关闭路由后内容始终会释放。
 /// [onClose] 在抽屉浮层关闭后触发。
 ///
 /// 返回的 [TDrawerHandle] 可用于查询显示状态或主动关闭抽屉。
+///
+/// ## 返回值
+/// 已经发起打开的抽屉控制句柄，可用于查询状态与关闭抽屉。
 TDrawerHandle showTDrawer(
   BuildContext context, {
   required TDrawer drawer,

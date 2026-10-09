@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// TabBarView 组件
 ///
-/// Material TabBarView 薄包装。
+/// 展示与标签栏控制器同步的分页内容。
 /// `physics` 为空时默认不可滑动。
 class TTabsBarView extends StatelessWidget {
   /// 子widget列表
@@ -11,6 +11,7 @@ class TTabsBarView extends StatelessWidget {
   /// 可选的内容区控制器；为空时使用最近的 [DefaultTabController]。
   ///
   /// 与 `TTabsBar` 放在同一 [DefaultTabController] 下即可共享选中状态。
+  /// 必须存在显式控制器或祖先 DefaultTabController，其 length 须等于 children.length。显式控制器由调用方释放。
   final TabController? controller;
 
   /// 滑动物理特性；未传时默认不可滑动。

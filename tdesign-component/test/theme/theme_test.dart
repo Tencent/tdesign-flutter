@@ -18,7 +18,7 @@ void main() {
       expect(token.radiusDefault, isA<double>());
     });
 
-    test('小程序全局圆角变量在明暗主题中取值一致且可覆盖', () {
+    test('全局圆角 Token 在明暗主题中取值一致且可覆盖', () {
       final token = TThemeData.defaultData();
       for (final mode in [token, token.dark!]) {
         expect(mode.radiusSmall, 3);

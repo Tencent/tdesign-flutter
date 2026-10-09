@@ -56,7 +56,7 @@ class ExamplePage extends StatefulWidget {
   /// 普通布局中每个示例项的外边距。
   final EdgeInsetsGeometry? itemMargin;
 
-  /// 使用小程序 Demo 的紧凑分组结构：说明条、白色示例块、连续字段行。
+  /// 使用紧凑的示例分组结构：说明条、白色示例块、连续字段行。
   final bool compactDemo;
 
   /// 背景颜色

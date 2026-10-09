@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 /// TActionSheet 组件级视觉 ThemeExtension
+///
+/// {@category ComponentTheme}
 class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
   /// 宫格项目高度
+  /// 未配置时为 96 逻辑像素，show 方法的 itemHeight 优先。
   final double? gridItemHeight;
 
   /// 蒙层颜色
@@ -12,12 +15,14 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
   final double? panelRadius;
 
   /// 默认图标字形尺寸；同时作为列表图标槽位尺寸。
+  /// 未配置时为 24 逻辑像素。
   final double? iconSize;
 
   /// 宫格布局的图标槽位尺寸；未设置时默认 40dp。
   final double? gridIconExtent;
 
   /// 默认图标颜色。
+  /// 未配置时使用 textColorPrimary Token；禁用项使用 textColorDisabled。
   final Color? iconColor;
 
   const TActionSheetThemeData({
@@ -29,7 +34,14 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
     this.iconColor,
   });
 
-  TActionSheetThemeData merge(TActionSheetThemeData? other) {
+  /// 合并主题配置。
+  ///
+  /// ## 返回值
+  /// 返回合并后的主题；[other] 的非空字段覆盖当前字段，other 为空时返回当前主题。
+  TActionSheetThemeData merge(
+    /// 要合并的目标主题；为空时保留当前配置。
+    TActionSheetThemeData? other,
+  ) {
     if (other == null) {
       return this;
     }
@@ -43,6 +55,10 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
     );
   }
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TActionSheetThemeData copyWith({
     double? gridItemHeight,
@@ -62,9 +78,17 @@ class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
   TActionSheetThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
     ThemeExtension<TActionSheetThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
     double t,
   ) {
     if (other is! TActionSheetThemeData) {

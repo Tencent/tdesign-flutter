@@ -26,7 +26,7 @@ void main() {
     );
   }
 
-  testWidgets('Search 页面覆盖小程序 Demo 场景和 40dp 组件本体', (tester) async {
+  testWidgets('Search 页面覆盖搜索场景和 40dp 组件本体', (tester) async {
     tester.view.physicalSize = const Size(375, 1600);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);

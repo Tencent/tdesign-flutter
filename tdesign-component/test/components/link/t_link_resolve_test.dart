@@ -55,7 +55,7 @@ void main() {
     expect(style.color, Colors.red);
   });
 
-  testWidgets('图标尺寸与间距对齐小程序', (tester) async {
+  testWidgets('图标尺寸与间距符合默认配置', (tester) async {
     await tester.pumpWidget(wrap(const SizedBox()));
     final context = tester.element(find.byType(SizedBox));
 

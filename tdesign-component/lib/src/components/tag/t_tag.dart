@@ -10,8 +10,6 @@ import '../../theme/t_theme.dart';
 import 't_tag_theme_data.dart';
 import 't_tag_types.dart';
 
-/// 展示型标签组件，仅展示，内部不可更改自身状态
-/// 支持样式：方形/圆角/半圆/带关闭图标
 class TTag extends StatelessWidget {
   const TTag(
     this.text, {
@@ -48,7 +46,7 @@ class TTag extends StatelessWidget {
   /// 是否显示关闭图标。
   final bool needCloseIcon;
 
-  /// 是否使用禁用视觉状态。
+  /// 是否启用标签；false 时使用禁用样式并阻止标签点击与关闭图标回调。
   final bool enabled;
 
   /// 标签点击回调；为空时不创建标签点击行为。
@@ -281,7 +279,7 @@ class TTag extends StatelessWidget {
         break;
       case TTagColorPreset.defaultTheme:
         if (isOutline) {
-          // 小程序 light-outline/default 单独使用 component-border；普通
+          // light-outline/default 单独使用 component-border；普通
           // outline/default 则使用 tag-default-color 的回退 bg-color-component。
           borderColor = isLight
               ? token.componentBorder

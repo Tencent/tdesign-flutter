@@ -35,7 +35,7 @@ enum TimeMode {
   second,
 }
 
-/// 各列选项步进，未配置的列步进为 1。
+/// 各列选项步进，未配置或小于等于 1 的列步进按 1 处理。
 @immutable
 class DateTimePickerSteps {
   /// 创建步进配置。
@@ -79,8 +79,8 @@ class DateTimePickerSteps {
     return step == null
         ? 1
         : step < 1
-            ? 1
-            : step;
+        ? 1
+        : step;
   }
 
   @override

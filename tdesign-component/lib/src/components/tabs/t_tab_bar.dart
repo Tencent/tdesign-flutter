@@ -17,9 +17,6 @@ enum TTabsBarSize {
   large,
 }
 
-/// 标签栏
-///
-/// 支持滚动、指示器自定义，以及 Line、Tag、Card 三种 TDesign 形态。
 class TTabsBar extends StatelessWidget {
   const TTabsBar({
     Key? key,
@@ -37,12 +34,14 @@ class TTabsBar extends StatelessWidget {
   /// 可选的标签控制器；为空时使用最近的 [DefaultTabController]。
   ///
   /// 仅在需要读取当前索引、命令式切换或跨组件共享状态时显式传入。
+  /// 必须存在显式控制器或祖先 DefaultTabController，其 length 须等于 tabs.length。显式控制器由调用方释放。
   final TabController? controller;
 
   /// 是否横向滚动。
   final bool isScrollable;
 
   /// 点击事件
+  /// 仅用于点击通知；为 null 时仍可切换标签，禁用单项请使用 TTab.enabled。
   final ValueChanged<int>? onTap;
 
   /// 选项卡文字尺寸，默认为 [TTabsBarSize.small]。

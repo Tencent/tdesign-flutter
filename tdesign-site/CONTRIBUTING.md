@@ -69,12 +69,11 @@ cd tdesign-flutter/tdesign-site/
 pnpm install --frozen-lockfile
 
 # 运行项目
-pnpm site:dev
+pnpm dev
 ```
 
-**注意：** 本地运行项目，右侧 example 未展示对应组件示例，是正常现象，该示例正式部署才会展示。
+`pnpm dev` 同时启动文档站点（19000）和 Flutter Web 示例（19001），本地也可以查看右侧组件示例。请先确保 Flutter SDK 已安装，示例依赖已通过 `flutter pub get` 安装；如果预览未显示，检查终端中的 Flutter Web 启动日志和端口占用。
 
-![Web组件预览示例](https://tdesign.tencent.com/flutter/assets/contributing_example.png)
 
 ## 3. 如何领取 Issue
 

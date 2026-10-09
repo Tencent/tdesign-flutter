@@ -33,46 +33,23 @@ part 't_popup_inset.dart';
 part 't_popup_options.dart';
 part 't_popup_types.dart';
 
-/// 弹出层入口：五向滑入 / 居中弹出，支持蒙层、可选 bottom 头部和
-/// 可选 center 面板外下方关闭区。
-///
-/// 通过 [show] 命令式打开；返回 [TPopupHandle] 用于关闭与再次打开。
-/// 多次调用 [show] 会继续压入新的浮层路由，可用于叠加展示。
-///
-/// **示例**
-///
-/// ```dart
-/// final handle = TPopup.show(
-///   context,
-///   options: TPopupOptions.bottom(
-///     headerBuilder: (context, close) => TPopupHeader(
-///       title: const Text('标题'),
-///     ),
-///     child: MyPanel(),
-///   ),
-/// );
-/// handle.close();
-/// handle.open();
-/// ```
-///
-/// 配置项见 [TPopupOptions]；方向见 [TPopupPlacement]。
 final class TPopup {
   // 私有构造器：工具类仅暴露静态方法，无外部调用，标记为覆盖率例外（不可达死代码）。
   const TPopup._(); // coverage:ignore-line
 
-  /// 打开浮层并压入独立 [PopupRoute]。
+  /// 每次调用打开独立浮层，可叠加展示；参数与方向不匹配时抛出 [FlutterError]。
   ///
-  /// [context] 用于查找 [Navigator] 并展示浮层。
+  /// [context] 用于查找 [Navigator] 并获取局部主题。
   ///
-  /// [options] 浮层配置；方向固定时推荐 [TPopupOptions.bottom] 等命名工厂。
+  /// [options] 浮层配置；创建句柄时合并 [context] 的 [TPopupThemeData]，重新打开不重新解析已合并的主题值。
   ///
-  /// 返回 [TPopupHandle]，可用 [TPopupHandle.close]、[TPopupHandle.open]、
-  /// [TPopupHandle.isShowing] 控制与查询。
-  /// 重复调用会继续 push 新的浮层；若需互斥请在业务层管理。
+  /// [navigatorContext] 承载浮层的导航上下文；未指定时使用 [context]。
   ///
-  /// [navigatorContext] 可选，指定承载浮层的 [Navigator] 的 context，默认 [context]。
+  /// [useRootNavigator] 是否使用根 [Navigator]。
   ///
-  /// [useRootNavigator] 为 true 时使用根 [Navigator]（嵌套导航场景）。
+  /// ## 返回值
+  ///
+  /// 用于控制当前浮层的关闭、重新打开及状态查询。
   static TPopupHandle show(
     BuildContext context, {
     required TPopupOptions options,

@@ -22,7 +22,7 @@ void main() {
     side: side,
   );
 
-  test('暗色特殊组件背景保留小程序透明色', () {
+  test('暗色特殊组件背景默认为透明色', () {
     final token = TThemeData.defaultData();
     expect(token.colorMap['bgColorSpecialComponent'], Colors.white);
     expect(token.dark!.colorMap['bgColorSpecialComponent'], Colors.transparent);
@@ -483,7 +483,7 @@ void main() {
       expect(m['missing'], isNull);
     });
 
-    test('小程序色阶别名逐层解析，显式 Token 覆盖优先', () {
+    test('色阶别名逐层解析，显式 Token 覆盖优先', () {
       final base = TThemeData.defaultData();
       expect(base.primaryColor7, const Color(0xFF0052D9));
       expect(base.brandColor, base.primaryColor7);

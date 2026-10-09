@@ -16,4 +16,4 @@
 
 指令按组映射到 `tdesign-component/example/assets/code/<group>.<name>.txt`。单个片段仍可使用 `{{ flutter-example table.TableBasicExample }}` 调试，但组件正式文档必须使用组映射，确保该组件所有生成示例都被展示。
 
-`pnpm test:example-code` 会验证全部 57 份组件文档、映射组和生成资产，并禁止重新加入手工维护的 `td-code-block` Dart 副本。资产键非法、文件不存在、组件缺少映射或仍有旧副本时，站点构建都会失败。
+`pnpm test:example-code` 会验证全部 57 份组件文档、映射组和生成资产，组件页正文只允许生成的代码演示和 API 入口，禁止手写代码块、API 表格、迁移章节和重复说明。资产键非法、文件不存在、组件缺少映射或仍有旧副本时，站点构建都会失败。

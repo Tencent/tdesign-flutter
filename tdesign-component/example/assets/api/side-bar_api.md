@@ -21,6 +21,12 @@
 
 ### TSideBarItem
 
+侧边导航栏的不可变配置项。
+
+这是数据配置而非 Widget，不参与 Flutter Key 匹配。
+`value` 应在同一个侧边导航栏的 children 列表中保持唯一，以便组件稳定地
+保留选中状态和滚动目标。
+
 #### 构造方法
 
 ##### TSideBarItem
@@ -31,14 +37,31 @@
 | disabled | bool | false | 是否禁用 | 否 |
 | icon | IconData? | - | 图标 | 否 |
 | label | String | '' | 标签 | 否 |
-| value | int | -1 | 值 | 否 |
+| value | int | -1 | 条目的业务值；由调用方指定，默认 -1，不自动使用 children 中的位置。 父组件通过相同的值指定选中项；选择回调返回该值。 | 否 |
+
+
+### TSideBarVariant
+
+侧边栏样式
+#### 枚举值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| line | TSideBarVariant | - | 左侧品牌色指示线样式 | - |
+| tag | TSideBarVariant | - | 选中项为圆角标签样式 | - |
 
 
 ### TSideBarThemeData
 
-#### 构造方法
+侧边栏组件 ThemeExtension
 
-##### TSideBarThemeData
+管理 TSideBar 的子树级视觉样式（内边距、选中/未选中颜色等）。
+实例参数负责选中值、形态和交互；具体视觉值由本组件 Theme 配置。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
@@ -47,50 +70,3 @@
 | selectedTextStyle | TextStyle? | - | 选中文字样式；其中的 color 同时控制选中图标和指示线。 未指定 color 时读取全局品牌色；禁用态始终使用全局禁用色。 | 否 |
 | textStyle | TextStyle? | - | 未选中标签文字样式；颜色同时用于未选中图标。 选中项只继承排版字段，不继承这里的颜色；禁用态使用全局禁用色。 未指定颜色时使用全局正文色。 | 否 |
 | unSelectedBgColor | Color? | - | 默认未选中背景颜色 | 否 |
-
-
-#### 实例方法
-
-##### TSideBarThemeData.copyWith
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| contentPadding | EdgeInsetsGeometry? | - | 字段含义：默认自定义文本框内边距 调用时的空值行为见方法说明。 | 否 |
-| textStyle | TextStyle? | - | 字段含义：未选中标签文字样式；颜色同时用于未选中图标。 选中项只继承排版字段，不继承这里的颜色；禁用态使用全局禁用色。 未指定颜色时使用全局正文色。 调用时的空值行为见方法说明。 | 否 |
-| selectedTextStyle | TextStyle? | - | 字段含义：选中文字样式；其中的 color 同时控制选中图标和指示线。 未指定 color 时读取全局品牌色；禁用态始终使用全局禁用色。 调用时的空值行为见方法说明。 | 否 |
-| selectedBgColor | Color? | - | 字段含义：默认选中背景颜色 调用时的空值行为见方法说明。 | 否 |
-| unSelectedBgColor | Color? | - | 字段含义：默认未选中背景颜色 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TSideBarThemeData | - | - | - |
-
-
-##### TSideBarThemeData.lerp
-
-位置参数：`other, t`
-
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TSideBarThemeData&gt;? | - | - | 是 |
-| t | double | - | - | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TSideBarThemeData | - | - | - |
-
-
-### TSideBarVariant
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| line | TSideBarVariant | - | 左侧品牌色指示线样式 | - |
-| tag | TSideBarVariant | - | 选中项为圆角标签样式 | - |

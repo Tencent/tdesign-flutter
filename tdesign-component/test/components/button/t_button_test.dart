@@ -1878,7 +1878,7 @@ void main() {
       expect(button.style?.backgroundColor?.resolve({}), token.brandColorLight);
     });
 
-    testWidgets('outline 的默认、按压和禁用色沿小程序组件变量回退', (tester) async {
+    testWidgets('outline 的默认、按压和禁用色沿组件 Token 回退', (tester) async {
       final token = TThemeData.defaultData();
       final cases = <(TButtonColorPreset, Color, Color, Color, Color)>[
         (

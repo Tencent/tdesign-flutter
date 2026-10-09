@@ -18,7 +18,7 @@ void main() {
     expect(find.text('Button 按钮'), findsOneWidget);
   });
 
-  testWidgets('示例页面标题层级与小程序 Demo 壳一致', (tester) async {
+  testWidgets('示例页面标题层级保持一致', (tester) async {
     final token = TThemeData.defaultData();
     await tester.pumpWidget(
       ChangeNotifierProvider(

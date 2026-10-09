@@ -6,7 +6,6 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_footer_theme_data.dart';
 
-/// 页面底部的版权、链接和品牌信息区域。
 class TFooter extends StatelessWidget {
   const TFooter({Key? key, this.logo, this.text = '', this.links = const []})
     : super(key: key);
@@ -14,10 +13,10 @@ class TFooter extends StatelessWidget {
   /// 品牌内容；可与 [text] 组合展示，非空时不展示 [links]。
   final Widget? logo;
 
-  /// 文字
+  /// 版权或说明文字；可与 links 或 logo 组合展示。
   final String text;
 
-  /// 链接内容；多个链接之间自动绘制分隔线。
+  /// 链接内容；仅在 logo 为空时展示，并与 text 组合。多个链接之间自动绘制分隔线。
   final List<Widget> links;
 
   @override

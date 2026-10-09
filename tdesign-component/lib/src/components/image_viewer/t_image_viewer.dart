@@ -10,10 +10,14 @@ import '../swiper/t_swiper_types.dart';
 import 't_image_viewer_theme_data.dart';
 
 /// 图片预览导航栏槽位构建器。
+/// [context] 图片预览导航栏的构建上下文。
+/// [index] 当前图片索引，从 0 开始。
+///
+/// ## 返回值
+/// 导航栏对应槽位的内容。
 typedef TImageViewerItemBuilder =
     Widget Function(BuildContext context, int index);
 
-/// 命令式图片预览工具。
 class TImageViewer {
   const TImageViewer._();
 
@@ -23,20 +27,23 @@ class TImageViewer {
   /// 调用方需要主动关闭时，可通过持有的 [NavigatorState] 调用
   /// [NavigatorState.pop]；返回的 Future 会在路由关闭后完成一次。
   /// [images] 是待预览的图片列表，不能为空。
-  /// [labels] 是与图片一一对应的标签文案。
-  /// [initialIndex] 设置初始展示的图片索引。
+  /// [labels] 是与图片一一对应的标签文案；非空时长度必须等于 images，否则抛出 ArgumentError。
+  /// [initialIndex] 设置初始展示的图片索引，必须在 0 到 images.length - 1 之间；否则抛出 RangeError。
   /// [showClose] 控制关闭按钮是否显示。
   /// [showDelete] 控制删除按钮是否显示。
   /// [showIndex] 控制当前页码是否显示。
   /// [loop] 控制是否循环切换图片。
   /// [autoplay] 控制是否自动切换图片；图片放大时暂停，还原后恢复。
-  /// [autoplayInterval] 设置自动切换图片的时间间隔。
+  /// [autoplayInterval] 设置自动切换图片的时间间隔，必须大于 Duration.zero；否则抛出 ArgumentError。
   /// [onIndexChanged] 在当前图片索引变化时触发。
   /// [onDelete] 在点击删除按钮时触发，仅通知当前索引。
   /// [onTap] 在点击当前全屏预览区、关闭预览前触发。
   /// [onLongPress] 在长按当前图片时触发。
   /// [leadingBuilder] 构建导航栏起始区域。
   /// [trailingBuilder] 构建导航栏末尾区域。
+  ///
+  /// ## 返回值
+  /// 预览路由被弹出时完成，不等待关闭动画结束；参数不合法时在展示前同步抛出异常。
   static Future<void> show({
     required BuildContext context,
     required List<ImageProvider<Object>> images,

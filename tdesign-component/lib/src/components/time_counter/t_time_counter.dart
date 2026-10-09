@@ -51,6 +51,10 @@ List<RegExpMatch>? _parseTimeFormat(String format) {
 }
 
 /// 自定义计时内容构建器。
+/// [time] 当前计时值，单位为毫秒。
+///
+/// ## 返回值
+/// 自定义计时展示内容。
 typedef TTimeCounterBuilder = Widget Function(int time);
 
 String _toDigits(int n, int l) => n.toString().padLeft(l, '0');
@@ -58,7 +62,6 @@ String _toDigits(int n, int l) => n.toString().padLeft(l, '0');
 String _getMark(String format, RegExpMatch match) =>
     match.end < format.length ? format.substring(match.end, match.end + 1) : '';
 
-/// 通用计时器组件，支持正向计时与倒计时。
 class TTimeCounter extends StatefulWidget {
   const TTimeCounter({
     super.key,
@@ -94,24 +97,26 @@ class TTimeCounter extends StatefulWidget {
   /// 使用 [content] 时，该字段仍决定计时更新精度。
   final String format;
 
-  /// 计时器尺寸；优先于组件 Theme。
+  /// 计时器尺寸；null 时使用 TTimeCounterSize.medium。
   final TTimeCounterSize? size;
 
   /// 是否使用本地化时间单位分隔，默认为 false。
   final bool splitWithUnit;
 
-  /// 视觉形态；优先于组件 Theme。
+  /// 视觉形态；null 时使用 TTimeCounterVariant.plain。
   final TTimeCounterVariant? variant;
 
   /// 必需；计时时长，单位毫秒。
   ///
   /// 父组件更新该值时会按新的声明式配置重置计时，并覆盖此前
   /// [TTimeCounterController.reset] 传入的临时目标时长。
+  /// 必须大于或等于 0。
   final int time;
 
-  /// 格式化后的可见值变化时触发，回调值为当前毫秒数。
+  /// 计时推进或控制器 reset 导致格式化后的可见值变化时触发，回调值为当前毫秒数。
   ///
-  /// [format] 包含毫秒段时按绘制帧触发，否则仅在可见时间段变化时触发。
+  /// [format] 包含毫秒段时随绘制帧更新，否则仅在可见时间段变化时通知。
+  /// 父组件更新 time 或 direction 导致的声明式重置不触发本回调；初始化也不触发。
   final ValueChanged<int>? onChanged;
 
   /// 计时到达终点时触发一次回调。

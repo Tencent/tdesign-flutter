@@ -2,14 +2,6 @@
 
 ### TBadge
 
-在内容边角或独立位置展示短文本、圆点或角标状态。
-
-默认使用 `TBadgeVariant.circle` 与 `TBadgeSize.medium`。当 `child` 非空时，
-徽标叠加在 `child` 上；当 `child` 为空时，只渲染徽标本体。
-
-TabBar、SideBar、ActionSheet 等内部拥有锚点的组合组件使用
-`TBadgeConfig`，调用方不应向这些组件传入一个待拆解的 `TBadge`。
-
 #### 构造方法
 
 ##### TBadge
@@ -96,67 +88,6 @@ ActionSheet 等组件在内部创建徽标锚点时使用；组件会把配置�
 | isCustom | bool | - | 当前配置是否使用完全自定义徽标外观。 | - |
 
 
-### TBadgeThemeData
-
-TDesign 徽标的子树级视觉默认值。
-
-形态、内容、对齐和偏移由实例 API 控制，不从 Material BadgeTheme 读取。
-
-#### 构造方法
-
-##### TBadgeThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 徽标背景色；为空时使用全局错误色 Token。 | 否 |
-| borderColor | Color? | - | 开启描边时使用的颜色；为空时回退到当前容器背景色。 | 否 |
-| borderWidth | double? | - | 开启描边时使用的宽度；为空时使用 1 逻辑像素。 | 否 |
-| dotSize | double? | - | 圆点直径；为空时使用组件内置尺寸。 | 否 |
-| labelHeight | double? | - | 文字徽标高度；为空时由当前尺寸的字体 Token 决定。 | 否 |
-| padding | EdgeInsetsGeometry? | - | 文字徽标内边距；为空时由当前尺寸决定。 | 否 |
-| textStyle | TextStyle? | - | 徽标文字的唯一组件级样式入口；未配置字段从字体与反色文字 Token 取得。 | 否 |
-
-
-#### 实例方法
-
-##### TBadgeThemeData.copyWith
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 字段含义：徽标背景色；为空时使用全局错误色 Token。 调用时的空值行为见方法说明。 | 否 |
-| dotSize | double? | - | 字段含义：圆点直径；为空时使用组件内置尺寸。 调用时的空值行为见方法说明。 | 否 |
-| labelHeight | double? | - | 字段含义：文字徽标高度；为空时由当前尺寸的字体 Token 决定。 调用时的空值行为见方法说明。 | 否 |
-| textStyle | TextStyle? | - | 字段含义：徽标文字的唯一组件级样式入口；未配置字段从字体与反色文字 Token 取得。 调用时的空值行为见方法说明。 | 否 |
-| padding | EdgeInsetsGeometry? | - | 字段含义：文字徽标内边距；为空时由当前尺寸决定。 调用时的空值行为见方法说明。 | 否 |
-| borderColor | Color? | - | 字段含义：开启描边时使用的颜色；为空时回退到当前容器背景色。 调用时的空值行为见方法说明。 | 否 |
-| borderWidth | double? | - | 字段含义：开启描边时使用的宽度；为空时使用 1 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TBadgeThemeData | - | - | - |
-
-
-##### TBadgeThemeData.lerp
-
-位置参数：`other, t`
-
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TBadgeThemeData&gt;? | - | - | 是 |
-| t | double | - | - | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TBadgeThemeData | - | - | - |
-
-
 ### TBadgeVariant
 
 徽标的结构形态；尺寸与描边分别由 `TBadge.size`、`TBadge.border` 控制。
@@ -186,3 +117,25 @@ TDesign 徽标的子树级视觉默认值。
 | --- | --- | --- | --- | --- |
 | medium | TBadgeSize | - | 中尺寸，使用 `fontMarkExtraSmall` 与 16 逻辑像素标签行盒。 | - |
 | large | TBadgeSize | - | 大尺寸，使用 `fontMarkSmall` 与 20 逻辑像素标签行盒。 | - |
+
+
+### TBadgeThemeData
+
+TDesign 徽标的子树级视觉默认值。
+
+形态、内容、对齐和偏移由实例 API 控制，不从 Material BadgeTheme 读取。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 徽标背景色；为空时使用全局错误色 Token。 | 否 |
+| borderColor | Color? | - | 开启描边时使用的颜色；为空时回退到当前容器背景色。 | 否 |
+| borderWidth | double? | - | 开启描边时使用的宽度；为空时使用 1 逻辑像素。 | 否 |
+| dotSize | double? | - | 圆点直径；为空时使用 8 逻辑像素。 | 否 |
+| labelHeight | double? | - | 文字徽标高度；为空时由当前尺寸的字体 Token 决定。 | 否 |
+| padding | EdgeInsetsGeometry? | - | 文字徽标内边距；为空时中、大尺寸分别使用左右 4、6 逻辑像素。 | 否 |
+| textStyle | TextStyle? | - | 徽标文字的唯一组件级样式入口；未配置字段从字体与反色文字 Token 取得。 | 否 |

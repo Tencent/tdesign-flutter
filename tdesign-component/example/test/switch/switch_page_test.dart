@@ -41,7 +41,7 @@ void main() {
     await tester.pump();
   }
 
-  testWidgets('Switch 示例按小程序分组展示类型、状态和尺寸', (tester) async {
+  testWidgets('Switch 示例分组展示类型、状态和尺寸', (tester) async {
     await pumpPage(tester);
 
     expect(find.text('01 组件类型'), findsOneWidget);

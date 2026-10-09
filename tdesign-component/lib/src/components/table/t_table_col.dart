@@ -25,6 +25,12 @@ enum TTableColumnAlign {
 }
 
 /// 单元格构建器。
+/// [context] 单元格的构建上下文。
+/// [row] 当前行数据。
+/// [rowIndex] 当前行在排序后可见数据中的索引，从 0 开始。
+///
+/// ## 返回值
+/// 当前单元格内容。
 typedef TTableCellBuilder<T> =
     Widget Function(BuildContext context, T row, int rowIndex);
 
