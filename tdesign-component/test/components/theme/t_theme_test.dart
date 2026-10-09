@@ -397,6 +397,54 @@ void main() {
   });
 
   group('TThemeData 拷贝与 Map', () {
+    test('copyWith 统一所有 Token 映射并隔离原配置', () {
+      final extra = _TestExtra();
+      final base = TThemeData.defaultData().copyWith(
+        name: 'source',
+        extraThemeData: extra,
+      );
+      base.refMap['customAlias'] = 'brandColor';
+      final originalBrand = base.colorMap['brandColor'];
+      final font = Font(size: 19, lineHeight: 28);
+      final family = FontFamily(fontFamily: 'Example');
+      const shadows = [BoxShadow(color: Colors.blue, blurRadius: 3)];
+      const inset = BorderSide(color: Colors.green, width: 2);
+      final copied = base.copyWith(
+        colorMap: {'customAlias': Colors.red},
+        fontMap: {'fontBodyLarge': font},
+        fontMetricMap: {'fontSizeBodyLarge': 19},
+        radiusMap: {'radiusDefault': 40},
+        fontFamilyMap: {'fontFamily': family},
+        shadowMap: {'shadow1': shadows},
+        insetShadowMap: {'shadowInsetTop': inset},
+        spacerMap: {'spacer': 10},
+      );
+      expect(copied.name, 'source');
+      expect(copied.extraThemeData, same(extra));
+      expect(copied.colorMap['customAlias'], Colors.red);
+      expect(copied.refMap['customAlias'], 'brandColor');
+      copied.refMap['customAlias'] = 'otherAlias';
+      expect(base.refMap['customAlias'], 'brandColor');
+      expect(base.colorMap['customAlias'], originalBrand);
+      expect(copied.fontMap['fontBodyLarge'], same(font));
+      expect(copied.fontMetricMap['fontSizeBodyLarge'], 19);
+      expect(copied.radiusMap['radiusDefault'], 40);
+      expect(copied.fontFamilyMap['fontFamily'], same(family));
+      expect(copied.shadowMap['shadow1'], shadows);
+      expect(copied.insetShadowMap['shadowInsetTop'], inset);
+      expect(copied.spacerMap['spacer'], 10);
+      expect(copied.spacerMap['spacer1'], base.spacerMap['spacer1']);
+      copied.colorMap['brandColor'] = Colors.purple;
+      expect(base.colorMap['brandColor'], originalBrand);
+      final retained = copied.copyWith(name: null);
+      expect(retained.name, 'source');
+      expect(retained.extraThemeData, same(extra));
+      final chained = copied.copyWith().copyWith(name: 'renamed');
+      expect(chained.name, 'renamed');
+      expect(chained.spacerMap['spacer'], 10);
+      expect(chained.light, same(chained));
+    });
+
     test('copyWith 覆盖并保留未覆盖字段', () {
       final base = TThemeData.defaultData();
       final copied = base.copyWith(
