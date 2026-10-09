@@ -1,24 +1,54 @@
 ## API
+
+默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
+
 ### TRadio
 #### 简介
 由最近的 `TRadioGroup` 控制选中状态的单选框。
 必须作为同类型 `TRadioGroup` 的后代使用：
+
+#### 声明
+
+```dart
+class TRadio<T> extends StatelessWidget
+```
+
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向。 |
-| customIconBuilder | TRadioIconBuilder? | - | 自定义单选框指示器。 |
-| disabled | bool | false | 是否禁用当前选项。 |
-| iconType | TRadioIconType | TRadioIconType.fill | 内置指示器样式；`customIconBuilder` 非空时以自定义指示器为准。 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| size | TRadioSize | TRadioSize.medium | 单选框尺寸。 |
-| subTitle | String? | - | 副标题文案。 |
-| subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 |
-| title | String? | - | 主标题文案。 |
-| titleMaxLines | int | 3 | 主标题最大行数，默认 3 行。 |
-| value | T | - | 当前选项值。 |
-| variant | TRadioVariant | TRadioVariant.block | 完整视觉结构，默认使用通栏结构。 |
+
+```dart
+const TRadio({
+  super.key,
+  required this.value,
+  this.title,
+  this.subTitle,
+  this.size = TRadioSize.medium,
+  this.iconType = TRadioIconType.fill,
+  this.variant = TRadioVariant.block,
+  this.disabled = false,
+  this.contentDirection = TContentDirection.right,
+  this.titleMaxLines = 3,
+  this.subTitleMaxLines = 5,
+  this.customIconBuilder,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向。 | 否 |
+| customIconBuilder | TRadioIconBuilder? | - | 自定义单选框指示器。 | 否 |
+| disabled | bool | false | 是否禁用当前选项。 | 否 |
+| iconType | TRadioIconType | TRadioIconType.fill | 内置指示器样式；`customIconBuilder` 非空时以自定义指示器为准。 | 否 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| size | TRadioSize | TRadioSize.medium | 单选框尺寸。 | 否 |
+| subTitle | String? | - | 副标题文案。 | 否 |
+| subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 | 否 |
+| title | String? | - | 主标题文案。 | 否 |
+| titleMaxLines | int | 3 | 主标题最大行数，默认 3 行。 | 否 |
+| value | T | - | 当前选项值。 | 是 |
+| variant | TRadioVariant | TRadioVariant.block | 完整视觉结构，默认使用通栏结构。 | 否 |
 
 
 ### TRadioGroup
@@ -27,49 +57,106 @@
 默认构造通过 `child` 接收调用方布局；标准数据列表使用
 `TRadioGroup.options`。组内的 `TRadio` 从该组件读取选中值和变更回调。
 
-#### 工厂构造方法
+#### 声明
+
+```dart
+class TRadioGroup<T> extends StatelessWidget
+```
+
+
+#### 命名构造方法
 
 ##### TRadioGroup.options
 
+```dart
+const TRadioGroup.options({
+  super.key,
+  required this.value,
+  required List<TRadioOption<T>> options,
+  this.onChanged,
+  Axis direction = Axis.vertical,
+  int columns = 1,
+  TRadioVariant variant = TRadioVariant.block,
+  bool? showDivider,
+  TContentDirection contentDirection = TContentDirection.right,
+  TRadioSize size = TRadioSize.medium,
+  TRadioIconType iconType = TRadioIconType.fill,
+  int titleMaxLines = 3,
+  int subTitleMaxLines = 5,
+})
+```
+
+
 使用数据项生成标准布局的单选框组。
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| value | T? | - | 受控选中值。 |
-| options | List<TRadioOption<T>> | - | - |
-| onChanged | ValueChanged<T>? | - | 选中值变更回调；为 null 时整组禁用。 |
-| direction | Axis | Axis.vertical | 排列方向，默认纵向。 |
-| columns | int | 1 | 每行列数，默认 1，必须大于 0。 横向 `TRadioVariant.inline` 按内容自然收缩并在行内两端对齐， 不使用该列数等分宽度。 |
-| variant | TRadioVariant | TRadioVariant.block | 生成项的完整视觉结构，默认 `TRadioVariant.block`。 |
-| showDivider | bool? | - | 是否显示项间分割线。 为空时仅 `TRadioVariant.block` 默认显示；非 block 结构不能设为 true。 |
-| contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向，默认文案在指示器右侧。 |
-| size | TRadioSize | TRadioSize.medium | 单选框尺寸，默认 `TRadioSize.medium`。 |
-| iconType | TRadioIconType | TRadioIconType.fill | 内置指示器样式，默认 `TRadioIconType.fill`。 |
-| titleMaxLines | int | 3 | 主标题最大行数，默认 3 行。 |
-| subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 |
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| value | T? | - | 受控选中值。 | 是 |
+| options | List&lt;TRadioOption&lt;T&gt;&gt; | - | 单选框数据项。 | 是 |
+| onChanged | ValueChanged&lt;T&gt;? | - | 选中值变更回调；为 null 时整组禁用。 | 否 |
+| direction | Axis | Axis.vertical | 排列方向，默认纵向。 | 否 |
+| columns | int | 1 | 每行列数，默认 1，必须大于 0。 横向 `TRadioVariant.inline` 按内容自然收缩并在行内两端对齐， 不使用该列数等分宽度。 | 否 |
+| variant | TRadioVariant | TRadioVariant.block | 生成项的完整视觉结构，默认 `TRadioVariant.block`。 | 否 |
+| showDivider | bool? | - | 是否显示项间分割线。 为空时仅 `TRadioVariant.block` 默认显示；非 block 结构不能设为 true。 | 否 |
+| contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向，默认文案在指示器右侧。 | 否 |
+| size | TRadioSize | TRadioSize.medium | 单选框尺寸，默认 `TRadioSize.medium`。 | 否 |
+| iconType | TRadioIconType | TRadioIconType.fill | 内置指示器样式，默认 `TRadioIconType.fill`。 | 否 |
+| titleMaxLines | int | 3 | 主标题最大行数，默认 3 行。 | 否 |
+| subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 | 否 |
 
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| child | Widget | - | 包含 `TRadio` 的自定义布局。 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| onChanged | ValueChanged<T>? | - | 选中值变更回调；为 null 时整组禁用。 |
-| value | T? | - | 受控选中值。 |
+
+```dart
+const TRadioGroup({
+  super.key,
+  required this.value,
+  this.onChanged,
+  required this.child,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| child | Widget | - | 包含 `TRadio` 的自定义布局。 | 是 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| onChanged | ValueChanged&lt;T&gt;? | - | 选中值变更回调；为 null 时整组禁用。 | 否 |
+| value | T? | - | 受控选中值。 | 是 |
 
 
 ### TRadioOption
 #### 简介
 单选框组的数据项。
+
+#### 声明
+
+```dart
+class TRadioOption<T>
+```
+
 #### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| disabled | bool | false | 是否禁用该项。 |
-| label | String | - | 主文案。 |
-| subTitle | String? | - | 副文案。 |
-| value | T | - | 选项值。 |
+
+```dart
+const TRadioOption({
+  required this.value,
+  required this.label,
+  this.subTitle,
+  this.disabled = false,
+})
+```
+
+##### 参数
+
+| 参数 | 类型 | 默认值 | 说明 | 必填 |
+| --- | --- | --- | --- | --- |
+| disabled | bool | false | 是否禁用该项。 | 否 |
+| label | String | - | 主文案。 | 是 |
+| subTitle | String? | - | 副文案。 | 否 |
+| value | T | - | 选项值。 | 是 |
 
 
 ### TRadioSize

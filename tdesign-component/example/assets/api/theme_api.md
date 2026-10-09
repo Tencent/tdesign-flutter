@@ -3,8 +3,6 @@
 默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
 
 ### TThemeData
-#### 简介
-主题数据
 
 #### 声明
 
@@ -166,3 +164,10 @@ T? ofExtra<T extends TExtraThemeData>()
 读取指定类型的业务扩展主题；未配置或类型不匹配时返回 null。
 
 返回类型：`T?`
+
+### DefaultMapFactory
+#### 类型定义
+
+```dart
+typedef DefaultMapFactory = TMap? Function();
+```
