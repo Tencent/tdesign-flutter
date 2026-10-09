@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/gestures.dart';
@@ -361,26 +362,46 @@ void main() {
       expect(error, isA<StateError>());
     });
 
-    testWidgets('business callback errors are not reported as picker errors', (
-      tester,
-    ) async {
-      Object? pickerError;
-      var changed = false;
-      await tester.pumpWidget(
-        wrap(
-          TUpload(
-            files: const [],
-            picker: () async => [file('picked')],
-            onChanged: (_) => changed = true,
-            onError: (value) => pickerError = value,
+    for (final callback in ['onChanged', 'maxFiles', 'fileSize']) {
+      testWidgets('$callback errors propagate without picker onError', (
+        tester,
+      ) async {
+        final businessError = StateError('business callback failed');
+        final propagated = <Object>[];
+        Object? pickerError;
+        await tester.pumpWidget(
+          wrap(
+            TUpload(
+              layout: TUploadLayout.list,
+              files: const [],
+              maxFiles: callback == 'maxFiles' ? 1 : null,
+              maxFileSize: callback == 'fileSize' ? 10 : null,
+              picker: () async => callback == 'maxFiles'
+                  ? [file('first'), file('second')]
+                  : [file('picked', size: 11)],
+              onChanged: (_) {
+                if (callback == 'onChanged') {
+                  throw businessError;
+                }
+              },
+              onValidationError: (_) => throw businessError,
+              onError: (value) => pickerError = value,
+            ),
           ),
-        ),
-      );
-      await tester.tap(find.byKey(const ValueKey('upload-add')));
-      await tester.pump();
-      expect(changed, isTrue);
-      expect(pickerError, isNull);
-    });
+        );
+        final add = tester.widget<TButton>(
+          find.byKey(const ValueKey('upload-add')),
+        );
+        runZonedGuarded(
+          add.onPressed!,
+          (error, stack) => propagated.add(error),
+        );
+        await tester.pump();
+        expect(pickerError, isNull);
+        expect(propagated, hasLength(1));
+        expect(propagated.single, same(businessError));
+      });
+    }
 
     testWidgets('remove emits the remaining files', (tester) async {
       List<TUploadFile>? changed;
