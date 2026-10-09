@@ -2,6 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { validateComponentPage } from './page-contract.mjs';
+
 import {
   defaultExampleCodeDirectory,
   listFlutterExampleKeys,
@@ -36,6 +38,11 @@ for (const slug of fs.readdirSync(docsDirectory).sort()) {
   }
 
   const source = fs.readFileSync(readme, 'utf8');
+  const contractError = validateComponentPage(source, expectedGroup, slug);
+  if (contractError) {
+    errors.push(`${slug}: ${contractError}`);
+    continue;
+  }
   if (source.includes('以下示例代码直接来自 Example App')) {
     errors.push(`${slug}: contains redundant generated-example boilerplate`);
     continue;

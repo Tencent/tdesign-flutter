@@ -5,14 +5,6 @@ spline: base
 isComponent: true
 ---
 
-## 引入
-
-通过统一入口引入 TDesign Flutter 组件：
-
-```dart
-import 'package:tdesign_flutter/tdesign_flutter.dart';
-```
-
 ## 代码演示
 
 {{ flutter-example-group navbar }}
