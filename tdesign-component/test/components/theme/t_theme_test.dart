@@ -65,9 +65,9 @@ void main() {
     });
 
     test('自定义值按逻辑像素解释，不按比例解释', () {
-      final token =
-          TThemeData.defaultData().copyWith(radiusMap: {'radiusCircle': 16})
-              as TThemeData;
+      final token = TThemeData.defaultData().copyWith(
+        radiusMap: {'radiusCircle': 16},
+      );
       expect(token.radiusCircle, 16);
       final path = circleBorder(
         token,
@@ -375,15 +375,15 @@ void main() {
     test('fromJson 解析各映射 + ref + 暗色块', () {
       final theme = TThemeData.fromJson('testTheme', json)!;
       expect(theme, isNotNull);
-      expect(theme.ofColor('brandColor'), isA<Color>());
+      expect(theme.colorMap['brandColor'], isA<Color>());
       // ref 回指
-      expect(theme.ofColor('aliasColor'), theme.ofColor('brandColor'));
-      expect(theme.ofFont('fontLarge')?.size, 16);
-      expect(theme.ofCorner('radiusSmall'), 4);
-      expect(theme.ofFontFamily('familyMain')?.fontFamily, 'PingFang');
-      expect(theme.ofShadow('shadow1')?.length, 1);
+      expect(theme.colorMap['aliasColor'], theme.colorMap['brandColor']);
+      expect(theme.fontMap['fontLarge']?.size, 16);
+      expect(theme.radiusMap['radiusSmall'], 4);
+      expect(theme.fontFamilyMap['familyMain']?.fontFamily, 'PingFang');
+      expect(theme.shadowMap['shadow1']?.length, 1);
       // spacerMap 来自 margin
-      expect(theme.ofColor('aliasColor'), isNotNull);
+      expect(theme.colorMap['aliasColor'], isNotNull);
       // 暗色块
       expect(theme.dark, isNotNull);
       expect(theme.dark!.light, same(theme));
@@ -405,27 +405,80 @@ void main() {
   });
 
   group('TThemeData 拷贝与 Map', () {
+    test('copyWith 统一所有 Token 映射并隔离原配置', () {
+      final extra = _TestExtra();
+      final base = TThemeData.defaultData().copyWith(
+        name: 'source',
+        extraThemeData: extra,
+      );
+      base.refMap['customAlias'] = 'brandColor';
+      final originalBrand = base.colorMap['brandColor'];
+      final font = Font(size: 19, lineHeight: 28);
+      final family = FontFamily(fontFamily: 'Example');
+      const shadows = [BoxShadow(color: Colors.blue, blurRadius: 3)];
+      const inset = BorderSide(color: Colors.green, width: 2);
+      final copied = base.copyWith(
+        colorMap: {'customAlias': Colors.red},
+        fontMap: {'fontBodyLarge': font},
+        fontMetricMap: {'fontSizeBodyLarge': 19},
+        radiusMap: {'radiusDefault': 40},
+        fontFamilyMap: {'fontFamily': family},
+        shadowMap: {'shadow1': shadows},
+        insetShadowMap: {'shadowInsetTop': inset},
+        spacerMap: {'spacer': 10},
+      );
+      expect(copied.name, 'source');
+      expect(copied.extraThemeData, same(extra));
+      expect(copied.colorMap['customAlias'], Colors.red);
+      expect(copied.refMap['customAlias'], 'brandColor');
+      copied.refMap['customAlias'] = 'otherAlias';
+      expect(base.refMap['customAlias'], 'brandColor');
+      expect(base.colorMap['customAlias'], originalBrand);
+      expect(copied.fontMap['fontBodyLarge'], same(font));
+      expect(copied.fontMetricMap['fontSizeBodyLarge'], 19);
+      expect(copied.radiusMap['radiusDefault'], 40);
+      expect(copied.fontFamilyMap['fontFamily'], same(family));
+      expect(copied.shadowMap['shadow1'], shadows);
+      expect(copied.insetShadowMap['shadowInsetTop'], inset);
+      expect(copied.spacerMap['spacer'], 10);
+      expect(copied.spacerMap['spacer1'], base.spacerMap['spacer1']);
+      copied.colorMap['brandColor'] = Colors.purple;
+      expect(base.colorMap['brandColor'], originalBrand);
+      final retained = copied.copyWith(name: null);
+      expect(retained.name, 'source');
+      expect(retained.extraThemeData, same(extra));
+      final chained = copied.copyWith().copyWith(name: 'renamed');
+      expect(chained.name, 'renamed');
+      expect(chained.spacerMap['spacer'], 10);
+      expect(chained.light, same(chained));
+    });
+
+    test('ofExtra 未配置时返回 null', () {
+      expect(TThemeData.defaultData().ofExtra<_TestExtra>(), isNull);
+    });
+
     test('copyWith 覆盖并保留未覆盖字段', () {
       final base = TThemeData.defaultData();
-      final copied =
-          base.copyWith(name: 'copied', colorMap: {'brandColor': Colors.red})
-              as TThemeData;
+      final copied = base.copyWith(
+        name: 'copied',
+        colorMap: {'brandColor': Colors.red},
+      );
       expect(copied.name, 'copied');
-      expect(copied.ofColor('brandColor'), Colors.red);
+      expect(copied.colorMap['brandColor'], Colors.red);
       // 未覆盖的其它颜色经 factory 仍可取
-      expect(copied.ofColor('textColorAnti'), isNotNull);
+      expect(copied.colorMap['textColorAnti'], isNotNull);
       expect(copied.light, same(copied));
       expect(TThemeBuilder.light(copied).colorScheme.primary, Colors.red);
     });
 
-    test('copyWithTThemeData 同义封装', () {
+    test('copyWith 返回具体主题类型', () {
       final base = TThemeData.defaultData();
-      final copied = base.copyWithTThemeData(
-        'copy2',
+      final copied = base.copyWith(
+        name: 'copy2',
         colorMap: {'brandColor': Colors.blue},
       );
       expect(copied.name, 'copy2');
-      expect(copied.ofColor('brandColor'), Colors.blue);
+      expect(copied.colorMap['brandColor'], Colors.blue);
       expect(copied, isA<TThemeData>());
     });
 
@@ -448,15 +501,15 @@ void main() {
       expect(base.brandColor, base.primaryColor7);
       expect(base.borderLevel1Color, base.componentStroke);
 
-      final paletteOverride = base.copyWithTThemeData(
-        'palette-override',
+      final paletteOverride = base.copyWith(
+        name: 'palette-override',
         colorMap: {'primaryColor7': Colors.purple},
       );
       expect(paletteOverride.primaryColor7, Colors.purple);
       expect(paletteOverride.brandColor, Colors.purple);
 
-      final semanticOverride = paletteOverride.copyWithTThemeData(
-        'semantic-override',
+      final semanticOverride = paletteOverride.copyWith(
+        name: 'semantic-override',
         colorMap: {'brandColor': Colors.orange},
       );
       expect(semanticOverride.brandColor, Colors.orange);
@@ -476,9 +529,9 @@ void main() {
     test('other 为同类型时返回 other 各映射', () {
       final a = TThemeData.defaultData();
       final b = TThemeData.defaultData();
-      final r = a.lerp(b, 0.5) as TThemeData;
+      final r = a.lerp(b, 0.5);
       expect(r.name, b.name);
-      expect(r.ofColor('brandColor'), isNotNull);
+      expect(r.colorMap['brandColor'], isNotNull);
     });
 
     test('other 非同类型时返回 this', () {

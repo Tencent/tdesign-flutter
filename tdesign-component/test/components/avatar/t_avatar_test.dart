@@ -62,8 +62,8 @@ void main() {
     testWidgets('方形头像默认读取 radiusDefault 和 brandColorLightActive', (
       tester,
     ) async {
-      final tokens = TThemeData.defaultData().copyWithTThemeData(
-        'avatar-design-defaults',
+      final tokens = TThemeData.defaultData().copyWith(
+        name: 'avatar-design-defaults',
         radiusMap: {'radiusSmall': 3, 'radiusDefault': 9},
         colorMap: {
           'brandColorFocus': Colors.red,
@@ -100,9 +100,9 @@ void main() {
     });
 
     testWidgets('未指定组件圆角时读取自定义全局 radiusCircle', (tester) async {
-      final tokens =
-          TThemeData.defaultData().copyWith(radiusMap: {'radiusCircle': 7})
-              as TThemeData;
+      final tokens = TThemeData.defaultData().copyWith(
+        radiusMap: {'radiusCircle': 7},
+      );
       await tester.pumpWidget(app(const TAvatar(), tokens: tokens));
 
       final clip = tester.widget<ClipRRect>(find.byType(ClipRRect));
@@ -819,8 +819,8 @@ void main() {
     });
 
     testWidgets('ThemeData 动画读取小号成员和自定义全局圆角的有效回退', (tester) async {
-      final tokens = TThemeData.defaultData().copyWithTThemeData(
-        'avatar-interpolation-tokens',
+      final tokens = TThemeData.defaultData().copyWith(
+        name: 'avatar-interpolation-tokens',
         radiusMap: {'radiusCircle': 7, 'radiusDefault': 3},
       );
       final baseTheme = TThemeBuilder.light(tokens);

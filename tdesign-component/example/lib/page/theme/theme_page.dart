@@ -121,7 +121,9 @@ class _TThemeColorsPageState extends State<TThemeColorsPage> {
       child: TText(
         '使用外层默认主题',
         font: context.tTheme.fontBodyLarge, // 字体，业务方使用时，
-        style: TextStyle(color: context.tTheme.brandColor), // 颜色，AS中点击颜色可查看具体设置和显示效果
+        style: TextStyle(
+          color: context.tTheme.brandColor,
+        ), // 颜色，AS中点击颜色可查看具体设置和显示效果
       ),
     );
   }
@@ -132,8 +134,8 @@ class _TThemeColorsPageState extends State<TThemeColorsPage> {
       // 替换fonts和colors，其他主题从父类拷贝
       data: Theme.of(context).copyWith(
         extensions: [
-          context.tTheme.copyWithTThemeData(
-            'custom',
+          context.tTheme.copyWith(
+            name: 'custom',
             fontMap: {'fontBodyLarge': Font(size: 40, lineHeight: 80)},
             colorMap: {'brandColor': Colors.red},
           ),
@@ -159,12 +161,16 @@ class TestWidget extends StatelessWidget {
           TText(
             '使用内层赋值主题',
             font: context.tTheme.fontBodyLarge, //明确使用内层主题，必须传context
-            style: TextStyle(color: context.tTheme.brandColor), // 明确使用内层主题，必须传context
+            style: TextStyle(
+              color: context.tTheme.brandColor,
+            ), // 明确使用内层主题，必须传context
           ),
           TText(
             '使用内层不赋值主题',
             font: context.tTheme.fontTitleExtraLarge, //明确使用内层主题，必须传context
-            style: TextStyle(color: context.tTheme.successColor), // 明确使用内层主题，必须传context
+            style: TextStyle(
+              color: context.tTheme.successColor,
+            ), // 明确使用内层主题，必须传context
           ),
           const TButton(
             child: Text('使用内层赋值主题'),

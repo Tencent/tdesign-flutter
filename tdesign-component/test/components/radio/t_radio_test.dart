@@ -381,9 +381,9 @@ void main() {
     });
 
     testWidgets('块高、指示器和卡片高度均读取 TDesign token', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'radio-size-token-test',
-        marginMap: const {
+      final token = TThemeData.defaultData().copyWith(
+        name: 'radio-size-token-test',
+        spacerMap: const {
           'spacer': 9,
           'spacer2': 18,
           'spacer3': 27,

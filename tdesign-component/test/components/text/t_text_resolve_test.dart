@@ -100,8 +100,8 @@ void main() {
     ]);
     expect(token.fontFamily?.fallback, ['Microsoft YaHei', 'Arial Regular']);
 
-    final custom = token.copyWithTThemeData(
-      'custom-family',
+    final custom = token.copyWith(
+      name: 'custom-family',
       fontFamilyMap: {
         'fontFamily': FontFamily(
           fontFamily: 'PingFang SC',

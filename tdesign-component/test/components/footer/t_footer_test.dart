@@ -116,9 +116,9 @@ void main() {
   testWidgets('link spacing and brand gap follow spacing tokens', (
     tester,
   ) async {
-    final token = TThemeData.defaultData().copyWithTThemeData(
-      'footer-spacing',
-      marginMap: {'spacer': 10, 'spacer1': 18},
+    final token = TThemeData.defaultData().copyWith(
+      name: 'footer-spacing',
+      spacerMap: {'spacer': 10, 'spacer1': 18},
     );
     await tester.pumpWidget(
       app(

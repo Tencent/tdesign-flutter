@@ -31,8 +31,8 @@ void main() {
       dark.shadowInsetBottom,
       const BorderSide(color: Color(0xFF5E5E5E), width: 0.5),
     );
-    final overridden = light.copyWithTThemeData(
-      'inset-override',
+    final overridden = light.copyWith(
+      name: 'inset-override',
       insetShadowMap: {
         'shadowInsetTop': const BorderSide(color: Colors.red, width: 1),
       },
@@ -56,8 +56,8 @@ void main() {
 
   group('TFonts extension', () {
     testWidgets('TText 默认字体跟随独立字号和行高 Token', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'text-metric-override',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'text-metric-override',
         fontMetricMap: {'fontSizeBodyMedium': 19, 'lineHeightBodyMedium': 29},
       );
       await tester.pumpWidget(
@@ -84,8 +84,8 @@ void main() {
       expect(base.fontBodyMedium?.size, 14);
       expect(base.fontBodyMedium?.height, 22 / 14);
 
-      final metrics = base.copyWithTThemeData(
-        'font-metric-override',
+      final metrics = base.copyWith(
+        name: 'font-metric-override',
         fontMetricMap: {
           'fontSizeBodyMedium': 18,
           'lineHeightBodyMedium': 28,
@@ -96,8 +96,8 @@ void main() {
       expect(metrics.fontBodyMedium?.height, 28 / 18);
       expect(metrics.fontSizeBase, 17);
 
-      final composite = metrics.copyWithTThemeData(
-        'font-composite-override',
+      final composite = metrics.copyWith(
+        name: 'font-composite-override',
         fontMap: {'fontBodyMedium': Font(size: 19, lineHeight: 30)},
       );
       expect(composite.fontBodyMedium?.size, 19);

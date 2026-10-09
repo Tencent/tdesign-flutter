@@ -525,36 +525,10 @@ class TThemeData extends ThemeExtension<TThemeData> {
     return _defaultThemeData!;
   }
 
-  /// 从父类拷贝
-  TThemeData copyWithTThemeData(
-    String name, {
-    Map<String, Color>? colorMap,
-    Map<String, Font>? fontMap,
-    Map<String, double>? fontMetricMap,
-    Map<String, double>? radiusMap,
-    Map<String, FontFamily>? fontFamilyMap,
-    Map<String, List<BoxShadow>>? shadowMap,
-    Map<String, BorderSide>? insetShadowMap,
-    Map<String, double>? marginMap,
-    TExtraThemeData? extraThemeData,
-  }) {
-    return copyWith(
-          name: name,
-          colorMap: colorMap,
-          fontMap: fontMap,
-          fontMetricMap: fontMetricMap,
-          radiusMap: radiusMap,
-          fontFamilyMap: fontFamilyMap,
-          shadowMap: shadowMap,
-          insetShadowMap: insetShadowMap,
-          marginMap: marginMap,
-          extraThemeData: extraThemeData,
-        )
-        as TThemeData;
-  }
-
+  /// 复制 Token 主题并合并非空映射，返回具体的 [TThemeData]。
+  /// 未传入的映射值、名称和扩展数据保留。
   @override
-  ThemeExtension<TThemeData> copyWith({
+  TThemeData copyWith({
     String? name,
     Map<String, Color>? colorMap,
     Map<String, Font>? fontMap,
@@ -563,12 +537,13 @@ class TThemeData extends ThemeExtension<TThemeData> {
     Map<String, FontFamily>? fontFamilyMap,
     Map<String, List<BoxShadow>>? shadowMap,
     Map<String, BorderSide>? insetShadowMap,
-    Map<String, double>? marginMap,
+    /// 间距 Token 的增量映射；非空值覆盖同名 Token，其他间距沿用当前配置。
+    Map<String, double>? spacerMap,
     TExtraThemeData? extraThemeData,
   }) {
     final copiedRefs = _copyMap<String>(refMap, null);
     return TThemeData(
-      name: name ?? 'default',
+      name: name ?? this.name,
       colorMap: _copyMap<Color>(this.colorMap, colorMap, copiedRefs),
       fontMap: _copyMap<Font>(this.fontMap, fontMap, copiedRefs),
       fontMetricMap: _copyMap<double>(
@@ -592,7 +567,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
         insetShadowMap,
         copiedRefs,
       ),
-      spacerMap: _copyMap<double>(spacerMap, marginMap, copiedRefs),
+      spacerMap: _copyMap<double>(this.spacerMap, spacerMap, copiedRefs),
       refMap: copiedRefs,
       extraThemeData: extraThemeData ?? this.extraThemeData,
     );
@@ -667,12 +642,16 @@ class TThemeData extends ThemeExtension<TThemeData> {
       /// 要求json配置必须正确
       final themeConfig = json.decode(themeJson);
       if (themeConfig.containsKey(name)) {
-        var theme = parseThemeData(name, themeConfig, extraThemeData);
+        var theme = _parseThemeData(name, themeConfig, extraThemeData);
         theme.light = theme;
         darkName ??= '${name}Dark';
         if (themeConfig[darkName] != null) {
           // 解析暗色模式
-          var darkTheme = parseThemeData(darkName, themeConfig, extraThemeData);
+          var darkTheme = _parseThemeData(
+            darkName,
+            themeConfig,
+            extraThemeData,
+          );
           darkTheme.light = theme;
           theme.dark = darkTheme;
           // 填充暗色模式缺失数据
@@ -697,7 +676,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
     }
   }
 
-  static TThemeData parseThemeData(
+  static TThemeData _parseThemeData(
     String name,
 
     /// 已解析的主题 JSON 配置。
@@ -792,37 +771,16 @@ class TThemeData extends ThemeExtension<TThemeData> {
     return theme;
   }
 
-  Color? ofColor(String? key) {
-    return colorMap[key];
-  }
-
-  Font? ofFont(String? key) {
-    return fontMap[key];
-  }
-
-  double? ofCorner(String? key) {
-    return radiusMap[key];
-  }
-
-  FontFamily? ofFontFamily(String? key) {
-    return fontFamilyMap[key];
-  }
-
-  List<BoxShadow>? ofShadow(String? key) {
-    return shadowMap[key];
-  }
-
+  /// 读取指定类型的业务扩展主题；未配置或类型不匹配时返回 null。
   T? ofExtra<T extends TExtraThemeData>() {
-    try {
-      return extraThemeData as T;
-    } catch (e) {
-      Log.e('TThemeData ofExtra error: $e');
-    }
-    return null;
+    final extra = extraThemeData;
+    return extra is T ? extra : null;
   }
 
+  /// 返回目标 Token 配置；other 为空或类型不匹配时保留当前主题。
+  /// 当前实现不使用 t 连续插值，也不复制目标 extraThemeData。
   @override
-  ThemeExtension<TThemeData> lerp(ThemeExtension<TThemeData>? other, double t) {
+  TThemeData lerp(ThemeExtension<TThemeData>? other, double t) {
     if (other is! TThemeData) {
       return this;
     }
