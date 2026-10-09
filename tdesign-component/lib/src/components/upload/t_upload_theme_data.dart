@@ -12,6 +12,8 @@ enum TUploadVariant {
 }
 
 /// TUpload 组件级 ThemeExtension。
+///
+/// {@category ComponentTheme}
 class TUploadThemeData extends ThemeExtension<TUploadThemeData> {
   const TUploadThemeData({
     this.variant,

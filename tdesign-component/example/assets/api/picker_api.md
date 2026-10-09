@@ -10,8 +10,8 @@
 #### 主题配置
 
 组件主题通过 `TPickerThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TPickerThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TPickerThemeData` 配置项。
 
 #### 构造方法
 
@@ -154,61 +154,6 @@ const 构造不会复制或冻结传入的 `selectedOptions` 和 `indexes`。
 | options | List&lt;TPickerOption&gt; | - | 根选项。 | 是 |
 
 
-### TPickerThemeData
-
-TPicker 组件级 ThemeExtension
-
-被 TPicker 和 TDateTimePicker 共用。
-
-#### 构造方法
-
-##### TPickerThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| height | double? | - | 滚轮视窗高度，单位为逻辑像素；null 时使用默认值 200。 必须为有限正数，行高由此高度除以 `itemCount`（默认 5）得到。 | 否 |
-| itemCount | int? | - | 每屏显示项数，null 时使用默认值 5；必须大于零。 | 否 |
-
-
-#### 实例方法
-
-##### TPickerThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| height | double? | - | 字段含义：滚轮视窗高度，单位为逻辑像素；null 时使用默认值 200。 必须为有限正数，行高由此高度除以 `itemCount`（默认 5）得到。 调用时的空值行为见方法说明。 | 否 |
-| itemCount | int? | - | 字段含义：每屏显示项数，null 时使用默认值 5；必须大于零。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TPickerThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TPickerThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TPickerThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TPickerThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
 ### TPickerItems
 
 选择器数据源。
@@ -267,3 +212,20 @@ TPicker 组件级 ThemeExtension
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | Widget? | - | 当前选项内容；返回 null 时使用默认文字渲染。 | - |
+
+
+### TPickerThemeData
+
+TPicker 组件级 ThemeExtension
+
+被 TPicker 和 TDateTimePicker 共用。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| height | double? | - | 滚轮视窗高度，单位为逻辑像素；null 时使用默认值 200。 必须为有限正数，行高由此高度除以 `itemCount`（默认 5）得到。 | 否 |
+| itemCount | int? | - | 每屏显示项数，null 时使用默认值 5；必须大于零。 | 否 |

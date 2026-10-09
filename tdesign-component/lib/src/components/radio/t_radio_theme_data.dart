@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 /// TRadio 组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树默认样式。
+///
+/// {@category ComponentTheme}
 class TRadioThemeData extends ThemeExtension<TRadioThemeData> {
   /// 选中态颜色。
   /// null 时使用 brandColor Token。

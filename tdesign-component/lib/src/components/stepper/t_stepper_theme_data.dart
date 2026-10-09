@@ -7,6 +7,11 @@ import 't_stepper_theme_interpolation.dart';
 /// 通过 [ThemeData.extensions] 或 `ThemeData.mergeExtension` 注入。实例参数
 /// 优先于此主题；未设置的文字字段使用全局 TDesign Token，图标及输入装饰
 /// 仍按各自 Flutter 主题解析。
+///
+/// 主题过渡保留未指定字段的继承语义，由组件结合当前实例尺寸与主题解析；
+/// 两端均未指定的字段仍为 null，端点返回原始配置。
+///
+/// {@category ComponentTheme}
 class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
   const TStepperThemeData({
     this.inputWidth,

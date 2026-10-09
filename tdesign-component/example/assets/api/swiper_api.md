@@ -7,8 +7,8 @@ Controller 驱动的轮播组件。
 #### 主题配置
 
 组件主题通过 `TSwiperThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TSwiperThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TSwiperThemeData` 配置项。
 
 #### 构造方法
 
@@ -144,81 +144,6 @@ Controller 驱动的轮播组件。
 | 返回值 | Future&lt;void&gt; | - | 所绑定轮播的切换请求完成时结束；未绑定时立即完成，不执行切换。 | - |
 
 
-### TSwiperThemeData
-
-轮播组件级 ThemeExtension。
-
-保存指示器、内容圆角和切换按钮的视觉默认值。
-
-#### 构造方法
-
-##### TSwiperThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| activeColor | Color? | - | 激活项颜色。 null 时使用 textColorAnti Token。 | 否 |
-| activeDotExtent | double? | - | 长条激活项在滚动主轴上的长度。 未配置时为 20 逻辑像素，必须大于 0。 | 否 |
-| borderRadius | BorderRadiusGeometry? | - | 轮播内容圆角。 null 时使用 radiusLarge Token 构造圆角。 | 否 |
-| controlIconSize | double? | - | 控制按钮图标尺寸。 未配置时为 18 逻辑像素，必须大于 0。 | 否 |
-| controlStyle | ButtonStyle? | - | 控制按钮样式。 | 否 |
-| dotSize | double? | - | 圆点直径。 未配置时为 6 逻辑像素，必须大于 0。 | 否 |
-| dotSpacing | double? | - | 圆点间距。 未配置时为 5 逻辑像素，必须大于或等于 0。 | 否 |
-| fractionBackgroundColor | Color? | - | 数字指示器背景色。 null 时使用 textColorPlaceholder Token。 | 否 |
-| fractionStyle | TextStyle? | - | 数字指示器文字样式。 | 否 |
-| inactiveColor | Color? | - | 未激活项颜色。 | 否 |
-| paginationAlignment | AlignmentGeometry? | - | 默认指示器对齐方式。 未配置时 controls 居中，其他类型横向轮播为 bottomCenter、纵向轮播为 centerRight。 | 否 |
-| paginationMargin | EdgeInsetsGeometry? | - | 指示器外边距。 未配置时普通指示器四边为 12；controls 沿滚动轴两端为 15 逻辑像素。 | 否 |
-
-
-#### 实例方法
-
-##### TSwiperThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| paginationAlignment | AlignmentGeometry? | - | 字段含义：默认指示器对齐方式。 未配置时 controls 居中，其他类型横向轮播为 bottomCenter、纵向轮播为 centerRight。 调用时的空值行为见方法说明。 | 否 |
-| paginationMargin | EdgeInsetsGeometry? | - | 字段含义：指示器外边距。 未配置时普通指示器四边为 12；controls 沿滚动轴两端为 15 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| borderRadius | BorderRadiusGeometry? | - | 字段含义：轮播内容圆角。 null 时使用 radiusLarge Token 构造圆角。 调用时的空值行为见方法说明。 | 否 |
-| activeColor | Color? | - | 字段含义：激活项颜色。 null 时使用 textColorAnti Token。 调用时的空值行为见方法说明。 | 否 |
-| inactiveColor | Color? | - | 字段含义：未激活项颜色。 调用时的空值行为见方法说明。 | 否 |
-| dotSize | double? | - | 字段含义：圆点直径。 未配置时为 6 逻辑像素，必须大于 0。 调用时的空值行为见方法说明。 | 否 |
-| activeDotExtent | double? | - | 字段含义：长条激活项在滚动主轴上的长度。 未配置时为 20 逻辑像素，必须大于 0。 调用时的空值行为见方法说明。 | 否 |
-| dotSpacing | double? | - | 字段含义：圆点间距。 未配置时为 5 逻辑像素，必须大于或等于 0。 调用时的空值行为见方法说明。 | 否 |
-| fractionStyle | TextStyle? | - | 字段含义：数字指示器文字样式。 调用时的空值行为见方法说明。 | 否 |
-| fractionBackgroundColor | Color? | - | 字段含义：数字指示器背景色。 null 时使用 textColorPlaceholder Token。 调用时的空值行为见方法说明。 | 否 |
-| controlStyle | ButtonStyle? | - | 字段含义：控制按钮样式。 调用时的空值行为见方法说明。 | 否 |
-| controlIconSize | double? | - | 字段含义：控制按钮图标尺寸。 未配置时为 18 逻辑像素，必须大于 0。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TSwiperThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TSwiperThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | TSwiperThemeData? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TSwiperThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
 ### TSwiperPaginationItemDetails
 
 单个轮播指示器标记的状态信息。
@@ -300,3 +225,30 @@ Controller 驱动的轮播组件。
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | Widget | - | 当前轮播指示器标记内容。 | - |
+
+
+### TSwiperThemeData
+
+轮播组件级 ThemeExtension。
+
+保存指示器、内容圆角和切换按钮的视觉默认值。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| activeColor | Color? | - | 激活项颜色。 null 时使用 textColorAnti Token。 | 否 |
+| activeDotExtent | double? | - | 长条激活项在滚动主轴上的长度。 未配置时为 20 逻辑像素，必须大于 0。 | 否 |
+| borderRadius | BorderRadiusGeometry? | - | 轮播内容圆角。 null 时使用 radiusLarge Token 构造圆角。 | 否 |
+| controlIconSize | double? | - | 控制按钮图标尺寸。 未配置时为 18 逻辑像素，必须大于 0。 | 否 |
+| controlStyle | ButtonStyle? | - | 控制按钮样式。 | 否 |
+| dotSize | double? | - | 圆点直径。 未配置时为 6 逻辑像素，必须大于 0。 | 否 |
+| dotSpacing | double? | - | 圆点间距。 未配置时为 5 逻辑像素，必须大于或等于 0。 | 否 |
+| fractionBackgroundColor | Color? | - | 数字指示器背景色。 null 时使用 textColorPlaceholder Token。 | 否 |
+| fractionStyle | TextStyle? | - | 数字指示器文字样式。 | 否 |
+| inactiveColor | Color? | - | 未激活项颜色。 | 否 |
+| paginationAlignment | AlignmentGeometry? | - | 默认指示器对齐方式。 未配置时 controls 居中，其他类型横向轮播为 bottomCenter、纵向轮播为 centerRight。 | 否 |
+| paginationMargin | EdgeInsetsGeometry? | - | 指示器外边距。 未配置时普通指示器四边为 12；controls 沿滚动轴两端为 15 逻辑像素。 | 否 |

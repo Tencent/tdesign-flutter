@@ -312,8 +312,8 @@ ThemeData withDemoGoldenFonts(ThemeData theme, DemoPageTestSpec spec) {
     if (spec.supplementalCjkFontFamily case final family?) family,
   ];
   final token = theme.extension<TThemeData>() ?? TThemeData.defaultData();
-  final goldenToken = token.copyWithTThemeData(
-    '${token.name}-golden',
+  final goldenToken = token.copyWith(
+    name: '${token.name}-golden',
     fontFamilyMap: {
       'fontFamily': FontFamily(
         // Linux Golden 中 Roboto 用于英文/数字，CJK 字体用于中文。

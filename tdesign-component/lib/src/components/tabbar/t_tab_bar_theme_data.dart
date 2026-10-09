@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 /// 底部标签栏 ThemeExtension
 ///
 /// 管理 TTabBar 的子树级视觉默认值（高度、颜色与分割线等）。
+///
+/// {@category ComponentTheme}
 class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
   /// 默认高度
   final double? barHeight;

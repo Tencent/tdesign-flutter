@@ -15,6 +15,8 @@ enum TCellGroupVariant {
 ///
 /// 仅保存视觉和布局默认值，不保存内容、回调或列表数据。
 /// 文字样式按字段覆盖全局 Token 派生的组件默认值；未配置字段保持默认。
+///
+/// {@category ComponentTheme}
 class TCellThemeData extends ThemeExtension<TCellThemeData> {
   const TCellThemeData({
     this.titleStyle,

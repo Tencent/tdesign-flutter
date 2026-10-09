@@ -7,6 +7,8 @@ import 't_badge_defaults.dart';
 /// TDesign 徽标的子树级视觉默认值。
 ///
 /// 形态、内容、对齐和偏移由实例 API 控制，不从 Material BadgeTheme 读取。
+///
+/// {@category ComponentTheme}
 @immutable
 class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
   const TBadgeThemeData({

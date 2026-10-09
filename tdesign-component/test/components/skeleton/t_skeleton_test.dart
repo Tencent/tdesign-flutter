@@ -30,9 +30,9 @@ void main() {
       await tester.pumpWidget(
         wrap(
           const TSkeleton(variant: TSkeletonVariant.avatar),
-          token:
-              TThemeData.defaultData().copyWith(radiusMap: {'radiusCircle': 7})
-                  as TThemeData,
+          token: TThemeData.defaultData().copyWith(
+            radiusMap: {'radiusCircle': 7},
+          ),
         ),
       );
       expect(decorations(tester).first.borderRadius, BorderRadius.circular(7));

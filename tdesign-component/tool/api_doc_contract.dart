@@ -626,3 +626,18 @@ List<String> _withoutTrailingCommas(List<String> tokens) => [
         !const {')', ']', '}'}.contains(tokens[i + 1]))
       tokens[i],
 ];
+
+/// Allow configuration tables only for explicitly categorized ThemeExtensions.
+bool isComponentThemeDeclaration(Declaration? source) =>
+    source is ClassDeclaration &&
+    source.extendsClause?.superclass.name2.lexeme == 'ThemeExtension' &&
+    (source.documentationComment?.tokens
+            .map((token) => token.lexeme)
+            .join('\n')
+            .contains('{@category ComponentTheme}') ??
+        false);
+
+bool isComponentThemeConfiguration(Declaration? source, String section) =>
+    isComponentThemeDeclaration(source) &&
+    section.contains('<!-- api-theme: fields -->') &&
+    section.contains('#### 配置项\n');

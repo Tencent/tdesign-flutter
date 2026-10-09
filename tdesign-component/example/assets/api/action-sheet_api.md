@@ -33,8 +33,8 @@
 #### 主题配置
 
 组件主题通过 `TActionSheetThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TActionSheetThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TActionSheetThemeData` 配置项。
 
 #### 静态方法
 
@@ -136,86 +136,6 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | TPopupHandle | - | 已经发起打开的动作面板控制句柄，可用于查询状态与关闭面板。 | - |
-
-
-### TActionSheetThemeData
-
-TActionSheet 组件级视觉 ThemeExtension
-
-#### 构造方法
-
-##### TActionSheetThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| barrierColor | Color? | - | 蒙层颜色 | 否 |
-| gridIconExtent | double? | - | 宫格布局的图标槽位尺寸；未设置时默认 40dp。 | 否 |
-| gridItemHeight | double? | - | 宫格项目高度 未配置时为 96 逻辑像素，show 方法的 itemHeight 优先。 | 否 |
-| iconColor | Color? | - | 默认图标颜色。 未配置时使用 textColorPrimary Token；禁用项使用 textColorDisabled。 | 否 |
-| iconSize | double? | - | 默认图标字形尺寸；同时作为列表图标槽位尺寸。 未配置时为 24 逻辑像素。 | 否 |
-| panelRadius | double? | - | 面板圆角 | 否 |
-
-
-#### 实例方法
-
-##### TActionSheetThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| gridItemHeight | double? | - | 字段含义：宫格项目高度 未配置时为 96 逻辑像素，show 方法的 itemHeight 优先。 调用时的空值行为见方法说明。 | 否 |
-| barrierColor | Color? | - | 字段含义：蒙层颜色 调用时的空值行为见方法说明。 | 否 |
-| panelRadius | double? | - | 字段含义：面板圆角 调用时的空值行为见方法说明。 | 否 |
-| iconSize | double? | - | 字段含义：默认图标字形尺寸；同时作为列表图标槽位尺寸。 未配置时为 24 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| gridIconExtent | double? | - | 字段含义：宫格布局的图标槽位尺寸；未设置时默认 40dp。 调用时的空值行为见方法说明。 | 否 |
-| iconColor | Color? | - | 字段含义：默认图标颜色。 未配置时使用 textColorPrimary Token；禁用项使用 textColorDisabled。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TActionSheetThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TActionSheetThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TActionSheetThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TActionSheetThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
-##### TActionSheetThemeData.merge
-
-位置参数：`other`
-
-
-合并主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | TActionSheetThemeData? | - | 要合并的目标主题；为空时保留当前配置。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TActionSheetThemeData | - | 返回合并后的主题；`other` 的非空字段覆盖当前字段，other 为空时返回当前主题。 | - |
 
 
 ### TActionSheetGridLayout
@@ -334,3 +254,22 @@ TActionSheet 组件级视觉 ThemeExtension
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | void | - | 无返回值。 | - |
+
+
+### TActionSheetThemeData
+
+TActionSheet 组件级视觉 ThemeExtension
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| barrierColor | Color? | - | 蒙层颜色 | 否 |
+| gridIconExtent | double? | - | 宫格布局的图标槽位尺寸；未设置时默认 40dp。 | 否 |
+| gridItemHeight | double? | - | 宫格项目高度 未配置时为 96 逻辑像素，show 方法的 itemHeight 优先。 | 否 |
+| iconColor | Color? | - | 默认图标颜色。 未配置时使用 textColorPrimary Token；禁用项使用 textColorDisabled。 | 否 |
+| iconSize | double? | - | 默认图标字形尺寸；同时作为列表图标槽位尺寸。 未配置时为 24 逻辑像素。 | 否 |
+| panelRadius | double? | - | 面板圆角 | 否 |

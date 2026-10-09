@@ -16,8 +16,8 @@
 #### 主题配置
 
 组件主题通过 `TToastThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TToastThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TToastThemeData` 配置项。
 
 #### 构造方法
 
@@ -275,13 +275,37 @@
 | showOverlay | bool | false | 是否显示可见半透明蒙层（默认 false）。 | 否 |
 
 
+### IconTextDirection
+
+Toast 文案排列方向
+#### 枚举值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| horizontal | IconTextDirection | - | 横向 | - |
+| vertical | IconTextDirection | - | 竖向 | - |
+
+
+### TToastPlacement
+
+Toast 展示位置
+#### 枚举值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| top | TToastPlacement | - | 顶部（距屏幕顶部 25%，水平居中） | - |
+| middle | TToastPlacement | - | 居中（屏幕正中） | - |
+| bottom | TToastPlacement | - | 底部（距屏幕底部 25%，水平居中） | - |
+
+
 ### TToastThemeData
 
 TToast 组件级 ThemeExtension
 
-#### 构造方法
+<!-- api-theme: fields -->
 
-##### TToastThemeData
+#### 配置项
+
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
@@ -315,89 +339,3 @@ TToast 组件级 ThemeExtension
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | double? | - | 按 t 线性插值的数值；两端均为 null 时为 null，仅一端为 null 时将该端按 0 计算。 | - |
-
-
-#### 实例方法
-
-##### TToastThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 字段含义：背景色 调用时的空值行为见方法说明。 | 否 |
-| textStyle | TextStyle? | - | 字段含义：文案样式 调用时的空值行为见方法说明。 | 否 |
-| iconSize | double? | - | 字段含义：图标尺寸 调用时的空值行为见方法说明。 | 否 |
-| iconColor | Color? | - | 字段含义：图标颜色 调用时的空值行为见方法说明。 | 否 |
-| borderRadius | double? | - | 字段含义：圆角 调用时的空值行为见方法说明。 | 否 |
-| padding | EdgeInsetsGeometry? | - | 字段含义：内边距 调用时的空值行为见方法说明。 | 否 |
-| maxWidth | double? | - | 字段含义：最大宽度 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TToastThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TToastThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TToastThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TToastThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
-##### TToastThemeData.merge
-
-位置参数：`other`
-
-
-合并主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | TToastThemeData? | - | 要合并的目标主题；为空时保留当前配置。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TToastThemeData | - | other 的非空字段优先的合并主题；other 为 null 时返回当前主题。 | - |
-
-
-### IconTextDirection
-
-Toast 文案排列方向
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| horizontal | IconTextDirection | - | 横向 | - |
-| vertical | IconTextDirection | - | 竖向 | - |
-
-
-### TToastPlacement
-
-Toast 展示位置
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| top | TToastPlacement | - | 顶部（距屏幕顶部 25%，水平居中） | - |
-| middle | TToastPlacement | - | 居中（屏幕正中） | - |
-| bottom | TToastPlacement | - | 底部（距屏幕底部 25%，水平居中） | - |

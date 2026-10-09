@@ -12,8 +12,8 @@
 #### 主题配置
 
 组件主题通过 `TFabThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TFabThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TFabThemeData` 配置项。
 
 #### 构造方法
 
@@ -70,71 +70,6 @@
 | start | DragStartDetails? | - | 拖拽开始详情 | 否 |
 
 
-### TFabThemeData
-
-Fab 定位层 ThemeExtension
-
-仅管理 Fab 定位层的默认值（偏移、边界、拖拽阈值等）。
-默认动作层固定使用 large / fill / primary；需要完整自定义动作层时使用
-`TFab.child`。
-
-#### 构造方法
-
-##### TFabThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| defaultBottom | double? | - | 距父级 Stack 底部的默认偏移；未设置时为 32 逻辑像素。 | 否 |
-| defaultRight | double? | - | 距父级 Stack 右侧的默认偏移；未设置时为 16 逻辑像素。 | 否 |
-| defaultXBounds | TFabBounds? | - | 默认水平拖拽边界；未设置时左右各保留 16 逻辑像素。 | 否 |
-| defaultYBounds | TFabBounds? | - | 默认垂直拖拽边界；未设置时上下边界均为 0。 | 否 |
-| dragTapSlop | double? | - | 点击与拖拽的判定阈值；未设置时为 18 逻辑像素。 按手势起点到当前位置的屏幕全方向最大位移判定，与 `TFabDragAxis` 限制的 位置更新轴向无关。 | 否 |
-| magnetAnimationDuration | Duration? | - | 吸附动画时长；未设置时为 200 毫秒。 | 否 |
-
-
-#### 实例方法
-
-##### TFabThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| defaultRight | double? | - | 字段含义：距父级 Stack 右侧的默认偏移；未设置时为 16 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| defaultBottom | double? | - | 字段含义：距父级 Stack 底部的默认偏移；未设置时为 32 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| defaultXBounds | TFabBounds? | - | 字段含义：默认水平拖拽边界；未设置时左右各保留 16 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| defaultYBounds | TFabBounds? | - | 字段含义：默认垂直拖拽边界；未设置时上下边界均为 0。 调用时的空值行为见方法说明。 | 否 |
-| magnetAnimationDuration | Duration? | - | 字段含义：吸附动画时长；未设置时为 200 毫秒。 调用时的空值行为见方法说明。 | 否 |
-| dragTapSlop | double? | - | 字段含义：点击与拖拽的判定阈值；未设置时为 18 逻辑像素。 按手势起点到当前位置的屏幕全方向最大位移判定，与 `TFabDragAxis` 限制的 位置更新轴向无关。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TFabThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TFabThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TFabThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TFabThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
 ### TFabDragAxis
 
 拖拽轴向
@@ -177,3 +112,26 @@ Fab 定位层 ThemeExtension
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | void | - | 无返回值。 | - |
+
+
+### TFabThemeData
+
+Fab 定位层 ThemeExtension
+
+仅管理 Fab 定位层的默认值（偏移、边界、拖拽阈值等）。
+默认动作层固定使用 large / fill / primary；需要完整自定义动作层时使用
+`TFab.child`。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| defaultBottom | double? | - | 距父级 Stack 底部的默认偏移；未设置时为 32 逻辑像素。 | 否 |
+| defaultRight | double? | - | 距父级 Stack 右侧的默认偏移；未设置时为 16 逻辑像素。 | 否 |
+| defaultXBounds | TFabBounds? | - | 默认水平拖拽边界；未设置时左右各保留 16 逻辑像素。 | 否 |
+| defaultYBounds | TFabBounds? | - | 默认垂直拖拽边界；未设置时上下边界均为 0。 | 否 |
+| dragTapSlop | double? | - | 点击与拖拽的判定阈值；未设置时为 18 逻辑像素。 按手势起点到当前位置的屏幕全方向最大位移判定，与 `TFabDragAxis` 限制的 位置更新轴向无关。 | 否 |
+| magnetAnimationDuration | Duration? | - | 吸附动画时长；未设置时为 200 毫秒。 | 否 |

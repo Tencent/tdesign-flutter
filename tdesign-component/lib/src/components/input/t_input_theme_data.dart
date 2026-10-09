@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 /// TInput 与 TTextarea 共用的组件级 ThemeExtension。
 ///
+/// {@category ComponentTheme}
+///
 /// 输入组件的外层边框、颜色、内边距和提示文字样式在这里提供组件级默认值；
 /// 默认状态不继承全局填充色，避免输入区被 [ThemeData.inputDecorationTheme]
 /// 污染。

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../theme/basic.dart' show Font;
 
 /// 空态组件级 ThemeExtension
+///
+/// {@category ComponentTheme}
 class TEmptyThemeData extends ThemeExtension<TEmptyThemeData> {
   /// 描述文字颜色
   /// 未配置时使用 textColorPlaceholder Token。

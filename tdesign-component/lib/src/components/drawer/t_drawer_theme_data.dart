@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 ///
 /// 只保存子树级具体视觉默认值。方向、蒙层与展示生命周期由 `showTDrawer`
 /// 负责；分隔线和按压反馈由组件实例负责；构造器具体视觉参数优先级高于 ThemeData。
+///
+/// {@category ComponentTheme}
 class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
   /// 默认宽度，默认 280。
   final double? width;

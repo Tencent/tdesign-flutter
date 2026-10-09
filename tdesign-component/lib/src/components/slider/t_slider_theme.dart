@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 /// TSlider 与 TRangeSlider 共用的组件级 ThemeExtension。
 ///
 /// 轨道、滑块和提示标签由组件 Theme 控制，不读取 Material SliderTheme。
+///
+/// {@category ComponentTheme}
 class TSliderThemeData extends ThemeExtension<TSliderThemeData> {
   const TSliderThemeData({
     this.activeTrackColor,

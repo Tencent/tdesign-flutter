@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// 图片组件的视觉默认值。
+///
+/// {@category ComponentTheme}
 @immutable
 class TImageThemeData extends ThemeExtension<TImageThemeData> {
   const TImageThemeData({

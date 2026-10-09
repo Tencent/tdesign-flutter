@@ -9,7 +9,7 @@ import 'backtop_demo_test_spec.dart';
 void main() {
   registerDemoStructureTests(backTopDemoPageTestSpec);
 
-  testWidgets('公开 Demo 对齐小程序的形态选择与滚动模式', (tester) async {
+  testWidgets('公开 Demo 展示形态选择与滚动模式', (tester) async {
     await pumpFullDemoPage(tester, backTopDemoPageTestSpec, ThemeMode.light);
 
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));

@@ -60,8 +60,8 @@ void main() {
     });
 
     testWidgets('Tag 文字消费全局字体族，不固定设计实例宽度', (tester) async {
-      final tokens = TThemeData.defaultData().copyWithTThemeData(
-        'tag-font-family-test',
+      final tokens = TThemeData.defaultData().copyWith(
+        name: 'tag-font-family-test',
         fontFamilyMap: {
           'fontFamily': FontFamily(
             fontFamily: 'Custom Tag Font',
@@ -299,8 +299,8 @@ void main() {
       const dangerLight = Color(0xFFEEDDBB);
       const success = Color(0xFF246813);
       const successLight = Color(0xFFBBEECC);
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'custom-tag-colors',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'custom-tag-colors',
         colorMap: {
           'brandColor': primary,
           'brandColorLight': primaryLight,
@@ -380,8 +380,8 @@ void main() {
       const warning = Color(0xFF102030);
       const danger = Color(0xFF203040);
       const success = Color(0xFF304050);
-      final token = TThemeData.defaultData().dark!.copyWithTThemeData(
-        'custom-dark-tag-colors',
+      final token = TThemeData.defaultData().dark!.copyWith(
+        name: 'custom-dark-tag-colors',
         colorMap: {
           'warningColor1': warning,
           'warningColorLight': const Color(0xFF111111),
@@ -477,8 +477,8 @@ void main() {
     });
 
     testWidgets('square 四档跟随全局 radiusSmall，组件 Theme 可覆盖', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'tag-square-radius-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'tag-square-radius-test',
         radiusMap: {'radiusSmall': 14, 'radiusDefault': 7},
       );
       for (final size in TTagSize.values.where((s) => s != TTagSize.custom)) {
@@ -529,8 +529,8 @@ void main() {
     });
 
     testWidgets('Theme 动画中方角和 success 填充消费动态 Token 回退', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'tag-animated-theme-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'tag-animated-theme-test',
         radiusMap: {'radiusSmall': 4},
       );
       final animatedTheme = const TTagThemeData().lerp(
@@ -645,7 +645,7 @@ void main() {
           expect(closeRect.left - textRect.right, spacing);
         });
       }
-      testWidgets('${sizeCase.size.name} 默认尺寸与小程序边框盒一致', (tester) async {
+      testWidgets('${sizeCase.size.name} 默认尺寸包含边框盒', (tester) async {
         await tester.pumpWidget(
           wrapWithTheme(TTag('尺寸', size: sizeCase.size, icon: Icons.star)),
         );
@@ -766,8 +766,8 @@ void main() {
       const containerColor = Color(0xFFABCDEF);
       const componentColor = Color(0xFF123456);
       const unrelatedBorder = Color(0xFF654321);
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'tag-outline-token-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'tag-outline-token-test',
         colorMap: {
           'bgColorContainer': containerColor,
           'bgColorComponent': componentColor,
@@ -891,8 +891,8 @@ void main() {
 
     testWidgets('关闭图标颜色读取 textColorPlaceholder，不跟随标签文字色', (tester) async {
       const placeholder = Color(0xFF987654);
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'tag-close-icon-color-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'tag-close-icon-color-test',
         colorMap: {
           'textColorPlaceholder': placeholder,
           'brandColor': const Color(0xFF123456),

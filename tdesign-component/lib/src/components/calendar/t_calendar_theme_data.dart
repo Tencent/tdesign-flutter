@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 ///
 /// 包含日历的装饰、字体和布局默认值。
 /// 样式字段通过 `ThemeData.mergeExtension` 在子树覆盖，不需要额外的实例 style 参数。
+///
+/// {@category ComponentTheme}
 class TCalendarThemeData extends ThemeExtension<TCalendarThemeData> {
   /// 日历整体高度；为 null 时由星期栏、月份标题、六行日期、间距和内边距计算视窗高度，不按全部月份展开。
   final double? height;

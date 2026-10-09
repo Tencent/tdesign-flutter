@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// TMessage 组件级 ThemeExtension
+///
+/// {@category ComponentTheme}
 class TMessageThemeData extends ThemeExtension<TMessageThemeData> {
   /// 背景色
   /// 未配置时使用 bgColorContainer Token。

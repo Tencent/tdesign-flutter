@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 ///
 /// 仅在对应实例参数未指定时生效；实例字体预设和段落参数
 /// 优先于这里的默认值。外部 Flutter [DefaultTextStyle] 不会自动覆盖 TDesign 文字。
+///
+/// {@category ComponentTheme}
 class TTextThemeData extends ThemeExtension<TTextThemeData> {
   const TTextThemeData({
     this.textStyle,

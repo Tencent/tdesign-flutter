@@ -18,7 +18,7 @@ void main() {
     expect(find.text('Button 按钮'), findsOneWidget);
   });
 
-  testWidgets('示例页面标题层级与小程序 Demo 壳一致', (tester) async {
+  testWidgets('示例页面标题层级保持一致', (tester) async {
     final token = TThemeData.defaultData();
     await tester.pumpWidget(
       ChangeNotifierProvider(
@@ -55,8 +55,8 @@ void main() {
   testWidgets(
     'compact module titles follow TD tokens despite Material text theme',
     (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'compact-title',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'compact-title',
         fontMap: {
           'fontTitleLarge': Font(
             size: 20,

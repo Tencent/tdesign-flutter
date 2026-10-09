@@ -9,6 +9,8 @@ import 't_fab_layout.dart';
 /// 仅管理 Fab 定位层的默认值（偏移、边界、拖拽阈值等）。
 /// 默认动作层固定使用 large / fill / primary；需要完整自定义动作层时使用
 /// `TFab.child`。
+///
+/// {@category ComponentTheme}
 class TFabThemeData extends ThemeExtension<TFabThemeData> {
   /// 距父级 Stack 右侧的默认偏移；未设置时为 16 逻辑像素。
   final double? defaultRight;

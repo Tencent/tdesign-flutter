@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// TToast 组件级 ThemeExtension
+///
+/// {@category ComponentTheme}
 class TToastThemeData extends ThemeExtension<TToastThemeData> {
   /// 背景色
   final Color? backgroundColor;

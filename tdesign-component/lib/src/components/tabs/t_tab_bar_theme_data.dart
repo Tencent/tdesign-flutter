@@ -17,6 +17,8 @@ enum TTabsBarVariant {
 /// TabBar 组件 ThemeExtension
 ///
 /// 管理 TTabsBar 的子树级视觉默认样式。
+///
+/// {@category ComponentTheme}
 class TTabsBarThemeData extends ThemeExtension<TTabsBarThemeData> {
   /// 栏背景色。
   final Color? backgroundColor;

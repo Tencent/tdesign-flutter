@@ -168,3 +168,11 @@ pnpm site
 ## 组件 Theme 文档入口（2026-10-09）
 
 57 页主入口 dartdoc 增加主题配置：51 个独立 Theme、3 个复用 Theme、2 个无独立 Theme 与全局 Theme 分别处理。双 SDK 生成与工作区字节一致，各 115 项文档专项、70 项真实 API 页面测试及严格分析通过；validate 零问题，73 个生产文件非注释 Token 不变。候选工具 #29 仍未合入 main，正式依赖/--check/最终 CI 与 autofix 仍为独立门禁。详见 [theme-presentation.md](theme-presentation.md)。
+
+## 全组件 Theme 配置表推广（2026-10-09）
+
+51 个独立组件 Theme 统一采用 Input 配置表方案，功能声明在前、Theme 在后；57 页保留 369 声明、438 个配置字段及 6 个专有可调用项。两 SDK 生成字节一致，独立 AST 无问题，文档与实际 API 页面回归及严格分析通过。完整证据、最终修复后的补验范围及正式工具交付门禁见 [component-theme-config-presentation.md](component-theme-config-presentation.md)。本轮修改仍为本地未提交状态。
+
+## Theme API 与平台描述核查
+
+本轮职责分析、清理范围与全仓库剩余引用清单见 [theme-api-and-platform-descriptions.md](theme-api-and-platform-descriptions.md)。未删除公开 API，历史来源与真实生态链接保留。

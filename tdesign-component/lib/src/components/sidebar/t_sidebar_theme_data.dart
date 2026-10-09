@@ -13,6 +13,8 @@ enum TSideBarVariant {
 ///
 /// 管理 TSideBar 的子树级视觉样式（内边距、选中/未选中颜色等）。
 /// 实例参数负责选中值、形态和交互；具体视觉值由本组件 Theme 配置。
+///
+/// {@category ComponentTheme}
 class TSideBarThemeData extends ThemeExtension<TSideBarThemeData> {
   /// 默认自定义文本框内边距
   final EdgeInsetsGeometry? contentPadding;

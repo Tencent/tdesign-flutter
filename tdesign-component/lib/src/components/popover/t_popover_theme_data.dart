@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 /// TPopover 组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树的默认气泡样式。
+///
+/// {@category ComponentTheme}
 class TPopoverThemeData extends ThemeExtension<TPopoverThemeData> {
   /// 气泡背景色
   final Color? backgroundColor;

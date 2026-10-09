@@ -11,6 +11,8 @@ import 't_avatar_types.dart';
 /// 头像组件级 ThemeExtension。
 ///
 /// 仅保存视觉默认值，不保存头像内容、回调或头像组成员。
+///
+/// {@category ComponentTheme}
 class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
   const TAvatarThemeData({
     this.dimension,

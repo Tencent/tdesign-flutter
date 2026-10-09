@@ -7,6 +7,8 @@ import 't_button_defaults.dart';
 /// TButton 组件级 ThemeExtension
 ///
 /// 只承载 [ButtonStyle] 不能表达的按钮子树默认视觉值。
+///
+/// {@category ComponentTheme}
 class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
   /// 图标与文案之间的间距，单位为逻辑像素。
   ///

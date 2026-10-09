@@ -7,8 +7,8 @@
 #### 主题配置
 
 组件主题通过 `TCheckboxThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TCheckboxThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TCheckboxThemeData` 配置项。
 
 #### 构造方法
 
@@ -75,76 +75,6 @@
 | label | String | - | 主文案。 | 是 |
 | subTitle | String? | - | 副文案。 | 否 |
 | value | T | - | 选项值。 | 是 |
-
-
-### TCheckboxThemeData
-
-TCheckbox 组件级 ThemeExtension
-
-通过 Theme 子树注入，控制子树默认样式。
-被 TCheckbox 和 TCheckboxGroup 共用。
-
-#### 构造方法
-
-##### TCheckboxThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 卡片背景颜色。 卡片模式下生效；null 时使用 bgColorContainer Token。 | 否 |
-| customSpace | EdgeInsetsGeometry? | - | 内容区域内边距。 null 时按是否有文案、卡片模式及当前字号计算内边距；纯指示器不增加文案内边距。 | 否 |
-| disableColor | Color? | - | 禁用态指示器的前景色；未选时用于描边色。 | 否 |
-| insetSpacing | double? | - | 文案与非指示器侧的内边距。 null 时使用 spacer2 Token。 | 否 |
-| selectColor | Color? | - | 选中态颜色。 null 时使用 brandColor Token。 | 否 |
-| spacing | double? | - | 指示器与文案间距。 null 时使用 spacer Token。 | 否 |
-| subTitleColor | Color? | - | 副标题颜色。 启用态 null 时使用 textColorSecondary Token；禁用态始终使用 textColorDisabled。 | 否 |
-| titleColor | Color? | - | 主标题颜色。 启用态 null 时使用 textColorPrimary Token；禁用态始终使用 textColorDisabled。 | 否 |
-| variant | TCheckboxVariant? | - | 复选框指示器的默认视觉变体；未设置时使用圆形。 | 否 |
-
-
-#### 实例方法
-
-##### TCheckboxThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| variant | TCheckboxVariant? | - | 字段含义：复选框指示器的默认视觉变体；未设置时使用圆形。 调用时的空值行为见方法说明。 | 否 |
-| selectColor | Color? | - | 字段含义：选中态颜色。 null 时使用 brandColor Token。 调用时的空值行为见方法说明。 | 否 |
-| disableColor | Color? | - | 字段含义：禁用态指示器的前景色；未选时用于描边色。 调用时的空值行为见方法说明。 | 否 |
-| titleColor | Color? | - | 字段含义：主标题颜色。 启用态 null 时使用 textColorPrimary Token；禁用态始终使用 textColorDisabled。 调用时的空值行为见方法说明。 | 否 |
-| subTitleColor | Color? | - | 字段含义：副标题颜色。 启用态 null 时使用 textColorSecondary Token；禁用态始终使用 textColorDisabled。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：卡片背景颜色。 卡片模式下生效；null 时使用 bgColorContainer Token。 调用时的空值行为见方法说明。 | 否 |
-| spacing | double? | - | 字段含义：指示器与文案间距。 null 时使用 spacer Token。 调用时的空值行为见方法说明。 | 否 |
-| insetSpacing | double? | - | 字段含义：文案与非指示器侧的内边距。 null 时使用 spacer2 Token。 调用时的空值行为见方法说明。 | 否 |
-| customSpace | EdgeInsetsGeometry? | - | 字段含义：内容区域内边距。 null 时按是否有文案、卡片模式及当前字号计算内边距；纯指示器不增加文案内边距。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TCheckboxThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TCheckboxThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TCheckboxThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TCheckboxThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
 
 
 ### TContentDirection
@@ -230,3 +160,28 @@ TCheckbox 组件级 ThemeExtension
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | Widget | - | 当前数据项的自定义内容。 | - |
+
+
+### TCheckboxThemeData
+
+TCheckbox 组件级 ThemeExtension
+
+通过 Theme 子树注入，控制子树默认样式。
+被 TCheckbox 和 TCheckboxGroup 共用。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 卡片背景颜色。 卡片模式下生效；null 时使用 bgColorContainer Token。 | 否 |
+| customSpace | EdgeInsetsGeometry? | - | 内容区域内边距。 null 时按是否有文案、卡片模式及当前字号计算内边距；纯指示器不增加文案内边距。 | 否 |
+| disableColor | Color? | - | 禁用态指示器的前景色；未选时用于描边色。 | 否 |
+| insetSpacing | double? | - | 文案与非指示器侧的内边距。 null 时使用 spacer2 Token。 | 否 |
+| selectColor | Color? | - | 选中态颜色。 null 时使用 brandColor Token。 | 否 |
+| spacing | double? | - | 指示器与文案间距。 null 时使用 spacer Token。 | 否 |
+| subTitleColor | Color? | - | 副标题颜色。 启用态 null 时使用 textColorSecondary Token；禁用态始终使用 textColorDisabled。 | 否 |
+| titleColor | Color? | - | 主标题颜色。 启用态 null 时使用 textColorPrimary Token；禁用态始终使用 textColorDisabled。 | 否 |
+| variant | TCheckboxVariant? | - | 复选框指示器的默认视觉变体；未设置时使用圆形。 | 否 |

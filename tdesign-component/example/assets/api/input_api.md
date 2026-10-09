@@ -11,8 +11,8 @@
 #### 主题配置
 
 组件主题通过 `TInputThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TInputThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TInputThemeData` 配置项。
 
 #### 构造方法
 
@@ -51,75 +51,6 @@
 | textAlign | TextAlign | TextAlign.start | 文本对齐方式。 | 否 |
 
 
-### TInputThemeData
-
-TInput 与 TTextarea 共用的组件级 ThemeExtension。
-
-输入组件的外层边框、颜色、内边距和提示文字样式在这里提供组件级默认值；
-默认状态不继承全局填充色，避免输入区被 `ThemeData.inputDecorationTheme`
-污染。
-
-#### 构造方法
-
-##### TInputThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 输入区域背景色。 null 时在 TFormItem 作用域内透明，独立输入框使用 bgColorContainer Token。 | 否 |
-| borderColor | Color? | - | 输入区域边框颜色。 null 时按启用、焦点与语义状态解析边框颜色；禁用态使用 componentStroke Token。 | 否 |
-| borderRadius | double? | - | 输入区域圆角。 对非多行、非无边框输入框设置为大于 0 的值时，输入框使用完整边框； 未设置时保留单行输入框的底部分隔线。 | 否 |
-| borderWidth | double? | - | 输入区域边框宽度。 null 时为 1 逻辑像素。 | 否 |
-| clearIconColor | Color? | - | 清除图标颜色。 null 时错误态使用 errorColor，其他状态使用 textColorPlaceholder Token。 | 否 |
-| clearIconSize | double? | - | 清除图标尺寸。 null 时为 20 逻辑像素。 | 否 |
-| contentPadding | EdgeInsetsGeometry? | - | 输入区域内边距。 null 时在 TFormItem 作用域内为零，独立输入框为四周 16 逻辑像素；Textarea 组合有独立的容器分工。 | 否 |
-| hintStyle | TextStyle? | - | 占位提示文本样式。 未指定的字段继承 TDesign 输入框提示词 token。 | 否 |
-
-
-#### 实例方法
-
-##### TInputThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| clearIconSize | double? | - | 字段含义：清除图标尺寸。 null 时为 20 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| hintStyle | TextStyle? | - | 字段含义：占位提示文本样式。 未指定的字段继承 TDesign 输入框提示词 token。 调用时的空值行为见方法说明。 | 否 |
-| clearIconColor | Color? | - | 字段含义：清除图标颜色。 null 时错误态使用 errorColor，其他状态使用 textColorPlaceholder Token。 调用时的空值行为见方法说明。 | 否 |
-| contentPadding | EdgeInsetsGeometry? | - | 字段含义：输入区域内边距。 null 时在 TFormItem 作用域内为零，独立输入框为四周 16 逻辑像素；Textarea 组合有独立的容器分工。 调用时的空值行为见方法说明。 | 否 |
-| borderRadius | double? | - | 字段含义：输入区域圆角。 对非多行、非无边框输入框设置为大于 0 的值时，输入框使用完整边框； 未设置时保留单行输入框的底部分隔线。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：输入区域背景色。 null 时在 TFormItem 作用域内透明，独立输入框使用 bgColorContainer Token。 调用时的空值行为见方法说明。 | 否 |
-| borderColor | Color? | - | 字段含义：输入区域边框颜色。 null 时按启用、焦点与语义状态解析边框颜色；禁用态使用 componentStroke Token。 调用时的空值行为见方法说明。 | 否 |
-| borderWidth | double? | - | 字段含义：输入区域边框宽度。 null 时为 1 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TInputThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TInputThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TInputThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TInputThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
 ### TInputClearButtonMode
 
 输入框清除按钮的显示模式。
@@ -145,3 +76,28 @@ TInput 与 TTextarea 共用的组件级 ThemeExtension。
 | success | TInputStatus | - | 成功状态。 | - |
 | warning | TInputStatus | - | 警告状态。 | - |
 | error | TInputStatus | - | 错误状态。 | - |
+
+
+### TInputThemeData
+
+TInput 与 TTextarea 共用的组件级 ThemeExtension。
+
+输入组件的外层边框、颜色、内边距和提示文字样式在这里提供组件级默认值；
+默认状态不继承全局填充色，避免输入区被 `ThemeData.inputDecorationTheme`
+污染。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 输入区域背景色。 null 时在 TFormItem 作用域内透明，独立输入框使用 bgColorContainer Token。 | 否 |
+| borderColor | Color? | - | 输入区域边框颜色。 null 时按启用、焦点与语义状态解析边框颜色；禁用态使用 componentStroke Token。 | 否 |
+| borderRadius | double? | - | 输入区域圆角。 对非多行、非无边框输入框设置为大于 0 的值时，输入框使用完整边框； 未设置时保留单行输入框的底部分隔线。 | 否 |
+| borderWidth | double? | - | 输入区域边框宽度。 null 时为 1 逻辑像素。 | 否 |
+| clearIconColor | Color? | - | 清除图标颜色。 null 时错误态使用 errorColor，其他状态使用 textColorPlaceholder Token。 | 否 |
+| clearIconSize | double? | - | 清除图标尺寸。 null 时为 20 逻辑像素。 | 否 |
+| contentPadding | EdgeInsetsGeometry? | - | 输入区域内边距。 null 时在 TFormItem 作用域内为零，独立输入框为四周 16 逻辑像素；Textarea 组合有独立的容器分工。 | 否 |
+| hintStyle | TextStyle? | - | 占位提示文本样式。 未指定的字段继承 TDesign 输入框提示词 token。 | 否 |

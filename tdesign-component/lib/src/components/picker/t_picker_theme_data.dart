@@ -7,6 +7,8 @@ import 'picker_defaults.dart';
 /// TPicker 组件级 ThemeExtension
 ///
 /// 被 TPicker 和 TDateTimePicker 共用。
+///
+/// {@category ComponentTheme}
 class TPickerThemeData extends ThemeExtension<TPickerThemeData> {
   /// 滚轮视窗高度，单位为逻辑像素；null 时使用默认值 200。
   ///

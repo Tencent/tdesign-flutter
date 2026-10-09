@@ -7,8 +7,8 @@
 #### 主题配置
 
 组件主题通过 `TImageThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TImageThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TImageThemeData` 配置项。
 
 #### 构造方法
 
@@ -40,67 +40,6 @@
 | width | double? | - | 图片宽度，未指定时为 72。 | 否 |
 
 
-### TImageThemeData
-
-图片组件的视觉默认值。
-
-#### 构造方法
-
-##### TImageThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| centerSlice | Rect? | - | 九宫格中心切片。 | 否 |
-| color | Color? | - | 图片叠加色。 | 否 |
-| colorBlendMode | BlendMode? | - | 颜色混合模式。 | 否 |
-| gaplessPlayback | bool? | - | 更新 provider 时是否保留上一帧。 未配置时为 false。 | 否 |
-| isAntiAlias | bool? | - | 是否启用抗锯齿。 未配置时为 false。 | 否 |
-| matchTextDirection | bool? | - | 是否匹配文字方向。 未配置时为 false。 | 否 |
-
-
-#### 实例方法
-
-##### TImageThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| color | Color? | - | 字段含义：图片叠加色。 调用时的空值行为见方法说明。 | 否 |
-| colorBlendMode | BlendMode? | - | 字段含义：颜色混合模式。 调用时的空值行为见方法说明。 | 否 |
-| centerSlice | Rect? | - | 字段含义：九宫格中心切片。 调用时的空值行为见方法说明。 | 否 |
-| matchTextDirection | bool? | - | 字段含义：是否匹配文字方向。 未配置时为 false。 调用时的空值行为见方法说明。 | 否 |
-| gaplessPlayback | bool? | - | 字段含义：更新 provider 时是否保留上一帧。 未配置时为 false。 调用时的空值行为见方法说明。 | 否 |
-| isAntiAlias | bool? | - | 字段含义：是否启用抗锯齿。 未配置时为 false。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TImageThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TImageThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TImageThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TImageThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
 ### TImageShape
 
 图片形状。
@@ -111,3 +50,22 @@
 | square | TImageShape | - | 方形。 | - |
 | roundedSquare | TImageShape | - | 圆角方形。 | - |
 | circle | TImageShape | - | 圆形。 | - |
+
+
+### TImageThemeData
+
+图片组件的视觉默认值。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| centerSlice | Rect? | - | 九宫格中心切片。 | 否 |
+| color | Color? | - | 图片叠加色。 | 否 |
+| colorBlendMode | BlendMode? | - | 颜色混合模式。 | 否 |
+| gaplessPlayback | bool? | - | 更新 provider 时是否保留上一帧。 未配置时为 false。 | 否 |
+| isAntiAlias | bool? | - | 是否启用抗锯齿。 未配置时为 false。 | 否 |
+| matchTextDirection | bool? | - | 是否匹配文字方向。 未配置时为 false。 | 否 |

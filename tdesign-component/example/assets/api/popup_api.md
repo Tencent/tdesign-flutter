@@ -7,8 +7,8 @@
 #### 主题配置
 
 组件主题通过 `TPopupThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TPopupThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TPopupThemeData` 配置项。
 
 #### 静态方法
 
@@ -434,123 +434,6 @@ right 方向的上下留白。
 | top | double | 0 | 顶部留白 | 否 |
 
 
-### TPopupThemeData
-
-Popup 子树默认样式，通过 Theme.extensions 注入。
-
-<!-- api-table: details -->
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| TPopupOptions 显式值 | - | - | 优先级：最高 | - |
-| TPopupThemeData | - | - | 优先级：其次 | - |
-| 组件默认值 | - | - | 优先级：最后 | - |
-
-#### 构造方法
-
-##### TPopupThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| barrierColor | Color? | - | 蒙层颜色，透明度直接由 `Color` 的 alpha 指定。 | 否 |
-| centerSize | Size? | - | center 未显式传入宽高时的默认面板尺寸 | 否 |
-| drawerWidth | double? | - | left / right 未显式传入宽度时的默认抽屉宽度 | 否 |
-| edgeHeight | double? | - | top / bottom 未显式传入高度时的默认面板高度 | 否 |
-| panelBackgroundColor | Color? | - | 内容区背景色 | 否 |
-| panelRadius | double? | - | 面板圆角；未指定时顶部/底部/居中取全局主题大圆角，左侧/右侧无圆角。 | 否 |
-
-
-#### 静态方法
-
-##### TPopupThemeData.lerpDouble
-
-位置参数：`a, b, t`
-
-
-数值线性插值。
-
-<!-- api-table: details -->
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 两端均为 null | - | - | null | - |
-| 一端为 null | - | - | 该端按 0 计算 | - |
-| 两端均非空 | - | - | 按 `t` 线性插值 | - |
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| a | double? | - | 起始值。 | 是 |
-| b | double? | - | 目标值。 | 是 |
-| t | double | - | 插值进度。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | double? | - | 插值结果；两端均为 null 时返回 null。 | - |
-
-
-#### 实例方法
-
-##### TPopupThemeData.copyWith
-
-复制主题；非空参数替换对应配置，null 参数保留当前配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| barrierColor | Color? | - | 蒙层颜色（含透明度）。 | 否 |
-| panelRadius | double? | - | 面板圆角。 | 否 |
-| panelBackgroundColor | Color? | - | 面板背景色。 | 否 |
-| edgeHeight | double? | - | 顶部/底部面板高度。 | 否 |
-| drawerWidth | double? | - | 左侧/右侧面板宽度。 | 否 |
-| centerSize | Size? | - | 居中面板尺寸。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TPopupThemeData | - | 应用指定参数后的主题副本。 | - |
-
-
-##### TPopupThemeData.lerp
-
-位置参数：`other, t`
-
-
-按 `t` 对主题进行插值。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TPopupThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TPopupThemeData | - | 过渡主题；目标为空或类型不匹配时返回当前对象。 | - |
-
-
-##### TPopupThemeData.merge
-
-位置参数：`other`
-
-
-合并主题；`other` 的非空字段优先，空字段保留当前值。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | TPopupThemeData? | - | 要合并的目标主题；为空时保留当前配置。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TPopupThemeData | - | 合并后的主题；`other` 为空时返回当前对象。 | - |
-
-
 ### TPopupPlacement
 
 `TPopupOptions.placement` 的弹出方向。
@@ -643,3 +526,59 @@ Popup 子树默认样式，通过 Theme.extensions 注入。
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | void | - | 无返回值。 | - |
+
+
+### TPopupThemeData
+
+Popup 子树默认样式，通过 Theme.extensions 注入。
+
+<!-- api-table: details -->
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| TPopupOptions 显式值 | - | - | 优先级：最高 | - |
+| TPopupThemeData | - | - | 优先级：其次 | - |
+| 组件默认值 | - | - | 优先级：最后 | - |
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| barrierColor | Color? | - | 蒙层颜色，透明度直接由 `Color` 的 alpha 指定。 | 否 |
+| centerSize | Size? | - | center 未显式传入宽高时的默认面板尺寸 | 否 |
+| drawerWidth | double? | - | left / right 未显式传入宽度时的默认抽屉宽度 | 否 |
+| edgeHeight | double? | - | top / bottom 未显式传入高度时的默认面板高度 | 否 |
+| panelBackgroundColor | Color? | - | 内容区背景色 | 否 |
+| panelRadius | double? | - | 面板圆角；未指定时顶部/底部/居中取全局主题大圆角，左侧/右侧无圆角。 | 否 |
+
+
+#### 静态方法
+
+##### TPopupThemeData.lerpDouble
+
+位置参数：`a, b, t`
+
+
+数值线性插值。
+
+<!-- api-table: details -->
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 两端均为 null | - | - | null | - |
+| 一端为 null | - | - | 该端按 0 计算 | - |
+| 两端均非空 | - | - | 按 `t` 线性插值 | - |
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| a | double? | - | 起始值。 | 是 |
+| b | double? | - | 目标值。 | 是 |
+| t | double | - | 插值进度。 | 是 |
+
+
+###### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | double? | - | 插值结果；两端均为 null 时返回 null。 | - |

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 /// TLoading 组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树的默认加载样式。
+///
+/// {@category ComponentTheme}
 class TLoadingThemeData extends ThemeExtension<TLoadingThemeData> {
   /// 图标颜色。
   ///
@@ -19,7 +21,7 @@ class TLoadingThemeData extends ThemeExtension<TLoadingThemeData> {
   final Axis? axis;
 
   /// 一次刷新的时间（毫秒），控制动画速度。
-  /// 未指定时默认 `800`ms（对齐 TDesign 小程序 / Mobile Vue 的 `duration` 默认值）。
+  /// 未指定时默认 `800`ms。
   /// 小于或等于 0 时归一化为 1 毫秒。
   final int? duration;
 

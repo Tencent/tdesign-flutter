@@ -94,6 +94,17 @@ void main(List<String> args) {
       jsonDecode(manifestFile.readAsStringSync()) as Map<String, dynamic>;
   final components = (manifest['components'] as List)
       .cast<Map<String, dynamic>>();
+  final selectedComponents = args
+      .where((arg) => arg.startsWith('--components='))
+      .expand((arg) => arg.substring('--components='.length).split(','))
+      .toSet();
+  if (selectedComponents.isNotEmpty && args.contains('--sync')) {
+    throw ArgumentError('Scoped auditing cannot synchronize the manifest.');
+  }
+  final knownComponents = components.map((item) => item['slug']).toSet();
+  if (!knownComponents.containsAll(selectedComponents)) {
+    throw ArgumentError('Unknown audit component: $selectedComponents');
+  }
   final owners = <String, String>{};
   for (final component in components) {
     final path = component['source']['path'] as String;
@@ -124,6 +135,9 @@ void main(List<String> args) {
     final owner = segments.contains('components')
         ? owners[segments[segments.indexOf('components') + 1]]
         : 'theme';
+    if (selectedComponents.isNotEmpty && !selectedComponents.contains(owner)) {
+      continue;
+    }
     final members = <String>[];
     final constructors = <String>[];
     declarations[name] = {
@@ -329,6 +343,10 @@ void main(List<String> args) {
   }
   final configured = <String>{};
   for (final component in components) {
+    if (selectedComponents.isNotEmpty &&
+        !selectedComponents.contains(component['slug'])) {
+      continue;
+    }
     for (final name in [
       ...component['api']['names'],
       ...?component['api']['functions'],
@@ -351,6 +369,19 @@ void main(List<String> args) {
       p.join(root, 'example/assets/api/${component['slug']}_api.md'),
     );
     final doc = docFile.existsSync() ? docFile.readAsStringSync() : '';
+    var seenComponentTheme = false;
+    for (final heading in RegExp(
+      r'^### (.+)$',
+      multiLine: true,
+    ).allMatches(doc)) {
+      final name = heading.group(1)!;
+      final node = nodes[name];
+      if (isComponentThemeDeclaration(node)) {
+        seenComponentTheme = true;
+      } else if (seenComponentTheme && node != null) {
+        issue('output-theme-order', name, exports[name]!, node.offset);
+      }
+    }
     var headers = <String>[];
     var outputOwner = component['slug'] as String;
     for (final line in apiContractLines(doc)) {
@@ -404,8 +435,65 @@ void main(List<String> args) {
         continue;
       }
       final next = doc.indexOf('\n### ', start + 1);
-      final section = doc.substring(start, next < 0 ? doc.length : next);
+      var section = doc.substring(start, next < 0 ? doc.length : next);
       final sourceNode = nodes[name];
+      final themeConfiguration = isComponentThemeConfiguration(
+        sourceNode,
+        section,
+      );
+      if (isComponentThemeDeclaration(sourceNode) && !themeConfiguration) {
+        issue(
+          'output-theme-configuration',
+          name,
+          exports[name]!,
+          sourceNode!.offset,
+        );
+      }
+      if (themeConfiguration) {
+        if (RegExp(r'^#### 配置项$', multiLine: true).allMatches(section).length !=
+                1 ||
+            '<!-- api-theme: fields -->'.allMatches(section).length != 1) {
+          issue(
+            'output-theme-configuration',
+            name,
+            exports[name]!,
+            sourceNode!.offset,
+          );
+        }
+        for (final method
+            in (sourceNode as ClassDeclaration).members
+                .whereType<MethodDeclaration>()) {
+          if (!method.isStatic &&
+              const {
+                'copyWith',
+                'lerp',
+                'merge',
+              }.contains(method.name.lexeme) &&
+              section.contains('##### $name.${method.name.lexeme}\n')) {
+            issue(
+              'output-theme-shared-method',
+              name,
+              exports[name]!,
+              sourceNode.offset,
+            );
+          }
+        }
+      }
+      if (section.contains('<!-- api-theme: fields -->')) {
+        if (!themeConfiguration) {
+          issue(
+            'output-theme-classification',
+            name,
+            exports[name]!,
+            sourceNode!.offset,
+          );
+          continue;
+        }
+        section = section.replaceFirst(
+          '#### 配置项\n',
+          '#### 构造方法\n\n##### $name\n',
+        );
+      }
       if (sourceNode is GenericTypeAlias) {
         for (final failure in typedefDocumentationIssues(sourceNode, section)) {
           issue(
@@ -451,6 +539,16 @@ void main(List<String> args) {
       }
       for (final entry in (declaration['callables'] as Map).entries) {
         final callable = entry.key as String;
+        if (themeConfiguration &&
+            const {'copyWith', 'lerp', 'merge'}.contains(callable) &&
+            (sourceNode as ClassDeclaration).members
+                .whereType<MethodDeclaration>()
+                .any(
+                  (method) =>
+                      !method.isStatic && method.name.lexeme == callable,
+                )) {
+          continue;
+        }
         String callableSection;
         if (declaration['kind'] == 'function') {
           callableSection = section;
@@ -575,6 +673,15 @@ void main(List<String> args) {
         }
       }
       for (final member in declaration['members'] as List<String>) {
+        if (themeConfiguration &&
+            const {'copyWith', 'lerp', 'merge'}.contains(member) &&
+            (sourceNode as ClassDeclaration).members
+                .whereType<MethodDeclaration>()
+                .any(
+                  (method) => !method.isStatic && method.name.lexeme == member,
+                )) {
+          continue;
+        }
         if (!section.contains('| $member |') &&
             !section.contains('##### $name.$member\n')) {
           issue(
@@ -600,7 +707,11 @@ void main(List<String> args) {
       }
     }
   }
-  for (final name in exports.keys.where((name) => !configured.contains(name))) {
+  for (final name in exports.keys.where(
+    (name) =>
+        !configured.contains(name) &&
+        (selectedComponents.isEmpty || declarations.containsKey(name)),
+  )) {
     issue('scope', name, exports[name]!, nodes[name]!.offset);
   }
   if (args.contains('--json')) {

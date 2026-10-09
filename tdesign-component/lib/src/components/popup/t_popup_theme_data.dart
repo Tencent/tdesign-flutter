@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 /// | TPopupOptions 显式值 | 最高 |
 /// | TPopupThemeData | 其次 |
 /// | 组件默认值 | 最后 |
+///
+/// {@category ComponentTheme}
 class TPopupThemeData extends ThemeExtension<TPopupThemeData> {
   /// 蒙层颜色，透明度直接由 [Color] 的 alpha 指定。
   final Color? barrierColor;

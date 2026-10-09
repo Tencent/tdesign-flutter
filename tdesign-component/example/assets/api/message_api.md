@@ -12,8 +12,8 @@ Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 
 #### 主题配置
 
 组件主题通过 `TMessageThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TMessageThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TMessageThemeData` 配置项。
 
 #### 构造方法
 
@@ -111,13 +111,27 @@ Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 
 
 立即移除消息；重复调用不会重复触发 `onDismissed`。
 
+### TMessageStatus
+
+TMessage 语义状态
+#### 枚举值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| info | TMessageStatus | - | 信息 | - |
+| success | TMessageStatus | - | 成功 | - |
+| warning | TMessageStatus | - | 警告 | - |
+| error | TMessageStatus | - | 错误 | - |
+
+
 ### TMessageThemeData
 
 TMessage 组件级 ThemeExtension
 
-#### 构造方法
+<!-- api-theme: fields -->
 
-##### TMessageThemeData
+#### 配置项
+
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
@@ -147,75 +161,3 @@ TMessage 组件级 ThemeExtension
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | double? | - | 按 t 线性插值的数值；两端均为 null 时为 null，仅一端为 null 时将该端按 0 计算。 | - |
-
-
-#### 实例方法
-
-##### TMessageThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 字段含义：背景色 未配置时使用 bgColorContainer Token。 调用时的空值行为见方法说明。 | 否 |
-| shape | ShapeBorder? | - | 字段含义：形状 未配置时使用 radiusDefault Token 构造圆角矩形。 调用时的空值行为见方法说明。 | 否 |
-| elevation | double? | - | 字段含义：阴影 未配置时使用全局 shadow1 绘制阴影；非空时改用 Material elevation。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TMessageThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TMessageThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TMessageThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TMessageThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
-##### TMessageThemeData.merge
-
-位置参数：`other`
-
-
-合并主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | TMessageThemeData? | - | 要合并的目标主题；为空时保留当前配置。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TMessageThemeData | - | 返回合并后的主题；`other` 的非空字段覆盖当前字段，other 为空时返回当前主题。 | - |
-
-
-### TMessageStatus
-
-TMessage 语义状态
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| info | TMessageStatus | - | 信息 | - |
-| success | TMessageStatus | - | 成功 | - |
-| warning | TMessageStatus | - | 警告 | - |
-| error | TMessageStatus | - | 错误 | - |

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 /// TSwitch 组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树默认样式。
+///
+/// {@category ComponentTheme}
 class TSwitchThemeData extends ThemeExtension<TSwitchThemeData> {
   /// 开启态轨道颜色。
   /// 未配置时使用 brandColor Token。

@@ -12,8 +12,8 @@ import 't_empty_theme_data.dart';
 /// ### 主题配置
 ///
 /// 组件主题通过 [TEmptyThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-/// `TEmptyThemeData` 说明。
+/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
+/// `TEmptyThemeData` 配置项。
 class TEmpty extends StatelessWidget {
   const TEmpty({
     this.icon = TIcons.info_circle_filled,

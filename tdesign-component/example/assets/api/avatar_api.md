@@ -12,8 +12,8 @@
 #### 主题配置
 
 组件主题通过 `TAvatarThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TAvatarThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TAvatarThemeData` 配置项。
 
 #### 构造方法
 
@@ -56,77 +56,6 @@
 | spacing | double? | - | 相邻头像的重叠宽度；非空时必须是有限、非负值，布局时限制到成员边长。 为空时使用组件主题，最终回退为 8 逻辑像素。 | 否 |
 
 
-### TAvatarThemeData
-
-头像组件级 ThemeExtension。
-
-仅保存视觉默认值，不保存头像内容、回调或头像组成员。
-
-#### 构造方法
-
-##### TAvatarThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 默认背景色；未设置时回退全局 `brandColorLightActive`。 | 否 |
-| circleBorderRadius | double? | - | 圆形头像圆角；未设置时回退全局 `radiusCircle`（逻辑像素）。 | 否 |
-| dimension | double? | - | 自定义头像边长；未设置时小、中、大尺寸分别为 40、48、64 逻辑像素。 | 否 |
-| foregroundColor | Color? | - | 默认图标与继承文字的前景色；未设置时回退全局品牌色。 | 否 |
-| groupBorderColor | Color? | - | 头像组成员描边颜色；未设置时使用 `bgColorContainer` Token。 | 否 |
-| groupBorderWidth | double? | - | 头像组成员描边宽度。 未设置时按成员尺寸使用小/中/大 1/2/3 逻辑像素。 | 否 |
-| groupShadow | BoxShadow? | - | 头像组成员阴影；未设置时使用 1px 水平偏移、2px `blurRadius` 和 15% 黑色。 | 否 |
-| groupSpacing | double? | - | 头像组重叠宽度；未设置时为 8 逻辑像素，实例 spacing 优先。 | 否 |
-| iconSize | double? | - | 默认图标大小；未设置时小、中、大尺寸分别为 20、24、32 逻辑像素。 | 否 |
-| squareBorderRadius | double? | - | 方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。 | 否 |
-
-
-#### 实例方法
-
-##### TAvatarThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| dimension | double? | - | 字段含义：自定义头像边长；未设置时小、中、大尺寸分别为 40、48、64 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| iconSize | double? | - | 字段含义：默认图标大小；未设置时小、中、大尺寸分别为 20、24、32 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| circleBorderRadius | double? | - | 字段含义：圆形头像圆角；未设置时回退全局 `radiusCircle`（逻辑像素）。 调用时的空值行为见方法说明。 | 否 |
-| squareBorderRadius | double? | - | 字段含义：方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：默认背景色；未设置时回退全局 `brandColorLightActive`。 调用时的空值行为见方法说明。 | 否 |
-| foregroundColor | Color? | - | 字段含义：默认图标与继承文字的前景色；未设置时回退全局品牌色。 调用时的空值行为见方法说明。 | 否 |
-| groupSpacing | double? | - | 字段含义：头像组重叠宽度；未设置时为 8 逻辑像素，实例 spacing 优先。 调用时的空值行为见方法说明。 | 否 |
-| groupBorderWidth | double? | - | 字段含义：头像组成员描边宽度。 未设置时按成员尺寸使用小/中/大 1/2/3 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| groupBorderColor | Color? | - | 字段含义：头像组成员描边颜色；未设置时使用 `bgColorContainer` Token。 调用时的空值行为见方法说明。 | 否 |
-| groupShadow | BoxShadow? | - | 字段含义：头像组成员阴影；未设置时使用 1px 水平偏移、2px `blurRadius` 和 15% 黑色。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TAvatarThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TAvatarThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | TAvatarThemeData? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TAvatarThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
 ### TAvatarSize
 
 头像尺寸。
@@ -159,3 +88,28 @@
 | --- | --- | --- | --- | --- |
 | startUp | TAvatarGroupCascading | - | 起始侧头像位于上层。 | - |
 | endUp | TAvatarGroupCascading | - | 结束侧头像位于上层。 | - |
+
+
+### TAvatarThemeData
+
+头像组件级 ThemeExtension。
+
+仅保存视觉默认值，不保存头像内容、回调或头像组成员。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 默认背景色；未设置时回退全局 `brandColorLightActive`。 | 否 |
+| circleBorderRadius | double? | - | 圆形头像圆角；未设置时回退全局 `radiusCircle`（逻辑像素）。 | 否 |
+| dimension | double? | - | 自定义头像边长；未设置时小、中、大尺寸分别为 40、48、64 逻辑像素。 | 否 |
+| foregroundColor | Color? | - | 默认图标与继承文字的前景色；未设置时回退全局品牌色。 | 否 |
+| groupBorderColor | Color? | - | 头像组成员描边颜色；未设置时使用 `bgColorContainer` Token。 | 否 |
+| groupBorderWidth | double? | - | 头像组成员描边宽度。 未设置时按成员尺寸使用小/中/大 1/2/3 逻辑像素。 | 否 |
+| groupShadow | BoxShadow? | - | 头像组成员阴影；未设置时使用 1px 水平偏移、2px `blurRadius` 和 15% 黑色。 | 否 |
+| groupSpacing | double? | - | 头像组重叠宽度；未设置时为 8 逻辑像素，实例 spacing 优先。 | 否 |
+| iconSize | double? | - | 默认图标大小；未设置时小、中、大尺寸分别为 20、24、32 逻辑像素。 | 否 |
+| squareBorderRadius | double? | - | 方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。 | 否 |

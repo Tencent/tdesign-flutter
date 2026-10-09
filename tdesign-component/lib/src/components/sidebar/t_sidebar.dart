@@ -36,8 +36,8 @@ class _SideBarItemData {
 /// ### 主题配置
 ///
 /// 组件主题通过 [TSideBarThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-/// `TSideBarThemeData` 说明。
+/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
+/// `TSideBarThemeData` 配置项。
 class TSideBar extends StatefulWidget {
   const TSideBar({
     Key? key,

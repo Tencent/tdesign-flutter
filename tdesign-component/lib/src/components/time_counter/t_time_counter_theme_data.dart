@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 ///
 /// 尺寸档位与形态由 `TTimeCounter.size` / `variant` 唯一选择；未设置的视觉值
 /// 在使用时回退当前 TDesign 全局 Token，而不是在 Theme 中冻结默认值。
+///
+/// {@category ComponentTheme}
 @immutable
 class TTimeCounterThemeData extends ThemeExtension<TTimeCounterThemeData> {
   const TTimeCounterThemeData({

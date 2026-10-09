@@ -14,7 +14,7 @@ import 't_theme.dart';
 extension TColors on TThemeData {
   // 功能色组----------------------------------------------------
 
-  /// 小程序 `--td-primary-color-*` 色阶；默认分别引用同级品牌色阶。
+  /// 主色阶；默认分别引用同级品牌色阶。
   Color get primaryColor1 => colorMap['primaryColor1'] ?? brandColor1;
 
   /// 主色第 2 级色阶；未配置时使用 [brandColor2]。
@@ -405,7 +405,7 @@ extension TColors on TThemeData {
   /// 页面背景色；优先同名 Token，未解析到时回退 grayColor1。
   Color get bgColorPage => colorMap['bgColorPage'] ?? grayColor1;
 
-  /// 小程序 `--td-bg-color-container`；浅色默认引用 [fontWhite1]。
+  /// 容器背景色；浅色默认引用 [fontWhite1]。
   Color get bgColorContainer => colorMap['bgColorContainer'] ?? fontWhite1;
 
   /// 容器背景的按压态颜色；优先读取同名颜色 Token，否则使用内置回退色。
@@ -420,15 +420,15 @@ extension TColors on TThemeData {
   Color get bgColorSecondaryContainerActive =>
       colorMap['bgColorSecondaryContainerActive'] ?? grayColor4;
 
-  /// 小程序 `--td-bg-color-secondarycomponent`，默认引用灰阶 4。
+  /// 次要组件背景色，默认引用灰阶 4。
   Color get bgColorSecondaryComponent =>
       colorMap['bgColorSecondaryComponent'] ?? grayColor4;
 
-  /// 小程序 `--td-bg-color-secondarycomponent-active`，默认引用灰阶 6。
+  /// 次要组件激活背景色，默认引用灰阶 6。
   Color get bgColorSecondaryComponentActive =>
       colorMap['bgColorSecondaryComponentActive'] ?? grayColor6;
 
-  /// 小程序 `--td-bg-color-specialcomponent`；暗色主题默认透明。
+  /// 特殊组件背景色；暗色主题默认透明。
   Color get bgColorSpecialComponent =>
       colorMap['bgColorSpecialComponent'] ?? whiteColor1;
 
@@ -449,11 +449,11 @@ extension TColors on TThemeData {
   /// 组件边框颜色；优先读取同名颜色 Token，否则使用内置回退色。
   Color get componentBorder => colorMap['componentBorder'] ?? grayColor4;
 
-  /// 小程序一级分割线颜色，默认与 [componentStroke] 使用同一色阶。
+  /// 一级分割线颜色，默认与 [componentStroke] 使用同一色阶。
   Color get borderLevel1Color =>
       colorMap['borderLevel1Color'] ?? componentStroke;
 
-  /// 小程序二级边框颜色，默认与 [componentBorder] 使用同一色阶。
+  /// 二级边框颜色，默认与 [componentBorder] 使用同一色阶。
   Color get borderLevel2Color =>
       colorMap['borderLevel2Color'] ?? componentBorder;
 
@@ -472,7 +472,7 @@ extension TColors on TThemeData {
   /// 禁用文字颜色；优先读取同名颜色 Token，否则使用内置回退色。
   Color get textColorDisabled => colorMap['textColorDisabled'] ?? fontGray4;
 
-  /// 小程序 `--td-text-color-anti`，默认引用 [fontWhite1]。
+  /// 反色文字颜色，默认引用 [fontWhite1]。
   Color get textColorAnti => colorMap['textColorAnti'] ?? fontWhite1;
 
   /// 品牌文字颜色；优先读取同名颜色 Token，否则使用内置回退色。

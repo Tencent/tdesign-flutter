@@ -4,7 +4,7 @@ description: 如何使用 TThemeData 自定义 Flutter 主题
 spline: explain
 ---
 
-TDesign Flutter 使用 `TThemeData` 和 Flutter `ThemeData` 描述主题。应用应通过 `TTheme` 注入主题数据，不使用 CSS Variables 或小程序 `page` 样式。
+TDesign Flutter 使用 `TThemeData` 和 Flutter `ThemeData` 描述主题。应用通过 `TTheme` 注入主题数据。
 
 ## 全局自定义
 

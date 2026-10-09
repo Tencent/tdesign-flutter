@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 /// 骨架屏组件级 ThemeExtension。
 ///
 /// 仅保存占位块的视觉和布局默认值；动画、延迟与具体布局由实例决定。
+///
+/// {@category ComponentTheme}
 class TSkeletonThemeData extends ThemeExtension<TSkeletonThemeData> {
   const TSkeletonThemeData({
     this.blockColor,

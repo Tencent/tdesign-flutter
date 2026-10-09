@@ -12,8 +12,8 @@ title 与 content 至少提供一个；actionsWidget 与非空 actions 互斥。
 #### 主题配置
 
 组件主题通过 `TDialogThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TDialogThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TDialogThemeData` 配置项。
 
 #### 构造方法
 
@@ -119,6 +119,18 @@ Dialog 操作项。
 | title | String? | - | 标题文案；为空时不显示标题。 | 否 |
 
 
+### TDialogActionRole
+
+Dialog 操作的语义角色。
+#### 枚举值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| normal | TDialogActionRole | - | 次要操作。 | - |
+| primary | TDialogActionRole | - | 主要操作。 | - |
+| destructive | TDialogActionRole | - | 危险操作。 | - |
+
+
 ### TDialogThemeData
 
 TDialog 组件级 ThemeExtension
@@ -127,9 +139,10 @@ TDialog 组件级 ThemeExtension
 面板视觉值由本扩展统一配置；未设置时回退 TDesign Token 或组件内置值，
 不从 Flutter DialogTheme 读取。
 
-#### 构造方法
+<!-- api-theme: fields -->
 
-##### TDialogThemeData
+#### 配置项
+
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
@@ -164,79 +177,3 @@ TDialog 组件级 ThemeExtension
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | double? | - | 按 t 线性插值的数值；两端均为 null 时为 null，仅一端为 null 时将该端按 0 计算。 | - |
-
-
-#### 实例方法
-
-##### TDialogThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 字段含义：背景色（对应 Material `DialogThemeData.backgroundColor`） 未配置时使用 bgColorContainer Token。 调用时的空值行为见方法说明。 | 否 |
-| shape | ShapeBorder? | - | 字段含义：形状（圆角；对应 Material `DialogThemeData.shape`） 未配置时使用 radiusExtraLarge Token 构造圆角矩形。 调用时的空值行为见方法说明。 | 否 |
-| elevation | double? | - | 字段含义：阴影（对应 Material `DialogThemeData.elevation`） 未配置时为 0。 调用时的空值行为见方法说明。 | 否 |
-| titleTextStyle | TextStyle? | - | 字段含义：标题文案样式（对应 Material `DialogThemeData.titleTextStyle`） 未配置时使用 fontTitleLarge / textColorPrimary Token。 调用时的空值行为见方法说明。 | 否 |
-| contentTextStyle | TextStyle? | - | 字段含义：内容文案样式（对应 Material `DialogThemeData.contentTextStyle`） 未配置时使用 fontBodyLarge / textColorSecondary Token。 调用时的空值行为见方法说明。 | 否 |
-| contentPadding | EdgeInsetsGeometry? | - | 字段含义：内容内边距（对应 Material `Dialog` 的 contentPadding；TDesign 扩展） 未配置时左、上、右均使用 spacer3，底部为 0。 调用时的空值行为见方法说明。 | 否 |
-| maxHeight | double? | - | 字段含义：面板最大高度。 未配置时为视口高度的 80%；同时不超过视口高度减 spacer4，最小为 0。 调用时的空值行为见方法说明。 | 否 |
-| width | double? | - | 字段含义：弹窗宽度 未配置时为 311 逻辑像素，实际布局仍受可用宽度限制。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TDialogThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TDialogThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TDialogThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TDialogThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
-##### TDialogThemeData.merge
-
-位置参数：`other`
-
-
-合并主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | TDialogThemeData? | - | 要合并的目标主题；为空时保留当前配置。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TDialogThemeData | - | other 的非空字段优先的合并主题；other 为 null 时返回当前主题。 | - |
-
-
-### TDialogActionRole
-
-Dialog 操作的语义角色。
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| normal | TDialogActionRole | - | 次要操作。 | - |
-| primary | TDialogActionRole | - | 主要操作。 | - |
-| destructive | TDialogActionRole | - | 危险操作。 | - |

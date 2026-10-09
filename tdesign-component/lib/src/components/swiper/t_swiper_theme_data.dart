@@ -10,6 +10,8 @@ const _defaultControlIconSize = 18.0;
 /// 轮播组件级 ThemeExtension。
 ///
 /// 保存指示器、内容圆角和切换按钮的视觉默认值。
+///
+/// {@category ComponentTheme}
 class TSwiperThemeData extends ThemeExtension<TSwiperThemeData> {
   const TSwiperThemeData({
     this.paginationAlignment,

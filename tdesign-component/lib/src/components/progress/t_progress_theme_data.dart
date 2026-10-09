@@ -9,6 +9,8 @@ import 't_progress_defaults.dart';
 ///
 /// 通过 Theme 子树注入，控制子树的默认视觉值。
 /// 除进度值、状态与线性渐变等实例语义外，具体绘制值优先读取组件 Theme。
+///
+/// {@category ComponentTheme}
 class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
   /// 进度条粗细
   final double? strokeWidth;

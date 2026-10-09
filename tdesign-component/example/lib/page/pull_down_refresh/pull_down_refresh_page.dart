@@ -48,8 +48,7 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
           title: '自定义提示语',
           children: [
             ExampleItem(
-              desc:
-                  'loadingTexts（小程序已有公开 props 的新增 API 演示，Demo 形态仅参考 Mobile Vue）',
+              desc: '通过 loadingTexts 自定义四个刷新阶段的提示语',
               methodName: 'PullDownRefreshLoadingTextsExample',
               builder: (_) => const PullDownRefreshLoadingTextsExample(),
             ),
@@ -59,8 +58,7 @@ class _TPullDownRefreshPageState extends State<TPullDownRefreshPage> {
           title: '刷新超时',
           children: [
             ExampleItem(
-              desc:
-                  'refreshTimeout（小程序已有公开 props 的新增 API 演示，Demo 形态仅参考 Mobile Vue）',
+              desc: '通过 refreshTimeout 设置刷新超时时间',
               methodName: 'PullDownRefreshTimeoutExample',
               builder: (_) => const PullDownRefreshTimeoutExample(),
             ),

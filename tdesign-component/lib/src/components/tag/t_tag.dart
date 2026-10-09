@@ -16,8 +16,8 @@ import 't_tag_types.dart';
 /// ### 主题配置
 ///
 /// 组件主题通过 [TTagThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-/// `TTagThemeData` 说明。
+/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
+/// `TTagThemeData` 配置项。
 class TTag extends StatelessWidget {
   const TTag(
     this.text, {
@@ -287,7 +287,7 @@ class TTag extends StatelessWidget {
         break;
       case TTagColorPreset.defaultTheme:
         if (isOutline) {
-          // 小程序 light-outline/default 单独使用 component-border；普通
+          // light-outline/default 单独使用 component-border；普通
           // outline/default 则使用 tag-default-color 的回退 bg-color-component。
           borderColor = isLight
               ? token.componentBorder

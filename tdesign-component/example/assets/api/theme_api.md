@@ -10,6 +10,17 @@
 使用 `TMaterialThemeBuilder` 构建主题，或将 `TThemeData` 放入 Flutter
 `ThemeData.extensions`；组件级 ThemeExtension 的字段与回退见各组件 API 页。
 
+#### 组件主题的共用操作
+
+各组件 API 页末尾的 Theme 配置表列出该组件支持的字段。
+`copyWith` 创建主题副本，非空参数替换字段，省略或传入 null 保留原值；
+如需恢复下层 Theme 或 Token，重新构造主题并只传入仍需保留的字段。
+`lerp(other, t)` 在当前与目标主题间生成过渡配置，目标为空或类型不匹配时
+保留当前主题；通常 t 为 0、1 时对应两端。各字段可能插值、切换或保留继承，
+特殊行为见对应组件的 Theme 说明。
+提供 `merge` 的组件主题支持目标非空字段覆盖当前字段，目标为空时保留当前主题；
+此方法不是所有组件主题都提供的能力。
+
 #### 构造方法
 
 ##### TThemeData
@@ -20,8 +31,8 @@
 | extraThemeData | TExtraThemeData? | - | 额外定义的结构 | 否 |
 | fontFamilyMap | TMap&lt;String, FontFamily&gt; | - | 字体样式 | 是 |
 | fontMap | TMap&lt;String, Font&gt; | - | 字体尺寸 | 是 |
-| fontMetricMap | TMap&lt;String, double&gt;? | - | 小程序独立字号与行高 Token，单位为 Flutter 逻辑像素。 | 否 |
-| insetShadowMap | TMap&lt;String, BorderSide&gt;? | - | 小程序 blur=0 的内投影在 Flutter 中对应的内侧边线。 | 否 |
+| fontMetricMap | TMap&lt;String, double&gt;? | - | 独立字号与行高 Token，单位为 Flutter 逻辑像素。 | 否 |
+| insetShadowMap | TMap&lt;String, BorderSide&gt;? | - | 内投影对应的定向内侧边线。 | 否 |
 | name | String | - | 名称 | 是 |
 | radiusMap | TMap&lt;String, double&gt; | - | 圆角 | 是 |
 | refMap | TMap&lt;String, String&gt; | - | 映射关系 | 是 |
@@ -78,30 +89,6 @@
 | 返回值 | TThemeData? | - | 解析成功的 Token 主题；空字符串、格式错误或缺少指定配置时为 null。 | - |
 
 
-##### TThemeData.parseThemeData
-
-位置参数：`name, themeConfig, extraThemeData`
-
-
-从已解析的 `themeConfig` 读取 `name` 对应的主题。
-配置不存在或对应映射为空时，返回本地映射为空但仍可通过默认 Token 回退解析的主题；
-此时不会解析或安装 `extraThemeData`。仅当对应配置存在且非空时，非空 `extraThemeData`
-才会参与解析并安装到返回主题。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| name | String | - | 待解析的主题名称。 | 是 |
-| themeConfig | dynamic | - | 已解析的主题 JSON 配置。 | 是 |
-| extraThemeData | TExtraThemeData? | - | 可选的额外主题数据；仅在 name 对应的配置存在且非空时解析并安装。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TThemeData | - | 指定名称的 Token 主题；缺失配置时返回带默认映射回退的空本地主题。 | - |
-
-
 #### 实例方法
 
 ##### TThemeData.copyWith
@@ -113,12 +100,12 @@
 | name | String? | - | 字段含义：名称 调用时的空值行为见方法说明。 | 否 |
 | colorMap | Map&lt;String, Color&gt;? | - | 字段含义：颜色 调用时的空值行为见方法说明。 | 否 |
 | fontMap | Map&lt;String, Font&gt;? | - | 字段含义：字体尺寸 调用时的空值行为见方法说明。 | 否 |
-| fontMetricMap | Map&lt;String, double&gt;? | - | 字段含义：小程序独立字号与行高 Token，单位为 Flutter 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
+| fontMetricMap | Map&lt;String, double&gt;? | - | 字段含义：独立字号与行高 Token，单位为 Flutter 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
 | radiusMap | Map&lt;String, double&gt;? | - | 字段含义：圆角 调用时的空值行为见方法说明。 | 否 |
 | fontFamilyMap | Map&lt;String, FontFamily&gt;? | - | 字段含义：字体样式 调用时的空值行为见方法说明。 | 否 |
 | shadowMap | Map&lt;String, List&lt;BoxShadow&gt;&gt;? | - | 字段含义：阴影 调用时的空值行为见方法说明。 | 否 |
-| insetShadowMap | Map&lt;String, BorderSide&gt;? | - | 字段含义：小程序 blur=0 的内投影在 Flutter 中对应的内侧边线。 调用时的空值行为见方法说明。 | 否 |
-| marginMap | Map&lt;String, double&gt;? | - | 间距 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
+| insetShadowMap | Map&lt;String, BorderSide&gt;? | - | 字段含义：内投影对应的定向内侧边线。 调用时的空值行为见方法说明。 | 否 |
+| spacerMap | Map&lt;String, double&gt;? | - | 间距 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
 | extraThemeData | TExtraThemeData? | - | 字段含义：额外定义的结构 调用时的空值行为见方法说明。 | 否 |
 
 
@@ -126,35 +113,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | ThemeExtension&lt;TThemeData&gt; | - | 复制 Token 主题并合并传入的映射；未传入的映射值沿用当前配置。 name 为空时使用 default；extraThemeData 为空时保留当前扩展数据。 | - |
-
-
-##### TThemeData.copyWithTThemeData
-
-位置参数：`name`
-
-
-从父类拷贝
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| name | String | - | 副本的主题名称。 | 是 |
-| colorMap | Map&lt;String, Color&gt;? | - | 颜色 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
-| fontMap | Map&lt;String, Font&gt;? | - | 复合字体 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
-| fontMetricMap | Map&lt;String, double&gt;? | - | 字号与行高 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
-| radiusMap | Map&lt;String, double&gt;? | - | 圆角 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
-| fontFamilyMap | Map&lt;String, FontFamily&gt;? | - | 字体栈 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
-| shadowMap | Map&lt;String, List&lt;BoxShadow&gt;&gt;? | - | 外投影 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
-| insetShadowMap | Map&lt;String, BorderSide&gt;? | - | 内侧边线 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
-| marginMap | Map&lt;String, double&gt;? | - | 间距 Token 的增量配置；沿用 marginMap 参数名，合并到 spacerMap。 | 否 |
-| extraThemeData | TExtraThemeData? | - | 扩展主题数据；为空时沿用当前配置。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TThemeData | - | 复制并合并指定映射后的 TThemeData；未传入的映射沿用当前配置。 | - |
+| 返回值 | TThemeData | - | 复制 Token 主题并合并传入的映射；未传入的映射值沿用当前配置。 name 和 extraThemeData 为空时保留当前名称和扩展数据。 | - |
 
 
 ##### TThemeData.lerp
@@ -162,130 +121,24 @@
 位置参数：`other, t`
 
 
-生成主题过渡配置。
+在当前主题与目标主题间生成过渡配置。
+
+t 为 0 或 1 时返回对应端点；目标为空时返回当前主题。
+颜色、字号、行高、圆角、阴影和间距按有效 Token 值插值，
+单侧存在的 Token 保留；名称、字体族、业务扩展和明暗关联在 t=0.5 切换。
+相同且未显式覆盖的 Token 引用继续沿用，其他值保存在新的映射中。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 保留 ThemeExtension 接口的进度参数；当前实现忽略该值。 | 是 |
+| other | ThemeExtension&lt;TThemeData&gt;? | - | 目标主题；为空或类型不匹配时返回当前主题。 | 是 |
+| t | double | - | 过渡进度；0 为当前主题，1 为目标主题，离散配置在 0.5 切换。 | 是 |
 
 
 ###### 返回值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| 返回值 | ThemeExtension&lt;TThemeData&gt; | - | 返回使用目标主题 Token 映射的新主题；此实现不使用 t 做连续插值。 other 为空或类型不匹配时返回当前主题。当前实现不会保留 `extraThemeData`， 业务扩展数据需要由调用方在主题切换后重新注入。 | - |
-
-
-##### TThemeData.ofColor
-
-位置参数：`key`
-
-
-按 `key` 读取颜色 Token；没有本地配置且无法解析引用或默认映射时返回 null。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| key | String? | - | 要查询的 Token 键；为空或未命中时返回 null。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | Color? | - | 命中的颜色 Token；本地、引用链和默认映射都未命中时为 null。 | - |
-
-
-##### TThemeData.ofCorner
-
-位置参数：`key`
-
-
-按 `key` 读取圆角 Token，单位为逻辑像素；找不到时返回 null。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| key | String? | - | 要查询的 Token 键；为空或未命中时返回 null。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | double? | - | 命中的圆角值，单位为逻辑像素；未命中时为 null。 | - |
-
-
-##### TThemeData.ofExtra
-
-类型参数：`T extends TExtraThemeData`
-
-
-无参数。
-
-读取指定 TExtraThemeData 子类型的扩展数据；未配置或类型不匹配时返回 null。
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | T? | - | 指定类型的额外主题数据；未配置或类型不匹配时为 null。 | - |
-
-
-##### TThemeData.ofFont
-
-位置参数：`key`
-
-
-按 `key` 读取复合字体 Token；没有本地配置且无法解析引用或默认映射时返回 null。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| key | String? | - | 要查询的 Token 键；为空或未命中时返回 null。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | Font? | - | 命中的复合字体 Token；本地、引用链和默认映射都未命中时为 null。 | - |
-
-
-##### TThemeData.ofFontFamily
-
-位置参数：`key`
-
-
-按 `key` 读取字体栈 Token；找不到时返回 null。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| key | String? | - | 要查询的 Token 键；为空或未命中时返回 null。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | FontFamily? | - | 命中的字体栈 Token；未命中时为 null。 | - |
-
-
-##### TThemeData.ofShadow
-
-位置参数：`key`
-
-
-按 `key` 读取外投影列表；找不到时返回 null。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| key | String? | - | 要查询的 Token 键；为空或未命中时返回 null。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | List&lt;BoxShadow&gt;? | - | 命中的外投影列表；未命中时为 null。 | - |
+| 返回值 | TThemeData | - | 两端之间的 Token 主题；端点返回原主题，中间值返回独立映射。 | - |
 
 
 ### Font
@@ -816,16 +669,16 @@ TDesign 主题包含完整色值组，业务可以按需二次封装。未显式
 | bgColorComponent | Color | - | 组件默认背景色；优先读取同名颜色 Token，否则使用内置回退色。 | - |
 | bgColorComponentActive | Color | - | 组件按压态背景色；优先读取同名颜色 Token，否则使用内置回退色。 | - |
 | bgColorComponentDisabled | Color | - | 组件禁用态背景色；优先读取同名颜色 Token，否则使用内置回退色。 | - |
-| bgColorContainer | Color | - | 小程序 `--td-bg-color-container`；浅色默认引用 `fontWhite1`。 | - |
+| bgColorContainer | Color | - | 容器背景色；浅色默认引用 `fontWhite1`。 | - |
 | bgColorContainerActive | Color | - | 容器背景的按压态颜色；优先读取同名颜色 Token，否则使用内置回退色。 | - |
 | bgColorPage | Color | - | 页面背景色；优先同名 Token，未解析到时回退 grayColor1。 | - |
-| bgColorSecondaryComponent | Color | - | 小程序 `--td-bg-color-secondarycomponent`，默认引用灰阶 4。 | - |
-| bgColorSecondaryComponentActive | Color | - | 小程序 `--td-bg-color-secondarycomponent-active`，默认引用灰阶 6。 | - |
+| bgColorSecondaryComponent | Color | - | 次要组件背景色，默认引用灰阶 4。 | - |
+| bgColorSecondaryComponentActive | Color | - | 次要组件激活背景色，默认引用灰阶 6。 | - |
 | bgColorSecondaryContainer | Color | - | 次级容器背景色；优先读取同名颜色 Token，否则使用内置回退色。 | - |
 | bgColorSecondaryContainerActive | Color | - | 次级容器背景的按压态颜色；优先读取同名颜色 Token，否则使用内置回退色。 | - |
-| bgColorSpecialComponent | Color | - | 小程序 `--td-bg-color-specialcomponent`；暗色主题默认透明。 | - |
-| borderLevel1Color | Color | - | 小程序一级分割线颜色，默认与 `componentStroke` 使用同一色阶。 | - |
-| borderLevel2Color | Color | - | 小程序二级边框颜色，默认与 `componentBorder` 使用同一色阶。 | - |
+| bgColorSpecialComponent | Color | - | 特殊组件背景色；暗色主题默认透明。 | - |
+| borderLevel1Color | Color | - | 一级分割线颜色，默认与 `componentStroke` 使用同一色阶。 | - |
+| borderLevel2Color | Color | - | 二级边框颜色，默认与 `componentBorder` 使用同一色阶。 | - |
 | brandColor | Color | - | 未解析到同名 Token 时的回退色：#0052D9。 | - |
 | brandColor1 | Color | - | 未解析到同名 Token 时的回退色：#F2F3FF。 | - |
 | brandColor10 | Color | - | 未解析到同名 Token 时的回退色：#001A57。 | - |
@@ -885,7 +738,7 @@ TDesign 主题包含完整色值组，业务可以按需二次封装。未显式
 | maskActive | Color | - | 弹层遮罩色。 | - |
 | maskBackground | Color | - | 二维码等背景遮罩色。 | - |
 | maskDisabled | Color | - | 禁用态遮罩色。 | - |
-| primaryColor1 | Color | - | 小程序 `--td-primary-color-*` 色阶；默认分别引用同级品牌色阶。 | - |
+| primaryColor1 | Color | - | 主色阶；默认分别引用同级品牌色阶。 | - |
 | primaryColor10 | Color | - | 主色第 10 级色阶；未配置时使用 `brandColor10`。 | - |
 | primaryColor2 | Color | - | 主色第 2 级色阶；未配置时使用 `brandColor2`。 | - |
 | primaryColor3 | Color | - | 主色第 3 级色阶；未配置时使用 `brandColor3`。 | - |
@@ -915,7 +768,7 @@ TDesign 主题包含完整色值组，业务可以按需二次封装。未显式
 | successColorLight | Color | - | 未解析到同名 Token 时的回退色：#E3F9E9。 | - |
 | successColorLightActive | Color | - | 浅色成功色点击态，默认使用成功色阶 2。 | - |
 | tableShadowColor | Color | - | 表格专用阴影色。 | - |
-| textColorAnti | Color | - | 小程序 `--td-text-color-anti`，默认引用 `fontWhite1`。 | - |
+| textColorAnti | Color | - | 反色文字颜色，默认引用 `fontWhite1`。 | - |
 | textColorBrand | Color | - | 品牌文字颜色；优先读取同名颜色 Token，否则使用内置回退色。 | - |
 | textColorDisabled | Color | - | 禁用文字颜色；优先读取同名颜色 Token，否则使用内置回退色。 | - |
 | textColorLink | Color | - | 链接文字颜色；优先读取同名颜色 Token，否则使用内置回退色。 | - |
@@ -946,7 +799,7 @@ TDesign 主题包含完整色值组，业务可以按需二次封装。未显式
 适用类型：`FontFamily`
 
 
-将小程序的 CSS 字体栈转换为当前 Flutter 平台可绘制的字体选择。
+将主题字体栈解析为当前 Flutter 平台可绘制的字体选择。
 保留 Token 原值；非 Apple 平台对默认栈使用 Roboto 作为主字体。
 
 #### 属性
@@ -968,8 +821,8 @@ TDesign 主题包含完整色值组，业务可以按需二次封装。未显式
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| fontFamily | FontFamily? | - | 小程序 `--td-font-family`；可用于 Flutter `TextStyle.fontFamily` 和 `fontFamilyFallback`。`TText` 在非 Apple 平台会为默认字体栈选择 Flutter 可用的主字体，不改变这里保存的小程序原始值。 | - |
-| fontFamilyMedium | FontFamily? | - | 小程序 `--td-font-family-medium`。 | - |
+| fontFamily | FontFamily? | - | 默认字体栈；可用于 Flutter `TextStyle.fontFamily` 和 `fontFamilyFallback`。`TText` 在非 Apple 平台会为默认字体栈选择 Flutter 可用的主字体，不改变这里保存的 Token 原值。 | - |
+| fontFamilyMedium | FontFamily? | - | 中等字重字体栈。 | - |
 
 
 ### TFontMetrics
@@ -977,7 +830,7 @@ TDesign 主题包含完整色值组，业务可以按需二次封装。未显式
 适用类型：`TThemeData`
 
 
-小程序独立字号与行高 Token。CSS 中 `--td-font-*` 由这些变量组合而成。
+独立字号与行高 Token，用于组合字体样式。
 
 #### 属性
 
@@ -1038,7 +891,7 @@ TDesign 主题包含完整色值组，业务可以按需二次封装。未显式
 适用类型：`TThemeData`
 
 
-小程序复合字体 Token。显式覆盖复合 `Font` 时以它为准；否则随独立字号和行高变化。
+复合字体 Token。显式覆盖复合 `Font` 时以它为准；否则随独立字号和行高变化。
 
 #### 属性
 
@@ -1077,11 +930,11 @@ TDesign 主题包含完整色值组，业务可以按需二次封装。未显式
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| radiusCircle | double | - | Flutter 固定逻辑像素圆角，默认 9999。 小程序 `--td-radius-circle` 为 CSS `50%`；这里是明确的跨端几何例外。 自定义值仍按逻辑像素解释，不按宽高比例解释。 | - |
+| radiusCircle | double | - | Flutter 固定逻辑像素圆角，默认 9999。 自定义值仍按逻辑像素解释，不按宽高比例解释。 | - |
 | radiusDefault | double | - | 默认圆角，默认 6 逻辑像素。 | - |
 | radiusExtraLarge | double | - | 特大圆角，默认 12 逻辑像素。 | - |
 | radiusLarge | double | - | 大圆角，默认 9 逻辑像素。 | - |
-| radiusRound | double | - | 小程序 `--td-radius-round: 999px`，Flutter 默认 999 逻辑像素。 | - |
+| radiusRound | double | - | 胶囊圆角，默认 999 逻辑像素。 | - |
 | radiusSmall | double | - | 小圆角，默认 3 逻辑像素。 | - |
 
 
@@ -1090,16 +943,16 @@ TDesign 主题包含完整色值组，业务可以按需二次封装。未显式
 适用类型：`TThemeData`
 
 
-小程序全局外投影 Token；CSS 内投影不能直接由 Flutter `BoxShadow` 表达。
+全局外投影 Token，使用 Flutter `BoxShadow` 表达。
 
 #### 属性
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| shadow1 | List&lt;BoxShadow&gt;? | - | `--td-shadow-1` 基础投影。 | - |
-| shadow2 | List&lt;BoxShadow&gt;? | - | `--td-shadow-2` 中层投影。 | - |
-| shadow3 | List&lt;BoxShadow&gt;? | - | `--td-shadow-3` 上层投影。 | - |
-| shadow4 | List&lt;BoxShadow&gt;? | - | `--td-shadow-4` 轻投影。 | - |
+| shadow1 | List&lt;BoxShadow&gt;? | - | 基础投影。 | - |
+| shadow2 | List&lt;BoxShadow&gt;? | - | 中层投影。 | - |
+| shadow3 | List&lt;BoxShadow&gt;? | - | 上层投影。 | - |
+| shadow4 | List&lt;BoxShadow&gt;? | - | 轻投影。 | - |
 
 
 ### TInsetShadows
@@ -1107,7 +960,7 @@ TDesign 主题包含完整色值组，业务可以按需二次封装。未显式
 适用类型：`TThemeData`
 
 
-小程序当前的四个 blur=0 的 inset 阴影在 Flutter 中用定向内侧边线表达。
+四个方向的内投影使用定向内侧边线表达。
 使用方应把对应 `BorderSide` 放入 `Border.top` / right / bottom / left。
 
 #### 属性
@@ -1125,19 +978,19 @@ TDesign 主题包含完整色值组，业务可以按需二次封装。未显式
 适用类型：`TThemeData`
 
 
-小程序全局间距 Token；375 逻辑像素宽下按 2rpx = 1dp 转换。
+全局间距 Token，单位为 Flutter 逻辑像素。
 
 #### 属性
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| spacer | double | - | `--td-spacer`: 16rpx。 | - |
-| spacer1 | double | - | `--td-spacer-1`: 24rpx。 | - |
-| spacer2 | double | - | `--td-spacer-2`: 32rpx。 | - |
-| spacer3 | double | - | `--td-spacer-3`: 48rpx。 | - |
-| spacer4 | double | - | `--td-spacer-4`: 64rpx。旧 Flutter `spacer4` 的 4dp 语义已移除。 | - |
-| spacer5 | double | - | `--td-spacer-5`: 96rpx。 | - |
-| spacer6 | double | - | `--td-spacer-6`: 160rpx。 | - |
+| spacer | double | - | 间距 Token，未配置时回退为 8 逻辑像素。 | - |
+| spacer1 | double | - | 间距 Token，未配置时回退为 12 逻辑像素。 | - |
+| spacer2 | double | - | 间距 Token，未配置时回退为 16 逻辑像素。 | - |
+| spacer3 | double | - | 间距 Token，未配置时回退为 24 逻辑像素。 | - |
+| spacer4 | double | - | 间距 Token，未配置时回退为 32 逻辑像素。 | - |
+| spacer5 | double | - | 间距 Token，未配置时回退为 48 逻辑像素。 | - |
+| spacer6 | double | - | 间距 Token，未配置时回退为 80 逻辑像素。 | - |
 
 
 ### TThemeContextExtension

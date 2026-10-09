@@ -7,6 +7,8 @@ import '../../theme/basic.dart' show Font;
 /// 索引组件的子树级视觉主题。
 ///
 /// 仅管理尺寸、颜色和字体。吸顶、滚动方向与胶囊模式属于组件实例行为。
+///
+/// {@category ComponentTheme}
 class TIndexesThemeData extends ThemeExtension<TIndexesThemeData> {
   const TIndexesThemeData({
     this.indexListMaxHeight,

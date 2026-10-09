@@ -7,8 +7,8 @@
 #### 主题配置
 
 组件主题通过 `TDropdownThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TDropdownThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TDropdownThemeData` 配置项。
 
 #### 构造方法
 
@@ -250,120 +250,6 @@
 | 返回值 | Future&lt;void&gt; | - | 当前切换请求处理完毕时完成；未绑定或请求无效、被打断时也会完成，不代表目标状态一定已达成。 | - |
 
 
-### TDropdownThemeData
-
-DropdownMenu 的组件级视觉与布局默认值。
-
-#### 构造方法
-
-##### TDropdownThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| actionAreaPadding | EdgeInsetsGeometry? | - | 多选面板底部操作区内边距。 | 否 |
-| actionGap | double? | - | 多选面板底部按钮之间的间距；为空时读取全局 spacer2。 | 否 |
-| activeIconColor | Color? | - | 打开面板的触发项箭头颜色。 | 否 |
-| activeTextStyle | TextStyle? | - | 打开面板的触发项文本样式。 | 否 |
-| barBackgroundColor | Color? | - | 筛选栏背景色；为空时读取全局 bgColorContainer。 | 否 |
-| barHeight | double? | - | 筛选栏高度，默认 48 逻辑像素。 | 否 |
-| disabledIconColor | Color? | - | 禁用触发项箭头颜色。 | 否 |
-| disabledOptionColor | Color? | - | 多列选项禁用背景色。 | 否 |
-| disabledOptionTextStyle | TextStyle? | - | 禁用选项文本样式。 | 否 |
-| disabledTextStyle | TextStyle? | - | 禁用触发项文本样式。 | 否 |
-| dividerColor | Color? | - | 筛选栏底部分隔线颜色；为空时读取全局 componentStroke。 | 否 |
-| iconColor | Color? | - | 默认触发项箭头颜色。 | 否 |
-| iconSize | double? | - | 触发项箭头尺寸，默认 24 逻辑像素。 | 否 |
-| optionBorderRadius | BorderRadius? | - | 多列选项圆角；为空时读取全局 radiusDefault。 | 否 |
-| optionColor | Color? | - | 多列选项默认背景色。 | 否 |
-| optionHeight | double? | - | 单选列表行高度，默认 56 逻辑像素。 | 否 |
-| optionPadding | EdgeInsetsGeometry? | - | 选项内边距；为空时使用全局 spacer2 水平间距。 | 否 |
-| optionTextStyle | TextStyle? | - | 选项默认文本样式。 | 否 |
-| overlayColor | Color? | - | 遮罩颜色，包含透明度。未指定时为黑色 60%，动画按展开进度缩放透明度。 | 否 |
-| panelBackgroundColor | Color? | - | 面板背景色；为空时读取全局 bgColorContainer。 | 否 |
-| selectedOptionColor | Color? | - | 多列选项选中背景色。 | 否 |
-| selectedOptionTextStyle | TextStyle? | - | 选中选项文本样式。 | 否 |
-| textStyle | TextStyle? | - | 默认触发项文本样式。 | 否 |
-
-
-#### 实例方法
-
-##### TDropdownThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| barHeight | double? | - | 字段含义：筛选栏高度，默认 48 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| barBackgroundColor | Color? | - | 字段含义：筛选栏背景色；为空时读取全局 bgColorContainer。 调用时的空值行为见方法说明。 | 否 |
-| dividerColor | Color? | - | 字段含义：筛选栏底部分隔线颜色；为空时读取全局 componentStroke。 调用时的空值行为见方法说明。 | 否 |
-| textStyle | TextStyle? | - | 字段含义：默认触发项文本样式。 调用时的空值行为见方法说明。 | 否 |
-| activeTextStyle | TextStyle? | - | 字段含义：打开面板的触发项文本样式。 调用时的空值行为见方法说明。 | 否 |
-| disabledTextStyle | TextStyle? | - | 字段含义：禁用触发项文本样式。 调用时的空值行为见方法说明。 | 否 |
-| iconColor | Color? | - | 字段含义：默认触发项箭头颜色。 调用时的空值行为见方法说明。 | 否 |
-| activeIconColor | Color? | - | 字段含义：打开面板的触发项箭头颜色。 调用时的空值行为见方法说明。 | 否 |
-| disabledIconColor | Color? | - | 字段含义：禁用触发项箭头颜色。 调用时的空值行为见方法说明。 | 否 |
-| iconSize | double? | - | 字段含义：触发项箭头尺寸，默认 24 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| panelBackgroundColor | Color? | - | 字段含义：面板背景色；为空时读取全局 bgColorContainer。 调用时的空值行为见方法说明。 | 否 |
-| overlayColor | Color? | - | 字段含义：遮罩颜色，包含透明度。未指定时为黑色 60%，动画按展开进度缩放透明度。 调用时的空值行为见方法说明。 | 否 |
-| optionHeight | double? | - | 字段含义：单选列表行高度，默认 56 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| optionPadding | EdgeInsetsGeometry? | - | 字段含义：选项内边距；为空时使用全局 spacer2 水平间距。 调用时的空值行为见方法说明。 | 否 |
-| optionTextStyle | TextStyle? | - | 字段含义：选项默认文本样式。 调用时的空值行为见方法说明。 | 否 |
-| selectedOptionTextStyle | TextStyle? | - | 字段含义：选中选项文本样式。 调用时的空值行为见方法说明。 | 否 |
-| disabledOptionTextStyle | TextStyle? | - | 字段含义：禁用选项文本样式。 调用时的空值行为见方法说明。 | 否 |
-| optionColor | Color? | - | 字段含义：多列选项默认背景色。 调用时的空值行为见方法说明。 | 否 |
-| selectedOptionColor | Color? | - | 字段含义：多列选项选中背景色。 调用时的空值行为见方法说明。 | 否 |
-| disabledOptionColor | Color? | - | 字段含义：多列选项禁用背景色。 调用时的空值行为见方法说明。 | 否 |
-| optionBorderRadius | BorderRadius? | - | 字段含义：多列选项圆角；为空时读取全局 radiusDefault。 调用时的空值行为见方法说明。 | 否 |
-| actionAreaPadding | EdgeInsetsGeometry? | - | 字段含义：多选面板底部操作区内边距。 调用时的空值行为见方法说明。 | 否 |
-| actionGap | double? | - | 字段含义：多选面板底部按钮之间的间距；为空时读取全局 spacer2。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TDropdownThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TDropdownThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TDropdownThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TDropdownThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
-##### TDropdownThemeData.merge
-
-位置参数：`other`
-
-
-合并主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | TDropdownThemeData? | - | 要合并的目标主题；为空时保留当前配置。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TDropdownThemeData | - | 返回合并后的主题；`other` 的非空字段覆盖当前字段，other 为空时返回当前主题。 | - |
-
-
 ### TDropdownMenuPlacement
 
 下拉筛选面板相对筛选栏的展开位置。
@@ -457,3 +343,39 @@ DropdownMenu 的组件级视觉与布局默认值。
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | Widget | - | 自定义筛选触发项内容。 | - |
+
+
+### TDropdownThemeData
+
+DropdownMenu 的组件级视觉与布局默认值。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| actionAreaPadding | EdgeInsetsGeometry? | - | 多选面板底部操作区内边距。 | 否 |
+| actionGap | double? | - | 多选面板底部按钮之间的间距；为空时读取全局 spacer2。 | 否 |
+| activeIconColor | Color? | - | 打开面板的触发项箭头颜色。 | 否 |
+| activeTextStyle | TextStyle? | - | 打开面板的触发项文本样式。 | 否 |
+| barBackgroundColor | Color? | - | 筛选栏背景色；为空时读取全局 bgColorContainer。 | 否 |
+| barHeight | double? | - | 筛选栏高度，默认 48 逻辑像素。 | 否 |
+| disabledIconColor | Color? | - | 禁用触发项箭头颜色。 | 否 |
+| disabledOptionColor | Color? | - | 多列选项禁用背景色。 | 否 |
+| disabledOptionTextStyle | TextStyle? | - | 禁用选项文本样式。 | 否 |
+| disabledTextStyle | TextStyle? | - | 禁用触发项文本样式。 | 否 |
+| dividerColor | Color? | - | 筛选栏底部分隔线颜色；为空时读取全局 componentStroke。 | 否 |
+| iconColor | Color? | - | 默认触发项箭头颜色。 | 否 |
+| iconSize | double? | - | 触发项箭头尺寸，默认 24 逻辑像素。 | 否 |
+| optionBorderRadius | BorderRadius? | - | 多列选项圆角；为空时读取全局 radiusDefault。 | 否 |
+| optionColor | Color? | - | 多列选项默认背景色。 | 否 |
+| optionHeight | double? | - | 单选列表行高度，默认 56 逻辑像素。 | 否 |
+| optionPadding | EdgeInsetsGeometry? | - | 选项内边距；为空时使用全局 spacer2 水平间距。 | 否 |
+| optionTextStyle | TextStyle? | - | 选项默认文本样式。 | 否 |
+| overlayColor | Color? | - | 遮罩颜色，包含透明度。未指定时为黑色 60%，动画按展开进度缩放透明度。 | 否 |
+| panelBackgroundColor | Color? | - | 面板背景色；为空时读取全局 bgColorContainer。 | 否 |
+| selectedOptionColor | Color? | - | 多列选项选中背景色。 | 否 |
+| selectedOptionTextStyle | TextStyle? | - | 选中选项文本样式。 | 否 |
+| textStyle | TextStyle? | - | 默认触发项文本样式。 | 否 |

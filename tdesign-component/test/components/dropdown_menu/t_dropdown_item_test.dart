@@ -28,9 +28,9 @@ void main() {
         testWidgets('equal columns $columns $direction gap=$gap', (
           tester,
         ) async {
-          final tokens = TThemeData.defaultData().copyWithTThemeData(
-            'dropdown-grid',
-            marginMap: {'spacer1': gap},
+          final tokens = TThemeData.defaultData().copyWith(
+            name: 'dropdown-grid',
+            spacerMap: {'spacer1': gap},
           );
           await tester.pumpWidget(
             MaterialApp(

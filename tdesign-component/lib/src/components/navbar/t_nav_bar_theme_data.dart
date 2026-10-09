@@ -28,6 +28,11 @@ class TNavBarBorder {
 ///
 /// 管理 TNavBar 的子树级默认样式（标题颜色、背景、内边距、阴影、边框等）。
 /// 构造器参数优先级高于 ThemeData。高度属于 PreferredSizeWidget 契约，只能通过 TNavBar.height 设置。
+///
+/// 复制配置时，省略或传入 null 会保留原值；恢复下层 Theme 或 Token 时，
+/// 重新构造主题并只传入仍需保留的字段。
+///
+/// {@category ComponentTheme}
 class TNavBarThemeData extends ThemeExtension<TNavBarThemeData> {
   /// 标题的子树默认颜色。
   ///

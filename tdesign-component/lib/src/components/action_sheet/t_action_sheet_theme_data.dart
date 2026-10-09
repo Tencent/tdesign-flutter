@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// TActionSheet 组件级视觉 ThemeExtension
+///
+/// {@category ComponentTheme}
 class TActionSheetThemeData extends ThemeExtension<TActionSheetThemeData> {
   /// 宫格项目高度
   /// 未配置时为 96 逻辑像素，show 方法的 itemHeight 优先。

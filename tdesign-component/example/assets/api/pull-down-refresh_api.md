@@ -4,8 +4,7 @@
 
 TDesign 下拉刷新组件。
 
-以**最小、Flutter 惯用**的 API 封装 `EasyRefresh`，对齐官方
-（小程序 / mobile-vue）PullDownRefresh 的行为表现：
+通过 `EasyRefresh` 提供下拉刷新能力：
 下拉 → 松手 → 刷新 → 完成四态，支持触底加载、超时、
 四态文案自定义与受控刷新。
 
@@ -79,7 +78,6 @@ TDesign 下拉刷新组件。
 
 下拉刷新四态提示语。
 
-对应官方（小程序 / mobile-vue）`loadingTexts: string[]` 数组，
 覆盖「下拉刷新 / 松手刷新 / 正在刷新 / 刷新完成」四个阶段的文案。
 
 #### 构造方法

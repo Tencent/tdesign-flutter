@@ -28,8 +28,8 @@ export 't_stepper_types.dart';
 /// ### 主题配置
 ///
 /// 组件主题通过 [TStepperThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-/// `TStepperThemeData` 说明。
+/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
+/// `TStepperThemeData` 配置项。
 class TStepper extends StatefulWidget {
   const TStepper({
     super.key,
@@ -559,7 +559,7 @@ class _StepperStyle {
     final componentTextStyle = rawComponentTextStyle == null
         ? null
         : _flattenFontPackage(rawComponentTextStyle);
-    // Flutter asset used by Stepper; not a mini-program global token.
+    // Flutter asset used by Stepper.
     const resolvedNumberFontFamily = 'packages/tdesign_flutter/TCloudNumber';
     final foregroundColor =
         componentTheme?.foregroundColor ?? token.textColorPrimary;

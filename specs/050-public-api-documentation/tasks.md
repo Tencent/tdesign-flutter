@@ -86,3 +86,23 @@
 - [ ] 工具 #29 合入正式 main 后复验正式生成链和最终 CI/autofix。
 
 方案、证据及阻塞原因见 [theme-presentation.md](theme-presentation.md)。
+# 全组件 Theme 配置表推广（2026-10-09）
+
+- [x] 盘点 51 个组件 Theme、复用 Theme 与全局 Token 页边界。
+- [x] 源码分类、单一配置表、Theme 置后、集中共用操作说明及特殊语义保留。
+- [x] 校验器和展示测试拦截顺序错误、分类缺失、重复配置表、重复共用方法表及类说明丢失。
+- [x] 57 页两 SDK 生成一致，369 个声明、438 个 Theme 配置字段及 6 个专有可调用项保留。
+- [x] 完成两 SDK 最终文档回归、页面回归、严格分析与验收记录，见 component-theme-config-presentation.md。
+- [ ] 正式工具交付后复验消费依赖和 autofix；本轮不据候选生成声明正式链路完成。
+
+## Theme API 与平台描述核查
+
+- [x] 核查 Theme 页 27 声明及 TThemeData 12 方法的职责和冗余入口。
+- [x] 清理源码、生成 API、Demo 与测试说明，记录全仓库检索和保留来源边界。
+- [x] 完成双 SDK 文档验证与受影响 Demo 回归，验收见 theme-api-and-platform-descriptions.md。
+
+## 跟随 TThemeData API 收敛 PR
+
+- [x] 独立 API PR #1152 已提交并附双 SDK 功能证据。
+- [x] 文档工作区按五个必要操作同步源码契约、消费者和生成资产。
+- [ ] API PR 合入后同步正式基线，再交付文档与工具生成链。

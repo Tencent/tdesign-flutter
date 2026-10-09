@@ -5,6 +5,8 @@ const _kDefaultRootColumnWidth = 103.0;
 const _kDefaultItemHeight = 56.0;
 
 /// TTreeSelect 组件级 ThemeExtension。
+///
+/// {@category ComponentTheme}
 class TTreeSelectThemeData extends ThemeExtension<TTreeSelectThemeData> {
   const TTreeSelectThemeData({
     this.height,

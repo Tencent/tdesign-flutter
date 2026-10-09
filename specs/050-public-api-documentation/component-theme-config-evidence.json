@@ -1,0 +1,610 @@
+{
+  "pages": [
+    {
+      "page": "radio_api.md",
+      "declarations": 8,
+      "component_themes": [
+        "TRadioThemeData"
+      ],
+      "configuration_fields": [
+        7
+      ],
+      "sha256": "f24037cba71eeaa134468c16e944780aa454ccd0c6da5de2f48d35daeaa06fb3"
+    },
+    {
+      "page": "action-sheet_api.md",
+      "declarations": 8,
+      "component_themes": [
+        "TActionSheetThemeData"
+      ],
+      "configuration_fields": [
+        6
+      ],
+      "sha256": "4029792f3beea4b80227666458e4abd3bb595b6adb0245c1c3772eb63d818e92"
+    },
+    {
+      "page": "notice-bar_api.md",
+      "declarations": 4,
+      "component_themes": [
+        "TNoticeBarThemeData"
+      ],
+      "configuration_fields": [
+        6
+      ],
+      "sha256": "19a7a8a9f8e700c1d9d0c7a6282c85d5f2414345ec1517101e6e7822ce55bc1a"
+    },
+    {
+      "page": "text_api.md",
+      "declarations": 4,
+      "component_themes": [
+        "TTextThemeData"
+      ],
+      "configuration_fields": [
+        4
+      ],
+      "sha256": "8adc060d820cccab1df3201f461bd41d082f3ec303d1daa7454baf240d6bf64f"
+    },
+    {
+      "page": "tree-select_api.md",
+      "declarations": 3,
+      "component_themes": [
+        "TTreeSelectThemeData"
+      ],
+      "configuration_fields": [
+        11
+      ],
+      "sha256": "5645af61e1eacf0d7d910682350f0df23111df7c827959d8605e5a85399b42d4"
+    },
+    {
+      "page": "table_api.md",
+      "declarations": 15,
+      "component_themes": [
+        "TTableThemeData"
+      ],
+      "configuration_fields": [
+        8
+      ],
+      "sha256": "f1a86c0cd7eb83e9e2f2b43e80827ff28582df564547629d09ee619c074b6071"
+    },
+    {
+      "page": "back-top_api.md",
+      "declarations": 4,
+      "component_themes": [
+        "TBackTopThemeData"
+      ],
+      "configuration_fields": [
+        11
+      ],
+      "sha256": "730e72bb5172d2e0df19ac3a3d6fd84e363abb77f35c703701220d7473fbd24f"
+    },
+    {
+      "page": "badge_api.md",
+      "declarations": 5,
+      "component_themes": [
+        "TBadgeThemeData"
+      ],
+      "configuration_fields": [
+        7
+      ],
+      "sha256": "b7339cd2f71c0fcecae89721ff2a84844b2eb4421bd9fefcb0d1c1677e46fc22"
+    },
+    {
+      "page": "steps_api.md",
+      "declarations": 5,
+      "component_themes": [],
+      "configuration_fields": [],
+      "sha256": "cf3b252b9166d9fdc9c114ece913fcf8973fe717325225fec970455ec4ce1823"
+    },
+    {
+      "page": "result_api.md",
+      "declarations": 3,
+      "component_themes": [
+        "TResultThemeData"
+      ],
+      "configuration_fields": [
+        3
+      ],
+      "sha256": "435ca210305a5bc84357a4656cd9c0a7339acd6970128c14f9b8c972b68c8ad3"
+    },
+    {
+      "page": "dialog_api.md",
+      "declarations": 5,
+      "component_themes": [
+        "TDialogThemeData"
+      ],
+      "configuration_fields": [
+        8
+      ],
+      "sha256": "a5726b79c1dbf3f5a37d5f8e9029d7dbc927bad7bb2d5d5b4863393723ab4a04"
+    },
+    {
+      "page": "drawer_api.md",
+      "declarations": 7,
+      "component_themes": [
+        "TDrawerThemeData"
+      ],
+      "configuration_fields": [
+        15
+      ],
+      "sha256": "2fc8b89dbb4a7edf23e4297066787dc3c85b5b09922c6b20c7d7083d7969f146"
+    },
+    {
+      "page": "swiper_api.md",
+      "declarations": 8,
+      "component_themes": [
+        "TSwiperThemeData"
+      ],
+      "configuration_fields": [
+        12
+      ],
+      "sha256": "54a3a118ed68536ee260ecb2d80cbb77fd64c9d2ede924fcd6ee819f6c2fc671"
+    },
+    {
+      "page": "popover_api.md",
+      "declarations": 7,
+      "component_themes": [
+        "TPopoverThemeData"
+      ],
+      "configuration_fields": [
+        10
+      ],
+      "sha256": "b2eb79cc9264c00337ae0bf5741ffd5df9c940fd2a3760b096ab20fb8cf1b7b6"
+    },
+    {
+      "page": "upload_api.md",
+      "declarations": 9,
+      "component_themes": [
+        "TUploadThemeData"
+      ],
+      "configuration_fields": [
+        18
+      ],
+      "sha256": "3bf7bdd9afdf50b61847a470caa994e646b7e11ddce0fc5658150090a7c72622"
+    },
+    {
+      "page": "slider_api.md",
+      "declarations": 5,
+      "component_themes": [
+        "TSliderThemeData"
+      ],
+      "configuration_fields": [
+        11
+      ],
+      "sha256": "85b19f8a145012b24937f8e53e80059050c67fc8a1c5bb3c010cec9f25194ac3"
+    },
+    {
+      "page": "tag_api.md",
+      "declarations": 7,
+      "component_themes": [
+        "TTagThemeData"
+      ],
+      "configuration_fields": [
+        11
+      ],
+      "sha256": "df5ccfd6d7ce5b484bfd7d65a8fca27caa31727db51449bd176e17ac36e24a9d"
+    },
+    {
+      "page": "image-viewer_api.md",
+      "declarations": 3,
+      "component_themes": [
+        "TImageViewerThemeData"
+      ],
+      "configuration_fields": [
+        7
+      ],
+      "sha256": "4bb0abd819a00196f79b7118e24506abd7852c74204a1e383a3c5cd049fa2f8f"
+    },
+    {
+      "page": "input_api.md",
+      "declarations": 4,
+      "component_themes": [
+        "TInputThemeData"
+      ],
+      "configuration_fields": [
+        8
+      ],
+      "sha256": "e7b7768cc0f415fc924ba633b99c0af777dee98ec0ec5ee98fd39486627738fa"
+    },
+    {
+      "page": "navbar_api.md",
+      "declarations": 4,
+      "component_themes": [
+        "TNavBarThemeData"
+      ],
+      "configuration_fields": [
+        8
+      ],
+      "sha256": "16eb0fb8815515aaf19f0ad8249fe2deae8398423990fd004e203fcfbe052bf3"
+    },
+    {
+      "page": "search_api.md",
+      "declarations": 4,
+      "component_themes": [
+        "TSearchBarThemeData"
+      ],
+      "configuration_fields": [
+        10
+      ],
+      "sha256": "155d74e08841ff422a8508e53249df5151d234aaadae1c4ce0c231d220c38235"
+    },
+    {
+      "page": "progress_api.md",
+      "declarations": 4,
+      "component_themes": [
+        "TProgressThemeData"
+      ],
+      "configuration_fields": [
+        10
+      ],
+      "sha256": "61f7372d25ab37bd21ff6df4e4d9b0c95036e92bc450ce45e0365eac8fa5ffdb"
+    },
+    {
+      "page": "date-time-picker_api.md",
+      "declarations": 8,
+      "component_themes": [],
+      "configuration_fields": [],
+      "sha256": "d9e382c4431cd2678af0b4dc4e1962bdddbcfc69461ff8d9f8720ecc0193620b"
+    },
+    {
+      "page": "calendar_api.md",
+      "declarations": 10,
+      "component_themes": [
+        "TCalendarThemeData"
+      ],
+      "configuration_fields": [
+        14
+      ],
+      "sha256": "d9bed94c14fcde3ff49f1b3721d02c04ca4b93f063fd91ea0e5906c9fc07e19c"
+    },
+    {
+      "page": "loading_api.md",
+      "declarations": 4,
+      "component_themes": [
+        "TLoadingThemeData"
+      ],
+      "configuration_fields": [
+        4
+      ],
+      "sha256": "9c056de9371cc4d11e1e7cb468ef699eebf3740138252b9b57746cd9dc9135d1"
+    },
+    {
+      "page": "dropdown-menu_api.md",
+      "declarations": 14,
+      "component_themes": [
+        "TDropdownThemeData"
+      ],
+      "configuration_fields": [
+        23
+      ],
+      "sha256": "3d34a87ba51cc7991f35fe198e95981f9af8490cd59e520037dd5ae211aafbb0"
+    },
+    {
+      "page": "popup_api.md",
+      "declarations": 16,
+      "component_themes": [
+        "TPopupThemeData"
+      ],
+      "configuration_fields": [
+        6
+      ],
+      "sha256": "1d45e85ead3fb17f487d44cf7c68ea4939793f26c107c1292c12fce8745ae2f7"
+    },
+    {
+      "page": "footer_api.md",
+      "declarations": 2,
+      "component_themes": [
+        "TFooterThemeData"
+      ],
+      "configuration_fields": [
+        1
+      ],
+      "sha256": "2f6fe25d86af3d306a8eaf009034582a342e1d705244ed3b1b4fbeb2b15e71e1"
+    },
+    {
+      "page": "skeleton_api.md",
+      "declarations": 8,
+      "component_themes": [
+        "TSkeletonThemeData"
+      ],
+      "configuration_fields": [
+        4
+      ],
+      "sha256": "4b7dcd8bc366b7ef448a4d4be6c778fcae074d8dd2ee24c3bae5c8e75430d49f"
+    },
+    {
+      "page": "image_api.md",
+      "declarations": 3,
+      "component_themes": [
+        "TImageThemeData"
+      ],
+      "configuration_fields": [
+        6
+      ],
+      "sha256": "9c405ea79be6987ed46c7a5a96d3ff8790a6f5038ff767a8787f4fb2dcd8a7de"
+    },
+    {
+      "page": "switch_api.md",
+      "declarations": 4,
+      "component_themes": [
+        "TSwitchThemeData"
+      ],
+      "configuration_fields": [
+        11
+      ],
+      "sha256": "d7c13fe8c8d48b92da611898cd7b52e6fc6c7d4871827f15c381e6f7b694f758"
+    },
+    {
+      "page": "checkbox_api.md",
+      "declarations": 9,
+      "component_themes": [
+        "TCheckboxThemeData"
+      ],
+      "configuration_fields": [
+        9
+      ],
+      "sha256": "2fa09bdff17beb96ec113cad527295878499929939910a31ee4b43dc0a63cbec"
+    },
+    {
+      "page": "tab-bar_api.md",
+      "declarations": 11,
+      "component_themes": [
+        "TTabBarThemeData"
+      ],
+      "configuration_fields": [
+        7
+      ],
+      "sha256": "8462f414f9291ab00f1dae7475809cc18d2a2e3786c78c2b6171e5eb9f9a0d20"
+    },
+    {
+      "page": "divider_api.md",
+      "declarations": 4,
+      "component_themes": [
+        "TDividerThemeData"
+      ],
+      "configuration_fields": [
+        7
+      ],
+      "sha256": "81fc701add5fdd36b805d53a093d53b07d81a0ef0e0ff1d201722341b20c0e68"
+    },
+    {
+      "page": "button_api.md",
+      "declarations": 7,
+      "component_themes": [
+        "TButtonThemeData"
+      ],
+      "configuration_fields": [
+        2
+      ],
+      "sha256": "666f848aeba8d283f846982aecc2ecad6395b577c250b2eaeb153fccc8eaed59"
+    },
+    {
+      "page": "time-counter_api.md",
+      "declarations": 7,
+      "component_themes": [
+        "TTimeCounterThemeData"
+      ],
+      "configuration_fields": [
+        5
+      ],
+      "sha256": "3f719cad2316c5da383f0ac1968248668f2ea301e91ae07594f3efb1161e2b38"
+    },
+    {
+      "page": "side-bar_api.md",
+      "declarations": 4,
+      "component_themes": [
+        "TSideBarThemeData"
+      ],
+      "configuration_fields": [
+        5
+      ],
+      "sha256": "ccee1b9847b8d810e90882fe934f0c85b29f28a7b8bcb082d41dce032b7a0eb9"
+    },
+    {
+      "page": "fab_api.md",
+      "declarations": 7,
+      "component_themes": [
+        "TFabThemeData"
+      ],
+      "configuration_fields": [
+        6
+      ],
+      "sha256": "444f2cd217ba4993c62ad1c498fb93afa75d2a06a2b2f7736120ac1c3b410a86"
+    },
+    {
+      "page": "pull-down-refresh_api.md",
+      "declarations": 4,
+      "component_themes": [],
+      "configuration_fields": [],
+      "sha256": "4fbef3e5a48cfe20b8971d2d1c00b5d07c0e03d63912a345b08fde1ff31f7e3b"
+    },
+    {
+      "page": "message_api.md",
+      "declarations": 5,
+      "component_themes": [
+        "TMessageThemeData"
+      ],
+      "configuration_fields": [
+        3
+      ],
+      "sha256": "36005b112c682fca3c1ce48a8a12a9ff7ce9dd9b78a19f31aa7c7e7a9dd6bfaa"
+    },
+    {
+      "page": "cell_api.md",
+      "declarations": 6,
+      "component_themes": [
+        "TCellThemeData"
+      ],
+      "configuration_fields": [
+        18
+      ],
+      "sha256": "be9431b8613f9f8e807059bfbef37e3f0df37921b16575f3b810019bd8e7f7e3"
+    },
+    {
+      "page": "stepper_api.md",
+      "declarations": 4,
+      "component_themes": [
+        "TStepperThemeData"
+      ],
+      "configuration_fields": [
+        12
+      ],
+      "sha256": "18bcb91dc1dd461a9295c474978318e4fee1b3c6d026d4e700ed6bb40456094a"
+    },
+    {
+      "page": "form_api.md",
+      "declarations": 11,
+      "component_themes": [
+        "TFormThemeData"
+      ],
+      "configuration_fields": [
+        16
+      ],
+      "sha256": "234647905c11b0f3faa0bbf7fd890f7fab38707988c6b7792f4e8975d71d5866"
+    },
+    {
+      "page": "tabs_api.md",
+      "declarations": 7,
+      "component_themes": [
+        "TTabsBarThemeData"
+      ],
+      "configuration_fields": [
+        10
+      ],
+      "sha256": "6ad7497176e477bd470ceae6e819325c93372aa120d1dbfaee8d1194b83191a4"
+    },
+    {
+      "page": "picker_api.md",
+      "declarations": 10,
+      "component_themes": [
+        "TPickerThemeData"
+      ],
+      "configuration_fields": [
+        2
+      ],
+      "sha256": "daf99582b0c92390d55db53f47a11a0fa9ac0bdd7caeb99b359d30595d541100"
+    },
+    {
+      "page": "toast_api.md",
+      "declarations": 5,
+      "component_themes": [
+        "TToastThemeData"
+      ],
+      "configuration_fields": [
+        7
+      ],
+      "sha256": "1574333577f92afb8d57ef78549a586b055b7dde9d0a46d6fc4aeb8477aa253a"
+    },
+    {
+      "page": "textarea_api.md",
+      "declarations": 2,
+      "component_themes": [],
+      "configuration_fields": [],
+      "sha256": "6ee24bb30c3ad4ae40760a3be21b6a27378ebad025e5027d6ca0e91fd566961c"
+    },
+    {
+      "page": "cascader_api.md",
+      "declarations": 4,
+      "component_themes": [
+        "TCascaderThemeData"
+      ],
+      "configuration_fields": [
+        9
+      ],
+      "sha256": "65c7f57c6514f58babcb907752017f75076f7d03d86b399f3973387baec7543a"
+    },
+    {
+      "page": "icon_api.md",
+      "declarations": 1,
+      "component_themes": [],
+      "configuration_fields": [],
+      "sha256": "dd68676a0c5d4c2cca457f609b49ec957d0e26856f35fc2423b751fbb1876001"
+    },
+    {
+      "page": "link_api.md",
+      "declarations": 4,
+      "component_themes": [
+        "TLinkThemeData"
+      ],
+      "configuration_fields": [
+        3
+      ],
+      "sha256": "d038a71c87ba846640e8308d0d3d5c23df6648bca15cdb9b557e919a5038752a"
+    },
+    {
+      "page": "empty_api.md",
+      "declarations": 2,
+      "component_themes": [
+        "TEmptyThemeData"
+      ],
+      "configuration_fields": [
+        2
+      ],
+      "sha256": "de833cec91d7d4a7e21ce78f944321599026904ea2cc4d19418835b4841f74be"
+    },
+    {
+      "page": "collapse_api.md",
+      "declarations": 7,
+      "component_themes": [
+        "TCollapseThemeData"
+      ],
+      "configuration_fields": [
+        11
+      ],
+      "sha256": "ba1f1853e5d972f0ed36363e0fa247c688c2887f4d0b58959c71ed3b609e0411"
+    },
+    {
+      "page": "avatar_api.md",
+      "declarations": 6,
+      "component_themes": [
+        "TAvatarThemeData"
+      ],
+      "configuration_fields": [
+        10
+      ],
+      "sha256": "4141c9e4d54103728ea8e1b6aacededb9a88e26e17bcdc7e08adfbc333bd4ef9"
+    },
+    {
+      "page": "indexes_api.md",
+      "declarations": 10,
+      "component_themes": [
+        "TIndexesThemeData"
+      ],
+      "configuration_fields": [
+        25
+      ],
+      "sha256": "4eb2e90133ba849b6c81fb2ff82a094b3776579106c126c5bb6ede1969e61add"
+    },
+    {
+      "page": "swipe-cell_api.md",
+      "declarations": 7,
+      "component_themes": [
+        "TSwipeCellThemeData"
+      ],
+      "configuration_fields": [
+        1
+      ],
+      "sha256": "2cf9ec2be7fb79270fdfe4d8200f89ccae8279f7053041d5dacd7a34839cbcdb"
+    },
+    {
+      "page": "rate_api.md",
+      "declarations": 3,
+      "component_themes": [
+        "TRateThemeData"
+      ],
+      "configuration_fields": [
+        8
+      ],
+      "sha256": "206240592c9298017ae9e40ac9e37f9be65465fa01ccea1b5804046ab77d0819"
+    },
+    {
+      "page": "theme_api.md",
+      "declarations": 27,
+      "component_themes": [],
+      "configuration_fields": [],
+      "sha256": "636d6cd7c157bda6e88cde5a7b49f7202eb99c3a3f1a5121616f67f52c473213"
+    }
+  ],
+  "preserved_custom_callables": 6,
+  "unexpected": [],
+  "dual_sdk_differences": []
+}

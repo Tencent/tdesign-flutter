@@ -26,6 +26,8 @@ enum TBackTopColorPreset {
 ///
 /// 只承载子树级具体视觉默认值；结构形态、配色选择和滚动显隐行为由
 /// `TBackTop` 实例唯一拥有。
+///
+/// {@category ComponentTheme}
 class TBackTopThemeData extends ThemeExtension<TBackTopThemeData> {
   /// 背景色；未设置时根据实例配色读取 TDesign 语义 Token。
   final Color? backgroundColor;

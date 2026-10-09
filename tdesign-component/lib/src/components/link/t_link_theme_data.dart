@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 ///
 /// 通过 Theme 子树注入链接字号样式、图标尺寸和间距等具体视觉值。
 /// 尺寸档位、配色预设和下划线选择仅由 `TLink` 实例控制。
+///
+/// {@category ComponentTheme}
 class TLinkThemeData extends ThemeExtension<TLinkThemeData> {
   const TLinkThemeData({this.textStyle, this.iconSize, this.iconGap});
 

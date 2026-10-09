@@ -482,6 +482,17 @@ void setTResourceBuilder(
 /// 全局颜色、字体、圆角、阴影和间距 Token 在本页集中定义。
 /// 使用 [TMaterialThemeBuilder] 构建主题，或将 [TThemeData] 放入 Flutter
 /// [ThemeData.extensions]；组件级 ThemeExtension 的字段与回退见各组件 API 页。
+///
+/// ### 组件主题的共用操作
+///
+/// 各组件 API 页末尾的 Theme 配置表列出该组件支持的字段。
+/// `copyWith` 创建主题副本，非空参数替换字段，省略或传入 null 保留原值；
+/// 如需恢复下层 Theme 或 Token，重新构造主题并只传入仍需保留的字段。
+/// `lerp(other, t)` 在当前与目标主题间生成过渡配置，目标为空或类型不匹配时
+/// 保留当前主题；通常 t 为 0、1 时对应两端。各字段可能插值、切换或保留继承，
+/// 特殊行为见对应组件的 Theme 说明。
+/// 提供 `merge` 的组件主题支持目标非空字段覆盖当前字段，目标为空时保留当前主题；
+/// 此方法不是所有组件主题都提供的能力。
 class TThemeData extends ThemeExtension<TThemeData> {
   static const String _defaultThemeName = 'default';
   static const String _defaultDartThemeName = 'defaultDark';
@@ -502,7 +513,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
   /// 字体尺寸
   late TMap<String, Font> fontMap;
 
-  /// 小程序独立字号与行高 Token，单位为 Flutter 逻辑像素。
+  /// 独立字号与行高 Token，单位为 Flutter 逻辑像素。
   late TMap<String, double> fontMetricMap;
 
   /// 圆角
@@ -514,7 +525,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
   /// 阴影
   late TMap<String, List<BoxShadow>> shadowMap;
 
-  /// 小程序 blur=0 的内投影在 Flutter 中对应的内侧边线。
+  /// 内投影对应的定向内侧边线。
   late TMap<String, BorderSide> insetShadowMap;
 
   /// 间隔
@@ -570,63 +581,13 @@ class TThemeData extends ThemeExtension<TThemeData> {
     return _defaultThemeData!;
   }
 
-  /// 从父类拷贝
-  ///
-  /// ## 返回值
-  /// 复制并合并指定映射后的 TThemeData；未传入的映射沿用当前配置。
-  TThemeData copyWithTThemeData(
-    /// 副本的主题名称。
-    String name, {
-
-    /// 颜色 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
-    Map<String, Color>? colorMap,
-
-    /// 复合字体 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
-    Map<String, Font>? fontMap,
-
-    /// 字号与行高 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
-    Map<String, double>? fontMetricMap,
-
-    /// 圆角 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
-    Map<String, double>? radiusMap,
-
-    /// 字体栈 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
-    Map<String, FontFamily>? fontFamilyMap,
-
-    /// 外投影 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
-    Map<String, List<BoxShadow>>? shadowMap,
-
-    /// 内侧边线 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
-    Map<String, BorderSide>? insetShadowMap,
-
-    /// 间距 Token 的增量配置；沿用 marginMap 参数名，合并到 spacerMap。
-    Map<String, double>? marginMap,
-
-    /// 扩展主题数据；为空时沿用当前配置。
-    TExtraThemeData? extraThemeData,
-  }) {
-    return copyWith(
-          name: name,
-          colorMap: colorMap,
-          fontMap: fontMap,
-          fontMetricMap: fontMetricMap,
-          radiusMap: radiusMap,
-          fontFamilyMap: fontFamilyMap,
-          shadowMap: shadowMap,
-          insetShadowMap: insetShadowMap,
-          marginMap: marginMap,
-          extraThemeData: extraThemeData,
-        )
-        as TThemeData;
-  }
-
   /// 复制主题配置。
   ///
   /// ## 返回值
   /// 复制 Token 主题并合并传入的映射；未传入的映射值沿用当前配置。
-  /// name 为空时使用 default；extraThemeData 为空时保留当前扩展数据。
+  /// name 和 extraThemeData 为空时保留当前名称和扩展数据。
   @override
-  ThemeExtension<TThemeData> copyWith({
+  TThemeData copyWith({
     String? name,
     Map<String, Color>? colorMap,
     Map<String, Font>? fontMap,
@@ -637,12 +598,12 @@ class TThemeData extends ThemeExtension<TThemeData> {
     Map<String, BorderSide>? insetShadowMap,
 
     /// 间距 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
-    Map<String, double>? marginMap,
+    Map<String, double>? spacerMap,
     TExtraThemeData? extraThemeData,
   }) {
     final copiedRefs = _copyMap<String>(refMap, null);
     return TThemeData(
-      name: name ?? 'default',
+      name: name ?? this.name,
       colorMap: _copyMap<Color>(this.colorMap, colorMap, copiedRefs),
       fontMap: _copyMap<Font>(this.fontMap, fontMap, copiedRefs),
       fontMetricMap: _copyMap<double>(
@@ -666,7 +627,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
         insetShadowMap,
         copiedRefs,
       ),
-      spacerMap: _copyMap<double>(spacerMap, marginMap, copiedRefs),
+      spacerMap: _copyMap<double>(this.spacerMap, spacerMap, copiedRefs),
       refMap: copiedRefs,
       extraThemeData: extraThemeData ?? this.extraThemeData,
     );
@@ -744,12 +705,16 @@ class TThemeData extends ThemeExtension<TThemeData> {
       /// 要求json配置必须正确
       final themeConfig = json.decode(themeJson);
       if (themeConfig.containsKey(name)) {
-        var theme = parseThemeData(name, themeConfig, extraThemeData);
+        var theme = _parseThemeData(name, themeConfig, extraThemeData);
         theme.light = theme;
         darkName ??= '${name}Dark';
         if (themeConfig[darkName] != null) {
           // 解析暗色模式
-          var darkTheme = parseThemeData(darkName, themeConfig, extraThemeData);
+          var darkTheme = _parseThemeData(
+            darkName,
+            themeConfig,
+            extraThemeData,
+          );
           darkTheme.light = theme;
           theme.dark = darkTheme;
           // 填充暗色模式缺失数据
@@ -781,7 +746,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
   ///
   /// ## 返回值
   /// 指定名称的 Token 主题；缺失配置时返回带默认映射回退的空本地主题。
-  static TThemeData parseThemeData(
+  static TThemeData _parseThemeData(
     /// 待解析的主题名称。
     String name,
 
@@ -818,7 +783,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
       theme.fontMap[key] = Font.fromJson(value);
     });
 
-    /// 小程序字体尺寸与行高可独立覆盖，不能只保留复合 Font。
+    /// 字体尺寸与行高可独立覆盖，不能只保留复合 Font。
     Map<String, dynamic>? fontMetricsMap = curThemeMap?['fontMetric'];
     fontMetricsMap?.forEach((key, value) {
       theme.fontMetricMap[key] = (value as num).toDouble();
@@ -857,7 +822,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
       theme.shadowMap[key] = list;
     });
 
-    /// 当前小程序内阴影均为 blur=0、扩散=0 的 0.5px 内侧描边。
+    /// 默认内阴影使用宽度 0.5 逻辑像素的内侧描边。
     Map<String, dynamic>? insetShadowsMap = curThemeMap?['insetShadow'];
     insetShadowsMap?.forEach((key, value) {
       theme.insetShadowMap[key] = BorderSide(
@@ -879,103 +844,147 @@ class TThemeData extends ThemeExtension<TThemeData> {
     return theme;
   }
 
-  /// 按 [key] 读取颜色 Token；没有本地配置且无法解析引用或默认映射时返回 null。
+  /// 在当前主题与目标主题间生成过渡配置。
+  ///
+  /// t 为 0 或 1 时返回对应端点；目标为空时返回当前主题。
+  /// 颜色、字号、行高、圆角、阴影和间距按有效 Token 值插值，
+  /// 单侧存在的 Token 保留；名称、字体族、业务扩展和明暗关联在 t=0.5 切换。
+  /// 相同且未显式覆盖的 Token 引用继续沿用，其他值保存在新的映射中。
   ///
   /// ## 返回值
-  /// 命中的颜色 Token；本地、引用链和默认映射都未命中时为 null。
-  Color? ofColor(
-    /// 要查询的 Token 键；为空或未命中时返回 null。
-    String? key,
-  ) {
-    return colorMap[key];
-  }
-
-  /// 按 [key] 读取复合字体 Token；没有本地配置且无法解析引用或默认映射时返回 null。
-  ///
-  /// ## 返回值
-  /// 命中的复合字体 Token；本地、引用链和默认映射都未命中时为 null。
-  Font? ofFont(
-    /// 要查询的 Token 键；为空或未命中时返回 null。
-    String? key,
-  ) {
-    return fontMap[key];
-  }
-
-  /// 按 [key] 读取圆角 Token，单位为逻辑像素；找不到时返回 null。
-  ///
-  /// ## 返回值
-  /// 命中的圆角值，单位为逻辑像素；未命中时为 null。
-  double? ofCorner(
-    /// 要查询的 Token 键；为空或未命中时返回 null。
-    String? key,
-  ) {
-    return radiusMap[key];
-  }
-
-  /// 按 [key] 读取字体栈 Token；找不到时返回 null。
-  ///
-  /// ## 返回值
-  /// 命中的字体栈 Token；未命中时为 null。
-  FontFamily? ofFontFamily(
-    /// 要查询的 Token 键；为空或未命中时返回 null。
-    String? key,
-  ) {
-    return fontFamilyMap[key];
-  }
-
-  /// 按 [key] 读取外投影列表；找不到时返回 null。
-  ///
-  /// ## 返回值
-  /// 命中的外投影列表；未命中时为 null。
-  List<BoxShadow>? ofShadow(
-    /// 要查询的 Token 键；为空或未命中时返回 null。
-    String? key,
-  ) {
-    return shadowMap[key];
-  }
-
-  /// 读取指定 TExtraThemeData 子类型的扩展数据；未配置或类型不匹配时返回 null。
-  ///
-  /// ## 返回值
-  /// 指定类型的额外主题数据；未配置或类型不匹配时为 null。
-  T? ofExtra<T extends TExtraThemeData>() {
-    try {
-      return extraThemeData as T;
-    } catch (e) {
-      Log.e('TThemeData ofExtra error: $e');
-    }
-    return null;
-  }
-
-  /// 生成主题过渡配置。
-  ///
-  /// ## 返回值
-  /// 返回使用目标主题 Token 映射的新主题；此实现不使用 t 做连续插值。
-  /// other 为空或类型不匹配时返回当前主题。当前实现不会保留 [extraThemeData]，
-  /// 业务扩展数据需要由调用方在主题切换后重新注入。
+  /// 两端之间的 Token 主题；端点返回原主题，中间值返回独立映射。
   @override
-  ThemeExtension<TThemeData> lerp(
-    /// 目标主题；为空或类型不匹配时保留当前主题。
+  TThemeData lerp(
+    /// 目标主题；为空或类型不匹配时返回当前主题。
     ThemeExtension<TThemeData>? other,
 
-    /// 保留 ThemeExtension 接口的进度参数；当前实现忽略该值。
+    /// 过渡进度；0 为当前主题，1 为目标主题，离散配置在 0.5 切换。
     double t,
   ) {
-    if (other is! TThemeData) {
+    if (other is! TThemeData || identical(this, other) || t == 0) {
       return this;
     }
-    return TThemeData(
-      name: other.name,
-      colorMap: other.colorMap,
-      fontMap: other.fontMap,
-      fontMetricMap: other.fontMetricMap,
-      radiusMap: other.radiusMap,
-      fontFamilyMap: other.fontFamilyMap,
-      shadowMap: other.shadowMap,
-      insetShadowMap: other.insetShadowMap,
-      spacerMap: other.spacerMap,
-      refMap: other.refMap,
+    if (t == 1) {
+      return other;
+    }
+    final selected = t < 0.5 ? this : other;
+    final refs = _copyMap<String>(selected.refMap, null);
+    final result = TThemeData(
+      name: selected.name,
+      colorMap: _lerpMap(
+        colorMap,
+        other.colorMap,
+        refs,
+        t,
+        (a, b, t) => Color.lerp(a, b, t)!,
+      ),
+      fontMap: _lerpMap(fontMap, other.fontMap, refs, t, _lerpFont),
+      fontMetricMap: _lerpMap(
+        fontMetricMap,
+        other.fontMetricMap,
+        refs,
+        t,
+        _lerpNumber,
+      ),
+      radiusMap: _lerpMap(radiusMap, other.radiusMap, refs, t, _lerpNumber),
+      fontFamilyMap: _lerpMap(
+        fontFamilyMap,
+        other.fontFamilyMap,
+        refs,
+        t,
+        (a, b, t) => t < 0.5 ? a : b,
+      ),
+      shadowMap: _lerpMap(
+        shadowMap,
+        other.shadowMap,
+        refs,
+        t,
+        (a, b, t) => BoxShadow.lerpList(a, b, t)!,
+      ),
+      insetShadowMap: _lerpMap(
+        insetShadowMap,
+        other.insetShadowMap,
+        refs,
+        t,
+        BorderSide.lerp,
+      ),
+      spacerMap: _lerpMap(spacerMap, other.spacerMap, refs, t, _lerpNumber),
+      refMap: refs,
+      extraThemeData: selected.extraThemeData,
     );
+    result.light = identical(selected.light, selected)
+        ? result
+        : selected.light;
+    result.dark = selected.dark;
+    return result;
+  }
+
+  static double _lerpNumber(double a, double b, double t) => a + (b - a) * t;
+
+  static Font _lerpFont(Font a, Font b, double t) {
+    final result = Font(
+      size: 1,
+      lineHeight: 1,
+      fontWeight: FontWeight.lerp(a.fontWeight, b.fontWeight, t)!,
+    );
+    result.size = _lerpNumber(a.size, b.size, t);
+    final lineHeight = _lerpNumber(a.size * a.height, b.size * b.height, t);
+    result.height = result.size == 0
+        ? _lerpNumber(a.height, b.height, t)
+        : lineHeight / result.size;
+    return result;
+  }
+
+  static Set<String> _tokenKeys(TMap<dynamic, dynamic> map) {
+    final keys = <String>{};
+    final visited = <TMap<dynamic, dynamic>>{};
+    void collect(TMap<dynamic, dynamic> current) {
+      if (!visited.add(current)) {
+        return;
+      }
+      keys.addAll(current.keys.whereType<String>());
+      final refs = current.refs;
+      if (refs != null) {
+        collect(refs);
+      }
+      final fallback = current.factory?.call();
+      if (fallback != null) {
+        collect(fallback);
+      }
+    }
+
+    collect(map);
+    return keys;
+  }
+
+  TMap<String, V> _lerpMap<V>(
+    TMap<String, V> a,
+    TMap<String, V> b,
+    TMap<String, String> refs,
+    double t,
+    V Function(V, V, double) interpolate,
+  ) {
+    final result = TMap<String, V>(refs: refs);
+    for (final key in {..._tokenKeys(a), ..._tokenKeys(b)}) {
+      final reference = a.refs?[key];
+      if (reference != null &&
+          reference == b.refs?[key] &&
+          a.get(key) == null &&
+          b.get(key) == null) {
+        continue;
+      }
+      final first = a[key];
+      final second = b[key];
+      final value = first == null
+          ? second
+          : second == null
+          ? first
+          : interpolate(first, second, t);
+      if (value != null) {
+        result[key] = value;
+      }
+    }
+    return result;
   }
 }
 
@@ -1025,7 +1034,7 @@ class TMap<K, V> extends DelegatingMap<K, V> {
       return null;
     }
     // An explicitly configured token wins over its default reference. This
-    // mirrors a CSS custom property overriding a var(--td-...) fallback.
+    // Explicit Token values override reference and default-map fallbacks.
     final localValue = super[key];
     if (localValue != null) {
       return localValue;

@@ -58,7 +58,7 @@ class _TTimeCounterStyle {
     bool? splitWithUnit,
     TTimeCounterThemeData? componentTheme,
   }) {
-    // TimeCounter has no corresponding mini-program global number font token.
+    // TimeCounter uses its own number font configuration.
     timeFontFamily = FontFamily(
       fontFamily: 'TCloudNumber',
       package: 'tdesign_flutter',

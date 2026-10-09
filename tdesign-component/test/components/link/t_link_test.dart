@@ -82,7 +82,7 @@ void main() {
     expect(find.byIcon(Icons.arrow_forward), findsOneWidget);
   });
 
-  testWidgets('图标尺寸与图文间距默认对齐小程序', (tester) async {
+  testWidgets('图标尺寸与图文间距符合默认配置', (tester) async {
     await tester.pumpWidget(
       wrap(
         const TLink(

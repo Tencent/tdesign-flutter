@@ -39,6 +39,12 @@ enum TFormItemContentAlignment {
 }
 
 /// TForm 组件级 ThemeExtension。
+///
+/// 主题过渡中，布局、对齐和必填标记位置在进度 0.5 处切换；
+/// 标签宽度、表单项内边距、项间距和标签间距分别按 80、四周 16、0、8
+/// 逻辑像素补空值后插值。
+///
+/// {@category ComponentTheme}
 class TFormThemeData extends ThemeExtension<TFormThemeData> {
   const TFormThemeData({
     this.showColon,

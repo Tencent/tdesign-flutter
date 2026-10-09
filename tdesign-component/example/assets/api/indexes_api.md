@@ -7,8 +7,8 @@
 #### 主题配置
 
 组件主题通过 `TIndexesThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TIndexesThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TIndexesThemeData` 配置项。
 
 #### 构造方法
 
@@ -66,107 +66,6 @@
 | indexListMaxHeight | double | 0.8 | 索引列表最大高度（父容器高度的百分比，默认0.8） | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | onSelect | void Function(String newIndex, String oldIndex) | - | 用户点击或拖动侧边栏、激活索引发生变化时触发 | 是 |
-
-
-### TIndexesThemeData
-
-索引组件的子树级视觉主题。
-
-仅管理尺寸、颜色和字体。吸顶、滚动方向与胶囊模式属于组件实例行为。
-
-#### 构造方法
-
-##### TIndexesThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| activeAnchorBackgroundColor | Color? | - | 激活锚点背景色。 | 否 |
-| activeAnchorColor | Color? | - | 激活锚点文字颜色。 | 否 |
-| activeAnchorFont | Font? | - | 激活锚点字体。 | 否 |
-| activeIndexBackgroundColor | Color? | - | 激活索引背景色。 | 否 |
-| activeIndexColor | Color? | - | 激活索引文字颜色。 | 否 |
-| activeIndexFont | Font? | - | 激活索引字体。 | 否 |
-| anchorBackgroundColor | Color? | - | 普通锚点背景色。 | 否 |
-| anchorBorderColor | Color? | - | 激活锚点边框颜色。 | 否 |
-| anchorColor | Color? | - | 普通锚点文字颜色。 | 否 |
-| anchorFont | Font? | - | 普通锚点字体。 | 否 |
-| anchorHorizontalPadding | double? | - | 锚点水平内边距。 | 否 |
-| anchorVerticalPadding | double? | - | 锚点垂直内边距。 | 否 |
-| capsuleMargin | double? | - | 胶囊锚点的水平外边距。 | 否 |
-| indexColor | Color? | - | 普通索引文字颜色。 | 否 |
-| indexFont | Font? | - | 普通索引字体。 | 否 |
-| indexItemSize | double? | - | 单个索引的尺寸。 | 否 |
-| indexItemSpacing | double? | - | 相邻索引之间的距离。 | 否 |
-| indexListMaxHeight | double? | - | 索引列表最大高度占父容器高度的比例。 | 否 |
-| sidebarRight | double? | - | 侧栏距容器右侧的距离。 | 否 |
-| tipBackgroundColor | Color? | - | 按压提示背景色。 | 否 |
-| tipColor | Color? | - | 按压提示文字颜色。 | 否 |
-| tipFont | Font? | - | 按压提示字体。 | 否 |
-| tipGap | double? | - | 按压提示与索引之间的距离。 | 否 |
-| tipMaxWidth | double? | - | 按压提示的最大宽度。 | 否 |
-| tipSize | double? | - | 按压提示的最小尺寸。 | 否 |
-
-
-#### 实例方法
-
-##### TIndexesThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| indexListMaxHeight | double? | - | 字段含义：索引列表最大高度占父容器高度的比例。 调用时的空值行为见方法说明。 | 否 |
-| sidebarRight | double? | - | 字段含义：侧栏距容器右侧的距离。 调用时的空值行为见方法说明。 | 否 |
-| indexItemSize | double? | - | 字段含义：单个索引的尺寸。 调用时的空值行为见方法说明。 | 否 |
-| indexItemSpacing | double? | - | 字段含义：相邻索引之间的距离。 调用时的空值行为见方法说明。 | 否 |
-| tipSize | double? | - | 字段含义：按压提示的最小尺寸。 调用时的空值行为见方法说明。 | 否 |
-| tipMaxWidth | double? | - | 字段含义：按压提示的最大宽度。 调用时的空值行为见方法说明。 | 否 |
-| tipGap | double? | - | 字段含义：按压提示与索引之间的距离。 调用时的空值行为见方法说明。 | 否 |
-| indexColor | Color? | - | 字段含义：普通索引文字颜色。 调用时的空值行为见方法说明。 | 否 |
-| activeIndexColor | Color? | - | 字段含义：激活索引文字颜色。 调用时的空值行为见方法说明。 | 否 |
-| activeIndexBackgroundColor | Color? | - | 字段含义：激活索引背景色。 调用时的空值行为见方法说明。 | 否 |
-| tipColor | Color? | - | 字段含义：按压提示文字颜色。 调用时的空值行为见方法说明。 | 否 |
-| tipBackgroundColor | Color? | - | 字段含义：按压提示背景色。 调用时的空值行为见方法说明。 | 否 |
-| indexFont | Font? | - | 字段含义：普通索引字体。 调用时的空值行为见方法说明。 | 否 |
-| activeIndexFont | Font? | - | 字段含义：激活索引字体。 调用时的空值行为见方法说明。 | 否 |
-| tipFont | Font? | - | 字段含义：按压提示字体。 调用时的空值行为见方法说明。 | 否 |
-| anchorColor | Color? | - | 字段含义：普通锚点文字颜色。 调用时的空值行为见方法说明。 | 否 |
-| activeAnchorColor | Color? | - | 字段含义：激活锚点文字颜色。 调用时的空值行为见方法说明。 | 否 |
-| anchorBackgroundColor | Color? | - | 字段含义：普通锚点背景色。 调用时的空值行为见方法说明。 | 否 |
-| activeAnchorBackgroundColor | Color? | - | 字段含义：激活锚点背景色。 调用时的空值行为见方法说明。 | 否 |
-| anchorBorderColor | Color? | - | 字段含义：激活锚点边框颜色。 调用时的空值行为见方法说明。 | 否 |
-| anchorFont | Font? | - | 字段含义：普通锚点字体。 调用时的空值行为见方法说明。 | 否 |
-| activeAnchorFont | Font? | - | 字段含义：激活锚点字体。 调用时的空值行为见方法说明。 | 否 |
-| anchorVerticalPadding | double? | - | 字段含义：锚点垂直内边距。 调用时的空值行为见方法说明。 | 否 |
-| anchorHorizontalPadding | double? | - | 字段含义：锚点水平内边距。 调用时的空值行为见方法说明。 | 否 |
-| capsuleMargin | double? | - | 字段含义：胶囊锚点的水平外边距。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TIndexesThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TIndexesThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TIndexesThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TIndexesThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
 
 
 ### StickyHeaderController
@@ -338,3 +237,43 @@ Creates an element that uses the given widget as its configuration.
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | Widget | - | 当前状态下的头部内容。 | - |
+
+
+### TIndexesThemeData
+
+索引组件的子树级视觉主题。
+
+仅管理尺寸、颜色和字体。吸顶、滚动方向与胶囊模式属于组件实例行为。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| activeAnchorBackgroundColor | Color? | - | 激活锚点背景色。 | 否 |
+| activeAnchorColor | Color? | - | 激活锚点文字颜色。 | 否 |
+| activeAnchorFont | Font? | - | 激活锚点字体。 | 否 |
+| activeIndexBackgroundColor | Color? | - | 激活索引背景色。 | 否 |
+| activeIndexColor | Color? | - | 激活索引文字颜色。 | 否 |
+| activeIndexFont | Font? | - | 激活索引字体。 | 否 |
+| anchorBackgroundColor | Color? | - | 普通锚点背景色。 | 否 |
+| anchorBorderColor | Color? | - | 激活锚点边框颜色。 | 否 |
+| anchorColor | Color? | - | 普通锚点文字颜色。 | 否 |
+| anchorFont | Font? | - | 普通锚点字体。 | 否 |
+| anchorHorizontalPadding | double? | - | 锚点水平内边距。 | 否 |
+| anchorVerticalPadding | double? | - | 锚点垂直内边距。 | 否 |
+| capsuleMargin | double? | - | 胶囊锚点的水平外边距。 | 否 |
+| indexColor | Color? | - | 普通索引文字颜色。 | 否 |
+| indexFont | Font? | - | 普通索引字体。 | 否 |
+| indexItemSize | double? | - | 单个索引的尺寸。 | 否 |
+| indexItemSpacing | double? | - | 相邻索引之间的距离。 | 否 |
+| indexListMaxHeight | double? | - | 索引列表最大高度占父容器高度的比例。 | 否 |
+| sidebarRight | double? | - | 侧栏距容器右侧的距离。 | 否 |
+| tipBackgroundColor | Color? | - | 按压提示背景色。 | 否 |
+| tipColor | Color? | - | 按压提示文字颜色。 | 否 |
+| tipFont | Font? | - | 按压提示字体。 | 否 |
+| tipGap | double? | - | 按压提示与索引之间的距离。 | 否 |
+| tipMaxWidth | double? | - | 按压提示的最大宽度。 | 否 |
+| tipSize | double? | - | 按压提示的最小尺寸。 | 否 |

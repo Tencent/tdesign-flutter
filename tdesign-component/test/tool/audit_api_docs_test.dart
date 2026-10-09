@@ -55,6 +55,88 @@ void main() {
         if (json) '--json',
       ]);
 
+  for (final variant in [
+    'valid',
+    'missing field',
+    'wrong type',
+    'wrong default',
+    'ordinary class',
+    'missing classification',
+    'wrong order',
+    'duplicate configuration',
+    'repeated shared method',
+  ]) {
+    test('Input Theme configuration audit: $variant', () async {
+      var themeSource = File(
+        'lib/src/components/input/t_input_theme_data.dart',
+      ).readAsStringSync().replaceAll('TInputThemeData', 'Sample');
+      final inputDoc = File(
+        'example/assets/api/input_api.md',
+      ).readAsStringSync();
+      final start = inputDoc.indexOf('### TInputThemeData\n');
+      final end = inputDoc.indexOf('\n### ', start + 1);
+      var themeDoc = inputDoc
+          .substring(start, end < 0 ? inputDoc.length : end)
+          .replaceAll('TInputThemeData', 'Sample');
+      if (variant == 'duplicate configuration') {
+        themeDoc += '\n#### 配置项\n';
+      } else if (variant == 'repeated shared method') {
+        themeDoc += '\n##### Sample.copyWith\n';
+      } else if (variant == 'missing classification') {
+        themeDoc = themeDoc.replaceFirst('<!-- api-theme: fields -->', '');
+      } else if (variant == 'missing field') {
+        themeDoc = themeDoc.replaceAll(
+          RegExp(r'^\| borderWidth .*\n', multiLine: true),
+          '',
+        );
+      } else if (variant == 'wrong type') {
+        themeDoc = themeDoc.replaceFirst(
+          '| borderWidth | double?',
+          '| borderWidth | String?',
+        );
+      } else if (variant == 'wrong default') {
+        themeDoc = themeDoc.replaceFirst(
+          '| borderWidth | double? | - |',
+          '| borderWidth | double? | 1 |',
+        );
+      } else if (variant == 'ordinary class') {
+        themeSource = themeSource.replaceFirst(
+          ' extends ThemeExtension<Sample>',
+          '',
+        );
+      }
+      source.writeAsStringSync(
+        '$themeSource\n/// Clear mode.\nenum Mode {\n/// Never clear.\nnever\n}\n',
+      );
+      final manifestFile = File(p.join(fixture.path, 'tool/components.json'));
+      final manifest = jsonDecode(manifestFile.readAsStringSync()) as Map;
+      (manifest['components'][0]['api']['names'] as List).add('Mode');
+      manifestFile.writeAsStringSync(jsonEncode(manifest));
+      const modeDoc = '''
+### Mode
+Clear mode.
+#### 枚举值
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| never | Mode | - | Never clear. | - |
+''';
+      asset.writeAsStringSync(
+        variant == 'wrong order'
+            ? '## API\n\n$themeDoc\n$modeDoc'
+            : '## API\n\n$modeDoc\n$themeDoc',
+      );
+      final result = await audit(json: true);
+      final report = jsonDecode(result.stdout as String) as Map;
+      if (variant == 'valid') {
+        expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
+        expect(report['issues'], isEmpty);
+      } else {
+        expect(result.exitCode, isNot(0));
+        expect(report['issues'], isNotEmpty);
+      }
+    });
+  }
+
   test(
     'audits typedef tables against exported source and accepts legacy aliases',
     () async {

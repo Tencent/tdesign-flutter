@@ -1,7 +1,7 @@
 import 'basic.dart';
 import 't_theme.dart';
 
-/// 小程序独立字号与行高 Token。CSS 中 `--td-font-*` 由这些变量组合而成。
+/// 独立字号与行高 Token，用于组合字体样式。
 extension TFontMetrics on TThemeData {
   double _metric(String key, double fallback) => fontMetricMap[key] ?? fallback;
 
@@ -154,7 +154,7 @@ extension TFontMetrics on TThemeData {
   double get lineHeightDisplayLarge => _metric('lineHeightDisplayLarge', 72);
 }
 
-/// 小程序复合字体 Token。显式覆盖复合 [Font] 时以它为准；否则随独立字号和行高变化。
+/// 复合字体 Token。显式覆盖复合 [Font] 时以它为准；否则随独立字号和行高变化。
 extension TFonts on TThemeData {
   Font? _resolveFont(String key, String sizeKey, String lineHeightKey) {
     final configured = fontMap[key];

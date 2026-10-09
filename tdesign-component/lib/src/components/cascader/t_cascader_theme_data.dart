@@ -14,6 +14,8 @@ enum TCascaderVariant {
 }
 
 /// TCascader 组件级 ThemeExtension。
+///
+/// {@category ComponentTheme}
 class TCascaderThemeData extends ThemeExtension<TCascaderThemeData> {
   const TCascaderThemeData({
     this.height,

@@ -3,6 +3,8 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 
 /// `TSearchBar` 的默认视觉配置。
+///
+/// {@category ComponentTheme}
 class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
   const TSearchBarThemeData({
     this.height,

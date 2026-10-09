@@ -116,8 +116,8 @@ class _ToastInstance {
 /// ### 主题配置
 ///
 /// 组件主题通过 [TToastThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-/// `TToastThemeData` 说明。
+/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
+/// `TToastThemeData` 配置项。
 class TToast {
   static final Map<String, _ToastInstance> _toastInstances = {};
 
@@ -583,7 +583,7 @@ class TToast {
     final maskColor = showMask
         ? (cfg.color ?? Colors.black.withValues(alpha: cfg.opacity))
         : Colors.transparent;
-    // 采用与小程序 / mobile-vue 一致的垂直百分比偏移（水平恒居中）：
+    // 采用垂直百分比偏移（水平恒居中）：
     // top 距顶 25%、middle 正中 50%、bottom 距底 25%。
     // 百分比定位天然避让安全区，无需再叠加 SafeArea。
     final alignment = switch (placement) {

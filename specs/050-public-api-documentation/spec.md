@@ -66,3 +66,23 @@ manifest 遗留过期名称和缺失 Theme；工具遗漏普通实例方法及�
 - 复用 Theme 的组件仅说明真实复用范围，不在 manifest 重复登记其他组件的 Theme 类型。
 - Icon、Steps 没有独立 Theme，明确实际样式来源；全局 Token 类型、查询和资源配置集中于 Theme 页。
 - 不改变运行代码、公开签名、默认值、主题优先级或弹层快照行为。
+
+## Input Theme 配置表试点（2026-10-09）
+
+- 展示顺序先功能 API，后组件 Theme；两组各自保留原有相对顺序。Input 顺序为 TInput、TInputClearButtonMode、TInputStatus、TInputThemeData。
+- 组件 ThemeExtension 可用源码 dartdoc 的 `{@category ComponentTheme}` 声明配置表展示；工具同时核对真实 ThemeExtension 声明，不按类型名猜测。
+- 默认构造参数投影成单一「配置项」表，保留字段类型、声明默认值、说明和 required；省略标准 copyWith/lerp/merge 的重复方法表。其他专有方法及命名构造仍保留。
+- 独立 AST 审计必须核对分类和字段契约，不能允许普通类借该展示规则隐藏方法；源码方法与注释保留。
+- 本轮仅给 TInputThemeData 分类并重新生成 input_api.md，其他 56 份资产不变。只验收 Input；不据此声明已推广到全部组件。
+
+## 全组件 Theme 配置表推广（2026-10-09）
+
+- 将 Input 已验收的分类、单一配置表和 Theme 置后规则推广到 manifest 中所有组件级 ThemeExtension；全局 TThemeData 的 Token 查询、资源与构建 API 保持完整展示。
+- 主入口 dartdoc 只指向配置字段及回退；共用 copyWith/lerp/merge 能力在全局 Theme 页集中说明，不承诺各组件的插值细节完全一致。特殊过渡语义由对应 Theme 类或字段注释保留。
+- 各页只将组件 Theme 移到末尾，功能类、模型、枚举、typedef 和函数的原有相对顺序保持不变；专有方法、静态方法和命名构造仍保留。
+- 独立审计和展示测试须强制核对源码分类、配置表及主题排序，防止遗漏标记、字段丢失或功能 API 被隐藏。两 SDK 生成、AST 审计、文档专项测试、真实 API 页面及严格 analyze 作为本轮门禁。
+- 本轮仅改变文档注释、生成器和文档验收规则；所有生产文件非注释 Token 必须不变。正式工具依赖不引用临时分支或提交，候选工具与消费文档分别保留交付状态。
+
+## Theme API 职责与平台描述
+
+用户 API、Demo 与源码行为说明按 Flutter 契约描述，不将参考平台当作使用方依赖。历史审计来源及真实生态链接保留，边界见 theme-api-and-platform-descriptions.md；本轮不变更公开 API。

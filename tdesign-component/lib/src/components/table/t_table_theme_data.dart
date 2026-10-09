@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 /// 表格组件级 ThemeExtension。
 ///
 /// 仅保存表格的视觉默认值。
+///
+/// {@category ComponentTheme}
 class TTableThemeData extends ThemeExtension<TTableThemeData> {
   const TTableThemeData({
     this.rowHeight,

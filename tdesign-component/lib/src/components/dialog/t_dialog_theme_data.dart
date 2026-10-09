@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 /// 通过 Theme 子树注入，控制子树的默认对话框样式。
 /// 面板视觉值由本扩展统一配置；未设置时回退 TDesign Token 或组件内置值，
 /// 不从 Flutter DialogTheme 读取。
+///
+/// {@category ComponentTheme}
 class TDialogThemeData extends ThemeExtension<TDialogThemeData> {
   /// 背景色（对应 Material [DialogThemeData.backgroundColor]）
   /// 未配置时使用 bgColorContainer Token。

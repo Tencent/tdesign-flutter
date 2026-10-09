@@ -7,8 +7,8 @@
 #### 主题配置
 
 组件主题通过 `TTimeCounterThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TTimeCounterThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TTimeCounterThemeData` 配置项。
 
 #### 构造方法
 
@@ -72,68 +72,6 @@ Controller 由调用方创建并负责释放。绑定多个 `TTimeCounter` 时�
 
 开始或继续计时。
 
-### TTimeCounterThemeData
-
-计时器组件的具体视觉默认值。
-
-尺寸档位与形态由 `TTimeCounter.size` / `variant` 唯一选择；未设置的视觉值
-在使用时回退当前 TDesign 全局 Token，而不是在 Theme 中冻结默认值。
-
-#### 构造方法
-
-##### TTimeCounterThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| blockBackgroundColor | Color? | - | 圆形、方形数字块的背景色；未设置时回退 `errorColor`。 | 否 |
-| blockTextColor | Color? | - | 圆形、方形数字块的文字颜色；未设置时回退 `textColorAnti`。 | 否 |
-| defaultTextColor | Color? | - | 纯文本计时数字颜色；未设置时回退 `textColorPrimary`。 | 否 |
-| roundBorderRadius | double? | - | 圆形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusCircle`。 默认数字块宽高相等，故固定大半径显示为正圆。自定义较小半径时显示 对应的圆角方块，不再被固定 `BoxShape.circle` 忽略。 | 否 |
-| squareBorderRadius | double? | - | 方形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusSmall`。 | 否 |
-
-
-#### 实例方法
-
-##### TTimeCounterThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| defaultTextColor | Color? | - | 字段含义：纯文本计时数字颜色；未设置时回退 `textColorPrimary`。 调用时的空值行为见方法说明。 | 否 |
-| blockTextColor | Color? | - | 字段含义：圆形、方形数字块的文字颜色；未设置时回退 `textColorAnti`。 调用时的空值行为见方法说明。 | 否 |
-| blockBackgroundColor | Color? | - | 字段含义：圆形、方形数字块的背景色；未设置时回退 `errorColor`。 调用时的空值行为见方法说明。 | 否 |
-| squareBorderRadius | double? | - | 字段含义：方形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusSmall`。 调用时的空值行为见方法说明。 | 否 |
-| roundBorderRadius | double? | - | 字段含义：圆形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusCircle`。 默认数字块宽高相等，故固定大半径显示为正圆。自定义较小半径时显示 对应的圆角方块，不再被固定 `BoxShape.circle` 忽略。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TTimeCounterThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TTimeCounterThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TTimeCounterThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TTimeCounterThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
 ### TTimeCounterDirection
 
 计时方向。
@@ -189,3 +127,24 @@ Controller 由调用方创建并负责释放。绑定多个 `TTimeCounter` 时�
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | Widget | - | 自定义计时展示内容。 | - |
+
+
+### TTimeCounterThemeData
+
+计时器组件的具体视觉默认值。
+
+尺寸档位与形态由 `TTimeCounter.size` / `variant` 唯一选择；未设置的视觉值
+在使用时回退当前 TDesign 全局 Token，而不是在 Theme 中冻结默认值。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| blockBackgroundColor | Color? | - | 圆形、方形数字块的背景色；未设置时回退 `errorColor`。 | 否 |
+| blockTextColor | Color? | - | 圆形、方形数字块的文字颜色；未设置时回退 `textColorAnti`。 | 否 |
+| defaultTextColor | Color? | - | 纯文本计时数字颜色；未设置时回退 `textColorPrimary`。 | 否 |
+| roundBorderRadius | double? | - | 圆形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusCircle`。 默认数字块宽高相等，故固定大半径显示为正圆。自定义较小半径时显示 对应的圆角方块，不再被固定 `BoxShape.circle` 忽略。 | 否 |
+| squareBorderRadius | double? | - | 方形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusSmall`。 | 否 |

@@ -7,8 +7,8 @@
 #### 主题配置
 
 组件主题通过 `TUploadThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TUploadThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TUploadThemeData` 配置项。
 
 #### 构造方法
 
@@ -75,91 +75,6 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | TUploadFile | - | 用非空参数替换对应字段的新文件对象；null 参数保留当前字段。 | - |
-
-
-### TUploadThemeData
-
-TUpload 组件级 ThemeExtension。
-
-#### 构造方法
-
-##### TUploadThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| addIconSize | double? | - | 网格添加图标尺寸；null 时为 28 逻辑像素。 | 否 |
-| alignment | WrapAlignment? | - | 网格 Wrap 对齐方式；null 时为 WrapAlignment.start。 | 否 |
-| backgroundColor | Color? | - | 启用项背景色；null 时使用 bgColorSecondaryContainer Token。 | 否 |
-| borderRadius | double? | - | 方形上传项圆角，单位为逻辑像素；null 时使用 radiusDefault Token，圆形变体不使用该值。 | 否 |
-| disabledBackgroundColor | Color? | - | 禁用添加项背景色；null 时使用 bgColorComponentDisabled Token。 | 否 |
-| disabledForegroundColor | Color? | - | 禁用添加项前景色；null 时使用 textColorDisabled Token。 | 否 |
-| disabledMaskColor | Color? | - | 有图片预览且处于 ready/success 的禁用文件遮罩色；null 时亮色使用 textColorAnti、暗色使用 fontGray1，alpha 均为 0.6。 | 否 |
-| foregroundColor | Color? | - | 启用项前景色；null 时使用 textColorPlaceholder Token。 | 否 |
-| itemSize | double? | - | 网格上传项的宽高，单位为逻辑像素；null 时为 80。 | 否 |
-| overlayColor | Color? | - | 上传中/失败状态的遮罩色；null 时使用 fontGray3 Token。 | 否 |
-| removeButtonColor | Color? | - | 移除按钮背景色；null 时使用 textColorDisabled Token。 | 否 |
-| removeButtonSize | double? | - | 移除按钮宽高；null 时为 20 逻辑像素。 | 否 |
-| removeIconSize | double? | - | 移除图标尺寸；null 时为 16 逻辑像素。 | 否 |
-| runSpacing | double? | - | 网格项纵向间距；null 时使用全局 spacer Token。列表项间距由全局 spacer1 决定。 | 否 |
-| spacing | double? | - | 网格项横向间距；null 时使用全局 spacer Token。 | 否 |
-| statusIconSize | double? | - | 上传状态图标尺寸；null 时为 24 逻辑像素。 | 否 |
-| statusTextStyle | TextStyle? | - | 状态文案样式；null 时使用反色前景色与 fontBodySmall，字号最终回退 12。 | 否 |
-| variant | TUploadVariant? | - | 上传项形状；null 时使用圆角方形。 | 否 |
-
-
-#### 实例方法
-
-##### TUploadThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| variant | TUploadVariant? | - | 字段含义：上传项形状；null 时使用圆角方形。 调用时的空值行为见方法说明。 | 否 |
-| itemSize | double? | - | 字段含义：网格上传项的宽高，单位为逻辑像素；null 时为 80。 调用时的空值行为见方法说明。 | 否 |
-| spacing | double? | - | 字段含义：网格项横向间距；null 时使用全局 spacer Token。 调用时的空值行为见方法说明。 | 否 |
-| runSpacing | double? | - | 字段含义：网格项纵向间距；null 时使用全局 spacer Token。列表项间距由全局 spacer1 决定。 调用时的空值行为见方法说明。 | 否 |
-| alignment | WrapAlignment? | - | 字段含义：网格 Wrap 对齐方式；null 时为 WrapAlignment.start。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：启用项背景色；null 时使用 bgColorSecondaryContainer Token。 调用时的空值行为见方法说明。 | 否 |
-| foregroundColor | Color? | - | 字段含义：启用项前景色；null 时使用 textColorPlaceholder Token。 调用时的空值行为见方法说明。 | 否 |
-| disabledBackgroundColor | Color? | - | 字段含义：禁用添加项背景色；null 时使用 bgColorComponentDisabled Token。 调用时的空值行为见方法说明。 | 否 |
-| disabledForegroundColor | Color? | - | 字段含义：禁用添加项前景色；null 时使用 textColorDisabled Token。 调用时的空值行为见方法说明。 | 否 |
-| overlayColor | Color? | - | 字段含义：上传中/失败状态的遮罩色；null 时使用 fontGray3 Token。 调用时的空值行为见方法说明。 | 否 |
-| statusTextStyle | TextStyle? | - | 字段含义：状态文案样式；null 时使用反色前景色与 fontBodySmall，字号最终回退 12。 调用时的空值行为见方法说明。 | 否 |
-| borderRadius | double? | - | 字段含义：方形上传项圆角，单位为逻辑像素；null 时使用 radiusDefault Token，圆形变体不使用该值。 调用时的空值行为见方法说明。 | 否 |
-| addIconSize | double? | - | 字段含义：网格添加图标尺寸；null 时为 28 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| statusIconSize | double? | - | 字段含义：上传状态图标尺寸；null 时为 24 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| removeButtonSize | double? | - | 字段含义：移除按钮宽高；null 时为 20 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| removeButtonColor | Color? | - | 字段含义：移除按钮背景色；null 时使用 textColorDisabled Token。 调用时的空值行为见方法说明。 | 否 |
-| removeIconSize | double? | - | 字段含义：移除图标尺寸；null 时为 16 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| disabledMaskColor | Color? | - | 字段含义：有图片预览且处于 ready/success 的禁用文件遮罩色；null 时亮色使用 textColorAnti、暗色使用 fontGray1，alpha 均为 0.6。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TUploadThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TUploadThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TUploadThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TUploadThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
 
 
 ### TUploadFileStatus
@@ -234,3 +149,34 @@ TUpload 组件级 ThemeExtension。
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | Future&lt;List&lt;TUploadFile&gt;&gt; | - | 文件选择完成时提供选择的文件列表；空列表表示没有新增文件。 | - |
+
+
+### TUploadThemeData
+
+TUpload 组件级 ThemeExtension。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| addIconSize | double? | - | 网格添加图标尺寸；null 时为 28 逻辑像素。 | 否 |
+| alignment | WrapAlignment? | - | 网格 Wrap 对齐方式；null 时为 WrapAlignment.start。 | 否 |
+| backgroundColor | Color? | - | 启用项背景色；null 时使用 bgColorSecondaryContainer Token。 | 否 |
+| borderRadius | double? | - | 方形上传项圆角，单位为逻辑像素；null 时使用 radiusDefault Token，圆形变体不使用该值。 | 否 |
+| disabledBackgroundColor | Color? | - | 禁用添加项背景色；null 时使用 bgColorComponentDisabled Token。 | 否 |
+| disabledForegroundColor | Color? | - | 禁用添加项前景色；null 时使用 textColorDisabled Token。 | 否 |
+| disabledMaskColor | Color? | - | 有图片预览且处于 ready/success 的禁用文件遮罩色；null 时亮色使用 textColorAnti、暗色使用 fontGray1，alpha 均为 0.6。 | 否 |
+| foregroundColor | Color? | - | 启用项前景色；null 时使用 textColorPlaceholder Token。 | 否 |
+| itemSize | double? | - | 网格上传项的宽高，单位为逻辑像素；null 时为 80。 | 否 |
+| overlayColor | Color? | - | 上传中/失败状态的遮罩色；null 时使用 fontGray3 Token。 | 否 |
+| removeButtonColor | Color? | - | 移除按钮背景色；null 时使用 textColorDisabled Token。 | 否 |
+| removeButtonSize | double? | - | 移除按钮宽高；null 时为 20 逻辑像素。 | 否 |
+| removeIconSize | double? | - | 移除图标尺寸；null 时为 16 逻辑像素。 | 否 |
+| runSpacing | double? | - | 网格项纵向间距；null 时使用全局 spacer Token。列表项间距由全局 spacer1 决定。 | 否 |
+| spacing | double? | - | 网格项横向间距；null 时使用全局 spacer Token。 | 否 |
+| statusIconSize | double? | - | 上传状态图标尺寸；null 时为 24 逻辑像素。 | 否 |
+| statusTextStyle | TextStyle? | - | 状态文案样式；null 时使用反色前景色与 fontBodySmall，字号最终回退 12。 | 否 |
+| variant | TUploadVariant? | - | 上传项形状；null 时使用圆角方形。 | 否 |

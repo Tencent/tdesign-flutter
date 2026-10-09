@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// DropdownMenu 的组件级视觉与布局默认值。
+///
+/// {@category ComponentTheme}
 class TDropdownThemeData extends ThemeExtension<TDropdownThemeData> {
   const TDropdownThemeData({
     this.barHeight,

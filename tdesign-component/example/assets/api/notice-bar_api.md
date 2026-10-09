@@ -7,8 +7,8 @@
 #### 主题配置
 
 组件主题通过 `TNoticeBarThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TNoticeBarThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TNoticeBarThemeData` 配置项。
 
 #### 构造方法
 
@@ -31,15 +31,42 @@
 | suffixIcon | IconData? | - | 尾部图标，可以和 `operation` 同时显示。 | 否 |
 
 
+### TNoticeBarTapTarget
+
+公告栏点击区域
+#### 枚举值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| prefix | TNoticeBarTapTarget | - | 前缀区域 | - |
+| content | TNoticeBarTapTarget | - | 公告内容 | - |
+| operation | TNoticeBarTapTarget | - | 右侧操作区 | - |
+| suffix | TNoticeBarTapTarget | - | 尾部图标 | - |
+
+
+### TNoticeBarStatus
+
+公告栏业务状态。
+#### 枚举值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| info | TNoticeBarStatus | - | 普通信息（默认）。 | - |
+| success | TNoticeBarStatus | - | 成功信息。 | - |
+| warning | TNoticeBarStatus | - | 警示信息。 | - |
+| error | TNoticeBarStatus | - | 错误信息。 | - |
+
+
 ### TNoticeBarThemeData
 
 TNoticeBar 组件级 ThemeExtension
 
 通过 Theme 子树注入，控制子树的默认公告栏样式。
 
-#### 构造方法
+<!-- api-theme: fields -->
 
-##### TNoticeBarThemeData
+#### 配置项
+
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
@@ -86,66 +113,6 @@ TNoticeBar 组件级 ThemeExtension
 
 #### 实例方法
 
-##### TNoticeBarThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| height | double? | - | 字段含义：文字高度 未配置时为 22 逻辑像素，表示正文区域高度，外层内边距另计。 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：公告栏背景色 调用时的空值行为见方法说明。 | 否 |
-| textStyle | TextStyle? | - | 字段含义：公告栏内容样式 调用时的空值行为见方法说明。 | 否 |
-| leftIconColor | Color? | - | 字段含义：公告栏左侧图标颜色 调用时的空值行为见方法说明。 | 否 |
-| rightIconColor | Color? | - | 字段含义：公告栏右侧图标颜色 调用时的空值行为见方法说明。 | 否 |
-| padding | EdgeInsetsGeometry? | - | 字段含义：公告栏内边距 未配置时使用 defaultPadding，即上/下 13、左 16、右 12 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TNoticeBarThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TNoticeBarThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TNoticeBarThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TNoticeBarThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
-##### TNoticeBarThemeData.merge
-
-位置参数：`other`
-
-
-合并主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | TNoticeBarThemeData? | - | 要合并的目标主题；为空时保留当前配置。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TNoticeBarThemeData | - | other 的非空字段优先的合并主题；other 为 null 时返回当前主题。 | - |
-
-
 ##### TNoticeBarThemeData.resolve
 
 位置参数：`context`
@@ -164,29 +131,3 @@ TNoticeBar 组件级 ThemeExtension
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | TNoticeBarThemeData | - | 将状态预设与当前主题覆盖合并后的 NoticeBar 视觉配置。 | - |
-
-
-### TNoticeBarTapTarget
-
-公告栏点击区域
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| prefix | TNoticeBarTapTarget | - | 前缀区域 | - |
-| content | TNoticeBarTapTarget | - | 公告内容 | - |
-| operation | TNoticeBarTapTarget | - | 右侧操作区 | - |
-| suffix | TNoticeBarTapTarget | - | 尾部图标 | - |
-
-
-### TNoticeBarStatus
-
-公告栏业务状态。
-#### 枚举值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| info | TNoticeBarStatus | - | 普通信息（默认）。 | - |
-| success | TNoticeBarStatus | - | 成功信息。 | - |
-| warning | TNoticeBarStatus | - | 警示信息。 | - |
-| error | TNoticeBarStatus | - | 错误信息。 | - |

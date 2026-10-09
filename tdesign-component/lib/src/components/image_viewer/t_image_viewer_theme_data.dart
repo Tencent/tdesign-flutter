@@ -3,6 +3,8 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 
 /// 图片预览组件级 ThemeExtension
+///
+/// {@category ComponentTheme}
 class TImageViewerThemeData extends ThemeExtension<TImageViewerThemeData> {
   /// 预览页背景色
   /// null 时由 fontGray1 与 bgColorContainer 叠加得到默认背景色。

@@ -9,7 +9,7 @@ import '../button/t_button_types.dart';
 class TFabDefaults {
   TFabDefaults._(); // coverage:ignore-line
 
-  /// 默认尺寸：与小程序 Fab 的 large 基线一致。
+  /// 默认 large 尺寸。
   static const defaultSize = TButtonSize.large;
 
   /// 默认变体：Fab 始终使用填充动作层。

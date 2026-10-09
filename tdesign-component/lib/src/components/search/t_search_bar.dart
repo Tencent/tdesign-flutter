@@ -22,8 +22,8 @@ const EdgeInsets _kContentPadding = EdgeInsets.symmetric(horizontal: 12);
 /// ### 主题配置
 ///
 /// 组件主题通过 [TSearchBarThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-/// `TSearchBarThemeData` 说明。
+/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
+/// `TSearchBarThemeData` 配置项。
 class TSearchBar extends StatefulWidget {
   const TSearchBar({
     super.key,

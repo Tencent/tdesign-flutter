@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 /// 通过 Theme 子树注入，控制子树的默认样式。
 /// 布局、内容和虚线选择由实例控制；视觉值从本主题读取，未配置时回退
 /// TDesign Token 或组件内置值，不读取 Material DividerTheme。
+///
+/// {@category ComponentTheme}
 class TDividerThemeData extends ThemeExtension<TDividerThemeData> {
   /// 线条颜色；未设置时使用 `bgColorComponent` Token。
   final Color? color;

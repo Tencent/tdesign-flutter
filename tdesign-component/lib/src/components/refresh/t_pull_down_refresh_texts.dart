@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 
 /// 下拉刷新四态提示语。
 ///
-/// 对应官方（小程序 / mobile-vue）`loadingTexts: string[]` 数组，
 /// 覆盖「下拉刷新 / 松手刷新 / 正在刷新 / 刷新完成」四个阶段的文案。
 class TPullDownRefreshTexts {
   /// 下拉未达阈值时的提示语（官方默认「下拉刷新」）。

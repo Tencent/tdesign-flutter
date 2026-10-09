@@ -9,8 +9,8 @@
 #### 主题配置
 
 组件主题通过 `TTabsBarThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TTabsBarThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TTabsBarThemeData` 配置项。
 
 #### 构造方法
 
@@ -80,77 +80,6 @@ TDesign自定义下标
 | indicatorWidth | double? | - | 指示器宽度 | 否 |
 
 
-### TTabsBarThemeData
-
-TabBar 组件 ThemeExtension
-
-管理 TTabsBar 的子树级视觉默认样式。
-
-#### 构造方法
-
-##### TTabsBarThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 栏背景色。 | 否 |
-| disabledLabelStyle | TextStyle? | - | 禁用标签文字和图标样式。 | 否 |
-| dividerColor | Color? | - | 分割线颜色。 | 否 |
-| dividerHeight | double? | - | 分割线高度；小于等于 0 时不展示。 | 否 |
-| indicator | Decoration? | - | 组件主题指示器；非空时覆盖内置形态指示器。 为空时 Line 使用 TDesign 默认指示器，Tag 与 Card 不展示指示器。 | 否 |
-| labelPadding | EdgeInsetsGeometry? | - | 标签内容边距。 | 否 |
-| labelStyle | TextStyle? | - | 选中标签文字样式。 | 否 |
-| selectedTagBackgroundColor | Color? | - | Tag 形态下的选中背景色。 | 否 |
-| tagBackgroundColor | Color? | - | Tag 形态下的默认背景色。 | 否 |
-| unselectedLabelStyle | TextStyle? | - | 未选中标签文字样式。 | 否 |
-
-
-#### 实例方法
-
-##### TTabsBarThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 字段含义：栏背景色。 调用时的空值行为见方法说明。 | 否 |
-| labelStyle | TextStyle? | - | 字段含义：选中标签文字样式。 调用时的空值行为见方法说明。 | 否 |
-| unselectedLabelStyle | TextStyle? | - | 字段含义：未选中标签文字样式。 调用时的空值行为见方法说明。 | 否 |
-| disabledLabelStyle | TextStyle? | - | 字段含义：禁用标签文字和图标样式。 调用时的空值行为见方法说明。 | 否 |
-| labelPadding | EdgeInsetsGeometry? | - | 字段含义：标签内容边距。 调用时的空值行为见方法说明。 | 否 |
-| indicator | Decoration? | - | 字段含义：组件主题指示器；非空时覆盖内置形态指示器。 为空时 Line 使用 TDesign 默认指示器，Tag 与 Card 不展示指示器。 调用时的空值行为见方法说明。 | 否 |
-| dividerColor | Color? | - | 字段含义：分割线颜色。 调用时的空值行为见方法说明。 | 否 |
-| dividerHeight | double? | - | 字段含义：分割线高度；小于等于 0 时不展示。 调用时的空值行为见方法说明。 | 否 |
-| selectedTagBackgroundColor | Color? | - | 字段含义：Tag 形态下的选中背景色。 调用时的空值行为见方法说明。 | 否 |
-| tagBackgroundColor | Color? | - | 字段含义：Tag 形态下的默认背景色。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TTabsBarThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TTabsBarThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TTabsBarThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TTabsBarThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
 ### TTabsBarVariant
 
 TabsBar 形态枚举。
@@ -172,3 +101,28 @@ TabsBar 形态枚举。
 | --- | --- | --- | --- | --- |
 | small | TTabsBarSize | - | 小尺寸，使用 14px 字体 Token。 | - |
 | large | TTabsBarSize | - | 大尺寸，使用 16px 字体 Token。 | - |
+
+
+### TTabsBarThemeData
+
+TabBar 组件 ThemeExtension
+
+管理 TTabsBar 的子树级视觉默认样式。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 栏背景色。 | 否 |
+| disabledLabelStyle | TextStyle? | - | 禁用标签文字和图标样式。 | 否 |
+| dividerColor | Color? | - | 分割线颜色。 | 否 |
+| dividerHeight | double? | - | 分割线高度；小于等于 0 时不展示。 | 否 |
+| indicator | Decoration? | - | 组件主题指示器；非空时覆盖内置形态指示器。 为空时 Line 使用 TDesign 默认指示器，Tag 与 Card 不展示指示器。 | 否 |
+| labelPadding | EdgeInsetsGeometry? | - | 标签内容边距。 | 否 |
+| labelStyle | TextStyle? | - | 选中标签文字样式。 | 否 |
+| selectedTagBackgroundColor | Color? | - | Tag 形态下的选中背景色。 | 否 |
+| tagBackgroundColor | Color? | - | Tag 形态下的默认背景色。 | 否 |
+| unselectedLabelStyle | TextStyle? | - | 未选中标签文字样式。 | 否 |

@@ -18,8 +18,8 @@ import 't_backtop_theme_data.dart';
 /// ### 主题配置
 ///
 /// 组件主题通过 [TBackTopThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-/// `TBackTopThemeData` 说明。
+/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
+/// `TBackTopThemeData` 配置项。
 class TBackTop extends StatefulWidget {
   const TBackTop({
     Key? key,
@@ -264,7 +264,7 @@ class _TBackTopState extends State<TBackTop> {
         ),
         decoration: ShapeDecoration(
           color: style.backgroundColor,
-          // 小程序半圆形使用 radius-round；只有正圆形使用 radius-circle (50%)。
+          // 半圆形使用 radiusRound；正圆形使用 radiusCircle。
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(context.tTheme.radiusRound),

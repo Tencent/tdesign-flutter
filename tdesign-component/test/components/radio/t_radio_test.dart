@@ -68,7 +68,7 @@ void main() {
   }
 
   group('TRadio 单项行为', () {
-    testWidgets('默认主标题和副标题行数与小程序一致', (tester) async {
+    testWidgets('默认主标题和副标题行数符合配置', (tester) async {
       final radio = controlledRadio<String>(
         value: 'a',
         selectedValue: 'a',
@@ -347,7 +347,7 @@ void main() {
       }
     });
 
-    testWidgets('三档块级高度保持 48 56 64 且默认规格对应小程序', (tester) async {
+    testWidgets('三档块级高度保持 48 56 64 且默认规格正确', (tester) async {
       await tester.pumpWidget(
         wrap(
           Column(
@@ -381,9 +381,9 @@ void main() {
     });
 
     testWidgets('块高、指示器和卡片高度均读取 TDesign token', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'radio-size-token-test',
-        marginMap: const {
+      final token = TThemeData.defaultData().copyWith(
+        name: 'radio-size-token-test',
+        spacerMap: const {
           'spacer': 9,
           'spacer2': 18,
           'spacer3': 27,

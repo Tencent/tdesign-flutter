@@ -10,8 +10,8 @@
 #### 主题配置
 
 组件主题通过 `TSideBarThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TSideBarThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TSideBarThemeData` 配置项。
 
 #### 构造方法
 
@@ -51,68 +51,6 @@
 | value | int | -1 | 条目的业务值；由调用方指定，默认 -1，不自动使用 children 中的位置。 父组件通过相同的值指定选中项；选择回调返回该值。 | 否 |
 
 
-### TSideBarThemeData
-
-侧边栏组件 ThemeExtension
-
-管理 TSideBar 的子树级视觉样式（内边距、选中/未选中颜色等）。
-实例参数负责选中值、形态和交互；具体视觉值由本组件 Theme 配置。
-
-#### 构造方法
-
-##### TSideBarThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| contentPadding | EdgeInsetsGeometry? | - | 默认自定义文本框内边距 | 否 |
-| selectedBgColor | Color? | - | 默认选中背景颜色 | 否 |
-| selectedTextStyle | TextStyle? | - | 选中文字样式；其中的 color 同时控制选中图标和指示线。 未指定 color 时读取全局品牌色；禁用态始终使用全局禁用色。 | 否 |
-| textStyle | TextStyle? | - | 未选中标签文字样式；颜色同时用于未选中图标。 选中项只继承排版字段，不继承这里的颜色；禁用态使用全局禁用色。 未指定颜色时使用全局正文色。 | 否 |
-| unSelectedBgColor | Color? | - | 默认未选中背景颜色 | 否 |
-
-
-#### 实例方法
-
-##### TSideBarThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| contentPadding | EdgeInsetsGeometry? | - | 字段含义：默认自定义文本框内边距 调用时的空值行为见方法说明。 | 否 |
-| textStyle | TextStyle? | - | 字段含义：未选中标签文字样式；颜色同时用于未选中图标。 选中项只继承排版字段，不继承这里的颜色；禁用态使用全局禁用色。 未指定颜色时使用全局正文色。 调用时的空值行为见方法说明。 | 否 |
-| selectedTextStyle | TextStyle? | - | 字段含义：选中文字样式；其中的 color 同时控制选中图标和指示线。 未指定 color 时读取全局品牌色；禁用态始终使用全局禁用色。 调用时的空值行为见方法说明。 | 否 |
-| selectedBgColor | Color? | - | 字段含义：默认选中背景颜色 调用时的空值行为见方法说明。 | 否 |
-| unSelectedBgColor | Color? | - | 字段含义：默认未选中背景颜色 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TSideBarThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TSideBarThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TSideBarThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TSideBarThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
 ### TSideBarVariant
 
 侧边栏样式
@@ -122,3 +60,24 @@
 | --- | --- | --- | --- | --- |
 | line | TSideBarVariant | - | 左侧品牌色指示线样式 | - |
 | tag | TSideBarVariant | - | 选中项为圆角标签样式 | - |
+
+
+### TSideBarThemeData
+
+侧边栏组件 ThemeExtension
+
+管理 TSideBar 的子树级视觉样式（内边距、选中/未选中颜色等）。
+实例参数负责选中值、形态和交互；具体视觉值由本组件 Theme 配置。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| contentPadding | EdgeInsetsGeometry? | - | 默认自定义文本框内边距 | 否 |
+| selectedBgColor | Color? | - | 默认选中背景颜色 | 否 |
+| selectedTextStyle | TextStyle? | - | 选中文字样式；其中的 color 同时控制选中图标和指示线。 未指定 color 时读取全局品牌色；禁用态始终使用全局禁用色。 | 否 |
+| textStyle | TextStyle? | - | 未选中标签文字样式；颜色同时用于未选中图标。 选中项只继承排版字段，不继承这里的颜色；禁用态使用全局禁用色。 未指定颜色时使用全局正文色。 | 否 |
+| unSelectedBgColor | Color? | - | 默认未选中背景颜色 | 否 |

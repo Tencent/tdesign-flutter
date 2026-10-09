@@ -3,6 +3,8 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 
 /// TRate 组件级 ThemeExtension。
+///
+/// {@category ComponentTheme}
 class TRateThemeData extends ThemeExtension<TRateThemeData> {
   const TRateThemeData({
     this.starColor,

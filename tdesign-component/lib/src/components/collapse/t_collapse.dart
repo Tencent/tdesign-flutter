@@ -19,8 +19,8 @@ import 't_inset_divider.dart';
 /// ### 主题配置
 ///
 /// 组件主题通过 [TCollapseThemeData] 配置，放入 Flutter [ThemeData.extensions]
-/// 后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-/// `TCollapseThemeData` 说明。
+/// 后作用于对应子树。可配置字段和未设置时的回退见本页的
+/// `TCollapseThemeData` 配置项。
 class TCollapse<T extends Object> extends StatefulWidget {
   const TCollapse({
     required this.children,

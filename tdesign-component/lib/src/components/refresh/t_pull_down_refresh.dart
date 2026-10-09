@@ -15,8 +15,7 @@ import 't_pull_down_refresh_texts.dart';
 
 /// TDesign 下拉刷新组件。
 ///
-/// 以**最小、Flutter 惯用**的 API 封装 [EasyRefresh]，对齐官方
-/// （小程序 / mobile-vue）PullDownRefresh 的行为表现：
+/// 通过 [EasyRefresh] 提供下拉刷新能力：
 /// 下拉 → 松手 → 刷新 → 完成四态，支持触底加载、超时、
 /// 四态文案自定义与受控刷新。
 ///
@@ -172,7 +171,7 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
 
   /// 上报状态变化：去重 + 异步调度，避免 build 期同步回调与重复上报。
   void _handleStateChanged(TPullDownRefreshState state) {
-    // 小程序超时是一次性事件，随后直接收起；不能在迟到的 Future 完成时
+    // 刷新超时是一次性事件，随后直接收起；不能在迟到的 Future 完成时
     // 再次把 timeout 刷新报告成 done。
     if (state == TPullDownRefreshState.done && _timeoutTerminal) {
       return;
@@ -438,7 +437,7 @@ class _TPullDownRefreshHeader extends Header {
        assert(maxOverOffset >= triggerDistance),
        super(
          triggerOffset: triggerDistance,
-         // 与小程序 Demo 一致：下拉时让 ScrollView 产生真实 overscroll，
+         // 下拉时让 ScrollView 产生真实 overscroll，
          // 刷新头和页面内容一起向下移动。clamping=true 会把内容固定在原位，
          // 只在其上方绘制刷新头，不符合 PullDownRefresh 的交互表现。
          clamping: false,
@@ -524,8 +523,7 @@ class _TPullDownRefreshHeader extends Header {
 
 /// 触底加载检测 Footer（内部实现）。
 ///
-/// 小程序 `scrolltolower` 只提供事件，不定义可见 Footer，因此这里不绘制
-/// loading/no-more 文案，避免引入跨端不存在的视觉表现。
+/// 触底加载只提供事件，不绘制 loading/no-more 文案。
 class _TPullDownRefreshFooter extends Footer {
   _TPullDownRefreshFooter({required double triggerOffset})
     : super(

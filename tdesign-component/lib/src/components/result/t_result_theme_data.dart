@@ -3,6 +3,8 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 
 /// 结果组件级 ThemeExtension
+///
+/// {@category ComponentTheme}
 class TResultThemeData extends ThemeExtension<TResultThemeData> {
   /// 默认状态图标尺寸；自定义 icon 不使用该字段。
   /// 未配置时为 80 逻辑像素，必须大于 0。

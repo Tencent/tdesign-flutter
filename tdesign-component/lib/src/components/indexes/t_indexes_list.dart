@@ -186,7 +186,7 @@ class _TIndexesListState extends State<TIndexesList> {
                                       horizontal: context.tTheme.spacer2,
                                     ),
                                     decoration: ShapeDecoration(
-                                      // 小程序提示气泡以自身高度作为圆角，而非全局 50%。
+                                      // 提示气泡以自身高度作为圆角。
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
                                           tipSize,

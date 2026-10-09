@@ -9,8 +9,8 @@
 #### 主题配置
 
 组件主题通过 `TTabBarThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TTabBarThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TTabBarThemeData` 配置项。
 
 #### 构造方法
 
@@ -105,71 +105,6 @@
 | value | String | - | 选项值 | 是 |
 
 
-### TTabBarThemeData
-
-底部标签栏 ThemeExtension
-
-管理 TTabBar 的子树级视觉默认值（高度、颜色与分割线等）。
-
-#### 构造方法
-
-##### TTabBarThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 默认背景颜色 | 否 |
-| barHeight | double? | - | 默认高度 | 否 |
-| dividerColor | Color? | - | 竖向分割线颜色；未设置时读取全局灰阶 3。 | 否 |
-| dividerHeight | double? | - | 默认分割线高度 | 否 |
-| dividerThickness | double? | - | 默认分割线厚度 | 否 |
-| selectedBgColor | Color? | - | 默认选中时背景颜色 | 否 |
-| unselectedBgColor | Color? | - | 默认未选中时背景颜色 | 否 |
-
-
-#### 实例方法
-
-##### TTabBarThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| barHeight | double? | - | 字段含义：默认高度 调用时的空值行为见方法说明。 | 否 |
-| selectedBgColor | Color? | - | 字段含义：默认选中时背景颜色 调用时的空值行为见方法说明。 | 否 |
-| unselectedBgColor | Color? | - | 字段含义：默认未选中时背景颜色 调用时的空值行为见方法说明。 | 否 |
-| backgroundColor | Color? | - | 字段含义：默认背景颜色 调用时的空值行为见方法说明。 | 否 |
-| dividerHeight | double? | - | 字段含义：默认分割线高度 调用时的空值行为见方法说明。 | 否 |
-| dividerThickness | double? | - | 字段含义：默认分割线厚度 调用时的空值行为见方法说明。 | 否 |
-| dividerColor | Color? | - | 字段含义：竖向分割线颜色；未设置时读取全局灰阶 3。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TTabBarThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TTabBarThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TTabBarThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TTabBarThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
 ### TTabBarType
 
 底部标签栏内容类型。
@@ -227,3 +162,25 @@
 | none | TTabBarIndicatorAnimation | - | 无动画，瞬间切换 | - |
 | linear | TTabBarIndicatorAnimation | - | 线性滑动：指示器匀速从一个 tab 滑到另一个 | - |
 | elastic | TTabBarIndicatorAnimation | - | 弹性动画：指示器先拉伸后收缩 | - |
+
+
+### TTabBarThemeData
+
+底部标签栏 ThemeExtension
+
+管理 TTabBar 的子树级视觉默认值（高度、颜色与分割线等）。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| backgroundColor | Color? | - | 默认背景颜色 | 否 |
+| barHeight | double? | - | 默认高度 | 否 |
+| dividerColor | Color? | - | 竖向分割线颜色；未设置时读取全局灰阶 3。 | 否 |
+| dividerHeight | double? | - | 默认分割线高度 | 否 |
+| dividerThickness | double? | - | 默认分割线厚度 | 否 |
+| selectedBgColor | Color? | - | 默认选中时背景颜色 | 否 |
+| unselectedBgColor | Color? | - | 默认未选中时背景颜色 | 否 |

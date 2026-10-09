@@ -7,8 +7,8 @@
 #### 主题配置
 
 组件主题通过 `TSwipeCellThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TSwipeCellThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TSwipeCellThemeData` 配置项。
 
 #### 构造方法
 
@@ -141,78 +141,6 @@
 | onPressed | void Function(BuildContext context)? | - | 点击回调。回调后组件会自动关闭操作面板。 | 否 |
 
 
-### TSwipeCellThemeData
-
-TSwipeCell 组件级 ThemeExtension
-
-通过 Theme 子树注入操作项共享内边距；逐项图文样式由操作项实例控制。
-
-#### 构造方法
-
-##### TSwipeCellThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| actionPadding | EdgeInsetsGeometry? | - | 操作项左右内边距。 | 否 |
-
-
-#### 实例方法
-
-##### TSwipeCellThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| actionPadding | EdgeInsetsGeometry? | - | 字段含义：操作项左右内边距。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TSwipeCellThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TSwipeCellThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TSwipeCellThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TSwipeCellThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
-
-
-##### TSwipeCellThemeData.merge
-
-位置参数：`other`
-
-
-合并主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | TSwipeCellThemeData? | - | 要合并的目标主题；为空时保留当前配置。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TSwipeCellThemeData | - | other 的非空字段优先的合并主题；other 为 null 时返回当前主题。 | - |
-
-
 ### TSwipeCellSide
 
 操作面板所在侧。
@@ -244,3 +172,19 @@ TSwipeCell 组件级 ThemeExtension
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | void | - | 无返回值。 | - |
+
+
+### TSwipeCellThemeData
+
+TSwipeCell 组件级 ThemeExtension
+
+通过 Theme 子树注入操作项共享内边距；逐项图文样式由操作项实例控制。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| actionPadding | EdgeInsetsGeometry? | - | 操作项左右内边距。 | 否 |

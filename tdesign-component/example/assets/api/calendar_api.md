@@ -9,8 +9,8 @@
 #### 主题配置
 
 组件主题通过 `TCalendarThemeData` 配置，放入 Flutter `ThemeData.extensions`
-后作用于对应子树。字段含义、未配置时的回退及复制/过渡行为见本页的
-`TCalendarThemeData` 说明。
+后作用于对应子树。可配置字段和未设置时的回退见本页的
+`TCalendarThemeData` 配置项。
 
 #### 构造方法
 
@@ -64,86 +64,6 @@
 | --- | --- | --- | --- | --- |
 | date | DateTime | - | 当前格子的阳历日期（仅年月日，无时分秒）。 | 是 |
 | selectType | DateSelectType | - | 当前格的选中/区间/禁用等展示状态，便于按态设置副标题样式。 | 是 |
-
-
-### TCalendarThemeData
-
-TCalendar 组件级 ThemeExtension
-
-包含日历的装饰、字体和布局默认值。
-样式字段通过 `ThemeData.mergeExtension` 在子树覆盖，不需要额外的实例 style 参数。
-
-#### 构造方法
-
-##### TCalendarThemeData
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| bodyPadding | double? | - | 日历主体内边距；为 null 时使用全局 spacer2 Token。 | 否 |
-| cellDecoration | BoxDecoration? | - | 日期单元格装饰（选中状态） null 时按日期格选择状态与全局 Token 解析默认装饰。 | 否 |
-| cellHeight | double? | - | 日期单元格高度；为 null 时使用 60 逻辑像素。 | 否 |
-| centreColor | Color? | - | 区间中间格背景与格间衔接条颜色 null 时按区间格的选择状态与当前 Token 解析区间背景。 | 否 |
-| dayStyle | TextStyle? | - | 日期数字样式 null 时继承当前全局 Token 与日期格状态解析的样式。 | 否 |
-| decoration | BoxDecoration? | - | 组件容器装饰 null 时继承当前全局 Token 解析的容器装饰。 | 否 |
-| height | double? | - | 日历整体高度；为 null 时由星期栏、月份标题、六行日期、间距和内边距计算视窗高度，不按全部月份展开。 | 否 |
-| monthTitleHeight | double? | - | 月份标题高度；为 null 时使用 22 逻辑像素。 | 否 |
-| monthTitleStyle | TextStyle? | - | 月份标题文字样式 null 时继承当前全局 Token 解析的月份标题样式。 | 否 |
-| subtitleStyle | TextStyle? | - | 副标题样式 null 时继承当前全局 Token 与选择状态解析的副标题样式。 | 否 |
-| todayDayStyle | TextStyle? | - | 今天日期数字样式 null 时继承当前全局 Token 解析的今天样式。 | 否 |
-| verticalGap | double? | - | 日期格垂直间距；为 null 时使用全局 spacer Token，水平间距为该值的一半。 | 否 |
-| weekdayGap | double? | - | 星期之间的水平间距；为 null 时使用组件默认值 4 逻辑像素。 | 否 |
-| weekdayStyle | TextStyle? | - | 星期文字样式 null 时继承当前全局 Token 解析的星期样式。 | 否 |
-
-
-#### 实例方法
-
-##### TCalendarThemeData.copyWith
-
-复制主题配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| height | double? | - | 字段含义：日历整体高度；为 null 时由星期栏、月份标题、六行日期、间距和内边距计算视窗高度，不按全部月份展开。 调用时的空值行为见方法说明。 | 否 |
-| decoration | BoxDecoration? | - | 字段含义：组件容器装饰 null 时继承当前全局 Token 解析的容器装饰。 调用时的空值行为见方法说明。 | 否 |
-| weekdayStyle | TextStyle? | - | 字段含义：星期文字样式 null 时继承当前全局 Token 解析的星期样式。 调用时的空值行为见方法说明。 | 否 |
-| monthTitleStyle | TextStyle? | - | 字段含义：月份标题文字样式 null 时继承当前全局 Token 解析的月份标题样式。 调用时的空值行为见方法说明。 | 否 |
-| dayStyle | TextStyle? | - | 字段含义：日期数字样式 null 时继承当前全局 Token 与日期格状态解析的样式。 调用时的空值行为见方法说明。 | 否 |
-| todayDayStyle | TextStyle? | - | 字段含义：今天日期数字样式 null 时继承当前全局 Token 解析的今天样式。 调用时的空值行为见方法说明。 | 否 |
-| cellDecoration | BoxDecoration? | - | 字段含义：日期单元格装饰（选中状态） null 时按日期格选择状态与全局 Token 解析默认装饰。 调用时的空值行为见方法说明。 | 否 |
-| subtitleStyle | TextStyle? | - | 字段含义：副标题样式 null 时继承当前全局 Token 与选择状态解析的副标题样式。 调用时的空值行为见方法说明。 | 否 |
-| cellHeight | double? | - | 字段含义：日期单元格高度；为 null 时使用 60 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| monthTitleHeight | double? | - | 字段含义：月份标题高度；为 null 时使用 22 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| verticalGap | double? | - | 字段含义：日期格垂直间距；为 null 时使用全局 spacer Token，水平间距为该值的一半。 调用时的空值行为见方法说明。 | 否 |
-| bodyPadding | double? | - | 字段含义：日历主体内边距；为 null 时使用全局 spacer2 Token。 调用时的空值行为见方法说明。 | 否 |
-| weekdayGap | double? | - | 字段含义：星期之间的水平间距；为 null 时使用组件默认值 4 逻辑像素。 调用时的空值行为见方法说明。 | 否 |
-| centreColor | Color? | - | 字段含义：区间中间格背景与格间衔接条颜色 null 时按区间格的选择状态与当前 Token 解析区间背景。 调用时的空值行为见方法说明。 | 否 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TCalendarThemeData | - | 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。 | - |
-
-
-##### TCalendarThemeData.lerp
-
-位置参数：`other, t`
-
-
-生成主题过渡配置。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| other | ThemeExtension&lt;TCalendarThemeData&gt;? | - | 目标主题；为空或类型不匹配时保留当前主题。 | 是 |
-| t | double | - | 插值进度；通常 0 表示当前主题，1 表示目标主题。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TCalendarThemeData | - | 按 t 在当前主题和目标主题之间生成过渡主题。 other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。 | - |
 
 
 ### DateSelectType
@@ -255,3 +175,33 @@ TCalendar 组件级 ThemeExtension
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | Widget | - | 当前月份的标题内容。 | - |
+
+
+### TCalendarThemeData
+
+TCalendar 组件级 ThemeExtension
+
+包含日历的装饰、字体和布局默认值。
+样式字段通过 `ThemeData.mergeExtension` 在子树覆盖，不需要额外的实例 style 参数。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| bodyPadding | double? | - | 日历主体内边距；为 null 时使用全局 spacer2 Token。 | 否 |
+| cellDecoration | BoxDecoration? | - | 日期单元格装饰（选中状态） null 时按日期格选择状态与全局 Token 解析默认装饰。 | 否 |
+| cellHeight | double? | - | 日期单元格高度；为 null 时使用 60 逻辑像素。 | 否 |
+| centreColor | Color? | - | 区间中间格背景与格间衔接条颜色 null 时按区间格的选择状态与当前 Token 解析区间背景。 | 否 |
+| dayStyle | TextStyle? | - | 日期数字样式 null 时继承当前全局 Token 与日期格状态解析的样式。 | 否 |
+| decoration | BoxDecoration? | - | 组件容器装饰 null 时继承当前全局 Token 解析的容器装饰。 | 否 |
+| height | double? | - | 日历整体高度；为 null 时由星期栏、月份标题、六行日期、间距和内边距计算视窗高度，不按全部月份展开。 | 否 |
+| monthTitleHeight | double? | - | 月份标题高度；为 null 时使用 22 逻辑像素。 | 否 |
+| monthTitleStyle | TextStyle? | - | 月份标题文字样式 null 时继承当前全局 Token 解析的月份标题样式。 | 否 |
+| subtitleStyle | TextStyle? | - | 副标题样式 null 时继承当前全局 Token 与选择状态解析的副标题样式。 | 否 |
+| todayDayStyle | TextStyle? | - | 今天日期数字样式 null 时继承当前全局 Token 解析的今天样式。 | 否 |
+| verticalGap | double? | - | 日期格垂直间距；为 null 时使用全局 spacer Token，水平间距为该值的一半。 | 否 |
+| weekdayGap | double? | - | 星期之间的水平间距；为 null 时使用组件默认值 4 逻辑像素。 | 否 |
+| weekdayStyle | TextStyle? | - | 星期文字样式 null 时继承当前全局 Token 解析的星期样式。 | 否 |

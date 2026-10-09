@@ -186,8 +186,8 @@ void main() {
   testWidgets('nullable visual styles interpolate from effective tokens', (
     tester,
   ) async {
-    final token = TThemeData.defaultData().copyWithTThemeData(
-      'stepper-lerp',
+    final token = TThemeData.defaultData().copyWith(
+      name: 'stepper-lerp',
       colorMap: {
         'textColorPrimary': Colors.red,
         'textColorDisabled': Colors.green,

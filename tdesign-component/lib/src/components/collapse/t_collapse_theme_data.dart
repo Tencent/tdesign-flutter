@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// 折叠面板组件级 ThemeExtension
+///
+/// {@category ComponentTheme}
 class TCollapseThemeData extends ThemeExtension<TCollapseThemeData> {
   /// 默认面板背景色
   /// 未配置时使用 bgColorContainer Token；单个面板的 backgroundColor 优先。
