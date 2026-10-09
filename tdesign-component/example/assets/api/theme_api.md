@@ -3,8 +3,6 @@
 默认值列展示源码声明的默认值；`-` 表示未显式声明。运行时的 Theme / Token 回退见说明，参数是否必填见「必填」列。
 
 ### TThemeData
-#### 简介
-主题数据
 
 #### 声明
 
@@ -159,3 +157,11 @@ t 为 0 或 1 时返回对应端点；目标为空时返回当前主题。
 | --- | --- | --- | --- | --- |
 | other | ThemeExtension&lt;TThemeData&gt;? | - | 目标主题；为空或类型不匹配时返回当前主题。 | 是 |
 | t | double | - | 过渡进度；0 为当前主题，1 为目标主题，离散配置在 0.5 切换。 | 是 |
+
+
+### DefaultMapFactory
+#### 类型定义
+
+```dart
+typedef DefaultMapFactory = TMap? Function();
+```
