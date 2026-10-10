@@ -47,45 +47,47 @@ dart run tool/audit_api_docs.dart --json
 
 ### 生成逻辑
 
-演示代码由普通 Dart analyzer 脚本生成。组件示例的写法要求将可显示的部分提取成独立方法，并添加 `@ExampleCode` 注解。示例：
+每个公开 `ExampleItem` 对应一个独立的 `*_example.dart` Widget 文件。为 Widget 添加 `@ExampleCode`，生成器导出完整源文件（去掉示例框架注解和导入），保留数据、状态和辅助方法。
 
 ```dart
-@Override
-Widget build(BuildContext context) {
-  return ExamplePage(
-    exampleCodeGroup: 'button',
-    children: [
-      ExampleModule(
-        title: '默认',
-        children: [
-          ExampleItem(
-            desc: '可点击',
-            builder: _buildNormalClickButton
-          )
-        ]
-      )
-    ]
-  );
-}
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
 
 @ExampleCode(group: 'button')
-TButton _buildNormalClickButton(BuildContext context) {
-  return TButton(
-    content: '强按钮',
-    style: TButtonStyle.primary(),
-    onTap: onTap,
-    onLongPress: onLongPress,
-  );
+class PrimaryButtonExample extends StatelessWidget {
+  const PrimaryButtonExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return TButton(
+      colorPreset: TButtonColorPreset.primary,
+      onPressed: () => TToast.showText('点击了按钮', context: context),
+      child: const TText('按钮'),
+    );
+  }
 }
 ```
 
-其中，`group` 参数需与 `exampleCodeGroup` 参数一致，为直接的字符串赋值，不能是变量引用或者字符串拼接。
+页面入口使用 `@ExampleCodeManifest()`，在 `ExamplePage` 内直接声明 `ExampleModule` 和 `ExampleItem`。`group` 与 `exampleCodeGroup` 使用相同的字符串字面量；`methodName` 与 builder 直接构建的 Widget 类名一致：
+
+```dart
+ExampleItem(
+  desc: '主要按钮',
+  methodName: 'PrimaryButtonExample',
+  builder: (context) => const PrimaryButtonExample(),
+)
+```
+
+例子需要同目录的共享数据或辅助声明时，通过 `@ExampleCode(includes: ['helper.dart'], group: 'button')` 将真实依赖纳入片段。不要把页面容器或 Example App 的私有依赖带入用户代码。
 
 生成或校验示例代码片段：
 
 ```bash
 dart run tool/generate_example_code.dart
 dart run tool/generate_example_code.dart --check
+dart run tool/check_demo_structure.dart
+dart run tool/check_demo_snippets.dart
 ```
 
-生成的 `example/assets/code/*.txt` 需要与源码一同提交；CI 会使用 `--check` 校验它们是否同步。
+生成的 `example/assets/code/*.txt` 和 `manifest.json` 由工具维护；CI 使用 `--check` 校验同步。结构检查确认公开入口与资产映射，片段分析检查导入与编译，仍须通过实际示例操作验证行为。

@@ -11,7 +11,7 @@ spline: explain
 ## 自定义主题
 - 自定义主题用法请参考：https://tdesign.tencent.com/flutter/getting-started#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98
 - 在启动即修改主题颜色，完整示例代码请参考：https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/component_test/test_app.dart
-- 在应用使用中切换主题颜色，示例代码请参考 example 的 `main.dart` 和 `home.dart`：https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/main.dart
+- 在应用使用中切换主题颜色，示例代码请参考 Example App 的 `main.dart` 和 `home.dart`：https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/main.dart
 - 转换完整代码：https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/shell/theme/css2_json_theme.dart
 
 ## 深色模式
@@ -24,7 +24,7 @@ spline: explain
 
 ## Input相关
 - 自定义高度：TInput没有自带 `height` 参数，可以通过外部嵌套 `SizedBox` 来修改高度。不过修改高度后，内部相关高度不会等比缩放，需要业务自己同步修改。
-- 输入正则：Input的`FilteringTextInputFormatter.allow(RegExp(r''))`的正则是匹配即将输入的单个字符串的，不是匹配已输入的整个字符串的，按字符串匹配写的正则可能导致无法输入。
+- 输入正则：`FilteringTextInputFormatter.allow` 会保留新编辑值中匹配的片段，并过滤不匹配的片段；不要使用 `^`、`$` 来校验整个输入值。需要接受或拒绝完整编辑值时，使用 `TextInputFormatter.withFunction`。
 
 ## TImage缓存问题
 
@@ -32,7 +32,7 @@ spline: explain
 
 ## Toast 使用context
 
-目前 `TToast` 显示需要`context`，如果使用的是`GetX`，可以考虑是否要方法记录一个全局context，再给 TToast 使用。如果后续实现方案优化了context，将更新本文档。
+`TToast` 需要仍处于挂载状态、能够访问 `Overlay` 的 `BuildContext`。优先使用当前页面的 context；异步操作后先检查 `context.mounted`，再显示提示。不要长期保存页面 context。
 
 ## 内部写死的颜色或尺寸
 
@@ -40,10 +40,10 @@ spline: explain
 
 ## Flutter SDK 版本要求
 
-TDesign Flutter v1 的最低支持版本为 Flutter `3.32.0`，不再支持 Flutter 3.32 以下版本，也不再需要配置 `tdesign_flutter_adaptation` 依赖覆盖。
+TDesign Flutter v1 的最低支持版本为 Flutter `3.32.0`。
 
 ## 文字居中
 
-`TText` 使用 Flutter 的文本布局，不再通过旧版的内部 padding 或 字体 padding 配置 补偿字体位置。水平对齐使用 `textAlign`，容器内对齐使用 `Center` 或 `Align`；行高与字体布局可通过 `style`、`strutStyle` 和 `textHeightBehavior` 配置。
+`TText` 使用 Flutter 的文本布局。水平对齐使用 `textAlign`，容器内对齐使用 `Center` 或 `Align`；行高与字体布局可通过 `style`、`strutStyle` 和 `textHeightBehavior` 配置。
 
 示例见 [Text 文档](https://tdesign.tencent.com/flutter/components/text) 和 [文本示例源码](https://github.com/Tencent/tdesign-flutter/tree/develop/tdesign-component/example/lib/page/text)。
