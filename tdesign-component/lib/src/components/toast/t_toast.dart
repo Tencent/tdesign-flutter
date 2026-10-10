@@ -561,7 +561,7 @@ class TToast {
     );
 
     final cfg = overlay ?? const TOverlayConfig();
-    // 拦截点击统一由 TOverlayConfig.preventTap 决定（不兼容收敛版）。
+    // 拦截点击统一由 TOverlayConfig.preventTap 决定。
     final finalPreventTap = cfg.preventTap;
     final showMask = cfg.showOverlay;
     final maskColor = showMask
@@ -582,7 +582,12 @@ class TToast {
         builder: (BuildContext context) => captured.wrap(
           Stack(
             children: [
-              Positioned.fill(child: Container(color: maskColor)),
+              Positioned.fill(
+                child: IgnorePointer(
+                  ignoring: !finalPreventTap,
+                  child: Container(color: maskColor),
+                ),
+              ),
               Align(alignment: alignment, child: widget),
             ],
           ),

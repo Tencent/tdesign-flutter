@@ -68,6 +68,54 @@ void main() {
   // ============================================================
   // E 类控制：showText 调用即显
   // ============================================================
+  group('overlay pointer contract', () {
+    for (final showOverlay in [false, true]) {
+      for (final preventTap in [false, true]) {
+        testWidgets('showOverlay=$showOverlay preventTap=$preventTap', (
+          tester,
+        ) async {
+          var taps = 0;
+          late BuildContext context;
+          addTearDown(TToast.dismissAll);
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Scaffold(
+                body: Builder(
+                  builder: (value) {
+                    context = value;
+                    return Align(
+                      alignment: Alignment.topLeft,
+                      child: TextButton(
+                        onPressed: () => taps++,
+                        child: const Text('target'),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+          TToast.showText(
+            'message',
+            context: context,
+            duration: const Duration(seconds: 5),
+            overlay: TOverlayConfig(
+              showOverlay: showOverlay,
+              preventTap: preventTap,
+            ),
+          );
+          await tester.pump();
+          await tester.tapAt(tester.getCenter(find.text('target')));
+          expect(taps, preventTap ? 0 : 1);
+          TToast.dismissAll();
+          await tester.pump();
+          await tester.tap(find.text('target'));
+          expect(taps, preventTap ? 1 : 2);
+        });
+      }
+    }
+  });
+
   group('TToast E 类控制（showText）', () {
     testWidgets('showText 调用后 Toast 出现', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
