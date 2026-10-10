@@ -223,6 +223,349 @@ void main() {
       expect(find.byType(DragTarget<int>), findsNothing);
     });
 
+    testWidgets('picker merges into latest parent files', (tester) async {
+      final pending = Completer<List<TUploadFile>>();
+      var files = <TUploadFile>[const TUploadFile(id: 'old', name: 'old')];
+      late StateSetter rebuild;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: StatefulBuilder(
+              builder: (context, setState) {
+                rebuild = setState;
+                return TUpload(
+                  maxFiles: 5,
+                  files: files,
+                  picker: () => pending.future,
+                  onChanged: (next) => rebuild(() => files = next),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.byKey(const ValueKey('upload-add')));
+      rebuild(() => files = [const TUploadFile(id: 'new', name: 'new')]);
+      await tester.pump();
+      pending.complete([const TUploadFile(id: 'picked', name: 'picked')]);
+      await tester.pump();
+      expect(files.map((file) => file.id), ['new', 'picked']);
+      expect(
+        () => files.add(const TUploadFile(id: 'extra', name: 'extra')),
+        throwsUnsupportedError,
+      );
+    });
+
+    testWidgets(
+      'picker ignores reentry and allows next request after completion',
+      (tester) async {
+        final pending = [
+          Completer<List<TUploadFile>>(),
+          Completer<List<TUploadFile>>(),
+        ];
+        var requests = 0;
+        var files = <TUploadFile>[];
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: StatefulBuilder(
+                builder: (context, setState) {
+                  return TUpload(
+                    maxFiles: 5,
+                    files: files,
+                    picker: () => pending[requests++].future,
+                    onChanged: (next) => setState(() => files = next),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+        await tester.tap(find.byKey(const ValueKey('upload-add')));
+        await tester.tap(find.byKey(const ValueKey('upload-add')));
+        expect(requests, 1);
+        pending.first.complete([const TUploadFile(id: 'first', name: 'first')]);
+        await tester.pump();
+        await tester.tap(find.byKey(const ValueKey('upload-add')));
+        expect(requests, 2);
+        pending.last.complete([
+          const TUploadFile(id: 'second', name: 'second'),
+        ]);
+        await tester.pump();
+        expect(files.map((file) => file.id), ['first', 'second']);
+      },
+    );
+
+    testWidgets('picker delivers completion after onChanged is removed', (
+      tester,
+    ) async {
+      final pending = Completer<List<TUploadFile>>();
+      var enabled = true;
+      var changes = 0;
+      late StateSetter rebuild;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: StatefulBuilder(
+              builder: (context, setState) {
+                rebuild = setState;
+                return TUpload(
+                  files: const [],
+                  picker: () => pending.future,
+                  onChanged: enabled ? (_) => changes++ : null,
+                );
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.byKey(const ValueKey('upload-add')));
+      rebuild(() => enabled = false);
+      await tester.pump();
+      pending.complete([const TUploadFile(id: 'picked', name: 'picked')]);
+      await tester.pump();
+      expect(changes, 1);
+    });
+
+    for (final reenabled in [false, true]) {
+      for (final outcome in ['result', 'quantity', 'size', 'error']) {
+        testWidgets(
+          'pending $outcome is delivered after disabling${reenabled ? " and re-enabling" : ""}',
+          (tester) async {
+            final pending = Completer<List<TUploadFile>>();
+            final pickerError = StateError('picker failed');
+            var enabled = true;
+            var updated = false;
+            var requests = 0;
+            late StateSetter rebuild;
+            final calls = <String>[];
+            List<TUploadFile>? changed;
+            TUploadValidationError? validation;
+            Object? error;
+            await tester.pumpWidget(
+              wrap(
+                StatefulBuilder(
+                  builder: (context, setState) {
+                    rebuild = setState;
+                    final source = updated ? 'current' : 'initial';
+                    return TUpload(
+                      files: [file(updated ? 'new' : 'old')],
+                      maxFiles: updated && outcome == 'quantity' ? 2 : 5,
+                      maxFileSize: updated && outcome == 'size' ? 1 : 100,
+                      picker: () {
+                        requests++;
+                        return pending.future;
+                      },
+                      onChanged: enabled
+                          ? (next) {
+                              calls.add('$source:result');
+                              changed = next;
+                            }
+                          : null,
+                      onValidationError: enabled
+                          ? (value) {
+                              calls.add('$source:validation');
+                              validation = value;
+                            }
+                          : null,
+                      onError: enabled
+                          ? (value) {
+                              calls.add('$source:error');
+                              error = value;
+                            }
+                          : null,
+                    );
+                  },
+                ),
+              ),
+            );
+            await tester.tap(find.byKey(const ValueKey('upload-add')));
+            rebuild(() {
+              enabled = false;
+              updated = true;
+            });
+            await tester.pump();
+            await tester.tap(find.byKey(const ValueKey('upload-add')));
+            expect(requests, 1);
+            if (reenabled) {
+              rebuild(() => enabled = true);
+              await tester.pump();
+              await tester.tap(find.byKey(const ValueKey('upload-add')));
+              expect(requests, 1);
+            }
+            if (outcome == 'error') {
+              pending.completeError(pickerError);
+            } else {
+              pending.complete([
+                file('picked', size: 2),
+                if (outcome == 'quantity') file('second', size: 2),
+              ]);
+            }
+            await tester.pump();
+            final source = reenabled ? 'current' : 'initial';
+            if (outcome == 'result') {
+              expect(calls, ['$source:result']);
+              expect(changed!.map((value) => value.id), ['new', 'picked']);
+              expect(() => changed!.add(file('extra')), throwsUnsupportedError);
+            } else if (outcome == 'error') {
+              expect(calls, ['$source:error']);
+              expect(error, same(pickerError));
+              expect(changed, isNull);
+            } else {
+              expect(calls, ['$source:validation']);
+              expect(
+                validation,
+                outcome == 'quantity'
+                    ? TUploadValidationError.maxFiles
+                    : TUploadValidationError.fileSize,
+              );
+              expect(changed, isNull);
+            }
+          },
+        );
+      }
+    }
+
+    for (final quantityLimit in [true, false]) {
+      testWidgets(
+        'picker validates latest ${quantityLimit ? 'quantity' : 'size'} limit',
+        (tester) async {
+          final pending = Completer<List<TUploadFile>>();
+          var tightened = false;
+          var changes = 0;
+          final errors = <TUploadValidationError>[];
+          late StateSetter rebuild;
+          await tester.pumpWidget(
+            wrap(
+              StatefulBuilder(
+                builder: (context, setState) {
+                  rebuild = setState;
+                  return TUpload(
+                    files: const [],
+                    maxFiles: quantityLimit && tightened ? 1 : 5,
+                    maxFileSize: !quantityLimit && tightened ? 1 : 100,
+                    picker: () => pending.future,
+                    onChanged: (_) => changes++,
+                    onValidationError: errors.add,
+                  );
+                },
+              ),
+            ),
+          );
+          await tester.tap(find.byKey(const ValueKey('upload-add')));
+          rebuild(() => tightened = true);
+          await tester.pump();
+          pending.complete([
+            file('a', size: 2),
+            if (quantityLimit) file('b', size: 2),
+          ]);
+          await tester.pump();
+          expect(changes, 0);
+          expect(errors, [
+            quantityLimit
+                ? TUploadValidationError.maxFiles
+                : TUploadValidationError.fileSize,
+          ]);
+        },
+      );
+    }
+
+    for (final failPicker in [false, true]) {
+      testWidgets(
+        'unmounted picker discards ${failPicker ? 'error' : 'result'}',
+        (tester) async {
+          final pending = Completer<List<TUploadFile>>();
+          var callbacks = 0;
+          await tester.pumpWidget(
+            wrap(
+              TUpload(
+                files: const [],
+                picker: () => pending.future,
+                onChanged: (_) => callbacks++,
+                onError: (_) => callbacks++,
+              ),
+            ),
+          );
+          await tester.tap(find.byKey(const ValueKey('upload-add')));
+          await tester.pumpWidget(wrap(const SizedBox()));
+          if (failPicker) {
+            pending.completeError(StateError('picker failed'));
+          } else {
+            pending.complete([file('a')]);
+          }
+          await tester.pump();
+          expect(callbacks, 0);
+          expect(tester.takeException(), isNull);
+        },
+      );
+      testWidgets(
+        'picker can retry after ${failPicker ? 'error' : 'cancellation'}',
+        (tester) async {
+          final pending = Completer<List<TUploadFile>>();
+          var requests = 0;
+          List<TUploadFile>? changed;
+          Object? error;
+          await tester.pumpWidget(
+            wrap(
+              TUpload(
+                files: const [],
+                picker: () => requests++ == 0
+                    ? pending.future
+                    : Future.value([file('a')]),
+                onChanged: (value) => changed = value,
+                onError: (value) => error = value,
+              ),
+            ),
+          );
+          await tester.tap(find.byKey(const ValueKey('upload-add')));
+          if (failPicker) {
+            pending.completeError(StateError('picker failed'));
+          } else {
+            pending.complete([]);
+          }
+          await tester.pump();
+          expect(changed, isNull);
+          expect(error, failPicker ? isA<StateError>() : isNull);
+          await tester.tap(find.byKey(const ValueKey('upload-add')));
+          await tester.pump();
+          expect(requests, 2);
+          expect(changed!.map((value) => value.id), ['a']);
+        },
+      );
+    }
+
+    testWidgets('picker uses current callback and layout after rebuild', (
+      tester,
+    ) async {
+      final pending = Completer<List<TUploadFile>>();
+      var updated = false;
+      final calls = <String>[];
+      late StateSetter rebuild;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) {
+              rebuild = setState;
+              return TUpload(
+                files: const [],
+                picker: () => pending.future,
+                layout: updated ? TUploadLayout.list : TUploadLayout.grid,
+                onChanged: updated
+                    ? (_) => calls.add('current')
+                    : (_) => calls.add('old'),
+              );
+            },
+          ),
+        ),
+      );
+      await tester.tap(find.byKey(const ValueKey('upload-add')));
+      rebuild(() => updated = true);
+      await tester.pump();
+      pending.complete([file('a')]);
+      await tester.pump();
+      expect(calls, ['current']);
+    });
+
     testWidgets('custom picker emits a complete immutable next list', (
       tester,
     ) async {
