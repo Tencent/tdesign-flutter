@@ -15,11 +15,11 @@
 | maxFiles | int? | 1 | 最大文件数量；null 表示不限制。 非 null 时必须大于 0；video 模式必须设为 1，包括使用自定义 picker 时。 | 否 |
 | maxFileSize | int? | - | 单个文件最大字节数；null 表示不限制。 自定义 picker 返回的文件未提供 size 时跳过大小校验，调用方需自行保证大小限制。 | 否 |
 | mediaType | TUploadMediaType | TUploadMediaType.image | 允许选择的媒体类型。 | 否 |
-| onChanged | ValueChanged&lt;List&lt;TUploadFile&gt;&gt;? | - | 文件列表变化回调；为 null 时禁用。 | 否 |
-| onError | ValueChanged&lt;Object&gt;? | - | 新增文件流程出现异常时触发，包括选择器失败，以及该流程中 onChanged、onValidationError 同步抛出的业务异常。 不表示网络上传失败；组件不执行网络上传。其他点击、删除、排序回调的异常不在此流程内捕获。 | 否 |
+| onChanged | ValueChanged&lt;List&lt;TUploadFile&gt;&gt;? | - | 文件列表变化回调；为 null 时禁用。 为 null 只阻止新的交互，不取消已经开始的选择。 异步选择完成后优先使用当前回调；当前回调为空时使用选择开始时的回调。 组件卸载后不再通知。 | 否 |
+| onError | ValueChanged&lt;Object&gt;? | - | 文件选择器抛出异常时触发，包括读取所选文件失败。 不表示网络上传失败；组件不执行网络上传。业务回调（包括 `onChanged`、`onValidationError`）抛出的异常不会被捕获或转发到此回调。 在途选择不受临时禁用影响；发生异常时优先使用当前回调， 当前回调为空时使用选择开始时的回调。组件卸载后不再通知。 | 否 |
 | onFileTap | ValueChanged&lt;TUploadFile&gt;? | - | 点击任意状态的已有文件时触发。 组件不会自动预览或重新上传；调用方应根据 `TUploadFile.status` 决定后续行为。组件禁用时不会触发。 | 否 |
-| onValidationError | ValueChanged&lt;TUploadValidationError&gt;? | - | 文件校验失败时触发。 新增批次超出数量或大小限制时整批拒绝，不触发 onChanged。 | 否 |
-| picker | TUploadPicker? | - | 自定义文件选择器；为空时使用 image_picker。 | 否 |
+| onValidationError | ValueChanged&lt;TUploadValidationError&gt;? | - | 文件校验失败时触发。 新增批次超出数量或大小限制时整批拒绝，不触发 onChanged。 异步选择完成后优先使用当前回调；当前回调为空时使用选择开始时的回调。 | 否 |
+| picker | TUploadPicker? | - | 自定义文件选择器；为空时使用 image_picker。 同一组件选择期间忽略重复点击。选择完成后按最新的受控文件列表与 数量、大小限制校验并合并；禁用不取消在途选择，组件卸载后不再通知。 | 否 |
 
 
 ### TUploadFile
