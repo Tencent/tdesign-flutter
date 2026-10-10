@@ -296,7 +296,7 @@ void main() {
       },
     );
 
-    testWidgets('picker discards completion after onChanged is removed', (
+    testWidgets('picker delivers completion after onChanged is removed', (
       tester,
     ) async {
       final pending = Completer<List<TUploadFile>>();
@@ -324,8 +324,107 @@ void main() {
       await tester.pump();
       pending.complete([const TUploadFile(id: 'picked', name: 'picked')]);
       await tester.pump();
-      expect(changes, 0);
+      expect(changes, 1);
     });
+
+    for (final reenabled in [false, true]) {
+      for (final outcome in ['result', 'quantity', 'size', 'error']) {
+        testWidgets(
+          'pending $outcome is delivered after disabling${reenabled ? " and re-enabling" : ""}',
+          (tester) async {
+            final pending = Completer<List<TUploadFile>>();
+            final pickerError = StateError('picker failed');
+            var enabled = true;
+            var updated = false;
+            var requests = 0;
+            late StateSetter rebuild;
+            final calls = <String>[];
+            List<TUploadFile>? changed;
+            TUploadValidationError? validation;
+            Object? error;
+            await tester.pumpWidget(
+              wrap(
+                StatefulBuilder(
+                  builder: (context, setState) {
+                    rebuild = setState;
+                    final source = updated ? 'current' : 'initial';
+                    return TUpload(
+                      files: [file(updated ? 'new' : 'old')],
+                      maxFiles: updated && outcome == 'quantity' ? 2 : 5,
+                      maxFileSize: updated && outcome == 'size' ? 1 : 100,
+                      picker: () {
+                        requests++;
+                        return pending.future;
+                      },
+                      onChanged: enabled
+                          ? (next) {
+                              calls.add('$source:result');
+                              changed = next;
+                            }
+                          : null,
+                      onValidationError: enabled
+                          ? (value) {
+                              calls.add('$source:validation');
+                              validation = value;
+                            }
+                          : null,
+                      onError: enabled
+                          ? (value) {
+                              calls.add('$source:error');
+                              error = value;
+                            }
+                          : null,
+                    );
+                  },
+                ),
+              ),
+            );
+            await tester.tap(find.byKey(const ValueKey('upload-add')));
+            rebuild(() {
+              enabled = false;
+              updated = true;
+            });
+            await tester.pump();
+            await tester.tap(find.byKey(const ValueKey('upload-add')));
+            expect(requests, 1);
+            if (reenabled) {
+              rebuild(() => enabled = true);
+              await tester.pump();
+              await tester.tap(find.byKey(const ValueKey('upload-add')));
+              expect(requests, 1);
+            }
+            if (outcome == 'error') {
+              pending.completeError(pickerError);
+            } else {
+              pending.complete([
+                file('picked', size: 2),
+                if (outcome == 'quantity') file('second', size: 2),
+              ]);
+            }
+            await tester.pump();
+            final source = reenabled ? 'current' : 'initial';
+            if (outcome == 'result') {
+              expect(calls, ['$source:result']);
+              expect(changed!.map((value) => value.id), ['new', 'picked']);
+              expect(() => changed!.add(file('extra')), throwsUnsupportedError);
+            } else if (outcome == 'error') {
+              expect(calls, ['$source:error']);
+              expect(error, same(pickerError));
+              expect(changed, isNull);
+            } else {
+              expect(calls, ['$source:validation']);
+              expect(
+                validation,
+                outcome == 'quantity'
+                    ? TUploadValidationError.maxFiles
+                    : TUploadValidationError.fileSize,
+              );
+              expect(changed, isNull);
+            }
+          },
+        );
+      }
+    }
 
     for (final quantityLimit in [true, false]) {
       testWidgets(

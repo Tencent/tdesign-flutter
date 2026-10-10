@@ -41,7 +41,9 @@ class TUpload extends StatelessWidget {
   final List<TUploadFile> files;
 
   /// 文件列表变化回调；为 null 时禁用。
-  /// 异步选择完成后使用当前回调；选择期间移除此回调会丢弃选择结果。
+  /// 为 null 只阻止新的交互，不取消已经开始的选择。
+  /// 异步选择完成后优先使用当前回调；当前回调为空时使用选择开始时的回调。
+  /// 组件卸载后不再通知。
   final ValueChanged<List<TUploadFile>>? onChanged;
 
   /// 允许选择的媒体类型。
@@ -67,7 +69,7 @@ class TUpload extends StatelessWidget {
   /// 自定义文件选择器；为空时使用 image_picker。
   ///
   /// 同一组件选择期间忽略重复点击。选择完成后按最新的受控文件列表与
-  /// 数量、大小限制校验并合并；组件禁用或卸载时丢弃结果与选择器异常。
+  /// 数量、大小限制校验并合并；禁用不取消在途选择，组件卸载后不再通知。
   final TUploadPicker? picker;
 
   /// 点击任意状态的已有文件时触发。
@@ -78,12 +80,15 @@ class TUpload extends StatelessWidget {
 
   /// 文件校验失败时触发。
   /// 新增批次超出数量或大小限制时整批拒绝，不触发 onChanged。
+  /// 异步选择完成后优先使用当前回调；当前回调为空时使用选择开始时的回调。
   final ValueChanged<TUploadValidationError>? onValidationError;
 
   /// 文件选择器抛出异常时触发，包括读取所选文件失败。
   ///
   /// 不表示网络上传失败；组件不执行网络上传。业务回调（包括
   /// [onChanged]、[onValidationError]）抛出的异常不会被捕获或转发到此回调。
+  /// 在途选择不受临时禁用影响；发生异常时优先使用当前回调，
+  /// 当前回调为空时使用选择开始时的回调。组件卸载后不再通知。
   final ValueChanged<Object>? onError;
 
   @override
@@ -691,33 +696,42 @@ class _TUploadState extends State<_TUploadView> {
     if (!_canPick) {
       return;
     }
+    final onChangedAtStart = onChanged!;
+    final onValidationErrorAtStart = onValidationError;
+    final onErrorAtStart = onError;
     setState(() => _picking = true);
     try {
       late final List<TUploadFile> selected;
       try {
         selected = await (picker?.call() ?? _pickWithImagePicker());
       } catch (error) {
-        if (mounted && _enabled) {
-          onError?.call(error);
+        if (mounted) {
+          (onError ?? onErrorAtStart)?.call(error);
         }
         return;
       }
-      if (!mounted || !_enabled || selected.isEmpty) {
+      if (!mounted || selected.isEmpty) {
         return;
       }
       final limit = maxFiles;
       if (limit != null && files.length + selected.length > limit) {
-        onValidationError?.call(TUploadValidationError.maxFiles);
+        (onValidationError ?? onValidationErrorAtStart)?.call(
+          TUploadValidationError.maxFiles,
+        );
         return;
       }
       if (maxFileSize != null &&
           selected.any(
             (file) => file.size != null && file.size! > maxFileSize!,
           )) {
-        onValidationError?.call(TUploadValidationError.fileSize);
+        (onValidationError ?? onValidationErrorAtStart)?.call(
+          TUploadValidationError.fileSize,
+        );
         return;
       }
-      onChanged?.call(List.unmodifiable([...files, ...selected]));
+      (onChanged ?? onChangedAtStart)(
+        List.unmodifiable([...files, ...selected]),
+      );
     } finally {
       if (mounted) {
         setState(() => _picking = false);
