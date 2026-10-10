@@ -27,25 +27,25 @@ enum IconTextDirection {
 
 /// Toast 展示位置
 enum TToastPlacement {
-  /// 顶部（距屏幕顶部 25%，水平居中）
+  /// 顶部（中心距 Overlay 顶部 25%，水平居中）
   top,
 
-  /// 居中（屏幕正中）
+  /// 中间（中心距 Overlay 顶部 45%）
   middle,
 
-  /// 底部（距屏幕底部 25%，水平居中）
+  /// 底部（中心距 Overlay 顶部 75%，水平居中）
   bottom,
 }
 
 /// 蒙层行为配置
 ///
 /// 统一收敛 Toast 展示期间遮罩层的各项行为：
-/// - [showOverlay]：是否显示可见半透明蒙层（与 [preventTap] 解耦，
+/// - [showOverlay]：是否显示可见半透明蒙层（与 [preventScrollThrough] 解耦，
 ///   `true` 时展示半透明黑色蒙层遮住背景）；
 /// - [color] / [opacity]：蒙层颜色与透明度，`color` 为 null 时由
 ///   `Colors.black.withValues(alpha: opacity)` 派生黑色蒙层；
-/// - [preventTap]：是否拦截背景点击（与蒙层是否可见解耦，
-///   `true` 时展示期间背景不可点击）。
+/// - [preventScrollThrough]：是否禁止背景点击和滚动（与蒙层是否可见解耦，
+///   `true` 时展示期间阻止背景点击、触控滑动和鼠标滚轮；Toast 内容自身仍可交互）。
 class TOverlayConfig {
   /// 是否显示可见半透明蒙层（默认 false）。
   final bool showOverlay;
@@ -56,14 +56,14 @@ class TOverlayConfig {
   /// 蒙层透明度（0~1，默认 0.2）。
   final double opacity;
 
-  /// 是否拦截背景点击（默认 false）。
-  final bool preventTap;
+  /// 是否禁止背景点击和滚动（默认 false）。
+  final bool preventScrollThrough;
 
   const TOverlayConfig({
     this.showOverlay = false,
     this.color,
     this.opacity = 0.2,
-    this.preventTap = false,
+    this.preventScrollThrough = false,
   });
 }
 
@@ -109,11 +109,6 @@ class TToast {
   /// 避免重复点击叠加多个 Toast（半透明背景叠加会不断变深）。
   static const String _anonymousToastId = 'toast_anonymous';
 
-  /// 无限时长哨兵值：加载类 Toast 使用，表示"永不自动消失"。
-  /// 封装为具名常量，避免魔法数字导致用户传入相近的超长 duration
-  /// 时被误判为无限。
-  static const Duration infiniteDuration = Duration(seconds: 99999999);
-
   /// 普通文本Toast
   ///
   /// ## 返回值
@@ -125,7 +120,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。
+    /// 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。
     Duration duration = const Duration(milliseconds: 2000),
 
     /// 文案最大行数。
@@ -190,7 +185,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。
+    /// 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。
     Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
@@ -254,7 +249,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。
+    /// 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。
     Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
@@ -312,7 +307,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。
+    /// 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。
     Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
@@ -370,7 +365,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。
+    /// 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。
     Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
@@ -425,8 +420,8 @@ class TToast {
     /// 加载提示文案。
     String? text,
 
-    /// 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。
-    Duration duration = TToast.infiniteDuration,
+    /// 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。
+    Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
     TOverlayConfig? overlay,
@@ -481,8 +476,8 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。
-    Duration duration = TToast.infiniteDuration,
+    /// 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。
+    Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
     TOverlayConfig? overlay,
@@ -561,42 +556,37 @@ class TToast {
     );
 
     final cfg = overlay ?? const TOverlayConfig();
-    // 拦截点击统一由 TOverlayConfig.preventTap 决定。
-    final finalPreventTap = cfg.preventTap;
+    // 背景点击和滚动的阻断统一由 TOverlayConfig.preventScrollThrough 决定。
+    final blockBackground = cfg.preventScrollThrough;
     final showMask = cfg.showOverlay;
     final maskColor = showMask
         ? (cfg.color ?? Colors.black.withValues(alpha: cfg.opacity))
         : Colors.transparent;
-    // 采用垂直百分比偏移（水平恒居中）：
-    // top 距顶 25%、middle 正中 50%、bottom 距底 25%。
-    // 百分比定位天然避让安全区，无需再叠加 SafeArea。
-    final alignment = switch (placement) {
-      TToastPlacement.top => const FractionalOffset(0.5, 0.25),
-      TToastPlacement.middle => const FractionalOffset(0.5, 0.5),
-      TToastPlacement.bottom => const FractionalOffset(0.5, 0.75),
-    };
+    final positionedToast = CustomSingleChildLayout(
+      delegate: _ToastPlacementDelegate(placement),
+      child: widget,
+    );
 
     OverlayEntry overlayEntry;
-    if (finalPreventTap || showMask) {
+    if (blockBackground || showMask) {
       overlayEntry = OverlayEntry(
         builder: (BuildContext context) => captured.wrap(
           Stack(
             children: [
               Positioned.fill(
                 child: IgnorePointer(
-                  ignoring: !finalPreventTap,
+                  ignoring: !blockBackground,
                   child: Container(color: maskColor),
                 ),
               ),
-              Align(alignment: alignment, child: widget),
+              positionedToast,
             ],
           ),
         ),
       );
     } else {
       overlayEntry = OverlayEntry(
-        builder: (BuildContext context) =>
-            captured.wrap(Align(alignment: alignment, child: widget)),
+        builder: (BuildContext context) => captured.wrap(positionedToast),
       );
     }
 
@@ -604,7 +594,7 @@ class TToast {
 
     Timer? timer;
 
-    if (duration != TToast.infiniteDuration) {
+    if (duration > Duration.zero) {
       timer = Timer(duration, () {
         final instance = _toastInstances[toastId];
         if (instance != null && instance.showing) {
@@ -620,6 +610,34 @@ class TToast {
       timer: timer,
     );
   }
+}
+
+/// 以 Toast 中心定位，百分比相对 Overlay 全高而非剩余空间。
+class _ToastPlacementDelegate extends SingleChildLayoutDelegate {
+  const _ToastPlacementDelegate(this.placement);
+
+  final TToastPlacement placement;
+
+  @override
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) =>
+      constraints.loosen();
+
+  @override
+  Offset getPositionForChild(Size size, Size childSize) {
+    final fraction = switch (placement) {
+      TToastPlacement.top => 0.25,
+      TToastPlacement.middle => 0.45,
+      TToastPlacement.bottom => 0.75,
+    };
+    return Offset(
+      (size.width - childSize.width) / 2,
+      size.height * fraction - childSize.height / 2,
+    );
+  }
+
+  @override
+  bool shouldRelayout(_ToastPlacementDelegate oldDelegate) =>
+      placement != oldDelegate.placement;
 }
 
 class _TIconTextToast extends StatelessWidget {

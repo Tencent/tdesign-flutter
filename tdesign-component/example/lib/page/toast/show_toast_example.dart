@@ -20,7 +20,7 @@ class ShowToastExample extends StatelessWidget {
           TToast.showText(
             '轻提示文字内容',
             context: context,
-            duration: TToast.infiniteDuration,
+            duration: Duration.zero,
             toastId: 'manual-close-demo',
           );
         },
