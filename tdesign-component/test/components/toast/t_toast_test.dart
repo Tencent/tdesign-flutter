@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
@@ -11,6 +12,20 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 注意：Widget 测试中 Timer 由 FakeAsync 接管，直接调用 show 方法后
 /// 用 `tester.pump(Duration)` 推进假时钟即可触发 Toast 显示/自动消失，
 /// 避免 `runAsync` + `pumpAndSettle` 在 Windows/WSL 跨平台时序不一致导致失败。
+void expectToastCenter(WidgetTester tester, Finder content, double fraction) {
+  final layout = find
+      .ancestor(of: content, matching: find.byType(CustomSingleChildLayout))
+      .first;
+  final widget = tester.widget<CustomSingleChildLayout>(layout);
+  final overlayRect = tester.getRect(layout);
+  final center = tester.getCenter(find.byWidget(widget.child!));
+  expect(center.dx, closeTo(overlayRect.center.dx, 0.01));
+  expect(
+    center.dy,
+    closeTo(overlayRect.top + overlayRect.height * fraction, 0.01),
+  );
+}
+
 void main() {
   /// 用 TTheme 包裹以提供基础 Token，含可定位的 Key 节点
   ThemeData fullTheme({TToastThemeData? toastTheme}) {
@@ -68,6 +83,268 @@ void main() {
   // ============================================================
   // E 类控制：showText 调用即显
   // ============================================================
+  group('overlay pointer contract', () {
+    for (final showOverlay in [false, true]) {
+      for (final preventScrollThrough in [false, true]) {
+        testWidgets(
+          'showOverlay=$showOverlay preventScrollThrough=$preventScrollThrough',
+          (tester) async {
+            var taps = 0;
+            late BuildContext context;
+            addTearDown(TToast.dismissAll);
+            await tester.pumpWidget(
+              MaterialApp(
+                home: Scaffold(
+                  body: Builder(
+                    builder: (value) {
+                      context = value;
+                      return Align(
+                        alignment: Alignment.topLeft,
+                        child: TextButton(
+                          onPressed: () => taps++,
+                          child: const Text('target'),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            );
+            TToast.showText(
+              'message',
+              context: context,
+              duration: const Duration(seconds: 5),
+              overlay: TOverlayConfig(
+                showOverlay: showOverlay,
+                preventScrollThrough: preventScrollThrough,
+              ),
+            );
+            await tester.pump();
+            await tester.tapAt(tester.getCenter(find.text('target')));
+            expect(taps, preventScrollThrough ? 0 : 1);
+            TToast.dismissAll();
+            await tester.pump();
+            await tester.tap(find.text('target'));
+            expect(taps, preventScrollThrough ? 1 : 2);
+          },
+        );
+      }
+    }
+  });
+
+  group('duration contract', () {
+    for (final duration in [Duration.zero, const Duration(milliseconds: -1)]) {
+      testWidgets('$duration keeps every Toast kind until dismissed', (
+        tester,
+      ) async {
+        await tester.pumpWidget(wrapWithTheme());
+        final context = tester.element(find.byKey(const Key('toast_host')));
+        final ids = [
+          TToast.showText(
+            'persistent text',
+            context: context,
+            duration: duration,
+            toastId: 'text',
+          ),
+          TToast.showIconText(
+            'persistent icon',
+            context: context,
+            duration: duration,
+            toastId: 'icon',
+          ),
+          TToast.showSuccess(
+            'persistent success',
+            context: context,
+            duration: duration,
+            toastId: 'success',
+          ),
+          TToast.showWarning(
+            'persistent warning',
+            context: context,
+            duration: duration,
+            toastId: 'warning',
+          ),
+          TToast.showFail(
+            'persistent error',
+            context: context,
+            duration: duration,
+            toastId: 'error',
+          ),
+          TToast.showLoading(
+            text: 'persistent loading',
+            context: context,
+            duration: duration,
+            toastId: 'loading',
+          ),
+          TToast.showLoadingWithoutText(
+            context: context,
+            duration: duration,
+            toastId: 'loading-only',
+          ),
+        ];
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 10));
+        expect(find.textContaining('persistent'), findsNWidgets(6));
+        expect(find.byType(TCircleIndicator), findsNWidgets(2));
+        for (final id in ids) {
+          TToast.dismissToast(id);
+        }
+        await tester.pump();
+        expect(find.textContaining('persistent'), findsNothing);
+        expect(find.byType(TCircleIndicator), findsNothing);
+      });
+    }
+    for (final withText in [false, true]) {
+      testWidgets('loading withText=$withText defaults to 2000ms', (
+        tester,
+      ) async {
+        await tester.pumpWidget(wrapWithTheme());
+        final context = tester.element(find.byKey(const Key('toast_host')));
+        if (withText) {
+          TToast.showLoading(context: context, text: 'timed loading');
+        } else {
+          TToast.showLoadingWithoutText(context: context);
+        }
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 1999));
+        expect(find.byType(TCircleIndicator), findsOneWidget);
+        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump(const Duration(milliseconds: 200));
+        expect(find.byType(TCircleIndicator), findsNothing);
+      });
+    }
+  });
+
+  group('background scrolling contract', () {
+    for (final showOverlay in [false, true]) {
+      for (final preventScrollThrough in [false, true]) {
+        testWidgets(
+          'mask=$showOverlay block=$preventScrollThrough blocks drag and wheel',
+          (tester) async {
+            final controller = ScrollController();
+            addTearDown(controller.dispose);
+            addTearDown(TToast.dismissAll);
+            late BuildContext context;
+            await tester.pumpWidget(
+              MaterialApp(
+                home: Scaffold(
+                  body: Builder(
+                    builder: (value) {
+                      context = value;
+                      return ListView.builder(
+                        controller: controller,
+                        itemExtent: 60,
+                        itemCount: 100,
+                        itemBuilder: (_, index) => Text('row $index'),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            );
+            TToast.showText(
+              'scroll blocker',
+              context: context,
+              duration: Duration.zero,
+              overlay: TOverlayConfig(
+                showOverlay: showOverlay,
+                preventScrollThrough: preventScrollThrough,
+              ),
+            );
+            await tester.pump();
+            const point = Offset(40, 200);
+            await tester.dragFrom(point, const Offset(0, -150));
+            await tester.pumpAndSettle();
+            expect(
+              controller.offset,
+              preventScrollThrough ? 0 : greaterThan(0),
+            );
+            controller.jumpTo(0);
+            await tester.sendEventToBinding(
+              const PointerScrollEvent(
+                position: point,
+                scrollDelta: Offset(0, 100),
+              ),
+            );
+            await tester.pumpAndSettle();
+            expect(
+              controller.offset,
+              preventScrollThrough ? 0 : greaterThan(0),
+            );
+            TToast.dismissAll();
+            await tester.pump();
+            controller.jumpTo(0);
+            await tester.dragFrom(point, const Offset(0, -150));
+            await tester.pumpAndSettle();
+            expect(controller.offset, greaterThan(0));
+            controller.jumpTo(0);
+            await tester.sendEventToBinding(
+              const PointerScrollEvent(
+                position: point,
+                scrollDelta: Offset(0, 100),
+              ),
+            );
+            await tester.pumpAndSettle();
+            expect(controller.offset, greaterThan(0));
+          },
+        );
+      }
+    }
+    testWidgets('blocking background preserves custom Toast interactions', (
+      tester,
+    ) async {
+      var taps = 0;
+      await tester.pumpWidget(wrapWithTheme());
+      final context = tester.element(find.byKey(const Key('toast_host')));
+      TToast.showText(
+        null,
+        context: context,
+        duration: Duration.zero,
+        overlay: const TOverlayConfig(preventScrollThrough: true),
+        customWidget: TextButton(
+          onPressed: () => taps++,
+          child: const Text('toast action'),
+        ),
+      );
+      await tester.pump();
+      await tester.tap(find.text('toast action'));
+      expect(taps, 1);
+      TToast.dismissAll();
+      await tester.pump();
+    });
+  });
+
+  for (final height in [20.0, 150.0]) {
+    for (final placement in TToastPlacement.values) {
+      testWidgets('$placement has exact center for content height=$height', (
+        tester,
+      ) async {
+        await tester.pumpWidget(wrapWithTheme());
+        final context = tester.element(find.byKey(const Key('toast_host')));
+        TToast.showText(
+          null,
+          context: context,
+          duration: Duration.zero,
+          placement: placement,
+          customWidget: SizedBox(
+            width: 100,
+            height: height,
+            child: const Text('geometry'),
+          ),
+        );
+        await tester.pump();
+        final fraction = {
+          TToastPlacement.top: 0.25,
+          TToastPlacement.middle: 0.45,
+          TToastPlacement.bottom: 0.75,
+        }[placement]!;
+        expectToastCenter(tester, find.text('geometry'), fraction);
+        TToast.dismissAll();
+        await tester.pump();
+      });
+    }
+  }
+
   group('TToast E 类控制（showText）', () {
     testWidgets('showText 调用后 Toast 出现', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
@@ -551,7 +828,7 @@ void main() {
         '旧 Toast',
         context: context,
         toastId: 'same',
-        overlay: const TOverlayConfig(preventTap: true),
+        overlay: const TOverlayConfig(preventScrollThrough: true),
       );
       await tester.pump();
       TToast.showText('新 Toast', context: context, toastId: 'same');
@@ -654,21 +931,21 @@ void main() {
   });
 
   // ============================================================
-  // preventTap / customWidget
+  // preventScrollThrough / customWidget
   // ============================================================
   group('TToast 遮罩与自定义', () {
-    testWidgets('TOverlayConfig.preventTap 渲染全屏遮罩', (tester) async {
+    testWidgets('TOverlayConfig.preventScrollThrough 渲染全屏遮罩', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       await showToastAndPump(tester, (context) {
         TToast.showText(
           '防触',
           context: context,
-          overlay: const TOverlayConfig(preventTap: true),
+          overlay: const TOverlayConfig(preventScrollThrough: true),
           duration: const Duration(milliseconds: 100),
         );
       });
       expect(find.text('防触'), findsOneWidget);
-      // preventTap 时使用全屏拦截层
+      // preventScrollThrough 时使用全屏拦截层
       expect(find.byType(Positioned), findsWidgets);
       await waitForDismiss(tester);
     });
@@ -719,7 +996,7 @@ void main() {
           overlay: const TOverlayConfig(
             showOverlay: true,
             opacity: 0.5,
-            preventTap: true,
+            preventScrollThrough: true,
           ),
           duration: const Duration(milliseconds: 100),
         );
@@ -749,7 +1026,7 @@ void main() {
   // placement 展示位置
   // ============================================================
   group('TToast placement 展示位置', () {
-    testWidgets('默认 middle 居中', (tester) async {
+    testWidgets('默认 middle 中心位于 45%', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       await showToastAndPump(tester, (context) {
         TToast.showText(
@@ -759,11 +1036,8 @@ void main() {
         );
       });
       expect(find.text('居中'), findsOneWidget);
-      // 无蒙层/拦截时不使用 Stack，直接 Align
-      final align = tester.widget<Align>(
-        find.ancestor(of: find.text('居中'), matching: find.byType(Align)).first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.5));
+      // 无蒙层/拦截时按实际中心位置定位
+      expectToastCenter(tester, find.text('居中'), 0.45);
       await waitForDismiss(tester);
     });
 
@@ -778,10 +1052,7 @@ void main() {
         );
       });
       expect(find.text('顶部'), findsOneWidget);
-      final align = tester.widget<Align>(
-        find.ancestor(of: find.text('顶部'), matching: find.byType(Align)).first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.25));
+      expectToastCenter(tester, find.text('顶部'), 0.25);
       await waitForDismiss(tester);
     });
 
@@ -796,10 +1067,7 @@ void main() {
         );
       });
       expect(find.text('底部'), findsOneWidget);
-      final align = tester.widget<Align>(
-        find.ancestor(of: find.text('底部'), matching: find.byType(Align)).first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.75));
+      expectToastCenter(tester, find.text('底部'), 0.75);
       await waitForDismiss(tester);
     });
 
@@ -815,13 +1083,8 @@ void main() {
         );
       });
       expect(find.text('顶部遮罩'), findsOneWidget);
-      // 有蒙层时使用 Stack 包裹，Toast 仍在 Stack 内的 Align 中按 placement 定位
-      final align = tester.widget<Align>(
-        find
-            .ancestor(of: find.text('顶部遮罩'), matching: find.byType(Align))
-            .first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.25));
+      // 有蒙层时 Toast 中心仍按 Overlay 高度定位
+      expectToastCenter(tester, find.text('顶部遮罩'), 0.25);
       // 可见蒙层仍渲染
       expect(
         find.byWidgetPredicate(
@@ -872,12 +1135,7 @@ void main() {
         );
       });
       expect(find.text('图标底部'), findsOneWidget);
-      final align = tester.widget<Align>(
-        find
-            .ancestor(of: find.text('图标底部'), matching: find.byType(Align))
-            .first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.75));
+      expectToastCenter(tester, find.text('图标底部'), 0.75);
       await waitForDismiss(tester);
     });
 
@@ -894,12 +1152,7 @@ void main() {
       });
       expect(find.text('成功遮罩'), findsOneWidget);
       expect(find.byIcon(TIcons.check_circle), findsOneWidget);
-      final align = tester.widget<Align>(
-        find
-            .ancestor(of: find.text('成功遮罩'), matching: find.byType(Align))
-            .first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.25));
+      expectToastCenter(tester, find.text('成功遮罩'), 0.25);
       await waitForDismiss(tester);
     });
 
@@ -909,13 +1162,13 @@ void main() {
         TToast.showWarning(
           '警告拦截',
           context: context,
-          overlay: const TOverlayConfig(preventTap: true),
+          overlay: const TOverlayConfig(preventScrollThrough: true),
           duration: const Duration(milliseconds: 100),
         );
       });
       expect(find.text('警告拦截'), findsOneWidget);
       expect(find.byIcon(TIcons.error_circle), findsOneWidget);
-      // preventTap 时渲染全屏拦截层
+      // preventScrollThrough 时渲染全屏拦截层
       expect(find.byType(Positioned), findsWidgets);
       await waitForDismiss(tester);
     });
@@ -932,12 +1185,7 @@ void main() {
       });
       expect(find.text('失败底部'), findsOneWidget);
       expect(find.byIcon(TIcons.close_circle), findsOneWidget);
-      final align = tester.widget<Align>(
-        find
-            .ancestor(of: find.text('失败底部'), matching: find.byType(Align))
-            .first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.75));
+      expectToastCenter(tester, find.text('失败底部'), 0.75);
       await waitForDismiss(tester);
     });
 
@@ -970,15 +1218,7 @@ void main() {
         placement: TToastPlacement.top,
       );
       await tester.pump();
-      final align = tester.widget<Align>(
-        find
-            .ancestor(
-              of: find.byType(TCircleIndicator),
-              matching: find.byType(Align),
-            )
-            .first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.25));
+      expectToastCenter(tester, find.byType(TCircleIndicator), 0.25);
       TToast.dismissToast(id);
       await tester.pump();
     });
@@ -1010,7 +1250,9 @@ void main() {
       await waitForDismiss(tester);
     });
 
-    testWidgets('showOverlay 与 preventTap 均关闭时不渲染蒙层/拦截层', (tester) async {
+    testWidgets('showOverlay 与 preventScrollThrough 均关闭时不渲染蒙层/拦截层', (
+      tester,
+    ) async {
       await tester.pumpWidget(wrapWithTheme());
       await showToastAndPump(tester, (context) {
         TToast.showText(
@@ -1021,11 +1263,8 @@ void main() {
         );
       });
       expect(find.text('无遮罩'), findsOneWidget);
-      // 两者皆关：Toast 直接由 Align 承载（无 Stack 全屏蒙层）
-      final align = tester.widget<Align>(
-        find.ancestor(of: find.text('无遮罩'), matching: find.byType(Align)).first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.5));
+      // 两者皆关：没有全屏蒙层，中心位置仍保持一致
+      expectToastCenter(tester, find.text('无遮罩'), 0.45);
       // 无可见蒙层：不存在黑色蒙层 Container（遮罩色），且无全屏 Positioned 拦截层
       expect(
         find.byWidgetPredicate(

@@ -22,7 +22,7 @@ class CoverToastExample extends StatelessWidget {
             overlay: const TOverlayConfig(
               showOverlay: true,
               opacity: 0.4,
-              preventTap: true,
+              preventScrollThrough: true,
             ),
           );
         },

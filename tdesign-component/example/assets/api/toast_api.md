@@ -8,13 +8,6 @@
 
 无参数。
 
-#### 静态成员
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| infiniteDuration | Duration | Duration(seconds: 99999999) | 无限时长哨兵值：加载类 Toast 使用，表示"永不自动消失"。 封装为具名常量，避免魔法数字导致用户传入相近的超长 duration 时被误判为无限。 | - |
-
-
 #### 静态方法
 
 ##### TToast.dismissAll
@@ -47,7 +40,7 @@
 | text | String? | - | 提示文案。 | 是 |
 | direction | IconTextDirection | IconTextDirection.horizontal | 图标与文案排列方向。 | 否 |
 | context | BuildContext | - | 用于查找 Overlay 的上下文。 | 是 |
-| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。 | 否 |
+| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。 | 否 |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 | 否 |
 | placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 | 否 |
 | backgroundColor | Color? | - | Toast 背景色。 | 否 |
@@ -78,7 +71,7 @@
 | icon | IconData? | - | 左侧或上方图标。 | 否 |
 | direction | IconTextDirection | IconTextDirection.horizontal | 图标与文案排列方向。 | 否 |
 | context | BuildContext | - | 用于查找 Overlay 的上下文。 | 是 |
-| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。 | 否 |
+| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。 | 否 |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 | 否 |
 | placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 | 否 |
 | backgroundColor | Color? | - | Toast 背景色。 | 否 |
@@ -104,7 +97,7 @@
 | --- | --- | --- | --- | --- |
 | context | BuildContext | - | 用于查找 Overlay 的上下文。 | 是 |
 | text | String? | - | 加载提示文案。 | 否 |
-| duration | Duration | TToast.infiniteDuration | 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。 | 否 |
+| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。 | 否 |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 | 否 |
 | placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 | 否 |
 | customWidget | Widget? | - | 自定义加载文案区域；传入后替换 text 对应内容，加载指示器仍显示。 | 否 |
@@ -129,7 +122,7 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | context | BuildContext | - | 用于查找 Overlay 的上下文。 | 是 |
-| duration | Duration | TToast.infiniteDuration | 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。 | 否 |
+| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。 | 否 |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 | 否 |
 | placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 | 否 |
 | backgroundColor | Color? | - | Toast 背景色。 | 否 |
@@ -157,7 +150,7 @@
 | text | String? | - | 提示文案。 | 是 |
 | direction | IconTextDirection | IconTextDirection.horizontal | 图标与文案排列方向。 | 否 |
 | context | BuildContext | - | 用于查找 Overlay 的上下文。 | 是 |
-| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。 | 否 |
+| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。 | 否 |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 | 否 |
 | placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 | 否 |
 | backgroundColor | Color? | - | Toast 背景色。 | 否 |
@@ -186,7 +179,7 @@
 | --- | --- | --- | --- | --- |
 | text | String? | - | 提示文案；为 null 时只展示自定义内容。 | 是 |
 | context | BuildContext | - | 用于查找 Overlay 的上下文。 | 是 |
-| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。 | 否 |
+| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。 | 否 |
 | maxLines | int? | - | 文案最大行数。 | 否 |
 | constraints | BoxConstraints? | - | Toast 内容约束。 | 否 |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 | 否 |
@@ -216,7 +209,7 @@
 | text | String? | - | 提示文案。 | 是 |
 | direction | IconTextDirection | IconTextDirection.horizontal | 图标与文案排列方向。 | 否 |
 | context | BuildContext | - | 用于查找 Overlay 的上下文。 | 是 |
-| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长；仅 infiniteDuration 表示不自动关闭，零或负时长会立即开始关闭。 | 否 |
+| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。 | 否 |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 | 否 |
 | placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 | 否 |
 | backgroundColor | Color? | - | Toast 背景色。 | 否 |
@@ -239,12 +232,12 @@
 蒙层行为配置
 
 统一收敛 Toast 展示期间遮罩层的各项行为：
-- `showOverlay`：是否显示可见半透明蒙层（与 `preventTap` 解耦，
+- `showOverlay`：是否显示可见半透明蒙层（与 `preventScrollThrough` 解耦，
 `true` 时展示半透明黑色蒙层遮住背景）；
 - `color` / `opacity`：蒙层颜色与透明度，`color` 为 null 时由
 `Colors.black.withValues(alpha: opacity)` 派生黑色蒙层；
-- `preventTap`：是否拦截背景点击（与蒙层是否可见解耦，
-`true` 时展示期间背景不可点击）。
+- `preventScrollThrough`：是否禁止背景点击和滚动（与蒙层是否可见解耦，
+`true` 时展示期间阻止背景点击、触控滑动和鼠标滚轮；Toast 内容自身仍可交互）。
 
 #### 构造方法
 
@@ -254,7 +247,7 @@
 | --- | --- | --- | --- | --- |
 | color | Color? | - | 蒙层颜色；为 null 时由 `opacity` 派生黑色蒙层。 | 否 |
 | opacity | double | 0.2 | 蒙层透明度（0~1，默认 0.2）。 | 否 |
-| preventTap | bool | false | 是否拦截背景点击（默认 false）。 | 否 |
+| preventScrollThrough | bool | false | 是否禁止背景点击和滚动（默认 false）。 | 否 |
 | showOverlay | bool | false | 是否显示可见半透明蒙层（默认 false）。 | 否 |
 
 
@@ -276,9 +269,9 @@ Toast 展示位置
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| top | TToastPlacement | - | 顶部（距屏幕顶部 25%，水平居中） | - |
-| middle | TToastPlacement | - | 居中（屏幕正中） | - |
-| bottom | TToastPlacement | - | 底部（距屏幕底部 25%，水平居中） | - |
+| top | TToastPlacement | - | 顶部（中心距 Overlay 顶部 25%，水平居中） | - |
+| middle | TToastPlacement | - | 中间（中心距 Overlay 顶部 45%） | - |
+| bottom | TToastPlacement | - | 底部（中心距 Overlay 顶部 75%，水平居中） | - |
 
 
 ### TToastThemeData

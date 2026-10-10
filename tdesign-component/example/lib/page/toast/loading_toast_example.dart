@@ -16,11 +16,7 @@ class LoadingToastExample extends StatelessWidget {
         variant: TButtonVariant.outline,
         colorPreset: TButtonColorPreset.primary,
         onPressed: () {
-          final id = TToast.showLoading(text: '加载中...', context: context);
-          // 3 秒后关闭
-          Future.delayed(const Duration(seconds: 3), () {
-            TToast.dismissToast(id);
-          });
+          TToast.showLoading(text: '加载中...', context: context);
         },
       ),
     );

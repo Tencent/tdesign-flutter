@@ -1040,6 +1040,10 @@ const componentTestManifests = <ComponentTestManifest>[
   ),
   ComponentTestManifest(
     name: 'toast',
+    exampleTests: [
+      'test/toast/toast_demo_test.dart',
+      'test/toast/toast_structure_test.dart',
+    ],
     coverageTargets: ['lib/src/components/toast/'],
     componentTests: ['test/components/toast/t_toast_test.dart'],
     visualTests: [
