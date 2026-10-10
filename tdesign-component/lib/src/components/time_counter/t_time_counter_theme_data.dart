@@ -34,7 +34,7 @@ class TTimeCounterThemeData extends ThemeExtension<TTimeCounterThemeData> {
   /// 圆形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusCircle`。
   ///
   /// 默认数字块宽高相等，故固定大半径显示为正圆。自定义较小半径时显示
-  /// 对应的圆角方块，不再被固定 `BoxShape.circle` 忽略。
+  /// 对应的圆角方块。
   final double? roundBorderRadius;
 
   /// 复制主题配置。
