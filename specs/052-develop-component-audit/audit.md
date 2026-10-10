@@ -1,12 +1,12 @@
 # Develop 全组件、示例与 API 审查记录
 
-日期：2026-10-09。基线：`origin/develop e724cd0c4`；工作分支：`rss1102/fix/develop-component-audit`。
+日期：2026-10-09。基线：`origin/develop e724cd0c4`；审查工作分支：`rss1102/fix/develop-component-audit`；文档交付分支：`rss1102/docs/develop-doc-cleanup`（PR #1155）。
 
 ## 结论与边界
 
 已修复本轮确认的文档错误和无调用的历史实现。基线中确认 Upload 存在两种文件丢失场景（P1）、异步完成后调用已撤销回调（P2），Toast 存在遮罩拦截与配置不符（P2）。2026-10-10 已通过独立 PR #1153/#1154 提交这四项修复，尚未合并。本 PR 仅交付文档清理和风险登记，本分支/当前 develop 的这些运行缺陷仍存在。组件修复和双版本正确行为回归见对应 PR，不将独立分支修复误报为 develop 已解决。
 
-范围来自 `tool/components.json`：56 个组件及 Theme，共 57 个 API 页、369 个公开声明；60 个 Demo 入口，370 个独立示例。全部执行公开导出/注释结构审计、示例映射、独立编译及现有非视觉回归；源码审查重点见逐项表。静态审计不保证注释语义完全正确，已有用例也不保证组件没有其他 bug。Web 页面只做抽样检查，尚未逐一人工操作 370 个代码面板。Linux Flutter 3.32.0 Golden 本轮未执行，不能声称视觉对齐已验收。
+范围来自 `tool/components.json`：56 个组件及 Theme，共 57 个 API 页、369 个公开声明；60 个 Demo 入口，370 个独立示例。全部执行公开导出/注释结构审计、示例映射、独立编译及现有非视觉回归；源码审查重点见逐项表。静态审计不保证注释语义完全正确，已有用例也不保证组件没有其他 bug。Web 页面只做抽样检查，尚未逐一人工操作 370 个代码面板。审查阶段未在本地执行 Linux Flutter 3.32.0 Golden；远端 CI 的最终提交与 Linux Golden 结果见本 PR 描述。自动回归不等于逐项人工视觉对齐验收。
 
 ## 已复现风险
 
@@ -14,10 +14,10 @@ P1 指合法操作导致数据丢失；P2 指契约或交互错误。下列问�
 
 | 编号 | 组件/等级 | 基线触发及错误结果 | 基线根因位置 | 修复及验收 | 当前状态 |
 | --- | --- | --- | --- | --- | --- |
-| U1 | Upload / P1 | picker 等待期间，父组件将文件从 old 更新为 new；picker 返回 picked 后收到 old + picked，new 丢失 | `lib/src/components/upload/t_upload.dart:656–682`；await 后读取旧 StatelessWidget 的 files | 私有 State 在完成时读取最新受控 files；替换列表及不可变结果回归通过 | 独立 [#1153](https://github.com/Tencent/tdesign-flutter/pull/1153) 已修复；待 CI/合并 |
-| U2 | Upload / P1 | 自定义异步 picker 可以连续启动两次；first 完成后 second 仍以空列表为基底，最终仅保留 second | 同上；没有并发请求保护，两个闭包使用同一旧快照 | 同一实例仅允许一次选择在途；重复点击不启动第二请求，完成后可再次选择并合并已有文件 | 独立 [#1153](https://github.com/Tencent/tdesign-flutter/pull/1153) 已修复；待 CI/合并 |
-| U3 | Upload / P2 | 等待期间父组件令 onChanged=null，picker 完成后旧 onChanged 仍被调用一次 | 同上；context.mounted 只证明 Element 存活，不能证明 Widget 配置仍有效 | 完成时读取最新 onChanged 和数量/大小限制；禁用/卸载丢弃结果，布局切换仍调用当前回调 | 独立 [#1153](https://github.com/Tencent/tdesign-flutter/pull/1153) 已修复；待 CI/合并 |
-| T1 | Toast / P2 | showOverlay=true、preventTap=false；背景 TextButton 点击无响应，dismissAll 后恢复 | `lib/src/components/toast/t_toast.dart:578–585`；全屏有颜色的 Container 命中点击 | 遮罩单独包裹 IgnorePointer，按 preventTap 决定命中；四种配置及关闭恢复均验证 | 独立 [#1154](https://github.com/Tencent/tdesign-flutter/pull/1154) 已修复；待 CI/合并 |
+| U1 | Upload / P1 | picker 等待期间，父组件将文件从 old 更新为 new；picker 返回 picked 后收到 old + picked，new 丢失 | `lib/src/components/upload/t_upload.dart:656–682`；await 后读取旧 StatelessWidget 的 files | 私有 State 在完成时读取最新受控 files；替换列表及不可变结果回归通过 | 独立 [#1153](https://github.com/Tencent/tdesign-flutter/pull/1153) 已修复；CI 结果见对应 PR，待合并 |
+| U2 | Upload / P1 | 自定义异步 picker 可以连续启动两次；first 完成后 second 仍以空列表为基底，最终仅保留 second | 同上；没有并发请求保护，两个闭包使用同一旧快照 | 同一实例仅允许一次选择在途；重复点击不启动第二请求，完成后可再次选择并合并已有文件 | 独立 [#1153](https://github.com/Tencent/tdesign-flutter/pull/1153) 已修复；CI 结果见对应 PR，待合并 |
+| U3 | Upload / P2 | 等待期间父组件令 onChanged=null，picker 完成后旧 onChanged 仍被调用一次 | 同上；context.mounted 只证明 Element 存活，不能证明 Widget 配置仍有效 | 完成时读取最新 onChanged 和数量/大小限制；禁用/卸载丢弃结果，布局切换仍调用当前回调 | 独立 [#1153](https://github.com/Tencent/tdesign-flutter/pull/1153) 已修复；CI 结果见对应 PR，待合并 |
+| T1 | Toast / P2 | showOverlay=true、preventTap=false；背景 TextButton 点击无响应，dismissAll 后恢复 | `lib/src/components/toast/t_toast.dart:578–585`；全屏有颜色的 Container 命中点击 | 遮罩单独包裹 IgnorePointer，按 preventTap 决定命中；四种配置及关闭恢复均验证 | 独立 [#1154](https://github.com/Tencent/tdesign-flutter/pull/1154) 已修复；CI 结果见对应 PR，待合并 |
 
 最小复现保存在 [risk-reproduction.dart.txt](risk-reproduction.dart.txt)。这四个测试断言的是**基线错误行为**，通过表示缺陷已复现，不表示组件正常；因此不作为永久 CI 回归测试。复现方式：临时复制为 `tdesign-component/test/develop_audit_tmp_test.dart`，在组件目录运行 `flutter test test/develop_audit_tmp_test.dart`，运行后移除临时文件。该文本仅用于检出基线 e724cd0c4 的旧行为，不能在修复后的代码上当作通过门禁。永久回归已加入现有已登记的 [Upload PR #1153 测试](https://github.com/Tencent/tdesign-flutter/pull/1153/files) 和 [Toast PR #1154 测试](https://github.com/Tencent/tdesign-flutter/pull/1154/files)，断言正确行为。
 
