@@ -41,6 +41,7 @@ class TUpload extends StatelessWidget {
   final List<TUploadFile> files;
 
   /// 文件列表变化回调；为 null 时禁用。
+  /// 异步选择完成后使用当前回调；选择期间移除此回调会丢弃选择结果。
   final ValueChanged<List<TUploadFile>>? onChanged;
 
   /// 允许选择的媒体类型。
@@ -64,6 +65,9 @@ class TUpload extends StatelessWidget {
   final int? maxFileSize;
 
   /// 自定义文件选择器；为空时使用 image_picker。
+  ///
+  /// 同一组件选择期间忽略重复点击。选择完成后按最新的受控文件列表与
+  /// 数量、大小限制校验并合并；组件禁用或卸载时丢弃结果与选择器异常。
   final TUploadPicker? picker;
 
   /// 点击任意状态的已有文件时触发。
@@ -76,10 +80,43 @@ class TUpload extends StatelessWidget {
   /// 新增批次超出数量或大小限制时整批拒绝，不触发 onChanged。
   final ValueChanged<TUploadValidationError>? onValidationError;
 
-  /// 新增文件流程出现异常时触发，包括选择器失败，以及该流程中
-  /// onChanged、onValidationError 同步抛出的业务异常。
-  /// 不表示网络上传失败；组件不执行网络上传。其他点击、删除、排序回调的异常不在此流程内捕获。
+  /// 文件选择器抛出异常时触发，包括读取所选文件失败。
+  ///
+  /// 不表示网络上传失败；组件不执行网络上传。业务回调（包括
+  /// [onChanged]、[onValidationError]）抛出的异常不会被捕获或转发到此回调。
   final ValueChanged<Object>? onError;
+
+  @override
+  Widget build(BuildContext context) => _TUploadView(configuration: this);
+}
+
+class _TUploadView extends StatefulWidget {
+  const _TUploadView({required this.configuration});
+
+  final TUpload configuration;
+
+  @override
+  State<_TUploadView> createState() => _TUploadState();
+}
+
+class _TUploadState extends State<_TUploadView> {
+  bool _picking = false;
+
+  List<TUploadFile> get files => widget.configuration.files;
+  ValueChanged<List<TUploadFile>>? get onChanged =>
+      widget.configuration.onChanged;
+  TUploadMediaType get mediaType => widget.configuration.mediaType;
+  TUploadLayout get layout => widget.configuration.layout;
+  bool get draggable => widget.configuration.draggable;
+  int? get maxFiles => widget.configuration.maxFiles;
+  int? get maxFileSize => widget.configuration.maxFileSize;
+  TUploadPicker? get picker => widget.configuration.picker;
+  ValueChanged<TUploadFile>? get onFileTap => widget.configuration.onFileTap;
+  ValueChanged<TUploadValidationError>? get onValidationError =>
+      widget.configuration.onValidationError;
+  ValueChanged<Object>? get onError => widget.configuration.onError;
+
+  bool get _canPick => _enabled && _canAdd && !_picking;
 
   bool get _enabled => onChanged != null;
 
@@ -185,20 +222,20 @@ class TUpload extends StatelessWidget {
 
   Widget _buildAdd(BuildContext context, double size, TUploadThemeData? theme) {
     final resource = TResourceManager.instance.delegate(context);
-    final backgroundColor = _enabled
+    final backgroundColor = _canPick
         ? (theme?.backgroundColor ?? context.tTheme.bgColorSecondaryContainer)
         : (theme?.disabledBackgroundColor ??
               context.tTheme.bgColorComponentDisabled);
-    final foregroundColor = _enabled
+    final foregroundColor = _canPick
         ? (theme?.foregroundColor ?? context.tTheme.textColorPlaceholder)
         : (theme?.disabledForegroundColor ?? context.tTheme.textColorDisabled);
     return Semantics(
       button: true,
-      enabled: _enabled,
+      enabled: _canPick,
       label: resource.uploadSelect,
       child: GestureDetector(
         key: const ValueKey('upload-add'),
-        onTap: _enabled ? () => _pickFiles(context) : null,
+        onTap: _canPick ? _pickFiles : null,
         child: Container(
           width: size,
           height: size,
@@ -422,7 +459,7 @@ class TUpload extends StatelessWidget {
       size: TButtonSize.medium,
       colorPreset: TButtonColorPreset.primary,
       icon: const Icon(TIcons.upload),
-      onPressed: _enabled ? () => _pickFiles(context) : null,
+      onPressed: _canPick ? _pickFiles : null,
       child: const Text('Upload'),
     );
   }
@@ -650,32 +687,42 @@ class TUpload extends StatelessWidget {
     fontWeight: font?.fontWeight,
   );
 
-  Future<void> _pickFiles(BuildContext context) async {
-    late final List<TUploadFile> selected;
+  Future<void> _pickFiles() async {
+    if (!_canPick) {
+      return;
+    }
+    setState(() => _picking = true);
     try {
-      selected = await (picker?.call() ?? _pickWithImagePicker());
-    } catch (error) {
-      if (context.mounted) {
-        onError?.call(error);
+      late final List<TUploadFile> selected;
+      try {
+        selected = await (picker?.call() ?? _pickWithImagePicker());
+      } catch (error) {
+        if (mounted && _enabled) {
+          onError?.call(error);
+        }
+        return;
       }
-      return;
+      if (!mounted || !_enabled || selected.isEmpty) {
+        return;
+      }
+      final limit = maxFiles;
+      if (limit != null && files.length + selected.length > limit) {
+        onValidationError?.call(TUploadValidationError.maxFiles);
+        return;
+      }
+      if (maxFileSize != null &&
+          selected.any(
+            (file) => file.size != null && file.size! > maxFileSize!,
+          )) {
+        onValidationError?.call(TUploadValidationError.fileSize);
+        return;
+      }
+      onChanged?.call(List.unmodifiable([...files, ...selected]));
+    } finally {
+      if (mounted) {
+        setState(() => _picking = false);
+      }
     }
-    if (!context.mounted || selected.isEmpty) {
-      return;
-    }
-    final limit = maxFiles;
-    if (limit != null && files.length + selected.length > limit) {
-      onValidationError?.call(TUploadValidationError.maxFiles);
-      return;
-    }
-    if (maxFileSize != null &&
-        selected.any(
-          (file) => file.size != null && file.size! > maxFileSize!,
-        )) {
-      onValidationError?.call(TUploadValidationError.fileSize);
-      return;
-    }
-    onChanged?.call(List.unmodifiable([...files, ...selected]));
   }
 
   Future<List<TUploadFile>> _pickWithImagePicker() async {
