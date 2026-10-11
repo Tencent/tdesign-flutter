@@ -26,21 +26,18 @@
       <div v-show="tab === 'api'" name="API" v-html="info.apiMd"></div>
       <div v-show="tab === 'design'" name="DESIGN" v-html="info.designMd"></div>
     </template>
-    <div v-else-if="info.flutterPreview" class="flutter-guide-preview">
-      <div name="DOC" :class="info.docClass" v-html="info.docMd"></div>
-      <div class="flutter-guide-preview-column">
-        <aside class="flutter-guide-phone">
-          <iframe
-            ref="demoIframe"
-            :title="info.title + ' Flutter Web 演示'"
-            :src="liveUrl"
-            frameborder="0"
-            width="100%"
-            height="100%"
-            style="box-sizing: border-box; border-radius: 0 0 6px 6px; overflow: hidden;"
-          ></iframe>
-        </aside>
-      </div>
+    <div v-else-if="info.flutterPreview" name="DOC" :class="info.docClass">
+      <div v-html="guideDocParts[0]"></div>
+      <section class="flutter-guide-preview" aria-label="Flutter Web 交互演示">
+        <iframe
+          ref="demoIframe"
+          :title="info.title + ' Flutter Web 演示'"
+          :style="{ height: (info.flutterPreviewHeight || 520) + 'px' }"
+          :src="liveUrl"
+          frameborder="0"
+        ></iframe>
+      </section>
+      <div v-html="guideDocParts[1]"></div>
     </div>
     <div name="DOC" :class="info.docClass" v-else v-html="info.docMd"></div>
     <div style="margin-top: 48px">
@@ -69,6 +66,11 @@ export default defineComponent({
   },
 
   computed: {
+    guideDocParts() {
+      const parts = this.info.docMd.split('<div data-flutter-guide-preview></div>');
+      if (parts.length !== 2) throw new Error('Flutter guide must declare exactly one preview location');
+      return parts;
+    },
     tab: {
       get() {
         return this.$route.query.tab || 'demo';
@@ -150,37 +152,17 @@ export default defineComponent({
 
 <style lang="less">
 .flutter-guide-preview {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 375px;
-  gap: 32px;
-
-  > [name='DOC'] {
-    min-width: 0;
-  }
-}
-
-.flutter-guide-phone {
-  position: fixed;
-  z-index: 550;
-  top: 128px;
-  width: 375px;
-  height: min(580px, calc(100vh - 152px));
-  box-sizing: border-box;
+  width: 100%;
+  max-width: 520px;
+  margin: 24px 0 32px;
   border: 1px solid var(--td-component-border, #dcdcdc);
   border-radius: 6px;
   overflow: hidden;
-}
 
-@media (max-width: 1100px) {
-  .flutter-guide-preview {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .flutter-guide-phone {
-    position: static;
-    height: 580px;
+  iframe {
+    display: block;
     width: 100%;
-    max-width: 375px;
+    height: 520px;
   }
 }
 

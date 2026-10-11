@@ -6,7 +6,9 @@ flutterPreview: custom-theme
 toc: false
 ---
 
-在预览中切换品牌色和全局圆角：全局标签随之变化，局部标签保持 24 圆角，大号标签只改变实例尺寸。
+在预览中切换品牌色和全局圆角：实际按钮随之变化，局部按钮保持 24 圆角，大号按钮只改变实例尺寸。点击按钮可看到反馈。
+
+<div data-flutter-guide-preview></div>
 
 ## 先选择修改范围
 

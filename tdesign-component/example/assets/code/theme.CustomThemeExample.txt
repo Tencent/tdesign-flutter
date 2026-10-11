@@ -12,22 +12,21 @@ class _CustomThemeExampleState extends State<CustomThemeExample> {
   static const _colors = {'默认色': '#0052D9', '绿色': '#2BA471', '自定义色': '#834EC2'};
   String _brand = '默认色';
   double _radius = 6;
+  String _message = '';
 
   @override
   Widget build(BuildContext context) {
     final token = TThemeData.fromJson(
       'brand',
-      '{"brand":{"color":{"brandColor":"${_colors[_brand]}"}}}',
+      '{"brand":{"color":{"brandColor":"${_colors[_brand]}"},"radius":{"radiusDefault":$_radius}}}',
     )!;
-    final tagTheme = TTagThemeData(squareBorderRadius: _radius);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: TThemeBuilder.light(token).mergeExtension(tagTheme),
-      darkTheme: TThemeBuilder.dark(token).mergeExtension(tagTheme),
+      theme: TThemeBuilder.light(token),
+      darkTheme: TThemeBuilder.dark(token),
       home: Builder(
         builder: (context) {
           final theme = Theme.of(context);
-          final currentTagTheme = theme.extension<TTagThemeData>()!;
           return Scaffold(
             appBar: const TNavBar(title: Text('自定义主题')),
             body: ListView(
@@ -51,35 +50,57 @@ class _CustomThemeExampleState extends State<CustomThemeExample> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                TButton(
-                  onPressed: () =>
-                      setState(() => _radius = _radius == 6 ? 16 : 6),
-                  child: Text('切换全局圆角（当前 ${_radius.toInt()}）'),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TButton(
+                    onPressed: () =>
+                        setState(() => _radius = _radius == 6 ? 16 : 6),
+                    child: Text('切换全局圆角（当前 ${_radius.toInt()}）'),
+                  ),
                 ),
                 const SizedBox(height: 24),
                 TText('全局样式：圆角 ${_radius.toInt()}'),
                 const SizedBox(height: 8),
-                const TTag('全局标签', colorPreset: TTagColorPreset.primary),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TButton(
+                    onPressed: () => setState(() => _message = '全局按钮'),
+                    colorPreset: TButtonColorPreset.primary,
+                    child: const Text('全局按钮'),
+                  ),
+                ),
                 const SizedBox(height: 16),
                 const TText('局部覆盖：圆角固定 24，保留品牌色'),
                 const SizedBox(height: 8),
                 Theme(
                   data: theme.mergeExtension(
-                    currentTagTheme.copyWith(squareBorderRadius: 24),
+                    context.tTheme.copyWith(radiusMap: {'radiusDefault': 24}),
                   ),
-                  child: const TTag(
-                    '局部标签',
-                    colorPreset: TTagColorPreset.primary,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: TButton(
+                      onPressed: () => setState(() => _message = '局部按钮'),
+                      colorPreset: TButtonColorPreset.primary,
+                      child: const Text('局部按钮'),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
                 const TText('实例参数：仅改变尺寸'),
                 const SizedBox(height: 8),
-                const TTag(
-                  '大号标签',
-                  size: TTagSize.large,
-                  colorPreset: TTagColorPreset.primary,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TButton(
+                    onPressed: () => setState(() => _message = '大号按钮'),
+                    size: TButtonSize.large,
+                    colorPreset: TButtonColorPreset.primary,
+                    child: const Text('大号按钮'),
+                  ),
                 ),
+                if (_message.isNotEmpty) ...[
+                  const SizedBox(height: 16),
+                  TText('当前点击：$_message'),
+                ],
               ],
             ),
           );

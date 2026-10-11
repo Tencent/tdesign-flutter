@@ -14,7 +14,7 @@ void main() {
     addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
     await tester.pumpWidget(const DarkModeExample());
     await tester.pumpAndSettle();
-    final tag = find.byType(TTag);
+    final tag = find.widgetWithText(TButton, '主要按钮');
     expect(Theme.of(tester.element(tag)).brightness, Brightness.light);
     await tester.tap(find.text('深色'));
     await tester.pumpAndSettle();
@@ -32,43 +32,49 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Custom guide changes brand and keeps local radius isolated', (
+  testWidgets('Custom guide renders interactive buttons with scoped styles', (
     tester,
   ) async {
     await tester.pumpWidget(const CustomThemeExample());
     await tester.pumpAndSettle();
-    Finder tag(String text) => find.byWidgetPredicate(
-      (widget) => widget is TTag && widget.text == text,
-    );
-    BuildContext context(String text) => tester.element(tag(text));
-    expect(context('全局标签').tTheme.brandColor, const Color(0xFF0052D9));
+    Finder button(String text) => find.widgetWithText(TButton, text);
+    BuildContext context(String text) => tester.element(button(text));
+    double radius(String text) {
+      final rendered = tester.widget<ElevatedButton>(
+        find.descendant(
+          of: button(text),
+          matching: find.byType(ElevatedButton),
+        ),
+      );
+      final shape =
+          rendered.style!.shape!.resolve({})! as RoundedRectangleBorder;
+      return (shape.borderRadius as BorderRadius).topLeft.x;
+    }
+
+    expect(find.byType(TTag), findsNothing);
+    expect(radius('全局按钮'), 6);
+    expect(radius('局部按钮'), 24);
+    expect(tester.getSize(button('全局按钮')).width, lessThan(300));
     await tester.tap(find.text('绿色'));
     await tester.pumpAndSettle();
-    for (final text in ['全局标签', '局部标签', '大号标签']) {
+    for (final text in ['全局按钮', '局部按钮', '大号按钮']) {
       expect(context(text).tTheme.brandColor, const Color(0xFF2BA471));
     }
     await tester.tap(find.text('切换全局圆角（当前 6）'));
     await tester.pumpAndSettle();
-    expect(
-      Theme.of(context('全局标签')).extension<TTagThemeData>()!.squareBorderRadius,
-      16,
-    );
-    expect(
-      Theme.of(context('局部标签')).extension<TTagThemeData>()!.squareBorderRadius,
-      24,
-    );
-    expect(
-      Theme.of(context('大号标签')).extension<TTagThemeData>()!.squareBorderRadius,
-      16,
-    );
-    expect(tester.widget<TTag>(tag('大号标签')).size, TTagSize.large);
+    expect(radius('全局按钮'), 16);
+    expect(radius('局部按钮'), 24);
+    expect(radius('大号按钮'), 16);
+    expect(tester.widget<TButton>(button('大号按钮')).size, TButtonSize.large);
+    for (final text in ['全局按钮', '局部按钮', '大号按钮']) {
+      await tester.tap(button(text));
+      await tester.pumpAndSettle();
+      expect(find.text('当前点击：$text'), findsOneWidget);
+    }
     await tester.tap(find.text('自定义色'));
     await tester.pumpAndSettle();
-    expect(context('局部标签').tTheme.brandColor, const Color(0xFF834EC2));
-    expect(
-      Theme.of(context('局部标签')).extension<TTagThemeData>()!.squareBorderRadius,
-      24,
-    );
+    expect(context('局部按钮').tTheme.brandColor, const Color(0xFF834EC2));
+    expect(radius('局部按钮'), 24);
     expect(tester.takeException(), isNull);
   });
 

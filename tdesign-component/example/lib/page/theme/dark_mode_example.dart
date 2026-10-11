@@ -14,6 +14,7 @@ class DarkModeExample extends StatefulWidget {
 class _DarkModeExampleState extends State<DarkModeExample> {
   final TThemeData _tokens = TThemeData.defaultData();
   ThemeMode _mode = ThemeMode.system;
+  String _message = '';
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -51,13 +52,27 @@ class _DarkModeExampleState extends State<DarkModeExample> {
               '当前显示：${Theme.of(context).brightness == Brightness.dark ? '深色' : '浅色'}',
             ),
             const SizedBox(height: 16),
-            TButton(
-              onPressed: () {},
-              colorPreset: TButtonColorPreset.primary,
-              child: const Text('主要按钮'),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                TButton(
+                  onPressed: () => setState(() => _message = '主要按钮'),
+                  colorPreset: TButtonColorPreset.primary,
+                  child: const Text('主要按钮'),
+                ),
+                TButton(
+                  onPressed: () => setState(() => _message = '描边按钮'),
+                  variant: TButtonVariant.outline,
+                  colorPreset: TButtonColorPreset.primary,
+                  child: const Text('描边按钮'),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            const TTag('主题标签', colorPreset: TTagColorPreset.primary),
+            if (_message.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              TText('当前点击：$_message'),
+            ],
             const SizedBox(height: 16),
             const TText('页面、按钮与文字一起跟随所选模式。'),
           ],
