@@ -1,194 +1,149 @@
 ---
 title: 贡献指南
-description: TDesign Flutter 贡献指南
+description: 运行项目、提交贡献并验证 TDesign Flutter 的改动。
 spline: explain
 ---
 
+本页介绍从运行项目到提交 PR 的操作流程。开发、协作、PR 和更新日志规则以仓库根目录的 [CONTRIBUTING.md](https://github.com/Tencent/tdesign-flutter/blob/develop/CONTRIBUTING.md) 为准；复杂需求和公共契约变更先阅读 [Spec 规范](https://github.com/Tencent/tdesign-flutter/blob/develop/specs/README.md)。
 
-## 1. 项目地址
+## 1. 准备项目
 
-<https://github.com/Tencent/tdesign-flutter>
+### 开发环境
+
+- Flutter 最低版本为 `3.32.0`，Dart 最低版本为 `3.8.0`；代码需要同时兼容 Flutter `3.32.0` 和最新 stable。
+- 官网使用 pnpm，版本见 [package.json](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-site/package.json) 的 `packageManager` 字段。
+- Flutter 安装和设备配置请参考 [Flutter 官方文档](https://docs.flutter.cn/install)。
+
+### 获取源码
+
+```bash
+git clone https://github.com/Tencent/tdesign-flutter.git
+cd tdesign-flutter
+git switch develop
+git pull --ff-only
+```
+
+从最新 `develop` 创建功能分支，分支和 PR 命名按[仓库协作规范](https://github.com/Tencent/tdesign-flutter/blob/develop/AGENTS.md)执行。
 
 ### 目录结构
 
-```txt
+```text
 tdesign-component/
-├── demo_tool       // API 和演示代码工具
-├── example         // 组件使用示例
-├── lib             // 组件库
-└── test            // 组件测试
+├── demo_tool       # API 生成兼容入口
+├── example         # 组件示例应用及生成的 API、代码片段
+├── lib             # 组件公开实现与主题
+├── test            # 组件和工具测试
+└── tool            # API manifest、生成器、测试登记与回归 runner
 
-tdesign-site/       // TDesign Flutter 站点
+tdesign-site/       # 官网、组件文档和本地预览
+specs/              # 设计与验收记录
 ```
 
-## 2. 如何运行
+## 2. 运行与预览
 
-### 2.1 Flutter 基础知识
+### 组件示例应用
 
-- Flutter 基础介绍：[https://book.flutterchina.club/chapter1/flutter_intro.html](https://book.flutterchina.club/chapter1/flutter_intro.html)
-- Dart 语言介绍：[https://book.flutterchina.club/chapter1/dart.html](https://book.flutterchina.club/chapter1/dart.html)
-- 搭建 Flutter 开发环境：[https://book.flutterchina.club/chapter1/install_flutter.html](https://book.flutterchina.club/chapter1/install_flutter.html)
-- 计数器应用示例：[https://book.flutterchina.club/chapter2/first_flutter_app.html](https://book.flutterchina.club/chapter2/first_flutter_app.html)
-
-### 2.2 开发环境要求
-
-Flutter SDK 版本： `>= 3.32.0`
-
-### 2.3 克隆项目
+从仓库根目录执行：
 
 ```bash
-# 克隆项目
-git clone <https://github.com/Tencent/tdesign-flutter.git>
-```
-
-### 2.4 运行 Flutter 项目
-
-下面是命令行运行方法，正常也可以不使用命令行，而在 IDE 直接运行，推荐使用 Android Studio 进行开发。运行时请选择 Android 设备和 iOS 模拟器，不要直接在浏览器运行。
-
-```bash
-# 运行 Flutter 组件项目
-cd tdesign-flutter/tdesign-component/
-
-# 拉取依赖
+cd tdesign-component
 flutter pub get
-
-# 进入示例项目
-cd example/
-
-# 运行项目，最好在运行前先确认设备已连接
-flutter run
+cd example
+flutter pub get
+flutter devices
+flutter run -d <device-id>
 ```
 
-### 2.5 运行前端官网项目
+将 `<device-id>` 替换为 `flutter devices` 列出的设备 ID。Android 或 iOS 设备用于验证平台能力和移动端交互；Web 可以预览组件，但不能代替相册选择等平台能力的真机验收。
+
+### 官网与 Flutter Web 示例
+
+从仓库根目录执行：
 
 ```bash
-# 进入官网项目
-cd tdesign-flutter/tdesign-site/
-
-# 安装依赖（仓库使用 pnpm）
+cd tdesign-site
 pnpm install --frozen-lockfile
-
-# 运行项目
 pnpm dev
 ```
 
-`pnpm dev` 同时启动文档站点（19000）和 Flutter Web 示例（19001），本地也可以查看右侧组件示例。请先确保 Flutter SDK 已安装，示例依赖已通过 `flutter pub get` 安装；如果预览未显示，检查终端中的 Flutter Web 启动日志和端口占用。
+请先完成上面的示例应用依赖安装。`pnpm dev` 同时启动文档站点（默认 `19000`）和 Flutter Web 示例（默认 `19001`）；浏览器打开 `http://localhost:19000/flutter/getting-started`。如果右侧示例未显示，检查 Flutter Web 日志和端口占用。
 
+只修改文档时，可用 `pnpm dev:site` 单独启动文档站点；需要组件预览时再使用 `pnpm dev`。构建官网使用 `pnpm site`，其中会先执行主题桥接和组件文档契约检查。
 
-## 3. 如何领取 Issue
+## 3. 讨论需求与领取 Issue
 
-### 3.1 一个 Issue 的完整流程
+提交前先搜索[常见问题](https://tdesign.tencent.com/flutter/faq)、[更新日志](https://tdesign.tencent.com/flutter/changelog)和 [GitHub Issues](https://github.com/Tencent/tdesign-flutter/issues)，避免重复反馈。
 
-- 用户发现功能不满足，查看 API 文档确认不支持，然后提 Issue。[常见问题](https://github.com/Tencent/tdesign-flutter/blob/main/tdesign-site/FAQ.md)
-- 提了 Issue 后，在群里发出 Issue 链接，方便后续直接沟通，确认详细需求。然后将最终确认结果贴到 GitHub 的 Issue 上。
-- 负责人评估开发工作量，打 `help want` 和 `issueShoot` 标签。
-- 贡献者确认要领取，在 Issue 下评论领取，并通知负责人。负责人打上 `Received` 标签，讨论确认实现方案。
-- 贡献者参考开发规范开发完功能，按照文档自检，然后提 PR，并同步负责人验收。
-- PR 自动构建测试包。【自动构建流水线】
-- 负责人拉设计一起视觉走查（如果需要的话），走查完成后，合并 PR。Issue 打上下一个版本的标签。
-- 版本发布后，Issue 关闭。
+- 在 Issue 中写明预期行为、当前行为、版本及复现方式；有意贡献时评论领取，并与负责人确认实现范围。
+- 群内讨论得到的需求和验收结论应补充到 GitHub Issue，方便后续参与者追踪。
+- 需要设计走查的改动，由负责人协调设计同学；PR 中保留相关验收记录。
 
-### 3.2 标签管理
+Issue 标签由负责人维护：`issueShoot` 表示已评估、可领取，`Received` 表示已领取，`pre_x.x.x` 表示预计发布版本，`x.x.x` 表示已发布版本。Issue 关联与关闭按[仓库规范](https://github.com/Tencent/tdesign-flutter/blob/develop/CONTRIBUTING.md#pr-关联-issue)处理。
 
-- 无标签：未评估
-- `issueShoot`：已评工作量，可领取
-- `Received`：已领取
-- `pre_x.x.x`：预计某个版本发布
-- `x.x.x`：某个版本已发布
+## 4. 实现与文档
 
-## 4. 开发规范
+组件命名、主题所有权、国际化资源、公开 API 注释等规则请阅读[开发规范](https://github.com/Tencent/tdesign-flutter/blob/develop/CONTRIBUTING.md#开发规范)。公共 API 的 `///` dartdoc 是生成用户文档的来源，修改 API 时同步说明默认值、生效条件、空值语义及相关参数关系。
 
-- 组件命名规范：以 `T` 为前缀，组件名称、API 名称参考 TDesign 现有组件和 API 命名，可以根据 Flutter 原生 Widget 的特点进行修改。组件 API 以满足设计要求和使用为准，可根据 Flutter 特点做精简或定制。
-- 组件库用到的所有色值、圆角、字体字号等样式属性需全部定义在主题中。
-- 代码规范遵循腾讯 Dart 代码规范。
-- 对于系统原有组件，如 `Text`、`Image` 等，应兼容系统原组件功能，只能扩展，不能阉割，以免业务需要使用系统功能时，必须放弃 TDesign 控件。
-- 示例页面尽量使用 `ExamplePage` + `ExampleModule` + `ExampleItem` 组合，按照示例稿的布局实现。
-- 组件 API 和演示代码，请参考 `demo_tool/README.md` 文件。
-- 组件内部的固定文案，都应该抽离到 `TResourceDelegate` 中统一管理，方便业务进行国际化适配。
-- 如果已有 TDesign 组件封装，尽量使用现有 T 组件，而非直接使用系统组件。
+复杂需求、公共 API 变更、组件重构和跨目录改动按 [Spec 流程](https://github.com/Tencent/tdesign-flutter/blob/develop/specs/README.md)记录行为契约、实施方案和验收结果。是否需要 Spec 与是否需要更新日志分别判断。
 
-## 5. 验收标准
+### API 和示例来源
 
-### 5.1 PR 规则
+- API 清单维护在 [`tdesign-component/tool/components.json`](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/tool/components.json)，公开范围以 `lib/tdesign_flutter.dart` 的导出为准。
+- `demo_tool/all_build.sh` 调用 `tool/generate_api.mjs`，生成 `example/assets/api/*.md`。新增或迁移组件时更新 manifest；无需配置旧的 API 二进制。
+- 示例方法标记 `@ExampleCode`，`group` 与页面的 `exampleCodeGroup` 一致，生成 `example/assets/code/*.txt`。
+- 官网组件页通过 `flutter-example-group` 和 `flutter-api` 指令读取示例与 API 产物。新增组件时同时核对菜单、组件概览和页面指令的组件标识。
+- 根目录 README 由 `scripts/sync-readme.mjs` 同步到组件包，中文 README 的接入部分生成官网快速开始。
 
-- PR 标题遵循 Conventional Commits 格式：`type(scope): 修改描述`。`scope` 可填写组件、文档或 CI 模块；常用 `type` 包括 `feat`、`fix`、`docs`、`refactor`、`test`、`ci` 和 `chore`。例如：`fix(TBottomTabBar): 修复 iconText 模式底部溢出`、`docs(contributing): 更新 PR 提交流程`。
-- 复杂需求、公共 API 变更、组件重构和跨目录改动应附带 [Spec](https://github.com/Tencent/tdesign-flutter/tree/develop/specs) 目录链接；是否可以不创建 Spec，由 Review 根据实际改动判断。
-- 勾选规则：
-  > 1. 只要有新增参数，就勾选"新特性提交"。
-  >
-  > 2. 只修改内部 bug，未新增参数，才勾选"日常 bug 修复"。
-  >
-  > 3. 其他选项视具体改动判断。
-- “相关 Issue” 处带上修复的 Issue 链接。
-- 其他内容视情况可选填。
+PR 的 autofix 流水线会自动生成 API、代码片段和 README 副本，贡献者无需手工维护这些产物。需要本地排查时，从相应源文件修正后运行以下命令：
 
-### 5.2 代码 Review 自检【欢迎大家补充】
+```bash
+# 在 tdesign-component 目录执行
+sh demo_tool/all_build.sh
+node tool/generate_api.mjs --check
+dart run tool/generate_example_code.dart
+dart run tool/generate_example_code.dart --check
 
-- 尽量使用 TD 已有组件，而非系统组件。比如有直接使用 `Text` 组件的，请换成 `TText` 组件。
-- 检测边界条件，比如参数为 `null` 是否会导致代码异常？
-- 是否提供验收用例？用例是否 `ExamplePage` 放在 `test` 字段里？
-- 是否提供完善文档？
+# 在仓库根目录执行
+node scripts/sync-readme.mjs
+```
 
-### 5.3 文档自检
+生成方式见 [API 与示例工具说明](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/demo_tool/README.md)。autofix 更新 PR 后，应检查最新提交的生成差异和后续 CI 结果。
 
-#### 5.3.1 API 文档
+## 5. 验证改动
 
-- `tdesign-component/demo_tool/all_build.sh` 文件中是否包含对应组件 API 的脚本，若未包含，请参考 `tdesign-component/demo_tool/README.md` 及其他组件示例添加脚本。请确保提交的 `all_build.sh` 中触发的是 `./bin/api_tool_linux`，因为 GitHub 自动打包的环境是 Linux 系统。
-- 检测组件属性的注释是否完善。
-- 如果组件有对应的系统组件，检测是否有系统组件支持的参数 TD 组件不支持。
-- 检测组件与 [https://tdesign.tencent.com/mobile-vue/overview](https://tdesign.tencent.com/mobile-vue/overview) 是否有含义相同但命名不同的组件，如果有，尽量保持命名一致。
-- `tdesign-component/demo_tool/all_build.sh` 中的名字与 `tdesign-component/example/lib/config.dart` 的名字需保持一致。
+### 代码与自动化回归
 
-![API 名称示例](https://tdesign.tencent.com/flutter/assets/contributing_api_name.png)
+从 `tdesign-component` 目录执行静态检查，要求零诊断：
 
-#### 5.3.2 新增组件
+```bash
+flutter analyze --fatal-infos
+```
 
-- `tdesign-site/site/site.config.mjs`
+新增或补充组件测试时，在 [`tool/component_test_manifest.dart`](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/tool/component_test_manifest.dart) 登记组件测试、生产源码覆盖率目标、Demo 功能测试和视觉回归。手写生产 Dart 行覆盖率要求 `LH/LF >= 95%`；详细字段和共享示例测试登记见[组件测试与 CI 回归门禁](https://github.com/Tencent/tdesign-flutter/blob/develop/CONTRIBUTING.md#组件测试与-ci-回归门禁)。
 
-> 菜单栏是否放开了注释？如果没有被注释组件，则参考其他组件添加。
-> `name` 与 `tdesign-component/example/lib/config.dart` 的 `ExamplePageModel` 的 `name` 参数是否一致。
+```bash
+flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
+dart run tool/run_component_regression.dart
+dart run tool/run_example_regression.dart
+dart run tool/run_visual_regression.dart
+```
 
-![组件名称示例](https://tdesign.tencent.com/flutter/assets/contributing_component_name.png)
+功能回归需要覆盖 Flutter `3.32.0` 与最新 stable。Golden 按[视觉回归 CI](https://github.com/Tencent/tdesign-flutter/blob/develop/.github/workflows/test-build.yml)规定的 SDK 和平台运行；不能以本机另一平台生成的图片代替 CI 基线。测试文件存在或单独运行通过，不代表已进入集中式 CI 调度。
 
-- `tdesign-site/site/docs/overview.md`：检查组件预览是否已添加、分组组件数量是否正确。
+### 示例与人工验收
 
-![概览示例](https://tdesign.tencent.com/flutter/assets/contributing_overview.png)
+- 检查新增能力、受控状态回写、边界输入和 Controller 生命周期。
+- 检查布局溢出、点击与滚动、浅色与深色主题、局部主题覆盖和英文环境。
+- 在示例页打开 API 与源码面板，核对内容是否与实现一致；缺失时检查 manifest、注解分组及生成日志。
+- 示例页的 `test` 区域用于补充交互验收场景，不能代替自动化测试。
+- 涉及平台能力时在目标设备验证；涉及视觉变化时补充 Golden 和必要的设计走查。
 
-#### 5.3.3 Spec 文档
+PR 预览包是否生成以及使用哪个 SDK，以流水线实际日志和 PR 评论为准。拿到预览包后按上述场景验证，将结果和未覆盖项写入 PR 或 Spec 的 `acceptance.md`。
 
-复杂需求、公共 API 变更、组件重构和跨目录改动通常需要创建 Spec。请从仓库根目录的 `specs/_template/` 复制模板，创建 `specs/<编号>-<短名称>/` 目录，并在 PR 中附上目录链接；是否可以例外，由 Review 根据实际改动判断。
+## 6. 提交 PR
 
-- `spec.md`：记录背景、目标、范围、非目标、行为契约和验收标准。
-- `plan.md`：记录技术方案、影响范围、API 变化、风险和验证策略。
-- `tasks.md`：拆分实现、测试、示例和文档任务，并更新任务状态。
-- `acceptance.md`：记录实际验证命令、结果、人工验收项和未覆盖风险。
+使用仓库的 [PR 模板](https://github.com/Tencent/tdesign-flutter/blob/develop/.github/PULL_REQUEST_TEMPLATE.md)，完整保留小节、所有已选与未选选项以及 HTML 注释，只打勾和填写。PR 标题遵循 Conventional Commits；breaking change 使用 `breaking` type，并说明受影响 API、默认行为或删除能力及迁移方法。
 
-实现或验收标准发生变化时，应先同步更新 Spec，再继续修改代码。简单文案、格式调整和单文件局部修改不要求创建完整 Spec。
+关联 GitHub Issue，填写问题、解决方案和实际验证结果；需要 Spec 时附上目录链接。更新日志只描述用户可感知的变化，内部调整和行为不变的重构不写日志；判断与格式见 [PR 更新日志规范](https://github.com/Tencent/tdesign-flutter/blob/develop/CONTRIBUTING.md#pr-更新日志规范)。`CHANGELOG.md` 由发布工具生成，无需手动编辑。
 
-### 5.4 Demo 自测
-
-提交 PR 后，会触发流水线自动打包。打包完成会添加评论如下：
-
-![APK 示例](https://tdesign.tencent.com/flutter/assets/contributing_apk.png)
-
-点击 “体验 apk” 后面链接，即可跳转打包完成的 apk 下载地址，可以安装自测。
-
-**注意：** 该 demo 使用 CI 配置的 Flutter 版本打包；如果评论打包失败，请检查流水线日志确认原因。
-
-#### 自测内容
-
-- 组件改动后，整体是否有明显的布局溢出等展示异常。
-- 新增功能是否在"单元测试"栏目下？（需把示例放在 `ExamplePage` 的 `test` 字段里）。
-- 验证功能是否符合预期。
-- 点击右上角"i"图标，查看 API 文档是否正确。（若不正确，检测 `all_build.sh` 是否配置了对应组件的脚本）。
-- 点击右上角"</>"图标，检测示例代码是否生成。（若未生成，参考其他有生成的模块修改）。
-- 如涉及视觉改动，请联系负责人拉取设计同学进行视觉走查。
-- 英文环境、切换主题后是否展示正常。
-
-### 5.5 视觉走查
-
-PR 打包完成后，通知负责人拉设计同学进群，将 PR 链接发到群里。设计同学根据“设计走查流水线地址”的链接，替换内网域名后，下载 ipa 包进行走查。
-
-## 6. 合并 PR
-
-Issue 验收完成后，由负责人合并 PR，并将 Issue 的标签改为 `pre_x.x.x`。
+等待 CI 和 Review，并基于最新 PR 提交确认验证结果。问题验收、设计走查和必要检查完成后，由负责人合并。

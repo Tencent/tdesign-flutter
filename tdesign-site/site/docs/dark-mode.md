@@ -4,7 +4,7 @@ description: 使用 TThemeBuilder 和 Flutter ThemeMode 配置浅色、深色及
 spline: explain
 ---
 
-## 配置主题
+## 切换浅色、深色与跟随系统
 
 通过 `TThemeBuilder.light` 和 `TThemeBuilder.dark` 将 `TThemeData` 转换为 Flutter 主题，并在 `MaterialApp` 上设置 `themeMode`。
 
@@ -54,21 +54,16 @@ class _ThemeExampleState extends State<ThemeExample> {
 
 `ThemeMode.system` 跟随系统外观；`ThemeMode.light` 和 `ThemeMode.dark` 固定使用对应模式。应用可以自行保存用户选择，在启动时恢复。
 
-## 加载自定义配色
+## 保存用户选择
 
-将主题 JSON 注册到应用的 `pubspec.yaml` assets 中，再加载浅色和深色配置：
+将 `ThemeMode` 作为业务状态保存，并在启动时恢复；保存和读取可以采用业务已有的持久化方案。异步读取完成时，要避免覆盖用户在等待期间作出的新选择。
 
-```dart
-final json = await rootBundle.loadString('assets/theme.json');
-final tokens = TThemeData.fromJson(
-  'green',
-  json,
-  darkName: 'greenDark',
-) ?? TThemeData.defaultData();
-```
+可参考示例应用的 [ThemeModeProvider](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/provider/theme_mode_provider.dart)。本页示例用 `setState` 演示切换，业务可以使用自己的状态管理方式。
 
-此处需要引入 `package:flutter/services.dart`。JSON 中的 `green` 和 `greenDark` 应与实际主题名称一致。用上面的 `tokens` 替换示例中的 `_tokens`，再分别通过 `TThemeBuilder.light(tokens)` 和 `TThemeBuilder.dark(tokens)` 构建主题。
+## 使用自定义明暗配色
 
-组件通过 `context.tTheme` 读取当前子树的 Token。全局配色由 `TThemeData` 管理，组件局部样式通过对应的 `T*ThemeData` 配置。
+将已经加载好的自定义 Token 替换示例中的 `_tokens`，再分别传给 `TThemeBuilder.light` 和 `TThemeBuilder.dark`。JSON 结构、资产加载和暗色配置名称统一见[自定义主题](/flutter/custom-theme)。
 
-完整示例见 [深色模式示例源码](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/component_test/dark_test.dart)，配色配置见 [自定义主题](https://tdesign.tencent.com/flutter/getting-started#自定义主题)。
+没有暗色 Token 时，`TThemeBuilder.dark` 会回退当前 Token；切换到深色模式不会自动生成一套自定义暗色配色。
+
+完整示例见[深色模式示例源码](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/component_test/dark_test.dart)。
