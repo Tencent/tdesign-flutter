@@ -1023,7 +1023,10 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/theme/t_resource_delegate_test.dart',
       'test/components/theme/t_theme_test.dart',
     ],
-    exampleTests: ['test/theme/theme_demo_test.dart'],
+    exampleTests: [
+      'test/theme/theme_demo_test.dart',
+      'test/theme/theme_guides_test.dart',
+    ],
     visualTests: [
       VisualTestManifest(
         name: 'Theme Component',

@@ -1,5 +1,10 @@
 <template>
-  <td-doc-content ref="tdDocContent" platform="mobile" page-status="hidden">
+  <td-doc-content
+    ref="tdDocContent"
+    platform="mobile"
+    page-status="hidden"
+    :style="info.flutterPreview ? { '--content-padding-right': '0px' } : undefined"
+  >
     <td-doc-header v-if="info.tdDocHeader" platform="mobile" slot="doc-header" ref="tdDocHeader" changelog="false"></td-doc-header>
     <template v-if="info.isComponent">
       <td-doc-tabs ref="tdDocTabs" :tab="tab"></td-doc-tabs>
@@ -21,6 +26,22 @@
       <div v-show="tab === 'api'" name="API" v-html="info.apiMd"></div>
       <div v-show="tab === 'design'" name="DESIGN" v-html="info.designMd"></div>
     </template>
+    <div v-else-if="info.flutterPreview" class="flutter-guide-preview">
+      <div name="DOC" :class="info.docClass" v-html="info.docMd"></div>
+      <div class="flutter-guide-preview-column">
+        <aside class="flutter-guide-phone">
+          <iframe
+            ref="demoIframe"
+            :title="info.title + ' Flutter Web 演示'"
+            :src="liveUrl"
+            frameborder="0"
+            width="100%"
+            height="100%"
+            style="box-sizing: border-box; border-radius: 0 0 6px 6px; overflow: hidden;"
+          ></iframe>
+        </aside>
+      </div>
+    </div>
     <div name="DOC" :class="info.docClass" v-else v-html="info.docMd"></div>
     <div style="margin-top: 48px">
       <td-doc-history :time="info.lastUpdated"></td-doc-history>
@@ -63,7 +84,7 @@ export default defineComponent({
       return path.slice(path.lastIndexOf('/') + 1);
     },
     liveUrl() {
-      return flutterExampleLiveUrl(this.name, {
+      return flutterExampleLiveUrl(this.info.flutterPreview || this.name, {
         dev: import.meta.env.DEV,
         hostname: window.location.hostname,
         devServerPort: import.meta.env.VITE_FLUTTER_WEB_PORT || '19001',
@@ -128,6 +149,40 @@ export default defineComponent({
 </script>
 
 <style lang="less">
+.flutter-guide-preview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 375px;
+  gap: 32px;
+
+  > [name='DOC'] {
+    min-width: 0;
+  }
+}
+
+.flutter-guide-phone {
+  position: fixed;
+  top: 128px;
+  width: 375px;
+  height: min(580px, calc(100vh - 152px));
+  box-sizing: border-box;
+  border: 1px solid var(--td-component-border, #dcdcdc);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+@media (max-width: 1100px) {
+  .flutter-guide-preview {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .flutter-guide-phone {
+    position: static;
+    height: 580px;
+    width: 100%;
+    max-width: 375px;
+  }
+}
+
 div[name='API'] {
   h6 {
     font-size: 1em;

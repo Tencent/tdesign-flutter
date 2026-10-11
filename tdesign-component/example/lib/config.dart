@@ -57,6 +57,8 @@ import 'page/tabs/tabs_page.dart';
 import 'page/tag/tag_page.dart';
 import 'page/text/text_page.dart';
 import 'page/textarea/textarea_page.dart';
+import 'page/theme/custom_theme_example.dart';
+import 'page/theme/dark_mode_example.dart';
 import 'page/theme/theme_page.dart';
 import 'page/time_counter/time_counter_page.dart';
 import 'page/toast/toast_page.dart';
@@ -74,6 +76,16 @@ List<ExamplePageModel> examplePageList = [];
 
 Map<String, List<ExamplePageModel>> exampleMap = {
   '全局配置': [
+    ExamplePageModel(
+      text: '自定义主题',
+      name: 'custom-theme',
+      pageBuilder: _wrapInheritedTheme((context) => const CustomThemeExample()),
+    ),
+    ExamplePageModel(
+      text: '深色模式',
+      name: 'dark-mode',
+      pageBuilder: _wrapInheritedTheme((context) => const DarkModeExample()),
+    ),
     ExamplePageModel(
       text: 'Theme 主题',
       name: 'theme',

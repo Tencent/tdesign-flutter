@@ -2,55 +2,17 @@
 title: 深色模式
 description: 使用 TThemeBuilder 和 Flutter ThemeMode 配置浅色、深色及跟随系统的主题。
 spline: explain
+flutterPreview: dark-mode
+toc: false
 ---
 
 ## 切换浅色、深色与跟随系统
 
+在预览中切换模式，观察页面、按钮与文字的变化。源码可在已安装依赖的应用中用 `runApp(const DarkModeExample())` 运行。
+
 通过 `TThemeBuilder.light` 和 `TThemeBuilder.dark` 将 `TThemeData` 转换为 Flutter 主题，并在 `MaterialApp` 上设置 `themeMode`。
 
-```dart
-import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
-
-void main() => runApp(const ThemeExample());
-
-class ThemeExample extends StatefulWidget {
-  const ThemeExample({super.key});
-
-  @override
-  State<ThemeExample> createState() => _ThemeExampleState();
-}
-
-class _ThemeExampleState extends State<ThemeExample> {
-  final TThemeData _tokens = TThemeData.defaultData();
-  ThemeMode _mode = ThemeMode.system;
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: TThemeBuilder.light(_tokens),
-      darkTheme: TThemeBuilder.dark(_tokens),
-      themeMode: _mode,
-      home: Scaffold(
-        appBar: AppBar(title: const Text('主题设置')),
-        body: Column(
-          children: [
-            for (final mode in ThemeMode.values)
-              TextButton(
-                onPressed: () => setState(() => _mode = mode),
-                child: Text(switch (mode) {
-                  ThemeMode.system => '跟随系统',
-                  ThemeMode.light => '浅色模式',
-                  ThemeMode.dark => '深色模式',
-                }),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-```
+{{ flutter-example theme.DarkModeExample }}
 
 `ThemeMode.system` 跟随系统外观；`ThemeMode.light` 和 `ThemeMode.dark` 固定使用对应模式。
 
@@ -66,4 +28,4 @@ class _ThemeExampleState extends State<ThemeExample> {
 
 自定义配色需要准备对应暗色 Token，详见[自定义暗色配色](/flutter/custom-theme#配置自定义暗色配色)。
 
-完整示例见[深色模式示例源码](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/component_test/dark_test.dart)。
+完整示例见[深色模式示例源码](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/theme/dark_mode_example.dart)。

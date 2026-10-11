@@ -2,7 +2,11 @@
 title: 自定义主题
 description: 按应用、组件、局部区域和单个实例选择样式配置方式。
 spline: explain
+flutterPreview: custom-theme
+toc: false
 ---
+
+在预览中切换品牌色和全局圆角：全局标签随之变化，局部标签保持 24 圆角，大号标签只改变实例尺寸。
 
 ## 先选择修改范围
 
@@ -101,3 +105,9 @@ Future<TThemeData> loadThemeAsset() async {
 只改变品牌色的浅色 JSON 不会自动生成完整暗色方案；缺少暗色 Token 时，`TThemeBuilder.dark` 回退当前 Token。需要不同暗色配色时，按前面的命名规则补充暗色 JSON。
 
 浅色、深色与跟随系统的选择及持久化见[深色模式](/flutter/dark-mode)，本页负责定义这些模式使用的配色。
+
+## 交互演示源码
+
+下面是预览的实际源码；在已安装依赖的应用中用 `runApp(const CustomThemeExample())` 运行。
+
+{{ flutter-example theme.CustomThemeExample }}

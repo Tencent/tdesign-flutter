@@ -1,0 +1,93 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import '../../annotation/example_code.dart';
+
+@ExampleCode(group: 'theme')
+class CustomThemeExample extends StatefulWidget {
+  const CustomThemeExample({super.key});
+
+  @override
+  State<CustomThemeExample> createState() => _CustomThemeExampleState();
+}
+
+class _CustomThemeExampleState extends State<CustomThemeExample> {
+  static const _colors = {'默认色': '#0052D9', '绿色': '#2BA471', '自定义色': '#834EC2'};
+  String _brand = '默认色';
+  double _radius = 6;
+
+  @override
+  Widget build(BuildContext context) {
+    final token = TThemeData.fromJson(
+      'brand',
+      '{"brand":{"color":{"brandColor":"${_colors[_brand]}"}}}',
+    )!;
+    final tagTheme = TTagThemeData(squareBorderRadius: _radius);
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: TThemeBuilder.light(token).mergeExtension(tagTheme),
+      darkTheme: TThemeBuilder.dark(token).mergeExtension(tagTheme),
+      home: Builder(
+        builder: (context) {
+          final theme = Theme.of(context);
+          final currentTagTheme = theme.extension<TTagThemeData>()!;
+          return Scaffold(
+            appBar: AppBar(title: const Text('自定义主题')),
+            body: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                const TText('应用品牌色'),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final name in _colors.keys)
+                      TButton(
+                        onPressed: () => setState(() => _brand = name),
+                        variant: _brand == name
+                            ? TButtonVariant.fill
+                            : TButtonVariant.outline,
+                        colorPreset: TButtonColorPreset.primary,
+                        child: Text(name),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                TButton(
+                  onPressed: () =>
+                      setState(() => _radius = _radius == 6 ? 16 : 6),
+                  child: Text('切换全局圆角（当前 ${_radius.toInt()}）'),
+                ),
+                const SizedBox(height: 24),
+                TText('全局样式：圆角 ${_radius.toInt()}'),
+                const SizedBox(height: 8),
+                const TTag('全局标签', colorPreset: TTagColorPreset.primary),
+                const SizedBox(height: 16),
+                const TText('局部覆盖：圆角固定 24，保留品牌色'),
+                const SizedBox(height: 8),
+                Theme(
+                  data: theme.mergeExtension(
+                    currentTagTheme.copyWith(squareBorderRadius: 24),
+                  ),
+                  child: const TTag(
+                    '局部标签',
+                    colorPreset: TTagColorPreset.primary,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const TText('实例参数：仅改变尺寸'),
+                const SizedBox(height: 8),
+                const TTag(
+                  '大号标签',
+                  size: TTagSize.large,
+                  colorPreset: TTagColorPreset.primary,
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
