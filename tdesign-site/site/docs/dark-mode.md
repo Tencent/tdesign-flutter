@@ -52,7 +52,7 @@ class _ThemeExampleState extends State<ThemeExample> {
 }
 ```
 
-`ThemeMode.system` 跟随系统外观；`ThemeMode.light` 和 `ThemeMode.dark` 固定使用对应模式。应用可以自行保存用户选择，在启动时恢复。
+`ThemeMode.system` 跟随系统外观；`ThemeMode.light` 和 `ThemeMode.dark` 固定使用对应模式。
 
 ## 保存用户选择
 
@@ -64,6 +64,6 @@ class _ThemeExampleState extends State<ThemeExample> {
 
 将已经加载好的自定义 Token 替换示例中的 `_tokens`，再分别传给 `TThemeBuilder.light` 和 `TThemeBuilder.dark`。JSON 结构、资产加载和暗色配置名称统一见[自定义主题](/flutter/custom-theme)。
 
-没有暗色 Token 时，`TThemeBuilder.dark` 会回退当前 Token；切换到深色模式不会自动生成一套自定义暗色配色。
+自定义配色需要准备对应暗色 Token，详见[自定义暗色配色](/flutter/custom-theme#配置自定义暗色配色)。
 
 完整示例见[深色模式示例源码](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/component_test/dark_test.dart)。

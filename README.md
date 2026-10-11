@@ -98,14 +98,14 @@ The default themes are configured, and `ThemeMode.system` follows the system app
 
 ## What Do You Want to Do Next?
 
-| Goal | Guide | Outcome |
-| --- | --- | --- |
-| Find and use components | [Component Overview](https://tdesign.tencent.com/flutter/overview) | Explore demos and public parameters |
-| Change application brand colors | [Custom Theme](https://tdesign.tencent.com/flutter/custom-theme) | Configure application colors |
-| Style a component type, subtree, or instance | [Custom Theme](https://tdesign.tencent.com/flutter/custom-theme) | Choose the appropriate configuration scope |
-| Switch appearance or save the selected mode | [Dark Mode](https://tdesign.tencent.com/flutter/dark-mode) | Manage light, dark, and system modes |
-| Support another language | [Internationalization](https://tdesign.tencent.com/flutter/internationalization) | Localize application and component resources |
-| Upgrade from an older version | [Releases](https://github.com/Tencent/tdesign-flutter/releases) | Review the target version and breaking changes |
+| Goal | Guide |
+| --- | --- |
+| Find and use components | [Component Overview](https://tdesign.tencent.com/flutter/overview) |
+| Change application brand colors | [Custom Theme](https://tdesign.tencent.com/flutter/custom-theme#%E9%85%8D%E7%BD%AE%E5%BA%94%E7%94%A8%E5%93%81%E7%89%8C%E8%89%B2) |
+| Style a component type, subtree, or instance | [Custom Theme](https://tdesign.tencent.com/flutter/custom-theme#%E5%85%88%E9%80%89%E6%8B%A9%E4%BF%AE%E6%94%B9%E8%8C%83%E5%9B%B4) |
+| Switch appearance or save the selected mode | [Dark Mode](https://tdesign.tencent.com/flutter/dark-mode) |
+| Support another language | [Internationalization](https://tdesign.tencent.com/flutter/internationalization) |
+| Upgrade from an older version | [Releases](https://github.com/Tencent/tdesign-flutter/releases) |
 
 ## 🌐 TDesign Component Libraries
 

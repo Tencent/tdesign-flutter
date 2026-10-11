@@ -121,6 +121,20 @@ export default defineComponent({
       requestAnimationFrame(() => {
         this.loaded = true;
         callback();
+        this.$nextTick(() => {
+          const { hash } = this.$route;
+          if (!hash) return;
+          let anchor;
+          try {
+            anchor = decodeURIComponent(hash.slice(1));
+          } catch {
+            return;
+          }
+          const target = document.getElementById(anchor);
+          if (target) {
+            window.scrollTo(0, window.scrollY + target.getBoundingClientRect().top - 80);
+          }
+        });
       });
     },
     observeThemeStyle(styleId, themePart) {

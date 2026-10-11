@@ -29,11 +29,10 @@ git pull --ff-only
 
 ```text
 tdesign-component/
-├── demo_tool       # API 生成兼容入口
-├── example         # 组件示例应用及生成的 API、代码片段
+├── example         # 组件示例应用
 ├── lib             # 组件公开实现与主题
 ├── test            # 组件和工具测试
-└── tool            # API manifest、生成器、测试登记与回归 runner
+└── tool            # 测试登记与回归工具
 
 tdesign-site/       # 官网、组件文档和本地预览
 specs/              # 设计与验收记录
@@ -66,7 +65,7 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-请先完成上面的示例应用依赖安装。`pnpm dev` 同时启动文档站点（默认 `19000`）和 Flutter Web 示例（默认 `19001`）；浏览器打开 `http://localhost:19000/flutter/getting-started`。如果右侧示例未显示，检查 Flutter Web 日志和端口占用。
+`pnpm dev` 需要先完成上面的示例应用依赖安装，同时启动文档站点（默认 `19000`）和 Flutter Web 示例（默认 `19001`）；浏览器打开 `http://localhost:19000/flutter/getting-started`。如果右侧示例未显示，检查 Flutter Web 日志和端口占用。
 
 只修改文档时，可用 `pnpm dev:site` 单独启动文档站点；需要组件预览时再使用 `pnpm dev`。构建官网使用 `pnpm site`，其中会先执行主题桥接和组件文档契约检查。
 
@@ -78,7 +77,6 @@ pnpm dev
 - 群内讨论得到的需求和验收结论应补充到 GitHub Issue，方便后续参与者追踪。
 - 需要设计走查的改动，由负责人协调设计同学；PR 中保留相关验收记录。
 
-Issue 标签由负责人维护：`issueShoot` 表示已评估、可领取，`Received` 表示已领取，`pre_x.x.x` 表示预计发布版本，`x.x.x` 表示已发布版本。Issue 关联与关闭按[仓库规范](https://github.com/Tencent/tdesign-flutter/blob/develop/CONTRIBUTING.md#pr-关联-issue)处理。
 
 ## 4. 实现与文档
 
@@ -86,59 +84,30 @@ Issue 标签由负责人维护：`issueShoot` 表示已评估、可领取，`Rec
 
 复杂需求、公共 API 变更、组件重构和跨目录改动按 [Spec 流程](https://github.com/Tencent/tdesign-flutter/blob/develop/specs/README.md)记录行为契约、实施方案和验收结果。是否需要 Spec 与是否需要更新日志分别判断。
 
-### API 和示例来源
+### 修改文档来源
 
-- API 清单维护在 [`tdesign-component/tool/components.json`](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/tool/components.json)，公开范围以 `lib/tdesign_flutter.dart` 的导出为准。
-- `demo_tool/all_build.sh` 调用 `tool/generate_api.mjs`，生成 `example/assets/api/*.md`。新增或迁移组件时更新 manifest；无需配置旧的 API 二进制。
-- 示例方法标记 `@ExampleCode`，`group` 与页面的 `exampleCodeGroup` 一致，生成 `example/assets/code/*.txt`。
-- 官网组件页通过 `flutter-example-group` 和 `flutter-api` 指令读取示例与 API 产物。新增组件时同时核对菜单、组件概览和页面指令的组件标识。
-- 根目录 README 由 `scripts/sync-readme.mjs` 同步到组件包，中文 README 的接入部分生成官网快速开始。
+修改组件 API 时更新源码中的 `///` 注释，修改演示时更新示例源码，修改快速开始时更新根目录中文 README。API、示例片段和 README 副本由 PR 的 autofix 流水线生成，无需手工维护。
 
-PR 的 autofix 流水线会自动生成 API、代码片段和 README 副本，贡献者无需手工维护这些产物。需要本地排查时，从相应源文件修正后运行以下命令：
+新增组件或排查生成问题时，参考 [API 与示例工具说明](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/demo_tool/README.md)和[生成产物说明](https://github.com/Tencent/tdesign-flutter/blob/develop/AGENTS.md)。
 
-```bash
-# 在 tdesign-component 目录执行
-sh demo_tool/all_build.sh
-node tool/generate_api.mjs --check
-dart run tool/generate_example_code.dart
-dart run tool/generate_example_code.dart --check
+## 5. 按改动类型验证
 
-# 在仓库根目录执行
-node scripts/sync-readme.mjs
-```
+| 改动类型 | 必要检查 |
+| --- | --- |
+| 只修改文档 | 预览改动页面，检查代码、链接和导航；官网改动执行 `pnpm site` |
+| 修改组件或示例 | 静态分析、相关组件与示例测试，验证改动功能及边界情况 |
+| 涉及视觉变化 | 在组件检查基础上补充明暗主题、局部主题和 Golden 验证 |
+| 涉及平台能力 | 在目标 Android/iOS 设备验证，例如相册选择；Web 预览不能代替真机 |
 
-生成方式见 [API 与示例工具说明](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/demo_tool/README.md)。autofix 更新 PR 后，应检查最新提交的生成差异和后续 CI 结果。
-
-## 5. 验证改动
-
-### 代码与自动化回归
-
-从 `tdesign-component` 目录执行静态检查，要求零诊断：
+组件或示例改动，从 `tdesign-component` 目录执行：
 
 ```bash
 flutter analyze --fatal-infos
 ```
 
-新增或补充组件测试时，在 [`tool/component_test_manifest.dart`](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/tool/component_test_manifest.dart) 登记组件测试、生产源码覆盖率目标、Demo 功能测试和视觉回归。手写生产 Dart 行覆盖率要求 `LH/LF >= 95%`；详细字段和共享示例测试登记见[组件测试与 CI 回归门禁](https://github.com/Tencent/tdesign-flutter/blob/develop/CONTRIBUTING.md#组件测试与-ci-回归门禁)。
+新增测试须登记到 [`tool/component_test_manifest.dart`](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/tool/component_test_manifest.dart)，让 CI 执行。功能回归覆盖 Flutter `3.32.0` 与最新 stable，生产 Dart 行覆盖率要求至少 95%；测试命令和登记方法见[组件测试与 CI 回归门禁](https://github.com/Tencent/tdesign-flutter/blob/develop/CONTRIBUTING.md#组件测试与-ci-回归门禁)。Golden 使用[视觉回归 CI](https://github.com/Tencent/tdesign-flutter/blob/develop/.github/workflows/test-build.yml)规定的 SDK 和平台。
 
-```bash
-flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
-dart run tool/run_component_regression.dart
-dart run tool/run_example_regression.dart
-dart run tool/run_visual_regression.dart
-```
-
-功能回归需要覆盖 Flutter `3.32.0` 与最新 stable。Golden 按[视觉回归 CI](https://github.com/Tencent/tdesign-flutter/blob/develop/.github/workflows/test-build.yml)规定的 SDK 和平台运行；不能以本机另一平台生成的图片代替 CI 基线。测试文件存在或单独运行通过，不代表已进入集中式 CI 调度。
-
-### 示例与人工验收
-
-- 检查新增能力、受控状态回写、边界输入和 Controller 生命周期。
-- 检查布局溢出、点击与滚动、浅色与深色主题、局部主题覆盖和英文环境。
-- 在示例页打开 API 与源码面板，核对内容是否与实现一致；缺失时检查 manifest、注解分组及生成日志。
-- 示例页的 `test` 区域用于补充交互验收场景，不能代替自动化测试。
-- 涉及平台能力时在目标设备验证；涉及视觉变化时补充 Golden 和必要的设计走查。
-
-PR 预览包是否生成以及使用哪个 SDK，以流水线实际日志和 PR 评论为准。拿到预览包后按上述场景验证，将结果和未覆盖项写入 PR 或 Spec 的 `acceptance.md`。
+记录实际验证结果和未覆盖项，写入 PR 或 Spec 的 `acceptance.md`。如使用 PR 预览包，以流水线日志和评论中的版本为准。
 
 ## 6. 提交 PR
 

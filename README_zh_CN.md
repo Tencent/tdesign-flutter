@@ -105,14 +105,14 @@ class MyApp extends StatelessWidget {
 
 ## 接下来你想做什么？
 
-| 需求 | 阅读入口 | 你将完成什么 |
-| --- | --- | --- |
-| 找到并使用组件 | [组件概览](https://tdesign.tencent.com/flutter/overview) | 查看演示和公开参数 |
-| 改整个应用的品牌色 | [自定义主题](https://tdesign.tencent.com/flutter/custom-theme) | 配置全局配色 |
-| 改一类组件、某个页面或单个实例的样式 | [自定义主题](https://tdesign.tencent.com/flutter/custom-theme) | 选择合适的配置范围 |
-| 手动切换明暗模式，或保存用户选择 | [深色模式](https://tdesign.tencent.com/flutter/dark-mode) | 管理浅色、深色与跟随系统 |
-| 使用其他语言 | [国际化](https://tdesign.tencent.com/flutter/internationalization) | 配置业务语言与组件文案 |
-| 从旧版本升级 | [发布记录](https://github.com/Tencent/tdesign-flutter/releases) | 核对目标版本及不兼容变化 |
+| 需求 | 阅读入口 |
+| --- | --- |
+| 找到并使用组件 | [组件概览](https://tdesign.tencent.com/flutter/overview) |
+| 改整个应用的品牌色 | [自定义主题](https://tdesign.tencent.com/flutter/custom-theme#%E9%85%8D%E7%BD%AE%E5%BA%94%E7%94%A8%E5%93%81%E7%89%8C%E8%89%B2) |
+| 改一类组件、某个页面或单个实例的样式 | [自定义主题](https://tdesign.tencent.com/flutter/custom-theme#%E5%85%88%E9%80%89%E6%8B%A9%E4%BF%AE%E6%94%B9%E8%8C%83%E5%9B%B4) |
+| 手动切换明暗模式，或保存用户选择 | [深色模式](https://tdesign.tencent.com/flutter/dark-mode) |
+| 使用其他语言 | [国际化](https://tdesign.tencent.com/flutter/internationalization) |
+| 从旧版本升级 | [发布记录](https://github.com/Tencent/tdesign-flutter/releases) |
 
 <!-- getting-started:end -->
 
