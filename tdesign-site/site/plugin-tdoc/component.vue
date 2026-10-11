@@ -161,6 +161,7 @@ export default defineComponent({
 
 .flutter-guide-phone {
   position: fixed;
+  z-index: 550;
   top: 128px;
   width: 375px;
   height: min(580px, calc(100vh - 152px));

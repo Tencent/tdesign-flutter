@@ -96,6 +96,8 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.byType(entry.value), findsOneWidget);
+      expect(find.byType(TNavBar), findsOneWidget);
+      expect(find.byType(AppBar), findsNothing);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox.shrink());
     }

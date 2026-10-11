@@ -32,7 +32,7 @@ class _CustomThemeExampleState extends State<CustomThemeExample> {
           final theme = Theme.of(context);
           final currentTagTheme = theme.extension<TTagThemeData>()!;
           return Scaffold(
-            appBar: AppBar(title: const Text('自定义主题')),
+            appBar: const TNavBar(title: Text('自定义主题')),
             body: ListView(
               padding: const EdgeInsets.all(16),
               children: [

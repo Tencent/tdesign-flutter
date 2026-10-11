@@ -40,3 +40,5 @@
 ## Flutter Web 指南演示
 
 深色模式与自定义主题指南提供右侧 Flutter Web 预览，分别复用公开 `dark-mode` / `custom-theme` 路由。演示源码来自实际 Example 的生成片段，不维护平行文档代码。深色模式支持浅色、深色和系统模式；自定义主题支持默认、绿色和自定义配色、6/16 圆角切换并对比固定 24 圆角的局部覆盖。演示状态仅作用于预览应用，不修改官网或其他演示。窄屏预览位于正文下方；Theme API 保持生成契约。
+
+- 指南可见 UI 使用真实 TD 组件：顶部 TNavBar、控制 TButton、展示 TTag/TText；Flutter 的 MaterialApp/Scaffold/Theme 负责应用与主题承载。按钮和导航栏标题按公开契约使用 Text 内容插槽，继承所属组件样式。

@@ -63,3 +63,9 @@
 - 宿主横向隐藏溢出阻止 sticky 跟随窗口；指南采用传统组件的 fixed 预览方式，窄屏 static，未修改宿主或组件页布局。
 - 无组件公开 API、默认行为或 Theme API 正文变更，无 breaking change。未新增 Linux Golden 基线，本机 Docker daemon 不可用；新增指南视觉验证来自浏览器，原组件 Golden 留待本轮 CI。
 - 构建输出、依赖缓存与临时消费应用未纳入提交，未混入原工作区改动。
+
+## TD 组件统一验收
+
+- 两页顶部改为真实 TNavBar，与既有 TButton/TTag/TText 组成展示 UI；Text 仅作按钮/导航栏的内容插槽，按公开契约继承组件样式。
+- Flutter 3.32.0、3.44.9 示例分析零诊断，3 个模式/主题/路由测试各全部通过；测试核对 TNavBar 存在且无 Material AppBar。生成源码 --check、3.44.9 Web 构建和站点构建通过。
+- 浏览器验证 TD 导航栏和控件、浅色/深色切换及自定义主题；修复文档标题遮挡预览并拦截点击的层级问题。

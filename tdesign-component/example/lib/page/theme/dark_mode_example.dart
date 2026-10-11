@@ -23,7 +23,7 @@ class _DarkModeExampleState extends State<DarkModeExample> {
     themeMode: _mode,
     home: Builder(
       builder: (context) => Scaffold(
-        appBar: AppBar(title: const Text('深色模式')),
+        appBar: const TNavBar(title: Text('深色模式')),
         body: ListView(
           padding: const EdgeInsets.all(16),
           children: [

@@ -1,6 +1,6 @@
 ---
 title: 深色模式
-description: 使用 TThemeBuilder 和 Flutter ThemeMode 配置浅色、深色及跟随系统的主题。
+description: 使用 TD 组件演示浅色、深色及跟随系统的主题切换。
 spline: explain
 flutterPreview: dark-mode
 toc: false
