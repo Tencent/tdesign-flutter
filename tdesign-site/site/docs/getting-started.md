@@ -44,11 +44,11 @@ class MyApp extends StatelessWidget {
       darkTheme: TThemeBuilder.dark(token),
       themeMode: ThemeMode.system,
       home: Scaffold(
-        appBar: AppBar(title: const Text('TDesign Flutter')),
+        appBar: const TNavBar(title: Text('TDesign Flutter')),
         body: Center(
           child: TButton(
             onPressed: () {},
-            child: const TText('Hello TDesign'),
+            child: const Text('Hello TDesign'),
           ),
         ),
       ),

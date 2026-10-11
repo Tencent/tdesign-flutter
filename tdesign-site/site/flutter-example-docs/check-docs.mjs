@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { guideExamples, validateGuidePage } from './guide-contract.mjs';
 import { validateComponentPage } from './page-contract.mjs';
 
 import {
@@ -70,13 +71,23 @@ for (const slug of fs.readdirSync(docsDirectory).sort()) {
   mappedGroups.add(expectedGroup);
 }
 
+for (const slug of Object.keys(guideExamples)) {
+  try {
+    const source = fs.readFileSync(path.resolve(adapterDirectory, `../docs/${slug}.md`), 'utf8');
+    validateGuidePage(source, slug);
+    replaceFlutterExampleDirectives(source);
+  } catch (error) {
+    errors.push(`${slug}: ${error.message}`);
+  }
+}
+
 if (errors.length > 0) {
   console.error(errors.map((error) => `[flutter-example-docs] ${error}`).join('\n'));
   process.exitCode = 1;
 } else {
   const excludedGroups = [...new Set(assetGroups.values())].filter((group) => !mappedGroups.has(group)).sort();
   console.log(
-    `[flutter-example-docs] ${documentCount} component documents map ${mappedExampleCount} generated examples; non-component groups: ${
+    `[flutter-example-docs] ${documentCount} component documents and ${Object.keys(guideExamples).length} interactive guides map ${mappedExampleCount} generated examples; non-component groups: ${
       excludedGroups.join(', ') || 'none'
     }`,
   );

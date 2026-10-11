@@ -15,6 +15,7 @@ class _CustomThemeExampleState extends State<CustomThemeExample> {
   static const _colors = {'默认色': '#0052D9', '绿色': '#2BA471', '自定义色': '#834EC2'};
   String _brand = '默认色';
   double _radius = 6;
+  double _iconSpacing = 4;
   String _message = '';
 
   @override
@@ -25,8 +26,12 @@ class _CustomThemeExampleState extends State<CustomThemeExample> {
     )!;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: TThemeBuilder.light(token),
-      darkTheme: TThemeBuilder.dark(token),
+      theme: TThemeBuilder.light(
+        token,
+      ).mergeExtension(TButtonThemeData(iconTextSpacing: _iconSpacing)),
+      darkTheme: TThemeBuilder.dark(
+        token,
+      ).mergeExtension(TButtonThemeData(iconTextSpacing: _iconSpacing)),
       home: Builder(
         builder: (context) {
           final theme = Theme.of(context);
@@ -53,13 +58,22 @@ class _CustomThemeExampleState extends State<CustomThemeExample> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TButton(
-                    onPressed: () =>
-                        setState(() => _radius = _radius == 6 ? 16 : 6),
-                    child: Text('切换全局圆角（当前 ${_radius.toInt()}）'),
-                  ),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    TButton(
+                      onPressed: () =>
+                          setState(() => _radius = _radius == 6 ? 16 : 6),
+                      child: Text('全局圆角：${_radius.toInt()}'),
+                    ),
+                    TButton(
+                      onPressed: () => setState(
+                        () => _iconSpacing = _iconSpacing == 4 ? 16 : 4,
+                      ),
+                      child: Text('图标间距：${_iconSpacing.toInt()}'),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 24),
                 TText('全局样式：圆角 ${_radius.toInt()}'),
@@ -69,6 +83,7 @@ class _CustomThemeExampleState extends State<CustomThemeExample> {
                   child: TButton(
                     onPressed: () => setState(() => _message = '全局按钮'),
                     colorPreset: TButtonColorPreset.primary,
+                    icon: const Icon(TIcons.add),
                     child: const Text('全局按钮'),
                   ),
                 ),
@@ -84,6 +99,7 @@ class _CustomThemeExampleState extends State<CustomThemeExample> {
                     child: TButton(
                       onPressed: () => setState(() => _message = '局部按钮'),
                       colorPreset: TButtonColorPreset.primary,
+                      icon: const Icon(TIcons.add),
                       child: const Text('局部按钮'),
                     ),
                   ),
@@ -97,6 +113,7 @@ class _CustomThemeExampleState extends State<CustomThemeExample> {
                     onPressed: () => setState(() => _message = '大号按钮'),
                     size: TButtonSize.large,
                     colorPreset: TButtonColorPreset.primary,
+                    icon: const Icon(TIcons.add),
                     child: const Text('大号按钮'),
                   ),
                 ),

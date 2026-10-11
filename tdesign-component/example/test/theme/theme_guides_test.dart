@@ -51,6 +51,23 @@ void main() {
       return (shape.borderRadius as BorderRadius).topLeft.x;
     }
 
+    double iconSpacing(String text) {
+      final icon = find.descendant(
+        of: button(text),
+        matching: find.byType(Icon),
+      );
+      return tester.getTopLeft(find.text(text)).dx -
+          tester.getTopRight(icon).dx;
+    }
+
+    for (final text in ['全局按钮', '局部按钮', '大号按钮']) {
+      expect(iconSpacing(text), closeTo(4, 0.01));
+    }
+    await tester.tap(find.text('图标间距：4'));
+    await tester.pumpAndSettle();
+    for (final text in ['全局按钮', '局部按钮', '大号按钮']) {
+      expect(iconSpacing(text), closeTo(16, 0.01));
+    }
     expect(find.byType(TTag), findsNothing);
     expect(radius('全局按钮'), 6);
     expect(radius('局部按钮'), 24);
@@ -60,7 +77,7 @@ void main() {
     for (final text in ['全局按钮', '局部按钮', '大号按钮']) {
       expect(context(text).tTheme.brandColor, const Color(0xFF2BA471));
     }
-    await tester.tap(find.text('切换全局圆角（当前 6）'));
+    await tester.tap(find.text('全局圆角：6'));
     await tester.pumpAndSettle();
     expect(radius('全局按钮'), 16);
     expect(radius('局部按钮'), 24);

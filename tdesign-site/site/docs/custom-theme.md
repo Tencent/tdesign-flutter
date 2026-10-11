@@ -6,77 +6,46 @@ flutterPreview: custom-theme
 toc: false
 ---
 
-在预览中切换品牌色和全局圆角：实际按钮随之变化，局部按钮保持 24 圆角，大号按钮只改变实例尺寸。点击按钮可看到反馈。
+切换品牌色、全局圆角和按钮图标间距，观察同一组实际 TD 按钮。局部按钮始终保持 24 圆角，大号按钮使用实例尺寸；点击按钮可看到反馈。
 
 <div data-flutter-guide-preview></div>
 
 ## 先选择修改范围
 
-| 你想改什么 | 使用什么 | 影响范围 |
+| 你想改什么 | 使用什么 | 本页演示 |
 | --- | --- | --- |
-| 整个应用的品牌色、字体、间距 | `TThemeData` 与 `TThemeBuilder` | 使用该主题的应用子树 |
-| 某一类组件的样式默认值 | 对应的 `T*ThemeData` | 该主题下的同类组件 |
-| 某个页面或区域的组件样式 | `Theme` 与 `mergeExtension` | 被包裹的子树 |
-| 一个实例支持的尺寸、状态或外形 | 组件的公开参数 | 当前实例 |
+| 应用品牌色、字体、间距等 Token | `TThemeData` 与 `TThemeBuilder` | 品牌色与全局圆角 |
+| 一类组件支持的样式默认值 | 对应的 `T*ThemeData` | 所有按钮的图标间距 |
+| 某个页面或区域的样式 | `Theme` 与 `mergeExtension` | 局部按钮固定圆角 |
+| 一个实例支持的尺寸、状态或外形 | 组件公开参数 | 大号按钮的尺寸 |
 
-实例有对应参数时优先使用参数；没有时可用 `Theme` 只包裹该实例，例如修改单个 Tag 的圆角。
-
-以下示例沿用快速开始的 `material.dart` 和 `tdesign_flutter.dart` 导入。
+有对应实例参数时直接使用参数；需要共享默认值时再配置主题。各组件支持的字段见 [Theme API](/flutter/components/theme)及对应组件 API。
 
 ## 配置应用品牌色
 
-添加下面函数，再把快速开始中的 `final token = TThemeData.defaultData();` 改为 `final token = loadBrandTheme();`：
+示例将品牌色和 `radiusDefault` 写入 JSON，用 `TThemeData.fromJson` 解析，再传给 `TThemeBuilder.light` 和 `TThemeBuilder.dark`。将此 Token 替换快速开始的 `TThemeData.defaultData()` 即可应用到自己的应用。
 
-```dart
-TThemeData loadBrandTheme() {
-  const config = '''
-  {
-    "myTheme": {
-      "color": { "brandColor": "#D7B386" }
-    }
-  }
-  ''';
-  return TThemeData.fromJson('myTheme', config) ?? TThemeData.defaultData();
-}
-```
-
-所有可用 Token 键见 [t_default_theme.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/lib/src/theme/t_default_theme.dart)。如果需要自定义暗色 Token，在 JSON 中增加 `myThemeDark` 配置；`fromJson` 默认查找 `${name}Dark`，也可以通过 `darkName` 指定名称。
+所有可用 Token 键见 [t_default_theme.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/lib/src/theme/t_default_theme.dart)。按钮等读取当前 Token 的组件会随品牌色与全局圆角变化。
 
 ## 配置一类组件的默认样式
 
-例如让方形 Tag 默认使用 6 逻辑像素圆角。添加下面函数，将快速开始的 `theme: TThemeBuilder.light(token)` 改为 `theme: buildLightTheme(token)`。暗色模式也需要在 `TThemeBuilder.dark(token)` 的结果上合并同样的组件扩展。
-
-```dart
-ThemeData buildLightTheme(TThemeData token) => TThemeBuilder.light(token)
-    .mergeExtension(const TTagThemeData(squareBorderRadius: 6));
-```
+示例将 `TButtonThemeData(iconTextSpacing: _iconSpacing)` 合并到浅色和深色主题。切换“图标间距”时，三个演示按钮一起变化。组件扩展只控制它公开支持的字段；本例的圆角来自应用 Token，图标间距来自 Button 扩展。
 
 ## 只修改一个页面或区域
 
-用 `Theme` 包裹目标子树。这里将局部方形 Tag 的圆角改为 12，同时保留应用级 Tag Theme 的其他字段：
+局部按钮使用 `Theme` 包裹，通过 `context.tTheme.copyWith(radiusMap: {'radiusDefault': 24})` 覆盖当前 Token 的圆角，再用 `mergeExtension` 合并到当前 Flutter 主题。
 
-```dart
-Widget buildLocalTag(BuildContext context) {
-  final theme = Theme.of(context);
-  final tagTheme = theme.extension<TTagThemeData>() ?? const TTagThemeData();
-  return Theme(
-    data: theme.mergeExtension(tagTheme.copyWith(squareBorderRadius: 12)),
-    child: const TTag('TDesign'),
-  );
-}
-```
-
-在已配置主题的 `MaterialApp` 内调用 `buildLocalTag(context)`。`mergeExtension` 保留其他类型的扩展；先调用已有扩展的 `copyWith`，可同时保留该组件的其他字段。读取当前 Token 使用 `context.tTheme`，不要用返回默认 Token 的 `TThemeData.defaultData()`。
+因此它保留应用品牌色和 Button 图标间距，只固定自己的圆角。修改某个组件扩展时也应先读取当前扩展并 `copyWith`，避免丢失其他字段。不要用 `TThemeData.defaultData()` 替代当前 Token。
 
 ## 只修改一个实例
 
-优先使用该组件公开支持的参数，例如标签的尺寸：
+大号按钮使用 `size: TButtonSize.large`，无需复制或重建主题；品牌色、圆角和图标间距仍继承当前主题。
 
-```dart
-Widget buildLargeTag() => const TTag('TDesign', size: TTagSize.large);
-```
+## 交互演示源码
 
-组件的具体字段、生效条件和覆盖关系见 [Theme API](/flutter/components/theme)及对应组件 API。
+下面是预览的完整实际源码。沿用快速开始的 Flutter 和 TDesign 导入，在已安装依赖的应用中用 `runApp(const CustomThemeExample())` 运行。
+
+{{ flutter-example theme.CustomThemeExample }}
 
 ## 可选：从主题生成器导入配色
 
@@ -107,9 +76,3 @@ Future<TThemeData> loadThemeAsset() async {
 只改变品牌色的浅色 JSON 不会自动生成完整暗色方案；缺少暗色 Token 时，`TThemeBuilder.dark` 回退当前 Token。需要不同暗色配色时，按前面的命名规则补充暗色 JSON。
 
 浅色、深色与跟随系统的选择及持久化见[深色模式](/flutter/dark-mode)，本页负责定义这些模式使用的配色。
-
-## 交互演示源码
-
-下面是预览的实际源码；在已安装依赖的应用中用 `runApp(const CustomThemeExample())` 运行。
-
-{{ flutter-example theme.CustomThemeExample }}

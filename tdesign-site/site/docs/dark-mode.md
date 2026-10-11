@@ -15,9 +15,11 @@ toc: false
 
 <div data-flutter-guide-preview></div>
 
-{{ flutter-example theme.DarkModeExample }}
-
 `ThemeMode.system` 跟随系统外观；`ThemeMode.light` 和 `ThemeMode.dark` 固定使用对应模式。
+
+## 交互演示源码
+
+{{ flutter-example theme.DarkModeExample }}
 
 ## 保存用户选择
 
@@ -27,8 +29,6 @@ toc: false
 
 ## 使用自定义明暗配色
 
-将已经加载好的自定义 Token 替换示例中的 `_tokens`，再分别传给 `TThemeBuilder.light` 和 `TThemeBuilder.dark`。JSON 结构、资产加载和暗色配置名称统一见[自定义主题](/flutter/custom-theme)。
-
-自定义配色需要准备对应暗色 Token，详见[自定义暗色配色](/flutter/custom-theme#配置自定义暗色配色)。
+将已经加载好的自定义 Token 替换示例中的 `_tokens`，再分别传给 `TThemeBuilder.light` 和 `TThemeBuilder.dark`。自定义配色需要准备对应暗色 Token；JSON 结构、资产加载和暗色配置名称见[自定义主题](/flutter/custom-theme#配置自定义暗色配色)。
 
 完整示例见[深色模式示例源码](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/page/theme/dark_mode_example.dart)。
