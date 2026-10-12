@@ -14,11 +14,11 @@ import '../form/t_form_item_scope.dart';
 import 't_input_theme_data.dart';
 import 't_input_types.dart';
 
-/// TDesign 输入框。
-///
-/// 内置编辑器和操作按钮不受 Material 视觉密度影响；前后缀内容
-/// 保留调用方主题。输入装饰通过 [TInputThemeData] 配置。
 class TInput extends StatefulWidget {
+  /// 创建 TDesign 输入框。
+  ///
+  /// 内置编辑器和操作按钮不受 Material 视觉密度影响；前后缀内容
+  /// 保留调用方主题。输入装饰通过 [TInputThemeData] 配置。
   const TInput({
     super.key,
     this.controller,

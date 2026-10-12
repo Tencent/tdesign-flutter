@@ -64,3 +64,9 @@ flutter test --no-pub test/button test/input test/textarea test/table test/fab t
 PR 分支基于 `origin/develop@faab46b2a447a336bdb9e5b42ff9d556f171bc0d`。新增的 Upload/Toast 上游提交未改变本次生产与测试范围；最终 diff 指纹与上文一致。独立 worktree 仅包含密度隔离修改，3.32.0 组件包严格 analyze 与 223 项聚焦测试再次通过。
 
 最终 develop 基线的 latest 3.47.7 组件包严格 analyze 零诊断，三组件及新版装饰密度专项测试 224 项通过。
+
+## PR CI 文档展示修正
+
+首次 PR CI 的 Flutter 3.32 功能任务中，组件测试及各组件生产覆盖率均通过；工具测试发现 `TInput` 新增类级说明出现在首张 API 表前，违反 `api_presentation_test.dart` 的展示契约。将密度说明移至公开构造方法 dartdoc 并重新生成 API，保留用户可见说明，未改动运行逻辑或 Golden 基线。
+
+修正后两套 SDK 的 `api_presentation_test.dart` 各 57 项全部通过，组件包严格分析均为 0 issues。修正只影响注释与生成文档，运行逻辑及既有视觉验证不变。
