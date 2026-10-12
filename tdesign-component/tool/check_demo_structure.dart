@@ -138,6 +138,8 @@ void main() {
         }
       }
     }
+    final guides = manifest['guides'] as Map<String, dynamic>? ?? const {};
+    errors.addAll(registerGuideAssets(guides, config, registeredAssets));
     registeredAssetCount = registeredAssets.length;
     if (annotatedExamples.length != registeredAssetCount) {
       errors.add(
@@ -193,6 +195,41 @@ void main() {
 
   stdout.writeln(
     'Demo 目录结构检查通过：${entries.length} 个入口、0 个旧分组文件、'
-    '$registeredAssetCount 个公开 ExampleItem 均一对一映射到完整代码资产。',
+    '$registeredAssetCount 个组件或指南示例均一对一映射到完整代码资产。',
   );
+}
+
+/// Registers guide assets only when their runtime routes match the Widget.
+List<String> registerGuideAssets(
+  Map<String, dynamic> guides,
+  String config,
+  Set<String> registeredAssets,
+) {
+  final errors = <String>[];
+  final guideRoutes = RegExp(
+    r'ExamplePageModel\(([\s\S]*?)\n    \)',
+  ).allMatches(config).map((match) => match.group(1)!).toList();
+  for (final entry in guides.entries) {
+    final assetKey = entry.value;
+    if (assetKey is! String ||
+        !RegExp(r'^[a-z][a-z0-9-]*$').hasMatch(entry.key) ||
+        !RegExp(
+          r'^[A-Za-z0-9_-]+\.[A-Za-z_][A-Za-z0-9_]*$',
+        ).hasMatch(assetKey)) {
+      errors.add('指南映射无效：${entry.key}');
+      continue;
+    }
+    final widget = assetKey.split('.').last;
+    final matchingRoutes = guideRoutes
+        .where((model) => RegExp("name: *'${entry.key}'").hasMatch(model))
+        .toList();
+    if (matchingRoutes.length != 1 ||
+        !matchingRoutes.single.contains('const $widget(')) {
+      errors.add('指南路由未构建对应示例：${entry.key} ($assetKey)');
+    }
+    if (!registeredAssets.add(assetKey)) {
+      errors.add('指南与组件示例重复登记：$assetKey');
+    }
+  }
+  return errors;
 }

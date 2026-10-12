@@ -9,7 +9,17 @@ class ExampleCode {
   /// Relative helper files whose declarations are part of this copyable demo.
   final List<String> includes;
 
-  const ExampleCode({required this.group, this.includes = const []});
+  /// Independent guide route, instead of a component page ExampleItem.
+  ///
+  /// Must be a unique literal route registered to this standalone Widget.
+  /// Null keeps the component ExampleItem registration contract.
+  final String? route;
+
+  const ExampleCode({
+    required this.group,
+    this.includes = const [],
+    this.route,
+  });
 }
 
 /// Marks a migrated Example page whose public code order is manifest-driven.

@@ -39,13 +39,6 @@ export default {
           path: '/flutter/changelog',
           component: () => import('../CHANGELOG.md'),
         },
-        // {
-        //   title: '自定义主题',
-        //   name: 'custom-theme',
-        //   meta: { docType: 'explain' },
-        //   path: '/flutter/custom-theme',
-        //   component: () => import('@docs/custom-theme.md'),
-        // },
         {
           title: '组件概览',
           name: 'overview',
@@ -60,11 +53,11 @@ export default {
       type: 'document', // 普通文档
       children: [
         {
-          title: 'Theme 主题',
-          name: 'theme',
-          meta: { docType: 'base' },
-          path: '/flutter/components/theme',
-          component: () => import('@component-docs/theme/README.md'),
+          title: '自定义主题',
+          name: 'custom-theme',
+          meta: { docType: 'explain' },
+          path: '/flutter/custom-theme',
+          component: () => import('@docs/custom-theme.md'),
         },
         {
           title: '深色模式',
@@ -72,6 +65,20 @@ export default {
           meta: { docType: 'explain' },
           path: '/flutter/dark-mode',
           component: () => import('@docs/dark-mode.md'),
+        },
+        {
+          title: '国际化',
+          name: 'internationalization',
+          meta: { docType: 'explain' },
+          path: '/flutter/internationalization',
+          component: () => import('@docs/internationalization.md'),
+        },
+        {
+          title: 'Theme API',
+          name: 'theme',
+          meta: { docType: 'base' },
+          path: '/flutter/components/theme',
+          component: () => import('@component-docs/theme/README.md'),
         },
       ],
     },

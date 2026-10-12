@@ -1,0 +1,80 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+class ThemeDarkModeExample extends StatefulWidget {
+  const ThemeDarkModeExample({super.key});
+
+  @override
+  State<ThemeDarkModeExample> createState() => _ThemeDarkModeExampleState();
+}
+
+class _ThemeDarkModeExampleState extends State<ThemeDarkModeExample> {
+  final TThemeData _tokens = TThemeData.defaultData();
+  ThemeMode _mode = ThemeMode.system;
+  String _message = '';
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+    debugShowCheckedModeBanner: false,
+    theme: TThemeBuilder.light(_tokens),
+    darkTheme: TThemeBuilder.dark(_tokens),
+    themeMode: _mode,
+    home: Builder(
+      builder: (context) => Scaffold(
+        appBar: const TNavBar(title: Text('深色模式')),
+        body: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final mode in ThemeMode.values)
+                  TButton(
+                    onPressed: () => setState(() => _mode = mode),
+                    variant: _mode == mode
+                        ? TButtonVariant.fill
+                        : TButtonVariant.outline,
+                    colorPreset: TButtonColorPreset.primary,
+                    child: Text(switch (mode) {
+                      ThemeMode.system => '跟随系统',
+                      ThemeMode.light => '浅色',
+                      ThemeMode.dark => '深色',
+                    }),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            TText(
+              '当前显示：${Theme.of(context).brightness == Brightness.dark ? '深色' : '浅色'}',
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                TButton(
+                  onPressed: () => setState(() => _message = '主要按钮'),
+                  colorPreset: TButtonColorPreset.primary,
+                  child: const Text('主要按钮'),
+                ),
+                TButton(
+                  onPressed: () => setState(() => _message = '描边按钮'),
+                  variant: TButtonVariant.outline,
+                  colorPreset: TButtonColorPreset.primary,
+                  child: const Text('描边按钮'),
+                ),
+              ],
+            ),
+            if (_message.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              TText('当前点击：$_message'),
+            ],
+            const SizedBox(height: 16),
+            const TText('页面、按钮与文字一起跟随所选模式。'),
+          ],
+        ),
+      ),
+    ),
+  );
+}

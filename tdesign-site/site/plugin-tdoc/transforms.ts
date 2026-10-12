@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import mdToVue from '../scripts/md-to-vue';
 import { replaceFlutterExampleDirectives } from '../flutter-example-docs/transform.mjs';
+import { validateGuidePage } from '../flutter-example-docs/guide-contract.mjs';
 import { replaceFlutterApiDirectives } from '../flutter-example-docs/api.mjs';
 
 let demoCodesImports: Record<string, string> = {};
@@ -12,6 +13,7 @@ export default {
     const reg = file.match(/docs\/components\/(\S*)(?=\/\S*.md)/);
     const name = reg && reg[1];
     demoCodesImports = {};
+    validateGuidePage(source, path.basename(file, path.extname(file)));
 
     // Flutter Web 文档直接读取 Example App 生成的唯一代码资产。
     source = replaceFlutterExampleDirectives(source);

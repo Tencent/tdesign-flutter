@@ -2312,5 +2312,9 @@
       }
     ]
   },
-  "legacyGroups": []
+  "legacyGroups": [],
+  "guides": {
+    "custom-theme": "theme.CustomThemeExample",
+    "dark-mode": "theme.ThemeDarkModeExample"
+  }
 }

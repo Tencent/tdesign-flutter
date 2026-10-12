@@ -15,10 +15,27 @@ const rootDir = `${__dirname}/..`;
 // ============================================================
 
 const transforms = {
-  // 移除语言切换链接: [English](./README.md) | 简体中文
-  removeLangLink: (content) => {
-    return content.replace(/\[English\]\(\.\/README\.md\) \| 简体中文\n?/g, '')
-      .replace('https://raw.githubusercontent.com/Tencent/tdesign-flutter/develop/tdesign-site/site/public/assets/qrcode/t_apk_qrcode.png', `data:image/png;base64,${readFileSync(`${rootDir}/tdesign-site/site/public/assets/qrcode/t_apk_qrcode.png`).toString('base64')}`);
+  gettingStarted: (content) => {
+    const start = '<!-- getting-started:start -->';
+    const end = '<!-- getting-started:end -->';
+    if (content.split(start).length !== 2 || content.split(end).length !== 2) {
+      throw new Error('README_zh_CN.md must contain one getting-started start and end marker.');
+    }
+    const startIndex = content.indexOf(start) + start.length;
+    const endIndex = content.indexOf(end);
+    const body = content.slice(startIndex, endIndex).trim()
+      .replaceAll('https://tdesign.tencent.com/flutter/', '/flutter/');
+    if (endIndex < startIndex || !body) {
+      throw new Error('README_zh_CN.md getting-started markers must enclose non-empty content in order.');
+    }
+    return `---
+title: 快速开始
+description: 安装并运行第一个 TDesign Flutter 应用，再按需求继续配置。
+spline: explain
+---
+
+${body}
+`;
   },
 };
 
@@ -33,7 +50,7 @@ const syncConfig = [
     source: 'README_zh_CN.md',
     targets: [
       { path: 'tdesign-component/README_zh_CN.md' },
-      { path: 'tdesign-site/site/docs/getting-started.md', transform: 'removeLangLink' },
+      { path: 'tdesign-site/site/docs/getting-started.md', transform: 'gettingStarted' },
     ],
   },
 ];
@@ -43,6 +60,7 @@ const syncConfig = [
 // ============================================================
 
 function sync() {
+  const outputs = [];
   for (const { source, targets } of syncConfig) {
     const sourcePath = `${rootDir}/${source}`;
 
@@ -63,13 +81,17 @@ function sync() {
           content = transformFn(content);
           console.log(`  [Transform: ${transform}]`);
         } else {
-          console.log(`  [Warn] Unknown transform: ${transform}`);
+          throw new Error(`Unknown transform: ${transform}`);
         }
       }
 
-      writeFileSync(`${rootDir}/${path}`, content, 'utf-8');
-      console.log(`  [Sync] -> ${path}`);
+      outputs.push({ path, content });
     }
+  }
+
+  for (const { path, content } of outputs) {
+    writeFileSync(`${rootDir}/${path}`, content, 'utf-8');
+    console.log(`  [Sync] -> ${path}`);
   }
 
   console.log('\nDone!');

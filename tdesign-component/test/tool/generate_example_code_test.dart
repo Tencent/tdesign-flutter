@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -57,6 +58,57 @@ class $pageName {
   ExampleCodeGenerator createGenerator() => ExampleCodeGenerator(
     sourceDirectory: sourceDirectory,
     outputDirectory: outputDirectory,
+  );
+
+  void writeGuide(String name, String route) {
+    writeSource('${name}_example', """
+@ExampleCode(group: 'theme', route: '$route')
+class $name {}
+""");
+  }
+
+  test('guide assets are generated separately from component page items', () {
+    writeSource('theme_base_example', """
+@ExampleCode(group: 'theme')
+class ThemeBaseExample {}
+""");
+    writeManifest('theme', ['ThemeBaseExample']);
+    writeGuide('ThemeGuideExample', 'theme-guide');
+    createGenerator().run();
+    final manifest =
+        jsonDecode(
+              File('${outputDirectory.path}/manifest.json').readAsStringSync(),
+            )
+            as Map<String, dynamic>;
+    expect(manifest['guides'], {'theme-guide': 'theme.ThemeGuideExample'});
+    final groups = manifest['groups'] as Map<String, dynamic>;
+    expect(groups['theme'].toString(), isNot(contains('ThemeGuideExample')));
+    expect(createGenerator().run(check: true).isUpToDate, isTrue);
+  });
+
+  test(
+    'rejects duplicate guide routes instead of overwriting registration',
+    () {
+      writeGuide('ThemeOneExample', 'theme-guide');
+      writeGuide('ThemeTwoExample', 'theme-guide');
+      expect(createGenerator().run, throwsA(isA<StateError>()));
+    },
+  );
+
+  test('rejects invalid guide routes', () {
+    writeGuide('ThemeGuideExample', '../guide');
+    expect(createGenerator().run, throwsA(isA<StateError>()));
+  });
+
+  test(
+    'guide route cannot annotate a method instead of a standalone Widget',
+    () {
+      writeSource('theme', """
+@ExampleCode(group: 'theme', route: 'theme-guide')
+void example() {}
+""");
+      expect(createGenerator().run, throwsA(isA<StateError>()));
+    },
   );
 
   test('exports class and top-level methods without annotation', () {
