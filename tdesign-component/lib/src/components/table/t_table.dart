@@ -825,18 +825,12 @@ class _TTableState<T> extends State<TTable<T>> {
       width: _selectionColumnWidth,
       height: double.infinity,
       decoration: BoxDecoration(border: _cellBorder(context, null)),
-      child: CheckboxTheme(
-        data: const CheckboxThemeData(
-          visualDensity: VisualDensity.compact,
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        ),
-        child: Center(
-          child: TCheckbox(
-            value: tristate ? null : value,
-            size: TCheckboxSize.small,
-            showDivider: false,
-            onChanged: enabled ? onChanged : null,
-          ),
+      child: Center(
+        child: TCheckbox(
+          value: tristate ? null : value,
+          size: TCheckboxSize.small,
+          showDivider: false,
+          onChanged: enabled ? onChanged : null,
         ),
       ),
     );

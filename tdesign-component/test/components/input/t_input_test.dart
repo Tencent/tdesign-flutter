@@ -18,6 +18,103 @@ void main() {
   TextField field(WidgetTester tester) =>
       tester.widget<TextField>(find.byType(TextField));
 
+  group('TInput Material 密度隔离', () {
+    for (final density in [
+      const VisualDensity(horizontal: -4, vertical: -4),
+      VisualDensity.standard,
+      const VisualDensity(horizontal: 4, vertical: 4),
+    ]) {
+      testWidgets('内置编辑器和操作图标忽略密度 ${density.vertical}', (tester) async {
+        final theme = TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+          visualDensity: density,
+          iconButtonTheme: IconButtonThemeData(
+            style: ButtonStyle(visualDensity: density),
+          ),
+        );
+        String? changed;
+        VisualDensity? prefixDensity;
+        VisualDensity? suffixDensity;
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: Scaffold(
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    TInput(
+                      key: const ValueKey('clear-input'),
+                      initialValue: 'Test',
+                      clearButtonMode: TInputClearButtonMode.always,
+                      onChanged: (value) => changed = value,
+                    ),
+                    const TInput(
+                      key: ValueKey('password-input'),
+                      initialValue: 'Test',
+                      obscureText: true,
+                      showPasswordToggle: true,
+                    ),
+                    TInput(
+                      initialValue: 'Test',
+                      prefix: Builder(
+                        builder: (context) {
+                          prefixDensity = Theme.of(context).visualDensity;
+                          return const Text('prefix');
+                        },
+                      ),
+                      suffix: Builder(
+                        builder: (context) {
+                          suffixDensity = Theme.of(context).visualDensity;
+                          return const Text('suffix');
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        for (final key in ['clear-input', 'password-input']) {
+          expect(tester.getSize(find.byKey(ValueKey(key))).height, 56);
+          final editor = find.descendant(
+            of: find.byKey(ValueKey(key)),
+            matching: find.byType(TextField),
+          );
+          expect(tester.getSize(editor).height, 24);
+          expect(
+            Theme.of(tester.element(editor)).visualDensity,
+            VisualDensity.standard,
+          );
+        }
+        expect(
+          tester.getSize(find.byIcon(TIcons.close_circle_filled)),
+          const Size.square(20),
+        );
+        expect(
+          tester.getSize(find.byIcon(TIcons.browse_off)),
+          const Size.square(24),
+        );
+        expect(prefixDensity, density);
+        expect(suffixDensity, density);
+        await tester.tap(find.byTooltip('清除'));
+        await tester.pumpAndSettle();
+        expect(changed, '');
+        final passwordEditor = find.descendant(
+          of: find.byKey(const ValueKey('password-input')),
+          matching: find.byType(TextField),
+        );
+        expect(tester.widget<TextField>(passwordEditor).obscureText, isTrue);
+        await tester.tap(find.byTooltip('显示密码'));
+        await tester.pumpAndSettle();
+        expect(tester.widget<TextField>(passwordEditor).obscureText, isFalse);
+        await tester.enterText(passwordEditor, 'Next');
+        expect(find.text('Next'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      });
+    }
+  });
+
   group('TInput v1 control', () {
     testWidgets('multiline 较小 maxLines 会收敛默认 minLines', (tester) async {
       await tester.pumpWidget(

@@ -33,6 +33,117 @@ void main() {
     );
   }
 
+  group('TButton Material 密度隔离', () {
+    for (final gradient in [false, true]) {
+      testWidgets('四档与纯图标尺寸忽略全局和实例密度 gradient=$gradient', (tester) async {
+        const heights = [48.0, 40.0, 32.0, 28.0];
+        for (final density in [
+          const VisualDensity(horizontal: -4, vertical: -4),
+          VisualDensity.standard,
+          const VisualDensity(horizontal: 4, vertical: 4),
+        ]) {
+          final theme = ThemeData(
+            platform: TargetPlatform.macOS,
+            visualDensity: density,
+            extensions: [
+              TThemeData.defaultData(),
+              if (gradient)
+                const TButtonThemeData(
+                  gradient: LinearGradient(colors: [Colors.blue, Colors.red]),
+                ),
+            ],
+          );
+          for (var index = 0; index < TButtonSize.values.length; index++) {
+            for (final shape in [
+              TButtonShape.rectangle,
+              TButtonShape.square,
+              TButtonShape.circle,
+            ]) {
+              const key = ValueKey('density-button');
+              await tester.pumpWidget(
+                MaterialApp(
+                  theme: theme,
+                  home: Scaffold(
+                    body: Align(
+                      alignment: Alignment.topLeft,
+                      child: TButton(
+                        key: key,
+                        size: TButtonSize.values[index],
+                        shape: shape,
+                        style: ButtonStyle(visualDensity: density),
+                        icon: shape == TButtonShape.rectangle
+                            ? null
+                            : const Icon(Icons.add),
+                        onPressed: () {},
+                        child: shape == TButtonShape.rectangle
+                            ? const Text('Button')
+                            : null,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+              await tester.pumpAndSettle();
+              expect(tester.getSize(find.byKey(key)).height, heights[index]);
+              if (shape != TButtonShape.rectangle) {
+                expect(
+                  tester.getSize(find.byKey(key)),
+                  Size.square(heights[index]),
+                );
+              }
+              expect(tester.takeException(), isNull);
+            }
+          }
+        }
+      });
+    }
+
+    testWidgets('桌面缺省密度不改变尺寸，其他实例样式和内容主题保留', (tester) async {
+      VisualDensity? contentDensity;
+      var pressed = 0;
+      final theme = ThemeData(
+        platform: TargetPlatform.macOS,
+        extensions: [TThemeData.defaultData()],
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: Scaffold(
+            body: Align(
+              alignment: Alignment.topLeft,
+              child: TButton(
+                size: TButtonSize.large,
+                style: const ButtonStyle(
+                  padding: WidgetStatePropertyAll(
+                    EdgeInsets.symmetric(horizontal: 30),
+                  ),
+                  foregroundColor: WidgetStatePropertyAll(Colors.purple),
+                ),
+                onPressed: () => pressed++,
+                child: Builder(
+                  builder: (context) {
+                    contentDensity = Theme.of(context).visualDensity;
+                    return const Text('Button');
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(tester.getSize(find.byType(TButton)).height, 48);
+      expect(contentDensity, VisualDensity.compact);
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      expect(
+        button.style?.padding?.resolve({}),
+        const EdgeInsets.symmetric(horizontal: 30),
+      );
+      expect(button.style?.foregroundColor?.resolve({}), Colors.purple);
+      await tester.tap(find.text('Button'));
+      expect(pressed, 1);
+    });
+  });
+
   // ============================================================
   // A 类控制：禁用（onPressed: null）
   // ============================================================

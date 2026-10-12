@@ -130,6 +130,9 @@ class TButtonResolve {
       resolved = _overrideWith(resolved, instanceStyle);
     }
 
+    // TD 尺寸不参与 Material 密度调整，包括实例显式密度覆盖。
+    resolved = resolved.copyWith(visualDensity: VisualDensity.standard);
+
     // 最终样式未显式配置交互层时，使用最终前景色生成 Flutter 原生 WidgetState 反馈。
     // 只补空缺，不覆盖实例 style 的显式 overlayColor。
     if (resolved.overlayColor == null) {

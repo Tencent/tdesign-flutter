@@ -68,6 +68,10 @@ class TButton extends StatefulWidget {
 
   /// 当前按钮的完整 [ButtonStyle] 视觉配置入口，不影响其他按钮。
   ///
+  /// [ButtonStyle.visualDensity] 不生效；内置布局始终使用标准密度，
+  /// 尺寸由 [size] 与显式内边距、宽高配置决定。
+  /// 调用方内容仍继承原主题。
+  ///
   /// 组件默认使用 [MaterialTapTargetSize.shrinkWrap] 保持 TDesign 精确尺寸；
   /// 需要至少 48dp 点击区时可将 [ButtonStyle.tapTargetSize] 设为
   /// [MaterialTapTargetSize.padded]。
