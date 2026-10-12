@@ -1,12 +1,13 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
-import '../../util/context_extension.dart';
 import '../badge/t_badge.dart';
 import '../badge/t_badge_internal.dart';
 import '../badge/t_badge_layout.dart';
@@ -215,7 +216,7 @@ class TActionSheetList<T> extends StatelessWidget {
                     ),
                     children: [
                       if (item.icon != null) ...[
-                        IconTheme(
+                        TInternalIconTheme(
                           data: IconThemeData(
                             color: item.disabled
                                 ? context.tTheme.textColorDisabled

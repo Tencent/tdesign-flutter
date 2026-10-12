@@ -5,11 +5,11 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../icon/t_icon.dart';
-import '../text/t_text.dart';
 import '../text/t_text_styled.dart';
 import '../text/t_text_theme_data.dart';
 import 't_cascader_defaults.dart';
@@ -173,7 +173,7 @@ class _TCascaderState extends State<TCascader> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildNavigation(context, selected, theme),
-                  Divider(
+                  TInternalDivider(
                     height: 1,
                     thickness: 1,
                     color:

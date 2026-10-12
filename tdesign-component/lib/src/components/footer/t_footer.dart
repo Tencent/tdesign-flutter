@@ -4,6 +4,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_styled.dart';
 import 't_footer_theme_data.dart';
 
 class TFooter extends StatelessWidget {
@@ -95,7 +96,7 @@ class TFooter extends StatelessWidget {
   }
 
   Widget _renderText(BuildContext context) {
-    return Text(
+    return TTextStyled(
       text,
       textAlign: TextAlign.center,
       maxLines: 1,

@@ -3,8 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
-import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../icon/t_icon.dart';
 import '../loading/t_loading_theme_data.dart';
@@ -68,6 +68,7 @@ class TButton extends StatefulWidget {
 
   /// 当前按钮的完整 [ButtonStyle] 视觉配置入口，不影响其他按钮。
   ///
+  /// 外部 Material 按钮主题不控制内置样式；请通过此实例 style 或 TD Theme 定制。
   /// [ButtonStyle.visualDensity] 不生效；内置布局始终使用标准密度，
   /// 尺寸由 [size] 与显式内边距、宽高配置决定。
   /// 调用方内容仍继承原主题。
@@ -270,7 +271,7 @@ class _TButtonState extends State<TButton> {
 
       final styledContent = content == null
           ? null
-          : IconTheme.merge(
+          : TInternalIconTheme.merge(
               data: IconThemeData(color: iconColor, size: iconSize),
               child: content,
             );
@@ -306,7 +307,7 @@ class _TButtonState extends State<TButton> {
           shape: effectiveShape,
         ),
         clipBehavior: Clip.antiAlias,
-        child: Material(
+        child: TInternalMaterial(
           type: MaterialType.transparency,
           shape: effectiveShape,
           clipBehavior: Clip.antiAlias,
@@ -315,7 +316,7 @@ class _TButtonState extends State<TButton> {
           shadowColor: shadowColor,
           surfaceTintColor: surfaceTintColor,
           animationDuration: animationDuration,
-          child: InkWell(
+          child: TInternalInkWell(
             customBorder: effectiveShape,
             overlayColor: resolvedStyle.overlayColor,
             mouseCursor: mouseCursor,
@@ -377,12 +378,43 @@ class _TButtonState extends State<TButton> {
         ),
       );
     } else {
-      button = ElevatedButton(
-        onPressed: widget.onPressed,
-        onLongPress: widget.onPressed == null ? null : widget.onLongPress,
-        statesController: _statesController,
-        style: resolvedStyle,
-        child: content,
+      final captured = TInternalMaterialTheme.capture(context);
+      final originalBackgroundBuilder = resolvedStyle.backgroundBuilder;
+      final originalForegroundBuilder = resolvedStyle.foregroundBuilder;
+      final nativeStyle = resolvedStyle.copyWith(
+        backgroundBuilder: originalBackgroundBuilder == null
+            ? null
+            : (inner, states, child) => TInternalMaterialTheme.restore(
+                captured,
+                inner,
+                originalBackgroundBuilder(context, states, child),
+              ),
+        foregroundBuilder: originalForegroundBuilder == null
+            ? null
+            : (inner, states, child) => TInternalMaterialTheme.restore(
+                captured,
+                inner,
+                originalForegroundBuilder(context, states, child),
+              ),
+      );
+      button = Theme(
+        data: TInternalMaterialTheme.resolve(context),
+        child: ElevatedButtonTheme(
+          data: const ElevatedButtonThemeData(),
+          child: ElevatedButton(
+            onPressed: widget.onPressed,
+            onLongPress: widget.onPressed == null ? null : widget.onLongPress,
+            statesController: _statesController,
+            style: nativeStyle,
+            child: Builder(
+              builder: (context) => TInternalMaterialTheme.restore(
+                captured,
+                context,
+                content ?? const SizedBox.shrink(),
+              ),
+            ),
+          ),
+        ),
       );
     }
 

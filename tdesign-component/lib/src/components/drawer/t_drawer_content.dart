@@ -74,7 +74,10 @@ class _TDrawerContent extends StatelessWidget {
                       ),
                     ),
                     child: DefaultTextStyle(
-                      style: _titleTextStyle(context, drawerTheme),
+                      style: TTextResolve.resolve(
+                        context: context,
+                        style: _titleTextStyle(context, drawerTheme),
+                      ),
                       child: title!,
                     ),
                   ),
@@ -221,7 +224,7 @@ class _DrawerMenuItemState extends State<_DrawerMenuItem> {
       child: Row(
         children: [
           if (widget.item.icon != null) ...[
-            IconTheme.merge(
+            TInternalIconTheme.merge(
               data: IconThemeData(
                 color: widget.iconColor,
                 size: widget.iconSize,
@@ -264,7 +267,7 @@ class _DrawerMenuItemState extends State<_DrawerMenuItem> {
       mainAxisSize: MainAxisSize.min,
       children: [
         item,
-        Divider(
+        TInternalDivider(
           height: widget.dividerThickness,
           thickness: widget.dividerThickness,
           indent: widget.dividerIndent,

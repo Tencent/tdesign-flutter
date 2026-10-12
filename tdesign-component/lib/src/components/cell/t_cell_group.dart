@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_style_scope.dart';
 import 't_cell.dart';
@@ -120,7 +121,7 @@ class TCellGroup extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         child,
-        Divider(
+        TInternalDivider(
           height: 0.5,
           thickness: 0.5,
           indent: 16,

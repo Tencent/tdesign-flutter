@@ -378,6 +378,10 @@ Token → 完整 ThemeData 的构建器
 将 `TThemeData` 的颜色与字体映射为 Material 配色、文字样式和组件主题，
 同时保留该 Token 主题作为 ThemeExtension。
 
+此映射供原生 Material Widget 使用；TD 内置样式仅使用受支持的实例配置、
+TD ThemeExtension 与 Token，不反向继承外部 Material/M2/M3 样式配置。
+调用方自定义内容仍保留其 Flutter 主题行为。
+
 通常不直接使用，通过 `TThemeBuilder.light` / `TThemeBuilder.dark` 入口。
 
 #### 构造方法

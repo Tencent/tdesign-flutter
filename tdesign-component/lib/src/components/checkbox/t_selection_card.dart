@@ -4,6 +4,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 
@@ -193,7 +194,7 @@ class _SelectionCardMark extends StatelessWidget {
           Positioned(
             top: iconOffset.dy,
             left: iconOffset.dx,
-            child: Icon(
+            child: TInternalIcon(
               TIcons.check,
               size: iconSize,
               color: context.tTheme.textColorAnti,

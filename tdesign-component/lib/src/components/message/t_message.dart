@@ -6,9 +6,11 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_styled.dart';
 import 't_message_theme_data.dart';
 import 't_message_types.dart';
 
@@ -460,7 +462,7 @@ class _TMessageState extends State<TMessage>
     if (widget.marquee == null) {
       return Align(
         alignment: Alignment.centerLeft,
-        child: Text(
+        child: TTextStyled(
           widget.content,
           style: style,
           maxLines: 1,
@@ -490,7 +492,7 @@ class _TMessageState extends State<TMessage>
             child: child,
           ),
         ),
-        child: Text(widget.content, style: style, maxLines: 1),
+        child: TTextStyled(widget.content, style: style, maxLines: 1),
       ),
     );
   }
@@ -517,7 +519,7 @@ class _TMessageState extends State<TMessage>
         context.tTheme.errorColor,
       ),
     };
-    return Icon(icon, color: color, size: 22);
+    return TInternalIcon(icon, color: color, size: 22);
   }
 
   Widget _buildCloseButton(BuildContext context) {
@@ -528,7 +530,10 @@ class _TMessageState extends State<TMessage>
       },
       child:
           widget.closeButton ??
-          Icon(TIcons.close, color: context.tTheme.textColorPlaceholder),
+          TInternalIcon(
+            TIcons.close,
+            color: context.tTheme.textColorPlaceholder,
+          ),
     );
   }
 
@@ -581,9 +586,12 @@ class _TMessageState extends State<TMessage>
               shape: shape,
               shadows: context.tTheme.shadow1 ?? const [],
             ),
-            child: Material(type: MaterialType.transparency, child: content),
+            child: TInternalMaterial(
+              type: MaterialType.transparency,
+              child: content,
+            ),
           )
-        : Material(
+        : TInternalMaterial(
             color: backgroundColor,
             shape: shape,
             elevation: theme.elevation!,

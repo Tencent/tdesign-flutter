@@ -6,18 +6,21 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../form/t_field_scope.dart';
 import '../form/t_form_item_scope.dart';
+import '../text/t_text_resolve.dart';
+import '../text/t_text_styled.dart';
 import 't_input_theme_data.dart';
 import 't_input_types.dart';
 
 class TInput extends StatefulWidget {
   /// 创建 TDesign 输入框。
   ///
-  /// 内置编辑器和操作按钮不受 Material 视觉密度影响；前后缀内容
+  /// 内置编辑器、提示词和操作按钮不受外部 Material 主题控制；前后缀内容
   /// 保留调用方主题。输入装饰通过 [TInputThemeData] 配置。
   const TInput({
     super.key,
@@ -262,55 +265,46 @@ class _TInputState extends State<TInput> {
                   ? themeHintStyle?.color ?? token.textColorPlaceholder
                   : token.textColorDisabled,
             );
-    final innerDecoration = InputDecoration(
-      hintText: widget.hintText,
-      hintStyle: hintStyle,
-      hintMaxLines: 1,
-      filled: false,
-      fillColor: Colors.transparent,
-      isCollapsed: true,
-      contentPadding: EdgeInsets.zero,
-      border: InputBorder.none,
-      enabledBorder: InputBorder.none,
-      focusedBorder: InputBorder.none,
-      disabledBorder: InputBorder.none,
-      errorBorder: InputBorder.none,
-      focusedErrorBorder: InputBorder.none,
-    );
-
     final configuredMinLines =
         widget.minLines ?? (widget._multiline ? 4 : null);
     final minLines = configuredMinLines == null || widget.maxLines == null
         ? configuredMinLines
         : configuredMinLines.clamp(1, widget.maxLines!);
     // 内置装饰由 Input 专属 API 负责；仅隔离编辑器，保留前后缀主题。
-    final editor = Theme(
-      data: Theme.of(context).copyWith(
-        visualDensity: VisualDensity.standard,
-        inputDecorationTheme: const InputDecorationTheme(),
-      ),
-      child: TextField(
-        controller: _controller,
-        focusNode: _focusNode,
-        onChanged: widget.onChanged,
-        onSubmitted: widget.onSubmitted,
-        onEditingComplete: widget.onEditingComplete,
-        enabled: widget.enabled,
-        readOnly: widget.readOnly,
-        maxLines: widget.maxLines,
-        minLines: minLines,
-        maxLength: null,
-        autofocus: widget.autofocus,
-        keyboardType: widget.inputType,
-        textInputAction: widget.inputAction,
-        textAlign: widget.textAlign,
-        obscureText: widget.showPasswordToggle
-            ? _obscureText
-            : widget.obscureText,
-        inputFormatters: _effectiveFormatters(),
-        style: textStyle,
-        cursorColor: cursorColor,
-        decoration: innerDecoration,
+    final editor = TInternalInputHint(
+      controller: _controller,
+      hintText: widget.hintText,
+      hintStyle: hintStyle,
+      textAlign: widget.textAlign,
+      multiline: widget._multiline,
+      child: Theme(
+        data: TInternalMaterialTheme.resolve(context),
+        child: TextSelectionTheme(
+          data: TInternalMaterialTheme.resolve(context).textSelectionTheme,
+          child: TextField(
+            controller: _controller,
+            focusNode: _focusNode,
+            onChanged: widget.onChanged,
+            onSubmitted: widget.onSubmitted,
+            onEditingComplete: widget.onEditingComplete,
+            enabled: widget.enabled,
+            readOnly: widget.readOnly,
+            maxLines: widget.maxLines,
+            minLines: minLines,
+            maxLength: null,
+            autofocus: widget.autofocus,
+            keyboardType: widget.inputType,
+            textInputAction: widget.inputAction,
+            textAlign: widget.textAlign,
+            obscureText: widget.showPasswordToggle
+                ? _obscureText
+                : widget.obscureText,
+            inputFormatters: _effectiveFormatters(),
+            style: TTextResolve.resolve(context: context, style: textStyle),
+            cursorColor: cursorColor,
+            decoration: null,
+          ),
+        ),
       ),
     );
     final contentPadding =
@@ -380,7 +374,7 @@ class _TInputState extends State<TInput> {
         ? null
         : Padding(
             padding: const EdgeInsets.only(top: 4),
-            child: Text(
+            child: TTextStyled(
               inputErrorText,
               style: TextStyle(
                 fontSize: token.fontBodySmall?.size,
@@ -562,7 +556,7 @@ class _TInputShellState extends State<_TInputShell> {
         ? SizedBox(
             width: 32,
             height: widget.clearIconSize,
-            child: IconButton(
+            child: TInternalIconButton(
               visualDensity: VisualDensity.standard,
               tooltip: '清除',
               onPressed: widget.enabled && !widget.readOnly
@@ -574,7 +568,7 @@ class _TInputShellState extends State<_TInputShell> {
                 height: widget.clearIconSize,
               ),
               iconSize: widget.clearIconSize,
-              icon: Icon(
+              icon: TInternalIcon(
                 TIcons.close_circle_filled,
                 color: widget.clearIconColor,
               ),
@@ -585,7 +579,7 @@ class _TInputShellState extends State<_TInputShell> {
         ? SizedBox(
             width: _inputIconSize,
             height: _inputIconSize,
-            child: IconButton(
+            child: TInternalIconButton(
               visualDensity: VisualDensity.standard,
               tooltip: widget.obscureText ? '显示密码' : '隐藏密码',
               onPressed: widget.enabled ? widget.onTogglePassword : null,
@@ -595,7 +589,7 @@ class _TInputShellState extends State<_TInputShell> {
                 height: _inputIconSize,
               ),
               iconSize: _inputIconSize,
-              icon: Icon(
+              icon: TInternalIcon(
                 widget.obscureText ? TIcons.browse_off : TIcons.browse,
                 color: widget.enabled
                     ? context.tTheme.textColorPlaceholder
@@ -607,7 +601,7 @@ class _TInputShellState extends State<_TInputShell> {
     final counter = widget.indicator && widget.counterLimit != null
         ? Align(
             alignment: AlignmentDirectional.centerEnd,
-            child: Text(
+            child: TTextStyled(
               '${_inputLength(widget.controller.text, widget.maxCharacter)}/${widget.counterLimit}',
               style: widget.counterStyle.copyWith(color: widget.counterColor),
             ),
@@ -692,7 +686,7 @@ class _TInputSlot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconTheme(
+    return TInternalIconTheme(
       data: IconThemeData(color: color, size: _inputIconSize),
       child: Center(child: child),
     );

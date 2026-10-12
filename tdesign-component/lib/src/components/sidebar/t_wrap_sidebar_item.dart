@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
-import '../../theme/t_radius.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
 import '../badge/t_badge_internal.dart';
-import '../text/t_text.dart';
 import '../text/t_text_styled.dart';
 import 't_sidebar_theme_data.dart';
 
@@ -169,7 +168,7 @@ class TWrapSideBarItem extends StatelessWidget {
       visible: icon != null,
       child: Padding(
         padding: const EdgeInsets.only(right: 2),
-        child: Icon(icon, size: 20, color: _foregroundColor(context)),
+        child: TInternalIcon(icon, size: 20, color: _foregroundColor(context)),
       ),
     );
   }

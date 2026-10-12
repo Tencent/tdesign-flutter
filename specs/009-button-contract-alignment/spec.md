@@ -1,5 +1,7 @@
 # Button 尺寸、形状与原生交互契约对齐
 
+> 后续契约：[054 Material 样式所有权](../054-material-style-ownership/spec.md) 优先于本文早期关于 Material ButtonTheme 的覆盖说明。外部 Material 主题不控制 TD 内置视觉；ButtonStyle 实例配置仍保留受支持字段，visualDensity 始终标准。
+
 ## 背景
 
 `TButtonSize` 已声明 48、40、32、28dp 四档视觉尺寸，但普通按钮底层

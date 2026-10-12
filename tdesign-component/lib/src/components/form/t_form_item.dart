@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_styled.dart';
 import 't_field_scope.dart';
 import 't_form.dart';
 import 't_form_item_scope.dart';
@@ -130,9 +132,13 @@ class TFormItem extends StatelessWidget {
         .merge(theme?.errorStyle);
     final labelWidget = label == null
         ? null
-        : Text(labelText, textAlign: effectiveLabelAlign, style: labelStyle);
+        : TTextStyled(
+            labelText,
+            textAlign: effectiveLabelAlign,
+            style: labelStyle,
+          );
     final requiredMark = effectiveRequired
-        ? Text(
+        ? TTextStyled(
             '*',
             style: TextStyle(
               color: context.tTheme.errorColor,
@@ -163,7 +169,7 @@ class TFormItem extends StatelessWidget {
           );
     final leadingWidget = leading == null
         ? null
-        : IconTheme.merge(
+        : TInternalIconTheme.merge(
             data: IconThemeData(color: token.textColorPrimary, size: 24),
             child: leading!,
           );
@@ -186,25 +192,25 @@ class TFormItem extends StatelessWidget {
           effectiveContentAlignment == TFormItemContentAlignment.end
               ? Align(
                   alignment: contentAreaAlignment,
-                  child: Text(
+                  child: TTextStyled(
                     effectiveErrorText,
                     textAlign: contentTextAlign,
                     style: errorStyle,
                   ),
                 )
-              : Text(effectiveErrorText, style: errorStyle),
+              : TTextStyled(effectiveErrorText, style: errorStyle),
         ] else if (help != null) ...[
           SizedBox(height: theme?.messageGap ?? 4.0),
           effectiveContentAlignment == TFormItemContentAlignment.end
               ? Align(
                   alignment: contentAreaAlignment,
-                  child: Text(
+                  child: TTextStyled(
                     help!,
                     textAlign: contentTextAlign,
                     style: helpStyle,
                   ),
                 )
-              : Text(help!, style: helpStyle),
+              : TTextStyled(help!, style: helpStyle),
         ],
       ],
     );

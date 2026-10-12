@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/icon/t_icon.dart'
     show TIconStyleScope;
@@ -9,6 +10,61 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 覆盖基础渲染、构造器参数、Material IconTheme 隔离、
 /// TIcon.fromName 工厂构造。
 void main() {
+  testWidgets(
+    'Material icon effects cannot change TD icons or caller content',
+    (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: IconTheme(
+              data: IconThemeData(
+                opacity: 0.2,
+                fill: 1,
+                weight: 900,
+                grade: 200,
+                opticalSize: 48,
+                shadows: [Shadow(blurRadius: 5)],
+                applyTextScaling: true,
+              ),
+              child: Column(
+                children: [
+                  TIcon(TIcons.home, color: Colors.red),
+                  Icon(Icons.home, color: Colors.red),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      final td = find.descendant(
+        of: find.byType(TIcon),
+        matching: find.byType(RichText),
+      );
+      expect(
+        tester.renderObject<RenderParagraph>(td).text.style!.color,
+        Colors.red,
+      );
+      final native = find.byType(Icon).last;
+      final nativeText = find.descendant(
+        of: native,
+        matching: find.byType(RichText),
+      );
+      expect(
+        tester.renderObject<RenderParagraph>(nativeText).text.style!.color!.a,
+        closeTo(0.2, 0.01),
+      );
+      final owned = tester.widget<Icon>(
+        find.descendant(of: find.byType(TIcon), matching: find.byType(Icon)),
+      );
+      expect(owned.shadows, isEmpty);
+      expect(owned.fill, 0);
+      expect(owned.weight, 400);
+      expect(owned.grade, 0);
+      expect(owned.opticalSize, 24);
+      expect(owned.applyTextScaling, isFalse);
+    },
+  );
+
   /// 完整包装，注入 TDesign 全局主题。
   Widget wrapWithTheme(
     Widget child, {

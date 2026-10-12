@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_styled.dart';
 import 't_swiper_theme_data.dart';
 import 't_swiper_types.dart';
 
@@ -834,7 +836,7 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Center(
             widthFactor: 1,
-            child: Text(
+            child: TTextStyled(
               '${_index + 1}/$_count',
               style: defaultStyle.merge(theme?.fractionStyle),
             ),
@@ -882,21 +884,21 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
         direction: widget.scrollDirection,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          IconButton(
+          TInternalIconButton(
             tooltip: localizations.previousPageTooltip,
             onPressed: canGoBack
                 ? () => unawaited(_previous(null, null))
                 : null,
             style: style,
             iconSize: theme?.controlIconSize ?? 18,
-            icon: widget.previousIcon ?? Icon(previousIcon),
+            icon: widget.previousIcon ?? TInternalIcon(previousIcon),
           ),
-          IconButton(
+          TInternalIconButton(
             tooltip: localizations.nextPageTooltip,
             onPressed: canGoForward ? () => unawaited(_next(null, null)) : null,
             style: style,
             iconSize: theme?.controlIconSize ?? 18,
-            icon: widget.nextIcon ?? Icon(nextIcon),
+            icon: widget.nextIcon ?? TInternalIcon(nextIcon),
           ),
         ],
       ),

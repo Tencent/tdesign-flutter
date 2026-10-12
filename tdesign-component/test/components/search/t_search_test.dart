@@ -52,7 +52,7 @@ void main() {
       );
 
       expect(find.text('controlled'), findsOneWidget);
-      expect(field(tester).decoration?.hintText, '搜索');
+      expect(find.text('搜索'), findsNothing);
 
       await tester.pumpWidget(
         wrap(const TSearchBar(key: ValueKey('initial'), initialValue: 'first')),
@@ -244,11 +244,9 @@ void main() {
       expect(field(tester).style?.fontSize, token.fontBodyLarge?.size);
       expect(field(tester).style?.height, token.fontBodyLarge?.height);
       expect(
-        field(tester).decoration?.hintStyle?.color,
+        tester.widget<Text>(find.text('搜索')).style?.color,
         token.textColorPlaceholder,
       );
-      expect(field(tester).decoration?.isCollapsed, isTrue);
-      expect(field(tester).decoration?.contentPadding, EdgeInsets.zero);
     });
 
     testWidgets('instance shape and theme visual values have separate owners', (

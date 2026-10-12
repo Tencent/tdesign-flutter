@@ -4,8 +4,10 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 import '../../theme/t_colors.dart';
 import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_resolve.dart';
 import 't_nav_bar_theme_data.dart';
 
 class TNavBar extends StatelessWidget implements PreferredSizeWidget {
@@ -167,7 +169,7 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
                 : EdgeInsets.only(left: context.tTheme.spacer)),
         child:
             item.customWidget ??
-            Icon(
+            TInternalIcon(
               item.icon,
               size: item.iconSize,
               color: isDisabled
@@ -219,7 +221,10 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   Widget _getTitleWidget(BuildContext context) {
     return DefaultTextStyle.merge(
-      style: _getTitleStyle(context),
+      style: TTextResolve.resolve(
+        context: context,
+        style: _getTitleStyle(context),
+      ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       child: title ?? const SizedBox.shrink(),

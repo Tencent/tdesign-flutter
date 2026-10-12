@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:math' as math;
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
-import '../../util/context_extension.dart';
-import '../text/t_text.dart';
 import '../text/t_text_styled.dart';
 import 't_notice_bar_theme_data.dart';
 import 't_notice_bar_types.dart';
@@ -470,7 +468,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
         padding: EdgeInsets.only(right: isHidden ? 0 : context.tTheme.spacer),
         child: _buildCustomTapTarget(
           TNoticeBarTapTarget.prefix,
-          IconTheme.merge(
+          TInternalIconTheme.merge(
             data: IconThemeData(
               color: _resolved.leftIconColor,
               size: _effectiveHeight,
@@ -484,7 +482,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
       padding: EdgeInsets.only(right: context.tTheme.spacer),
       child: _buildBuiltInTapTarget(
         TNoticeBarTapTarget.prefix,
-        Icon(
+        TInternalIcon(
           _defaultPrefixIcon,
           color: _resolved.leftIconColor,
           size: _effectiveHeight,
@@ -536,7 +534,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
               TNoticeBarTapTarget.suffix,
               Container(
                 margin: const EdgeInsets.only(left: 8),
-                child: Icon(
+                child: TInternalIcon(
                   suffixIcon,
                   color: _resolved.rightIconColor,
                   size: _effectiveHeight,

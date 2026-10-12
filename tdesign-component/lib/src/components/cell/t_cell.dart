@@ -3,6 +3,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_style_scope.dart';
@@ -217,7 +218,7 @@ class _TCellState extends State<TCell> {
             ],
             if (widget.arrow) ...[
               const SizedBox(width: 4.0),
-              Icon(
+              TInternalIcon(
                 TIcons.chevron_right,
                 size: 24,
                 color: theme?.arrowColor ?? context.tTheme.textColorPlaceholder,

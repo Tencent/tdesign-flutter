@@ -67,8 +67,7 @@ void main() {
     expect(field.textInputAction, TextInputAction.newline);
     expect(field.textAlign, TextAlign.center);
     expect(find.text('标题'), findsOneWidget);
-    expect(field.decoration?.filled, isFalse);
-    expect(field.decoration?.fillColor, Colors.transparent);
+
     controller.dispose();
     focusNode.dispose();
   });
@@ -162,10 +161,45 @@ void main() {
     expect(label.style?.height, token.fontBodyMedium?.height);
     expect(label.style?.color, token.textColorPrimary);
 
-    final field = tester.widget<TextField>(find.byType(TextField));
-    expect(field.decoration?.hintStyle?.fontSize, token.fontBodyMedium?.size);
-    expect(field.decoration?.hintStyle?.height, token.fontBodyMedium?.height);
-    expect(field.decoration?.hintStyle?.color, token.textColorPlaceholder);
+    expect(
+      tester
+          .widget<Text>(
+            find
+                .text(
+                  tester.widget<TTextarea>(find.byType(TTextarea)).hintText!,
+                )
+                .last,
+          )
+          .style
+          ?.fontSize,
+      token.fontBodyMedium?.size,
+    );
+    expect(
+      tester
+          .widget<Text>(
+            find
+                .text(
+                  tester.widget<TTextarea>(find.byType(TTextarea)).hintText!,
+                )
+                .last,
+          )
+          .style
+          ?.height,
+      token.fontBodyMedium?.height,
+    );
+    expect(
+      tester
+          .widget<Text>(
+            find
+                .text(
+                  tester.widget<TTextarea>(find.byType(TTextarea)).hintText!,
+                )
+                .last,
+          )
+          .style
+          ?.color,
+      token.textColorPlaceholder,
+    );
 
     final indicator = tester.widget<Text>(find.text('0/200'));
     expect(indicator.style?.fontSize, token.fontBodySmall?.size);

@@ -5,6 +5,7 @@ import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_resolve.dart';
 import 't_button_types.dart';
 
 /// 按钮样式解析器
@@ -153,7 +154,15 @@ class TButtonResolve {
       );
     }
 
-    return resolved;
+    final configuredTextStyle = resolved.textStyle;
+    return resolved.copyWith(
+      textStyle: WidgetStateProperty.resolveWith(
+        (states) => TTextResolve.resolve(
+          context: context,
+          style: tokenTextStyle.merge(configuredTextStyle?.resolve(states)),
+        ),
+      ),
+    );
   }
 
   /// 使用 [overrideStyle] 覆盖 [base] 中同名字段。

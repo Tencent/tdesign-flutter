@@ -3,12 +3,14 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../checkbox/t_check_box.dart';
 import '../empty/t_empty.dart';
 import '../icon/t_icon.dart';
 import '../loading/t_loading.dart';
+import '../text/t_text_resolve.dart';
 import 't_table_col.dart';
 import 't_table_theme_data.dart';
 import 't_table_types.dart';
@@ -667,7 +669,7 @@ class _TTableState<T> extends State<TTable<T>> {
       trailingBoundary: trailingBoundary,
       child: column.comparator == null
           ? content
-          : InkWell(onTap: () => _requestSort(column), child: content),
+          : TInternalInkWell(onTap: () => _requestSort(column), child: content),
     );
   }
 
@@ -740,7 +742,10 @@ class _TTableState<T> extends State<TTable<T>> {
       padding: theme?.cellPadding ?? const EdgeInsets.symmetric(horizontal: 16),
       child: ClipRect(
         child: DefaultTextStyle.merge(
-          style: _textStyle(context, header: header),
+          style: TTextResolve.resolve(
+            context: context,
+            style: _textStyle(context, header: header),
+          ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           child: child,
@@ -761,7 +766,7 @@ class _TTableState<T> extends State<TTable<T>> {
       ),
       child: onTap == null
           ? Align(alignment: alignment, child: content)
-          : InkWell(
+          : TInternalInkWell(
               onTap: onTap,
               child: Align(alignment: alignment, child: content),
             ),

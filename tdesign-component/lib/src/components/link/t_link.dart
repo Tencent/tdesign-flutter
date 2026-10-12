@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/t_internal_material.dart';
+import '../text/t_text_resolve.dart';
 import 't_link_resolve.dart';
 import 't_link_theme_data.dart';
 import 't_link_types.dart';
@@ -122,10 +124,10 @@ class _TLinkInteractionState extends State<_TLinkInteraction> {
       theme: widget.theme,
     );
 
-    var content = IconTheme.merge(
+    Widget content = TInternalIconTheme.merge(
       data: IconThemeData(color: color, size: iconSize),
       child: DefaultTextStyle.merge(
-        style: textStyle,
+        style: TTextResolve.resolve(context: context, style: textStyle),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -152,7 +154,7 @@ class _TLinkInteractionState extends State<_TLinkInteraction> {
       );
     }
 
-    content = InkWell(
+    content = TInternalInkWell(
       onTap: widget.onPressed,
       overlayColor: const WidgetStatePropertyAll(Colors.transparent),
       onHover: (value) => _updateInteraction(_Interaction.hover, value),
@@ -163,7 +165,7 @@ class _TLinkInteractionState extends State<_TLinkInteraction> {
     );
 
     if (widget.tooltip != null) {
-      content = Tooltip(message: widget.tooltip!, child: content);
+      content = TInternalTooltip(message: widget.tooltip!, child: content);
     }
     return Semantics(
       link: true,

@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_resolve.dart';
+import '../text/t_text_styled.dart';
 import 't_slider_theme.dart';
 
 /// 格式化滑块提示文案。
@@ -43,6 +46,7 @@ SliderThemeData _sliderThemeFromTDesign(BuildContext context) {
       (isDark ? token.bgColorComponentDisabled : token.componentBorder);
 
   return SliderThemeData(
+    overlayShape: const RoundSliderOverlayShape(),
     activeTrackColor: activeTrack,
     inactiveTrackColor: inactiveTrack,
     secondaryActiveTrackColor: activeTrack.withAlpha(0x8a),
@@ -72,11 +76,14 @@ SliderThemeData _sliderThemeFromTDesign(BuildContext context) {
     overlayColor: theme?.overlayColor ?? brand.withAlpha(0x1f),
     valueIndicatorColor: theme?.valueIndicatorColor ?? brand,
     valueIndicatorStrokeColor: theme?.valueIndicatorColor ?? brand,
-    valueIndicatorTextStyle: TextStyle(
-      color: theme?.valueIndicatorTextColor ?? token.textColorPrimary,
-      fontSize: token.fontBodyMedium?.size,
-      height: token.fontBodyMedium?.height,
-      fontWeight: token.fontBodyMedium?.fontWeight,
+    valueIndicatorTextStyle: TTextResolve.resolve(
+      context: context,
+      style: TextStyle(
+        color: theme?.valueIndicatorTextColor ?? token.textColorPrimary,
+        fontSize: token.fontBodyMedium?.size,
+        height: token.fontBodyMedium?.height,
+        fontWeight: token.fontBodyMedium?.fontWeight,
+      ),
     ),
   );
 }
@@ -211,7 +218,10 @@ class TSlider extends StatelessWidget {
     final decoration = Theme.of(
       context,
     ).extension<TSliderThemeData>()?.decoration;
-    final themedSlider = SliderTheme(data: sliderTheme, child: slider);
+    final themedSlider = Theme(
+      data: TInternalMaterialTheme.resolve(context),
+      child: SliderTheme(data: sliderTheme, child: slider),
+    );
     final sliderContent = showThumbValue
         ? Padding(
             padding: EdgeInsets.only(top: context.tTheme.spacer2),
@@ -328,7 +338,10 @@ class TRangeSlider extends StatelessWidget {
     final decoration = Theme.of(
       context,
     ).extension<TSliderThemeData>()?.decoration;
-    final themedSlider = SliderTheme(data: sliderTheme, child: slider);
+    final themedSlider = Theme(
+      data: TInternalMaterialTheme.resolve(context),
+      child: SliderTheme(data: sliderTheme, child: slider),
+    );
     final sliderContent = showThumbValue
         ? Padding(
             padding: EdgeInsets.only(top: context.tTheme.spacer2),
@@ -1032,8 +1045,9 @@ class _SliderWithScaleLabels extends StatelessWidget {
               : isLast
               ? AlignmentDirectional.centerEnd
               : Alignment.center,
-          child: Text(
+          child: TTextStyled(
             text,
+            style: null,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,

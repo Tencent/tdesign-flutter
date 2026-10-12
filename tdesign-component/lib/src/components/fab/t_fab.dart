@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/t_internal_material.dart';
 import 't_fab_defaults.dart';
 import 't_fab_drag.dart';
 import 't_fab_layout.dart';
@@ -140,7 +141,7 @@ class TFab extends StatelessWidget {
 
     // Tooltip / Semantics
     if (tooltip != null && tooltip!.isNotEmpty) {
-      actionChild = Tooltip(message: tooltip!, child: actionChild);
+      actionChild = TInternalTooltip(message: tooltip!, child: actionChild);
     }
     if (semanticLabel != null && semanticLabel!.isNotEmpty) {
       actionChild = Semantics(label: semanticLabel!, child: actionChild);

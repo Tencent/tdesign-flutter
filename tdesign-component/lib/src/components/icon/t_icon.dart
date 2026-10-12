@@ -10,18 +10,22 @@ class TIconStyleScope extends InheritedWidget {
     super.key,
     required this.color,
     required this.size,
+    this.style,
     required super.child,
   });
 
   final Color? color;
   final double? size;
+  final IconThemeData? style;
 
   static TIconStyleScope? maybeOf(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<TIconStyleScope>();
 
   @override
   bool updateShouldNotify(TIconStyleScope oldWidget) =>
-      color != oldWidget.color || size != oldWidget.size;
+      color != oldWidget.color ||
+      size != oldWidget.size ||
+      style != oldWidget.style;
 }
 
 class TIcon extends StatelessWidget {
@@ -82,11 +86,20 @@ class TIcon extends StatelessWidget {
     final effectiveColor =
         color ?? scope?.color ?? context.tTheme.textColorPrimary;
 
-    return Icon(
-      icon,
-      size: effectiveSize,
-      color: effectiveColor,
-      semanticLabel: semanticLabel,
+    return IconTheme(
+      data: IconThemeData(opacity: scope?.style?.opacity ?? 1),
+      child: Icon(
+        icon,
+        size: effectiveSize,
+        color: effectiveColor,
+        fill: scope?.style?.fill ?? 0,
+        weight: scope?.style?.weight ?? 400,
+        grade: scope?.style?.grade ?? 0,
+        opticalSize: scope?.style?.opticalSize ?? effectiveSize,
+        shadows: scope?.style?.shadows ?? const [],
+        applyTextScaling: scope?.style?.applyTextScaling ?? false,
+        semanticLabel: semanticLabel,
+      ),
     );
   }
 }

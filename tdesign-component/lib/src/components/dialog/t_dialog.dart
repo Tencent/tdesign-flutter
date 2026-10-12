@@ -3,16 +3,17 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
-import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../button/t_button.dart';
 import '../button/t_button_types.dart';
+import '../text/t_text_resolve.dart';
 import 't_dialog_theme_data.dart';
 
 export 't_confirm_dialog.dart';
@@ -312,7 +313,7 @@ class TDialog extends StatelessWidget {
       scopesRoute: true,
       label: semanticLabel,
       explicitChildNodes: true,
-      child: Material(
+      child: TInternalMaterial(
         color: effectiveBackground,
         shape: effectiveShape,
         elevation: effectiveElevation,
@@ -356,7 +357,7 @@ class TDialog extends StatelessWidget {
                 PositionedDirectional(
                   top: 0,
                   end: 0,
-                  child: IconButton(
+                  child: TInternalIconButton(
                     tooltip: context.resource.close,
                     padding: EdgeInsetsDirectional.fromSTEB(
                       token.spacer2,
@@ -380,7 +381,10 @@ class TDialog extends StatelessWidget {
                       ),
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    icon: Icon(TIcons.close, color: token.textColorPlaceholder),
+                    icon: TInternalIcon(
+                      TIcons.close,
+                      color: token.textColorPlaceholder,
+                    ),
                     onPressed: () =>
                         Navigator.maybePop(context, closeButtonResult),
                   ),
@@ -442,7 +446,10 @@ class _DialogScrollableContentState extends State<_DialogScrollableContent> {
               0,
             ),
             child: DefaultTextStyle(
-              style: widget.titleStyle,
+              style: TTextResolve.resolve(
+                context: context,
+                style: widget.titleStyle,
+              ),
               textAlign: TextAlign.center,
               child: widget.title!,
             ),
@@ -457,7 +464,10 @@ class _DialogScrollableContentState extends State<_DialogScrollableContent> {
                 padding.bottom,
               ),
               child: DefaultTextStyle(
-                style: widget.contentStyle,
+                style: TTextResolve.resolve(
+                  context: context,
+                  style: widget.contentStyle,
+                ),
                 textAlign: TextAlign.center,
                 child: widget.content!,
               ),
@@ -474,13 +484,19 @@ class _DialogScrollableContentState extends State<_DialogScrollableContent> {
         children: [
           if (widget.title != null)
             DefaultTextStyle(
-              style: widget.titleStyle,
+              style: TTextResolve.resolve(
+                context: context,
+                style: widget.titleStyle,
+              ),
               textAlign: TextAlign.center,
               child: widget.title!,
             ),
           if (widget.content != null)
             DefaultTextStyle(
-              style: widget.contentStyle,
+              style: TTextResolve.resolve(
+                context: context,
+                style: widget.contentStyle,
+              ),
               textAlign: TextAlign.center,
               child: widget.content!,
             ),
@@ -618,7 +634,7 @@ class _DialogActions extends StatelessWidget {
             children: [
               for (var index = 0; index < buttons.length; index++) ...[
                 if (index > 0)
-                  VerticalDivider(
+                  TInternalVerticalDivider(
                     width: 0.5,
                     thickness: 0.5,
                     color: divider.color,

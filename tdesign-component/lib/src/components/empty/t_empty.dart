@@ -3,6 +3,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
 import 't_empty_theme_data.dart';
@@ -43,7 +44,7 @@ class TEmpty extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           image ??
-              Icon(
+              TInternalIcon(
                 icon ?? TIcons.info_circle_filled,
                 size: 96,
                 color: context.tTheme.textColorPlaceholder,

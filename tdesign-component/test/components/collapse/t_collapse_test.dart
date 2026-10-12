@@ -411,7 +411,7 @@ void main() {
       );
 
       expect(
-        IconTheme.of(tester.element(find.byIcon(Icons.expand_more))).color,
+        tester.widget<Icon>(find.byIcon(Icons.expand_more)).color,
         token.textColorPlaceholder,
       );
     });
@@ -476,7 +476,7 @@ void main() {
         Colors.blue,
       );
       expect(
-        IconTheme.of(tester.element(find.byIcon(Icons.expand_less))).color,
+        tester.widget<Icon>(find.byIcon(Icons.expand_less)).color,
         Colors.purple,
       );
       expect(

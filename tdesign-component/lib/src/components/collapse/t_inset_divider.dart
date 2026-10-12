@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 
@@ -18,7 +19,7 @@ class TInsetDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 1,
-      child: Divider(
+      child: TInternalDivider(
         color: color ?? context.tTheme.componentStroke,
         indent: indent ?? context.tTheme.spacer2,
         endIndent: 0.0,

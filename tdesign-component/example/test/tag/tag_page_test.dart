@@ -48,9 +48,9 @@ void main() {
 
     final textWidth = tester.getSize(find.text('Tag')).width;
     final tagWidth = tester.getSize(find.byType(TTag)).width;
-    expect(textWidth, closeTo(20.5078125, 0.02));
+    expect(textWidth, closeTo(19.7578125, 0.02));
     expect(tagWidth, closeTo(textWidth + 16, 0.02));
-    expect(tagWidth, closeTo(36.5078125, 0.02));
+    expect(tagWidth, closeTo(35.7578125, 0.02));
   }, tags: 'demo');
 
   testWidgets('round Tag Demo includes the mark outline instance', (

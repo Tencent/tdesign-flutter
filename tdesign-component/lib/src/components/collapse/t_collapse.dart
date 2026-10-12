@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_resolve.dart';
 import 't_collapse_panel.dart';
 import 't_collapse_theme_data.dart';
 import 't_collapse_types.dart';
@@ -119,7 +121,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       );
 
       panels.add(
-        Material(
+        TInternalMaterial(
           key: panelKey,
           color: bgColor,
           child: Column(
@@ -139,7 +141,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     final cardBorderRadius =
         theme?.cardBorderRadius ??
         BorderRadius.circular(context.tTheme.radiusLarge);
-    Widget collapse = Material(
+    Widget collapse = TInternalMaterial(
       elevation: elevation,
       color: theme?.backgroundColor ?? context.tTheme.bgColorContainer,
       borderRadius: _isCardStyle(context) ? cardBorderRadius : null,
@@ -229,7 +231,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
         enabled: isInteractive,
         expanded: isExpanded,
         onTap: hasExplicitSemanticsLabel ? onTap : null,
-        child: InkWell(
+        child: TInternalInkWell(
           borderRadius: borderRadius,
           excludeFromSemantics: hasExplicitSemanticsLabel,
           onTap: onTap,
@@ -265,7 +267,10 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     TCollapseThemeData? theme,
   ) {
     Widget content = DefaultTextStyle(
-      style: _contentTextStyle(context, theme),
+      style: TTextResolve.resolve(
+        context: context,
+        style: _contentTextStyle(context, theme),
+      ),
       child: Padding(
         padding:
             theme?.contentPadding ?? EdgeInsets.all(context.tTheme.spacer2),
@@ -308,15 +313,15 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     final iconColor = isDisabled
         ? theme?.disabledIconColor ?? context.tTheme.textColorDisabled
         : theme?.iconColor ?? context.tTheme.textColorPlaceholder;
-    return ListTile(
+    return TInternalListTile(
       leading: child.leadingBuilder == null
           ? null
-          : IconTheme(
+          : TInternalIconTheme(
               data: IconThemeData(color: iconColor),
               child: child.leadingBuilder!(context, isExpanded),
             ),
       title: DefaultTextStyle(
-        style: style,
+        style: TTextResolve.resolve(context: context, style: style),
         child: child.headerBuilder(context, isExpanded),
       ),
     );
@@ -337,8 +342,11 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
         ? theme?.disabledIconColor ?? context.tTheme.textColorDisabled
         : theme?.iconColor ?? context.tTheme.textColorPlaceholder;
     return DefaultTextStyle(
-      style: _contentTextStyle(context, theme).copyWith(color: color),
-      child: IconTheme(
+      style: TTextResolve.resolve(
+        context: context,
+        style: _contentTextStyle(context, theme).copyWith(color: color),
+      ),
+      child: TInternalIconTheme(
         data: IconThemeData(color: color),
         child: builder(context, isExpanded),
       ),
@@ -371,7 +379,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
               bottom: context.tTheme.spacer2,
             )
           : EdgeInsets.all(context.tTheme.spacer2),
-      child: IconTheme(
+      child: TInternalIconTheme(
         data: IconThemeData(color: iconColor, size: 24),
         child: builder(context, isExpanded),
       ),

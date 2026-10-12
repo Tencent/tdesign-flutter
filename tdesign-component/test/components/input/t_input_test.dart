@@ -18,6 +18,15 @@ void main() {
   TextField field(WidgetTester tester) =>
       tester.widget<TextField>(find.byType(TextField));
 
+  Text hint(WidgetTester tester) => tester.widget<Text>(
+    find
+        .text(
+          tester.widget<TInput>(find.byType(TInput).first).hintText!,
+          skipOffstage: false,
+        )
+        .last,
+  );
+
   group('TInput Material 密度隔离', () {
     for (final density in [
       const VisualDensity(horizontal: -4, vertical: -4),
@@ -224,9 +233,9 @@ void main() {
       );
 
       final textField = field(tester);
-      expect(textField.decoration?.hintText, 'property hint');
-      expect(textField.decoration?.filled, isFalse);
-      expect(textField.decoration?.fillColor, Colors.transparent);
+      expect(find.text('property hint'), findsOneWidget);
+      expect(find.byType(InputDecorator), findsNothing);
+
       expect(textField.maxLength, isNull);
       expect(
         textField.inputFormatters,
@@ -258,12 +267,7 @@ void main() {
         ),
       );
 
-      final decoration = field(tester).decoration;
-      expect(decoration?.filled, isFalse);
-      expect(decoration?.fillColor, Colors.transparent);
-      expect(decoration?.isCollapsed, isTrue);
-      expect(decoration?.contentPadding, EdgeInsets.zero);
-      expect(decoration?.hintMaxLines, 1);
+      expect(find.byType(InputDecorator), findsNothing);
     });
 
     testWidgets('native hint style does not override TDesign hint token', (
@@ -285,14 +289,11 @@ void main() {
         ),
       );
 
-      final decoration = field(tester).decoration;
+      expect(find.byType(InputDecorator), findsNothing);
       expect(
-        decoration?.hintStyle?.color,
+        hint(tester).style?.color,
         TThemeData.defaultData().textColorPlaceholder,
       );
-      expect(decoration?.filled, isFalse);
-      expect(decoration?.fillColor, Colors.transparent);
-      expect(decoration?.contentPadding, EdgeInsets.zero);
     });
 
     testWidgets('文本和提示词遵循 TDesign 颜色契约', (tester) async {
@@ -300,10 +301,7 @@ void main() {
       await tester.pumpWidget(wrap(const TInput(hintText: 'hint')));
 
       expect(field(tester).style?.color, token.textColorPrimary);
-      expect(
-        field(tester).decoration?.hintStyle?.color,
-        token.textColorPlaceholder,
-      );
+      expect(hint(tester).style?.color, token.textColorPlaceholder);
 
       await tester.pumpWidget(
         wrap(const TInput(hintText: 'hint', enabled: false)),
@@ -318,16 +316,14 @@ void main() {
         wrap(
           const TInput(
             initialValue: 'disabled',
+            hintText: 'hint',
             enabled: false,
             style: TextStyle(color: Colors.black),
           ),
         ),
       );
       expect(field(tester).style?.color, token.textColorDisabled);
-      expect(
-        field(tester).decoration?.hintStyle?.color,
-        token.textColorDisabled,
-      );
+      expect(hint(tester).style?.color, token.textColorDisabled);
 
       for (final status in const [
         TInputStatus.success,
@@ -374,15 +370,15 @@ void main() {
           TThemeData.defaultData().fontBodyLarge?.height,
         );
         expect(
-          field(tester).decoration?.hintStyle?.fontSize,
+          hint(tester).style?.fontSize,
           TThemeData.defaultData().fontBodyLarge?.size,
         );
         expect(
-          field(tester).decoration?.hintStyle?.height,
+          hint(tester).style?.height,
           TThemeData.defaultData().fontBodyLarge?.height,
         );
         expect(
-          field(tester).decoration?.hintStyle?.color,
+          hint(tester).style?.color,
           TThemeData.defaultData().textColorPlaceholder,
         );
       },
@@ -406,7 +402,7 @@ void main() {
         );
 
         final inputStyle = field(tester).style;
-        final hintStyle = field(tester).decoration?.hintStyle;
+        final hintStyle = hint(tester).style;
         expect(inputStyle?.color, Colors.white);
         expect(inputStyle?.fontSize, token.fontBodyLarge?.size);
         expect(inputStyle?.height, token.fontBodyLarge?.height);
@@ -919,7 +915,8 @@ void main() {
         ),
         isTrue,
       );
-      expect(field(tester).decoration?.border, InputBorder.none);
+
+      expect(find.byType(InputDecorator), findsNothing);
     });
 
     testWidgets('rounded single-line input uses a complete outer border', (

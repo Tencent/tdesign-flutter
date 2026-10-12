@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
+import '../../theme/t_internal_material.dart';
 import '../loading/t_circle_indicator.dart';
+import '../text/t_text_styled.dart';
 import 't_cupertino_switch.dart';
 import 't_switch_resolve.dart';
 import 't_switch_theme_data.dart';
@@ -108,7 +110,7 @@ class TSwitch extends StatelessWidget {
       TSwitchVariant.text => SizedBox(
         width: 16,
         child: Center(
-          child: Text(
+          child: TTextStyled(
             value ? (openText ?? '开') : (closeText ?? '关'),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -130,7 +132,7 @@ class TSwitch extends StatelessWidget {
           ),
         ),
       ),
-      TSwitchVariant.icon => Icon(
+      TSwitchVariant.icon => TInternalIcon(
         value ? TIcons.check : TIcons.close,
         size: 16,
         color: value

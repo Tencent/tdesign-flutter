@@ -5,6 +5,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
@@ -12,6 +13,7 @@ import '../checkbox/t_check_box.dart' show TContentDirection;
 import '../checkbox/t_selection_card.dart';
 import '../divider/t_divider.dart';
 import '../divider/t_divider_theme_data.dart';
+import '../text/t_text_styled.dart';
 import 't_radio_theme_data.dart';
 
 /// 自定义单选框指示器构建器。
@@ -337,7 +339,7 @@ class TRadio<T> extends StatelessWidget {
       width: iconSize,
       height: iconSize,
       child: selectedIcon != null
-          ? Icon(selectedIcon, size: iconSize, color: color)
+          ? TInternalIcon(selectedIcon, size: iconSize, color: color)
           : iconType == TRadioIconType.check
           ? null
           : CustomPaint(
@@ -386,7 +388,7 @@ class TRadio<T> extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (title != null)
-          Text(
+          TTextStyled(
             title!,
             maxLines: titleMaxLines,
             overflow: TextOverflow.ellipsis,
@@ -398,7 +400,7 @@ class TRadio<T> extends StatelessWidget {
           ),
         if (title != null && subTitle != null) const SizedBox(height: 4.0),
         if (subTitle != null)
-          Text(
+          TTextStyled(
             subTitle!,
             maxLines: subTitleMaxLines,
             overflow: TextOverflow.ellipsis,

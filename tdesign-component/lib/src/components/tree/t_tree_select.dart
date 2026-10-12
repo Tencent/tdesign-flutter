@@ -4,8 +4,8 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
-import '../text/t_text.dart';
 import '../text/t_text_styled.dart';
 import 't_tree_select_theme_data.dart';
 
@@ -555,7 +555,11 @@ class _TreeOptionTile extends StatelessWidget {
                   SizedBox(
                     width: 56,
                     height: height,
-                    child: Icon(TIcons.check, size: 24, color: indicatorColor),
+                    child: TInternalIcon(
+                      TIcons.check,
+                      size: 24,
+                      color: indicatorColor,
+                    ),
                   ),
               ],
             ),

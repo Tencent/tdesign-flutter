@@ -102,7 +102,9 @@ void main() {
       final placeholderFinder = find
           .byKey(const ValueKey('image-viewer-error-placeholder'))
           .first;
-      final placeholder = tester.widget<Icon>(placeholderFinder);
+      final placeholder = tester.widget<Icon>(
+        find.descendant(of: placeholderFinder, matching: find.byType(Icon)),
+      );
       expect(placeholder.icon, TIcons.close);
       expect(placeholder.size, token.spacer3);
       expect(placeholder.color, token.textColorAnti);

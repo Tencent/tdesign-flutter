@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+
 import '../../theme/t_colors.dart';
-import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/iterable_ext.dart';
-import '../text/t_text.dart';
+import '../text/t_text_resolve.dart';
 import '../text/t_text_styled.dart';
 import 't_calendar_style.dart';
 import 't_calendar_types.dart';
@@ -272,7 +272,10 @@ class _TCalendarCellState extends State<TCalendarCell> {
       return null;
     }
     return DefaultTextStyle.merge(
-      style: cellStyle.subtitleStyle,
+      style: TTextResolve.resolve(
+        context: context,
+        style: cellStyle.subtitleStyle,
+      ),
       child: subtitle,
     );
   }

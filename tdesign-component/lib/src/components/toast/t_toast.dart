@@ -6,13 +6,11 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../../util/t_toolbar_pressable.dart';
-import '../icon/t_icon.dart';
 import '../loading/t_circle_indicator.dart';
-import '../text/t_text.dart';
 import '../text/t_text_styled.dart';
 import 't_toast_theme_data.dart';
 
@@ -679,7 +677,7 @@ class _TIconTextToast extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            TInternalIcon(
               iconData,
               size: toastTheme.iconSize ?? 24,
               color: toastTheme.iconColor ?? theme.textColorAnti,
@@ -723,7 +721,7 @@ class _TIconTextToast extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
+            TInternalIcon(
               iconData,
               size: toastTheme.iconSize ?? 32,
               color: toastTheme.iconColor ?? theme.textColorAnti,

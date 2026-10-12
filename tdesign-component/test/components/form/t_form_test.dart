@@ -1325,7 +1325,7 @@ void main() {
       expect(controller.submit(), isFalse);
       await tester.pump();
       final input = tester.widget<TextField>(find.byType(TextField));
-      expect(input.decoration!.errorText, isNull);
+      expect(input.decoration, isNull);
       expect(find.text('required'), findsOneWidget);
     });
 
@@ -1353,7 +1353,7 @@ void main() {
       expect(controller.submit(), isFalse);
       await tester.pump();
       final input = tester.widget<TextField>(find.byType(TextField));
-      expect(input.decoration!.errorText, isNull);
+      expect(input.decoration, isNull);
       expect(find.text('required'), findsOneWidget);
     });
 
@@ -1887,7 +1887,10 @@ void main() {
       expect(style?.fontSize, token.fontBodyLarge?.size);
       expect(style?.height, token.fontBodyLarge?.height);
       expect(style?.fontWeight, token.fontBodyLarge?.fontWeight);
-      expect(style?.fontFamilyFallback, isNull);
+      expect(
+        style?.fontFamilyFallback,
+        token.fontFamily?.flutterFontFamilyFallback,
+      );
     });
 
     testWidgets('required mark theme merges with the semantic error color', (

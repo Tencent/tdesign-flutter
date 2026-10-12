@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
-import '../text/t_text.dart';
 import '../text/t_text_styled.dart';
 import 't_swipe_cell_inherited.dart';
 import 't_swipe_cell_theme_data.dart';
@@ -122,7 +122,11 @@ class TSwipeCellAction extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (icon != null)
-                Icon(icon, size: effectiveIconSize, color: effectiveIconColor),
+                TInternalIcon(
+                  icon,
+                  size: effectiveIconSize,
+                  color: effectiveIconColor,
+                ),
               if (icon != null && label != null)
                 SizedBox(width: effectiveSpacing),
               if (label != null)
