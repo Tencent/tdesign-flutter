@@ -12,7 +12,7 @@ void main() {
   ) async {
     tester.platformDispatcher.platformBrightnessTestValue = Brightness.light;
     addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
-    await tester.pumpWidget(const DarkModeExample());
+    await tester.pumpWidget(const ThemeDarkModeExample());
     await tester.pumpAndSettle();
     final tag = find.widgetWithText(TButton, '主要按钮');
     expect(Theme.of(tester.element(tag)).brightness, Brightness.light);
@@ -100,7 +100,7 @@ void main() {
   ) async {
     TExampleRoute.init();
     for (final entry in {
-      'dark-mode': DarkModeExample,
+      'dark-mode': ThemeDarkModeExample,
       'custom-theme': CustomThemeExample,
     }.entries) {
       final route = TExampleRoute.onGenerateRoute(

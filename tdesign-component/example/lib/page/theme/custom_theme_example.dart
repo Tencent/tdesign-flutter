@@ -3,7 +3,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
 
-@ExampleCode(group: 'theme')
+@ExampleCode(group: 'theme', route: 'custom-theme')
 class CustomThemeExample extends StatefulWidget {
   const CustomThemeExample({super.key});
 

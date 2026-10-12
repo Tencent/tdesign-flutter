@@ -1,9 +1,7 @@
 import matter from 'gray-matter';
+import { readFlutterExampleManifest } from './transform.mjs';
 
-export const guideExamples = Object.freeze({
-  'custom-theme': 'theme.CustomThemeExample',
-  'dark-mode': 'theme.DarkModeExample',
-});
+export const guideExamples = Object.freeze(readFlutterExampleManifest().guides ?? {});
 export const guidePreviewMarker = '<div data-flutter-guide-preview></div>';
 
 /** Validate before rendering so a broken guide cannot produce a successful build. */

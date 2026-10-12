@@ -69,6 +69,7 @@ class ExampleCodeGenerator {
     final expected = <String, String>{
       ...collector.outputs,
       _manifestFileName: manifestCollector.encode(
+        guides: collector.guides,
         allGroups: collector.outputs.keys
             .map((fileName) => fileName.substring(0, fileName.indexOf('.')))
             .toSet(),
@@ -147,6 +148,7 @@ class GenerationResult {
 
 class _ExampleCodeCollector extends RecursiveAstVisitor<void> {
   final Map<String, String> outputs = <String, String>{};
+  final Map<String, String> guides = <String, String>{};
   final List<String> _errors = <String>[];
 
   late File _file;
@@ -219,6 +221,27 @@ class _ExampleCodeCollector extends RecursiveAstVisitor<void> {
         '$_annotationName group containing only letters, digits, "_" or "-".',
       );
       return;
+    }
+
+    for (final argument in annotation.arguments?.arguments ?? const []) {
+      if (argument is! NamedExpression || argument.name.label.name != 'route') {
+        continue;
+      }
+      final expression = argument.expression;
+      if (expression is! SimpleStringLiteral ||
+          !RegExp(r'^[a-z][a-z0-9-]*$').hasMatch(expression.value) ||
+          node != _standaloneExampleClass) {
+        _errors.add(
+          '${_file.path}: guide route requires a literal route on a standalone Widget.',
+        );
+        return;
+      }
+      final route = expression.value;
+      if (guides.containsKey(route)) {
+        _errors.add('${_file.path}: duplicate guide route $route.');
+        return;
+      }
+      guides[route] = '$group.$methodName';
     }
 
     final fileName = '$group.$methodName.txt';
@@ -518,7 +541,10 @@ class _ExampleManifestCollector {
     }
   }
 
-  String encode({required Set<String> allGroups}) {
+  String encode({
+    required Set<String> allGroups,
+    required Map<String, String> guides,
+  }) {
     final groups = Map<String, Object>.fromEntries(
       _groups.entries.toList()
         ..sort((left, right) => left.key.compareTo(right.key)),
@@ -531,7 +557,7 @@ class _ExampleManifestCollector {
         'Missing: ${unregisteredGroups.join(', ')}',
       );
     }
-    return '${const JsonEncoder.withIndent('  ').convert({'version': 1, 'groups': groups, 'legacyGroups': <String>[]})}\n';
+    return '${const JsonEncoder.withIndent('  ').convert({'version': 1, 'groups': groups, 'legacyGroups': <String>[], if (guides.isNotEmpty) 'guides': Map.fromEntries(guides.entries.toList()..sort((a, b) => a.key.compareTo(b.key)))})}\n';
   }
 }
 

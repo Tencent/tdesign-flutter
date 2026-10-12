@@ -84,7 +84,9 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: '深色模式',
       name: 'dark-mode',
-      pageBuilder: _wrapInheritedTheme((context) => const DarkModeExample()),
+      pageBuilder: _wrapInheritedTheme(
+        (context) => const ThemeDarkModeExample(),
+      ),
     ),
     ExamplePageModel(
       text: 'Theme 主题',

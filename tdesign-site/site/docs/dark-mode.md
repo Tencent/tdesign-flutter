@@ -9,7 +9,7 @@ toc: false
 
 ## 切换浅色、深色与跟随系统
 
-在预览中切换模式，观察页面、按钮与文字的变化。源码可在已安装依赖的应用中用 `runApp(const DarkModeExample())` 运行。
+在预览中切换模式，观察页面、按钮与文字的变化。源码可在已安装依赖的应用中用 `runApp(const ThemeDarkModeExample())` 运行。
 
 通过 `TThemeBuilder.light` 和 `TThemeBuilder.dark` 将 `TThemeData` 转换为 Flutter 主题，并在 `MaterialApp` 上设置 `themeMode`。
 
@@ -19,7 +19,7 @@ toc: false
 
 ## 交互演示源码
 
-{{ flutter-example theme.DarkModeExample }}
+{{ flutter-example theme.ThemeDarkModeExample }}
 
 ## 保存用户选择
 

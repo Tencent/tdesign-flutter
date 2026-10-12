@@ -3,15 +3,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
 
-@ExampleCode(group: 'theme')
-class DarkModeExample extends StatefulWidget {
-  const DarkModeExample({super.key});
+@ExampleCode(group: 'theme', route: 'dark-mode')
+class ThemeDarkModeExample extends StatefulWidget {
+  const ThemeDarkModeExample({super.key});
 
   @override
-  State<DarkModeExample> createState() => _DarkModeExampleState();
+  State<ThemeDarkModeExample> createState() => _ThemeDarkModeExampleState();
 }
 
-class _DarkModeExampleState extends State<DarkModeExample> {
+class _ThemeDarkModeExampleState extends State<ThemeDarkModeExample> {
   final TThemeData _tokens = TThemeData.defaultData();
   ThemeMode _mode = ThemeMode.system;
   String _message = '';
