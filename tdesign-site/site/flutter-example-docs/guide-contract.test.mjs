@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { test } from 'node:test';
-import { guideExamples, guidePreviewMarker, validateGuidePage } from './guide-contract.mjs';
+import { guideExamples, validateGuidePage } from './guide-contract.mjs';
 import { replaceFlutterExampleDirectives } from './transform.mjs';
 
 for (const slug of ['custom-theme', 'dark-mode']) {
@@ -13,11 +13,11 @@ for (const slug of ['custom-theme', 'dark-mode']) {
     assert.ok(!rendered.includes('{{ flutter-example'));
   });
   for (const [name, mutate] of [
-    ['missing mount', (s) => s.replace(guidePreviewMarker, '')],
-    ['duplicate mount', (s) => s + guidePreviewMarker],
+    ['old mount marker', (s) => s + '<div data-flutter-guide-preview></div>'],
+    ['missing route', (s) => s.replace(`flutterPreview: ${slug}`, '')],
     ['wrong route', (s) => s.replace(`flutterPreview: ${slug}`, 'flutterPreview: unknown')],
     ['wrong source', (s) => s.replace(guideExamples[slug], 'theme.ThemeDemo')],
-    ['invalid height', (s) => s.replace('flutterPreview:', 'flutterPreviewHeight: -1\nflutterPreview:').replace('flutterPreviewHeight: 360\n', '')],
+    ['old height override', (s) => s.replace('flutterPreview:', 'flutterPreviewHeight: 360\nflutterPreview:')],
   ]) {
     test(`${slug}: rejects ${name}`, () => {
       assert.throws(() => validateGuidePage(mutate(source), slug));

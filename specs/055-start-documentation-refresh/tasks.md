@@ -8,3 +8,5 @@
 - [ ] DOING 更新同一 PR，确认最终远程 head；新提交 CI 与专用 Linux Golden 尚未确认，见 acceptance.md。
 
 - [x] DONE 修复指南生成资产登记与命名，完整执行 CI 的结构及片段检查。
+
+- [x] DONE 统一组件与指南预览容器，清理旧挂载实现并验收桌面/窄屏交互。

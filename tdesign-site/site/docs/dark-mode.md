@@ -3,7 +3,6 @@ title: 深色模式
 description: 使用 TD 组件演示浅色、深色及跟随系统的主题切换。
 spline: explain
 flutterPreview: dark-mode
-flutterPreviewHeight: 360
 toc: false
 ---
 
@@ -12,8 +11,6 @@ toc: false
 在预览中切换模式，观察页面、按钮与文字的变化。源码可在已安装依赖的应用中用 `runApp(const ThemeDarkModeExample())` 运行。
 
 通过 `TThemeBuilder.light` 和 `TThemeBuilder.dark` 将 `TThemeData` 转换为 Flutter 主题，并在 `MaterialApp` 上设置 `themeMode`。
-
-<div data-flutter-guide-preview></div>
 
 `ThemeMode.system` 跟随系统外观；`ThemeMode.light` 和 `ThemeMode.dark` 固定使用对应模式。
 

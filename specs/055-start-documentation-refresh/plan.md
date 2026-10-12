@@ -1,6 +1,6 @@
 # 实施方案
 
-按完整交付链组织：用户任务 → 文档入口 → 实际 Dart 示例 → 生成源码 → Flutter Web 正文预览 → 自动检查与人工验收。
+按完整交付链组织：用户任务 → 文档入口 → 实际 Dart 示例 → 生成源码 → 共享 Flutter Web 预览 → 自动检查与人工验收。
 
 1. 根 README 是快速开始唯一源；修改实际 TD 导航栏和按钮文本后运行同步脚本。
 2. 自定义主题围绕同一组 Button 解释四层配置。应用使用 TThemeData，组件默认图标间距使用 TButtonThemeData，局部 Theme 只覆盖圆角，实例只改尺寸；避免教程 Tag 与预览 Button 不一致。
@@ -12,3 +12,7 @@
 ## 风险与边界
 
 组件 Theme 扩展只使用实际公开字段，不推断不存在的 Button 圆角字段。预览嵌套 MaterialApp 自主管理模式。生成器、既有组件页、历史主题锚点保持原有契约。Linux Golden 证据与人工浏览器证据分开登记；没有运行的检查不得标记通过。
+
+## 统一预览容器
+
+抽取既有 td-doc-phone/iframe 为 FlutterPreview，组件页与两篇指南共用；加载通知与卸载监听由同一个组件负责。指南保留正文、路由及生成源码，不增加组件 API/Design 标签。移除 guideDocParts、正文标记、flutterPreviewHeight、专用 CSS 和右侧留白覆盖；构建契约拒绝旧配置回流。
