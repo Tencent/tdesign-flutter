@@ -8,7 +8,7 @@
 
 创建 TDesign 输入框。
 
-内置编辑器、提示词和操作按钮不受外部 Material 主题控制；前后缀内容
+内置文字、提示词和按钮视觉由 TD 控制；原生编辑、文本选择和前后缀内容
 保留调用方主题。输入装饰通过 `TInputThemeData` 配置。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -39,7 +39,7 @@
 | readOnly | bool | false | 是否只读。 设为 `true` 时禁止修改内容，但保留只读文本的选择和复制能力；文字仍使用正常态颜色。 | 否 |
 | showPasswordToggle | bool | false | 是否在后置插槽显示内置密码显隐按钮。 初始显隐状态由 `obscureText` 决定，按钮点击后的显隐状态由输入框 自身维护。启用后会使用 TDesign 的浏览图标和 24dp 图标槽，且不会 额外撑高输入框；仅支持单行输入。如果同时传入 `suffix`，自定义后置内容 会紧跟在该按钮之后。启用密码显隐按钮时，不同时显示内置清除按钮。 | 否 |
 | status | TInputStatus | TInputStatus.normal | 输入框语义状态。 状态色用于输入壳层、计数器和错误提示； 已输入文字仍使用正常正文色，除非通过 `style` 显式覆盖。 当输入框位于 `TFormField` 中且表单错误需要在输入框内展示时， 表单错误状态优先于这里显式设置的状态。 | 否 |
-| style | TextStyle? | - | 输入文本样式。 输入文字样式的唯一组件公开配置入口。未指定的字段继承显式 Material 文字主题或 TDesign `fontBodyLarge`；提示文字由组件 Theme 的 `hintStyle` 单独控制。 | 否 |
+| style | TextStyle? | - | 输入文本样式。 输入文字样式的唯一组件公开配置入口。未指定的字段使用 TD Theme 与 TDesign `fontBodyLarge`；提示文字由组件 Theme 的 `hintStyle` 单独控制。 | 否 |
 | suffix | Widget? | - | 后缀组件；传入后不显示内置清除按钮。 | 否 |
 | textAlign | TextAlign | TextAlign.start | 文本对齐方式。 | 否 |
 

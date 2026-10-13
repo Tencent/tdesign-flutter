@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  gradientGeometryGoldens();
   setUpAll(() async {
     final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
       ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
@@ -36,6 +37,140 @@ void main() {
       matchesGoldenFile('goldens/m3_isolation_controls.png'),
     );
   });
+
+  testWidgets('custom content retains its theme beside TD visuals', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(760, 420);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: RepaintBoundary(
+            key: const Key('custom-content-scene'),
+            child: ColoredBox(
+              color: Colors.white,
+              child: Row(
+                children: [
+                  for (final m3 in [false, true])
+                    Expanded(
+                      child: Theme(
+                        data: ThemeData(
+                          useMaterial3: m3,
+                          iconTheme: const IconThemeData(
+                            color: Colors.green,
+                            size: 64,
+                          ),
+                          textTheme: const TextTheme(
+                            bodyMedium: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 28,
+                              color: Colors.purple,
+                            ),
+                          ),
+                          extensions: [TThemeData.defaultData()],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              m3 ? 'Material 3' : 'Material 2',
+                              style: const TextStyle(
+                                fontFamily: 'Roboto',
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TDialog(
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(TIcons.home),
+                                  Builder(
+                                    builder: (context) => Text(
+                                      'Custom content',
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  const TIcon(TIcons.home),
+                                  const TText('TD built-in style'),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 400));
+    await expectLater(
+      find.byKey(const Key('custom-content-scene')),
+      matchesGoldenFile('goldens/m3_custom_content.png'),
+    );
+  });
+  testWidgets(
+    'owned typography and partial state styles resist ambient visuals',
+    (tester) async {
+      tester.view.physicalSize = const Size(760, 340);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: RepaintBoundary(
+              key: Key('owned-typography'),
+              child: Row(
+                children: [
+                  Expanded(child: _OwnedTypographyColumn(m3: false)),
+                  Expanded(child: _OwnedTypographyColumn(m3: true)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await expectLater(
+        find.byKey(const Key('owned-typography')),
+        matchesGoldenFile('goldens/m3_owned_typography.png'),
+      );
+      final gestures = <TestGesture>[];
+      for (var i = 0; i < 2; i++) {
+        gestures.add(
+          await tester.startGesture(
+            tester.getCenter(find.byType(TButton).at(i)),
+            pointer: i + 1,
+          ),
+        );
+      }
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      await expectLater(
+        find.byKey(const Key('owned-typography')),
+        matchesGoldenFile('goldens/m3_partial_state_pressed.png'),
+      );
+      for (final gesture in gestures) {
+        await gesture.up();
+      }
+      FocusManager.instance.primaryFocus?.unfocus();
+      await tester.pumpAndSettle();
+      await expectLater(
+        find.byKey(const Key('owned-typography')),
+        matchesGoldenFile('goldens/m3_owned_typography.png'),
+      );
+    },
+  );
 }
 
 class _M3IsolationScene extends StatelessWidget {
@@ -174,3 +309,326 @@ void _switchNoop(bool value) {}
 void _tapNoop() {}
 
 void _sliderNoop(double value) {}
+
+class _OwnedTypographyColumn extends StatelessWidget {
+  const _OwnedTypographyColumn({required this.m3});
+  final bool m3;
+  @override
+  Widget build(BuildContext context) {
+    final data = ThemeData(
+      useMaterial3: m3,
+      textTheme: const TextTheme(
+        bodyMedium: TextStyle(
+          fontSize: 80,
+          letterSpacing: 18,
+          wordSpacing: 9,
+          shadows: [Shadow(color: Colors.pink, blurRadius: 3)],
+        ),
+      ),
+      elevatedButtonTheme: const ElevatedButtonThemeData(
+        style: ButtonStyle(
+          foregroundColor: WidgetStatePropertyAll(Colors.green),
+        ),
+      ),
+      extensions: [TThemeData.defaultData()],
+    );
+    return Theme(
+      data: data,
+      child: Material(
+        color: Colors.white,
+        textStyle: data.textTheme.bodyMedium,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                m3 ? 'Material 3' : 'Material 2',
+                style: const TextStyle(
+                  inherit: false,
+                  fontFamily: 'Roboto',
+                  fontSize: 14,
+                  height: 1.4,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const TCell(title: Text('Cell title'), required: true),
+              const TDivider(child: Text('Divider label')),
+              const SizedBox(height: 12),
+              TButton(
+                onPressed: _tapNoop,
+                variant: TButtonVariant.outline,
+                colorPreset: TButtonColorPreset.danger,
+                style: ButtonStyle(
+                  foregroundColor: WidgetStateProperty.resolveWith(
+                    (states) => states.contains(WidgetState.pressed)
+                        ? Colors.pink
+                        : null,
+                  ),
+                  overlayColor: WidgetStateProperty.resolveWith(
+                    (states) => states.contains(WidgetState.pressed)
+                        ? Colors.transparent
+                        : null,
+                  ),
+                ),
+                child: const Text('Danger'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+void gradientGeometryGoldens() {
+  for (final brightness in Brightness.values) {
+    testWidgets(
+      'gradient geometry ${brightness.name} default and pressed golden',
+      (tester) async {
+        tester.view.physicalSize = const Size(760, 720);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        final token = brightness == Brightness.dark
+            ? TThemeData.defaultData().dark!
+            : TThemeData.defaultData().light;
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: RepaintBoundary(
+                key: const Key('button-geometry-scene'),
+                child: ColoredBox(
+                  color: token.bgColorPage,
+                  child: Row(
+                    children: [
+                      for (var i = 0; i < 4; i++)
+                        Expanded(
+                          child: _ButtonGeometryColumn(
+                            column: i,
+                            m3: i >= 2,
+                            gradient: i.isOdd,
+                            brightness: brightness,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await expectLater(
+          find.byKey(const Key('button-geometry-scene')),
+          matchesGoldenFile(
+            'goldens/button_gradient_geometry_${brightness.name}.png',
+          ),
+        );
+        final gestures = <TestGesture>[];
+        for (var i = 0; i < 4; i++) {
+          gestures.add(
+            await tester.startGesture(
+              tester.getCenter(find.byKey(ValueKey('geometry-state-$i'))),
+              pointer: i + 1,
+            ),
+          );
+        }
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 400));
+        await expectLater(
+          find.byKey(const Key('button-geometry-scene')),
+          matchesGoldenFile(
+            'goldens/button_gradient_geometry_pressed_${brightness.name}.png',
+          ),
+        );
+        for (final gesture in gestures) {
+          await gesture.up();
+        }
+        FocusManager.instance.primaryFocus?.unfocus();
+        await tester.pumpAndSettle();
+        await expectLater(
+          find.byKey(const Key('button-geometry-scene')),
+          matchesGoldenFile(
+            'goldens/button_gradient_geometry_${brightness.name}.png',
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _ButtonGeometryColumn extends StatelessWidget {
+  const _ButtonGeometryColumn({
+    required this.column,
+    required this.m3,
+    required this.gradient,
+    required this.brightness,
+  });
+  final int column;
+  final bool m3;
+  final bool gradient;
+  final Brightness brightness;
+
+  @override
+  Widget build(BuildContext context) {
+    final token = brightness == Brightness.dark
+        ? TThemeData.defaultData().dark!
+        : TThemeData.defaultData().light;
+    final data = ThemeData(
+      useMaterial3: m3,
+      brightness: brightness,
+      textTheme: const TextTheme(
+        bodyMedium: TextStyle(
+          fontFamily: 'Roboto',
+          fontSize: 24,
+          height: 1.4,
+          color: Colors.purple,
+        ),
+      ),
+      extensions: [
+        token,
+        if (gradient)
+          TButtonThemeData(
+            gradient: LinearGradient(
+              colors: [token.bgColorContainer, token.bgColorContainer],
+            ),
+          ),
+      ],
+    );
+    return Theme(
+      data: data,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'M${m3 ? 3 : 2} ${gradient ? 'gradient' : 'ordinary'}',
+            style: TextStyle(
+              inherit: false,
+              fontFamily: 'Roboto',
+              fontSize: 14,
+              height: 1.4,
+              color: token.textColorPrimary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          for (final size in TButtonSize.values)
+            SizedBox(
+              height: 60,
+              child: Center(
+                child: TButton(
+                  size: size,
+                  variant: TButtonVariant.outline,
+                  colorPreset: TButtonColorPreset.danger,
+                  onPressed: _tapNoop,
+                  child: Text(size.name),
+                ),
+              ),
+            ),
+          const SizedBox(
+            height: 48,
+            child: Center(
+              child: TButton(
+                size: TButtonSize.extraSmall,
+                shape: TButtonShape.circle,
+                variant: TButtonVariant.outline,
+                colorPreset: TButtonColorPreset.danger,
+                onPressed: _tapNoop,
+                icon: TIcon(TIcons.home),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 40,
+            child: Center(
+              child: TButton(
+                variant: TButtonVariant.outline,
+                onPressed: _tapNoop,
+                style: ButtonStyle(
+                  minimumSize: WidgetStatePropertyAll(Size.zero),
+                  padding: WidgetStatePropertyAll(
+                    EdgeInsets.fromLTRB(10, 3, 14, 5),
+                  ),
+                  side: WidgetStatePropertyAll(
+                    BorderSide(color: Color(0x66000000), width: 4),
+                  ),
+                  shape: WidgetStatePropertyAll(RoundedRectangleBorder()),
+                ),
+                child: SizedBox(
+                  width: 24,
+                  height: 12,
+                  child: ColoredBox(color: Colors.amber),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 64,
+            child: Center(
+              child: TButton(
+                variant: TButtonVariant.outline,
+                onPressed: _tapNoop,
+                style: ButtonStyle(
+                  minimumSize: WidgetStatePropertyAll(Size.zero),
+                  fixedSize: WidgetStatePropertyAll(Size(120, 44)),
+                  padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                  side: WidgetStatePropertyAll(
+                    BorderSide(
+                      color: Color(0x66000000),
+                      width: 4,
+                      strokeAlign: BorderSide.strokeAlignOutside,
+                    ),
+                  ),
+                  shape: WidgetStatePropertyAll(RoundedRectangleBorder()),
+                ),
+                child: SizedBox.expand(child: ColoredBox(color: Colors.amber)),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 48,
+            child: Center(
+              child: TButton(
+                key: ValueKey('geometry-state-$column'),
+                size: TButtonSize.extraSmall,
+                variant: TButtonVariant.outline,
+                onPressed: _tapNoop,
+                child: const Text('Press'),
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(
+                    token.bgColorContainer,
+                  ),
+                  overlayColor: const WidgetStatePropertyAll(
+                    Colors.transparent,
+                  ),
+                  side: WidgetStateProperty.resolveWith(
+                    (states) => BorderSide(
+                      color: const Color(0x996a1b9a),
+                      width: states.contains(WidgetState.pressed) ? 6 : 1,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 64,
+            child: Center(
+              child: TButton(
+                variant: TButtonVariant.outline,
+                onPressed: _tapNoop,
+                child: Builder(
+                  builder: (context) => Text(
+                    'Custom',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

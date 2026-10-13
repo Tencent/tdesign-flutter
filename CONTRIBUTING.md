@@ -18,7 +18,7 @@ tdesign-site/       // tdesign flutter 站点
 
 ## 开发规范
 
-- TD 内置视觉由组件实例样式、TD ThemeExtension 与 TDesign Token 决定，不接受外部 Material/M2/M3 的默认或显式主题配置控制。调用方传入的 child、prefix、suffix、builder 内容保留自身的 Flutter 主题行为；亮暗模式、字体缩放、方向、平台编辑、焦点、键盘与无障碍机制继续支持。内部原生控件须在最小范围隔离 Material 样式，不能重置整棵用户内容树。
+- TD 内置视觉由受支持的组件实例样式、TD ThemeExtension 与 Token 决定，阻止 Material/M2/M3 默认视觉意外影响；外部 Material 组件视觉主题不作为覆盖入口。保留 TD 显式定制、调用方自定义内容的主题、文本选择和原生编辑、反馈、触发、焦点、键盘与无障碍能力。内部原生控件局部隔离视觉，不重置用户内容树，不因防范样式干扰删除原生能力。
 
 - 组件命名规范：以 `T` 为前缀，组件名称、API 名称参考 TDesign 现有组件和 API 命名，可以根据 Flutter 原生 Widget 的特点进行修改。组件 API 以满足设计要求和使用为准，可根据 Flutter 特点做精简或定制。
 - 组件库用到的所有色值、圆角、字体字号等样式属性需全部定义在主题中。

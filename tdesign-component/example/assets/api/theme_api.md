@@ -380,7 +380,7 @@ Token → 完整 ThemeData 的构建器
 
 此映射供原生 Material Widget 使用；TD 内置样式仅使用受支持的实例配置、
 TD ThemeExtension 与 Token，不反向继承外部 Material/M2/M3 样式配置。
-调用方自定义内容仍保留其 Flutter 主题行为。
+调用方自定义内容保留其 Flutter 主题行为；原生选择、编辑、反馈和焦点能力继续支持。
 
 通常不直接使用，通过 `TThemeBuilder.light` / `TThemeBuilder.dark` 入口。
 

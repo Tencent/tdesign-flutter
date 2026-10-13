@@ -5,6 +5,7 @@ import 'package:tdesign_flutter/src/theme/t_internal_material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  statefulNativeBehaviorTests();
   ownershipBoundaryTests();
   testWidgets(
     'internal actions isolate Material styles and retain explicit styles and content',
@@ -136,10 +137,6 @@ void main() {
         final resolved = TInternalMaterialTheme.resolve(context);
         expect(resolved.brightness, dark ? Brightness.dark : Brightness.light);
         expect(resolved.visualDensity, VisualDensity.standard);
-        expect(
-          resolved.textSelectionTheme.cursorColor,
-          TThemeData.defaultData().brandColor,
-        );
       }
       expect(tapped, 2);
       await tester.pumpWidget(
@@ -200,6 +197,335 @@ void main() {
 }
 
 void ownershipBoundaryTests() {
+  testWidgets(
+    'generic content retains icons and typography while TD glyphs stay owned',
+    (tester) async {
+      for (final m3 in [false, true]) {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              useMaterial3: m3,
+              iconTheme: const IconThemeData(
+                color: Colors.green,
+                size: 64,
+                opacity: 0.4,
+                shadows: [Shadow(blurRadius: 3)],
+              ),
+              textTheme: const TextTheme(
+                bodyMedium: TextStyle(fontSize: 31, fontFamily: 'caller-font'),
+              ),
+            ),
+            home: const Scaffold(
+              body: TInternalMaterial(
+                child: Column(
+                  children: [
+                    Icon(Icons.home),
+                    TIcon(TIcons.home),
+                    Text('caller text'),
+                    TText('TD text'),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+        final caller = find.byIcon(Icons.home);
+        final data = IconTheme.of(tester.element(caller));
+        expect(data.color, Colors.green);
+        expect(data.size, 64);
+        expect(data.opacity, 0.4);
+        expect(data.shadows!.single.blurRadius, 3);
+        final td = tester.widget<Icon>(find.byIcon(TIcons.home));
+        expect(td.size, 24);
+        expect(td.color, TThemeData.defaultData().textColorPrimary);
+        final text = tester.renderObject<RenderParagraph>(
+          find.text('caller text'),
+        );
+        expect(text.text.style!.fontSize, 31);
+        expect(text.text.style!.fontFamily, 'caller-font');
+        expect(
+          tester
+              .renderObject<RenderParagraph>(find.text('TD text'))
+              .text
+              .style!
+              .fontSize,
+          TThemeData.defaultData().fontBodyMedium!.size,
+        );
+      }
+    },
+  );
+
+  testWidgets('Dialog caller icon follows live inherited theme changes', (
+    tester,
+  ) async {
+    for (final m3 in [false, true]) {
+      for (final size in [64.0, 40.0]) {
+        final color = size == 64 ? Colors.green : Colors.red;
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              useMaterial3: m3,
+              iconTheme: IconThemeData(color: color, size: size),
+            ),
+            home: const Scaffold(body: TDialog(content: Icon(Icons.home))),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final data = IconTheme.of(tester.element(find.byIcon(Icons.home)));
+        expect(data.color, color);
+        expect(data.size, size);
+        expect(tester.getSize(find.byIcon(Icons.home)).height, size);
+      }
+    }
+  });
+
+  testWidgets(
+    'native text selection and explicit selection colors survive editor isolation',
+    (tester) async {
+      var submitted = '';
+      for (final m3 in [false, true]) {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              useMaterial3: m3,
+              inputDecorationTheme: const InputDecorationTheme(
+                filled: true,
+                fillColor: Colors.pink,
+              ),
+              textSelectionTheme: const TextSelectionThemeData(
+                selectionColor: Colors.pink,
+                selectionHandleColor: Colors.green,
+              ),
+            ),
+            home: Scaffold(
+              body: Column(
+                children: [
+                  TInput(
+                    initialValue: 'input',
+                    onSubmitted: (value) => submitted = value,
+                  ),
+                  const TSearchBar(initialValue: 'search'),
+                  const SelectionArea(
+                    child: Column(
+                      children: [
+                        TText('native selection'),
+                        TText(
+                          'explicit selection',
+                          selectionColor: Colors.yellow,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        expect(find.byType(InputDecorator), findsNothing);
+        for (var index = 0; index < 2; index++) {
+          tester
+              .widgetList<EditableText>(find.byType(EditableText))
+              .elementAt(index)
+              .focusNode
+              .requestFocus();
+          await tester.pumpAndSettle();
+          final editor = tester
+              .widgetList<EditableText>(find.byType(EditableText))
+              .elementAt(index);
+          expect(editor.selectionColor, Colors.pink);
+          expect(editor.style.letterSpacing, 0);
+        }
+        final texts = tester
+            .widgetList<RichText>(
+              find.descendant(
+                of: find.byType(SelectionArea),
+                matching: find.byType(RichText),
+              ),
+            )
+            .toList();
+        expect(texts.first.selectionColor, Colors.pink);
+        expect(texts.last.selectionColor, Colors.yellow);
+        await tester.enterText(find.byType(TextField).first, 'edited');
+        await tester.testTextInput.receiveAction(TextInputAction.done);
+        await tester.pump();
+        expect(submitted, 'edited');
+      }
+    },
+  );
+
+  testWidgets(
+    'tooltip keeps native timing trigger and semantics without ambient visuals',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            tooltipTheme: const TooltipThemeData(
+              waitDuration: Duration(milliseconds: 50),
+              showDuration: Duration(seconds: 10),
+              exitDuration: Duration(milliseconds: 100),
+              triggerMode: TooltipTriggerMode.tap,
+              enableFeedback: false,
+              excludeFromSemantics: true,
+              decoration: BoxDecoration(color: Colors.pink),
+              textStyle: TextStyle(fontSize: 80),
+            ),
+          ),
+          home: const Scaffold(
+            body: TInternalTooltip(
+              message: 'native-tip',
+              child: SizedBox(
+                key: Key('tip-anchor'),
+                width: 40,
+                height: 40,
+                child: ColoredBox(color: Colors.transparent),
+              ),
+            ),
+          ),
+        ),
+      );
+      final data = TooltipTheme.of(tester.element(find.byType(Tooltip)));
+      expect(data.triggerMode, TooltipTriggerMode.tap);
+      expect(data.waitDuration, const Duration(milliseconds: 50));
+      expect(data.showDuration, const Duration(seconds: 10));
+      expect(data.exitDuration, const Duration(milliseconds: 100));
+      expect(data.enableFeedback, isFalse);
+      expect(data.excludeFromSemantics, isTrue);
+      expect(data.decoration, isNull);
+      await tester.tap(find.byKey(const Key('tip-anchor')));
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(find.text('native-tip'), findsOneWidget);
+      expect(
+        tester
+            .renderObject<RenderParagraph>(find.text('native-tip'))
+            .text
+            .style!
+            .fontSize,
+        isNot(80),
+      );
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+    },
+  );
+
+  testWidgets('native feedback settings survive and explicit TD style wins', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(
+          iconButtonTheme: const IconButtonThemeData(
+            style: ButtonStyle(
+              enableFeedback: false,
+              mouseCursor: WidgetStatePropertyAll(SystemMouseCursors.forbidden),
+              backgroundColor: WidgetStatePropertyAll(Colors.pink),
+            ),
+          ),
+          elevatedButtonTheme: const ElevatedButtonThemeData(
+            style: ButtonStyle(
+              enableFeedback: false,
+              mouseCursor: WidgetStatePropertyAll(SystemMouseCursors.forbidden),
+            ),
+          ),
+        ),
+        home: Scaffold(
+          body: Column(
+            children: [
+              TInternalIconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.home),
+              ),
+              TInternalIconButton(
+                onPressed: () {},
+                style: const ButtonStyle(
+                  enableFeedback: true,
+                  mouseCursor: WidgetStatePropertyAll(SystemMouseCursors.text),
+                  backgroundColor: WidgetStatePropertyAll(Colors.blue),
+                ),
+                icon: const Icon(Icons.home),
+              ),
+              TButton(onPressed: () {}, child: const Text('native feedback')),
+              TButton(
+                onPressed: () {},
+                style: const ButtonStyle(
+                  enableFeedback: true,
+                  mouseCursor: WidgetStatePropertyAll(SystemMouseCursors.text),
+                ),
+                child: const Text('explicit feedback'),
+              ),
+              Builder(
+                builder: (context) => Theme(
+                  data: Theme.of(context).mergeExtension(
+                    const TButtonThemeData(
+                      gradient: LinearGradient(
+                        colors: [Colors.blue, Colors.green],
+                      ),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      TButton(
+                        onPressed: () {},
+                        child: const Text('gradient feedback'),
+                      ),
+                      TButton(
+                        onPressed: () {},
+                        style: const ButtonStyle(
+                          enableFeedback: true,
+                          mouseCursor: WidgetStatePropertyAll(
+                            SystemMouseCursors.text,
+                          ),
+                        ),
+                        child: const Text('explicit gradient feedback'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    final icons = tester
+        .widgetList<IconButton>(find.byType(IconButton))
+        .toList();
+    expect(icons.first.style!.enableFeedback, isFalse);
+    expect(
+      icons.first.style!.mouseCursor!.resolve({}),
+      SystemMouseCursors.forbidden,
+    );
+    expect(icons.last.style!.mouseCursor!.resolve({}), SystemMouseCursors.text);
+    expect(icons.first.style!.backgroundColor!.resolve({}), Colors.transparent);
+    expect(icons.last.style!.enableFeedback, isTrue);
+    expect(icons.last.style!.backgroundColor!.resolve({}), Colors.blue);
+    final buttons = tester
+        .widgetList<ElevatedButton>(find.byType(ElevatedButton))
+        .toList();
+    expect(buttons.first.style!.enableFeedback, isFalse);
+    expect(
+      buttons.first.style!.mouseCursor!.resolve({}),
+      SystemMouseCursors.forbidden,
+    );
+    expect(
+      buttons.last.style!.mouseCursor!.resolve({}),
+      SystemMouseCursors.text,
+    );
+    expect(buttons.last.style!.enableFeedback, isTrue);
+    final ink = tester
+        .widgetList<TInternalInkWell>(find.byType(TInternalInkWell))
+        .toList();
+    expect(ink.first.enableFeedback, isFalse);
+    expect(ink.last.enableFeedback, isTrue);
+    expect(
+      (ink.first.mouseCursor! as WidgetStateMouseCursor).resolve({}),
+      SystemMouseCursors.forbidden,
+    );
+    expect(
+      (ink.last.mouseCursor! as WidgetStateMouseCursor).resolve({}),
+      SystemMouseCursors.text,
+    );
+  });
+
   testWidgets(
     'local Material wrappers cannot inject visuals; caller content keeps wrappers',
     (tester) async {
@@ -392,3 +718,127 @@ Widget pinkBackground(
   color: Colors.pink,
   child: child,
 );
+
+void statefulNativeBehaviorTests() {
+  for (final m3 in [false, true]) {
+    for (final gradient in [false, true]) {
+      testWidgets(
+        'stateful mouse cursor retains original native fallback M3=$m3 gradient=$gradient',
+        (tester) async {
+          final inherited = WidgetStateProperty.resolveWith<MouseCursor?>(
+            (s) => s.contains(WidgetState.disabled)
+                ? SystemMouseCursors.forbidden
+                : s.contains(WidgetState.focused)
+                ? SystemMouseCursors.precise
+                : SystemMouseCursors.grab,
+          );
+          final partial = WidgetStateProperty.resolveWith<MouseCursor?>(
+            (s) => s.contains(WidgetState.hovered)
+                ? SystemMouseCursors.text
+                : null,
+          );
+          await tester.pumpWidget(
+            MaterialApp(
+              theme: ThemeData(
+                useMaterial3: m3,
+                elevatedButtonTheme: ElevatedButtonThemeData(
+                  style: ButtonStyle(
+                    mouseCursor: inherited,
+                    enableFeedback: false,
+                  ),
+                ),
+                iconButtonTheme: IconButtonThemeData(
+                  style: ButtonStyle(
+                    mouseCursor: inherited,
+                    enableFeedback: false,
+                  ),
+                ),
+                extensions: [
+                  TThemeData.defaultData(),
+                  if (gradient)
+                    const TButtonThemeData(
+                      gradient: LinearGradient(
+                        colors: [Colors.white, Colors.grey],
+                      ),
+                    ),
+                ],
+              ),
+              home: Scaffold(
+                body: Column(
+                  children: [
+                    TInternalIconButton(
+                      onPressed: () {},
+                      style: ButtonStyle(
+                        mouseCursor: partial,
+                        foregroundColor: WidgetStateProperty.resolveWith(
+                          (s) => s.contains(WidgetState.pressed)
+                              ? Colors.pink
+                              : null,
+                        ),
+                      ),
+                      icon: const Icon(Icons.home),
+                    ),
+                    TButton(
+                      onPressed: () {},
+                      style: ButtonStyle(mouseCursor: partial),
+                      child: const Text('cursor'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          final iconStyle = tester
+              .widget<IconButton>(find.byType(IconButton))
+              .style!;
+          final buttonCursor = gradient
+              ? tester
+                        .widget<TInternalInkWell>(find.byType(TInternalInkWell))
+                        .mouseCursor!
+                    as WidgetStateMouseCursor
+              : tester
+                    .widget<ElevatedButton>(find.byType(ElevatedButton))
+                    .style!
+                    .mouseCursor!;
+          final states = [
+            <WidgetState>{},
+            {WidgetState.hovered},
+            {WidgetState.focused},
+            {WidgetState.disabled},
+            {WidgetState.pressed},
+          ];
+          final expected = [
+            SystemMouseCursors.grab,
+            SystemMouseCursors.text,
+            SystemMouseCursors.precise,
+            SystemMouseCursors.forbidden,
+            SystemMouseCursors.grab,
+          ];
+          for (var i = 0; i < states.length; i++) {
+            expect(buttonCursor.resolve(states[i]), expected[i]);
+            expect(iconStyle.mouseCursor!.resolve(states[i]), expected[i]);
+          }
+          final region = tester.widget<MouseRegion>(
+            find
+                .descendant(
+                  of: find.byType(TButton),
+                  matching: find.byType(MouseRegion),
+                )
+                .first,
+          );
+          expect(region.cursor, SystemMouseCursors.grab);
+          expect(iconStyle.enableFeedback, isFalse);
+          expect(
+            iconStyle.foregroundColor!.resolve({}),
+            TThemeData.defaultData().textColorPrimary,
+          );
+          expect(
+            iconStyle.foregroundColor!.resolve({WidgetState.pressed}),
+            Colors.pink,
+          );
+        },
+      );
+    }
+  }
+}

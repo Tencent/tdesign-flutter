@@ -1,3 +1,5 @@
+> 以下为 head `93c1d747` 的已完成任务；当前本地调整进度见 [local-adjustment.md](./local-adjustment.md)。
+
 # 任务
 
 - [x] 共享文字隔离与双版本验证

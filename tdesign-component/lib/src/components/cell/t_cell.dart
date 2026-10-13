@@ -7,6 +7,7 @@ import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_style_scope.dart';
+import '../text/t_text_styled.dart';
 import 't_cell_theme_data.dart';
 
 /// 单元格内容垂直对齐方式。
@@ -163,7 +164,7 @@ class _TCellState extends State<TCell> {
                             ),
                           ),
                           if (widget.required)
-                            Text(
+                            TTextStyled(
                               ' *',
                               style: TextStyle(
                                 color: token.errorColor,

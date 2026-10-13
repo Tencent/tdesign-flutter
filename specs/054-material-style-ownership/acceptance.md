@@ -1,3 +1,5 @@
+> 2026-10-13：本页仅记录 head `93c1d747` 的历史验收。原生选择、Tooltip 交互和反馈设置现按能力保留；本地边界修正及新验证见 [local-adjustment.md](./local-adjustment.md)，不以本页结果代替当前验收。
+
 # 验收记录
 
 基线：PR #1157 head `4a24328df66e8ff75785b9db7f0bed0e1e088fea`。验证日期：2026-10-12。原工作区的用户修改未纳入本 PR。

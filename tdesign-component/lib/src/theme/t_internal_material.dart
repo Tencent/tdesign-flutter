@@ -7,7 +7,7 @@ import 't_colors.dart';
 import 't_spacers.dart';
 import 't_theme.dart';
 
-/// Material implementation details use TD defaults, never ambient M2/M3 styles.
+/// Internal visuals use TD defaults; caller content and native abilities retain themes.
 @internal
 class TInternalMaterialTheme {
   TInternalMaterialTheme._();
@@ -25,10 +25,21 @@ class TInternalMaterialTheme {
   static Widget restore(
     CapturedThemes captured,
     BuildContext context,
-    Widget child,
-  ) {
+    Widget child, {
+    bool retainIconDefaults = false,
+  }) {
     final text = DefaultTextStyle.of(context);
     final icon = IconTheme.of(context);
+    final content = retainIconDefaults
+        ? IconTheme.merge(
+            data: IconThemeData(color: icon.color, size: icon.size),
+            child: TIconStyleScope(
+              color: icon.color,
+              size: icon.size,
+              child: child,
+            ),
+          )
+        : child;
     return captured.wrap(
       DefaultTextStyle(
         style: text.style,
@@ -38,15 +49,77 @@ class TInternalMaterialTheme {
         maxLines: text.maxLines,
         textWidthBasis: text.textWidthBasis,
         textHeightBehavior: text.textHeightBehavior,
-        child: IconTheme.merge(
-          data: IconThemeData(color: icon.color, size: icon.size),
-          child: TIconStyleScope(
-            color: icon.color,
-            size: icon.size,
-            child: child,
-          ),
-        ),
+        child: content,
       ),
+    );
+  }
+
+  // Tooltip presentation stays local; interaction and accessibility stay native.
+  static TooltipThemeData tooltipBehavior(BuildContext context) {
+    final inherited = TooltipTheme.of(context);
+    return TooltipThemeData(
+      waitDuration: inherited.waitDuration,
+      showDuration: inherited.showDuration,
+      exitDuration: inherited.exitDuration,
+      triggerMode: inherited.triggerMode,
+      enableFeedback: inherited.enableFeedback,
+      excludeFromSemantics: inherited.excludeFromSemantics,
+    );
+  }
+
+  // Instance properties returning null retain the owner's default for that state.
+  static ButtonStyle mergeButtonStyle(ButtonStyle defaults, ButtonStyle style) {
+    return style
+        .merge(defaults)
+        .copyWith(
+          textStyle: _stateFallback(style.textStyle, defaults.textStyle),
+          backgroundColor: _stateFallback(
+            style.backgroundColor,
+            defaults.backgroundColor,
+          ),
+          foregroundColor: _stateFallback(
+            style.foregroundColor,
+            defaults.foregroundColor,
+          ),
+          overlayColor: _stateFallback(
+            style.overlayColor,
+            defaults.overlayColor,
+          ),
+          shadowColor: _stateFallback(style.shadowColor, defaults.shadowColor),
+          surfaceTintColor: _stateFallback(
+            style.surfaceTintColor,
+            defaults.surfaceTintColor,
+          ),
+          elevation: _stateFallback(style.elevation, defaults.elevation),
+          padding: _stateFallback(style.padding, defaults.padding),
+          minimumSize: _stateFallback(style.minimumSize, defaults.minimumSize),
+          fixedSize: _stateFallback(style.fixedSize, defaults.fixedSize),
+          maximumSize: _stateFallback(style.maximumSize, defaults.maximumSize),
+          iconColor: _stateFallback(style.iconColor, defaults.iconColor),
+          iconSize: _stateFallback(style.iconSize, defaults.iconSize),
+          side: _stateFallback(style.side, defaults.side),
+          shape: _stateFallback(style.shape, defaults.shape),
+          mouseCursor: _stateFallback(style.mouseCursor, defaults.mouseCursor),
+        );
+  }
+
+  static WidgetStateProperty<MouseCursor?>? resolveMouseCursor(
+    WidgetStateProperty<MouseCursor?>? instance,
+    WidgetStateProperty<MouseCursor?>? inherited,
+  ) => _stateFallback(instance, inherited);
+
+  static WidgetStateProperty<T?>? _stateFallback<T>(
+    WidgetStateProperty<T?>? preferred,
+    WidgetStateProperty<T?>? fallback,
+  ) {
+    if (preferred == null) {
+      return fallback;
+    }
+    if (fallback == null) {
+      return preferred;
+    }
+    return WidgetStateProperty.resolveWith(
+      (states) => preferred.resolve(states) ?? fallback.resolve(states),
     );
   }
 
@@ -64,11 +137,6 @@ class TInternalMaterialTheme {
       iconButtonTheme: const IconButtonThemeData(),
       listTileTheme: const ListTileThemeData(),
       inputDecorationTheme: const InputDecorationTheme(),
-      textSelectionTheme: TextSelectionThemeData(
-        cursorColor: token.brandColor,
-        selectionColor: token.brandColor.withValues(alpha: 0.3),
-        selectionHandleColor: token.brandColor,
-      ),
     );
   }
 }
@@ -84,7 +152,6 @@ class TInternalIconButton extends StatelessWidget {
     this.constraints,
     this.iconSize,
     this.style,
-    this.visualDensity,
     super.key,
   });
 
@@ -95,8 +162,6 @@ class TInternalIconButton extends StatelessWidget {
   final BoxConstraints? constraints;
   final double? iconSize;
   final ButtonStyle? style;
-  // Kept only for migrated internal call sites; TD always uses standard density.
-  final VisualDensity? visualDensity;
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +190,8 @@ class TInternalIconButton extends StatelessWidget {
       alignment: Alignment.center,
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       animationDuration: kThemeChangeDuration,
-      enableFeedback: true,
+      enableFeedback: IconButtonTheme.of(context).style?.enableFeedback ?? true,
+      mouseCursor: IconButtonTheme.of(context).style?.mouseCursor,
       splashFactory: InkRipple.splashFactory,
       overlayColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.pressed)) {
@@ -140,13 +206,15 @@ class TInternalIconButton extends StatelessWidget {
         return Colors.transparent;
       }),
     );
-    final resolved = (style?.merge(defaults) ?? defaults).copyWith(
-      visualDensity: VisualDensity.standard,
-    );
+    final resolved =
+        (style == null
+                ? defaults
+                : TInternalMaterialTheme.mergeButtonStyle(defaults, style!))
+            .copyWith(visualDensity: VisualDensity.standard);
     return Theme(
       data: TInternalMaterialTheme.resolve(context),
       child: TooltipTheme(
-        data: const TooltipThemeData(),
+        data: TInternalMaterialTheme.tooltipBehavior(context),
         child: IconButtonTheme(
           data: const IconButtonThemeData(),
           child: IconButton(
@@ -158,8 +226,12 @@ class TInternalIconButton extends StatelessWidget {
             visualDensity: VisualDensity.standard,
             style: resolved,
             icon: Builder(
-              builder: (context) =>
-                  TInternalMaterialTheme.restore(captured, context, icon),
+              builder: (context) => TInternalMaterialTheme.restore(
+                captured,
+                context,
+                icon,
+                retainIconDefaults: true,
+              ),
             ),
           ),
         ),
@@ -278,7 +350,7 @@ class TInternalMaterial extends StatelessWidget {
         elevation: elevation,
         shadowColor: shadowColor,
         surfaceTintColor: surfaceTintColor,
-        textStyle: TTextResolve.resolve(context: context, style: textStyle),
+        textStyle: textStyle ?? Theme.of(context).textTheme.bodyMedium,
         shape: shape,
         borderRadius: borderRadius,
         clipBehavior: clipBehavior,
@@ -312,7 +384,7 @@ class TInternalTooltip extends StatelessWidget {
     return Theme(
       data: TInternalMaterialTheme.resolve(context),
       child: TooltipTheme(
-        data: const TooltipThemeData(),
+        data: TInternalMaterialTheme.tooltipBehavior(context),
         child: Tooltip(
           message: message,
           child: Builder(

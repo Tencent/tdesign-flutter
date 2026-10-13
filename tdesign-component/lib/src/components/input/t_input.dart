@@ -20,7 +20,7 @@ import 't_input_types.dart';
 class TInput extends StatefulWidget {
   /// 创建 TDesign 输入框。
   ///
-  /// 内置编辑器、提示词和操作按钮不受外部 Material 主题控制；前后缀内容
+  /// 内置文字、提示词和按钮视觉由 TD 控制；原生编辑、文本选择和前后缀内容
   /// 保留调用方主题。输入装饰通过 [TInputThemeData] 配置。
   const TInput({
     super.key,
@@ -162,8 +162,8 @@ class TInput extends StatefulWidget {
 
   /// 输入文本样式。
   ///
-  /// 输入文字样式的唯一组件公开配置入口。未指定的字段继承显式
-  /// Material 文字主题或 TDesign `fontBodyLarge`；提示文字由组件 Theme
+  /// 输入文字样式的唯一组件公开配置入口。未指定的字段使用 TD Theme
+  /// 与 TDesign `fontBodyLarge`；提示文字由组件 Theme
   /// 的 `hintStyle` 单独控制。
   final TextStyle? style;
 
@@ -277,34 +277,28 @@ class _TInputState extends State<TInput> {
       hintStyle: hintStyle,
       textAlign: widget.textAlign,
       multiline: widget._multiline,
-      child: Theme(
-        data: TInternalMaterialTheme.resolve(context),
-        child: TextSelectionTheme(
-          data: TInternalMaterialTheme.resolve(context).textSelectionTheme,
-          child: TextField(
-            controller: _controller,
-            focusNode: _focusNode,
-            onChanged: widget.onChanged,
-            onSubmitted: widget.onSubmitted,
-            onEditingComplete: widget.onEditingComplete,
-            enabled: widget.enabled,
-            readOnly: widget.readOnly,
-            maxLines: widget.maxLines,
-            minLines: minLines,
-            maxLength: null,
-            autofocus: widget.autofocus,
-            keyboardType: widget.inputType,
-            textInputAction: widget.inputAction,
-            textAlign: widget.textAlign,
-            obscureText: widget.showPasswordToggle
-                ? _obscureText
-                : widget.obscureText,
-            inputFormatters: _effectiveFormatters(),
-            style: TTextResolve.resolve(context: context, style: textStyle),
-            cursorColor: cursorColor,
-            decoration: null,
-          ),
-        ),
+      child: TextField(
+        controller: _controller,
+        focusNode: _focusNode,
+        onChanged: widget.onChanged,
+        onSubmitted: widget.onSubmitted,
+        onEditingComplete: widget.onEditingComplete,
+        enabled: widget.enabled,
+        readOnly: widget.readOnly,
+        maxLines: widget.maxLines,
+        minLines: minLines,
+        maxLength: null,
+        autofocus: widget.autofocus,
+        keyboardType: widget.inputType,
+        textInputAction: widget.inputAction,
+        textAlign: widget.textAlign,
+        obscureText: widget.showPasswordToggle
+            ? _obscureText
+            : widget.obscureText,
+        inputFormatters: _effectiveFormatters(),
+        style: TTextResolve.resolve(context: context, style: textStyle),
+        cursorColor: cursorColor,
+        decoration: null,
       ),
     );
     final contentPadding =
@@ -557,7 +551,6 @@ class _TInputShellState extends State<_TInputShell> {
             width: 32,
             height: widget.clearIconSize,
             child: TInternalIconButton(
-              visualDensity: VisualDensity.standard,
               tooltip: '清除',
               onPressed: widget.enabled && !widget.readOnly
                   ? widget.onClear
@@ -580,7 +573,6 @@ class _TInputShellState extends State<_TInputShell> {
             width: _inputIconSize,
             height: _inputIconSize,
             child: TInternalIconButton(
-              visualDensity: VisualDensity.standard,
               tooltip: widget.obscureText ? '显示密码' : '隐藏密码',
               onPressed: widget.enabled ? widget.onTogglePassword : null,
               padding: EdgeInsets.zero,
