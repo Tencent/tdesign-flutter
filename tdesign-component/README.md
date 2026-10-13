@@ -43,29 +43,46 @@ Download link: [tdesign-flutter-example.apk](https://tdesign.gtimg.com/flutter/t
 
 [https://github.com/Tencent/tdesign-flutter/tree/main/tdesign-component](https://github.com/Tencent/tdesign-flutter/tree/main/tdesign-component)
 
-## 🔨 Installation
+## 🚀 Quick Start
 
-### SDK Requirements
-
-```yaml
-dart: ">=3.8.0 <4.0.0"
-flutter: ">=3.32.0"
-```
+Requires Flutter ≥ 3.32.0 and Dart ≥ 3.8.0.
 
 ### Add Dependency
 
-Add the following to your `pubspec.yaml`:
+Add the following to `pubspec.yaml`:
 
 ```yaml
 dependencies:
+  flutter:
+    sdk: flutter
   tdesign_flutter: 1.0.0-alpha.1
 ```
 
-### Import
+Install the dependency:
+
+```bash
+flutter pub get
+```
+
+### Minimal Import
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
+
+The TDesign entry point re-exports Flutter Material widgets, so the same import provides `MaterialApp`, `Scaffold`, `Text`, and TDesign components.
+
+### Minimal Usage
+
+Add the button to the widget tree of an existing page:
+
+```dart
+const TButton(child: Text('Button'))
+```
+
+No additional initialization or theme configuration is required. Omitting `onPressed` leaves the button disabled.
+
+> Before publishing this guide, update the dependency version to a release containing the Material re-export. The published `1.0.0-alpha.1` still requires an additional `package:flutter/material.dart` import.
 
 ## 📖 Usage
 

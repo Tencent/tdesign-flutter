@@ -1,11 +1,10 @@
 import 'dart:ui' as ui;
 
-import 'package:flutter/material.dart'
-    hide TabPageSelector, TabPageSelectorIndicator;
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/tabs/t_horizontal_tab_bar.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart'
+    hide TabPageSelector, TabPageSelectorIndicator;
 
 /// THorizontalTabBar / THorizontalTabBarView / TabPageSelector 测试。
 

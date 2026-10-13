@@ -43,29 +43,46 @@
 
 [https://github.com/Tencent/tdesign-flutter/tree/main/tdesign-component](https://github.com/Tencent/tdesign-flutter/tree/main/tdesign-component)
 
-## 🔨 安装
+## 🚀 快速开始
 
-### SDK 版本要求
-
-```yaml
-dart: ">=3.8.0 <4.0.0"
-flutter: ">=3.32.0"
-```
+要求 Flutter ≥ 3.32.0、Dart ≥ 3.8.0。
 
 ### 添加依赖
 
-在 `pubspec.yaml` 中添加以下内容：
+在 `pubspec.yaml` 中添加：
 
 ```yaml
 dependencies:
+  flutter:
+    sdk: flutter
   tdesign_flutter: 1.0.0-alpha.1
 ```
 
-### 引入
+安装依赖：
+
+```bash
+flutter pub get
+```
+
+### 最小导入
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
+
+TD 入口导出 Flutter Material 组件，可通过同一个入口使用 `MaterialApp`、`Scaffold`、`Text` 和 TDesign 组件。
+
+### 最小使用
+
+将按钮放入已有页面的 Widget 树中：
+
+```dart
+const TButton(child: Text('按钮'))
+```
+
+无需额外初始化或主题配置。不传 `onPressed` 时，按钮处于禁用状态。
+
+> 发布前需将依赖版本更新为包含 Material 重导出的版本。已发布的 `1.0.0-alpha.1` 仍需额外导入 `package:flutter/material.dart`。
 
 ## 📖 使用方法
 

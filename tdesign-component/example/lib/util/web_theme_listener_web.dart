@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:js_interop';
 
-import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:web/web.dart' as web;
 
