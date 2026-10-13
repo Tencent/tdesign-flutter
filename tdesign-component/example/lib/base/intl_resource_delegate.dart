@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../l10n/app_localizations.dart';

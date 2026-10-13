@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -120,7 +119,7 @@ void main() {
         'assets/code/table.${names[index]}.txt',
       );
       expect(expected, contains('class ${names[index]}'));
-      expect(expected, contains("import 'package:flutter/material.dart';"));
+      expect(expected, contains("import 'package:tdesign_flutter/tdesign_flutter.dart';"));
 
       await tester.tap(find.text('code').at(index));
       await tester.pumpAndSettle();

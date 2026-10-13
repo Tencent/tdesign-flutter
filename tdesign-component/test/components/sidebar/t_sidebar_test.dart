@@ -1,6 +1,5 @@
 import 'dart:ui' show SemanticsFlag;
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/sidebar/t_wrap_sidebar_item.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
