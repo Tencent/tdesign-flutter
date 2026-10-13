@@ -456,6 +456,9 @@ class TButtonResolve {
     final padV = fixedIconShape ? paddingValue : metrics.verticalPadding;
 
     return ButtonStyle(
+      maximumSize: const WidgetStatePropertyAll(Size.infinite),
+      alignment: Alignment.center,
+      animationDuration: kThemeChangeDuration,
       minimumSize: WidgetStatePropertyAll<Size>(
         Size(fixedIconShape ? metrics.height : 0, minHeight),
       ),

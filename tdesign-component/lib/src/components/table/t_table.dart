@@ -468,7 +468,7 @@ class _TTableState<T> extends State<TTable<T>> {
                 trailingBoundary: index == left.length - 1,
               ),
             Expanded(
-              child: SingleChildScrollView(
+              child: TInternalScrollScope(child: SingleChildScrollView(
                 controller: _horizontalScroll.headerController,
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -476,7 +476,7 @@ class _TTableState<T> extends State<TTable<T>> {
                       .map((column) => _buildHeaderCell(context, theme, column))
                       .toList(),
                 ),
-              ),
+              )),
             ),
             for (var index = 0; index < right.length; index++)
               _buildHeaderCell(
@@ -575,18 +575,20 @@ class _TTableState<T> extends State<TTable<T>> {
             ),
           _buildPane(context, theme, grid, left, rowHeight),
           Expanded(
-            child: SingleChildScrollView(
+            child: TInternalScrollScope(child: SingleChildScrollView(
               controller: _horizontalScroll.bodyController,
               scrollDirection: Axis.horizontal,
               child: _buildPane(context, theme, grid, center, rowHeight),
-            ),
+            )),
           ),
           _buildPane(context, theme, grid, right, rowHeight),
         ],
       ),
     );
     var body = widget.height != null || widget.maxHeight != null
-        ? SingleChildScrollView(child: content)
+        ? TInternalScrollScope(child: SingleChildScrollView(
+            child: content,
+          ))
         : content;
     if (widget.onScroll == null) {
       return body;

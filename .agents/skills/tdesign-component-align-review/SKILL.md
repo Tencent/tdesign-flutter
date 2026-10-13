@@ -157,7 +157,7 @@ API Review 不以“字段有一句 dartdoc”为完成。对本次新增、修�
 
 ## 4. Theme 与视觉
 
-TD 内置视觉字段的解析优先级为：实例显式参数或受支持的完整 style > 当前子树的 TD 组件 ThemeExtension 显式字段 > TDesign 语义 token / 已文档化的内置默认值。阻止 Material/M2/M3 默认视觉意外影响 TD；外部 Material 组件视觉主题不作为 TD 覆盖入口；实例 style 可以复用 Flutter 样式类型，但不因此开放 Material 主题继承。child、prefix、suffix、builder 等调用方内容保留自身的主题行为，内部隔离不得覆盖用户内容树。原生选择与编辑、Tooltip 触发和时长、反馈及焦点、键盘、无障碍能力继续支持，不将其使用 Material 实现本身判为样式泄漏。亮暗模式、字体缩放、平台输入、焦点、键盘、方向与无障碍机制继续支持。第 3 节的语义选择器不套用视觉解析链。
+TD 内置视觉和行为字段的解析优先级为：实例显式参数或受支持的完整 style > 当前子树的 TD 组件 ThemeExtension 显式字段 > TDesign 语义 token / 已文档化的内置默认值。外部 Material/M2/M3 默认及显式主题不作为 TD 视觉或行为入口；实例 style 可以复用 Flutter 样式类型，但不因此开放 Material 主题继承。child、prefix、suffix、builder 等调用方内容保留自身的主题行为，内部隔离不得覆盖用户内容树。原生选择与编辑、Tooltip、反馈及焦点、键盘、无障碍能力继续支持，但其可配置行为和视觉由 TD 明确，不透传外部 Material 主题；不将其使用 Material 实现本身判为样式泄漏。亮暗模式、字体缩放、平台输入、焦点、键盘、方向与无障碍机制继续支持。第 3 节的语义选择器不套用视觉解析链。
 
 - token 是最终兜底，不应预填到高优先级 TD ThemeExtension 并遮蔽组件的显式配置；
 - ThemeData 只承载视觉、布局和稳定的呈现默认值，不承载内容、业务状态、回调、Controller 或业务流程开关；动画时长等运动视觉参数可以进入 Theme，但是否启用业务能力仍由组件状态或回调表达；

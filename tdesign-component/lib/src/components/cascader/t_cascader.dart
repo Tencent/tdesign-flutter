@@ -183,12 +183,12 @@ class _TCascaderState extends State<TCascader> {
                       widget.subtitles[_activeLevel].isNotEmpty)
                     _buildSubtitle(context),
                   Expanded(
-                    child: ListView.builder(
+                    child: TInternalScrollScope(child: ListView.builder(
                       padding: EdgeInsets.zero,
                       itemCount: options.length,
                       itemBuilder: (context, index) =>
                           _buildOption(context, options[index], theme),
-                    ),
+                    )),
                   ),
                 ],
               ),
@@ -250,7 +250,7 @@ class _TCascaderState extends State<TCascader> {
         ),
       );
     }
-    return SingleChildScrollView(
+    return TInternalScrollScope(child: SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: theme?.navigationPadding,
       child: Row(
@@ -259,7 +259,7 @@ class _TCascaderState extends State<TCascader> {
             _buildTabNavigationEntry(context, entry, styles, activeColor),
         ],
       ),
-    );
+    ));
   }
 
   Widget _buildStepNavigationEntry(

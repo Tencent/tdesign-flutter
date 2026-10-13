@@ -84,7 +84,7 @@ class _TDrawerContent extends StatelessWidget {
                 ),
               ),
             Expanded(
-              child: ListView.builder(
+              child: TInternalScrollScope(child: ListView.builder(
                 padding: EdgeInsets.zero,
                 itemCount: items?.length ?? 0,
                 itemBuilder: (context, index) {
@@ -120,7 +120,7 @@ class _TDrawerContent extends StatelessWidget {
                         (index < (items?.length ?? 0) - 1 || showLastDivider),
                   );
                 },
-              ),
+              )),
             ),
             if (footer != null)
               Container(

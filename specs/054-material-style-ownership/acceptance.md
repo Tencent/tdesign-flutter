@@ -1,3 +1,5 @@
+> 2026-10-13 严格边界的最新本地实现、验证与 review 见 [strict-boundary.md](./strict-boundary.md)。本页保留此前阶段记录，不代替新边界验收。
+
 > 2026-10-13：本页仅记录 head `93c1d747` 的历史验收。原生选择、Tooltip 交互和反馈设置现按能力保留；本地边界修正及新验证见 [local-adjustment.md](./local-adjustment.md)，不以本页结果代替当前验收。
 
 # 验收记录

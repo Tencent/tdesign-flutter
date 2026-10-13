@@ -551,10 +551,10 @@ class _TRateState extends State<TRate> {
       }
       return SizedBox(
         width: (popupWidth - token.spacer).clamp(0, double.infinity),
-        child: SingleChildScrollView(
+        child: TInternalScrollScope(child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: choices,
-        ),
+        )),
       );
     }
 

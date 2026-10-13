@@ -3,10 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/theme/t_internal_material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
   gradientGeometryGoldens();
+  strictBoundaryGoldens();
+  strictScrollGoldens();
   setUpAll(() async {
     final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
       ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
@@ -19,7 +22,17 @@ void main() {
           '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
         ).readAsBytes().then(ByteData.sublistView),
       );
-    await Future.wait([iconFont.load(), robotoFont.load()]);
+    final materialFont = FontLoader('MaterialIcons')
+      ..addFont(
+        File(
+          '${flutterBin.path}/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
+        ).readAsBytes().then(ByteData.sublistView),
+      );
+    await Future.wait([
+      iconFont.load(),
+      robotoFont.load(),
+      materialFont.load(),
+    ]);
   });
 
   testWidgets('implicit Material defaults do not change TDesign visuals', (
@@ -630,5 +643,183 @@ class _ButtonGeometryColumn extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+void strictBoundaryGoldens() {
+  for (final dark in [false, true]) {
+    for (final m3 in [false, true]) {
+      for (final menu in [false, true]) {
+        testWidgets(
+          'strict TD ${menu ? 'selection menu' : 'tooltip and tile'} dark=$dark M3=$m3',
+          (tester) async {
+            tester.view.physicalSize = const Size(760, 420);
+            tester.view.devicePixelRatio = 1;
+            addTearDown(tester.view.resetPhysicalSize);
+            addTearDown(tester.view.resetDevicePixelRatio);
+            final token = dark
+                ? TThemeData.defaultData().dark!
+                : TThemeData.defaultData();
+            await tester.pumpWidget(
+              MaterialApp(
+                theme: ThemeData(
+                  brightness: dark ? Brightness.dark : Brightness.light,
+                  useMaterial3: m3,
+                  platform: TargetPlatform.android,
+                  extensions: [token],
+                  tooltipTheme: const TooltipThemeData(
+                    triggerMode: TooltipTriggerMode.tap,
+                    excludeFromSemantics: true,
+                    decoration: BoxDecoration(color: Colors.pink),
+                    textStyle: TextStyle(fontSize: 80),
+                  ),
+                  textSelectionTheme: const TextSelectionThemeData(
+                    selectionColor: Colors.pink,
+                    selectionHandleColor: Colors.green,
+                  ),
+                  textButtonTheme: const TextButtonThemeData(
+                    style: ButtonStyle(elevation: WidgetStatePropertyAll(9)),
+                  ),
+                  iconTheme: const IconThemeData(color: Colors.green, size: 28),
+                ),
+                home: Scaffold(
+                  backgroundColor: token.bgColorContainer,
+                  body: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      children: [
+                        const TInput(
+                          initialValue: 'Select and copy TD text',
+                          prefix: Icon(Icons.home),
+                        ),
+                        const SizedBox(height: 24),
+                        const TInternalListTile(
+                          leading: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: ColoredBox(color: Colors.blue),
+                          ),
+                          title: SizedBox(
+                            height: 100,
+                            child: Center(
+                              child: TText('Tall title keeps centered leading'),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        TInternalTooltip(
+                          message: 'TD hint keeps native tooltip ability',
+                          child: SizedBox(
+                            key: const Key('strict-tip'),
+                            width: 180,
+                            height: 40,
+                            child: Center(
+                              child: TText(
+                                'Long press for hint',
+                                style: TextStyle(color: token.brandColor),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+            await tester.pumpAndSettle();
+            if (menu) {
+              final state = tester.state<EditableTextState>(
+                find.byType(EditableText),
+              );
+              state.widget.focusNode.requestFocus();
+              await tester.pumpAndSettle();
+              state.widget.controller.selection = const TextSelection(
+                baseOffset: 0,
+                extentOffset: 6,
+              );
+              await tester.pump();
+              state.showToolbar();
+              await tester.pumpAndSettle();
+            } else {
+              await tester.longPress(find.byKey(const Key('strict-tip')));
+              await tester.pump(const Duration(milliseconds: 300));
+            }
+            // Both external M2/M3 modes must match the same owned rendering baseline.
+            await expectLater(
+              find.byType(Overlay).first,
+              matchesGoldenFile(
+                'goldens/strict_${menu ? 'selection' : 'tooltip'}_${dark ? 'dark' : 'light'}.png',
+              ),
+            );
+            await tester.pumpWidget(const SizedBox.shrink());
+            await tester.pumpAndSettle();
+          },
+        );
+      }
+    }
+  }
+}
+
+void strictScrollGoldens() {
+  for (final dark in [false, true]) {
+    for (final m3 in [false, true]) {
+      testWidgets('strict TD desktop scrollbar dark=$dark M3=$m3', (
+        tester,
+      ) async {
+        tester.view.physicalSize = const Size(400, 300);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        final token = dark
+            ? TThemeData.defaultData().dark!
+            : TThemeData.defaultData();
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              useMaterial3: m3,
+              brightness: dark ? Brightness.dark : Brightness.light,
+              platform: TargetPlatform.windows,
+              extensions: [token],
+              scrollbarTheme: const ScrollbarThemeData(
+                thickness: WidgetStatePropertyAll(29),
+                thumbColor: WidgetStatePropertyAll(Colors.pink),
+                interactive: false,
+              ),
+            ),
+            home: Scaffold(
+              backgroundColor: token.bgColorContainer,
+              body: Center(
+                child: TSideBar(
+                  value: 0,
+                  width: 103,
+                  height: 180,
+                  onChanged: (_) {},
+                  children: List.generate(
+                    12,
+                    (i) => TSideBarItem(value: i, label: 'Item $i'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        tester
+            .state<ScrollableState>(find.byType(Scrollable).first)
+            .position
+            .jumpTo(100);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 150));
+        await expectLater(
+          find.byType(Scaffold),
+          matchesGoldenFile(
+            'goldens/strict_scroll_${dark ? 'dark' : 'light'}.png',
+          ),
+        );
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpAndSettle();
+      });
+    }
   }
 }

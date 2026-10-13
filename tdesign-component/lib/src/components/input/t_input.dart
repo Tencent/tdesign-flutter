@@ -277,28 +277,31 @@ class _TInputState extends State<TInput> {
       hintStyle: hintStyle,
       textAlign: widget.textAlign,
       multiline: widget._multiline,
-      child: TextField(
-        controller: _controller,
-        focusNode: _focusNode,
-        onChanged: widget.onChanged,
-        onSubmitted: widget.onSubmitted,
-        onEditingComplete: widget.onEditingComplete,
-        enabled: widget.enabled,
-        readOnly: widget.readOnly,
-        maxLines: widget.maxLines,
-        minLines: minLines,
-        maxLength: null,
-        autofocus: widget.autofocus,
-        keyboardType: widget.inputType,
-        textInputAction: widget.inputAction,
-        textAlign: widget.textAlign,
-        obscureText: widget.showPasswordToggle
-            ? _obscureText
-            : widget.obscureText,
-        inputFormatters: _effectiveFormatters(),
-        style: TTextResolve.resolve(context: context, style: textStyle),
-        cursorColor: cursorColor,
-        decoration: null,
+      child: TInternalEditor(
+        child: TextField(
+          contextMenuBuilder: TInternalMaterialTheme.editorMenu,
+          controller: _controller,
+          focusNode: _focusNode,
+          onChanged: widget.onChanged,
+          onSubmitted: widget.onSubmitted,
+          onEditingComplete: widget.onEditingComplete,
+          enabled: widget.enabled,
+          readOnly: widget.readOnly,
+          maxLines: widget.maxLines,
+          minLines: minLines,
+          maxLength: null,
+          autofocus: widget.autofocus,
+          keyboardType: widget.inputType,
+          textInputAction: widget.inputAction,
+          textAlign: widget.textAlign,
+          obscureText: widget.showPasswordToggle
+              ? _obscureText
+              : widget.obscureText,
+          inputFormatters: _effectiveFormatters(),
+          style: TTextResolve.resolve(context: context, style: textStyle),
+          cursorColor: cursorColor,
+          decoration: null,
+        ),
       ),
     );
     final contentPadding =

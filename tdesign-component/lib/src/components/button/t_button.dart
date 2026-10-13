@@ -71,9 +71,9 @@ class TButton extends StatefulWidget {
   /// 外部 Material 按钮主题不控制内置样式；请通过此实例 style 或 TD Theme 定制。
   /// [ButtonStyle.visualDensity] 不生效；内置布局始终使用标准密度，
   /// 尺寸由 [size] 与显式内边距、宽高配置决定。
-  /// 原生 [ButtonStyle.enableFeedback] 和 [ButtonStyle.mouseCursor] 可继承按钮主题，
-  /// 实例配置优先；状态属性返回 null 时继承该状态的 TD 默认值，
-  /// mouseCursor 则继续回退原生主题。调用方内容仍继承原主题。
+  /// 反馈和鼠标指针仅由实例 style、TD Theme 或内置默认值控制。
+  /// 状态属性返回 null 时回退该状态的 TD 默认值；不读取 Material 按钮主题。
+  /// 调用方内容仍继承原主题。
   ///
   /// 组件默认使用 [MaterialTapTargetSize.shrinkWrap] 保持 TDesign 精确尺寸；
   /// 需要至少 48dp 点击区时可将 [ButtonStyle.tapTargetSize] 设为
@@ -156,12 +156,14 @@ class _TButtonState extends State<TButton> {
       hasGradient: hasGradient,
     );
 
-    final nativeBehavior = ElevatedButtonTheme.of(context).style;
-    final enableFeedback =
-        resolvedStyle.enableFeedback ?? nativeBehavior?.enableFeedback;
+    final enableFeedback = resolvedStyle.enableFeedback ?? true;
     final preferredMouseCursor = TInternalMaterialTheme.resolveMouseCursor(
       resolvedStyle.mouseCursor,
-      nativeBehavior?.mouseCursor,
+      WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.disabled)
+            ? SystemMouseCursors.basic
+            : SystemMouseCursors.click,
+      ),
     );
 
     // 构建带图标的内容
@@ -308,7 +310,7 @@ class _TButtonState extends State<TButton> {
               customBorder: effectiveShape,
               overlayColor: resolvedStyle.overlayColor,
               mouseCursor: mouseCursor,
-              enableFeedback: enableFeedback ?? true,
+              enableFeedback: enableFeedback,
               splashFactory: resolvedStyle.splashFactory,
               statesController: _statesController,
               onTap: widget.onPressed,

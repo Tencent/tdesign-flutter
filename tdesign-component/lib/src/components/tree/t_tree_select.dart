@@ -195,7 +195,7 @@ class _TTreeSelectState extends State<TTreeSelect> {
         return Container(
           height: theme?.height ?? _kTreeSelectHeight,
           color: theme?.backgroundColor ?? context.tTheme.bgColorContainer,
-          child: SingleChildScrollView(
+          child: TInternalScrollScope(child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -210,7 +210,7 @@ class _TTreeSelectState extends State<TTreeSelect> {
                   ),
               ],
             ),
-          ),
+          )),
         );
       },
     );
@@ -306,7 +306,7 @@ class _TTreeSelectState extends State<TTreeSelect> {
     return Container(
       width: width,
       color: backgroundColor,
-      child: ListView.builder(
+      child: TInternalScrollScope(child: ListView.builder(
         padding: EdgeInsets.zero,
         itemCount: options.length,
         itemBuilder: (context, index) {
@@ -346,7 +346,7 @@ class _TTreeSelectState extends State<TTreeSelect> {
             theme: theme,
           );
         },
-      ),
+      )),
     );
   }
 

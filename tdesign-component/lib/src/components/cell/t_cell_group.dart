@@ -58,7 +58,9 @@ class TCellGroup extends StatelessWidget {
         ),
     ];
     final list = scrollable
-        ? ListView(children: children)
+        ? TInternalScrollScope(child: ListView(
+            children: children,
+          ))
         : Column(mainAxisSize: MainAxisSize.min, children: children);
     final content = Container(
       padding: resolvedVariant == TCellGroupVariant.card

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../components/button/t_button.dart';
 import '../../components/button/t_button_theme_data.dart';
 import '../../components/button/t_button_types.dart';
+import '../../theme/t_colors.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
@@ -67,7 +68,12 @@ class TFabResolve {
     final effectiveShape = TFabDefaults.shapeForText(hasText);
 
     final tButton = TButton(
-      child: hasText ? Text(text) : null,
+      child: hasText
+          ? Text(
+              text,
+              selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
+            )
+          : null,
       icon: effectiveIcon,
       size: TFabDefaults.defaultSize,
       variant: TFabDefaults.defaultVariant,

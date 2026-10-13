@@ -1,8 +1,10 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
@@ -186,7 +188,7 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
 
   Widget _buildPaginationGrid(BuildContext context) {
     return _gridWrap(
-      PageView.builder(
+      TInternalScrollScope(child: PageView.builder(
         itemCount: (widget.items.length / widget.layout.count).ceil(),
         // 当页面改变时更新当前页码
         onPageChanged: (index) {
@@ -202,7 +204,7 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
               .toList();
           return _buildGrid(context, items: pageItems);
         },
-      ),
+      )),
     );
   }
 
@@ -224,7 +226,7 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
             widget.layout.itemMinWidth ?? 0,
           );
           final panelWidth = itemWidth * columnsPerPanel;
-          return ListView.builder(
+          return TInternalScrollScope(child: ListView.builder(
             itemCount: panelCount,
             padding: EdgeInsets.zero,
             scrollDirection: Axis.horizontal,
@@ -255,7 +257,7 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
                 ),
               );
             },
-          );
+          ));
         },
       ),
     );
@@ -274,7 +276,7 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
           final needsVerticalScroll =
               (items ?? widget.items).length > widget.layout.count ||
               constraints.maxHeight < widget.layout.rows * widget.itemHeight;
-          return GridView.builder(
+          return TInternalScrollScope(child: GridView.builder(
             physics: needsVerticalScroll
                 ? const AlwaysScrollableScrollPhysics()
                 : const NeverScrollableScrollPhysics(),
@@ -291,7 +293,7 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
                 onSelected: widget.onSelected,
               );
             },
-          );
+          ));
         },
       ),
     );
@@ -401,7 +403,7 @@ class TActionSheetSectionGrid<T> extends StatelessWidget {
             _buildSectionTitle(context, section.title),
             SizedBox(
               height: itemHeight,
-              child: ListView.builder(
+              child: TInternalScrollScope(child: ListView.builder(
                 padding: EdgeInsets.zero,
                 scrollDirection: Axis.horizontal,
                 itemCount: section.items.length,
@@ -413,7 +415,7 @@ class TActionSheetSectionGrid<T> extends StatelessWidget {
                     onSelected: onSelected,
                   ),
                 ),
-              ),
+              )),
             ),
           ],
           if (showCancel)

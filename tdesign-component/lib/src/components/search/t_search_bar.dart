@@ -257,45 +257,50 @@ class _TSearchBarState extends State<TSearchBar> {
                               effectiveAlignment == TSearchBarAlignment.center
                               ? TextAlign.center
                               : TextAlign.left,
-                          child: TextField(
-                            controller: _controller,
-                            focusNode: _focusNode,
-                            autofocus: widget.autofocus,
-                            enabled: widget.enabled,
-                            readOnly: widget.readOnly,
-                            onChanged: widget.onChanged,
-                            onSubmitted: widget.onSubmitted,
-                            keyboardType: widget.inputType,
-                            textInputAction: widget.inputAction,
-                            inputFormatters: [
-                              ...?widget.inputFormatters,
-                              if (widget.maxCharacter != null)
-                                _SearchMaxCharacterFormatter(
-                                  widget.maxCharacter!,
-                                ),
-                            ],
-                            maxLength: widget.maxLength,
-                            buildCounter:
-                                (
-                                  _, {
-                                  required currentLength,
-                                  required isFocused,
-                                  required maxLength,
-                                }) => null,
-                            cursorColor: token.brandColor,
-                            cursorHeight: theme?.cursorHeight,
-                            textAlignVertical: TextAlignVertical.center,
-                            textAlign:
-                                effectiveAlignment == TSearchBarAlignment.center
-                                ? TextAlign.center
-                                : TextAlign.left,
-                            style: TTextResolve.resolve(
-                              context: context,
-                              style: textStyle,
+                          child: TInternalEditor(
+                            child: TextField(
+                              contextMenuBuilder:
+                                  TInternalMaterialTheme.editorMenu,
+                              controller: _controller,
+                              focusNode: _focusNode,
+                              autofocus: widget.autofocus,
+                              enabled: widget.enabled,
+                              readOnly: widget.readOnly,
+                              onChanged: widget.onChanged,
+                              onSubmitted: widget.onSubmitted,
+                              keyboardType: widget.inputType,
+                              textInputAction: widget.inputAction,
+                              inputFormatters: [
+                                ...?widget.inputFormatters,
+                                if (widget.maxCharacter != null)
+                                  _SearchMaxCharacterFormatter(
+                                    widget.maxCharacter!,
+                                  ),
+                              ],
+                              maxLength: widget.maxLength,
+                              buildCounter:
+                                  (
+                                    _, {
+                                    required currentLength,
+                                    required isFocused,
+                                    required maxLength,
+                                  }) => null,
+                              cursorColor: token.brandColor,
+                              cursorHeight: theme?.cursorHeight,
+                              textAlignVertical: TextAlignVertical.center,
+                              textAlign:
+                                  effectiveAlignment ==
+                                      TSearchBarAlignment.center
+                                  ? TextAlign.center
+                                  : TextAlign.left,
+                              style: TTextResolve.resolve(
+                                context: context,
+                                style: textStyle,
+                              ),
+                              decoration: null,
+                              maxLines: 1,
+                              cursorOpacityAnimates: false,
                             ),
-                            decoration: null,
-                            maxLines: 1,
-                            cursorOpacityAnimates: false,
                           ),
                         ),
                       ),

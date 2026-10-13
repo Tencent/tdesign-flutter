@@ -624,7 +624,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   Widget build(BuildContext context) {
     final theme = _theme;
     final bar = widget.scrollable
-        ? SingleChildScrollView(
+        ? TInternalScrollScope(child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: List<Widget>.generate(
@@ -635,7 +635,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
                 ),
               ),
             ),
-          )
+          ))
         : LayoutBuilder(
             builder: (context, constraints) {
               if (constraints.hasBoundedWidth) {

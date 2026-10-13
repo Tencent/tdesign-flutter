@@ -280,7 +280,7 @@ void ownershipBoundaryTests() {
   });
 
   testWidgets(
-    'native text selection and explicit selection colors survive editor isolation',
+    'TD selection visuals ignore ambient themes and preserve editing and explicit colors',
     (tester) async {
       var submitted = '';
       for (final m3 in [false, true]) {
@@ -332,7 +332,10 @@ void ownershipBoundaryTests() {
           final editor = tester
               .widgetList<EditableText>(find.byType(EditableText))
               .elementAt(index);
-          expect(editor.selectionColor, Colors.pink);
+          expect(
+            editor.selectionColor,
+            TThemeData.defaultData().brandColor.withValues(alpha: 0.4),
+          );
           expect(editor.style.letterSpacing, 0);
         }
         final texts = tester
@@ -343,7 +346,10 @@ void ownershipBoundaryTests() {
               ),
             )
             .toList();
-        expect(texts.first.selectionColor, Colors.pink);
+        expect(
+          texts.first.selectionColor,
+          TThemeData.defaultData().brandColor.withValues(alpha: 0.4),
+        );
         expect(texts.last.selectionColor, Colors.yellow);
         await tester.enterText(find.byType(TextField).first, 'edited');
         await tester.testTextInput.receiveAction(TextInputAction.done);
@@ -353,178 +359,196 @@ void ownershipBoundaryTests() {
     },
   );
 
-  testWidgets(
-    'tooltip keeps native timing trigger and semantics without ambient visuals',
-    (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: ThemeData(
-            tooltipTheme: const TooltipThemeData(
-              waitDuration: Duration(milliseconds: 50),
-              showDuration: Duration(seconds: 10),
-              exitDuration: Duration(milliseconds: 100),
-              triggerMode: TooltipTriggerMode.tap,
-              enableFeedback: false,
-              excludeFromSemantics: true,
-              decoration: BoxDecoration(color: Colors.pink),
-              textStyle: TextStyle(fontSize: 80),
-            ),
-          ),
-          home: const Scaffold(
-            body: TInternalTooltip(
-              message: 'native-tip',
-              child: SizedBox(
-                key: Key('tip-anchor'),
-                width: 40,
-                height: 40,
-                child: ColoredBox(color: Colors.transparent),
-              ),
-            ),
-          ),
-        ),
-      );
-      final data = TooltipTheme.of(tester.element(find.byType(Tooltip)));
-      expect(data.triggerMode, TooltipTriggerMode.tap);
-      expect(data.waitDuration, const Duration(milliseconds: 50));
-      expect(data.showDuration, const Duration(seconds: 10));
-      expect(data.exitDuration, const Duration(milliseconds: 100));
-      expect(data.enableFeedback, isFalse);
-      expect(data.excludeFromSemantics, isTrue);
-      expect(data.decoration, isNull);
-      await tester.tap(find.byKey(const Key('tip-anchor')));
-      await tester.pump(const Duration(milliseconds: 300));
-      expect(find.text('native-tip'), findsOneWidget);
-      expect(
-        tester
-            .renderObject<RenderParagraph>(find.text('native-tip'))
-            .text
-            .style!
-            .fontSize,
-        isNot(80),
-      );
-      await tester.pumpWidget(const SizedBox.shrink());
-      await tester.pumpAndSettle();
-    },
-  );
-
-  testWidgets('native feedback settings survive and explicit TD style wins', (
+  testWidgets('tooltip uses TD visuals timing trigger and semantics', (
     tester,
   ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(
-          iconButtonTheme: const IconButtonThemeData(
-            style: ButtonStyle(
-              enableFeedback: false,
-              mouseCursor: WidgetStatePropertyAll(SystemMouseCursors.forbidden),
-              backgroundColor: WidgetStatePropertyAll(Colors.pink),
-            ),
-          ),
-          elevatedButtonTheme: const ElevatedButtonThemeData(
-            style: ButtonStyle(
-              enableFeedback: false,
-              mouseCursor: WidgetStatePropertyAll(SystemMouseCursors.forbidden),
-            ),
+          tooltipTheme: const TooltipThemeData(
+            waitDuration: Duration(milliseconds: 50),
+            showDuration: Duration(seconds: 10),
+            exitDuration: Duration(milliseconds: 100),
+            triggerMode: TooltipTriggerMode.tap,
+            enableFeedback: false,
+            excludeFromSemantics: true,
+            decoration: BoxDecoration(color: Colors.pink),
+            textStyle: TextStyle(fontSize: 80),
           ),
         ),
-        home: Scaffold(
-          body: Column(
-            children: [
-              TInternalIconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.home),
-              ),
-              TInternalIconButton(
-                onPressed: () {},
-                style: const ButtonStyle(
-                  enableFeedback: true,
-                  mouseCursor: WidgetStatePropertyAll(SystemMouseCursors.text),
-                  backgroundColor: WidgetStatePropertyAll(Colors.blue),
-                ),
-                icon: const Icon(Icons.home),
-              ),
-              TButton(onPressed: () {}, child: const Text('native feedback')),
-              TButton(
-                onPressed: () {},
-                style: const ButtonStyle(
-                  enableFeedback: true,
-                  mouseCursor: WidgetStatePropertyAll(SystemMouseCursors.text),
-                ),
-                child: const Text('explicit feedback'),
-              ),
-              Builder(
-                builder: (context) => Theme(
-                  data: Theme.of(context).mergeExtension(
-                    const TButtonThemeData(
-                      gradient: LinearGradient(
-                        colors: [Colors.blue, Colors.green],
-                      ),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      TButton(
-                        onPressed: () {},
-                        child: const Text('gradient feedback'),
-                      ),
-                      TButton(
-                        onPressed: () {},
-                        style: const ButtonStyle(
-                          enableFeedback: true,
-                          mouseCursor: WidgetStatePropertyAll(
-                            SystemMouseCursors.text,
-                          ),
-                        ),
-                        child: const Text('explicit gradient feedback'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+        home: const Scaffold(
+          body: TInternalTooltip(
+            message: 'native-tip',
+            child: SizedBox(
+              key: Key('tip-anchor'),
+              width: 40,
+              height: 40,
+              child: ColoredBox(color: Colors.transparent),
+            ),
           ),
         ),
       ),
     );
-    final icons = tester
-        .widgetList<IconButton>(find.byType(IconButton))
-        .toList();
-    expect(icons.first.style!.enableFeedback, isFalse);
+    final data = TooltipTheme.of(tester.element(find.byType(Tooltip)));
+    expect(data.triggerMode, TooltipTriggerMode.longPress);
+    expect(data.waitDuration, Duration.zero);
+    expect(data.showDuration, const Duration(milliseconds: 1500));
+    expect(data.exitDuration, const Duration(milliseconds: 100));
+    expect(data.enableFeedback, isTrue);
+    expect(data.excludeFromSemantics, isFalse);
     expect(
-      icons.first.style!.mouseCursor!.resolve({}),
-      SystemMouseCursors.forbidden,
+      (data.decoration! as BoxDecoration).color,
+      TThemeData.defaultData().textColorPrimary.withValues(alpha: 0.9),
     );
-    expect(icons.last.style!.mouseCursor!.resolve({}), SystemMouseCursors.text);
-    expect(icons.first.style!.backgroundColor!.resolve({}), Colors.transparent);
-    expect(icons.last.style!.enableFeedback, isTrue);
-    expect(icons.last.style!.backgroundColor!.resolve({}), Colors.blue);
-    final buttons = tester
-        .widgetList<ElevatedButton>(find.byType(ElevatedButton))
-        .toList();
-    expect(buttons.first.style!.enableFeedback, isFalse);
+    expect(data.textStyle!.letterSpacing, 0);
+    await tester.longPress(find.byKey(const Key('tip-anchor')));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('native-tip'), findsOneWidget);
     expect(
-      buttons.first.style!.mouseCursor!.resolve({}),
-      SystemMouseCursors.forbidden,
+      tester
+          .renderObject<RenderParagraph>(find.text('native-tip'))
+          .text
+          .style!
+          .fontSize,
+      isNot(80),
     );
-    expect(
-      buttons.last.style!.mouseCursor!.resolve({}),
-      SystemMouseCursors.text,
-    );
-    expect(buttons.last.style!.enableFeedback, isTrue);
-    final ink = tester
-        .widgetList<TInternalInkWell>(find.byType(TInternalInkWell))
-        .toList();
-    expect(ink.first.enableFeedback, isFalse);
-    expect(ink.last.enableFeedback, isTrue);
-    expect(
-      (ink.first.mouseCursor! as WidgetStateMouseCursor).resolve({}),
-      SystemMouseCursors.forbidden,
-    );
-    expect(
-      (ink.last.mouseCursor! as WidgetStateMouseCursor).resolve({}),
-      SystemMouseCursors.text,
-    );
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
   });
+
+  testWidgets(
+    'ambient feedback settings are ignored and explicit TD style wins',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            iconButtonTheme: const IconButtonThemeData(
+              style: ButtonStyle(
+                enableFeedback: false,
+                mouseCursor: WidgetStatePropertyAll(
+                  SystemMouseCursors.forbidden,
+                ),
+                backgroundColor: WidgetStatePropertyAll(Colors.pink),
+              ),
+            ),
+            elevatedButtonTheme: const ElevatedButtonThemeData(
+              style: ButtonStyle(
+                enableFeedback: false,
+                mouseCursor: WidgetStatePropertyAll(
+                  SystemMouseCursors.forbidden,
+                ),
+              ),
+            ),
+          ),
+          home: Scaffold(
+            body: Column(
+              children: [
+                TInternalIconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.home),
+                ),
+                TInternalIconButton(
+                  onPressed: () {},
+                  style: const ButtonStyle(
+                    enableFeedback: true,
+                    mouseCursor: WidgetStatePropertyAll(
+                      SystemMouseCursors.text,
+                    ),
+                    backgroundColor: WidgetStatePropertyAll(Colors.blue),
+                  ),
+                  icon: const Icon(Icons.home),
+                ),
+                TButton(onPressed: () {}, child: const Text('native feedback')),
+                TButton(
+                  onPressed: () {},
+                  style: const ButtonStyle(
+                    enableFeedback: true,
+                    mouseCursor: WidgetStatePropertyAll(
+                      SystemMouseCursors.text,
+                    ),
+                  ),
+                  child: const Text('explicit feedback'),
+                ),
+                Builder(
+                  builder: (context) => Theme(
+                    data: Theme.of(context).mergeExtension(
+                      const TButtonThemeData(
+                        gradient: LinearGradient(
+                          colors: [Colors.blue, Colors.green],
+                        ),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        TButton(
+                          onPressed: () {},
+                          child: const Text('gradient feedback'),
+                        ),
+                        TButton(
+                          onPressed: () {},
+                          style: const ButtonStyle(
+                            enableFeedback: true,
+                            mouseCursor: WidgetStatePropertyAll(
+                              SystemMouseCursors.text,
+                            ),
+                          ),
+                          child: const Text('explicit gradient feedback'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      final icons = tester
+          .widgetList<IconButton>(find.byType(IconButton))
+          .toList();
+      expect(icons.first.style!.enableFeedback, isTrue);
+      expect(
+        icons.first.style!.mouseCursor!.resolve({}),
+        SystemMouseCursors.click,
+      );
+      expect(
+        icons.last.style!.mouseCursor!.resolve({}),
+        SystemMouseCursors.text,
+      );
+      expect(
+        icons.first.style!.backgroundColor!.resolve({}),
+        Colors.transparent,
+      );
+      expect(icons.last.style!.enableFeedback, isTrue);
+      expect(icons.last.style!.backgroundColor!.resolve({}), Colors.blue);
+      final buttons = tester
+          .widgetList<ElevatedButton>(find.byType(ElevatedButton))
+          .toList();
+      expect(buttons.first.style!.enableFeedback, isTrue);
+      expect(
+        buttons.first.style!.mouseCursor!.resolve({}),
+        SystemMouseCursors.click,
+      );
+      expect(
+        buttons.last.style!.mouseCursor!.resolve({}),
+        SystemMouseCursors.text,
+      );
+      expect(buttons.last.style!.enableFeedback, isTrue);
+      final ink = tester
+          .widgetList<TInternalInkWell>(find.byType(TInternalInkWell))
+          .toList();
+      expect(ink.first.enableFeedback, isTrue);
+      expect(ink.last.enableFeedback, isTrue);
+      expect(
+        (ink.first.mouseCursor! as WidgetStateMouseCursor).resolve({}),
+        SystemMouseCursors.click,
+      );
+      expect(
+        (ink.last.mouseCursor! as WidgetStateMouseCursor).resolve({}),
+        SystemMouseCursors.text,
+      );
+    },
+  );
 
   testWidgets(
     'local Material wrappers cannot inject visuals; caller content keeps wrappers',
@@ -723,7 +747,7 @@ void statefulNativeBehaviorTests() {
   for (final m3 in [false, true]) {
     for (final gradient in [false, true]) {
       testWidgets(
-        'stateful mouse cursor retains original native fallback M3=$m3 gradient=$gradient',
+        'stateful mouse cursor falls back to TD defaults M3=$m3 gradient=$gradient',
         (tester) async {
           final inherited = WidgetStateProperty.resolveWith<MouseCursor?>(
             (s) => s.contains(WidgetState.disabled)
@@ -809,11 +833,11 @@ void statefulNativeBehaviorTests() {
             {WidgetState.pressed},
           ];
           final expected = [
-            SystemMouseCursors.grab,
+            SystemMouseCursors.click,
             SystemMouseCursors.text,
-            SystemMouseCursors.precise,
-            SystemMouseCursors.forbidden,
-            SystemMouseCursors.grab,
+            SystemMouseCursors.click,
+            SystemMouseCursors.basic,
+            SystemMouseCursors.click,
           ];
           for (var i = 0; i < states.length; i++) {
             expect(buttonCursor.resolve(states[i]), expected[i]);
@@ -827,8 +851,8 @@ void statefulNativeBehaviorTests() {
                 )
                 .first,
           );
-          expect(region.cursor, SystemMouseCursors.grab);
-          expect(iconStyle.enableFeedback, isFalse);
+          expect(region.cursor, SystemMouseCursors.click);
+          expect(iconStyle.enableFeedback, isTrue);
           expect(
             iconStyle.foregroundColor!.resolve({}),
             TThemeData.defaultData().textColorPrimary,

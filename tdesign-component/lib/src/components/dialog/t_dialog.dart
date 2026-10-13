@@ -516,11 +516,11 @@ class _DialogScrollableContentState extends State<_DialogScrollableContent> {
       radius: const Radius.circular(2),
       crossAxisMargin: 16,
       thumbColor: widget.scrollbarColor,
-      child: SingleChildScrollView(
+      child: TInternalScrollScope(child: SingleChildScrollView(
         controller: _scrollController,
         padding: padding,
         child: child,
-      ),
+      )),
     );
   }
 }

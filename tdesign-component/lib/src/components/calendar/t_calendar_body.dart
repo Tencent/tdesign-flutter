@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/t_internal_material.dart';
 import '../../util/context_extension.dart';
 import '../../util/iterable_ext.dart';
 import '../text/t_text.dart';
@@ -304,7 +305,7 @@ class _TCalendarBodyState extends State<TCalendarBody> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return TInternalScrollScope(child: ListView.builder(
       padding: EdgeInsets.all(widget.bodyPadding),
       controller: _scrollController,
       itemCount: _months.length,
@@ -373,7 +374,7 @@ class _TCalendarBodyState extends State<TCalendarBody> {
           ],
         );
       },
-    );
+    ));
   }
 
   void _scrollToItem() {

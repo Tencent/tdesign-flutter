@@ -1,3 +1,5 @@
+> 2026-10-13 严格边界的最新本地实现、验证与 review 见 [strict-boundary.md](./strict-boundary.md)。本页保留此前阶段记录，不代替新边界验收。
+
 # 2026-10-13 本地边界调整
 
 起点：PR #1157 head `93c1d7479586017618f2e3b0d21818b6cae1a632`。只在已附着 worktree 本地处理，不推送、不评论、不修改远端 PR。acceptance.md 和 tasks.md 保留旧 head 的历史记录，当前验收以本页为准。

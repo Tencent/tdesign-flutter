@@ -584,7 +584,7 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
       clipBehavior: widget.clipBehavior,
       child: NotificationListener<ScrollNotification>(
         onNotification: _handleScrollNotification,
-        child: PageView.builder(
+        child: TInternalScrollScope(child: PageView.builder(
           controller: _pageController,
           itemCount: widget.loop ? null : _count,
           onPageChanged: _handlePageChanged,
@@ -597,7 +597,7 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
           dragStartBehavior: widget.dragStartBehavior,
           allowImplicitScrolling: widget.allowImplicitScrolling,
           itemBuilder: (context, page) => _buildPage(context, page, effect),
-        ),
+        )),
       ),
     );
 

@@ -354,7 +354,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
         final textHeight = _getTextHeight();
         final contextWidth = _getContextWidth();
 
-        child = SingleChildScrollView(
+        child = TInternalScrollScope(child: SingleChildScrollView(
           controller: _scrollController,
           scrollDirection: Axis.horizontal,
           physics: const NeverScrollableScrollPhysics(),
@@ -369,7 +369,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
               ),
             ],
           ),
-        );
+        ));
         break;
       case Axis.vertical:
         var content = _contentList;
@@ -379,7 +379,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
         }
         child = SizedBox(
           height: _effectiveHeight,
-          child: SingleChildScrollView(
+          child: TInternalScrollScope(child: SingleChildScrollView(
             controller: _scrollController,
             scrollDirection: Axis.vertical,
             child: Column(
@@ -414,7 +414,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
                 ),
               ],
             ),
-          ),
+          )),
         );
         break;
     }

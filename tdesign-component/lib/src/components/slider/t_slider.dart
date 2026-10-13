@@ -46,7 +46,12 @@ SliderThemeData _sliderThemeFromTDesign(BuildContext context) {
       (isDark ? token.bgColorComponentDisabled : token.componentBorder);
 
   return SliderThemeData(
-    overlayShape: const RoundSliderOverlayShape(),
+    // Preserve current TD layout; zero padding would shrink the native render box.
+    // ignore: deprecated_member_use
+    year2023: true,
+    overlayShape: const RoundSliderOverlayShape(overlayRadius: 24),
+    minThumbSeparation: 8,
+    allowedInteraction: SliderInteraction.tapAndSlide,
     activeTrackColor: activeTrack,
     inactiveTrackColor: inactiveTrack,
     secondaryActiveTrackColor: activeTrack.withAlpha(0x8a),

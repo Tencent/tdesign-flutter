@@ -1052,14 +1052,14 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
             ).add(widget.padding ?? EdgeInsets.zero)
           : widget.padding;
       _scrollController ??= _TabBarScrollController(this);
-      tHorizontalTabBar = SingleChildScrollView(
+      tHorizontalTabBar = TInternalScrollScope(child: SingleChildScrollView(
         dragStartBehavior: widget.dragStartBehavior,
         scrollDirection: Axis.horizontal,
         controller: _scrollController,
         padding: effectivePadding,
         physics: widget.physics,
         child: tHorizontalTabBar,
-      );
+      ));
     } else if (widget.padding != null) {
       tHorizontalTabBar = Padding(
         padding: widget.padding!,
@@ -1529,14 +1529,14 @@ class _THorizontalTabBarViewState extends State<THorizontalTabBarView> {
     }());
     return NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
-      child: PageView(
+      child: TInternalScrollScope(child: PageView(
         dragStartBehavior: widget.dragStartBehavior,
         controller: _pageController,
         physics: widget.physics == null
             ? const PageScrollPhysics().applyTo(const ClampingScrollPhysics())
             : const PageScrollPhysics().applyTo(widget.physics),
         children: _childrenWithKey,
-      ),
+      )),
     );
   }
 }

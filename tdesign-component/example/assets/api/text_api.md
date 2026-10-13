@@ -17,7 +17,7 @@
 | locale | Locale? | - | 透传至 `Text.locale`。 | 否 |
 | maxLines | int? | - | 透传至 `Text.maxLines`。 | 否 |
 | overflow | TextOverflow? | - | 透传至 `Text.overflow`。 | 否 |
-| selectionColor | Color? | - | 透传至 `Text.selectionColor`。 | 否 |
+| selectionColor | Color? | - | 选择高亮颜色；未指定时使用 TD brandColor 的 40% alpha，不继承 Material 选择主题。 | 否 |
 | semanticsIdentifier | String? | - | 透传至 `Text.semanticsIdentifier`。 | 否 |
 | semanticsLabel | String? | - | 透传至 `Text.semanticsLabel`。 | 否 |
 | softWrap | bool? | - | 透传至 `Text.softWrap`。 | 否 |
@@ -54,7 +54,7 @@
 | semanticsIdentifier | String? | - | 透传至 `Text.semanticsIdentifier`。 | 否 |
 | textWidthBasis | TextWidthBasis? | - | 透传至 `Text.textWidthBasis`。 | 否 |
 | textHeightBehavior | ui.TextHeightBehavior? | - | 透传至 `Text.textHeightBehavior`。 | 否 |
-| selectionColor | Color? | - | 透传至 `Text.selectionColor`。 | 否 |
+| selectionColor | Color? | - | 选择高亮颜色；未指定时使用 TD brandColor 的 40% alpha，不继承 Material 选择主题。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 
 

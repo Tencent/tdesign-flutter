@@ -91,7 +91,7 @@ void main() {
             matching: find.byType(TextField),
           );
           expect(tester.getSize(editor).height, 24);
-          expect(Theme.of(tester.element(editor)).visualDensity, density);
+          expect(Theme.of(tester.element(editor)).visualDensity, VisualDensity.standard);
         }
         expect(
           tester.getSize(find.byIcon(TIcons.close_circle_filled)),

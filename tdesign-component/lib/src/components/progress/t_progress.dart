@@ -518,8 +518,13 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
 
     Widget getAutoText() =>
         showAutoText && widget.type != TProgressVariant.microCircular
-        ? Text('${(widget.value! * 100).round()}%')
-        : const Text('');
+        ? Builder(
+            builder: (context) => Text(
+              '${(widget.value! * 100).round()}%',
+              selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
+            ),
+          )
+        : const Text('', selectionColor: Colors.transparent);
 
     return getAutoText();
   }

@@ -1024,6 +1024,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/theme/t_resource_delegate_test.dart',
       'test/components/theme/t_theme_test.dart',
       'test/components/theme/t_internal_material_test.dart',
+      'test/components/theme/t_strict_material_boundary_test.dart',
     ],
     exampleTests: ['test/theme/theme_demo_test.dart'],
     visualTests: [

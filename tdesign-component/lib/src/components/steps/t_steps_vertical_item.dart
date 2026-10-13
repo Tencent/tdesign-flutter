@@ -95,6 +95,7 @@ class TStepsVerticalItem extends StatelessWidget {
     /// 步骤条icon图标组件，默认为索引文字
     Widget? stepsIconWidget = Text(
       (index + 1).toString(),
+      selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
       style: TTextResolve.resolve(
         context: context,
         defaults: TextStyle(

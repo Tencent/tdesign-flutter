@@ -179,7 +179,7 @@ class TActionSheetList<T> extends StatelessWidget {
     final iconSize = actionSheetTheme?.iconSize ?? 24;
     return Container(
       color: context.tTheme.bgColorContainer,
-      child: ListView.builder(
+      child: TInternalScrollScope(child: ListView.builder(
         shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: items.length,
@@ -262,7 +262,7 @@ class TActionSheetList<T> extends StatelessWidget {
             ),
           );
         },
-      ),
+      )),
     );
   }
 

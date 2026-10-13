@@ -1,13 +1,23 @@
+import 'package:flutter/cupertino.dart'
+    show
+        CupertinoTheme,
+        CupertinoThemeData,
+        CupertinoTextSelectionToolbarButton,
+        CupertinoDesktopTextSelectionToolbarButton;
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 import '../components/icon/t_icon.dart';
+import '../components/text/t_text.dart';
 import '../components/text/t_text_resolve.dart';
+import '../components/text/t_text_theme_data.dart';
+import 'basic.dart';
 import 't_colors.dart';
+import 't_fonts.dart';
 import 't_spacers.dart';
 import 't_theme.dart';
 
-/// Internal visuals use TD defaults; caller content and native abilities retain themes.
+/// TD owns internal visuals and behavior; caller content retains its themes.
 @internal
 class TInternalMaterialTheme {
   TInternalMaterialTheme._();
@@ -54,18 +64,145 @@ class TInternalMaterialTheme {
     );
   }
 
-  // Tooltip presentation stays local; interaction and accessibility stay native.
-  static TooltipThemeData tooltipBehavior(BuildContext context) {
-    final inherited = TooltipTheme.of(context);
+  // Both visual and behavioral defaults belong to TD, not ambient TooltipTheme.
+  static TooltipThemeData tooltipDefaults(BuildContext context) {
+    final token = context.tTheme;
+    final desktop = switch (Theme.of(context).platform) {
+      TargetPlatform.linux ||
+      TargetPlatform.macOS ||
+      TargetPlatform.windows => true,
+      _ => false,
+    };
+    final fontSize = desktop ? 12.0 : 14.0;
     return TooltipThemeData(
-      waitDuration: inherited.waitDuration,
-      showDuration: inherited.showDuration,
-      exitDuration: inherited.exitDuration,
-      triggerMode: inherited.triggerMode,
-      enableFeedback: inherited.enableFeedback,
-      excludeFromSemantics: inherited.excludeFromSemantics,
+      constraints: BoxConstraints(minHeight: desktop ? 24 : 32),
+      padding: EdgeInsets.symmetric(horizontal: desktop ? 8 : 16, vertical: 4),
+      margin: EdgeInsets.zero,
+      verticalOffset: 24,
+      preferBelow: true,
+      textAlign: TextAlign.start,
+      textStyle: TTextResolve.resolve(
+        context: context,
+        defaults: TextStyle(
+          fontSize: fontSize,
+          height: (desktop ? 20 : 22) / fontSize,
+          fontWeight: FontWeight.w400,
+          color: Theme.of(context).brightness == Brightness.dark
+              ? token.fontGray1
+              : token.textColorAnti,
+        ),
+      ),
+      decoration: BoxDecoration(
+        color: token.textColorPrimary.withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      waitDuration: Duration.zero,
+      showDuration: const Duration(milliseconds: 1500),
+      exitDuration: const Duration(milliseconds: 100),
+      triggerMode: TooltipTriggerMode.longPress,
+      enableFeedback: true,
+      excludeFromSemantics: false,
     );
   }
+
+  // Only the default native editing menu is isolated; menu actions stay native.
+  static Widget editorMenu(BuildContext context, EditableTextState state) =>
+      Theme(
+        data: resolve(context),
+        child: TextButtonTheme(
+          data: TextButtonThemeData(style: _menuButtonStyle(context)),
+          child: IconButtonTheme(
+            data: IconButtonThemeData(style: _menuButtonStyle(context)),
+            child: TooltipTheme(
+              data: tooltipDefaults(context),
+              child: AdaptiveTextSelectionToolbar(
+                anchors: state.contextMenuAnchors,
+                children: _menuButtons(context, state.contextMenuButtonItems),
+              ),
+            ),
+          ),
+        ),
+      );
+
+  // Native button/layout/action implementations remain; only owned labels use TD text.
+  static List<Widget> _menuButtons(
+    BuildContext context,
+    List<ContextMenuButtonItem> items,
+  ) => [
+    for (var i = 0; i < items.length; i++)
+      switch (Theme.of(context).platform) {
+        TargetPlatform.android ||
+        TargetPlatform.fuchsia => TextSelectionToolbarTextButton(
+          onPressed: items[i].onPressed,
+          padding: TextSelectionToolbarTextButton.getPadding(i, items.length),
+          alignment: AlignmentDirectional.centerStart,
+          child: _TInternalMenuLabel(
+            AdaptiveTextSelectionToolbar.getButtonLabel(context, items[i]),
+          ),
+        ),
+        TargetPlatform.linux ||
+        TargetPlatform.windows => DesktopTextSelectionToolbarButton(
+          onPressed: items[i].onPressed,
+          child: _TInternalMenuLabel(
+            AdaptiveTextSelectionToolbar.getButtonLabel(context, items[i]),
+          ),
+        ),
+        TargetPlatform.iOS =>
+          items[i].type == ContextMenuButtonType.liveTextInput
+              ? CupertinoTextSelectionToolbarButton.buttonItem(
+                  buttonItem: items[i],
+                )
+              : CupertinoTextSelectionToolbarButton(
+                  onPressed: items[i].onPressed,
+                  child: _TInternalMenuLabel(
+                    AdaptiveTextSelectionToolbar.getButtonLabel(
+                      context,
+                      items[i],
+                    ),
+                  ),
+                ),
+        TargetPlatform.macOS => _TInternalCupertinoMenuButton(
+          onPressed: items[i].onPressed,
+          label: AdaptiveTextSelectionToolbar.getButtonLabel(context, items[i]),
+        ),
+      },
+  ];
+
+  static ButtonStyle _menuButtonStyle(BuildContext context) => ButtonStyle(
+    textStyle: WidgetStatePropertyAll(TTextResolve.resolve(context: context)),
+    backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
+    foregroundColor: WidgetStatePropertyAll(context.tTheme.textColorPrimary),
+    elevation: const WidgetStatePropertyAll(0),
+    shadowColor: const WidgetStatePropertyAll(Colors.transparent),
+    surfaceTintColor: const WidgetStatePropertyAll(Colors.transparent),
+    shape: const WidgetStatePropertyAll(RoundedRectangleBorder()),
+    side: const WidgetStatePropertyAll(BorderSide.none),
+    minimumSize: const WidgetStatePropertyAll(Size.square(48)),
+    maximumSize: const WidgetStatePropertyAll(Size.infinite),
+    padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 16)),
+    iconSize: const WidgetStatePropertyAll(24),
+    alignment: Alignment.center,
+    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    visualDensity: VisualDensity.standard,
+    animationDuration: kThemeChangeDuration,
+    enableFeedback: true,
+    mouseCursor: WidgetStateProperty.resolveWith(
+      (states) => states.contains(WidgetState.disabled)
+          ? SystemMouseCursors.basic
+          : SystemMouseCursors.click,
+    ),
+    splashFactory: InkRipple.splashFactory,
+    overlayColor: WidgetStateProperty.resolveWith(
+      (states) => context.tTheme.textColorPrimary.withValues(
+        alpha: states.contains(WidgetState.pressed)
+            ? 0.12
+            : states.contains(WidgetState.hovered) ||
+                  states.contains(WidgetState.focused)
+            ? 0.08
+            : 0,
+      ),
+    ),
+  );
 
   // Instance properties returning null retain the owner's default for that state.
   static ButtonStyle mergeButtonStyle(ButtonStyle defaults, ButtonStyle style) {
@@ -129,10 +266,39 @@ class TInternalMaterialTheme {
     final base = inherited.brightness == Brightness.dark
         ? TThemeBuilder.dark(token)
         : TThemeBuilder.light(token);
+    TextStyle owned(Font? font) => TTextResolve.resolve(
+      context: context,
+      defaults: TextStyle(
+        fontSize: font?.size,
+        height: font?.height,
+        fontWeight: font?.fontWeight,
+        color: token.textColorPrimary,
+      ),
+    );
     return base.copyWith(
+      textTheme: TextTheme(
+        displayLarge: owned(token.fontDisplayLarge),
+        displayMedium: owned(token.fontDisplayMedium),
+        displaySmall: owned(token.fontDisplayMedium),
+        headlineLarge: owned(token.fontHeadlineLarge),
+        headlineMedium: owned(token.fontHeadlineMedium),
+        headlineSmall: owned(token.fontHeadlineSmall),
+        titleLarge: owned(token.fontTitleLarge),
+        titleMedium: owned(token.fontTitleMedium),
+        titleSmall: owned(token.fontTitleSmall),
+        bodyLarge: owned(token.fontBodyLarge),
+        bodyMedium: owned(token.fontBodyMedium),
+        bodySmall: owned(token.fontBodySmall),
+        labelLarge: owned(token.fontLinkLarge),
+        labelMedium: owned(token.fontLinkMedium),
+        labelSmall: owned(token.fontLinkSmall),
+      ),
       extensions: inherited.extensions.values,
       platform: inherited.platform,
       visualDensity: VisualDensity.standard,
+      applyElevationOverlayColor: false,
+      canvasColor: token.bgColorContainer,
+      cardColor: token.bgColorContainer,
       splashFactory: InkRipple.splashFactory,
       iconButtonTheme: const IconButtonThemeData(),
       listTileTheme: const ListTileThemeData(),
@@ -190,8 +356,12 @@ class TInternalIconButton extends StatelessWidget {
       alignment: Alignment.center,
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       animationDuration: kThemeChangeDuration,
-      enableFeedback: IconButtonTheme.of(context).style?.enableFeedback ?? true,
-      mouseCursor: IconButtonTheme.of(context).style?.mouseCursor,
+      enableFeedback: true,
+      mouseCursor: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.disabled)
+            ? SystemMouseCursors.basic
+            : SystemMouseCursors.click,
+      ),
       splashFactory: InkRipple.splashFactory,
       overlayColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.pressed)) {
@@ -214,7 +384,7 @@ class TInternalIconButton extends StatelessWidget {
     return Theme(
       data: TInternalMaterialTheme.resolve(context),
       child: TooltipTheme(
-        data: TInternalMaterialTheme.tooltipBehavior(context),
+        data: TInternalMaterialTheme.tooltipDefaults(context),
         child: IconButtonTheme(
           data: const IconButtonThemeData(),
           child: IconButton(
@@ -346,7 +516,11 @@ class TInternalMaterial extends StatelessWidget {
       data: TInternalMaterialTheme.resolve(context),
       child: Material(
         type: type,
-        color: color,
+        color:
+            color ??
+            (type == MaterialType.transparency
+                ? null
+                : context.tTheme.bgColorContainer),
         elevation: elevation,
         shadowColor: shadowColor,
         surfaceTintColor: surfaceTintColor,
@@ -384,7 +558,7 @@ class TInternalTooltip extends StatelessWidget {
     return Theme(
       data: TInternalMaterialTheme.resolve(context),
       child: TooltipTheme(
-        data: TInternalMaterialTheme.tooltipBehavior(context),
+        data: TInternalMaterialTheme.tooltipDefaults(context),
         child: Tooltip(
           message: message,
           child: Builder(
@@ -529,6 +703,7 @@ class TInternalListTile extends StatelessWidget {
         child: ListTile(
           dense: false,
           isThreeLine: false,
+          titleAlignment: ListTileTitleAlignment.center,
           visualDensity: VisualDensity.standard,
           minTileHeight: 56,
           minVerticalPadding: 8,
@@ -577,6 +752,8 @@ class TInternalCircularProgressIndicator extends StatelessWidget {
       data: const ProgressIndicatorThemeData(),
       child: CircularProgressIndicator(
         value: value,
+        constraints: const BoxConstraints(),
+        padding: EdgeInsets.zero,
         strokeWidth: strokeWidth,
         color: color ?? context.tTheme.brandColor,
         backgroundColor: Colors.transparent,
@@ -647,6 +824,8 @@ class TInternalInputHint extends StatelessWidget {
                           alignment: alignment,
                           child: Text(
                             hintText!,
+                            selectionColor: context.tTheme.brandColor
+                                .withValues(alpha: 0.4),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TTextResolve.resolve(
@@ -665,5 +844,155 @@ class TInternalInputHint extends StatelessWidget {
         ),
       );
     },
+  );
+}
+
+/// An editor owns selection visuals; its slots remain outside this boundary.
+@internal
+class TInternalEditor extends StatelessWidget {
+  const TInternalEditor({required this.child, super.key});
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    final token = context.tTheme;
+    return Theme(
+      data: TInternalMaterialTheme.resolve(context),
+      child: DefaultSelectionStyle(
+        selectionColor: token.brandColor.withValues(alpha: 0.4),
+        cursorColor: token.brandColor,
+        child: TextSelectionTheme(
+          data: TextSelectionThemeData(
+            selectionColor: token.brandColor.withValues(alpha: 0.4),
+            cursorColor: token.brandColor,
+            selectionHandleColor: token.brandColor,
+          ),
+          child: CupertinoTheme(
+            data: CupertinoThemeData(
+              brightness: Theme.of(context).brightness,
+              primaryColor: token.brandColor,
+            ),
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Only this scrollable uses TD chrome. Descendant custom scrollables keep theirs.
+@internal
+class TInternalScrollBehavior extends MaterialScrollBehavior {
+  const TInternalScrollBehavior({this.callerBehavior});
+  final ScrollBehavior? callerBehavior;
+  @override
+  Widget buildOverscrollIndicator(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) => callerBehavior == null
+      ? child
+      : ScrollConfiguration(behavior: callerBehavior!, child: child);
+  @override
+  Widget buildScrollbar(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
+    if (axisDirectionToAxis(details.direction) == Axis.horizontal) {
+      return child;
+    }
+    switch (getPlatform(context)) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.iOS:
+        return child;
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+        return RawScrollbar(
+          controller: details.controller,
+          thumbVisibility: false,
+          trackVisibility: false,
+          interactive: true,
+          thickness: 6,
+          radius: const Radius.circular(8),
+          minThumbLength: 18,
+          thumbColor: context.tTheme.textColorPlaceholder,
+          fadeDuration: const Duration(milliseconds: 300),
+          timeToFade: const Duration(milliseconds: 600),
+          pressDuration: Duration.zero,
+          child: child,
+        );
+    }
+  }
+}
+
+/// Scope only the owner Scrollable, restoring caller configuration below its viewport.
+@internal
+class TInternalScrollScope extends StatelessWidget {
+  const TInternalScrollScope({required this.child, super.key});
+  final Widget child;
+  @override
+  Widget build(BuildContext context) => ScrollConfiguration(
+    behavior: TInternalScrollBehavior(
+      callerBehavior: ScrollConfiguration.of(context),
+    ),
+    child: child,
+  );
+}
+
+// TD owns typography; the isolated native control supplies its state foreground.
+class _TInternalMenuLabel extends StatelessWidget {
+  const _TInternalMenuLabel(this.label, {this.hovered = false});
+  final String label;
+  final bool hovered;
+  @override
+  Widget build(BuildContext context) {
+    final nativeStyle = DefaultTextStyle.of(context).style;
+    final explicit = Theme.of(
+      context,
+    ).extension<TTextThemeData>()?.textStyle?.color;
+    final nativeColor = switch (Theme.of(context).platform) {
+      TargetPlatform.macOS =>
+        hovered
+            ? CupertinoTheme.of(context).primaryContrastingColor
+            : context.tTheme.textColorPrimary,
+      TargetPlatform.iOS => context.tTheme.textColorPrimary,
+      _ => nativeStyle.color ?? context.tTheme.textColorPrimary,
+    };
+    return TText(
+      label,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(color: explicit ?? nativeColor),
+    );
+  }
+}
+
+// A supplied child bypasses Cupertino's private label hover color. Mirror only
+// that visual state; the native button still owns layout, press and its action.
+class _TInternalCupertinoMenuButton extends StatefulWidget {
+  const _TInternalCupertinoMenuButton({
+    required this.label,
+    required this.onPressed,
+  });
+  final String label;
+  final VoidCallback? onPressed;
+  @override
+  State<_TInternalCupertinoMenuButton> createState() =>
+      _TInternalCupertinoMenuButtonState();
+}
+
+class _TInternalCupertinoMenuButtonState
+    extends State<_TInternalCupertinoMenuButton> {
+  bool _hovered = false;
+  @override
+  Widget build(BuildContext context) => MouseRegion(
+    onEnter: (_) => setState(() => _hovered = true),
+    onExit: (_) => setState(() => _hovered = false),
+    child: CupertinoDesktopTextSelectionToolbarButton(
+      onPressed: widget.onPressed,
+      child: _TInternalMenuLabel(widget.label, hovered: _hovered),
+    ),
   );
 }

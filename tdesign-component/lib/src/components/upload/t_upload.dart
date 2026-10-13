@@ -465,7 +465,10 @@ class _TUploadState extends State<_TUploadView> {
       colorPreset: TButtonColorPreset.primary,
       icon: const TInternalIcon(TIcons.upload),
       onPressed: _canPick ? _pickFiles : null,
-      child: const Text('Upload'),
+      child: Text(
+        'Upload',
+        selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
+      ),
     );
   }
 
