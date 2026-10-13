@@ -1,5 +1,7 @@
 # Button 尺寸、形状与原生交互契约对齐
 
+> 后续契约：[054 Material 样式所有权](../054-material-style-ownership/spec.md) 优先于本文早期关于 Material ButtonTheme 的覆盖说明。外部 Material 主题不控制 TD 内置视觉；ButtonStyle 实例配置仍保留受支持字段，visualDensity 始终标准。
+
 ## 背景
 
 `TButtonSize` 已声明 48、40、32、28dp 四档视觉尺寸，但普通按钮底层
@@ -68,7 +70,7 @@ variant 又把 `overlayColor` 固定为透明，导致渐变和 ghost 按钮缺�
   默认值，实例 `ButtonStyle.tapTargetSize` 具有最高优先级。
 - `MaterialTapTargetSize.padded` 只扩展点击和布局区域，不放大可见按钮背景；普通与渐变
   分支行为一致。
-- 渐变按钮保留 button/enabled 语义，并消费解析后的 visual density、tap target、
+- 渐变按钮保留 button/enabled 语义，并消费解析后的标准 visual density、tap target、
   mouse cursor、feedback 和 splash 配置。
 - 渐变按钮与 Flutter `ButtonStyleButton` 共用同一状态解析契约：pressed、hovered、
   focused、disabled 变化时，颜色、文字、图标、边框、形状、padding、尺寸、阴影和
@@ -79,7 +81,8 @@ variant 又把 `overlayColor` 固定为透明，导致渐变和 ghost 按钮缺�
   尺寸默认值；显式 `Icon.size` / `Icon.color` 仍保持 Flutter 原生最高优先级。
 - `tapTargetSize` 由统一 resolve 入口保证非空，渐变布局不再维护与 resolver 分叉的
   Material Theme fallback；visual density 对约束和 padding 的处理与
-  `ButtonStyleButton` 一致。
+  `ButtonStyleButton` 一致。后续 [053](../053-material-density-isolation/spec.md)
+  收敛为始终使用标准密度，Material 主题和实例密度覆盖不再参与 TD 内置布局。
 - 渐变按钮沿用 Flutter `ButtonStyleButton` 的外层 `Semantics` + 内层 `InkWell`
   结构，button/enabled 与 tap 动作必须合并为一个语义节点，不能产生重复按钮节点。
 - 渐变分支的本地 tap-target 只承接 Flutter 私有 `_InputPadding` 的公开可见行为：

@@ -2,9 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/src/theme/t_internal_material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  messagePickerBoundaryGoldens();
+  swiperControlStyleGoldens();
+  gradientGeometryGoldens();
+  strictBoundaryGoldens();
+  strictScrollGoldens();
   setUpAll(() async {
     final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
       ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
@@ -17,7 +23,17 @@ void main() {
           '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
         ).readAsBytes().then(ByteData.sublistView),
       );
-    await Future.wait([iconFont.load(), robotoFont.load()]);
+    final materialFont = FontLoader('MaterialIcons')
+      ..addFont(
+        File(
+          '${flutterBin.path}/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
+        ).readAsBytes().then(ByteData.sublistView),
+      );
+    await Future.wait([
+      iconFont.load(),
+      robotoFont.load(),
+      materialFont.load(),
+    ]);
   });
 
   testWidgets('implicit Material defaults do not change TDesign visuals', (
@@ -35,6 +51,140 @@ void main() {
       matchesGoldenFile('goldens/m3_isolation_controls.png'),
     );
   });
+
+  testWidgets('custom content retains its theme beside TD visuals', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(760, 420);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: RepaintBoundary(
+            key: const Key('custom-content-scene'),
+            child: ColoredBox(
+              color: Colors.white,
+              child: Row(
+                children: [
+                  for (final m3 in [false, true])
+                    Expanded(
+                      child: Theme(
+                        data: ThemeData(
+                          useMaterial3: m3,
+                          iconTheme: const IconThemeData(
+                            color: Colors.green,
+                            size: 64,
+                          ),
+                          textTheme: const TextTheme(
+                            bodyMedium: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 28,
+                              color: Colors.purple,
+                            ),
+                          ),
+                          extensions: [TThemeData.defaultData()],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              m3 ? 'Material 3' : 'Material 2',
+                              style: const TextStyle(
+                                fontFamily: 'Roboto',
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TDialog(
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(TIcons.home),
+                                  Builder(
+                                    builder: (context) => Text(
+                                      'Custom content',
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  const TIcon(TIcons.home),
+                                  const TText('TD built-in style'),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 400));
+    await expectLater(
+      find.byKey(const Key('custom-content-scene')),
+      matchesGoldenFile('goldens/m3_custom_content.png'),
+    );
+  });
+  testWidgets(
+    'owned typography and partial state styles resist ambient visuals',
+    (tester) async {
+      tester.view.physicalSize = const Size(760, 340);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: RepaintBoundary(
+              key: Key('owned-typography'),
+              child: Row(
+                children: [
+                  Expanded(child: _OwnedTypographyColumn(m3: false)),
+                  Expanded(child: _OwnedTypographyColumn(m3: true)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await expectLater(
+        find.byKey(const Key('owned-typography')),
+        matchesGoldenFile('goldens/m3_owned_typography.png'),
+      );
+      final gestures = <TestGesture>[];
+      for (var i = 0; i < 2; i++) {
+        gestures.add(
+          await tester.startGesture(
+            tester.getCenter(find.byType(TButton).at(i)),
+            pointer: i + 1,
+          ),
+        );
+      }
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      await expectLater(
+        find.byKey(const Key('owned-typography')),
+        matchesGoldenFile('goldens/m3_partial_state_pressed.png'),
+      );
+      for (final gesture in gestures) {
+        await gesture.up();
+      }
+      FocusManager.instance.primaryFocus?.unfocus();
+      await tester.pumpAndSettle();
+      await expectLater(
+        find.byKey(const Key('owned-typography')),
+        matchesGoldenFile('goldens/m3_owned_typography.png'),
+      );
+    },
+  );
 }
 
 class _M3IsolationScene extends StatelessWidget {
@@ -173,3 +323,812 @@ void _switchNoop(bool value) {}
 void _tapNoop() {}
 
 void _sliderNoop(double value) {}
+
+class _OwnedTypographyColumn extends StatelessWidget {
+  const _OwnedTypographyColumn({required this.m3});
+  final bool m3;
+  @override
+  Widget build(BuildContext context) {
+    final data = ThemeData(
+      useMaterial3: m3,
+      textTheme: const TextTheme(
+        bodyMedium: TextStyle(
+          fontSize: 80,
+          letterSpacing: 18,
+          wordSpacing: 9,
+          shadows: [Shadow(color: Colors.pink, blurRadius: 3)],
+        ),
+      ),
+      elevatedButtonTheme: const ElevatedButtonThemeData(
+        style: ButtonStyle(
+          foregroundColor: WidgetStatePropertyAll(Colors.green),
+        ),
+      ),
+      extensions: [TThemeData.defaultData()],
+    );
+    return Theme(
+      data: data,
+      child: Material(
+        color: Colors.white,
+        textStyle: data.textTheme.bodyMedium,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                m3 ? 'Material 3' : 'Material 2',
+                style: const TextStyle(
+                  inherit: false,
+                  fontFamily: 'Roboto',
+                  fontSize: 14,
+                  height: 1.4,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const TCell(title: Text('Cell title'), required: true),
+              const TDivider(child: Text('Divider label')),
+              const SizedBox(height: 12),
+              TButton(
+                onPressed: _tapNoop,
+                variant: TButtonVariant.outline,
+                colorPreset: TButtonColorPreset.danger,
+                style: ButtonStyle(
+                  foregroundColor: WidgetStateProperty.resolveWith(
+                    (states) => states.contains(WidgetState.pressed)
+                        ? Colors.pink
+                        : null,
+                  ),
+                  overlayColor: WidgetStateProperty.resolveWith(
+                    (states) => states.contains(WidgetState.pressed)
+                        ? Colors.transparent
+                        : null,
+                  ),
+                ),
+                child: const Text('Danger'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+void gradientGeometryGoldens() {
+  for (final brightness in Brightness.values) {
+    testWidgets(
+      'gradient geometry ${brightness.name} default and pressed golden',
+      (tester) async {
+        tester.view.physicalSize = const Size(760, 720);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        final token = brightness == Brightness.dark
+            ? TThemeData.defaultData().dark!
+            : TThemeData.defaultData().light;
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: RepaintBoundary(
+                key: const Key('button-geometry-scene'),
+                child: ColoredBox(
+                  color: token.bgColorPage,
+                  child: Row(
+                    children: [
+                      for (var i = 0; i < 4; i++)
+                        Expanded(
+                          child: _ButtonGeometryColumn(
+                            column: i,
+                            m3: i >= 2,
+                            gradient: i.isOdd,
+                            brightness: brightness,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await expectLater(
+          find.byKey(const Key('button-geometry-scene')),
+          matchesGoldenFile(
+            'goldens/button_gradient_geometry_${brightness.name}.png',
+          ),
+        );
+        final gestures = <TestGesture>[];
+        for (var i = 0; i < 4; i++) {
+          gestures.add(
+            await tester.startGesture(
+              tester.getCenter(find.byKey(ValueKey('geometry-state-$i'))),
+              pointer: i + 1,
+            ),
+          );
+        }
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 400));
+        await expectLater(
+          find.byKey(const Key('button-geometry-scene')),
+          matchesGoldenFile(
+            'goldens/button_gradient_geometry_pressed_${brightness.name}.png',
+          ),
+        );
+        for (final gesture in gestures) {
+          await gesture.up();
+        }
+        FocusManager.instance.primaryFocus?.unfocus();
+        await tester.pumpAndSettle();
+        await expectLater(
+          find.byKey(const Key('button-geometry-scene')),
+          matchesGoldenFile(
+            'goldens/button_gradient_geometry_${brightness.name}.png',
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _ButtonGeometryColumn extends StatelessWidget {
+  const _ButtonGeometryColumn({
+    required this.column,
+    required this.m3,
+    required this.gradient,
+    required this.brightness,
+  });
+  final int column;
+  final bool m3;
+  final bool gradient;
+  final Brightness brightness;
+
+  @override
+  Widget build(BuildContext context) {
+    final token = brightness == Brightness.dark
+        ? TThemeData.defaultData().dark!
+        : TThemeData.defaultData().light;
+    final data = ThemeData(
+      useMaterial3: m3,
+      brightness: brightness,
+      textTheme: const TextTheme(
+        bodyMedium: TextStyle(
+          fontFamily: 'Roboto',
+          fontSize: 24,
+          height: 1.4,
+          color: Colors.purple,
+        ),
+      ),
+      extensions: [
+        token,
+        if (gradient)
+          TButtonThemeData(
+            gradient: LinearGradient(
+              colors: [token.bgColorContainer, token.bgColorContainer],
+            ),
+          ),
+      ],
+    );
+    return Theme(
+      data: data,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'M${m3 ? 3 : 2} ${gradient ? 'gradient' : 'ordinary'}',
+            style: TextStyle(
+              inherit: false,
+              fontFamily: 'Roboto',
+              fontSize: 14,
+              height: 1.4,
+              color: token.textColorPrimary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          for (final size in TButtonSize.values)
+            SizedBox(
+              height: 60,
+              child: Center(
+                child: TButton(
+                  size: size,
+                  variant: TButtonVariant.outline,
+                  colorPreset: TButtonColorPreset.danger,
+                  onPressed: _tapNoop,
+                  child: Text(size.name),
+                ),
+              ),
+            ),
+          const SizedBox(
+            height: 48,
+            child: Center(
+              child: TButton(
+                size: TButtonSize.extraSmall,
+                shape: TButtonShape.circle,
+                variant: TButtonVariant.outline,
+                colorPreset: TButtonColorPreset.danger,
+                onPressed: _tapNoop,
+                icon: TIcon(TIcons.home),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 40,
+            child: Center(
+              child: TButton(
+                variant: TButtonVariant.outline,
+                onPressed: _tapNoop,
+                style: ButtonStyle(
+                  minimumSize: WidgetStatePropertyAll(Size.zero),
+                  padding: WidgetStatePropertyAll(
+                    EdgeInsets.fromLTRB(10, 3, 14, 5),
+                  ),
+                  side: WidgetStatePropertyAll(
+                    BorderSide(color: Color(0x66000000), width: 4),
+                  ),
+                  shape: WidgetStatePropertyAll(RoundedRectangleBorder()),
+                ),
+                child: SizedBox(
+                  width: 24,
+                  height: 12,
+                  child: ColoredBox(color: Colors.amber),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 64,
+            child: Center(
+              child: TButton(
+                variant: TButtonVariant.outline,
+                onPressed: _tapNoop,
+                style: ButtonStyle(
+                  minimumSize: WidgetStatePropertyAll(Size.zero),
+                  fixedSize: WidgetStatePropertyAll(Size(120, 44)),
+                  padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                  side: WidgetStatePropertyAll(
+                    BorderSide(
+                      color: Color(0x66000000),
+                      width: 4,
+                      strokeAlign: BorderSide.strokeAlignOutside,
+                    ),
+                  ),
+                  shape: WidgetStatePropertyAll(RoundedRectangleBorder()),
+                ),
+                child: SizedBox.expand(child: ColoredBox(color: Colors.amber)),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 48,
+            child: Center(
+              child: TButton(
+                key: ValueKey('geometry-state-$column'),
+                size: TButtonSize.extraSmall,
+                variant: TButtonVariant.outline,
+                onPressed: _tapNoop,
+                child: const Text('Press'),
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(
+                    token.bgColorContainer,
+                  ),
+                  overlayColor: const WidgetStatePropertyAll(
+                    Colors.transparent,
+                  ),
+                  side: WidgetStateProperty.resolveWith(
+                    (states) => BorderSide(
+                      color: const Color(0x996a1b9a),
+                      width: states.contains(WidgetState.pressed) ? 6 : 1,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 64,
+            child: Center(
+              child: TButton(
+                variant: TButtonVariant.outline,
+                onPressed: _tapNoop,
+                child: Builder(
+                  builder: (context) => Text(
+                    'Custom',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+void strictBoundaryGoldens() {
+  for (final dark in [false, true]) {
+    for (final m3 in [false, true]) {
+      for (final menu in [false, true]) {
+        testWidgets(
+          'strict TD ${menu ? 'selection menu' : 'tooltip and tile'} dark=$dark M3=$m3',
+          (tester) async {
+            tester.view.physicalSize = const Size(760, 420);
+            tester.view.devicePixelRatio = 1;
+            addTearDown(tester.view.resetPhysicalSize);
+            addTearDown(tester.view.resetDevicePixelRatio);
+            final token = dark
+                ? TThemeData.defaultData().dark!
+                : TThemeData.defaultData();
+            await tester.pumpWidget(
+              MaterialApp(
+                theme: ThemeData(
+                  brightness: dark ? Brightness.dark : Brightness.light,
+                  useMaterial3: m3,
+                  platform: TargetPlatform.android,
+                  extensions: [token],
+                  tooltipTheme: const TooltipThemeData(
+                    triggerMode: TooltipTriggerMode.tap,
+                    excludeFromSemantics: true,
+                    decoration: BoxDecoration(color: Colors.pink),
+                    textStyle: TextStyle(fontSize: 80),
+                  ),
+                  textSelectionTheme: const TextSelectionThemeData(
+                    selectionColor: Colors.pink,
+                    selectionHandleColor: Colors.green,
+                  ),
+                  textButtonTheme: const TextButtonThemeData(
+                    style: ButtonStyle(elevation: WidgetStatePropertyAll(9)),
+                  ),
+                  iconTheme: const IconThemeData(color: Colors.green, size: 28),
+                ),
+                home: Scaffold(
+                  backgroundColor: token.bgColorContainer,
+                  body: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      children: [
+                        const TInput(
+                          initialValue: 'Select and copy TD text',
+                          prefix: Icon(Icons.home),
+                        ),
+                        const SizedBox(height: 24),
+                        const TInternalListTile(
+                          leading: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: ColoredBox(color: Colors.blue),
+                          ),
+                          title: SizedBox(
+                            height: 100,
+                            child: Center(
+                              child: TText('Tall title keeps centered leading'),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        TInternalTooltip(
+                          message: 'TD hint keeps native tooltip ability',
+                          child: SizedBox(
+                            key: const Key('strict-tip'),
+                            width: 180,
+                            height: 40,
+                            child: Center(
+                              child: TText(
+                                'Long press for hint',
+                                style: TextStyle(color: token.brandColor),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+            await tester.pumpAndSettle();
+            if (menu) {
+              final state = tester.state<EditableTextState>(
+                find.byType(EditableText),
+              );
+              state.widget.focusNode.requestFocus();
+              await tester.pumpAndSettle();
+              state.widget.controller.selection = const TextSelection(
+                baseOffset: 0,
+                extentOffset: 6,
+              );
+              await tester.pump();
+              state.showToolbar();
+              await tester.pumpAndSettle();
+            } else {
+              await tester.longPress(find.byKey(const Key('strict-tip')));
+              await tester.pump(const Duration(milliseconds: 300));
+            }
+            // Both external M2/M3 modes must match the same owned rendering baseline.
+            await expectLater(
+              find.byType(Overlay).first,
+              matchesGoldenFile(
+                'goldens/strict_${menu ? 'selection' : 'tooltip'}_${dark ? 'dark' : 'light'}.png',
+              ),
+            );
+            await tester.pumpWidget(const SizedBox.shrink());
+            await tester.pumpAndSettle();
+          },
+        );
+      }
+    }
+  }
+}
+
+void strictScrollGoldens() {
+  for (final dark in [false, true]) {
+    for (final m3 in [false, true]) {
+      testWidgets('strict TD desktop scrollbar dark=$dark M3=$m3', (
+        tester,
+      ) async {
+        tester.view.physicalSize = const Size(400, 300);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        final token = dark
+            ? TThemeData.defaultData().dark!
+            : TThemeData.defaultData();
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              useMaterial3: m3,
+              brightness: dark ? Brightness.dark : Brightness.light,
+              platform: TargetPlatform.windows,
+              extensions: [token],
+              scrollbarTheme: const ScrollbarThemeData(
+                thickness: WidgetStatePropertyAll(29),
+                thumbColor: WidgetStatePropertyAll(Colors.pink),
+                interactive: false,
+              ),
+            ),
+            home: Scaffold(
+              backgroundColor: token.bgColorContainer,
+              body: Center(
+                child: TSideBar(
+                  value: 0,
+                  width: 103,
+                  height: 180,
+                  onChanged: (_) {},
+                  children: List.generate(
+                    12,
+                    (i) => TSideBarItem(value: i, label: 'Item $i'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        tester
+            .state<ScrollableState>(find.byType(Scrollable).first)
+            .position
+            .jumpTo(100);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 150));
+        await expectLater(
+          find.byType(Scaffold),
+          matchesGoldenFile(
+            'goldens/strict_scroll_${dark ? 'dark' : 'light'}.png',
+          ),
+        );
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpAndSettle();
+      });
+    }
+  }
+}
+
+void swiperControlStyleGoldens() {
+  for (final brightness in Brightness.values) {
+    testWidgets('Swiper owned control style ${brightness.name}', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(640, 220);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final token = TThemeData.defaultData();
+      final td = brightness == Brightness.dark ? token.dark! : token;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: RepaintBoundary(
+              key: const Key('swiper-style-scene'),
+              child: ColoredBox(
+                color: td.bgColorPage,
+                child: Row(
+                  children: [
+                    for (final m3 in [false, true])
+                      Expanded(
+                        child: Theme(
+                          data: ThemeData(
+                            useMaterial3: m3,
+                            brightness: brightness,
+                            iconButtonTheme: const IconButtonThemeData(
+                              style: ButtonStyle(
+                                backgroundColor: WidgetStatePropertyAll(
+                                  Colors.orange,
+                                ),
+                                iconSize: WidgetStatePropertyAll(70),
+                                visualDensity: VisualDensity(
+                                  horizontal: 4,
+                                  vertical: 4,
+                                ),
+                              ),
+                            ),
+                            extensions: [
+                              td,
+                              TSwiperThemeData(
+                                controlStyle: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStateProperty.resolveWith(
+                                        (s) => s.contains(WidgetState.pressed)
+                                            ? Colors.pink
+                                            : null,
+                                      ),
+                                  foregroundColor:
+                                      WidgetStateProperty.resolveWith(
+                                        (s) => s.contains(WidgetState.pressed)
+                                            ? Colors.yellow
+                                            : null,
+                                      ),
+                                  iconSize: WidgetStateProperty.resolveWith(
+                                    (s) => s.contains(WidgetState.pressed)
+                                        ? 30
+                                        : 24,
+                                  ),
+                                  minimumSize: const WidgetStatePropertyAll(
+                                    Size.square(40),
+                                  ),
+                                  fixedSize: const WidgetStatePropertyAll(
+                                    Size.square(40),
+                                  ),
+                                  padding: const WidgetStatePropertyAll(
+                                    EdgeInsets.all(4),
+                                  ),
+                                  shape: const WidgetStatePropertyAll(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                                  side: const WidgetStatePropertyAll(
+                                    BorderSide(color: Colors.blue, width: 2),
+                                  ),
+                                  overlayColor: const WidgetStatePropertyAll(
+                                    Colors.transparent,
+                                  ),
+                                  visualDensity: const VisualDensity(
+                                    horizontal: -4,
+                                    vertical: -4,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              children: [
+                                TText(m3 ? 'Material 3' : 'Material 2'),
+                                const SizedBox(height: 12),
+                                SizedBox(
+                                  height: 160,
+                                  child: TSwiper(
+                                    key: ValueKey('owned-swiper-$m3'),
+                                    pagination:
+                                        TSwiperPaginationVariant.controls,
+                                    children: [
+                                      ColoredBox(
+                                        color: td.bgColorSecondaryContainer,
+                                        child: const Center(
+                                          child: TText('Page 1'),
+                                        ),
+                                      ),
+                                      ColoredBox(
+                                        color: td.bgColorSecondaryContainer,
+                                        child: const Center(
+                                          child: TText('Page 2'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 400));
+      await expectLater(
+        find.byKey(const Key('swiper-style-scene')),
+        matchesGoldenFile(
+          'goldens/swiper_control_style_${brightness.name}.png',
+        ),
+      );
+      final gestures = <TestGesture>[];
+      for (final m3 in [false, true]) {
+        final next = find
+            .descendant(
+              of: find.byKey(ValueKey('owned-swiper-$m3')),
+              matching: find.byType(IconButton),
+            )
+            .last;
+        gestures.add(
+          await tester.startGesture(
+            tester.getCenter(next),
+            pointer: m3 ? 2 : 1,
+          ),
+        );
+      }
+      await tester.pump(const Duration(milliseconds: 400));
+      await expectLater(
+        find.byKey(const Key('swiper-style-scene')),
+        matchesGoldenFile(
+          'goldens/swiper_control_style_pressed_${brightness.name}.png',
+        ),
+      );
+      for (final gesture in gestures) {
+        await gesture.up();
+      }
+      await tester.pumpAndSettle();
+    });
+  }
+}
+
+class _CustomContentScrollBehavior extends ScrollBehavior {
+  const _CustomContentScrollBehavior();
+
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) =>
+      const NeverScrollableScrollPhysics();
+}
+
+void messagePickerBoundaryGoldens() {
+  for (final m3 in [false, true]) {
+    for (final brightness in Brightness.values) {
+      final suffix = '${m3 ? "m3" : "m2"}_${brightness.name}';
+      final token = brightness == Brightness.dark
+          ? TThemeData.defaultData().dark!
+          : TThemeData.defaultData();
+      final theme = ThemeData(
+        useMaterial3: m3,
+        brightness: brightness,
+        iconTheme: const IconThemeData(size: 70, color: Colors.green),
+        extensions: [
+          token,
+          const TTextThemeData(
+            textStyle: TextStyle(fontFamily: 'Roboto', letterSpacing: 8),
+          ),
+        ],
+      );
+      testWidgets('Message resolved marquee $suffix golden', (tester) async {
+        tester.view.physicalSize = const Size(400, 180);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        await tester.pumpWidget(
+          RepaintBoundary(
+            key: const Key('message-boundary'),
+            child: MaterialApp(
+              theme: theme,
+              home: const Scaffold(
+                body: Stack(
+                  children: [
+                    TMessage(
+                      content: 'WWWWWWWWWWWWWWWWWWWW',
+                      showIcon: false,
+                      duration: null,
+                      marquee: TMessageMarquee(
+                        duration: Duration(milliseconds: 200),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+        await expectLater(
+          find.byKey(const Key('message-boundary')),
+          matchesGoldenFile('goldens/message_marquee_mid_$suffix.png'),
+        );
+        await tester.pump(const Duration(milliseconds: 120));
+        await expectLater(
+          find.byKey(const Key('message-boundary')),
+          matchesGoldenFile('goldens/message_marquee_end_$suffix.png'),
+        );
+        await tester.pumpWidget(const SizedBox());
+      }, tags: 'golden');
+      testWidgets('Picker custom scroll boundary $suffix golden', (
+        tester,
+      ) async {
+        tester.view.physicalSize = const Size(400, 400);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        final nested = ScrollController();
+        addTearDown(nested.dispose);
+        await tester.pumpWidget(
+          RepaintBoundary(
+            key: const Key('picker-boundary'),
+            child: MaterialApp(
+              theme: theme,
+              builder: (context, child) => ScrollConfiguration(
+                behavior: const _CustomContentScrollBehavior(),
+                child: child!,
+              ),
+              home: Scaffold(
+                body: Center(
+                  child: SizedBox(
+                    width: 350,
+                    height: 300,
+                    child: TPicker(
+                      items: const TPickerColumns([
+                        [TPickerOption(label: 'Option', value: 1)],
+                      ]),
+                      value: const [1],
+                      onChanged: (_) {},
+                      itemBuilder: (context, option, column, index, distance) =>
+                          SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: SingleChildScrollView(
+                              key: const Key('picker-custom-scroll'),
+                              controller: nested,
+                              scrollDirection: Axis.horizontal,
+                              child: const SizedBox(
+                                width: 100,
+                                height: 22,
+                                child: Icon(
+                                  Icons.star,
+                                  size: 22,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                            ),
+                          ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pump(const Duration(milliseconds: 500));
+        await expectLater(
+          find.byKey(const Key('picker-boundary')),
+          matchesGoldenFile('goldens/picker_custom_scroll_initial_$suffix.png'),
+        );
+        await tester.drag(
+          find.byKey(const Key('picker-custom-scroll')),
+          const Offset(-40, 0),
+        );
+        await tester.pumpAndSettle();
+        await expectLater(
+          find.byKey(const Key('picker-boundary')),
+          matchesGoldenFile('goldens/picker_custom_scroll_dragged_$suffix.png'),
+        );
+        expect(nested.offset, 0);
+        await tester.pumpWidget(const SizedBox());
+      }, tags: 'golden');
+    }
+  }
+}

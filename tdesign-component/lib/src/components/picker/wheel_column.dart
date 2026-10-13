@@ -55,8 +55,6 @@ class WheelColumn extends StatefulWidget {
 
 @internal
 class WheelColumnState extends State<WheelColumn> {
-  static final _defaultScrollBehavior = WheelBehavior();
-
   late List<TPickerOption> _options;
   late FixedExtentScrollController _controller;
   bool _correcting = false;
@@ -201,7 +199,8 @@ class WheelColumnState extends State<WheelColumn> {
       context: context,
       removeTop: true,
       child: ScrollConfiguration(
-        behavior: widget.scrollBehavior ?? _defaultScrollBehavior,
+        behavior: widget.scrollBehavior ??
+            WheelBehavior(callerBehavior: ScrollConfiguration.of(context)),
         child: NotificationListener<ScrollNotification>(
           onNotification: _handleScrollNotification,
           child: wheel,

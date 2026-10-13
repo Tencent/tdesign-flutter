@@ -15,6 +15,66 @@ class _NonlinearTextScaler extends TextScaler {
 }
 
 void main() {
+  testWidgets(
+    'Material typography cannot change TD text; explicit style wins',
+    (tester) async {
+      for (final m3 in [false, true]) {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              useMaterial3: m3,
+              textTheme: const TextTheme(
+                bodyMedium: TextStyle(
+                  letterSpacing: 12,
+                  wordSpacing: 13,
+                  fontFamily: 'external',
+                ),
+              ),
+            ),
+            home: const Scaffold(
+              body: Column(
+                children: [
+                  TText('owned'),
+                  TText(
+                    'explicit',
+                    style: TextStyle(
+                      letterSpacing: 3,
+                      wordSpacing: 4,
+                      fontFamily: 'custom',
+                    ),
+                  ),
+                  Text('caller', style: TextStyle(letterSpacing: 7)),
+                ],
+              ),
+            ),
+          ),
+        );
+        final owned = tester
+            .renderObject<RenderParagraph>(find.text('owned'))
+            .text
+            .style!;
+        expect(owned.letterSpacing, 0);
+        expect(owned.wordSpacing, 0);
+        expect(owned.fontFamily, isNot('external'));
+        final explicit = tester
+            .renderObject<RenderParagraph>(find.text('explicit'))
+            .text
+            .style!;
+        expect(explicit.letterSpacing, 3);
+        expect(explicit.wordSpacing, 4);
+        expect(explicit.fontFamily, 'custom');
+        expect(
+          tester
+              .renderObject<RenderParagraph>(find.text('caller'))
+              .text
+              .style!
+              .letterSpacing,
+          7,
+        );
+      }
+    },
+  );
+
   Widget wrap(Widget child) {
     final theme = TThemeBuilder.light(TThemeData.defaultData());
     return MaterialApp(

@@ -3,9 +3,9 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
-import '../text/t_text.dart';
 import '../text/t_text_styled.dart';
 import 't_result_theme_data.dart';
 
@@ -108,25 +108,25 @@ class TResult extends StatelessWidget {
     final iconSize = _theme(context)?.iconSize ?? 80;
     switch (status) {
       case TResultStatus.success:
-        return Icon(
+        return TInternalIcon(
           TIcons.check_circle,
           color: context.tTheme.successColor,
           size: iconSize,
         );
       case TResultStatus.warning:
-        return Icon(
+        return TInternalIcon(
           TIcons.error_circle,
           color: context.tTheme.warningColor,
           size: iconSize,
         );
       case TResultStatus.error:
-        return Icon(
+        return TInternalIcon(
           TIcons.close_circle,
           color: context.tTheme.errorColor,
           size: iconSize,
         );
       case TResultStatus.info:
-        return Icon(
+        return TInternalIcon(
           TIcons.info_circle,
           color: context.tTheme.brandColor,
           size: iconSize,

@@ -4,8 +4,8 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
-import '../text/t_text.dart';
 import '../text/t_text_styled.dart';
 import 't_tree_select_theme_data.dart';
 
@@ -195,7 +195,7 @@ class _TTreeSelectState extends State<TTreeSelect> {
         return Container(
           height: theme?.height ?? _kTreeSelectHeight,
           color: theme?.backgroundColor ?? context.tTheme.bgColorContainer,
-          child: SingleChildScrollView(
+          child: TInternalScrollScope(child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -210,7 +210,7 @@ class _TTreeSelectState extends State<TTreeSelect> {
                   ),
               ],
             ),
-          ),
+          )),
         );
       },
     );
@@ -306,7 +306,7 @@ class _TTreeSelectState extends State<TTreeSelect> {
     return Container(
       width: width,
       color: backgroundColor,
-      child: ListView.builder(
+      child: TInternalScrollScope(child: ListView.builder(
         padding: EdgeInsets.zero,
         itemCount: options.length,
         itemBuilder: (context, index) {
@@ -346,7 +346,7 @@ class _TTreeSelectState extends State<TTreeSelect> {
             theme: theme,
           );
         },
-      ),
+      )),
     );
   }
 
@@ -555,7 +555,11 @@ class _TreeOptionTile extends StatelessWidget {
                   SizedBox(
                     width: 56,
                     height: height,
-                    child: Icon(TIcons.check, size: 24, color: indicatorColor),
+                    child: TInternalIcon(
+                      TIcons.check,
+                      size: 24,
+                      color: indicatorColor,
+                    ),
                   ),
               ],
             ),

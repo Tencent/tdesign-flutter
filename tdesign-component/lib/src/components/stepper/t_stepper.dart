@@ -5,7 +5,7 @@ import 'package:flutter/services.dart' show TextInputFormatter;
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
-import '../../theme/t_font_family.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import 't_stepper_defaults.dart';
@@ -382,7 +382,7 @@ class _StepperButton extends StatelessWidget {
               borderRadius: borderRadius,
             ),
             child: Center(
-              child: Icon(
+              child: TInternalIcon(
                 icon,
                 size: style.iconSize,
                 color: disabled

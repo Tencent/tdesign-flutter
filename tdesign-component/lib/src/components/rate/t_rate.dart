@@ -5,12 +5,12 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../text/t_text.dart';
 import '../text/t_text_styled.dart';
 import 't_rate_theme_data.dart';
 
@@ -364,9 +364,9 @@ class _TRateState extends State<TRate> {
   Widget _buildIcon(bool filled, double iconSize, Color color) {
     final icon = widget.icon?.call(filled);
     if (icon == null) {
-      return Icon(TIcons.star_filled, size: iconSize, color: color);
+      return TInternalIcon(TIcons.star_filled, size: iconSize, color: color);
     }
-    return IconTheme.merge(
+    return TInternalIconTheme.merge(
       data: IconThemeData(size: iconSize, color: color),
       child: icon,
     );
@@ -551,10 +551,10 @@ class _TRateState extends State<TRate> {
       }
       return SizedBox(
         width: (popupWidth - token.spacer).clamp(0, double.infinity),
-        child: SingleChildScrollView(
+        child: TInternalScrollScope(child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: choices,
-        ),
+        )),
       );
     }
 
@@ -570,7 +570,7 @@ class _TRateState extends State<TRate> {
         Positioned(
           left: left,
           top: top,
-          child: Material(
+          child: TInternalMaterial(
             color: Colors.transparent,
             child: Container(
               key: _valueIndicatorShowsHalfChoices
@@ -636,7 +636,7 @@ class _TRateState extends State<TRate> {
                 ],
               ),
             ),
-            Text(
+            TTextStyled(
               _formatValue(value),
               style: TextStyle(fontSize: token.fontBodyMedium?.size),
             ),

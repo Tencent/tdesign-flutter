@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
 import '../loading/t_loading.dart';
@@ -211,7 +212,7 @@ class _TSideBarState extends State<TSideBar> {
         context: context,
         removeTop: true,
         removeBottom: true,
-        child: ListView.builder(
+        child: TInternalScrollScope(child: ListView.builder(
           physics: const ClampingScrollPhysics(),
           itemCount: displayChildren.length,
           controller: _scrollerController,
@@ -241,7 +242,7 @@ class _TSideBarState extends State<TSideBar> {
               onTap: widget.onChanged == null ? null : () => onSelect(ele),
             );
           },
-        ),
+        )),
       ),
     );
 

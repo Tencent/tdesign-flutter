@@ -5,8 +5,10 @@ import '../../theme/basic.dart' show Font, FontFamily;
 import '../../theme/t_colors.dart';
 import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_styled.dart';
 import 't_tag_theme_data.dart';
 import 't_tag_types.dart';
 
@@ -123,7 +125,7 @@ class TTag extends StatelessWidget {
       if (needCloseIcon) {
         final closeIcon = Container(
           margin: EdgeInsets.only(left: iconSpacing),
-          child: Icon(
+          child: TInternalIcon(
             TIcons.close,
             color: colors.closeIconColor ?? context.tTheme.textColorAnti,
             size: iconSize,
@@ -178,7 +180,7 @@ class TTag extends StatelessWidget {
     required TextOverflow overflow,
     required int maxLines,
   }) {
-    return Text(
+    return TTextStyled(
       text,
       maxLines: maxLines,
       overflow: overflow,
@@ -329,7 +331,7 @@ class TTag extends StatelessWidget {
   Widget? _getIcon(Color textColor) {
     if (icon != null) {
       // 使用 Icon 组件渲染，保证可被 find.byIcon 命中且视觉一致
-      return Icon(icon, color: textColor, size: _getIconSize());
+      return TInternalIcon(icon, color: textColor, size: _getIconSize());
     }
     return null;
   }

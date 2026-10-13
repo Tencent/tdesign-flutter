@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  requiredMarkerOwnershipTests();
   Widget app(Widget child, {TCellThemeData? cellTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
     if (cellTheme != null) {
@@ -617,4 +618,99 @@ void main() {
       expect(a.lerp(null, 0.5), same(a));
     });
   });
+}
+
+void requiredMarkerOwnershipTests() {
+  for (final m3 in [false, true]) {
+    testWidgets('required marker isolates ambient typography M3=$m3', (
+      tester,
+    ) async {
+      final heights = <double>[];
+      for (final hostile in [false, true]) {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              useMaterial3: m3,
+              textTheme: TextTheme(
+                bodyMedium: TextStyle(
+                  fontSize: hostile ? 80 : 14,
+                  letterSpacing: hostile ? 18 : 0,
+                  wordSpacing: hostile ? 9 : 0,
+                  shadows: hostile
+                      ? const [Shadow(color: Colors.pink, blurRadius: 3)]
+                      : null,
+                ),
+              ),
+              extensions: [TThemeData.defaultData()],
+            ),
+            home: const Scaffold(
+              body: TCell(title: Text('title'), required: true),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final style =
+            (tester.renderObject<RenderParagraph>(find.text(' *')).text
+                    as TextSpan)
+                .style!;
+        expect(style.fontSize, 14);
+        expect(style.letterSpacing, 0);
+        expect(style.wordSpacing, 0);
+        expect(style.shadows, anyOf(isNull, isEmpty));
+        heights.add(tester.getSize(find.byType(TCell)).height);
+      }
+      expect(heights.first, heights.last);
+    });
+    testWidgets('requiredStyle and caller content theme survive M3=$m3', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            useMaterial3: m3,
+            textTheme: const TextTheme(
+              bodyMedium: TextStyle(fontSize: 31, color: Colors.green),
+            ),
+            extensions: [
+              TThemeData.defaultData(),
+              const TCellThemeData(
+                requiredStyle: TextStyle(
+                  fontSize: 21,
+                  color: Colors.blue,
+                  letterSpacing: 3,
+                  shadows: [Shadow(color: Colors.blue, blurRadius: 2)],
+                ),
+              ),
+            ],
+          ),
+          home: Scaffold(
+            body: TCell(
+              required: true,
+              title: Builder(
+                builder: (context) => Text(
+                  'custom',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final marker =
+          (tester.renderObject<RenderParagraph>(find.text(' *')).text
+                  as TextSpan)
+              .style!;
+      final custom =
+          (tester.renderObject<RenderParagraph>(find.text('custom')).text
+                  as TextSpan)
+              .style!;
+      expect(marker.fontSize, 21);
+      expect(marker.color, Colors.blue);
+      expect(marker.letterSpacing, 3);
+      expect(marker.shadows!.single.color, Colors.blue);
+      expect(custom.fontSize, 31);
+      expect(custom.color, Colors.green);
+    });
+  }
 }

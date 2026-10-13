@@ -10,8 +10,9 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
-import '../../theme/t_spacers.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_styled.dart';
 import 't_dropdown_theme_data.dart';
 
 /// 下拉筛选面板相对筛选栏的展开位置。
@@ -623,7 +624,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   Widget build(BuildContext context) {
     final theme = _theme;
     final bar = widget.scrollable
-        ? SingleChildScrollView(
+        ? TInternalScrollScope(child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: List<Widget>.generate(
@@ -634,7 +635,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
                 ),
               ),
             ),
-          )
+          ))
         : LayoutBuilder(
             builder: (context, constraints) {
               if (constraints.hasBoundedWidth) {
@@ -758,7 +759,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
       button: true,
       enabled: item.enabled,
       expanded: isOpen,
-      child: InkWell(
+      child: TInternalInkWell(
         focusNode: _triggerFocusNodes[index],
         onTap: onTap,
         child: Row(
@@ -766,7 +767,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
           mainAxisSize: MainAxisSize.min,
           children: [
             Flexible(
-              child: Text(
+              child: TTextStyled(
                 item.label!,
                 style: style,
                 maxLines: 1,
@@ -778,7 +779,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
               turns: arrowTurns,
               duration: _duration,
               curve: Curves.ease,
-              child: Icon(
+              child: TInternalIcon(
                 TIcons.caret_down_small,
                 size: theme.iconSize ?? 24,
                 color: iconColor,
@@ -1160,7 +1161,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
           child: ConstrainedBox(
             key: measureKey,
             constraints: BoxConstraints(maxHeight: maxHeight),
-            child: Material(
+            child: TInternalMaterial(
               color: panelBackgroundColor,
               child: FocusScope(
                 child: widget.items[panelIndex].panelBuilder(

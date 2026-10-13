@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
@@ -8,11 +6,13 @@ import '../../theme/basic.dart';
 import '../../theme/resource_delegate.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../button/t_button.dart';
 import '../button/t_button_types.dart';
+import '../text/t_text_styled.dart';
 import 't_upload_theme_data.dart';
 import 't_upload_types.dart';
 
@@ -205,7 +205,7 @@ class _TUploadState extends State<_TUploadView> {
       builder: (context, candidates, rejected) => LongPressDraggable<int>(
         key: ValueKey('upload-drag-${files[index].id}'),
         data: index,
-        feedback: Material(
+        feedback: TInternalMaterial(
           color: Colors.transparent,
           child: SizedBox(width: feedbackWidth, child: child),
         ),
@@ -246,7 +246,7 @@ class _TUploadState extends State<_TUploadView> {
           height: size,
           decoration: _decoration(context, backgroundColor, theme),
           alignment: Alignment.center,
-          child: Icon(
+          child: TInternalIcon(
             TIcons.add,
             size: theme?.addIconSize ?? 28,
             color: foregroundColor,
@@ -313,7 +313,7 @@ class _TUploadState extends State<_TUploadView> {
                         ),
                       ),
                     ),
-                    child: Icon(
+                    child: TInternalIcon(
                       TIcons.close,
                       size: theme?.removeIconSize ?? 16,
                       color: context.tTheme.textColorAnti,
@@ -360,13 +360,13 @@ class _TUploadState extends State<_TUploadView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            TInternalIcon(
               _fileIcon(file.name),
               size: 24,
               color: _fileIconColor(context, file.name),
             ),
             const SizedBox(height: 4.0),
-            Text(
+            TTextStyled(
               file.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -387,7 +387,7 @@ class _TUploadState extends State<_TUploadView> {
   Widget _placeholder(BuildContext context, TUploadThemeData? theme) {
     return ColoredBox(
       color: theme?.backgroundColor ?? context.tTheme.bgColorSecondaryContainer,
-      child: Icon(
+      child: TInternalIcon(
         TIcons.file,
         color: theme?.foregroundColor ?? context.tTheme.textColorPlaceholder,
       ),
@@ -427,20 +427,20 @@ class _TUploadState extends State<_TUploadView> {
             if (isUploading)
               SizedBox.square(
                 dimension: theme?.statusIconSize ?? 24,
-                child: CircularProgressIndicator(
+                child: TInternalCircularProgressIndicator(
                   value: file.progress,
                   strokeWidth: 2,
                   color: foregroundColor,
                 ),
               )
             else
-              Icon(
+              TInternalIcon(
                 isRetryableError ? TIcons.refresh : TIcons.close_circle,
                 size: theme?.statusIconSize ?? 24,
                 color: foregroundColor,
               ),
             const SizedBox(height: 4),
-            Text(
+            TTextStyled(
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -463,9 +463,12 @@ class _TUploadState extends State<_TUploadView> {
       key: const ValueKey('upload-add'),
       size: TButtonSize.medium,
       colorPreset: TButtonColorPreset.primary,
-      icon: const Icon(TIcons.upload),
+      icon: const TInternalIcon(TIcons.upload),
       onPressed: _canPick ? _pickFiles : null,
-      child: const Text('Upload'),
+      child: Text(
+        'Upload',
+        selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
+      ),
     );
   }
 
@@ -490,7 +493,7 @@ class _TUploadState extends State<_TUploadView> {
               onTap: () => onChanged!(
                 List.unmodifiable(files.where((item) => item.id != file.id)),
               ),
-              child: Icon(
+              child: TInternalIcon(
                 TIcons.delete,
                 size: 18,
                 color: context.tTheme.textColorPlaceholder,
@@ -508,7 +511,7 @@ class _TUploadState extends State<_TUploadView> {
     if (file.status == TUploadFileStatus.uploading) {
       return SizedBox.square(
         dimension: 24,
-        child: CircularProgressIndicator(
+        child: TInternalCircularProgressIndicator(
           value: file.progress,
           strokeWidth: 2,
           color: _enabled
@@ -518,7 +521,7 @@ class _TUploadState extends State<_TUploadView> {
       );
     }
     if (file.status == TUploadFileStatus.error) {
-      return Icon(
+      return TInternalIcon(
         TIcons.error_circle_filled,
         size: 24,
         color: _enabled
@@ -527,7 +530,7 @@ class _TUploadState extends State<_TUploadView> {
       );
     }
     if (file.status == TUploadFileStatus.retryableError) {
-      return Icon(
+      return TInternalIcon(
         TIcons.refresh,
         size: 24,
         color: _enabled
@@ -551,7 +554,7 @@ class _TUploadState extends State<_TUploadView> {
         ),
       );
     }
-    return Icon(
+    return TInternalIcon(
       _fileIcon(file.name),
       size: 24,
       color: _fileIconColor(context, file.name),
@@ -630,14 +633,14 @@ class _TUploadState extends State<_TUploadView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  TTextStyled(
                     title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: _fontStyle(token.fontBodyMedium, titleColor),
                   ),
                   const SizedBox(height: 4.0),
-                  Text(
+                  TTextStyled(
                     subtitle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

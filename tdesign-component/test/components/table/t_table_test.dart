@@ -671,30 +671,30 @@ void main() {
             ),
           );
 
+      Set<_Row>? selection;
       await tester.pumpWidget(
         app(
           TTable(
             columns: columns(),
             data: rows,
             selectionMode: TTableSelectionMode.multiple,
-            onSelectionChanged: (_) {},
+            onSelectionChanged: (value) => selection = value,
           ),
           materialTheme: pollutedTheme,
         ),
       );
 
-      final checkboxTheme = tester
-          .widgetList<CheckboxTheme>(find.byType(CheckboxTheme))
-          .first;
-      expect(checkboxTheme.data.visualDensity, VisualDensity.compact);
+      final checkboxes = find.byType(TCheckbox);
+      expect(checkboxes, findsNWidgets(4));
+      expect(tester.getSize(checkboxes.first).width, 48);
+      final indicator = find.byIcon(TIcons.circle).first;
+      expect(tester.getSize(indicator), const Size.square(20));
       expect(
-        checkboxTheme.data.materialTapTargetSize,
-        MaterialTapTargetSize.shrinkWrap,
+        tester.widget<Icon>(indicator).color,
+        TThemeData.defaultData().componentBorder,
       );
-      expect(checkboxTheme.data.fillColor, isNull);
-      expect(checkboxTheme.data.checkColor, isNull);
-      expect(checkboxTheme.data.shape, isNull);
-      expect(checkboxTheme.data.side, isNull);
+      await tester.tap(checkboxes.first);
+      expect(selection, rows.toSet());
     });
   });
 

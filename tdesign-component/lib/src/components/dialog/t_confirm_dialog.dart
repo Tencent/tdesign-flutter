@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/t_colors.dart';
+import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../button/t_button_types.dart';
 import 't_dialog.dart';
@@ -64,8 +66,22 @@ class TConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TDialog(
-      title: title == null ? null : Text(title!),
-      content: contentWidget ?? (content == null ? null : Text(content!)),
+      title: title == null
+          ? null
+          : Text(
+              title!,
+              selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
+            ),
+      content:
+          contentWidget ??
+          (content == null
+              ? null
+              : Text(
+                  content!,
+                  selectionColor: context.tTheme.brandColor.withValues(
+                    alpha: 0.4,
+                  ),
+                )),
       showCloseButton: showCloseButton,
       closeButtonResult: closeButtonResult,
       semanticLabel: semanticLabel ?? title,
@@ -76,7 +92,10 @@ class TConfirmDialog extends StatelessWidget {
           closeOnPressed: closeOnPressed,
           onPressed: onPressed,
           style: buttonStyle,
-          child: Text(buttonText ?? context.resource.knew),
+          child: Text(
+            buttonText ?? context.resource.knew,
+            selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
+          ),
         ),
       ],
     );

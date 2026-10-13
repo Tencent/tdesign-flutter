@@ -3,10 +3,12 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../swiper/t_swiper.dart';
 import '../swiper/t_swiper_types.dart';
+import '../text/t_text_styled.dart';
 import 't_image_viewer_theme_data.dart';
 
 /// 图片预览导航栏槽位构建器。
@@ -262,7 +264,7 @@ class _TImageViewerViewState extends State<_TImageViewerView>
           context.tTheme.fontGray1,
           context.tTheme.bgColorContainer,
         );
-    return Material(
+    return TInternalMaterial(
       color: backgroundColor,
       child: Stack(
         fit: StackFit.expand,
@@ -396,7 +398,7 @@ class _TImageViewerViewState extends State<_TImageViewerView>
         mainAxisSize: MainAxisSize.min,
         children: [
           if (label != null && label.isNotEmpty)
-            Text(
+            TTextStyled(
               label,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
@@ -405,7 +407,7 @@ class _TImageViewerViewState extends State<_TImageViewerView>
                   TextStyle(color: context.tTheme.textColorAnti),
             ),
           if (widget.showIndex)
-            Text(
+            TTextStyled(
               '${_index + 1}/${widget.images.length}',
               style:
                   theme?.indexStyle ??
@@ -423,11 +425,11 @@ class _TImageViewerViewState extends State<_TImageViewerView>
     if (!widget.showClose) {
       return const SizedBox.shrink();
     }
-    return IconButton(
+    return TInternalIconButton(
       tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
       onPressed: () => Navigator.of(context).pop(),
       style: _actionStyle(context, theme, enabled: true),
-      icon: const Icon(TIcons.close),
+      icon: const TInternalIcon(TIcons.close),
     );
   }
 
@@ -435,13 +437,13 @@ class _TImageViewerViewState extends State<_TImageViewerView>
     if (!widget.showDelete) {
       return const SizedBox.shrink();
     }
-    return IconButton(
+    return TInternalIconButton(
       tooltip: MaterialLocalizations.of(context).deleteButtonTooltip,
       onPressed: widget.onDelete == null
           ? null
           : () => widget.onDelete!(_index),
       style: _actionStyle(context, theme, enabled: widget.onDelete != null),
-      icon: const Icon(TIcons.delete),
+      icon: const TInternalIcon(TIcons.delete),
     );
   }
 
@@ -558,7 +560,7 @@ class _TImageViewerPageState extends State<_TImageViewerPage>
             child: Image(
               image: widget.image,
               fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) => Icon(
+              errorBuilder: (_, __, ___) => TInternalIcon(
                 TIcons.close,
                 key: const ValueKey('image-viewer-error-placeholder'),
                 size: context.tTheme.spacer3,

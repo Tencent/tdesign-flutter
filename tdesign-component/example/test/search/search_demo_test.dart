@@ -17,10 +17,12 @@ void main() {
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('search result ${mode.name} golden', (tester) async {
       await pumpFullDemoPage(tester, spec, mode);
-      final textField = find.byWidgetPredicate(
-        (widget) =>
-            widget is TextField &&
-            widget.decoration?.hintText == '输入tdesign，有预览结果',
+      final textField = find.descendant(
+        of: find.byWidgetPredicate(
+          (widget) =>
+              widget is TSearchBar && widget.hintText == '输入tdesign，有预览结果',
+        ),
+        matching: find.byType(TextField),
       );
       await tester.tap(textField);
       await tester.enterText(textField, 'mobile');

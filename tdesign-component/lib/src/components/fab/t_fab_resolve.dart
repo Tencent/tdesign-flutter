@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import '../../components/button/t_button.dart';
 import '../../components/button/t_button_theme_data.dart';
 import '../../components/button/t_button_types.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_shadows.dart';
-import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_fab_defaults.dart';
 import 't_fab_layout.dart';
@@ -60,13 +61,19 @@ class TFabResolve {
     required BuildContext context,
   }) {
     final hasText = text != null && text.isNotEmpty;
-    final effectiveIcon = icon ?? const Icon(TFabDefaults.defaultIconData);
+    final effectiveIcon =
+        icon ?? const TInternalIcon(TFabDefaults.defaultIconData);
 
     // shape 推导：纯图标=圆形，有文字=胶囊形。
     final effectiveShape = TFabDefaults.shapeForText(hasText);
 
     final tButton = TButton(
-      child: hasText ? Text(text) : null,
+      child: hasText
+          ? Text(
+              text,
+              selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
+            )
+          : null,
       icon: effectiveIcon,
       size: TFabDefaults.defaultSize,
       variant: TFabDefaults.defaultVariant,

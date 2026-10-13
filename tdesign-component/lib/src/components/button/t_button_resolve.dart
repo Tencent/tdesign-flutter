@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_resolve.dart';
 import 't_button_types.dart';
 
 /// 按钮样式解析器
@@ -127,38 +129,51 @@ class TButtonResolve {
     }
 
     if (instanceStyle != null) {
-      resolved = _overrideWith(resolved, instanceStyle);
+      resolved = _overrideWith(resolved, instanceStyle, stateFallback: true);
     }
 
-    // 最终样式未显式配置交互层时，使用最终前景色生成 Flutter 原生 WidgetState 反馈。
-    // 只补空缺，不覆盖实例 style 的显式 overlayColor。
-    if (resolved.overlayColor == null) {
-      final foreground = resolved.foregroundColor;
-      final background = resolved.backgroundColor;
-      final hasPressedBackground =
-          background?.resolve(const <WidgetState>{WidgetState.pressed}) !=
-          background?.resolve(const <WidgetState>{});
-      resolved = _overrideWith(
-        resolved,
-        ButtonStyle(
-          overlayColor: _interactionOverlay(
-            foreground,
-            fallbackColor: tTheme.textColorPrimary,
-            includePressed: !hasPressedBackground,
-          ),
+    // TD 尺寸不参与 Material 密度调整，包括实例显式密度覆盖。
+    resolved = resolved.copyWith(visualDensity: VisualDensity.standard);
+
+    // Resolve missing feedback states from the final TD foreground/background.
+    // Non-null instance values (including transparent) remain authoritative.
+    final foreground = resolved.foregroundColor;
+    final background = resolved.backgroundColor;
+    final hasPressedBackground =
+        background?.resolve(const <WidgetState>{WidgetState.pressed}) !=
+        background?.resolve(const <WidgetState>{});
+    resolved = _overrideWith(
+      ButtonStyle(
+        overlayColor: _interactionOverlay(
+          foreground,
+          fallbackColor: tTheme.textColorPrimary,
+          includePressed: !hasPressedBackground,
         ),
-      );
-    }
+      ),
+      resolved,
+      stateFallback: true,
+    );
 
-    return resolved;
+    final configuredTextStyle = resolved.textStyle;
+    return resolved.copyWith(
+      textStyle: WidgetStateProperty.resolveWith(
+        (states) => TTextResolve.resolve(
+          context: context,
+          style: tokenTextStyle.merge(configuredTextStyle?.resolve(states)),
+        ),
+      ),
+    );
   }
 
   /// 使用 [overrideStyle] 覆盖 [base] 中同名字段。
   static ButtonStyle _overrideWith(
     ButtonStyle base,
-    ButtonStyle overrideStyle,
-  ) {
-    return overrideStyle.merge(base);
+    ButtonStyle overrideStyle, {
+    bool stateFallback = false,
+  }) {
+    return stateFallback
+        ? TInternalMaterialTheme.mergeButtonStyle(base, overrideStyle)
+        : overrideStyle.merge(base);
   }
 
   /// 根据 variant + colorPreset 生成颜色 ButtonStyle
@@ -441,6 +456,9 @@ class TButtonResolve {
     final padV = fixedIconShape ? paddingValue : metrics.verticalPadding;
 
     return ButtonStyle(
+      maximumSize: const WidgetStatePropertyAll(Size.infinite),
+      alignment: Alignment.center,
+      animationDuration: kThemeChangeDuration,
       minimumSize: WidgetStatePropertyAll<Size>(
         Size(fixedIconShape ? metrics.height : 0, minHeight),
       ),

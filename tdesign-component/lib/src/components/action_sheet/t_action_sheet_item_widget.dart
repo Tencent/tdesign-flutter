@@ -1,12 +1,13 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../badge/t_badge.dart';
 import '../badge/t_badge_internal.dart';
 import '../badge/t_badge_layout.dart';
 import '../text/t_text.dart';
@@ -108,7 +109,7 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
     double iconSize,
     double iconExtent,
   ) {
-    final icon = IconTheme(
+    final icon = TInternalIconTheme(
       data: IconThemeData(color: iconColor, size: iconSize),
       child: SizedBox(
         width: iconExtent,

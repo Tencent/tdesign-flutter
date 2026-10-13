@@ -4,9 +4,11 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 import '../../theme/t_colors.dart';
 import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_resolve.dart';
 import 't_progress_circular.dart';
 import 't_progress_defaults.dart';
 import 't_progress_theme_data.dart';
@@ -506,7 +508,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
     );
     if (statusIcon != null) {
       if (widget.type != TProgressVariant.plump) {
-        return Icon(
+        return TInternalIcon(
           statusIcon,
           key: ValueKey('progress-${widget.status.name}'),
         );
@@ -516,8 +518,13 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
 
     Widget getAutoText() =>
         showAutoText && widget.type != TProgressVariant.microCircular
-        ? Text('${(widget.value! * 100).round()}%')
-        : const Text('');
+        ? Builder(
+            builder: (context) => Text(
+              '${(widget.value! * 100).round()}%',
+              selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
+            ),
+          )
+        : const Text('', selectionColor: Colors.transparent);
 
     return getAutoText();
   }
@@ -681,7 +688,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
     if (icon == null) {
       throw StateError('The normal status has no external icon.');
     }
-    return Icon(
+    return TInternalIcon(
       icon,
       key: ValueKey('progress-${widget.status.name}'),
       color: _effectiveColor,
@@ -880,19 +887,22 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
     final iconColor = widget.type == TProgressVariant.plump
         ? labelColor
         : _effectiveColor;
-    return IconTheme(
+    return TInternalIconTheme(
       data: IconThemeData(color: iconColor, size: iconSize),
       child: DefaultTextStyle(
         key: const ValueKey('progress-label-style'),
-        style: TextStyle(
-          color: labelColor,
-          fontSize: tokenFont?.size ?? fallbackFontSize,
-          height: tokenFont?.height ?? fallbackLineHeight,
-          fontWeight: tokenFont?.fontWeight ?? fallbackFontWeight,
-          fontFamily: context.tTheme.fontFamily?.flutterFontFamily,
-          fontFamilyFallback:
-              context.tTheme.fontFamily?.flutterFontFamilyFallback,
-          letterSpacing: 0,
+        style: TTextResolve.resolve(
+          context: context,
+          style: TextStyle(
+            color: labelColor,
+            fontSize: tokenFont?.size ?? fallbackFontSize,
+            height: tokenFont?.height ?? fallbackLineHeight,
+            fontWeight: tokenFont?.fontWeight ?? fallbackFontWeight,
+            fontFamily: context.tTheme.fontFamily?.flutterFontFamily,
+            fontFamilyFallback:
+                context.tTheme.fontFamily?.flutterFontFamilyFallback,
+            letterSpacing: 0,
+          ),
         ),
         child: _effectiveLabel,
       ),

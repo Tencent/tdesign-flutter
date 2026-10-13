@@ -3,12 +3,14 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../checkbox/t_check_box.dart';
 import '../empty/t_empty.dart';
 import '../icon/t_icon.dart';
 import '../loading/t_loading.dart';
+import '../text/t_text_resolve.dart';
 import 't_table_col.dart';
 import 't_table_theme_data.dart';
 import 't_table_types.dart';
@@ -466,7 +468,7 @@ class _TTableState<T> extends State<TTable<T>> {
                 trailingBoundary: index == left.length - 1,
               ),
             Expanded(
-              child: SingleChildScrollView(
+              child: TInternalScrollScope(child: SingleChildScrollView(
                 controller: _horizontalScroll.headerController,
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -474,7 +476,7 @@ class _TTableState<T> extends State<TTable<T>> {
                       .map((column) => _buildHeaderCell(context, theme, column))
                       .toList(),
                 ),
-              ),
+              )),
             ),
             for (var index = 0; index < right.length; index++)
               _buildHeaderCell(
@@ -573,18 +575,20 @@ class _TTableState<T> extends State<TTable<T>> {
             ),
           _buildPane(context, theme, grid, left, rowHeight),
           Expanded(
-            child: SingleChildScrollView(
+            child: TInternalScrollScope(child: SingleChildScrollView(
               controller: _horizontalScroll.bodyController,
               scrollDirection: Axis.horizontal,
               child: _buildPane(context, theme, grid, center, rowHeight),
-            ),
+            )),
           ),
           _buildPane(context, theme, grid, right, rowHeight),
         ],
       ),
     );
     var body = widget.height != null || widget.maxHeight != null
-        ? SingleChildScrollView(child: content)
+        ? TInternalScrollScope(child: SingleChildScrollView(
+            child: content,
+          ))
         : content;
     if (widget.onScroll == null) {
       return body;
@@ -667,7 +671,7 @@ class _TTableState<T> extends State<TTable<T>> {
       trailingBoundary: trailingBoundary,
       child: column.comparator == null
           ? content
-          : InkWell(onTap: () => _requestSort(column), child: content),
+          : TInternalInkWell(onTap: () => _requestSort(column), child: content),
     );
   }
 
@@ -740,7 +744,10 @@ class _TTableState<T> extends State<TTable<T>> {
       padding: theme?.cellPadding ?? const EdgeInsets.symmetric(horizontal: 16),
       child: ClipRect(
         child: DefaultTextStyle.merge(
-          style: _textStyle(context, header: header),
+          style: TTextResolve.resolve(
+            context: context,
+            style: _textStyle(context, header: header),
+          ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           child: child,
@@ -761,7 +768,7 @@ class _TTableState<T> extends State<TTable<T>> {
       ),
       child: onTap == null
           ? Align(alignment: alignment, child: content)
-          : InkWell(
+          : TInternalInkWell(
               onTap: onTap,
               child: Align(alignment: alignment, child: content),
             ),
@@ -825,18 +832,12 @@ class _TTableState<T> extends State<TTable<T>> {
       width: _selectionColumnWidth,
       height: double.infinity,
       decoration: BoxDecoration(border: _cellBorder(context, null)),
-      child: CheckboxTheme(
-        data: const CheckboxThemeData(
-          visualDensity: VisualDensity.compact,
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        ),
-        child: Center(
-          child: TCheckbox(
-            value: tristate ? null : value,
-            size: TCheckboxSize.small,
-            showDivider: false,
-            onChanged: enabled ? onChanged : null,
-          ),
+      child: Center(
+        child: TCheckbox(
+          value: tristate ? null : value,
+          size: TCheckboxSize.small,
+          showDivider: false,
+          onChanged: enabled ? onChanged : null,
         ),
       ),
     );

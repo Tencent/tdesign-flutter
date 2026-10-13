@@ -8,7 +8,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
-import '../../util/context_extension.dart';
+import '../text/t_text_resolve.dart';
 import 't_popover_theme_data.dart';
 import 't_popover_types.dart';
 
@@ -381,7 +381,10 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     final content = widget.content;
     final styledContent = content is Text
         ? DefaultTextStyle.merge(
-            style: _defaultContentTextStyle,
+            style: TTextResolve.resolve(
+              context: context,
+              style: _defaultContentTextStyle,
+            ),
             child: content,
           )
         : content;

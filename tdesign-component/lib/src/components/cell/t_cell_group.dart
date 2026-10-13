@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_style_scope.dart';
 import 't_cell.dart';
@@ -57,7 +58,9 @@ class TCellGroup extends StatelessWidget {
         ),
     ];
     final list = scrollable
-        ? ListView(children: children)
+        ? TInternalScrollScope(child: ListView(
+            children: children,
+          ))
         : Column(mainAxisSize: MainAxisSize.min, children: children);
     final content = Container(
       padding: resolvedVariant == TCellGroupVariant.card
@@ -120,7 +123,7 @@ class TCellGroup extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         child,
-        Divider(
+        TInternalDivider(
           height: 0.5,
           thickness: 0.5,
           indent: 16,

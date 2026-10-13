@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_styled.dart';
 import 't_swiper_theme_data.dart';
 import 't_swiper_types.dart';
 
@@ -582,19 +584,21 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
       clipBehavior: widget.clipBehavior,
       child: NotificationListener<ScrollNotification>(
         onNotification: _handleScrollNotification,
-        child: PageView.builder(
-          controller: _pageController,
-          itemCount: widget.loop ? null : _count,
-          onPageChanged: _handlePageChanged,
-          scrollDirection: widget.scrollDirection,
-          physics: widget.physics,
-          pageSnapping: widget.pageSnapping,
-          padEnds: widget.padEnds,
-          clipBehavior: widget.clipBehavior,
-          reverse: widget.reverse,
-          dragStartBehavior: widget.dragStartBehavior,
-          allowImplicitScrolling: widget.allowImplicitScrolling,
-          itemBuilder: (context, page) => _buildPage(context, page, effect),
+        child: TInternalScrollScope(
+          child: PageView.builder(
+            controller: _pageController,
+            itemCount: widget.loop ? null : _count,
+            onPageChanged: _handlePageChanged,
+            scrollDirection: widget.scrollDirection,
+            physics: widget.physics,
+            pageSnapping: widget.pageSnapping,
+            padEnds: widget.padEnds,
+            clipBehavior: widget.clipBehavior,
+            reverse: widget.reverse,
+            dragStartBehavior: widget.dragStartBehavior,
+            allowImplicitScrolling: widget.allowImplicitScrolling,
+            itemBuilder: (context, page) => _buildPage(context, page, effect),
+          ),
         ),
       ),
     );
@@ -834,7 +838,7 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Center(
             widthFactor: 1,
-            child: Text(
+            child: TTextStyled(
               '${_index + 1}/$_count',
               style: defaultStyle.merge(theme?.fractionStyle),
             ),
@@ -871,10 +875,16 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
         alpha: 0.55,
       ),
       minimumSize: const Size.square(32),
+      iconSize: 18,
       tapTargetSize: MaterialTapTargetSize.padded,
       padding: EdgeInsets.zero,
     );
-    final style = fallbackStyle.merge(theme?.controlStyle);
+    final style = theme?.controlStyle == null
+        ? fallbackStyle
+        : TInternalMaterialTheme.mergeButtonStyle(
+            fallbackStyle,
+            theme!.controlStyle!,
+          );
     return SizedBox(
       width: widget.scrollDirection == Axis.horizontal ? double.infinity : null,
       height: widget.scrollDirection == Axis.vertical ? double.infinity : null,
@@ -882,21 +892,19 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
         direction: widget.scrollDirection,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          IconButton(
+          TInternalIconButton(
             tooltip: localizations.previousPageTooltip,
             onPressed: canGoBack
                 ? () => unawaited(_previous(null, null))
                 : null,
             style: style,
-            iconSize: theme?.controlIconSize ?? 18,
-            icon: widget.previousIcon ?? Icon(previousIcon),
+            icon: widget.previousIcon ?? TInternalIcon(previousIcon),
           ),
-          IconButton(
+          TInternalIconButton(
             tooltip: localizations.nextPageTooltip,
             onPressed: canGoForward ? () => unawaited(_next(null, null)) : null,
             style: style,
-            iconSize: theme?.controlIconSize ?? 18,
-            icon: widget.nextIcon ?? Icon(nextIcon),
+            icon: widget.nextIcon ?? TInternalIcon(nextIcon),
           ),
         ],
       ),

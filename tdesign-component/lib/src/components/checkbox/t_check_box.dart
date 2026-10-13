@@ -5,11 +5,13 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../divider/t_divider.dart';
 import '../divider/t_divider_theme_data.dart';
+import '../text/t_text_styled.dart';
 import 't_checkbox_theme_data.dart';
 import 't_selection_card.dart';
 
@@ -335,7 +337,7 @@ class TCheckbox extends StatelessWidget {
       height: indicatorSize,
       child: icon == null
           ? null
-          : Icon(icon, size: indicatorSize, color: color),
+          : TInternalIcon(icon, size: indicatorSize, color: color),
     );
   }
 
@@ -376,7 +378,7 @@ class TCheckbox extends StatelessWidget {
       alignment: Alignment.center,
       child: mark == null
           ? null
-          : Icon(
+          : TInternalIcon(
               mark,
               size: indicatorSize * 0.75,
               color: context.tTheme.textColorAnti,
@@ -435,7 +437,7 @@ class TCheckbox extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (title != null)
-          Text(
+          TTextStyled(
             title!,
             maxLines: titleMaxLines,
             overflow: TextOverflow.ellipsis,
@@ -447,7 +449,7 @@ class TCheckbox extends StatelessWidget {
           ),
         if (title != null && subTitle != null) const SizedBox(height: 4.0),
         if (subTitle != null)
-          Text(
+          TTextStyled(
             subTitle!,
             maxLines: subTitleMaxLines,
             overflow: TextOverflow.ellipsis,

@@ -5,12 +5,14 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../button/t_button.dart';
 import '../button/t_button_types.dart';
+import '../text/t_text_styled.dart';
 import 't_dropdown_menu.dart';
 import 't_dropdown_theme_data.dart';
 
@@ -73,31 +75,33 @@ class TDropdownSingleSelectPanel<T> extends StatelessWidget {
       constraints: BoxConstraints(
         maxHeight: maxHeight ?? _defaultBodyMaxHeight,
       ),
-      child: ListView.builder(
-        padding: EdgeInsets.zero,
-        shrinkWrap: true,
-        itemCount: options.length,
-        itemBuilder: (context, index) {
-          final option = options[index];
-          final selected = option.value == value;
-          return _DropdownOptionRow(
-            label: option.label,
-            selected: selected,
-            disabled: option.disabled,
-            height: theme.optionHeight ?? 56,
-            padding:
-                theme.optionPadding ??
-                EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
-            onTap: option.disabled
-                ? null
-                : () {
-                    onChanged(option.value);
-                    unawaited(
-                      controller.close(TDropdownMenuCloseReason.selection),
-                    );
-                  },
-          );
-        },
+      child: TInternalScrollScope(
+        child: ListView.builder(
+          padding: EdgeInsets.zero,
+          shrinkWrap: true,
+          itemCount: options.length,
+          itemBuilder: (context, index) {
+            final option = options[index];
+            final selected = option.value == value;
+            return _DropdownOptionRow(
+              label: option.label,
+              selected: selected,
+              disabled: option.disabled,
+              height: theme.optionHeight ?? 56,
+              padding:
+                  theme.optionPadding ??
+                  EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
+              onTap: option.disabled
+                  ? null
+                  : () {
+                      onChanged(option.value);
+                      unawaited(
+                        controller.close(TDropdownMenuCloseReason.selection),
+                      );
+                    },
+            );
+          },
+        ),
       ),
     );
   }
@@ -189,45 +193,47 @@ class _TDropdownMultiSelectPanelState<T>
               constraints: BoxConstraints(
                 maxHeight: widget.maxHeight ?? _defaultBodyMaxHeight,
               ),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(
-                    context.tTheme.spacer2,
-                    context.tTheme.spacer1,
-                    context.tTheme.spacer2,
-                    context.tTheme.spacer2,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      for (final entry in groups.entries) ...[
-                        if (entry.key != null)
-                          Padding(
-                            padding: EdgeInsets.only(
-                              bottom: context.tTheme.spacer1,
+              child: TInternalScrollScope(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      context.tTheme.spacer2,
+                      context.tTheme.spacer1,
+                      context.tTheme.spacer2,
+                      context.tTheme.spacer2,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (final entry in groups.entries) ...[
+                          if (entry.key != null)
+                            Padding(
+                              padding: EdgeInsets.only(
+                                bottom: context.tTheme.spacer1,
+                              ),
+                              child: TTextStyled(
+                                entry.key!,
+                                style:
+                                    theme.optionTextStyle ??
+                                    TextStyle(
+                                      color: context.tTheme.textColorPrimary,
+                                      fontSize:
+                                          context.tTheme.fontBodyMedium?.size,
+                                      height:
+                                          context.tTheme.fontBodyMedium?.height,
+                                      fontWeight: context
+                                          .tTheme
+                                          .fontBodyMedium
+                                          ?.fontWeight,
+                                    ),
+                              ),
                             ),
-                            child: Text(
-                              entry.key!,
-                              style:
-                                  theme.optionTextStyle ??
-                                  TextStyle(
-                                    color: context.tTheme.textColorPrimary,
-                                    fontSize:
-                                        context.tTheme.fontBodyMedium?.size,
-                                    height:
-                                        context.tTheme.fontBodyMedium?.height,
-                                    fontWeight: context
-                                        .tTheme
-                                        .fontBodyMedium
-                                        ?.fontWeight,
-                                  ),
-                            ),
-                          ),
-                        ..._buildRows(context, entry.value, theme),
-                        if (entry.key != groups.keys.last)
-                          SizedBox(height: context.tTheme.spacer2),
+                          ..._buildRows(context, entry.value, theme),
+                          if (entry.key != groups.keys.last)
+                            SizedBox(height: context.tTheme.spacer2),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -302,7 +308,12 @@ class _TDropdownMultiSelectPanelState<T>
             child: TButton(
               colorPreset: TButtonColorPreset.light,
               onPressed: () => setState(_draft.clear),
-              child: Text(context.resource.reset),
+              child: Text(
+                context.resource.reset,
+                selectionColor: context.tTheme.brandColor.withValues(
+                  alpha: 0.4,
+                ),
+              ),
             ),
           ),
           SizedBox(width: theme.actionGap ?? context.tTheme.spacer2),
@@ -315,7 +326,12 @@ class _TDropdownMultiSelectPanelState<T>
                   widget.controller.close(TDropdownMenuCloseReason.confirm),
                 );
               },
-              child: Text(context.resource.confirm),
+              child: Text(
+                context.resource.confirm,
+                selectionColor: context.tTheme.brandColor.withValues(
+                  alpha: 0.4,
+                ),
+              ),
             ),
           ),
         ],
@@ -395,7 +411,7 @@ class _DropdownOptionRow extends StatelessWidget {
             ),
           ),
         ),
-        child: InkWell(
+        child: TInternalInkWell(
           onTap: onTap,
           child: SizedBox(
             height: height,
@@ -404,7 +420,7 @@ class _DropdownOptionRow extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(
+                    child: TTextStyled(
                       label,
                       style: style,
                       maxLines: 1,
@@ -412,7 +428,7 @@ class _DropdownOptionRow extends StatelessWidget {
                     ),
                   ),
                   if (selected)
-                    Icon(
+                    TInternalIcon(
                       TIcons.check,
                       size: 24,
                       color: context.tTheme.brandColor,
@@ -469,7 +485,7 @@ class _DropdownOptionChip extends StatelessWidget {
       selected: selected,
       enabled: !disabled,
       button: true,
-      child: InkWell(
+      child: TInternalInkWell(
         onTap: onTap,
         borderRadius:
             theme.optionBorderRadius ??
@@ -486,7 +502,7 @@ class _DropdownOptionChip extends StatelessWidget {
           padding:
               theme.optionPadding ??
               EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
-          child: Text(
+          child: TTextStyled(
             label,
             style: style,
             maxLines: 1,

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/iterable_ext.dart';
@@ -202,11 +203,11 @@ class _TIndexesState extends State<TIndexes> {
     final theme = _resolveTheme();
     Widget child = Stack(
       children: [
-        CustomScrollView(
+        TInternalScrollScope(child: CustomScrollView(
           controller: _scrollController,
           reverse: widget.reverse,
           slivers: _slivers(),
-        ),
+        )),
         TIndexesList(
           indexList: _indexList,
           activeIndex: _activeIndex,

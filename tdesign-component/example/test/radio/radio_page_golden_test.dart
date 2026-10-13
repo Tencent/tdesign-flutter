@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -36,11 +37,13 @@ void main() {
             ).copyWith(textScaler: TextScaler.noScaling),
             child: child!,
           ),
-          theme: _withRadioGoldenFonts(
+          theme: withDemoGoldenFonts(
             TThemeBuilder.light(TThemeData.defaultData()),
+            _radioDemoSpec,
           ),
-          darkTheme: _withRadioGoldenFonts(
+          darkTheme: withDemoGoldenFonts(
             TThemeBuilder.dark(TThemeData.defaultData()),
+            _radioDemoSpec,
           ),
           themeMode: mode,
           home: ExamplePageInheritedTheme(
@@ -66,6 +69,7 @@ void main() {
       await tester.pumpWidget(buildPage(mode));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
+      _expectRadioFontFallback(tester);
 
       await expectLater(
         find.byKey(const Key('radio-page-golden')),
@@ -90,6 +94,7 @@ void main() {
       await tester.pump();
 
       expect(tester.widget<TRadioGroup<int>>(group).value, 3);
+      _expectRadioFontFallback(tester);
       await expectLater(
         find.byKey(const Key('radio-page-golden')),
         matchesGoldenFile('goldens/radio_selected_${mode.name}.png'),
@@ -98,12 +103,16 @@ void main() {
   }
 }
 
-ThemeData _withRadioGoldenFonts(ThemeData theme) {
-  const fallback = ['Radio Golden CJK'];
-  return theme.copyWith(
-    textTheme: theme.textTheme.apply(fontFamilyFallback: fallback),
-    primaryTextTheme: theme.primaryTextTheme.apply(
-      fontFamilyFallback: fallback,
-    ),
+void _expectRadioFontFallback(WidgetTester tester) {
+  // Check the rendered TD label, so updating a missing-glyph baseline cannot
+  // hide a fixture that only configures Material's text theme.
+  final label = find.descendant(
+    of: find.byType(TRadio<int>).first,
+    matching: find.text('单选'),
+  );
+  final paragraph = tester.renderObject<RenderParagraph>(label);
+  expect(
+    paragraph.text.style?.fontFamilyFallback,
+    contains(_radioDemoSpec.supplementalCjkFontFamily),
   );
 }

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
 import '../icon/t_icon.dart';
+import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
+import '../text/t_text_styled.dart';
 import 't_tab_bar_theme_data.dart';
 
 /// Tab 组件
@@ -57,16 +61,15 @@ class TTab extends Tab {
     }
     Widget content = Center(widthFactor: 1.0, child: label);
     if (!enabled) {
-      final disabledStyle = DefaultTextStyle.of(context).style
-          .copyWith(color: context.tTheme.textColorDisabled)
-          .merge(
-            Theme.of(
-              context,
-            ).extension<TTabsBarThemeData>()?.disabledLabelStyle,
-          );
-      content = DefaultTextStyle.merge(
-        style: disabledStyle,
-        child: IconTheme.merge(
+      final disabledStyle = TTextResolve.resolve(
+        context: context,
+        style: TextStyle(color: context.tTheme.textColorDisabled).merge(
+          Theme.of(context).extension<TTabsBarThemeData>()?.disabledLabelStyle,
+        ),
+      );
+      content = TTextStyleScope(
+        style: TTextResolve.resolve(context: context, style: disabledStyle),
+        child: TInternalIconTheme.merge(
           data: IconThemeData(color: disabledStyle.color),
           child: TIconStyleScope(
             color: disabledStyle.color,
@@ -83,6 +86,11 @@ class TTab extends Tab {
     if (child != null) {
       return child!;
     }
-    return Text(text!, softWrap: false, overflow: TextOverflow.fade);
+    return TTextStyled(
+      text!,
+      style: null,
+      softWrap: false,
+      overflow: TextOverflow.fade,
+    );
   }
 }

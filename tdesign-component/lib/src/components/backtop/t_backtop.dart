@@ -3,10 +3,10 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../text/t_text.dart';
 import '../text/t_text_styled.dart';
 import 't_backtop_theme_data.dart';
 
@@ -139,7 +139,7 @@ class _TBackTopState extends State<TBackTop> {
       button: true,
       enabled: hasAction,
       label: _resolveTooltip(context),
-      child: Tooltip(
+      child: TInternalTooltip(
         message: _resolveTooltip(context),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -225,7 +225,7 @@ class _TBackTopState extends State<TBackTop> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
+            TInternalIcon(
               TIcons.backtop,
               size: style.iconSize,
               color: style.contentColor,
@@ -270,7 +270,7 @@ class _TBackTopState extends State<TBackTop> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(
+            TInternalIcon(
               TIcons.backtop,
               size: style.iconSize,
               color: style.contentColor,

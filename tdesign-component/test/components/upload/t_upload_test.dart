@@ -1207,7 +1207,10 @@ void main() {
         ),
         findsOneWidget,
       );
-      expect(tester.widget<Text>(find.text('上传失败')).style, statusStyle);
+      final renderedStatusStyle = tester.widget<Text>(find.text('上传失败')).style!;
+      expect(renderedStatusStyle.color, statusStyle.color);
+      expect(renderedStatusStyle.fontSize, statusStyle.fontSize);
+      expect(renderedStatusStyle.inherit, isFalse);
       final statusClip = tester.widget<ClipRRect>(
         find
             .ancestor(

@@ -1013,6 +1013,7 @@ const componentTestManifests = <ComponentTestManifest>[
     coverageTargets: [
       'lib/src/theme/t_theme.dart',
       'lib/src/theme/t_radius.dart',
+      'lib/src/theme/t_internal_material.dart',
     ],
     componentTests: [
       'test/acceptance/theme_acceptance_test.dart',
@@ -1022,6 +1023,8 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/theme/t_material_theme_priority_test.dart',
       'test/components/theme/t_resource_delegate_test.dart',
       'test/components/theme/t_theme_test.dart',
+      'test/components/theme/t_internal_material_test.dart',
+      'test/components/theme/t_strict_material_boundary_test.dart',
     ],
     exampleTests: ['test/theme/theme_demo_test.dart'],
     visualTests: [

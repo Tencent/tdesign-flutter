@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_resolve.dart';
 import 't_avatar_defaults.dart';
 import 't_avatar_theme_data.dart';
 import 't_avatar_types.dart';
@@ -60,7 +62,7 @@ class TAvatar extends StatelessWidget {
     ).copyWith(color: resolvedForegroundColor);
     final content =
         child ??
-        Icon(
+        TInternalIcon(
           TIcons.user,
           size:
               theme?.resolveIconSize(resolvedSize) ??
@@ -79,8 +81,11 @@ class TAvatar extends StatelessWidget {
             children: [
               Center(
                 child: DefaultTextStyle.merge(
-                  style: resolvedTextStyle,
-                  child: IconTheme.merge(
+                  style: TTextResolve.resolve(
+                    context: context,
+                    style: resolvedTextStyle,
+                  ),
+                  child: TInternalIconTheme.merge(
                     data: IconThemeData(color: resolvedForegroundColor),
                     child: content,
                   ),

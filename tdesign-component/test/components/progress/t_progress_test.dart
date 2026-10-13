@@ -863,7 +863,9 @@ void main() {
         );
         await tester.pumpAndSettle();
         final finder = find.byKey(ValueKey('progress-$status'));
-        final icon = tester.widget<Icon>(finder);
+        final icon = tester.widget<Icon>(
+          find.descendant(of: finder, matching: find.byType(Icon)),
+        );
         return icon.size ?? IconTheme.of(tester.element(finder)).size;
       }
 

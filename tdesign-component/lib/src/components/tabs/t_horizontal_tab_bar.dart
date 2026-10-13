@@ -12,9 +12,12 @@ import 'package:flutter/rendering.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../icon/t_icon.dart';
+import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_tab.dart';
 import 't_tab_bar_theme_data.dart';
 
@@ -83,9 +86,12 @@ class _TabStyle extends AnimatedWidget {
         ? Color.lerp(selectedColor, unselectedColor, animation.value)!
         : Color.lerp(unselectedColor, selectedColor, animation.value)!;
 
-    return DefaultTextStyle(
-      style: textStyle.copyWith(color: color),
-      child: IconTheme(
+    return TTextStyleScope(
+      style: TTextResolve.resolve(
+        context: context,
+        style: textStyle.copyWith(color: color),
+      ),
+      child: TInternalIconTheme(
         data: IconThemeData(size: _kTabIconSize, color: color),
         child: TIconStyleScope(color: color, size: _kTabIconSize, child: child),
       ),
@@ -988,7 +994,7 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
     for (var index = 0; index < tabCount; index += 1) {
       wrappedTabs[index] = IgnorePointer(
         ignoring: !widget.tabs[index].enabled,
-        child: InkWell(
+        child: TInternalInkWell(
           mouseCursor: widget.mouseCursor ?? SystemMouseCursors.click,
           onTap: () {
             _handleTap(index);
@@ -1046,14 +1052,14 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
             ).add(widget.padding ?? EdgeInsets.zero)
           : widget.padding;
       _scrollController ??= _TabBarScrollController(this);
-      tHorizontalTabBar = SingleChildScrollView(
+      tHorizontalTabBar = TInternalScrollScope(child: SingleChildScrollView(
         dragStartBehavior: widget.dragStartBehavior,
         scrollDirection: Axis.horizontal,
         controller: _scrollController,
         padding: effectivePadding,
         physics: widget.physics,
         child: tHorizontalTabBar,
-      );
+      ));
     } else if (widget.padding != null) {
       tHorizontalTabBar = Padding(
         padding: widget.padding!,
@@ -1523,14 +1529,14 @@ class _THorizontalTabBarViewState extends State<THorizontalTabBarView> {
     }());
     return NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
-      child: PageView(
+      child: TInternalScrollScope(child: PageView(
         dragStartBehavior: widget.dragStartBehavior,
         controller: _pageController,
         physics: widget.physics == null
             ? const PageScrollPhysics().applyTo(const ClampingScrollPhysics())
             : const PageScrollPhysics().applyTo(widget.physics),
         children: _childrenWithKey,
-      ),
+      )),
     );
   }
 }

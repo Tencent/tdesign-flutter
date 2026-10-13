@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  _marqueeTypographyRegression();
   Widget wrap(
     Widget child, {
     TMessageThemeData? messageTheme,
@@ -914,4 +915,75 @@ void main() {
       expect(find.text('组件调用'), findsNothing);
     });
   });
+}
+
+void _marqueeTypographyRegression() {
+  for (final m3 in [false, true]) {
+    for (final scale in [1.0, 1.5]) {
+      for (final direction in TextDirection.values) {
+        for (final bold in [false, true]) {
+          testWidgets(
+            'marquee resolves TD typography m3=$m3 scale=$scale $direction bold=$bold',
+            (tester) async {
+              const content = 'WWWWWWWWWWWWWWWWWWWW';
+              await tester.pumpWidget(
+                MaterialApp(
+                  theme: ThemeData(
+                    useMaterial3: m3,
+                    extensions: [
+                      TThemeData.defaultData(),
+                      const TTextThemeData(
+                        textStyle: TextStyle(letterSpacing: 8),
+                      ),
+                    ],
+                  ),
+                  home: MediaQuery(
+                    data: MediaQueryData(
+                      textScaler: TextScaler.linear(scale),
+                      boldText: bold,
+                    ),
+                    child: Directionality(
+                      textDirection: direction,
+                      child: const Scaffold(
+                        body: Stack(
+                          children: [
+                            TMessage(
+                              content: content,
+                              showIcon: false,
+                              duration: null,
+                              marquee: TMessageMarquee(
+                                duration: Duration(milliseconds: 200),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+              await tester.pump();
+              await tester.pump(const Duration(milliseconds: 220));
+              final width = tester.getSize(find.text(content)).width;
+              final transform = tester.widget<Transform>(
+                find
+                    .byWidgetPredicate(
+                      (widget) =>
+                          widget is Transform &&
+                          widget.transform.storage[12] < 0,
+                    )
+                    .first,
+              );
+              expect(width + transform.transform.storage[12], closeTo(0, 0.01));
+              expect(
+                tester.widget<Text>(find.text(content)).style!.letterSpacing,
+                8,
+              );
+              await tester.pumpWidget(const SizedBox());
+            },
+          );
+        }
+      }
+    }
+  }
 }

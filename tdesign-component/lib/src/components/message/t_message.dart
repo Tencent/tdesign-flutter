@@ -6,9 +6,11 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_styled.dart';
 import 't_message_theme_data.dart';
 import 't_message_types.dart';
 
@@ -460,7 +462,7 @@ class _TMessageState extends State<TMessage>
     if (widget.marquee == null) {
       return Align(
         alignment: Alignment.centerLeft,
-        child: Text(
+        child: TTextStyled(
           widget.content,
           style: style,
           maxLines: 1,
@@ -469,15 +471,36 @@ class _TMessageState extends State<TMessage>
       );
     }
 
-    final textPainter = TextPainter(
-      text: TextSpan(text: widget.content, style: style),
+    // 测量与绘制共享最终 TD 文本配置，保留系统文字缩放和语言方向。
+    final text = TTextStyled(
+      widget.content,
+      style: style,
       maxLines: 1,
-      textDirection: TextDirection.ltr,
+    ).getRawText(context: context);
+    final defaultTextStyle = DefaultTextStyle.of(context);
+    final effectiveStyle = MediaQuery.boldTextOf(context)
+        ? text.style!.merge(const TextStyle(fontWeight: FontWeight.bold))
+        : text.style;
+    final textPainter = TextPainter(
+      text: TextSpan(text: text.data, style: effectiveStyle),
+      textAlign:
+          text.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start,
+      maxLines: text.maxLines,
+      textDirection: text.textDirection ?? Directionality.of(context),
+      textScaler: text.textScaler ?? MediaQuery.textScalerOf(context),
+      locale: text.locale ?? Localizations.maybeLocaleOf(context),
+      strutStyle: text.strutStyle,
+      textWidthBasis: text.textWidthBasis ?? defaultTextStyle.textWidthBasis,
+      textHeightBehavior:
+          text.textHeightBehavior ??
+          defaultTextStyle.textHeightBehavior ??
+          DefaultTextHeightBehavior.maybeOf(context),
     )..layout();
     final tween = Tween<Offset>(
       begin: Offset.zero,
       end: Offset(-textPainter.width, 0),
     );
+    textPainter.dispose();
     return ClipRect(
       child: AnimatedBuilder(
         animation: _animationController,
@@ -490,7 +513,7 @@ class _TMessageState extends State<TMessage>
             child: child,
           ),
         ),
-        child: Text(widget.content, style: style, maxLines: 1),
+        child: text,
       ),
     );
   }
@@ -517,7 +540,7 @@ class _TMessageState extends State<TMessage>
         context.tTheme.errorColor,
       ),
     };
-    return Icon(icon, color: color, size: 22);
+    return TInternalIcon(icon, color: color, size: 22);
   }
 
   Widget _buildCloseButton(BuildContext context) {
@@ -528,7 +551,10 @@ class _TMessageState extends State<TMessage>
       },
       child:
           widget.closeButton ??
-          Icon(TIcons.close, color: context.tTheme.textColorPlaceholder),
+          TInternalIcon(
+            TIcons.close,
+            color: context.tTheme.textColorPlaceholder,
+          ),
     );
   }
 
@@ -581,9 +607,12 @@ class _TMessageState extends State<TMessage>
               shape: shape,
               shadows: context.tTheme.shadow1 ?? const [],
             ),
-            child: Material(type: MaterialType.transparency, child: content),
+            child: TInternalMaterial(
+              type: MaterialType.transparency,
+              child: content,
+            ),
           )
-        : Material(
+        : TInternalMaterial(
             color: backgroundColor,
             shape: shape,
             elevation: theme.elevation!,

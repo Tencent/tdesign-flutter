@@ -35,7 +35,11 @@ class TTextResolve {
     final componentTheme = material.extension<TTextThemeData>();
 
     var resolved = _merge(
-      const TextStyle(),
+      const TextStyle(
+        textBaseline: TextBaseline.alphabetic,
+        letterSpacing: 0,
+        wordSpacing: 0,
+      ),
       _fontStyle(tokenFont).copyWith(
         color: token.textColorPrimary,
         fontFamily: token.fontFamily?.flutterFontFamily,

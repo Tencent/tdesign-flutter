@@ -11,6 +11,7 @@ import '../form/t_form_item_scope.dart';
 import '../input/t_input.dart';
 import '../input/t_input_theme_data.dart';
 import '../input/t_input_types.dart';
+import '../text/t_text_styled.dart';
 
 /// 多行文本框内部标题与编辑区的排列方式。
 enum TTextareaLayout {
@@ -272,7 +273,7 @@ class _TTextareaState extends State<TTextarea> {
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
-                  Text(label, style: labelStyle),
+                  TTextStyled(label, style: labelStyle),
                   SizedBox(width: token.spacer2),
                   Expanded(child: constrainedEditor),
                 ],
@@ -280,7 +281,7 @@ class _TTextareaState extends State<TTextarea> {
               (final label?, TTextareaLayout.vertical) => Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(label, style: labelStyle),
+                  TTextStyled(label, style: labelStyle),
                   SizedBox(height: token.spacer),
                   if (constraints.hasTightHeight)
                     Expanded(child: editor)

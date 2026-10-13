@@ -6,13 +6,13 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
 import '../badge/t_badge_internal.dart';
 import '../badge/t_badge_layout.dart';
-import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
 import '../text/t_text_styled.dart';
 import 't_tab_bar_theme_data.dart';
@@ -705,7 +705,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
           return SizedBox(
             width: _effectiveDividerThickness,
             height: _effectiveDividerHeight,
-            child: VerticalDivider(
+            child: TInternalVerticalDivider(
               color: _effectiveDividerColor,
               thickness: _effectiveDividerThickness,
             ),
@@ -832,7 +832,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
         child = Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
+            TInternalIcon(
               TIcons.view_list,
               size: 16.0,
               color: isSelected
@@ -860,7 +860,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     if (basicType == _TTabBarBasicType.icon) {
       var selectedIcon = itemConfig.selectedIcon;
       var unSelectedIcon = itemConfig.unselectedIcon;
-      child = IconTheme(
+      child = TInternalIconTheme(
         data: IconThemeData(
           size: _kDefaultTabIconSize,
           color: isSelected
@@ -874,7 +874,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     if (basicType == _TTabBarBasicType.iconText) {
       var selectedIcon = itemConfig.selectedIcon;
       var unSelectedIcon = itemConfig.unselectedIcon;
-      final icon = IconTheme(
+      final icon = TInternalIconTheme(
         data: IconThemeData(
           size: _kDefaultTabIconSize,
           color: isSelected
@@ -988,14 +988,14 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     if (!needInkWell) {
       return child;
     }
-    return Material(
+    return TInternalMaterial(
       color: Colors.transparent,
       shape: isInOrOutCapsule
           ? RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
             )
           : null,
-      child: InkWell(
+      child: TInternalInkWell(
         customBorder: isInOrOutCapsule
             ? RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
@@ -1293,7 +1293,7 @@ class _TabBarPopupDialogState extends State<_TabBarPopupDialog> {
       maxLeft < _kPopupViewportPadding ? _kPopupViewportPadding : maxLeft,
     );
 
-    return Material(
+    return TInternalMaterial(
       type: MaterialType.transparency,
       child: GestureDetector(
         onTap: () => Navigator.of(context).pop(),
@@ -1340,7 +1340,7 @@ class _TabBarPopupDialogState extends State<_TabBarPopupDialog> {
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 8.0,
                                 ),
-                                child: Divider(
+                                child: TInternalDivider(
                                   thickness: 0.5,
                                   height: 0.5,
                                   color: context.tTheme.componentStroke,

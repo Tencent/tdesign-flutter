@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
 import '../popup/t_popup.dart';
-import '../text/t_text.dart';
+import '../text/t_text_resolve.dart';
 import '../text/t_text_styled.dart';
 import '../text/t_text_theme_data.dart';
 import 't_drawer_theme_data.dart';

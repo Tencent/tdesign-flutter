@@ -3,8 +3,8 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
-import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
 import '../text/t_text_styled.dart';
 import 't_steps.dart';
@@ -78,7 +78,7 @@ class TStepsVerticalItem extends StatelessWidget {
       stepsNumberTextColor = theme.brandColor;
       stepsTitleColor = theme.textColorPrimary;
 
-      completeIconWidget = Icon(
+      completeIconWidget = TInternalIcon(
         TIcons.check,
         color: theme.brandColor,
         size: 16,
@@ -95,6 +95,7 @@ class TStepsVerticalItem extends StatelessWidget {
     /// 步骤条icon图标组件，默认为索引文字
     Widget? stepsIconWidget = Text(
       (index + 1).toString(),
+      selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
       style: TTextResolve.resolve(
         context: context,
         defaults: TextStyle(
@@ -112,7 +113,11 @@ class TStepsVerticalItem extends StatelessWidget {
 
     /// 传递了成功的 icon 图标, 已完成的 step 都需要显示
     if (data.icon != null) {
-      stepsIconWidget = Icon(data.icon, color: stepsIconColor, size: 22);
+      stepsIconWidget = TInternalIcon(
+        data.icon,
+        color: stepsIconColor,
+        size: 22,
+      );
 
       /// 传了图标则不用设置背景色
       shouldSetIconWidgetDecoration = false;
@@ -128,7 +133,7 @@ class TStepsVerticalItem extends StatelessWidget {
         simpleStepsIconColor = theme.errorColor;
       } else {
         shouldSetIconWidgetDecoration = data.errorIcon == null;
-        stepsIconWidget = Icon(
+        stepsIconWidget = TInternalIcon(
           data.errorIcon ?? TIcons.close,
           color: theme.errorColor,
           size: shouldSetIconWidgetDecoration ? 16 : 22,
@@ -249,7 +254,7 @@ class TStepsVerticalItem extends StatelessWidget {
                                     : const SizedBox.shrink()),
                           ),
                           if (mode == TStepsMode.selectable)
-                            Icon(
+                            TInternalIcon(
                               TIcons.chevron_right,
                               color: theme.textColorPrimary,
                               size: 16,

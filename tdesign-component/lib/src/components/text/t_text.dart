@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../theme/basic.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_theme.dart';
 import 't_text_resolve.dart';
 import 't_text_theme_data.dart';
 
@@ -98,7 +100,7 @@ class TText extends StatelessWidget {
   /// 透传至 [Text.textHeightBehavior]。
   final ui.TextHeightBehavior? textHeightBehavior;
 
-  /// 透传至 [Text.selectionColor]。
+  /// 选择高亮颜色；未指定时使用 TD brandColor 的 40% alpha，不继承 Material 选择主题。
   final Color? selectionColor;
 
   @override
@@ -151,7 +153,8 @@ class TText extends StatelessWidget {
         semanticsIdentifier: semanticsIdentifier,
         textWidthBasis: effectiveTextWidthBasis,
         textHeightBehavior: effectiveTextHeightBehavior,
-        selectionColor: selectionColor,
+        selectionColor:
+            selectionColor ?? context.tTheme.brandColor.withValues(alpha: 0.4),
       );
     }
     return Text(
@@ -170,7 +173,8 @@ class TText extends StatelessWidget {
       semanticsIdentifier: semanticsIdentifier,
       textWidthBasis: effectiveTextWidthBasis,
       textHeightBehavior: effectiveTextHeightBehavior,
-      selectionColor: selectionColor,
+      selectionColor:
+          selectionColor ?? context.tTheme.brandColor.withValues(alpha: 0.4),
     );
   }
 }

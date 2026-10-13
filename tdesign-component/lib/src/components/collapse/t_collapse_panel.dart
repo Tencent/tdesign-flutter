@@ -3,6 +3,7 @@
  */
 import 'package:flutter/material.dart';
 
+import '../../theme/t_internal_material.dart';
 import 't_collapse_types.dart';
 
 /// 根据折叠状态构建面板头部区域内容的回调。
@@ -15,7 +16,7 @@ typedef TCollapsePanelBuilder =
     Widget Function(BuildContext context, bool isExpanded);
 
 Widget _defaultExpandIconBuilder(BuildContext context, bool isExpanded) {
-  return Icon(isExpanded ? Icons.expand_less : Icons.expand_more);
+  return TInternalIcon(isExpanded ? Icons.expand_less : Icons.expand_more);
 }
 
 /// 折叠面板配置。

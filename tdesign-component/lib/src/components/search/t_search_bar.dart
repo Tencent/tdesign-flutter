@@ -4,8 +4,11 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_resolve.dart';
+import '../text/t_text_styled.dart';
 import 't_search_bar_theme_data.dart';
 
 const double _kSearchBarHeight = 40;
@@ -238,60 +241,67 @@ class _TSearchBarState extends State<TSearchBar> {
                 padding: contentPadding,
                 child: Row(
                   children: [
-                    IconTheme(
+                    TInternalIconTheme(
                       data: searchIconTheme,
-                      child: const Icon(TIcons.search, size: 20),
+                      child: const TInternalIcon(TIcons.search, size: 20),
                     ),
                     const SizedBox(width: _kIconGap),
                     Expanded(
-                      child: Material(
+                      child: TInternalMaterial(
                         type: MaterialType.transparency,
-                        child: TextField(
+                        child: TInternalInputHint(
                           controller: _controller,
-                          focusNode: _focusNode,
-                          autofocus: widget.autofocus,
-                          enabled: widget.enabled,
-                          readOnly: widget.readOnly,
-                          onChanged: widget.onChanged,
-                          onSubmitted: widget.onSubmitted,
-                          keyboardType: widget.inputType,
-                          textInputAction: widget.inputAction,
-                          inputFormatters: [
-                            ...?widget.inputFormatters,
-                            if (widget.maxCharacter != null)
-                              _SearchMaxCharacterFormatter(
-                                widget.maxCharacter!,
-                              ),
-                          ],
-                          maxLength: widget.maxLength,
-                          buildCounter:
-                              (
-                                _, {
-                                required currentLength,
-                                required isFocused,
-                                required maxLength,
-                              }) => null,
-                          cursorColor: token.brandColor,
-                          cursorHeight: theme?.cursorHeight,
-                          textAlignVertical: TextAlignVertical.center,
+                          hintText: widget.hintText,
+                          hintStyle: hintStyle,
                           textAlign:
                               effectiveAlignment == TSearchBarAlignment.center
                               ? TextAlign.center
                               : TextAlign.left,
-                          style: textStyle,
-                          decoration: InputDecoration(
-                            hintText: widget.hintText,
-                            hintStyle: hintStyle,
-                            hintMaxLines: 1,
-                            border: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            isCollapsed: true,
-                            contentPadding: EdgeInsets.zero,
+                          child: TInternalEditor(
+                            child: TextField(
+                              contextMenuBuilder:
+                                  TInternalMaterialTheme.editorMenu,
+                              controller: _controller,
+                              focusNode: _focusNode,
+                              autofocus: widget.autofocus,
+                              enabled: widget.enabled,
+                              readOnly: widget.readOnly,
+                              onChanged: widget.onChanged,
+                              onSubmitted: widget.onSubmitted,
+                              keyboardType: widget.inputType,
+                              textInputAction: widget.inputAction,
+                              inputFormatters: [
+                                ...?widget.inputFormatters,
+                                if (widget.maxCharacter != null)
+                                  _SearchMaxCharacterFormatter(
+                                    widget.maxCharacter!,
+                                  ),
+                              ],
+                              maxLength: widget.maxLength,
+                              buildCounter:
+                                  (
+                                    _, {
+                                    required currentLength,
+                                    required isFocused,
+                                    required maxLength,
+                                  }) => null,
+                              cursorColor: token.brandColor,
+                              cursorHeight: theme?.cursorHeight,
+                              textAlignVertical: TextAlignVertical.center,
+                              textAlign:
+                                  effectiveAlignment ==
+                                      TSearchBarAlignment.center
+                                  ? TextAlign.center
+                                  : TextAlign.left,
+                              style: TTextResolve.resolve(
+                                context: context,
+                                style: textStyle,
+                              ),
+                              decoration: null,
+                              maxLines: 1,
+                              cursorOpacityAnimates: false,
+                            ),
                           ),
-                          maxLines: 1,
-                          cursorOpacityAnimates: false,
                         ),
                       ),
                     ),
@@ -305,9 +315,11 @@ class _TSearchBarState extends State<TSearchBar> {
                           child: SizedBox(
                             width: 32,
                             height: height,
-                            child: IconTheme(
+                            child: TInternalIconTheme(
                               data: clearIconTheme,
-                              child: const Icon(TIcons.close_circle_filled),
+                              child: const TInternalIcon(
+                                TIcons.close_circle_filled,
+                              ),
                             ),
                           ),
                         ),
@@ -326,7 +338,9 @@ class _TSearchBarState extends State<TSearchBar> {
                 onTap: widget.enabled ? widget.onActionPressed : null,
                 child: SizedBox(
                   height: height,
-                  child: Center(child: Text(actionText, style: actionStyle)),
+                  child: Center(
+                    child: TTextStyled(actionText, style: actionStyle),
+                  ),
                 ),
               ),
             ),
