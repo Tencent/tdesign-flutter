@@ -421,6 +421,101 @@ void main() {
       TLoadingController.dismiss();
       await tester.pump();
     });
+
+    testWidgets('宿主 Overlay 被销毁后仍可再次显示', (tester) async {
+      late BuildContext ctx;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              ctx = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TLoadingController.show(ctx, text: '第一次');
+      await tester.pump();
+      expect(find.text('第一次'), findsOneWidget);
+
+      // 模拟页面 pop / 热重载：承载 Overlay 的宿主被销毁，且没调用 dismiss。
+      await tester.pumpWidget(
+        const Directionality(
+          textDirection: TextDirection.ltr,
+          child: SizedBox(),
+        ),
+      );
+      await tester.pump();
+      expect(find.text('第一次'), findsNothing);
+
+      // 换成新宿主与新 Overlay：必须还能显示，而不是被残留状态拦住。
+      late BuildContext ctx2;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              ctx2 = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TLoadingController.show(ctx2, text: '第二次');
+      await tester.pump();
+      expect(find.text('第二次'), findsOneWidget);
+
+      TLoadingController.dismiss();
+      await tester.pump();
+      expect(find.text('第二次'), findsNothing);
+    });
+
+    testWidgets('宿主 Overlay 已销毁时 dismiss 安全并复位状态', (tester) async {
+      late BuildContext ctx;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              ctx = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TLoadingController.show(ctx, text: '加载中');
+      await tester.pump();
+      expect(find.text('加载中'), findsOneWidget);
+
+      await tester.pumpWidget(
+        const Directionality(
+          textDirection: TextDirection.ltr,
+          child: SizedBox(),
+        ),
+      );
+      await tester.pump();
+
+      // 已随宿主卸载的加载层不应被重复 remove，也不应抛断言错误。
+      expect(TLoadingController.dismiss, returnsNormally);
+
+      // 状态已复位，新的宿主上可以再次 show。
+      late BuildContext ctx2;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              ctx2 = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TLoadingController.show(ctx2, text: '再次加载');
+      await tester.pump();
+      expect(find.text('再次加载'), findsOneWidget);
+
+      TLoadingController.dismiss();
+      await tester.pump();
+      expect(find.text('再次加载'), findsNothing);
+    });
   });
 
   // ============================================================
