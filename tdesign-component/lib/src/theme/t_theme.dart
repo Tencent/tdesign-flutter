@@ -1015,7 +1015,6 @@ class TMap<K, V> extends DelegatingMap<K, V> {
     if (!visited.add(key)) {
       return null;
     }
-    // An explicitly configured token wins over its default reference. This
     // Explicit Token values override reference and default-map fallbacks.
     final localValue = super[key];
     if (localValue != null) {

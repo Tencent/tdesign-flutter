@@ -1,0 +1,146 @@
+// Historical defect assertions for baseline e724cd0c4, not regression tests.
+// These must fail after the fix; correct assertions are in the registered
+// Upload and Toast component test suites.
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+void main() {
+  testWidgets(
+    'Upload picker completing after parent update loses latest files',
+    (tester) async {
+      final pending = Completer<List<TUploadFile>>();
+      var files = <TUploadFile>[const TUploadFile(id: 'old', name: 'old')];
+      late StateSetter rebuild;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: StatefulBuilder(
+              builder: (context, setState) {
+                rebuild = setState;
+                return TUpload(
+                  maxFiles: 5,
+                  files: files,
+                  picker: () => pending.future,
+                  onChanged: (next) => rebuild(() => files = next),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.byKey(const ValueKey('upload-add')));
+      rebuild(() => files = [const TUploadFile(id: 'new', name: 'new')]);
+      await tester.pump();
+      pending.complete([const TUploadFile(id: 'picked', name: 'picked')]);
+      await tester.pump();
+      expect(files.map((file) => file.id), ['old', 'picked']);
+      expect(files.any((file) => file.id == 'new'), isFalse);
+    },
+  );
+
+  testWidgets('Upload concurrent picker completions overwrite each other', (
+    tester,
+  ) async {
+    final pending = [
+      Completer<List<TUploadFile>>(),
+      Completer<List<TUploadFile>>(),
+    ];
+    var requests = 0;
+    var files = <TUploadFile>[];
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: StatefulBuilder(
+            builder: (context, setState) {
+              return TUpload(
+                maxFiles: 5,
+                files: files,
+                picker: () => pending[requests++].future,
+                onChanged: (next) => setState(() => files = next),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.byKey(const ValueKey('upload-add')));
+    await tester.tap(find.byKey(const ValueKey('upload-add')));
+    expect(requests, 2);
+    pending.first.complete([const TUploadFile(id: 'first', name: 'first')]);
+    await tester.pump();
+    pending.last.complete([const TUploadFile(id: 'second', name: 'second')]);
+    await tester.pump();
+    expect(files.map((file) => file.id), ['second']);
+  });
+
+  testWidgets('Upload still calls stale callback after being disabled', (
+    tester,
+  ) async {
+    final pending = Completer<List<TUploadFile>>();
+    var enabled = true;
+    var changes = 0;
+    late StateSetter rebuild;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: StatefulBuilder(
+            builder: (context, setState) {
+              rebuild = setState;
+              return TUpload(
+                files: const [],
+                picker: () => pending.future,
+                onChanged: enabled ? (_) => changes++ : null,
+              );
+            },
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.byKey(const ValueKey('upload-add')));
+    rebuild(() => enabled = false);
+    await tester.pump();
+    pending.complete([const TUploadFile(id: 'picked', name: 'picked')]);
+    await tester.pump();
+    expect(changes, 1);
+  });
+  testWidgets('Toast visible overlay intercepts despite preventTap false', (
+    tester,
+  ) async {
+    var taps = 0;
+    late BuildContext context;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Builder(
+            builder: (value) {
+              context = value;
+              return Align(
+                alignment: Alignment.topLeft,
+                child: TextButton(
+                  onPressed: () => taps++,
+                  child: const Text('target'),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+    TToast.showText(
+      'message',
+      context: context,
+      duration: const Duration(seconds: 5),
+      overlay: const TOverlayConfig(showOverlay: true, preventTap: false),
+    );
+    await tester.pump();
+    await tester.tapAt(tester.getCenter(find.text('target')));
+    expect(taps, 0);
+    TToast.dismissAll();
+    await tester.pump();
+    await tester.tap(find.text('target'));
+    expect(taps, 1);
+  });
+}

@@ -19,8 +19,6 @@ dependencies:
   # 下拉刷新组件
   easy_refresh: ^3.4.0
 
-  # 滑动单元格组件
-
   # 相册选择组件
   image_picker: 1.1.2
   image_picker_android: 0.8.12+23

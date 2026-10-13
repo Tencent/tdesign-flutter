@@ -1,60 +1,20 @@
-import path from 'path';
-import fs from 'fs';
 import mdToVue from '../scripts/md-to-vue';
 import { replaceFlutterExampleDirectives } from '../flutter-example-docs/transform.mjs';
 import { replaceFlutterApiDirectives } from '../flutter-example-docs/api.mjs';
 
-let demoCodesImports: Record<string, string> = {};
-
 export default {
-  before({ source, file }: any) {
-    const resourceDir = path.dirname(file);
-    const reg = file.match(/docs\/components\/(\S*)(?=\/\S*.md)/);
-    const name = reg && reg[1];
-    demoCodesImports = {};
-
+  before({ source }: any) {
     // Flutter Web 文档直接读取 Example App 生成的唯一代码资产。
     source = replaceFlutterExampleDirectives(source);
     source = replaceFlutterApiDirectives(source);
 
-    // 兼容历史小程序 demo 文件占位符。
-    source = source.replace(/{{\s+(.+)\s+}}/g, (_: string, demoDirName: string) => {
-      const demoPath = path.resolve(resourceDir, `./_example/${demoDirName}`);
-      if (!fs.existsSync(demoPath)) {
-        console.log('\x1B[36m%s\x1B[0m', `${name} 组件需要实现 _example/${demoDirName} 示例!`);
-        return '\n<h3>DEMO (🚧建设中）...</h3>';
-      }
-      const wxml = fs.readFileSync(path.resolve(demoPath, 'index.wxml'), { encoding: 'utf-8' });
-      const js = fs.readFileSync(path.resolve(demoPath, 'index.js'), { encoding: 'utf-8' });
-      const css = fs.readFileSync(path.resolve(demoPath, 'index.wxss'), { encoding: 'utf-8' });
-      const json = fs.readFileSync(path.resolve(demoPath, 'index.json'), { encoding: 'utf-8' });
-
-      return `
-<td-code-block panel="WXML">
-  <pre slot="WXML" lang="html">${encodeURIComponent(wxml)}</pre>
-
-  <pre slot="JS" lang="javascript">${encodeURIComponent(js)}</pre>
-
-  <pre slot="CSS" lang="css">${encodeURIComponent(css)}</pre>
-
-  <pre slot="JSON" lang="javascript">${encodeURIComponent(json)}</pre>
-</td-code-block>`;
-    });
-
     return source;
   },
   render({ source, file, md }: { source: string; file: string; md: any }) {
-    const demoCodesDefsStr = Object.keys(demoCodesImports)
-      .map((key) => demoCodesImports[key])
-      .join(';\n');
-    const demoCodesInstallStr = Object.keys(demoCodesImports).join(',');
-
     const sfc = mdToVue({
       md,
       file,
       source,
-      demoCodesDefsStr,
-      demoCodesInstallStr,
     });
 
     return sfc;

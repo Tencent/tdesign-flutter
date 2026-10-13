@@ -1,0 +1,242 @@
+{
+  "baseline": "e724cd0c4",
+  "declarations": 369,
+  "issues": [],
+  "components": [
+    {
+      "component": "button",
+      "api_sha256": "30df41feaeb5df6f07f20d8ebca6ad90ee55297da5e4df373d0106f37187914e"
+    },
+    {
+      "component": "divider",
+      "api_sha256": "db84fa63f4b3cdaa1a89220c61063784eb6a7970130013d40558ee231a8f559c"
+    },
+    {
+      "component": "fab",
+      "api_sha256": "d468f38c962ef5adcbb8ef7f6db997ba412a6e059df390527de845247ff7cdfb"
+    },
+    {
+      "component": "icon",
+      "api_sha256": "02a106141779dcb7d784c349471860bdafab5a982c8358b0ee631bfdeebf1a00"
+    },
+    {
+      "component": "link",
+      "api_sha256": "926a48a04faa978869e5fda9fec01debd4ef3664121f624c3cbe92440af755d5"
+    },
+    {
+      "component": "text",
+      "api_sha256": "90df6a4a433eec6f643af681911a4f72629de45e712299aa2f570754e37363b1"
+    },
+    {
+      "component": "back-top",
+      "api_sha256": "d7656adee280c0cd44488ea131481fc359ba9b8bb07a9788171dc02fd864acd5"
+    },
+    {
+      "component": "drawer",
+      "api_sha256": "310f410e1306274acec980840b899a331731bf724aa83508d1c8acb8e3480244"
+    },
+    {
+      "component": "indexes",
+      "api_sha256": "e2d38dbdee5b7489a25e5cca5b6b7e2f5ffa583fb79ae1d183447edbde0e6d26"
+    },
+    {
+      "component": "navbar",
+      "api_sha256": "5810acd522339dde4391981fd43769d14dcbd970a72b789345a0b088b5df708a"
+    },
+    {
+      "component": "side-bar",
+      "api_sha256": "057945036482f2fd8bcd0ed2c4790d958627f3ba22c1069ae090ad104dd14100"
+    },
+    {
+      "component": "steps",
+      "api_sha256": "2e1ad171492818f5dc04edf1fae34f54d40375f04990a74ee90ce44879d5930f"
+    },
+    {
+      "component": "tab-bar",
+      "api_sha256": "e40a27a26ee5191b390626c28076212807a05d0521244861ec98a995b79b7910"
+    },
+    {
+      "component": "tabs",
+      "api_sha256": "ebd572a172e00c416478466649e56c6e9b76fd5e70bcf78c7fe1359458568a82"
+    },
+    {
+      "component": "calendar",
+      "api_sha256": "1f3c8c023e850f0cb39a8228abc2e6583d073a4e089c2d7a9d79e7b42f441809"
+    },
+    {
+      "component": "cascader",
+      "api_sha256": "78c684cf6ddd9684f43f7b3a1ab94acb6eb070942a5789eac01d7b43a4f52ea7"
+    },
+    {
+      "component": "checkbox",
+      "api_sha256": "39a6c844783d71a9cdf434e8196366a1cea0cbcdaea0f1ffd5fcfd5f98dda842"
+    },
+    {
+      "component": "picker",
+      "api_sha256": "1e8728ad145fd2a5bcd5f3e378c0171e8e19d540f7d843673edca0cc5e0070e5"
+    },
+    {
+      "component": "date-time-picker",
+      "api_sha256": "4fefc6afaa9301ad5b3a1d9b3ca45c7d0b45c8263aba90127d889bd6b30c5873"
+    },
+    {
+      "component": "form",
+      "api_sha256": "aaaabe6215c06d590605fddd0777fa3fe5ab5786620a9b9390073dbec1fe2c4c"
+    },
+    {
+      "component": "input",
+      "api_sha256": "8fee4c483ed916936914e6faa79a8cbad5a83322e746551687a5b5aa55e0ac2b"
+    },
+    {
+      "component": "radio",
+      "api_sha256": "8e48b0f7ba438eed2b616838a088cccef9929d5adf3a257fa0c8d56295356377"
+    },
+    {
+      "component": "rate",
+      "api_sha256": "9787a8bb289bfc775785ec7c2e230a327e9cf3a516002bbfc5aa706f33c6aea1"
+    },
+    {
+      "component": "search",
+      "api_sha256": "b1702a117eaf2db085eb572efa5678a79d8958703c68d71766ac2817d725ffeb"
+    },
+    {
+      "component": "slider",
+      "api_sha256": "206ddc7431f4232e244cd574880644f5c52b6744f0c345525724c9d7792d63b0"
+    },
+    {
+      "component": "stepper",
+      "api_sha256": "92201a4154a8960c5207402ffd70b94ec8c0b5e0cb54a0c7d680a79994296223"
+    },
+    {
+      "component": "switch",
+      "api_sha256": "85fc5cbf4b4ab5c7f3fa9f9638f9143a0d55d12e255841ff0c43a32d70f5fbc1"
+    },
+    {
+      "component": "textarea",
+      "api_sha256": "bfd434e7f98481551a557d6fc03770400c1206f4837d54a303d13b4c2791f4da"
+    },
+    {
+      "component": "tree-select",
+      "api_sha256": "d715a514da09f0f5b9ef16973be7768ee5e3f6fe54d3601e42ea7f2d1c01d660"
+    },
+    {
+      "component": "upload",
+      "api_sha256": "a35198f934842ac86b76ad474a8b9ab31c7e7c8d8323448491afe70e31417a66"
+    },
+    {
+      "component": "avatar",
+      "api_sha256": "9163cde61fc2eaa84f627b9a1329174a637ae1dbb93350963dd5ebe8ee061ea8"
+    },
+    {
+      "component": "badge",
+      "api_sha256": "de8c1d5f3918ebb0d87c3dfcd24f14b4f4837800d855a2deb4d85274996cf8bc"
+    },
+    {
+      "component": "cell",
+      "api_sha256": "c84ef4004ff330ab34af2ab8fcdc1faa152331444636510b3946daaa34bcee5e"
+    },
+    {
+      "component": "time-counter",
+      "api_sha256": "dc626a1bd51ef04aee729e682fe550938deb81483f9ff2cda97d45b3933d2f6c"
+    },
+    {
+      "component": "collapse",
+      "api_sha256": "2692fc910d19943365f432473a3ed90ce3d6819271bd08c72b344b0d6f9f0191"
+    },
+    {
+      "component": "empty",
+      "api_sha256": "e6cdd528e6a015bfd6e36c647f317305a228d95649fb18b96c4e94255926d10f"
+    },
+    {
+      "component": "footer",
+      "api_sha256": "584457784511fc52db430ed8f96d8bdbf441e48e23524d65fc646e6361b91cf6"
+    },
+    {
+      "component": "image",
+      "api_sha256": "581404cc7497aee9b19ec61f3071d007415b259635be8db6af3bfebde3624469"
+    },
+    {
+      "component": "image-viewer",
+      "api_sha256": "b0f3fff46464a68c16b9fce243aca7d84c063df54dc0ffa011abd7eeceec8529"
+    },
+    {
+      "component": "progress",
+      "api_sha256": "9613fff75d5e8b7b157f62e202fda768ba63d815e6e05ff4a45944fc9d41f6fd"
+    },
+    {
+      "component": "result",
+      "api_sha256": "311705e54941e42e3df53253e9f0701b09fe0bbbef28f0ce46700b2be288ce09"
+    },
+    {
+      "component": "skeleton",
+      "api_sha256": "ad2dea726b68bfe3a3c79d1507f3a122c6ce1660baebd5b7946bd007405531b0"
+    },
+    {
+      "component": "swiper",
+      "api_sha256": "e934c764054a520c16eac05b7f262cc43f3425d0b61dd52b22ac3a880dddab8e"
+    },
+    {
+      "component": "table",
+      "api_sha256": "b31859b29a5c49eae22314d8cd89f673b6902acf0d6dd4bea960b0e6642cbd9f"
+    },
+    {
+      "component": "tag",
+      "api_sha256": "4b5ee9ec2969113512343417956d14170d01c0e273eebf9e74cdca139ee34d3f"
+    },
+    {
+      "component": "action-sheet",
+      "api_sha256": "89663c2decb4023ae272d0b8ae6e71b129b09cb88c22e94de9d6946172118b6f"
+    },
+    {
+      "component": "dialog",
+      "api_sha256": "90820d6c6f1e1583a95ce20143e167d7dfbed7fd86017b73c3239f40048089bc"
+    },
+    {
+      "component": "dropdown-menu",
+      "api_sha256": "4260374bf177221e28a832e7e8797b4278372ff0dcdf7ad6ac0abb5d5bf69001"
+    },
+    {
+      "component": "loading",
+      "api_sha256": "ef78eeacc38e7fa22f0ea8e5ccfef88136cc06048e702611747cf60f6267f626"
+    },
+    {
+      "component": "message",
+      "api_sha256": "105619ca6194841279d68736ca5d63d3ee4c5eabb485e30d676fd84c9b9491ba"
+    },
+    {
+      "component": "notice-bar",
+      "api_sha256": "bc99fbaf5d526f40d408f959d9fbb400bb371607df52889544e2444077aee6df"
+    },
+    {
+      "component": "popover",
+      "api_sha256": "69a6b580a22f5412ae6fd962288080f3123bff1de1acc77f4aacb103e7ca684d"
+    },
+    {
+      "component": "popup",
+      "api_sha256": "5f97509e8bd868cb98550c9e4cf6f27dcae870c11cb3c39efd87da9acb85604f"
+    },
+    {
+      "component": "pull-down-refresh",
+      "api_sha256": "f65d7127bdd63245076f51a26e0cf1358992180a07d58a0d98c3435e2df39d4d"
+    },
+    {
+      "component": "swipe-cell",
+      "api_sha256": "c9686ec2fda5b13a1db38404306d88c492e09f728405e002d5859eaf2aaf5fdf"
+    },
+    {
+      "component": "toast",
+      "api_sha256": "ceb1e10a0ded707f2070209450d02efb4103bddcd8ac23ed79eb2e2a76c72a4c"
+    },
+    {
+      "component": "theme",
+      "api_sha256": "0891819d5e481a9e30c917da1e686e47c0b1d3f43fbc2938465d5b9430f06e04"
+    }
+  ],
+  "updated_at": "2026-10-10",
+  "runtime_fix_prs": {
+    "U1": "https://github.com/Tencent/tdesign-flutter/pull/1153",
+    "U2": "https://github.com/Tencent/tdesign-flutter/pull/1153",
+    "U3": "https://github.com/Tencent/tdesign-flutter/pull/1153",
+    "T1": "https://github.com/Tencent/tdesign-flutter/pull/1154"
+  }
+}
