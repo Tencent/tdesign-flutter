@@ -1,0 +1,1 @@
+先解析最终TD TextStyle，再为单行未指定leadingDistribution的Tag补even默认值；不覆盖显式TTextThemeData。Badge custom Demo自己指定留白策略。双版本组件/Demo/analyze及95%生产覆盖率门禁；Linux无更新比较、逐图复核预期差异后更新并无更新复跑。手机离线时明确说明复核缺口。

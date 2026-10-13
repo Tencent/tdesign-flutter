@@ -96,6 +96,7 @@ class TTag extends StatelessWidget {
         ? theme?.resolveTextColor(colors.textColor) ?? colors.textColor
         : colors.textColor;
     var child = _buildLabel(
+      context,
       // 禁用态应始终使用禁用 token，避免普通 ThemeExtension 的颜色覆盖状态。
       textColor: foregroundColor,
       font: effectiveFont,
@@ -171,7 +172,8 @@ class TTag extends StatelessWidget {
   }
 
   /// 文本行盒与 Tag 高度使用同一个字体 Token 的行高。
-  Widget _buildLabel({
+  Widget _buildLabel(
+    BuildContext context, {
     required Color textColor,
     required Font? font,
     required FontFamily? fontFamily,
@@ -180,7 +182,7 @@ class TTag extends StatelessWidget {
     required TextOverflow overflow,
     required int maxLines,
   }) {
-    return TTextStyled(
+    final label = TTextStyled(
       text,
       maxLines: maxLines,
       overflow: overflow,
@@ -192,6 +194,20 @@ class TTag extends StatelessWidget {
         fontFamily: fontFamily?.flutterFontFamily,
         fontFamilyFallback: fontFamilyFallback,
         package: fontFamily?.package,
+      ),
+    );
+    if (maxLines != 1) {
+      return label;
+    }
+    // 先解析 TD 显式配置；单行默认均分额外行高，保留字体与行高 Token，不改变多行段落。
+    final resolvedStyle = label.getTextStyle(context);
+    return TTextStyled(
+      text,
+      maxLines: maxLines,
+      overflow: overflow,
+      style: resolvedStyle.copyWith(
+        leadingDistribution:
+            resolvedStyle.leadingDistribution ?? TextLeadingDistribution.even,
       ),
     );
   }
