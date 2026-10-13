@@ -6,3 +6,5 @@
 4. 双版本功能、覆盖率、Example、工具和 Linux Golden 回归。
 
 已有 PR #1157 的独立 worktree 作为实施目录，保留原工作区的用户修改。
+
+5. Swiper统一controlStyle图标尺寸与按状态回退，保留图标/图层主题，按专项矩阵验证。

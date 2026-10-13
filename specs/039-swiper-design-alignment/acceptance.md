@@ -45,3 +45,7 @@
 - controls 的圆形背景 32dp、图标 18dp 是 Flutter 工程默认视觉值，`IconButton` 实际触控区域保持 48dp；该值不作为 Figma 精确标注，可由 `TSwiperThemeData.controlStyle/controlIconSize` 覆盖。
 - Figma `28600:39098` 中各类型使用六张内容并从第一页开始；fraction 是右下角紧凑胶囊，controls 位于图片左右两侧垂直居中。对应布局由组件默认实现负责，Demo 未添加外层样式补丁。
 - Flutter 3.32 Linux 首次严格 Golden 比较确认 light/dark 均为预期布局变化（22.58%，分别 215159px / 215136px）；人工检查实际图后仅更新 Swiper 两张基线，并在同一环境无 `--update-goldens` 精确复跑 2/2 通过。
+
+## 后续 API 收敛
+
+PR #1157 本地后续调整删除 controlIconSize，图标尺寸统一通过 controlStyle.iconSize；上文为历史验收记录。当前契约和迁移见 [054 Swiper 控制按钮样式](../054-material-style-ownership/swiper-control-style.md)。

@@ -58,7 +58,7 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
   late List<FixedExtentScrollController> _controllers;
   late List<GlobalKey<WheelColumnState>> _columnKeys;
   bool _controllersReady = false;
-  final _scrollBehavior = WheelBehavior();
+  final _scrollBehavior = const WheelBehavior();
 
   double get _itemHeight => widget.height / widget.itemCount;
 

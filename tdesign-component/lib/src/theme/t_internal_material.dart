@@ -376,11 +376,35 @@ class TInternalIconButton extends StatelessWidget {
         return Colors.transparent;
       }),
     );
-    final resolved =
+    var resolved =
         (style == null
                 ? defaults
                 : TInternalMaterialTheme.mergeButtonStyle(defaults, style!))
             .copyWith(visualDensity: VisualDensity.standard);
+    final backgroundBuilder = resolved.backgroundBuilder;
+    final foregroundBuilder = resolved.foregroundBuilder;
+    resolved = resolved.copyWith(
+      backgroundBuilder: backgroundBuilder == null
+          ? null
+          : (context, states, child) => TInternalMaterialTheme.restore(
+              captured,
+              context,
+              Builder(
+                builder: (context) => backgroundBuilder(context, states, child),
+              ),
+              retainIconDefaults: true,
+            ),
+      foregroundBuilder: foregroundBuilder == null
+          ? null
+          : (context, states, child) => TInternalMaterialTheme.restore(
+              captured,
+              context,
+              Builder(
+                builder: (context) => foregroundBuilder(context, states, child),
+              ),
+              retainIconDefaults: true,
+            ),
+    );
     return Theme(
       data: TInternalMaterialTheme.resolve(context),
       child: TooltipTheme(

@@ -28,3 +28,12 @@ TD 内置视觉和行为只接受受支持的实例参数/style、TD ThemeExtens
 - 显式 padding、minimumSize / fixedSize / maximumSize、状态边框与形状、点击区尺寸、RTL 以及自定义内容主题和位置保持原语义。
 - 不将尺寸 Token 改为硬高度；字体缩放和大尺寸内容可像普通按钮一样撑大 minimumSize 按钮。
 - 本项修正恢复已定义的尺寸契约，不新增或删除公开 API。原 PR 的 Material 主题迁移 breaking 说明保留；这一尺寸缺陷修复的用户更新日志为：fix(button): 修复渐变描边按钮尺寸与普通按钮不一致。不改自动生成的 CHANGELOG。
+
+## Swiper 控制按钮定制收敛
+
+契约与breaking迁移见 [swiper-control-style.md](./swiper-control-style.md)。删除controlIconSize，尺寸统一为controlStyle.iconSize；按状态非空合并，visualDensity禁止，自定义图层保留调用方主题。
+
+### Message / Picker 审查缺口修复
+
+- Message 跑马灯测量与绘制使用同一份最终 TD 文本配置，并保留系统文字缩放、方向与 locale；显式 TD 字体/字距不能造成单次滚动结束后文字残留。
+- Picker 内置滚轮保持 TD 物理、禁用与输入策略；滚轮 viewport 以下恢复调用方 ScrollConfiguration，自定义 itemBuilder 内容遵守调用方滚动物理。不得通过恢复 Material 字体继承解决问题。

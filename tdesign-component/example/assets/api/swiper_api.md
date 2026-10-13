@@ -235,8 +235,7 @@
 | activeColor | Color? | - | 激活项颜色。 null 时使用 textColorAnti Token。 | 否 |
 | activeDotExtent | double? | - | 长条激活项在滚动主轴上的长度。 未配置时为 20 逻辑像素，必须大于 0。 | 否 |
 | borderRadius | BorderRadiusGeometry? | - | 轮播内容圆角。 null 时使用 radiusLarge Token 构造圆角。 | 否 |
-| controlIconSize | double? | - | 控制按钮图标尺寸。 未配置时为 18 逻辑像素，必须大于 0。 | 否 |
-| controlStyle | ButtonStyle? | - | 控制按钮样式。 | 否 |
+| controlStyle | ButtonStyle? | - | 前后切换按钮样式；仅 controls 指示器生效。 非空字段覆盖 TD 默认值；状态属性返回 null 时回退到同状态默认值。 iconSize 是图标尺寸的唯一主题入口，默认 18dp；自定义图标自身显式尺寸优先。 可配置颜色、图标、padding、尺寸、形状、描边、阴影、表面色和状态反馈， 以及鼠标指针、enableFeedback、splashFactory 和 tapTargetSize。 默认背景尺寸为 32dp、点击热区为 48dp；显式尺寸和 tapTargetSize 可调整热区。 visualDensity 不生效，请使用 padding 或尺寸字段调整布局。 animationDuration 仅控制按钮样式过渡，不改变 Swiper 的切页动画。 textStyle 为自定义文字内容提供默认样式；iconAlignment 不创建图标文字布局。 backgroundBuilder / foregroundBuilder 保留调用方主题及按钮的插槽默认样式。 外部 Material 按钮主题不覆盖此配置，切页、禁用和 Tooltip 由组件管理。 原 controlIconSize 请迁移为 ButtonStyle 的 iconSize 状态属性。 主题过渡中，图标尺寸、最小尺寸等使用组件有效默认值插值； 最大尺寸缺省保持无限约束，固定尺寸缺省恢复自然布局。 仅一端配置的颜色或文字样式切换到对应端配置，未配置时仍读取当前 TD 默认值。 | 否 |
 | dotSize | double? | - | 圆点直径。 未配置时为 6 逻辑像素，必须大于 0。 | 否 |
 | dotSpacing | double? | - | 圆点间距。 未配置时为 5 逻辑像素，必须大于或等于 0。 | 否 |
 | fractionBackgroundColor | Color? | - | 数字指示器背景色。 null 时使用 textColorPlaceholder Token。 | 否 |

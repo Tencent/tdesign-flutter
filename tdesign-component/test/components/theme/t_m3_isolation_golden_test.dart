@@ -6,6 +6,8 @@ import 'package:tdesign_flutter/src/theme/t_internal_material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  messagePickerBoundaryGoldens();
+  swiperControlStyleGoldens();
   gradientGeometryGoldens();
   strictBoundaryGoldens();
   strictScrollGoldens();
@@ -819,6 +821,314 @@ void strictScrollGoldens() {
         await tester.pumpWidget(const SizedBox.shrink());
         await tester.pumpAndSettle();
       });
+    }
+  }
+}
+
+void swiperControlStyleGoldens() {
+  for (final brightness in Brightness.values) {
+    testWidgets('Swiper owned control style ${brightness.name}', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(640, 220);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final token = TThemeData.defaultData();
+      final td = brightness == Brightness.dark ? token.dark! : token;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: RepaintBoundary(
+              key: const Key('swiper-style-scene'),
+              child: ColoredBox(
+                color: td.bgColorPage,
+                child: Row(
+                  children: [
+                    for (final m3 in [false, true])
+                      Expanded(
+                        child: Theme(
+                          data: ThemeData(
+                            useMaterial3: m3,
+                            brightness: brightness,
+                            iconButtonTheme: const IconButtonThemeData(
+                              style: ButtonStyle(
+                                backgroundColor: WidgetStatePropertyAll(
+                                  Colors.orange,
+                                ),
+                                iconSize: WidgetStatePropertyAll(70),
+                                visualDensity: VisualDensity(
+                                  horizontal: 4,
+                                  vertical: 4,
+                                ),
+                              ),
+                            ),
+                            extensions: [
+                              td,
+                              TSwiperThemeData(
+                                controlStyle: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStateProperty.resolveWith(
+                                        (s) => s.contains(WidgetState.pressed)
+                                            ? Colors.pink
+                                            : null,
+                                      ),
+                                  foregroundColor:
+                                      WidgetStateProperty.resolveWith(
+                                        (s) => s.contains(WidgetState.pressed)
+                                            ? Colors.yellow
+                                            : null,
+                                      ),
+                                  iconSize: WidgetStateProperty.resolveWith(
+                                    (s) => s.contains(WidgetState.pressed)
+                                        ? 30
+                                        : 24,
+                                  ),
+                                  minimumSize: const WidgetStatePropertyAll(
+                                    Size.square(40),
+                                  ),
+                                  fixedSize: const WidgetStatePropertyAll(
+                                    Size.square(40),
+                                  ),
+                                  padding: const WidgetStatePropertyAll(
+                                    EdgeInsets.all(4),
+                                  ),
+                                  shape: const WidgetStatePropertyAll(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                                  side: const WidgetStatePropertyAll(
+                                    BorderSide(color: Colors.blue, width: 2),
+                                  ),
+                                  overlayColor: const WidgetStatePropertyAll(
+                                    Colors.transparent,
+                                  ),
+                                  visualDensity: const VisualDensity(
+                                    horizontal: -4,
+                                    vertical: -4,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              children: [
+                                TText(m3 ? 'Material 3' : 'Material 2'),
+                                const SizedBox(height: 12),
+                                SizedBox(
+                                  height: 160,
+                                  child: TSwiper(
+                                    key: ValueKey('owned-swiper-$m3'),
+                                    pagination:
+                                        TSwiperPaginationVariant.controls,
+                                    children: [
+                                      ColoredBox(
+                                        color: td.bgColorSecondaryContainer,
+                                        child: const Center(
+                                          child: TText('Page 1'),
+                                        ),
+                                      ),
+                                      ColoredBox(
+                                        color: td.bgColorSecondaryContainer,
+                                        child: const Center(
+                                          child: TText('Page 2'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 400));
+      await expectLater(
+        find.byKey(const Key('swiper-style-scene')),
+        matchesGoldenFile(
+          'goldens/swiper_control_style_${brightness.name}.png',
+        ),
+      );
+      final gestures = <TestGesture>[];
+      for (final m3 in [false, true]) {
+        final next = find
+            .descendant(
+              of: find.byKey(ValueKey('owned-swiper-$m3')),
+              matching: find.byType(IconButton),
+            )
+            .last;
+        gestures.add(
+          await tester.startGesture(
+            tester.getCenter(next),
+            pointer: m3 ? 2 : 1,
+          ),
+        );
+      }
+      await tester.pump(const Duration(milliseconds: 400));
+      await expectLater(
+        find.byKey(const Key('swiper-style-scene')),
+        matchesGoldenFile(
+          'goldens/swiper_control_style_pressed_${brightness.name}.png',
+        ),
+      );
+      for (final gesture in gestures) {
+        await gesture.up();
+      }
+      await tester.pumpAndSettle();
+    });
+  }
+}
+
+class _CustomContentScrollBehavior extends ScrollBehavior {
+  const _CustomContentScrollBehavior();
+
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) =>
+      const NeverScrollableScrollPhysics();
+}
+
+void messagePickerBoundaryGoldens() {
+  for (final m3 in [false, true]) {
+    for (final brightness in Brightness.values) {
+      final suffix = '${m3 ? "m3" : "m2"}_${brightness.name}';
+      final token = brightness == Brightness.dark
+          ? TThemeData.defaultData().dark!
+          : TThemeData.defaultData();
+      final theme = ThemeData(
+        useMaterial3: m3,
+        brightness: brightness,
+        iconTheme: const IconThemeData(size: 70, color: Colors.green),
+        extensions: [
+          token,
+          const TTextThemeData(
+            textStyle: TextStyle(fontFamily: 'Roboto', letterSpacing: 8),
+          ),
+        ],
+      );
+      testWidgets('Message resolved marquee $suffix golden', (tester) async {
+        tester.view.physicalSize = const Size(400, 180);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        await tester.pumpWidget(
+          RepaintBoundary(
+            key: const Key('message-boundary'),
+            child: MaterialApp(
+              theme: theme,
+              home: const Scaffold(
+                body: Stack(
+                  children: [
+                    TMessage(
+                      content: 'WWWWWWWWWWWWWWWWWWWW',
+                      showIcon: false,
+                      duration: null,
+                      marquee: TMessageMarquee(
+                        duration: Duration(milliseconds: 200),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+        await expectLater(
+          find.byKey(const Key('message-boundary')),
+          matchesGoldenFile('goldens/message_marquee_mid_$suffix.png'),
+        );
+        await tester.pump(const Duration(milliseconds: 120));
+        await expectLater(
+          find.byKey(const Key('message-boundary')),
+          matchesGoldenFile('goldens/message_marquee_end_$suffix.png'),
+        );
+        await tester.pumpWidget(const SizedBox());
+      }, tags: 'golden');
+      testWidgets('Picker custom scroll boundary $suffix golden', (
+        tester,
+      ) async {
+        tester.view.physicalSize = const Size(400, 400);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        final nested = ScrollController();
+        addTearDown(nested.dispose);
+        await tester.pumpWidget(
+          RepaintBoundary(
+            key: const Key('picker-boundary'),
+            child: MaterialApp(
+              theme: theme,
+              builder: (context, child) => ScrollConfiguration(
+                behavior: const _CustomContentScrollBehavior(),
+                child: child!,
+              ),
+              home: Scaffold(
+                body: Center(
+                  child: SizedBox(
+                    width: 350,
+                    height: 300,
+                    child: TPicker(
+                      items: const TPickerColumns([
+                        [TPickerOption(label: 'Option', value: 1)],
+                      ]),
+                      value: const [1],
+                      onChanged: (_) {},
+                      itemBuilder: (context, option, column, index, distance) =>
+                          SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: SingleChildScrollView(
+                              key: const Key('picker-custom-scroll'),
+                              controller: nested,
+                              scrollDirection: Axis.horizontal,
+                              child: const SizedBox(
+                                width: 100,
+                                height: 22,
+                                child: Icon(
+                                  Icons.star,
+                                  size: 22,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                            ),
+                          ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pump(const Duration(milliseconds: 500));
+        await expectLater(
+          find.byKey(const Key('picker-boundary')),
+          matchesGoldenFile('goldens/picker_custom_scroll_initial_$suffix.png'),
+        );
+        await tester.drag(
+          find.byKey(const Key('picker-custom-scroll')),
+          const Offset(-40, 0),
+        );
+        await tester.pumpAndSettle();
+        await expectLater(
+          find.byKey(const Key('picker-boundary')),
+          matchesGoldenFile('goldens/picker_custom_scroll_dragged_$suffix.png'),
+        );
+        expect(nested.offset, 0);
+        await tester.pumpWidget(const SizedBox());
+      }, tags: 'golden');
     }
   }
 }

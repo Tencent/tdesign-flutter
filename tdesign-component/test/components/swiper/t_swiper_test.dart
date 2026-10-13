@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart' show LogicalKeyboardKey;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -1023,8 +1024,7 @@ void main() {
       dotSpacing: 2,
       fractionStyle: TextStyle(fontSize: 10),
       fractionBackgroundColor: Colors.white,
-      controlStyle: ButtonStyle(),
-      controlIconSize: 12,
+      controlStyle: ButtonStyle(iconSize: WidgetStatePropertyAll(12)),
     );
     const b = TSwiperThemeData(
       paginationAlignment: Alignment.topRight,
@@ -1037,23 +1037,22 @@ void main() {
       dotSpacing: 6,
       fractionStyle: TextStyle(fontSize: 14),
       fractionBackgroundColor: Colors.black,
-      controlStyle: ButtonStyle(),
-      controlIconSize: 20,
+      controlStyle: ButtonStyle(iconSize: WidgetStatePropertyAll(20)),
     );
 
     test('copyWith 和 lerp 覆盖新增视觉字段', () {
       final copied = a.copyWith(
         activeDotExtent: 18,
-        controlIconSize: 16,
+        controlStyle: const ButtonStyle(iconSize: WidgetStatePropertyAll(16)),
         paginationAlignment: Alignment.center,
       );
       expect(copied.activeDotExtent, 18);
-      expect(copied.controlIconSize, 16);
+      expect(copied.controlStyle!.iconSize!.resolve({}), 16);
       expect(copied.paginationAlignment, Alignment.center);
 
       final value = a.lerp(b, 0.5);
       expect(value.activeDotExtent, 15);
-      expect(value.controlIconSize, 16);
+      expect(value.controlStyle!.iconSize!.resolve({}), 16);
       expect(value.paginationAlignment, Alignment.center);
       expect(value.borderRadius, const BorderRadius.all(Radius.circular(4)));
       expect(value.fractionStyle?.fontSize, 12);
@@ -1065,7 +1064,7 @@ void main() {
         dotSize: 8,
         activeDotExtent: 20,
         dotSpacing: 5,
-        controlIconSize: 18,
+        controlStyle: ButtonStyle(iconSize: WidgetStatePropertyAll(18)),
       );
       expect(defaults.lerp(explicit, 0).dotSize, 6);
       expect(defaults.lerp(explicit, 0.5).dotSize, 7);
@@ -1076,11 +1075,410 @@ void main() {
       expect(defaults.lerp(defaults, 0.5).dotSize, isNull);
       expect(defaults.lerp(explicit, 0.5).activeDotExtent, 20);
       expect(defaults.lerp(explicit, 0.5).dotSpacing, 5);
-      expect(defaults.lerp(explicit, 0.5).controlIconSize, 18);
+      expect(
+        defaults.lerp(explicit, 0.5).controlStyle!.iconSize!.resolve({}),
+        18,
+      );
       expect(() => TSwiperThemeData(dotSize: -1), throwsAssertionError);
       expect(() => TSwiperThemeData(activeDotExtent: -1), throwsAssertionError);
       expect(() => TSwiperThemeData(dotSpacing: -1), throwsAssertionError);
-      expect(() => TSwiperThemeData(controlIconSize: -1), throwsAssertionError);
+    });
+  });
+
+  group('controls TD style ownership', () {
+    for (final m3 in [false, true]) {
+      for (final brightness in Brightness.values) {
+        Widget ownedApp(Widget swiper, ButtonStyle style) => MaterialApp(
+          theme: ThemeData(
+            useMaterial3: m3,
+            brightness: brightness,
+            iconButtonTheme: const IconButtonThemeData(
+              style: ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(Colors.orange),
+                iconSize: WidgetStatePropertyAll(70),
+                minimumSize: WidgetStatePropertyAll(Size.square(90)),
+                visualDensity: VisualDensity(horizontal: 4, vertical: 4),
+                enableFeedback: true,
+              ),
+            ),
+            extensions: [
+              brightness == Brightness.dark
+                  ? TThemeData.defaultData().dark!
+                  : TThemeData.defaultData(),
+              TSwiperThemeData(controlStyle: style),
+            ],
+          ),
+          home: Scaffold(
+            body: SizedBox(width: 320, height: 200, child: swiper),
+          ),
+        );
+        testWidgets(
+          'explicit colors, geometry and feedback M3=$m3 $brightness',
+          (tester) async {
+            await tester.pumpWidget(
+              ownedApp(
+                const TSwiper(
+                  loop: true,
+                  pagination: TSwiperPaginationVariant.controls,
+                  children: pages,
+                ),
+                const ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(Colors.pink),
+                  foregroundColor: WidgetStatePropertyAll(Colors.green),
+                  iconColor: WidgetStatePropertyAll(Colors.purple),
+                  iconSize: WidgetStatePropertyAll(30),
+                  minimumSize: WidgetStatePropertyAll(Size.square(44)),
+                  fixedSize: WidgetStatePropertyAll(Size.square(60)),
+                  maximumSize: WidgetStatePropertyAll(Size.square(90)),
+                  padding: WidgetStatePropertyAll(EdgeInsets.all(6)),
+                  shape: WidgetStatePropertyAll(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                  ),
+                  side: WidgetStatePropertyAll(
+                    BorderSide(color: Colors.blue, width: 2),
+                  ),
+                  overlayColor: WidgetStatePropertyAll(Colors.yellow),
+                  visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+                  enableFeedback: false,
+                  mouseCursor: WidgetStatePropertyAll(SystemMouseCursors.wait),
+                  animationDuration: Duration(milliseconds: 80),
+                  splashFactory: NoSplash.splashFactory,
+                ),
+              ),
+            );
+            await tester.pumpAndSettle();
+            final button = tester.widget<IconButton>(
+              find.byType(IconButton).first,
+            );
+            final style = button.style!;
+            expect(
+              tester.getSize(find.byType(IconButton).first),
+              const Size.square(60),
+            );
+            expect(style.minimumSize!.resolve({}), const Size.square(44));
+            expect(style.maximumSize!.resolve({}), const Size.square(90));
+            expect(style.padding!.resolve({}), const EdgeInsets.all(6));
+            expect(style.side!.resolve({})!.width, 2);
+            expect(style.visualDensity, VisualDensity.standard);
+            expect(style.enableFeedback, isFalse);
+            expect(style.mouseCursor!.resolve({}), SystemMouseCursors.wait);
+            expect(style.animationDuration, const Duration(milliseconds: 80));
+            expect(style.splashFactory, NoSplash.splashFactory);
+            final icon = tester.widget<Icon>(find.byIcon(Icons.chevron_left));
+            expect(icon.size, 30);
+            expect(icon.color, Colors.purple);
+            final material = tester.widget<Material>(
+              find
+                  .descendant(
+                    of: find.byType(IconButton).first,
+                    matching: find.byType(Material),
+                  )
+                  .first,
+            );
+            expect(material.color, Colors.pink);
+            expect(tester.takeException(), isNull);
+            for (final (style, size) in [
+              (
+                const ButtonStyle(
+                  minimumSize: WidgetStatePropertyAll(Size.square(60)),
+                ),
+                const Size.square(60),
+              ),
+              (
+                const ButtonStyle(
+                  padding: WidgetStatePropertyAll(EdgeInsets.all(12)),
+                ),
+                const Size.square(42),
+              ),
+              (
+                const ButtonStyle(
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                const Size.square(32),
+              ),
+            ]) {
+              await tester.pumpWidget(
+                ownedApp(
+                  const TSwiper(
+                    loop: true,
+                    pagination: TSwiperPaginationVariant.controls,
+                    children: pages,
+                  ),
+                  style,
+                ),
+              );
+              await tester.pumpAndSettle();
+              final surface = find
+                  .descendant(
+                    of: find.byType(IconButton).first,
+                    matching: find.byType(Material),
+                  )
+                  .first;
+              expect(tester.getSize(surface), size);
+              if (style.tapTargetSize != null) {
+                expect(tester.getSize(find.byType(IconButton).first), size);
+              }
+            }
+          },
+        );
+        testWidgets(
+          'state null uses Swiper defaults, explicit zero survives M3=$m3 $brightness',
+          (tester) async {
+            await tester.pumpWidget(
+              ownedApp(
+                const TSwiper(
+                  pagination: TSwiperPaginationVariant.controls,
+                  children: pages,
+                ),
+                ButtonStyle(
+                  backgroundColor: WidgetStateProperty.resolveWith(
+                    (s) => s.contains(WidgetState.pressed) ? Colors.pink : null,
+                  ),
+                  foregroundColor: WidgetStateProperty.resolveWith(
+                    (s) =>
+                        s.contains(WidgetState.hovered) ? Colors.green : null,
+                  ),
+                  iconSize: WidgetStateProperty.resolveWith(
+                    (s) => s.contains(WidgetState.pressed) ? 26 : null,
+                  ),
+                  padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+                  side: const WidgetStatePropertyAll(BorderSide.none),
+                  overlayColor: const WidgetStatePropertyAll(
+                    Colors.transparent,
+                  ),
+                  visualDensity: const VisualDensity(
+                    horizontal: 4,
+                    vertical: 4,
+                  ),
+                ),
+              ),
+            );
+            await tester.pumpAndSettle();
+            final style = tester
+                .widget<IconButton>(find.byType(IconButton).last)
+                .style!;
+            final token = TThemeData.defaultData();
+            final td = brightness == Brightness.dark ? token.dark! : token;
+            for (final s in [
+              <WidgetState>{},
+              {WidgetState.hovered},
+              {WidgetState.focused},
+              {WidgetState.disabled},
+              {WidgetState.pressed},
+            ]) {
+              expect(
+                style.backgroundColor!.resolve(s),
+                s.contains(WidgetState.pressed)
+                    ? Colors.pink
+                    : s.contains(WidgetState.disabled)
+                    ? td.fontGray3.withValues(alpha: 0.35)
+                    : td.fontGray3,
+              );
+              expect(
+                style.foregroundColor!.resolve(s),
+                s.contains(WidgetState.hovered)
+                    ? Colors.green
+                    : s.contains(WidgetState.disabled)
+                    ? td.textColorAnti.withValues(alpha: 0.55)
+                    : td.textColorAnti,
+              );
+              expect(
+                style.iconSize!.resolve(s),
+                s.contains(WidgetState.pressed) ? 26 : 18,
+              );
+              expect(style.padding!.resolve(s), EdgeInsets.zero);
+              expect(style.side!.resolve(s), BorderSide.none);
+              expect(style.overlayColor!.resolve(s), Colors.transparent);
+            }
+            final previous = tester.widget<IconButton>(
+              find.byType(IconButton).first,
+            );
+            expect(previous.onPressed, isNull);
+            final gesture = await tester.startGesture(
+              tester.getCenter(find.byType(IconButton).last),
+            );
+            // Finish icon interpolation before native Tooltip long-press cancels the tap.
+            for (var frame = 0; frame < 3; frame++) {
+              await tester.pump(const Duration(milliseconds: 150));
+            }
+            expect(
+              tester.widget<Icon>(find.byIcon(Icons.chevron_right)).size,
+              26,
+            );
+            expect(
+              tester
+                  .widget<Material>(
+                    find
+                        .descendant(
+                          of: find.byType(IconButton).last,
+                          matching: find.byType(Material),
+                        )
+                        .first,
+                  )
+                  .color,
+              Colors.pink,
+            );
+            await gesture.up();
+            await tester.pumpAndSettle();
+            expect(find.text('page-1'), findsOneWidget);
+            expect(
+              tester.widget<Icon>(find.byIcon(Icons.chevron_right)).size,
+              18,
+            );
+            expect(tester.takeException(), isNull);
+          },
+        );
+        testWidgets(
+          'icons and layers retain caller theme and native navigation M3=$m3 $brightness',
+          (tester) async {
+            final observed = <String, ThemeData>{};
+            final controller = TSwiperController();
+            addTearDown(controller.dispose);
+            final changes = <int>[];
+            await tester.pumpWidget(
+              ownedApp(
+                TSwiper(
+                  controller: controller,
+                  onChanged: changes.add,
+                  pagination: TSwiperPaginationVariant.controls,
+                  previousIcon: Builder(
+                    builder: (context) {
+                      observed['icon'] = Theme.of(context);
+                      return const Icon(
+                        Icons.star,
+                        size: 22,
+                        color: Colors.blue,
+                      );
+                    },
+                  ),
+                  children: pages,
+                ),
+                ButtonStyle(
+                  iconSize: const WidgetStatePropertyAll(30),
+                  backgroundBuilder: (context, states, child) {
+                    observed['background'] = Theme.of(context);
+                    return child ?? const SizedBox.shrink();
+                  },
+                  foregroundBuilder: (context, states, child) {
+                    observed['foreground'] = Theme.of(context);
+                    return child ?? const SizedBox.shrink();
+                  },
+                ),
+              ),
+            );
+            await tester.pumpAndSettle();
+            for (final name in ['icon', 'background', 'foreground']) {
+              expect(observed[name]!.useMaterial3, m3);
+              expect(observed[name]!.brightness, brightness);
+              expect(
+                observed[name]!.iconButtonTheme.style!.iconSize!.resolve({}),
+                70,
+              );
+            }
+            expect(tester.widget<Icon>(find.byIcon(Icons.star)).size, 22);
+            await tester.tap(find.byTooltip('Next page'));
+            await tester.pumpAndSettle();
+            expect(controller.index, 1);
+            expect(changes, [1]);
+            Focus.of(
+              tester.element(find.byIcon(Icons.chevron_right)),
+            ).requestFocus();
+            await tester.pump();
+            await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+            await tester.pumpAndSettle();
+            expect(controller.index, 2);
+            expect(
+              tester.widget<IconButton>(find.byType(IconButton).last).onPressed,
+              isNull,
+            );
+          },
+        );
+      }
+    }
+    test('nullable style tween keeps owned defaults and valid constraints', () {
+      const from = TSwiperThemeData(
+        controlStyle: ButtonStyle(
+          minimumSize: WidgetStatePropertyAll(Size.square(44)),
+          fixedSize: WidgetStatePropertyAll(Size.square(60)),
+          maximumSize: WidgetStatePropertyAll(Size.square(90)),
+          backgroundColor: WidgetStatePropertyAll(Colors.pink),
+        ),
+      );
+      const to = TSwiperThemeData(
+        controlStyle: ButtonStyle(
+          minimumSize: WidgetStatePropertyAll(Size.square(60)),
+        ),
+      );
+      expect(from.lerp(to, 0).controlStyle, same(from.controlStyle));
+      expect(from.lerp(to, 1).controlStyle, same(to.controlStyle));
+      for (final t in [0.25, 0.5, 0.75]) {
+        final value = from.lerp(to, t).controlStyle!;
+        expect(value.minimumSize!.resolve({}), Size.square(44 + 16 * t));
+        expect(value.maximumSize!.resolve({}), Size.infinite);
+        expect(
+          value.backgroundColor!.resolve({}),
+          t < 0.5 ? Colors.pink : null,
+        );
+        expect(
+          value.fixedSize!.resolve({}),
+          t < 0.5 ? const Size.square(60) : null,
+        );
+      }
+      const geometry = TSwiperThemeData(
+        controlStyle: ButtonStyle(
+          iconSize: WidgetStatePropertyAll(30),
+          padding: WidgetStatePropertyAll(EdgeInsets.all(12)),
+          minimumSize: WidgetStatePropertyAll(Size.square(60)),
+          elevation: WidgetStatePropertyAll(4),
+          shape: WidgetStatePropertyAll(RoundedRectangleBorder()),
+          side: WidgetStatePropertyAll(BorderSide(width: 2)),
+          shadowColor: WidgetStatePropertyAll(Colors.black),
+          surfaceTintColor: WidgetStatePropertyAll(Colors.blue),
+        ),
+      );
+      final middle = const TSwiperThemeData().lerp(geometry, 0.5).controlStyle!;
+      expect(middle.iconSize!.resolve({}), 24);
+      expect(middle.minimumSize!.resolve({}), const Size.square(46));
+      expect(middle.padding!.resolve({}), const EdgeInsets.all(6));
+      expect(middle.elevation!.resolve({}), 2);
+      expect(middle.side!.resolve({})!.width, 1);
+      expect(middle.shape!.resolve({}), isNotNull);
+      expect(middle.shadowColor!.resolve({})!.a, closeTo(0.5, 0.01));
+      expect(middle.surfaceTintColor!.resolve({})!.a, closeTo(0.5, 0.01));
+    });
+    test('iconSize lerp uses 18dp for missing values and state nulls', () {
+      const defaults = TSwiperThemeData();
+      final explicit = TSwiperThemeData(
+        controlStyle: ButtonStyle(
+          iconSize: WidgetStateProperty.resolveWith(
+            (s) => s.contains(WidgetState.pressed) ? 30 : null,
+          ),
+        ),
+      );
+      for (final t in [0.0, 0.5, 1.0]) {
+        final forward = defaults.lerp(explicit, t).controlStyle?.iconSize;
+        final reverse = explicit.lerp(defaults, t).controlStyle?.iconSize;
+        expect(forward?.resolve({}) ?? 18, 18);
+        expect(forward?.resolve({WidgetState.pressed}) ?? 18, 18 + 12 * t);
+        expect(reverse?.resolve({WidgetState.pressed}) ?? 18, 30 - 12 * t);
+      }
+      expect(defaults.lerp(defaults, 0.5).controlStyle, isNull);
+      expect(
+        defaults
+            .lerp(
+              const TSwiperThemeData(
+                controlStyle: ButtonStyle(
+                  padding: WidgetStatePropertyAll(EdgeInsets.zero),
+                ),
+              ),
+              0.5,
+            )
+            .controlStyle!
+            .iconSize,
+        isNull,
+      );
     });
   });
 
