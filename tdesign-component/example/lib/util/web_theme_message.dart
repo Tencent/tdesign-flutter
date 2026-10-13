@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:css2token/css2token.dart';
-import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// Parses a website message into the theme consumed by the Flutter Web Demo.

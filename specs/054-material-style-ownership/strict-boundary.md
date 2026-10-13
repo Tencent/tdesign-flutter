@@ -54,3 +54,15 @@ ScrollView 使用局部 TInternalScrollScope，内部 chrome 拒绝外部主题�
 - 最终 diff 检查通过。未发现约定范围内的剩余外部 Material 配置入口或 M2/M3 主题默认依赖；TD 显式配置、调用方内容主题、实际原生编辑/复制、滚动、焦点、平台菜单和语义能力保持。此结论不替代未来 Flutter 算法升级的运行验证。
 
 按最新用户授权提交并推送本次全部本地修正，PR 描述改为严格视觉与行为配置边界，完整保留模板。新 head 的远端 CI 独立确认，不复用旧提交绿灯。
+
+## develop 合并冲突与边界复核
+
+合并基线为 develop `e2ea9c364`（#1158），合并前 PR head `2cbc3dfd8`。两处文本冲突是 Radio Golden 与 Icon 回归测试导入：遵循 develop 的统一 Material 导出，保留 PR 新增 RenderParagraph 断言需要的 rendering 导入，以及 Radio 的 TD Token 字体配置；另清理本 PR 两个新增主题测试中的重复 Material 导入。
+
+统一 `tdesign_flutter.dart` 导出 Material 是调用方可用 API，不构成 TD 内置主题继承入口。TD 配置所有权、自定义内容原主题、必要原生能力的边界保持。相对上一个已审查 head，组件实现和内部隔离适配层字节不变，生产修改仅为 develop 的 Material 导出及 ResourceDelegate 重复导入清理；不回退 develop。
+
+合并后 lib 指纹：`7e11af3608fbb0e85152c8bf8e7d773174ca09f099cc577033849a746ea6e08c`，与双版本和 Linux 验证副本一致。最终验证结果在合并提交前记录。
+
+合并后验证通过：Flutter 3.32.0 / 3.47.7 各 57 组 / 2887 项组件及覆盖率（最低 Indexes 709/742 = 95.55%）、155 项工具、365 项 Demo 非 Golden；组件与 Demo 严格 analyze 零诊断。API 文档 57 项及示例片段 --check 通过。冲突相关 Icon/Radio/Theme 的 4 个 Linux Golden 套件 / 33 项无更新参数通过；其余渲染路径、字体、资源与基线不变，复用先前完整比较结果。619 张已有 Golden PNG 在此次合并中均未修改。
+
+复核结论：未发现新外部 Material 配置入口、内部隔离默认值回退或 TD 显式配置/自定义内容主题/必要原生能力回归。保留 develop 的公开导出便利性，同时不让该导出改变 TD 配置所有权。合并提交按授权推送；远端 CI 以新的 merge head 独立读取。

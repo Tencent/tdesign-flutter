@@ -1,5 +1,3 @@
-/// 组件库相关的，只需要引入这个文件，里面暴露td前缀所有需要的类
-import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';

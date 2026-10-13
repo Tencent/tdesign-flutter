@@ -1,3 +1,5 @@
+// Re-export Material so applications can use a single TDesign import.
+export 'package:flutter/material.dart';
 export 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 export 'src/components/action_sheet/t_action_sheet.dart';

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// Popup 测试用文案资源：仅覆盖 cancel / confirm，其余与库内默认中文一致。
