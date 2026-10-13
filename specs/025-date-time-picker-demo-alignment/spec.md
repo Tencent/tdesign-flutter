@@ -66,3 +66,5 @@ Figma 当前分支节点 28591:37823（02 组件样式）为 Title/Large，PingF
 默认选中字体使用 fontMarkLarge，普通字体使用 fontBodyLarge；显式 TextTheme、DefaultTextStyle 和 TTextThemeData 按文字主题优先级覆盖默认值。高度主题由未配置状态参与动画时以 200 插值，两端均未配置时保持 null。
 
 Picker 与 DateTimePicker 均在全部滚轮停止后恢复父级未接受的候选值；接受值不重建控制器，不中断惯性。公开 API 签名不变，DateTimePicker 不回传值时改为自动回滚，属于行为变化。
+
+组件文案更新的根因修复契约见 [056](../056-date-time-picker-label-updates/spec.md)。

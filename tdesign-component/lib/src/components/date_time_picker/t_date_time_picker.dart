@@ -44,6 +44,7 @@ class TDateTimePicker extends StatefulWidget {
   ///
   /// - **回调参数**：`column` 为 [DateTimeColumn]，`value` 为列数值
   /// - **回退**：返回 null 时使用内置默认文案（含国际化单位后缀）
+  /// - **更新**：回调变化会刷新文案，保留当前滚动状态；可直接在 build 中传入匿名回调。
   final DateTimePickerRenderLabel? renderLabel;
 
   /// 可选范围下限。未指定时，年列最小值为初始选中年份减 10。
@@ -143,22 +144,15 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
     final rangeChanged =
         oldWidget.start != widget.start || oldWidget.end != widget.end;
     final stepsChanged = oldWidget.steps != widget.steps;
-    final showWeekChanged = oldWidget.showWeek != widget.showWeek;
-    final renderLabelChanged = oldWidget.renderLabel != widget.renderLabel;
 
     // 接受与拒绝都比较归一化后的完整日期，保留隐藏计算年的语义：
     // 同年接受滚轮结果不重建，仅计算年变化也能同步更新。
     final controlledValueDiverged =
         _createSnapshot().current != _snapshot.current;
-    final configurationChanged =
-        modeChanged ||
-        rangeChanged ||
-        stepsChanged ||
-        showWeekChanged ||
-        renderLabelChanged;
+    final configurationChanged = modeChanged || rangeChanged || stepsChanged;
     if (!controlledValueDiverged && !configurationChanged) {
       // 父级接受滚轮刚发出的受控值时，内部 snapshot 已经是最新状态。
-      // 保留当前 wheel 与 controller，避免每变一格都销毁并中断惯性滚动。
+      // 文案更新由 Wheel 刷新选项，保留控制器与正在进行的拖动/惯性。
       return;
     }
     if (modeChanged || controlledValueDiverged) {
@@ -233,13 +227,10 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
           Object.hashAll(widget.mode.columns),
           widget.start,
           widget.end,
-          widget.showWeek,
-          widget.renderLabel,
           widget.steps,
-          labels,
-          Localizations.localeOf(context),
         ),
       ),
+      locale: Localizations.localeOf(context),
       snapshot: _snapshot,
       labels: labels,
       start: start,

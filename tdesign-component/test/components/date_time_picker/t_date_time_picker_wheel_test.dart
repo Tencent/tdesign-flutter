@@ -30,6 +30,7 @@ Widget wrap(Widget child) => MaterialApp(
     );
 
 void main() {
+  _displayConfigurationRegression();
   group('DateTimePickerWheel 渲染', () {
     testWidgets('年/月/日三列渲染并暴露选项', (tester) async {
       final token = TThemeData.defaultData();
@@ -300,4 +301,75 @@ Finder _wheelHighlightFinder() {
         widget.constraints?.minHeight == 40 &&
         widget.constraints?.maxHeight == 40,
   );
+}
+
+void _displayConfigurationRegression() {
+  testWidgets('weekday and resource labels update without replacing wheel', (
+    tester,
+  ) async {
+    final snapshot = makeSnapshot();
+    var labels = DateTimePickerLabels.defaults;
+    var showWeek = false;
+    var locale = const Locale('en');
+    var prefix = 'en';
+    String? label(DateTimeColumn column, int value) =>
+        column == DateTimeColumn.month ? '$prefix$value' : null;
+    late StateSetter update;
+    await tester.pumpWidget(
+      wrap(
+        StatefulBuilder(
+          builder: (context, setState) {
+            update = setState;
+            return DateTimePickerWheel(
+              snapshot: snapshot,
+              labels: labels,
+              start: DateTime(2020, 1, 1),
+              end: DateTime(2030, 12, 31),
+              showWeek: showWeek,
+              steps: null,
+              renderLabel: label,
+        locale: locale,
+              height: 200,
+              itemCount: 5,
+              onChanged: (_, __) {},
+            );
+          },
+        ),
+      ),
+    );
+    final wheels = find.byType(ListWheelScrollView);
+    final controllers = tester
+        .widgetList<ListWheelScrollView>(wheels)
+        .map((wheel) => wheel.controller)
+        .toList();
+    final states = tester.stateList(wheels).toList();
+    update(() {
+      showWeek = true;
+      labels = DateTimePickerLabels(
+        unitSuffix: {
+          ...DateTimePickerLabels.defaults.unitSuffix,
+          DateTimeColumn.year: 'Y',
+        },
+        weekLabels: const ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      );
+    });
+    await tester.pump();
+    expect(find.text('2024Y'), findsOneWidget);
+    expect(find.textContaining('Sat'), findsWidgets);
+    expect(find.text('en6'), findsOneWidget);
+    update(() {
+      locale = const Locale('zh');
+      prefix = 'zh';
+    });
+    await tester.pump();
+    expect(find.text('zh6'), findsOneWidget);
+    expect(find.text('en6'), findsNothing);
+    final current = tester.widgetList<ListWheelScrollView>(wheels).toList();
+    final currentStates = tester.stateList(wheels).toList();
+    for (var i = 0; i < 3; i++) {
+      expect(current[i].controller, same(controllers[i]));
+      expect(currentStates[i], same(states[i]));
+    }
+    await tester.pumpWidget(const SizedBox());
+  });
 }

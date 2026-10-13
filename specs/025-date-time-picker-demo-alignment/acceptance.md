@@ -76,3 +76,7 @@ flutter test --no-pub test/date_time_picker_demo_test.dart test/date_time_picker
 - Flutter 3.32 隔离环境：Picker 与 DateTimePicker 登记测试共 182 项通过；DateTimePicker 生产代码覆盖率 97.17%，Picker 97.51%。
 - Flutter 3.47：相关组件、日期算法及主题测试通过；`dart analyze --fatal-infos` 无诊断。
 - Picker 与 DateTimePicker 深浅色 Demo Golden 共 34 项通过，原基线无变化。
+
+## 六列连续滚动
+
+年月日时分秒 Demo 保留匿名 `renderLabel` 调用，连续滚动、文案更新及确认、取消行为已验证。组件契约与简要验收见 [Spec 056](../056-date-time-picker-label-updates/spec.md) 和 [验收结果](../056-date-time-picker-label-updates/acceptance.md)。

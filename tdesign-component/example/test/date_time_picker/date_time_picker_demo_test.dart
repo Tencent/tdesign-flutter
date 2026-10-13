@@ -9,6 +9,7 @@ import '../demo_page_test_utils.dart';
 import 'date_time_picker_demo_test_spec.dart';
 
 void main() {
+  _registerSixColumnScrollRegression();
   registerDemoStructureTests(dateTimePickerDemoPageTestSpec);
 
   testWidgets('DateTimePicker typography preserves title and body hierarchy', (
@@ -221,6 +222,89 @@ void main() {
     await tester.tap(find.text('确定'));
     await tester.pumpAndSettle();
     expect(find.text('2026-08'), findsOneWidget);
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
+}
+
+void _registerSixColumnScrollRegression() {
+  testWidgets('six-column draft updates keep controllers and continuous drag', (
+    tester,
+  ) async {
+    await pumpDemoPageAtPhoneViewport(
+      tester,
+      dateTimePickerDemoPageTestSpec,
+      ThemeMode.light,
+    );
+    final trigger = find.byKey(
+      const ValueKey('date-time-picker-date-time-trigger'),
+    );
+    await tester.scrollUntilVisible(
+      trigger,
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    final overflow = tester.getRect(trigger).bottom - 780;
+    if (overflow > 0) {
+      await tester.drag(
+        find.byType(CustomScrollView).first,
+        Offset(0, -overflow - 16),
+      );
+      await tester.pumpAndSettle();
+    }
+    await tester.tap(trigger);
+    await tester.pumpAndSettle();
+    final wheels = find.byType(ListWheelScrollView);
+    expect(wheels, findsNWidgets(6));
+    final before = tester
+        .widgetList<ListWheelScrollView>(wheels)
+        .map((wheel) => wheel.controller)
+        .toList();
+    final beforeStates = tester.stateList(wheels).toList();
+    final panel = find.byKey(
+      const ValueKey('date-time-picker-date-time-panel'),
+    );
+    final gesture = await tester.startGesture(tester.getCenter(wheels.last));
+    for (var i = 0; i < 3; i++) {
+      await gesture.moveBy(const Offset(0, -40));
+      await tester.pump(const Duration(milliseconds: 16));
+      final after = tester.widgetList<ListWheelScrollView>(wheels).toList();
+      final afterStates = tester.stateList(wheels).toList();
+      for (var column = 0; column < 6; column++) {
+        expect(after[column].controller, same(before[column]));
+        expect(afterStates[column], same(beforeStates[column]));
+      }
+    }
+    await gesture.up();
+    await tester.pumpAndSettle();
+    final draft = tester.widget<TDateTimePicker>(panel).value;
+    expect(draft.second, greaterThan(24));
+    expect(find.text('2022'), findsOneWidget);
+    await tester.tap(find.text('取消'));
+    await tester.pumpAndSettle();
+    expect(
+      find.descendant(of: trigger, matching: find.text('2022-08-10 12:50:23')),
+      findsOneWidget,
+    );
+    await tester.tap(trigger);
+    await tester.pumpAndSettle();
+    await tester.drag(
+      find.byType(ListWheelScrollView).last,
+      const Offset(0, -120),
+    );
+    await tester.pumpAndSettle();
+    final confirmed = tester.widget<TDateTimePicker>(panel).value.second;
+    expect(confirmed, greaterThan(24));
+    await tester.tap(find.text('确定'));
+    await tester.pumpAndSettle();
+    expect(
+      find.descendant(
+        of: trigger,
+        matching: find.text(
+          '2022-08-10 12:50:${confirmed.toString().padLeft(2, '0')}',
+        ),
+      ),
+      findsOneWidget,
+    );
     await disposeDemoPage(tester);
   }, tags: 'demo');
 }
