@@ -68,3 +68,13 @@
 - generate_example_code.dart --check、check_demo_structure.dart（60 个入口 / 370 个 ExampleItem）与 git diff --check 通过。
 - 日志：/private/tmp/pr1158-failed.log、pr1158-snippets-3.32.log、pr1158-snippets-3.44.log、pr1158-analyze-fix-3.32.log、pr1158-analyze-fix-3.44.log。
 - 修复推送后，以 PR 最新 head 的 CI / autofix 结果为准；不执行合并。
+
+## Table assertion and CLA follow-up (2026-10-13)
+
+- CI on 9f6e1f535 passed snippet checks; both SDK jobs failed only the Table snippet import assertion, with 364 other Demo tests passing.
+- The assertion now checks the unified TDesign import while retaining all nine class-level snippets and rendered code-panel checks.
+- Table suite: 4 tests passed on Flutter 3.32.0 and stable 3.44.9. The full run_example_regression.dart entry passed all 365 tests on stable 3.44.9.
+- Re-ran the autofix generation entry, README synchronization, snippet synchronization check, and all 370 snippet analyses without additional generated changes.
+- CLA bot reported RSS1102 signed and autofix-ci[bot] unsigned. Locally regenerated and verified bot output was included in the contributor commit; original history remains on local backup branch rss1102/chore/pr1158-before-cla.
+- Updated only this PR branch using an explicit force-with-lease. No merge was performed. Remote CLA and CI must be verified against the latest head.
+- Logs: /private/tmp/pr1158-failed-second.log, pr1158-table-3.32.log, pr1158-table-stable.log, pr1158-example-regression.log, pr1158-api-regenerated.log.
