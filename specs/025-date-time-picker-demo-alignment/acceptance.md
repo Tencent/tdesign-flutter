@@ -77,8 +77,6 @@ flutter test --no-pub test/date_time_picker_demo_test.dart test/date_time_picker
 - Flutter 3.47：相关组件、日期算法及主题测试通过；`dart analyze --fatal-infos` 无诊断。
 - Picker 与 DateTimePicker 深浅色 Demo Golden 共 34 项通过，原基线无变化。
 
-## 六列连续滚动修复演进（2026-10-14）
+## 六列连续滚动
 
-最初采用Demo内稳定renderLabel规避。后续根因修复恢复原匿名回调，改由组件保留滚动状态，见Spec056；onChanged 回传受控草稿时不得更换六列 controller / wheel state。连续拖动与惯性可跨越多格，年份无单位，其余列保留默认文案；取消不提交、确认写回。组件根因修复保留真实文案更新及结构/范围/步进的响应；公开API签名不变。回归沿用已登记的 date_time_picker_demo_test.dart。
-
-初始Demo修复阶段验证：Flutter 3.32.0 / 3.47.7 各8项日期时间Demo功能回归通过，Demo analyze零问题、生成代码片段检查通过；Linux3.32既有22项Golden无更新比较通过。profile APK构建通过；安装时手机已断开，修复版真机连续拖动尚未复核，不以构建结果代替。初始阶段未改生产组件；后续组件根因修复已通过双版本和Android profile同手势、确认/取消验证，详见Spec056。公开API签名不变。
+年月日时分秒 Demo 保留匿名 `renderLabel` 调用，连续滚动、文案更新及确认、取消行为已验证。组件契约与简要验收见 [Spec 056](../056-date-time-picker-label-updates/spec.md) 和 [验收结果](../056-date-time-picker-label-updates/acceptance.md)。
