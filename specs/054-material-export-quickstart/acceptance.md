@@ -78,3 +78,12 @@
 - CLA bot reported RSS1102 signed and autofix-ci[bot] unsigned. Locally regenerated and verified bot output was included in the contributor commit; original history remains on local backup branch rss1102/chore/pr1158-before-cla.
 - Updated only this PR branch using an explicit force-with-lease. No merge was performed. Remote CLA and CI must be verified against the latest head.
 - Logs: /private/tmp/pr1158-failed-second.log, pr1158-table-3.32.log, pr1158-table-stable.log, pr1158-example-regression.log, pr1158-api-regenerated.log.
+
+## Documented source dependency validation (2026-10-13)
+
+- Replaced the incompatible hosted alpha.1 dependency with Git URL https://github.com/Tencent/tdesign-flutter.git, fixed ref 86c37e563039c57cf6c3f9b52fead418fd3c03bd, and package path tdesign-component.
+- Stable ^1.0.0 is documented only as a post-release option once that release contains the re-export; exact 1.0.0 does not allow future compatible updates. Package release version was not changed.
+- Extracted the dependency YAML and TButton expressions from each README into independent consumer projects under /private/tmp/pr1158-source-quickstart-20261013. No path overrides were used.
+- Chinese / Flutter 3.32.0 and English / stable 3.44.9: remote flutter pub get succeeded; both lockfiles confirm the exact documented Git ref and package subdirectory; analyze --fatal-infos returned zero diagnostics; each Widget smoke test passed, rendering the minimal button with a single TD import and preserving disabled semantics.
+- Component README copies match source byte-for-byte; site Quick Start matches the Chinese source section; git diff --check passes.
+- Logs: /private/tmp/pr1158-source-pub-3.32.log, pr1158-source-analyze-3.32.log, pr1158-source-test-3.32.log, pr1158-source-pub-stable.log, pr1158-source-analyze-stable.log, pr1158-source-test-stable.log.

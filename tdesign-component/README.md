@@ -49,14 +49,20 @@ Requires Flutter ≥ 3.32.0 and Dart ≥ 3.8.0.
 
 ### Add Dependency
 
-Add the following to `pubspec.yaml`:
+The single-import feature has not been published to pub.dev yet. Before release, add this source dependency pinned to a specific commit to `pubspec.yaml`:
 
 ```yaml
 dependencies:
   flutter:
     sdk: flutter
-  tdesign_flutter: 1.0.0-alpha.1
+  tdesign_flutter:
+    git:
+      url: https://github.com/Tencent/tdesign-flutter.git
+      ref: 86c37e563039c57cf6c3f9b52fead418fd3c03bd
+      path: tdesign-component
 ```
+
+Once a stable `1.0.0` release containing this feature is published, replace the source dependency with `tdesign_flutter: ^1.0.0`. This allows compatible 1.x updates without editing the version for every release; `1.0.0` without `^` allows only that exact version. Until then, use the source configuration above.
 
 Install the dependency:
 
@@ -81,8 +87,6 @@ const TButton(child: Text('Button'))
 ```
 
 No additional initialization or theme configuration is required. Omitting `onPressed` leaves the button disabled.
-
-> Before publishing this guide, update the dependency version to a release containing the Material re-export. The published `1.0.0-alpha.1` still requires an additional `package:flutter/material.dart` import.
 
 ## 📖 Usage
 

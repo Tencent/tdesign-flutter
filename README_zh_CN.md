@@ -49,14 +49,20 @@
 
 ### 添加依赖
 
-在 `pubspec.yaml` 中添加：
+当前单入口功能尚未发布到 pub.dev。发布前，在 `pubspec.yaml` 中添加以下锁定提交的源码依赖：
 
 ```yaml
 dependencies:
   flutter:
     sdk: flutter
-  tdesign_flutter: 1.0.0-alpha.1
+  tdesign_flutter:
+    git:
+      url: https://github.com/Tencent/tdesign-flutter.git
+      ref: 86c37e563039c57cf6c3f9b52fead418fd3c03bd
+      path: tdesign-component
 ```
+
+包含上述能力的 `1.0.0` 稳定版发布后，可将源码依赖替换为 `tdesign_flutter: ^1.0.0`，允许兼容的 1.x 更新，无需每次发布都修改版本号；`1.0.0` 不带 `^` 则只允许该精确版本。发布前请使用上面的源码配置。
 
 安装依赖：
 
@@ -81,8 +87,6 @@ const TButton(child: Text('按钮'))
 ```
 
 无需额外初始化或主题配置。不传 `onPressed` 时，按钮处于禁用状态。
-
-> 发布前需将依赖版本更新为包含 Material 重导出的版本。已发布的 `1.0.0-alpha.1` 仍需额外导入 `package:flutter/material.dart`。
 
 ## 📖 使用方法
 
