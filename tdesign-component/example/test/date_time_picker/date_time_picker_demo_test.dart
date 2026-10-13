@@ -263,7 +263,6 @@ void _registerSixColumnScrollRegression() {
     final panel = find.byKey(
       const ValueKey('date-time-picker-date-time-panel'),
     );
-    final label = tester.widget<TDateTimePicker>(panel).renderLabel;
     final gesture = await tester.startGesture(tester.getCenter(wheels.last));
     for (var i = 0; i < 3; i++) {
       await gesture.moveBy(const Offset(0, -40));
@@ -274,7 +273,6 @@ void _registerSixColumnScrollRegression() {
         expect(after[column].controller, same(before[column]));
         expect(afterStates[column], same(beforeStates[column]));
       }
-      expect(tester.widget<TDateTimePicker>(panel).renderLabel, same(label));
     }
     await gesture.up();
     await tester.pumpAndSettle();

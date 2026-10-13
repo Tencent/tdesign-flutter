@@ -30,9 +30,11 @@ class DateTimePickerWheel extends StatefulWidget {
     required this.itemCount,
     required this.onChanged,
     this.onScrollEnd,
+    this.locale,
   });
 
   final VoidCallback? onScrollEnd;
+  final Locale? locale;
   final DateTimePickerSnapshot snapshot;
   final DateTimePickerLabels labels;
   final DateTime? start;
@@ -99,15 +101,37 @@ class _DateTimePickerWheelState extends State<DateTimePickerWheel> {
   @override
   void didUpdateWidget(covariant DateTimePickerWheel oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (_snapshot == widget.snapshot &&
-        oldWidget.showWeek == widget.showWeek &&
+    final sameSelectionConfiguration =
+        _snapshot == widget.snapshot &&
         oldWidget.start == widget.start &&
         oldWidget.end == widget.end &&
         oldWidget.steps == widget.steps &&
-        oldWidget.renderLabel == widget.renderLabel &&
-        oldWidget.labels == widget.labels &&
         oldWidget.height == widget.height &&
-        oldWidget.itemCount == widget.itemCount) {
+        oldWidget.itemCount == widget.itemCount;
+    if (sameSelectionConfiguration) {
+      if (oldWidget.showWeek == widget.showWeek &&
+          oldWidget.renderLabel == widget.renderLabel &&
+          oldWidget.labels == widget.labels &&
+          oldWidget.locale == widget.locale) {
+        return;
+      }
+      // 展示变化不移动选中项、不更换控制器，避免打断当前 Drag/BallisticActivity。
+      for (var i = 0; i < _columns.length; i++) {
+        final options = _snapshot.columnOptionsAt(
+          i,
+          start: widget.start,
+          end: widget.end,
+          showWeek: widget.showWeek,
+          labels: _labels,
+          renderLabel: widget.renderLabel,
+          steps: widget.steps,
+        );
+        _columns[i] = options;
+        _columnKeys[i].currentState?.applyColumnUpdate(
+          options: options,
+          controller: _controllers[i],
+        );
+      }
       return;
     }
     final previousControllers = List<FixedExtentScrollController>.from(

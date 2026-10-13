@@ -84,11 +84,6 @@ class _DateTimePickerDateTimeExampleState
 
     void showPicker() {
       var draft = value;
-      // 回调在本次弹层内保持稳定，受控值更新不应重建滚轮或中断拖动。
-      final renderLabel = id == 'date-time'
-          ? (DateTimeColumn column, int value) =>
-                column == DateTimeColumn.year ? '$value' : null
-          : null;
       TPickerPopup.show(
         context,
         headerBuilder: (_, close) => TPopupHeader(
@@ -122,7 +117,10 @@ class _DateTimePickerDateTimeExampleState
             mode: mode,
             showWeek: showWeek,
             // 六列并排时年份省略单位，避免 375px 窄屏省略年份数字。
-            renderLabel: renderLabel,
+            renderLabel: id == 'date-time'
+                ? (column, value) =>
+                      column == DateTimeColumn.year ? '$value' : null
+                : null,
             onChanged: (next) => setPopupState(() => draft = next),
           ),
         ),
