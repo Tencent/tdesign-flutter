@@ -34,7 +34,7 @@ Picker 专用弹层入口。
 
 打开包含标准头部和 Picker 滚轮的底部弹层。
 
-弹层总高为当前 `TPickerThemeData.height`（默认 200）加
+弹层总高为当前 `TPickerThemeData.height`（默认至少 200，随内置文字增长）加
 `TPopupHeader.headerHeight`（58）。`child` 通常为 `TPicker` 或
 `TDateTimePicker`，其受控值、确认和取消状态仍由调用方管理。
 
@@ -216,5 +216,5 @@ TPicker 组件级 ThemeExtension
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| height | double? | - | 滚轮视窗高度，单位为逻辑像素；null 时使用默认值 200。 必须为有限正数，行高由此高度除以 `itemCount`（默认 5）得到。 | 否 |
+| height | double? | - | 滚轮视窗高度，单位为逻辑像素；null 时至少为 200，并随内置文字的自然行高增长。 必须为有限正数，行高由此高度除以 `itemCount`（默认 5）得到。 | 否 |
 | itemCount | int? | - | 每屏显示项数，null 时使用默认值 5；必须大于零。 | 否 |

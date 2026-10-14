@@ -155,10 +155,10 @@
 | animationDuration | Duration? | - | 动画持续时间 未配置时为 300 毫秒。 | 否 |
 | backgroundColor | Color? | - | 进度条背景色 | 否 |
 | circleInnerBgColor | Color? | - | 环形进度条内圆背景色。默认浅色读取容器色、暗色透明； 宿主如需定义暗色内圆，可在组件 Theme 中显式配置。 | 否 |
-| circleSize | double? | - | 环形进度条的正方形边长；未设置时由环形规格决定。 未配置时 circular 为 112、microCircular / microButton 为 24 逻辑像素。 | 否 |
+| circleSize | double? | - | 环形进度条的正方形边长；未设置时由环形规格决定。 未配置时 circular 为 112、microCircular / microButton 为 24 逻辑像素。 显式值固定；常规环形默认尺寸可随内置百分比的自然文字大小增长。 | 否 |
 | color | Color? | - | 进度条颜色 | 否 |
 | indeterminateAnimationDuration | Duration? | - | 不确定进度完成一次循环的时长。 未配置时为 1200 毫秒；必须大于 Duration.zero，否则抛出 FlutterError。 | 否 |
 | indeterminateCircularValue | double? | - | 不确定环形进度弧占整圈的比例。 未配置时为 0.25；必须大于 0 且小于 1。 | 否 |
 | indeterminateLinearSegmentFraction | double? | - | 不确定线性进度段占轨道宽度的比例。 未配置时为 0.32；必须大于 0 且不大于 1。 | 否 |
 | linearBorderRadius | BorderRadiusGeometry? | - | 条形进度条末端圆角 | 否 |
-| strokeWidth | double? | - | 进度条粗细 | 否 |
+| strokeWidth | double? | - | 进度条粗细；显式值保持固定。 未设置时，内置百分比的 plump/button 默认高度可随文字自然行高增长。 | 否 |

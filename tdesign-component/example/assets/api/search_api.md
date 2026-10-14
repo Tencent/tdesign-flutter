@@ -70,7 +70,7 @@
 | clearIconTheme | IconThemeData? | - | 清除图标主题。 | 否 |
 | contentPadding | EdgeInsetsGeometry? | - | 输入区域内部留白，默认水平方向 12dp。 | 否 |
 | cursorHeight | double? | - | 光标高度。 | 否 |
-| height | double? | - | 搜索框高度，默认 40dp。 | 否 |
+| height | double? | - | 搜索框高度，默认 40dp。 显式高度保持固定；默认至少 40，并随内置文字和图标的自然尺寸增长。 | 否 |
 | hintStyle | TextStyle? | - | 占位文字样式，未设置字段继承 `fontBodyLarge` 和占位色 Token。 | 否 |
 | inputBackgroundColor | Color? | - | 输入区域背景色，默认 `bgColorSecondaryContainer` Token。 | 否 |
 | searchIconTheme | IconThemeData? | - | 搜索图标主题。 | 否 |
