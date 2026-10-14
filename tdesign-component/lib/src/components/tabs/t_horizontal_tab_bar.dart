@@ -921,12 +921,7 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
                         )
                       : null,
                   decoration: _getContentDecorateInner(index),
-                  child: OverflowBox(
-                    fit: OverflowBoxFit.deferToChild,
-                    minHeight: 0,
-                    maxHeight: double.infinity,
-                    child: widget.tabs[index],
-                  ),
+                  child: widget.tabs[index],
                 ),
               ),
             ),

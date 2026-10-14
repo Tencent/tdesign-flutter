@@ -56,6 +56,9 @@ class TSwitch extends StatelessWidget {
     final resolvedVariant = variant ?? TSwitchVariant.filled;
     final enabled = onChanged != null && !loading;
     final resolved = TSwitchResolve.resolve(context: context, theme: theme);
+    final textGrowth = resolvedVariant == TSwitchVariant.text
+        ? _textGrowth(context, resolved)
+        : 1.0;
 
     Widget current = TCupertinoSwitch(
       value: value,
@@ -70,7 +73,7 @@ class TSwitch extends StatelessWidget {
       // State colors are resolved independently; never dim the whole switch.
       disabledOpacity: 1,
       thumbView: _buildThumb(
-        context: context,
+        textGrowth: textGrowth,
         resolved: resolved,
         variant: resolvedVariant,
         loading: loading,
@@ -85,9 +88,7 @@ class TSwitch extends StatelessWidget {
     }
 
     // 默认文字开关随内容增长；显式预设尺寸仍保持固定几何。
-    final growth = size == null && resolvedVariant == TSwitchVariant.text
-        ? _textGrowth(context, resolved)
-        : 1.0;
+    final growth = size == null ? textGrowth : 1.0;
     return Semantics(
       enabled: enabled,
       toggled: value,
@@ -100,23 +101,42 @@ class TSwitch extends StatelessWidget {
   }
 
   double _textGrowth(BuildContext context, TSwitchResolvedStyle resolved) {
-    var height = 16.0;
-    for (final configured in [
-      resolved.thumbContentOnFont,
-      resolved.thumbContentOffFont,
+    var extent = 16.0;
+    for (final (configured, label) in [
+      (resolved.thumbContentOnFont, openText ?? '开'),
+      (resolved.thumbContentOffFont, closeText ?? '关'),
     ]) {
       final size = TTextStyled(
-        '国Ag',
+        label,
         maxLines: 1,
         style: configured.copyWith(height: configured.height ?? 1),
       ).naturalSize(context);
-      height = math.max(height, size.height);
+      extent = math.max(extent, size.height);
+      if (label.characters.length <= 1) {
+        extent = math.max(extent, size.width);
+      } else {
+        final abbreviatedWidth = [label.characters.first, '…'].fold<double>(
+          0,
+          (width, part) =>
+              width +
+              TTextStyled(
+                part,
+                maxLines: 1,
+                style: configured.copyWith(height: configured.height ?? 1),
+              ).naturalSize(context).width,
+        );
+        // Measure separately: prefix/ellipsis kerning differs from the source label.
+        extent = math.max(
+          extent,
+          math.min(size.width, abbreviatedWidth).ceilToDouble(),
+        );
+      }
     }
-    return height / 16;
+    return extent / 16;
   }
 
   Widget? _buildThumb({
-    required BuildContext context,
+    required double textGrowth,
     required TSwitchResolvedStyle resolved,
     required TSwitchVariant variant,
     required bool loading,
@@ -136,31 +156,16 @@ class TSwitch extends StatelessWidget {
         width: 16,
         height: 16,
         // 滑块是固定几何；先让文字完成自然纵向布局，再按内容槽缩小。
-        // 单字符先自然排版，避免字体放大后连字符也被省略。
-        // 多字符为字符与省略号预留排版宽度，再适配滑块，避免整段消失。
+        // 两个状态使用同一自然内容槽，抵消外层几何缩放，保留各自实际字号。
+        // 单字符完整展示；多字符沿用槽内省略。
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: SizedBox(
-            width:
-                (value ? (openText ?? '开') : (closeText ?? '关'))
-                        .characters
-                        .length ==
-                    1
-                ? null
-                : math.max(
-                    16,
-                    MediaQuery.textScalerOf(context).scale(
-                          (value
-                                      ? resolved.thumbContentOnFont
-                                      : resolved.thumbContentOffFont)
-                                  .fontSize ??
-                              14,
-                        ) *
-                        2.5,
-                  ),
+            width: 16 * textGrowth,
             child: TTextStyled(
               value ? (openText ?? '开') : (closeText ?? '关'),
               maxLines: 1,
+              textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               style:
                   (value

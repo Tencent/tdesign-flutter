@@ -10,3 +10,5 @@
 - [ ] 修复后真机字体与交互核验（设备已连接，已开始逐状态核验）
 - [x] 收敛 Input / Popup / Calendar 的过度保护并完成相关双版本、Golden 和真机回归
 - 用户已授权提交与推送；提交前最终候选双版本与登记视觉回归已完成。
+
+- [x] 修复最终 Review 的 Tabs 自定义约束、Switch 缩字、Calendar 文案测量与 Indexes 测试归属，完成双版本和受影响 Golden 验证。

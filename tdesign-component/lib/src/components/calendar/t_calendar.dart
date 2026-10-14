@@ -252,21 +252,33 @@ class _TCalendarState extends State<TCalendar> {
         );
       }
     }
-    String longest(Iterable<String> labels) =>
-        labels.reduce((a, b) => a.runes.length >= b.runes.length ? a : b);
-    final weekdayHeight = math.max(
+    double labelsHeight(
+      Iterable<String> labels,
+      TextStyle? style,
+      double availableWidth,
+      double minimum,
+    ) => labels.fold<double>(
+      minimum,
+      (height, label) => math.max(
+        height,
+        TTextStyled(
+          label,
+          centerLeading: true,
+          style: style,
+        ).naturalSize(context, maxWidth: availableWidth).height,
+      ),
+    );
+    // The seven weekday labels can wrap differently even with equal character counts.
+    final weekdayHeight = labelsHeight(
+      weekdayNames,
+      weekdayStyle,
+      weekdayWidth,
       base.weekdayHeight,
-      TTextStyled(
-        longest(weekdayNames),
-        centerLeading: true,
-        style: weekdayStyle,
-      ).naturalSize(context, maxWidth: weekdayWidth).height,
     );
     var defaultMonthHeight = base.monthTitleHeight;
     if (theme?.monthTitleHeight == null &&
         widget.monthTitleBuilder == TCalendar._defaultMonthTitleBuilder) {
-      // Resolve localized labels cheaply; perform only one paragraph layout.
-      final title = longest(
+      defaultMonthHeight = labelsHeight(
         List.generate(
           12,
           (index) => TCalendar._defaultMonthTitleText(
@@ -274,16 +286,9 @@ class _TCalendarState extends State<TCalendar> {
             DateTime(widget.maxDate.year, index + 1),
           ),
         ),
-      );
-      defaultMonthHeight = math.max(
+        TCalendar._defaultMonthTitleStyle(context),
+        math.max(0, width - padding * 2),
         defaultMonthHeight,
-        TTextStyled(
-              title,
-              centerLeading: true,
-              style: TCalendar._defaultMonthTitleStyle(context),
-            )
-            .naturalSize(context, maxWidth: math.max(0, width - padding * 2))
-            .height,
       );
     }
     return TCalendarStyle(
