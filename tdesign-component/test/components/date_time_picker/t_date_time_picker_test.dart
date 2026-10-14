@@ -11,6 +11,7 @@ Widget wrap(Widget child) => MaterialApp(
 );
 
 void main() {
+  _labelUpdateScrollRegression();
   testWidgets('月日模式保留闰日且真实滚动只返回月日', (tester) async {
     var value = const TDateTimePickerValue(month: 2, day: 29);
     var changes = 0;
@@ -497,4 +498,165 @@ void main() {
       throwsArgumentError,
     );
   });
+}
+
+void _labelUpdateScrollRegression() {
+  for (final m3 in [false, true]) {
+    testWidgets('inline label accepts continuous drag and inertia m3=$m3', (
+      tester,
+    ) async {
+      var value = const TDateTimePickerValue(
+        year: 2022,
+        month: 8,
+        day: 10,
+        hour: 12,
+        minute: 50,
+        second: 23,
+      );
+      var updates = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            useMaterial3: m3,
+            extensions: [TThemeData.defaultData()],
+          ),
+          home: Scaffold(
+            body: Center(
+              child: SizedBox(
+                width: 375,
+                height: 200,
+                child: StatefulBuilder(
+                  builder: (context, setState) => TDateTimePicker(
+                    value: value,
+                    mode: DateTimePickerMode(
+                      dateMode: DateMode.date,
+                      timeMode: TimeMode.second,
+                    ),
+                    renderLabel: (column, item) =>
+                        column == DateTimeColumn.year ? '$item' : null,
+                    onChanged: (next) => setState(() {
+                      value = next;
+                      updates++;
+                    }),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      final wheels = find.byType(ListWheelScrollView);
+      final controllers = tester
+          .widgetList<ListWheelScrollView>(wheels)
+          .map((wheel) => wheel.controller)
+          .toList();
+      final states = tester.stateList(wheels).toList();
+      final last = controllers.last! as FixedExtentScrollController;
+      final gesture = await tester.startGesture(tester.getCenter(wheels.last));
+      for (var i = 0; i < 3; i++) {
+        await gesture.moveBy(
+          const Offset(0, -40),
+          timeStamp: Duration(milliseconds: (i + 1) * 16),
+        );
+        await tester.pump(const Duration(milliseconds: 16));
+        final current = tester.widgetList<ListWheelScrollView>(wheels).toList();
+        final currentStates = tester.stateList(wheels).toList();
+        for (var column = 0; column < 6; column++) {
+          expect(current[column].controller, same(controllers[column]));
+          expect(currentStates[column], same(states[column]));
+        }
+        expect(last.position.isScrollingNotifier.value, isTrue);
+      }
+      await gesture.up(timeStamp: const Duration(milliseconds: 64));
+      await tester.pump(const Duration(milliseconds: 16));
+      final offsetAtRelease = last.offset;
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(last.offset, greaterThan(offsetAtRelease));
+      await tester.pumpAndSettle();
+      expect(updates, greaterThan(2));
+      expect(value.second, greaterThan(25));
+      expect(last.selectedItem, value.second);
+      expect(find.text('2022'), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
+    });
+
+    testWidgets(
+      'actual label edits preserve drag and ballistic activity m3=$m3',
+      (tester) async {
+        var value = const TDateTimePickerValue(year: 2022, month: 8, day: 10);
+        var prefix = 'old';
+        late StateSetter update;
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              useMaterial3: m3,
+              extensions: [TThemeData.defaultData()],
+            ),
+            home: Scaffold(
+              body: Center(
+                child: SizedBox(
+                  width: 375,
+                  height: 200,
+                  child: StatefulBuilder(
+                    builder: (context, setState) {
+                      update = setState;
+                      return TDateTimePicker(
+                        value: value,
+                        renderLabel: (column, item) =>
+                            column == DateTimeColumn.year
+                            ? '$prefix$item'
+                            : null,
+                        onChanged: (next) => setState(() => value = next),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        final wheels = find.byType(ListWheelScrollView);
+        final controller =
+            tester.widget<ListWheelScrollView>(wheels.first).controller!
+                as FixedExtentScrollController;
+        final gesture = await tester.startGesture(
+          tester.getCenter(wheels.first),
+        );
+        await gesture.moveBy(
+          const Offset(0, -25),
+          timeStamp: const Duration(milliseconds: 16),
+        );
+        await tester.pump(const Duration(milliseconds: 16));
+        final drag = controller.position.activity;
+        final offset = controller.offset;
+        update(() => prefix = 'new');
+        await tester.pump();
+        expect(
+          tester.widget<ListWheelScrollView>(wheels.first).controller,
+          same(controller),
+        );
+        expect(controller.position.activity, same(drag));
+        expect(controller.offset, offset);
+        expect(find.text('new${value.year}'), findsOneWidget);
+        expect(find.text('old${value.year}'), findsNothing);
+        await gesture.moveBy(
+          const Offset(0, -80),
+          timeStamp: const Duration(milliseconds: 32),
+        );
+        await tester.pump(const Duration(milliseconds: 16));
+        await gesture.up(timeStamp: const Duration(milliseconds: 48));
+        await tester.pump(const Duration(milliseconds: 16));
+        final ballistic = controller.position.activity;
+        final releaseOffset = controller.offset;
+        update(() => prefix = 'live');
+        await tester.pump();
+        expect(controller.position.activity, same(ballistic));
+        expect(controller.offset, releaseOffset);
+        expect(find.text('live${value.year}'), findsOneWidget);
+        await tester.pumpAndSettle();
+        expect(controller.selectedItem, value.year! - 2012);
+        await tester.pumpWidget(const SizedBox());
+      },
+    );
+  }
 }
