@@ -548,6 +548,57 @@ void main() {
       );
       expect(find.byType(ListView), findsOneWidget);
     });
+
+    testWidgets('有界高度时 scrollable 撑满剩余空间并可滚动', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const SizedBox(
+            height: 160,
+            child: TCellGroup(scrollable: true, cells: cells),
+          ),
+        ),
+      );
+      final listView = tester.widget<ListView>(find.byType(ListView));
+      expect(listView.shrinkWrap, isFalse);
+      // 垂直 ListView 未显式指定 physics 时，框架默认为 AlwaysScrollableScrollPhysics。
+      expect(listView.physics, isNot(isA<NeverScrollableScrollPhysics>()));
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('scrollable 放进 SingleChildScrollView 不触发布局异常', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const SingleChildScrollView(
+            child: TCellGroup(scrollable: true, cells: cells),
+          ),
+        ),
+      );
+      expect(tester.takeException(), isNull);
+      expect(find.byType(TCell), findsNWidgets(2));
+      // 无界高度下降级为按内容高度，且不参与嵌套滚动。
+      final listView = tester.widget<ListView>(find.byType(ListView));
+      expect(listView.shrinkWrap, isTrue);
+      expect(listView.physics, isA<NeverScrollableScrollPhysics>());
+    });
+
+    testWidgets('scrollable 放进 Column 不触发布局异常', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const Column(children: [TCellGroup(scrollable: true, cells: cells)]),
+        ),
+      );
+      expect(tester.takeException(), isNull);
+      expect(find.byType(TCell), findsNWidgets(2));
+    });
+
+    testWidgets('非 scrollable 时行为不变', (tester) async {
+      await tester.pumpWidget(
+        app(const TCellGroup(title: Text('Group'), cells: cells)),
+      );
+      expect(tester.takeException(), isNull);
+      expect(find.byType(ListView), findsNothing);
+      expect(find.byType(TCell), findsNWidgets(2));
+    });
   });
 
   group('TCellThemeData', () {
