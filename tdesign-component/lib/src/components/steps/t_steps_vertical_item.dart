@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
@@ -93,11 +95,13 @@ class TStepsVerticalItem extends StatelessWidget {
     }
 
     /// 步骤条icon图标组件，默认为索引文字
-    Widget? stepsIconWidget = Text(
+    final number = TTextStyled(
       (index + 1).toString(),
+      maxLines: 1,
       selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
       style: TTextResolve.resolve(
         context: context,
+        singleLine: true,
         defaults: TextStyle(
           color: stepsNumberTextColor,
           fontWeight: FontWeight.w400,
@@ -105,6 +109,8 @@ class TStepsVerticalItem extends StatelessWidget {
         ),
       ),
     );
+
+    Widget? stepsIconWidget = number;
 
     /// 已完成的用 icon 图标显示
     if (completeIconWidget != null) {
@@ -147,7 +153,16 @@ class TStepsVerticalItem extends StatelessWidget {
         : null;
 
     /// icon组件容器大小
-    double iconContainerSize = 22;
+    // 序号槽按真实文字增长；图标仍保留各自显式尺寸。
+    final numberSize = TTextStyled(
+      stepsCount.toString(),
+      maxLines: 1,
+      style: number.style,
+    ).naturalSize(context);
+    double iconContainerSize = math.max(
+      22,
+      math.max(numberSize.width, numberSize.height),
+    );
 
     /// icon组件容器margin
     double iconMarginBottom = 8;
@@ -193,7 +208,9 @@ class TStepsVerticalItem extends StatelessWidget {
             // 左侧图标、线条
             Container(
               margin: const EdgeInsets.only(right: 8),
-              width: 22,
+              width: indicator == TStepsIndicator.standard
+                  ? iconContainerSize
+                  : 22,
               child: ConstrainedBox(
                 constraints: const BoxConstraints(minHeight: 62),
                 child: Column(
@@ -201,7 +218,9 @@ class TStepsVerticalItem extends StatelessWidget {
                   children: [
                     Container(
                       width: iconContainerSize,
-                      height: 22,
+                      height: indicator == TStepsIndicator.standard
+                          ? iconContainerSize
+                          : 22,
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(bottom: iconMarginBottom),
                       decoration: iconWidgetDecoration,

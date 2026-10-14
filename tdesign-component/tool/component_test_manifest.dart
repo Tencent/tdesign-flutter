@@ -804,6 +804,8 @@ const componentTestManifests = <ComponentTestManifest>[
     componentTests: [
       'test/components/text/t_font_loader_test.dart',
       'test/components/text/t_text_resolve_test.dart',
+      'test/components/text/t_single_line_leading_test.dart',
+      'test/components/text/t_component_centering_test.dart',
       'test/components/text/t_text_style_scope_test.dart',
       'test/components/text/t_text_test.dart',
     ],
@@ -812,6 +814,14 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Text Demo',
         workingDirectory: 'example',
         testFiles: ['test/text/text_demo_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Component centering states',
+        workingDirectory: '.',
+        kind: VisualTestKind.component,
+        testFiles: [
+          'test/components/text/t_component_centering_golden_test.dart',
+        ],
       ),
     ],
   ),

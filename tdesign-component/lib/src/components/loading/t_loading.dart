@@ -11,7 +11,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_activity_indicator.dart';
 import 't_circle_indicator.dart';
 import 't_loading_theme_data.dart';
@@ -132,7 +132,10 @@ class TLoading extends StatelessWidget {
         effectiveAxis == Axis.vertical
             ? const SizedBox(height: 6)
             : const SizedBox(width: 8),
-        _textWidget(context, theme, effectiveRefreshWidget),
+        if (effectiveAxis == Axis.horizontal)
+          Flexible(child: _textWidget(context, theme, effectiveRefreshWidget))
+        else
+          _textWidget(context, theme, effectiveRefreshWidget),
       ],
     );
   }
@@ -142,8 +145,9 @@ class TLoading extends StatelessWidget {
     TLoadingThemeData theme,
     Widget? refreshWidget,
   ) {
-    Widget result = TText(
+    Widget result = TTextStyled(
       text ?? '',
+      centerLeading: true,
       font: context.tTheme.fontBodyMedium ?? Font(size: 14, lineHeight: 22),
       textAlign: TextAlign.center,
       style: TextStyle(
@@ -154,7 +158,11 @@ class TLoading extends StatelessWidget {
     if (refreshWidget != null) {
       result = Row(
         mainAxisSize: MainAxisSize.min,
-        children: [result, const SizedBox(width: 8), refreshWidget],
+        children: [
+          Flexible(child: result),
+          const SizedBox(width: 8),
+          refreshWidget,
+        ],
       );
     }
     return result;

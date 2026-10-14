@@ -7,6 +7,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_styled.dart';
 import 't_fab_defaults.dart';
 import 't_fab_layout.dart';
 
@@ -69,9 +70,15 @@ class TFabResolve {
 
     final tButton = TButton(
       child: hasText
-          ? Text(
-              text,
-              selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
+          ? Builder(
+              builder: (context) => TTextStyled(
+                text,
+                centerLeading: true,
+                style: DefaultTextStyle.of(context).style,
+                selectionColor: context.tTheme.brandColor.withValues(
+                  alpha: 0.4,
+                ),
+              ),
             )
           : null,
       icon: effectiveIcon,

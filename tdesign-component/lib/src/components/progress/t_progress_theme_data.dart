@@ -12,7 +12,8 @@ import 't_progress_defaults.dart';
 ///
 /// {@category ComponentTheme}
 class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
-  /// 进度条粗细
+  /// 进度条粗细；显式值保持固定。
+  /// 未设置时，内置百分比的 plump/button 默认高度可随文字自然行高增长。
   final double? strokeWidth;
 
   /// 进度条颜色
@@ -30,6 +31,7 @@ class TProgressThemeData extends ThemeExtension<TProgressThemeData> {
 
   /// 环形进度条的正方形边长；未设置时由环形规格决定。
   /// 未配置时 circular 为 112、microCircular / microButton 为 24 逻辑像素。
+  /// 显式值固定；常规环形默认尺寸可随内置百分比的自然文字大小增长。
   final double? circleSize;
 
   /// 动画持续时间

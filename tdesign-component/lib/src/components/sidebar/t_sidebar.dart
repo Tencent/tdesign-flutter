@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_internal_material.dart';
@@ -125,24 +126,48 @@ class _TSideBarState extends State<TSideBar> {
       return;
     }
 
-    // ListView 会延迟创建视口外条目。先按默认行高接近目标，再以实际位置校正。
-    final position = _scrollerController.position;
-    final estimatedOffset = (item.index * _estimatedItemHeight).clamp(
-      position.minScrollExtent,
-      position.maxScrollExtent,
-    );
-    await _scrollerController.animateTo(
-      estimatedOffset,
-      duration: const Duration(milliseconds: 150),
-      curve: Curves.easeInOut,
-    );
-    if (!mounted) {
-      return;
-    }
-
-    final resolvedContext = item.key.currentContext;
-    if (resolvedContext != null) {
-      await _ensureItemVisible(resolvedContext);
+    // 延迟列表先按实际已布局项目的高度接近目标，避免字体增长后
+    // 固定 56dp 估算停在错误位置；每次布局后再校正。
+    for (var attempt = 0; attempt < displayChildren.length; attempt++) {
+      if (!mounted || !_scrollerController.hasClients) {
+        return;
+      }
+      final resolved = item.key.currentContext;
+      if (resolved != null) {
+        await _ensureItemVisible(resolved);
+        return;
+      }
+      _SideBarItemData? nearest;
+      RenderBox? box;
+      for (final candidate in displayChildren) {
+        final render = candidate.key.currentContext?.findRenderObject();
+        if (render is RenderBox &&
+            render.hasSize &&
+            render.size.height > 0 &&
+            (nearest == null ||
+                (candidate.index - item.index).abs() <
+                    (nearest.index - item.index).abs())) {
+          nearest = candidate;
+          box = render;
+        }
+      }
+      final position = _scrollerController.position;
+      final estimated = nearest == null || box == null
+          ? item.index * _estimatedItemHeight
+          : RenderAbstractViewport.of(box).getOffsetToReveal(box, 0).offset +
+                (item.index - nearest.index) * box.size.height;
+      final target = estimated.clamp(
+        position.minScrollExtent,
+        position.maxScrollExtent,
+      );
+      if (target == position.pixels) {
+        return;
+      }
+      await _scrollerController.animateTo(
+        target,
+        duration: const Duration(milliseconds: 150),
+        curve: Curves.easeInOut,
+      );
     }
   }
 
@@ -212,37 +237,39 @@ class _TSideBarState extends State<TSideBar> {
         context: context,
         removeTop: true,
         removeBottom: true,
-        child: TInternalScrollScope(child: ListView.builder(
-          physics: const ClampingScrollPhysics(),
-          itemCount: displayChildren.length,
-          controller: _scrollerController,
-          itemBuilder: (BuildContext context, int index) {
-            final ele = displayChildren[index];
-            return TWrapSideBarItem(
-              key: ele.key,
-              variant: widget.variant,
-              value: ele.value,
-              icon: ele.icon,
-              disabled: ele.disabled ?? false,
-              label: ele.label ?? '',
-              badge: ele.badge,
-              textStyle: theme.textStyle,
-              selected: currentIndex == ele.index,
-              selectedTextStyle: selectedTextStyle,
-              contentPadding: theme.contentPadding,
-              topAdjacent:
-                  currentIndex != null && currentIndex! + 1 == ele.index,
-              bottomAdjacent:
-                  currentIndex != null && currentIndex! - 1 == ele.index,
-              selectedBgColor:
-                  theme.selectedBgColor ?? context.tTheme.bgColorContainer,
-              unSelectedBgColor:
-                  theme.unSelectedBgColor ??
-                  context.tTheme.bgColorSecondaryContainer,
-              onTap: widget.onChanged == null ? null : () => onSelect(ele),
-            );
-          },
-        )),
+        child: TInternalScrollScope(
+          child: ListView.builder(
+            physics: const ClampingScrollPhysics(),
+            itemCount: displayChildren.length,
+            controller: _scrollerController,
+            itemBuilder: (BuildContext context, int index) {
+              final ele = displayChildren[index];
+              return TWrapSideBarItem(
+                key: ele.key,
+                variant: widget.variant,
+                value: ele.value,
+                icon: ele.icon,
+                disabled: ele.disabled ?? false,
+                label: ele.label ?? '',
+                badge: ele.badge,
+                textStyle: theme.textStyle,
+                selected: currentIndex == ele.index,
+                selectedTextStyle: selectedTextStyle,
+                contentPadding: theme.contentPadding,
+                topAdjacent:
+                    currentIndex != null && currentIndex! + 1 == ele.index,
+                bottomAdjacent:
+                    currentIndex != null && currentIndex! - 1 == ele.index,
+                selectedBgColor:
+                    theme.selectedBgColor ?? context.tTheme.bgColorContainer,
+                unSelectedBgColor:
+                    theme.unSelectedBgColor ??
+                    context.tTheme.bgColorSecondaryContainer,
+                onTap: widget.onChanged == null ? null : () => onSelect(ele),
+              );
+            },
+          ),
+        ),
       ),
     );
 

@@ -624,18 +624,20 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   Widget build(BuildContext context) {
     final theme = _theme;
     final bar = widget.scrollable
-        ? TInternalScrollScope(child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List<Widget>.generate(
-                widget.items.length,
-                (index) => SizedBox(
-                  width: widget.items[index].width ?? 112,
-                  child: _buildTrigger(index),
+        ? TInternalScrollScope(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List<Widget>.generate(
+                  widget.items.length,
+                  (index) => SizedBox(
+                    width: widget.items[index].width ?? 112,
+                    child: _buildTrigger(index),
+                  ),
                 ),
               ),
             ),
-          ))
+          )
         : LayoutBuilder(
             builder: (context, constraints) {
               if (constraints.hasBoundedWidth) {
@@ -678,7 +680,10 @@ class _TDropdownMenuState extends State<TDropdownMenu>
           trackTransforms: _controller.isOpen,
           child: Container(
             key: _barKey,
-            height: theme.barHeight ?? 48,
+            height: theme.barHeight,
+            constraints: theme.barHeight == null
+                ? const BoxConstraints(minHeight: 48)
+                : null,
             decoration: BoxDecoration(
               color:
                   theme.barBackgroundColor ?? context.tTheme.bgColorContainer,

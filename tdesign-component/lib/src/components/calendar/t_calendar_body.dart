@@ -47,14 +47,13 @@ class TCalendarBody extends StatefulWidget {
     List<TCalendarCellModel?> dateList,
     int rowIndex,
     int colIndex,
-  ) builder;
+  )
+  builder;
   final double bodyPadding;
   final List<String> monthNames;
   final TextStyle? monthTitleStyle;
-  final Widget Function(
-    BuildContext context,
-    DateTime monthDate,
-  )? monthTitleBuilder;
+  final Widget Function(BuildContext context, DateTime monthDate)?
+  monthTitleBuilder;
   final double monthTitleHeight;
   final double verticalGap;
   final double cellHeight;
@@ -63,7 +62,7 @@ class TCalendarBody extends StatefulWidget {
 
   /// 在每个月份的单元格列表新生成时回调，便于上层登记选中引用。
   final void Function(DateTime monthDate, List<TCalendarCellModel?> cells)?
-      onCellGenerated;
+  onCellGenerated;
 
   /// 当 `_data` 整体被清空时回调，上层清空选中映射。
   final VoidCallback? onCacheInvalidated;
@@ -109,10 +108,12 @@ class _TCalendarBodyState extends State<TCalendarBody> {
   @override
   void didUpdateWidget(covariant TCalendarBody oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final rangeChanged = oldWidget.minDate != widget.minDate ||
+    final rangeChanged =
+        oldWidget.minDate != widget.minDate ||
         oldWidget.maxDate != widget.maxDate;
     final weekStartChanged = oldWidget.firstDayOfWeek != widget.firstDayOfWeek;
-    final layoutMetricsChanged = oldWidget.cellHeight != widget.cellHeight ||
+    final layoutMetricsChanged =
+        oldWidget.cellHeight != widget.cellHeight ||
         oldWidget.monthTitleHeight != widget.monthTitleHeight ||
         oldWidget.verticalGap != widget.verticalGap ||
         oldWidget.bodyPadding != widget.bodyPadding;
@@ -305,76 +306,80 @@ class _TCalendarBodyState extends State<TCalendarBody> {
 
   @override
   Widget build(BuildContext context) {
-    return TInternalScrollScope(child: ListView.builder(
-      padding: EdgeInsets.all(widget.bodyPadding),
-      controller: _scrollController,
-      itemCount: _months.length,
-      itemExtentBuilder: (index, dimensions) =>
-          _getMonthHeight(_months, index, _monthHeight),
-      itemBuilder: (context, index) {
-        final monthDate = _months[index];
-        final monthYear = monthDate.year.toString() + context.resource.year;
-        final monthMonth = widget.monthNames[monthDate.month - 1];
-        final monthDateText = '$monthYear $monthMonth';
-        // 只读：build 不写状态。命中缓存直接用，未命中走纯函数计算并安排
-        // 在下一帧补写缓存（postFrameCallback），避免 build 阶段副作用。
-        List<TCalendarCellModel?> monthData;
-        final cached = _data[monthDate];
-        if (cached != null) {
-          monthData = cached;
-        } else {
-          monthData = _getDaysInMonth(monthDate, _min, _max);
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (!mounted) {
-              return;
-            }
-            // 仅当下一帧仍未被其他路径填充时写入，幂等。
-            // 注册回调也只在真正写入这条新数据时触发，避免重复登记。
-            if (!_data.containsKey(monthDate)) {
-              _data[monthDate] = monthData;
-              widget.onCellGenerated?.call(monthDate, monthData);
-            }
-          });
-        }
+    return TInternalScrollScope(
+      child: ListView.builder(
+        padding: EdgeInsets.all(widget.bodyPadding),
+        controller: _scrollController,
+        itemCount: _months.length,
+        itemExtentBuilder: (index, dimensions) =>
+            _getMonthHeight(_months, index, _monthHeight),
+        itemBuilder: (context, index) {
+          final monthDate = _months[index];
+          final monthYear = monthDate.year.toString() + context.resource.year;
+          final monthMonth = widget.monthNames[monthDate.month - 1];
+          final monthDateText = '$monthYear $monthMonth';
+          // 只读：build 不写状态。命中缓存直接用，未命中走纯函数计算并安排
+          // 在下一帧补写缓存（postFrameCallback），避免 build 阶段副作用。
+          List<TCalendarCellModel?> monthData;
+          final cached = _data[monthDate];
+          if (cached != null) {
+            monthData = cached;
+          } else {
+            monthData = _getDaysInMonth(monthDate, _min, _max);
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (!mounted) {
+                return;
+              }
+              // 仅当下一帧仍未被其他路径填充时写入，幂等。
+              // 注册回调也只在真正写入这条新数据时触发，避免重复登记。
+              if (!_data.containsKey(monthDate)) {
+                _data[monthDate] = monthData;
+                widget.onCellGenerated?.call(monthDate, monthData);
+              }
+            });
+          }
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: widget.monthTitleHeight,
-              child: widget.monthTitleBuilder?.call(context, monthDate) ??
-                  TTextStyled(monthDateText, style: widget.monthTitleStyle),
-            ),
-            ...List.generate(
-              (monthData.length / 7).ceil(),
-              (rowIndex) => [
-                SizedBox(height: widget.verticalGap),
-                Row(
-                  children: [
-                    for (int colIndex = 0; colIndex < 7; colIndex++) ...[
-                      if (colIndex != 0)
-                        SizedBox(width: widget.verticalGap / 2),
-                      Expanded(
-                        child: widget.builder(
-                          (rowIndex * 7 + colIndex < monthData.length)
-                              ? monthData[rowIndex * 7 + colIndex]
-                              : null,
-                          monthData,
-                          rowIndex,
-                          colIndex,
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: widget.monthTitleHeight,
+                child:
+                    widget.monthTitleBuilder?.call(context, monthDate) ??
+                    TTextStyled(monthDateText, style: widget.monthTitleStyle),
+              ),
+              ...List.generate(
+                (monthData.length / 7).ceil(),
+                (rowIndex) => [
+                  SizedBox(height: widget.verticalGap),
+                  Row(
+                    children: [
+                      for (int colIndex = 0; colIndex < 7; colIndex++) ...[
+                        if (colIndex != 0)
+                          SizedBox(width: widget.verticalGap / 2),
+                        Expanded(
+                          child: widget.builder(
+                            (rowIndex * 7 + colIndex < monthData.length)
+                                ? monthData[rowIndex * 7 + colIndex]
+                                : null,
+                            monthData,
+                            rowIndex,
+                            colIndex,
+                          ),
                         ),
-                      ),
-                    ]
-                  ],
-                ),
-              ],
-            ).expand((element) => element).toList(),
-            SizedBox(
-                height: index == _months.length - 1 ? 0 : widget.bodyPadding),
-          ],
-        );
-      },
-    ));
+                      ],
+                    ],
+                  ),
+                ],
+              ).expand((element) => element).toList(),
+              SizedBox(
+                height: index == _months.length - 1 ? 0 : widget.bodyPadding,
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 
   void _scrollToItem() {
@@ -434,12 +439,12 @@ class _TCalendarBodyState extends State<TCalendarBody> {
 
     if (viewport > 0 && delta > viewport * thresholdInViewports) {
       // 朝目标方向跳到距离目标 1 屏的位置，给最后一段留出动画空间
-      final preJump =
-          target > position.pixels ? target - viewport : target + viewport;
-      _scrollController.jumpTo(preJump.clamp(
-        position.minScrollExtent,
-        position.maxScrollExtent,
-      ));
+      final preJump = target > position.pixels
+          ? target - viewport
+          : target + viewport;
+      _scrollController.jumpTo(
+        preJump.clamp(position.minScrollExtent, position.maxScrollExtent),
+      );
       // 关键：jumpTo 后必须等 ListView 完成一次 layout（itemExtentBuilder 重新算
       // viewport，可见 item 重新生成），否则紧接着 animateTo 可能拿到陈旧的
       // maxScrollExtent / pixels，触发断言或滚到错误位置。
@@ -479,17 +484,17 @@ class _TCalendarBodyState extends State<TCalendarBody> {
     _scrollController
         .animateTo(target, duration: duration, curve: curve)
         .whenComplete(() {
-      // State 已 dispose 时直接退出，不再触碰 _scrollController（已 dispose）。
-      if (!mounted) {
-        return;
-      }
-      _programmaticScroll = false;
-      // 落定后补发一次 onMonthChange，让外部确认最终月份；
-      // _onScroll 内部仅在 monthKey 变化时回调，幂等。
-      if (_scrollController.hasClients) {
-        _onScroll();
-      }
-    });
+          // State 已 dispose 时直接退出，不再触碰 _scrollController（已 dispose）。
+          if (!mounted) {
+            return;
+          }
+          _programmaticScroll = false;
+          // 落定后补发一次 onMonthChange，让外部确认最终月份；
+          // _onScroll 内部仅在 monthKey 变化时回调，幂等。
+          if (_scrollController.hasClients) {
+            _onScroll();
+          }
+        });
   }
 
   List<DateTime> _monthsBetween(DateTime min, DateTime max) {
@@ -503,11 +508,19 @@ class _TCalendarBodyState extends State<TCalendarBody> {
   }
 
   List<TCalendarCellModel?> _getDaysInMonth(
-      DateTime curDate, DateTime min, DateTime max) {
+    DateTime curDate,
+    DateTime min,
+    DateTime max,
+  ) {
     final daysInMonth = List<TCalendarCellModel?>.generate(
-        _getPreOffset(curDate), (index) => null);
-    final daysInMonthCount = DateTime(curDate.year, curDate.month + 1, 0)
-        .day; // 获取下个月的第一天的前一天，即当前月的最后一天
+      _getPreOffset(curDate),
+      (index) => null,
+    );
+    final daysInMonthCount = DateTime(
+      curDate.year,
+      curDate.month + 1,
+      0,
+    ).day; // 获取下个月的第一天的前一天，即当前月的最后一天
     for (var day = 1; day <= daysInMonthCount; day++) {
       final date = DateTime(curDate.year, curDate.month, day);
       var selectType = DateSelectType.empty;
@@ -539,11 +552,13 @@ class _TCalendarBodyState extends State<TCalendarBody> {
           }
         }
       }
-      daysInMonth.add(TCalendarCellModel(
-        date: date,
-        selectType: selectType,
-        isLastDayOfMonth: daysInMonthCount == day,
-      ));
+      daysInMonth.add(
+        TCalendarCellModel(
+          date: date,
+          selectType: selectType,
+          isLastDayOfMonth: daysInMonthCount == day,
+        ),
+      );
     }
     var sufOffset = 7 - daysInMonth.length % 7;
     sufOffset = sufOffset == 7 ? 0 : sufOffset;
@@ -565,7 +580,10 @@ class _TCalendarBodyState extends State<TCalendarBody> {
 
   /// 获取月份高度，带缓存
   double _getMonthHeight(
-      List<DateTime> months, int index, Map<int, double> monthHeight) {
+    List<DateTime> months,
+    int index,
+    Map<int, double> monthHeight,
+  ) {
     if (months.getOrNull(index) == null) {
       return 1;
     }
@@ -577,7 +595,8 @@ class _TCalendarBodyState extends State<TCalendarBody> {
     final preOffset = _getPreOffset(item);
     final daysInMonthCount = DateTime(item.year, item.month + 1, 0).day;
     final daysInMonth = preOffset + daysInMonthCount;
-    final height = widget.monthTitleHeight +
+    final height =
+        widget.monthTitleHeight +
         (daysInMonth / 7).ceil() * (widget.verticalGap + widget.cellHeight) +
         (isLast ? 0 : widget.bodyPadding);
     monthHeight[index] = height;

@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show OverflowBoxFit;
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/basic.dart';
@@ -394,6 +395,62 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
         widget.animationDuration ?? const Duration(milliseconds: 300);
   }
 
+  double _defaultContentHeight(double itemWidth) {
+    if (widget.type == TTabBarType.icon) {
+      return _kDefaultTabBarHeight;
+    }
+    final stacked =
+        widget.type == TTabBarType.iconText &&
+        widget.iconTextLayout == TTabBarIconTextLayout.stacked;
+    final font = widget.type == TTabBarType.iconText
+        ? (stacked
+              ? context.tTheme.fontBodyExtraSmall!
+              : context.tTheme.fontBodyLarge!)
+        : context.tTheme.fontTitleMedium!;
+    final extras = widget.type == TTabBarType.iconText && !stacked
+        ? _kDefaultTabIconSize + _kInlineIconTextGap
+        : 0;
+    var height = _kDefaultTabBarHeight;
+    for (final config in widget.navigationTabs) {
+      for (final selected in [false, true]) {
+        final style = TTextResolve.resolve(
+          context: context,
+          defaults: TextStyle(
+            fontSize: font.size,
+            height: font.height,
+            fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+          ),
+          style: selected
+              ? config.selectTabTextStyle
+              : config.unselectTabTextStyle,
+        );
+        final text = TTextStyled(
+          config.tabText ?? '',
+          centerLeading: true,
+          maxLines: widget.type == TTabBarType.iconText && !stacked ? 1 : null,
+          style: style,
+        );
+        final size = text.naturalSize(
+          context,
+          maxWidth: math.max(
+            0,
+            itemWidth -
+                extras -
+                (widget.type == TTabBarType.doubleLayer &&
+                        config.popUpButtonConfig != null
+                    ? 16 + 5 + _kArrowWidth + _kPopupArrowGap
+                    : 0),
+          ),
+        );
+        height = math.max(
+          height,
+          size.height + (stacked ? _kDefaultTabIconSize : 0) + 2 * _kBarPadding,
+        );
+      }
+    }
+    return height;
+  }
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -434,6 +491,10 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
               (contentWidth - itemGap * (count - 1)) / count,
             );
 
+            if (Theme.of(context).extension<TTabBarThemeData>()?.barHeight ==
+                null) {
+              _effectiveBarHeight = _defaultContentHeight(itemWidth);
+            }
             Widget result = Container(
               height: _effectiveBarHeight,
               alignment: Alignment.center,
@@ -840,11 +901,13 @@ class _TTabBarItemWithBadge extends StatelessWidget {
                   : context.tTheme.textColorPrimary,
             ),
             const SizedBox(width: 5),
-            _textItem(
-              context,
-              itemConfig,
-              isSelected,
-              context.tTheme.fontTitleMedium!,
+            Flexible(
+              child: _textItem(
+                context,
+                itemConfig,
+                isSelected,
+                context.tTheme.fontTitleMedium!,
+              ),
             ),
           ],
         );
@@ -912,9 +975,10 @@ class _TTabBarItemWithBadge extends StatelessWidget {
           ? icon
           : _attachBadge(context, badge, icon);
       child = OverflowBox(
+        fit: OverflowBoxFit.deferToChild,
         alignment: Alignment.center,
         minHeight: 0,
-        maxHeight: itemHeight + 2 * _kBarPadding,
+        maxHeight: double.infinity,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -955,6 +1019,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
   }) {
     return TTextStyled(
       config.tabText ?? '',
+      centerLeading: true,
       maxLines: singleLine ? 1 : null,
       overflow: singleLine ? TextOverflow.ellipsis : null,
       style: TTextResolve.resolve(
@@ -1080,19 +1145,23 @@ class TTabBarPopUpBtnConfig {
 class TTabBarPopUpShapeConfig {
   TTabBarPopUpShapeConfig({
     this.popUpWidth,
-    this.popUpItemHeight = _kDefaultMenuItemHeight,
+    double? popUpItemHeight,
     this.backgroundColor,
     this.radius,
     this.arrowWidth,
     this.arrowHeight,
-  });
+  }) : _adaptiveItemHeight = popUpItemHeight == null,
+       popUpItemHeight = popUpItemHeight ?? _kDefaultMenuItemHeight;
+
+  final bool _adaptiveItemHeight;
 
   /// 弹窗宽度。
   ///
   /// 不设置时使用 `max(107, 标签项宽度 - 20)`；显式设置时覆盖该默认值。
   final double? popUpWidth;
 
-  /// 单个选项高度 所有选项等高 不设置则使用默认值 48
+  /// 单个选项高度；所有选项等高。未设置时至少 48，可随内置文字增长。
+  /// 显式数值保持固定；构造后的默认公开值仍为 48。
   final double? popUpItemHeight;
 
   /// 弹窗背景颜色
@@ -1141,6 +1210,7 @@ class TTabBarMenuItem extends StatelessWidget {
           itemWidget ??
           TTextStyled(
             value,
+            centerLeading: true,
             style: TTextResolve.resolve(
               context: context,
               defaults: TextStyle(
@@ -1257,6 +1327,28 @@ class _TabBarPopupDialogState extends State<_TabBarPopupDialog> {
     var popUpItemHeight =
         widget.config?.popUpItemHeight ?? _kDefaultMenuItemHeight;
     var popUpItemWidth = widget.config?.popUpWidth ?? widget.defaultPopUpWidth;
+    if (widget.config?._adaptiveItemHeight ?? true) {
+      for (final item in widget.items) {
+        if (item.itemWidget != null) {
+          continue;
+        }
+        final style = TTextResolve.resolve(
+          context: context,
+          defaults: TextStyle(
+            fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
+            fontWeight: FontWeight.w400,
+          ),
+        );
+        popUpItemHeight = math.max(
+          popUpItemHeight,
+          TTextStyled(
+            item.value,
+            centerLeading: true,
+            style: style,
+          ).naturalSize(context, maxWidth: popUpItemWidth).height,
+        );
+      }
+    }
     var menuItems = widget.items
         .map(
           (e) => GestureDetector(

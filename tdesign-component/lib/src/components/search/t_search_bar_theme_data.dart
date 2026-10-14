@@ -20,6 +20,7 @@ class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
   });
 
   /// 搜索框高度，默认 40dp。
+  /// 显式高度保持固定；默认至少 40，并随内置文字和图标的自然尺寸增长。
   final double? height;
 
   /// 输入区域背景色，默认 `bgColorSecondaryContainer` Token。

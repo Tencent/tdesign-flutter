@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
@@ -9,6 +11,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_styled.dart';
 import 't_progress_circular.dart';
 import 't_progress_defaults.dart';
 import 't_progress_theme_data.dart';
@@ -238,9 +241,28 @@ class TProgress extends StatelessWidget {
     final theme = _theme(context);
     final defaultValues = _getDefaultValues(context, variant);
 
+    var defaultHeight = defaultValues.strokeWidth;
+    if (label == null &&
+        (variant == TProgressVariant.plump ||
+            variant == TProgressVariant.button)) {
+      final font = variant == TProgressVariant.plump
+          ? context.tTheme.fontMarkSmall
+          : context.tTheme.fontMarkLarge;
+      final size = TTextStyled(
+        '100%',
+        maxLines: 1,
+        style: TextStyle(
+          fontSize: font?.size ?? (variant == TProgressVariant.plump ? 12 : 16),
+          height:
+              font?.height ??
+              (variant == TProgressVariant.plump ? 20 / 12 : 24 / 16),
+          fontWeight: font?.fontWeight ?? FontWeight.w600,
+        ),
+      ).naturalSize(context);
+      defaultHeight = math.max(defaultHeight, size.height);
+    }
     final strokeWidth =
-        theme?.resolveStrokeWidth(defaultValues.strokeWidth) ??
-        defaultValues.strokeWidth;
+        theme?.resolveStrokeWidth(defaultHeight) ?? defaultHeight;
     final trackFallback = defaultValues.backgroundColor;
     final backgroundColor =
         theme?.resolveBackgroundColor(trackFallback) ?? trackFallback;
@@ -254,9 +276,32 @@ class TProgress extends StatelessWidget {
     final linearBorderRadius =
         theme?.resolveLinearBorderRadius(defaultValues.linearBorderRadius) ??
         defaultValues.linearBorderRadius;
+    var defaultCircleSize = defaultValues.circleRadius;
+    if (variant == TProgressVariant.circular &&
+        label == null &&
+        value != null) {
+      final font = context.tTheme.fontTitleExtraLarge;
+      final size = TTextStyled(
+        '100%',
+        maxLines: 1,
+        style: TextStyle(
+          fontSize: font?.size ?? 20,
+          height: font?.height ?? 28 / 20,
+          fontWeight: font?.fontWeight ?? FontWeight.w600,
+          fontFamily: context.tTheme.fontFamily?.flutterFontFamily,
+          fontFamilyFallback:
+              context.tTheme.fontFamily?.flutterFontFamilyFallback,
+          letterSpacing: 0,
+        ),
+      ).naturalSize(context);
+      defaultCircleSize = math.max(
+        defaultCircleSize,
+        math.sqrt(size.width * size.width + size.height * size.height) +
+            strokeWidth * 2,
+      );
+    }
     final circleRadius =
-        theme?.resolveCircleSize(defaultValues.circleRadius) ??
-        defaultValues.circleRadius;
+        theme?.resolveCircleSize(defaultCircleSize) ?? defaultCircleSize;
     final colorFallback = _statusColor(context, status);
     final color = theme?.resolveColor(colorFallback) ?? colorFallback;
     final animationDuration =
@@ -519,8 +564,10 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
     Widget getAutoText() =>
         showAutoText && widget.type != TProgressVariant.microCircular
         ? Builder(
-            builder: (context) => Text(
+            builder: (context) => TTextStyled(
               '${(widget.value! * 100).round()}%',
+              maxLines: 1,
+              style: DefaultTextStyle.of(context).style,
               selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
             ),
           )
@@ -893,6 +940,7 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
         key: const ValueKey('progress-label-style'),
         style: TTextResolve.resolve(
           context: context,
+          singleLine: widget.label == null,
           style: TextStyle(
             color: labelColor,
             fontSize: tokenFont?.size ?? fallbackFontSize,

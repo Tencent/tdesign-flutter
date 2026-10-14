@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
@@ -29,7 +31,8 @@ class TSwitch extends StatelessWidget {
   /// 开关状态变更回调；为 null 时禁用。
   final ValueChanged<bool>? onChanged;
 
-  /// 开关尺寸；未传时为 [TSwitchSize.medium]。
+  /// 开关尺寸；未传时以 [TSwitchSize.medium] 为最小尺寸，文字形态可随内容增长。
+  /// 显式预设尺寸保持固定，滑块文字适配其内容槽。
   final TSwitchSize? size;
 
   /// 开关内容形态；未传时为 [TSwitchVariant.filled]。
@@ -67,6 +70,7 @@ class TSwitch extends StatelessWidget {
       // State colors are resolved independently; never dim the whole switch.
       disabledOpacity: 1,
       thumbView: _buildThumb(
+        context: context,
         resolved: resolved,
         variant: resolvedVariant,
         loading: loading,
@@ -80,18 +84,39 @@ class TSwitch extends StatelessWidget {
       current = IgnorePointer(ignoring: true, child: current);
     }
 
+    // 默认文字开关随内容增长；显式预设尺寸仍保持固定几何。
+    final growth = size == null && resolvedVariant == TSwitchVariant.text
+        ? _textGrowth(context, resolved)
+        : 1.0;
     return Semantics(
       enabled: enabled,
       toggled: value,
       child: SizedBox(
-        width: TSwitchResolve.width(resolvedSize),
-        height: TSwitchResolve.height(resolvedSize),
+        width: TSwitchResolve.width(resolvedSize) * growth,
+        height: TSwitchResolve.height(resolvedSize) * growth,
         child: FittedBox(child: current),
       ),
     );
   }
 
+  double _textGrowth(BuildContext context, TSwitchResolvedStyle resolved) {
+    var height = 16.0;
+    for (final configured in [
+      resolved.thumbContentOnFont,
+      resolved.thumbContentOffFont,
+    ]) {
+      final size = TTextStyled(
+        '国Ag',
+        maxLines: 1,
+        style: configured.copyWith(height: configured.height ?? 1),
+      ).naturalSize(context);
+      height = math.max(height, size.height);
+    }
+    return height / 16;
+  }
+
   Widget? _buildThumb({
+    required BuildContext context,
     required TSwitchResolvedStyle resolved,
     required TSwitchVariant variant,
     required bool loading,
@@ -109,26 +134,54 @@ class TSwitch extends StatelessWidget {
     return switch (variant) {
       TSwitchVariant.text => SizedBox(
         width: 16,
-        child: Center(
-          child: TTextStyled(
-            value ? (openText ?? '开') : (closeText ?? '关'),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style:
-                (value
-                        ? resolved.thumbContentOnFont
-                        : resolved.thumbContentOffFont)
-                    .copyWith(
-                      color: value
-                          ? (disabled
-                                ? resolved.disabledTrackOnColor
-                                : resolved.thumbContentOnColor)
-                          : (disabled
-                                ? resolved.disabledTrackOffColor
-                                : resolved.thumbContentOffColor),
-                      height: 1,
-                      leadingDistribution: TextLeadingDistribution.even,
-                    ),
+        height: 16,
+        // 滑块是固定几何；先让文字完成自然纵向布局，再按内容槽缩小。
+        // 单字符先自然排版，避免字体放大后连字符也被省略。
+        // 多字符为字符与省略号预留排版宽度，再适配滑块，避免整段消失。
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: SizedBox(
+            width:
+                (value ? (openText ?? '开') : (closeText ?? '关'))
+                        .characters
+                        .length ==
+                    1
+                ? null
+                : math.max(
+                    16,
+                    MediaQuery.textScalerOf(context).scale(
+                          (value
+                                      ? resolved.thumbContentOnFont
+                                      : resolved.thumbContentOffFont)
+                                  .fontSize ??
+                              14,
+                        ) *
+                        2.5,
+                  ),
+            child: TTextStyled(
+              value ? (openText ?? '开') : (closeText ?? '关'),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style:
+                  (value
+                          ? resolved.thumbContentOnFont
+                          : resolved.thumbContentOffFont)
+                      .copyWith(
+                        color: value
+                            ? (disabled
+                                  ? resolved.disabledTrackOnColor
+                                  : resolved.thumbContentOnColor)
+                            : (disabled
+                                  ? resolved.disabledTrackOffColor
+                                  : resolved.thumbContentOffColor),
+                        height:
+                            (value
+                                    ? resolved.thumbContentOnFont
+                                    : resolved.thumbContentOffFont)
+                                .height ??
+                            1,
+                      ),
+            ),
           ),
         ),
       ),

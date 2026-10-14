@@ -60,7 +60,11 @@ class TCalendarHeader extends StatelessWidget {
               child: SizedBox(
                 height: weekdayHeight,
                 child: Center(
-                  child: TTextStyled(list[index], style: weekdayStyle),
+                  child: TTextStyled(
+                    list[index],
+                    style: weekdayStyle,
+                    centerLeading: true,
+                  ),
                 ),
               ),
             ),

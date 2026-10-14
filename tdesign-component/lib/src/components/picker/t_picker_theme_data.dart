@@ -10,7 +10,7 @@ import 'picker_defaults.dart';
 ///
 /// {@category ComponentTheme}
 class TPickerThemeData extends ThemeExtension<TPickerThemeData> {
-  /// 滚轮视窗高度，单位为逻辑像素；null 时使用默认值 200。
+  /// 滚轮视窗高度，单位为逻辑像素；null 时至少为 200，并随内置文字的自然行高增长。
   ///
   /// 必须为有限正数，行高由此高度除以 [itemCount]（默认 5）得到。
   final double? height;

@@ -1,7 +1,27 @@
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  setUpAll(() async {
+    final flutterBin = File(
+      Platform.resolvedExecutable,
+    ).parent.parent.parent.parent.parent;
+    await (FontLoader('Roboto')..addFont(
+          File(
+            '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
+          ).readAsBytes().then(ByteData.sublistView),
+        ))
+        .load();
+    await (FontLoader('TDesignGoldenCJK')..addFont(
+          File(
+            'example/test/fonts/TDesignGoldenCJK-Regular.otf',
+          ).readAsBytes().then(ByteData.sublistView),
+        ))
+        .load();
+  });
   Widget wrapWithTheme(
     Widget child, {
     TTabBarThemeData? tabBarTheme,
@@ -10,7 +30,15 @@ void main() {
     return MaterialApp(
       theme: ThemeData(
         extensions: [
-          themeData ?? TThemeData.defaultData(),
+          themeData ??
+              TThemeData.defaultData().copyWith(
+                fontFamilyMap: {
+                  'fontFamily': FontFamily(
+                    fontFamily: 'Roboto',
+                    fallback: ['TDesignGoldenCJK'],
+                  ),
+                },
+              ),
           if (tabBarTheme != null) tabBarTheme,
         ],
       ),

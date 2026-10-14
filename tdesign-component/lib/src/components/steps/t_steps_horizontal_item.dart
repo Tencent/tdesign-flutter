@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
@@ -93,11 +95,13 @@ class TStepsHorizontalItem extends StatelessWidget {
     }
 
     /// 步骤条icon图标组件，默认为索引文字
-    Widget? stepsIconWidget = Text(
+    final number = TTextStyled(
       (index + 1).toString(),
+      maxLines: 1,
       selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
       style: TTextResolve.resolve(
         context: context,
+        singleLine: true,
         defaults: TextStyle(
           color: stepsNumberTextColor,
           fontWeight: FontWeight.w400,
@@ -105,6 +109,8 @@ class TStepsHorizontalItem extends StatelessWidget {
         ),
       ),
     );
+
+    Widget? stepsIconWidget = number;
 
     /// 已完成的用icon图标显示
     if (completeIconWidget != null) {
@@ -147,7 +153,16 @@ class TStepsHorizontalItem extends StatelessWidget {
         : null;
 
     /// icon组件容器大小
-    double iconContainerSize = 22;
+    // 序号槽按真实文字增长；图标仍保留各自显式尺寸。
+    final numberSize = TTextStyled(
+      stepsCount.toString(),
+      maxLines: 1,
+      style: number.style,
+    ).naturalSize(context);
+    double iconContainerSize = math.max(
+      22,
+      math.max(numberSize.width, numberSize.height),
+    );
 
     /// 简略步骤条
     if (indicator != TStepsIndicator.standard) {

@@ -54,11 +54,7 @@ class _TPickerState extends State<TPicker> {
   TPickerThemeData? get _theme =>
       Theme.of(context).extension<TPickerThemeData>();
 
-  double get _height => _theme?.height ?? defaultPickerHeight;
-
   int get _itemCount => _theme?.itemCount ?? defaultPickerItemCount;
-
-  double get _itemHeight => _height / _itemCount;
 
   @override
   void initState() {
@@ -179,6 +175,11 @@ class _TPickerState extends State<TPicker> {
 
   @override
   Widget build(BuildContext context) {
+    final height = resolvePickerHeight(
+      context,
+      customContent: widget.itemBuilder != null,
+    );
+    final itemHeight = height / _itemCount;
     return Semantics(
       container: true,
       explicitChildNodes: true,
@@ -189,11 +190,11 @@ class _TPickerState extends State<TPicker> {
         child: AbsorbPointer(
           absorbing: !_enabled,
           child: MultiWheelLayout(
-            height: _height,
-            itemHeight: _itemHeight,
+            height: height,
+            itemHeight: itemHeight,
             columns: [
               for (var index = 0; index < _columns.length; index++)
-                _buildColumn(context, index),
+                _buildColumn(context, index, itemHeight),
             ],
           ),
         ),
@@ -201,7 +202,11 @@ class _TPickerState extends State<TPicker> {
     );
   }
 
-  Widget _buildColumn(BuildContext context, int columnIndex) {
+  Widget _buildColumn(
+    BuildContext context,
+    int columnIndex,
+    double itemHeight,
+  ) {
     final options = _columns[columnIndex];
     if (options.isEmpty) {
       return const SizedBox.shrink();
@@ -214,7 +219,7 @@ class _TPickerState extends State<TPicker> {
           colIndex: columnIndex,
           options: options,
           controller: _controllers[columnIndex],
-          itemHeight: _itemHeight,
+          itemHeight: itemHeight,
           disabled: !_enabled,
           itemBuilder: widget.itemBuilder,
           onItemSelected: _onItemSelected,

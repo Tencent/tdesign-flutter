@@ -40,10 +40,10 @@ class TCalendarThemeData extends ThemeExtension<TCalendarThemeData> {
   /// null 时继承当前全局 Token 与选择状态解析的副标题样式。
   final TextStyle? subtitleStyle;
 
-  /// 日期单元格高度；为 null 时使用 60 逻辑像素。
+  /// 日期单元格高度；为 null 时至少为 60 逻辑像素，内置日期随文字自然行高增长。
   final double? cellHeight;
 
-  /// 月份标题高度；为 null 时使用 22 逻辑像素。
+  /// 月份标题高度；为 null 时至少为 22 逻辑像素，默认文字随自然行高增长。
   final double? monthTitleHeight;
 
   /// 日期格垂直间距；为 null 时使用全局 spacer Token，水平间距为该值的一半。

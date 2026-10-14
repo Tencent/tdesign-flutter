@@ -1,4 +1,7 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show OverflowBoxFit;
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
@@ -211,9 +214,28 @@ class _TBackTopState extends State<TBackTop> {
 
   Widget _buildCircleWidget(BuildContext context) {
     final style = _resolveStyle(context);
+    final theme = Theme.of(context).extension<TBackTopThemeData>();
+    final textSize = widget.showText
+        ? TTextStyled(
+            context.resource.top,
+            maxLines: 1,
+            style: style.textStyle,
+          ).naturalSize(context)
+        : Size.zero;
+    final contentWidth = math.max(style.iconSize, textSize.width);
+    final contentHeight = style.iconSize + textSize.height;
+    final roundSize =
+        theme?.roundSize ??
+        math.max(
+          style.roundSize,
+          math.sqrt(
+                contentWidth * contentWidth + contentHeight * contentHeight,
+              ) +
+              style.borderWidth * 2,
+        );
     return Container(
-      width: style.roundSize,
-      height: style.roundSize,
+      width: roundSize,
+      height: roundSize,
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(context.tTheme.radiusCircle),
@@ -222,22 +244,27 @@ class _TBackTopState extends State<TBackTop> {
         color: style.backgroundColor,
       ),
       child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TInternalIcon(
-              TIcons.backtop,
-              size: style.iconSize,
-              color: style.contentColor,
-            ),
-            if (widget.showText)
-              TTextStyled(
-                context.resource.top,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: style.textStyle,
+        child: OverflowBox(
+          fit: OverflowBoxFit.deferToChild,
+          minHeight: 0,
+          maxHeight: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TInternalIcon(
+                TIcons.backtop,
+                size: style.iconSize,
+                color: style.contentColor,
               ),
-          ],
+              if (widget.showText)
+                TTextStyled(
+                  context.resource.top,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: style.textStyle,
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -245,10 +272,24 @@ class _TBackTopState extends State<TBackTop> {
 
   Widget _buildHalfCircleWidget(BuildContext context) {
     final style = _resolveStyle(context);
+    final theme = Theme.of(context).extension<TBackTopThemeData>();
+    final textSize = widget.showText
+        ? TTextStyled(
+            '${context.resource.back}\n${context.resource.top}',
+            maxLines: 2,
+            style: style.textStyle,
+          ).naturalSize(context)
+        : Size.zero;
+    final height =
+        theme?.halfCircleHeight ??
+        math.max(
+          style.halfCircleHeight,
+          math.max(style.iconSize, textSize.height) + style.borderWidth * 2,
+        );
     return ConstrainedBox(
       constraints: BoxConstraints(minWidth: style.halfCircleMinWidth),
       child: Container(
-        height: style.halfCircleHeight,
+        height: height,
         padding: EdgeInsets.symmetric(
           horizontal: style.halfCircleHorizontalPadding,
         ),
@@ -277,12 +318,17 @@ class _TBackTopState extends State<TBackTop> {
             ),
             if (widget.showText) ...[
               SizedBox(width: style.contentGap),
-              TTextStyled(
-                '${context.resource.back}\n${context.resource.top}',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: style.textStyle,
+              OverflowBox(
+                fit: OverflowBoxFit.deferToChild,
+                minHeight: 0,
+                maxHeight: double.infinity,
+                child: TTextStyled(
+                  '${context.resource.back}\n${context.resource.top}',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: style.textStyle,
+                ),
               ),
             ],
           ],

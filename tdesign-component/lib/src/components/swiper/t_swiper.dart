@@ -832,14 +832,16 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
             context.tTheme.textColorPlaceholder,
         borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
       ),
-      child: SizedBox(
-        height: 24,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 24),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Center(
             widthFactor: 1,
+            heightFactor: 1,
             child: TTextStyled(
               '${_index + 1}/$_count',
+              centerLeading: true,
               style: defaultStyle.merge(theme?.fractionStyle),
             ),
           ),

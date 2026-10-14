@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart'
         CupertinoTextSelectionToolbarButton,
         CupertinoDesktopTextSelectionToolbarButton;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show OverflowBoxFit;
 import 'package:meta/meta.dart';
 
 import '../components/icon/t_icon.dart';
@@ -846,15 +847,37 @@ class TInternalInputHint extends StatelessWidget {
                       child: ExcludeSemantics(
                         child: Align(
                           alignment: alignment,
-                          child: Text(
-                            hintText!,
-                            selectionColor: context.tTheme.brandColor
-                                .withValues(alpha: 0.4),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TTextResolve.resolve(
-                              context: context,
-                              style: hintStyle,
+                          child: ClipRect(
+                            child: OverflowBox(
+                              fit: OverflowBoxFit.deferToChild,
+                              minHeight: 0,
+                              maxHeight: double.infinity,
+                              alignment: alignment.resolve(
+                                Directionality.of(context),
+                              ),
+                              child: Text(
+                                hintText!,
+                                strutStyle: multiline
+                                    ? null
+                                    : TTextResolve.singleLineStrut(
+                                        context: context,
+                                        resolvedStyle: TTextResolve.resolve(
+                                          context: context,
+                                          singleLine: true,
+                                          style: hintStyle,
+                                        ),
+                                        configuredStyle: hintStyle,
+                                      ),
+                                selectionColor: context.tTheme.brandColor
+                                    .withValues(alpha: 0.4),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TTextResolve.resolve(
+                                  context: context,
+                                  singleLine: !multiline,
+                                  style: hintStyle,
+                                ),
+                              ),
                             ),
                           ),
                         ),

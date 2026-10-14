@@ -88,6 +88,7 @@ class TTab extends Tab {
     }
     return TTextStyled(
       text!,
+      centerLeading: true,
       style: null,
       softWrap: false,
       overflow: TextOverflow.fade,

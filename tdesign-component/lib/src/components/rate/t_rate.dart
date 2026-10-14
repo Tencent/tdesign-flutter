@@ -319,7 +319,6 @@ class _TRateState extends State<TRate> {
       fontSize: font?.size ?? 16,
       height: font?.height ?? 1.5,
       fontWeight: font?.fontWeight ?? FontWeight.w400,
-      leadingDistribution: TextLeadingDistribution.even,
     );
     return defaultStyle.merge(theme?.textStyle);
   }
@@ -551,10 +550,12 @@ class _TRateState extends State<TRate> {
       }
       return SizedBox(
         width: (popupWidth - token.spacer).clamp(0, double.infinity),
-        child: TInternalScrollScope(child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: choices,
-        )),
+        child: TInternalScrollScope(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: choices,
+          ),
+        ),
       );
     }
 
@@ -638,6 +639,7 @@ class _TRateState extends State<TRate> {
             ),
             TTextStyled(
               _formatValue(value),
+              centerLeading: true,
               style: TextStyle(fontSize: token.fontBodyMedium?.size),
             ),
           ],

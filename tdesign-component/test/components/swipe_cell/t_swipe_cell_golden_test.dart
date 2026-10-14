@@ -22,7 +22,14 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
 
-      final token = TThemeData.defaultData();
+      final modeToken = brightness == Brightness.light
+          ? TThemeData.defaultData()
+          : TThemeData.defaultData().dark!;
+      final token = modeToken.copyWith(
+        fontFamilyMap: {
+          'fontFamily': FontFamily(fontFamily: 'TDesign Alignment CJK'),
+        },
+      );
       final baseTheme = brightness == Brightness.light
           ? TThemeBuilder.light(token)
           : TThemeBuilder.dark(token);

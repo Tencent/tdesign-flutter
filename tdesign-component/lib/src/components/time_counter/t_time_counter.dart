@@ -363,26 +363,32 @@ class _TTimeCounterState extends State<TTimeCounter>
   int _visibleBucketFor(int time) => time ~/ _visibleResolutionMilliseconds;
 
   List<Widget> _buildTextWidget(String time, String split) {
+    final text = TTextStyled(
+      time,
+      centerLeading: true,
+      style: TextStyle(
+        fontFamily: _style.timeFontFamily?.fontFamily,
+        package: _style.timeFontFamily?.package,
+        fontSize: _style.timeFontSize,
+        height: _style.timeFontHeight,
+        fontWeight: _style.timeFontWeight,
+        color: _style.timeColor,
+      ),
+    );
+    final natural = widget.size == null && _style.timeHeight != null
+        ? text.naturalSize(context)
+        : null;
+    final extent = natural == null
+        ? null
+        : max(_style.timeHeight!, max(natural.width, natural.height));
     final children = <Widget>[
       Container(
-        width: _style.timeWidth,
-        height: _style.timeHeight,
+        width: extent ?? _style.timeWidth,
+        height: extent ?? _style.timeHeight,
         padding: _style.timePadding,
         margin: _style.timeMargin,
         decoration: _style.timeBox,
-        child: Center(
-          child: TTextStyled(
-            time,
-            style: TextStyle(
-              fontFamily: _style.timeFontFamily?.fontFamily,
-              package: _style.timeFontFamily?.package,
-              fontSize: _style.timeFontSize,
-              height: _style.timeFontHeight,
-              fontWeight: _style.timeFontWeight,
-              color: _style.timeColor,
-            ),
-          ),
-        ),
+        child: Center(child: text),
       ),
     ];
     if (split.isNotEmpty) {
@@ -390,6 +396,7 @@ class _TTimeCounterState extends State<TTimeCounter>
         SizedBox(width: _style.space),
         TTextStyled(
           split,
+          centerLeading: true,
           style: TextStyle(
             fontSize: _style.splitFontSize,
             height: _style.splitFontHeight,

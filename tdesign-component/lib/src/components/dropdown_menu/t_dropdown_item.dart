@@ -87,7 +87,7 @@ class TDropdownSingleSelectPanel<T> extends StatelessWidget {
               label: option.label,
               selected: selected,
               disabled: option.disabled,
-              height: theme.optionHeight ?? 56,
+              height: theme.optionHeight,
               padding:
                   theme.optionPadding ??
                   EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
@@ -374,7 +374,7 @@ class _DropdownOptionRow extends StatelessWidget {
   final String label;
   final bool selected;
   final bool disabled;
-  final double height;
+  final double? height;
   final EdgeInsetsGeometry padding;
   final VoidCallback? onTap;
 
@@ -413,8 +413,11 @@ class _DropdownOptionRow extends StatelessWidget {
         ),
         child: TInternalInkWell(
           onTap: onTap,
-          child: SizedBox(
+          child: Container(
             height: height,
+            constraints: height == null
+                ? const BoxConstraints(minHeight: 56)
+                : null,
             child: Padding(
               padding: padding,
               child: Row(
@@ -491,8 +494,7 @@ class _DropdownOptionChip extends StatelessWidget {
             theme.optionBorderRadius ??
             BorderRadius.circular(context.tTheme.radiusDefault),
         child: Container(
-          height: 40,
-          alignment: Alignment.center,
+          constraints: const BoxConstraints(minHeight: 40),
           decoration: BoxDecoration(
             color: backgroundColor,
             borderRadius:
@@ -502,11 +504,15 @@ class _DropdownOptionChip extends StatelessWidget {
           padding:
               theme.optionPadding ??
               EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
-          child: TTextStyled(
-            label,
-            style: style,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          child: Align(
+            alignment: Alignment.center,
+            heightFactor: 1,
+            child: TTextStyled(
+              label,
+              style: style,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ),
       ),

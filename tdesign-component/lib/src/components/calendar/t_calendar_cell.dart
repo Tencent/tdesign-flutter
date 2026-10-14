@@ -247,7 +247,9 @@ class _TCalendarCellState extends State<TCalendarCell> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Center(child: TTextStyled(dayText, style: dayTextStyle)),
+        Center(
+          child: TTextStyled(dayText, style: dayTextStyle, centerLeading: true),
+        ),
         if (subtitle != null)
           Positioned(
             left: 0,

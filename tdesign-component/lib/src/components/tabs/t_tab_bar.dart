@@ -61,7 +61,7 @@ class TTabsBar extends StatelessWidget {
         themeData.backgroundColor ?? context.tTheme.bgColorContainer;
     final resolvedIndicator = themeData.indicator ?? _defaultIndicator(context);
     return Container(
-      height: 48,
+      constraints: const BoxConstraints(minHeight: 48),
       decoration: variant == TTabsBarVariant.card
           ? BoxDecoration(color: backgroundColor)
           : BoxDecoration(

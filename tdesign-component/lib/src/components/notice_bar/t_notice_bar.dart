@@ -127,7 +127,18 @@ class _TNoticeBarState extends State<TNoticeBar> {
   double get _effectiveSpeed =>
       widget.speed.isFinite && widget.speed > 0 ? widget.speed : 50;
 
-  double get _effectiveHeight => _theme.height ?? 22;
+  double get _effectiveIconSize => _theme.height ?? 22;
+
+  double get _effectiveHeight =>
+      _theme.height ??
+      math.max(
+        22,
+        TTextStyled(
+          '国Ag',
+          style: _resolved.textStyle,
+          maxLines: 1,
+        ).naturalSize(context).height,
+      );
 
   EdgeInsetsGeometry get _effectivePadding =>
       _theme.padding ?? TNoticeBarThemeData.defaultPadding;
@@ -280,14 +291,12 @@ class _TNoticeBarState extends State<TNoticeBar> {
 
   /// 获取文本内容尺寸消息
   Size _getFontSize() {
-    final text = _contentList.isEmpty ? '' : _contentList.first;
-    final textPainter = TextPainter(
-      text: TextSpan(text: text, style: _resolved.textStyle),
-      locale: Localizations.localeOf(context),
-      textDirection: TextDirection.ltr,
+    final text = TTextStyled(
+      _contentList.isEmpty ? '' : _contentList.first,
+      style: _resolved.textStyle,
       maxLines: widget.marquee ? 1 : widget.maxLines,
-    )..layout(maxWidth: _getEmptyWidth());
-    return textPainter.size;
+    );
+    return text.naturalSize(context, maxWidth: _getEmptyWidth());
   }
 
   /// 获取文本内容宽度
@@ -318,7 +327,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
 
   /// 获取文字高度
   double _getTextHeight() {
-    return _getFontSize().height;
+    return _theme.height ?? _getFontSize().height;
   }
 
   /// 内容区域
@@ -354,22 +363,24 @@ class _TNoticeBarState extends State<TNoticeBar> {
         final textHeight = _getTextHeight();
         final contextWidth = _getContextWidth();
 
-        child = TInternalScrollScope(child: SingleChildScrollView(
-          controller: _scrollController,
-          scrollDirection: Axis.horizontal,
-          physics: const NeverScrollableScrollPhysics(),
-          child: Row(
-            children: [
-              SizedBox(key: _key, height: textHeight, child: textWidget),
-              SizedBox(width: emptyWidth),
-              SizedBox(
-                width: math.max(emptyWidth, contextWidth),
-                height: textHeight,
-                child: textWidget,
-              ),
-            ],
+        child = TInternalScrollScope(
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            scrollDirection: Axis.horizontal,
+            physics: const NeverScrollableScrollPhysics(),
+            child: Row(
+              children: [
+                SizedBox(key: _key, height: textHeight, child: textWidget),
+                SizedBox(width: emptyWidth),
+                SizedBox(
+                  width: math.max(emptyWidth, contextWidth),
+                  height: textHeight,
+                  child: textWidget,
+                ),
+              ],
+            ),
           ),
-        ));
+        );
         break;
       case Axis.vertical:
         var content = _contentList;
@@ -379,42 +390,44 @@ class _TNoticeBarState extends State<TNoticeBar> {
         }
         child = SizedBox(
           height: _effectiveHeight,
-          child: TInternalScrollScope(child: SingleChildScrollView(
-            controller: _scrollController,
-            scrollDirection: Axis.vertical,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (int i = 0; i < content.length; i++)
+          child: TInternalScrollScope(
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              scrollDirection: Axis.vertical,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  for (int i = 0; i < content.length; i++)
+                    SizedBox(
+                      height: _effectiveHeight,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: TTextStyled(
+                          content[i],
+                          style: _resolved.textStyle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
                   SizedBox(
+                    key: _key,
                     height: _effectiveHeight,
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: TTextStyled(
-                        content[i],
+                        content[0],
                         style: _resolved.textStyle,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
-                SizedBox(
-                  key: _key,
-                  height: _effectiveHeight,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: TTextStyled(
-                      content[0],
-                      style: _resolved.textStyle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          )),
+          ),
         );
         break;
     }
@@ -471,7 +484,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
           TInternalIconTheme.merge(
             data: IconThemeData(
               color: _resolved.leftIconColor,
-              size: _effectiveHeight,
+              size: _effectiveIconSize,
             ),
             child: prefix,
           ),
@@ -485,7 +498,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
         TInternalIcon(
           _defaultPrefixIcon,
           color: _resolved.leftIconColor,
-          size: _effectiveHeight,
+          size: _effectiveIconSize,
         ),
       ),
     );
@@ -537,7 +550,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
                 child: TInternalIcon(
                   suffixIcon,
                   color: _resolved.rightIconColor,
-                  size: _effectiveHeight,
+                  size: _effectiveIconSize,
                 ),
               ),
             ),
