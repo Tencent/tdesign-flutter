@@ -247,6 +247,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/calendar/t_calendar_lunar_test.dart',
       'test/components/calendar/t_calendar_on_change_init_test.dart',
       'test/components/calendar/t_calendar_test.dart',
+      'test/components/calendar/t_calendar_label_height_test.dart',
     ],
     exampleTests: ['test/calendar/calendar_demo_test.dart'],
     visualTests: [
@@ -460,6 +461,7 @@ const componentTestManifests = <ComponentTestManifest>[
     componentTests: [
       'test/components/indexes/sticky_header/sticky_header_test.dart',
       'test/components/indexes/t_indexes_test.dart',
+      'test/components/indexes/t_indexes_scroll_test.dart',
     ],
     exampleTests: ['test/indexes/indexes_demo_test.dart'],
     visualTests: [
@@ -596,6 +598,7 @@ const componentTestManifests = <ComponentTestManifest>[
     componentTests: [
       'test/components/tabs/t_horizontal_tab_bar_test.dart',
       'test/components/tabs/t_tab_bar_test.dart',
+      'test/components/tabs/t_tabs_content_constraints_test.dart',
       'test/components/tabs/t_tab_test.dart',
     ],
     exampleTests: ['test/tabs/tabs_page_test.dart'],
@@ -804,6 +807,8 @@ const componentTestManifests = <ComponentTestManifest>[
     componentTests: [
       'test/components/text/t_font_loader_test.dart',
       'test/components/text/t_text_resolve_test.dart',
+      'test/components/text/t_single_line_leading_test.dart',
+      'test/components/text/t_component_centering_test.dart',
       'test/components/text/t_text_style_scope_test.dart',
       'test/components/text/t_text_test.dart',
     ],
@@ -812,6 +817,14 @@ const componentTestManifests = <ComponentTestManifest>[
         name: 'Text Demo',
         workingDirectory: 'example',
         testFiles: ['test/text/text_demo_test.dart'],
+      ),
+      VisualTestManifest(
+        name: 'Component centering states',
+        workingDirectory: '.',
+        kind: VisualTestKind.component,
+        testFiles: [
+          'test/components/text/t_component_centering_golden_test.dart',
+        ],
       ),
     ],
   ),
@@ -920,6 +933,7 @@ const componentTestManifests = <ComponentTestManifest>[
     coverageTargets: ['lib/src/components/switch/'],
     componentTests: [
       'test/components/switch/t_switch_test.dart',
+      'test/components/switch/t_switch_typography_test.dart',
       'test/components/switch/t_cupertino_switch_test.dart',
     ],
     visualTests: [

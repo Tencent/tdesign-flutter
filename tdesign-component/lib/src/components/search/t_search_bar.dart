@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
@@ -168,7 +170,7 @@ class _TSearchBarState extends State<TSearchBar> {
     final theme = Theme.of(context).extension<TSearchBarThemeData>();
     final effectiveVariant = widget.variant ?? TSearchBarVariant.square;
     final effectiveAlignment = widget.textAlignment ?? TSearchBarAlignment.left;
-    final height = theme?.height ?? _kSearchBarHeight;
+    var height = theme?.height ?? _kSearchBarHeight;
     final inputBackgroundColor =
         theme?.inputBackgroundColor ?? token.bgColorSecondaryContainer;
     final contentPadding = theme?.contentPadding ?? _kContentPadding;
@@ -222,6 +224,36 @@ class _TSearchBarState extends State<TSearchBar> {
       clearIconTheme = clearIconTheme.copyWith(color: token.textColorDisabled);
     }
 
+    if (theme?.height == null) {
+      for (final style in [textStyle, hintStyle]) {
+        height = math.max(
+          height,
+          TTextStyled(
+                '国Ag',
+                maxLines: 1,
+                style: style,
+              ).naturalSize(context).height +
+              contentPadding.vertical,
+        );
+      }
+      if (hasAction) {
+        height = math.max(
+          height,
+          TTextStyled(
+            actionText,
+            style: actionStyle,
+          ).naturalSize(context).height,
+        );
+      }
+      height = math.max(
+        height,
+        math.max(
+              searchIconTheme.size ?? _kIconSize,
+              clearIconTheme.size ?? _kIconSize,
+            ) +
+            contentPadding.vertical,
+      );
+    }
     return SizedBox(
       height: height,
       child: Row(
@@ -295,7 +327,17 @@ class _TSearchBarState extends State<TSearchBar> {
                                   : TextAlign.left,
                               style: TTextResolve.resolve(
                                 context: context,
+                                singleLine: true,
                                 style: textStyle,
+                              ),
+                              strutStyle: TTextResolve.singleLineStrut(
+                                context: context,
+                                resolvedStyle: TTextResolve.resolve(
+                                  context: context,
+                                  singleLine: true,
+                                  style: textStyle,
+                                ),
+                                configuredStyle: textStyle,
                               ),
                               decoration: null,
                               maxLines: 1,

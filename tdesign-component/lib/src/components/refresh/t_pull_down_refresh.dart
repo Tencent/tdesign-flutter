@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../loading/t_loading.dart';
 import '../loading/t_loading_theme_data.dart';
-import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_pull_down_refresh_controller.dart';
 import 't_pull_down_refresh_texts.dart';
 
@@ -67,10 +68,12 @@ class TPullDownRefresh extends StatefulWidget {
   /// 必须为非负时长。
   final Duration? refreshTimeout;
 
-  /// Header 容器高度与触发阈值，默认 50 逻辑像素，必须大于 0。
+  /// Header 容器高度与触发阈值；默认至少 50，随内置文字增长。
+  /// 显式值固定，必须大于 0。
   final double loadingBarHeight;
 
-  /// 最大下拉高度，默认 80 逻辑像素，不得小于 loadingBarHeight。
+  /// 最大下拉高度；默认至少 80，并覆盖默认增长后的 Header。
+  /// 显式值固定，不得小于 loadingBarHeight；其值也限制默认 Header 的增长。
   final double maxBarHeight;
 
   /// 刷新完成提示的展示时长（默认 500ms，对齐官方 `successDuration`）。
@@ -95,13 +98,20 @@ class TPullDownRefresh extends StatefulWidget {
     this.controller,
     this.texts,
     this.refreshTimeout = const Duration(milliseconds: 3000),
-    this.loadingBarHeight = 50,
-    this.maxBarHeight = 80,
+    double? loadingBarHeight,
+    double? maxBarHeight,
     this.successDuration = const Duration(milliseconds: 500),
     this.onStateChanged,
-  }) : assert(lowerThreshold > 0),
-       assert(loadingBarHeight > 0),
-       assert(maxBarHeight >= loadingBarHeight);
+  }) : loadingBarHeight = loadingBarHeight ?? 50,
+       maxBarHeight = maxBarHeight ?? 80,
+       _adaptiveLoadingHeight = loadingBarHeight == null,
+       _adaptiveMaxHeight = maxBarHeight == null,
+       assert(lowerThreshold > 0),
+       assert((loadingBarHeight ?? 50) > 0),
+       assert((maxBarHeight ?? 80) >= (loadingBarHeight ?? 50));
+
+  final bool _adaptiveLoadingHeight;
+  final bool _adaptiveMaxHeight;
 
   @override
   State<TPullDownRefresh> createState() => _TPullDownRefreshState();
@@ -377,22 +387,65 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
     final footer = _loadMoreEnabled
         ? _TPullDownRefreshFooter(triggerOffset: widget.lowerThreshold)
         : null;
-    return EasyRefresh(
-      controller: _easyController,
-      header: _refreshEnabled
-          ? _TPullDownRefreshHeader(
-              extent: widget.loadingBarHeight,
-              triggerDistance: widget.loadingBarHeight,
-              maxOverOffset: widget.maxBarHeight,
-              successDuration: widget.successDuration,
-              texts: _effectiveTexts(context),
-              onStateChanged: _handleStateChanged,
-            )
-          : null,
-      footer: footer,
-      onRefresh: _refreshEnabled ? _handleRefresh : null,
-      onLoad: _loadMoreEnabled ? _handleLoadMore : null,
-      child: widget.child,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final texts = _effectiveTexts(context);
+        var headerHeight = widget.loadingBarHeight;
+        if (widget._adaptiveLoadingHeight) {
+          final width = constraints.hasBoundedWidth
+              ? constraints.maxWidth
+              : MediaQuery.sizeOf(context).width;
+          for (final text in [
+            texts.pullToRefresh,
+            texts.releaseToRefresh,
+            texts.refreshing,
+            texts.refreshComplete,
+          ]) {
+            headerHeight = math.max(
+              headerHeight,
+              TTextStyled(
+                    text,
+                    centerLeading: true,
+                    font: context.tTheme.fontBodyMedium,
+                    style: text == texts.refreshing
+                        ? const TextStyle(fontWeight: FontWeight.w400)
+                        : null,
+                  )
+                  .naturalSize(
+                    context,
+                    maxWidth: math.max(
+                      0,
+                      width - (text == texts.refreshing ? 32 : 0),
+                    ),
+                  )
+                  .height,
+            );
+          }
+          if (!widget._adaptiveMaxHeight) {
+            headerHeight = math.min(headerHeight, widget.maxBarHeight);
+          }
+        }
+        final maxHeight = widget._adaptiveMaxHeight
+            ? math.max(widget.maxBarHeight, headerHeight)
+            : widget.maxBarHeight;
+        return EasyRefresh(
+          controller: _easyController,
+          header: _refreshEnabled
+              ? _TPullDownRefreshHeader(
+                  extent: headerHeight,
+                  triggerDistance: headerHeight,
+                  maxOverOffset: maxHeight,
+                  successDuration: widget.successDuration,
+                  texts: texts,
+                  onStateChanged: _handleStateChanged,
+                )
+              : null,
+          footer: footer,
+          onRefresh: _refreshEnabled ? _handleRefresh : null,
+          onLoad: _loadMoreEnabled ? _handleLoadMore : null,
+          child: widget.child,
+        );
+      },
     );
   }
 }
@@ -471,8 +524,9 @@ class _TPullDownRefreshHeader extends Header {
                 data: Theme.of(context).mergeExtension(refreshLoadingTheme),
                 child: TLoading(size: 24, text: text),
               )
-            : TText(
+            : TTextStyled(
                 text,
+                centerLeading: true,
                 font: context.tTheme.fontBodyMedium,
                 style: TextStyle(color: context.tTheme.textColorPlaceholder),
               ),

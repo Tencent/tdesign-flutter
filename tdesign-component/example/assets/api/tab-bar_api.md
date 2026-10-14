@@ -74,7 +74,7 @@
 | arrowHeight | double? | - | 箭头高度 默认8 | 否 |
 | arrowWidth | double? | - | 箭头宽度 默认13.5 | 否 |
 | backgroundColor | Color? | - | 弹窗背景颜色 | 否 |
-| popUpItemHeight | double? | _kDefaultMenuItemHeight | 单个选项高度 所有选项等高 不设置则使用默认值 48 | 否 |
+| popUpItemHeight | double? | - | 单个选项高度；所有选项等高。未设置时至少 48，可随内置文字增长。 显式数值保持固定；构造后的默认公开值仍为 48。 | 否 |
 | popUpWidth | double? | - | 弹窗宽度。 不设置时使用 `max(107, 标签项宽度 - 20)`；显式设置时覆盖该默认值。 | 否 |
 | radius | double? | - | 弹层面板圆角。 不设置时使用当前 TDesign 主题的 `radiusDefault`（默认 6 逻辑像素）； 显式设置时覆盖主题默认值。 | 否 |
 

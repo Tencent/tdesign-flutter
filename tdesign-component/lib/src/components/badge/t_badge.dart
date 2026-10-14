@@ -270,12 +270,9 @@ class TBadge extends StatelessWidget {
           fit: BoxFit.scaleDown,
           child: TTextStyled(
             text,
-            style: textStyle.copyWith(
-              color: textColor,
-              leadingDistribution:
-                  textStyle.leadingDistribution ?? TextLeadingDistribution.even,
-            ),
-            textHeightBehavior: const TextHeightBehavior(
+            centerLeading: true,
+            style: textStyle.copyWith(color: textColor),
+            defaultTextHeightBehavior: const TextHeightBehavior(
               applyHeightToFirstAscent: false,
               applyHeightToLastDescent: false,
             ),

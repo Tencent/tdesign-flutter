@@ -404,11 +404,10 @@ void main() {
         ),
       );
 
+      expect(tester.getSize(find.byType(TSelectionCard)).height, 89);
       expect(
-        find.byWidgetPredicate(
-          (widget) => widget is SizedBox && widget.height == 89,
-        ),
-        findsOneWidget,
+        tester.getCenter(find.text('selected')).dy,
+        closeTo(tester.getCenter(find.byType(TSelectionCard)).dy, .01),
       );
       expect(tester.widget<Icon>(find.byIcon(TIcons.check)).size, 15.5);
       expect(
@@ -454,12 +453,7 @@ void main() {
         ),
       );
 
-      expect(
-        find.byWidgetPredicate(
-          (widget) => widget is SizedBox && widget.height == 62,
-        ),
-        findsOneWidget,
-      );
+      expect(tester.getSize(find.byType(TSelectionCard)).height, 62);
       expect(tester.widget<Icon>(find.byIcon(TIcons.check)).size, 13.5);
       expect(
         find.byWidgetPredicate(

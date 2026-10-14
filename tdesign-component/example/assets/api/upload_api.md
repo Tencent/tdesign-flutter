@@ -162,7 +162,7 @@ TUpload 组件级 ThemeExtension。
 | disabledForegroundColor | Color? | - | 禁用添加项前景色；null 时使用 textColorDisabled Token。 | 否 |
 | disabledMaskColor | Color? | - | 有图片预览且处于 ready/success 的禁用文件遮罩色；null 时亮色使用 textColorAnti、暗色使用 fontGray1，alpha 均为 0.6。 | 否 |
 | foregroundColor | Color? | - | 启用项前景色；null 时使用 textColorPlaceholder Token。 | 否 |
-| itemSize | double? | - | 网格上传项的宽高，单位为逻辑像素；null 时为 80。 | 否 |
+| itemSize | double? | - | 网格上传项的宽高，单位为逻辑像素；显式值固定；默认至少 80，并随内置文件名和状态文字增长。 | 否 |
 | overlayColor | Color? | - | 上传中/失败状态的遮罩色；null 时使用 fontGray3 Token。 | 否 |
 | removeButtonColor | Color? | - | 移除按钮背景色；null 时使用 textColorDisabled Token。 | 否 |
 | removeButtonSize | double? | - | 移除按钮宽高；null 时为 20 逻辑像素。 | 否 |

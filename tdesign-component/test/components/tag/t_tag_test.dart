@@ -14,6 +14,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// - 主题覆盖（ThemeExtension）
 /// - 边界场景
 void main() {
+  _singleLineLeadingRegression();
+
   /// 完整包装，注入 TDesign 全局主题。
   Widget wrapWithTheme(
     Widget child, {
@@ -1447,5 +1449,105 @@ void main() {
       );
       expect(find.byType(TTag), findsNWidgets(TTagVariant.values.length));
     });
+  });
+}
+
+void _singleLineLeadingRegression() {
+  for (final m3 in [false, true]) {
+    for (final scale in [1.0, 1.5]) {
+      testWidgets('Tag default leading and line boxes m3=$m3 scale=$scale', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              useMaterial3: m3,
+              extensions: [TThemeData.defaultData()],
+            ),
+            home: MediaQuery(
+              data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+              child: Scaffold(
+                body: Column(
+                  children: [
+                    for (final size in TTagSize.values)
+                      if (size != TTagSize.custom)
+                        TTag('标签 Ag8 $size', size: size),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+        for (final element in find.byType(TTag).evaluate()) {
+          final tag = find.byElementPredicate((e) => identical(e, element));
+          final text = find.descendant(of: tag, matching: find.byType(Text));
+          expect(
+            tester.widget<Text>(text).style!.leadingDistribution,
+            TextLeadingDistribution.even,
+          );
+          final container = find.descendant(
+            of: tag,
+            matching: find.byWidgetPredicate(
+              (w) => w is Container && w.decoration is BoxDecoration,
+            ),
+          );
+          expect(
+            tester.getRect(text).center.dy,
+            closeTo(tester.getRect(container.first).center.dy, 0.01),
+          );
+        }
+      });
+    }
+    testWidgets('Tag respects explicit TD typography m3=$m3', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            useMaterial3: m3,
+            extensions: [
+              TThemeData.defaultData().copyWith(
+                fontFamilyMap: {
+                  'fontFamily': FontFamily(fontFamily: 'Custom TD Font'),
+                },
+              ),
+              const TTextThemeData(
+                textStyle: TextStyle(
+                  leadingDistribution: TextLeadingDistribution.proportional,
+                  fontFamily: 'Custom TD Font',
+                  letterSpacing: 2,
+                ),
+              ),
+            ],
+          ),
+          home: const Scaffold(body: TTag('Explicit')),
+        ),
+      );
+      final text = tester.widget<Text>(find.text('Explicit'));
+      expect(
+        text.style!.leadingDistribution,
+        TextLeadingDistribution.proportional,
+      );
+      expect(text.style!.fontFamily, 'Custom TD Font');
+      expect(text.style!.letterSpacing, 2);
+    });
+  }
+  testWidgets('multiline Tag and ordinary Text keep paragraph leading', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TThemeBuilder.light(
+          TThemeData.defaultData(),
+        ).mergeExtension(const TTagThemeData(maxLines: 2, fixedWidth: 80)),
+        home: const Scaffold(
+          body: Column(children: [TTag('标签多行文字 Ag8'), TText('正文 Ag8')]),
+        ),
+      ),
+    );
+    for (final label in ['标签多行文字 Ag8', '正文 Ag8']) {
+      expect(
+        tester.widget<Text>(find.text(label)).style!.leadingDistribution,
+        isNull,
+      );
+    }
   });
 }

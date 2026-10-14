@@ -54,7 +54,7 @@ class TStepper extends StatefulWidget {
 
   /// 组件尺寸。
   ///
-  /// 为空时使用 [TStepperSize.medium]。
+  /// 为空时以 [TStepperSize.medium] 为最小尺寸，内置文字放大时可增长；显式 size 保持固定。
   final TStepperSize? size;
 
   /// 组件形态。
@@ -539,7 +539,8 @@ class _StepperStyle {
     final size = widget.size ?? TStepperSize.medium;
     final variant = widget.variant ?? TStepperVariant.normal;
     final geometry = stepperGeometry(size);
-    final controlSize = componentTheme?.controlSize ?? geometry.controlSize;
+    var controlSize = componentTheme?.controlSize ?? geometry.controlSize;
+    final grows = componentTheme?.controlSize == null && widget.size == null;
     final rawComponentTextStyle = componentTheme?.textStyle;
     final componentTextStyle = rawComponentTextStyle == null
         ? null
@@ -560,7 +561,9 @@ class _StepperStyle {
         .merge(componentTextStyle);
     final resolvedFontSize = themedTextStyle.fontSize ?? geometry.fontSize;
     final explicitTextHeight = componentTheme?.textStyle?.height;
-    final resolvedLineHeight = math.min(geometry.lineHeight, controlSize);
+    final resolvedLineHeight = grows && resolvedFontSize > controlSize
+        ? math.max(geometry.lineHeight, resolvedFontSize)
+        : math.min(geometry.lineHeight, controlSize);
     final textStyle = themedTextStyle.copyWith(
       fontSize: resolvedFontSize,
       // Figma 的三档文字分别使用 10/16、12/20、16/24 行盒。Theme 只覆盖
@@ -573,12 +576,30 @@ class _StepperStyle {
           componentTheme?.textStyle?.leadingDistribution ??
           TextLeadingDistribution.even,
     );
+    final scaler = MediaQuery.textScalerOf(context);
+    if (grows) {
+      controlSize = math.max(
+        controlSize,
+        math.max(resolvedFontSize, resolvedFontSize * textStyle.height!),
+      );
+      controlSize = math.max(
+        controlSize,
+        math.max(
+          scaler.scale(resolvedFontSize),
+          scaler.scale(resolvedFontSize) * textStyle.height!,
+        ),
+      );
+    }
+    final widthGrowth = grows
+        ? math.max(1.0, scaler.scale(resolvedFontSize) / resolvedFontSize)
+        : 1.0;
     final borderColor = componentTheme?.borderColor ?? token.componentBorder;
 
     return _StepperStyle(
       variant: variant,
       controlSize: controlSize,
-      inputWidth: componentTheme?.inputWidth ?? geometry.inputWidth,
+      inputWidth:
+          componentTheme?.inputWidth ?? geometry.inputWidth * widthGrowth,
       iconSize: componentTheme?.iconSize ?? geometry.iconSize,
       spacing: componentTheme?.spacing ?? stepperSpacing,
       borderRadius:

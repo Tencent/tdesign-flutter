@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -8,6 +11,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// controller 控制（start/pause/reset）、onChanged/onFinish 回调、
 /// Theme 覆盖。
 void main() {
+  setUpAll(() async {
+    await (FontLoader('packages/tdesign_flutter/TCloudNumber')..addFont(
+          File(
+            'assets/tdesign/TCloudNumberVF.ttf',
+          ).readAsBytes().then(ByteData.sublistView),
+        ))
+        .load();
+  });
+
   /// 用 TTheme 包裹以提供基础 Token
   Widget wrapWithTheme(
     Widget child, {

@@ -51,13 +51,13 @@ class TIndexesThemeData extends ThemeExtension<TIndexesThemeData> {
   /// 侧栏距容器右侧的距离。
   final double? sidebarRight;
 
-  /// 单个索引的尺寸。
+  /// 单个索引的尺寸；显式值保持固定，默认至少 20 并随内置文字自然行高增长。
   final double? indexItemSize;
 
   /// 相邻索引之间的距离。
   final double? indexItemSpacing;
 
-  /// 按压提示的最小尺寸。
+  /// 按压提示的最小尺寸；显式值保持固定，默认可随内置文字自然行高增长。
   final double? tipSize;
 
   /// 按压提示的最大宽度。

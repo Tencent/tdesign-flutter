@@ -299,7 +299,22 @@ class _TInputState extends State<TInput> {
               ? _obscureText
               : widget.obscureText,
           inputFormatters: _effectiveFormatters(),
-          style: TTextResolve.resolve(context: context, style: textStyle),
+          style: TTextResolve.resolve(
+            context: context,
+            singleLine: !widget._multiline,
+            style: textStyle,
+          ),
+          strutStyle: widget._multiline
+              ? null
+              : TTextResolve.singleLineStrut(
+                  context: context,
+                  resolvedStyle: TTextResolve.resolve(
+                    context: context,
+                    singleLine: true,
+                    style: textStyle,
+                  ),
+                  configuredStyle: textStyle,
+                ),
           cursorColor: cursorColor,
           decoration: null,
         ),
@@ -507,6 +522,7 @@ class _TInputShell extends StatefulWidget {
 }
 
 class _TInputShellState extends State<_TInputShell> {
+  final _editorKey = GlobalKey(debugLabel: 'input-native-editor');
   @override
   void initState() {
     super.initState();
@@ -594,15 +610,16 @@ class _TInputShellState extends State<_TInputShell> {
             ),
           )
         : null;
-    final counter = widget.indicator && widget.counterLimit != null
-        ? Align(
-            alignment: AlignmentDirectional.centerEnd,
-            child: TTextStyled(
-              '${_inputLength(widget.controller.text, widget.maxCharacter)}/${widget.counterLimit}',
-              style: widget.counterStyle.copyWith(color: widget.counterColor),
-            ),
+    final counterText = widget.indicator && widget.counterLimit != null
+        ? TTextStyled(
+            '${_inputLength(widget.controller.text, widget.maxCharacter)}/${widget.counterLimit}',
+            centerLeading: true,
+            style: widget.counterStyle.copyWith(color: widget.counterColor),
           )
         : null;
+    final counter = counterText == null
+        ? null
+        : Align(alignment: AlignmentDirectional.centerEnd, child: counterText);
     final border = widget.borderless
         ? null
         : widget.multiline || widget.borderRadius != BorderRadius.zero
@@ -627,7 +644,9 @@ class _TInputShellState extends State<_TInputShell> {
           ),
           SizedBox(width: context.tTheme.spacer2),
         ],
-        Expanded(child: widget.editor),
+        Expanded(
+          child: KeyedSubtree(key: _editorKey, child: widget.editor),
+        ),
         if (clearButton != null) ...[const SizedBox(width: 4), clearButton],
         if (passwordButton != null) ...[
           const SizedBox(width: 4),
@@ -654,18 +673,21 @@ class _TInputShellState extends State<_TInputShell> {
       child: Padding(
         padding: widget.contentPadding,
         child: LayoutBuilder(
-          builder: (context, constraints) => Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              inputRow,
-              if (counter != null) ...[
+          builder: (context, constraints) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
                 if (widget.multiline && constraints.hasTightHeight)
-                  const Spacer(),
-                SizedBox(height: widget.counterGap),
-                counter,
+                  Expanded(child: inputRow)
+                else
+                  inputRow,
+                if (counter != null) ...[
+                  SizedBox(height: widget.counterGap),
+                  counter,
+                ],
               ],
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

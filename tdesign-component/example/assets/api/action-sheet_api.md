@@ -51,7 +51,7 @@
 | showOverlay | bool | true | 是否显示蒙层。 | 否 |
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭。 | 否 |
 | useSafeArea | bool | true | 是否避让系统安全区。 | 否 |
-| itemHeight | double? | - | 宫格项目高度。 | 否 |
+| itemHeight | double? | - | 宫格项目高度；显式值保持固定，默认至少 96 并随内置文字增长。 | 否 |
 | onCancel | VoidCallback? | - | 点击取消时回调。 | 否 |
 | onClosed | VoidCallback? | - | 面板关闭后回调。 | 否 |
 | onSelected | TActionSheetOnSelected&lt;T&gt;? | - | 点击动作时回调。 | 否 |
@@ -84,7 +84,7 @@
 | closeOnOverlayClick | bool | true | 点击蒙层是否关闭。 | 否 |
 | useSafeArea | bool | true | 是否避让系统安全区。 | 否 |
 | itemWidth | double | 80 | 横向列表单项宽度，默认为 80。 | 否 |
-| itemHeight | double? | - | 单项高度；为 null 时使用组件主题，最终回退为 96。 | 否 |
+| itemHeight | double? | - | 单项高度；为 null 时使用组件主题，默认至少为 96，并随内置标签的自然高度增长。 | 否 |
 | onCancel | VoidCallback? | - | 点击取消时回调。 | 否 |
 | onClosed | VoidCallback? | - | 面板关闭后回调。 | 否 |
 | onSelected | TActionSheetOnSelected&lt;T&gt;? | - | 点击项目时回传原始项目。 | 否 |

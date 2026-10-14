@@ -107,6 +107,9 @@ void main() {
       tester.widget<TButton>(find.byType(TButton)).size,
       TButtonSize.large,
     );
+    final customText = tester.widget<Text>(find.text('NEW'));
+    expect(customText.style?.leadingDistribution, TextLeadingDistribution.even);
+    expect(customText.style?.height, 16 / 10);
     final badgeRect = tester.getRect(find.text('NEW'));
     final buttonRect = tester.getRect(find.byType(TButton));
     expect(buttonRect.size, const Size.square(48));

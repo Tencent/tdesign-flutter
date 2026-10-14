@@ -39,7 +39,8 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
 
   /// 控件高度及单个按钮宽度。
   ///
-  /// 为空时 small、medium、large 分别使用 20、24、26。
+  /// 为空时 small、medium、large 分别以 20、24、26 为基础；
+  /// 未指定实例 size 时可随内置文字增长，显式控制尺寸保持固定。
   final double? controlSize;
 
   /// 加减图标尺寸。

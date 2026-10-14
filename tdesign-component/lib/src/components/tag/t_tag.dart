@@ -146,8 +146,12 @@ class TTag extends StatelessWidget {
         theme?.resolvePadding(defaultPadding) ?? defaultPadding;
     final result = Container(
       width: fixedWidth,
-      height: maxLines == 1
-          ? _getTagHeight(effectiveFont, effectivePadding, borderWidth)
+      constraints: maxLines == 1
+          ? BoxConstraints(
+              minHeight:
+                  _getTagHeight(effectiveFont, effectivePadding, borderWidth) ??
+                  0,
+            )
           : null,
       padding: effectivePadding,
       decoration: BoxDecoration(
@@ -160,6 +164,7 @@ class TTag extends StatelessWidget {
       ),
       child: Align(
         alignment: Alignment.center,
+        heightFactor: maxLines == 1 ? 1 : null,
         widthFactor: fixedWidth == null ? 1 : null,
         child: child,
       ),
@@ -349,7 +354,7 @@ class TTag extends StatelessWidget {
     }
   }
 
-  /// 计算标签高度，只约束纵向布局，不影响标签按内容自适应宽度。
+  /// 默认最小高度；真实文字行及图标可以撑高内容区，避免缩放后裁切和偏移。
   double? _getTagHeight(
     Font? textFont,
     EdgeInsets padding,

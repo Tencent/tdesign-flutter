@@ -1,4 +1,7 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show OverflowBoxFit;
 import 'package:image_picker/image_picker.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
@@ -130,11 +133,57 @@ class _TUploadState extends State<_TUploadView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TUploadThemeData>();
-    final size = theme?.itemSize ?? 80;
+    final size = theme?.itemSize ?? _defaultItemSize(context, theme);
     final content = layout == TUploadLayout.grid
         ? _buildGrid(context, size, theme)
         : _buildList(context, theme);
     return Semantics(enabled: _enabled, child: content);
+  }
+
+  double _defaultItemSize(BuildContext context, TUploadThemeData? theme) {
+    var result = 80.0;
+    for (final file in files) {
+      if (file.bytes == null && file.url == null) {
+        final line = TTextStyled(
+          file.name,
+          maxLines: 1,
+          style: _fontStyle(
+            context.tTheme.fontBodySmall,
+            context.tTheme.textColorSecondary,
+          ),
+        ).naturalSize(context).height;
+        result = math.max(result, line + 24 + 4 + context.tTheme.spacer * 2);
+      }
+      if (file.status != TUploadFileStatus.ready &&
+          file.status != TUploadFileStatus.success) {
+        final line = TTextStyled(
+          _statusLabel(context, file),
+          maxLines: 1,
+          style: _statusTextStyle(context, theme),
+        ).naturalSize(context).height;
+        result = math.max(result, line + (theme?.statusIconSize ?? 24) + 4);
+      }
+    }
+    return result;
+  }
+
+  TextStyle _statusTextStyle(BuildContext context, TUploadThemeData? theme) =>
+      TextStyle(
+        color: context.tTheme.textColorAnti,
+        fontSize: context.tTheme.fontBodySmall?.size ?? 12,
+        height: context.tTheme.fontBodySmall?.height,
+      ).merge(theme?.statusTextStyle);
+
+  String _statusLabel(BuildContext context, TUploadFile file) {
+    final resource = TResourceManager.instance.delegate(context);
+    return file.status == TUploadFileStatus.uploading
+        ? file.progress == null
+              ? resource.uploading
+              : '${(file.progress! * 100).round()}%'
+        : file.errorText ??
+              (file.status == TUploadFileStatus.retryableError
+                  ? resource.uploadRetry
+                  : resource.uploadFailed);
   }
 
   Widget _buildGrid(
@@ -357,28 +406,34 @@ class _TUploadState extends State<_TUploadView> {
           vertical: context.tTheme.spacer,
           horizontal: 4.0,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TInternalIcon(
-              _fileIcon(file.name),
-              size: 24,
-              color: _fileIconColor(context, file.name),
-            ),
-            const SizedBox(height: 4.0),
-            TTextStyled(
-              file.name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: _fontStyle(
-                context.tTheme.fontBodySmall,
-                _enabled
-                    ? context.tTheme.textColorSecondary
-                    : context.tTheme.textColorDisabled,
+        child: OverflowBox(
+          fit: OverflowBoxFit.deferToChild,
+          minHeight: 0,
+          maxHeight: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TInternalIcon(
+                _fileIcon(file.name),
+                size: 24,
+                color: _fileIconColor(context, file.name),
               ),
-            ),
-          ],
+              const SizedBox(height: 4.0),
+              TTextStyled(
+                file.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: _fontStyle(
+                  context.tTheme.fontBodySmall,
+                  _enabled
+                      ? context.tTheme.textColorSecondary
+                      : context.tTheme.textColorDisabled,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -408,51 +463,45 @@ class _TUploadState extends State<_TUploadView> {
   ) {
     final isUploading = file.status == TUploadFileStatus.uploading;
     final isRetryableError = file.status == TUploadFileStatus.retryableError;
-    final resource = TResourceManager.instance.delegate(context);
-    final label = isUploading
-        ? file.progress == null
-              ? resource.uploading
-              : '${(file.progress! * 100).round()}%'
-        : file.errorText ??
-              (isRetryableError ? resource.uploadRetry : resource.uploadFailed);
+    final label = _statusLabel(context, file);
     final foregroundColor = context.tTheme.textColorAnti;
     return GestureDetector(
       key: ValueKey('upload-status-${file.id}'),
       onTap: _enabled && onFileTap != null ? () => onFileTap!(file) : null,
       child: ColoredBox(
         color: theme?.overlayColor ?? context.tTheme.fontGray3,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (isUploading)
-              SizedBox.square(
-                dimension: theme?.statusIconSize ?? 24,
-                child: TInternalCircularProgressIndicator(
-                  value: file.progress,
-                  strokeWidth: 2,
+        child: OverflowBox(
+          fit: OverflowBoxFit.deferToChild,
+          minHeight: 0,
+          maxHeight: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (isUploading)
+                SizedBox.square(
+                  dimension: theme?.statusIconSize ?? 24,
+                  child: TInternalCircularProgressIndicator(
+                    value: file.progress,
+                    strokeWidth: 2,
+                    color: foregroundColor,
+                  ),
+                )
+              else
+                TInternalIcon(
+                  isRetryableError ? TIcons.refresh : TIcons.close_circle,
+                  size: theme?.statusIconSize ?? 24,
                   color: foregroundColor,
                 ),
-              )
-            else
-              TInternalIcon(
-                isRetryableError ? TIcons.refresh : TIcons.close_circle,
-                size: theme?.statusIconSize ?? 24,
-                color: foregroundColor,
+              const SizedBox(height: 4),
+              TTextStyled(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: _statusTextStyle(context, theme),
               ),
-            const SizedBox(height: 4),
-            TTextStyled(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style:
-                  theme?.statusTextStyle ??
-                  TextStyle(
-                    color: foregroundColor,
-                    fontSize: context.tTheme.fontBodySmall?.size ?? 12,
-                    height: context.tTheme.fontBodySmall?.height,
-                  ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

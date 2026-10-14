@@ -4,6 +4,7 @@ import '../../util/context_extension.dart';
 import '../popup/t_popup.dart';
 import 't_action_sheet_grid.dart';
 import 't_action_sheet_item.dart';
+import 't_action_sheet_item_widget.dart';
 import 't_action_sheet_list.dart';
 import 't_action_sheet_theme_data.dart';
 import 't_action_sheet_types.dart';
@@ -78,7 +79,7 @@ final class TActionSheet {
   /// [closeOnOverlayClick] 点击蒙层是否关闭。
   /// [useSafeArea] 是否避让系统安全区。
   /// [layout] 普通、分页或横向滚动宫格布局。
-  /// [itemHeight] 宫格项目高度。
+  /// [itemHeight] 宫格项目高度；显式值保持固定，默认至少 96 并随内置文字增长。
   /// [onCancel] 点击取消时回调。
   /// [onClosed] 面板关闭后回调。
   /// [onSelected] 点击动作时回调。
@@ -127,7 +128,7 @@ final class TActionSheet {
   /// [closeOnOverlayClick] 点击蒙层是否关闭。
   /// [useSafeArea] 是否避让系统安全区。
   /// [itemWidth] 横向列表单项宽度，默认为 80。
-  /// [itemHeight] 单项高度；为 null 时使用组件主题，最终回退为 96。
+  /// [itemHeight] 单项高度；为 null 时使用组件主题，默认至少为 96，并随内置标签的自然高度增长。
   /// [onCancel] 点击取消时回调。
   /// [onClosed] 面板关闭后回调。
   /// [onSelected] 点击项目时回传原始项目。
@@ -151,12 +152,20 @@ final class TActionSheet {
     assert(itemWidth > 0, 'itemWidth must be greater than 0');
     final theme = Theme.of(context).extension<TActionSheetThemeData>();
     final effectiveCancelText = cancelText ?? context.resource.cancel;
-    final effectiveItemHeight = itemHeight ?? theme?.gridItemHeight ?? 96;
+    final effectiveItemHeight =
+        itemHeight ??
+        theme?.gridItemHeight ??
+        actionSheetGridItemHeight(
+          context,
+          sections.expand((section) => section.items),
+        );
     final popupHeight = TActionSheetSectionGrid.preferredPopupHeight(
       context,
       sectionCount: sections.length,
+      titles: sections.map((section) => section.title),
       itemHeight: effectiveItemHeight,
       showCancel: showCancel,
+      cancelText: effectiveCancelText,
     );
     return TPopup.show(
       context,
@@ -204,13 +213,17 @@ final class TActionSheet {
     final theme = Theme.of(context).extension<TActionSheetThemeData>();
     final effectiveAlign = align ?? TActionSheetAlign.center;
     final effectiveCancelText = cancelText ?? context.resource.cancel;
-    final effectiveItemHeight = itemHeight ?? theme?.gridItemHeight ?? 96;
+    final effectiveItemHeight =
+        itemHeight ??
+        theme?.gridItemHeight ??
+        actionSheetGridItemHeight(context, items);
     final popupHeight = switch (layout) {
       _TActionSheetLayout.list => TActionSheetList.preferredPopupHeight(
         context,
         items: items,
         subtitle: subtitle,
         showCancel: showCancel,
+        cancelText: effectiveCancelText,
       ),
       _TActionSheetLayout.grid => TActionSheetGrid.preferredPopupHeight(
         context,
@@ -218,6 +231,7 @@ final class TActionSheet {
         layout: gridLayout,
         itemHeight: effectiveItemHeight,
         showCancel: showCancel,
+        cancelText: effectiveCancelText,
       ),
     };
 

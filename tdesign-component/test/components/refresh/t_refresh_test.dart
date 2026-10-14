@@ -296,8 +296,13 @@ void main() {
       await gesture.moveBy(const Offset(0, 40));
       await tester.pump(const Duration(milliseconds: 100));
 
-      expect(find.byType(TText), findsOneWidget);
-      final tip = tester.widget<TText>(find.byType(TText));
+      expect(
+        find.byWidgetPredicate((widget) => widget is TText),
+        findsOneWidget,
+      );
+      final tip = tester.widget<TText>(
+        find.byWidgetPredicate((widget) => widget is TText),
+      );
       expect(tip.style?.color, TThemeData.defaultData().textColorPlaceholder);
 
       await gesture.cancel();
@@ -390,7 +395,7 @@ void main() {
       final loadingText = tester.widget<TText>(
         find.descendant(
           of: find.byType(TLoading),
-          matching: find.byType(TText),
+          matching: find.byWidgetPredicate((widget) => widget is TText),
         ),
       );
       expect(loadingText.style?.color, Colors.green);
@@ -423,7 +428,7 @@ void main() {
       final loadingText = tester.widget<TText>(
         find.descendant(
           of: find.byType(TLoading),
-          matching: find.byType(TText),
+          matching: find.byWidgetPredicate((widget) => widget is TText),
         ),
       );
       expect(loadingText.style?.color, tokens.dark!.textColorDisabled);
