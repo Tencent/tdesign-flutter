@@ -18,7 +18,6 @@ class TMessagePage extends StatelessWidget {
       desc: '用于轻量级反馈或提示，不会打断用户操作。',
       exampleCodeGroup: 'message',
       itemMargin: const EdgeInsets.symmetric(horizontal: 16),
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

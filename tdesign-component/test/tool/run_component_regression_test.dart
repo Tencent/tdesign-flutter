@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../tool/check_component_coverage.dart';
 import '../../tool/component_test_manifest.dart';
 import '../../tool/run_component_regression.dart';
+import '../../tool/run_example_regression.dart';
 
 void main() {
   test('regression suites and coverage targets stay in sync', () {
@@ -56,6 +57,33 @@ void main() {
       expect(File('example/$testFile').existsSync(), isTrue, reason: testFile);
     }
   });
+
+  test(
+    'public example assertions and default debug controls run separately',
+    () {
+      final groups = exampleRegressionArguments([
+        'test/widget_test.dart',
+        'test/example_test.dart',
+      ]);
+      expect(groups, hasLength(2));
+      expect(
+        groups.first,
+        contains('--dart-define=TDESIGN_DEMO_TEST_MODULES=false'),
+      );
+      expect(
+        groups.first,
+        containsAll(['--exclude-tags', 'golden', 'test/example_test.dart']),
+      );
+      expect(
+        groups.last,
+        containsAll(['--tags', 'internal-demo', 'test/widget_test.dart']),
+      );
+      expect(
+        groups.last.where((argument) => argument.startsWith('--dart-define=')),
+        isEmpty,
+      );
+    },
+  );
 
   test('GitHub and CNB invoke the shared example regression runner', () {
     final githubWorkflow = File(

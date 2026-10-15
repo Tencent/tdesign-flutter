@@ -32,7 +32,6 @@ class TSideBarPageState extends State<TSideBarPage> {
       exampleCodeGroup: 'sideBar',
       desc: '用于内容分类后的展示切换。',
       compactDemo: true,
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

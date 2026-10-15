@@ -44,7 +44,6 @@ class _TBackTopPageState extends State<TBackTopPage> {
       desc: '用于当页面过长往下滑动时，帮助用户快速回到页面顶部。',
       exampleCodeGroup: 'backtop',
       compactDemo: true,
-      showTestModule: false,
       floatingActionButton: TBackTop(
         key: const Key('backtop-demo-floating'),
         controller: controller,

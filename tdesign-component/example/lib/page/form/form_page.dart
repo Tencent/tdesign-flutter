@@ -16,7 +16,6 @@ class TFormPage extends StatelessWidget {
       desc: '用以收集、校验和提交数据，一般由输入框、单选框、复选框、选择器等控件组成。',
       exampleCodeGroup: 'form',
       compactDemo: true,
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

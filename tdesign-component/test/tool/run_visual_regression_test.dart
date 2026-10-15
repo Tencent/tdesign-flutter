@@ -27,6 +27,23 @@ void main() {
     }
   });
 
+  test('only Demo visual processes disable internal debug modules', () {
+    for (final suite in visualTestSuites) {
+      final args = visualTestArguments(suite);
+      expect(
+        args.contains('--dart-define=TDESIGN_DEMO_TEST_MODULES=false'),
+        suite.kind == VisualTestKind.demo,
+      );
+      expect(args, containsAll(suite.testFiles));
+      expect(args, containsAll(suite.arguments));
+      expect(args, isNot(contains('--update-goldens')));
+      expect(
+        visualTestArguments(suite, updateGoldens: true).last,
+        '--update-goldens',
+      );
+    }
+  });
+
   test('visual regression uses the exact default Golden comparator', () {
     final goldenTests = [
       for (final root in ['test', 'example/test'])

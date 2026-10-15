@@ -33,7 +33,10 @@ void main() {
   testWidgets('公开 Demo 展示 Figma 的七个入口', (tester) async {
     await pumpFullDemoPage(tester, drawerDemoPageTestSpec, ThemeMode.light);
 
-    expect(find.text('单元测试'), findsNothing);
+    expect(
+      tester.widget<ExamplePage>(find.byType(ExamplePage)).showTestModule,
+      isTrue,
+    );
     final renderedEntries = <(String, double)>[];
     for (final scene in drawerDemoScenes) {
       final label = scene.label;

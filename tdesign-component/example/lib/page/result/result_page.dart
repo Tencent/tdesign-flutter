@@ -18,7 +18,6 @@ class TResultPage extends StatelessWidget {
       title: 'Result 结果',
       desc: '用于反馈不同结果的展示。',
       exampleCodeGroup: 'result',
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

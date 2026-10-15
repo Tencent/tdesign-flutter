@@ -28,7 +28,6 @@ class _TCheckboxPageState extends State<TCheckboxPage> {
       desc: '用于预设的一组选项中执行多项选择，并呈现选择结果。',
       exampleCodeGroup: 'checkbox',
       compactDemo: true,
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',
