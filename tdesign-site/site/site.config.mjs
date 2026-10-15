@@ -1,12 +1,6 @@
 export default {
   standalone: [
     {
-      path: '/flutter/migration-1-0',
-      name: 'migration-1-0',
-      meta: { docType: 'explain' },
-      component: () => import('@docs/migration-0.2.7-to-1.0.md'),
-    },
-    {
       path: '/flutter/dark-mode',
       redirect: '/flutter/custom-theme#明暗模式',
     },
@@ -24,11 +18,18 @@ export default {
           component: () => import('@docs/getting-started.md'),
         },
         {
-          title: '贡献指南',
-          name: 'develop',
+          title: '迁移指南',
+          name: 'migration-1-0',
           meta: { docType: 'explain' },
-          path: '/flutter/develop',
-          component: () => import('../../CONTRIBUTING.md'),
+          path: '/flutter/migration-1-0',
+          component: () => import('@docs/migration-0.2.7-to-1.0.md'),
+        },
+        {
+          title: '组件概览',
+          name: 'overview',
+          meta: { docType: 'explain' },
+          path: '/flutter/overview',
+          component: () => import('@docs/overview.md'),
         },
         {
           title: '常见问题',
@@ -37,13 +38,6 @@ export default {
           path: '/flutter/faq',
           component: () => import('@docs/faq.md'),
         },
-        // {
-        //   title: '谁在用',
-        //   name: 'used',
-        //   meta: { docType: 'explain' },
-        //   path: '/flutter/used',
-        //   component: () => import('@pages/used.vue'),
-        // },
         {
           title: '更新日志',
           name: 'changelog',
@@ -52,11 +46,11 @@ export default {
           component: () => import('../CHANGELOG.md'),
         },
         {
-          title: '组件概览',
-          name: 'overview',
+          title: '贡献指南',
+          name: 'develop',
           meta: { docType: 'explain' },
-          path: '/flutter/overview',
-          component: () => import('@docs/overview.md'),
+          path: '/flutter/develop',
+          component: () => import('../../CONTRIBUTING.md'),
         },
       ],
     },

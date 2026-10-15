@@ -30,10 +30,13 @@ export default function mdToVue(options: any) {
       import { defineComponent } from 'vue';
       ${demoCodesImportsStr}
 
+      const info = ${JSON.stringify(mdSegment)};
+      info.docMd = info.docMd.replaceAll('src="/assets/', 'src="' + import.meta.env.BASE_URL + 'assets/');
+
       export default defineComponent({
         props: { docType: String },
         components: { TdesignDoc },
-        provide: { info: ${JSON.stringify(mdSegment)}, demos: { ${demoCodesDefsStr} } },
+        provide: { info, demos: { ${demoCodesDefsStr} } },
       });
     </script>
   `;
