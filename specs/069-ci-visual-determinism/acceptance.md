@@ -9,3 +9,15 @@ Flutter3.32：调度/日历/居中55项通过；默认Debug共享控件/Result/S
 Flutter3.47.7：55项调度/日历/居中通过，默认模式26项与隐藏模式13项通过。隔离验证工程的旧Shader缓存曾与当前SDK不匹配，已清理隔离工程缓存并离线解析后通过；不修改主工程依赖。
 
 后续：提交这批修复后读取新CI，检查Linux实际图、必要基线以及剩余功能/覆盖率失败，当前不宣称CI全部通过。
+
+## 完整功能回归修复
+
+读取1347262完整CI日志并在双SDK重现13项失败：内部示例污染公开Popover按钮数、TabBar等代码入口数及定位断言。run_example_regression现对公开场景统一隐藏内部区块，随后独立运行internal-demo标签验证默认Debug开关；未修改公开实例数量或放宽布局阈值。Flutter3.32.0与3.47.7完整公开功能回归各377项通过，默认Debug专项各1项通过。两个包分析曾发现新调度脚本单行if格式问题，已修正。
+
+## Linux首轮修复结果与产物收集缺陷
+
+0c24e4f8的Linux视觉运行38711495490/job116343960093已完成：Calendar/Indexes四项通过，原先大范围Demo差异消除，仅Divider、PullDownRefresh、Tabs、Skeleton、Icon、Link、Text、Upload、Theme、Toast十组仍失败。旧基线含内部区块而新输出按公开示例关闭，另有四个新增主题指南基线缺失。没有直接更新基线。
+
+发现工作流只上传example/test/failures，实际目录是example/test/<组件>/failures，日志明确No files were found，导致无artifact。按本轮“排查并修复当前CI”授权，将路径修正为example/test/**/failures，并加调度器自检。下一轮先取得Linux实际图并核对后再安装必要基线。
+
+调度器自检最终在双SDK各17项通过。指南视觉矩阵扩展为初始/手动切换/系统切换各浅深两张，共六张，确保明暗PNG成对；场景通过真实操作从相反模式切换。待Linux产物核对并安装后才能宣称视觉验收通过。

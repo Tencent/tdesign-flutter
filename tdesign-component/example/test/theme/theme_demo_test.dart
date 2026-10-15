@@ -54,25 +54,47 @@ void main() {
     }, tags: 'golden');
   }
   for (final followSystem in [false, true]) {
-    testWidgets(
-      'custom theme guide ${followSystem ? 'system' : 'manual'} dark switch golden',
-      (tester) async {
-        tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
-        addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
-        await pumpFullDemoPage(tester, guideSpec, ThemeMode.light);
-        await tester.tap(find.text(followSystem ? '跟随系统' : '深色'));
-        await tester.pumpAndSettle();
-        expect(find.text('当前外观：深色'), findsNWidgets(2));
-        expect(find.text('brandColor：#699EF5'), findsNWidgets(2));
-        expect(find.textContaining('单元测试'), findsNothing);
-        await _expectGuideGolden(
-          tester,
-          'custom_theme_${followSystem ? 'system' : 'manual'}_dark.png',
-        );
-        await disposeDemoPage(tester);
-      },
-      tags: 'golden',
-    );
+    for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+      testWidgets(
+        'custom theme guide ${followSystem ? 'system' : 'manual'} ${mode.name} switch golden',
+        (tester) async {
+          final isDark = mode == ThemeMode.dark;
+          tester.platformDispatcher.platformBrightnessTestValue = isDark
+              ? Brightness.dark
+              : Brightness.light;
+          addTearDown(
+            tester.platformDispatcher.clearPlatformBrightnessTestValue,
+          );
+          await pumpFullDemoPage(
+            tester,
+            guideSpec,
+            isDark ? ThemeMode.light : ThemeMode.dark,
+          );
+          await tester.tap(
+            find.text(
+              followSystem
+                  ? '跟随系统'
+                  : isDark
+                  ? '深色'
+                  : '浅色',
+            ),
+          );
+          await tester.pumpAndSettle();
+          expect(find.text('当前外观：${isDark ? '深色' : '浅色'}'), findsNWidgets(2));
+          expect(
+            find.text('brandColor：#${isDark ? '699EF5' : '0052D9'}'),
+            findsNWidgets(2),
+          );
+          expect(find.textContaining('单元测试'), findsNothing);
+          await _expectGuideGolden(
+            tester,
+            'custom_theme_${followSystem ? 'system' : 'manual'}_${mode.name}.png',
+          );
+          await disposeDemoPage(tester);
+        },
+        tags: 'golden',
+      );
+    }
   }
 
   testWidgets('Theme Demo lists the current palette keys', (tester) async {

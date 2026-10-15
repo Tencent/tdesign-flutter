@@ -272,7 +272,7 @@ void main() {
     await tester.pumpWidget(buildPage(showTestModule: false));
     await tester.pump();
     expect(find.text('02 单元测试'), findsNothing);
-  });
+  }, tags: 'internal-demo');
 
   testWidgets('Link Demo 使用页面背景与白色示例行分层', (tester) async {
     final token = TThemeData.defaultData();
