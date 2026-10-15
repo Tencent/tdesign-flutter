@@ -2,6 +2,8 @@
 
 ## 1.0 发布前准备
 
+本轮状态、剩余项和关闭条件统一记录在 [发布候选收口记录](./specs/074-release-readiness-closeout/readiness.md)。先按该记录处理缺口，再在独立 `release/1.0.0` PR 升级版本并冻结候选；版本 PR 的建立不表示已经放行。
+
 1. 固定发布候选提交，记录完整 SHA、目标版本及 Flutter/Dart 版本；统一组件 pubspec、示例 pubspec 与 example/assets/version 的版本展示及构建号。本轮准备不等于已经发布 1.0。
 2. 从 `0.2.7` 升级的说明统一维护在 [迁移指南](./tdesign-site/site/docs/migration-0.2.7-to-1.0.md)。执行 `node scripts/sync-readme.mjs` 更新指南内可运行片段并同步包内副本，随后用 `--check` 确认；站点直接读取源文件，不直接改包内副本。
 3. 在 Flutter 3.32.0 和当前 stable 的隔离环境解析依赖并执行严格分析、Upload 回归、独立迁移消费测试；记录图片选择器及平台实现包的实际版本。最低版本、正常升级、业务同时依赖较新图片选择器三个场景分别留证。

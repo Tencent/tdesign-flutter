@@ -29,6 +29,10 @@ Widget migratedTextTheme(BuildContext context, Widget child) {
     child: child,
   );
 }
+
+TThemeData migratedThemeCopy(TThemeData tokens) {
+  return tokens.copyWith(name: 'business', spacerMap: const {'spacer3': 12});
+}
 // migration:theme:end
 
 // migration:choices:start
@@ -176,3 +180,51 @@ String migratedLoading(BuildContext context) {
 }
 
 // migration:toast:end
+
+// migration:removed-capabilities:start
+TBadgeConfig? migratedBadge(bool showBadge, Widget badge) {
+  return showBadge ? TBadgeConfig.custom(badge: badge) : null;
+}
+
+TMessageMarquee migratedMarquee(int speedMs, bool repeat, int delayMs) {
+  return TMessageMarquee(
+    duration: Duration(milliseconds: speedMs),
+    repeat: repeat,
+    delay: Duration(milliseconds: delayMs),
+  );
+}
+
+Widget migratedImageDialog(Image image) {
+  return TDialog(
+    title: const Text('活动说明'),
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [image, const Text('图片下方的业务说明')],
+    ),
+    actions: const [TDialogAction(child: Text('知道了'), result: true)],
+  );
+}
+
+Widget migratedCustomCounter(int milliseconds, Color color) {
+  return TTimeCounter(
+    time: milliseconds,
+    autoStart: false,
+    content: (time) => Text(
+      '${time ~/ Duration.millisecondsPerSecond}s',
+      style: TextStyle(color: color),
+    ),
+  );
+}
+
+Widget migratedProgress(double fraction) {
+  return TProgress.circular(value: fraction);
+}
+
+Widget migratedIndexes() {
+  return TIndexes(
+    indexList: const ['A'],
+    builderContent: (context, index) => Text(index),
+  );
+}
+
+// migration:removed-capabilities:end

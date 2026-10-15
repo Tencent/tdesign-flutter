@@ -1,0 +1,2921 @@
+{
+  "baseline": "0.2.7 fa6544628bb2cbb8e1122aa79feca8043f9822d9",
+  "candidate": "7d3cb3e26d3a83f4a1154061504d062fe7ac488e",
+  "scope": "200 PRs found on the first-parent candidate history; excludes issue references in commit subjects. PR presence is not exhaustive verification of all changes inside that PR.",
+  "counts": {
+    "present-in-generated-preview": 106,
+    "added-to-reviewed-preview": 21,
+    "excluded-maintenance-or-version-record": 65,
+    "covered-or-intermediate-api-not-retained": 4,
+    "final-behavior-review-required": 4
+  },
+  "remainingReview": [
+    {
+      "number": 868,
+      "reason": "旧胶囊Slider滑块边界修复：现实现已重构，须以最终几何/视觉结果决定如何表述，不能仅沿用旧补丁标题。"
+    },
+    {
+      "number": 890,
+      "reason": "旧TDTable固定首列与纵向滚动修复：需对最终TTable约束与固定列场景确认，不宣传旧接口的兼容修复。"
+    },
+    {
+      "number": 880,
+      "reason": "旧TreeSelect向外弯折圆角：新实现外观以最终设计验收为准，不仅凭旧PR认定该像素效果通过。"
+    },
+    {
+      "number": 903,
+      "reason": "旧Web文字垂直居中补偿：全局补偿入口已删除，应按最终文字/字体布局确认，不宣称恢复旧补偿算法。"
+    }
+  ],
+  "previewChanges": {
+    "addedEntries": 18,
+    "mergedDuplicateThemeDocEntries": 5,
+    "removedSpecMetadataEntries": 2,
+    "movedMisgroupedFixAndBreakingEntries": true,
+    "iconMigrationWarning": "TDIcons->external TIcons0.0.6 has 3 removed glyph names; all->allIconsMap; old private .name/font identity not preserved."
+  },
+  "entries": [
+    {
+      "number": 1168,
+      "title": "fix(demo): 修复构建日期、图片删除、代码入口和气泡溢出",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1168",
+      "mergedAt": "2026-10-15T12:18:30Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1167,
+      "title": "docs(site): 补充迁移侧边导航与官方 Demo 体验入口",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1167",
+      "mergedAt": "2026-10-15T11:44:22Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1166,
+      "title": "test(release): 补充迁移主题与 Token 消费验证",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1166",
+      "mergedAt": "2026-10-15T11:21:46Z",
+      "declaredNoChangelog": true,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 19,
+      "productionAreas": [
+        "badge",
+        "button",
+        "calendar",
+        "date_time_picker",
+        "dialog",
+        "indexes",
+        "link",
+        "loading",
+        "popup",
+        "refresh",
+        "swiper",
+        "time_counter",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1165,
+      "title": "fix(demo): 统一内部测试区块展示并隔离公开快照",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1165",
+      "mergedAt": "2026-10-15T10:44:30Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1164,
+      "title": "fix(test): 修复既有快照确定性与失败图片收集",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1164",
+      "mergedAt": "2026-10-15T10:23:44Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1160,
+      "title": "fix(components): 修复内置文字垂直居中与默认尺寸裁切",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1160",
+      "mergedAt": "2026-10-14T17:57:12Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 57,
+      "productionAreas": [
+        "action_sheet",
+        "backtop",
+        "badge",
+        "calendar",
+        "cascader",
+        "checkbox",
+        "date_time_picker",
+        "dropdown_menu",
+        "fab",
+        "image_viewer",
+        "indexes",
+        "input",
+        "loading",
+        "message",
+        "notice_bar",
+        "picker",
+        "progress",
+        "rate",
+        "refresh",
+        "search",
+        "sidebar",
+        "slider",
+        "stepper",
+        "steps",
+        "swiper",
+        "switch",
+        "tabbar",
+        "tabs",
+        "tag",
+        "text",
+        "time_counter",
+        "tree",
+        "upload",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1159,
+      "title": "fix(date-time-picker): 修复文案更新导致滚轮拖动和惯性中断",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1159",
+      "mergedAt": "2026-10-13T20:36:02Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "date_time_picker"
+      ]
+    },
+    {
+      "number": 1157,
+      "title": "breaking(components): 收口 TD 内置配置并隔离 Material 主题",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1157",
+      "mergedAt": "2026-10-13T17:07:37Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 73,
+      "productionAreas": [
+        "action_sheet",
+        "avatar",
+        "backtop",
+        "button",
+        "calendar",
+        "cascader",
+        "cell",
+        "checkbox",
+        "collapse",
+        "date_time_picker",
+        "dialog",
+        "divider",
+        "drawer",
+        "dropdown_menu",
+        "empty",
+        "fab",
+        "footer",
+        "form",
+        "icon",
+        "image",
+        "image_viewer",
+        "indexes",
+        "input",
+        "link",
+        "message",
+        "navbar",
+        "notice_bar",
+        "picker",
+        "popover",
+        "progress",
+        "radio",
+        "rate",
+        "result",
+        "search",
+        "sidebar",
+        "slider",
+        "stepper",
+        "steps",
+        "swipe_cell",
+        "swiper",
+        "switch",
+        "tabbar",
+        "table",
+        "tabs",
+        "tag",
+        "text",
+        "textarea",
+        "toast",
+        "tree",
+        "upload",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1158,
+      "title": "feat: 统一 Material 导出并简化快速开始",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1158",
+      "mergedAt": "2026-10-13T07:52:42Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1154,
+      "title": "breaking(toast): 统一时长、背景交互阻断与位置契约",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1154",
+      "mergedAt": "2026-10-10T08:46:34Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "toast"
+      ]
+    },
+    {
+      "number": 1153,
+      "title": "fix(upload): 修复异步文件选择覆盖与过期配置问题",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1153",
+      "mergedAt": "2026-10-10T07:23:12Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "upload"
+      ]
+    },
+    {
+      "number": 1149,
+      "title": "docs(api): 完善公开契约与组件 Theme 配置表",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1149",
+      "mergedAt": "2026-10-09T15:12:34Z",
+      "declaredNoChangelog": true,
+      "status": "covered-or-intermediate-api-not-retained",
+      "reason": "157个lib文件的规范化AST均未改变，属于注释与生成API说明整理，保留无需运行行为Changelog的处置。",
+      "productionFileCount": 157,
+      "productionAreas": [
+        "action_sheet",
+        "avatar",
+        "backtop",
+        "badge",
+        "button",
+        "calendar",
+        "cascader",
+        "cell",
+        "checkbox",
+        "collapse",
+        "date_time_picker",
+        "dialog",
+        "divider",
+        "drawer",
+        "dropdown_menu",
+        "empty",
+        "fab",
+        "footer",
+        "form",
+        "icon",
+        "image",
+        "image_viewer",
+        "indexes",
+        "input",
+        "link",
+        "loading",
+        "message",
+        "navbar",
+        "notice_bar",
+        "picker",
+        "popover",
+        "popup",
+        "progress",
+        "radio",
+        "rate",
+        "refresh",
+        "result",
+        "search",
+        "sidebar",
+        "skeleton",
+        "slider",
+        "stepper",
+        "steps",
+        "swipe_cell",
+        "swiper",
+        "switch",
+        "tabbar",
+        "table",
+        "tabs",
+        "tag",
+        "text",
+        "textarea",
+        "time_counter",
+        "toast",
+        "tree",
+        "upload",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1151,
+      "title": "fix(TUpload): 区分选择器错误与业务回调异常",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1151",
+      "mergedAt": "2026-10-09T09:27:13Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "upload"
+      ]
+    },
+    {
+      "number": 1152,
+      "title": "breaking(theme): 精简 TThemeData API 并修复主题过渡",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1152",
+      "mergedAt": "2026-10-09T07:40:56Z",
+      "declaredNoChangelog": true,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1132,
+      "title": "fix(site): 完善 Flutter Demo 主题 Token 控制",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1132",
+      "mergedAt": "2026-10-07T15:46:24Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1146,
+      "title": "breaking(theme): 标准化全局 Token 并收敛组件 Theme 与视觉 API",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1146",
+      "mergedAt": "2026-10-04T01:22:24Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 143,
+      "productionAreas": [
+        "action_sheet",
+        "avatar",
+        "backtop",
+        "badge",
+        "button",
+        "calendar",
+        "cascader",
+        "cell",
+        "checkbox",
+        "collapse",
+        "dialog",
+        "divider",
+        "drawer",
+        "dropdown_menu",
+        "empty",
+        "fab",
+        "footer",
+        "form",
+        "icon",
+        "image_viewer",
+        "indexes",
+        "input",
+        "link",
+        "loading",
+        "message",
+        "navbar",
+        "notice_bar",
+        "picker",
+        "popover",
+        "popup",
+        "progress",
+        "radio",
+        "rate",
+        "refresh",
+        "result",
+        "search",
+        "sidebar",
+        "skeleton",
+        "slider",
+        "stepper",
+        "steps",
+        "swipe_cell",
+        "swiper",
+        "switch",
+        "tabbar",
+        "table",
+        "tabs",
+        "tag",
+        "text",
+        "textarea",
+        "time_counter",
+        "toast",
+        "tree",
+        "upload",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1145,
+      "title": "fix(TPullDownRefresh): 修复暗色模式文字层级",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1145",
+      "mergedAt": "2026-09-23T14:40:30Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "refresh"
+      ]
+    },
+    {
+      "number": 1139,
+      "title": "test(Demo): 补齐 57 个组件交互态 Golden",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1139",
+      "mergedAt": "2026-09-23T10:33:37Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1144,
+      "title": "feat(components): 完善组件二次走查对齐",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1144",
+      "mergedAt": "2026-09-23T07:13:45Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 10,
+      "productionAreas": [
+        "button",
+        "cascader",
+        "checkbox",
+        "dropdown_menu",
+        "form",
+        "input",
+        "slider",
+        "tabbar",
+        "textarea",
+        "tree"
+      ]
+    },
+    {
+      "number": 1143,
+      "title": "breaking(components): 对齐组件 Demo 与设计规范",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1143",
+      "mergedAt": "2026-09-21T14:04:34Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 12,
+      "productionAreas": [
+        "button",
+        "cell",
+        "checkbox",
+        "collapse",
+        "footer",
+        "popover",
+        "progress",
+        "swiper",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1142,
+      "title": "refactor(example): 重组全组件 Demo 并映射 Web 文档",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1142",
+      "mergedAt": "2026-09-20T10:46:11Z",
+      "declaredNoChangelog": true,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "calendar"
+      ]
+    },
+    {
+      "number": 1141,
+      "title": "breaking(Badge): 统一徽标 API 与组合组件默认定位",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1141",
+      "mergedAt": "2026-09-19T16:40:50Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 19,
+      "productionAreas": [
+        "action_sheet",
+        "badge",
+        "sidebar",
+        "tabbar",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1117,
+      "title": "feat(TIndexes): 添加安全区域适配功能",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1117",
+      "mergedAt": "2026-09-17T19:57:50Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "indexes"
+      ]
+    },
+    {
+      "number": 1140,
+      "title": "breaking(table): 对齐 Figma 表格 Demo 与 API",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1140",
+      "mergedAt": "2026-09-17T18:47:23Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 3,
+      "productionAreas": [
+        "table"
+      ]
+    },
+    {
+      "number": 1138,
+      "title": "breaking(TabBar): 修复双层菜单默认宽度",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1138",
+      "mergedAt": "2026-09-17T04:08:22Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "tabbar"
+      ]
+    },
+    {
+      "number": 1114,
+      "title": "chore(config): 更新分析选项配置以排除构建和平台特定目录",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1114",
+      "mergedAt": "2026-09-17T03:59:20Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1115,
+      "title": "docs(theme): 移除多主题支持的过时文档说明",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1115",
+      "mergedAt": "2026-09-17T03:38:46Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1136,
+      "title": "breaking(navbar): 修复主题契约并补齐视觉回归",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1136",
+      "mergedAt": "2026-09-17T02:58:16Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "navbar"
+      ]
+    },
+    {
+      "number": 1137,
+      "title": "fix(theme): 修复 Indexes 与 SideBar 主题插值",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1137",
+      "mergedAt": "2026-09-17T02:45:45Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "indexes",
+        "sidebar"
+      ]
+    },
+    {
+      "number": 1135,
+      "title": "fix(TSideBar): 修复徽标与文案间距",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1135",
+      "mergedAt": "2026-09-17T01:40:49Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "sidebar"
+      ]
+    },
+    {
+      "number": 1134,
+      "title": "test(drawer): 补齐按压态视觉回归",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1134",
+      "mergedAt": "2026-09-17T01:40:22Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1133,
+      "title": "fix(indexes): 避让顶部系统安全区",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1133",
+      "mergedAt": "2026-09-16T22:27:43Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1131,
+      "title": "fix(TSwipeCell): 修复滑动操作文字反色",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1131",
+      "mergedAt": "2026-09-16T19:34:36Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "swipe_cell"
+      ]
+    },
+    {
+      "number": 1130,
+      "title": "fix(Demo): 对齐 PullDownRefresh 骨架模块顺序",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1130",
+      "mergedAt": "2026-09-16T18:56:20Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1129,
+      "title": "fix(TPopover): 对齐四角气泡箭头边距",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1129",
+      "mergedAt": "2026-09-16T18:54:57Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "popover"
+      ]
+    },
+    {
+      "number": 1128,
+      "title": "fix(TNoticeBar): 对齐前缀图标与正文间距",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1128",
+      "mergedAt": "2026-09-16T18:33:08Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "notice_bar"
+      ]
+    },
+    {
+      "number": 1127,
+      "title": "fix(TMessage): 对齐默认边距与关闭通知示例",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1127",
+      "mergedAt": "2026-09-16T16:47:03Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "message"
+      ]
+    },
+    {
+      "number": 1126,
+      "title": "fix(Loading): 修复 activity 指示器默认颜色",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1126",
+      "mergedAt": "2026-09-16T15:50:44Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "loading"
+      ]
+    },
+    {
+      "number": 1112,
+      "title": "fix(Tag): 补充超长省略与可选描边示例",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1112",
+      "mergedAt": "2026-09-16T11:43:39Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1111,
+      "title": "breaking(TTextarea): 调整标题布局并补齐竖排样式",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1111",
+      "mergedAt": "2026-09-16T10:32:03Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "textarea"
+      ]
+    },
+    {
+      "number": 1125,
+      "title": "fix(DropdownMenu): 修复分栏禁用项背景色",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1125",
+      "mergedAt": "2026-09-16T08:50:54Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "dropdown_menu"
+      ]
+    },
+    {
+      "number": 1124,
+      "title": "fix(Dialog): 修正滚动条与示例像素差异",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1124",
+      "mergedAt": "2026-09-16T07:42:44Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "dialog"
+      ]
+    },
+    {
+      "number": 1123,
+      "title": "fix(ActionSheet): 补齐分页宫格并修正视觉间距",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1123",
+      "mergedAt": "2026-09-16T03:19:21Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 3,
+      "productionAreas": [
+        "action_sheet"
+      ]
+    },
+    {
+      "number": 1110,
+      "title": "fix(Demo): 对齐移动端示例页布局与 Search 视觉",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1110",
+      "mergedAt": "2026-09-15T11:28:04Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "search"
+      ]
+    },
+    {
+      "number": 1108,
+      "title": "fix(TRate): 修复评分样式与示例布局",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1108",
+      "mergedAt": "2026-09-15T03:05:37Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "rate"
+      ]
+    },
+    {
+      "number": 1096,
+      "title": "fix(TTimeCounter): 对齐倒计时展示与计时行为",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1096",
+      "mergedAt": "2026-09-15T02:44:38Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 6,
+      "productionAreas": [
+        "time_counter",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1105,
+      "title": "fix(Form): 对齐表单默认态、布局与操作样式",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1105",
+      "mergedAt": "2026-09-14T21:59:11Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 3,
+      "productionAreas": [
+        "form"
+      ]
+    },
+    {
+      "number": 1122,
+      "title": "fix(TStepper): 修复数字垂直居中",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1122",
+      "mergedAt": "2026-09-14T18:07:45Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 3,
+      "productionAreas": [
+        "stepper"
+      ]
+    },
+    {
+      "number": 1121,
+      "title": "fix(TPicker): 修复选择器弹层高度与滚轮裁切",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1121",
+      "mergedAt": "2026-09-14T08:12:27Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 6,
+      "productionAreas": [
+        "date_time_picker",
+        "picker",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1120,
+      "title": "fix(TPicker): 修复选项文字居中并对齐演示",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1120",
+      "mergedAt": "2026-09-14T02:36:33Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "picker"
+      ]
+    },
+    {
+      "number": 1119,
+      "title": "breaking(TRadio): 重构单选组状态源与布局契约",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1119",
+      "mergedAt": "2026-09-13T21:42:42Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "radio"
+      ]
+    },
+    {
+      "number": 1102,
+      "title": "breaking(TForm,TInput): 对齐标签字号、插槽间距与验证码样式",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1102",
+      "mergedAt": "2026-09-13T10:00:04Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "form",
+        "input"
+      ]
+    },
+    {
+      "number": 1104,
+      "title": "fix(checkbox): 对齐禁用态与卡片布局",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1104",
+      "mergedAt": "2026-09-12T21:59:49Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 4,
+      "productionAreas": [
+        "checkbox",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1118,
+      "title": "fix(Calendar): 修复日期文字颜色并完善演示",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1118",
+      "mergedAt": "2026-09-12T18:20:17Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "calendar"
+      ]
+    },
+    {
+      "number": 1100,
+      "title": "feat(TTabsBar): 补充选项卡尺寸与内容区样式",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1100",
+      "mergedAt": "2026-09-12T10:17:49Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "tabs",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1101,
+      "title": "breaking(TDivider): 调整垂直分割线默认间距",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1101",
+      "mergedAt": "2026-09-11T18:32:26Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "divider"
+      ]
+    },
+    {
+      "number": 1103,
+      "title": "breaking(TButton): 修复禁用态与浅色描边样式",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1103",
+      "mergedAt": "2026-09-11T17:01:59Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "button"
+      ]
+    },
+    {
+      "number": 1091,
+      "title": "breaking(ImageViewer): 统一关闭语义并支持缩放与下拉交互",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1091",
+      "mergedAt": "2026-09-11T15:01:53Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "image_viewer"
+      ]
+    },
+    {
+      "number": 1107,
+      "title": "fix(TBadge): 修复中文环境文字徽标样式与垂直对齐",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1107",
+      "mergedAt": "2026-09-11T01:36:18Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "badge",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1106,
+      "title": "feat(TBadge): 支持自定义徽标并修复右上角定位",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1106",
+      "mergedAt": "2026-09-10T20:17:20Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "badge"
+      ]
+    },
+    {
+      "number": 1095,
+      "title": "breaking(TSwiper): 收敛轮播状态并对齐分页视觉交互",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1095",
+      "mergedAt": "2026-09-10T20:13:07Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 3,
+      "productionAreas": [
+        "swiper"
+      ]
+    },
+    {
+      "number": 1094,
+      "title": "breaking(TSkeleton): 收敛预设形态并对齐骨架屏视觉与动效",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1094",
+      "mergedAt": "2026-09-10T15:40:54Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "skeleton"
+      ]
+    },
+    {
+      "number": 1093,
+      "title": "breaking(TResult): 统一状态与描述 API 并对齐视觉语义",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1093",
+      "mergedAt": "2026-09-10T10:24:38Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "result"
+      ]
+    },
+    {
+      "number": 1092,
+      "title": "breaking(TProgress): 收敛进度形态、状态与交互语义",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1092",
+      "mergedAt": "2026-09-10T05:25:47Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "progress"
+      ]
+    },
+    {
+      "number": 1087,
+      "title": "breaking(TImage): 对齐图片形状、适配与加载状态契约",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1087",
+      "mergedAt": "2026-09-09T21:08:58Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "image"
+      ]
+    },
+    {
+      "number": 1089,
+      "title": "breaking(TCollapse): 收敛受控展开契约与头部扩展点",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1089",
+      "mergedAt": "2026-09-09T16:57:23Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "collapse"
+      ]
+    },
+    {
+      "number": 1086,
+      "title": "breaking(TEmpty): consolidate content composition API",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1086",
+      "mergedAt": "2026-09-09T08:08:00Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "empty"
+      ]
+    },
+    {
+      "number": 1088,
+      "title": "breaking(TFooter): consolidate content composition API",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1088",
+      "mergedAt": "2026-09-09T07:54:14Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "footer"
+      ]
+    },
+    {
+      "number": 1065,
+      "title": "breaking(TTreeSelect): 对齐设计稿示例与默认列宽",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1065",
+      "mergedAt": "2026-09-09T06:25:25Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "tree"
+      ]
+    },
+    {
+      "number": 1090,
+      "title": "feat(avatar): 对齐移动端设计并收敛头像与头像组 API",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1090",
+      "mergedAt": "2026-09-08T21:57:06Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 4,
+      "productionAreas": [
+        "avatar"
+      ]
+    },
+    {
+      "number": 1064,
+      "title": "fix(TStepper): 修复受控交互与主题插值并对齐公开示例",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1064",
+      "mergedAt": "2026-09-08T19:04:32Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 4,
+      "productionAreas": [
+        "stepper"
+      ]
+    },
+    {
+      "number": 1084,
+      "title": "breaking(TSteps): 收敛进度、可选择与纯展示模式",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1084",
+      "mergedAt": "2026-09-08T18:26:06Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 10,
+      "productionAreas": [
+        "steps",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1063,
+      "title": "fix(TSlider): 修复 TSlider/TRangeSlider 默认视觉与主题优先级并回归公开 Demo",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1063",
+      "mergedAt": "2026-09-08T17:10:13Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "slider"
+      ]
+    },
+    {
+      "number": 1085,
+      "title": "breaking(tabbar): 收敛底部标签栏设计与公开契约",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1085",
+      "mergedAt": "2026-09-08T15:00:47Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 5,
+      "productionAreas": [
+        "tabbar",
+        "text",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1099,
+      "title": "feat(popover): 新增锚点控制模式并修复主题插值",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1099",
+      "mergedAt": "2026-09-08T13:31:10Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "popover"
+      ]
+    },
+    {
+      "number": 1083,
+      "title": "breaking(TSideBar): 收敛侧边栏设计与公开契约",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1083",
+      "mergedAt": "2026-09-08T09:47:54Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 4,
+      "productionAreas": [
+        "sidebar"
+      ]
+    },
+    {
+      "number": 1060,
+      "title": "breaking(TCascader): 对齐级联面板与公开示例",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1060",
+      "mergedAt": "2026-09-08T06:32:09Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 4,
+      "productionAreas": [
+        "cascader",
+        "search"
+      ]
+    },
+    {
+      "number": 1082,
+      "title": "breaking(TNavBar): 收敛导航栏 API、主题与标题样式",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1082",
+      "mergedAt": "2026-09-07T13:53:38Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "navbar"
+      ]
+    },
+    {
+      "number": 1081,
+      "title": "breaking(TIndexes): 收敛索引设计与交互契约",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1081",
+      "mergedAt": "2026-09-06T22:30:31Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 4,
+      "productionAreas": [
+        "indexes"
+      ]
+    },
+    {
+      "number": 1080,
+      "title": "breaking(TDrawer): 收敛为声明式内容组件与 showTDrawer 浮层契约",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1080",
+      "mergedAt": "2026-09-06T00:54:01Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 4,
+      "productionAreas": [
+        "drawer",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1079,
+      "title": "breaking(TBackTop): 收敛 API 与 Theme 契约，修复 Demo 交互与 FAB 宿主动画",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1079",
+      "mergedAt": "2026-09-05T19:27:56Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 3,
+      "productionAreas": [
+        "backtop",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1078,
+      "title": "refactor(test): 统一组件回归测试清单",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1078",
+      "mergedAt": "2026-09-04T21:27:23Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1061,
+      "title": "feat(TDateTimePicker): 新增月日模式并完善滚轮交互",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1061",
+      "mergedAt": "2026-09-04T19:48:38Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 5,
+      "productionAreas": [
+        "date_time_picker"
+      ]
+    },
+    {
+      "number": 1076,
+      "title": "fix(TPicker): 修复主题覆盖顺序和高度插值",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1076",
+      "mergedAt": "2026-09-04T19:13:45Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "picker"
+      ]
+    },
+    {
+      "number": 1077,
+      "title": "docs(skills): 完善组件主题优先级与插值审查规则",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1077",
+      "mergedAt": "2026-09-04T19:13:26Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1062,
+      "title": "breaking(picker): 恢复受控选择并完善滚轮交互与示例",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1062",
+      "mergedAt": "2026-09-04T08:47:38Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 6,
+      "productionAreas": [
+        "picker",
+        "popup"
+      ]
+    },
+    {
+      "number": 1075,
+      "title": "docs(skills): clarify demo ownership and consolidate review rules",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1075",
+      "mergedAt": "2026-09-04T03:08:10Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1059,
+      "title": "breaking(calendar): align Calendar demo and consolidate public API",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1059",
+      "mergedAt": "2026-09-03T21:20:36Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 5,
+      "productionAreas": [
+        "calendar"
+      ]
+    },
+    {
+      "number": 1034,
+      "title": "breaking(dropdown-menu): 明确动画主题继承并修复布局与锚定",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1034",
+      "mergedAt": "2026-09-03T11:34:08Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 3,
+      "productionAreas": [
+        "dropdown_menu"
+      ]
+    },
+    {
+      "number": 1036,
+      "title": "breaking(dialog): 普通操作默认配色调整为浅色填充并收敛操作排序、关闭结果与间距字段可空",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1036",
+      "mergedAt": "2026-09-03T08:00:28Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "dialog"
+      ]
+    },
+    {
+      "number": 1030,
+      "title": "breaking(ActionSheet): 收敛布局、选择、内容样式与高度语义",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1030",
+      "mergedAt": "2026-09-02T20:22:10Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 11,
+      "productionAreas": [
+        "action_sheet",
+        "badge",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1071,
+      "title": "breaking(TBadge): 收敛徽标形态与尺寸 API",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1071",
+      "mergedAt": "2026-09-02T16:34:35Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 3,
+      "productionAreas": [
+        "badge",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1072,
+      "title": "breaking(Tabs): 收敛选项卡 API 与主题边界",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1072",
+      "mergedAt": "2026-09-02T16:10:55Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 5,
+      "productionAreas": [
+        "tabs"
+      ]
+    },
+    {
+      "number": 1070,
+      "title": "fix(rate, badge): 修复文字垂直对齐",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1070",
+      "mergedAt": "2026-09-01T19:03:41Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "badge",
+        "rate"
+      ]
+    },
+    {
+      "number": 1035,
+      "title": "breaking(TMessage): 收敛状态与时长 API 并对齐默认展示契约与公开 Demo",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1035",
+      "mergedAt": "2026-08-31T22:46:33Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 4,
+      "productionAreas": [
+        "message",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1031,
+      "title": "breaking(TLoading): size 改为 double 像素值并调整默认布局与动画，修复自定义图标旋转与显示",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1031",
+      "mergedAt": "2026-08-31T18:35:49Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 6,
+      "productionAreas": [
+        "loading",
+        "refresh",
+        "sidebar"
+      ]
+    },
+    {
+      "number": 1033,
+      "title": "breaking(popover): 收敛内容与定位公开 API，对齐公开 Demo 并同步站点文档",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1033",
+      "mergedAt": "2026-08-31T07:35:54Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 4,
+      "productionAreas": [
+        "popover",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1032,
+      "title": "breaking(TNoticeBar): 收敛 prefix/operation/status 插槽与状态契约并修复滚动距离",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1032",
+      "mergedAt": "2026-08-30T19:34:30Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 4,
+      "productionAreas": [
+        "notice_bar",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1058,
+      "title": "breaking(Tag,Popover): 删除 Theme 配色与形态选择器，新增 TTag.variant 并重命名 TPopoverColorScheme",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1058",
+      "mergedAt": "2026-08-30T19:22:37Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 10,
+      "productionAreas": [
+        "button",
+        "popover",
+        "tag",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1037,
+      "title": "breaking(popup): 收敛蒙层、插槽与生命周期 API 并对齐官方默认行为",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1037",
+      "mergedAt": "2026-08-29T22:50:55Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 12,
+      "productionAreas": [
+        "action_sheet",
+        "dialog",
+        "drawer",
+        "popup",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1056,
+      "title": "breaking(rate): 对齐评分组件契约、交互与示例",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1056",
+      "mergedAt": "2026-08-28T09:37:45Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "rate"
+      ]
+    },
+    {
+      "number": 1049,
+      "title": "breaking(radio): 对齐默认勾选、分割线与文本省略样式",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1049",
+      "mergedAt": "2026-08-27T21:11:43Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "radio"
+      ]
+    },
+    {
+      "number": 1057,
+      "title": "fix(checkbox): 修复样式尺寸未跟随主题 token",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1057",
+      "mergedAt": "2026-08-27T20:27:32Z",
+      "declaredNoChangelog": true,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "checkbox"
+      ]
+    },
+    {
+      "number": 1048,
+      "title": "breaking(checkbox): 调整指示器、分割线、多行文案与行高默认值并收敛示例布局",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1048",
+      "mergedAt": "2026-08-27T18:25:21Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 4,
+      "productionAreas": [
+        "checkbox"
+      ]
+    },
+    {
+      "number": 1054,
+      "title": "ci: 增加组件覆盖率与快照回归门禁",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1054",
+      "mergedAt": "2026-08-27T07:16:37Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1050,
+      "title": "breaking(TSwitch): 独立加载状态并收敛示例",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1050",
+      "mergedAt": "2026-08-26T13:09:20Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "switch"
+      ]
+    },
+    {
+      "number": 1047,
+      "title": "breaking(upload): 收敛文件布局、可重试失败与文件点击契约",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1047",
+      "mergedAt": "2026-08-26T08:44:58Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 4,
+      "productionAreas": [
+        "upload",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1038,
+      "title": "breaking(form-input): 重构字段校验与文本输入组件契约",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1038",
+      "mergedAt": "2026-08-25T18:49:51Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 12,
+      "productionAreas": [
+        "form",
+        "input",
+        "textarea",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1053,
+      "title": "test(Link): 更新默认颜色隔离快照",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1053",
+      "mergedAt": "2026-08-25T09:32:49Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1052,
+      "title": "test(Link): 修正主题优先级断言",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1052",
+      "mergedAt": "2026-08-25T08:32:27Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1051,
+      "title": "breaking(Search): 收敛搜索框 API 与交互契约",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1051",
+      "mergedAt": "2026-08-24T11:08:09Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "search"
+      ]
+    },
+    {
+      "number": 1043,
+      "title": "breaking(Link): 收敛链接 API 与主题状态契约",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1043",
+      "mergedAt": "2026-08-23T20:10:08Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 6,
+      "productionAreas": [
+        "link",
+        "message",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1044,
+      "title": "breaking(Divider): 统一默认几何与主题样式契约",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1044",
+      "mergedAt": "2026-08-23T18:24:44Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 3,
+      "productionAreas": [
+        "divider",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1045,
+      "title": "docs(Icon): 完善图标目录、组件文档与视觉验证",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1045",
+      "mergedAt": "2026-08-23T17:29:04Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "icon"
+      ]
+    },
+    {
+      "number": 1042,
+      "title": "breaking(TText): 重构 Flutter 原生文本与字体加载契约",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1042",
+      "mergedAt": "2026-08-23T16:39:23Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 8,
+      "productionAreas": [
+        "action_sheet",
+        "loading",
+        "popover",
+        "tabbar",
+        "text"
+      ]
+    },
+    {
+      "number": 1039,
+      "title": "breaking(TButton): 对齐小程序 Button 契约，统一尺寸/tap target/圆角，移除 filled 与 margin",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1039",
+      "mergedAt": "2026-08-22T15:45:51Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 4,
+      "productionAreas": [
+        "button"
+      ]
+    },
+    {
+      "number": 1040,
+      "title": "breaking(TFab): 对齐悬浮按钮视觉与拖拽契约",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1040",
+      "mergedAt": "2026-08-22T09:46:00Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 6,
+      "productionAreas": [
+        "fab"
+      ]
+    },
+    {
+      "number": 1041,
+      "title": "docs: 补充 skill 脚本产物说明并优化 PR 更新日志模板",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1041",
+      "mergedAt": "2026-08-22T08:52:24Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1029,
+      "title": "breaking(TPullDownRefresh): 新增最小化、Flutter 模式的下拉刷新组件并移除低层 TRefreshHeader",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1029",
+      "mergedAt": "2026-08-19T08:54:43Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 9,
+      "productionAreas": [
+        "refresh",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1021,
+      "title": "breaking(TSwipeCell): 对齐官方交互与视觉默认值并收敛组件 API",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1021",
+      "mergedAt": "2026-08-18T19:11:51Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 6,
+      "productionAreas": [
+        "swipe_cell",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 1026,
+      "title": "fix(TCell): 修复辅助信息默认字号与右侧插槽对齐",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1026",
+      "mergedAt": "2026-08-18T09:40:30Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "cell"
+      ]
+    },
+    {
+      "number": 1025,
+      "title": "chore(cnb): 分支新增「启动预览」按钮，以仅预览模式构建并打开 Flutter Web 预览",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1025",
+      "mergedAt": "2026-08-18T07:20:20Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1024,
+      "title": " chore(site): 升级构建链并清理遗留依赖",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1024",
+      "mergedAt": "2026-08-17T17:53:05Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1023,
+      "title": "docs: 优化 commit type 与 CHANGELOG 分组对应关系，改用 breaking 替代 ⚠️ 前缀",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1023",
+      "mergedAt": "2026-08-17T10:50:34Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1022,
+      "title": "fix(example): 路由名归一化兜底匹配，修复站点 kebab-case 路径无法命中 camelCase 路由的问题",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1022",
+      "mergedAt": "2026-08-17T10:01:51Z",
+      "declaredNoChangelog": true,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1018,
+      "title": "refactor(TToast): 收敛 preventTap 到 TOverlayConfig 并新增可见遮罩与展示位置",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1018",
+      "mergedAt": "2026-08-16T16:39:56Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "toast"
+      ]
+    },
+    {
+      "number": 1019,
+      "title": "ci(android): 提高 Gradle JVM 堆内存以修复 release 构建 OOM",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1019",
+      "mergedAt": "2026-08-16T12:02:28Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1013,
+      "title": "refactor(ci): 复用 develop.push 与 pull_request 的 CI pipeline 模板以精简 .cnb.yml",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1013",
+      "mergedAt": "2026-08-16T10:05:20Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1010,
+      "title": "chore(skill,ci): 补充文档注释/lint 约定并新增静态检查",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1010",
+      "mergedAt": "2026-08-14T09:19:27Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 10,
+      "productionAreas": [
+        "button",
+        "date_time_picker",
+        "dropdown_menu",
+        "picker",
+        "slider",
+        "swipe_cell",
+        "swiper",
+        "switch",
+        "tabs",
+        "toast"
+      ]
+    },
+    {
+      "number": 1012,
+      "title": "chore(specs): 将 swipe-cell theme review spec 编号 004 顺延为 005",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1012",
+      "mergedAt": "2026-08-14T09:18:27Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1011,
+      "title": "refactor(ci): 将 .cnb.yml 公共可复用片段抽离到 .cnb 目录，改用 include + !reference 引入",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1011",
+      "mergedAt": "2026-08-14T06:47:41Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1007,
+      "title": "feat(TSwipeCell): 补齐组件级主题覆盖能力",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1007",
+      "mergedAt": "2026-08-13T20:03:40Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 4,
+      "productionAreas": [
+        "swipe_cell"
+      ]
+    },
+    {
+      "number": 1005,
+      "title": "fix(toast): align toast background color with TDesign Mobile",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1005",
+      "mergedAt": "2026-08-13T19:32:08Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "toast"
+      ]
+    },
+    {
+      "number": 1006,
+      "title": "docs: breaking change 更新日志条目加 ⚠️ 前置标记",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1006",
+      "mergedAt": "2026-08-13T19:11:31Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 999,
+      "title": "chore(ci): add cnb build",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/999",
+      "mergedAt": "2026-08-13T18:12:18Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 998,
+      "title": "ci(autofix): generate example code txt print verbose",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/998",
+      "mergedAt": "2026-08-13T17:54:43Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1004,
+      "title": "chore: use AGENTS.md + repo-level skill for repo conventions",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1004",
+      "mergedAt": "2026-08-13T17:40:56Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1001,
+      "title": "chore: use `AGENTS.md` + repo-level skill for repo conventions",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1001",
+      "mergedAt": "2026-08-13T12:57:04Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 1002,
+      "title": "fix(example): follow Flutter SDK intl version",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/1002",
+      "mergedAt": "2026-08-13T08:22:44Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 988,
+      "title": "fix(ci): streamline generated-file autofix workflow",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/988",
+      "mergedAt": "2026-08-11T08:50:24Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 987,
+      "title": "chore: align example ordering and clean up obsolete V1.0 TODO markers",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/987",
+      "mergedAt": "2026-08-11T08:30:52Z",
+      "declaredNoChangelog": false,
+      "status": "present-in-generated-preview",
+      "reason": "已检查来源PR属于0.2.7后的候选祖先范围；PR链接存在不代表该PR所有子项和视觉均已验证。",
+      "productionFileCount": 17,
+      "productionAreas": [
+        "action_sheet",
+        "backtop",
+        "button",
+        "icon",
+        "indexes",
+        "loading",
+        "navbar",
+        "popover",
+        "steps",
+        "tabs",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 983,
+      "title": "ci: test Flutter 3.32.0 and `flutter@latest` builds",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/983",
+      "mergedAt": "2026-08-10T22:35:48Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 982,
+      "title": "docs(ci): clarify preview comment links",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/982",
+      "mergedAt": "2026-08-10T15:47:49Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 981,
+      "title": "chore(site): remove stale generated artifacts",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/981",
+      "mergedAt": "2026-08-10T15:42:05Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 984,
+      "title": "feat: 添加 CNB 同步工作流和环境配置文件",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/984",
+      "mergedAt": "2026-08-10T15:41:25Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 980,
+      "title": "fix(popover): harden lifecycle and adaptive positioning",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/980",
+      "mergedAt": "2026-08-10T07:08:31Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "popover"
+      ]
+    },
+    {
+      "number": 979,
+      "title": "refactor: consolidate Flutter documentation structure",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/979",
+      "mergedAt": "2026-08-09T17:58:49Z",
+      "declaredNoChangelog": false,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 977,
+      "title": "CI: 完全移除 AOP 残留与旧文档生成链路",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/977",
+      "mergedAt": "2026-08-08T20:27:51Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 978,
+      "title": "docs: add specs workflow and remove AI harness",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/978",
+      "mergedAt": "2026-08-08T18:38:45Z",
+      "declaredNoChangelog": false,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 974,
+      "title": "refractor(TDropdownMenu): 优化锚定遮罩与菜单切换动画",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/974",
+      "mergedAt": "2026-08-07T02:18:10Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "dropdown_menu"
+      ]
+    },
+    {
+      "number": 975,
+      "title": "fix(ci): harden preview build and publish workflows",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/975",
+      "mergedAt": "2026-08-05T18:32:44Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 976,
+      "title": "refactor: 移除 Flutter 版本适配包，明确最低支持 Flutter 3.32.0",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/976",
+      "mergedAt": "2026-08-05T09:03:26Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 3,
+      "productionAreas": [
+        "indexes"
+      ]
+    },
+    {
+      "number": 972,
+      "title": "chore: trim alpha pub package contents",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/972",
+      "mergedAt": "2026-07-31T13:27:16Z",
+      "declaredNoChangelog": false,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 971,
+      "title": "docs: align alpha release installation guide",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/971",
+      "mergedAt": "2026-07-31T13:04:26Z",
+      "declaredNoChangelog": false,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 970,
+      "title": "chore(release): 1.0.0-alpha.1 ",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/970",
+      "mergedAt": "2026-07-31T12:50:54Z",
+      "declaredNoChangelog": false,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 967,
+      "title": "!refactor: migrate v1 implementation",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/967",
+      "mergedAt": "2026-07-31T11:33:33Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 243,
+      "productionAreas": [
+        "action_sheet",
+        "avatar",
+        "backtop",
+        "badge",
+        "button",
+        "calendar",
+        "cascader",
+        "cell",
+        "checkbox",
+        "collapse",
+        "date_time_picker",
+        "dialog",
+        "divider",
+        "drawer",
+        "dropdown_menu",
+        "empty",
+        "fab",
+        "footer",
+        "form",
+        "icon",
+        "image",
+        "image_viewer",
+        "indexes",
+        "input",
+        "link",
+        "loading",
+        "message",
+        "navbar",
+        "notice_bar",
+        "picker",
+        "popover",
+        "popup",
+        "progress",
+        "radio",
+        "rate",
+        "refresh",
+        "result",
+        "search",
+        "sidebar",
+        "skeleton",
+        "slider",
+        "stepper",
+        "steps",
+        "swipe_cell",
+        "swiper",
+        "switch",
+        "tabbar",
+        "table",
+        "tabs",
+        "tag",
+        "text",
+        "textarea",
+        "time_counter",
+        "toast",
+        "tree",
+        "upload",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 964,
+      "title": "chore: update wx group source",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/964",
+      "mergedAt": "2026-07-20T07:58:00Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 958,
+      "title": "feat(Picker): 新增 `onColumnScrollEnd` 支持按需加载",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/958",
+      "mergedAt": "2026-06-09T08:20:57Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 23,
+      "productionAreas": [
+        "date_time_picker",
+        "picker",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 926,
+      "title": "refactor(calendar): 移除默认 popup，独立出 calendar 页面，并重构其他 api",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/926",
+      "mergedAt": "2026-06-05T06:36:24Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 17,
+      "productionAreas": [
+        "calendar",
+        "date_time_picker",
+        "dialog",
+        "picker",
+        "popup",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 942,
+      "title": "refactor(date-time-picker): 复用 picker 功能，并且从 picker 源码中迁移出来独立",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/942",
+      "mergedAt": "2026-06-04T13:09:29Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 16,
+      "productionAreas": [
+        "calendar",
+        "date_time_picker",
+        "picker",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 953,
+      "title": "refactor(picker): 移除不必要的 onLoad 回调和 header 部分",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/953",
+      "mergedAt": "2026-06-04T03:42:34Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 6,
+      "productionAreas": [
+        "calendar",
+        "picker",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 954,
+      "title": "ci: use reusable issue ci file",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/954",
+      "mergedAt": "2026-06-01T10:19:01Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 950,
+      "title": "feat(popup): add `useSafeArea` for edge placements and optimize comments",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/950",
+      "mergedAt": "2026-06-01T10:06:33Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 3,
+      "productionAreas": [
+        "popup"
+      ]
+    },
+    {
+      "number": 951,
+      "title": "fix(popup): 修复重构 popup 过程中弹窗路由中的 `Material` 上下文，避免子树继承异常 `DefaultTextStyle`",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/951",
+      "mergedAt": "2026-05-28T07:50:27Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "popup"
+      ]
+    },
+    {
+      "number": 946,
+      "title": "refactor(popup): reimplement `popup`",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/946",
+      "mergedAt": "2026-05-26T15:30:48Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 20,
+      "productionAreas": [
+        "action_sheet",
+        "calendar",
+        "drawer",
+        "image_viewer",
+        "picker",
+        "popup",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 947,
+      "title": "fix(calendar): 移除 t_calendar_popup 中重复的 CalendarTrigger 定义",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/947",
+      "mergedAt": "2026-05-23T19:56:24Z",
+      "declaredNoChangelog": false,
+      "status": "covered-or-intermediate-api-not-retained",
+      "reason": "旧CalendarTrigger声明已从公开面移除；被Calendar/Picker拆分及旧声明处置覆盖。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "calendar"
+      ]
+    },
+    {
+      "number": 948,
+      "title": "fix(ci): replace blocked `actions-cool` workflow dependencies",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/948",
+      "mergedAt": "2026-05-23T19:26:36Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 945,
+      "title": "chore: remove unexpectedly generated files",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/945",
+      "mergedAt": "2026-05-21T19:42:24Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 941,
+      "title": "Feature/harness",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/941",
+      "mergedAt": "2026-05-14T11:50:03Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 940,
+      "title": "Feature/harness",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/940",
+      "mergedAt": "2026-05-14T11:37:39Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 938,
+      "title": "ci(test-build):移除 Flutter 3.16.9 测试",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/938",
+      "mergedAt": "2026-05-13T12:16:35Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 934,
+      "title": "Feature/harness",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/934",
+      "mergedAt": "2026-05-13T07:13:01Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 931,
+      "title": "Feature/harness",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/931",
+      "mergedAt": "2026-05-13T06:38:11Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 921,
+      "title": "refactor(picker): 将 picker 组件只保留选择功能",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/921",
+      "mergedAt": "2026-05-11T09:32:59Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 15,
+      "productionAreas": [
+        "calendar",
+        "picker",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 909,
+      "title": "ci: 清理废弃的 txt 文件",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/909",
+      "mergedAt": "2026-04-10T11:05:31Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 907,
+      "title": "refactor: rename prefix `TD` to `T`",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/907",
+      "mergedAt": "2026-04-10T02:40:45Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 154,
+      "productionAreas": [
+        "action_sheet",
+        "avatar",
+        "backtop",
+        "badge",
+        "button",
+        "calendar",
+        "cascader",
+        "cell",
+        "checkbox",
+        "collapse",
+        "dialog",
+        "divider",
+        "drawer",
+        "dropdown_menu",
+        "empty",
+        "fab",
+        "footer",
+        "form",
+        "icon",
+        "image",
+        "image_viewer",
+        "indexes",
+        "input",
+        "link",
+        "loading",
+        "message",
+        "navbar",
+        "notice_bar",
+        "picker",
+        "popover",
+        "popup",
+        "progress",
+        "radio",
+        "rate",
+        "refresh",
+        "result",
+        "search",
+        "sidebar",
+        "skeleton",
+        "slider",
+        "stepper",
+        "steps",
+        "swipe_cell",
+        "swiper",
+        "switch",
+        "tabbar",
+        "table",
+        "tabs",
+        "tag",
+        "text",
+        "textarea",
+        "time_counter",
+        "toast",
+        "tree",
+        "upload",
+        "theme/util"
+      ]
+    },
+    {
+      "number": 908,
+      "title": "Revert \"ci(test-build): 恢复3.x 编译测试\"",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/908",
+      "mergedAt": "2026-04-09T10:44:21Z",
+      "declaredNoChangelog": false,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 905,
+      "title": "fix(tab-bar): fix icon color not changing on selection (fixes #900)",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/905",
+      "mergedAt": "2026-04-09T07:00:21Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "tabbar"
+      ]
+    },
+    {
+      "number": 903,
+      "title": "Text: 修复Web平台内容不居中",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/903",
+      "mergedAt": "2026-04-09T07:00:04Z",
+      "declaredNoChangelog": false,
+      "status": "final-behavior-review-required",
+      "reason": "旧Web文字垂直居中补偿：全局补偿入口已删除，应按最终文字/字体布局确认，不宣称恢复旧补偿算法。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "text"
+      ]
+    },
+    {
+      "number": 901,
+      "title": "ci(test-build): 恢复3.x 编译测试",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/901",
+      "mergedAt": "2026-04-09T06:57:30Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 897,
+      "title": "chore: update feedback and release apk qrcode",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/897",
+      "mergedAt": "2026-04-09T06:57:10Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 895,
+      "title": "ci(test-build): 仅在非develop分支上取消进行中的构建",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/895",
+      "mergedAt": "2026-04-09T06:56:48Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 885,
+      "title": "`TDBottomTabBar`：增加安全区域占位属性",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/885",
+      "mergedAt": "2026-04-09T06:23:26Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "tabbar"
+      ]
+    },
+    {
+      "number": 868,
+      "title": "fixed: The capsule-shaped slider thumb is out of track range -  #755 Issue",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/868",
+      "mergedAt": "2026-04-09T06:19:15Z",
+      "declaredNoChangelog": false,
+      "status": "final-behavior-review-required",
+      "reason": "旧胶囊Slider滑块边界修复：现实现已重构，须以最终几何/视觉结果决定如何表述，不能仅沿用旧补丁标题。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "slider"
+      ]
+    },
+    {
+      "number": 902,
+      "title": "feat(calendar): 支持阴历、阳历类型 (#717)⁠",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/902",
+      "mergedAt": "2026-03-30T03:12:48Z",
+      "declaredNoChangelog": false,
+      "status": "covered-or-intermediate-api-not-retained",
+      "reason": "该PR在0.2.7之后引入的农历专属接口未保留到当前TCalendar；不把中间版本特性当成最终公开API，业务扩展按subtitleBuilder/cellBuilder表达。",
+      "productionFileCount": 5,
+      "productionAreas": [
+        "calendar"
+      ]
+    },
+    {
+      "number": 866,
+      "title": "chore(ci): 优化ci运行,增加运行条件减少运行次数",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/866",
+      "mergedAt": "2026-02-28T06:18:10Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 878,
+      "title": "ci(auto-fix): 添加 site 文档同步",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/878",
+      "mergedAt": "2026-02-28T02:47:44Z",
+      "declaredNoChangelog": false,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 874,
+      "title": "ci：auto close release issue",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/874",
+      "mergedAt": "2026-02-28T02:27:19Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 887,
+      "title": "ci: 添加 README 文档同步到 pub.dev 官网和 site 文档",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/887",
+      "mergedAt": "2026-02-28T02:27:07Z",
+      "declaredNoChangelog": false,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 893,
+      "title": "fix(TDForm): FormItemNotifier.formVal 支持多种表单值类型",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/893",
+      "mergedAt": "2026-02-28T02:04:15Z",
+      "declaredNoChangelog": false,
+      "status": "covered-or-intermediate-api-not-retained",
+      "reason": "旧FormItemNotifier已移除；最终以TFormField<T>字段树和受控值契约迁移，不宣传旧Notifier仍可使用。",
+      "productionFileCount": 2,
+      "productionAreas": [
+        "form"
+      ]
+    },
+    {
+      "number": 890,
+      "title": "fix(TDTable): 首列固定设定后再设定height超出后不会出现纵向滚动条",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/890",
+      "mergedAt": "2026-02-27T09:10:13Z",
+      "declaredNoChangelog": false,
+      "status": "final-behavior-review-required",
+      "reason": "旧TDTable固定首列与纵向滚动修复：需对最终TTable约束与固定列场景确认，不宣传旧接口的兼容修复。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "table"
+      ]
+    },
+    {
+      "number": 888,
+      "title": "ci: 暂时禁用 Flutter 3.x 版本测试",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/888",
+      "mergedAt": "2026-02-27T07:17:51Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 880,
+      "title": "TDTreeSelect: 一级菜单选中项右侧增加向外弯折圆角效果",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/880",
+      "mergedAt": "2026-02-09T08:48:35Z",
+      "declaredNoChangelog": false,
+      "status": "final-behavior-review-required",
+      "reason": "旧TreeSelect向外弯折圆角：新实现外观以最终设计验收为准，不仅凭旧PR认定该像素效果通过。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "tree"
+      ]
+    },
+    {
+      "number": 881,
+      "title": "TDNavBarItem: 新增 customWidget 参数替代已废弃的 iconWidget",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/881",
+      "mergedAt": "2026-02-09T08:34:52Z",
+      "declaredNoChangelog": false,
+      "status": "added-to-reviewed-preview",
+      "reason": "自动草稿缺失或同一PR还有遗漏条目；按最终公开契约补入候选稿。",
+      "productionFileCount": 1,
+      "productionAreas": [
+        "navbar"
+      ]
+    },
+    {
+      "number": 872,
+      "title": "refactor(ci): 优化构建文档步骤，添加构建时间和版本",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/872",
+      "mergedAt": "2026-02-09T06:11:18Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 870,
+      "title": "chore: close issues with release version label automatically on release",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/870",
+      "mergedAt": "2026-02-02T03:27:19Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": [],
+      "sourceTitleSha256": "7026a7164251fef161d5726831743aaec68e48f4fa7df4fa20900d3ed13164b6",
+      "titleNormalization": "Historical spelling corrected for display; source title preserved by hash and PR URL."
+    },
+    {
+      "number": 873,
+      "title": "chore: 更新 `@tdesign/site-components@0.18.1`",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/873",
+      "mergedAt": "2026-01-30T09:29:17Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 867,
+      "title": "chore(site): 移除文档同步脚本",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/867",
+      "mergedAt": "2026-01-22T07:15:56Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 865,
+      "title": "docs(site): 移除语言切换链接",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/865",
+      "mergedAt": "2026-01-22T03:19:55Z",
+      "declaredNoChangelog": true,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    },
+    {
+      "number": 864,
+      "title": "Release/0.2.7",
+      "url": "https://github.com/Tencent/tdesign-flutter/pull/864",
+      "mergedAt": "2026-01-21T13:24:27Z",
+      "declaredNoChangelog": false,
+      "status": "excluded-maintenance-or-version-record",
+      "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
+      "productionFileCount": 0,
+      "productionAreas": []
+    }
+  ]
+}
