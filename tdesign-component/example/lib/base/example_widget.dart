@@ -14,6 +14,11 @@ import 'example_route.dart';
 import 'notification_center.dart';
 import 'syntax_highlighter.dart';
 
+const _demoTestModulesEnabled = bool.fromEnvironment(
+  'TDESIGN_DEMO_TEST_MODULES',
+  defaultValue: true,
+);
+
 var navBarkey = GlobalKey();
 
 /// 示例页面控件，建议每个页面返回一个ExampleWidget即可，不用独自封装
@@ -79,9 +84,11 @@ class ExamplePage extends StatefulWidget {
   /// 悬浮按钮的位置过渡动画。
   final FloatingActionButtonAnimator? floatingActionButtonAnimator;
 
-  /// 是否在 debug 模式展示仅用于内部验证的单元测试模块。
+  /// 是否在 debug 模式展示仅用于内部验证的单元测试模块，默认展示。
   ///
   /// profile 和 release 构建中始终不展示。
+  /// 视觉测试通过 `--dart-define=TDESIGN_DEMO_TEST_MODULES=false` 统一隐藏，
+  /// 不改变本地 debug 的默认展示与页面开关。
   final bool showTestModule;
 
   /// 悬浮按钮
@@ -252,7 +259,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   Widget _buildExampleList() {
     final modules = [
       ...widget.children,
-      if (kDebugMode && widget.showTestModule)
+      if (kDebugMode && _demoTestModulesEnabled && widget.showTestModule)
         ExampleModule(
           title: '单元测试',
           children: [_buildTestExampleItem(), ...widget.test],

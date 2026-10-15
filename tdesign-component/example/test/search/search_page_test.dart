@@ -45,7 +45,7 @@ void main() {
 
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
     expect(page.compactDemo, isTrue);
-    expect(page.showTestModule, isFalse);
+    expect(page.showTestModule, isTrue);
     expect(page.children.map((module) => module.title), ['组件类型', '组件样式']);
     expect(page.children.last.children.map((item) => item.desc), [
       '搜索框形状',

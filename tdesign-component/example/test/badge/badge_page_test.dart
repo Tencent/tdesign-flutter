@@ -42,7 +42,7 @@ void main() {
       'Medium',
     ]);
     expect(page.floatingActionButton, isNull);
-    expect(page.showTestModule, isFalse);
+    expect(page.showTestModule, isTrue);
     expect(page.backgroundColor, const Color(0xFFF6F6F6));
     expect(
       page.children

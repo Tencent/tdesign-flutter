@@ -21,7 +21,6 @@ class TSwitchPage extends StatelessWidget {
       exampleCodeGroup: 'switch',
       desc: '用于控制某个功能的开启和关闭。',
       compactDemo: true,
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

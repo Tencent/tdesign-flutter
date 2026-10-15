@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/src/components/action_sheet/t_action_sheet_grid.dart';
 import 'package:tdesign_flutter/src/components/action_sheet/t_action_sheet_item_widget.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/page/action_sheet/action_sheet_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
@@ -160,7 +161,10 @@ void main() {
       }
     }
     expect(foundLabels, containsAll(labels));
-    expect(find.text('单元测试'), findsNothing);
+    expect(
+      tester.widget<ExamplePage>(find.byType(ExamplePage)).showTestModule,
+      isTrue,
+    );
   });
 
   testWidgets('触发按钮按 Figma 顺序使用 16dp 边距和 8dp 间距连续排列', (tester) async {

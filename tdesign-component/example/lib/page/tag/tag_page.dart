@@ -26,7 +26,6 @@ class _TTagPageState extends State<TTagPage> {
       title: tTitle(),
       desc: '用于表明主体的类目，属性或状态',
       exampleCodeGroup: 'tag',
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

@@ -27,7 +27,6 @@ class _TCascaderPageState extends State<TCascaderPage> {
       desc: '用于多层级数据的逐级选择。',
       exampleCodeGroup: 'cascader',
       compactDemo: true,
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

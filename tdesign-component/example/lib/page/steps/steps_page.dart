@@ -32,7 +32,6 @@ class _TStepsPageState extends State<TStepsPage> {
       exampleCodeGroup: 'steps',
       desc: '用于任务步骤展示或任务进度展示。',
       compactDemo: true,
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

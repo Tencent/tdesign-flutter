@@ -22,7 +22,6 @@ class TNoticeBarPage extends StatelessWidget {
       title: tTitle(context),
       exampleCodeGroup: 'noticeBar',
       desc: '在导航栏下方，用于给用户显示提示消息。',
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',
