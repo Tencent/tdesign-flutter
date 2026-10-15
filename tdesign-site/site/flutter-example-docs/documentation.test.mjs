@@ -5,7 +5,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import siteConfig from '../site.config.mjs';
-import { migrationSource, packageLinks, renderMigrationExamples, syncDocuments } from '../../../scripts/documentation.mjs';
+import { migrationSource, guideLinks, packageLinks, renderMigrationExamples, syncDocuments } from '../../../scripts/documentation.mjs';
 import { adaptGuideLinks, adaptRepositoryDocument } from './repository-document.mjs';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
@@ -88,4 +88,27 @@ test('migration is linked from getting started and dark mode shares the theme gu
   assert.match(read('tdesign-site/site/docs/getting-started.md'), /migration-0\.2\.7-to-1\.0\.md/);
   assert.doesNotMatch(read('tdesign-site/site/docs/getting-started.md'), /尚未发布|发布前|git:/);
   assert.match(read('tdesign-site/docs/components/theme/README.md'), /title: Theme 主题/);
+});
+
+test('component links stay local in preview and become absolute in package copies', () => {
+  const content = '[Button](https://tdesign.tencent.com/flutter/components/button?tab=api) [Form](/flutter/components/form)';
+  const local = guideLinks(content);
+  assert.match(local, /\[Button\]\(\/flutter\/components\/button\?tab=api\)/);
+  assert.doesNotMatch(local, /https:/);
+  const portable = guideLinks(local, { absolute: true });
+  assert.match(portable, /https:\/\/tdesign.tencent.com\/flutter\/components\/button\?tab=api/);
+  assert.match(portable, /https:\/\/tdesign.tencent.com\/flutter\/components\/form/);
+});
+
+
+test('custom theme guide uses the shared component preview with standalone scene links', () => {
+  const guide = readFileSync(path.join(root, 'tdesign-site/site/docs/custom-theme.md'), 'utf8');
+  const runtime = readFileSync(path.join(root, 'tdesign-component/example/lib/documentation_theme_demo.dart'), 'utf8');
+  assert.match(guide, /^flutterExample: custom-theme$/m);
+  assert.doesNotMatch(guide, /<iframe/);
+  for (const scene of ['json', 'local', 'mode']) {
+    assert.ok(guide.includes(`[单独打开运行示例](/flutter/example/#custom-theme-${scene})`));
+  }
+  assert.match(runtime, /documentationThemeApp\(/);
+  assert.match(runtime, /documentationLocalTheme\(/);
 });

@@ -24,7 +24,6 @@ class _TSearchBarPageState extends State<TSearchBarPage> {
       title: tTitle(),
       desc: '用于用户输入搜索信息，并进行页面内容搜索。',
       compactDemo: true,
-      showTestModule: false,
       exampleCodeGroup: 'search',
       children: [
         ExampleModule(

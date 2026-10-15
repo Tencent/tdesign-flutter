@@ -26,7 +26,6 @@ class _TSwiperPageState extends State<TSwiperPage> {
       title: tTitle(),
       desc: '用于循环轮播一组图片或内容，也可以滑动进行切换，轮播动效时间可以设置。',
       exampleCodeGroup: 'swiper',
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

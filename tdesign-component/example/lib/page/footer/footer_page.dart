@@ -16,7 +16,6 @@ class TFooterPage extends StatelessWidget {
       title: tTitle(context),
       desc: '用于基础列表展示，可附带文字、品牌 logo、操作，常用商详、个人中心、设置等页面。',
       exampleCodeGroup: 'footer',
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

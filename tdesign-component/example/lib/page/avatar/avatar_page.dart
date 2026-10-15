@@ -27,7 +27,6 @@ class _TAvatarPageState extends State<TAvatarPage> {
     return ExamplePage(
       title: tTitle(),
       exampleCodeGroup: 'avatar',
-      showTestModule: false,
       desc: '用于展示用户头像信息，除了纯展示也可点击进入个人详情等操作。',
       children: [
         ExampleModule(

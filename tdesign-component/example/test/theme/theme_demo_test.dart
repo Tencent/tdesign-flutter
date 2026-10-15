@@ -1,10 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_route.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/documentation_examples.dart';
+import 'package:tdesign_flutter_example/documentation_theme_demo.dart';
 import 'package:tdesign_flutter_example/page/theme/theme_function_color_example.dart';
 import 'package:tdesign_flutter_example/page/theme/theme_other_color_example.dart';
 import 'package:tdesign_flutter_example/page/theme/theme_page.dart';
 import 'package:tdesign_flutter_example/page/theme/theme_text_color_example.dart';
+import 'package:tdesign_flutter_example/util/web_theme_message.dart';
 
 import '../demo_page_test_utils.dart';
 
@@ -153,4 +157,270 @@ void main() {
       expect(tester.takeException(), isNull);
     }
   });
+
+  testWidgets('Web incremental themes retain all inherited neutral swatches', (
+    tester,
+  ) async {
+    for (final color in [Colors.red, Colors.blue]) {
+      final theme = parseWebThemeUpdateMessage({
+        'type': 'flutter-theme-update',
+        'theme': {
+          'light': {
+            'color': {
+              'grayColor1': color == Colors.red ? '#f44336' : '#2196f3',
+            },
+          },
+          'dark': {
+            'color': {
+              'grayColor1': color == Colors.red ? '#f44336' : '#2196f3',
+            },
+          },
+        },
+      });
+      expect(theme, isNotNull);
+      expect(
+        theme!.colorMap.keys.where((key) => key.startsWith('grayColor')),
+        hasLength(1),
+      );
+      for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: TThemeBuilder.light(theme),
+            darkTheme: TThemeBuilder.dark(theme),
+            themeMode: mode,
+            home: const Scaffold(
+              body: SingleChildScrollView(child: ThemeOtherColorExample()),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        for (var index = 1; index <= 14; index++) {
+          final label = find.text('grayColor$index');
+          expect(label, findsOneWidget);
+          final swatch = tester.widget<Container>(
+            find.ancestor(of: label, matching: find.byType(Container)).first,
+          );
+          expect(
+            swatch.color?.toARGB32(),
+            (index == 1
+                    ? color
+                    : (mode == ThemeMode.dark ? theme.dark! : theme)
+                          .colorMap['grayColor$index'])
+                ?.toARGB32(),
+          );
+        }
+        expect(find.text('bgColorContainer'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      }
+    }
+  });
+
+  testWidgets('custom theme guide routes render the shared runnable examples', (
+    tester,
+  ) async {
+    TExampleRoute.init();
+    for (final scene in DocumentationThemeScene.values) {
+      final name = 'custom-theme-${scene.name}';
+      expect(TExampleRoute.pageModelList.containsKey(name), isTrue);
+      await tester.pumpWidget(
+        MaterialApp(
+          key: ValueKey(name),
+          initialRoute: name,
+          onGenerateRoute: TExampleRoute.onGenerateRoute,
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(DocumentationThemeDemo), findsOneWidget);
+      if (scene == DocumentationThemeScene.local) {
+        final tags = tester.elementList(find.byType(TTag)).toList();
+        expect(tags, hasLength(2));
+        expect(
+          Theme.of(tags[0]).extension<TTagThemeData>()?.squareBorderRadius,
+          isNot(6),
+        );
+        expect(
+          Theme.of(tags[1]).extension<TTagThemeData>()?.squareBorderRadius,
+          6,
+        );
+      } else {
+        expect(find.text('brandColor：#0052D9'), findsOneWidget);
+        expect(find.text('品牌色按钮'), findsOneWidget);
+        expect(find.text('品牌色标签'), findsOneWidget);
+      }
+      expect(tester.takeException(), isNull);
+    }
+  });
+
+  testWidgets('custom theme guide switches light dark and system modes', (
+    tester,
+  ) async {
+    tester.platformDispatcher.platformBrightnessTestValue = Brightness.light;
+    addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
+    await tester.pumpWidget(
+      const DocumentationThemeDemo(scene: DocumentationThemeScene.mode),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('brandColor：#0052D9'), findsOneWidget);
+    await tester.tap(find.text('深色'));
+    await tester.pumpAndSettle();
+    expect(find.text('brandColor：#699EF5'), findsOneWidget);
+    expect(find.text('当前外观：深色'), findsOneWidget);
+    await tester.tap(find.text('跟随系统'));
+    await tester.pumpAndSettle();
+    expect(find.text('当前外观：浅色'), findsOneWidget);
+    tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
+    await tester.pumpAndSettle();
+    expect(find.text('当前外观：深色'), findsOneWidget);
+    await tester.tap(find.text('浅色'));
+    await tester.pumpAndSettle();
+    expect(find.text('brandColor：#0052D9'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('custom theme guide shares the component ExamplePage structure', (
+    tester,
+  ) async {
+    TExampleRoute.init();
+    final model = TExampleRoute.pageModelList['custom-theme'];
+    expect(model, isNotNull);
+    final spec = DemoPageTestSpec(
+      name: 'custom-theme',
+      title: '自定义主题',
+      page: Builder(builder: (context) => model!.pageBuilder(context, model)),
+      expectedTexts: const ['JSON 配置', '组件局部样式', '明暗模式'],
+    );
+    await pumpFullDemoPage(tester, spec, ThemeMode.light);
+    final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
+    expect(page.children.map((module) => module.title), [
+      'JSON 配置',
+      '组件局部样式',
+      '明暗模式',
+    ]);
+    expect(find.byType(DocumentationThemeContent), findsNWidgets(3));
+    expect(find.text('brandColor：#0052D9'), findsNWidgets(2));
+    await tester.tap(find.text('深色'));
+    await tester.pumpAndSettle();
+    expect(find.text('brandColor：#699EF5'), findsNWidgets(2));
+    expect(find.text('brandColor：#0052D9'), findsNothing);
+    expect(find.text('当前模式：深色'), findsOneWidget);
+    final defaults = TThemeData.defaultData().dark!;
+    final pageScaffold = tester.widget<Scaffold>(
+      find
+          .descendant(
+            of: find.byType(ExamplePage),
+            matching: find.byType(Scaffold),
+          )
+          .first,
+    );
+    expect(pageScaffold.backgroundColor, defaults.bgColorPage);
+    for (final scene in DocumentationThemeScene.values) {
+      final finder = find.byKey(ValueKey('theme-scene-${scene.name}'));
+      expect(
+        tester.widget<ColoredBox>(finder).color,
+        defaults.bgColorContainer,
+      );
+      final context = tester.element(finder);
+      expect(Theme.of(context).brightness, Brightness.dark);
+      expect(context.tTheme.textColorPrimary, defaults.textColorPrimary);
+    }
+    await tester.tap(find.text('浅色'));
+    await tester.pumpAndSettle();
+    expect(find.text('brandColor：#0052D9'), findsNWidgets(2));
+    expect(find.text('brandColor：#699EF5'), findsNothing);
+    expect(tester.takeException(), isNull);
+    await disposeDemoPage(tester);
+  });
+
+  testWidgets(
+    'custom theme guide initially follows and updates with the host appearance',
+    (tester) async {
+      Widget host(bool dark) => MaterialApp(
+        theme: dark
+            ? TThemeBuilder.dark(TThemeData.defaultData())
+            : TThemeBuilder.light(TThemeData.defaultData()),
+        home: const DocumentationThemeDemo(scene: DocumentationThemeScene.mode),
+      );
+      for (final dark in [true, false, true]) {
+        await tester.pumpWidget(host(dark));
+        await tester.pumpAndSettle();
+        final defaults = dark
+            ? TThemeData.defaultData().dark!
+            : TThemeData.defaultData();
+        final finder = find.byKey(const ValueKey('theme-scene-mode'));
+        expect(
+          tester.widget<ColoredBox>(finder).color,
+          defaults.bgColorContainer,
+        );
+        expect(
+          Theme.of(tester.element(finder)).brightness,
+          dark ? Brightness.dark : Brightness.light,
+        );
+        expect(find.text('当前模式：${dark ? '深色' : '浅色'}'), findsOneWidget);
+        expect(
+          find.text('主题配置：${dark ? 'oceanDark' : 'ocean'}'),
+          findsOneWidget,
+        );
+      }
+    },
+  );
+
+  testWidgets(
+    'guide compares actual light and dark token values at phone width',
+    (tester) async {
+      tester.view.physicalSize = const Size(320, 1600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      for (final dark in [false, true]) {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: dark
+                ? TThemeBuilder.dark(TThemeData.defaultData())
+                : TThemeBuilder.light(TThemeData.defaultData()),
+            home: const DocumentationThemeDemo(
+              scene: DocumentationThemeScene.json,
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final comparison = find.byKey(const ValueKey('theme-token-comparison'));
+        expect(comparison, findsOneWidget);
+        for (final value in [
+          '#0052D9',
+          '#699EF5',
+          '#F3F3F3',
+          '#181818',
+          '#FFFFFF',
+          '#242424',
+          '#E5000000',
+          '#E6FFFFFF',
+        ]) {
+          expect(
+            find.descendant(of: comparison, matching: find.text(value)),
+            findsOneWidget,
+          );
+        }
+        expect(find.text('brandColor\nJSON 覆盖'), findsOneWidget);
+        expect(find.textContaining('默认继承'), findsNWidgets(3));
+        expect(
+          find.text(dark ? '深色（当前）\noceanDark' : '浅色（当前）\nocean'),
+          findsOneWidget,
+        );
+        final scene = find.byKey(const ValueKey('theme-scene-json'));
+        final activeTokens = tester.element(scene).tTheme;
+        final activeBg = dark ? '#181818' : '#F3F3F3';
+        final activeText = dark ? '#E6FFFFFF' : '#E5000000';
+        expect(
+          activeTokens.bgColorPage.toARGB32(),
+          int.parse('FF${activeBg.substring(1)}', radix: 16),
+        );
+        expect(
+          activeTokens.textColorPrimary.toARGB32(),
+          int.parse(activeText.substring(1), radix: 16),
+        );
+        expect(tester.getSize(comparison).width, lessThanOrEqualTo(320));
+        expect(tester.takeException(), isNull);
+      }
+    },
+  );
 }

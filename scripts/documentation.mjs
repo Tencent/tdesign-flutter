@@ -14,8 +14,11 @@ function guideRoute(slug) {
 }
 
 export function guideLinks(content, { absolute = false } = {}) {
-  return content.replace(/\]\(\.\/([a-z0-9.-]+)\.md(#[^)]*)?\)/g, (_, slug, fragment = '') =>
-    `](${absolute ? site : '/flutter/'}${guideRoute(slug)}${fragment})`);
+  const local = content.replace(/\]\(\.\/([a-z0-9.-]+)\.md(#[^)]*)?\)/g, (_, slug, fragment = '') =>
+    `](/flutter/${guideRoute(slug)}${fragment})`);
+  // Keep navigation inside the local preview; package readers need full URLs.
+  return local.replace(/\]\((?:https:\/\/tdesign\.tencent\.com)?\/flutter\/([^)]*)\)/g,
+    (_, target) => `](${absolute ? site : '/flutter/'}${target})`);
 }
 
 // Package readers cannot resolve repository-only relative paths.

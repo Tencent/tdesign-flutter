@@ -203,7 +203,7 @@ void main() {
     );
   });
 
-  testWidgets('单元测试模块仅在 debug 模式按开关展示', (tester) async {
+  testWidgets('单元测试模块在 debug 模式默认展示并支持显式关闭', (tester) async {
     Widget buildPage({required bool showTestModule}) {
       return ChangeNotifierProvider(
         create: (_) => ThemeModeProvider(),
@@ -225,6 +225,29 @@ void main() {
         ),
       );
     }
+
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (_) => ThemeModeProvider(),
+        child: MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: ExamplePage(
+            title: 'Default test module',
+            exampleCodeGroup: 'test',
+            children: const [
+              ExampleModule(
+                title: 'Demo',
+                children: [
+                  ExampleItem(ignoreCode: true, builder: _emptyExample),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.text('02 单元测试'), findsOneWidget);
 
     await tester.pumpWidget(buildPage(showTestModule: true));
     await tester.pump();

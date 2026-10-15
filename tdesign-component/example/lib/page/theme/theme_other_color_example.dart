@@ -14,13 +14,18 @@ class _ThemeOtherColorExampleState extends State<ThemeOtherColorExample> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    grayMap
-      ..clear()
-      ..addEntries(
-        context.tTheme.colorMap.entries.where(
-          (entry) => entry.key.startsWith('grayColor'),
-        ),
-      );
+    final colors = context.tTheme.colorMap;
+    final keys = {
+      ...TThemeData.defaultData().colorMap.keys,
+      ...colors.keys,
+    }.where((key) => key.startsWith('grayColor'));
+    grayMap.clear();
+    for (final key in keys) {
+      final color = colors[key];
+      if (color != null) {
+        grayMap[key] = color;
+      }
+    }
   }
 
   Widget _buildOtherColor(BuildContext context) {

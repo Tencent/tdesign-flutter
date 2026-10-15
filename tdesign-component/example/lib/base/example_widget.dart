@@ -79,7 +79,7 @@ class ExamplePage extends StatefulWidget {
   /// 悬浮按钮的位置过渡动画。
   final FloatingActionButtonAnimator? floatingActionButtonAnimator;
 
-  /// 是否在 debug 模式展示仅用于内部验证的单元测试模块。
+  /// 是否在 debug 模式展示仅用于内部验证的单元测试模块，默认展示。
   ///
   /// profile 和 release 构建中始终不展示。
   final bool showTestModule;

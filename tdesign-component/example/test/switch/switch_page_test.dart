@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_base.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/page/switch/switch_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
@@ -46,7 +47,10 @@ void main() {
     expect(find.text('01 组件类型'), findsOneWidget);
     expect(find.text('02 组件状态'), findsOneWidget);
     expect(find.text('03 组件样式'), findsOneWidget);
-    expect(find.text('04 单元测试'), findsNothing);
+    expect(
+      tester.widget<ExamplePage>(find.byType(ExamplePage)).showTestModule,
+      isTrue,
+    );
     expect(find.text('基础开关'), findsNWidgets(2));
     expect(find.text('带描述开关'), findsOneWidget);
     expect(find.text('自定义颜色开关'), findsNWidgets(2));
@@ -72,7 +76,8 @@ void main() {
         matching: find.byType(Scrollable),
       ),
     );
-    expect(scrollable.position.maxScrollExtent, 0);
+    // Debug 区块追加在公开示例后，页面允许继续滚动。
+    expect(scrollable.position.maxScrollExtent, greaterThan(0));
     expect(
       tester.widget<Scaffold>(find.byType(Scaffold)).backgroundColor,
       const Color(0xFFF6F6F6),

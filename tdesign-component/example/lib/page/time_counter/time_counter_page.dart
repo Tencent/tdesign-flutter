@@ -27,7 +27,6 @@ class TTimeCounterPage extends StatelessWidget {
       title: tTitle(context),
       desc: '用于实时展示计时数值，支持正向计时与倒计时。',
       exampleCodeGroup: 'timeCounter',
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
 
 import '../demo_page_test_utils.dart';
 import 'result_demo_test_spec.dart';
@@ -10,8 +11,11 @@ void main() {
   testWidgets('公开 Demo 展示完整状态、描述与自定义结果', (tester) async {
     await pumpFullDemoPage(tester, resultDemoPageTestSpec, ThemeMode.light);
 
-    expect(find.text('02 单元测试'), findsNothing);
-    expect(find.textContaining('未在示例稿中体现'), findsNothing);
+    expect(
+      tester.widget<ExamplePage>(find.byType(ExamplePage)).showTestModule,
+      isTrue,
+    );
+    expect(find.textContaining('未在示例稿中体现'), findsOneWidget);
 
     final results = tester.widgetList<TResult>(find.byType(TResult)).toList();
     expect(results, hasLength(9));

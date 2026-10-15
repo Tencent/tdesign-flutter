@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/calendar/t_calendar_cell.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
 
 import '../demo_page_test_utils.dart';
 import 'calendar_demo_test_spec.dart';
@@ -111,7 +112,10 @@ void main() {
     expect(tops, orderedEquals([...tops]..sort()));
     expect(find.text('单选模式'), findsNothing);
     expect(find.text('滚动控制'), findsNothing);
-    expect(find.text('单元测试'), findsNothing);
+    expect(
+      tester.widget<ExamplePage>(find.byType(ExamplePage)).showTestModule,
+      isTrue,
+    );
 
     final inlineCalendar = tester.widget<TCalendar>(
       find.byKey(const ValueKey('calendar-inline-panel')),

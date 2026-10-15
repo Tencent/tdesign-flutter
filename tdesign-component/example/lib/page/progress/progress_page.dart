@@ -23,7 +23,6 @@ class TProgressPage extends StatelessWidget {
       title: tTitle(context),
       desc: '用于展示任务当前的进度。',
       exampleCodeGroup: 'progress',
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

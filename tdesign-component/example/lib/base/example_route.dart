@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../config.dart';
+import '../documentation_theme_demo.dart';
 import '../setting.dart';
 import 'api_widget.dart';
 import 'example_base.dart';
@@ -20,6 +21,20 @@ class TExampleRoute {
         pageModelList[model.name] = model;
       });
     });
+    pageModelList['custom-theme'] = ExamplePageModel(
+      text: '自定义主题',
+      name: 'custom-theme',
+      pageBuilder: (_, __) => const DocumentationThemeGuidePage(),
+    );
+    // 指南运行效果使用独立路由，不加入组件清单或 API 生成。
+    for (final scene in DocumentationThemeScene.values) {
+      final name = 'custom-theme-${scene.name}';
+      pageModelList[name] = ExamplePageModel(
+        text: '自定义主题',
+        name: name,
+        pageBuilder: (_, __) => DocumentationThemeDemo(scene: scene),
+      );
+    }
     // 添加关于页路由
     pageModelList[aboutPath] = ExamplePageModel(
       text: '设置',

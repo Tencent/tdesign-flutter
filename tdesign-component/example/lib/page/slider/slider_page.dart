@@ -28,7 +28,6 @@ class _TSliderPageState extends State<TSliderPage> {
     desc: '用于选择横轴上的数值、区间、档位。',
     exampleCodeGroup: 'slider',
     compactDemo: true,
-    showTestModule: false,
     children: [
       ExampleModule(
         title: '组件类型',

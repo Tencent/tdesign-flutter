@@ -31,7 +31,6 @@ class _TDateTimePickerPageState extends State<TDateTimePickerPage> {
     backgroundColor: Theme.of(context).brightness == Brightness.light
         ? const Color(0xFFF6F6F6)
         : context.tTheme.bgColorPage,
-    showTestModule: false,
     children: [
       ExampleModule(
         title: '组件类型',

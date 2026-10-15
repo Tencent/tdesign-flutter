@@ -18,7 +18,6 @@ class TSwipeCellPage extends StatelessWidget {
       exampleCodeGroup: 'SwipeCell',
       desc: '用于承载列表中的更多操作，通过左右滑动来展示，按钮宽度根据内容自适应、高度根据列表高度而变化。',
       backgroundColor: context.tTheme.bgColorPage,
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

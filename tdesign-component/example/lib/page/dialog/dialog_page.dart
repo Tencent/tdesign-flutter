@@ -22,7 +22,6 @@ class TDialogPage extends StatelessWidget {
       desc: '用于显示重要提示或请求用户进行重要操作，一种打断当前操作的模态视图。',
       exampleCodeGroup: 'dialog',
       itemMargin: EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',
