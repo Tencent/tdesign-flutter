@@ -1,3 +1,5 @@
+> 2026-10-15 发布前核销：正式工具 #29 与文档 #1149 均已合入。当前生成一致性和 CI 证据见 [Spec 057](../057-release-readiness-audit/acceptance.md)；下文历史阶段候选/阻塞说明仅描述当时检查点。
+
 # 任务拆分
 
 - [x] 建立全量导出清单与 Spec。
@@ -9,7 +11,7 @@
 - [x] 保存 57 个组件逐项签名/参数/Theme/页面验收清单；85 个生产源码文件与基础代码 Token 等价。
 - [x] 修复 Demo 注册名与 API 文件 slug 不一致；真实页面双版本各 70 项测试通过并登记共享 CI 入口。
 - [x] 工具 #28 已合入正式 main@96f1c693；双版本重新解析依赖，全量生成、--check、AST 审计、validate 及严格 analyze 通过，资产无差异。
-- [ ] PR 经维护者审核后合入 develop；正式链最新 CI/head 与 autofix 产物 diff 在 PR 描述和检查页记录。
+- [x] 文档 PR #1149 已于 2026-10-09 合入 develop（e724cd0c）；当前基线 CI 通过。历史 head 的逐次 autofix diff 留在原 PR，当前生成一致性见 Spec 057。
 
 ## 全量内容复检（2026-10-08）
 
@@ -21,7 +23,7 @@
 - [x] 候选工具重新生成并逐项核对全部组件文档，完成双版本与站点验收；正式 main 复验仍待 #29 合并。
 - [x] 输出逐组件审查结果及组件源码、使用方式、公开 API、运行行为影响报告。
 
-- [ ] 工具 #29 合入正式 main 后重新生成/校验，并确认最终 head 的 CI 与 autofix。本轮修复按维护者明确要求先推送，正式验收仍待办。
+- [x] 本阶段“等待工具 #29 正式交付/生成复验”已由下方正式工具交付及 2026-10-15 检查覆盖：main@6bcf065e、57 份 API --check 无差异、当前基线 CI 通过。见 Spec 057。
 
 ## API 展示精简：仅 Popup（2026-10-08）
 
@@ -70,7 +72,7 @@
 - [x] 全量重新生成 57 份 API；两 SDK 生成字节一致，当前资产无差异，AST 审计 0 issue。
 - [x] 两 SDK 各 2707 项非 Golden 组件测试、70 项 API 页面测试、115 项文档专项测试通过。
 - [x] 记录结构验收与语义验收的区别、测试误导风险、Theme.lerp 实现风险和正式工具/autofix 门禁，见 reasonableness-repair.md。
-- [ ] 工具 PR #29 合入正式 main 后重新解析 resolved ref、生成/--check 并复验 autofix；当前不将本轮候选结果声明为最终可合并。
+- [x] 本阶段“等待工具 #29 正式交付/生成复验”已由下方正式工具交付及 2026-10-15 检查覆盖：main@6bcf065e、57 份 API --check 无差异、当前基线 CI 通过。见 Spec 057。
 - [x] TThemeData.lerp 的完整插值与 extraThemeData 离散切换已由 #1152 修复并合入 develop。
 
 
@@ -83,7 +85,7 @@
 - [x] 从主入口 dartdoc 生成 57 页主题配置说明；51 个独立 Theme、3 个复用 Theme、2 个无独立 Theme 与全局 Theme 分别处理。
 - [x] 双 SDK 重新生成、内容比对与文档/API 页面回归。
 - [x] 同步本轮源码注释与生成产物到文档 PR #1149（源码提交 86e7dbf5；同步远端 autofix 后 e5adcf8b 已普通推送）。
-- [ ] 工具 #29 合入正式 main 后复验正式生成链和最终 CI/autofix。
+- [x] 本阶段“等待工具 #29 正式交付/生成复验”已由下方正式工具交付及 2026-10-15 检查覆盖：main@6bcf065e、57 份 API --check 无差异、当前基线 CI 通过。见 Spec 057。
 
 方案、证据及阻塞原因见 [theme-presentation.md](theme-presentation.md)。
 # 全组件 Theme 配置表推广（2026-10-09）
@@ -93,7 +95,7 @@
 - [x] 校验器和展示测试拦截顺序错误、分类缺失、重复配置表、重复共用方法表及类说明丢失。
 - [x] 57 页两 SDK 生成一致，369 个声明、438 个 Theme 配置字段及 6 个专有可调用项保留。
 - [x] 完成两 SDK 最终文档回归、页面回归、严格分析与验收记录，见 component-theme-config-presentation.md。
-- [ ] 正式工具交付后复验消费依赖和 autofix；本轮不据候选生成声明正式链路完成。
+- [x] 本阶段“等待工具 #29 正式交付/生成复验”已由下方正式工具交付及 2026-10-15 检查覆盖：main@6bcf065e、57 份 API --check 无差异、当前基线 CI 通过。见 Spec 057。
 
 ## Theme API 与平台描述核查
 
@@ -112,7 +114,7 @@
 - [x] 57 页逐组件移除主入口简介，并保留必要参数和方法契约。
 - [x] 逐页生成，核对声明、表格行数、Theme 顺序和直接 API 入口。
 - [x] 双 SDK 展示、页面、AST 审计、严格分析、生成一致与浏览器抽查通过，新增门禁经故障注入验证。
-- [ ] 工具 #29 合入正式 ref 后复验最终生成链和 CI/autofix。
+- [x] 本阶段“等待工具 #29 正式交付/生成复验”已由下方正式工具交付及 2026-10-15 检查覆盖：main@6bcf065e、57 份 API --check 无差异、当前基线 CI 通过。见 Spec 057。
 
 当前验收见 [direct-api-presentation.md](direct-api-presentation.md)。
 
@@ -120,6 +122,6 @@
 
 - [x] 工具 #29 合入 main，消费依赖重新解析到正式提交。
 - [x] 正式工具生成与双 SDK --check、AST 审计及展示回归完成。
-- [ ] 本次推送后核对最终 CI/autofix；PullDownRefresh Golden 差异仍待独立处理。
+- [x] 当前基线 CI、正式工具生成 --check 与 Linux 登记 Golden 已通过；历史 PullDownRefresh 登记快照差异不再作为当前失败项。见 Spec 057；不外推未登记场景。
 
 记录见 [formal-tool-delivery.md](formal-tool-delivery.md)。

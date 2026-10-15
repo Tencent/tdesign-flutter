@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 
 /// 下拉刷新四态提示语。
 ///

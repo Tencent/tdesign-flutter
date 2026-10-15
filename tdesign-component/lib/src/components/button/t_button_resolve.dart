@@ -387,7 +387,7 @@ class TButtonResolve {
       case TButtonColorPreset.light:
         fg = tTheme.brandColor;
       case TButtonColorPreset.defaultTheme:
-        fg = tTheme.fontWhite1;
+        fg = tTheme.textColorAnti;
     }
 
     return ButtonStyle(

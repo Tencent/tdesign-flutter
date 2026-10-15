@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../text/t_text.dart';
 import '../text/t_text_styled.dart';
 
 // ---------------------------------------------------------------------------

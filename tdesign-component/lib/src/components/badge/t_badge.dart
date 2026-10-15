@@ -2,10 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../../theme/t_colors.dart';
-import '../../theme/t_fonts.dart';
-import '../../theme/t_theme.dart';
-import '../text/t_text.dart';
 import '../text/t_text_styled.dart';
 import 't_badge_fallback.dart';
 import 't_badge_label.dart';

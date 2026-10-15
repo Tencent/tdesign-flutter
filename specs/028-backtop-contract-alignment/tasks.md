@@ -1,3 +1,5 @@
+> 2026-10-15 发布前核销：当前自动检查与历史阶段记录分开；证据和保留待办见 [Spec 057](../057-release-readiness-audit/acceptance.md)。
+
 # 实施任务
 
 - [x] DONE 冻结 Figma、小程序 1.16.0 与当前 Flutter 差异
@@ -9,4 +11,5 @@
 - [x] DONE 生成并检查 API 与示例代码资产
 - [x] DONE 执行 Flutter 3.32.0 与 latest 验证
 - [x] DONE 重新执行 Android 真机可见交互与普通 APK 持久安装验收
-- [ ] TODO 更新独立 GitHub PR 并完成 CNB CodeBuddy Review
+- [x] DONE GitHub #1079 已合入 develop；当前基线 CI 通过，见 Spec 057。
+- [ ] 核对 CNB CodeBuddy Review 的最终处理记录；本轮未取得 CNB 证据，不因 GitHub 合并标记为完成。

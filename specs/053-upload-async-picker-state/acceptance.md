@@ -1,3 +1,5 @@
+> 当前状态（2026-10-15）：以下为分阶段历史记录。`develop@30767a55` 的双版本功能与 Linux 3.32.0 已登记 Golden 已通过；正式工具 #29 已合入且 API --check 通过。旧失败数/待推送描述不作为当前结论。未登记场景、跨端像素和真机验收仍须独立核验，见 [Spec 057](../057-release-readiness-audit/acceptance.md)。
+
 # 验收
 
 2026-10-10 修订检查点：Flutter 3.32.0 / Dart 3.8.0 与 Flutter stable 3.47.6 / Dart 3.13.5。

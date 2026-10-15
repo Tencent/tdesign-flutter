@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 
 import '../../theme/basic.dart' show Font;
 import '../../theme/t_colors.dart';
@@ -11,10 +10,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
-import '../../util/iterable_ext.dart';
 import '../text/t_text_styled.dart';
-import 'sticky_header/sticky_header_widget.dart';
-import 't_indexes_anchor.dart';
 import 't_indexes_theme_data.dart';
 
 /// 索引

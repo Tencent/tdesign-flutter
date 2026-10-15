@@ -12,6 +12,13 @@ export default {
           component: () => import('@docs/getting-started.md'),
         },
         {
+          title: '0.2.7 → 1.0 迁移',
+          name: 'migration-1-0',
+          meta: { docType: 'explain' },
+          path: '/flutter/migration-1-0',
+          component: () => import('@docs/migration-1-0.md'),
+        },
+        {
           title: '贡献指南',
           name: 'develop',
           meta: { docType: 'explain' },
