@@ -14,4 +14,6 @@
 - 代码清单 / 代码面板、删除一张 / 删除全部的 8 份新基线来自 Linux 实际渲染，已逐张人工检查。既有基线未改动。
 - run 38730185293、head e6f24ec：原有图片及已建立的新基线 13 项通过，仅 3 份首次基线缺失；没有组件布局或代码面板交互错误。文件来自该 run 的 golden-failures-flutter-3.32.0 artifact。
 - 代码查看测试用 waitForDemoWidget 等待稳定界面；不使用固定延时推定异步资源已加载。对原来直接 await 的测试资源读取使用 tester.runAsync，避免 fake async 挂起。
-- 8 份基线齐备后将再次进行无更新参数的 Linux 比对；完整 CI 状态以最终 head 为准。
+- run 38730683153、应用源码 head 04bf7f5：`Verify Demo experience visual states` step 成功，16 项 Linux 正式图片比对通过（4 个代码查看场景 + 12 个 ImageViewer 场景），未使用更新参数或容差。
+- 专项验证后移除临时前置验证步骤，正式 GitHub/CNB 继续只使用集中式 visual runner；所有新增用例均已登记。此收尾不改变已验证的 Demo 源码或 PNG。
+- 完整 CI 仍以最终 head 为准；未将尚在运行的全仓回归或构建声明为已通过。
