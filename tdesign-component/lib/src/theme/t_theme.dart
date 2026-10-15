@@ -637,32 +637,41 @@ class TThemeData extends ThemeExtension<TThemeData> {
   }
 
   /// 创建空对象
-  static TThemeData _emptyData(String name, {TExtraThemeData? extraThemeData}) {
-    var refMap = TMap<String, String>(factory: () => defaultData().refMap);
+  static TThemeData _emptyData(
+    String name, {
+    TExtraThemeData? extraThemeData,
+    bool preferDarkDefaults = false,
+  }) {
+    TThemeData defaults() => preferDarkDefaults
+        ? defaultData().dark ?? defaultData()
+        : defaultData();
+    var refMap = TMap<String, String>(factory: () => defaults().refMap);
     return TThemeData(
       name: name,
-      colorMap: TMap(factory: () => defaultData().colorMap, refs: refMap),
-      fontMap: TMap(factory: () => defaultData().fontMap, refs: refMap),
+      colorMap: TMap(factory: () => defaults().colorMap, refs: refMap),
+      fontMap: TMap(factory: () => defaults().fontMap, refs: refMap),
       fontMetricMap: TMap(
-        factory: () => defaultData().fontMetricMap,
+        factory: () => defaults().fontMetricMap,
         refs: refMap,
       ),
-      radiusMap: TMap(factory: () => defaultData().radiusMap, refs: refMap),
+      radiusMap: TMap(factory: () => defaults().radiusMap, refs: refMap),
       fontFamilyMap: TMap(
-        factory: () => defaultData().fontFamilyMap,
+        factory: () => defaults().fontFamilyMap,
         refs: refMap,
       ),
-      shadowMap: TMap(factory: () => defaultData().shadowMap, refs: refMap),
+      shadowMap: TMap(factory: () => defaults().shadowMap, refs: refMap),
       insetShadowMap: TMap(
-        factory: () => defaultData().insetShadowMap,
+        factory: () => defaults().insetShadowMap,
         refs: refMap,
       ),
-      spacerMap: TMap(factory: () => defaultData().spacerMap, refs: refMap),
+      spacerMap: TMap(factory: () => defaults().spacerMap, refs: refMap),
       refMap: refMap,
     );
   }
 
   /// 解析主题 JSON；空字符串、格式错误或缺少 name 对应配置时返回 null。
+  /// 浅色与深色块中未配置的 Token 分别回退默认浅色与深色主题；
+  /// 深色块不存在时不自动创建，暗色构建仍回退当前 Token。
   ///
   /// [name] 主题名称，目前只支持一级键
   ///
@@ -700,6 +709,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
             darkName,
             themeConfig,
             extraThemeData,
+            preferDarkDefaults: true,
           );
           darkTheme.light = theme;
           theme.dark = darkTheme;
@@ -740,9 +750,10 @@ class TThemeData extends ThemeExtension<TThemeData> {
     dynamic themeConfig,
 
     /// 可选的额外主题数据；仅在 name 对应的配置存在且非空时解析并安装。
-    TExtraThemeData? extraThemeData,
-  ) {
-    var theme = _emptyData(name);
+    TExtraThemeData? extraThemeData, {
+    bool preferDarkDefaults = false,
+  }) {
+    var theme = _emptyData(name, preferDarkDefaults: preferDarkDefaults);
     Map<String, dynamic>? curThemeMap = themeConfig['$name'];
     if (curThemeMap?.isEmpty ?? true) {
       return theme;

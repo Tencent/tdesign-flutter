@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
-import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import 't_link_theme_data.dart';
 import 't_link_types.dart';

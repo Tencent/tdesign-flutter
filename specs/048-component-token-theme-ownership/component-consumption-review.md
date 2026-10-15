@@ -1,3 +1,5 @@
+> 最新处置（2026-10-15，Spec060）：已实修Ghost语义回退的2个观察项，8项由既有Flutter契约及运行断言支持；21项差异与1项平台几何已有具体方案，524项仍待补运行。当前代码为30767a55上的未提交工作区，本地新指纹验证见 [Spec060](../060-token-difference-resolution/acceptance.md)，不沿用旧远端CI作为本次修复通过证据。
+
 # 组件 Token 消费审查队列
 
 数据来自 [`component-consumption-audit.json`](./component-consumption-audit.json)，固定小程序源码 `1a1c5ca135b0e9bf19abc43a59870c4908a28ad5`。每项均保留小程序变量名、默认浅/暗值、全局回退表达式和 Flutter 代码位置。下表仅是审查范围与优先级，不把静态命中误判为最终绘制一致。

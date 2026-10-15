@@ -1,0 +1,46 @@
+--- a/tdesign-component/lib/src/components/button/t_button_resolve.dart
++++ b/tdesign-component/lib/src/components/button/t_button_resolve.dart
+@@ -565,8 +565,8 @@
+     return switch (scheme) {
+       TButtonColorPreset.primary => tTheme.brandColorActive,
+       TButtonColorPreset.danger => tTheme.errorColorActive,
+-      TButtonColorPreset.light => tTheme.brandColorFocus,
+-      TButtonColorPreset.defaultTheme => tTheme.bgColorComponent,
++      TButtonColorPreset.light => tTheme.brandColorLightActive,
++      TButtonColorPreset.defaultTheme => tTheme.bgColorComponentActive,
+     };
+   }
+ 
+--- a/tdesign-component/lib/src/components/switch/t_switch_resolve.dart
++++ b/tdesign-component/lib/src/components/switch/t_switch_resolve.dart
+@@ -72,7 +72,7 @@
+           theme?.loadingColor ?? (isDark ? token.fontWhite1 : token.brandColor),
+       thumbContentOnColor: theme?.thumbContentOnColor ?? token.brandColor,
+       thumbContentOffColor:
+-          theme?.thumbContentOffColor ?? token.textColorDisabled,
++          theme?.thumbContentOffColor ?? token.bgColorSecondaryContainerActive,
+       thumbContentOnFont:
+           theme?.thumbContentOnFont ??
+           TextStyle(fontSize: token.fontBodyMedium?.size ?? 14),
+--- a/tdesign-component/lib/src/components/switch/t_switch_theme_data.dart
++++ b/tdesign-component/lib/src/components/switch/t_switch_theme_data.dart
+@@ -35,7 +35,7 @@
+   final Color? thumbContentOnColor;
+ 
+   /// 关闭态滑块内容颜色。
+-  /// 未配置时使用 textColorDisabled Token。
++  /// 未配置时使用 bgColorSecondaryContainerActive Token。
+   final Color? thumbContentOffColor;
+ 
+   /// 开启态滑块内容文本样式。
+--- a/tdesign-component/lib/src/components/input/t_input.dart
++++ b/tdesign-component/lib/src/components/input/t_input.dart
+@@ -447,7 +447,7 @@
+   };
+ 
+   Color _borderColor(TThemeData token, TInputStatus status) => switch (status) {
+-    TInputStatus.normal => token.componentBorder,
++    TInputStatus.normal => token.componentStroke,
+     TInputStatus.success => token.successColor,
+     TInputStatus.warning => token.warningColor,
+     TInputStatus.error => token.errorColor,

@@ -22,8 +22,7 @@ dependencies:
   # 滑动单元格组件
 
   # 相册选择组件
-  image_picker: 1.1.2
-  image_picker_android: 0.8.12+23
+  image_picker: ^1.1.2
 
 dev_dependencies:
   analyzer: ^7.4.0

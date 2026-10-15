@@ -1,3 +1,5 @@
+> 历史迁移草稿：本文仅描述 Spec 011 当时的 API，不能直接用于 0.2.7 → 1.0。后续收敛已改变 TText 字体入口与 Material 默认继承规则；当前迁移说明编写方案见 [Spec 057](../057-release-readiness-audit/migration-plan.md)。保留原记录供追溯。
+
 # Breaking 迁移指南
 
 本次重构不保留 deprecated 别名或旧行为分支。旧调用会产生编译错误，请按以下方式迁移。

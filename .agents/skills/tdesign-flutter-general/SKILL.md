@@ -76,7 +76,7 @@ Skills 按职责补充规范：本 skill 管通用协作与 CI 登记；[`tdesig
 
 1. **API 文档**：`sh ./demo_tool/all_build.sh`（等价 `node tool/generate_api.mjs`，manifest 驱动），从组件 API 生成 `example/assets/api/<component>_api.md`；新增 / 迁移组件时先更新 `tool/components.json`。改动设计 / 组件 API 时该产物会随之变化。
 2. **示例代码片段**：`dart run tool/generate_example_code.dart`，从带 `@ExampleCode` 注解的示例方法生成 `example/assets/code/*.txt`；CI 用 `--check` 校验片段与源码同步。改动示例方法时该产物会随之变化。
-3. **README 副本**：`node scripts/sync-readme.mjs`，把根目录 `README.md` / `README_zh_CN.md` 同步到 `tdesign-component/README*.md` 与 `tdesign-site/site/docs/getting-started.md`。改动根目录 README 时副本会随之同步。
+3. **README 副本**：`node scripts/sync-readme.mjs`，把根目录 `README.md` / `README_zh_CN.md` 同步到 `tdesign-component/README*.md`；站点 `site/docs/migration-0.2.7-to-1.0.md` 是迁移正文源，生成包内 `MIGRATION.md`。站点快速开始独立维护，不再由 README 生成；`--check` 只检查同步状态，不写文件。
 
 自动生成与本地验收不是同一件事：贡献者无需手工维护产物；组件对齐任务需要核对示例时，按 Review skill 校验生成片段，变化只能来自源文件，不能直接修改产物。
 

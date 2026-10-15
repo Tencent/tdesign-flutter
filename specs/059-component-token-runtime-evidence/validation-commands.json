@@ -1,0 +1,143 @@
+{
+  "workingDirectory": "tdesign-component (separate identical source checkouts for the two SDKs)",
+  "sdkVersions": [
+    "3.32.0",
+    "3.47.7"
+  ],
+  "componentTests": [
+    "test/components/button/t_button_test.dart",
+    "test/components/button/t_button_theme_priority_test.dart",
+    "test/components/button/t_button_theme_test.dart",
+    "test/components/button/t_button_widget_test.dart",
+    "test/components/switch/t_switch_test.dart",
+    "test/components/switch/t_switch_typography_test.dart",
+    "test/components/switch/t_cupertino_switch_test.dart",
+    "test/components/input/t_input_test.dart",
+    "test/components/input/t_input_theme_test.dart",
+    "test/components/link/t_link_resolve_test.dart",
+    "test/components/link/t_link_test.dart",
+    "test/components/link/t_link_theme_test.dart",
+    "test/components/link/t_link_widget_test.dart",
+    "test/components/avatar/t_avatar_test.dart",
+    "test/components/empty/t_empty_test.dart",
+    "test/components/progress/t_progress_test.dart"
+  ],
+  "analyze": [
+    "flutter",
+    "analyze",
+    "--no-pub",
+    "--fatal-infos"
+  ],
+  "fullRegression": [
+    "flutter",
+    "test",
+    "--no-pub",
+    "--exclude-tags",
+    "demo",
+    "--reporter",
+    "expanded",
+    "--coverage",
+    "test/components/button/t_button_test.dart",
+    "test/components/button/t_button_theme_priority_test.dart",
+    "test/components/button/t_button_theme_test.dart",
+    "test/components/button/t_button_widget_test.dart",
+    "test/components/switch/t_switch_test.dart",
+    "test/components/switch/t_switch_typography_test.dart",
+    "test/components/switch/t_cupertino_switch_test.dart",
+    "test/components/input/t_input_test.dart",
+    "test/components/input/t_input_theme_test.dart",
+    "test/components/link/t_link_resolve_test.dart",
+    "test/components/link/t_link_test.dart",
+    "test/components/link/t_link_theme_test.dart",
+    "test/components/link/t_link_widget_test.dart",
+    "test/components/avatar/t_avatar_test.dart",
+    "test/components/empty/t_empty_test.dart",
+    "test/components/progress/t_progress_test.dart"
+  ],
+  "coverageCommands": [
+    [
+      "dart",
+      "run",
+      "tool/check_component_coverage.dart",
+      "button"
+    ],
+    [
+      "dart",
+      "run",
+      "tool/check_component_coverage.dart",
+      "switch"
+    ],
+    [
+      "dart",
+      "run",
+      "tool/check_component_coverage.dart",
+      "input"
+    ],
+    [
+      "dart",
+      "run",
+      "tool/check_component_coverage.dart",
+      "link"
+    ],
+    [
+      "dart",
+      "run",
+      "tool/check_component_coverage.dart",
+      "avatar"
+    ],
+    [
+      "dart",
+      "run",
+      "tool/check_component_coverage.dart",
+      "empty"
+    ],
+    [
+      "dart",
+      "run",
+      "tool/check_component_coverage.dart",
+      "progress"
+    ]
+  ],
+  "focusEnvironment": {
+    "TDESIGN_TOKEN_EVIDENCE": "1"
+  },
+  "focus": [
+    "flutter",
+    "test",
+    "--no-pub",
+    "--reporter",
+    "expanded",
+    "--plain-name",
+    "token consumption",
+    "test/components/button/t_button_test.dart",
+    "test/components/switch/t_switch_test.dart",
+    "test/components/input/t_input_test.dart",
+    "test/components/link/t_link_test.dart",
+    "test/components/avatar/t_avatar_test.dart",
+    "test/components/empty/t_empty_test.dart",
+    "test/components/progress/t_progress_test.dart"
+  ],
+  "sdkMetadata": [
+    "flutter",
+    "--version",
+    "--machine"
+  ],
+  "compileFrozenSource": [
+    "node",
+    "tool/audit_compiled_token_consumption.mjs",
+    "<frozen-source-root>"
+  ],
+  "summarize": [
+    "node",
+    "tool/summarize_component_token_evidence.mjs",
+    "<validation-log-directory>"
+  ],
+  "requireComplete": [
+    "node",
+    "tool/summarize_component_token_evidence.mjs",
+    "<validation-log-directory>",
+    "--require-complete"
+  ],
+  "requireCompleteExpectedExit": 1,
+  "explanation": "The final gate remains incomplete; normal function tests do not assert unresolved diagnostic targets as passed."
+}

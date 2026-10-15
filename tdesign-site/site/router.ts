@@ -35,6 +35,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/:catchAll(.*)',
     redirect: '/flutter/overview',
   },
+  ...siteConfig.standalone,
   ...getDocsRoutes(docs, 'document'),
   ...getDocsRoutes(docs, 'component'),
 ];
@@ -42,6 +43,9 @@ const routes: Array<RouteRecordRaw> = [
 const routerConfig: RouterOptions = {
   routes,
   history: createWebHistory('/'),
+  scrollBehavior(to) {
+    return to.hash ? { el: decodeURIComponent(to.hash) } : { top: 0 };
+  },
 };
 
 const router = createRouter(routerConfig);

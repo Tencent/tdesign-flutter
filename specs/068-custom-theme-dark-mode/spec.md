@@ -1,0 +1,7 @@
+# 自定义主题深色完整性
+
+修复稀疏JSON深色配置错误继承浅色默认Token，以及指南每个场景独立默认浅色导致混合背景的问题。存在深色块时缺失值按默认深色主题解析；没有深色块仍保持已有buildDark回退行为。显式颜色与ref优先，深色块仍继承浅色显式ref契约。指南使用一个MaterialApp共享明暗状态，初始跟随外层预览外观；手动模式覆盖外层，system跟随系统。标题、背景、文字及三个场景同步切换。局部标签样式只影响对应子树。
+
+## 配置数值对照
+
+Demo展示浅色ocean与深色oceanDark的brandColor、bgColorPage、bgColorContainer、textColorPrimary，直接从本次运行配置读取。标注品牌色为JSON覆盖，其余为默认继承；颜色保留透明度，使用#RRGGBB或#AARRGGBB格式并给出说明。当前生效模式明确标识，320dp宽度不溢出。不罗列全量Token。

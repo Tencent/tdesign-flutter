@@ -1,3 +1,5 @@
+> 2026-10-15 发布前核销：当前自动检查与历史阶段记录分开；证据和保留待办见 [Spec 057](../057-release-readiness-audit/acceptance.md)。
+
 # 任务清单
 
 - [x] 完成新版 Figma / 小程序 / Flutter 三方差异输出
@@ -12,4 +14,5 @@
 - [x] 处理上一轮 CodeBuddy Review 反馈
 - [x] 补充逐字段主题、双轴 display、实际代码面板和核心片段编译回归
 - [x] 用命名构造分离 progress/selectable/display，移除无效参数组合与 onChange 视觉耦合
-- [ ] 本轮修复推送后，检查新 head CI 并完成新一轮 CNB Review
+- [x] 当前基线 Steps 回归和 Linux 登记 Golden 的 CI 已通过，见 Spec 057。
+- [ ] 核对新一轮 CNB Review 的处理记录；本轮未取得 CNB 证据。

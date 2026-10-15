@@ -1,3 +1,5 @@
+> 2026-10-15 发布前核销：当前自动检查与历史阶段记录分开；证据和保留待办见 [Spec 057](../057-release-readiness-audit/acceptance.md)。
+
 # 实施任务
 
 - [x] DONE 2026-09-27：删除 `showTopBorder`、实例/Theme `topBorder` 与 `placeholder`，Filled 固定默认顶线，`useSafeArea` 仅决定是否以组件背景填充底部安全区；自定义 Demo 恢复默认顶线。Flutter 3.32.0/3.47.0 组件测试各 44/44、Demo 测试各 9/9、两个包完整 analyze 零告警；3.32.0 生产覆盖率 504/513（98.25%）。Linux 3.32.0 组件 Golden 14/14 与共享导航矩阵 2/2 无更新通过；公开 Demo 先确认 8 张仅新增顶线，再更新 8 张且无更新严格复跑 11/11 通过。
@@ -38,7 +40,8 @@
 - [x] DONE 收敛水波纹点击识别器、回调文档与单次通知回归
 - [x] DONE 删除重复徽标配置层，以可空 TBadge 和自身 offset 收敛显隐与定位
 - [x] DONE 撤回仅服务 TabBar 的公共 `ExamplePage.navBarTitle` 扩展
-- [ ] TODO 本轮修复推送后，检查新 head CI 并完成新一轮 CNB Review
+- [x] 当前基线 TabBar 回归和 Linux 登记 Golden 的 CI 已通过，见 Spec 057。
+- [ ] 核对新一轮 CNB Review 的处理记录；本轮未取得 CNB 证据。
 - [x] DONE 修复二级菜单默认宽度并同步公开 dartdoc
 - [x] DONE 补充九个公开实例的点击功能断言与明暗 postAction Golden
 - [x] DONE 补充纯文本点击和双层菜单选择 Toast 的独立明暗 Golden

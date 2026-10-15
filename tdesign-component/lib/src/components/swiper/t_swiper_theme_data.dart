@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 't_swiper_types.dart';
 
 const _defaultDotSize = 6.0;
 const _defaultActiveDotExtent = 20.0;

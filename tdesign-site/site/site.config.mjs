@@ -1,4 +1,16 @@
 export default {
+  standalone: [
+    {
+      path: '/flutter/migration-1-0',
+      name: 'migration-1-0',
+      meta: { docType: 'explain' },
+      component: () => import('@docs/migration-0.2.7-to-1.0.md'),
+    },
+    {
+      path: '/flutter/dark-mode',
+      redirect: '/flutter/custom-theme#明暗模式',
+    },
+  ],
   docs: [
     {
       title: '开始',
@@ -16,14 +28,14 @@ export default {
           name: 'develop',
           meta: { docType: 'explain' },
           path: '/flutter/develop',
-          component: () => import('../CONTRIBUTING.md'),
+          component: () => import('../../CONTRIBUTING.md'),
         },
         {
           title: '常见问题',
           name: 'faq',
           meta: { docType: 'explain' },
           path: '/flutter/faq',
-          component: () => import('../FAQ.md'),
+          component: () => import('@docs/faq.md'),
         },
         // {
         //   title: '谁在用',
@@ -39,13 +51,6 @@ export default {
           path: '/flutter/changelog',
           component: () => import('../CHANGELOG.md'),
         },
-        // {
-        //   title: '自定义主题',
-        //   name: 'custom-theme',
-        //   meta: { docType: 'explain' },
-        //   path: '/flutter/custom-theme',
-        //   component: () => import('@docs/custom-theme.md'),
-        // },
         {
           title: '组件概览',
           name: 'overview',
@@ -67,11 +72,18 @@ export default {
           component: () => import('@component-docs/theme/README.md'),
         },
         {
-          title: '深色模式',
-          name: 'dark-mode',
+          title: '自定义主题',
+          name: 'custom-theme',
           meta: { docType: 'explain' },
-          path: '/flutter/dark-mode',
-          component: () => import('@docs/dark-mode.md'),
+          path: '/flutter/custom-theme',
+          component: () => import('@docs/custom-theme.md'),
+        },
+        {
+          title: '国际化',
+          name: 'internationalization',
+          meta: { docType: 'explain' },
+          path: '/flutter/internationalization',
+          component: () => import('@docs/internationalization.md'),
         },
       ],
     },
