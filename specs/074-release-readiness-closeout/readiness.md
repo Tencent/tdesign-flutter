@@ -16,7 +16,7 @@
 | 剩余差异 | [Spec060方案](../060-token-difference-resolution/solutions.md) 仍是待实施方案 | 先确定按钮危险/禁用语义与 Switch 几何目标及设计版本，再分按钮、Switch两批实施。每批双SDK功能回归、Linux3.32精确Golden和设计复核；按钮边框先量测375px、DPR2/3的微信伪元素实际几何，不能直接把4rpx换成2dp |
 | 人工验收 | [12项验收表](../058-release-preparation/manual-acceptance.md) 全部未执行，最终SHA、设备和设计版本未填 | 在最终候选构建设备包；真实Android/iOS和目标浏览器执行IME、权限、GPU、滚动及字体/主题场景；逐行记录设备、步骤、结果和证据。单元测试不能替代 |
 | 迁移覆盖 | 现有9组可运行片段和21项消费测试，未覆盖57组件所有旧用法 | 对真实0.2.7业务使用的API逐项对照指南和383项旧声明附录；缺改法补到已有章节，再补对应外部消费场景；旧调用在0.2.7环境独立验证。不得把结构校验等同于全面可迁移 |
-| CodeCC | #1168 check 116408636711失败；严重漏洞计数返回null、0条annotation，无可定位漏洞 | 本轮重试GitHub check接口返回404。需扫描应用维护者从[原任务](https://codecc.woa.com/codecc/GITHUB_724563665/task/list?pipelineId=p-449b99d972484fe48d9503b3b8b0aceb&buildId=b-e3f2fe09cde149729bb086ef203894e4&from=check_run)恢复有效结果并扫描最终head；有效结果为0或实际问题修复后才关闭，不修改门禁绕过 |
+| CodeCC | 新版本PR1170 head7d3cb3e2的check116424269590已成功，严重漏洞数明确为0；PR1169 head3ec9793b亦通过。旧#1168的null失败记录保留，不当作具体漏洞 | 本轮通过新PR重新触发扫描恢复有效结果，没有绕过门禁；候选变更后必须确认新的最终head扫描通过，不能沿用旧head的绿色结果 |
 | 更新日志 | 自动日志外已有[发布说明草稿](../058-release-preparation/release-notes-draft.md)，不能推定工具会采集被标记无需日志的PR | 核对 release PR 自动生成评论覆盖0.2.7以来用户可见变更，特别是Ghost自定义反色、稀疏深色主题JSON及API删除。按现有流程编辑确认的发布评论，不手写自动CHANGELOG |
 | 最终候选验证 | develop历史CI和本轮检查并非最终release head | release PR最后一次自动修改后重新记录完整head、依赖和构建哈希；双SDK分析/功能/迁移、Linux精确Golden、APK/iOS/Web、真实发布归档dry-run必须对应同一候选；修订源码后复验受影响项 |
 | 交付来源 | 官方固定APK/二维码之前下载到0.2.7，尚无1.0交付证据；tag流程读取移动develop | 发布人按PUBLISH.md核对tag/包/站点/APK来自同一冻结SHA。不能证明来源一致就暂停交付；线上pub.dev消费和二维码APK实际安装在发布后执行，发布前准备对应访问权限与回退方案 |
@@ -28,4 +28,4 @@
 3. 同步最终 develop 到独立版本 PR，冻结候选；完成全矩阵、归档预检和扫描，确认工作流使用该候选。
 4. 发布门槛全部关闭后再合并版本 PR，按 PUBLISH.md 上传和上线；验证正式包消费、正式站点和APK二维码。
 
-当前没有设备、设计裁定和扫描内部报告，不能把这些项改为完成，也不能据此合并版本 PR 或宣称1.0已发布。
+当前没有设备和设计裁定，不能把对应项改为完成，也不能据此合并版本 PR 或宣称1.0已发布。
