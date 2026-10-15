@@ -80,8 +80,10 @@ test('repository copies and runnable migration snippets are synchronized', () =>
 
 test('migration is linked from getting started and dark mode shares the theme guide', () => {
   const leaves = siteConfig.docs.flatMap(group => group.children ?? []);
-  assert.ok(!leaves.some(page => ['migration-1-0', 'dark-mode'].includes(page.name)));
-  assert.ok(siteConfig.standalone.some(page => page.path === '/flutter/migration-1-0'));
+  assert.ok(!leaves.some(page => page.name === 'dark-mode'));
+  const migration = [...leaves, ...siteConfig.standalone].filter(page => page.path === '/flutter/migration-1-0');
+  assert.equal(migration.length, 1);
+  assert.equal(migration[0].name, 'migration-1-0');
   assert.equal(siteConfig.standalone.find(page => page.path === '/flutter/dark-mode').redirect, '/flutter/custom-theme#明暗模式');
   const read = file => readFileSync(path.join(root, file), 'utf8');
   assert.match(read('tdesign-site/site/docs/getting-started.md'), /tdesign_flutter: \^1\.0\.0/);
