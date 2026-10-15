@@ -10,6 +10,8 @@ spline: explain
 
 升级时将依赖更新为 `tdesign_flutter: ^1.0.0`。本文仅说明 0.2.7 到 1.0 的迁移；alpha 版本之间的升级不在本文范围。
 
+已有具体组件需要迁移时，可直接跳到[按组件查找迁移方式](#migration-components)；首次升级建议先按下面的顺序处理公共配置。
+
 ## 升级顺序
 
 1. 保留当前依赖锁文件、主题 JSON 与关键页面截图；先在业务分支迁移。
@@ -288,69 +290,285 @@ Widget migratedUpload({
 - **底部导航**：旧 `TDBottomTabBar` → `TTabBar`，提供 type、navigationTabs、受控 value/onChanged；旧 `topBorder/showTopBorder/centerDistance` 没有等价开关恢复，按新的默认边线和内置图文布局验收。
 - **Swiper**：使用 `TSwiper` 的 children 或 itemBuilder/itemCount；自建 `TSwiperController` 并在页面 dispose 中释放。旧第三方 SwiperPlugin/SwiperController 和 TDSwiperPagination 不能直接传入；按当前分页、箭头与 pageEffect 能力重组。TSwiper 默认 loop/autoplay 均 false，业务需要时显式打开。
 
-## 全部组件迁移索引
+<a id="migration-components"></a>
+## 按组件查找迁移方式
 
-下表是入口与职责迁移索引，不承诺旧构造参数一一保留。每个组件的全部当前字段与默认值以 1.0 API 文档为准；旧名查找见文末导出索引。
+只需要迁移项目中实际使用的组件。先搜索代码中的旧类名，例如 `TDButton`，再按下面的分类找到它。
 
-| 组件 | 0.2.7 入口 | 1.0 入口 | 必须检查的迁移点 |
-|---|---|---|---|
-| button | `TDButton` | `TButton` | text→child；onTap→onPressed；type→variant；theme→colorPreset；状态样式合并为 ButtonStyle。 |
-| divider | `TDDivider` | `TDivider` | 按当前构造及 TDividerThemeData 配置；方向/内容与具体视觉默认值分开。 |
-| fab | `TDFab` | `TFab` | 重新核对尺寸/形态枚举、内容和事件；具体视觉从 TFabThemeData 配置。 |
-| icon | `TDIcons / Icon` | `TIcons / TIcon` | 图标数据来自 tdesign_flutter_icons；TIcon 的默认视觉由 TD 控制，实例 size/color 可覆盖。 |
-| text | `TDText / TDTextSpan` | `TText / TTextSpan` | 删除分散字体、在线加载和 padding 入口；用 style、textScaler、显式父布局，见文字一节。 |
-| link | `TDLink` | `TLink` | 内容改用 Widget child；内置规格与 colorPreset 留实例，具体视觉从 TLinkThemeData 配置。 |
-| backtop | `TDBackTop` | `TBackTop` | 按当前滚动绑定与形态配置；仅提供滚动控制器时按组件契约回顶，不用空回调猜禁用。 |
-| drawer | `TDDrawer / TDDrawerWidget` | `TDrawer / showTDrawer` | 内容与浮层打开分开；宽度/背景移入 TDrawerThemeData，旧内容实现类型不再直接构造。 |
-| indexes | `TDIndexes` | `TIndexes` | 重新核对受控索引及滚动对象；字母列表最大高度在组件 Theme 配置。 |
-| navbar | `TDNavBar` | `TNavBar` | title/操作保留内容职责，背景、颜色、间距、边框和阴影迁入 TNavBarThemeData。 |
-| sidebar | `TDSideBar` | `TSideBar` | 选择交给 value/onChanged；去掉旧 Controller/数据项样式依赖，视觉使用 TSideBarThemeData。 |
-| steps | `TDSteps` | `TSteps.progress / selectable / display` | 选择进度、可选择或纯展示模式；不把三种状态源混用。 |
-| tab_bar | `TDBottomTabBar` | `TTabBar` | 底部导航：显式 type、navigationTabs、value/onChanged；尺寸/颜色/分隔线迁 Theme。 |
-| tabs | `TDTabBar / TDTabBarView` | `TTabsBar / TTabsBarView` | 顶部页签：共享 TabController 或 DefaultTabController；不是底部 TTabBar。 |
-| form | `TDForm / FormController` | `TForm / TFormField / TFormController` | 从 items/rules/data 配置改为字段 Widget 树；value/onChanged、validator 与控制器职责分开。 |
-| input | `TDInput` | `TInput` | controller 与 initialValue 互斥；onChanged/hintText/prefix/suffix；不要把 initialValue 当持续受控值。 |
-| textarea | `TDTextarea` | `TTextarea` | 多行输入独立组件；用 minLines/maxLines、controller 与字段回调，核对计数/字符限制。 |
-| search | `TDSearchBar` | `TSearchBar` | placeHolder→hintText、onTextChanged→onChanged、onActionClick→onActionPressed；不保留旧样式对象。 |
-| checkbox | `TDCheckbox / TDCheckboxGroup` | `TCheckbox / TCheckboxGroup` | checked/id/controller 方案改为 value/onChanged；组提供 options 和受控选中集合，类型按当前 API。 |
-| radio | `TDRadio / TDRadioGroup` | `TRadio / TRadioGroup<T>` | 单项必须位于同类型组下；组持有 value/onChanged，不再为每项维护选中状态。 |
-| switch | `TDSwitch` | `TSwitch` | value/onChanged 管开关状态；空回调禁用；规格与具体配色分别从实例/Theme 设置。 |
-| stepper | `TDStepper` | `TStepper` | required value；回调接受后重建；旧 defaultValue/eventController 不能作为迁移目标。 |
-| slider | `TDSlider / TDRangeSlider` | `TSlider / TRangeSlider` | 按当前值及回调类型迁移；旧 Thumb/Track/Painter 类型不再作为可继承公开入口。 |
-| rate | `TDRate` | `TRate` | 按当前受控数值与回调迁移；重验半星、禁用、只读与自定义指示器。 |
-| picker | `TDPicker / TDMultiPicker / TDMultiLinkedPicker` | `TPicker + TPickerColumns / TPickerLinked` | 列数据改不可变 option 树；选择面板不负责业务确认，使用 TPickerPopup 组合草稿/确认/取消。 |
-| date_time_picker | `TDDatePicker` | `TDateTimePicker` | DatePickerModel 改为 TDateTimePickerValue + DateTimePickerMode；上下界/步进显式传入，外部管理确认。 |
-| cascader | `TDCascader / TDMultiCascader` | `TCascader` | 使用 TCascaderOption 树与受控路径；旧自定义 Tab/Action/多选控制类型不能机械替换，按当前能力重组。 |
-| tree_select | `TDTreeSelect / TDSelectOption` | `TTreeSelect / TTreeSelectOption` | 树数据、选中集合与 multiple 明确配置；不再复用旧副作用控制器。 |
-| calendar | `TDCalendar` | `TCalendar` | value 是 List<DateTime>；variant 决定单选/多选/区间；onChanged 回写，时间选择和弹层外部组合。 |
-| upload | `TDUpload` | `TUpload` | files/onChanged 受控；单一 mediaType，maxFiles/maxFileSize、不可变结果；上传请求由业务执行。 |
-| avatar | `TDAvatar` | `TAvatar` | 形状用 shape，物理大小/颜色迁 TAvatarThemeData；特殊文字用 child: Text(style: ...)。 |
-| badge | `TDBadge` | `TBadge` | 统一 label/size 等当前入口；旧数字/红点/丝带类型按组件 API 重组，不复用旧 BadgeConfig。 |
-| cell | `TDCell / TDCellGroup` | `TCell / TCellGroup` | 以内容槽组合；连续列表用 TCellGroup；统一背景/分隔线由组或 Theme 管理。 |
-| collapse | `TDCollapse / TDCollapsePanel` | `TCollapse / TCollapsePanel` | 受控展开值与内容分开；形态/动画属于实例，具体外观从 TCollapseThemeData 配置。 |
-| empty | `TDEmpty` | `TEmpty` | 旧 type 改为 icon/image/emptyText/operation 组合；不再查找 TDEmptyType，也不导入内部插图。 |
-| footer | `TDFooter` | `TFooter` | 按当前内容/链接数据与组件 Theme 迁移，不继续使用旧 FooterType 作为类型。 |
-| image | `TDImage` | `TImage` | 重验加载/失败/裁剪；尺寸和占位以当前 API 为准，旧 TDImageType 不能仅改前缀。 |
-| image_viewer | `TDImageViewer / TDImageDialog` | `TImageViewer.show` | images 使用 ImageProvider 列表；initialIndex 与 onIndexChanged，内部 State/Dialog 类型不再直接实例化。 |
-| progress | `TDProgress` | `TProgress` | variant/status 与主题分开；圆环 circleSize 表示外框边长，不能把旧半径语义套入。 |
-| result | `TDResult` | `TResult` | 重选当前语义状态与内容插槽，背景/文字视觉使用 TResultThemeData。 |
-| skeleton | `TDSkeleton / TDSkeletonRowCol*` | `TSkeleton / TSkeleton.custom` | 标准形态用 variant；自定义布局使用 TSkeletonLayout，不复用旧 RowCol 配置类型。 |
-| swiper | `Swiper + TDSwiperPagination` | `TSwiper / TSwiperController` | 不再用第三方 SwiperController/SwiperPlugin；迁移 children 或 itemBuilder、分页及自有控制器。 |
-| table | `TDTable / TDTableCol` | `TTable<T> / TTableColumn<T>` | 列使用 id/header/cellBuilder，data 必填；排序和选择是受控值，旧列/行选择回调需要改写。 |
-| tag | `TDTag / TDSelectTag` | `TTag / TSelectTag` | 语义色用 colorPreset；选中/关闭遵循当前回调；具体字体和圆角从 Theme 设置。 |
-| time_counter | `TDTimeCounter` | `TTimeCounter` | time 和 onChanged 均使用毫秒整数；重验自动开始、方向与结束；自建 Controller 由业务释放。 |
-| action_sheet | `TDActionSheet` | `TActionSheet` | 按当前列表/宫格入口及 TActionSheetItem 组合；旧主题枚举不是新 Theme 类型。 |
-| dialog | `TDAlertDialog / TDConfirmDialog / TDInputDialog` | `TDialog / TConfirmDialog / TDialogAction` | 单确认便捷弹窗与多操作槽分开；输入弹窗用 TDialog+TInput 组合，不恢复专用旧类。 |
-| dropdown_menu | `TDDropdownMenu / TDDropdownItem` | `TDropdownMenu / TDropdownMenuItem` | 菜单项描述与 Single/MultiSelectPanel 组合；重验外部值更新、遮罩和 anchor，不直接改名前缀。 |
-| loading | `TDLoading` | `TLoading` | 按当前 icon/内容与 TLoadingController 使用；旧内部指示器/State 不作为公开继承点。 |
-| message | `TDMessage` | `TMessage` | duration 使用 Duration；status 替代旧 theme；显示由 Widget 树或命令句柄管理，不保留 visible 开关。 |
-| notice_bar | `TDNoticeBar` | `TNoticeBar` | 语义状态/滚动/多行用当前 API；重验循环、点击与关闭，不搬旧样式类。 |
-| popover | `TDPopover / TDPopoverWidget` | `TPopover` | 锚点和一次性命令按当前入口使用；offset/arrowSize/padding/背景/圆角从 TPopoverThemeData 设置。 |
-| popup | `TDPopup*Panel / TDSlidePopupRoute` | `TPopup.show + TPopupOptions + TPopupHandle` | 面板、路由与控制统一；选择方向专属 Options/Inset，关闭结果从 handle.result 获取。 |
-| refresh | `TDRefreshHeader` | `TPullDownRefresh` | 用 wrapper、受控回调和 TPullDownRefreshController 迁移；旧第三方 Header 不能仅改名。 |
-| swipe_cell | `TDSwipeCell / TDSwipeCellAction` | `TSwipeCell / TSwipeCellAction` | 侧滑交互与逐项动作配置使用当前 API；不要依赖旧 Inherited/State，避免重复通知。 |
-| toast | `TDToast` | `TToast` | duration 为 Duration，加载默认也会超时；持续加载显式 Duration.zero，背景拦截放 TOverlayConfig。 |
-| theme | `TDTheme / TDThemeData` | `context.tTheme / TThemeData / TThemeBuilder` | 全局 Token→TD 组件 Theme→支持的实例配置；Material 外观不再反向影响 TD 默认视觉。 |
+1. **找对应入口**：每项先列出“0.2.7旧入口 → 1.0入口”，用于定位新组件。
+2. **完成用法调整**：阅读“需要调整”，并结合前文示例修改参数、数据和回调；箭头不表示只改类名就能完成迁移。
+3. **核对当前用法**：点击组件名称进入1.0 API文档，再验证真实操作、主题及布局。
+
+例如，搜索到 `TDButton` 时，先看[按钮与禁用语义](#按钮与禁用语义)，把文字和点击回调迁到新的内容槽与回调，再查看按钮API。不要仅把它改名为 `TButton` 后就结束。
+
+### 选择你正在迁移的组件
+
+- [主题与全局配置](#migration-group-global)（1项）
+- [按钮、文字与基础组件](#migration-group-basic)（6项）
+- [页面导航与页签](#migration-group-navigation)（8项）
+- [表单、输入与选择](#migration-group-input)（16项）
+- [内容与数据展示](#migration-group-display)（15项）
+- [浮层、提示与交互反馈](#migration-group-feedback)（11项）
+
+查找旧枚举、Controller、State等辅助类型时，使用文末的[旧类型名称对照](#migration-legacy-types)。该附录用于定位处置方向，组件迁移优先按下面的分组进行。
+
+<a id="migration-group-global"></a>
+### 主题与全局配置
+
+先处理全局主题，再迁移各组件的局部样式。
+
+- **[Theme 主题](https://tdesign.tencent.com/flutter/components/theme?tab=api)**：`TDTheme / TDThemeData` → `context.tTheme / TThemeData / TThemeBuilder`。
+
+  **需要调整**：全局 Token→TD 组件 Theme→支持的实例配置； Material 外观不再反向影响 TD 默认视觉。
+
+<a id="migration-group-basic"></a>
+### 按钮、文字与基础组件
+
+从页面上常用的按钮、文字、图标等开始，核对内容槽和样式配置。
+
+- **[Button 按钮](https://tdesign.tencent.com/flutter/components/button?tab=api)**：`TDButton` → `TButton`。
+
+  **需要调整**：text→child； onTap→onPressed； type→variant； theme→colorPreset； 状态样式合并为 ButtonStyle。
+
+- **[Divider 分割线](https://tdesign.tencent.com/flutter/components/divider?tab=api)**：`TDDivider` → `TDivider`。
+
+  **需要调整**：按当前构造及 TDividerThemeData 配置； 方向/内容与具体视觉默认值分开。
+
+- **[Fab 悬浮按钮](https://tdesign.tencent.com/flutter/components/fab?tab=api)**：`TDFab` → `TFab`。
+
+  **需要调整**：重新核对尺寸/形态枚举、内容和事件； 具体视觉从 TFabThemeData 配置。
+
+- **[Icon 图标](https://tdesign.tencent.com/flutter/components/icon?tab=api)**：`TDIcons / Icon` → `TIcons / TIcon`。
+
+  **需要调整**：图标数据来自 tdesign_flutter_icons； TIcon 的默认视觉由 TD 控制，实例 size/color 可覆盖。
+
+- **[Link 链接](https://tdesign.tencent.com/flutter/components/link?tab=api)**：`TDLink` → `TLink`。
+
+  **需要调整**：内容改用 Widget child； 内置规格与 colorPreset 留实例，具体视觉从 TLinkThemeData 配置。
+
+- **[Text 文本](https://tdesign.tencent.com/flutter/components/text?tab=api)**：`TDText / TDTextSpan` → `TText / TTextSpan`。
+
+  **需要调整**：删除分散字体、在线加载和 padding 入口； 用 style、textScaler、显式父布局，见文字一节。
+
+<a id="migration-group-navigation"></a>
+### 页面导航与页签
+
+重点区分顶部页签、底部导航以及各自的控制器和受控值。
+
+- **[BackTop 返回顶部](https://tdesign.tencent.com/flutter/components/back-top?tab=api)**：`TDBackTop` → `TBackTop`。
+
+  **需要调整**：按当前滚动绑定与形态配置； 仅提供滚动控制器时按组件契约回顶，不用空回调猜禁用。
+
+- **[Drawer 抽屉](https://tdesign.tencent.com/flutter/components/drawer?tab=api)**：`TDDrawer / TDDrawerWidget` → `TDrawer / showTDrawer`。
+
+  **需要调整**：内容与浮层打开分开； 宽度/背景移入 TDrawerThemeData，旧内容实现类型不再直接构造。
+
+- **[Indexes 索引](https://tdesign.tencent.com/flutter/components/indexes?tab=api)**：`TDIndexes` → `TIndexes`。
+
+  **需要调整**：重新核对受控索引及滚动对象； 字母列表最大高度在组件 Theme 配置。
+
+- **[Navbar 导航栏](https://tdesign.tencent.com/flutter/components/navbar?tab=api)**：`TDNavBar` → `TNavBar`。
+
+  **需要调整**：title/操作保留内容职责，背景、颜色、间距、边框和阴影迁入 TNavBarThemeData。
+
+- **[SideBar 侧边栏](https://tdesign.tencent.com/flutter/components/side-bar?tab=api)**：`TDSideBar` → `TSideBar`。
+
+  **需要调整**：选择交给 value/onChanged； 去掉旧 Controller/数据项样式依赖，视觉使用 TSideBarThemeData。
+
+- **[Steps 步骤条](https://tdesign.tencent.com/flutter/components/steps?tab=api)**：`TDSteps` → `TSteps.progress / selectable / display`。
+
+  **需要调整**：选择进度、可选择或纯展示模式； 不把三种状态源混用。
+
+- **[TabBar 标签栏](https://tdesign.tencent.com/flutter/components/tab-bar?tab=api)**：`TDBottomTabBar` → `TTabBar`。
+
+  **需要调整**：底部导航：显式 type、navigationTabs、value/onChanged； 尺寸/颜色/分隔线迁 组件 Theme。
+
+- **[Tabs 选项卡](https://tdesign.tencent.com/flutter/components/tabs?tab=api)**：`TDTabBar / TDTabBarView` → `TTabsBar / TTabsBarView`。
+
+  **需要调整**：顶部页签：共享 TabController 或 DefaultTabController； 不是底部 TTabBar。
+
+<a id="migration-group-input"></a>
+### 表单、输入与选择
+
+先确认值由谁持有，再处理回调、表单校验和确认/取消流程。
+
+- **[Calendar 日历](https://tdesign.tencent.com/flutter/components/calendar?tab=api)**：`TDCalendar` → `TCalendar`。
+
+  **需要调整**：value 是 List<DateTime>； variant 决定单选/多选/区间； onChanged 回写，时间选择和弹层外部组合。
+
+- **[Cascader 级联选择器](https://tdesign.tencent.com/flutter/components/cascader?tab=api)**：`TDCascader / TDMultiCascader` → `TCascader`。
+
+  **需要调整**：使用 TCascaderOption 树与受控路径； 旧自定义 Tab/Action/多选控制类型不能机械替换，按当前能力重组。
+
+- **[CheckBox 多选框](https://tdesign.tencent.com/flutter/components/checkbox?tab=api)**：`TDCheckbox / TDCheckboxGroup` → `TCheckbox / TCheckboxGroup`。
+
+  **需要调整**：checked/id/controller 方案改为 value/onChanged； 组提供 options 和受控选中集合，类型按当前 API。
+
+- **[DateTimePicker 时间选择器](https://tdesign.tencent.com/flutter/components/date-time-picker?tab=api)**：`TDDatePicker` → `TDateTimePicker`。
+
+  **需要调整**：DatePickerModel 改为 TDateTimePickerValue + DateTimePickerMode； 上下界/步进显式传入，外部管理确认。
+
+- **[Form 表单](https://tdesign.tencent.com/flutter/components/form?tab=api)**：`TDForm / FormController` → `TForm / TFormField / TFormController`。
+
+  **需要调整**：从 items/rules/data 配置改为字段 Widget 树； value/onChanged、validator 与控制器职责分开。
+
+- **[Input 输入框](https://tdesign.tencent.com/flutter/components/input?tab=api)**：`TDInput` → `TInput`。
+
+  **需要调整**：controller 与 initialValue 互斥； onChanged/hintText/prefix/suffix； 不要把 initialValue 当持续受控值。
+
+- **[Picker 选择器](https://tdesign.tencent.com/flutter/components/picker?tab=api)**：`TDPicker / TDMultiPicker / TDMultiLinkedPicker` → `TPicker + TPickerColumns / TPickerLinked`。
+
+  **需要调整**：列数据改不可变 option 树； 选择面板不负责业务确认，使用 TPickerPopup 组合草稿/确认/取消。
+
+- **[Radio 单选框](https://tdesign.tencent.com/flutter/components/radio?tab=api)**：`TDRadio / TDRadioGroup` → `TRadio / TRadioGroup<T>`。
+
+  **需要调整**：单项必须位于同类型组下； 组持有 value/onChanged，不再为每项维护选中状态。
+
+- **[Rate 评分](https://tdesign.tencent.com/flutter/components/rate?tab=api)**：`TDRate` → `TRate`。
+
+  **需要调整**：按当前受控数值与回调迁移； 重验半星、禁用、只读与自定义指示器。
+
+- **[Search 搜索框](https://tdesign.tencent.com/flutter/components/search?tab=api)**：`TDSearchBar` → `TSearchBar`。
+
+  **需要调整**：placeHolder→hintText、onTextChanged→onChanged、onActionClick→onActionPressed； 不保留旧样式对象。
+
+- **[Slider 滑动选择器](https://tdesign.tencent.com/flutter/components/slider?tab=api)**：`TDSlider / TDRangeSlider` → `TSlider / TRangeSlider`。
+
+  **需要调整**：按当前值及回调类型迁移； 旧 Thumb/Track/Painter 类型不再作为可继承公开入口。
+
+- **[Stepper 步进器](https://tdesign.tencent.com/flutter/components/stepper?tab=api)**：`TDStepper` → `TStepper`。
+
+  **需要调整**：required value； 回调接受后重建； 旧 defaultValue/eventController 不能作为迁移目标。
+
+- **[Switch 开关](https://tdesign.tencent.com/flutter/components/switch?tab=api)**：`TDSwitch` → `TSwitch`。
+
+  **需要调整**：value/onChanged 管开关状态； 空回调禁用； 规格与具体配色分别从实例/Theme 设置。
+
+- **[Textarea 多行文本框](https://tdesign.tencent.com/flutter/components/textarea?tab=api)**：`TDTextarea` → `TTextarea`。
+
+  **需要调整**：多行输入独立组件； 用 minLines/maxLines、controller 与字段回调，核对计数/字符限制。
+
+- **[TreeSelect 树形选择](https://tdesign.tencent.com/flutter/components/tree-select?tab=api)**：`TDTreeSelect / TDSelectOption` → `TTreeSelect / TTreeSelectOption`。
+
+  **需要调整**：树数据、选中集合与 multiple 明确配置； 不再复用旧副作用控制器。
+
+- **[Upload 上传](https://tdesign.tencent.com/flutter/components/upload?tab=api)**：`TDUpload` → `TUpload`。
+
+  **需要调整**：files/onChanged 受控； 单一 mediaType，maxFiles/maxFileSize、不可变结果； 上传请求由业务执行。
+
+<a id="migration-group-display"></a>
+### 内容与数据展示
+
+检查数据结构、内容插槽、状态以及具体尺寸的含义。
+
+- **[Avatar 头像](https://tdesign.tencent.com/flutter/components/avatar?tab=api)**：`TDAvatar` → `TAvatar`。
+
+  **需要调整**：形状用 shape，物理大小/颜色迁 TAvatarThemeData； 特殊文字用 child: Text(style: ...)。
+
+- **[Badge 徽标](https://tdesign.tencent.com/flutter/components/badge?tab=api)**：`TDBadge` → `TBadge`。
+
+  **需要调整**：统一 label/size 等当前入口； 旧数字/红点/丝带类型按组件 API 重组，不复用旧 BadgeConfig。
+
+- **[Cell 单元格](https://tdesign.tencent.com/flutter/components/cell?tab=api)**：`TDCell / TDCellGroup` → `TCell / TCellGroup`。
+
+  **需要调整**：以内容槽组合； 连续列表用 TCellGroup； 统一背景/分隔线由组或 Theme 管理。
+
+- **[Collapse 折叠面板](https://tdesign.tencent.com/flutter/components/collapse?tab=api)**：`TDCollapse / TDCollapsePanel` → `TCollapse / TCollapsePanel`。
+
+  **需要调整**：受控展开值与内容分开； 形态/动画属于实例，具体外观从 TCollapseThemeData 配置。
+
+- **[Empty 空状态](https://tdesign.tencent.com/flutter/components/empty?tab=api)**：`TDEmpty` → `TEmpty`。
+
+  **需要调整**：旧 type 改为 icon/image/emptyText/operation 组合； 不再查找 TDEmptyType，也不导入内部插图。
+
+- **[Footer 页脚](https://tdesign.tencent.com/flutter/components/footer?tab=api)**：`TDFooter` → `TFooter`。
+
+  **需要调整**：按当前内容/链接数据与组件 Theme 迁移，不继续使用旧 FooterType 作为类型。
+
+- **[Image 图片](https://tdesign.tencent.com/flutter/components/image?tab=api)**：`TDImage` → `TImage`。
+
+  **需要调整**：重验加载/失败/裁剪； 尺寸和占位以当前 API 为准，旧 TDImageType 不能仅改前缀。
+
+- **[ImageViewer 图片预览](https://tdesign.tencent.com/flutter/components/image-viewer?tab=api)**：`TDImageViewer / TDImageDialog` → `TImageViewer.show`。
+
+  **需要调整**：images 使用 ImageProvider 列表； initialIndex 与 onIndexChanged，内部 State/Dialog 类型不再直接实例化。
+
+- **[Progress 进度条](https://tdesign.tencent.com/flutter/components/progress?tab=api)**：`TDProgress` → `TProgress`。
+
+  **需要调整**：variant/status 与主题分开； 圆环 circleSize 表示外框边长，不能把旧半径语义套入。
+
+- **[Result 结果](https://tdesign.tencent.com/flutter/components/result?tab=api)**：`TDResult` → `TResult`。
+
+  **需要调整**：重选当前语义状态与内容插槽，背景/文字视觉使用 TResultThemeData。
+
+- **[Skeleton 骨架屏](https://tdesign.tencent.com/flutter/components/skeleton?tab=api)**：`TDSkeleton / TDSkeletonRowCol*` → `TSkeleton / TSkeleton.custom`。
+
+  **需要调整**：标准形态用 variant； 自定义布局使用 TSkeletonLayout，不复用旧 RowCol 配置类型。
+
+- **[Swiper 轮播图](https://tdesign.tencent.com/flutter/components/swiper?tab=api)**：`Swiper + TDSwiperPagination` → `TSwiper / TSwiperController`。
+
+  **需要调整**：不再用第三方 SwiperController/SwiperPlugin； 迁移 children 或 itemBuilder、分页及自有控制器。
+
+- **[Table 表格](https://tdesign.tencent.com/flutter/components/table?tab=api)**：`TDTable / TDTableCol` → `TTable<T> / TTableColumn<T>`。
+
+  **需要调整**：列使用 id/header/cellBuilder，data 必填； 排序和选择是受控值，旧列/行选择回调需要改写。
+
+- **[Tag 标签](https://tdesign.tencent.com/flutter/components/tag?tab=api)**：`TDTag / TDSelectTag` → `TTag / TSelectTag`。
+
+  **需要调整**：语义色用 colorPreset； 选中/关闭遵循当前回调； 具体字体和圆角从 Theme 设置。
+
+- **[TimeCounter 计时器](https://tdesign.tencent.com/flutter/components/time-counter?tab=api)**：`TDTimeCounter` → `TTimeCounter`。
+
+  **需要调整**：time 和 onChanged 均使用毫秒整数； 重验自动开始、方向与结束； 自建 Controller 由业务释放。
+
+<a id="migration-group-feedback"></a>
+### 浮层、提示与交互反馈
+
+核对打开与关闭方式、返回结果、时长、异步结束和资源释放。
+
+- **[ActionSheet 动作面板](https://tdesign.tencent.com/flutter/components/action-sheet?tab=api)**：`TDActionSheet` → `TActionSheet`。
+
+  **需要调整**：按当前列表/宫格入口及 TActionSheetItem 组合； 旧主题枚举不是新 Theme 类型。
+
+- **[Dialog 对话框](https://tdesign.tencent.com/flutter/components/dialog?tab=api)**：`TDAlertDialog / TDConfirmDialog / TDInputDialog` → `TDialog / TConfirmDialog / TDialogAction`。
+
+  **需要调整**：单确认便捷弹窗与多操作槽分开； 输入弹窗用 TDialog+TInput 组合，不恢复专用旧类。
+
+- **[DropdownMenu 下拉菜单](https://tdesign.tencent.com/flutter/components/dropdown-menu?tab=api)**：`TDDropdownMenu / TDDropdownItem` → `TDropdownMenu / TDropdownMenuItem`。
+
+  **需要调整**：菜单项描述与 Single/MultiSelectPanel 组合； 重验外部值更新、遮罩和 anchor，不直接改名前缀。
+
+- **[Loading 加载](https://tdesign.tencent.com/flutter/components/loading?tab=api)**：`TDLoading` → `TLoading`。
+
+  **需要调整**：按当前 icon/内容与 TLoadingController 使用； 旧内部指示器/State 不作为公开继承点。
+
+- **[Message 全局提示](https://tdesign.tencent.com/flutter/components/message?tab=api)**：`TDMessage` → `TMessage`。
+
+  **需要调整**：duration 使用 Duration； status 替代旧 theme； 显示由 Widget 树或命令句柄管理，不保留 visible 开关。
+
+- **[NoticeBar 消息提醒](https://tdesign.tencent.com/flutter/components/notice-bar?tab=api)**：`TDNoticeBar` → `TNoticeBar`。
+
+  **需要调整**：语义状态/滚动/多行用当前 API； 重验循环、点击与关闭，不搬旧样式类。
+
+- **[Popover 弹出气泡](https://tdesign.tencent.com/flutter/components/popover?tab=api)**：`TDPopover / TDPopoverWidget` → `TPopover`。
+
+  **需要调整**：锚点和一次性命令按当前入口使用； offset/arrowSize/padding/背景/圆角从 TPopoverThemeData 设置。
+
+- **[Popup 弹出层](https://tdesign.tencent.com/flutter/components/popup?tab=api)**：`TDPopup*Panel / TDSlidePopupRoute` → `TPopup.show + TPopupOptions + TPopupHandle`。
+
+  **需要调整**：面板、路由与控制统一； 选择方向专属 Options/Inset，关闭结果从 handle.result 获取。
+
+- **[PullDownRefresh 下拉刷新](https://tdesign.tencent.com/flutter/components/pull-down-refresh?tab=api)**：`TDRefreshHeader` → `TPullDownRefresh`。
+
+  **需要调整**：用 wrapper、受控回调和 TPullDownRefreshController 迁移； 旧第三方 Header 不能仅改名。
+
+- **[SwipeCell 滑动操作](https://tdesign.tencent.com/flutter/components/swipe-cell?tab=api)**：`TDSwipeCell / TDSwipeCellAction` → `TSwipeCell / TSwipeCellAction`。
+
+  **需要调整**：侧滑交互与逐项动作配置使用当前 API； 不要依赖旧 Inherited/State，避免重复通知。
+
+- **[Toast 轻提示](https://tdesign.tencent.com/flutter/components/toast?tab=api)**：`TDToast` → `TToast`。
+
+  **需要调整**：duration 为 Duration，加载默认也会超时； 持续加载显式 Duration.zero，背景拦截放 TOverlayConfig。
 
 ## 编译通过后仍要检查
 
@@ -362,9 +580,13 @@ Widget migratedUpload({
 
 不存在替代入口的旧公开 State、Painter、布局适配和静态辅助类，不应通过深层 src 导入恢复。若业务依赖其具体能力，应使用公开 Widget/Theme/Flutter 原语重新组合，或在业务中维护对应实现；这类代码需要人工迁移。
 
-## 0.2.7 公开导出名称索引
+<a id="migration-legacy-types"></a>
+## 附录：按旧类型名称查找
 
 以下覆盖 0.2.7 主入口追踪到的自有公开声明（不包括外部包导出）。它用于查找旧名和定位处置方向，**不是自动替换表**。即使目标同名，构造参数、回调、默认值或行为也可能变化。公开基类的继承成员与业务自行继承/深层导入需额外审查。当前入口还导出 Material；同名的 Flutter 类型不作为旧 TD 自有声明的兼容实现。
+
+<details>
+<summary>展开0.2.7旧类型名称对照表（383项）</summary>
 
 | 0.2.7 名称 | 当前入口或处置 | 范围 |
 |---|---|---|
@@ -751,3 +973,5 @@ Widget migratedUpload({
 | `TrapezoidPath` | 无对应的 TD 自有声明；按组件 Widget / Theme / Flutter 原语改写 | 旧实现无兼容契约；同名 Flutter 类型不代表等价 |
 | `horizontalChild` | 无对应的 TD 自有声明；按组件 Widget / Theme / Flutter 原语改写 | 旧实现无兼容契约；同名 Flutter 类型不代表等价 |
 | `slideTransitionFromToAlignment` | 无对应的 TD 自有声明；按组件 Widget / Theme / Flutter 原语改写 | 旧实现无兼容契约；同名 Flutter 类型不代表等价 |
+
+</details>
