@@ -266,9 +266,12 @@ void _calendarIndexesScenes() {
               brightness: brightness,
               extensions: [
                 token,
-                const TCalendarThemeData(
+                TCalendarThemeData(
+                  // 本场景只验证居中，不让真实“今天”改变固定日期的截图。
+                  // 今日状态的颜色由 Calendar 独立状态测试覆盖。
+                  todayDayStyle: TextStyle(color: token.textColorPrimary),
                   height: 550,
-                  monthTitleStyle: TextStyle(
+                  monthTitleStyle: const TextStyle(
                     fontSize: 24,
                     height: 2,
                     color: Colors.purple,

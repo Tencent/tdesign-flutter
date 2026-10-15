@@ -93,6 +93,14 @@ void main() {
     );
   });
 
+  test('GitHub uploads failures from nested Demo directories', () {
+    final workflow = File(
+      '../.github/workflows/test-build.yml',
+    ).readAsStringSync();
+    expect(workflow, contains('tdesign-component/test/**/failures/'));
+    expect(workflow, contains('tdesign-component/example/test/**/failures/'));
+  });
+
   test('visual regression suite names are unique', () {
     final names = visualTestSuites.map((suite) => suite.name).toList();
     expect(names.toSet(), hasLength(names.length));
