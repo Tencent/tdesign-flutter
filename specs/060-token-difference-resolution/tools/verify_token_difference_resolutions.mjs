@@ -5,9 +5,9 @@ import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 
 // Verifies this resolution batch while preserving the original Spec059 target.
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const logs = process.argv[2];
-if (!logs) throw new Error('Usage: node tool/verify_token_difference_resolutions.mjs <log-directory>');
+if (!logs) throw new Error('Usage: node specs/060-token-difference-resolution/tools/verify_token_difference_resolutions.mjs <log-directory>');
 const output = join(root, 'specs/060-token-difference-resolution');
 const read = path => JSON.parse(readFileSync(path, 'utf8'));
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -103,7 +103,7 @@ const report = {
     'implementation-plan-pending': 21, 'platform-geometry-plan-pending': 1, 'no-frozen-source-consumer-found': 5 },
   scope: '32 previously disputed rows; contract support is not final visual acceptance. No claim that the remaining 524 rows are verified.',
   sourceFilesSha256: sha(JSON.stringify(envs[0].snapshot.files)), fingerprints: envs[0].snapshot.files,
-  evidenceTools: [{ file: 'tool/verify_token_difference_resolutions.mjs', sha256: sha(readFileSync(fileURLToPath(import.meta.url))) }],
+  evidenceTools: [{ file: 'specs/060-token-difference-resolution/tools/verify_token_difference_resolutions.mjs', sha256: sha(readFileSync(fileURLToPath(import.meta.url))) }],
   checkpoints: envs.map(({ samples, snapshot, ...metadata }) => ({ ...metadata, lockSha256: snapshot.lockSha256 })),
   proposal: { appliedToMainWorkspace: false, patchSha256: sha(readFileSync(patch)), appliesCleanly: true,
     isolatedFunctionalSdk: envs[1].sdk.frameworkVersion, isolatedFocusCount: 47,

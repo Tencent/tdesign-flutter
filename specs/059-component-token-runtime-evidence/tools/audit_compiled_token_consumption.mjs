@@ -6,9 +6,9 @@ import { fileURLToPath } from 'node:url';
 
 // Compile frozen Less so @@ lookups are resolved instead of treating every
 // declaration in a component containing @@ as a possible dynamic consumer.
-const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const repo = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const miniRoot = process.argv[2];
-if (!miniRoot) throw new Error('Usage: node tool/audit_compiled_token_consumption.mjs <frozen-miniprogram-root>');
+if (!miniRoot) throw new Error('Usage: node specs/059-component-token-runtime-evidence/tools/audit_compiled_token_consumption.mjs <frozen-miniprogram-root>');
 const require = createRequire(join(repo, 'tdesign-site/package.json'));
 const less = require('less');
 const audit = JSON.parse(readFileSync(join(repo, 'specs/048-component-token-theme-ownership/component-consumption-audit.json')));

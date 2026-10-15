@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../lib/migration_027_examples.dart';
+import '../lib/migration_027_to_100_examples.dart';
 
 Widget host(Widget child) => migratedApp(Scaffold(body: child));
 

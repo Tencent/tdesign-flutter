@@ -4,9 +4,9 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 
-// Usage: node tool/summarize_component_token_evidence.mjs <validation-log-directory>
+// Usage: node specs/059-component-token-runtime-evidence/tools/summarize_component_token_evidence.mjs <validation-log-directory>
 // Stage results do not mean that visual acceptance or all 677 rows are complete.
-const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const repo = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const logs = process.argv[2];
 if (!logs) throw new Error('Provide the validation log directory');
 const target = join(repo, 'specs/059-component-token-runtime-evidence');
@@ -140,7 +140,7 @@ const summary = { date: '2026-10-15', baseline: execFileSync('git', ['rev-parse'
     sha256: sha(readFileSync(join(logs, 'frozen-source.tar.gz'))),
   }, scope: '677 historical pending rows; runtime default evidence and frozen source applicability are separate from final visual acceptance.',
   counts, observationNames: byName.size, observationsPerSdk: low.length, identicalAcrossSdks: true,
-  checkpoints, evidenceTools: ['tool/audit_compiled_token_consumption.mjs', 'tool/summarize_component_token_evidence.mjs'].map(file => ({ file, sha256: sha(readFileSync(join(repo, file))) })), sourceFingerprintSha256: sha(JSON.stringify(fingerprints)), fingerprints, rows };
+  checkpoints, evidenceTools: ['specs/059-component-token-runtime-evidence/tools/audit_compiled_token_consumption.mjs', 'specs/059-component-token-runtime-evidence/tools/summarize_component_token_evidence.mjs'].map(file => ({ file, sha256: sha(readFileSync(join(repo, file))) })), sourceFingerprintSha256: sha(JSON.stringify(fingerprints)), fingerprints, rows };
 writeFileSync(join(target, 'runtime-observations.json'), `${JSON.stringify({ lowSdk: checkpoints[0].sdk.frameworkVersion, highSdk: checkpoints[1].sdk.frameworkVersion, identicalAcrossSdks: true, observations: low }, null, 2)}\n`);
 writeFileSync(join(target, 'runtime-review.json'), `${JSON.stringify(summary, null, 2)}\n`);
 console.log(JSON.stringify({ counts, observationNames: byName.size, observationsPerSdk: low.length, regressions: checkpoints.map(item => item.regressionCount) }));

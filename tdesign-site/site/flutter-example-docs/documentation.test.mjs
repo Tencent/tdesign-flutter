@@ -39,7 +39,7 @@ test('check mode detects stale copies and missing sources without writing files'
     for (const file of ['custom-theme', 'internationalization']) write(`tdesign-site/site/docs/${file}.md`, marker.replaceAll('migration-example:', 'documentation-example:'));
     write('README.md', '# project');
     write('README_zh_CN.md', '# 项目');
-    write('tdesign-component/tool/fixtures/token_migration/lib/migration_027_examples.dart', example);
+    write('tdesign-component/tool/fixtures/token_migration/lib/migration_027_to_100_examples.dart', example);
     assert.throws(() => syncDocuments({ root: temp, check: true }), /Stale/);
     assert.match(read(migrationSource), /old/);
     syncDocuments({ root: temp });
