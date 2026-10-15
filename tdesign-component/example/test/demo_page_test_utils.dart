@@ -384,3 +384,16 @@ Future<void> preloadDemoCodeGroup(String group) async {
     ]);
   }
 }
+
+Future<void> waitForDemoWidget(WidgetTester tester, Finder finder) async {
+  for (var attempt = 0; attempt < 100; attempt++) {
+    await tester.pumpAndSettle();
+    if (finder.evaluate().isNotEmpty) {
+      return;
+    }
+    await tester.runAsync(() async {
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+  }
+  expect(finder, findsWidgets);
+}

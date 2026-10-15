@@ -12,13 +12,6 @@ import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 import 'demo_page_test_utils.dart';
 
 void main() {
-  Future<void> finishLoading(WidgetTester tester) async {
-    await tester.runAsync(() async {
-      await Future<void>.delayed(const Duration(milliseconds: 50));
-    });
-    await tester.pumpAndSettle();
-  }
-
   testWidgets('所有公开分组的代码资源均已打包且非空', (tester) async {
     await tester.runAsync(() async {
       final manifest =
@@ -84,7 +77,7 @@ void main() {
       await tester.pumpAndSettle();
       for (final entry in page.entries.entries) {
         await tester.tap(find.byIcon(TIcons.code));
-        await finishLoading(tester);
+        await waitForDemoWidget(tester, find.text('选择示例代码'));
         expect(find.text('选择示例代码'), findsOneWidget);
         final option = find.descendant(
           of: find.byType(BottomSheet),
@@ -92,7 +85,7 @@ void main() {
         );
         await tester.ensureVisible(option);
         await tester.tap(option);
-        await finishLoading(tester);
+        await waitForDemoWidget(tester, find.byType(Markdown));
         final panel = find.byType(Markdown);
         expect(panel, findsOneWidget);
         expect(tester.widget<Markdown>(panel).data, contains(entry.value));
@@ -128,7 +121,7 @@ void main() {
     );
     for (final label in ['group', 'asset']) {
       await tester.tap(find.text(label));
-      await finishLoading(tester);
+      await waitForDemoWidget(tester, find.text('暂无演示代码'));
       final message = find.text('暂无演示代码');
       expect(message, findsOneWidget);
       Navigator.of(tester.element(message)).pop();

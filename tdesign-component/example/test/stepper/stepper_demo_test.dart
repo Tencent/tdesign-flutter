@@ -174,10 +174,7 @@ void main() {
       ];
       for (var i = 0; i < names.length; i++) {
         await tester.tap(find.byIcon(TIcons.code));
-        await tester.runAsync(() async {
-          await Future<void>.delayed(const Duration(milliseconds: 50));
-        });
-        await tester.pumpAndSettle();
+        await waitForDemoWidget(tester, find.text('选择示例代码'));
         final entry = find
             .descendant(
               of: find.byType(BottomSheet),
@@ -186,10 +183,7 @@ void main() {
             .at(i);
         await tester.ensureVisible(entry);
         await tester.tap(entry);
-        await tester.runAsync(() async {
-          await Future<void>.delayed(const Duration(milliseconds: 50));
-        });
-        await tester.pumpAndSettle();
+        await waitForDemoWidget(tester, find.byType(Markdown));
         final expected = await tester.runAsync(
           () => rootBundle.loadString('assets/code/stepper.${names[i]}.txt'),
         );

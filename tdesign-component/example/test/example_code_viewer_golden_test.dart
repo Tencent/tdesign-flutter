@@ -60,7 +60,7 @@ void main() {
         );
         await tester.pumpAndSettle();
         await tester.tap(find.byIcon(TIcons.code));
-        await tester.pumpAndSettle();
+        await waitForDemoWidget(tester, find.text('选择示例代码'));
         expect(find.text('选择示例代码'), findsOneWidget);
         if (stage == 'picker') {
           final goldenPath = 'goldens/code_picker_${mode.name}.png';
@@ -84,7 +84,7 @@ void main() {
               )
               .first,
         );
-        await tester.pumpAndSettle();
+        await waitForDemoWidget(tester, find.byType(Markdown));
         expect(find.byType(Markdown), findsOneWidget);
         final goldenPath = 'goldens/code_panel_${mode.name}.png';
         await captureGoldenEvidence(
