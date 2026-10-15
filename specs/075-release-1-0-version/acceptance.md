@@ -10,3 +10,7 @@
 - 差异只包含组件pubspec、Demo版本资产和本目录Spec。最低Flutter/Dart约束、生产依赖、API和行为均未改变，无新增breaking change。
 
 待办：最终head的完整CI、CodeCC、发布说明确认、Token/设备/设计证据和交付来源核验；见PR1169。此PR保持草稿，不合并、不发布。已有dry-run和path宿主测试不能替代发布后pub.dev真实消费。
+
+## 自动发布说明复核
+
+PR1170的Auto Release run38735496820通过，已生成1.0.0草稿评论6192136199。草稿仍有5条重复主题文档说明、2条Spec元数据进入Others，以及breaking条目进入Others；稀疏深色JSON修复未收录。幽灵按钮相关条目存在，但不能据此认定已包含Spec060本次反色Token修复。PR正文已明确补齐后两项，并要求整理分组与去重后再确认机器人评论。没有删除评论中的待确认标记或触发写入CHANGELOG；日志审核尚未放行。
