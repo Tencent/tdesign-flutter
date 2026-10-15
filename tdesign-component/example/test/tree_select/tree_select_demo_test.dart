@@ -169,11 +169,23 @@ void main() {
       expectedSources.add(source);
     }
 
-    await tester.tap(find.byIcon(TIcons.code));
-    await tester.pumpAndSettle();
-    expect(find.text('code'), findsNWidgets(3));
     for (var i = 0; i < names.length; i++) {
-      await tester.tap(find.text('code').at(i));
+      await tester.tap(find.byIcon(TIcons.code));
+      await tester.runAsync(() async {
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+      });
+      await tester.pumpAndSettle();
+      final entry = find
+          .descendant(
+            of: find.byType(BottomSheet),
+            matching: find.byType(TCell),
+          )
+          .at(i);
+      await tester.ensureVisible(entry);
+      await tester.tap(entry);
+      await tester.runAsync(() async {
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+      });
       await tester.pumpAndSettle();
       final content = tester.widget<Markdown>(find.byType(Markdown)).data;
       expect(content, contains(expectedSources[i]));

@@ -130,6 +130,10 @@ jobs:
         working-directory: ./tdesign-component/example
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
+      - name: Verify Demo experience visual states
+        working-directory: ./tdesign-component/example
+        run: flutter test --no-pub --dart-define=TDESIGN_DEMO_TEST_MODULES=false test/example_code_viewer_golden_test.dart test/image_viewer/image_viewer_demo_golden_test.dart
+
       - name: Run visual regression tests
         working-directory: ./tdesign-component
         run: dart run tool/run_visual_regression.dart
@@ -217,4 +221,6 @@ jobs:
         run: echo "Xcode ${{ matrix.platform }} ready"
       - name: flutter build
         working-directory: ./tdesign-component/example
-        run: ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}
+        run: |
+          dart ../tool/write_demo_build_info.dart
+          ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}

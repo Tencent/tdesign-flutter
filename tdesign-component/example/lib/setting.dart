@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import 'base/demo_build_info.dart';
 import 'l10n/app_localizations.dart';
 import 'provider/locale_provider.dart';
 import 'provider/theme_mode_provider.dart';
@@ -30,16 +31,24 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Future<void> _getVersion() async {
-    version = await rootBundle.loadString('assets/version');
-    setState(() {});
+    final value = await rootBundle.loadString('assets/version');
+    if (mounted) {
+      setState(() => version = value.trim());
+    }
   }
 
   Future<void> _getPublishTime() async {
-    var timeStamp = await rootBundle.loadString('assets/publish_time');
-    var exactTime =
-        DateTime.fromMillisecondsSinceEpoch(int.parse(timeStamp.trim()));
-    publishTime = '${exactTime.year}-${exactTime.month}-${exactTime.day}';
-    setState(() {});
+    String value;
+    try {
+      value = formatDemoBuildDate(
+        await rootBundle.loadString('assets/publish_time'),
+      );
+    } catch (_) {
+      value = '未知';
+    }
+    if (mounted) {
+      setState(() => publishTime = value);
+    }
   }
 
   @override
@@ -50,8 +59,9 @@ class _SettingPageState extends State<SettingPage> {
     /// 获取系统主题
     systemBrightness = MediaQuery.platformBrightnessOf(context);
     return Scaffold(
-      appBar:
-          AppBar(title: Text(AppLocalizations.of(context)?.setting ?? '设置')),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)?.setting ?? '设置'),
+      ),
       body: Column(
         children: [
           TCellGroup(
@@ -59,10 +69,11 @@ class _SettingPageState extends State<SettingPage> {
             variant: TCellGroupVariant.card,
             cells: [
               TCell(
-                  title: const Text('当前语言（点击切换）'),
-                  // 获取系统locale
-                  note: Text(localeProvider.currentLanguageName),
-                  onTap: localeProvider.toggleLocale),
+                title: const Text('当前语言（点击切换）'),
+                // 获取系统locale
+                note: Text(localeProvider.currentLanguageName),
+                onTap: localeProvider.toggleLocale,
+              ),
             ],
           ),
           TCellGroup(
@@ -108,14 +119,17 @@ class _SettingPageState extends State<SettingPage> {
             variant: TCellGroupVariant.card,
             cells: [
               TCell(
-                  title: Text(AppLocalizations.of(context)?.version ?? '版本号'),
-                  note: Text(version)),
+                title: Text(AppLocalizations.of(context)?.version ?? '版本号'),
+                note: Text(version),
+              ),
               TCell(
-                  title:
-                      Text(AppLocalizations.of(context)?.publishDate ?? '发版日期'),
-                  note: Text(publishTime)),
+                title: Text(
+                  AppLocalizations.of(context)?.publishDate ?? '构建日期',
+                ),
+                note: Text(publishTime),
+              ),
             ],
-          )
+          ),
         ],
       ),
     );

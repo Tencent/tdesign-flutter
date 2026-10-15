@@ -21,7 +21,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get version => '版本号';
 
   @override
-  String get publishDate => '发版日期';
+  String get publishDate => '构建日期';
 
   @override
   String get defaultTheme => '默认主题';

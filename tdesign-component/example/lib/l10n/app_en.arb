@@ -3,7 +3,7 @@
   "setting": "Setting",
   "about": "AboutUs",
   "version": "Version",
-  "publishDate": "PublishDate",
+  "publishDate": "Build date",
   "defaultTheme": "defaultTheme",
   "greenTheme": "greenTheme",
   "redTheme": "redTheme",
