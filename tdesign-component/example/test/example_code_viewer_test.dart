@@ -9,6 +9,8 @@ import 'package:tdesign_flutter_example/base/example_code_viewer.dart';
 import 'package:tdesign_flutter_example/config.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
+import 'demo_page_test_utils.dart';
+
 void main() {
   Future<void> finishLoading(WidgetTester tester) async {
     await tester.runAsync(() async {
@@ -57,6 +59,9 @@ void main() {
     ),
   ]) {
     testWidgets('${page.name} 工具栏直接选择并展示示例代码', (tester) async {
+      await tester.runAsync(
+        () => preloadDemoCodeGroup(page.name == 'fab' ? 'fab' : 'image-viewer'),
+      );
       tester.view.physicalSize = const Size(375, 812);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.resetPhysicalSize);

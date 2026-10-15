@@ -38,6 +38,7 @@ class _ImageViewerWithActionsExampleState
       while (mounted && _images.isNotEmpty) {
         int? deletedIndex;
         var previewOpen = true;
+        var confirming = false;
         // 每次预览持有独立快照；删除只发生在旧预览关闭后。
         final snapshot = List<ImageProvider<Object>>.unmodifiable(_images);
         await TImageViewer.show(
@@ -48,6 +49,10 @@ class _ImageViewerWithActionsExampleState
           showDelete: true,
           showIndex: true,
           onDelete: (index) async {
+            if (!mounted || confirming || !previewOpen) {
+              return;
+            }
+            confirming = true;
             var confirmed = false;
             final closed = Completer<void>();
             TActionSheet.showList<int>(
@@ -64,6 +69,7 @@ class _ImageViewerWithActionsExampleState
               onClosed: closed.complete,
             );
             await closed.future;
+            confirming = false;
             if (confirmed && mounted && previewOpen) {
               deletedIndex = index;
               navigator.pop();

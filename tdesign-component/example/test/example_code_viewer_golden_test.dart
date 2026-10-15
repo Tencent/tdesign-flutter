@@ -17,10 +17,13 @@ const _spec = DemoPageTestSpec(
 );
 
 void main() {
-  setUpAll(() => loadDemoGoldenFonts(_spec));
+  setUpAll(() async {
+    await loadDemoGoldenFonts(_spec);
+  });
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
     for (final stage in ['picker', 'panel']) {
       testWidgets('code $stage ${mode.name} golden', (tester) async {
+        await tester.runAsync(() => preloadDemoCodeGroup('fab'));
         tester.view.physicalSize = const Size(375, 812);
         tester.view.devicePixelRatio = 1;
         addTearDown(tester.view.resetPhysicalSize);
@@ -57,9 +60,6 @@ void main() {
         );
         await tester.pumpAndSettle();
         await tester.tap(find.byIcon(TIcons.code));
-        await tester.runAsync(() async {
-          await Future<void>.delayed(const Duration(milliseconds: 50));
-        });
         await tester.pumpAndSettle();
         expect(find.text('选择示例代码'), findsOneWidget);
         if (stage == 'picker') {
@@ -84,9 +84,6 @@ void main() {
               )
               .first,
         );
-        await tester.runAsync(() async {
-          await Future<void>.delayed(const Duration(milliseconds: 50));
-        });
         await tester.pumpAndSettle();
         expect(find.byType(Markdown), findsOneWidget);
         final goldenPath = 'goldens/code_panel_${mode.name}.png';

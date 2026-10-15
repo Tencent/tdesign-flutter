@@ -74,6 +74,7 @@ void main() {
       expect(find.text(initialPage), findsOneWidget);
       await tester.tap(find.byTooltip('Delete'));
       await tester.pumpAndSettle();
+      expect(find.text('要删除这张照片吗？'), findsOneWidget);
       await tester.tap(find.textContaining(RegExp('取消|Cancel')));
       await tester.pumpAndSettle();
       expect(find.text(initialPage), findsOneWidget);

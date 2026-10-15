@@ -164,6 +164,7 @@ void main() {
       );
       await tester.pump();
       expect(tester.widget<TStepper>(base).value, 4);
+      await tester.runAsync(() => preloadDemoCodeGroup('stepper'));
       const names = [
         'StepperBaseExample',
         'StepperBoundsExample',
@@ -189,8 +190,8 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 50));
         });
         await tester.pumpAndSettle();
-        final expected = await rootBundle.loadString(
-          'assets/code/stepper.${names[i]}.txt',
+        final expected = await tester.runAsync(
+          () => rootBundle.loadString('assets/code/stepper.${names[i]}.txt'),
         );
         final content = tester.widget<Markdown>(find.byType(Markdown)).data;
         expect(content, contains(expected));

@@ -152,6 +152,7 @@ void main() {
       'yunfu',
     ]);
 
+    await tester.runAsync(() => preloadDemoCodeGroup('tree-select'));
     const names = [
       'TreeSelectSingleExample',
       'TreeSelectMultipleExample',
@@ -159,9 +160,9 @@ void main() {
     ];
     final expectedSources = <String>[];
     for (final name in names) {
-      final source = await rootBundle.loadString(
-        'assets/code/tree-select.$name.txt',
-      );
+      final source = (await tester.runAsync(
+        () => rootBundle.loadString('assets/code/tree-select.$name.txt'),
+      ))!;
       expect(source, contains('class $name extends StatefulWidget'));
       expect(source, contains('static const _options'));
       expect(source, contains('List<List<Object?>> _value'));
