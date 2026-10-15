@@ -1,8 +1,8 @@
-# CONTRIBUTING
+# 贡献指南
 
-> **本文档是 `tdesign-flutter` 仓库开发 / 协作 / PR / 更新日志规范的唯一事实来源**。
-> 其他文档（`AGENTS.md` 入口索引、`.agents/skills/.../SKILL.md`、`specs/README.md`）如需引用，统一指向本文档，避免重复维护。
-> - Spec 专项规范 → [`specs/README.md`](./specs/README.md)
+感谢参与 TDesign Flutter。本文介绍本地开发、编码规范、问题反馈、Pull Request 提交和验收流程。
+
+涉及公共 API、组件行为或跨目录改动时，请先阅读[设计方案与验收记录规范](./specs/README.md)，并随实现维护相应记录。
 
 ## 目录结构
 
@@ -181,7 +181,7 @@ dart run tool/run_visual_regression.dart
 | 内容 | 唯一来源 | 使用与生成方式 |
 |---|---|---|
 | 项目介绍和最短示例 | 根README.md、README_zh_CN.md | 中英文分别维护，包内副本生成 |
-| 安装、主题、深色模式、国际化、FAQ、迁移 | tdesign-site/site/docs/ | 站点直接读取，迁移另生成包内MIGRATION.md |
+| 安装、主题（含明暗模式）、国际化、FAQ、迁移 | tdesign-site/site/docs/ | 站点直接读取，迁移另生成包内MIGRATION.md |
 | 贡献规范 | 本文件 | 站点直接读取并适配页面元信息与相对链接 |
 | 站点开发方式 | [tdesign-site/README.md](./tdesign-site/README.md) | 其他说明链接到此处 |
 | API | lib中的公开dartdoc注释 | 生成example/assets/api，站点和示例App共用 |
@@ -189,6 +189,6 @@ dart run tool/run_visual_regression.dart
 | 设计决策与验收 | specs/ | 保留历史证据，现行用户用法写入用户指南 |
 | 发布流程与记录 | PUBLISH.md及既有CHANGELOG生成入口 | 发布步骤与历史记录分开维护 |
 
-执行 `node scripts/sync-readme.mjs` 更新指南中的可运行迁移片段和包内副本；执行 `node scripts/sync-readme.mjs --check` 只检查，不改文件。包内副本顶部标注来源，不手工修改。站点普通指南使用小写连字符命名，迁移文件名写清起止版本。
+执行 `node scripts/sync-readme.mjs` 更新迁移、主题及国际化指南中的可运行示例片段和包内副本；执行 `node scripts/sync-readme.mjs --check` 只检查，不改文件。包内副本顶部标注来源，不手工修改。站点普通指南使用小写连字符命名，迁移文件名写清起止版本。
 
 新增指南后在站点导航登记；内部文档链接使用相对路径，站点渲染时转换为既有路由，包内副本转换为可访问的线上入口。完整文档来源和边界见[整理记录](./specs/062-documentation-source-consolidation/spec.md)。

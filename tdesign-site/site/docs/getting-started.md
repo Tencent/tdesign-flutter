@@ -13,20 +13,16 @@ spline: explain
 
 ### 添加依赖
 
-当前单入口功能尚未发布到 pub.dev。发布前，在 `pubspec.yaml` 中添加以下锁定提交的源码依赖：
+在应用的 `pubspec.yaml` 中添加：
 
 ```yaml
 dependencies:
   flutter:
     sdk: flutter
-  tdesign_flutter:
-    git:
-      url: https://github.com/Tencent/tdesign-flutter.git
-      ref: 86c37e563039c57cf6c3f9b52fead418fd3c03bd
-      path: tdesign-component
+  tdesign_flutter: ^1.0.0
 ```
 
-包含上述能力的 `1.0.0` 稳定版发布后，可将源码依赖替换为 `tdesign_flutter: ^1.0.0`，允许兼容的 1.x 更新，无需每次发布都修改版本号；`1.0.0` 不带 `^` 则只允许该精确版本。发布前请使用上面的源码配置。
+`^1.0.0` 允许兼容的1.x更新。应用应提交依赖锁文件，升级后回归关键业务页面。
 
 安装依赖：
 
@@ -55,7 +51,7 @@ const TButton(child: Text('按钮'))
 ## 下一步
 
 - [自定义主题](./custom-theme.md)
-- [深色模式](./dark-mode.md)
+- [明暗主题切换](./custom-theme.md#明暗模式)
 - [国际化](./internationalization.md)
 - [组件概览](./overview.md)
 - [常见问题](./faq.md)

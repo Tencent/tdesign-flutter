@@ -1,4 +1,16 @@
 export default {
+  standalone: [
+    {
+      path: '/flutter/migration-1-0',
+      name: 'migration-1-0',
+      meta: { docType: 'explain' },
+      component: () => import('@docs/migration-0.2.7-to-1.0.md'),
+    },
+    {
+      path: '/flutter/dark-mode',
+      redirect: '/flutter/custom-theme#明暗模式',
+    },
+  ],
   docs: [
     {
       title: '开始',
@@ -10,13 +22,6 @@ export default {
           meta: { docType: 'explain' },
           path: '/flutter/getting-started',
           component: () => import('@docs/getting-started.md'),
-        },
-        {
-          title: '0.2.7 → 1.0 迁移',
-          name: 'migration-1-0',
-          meta: { docType: 'explain' },
-          path: '/flutter/migration-1-0',
-          component: () => import('@docs/migration-0.2.7-to-1.0.md'),
         },
         {
           title: '贡献指南',
@@ -79,13 +84,6 @@ export default {
           meta: { docType: 'explain' },
           path: '/flutter/internationalization',
           component: () => import('@docs/internationalization.md'),
-        },
-        {
-          title: '深色模式',
-          name: 'dark-mode',
-          meta: { docType: 'explain' },
-          path: '/flutter/dark-mode',
-          component: () => import('@docs/dark-mode.md'),
         },
       ],
     },

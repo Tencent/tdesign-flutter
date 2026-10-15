@@ -33,27 +33,29 @@ export function packageLinks(content) {
   });
 }
 
-export function renderMigrationExamples(guide, examples) {
+export function renderExamples(guide, examples, family = 'migration') {
   const seen = new Set();
-  const rendered = guide.replace(
-    /<!-- migration-example:([a-z]+):start -->[\s\S]*?<!-- migration-example:\1:end -->/g,
-    (_, name) => {
-      if (seen.has(name)) throw new Error(`Duplicate migration example: ${name}`);
-      seen.add(name);
-      const start = `// migration:${name}:start`;
-      const end = `// migration:${name}:end`;
-      if (examples.split(start).length !== 2 || examples.split(end).length !== 2) {
-        throw new Error(`Missing or duplicate migration example: ${name}`);
-      }
-      const offset = examples.indexOf(start) + start.length;
-      const endOffset = examples.indexOf(end, offset);
-      if (endOffset < 0) throw new Error(`Invalid migration example order: ${name}`);
-      return `<!-- migration-example:${name}:start -->\n\`\`\`dart\n${examples.slice(offset, endOffset).trim()}\n\`\`\`\n<!-- migration-example:${name}:end -->`;
-    },
-  );
-  const markers = [...rendered.matchAll(/<!-- migration-example:[^>]+ -->/g)];
-  if (markers.length !== seen.size * 2 || seen.size === 0) throw new Error('Unmatched migration example markers');
+  const pattern = new RegExp(`<!-- ${family}-example:([a-z-]+):start -->[\\s\\S]*?<!-- ${family}-example:\\1:end -->`, 'g');
+  const rendered = guide.replace(pattern, (_, name) => {
+    if (seen.has(name)) throw new Error(`Duplicate ${family} example: ${name}`);
+    seen.add(name);
+    const start = `// ${family}:${name}:start`;
+    const end = `// ${family}:${name}:end`;
+    if (examples.split(start).length !== 2 || examples.split(end).length !== 2) {
+      throw new Error(`Missing or duplicate ${family} example: ${name}`);
+    }
+    const offset = examples.indexOf(start) + start.length;
+    const endOffset = examples.indexOf(end, offset);
+    if (endOffset < 0) throw new Error(`Invalid ${family} example order: ${name}`);
+    return `<!-- ${family}-example:${name}:start -->\n\`\`\`dart\n${examples.slice(offset, endOffset).trim()}\n\`\`\`\n<!-- ${family}-example:${name}:end -->`;
+  });
+  const markers = [...rendered.matchAll(new RegExp(`<!-- ${family}-example:[^>]+ -->`, 'g'))];
+  if (markers.length !== seen.size * 2 || seen.size === 0) throw new Error(`Unmatched ${family} example markers`);
   return rendered;
+}
+
+export function renderMigrationExamples(guide, examples) {
+  return renderExamples(guide, examples);
 }
 
 export function generatedDocument(source, body) {
@@ -65,6 +67,11 @@ export function syncDocuments({ root = repositoryRoot, check = false } = {}) {
   const read = file => readFileSync(resolve(root, file), 'utf8');
   const guide = renderMigrationExamples(read(migrationSource), read(exampleSource));
   const outputs = new Map([[migrationSource, guide]]);
+  const documentationExamples = read('tdesign-component/example/lib/documentation_examples.dart');
+  for (const file of ['custom-theme', 'internationalization']) {
+    const path = `tdesign-site/site/docs/${file}.md`;
+    outputs.set(path, renderExamples(read(path), documentationExamples, 'documentation'));
+  }
   for (const source of ['README.md', 'README_zh_CN.md']) {
     outputs.set(`tdesign-component/${source}`, generatedDocument(source, packageLinks(read(source))));
   }

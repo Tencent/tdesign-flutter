@@ -7,7 +7,7 @@ const root = fileURLToPath(new URL('../../../', import.meta.url));
 /** Display the canonical contribution guide without maintaining a site copy. */
 export function adaptRepositoryDocument(source, file) {
   if (path.resolve(file) !== path.join(root, 'CONTRIBUTING.md')) return source;
-  const content = source.replace(/^# CONTRIBUTING\s*\n/, '').replace(
+  const content = source.replace(/^# (?:CONTRIBUTING|贡献指南)\s*\n/, '').replace(
     /\]\((\.\.?\/[^)]+)\)/g,
     (_, target) => `](https://github.com/Tencent/tdesign-flutter/blob/develop/${target.replace(/^\.\//, '')})`,
   );

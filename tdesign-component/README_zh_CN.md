@@ -51,7 +51,7 @@
 
 要求 Flutter ≥ 3.32.0、Dart ≥ 3.8.0。
 
-1.0 仍处于发布准备阶段。安装方式和锁定源码依赖见[快速开始](https://tdesign.tencent.com/flutter/getting-started)；正式发布后按指南切换稳定版本。
+在 `pubspec.yaml` 中添加 `tdesign_flutter: ^1.0.0`，运行 `flutter pub get`。完整接入步骤见[快速开始](https://tdesign.tencent.com/flutter/getting-started)。
 
 ### 最小导入
 
@@ -75,7 +75,7 @@ const TButton(child: Text('按钮'))
 
 - [快速开始](https://tdesign.tencent.com/flutter/getting-started)
 - [自定义主题](https://tdesign.tencent.com/flutter/custom-theme)
-- [深色模式](https://tdesign.tencent.com/flutter/dark-mode)
+- [深色模式](https://tdesign.tencent.com/flutter/custom-theme#明暗模式)
 - [国际化](https://tdesign.tencent.com/flutter/internationalization)
 - [常见问题](https://tdesign.tencent.com/flutter/faq)
 - [在线组件文档](https://tdesign.tencent.com/flutter/overview)

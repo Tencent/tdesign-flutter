@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-15",
+  "documentEdition": "1.0 stable, as requested; no package publication or version mutation",
+  "sdkVersions": [
+    "3.32.0",
+    "3.47.7"
+  ],
+  "functionalTestsPerSdk": 25,
+  "goldenExcludedInFinalRuns": true,
+  "finalLinuxVisualAcceptance": false,
+  "siteTests": {
+    "theme": 6,
+    "documentation": 22,
+    "componentPages": 57,
+    "generatedExamples": 360
+  },
+  "exampleCodeCheckExitCode": 0,
+  "sources": [
+    {
+      "file": "tdesign-component/example/lib/documentation_examples.dart",
+      "sha256": "0dfb236ed486793ab0b38d521b967cf123bb2d567bc66fbd0a04f20234c6db86",
+      "identicalInHighSdkCopy": true
+    },
+    {
+      "file": "tdesign-component/example/lib/base/intl_resource_delegate.dart",
+      "sha256": "2001ca6ca79d897bb0797a538e2d27b62f03c171b64a9cbce45842b489926a3f",
+      "identicalInHighSdkCopy": true
+    },
+    {
+      "file": "tdesign-component/example/lib/page/theme/theme_page.dart",
+      "sha256": "803bcd089a07866598d08fa5a60e176dc4e3a9b9d0707a295f0238063360cab1",
+      "identicalInHighSdkCopy": true
+    },
+    {
+      "file": "tdesign-component/example/lib/page/theme/theme_function_color_example.dart",
+      "sha256": "cfd47fbaa1c2869f8d967cbfe99d8bbb6c8cdb8c162adcfc1b47f79c1a5e901f",
+      "identicalInHighSdkCopy": true
+    },
+    {
+      "file": "tdesign-component/example/lib/page/theme/theme_text_color_example.dart",
+      "sha256": "32f653f08eb171586db4734d070e1b711985fa9bc9fc94e07234ea64b0d2e973",
+      "identicalInHighSdkCopy": true
+    },
+    {
+      "file": "tdesign-component/example/lib/page/theme/theme_other_color_example.dart",
+      "sha256": "a632545a80d6bb7240a8e3f0cb408deb38222673f1474030a788af0c846220eb",
+      "identicalInHighSdkCopy": true
+    },
+    {
+      "file": "tdesign-component/example/test/theme/theme_demo_test.dart",
+      "sha256": "eca02ae6cb6d1aaf94d7f19476aa15d5c769785cc823e11fb0c539e3d9d13fda",
+      "identicalInHighSdkCopy": true
+    },
+    {
+      "file": "tdesign-component/example/test/web_theme_message_test.dart",
+      "sha256": "5b65cd9d2177b29e322bb3d230027a38fe685de107ee9840c6be907886dc6fce",
+      "identicalInHighSdkCopy": true
+    },
+    {
+      "file": "tdesign-component/example/test/web_theme_listener_lifecycle_test.dart",
+      "sha256": "8ccc9785019654ebf94ba78d9dc863eb676fd549a793067c67bdf2f45f82f9f5",
+      "identicalInHighSdkCopy": true
+    }
+  ],
+  "logs": {
+    "testsLow": {
+      "file": "tdesign-stable-docs-tests-low-final.log",
+      "sha256": "99d18e8780d10da28cc6f39256e6359884fe5e36ca7e1a73950bc22a335d9eb7"
+    },
+    "testsHigh": {
+      "file": "tdesign-stable-docs-tests-high.log",
+      "sha256": "fa93d4860526a0e57d764634887c2e31521cab85047a96c425d97036e7214ff0"
+    },
+    "analysisLow": {
+      "file": "tdesign-stable-docs-example-analyze-low-final.log",
+      "sha256": "4f03c26b69223d6dcfc4a18e293faa950fcf9b9b80ccf01cd3aa97bab33c0302"
+    },
+    "analysisHigh": {
+      "file": "tdesign-stable-docs-analyze-high.log",
+      "sha256": "c6277cd75773f31e7110974348a98074cc40ded68f6d7340177504832ea10423"
+    },
+    "site": {
+      "file": "tdesign-stable-docs-site-final.log",
+      "sha256": "5a36a851b1608cca416ab3b6e49f9a050e5bf7814ec64880f5489c670ce9f031"
+    },
+    "exampleCodeCheck": {
+      "file": "tdesign-stable-docs-code-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "initialMacGoldenFailure": {
+      "file": "tdesign-stable-docs-tests-low.log",
+      "sha256": "f43e1d723d120ced9d60ed3e24020bd72fd45707ca23fd451831a6c2b7a03b62"
+    },
+    "initialLintWarning": {
+      "file": "tdesign-stable-docs-analyze-low.log",
+      "sha256": "12cc2f986d5b924d98f0107bcac27e3e2d06613a2385d331e0b281ac895e3e12"
+    },
+    "wrongDirectoryAnalysis": {
+      "file": "tdesign-stable-docs-analyze-low-final.log",
+      "sha256": "7d58283a2e16ce345f794166baee6dcd9bdaf2dfd281006fa1776d9f38f2830f"
+    }
+  },
+  "sdkLockHashes": {
+    "low": "9aed677f1b9c70d582c0ea32877aaabb5a40e1604ca2a786da6040a48c9c1be0",
+    "high": "e72a26b91a35d1e005c75b09d1c50818f4a15f359b3b9cbeb849dfa375f1571d"
+  },
+  "externalDocumentation": {
+    "internationalization": "https://docs.flutter.dev/ui/internationalization",
+    "verifiedBy": "official Flutter page opened; old URL redirects to this URL"
+  },
+  "limitations": [
+    "First run incorrectly included 2 golden comparisons on macOS; both failed, neither baseline updated. Final runs exclude golden.",
+    "One analysis attempt ran from repository root without the package analysis context and failed; final analyses run in the Example package.",
+    "No new browser pixel or Linux Golden acceptance; HTTP preview modules and source/runtime contracts checked.",
+    "Complete user translation coverage remains the application responsibility."
+  ]
+}

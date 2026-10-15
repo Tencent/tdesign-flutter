@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
+import siteConfig from '../site.config.mjs';
 import { migrationSource, packageLinks, renderMigrationExamples, syncDocuments } from '../../../scripts/documentation.mjs';
 import { adaptGuideLinks, adaptRepositoryDocument } from './repository-document.mjs';
 
@@ -34,6 +35,8 @@ test('check mode detects stale copies and missing sources without writing files'
   const read = file => readFileSync(path.join(temp, file), 'utf8');
   try {
     write(migrationSource, `---\ntitle: migration\n---\n\n${marker}\n[主题](./custom-theme.md)`);
+    write('tdesign-component/example/lib/documentation_examples.dart', example.replaceAll('migration:', 'documentation:'));
+    for (const file of ['custom-theme', 'internationalization']) write(`tdesign-site/site/docs/${file}.md`, marker.replaceAll('migration-example:', 'documentation-example:'));
     write('README.md', '# project');
     write('README_zh_CN.md', '# 项目');
     write('tdesign-component/tool/fixtures/token_migration/test/support/migration_027_examples.dart', example);
@@ -73,4 +76,16 @@ test('guide links use stable routes and remain untouched in non-guide content', 
 
 test('repository copies and runnable migration snippets are synchronized', () => {
   syncDocuments({ check: true });
+});
+
+test('migration is linked from getting started and dark mode shares the theme guide', () => {
+  const leaves = siteConfig.docs.flatMap(group => group.children ?? []);
+  assert.ok(!leaves.some(page => ['migration-1-0', 'dark-mode'].includes(page.name)));
+  assert.ok(siteConfig.standalone.some(page => page.path === '/flutter/migration-1-0'));
+  assert.equal(siteConfig.standalone.find(page => page.path === '/flutter/dark-mode').redirect, '/flutter/custom-theme#明暗模式');
+  const read = file => readFileSync(path.join(root, file), 'utf8');
+  assert.match(read('tdesign-site/site/docs/getting-started.md'), /tdesign_flutter: \^1\.0\.0/);
+  assert.match(read('tdesign-site/site/docs/getting-started.md'), /migration-0\.2\.7-to-1\.0\.md/);
+  assert.doesNotMatch(read('tdesign-site/site/docs/getting-started.md'), /尚未发布|发布前|git:/);
+  assert.match(read('tdesign-site/docs/components/theme/README.md'), /title: Theme 主题/);
 });

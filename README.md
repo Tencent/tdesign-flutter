@@ -49,7 +49,7 @@ Upgrading from 0.2.7? Read the [1.0 migration guide (Chinese)](./tdesign-site/si
 
 Requires Flutter ≥ 3.32.0 and Dart ≥ 3.8.0.
 
-Version 1.0 is being prepared for release. Follow [Getting started](./tdesign-site/site/docs/getting-started.md) for the pinned source dependency and switch to the stable version after publication.
+Add `tdesign_flutter: ^1.0.0` to `pubspec.yaml` and run `flutter pub get`. See [Getting started](./tdesign-site/site/docs/getting-started.md) for the complete setup.
 
 ### Minimal Import
 
@@ -75,7 +75,7 @@ The detailed guides below are currently in Chinese.
 
 - [Getting started](./tdesign-site/site/docs/getting-started.md)
 - [Custom themes](./tdesign-site/site/docs/custom-theme.md)
-- [Dark mode](./tdesign-site/site/docs/dark-mode.md)
+- [Dark mode](./tdesign-site/site/docs/custom-theme.md#明暗模式)
 - [Internationalization](./tdesign-site/site/docs/internationalization.md)
 - [FAQ](./tdesign-site/site/docs/faq.md)
 - [Component documentation](https://tdesign.tencent.com/flutter/overview)
