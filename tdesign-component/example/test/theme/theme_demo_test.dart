@@ -40,7 +40,7 @@ void main() {
   const guideSpec = DemoPageTestSpec(
     name: 'custom-theme',
     title: '自定义主题',
-    page: DocumentationThemeGuidePage(),
+    page: DocumentationThemeGuidePage(themeAdapter: _guideGoldenTheme),
     expectedTexts: ['JSON 配置', '组件局部样式', '明暗模式'],
     goldenDirectory: 'theme',
   );
@@ -498,6 +498,25 @@ void main() {
       }
     },
   );
+
+  testWidgets(
+    'guide golden fonts preserve token pairs and reach native table text',
+    (tester) async {
+      await pumpFullDemoPage(tester, guideSpec, ThemeMode.light);
+      for (final value in ['#0052D9', '#699EF5', '配置项 / 来源']) {
+        final paragraph = tester.renderObject<RenderParagraph>(
+          find.text(value),
+        );
+        expect(
+          paragraph.text.style?.fontFamilyFallback,
+          containsAll(['Roboto', 'TDesign Golden CJK']),
+        );
+      }
+      expect(find.text('浅色（当前）\nocean'), findsOneWidget);
+      expect(find.text('深色\noceanDark'), findsOneWidget);
+      await disposeDemoPage(tester);
+    },
+  );
 }
 
 Future<void> _expectGuideGolden(WidgetTester tester, String name) async {
@@ -523,4 +542,18 @@ Future<void> _expectGuideGolden(WidgetTester tester, String name) async {
     });
   }
   await expectLater(target, matchesGoldenFile('goldens/$name'));
+}
+
+ThemeData _guideGoldenTheme(ThemeData theme) {
+  const fallback = ['Roboto', 'TDesign Golden CJK'];
+  return theme.copyWith(
+    textTheme: theme.textTheme.apply(
+      fontFamily: 'Roboto',
+      fontFamilyFallback: fallback,
+    ),
+    primaryTextTheme: theme.primaryTextTheme.apply(
+      fontFamily: 'Roboto',
+      fontFamilyFallback: fallback,
+    ),
+  );
 }

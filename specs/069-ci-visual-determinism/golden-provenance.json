@@ -1,0 +1,795 @@
+{
+  "source_commit": "43082c7b0cb6dfe38ea4b5898d194cbc988756bb",
+  "linux_run": 38712855827,
+  "linux_job": 116348720947,
+  "artifact_id": 11961791330,
+  "artifact_url": "https://github.com/Tencent/tdesign-flutter/actions/runs/38712855827/artifacts/11961791330",
+  "platform": "Linux Ubuntu 24.04 / Flutter 3.32.0",
+  "comparison": "exact; no tolerance override",
+  "review": "Reviewed whole-page contact sheets for all groups and native representative Theme/Toast outputs. Public content is retained; internal modules are removed, with expected viewport/overlay placement following public page height. No component-package baseline changed.",
+  "accepted": [
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/divider/failures/divider_page_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/divider/goldens/divider_page_dark.png",
+      "size": [
+        375,
+        812
+      ],
+      "sha256": "5b05f943900162f7cf9bfc5c0941682e31a77d2c73d4a7cc4768bbc86cb60127",
+      "old_size": [
+        375,
+        1006
+      ],
+      "old_sha256": "49d0448832e4fac192173789385487d84a9cc1dd400add721a00a945182aa0a4",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/divider/failures/divider_page_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/divider/goldens/divider_page_light.png",
+      "size": [
+        375,
+        812
+      ],
+      "sha256": "9b177e76124f372e6ca40b13049f57d02b04ac716b7ccd7f9171510a7ff526d3",
+      "old_size": [
+        375,
+        1006
+      ],
+      "old_sha256": "09995d0694f63c0a61a8603dc6c5079e3365da81bd7a0cf4392fcafd35c43a5d",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/icon/failures/icon_copied_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/icon/goldens/icon_copied_dark.png",
+      "size": [
+        375,
+        1481
+      ],
+      "sha256": "5b646c97ecd8975f40f338b4f553e631ef7351ebe87aa6dd10bcaf3b4872472c",
+      "old_size": [
+        375,
+        1717
+      ],
+      "old_sha256": "b48e3ebf2fea021c52ffe6e20f1ada4e211a0a66b2f2152f9f3deb36e989fd1b",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/icon/failures/icon_copied_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/icon/goldens/icon_copied_light.png",
+      "size": [
+        375,
+        1481
+      ],
+      "sha256": "ef625ffe20d6d52b82f92dc532b4cd012b099dcd6df22c360d3d7194bc7a9843",
+      "old_size": [
+        375,
+        1717
+      ],
+      "old_sha256": "c92463076d2c4ad0e5982cb9a50d4800da881d02c8392d54e9dd5dcb5f8d2bab",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/icon/failures/icon_page_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/icon/goldens/icon_page_dark.png",
+      "size": [
+        375,
+        1481
+      ],
+      "sha256": "5b646c97ecd8975f40f338b4f553e631ef7351ebe87aa6dd10bcaf3b4872472c",
+      "old_size": [
+        375,
+        1717
+      ],
+      "old_sha256": "b48e3ebf2fea021c52ffe6e20f1ada4e211a0a66b2f2152f9f3deb36e989fd1b",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/icon/failures/icon_page_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/icon/goldens/icon_page_light.png",
+      "size": [
+        375,
+        1481
+      ],
+      "sha256": "ef625ffe20d6d52b82f92dc532b4cd012b099dcd6df22c360d3d7194bc7a9843",
+      "old_size": [
+        375,
+        1717
+      ],
+      "old_sha256": "c92463076d2c4ad0e5982cb9a50d4800da881d02c8392d54e9dd5dcb5f8d2bab",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/link/failures/link_feedback_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/link/goldens/link_feedback_dark.png",
+      "size": [
+        375,
+        1212
+      ],
+      "sha256": "d29b4ece99daeee4c59349f197eb937b1b19560682763c1234a099a6f7e3e570",
+      "old_size": [
+        375,
+        1449
+      ],
+      "old_sha256": "3199812373cadfc115fb7d6ef1cb957f9938fca2bf80716f8cb73578a73d9222",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/link/failures/link_feedback_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/link/goldens/link_feedback_light.png",
+      "size": [
+        375,
+        1212
+      ],
+      "sha256": "e559ced431e6e5e8c058b232aed76029e0f07e356feaa8578d02ca532934edfe",
+      "old_size": [
+        375,
+        1449
+      ],
+      "old_sha256": "6aade4754a0dfad700ccda10f72d04f9d6151325ee441b6a5744216d9d44dceb",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/link/failures/link_page_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/link/goldens/link_page_dark.png",
+      "size": [
+        375,
+        1212
+      ],
+      "sha256": "ab1b63ed7168f7c2c2610f5c5fa20c160cd5752cf2a1782085fa8bfe4e3b5242",
+      "old_size": [
+        375,
+        1449
+      ],
+      "old_sha256": "64f6816db366a57178dbcabee321301ff4b142ac2c17ee4dff4804b9d1abd14f",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/link/failures/link_page_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/link/goldens/link_page_light.png",
+      "size": [
+        375,
+        1212
+      ],
+      "sha256": "1cd766d7aea4928e7348c484659ca47df23e171aa3698a80cd82196fa6887040",
+      "old_size": [
+        375,
+        1449
+      ],
+      "old_sha256": "aa9c936135961d8af0fc613a3f7f12d2eb817030a11567f378af4ba3d890fe9a",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/refresh/failures/pull_down_refresh_page_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/refresh/goldens/pull_down_refresh_page_dark.png",
+      "size": [
+        375,
+        1720
+      ],
+      "sha256": "d50a6f583cc8ddca16382b78a4c466b6420e0867dadde2cfdfddef5d9fa68068",
+      "old_size": [
+        375,
+        1957
+      ],
+      "old_sha256": "99a3fab9b9fb441d71e0f4aef626cc7fd33ba9efd926b5bdab6abaa706bb4571",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/refresh/failures/pull_down_refresh_page_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/refresh/goldens/pull_down_refresh_page_light.png",
+      "size": [
+        375,
+        1720
+      ],
+      "sha256": "b0739049ed5a338032a7ab596b853d1980678c41dc1dee8848e2b48c676edd61",
+      "old_size": [
+        375,
+        1957
+      ],
+      "old_sha256": "581fa81034989ff839018863fa640c44bd1866221bced76a604b6fdf975dd4d8",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/refresh/failures/pull_down_refresh_timeout_post_action_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/refresh/goldens/pull_down_refresh_timeout_post_action_dark.png",
+      "size": [
+        375,
+        812
+      ],
+      "sha256": "04d0e240e7177d39048f93c499f84426eabb40c95df6173a3f910e27e11dee9d",
+      "old_size": [
+        375,
+        812
+      ],
+      "old_sha256": "2d3e7af439d3702a5ebe849c321acc7bb7a4e7ba35a850b97e35df56a21137d8",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/refresh/failures/pull_down_refresh_timeout_post_action_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/refresh/goldens/pull_down_refresh_timeout_post_action_light.png",
+      "size": [
+        375,
+        812
+      ],
+      "sha256": "47b2a0b1d0eb4789680c3a34b26cfd64c18d5b0e6f2db7a38c9b3e19aa5c820d",
+      "old_size": [
+        375,
+        812
+      ],
+      "old_sha256": "8ed67596e621353bfd4b00bd5bde495ef31b4af4978307b2236c61d2f3a53480",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/skeleton/failures/skeleton_page_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/skeleton/goldens/skeleton_page_dark.png",
+      "size": [
+        375,
+        1752
+      ],
+      "sha256": "eafab1967cb1316c1c15677195fad84cccb87061f353e23ed55c9e59fdde1171",
+      "old_size": [
+        375,
+        1988
+      ],
+      "old_sha256": "c7b963c4b5800be4778b83de0b658bed186724be3a413f6cce89492e1d9929b1",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/skeleton/failures/skeleton_page_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/skeleton/goldens/skeleton_page_light.png",
+      "size": [
+        375,
+        1752
+      ],
+      "sha256": "a30cc2a1fb3d7acd1b7074b4f6c02b28c2c31082b03f82c7a30c62e7efc92e40",
+      "old_size": [
+        375,
+        1988
+      ],
+      "old_sha256": "960bf70530f44c039a1aa13595fe6f6f47841aeb0c248bb3928de285b148c17d",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/tabs/failures/tabs_content_selected_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/tabs/goldens/tabs_content_selected_dark.png",
+      "size": [
+        375,
+        1740
+      ],
+      "sha256": "44634325b979ba70514790f8a25c2399a19214df08e47c6c601bdb637a015893",
+      "old_size": [
+        375,
+        1993
+      ],
+      "old_sha256": "cba62a5a294537895127e115f024e64f5d5d51d7cbe3e080740c5841cfd25ab5",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/tabs/failures/tabs_content_selected_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/tabs/goldens/tabs_content_selected_light.png",
+      "size": [
+        375,
+        1740
+      ],
+      "sha256": "f3f23480a638c7b029b1be154a9b075c86b93074755120d71e576b629ae1071d",
+      "old_size": [
+        375,
+        1993
+      ],
+      "old_sha256": "401d3605871a9650575baed0f2ea78fb7e2a5aa8bd7a2bbb22ebe47b2b6c1386",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/tabs/failures/tabs_page_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/tabs/goldens/tabs_page_dark.png",
+      "size": [
+        375,
+        1740
+      ],
+      "sha256": "71c25c2cbd60a081f4016dccb603477ce151bad82779cf718e3395ce58b365e6",
+      "old_size": [
+        375,
+        1993
+      ],
+      "old_sha256": "87446b0c6da7b99a00bcf4dc4c9091709307c4a2186f6062e4e41a6b9f6b08ec",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/tabs/failures/tabs_page_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/tabs/goldens/tabs_page_light.png",
+      "size": [
+        375,
+        1740
+      ],
+      "sha256": "92b42cb2e32849da0040bff9eda23d9d2502b8ce6af516bb1d67a1fb2def676a",
+      "old_size": [
+        375,
+        1993
+      ],
+      "old_sha256": "40a565697a904f70cd8e9eeff52684598f260eecb3a8a8016544eb57aa0040d9",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/text/failures/text_page_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/text/goldens/text_page_dark.png",
+      "size": [
+        375,
+        1367
+      ],
+      "sha256": "cf47802a68fcc4a74d25a7a3484a09b83fdfcf4c5ba44af0da0d155a78b76fa8",
+      "old_size": [
+        375,
+        1604
+      ],
+      "old_sha256": "5ccd3643af36cacc30e9f3806433ff5eb187beaf0f51514c81da0a28bd25d64e",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/text/failures/text_page_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/text/goldens/text_page_light.png",
+      "size": [
+        375,
+        1367
+      ],
+      "sha256": "af7249e29b5f843cf32a905e3de167ffc1903bb53c561dd13653d65ca82ab904",
+      "old_size": [
+        375,
+        1604
+      ],
+      "old_sha256": "40f0fef8387cfe646a50eef5672511680e58853c6b294a80f73a20e9ffaa8aef",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/theme/failures/theme_page_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/theme/goldens/theme_page_dark.png",
+      "size": [
+        375,
+        2368
+      ],
+      "sha256": "bb6dbe6b30e105a60dbe3b7674ef7c8858d5e7a4dc58fe3b1bdc91926afc0d52",
+      "old_size": [
+        375,
+        2833
+      ],
+      "old_sha256": "f6e2da51427272ea675a485992fcb516369396a5009b7809d901d15c90424e7c",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/theme/failures/theme_page_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/theme/goldens/theme_page_light.png",
+      "size": [
+        375,
+        2368
+      ],
+      "sha256": "73f3fed3610898c9175357c95c112096396963cdf0525051fad216cdad544bad",
+      "old_size": [
+        375,
+        2833
+      ],
+      "old_sha256": "27ae9e228f94d85d3590ad3f6b955dea68acbba56432dab69f2187aa42252227",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_cover_opened_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_cover_opened_dark.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "6addb6d70487d1028ee80a3de469d6843866decc5b8bdc56abace4aa73e098f2",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "04f34b386d9b3d08ad2f0fef4a384a9e02a711d789966505bd395585e21aac9d",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_cover_opened_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_cover_opened_light.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "ad6fdd421b54abfdea71db87e998c51d5ec34214e64b99e0c37da62d767d9618",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "fc199cfcbfa369ce97cfd4653c3f2a86c2366cf224e95169b3dad5752a6a40ec",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_fail_opened_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_fail_opened_dark.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "175a7aba8c1e9555d136243b9bf64063ad609966f749f1178b7f5eb010b75665",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "8765a41b7cfd80dd3b32d9b9055877f04614e60f76bc2fc34c4c38b5d388d899",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_fail_opened_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_fail_opened_light.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "2f55a0ab895a272ce9fb68bcfb6add03c91e44405d2212bc4f6d08e087ca0f6c",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "cade478ad6bcb74ffcd6af6c103922d7085abb3a1c885f7223912ddf82b7d08b",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_horizontal_icon_opened_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_horizontal_icon_opened_dark.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "f2f6541dc9dd35d6d62114f735557ec62ffaf360d5156ab4e3d56c1032df9dc3",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "9e1a79083ac33fc81740cdf6a45e52865d3969f5e72da509f2c1f061c2298ba7",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_horizontal_icon_opened_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_horizontal_icon_opened_light.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "1917f84ab0927303dfdd8802cf918ccd3d307fa8bf5ce2392bbcd70532d86215",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "9372f2cffd0fd901263de89a985f97a4b6066d4ee6785584f6c1d4a3aabb9bdd",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_loading_opened_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_loading_opened_dark.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "6b15218c5d32a5d4ea3c1d0f0d278707c1f9d74ffec3674864e19da24b099d12",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "7eee31c99dd2a1458a136eda32c95cd86719b1a0b4549892e6f8c36d0382ef81",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_loading_opened_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_loading_opened_light.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "b65db65ca3e8665abf1ecfaa844c8ec75a47b28bfc497dcdcdbca946ca0914f9",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "7676171b905a8b1c29752733b9475ae6d673e152a60e0bf802c70c263b978c5b",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_manual_opened_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_manual_opened_dark.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "a226125d886800d13f40a5b4bf79b554275f5d26d1e57743128d27ecb9a0c1d6",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "7cfc81767b804f8d041fcdca7a5abe2474c8a66d08032233230d7fa3c3f3afe4",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_manual_opened_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_manual_opened_light.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "d74e5954598ab47c129eacec2b20ddf9d95b2a203aecea3f25864728bb0e2b17",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "3e88f2c315526f2f914bb124faf7d3ba4d68ffeac82b9d0a4099f559b9a84b2d",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_multiple_text_opened_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_multiple_text_opened_dark.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "8d0d04f81e39f23a8d516d013c6a05e85b5bfbd81f2d29b8150969219f200473",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "c02e8847fd1cf261e60a4f20e009fd132a8fcb61150d2aff33dadba15b634151",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_multiple_text_opened_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_multiple_text_opened_light.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "76ace7913a195840a53055377cbe04df82161fcabcd71a9dcc6623e082012272",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "4e09e55c010f7d7787d35909dbadb1dff05d9e4799e8826c38926a3e86932fa9",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_page_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_page_dark.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "3881834abf59f32172401adc7132ec60d733405ed3d63bfe978b5194bfa7d276",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "5ff204140470b7844e1e19e37826e843a2562c7d60c360524f998ce1426a9373",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_page_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_page_light.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "c39cbf4199ca686b4970db2ce2223dad0aa69aa68443e5f6193cdb1027cf408f",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "5ea09d53b2e5b5b1e96659497a6eb55a38ae4b2a9ab97c21b640ce9886529f84",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_success_opened_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_success_opened_dark.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "71010bcb9166a1cb34acda34fceb1a422ffa22c47e583799b5d52c6c1e1d0882",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "3ad5b1cfa5f703c3e031a9b770b59d87e99caa0ba144ec645905785c7354a52e",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_success_opened_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_success_opened_light.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "512441f742f0627c27602a9d9f3ea1f0f054d943c06ca7f4926c421e54838f2b",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "f78df0fdf7224ca93179034af00bb2956d137cc8979c19a24bcaba1ad35066df",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_text_opened_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_text_opened_dark.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "a226125d886800d13f40a5b4bf79b554275f5d26d1e57743128d27ecb9a0c1d6",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "7cfc81767b804f8d041fcdca7a5abe2474c8a66d08032233230d7fa3c3f3afe4",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_text_opened_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_text_opened_light.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "d74e5954598ab47c129eacec2b20ddf9d95b2a203aecea3f25864728bb0e2b17",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "3e88f2c315526f2f914bb124faf7d3ba4d68ffeac82b9d0a4099f559b9a84b2d",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_vertical_icon_opened_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_vertical_icon_opened_dark.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "3b989c1b246292c16f8f4197c9e98a2354765566fb97c15c9f169bdd9a4188e1",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "df99419599c3d7aef0c3f1ff9615b9f20d28260809563aec4148e8584661aa52",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_vertical_icon_opened_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_vertical_icon_opened_light.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "f93a02f04c4a6111f8f071c1c8f831c2cc1c92bcdba48930afcb372123134a55",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "a71130a3bee270ad89ce2e056fb0947e27fab0aa05c1e0b6a70d0ef1f9a3c1f6",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_warning_opened_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_warning_opened_dark.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "4310974e1f71fab9572c7f080ade4dd8c64eb39aa23f7cfd9315f5241b8893be",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "93dcdc9370690bdf9da9cff09f0483c11d51f0c4b8f5462b0d8f48b938496689",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/toast/failures/toast_warning_opened_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/toast/goldens/toast_warning_opened_light.png",
+      "size": [
+        375,
+        1568
+      ],
+      "sha256": "fc54341625204d58de2f1a1ab2628cda13bec6314ccaa876504d7d05997820f5",
+      "old_size": [
+        375,
+        1805
+      ],
+      "old_sha256": "523bb777e17a2cf5053685954ace759cf5395864c034600d343bee8c7d3fa289",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/upload/failures/upload_page_dark_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/upload/goldens/upload_page_dark.png",
+      "size": [
+        375,
+        2674
+      ],
+      "sha256": "d85dce3e670aeaa8ed9cf663c633e80f8cc876d7f11104c8b8a54be2fc9d6718",
+      "old_size": [
+        375,
+        2911
+      ],
+      "old_sha256": "47e30b0783c774e582dc8ba74e9f3e582dd88d0727e2a125d065fe799de374b0",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/upload/failures/upload_page_light_testImage.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/upload/goldens/upload_page_light.png",
+      "size": [
+        375,
+        2674
+      ],
+      "sha256": "721f67d8b67927e5f56e6521331af4de0fac4ba433219ff0ed44614ead0836d4",
+      "old_size": [
+        375,
+        2911
+      ],
+      "old_sha256": "999018341a243ecd637000f0fe166784b521d68265d0523a80446fd9dedf4ddc",
+      "decision": "accepted-public-demo-without-internal-debug-module"
+    }
+  ],
+  "rejected": [
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/theme/failures/custom_theme_initial_dark_actual.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/theme/goldens/custom_theme_initial_dark.png",
+      "size": [
+        375,
+        1488
+      ],
+      "sha256": "4ad7f1dd201563c42abf1cd10ce5c0acb48d95cea49e32c8591a9f1f690db2a1",
+      "decision": "rejected-native-text-fonts-incomplete"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/theme/failures/custom_theme_initial_light_actual.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/theme/goldens/custom_theme_initial_light.png",
+      "size": [
+        375,
+        1488
+      ],
+      "sha256": "7d0919e476eda3ec2f6eb24a5a4972075d1edfba629ef9c4a24b9dbab1f05e79",
+      "decision": "rejected-native-text-fonts-incomplete"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/theme/failures/custom_theme_manual_dark_actual.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/theme/goldens/custom_theme_manual_dark.png",
+      "size": [
+        375,
+        1488
+      ],
+      "sha256": "4ad7f1dd201563c42abf1cd10ce5c0acb48d95cea49e32c8591a9f1f690db2a1",
+      "decision": "rejected-native-text-fonts-incomplete"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/theme/failures/custom_theme_manual_light_actual.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/theme/goldens/custom_theme_manual_light.png",
+      "size": [
+        375,
+        1488
+      ],
+      "sha256": "7d0919e476eda3ec2f6eb24a5a4972075d1edfba629ef9c4a24b9dbab1f05e79",
+      "decision": "rejected-native-text-fonts-incomplete"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/theme/failures/custom_theme_system_dark_actual.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/theme/goldens/custom_theme_system_dark.png",
+      "size": [
+        375,
+        1488
+      ],
+      "sha256": "f39c4ad82bd2d5b79183d188f0b87ab0160efac775c8d160b0788e9cfa554166",
+      "decision": "rejected-native-text-fonts-incomplete"
+    },
+    {
+      "source": "/private/tmp/tdesign-ci-43082-goldens/example/test/theme/failures/custom_theme_system_light_actual.png",
+      "target": "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/tdesign-flutter/tdesign-component/example/test/theme/goldens/custom_theme_system_light.png",
+      "size": [
+        375,
+        1488
+      ],
+      "sha256": "d8f7ec291bd22771ddb1ec410e014829e8065d9b67ae60daef5e83748b2040e2",
+      "decision": "rejected-native-text-fonts-incomplete"
+    }
+  ],
+  "next": "Re-run against copied PNG bytes with no update flag; custom guide font adaptation still needs fresh Linux review."
+}
