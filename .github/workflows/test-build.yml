@@ -141,7 +141,7 @@ jobs:
           name: golden-failures-flutter-3.32.0
           path: |
             tdesign-component/test/**/failures/
-            tdesign-component/example/test/failures/
+            tdesign-component/example/test/**/failures/
           if-no-files-found: ignore
           retention-days: 7
 

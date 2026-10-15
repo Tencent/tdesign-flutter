@@ -96,10 +96,12 @@ void main() {
     await tester.pumpWidget(buildPage());
     await tester.pump();
 
-    final resultField = find.byWidgetPredicate(
-      (widget) =>
-          widget is TextField &&
-          widget.decoration?.hintText == '输入tdesign，有预览结果',
+    final resultField = find.descendant(
+      of: find.byWidgetPredicate(
+        (widget) =>
+            widget is TSearchBar && widget.hintText == '输入tdesign，有预览结果',
+      ),
+      matching: find.byType(TextField),
     );
     await tester.tap(resultField);
     await tester.pump();
