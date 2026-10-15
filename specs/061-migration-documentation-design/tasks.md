@@ -1,3 +1,5 @@
+> **历史设计，已被后续方案取代。** 本阶段只交付设计。正文来源以 [Spec062](../062-documentation-source-consolidation/spec.md) 为准；阅读结构和组件定位以 [Spec064](../064-migration-reading-flow/spec.md) 为准；侧栏入口以 [Spec072](../072-migration-navigation-and-demo-entry/spec.md) 为准。原定57个独立章节、自动注入摘要和拟定锚点不再作为实施任务，不应据此重复开发。下文及 JSON 矩阵保留原始设计，不能作为当前页面清单或已验证声明。尚缺的真实业务迁移、设备和设计证据见 [发布收口记录](../074-release-readiness-closeout/readiness.md)。
+
 # 工作清单
 
 ## 本次设计

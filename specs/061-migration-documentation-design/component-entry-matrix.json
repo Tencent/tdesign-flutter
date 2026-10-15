@@ -1,5 +1,5 @@
 {
-  "status": "design-only",
+  "status": "superseded-design",
   "source": "specs/058-release-preparation/component-migration-index.json",
   "entries": [
     {
@@ -629,5 +629,10 @@
       "proposedSiteTarget": "/flutter/migration-1-0#migration-theme",
       "implemented": false
     }
-  ]
+  ],
+  "supersededBy": [
+    "specs/062-documentation-source-consolidation/spec.md",
+    "specs/064-migration-reading-flow/spec.md"
+  ],
+  "usage": "Historical proposal only; entries and implemented flags do not describe the current site."
 }

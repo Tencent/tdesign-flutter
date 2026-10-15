@@ -1,6 +1,6 @@
 # 迁移指南分层阅读
 
-状态：实现完成，按用户最新授权提交至PR1163，待合并前Review。
+状态：实现已随 [PR1166](https://github.com/Tencent/tdesign-flutter/pull/1166) 合入 develop；后续入口调整见 Spec072。文档结构通过不代表全部业务迁移或发布验收完成。
 
 ## 目标
 
