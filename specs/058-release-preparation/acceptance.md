@@ -1,3 +1,5 @@
+> 后续补核：本阶段383项盘点漏了3个公开mixin和2个文字顶层变量；当前指南按388项补齐，见[Spec076](../076-migration-release-documentation-audit/acceptance.md)。本文件及原JSON保留原阶段证据，不作为当前完整导出清单。
+
 > 文档路径和维护来源已由[Spec062](../062-documentation-source-consolidation/spec.md)调整；下文保留本阶段历史记录，未完成迁移内容和验收仍以原清单为准。
 
 > 最新处置（2026-10-15，Spec060）：已实修Ghost语义回退的2个观察项，8项由既有Flutter契约及运行断言支持；21项差异与1项平台几何已有具体方案，524项仍待补运行。当前代码为30767a55上的未提交工作区，本地新指纹验证见 [Spec060](../060-token-difference-resolution/acceptance.md)，不沿用旧远端CI作为本次修复通过证据。
