@@ -2862,14 +2862,16 @@
     },
     {
       "number": 870,
-      "title": "chore: close issues with release version lable automatically on release",
+      "title": "chore: close issues with release version label automatically on release",
       "url": "https://github.com/Tencent/tdesign-flutter/pull/870",
       "mergedAt": "2026-02-02T03:27:19Z",
       "declaredNoChangelog": true,
       "status": "excluded-maintenance-or-version-record",
       "reason": "该提交未修改组件lib生产源码，属于文档、测试、构建、示例整理或版本记录；不作为组件运行能力条目补入。",
       "productionFileCount": 0,
-      "productionAreas": []
+      "productionAreas": [],
+      "sourceTitleSha256": "7026a7164251fef161d5726831743aaec68e48f4fa7df4fa20900d3ed13164b6",
+      "titleNormalization": "Historical spelling corrected for display; source title preserved by hash and PR URL."
     },
     {
       "number": 873,
