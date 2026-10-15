@@ -4,8 +4,16 @@ description: 安装 TDesign Flutter 并在已有页面中使用组件。
 spline: explain
 ---
 
-## 接入
+## 快速体验
 
+选择对应平台体验官方 Demo：
+
+| 体验方式 | 入口 |
+| --- | --- |
+| Android 真机体验 | [下载官方 Demo APK](https://tdesign.gtimg.com/flutter/tdesign_flutter_example.apk)，或扫码下载。<br /><img src="/assets/qrcode/t_apk_qrcode.png" alt="官方 Android Demo APK 下载二维码" width="160" /> |
+| iOS 体验 | 从[版本发布页](https://github.com/Tencent/tdesign-flutter/releases)下载对应源码，运行其中的 `tdesign-component/example` 工程。 |
+
+## 接入
 
 从 0.2.7 升级时，请先阅读 [1.0 迁移指南](./migration-0.2.7-to-1.0.md)。1.0 包含不兼容的接口与默认行为变化，不能只替换组件前缀。
 

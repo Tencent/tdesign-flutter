@@ -217,4 +217,6 @@ jobs:
         run: echo "Xcode ${{ matrix.platform }} ready"
       - name: flutter build
         working-directory: ./tdesign-component/example
-        run: ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}
+        run: |
+          dart ../tool/write_demo_build_info.dart
+          ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}

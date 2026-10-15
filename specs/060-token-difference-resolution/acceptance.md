@@ -47,7 +47,7 @@ Spec059的31项运行差异及1项平台几何均已给出可审查的处置，�
 
 每SDK采集1076条观察，逐条相同；270个相关源码/资源/测试/清单/pubspec文件在测试前后及两环境间一致，实际依赖锁分别记录。较新SDK的独立迁移首次因用户缓存active_roots写入受限失败，换独立临时缓存后解析、严格分析和21项测试通过；原始失败没有冒充通过。
 
-[验证器](../../tool/verify_token_difference_resolutions.mjs)检查前后源码/依赖快照、双SDK一致性、全部运行/覆盖率日志、原32项完整映射、已有契约引用及强制断言，生成本轮机器记录。运行命令和日志文件约定见[validation-commands.json](validation-commands.json)。Spec059保持修复前快照，不用旧日志给新源码背书。
+[验证器](./tools/verify_token_difference_resolutions.mjs)检查前后源码/依赖快照、双SDK一致性、全部运行/覆盖率日志、原32项完整映射、已有契约引用及强制断言，生成本轮机器记录。运行命令和日志文件约定见[validation-commands.json](validation-commands.json)。Spec059保持修复前快照，不用旧日志给新源码背书。
 
 ## 四项未应用的视觉修复候选
 

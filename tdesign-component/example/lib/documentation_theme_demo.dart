@@ -146,7 +146,11 @@ class DocumentationThemeContent extends StatelessWidget {
 
 /// 整个指南只有一个应用主题，模式切换同时更新页面壳及所有示例。
 class DocumentationThemeGuidePage extends StatefulWidget {
-  const DocumentationThemeGuidePage({super.key});
+  const DocumentationThemeGuidePage({this.themeAdapter, super.key});
+
+  /// 可选的宿主主题适配；截图测试用它固定原生文字的字体与回退栈。
+  /// 不修改指南的 Token 配置、明暗关联或交互状态。
+  final ThemeData Function(ThemeData)? themeAdapter;
 
   @override
   State<DocumentationThemeGuidePage> createState() =>
@@ -163,34 +167,40 @@ class _DocumentationThemeGuidePageState
     return documentationThemeApp(
       mode,
       Builder(
-        builder: (context) => ExamplePage(
-          title: '自定义主题',
-          desc: '配置全局主题、组件局部样式和明暗模式。',
-          exampleCodeGroup: 'theme',
-          backgroundColor: context.tTheme.bgColorPage,
-          children: [
-            for (final scene in DocumentationThemeScene.values)
-              ExampleModule(
-                title: switch (scene) {
-                  DocumentationThemeScene.json => 'JSON 配置',
-                  DocumentationThemeScene.local => '组件局部样式',
-                  DocumentationThemeScene.mode => '明暗模式',
-                },
-                children: [
-                  ExampleItem(
-                    ignoreCode: true,
-                    center: false,
-                    builder: (_) => DocumentationThemeContent(
-                      scene: scene,
-                      mode: mode,
-                      onModeChanged: (mode) =>
-                          setState(() => _selection = mode),
+        builder: (context) {
+          final page = ExamplePage(
+            title: '自定义主题',
+            desc: '配置全局主题、组件局部样式和明暗模式。',
+            exampleCodeGroup: 'theme',
+            backgroundColor: context.tTheme.bgColorPage,
+            children: [
+              for (final scene in DocumentationThemeScene.values)
+                ExampleModule(
+                  title: switch (scene) {
+                    DocumentationThemeScene.json => 'JSON 配置',
+                    DocumentationThemeScene.local => '组件局部样式',
+                    DocumentationThemeScene.mode => '明暗模式',
+                  },
+                  children: [
+                    ExampleItem(
+                      ignoreCode: true,
+                      center: false,
+                      builder: (_) => DocumentationThemeContent(
+                        scene: scene,
+                        mode: mode,
+                        onModeChanged: (mode) =>
+                            setState(() => _selection = mode),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-          ],
-        ),
+                  ],
+                ),
+            ],
+          );
+          final adapter = widget.themeAdapter;
+          return adapter == null
+              ? page
+              : Theme(data: adapter(Theme.of(context)), child: page);
+        },
       ),
     );
   }
