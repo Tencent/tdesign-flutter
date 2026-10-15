@@ -24,6 +24,19 @@ final visualTestSuites = [
       VisualTestSuite(component.name, visualTest),
 ];
 
+List<String> visualTestArguments(
+  VisualTestSuite suite, {
+  bool updateGoldens = false,
+}) => [
+  'test',
+  ...suite.testFiles,
+  '--no-pub',
+  if (suite.kind == VisualTestKind.demo)
+    '--dart-define=TDESIGN_DEMO_TEST_MODULES=false',
+  ...suite.arguments,
+  if (updateGoldens) '--update-goldens',
+];
+
 Future<int> runVisualRegression({bool updateGoldens = false}) async {
   final failedSuites = <String>[];
   final executedSuites = <String>{};
@@ -36,13 +49,7 @@ Future<int> runVisualRegression({bool updateGoldens = false}) async {
     stdout.writeln('\n=== ${suite.name} ===');
     final process = await Process.start(
       'flutter',
-      [
-        'test',
-        ...suite.testFiles,
-        '--no-pub',
-        ...suite.arguments,
-        if (updateGoldens) '--update-goldens',
-      ],
+      visualTestArguments(suite, updateGoldens: updateGoldens),
       workingDirectory: suite.workingDirectory,
       mode: ProcessStartMode.inheritStdio,
     );

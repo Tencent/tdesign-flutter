@@ -1,3 +1,8 @@
+import 'dart:io';
+import 'dart:ui' as ui;
+
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_route.dart';
@@ -21,6 +26,54 @@ void main() {
     componentType: TText,
   );
   registerDemoPageTests(spec);
+
+  setUpAll(() async {
+    // 指南内部 MaterialApp 使用默认字体栈；为其中文 fallback 加载测试字体。
+    await (FontLoader('Microsoft YaHei')..addFont(
+          File(
+            'test/fonts/TDesignGoldenCJK-Regular.otf',
+          ).readAsBytes().then(ByteData.sublistView),
+        ))
+        .load();
+  });
+
+  const guideSpec = DemoPageTestSpec(
+    name: 'custom-theme',
+    title: '自定义主题',
+    page: DocumentationThemeGuidePage(),
+    expectedTexts: ['JSON 配置', '组件局部样式', '明暗模式'],
+    goldenDirectory: 'theme',
+  );
+  for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('custom theme guide ${mode.name} whole page golden', (
+      tester,
+    ) async {
+      await pumpFullDemoPage(tester, guideSpec, mode);
+      await _expectGuideGolden(tester, 'custom_theme_initial_${mode.name}.png');
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
+  }
+  for (final followSystem in [false, true]) {
+    testWidgets(
+      'custom theme guide ${followSystem ? 'system' : 'manual'} dark switch golden',
+      (tester) async {
+        tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
+        addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
+        await pumpFullDemoPage(tester, guideSpec, ThemeMode.light);
+        await tester.tap(find.text(followSystem ? '跟随系统' : '深色'));
+        await tester.pumpAndSettle();
+        expect(find.text('当前外观：深色'), findsNWidgets(2));
+        expect(find.text('brandColor：#699EF5'), findsNWidgets(2));
+        expect(find.textContaining('单元测试'), findsNothing);
+        await _expectGuideGolden(
+          tester,
+          'custom_theme_${followSystem ? 'system' : 'manual'}_dark.png',
+        );
+        await disposeDemoPage(tester);
+      },
+      tags: 'golden',
+    );
+  }
 
   testWidgets('Theme Demo lists the current palette keys', (tester) async {
     await pumpFullDemoPage(tester, spec, ThemeMode.light);
@@ -423,4 +476,29 @@ void main() {
       }
     },
   );
+}
+
+Future<void> _expectGuideGolden(WidgetTester tester, String name) async {
+  final target = find.byKey(const ValueKey('custom-theme-demo-page'));
+  final golden = File('test/theme/goldens/$name');
+  if (!golden.existsSync()) {
+    // 首次 Linux 验收保留实际图供核对，缺失基线仍然报错，不自动批准。
+    await tester.runAsync(() async {
+      final boundary = tester.renderObject<RenderRepaintBoundary>(target);
+      final image = await boundary.toImage();
+      try {
+        final data = await image.toByteData(format: ui.ImageByteFormat.png);
+        final actual = File(
+          'test/theme/failures/${name.replaceAll('.png', '')}_actual.png',
+        );
+        await actual.parent.create(recursive: true);
+        await actual.writeAsBytes(
+          data!.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
+        );
+      } finally {
+        image.dispose();
+      }
+    });
+  }
+  await expectLater(target, matchesGoldenFile('goldens/$name'));
 }

@@ -15,7 +15,6 @@ void main() {
       tester.widget<ExamplePage>(find.byType(ExamplePage)).showTestModule,
       isTrue,
     );
-    expect(find.textContaining('未在示例稿中体现'), findsOneWidget);
 
     final results = tester.widgetList<TResult>(find.byType(TResult)).toList();
     expect(results, hasLength(9));

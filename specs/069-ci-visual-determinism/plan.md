@@ -1,0 +1,5 @@
+# 方案
+
+ExamplePage增加默认true的TDESIGN_DEMO_TEST_MODULES编译开关；run_visual_regression为Demo子进程传false，生产组件测试不受影响。将视觉调度参数提取为可检查列表并验证隔离范围。去掉公开组件功能测试对内部文案/滚动高度的耦合，内部开关由共享控件测试验证。
+
+文字居中Golden在自身CalendarThemeData中显式将todayDayStyle颜色设为普通日期文字色，保持选中态和布局参数。先跑调度器自测、双版本功能与分析，再推送读取新CI全部失败，逐项处理；适用Linux图片由CI产物取证，不直接更新基线消除失败。

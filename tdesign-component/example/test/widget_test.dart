@@ -247,11 +247,27 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(find.text('02 单元测试'), findsOneWidget);
+    expect(
+      find.text('02 单元测试'),
+      const bool.fromEnvironment(
+            'TDESIGN_DEMO_TEST_MODULES',
+            defaultValue: true,
+          )
+          ? findsOneWidget
+          : findsNothing,
+    );
 
     await tester.pumpWidget(buildPage(showTestModule: true));
     await tester.pump();
-    expect(find.text('02 单元测试'), findsOneWidget);
+    expect(
+      find.text('02 单元测试'),
+      const bool.fromEnvironment(
+            'TDESIGN_DEMO_TEST_MODULES',
+            defaultValue: true,
+          )
+          ? findsOneWidget
+          : findsNothing,
+    );
 
     await tester.pumpWidget(buildPage(showTestModule: false));
     await tester.pump();
