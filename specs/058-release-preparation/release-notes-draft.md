@@ -4,7 +4,7 @@
 
 ## Breaking Changes
 
-- 最低环境调整为 Flutter 3.32.0、Dart 3.8.0。组件统一迁移至 T 前缀，删除旧参数/样式/辅助类型的兼容入口；按 [0.2.7 → 1.0 迁移指南](../../MIGRATION_1_0.md) 迁移，不能批量替换前缀后直接上线。
+- 最低环境调整为 Flutter 3.32.0、Dart 3.8.0。组件统一迁移至 T 前缀，删除旧参数/样式/辅助类型的兼容入口；按 [0.2.7 → 1.0 迁移指南](../../tdesign-site/site/docs/migration-0.2.7-to-1.0.md) 迁移，不能批量替换前缀后直接上线。
 - 全局 Token、TD 组件 Theme 与显式实例配置分层；TD 默认视觉不再反向读取外部 Material/M2/M3 配置。文字使用 style/textScaler 与显式布局，自定义内容仍保留自己的主题及原生编辑能力。
 - 表单改为声明式字段树，选择与输入组件按当前受控值契约回写；父级创建的 Controller 按其类型负责释放。
 - Picker/DateTimePicker/Calendar 的选择与业务确认分开；Popup 采用 Options/Handle，Dialog 使用内容槽与 Action，底部导航和顶部页签分别为 TTabBar 与 TTabsBar。

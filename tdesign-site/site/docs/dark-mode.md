@@ -71,4 +71,4 @@ final tokens = TThemeData.fromJson(
 
 组件通过 `context.tTheme` 读取当前子树的 Token。全局配色由 `TThemeData` 管理，组件局部样式通过对应的 `T*ThemeData` 配置。
 
-完整示例见 [深色模式示例源码](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/component_test/dark_test.dart)，配色配置见 [自定义主题](https://tdesign.tencent.com/flutter/getting-started#自定义主题)。
+完整示例见 [深色模式示例源码](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/component_test/dark_test.dart)，配色配置见 [自定义主题](https://tdesign.tencent.com/flutter/custom-theme)。

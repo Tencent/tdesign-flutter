@@ -16,6 +16,20 @@ tdesign-component/
 tdesign-site/       // tdesign flutter 站点
 ```
 
+## 本地开发
+
+同时兼容 Flutter 3.32.0 与当前稳定版本。先安装目标 SDK，在仓库根目录执行：
+
+```bash
+cd tdesign-component
+flutter pub get
+cd example
+flutter pub get
+flutter run
+```
+
+在目标 Android/iOS 设备、模拟器或适用的 Web 环境运行。站点开发与右侧 Flutter Web 预览统一见[站点开发说明](./tdesign-site/README.md)，避免在此重复维护命令和端口配置。
+
 ## 开发规范
 
 - TD 内置视觉和行为只接受受支持的组件实例配置、TD ThemeExtension 与 Token；外部 Material/M2/M3 默认及显式主题不作为隐式入口。内部原生能力可以使用，但其视觉、反馈、触发和选择配置由 TD 明确。保留 TD 显式定制、调用方自定义内容的主题、文本选择和原生编辑、反馈、触发、焦点、键盘与无障碍能力。内部原生控件局部隔离视觉，不重置用户内容树，不因防范样式干扰删除原生能力。
@@ -40,6 +54,27 @@ tdesign-site/       // tdesign flutter 站点
 4. 只在实际对应的位置打勾 / 填写，未勾选的选项保持 `[ ]`，禁止删除未使用的小节或选项。
 
 即 PR 正文形态为「完整模板 + 打勾 + 填写」，与模板逐行对应、无删减、无缺漏。
+
+## 领取 Issue
+
+### 一个 Issue 的完整流程
+
+- 用户发现功能不满足，查看 API 文档确认不支持，然后提 Issue。[常见问题](https://tdesign.tencent.com/flutter/faq)
+- 提了 Issue 后，在群里发出 Issue 链接，方便后续直接沟通，确认详细需求。然后将最终确认结果贴到 GitHub 的 Issue 上。
+- 负责人评估开发工作量，打 `help want` 和 `issueShoot` 标签。
+- 贡献者确认要领取，在 Issue 下评论领取，并通知负责人。负责人打上 `Received` 标签，讨论确认实现方案。
+- 贡献者参考开发规范开发完功能，按照文档自检，然后提 PR，并同步负责人验收。
+- PR 自动构建测试包。【自动构建流水线】
+- 负责人拉设计一起视觉走查（如果需要的话），走查完成后，合并 PR。Issue 打上下一个版本的标签。
+- 版本发布后，Issue 关闭。
+
+### 标签管理
+
+- 无标签：未评估
+- `issueShoot`：已评工作量，可领取
+- `Received`：已领取
+- `pre_x.x.x`：预计某个版本发布
+- `x.x.x`：某个版本已发布
 
 ## PR 关联 Issue
 
@@ -122,12 +157,6 @@ dart run tool/run_visual_regression.dart
 
 调度器自测会检查组件名唯一、各类测试能力完整、登记文件存在，以及 GitHub/CNB 使用公共 runner。CI job 成功仅代表数组中已登记的测试通过；测试文件存在、Golden 已提交或本地单独运行通过，均不能替代 CI 回归登记。
 
-## 贡献指南
-
-请参考：[贡献指南](https://tdesign.tencent.com/flutter/develop)
-
-复杂需求、公共 API 变更、组件重构和跨目录改动请先阅读并创建对应的 [Spec](./specs/README.md)；是否可以不创建 Spec，由 Review 根据实际改动判断。
-
 ## Spec 贡献流程
 
 复杂需求、公共 API 变更、组件重构和跨目录改动，请按 [`specs/README.md`](./specs/README.md) 的完整流程创建并维护 Spec：
@@ -138,3 +167,28 @@ dart run tool/run_visual_regression.dart
 4. 提交 PR 时，在正文附上 Spec 目录链接；PR 描述「更新日志」须与 Spec 描述一致（格式见上文「PR 更新日志规范」）。
 
 简单文案、格式调整和单文件局部修改不要求创建完整 Spec。Spec 只描述设计和验收，不替代代码、测试或生成文档。
+
+## 人工验收与合并
+
+- 检查真实操作、布局溢出、明暗主题、英文环境、文字缩放和适用的焦点/键盘/无障碍能力。
+- 在 Example App 检查对应API和代码查看入口；文档有误时修复源码注释、组件清单或示例源码，再重新生成，勿手工修改产物。
+- 测试包或预览构建成功后，根据PR中的构建结果完成适用的Android/iOS验收；构建失败应先检查实际日志。
+- 视觉改动由负责人协调设计走查，并附目标、状态、平台与版本证据。Golden要求见[组件Review规范](./.agents/skills/tdesign-component-align-review/SKILL.md)。
+- Issue验收完成后由负责人合并PR；更新发布版本标签，正式发布后关闭对应Issue。
+
+## 文档维护
+
+| 内容 | 唯一来源 | 使用与生成方式 |
+|---|---|---|
+| 项目介绍和最短示例 | 根README.md、README_zh_CN.md | 中英文分别维护，包内副本生成 |
+| 安装、主题、深色模式、国际化、FAQ、迁移 | tdesign-site/site/docs/ | 站点直接读取，迁移另生成包内MIGRATION.md |
+| 贡献规范 | 本文件 | 站点直接读取并适配页面元信息与相对链接 |
+| 站点开发方式 | [tdesign-site/README.md](./tdesign-site/README.md) | 其他说明链接到此处 |
+| API | lib中的公开dartdoc注释 | 生成example/assets/api，站点和示例App共用 |
+| 示例 | example/lib中的标注源码 | 生成example/assets/code，站点和示例App共用 |
+| 设计决策与验收 | specs/ | 保留历史证据，现行用户用法写入用户指南 |
+| 发布流程与记录 | PUBLISH.md及既有CHANGELOG生成入口 | 发布步骤与历史记录分开维护 |
+
+执行 `node scripts/sync-readme.mjs` 更新指南中的可运行迁移片段和包内副本；执行 `node scripts/sync-readme.mjs --check` 只检查，不改文件。包内副本顶部标注来源，不手工修改。站点普通指南使用小写连字符命名，迁移文件名写清起止版本。
+
+新增指南后在站点导航登记；内部文档链接使用相对路径，站点渲染时转换为既有路由，包内副本转换为可访问的线上入口。完整文档来源和边界见[整理记录](./specs/062-documentation-source-consolidation/spec.md)。

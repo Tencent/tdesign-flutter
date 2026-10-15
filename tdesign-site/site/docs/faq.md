@@ -9,7 +9,7 @@ spline: explain
 1.0 当前处于预发布阶段，版本按功能完成和验证进度发布，不承诺固定的月度发布日期。已发布版本见 [Releases](https://github.com/Tencent/tdesign-flutter/releases)，后续计划以 [Issues](https://github.com/Tencent/tdesign-flutter/issues) 和对应里程碑为准。
 
 ## 自定义主题
-- 自定义主题用法请参考：https://tdesign.tencent.com/flutter/getting-started#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A2%98
+- 自定义主题用法请参考：https://tdesign.tencent.com/flutter/custom-theme
 - 在启动即修改主题颜色，完整示例代码请参考：https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/component_test/test_app.dart
 - 在应用使用中切换主题颜色，示例代码请参考 example 的 `main.dart` 和 `home.dart`：https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/main.dart
 - 转换完整代码：https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/shell/theme/css2_json_theme.dart

@@ -20,7 +20,7 @@
 - [x] 实例保留 `TText.font` 作为 TDesign 字体预设，移除 `fontWeight/fontFamily/textColor/isTextThrough/lineThroughColor` 分散便利字段，迁移仓内调用与测试；独立消费包已验证实例 style、富文本与组件 Theme 的公开替代调用。
 - [x] 既有 Button/Input 层级规则和 outline 状态回退完成测试；本轮进一步移除与完整实例 `style` 重复的组件 Theme 字段，测试需按新的单入口契约复核，旧规则不再作为验收标准。
 - [x] DONE 当前基线 dartdoc 审计、Demo/组件自动回归已通过，见 Spec 057。
-- [x] 仅面向 0.2.7 → 1.0 的迁移指南已落地，覆盖组件入口、行为和删除能力；独立消费用例双版本通过，见根 MIGRATION_1_0.md 与 Spec 058。此项不代表677项消费审查或全部业务迁移完成。
+- [x] 仅面向 0.2.7 → 1.0 的迁移指南已落地，覆盖组件入口、行为和删除能力；独立消费用例双版本通过，见[迁移指南](../../tdesign-site/site/docs/migration-0.2.7-to-1.0.md)与 Spec 058。此项不代表677项消费审查或全部业务迁移完成。
 - [x] DONE 当前基线双版本分析、组件和 Demo 功能、独立消费包迁移检查及 Linux 3.32.0 登记 Golden 全部通过；消费包 CI 步骤实际成功，不再等待推送。历史检查点保留于 `acceptance.md`，当前证据见 Spec 057。
 - [ ] DOING 804 项组件变量已按冻结源码逐项建静态证据；纠正 Less 动态消费误判后，10 项未见静态消费者、81 项属于尚无 Flutter 对应组件的已消费变量；Button 12 项、Tag 12 项默认 Widget 值，Tag 7 项及 Switch/Fab/Form/PullDownRefresh/DropdownItem 各 1 项回退路径已裁定，Progress 9 项已另做默认 Widget/Painter 消费链复核（不等于跨端视觉完成），历史基线为677项待核；最新分层结果见Spec059，116项默认运行证据已补，不直接扣减最终视觉待审数。
 - [x] 按 2026-10-03 用户裁定修正 Button 深色禁用字色、Switch 禁用/加载分层状态色与 Slider 浅色禁用滑块描边；Button/Switch 依冻结小程序，Slider 依直接选取的 Figma 图层。双版本聚焦测试与严格分析通过，生成 API 已更新；隔离 Linux 逐张检查、仅更新 10 张受影响 Golden 并无更新复跑通过。PR head CI 与整页 Figma 像素验收仍属总任务门禁，不以本项完成代替。

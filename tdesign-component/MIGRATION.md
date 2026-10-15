@@ -1,3 +1,5 @@
+<!-- Generated from tdesign-site/site/docs/migration-0.2.7-to-1.0.md; do not edit this copy. -->
+
 # 从 0.2.7 升级到 1.0
 
 本文仅面向 `tdesign_flutter 0.2.7` 使用方。1.0 是不兼容升级，旧参数和旧行为不会通过兼容别名保留；不能对全项目执行一次 `TD` → `T` 替换后就认为迁移结束。
