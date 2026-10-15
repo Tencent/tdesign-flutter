@@ -56,4 +56,56 @@ void main() {
     expect(find.text('要删除这张照片吗？'), findsOneWidget);
     expect(find.text('删除'), findsOneWidget);
   });
+
+  for (final deleteLast in [false, true]) {
+    testWidgets('真实删除、取消、删空与重新体验 last=$deleteLast', (tester) async {
+      await pumpDemoPageAtPhoneViewport(
+        tester,
+        imageViewerDemoPageTestSpec,
+        ThemeMode.light,
+      );
+      await tester.tap(find.widgetWithText(TButton, '带操作图片预览'));
+      await tester.pumpAndSettle();
+      if (deleteLast) {
+        await tester.drag(find.byType(TSwiper), const Offset(-400, 0));
+        await tester.pumpAndSettle();
+      }
+      final initialPage = deleteLast ? '2/2' : '1/2';
+      expect(find.text(initialPage), findsOneWidget);
+      await tester.tap(find.byTooltip('Delete'));
+      await tester.pumpAndSettle();
+      expect(find.text('要删除这张照片吗？'), findsOneWidget);
+      await tester.tap(find.textContaining(RegExp('取消|Cancel')));
+      await tester.pumpAndSettle();
+      expect(find.text(initialPage), findsOneWidget);
+
+      for (var remaining = 1; remaining >= 0; remaining--) {
+        await tester.tap(find.byTooltip('Delete'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('删除'));
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+        if (remaining == 1) {
+          expect(find.text('1/1'), findsOneWidget);
+          expect(
+            tester.widget<TSwiper>(find.byType(TSwiper)).children,
+            hasLength(1),
+          );
+          await tester.drag(find.byType(TSwiper), const Offset(-400, 0));
+          await tester.pumpAndSettle();
+          expect(find.text('1/1'), findsOneWidget);
+        }
+      }
+      expect(find.byType(TSwiper), findsNothing);
+      expect(find.text('图片已全部删除'), findsOneWidget);
+      TToast.dismissAll();
+      await tester.pump();
+      await tester.tap(find.text('重新体验带操作图片预览'));
+      await tester.pumpAndSettle();
+      expect(find.text('1/2'), findsOneWidget);
+      await tester.tap(find.byTooltip('Close'));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+    });
+  }
 }

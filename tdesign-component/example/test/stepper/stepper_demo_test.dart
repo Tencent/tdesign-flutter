@@ -164,10 +164,7 @@ void main() {
       );
       await tester.pump();
       expect(tester.widget<TStepper>(base).value, 4);
-      await tester.tap(find.byIcon(TIcons.code));
-      await tester.pumpAndSettle();
-      expect(find.text('code'), findsNWidgets(5));
-      expect(tester.widget<TStepper>(base).value, 4);
+      await tester.runAsync(() => preloadDemoCodeGroup('stepper'));
       const names = [
         'StepperBaseExample',
         'StepperBoundsExample',
@@ -176,10 +173,19 @@ void main() {
         'StepperSizesExample',
       ];
       for (var i = 0; i < names.length; i++) {
-        await tester.tap(find.text('code').at(i));
-        await tester.pumpAndSettle();
-        final expected = await rootBundle.loadString(
-          'assets/code/stepper.${names[i]}.txt',
+        await tester.tap(find.byIcon(TIcons.code));
+        await waitForDemoWidget(tester, find.text('选择示例代码'));
+        final entry = find
+            .descendant(
+              of: find.byType(BottomSheet),
+              matching: find.byType(TCell),
+            )
+            .at(i);
+        await tester.ensureVisible(entry);
+        await tester.tap(entry);
+        await waitForDemoWidget(tester, find.byType(Markdown));
+        final expected = await tester.runAsync(
+          () => rootBundle.loadString('assets/code/stepper.${names[i]}.txt'),
         );
         final content = tester.widget<Markdown>(find.byType(Markdown)).data;
         expect(content, contains(expected));

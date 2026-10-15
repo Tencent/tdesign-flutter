@@ -40,6 +40,8 @@ enum VisualTestKind {
 
 const sharedExampleTests = [
   'test/widget_test.dart',
+  'test/demo_build_info_test.dart',
+  'test/example_code_viewer_test.dart',
   'test/api_docs_test.dart',
   'test/web_theme_message_test.dart',
   'test/web_theme_listener_lifecycle_test.dart',
@@ -432,6 +434,11 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/fab/t_fab_test.dart',
     ],
     visualTests: [
+      VisualTestManifest(
+        name: 'Demo code viewer',
+        workingDirectory: 'example',
+        testFiles: ['test/example_code_viewer_golden_test.dart'],
+      ),
       VisualTestManifest(
         name: 'Fab Demo',
         workingDirectory: 'example',

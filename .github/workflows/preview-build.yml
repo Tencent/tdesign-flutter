@@ -74,12 +74,8 @@ jobs:
         working-directory: .
         run: node scripts/check-flutter-component-contracts.mjs
 
-      - name: Update assets files
-        env:
-          VERSION: ${{ steps.version.outputs.version }}
-        run: |
-          echo "$VERSION" > "$GITHUB_WORKSPACE/tdesign-component/example/assets/version"
-          date +%s%3N > "$GITHUB_WORKSPACE/tdesign-component/example/assets/publish_time"
+      - name: Update Demo build metadata
+        run: dart tdesign-component/tool/write_demo_build_info.dart
 
       - name: Build site
         working-directory: ./tdesign-site

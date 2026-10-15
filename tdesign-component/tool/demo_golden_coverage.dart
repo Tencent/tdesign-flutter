@@ -139,7 +139,12 @@ const demoGoldenCoverage = <DemoGoldenCoverage>[
   DemoGoldenCoverage(
     component: 'image_viewer',
     kind: DemoGoldenCoverageKind.exhaustiveWithEquivalence,
-    states: ['initial', 'actions viewer opened'],
+    states: [
+      'initial',
+      'actions viewer opened',
+      'one image deleted',
+      'all images deleted',
+    ],
     rationale: '带操作预览覆盖完整 Overlay；缩放和拖拽用组件功能测试验证。',
   ),
   DemoGoldenCoverage(
@@ -163,7 +168,12 @@ const demoGoldenCoverage = <DemoGoldenCoverage>[
   DemoGoldenCoverage(
     component: 'fab',
     kind: DemoGoldenCoverageKind.exhaustiveWithEquivalence,
-    states: ['initial', 'auto-collapse while scrolling'],
+    states: [
+      'initial',
+      'auto-collapse while scrolling',
+      'code picker',
+      'code panel',
+    ],
     rationale: '滚动手势保持期间固定收缩态；任意拖拽位置不作为像素契约。',
   ),
   DemoGoldenCoverage(

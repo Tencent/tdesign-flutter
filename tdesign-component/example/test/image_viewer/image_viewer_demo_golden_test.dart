@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../demo_page_test_utils.dart';
+import '../support/review_golden.dart';
 import 'image_viewer_demo_test_spec.dart';
 
 void main() {
@@ -107,5 +108,55 @@ void main() {
       );
       await disposeDemoPage(tester);
     }, tags: 'golden');
+
+    for (final target in [1, 0]) {
+      testWidgets('image viewer real delete $target ${mode.name} golden', (
+        tester,
+      ) async {
+        await pumpDemoPageAtPhoneViewport(
+          tester,
+          imageViewerDemoPageTestSpec,
+          mode,
+        );
+        final context = tester.element(find.byType(MaterialApp));
+        await tester.runAsync(() async {
+          await precacheImage(
+            const AssetImage('assets/img/image.png'),
+            context,
+          );
+          await precacheImage(
+            const AssetImage('assets/img/t_action_sheet_8.png'),
+            context,
+          );
+        });
+        await tester.tap(find.widgetWithText(TButton, '带操作图片预览'));
+        await tester.pumpAndSettle();
+        for (var remaining = 1; remaining >= 0; remaining--) {
+          await tester.tap(find.byTooltip('Delete'));
+          await tester.pumpAndSettle();
+          await tester.tap(find.text('删除'));
+          await tester.pumpAndSettle();
+          if (remaining != target) {
+            continue;
+          }
+          if (target == 0) {
+            TToast.dismissAll();
+            await tester.pump();
+            expect(find.text('重新体验带操作图片预览'), findsOneWidget);
+          } else {
+            expect(find.text('1/1'), findsOneWidget);
+          }
+          final goldenPath =
+              'goldens/image_viewer_deleted_${target == 1 ? 'one' : 'all'}_${mode.name}.png';
+          await captureGoldenEvidence(tester, find.byType(Overlay), goldenPath);
+          await expectLater(
+            find.byType(Overlay),
+            matchesGoldenFile(goldenPath),
+          );
+          break;
+        }
+        await disposeDemoPage(tester);
+      }, tags: 'golden');
+    }
   }
 }

@@ -47,12 +47,12 @@
 # APK 构建
 .build-apk:
   name: flutter build apk
-  script: cd tdesign-component/example && flutter build apk -t ./lib/main.dart --release
+  script: cd tdesign-component/example && dart ../tool/write_demo_build_info.dart && flutter build apk -t ./lib/main.dart --release
 
 # Web 构建
 .build-web:
   name: flutter build web
-  script: cd tdesign-component/example && flutter build web -t ./lib/main.dart --release
+  script: cd tdesign-component/example && dart ../tool/write_demo_build_info.dart && flutter build web -t ./lib/main.dart --release
 
 # ===== 完整 CI pipeline 模板（供事件侧逐条 !reference 引用）=====
 # 每个模板是完整的 Pipeline 对象（含 name / docker / stages），
