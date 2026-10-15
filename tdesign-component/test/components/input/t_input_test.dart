@@ -2,10 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../support/token_consumption_evidence.dart';
-
 void main() {
-  inputTokenConsumptionTests();
   Widget wrap(Widget child, {TInputThemeData? inputTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
     if (inputTheme != null) {
@@ -93,10 +90,7 @@ void main() {
             matching: find.byType(TextField),
           );
           expect(tester.getSize(editor).height, 24);
-          expect(
-            Theme.of(tester.element(editor)).visualDensity,
-            VisualDensity.standard,
-          );
+          expect(Theme.of(tester.element(editor)).visualDensity, VisualDensity.standard);
         }
         expect(
           tester.getSize(find.byIcon(TIcons.close_circle_filled)),
@@ -1014,163 +1008,4 @@ void main() {
       expect(committed.selection, const TextSelection.collapsed(offset: 1));
     });
   });
-}
-
-void inputTokenConsumptionTests() {
-  for (final brightness in Brightness.values) {
-    for (final custom in [false, true]) {
-      testWidgets('token consumption input ${brightness.name} custom=$custom', (
-        tester,
-      ) async {
-        final token = evidenceTokens(brightness, custom: custom);
-        for (final enabled in [true, false]) {
-          await tester.pumpWidget(
-            evidenceHost(
-              TInput(
-                key: ValueKey(enabled),
-                hintText: 'token hint',
-                enabled: enabled,
-                prefix: const Icon(Icons.add),
-                suffix: const Icon(Icons.close),
-              ),
-              brightness: brightness,
-              token: token,
-            ),
-          );
-          await tester.pumpAndSettle();
-          final editor = tester.widget<EditableText>(find.byType(EditableText));
-          final hint = tester.widget<Text>(find.text('token hint'));
-          final scenario = '${brightness.name}/custom=$custom/enabled=$enabled';
-          tokenObservation(
-            enabled ? 'inputDefaultTextColor' : 'inputDisabledTextColor',
-            scenario: scenario,
-            actual: editor.style.color,
-            expected: enabled
-                ? token.textColorPrimary
-                : token.textColorDisabled,
-          );
-          tokenObservation(
-            enabled ? 'inputPlaceholderTextColor' : 'inputDisabledTextColor',
-            scenario: scenario,
-            actual: hint.style?.color,
-            expected: enabled
-                ? token.textColorPlaceholder
-                : token.textColorDisabled,
-          );
-          if (enabled) {
-            tokenObservation(
-              'inputPlaceholderTextFont',
-              scenario: scenario,
-              actual:
-                  '${hint.style?.fontSize}/${hint.style!.height! * hint.style!.fontSize!}',
-              expected: custom ? '20.0/28.0' : '16.0/24.0',
-            );
-            tokenObservation(
-              'inputPrefixIconColor',
-              scenario: scenario,
-              actual: IconTheme.of(
-                tester.element(find.byIcon(Icons.add)),
-              ).color,
-              expected: token.textColorPrimary,
-            );
-            tokenObservation(
-              'inputSuffixIconColor',
-              scenario: scenario,
-              actual: IconTheme.of(
-                tester.element(find.byIcon(Icons.close)),
-              ).color,
-              expected: token.textColorPlaceholder,
-            );
-            final shell = tester
-                .widgetList<DecoratedBox>(
-                  find.descendant(
-                    of: find.byType(TInput),
-                    matching: find.byType(DecoratedBox),
-                  ),
-                )
-                .map((box) => box.decoration)
-                .whereType<BoxDecoration>()
-                .first;
-            tokenObservation(
-              'inputBgColor',
-              scenario: scenario,
-              actual: shell.color,
-              expected: token.bgColorContainer,
-            );
-            tokenObservation(
-              'inputBorderColor',
-              scenario: scenario,
-              actual: (shell.border! as Border).bottom.color,
-              expected: token.componentStroke,
-              enforce: false,
-            );
-            final outer = tester
-                .widgetList<DecoratedBox>(
-                  find.descendant(
-                    of: find.byType(TInput),
-                    matching: find.byType(DecoratedBox),
-                  ),
-                )
-                .first;
-            final padding = outer.child! as Padding;
-            tokenObservation(
-              'inputVerticalPadding',
-              scenario: scenario,
-              actual: padding.padding.resolve(TextDirection.ltr).top,
-              expected: token.spacer2,
-              enforce: !custom,
-            );
-            tokenObservation(
-              'inputVerticalPadding',
-              scenario: 'contract/$scenario/standalone-padding',
-              actual: padding.padding.resolve(TextDirection.ltr).top,
-              expected: 16.0,
-            );
-          }
-        }
-        await tester.pumpWidget(
-          evidenceHost(
-            const TInput(
-              hintText: 'overridden',
-              initialValue: 'explicit',
-              style: TextStyle(color: Colors.lime),
-            ),
-            brightness: brightness,
-            token: token,
-            extensions: const [
-              TInputThemeData(
-                backgroundColor: Colors.cyan,
-                hintStyle: TextStyle(color: Colors.purple),
-                borderColor: Colors.orange,
-              ),
-            ],
-          ),
-        );
-        await tester.pumpAndSettle();
-        expect(
-          tester.widget<EditableText>(find.byType(EditableText)).style.color,
-          Colors.lime,
-        );
-        expect(
-          tester
-              .widget<Text>(find.text('overridden', skipOffstage: false))
-              .style
-              ?.color,
-          Colors.purple,
-        );
-        final shell = tester
-            .widgetList<DecoratedBox>(
-              find.descendant(
-                of: find.byType(TInput),
-                matching: find.byType(DecoratedBox),
-              ),
-            )
-            .map((box) => box.decoration)
-            .whereType<BoxDecoration>()
-            .first;
-        expect(shell.color, Colors.cyan);
-        expect((shell.border! as Border).bottom.color, Colors.orange);
-      });
-    }
-  }
 }

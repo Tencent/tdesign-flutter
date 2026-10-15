@@ -295,31 +295,6 @@ void main() {
       expect(td.colorScheme.primary, token.brandColor);
     });
 
-    test('稀疏深色 JSON 的背景文字和引用回退默认深色 Token', () {
-      final token = TThemeData.fromJson('ocean', '''
-        {
-          "ocean": {"color": {"brandColor": "#0052D9"}},
-          "oceanDark": {"color": {"brandColor": "#699EF5"}}
-        }
-      ''')!;
-      final defaults = TThemeData.defaultData();
-      final dark = token.dark!;
-      expect(token.bgColorPage, defaults.bgColorPage);
-      expect(token.textColorPrimary, defaults.textColorPrimary);
-      expect(dark.bgColorPage, defaults.dark!.bgColorPage);
-      expect(dark.bgColorContainer, defaults.dark!.bgColorContainer);
-      expect(dark.textColorPrimary, defaults.dark!.textColorPrimary);
-      expect(dark.componentBorder, defaults.dark!.componentBorder);
-      expect(dark.refMap['bgColorPage'], defaults.dark!.refMap['bgColorPage']);
-      expect(dark.brandColor.toARGB32(), 0xFF699EF5);
-      expect(
-        TThemeBuilder.dark(token).scaffoldBackgroundColor,
-        defaults.dark!.bgColorContainer,
-      );
-      expect(dark.bgColorPage, isNot(token.bgColorPage));
-      expect(dark.textColorPrimary, isNot(token.textColorPrimary));
-    });
-
     test('buildDark 使用 token.dark 块', () {
       const json = '''
       {

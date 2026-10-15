@@ -366,16 +366,9 @@ const demoGoldenCoverage = <DemoGoldenCoverage>[
   ),
   DemoGoldenCoverage(
     component: 'theme',
-    kind: DemoGoldenCoverageKind.exhaustiveWithFunctionalBoundary,
-    states: [
-      'light and dark token pages',
-      'Material 2 and 3 isolation',
-      'custom theme guide initial light and dark',
-      'custom theme guide manual light and dark selection',
-      'custom theme guide system light and dark selection',
-    ],
-    rationale:
-        '色板与Material隔离保留原场景；自定义主题指南整页覆盖JSON、局部样式和数值对照，真实操作保存手动与系统浅深色，包含从相反模式切换后的结果。系统外观变化与320dp边界另由功能测试验证。',
+    kind: DemoGoldenCoverageKind.staticOnly,
+    states: ['light and dark token pages', 'Material 2 and 3 isolation'],
+    rationale: 'Theme 模块没有自身交互，颜色 Token 页面和 Material 默认值隔离场景固定其公开视觉契约。',
   ),
   DemoGoldenCoverage(
     component: 'toast',

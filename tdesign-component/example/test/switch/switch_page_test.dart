@@ -70,6 +70,13 @@ void main() {
     expect(find.byType(TCellGroup), findsNWidgets(4));
     expect(find.byType(TSwitch), findsNWidgets(11));
 
+    final scrollable = tester.state<ScrollableState>(
+      find.descendant(
+        of: find.byType(CustomScrollView),
+        matching: find.byType(Scrollable),
+      ),
+    );
+    expect(scrollable.position.maxScrollExtent, 0);
     expect(
       tester.widget<Scaffold>(find.byType(Scaffold)).backgroundColor,
       const Color(0xFFF6F6F6),
