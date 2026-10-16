@@ -5,8 +5,10 @@ import 'package:flutter/services.dart' show TextInputFormatter;
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import 't_stepper_defaults.dart';
 import 't_stepper_theme_data.dart';
@@ -538,9 +540,25 @@ class _StepperStyle {
     final token = context.tTheme;
     final size = widget.size ?? TStepperSize.medium;
     final variant = widget.variant ?? TStepperVariant.normal;
-    final geometry = stepperGeometry(size);
+    final baseGeometry = stepperGeometry(size);
+    final font = switch (size) {
+      TStepperSize.small => token.fontBodyExtraSmall,
+      TStepperSize.medium => token.fontBodySmall,
+      TStepperSize.large => token.fontBodyLarge,
+    };
+    final geometry = (
+      controlSize: baseGeometry.controlSize,
+      inputWidth: baseGeometry.inputWidth,
+      iconSize: baseGeometry.iconSize,
+      fontSize: font?.size ?? baseGeometry.fontSize,
+      lineHeight: font == null
+          ? baseGeometry.lineHeight
+          : font.size * font.height,
+    );
     var controlSize = componentTheme?.controlSize ?? geometry.controlSize;
-    final grows = componentTheme?.controlSize == null && widget.size == null;
+    final grows =
+        componentTheme?.controlSize == null &&
+        (widget.size == null || geometry.fontSize > geometry.controlSize);
     final rawComponentTextStyle = componentTheme?.textStyle;
     final componentTextStyle = rawComponentTextStyle == null
         ? null
@@ -601,7 +619,7 @@ class _StepperStyle {
       inputWidth:
           componentTheme?.inputWidth ?? geometry.inputWidth * widthGrowth,
       iconSize: componentTheme?.iconSize ?? geometry.iconSize,
-      spacing: componentTheme?.spacing ?? stepperSpacing,
+      spacing: componentTheme?.spacing ?? token.size2,
       borderRadius:
           componentTheme?.borderRadius ??
           BorderRadius.circular(token.radiusSmall),

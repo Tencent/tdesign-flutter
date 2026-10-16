@@ -69,7 +69,7 @@ class TButton extends StatefulWidget {
   ///
   /// 外部 Material 按钮主题不控制内置样式；请通过此实例 style 或 TD Theme 定制。
   /// [ButtonStyle.visualDensity] 不生效；内置布局始终使用标准密度，
-  /// 尺寸由 [size] 与显式内边距、宽高配置决定。
+  /// 尺寸由 [size] 规格、全局尺寸刻度与显式内边距、宽高配置决定。
   /// 反馈和鼠标指针仅由实例 style、TD Theme 或内置默认值控制。
   /// 状态属性返回 null 时回退该状态的 TD 默认值；不读取 Material 按钮主题。
   /// 调用方内容仍继承原主题。
@@ -139,6 +139,7 @@ class _TButtonState extends State<TButton> {
     final sizeMetrics = TButtonResolve.sizeMetrics(
       effectiveSize,
       context.tTheme,
+      buttonTheme: theme,
     );
     final hasGradient = theme?.gradient != null;
 

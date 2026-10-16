@@ -73,7 +73,7 @@
 - 普通及自定义徽标默认以中心点对齐锚点边角；消费组件的场景位置属于组合几何，
   通过内部最低优先级默认值提供，实例及 `BadgeTheme.offset` 仍可覆盖。
 - Medium/Large 的默认水平 padding 分别为 4/6 逻辑像素。
-- Square 的 2px 圆角与 Bubble 左下 1px 尖角是 Badge 专有形状常量；当前主题 Token 没有语义等价值，因此不错误映射到 3px 的 `radiusSmall`。
+- Square 按用户2026-10-16指定设计稿的 radius-default=3px，适配到当前 Flutter 的 `radiusSmall`（默认3px）；相关全局刻度变更应实时生效。Bubble 左下1px尖角与其余10px普通角仍保留既有形状常量，不随该刻度变化。
 - Ribbon/Triangle 画布尺寸由当前 Badge 行盒派生，不依赖设备像素比或平台字体基线。
 
 ## 验收标准

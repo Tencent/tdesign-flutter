@@ -1,3 +1,5 @@
+import 'package:flutter/painting.dart';
+
 /// TBadge 的 TDesign 内置视觉默认值。
 abstract final class TBadgeDefaults {
   /// Dot 的默认直径，单位为逻辑像素。
@@ -6,6 +8,14 @@ abstract final class TBadgeDefaults {
   /// `spacer`。后续建立正式的 Badge 组件 token 后，应将该默认值迁移到
   /// 对应 token；局部尺寸覆盖由 `TBadgeThemeData.dotSize` 提供。
   static const dotSize = 8.0;
+
+  /// 气泡徽标的独立四角圆角规格，单位为逻辑像素。
+  static const bubbleBorderRadius = BorderRadius.only(
+    topLeft: Radius.circular(10),
+    topRight: Radius.circular(10),
+    bottomRight: Radius.circular(10),
+    bottomLeft: Radius.circular(1),
+  );
 
   /// 描边的默认宽度，单位为逻辑像素。
   static const borderWidth = 1.0;

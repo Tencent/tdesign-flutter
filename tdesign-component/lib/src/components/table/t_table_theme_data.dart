@@ -47,7 +47,7 @@ class TTableThemeData extends ThemeExtension<TTableThemeData> {
   final Color? borderColor;
 
   /// 单元格内边距。
-  /// null 时左右各 16 逻辑像素。
+  /// null 时左右使用 spacer1 Token（默认各 12 逻辑像素），上下为 0。
   final EdgeInsetsGeometry? cellPadding;
 
   /// 复制主题配置。

@@ -8,6 +8,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../text/t_text_styled.dart';
@@ -193,13 +194,14 @@ class _TBackTopState extends State<TBackTop> {
           theme.borderColor ??
           (isDark ? token.grayColor9 : token.componentBorder),
       contentColor: theme.contentColor ?? defaultContent,
-      roundSize: theme.roundSize ?? 48,
-      halfCircleHeight: theme.halfCircleHeight ?? 40,
+      roundSize: theme.roundSize ?? token.size13,
+      halfCircleHeight: theme.halfCircleHeight ?? token.size12,
       halfCircleMinWidth: theme.halfCircleMinWidth ?? 38,
-      iconSize: theme.iconSize ?? 20,
+      iconSize: theme.iconSize ?? 22,
       borderWidth: theme.borderWidth ?? 0.5,
-      halfCircleHorizontalPadding: theme.halfCircleHorizontalPadding ?? 8,
-      contentGap: theme.contentGap ?? 2,
+      halfCircleHorizontalPadding:
+          theme.halfCircleHorizontalPadding ?? token.size4,
+      contentGap: theme.contentGap ?? token.size1,
       textStyle:
           TextStyle(
                 fontSize: token.fontMarkExtraSmall?.size ?? 10,

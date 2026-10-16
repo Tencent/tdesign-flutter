@@ -143,7 +143,7 @@ class TTag extends StatelessWidget {
     final borderWidth = isOutline ? 1.0 : 0.0;
     final defaultPadding = _getPadding(borderWidth);
     final effectivePadding =
-        theme?.resolvePadding(defaultPadding) ?? defaultPadding;
+        theme?.resolvePadding(defaultPadding, size: size) ?? defaultPadding;
     final result = Container(
       width: fixedWidth,
       constraints: maxLines == 1

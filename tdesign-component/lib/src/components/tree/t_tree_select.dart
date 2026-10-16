@@ -7,6 +7,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_styled.dart';
 import 't_tree_select_theme_data.dart';
@@ -16,7 +17,6 @@ const _kRootColumnWidth = 103.0;
 const _kIntermediateColumnWidth = 103.0;
 const _kLeafColumnMinWidth = 169.0;
 const _kItemHeight = 56.0;
-const _kOutwardCornerRadius = 9.0;
 
 /// 不可变的树形选择选项。
 @immutable
@@ -533,7 +533,7 @@ class _TreeOptionTile extends StatelessWidget {
               top: 0,
               right: 0,
               child: CustomPaint(
-                size: const Size(_kOutwardCornerRadius, _kOutwardCornerRadius),
+                size: const Size(9, 9),
                 painter: _OutwardCornerPainter(
                   color: selectedBackgroundColor,
                   corner: _Corner.topRight,
@@ -545,7 +545,7 @@ class _TreeOptionTile extends StatelessWidget {
               right: 0,
               bottom: 0,
               child: CustomPaint(
-                size: const Size(_kOutwardCornerRadius, _kOutwardCornerRadius),
+                size: const Size(9, 9),
                 painter: _OutwardCornerPainter(
                   color: selectedBackgroundColor,
                   corner: _Corner.bottomRight,
@@ -558,7 +558,10 @@ class _TreeOptionTile extends StatelessWidget {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 12),
+                    padding: EdgeInsets.only(
+                      left: context.tTheme.size6,
+                      right: 12,
+                    ),
                     child: TTextStyled(
                       label,
                       maxLines: 1,

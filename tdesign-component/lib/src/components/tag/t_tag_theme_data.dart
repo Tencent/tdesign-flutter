@@ -4,11 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 import '../../theme/basic.dart' show Font;
+import 't_tag_types.dart';
 
 /// 标签组件级 ThemeExtension
 ///
 /// 通过 Theme 子树注入，控制子树的默认样式。
-/// 具体视觉值由组件 Theme 控制，未指定时回退全局 Token。
+/// 具体视觉值由组件 Theme 控制，未指定时回退全局 Token 或文档化的组件规格。
+///
+/// 分档间距示例（统一 padding 配置优先）：
+/// ```dart
+/// Theme(
+///   data: Theme.of(context).mergeExtension(
+///     const TTagThemeData(smallPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 1)),
+///   ),
+///   child: const TTag('标签', size: TTagSize.small),
+/// )
+/// ```
 ///
 /// {@category ComponentTheme}
 class TTagThemeData extends ThemeExtension<TTagThemeData> {
@@ -31,8 +42,33 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
   /// 字体尺寸和行高；未设置时随标签尺寸使用对应的全局字体 Token。
   final Font? font;
 
-  /// 自定义间距
+  /// 所有尺寸统一的边框以内间距，优先于分档 padding；不会再次扣减边框。
+  /// 未设置时使用当前尺寸的分档配置或内置默认值。
   final EdgeInsets? padding;
+
+  /// 小尺寸标签的边框以内间距；统一 padding 配置优先。
+  ///
+  /// 未设置时保持当前默认：横向 max(6 - 实际边框宽, 0)dp，
+  /// 纵向 max(2 - 实际边框宽, 0)dp。显式值不会再次扣减边框。
+  final EdgeInsets? smallPadding;
+
+  /// 中尺寸标签的边框以内间距；统一 padding 配置优先。
+  ///
+  /// 未设置时保持当前默认：横向 max(8 - 实际边框宽, 0)dp，
+  /// 纵向 max(2 - 实际边框宽, 0)dp。显式值不会再次扣减边框。
+  final EdgeInsets? mediumPadding;
+
+  /// 大尺寸标签的边框以内间距；统一 padding 配置优先。
+  ///
+  /// 未设置时保持当前默认：横向 max(8 - 实际边框宽, 0)dp，
+  /// 纵向 max(3 - 实际边框宽, 0)dp。显式值不会再次扣减边框。
+  final EdgeInsets? largePadding;
+
+  /// 超大尺寸标签的边框以内间距；统一 padding 配置优先。
+  ///
+  /// 未设置时保持当前默认：横向 max(16 - 实际边框宽, 0)dp，
+  /// 纵向 max(9 - 实际边框宽, 0)dp。显式值不会再次扣减边框。
+  final EdgeInsets? extraLargePadding;
 
   /// 方形标签圆角，单位为逻辑像素；未设置时所有尺寸均读取全局
   /// `radiusSmall`（当前默认 3dp）。
@@ -57,6 +93,11 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     this.successLightColor,
     this.font,
     this.padding,
+    this.smallPadding,
+    this.mediumPadding,
+    this.largePadding,
+    this.extraLargePadding,
+
     this.squareBorderRadius,
     this.overflow,
     this.maxLines,
@@ -79,9 +120,24 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
   Color resolveBackgroundColor(Color fallback) =>
       _backgroundColorLerp?.resolve(fallback) ?? backgroundColor ?? fallback;
 
+  Map<TTagSize, _TagPaddingLerp?> get _sizePaddingLerps => const {};
+
+  EdgeInsets? _paddingForSize(TTagSize size) => switch (size) {
+    TTagSize.small => smallPadding,
+    TTagSize.medium => mediumPadding,
+    TTagSize.large => largePadding,
+    TTagSize.extraLarge => extraLargePadding,
+    TTagSize.custom => null,
+  };
+
   @internal
-  EdgeInsets resolvePadding(EdgeInsets fallback) =>
-      _paddingLerp?.resolve(fallback) ?? padding ?? fallback;
+  EdgeInsets resolvePadding(EdgeInsets fallback, {TTagSize? size}) =>
+      size == null
+      ? _paddingLerp?.resolve(fallback) ?? padding ?? fallback
+      : _sizePaddingLerps[size]?.resolve(fallback) ??
+            padding ??
+            _paddingForSize(size) ??
+            fallback;
 
   @internal
   Color resolveDangerColor(Color fallback) =>
@@ -114,6 +170,11 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
     Color? successLightColor,
     Font? font,
     EdgeInsets? padding,
+    EdgeInsets? smallPadding,
+    EdgeInsets? mediumPadding,
+    EdgeInsets? largePadding,
+    EdgeInsets? extraLargePadding,
+
     double? squareBorderRadius,
     TextOverflow? overflow,
     int? maxLines,
@@ -127,6 +188,11 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
       successLightColor: successLightColor ?? this.successLightColor,
       font: font ?? this.font,
       padding: padding ?? this.padding,
+      smallPadding: smallPadding ?? this.smallPadding,
+      mediumPadding: mediumPadding ?? this.mediumPadding,
+      largePadding: largePadding ?? this.largePadding,
+      extraLargePadding: extraLargePadding ?? this.extraLargePadding,
+
       squareBorderRadius: squareBorderRadius ?? this.squareBorderRadius,
       overflow: overflow ?? this.overflow,
       maxLines: maxLines ?? this.maxLines,
@@ -144,6 +210,18 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
           ? _backgroundColorLerp
           : null,
       paddingTransition: padding == null ? _paddingLerp : null,
+      sizePaddingTransitions: {
+        if (padding == null)
+          TTagSize.custom: _sizePaddingLerps[TTagSize.custom],
+        if (padding == null && smallPadding == null)
+          TTagSize.small: _sizePaddingLerps[TTagSize.small],
+        if (padding == null && mediumPadding == null)
+          TTagSize.medium: _sizePaddingLerps[TTagSize.medium],
+        if (padding == null && largePadding == null)
+          TTagSize.large: _sizePaddingLerps[TTagSize.large],
+        if (padding == null && extraLargePadding == null)
+          TTagSize.extraLarge: _sizePaddingLerps[TTagSize.extraLarge],
+      },
     );
   }
 
@@ -223,6 +301,31 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
         other._paddingLerp,
         t,
       ),
+      sizePaddingTransitions: {
+        // Each size already includes the uniform padding transition. A sized
+        // copyWith override must not revive the cleared transition via _paddingLerp.
+        for (final size in TTagSize.values)
+          size: _TagPaddingLerp(
+            padding ?? _paddingForSize(size),
+            _sizePaddingLerps[size],
+            other.padding ?? other._paddingForSize(size),
+            other._sizePaddingLerps[size],
+            t,
+          ),
+      },
+      smallPadding: smallPadding == null || other.smallPadding == null
+          ? null
+          : EdgeInsets.lerp(smallPadding, other.smallPadding, t),
+      mediumPadding: mediumPadding == null || other.mediumPadding == null
+          ? null
+          : EdgeInsets.lerp(mediumPadding, other.mediumPadding, t),
+      largePadding: largePadding == null || other.largePadding == null
+          ? null
+          : EdgeInsets.lerp(largePadding, other.largePadding, t),
+      extraLargePadding:
+          extraLargePadding == null || other.extraLargePadding == null
+          ? null
+          : EdgeInsets.lerp(extraLargePadding, other.extraLargePadding, t),
       squareBorderRadius: _lerpExplicitDouble(
         squareBorderRadius,
         other.squareBorderRadius,
@@ -254,6 +357,11 @@ class _InterpolatedTagThemeData extends TTagThemeData {
     super.successLightColor,
     super.font,
     super.padding,
+    super.smallPadding,
+    super.mediumPadding,
+    super.largePadding,
+    super.extraLargePadding,
+
     super.squareBorderRadius,
     super.overflow,
     super.maxLines,
@@ -265,13 +373,15 @@ class _InterpolatedTagThemeData extends TTagThemeData {
     _TagColorLerp? textColorTransition,
     _TagColorLerp? backgroundColorTransition,
     _TagPaddingLerp? paddingTransition,
+    Map<TTagSize, _TagPaddingLerp?> sizePaddingTransitions = const {},
   }) : _dangerTransition = dangerTransition,
        _successTransition = successTransition,
        _successLightTransition = successLightTransition,
        _squareBorderRadiusTransition = squareBorderRadiusTransition,
        _textColorTransition = textColorTransition,
        _backgroundColorTransition = backgroundColorTransition,
-       _paddingTransition = paddingTransition;
+       _paddingTransition = paddingTransition,
+       _sizePaddingLerps = sizePaddingTransitions;
 
   final _TagColorLerp? _dangerTransition;
   final _TagColorLerp? _successTransition;
@@ -280,6 +390,9 @@ class _InterpolatedTagThemeData extends TTagThemeData {
   final _TagColorLerp? _textColorTransition;
   final _TagColorLerp? _backgroundColorTransition;
   final _TagPaddingLerp? _paddingTransition;
+
+  @override
+  final Map<TTagSize, _TagPaddingLerp?> _sizePaddingLerps;
 
   @override
   _TagColorLerp? get _dangerLerp => _dangerTransition;

@@ -7,6 +7,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
+import '../../theme/t_overlay_themes.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
@@ -203,7 +204,7 @@ class TDialog extends StatelessWidget {
     bool useSafeArea = true,
   }) {
     final navigator = Navigator.of(context, rootNavigator: useRootNavigator);
-    final capturedThemes = InheritedTheme.capture(
+    final capturedThemes = TOverlayThemes.capture(
       from: context,
       to: navigator.context,
     );
@@ -219,7 +220,7 @@ class TDialog extends StatelessWidget {
         pageBuilder: (routeContext, animation, secondaryAnimation) {
           final centered = Center(child: dialog);
           final content = useSafeArea ? SafeArea(child: centered) : centered;
-          return capturedThemes.wrap(content);
+          return capturedThemes.wrap(routeContext, content);
         },
         transitionBuilder:
             (routeContext, animation, secondaryAnimation, child) {
@@ -516,11 +517,13 @@ class _DialogScrollableContentState extends State<_DialogScrollableContent> {
       radius: const Radius.circular(2),
       crossAxisMargin: 16,
       thumbColor: widget.scrollbarColor,
-      child: TInternalScrollScope(child: SingleChildScrollView(
-        controller: _scrollController,
-        padding: padding,
-        child: child,
-      )),
+      child: TInternalScrollScope(
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          padding: padding,
+          child: child,
+        ),
+      ),
     );
   }
 }

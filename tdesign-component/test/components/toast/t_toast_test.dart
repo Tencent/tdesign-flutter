@@ -26,6 +26,91 @@ void expectToastCenter(WidgetTester tester, Finder content, double fraction) {
 }
 
 void main() {
+  for (final dark in [false, true]) {
+    for (final kind in ['row', 'column', 'loading', 'loadingOnly']) {
+      testWidgets('Toast $kind 图标实时尺寸与显式优先 dark=$dark', (tester) async {
+        final base = TThemeData.defaultData();
+        final tokens = ValueNotifier(dark ? base.dark! : base);
+        final component = ValueNotifier<TToastThemeData?>(null);
+        await tester.pumpWidget(
+          ValueListenableBuilder<TThemeData>(
+            valueListenable: tokens,
+            builder: (_, token, __) => ValueListenableBuilder<TToastThemeData?>(
+              valueListenable: component,
+              builder: (_, config, __) => MaterialApp(
+                themeAnimationDuration: Duration.zero,
+                theme:
+                    (dark
+                            ? TThemeBuilder.dark(token)
+                            : TThemeBuilder.light(token))
+                        .copyWith(
+                          extensions: [token, if (config != null) config],
+                        ),
+                home: const Scaffold(
+                  body: SizedBox(key: ValueKey('fixed-toast-host')),
+                ),
+              ),
+            ),
+          ),
+        );
+        void show() {
+          final context = tester.element(
+            find.byKey(const ValueKey('fixed-toast-host')),
+          );
+          if (kind == 'row' || kind == 'column') {
+            TToast.showIconText(
+              '尺寸',
+              icon: Icons.info,
+              context: context,
+              duration: Duration.zero,
+              direction: kind == 'row'
+                  ? IconTextDirection.horizontal
+                  : IconTextDirection.vertical,
+            );
+          } else if (kind == 'loading') {
+            TToast.showLoading(context: context);
+          } else {
+            TToast.showLoadingWithoutText(context: context);
+          }
+        }
+
+        double size() => kind == 'row' || kind == 'column'
+            ? tester.widget<Icon>(find.byIcon(Icons.info)).size!
+            : tester
+                  .widget<TCircleIndicator>(find.byType(TCircleIndicator))
+                  .size;
+        show();
+        await tester.pump();
+        final initial = kind == 'row' ? 24.0 : 32.0;
+        final key = kind == 'row' ? 'size8' : 'size10';
+        expect(size(), initial);
+        tokens.value = tokens.value.copyWith(
+          sizeMap: {...tokens.value.sizeMap, 'size16': 73},
+        );
+        await tester.pump();
+        expect(size(), initial);
+        tokens.value = tokens.value.copyWith(
+          sizeMap: {...tokens.value.sizeMap, key: initial + 2},
+        );
+        await tester.pump();
+        expect(size(), initial + 2);
+        TToast.dismissAll();
+        await tester.pump(const Duration(seconds: 1));
+        component.value = const TToastThemeData(iconSize: 13);
+        await tester.pump();
+        show();
+        await tester.pump();
+        expect(size(), 13);
+        TToast.dismissAll();
+        await tester.pump(const Duration(seconds: 1));
+        await tester.pumpWidget(const SizedBox());
+        tokens.dispose();
+        component.dispose();
+        expect(tester.takeException(), isNull);
+      });
+    }
+  }
+
   /// 用 TTheme 包裹以提供基础 Token，含可定位的 Key 节点
   ThemeData fullTheme({TToastThemeData? toastTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
@@ -82,6 +167,62 @@ void main() {
   // ============================================================
   // E 类控制：showText 调用即显
   // ============================================================
+  testWidgets('文本 Toast 的 LR/xl 与 TB/l 独立响应且组件 padding 优先', (tester) async {
+    final tokens = ValueNotifier(TThemeData.defaultData());
+    final component = ValueNotifier<TToastThemeData?>(null);
+    await tester.pumpWidget(
+      ValueListenableBuilder<TThemeData>(
+        valueListenable: tokens,
+        builder: (context, token, child) =>
+            ValueListenableBuilder<TToastThemeData?>(
+              valueListenable: component,
+              builder: (context, custom, child) => MaterialApp(
+                themeAnimationDuration: Duration.zero,
+                theme: TThemeBuilder.light(
+                  token,
+                ).copyWith(extensions: [token, if (custom != null) custom]),
+                home: Scaffold(
+                  body: Builder(
+                    key: const Key('toast_host'),
+                    builder: (_) => const SizedBox(),
+                  ),
+                ),
+              ),
+            ),
+      ),
+    );
+    TToast.showText(
+      '设计内边距',
+      context: tester.element(find.byKey(const Key('toast_host'))),
+      duration: Duration.zero,
+    );
+    await tester.pump();
+    EdgeInsetsGeometry? padding() =>
+        tester.widget<Container>(toastBoxFinder('设计内边距')).padding;
+    expect(padding(), const EdgeInsets.symmetric(horizontal: 24, vertical: 16));
+    tokens.value = tokens.value.copyWith(sizeMap: {'size8': 30});
+    await tester.pumpAndSettle();
+    expect(padding(), const EdgeInsets.symmetric(horizontal: 30, vertical: 16));
+    tokens.value = tokens.value.copyWith(sizeMap: {'size6': 20, 'size9': 90});
+    await tester.pumpAndSettle();
+    expect(padding(), const EdgeInsets.symmetric(horizontal: 30, vertical: 20));
+    // Reopen under a local component theme to exercise capture priority.
+    TToast.dismissAll();
+    component.value = const TToastThemeData(padding: EdgeInsets.all(7));
+    await tester.pumpAndSettle();
+    TToast.showText(
+      '设计内边距',
+      context: tester.element(find.byKey(const Key('toast_host'))),
+      duration: Duration.zero,
+    );
+    await tester.pump();
+    expect(padding(), const EdgeInsets.all(7));
+    TToast.dismissAll();
+    await tester.pumpWidget(const SizedBox());
+    tokens.dispose();
+    component.dispose();
+  });
+
   group('overlay pointer contract', () {
     for (final showOverlay in [false, true]) {
       for (final preventScrollThrough in [false, true]) {

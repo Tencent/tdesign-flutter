@@ -18,6 +18,7 @@
 | radiusMap | TMap&lt;String, double&gt; | - | 圆角 | 是 |
 | refMap | TMap&lt;String, String&gt; | - | 映射关系 | 是 |
 | shadowMap | TMap&lt;String, List&lt;BoxShadow&gt;&gt; | - | 阴影 | 是 |
+| sizeMap | TMap&lt;String, double&gt;? | - | 全局尺寸刻度，单位为逻辑像素；与间距 Token 独立。 | 否 |
 | spacerMap | TMap&lt;String, double&gt; | - | 间隔 | 是 |
 
 
@@ -89,6 +90,7 @@
 | shadowMap | Map&lt;String, List&lt;BoxShadow&gt;&gt;? | - | 字段含义：阴影 调用时的空值行为见方法说明。 | 否 |
 | insetShadowMap | Map&lt;String, BorderSide&gt;? | - | 字段含义：内投影对应的定向内侧边线。 调用时的空值行为见方法说明。 | 否 |
 | spacerMap | Map&lt;String, double&gt;? | - | 间距 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。 | 否 |
+| sizeMap | Map&lt;String, double&gt;? | - | 尺寸刻度的增量映射；未提供时保留当前值。 | 否 |
 | extraThemeData | TExtraThemeData? | - | 字段含义：额外定义的结构 调用时的空值行为见方法说明。 | 否 |
 
 
@@ -974,6 +976,35 @@ TDesign 主题包含完整色值组，业务可以按需二次封装。未显式
 | spacer4 | double | - | 间距 Token，未配置时回退为 32 逻辑像素。 | - |
 | spacer5 | double | - | 间距 Token，未配置时回退为 48 逻辑像素。 | - |
 | spacer6 | double | - | 间距 Token，未配置时回退为 80 逻辑像素。 | - |
+
+
+### TSizes
+
+适用类型：`TThemeData`
+
+
+全局尺寸刻度，单位为逻辑像素；与布局间距独立。
+
+#### 属性
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| size1 | double | - | 第 1 档尺寸，默认 2 逻辑像素。 | - |
+| size10 | double | - | 第 10 档尺寸，默认 32 逻辑像素。 | - |
+| size11 | double | - | 第 11 档尺寸，默认 36 逻辑像素。 | - |
+| size12 | double | - | 第 12 档尺寸，默认 40 逻辑像素。 | - |
+| size13 | double | - | 第 13 档尺寸，默认 48 逻辑像素。 | - |
+| size14 | double | - | 第 14 档尺寸，默认 56 逻辑像素。 | - |
+| size15 | double | - | 第 15 档尺寸，默认 64 逻辑像素。 | - |
+| size16 | double | - | 第 16 档尺寸，默认 72 逻辑像素。 | - |
+| size2 | double | - | 第 2 档尺寸，默认 4 逻辑像素。 | - |
+| size3 | double | - | 第 3 档尺寸，默认 6 逻辑像素。 | - |
+| size4 | double | - | 第 4 档尺寸，默认 8 逻辑像素。 | - |
+| size5 | double | - | 第 5 档尺寸，默认 12 逻辑像素。 | - |
+| size6 | double | - | 第 6 档尺寸，默认 16 逻辑像素。 | - |
+| size7 | double | - | 第 7 档尺寸，默认 20 逻辑像素。 | - |
+| size8 | double | - | 第 8 档尺寸，默认 24 逻辑像素。 | - |
+| size9 | double | - | 第 9 档尺寸，默认 28 逻辑像素。 | - |
 
 
 ### TThemeContextExtension

@@ -10,6 +10,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
 import '../badge/t_badge_internal.dart';
@@ -37,7 +38,6 @@ const double _kDefaultMenuMinWidth = 107;
 const double _kDefaultMenuItemWidthShrink = 20;
 
 /// 导航栏默认高度
-const double _kDefaultTabBarHeight = 56;
 
 /// 图标项与图文项的默认图标尺寸；显式 Icon.size 仍优先。
 const double _kDefaultTabIconSize = 20;
@@ -382,7 +382,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
 
   void _resolveEffectiveValues() {
     final theme = Theme.of(context).extension<TTabBarThemeData>();
-    _effectiveBarHeight = theme?.barHeight ?? _kDefaultTabBarHeight;
+    _effectiveBarHeight = theme?.barHeight ?? context.tTheme.size14;
     _effectiveSelectedBgColor =
         theme?.selectedBgColor ?? context.tTheme.brandColorLight;
     _effectiveUnselectedBgColor = theme?.unselectedBgColor;
@@ -397,7 +397,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
 
   double _defaultContentHeight(double itemWidth) {
     if (widget.type == TTabBarType.icon) {
-      return _kDefaultTabBarHeight;
+      return context.tTheme.size14;
     }
     final stacked =
         widget.type == TTabBarType.iconText &&
@@ -410,7 +410,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
     final extras = widget.type == TTabBarType.iconText && !stacked
         ? _kDefaultTabIconSize + _kInlineIconTextGap
         : 0;
-    var height = _kDefaultTabBarHeight;
+    var height = context.tTheme.size14;
     for (final config in widget.navigationTabs) {
       for (final selected in [false, true]) {
         final style = TTextResolve.resolve(

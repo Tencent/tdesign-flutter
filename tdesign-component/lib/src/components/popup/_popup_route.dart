@@ -16,7 +16,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
   final TPopupOptions options;
   final void Function(TPopupTrigger trigger) onCloseWithTrigger;
-  final CapturedThemes? capturedThemes;
+  final TOverlayThemes? capturedThemes;
 
   late PopupLayout _layout;
   bool _animationListenerAttached = false;
@@ -164,7 +164,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
         children: [if (options.overlayConfig.showOverlay) barrier, positioned],
       ),
     );
-    return capturedThemes?.wrap(content) ?? content;
+    return capturedThemes?.wrap(context, content) ?? content;
   }
 
   Widget _buildBarrier(BuildContext context, double t) {

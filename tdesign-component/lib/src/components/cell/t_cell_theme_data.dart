@@ -83,7 +83,7 @@ class TCellThemeData extends ThemeExtension<TCellThemeData> {
   final EdgeInsetsGeometry? padding;
 
   /// 卡片组圆角。
-  /// 仅卡片形态生效，未配置时为 8 逻辑像素圆角。
+  /// 仅卡片形态生效，未配置时使用 radiusLarge Token，默认 9 逻辑像素。
   final BorderRadius? cardBorderRadius;
 
   /// 卡片组内边距。

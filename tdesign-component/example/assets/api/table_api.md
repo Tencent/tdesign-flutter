@@ -293,7 +293,7 @@
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 默认行背景色。 | 否 |
 | borderColor | Color? | - | 边框颜色。 null 时使用 componentStroke Token。 | 否 |
-| cellPadding | EdgeInsetsGeometry? | - | 单元格内边距。 null 时左右各 16 逻辑像素。 | 否 |
+| cellPadding | EdgeInsetsGeometry? | - | 单元格内边距。 null 时左右使用 spacer1 Token（默认各 12 逻辑像素），上下为 0。 | 否 |
 | headerColor | Color? | - | 表头背景色。 null 时使用 bgColorContainer Token。 | 否 |
 | headerHeight | double? | - | 表头高度。 null 时为 38 逻辑像素。 | 否 |
 | rowHeight | double? | - | 数据行高度。 null 时为 38 逻辑像素。 | 否 |

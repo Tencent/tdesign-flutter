@@ -288,7 +288,7 @@ TToast 组件级 ThemeExtension
 | backgroundColor | Color? | - | 背景色 | 否 |
 | borderRadius | double? | - | 圆角 | 否 |
 | iconColor | Color? | - | 图标颜色 | 否 |
-| iconSize | double? | - | 图标尺寸 | 否 |
+| iconSize | double? | - | 图标尺寸；未配置时横向读取 size8（24），纵向与加载读取 size10（32）。 | 否 |
 | maxWidth | double? | - | 最大宽度 | 否 |
 | padding | EdgeInsetsGeometry? | - | 内边距 | 否 |
 | textStyle | TextStyle? | - | 文案样式 | 否 |

@@ -44,6 +44,7 @@ const sharedExampleTests = [
   'test/example_code_viewer_test.dart',
   'test/api_docs_test.dart',
   'test/web_theme_message_test.dart',
+  'test/theme/all_component_web_theme_test.dart',
   'test/web_theme_listener_lifecycle_test.dart',
   'test/demo_page_test_utils_test.dart',
 ];
@@ -1034,11 +1035,18 @@ const componentTestManifests = <ComponentTestManifest>[
     coverageTargets: [
       'lib/src/theme/t_theme.dart',
       'lib/src/theme/t_radius.dart',
+      'lib/src/theme/t_sizes.dart',
+      'lib/src/theme/t_size_defaults.dart',
+      'lib/src/theme/t_token_double_lerp.dart',
+      'lib/src/theme/t_shadows.dart',
+      'lib/src/theme/t_overlay_themes.dart',
       'lib/src/theme/t_internal_material.dart',
     ],
     componentTests: [
       'test/acceptance/theme_acceptance_test.dart',
       'test/theme/theme_test.dart',
+      'test/theme/overlay_themes_test.dart',
+      'test/theme/component_token_ownership_test.dart',
       'test/theme/t_theme_extensions_test.dart',
       'test/components/theme/t_colors_test.dart',
       'test/components/theme/t_material_theme_priority_test.dart',

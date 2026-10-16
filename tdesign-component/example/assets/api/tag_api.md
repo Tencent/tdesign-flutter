@@ -106,7 +106,9 @@
 标签组件级 ThemeExtension
 
 通过 Theme 子树注入，控制子树的默认样式。
-具体视觉值由组件 Theme 控制，未指定时回退全局 Token。
+具体视觉值由组件 Theme 控制，未指定时回退全局 Token 或文档化的组件规格。
+
+分档间距示例（统一 padding 配置优先）：
 
 <!-- api-theme: fields -->
 
@@ -117,11 +119,15 @@
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 所有启用 Tag 的统一背景色；优先于各配色预设的填充色。 | 否 |
 | dangerColor | Color? | - | danger 预设的基础色；未设置时回退全局 errorColor。 | 否 |
+| extraLargePadding | EdgeInsets? | - | 超大尺寸标签的边框以内间距；统一 padding 配置优先。 未设置时保持当前默认：横向 max(16 - 实际边框宽, 0)dp， 纵向 max(9 - 实际边框宽, 0)dp。显式值不会再次扣减边框。 | 否 |
 | fixedWidth | double? | - | 标签固定宽度 | 否 |
 | font | Font? | - | 字体尺寸和行高；未设置时随标签尺寸使用对应的全局字体 Token。 | 否 |
+| largePadding | EdgeInsets? | - | 大尺寸标签的边框以内间距；统一 padding 配置优先。 未设置时保持当前默认：横向 max(8 - 实际边框宽, 0)dp， 纵向 max(3 - 实际边框宽, 0)dp。显式值不会再次扣减边框。 | 否 |
 | maxLines | int? | - | 文字最大行数。 未设置时组件默认按紧凑标签语义使用单行。 | 否 |
+| mediumPadding | EdgeInsets? | - | 中尺寸标签的边框以内间距；统一 padding 配置优先。 未设置时保持当前默认：横向 max(8 - 实际边框宽, 0)dp， 纵向 max(2 - 实际边框宽, 0)dp。显式值不会再次扣减边框。 | 否 |
 | overflow | TextOverflow? | - | 文字溢出处理 | 否 |
-| padding | EdgeInsets? | - | 自定义间距 | 否 |
+| padding | EdgeInsets? | - | 所有尺寸统一的边框以内间距，优先于分档 padding；不会再次扣减边框。 未设置时使用当前尺寸的分档配置或内置默认值。 | 否 |
+| smallPadding | EdgeInsets? | - | 小尺寸标签的边框以内间距；统一 padding 配置优先。 未设置时保持当前默认：横向 max(6 - 实际边框宽, 0)dp， 纵向 max(2 - 实际边框宽, 0)dp。显式值不会再次扣减边框。 | 否 |
 | squareBorderRadius | double? | - | 方形标签圆角，单位为逻辑像素；未设置时所有尺寸均读取全局 `radiusSmall`（当前默认 3dp）。 | 否 |
 | successColor | Color? | - | success 预设的基础色；未设置时回退全局 successColor。 | 否 |
 | successLightColor | Color? | - | success 预设的浅色填充；未设置时回退全局 successColor1。 | 否 |

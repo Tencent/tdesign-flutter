@@ -205,6 +205,8 @@ TThemeData _mergeTheme(
         ),
     spacerMap: TMap<String, double>(factory: () => base.spacerMap, refs: refMap)
       ..addAll(_declaredValues<double>(overrides.spacerMap, values['margin'])),
+    sizeMap: TMap<String, double>(factory: () => base.sizeMap, refs: refMap)
+      ..addAll(_declaredValues<double>(overrides.sizeMap, values['size'])),
     refMap: refMap,
     extraThemeData: base.extraThemeData,
   );

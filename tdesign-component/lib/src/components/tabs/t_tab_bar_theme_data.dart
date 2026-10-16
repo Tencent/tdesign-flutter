@@ -32,7 +32,8 @@ class TTabsBarThemeData extends ThemeExtension<TTabsBarThemeData> {
   /// 禁用标签文字和图标样式。
   final TextStyle? disabledLabelStyle;
 
-  /// 标签内容边距。
+  /// 标签外层内容边距。
+  /// tag 形态内框另有左右 spacer2 Token（默认各 16 逻辑像素）的内边距。
   final EdgeInsetsGeometry? labelPadding;
 
   /// 组件主题指示器；非空时覆盖内置形态指示器。
