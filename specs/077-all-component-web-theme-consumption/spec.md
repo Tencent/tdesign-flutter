@@ -65,3 +65,7 @@
 按用户授权为Badge气泡圆角、Button四档图标尺寸、Tag四档padding新增组件Theme配置，不扩展站点控制器、CSS转换或全局Token。小程序证据固定在a9f3ba680481d438b0be37e2e25cf4a62cf0acb3的packages/components/{badge,button,tag}/*.less。
 Badge新增bubbleBorderRadius（BorderRadiusGeometry），默认四角10/10/10/1，其他形态不受影响。Button新增largeIconSize/mediumIconSize/smallIconSize/extraSmallIconSize；默认仍是size8/size7/18/18，实例ButtonStyle.iconSize优先，普通及渐变分支和纯图标布局一致。Tag新增smallPadding/mediumPadding/largePadding/extraLargePadding（EdgeInsets，边框以内净padding），已有统一padding优先；新增配置不再次扣边框。未配置仍采用既有按实际border扣减的默认（原始水平6/8/8/16、垂直2/2/3/9）；不新增全局size依赖。
 所有新字段nullable，null表示回退；copyWith保留未指定字段，mergeExtension沿用既有同类型整体替换语义，不改成字段合并；部分更新使用原扩展copyWith。插值以当前有效默认为端点，支持显式到默认、统一到分档及中断过渡；原位主题更新不重建组件Element。此批为可选能力，不改变现有默认或删除公开能力。公开API注释、生成文档、测试与清单同步。
+
+## CI像素基线同步（2026-10-17）
+
+551f6dfc的双SDK分析、功能、构建通过，仅Linux视觉失败。逐项核对98张实际图、基线和差异；均对应已确认的Badge方形3、SideBar内块6、BackTop图标22、Dropdown图标20、Refresh图标25、Table水平padding12、Toast左右24/上下16。反馈页共用Toast，居中矩阵共用Badge/BackTop，不能按套件名误报额外组件实现错误。保持实现与比较容差不变，在Flutter3.32.0 Linux x86_64只同步已核对的98张有效基线，随后立即无更新参数复跑并等待远端CI。小程序或用户已裁定的设计目标不回退。SideBar共用截图实际引用sidebar_tag/goldens，按测试引用更新有效路径，避免误改同名旧图。
