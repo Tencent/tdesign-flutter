@@ -444,6 +444,60 @@ void main() {
       );
     });
 
+    for (final dark in [false, true]) {
+      testWidgets('square 使用设计3px圆角并仅响应small刻度 dark=$dark', (tester) async {
+        final defaults = TThemeData.defaultData();
+        final tokens = ValueNotifier(dark ? defaults.dark! : defaults);
+        const key = ValueKey('design-square');
+        await tester.pumpWidget(
+          ValueListenableBuilder<TThemeData>(
+            valueListenable: tokens,
+            builder: (context, value, child) => MaterialApp(
+              themeAnimationDuration: Duration.zero,
+              theme: ThemeData(
+                brightness: dark ? Brightness.dark : Brightness.light,
+                extensions: [value],
+              ),
+              home: const Scaffold(
+                body: Center(
+                  child: TBadge(
+                    key: key,
+                    label: '8',
+                    variant: TBadgeVariant.square,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        BorderRadiusGeometry? radius() =>
+            (tester
+                        .widget<DecoratedBox>(
+                          find.descendant(
+                            of: find.byKey(key),
+                            matching: find.byType(DecoratedBox),
+                          ),
+                        )
+                        .decoration
+                    as BoxDecoration)
+                .borderRadius;
+        expect(radius(), BorderRadius.circular(3));
+        final original = tester.element(find.byKey(key));
+        tokens.value = tokens.value.copyWith(
+          radiusMap: {'radiusDefault': 17, 'radiusLarge': 23},
+        );
+        await tester.pumpAndSettle();
+        expect(radius(), BorderRadius.circular(3));
+        tokens.value = tokens.value.copyWith(radiusMap: {'radiusSmall': 11});
+        await tester.pumpAndSettle();
+        expect(radius(), BorderRadius.circular(11));
+        expect(tester.element(find.byKey(key)), same(original));
+        expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox());
+        tokens.dispose();
+      });
+    }
+
     testWidgets('square 与 bubble 使用设计圆角且不经过 Material 胶囊裁剪', (tester) async {
       await tester.pumpWidget(
         app(
@@ -468,7 +522,7 @@ void main() {
       expect(
         decorations.map((decoration) => decoration.borderRadius),
         containsAll(<BorderRadius>[
-          BorderRadius.circular(2),
+          BorderRadius.circular(3),
           const BorderRadius.only(
             topLeft: Radius.circular(10),
             topRight: Radius.circular(10),

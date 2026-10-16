@@ -48,7 +48,7 @@ class TStepperThemeData extends ThemeExtension<TStepperThemeData> {
   /// 为空时 small、medium、large 分别使用 12、16、20。
   final double? iconSize;
 
-  /// normal 和 filled 形态的分段间距，默认 4。
+  /// normal 和 filled 形态的分段间距；未配置时使用全局 size2，默认 4。
   ///
   /// outline 始终连续排列，不使用该值。
   final double? spacing;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../popup/t_popup.dart';
 import '../text/t_text_resolve.dart';
@@ -128,7 +129,7 @@ TDrawerHandle showTDrawer(
       destroyOnClose: destroyOnClose,
       useSafeArea: useSafeArea,
       onClosed: onClose,
-      child: Theme(data: Theme.of(context), child: drawer),
+      child: drawer,
     ),
   );
   return TDrawerHandle._(handle);

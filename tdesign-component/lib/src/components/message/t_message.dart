@@ -7,6 +7,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
+import '../../theme/t_overlay_themes.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
@@ -166,7 +167,7 @@ class TMessage extends StatefulWidget {
     final messageKey = GlobalKey<_TMessageState>();
     late OverlayEntry entry;
     final overlay = Overlay.of(context);
-    final captured = InheritedTheme.capture(from: context, to: overlay.context);
+    final captured = TOverlayThemes.capture(from: context, to: overlay.context);
     final slot = offset == null
         ? (_defaultSlots[overlay] ??= _TMessageSlot())
         : null;
@@ -200,6 +201,7 @@ class TMessage extends StatefulWidget {
 
     entry = OverlayEntry(
       builder: (context) => captured.wrap(
+        context,
         TMessage(
           key: messageKey,
           content: content,

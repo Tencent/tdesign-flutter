@@ -35,6 +35,84 @@ void main() {
     );
   }
 
+  for (final dark in [false, true]) {
+    testWidgets('tag选中块按设计使用6px，邻项反向角保持9px dark=$dark', (tester) async {
+      final defaults = TThemeData.defaultData();
+      final tokens = ValueNotifier(dark ? defaults.dark! : defaults);
+      const tagKey = ValueKey('design-selected-tag');
+      const lineKey = ValueKey('unchanged-line-corner');
+      await tester.pumpWidget(
+        ValueListenableBuilder<TThemeData>(
+          valueListenable: tokens,
+          builder: (context, value, child) => MaterialApp(
+            themeAnimationDuration: Duration.zero,
+            theme: ThemeData(
+              brightness: dark ? Brightness.dark : Brightness.light,
+              extensions: [value],
+            ),
+            home: const Scaffold(
+              body: Center(
+                child: SizedBox(
+                  width: 160,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TWrapSideBarItem(
+                        key: tagKey,
+                        variant: TSideBarVariant.tag,
+                        label: '选中',
+                        value: 1,
+                        disabled: false,
+                        selected: true,
+                      ),
+                      TWrapSideBarItem(
+                        key: lineKey,
+                        variant: TSideBarVariant.line,
+                        label: '相邻',
+                        value: 2,
+                        disabled: false,
+                        topAdjacent: true,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      BorderRadiusGeometry? radius(Key key) => tester
+          .widgetList<Container>(
+            find.descendant(
+              of: find.byKey(key),
+              matching: find.byType(Container),
+            ),
+          )
+          .map((w) => w.decoration)
+          .whereType<BoxDecoration>()
+          .singleWhere((d) => d.borderRadius != null)
+          .borderRadius;
+      const lineRadius = BorderRadius.only(topRight: Radius.circular(9));
+      expect(radius(tagKey), BorderRadius.circular(6));
+      expect(radius(lineKey), lineRadius);
+      final original = tester.element(find.byKey(tagKey));
+      tokens.value = tokens.value.copyWith(
+        radiusMap: {'radiusSmall': 19, 'radiusLarge': 27},
+      );
+      await tester.pumpAndSettle();
+      expect(radius(tagKey), BorderRadius.circular(6));
+      expect(radius(lineKey), lineRadius);
+      tokens.value = tokens.value.copyWith(radiusMap: {'radiusDefault': 13});
+      await tester.pumpAndSettle();
+      expect(radius(tagKey), BorderRadius.circular(13));
+      expect(radius(lineKey), lineRadius);
+      expect(tester.element(find.byKey(tagKey)), same(original));
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+      tokens.dispose();
+    });
+  }
+
   group('TSideBarItem', () {
     test('默认构造', () {
       const item = TSideBarItem();

@@ -1,6 +1,9 @@
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+
+import '../../theme/t_token_double_lerp.dart';
 
 import 't_badge_defaults.dart';
 
@@ -11,6 +14,12 @@ import 't_badge_defaults.dart';
 /// {@category ComponentTheme}
 @immutable
 class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
+  TokenDoubleLerp? get _dotSizeLerp => null;
+
+  @internal
+  double resolveDotSize(double fallback) =>
+      _dotSizeLerp?.resolve(fallback) ?? dotSize ?? fallback;
+
   const TBadgeThemeData({
     this.backgroundColor,
     this.dotSize,
@@ -24,7 +33,7 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
   /// 徽标背景色；为空时使用全局错误色 Token。
   final Color? backgroundColor;
 
-  /// 圆点直径；为空时使用 8 逻辑像素。
+  /// 圆点直径；为空时读取 size4，默认 8 逻辑像素。
   final double? dotSize;
 
   /// 文字徽标高度；为空时由当前尺寸的字体 Token 决定。
@@ -56,14 +65,17 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
     Color? borderColor,
     double? borderWidth,
   }) {
-    return TBadgeThemeData(
-      backgroundColor: backgroundColor ?? this.backgroundColor,
-      dotSize: dotSize ?? this.dotSize,
-      labelHeight: labelHeight ?? this.labelHeight,
-      textStyle: textStyle ?? this.textStyle,
-      padding: padding ?? this.padding,
-      borderColor: borderColor ?? this.borderColor,
-      borderWidth: borderWidth ?? this.borderWidth,
+    return _InterpolatedTBadgeThemeData(
+      TBadgeThemeData(
+        backgroundColor: backgroundColor ?? this.backgroundColor,
+        dotSize: dotSize ?? this.dotSize,
+        labelHeight: labelHeight ?? this.labelHeight,
+        textStyle: textStyle ?? this.textStyle,
+        padding: padding ?? this.padding,
+        borderColor: borderColor ?? this.borderColor,
+        borderWidth: borderWidth ?? this.borderWidth,
+      ),
+      dotSizeLerp: dotSize == null ? _dotSizeLerp : null,
     );
   }
 
@@ -83,20 +95,29 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
     if (other is! TBadgeThemeData) {
       return this;
     }
-    return TBadgeThemeData(
-      backgroundColor: _lerpContextualColor(
-        backgroundColor,
-        other.backgroundColor,
+    return _InterpolatedTBadgeThemeData(
+      TBadgeThemeData(
+        backgroundColor: _lerpContextualColor(
+          backgroundColor,
+          other.backgroundColor,
+          t,
+        ),
+        dotSize: _lerpNullableDouble(dotSize, other.dotSize, t),
+        labelHeight: _lerpNullableDouble(labelHeight, other.labelHeight, t),
+        textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
+        padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
+        // null 表示依赖当前上下文的容器背景色，不能把它当作透明色参与
+        // 插值；在动画中点切换配置，才能保留两端各自的运行时回退语义。
+        borderColor: _lerpContextualColor(borderColor, other.borderColor, t),
+        borderWidth: _lerpBorderWidth(borderWidth, other.borderWidth, t),
+      ),
+      dotSizeLerp: TokenDoubleLerp.between(
+        dotSize,
+        _dotSizeLerp,
+        other.dotSize,
+        other._dotSizeLerp,
         t,
       ),
-      dotSize: _lerpNullableDouble(dotSize, other.dotSize, t),
-      labelHeight: _lerpNullableDouble(labelHeight, other.labelHeight, t),
-      textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
-      padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
-      // null 表示依赖当前上下文的容器背景色，不能把它当作透明色参与
-      // 插值；在动画中点切换配置，才能保留两端各自的运行时回退语义。
-      borderColor: _lerpContextualColor(borderColor, other.borderColor, t),
-      borderWidth: _lerpBorderWidth(borderWidth, other.borderWidth, t),
     );
   }
 
@@ -124,4 +145,23 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
     }
     return lerpDouble(begin, end, t);
   }
+}
+
+class _InterpolatedTBadgeThemeData extends TBadgeThemeData {
+  _InterpolatedTBadgeThemeData(
+    TBadgeThemeData data, {
+    TokenDoubleLerp? dotSizeLerp,
+  }) : _dotSizeLerp = dotSizeLerp,
+       super(
+         backgroundColor: data.backgroundColor,
+         dotSize: data.dotSize,
+         labelHeight: data.labelHeight,
+         textStyle: data.textStyle,
+         padding: data.padding,
+         borderColor: data.borderColor,
+         borderWidth: data.borderWidth,
+       );
+
+  @override
+  final TokenDoubleLerp? _dotSizeLerp;
 }

@@ -97,7 +97,7 @@ ActionSheet 等组件在内部创建徽标锚点时使用；组件会把配置�
 | --- | --- | --- | --- | --- |
 | circle | TBadgeVariant | - | 标准文本徽标；单字符呈圆形，多字符随内容扩展为胶囊形。 | - |
 | dot | TBadgeVariant | - | 不显示文本的圆点徽标，默认直径为 8 逻辑像素。 | - |
-| square | TBadgeVariant | - | 小圆角方形文本徽标；多字符时随内容横向扩展为矩形。 | - |
+| square | TBadgeVariant | - | 小圆角方形文本徽标；多字符时随内容横向扩展为矩形。 圆角读取全局 radiusSmall，默认3逻辑像素。 | - |
 | bubble | TBadgeVariant | - | 左下角收紧、其余角为圆角的气泡徽标。 | - |
 | ribbonRight | TBadgeVariant | - | 位于内容物理右上角的带状角标；RTL 下不交换方位。 | - |
 | ribbonLeft | TBadgeVariant | - | 位于内容物理左上角的带状角标；RTL 下不交换方位。 | - |
@@ -135,7 +135,7 @@ TDesign 徽标的子树级视觉默认值。
 | backgroundColor | Color? | - | 徽标背景色；为空时使用全局错误色 Token。 | 否 |
 | borderColor | Color? | - | 开启描边时使用的颜色；为空时回退到当前容器背景色。 | 否 |
 | borderWidth | double? | - | 开启描边时使用的宽度；为空时使用 1 逻辑像素。 | 否 |
-| dotSize | double? | - | 圆点直径；为空时使用 8 逻辑像素。 | 否 |
+| dotSize | double? | - | 圆点直径；为空时读取 size4，默认 8 逻辑像素。 | 否 |
 | labelHeight | double? | - | 文字徽标高度；为空时由当前尺寸的字体 Token 决定。 | 否 |
 | padding | EdgeInsetsGeometry? | - | 文字徽标内边距；为空时中、大尺寸分别使用左右 4、6 逻辑像素。 | 否 |
 | textStyle | TextStyle? | - | 徽标文字的唯一组件级样式入口；未配置字段从字体与反色文字 Token 取得。 | 否 |

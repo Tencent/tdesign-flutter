@@ -398,6 +398,24 @@ class TDefaultTheme {
             "shadowInsetBottom": {"color": "#dcdcdc", "width": 0.5},
             "shadowInsetLeft": {"color": "#dcdcdc", "width": 0.5}
         },
+        "size": {
+            "size1": 2,
+            "size2": 4,
+            "size3": 6,
+            "size4": 8,
+            "size5": 12,
+            "size6": 16,
+            "size7": 20,
+            "size8": 24,
+            "size9": 28,
+            "size10": 32,
+            "size11": 36,
+            "size12": 40,
+            "size13": 48,
+            "size14": 56,
+            "size15": 64,
+            "size16": 72
+        },
         "spacer": {
             "spacer": 8,
             "spacer1": 12,
@@ -802,6 +820,24 @@ class TDefaultTheme {
             "shadowInsetRight": {"color": "#5e5e5e", "width": 0.5},
             "shadowInsetBottom": {"color": "#5e5e5e", "width": 0.5},
             "shadowInsetLeft": {"color": "#5e5e5e", "width": 0.5}
+        },
+        "size": {
+            "size1": 2,
+            "size2": 4,
+            "size3": 6,
+            "size4": 8,
+            "size5": 12,
+            "size6": 16,
+            "size7": 20,
+            "size8": 24,
+            "size9": 28,
+            "size10": 32,
+            "size11": 36,
+            "size12": 40,
+            "size13": 48,
+            "size14": 56,
+            "size15": 64,
+            "size16": 72
         },
         "spacer": {
             "spacer": 8,

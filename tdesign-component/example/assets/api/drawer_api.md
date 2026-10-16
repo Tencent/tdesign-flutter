@@ -53,39 +53,6 @@
 | title | String? | - | 每列标题 | 否 |
 
 
-### showTDrawer
-#### 顶层函数
-
-通过 Popup 展示一个 `TDrawer`。
-
-返回的 `TDrawerHandle` 可用于查询显示状态或主动关闭抽屉。
-
-位置参数：`context`
-
-
-#### 参数
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| context | BuildContext | - | 用于查找承载抽屉浮层的 Navigator。 | 是 |
-| drawer | TDrawer | - | 只描述抽屉内容；方向、蒙层、顶部偏移和生命周期由本函数负责。 | 是 |
-| placement | TDrawerPlacement | TDrawerPlacement.right | 控制抽屉从左侧或右侧滑出，默认从右侧滑出。 | 否 |
-| showOverlay | bool | true | 控制是否显示蒙层，默认 true。 | 否 |
-| closeOnOverlayClick | bool | true | 控制点击蒙层时是否关闭抽屉，默认 true。 | 否 |
-| onOverlayClick | VoidCallback? | - | 在蒙层被点击时触发，不受是否自动关闭影响。 | 否 |
-| topInset | double? | - | 设置抽屉相对屏幕顶部的可选偏移，默认 0，必须大于或等于 0。 | 否 |
-| useSafeArea | bool | true | 控制浮层是否避让系统安全区域，默认 true。 | 否 |
-| destroyOnClose | bool | false | 默认 false；为 true 时路由 maintainState 为 false， 被其他不透明路由覆盖时可释放内容 State。关闭路由后内容始终会释放。 | 否 |
-| onClose | VoidCallback? | - | 在抽屉浮层关闭后触发。 | 否 |
-
-
-#### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TDrawerHandle | - | 已经发起打开的抽屉控制句柄，可用于查询状态与关闭抽屉。 | - |
-
-
 ### TDrawerPlacement
 
 抽屉方向。
@@ -141,7 +108,7 @@
 | itemBackgroundColor | Color? | - | 菜单项背景色。 null 时沿用抽屉实际面板背景色。 | 否 |
 | itemIconColor | Color? | - | 菜单项图标颜色。 null 时使用 textColorPrimary Token。 | 否 |
 | itemIconGap | double? | - | 菜单项图标与正文间距，默认 8。 | 否 |
-| itemIconSize | double? | - | 菜单项图标尺寸，默认 24。 | 否 |
+| itemIconSize | double? | - | 菜单项图标尺寸；为空时读取 size8，默认 24。 | 否 |
 | itemPadding | EdgeInsetsGeometry? | - | 菜单项内边距，默认 `EdgeInsets.fromLTRB(16, 16, 0, 16)`。 | 否 |
 | itemPressedColor | Color? | - | 菜单项按压背景色。 null 时使用 bgColorSecondaryContainer Token。 | 否 |
 | itemTextStyle | TextStyle? | - | 菜单正文样式。 | 否 |

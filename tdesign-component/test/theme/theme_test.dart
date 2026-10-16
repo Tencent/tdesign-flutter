@@ -8,6 +8,52 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 优先级（覆盖方向，强 → 弱）：
 /// **P0 实例 > P1 组件 Theme > P2 Material > P3 ColorScheme > P4 Token**
 void main() {
+  test(
+    'independent size tokens parse, copy and interpolate without touching spacers',
+    () {
+      final base = TThemeData.defaultData();
+      final changed = base.copyWith(sizeMap: {'size13': 72});
+      expect(changed.size13, 72);
+      expect(changed.spacer5, base.spacer5);
+      expect(
+        [
+          base.size1,
+          base.size2,
+          base.size3,
+          base.size4,
+          base.size5,
+          base.size6,
+          base.size7,
+          base.size8,
+          base.size9,
+          base.size10,
+          base.size11,
+          base.size12,
+          base.size13,
+          base.size14,
+          base.size15,
+          base.size16,
+        ],
+        [2, 4, 6, 8, 12, 16, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72],
+      );
+      expect(base.lerp(changed, 0.5).size13, 60);
+      final other = base.copyWith(sizeMap: {'size13': 96});
+      expect(changed.lerp(other, 0.5).size13, 84);
+      expect(changed.copyWith().size13, 72);
+      expect(
+        TThemeData.fromJson(
+          'custom',
+          '{"custom":{"size":{"size13":55.5}}}',
+        )!.size13,
+        55.5,
+      );
+      expect(
+        TThemeData.fromJson('custom', '{"custom":{"size":{"size13":-1}}}'),
+        isNull,
+      );
+    },
+  );
+
   group('全局 theme.of 基础设施', () {
     test('TThemeData.defaultData() 返回非空默认 Token', () {
       final token = TThemeData.defaultData();

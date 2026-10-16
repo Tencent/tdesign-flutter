@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_internal_material.dart';
+import '../../theme/t_sizes.dart';
+import '../../theme/t_theme.dart';
 import '../loading/t_circle_indicator.dart';
 import '../text/t_text_styled.dart';
 import 't_cupertino_switch.dart';
@@ -62,6 +64,7 @@ class TSwitch extends StatelessWidget {
 
     Widget current = TCupertinoSwitch(
       value: value,
+      trackWidth: _nativeTrackWidth(context, resolvedSize),
       activeColor: enabled
           ? resolved.trackOnColor
           : resolved.disabledTrackOnColor,
@@ -94,10 +97,32 @@ class TSwitch extends StatelessWidget {
       toggled: value,
       child: SizedBox(
         width: TSwitchResolve.width(resolvedSize) * growth,
-        height: TSwitchResolve.height(resolvedSize) * growth,
+        height: _height(context, resolvedSize) * growth,
         child: FittedBox(child: current),
       ),
     );
+  }
+
+  double _height(BuildContext context, TSwitchSize size) => switch (size) {
+    TSwitchSize.large => context.tTheme.size10,
+    TSwitchSize.medium => context.tTheme.size9,
+    TSwitchSize.small => context.tTheme.size8,
+  };
+
+  double _nativeTrackWidth(BuildContext context, TSwitchSize size) {
+    final nativeWidth = TSwitchResolve.width(TSwitchSize.medium);
+    final nativeHeight = TSwitchResolve.height(TSwitchSize.medium);
+    final height = _height(context, size);
+    // FittedBox keeps the thumb circular. Compensate only its internal track
+    // width so changing the bound height never scales the independent width.
+    // Preserve the visible width of the existing default fit for every tier.
+    final defaultFit = math.min(
+      TSwitchResolve.width(size) / nativeWidth,
+      TSwitchResolve.height(size) / nativeHeight,
+    );
+    return height == 0
+        ? nativeWidth
+        : nativeWidth * defaultFit * nativeHeight / height;
   }
 
   double _textGrowth(BuildContext context, TSwitchResolvedStyle resolved) {

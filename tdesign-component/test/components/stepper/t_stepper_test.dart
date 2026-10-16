@@ -52,6 +52,54 @@ void main() {
     return tester.widget<DecoratedBox>(finder).decoration as BoxDecoration;
   }
 
+  testWidgets('无关尺寸刻度不缩放 Stepper 的控件、输入区和图标', (tester) async {
+    final child = TStepper(value: 1, onChanged: (_) {});
+    await tester.pumpWidget(wrap(child));
+    final before = tester.getSize(find.byType(TStepper));
+    await tester.pumpWidget(
+      wrap(
+        child,
+        token: TThemeData.defaultData().copyWith(
+          sizeMap: {'size7': 80, 'size8': 96},
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(TStepper)), before);
+    await tester.pumpWidget(
+      wrap(
+        child,
+        token: TThemeData.defaultData().copyWith(sizeMap: {'size2': 10}),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(TStepper)).width, before.width + 12);
+    await tester.pumpWidget(
+      wrap(
+        child,
+        stepperTheme: const TStepperThemeData(
+          inputWidth: 64,
+          controlSize: 32,
+          iconSize: 20,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(TStepper)), isNot(before));
+  });
+
+  testWidgets('全局字号超过档位高度时增高，保留语义字号', (tester) async {
+    final token = TThemeData.defaultData().copyWith(
+      fontMap: {'fontBodySmall': Font(size: 40, lineHeight: 52)},
+    );
+    await tester.pumpWidget(
+      wrap(const TStepper(value: 1, size: TStepperSize.medium), token: token),
+    );
+    expect(editableText(tester).style.fontSize, 40);
+    expect(stepperSize(tester).height, greaterThanOrEqualTo(52));
+    expect(tester.takeException(), isNull);
+  });
+
   group('TStepper controlled behavior', () {
     testWidgets('renders controlled value and TDesign icons', (tester) async {
       await tester.pumpWidget(wrap(TStepper(value: 5, onChanged: (_) {})));
