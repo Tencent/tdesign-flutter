@@ -1,10 +1,10 @@
 # 本轮新增映射逐项核对
 
-本表审查的是本次 044/077 未提交改动新增的映射，不冒称复核整个设计系统。设计目标为用户指定的 [TDesign for mobile](https://www.figma.com/design/5iZtzla34Rz25j4cK7viAz?node-id=750-23479)，2026-10-16 通过只读 Plugin API 读取。
+本表审查的是本 PR 的 044/077 新增映射，不冒称复核整个设计系统。设计目标为用户指定的 [TDesign for mobile](https://www.figma.com/design/5iZtzla34Rz25j4cK7viAz?node-id=750-23479)，2026-10-16 通过只读 Plugin API 读取。
 
 ## 当前固定默认策略（2026-10-16）
 
-用户允许固定默认接入一致刻度；本批三项默认对齐和22处源码尺寸映射已实施，详见[fixed-default-mapping.md](fixed-default-mapping.md)。此前比较报告和45处原因分类均是本批前的检查点，不能继续当作当前待办。无匹配值的6处与其余14处缺口保持现状；不宣称Search的布局回退是独立的可见图标控制。
+用户允许固定默认接入一致刻度；本批三项默认对齐和22处源码尺寸映射已实施，详见[fixed-default-mapping.md](fixed-default-mapping.md)。此前比较报告和45处原因分类均是本批前的检查点，不能继续当作当前待办。原6处已补齐组件级配置（共9个公开字段），不新增全局映射或站点控制项；其余14处缺口保持现状。详见[component-token-mapping.md](component-token-mapping.md)。不宣称Search的布局回退是独立的可见图标控制。
 
 ## 当前用户尺寸裁定（2026-10-16）
 
@@ -12,7 +12,7 @@ M037、M087、M089的默认冲突已按用户确认修正：Cell card圆角9→r
 
 ## 小程序补充复核
 
-59个待确认/撤回消费点已完成两轮比较，见 [miniprogram-comparison.md](miniprogram-comparison.md)：6点明确全局来源、4点部分成立、3点默认冲突、1点结构不等价，其余45点不支持原全局映射。本批只记录证据，下面decision/current仍为实际代码行为；“有依据”不等于“已经实施”。
+59个待确认/撤回消费点已完成两轮比较，见 [miniprogram-comparison.md](miniprogram-comparison.md)：6点明确全局来源、4点部分成立、3点默认冲突、1点结构不等价，其余45点不支持原全局映射。比较报告保留前置检查点；下表decision/current已同步后续裁定与组件字段实现。“有依据”不等于“已经实施”。
 
 ## 当前用户裁定（2026-10-16）
 
@@ -34,7 +34,8 @@ Badge气泡10/1、dot8、padding4/6，SideBar邻项反向角9、最小高56及�
 - 撤回：无映射依据：1个源码消费点。
 - 保留：节点绑定：36个源码消费点。
 - 修正：用户授权一致刻度：22个源码消费点。
-- 待确认：已恢复默认：29个源码消费点。
+- 待确认：已恢复默认：23个源码消费点。
+- 组件配置已补齐：未新增全局映射：6个源码消费点。
 - 修正：语义字体来源：4个源码消费点。
 - 修正：用户跨端默认裁定：3个源码消费点。
 - 修正：用户设计裁定（square）：1个源码消费点。
@@ -60,7 +61,7 @@ Badge气泡10/1、dot8、padding4/6，SideBar邻项反向角9、最小高56及�
 | M004 | `avatar/t_avatar_defaults.dart`<br>`TAvatarSize.small => token?.size12 ?? 40,` | 保留：节点绑定 | 头像外框 size15/13/12 | avatar width/height → comp-size/xxxxl、xxl、xl |
 | M005 | `avatar/t_avatar_defaults.dart`<br>`TAvatarSize.large => token?.size10 ?? 32,` | 修正：用户授权一致刻度 | Avatar大号内置图标读取size10，默认32不变；已有显式入口优先 | 用户2026-10-16授权固定默认也可使用一致Token；小程序同一属性固定默认与现有基础size档完全一致；新增Flutter依赖，不冒称上游全局引用 |
 | M006 | `avatar/t_avatar_defaults.dart`<br>`TAvatarSize.medium => token?.size8 ?? 24,` | 修正：用户授权一致刻度 | Avatar中号内置图标读取size8，默认24不变；已有显式入口优先 | 用户2026-10-16授权固定默认也可使用一致Token；小程序同一属性固定默认与现有基础size档完全一致；新增Flutter依赖，不冒称上游全局引用 |
-| M007 | `avatar/t_avatar_defaults.dart`<br>`TAvatarSize.small => token?.size7 ?? 20,` | 待确认：已恢复默认 | 图标固定 32/24/20，组件 iconSize 优先 | Spec034/060；avatar 图标尺寸无绑定见证 |
+| M007 | `avatar/t_avatar_defaults.dart`<br>`TAvatarSize.small => token?.size7 ?? 20,` | 待确认：已恢复默认 | 小号内置图标保持20，组件iconSize优先；大/中号已分别接入size10/size8 | Spec034/060；avatar 图标尺寸无绑定见证 |
 | M008 | `avatar/t_avatar_defaults.dart`<br>`TAvatarSize.large => token?.fontTitleExtraLarge?.size ?? 20,` | 待确认：已恢复默认 | 大号字符固定 20 / w600；不能用页标题的 Title/ExtraLarge 样式证明头像绑定 | Spec034/060；采样未定位大号头像文字节点 |
 | M009 | `avatar/t_avatar_defaults.dart`<br>`TAvatarSize.medium => token?.fontMarkLarge?.size ?? 16,` | 修正：语义字体来源 | 中号 Title/Medium；小号 Title/Small，替换同值 Mark；单字 height=1 保留 | avatar styles：I26722:8947;26711:7105 / I26722:9195;26722:7351;26711:7140 |
 | M010 | `avatar/t_avatar_defaults.dart`<br>`TAvatarSize.small => token?.fontMarkMedium?.size ?? 14,` | 修正：语义字体来源 | 中号 Title/Medium；小号 Title/Small，替换同值 Mark；单字 height=1 保留 | avatar styles：I26722:8947;26711:7105 / I26722:9195;26722:7351;26711:7140 |
@@ -73,7 +74,7 @@ Badge气泡10/1、dot8、padding4/6，SideBar邻项反向角9、最小高56及�
 | M017 | `backtop/t_backtop.dart`<br>`theme.halfCircleHorizontalPadding ?? token.size4,` | 保留：节点绑定 | 圆形48、半圆高40、水平padding8、gap2 | backtop：26631:6440、26631:6475 / comp-size、paddingLR/s、margin/xxs |
 | M018 | `backtop/t_backtop.dart`<br>`contentGap: theme.contentGap ?? token.size1,` | 保留：节点绑定 | 圆形48、半圆高40、水平padding8、gap2 | backtop：26631:6440、26631:6475 / comp-size、paddingLR/s、margin/xxs |
 | M019 | `badge/t_badge_label.dart`<br>`final smallCornerScale = context.tTheme.radiusSmall / 3;` | 修正：用户设计裁定（square） | square直接读取radiusSmall，默认3；原公式涉及的bubble尖角仍固定1 | 用户2026-10-16裁定以指定设计稿为准；Badge节点27741:30861、25181:19264绑定radius-default=3，适配当前Flutter3px档radiusSmall；尖角未裁定 |
-| M020 | `badge/t_badge_label.dart`<br>`final largeCornerScale = context.tTheme.radiusLarge / 9;` | 待确认：已恢复默认 | bubble普通角10、左下尖角1，保持常量；square已单独裁定为3 | 尚未取得bubble各角与全局token的绑定；Spec023既有气泡几何继续保留 |
+| M020 | `badge/t_badge_label.dart`<br>`final largeCornerScale = context.tTheme.radiusLarge / 9;` | 组件配置已补齐：未新增全局映射 | bubble默认普通角10、左下1；可由TBadgeThemeData.bubbleBorderRadius覆盖，不绑定全局radius；square仍为radiusSmall默认3 | 小程序badge.less的--td-badge-bubble-border-radius；原全局圆角绑定仍无依据；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md |
 | M021 | `badge/t_badge_resolved_style.dart`<br>`final smallSize = tBadgeTheme?.dotSize ?? token.size4;` | 修正：用户授权一致刻度 | Badge圆点直径读取size4，默认8不变；已有显式入口优先 | 用户2026-10-16授权固定默认也可使用一致Token；小程序同一属性固定默认与现有基础size档完全一致；新增Flutter依赖，不冒称上游全局引用 |
 | M022 | `badge/t_badge_resolved_style.dart`<br>`EdgeInsets.symmetric(horizontal: large ? token.size3 : token.size2);` | 待确认：已恢复默认 | medium/large水平padding分别4/6，显式padding优先 | 缺少这两个padding到size刻度的绑定；square圆角裁定不涉及padding |
 | M023 | `button/t_button_resolve.dart`<br>`TButtonSize.large \|\| TButtonSize.medium => token.fontMarkLarge,` | 保留：组件规范 | MarkLarge / MarkMedium | Spec009；既有 Button 字体契约 |
@@ -88,8 +89,8 @@ Badge气泡10/1、dot8、padding4/6，SideBar邻项反向角9、最小高56及�
 | M032 | `button/t_button_resolve.dart`<br>`TButtonSize.extraSmall => token.size4,` | 保留：节点绑定 | 四档高度 48/40/32/28；水平 padding 20/16/12/8 | button height→comp-size/xxl、xl、m、s；padding→size/7、paddingLR/l、m、s |
 | M033 | `button/t_button_resolve.dart`<br>`TButtonSize.large => token.size8,` | 修正：用户授权一致刻度 | Button大档图标读取size8，默认24不变；已有显式入口优先 | 用户2026-10-16授权固定默认也可使用一致Token；小程序同一属性固定默认与现有基础size档完全一致；新增Flutter依赖，不冒称上游全局引用 |
 | M034 | `button/t_button_resolve.dart`<br>`TButtonSize.medium => token.size7,` | 修正：用户授权一致刻度 | Button中档图标读取size7，默认20不变；已有显式入口优先 | 用户2026-10-16授权固定默认也可使用一致Token；小程序同一属性固定默认与现有基础size档完全一致；新增Flutter依赖，不冒称上游全局引用 |
-| M035 | `button/t_button_resolve.dart`<br>`TButtonSize.small \|\| TButtonSize.extraSmall => token.size7 - 2,` | 待确认：已恢复默认 | 图标 24/20/18，不以 size7-2 拟合 | Button 图标属性未取得变量绑定 |
-| M036 | `cell/t_cell_group.dart`<br>`EdgeInsets.symmetric(horizontal: context.tTheme.spacer2)` | 待确认：已恢复默认 | card 圆角8、cardPadding16；已有组件 Theme 优先 | Cell 绑定见证属于内部 Cell 内容，不证明 card 容器绑定；8/9 无依据 |
+| M035 | `button/t_button_resolve.dart`<br>`TButtonSize.small \|\| TButtonSize.extraSmall => token.size7 - 2,` | 组件配置已补齐：未新增全局映射 | 小/超小图标默认18；可由TButtonThemeData分档字段覆盖，ButtonStyle.iconSize仍优先；不以size7-2拟合 | 小程序button.less的--td-button-small/extra-small-icon-size默认36rpx；没有18dp全局size档；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md |
+| M036 | `cell/t_cell_group.dart`<br>`EdgeInsets.symmetric(horizontal: context.tTheme.spacer2)` | 待确认：已恢复默认 | cardPadding保持16且组件Theme优先；卡片圆角已另经用户裁定为radiusLarge默认9，不再属于本项缺口 | Cell已取绑定见证属于内部Cell内容，不能证明card容器padding的全局来源 |
 | M037 | `cell/t_cell_group.dart`<br>`BorderRadius.circular(context.tTheme.radiusLarge * (8 / 9))` | 修正：用户尺寸裁定 | Cell card圆角读取radiusLarge，默认9；cardBorderRadius显式值优先，cardPadding不变 | 用户2026-10-16确认9；小程序cell-group--card直接引用radius-large；不再使用8/9比例 |
 | M038 | `checkbox/t_check_box.dart`<br>`final radius = BorderRadius.circular(context.tTheme.radiusSmall / 2);` | 撤回：规范冲突 | 方形指示器1.5px；不借用 radiusSmall/2 | Spec046明确1.5；新设计未取得指示器角的绑定 |
 | M039 | `drawer/t_drawer_content.dart`<br>`context.tTheme.size6,` | 保留：节点绑定 | 标题16/24/16/8，列表padding16、图文gap8 | drawer：27362:23975 的 title / 27362:23857 的 item-title，paddingLR/TB、margin/s |
@@ -143,10 +144,10 @@ Badge气泡10/1、dot8、padding4/6，SideBar邻项反向角9、最小高56及�
 | M087 | `table/t_table.dart`<br>`EdgeInsets.symmetric(horizontal: context.tTheme.size6),` | 修正：用户尺寸裁定 | Table表头和数据单元格水平padding读取spacer1，默认12；上下仍0；cellPadding显式值优先 | 用户2026-10-16确认12；小程序td/th padding为spacer、spacer1，当前只迁移已裁定的水平属性 |
 | M088 | `tabs/t_horizontal_tab_bar.dart`<br>`? BoxConstraints(minHeight: context.tTheme.size10)` | 修正：用户授权一致刻度 | Tabs tag最小高度读取size10，默认32不变；已有显式入口优先 | 用户2026-10-16授权固定默认也可使用一致Token；小程序同一属性固定默认与现有基础size档完全一致；新增Flutter依赖，不冒称上游全局引用 |
 | M089 | `tabs/t_horizontal_tab_bar.dart`<br>`horizontal: context.tTheme.size4,` | 修正：用户尺寸裁定 | Tabs tag内框水平padding读取spacer2，默认16；上下0、最小高32及外层labelPadding不变 | 用户2026-10-16确认16；小程序item-inner--tag水平padding直接引用spacer2 |
-| M090 | `tag/t_tag.dart`<br>`hPadding = context.tTheme.size6;` | 待确认：已恢复默认 | 恢复本轮新增映射前的组件规格，不添加公开token | 该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定 |
-| M091 | `tag/t_tag.dart`<br>`hPadding = context.tTheme.size4;` | 待确认：已恢复默认 | 恢复本轮新增映射前的组件规格，不添加公开token | 该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定 |
-| M092 | `tag/t_tag.dart`<br>`hPadding = context.tTheme.size4;` | 待确认：已恢复默认 | 恢复本轮新增映射前的组件规格，不添加公开token | 该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定 |
-| M093 | `tag/t_tag.dart`<br>`hPadding = context.tTheme.size3;` | 待确认：已恢复默认 | 恢复本轮新增映射前的组件规格，不添加公开token | 该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定 |
+| M090 | `tag/t_tag.dart`<br>`hPadding = context.tTheme.size6;` | 组件配置已补齐：未新增全局映射 | 超大档原始横16/纵9，按实际边框补偿；extraLargePadding可指定净间距，统一padding优先 | 小程序tag.less的--td-tag-extra-large-padding；保留Flutter原盒模型，不新增全局绑定；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md |
+| M091 | `tag/t_tag.dart`<br>`hPadding = context.tTheme.size4;` | 组件配置已补齐：未新增全局映射 | 大档原始横8/纵3，按实际边框补偿；largePadding可指定净间距，统一padding优先 | 小程序tag.less的--td-tag-large-padding；保留Flutter原盒模型，不新增全局绑定；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md |
+| M092 | `tag/t_tag.dart`<br>`hPadding = context.tTheme.size4;` | 组件配置已补齐：未新增全局映射 | 中档原始横8/纵2，按实际边框补偿；mediumPadding可指定净间距，统一padding优先 | 小程序tag.less的--td-tag-medium-padding；保留Flutter原盒模型，不新增全局绑定；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md |
+| M093 | `tag/t_tag.dart`<br>`hPadding = context.tTheme.size3;` | 组件配置已补齐：未新增全局映射 | 小档原始横6/纵2，按实际边框补偿；smallPadding可指定净间距，统一padding优先 | 小程序tag.less的--td-tag-small-padding；保留Flutter原盒模型，不新增全局绑定；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md |
 | M094 | `time_counter/t_time_counter_style.dart`<br>`size: context.tTheme.fontSizeTitleLarge.round(),` | 待确认：已恢复默认 | 恢复本轮新增映射前的组件规格，不添加公开token | 该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定 |
 | M095 | `time_counter/t_time_counter_style.dart`<br>`lineHeight: context.tTheme.lineHeightTitleLarge.round(),` | 待确认：已恢复默认 | 恢复本轮新增映射前的组件规格，不添加公开token | 该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定 |
 | M096 | `time_counter/t_time_counter_style.dart`<br>`blockExtent = context.tTheme.size7;` | 修正：用户授权一致刻度 | CountDown小号背景块读取size7，默认20不变；已有显式入口优先 | 用户2026-10-16授权固定默认也可使用一致Token；小程序同一属性固定默认与现有基础size档完全一致；新增Flutter依赖，不冒称上游全局引用 |
@@ -172,13 +173,13 @@ Badge气泡10/1、dot8、padding4/6，SideBar邻项反向角9、最小高56及�
 ## 缺少依据及冲突项（单列）
 
 - M001：avatar/t_avatar.dart，`: context.tTheme.shadowAvatarGroup ?? [TAvatarDefaults.groupShadow],`。Spec034/048；未取得组件效果绑定；保留 groupShadow / 内置头像层叠投影；不合成全局阴影别名。
-- M007：avatar/t_avatar_defaults.dart，`TAvatarSize.small => token?.size7 ?? 20,`。Spec034/060；avatar 图标尺寸无绑定见证；图标固定 32/24/20，组件 iconSize 优先。
+- M007：小号内置图标保持20，组件iconSize优先；大/中号已分别接入size10/size8。Spec034/060；avatar 图标尺寸无绑定见证。
 - M008：avatar/t_avatar_defaults.dart，`TAvatarSize.large => token?.fontTitleExtraLarge?.size ?? 20,`。Spec034/060；采样未定位大号头像文字节点；大号字符固定 20 / w600；不能用页标题的 Title/ExtraLarge 样式证明头像绑定。
 - M011：avatar/t_avatar_defaults.dart，`TAvatarSize.large => token?.fontTitleExtraLarge?.fontWeight,`。Spec034/060；采样未定位大号头像文字节点；大号字符固定 20 / w600；不能用页标题的 Title/ExtraLarge 样式证明头像绑定。
-- M020：badge/t_badge_label.dart，`final largeCornerScale = context.tTheme.radiusLarge / 9;`。尚未取得bubble各角与全局token的绑定；Spec023既有气泡几何继续保留；bubble普通角10、左下尖角1，保持常量；square已单独裁定为3。
+- M020：bubble默认普通角10、左下1；可由TBadgeThemeData.bubbleBorderRadius覆盖，不绑定全局radius；square仍为radiusSmall默认3。小程序badge.less的--td-badge-bubble-border-radius；原全局圆角绑定仍无依据；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md。
 - M022：badge/t_badge_resolved_style.dart，`EdgeInsets.symmetric(horizontal: large ? token.size3 : token.size2);`。缺少这两个padding到size刻度的绑定；square圆角裁定不涉及padding；medium/large水平padding分别4/6，显式padding优先。
-- M035：button/t_button_resolve.dart，`TButtonSize.small || TButtonSize.extraSmall => token.size7 - 2,`。Button 图标属性未取得变量绑定；图标 24/20/18，不以 size7-2 拟合。
-- M036：cell/t_cell_group.dart，`EdgeInsets.symmetric(horizontal: context.tTheme.spacer2)`。Cell 绑定见证属于内部 Cell 内容，不证明 card 容器绑定；8/9 无依据；card 圆角8、cardPadding16；已有组件 Theme 优先。
+- M035：小/超小图标默认18；可由TButtonThemeData分档字段覆盖，ButtonStyle.iconSize仍优先；不以size7-2拟合。小程序button.less的--td-button-small/extra-small-icon-size默认36rpx；没有18dp全局size档；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md。
+- M036：cardPadding保持16且组件Theme优先；卡片圆角已另经用户裁定为radiusLarge默认9，不再属于本项缺口。Cell已取绑定见证属于内部Cell内容，不能证明card容器padding的全局来源。
 - M038：checkbox/t_check_box.dart，`final radius = BorderRadius.circular(context.tTheme.radiusSmall / 2);`。Spec046明确1.5；新设计未取得指示器角的绑定；方形指示器1.5px；不借用 radiusSmall/2。
 - M048：dropdown_menu/t_dropdown_item.dart，`constraints: BoxConstraints(minHeight: context.tTheme.size12),`。该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定；恢复本轮新增映射前的组件规格，不添加公开token。
 - M054：message/t_message.dart，`padding: EdgeInsets.symmetric(horizontal: context.tTheme.size6),`。该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定；恢复本轮新增映射前的组件规格，不添加公开token。
@@ -191,10 +192,10 @@ Badge气泡10/1、dot8、padding4/6，SideBar邻项反向角9、最小高56及�
 - M077：steps/t_steps_vertical_item.dart，`size: context.tTheme.size6,`。该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定；恢复本轮新增映射前的组件规格，不添加公开token。
 - M078：steps/t_steps_vertical_item.dart，`size: context.tTheme.size6,`。该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定；恢复本轮新增映射前的组件规格，不添加公开token。
 - M080：swiper/t_swiper.dart，`padding: EdgeInsets.symmetric(horizontal: context.tTheme.size4),`。该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定；恢复本轮新增映射前的组件规格，不添加公开token。
-- M090：tag/t_tag.dart，`hPadding = context.tTheme.size6;`。该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定；恢复本轮新增映射前的组件规格，不添加公开token。
-- M091：tag/t_tag.dart，`hPadding = context.tTheme.size4;`。该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定；恢复本轮新增映射前的组件规格，不添加公开token。
-- M092：tag/t_tag.dart，`hPadding = context.tTheme.size4;`。该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定；恢复本轮新增映射前的组件规格，不添加公开token。
-- M093：tag/t_tag.dart，`hPadding = context.tTheme.size3;`。该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定；恢复本轮新增映射前的组件规格，不添加公开token。
+- M090：超大档原始横16/纵9，按实际边框补偿；extraLargePadding可指定净间距，统一padding优先。小程序tag.less的--td-tag-extra-large-padding；保留Flutter原盒模型，不新增全局绑定；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md。
+- M091：大档原始横8/纵3，按实际边框补偿；largePadding可指定净间距，统一padding优先。小程序tag.less的--td-tag-large-padding；保留Flutter原盒模型，不新增全局绑定；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md。
+- M092：中档原始横8/纵2，按实际边框补偿；mediumPadding可指定净间距，统一padding优先。小程序tag.less的--td-tag-medium-padding；保留Flutter原盒模型，不新增全局绑定；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md。
+- M093：小档原始横6/纵2，按实际边框补偿；smallPadding可指定净间距，统一padding优先。小程序tag.less的--td-tag-small-padding；保留Flutter原盒模型，不新增全局绑定；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md。
 - M094：time_counter/t_time_counter_style.dart，`size: context.tTheme.fontSizeTitleLarge.round(),`。该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定；恢复本轮新增映射前的组件规格，不添加公开token。
 - M095：time_counter/t_time_counter_style.dart，`lineHeight: context.tTheme.lineHeightTitleLarge.round(),`。该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定；恢复本轮新增映射前的组件规格，不添加公开token。
 - M108：tree/t_tree_select.dart，`size: Size.square(context.tTheme.radiusLarge),`。已取节点的圆角属于叶选中内框，不证明根项反向角；其他属性无对应绑定；反向角9、文字右12、操作槽56、图标24。
@@ -203,11 +204,11 @@ Badge气泡10/1、dot8、padding4/6，SideBar邻项反向角9、最小高56及�
 - M112：tree/t_tree_select.dart，`width: context.tTheme.size14,`。已取节点的圆角属于叶选中内框，不证明根项反向角；其他属性无对应绑定；反向角9、文字右12、操作槽56、图标24。
 - M113：tree/t_tree_select.dart，`size: context.tTheme.size8,`。已取节点的圆角属于叶选中内框，不证明根项反向角；其他属性无对应绑定；反向角9、文字右12、操作槽56、图标24。
 
-M019的square部分与M069已按用户设计裁定落实；气泡尖角的无依据部分仍归入M020所述气泡几何缺口。
+M019的square部分与M069已按用户设计裁定落实；M020已补齐组件气泡圆角配置，仍不建立全局radius绑定。M020、M035、M090..M093的组件字段均有小程序来源，详见[组件级清单](component-token-mapping.md)；未扩展站点控制器。
 
 ## 后续需要的裁定
 
-未读取的7页需要读取实际绑定；Table需要其对应设计节点；已读取但没有属性绑定的尺寸需要组件规范或绑定实例；Badge square和SideBar tag选中块已按用户裁定迁移；其余圆角的设计版本差异仍需确认。当前不会靠新增自定义token或别名掩盖这些缺口。
+未读取的7页需要读取实际绑定；Table需要其对应设计节点；已读取但没有属性绑定的尺寸需要组件规范或绑定实例；Badge square和SideBar tag选中块已按用户裁定迁移；其余圆角的设计版本差异仍需确认。除已授权的组件级字段外，当前不会新增无依据的全局引用或合成别名。
 
 ## 测试标准调整
 

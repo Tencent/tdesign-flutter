@@ -1036,6 +1036,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'lib/src/theme/t_theme.dart',
       'lib/src/theme/t_radius.dart',
       'lib/src/theme/t_sizes.dart',
+      'lib/src/theme/t_size_defaults.dart',
       'lib/src/theme/t_token_double_lerp.dart',
       'lib/src/theme/t_shadows.dart',
       'lib/src/theme/t_overlay_themes.dart',

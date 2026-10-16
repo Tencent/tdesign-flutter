@@ -9,6 +9,35 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// **P0 实例 > P1 组件 Theme > P2 Material > P3 ColorScheme > P4 Token**
 void main() {
   test(
+    'legacy and sparse size maps interpolate from their effective defaults',
+    () {
+      final defaults = TThemeData.defaultData();
+      TThemeData sparse({TMap<String, double>? sizes}) => TThemeData(
+        name: 'legacy',
+        colorMap: defaults.colorMap,
+        fontMap: defaults.fontMap,
+        radiusMap: defaults.radiusMap,
+        fontFamilyMap: defaults.fontFamilyMap,
+        shadowMap: defaults.shadowMap,
+        spacerMap: defaults.spacerMap,
+        refMap: defaults.refMap,
+        sizeMap: sizes,
+      );
+      final legacy = sparse();
+      final custom = sparse(sizes: TMap<String, double>()..['size8'] = 40);
+      expect(legacy.size8, 24);
+      expect(custom.size8, 40);
+      for (final t in [0.0, 0.25, 0.5, 0.75, 1.0]) {
+        expect(legacy.lerp(custom, t).size8, 24 + 16 * t);
+        expect(custom.lerp(legacy, t).size8, 40 - 16 * t);
+        expect(legacy.lerp(custom, t).size13, 48);
+      }
+      expect(legacy.lerp(custom, 0.5).copyWith().size8, 32);
+      expect(legacy.lerp(custom, 0.5).lerp(legacy, 0.5).size8, 28);
+    },
+  );
+
+  test(
     'independent size tokens parse, copy and interpolate without touching spacers',
     () {
       final base = TThemeData.defaultData();

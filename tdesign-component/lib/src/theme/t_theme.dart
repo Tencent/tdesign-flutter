@@ -11,6 +11,7 @@ import 't_colors.dart';
 import 't_component_theme_data.dart';
 import 't_default_theme.dart';
 import 't_fonts.dart';
+import 't_size_defaults.dart';
 
 // ============================================================
 // L2: 全局 theme.of 基础设施
@@ -926,7 +927,14 @@ class TThemeData extends ThemeExtension<TThemeData> {
         BorderSide.lerp,
       ),
       spacerMap: _lerpMap(spacerMap, other.spacerMap, refs, t, _lerpNumber),
-      sizeMap: _lerpMap(sizeMap, other.sizeMap, refs, t, _lerpNumber),
+      sizeMap: _lerpMap(
+        sizeMap,
+        other.sizeMap,
+        refs,
+        t,
+        _lerpNumber,
+        defaults: defaultSizeTokens,
+      ),
       refMap: refs,
       extraThemeData: selected.extraThemeData,
     );
@@ -980,10 +988,11 @@ class TThemeData extends ThemeExtension<TThemeData> {
     TMap<String, V> b,
     TMap<String, String> refs,
     double t,
-    V Function(V, V, double) interpolate,
-  ) {
+    V Function(V, V, double) interpolate, {
+    Map<String, V> defaults = const {},
+  }) {
     final result = TMap<String, V>(refs: refs);
-    for (final key in {..._tokenKeys(a), ..._tokenKeys(b)}) {
+    for (final key in {..._tokenKeys(a), ..._tokenKeys(b), ...defaults.keys}) {
       final reference = a.refs?[key];
       if (reference != null &&
           reference == b.refs?[key] &&
@@ -991,8 +1000,8 @@ class TThemeData extends ThemeExtension<TThemeData> {
           b.get(key) == null) {
         continue;
       }
-      final first = a[key];
-      final second = b[key];
+      final first = a[key] ?? defaults[key];
+      final second = b[key] ?? defaults[key];
       final value = first == null
           ? second
           : second == null

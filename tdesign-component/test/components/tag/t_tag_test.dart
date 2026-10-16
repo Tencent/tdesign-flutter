@@ -1646,6 +1646,38 @@ void _perSizePaddingTokenTests() {
       }
     },
   );
+  test('a sized padding override survives a restarted uniform transition', () {
+    const fallback = EdgeInsets.all(7);
+    const uniform = TTagThemeData(padding: EdgeInsets.all(20));
+    const sized = TTagThemeData(smallPadding: EdgeInsets.all(10));
+    for (final middle in [uniform.lerp(sized, 0.5), sized.lerp(uniform, 0.5)]) {
+      final overridden = middle.copyWith(smallPadding: EdgeInsets.zero);
+      expect(
+        overridden.resolvePadding(fallback, size: TTagSize.small),
+        EdgeInsets.zero,
+      );
+      for (final t in [0.0, 0.25, 0.5, 1.0]) {
+        expect(
+          overridden
+              .lerp(const TTagThemeData(), t)
+              .resolvePadding(fallback, size: TTagSize.small),
+          EdgeInsets.lerp(EdgeInsets.zero, fallback, t),
+        );
+        expect(
+          const TTagThemeData()
+              .lerp(overridden, t)
+              .resolvePadding(fallback, size: TTagSize.small),
+          EdgeInsets.lerp(fallback, EdgeInsets.zero, t),
+        );
+      }
+      expect(
+        overridden
+            .lerp(const TTagThemeData(), 0)
+            .resolvePadding(fallback, size: TTagSize.medium),
+        middle.resolvePadding(fallback, size: TTagSize.medium),
+      );
+    }
+  });
   for (final brightness in Brightness.values) {
     testWidgets(
       'Tag per-size net padding $brightness does not deduct border twice',

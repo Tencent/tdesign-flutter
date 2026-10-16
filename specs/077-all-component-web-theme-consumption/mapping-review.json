@@ -80,7 +80,7 @@
       "expression": "TAvatarSize.small => token?.size7 ?? 20,",
       "id": "M007",
       "decision": "待确认：已恢复默认",
-      "current": "图标固定 32/24/20，组件 iconSize 优先",
+      "current": "小号内置图标保持20，组件iconSize优先；大/中号已分别接入size10/size8",
       "evidence": "Spec034/060；avatar 图标尺寸无绑定见证",
       "miniprogramComparison": {
         "status": "部分成立",
@@ -217,13 +217,19 @@
       "beforeReviewLine": 60,
       "expression": "final largeCornerScale = context.tTheme.radiusLarge / 9;",
       "id": "M020",
-      "decision": "待确认：已恢复默认",
-      "current": "bubble普通角10、左下尖角1，保持常量；square已单独裁定为3",
-      "evidence": "尚未取得bubble各角与全局token的绑定；Spec023既有气泡几何继续保留；用户允许一致刻度后再次检查：现有Token没有完全匹配的默认值，继续保持当前独立规格",
+      "decision": "组件配置已补齐：未新增全局映射",
+      "current": "bubble默认普通角10、左下1；可由TBadgeThemeData.bubbleBorderRadius覆盖，不绑定全局radius；square仍为radiusSmall默认3",
+      "evidence": "小程序badge.less的--td-badge-bubble-border-radius；原全局圆角绑定仍无依据；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md",
       "miniprogramComparison": {
         "status": "不支持原全局映射",
         "report": "miniprogram-comparison.json",
         "implemented": false
+      },
+      "componentTheme": {
+        "fields": "bubbleBorderRadius",
+        "implemented": true,
+        "report": "component-token-mapping.md",
+        "controllerExtended": false
       }
     },
     {
@@ -380,13 +386,19 @@
       "beforeReviewLine": 498,
       "expression": "TButtonSize.small || TButtonSize.extraSmall => token.size7 - 2,",
       "id": "M035",
-      "decision": "待确认：已恢复默认",
-      "current": "图标 24/20/18，不以 size7-2 拟合",
-      "evidence": "Button 图标属性未取得变量绑定；用户允许一致刻度后再次检查：现有Token没有完全匹配的默认值，继续保持当前独立规格",
+      "decision": "组件配置已补齐：未新增全局映射",
+      "current": "小/超小图标默认18；可由TButtonThemeData分档字段覆盖，ButtonStyle.iconSize仍优先；不以size7-2拟合",
+      "evidence": "小程序button.less的--td-button-small/extra-small-icon-size默认36rpx；没有18dp全局size档；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md",
       "miniprogramComparison": {
         "status": "不支持原全局映射",
         "report": "miniprogram-comparison.json",
         "implemented": false
+      },
+      "componentTheme": {
+        "fields": "smallIconSize / extraSmallIconSize",
+        "implemented": true,
+        "report": "component-token-mapping.md",
+        "controllerExtended": false
       }
     },
     {
@@ -395,8 +407,8 @@
       "expression": "EdgeInsets.symmetric(horizontal: context.tTheme.spacer2)",
       "id": "M036",
       "decision": "待确认：已恢复默认",
-      "current": "card 圆角8、cardPadding16；已有组件 Theme 优先",
-      "evidence": "Cell 绑定见证属于内部 Cell 内容，不证明 card 容器绑定；8/9 无依据",
+      "current": "cardPadding保持16且组件Theme优先；卡片圆角已另经用户裁定为radiusLarge默认9，不再属于本项缺口",
+      "evidence": "Cell已取绑定见证属于内部Cell内容，不能证明card容器padding的全局来源",
       "miniprogramComparison": {
         "status": "结构不等价",
         "report": "miniprogram-comparison.json",
@@ -1035,13 +1047,19 @@
       "beforeReviewLine": 377,
       "expression": "hPadding = context.tTheme.size6;",
       "id": "M090",
-      "decision": "待确认：已恢复默认",
-      "current": "恢复本轮新增映射前的组件规格，不添加公开token",
-      "evidence": "该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定；用户允许一致刻度后再次检查：现有Token没有完全匹配的默认值，继续保持当前独立规格",
+      "decision": "组件配置已补齐：未新增全局映射",
+      "current": "超大档原始横16/纵9，按实际边框补偿；extraLargePadding可指定净间距，统一padding优先",
+      "evidence": "小程序tag.less的--td-tag-extra-large-padding；保留Flutter原盒模型，不新增全局绑定；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md",
       "miniprogramComparison": {
         "status": "不支持原全局映射",
         "report": "miniprogram-comparison.json",
         "implemented": false
+      },
+      "componentTheme": {
+        "fields": "extraLargePadding",
+        "implemented": true,
+        "report": "component-token-mapping.md",
+        "controllerExtended": false
       }
     },
     {
@@ -1049,13 +1067,19 @@
       "beforeReviewLine": 381,
       "expression": "hPadding = context.tTheme.size4;",
       "id": "M091",
-      "decision": "待确认：已恢复默认",
-      "current": "恢复本轮新增映射前的组件规格，不添加公开token",
-      "evidence": "该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定；用户允许一致刻度后再次检查：现有Token没有完全匹配的默认值，继续保持当前独立规格",
+      "decision": "组件配置已补齐：未新增全局映射",
+      "current": "大档原始横8/纵3，按实际边框补偿；largePadding可指定净间距，统一padding优先",
+      "evidence": "小程序tag.less的--td-tag-large-padding；保留Flutter原盒模型，不新增全局绑定；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md",
       "miniprogramComparison": {
         "status": "不支持原全局映射",
         "report": "miniprogram-comparison.json",
         "implemented": false
+      },
+      "componentTheme": {
+        "fields": "largePadding",
+        "implemented": true,
+        "report": "component-token-mapping.md",
+        "controllerExtended": false
       }
     },
     {
@@ -1063,13 +1087,19 @@
       "beforeReviewLine": 385,
       "expression": "hPadding = context.tTheme.size4;",
       "id": "M092",
-      "decision": "待确认：已恢复默认",
-      "current": "恢复本轮新增映射前的组件规格，不添加公开token",
-      "evidence": "该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定；用户允许一致刻度后再次检查：现有Token没有完全匹配的默认值，继续保持当前独立规格",
+      "decision": "组件配置已补齐：未新增全局映射",
+      "current": "中档原始横8/纵2，按实际边框补偿；mediumPadding可指定净间距，统一padding优先",
+      "evidence": "小程序tag.less的--td-tag-medium-padding；保留Flutter原盒模型，不新增全局绑定；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md",
       "miniprogramComparison": {
         "status": "不支持原全局映射",
         "report": "miniprogram-comparison.json",
         "implemented": false
+      },
+      "componentTheme": {
+        "fields": "mediumPadding",
+        "implemented": true,
+        "report": "component-token-mapping.md",
+        "controllerExtended": false
       }
     },
     {
@@ -1077,13 +1107,19 @@
       "beforeReviewLine": 389,
       "expression": "hPadding = context.tTheme.size3;",
       "id": "M093",
-      "decision": "待确认：已恢复默认",
-      "current": "恢复本轮新增映射前的组件规格，不添加公开token",
-      "evidence": "该页受 Figma 调用额度限制未读取；现有规范仅能证明数值，不能证明当前绑定；用户允许一致刻度后再次检查：现有Token没有完全匹配的默认值，继续保持当前独立规格",
+      "decision": "组件配置已补齐：未新增全局映射",
+      "current": "小档原始横6/纵2，按实际边框补偿；smallPadding可指定净间距，统一padding优先",
+      "evidence": "小程序tag.less的--td-tag-small-padding；保留Flutter原盒模型，不新增全局绑定；固定提交a9f3ba680481d438b0be37e2e25cf4a62cf0acb3，详见component-token-mapping.md",
       "miniprogramComparison": {
         "status": "不支持原全局映射",
         "report": "miniprogram-comparison.json",
         "implemented": false
+      },
+      "componentTheme": {
+        "fields": "smallPadding",
+        "implemented": true,
+        "report": "component-token-mapping.md",
+        "controllerExtended": false
       }
     },
     {

@@ -302,12 +302,14 @@ class TTagThemeData extends ThemeExtension<TTagThemeData> {
         t,
       ),
       sizePaddingTransitions: {
+        // Each size already includes the uniform padding transition. A sized
+        // copyWith override must not revive the cleared transition via _paddingLerp.
         for (final size in TTagSize.values)
           size: _TagPaddingLerp(
             padding ?? _paddingForSize(size),
-            _sizePaddingLerps[size] ?? _paddingLerp,
+            _sizePaddingLerps[size],
             other.padding ?? other._paddingForSize(size),
-            other._sizePaddingLerps[size] ?? other._paddingLerp,
+            other._sizePaddingLerps[size],
             t,
           ),
       },
