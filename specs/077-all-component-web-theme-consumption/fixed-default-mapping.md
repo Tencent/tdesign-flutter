@@ -39,10 +39,12 @@
 | M104 | Toast加载图标 | 32 | size10 |
 | M106 | Toast无文字加载图标 | 32 | size10 |
 
-保留的6点：Badge气泡10/1没有匹配圆角档；Button小/超小图标18没有匹配size档；Tag四档原始水平padding为6/8/8/16，分别可对应size3/size4/size4/size6。此前将有1px边框时的净padding5/7/7/15误判为无匹配刻度，现予更正。Tag仍保留现有常数及按实际borderWidth扣减的行为，组件级Token和盒模型语义待后续方案实现。禁止以radius比例、size减2或字体字号借用来凑默认值。
+保留的6点：Badge气泡10/1没有匹配圆角档；Button小/超小图标18没有匹配size档；Tag四档原始水平padding为6/8/8/16，分别可对应size3/size4/size4/size6。此前将有1px边框时的净padding5/7/7/15误判为无匹配刻度，现予更正。Tag仍保留现有常数及按实际borderWidth扣减的行为，组件级Token和盒模型语义已由后续组件批次补齐（不新增全局映射），详见[component-token-mapping.md](component-token-mapping.md)。禁止以radius比例、size减2或字体字号借用来凑默认值。
 
 ## 优先级与过渡
 
 实例显式值、既有组件Theme继续优先。Token只决定对应默认属性，不缩放整个组件。Avatar中/大图标、Badge dot、Drawer图标、Dropdown箭头/栏高度、Search高度、Toast图标的nullable默认在主题过渡中使用当前有效Token；copyWith和merge保留延迟默认状态。未新增公开样式字段。
 
 本批三项默认外观有意变化；其他匹配项默认保持。剩余45点中的本批25点已处理，另外20点仍保持原行为（2无匹配刻度、4个Tag边框补偿待实现、11结构/属性缺口、2字体维度缺口、1效果缺口）。上轮另列的6个有全局引用依据的候选点不混入这28点统计。验收见[fixed-default-acceptance.md](fixed-default-acceptance.md)。
+
+后续组件级能力已补齐：见[component-token-mapping.md](component-token-mapping.md)。本文件的双SDK结果只属于此前固定默认批次，不作为新字段的验收。

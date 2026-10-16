@@ -59,3 +59,9 @@
 三个跨端默认按小程序修改：BackTop图标20→22（既有组件iconSize覆盖，22无全局size档）；Dropdown触发箭头24→20（size7，iconSize优先）；Refresh加载图标24→25（无全局size档，保留独立规格）。BackTop nullable iconSize插值默认同步22。
 所有组件显式入口继续优先。Avatar私有延迟插值解析接收实际Token默认，避免插值时回退到旧常数。公开API签名不变，BackTop/Dropdown/Refresh默认视觉为有意变化；其他22点默认不变、自定义尺寸联动属于新增行为。
 补默认、相关/无关Token、明暗模式、显式覆盖和原位更新测试；同步API、清单；按受影响模块双SDK回归和严格分析，覆盖率≥95%，像素Golden仅3.32 Linux。
+
+## 组件级规格补齐（2026-10-17）
+
+按用户授权为Badge气泡圆角、Button四档图标尺寸、Tag四档padding新增组件Theme配置，不扩展站点控制器、CSS转换或全局Token。小程序证据固定在a9f3ba680481d438b0be37e2e25cf4a62cf0acb3的packages/components/{badge,button,tag}/*.less。
+Badge新增bubbleBorderRadius（BorderRadiusGeometry），默认四角10/10/10/1，其他形态不受影响。Button新增largeIconSize/mediumIconSize/smallIconSize/extraSmallIconSize；默认仍是size8/size7/18/18，实例ButtonStyle.iconSize优先，普通及渐变分支和纯图标布局一致。Tag新增smallPadding/mediumPadding/largePadding/extraLargePadding（EdgeInsets，边框以内净padding），已有统一padding优先；新增配置不再次扣边框。未配置仍采用既有按实际border扣减的默认（原始水平6/8/8/16、垂直2/2/3/9）；不新增全局size依赖。
+所有新字段nullable，null表示回退；copyWith保留未指定字段，mergeExtension沿用既有同类型整体替换语义，不改成字段合并；部分更新使用原扩展copyWith。插值以当前有效默认为端点，支持显式到默认、统一到分档及中断过渡；原位主题更新不重建组件Element。此批为可选能力，不改变现有默认或删除公开能力。公开API注释、生成文档、测试与清单同步。

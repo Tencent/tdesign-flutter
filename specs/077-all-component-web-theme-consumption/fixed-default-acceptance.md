@@ -55,3 +55,5 @@ Button尺寸断言在新旧SDK均等待300ms使图标主题过渡完成，不把
 初次回归清单误纳入了theme目录中未标记的Golden文件，在macOS产生像素差异；未使用更新参数，未修改基线，差异产物归档到临时目录。随后按文件名及tag排除像素测试，以上最终结果仅为功能/交互与静态检查，不把误跑结果作为视觉验收。
 
 [组件对齐技能第284行](../../.agents/skills/tdesign-component-align-review/SKILL.md#L284)要求“自动 Golden 与其他像素比较测试仅在 Flutter 3.32.0 Linux 执行和更新基线”。本机macOS且无可用Docker daemon，最终像素验收仍待该Linux环境，不更新基线。
+
+后续组件级能力已补齐：见[component-token-mapping.md](component-token-mapping.md)。本文件的双SDK结果只属于此前固定默认批次，不作为新字段的验收。

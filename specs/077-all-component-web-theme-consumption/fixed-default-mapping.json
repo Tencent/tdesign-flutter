@@ -240,5 +240,17 @@
       "size6"
     ],
     "behavior": "尚未接入；保持现有常数及实际borderWidth扣减。原先净padding无匹配的结论已更正。"
+  },
+  "componentTokenFollowup": {
+    "implemented": [
+      "M020",
+      "M035",
+      "M090",
+      "M091",
+      "M092",
+      "M093"
+    ],
+    "globalMappingsUnchanged": true,
+    "reference": "component-token-mapping.md"
   }
 }

@@ -3,6 +3,8 @@ import 'package:meta/meta.dart';
 
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
+import 't_badge_defaults.dart';
+import 't_badge_theme_data.dart';
 
 /// Badge 包内部使用的预设标签形状。
 ///
@@ -28,9 +30,6 @@ class TBadgeLabel extends StatelessWidget {
     required this.height,
     required this.dotSize,
   });
-
-  static const double bubbleRadius = 10;
-  static const double bubbleSharpRadius = 1;
 
   final TBadgeLabelShape shape;
   final bool visible;
@@ -60,12 +59,9 @@ class TBadgeLabel extends StatelessWidget {
       TBadgeLabelShape.square => BorderRadius.circular(
         context.tTheme.radiusSmall,
       ),
-      TBadgeLabelShape.bubble => const BorderRadius.only(
-        topLeft: Radius.circular(bubbleRadius),
-        topRight: Radius.circular(bubbleRadius),
-        bottomRight: Radius.circular(bubbleRadius),
-        bottomLeft: Radius.circular(bubbleSharpRadius),
-      ),
+      TBadgeLabelShape.bubble =>
+        Theme.of(context).extension<TBadgeThemeData>()?.bubbleBorderRadius ??
+            TBadgeDefaults.bubbleBorderRadius,
       _ => BorderRadius.circular(999),
     };
 

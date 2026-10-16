@@ -9,6 +9,7 @@ import '../../support/token_consumption_evidence.dart';
 ///
 /// 覆盖所有公开 API 和关键行为路径，目标覆盖率 95%+。
 void main() {
+  _sizeIconComponentTokenTests();
   testWidgets(
     'base size token scales every size and preserves explicit styles',
     (tester) async {
@@ -3574,4 +3575,110 @@ void ghostSemanticTokenTests() {
       }
     },
   );
+}
+
+void _sizeIconComponentTokenTests() {
+  const configured = TButtonThemeData(
+    largeIconSize: 30,
+    mediumIconSize: 26,
+    smallIconSize: 22,
+    extraSmallIconSize: 21,
+  );
+  for (final brightness in Brightness.values) {
+    for (final gradient in [false, true]) {
+      testWidgets(
+        'per-size component icons $brightness gradient=$gradient preserve instance priority',
+        (tester) async {
+          for (final size in TButtonSize.values) {
+            Future<void> pump(
+              TButtonThemeData component, {
+              ButtonStyle? style,
+              bool iconOnly = false,
+            }) async {
+              final token = TThemeData.defaultData().copyWith(
+                sizeMap: {'size8': 28, 'size7': 23},
+              );
+              var theme = brightness == Brightness.light
+                  ? TThemeBuilder.light(token)
+                  : TThemeBuilder.dark(token);
+              theme = theme.mergeExtension(
+                component.copyWith(
+                  gradient: gradient
+                      ? const LinearGradient(colors: [Colors.red, Colors.blue])
+                      : null,
+                ),
+              );
+              await tester.pumpWidget(
+                MaterialApp(
+                  theme: theme,
+                  home: Scaffold(
+                    body: TButton(
+                      key: const ValueKey('sized-icon'),
+                      size: size,
+                      icon: const Icon(TIcons.add),
+                      shape: iconOnly
+                          ? TButtonShape.square
+                          : TButtonShape.rectangle,
+                      style: style,
+                      onPressed: () {},
+                      child: iconOnly ? null : const Text('icon'),
+                    ),
+                  ),
+                ),
+              );
+              await tester.pumpAndSettle();
+            }
+
+            double iconSize() => IconTheme.of(
+              tester.element(
+                find
+                    .descendant(
+                      of: find.byType(TButton),
+                      matching: find.byType(Icon),
+                    )
+                    .first,
+              ),
+            ).size!;
+            await pump(const TButtonThemeData());
+            expect(iconSize(), [28, 23, 18, 18][size.index]);
+            final element = tester.element(find.byType(TButton));
+            await pump(configured);
+            expect(iconSize(), [30, 26, 22, 21][size.index]);
+            expect(tester.element(find.byType(TButton)), same(element));
+            await pump(configured, iconOnly: true);
+            expect(iconSize(), [30, 26, 22, 21][size.index]);
+            final materialRect = tester.getRect(
+              find
+                  .descendant(
+                    of: find.byType(TButton),
+                    matching: find.byType(Material),
+                  )
+                  .first,
+            );
+            final iconRect = tester.getRect(
+              find
+                  .descendant(
+                    of: find.byType(TButton),
+                    matching: find.byType(Icon),
+                  )
+                  .first,
+            );
+            expect(iconRect.center.dx, closeTo(materialRect.center.dx, .01));
+            expect(iconRect.center.dy, closeTo(materialRect.center.dy, .01));
+            await pump(
+              configured,
+              style: ButtonStyle(
+                iconSize: WidgetStateProperty.resolveWith(
+                  (states) => states.contains(WidgetState.disabled) ? 15 : 16,
+                ),
+              ),
+            );
+            expect(iconSize(), 16);
+            await pump(const TButtonThemeData());
+            expect(iconSize(), [28, 23, 18, 18][size.index]);
+          }
+        },
+      );
+    }
+  }
 }

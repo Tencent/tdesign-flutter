@@ -8,6 +8,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_resolve.dart';
+import 't_button_theme_data.dart';
 import 't_button_types.dart';
 
 /// 按钮样式解析器
@@ -84,6 +85,7 @@ class TButtonResolve {
       effectiveShape: shape,
       tapTargetSize: tapTargetSize,
       theme: tTheme,
+      buttonTheme: Theme.of(context).extension<TButtonThemeData>(),
     );
 
     // 5.5 textStyle 在各主题层合并完成后解析，保留其 stateful 字体字段，
@@ -440,6 +442,7 @@ class TButtonResolve {
     required TButtonShape effectiveShape,
     required MaterialTapTargetSize tapTargetSize,
     required TThemeData theme,
+    TButtonThemeData? buttonTheme,
   }) {
     final isSquareOrCircle =
         effectiveShape == TButtonShape.square ||
@@ -447,7 +450,7 @@ class TButtonResolve {
     // square/circle 纯 icon 按钮：等宽高 + 等边 padding
     final onlyIcon = hasIcon && !hasChild;
 
-    final metrics = sizeMetrics(size, theme);
+    final metrics = sizeMetrics(size, theme, buttonTheme: buttonTheme);
     final paddingValue = onlyIcon
         ? metrics.iconOnlyPadding
         : metrics.horizontalPadding;
@@ -474,7 +477,11 @@ class TButtonResolve {
   }
 
   /// 返回普通与渐变按钮共用的 TDesign 尺寸规格。
-  static TButtonSizeMetrics sizeMetrics(TButtonSize size, TThemeData? theme) {
+  static TButtonSizeMetrics sizeMetrics(
+    TButtonSize size,
+    TThemeData? theme, {
+    TButtonThemeData? buttonTheme,
+  }) {
     final token = theme ?? TThemeData.defaultData();
     final font = switch (size) {
       TButtonSize.large || TButtonSize.medium => token.fontMarkLarge,
@@ -497,7 +504,11 @@ class TButtonResolve {
       TButtonSize.medium => token.size7,
       TButtonSize.small || TButtonSize.extraSmall => 18.0,
     };
-    final effectiveIconSize = iconSize.clamp(0.0, double.infinity);
+    final effectiveIconSize =
+        (buttonTheme?.resolveIconSize(size, iconSize) ?? iconSize).clamp(
+          0.0,
+          double.infinity,
+        );
     final fontSize =
         font?.size ??
         (size == TButtonSize.large || size == TButtonSize.medium ? 16.0 : 14.0);

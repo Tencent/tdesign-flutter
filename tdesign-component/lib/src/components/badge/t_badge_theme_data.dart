@@ -11,6 +11,16 @@ import 't_badge_defaults.dart';
 ///
 /// 形态、内容、对齐和偏移由实例 API 控制，不从 Material BadgeTheme 读取。
 ///
+/// 子树气泡圆角配置示例：
+/// ```dart
+/// Theme(
+///   data: Theme.of(context).mergeExtension(
+///     const TBadgeThemeData(bubbleBorderRadius: BorderRadius.all(Radius.circular(8))),
+///   ),
+///   child: const TBadge(variant: TBadgeVariant.bubble, label: 'NEW'),
+/// )
+/// ```
+///
 /// {@category ComponentTheme}
 @immutable
 class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
@@ -28,6 +38,7 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
     this.padding,
     this.borderColor,
     this.borderWidth,
+    this.bubbleBorderRadius,
   });
 
   /// 徽标背景色；为空时使用全局错误色 Token。
@@ -51,6 +62,12 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
   /// 开启描边时使用的宽度；为空时使用 1 逻辑像素。
   final double? borderWidth;
 
+  /// 气泡徽标的四角圆角，仅对 bubble 形态生效。
+  ///
+  /// 未设置时左上、右上、右下为 10dp，左下为 1dp；不引用全局圆角。
+  /// 支持 BorderRadiusDirectional，按当前文字方向解析。
+  final BorderRadiusGeometry? bubbleBorderRadius;
+
   /// 复制主题配置。
   ///
   /// ## 返回值
@@ -64,6 +81,7 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
     EdgeInsetsGeometry? padding,
     Color? borderColor,
     double? borderWidth,
+    BorderRadiusGeometry? bubbleBorderRadius,
   }) {
     return _InterpolatedTBadgeThemeData(
       TBadgeThemeData(
@@ -74,6 +92,7 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
         padding: padding ?? this.padding,
         borderColor: borderColor ?? this.borderColor,
         borderWidth: borderWidth ?? this.borderWidth,
+        bubbleBorderRadius: bubbleBorderRadius ?? this.bubbleBorderRadius,
       ),
       dotSizeLerp: dotSize == null ? _dotSizeLerp : null,
     );
@@ -106,6 +125,14 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
         labelHeight: _lerpNullableDouble(labelHeight, other.labelHeight, t),
         textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
         padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
+        bubbleBorderRadius:
+            bubbleBorderRadius == null && other.bubbleBorderRadius == null
+            ? null
+            : BorderRadiusGeometry.lerp(
+                bubbleBorderRadius ?? TBadgeDefaults.bubbleBorderRadius,
+                other.bubbleBorderRadius ?? TBadgeDefaults.bubbleBorderRadius,
+                t,
+              ),
         // null 表示依赖当前上下文的容器背景色，不能把它当作透明色参与
         // 插值；在动画中点切换配置，才能保留两端各自的运行时回退语义。
         borderColor: _lerpContextualColor(borderColor, other.borderColor, t),
@@ -160,6 +187,7 @@ class _InterpolatedTBadgeThemeData extends TBadgeThemeData {
          padding: data.padding,
          borderColor: data.borderColor,
          borderWidth: data.borderWidth,
+         bubbleBorderRadius: data.bubbleBorderRadius,
        );
 
   @override

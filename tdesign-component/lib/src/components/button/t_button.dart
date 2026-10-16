@@ -139,6 +139,7 @@ class _TButtonState extends State<TButton> {
     final sizeMetrics = TButtonResolve.sizeMetrics(
       effectiveSize,
       context.tTheme,
+      buttonTheme: theme,
     );
     final hasGradient = theme?.gradient != null;
 

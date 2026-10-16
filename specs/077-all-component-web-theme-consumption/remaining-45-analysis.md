@@ -1,6 +1,6 @@
 # 剩余45处为什么不支持原全局映射
 
-本文件是用户新策略实施前的历史分类。当前三项默认及22处一致刻度源码位置已处理，最新状态见[fixed-default-mapping.md](fixed-default-mapping.md)；其中Search的3个默认/布局回退不作为额外可见控制能力。原45点中剩余20点维持现状。
+本文件是用户新策略实施前的历史分类。当前三项默认及22处一致刻度源码位置已处理，最新状态见[fixed-default-mapping.md](fixed-default-mapping.md)；其中Search的3个默认/布局回退不作为额外可见控制能力。原45点中剩余20点仍未新增全局引用；其中6点现已补齐组件Theme配置，其他14点未在本轮处理。最新组件级状态见[component-token-mapping.md](component-token-mapping.md)。
 
 
 这里的45是源码消费点，不是45个组件。审查对象是此前拟定的全局size/radius/font/shadow映射。不能确认该映射，不等于该属性不能主题化，也不等于现有组件Theme或实例参数失效。
