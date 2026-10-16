@@ -22,7 +22,7 @@
 
 本机通过OrbStack运行linux/amd64容器，Flutter3.32.0（framework be698c48a6，engine1881800949，Dart3.8.0）。使用提交551f6dfc的git archive隔离副本及既有缓存镜像tdesign-flutter-golden-cache:3.32.0，未使用宿主macOS像素结果。
 
-先不带更新参数复现：4个组件文件及14个example测试文件覆盖CI失败的16个套件，稳定重现全部98张差异，未出现像素比较之外的布局或功能失败。首次手工组件命令拼错Table测试文件名，随后使用manifest中的实际路径单独复现；该加载错误不计为组件回归，也未据此更新基线。
+先不带更新参数复现：4个组件文件及15个example测试文件覆盖CI失败的16个套件，稳定重现全部98张差异，未出现像素比较之外的布局或功能失败。首次手工组件命令拼错Table测试文件名，随后使用manifest中的实际路径单独复现；该加载错误不计为组件回归，也未据此更新基线。
 
 按同一文件清单执行一次更新批次（组件、example各一次flutter test --update-goldens），每部分完成后立即以相同参数移除--update-goldens复跑。组件更新/复跑各28项通过；example更新/复跑各183项通过。example命令保留--dart-define=TDESIGN_DEMO_TEST_MODULES=false，各命令使用--no-pub、原manifest参数和--reporter expanded。比较器保持Flutter精确比较，复跑差异为0。
 

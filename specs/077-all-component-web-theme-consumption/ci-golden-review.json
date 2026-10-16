@@ -2630,5 +2630,158 @@
       "ciRun": 38950396601,
       "afterSha256": "18502c999094f408cc99311b1c2d0328b6a9ceac794aad899bf18c90be74ddbd"
     }
-  ]
+  ],
+  "reproducedSuites": [
+    {
+      "name": "Badge Component",
+      "directory": ".",
+      "kind": "component",
+      "files": [
+        "test/components/badge/t_badge_golden_test.dart"
+      ],
+      "args": []
+    },
+    {
+      "name": "Badge Demo",
+      "directory": "example",
+      "kind": "demo",
+      "files": [
+        "test/badge/badge_demo_golden_test.dart"
+      ],
+      "args": []
+    },
+    {
+      "name": "BackTop Component",
+      "directory": ".",
+      "kind": "component",
+      "files": [
+        "test/components/backtop/t_backtop_golden_test.dart"
+      ],
+      "args": []
+    },
+    {
+      "name": "BackTop Demo",
+      "directory": "example",
+      "kind": "demo",
+      "files": [
+        "test/backtop/backtop_demo_golden_test.dart"
+      ],
+      "args": []
+    },
+    {
+      "name": "Popover Demo",
+      "directory": "example",
+      "kind": "demo",
+      "files": [
+        "test/popover/popover_demo_golden_test.dart"
+      ],
+      "args": []
+    },
+    {
+      "name": "DropdownMenu Demo",
+      "directory": "example",
+      "kind": "demo",
+      "files": [
+        "test/dropdown_menu/dropdown_menu_page_golden_test.dart"
+      ],
+      "args": []
+    },
+    {
+      "name": "PullDownRefresh Demo",
+      "directory": "example",
+      "kind": "demo",
+      "files": [
+        "test/refresh/pull_down_refresh_demo_golden_test.dart"
+      ],
+      "args": []
+    },
+    {
+      "name": "TabBar Demo",
+      "directory": "example",
+      "kind": "demo",
+      "files": [
+        "test/tab_bar/tab_bar_demo_golden_test.dart"
+      ],
+      "args": []
+    },
+    {
+      "name": "NavBar Demo",
+      "directory": "example",
+      "kind": "demo",
+      "files": [
+        "test/navbar/navbar_demo_golden_test.dart"
+      ],
+      "args": []
+    },
+    {
+      "name": "Link Demo",
+      "directory": "example",
+      "kind": "demo",
+      "files": [
+        "test/link/link_demo_test.dart",
+        "test/link/link_structure_test.dart"
+      ],
+      "args": []
+    },
+    {
+      "name": "NoticeBar Demo",
+      "directory": "example",
+      "kind": "demo",
+      "files": [
+        "test/notice_bar/notice_bar_page_golden_test.dart"
+      ],
+      "args": []
+    },
+    {
+      "name": "Table API states",
+      "directory": ".",
+      "kind": "component",
+      "files": [
+        "test/components/table/t_table_golden_test.dart"
+      ],
+      "args": []
+    },
+    {
+      "name": "Table Demo",
+      "directory": "example",
+      "kind": "demo",
+      "files": [
+        "test/table/table_demo_golden_test.dart",
+        "test/table/table_interaction_golden_test.dart"
+      ],
+      "args": []
+    },
+    {
+      "name": "Component centering states",
+      "directory": ".",
+      "kind": "component",
+      "files": [
+        "test/components/text/t_component_centering_golden_test.dart"
+      ],
+      "args": []
+    },
+    {
+      "name": "SideBar Demo",
+      "directory": "example",
+      "kind": "demo",
+      "files": [
+        "test/sidebar/sidebar_demo_golden_test.dart"
+      ],
+      "args": []
+    },
+    {
+      "name": "Toast Demo",
+      "directory": "example",
+      "kind": "demo",
+      "files": [
+        "test/toast/toast_demo_test.dart",
+        "test/toast/toast_structure_test.dart"
+      ],
+      "args": []
+    }
+  ],
+  "testFileCounts": {
+    ".": 4,
+    "example": 15
+  }
 }
