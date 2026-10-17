@@ -43,7 +43,7 @@ export default {
           name: 'changelog',
           meta: { docType: 'explain' },
           path: '/flutter/changelog',
-          component: () => import('../CHANGELOG.md'),
+          component: () => import('../../tdesign-component/CHANGELOG.md'),
         },
         {
           title: '贡献指南',
