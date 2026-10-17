@@ -29,4 +29,5 @@ jobs:
         with:
           token: ${{ secrets.TDESIGN_BOT_TOKEN }}
           mode: single
+          manifest-path: tdesign-component/pubspec.yaml
           changelog-path: tdesign-component/CHANGELOG.md
