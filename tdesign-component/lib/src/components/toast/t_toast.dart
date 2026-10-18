@@ -7,6 +7,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
+import '../../theme/t_overlay_themes.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
@@ -548,7 +549,7 @@ class TToast {
       debugPrint('warn: TToast requires an Overlay ancestor.');
       return;
     }
-    final captured = InheritedTheme.capture(
+    final captured = TOverlayThemes.capture(
       from: context,
       to: overlayState.context,
     );
@@ -569,6 +570,7 @@ class TToast {
     if (blockBackground || showMask) {
       overlayEntry = OverlayEntry(
         builder: (BuildContext context) => captured.wrap(
+          context,
           Stack(
             children: [
               Positioned.fill(
@@ -584,7 +586,8 @@ class TToast {
       );
     } else {
       overlayEntry = OverlayEntry(
-        builder: (BuildContext context) => captured.wrap(positionedToast),
+        builder: (BuildContext context) =>
+            captured.wrap(context, positionedToast),
       );
     }
 

@@ -125,6 +125,8 @@ TDesign 徽标的子树级视觉默认值。
 
 形态、内容、对齐和偏移由实例 API 控制，不从 Material BadgeTheme 读取。
 
+子树气泡圆角配置示例：
+
 <!-- api-theme: fields -->
 
 #### 配置项
@@ -135,7 +137,8 @@ TDesign 徽标的子树级视觉默认值。
 | backgroundColor | Color? | - | 徽标背景色；为空时使用全局错误色 Token。 | 否 |
 | borderColor | Color? | - | 开启描边时使用的颜色；为空时回退到当前容器背景色。 | 否 |
 | borderWidth | double? | - | 开启描边时使用的宽度；为空时使用 1 逻辑像素。 | 否 |
-| dotSize | double? | - | 圆点直径；为空时使用 8 逻辑像素。 | 否 |
+| bubbleBorderRadius | BorderRadiusGeometry? | - | 气泡徽标的四角圆角，仅对 bubble 形态生效。 未设置时左上、右上、右下为 10dp，左下为 1dp；不引用全局圆角。 支持 BorderRadiusDirectional，按当前文字方向解析。 | 否 |
+| dotSize | double? | - | 圆点直径；为空时使用独立默认 8 逻辑像素。 | 否 |
 | labelHeight | double? | - | 文字徽标高度；为空时由当前尺寸的字体 Token 决定。 | 否 |
 | padding | EdgeInsetsGeometry? | - | 文字徽标内边距；为空时中、大尺寸分别使用左右 4、6 逻辑像素。 | 否 |
 | textStyle | TextStyle? | - | 徽标文字的唯一组件级样式入口；未配置字段从字体与反色文字 Token 取得。 | 否 |

@@ -296,6 +296,44 @@ class _Resolver {
   }
 }
 
+// Split CSS font stacks without splitting commas inside quoted family names.
+List<String>? _fontStack(String? value) {
+  if (value == null) return null;
+  final families = <String>[];
+  var start = 0;
+  String? quote;
+  for (var i = 0; i <= value.length; i++) {
+    if (i < value.length) {
+      final char = value[i];
+      if (char == "'" || char == '"') {
+        if (i == 0 || value[i - 1] != r'\') {
+          quote = quote == char ? null : quote ?? char;
+        }
+      }
+      if (char != ',' || quote != null) continue;
+    }
+    var family = value.substring(start, i).trim();
+    start = i + 1;
+    if (family.length >= 2 &&
+        ((family.startsWith('"') && family.endsWith('"')) ||
+            (family.startsWith("'") && family.endsWith("'")))) {
+      family = family.substring(1, family.length - 1);
+    }
+    if (family.isEmpty ||
+        const {
+          'inherit',
+          'initial',
+          'unset',
+          'revert',
+          'revert-layer',
+        }.contains(family.toLowerCase())) {
+      return null;
+    }
+    families.add(family);
+  }
+  return quote == null && families.isNotEmpty ? families : null;
+}
+
 /// Converts one CSS declaration set into sparse Flutter token overrides.
 ///
 /// With [baselineCss], only changes against the pristine full CSS are emitted,
@@ -338,7 +376,17 @@ FlutterThemeTokens parseCssToFlutterTokens(String css, {String? baselineCss}) {
   }
   final font = <String, Object>{}, metrics = <String, Object>{};
   for (final spec in _fonts) {
-    final sizeToken = '--td-font-size-${spec.sizeSuffix}';
+    final directSizeToken = '--td-font-size-${spec.heightSuffix}';
+    final direct = variables.containsKey(directSizeToken);
+    final sizeToken =
+        direct ? directSizeToken : '--td-font-size-${spec.sizeSuffix}';
+    // Older web themes collapse TitleLarge into the title-large scale;
+    // modern mobile themes supply a separate title-extraLarge dimension.
+    final offset = direct &&
+            (spec.name != 'fontTitleLarge' ||
+                variables.containsKey('--td-font-size-title-extraLarge'))
+        ? 0.0
+        : spec.offset;
     final heightToken = '--td-line-height-${spec.heightSuffix}';
     if (!variables.containsKey(sizeToken) &&
         !variables.containsKey(heightToken)) {
@@ -353,7 +401,7 @@ FlutterThemeTokens parseCssToFlutterTokens(String css, {String? baselineCss}) {
         (variables.containsKey(heightToken) && sourceHeight == null)) {
       continue;
     }
-    final size = sourceSize == null ? null : sourceSize + spec.offset;
+    final size = sourceSize == null ? null : sourceSize + offset;
     if ((size != null && size <= 0) ||
         (sourceHeight != null && sourceHeight <= 0)) {
       continue;
@@ -387,7 +435,9 @@ FlutterThemeTokens parseCssToFlutterTokens(String css, {String? baselineCss}) {
     if (!resolver.changed(entry.value)) continue;
     final raw = resolver.value(entry.value);
     final layers = resolver.shadows(raw);
-    if (layers.isNotEmpty || raw == 'none') shadow[entry.key] = layers;
+    if (layers.isNotEmpty || raw == 'none') {
+      shadow[entry.key] = layers;
+    }
   }
   for (final entry in _insets.entries) {
     if (!resolver.changed(entry.value)) continue;
@@ -409,6 +459,26 @@ FlutterThemeTokens parseCssToFlutterTokens(String css, {String? baselineCss}) {
       };
     }
   }
+  final fontFamily = <String, Object>{};
+  for (final entry in const {
+    'fontFamily': '--td-font-family',
+    'fontFamilyMedium': '--td-font-family-medium',
+  }.entries) {
+    if (!resolver.changed(entry.value)) continue;
+    final stack = _fontStack(resolver.value(entry.value));
+    if (stack == null) continue;
+    fontFamily[entry.key] = {
+      'fontFamily': stack.first,
+      'fallback': stack.skip(1).toList(),
+    };
+  }
+  final size = <String, Object>{};
+  for (var index = 1; index <= 16; index++) {
+    final name = '--td-size-$index';
+    if (!resolver.changed(name)) continue;
+    final length = resolver.length(name);
+    if (length != null && length >= 0) size['size$index'] = length;
+  }
   final margin = <String, Object>{};
   for (final entry in _spacers.entries) {
     final (native, controller, scale) = entry.value;
@@ -429,6 +499,8 @@ FlutterThemeTokens parseCssToFlutterTokens(String css, {String? baselineCss}) {
     shadow: shadow,
     insetShadow: inset,
     margin: margin,
+    fontFamily: fontFamily,
+    size: size,
   );
 }
 

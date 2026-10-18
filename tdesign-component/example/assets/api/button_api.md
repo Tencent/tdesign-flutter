@@ -88,7 +88,10 @@
 
 TButton 组件级 ThemeExtension
 
-只承载 `ButtonStyle` 不能表达的按钮子树默认视觉值。
+承载按钮子树的分档图标默认值、图文间距与渐变。
+实例 ButtonStyle 的显式字段优先于对应组件默认值。
+
+分档默认值示例（实例 style 仍可覆盖）：
 
 <!-- api-theme: fields -->
 
@@ -97,5 +100,9 @@ TButton 组件级 ThemeExtension
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
+| extraSmallIconSize | double? | - | 超小尺寸按钮的图标大小，单位为逻辑像素。 未设置时使用独立默认 18dp；实例 ButtonStyle.iconSize 优先。 必须是有限非负数；仅改变内置图标及纯图标按钮的默认居中间距，不改变按钮高度。 | 否 |
 | gradient | Gradient? | - | 渐变背景色（装饰层，非 ButtonStyle 字段） | 否 |
 | iconTextSpacing | double? | - | 图标与文案之间的间距，单位为逻辑像素。 仅在按钮同时提供 icon 和 child 时生效；该值控制两者 之间的实际间隔，不会改变按钮整体内边距。为空时使用组件内置 默认值 4dp；全局 `spacer4` 对应 32dp，不用于此间距。 | 否 |
+| largeIconSize | double? | - | 大尺寸按钮的图标大小，单位为逻辑像素。 未设置时使用独立默认 24dp；实例 ButtonStyle.iconSize 优先。 必须是有限非负数；仅改变内置图标及纯图标按钮的默认居中间距，不改变按钮高度。 | 否 |
+| mediumIconSize | double? | - | 中尺寸按钮的图标大小，单位为逻辑像素。 未设置时使用独立默认 20dp；实例 ButtonStyle.iconSize 优先。 必须是有限非负数；仅改变内置图标及纯图标按钮的默认居中间距，不改变按钮高度。 | 否 |
+| smallIconSize | double? | - | 小尺寸按钮的图标大小，单位为逻辑像素。 未设置时使用独立默认 18dp；实例 ButtonStyle.iconSize 优先。 必须是有限非负数；仅改变内置图标及纯图标按钮的默认居中间距，不改变按钮高度。 | 否 |

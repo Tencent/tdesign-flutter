@@ -7,6 +7,104 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/util/web_theme_message.dart';
 
 void main() {
+  testWidgets(
+    'CSS reaches existing button tokens while size is carried without new consumers',
+    (tester) async {
+      final baseline =
+          jsonDecode(
+                File(
+                  '../../packages/css2token/test/fixtures/controller-defaults.json',
+                ).readAsStringSync(),
+              )
+              as Map;
+      Map<String, dynamic> message(bool custom) => {
+        'type': 'flutter-css-theme-update',
+        'themeMode': 'light',
+        'baseline': baseline,
+        'css': {
+          'light':
+              '${baseline['light']}\n${custom ? ':root {--td-brand-color: #123456;}' : ''}',
+          'dark':
+              '${baseline['dark']}\n${custom ? ':root {--td-brand-color: #654321;}' : ''}',
+          'extra':
+              '${baseline['extra']}\n${custom ? ':root {--td-font-family: "Example Sans", serif; --td-font-size-mark-medium: 20px; --td-radius-default: 13px; --td-size-6: 24px; --td-size-10: 48px; --td-shadow-2: 1px 2px 3px 4px #123456;}' : ''}',
+        },
+      };
+      Future<void> check(bool custom, bool dark) async {
+        final theme = parseWebThemeUpdateMessage(message(custom))!;
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: TThemeBuilder.light(theme),
+            darkTheme: TThemeBuilder.dark(theme),
+            themeMode: dark ? ThemeMode.dark : ThemeMode.light,
+            home: Scaffold(
+              body: Stack(
+                children: [
+                  TButton(
+                    colorPreset: TButtonColorPreset.primary,
+                    size: TButtonSize.small,
+                    onPressed: () {},
+                    child: const Text('Theme bridge'),
+                  ),
+                  TFab(onPressed: () {}),
+                ],
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final button = tester.widget<ElevatedButton>(
+          find.byType(ElevatedButton).first,
+        );
+        final style = button.style!;
+        final token = tester.element(find.byType(TButton).first).tTheme;
+        final defaults = TThemeData.defaultData();
+        final base = dark ? defaults.dark! : defaults;
+        expect(
+          style.backgroundColor!.resolve({}),
+          custom ? Color(dark ? 0xFF654321 : 0xFF123456) : base.brandColor,
+        );
+        expect(token.size10, custom ? 48 : 32);
+        expect(style.minimumSize!.resolve({})!.height, 32);
+        expect(
+          style.textStyle!.resolve({})!.fontSize,
+          custom ? 20 : base.fontMarkMedium!.size,
+        );
+        expect(
+          style.textStyle!.resolve({})!.fontFamily,
+          custom ? 'Example Sans' : base.fontFamily!.flutterFontFamily,
+        );
+        final shape = style.shape!.resolve({})! as RoundedRectangleBorder;
+        expect(
+          shape.borderRadius,
+          BorderRadius.circular(custom ? 13 : base.radiusDefault),
+        );
+        expect(
+          token.shadow2!.first.blurRadius,
+          custom ? 3 : base.shadow2!.first.blurRadius,
+        );
+        final shadows = tester
+            .widgetList<DecoratedBox>(
+              find.descendant(
+                of: find.byType(TFab),
+                matching: find.byType(DecoratedBox),
+              ),
+            )
+            .map((box) => box.decoration)
+            .whereType<ShapeDecoration>()
+            .expand((decoration) => decoration.shadows ?? <BoxShadow>[]);
+        expect(shadows, containsAll(token.shadow2!));
+        expect(tester.takeException(), isNull);
+      }
+
+      for (final custom in [true, false]) {
+        for (final dark in [false, true]) {
+          await check(custom, dark);
+        }
+      }
+    },
+  );
+
   test('parses every TThemeData group and its dark theme', () {
     final message = <String, dynamic>{
       'type': 'flutter-theme-update',
@@ -170,6 +268,8 @@ void main() {
       'shadow': 't_shadows.dart',
       'insetShadow': 't_shadows.dart',
       'margin': 't_spacers.dart',
+      'fontFamily': 't_font_family.dart',
+      'size': 't_sizes.dart',
     };
     final gettersByGroup = {
       for (final entry in files.entries)

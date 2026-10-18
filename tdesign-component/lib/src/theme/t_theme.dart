@@ -11,6 +11,7 @@ import 't_colors.dart';
 import 't_component_theme_data.dart';
 import 't_default_theme.dart';
 import 't_fonts.dart';
+import 't_size_defaults.dart';
 
 // ============================================================
 // L2: 全局 theme.of 基础设施
@@ -517,6 +518,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
   /// 间隔
   late TMap<String, double> spacerMap;
 
+  /// 全局尺寸刻度，单位为逻辑像素；与间距 Token 独立。
+  late TMap<String, double> sizeMap;
+
   /// 映射关系
   late TMap<String, String> refMap;
 
@@ -533,9 +537,11 @@ class TThemeData extends ThemeExtension<TThemeData> {
     required this.shadowMap,
     TMap<String, BorderSide>? insetShadowMap,
     required this.spacerMap,
+    TMap<String, double>? sizeMap,
     required this.refMap,
     this.extraThemeData,
   }) {
+    this.sizeMap = sizeMap ?? TMap<String, double>();
     this.fontMetricMap = fontMetricMap ?? TMap<String, double>();
     this.insetShadowMap = insetShadowMap ?? TMap<String, BorderSide>();
     light = this;
@@ -585,6 +591,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
 
     /// 间距 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
     Map<String, double>? spacerMap,
+
+    /// 尺寸刻度的增量映射；未提供时保留当前值。
+    Map<String, double>? sizeMap,
     TExtraThemeData? extraThemeData,
   }) {
     final copiedRefs = _copyMap<String>(refMap, null);
@@ -614,6 +623,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
         copiedRefs,
       ),
       spacerMap: _copyMap<double>(this.spacerMap, spacerMap, copiedRefs),
+      sizeMap: _copyMap<double>(this.sizeMap, sizeMap, copiedRefs),
       refMap: copiedRefs,
       extraThemeData: extraThemeData ?? this.extraThemeData,
     );
@@ -665,6 +675,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
         refs: refMap,
       ),
       spacerMap: TMap(factory: () => defaults().spacerMap, refs: refMap),
+      sizeMap: TMap(factory: () => defaults().sizeMap, refs: refMap),
       refMap: refMap,
     );
   }
@@ -828,6 +839,16 @@ class TThemeData extends ThemeExtension<TThemeData> {
       );
     });
 
+    /// 独立尺寸刻度；非法尺寸使整份配置被 fromJson 拒绝。
+    final sizes = curThemeMap?['size'] as Map<String, dynamic>?;
+    sizes?.forEach((key, value) {
+      final size = (value as num).toDouble();
+      if (!size.isFinite || size < 0) {
+        throw FormatException('Invalid size token: $key');
+      }
+      theme.sizeMap[key] = size;
+    });
+
     /// 设置Margin
     Map<String, dynamic>? marginsMap = curThemeMap?['margin'];
     marginsMap?.forEach((key, value) {
@@ -906,6 +927,14 @@ class TThemeData extends ThemeExtension<TThemeData> {
         BorderSide.lerp,
       ),
       spacerMap: _lerpMap(spacerMap, other.spacerMap, refs, t, _lerpNumber),
+      sizeMap: _lerpMap(
+        sizeMap,
+        other.sizeMap,
+        refs,
+        t,
+        _lerpNumber,
+        defaults: defaultSizeTokens,
+      ),
       refMap: refs,
       extraThemeData: selected.extraThemeData,
     );
@@ -959,10 +988,11 @@ class TThemeData extends ThemeExtension<TThemeData> {
     TMap<String, V> b,
     TMap<String, String> refs,
     double t,
-    V Function(V, V, double) interpolate,
-  ) {
+    V Function(V, V, double) interpolate, {
+    Map<String, V> defaults = const {},
+  }) {
     final result = TMap<String, V>(refs: refs);
-    for (final key in {..._tokenKeys(a), ..._tokenKeys(b)}) {
+    for (final key in {..._tokenKeys(a), ..._tokenKeys(b), ...defaults.keys}) {
       final reference = a.refs?[key];
       if (reference != null &&
           reference == b.refs?[key] &&
@@ -970,8 +1000,8 @@ class TThemeData extends ThemeExtension<TThemeData> {
           b.get(key) == null) {
         continue;
       }
-      final first = a[key];
-      final second = b[key];
+      final first = a[key] ?? defaults[key];
+      final second = b[key] ?? defaults[key];
       final value = first == null
           ? second
           : second == null

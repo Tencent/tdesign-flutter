@@ -32,6 +32,8 @@ class FlutterThemeTokens {
     required this.shadow,
     required this.insetShadow,
     required this.margin,
+    this.fontFamily = const {},
+    this.size = const {},
   });
 
   /// Semantic color references to leaf palette tokens.
@@ -57,6 +59,12 @@ class FlutterThemeTokens {
   /// Edge inset shadows represented by color and width.
   final Map<String, Object> insetShadow;
 
+  /// Independent logical-pixel size scale (size1 through size16).
+  final Map<String, Object> size;
+
+  /// Font stacks with a primary family and ordered fallbacks.
+  final Map<String, Object> fontFamily;
+
   /// Global Flutter spacers (the protocol group is named margin).
   final Map<String, Object> margin;
 
@@ -70,6 +78,8 @@ class FlutterThemeTokens {
         'shadow': shadow,
         'insetShadow': insetShadow,
         'margin': margin,
+        if (fontFamily.isNotEmpty) 'fontFamily': fontFamily,
+        if (size.isNotEmpty) 'size': size,
       };
 }
 

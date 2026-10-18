@@ -1,0 +1,150 @@
+{
+  "originalFullHead": "af58482ed807dae1f3c052ec269dfd296831eb85",
+  "develop": "3bc89d28e96d580e0893526c627dc38f16b16d82",
+  "branch": "breaking/flutter-web-theme-tokens",
+  "productionSha256": {
+    "packages/css2token/lib/src/converter.dart": "3de83441d2ac7eb19900a5000c079c4b82736e384538e614b454e69067b5e4e4",
+    "packages/css2token/lib/src/models.dart": "0516ab799d6afa9da6f3af90721b70444f34678445473d71869337bd34da42f1",
+    "tdesign-component/example/lib/util/web_theme_message.dart": "a58f7b211bb734a0bae995c6d20bc97adca274328b1e56b19ec005b785ecda36",
+    "tdesign-component/lib/src/components/badge/t_badge_defaults.dart": "f3007cae21389c94cd5e083ab1c4e88bd7251782c7c68bf27bc65a334cf807d3",
+    "tdesign-component/lib/src/components/badge/t_badge_label.dart": "0787eecdfa742b2a790fea679de92815528e1c49b5f1a110e54dc45a9fb821f3",
+    "tdesign-component/lib/src/components/badge/t_badge_resolved_style.dart": "dae901f6b722036811c976410e73cb7765a961adaaffd3255bc98d6d93074341",
+    "tdesign-component/lib/src/components/badge/t_badge_theme_data.dart": "8d4f708972c72e714fe8c521238baf1998656f818a4db415c9044df2b269afbd",
+    "tdesign-component/lib/src/components/button/t_button.dart": "a777814dd9a151ec2c90020ab24324b1eef493bed4f925dbd4b8f0c6c6830205",
+    "tdesign-component/lib/src/components/button/t_button_resolve.dart": "bc51907a3db5e0dfd039ac12573db6daaf9d1b99d975d1487e29c86aa90d0585",
+    "tdesign-component/lib/src/components/button/t_button_theme_data.dart": "2599e756a49620ff72bd111d3c2cba965490f4728acd981e4c24a56d7dfa2b07",
+    "tdesign-component/lib/src/components/dialog/t_dialog.dart": "897d1c0070fddf01b8928c7c89b70c7290e85e0472961e949f5b1cb977ff018c",
+    "tdesign-component/lib/src/components/drawer/t_drawer.dart": "8039e5a2db12621a13d5ff24c623adfe382c0c4dcf3b5c53c578459959452eca",
+    "tdesign-component/lib/src/components/message/t_message.dart": "adebc6ceea216ff776ccb60aed5751beead7c8a91b573aff7a0792cad208f901",
+    "tdesign-component/lib/src/components/popup/_popup_route.dart": "3200f63190324374cb2ad4bf8c613884068d2c8cc7f99ed400999a846b9d40f9",
+    "tdesign-component/lib/src/components/popup/t_popup.dart": "98480c27fb5277bb35523daf16cfc75019957e9f06eb5a34f19c498191012e66",
+    "tdesign-component/lib/src/components/popup/t_popup_handle.dart": "320b9c0987338c5250b84065f7c26caad65041db538702da95a98699a3a2e5f7",
+    "tdesign-component/lib/src/components/tag/t_tag.dart": "ca6ec4c5f82991db4d51d6360f84918ff69747ba2d3d75911b40ca9a6fba670b",
+    "tdesign-component/lib/src/components/tag/t_tag_theme_data.dart": "4630ccb3be76c946c318078ab4932aca55190f21ecd39d47a60371da35a5c85b",
+    "tdesign-component/lib/src/components/toast/t_toast.dart": "1003125604d127c1d550d1843e76450a35ee0c9af83faaab39c28109780d7e33",
+    "tdesign-component/lib/src/theme/t_default_theme.dart": "6dfedb98f5fbf24726e16d97e6d36f9a36fcee09ac6716d67fa2f60e7df8bbc9",
+    "tdesign-component/lib/src/theme/t_overlay_themes.dart": "9b29028d0821aeabb96d846e4bbd25e9bd0e57c662b21b5d9073b3516176abd1",
+    "tdesign-component/lib/src/theme/t_size_defaults.dart": "24991b59600e6ef7c5505041b07590cc9d0263e3cf6956feb516b124a4d5d124",
+    "tdesign-component/lib/src/theme/t_sizes.dart": "e3a028547e2d8ecde3bf8e628bd29720e1b98d1069b0683ffe951fddf2b6d704",
+    "tdesign-component/lib/src/theme/t_theme.dart": "d0f4365123cd244fca89da42f0b8ced0b37c431ec9278eeb31bf71ca050e7001",
+    "tdesign-component/lib/src/theme/t_token_double_lerp.dart": "601af11270d968383fe5a3b2c9e1a49e740bcba1a0dd2c068b98316b92ec3980",
+    "tdesign-component/lib/tdesign_flutter.dart": "49a5f860e1fe3785e77aa339560bf95c20de61afc09d951487390327ae855b5d",
+    "tdesign-component/tool/component_test_manifest.dart": "508c58715c7bfa5e710c31c8e04ef395b358940ab39d3cb0591a9308383efd09",
+    "tdesign-component/tool/components.json": "55848ebf5fc2d91d96d32e3cce06499a47c4f5c8e2428f02ffb66dfc2cf280c9"
+  },
+  "sdkResults": {
+    "3.32.0": {
+      "componentTests": 882,
+      "exampleTests": 45,
+      "converterTests": 30,
+      "analyze": "passed",
+      "apiAudit": "57 components; 370 public declarations; 0 issues",
+      "coverage": {
+        "theme": {
+          "LH": 836,
+          "LF": 861,
+          "percent": 97.1
+        },
+        "badge": {
+          "LH": 299,
+          "LF": 306,
+          "percent": 97.71
+        },
+        "button": {
+          "LH": 546,
+          "LF": 548,
+          "percent": 99.64
+        },
+        "tag": {
+          "LH": 343,
+          "LF": 350,
+          "percent": 98.0
+        },
+        "dialog": {
+          "LH": 303,
+          "LF": 304,
+          "percent": 99.67
+        },
+        "drawer": {
+          "LH": 202,
+          "LF": 203,
+          "percent": 99.51
+        },
+        "popup": {
+          "LH": 498,
+          "LF": 509,
+          "percent": 97.84
+        },
+        "message": {
+          "LH": 269,
+          "LF": 272,
+          "percent": 98.9
+        },
+        "toast": {
+          "LH": 236,
+          "LF": 239,
+          "percent": 98.74
+        }
+      }
+    },
+    "3.47.7": {
+      "componentTests": 882,
+      "exampleTests": 45,
+      "converterTests": 30,
+      "analyze": "passed",
+      "apiAudit": "57 components; 370 public declarations; 0 issues",
+      "coverage": {
+        "theme": {
+          "LH": 833,
+          "LF": 861,
+          "percent": 96.75
+        },
+        "badge": {
+          "LH": 297,
+          "LF": 306,
+          "percent": 97.06
+        },
+        "button": {
+          "LH": 546,
+          "LF": 548,
+          "percent": 99.64
+        },
+        "tag": {
+          "LH": 343,
+          "LF": 350,
+          "percent": 98.0
+        },
+        "dialog": {
+          "LH": 303,
+          "LF": 304,
+          "percent": 99.67
+        },
+        "drawer": {
+          "LH": 201,
+          "LF": 203,
+          "percent": 99.01
+        },
+        "popup": {
+          "LH": 496,
+          "LF": 509,
+          "percent": 97.45
+        },
+        "message": {
+          "LH": 268,
+          "LF": 272,
+          "percent": 98.53
+        },
+        "toast": {
+          "LH": 236,
+          "LF": 239,
+          "percent": 98.74
+        }
+      }
+    }
+  },
+  "nodeBridgeTests": 6,
+  "exampleSnippetsCheck": "passed",
+  "goldenBaselinesChangedAgainstDevelop": 0,
+  "linuxVisual": "running; no update flag",
+  "ci": "pending on final head"
+}

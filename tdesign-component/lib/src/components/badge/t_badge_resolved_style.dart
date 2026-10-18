@@ -37,7 +37,9 @@ class TBadgeResolvedStyle {
     final token = context.tTheme;
     final backgroundColor = tBadgeTheme?.backgroundColor ?? token.errorColor;
     final textColor = tBadgeTheme?.textStyle?.color ?? token.textColorAnti;
-    final smallSize = tBadgeTheme?.dotSize ?? TBadgeDefaults.dotSize;
+    final smallSize =
+        tBadgeTheme?.resolveDotSize(TBadgeDefaults.dotSize) ??
+        TBadgeDefaults.dotSize;
     final font = large ? token.fontMarkSmall : token.fontMarkExtraSmall;
     final themedTextStyle = tBadgeTheme?.textStyle;
     final resolvedTextStyle = TextStyle(

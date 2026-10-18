@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
+import 't_badge_defaults.dart';
+import 't_badge_theme_data.dart';
+
 /// Badge 包内部使用的预设标签形状。
 ///
 /// 该类型不导出到组件公共 API；TBadge 负责把公开的 variant 映射到这里。
@@ -26,10 +29,6 @@ class TBadgeLabel extends StatelessWidget {
     required this.dotSize,
   });
 
-  static const double squareRadius = 2;
-  static const double bubbleRadius = 10;
-  static const double bubbleSharpRadius = 1;
-
   final TBadgeLabelShape shape;
   final bool visible;
   final Widget? label;
@@ -54,13 +53,10 @@ class TBadgeLabel extends StatelessWidget {
       _ => height,
     };
     final borderRadius = switch (shape) {
-      TBadgeLabelShape.square => BorderRadius.circular(squareRadius),
-      TBadgeLabelShape.bubble => const BorderRadius.only(
-        topLeft: Radius.circular(bubbleRadius),
-        topRight: Radius.circular(bubbleRadius),
-        bottomRight: Radius.circular(bubbleRadius),
-        bottomLeft: Radius.circular(bubbleSharpRadius),
-      ),
+      TBadgeLabelShape.square => BorderRadius.circular(2),
+      TBadgeLabelShape.bubble =>
+        Theme.of(context).extension<TBadgeThemeData>()?.bubbleBorderRadius ??
+            TBadgeDefaults.bubbleBorderRadius,
       _ => BorderRadius.circular(999),
     };
 

@@ -84,7 +84,7 @@ class TPopupHandle {
     _resultCompleter = resultCompleter;
     final captureFrom = context?.mounted == true ? context! : themeContext;
     final capturedThemes = captureFrom.mounted
-        ? InheritedTheme.capture(from: captureFrom, to: navigator.context)
+        ? TOverlayThemes.capture(from: captureFrom, to: navigator.context)
         : null;
 
     _isClosed = false;
