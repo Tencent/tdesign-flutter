@@ -517,13 +517,12 @@ class _TPullDownRefreshHeader extends Header {
       height: state.offset,
       child: Container(
         alignment: Alignment.center,
-        key: const ValueKey('t-pull-down-refresh-header'),
         height: _extent,
         color: context.tTheme.bgColorContainer,
         child: showLoading
             ? Theme(
                 data: Theme.of(context).mergeExtension(refreshLoadingTheme),
-                child: TLoading(size: 25, text: text),
+                child: TLoading(size: 24, text: text),
               )
             : TTextStyled(
                 text,

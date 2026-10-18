@@ -1,23 +1,11 @@
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
-
-import '../../theme/t_token_double_lerp.dart';
 
 /// `TSearchBar` 的默认视觉配置。
 ///
 /// {@category ComponentTheme}
 class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
-  TokenDoubleLerp? get _heightLerp => null;
-
-  @internal
-  bool get hasHeightOverride => height != null || _heightLerp != null;
-
-  @internal
-  double resolveHeight(double fallback) =>
-      _heightLerp?.resolve(fallback) ?? height ?? fallback;
-
   const TSearchBarThemeData({
     this.height,
     this.inputBackgroundColor,
@@ -31,8 +19,8 @@ class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
     this.cursorHeight,
   });
 
-  /// 搜索框高度；默认最小高度读取 size12（40dp）。
-  /// 显式高度保持固定；默认随内置文字和图标的自然尺寸增长。
+  /// 搜索框高度，默认 40dp。
+  /// 显式高度保持固定；默认至少 40，并随内置文字和图标的自然尺寸增长。
   final double? height;
 
   /// 输入区域背景色，默认 `bgColorSecondaryContainer` Token。
@@ -79,20 +67,17 @@ class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
     double? actionGap,
     double? cursorHeight,
   }) {
-    return _InterpolatedTSearchBarThemeData(
-      TSearchBarThemeData(
-        height: height ?? this.height,
-        inputBackgroundColor: inputBackgroundColor ?? this.inputBackgroundColor,
-        contentPadding: contentPadding ?? this.contentPadding,
-        textStyle: textStyle ?? this.textStyle,
-        hintStyle: hintStyle ?? this.hintStyle,
-        searchIconTheme: searchIconTheme ?? this.searchIconTheme,
-        clearIconTheme: clearIconTheme ?? this.clearIconTheme,
-        actionTextStyle: actionTextStyle ?? this.actionTextStyle,
-        actionGap: actionGap ?? this.actionGap,
-        cursorHeight: cursorHeight ?? this.cursorHeight,
-      ),
-      heightLerp: height == null ? _heightLerp : null,
+    return TSearchBarThemeData(
+      height: height ?? this.height,
+      inputBackgroundColor: inputBackgroundColor ?? this.inputBackgroundColor,
+      contentPadding: contentPadding ?? this.contentPadding,
+      textStyle: textStyle ?? this.textStyle,
+      hintStyle: hintStyle ?? this.hintStyle,
+      searchIconTheme: searchIconTheme ?? this.searchIconTheme,
+      clearIconTheme: clearIconTheme ?? this.clearIconTheme,
+      actionTextStyle: actionTextStyle ?? this.actionTextStyle,
+      actionGap: actionGap ?? this.actionGap,
+      cursorHeight: cursorHeight ?? this.cursorHeight,
     );
   }
 
@@ -112,46 +97,37 @@ class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
     if (other is! TSearchBarThemeData) {
       return this;
     }
-    return _InterpolatedTSearchBarThemeData(
-      TSearchBarThemeData(
-        height: lerpDouble(height, other.height, t),
-        inputBackgroundColor: Color.lerp(
-          inputBackgroundColor,
-          other.inputBackgroundColor,
-          t,
-        ),
-        contentPadding: EdgeInsetsGeometry.lerp(
-          contentPadding,
-          other.contentPadding,
-          t,
-        ),
-        textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
-        hintStyle: TextStyle.lerp(hintStyle, other.hintStyle, t),
-        searchIconTheme: IconThemeData.lerp(
-          searchIconTheme,
-          other.searchIconTheme,
-          t,
-        ),
-        clearIconTheme: IconThemeData.lerp(
-          clearIconTheme,
-          other.clearIconTheme,
-          t,
-        ),
-        actionTextStyle: TextStyle.lerp(
-          actionTextStyle,
-          other.actionTextStyle,
-          t,
-        ),
-        actionGap: lerpDouble(actionGap, other.actionGap, t),
-        cursorHeight: lerpDouble(cursorHeight, other.cursorHeight, t),
-      ),
-      heightLerp: TokenDoubleLerp.between(
-        height,
-        _heightLerp,
-        other.height,
-        other._heightLerp,
+    return TSearchBarThemeData(
+      height: lerpDouble(height, other.height, t),
+      inputBackgroundColor: Color.lerp(
+        inputBackgroundColor,
+        other.inputBackgroundColor,
         t,
       ),
+      contentPadding: EdgeInsetsGeometry.lerp(
+        contentPadding,
+        other.contentPadding,
+        t,
+      ),
+      textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
+      hintStyle: TextStyle.lerp(hintStyle, other.hintStyle, t),
+      searchIconTheme: IconThemeData.lerp(
+        searchIconTheme,
+        other.searchIconTheme,
+        t,
+      ),
+      clearIconTheme: IconThemeData.lerp(
+        clearIconTheme,
+        other.clearIconTheme,
+        t,
+      ),
+      actionTextStyle: TextStyle.lerp(
+        actionTextStyle,
+        other.actionTextStyle,
+        t,
+      ),
+      actionGap: lerpDouble(actionGap, other.actionGap, t),
+      cursorHeight: lerpDouble(cursorHeight, other.cursorHeight, t),
     );
   }
 }
@@ -172,26 +148,4 @@ enum TSearchBarAlignment {
 
   /// 居中对齐。
   center,
-}
-
-class _InterpolatedTSearchBarThemeData extends TSearchBarThemeData {
-  _InterpolatedTSearchBarThemeData(
-    TSearchBarThemeData data, {
-    TokenDoubleLerp? heightLerp,
-  }) : _heightLerp = heightLerp,
-       super(
-         height: data.height,
-         inputBackgroundColor: data.inputBackgroundColor,
-         contentPadding: data.contentPadding,
-         textStyle: data.textStyle,
-         hintStyle: data.hintStyle,
-         searchIconTheme: data.searchIconTheme,
-         clearIconTheme: data.clearIconTheme,
-         actionTextStyle: data.actionTextStyle,
-         actionGap: data.actionGap,
-         cursorHeight: data.cursorHeight,
-       );
-
-  @override
-  final TokenDoubleLerp? _heightLerp;
 }

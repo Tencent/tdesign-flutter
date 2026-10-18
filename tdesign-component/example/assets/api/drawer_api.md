@@ -141,7 +141,7 @@
 | itemBackgroundColor | Color? | - | 菜单项背景色。 null 时沿用抽屉实际面板背景色。 | 否 |
 | itemIconColor | Color? | - | 菜单项图标颜色。 null 时使用 textColorPrimary Token。 | 否 |
 | itemIconGap | double? | - | 菜单项图标与正文间距，默认 8。 | 否 |
-| itemIconSize | double? | - | 菜单项图标尺寸；为空时读取 size8，默认 24。 | 否 |
+| itemIconSize | double? | - | 菜单项图标尺寸，默认 24。 | 否 |
 | itemPadding | EdgeInsetsGeometry? | - | 菜单项内边距，默认 `EdgeInsets.fromLTRB(16, 16, 0, 16)`。 | 否 |
 | itemPressedColor | Color? | - | 菜单项按压背景色。 null 时使用 bgColorSecondaryContainer Token。 | 否 |
 | itemTextStyle | TextStyle? | - | 菜单正文样式。 | 否 |

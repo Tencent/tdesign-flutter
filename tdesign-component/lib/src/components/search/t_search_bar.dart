@@ -8,14 +8,16 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
-import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_resolve.dart';
 import '../text/t_text_styled.dart';
 import 't_search_bar_theme_data.dart';
 
+const double _kSearchBarHeight = 40;
+const double _kIconSize = 24;
 const double _kIconGap = 5;
 const double _kActionGap = 15;
+const EdgeInsets _kContentPadding = EdgeInsets.symmetric(horizontal: 12);
 
 class TSearchBar extends StatefulWidget {
   const TSearchBar({
@@ -168,12 +170,10 @@ class _TSearchBarState extends State<TSearchBar> {
     final theme = Theme.of(context).extension<TSearchBarThemeData>();
     final effectiveVariant = widget.variant ?? TSearchBarVariant.square;
     final effectiveAlignment = widget.textAlignment ?? TSearchBarAlignment.left;
-    var height =
-        theme?.resolveHeight(context.tTheme.size12) ?? context.tTheme.size12;
+    var height = theme?.height ?? _kSearchBarHeight;
     final inputBackgroundColor =
         theme?.inputBackgroundColor ?? token.bgColorSecondaryContainer;
-    final contentPadding =
-        theme?.contentPadding ?? EdgeInsets.symmetric(horizontal: token.size5);
+    final contentPadding = theme?.contentPadding ?? _kContentPadding;
     final actionText = widget.actionText;
     final hasAction = actionText != null && actionText.isNotEmpty;
 
@@ -210,11 +210,11 @@ class _TSearchBarState extends State<TSearchBar> {
               : token.textColorDisabled,
         );
     var searchIconTheme = IconThemeData(
-      size: context.tTheme.size8,
+      size: _kIconSize,
       color: token.textColorPlaceholder,
     ).merge(theme?.searchIconTheme);
     var clearIconTheme = IconThemeData(
-      size: context.tTheme.size8,
+      size: _kIconSize,
       color: token.textColorPlaceholder,
     ).merge(theme?.clearIconTheme);
     if (!widget.enabled) {
@@ -224,7 +224,7 @@ class _TSearchBarState extends State<TSearchBar> {
       clearIconTheme = clearIconTheme.copyWith(color: token.textColorDisabled);
     }
 
-    if (theme?.hasHeightOverride != true) {
+    if (theme?.height == null) {
       for (final style in [textStyle, hintStyle]) {
         height = math.max(
           height,
@@ -248,8 +248,8 @@ class _TSearchBarState extends State<TSearchBar> {
       height = math.max(
         height,
         math.max(
-              searchIconTheme.size ?? context.tTheme.size8,
-              clearIconTheme.size ?? context.tTheme.size8,
+              searchIconTheme.size ?? _kIconSize,
+              clearIconTheme.size ?? _kIconSize,
             ) +
             contentPadding.vertical,
       );

@@ -44,7 +44,7 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
   /// 徽标背景色；为空时使用全局错误色 Token。
   final Color? backgroundColor;
 
-  /// 圆点直径；为空时读取 size4，默认 8 逻辑像素。
+  /// 圆点直径；为空时使用独立默认 8 逻辑像素。
   final double? dotSize;
 
   /// 文字徽标高度；为空时由当前尺寸的字体 Token 决定。

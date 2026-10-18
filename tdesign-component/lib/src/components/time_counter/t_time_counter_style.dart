@@ -78,7 +78,7 @@ class _TTimeCounterStyle {
         defaultFont = context.tTheme.fontBodyMedium;
         blockFont = context.tTheme.fontBodySmall;
         unitFont = context.tTheme.fontBodyExtraSmall;
-        blockExtent = context.tTheme.size7;
+        blockExtent = 20;
         unitSpace = 4;
         dotSpace = 2;
         break;
@@ -86,7 +86,7 @@ class _TTimeCounterStyle {
         defaultFont = context.tTheme.fontBodyLarge;
         blockFont = context.tTheme.fontBodyMedium;
         unitFont = context.tTheme.fontBodySmall;
-        blockExtent = context.tTheme.size8;
+        blockExtent = 24;
         unitSpace = 5;
         dotSpace = 3;
         break;
@@ -94,7 +94,7 @@ class _TTimeCounterStyle {
         defaultFont = largeNumberFont;
         blockFont = context.tTheme.fontBodyLarge;
         unitFont = context.tTheme.fontBodyMedium;
-        blockExtent = context.tTheme.size9;
+        blockExtent = 28;
         unitSpace = 6;
         dotSpace = 6;
     }

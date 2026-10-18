@@ -18,7 +18,6 @@ enum TBadgeVariant {
   dot,
 
   /// 小圆角方形文本徽标；多字符时随内容横向扩展为矩形。
-  /// 圆角读取全局 radiusSmall，默认3逻辑像素。
   square,
 
   /// 左下角收紧、其余角为圆角的气泡徽标。

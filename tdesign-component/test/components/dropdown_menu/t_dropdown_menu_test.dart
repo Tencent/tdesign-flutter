@@ -234,7 +234,7 @@ void main() {
       });
     }
 
-    testWidgets('default trigger follows the approved MiniProgram dimensions', (
+    testWidgets('default trigger follows the Figma token contract', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -249,7 +249,7 @@ void main() {
         matching: find.byIcon(TIcons.caret_down_small),
       );
       expect(tester.getSize(find.byType(TDropdownMenu)).height, 48);
-      expect(tester.widget<Icon>(icon).size, 20);
+      expect(tester.widget<Icon>(icon).size, 24);
       expect(tester.getTopLeft(icon).dx - tester.getTopRight(text).dx, 4);
 
       await tester.tap(text);

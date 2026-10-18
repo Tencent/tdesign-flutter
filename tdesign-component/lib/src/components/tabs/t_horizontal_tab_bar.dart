@@ -14,8 +14,6 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
-import '../../theme/t_sizes.dart';
-import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../icon/t_icon.dart';
 import '../text/t_text_resolve.dart';
@@ -26,6 +24,8 @@ import 't_tab_bar_theme_data.dart';
 const double _kTabHeight = 46.0;
 const double _kStartOffset = 52.0;
 const double _kTabIconSize = 18.0;
+const double _kTagHeight = 32.0;
+const double _kTagHorizontalPadding = 8.0;
 
 class _TabStyle extends AnimatedWidget {
   const _TabStyle({
@@ -913,10 +913,12 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
                       ? double.infinity
                       : null,
                   constraints: widget.variant == TTabsBarVariant.tag
-                      ? BoxConstraints(minHeight: context.tTheme.size10)
+                      ? const BoxConstraints(minHeight: _kTagHeight)
                       : null,
                   padding: widget.variant == TTabsBarVariant.tag
-                      ? EdgeInsets.symmetric(horizontal: context.tTheme.spacer2)
+                      ? const EdgeInsets.symmetric(
+                          horizontal: _kTagHorizontalPadding,
+                        )
                       : null,
                   decoration: _getContentDecorateInner(index),
                   child: widget.tabs[index],

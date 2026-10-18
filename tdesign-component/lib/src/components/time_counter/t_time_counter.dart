@@ -7,7 +7,6 @@ import '../../theme/basic.dart' show Font, FontFamily;
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
-import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../../util/list_ext.dart';

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
-import '../../theme/t_radius.dart';
-import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
 import '../badge/t_badge_internal.dart';
@@ -92,7 +90,7 @@ class TWrapSideBarItem extends StatelessWidget {
             renderPreLine(context),
             Expanded(
               child: Padding(
-                padding: contentPadding ?? EdgeInsets.all(context.tTheme.size6),
+                padding: contentPadding ?? const EdgeInsets.all(16),
                 child: renderMainContent(context),
               ),
             ),
@@ -109,16 +107,15 @@ class TWrapSideBarItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: unSelectedBgColor ?? context.tTheme.bgColorSecondaryContainer,
         ),
-        padding: EdgeInsets.all(context.tTheme.size4),
+        padding: const EdgeInsets.all(8),
         child: Container(
           decoration: BoxDecoration(
             color: selected && !disabled
                 ? selectedBgColor ?? context.tTheme.bgColorContainer
                 : null,
-            // The supplied design's 6px radius-medium uses Flutter's default tier.
-            borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
+            borderRadius: BorderRadius.circular(9),
           ),
-          padding: contentPadding ?? EdgeInsets.all(context.tTheme.size4),
+          padding: contentPadding ?? const EdgeInsets.all(8),
           child: renderMainContent(context),
         ),
       ),

@@ -58,12 +58,3 @@ test('completion follows supplied dependency defaults without a stale local copy
   assert.equal(ensureFlutterThemeTokenCoverage('', ':root { --td-size-6: 17.5px; }'),
     '\n:root {\n  --td-size-6: 17.5px;\n}\n');
 });
-
-test('all-component Flutter audit uses the current completed controller baseline', () => {
-  const baseline = loadControllerBaseline();
-  baseline.extra = ensureFlutterThemeTokenCoverage(baseline.extra, extraDefaults);
-  const fixture = JSON.parse(readFileSync(new URL(
-    '../../../tdesign-component/example/test/theme/fixtures/controller-css.json', import.meta.url,
-  ), 'utf8'));
-  assert.deepEqual(fixture, baseline);
-});

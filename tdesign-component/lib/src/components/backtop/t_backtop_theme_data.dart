@@ -47,7 +47,7 @@ class TBackTopThemeData extends ThemeExtension<TBackTopThemeData> {
   /// 半圆形无文字时的最小宽度，默认 38。
   final double? halfCircleMinWidth;
 
-  /// 图标尺寸，默认 22；显式值优先。
+  /// 图标尺寸，默认 20。
   final double? iconSize;
 
   /// 边框宽度，默认 0.5。
@@ -150,7 +150,7 @@ class TBackTopThemeData extends ThemeExtension<TBackTopThemeData> {
         38,
         t,
       ),
-      iconSize: _lerpOptionalDouble(iconSize, other.iconSize, 22, t),
+      iconSize: _lerpOptionalDouble(iconSize, other.iconSize, 20, t),
       borderWidth: _lerpOptionalDouble(borderWidth, other.borderWidth, 0.5, t),
       halfCircleHorizontalPadding: _lerpOptionalDouble(
         halfCircleHorizontalPadding,

@@ -1,9 +1,6 @@
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
-
-import '../../theme/t_token_double_lerp.dart';
 
 /// 抽屉组件 ThemeExtension。
 ///
@@ -12,12 +9,6 @@ import '../../theme/t_token_double_lerp.dart';
 ///
 /// {@category ComponentTheme}
 class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
-  TokenDoubleLerp? get _itemIconSizeLerp => null;
-
-  @internal
-  double resolveItemIconSize(double fallback) =>
-      _itemIconSizeLerp?.resolve(fallback) ?? itemIconSize ?? fallback;
-
   /// 默认宽度，默认 280。
   final double? width;
 
@@ -48,7 +39,7 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
   /// null 时使用 textColorPrimary Token。
   final Color? itemIconColor;
 
-  /// 菜单项图标尺寸；为空时读取 size8，默认 24。
+  /// 菜单项图标尺寸，默认 24。
   final double? itemIconSize;
 
   /// 菜单项图标与正文间距，默认 8。
@@ -111,25 +102,22 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
     double? dividerThickness,
     EdgeInsetsGeometry? footerPadding,
   }) {
-    return _InterpolatedTDrawerThemeData(
-      TDrawerThemeData(
-        width: width ?? this.width,
-        backgroundColor: backgroundColor ?? this.backgroundColor,
-        titleStyle: titleStyle ?? this.titleStyle,
-        titlePadding: titlePadding ?? this.titlePadding,
-        itemTextStyle: itemTextStyle ?? this.itemTextStyle,
-        itemBackgroundColor: itemBackgroundColor ?? this.itemBackgroundColor,
-        itemPressedColor: itemPressedColor ?? this.itemPressedColor,
-        itemPadding: itemPadding ?? this.itemPadding,
-        itemIconColor: itemIconColor ?? this.itemIconColor,
-        itemIconSize: itemIconSize ?? this.itemIconSize,
-        itemIconGap: itemIconGap ?? this.itemIconGap,
-        dividerColor: dividerColor ?? this.dividerColor,
-        dividerIndent: dividerIndent ?? this.dividerIndent,
-        dividerThickness: dividerThickness ?? this.dividerThickness,
-        footerPadding: footerPadding ?? this.footerPadding,
-      ),
-      itemIconSizeLerp: itemIconSize == null ? _itemIconSizeLerp : null,
+    return TDrawerThemeData(
+      width: width ?? this.width,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      titleStyle: titleStyle ?? this.titleStyle,
+      titlePadding: titlePadding ?? this.titlePadding,
+      itemTextStyle: itemTextStyle ?? this.itemTextStyle,
+      itemBackgroundColor: itemBackgroundColor ?? this.itemBackgroundColor,
+      itemPressedColor: itemPressedColor ?? this.itemPressedColor,
+      itemPadding: itemPadding ?? this.itemPadding,
+      itemIconColor: itemIconColor ?? this.itemIconColor,
+      itemIconSize: itemIconSize ?? this.itemIconSize,
+      itemIconGap: itemIconGap ?? this.itemIconGap,
+      dividerColor: dividerColor ?? this.dividerColor,
+      dividerIndent: dividerIndent ?? this.dividerIndent,
+      dividerThickness: dividerThickness ?? this.dividerThickness,
+      footerPadding: footerPadding ?? this.footerPadding,
     );
   }
 
@@ -149,72 +137,54 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
     if (other is! TDrawerThemeData) {
       return this;
     }
-    return _InterpolatedTDrawerThemeData(
-      TDrawerThemeData(
-        width: _lerpDoubleWithDefault(width, other.width, 280, t),
-        backgroundColor: _lerpColor(backgroundColor, other.backgroundColor, t),
-        titleStyle: _lerpTextStyle(titleStyle, other.titleStyle, t),
-        titlePadding: _lerpInsetsWithDefault(
-          titlePadding,
-          other.titlePadding,
-          const EdgeInsets.fromLTRB(16, 24, 16, 8),
-          t,
-        ),
-        itemTextStyle: _lerpTextStyle(itemTextStyle, other.itemTextStyle, t),
-        itemBackgroundColor: _lerpColor(
-          itemBackgroundColor,
-          other.itemBackgroundColor,
-          t,
-        ),
-        itemPressedColor: _lerpColor(
-          itemPressedColor,
-          other.itemPressedColor,
-          t,
-        ),
-        itemPadding: _lerpInsetsWithDefault(
-          itemPadding,
-          other.itemPadding,
-          const EdgeInsets.fromLTRB(16, 16, 0, 16),
-          t,
-        ),
-        itemIconColor: _lerpColor(itemIconColor, other.itemIconColor, t),
-        itemIconSize: _lerpDoubleWithDefault(
-          itemIconSize,
-          other.itemIconSize,
-          24,
-          t,
-        ),
-        itemIconGap: _lerpDoubleWithDefault(
-          itemIconGap,
-          other.itemIconGap,
-          8,
-          t,
-        ),
-        dividerColor: _lerpColor(dividerColor, other.dividerColor, t),
-        dividerIndent: _lerpDoubleWithDefault(
-          dividerIndent,
-          other.dividerIndent,
-          16,
-          t,
-        ),
-        dividerThickness: _lerpDoubleWithDefault(
-          dividerThickness,
-          other.dividerThickness,
-          0.5,
-          t,
-        ),
-        footerPadding: _lerpInsetsWithDefault(
-          footerPadding,
-          other.footerPadding,
-          const EdgeInsets.only(bottom: 20),
-          t,
-        ),
+    return TDrawerThemeData(
+      width: _lerpDoubleWithDefault(width, other.width, 280, t),
+      backgroundColor: _lerpColor(backgroundColor, other.backgroundColor, t),
+      titleStyle: _lerpTextStyle(titleStyle, other.titleStyle, t),
+      titlePadding: _lerpInsetsWithDefault(
+        titlePadding,
+        other.titlePadding,
+        const EdgeInsets.fromLTRB(16, 24, 16, 8),
+        t,
       ),
-      itemIconSizeLerp: TokenDoubleLerp.between(
+      itemTextStyle: _lerpTextStyle(itemTextStyle, other.itemTextStyle, t),
+      itemBackgroundColor: _lerpColor(
+        itemBackgroundColor,
+        other.itemBackgroundColor,
+        t,
+      ),
+      itemPressedColor: _lerpColor(itemPressedColor, other.itemPressedColor, t),
+      itemPadding: _lerpInsetsWithDefault(
+        itemPadding,
+        other.itemPadding,
+        const EdgeInsets.fromLTRB(16, 16, 0, 16),
+        t,
+      ),
+      itemIconColor: _lerpColor(itemIconColor, other.itemIconColor, t),
+      itemIconSize: _lerpDoubleWithDefault(
         itemIconSize,
-        _itemIconSizeLerp,
         other.itemIconSize,
-        other._itemIconSizeLerp,
+        24,
+        t,
+      ),
+      itemIconGap: _lerpDoubleWithDefault(itemIconGap, other.itemIconGap, 8, t),
+      dividerColor: _lerpColor(dividerColor, other.dividerColor, t),
+      dividerIndent: _lerpDoubleWithDefault(
+        dividerIndent,
+        other.dividerIndent,
+        16,
+        t,
+      ),
+      dividerThickness: _lerpDoubleWithDefault(
+        dividerThickness,
+        other.dividerThickness,
+        0.5,
+        t,
+      ),
+      footerPadding: _lerpInsetsWithDefault(
+        footerPadding,
+        other.footerPadding,
+        const EdgeInsets.only(bottom: 20),
         t,
       ),
     );
@@ -261,31 +231,4 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
     }
     return TextStyle.lerp(begin, end, t);
   }
-}
-
-class _InterpolatedTDrawerThemeData extends TDrawerThemeData {
-  _InterpolatedTDrawerThemeData(
-    TDrawerThemeData data, {
-    TokenDoubleLerp? itemIconSizeLerp,
-  }) : _itemIconSizeLerp = itemIconSizeLerp,
-       super(
-         width: data.width,
-         backgroundColor: data.backgroundColor,
-         titleStyle: data.titleStyle,
-         titlePadding: data.titlePadding,
-         itemTextStyle: data.itemTextStyle,
-         itemBackgroundColor: data.itemBackgroundColor,
-         itemPressedColor: data.itemPressedColor,
-         itemPadding: data.itemPadding,
-         itemIconColor: data.itemIconColor,
-         itemIconSize: data.itemIconSize,
-         itemIconGap: data.itemIconGap,
-         dividerColor: data.dividerColor,
-         dividerIndent: data.dividerIndent,
-         dividerThickness: data.dividerThickness,
-         footerPadding: data.footerPadding,
-       );
-
-  @override
-  final TokenDoubleLerp? _itemIconSizeLerp;
 }

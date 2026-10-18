@@ -392,8 +392,6 @@ void main() {
       );
       expect(indicator.color, Colors.red);
       expect(indicator.duration, 1234);
-      expect(tester.widget<TLoading>(find.byType(TLoading)).size, 25);
-      expect(indicator.size, 25);
       final loadingText = tester.widget<TText>(
         find.descendant(
           of: find.byType(TLoading),

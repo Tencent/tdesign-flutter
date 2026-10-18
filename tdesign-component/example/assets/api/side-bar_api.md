@@ -48,7 +48,7 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | line | TSideBarVariant | - | 左侧品牌色指示线样式 | - |
-| tag | TSideBarVariant | - | 选中项为圆角标签样式，内块圆角读取全局 radiusDefault，默认6逻辑像素。 | - |
+| tag | TSideBarVariant | - | 选中项为圆角标签样式 | - |
 
 
 ### TSideBarThemeData

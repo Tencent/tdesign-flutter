@@ -64,12 +64,7 @@ class _TDrawerContent extends StatelessWidget {
               Padding(
                 padding:
                     drawerTheme?.titlePadding ??
-                    EdgeInsets.fromLTRB(
-                      context.tTheme.size6,
-                      context.tTheme.size8,
-                      context.tTheme.size6,
-                      context.tTheme.size4,
-                    ),
+                    const EdgeInsets.fromLTRB(16, 24, 16, 8),
                 child: Align(
                   alignment: AlignmentDirectional.centerStart,
                   child: Theme(
@@ -89,54 +84,43 @@ class _TDrawerContent extends StatelessWidget {
                 ),
               ),
             Expanded(
-              child: TInternalScrollScope(
-                child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: items?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    final item = items![index];
-                    return _DrawerMenuItem(
-                      item: item,
-                      onTap: onItemClick == null
-                          ? null
-                          : () => onItemClick!(index, item),
-                      enableFeedback: enableFeedback,
-                      textStyle: _itemTextStyle(context, drawerTheme),
-                      backgroundColor:
-                          drawerTheme?.itemBackgroundColor ??
-                          effectiveBackgroundColor,
-                      pressedColor:
-                          drawerTheme?.itemPressedColor ??
-                          context.tTheme.bgColorSecondaryContainer,
-                      padding:
-                          drawerTheme?.itemPadding ??
-                          EdgeInsets.fromLTRB(
-                            context.tTheme.size6,
-                            context.tTheme.size6,
-                            0,
-                            context.tTheme.size6,
-                          ),
-                      iconColor:
-                          drawerTheme?.itemIconColor ??
-                          context.tTheme.textColorPrimary,
-                      iconSize:
-                          drawerTheme?.resolveItemIconSize(
-                            context.tTheme.size8,
-                          ) ??
-                          context.tTheme.size8,
-                      iconGap: drawerTheme?.itemIconGap ?? context.tTheme.size4,
-                      dividerColor:
-                          drawerTheme?.dividerColor ??
-                          context.tTheme.componentStroke,
-                      dividerIndent: drawerTheme?.dividerIndent ?? 16,
-                      dividerThickness: drawerTheme?.dividerThickness ?? 0.5,
-                      showDivider:
-                          showDivider &&
-                          (index < (items?.length ?? 0) - 1 || showLastDivider),
-                    );
-                  },
-                ),
-              ),
+              child: TInternalScrollScope(child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: items?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final item = items![index];
+                  return _DrawerMenuItem(
+                    item: item,
+                    onTap: onItemClick == null
+                        ? null
+                        : () => onItemClick!(index, item),
+                    enableFeedback: enableFeedback,
+                    textStyle: _itemTextStyle(context, drawerTheme),
+                    backgroundColor:
+                        drawerTheme?.itemBackgroundColor ??
+                        effectiveBackgroundColor,
+                    pressedColor:
+                        drawerTheme?.itemPressedColor ??
+                        context.tTheme.bgColorSecondaryContainer,
+                    padding:
+                        drawerTheme?.itemPadding ??
+                        const EdgeInsets.fromLTRB(16, 16, 0, 16),
+                    iconColor:
+                        drawerTheme?.itemIconColor ??
+                        context.tTheme.textColorPrimary,
+                    iconSize: drawerTheme?.itemIconSize ?? 24,
+                    iconGap: drawerTheme?.itemIconGap ?? 8,
+                    dividerColor:
+                        drawerTheme?.dividerColor ??
+                        context.tTheme.componentStroke,
+                    dividerIndent: drawerTheme?.dividerIndent ?? 16,
+                    dividerThickness: drawerTheme?.dividerThickness ?? 0.5,
+                    showDivider:
+                        showDivider &&
+                        (index < (items?.length ?? 0) - 1 || showLastDivider),
+                  );
+                },
+              )),
             ),
             if (footer != null)
               Container(

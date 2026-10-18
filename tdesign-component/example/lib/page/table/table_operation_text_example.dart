@@ -26,20 +26,8 @@ class TableOperationTextExample extends StatelessWidget {
           cellBuilder: (context, _, __) => Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
-                child: Text(
-                  '修改',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: context.tTheme.brandColor),
-                ),
-              ),
-              Flexible(
-                child: Text(
-                  '通过',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: context.tTheme.brandColor),
-                ),
-              ),
+              Text('修改', style: TextStyle(color: context.tTheme.brandColor)),
+              Text('通过', style: TextStyle(color: context.tTheme.brandColor)),
             ],
           ),
         ),

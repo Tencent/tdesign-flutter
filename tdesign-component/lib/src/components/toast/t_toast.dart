@@ -9,7 +9,6 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_overlay_themes.dart';
 import '../../theme/t_radius.dart';
-import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../loading/t_circle_indicator.dart';
@@ -670,11 +669,7 @@ class _TIconTextToast extends StatelessWidget {
       ),
       child: Container(
         padding:
-            toastTheme.padding ??
-            EdgeInsets.symmetric(
-              horizontal: theme.size8,
-              vertical: theme.size6,
-            ),
+            toastTheme.padding ?? const EdgeInsets.fromLTRB(22, 14, 22, 14),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
@@ -687,7 +682,7 @@ class _TIconTextToast extends StatelessWidget {
           children: [
             TInternalIcon(
               iconData,
-              size: toastTheme.resolveIconSize(context.tTheme.size8),
+              size: toastTheme.iconSize ?? 24,
               color: toastTheme.iconColor ?? theme.textColorAnti,
             ),
             const SizedBox(width: 8),
@@ -718,7 +713,7 @@ class _TIconTextToast extends StatelessWidget {
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: toastTheme.maxWidth ?? 136),
       child: Container(
-        padding: toastTheme.padding ?? EdgeInsets.all(context.tTheme.size8),
+        padding: toastTheme.padding ?? const EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
@@ -731,7 +726,7 @@ class _TIconTextToast extends StatelessWidget {
           children: [
             TInternalIcon(
               iconData,
-              size: toastTheme.resolveIconSize(context.tTheme.size10),
+              size: toastTheme.iconSize ?? 32,
               color: toastTheme.iconColor ?? theme.textColorAnti,
             ),
             const SizedBox(height: 8),
@@ -780,8 +775,7 @@ class _TToastLoading extends StatelessWidget {
       ),
       child: Container(
         padding:
-            toastTheme.padding ??
-            EdgeInsets.symmetric(horizontal: context.tTheme.size8),
+            toastTheme.padding ?? const EdgeInsets.symmetric(horizontal: 24),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
@@ -794,7 +788,7 @@ class _TToastLoading extends StatelessWidget {
           children: [
             TCircleIndicator(
               color: toastTheme.iconColor ?? theme.textColorAnti,
-              size: toastTheme.resolveIconSize(context.tTheme.size10),
+              size: toastTheme.iconSize ?? 32,
               lineWidth: 4,
             ),
             const SizedBox(height: 8),
@@ -831,7 +825,7 @@ class _TToastLoadingWithoutText extends StatelessWidget {
     return ConstrainedBox(
       constraints: const BoxConstraints(minWidth: 80, minHeight: 80),
       child: Container(
-        padding: toastTheme.padding ?? EdgeInsets.all(context.tTheme.size8),
+        padding: toastTheme.padding ?? const EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
@@ -840,7 +834,7 @@ class _TToastLoadingWithoutText extends StatelessWidget {
         ),
         child: TCircleIndicator(
           color: toastTheme.iconColor ?? theme.textColorAnti,
-          size: toastTheme.resolveIconSize(context.tTheme.size10),
+          size: toastTheme.iconSize ?? 32,
           lineWidth: 4,
         ),
       ),
@@ -875,11 +869,7 @@ class _TTextToast extends StatelessWidget {
           constraints ?? BoxConstraints(maxWidth: toastTheme.maxWidth ?? 185),
       child: Container(
         padding:
-            toastTheme.padding ??
-            EdgeInsets.symmetric(
-              horizontal: theme.size8,
-              vertical: theme.size6,
-            ),
+            toastTheme.padding ?? const EdgeInsets.fromLTRB(22, 14, 22, 14),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(

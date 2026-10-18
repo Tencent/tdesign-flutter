@@ -5,7 +5,6 @@ import 'package:meta/meta.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
-import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import 't_badge_defaults.dart';
 import 't_badge_theme_data.dart';
@@ -38,7 +37,9 @@ class TBadgeResolvedStyle {
     final token = context.tTheme;
     final backgroundColor = tBadgeTheme?.backgroundColor ?? token.errorColor;
     final textColor = tBadgeTheme?.textStyle?.color ?? token.textColorAnti;
-    final smallSize = tBadgeTheme?.resolveDotSize(token.size4) ?? token.size4;
+    final smallSize =
+        tBadgeTheme?.resolveDotSize(TBadgeDefaults.dotSize) ??
+        TBadgeDefaults.dotSize;
     final font = large ? token.fontMarkSmall : token.fontMarkExtraSmall;
     final themedTextStyle = tBadgeTheme?.textStyle;
     final resolvedTextStyle = TextStyle(

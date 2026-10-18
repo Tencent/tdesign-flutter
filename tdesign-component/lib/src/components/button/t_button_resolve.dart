@@ -5,7 +5,6 @@ import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
-import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_resolve.dart';
 import 't_button_theme_data.dart';
@@ -84,7 +83,6 @@ class TButtonResolve {
       hasChild: hasChild,
       effectiveShape: shape,
       tapTargetSize: tapTargetSize,
-      theme: tTheme,
       buttonTheme: Theme.of(context).extension<TButtonThemeData>(),
     );
 
@@ -441,7 +439,6 @@ class TButtonResolve {
     required bool hasChild,
     required TButtonShape effectiveShape,
     required MaterialTapTargetSize tapTargetSize,
-    required TThemeData theme,
     TButtonThemeData? buttonTheme,
   }) {
     final isSquareOrCircle =
@@ -450,7 +447,7 @@ class TButtonResolve {
     // square/circle 纯 icon 按钮：等宽高 + 等边 padding
     final onlyIcon = hasIcon && !hasChild;
 
-    final metrics = sizeMetrics(size, theme, buttonTheme: buttonTheme);
+    final metrics = sizeMetrics(size, null, buttonTheme: buttonTheme);
     final paddingValue = onlyIcon
         ? metrics.iconOnlyPadding
         : metrics.horizontalPadding;
@@ -482,26 +479,25 @@ class TButtonResolve {
     TThemeData? theme, {
     TButtonThemeData? buttonTheme,
   }) {
-    final token = theme ?? TThemeData.defaultData();
     final font = switch (size) {
-      TButtonSize.large || TButtonSize.medium => token.fontMarkLarge,
-      TButtonSize.small || TButtonSize.extraSmall => token.fontMarkMedium,
+      TButtonSize.large || TButtonSize.medium => theme?.fontMarkLarge,
+      TButtonSize.small || TButtonSize.extraSmall => theme?.fontMarkMedium,
     };
     final height = switch (size) {
-      TButtonSize.large => token.size13,
-      TButtonSize.medium => token.size12,
-      TButtonSize.small => token.size10,
-      TButtonSize.extraSmall => token.size9,
+      TButtonSize.large => 48.0,
+      TButtonSize.medium => 40.0,
+      TButtonSize.small => 32.0,
+      TButtonSize.extraSmall => 28.0,
     };
     final horizontalPadding = switch (size) {
-      TButtonSize.large => token.size7,
-      TButtonSize.medium => token.size6,
-      TButtonSize.small => token.size5,
-      TButtonSize.extraSmall => token.size4,
+      TButtonSize.large => 20.0,
+      TButtonSize.medium => 16.0,
+      TButtonSize.small => 12.0,
+      TButtonSize.extraSmall => 8.0,
     };
     final iconSize = switch (size) {
-      TButtonSize.large => token.size8,
-      TButtonSize.medium => token.size7,
+      TButtonSize.large => 24.0,
+      TButtonSize.medium => 20.0,
       TButtonSize.small || TButtonSize.extraSmall => 18.0,
     };
     final effectiveIconSize =
@@ -516,10 +512,12 @@ class TButtonResolve {
     return TButtonSizeMetrics(
       height: height,
       horizontalPadding: horizontalPadding,
-      verticalPadding: ((height - fontSize * fontHeight) / 2).clamp(
-        0,
-        double.infinity,
-      ),
+      verticalPadding: switch (size) {
+        TButtonSize.large => 12,
+        TButtonSize.medium => 8,
+        TButtonSize.small => 5,
+        TButtonSize.extraSmall => 3,
+      },
       iconOnlyPadding: ((height - effectiveIconSize) / 2).clamp(
         0,
         double.infinity,

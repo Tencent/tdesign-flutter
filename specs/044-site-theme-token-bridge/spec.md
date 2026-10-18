@@ -13,7 +13,7 @@ Flutter 官网的主题控制器会把亮色、暗色和公共尺寸样式写入
 
 ## 非目标
 
-- 不删除或破坏既有 `TThemeData` API，不改变默认视觉和组件 ThemeExtension 优先级；尺寸补齐允许新增可选 sizeMap 与尺寸 getter。
+- 不改变 `TThemeData` 的公开 API、默认值或组件 ThemeExtension 优先级。
 - 不把 Web 组件专属尺寸 Token 机械扩展为 Flutter 组件公开 API。
 - 不修改 Golden 基线；默认控制器配置下 Flutter 默认视觉应保持不变。
 
@@ -84,10 +84,6 @@ Flutter 官网的主题控制器会把亮色、暗色和公共尺寸样式写入
 - 仅接收同源父窗口消息；监听注册完成后发送 ready。保留现有 CSS 与旧 Token 消息协议，非法消息不更新主题。
 - 官网或用户新设置的模式优先于尚未完成的本地偏好读取；Provider 释放后异步初始化不再通知。
 
-## 详情页映射补齐（2026-10-16）
+## 2026-10-18拆分范围
 
-- 独立 mobile 字体层级优先使用显式字号（title-extraLarge、body-extraSmall、mark-large 等），缺失时才沿用旧 Web 派生别名。
-- 字体族 CSS `--td-font-family` / `--td-font-family-medium` 转为同名 Flutter fontFamily 分组，保留引号内逗号和备用字体；空值、CSS 全局关键字不覆盖默认值。
-- 新增可选 sizeMap 与 size1..16 全局尺寸刻度，桥接 size-1..16。按钮四档高度读取 size13/12/10/9，横向 padding 读取 size7/6/5/4；纵向 padding 从高度与实际行高推导，纯图标 padding 从高度与图标尺寸推导。默认视觉不变，实例 ButtonStyle 保持最高优先级。
-- 控制器的组件专属 Web padding/height 名称不新增为 Flutter 公共 API。尺寸面板分别驱动尺寸刻度和现有七个 spacer 消费者；组件专属选择器不机械增加公开字段。
-- 回归验证必须覆盖实际 ThemeData 和组件消费，不仅验证转换 JSON。
+现有PR只补齐转换/传递能力与不改变原默认的组件字段。Button等新增全局消费者及默认外观调整移入独立breaking PR，拆分契约和验收见[078](../078-theme-pr-split/spec.md)。

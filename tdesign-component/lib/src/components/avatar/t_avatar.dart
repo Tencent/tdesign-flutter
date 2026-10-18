@@ -48,8 +48,8 @@ class TAvatar extends StatelessWidget {
         TAvatarSize.medium;
     final resolvedShape = shape ?? TAvatarShape.circle;
     final dimension =
-        theme?.resolveDimension(resolvedSize, token: context.tTheme) ??
-        TAvatarDefaults.dimensionFor(resolvedSize, token: context.tTheme);
+        theme?.resolveDimension(resolvedSize) ??
+        TAvatarDefaults.dimensionFor(resolvedSize);
     final radius = resolvedShape == TAvatarShape.circle
         ? theme?.resolveCircleBorderRadius(context.tTheme.radiusCircle) ??
               context.tTheme.radiusCircle
@@ -59,15 +59,14 @@ class TAvatar extends StatelessWidget {
         theme?.foregroundColor ?? context.tTheme.brandColor;
     final resolvedTextStyle = TAvatarDefaults.textStyleFor(
       resolvedSize,
-      token: context.tTheme,
     ).copyWith(color: resolvedForegroundColor);
     final content =
         child ??
         TInternalIcon(
           TIcons.user,
           size:
-              theme?.resolveIconSize(resolvedSize, token: context.tTheme) ??
-              TAvatarDefaults.iconSizeFor(resolvedSize, token: context.tTheme),
+              theme?.resolveIconSize(resolvedSize) ??
+              TAvatarDefaults.iconSizeFor(resolvedSize),
           color: resolvedForegroundColor,
         );
 
@@ -173,11 +172,10 @@ class TAvatarGroup extends StatelessWidget {
     final dimensions = visible.map((child) {
       final size = child is TAvatar ? child.size ?? groupSize : groupSize;
       final requested =
-          theme?.resolveDimension(size, token: context.tTheme) ??
-          TAvatarDefaults.dimensionFor(size, token: context.tTheme);
+          theme?.resolveDimension(size) ?? TAvatarDefaults.dimensionFor(size);
       return requested.isFinite && requested > 0
           ? requested
-          : TAvatarDefaults.dimensionFor(size, token: context.tTheme);
+          : TAvatarDefaults.dimensionFor(size);
     }).toList();
     final resolvedDimension = dimensions.reduce((a, b) => a > b ? a : b);
     final requestedOverlap =

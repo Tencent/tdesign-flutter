@@ -111,7 +111,7 @@ TabBar 组件 ThemeExtension
 | dividerColor | Color? | - | 分割线颜色。 | 否 |
 | dividerHeight | double? | - | 分割线高度；小于等于 0 时不展示。 | 否 |
 | indicator | Decoration? | - | 组件主题指示器；非空时覆盖内置形态指示器。 为空时 Line 使用 TDesign 默认指示器，Tag 与 Card 不展示指示器。 | 否 |
-| labelPadding | EdgeInsetsGeometry? | - | 标签外层内容边距。 tag 形态内框另有左右 spacer2 Token（默认各 16 逻辑像素）的内边距。 | 否 |
+| labelPadding | EdgeInsetsGeometry? | - | 标签内容边距。 | 否 |
 | labelStyle | TextStyle? | - | 选中标签文字样式。 | 否 |
 | selectedTagBackgroundColor | Color? | - | Tag 形态下的选中背景色。 | 否 |
 | tagBackgroundColor | Color? | - | Tag 形态下的默认背景色。 | 否 |

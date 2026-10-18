@@ -35,13 +35,13 @@ class TButtonThemeData extends ThemeExtension<TButtonThemeData> {
 
   /// 大尺寸按钮的图标大小，单位为逻辑像素。
   ///
-  /// 未设置时使用 size8（默认 24dp）；实例 ButtonStyle.iconSize 优先。
+  /// 未设置时使用独立默认 24dp；实例 ButtonStyle.iconSize 优先。
   /// 必须是有限非负数；仅改变内置图标及纯图标按钮的默认居中间距，不改变按钮高度。
   final double? largeIconSize;
 
   /// 中尺寸按钮的图标大小，单位为逻辑像素。
   ///
-  /// 未设置时使用 size7（默认 20dp）；实例 ButtonStyle.iconSize 优先。
+  /// 未设置时使用独立默认 20dp；实例 ButtonStyle.iconSize 优先。
   /// 必须是有限非负数；仅改变内置图标及纯图标按钮的默认居中间距，不改变按钮高度。
   final double? mediumIconSize;
 

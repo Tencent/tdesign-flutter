@@ -28,46 +28,6 @@ void main() {
     );
   }
 
-  testWidgets('设计高度 token 独立于轨道宽度，实际绘制和拖动同步更新', (tester) async {
-    final tokens = ValueNotifier(TThemeData.defaultData());
-    bool? changed;
-    await tester.pumpWidget(
-      ValueListenableBuilder<TThemeData>(
-        valueListenable: tokens,
-        builder: (context, value, child) => MaterialApp(
-          themeAnimationDuration: Duration.zero,
-          theme: TThemeBuilder.light(value),
-          home: Scaffold(
-            body: Center(
-              child: TSwitch(
-                value: true,
-                size: TSwitchSize.medium,
-                onChanged: (value) => changed = value,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-    final original = tester.getRect(find.byType(TCupertinoSwitch));
-    expect(original.size, const Size(45, 28));
-    tokens.value = tokens.value.copyWith(sizeMap: {'size9': 36, 'size8': 81});
-    await tester.pumpAndSettle();
-    final updated = tester.getRect(find.byType(TCupertinoSwitch));
-    expect(updated.width, closeTo(original.width, 0.001));
-    expect(updated.height, closeTo(36, 0.001));
-    expect(tester.getSize(find.byType(TSwitch)), const Size(45, 36));
-    await tester.drag(find.byType(TSwitch), const Offset(-50, 0));
-    await tester.pumpAndSettle();
-    expect(changed, false);
-    tokens.value = tokens.value.copyWith(sizeMap: {'size9': 0});
-    await tester.pumpAndSettle();
-    expect(tester.getSize(find.byType(TSwitch)).height, 0);
-    expect(tester.takeException(), isNull);
-    await tester.pumpWidget(const SizedBox());
-    tokens.dispose();
-  });
-
   group('TSwitch v1 controlled behavior', () {
     testWidgets('renders controlled values and reports the next value', (
       tester,

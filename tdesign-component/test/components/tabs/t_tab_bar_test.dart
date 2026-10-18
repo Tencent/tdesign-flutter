@@ -298,7 +298,7 @@ void main() {
         final size = tester.getSize(find.byWidget(container));
         expect(size.height, 32);
         expect(size.width, greaterThan(80));
-        expect(container.padding, const EdgeInsets.symmetric(horizontal: 16));
+        expect(container.padding, const EdgeInsets.symmetric(horizontal: 8));
       }
     });
 
