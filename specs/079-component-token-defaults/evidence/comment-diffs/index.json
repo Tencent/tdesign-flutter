@@ -1,0 +1,258 @@
+{
+  "base": "f5d8df2f2bc43224406319b4944930454458930c",
+  "head": "8e8666c0bc34e394a47c87b7c191d1fb5888deea",
+  "entries": [
+    {
+      "label": "BackTop",
+      "file": "01-backtop_state_matrix_light-comparison.png",
+      "path": "tdesign-component/test/components/backtop/goldens/backtop_state_matrix_light.png",
+      "bbox": [
+        25,
+        0,
+        296,
+        160
+      ],
+      "diffPixels": 6619,
+      "crop": [
+        9,
+        0,
+        296,
+        160
+      ]
+    },
+    {
+      "label": "Badge",
+      "file": "02-t_badge_light-comparison.png",
+      "path": "tdesign-component/test/components/badge/goldens/t_badge_light.png",
+      "bbox": [
+        252,
+        151,
+        268,
+        167
+      ],
+      "diffPixels": 20,
+      "crop": [
+        236,
+        135,
+        284,
+        183
+      ]
+    },
+    {
+      "label": "DropdownMenu",
+      "file": "03-dropdown_menu_page_light-comparison.png",
+      "path": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_page_light.png",
+      "bbox": [
+        21,
+        277,
+        348,
+        556
+      ],
+      "diffPixels": 4158,
+      "crop": [
+        5,
+        261,
+        364,
+        572
+      ]
+    },
+    {
+      "label": "Refresh",
+      "file": "04-pull_down_refresh_basic_post_action_light-comparison.png",
+      "path": "tdesign-component/example/test/refresh/goldens/pull_down_refresh_basic_post_action_light.png",
+      "bbox": [
+        143,
+        276,
+        232,
+        302
+      ],
+      "diffPixels": 585,
+      "crop": [
+        127,
+        260,
+        248,
+        318
+      ]
+    },
+    {
+      "label": "SideBar",
+      "file": "05-sidebar_tag_selected_item_light-comparison.png",
+      "path": "tdesign-component/example/test/sidebar/goldens/sidebar_tag_selected_item_light.png",
+      "bbox": [
+        8,
+        224,
+        95,
+        264
+      ],
+      "diffPixels": 86,
+      "crop": [
+        0,
+        208,
+        111,
+        280
+      ]
+    },
+    {
+      "label": "Table",
+      "file": "06-t_table_api_light-comparison.png",
+      "path": "tdesign-component/test/components/table/goldens/t_table_api_light.png",
+      "bbox": [
+        29,
+        60,
+        359,
+        513
+      ],
+      "diffPixels": 7466,
+      "crop": [
+        13,
+        44,
+        375,
+        529
+      ]
+    },
+    {
+      "label": "Toast",
+      "file": "07-toast_multiple_text_opened_light-comparison.png",
+      "path": "tdesign-component/example/test/toast/goldens/toast_multiple_text_opened_light.png",
+      "bbox": [
+        94,
+        656,
+        281,
+        755
+      ],
+      "diffPixels": 4292,
+      "crop": [
+        78,
+        640,
+        297,
+        771
+      ]
+    },
+    {
+      "label": "Link",
+      "file": "08-link_feedback_light-comparison.png",
+      "path": "tdesign-component/example/test/link/goldens/link_feedback_light.png",
+      "bbox": [
+        128,
+        518,
+        247,
+        573
+      ],
+      "diffPixels": 1004,
+      "crop": [
+        112,
+        502,
+        263,
+        589
+      ]
+    },
+    {
+      "label": "NavBar",
+      "file": "09-navbar_back_toast_light-comparison.png",
+      "path": "tdesign-component/example/test/navbar/goldens/navbar_back_toast_light.png",
+      "bbox": [
+        128,
+        338,
+        247,
+        393
+      ],
+      "diffPixels": 1004,
+      "crop": [
+        112,
+        322,
+        263,
+        409
+      ]
+    },
+    {
+      "label": "NoticeBar",
+      "file": "10-notice_bar_close_post_action_light-comparison.png",
+      "path": "tdesign-component/example/test/notice_bar/goldens/notice_bar_close_post_action_light.png",
+      "bbox": [
+        114,
+        683,
+        261,
+        737
+      ],
+      "diffPixels": 903,
+      "crop": [
+        98,
+        667,
+        277,
+        753
+      ]
+    },
+    {
+      "label": "Popover",
+      "file": "11-popover_custom_option_1_post_action_light-comparison.png",
+      "path": "tdesign-component/example/test/popover/goldens/popover_custom_option_1_post_action_light.png",
+      "bbox": [
+        117,
+        338,
+        258,
+        393
+      ],
+      "diffPixels": 1138,
+      "crop": [
+        101,
+        322,
+        274,
+        409
+      ]
+    },
+    {
+      "label": "TabBar",
+      "file": "12-tab_bar_text_toast_light-comparison.png",
+      "path": "tdesign-component/example/test/tab_bar/goldens/tab_bar_text_toast_light.png",
+      "bbox": [
+        142,
+        338,
+        233,
+        393
+      ],
+      "diffPixels": 836,
+      "crop": [
+        126,
+        322,
+        249,
+        409
+      ]
+    },
+    {
+      "label": "Badge 字体缩放场景",
+      "file": "13-centering_light_1.0-comparison.png",
+      "path": "tdesign-component/test/components/text/goldens/centering_light_1.0.png",
+      "bbox": [
+        68,
+        2197,
+        92,
+        2395
+      ],
+      "diffPixels": 110,
+      "crop": [
+        52,
+        2181,
+        108,
+        2411
+      ]
+    },
+    {
+      "label": "BackTop 大字号组合场景",
+      "file": "14-remaining_navigation_light_3_0-comparison.png",
+      "path": "tdesign-component/test/components/text/goldens/remaining_navigation_light_3_0.png",
+      "bbox": [
+        0,
+        12,
+        375,
+        691
+      ],
+      "diffPixels": 16578,
+      "crop": [
+        0,
+        0,
+        375,
+        691
+      ]
+    }
+  ]
+}
