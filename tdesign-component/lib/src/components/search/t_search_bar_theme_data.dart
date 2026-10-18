@@ -119,10 +119,10 @@ class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
       contentPaddingTransition: contentPadding == null
           ? _contentPaddingTransition
           : null,
-      clearIconSizeTransition: clearIconTheme?.size == null
+      clearIconSizeTransition: clearIconTheme == null
           ? _clearIconSizeTransition
           : null,
-      searchIconSizeTransition: searchIconTheme?.size == null
+      searchIconSizeTransition: searchIconTheme == null
           ? _searchIconSizeTransition
           : null,
     );

@@ -479,6 +479,13 @@ void tokenGeometryTransitions() {
       expect(absent.lerp(configured, 0).resolveClearIconSize(48), 48);
       expect(absent.lerp(configured, 1).resolveClearIconSize(48), 24);
       final midway = absent.lerp(configured, 0.5);
+      // Replacing IconThemeData replaces its unspecified size with the token default.
+      expect(
+        midway
+            .copyWith(clearIconTheme: const IconThemeData(color: Colors.red))
+            .resolveClearIconSize(48),
+        48,
+      );
       expect(midway.resolveClearIconSize(48), 36);
       expect(configured.lerp(absent, 0.5).resolveClearIconSize(48), 36);
       expect(midway.copyWith().resolveClearIconSize(48), 36);
@@ -502,6 +509,13 @@ void tokenGeometryTransitions() {
       expect(absent.lerp(configured, 0).resolveSearchIconSize(48), 48);
       expect(absent.lerp(configured, 1).resolveSearchIconSize(48), 24);
       final midway = absent.lerp(configured, 0.5);
+      // Replacing IconThemeData replaces its unspecified size with the token default.
+      expect(
+        midway
+            .copyWith(searchIconTheme: const IconThemeData(color: Colors.red))
+            .resolveSearchIconSize(48),
+        48,
+      );
       expect(midway.resolveSearchIconSize(48), 36);
       expect(configured.lerp(absent, 0.5).resolveSearchIconSize(48), 36);
       expect(midway.copyWith().resolveSearchIconSize(48), 36);

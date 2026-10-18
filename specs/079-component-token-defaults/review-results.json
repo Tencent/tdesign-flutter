@@ -2,7 +2,7 @@
   "reviewBase": "b374adc29503907bd51724c202d14eb3c8b44ab0",
   "foundation": "590df49a6209d31978e70e2eb4ea26101c605a6f",
   "develop": "3bc89d28e96d580e0893526c627dc38f16b16d82",
-  "validatedSourceDiffSha256": "0264ec8c96a308c8e30b274faaf8bdfe2c24620eb2aed8781d5072f650efbc51",
+  "validatedSourceDiffSha256": "7479b1f0bd93ca11e65ebcb6568b348f4c19a03b4c583ea201a746f06f0c22d0",
   "sources": {
     "tdesign-component/lib/src/components/backtop/t_backtop.dart": "ba32c6b9aeca9e465543f619f5baceb4cf79c5aec770298b5f2aa1bae4a3cb25",
     "tdesign-component/lib/src/components/backtop/t_backtop_theme_data.dart": "f4260c8137f66561ee15210f762fa39ed3bb7ff4c2a1e1f334d302fa499f438a",
@@ -11,7 +11,7 @@
     "tdesign-component/lib/src/components/drawer/t_drawer_content.dart": "8b6584fb66ed7987dd7656522f3fa27cddd7cda27ca6f2ebc291b0825bf7136c",
     "tdesign-component/lib/src/components/drawer/t_drawer_theme_data.dart": "705e43791c9b69786f02f666cd831e1489164e3170db782a2208305b7a939c26",
     "tdesign-component/lib/src/components/search/t_search_bar.dart": "995c5952855714983783157dccc93963f90017aa7872d482e18740866b4246f3",
-    "tdesign-component/lib/src/components/search/t_search_bar_theme_data.dart": "61688f8123cb39a0101819a72329e0f0809bf3da29fb07d467057d4792d50f73",
+    "tdesign-component/lib/src/components/search/t_search_bar_theme_data.dart": "d478369e4f791b5ddedcdcde18c66618236262438eda7c3c6e00c6bf66078258",
     "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart": "9128423f202dd11067597f651b68af8d461ef4fc0122ffc69a39d8e389aacba6",
     "tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart": "e171515dcc1870b7b99b0017ffbb12d8f075c6ff4ad6553e5538de7bc0e78ba6",
     "tdesign-component/lib/src/components/table/t_table.dart": "008d8c9c80a7f9eb82fb86542020113be8fe360fd11a92a30320f879549c383e",
@@ -19,7 +19,7 @@
     "tdesign-component/lib/src/components/toast/t_toast.dart": "91ef58e3a0095dcba1a0cf44425f650afaeea1949e75601db7a24c377486c9e2",
     "tdesign-component/lib/src/components/toast/t_toast_theme_data.dart": "7b40fd20eb1e9e29725934740d40267acdae992ed10f43257bf963735083d94d",
     "tdesign-component/lib/src/theme/t_token_double_lerp.dart": "3f0078d60a0ba85d6a5e8f5aa1725528c8046fbc08435fe96fa7c279af865691",
-    "tdesign-component/test/theme/token_default_transition_test.dart": "15e771cf860266e9ec5e0ca21c0bc70735b09251b8b584fe0949a2ab5552b375",
+    "tdesign-component/test/theme/token_default_transition_test.dart": "0db24f438c36daeb039d296e0803096dc5ef999c826f079bb73f214d7e2d8f6b",
     "tdesign-component/tool/component_test_manifest.dart": "217826c858c5f1ab13f6a2099b494ae1a6169a44a64f2b540f6d922c0050e138"
   },
   "newRegressionTests": 17,
@@ -32,7 +32,7 @@
         "backtop": "258/258 = 100.00%",
         "cell": "226/226 = 100.00%",
         "drawer": "282/288 = 97.92%",
-        "search": "282/287 = 98.26%",
+        "search": "280/285 = 98.25%",
         "tab_bar": "569/577 = 98.61%",
         "table": "455/455 = 100.00%",
         "toast": "276/279 = 98.92%"
@@ -40,7 +40,8 @@
       "analyze": "No issues found",
       "api": "57 components / 370 declarations / 0 issues",
       "snippets": "check passed; example source unchanged by follow-up",
-      "backtopFinalLayout": "512 core tests on final source; 3.32 full pages on final source, latest affected demo and 2 CSS consumers rerun after final BackTop change"
+      "backtopFinalLayout": "512 core tests on final source; 3.32 full pages on final source, latest affected demo and 2 CSS consumers rerun after final BackTop change",
+      "followupCopySemantics": "Final 512-test core + all eight coverage groups + strict analysis and API audit rerun after IconThemeData replacement correction."
     },
     "3.47.7": {
       "components": 512,
@@ -50,7 +51,7 @@
         "backtop": "258/258 = 100.00%",
         "cell": "226/226 = 100.00%",
         "drawer": "281/288 = 97.57%",
-        "search": "282/287 = 98.26%",
+        "search": "280/285 = 98.25%",
         "tab_bar": "568/577 = 98.44%",
         "table": "455/455 = 100.00%",
         "toast": "276/279 = 98.92%"
@@ -58,7 +59,8 @@
       "analyze": "No issues found",
       "api": "57 components / 370 declarations / 0 issues",
       "snippets": "check passed; example source unchanged by follow-up",
-      "backtopFinalLayout": "512 core tests on final source; 3.32 full pages on final source, latest affected demo and 2 CSS consumers rerun after final BackTop change"
+      "backtopFinalLayout": "512 core tests on final source; 3.32 full pages on final source, latest affected demo and 2 CSS consumers rerun after final BackTop change",
+      "followupCopySemantics": "Final 512-test core + all eight coverage groups + strict analysis and API audit rerun after IconThemeData replacement correction."
     }
   },
   "visual": {
@@ -90,5 +92,6 @@
     "analyze": "flutter analyze --fatal-infos",
     "api": "dart run tool/audit_api_docs.dart",
     "visual": "actual visualTestArguments for approved 16 plus affected suites; --update-goldens absent"
-  }
+  },
+  "followup": "Preserve whole IconThemeData replacement semantics: an omitted size in a replacement object falls back to the current token; 2 extra assertions in the existing 17 regressions."
 }
