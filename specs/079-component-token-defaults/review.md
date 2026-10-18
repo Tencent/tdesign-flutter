@@ -22,7 +22,7 @@
 
 18dp 的小/超小 Button 图标、Badge 气泡圆角与 Tag 分档 padding 保持组件配置，不扩大站点控制器。Search 前缀自身显式 20dp，外层 IconTheme 的 size 只参与既有主题/布局回退，不声称可独立改变前缀图标。
 
-98 张 PNG 的 afterSha256 全部匹配，文件集合与 PR 的 Golden 变更集合完全一致。原因归类：BackTop 10、Badge 10、Dropdown 16、Toast 36、Refresh 4、SideBar 4、Table 18。Cell/Tabs 的默认差异由实际布局断言覆盖；这 98 张图片不是 57 页全部视觉场景的证明。
+在 ca5c7c61 检查点，98 张 PNG 的 afterSha256 全部匹配当时 PR 的 Golden 变更集合。原因归类：BackTop 10、Badge 10、Dropdown 16、Toast 36、Refresh 4、SideBar 4、Table 18。Cell/Tabs 的默认差异由实际布局断言覆盖；这 98 张图片不是 57 页全部视觉场景的证明。
 
 ## 发现且修复：新增全局默认的 nullable 插值
 
@@ -36,12 +36,20 @@
 
 #1174 会改变默认外观及自定义全局主题的联动范围，需以 breaking 发布。Cell/Table/BackTop/Dropdown/Toast 有直接显式覆盖；Badge square、SideBar 内块、Tabs 内框没有独立组件字段，局部全局 token 也会影响其他消费者；Refresh 内部 25 无公开单属性旧 24 的恢复入口。
 
-完整远端 CI 只对 develop 目标运行。#1174 目前基于 #1172，现有检查不等于双版本功能/构建/视觉 CI；必须 #1172 合入后切换 base，验证最终 head 和合并结果，再决定 #1174 合入。不能使用 af58482e 的历史全绿替代本次修正后的验证。
+当前目标已是 develop。登记补正 head `ca5c7c61` 的完整远端 test-build（run 39141947514）通过；其结果仅属于该历史 head。本轮补充Golden后须验证新 head，不沿用旧检查作为当前通过证据。
 
-### 堆叠 PR 的合入保护
+### 当前基础与合入保护
 
-#1174 当前目标为 #1172 分支，不可直接合入，否则会把 breaking 改动带回原 PR。先合入 #1172 后检查其旧 head 590df49a 是否仍为 develop 的祖先：普通 merge 保留祖先时可正常改 base；若 #1172 经 squash/rebase 合并导致祖先关系丢失，须将 #1174 在 590df49a 之后的独有提交重新整理到最新 develop（处理冲突并重新验证），再核对最终 diff 只有 breaking 增量，执行新 head 完整 CI。仅切 base 不能保证差异范围正确。
+#1172 已以 squash 提交 `f5d8df2f` 合入 develop；#1174 已将原基础之后的5个独有提交移植到 develop。原重放检查点的整树和 breaking 增量均一致，证据见 rebase-results.json。当前目标分支为 develop，无须再合入旧基础分支。每次新增提交均以新 head 的完整 CI 和 Reviewer 审批为合入条件，历史成功不代替新 head 检查。
 
-## 最终本地检查结果
+## 登记补正前的本地检查结果（历史检查点）
 
-双SDK各512组件测试、157页面测试、八组>95%覆盖率、严格分析及API审计通过；17项新增回归通过。25组Linux Flutter3.32无更新视觉比较全部通过，覆盖原16组已审阅基线的所有归属套件及本轮修改影响的套件。98张PNG哈希仍与批准记录一致；比较器与容差未修改。详见review-results.json的源码指纹、资源指纹与分项结果。这是当前源码的本地证据，不是#1174完整远端CI。
+双SDK各512组件测试、157页面测试、八组>95%覆盖率、严格分析及API审计通过；17项新增回归通过。25组Linux Flutter3.32无更新视觉比较全部通过，覆盖原16组已审阅基线的所有归属套件及本轮修改影响的套件。98张PNG哈希仍与批准记录一致；比较器与容差未修改。详见review-results.json的源码指纹、资源指纹与分项结果。这是当时源码的本地证据；不能代替本轮字体/Golden补充后新head的验收。
+
+## 2026-10-19 字体与默认值Golden补充
+
+BackTop矩阵原来仅设置Material字体fallback，TD自有文字不会消费它，导致“顶部”为方框。测试改为同时加载仓库已有Roboto、TDesignGoldenCJK、TDesignAlignmentCJK及TIcons，并通过TD字体token配置fallback；两张矩阵已逐图确认中文正常，画布仍为296×160。组件产品代码未变。
+
+Cell新增两张明暗矩阵，包含默认卡片及仅打开groupBordered的卡片；cardBorderRadius/cardPadding均未显式设置，边框只用于显露组件自身默认角部。旧新差异仅在边框四角，分别112/110像素。Tabs新增四张可滚动tag初始/真实点击后的明暗矩阵，包含不同长度及禁用标签；各标签左右padding8→16，三项总宽224→272，选中切换与禁用外观正常。已有均分Demo不能证明自然宽度变化，因此新增场景不是原截图的重复。
+
+当前PR共104张变更Golden：原96张不变、2张BackTop字体基线替换、6张Cell/Tabs新增。原077记录仍属于其原始检查点，当前清单/哈希和前后差异见golden-completion-results.json及evidence/。这些聚焦组件场景不冒称57页全部公开状态的视觉覆盖。双SDK功能各226项/严格分析通过；Linux3.32单次授权更新8项后立即原命令无更新精确比较8项通过。最终新head远端门禁见PR Checks。

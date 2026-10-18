@@ -107,6 +107,12 @@ const componentTestManifests = <ComponentTestManifest>[
     exampleTests: ['test/cell/cell_page_test.dart'],
     visualTests: [
       VisualTestManifest(
+        name: 'Cell Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/cell/t_cell_golden_test.dart'],
+        kind: VisualTestKind.component,
+      ),
+      VisualTestManifest(
         name: 'Cell Demo',
         workingDirectory: 'example',
         testFiles: [
@@ -617,7 +623,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Tabs Component',
         workingDirectory: '.',
-        testFiles: ['test/components/tabs/t_tab_golden_test.dart'],
+        testFiles: [
+          'test/components/tabs/t_tab_golden_test.dart',
+          'test/components/tabs/t_tag_padding_golden_test.dart',
+        ],
         kind: VisualTestKind.component,
       ),
       VisualTestManifest(
