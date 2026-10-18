@@ -1,0 +1,16 @@
+{
+  "mergedPR1172": {
+    "originalHead": "590df49a6209d31978e70e2eb4ea26101c605a6f",
+    "squashCommit": "f5d8df2f2bc43224406319b4944930454458930c",
+    "identicalTree": "a9b6e813fee8a1d338578f23011b44d9bf97a98e"
+  },
+  "pr1174": {
+    "previousHead": "56c460a8524b39e5625af6032d8b9fde0c3c71ff",
+    "rebasedCheckpoint": "332b8d6eb35cff92de6b561d224c9d66e1855424",
+    "identicalTree": "22e34464cdebc80dc733599f7d6a6c14a34b5a06",
+    "breakingIncrementBinaryDiffSha256": "e9c51832bdcb888f3938ee75eabd5de42e19ede80538e4889037296c8b67c1b1",
+    "incrementBeforeAndAfterEqual": true,
+    "uniqueCommitCount": 5
+  },
+  "verification": "Whole tracked tree and incremental binary diff identical at rebase checkpoint. Follow-up changes only add rebase evidence under Spec079. Runtime, tests, API artifacts, original design evidence and 98 Goldens unchanged. Existing same-source verification is reusable; current remote CI must validate new head."
+}

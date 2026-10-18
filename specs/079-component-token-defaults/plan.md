@@ -9,3 +9,7 @@
 ### 堆叠 PR 的合入保护
 
 #1174 当前目标为 #1172 分支，不可直接合入，否则会把 breaking 改动带回原 PR。先合入 #1172 后检查其旧 head 590df49a 是否仍为 develop 的祖先：普通 merge 保留祖先时可正常改 base；若 #1172 经 squash/rebase 合并导致祖先关系丢失，须将 #1174 在 590df49a 之后的独有提交重新整理到最新 develop（处理冲突并重新验证），再核对最终 diff 只有 breaking 增量，执行新 head 完整 CI。仅切 base 不能保证差异范围正确。
+
+## 已执行的 squash 后整理
+
+#1172 已合入且两端tree一致，因此只对原基础之后的5个独有提交执行 rebase --onto 新develop。逐字节证明运行代码和breaking增量未变；本次验收新增只涉及Spec079。当前PR目标已是develop。
