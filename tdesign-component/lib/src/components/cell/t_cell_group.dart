@@ -73,7 +73,9 @@ class TCellGroup extends StatelessWidget {
               )
             : null,
         borderRadius: resolvedVariant == TCellGroupVariant.card
-            ? theme?.cardBorderRadius ??
+            ? theme?.resolveCardBorderRadius(
+                    BorderRadius.circular(context.tTheme.radiusLarge),
+                  ) ??
                   BorderRadius.circular(context.tTheme.radiusLarge)
             : null,
       ),

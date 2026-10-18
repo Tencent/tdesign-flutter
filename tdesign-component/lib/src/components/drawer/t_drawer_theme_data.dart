@@ -12,6 +12,24 @@ import '../../theme/t_token_double_lerp.dart';
 ///
 /// {@category ComponentTheme}
 class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
+  TokenValueLerp<EdgeInsetsGeometry>? get _titlePaddingTransition => null;
+
+  @internal
+  EdgeInsetsGeometry resolveTitlePadding(EdgeInsetsGeometry fallback) =>
+      _titlePaddingTransition?.resolve(fallback) ?? titlePadding ?? fallback;
+
+  TokenValueLerp<EdgeInsetsGeometry>? get _itemPaddingTransition => null;
+
+  @internal
+  EdgeInsetsGeometry resolveItemPadding(EdgeInsetsGeometry fallback) =>
+      _itemPaddingTransition?.resolve(fallback) ?? itemPadding ?? fallback;
+
+  TokenValueLerp<double>? get _itemIconGapTransition => null;
+
+  @internal
+  double resolveItemIconGap(double fallback) =>
+      _itemIconGapTransition?.resolve(fallback) ?? itemIconGap ?? fallback;
+
   TokenDoubleLerp? get _itemIconSizeLerp => null;
 
   @internal
@@ -130,6 +148,15 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
         footerPadding: footerPadding ?? this.footerPadding,
       ),
       itemIconSizeLerp: itemIconSize == null ? _itemIconSizeLerp : null,
+      titlePaddingTransition: titlePadding == null
+          ? _titlePaddingTransition
+          : null,
+      itemPaddingTransition: itemPadding == null
+          ? _itemPaddingTransition
+          : null,
+      itemIconGapTransition: itemIconGap == null
+          ? _itemIconGapTransition
+          : null,
     );
   }
 
@@ -217,6 +244,30 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
         other._itemIconSizeLerp,
         t,
       ),
+      titlePaddingTransition: TokenValueLerp.between(
+        titlePadding,
+        _titlePaddingTransition,
+        other.titlePadding,
+        other._titlePaddingTransition,
+        t,
+        (a, b, t) => EdgeInsetsGeometry.lerp(a, b, t)!,
+      ),
+      itemPaddingTransition: TokenValueLerp.between(
+        itemPadding,
+        _itemPaddingTransition,
+        other.itemPadding,
+        other._itemPaddingTransition,
+        t,
+        (a, b, t) => EdgeInsetsGeometry.lerp(a, b, t)!,
+      ),
+      itemIconGapTransition: TokenValueLerp.between(
+        itemIconGap,
+        _itemIconGapTransition,
+        other.itemIconGap,
+        other._itemIconGapTransition,
+        t,
+        (a, b, t) => lerpDouble(a, b, t)!,
+      ),
     );
   }
 
@@ -267,7 +318,13 @@ class _InterpolatedTDrawerThemeData extends TDrawerThemeData {
   _InterpolatedTDrawerThemeData(
     TDrawerThemeData data, {
     TokenDoubleLerp? itemIconSizeLerp,
-  }) : _itemIconSizeLerp = itemIconSizeLerp,
+    TokenValueLerp<EdgeInsetsGeometry>? titlePaddingTransition,
+    TokenValueLerp<EdgeInsetsGeometry>? itemPaddingTransition,
+    TokenValueLerp<double>? itemIconGapTransition,
+  }) : _titlePaddingTransition = titlePaddingTransition,
+       _itemPaddingTransition = itemPaddingTransition,
+       _itemIconGapTransition = itemIconGapTransition,
+       _itemIconSizeLerp = itemIconSizeLerp,
        super(
          width: data.width,
          backgroundColor: data.backgroundColor,
@@ -286,6 +343,12 @@ class _InterpolatedTDrawerThemeData extends TDrawerThemeData {
          footerPadding: data.footerPadding,
        );
 
+  @override
+  final TokenValueLerp<EdgeInsetsGeometry>? _titlePaddingTransition;
+  @override
+  final TokenValueLerp<EdgeInsetsGeometry>? _itemPaddingTransition;
+  @override
+  final TokenValueLerp<double>? _itemIconGapTransition;
   @override
   final TokenDoubleLerp? _itemIconSizeLerp;
 }

@@ -669,12 +669,9 @@ class _TIconTextToast extends StatelessWidget {
         maxHeight: 94,
       ),
       child: Container(
-        padding:
-            toastTheme.padding ??
-            EdgeInsets.symmetric(
-              horizontal: theme.size8,
-              vertical: theme.size6,
-            ),
+        padding: toastTheme.resolvePadding(
+          EdgeInsets.symmetric(horizontal: theme.size8, vertical: theme.size6),
+        ),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
@@ -718,7 +715,9 @@ class _TIconTextToast extends StatelessWidget {
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: toastTheme.maxWidth ?? 136),
       child: Container(
-        padding: toastTheme.padding ?? EdgeInsets.all(context.tTheme.size8),
+        padding: toastTheme.resolvePadding(
+          EdgeInsets.all(context.tTheme.size8),
+        ),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
@@ -779,9 +778,9 @@ class _TToastLoading extends StatelessWidget {
         maxWidth: maxWidth,
       ),
       child: Container(
-        padding:
-            toastTheme.padding ??
-            EdgeInsets.symmetric(horizontal: context.tTheme.size8),
+        padding: toastTheme.resolvePadding(
+          EdgeInsets.symmetric(horizontal: context.tTheme.size8),
+        ),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
@@ -831,7 +830,9 @@ class _TToastLoadingWithoutText extends StatelessWidget {
     return ConstrainedBox(
       constraints: const BoxConstraints(minWidth: 80, minHeight: 80),
       child: Container(
-        padding: toastTheme.padding ?? EdgeInsets.all(context.tTheme.size8),
+        padding: toastTheme.resolvePadding(
+          EdgeInsets.all(context.tTheme.size8),
+        ),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
@@ -874,12 +875,9 @@ class _TTextToast extends StatelessWidget {
       constraints:
           constraints ?? BoxConstraints(maxWidth: toastTheme.maxWidth ?? 185),
       child: Container(
-        padding:
-            toastTheme.padding ??
-            EdgeInsets.symmetric(
-              horizontal: theme.size8,
-              vertical: theme.size6,
-            ),
+        padding: toastTheme.resolvePadding(
+          EdgeInsets.symmetric(horizontal: theme.size8, vertical: theme.size6),
+        ),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(

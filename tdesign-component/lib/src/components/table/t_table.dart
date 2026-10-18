@@ -747,7 +747,9 @@ class _TTableState<T> extends State<TTable<T>> {
     };
     final content = Padding(
       padding:
-          theme?.cellPadding ??
+          theme?.resolveCellPadding(
+            EdgeInsets.symmetric(horizontal: context.tTheme.spacer1),
+          ) ??
           EdgeInsets.symmetric(horizontal: context.tTheme.spacer1),
       child: ClipRect(
         child: DefaultTextStyle.merge(

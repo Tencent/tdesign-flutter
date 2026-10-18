@@ -173,7 +173,10 @@ class _TSearchBarState extends State<TSearchBar> {
     final inputBackgroundColor =
         theme?.inputBackgroundColor ?? token.bgColorSecondaryContainer;
     final contentPadding =
-        theme?.contentPadding ?? EdgeInsets.symmetric(horizontal: token.size5);
+        theme?.resolveContentPadding(
+          EdgeInsets.symmetric(horizontal: token.size5),
+        ) ??
+        EdgeInsets.symmetric(horizontal: token.size5);
     final actionText = widget.actionText;
     final hasAction = actionText != null && actionText.isNotEmpty;
 
@@ -209,14 +212,28 @@ class _TSearchBarState extends State<TSearchBar> {
               ? theme?.actionTextStyle?.color ?? token.brandColor
               : token.textColorDisabled,
         );
-    var searchIconTheme = IconThemeData(
-      size: context.tTheme.size8,
-      color: token.textColorPlaceholder,
-    ).merge(theme?.searchIconTheme);
-    var clearIconTheme = IconThemeData(
-      size: context.tTheme.size8,
-      color: token.textColorPlaceholder,
-    ).merge(theme?.clearIconTheme);
+    var searchIconTheme =
+        IconThemeData(
+              size: context.tTheme.size8,
+              color: token.textColorPlaceholder,
+            )
+            .merge(theme?.searchIconTheme)
+            .copyWith(
+              size:
+                  theme?.resolveSearchIconSize(context.tTheme.size8) ??
+                  context.tTheme.size8,
+            );
+    var clearIconTheme =
+        IconThemeData(
+              size: context.tTheme.size8,
+              color: token.textColorPlaceholder,
+            )
+            .merge(theme?.clearIconTheme)
+            .copyWith(
+              size:
+                  theme?.resolveClearIconSize(context.tTheme.size8) ??
+                  context.tTheme.size8,
+            );
     if (!widget.enabled) {
       searchIconTheme = searchIconTheme.copyWith(
         color: token.textColorDisabled,

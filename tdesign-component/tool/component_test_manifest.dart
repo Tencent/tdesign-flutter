@@ -1047,6 +1047,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/theme/theme_test.dart',
       'test/theme/overlay_themes_test.dart',
       'test/theme/component_token_ownership_test.dart',
+      'test/theme/token_default_transition_test.dart',
       'test/theme/t_theme_extensions_test.dart',
       'test/components/theme/t_colors_test.dart',
       'test/components/theme/t_material_theme_priority_test.dart',

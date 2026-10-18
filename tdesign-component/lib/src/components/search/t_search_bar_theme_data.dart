@@ -9,6 +9,29 @@ import '../../theme/t_token_double_lerp.dart';
 ///
 /// {@category ComponentTheme}
 class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
+  TokenValueLerp<EdgeInsetsGeometry>? get _contentPaddingTransition => null;
+
+  @internal
+  EdgeInsetsGeometry resolveContentPadding(EdgeInsetsGeometry fallback) =>
+      _contentPaddingTransition?.resolve(fallback) ??
+      contentPadding ??
+      fallback;
+
+  TokenValueLerp<double>? get _clearIconSizeTransition => null;
+
+  @internal
+  double resolveClearIconSize(double fallback) =>
+      _clearIconSizeTransition?.resolve(fallback) ??
+      clearIconTheme?.size ??
+      fallback;
+  TokenValueLerp<double>? get _searchIconSizeTransition => null;
+
+  @internal
+  double resolveSearchIconSize(double fallback) =>
+      _searchIconSizeTransition?.resolve(fallback) ??
+      searchIconTheme?.size ??
+      fallback;
+
   TokenDoubleLerp? get _heightLerp => null;
 
   @internal
@@ -93,6 +116,15 @@ class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
         cursorHeight: cursorHeight ?? this.cursorHeight,
       ),
       heightLerp: height == null ? _heightLerp : null,
+      contentPaddingTransition: contentPadding == null
+          ? _contentPaddingTransition
+          : null,
+      clearIconSizeTransition: clearIconTheme?.size == null
+          ? _clearIconSizeTransition
+          : null,
+      searchIconSizeTransition: searchIconTheme?.size == null
+          ? _searchIconSizeTransition
+          : null,
     );
   }
 
@@ -152,6 +184,30 @@ class TSearchBarThemeData extends ThemeExtension<TSearchBarThemeData> {
         other._heightLerp,
         t,
       ),
+      contentPaddingTransition: TokenValueLerp.between(
+        contentPadding,
+        _contentPaddingTransition,
+        other.contentPadding,
+        other._contentPaddingTransition,
+        t,
+        (a, b, t) => EdgeInsetsGeometry.lerp(a, b, t)!,
+      ),
+      clearIconSizeTransition: TokenValueLerp.between(
+        clearIconTheme?.size,
+        _clearIconSizeTransition,
+        other.clearIconTheme?.size,
+        other._clearIconSizeTransition,
+        t,
+        (a, b, t) => lerpDouble(a, b, t)!,
+      ),
+      searchIconSizeTransition: TokenValueLerp.between(
+        searchIconTheme?.size,
+        _searchIconSizeTransition,
+        other.searchIconTheme?.size,
+        other._searchIconSizeTransition,
+        t,
+        (a, b, t) => lerpDouble(a, b, t)!,
+      ),
     );
   }
 }
@@ -178,7 +234,13 @@ class _InterpolatedTSearchBarThemeData extends TSearchBarThemeData {
   _InterpolatedTSearchBarThemeData(
     TSearchBarThemeData data, {
     TokenDoubleLerp? heightLerp,
-  }) : _heightLerp = heightLerp,
+    TokenValueLerp<EdgeInsetsGeometry>? contentPaddingTransition,
+    TokenValueLerp<double>? clearIconSizeTransition,
+    TokenValueLerp<double>? searchIconSizeTransition,
+  }) : _contentPaddingTransition = contentPaddingTransition,
+       _clearIconSizeTransition = clearIconSizeTransition,
+       _searchIconSizeTransition = searchIconSizeTransition,
+       _heightLerp = heightLerp,
        super(
          height: data.height,
          inputBackgroundColor: data.inputBackgroundColor,
@@ -192,6 +254,12 @@ class _InterpolatedTSearchBarThemeData extends TSearchBarThemeData {
          cursorHeight: data.cursorHeight,
        );
 
+  @override
+  final TokenValueLerp<EdgeInsetsGeometry>? _contentPaddingTransition;
+  @override
+  final TokenValueLerp<double>? _clearIconSizeTransition;
+  @override
+  final TokenValueLerp<double>? _searchIconSizeTransition;
   @override
   final TokenDoubleLerp? _heightLerp;
 }

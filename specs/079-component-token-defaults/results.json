@@ -30,5 +30,6 @@
     }
   },
   "remoteCI": "Pending: retarget to develop after PR #1172 merges",
-  "historicalCI": "https://github.com/Tencent/tdesign-flutter/actions/runs/39055021982"
+  "historicalCI": "https://github.com/Tencent/tdesign-flutter/actions/runs/39055021982",
+  "scope": "Initial restoration checkpoint b374adc2 only; current follow-up results are in review-results.json"
 }

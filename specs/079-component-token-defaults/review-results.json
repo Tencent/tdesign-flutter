@@ -1,0 +1,94 @@
+{
+  "reviewBase": "b374adc29503907bd51724c202d14eb3c8b44ab0",
+  "foundation": "590df49a6209d31978e70e2eb4ea26101c605a6f",
+  "develop": "3bc89d28e96d580e0893526c627dc38f16b16d82",
+  "validatedSourceDiffSha256": "0264ec8c96a308c8e30b274faaf8bdfe2c24620eb2aed8781d5072f650efbc51",
+  "sources": {
+    "tdesign-component/lib/src/components/backtop/t_backtop.dart": "ba32c6b9aeca9e465543f619f5baceb4cf79c5aec770298b5f2aa1bae4a3cb25",
+    "tdesign-component/lib/src/components/backtop/t_backtop_theme_data.dart": "f4260c8137f66561ee15210f762fa39ed3bb7ff4c2a1e1f334d302fa499f438a",
+    "tdesign-component/lib/src/components/cell/t_cell_group.dart": "fbac44edca1b76402f69963a55c29dacdb9b8c353de3a5b46915ff7985dfdec4",
+    "tdesign-component/lib/src/components/cell/t_cell_theme_data.dart": "a0067eb2ff82159b5b7a238f044aa2561859f7538a042e04e3cfb24fd3904c78",
+    "tdesign-component/lib/src/components/drawer/t_drawer_content.dart": "8b6584fb66ed7987dd7656522f3fa27cddd7cda27ca6f2ebc291b0825bf7136c",
+    "tdesign-component/lib/src/components/drawer/t_drawer_theme_data.dart": "705e43791c9b69786f02f666cd831e1489164e3170db782a2208305b7a939c26",
+    "tdesign-component/lib/src/components/search/t_search_bar.dart": "995c5952855714983783157dccc93963f90017aa7872d482e18740866b4246f3",
+    "tdesign-component/lib/src/components/search/t_search_bar_theme_data.dart": "61688f8123cb39a0101819a72329e0f0809bf3da29fb07d467057d4792d50f73",
+    "tdesign-component/lib/src/components/tabbar/t_tab_bar.dart": "9128423f202dd11067597f651b68af8d461ef4fc0122ffc69a39d8e389aacba6",
+    "tdesign-component/lib/src/components/tabbar/t_tab_bar_theme_data.dart": "e171515dcc1870b7b99b0017ffbb12d8f075c6ff4ad6553e5538de7bc0e78ba6",
+    "tdesign-component/lib/src/components/table/t_table.dart": "008d8c9c80a7f9eb82fb86542020113be8fe360fd11a92a30320f879549c383e",
+    "tdesign-component/lib/src/components/table/t_table_theme_data.dart": "5162721a288b383d34bb24bcd02e8679c81d4d206a1b6170468b983529e5b648",
+    "tdesign-component/lib/src/components/toast/t_toast.dart": "91ef58e3a0095dcba1a0cf44425f650afaeea1949e75601db7a24c377486c9e2",
+    "tdesign-component/lib/src/components/toast/t_toast_theme_data.dart": "7b40fd20eb1e9e29725934740d40267acdae992ed10f43257bf963735083d94d",
+    "tdesign-component/lib/src/theme/t_token_double_lerp.dart": "3f0078d60a0ba85d6a5e8f5aa1725528c8046fbc08435fe96fa7c279af865691",
+    "tdesign-component/test/theme/token_default_transition_test.dart": "15e771cf860266e9ec5e0ca21c0bc70735b09251b8b584fe0949a2ab5552b375",
+    "tdesign-component/tool/component_test_manifest.dart": "217826c858c5f1ab13f6a2099b494ae1a6169a44a64f2b540f6d922c0050e138"
+  },
+  "newRegressionTests": 17,
+  "sdks": {
+    "3.32.0": {
+      "components": 512,
+      "pages": 157,
+      "coverage": {
+        "theme": "841/868 = 96.89%",
+        "backtop": "258/258 = 100.00%",
+        "cell": "226/226 = 100.00%",
+        "drawer": "282/288 = 97.92%",
+        "search": "282/287 = 98.26%",
+        "tab_bar": "569/577 = 98.61%",
+        "table": "455/455 = 100.00%",
+        "toast": "276/279 = 98.92%"
+      },
+      "analyze": "No issues found",
+      "api": "57 components / 370 declarations / 0 issues",
+      "snippets": "check passed; example source unchanged by follow-up",
+      "backtopFinalLayout": "512 core tests on final source; 3.32 full pages on final source, latest affected demo and 2 CSS consumers rerun after final BackTop change"
+    },
+    "3.47.7": {
+      "components": 512,
+      "pages": 157,
+      "coverage": {
+        "theme": "839/868 = 96.66%",
+        "backtop": "258/258 = 100.00%",
+        "cell": "226/226 = 100.00%",
+        "drawer": "281/288 = 97.57%",
+        "search": "282/287 = 98.26%",
+        "tab_bar": "568/577 = 98.44%",
+        "table": "455/455 = 100.00%",
+        "toast": "276/279 = 98.92%"
+      },
+      "analyze": "No issues found",
+      "api": "57 components / 370 declarations / 0 issues",
+      "snippets": "check passed; example source unchanged by follow-up",
+      "backtopFinalLayout": "512 core tests on final source; 3.32 full pages on final source, latest affected demo and 2 CSS consumers rerun after final BackTop change"
+    }
+  },
+  "visual": {
+    "status": "running",
+    "platform": "Linux amd64 / Flutter 3.32.0",
+    "updateGoldens": false,
+    "comparator": "Existing exact comparator, no changes",
+    "scope": "Original 16 reviewed suites plus theme/backtop/cell/drawer/search/tab_bar/table/toast/tabs suites from actual manifest; deduplicated"
+  },
+  "remote": {
+    "1172": {
+      "head": "590df49a6209d31978e70e2eb4ea26101c605a6f",
+      "testBuild": "https://github.com/Tencent/tdesign-flutter/actions/runs/39124903963",
+      "status": "success"
+    },
+    "1174": {
+      "fullCI": "not triggered: current base is PR #1172 branch, workflow only targets develop",
+      "mergeRecommendation": "wait for #1172, retarget develop, run final-head full CI"
+    }
+  },
+  "goldens": {
+    "count": 98,
+    "allCurrentHashesMatchApprovedRecords": true
+  },
+  "commands": {
+    "components": "flutter test --no-pub <8 selected manifest componentTests and 3 tool tests> --exclude-tags golden --coverage --reporter expanded",
+    "pages": "flutter test --no-pub --dart-define=TDESIGN_DEMO_TEST_MODULES=false <57-page CSS matrix and affected manifest exampleTests> --exclude-tags golden --reporter expanded",
+    "coverage": "dart tool/check_component_coverage.dart <each of 8 groups> --lcov <version>.lcov",
+    "analyze": "flutter analyze --fatal-infos",
+    "api": "dart run tool/audit_api_docs.dart",
+    "visual": "actual visualTestArguments for approved 16 plus affected suites; --update-goldens absent"
+  }
+}

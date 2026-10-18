@@ -7,6 +7,12 @@ import '../../theme/t_token_double_lerp.dart';
 ///
 /// {@category ComponentTheme}
 class TToastThemeData extends ThemeExtension<TToastThemeData> {
+  TokenValueLerp<EdgeInsetsGeometry>? get _paddingTransition => null;
+
+  @internal
+  EdgeInsetsGeometry resolvePadding(EdgeInsetsGeometry fallback) =>
+      _paddingTransition?.resolve(fallback) ?? padding ?? fallback;
+
   TokenDoubleLerp? get _iconSizeLerp => null;
 
   @internal
@@ -68,6 +74,9 @@ class TToastThemeData extends ThemeExtension<TToastThemeData> {
       iconSizeLerp:
           other._iconSizeLerp ??
           (other.iconSize == null ? _iconSizeLerp : null),
+      paddingTransition:
+          other._paddingTransition ??
+          (other.padding == null ? _paddingTransition : null),
     );
   }
 
@@ -96,6 +105,7 @@ class TToastThemeData extends ThemeExtension<TToastThemeData> {
         maxWidth: maxWidth ?? this.maxWidth,
       ),
       iconSizeLerp: iconSize == null ? _iconSizeLerp : null,
+      paddingTransition: padding == null ? _paddingTransition : null,
     );
   }
 
@@ -132,6 +142,14 @@ class TToastThemeData extends ThemeExtension<TToastThemeData> {
         other._iconSizeLerp,
         t,
       ),
+      paddingTransition: TokenValueLerp.between(
+        padding,
+        _paddingTransition,
+        other.padding,
+        other._paddingTransition,
+        t,
+        (a, b, t) => EdgeInsetsGeometry.lerp(a, b, t)!,
+      ),
     );
   }
 
@@ -160,7 +178,9 @@ class _InterpolatedTToastThemeData extends TToastThemeData {
   _InterpolatedTToastThemeData(
     TToastThemeData data, {
     TokenDoubleLerp? iconSizeLerp,
-  }) : _iconSizeLerp = iconSizeLerp,
+    TokenValueLerp<EdgeInsetsGeometry>? paddingTransition,
+  }) : _paddingTransition = paddingTransition,
+       _iconSizeLerp = iconSizeLerp,
        super(
          backgroundColor: data.backgroundColor,
          textStyle: data.textStyle,
@@ -171,6 +191,8 @@ class _InterpolatedTToastThemeData extends TToastThemeData {
          maxWidth: data.maxWidth,
        );
 
+  @override
+  final TokenValueLerp<EdgeInsetsGeometry>? _paddingTransition;
   @override
   final TokenDoubleLerp? _iconSizeLerp;
 }

@@ -63,7 +63,14 @@ class _TDrawerContent extends StatelessWidget {
             if (title != null)
               Padding(
                 padding:
-                    drawerTheme?.titlePadding ??
+                    drawerTheme?.resolveTitlePadding(
+                      EdgeInsets.fromLTRB(
+                        context.tTheme.size6,
+                        context.tTheme.size8,
+                        context.tTheme.size6,
+                        context.tTheme.size4,
+                      ),
+                    ) ??
                     EdgeInsets.fromLTRB(
                       context.tTheme.size6,
                       context.tTheme.size8,
@@ -109,7 +116,14 @@ class _TDrawerContent extends StatelessWidget {
                           drawerTheme?.itemPressedColor ??
                           context.tTheme.bgColorSecondaryContainer,
                       padding:
-                          drawerTheme?.itemPadding ??
+                          drawerTheme?.resolveItemPadding(
+                            EdgeInsets.fromLTRB(
+                              context.tTheme.size6,
+                              context.tTheme.size6,
+                              0,
+                              context.tTheme.size6,
+                            ),
+                          ) ??
                           EdgeInsets.fromLTRB(
                             context.tTheme.size6,
                             context.tTheme.size6,
@@ -124,7 +138,11 @@ class _TDrawerContent extends StatelessWidget {
                             context.tTheme.size8,
                           ) ??
                           context.tTheme.size8,
-                      iconGap: drawerTheme?.itemIconGap ?? context.tTheme.size4,
+                      iconGap:
+                          drawerTheme?.resolveItemIconGap(
+                            context.tTheme.size4,
+                          ) ??
+                          context.tTheme.size4,
                       dividerColor:
                           drawerTheme?.dividerColor ??
                           context.tTheme.componentStroke,

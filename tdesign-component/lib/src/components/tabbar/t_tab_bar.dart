@@ -382,7 +382,8 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
 
   void _resolveEffectiveValues() {
     final theme = Theme.of(context).extension<TTabBarThemeData>();
-    _effectiveBarHeight = theme?.barHeight ?? context.tTheme.size14;
+    _effectiveBarHeight =
+        theme?.resolveBarHeight(context.tTheme.size14) ?? context.tTheme.size14;
     _effectiveSelectedBgColor =
         theme?.selectedBgColor ?? context.tTheme.brandColorLight;
     _effectiveUnselectedBgColor = theme?.unselectedBgColor;
