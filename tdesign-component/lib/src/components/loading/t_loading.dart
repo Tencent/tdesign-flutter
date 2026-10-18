@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_styled.dart';
 import 't_activity_indicator.dart';
@@ -129,8 +130,8 @@ class TLoading extends StatelessWidget {
       children: [
         indicator,
         effectiveAxis == Axis.vertical
-            ? const SizedBox(height: 6)
-            : const SizedBox(width: 8),
+            ? SizedBox(height: context.tTheme.size3)
+            : SizedBox(width: context.tTheme.size4),
         if (effectiveAxis == Axis.horizontal)
           Flexible(child: _textWidget(context, theme, effectiveRefreshWidget))
         else
@@ -159,7 +160,7 @@ class TLoading extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Flexible(child: result),
-          const SizedBox(width: 8),
+          SizedBox(width: context.tTheme.size4),
           refreshWidget,
         ],
       );

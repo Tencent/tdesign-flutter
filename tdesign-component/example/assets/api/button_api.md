@@ -17,7 +17,7 @@
 | onPressed | VoidCallback? | - | 点击回调，`null` 表示禁用 | 否 |
 | shape | TButtonShape | TButtonShape.rectangle | 按钮结构形状；纯图标的 square/circle 同时决定等宽高布局。 具体边框及圆角仍可通过 `style` 配置。 | 否 |
 | size | TButtonSize? | - | 尺寸，未传时使用 `TButtonSize.medium`。 默认按 48、40、32、28dp 的 TDesign 视觉高度参与布局。 | 否 |
-| style | ButtonStyle? | - | 当前按钮的完整 `ButtonStyle` 视觉配置入口，不影响其他按钮。 外部 Material 按钮主题不控制内置样式；请通过此实例 style 或 TD Theme 定制。 `ButtonStyle.visualDensity` 不生效；内置布局始终使用标准密度， 尺寸由 `size` 与显式内边距、宽高配置决定。 反馈和鼠标指针仅由实例 style、TD Theme 或内置默认值控制。 状态属性返回 null 时回退该状态的 TD 默认值；不读取 Material 按钮主题。 调用方内容仍继承原主题。 组件默认使用 `MaterialTapTargetSize.shrinkWrap` 保持 TDesign 精确尺寸； 需要至少 48dp 点击区时可将 `ButtonStyle.tapTargetSize` 设为 `MaterialTapTargetSize.padded`。 | 否 |
+| style | ButtonStyle? | - | 当前按钮的完整 `ButtonStyle` 视觉配置入口，不影响其他按钮。 外部 Material 按钮主题不控制内置样式；请通过此实例 style 或 TD Theme 定制。 `ButtonStyle.visualDensity` 不生效；内置布局始终使用标准密度， 尺寸由 `size` 规格、全局尺寸刻度与显式内边距、宽高配置决定。 反馈和鼠标指针仅由实例 style、TD Theme 或内置默认值控制。 状态属性返回 null 时回退该状态的 TD 默认值；不读取 Material 按钮主题。 调用方内容仍继承原主题。 组件默认使用 `MaterialTapTargetSize.shrinkWrap` 保持 TDesign 精确尺寸； 需要至少 48dp 点击区时可将 `ButtonStyle.tapTargetSize` 设为 `MaterialTapTargetSize.padded`。 | 否 |
 | variant | TButtonVariant? | - | 变体（fill / outline / text / ghost），未传时使用 `TButtonVariant.fill`。 | 否 |
 
 
@@ -103,6 +103,6 @@ TButton 组件级 ThemeExtension
 | extraSmallIconSize | double? | - | 超小尺寸按钮的图标大小，单位为逻辑像素。 未设置时使用独立默认 18dp；实例 ButtonStyle.iconSize 优先。 必须是有限非负数；仅改变内置图标及纯图标按钮的默认居中间距，不改变按钮高度。 | 否 |
 | gradient | Gradient? | - | 渐变背景色（装饰层，非 ButtonStyle 字段） | 否 |
 | iconTextSpacing | double? | - | 图标与文案之间的间距，单位为逻辑像素。 仅在按钮同时提供 icon 和 child 时生效；该值控制两者 之间的实际间隔，不会改变按钮整体内边距。为空时使用组件内置 默认值 4dp；全局 `spacer4` 对应 32dp，不用于此间距。 | 否 |
-| largeIconSize | double? | - | 大尺寸按钮的图标大小，单位为逻辑像素。 未设置时使用独立默认 24dp；实例 ButtonStyle.iconSize 优先。 必须是有限非负数；仅改变内置图标及纯图标按钮的默认居中间距，不改变按钮高度。 | 否 |
-| mediumIconSize | double? | - | 中尺寸按钮的图标大小，单位为逻辑像素。 未设置时使用独立默认 20dp；实例 ButtonStyle.iconSize 优先。 必须是有限非负数；仅改变内置图标及纯图标按钮的默认居中间距，不改变按钮高度。 | 否 |
+| largeIconSize | double? | - | 大尺寸按钮的图标大小，单位为逻辑像素。 未设置时使用 size8（默认 24dp）；实例 ButtonStyle.iconSize 优先。 必须是有限非负数；仅改变内置图标及纯图标按钮的默认居中间距，不改变按钮高度。 | 否 |
+| mediumIconSize | double? | - | 中尺寸按钮的图标大小，单位为逻辑像素。 未设置时使用 size7（默认 20dp）；实例 ButtonStyle.iconSize 优先。 必须是有限非负数；仅改变内置图标及纯图标按钮的默认居中间距，不改变按钮高度。 | 否 |
 | smallIconSize | double? | - | 小尺寸按钮的图标大小，单位为逻辑像素。 未设置时使用独立默认 18dp；实例 ButtonStyle.iconSize 优先。 必须是有限非负数；仅改变内置图标及纯图标按钮的默认居中间距，不改变按钮高度。 | 否 |

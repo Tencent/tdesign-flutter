@@ -25,6 +25,47 @@ void main() {
     );
   }
 
+  testWidgets('字符头像响应全局语义字号并保留子节点显式样式', (tester) async {
+    final token = TThemeData.defaultData().copyWith(
+      fontMap: {
+        'fontMarkLarge': Font(size: 41, lineHeight: 48),
+        'fontTitleMedium': Font(
+          size: 23,
+          lineHeight: 31,
+          fontWeight: FontWeight.w700,
+        ),
+      },
+    );
+    await tester.pumpWidget(
+      app(
+        const Row(
+          children: [
+            TAvatar(child: Text('A')),
+            TAvatar(
+              child: Text(
+                'B',
+                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w300),
+              ),
+            ),
+          ],
+        ),
+        tokens: token,
+      ),
+    );
+    final a = find.descendant(
+      of: find.text('A'),
+      matching: find.byType(RichText),
+    );
+    final b = find.descendant(
+      of: find.text('B'),
+      matching: find.byType(RichText),
+    );
+    expect(tester.widget<RichText>(a).text.style!.fontSize, 23);
+    expect(tester.widget<RichText>(b).text.style!.fontSize, 11);
+    expect(tester.widget<RichText>(a).text.style!.fontWeight, FontWeight.w700);
+    expect(tester.widget<RichText>(b).text.style!.fontWeight, FontWeight.w300);
+  });
+
   group('TAvatar', () {
     testWidgets('默认渲染用户图标和中尺寸圆形头像', (tester) async {
       await tester.pumpWidget(app(const TAvatar()));
@@ -1005,12 +1046,11 @@ void avatarTokenConsumptionTests() {
               ).style.fontSize,
               expected: custom
                   ? switch (entry.$1) {
-                      TAvatarSize.large => token.fontSizeXl,
-                      TAvatarSize.medium => token.fontSizeM,
-                      TAvatarSize.small => token.fontSizeBase,
+                      TAvatarSize.large => 20.0,
+                      TAvatarSize.medium => token.fontTitleMedium!.size,
+                      TAvatarSize.small => token.fontTitleSmall!.size,
                     }
                   : entry.$5,
-              enforce: !custom,
             );
             tokenObservation(
               'avatarText${entry.$2}FontSize',
@@ -1018,7 +1058,11 @@ void avatarTokenConsumptionTests() {
               actual: DefaultTextStyle.of(
                 tester.element(find.text('token avatar')),
               ).style.fontSize,
-              expected: entry.$5,
+              expected: switch (entry.$1) {
+                TAvatarSize.large => 20.0,
+                TAvatarSize.medium => token.fontTitleMedium!.size,
+                TAvatarSize.small => token.fontTitleSmall!.size,
+              },
             );
             final square = tester.widget<ClipRRect>(
               find

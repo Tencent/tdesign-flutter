@@ -92,11 +92,11 @@
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 默认背景色；未设置时回退全局 `brandColorLightActive`。 | 否 |
 | circleBorderRadius | double? | - | 圆形头像圆角；未设置时回退全局 `radiusCircle`（逻辑像素）。 | 否 |
-| dimension | double? | - | 自定义头像边长；未设置时小、中、大尺寸分别为 40、48、64 逻辑像素。 | 否 |
+| dimension | double? | - | 自定义头像边长；未设置时使用全局 size12/size13/size15，默认小、中、大为 40/48/64 逻辑像素。 | 否 |
 | foregroundColor | Color? | - | 默认图标与继承文字的前景色；未设置时回退全局品牌色。 | 否 |
 | groupBorderColor | Color? | - | 头像组成员描边颜色；未设置时使用 `bgColorContainer` Token。 | 否 |
 | groupBorderWidth | double? | - | 头像组成员描边宽度。 未设置时按成员尺寸使用小/中/大 1/2/3 逻辑像素。 | 否 |
 | groupShadow | BoxShadow? | - | 头像组成员阴影；未设置时使用 1px 水平偏移、2px `blurRadius` 和 15% 黑色。 | 否 |
 | groupSpacing | double? | - | 头像组重叠宽度；未设置时为 8 逻辑像素，实例 spacing 优先。 | 否 |
-| iconSize | double? | - | 默认图标大小；未设置时小、中、大尺寸分别为 20、24、32 逻辑像素。 | 否 |
+| iconSize | double? | - | 默认图标大小；未设置时小档为 20，中、大档分别读取 size8、size10（默认 24、32）。 | 否 |
 | squareBorderRadius | double? | - | 方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。 | 否 |

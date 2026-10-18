@@ -8,6 +8,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../text/t_text_styled.dart';
@@ -193,13 +194,13 @@ class _TBackTopState extends State<TBackTop> {
           theme.borderColor ??
           (isDark ? token.grayColor9 : token.componentBorder),
       contentColor: theme.contentColor ?? defaultContent,
-      roundSize: theme.roundSize ?? 48,
-      halfCircleHeight: theme.halfCircleHeight ?? 40,
       halfCircleMinWidth: theme.halfCircleMinWidth ?? 38,
-      iconSize: theme.iconSize ?? 20,
+      iconSize: theme.iconSize ?? 22,
       borderWidth: theme.borderWidth ?? 0.5,
-      halfCircleHorizontalPadding: theme.halfCircleHorizontalPadding ?? 8,
-      contentGap: theme.contentGap ?? 2,
+      halfCircleHorizontalPadding: theme.resolveHalfCircleHorizontalPadding(
+        token.size4,
+      ),
+      contentGap: theme.resolveContentGap(token.size1),
       textStyle:
           TextStyle(
                 fontSize: token.fontMarkExtraSmall?.size ?? 10,
@@ -224,15 +225,13 @@ class _TBackTopState extends State<TBackTop> {
         : Size.zero;
     final contentWidth = math.max(style.iconSize, textSize.width);
     final contentHeight = style.iconSize + textSize.height;
+    final defaultRoundSize = math.max(
+      context.tTheme.size13,
+      math.sqrt(contentWidth * contentWidth + contentHeight * contentHeight) +
+          style.borderWidth * 2,
+    );
     final roundSize =
-        theme?.roundSize ??
-        math.max(
-          style.roundSize,
-          math.sqrt(
-                contentWidth * contentWidth + contentHeight * contentHeight,
-              ) +
-              style.borderWidth * 2,
-        );
+        theme?.resolveRoundSize(defaultRoundSize) ?? defaultRoundSize;
     return Container(
       width: roundSize,
       height: roundSize,
@@ -280,12 +279,12 @@ class _TBackTopState extends State<TBackTop> {
             style: style.textStyle,
           ).naturalSize(context)
         : Size.zero;
+    final defaultHeight = math.max(
+      context.tTheme.size12,
+      math.max(style.iconSize, textSize.height) + style.borderWidth * 2,
+    );
     final height =
-        theme?.halfCircleHeight ??
-        math.max(
-          style.halfCircleHeight,
-          math.max(style.iconSize, textSize.height) + style.borderWidth * 2,
-        );
+        theme?.resolveHalfCircleHeight(defaultHeight) ?? defaultHeight;
     return ConstrainedBox(
       constraints: BoxConstraints(minWidth: style.halfCircleMinWidth),
       child: Container(
@@ -343,8 +342,6 @@ class _BackTopVisualStyle {
     required this.backgroundColor,
     required this.borderColor,
     required this.contentColor,
-    required this.roundSize,
-    required this.halfCircleHeight,
     required this.halfCircleMinWidth,
     required this.iconSize,
     required this.borderWidth,
@@ -356,8 +353,6 @@ class _BackTopVisualStyle {
   final Color backgroundColor;
   final Color borderColor;
   final Color contentColor;
-  final double roundSize;
-  final double halfCircleHeight;
   final double halfCircleMinWidth;
   final double iconSize;
   final double borderWidth;

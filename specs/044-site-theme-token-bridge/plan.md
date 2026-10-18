@@ -75,3 +75,11 @@
 条件导出改用 `dart.library.js_interop`；Web 实现使用 `package:web` 与 `dart:js_interop`，每次监听返回取消函数。通信层通过回调传出主题及模式，不依赖 ThemeModeProvider。MyApp 在 initState 创建并持有 ThemeModeProvider，通过 ChangeNotifierProvider.value 提供状态；首帧注册前检查 mounted，保存取消函数，dispose 时先取消监听再释放 Provider。build 不再注册监听或创建主题状态。ThemeModeProvider 使用模式修订号及释放状态，防止异步偏好初始化覆盖更新后的模式或通知已释放对象。
 
 验证覆盖双版本消息解析、Provider 初始化竞争及释放、Example smoke、strict analyze、Web release 构建和真实浏览器的来源过滤、释放重注册、首次握手与 Light/Dark 同步。该改动不改变组件绘制，不更新 Golden。
+
+## 2026-10-16 补齐方案
+
+- 转换库新增可选 fontFamily/size 输出，保持旧 fixture 和协议分组兼容。
+- TThemeData 新增可选 sizeMap，支持 fromJson、copyWith、lerp 与明暗默认刻度；TSizes 提供 16 档尺寸。
+- Example 合并独立 sizeMap；按钮按语义尺寸刻度消费高度与 padding，Fab 复用按钮后同步受益。
+- 覆盖字体族、16 档尺寸、实际按钮样式、Fab 投影、恢复默认、明暗切换及显式样式优先级。
+- 无删除或必填参数变化；新增可选 API，默认主题视觉保持一致。自定义 sizeMap 开始影响按钮尺寸是新增能力。

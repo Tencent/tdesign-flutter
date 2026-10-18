@@ -1,6 +1,9 @@
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+
+import '../../theme/t_token_double_lerp.dart';
 
 /// 单元格组视觉形态。
 enum TCellGroupVariant {
@@ -18,6 +21,14 @@ enum TCellGroupVariant {
 ///
 /// {@category ComponentTheme}
 class TCellThemeData extends ThemeExtension<TCellThemeData> {
+  TokenValueLerp<BorderRadius>? get _cardBorderRadiusTransition => null;
+
+  @internal
+  BorderRadius resolveCardBorderRadius(BorderRadius fallback) =>
+      _cardBorderRadiusTransition?.resolve(fallback) ??
+      cardBorderRadius ??
+      fallback;
+
   const TCellThemeData({
     this.titleStyle,
     this.requiredStyle,
@@ -83,7 +94,7 @@ class TCellThemeData extends ThemeExtension<TCellThemeData> {
   final EdgeInsetsGeometry? padding;
 
   /// 卡片组圆角。
-  /// 仅卡片形态生效，未配置时为 8 逻辑像素圆角。
+  /// 仅卡片形态生效，未配置时使用 radiusLarge Token，默认 9 逻辑像素。
   final BorderRadius? cardBorderRadius;
 
   /// 卡片组内边距。
@@ -135,25 +146,30 @@ class TCellThemeData extends ThemeExtension<TCellThemeData> {
     bool? groupBordered,
     bool? showLastDivider,
   }) {
-    return TCellThemeData(
-      titleStyle: titleStyle ?? this.titleStyle,
-      requiredStyle: requiredStyle ?? this.requiredStyle,
-      subtitleStyle: subtitleStyle ?? this.subtitleStyle,
-      noteStyle: noteStyle ?? this.noteStyle,
-      groupTitleStyle: groupTitleStyle ?? this.groupTitleStyle,
-      arrowColor: arrowColor ?? this.arrowColor,
-      borderColor: borderColor ?? this.borderColor,
-      groupBorderColor: groupBorderColor ?? this.groupBorderColor,
-      backgroundColor: backgroundColor ?? this.backgroundColor,
-      pressedColor: pressedColor ?? this.pressedColor,
-      padding: padding ?? this.padding,
-      cardBorderRadius: cardBorderRadius ?? this.cardBorderRadius,
-      cardPadding: cardPadding ?? this.cardPadding,
-      titlePadding: titlePadding ?? this.titlePadding,
-      showBottomBorder: showBottomBorder ?? this.showBottomBorder,
-      height: height ?? this.height,
-      groupBordered: groupBordered ?? this.groupBordered,
-      showLastDivider: showLastDivider ?? this.showLastDivider,
+    return _InterpolatedTCellThemeData(
+      TCellThemeData(
+        titleStyle: titleStyle ?? this.titleStyle,
+        requiredStyle: requiredStyle ?? this.requiredStyle,
+        subtitleStyle: subtitleStyle ?? this.subtitleStyle,
+        noteStyle: noteStyle ?? this.noteStyle,
+        groupTitleStyle: groupTitleStyle ?? this.groupTitleStyle,
+        arrowColor: arrowColor ?? this.arrowColor,
+        borderColor: borderColor ?? this.borderColor,
+        groupBorderColor: groupBorderColor ?? this.groupBorderColor,
+        backgroundColor: backgroundColor ?? this.backgroundColor,
+        pressedColor: pressedColor ?? this.pressedColor,
+        padding: padding ?? this.padding,
+        cardBorderRadius: cardBorderRadius ?? this.cardBorderRadius,
+        cardPadding: cardPadding ?? this.cardPadding,
+        titlePadding: titlePadding ?? this.titlePadding,
+        showBottomBorder: showBottomBorder ?? this.showBottomBorder,
+        height: height ?? this.height,
+        groupBordered: groupBordered ?? this.groupBordered,
+        showLastDivider: showLastDivider ?? this.showLastDivider,
+      ),
+      cardBorderRadiusTransition: cardBorderRadius == null
+          ? _cardBorderRadiusTransition
+          : null,
     );
   }
 
@@ -173,37 +189,81 @@ class TCellThemeData extends ThemeExtension<TCellThemeData> {
     if (other == null) {
       return this;
     }
-    return TCellThemeData(
-      titleStyle: TextStyle.lerp(titleStyle, other.titleStyle, t),
-      requiredStyle: TextStyle.lerp(requiredStyle, other.requiredStyle, t),
-      subtitleStyle: TextStyle.lerp(subtitleStyle, other.subtitleStyle, t),
-      noteStyle: TextStyle.lerp(noteStyle, other.noteStyle, t),
-      groupTitleStyle: TextStyle.lerp(
-        groupTitleStyle,
-        other.groupTitleStyle,
-        t,
+    return _InterpolatedTCellThemeData(
+      TCellThemeData(
+        titleStyle: TextStyle.lerp(titleStyle, other.titleStyle, t),
+        requiredStyle: TextStyle.lerp(requiredStyle, other.requiredStyle, t),
+        subtitleStyle: TextStyle.lerp(subtitleStyle, other.subtitleStyle, t),
+        noteStyle: TextStyle.lerp(noteStyle, other.noteStyle, t),
+        groupTitleStyle: TextStyle.lerp(
+          groupTitleStyle,
+          other.groupTitleStyle,
+          t,
+        ),
+        arrowColor: Color.lerp(arrowColor, other.arrowColor, t),
+        borderColor: Color.lerp(borderColor, other.borderColor, t),
+        groupBorderColor: Color.lerp(
+          groupBorderColor,
+          other.groupBorderColor,
+          t,
+        ),
+        backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
+        pressedColor: Color.lerp(pressedColor, other.pressedColor, t),
+        padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
+        cardBorderRadius: BorderRadius.lerp(
+          cardBorderRadius,
+          other.cardBorderRadius,
+          t,
+        ),
+        cardPadding: EdgeInsetsGeometry.lerp(cardPadding, other.cardPadding, t),
+        titlePadding: EdgeInsetsGeometry.lerp(
+          titlePadding,
+          other.titlePadding,
+          t,
+        ),
+        showBottomBorder: t < 0.5 ? showBottomBorder : other.showBottomBorder,
+        height: lerpDouble(height, other.height, t),
+        groupBordered: t < 0.5 ? groupBordered : other.groupBordered,
+        showLastDivider: t < 0.5 ? showLastDivider : other.showLastDivider,
       ),
-      arrowColor: Color.lerp(arrowColor, other.arrowColor, t),
-      borderColor: Color.lerp(borderColor, other.borderColor, t),
-      groupBorderColor: Color.lerp(groupBorderColor, other.groupBorderColor, t),
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      pressedColor: Color.lerp(pressedColor, other.pressedColor, t),
-      padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
-      cardBorderRadius: BorderRadius.lerp(
+      cardBorderRadiusTransition: TokenValueLerp.between(
         cardBorderRadius,
+        _cardBorderRadiusTransition,
         other.cardBorderRadius,
+        other._cardBorderRadiusTransition,
         t,
+        (a, b, t) => BorderRadius.lerp(a, b, t)!,
       ),
-      cardPadding: EdgeInsetsGeometry.lerp(cardPadding, other.cardPadding, t),
-      titlePadding: EdgeInsetsGeometry.lerp(
-        titlePadding,
-        other.titlePadding,
-        t,
-      ),
-      showBottomBorder: t < 0.5 ? showBottomBorder : other.showBottomBorder,
-      height: lerpDouble(height, other.height, t),
-      groupBordered: t < 0.5 ? groupBordered : other.groupBordered,
-      showLastDivider: t < 0.5 ? showLastDivider : other.showLastDivider,
     );
   }
+}
+
+class _InterpolatedTCellThemeData extends TCellThemeData {
+  _InterpolatedTCellThemeData(
+    TCellThemeData data, {
+    TokenValueLerp<BorderRadius>? cardBorderRadiusTransition,
+  }) : _cardBorderRadiusTransition = cardBorderRadiusTransition,
+       super(
+         titleStyle: data.titleStyle,
+         requiredStyle: data.requiredStyle,
+         subtitleStyle: data.subtitleStyle,
+         noteStyle: data.noteStyle,
+         groupTitleStyle: data.groupTitleStyle,
+         arrowColor: data.arrowColor,
+         borderColor: data.borderColor,
+         groupBorderColor: data.groupBorderColor,
+         backgroundColor: data.backgroundColor,
+         pressedColor: data.pressedColor,
+         padding: data.padding,
+         cardBorderRadius: data.cardBorderRadius,
+         cardPadding: data.cardPadding,
+         titlePadding: data.titlePadding,
+         showBottomBorder: data.showBottomBorder,
+         height: data.height,
+         groupBordered: data.groupBordered,
+         showLastDivider: data.showLastDivider,
+       );
+
+  @override
+  final TokenValueLerp<BorderRadius>? _cardBorderRadiusTransition;
 }

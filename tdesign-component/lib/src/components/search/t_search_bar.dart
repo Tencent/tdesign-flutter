@@ -8,16 +8,14 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_resolve.dart';
 import '../text/t_text_styled.dart';
 import 't_search_bar_theme_data.dart';
 
-const double _kSearchBarHeight = 40;
-const double _kIconSize = 24;
 const double _kIconGap = 5;
 const double _kActionGap = 15;
-const EdgeInsets _kContentPadding = EdgeInsets.symmetric(horizontal: 12);
 
 class TSearchBar extends StatefulWidget {
   const TSearchBar({
@@ -170,10 +168,15 @@ class _TSearchBarState extends State<TSearchBar> {
     final theme = Theme.of(context).extension<TSearchBarThemeData>();
     final effectiveVariant = widget.variant ?? TSearchBarVariant.square;
     final effectiveAlignment = widget.textAlignment ?? TSearchBarAlignment.left;
-    var height = theme?.height ?? _kSearchBarHeight;
+    var height =
+        theme?.resolveHeight(context.tTheme.size12) ?? context.tTheme.size12;
     final inputBackgroundColor =
         theme?.inputBackgroundColor ?? token.bgColorSecondaryContainer;
-    final contentPadding = theme?.contentPadding ?? _kContentPadding;
+    final contentPadding =
+        theme?.resolveContentPadding(
+          EdgeInsets.symmetric(horizontal: token.size5),
+        ) ??
+        EdgeInsets.symmetric(horizontal: token.size5);
     final actionText = widget.actionText;
     final hasAction = actionText != null && actionText.isNotEmpty;
 
@@ -209,14 +212,28 @@ class _TSearchBarState extends State<TSearchBar> {
               ? theme?.actionTextStyle?.color ?? token.brandColor
               : token.textColorDisabled,
         );
-    var searchIconTheme = IconThemeData(
-      size: _kIconSize,
-      color: token.textColorPlaceholder,
-    ).merge(theme?.searchIconTheme);
-    var clearIconTheme = IconThemeData(
-      size: _kIconSize,
-      color: token.textColorPlaceholder,
-    ).merge(theme?.clearIconTheme);
+    var searchIconTheme =
+        IconThemeData(
+              size: context.tTheme.size8,
+              color: token.textColorPlaceholder,
+            )
+            .merge(theme?.searchIconTheme)
+            .copyWith(
+              size:
+                  theme?.resolveSearchIconSize(context.tTheme.size8) ??
+                  context.tTheme.size8,
+            );
+    var clearIconTheme =
+        IconThemeData(
+              size: context.tTheme.size8,
+              color: token.textColorPlaceholder,
+            )
+            .merge(theme?.clearIconTheme)
+            .copyWith(
+              size:
+                  theme?.resolveClearIconSize(context.tTheme.size8) ??
+                  context.tTheme.size8,
+            );
     if (!widget.enabled) {
       searchIconTheme = searchIconTheme.copyWith(
         color: token.textColorDisabled,
@@ -224,7 +241,7 @@ class _TSearchBarState extends State<TSearchBar> {
       clearIconTheme = clearIconTheme.copyWith(color: token.textColorDisabled);
     }
 
-    if (theme?.height == null) {
+    if (theme?.hasHeightOverride != true) {
       for (final style in [textStyle, hintStyle]) {
         height = math.max(
           height,
@@ -248,8 +265,8 @@ class _TSearchBarState extends State<TSearchBar> {
       height = math.max(
         height,
         math.max(
-              searchIconTheme.size ?? _kIconSize,
-              clearIconTheme.size ?? _kIconSize,
+              searchIconTheme.size ?? context.tTheme.size8,
+              clearIconTheme.size ?? context.tTheme.size8,
             ) +
             contentPadding.vertical,
       );

@@ -32,3 +32,39 @@ class TokenDoubleLerp {
       ? null
       : TokenDoubleLerp(begin, beginLerp, end, endLerp, t);
 }
+
+/// Deferred interpolation for token-backed geometry supplied by the consumer.
+class TokenValueLerp<T> {
+  const TokenValueLerp(
+    this.begin,
+    this.beginLerp,
+    this.end,
+    this.endLerp,
+    this.t,
+    this.interpolate,
+  );
+
+  final T? begin;
+  final TokenValueLerp<T>? beginLerp;
+  final T? end;
+  final TokenValueLerp<T>? endLerp;
+  final double t;
+  final T Function(T, T, double) interpolate;
+
+  T resolve(T fallback) => interpolate(
+    beginLerp?.resolve(fallback) ?? begin ?? fallback,
+    endLerp?.resolve(fallback) ?? end ?? fallback,
+    t,
+  );
+
+  static TokenValueLerp<T>? between<T>(
+    T? begin,
+    TokenValueLerp<T>? beginLerp,
+    T? end,
+    TokenValueLerp<T>? endLerp,
+    double t,
+    T Function(T, T, double) interpolate,
+  ) => begin == null && end == null && beginLerp == null && endLerp == null
+      ? null
+      : TokenValueLerp(begin, beginLerp, end, endLerp, t, interpolate);
+}

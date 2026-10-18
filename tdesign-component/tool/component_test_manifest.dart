@@ -44,6 +44,7 @@ const sharedExampleTests = [
   'test/example_code_viewer_test.dart',
   'test/api_docs_test.dart',
   'test/web_theme_message_test.dart',
+  'test/theme/all_component_web_theme_test.dart',
   'test/web_theme_listener_lifecycle_test.dart',
   'test/demo_page_test_utils_test.dart',
 ];
@@ -105,6 +106,12 @@ const componentTestManifests = <ComponentTestManifest>[
     componentTests: ['test/components/cell/t_cell_test.dart'],
     exampleTests: ['test/cell/cell_page_test.dart'],
     visualTests: [
+      VisualTestManifest(
+        name: 'Cell Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/cell/t_cell_golden_test.dart'],
+        kind: VisualTestKind.component,
+      ),
       VisualTestManifest(
         name: 'Cell Demo',
         workingDirectory: 'example',
@@ -406,7 +413,10 @@ const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(
     name: 'drawer',
     coverageTargets: ['lib/src/components/drawer/'],
-    componentTests: ['test/components/drawer/t_drawer_test.dart'],
+    componentTests: [
+      'test/components/drawer/t_drawer_test.dart',
+      'test/components/drawer/t_drawer_token_transition_test.dart',
+    ],
     exampleTests: ['test/drawer/drawer_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
@@ -613,7 +623,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Tabs Component',
         workingDirectory: '.',
-        testFiles: ['test/components/tabs/t_tab_golden_test.dart'],
+        testFiles: [
+          'test/components/tabs/t_tab_golden_test.dart',
+          'test/components/tabs/t_tag_padding_golden_test.dart',
+        ],
         kind: VisualTestKind.component,
       ),
       VisualTestManifest(
@@ -1045,7 +1058,8 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/acceptance/theme_acceptance_test.dart',
       'test/theme/theme_test.dart',
       'test/theme/overlay_themes_test.dart',
-      'test/theme/theme_split_boundary_test.dart',
+      'test/theme/component_token_ownership_test.dart',
+      'test/theme/token_default_transition_test.dart',
       'test/theme/t_theme_extensions_test.dart',
       'test/components/theme/t_colors_test.dart',
       'test/components/theme/t_material_theme_priority_test.dart',

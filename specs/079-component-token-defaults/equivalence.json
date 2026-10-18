@@ -1,0 +1,15 @@
+{
+  "originalHead": "af58482ed807dae1f3c052ec269dfd296831eb85",
+  "foundation": "590df49a6209d31978e70e2eb4ea26101c605a6f",
+  "allOriginalTrackedFilesEqual": true,
+  "originalFileCount": 3801,
+  "additionalPaths": [
+    "specs/078-theme-pr-split",
+    "specs/079-component-token-defaults"
+  ],
+  "goldenCountRestored": 98,
+  "recipe": "git ls-tree -r -z af58482e; SHA1(blob + length + NUL + each working file bytes)",
+  "scope": "Restoration checkpoint b374adc2 before the subsequent token-default interpolation review; not current tree equivalence",
+  "restorationHead": "b374adc29503907bd51724c202d14eb3c8b44ab0",
+  "currentReview": "review.md / review-results.json"
+}
