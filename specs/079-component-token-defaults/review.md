@@ -30,7 +30,7 @@
 
 修复消费端延迟解析的 14 项几何字段：BackTop 四项、Cell 卡片圆角、Table padding、TabBar 高度、Drawer 两项 padding 与图标间距、Search padding/两种图标主题 size、Toast 分形态 padding。未增加全局引用或修改最终默认值。Search 的 IconThemeData 整体替换时，未指定 size 按原契约回退全局默认，不保留被替换对象的旧过渡。copyWith/merge 的显式字段清除对应过渡，其他字段继续保留；中断后再次插值沿用已解析的过渡。SideBar 已用 nullable 离散切换，Stepper 已按完整有效样式递归解析，无需重复修改。
 
-新增 17 项回归涵盖双向 nullable、端点、中间值、copyWith、二次插值、显式覆盖、Directional padding 与实际 Table 与 BackTop Widget 布局。测试登记在已有 theme CI 入口。
+新增 17 项回归涵盖双向 nullable、端点、中间值、copyWith、二次插值、显式覆盖、Directional padding 与实际 Table 与 BackTop Widget 布局。初次登记在theme入口；squash后真实CI分组核对将其中3项Drawer用例原样移到Drawer组件入口，其余14项保留theme入口。详见ci-registration-results.json的双版本独立门禁结果。
 
 ## 风险与合入条件
 

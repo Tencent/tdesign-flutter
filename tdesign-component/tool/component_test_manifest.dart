@@ -407,7 +407,10 @@ const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(
     name: 'drawer',
     coverageTargets: ['lib/src/components/drawer/'],
-    componentTests: ['test/components/drawer/t_drawer_test.dart'],
+    componentTests: [
+      'test/components/drawer/t_drawer_test.dart',
+      'test/components/drawer/t_drawer_token_transition_test.dart',
+    ],
     exampleTests: ['test/drawer/drawer_demo_test.dart'],
     visualTests: [
       VisualTestManifest(

@@ -12,5 +12,6 @@
     "incrementBeforeAndAfterEqual": true,
     "uniqueCommitCount": 5
   },
-  "verification": "Whole tracked tree and incremental binary diff identical at rebase checkpoint. Follow-up changes only add rebase evidence under Spec079. Runtime, tests, API artifacts, original design evidence and 98 Goldens unchanged. Existing same-source verification is reusable; current remote CI must validate new head."
+  "verification": "Whole tracked tree and incremental binary diff identical at rebase checkpoint. Follow-up changes only add rebase evidence under Spec079. Runtime, tests, API artifacts, original design evidence and 98 Goldens unchanged. Existing same-source verification is reusable; current remote CI must validate new head.",
+  "followupCIRegistration": "After the identical rebase checkpoint, the same 3 Drawer transition cases were moved from theme to Drawer componentTests to satisfy independent CI ownership/coverage. Production, API artifacts, design evidence and 98 Goldens remain byte-identical to old PR head."
 }

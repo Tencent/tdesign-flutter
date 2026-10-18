@@ -163,5 +163,6 @@
     "tdesign-component/example/test/fonts/TimeCounterGoldenCJK-Regular.otf": "39f4d2ad65e424fea210552a9ddeb0e1f79ae5f9acd6b21f56f4d861359debf1",
     "tdesign-component/example/test/fonts/TreeSelectGoldenCJK-Regular.otf": "1cbb5418c4cd91a103deb2a28f68dacb1e895a6efcb8f2f5e8198d67d38ac7ca"
   },
-  "validatedRuntimeHead": "e6da168c"
+  "validatedRuntimeHead": "e6da168c",
+  "scope": "Historical 56c460a8 runtime/combined-test checkpoint. Production unchanged after squash rebase; Drawer test ownership was corrected afterward. Current independent CI group results are in ci-registration-results.json."
 }
