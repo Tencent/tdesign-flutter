@@ -1,0 +1,490 @@
+{
+  "base": "f5d8df2f2bc43224406319b4944930454458930c",
+  "head": "8e8666c0bc34e394a47c87b7c191d1fb5888deea",
+  "items": [
+    {
+      "component": "BackTop",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/backtop_state_matrix_light-comparison.png",
+      "local": "backtop_state_matrix_light-comparison.png",
+      "source": "tdesign-component/test/components/backtop/goldens/backtop_state_matrix_light.png",
+      "diffPixels": 6619,
+      "diffBBox": [
+        25,
+        0,
+        296,
+        160
+      ]
+    },
+    {
+      "component": "BackTop",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/backtop_state_matrix_dark-comparison.png",
+      "local": "backtop_state_matrix_dark-comparison.png",
+      "source": "tdesign-component/test/components/backtop/goldens/backtop_state_matrix_dark.png",
+      "diffPixels": 6443,
+      "diffBBox": [
+        25,
+        0,
+        296,
+        160
+      ]
+    },
+    {
+      "component": "Badge",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/t_badge_light-comparison.png",
+      "local": "t_badge_light-comparison.png",
+      "source": "tdesign-component/test/components/badge/goldens/t_badge_light.png",
+      "diffPixels": 20,
+      "diffBBox": [
+        252,
+        151,
+        268,
+        167
+      ]
+    },
+    {
+      "component": "Badge",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/t_badge_dark-comparison.png",
+      "local": "t_badge_dark-comparison.png",
+      "source": "tdesign-component/test/components/badge/goldens/t_badge_dark.png",
+      "diffPixels": 20,
+      "diffBBox": [
+        252,
+        151,
+        268,
+        167
+      ]
+    },
+    {
+      "component": "DropdownMenu",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/dropdown_menu_page_light-comparison.png",
+      "local": "dropdown_menu_page_light-comparison.png",
+      "source": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_page_light.png",
+      "diffPixels": 4158,
+      "diffBBox": [
+        21,
+        277,
+        348,
+        556
+      ]
+    },
+    {
+      "component": "DropdownMenu",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/dropdown_menu_page_dark-comparison.png",
+      "local": "dropdown_menu_page_dark-comparison.png",
+      "source": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_page_dark.png",
+      "diffPixels": 4123,
+      "diffBBox": [
+        21,
+        277,
+        348,
+        556
+      ]
+    },
+    {
+      "component": "Refresh",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/pull_down_refresh_basic_post_action_light-comparison.png",
+      "local": "pull_down_refresh_basic_post_action_light-comparison.png",
+      "source": "tdesign-component/example/test/refresh/goldens/pull_down_refresh_basic_post_action_light.png",
+      "diffPixels": 585,
+      "diffBBox": [
+        143,
+        276,
+        232,
+        302
+      ]
+    },
+    {
+      "component": "Refresh",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/pull_down_refresh_basic_post_action_dark-comparison.png",
+      "local": "pull_down_refresh_basic_post_action_dark-comparison.png",
+      "source": "tdesign-component/example/test/refresh/goldens/pull_down_refresh_basic_post_action_dark.png",
+      "diffPixels": 588,
+      "diffBBox": [
+        143,
+        276,
+        232,
+        302
+      ]
+    },
+    {
+      "component": "SideBar",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/sidebar_tag_selected_item_light-comparison.png",
+      "local": "sidebar_tag_selected_item_light-comparison.png",
+      "source": "tdesign-component/example/test/sidebar/goldens/sidebar_tag_selected_item_light.png",
+      "diffPixels": 86,
+      "diffBBox": [
+        8,
+        224,
+        95,
+        264
+      ]
+    },
+    {
+      "component": "SideBar",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/sidebar_tag_selected_item_dark-comparison.png",
+      "local": "sidebar_tag_selected_item_dark-comparison.png",
+      "source": "tdesign-component/example/test/sidebar/goldens/sidebar_tag_selected_item_dark.png",
+      "diffPixels": 88,
+      "diffBBox": [
+        8,
+        224,
+        95,
+        264
+      ]
+    },
+    {
+      "component": "Table",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/t_table_api_light-comparison.png",
+      "local": "t_table_api_light-comparison.png",
+      "source": "tdesign-component/test/components/table/goldens/t_table_api_light.png",
+      "diffPixels": 7466,
+      "diffBBox": [
+        29,
+        60,
+        359,
+        513
+      ]
+    },
+    {
+      "component": "Table",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/t_table_api_dark-comparison.png",
+      "local": "t_table_api_dark-comparison.png",
+      "source": "tdesign-component/test/components/table/goldens/t_table_api_dark.png",
+      "diffPixels": 7469,
+      "diffBBox": [
+        29,
+        60,
+        359,
+        513
+      ]
+    },
+    {
+      "component": "Toast",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/toast_multiple_text_opened_light-comparison.png",
+      "local": "toast_multiple_text_opened_light-comparison.png",
+      "source": "tdesign-component/example/test/toast/goldens/toast_multiple_text_opened_light.png",
+      "diffPixels": 4292,
+      "diffBBox": [
+        94,
+        656,
+        281,
+        755
+      ]
+    },
+    {
+      "component": "Toast",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/toast_multiple_text_opened_dark-comparison.png",
+      "local": "toast_multiple_text_opened_dark-comparison.png",
+      "source": "tdesign-component/example/test/toast/goldens/toast_multiple_text_opened_dark.png",
+      "diffPixels": 4290,
+      "diffBBox": [
+        94,
+        656,
+        280,
+        755
+      ]
+    },
+    {
+      "component": "Link",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/link_feedback_light-comparison.png",
+      "local": "link_feedback_light-comparison.png",
+      "source": "tdesign-component/example/test/link/goldens/link_feedback_light.png",
+      "diffPixels": 1004,
+      "diffBBox": [
+        128,
+        518,
+        247,
+        573
+      ]
+    },
+    {
+      "component": "Link",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/link_feedback_dark-comparison.png",
+      "local": "link_feedback_dark-comparison.png",
+      "source": "tdesign-component/example/test/link/goldens/link_feedback_dark.png",
+      "diffPixels": 1002,
+      "diffBBox": [
+        128,
+        518,
+        247,
+        573
+      ]
+    },
+    {
+      "component": "NavBar",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/navbar_back_toast_light-comparison.png",
+      "local": "navbar_back_toast_light-comparison.png",
+      "source": "tdesign-component/example/test/navbar/goldens/navbar_back_toast_light.png",
+      "diffPixels": 1004,
+      "diffBBox": [
+        128,
+        338,
+        247,
+        393
+      ]
+    },
+    {
+      "component": "NavBar",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/navbar_back_toast_dark-comparison.png",
+      "local": "navbar_back_toast_dark-comparison.png",
+      "source": "tdesign-component/example/test/navbar/goldens/navbar_back_toast_dark.png",
+      "diffPixels": 1002,
+      "diffBBox": [
+        128,
+        338,
+        247,
+        393
+      ]
+    },
+    {
+      "component": "NoticeBar",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/notice_bar_close_post_action_light-comparison.png",
+      "local": "notice_bar_close_post_action_light-comparison.png",
+      "source": "tdesign-component/example/test/notice_bar/goldens/notice_bar_close_post_action_light.png",
+      "diffPixels": 903,
+      "diffBBox": [
+        114,
+        683,
+        261,
+        737
+      ]
+    },
+    {
+      "component": "NoticeBar",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/notice_bar_close_post_action_dark-comparison.png",
+      "local": "notice_bar_close_post_action_dark-comparison.png",
+      "source": "tdesign-component/example/test/notice_bar/goldens/notice_bar_close_post_action_dark.png",
+      "diffPixels": 899,
+      "diffBBox": [
+        114,
+        683,
+        261,
+        737
+      ]
+    },
+    {
+      "component": "Popover",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/popover_custom_option_1_post_action_light-comparison.png",
+      "local": "popover_custom_option_1_post_action_light-comparison.png",
+      "source": "tdesign-component/example/test/popover/goldens/popover_custom_option_1_post_action_light.png",
+      "diffPixels": 1138,
+      "diffBBox": [
+        117,
+        338,
+        258,
+        393
+      ]
+    },
+    {
+      "component": "Popover",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/popover_custom_option_1_post_action_dark-comparison.png",
+      "local": "popover_custom_option_1_post_action_dark-comparison.png",
+      "source": "tdesign-component/example/test/popover/goldens/popover_custom_option_1_post_action_dark.png",
+      "diffPixels": 1138,
+      "diffBBox": [
+        117,
+        338,
+        258,
+        393
+      ]
+    },
+    {
+      "component": "TabBar",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/tab_bar_text_toast_light-comparison.png",
+      "local": "tab_bar_text_toast_light-comparison.png",
+      "source": "tdesign-component/example/test/tab_bar/goldens/tab_bar_text_toast_light.png",
+      "diffPixels": 836,
+      "diffBBox": [
+        142,
+        338,
+        233,
+        393
+      ]
+    },
+    {
+      "component": "TabBar",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/tab_bar_text_toast_dark-comparison.png",
+      "local": "tab_bar_text_toast_dark-comparison.png",
+      "source": "tdesign-component/example/test/tab_bar/goldens/tab_bar_text_toast_dark.png",
+      "diffPixels": 832,
+      "diffBBox": [
+        142,
+        338,
+        233,
+        393
+      ]
+    },
+    {
+      "component": "Badge 字体缩放场景",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/centering_light_1.0-comparison.png",
+      "local": "centering_light_1.0-comparison.png",
+      "source": "tdesign-component/test/components/text/goldens/centering_light_1.0.png",
+      "diffPixels": 110,
+      "diffBBox": [
+        68,
+        2197,
+        92,
+        2395
+      ]
+    },
+    {
+      "component": "Badge 字体缩放场景",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/centering_dark_1.0-comparison.png",
+      "local": "centering_dark_1.0-comparison.png",
+      "source": "tdesign-component/test/components/text/goldens/centering_dark_1.0.png",
+      "diffPixels": 110,
+      "diffBBox": [
+        68,
+        2197,
+        92,
+        2395
+      ]
+    },
+    {
+      "component": "BackTop 大字号组合场景",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/remaining_navigation_light_3_0-comparison.png",
+      "local": "remaining_navigation_light_3_0-comparison.png",
+      "source": "tdesign-component/test/components/text/goldens/remaining_navigation_light_3_0.png",
+      "diffPixels": 16578,
+      "diffBBox": [
+        0,
+        12,
+        375,
+        691
+      ]
+    },
+    {
+      "component": "BackTop 大字号组合场景",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/remaining_navigation_dark_3_0-comparison.png",
+      "local": "remaining_navigation_dark_3_0-comparison.png",
+      "source": "tdesign-component/test/components/text/goldens/remaining_navigation_dark_3_0.png",
+      "diffPixels": 16496,
+      "diffBBox": [
+        0,
+        12,
+        375,
+        691
+      ]
+    },
+    {
+      "component": "Cell",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/cell-default-light-comparison.png",
+      "local": "cell-default-light-comparison.png",
+      "scenes": [
+        {
+          "scene": "cell_card_default_radius_light",
+          "diffPixels": 110,
+          "diffBBox": [
+            16,
+            88,
+            359,
+            146
+          ]
+        }
+      ]
+    },
+    {
+      "component": "Cell",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/cell-default-dark-comparison.png",
+      "local": "cell-default-dark-comparison.png",
+      "scenes": [
+        {
+          "scene": "cell_card_default_radius_dark",
+          "diffPixels": 112,
+          "diffBBox": [
+            16,
+            88,
+            359,
+            146
+          ]
+        }
+      ]
+    },
+    {
+      "component": "Tabs",
+      "mode": "light",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/tabs-default-light-comparison.png",
+      "local": "tabs-default-light-comparison.png",
+      "scenes": [
+        {
+          "scene": "tabs_tag_default_padding_light_initial",
+          "diffPixels": 5990,
+          "diffBBox": [
+            12,
+            0,
+            272,
+            48
+          ]
+        },
+        {
+          "scene": "tabs_tag_default_padding_light_selected",
+          "diffPixels": 6416,
+          "diffBBox": [
+            12,
+            0,
+            272,
+            48
+          ]
+        }
+      ]
+    },
+    {
+      "component": "Tabs",
+      "mode": "dark",
+      "file": "specs/079-component-token-defaults/evidence/comment-diffs/tabs-default-dark-comparison.png",
+      "local": "tabs-default-dark-comparison.png",
+      "scenes": [
+        {
+          "scene": "tabs_tag_default_padding_dark_initial",
+          "diffPixels": 5987,
+          "diffBBox": [
+            12,
+            0,
+            272,
+            48
+          ]
+        },
+        {
+          "scene": "tabs_tag_default_padding_dark_selected",
+          "diffPixels": 6422,
+          "diffBBox": [
+            12,
+            0,
+            272,
+            48
+          ]
+        }
+      ]
+    }
+  ]
+}
