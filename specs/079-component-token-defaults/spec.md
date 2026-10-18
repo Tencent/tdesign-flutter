@@ -21,3 +21,7 @@ A先合入develop，再将本PR的base从A分支调整为develop并运行完整C
 ## Token 默认与动画
 
 新增全局消费者的组件 Theme 字段未配置时，过渡的 nullable 端点必须在消费处从当前有效 token 解析，不得使用 0 或旧固定常量代替。copyWith、merge 及中断动画保留未覆盖字段的过渡，显式几何字段覆盖对应过渡；Directional padding 按真实文字方向解析。
+
+### 堆叠 PR 的合入保护
+
+#1174 当前目标为 #1172 分支，不可直接合入，否则会把 breaking 改动带回原 PR。先合入 #1172 后检查其旧 head 590df49a 是否仍为 develop 的祖先：普通 merge 保留祖先时可正常改 base；若 #1172 经 squash/rebase 合并导致祖先关系丢失，须将 #1174 在 590df49a 之后的独有提交重新整理到最新 develop（处理冲突并重新验证），再核对最终 diff 只有 breaking 增量，执行新 head 完整 CI。仅切 base 不能保证差异范围正确。

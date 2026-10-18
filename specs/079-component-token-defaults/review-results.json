@@ -64,11 +64,46 @@
     }
   },
   "visual": {
-    "status": "running",
+    "status": "passed",
     "platform": "Linux amd64 / Flutter 3.32.0",
     "updateGoldens": false,
     "comparator": "Existing exact comparator, no changes",
-    "scope": "Original 16 reviewed suites plus theme/backtop/cell/drawer/search/tab_bar/table/toast/tabs suites from actual manifest; deduplicated"
+    "scope": "Original 16 reviewed suites plus theme/backtop/cell/drawer/search/tab_bar/table/toast/tabs suites from actual manifest; deduplicated",
+    "suiteCount": 25,
+    "suites": [
+      "Badge Component",
+      "Badge Demo",
+      "Cell Demo",
+      "BackTop Component",
+      "BackTop Demo",
+      "Popover Demo",
+      "DropdownMenu Demo",
+      "Drawer Demo",
+      "Drawer Popup Consumer",
+      "PullDownRefresh Demo",
+      "TabBar Component",
+      "TabBar Demo",
+      "NavBar Demo",
+      "Tabs Component",
+      "Tabs Demo",
+      "Link Demo",
+      "NoticeBar Demo",
+      "Table API states",
+      "Table Demo",
+      "Component centering states",
+      "Search Demo",
+      "SideBar Demo",
+      "Theme Component",
+      "Theme Demo",
+      "Toast Demo"
+    ],
+    "logSha256": "42242a8260932b7e41d752bff5b79425befaa5883213cac5cb0e8e5a172d07cd",
+    "flutterVersion": "Flutter 3.32.0 • channel [user-branch] • unknown source\nFramework • revision be698c48a6 (1 year, 5 months ago) • 2025-05-19 12:59:14 -0700\nEngine • revision 1881800949 () • 1970-01-01 00:00:00.000\nTools • Dart 3.8.0 • DevTools 2.45.1",
+    "linuxDependencyLockSha256": {
+      "tdesign-component/pubspec.lock": "af8208a3dd672418dd482056cea209550a6956652443f1e8e98cd4840b71b9ca",
+      "tdesign-component/example/pubspec.lock": "c567b65b00ae825f93b5b9110ee776daf1d630f41ae75eb9ca360a437d14c0af"
+    },
+    "sourceValidation": "Mirror final production/test/manifest bytes match source fingerprint. Final Search copyWith correction copied before Search visual suite started; preceding suites do not consume that replacement branch."
   },
   "remote": {
     "1172": {
@@ -78,7 +113,7 @@
     },
     "1174": {
       "fullCI": "not triggered: current base is PR #1172 branch, workflow only targets develop",
-      "mergeRecommendation": "wait for #1172, retarget develop, run final-head full CI"
+      "mergeRecommendation": "Do not merge into PR #1172. Merge #1172 first; if squash/rebase lost foundation ancestry, transplant only B commits onto latest develop; verify incremental diff, retarget, and run final-head full CI."
     }
   },
   "goldens": {
@@ -93,5 +128,40 @@
     "api": "dart run tool/audit_api_docs.dart",
     "visual": "actual visualTestArguments for approved 16 plus affected suites; --update-goldens absent"
   },
-  "followup": "Preserve whole IconThemeData replacement semantics: an omitted size in a replacement object falls back to the current token; 2 extra assertions in the existing 17 regressions."
+  "followup": "Preserve whole IconThemeData replacement semantics: an omitted size in a replacement object falls back to the current token; 2 extra assertions in the existing 17 regressions.",
+  "trackedFontSha256": {
+    "tdesign-component/assets/tdesign/TCloudNumberVF.ttf": "f712f74bdb5343c12d6801b349fd5a1b07c54b9ab31023098803b98dc2ac6063",
+    "tdesign-component/example/test/fonts/AvatarGoldenCJK-Regular.otf": "f7a30185d3942c4cb698afb1e74002cc16eaddfcf70ae1ec0774f16e61f9392f",
+    "tdesign-component/example/test/fonts/BackTopGoldenCJK-Regular.otf": "44dc59fa4e3b84496d07c21e47af8679cec635b70af2e9561d9dbbfef444b42e",
+    "tdesign-component/example/test/fonts/BadgeGoldenCJK-Regular.otf": "0c7933246c76faff195e871bde8f83fb04e488d867efde542fa111bbaff7d88e",
+    "tdesign-component/example/test/fonts/CalendarGoldenCJK-Regular.otf": "d9df3abeeda93b75f92a6e35d0bd73b9da67375cab820d6ac203b8fe4c649c0d",
+    "tdesign-component/example/test/fonts/CascaderGoldenCJK-Regular.otf": "8bbb7b7109383e63954943d26ba653540b8037147b5258a19482589b0dd01ee6",
+    "tdesign-component/example/test/fonts/CollapseGoldenCJK-Regular.otf": "e8f9a14d26d2342b00d379f65e969c5b4b03e44ab9d8ae5bff372b885a729ac2",
+    "tdesign-component/example/test/fonts/DateTimePickerGoldenCJK-Regular.otf": "e153909c12e6f88953746a1334d40eb91806a02ac263fb5997bf41710e87156c",
+    "tdesign-component/example/test/fonts/DemoReviewGoldenCJK-Regular.otf": "09ceb5b1f9ac5e5451b6cd0e6b46945aee4e035c0eab17554c4772713e8a6ed0",
+    "tdesign-component/example/test/fonts/DrawerGoldenCJK-Regular.otf": "1638859b042d7df3056e1042e3ec56b248fc59cad9a88608d562093da7f060ba",
+    "tdesign-component/example/test/fonts/FormGoldenCJK-Regular.otf": "31036643ddabc5f4621d22fe743b454cef77c785a0d386f4f9a97bf125ad55ea",
+    "tdesign-component/example/test/fonts/ImageGoldenCJK-Regular.otf": "ba8c31342f34f0d1ca0ceb62e3f50c7de2169e6330f7c2b398993a9a0eff2ba5",
+    "tdesign-component/example/test/fonts/IndexesGoldenCJK-Regular.otf": "cedb91f9c93622514e0a86c6f2eab924310755de88e2dcbdc88a5dd211f973c1",
+    "tdesign-component/example/test/fonts/NavBarGoldenCJK-Regular.otf": "42ac590f847bba78e4854d1db40fe9bc4cfe537a003273e1f43b0ad1d3db557c",
+    "tdesign-component/example/test/fonts/PickerGoldenCJK-Regular.otf": "54321709d3095fd55996e301d0958f3f6fd8c71928cc38da403f3fdc1b4b30d7",
+    "tdesign-component/example/test/fonts/ProgressGoldenCJK-Regular.otf": "8f6894a9e05cf085047bbb10b48e18c0f3461d831a8af1c6ef7befb88890acc0",
+    "tdesign-component/example/test/fonts/RadioGoldenCJK-Regular.otf": "cdd6b80b52382a5345597848ba58ef53ddf630aa29bfa1a4165b63264c000c2d",
+    "tdesign-component/example/test/fonts/RateGoldenCJK-Regular.otf": "ba2f7a0b21ed4df2a6b24f8c44bec1d6b183ed28fce76131f89cf8ed93d54e91",
+    "tdesign-component/example/test/fonts/SideBarGoldenCJK-Regular.otf": "490f5cfd79e21292f96c3f07ae6a512650de9bbe0cb78d6eebc0e30ca8f461e0",
+    "tdesign-component/example/test/fonts/SkeletonGoldenCJK-Regular.otf": "0d9bc1e3573e19a40ac0777bf1799418a32eb3ab3f79a52e510e015bd1afbc93",
+    "tdesign-component/example/test/fonts/SliderGoldenCJK-Regular.otf": "59c5bebba9bf720005fb977a94b9c150b0b8e8c2698c1dca3a66d9f0d7cd9722",
+    "tdesign-component/example/test/fonts/StepperGoldenCJK-Regular.otf": "6df8e74aa398c55ff2140025fd79c31300653bc02ddf31d35ec94f9c5ae3d0d0",
+    "tdesign-component/example/test/fonts/StepsGoldenCJK-Regular.otf": "1c4a9391deda7834d5f3357e20d8bfcdd97be685e021ed31d2bde4166cdf9524",
+    "tdesign-component/example/test/fonts/SwiperGoldenCJK-Regular.otf": "ed438fa7b12f8d944f860c4d59e1c29e2fe5dc1a1b0cf9a9ce094d9c2ed8baa9",
+    "tdesign-component/example/test/fonts/TDesignAlignmentCJK-Regular.otf": "2c7a2ea904b3c082910f3929ca81ed543af3fe2897add8ef19a9b4cd518a5b8b",
+    "tdesign-component/example/test/fonts/TDesignFeedbackGoldenCJK-Regular.otf": "3ccbd82a3a8abbc2de214373ba6155021263f3401d43087784bf1acbdbb116e1",
+    "tdesign-component/example/test/fonts/TDesignGoldenCJK-Regular.otf": "1cf396734d8d8bd6f81bebc03f9abc16680da03b9bad485564d14e65c0e34235",
+    "tdesign-component/example/test/fonts/TabBarGoldenCJK-Regular.otf": "77e2e93df0b403af5ddd7411b6472ada58a93fcade6b87a34c26fe422f698c70",
+    "tdesign-component/example/test/fonts/TableGoldenCJK-Regular.otf": "f496cbf68c3d2d6a365a90f555bc7944609e2a3b9bf559b111149b47e4d4ee7d",
+    "tdesign-component/example/test/fonts/TabsGoldenCJK-Regular.otf": "883cb872c26093d5a7f5b9b491d8037657395b4c974f1942d97f9d341c9f71ee",
+    "tdesign-component/example/test/fonts/TimeCounterGoldenCJK-Regular.otf": "39f4d2ad65e424fea210552a9ddeb0e1f79ae5f9acd6b21f56f4d861359debf1",
+    "tdesign-component/example/test/fonts/TreeSelectGoldenCJK-Regular.otf": "1cbb5418c4cd91a103deb2a28f68dacb1e895a6efcb8f2f5e8198d67d38ac7ca"
+  },
+  "validatedRuntimeHead": "e6da168c"
 }
