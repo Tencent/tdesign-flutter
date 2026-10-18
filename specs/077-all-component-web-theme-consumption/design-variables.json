@@ -1,0 +1,1151 @@
+[
+  [
+    "VariableID:56374:4927",
+    "--td-font/family",
+    {
+      "56374:8": "PingFang SC"
+    }
+  ],
+  [
+    "VariableID:56374:4928",
+    "--td-font-weight/Semibold",
+    {
+      "56374:8": "600"
+    }
+  ],
+  [
+    "VariableID:56374:4929",
+    "--td-font-weight/Regular",
+    {
+      "56374:8": "400"
+    }
+  ],
+  [
+    "VariableID:56374:4930",
+    "--td-font-size/link-small",
+    {
+      "56374:8": 12
+    }
+  ],
+  [
+    "VariableID:56374:4931",
+    "--td-line-height/link-small",
+    {
+      "56374:8": 20
+    }
+  ],
+  [
+    "VariableID:56374:4932",
+    "--td-line-height/link-medium",
+    {
+      "56374:8": 22
+    }
+  ],
+  [
+    "VariableID:56374:4933",
+    "--td-line-height/link-large",
+    {
+      "56374:8": 24
+    }
+  ],
+  [
+    "VariableID:56374:4934",
+    "--td-line-height/mark-small",
+    {
+      "56374:8": 20
+    }
+  ],
+  [
+    "VariableID:56374:4935",
+    "--td-line-height/mark-medium",
+    {
+      "56374:8": 22
+    }
+  ],
+  [
+    "VariableID:56374:4936",
+    "--td-line-height/body-small",
+    {
+      "56374:8": 20
+    }
+  ],
+  [
+    "VariableID:56374:4937",
+    "--td-line-height/body-medium",
+    {
+      "56374:8": 22
+    }
+  ],
+  [
+    "VariableID:56374:4938",
+    "--td-line-height/body-large",
+    {
+      "56374:8": 24
+    }
+  ],
+  [
+    "VariableID:56374:4939",
+    "--td-line-height/title-small",
+    {
+      "56374:8": 22
+    }
+  ],
+  [
+    "VariableID:56374:4940",
+    "--td-line-height/title-medium",
+    {
+      "56374:8": 24
+    }
+  ],
+  [
+    "VariableID:56374:4941",
+    "--td-line-height/title-large",
+    {
+      "56374:8": 26
+    }
+  ],
+  [
+    "VariableID:56374:4942",
+    "--td-line-height/title-extralarge",
+    {
+      "56374:8": 28
+    }
+  ],
+  [
+    "VariableID:56374:4943",
+    "--td-line-height/headline-small",
+    {
+      "56374:8": 32
+    }
+  ],
+  [
+    "VariableID:56374:4944",
+    "--td-line-height/headline-medium",
+    {
+      "56374:8": 36
+    }
+  ],
+  [
+    "VariableID:56374:4945",
+    "--td-line-height/headline-large",
+    {
+      "56374:8": 44
+    }
+  ],
+  [
+    "VariableID:56374:4946",
+    "--td-line-height/display-medium",
+    {
+      "56374:8": 56
+    }
+  ],
+  [
+    "VariableID:56374:4947",
+    "--td-line-height/display-large",
+    {
+      "56374:8": 72
+    }
+  ],
+  [
+    "VariableID:56374:4948",
+    "--td-font-size/link-medium",
+    {
+      "56374:8": 14
+    }
+  ],
+  [
+    "VariableID:56374:4949",
+    "--td-font-size/link-large",
+    {
+      "56374:8": 16
+    }
+  ],
+  [
+    "VariableID:56374:4950",
+    "--td-font-size/mark-small",
+    {
+      "56374:8": 12
+    }
+  ],
+  [
+    "VariableID:56374:4951",
+    "--td-font-size/mark-medium",
+    {
+      "56374:8": 14
+    }
+  ],
+  [
+    "VariableID:56374:4952",
+    "--td-font-size/body-small",
+    {
+      "56374:8": 12
+    }
+  ],
+  [
+    "VariableID:56374:4953",
+    "--td-font-size/body-medium",
+    {
+      "56374:8": 14
+    }
+  ],
+  [
+    "VariableID:56374:4954",
+    "--td-font-size/body-large",
+    {
+      "56374:8": 16
+    }
+  ],
+  [
+    "VariableID:56374:4955",
+    "--td-font-size/title-small",
+    {
+      "56374:8": 14
+    }
+  ],
+  [
+    "VariableID:56374:4956",
+    "--td-font-size/title-medium",
+    {
+      "56374:8": 16
+    }
+  ],
+  [
+    "VariableID:56374:4957",
+    "--td-font-size/title-large",
+    {
+      "56374:8": 18
+    }
+  ],
+  [
+    "VariableID:56374:4958",
+    "--td-font-size/title-extralarge",
+    {
+      "56374:8": 20
+    }
+  ],
+  [
+    "VariableID:56374:4959",
+    "--td-font-size/headline-small",
+    {
+      "56374:8": 24
+    }
+  ],
+  [
+    "VariableID:56374:4960",
+    "--td-font-size/headline-medium",
+    {
+      "56374:8": 28
+    }
+  ],
+  [
+    "VariableID:56374:4961",
+    "--td-font-size/headline-large",
+    {
+      "56374:8": 36
+    }
+  ],
+  [
+    "VariableID:56374:4962",
+    "--td-font-size/display-medium",
+    {
+      "56374:8": 48
+    }
+  ],
+  [
+    "VariableID:56374:4963",
+    "--td-font-size/display-large",
+    {
+      "56374:8": 64
+    }
+  ],
+  [
+    "VariableID:56374:4965",
+    "--td-radius-small",
+    {
+      "56374:9": 2
+    }
+  ],
+  [
+    "VariableID:56374:4966",
+    "--td-radius-default",
+    {
+      "56374:9": 3
+    }
+  ],
+  [
+    "VariableID:56374:4967",
+    "--td-radius-medium",
+    {
+      "56374:9": 6
+    }
+  ],
+  [
+    "VariableID:56374:4968",
+    "--td-radius-large",
+    {
+      "56374:9": 9
+    }
+  ],
+  [
+    "VariableID:56374:4969",
+    "--td-radius-extralarge",
+    {
+      "56374:9": 12
+    }
+  ],
+  [
+    "VariableID:56374:4970",
+    "--td-radius-round",
+    {
+      "56374:9": 999
+    }
+  ],
+  [
+    "VariableID:56374:4972",
+    "--td-size/1",
+    {
+      "56374:10": 2
+    }
+  ],
+  [
+    "VariableID:56374:4973",
+    "--td-size/2",
+    {
+      "56374:10": 4
+    }
+  ],
+  [
+    "VariableID:56374:4974",
+    "--td-size/3",
+    {
+      "56374:10": 6
+    }
+  ],
+  [
+    "VariableID:56374:4975",
+    "--td-size/4",
+    {
+      "56374:10": 8
+    }
+  ],
+  [
+    "VariableID:56374:4976",
+    "--td-size/5",
+    {
+      "56374:10": 12
+    }
+  ],
+  [
+    "VariableID:56374:4977",
+    "--td-size/6",
+    {
+      "56374:10": 16
+    }
+  ],
+  [
+    "VariableID:56374:4978",
+    "--td-size/7",
+    {
+      "56374:10": 20
+    }
+  ],
+  [
+    "VariableID:56374:4979",
+    "--td-size/8",
+    {
+      "56374:10": 24
+    }
+  ],
+  [
+    "VariableID:56374:4980",
+    "--td-size/9",
+    {
+      "56374:10": 28
+    }
+  ],
+  [
+    "VariableID:56374:4981",
+    "--td-size/10",
+    {
+      "56374:10": 32
+    }
+  ],
+  [
+    "VariableID:56374:4982",
+    "--td-size/11",
+    {
+      "56374:10": 36
+    }
+  ],
+  [
+    "VariableID:56374:4983",
+    "--td-size/12",
+    {
+      "56374:10": 40
+    }
+  ],
+  [
+    "VariableID:56374:4984",
+    "--td-size/13",
+    {
+      "56374:10": 48
+    }
+  ],
+  [
+    "VariableID:56374:4985",
+    "--td-size/14",
+    {
+      "56374:10": 56
+    }
+  ],
+  [
+    "VariableID:56374:4986",
+    "--td-size/15",
+    {
+      "56374:10": 64
+    }
+  ],
+  [
+    "VariableID:56374:4987",
+    "--td-size/16",
+    {
+      "56374:10": 72
+    }
+  ],
+  [
+    "VariableID:56374:4988",
+    "--td-comp-size/xxxs",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4977"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:4989",
+    "--td-comp-size/xxs",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4978"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:4990",
+    "--td-comp-size/xs",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4979"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:4991",
+    "--td-comp-size/s",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4980"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:4992",
+    "--td-comp-size/m",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4981"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:4993",
+    "--td-comp-size/l",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4982"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:4994",
+    "--td-comp-size/xl",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4983"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:4995",
+    "--td-comp-size/xxl",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4984"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:4996",
+    "--td-comp-size/xxxl",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4985"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:4997",
+    "--td-comp-size/xxxxl",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4986"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:4998",
+    "--td-comp-size/xxxxxl",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4987"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:4999",
+    "--td-comp-paddingLR/xxs",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4972"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5000",
+    "--td-comp-paddingLR/xs",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4973"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5001",
+    "--td-comp-paddingLR/s",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4975"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5002",
+    "--td-comp-paddingLR/m",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4976"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5003",
+    "--td-comp-paddingLR/l",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4977"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5004",
+    "--td-comp-paddingLR/xl",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4979"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5005",
+    "--td-comp-paddingLR/xxl",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4981"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5006",
+    "--td-comp-paddingTB/xxs",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4972"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5007",
+    "--td-pop-padding/s",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4973"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5008",
+    "--td-pop-padding/m",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4974"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5009",
+    "--td-pop-padding/l",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4975"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5010",
+    "--td-pop-padding/xl",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4976"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5011",
+    "--td-pop-padding/xxl",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4977"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5012",
+    "--td-comp-paddingTB/xs",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4973"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5013",
+    "--td-comp-paddingTB/s",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4975"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5014",
+    "--td-comp-paddingTB/m",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4976"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5015",
+    "--td-comp-paddingTB/l",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4977"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5016",
+    "--td-comp-paddingTB/xl",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4979"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5017",
+    "--td-comp-paddingTB/xxl",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4981"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5018",
+    "--td-comp-margin/xxs",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4972"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5019",
+    "--td-comp-margin/xs",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4973"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5020",
+    "--td-comp-margin/s",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4975"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5021",
+    "--td-comp-margin/m",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4976"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5022",
+    "--td-comp-margin/l",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4977"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5023",
+    "--td-comp-margin/xl",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4978"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5024",
+    "--td-comp-margin/xxl",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4979"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5025",
+    "--td-comp-margin/xxxl",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4981"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5026",
+    "--td-comp-margin/xxxxl",
+    {
+      "56374:10": {
+        "type": "VARIABLE_ALIAS",
+        "id": "VariableID:56374:4983"
+      }
+    }
+  ],
+  [
+    "VariableID:56374:5086",
+    "基础投影/--td-shadow-1/offsetx-1",
+    {
+      "56374:11": 0,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5087",
+    "基础投影/--td-shadow-1/offsety-1",
+    {
+      "56374:11": 1,
+      "56374:12": 4
+    }
+  ],
+  [
+    "VariableID:56374:5088",
+    "基础投影/--td-shadow-1/blur-1",
+    {
+      "56374:11": 10,
+      "56374:12": 6
+    }
+  ],
+  [
+    "VariableID:56374:5089",
+    "基础投影/--td-shadow-1/spread-1",
+    {
+      "56374:11": 0,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5090",
+    "基础投影/--td-shadow-1/offsetx-2",
+    {
+      "56374:11": 0,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5091",
+    "基础投影/--td-shadow-1/offsety-2",
+    {
+      "56374:11": 4,
+      "56374:12": 1
+    }
+  ],
+  [
+    "VariableID:56374:5092",
+    "基础投影/--td-shadow-1/blur-2",
+    {
+      "56374:11": 5,
+      "56374:12": 10
+    }
+  ],
+  [
+    "VariableID:56374:5093",
+    "基础投影/--td-shadow-1/spread-2",
+    {
+      "56374:11": 0,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5094",
+    "基础投影/--td-shadow-1/offsetx-3",
+    {
+      "56374:11": 0,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5095",
+    "基础投影/--td-shadow-1/offsety-3",
+    {
+      "56374:11": 2,
+      "56374:12": 2
+    }
+  ],
+  [
+    "VariableID:56374:5096",
+    "基础投影/--td-shadow-1/blur-3",
+    {
+      "56374:11": 4,
+      "56374:12": 4
+    }
+  ],
+  [
+    "VariableID:56374:5097",
+    "基础投影/--td-shadow-1/spread-3",
+    {
+      "56374:11": -1,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5101",
+    "基础投影/--td-shadow-2/offsetx-1",
+    {
+      "56374:11": 0,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5102",
+    "基础投影/--td-shadow-2/offsety-1",
+    {
+      "56374:11": 3,
+      "56374:12": 8
+    }
+  ],
+  [
+    "VariableID:56374:5103",
+    "基础投影/--td-shadow-2/blur-1",
+    {
+      "56374:11": 14,
+      "56374:12": 10
+    }
+  ],
+  [
+    "VariableID:56374:5104",
+    "基础投影/--td-shadow-2/spread-1",
+    {
+      "56374:11": 2,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5105",
+    "基础投影/--td-shadow-2/offsetx-2",
+    {
+      "56374:11": 0,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5106",
+    "基础投影/--td-shadow-2/offsety-2",
+    {
+      "56374:11": 8,
+      "56374:12": 3
+    }
+  ],
+  [
+    "VariableID:56374:5107",
+    "基础投影/--td-shadow-2/blur-2",
+    {
+      "56374:11": 10,
+      "56374:12": 14
+    }
+  ],
+  [
+    "VariableID:56374:5108",
+    "基础投影/--td-shadow-2/spread-2",
+    {
+      "56374:11": 1,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5109",
+    "基础投影/--td-shadow-2/offsetx-3",
+    {
+      "56374:11": 0,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5110",
+    "基础投影/--td-shadow-2/offsety-3",
+    {
+      "56374:11": 5,
+      "56374:12": 5
+    }
+  ],
+  [
+    "VariableID:56374:5111",
+    "基础投影/--td-shadow-2/blur-3",
+    {
+      "56374:11": 5,
+      "56374:12": 5
+    }
+  ],
+  [
+    "VariableID:56374:5112",
+    "基础投影/--td-shadow-2/spread-3",
+    {
+      "56374:11": -3,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5116",
+    "基础投影/--td-shadow-3/offsetx-1",
+    {
+      "56374:11": 0,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5117",
+    "基础投影/--td-shadow-3/offsety-1",
+    {
+      "56374:11": 6,
+      "56374:12": 16
+    }
+  ],
+  [
+    "VariableID:56374:5118",
+    "基础投影/--td-shadow-3/blur-1",
+    {
+      "56374:11": 30,
+      "56374:12": 24
+    }
+  ],
+  [
+    "VariableID:56374:5119",
+    "基础投影/--td-shadow-3/spread-1",
+    {
+      "56374:11": 5,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5120",
+    "基础投影/--td-shadow-3/offsetx-2",
+    {
+      "56374:11": 0,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5121",
+    "基础投影/--td-shadow-3/offsety-2",
+    {
+      "56374:11": 16,
+      "56374:12": 6
+    }
+  ],
+  [
+    "VariableID:56374:5122",
+    "基础投影/--td-shadow-3/blur-2",
+    {
+      "56374:11": 24,
+      "56374:12": 30
+    }
+  ],
+  [
+    "VariableID:56374:5123",
+    "基础投影/--td-shadow-3/spread-2",
+    {
+      "56374:11": 2,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5124",
+    "基础投影/--td-shadow-3/offsetx-3",
+    {
+      "56374:11": 0,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5125",
+    "基础投影/--td-shadow-3/offsety-3",
+    {
+      "56374:11": 8,
+      "56374:12": 8
+    }
+  ],
+  [
+    "VariableID:56374:5126",
+    "基础投影/--td-shadow-3/blur-3",
+    {
+      "56374:11": 10,
+      "56374:12": 10
+    }
+  ],
+  [
+    "VariableID:56374:5127",
+    "基础投影/--td-shadow-3/spread-3",
+    {
+      "56374:11": -5,
+      "56374:12": 0
+    }
+  ],
+  [
+    "VariableID:56374:5134",
+    "light layer",
+    {
+      "56374:11": true,
+      "56374:12": false
+    }
+  ],
+  [
+    "VariableID:56374:5135",
+    "dark layer",
+    {
+      "56374:11": false,
+      "56374:12": true
+    }
+  ],
+  [
+    "VariableID:56374:12727",
+    "--td-font-size/mark-large",
+    {
+      "56374:8": 16
+    }
+  ],
+  [
+    "VariableID:56374:12728",
+    "--td-line-height/mark-large",
+    {
+      "56374:8": 24
+    }
+  ],
+  [
+    "VariableID:56399:2431",
+    "--td-font-size/body-extrasmall",
+    {
+      "56374:8": 10
+    }
+  ],
+  [
+    "VariableID:56399:2432",
+    "--td-line-height/body-extrasmall",
+    {
+      "56374:8": 16
+    }
+  ],
+  [
+    "VariableID:56399:2433",
+    "--td-font-size/mark-extrasmall",
+    {
+      "56374:8": 10
+    }
+  ],
+  [
+    "VariableID:56399:2434",
+    "--td-line-height/mark-extrasmall",
+    {
+      "56374:8": 16
+    }
+  ]
+]

@@ -1,4 +1,6 @@
 default.check-filename = true
+# Preserve the truncated node name returned by Figma in the frozen evidence snapshot.
+default.extend-ignore-re = ['arrow=true, description=false, leftIcon=false, note=false, requir']
 
 [default.extend-words]
 "BA" = "BA"

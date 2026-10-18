@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
+import '../../theme/t_radius.dart';
+import '../../theme/t_theme.dart';
 import 't_badge_defaults.dart';
 import 't_badge_theme_data.dart';
 
@@ -53,7 +55,10 @@ class TBadgeLabel extends StatelessWidget {
       _ => height,
     };
     final borderRadius = switch (shape) {
-      TBadgeLabelShape.square => BorderRadius.circular(2),
+      // The supplied design's 3px radius-default uses Flutter's small tier.
+      TBadgeLabelShape.square => BorderRadius.circular(
+        context.tTheme.radiusSmall,
+      ),
       TBadgeLabelShape.bubble =>
         Theme.of(context).extension<TBadgeThemeData>()?.bubbleBorderRadius ??
             TBadgeDefaults.bubbleBorderRadius,

@@ -6,6 +6,35 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 覆盖：默认渲染、shape 形态、showText、visibilityOffset 显隐、onPressed 回调/禁用、
 /// 回顶动画防抖、ThemeData 子树注入、品牌主题、tooltip。
 void main() {
+  testWidgets('默认图标22，独立于无匹配全局size，组件覆盖优先', (tester) async {
+    Future<void> pump(TThemeData token, [TBackTopThemeData? component]) =>
+        tester.pumpWidget(
+          MaterialApp(
+            themeAnimationDuration: Duration.zero,
+            theme: TThemeBuilder.light(
+              token,
+            ).copyWith(extensions: [token, if (component != null) component]),
+            home: const Scaffold(body: TBackTop()),
+          ),
+        );
+    final token = TThemeData.defaultData();
+    await pump(token);
+    expect(tester.widget<Icon>(find.byIcon(TIcons.backtop)).size, 22);
+    final other = token.copyWith(
+      sizeMap: {...token.sizeMap, 'size7': 25, 'size8': 30},
+    );
+    await pump(other);
+    expect(tester.widget<Icon>(find.byIcon(TIcons.backtop)).size, 22);
+    await pump(other, const TBackTopThemeData(iconSize: 17));
+    expect(tester.widget<Icon>(find.byIcon(TIcons.backtop)).size, 17);
+    expect(
+      const TBackTopThemeData()
+          .lerp(const TBackTopThemeData(iconSize: 30), .5)
+          .iconSize,
+      26,
+    );
+  });
+
   RoundedRectangleBorder circleBorder(
     TThemeData token, {
     BorderSide side = BorderSide.none,
@@ -470,7 +499,7 @@ void main() {
       const b = TBackTopThemeData(roundSize: 56, iconSize: 24);
       final result = a.lerp(b, 0.5);
       expect(result.roundSize, 52);
-      expect(result.iconSize, 22);
+      expect(result.iconSize, 23);
       expect(result.contentGap, null);
     });
 

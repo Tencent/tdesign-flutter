@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+
+import '../../theme/t_token_double_lerp.dart';
 
 /// TToast 组件级 ThemeExtension
 ///
 /// {@category ComponentTheme}
 class TToastThemeData extends ThemeExtension<TToastThemeData> {
+  TokenDoubleLerp? get _iconSizeLerp => null;
+
+  @internal
+  double resolveIconSize(double fallback) =>
+      _iconSizeLerp?.resolve(fallback) ?? iconSize ?? fallback;
+
   /// 背景色
   final Color? backgroundColor;
 
   /// 文案样式
   final TextStyle? textStyle;
 
-  /// 图标尺寸
+  /// 图标尺寸；未配置时横向读取 size8（24），纵向与加载读取 size10（32）。
   final double? iconSize;
 
   /// 图标颜色
@@ -46,14 +55,19 @@ class TToastThemeData extends ThemeExtension<TToastThemeData> {
     if (other == null) {
       return this;
     }
-    return TToastThemeData(
-      backgroundColor: other.backgroundColor ?? backgroundColor,
-      textStyle: other.textStyle ?? textStyle,
-      iconSize: other.iconSize ?? iconSize,
-      iconColor: other.iconColor ?? iconColor,
-      borderRadius: other.borderRadius ?? borderRadius,
-      padding: other.padding ?? padding,
-      maxWidth: other.maxWidth ?? maxWidth,
+    return _InterpolatedTToastThemeData(
+      TToastThemeData(
+        backgroundColor: other.backgroundColor ?? backgroundColor,
+        textStyle: other.textStyle ?? textStyle,
+        iconSize: other.iconSize ?? iconSize,
+        iconColor: other.iconColor ?? iconColor,
+        borderRadius: other.borderRadius ?? borderRadius,
+        padding: other.padding ?? padding,
+        maxWidth: other.maxWidth ?? maxWidth,
+      ),
+      iconSizeLerp:
+          other._iconSizeLerp ??
+          (other.iconSize == null ? _iconSizeLerp : null),
     );
   }
 
@@ -71,14 +85,17 @@ class TToastThemeData extends ThemeExtension<TToastThemeData> {
     EdgeInsetsGeometry? padding,
     double? maxWidth,
   }) {
-    return TToastThemeData(
-      backgroundColor: backgroundColor ?? this.backgroundColor,
-      textStyle: textStyle ?? this.textStyle,
-      iconSize: iconSize ?? this.iconSize,
-      iconColor: iconColor ?? this.iconColor,
-      borderRadius: borderRadius ?? this.borderRadius,
-      padding: padding ?? this.padding,
-      maxWidth: maxWidth ?? this.maxWidth,
+    return _InterpolatedTToastThemeData(
+      TToastThemeData(
+        backgroundColor: backgroundColor ?? this.backgroundColor,
+        textStyle: textStyle ?? this.textStyle,
+        iconSize: iconSize ?? this.iconSize,
+        iconColor: iconColor ?? this.iconColor,
+        borderRadius: borderRadius ?? this.borderRadius,
+        padding: padding ?? this.padding,
+        maxWidth: maxWidth ?? this.maxWidth,
+      ),
+      iconSizeLerp: iconSize == null ? _iconSizeLerp : null,
     );
   }
 
@@ -98,14 +115,23 @@ class TToastThemeData extends ThemeExtension<TToastThemeData> {
     if (other is! TToastThemeData) {
       return this;
     }
-    return TToastThemeData(
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
-      iconSize: lerpDouble(iconSize, other.iconSize, t),
-      iconColor: Color.lerp(iconColor, other.iconColor, t),
-      borderRadius: lerpDouble(borderRadius, other.borderRadius, t),
-      padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
-      maxWidth: lerpDouble(maxWidth, other.maxWidth, t),
+    return _InterpolatedTToastThemeData(
+      TToastThemeData(
+        backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
+        textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
+        iconSize: lerpDouble(iconSize, other.iconSize, t),
+        iconColor: Color.lerp(iconColor, other.iconColor, t),
+        borderRadius: lerpDouble(borderRadius, other.borderRadius, t),
+        padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
+        maxWidth: lerpDouble(maxWidth, other.maxWidth, t),
+      ),
+      iconSizeLerp: TokenDoubleLerp.between(
+        iconSize,
+        _iconSizeLerp,
+        other.iconSize,
+        other._iconSizeLerp,
+        t,
+      ),
     );
   }
 
@@ -128,4 +154,23 @@ class TToastThemeData extends ThemeExtension<TToastThemeData> {
     }
     return (a ?? 0.0) * (1.0 - t) + (b ?? 0.0) * t;
   }
+}
+
+class _InterpolatedTToastThemeData extends TToastThemeData {
+  _InterpolatedTToastThemeData(
+    TToastThemeData data, {
+    TokenDoubleLerp? iconSizeLerp,
+  }) : _iconSizeLerp = iconSizeLerp,
+       super(
+         backgroundColor: data.backgroundColor,
+         textStyle: data.textStyle,
+         iconSize: data.iconSize,
+         iconColor: data.iconColor,
+         borderRadius: data.borderRadius,
+         padding: data.padding,
+         maxWidth: data.maxWidth,
+       );
+
+  @override
+  final TokenDoubleLerp? _iconSizeLerp;
 }

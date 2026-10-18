@@ -11,6 +11,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_styled.dart';
 import 't_dropdown_theme_data.dart';
@@ -680,9 +681,11 @@ class _TDropdownMenuState extends State<TDropdownMenu>
           trackTransforms: _controller.isOpen,
           child: Container(
             key: _barKey,
-            height: theme.barHeight,
-            constraints: theme.barHeight == null
-                ? const BoxConstraints(minHeight: 48)
+            height: !theme.hasBarHeightOverride
+                ? null
+                : theme.resolveBarHeight(context.tTheme.size13),
+            constraints: !theme.hasBarHeightOverride
+                ? BoxConstraints(minHeight: context.tTheme.size13)
                 : null,
             decoration: BoxDecoration(
               color:
@@ -786,7 +789,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
               curve: Curves.ease,
               child: TInternalIcon(
                 TIcons.caret_down_small,
-                size: theme.iconSize ?? 24,
+                size: theme.resolveIconSize(context.tTheme.size7),
                 color: iconColor,
               ),
             ),
