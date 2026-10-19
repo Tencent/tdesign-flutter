@@ -1,0 +1,32 @@
+name: auto-release-flutter
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  publish:
+    permissions:
+      contents: read
+      id-token: write
+    environment:
+      name: pub.dev
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: flutter-actions/setup-flutter@v4
+        with:
+          channel: stable
+          version: 3.32.0
+
+      - uses: flutter-actions/setup-pubdev-credentials@v1
+
+      - name: install
+        working-directory: ./tdesign-component
+        run: flutter pub get
+
+      - name: publish
+        working-directory: ./tdesign-component
+        run: flutter pub publish --force

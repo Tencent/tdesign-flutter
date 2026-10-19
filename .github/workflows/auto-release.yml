@@ -1,0 +1,22 @@
+name: auto-release
+
+on:
+  pull_request:
+    types: [closed]
+    paths: ['tdesign-component/pubspec.yaml']
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    if: github.event.pull_request.merged && startsWith(github.head_ref, 'release/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: TDesignOteam/tdesign-changelog-action@next
+        with:
+          token: ${{ secrets.TDESIGN_BOT_TOKEN }}
+          mode: single
