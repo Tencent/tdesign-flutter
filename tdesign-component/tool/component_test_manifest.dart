@@ -44,6 +44,7 @@ const sharedExampleTests = [
   'test/example_code_viewer_test.dart',
   'test/api_docs_test.dart',
   'test/web_theme_message_test.dart',
+  'test/tool/generator_theme_test.dart',
   'test/theme/all_component_web_theme_test.dart',
   'test/web_theme_listener_lifecycle_test.dart',
   'test/demo_page_test_utils_test.dart',
@@ -1046,6 +1047,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'theme',
     coverageTargets: [
       'lib/src/theme/t_theme.dart',
+      'lib/src/theme/basic.dart',
       'lib/src/theme/t_radius.dart',
       'lib/src/theme/t_sizes.dart',
       'lib/src/theme/t_size_defaults.dart',
@@ -1057,6 +1059,7 @@ const componentTestManifests = <ComponentTestManifest>[
     componentTests: [
       'test/acceptance/theme_acceptance_test.dart',
       'test/theme/theme_test.dart',
+      'test/theme/font_json_test.dart',
       'test/theme/overlay_themes_test.dart',
       'test/theme/component_token_ownership_test.dart',
       'test/theme/token_default_transition_test.dart',
