@@ -67,7 +67,6 @@ jobs:
         working-directory: ./tdesign-component/example
         run: |
           set -euo pipefail
-          flutter pub get --enforce-lockfile
           flutter build web --base-href /flutter/example/
 
           cd "$GITHUB_WORKSPACE"

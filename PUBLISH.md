@@ -41,8 +41,6 @@
 
 ## Demo APK 构建
 
-PR 的 Flutter 3.32.0 下载包由 `PREVIEW_BUILD` 调用共享 APK workflow 生成；`test-build` 的 latest APK 用于兼容验证，不加入同一发布序列。版本资源和文件名共用组件版本，Android `versionCode` 为 `2030000000 + PREVIEW_BUILD run_number`，以兼容旧日期版本号并随运行递增。重试同一次运行保持版本号；正式交付不覆盖同版本产物。
+PR 的 Flutter 3.32.0 APK 由 PREVIEW_BUILD 的共享 workflow 构建，同时提供验证与下载；latest APK 由 test-build 验证，develop push 保留两个版本。下载文件名沿用组件版本与工作流运行编号；Android 包内版本逻辑维持原方案，本轮不迁移版本号。
 
-固定 Flutter 3.32.0 的 Demo 使用已提交的 Example 锁文件；更新依赖时用该 SDK 重新解析并验证。latest 兼容任务删除其工作副本中的锁文件后独立解析。API、示例片段和构建日期由资源准备任务生成后传递，编译目录和插件元数据不跨 SDK 复用。资源准备 workflow 每个工作流执行一次，PR 的测试构建与预览构建仍分别准备资源。
-
-本地或 CNB 直接打包时，先在 `tdesign-component` 执行 `dart tool/write_demo_build_info.dart`，再在 Example 执行 `flutter build apk --release --build-number <明确的构建号>`。未传构建号时采用 Example pubspec 的默认值，不保证可覆盖现有预览包。Flutter 3.32.0 的原生 release 构建保留默认插件准备，不添加 `--no-pub`。
+API、示例片段与构建日期集中准备后传给各平台，依赖与编译目录不跨 SDK 共享。APK 构建保留默认依赖解析与原生插件准备，不添加 --no-pub。本轮不提交 Example 锁文件；可复现依赖与同日重复 versionCode 问题后续独立处理。

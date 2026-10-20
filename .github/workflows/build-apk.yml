@@ -37,35 +37,20 @@ jobs:
             tdesign-component/example/android/**/*.gradle
             tdesign-component/example/android/gradle.properties
             tdesign-component/example/android/gradle/wrapper/gradle-wrapper.properties
-            tdesign-component/example/pubspec.lock
-      - name: Install Demo dependencies
-        working-directory: tdesign-component/example
-        env:
-          FLUTTER_VERSION: ${{ inputs.flutter-version }}
-        run: |
-          if [ "$FLUTTER_VERSION" = '3.32.0' ]; then
-            flutter pub get --enforce-lockfile
-          else
-            rm pubspec.lock
-            flutter pub get
-          fi
       - name: Download prepared resources
         uses: actions/download-artifact@v4
         with:
           name: demo-assets
           path: tdesign-component/example/assets
+      # Keep default dependency/plugin preparation for native release builds.
       - name: Build release APK
         working-directory: tdesign-component/example
         env:
           DEMO_VERSION: ${{ inputs.version }}
           DEMO_BUILD_NUMBER: ${{ inputs.build-number }}
         run: |
-          flutter build apk --release --build-name "$DEMO_VERSION" --build-number "$DEMO_BUILD_NUMBER"
+          flutter build apk --release
           mv build/app/outputs/flutter-apk/app-release.apk "build/app/outputs/flutter-apk/tdesign-flutter-${DEMO_VERSION}-${DEMO_BUILD_NUMBER}.apk"
-      # Native release builds must regenerate plugin registration (including on Flutter 3.32.0).
-      - name: Verify fixed SDK lockfile was preserved
-        if: inputs.flutter-version == '3.32.0'
-        run: git diff --exit-code -- tdesign-component/example/pubspec.lock
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:

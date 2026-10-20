@@ -27,12 +27,7 @@ jobs:
           cache-sdk: true
       - name: Install generator dependencies
         working-directory: tdesign-component
-        run: |
-          flutter pub get
-          git diff --exit-code -- example/pubspec.lock
-      - name: Verify locked Demo dependencies
-        working-directory: tdesign-component/example
-        run: flutter pub get --enforce-lockfile
+        run: flutter pub get
       - name: Prepare Demo resources
         working-directory: tdesign-component
         run: |
@@ -41,13 +36,27 @@ jobs:
           dart tool/write_demo_build_info.dart
       - name: Verify Flutter component contracts
         run: node scripts/check-flutter-component-contracts.mjs
-      - name: Verify build metadata contracts
-        run: node --test scripts/demo-build-metadata.test.mjs
       - name: Prepare build metadata
         id: metadata
         env:
           PR_NUMBER: ${{ github.event.pull_request.number || '0' }}
-        run: node scripts/demo-build-metadata.mjs
+        run: |
+          VERSION=$(cat tdesign-component/example/assets/version)
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Invalid Demo version" >&2
+            exit 1
+          fi
+          if [[ ! "$GITHUB_RUN_NUMBER" =~ ^[1-9][0-9]*$ ]]; then
+            echo "::error::Invalid workflow run number" >&2
+            exit 1
+          fi
+          {
+            echo "PR_NUMBER=$PR_NUMBER"
+            echo "VERSION=$VERSION"
+            echo "BUILD_NUMBER=$GITHUB_RUN_NUMBER"
+          } > build-env.txt
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "build-number=$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
       - name: Upload prepared resources
         uses: actions/upload-artifact@v4
         with:

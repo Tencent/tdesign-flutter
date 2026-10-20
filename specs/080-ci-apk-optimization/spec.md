@@ -1,23 +1,22 @@
 # CI 与 Demo APK 构建优化
 
-## 背景
+## 背景与目标
 
-PR 的相同 SDK APK 重复构建，平台矩阵反复生成资源，网站与 APK 串行；日期版本号同日不递增，l10n 含废弃选项。目标是在保留双 SDK、release 和现有回归口径的前提下减少重复工作。
+PR 的相同 SDK APK 重复构建，平台矩阵反复生成资源，网站与 APK 串行。只在本轮减少重复工作，保留双 SDK、release 和现有回归口径。
 
-## 方案与边界
+## 最终方案
 
+- 在 Flutter 3.32.0 集中生成 API、示例片段和构建信息，以工作流内 Artifact 传给各平台；不同 SDK 不共享依赖与编译目录。
+- PR 的最低版本 APK 同时用于兼容验证和下载，latest APK 仍由 test-build 验证；develop push 保留双版本 APK。Web 和 APK 在资源准备后并行。
+- APK 只执行普通 flutter build apk --release，保留 Flutter 默认依赖解析和原生插件准备，不增加独立 pub get、--no-pub 或双版本锁文件分支。
+- Gradle 保持 8.14，仅将 all 分发改成 bin；增加 Gradle 缓存并使用现有 JDK 17，NDK 跟随 SDK。Android 工程除此两处以外维持基线。
+- 包内版本号沿用原日期方案，下载文件名沿用组件版本与工作流运行编号。Example 锁文件继续忽略，自定义版本序号及依赖锁定不属于本轮。
+- l10n 明确输出到 lib/l10n，不声明废弃 synthetic-package 选项。保留 ARB、导入和 generate: true，不升级工具链。
 
-- l10n 直接生成到 `lib/l10n`，不再声明废弃的 synthetic-package 选项。保留 ARB、现有导入和 generate: true；最低与较新 SDK 均需在删除旧生成文件后重新生成并验证，不能以旧文件残留推定兼容。不升级 Gradle、AGP 或 Kotlin。
+## 取舍与兼容
 
-- 资源准备在 Flutter 3.32.0 下统一生成 API、示例片段与构建元数据，工作流内通过 Artifact 传递给 APK、Web、iOS。依赖和编译目录不跨 SDK 共享。
-- PR 的 3.32.0 APK 由 PREVIEW_BUILD 负责，同时提供兼容验证与下载；test-build 保留 latest APK，develop push 仍验证双版本。预览 Web 与 APK 并行，发布仍等待两者成功，保留来源 PR、Artifact 和线上内容校验。
-- 保留 release 与通用架构、测试依赖和组件回归。Gradle 使用 bin 分发与用户目录缓存；缓存命中不是成功条件。
-- 官方 GitHub APK 使用 PREVIEW_BUILD 运行序号生成 versionCode：2030000000 + run_number，上限 2100000000。迁移基数高于切换日旧日期方案；工作流重试可使用相同版本。其他工作流的验证包不作为同一连续发布序列。
-- Android versionName 读取统一版本资源，versionCode 消费 Flutter build-number；版本资源缺失立即失败，不再回退旧版本。本地无显式 build-number 时沿用 Flutter 的默认值。
-- Example 的固定 SDK 交付构建使用锁文件；latest 兼容构建单独解析依赖，不能受固定 SDK 锁文件限制。
+保留两个工作流分别准备资源，避免跨运行 Artifact 来源与权限耦合。版本号同日重复、版本资源丢失时旧回退和依赖复现问题仍然存在，后续独立修复；本轮不以减少代码为由删除必要插件准备。
 
-验收包括工作流语法、资源传递、双 SDK 依赖与检查、Android 版本及 release APK 构建。本地不推定远端工作流或预览发布已通过。
+## 验收标准
 
-## 取舍
-
-保留两个工作流各自的资源准备，避免跨运行查找 Artifact 带来来源与权限耦合。工具链升级及组件覆盖率调度重构不纳入本轮。
+工作流语法和预览元数据格式正确；移出版本号与锁文件方案后，两个 SDK 的普通 release APK 重新构建成功，包内版本符合原方案。资源复用、功能及 Golden 入口保持；本地验证不代替精简版未来的远端 CI。

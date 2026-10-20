@@ -10,6 +10,7 @@ pluginManagement {
     // 引入 Flutter 插件加载机制
     includeBuild("${settings.ext.flutterSdkPath}/packages/flutter_tools/gradle")
 
+    apply from: "${rootDir}/app/version.gradle" // 加载 version.gradle 脚本
     repositories {
         google()
         mavenCentral()

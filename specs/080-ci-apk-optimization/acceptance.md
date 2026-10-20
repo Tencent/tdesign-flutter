@@ -1,5 +1,18 @@
 # 本地验证记录
 
+## 精简版推送前本地验收（2026-10-20）
+
+已有版本 b467d630ad98a5bd6e23e2d3df9d50174b1dfb8f 已确认推送至 PR #1179。随后在 rss1102/perf/ci-apk-minimal 独立副本中移出版本号重构、两个元数据脚本和 Example 锁文件治理；以下结论记录推送前的本地范围。远端结果按 PR #1179 的实际 head 和检查链接核对。
+
+相对 develop 基线 d0de29e8b902c910c86dca05b46fc8604790d591，8 个非 specs 修改文件按路径排序，以路径、NUL、原始内容拼接的 SHA-256 为 19c061523ed8b32e4e8ab94f689bba52fb969a1bea545fbdaf15cc1a96f912a8。Android 工程只保留 ndkVersion 跟随 Flutter 和 Gradle 8.14 all 改 bin；settings.gradle、version.gradle 与基线相同。
+
+- actionlint 1.7.7 与 git diff --check 通过；预览元数据的正常/预发布版本、发布器字段格式及非法版本/运行编号检查通过。
+- Flutter 3.32.0 与 3.47.7 在独立目录执行普通 flutter build apk --release 均成功；没有独立 Example pub get、enforce-lockfile、--no-pub 或 build-number 覆盖。
+- aapt 核对两个 APK 的版本均为 1.0.0 / 2026102001，符合恢复后的旧日期方案。3.32.0 包 SHA-256 为 0fdfc96b2a9103b018a7fe16a049295f44e789d45510ff5f67c3eff3ef9a60dd；3.47.7 为 335fac5ce1baa372e14876b0e7de8612932e2dc846f343b717effe3baa40885b。
+- 完整日志、包字段与配置指纹保存在任务工作区 artifacts/ci-apk-minimal-20261020/，不纳入代码。
+
+本轮不升级工具链、不修改已推送副本；未重新执行精简版的 Web/iOS、全部测试、远端 CI 或设备安装。以下旧候选记录保留各自边界，不能代替精简版的这些验证。原版本号同日重复、版本文件缺失回退及依赖复现问题转为 tasks.md 的独立事项。
+
 以下记录绑定原独立验证副本的候选指纹；为单独提交 PR，将相同的构建代码与 l10n 配置移植到 develop 基线 d0de29e8b902c910c86dca05b46fc8604790d591。未带入文档整理 PR #1178 的改动。下述“未提交、未推送”描述当次本地验收时点，当前 PR 的远端状态另行核对。
 
 ## APK 与 CI 优化本地验收（2026-10-20）

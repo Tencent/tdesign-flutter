@@ -63,7 +63,7 @@ android {
         applicationId "com.tdesign.tdesign_flutter_example"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
+        versionCode createVersionCode()
         versionName createVersionName()
     }
 
