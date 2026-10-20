@@ -67,11 +67,13 @@ jobs:
         working-directory: ./tdesign-component
         run: dart run tool/audit_api_docs.dart
 
-  test:
-    name: test (flutter ${{ matrix.flutter-version }})
+  # 三类测试分别使用独立 runner，复用配置并保留逐组件覆盖率检查。
+  regression:
+    name: ${{ matrix.suite }} tests (flutter ${{ matrix.flutter-version }})
     strategy:
       fail-fast: false
       matrix:
+        suite: [components, examples, tooling]
         flutter-version:
           - 3.32.0
           - latest
@@ -93,14 +95,17 @@ jobs:
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
       - name: Install example dependencies
+        if: matrix.suite == 'examples'
         working-directory: ./tdesign-component/example
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
       - name: Run component regression tests with coverage
+        if: matrix.suite == 'components'
         working-directory: ./tdesign-component
         run: dart run tool/run_component_regression.dart
 
       - name: Test and analyze standalone css2token package
+        if: matrix.suite == 'tooling'
         working-directory: ./packages/css2token
         run: |
           dart pub get
@@ -108,22 +113,48 @@ jobs:
           dart analyze --fatal-infos
 
       - name: Verify public API migration in an external consumer
+        if: matrix.suite == 'tooling'
         working-directory: ./tdesign-component
         run: dart run tool/run_migration_consumer.dart
 
       - name: Test regression tooling
+        if: matrix.suite == 'tooling'
         working-directory: ./tdesign-component
         run: flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart test/tool/audit_api_docs_test.dart test/tool/typedef_docs_test.dart test/tool/api_presentation_test.dart
 
       - name: Check example structure and copied snippets
+        if: matrix.suite == 'tooling'
         working-directory: ./tdesign-component
         run: |
           dart run tool/check_demo_structure.dart
           dart run tool/check_demo_snippets.dart
 
       - name: Run example shared functional tests
+        if: matrix.suite == 'examples'
         working-directory: ./tdesign-component
         run: dart run tool/run_example_regression.dart
+
+  # 保留原必需检查名称，六个测试分支全部成功才通过。
+  test:
+    name: test (flutter ${{ matrix.flutter-version }})
+    needs: regression
+    if: always()
+    strategy:
+      fail-fast: false
+      matrix:
+        flutter-version:
+          - 3.32.0
+          - latest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require all regression jobs to succeed
+        env:
+          REGRESSION_RESULT: ${{ needs.regression.result }}
+        run: |
+          if [[ "$REGRESSION_RESULT" != "success" ]]; then
+            echo "::error::Regression jobs did not all succeed"
+            exit 1
+          fi
 
   visual-regression:
     name: visual regression (flutter 3.32.0 linux)
