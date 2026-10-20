@@ -47,6 +47,7 @@ void main() {
   });
   tearDown(() => fixture.delete(recursive: true));
 
+  // 契约用例直接调用审计逻辑，避免逐例启动 Dart 和加载分析器。
   Future<({int exitCode, String stdout, String stderr})> audit({
     bool json = false,
     List<String> args = const [],
@@ -60,6 +61,7 @@ void main() {
     return (exitCode: code, stdout: output.toString(), stderr: '');
   }
 
+  // 少量真实子进程用于验证命令行参数、输出和退出码。
   Future<ProcessResult> auditCli(List<String> args) {
     for (final file in ['audit_api_docs.dart', 'api_doc_contract.dart']) {
       File('tool/$file').copySync(p.join(fixture.path, 'tool', file));

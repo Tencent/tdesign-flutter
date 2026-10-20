@@ -44,6 +44,7 @@ android {
     namespace 'com.tdesign.tdesign_flutter_example'
 
     compileSdkVersion flutter.compileSdkVersion
+    // NDK 跟随当前 Flutter SDK，兼容最低版本与 latest 构建。
     ndkVersion flutter.ndkVersion
 
     compileOptions {

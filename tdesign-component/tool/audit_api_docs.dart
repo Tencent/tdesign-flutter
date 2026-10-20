@@ -17,8 +17,8 @@ void main(List<String> args) {
   );
 }
 
-/// Audits [root] and writes the CLI report to [output], returning its exit code.
-/// Parsing caches belong to this invocation; process state is left unchanged.
+/// 审计 [root]，将报告写入 [output] 并返回退出码，供 CLI 与测试共用。
+/// 每次调用独立解析，避免测试重复启动进程且不复用上次审计结果。
 int runApiDocsAudit(
   List<String> args, {
   required String root,

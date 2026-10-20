@@ -1,3 +1,4 @@
+# 统一生成 Demo 资源和预览元数据，供同次运行的平台构建复用。
 name: Prepare Demo resources
 
 on:
@@ -36,6 +37,7 @@ jobs:
           dart tool/write_demo_build_info.dart
       - name: Verify Flutter component contracts
         run: node scripts/check-flutter-component-contracts.mjs
+      # 运行编号用于预览元数据和下载文件名，不覆盖包内版本号。
       - name: Prepare build metadata
         id: metadata
         env:

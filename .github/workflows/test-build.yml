@@ -17,9 +17,11 @@ concurrency:
   cancel-in-progress: ${{ github.ref_name != 'develop' }}
 
 jobs:
+  # 各平台复用同次运行生成的资源，避免矩阵内重复生成。
   prepare-demo:
     uses: ./.github/workflows/prepare-demo.yml
 
+  # PR 的 3.32.0 APK 由预览流程提供；develop 推送仍验证双版本。
   apk:
     needs: prepare-demo
     strategy:
@@ -160,6 +162,7 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
+  # Web/iOS 保留双版本构建，APK 使用上方独立任务。
   build:
     needs: prepare-demo
     strategy:

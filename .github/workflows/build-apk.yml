@@ -1,3 +1,4 @@
+# 复用已准备的 Demo 资源，构建指定 Flutter 版本的 release APK 并上传。
 name: Build Demo APK
 
 on:
@@ -42,7 +43,7 @@ jobs:
         with:
           name: demo-assets
           path: tdesign-component/example/assets
-      # Keep default dependency/plugin preparation for native release builds.
+      # 保留默认依赖与插件准备，避免 3.32.0 使用 --no-pub 时注册代码不一致。
       - name: Build release APK
         working-directory: tdesign-component/example
         env:

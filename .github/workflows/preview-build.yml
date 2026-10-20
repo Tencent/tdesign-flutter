@@ -10,9 +10,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # 先准备共享资源，再并行构建 APK 和预览站点。
   prepare-demo:
     uses: ./.github/workflows/prepare-demo.yml
 
+  # 最低支持版本的 APK 同时用于兼容验证与 PR 下载。
   apk:
     needs: prepare-demo
     uses: ./.github/workflows/build-apk.yml
