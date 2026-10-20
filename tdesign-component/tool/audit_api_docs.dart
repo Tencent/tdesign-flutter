@@ -10,7 +10,20 @@ import 'api_doc_contract.dart';
 /// Checks the API manifest against this package's public exports and dartdoc.
 /// Run with --json for a source-location inventory, or --sync to update scope.
 void main(List<String> args) {
-  final root = File.fromUri(Platform.script).parent.parent.path;
+  exitCode = runApiDocsAudit(
+    args,
+    root: File.fromUri(Platform.script).parent.parent.path,
+    output: stdout,
+  );
+}
+
+/// Audits [root] and writes the CLI report to [output], returning its exit code.
+/// Parsing caches belong to this invocation; process state is left unchanged.
+int runApiDocsAudit(
+  List<String> args, {
+  required String root,
+  required StringSink output,
+}) {
   final declarations = <String, Map<String, dynamic>>{};
   final nodes = <String, Declaration>{};
   final units = <String, CompilationUnit>{};
@@ -716,22 +729,20 @@ void main(List<String> args) {
     issue('scope', name, exports[name]!, nodes[name]!.offset);
   }
   if (args.contains('--json')) {
-    stdout.writeln(
+    output.writeln(
       const JsonEncoder.withIndent(
         '  ',
       ).convert({'declarations': declarations, 'issues': issues}),
     );
   } else {
     for (final item in issues) {
-      stdout.writeln(
+      output.writeln(
         '${item['path']}:${item['line']} ${item['category']}: ${item['name']}',
       );
     }
-    stdout.writeln(
+    output.writeln(
       '${components.length} components; ${exports.length} public declarations; ${issues.length} issues',
     );
   }
-  if (issues.isNotEmpty) {
-    exitCode = 1;
-  }
+  return issues.isEmpty ? 0 : 1;
 }

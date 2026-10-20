@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
 
+import '../../tool/audit_api_docs.dart' as api_docs;
+
 void main() {
   late Directory fixture;
   late File asset;
@@ -18,9 +20,6 @@ void main() {
       'example/assets/api',
     ]) {
       Directory(p.join(fixture.path, directory)).createSync(recursive: true);
-    }
-    for (final file in ['audit_api_docs.dart', 'api_doc_contract.dart']) {
-      File('tool/$file').copySync(p.join(fixture.path, 'tool', file));
     }
     File(
       p.join(fixture.path, 'lib/tdesign_flutter.dart'),
@@ -48,12 +47,118 @@ void main() {
   });
   tearDown(() => fixture.delete(recursive: true));
 
-  Future<ProcessResult> audit({bool json = false}) =>
-      Process.run(_dartExecutable(), [
-        '--packages=$packageConfig',
-        p.join(fixture.path, 'tool/audit_api_docs.dart'),
-        if (json) '--json',
-      ]);
+  Future<({int exitCode, String stdout, String stderr})> audit({
+    bool json = false,
+    List<String> args = const [],
+  }) async {
+    final output = StringBuffer();
+    final code = api_docs.runApiDocsAudit(
+      [if (json) '--json', ...args],
+      root: fixture.path,
+      output: output,
+    );
+    return (exitCode: code, stdout: output.toString(), stderr: '');
+  }
+
+  Future<ProcessResult> auditCli(List<String> args) {
+    for (final file in ['audit_api_docs.dart', 'api_doc_contract.dart']) {
+      File('tool/$file').copySync(p.join(fixture.path, 'tool', file));
+    }
+    return Process.run(_dartExecutable(), [
+      '--packages=$packageConfig',
+      p.join(fixture.path, 'tool/audit_api_docs.dart'),
+      ...args,
+    ], workingDirectory: Directory.systemTemp.path);
+  }
+
+  test(
+    'CLI JSON success matches direct auditing outside package cwd',
+    () async {
+      final direct = await audit(json: true);
+      final cli = await auditCli(['--json']);
+      expect(cli.exitCode, 0, reason: '${cli.stderr}');
+      expect(cli.exitCode, direct.exitCode);
+      expect(cli.stdout, direct.stdout);
+      expect(cli.stderr, isEmpty);
+    },
+  );
+
+  test('CLI text failure matches direct auditing', () async {
+    asset.writeAsStringSync('');
+    final direct = await audit();
+    final cli = await auditCli([]);
+    expect(cli.exitCode, 1);
+    expect(cli.exitCode, direct.exitCode);
+    expect(cli.stdout, direct.stdout);
+    expect(cli.stdout, contains('output-type: Sample'));
+    expect(cli.stderr, isEmpty);
+  });
+
+  test('CLI rejects unknown component arguments', () async {
+    final cli = await auditCli(['--components=unknown']);
+    expect(cli.exitCode, isNot(0));
+    expect(cli.stderr, contains('Unknown audit component'));
+    expect(cli.stdout, isEmpty);
+  });
+
+  test(
+    'component selection preserves validation and can exclude defects',
+    () async {
+      final manifestFile = File(p.join(fixture.path, 'tool/components.json'));
+      final manifest = jsonDecode(manifestFile.readAsStringSync()) as Map;
+      (manifest['components'] as List).add({
+        'slug': 'other',
+        'source': {'path': 'lib/src/other', 'type': 'folder'},
+        'api': {
+          'names': ['Missing'],
+        },
+      });
+      Directory(p.join(fixture.path, 'lib/src/other')).createSync();
+      manifestFile.writeAsStringSync(jsonEncode(manifest));
+      expect((await audit()).exitCode, 1);
+      expect((await audit(args: ['--components=sample'])).exitCode, 0);
+      expect(
+        () => api_docs.runApiDocsAudit(
+          ['--components=sample', '--sync'],
+          root: fixture.path,
+          output: StringBuffer(),
+        ),
+        throwsArgumentError,
+      );
+      expect(
+        () => api_docs.runApiDocsAudit(
+          ['--components=unknown'],
+          root: fixture.path,
+          output: StringBuffer(),
+        ),
+        throwsArgumentError,
+      );
+    },
+  );
+
+  test(
+    'sync updates manifest and repeated calls reload changed files',
+    () async {
+      final cwd = Directory.current.path;
+      final previousExitCode = exitCode;
+      source.writeAsStringSync('$_source\n/// Extra type.\nclass Extra {}\n');
+      expect((await audit()).stdout, contains('scope: Extra'));
+      await audit(args: ['--sync']);
+      final manifest =
+          jsonDecode(
+                File(
+                  p.join(fixture.path, 'tool/components.json'),
+                ).readAsStringSync(),
+              )
+              as Map;
+      expect(manifest['components'][0]['api']['names'], ['Sample', 'Extra']);
+      expect((await audit()).stdout, contains('output-type: Extra'));
+      source.writeAsStringSync(_source);
+      expect((await audit()).stdout, contains('stale-scope: Extra'));
+      expect(Directory.current.path, cwd);
+      expect(exitCode, previousExitCode);
+    },
+  );
 
   test(
     'class introduction is optional while API contracts remain checked',
@@ -140,7 +245,7 @@ Clear mode.
             : '## API\n\n$modeDoc\n$themeDoc',
       );
       final result = await audit(json: true);
-      final report = jsonDecode(result.stdout as String) as Map;
+      final report = jsonDecode(result.stdout) as Map;
       if (variant == 'valid') {
         expect(result.exitCode, 0, reason: '${result.stdout}${result.stderr}');
         expect(report['issues'], isEmpty);
@@ -723,8 +828,7 @@ Visibility changed.
       asset.writeAsStringSync(_api.replaceFirst(_fallbackRow, ''));
       final result = await audit(json: true);
       expect(result.exitCode, 1);
-      final inventory =
-          jsonDecode(result.stdout as String) as Map<String, dynamic>;
+      final inventory = jsonDecode(result.stdout) as Map<String, dynamic>;
       expect(
         (inventory['issues'] as List).any(
           (issue) => issue['category'] == 'output-parameter-count',
