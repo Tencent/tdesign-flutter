@@ -131,6 +131,9 @@ jobs:
         if: matrix.suite == 'tooling'
         working-directory: ./tdesign-component
         run: |
+          # 在原 checkout 上检查，避免生成步骤掩盖已提交片段过期。
+          dart run tool/generate_example_code.dart --check
+          node --test tool/generate_api_test.mjs
           dart run tool/check_demo_structure.dart
           dart run tool/check_demo_snippets.dart
 

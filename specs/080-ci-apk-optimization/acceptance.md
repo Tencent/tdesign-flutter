@@ -96,3 +96,16 @@ Golden先全局按原executionKey去重，再归首个声明组件的固定组�
 CI矩阵、原名称汇总门禁及按组failure artifact保持，actionlint通过；组件4项、示例2项、工具2项和Golden2组。无参数仍完整执行，CNB配置不改。证据见工作区artifacts/pr1179-fixed-shards-local-20261020/，GROUPS.md仅为生成的审阅报告，不是维护配置。
 
 本地组件同SDK按组依次运行，Golden使用模拟amd64的Linux容器，环境不等同GitHub；未测量远端并行收益或实际耗时。未升级工具链、未重建APK/Web/iOS或重复未改动的Example功能入口；未提交、未推送。
+
+## 片段门禁与 API 生成提速（2026-10-20，本地未推送）
+
+双版本 tooling 恢复原 checkout 的片段 --check，并登记 3 项生成调度/真实批处理测试。Node 一次传入任务，Dart 顺序调用原工具包生成器，每个组件新实例。原 CLI 对照与新入口在两个 SDK 上均通过全部 57 份文档字节比较；file 模式及 getComments 开关另以真实 CLI 对照一致。
+
+| Flutter | 原入口全量检查 | 新入口全量检查 |
+| --- | ---: | ---: |
+| 3.32.0 | 50.12s | 9.35s |
+| 3.47.7 | 30.50s | 6.97s |
+
+本机各一次前后运行，未控制其他进程负载，不能外推远端 CI 耗时。双 SDK analyze 0 诊断、原有工具回归各 157 项、新增 Node 测试各 3 项、结构/片段检查全部通过；过期片段退出 1 且不写回；真实生成失败不执行后续任务。两版本无 package_config 冷启动通过（沿用对应 SDK 既有锁文件，不代表全部依赖缓存为空）。actionlint、Node 语法、diff 检查通过。3.32.0 本机峰值 RSS 约 876 MiB。
+
+证据：工作区 artifacts/pr1179-api-generator-local-20261020/REPORT.md 及相邻日志。临时编译原 CLI 的候选因 latest 编译开销而放弃，最终代码只使用单进程批处理。生产组件、工具链、平台配置和 Golden 未改，未重跑 APK/Web/iOS 或全量组件/Golden，未触发远端 CI。以上为推送前本地结果，推送后的 CI 与耗时在 PR 描述中绑定最终 head 和运行链接。

@@ -23,3 +23,7 @@
 组件调度保留每次 Flutter 进程与 coverage.run([component])。视觉调度先保留 executionKey 的首个套件，再按该组件的固定组号选择，避免共享套件跨组重复；默认执行也复用同一去重路径。参数解析、分组并集/交集、共享归属、组内顺序、固定映射、增删组件不重分配及组件/Golden 归属一致均需测试。
 
 修改 workflow include 矩阵为 components 两组、examples/tooling 各一组；Golden 改为两组矩阵与原名称汇总。CNB 继续无参数完整执行。双 SDK 在独立目录跑全部两组组件及工具测试，Golden 使用已有 amd64 Linux Flutter 3.32.0 镜像在各自副本比对，绝不写回基线。容器环境与 GitHub runner 不完全等同，不能推定远端耗时。
+
+## 片段门禁与 API 生成器复用
+
+先补回 tooling 中的 generate_example_code.dart --check。Node 将校验后的源路径、名称、分组、注释选项和输出目录传给单个 Dart 进程；薄适配入口构造与原 CLI 相同的 CommandInfo / SmartCreator 参数并顺序执行，不维护第二份生成规则。通过原 CLI 产物字节对比、跨组件状态、失败中止与临时目录清理验证。临时 AOT 编译方案因 latest 的编译成本导致总耗时增加而未采用，不引入 SDK 版本分支。
