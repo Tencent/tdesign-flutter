@@ -8,9 +8,9 @@ const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const source = join(repo, 'tdesign-component/lib/src/components');
 const miniRepo = resolve(repo, '../tdesign-miniprogram');
 const audit = JSON.parse(
-  readFileSync(join(repo, 'specs/047-miniprogram-token-alignment/token-audit.json'), 'utf8'),
+  readFileSync(join(repo, 'specs/engineering/048-Theme-configuration-contracts/evidence/token-source/token-audit.json'), 'utf8'),
 );
-const output = join(repo, 'specs/048-component-token-theme-ownership/component-consumption-audit.json');
+const output = join(repo, 'specs/engineering/048-Theme-configuration-contracts/evidence/consumption/component-consumption-audit.json');
 const flutterDirectoryAliases = {
   'back-top': 'backtop',
   'dropdown-item': 'dropdown_menu',

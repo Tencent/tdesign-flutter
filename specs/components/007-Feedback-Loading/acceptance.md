@@ -1,0 +1,37 @@
+# Loading 验证范围与结论
+
+## 本次范围
+
+2026-10-20：整理设计背景、决策和验收记录，重点冲突对照公开源码检查；本次未重新执行组件、Golden、设备或远端 CI。以下是原有范围内的证据摘要，不构成当前候选通过声明。
+
+## 已有验证结论
+
+| 原记录范围 | 原文可追溯标识与环境 | 有界结论 |
+| --- | --- | --- |
+| 既有记录 | `ab04f68`、`8e8d68f6`、`33352953431`；Flutter 3.32.0 | 组件与布局：有明确通过记录（限原范围）；Demo 与消费：有明确通过记录（限原范围）；静态检查：有明确通过记录（限原范围）；Golden：有明确通过记录（限原范围）；设备：仅按下文的实际操作与未覆盖范围解释 |
+
+同一原记录可能包含多个复验阶段；上表保留原文可识别的提交、源码/参考源标识与 SDK；这些标识不保证是同一个验证候选，不把它们合成为一次完整矩阵。未提供唯一候选或原始日志绑定的结果，须在实际交付时复核。
+
+## 验证范围与未覆盖项
+
+- `t_loading.dart` line 92（`colorScheme?.primary` fallback）为既有边界分支，未覆盖（需构造显式非默认 ColorScheme 场景），不影响 ≥95% 门槛。
+- **真机像素表现仍未实测**：已有微信开发者工具 iOS 模拟器截图与 Linux Golden，但不将其外推为真机 DPR 结论。
+- `reverse` / `pause` / `delay`（后续迭代，官方发布版未公开对应 Demo）。
+- `attach`（仅 Vue 独有且发布版注释）。
+
+## 原记录提到的验证入口
+
+- `flutter analyze --fatal-infos --no-pub`
+- `flutter test test/components/loading/t_loading_test.dart`
+- `flutter test --coverage test/components/loading/t_loading_test.dart`
+- `flutter test test/loading_demo_test.dart`
+- `flutter test test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart`
+- `dart run tool/generate_example_code.dart --check`
+
+入口仅用于追溯原记录；是否执行、对应环境和结果以原范围为准，不表示本轮重跑。
+
+## 必要证据与追溯
+
+原记录未给出可独立访问且绑定唯一候选的原始日志入口；保留的基线标识不能代替缺失证据。后续验证在此追加与最终方案相关的结论及必要链接，不重复保存每次运行流水。
+
+明确待办统一见 [tasks.md](./tasks.md)。没有新证据时不变更完成状态；已有日期与 SHA 只描述原记录覆盖范围。
