@@ -47,8 +47,7 @@ Theme 的配置职责与 Material 隔离合为一份；Token 运行验证放在�
         │   ├── plan.md
         │   ├── tasks.md
         │   ├── acceptance.md
-        │   ├── evidence/
-        │   └── tools/
+        │   └── evidence/
         └── 057-Release-readiness/
 
 ### 命名规则

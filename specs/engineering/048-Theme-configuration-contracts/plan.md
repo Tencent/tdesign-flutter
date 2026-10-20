@@ -22,7 +22,7 @@
 | --- | --- | --- |
 | 实现或验收入口 | [tdesign-component/lib/src/theme](../../../tdesign-component/lib/src/theme) | 与最终方案和候选范围同步维护 |
 | 实现或验收入口 | [tdesign-component/lib/src/components](../../../tdesign-component/lib/src/components) | 与最终方案和候选范围同步维护 |
-| 实现或验收入口 | [specs/engineering/048-Theme-configuration-contracts/tools](tools) | 与最终方案和候选范围同步维护 |
+| 验证入口 | [组件功能回归](../../../tdesign-component/tool/run_component_regression.dart)、[Golden 回归](../../../tdesign-component/tool/run_visual_regression.dart) | 按受影响契约运行；历史审计数据不代替当前候选验证 |
 
 ## 实施顺序与验证
 

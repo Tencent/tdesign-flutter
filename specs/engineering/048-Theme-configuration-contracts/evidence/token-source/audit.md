@@ -1,6 +1,6 @@
 # Token 差异审计（阶段性）
 
-基准：`tdesign-miniprogram/develop@1a1c5ca135b0e9bf19abc43a59870c4908a28ad5`。完整机器清单见 [`token-audit.json`](token-audit.json)，可用 `node tool/audit_miniprogram_tokens.mjs <小程序仓库目录>` 重算。该文件取当前 Flutter 工作区的主题配置，改动后须重新生成。
+基准：`tdesign-miniprogram/develop@1a1c5ca135b0e9bf19abc43a59870c4908a28ad5`。完整机器清单见 [`token-audit.json`](token-audit.json)。本表属于当次源码与默认主题的历史快照，不描述当前工作区状态；专项生成脚本已移除，后续验证按实际候选另行留证。
 
 | 对照表 | 行数 | 主要列 | 可判断范围 |
 | --- | ---: | --- | --- |
@@ -9,7 +9,7 @@
 | [组件变量逐项映射](component-token-table.md) | 804 | 变量、所属组件、源码位置、明暗默认表达、冲突值、Flutter 目录与 Theme 字段候选 | 小程序默认表达已逐项提取；Flutter 消费值尚未逐项证明 |
 | [Flutter Theme 字段清单](flutter-theme-field-table.md) | 460 | 组件、字段、源码、同名小程序变量候选 | Flutter 侧数量盘点；非同名不自动判为多余 |
 
-前三张逐项表由同一审计脚本生成：`--markdown=global`、`--markdown=component`、`--markdown=flutter-theme`。表内“值一致”只表示当前脚本的结构化值一致；“平台表达待视觉核对”不应当作像素一致。
+前三张逐项表由当时同一审计脚本生成，现作为冻结证据保留。表内“值一致”只表示该次提取的结构化值一致；“平台表达待视觉核对”不应当作像素一致。
 
 ## 全局 Token
 
