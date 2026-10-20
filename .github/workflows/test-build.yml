@@ -69,14 +69,19 @@ jobs:
 
   # 三类测试分别使用独立 runner，复用配置并保留逐组件覆盖率检查。
   regression:
-    name: ${{ matrix.suite }} tests (flutter ${{ matrix.flutter-version }})
+    name: ${{ matrix.suite }} tests (flutter ${{ matrix.flutter-version }}, group ${{ matrix.shard || 'all' }})
     strategy:
       fail-fast: false
       matrix:
-        suite: [components, examples, tooling]
+        suite: [examples, tooling]
         flutter-version:
           - 3.32.0
           - latest
+        include:
+          - {suite: components, flutter-version: '3.32.0', shard: 1}
+          - {suite: components, flutter-version: '3.32.0', shard: 2}
+          - {suite: components, flutter-version: latest, shard: 1}
+          - {suite: components, flutter-version: latest, shard: 2}
 
     runs-on: ubuntu-latest
     steps:
@@ -102,7 +107,7 @@ jobs:
       - name: Run component regression tests with coverage
         if: matrix.suite == 'components'
         working-directory: ./tdesign-component
-        run: dart run tool/run_component_regression.dart
+        run: dart run tool/run_component_regression.dart --shard=${{ matrix.shard }}
 
       - name: Test and analyze standalone css2token package
         if: matrix.suite == 'tooling'
@@ -134,7 +139,7 @@ jobs:
         working-directory: ./tdesign-component
         run: dart run tool/run_example_regression.dart
 
-  # 保留原必需检查名称，六个测试分支全部成功才通过。
+  # 保留原必需检查名称，全部功能测试分支成功才通过。
   test:
     name: test (flutter ${{ matrix.flutter-version }})
     needs: regression
@@ -156,8 +161,13 @@ jobs:
             exit 1
           fi
 
-  visual-regression:
-    name: visual regression (flutter 3.32.0 linux)
+  # Golden 按组件名固定分两组，使用独立目录和独立失败产物。
+  visual-shards:
+    name: visual group ${{ matrix.shard }} (flutter 3.32.0 linux)
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
@@ -180,18 +190,34 @@ jobs:
 
       - name: Run visual regression tests
         working-directory: ./tdesign-component
-        run: dart run tool/run_visual_regression.dart
+        run: dart run tool/run_visual_regression.dart --shard=${{ matrix.shard }}
 
       - name: Upload golden failure images
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: golden-failures-flutter-3.32.0
+          name: golden-failures-flutter-3.32.0-group-${{ matrix.shard }}
           path: |
             tdesign-component/test/**/failures/
             tdesign-component/example/test/**/failures/
           if-no-files-found: ignore
           retention-days: 7
+
+  # 保留原视觉门禁名称，任一组失败、取消或跳过均不能通过。
+  visual-regression:
+    name: visual regression (flutter 3.32.0 linux)
+    needs: visual-shards
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require all visual groups to succeed
+        env:
+          VISUAL_RESULT: ${{ needs.visual-shards.result }}
+        run: |
+          if [[ "$VISUAL_RESULT" != "success" ]]; then
+            echo "::error::Visual groups did not all succeed"
+            exit 1
+          fi
 
   # Web/iOS 保留双版本构建，APK 使用上方独立任务。
   build:
