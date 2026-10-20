@@ -44,6 +44,7 @@ android {
     namespace 'com.tdesign.tdesign_flutter_example'
 
     compileSdkVersion flutter.compileSdkVersion
+    ndkVersion flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -62,7 +63,7 @@ android {
         applicationId "com.tdesign.tdesign_flutter_example"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
-        versionCode createVersionCode()
+        versionCode flutterVersionCode.toInteger()
         versionName createVersionName()
     }
 

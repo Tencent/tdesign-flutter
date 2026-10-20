@@ -38,3 +38,11 @@
 ## 更新日志一致性
 
 现有站点和组件包CHANGELOG由各自发布工具维护，发布前对照同一候选版本逐项确认发布说明一致并保留历史记录。文档同步器不生成或互相覆盖CHANGELOG；两条发布生成链路的收敛另行实施。
+
+## Demo APK 构建
+
+PR 的 Flutter 3.32.0 下载包由 `PREVIEW_BUILD` 调用共享 APK workflow 生成；`test-build` 的 latest APK 用于兼容验证，不加入同一发布序列。版本资源和文件名共用组件版本，Android `versionCode` 为 `2030000000 + PREVIEW_BUILD run_number`，以兼容旧日期版本号并随运行递增。重试同一次运行保持版本号；正式交付不覆盖同版本产物。
+
+固定 Flutter 3.32.0 的 Demo 使用已提交的 Example 锁文件；更新依赖时用该 SDK 重新解析并验证。latest 兼容任务删除其工作副本中的锁文件后独立解析。API、示例片段和构建日期由资源准备任务生成后传递，编译目录和插件元数据不跨 SDK 复用。资源准备 workflow 每个工作流执行一次，PR 的测试构建与预览构建仍分别准备资源。
+
+本地或 CNB 直接打包时，先在 `tdesign-component` 执行 `dart tool/write_demo_build_info.dart`，再在 Example 执行 `flutter build apk --release --build-number <明确的构建号>`。未传构建号时采用 Example pubspec 的默认值，不保证可覆盖现有预览包。Flutter 3.32.0 的原生 release 构建保留默认插件准备，不添加 `--no-pub`。

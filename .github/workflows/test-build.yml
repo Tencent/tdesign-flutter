@@ -17,6 +17,21 @@ concurrency:
   cancel-in-progress: ${{ github.ref_name != 'develop' }}
 
 jobs:
+  prepare-demo:
+    uses: ./.github/workflows/prepare-demo.yml
+
+  apk:
+    needs: prepare-demo
+    strategy:
+      fail-fast: false
+      matrix:
+        flutter-version: ${{ fromJSON(github.event_name == 'pull_request' && '["latest"]' || '["3.32.0", "latest"]') }}
+    uses: ./.github/workflows/build-apk.yml
+    with:
+      flutter-version: ${{ matrix.flutter-version }}
+      version: ${{ needs.prepare-demo.outputs.version }}
+      build-number: ${{ needs.prepare-demo.outputs.build-number }}
+
   analyze:
     name: analyze (flutter ${{ matrix.flutter-version }})
     strategy:
@@ -146,20 +161,17 @@ jobs:
           retention-days: 7
 
   build:
+    needs: prepare-demo
     strategy:
       fail-fast: false
       matrix:
         platform:
-          - apk
           - ios
           - web
         flutter-version:
           - 3.32.0
           - latest
         include:
-          - platform: apk
-            os: ubuntu-latest
-            build: flutter build apk -t ./lib/main.dart --release
           - platform: ios
             os: macos-15
             build: flutter build ios -t ./lib/main.dart --no-codesign --release
@@ -193,17 +205,6 @@ jobs:
           pod --version
           flutter --version
 
-      - name: generate api md
-        working-directory: ./tdesign-component
-        run: sh ./demo_tool/all_build.sh
-
-      - name: Check example code snippets
-        working-directory: ./tdesign-component
-        run: dart run tool/generate_example_code.dart --check
-
-      - name: Check Flutter component contracts
-        run: node scripts/check-flutter-component-contracts.mjs
-
       - name: install component dependencies
         working-directory: ./tdesign-component
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
@@ -212,11 +213,13 @@ jobs:
         working-directory: ./tdesign-component/example
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
-      - name: Diagnose iOS linker settings
-        if: matrix.platform == 'ios'
-        run: echo "Xcode ${{ matrix.platform }} ready"
+      - name: Download prepared resources
+        uses: actions/download-artifact@v4
+        with:
+          name: demo-assets
+          path: tdesign-component/example/assets
+
       - name: flutter build
         working-directory: ./tdesign-component/example
         run: |
-          dart ../tool/write_demo_build_info.dart
           ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}
