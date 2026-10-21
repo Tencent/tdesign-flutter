@@ -5,7 +5,43 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/theme/t_internal_material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/custom_content_theme_scene.dart';
+
 void main() {
+  testWidgets('Dialog custom content keeps its explicit local TD text theme', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(760, 420);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(const CustomContentThemeScene());
+    await tester.pump(const Duration(milliseconds: 400));
+
+    // Verify the same M2/M3 scene as Golden without platform-dependent pixels.
+    final tdLabels = find.descendant(
+      of: find.byType(TText),
+      matching: find.byType(Text),
+    );
+    expect(tdLabels, findsNWidgets(2));
+    for (final element in tdLabels.evaluate()) {
+      final text = element.widget as Text;
+      final token = Theme.of(element).extension<TThemeData>()!;
+      expect(text.style!.fontSize, token.fontBodyMedium!.size);
+      expect(text.style!.height, token.fontBodyMedium!.height);
+      expect(text.style!.color, token.textColorPrimary);
+    }
+    final nativeLabels = find.text('Custom content');
+    expect(nativeLabels, findsNWidgets(2));
+    for (final element in nativeLabels.evaluate()) {
+      final text = element.widget as Text;
+      expect(text.style!.fontSize, 28);
+      expect(text.style!.color, Colors.purple);
+      expect(IconTheme.of(element).color, Colors.green);
+      expect(IconTheme.of(element).size, 64);
+    }
+  });
+
   for (final m3 in [false, true]) {
     testWidgets(
       'owned native labels isolate selection but custom text keeps it M3=$m3',
