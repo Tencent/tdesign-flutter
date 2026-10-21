@@ -754,7 +754,11 @@ const componentTestManifests = <ComponentTestManifest>[
   ),
   ComponentTestManifest(
     name: 'popup',
-    coverageTargets: ['lib/src/components/popup/'],
+    coverageTargets: [
+      'lib/src/components/popup/',
+      // The shared toolbar text-style bridge is exercised by Popup tests.
+      'lib/src/util/t_toolbar_pressable.dart',
+    ],
     componentTests: [
       'test/components/popup/t_feedback_theme_data_test.dart',
       'test/components/popup/t_popup_options_contract_test.dart',

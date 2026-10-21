@@ -6,9 +6,18 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/text_slot_regression.dart';
 import '../../support/token_consumption_evidence.dart';
 
 void main() {
+  registerTextSlotParityTests(
+    'Avatar foreground slot',
+    (child) => TAvatar(child: child),
+    theme: (theme) => theme.mergeExtension(
+      const TAvatarThemeData(foregroundColor: Colors.purple),
+    ),
+  );
+
   avatarTokenConsumptionTests();
   Widget app(
     Widget child, {

@@ -6,7 +6,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../helpers/popup_test_helpers.dart';
 import '../../helpers/popup_test_resource.dart';
 
+import '../../helpers/text_slot_regression.dart';
+
 void main() {
+  registerTextSlotParityTests(
+    'Toolbar pressable text slot',
+    (child) => TToolbarPressable(
+      mergeTextStyle: const TextStyle(fontSize: 18, color: Colors.purple),
+      onTap: () {},
+      child: child,
+    ),
+  );
+
   tearDown(resetPopupTestResource);
 
   group('TPopup 覆盖率补充', () {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_internal_material.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_link_resolve.dart';
 import 't_link_theme_data.dart';
 import 't_link_types.dart';
@@ -126,7 +127,7 @@ class _TLinkInteractionState extends State<_TLinkInteraction> {
 
     Widget content = TInternalIconTheme.merge(
       data: IconThemeData(color: color, size: iconSize),
-      child: DefaultTextStyle.merge(
+      child: TTextStyleScope(
         style: TTextResolve.resolve(context: context, style: textStyle),
         child: Row(
           mainAxisSize: MainAxisSize.min,

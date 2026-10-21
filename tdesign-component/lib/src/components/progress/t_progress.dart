@@ -11,6 +11,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import '../text/t_text_styled.dart';
 import 't_progress_circular.dart';
 import 't_progress_defaults.dart';
@@ -934,25 +935,27 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
     final iconColor = widget.type == TProgressVariant.plump
         ? labelColor
         : _effectiveColor;
+    final labelStyle = TTextResolve.resolve(
+      context: context,
+      singleLine: widget.label == null,
+      style: TextStyle(
+        color: labelColor,
+        fontSize: tokenFont?.size ?? fallbackFontSize,
+        height: tokenFont?.height ?? fallbackLineHeight,
+        fontWeight: tokenFont?.fontWeight ?? fallbackFontWeight,
+        fontFamily: context.tTheme.fontFamily?.flutterFontFamily,
+        fontFamilyFallback:
+            context.tTheme.fontFamily?.flutterFontFamilyFallback,
+        letterSpacing: 0,
+      ),
+    );
     return TInternalIconTheme(
       data: IconThemeData(color: iconColor, size: iconSize),
       child: DefaultTextStyle(
         key: const ValueKey('progress-label-style'),
-        style: TTextResolve.resolve(
-          context: context,
-          singleLine: widget.label == null,
-          style: TextStyle(
-            color: labelColor,
-            fontSize: tokenFont?.size ?? fallbackFontSize,
-            height: tokenFont?.height ?? fallbackLineHeight,
-            fontWeight: tokenFont?.fontWeight ?? fallbackFontWeight,
-            fontFamily: context.tTheme.fontFamily?.flutterFontFamily,
-            fontFamilyFallback:
-                context.tTheme.fontFamily?.flutterFontFamilyFallback,
-            letterSpacing: 0,
-          ),
-        ),
-        child: _effectiveLabel,
+        style: labelStyle,
+        // Keep native defaults and TD labels on the same resolved state style.
+        child: TTextStyleScope(style: labelStyle, child: _effectiveLabel),
       ),
     );
   }

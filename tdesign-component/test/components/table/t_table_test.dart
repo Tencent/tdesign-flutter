@@ -1,7 +1,42 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/text_slot_regression.dart';
+
 void main() {
+  registerTextSlotParityTests(
+    'Table header slot',
+    (child) => SizedBox(
+      width: 320,
+      child: TTable<int>(
+        columns: [
+          TTableColumn(
+            id: 'value',
+            header: child,
+            cellBuilder: (_, __, ___) => const Text('body'),
+          ),
+        ],
+        data: const [1],
+      ),
+    ),
+  );
+  registerTextSlotParityTests(
+    'Table cell slot',
+    (child) => SizedBox(
+      width: 320,
+      child: TTable<int>(
+        columns: [
+          TTableColumn(
+            id: 'value',
+            header: const Text('head'),
+            cellBuilder: (_, __, ___) => child,
+          ),
+        ],
+        data: const [1],
+      ),
+    ),
+  );
+
   const rows = [_Row('Alice', 30), _Row('Bob', 20), _Row('Carol', 40)];
 
   List<TTableColumn<_Row>> columns() => [

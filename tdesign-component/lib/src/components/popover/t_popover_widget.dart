@@ -8,7 +8,9 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_popover_theme_data.dart';
 import 't_popover_types.dart';
 
@@ -368,7 +370,23 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   }
 
   Widget _getContainerWidget() {
-    final plainTextSize = _resolvedPlainTextSize();
+    final content = widget.content;
+    // Only text content receives Popover typography; arbitrary custom layouts
+    // retain their own defaults. Measure TD text under the same slot theme.
+    if (content is Text || content is TText) {
+      return TTextStyleScope(
+        style: TTextResolve.resolve(
+          context: context,
+          style: _defaultContentTextStyle,
+        ),
+        child: Builder(builder: _contentContainer),
+      );
+    }
+    return _contentContainer(null);
+  }
+
+  Widget _contentContainer(BuildContext? slotContext) {
+    final plainTextSize = _resolvedPlainTextSize(slotContext);
     final minWidth =
         plainTextSize?.width ?? widget.width ?? _theme.minWidth ?? 0;
     final maxWidth = plainTextSize?.width ?? widget.width ?? _effectiveMaxWidth;
@@ -378,16 +396,6 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         widget.height ??
         _theme.maxHeight ??
         double.infinity;
-    final content = widget.content;
-    final styledContent = content is Text
-        ? DefaultTextStyle.merge(
-            style: TTextResolve.resolve(
-              context: context,
-              style: _defaultContentTextStyle,
-            ),
-            child: content,
-          )
-        : content;
     return Container(
       key: const Key('t-popover-content'),
       constraints: BoxConstraints(
@@ -404,30 +412,45 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         color: _backgroundColor,
         boxShadow: _theme.boxShadow ?? context.tTheme.shadow3 ?? const [],
       ),
-      child: styledContent,
+      child: widget.content,
     );
   }
 
-  Size? _resolvedPlainTextSize() {
+  Size? _resolvedPlainTextSize(BuildContext? slotContext) {
     final content = widget.content;
-    if (content is! Text ||
-        content.data == null ||
-        content.style != null ||
-        content.textSpan != null) {
+    final Text text;
+    if (content is TText) {
+      if (slotContext == null ||
+          content.data == null ||
+          content.style != null ||
+          content.font != null) {
+        return null;
+      }
+      text = content.getRawText(context: slotContext);
+    } else if (content is Text &&
+        content.data != null &&
+        content.style == null &&
+        content.textSpan == null) {
+      text = content;
+    } else {
       return null;
     }
     final contentMaxWidth =
         (widget.width ?? _effectiveMaxWidth) - _resolvedPadding.horizontal;
     final textPainter = TextPainter(
-      text: TextSpan(text: content.data, style: _defaultContentTextStyle),
-      locale: content.locale ?? Localizations.localeOf(context),
-      textDirection: content.textDirection ?? Directionality.of(context),
-      textAlign: content.textAlign ?? TextAlign.start,
-      maxLines: content.maxLines,
-      ellipsis: content.overflow == TextOverflow.ellipsis ? '\u2026' : null,
-      textScaler: content.textScaler ?? MediaQuery.textScalerOf(context),
-      textWidthBasis: content.textWidthBasis ?? TextWidthBasis.parent,
-      textHeightBehavior: content.textHeightBehavior,
+      text: TextSpan(
+        text: text.data,
+        style: content is TText ? text.style : _defaultContentTextStyle,
+      ),
+      strutStyle: text.strutStyle,
+      locale: text.locale ?? Localizations.localeOf(context),
+      textDirection: text.textDirection ?? Directionality.of(context),
+      textAlign: text.textAlign ?? TextAlign.start,
+      maxLines: text.maxLines,
+      ellipsis: text.overflow == TextOverflow.ellipsis ? '\u2026' : null,
+      textScaler: text.textScaler ?? MediaQuery.textScalerOf(context),
+      textWidthBasis: text.textWidthBasis ?? TextWidthBasis.parent,
+      textHeightBehavior: text.textHeightBehavior,
     )..layout(maxWidth: contentMaxWidth.clamp(0, double.infinity));
     final naturalWidth = textPainter.width + _resolvedPadding.horizontal;
     final resolvedWidth =

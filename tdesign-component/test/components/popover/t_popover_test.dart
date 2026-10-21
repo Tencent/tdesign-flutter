@@ -4,10 +4,132 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/popover/t_popover_widget.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/text_slot_regression.dart';
+
 /// TPopover 组件 Widget 测试
 ///
 /// 覆盖 TPopoverColorPreset、TPopoverPlacement、内容渲染、箭头、回调等。
 void main() {
+  registerTextSlotParityTests(
+    'Popover text slot',
+    (child) => Builder(
+      builder: (context) => TPopoverWidget(context: context, content: child),
+    ),
+  );
+
+  for (final scale in [1.0, 2.0]) {
+    for (final long in [false, true]) {
+      testWidgets('Popover native/TD natural sizing scale=$scale long=$long', (
+        tester,
+      ) async {
+        final data = long ? List.filled(8, 'word').join(' ') : 'short';
+        Size? expected;
+        for (final native in [true, false]) {
+          await tester.pumpWidget(
+            MaterialApp(
+              theme: TThemeBuilder.light(TThemeData.defaultData()),
+              home: Scaffold(
+                body: MediaQuery(
+                  data: MediaQueryData(
+                    size: const Size(800, 600),
+                    textScaler: TextScaler.linear(scale),
+                  ),
+                  child: Builder(
+                    builder: (context) => Center(
+                      child: TPopoverWidget(
+                        context: context,
+                        content: native ? Text(data) : TText(data),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          final actual = tester.getSize(
+            find.byKey(const Key('t-popover-content')),
+          );
+          if (native) {
+            expected = actual;
+          } else {
+            expect(actual, expected);
+          }
+          expect(tester.takeException(), isNull);
+        }
+      });
+    }
+  }
+
+  testWidgets(
+    'Popover natural height includes the configured paragraph strut',
+    (tester) async {
+      const strut = StrutStyle(fontSize: 18, height: 2, forceStrutHeight: true);
+      Size? expected;
+      for (final native in [true, false]) {
+        final theme = TThemeBuilder.light(
+          TThemeData.defaultData(),
+        ).mergeExtension(const TTextThemeData(strutStyle: strut));
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: Scaffold(
+              body: Builder(
+                builder: (context) => Center(
+                  child: TPopoverWidget(
+                    context: context,
+                    content: native
+                        ? const Text('strut', strutStyle: strut)
+                        : const TText('strut'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final panel = tester.getSize(
+          find.byKey(const Key('t-popover-content')),
+        );
+        final text = tester.getSize(find.text('strut'));
+        expect(panel.height, text.height + 24);
+        if (native) {
+          expected = panel;
+        } else {
+          expect(panel, expected);
+        }
+        expect(tester.takeException(), isNull);
+      }
+    },
+  );
+
+  testWidgets('Popover complex content retains caller typography', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => Center(
+              child: TPopoverWidget(
+                context: context,
+                content: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [TText('custom')],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final text = tester.widget<Text>(find.text('custom'));
+    expect(text.style!.fontSize, 14);
+    expect(text.style!.color, TThemeData.defaultData().textColorPrimary);
+  });
+
   /// 构建带主题的测试壳
   Widget wrapWithTheme(
     Widget child, {

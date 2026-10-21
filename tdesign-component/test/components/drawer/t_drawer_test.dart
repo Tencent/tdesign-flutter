@@ -1,7 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/text_slot_regression.dart';
+
 void main() {
+  registerTextSlotParityTests(
+    'Drawer title slot',
+    (child) => SizedBox(
+      height: 400,
+      child: TDrawer(title: child, items: const []),
+    ),
+  );
+
   ThemeData fullTheme({TDrawerThemeData? drawerTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
     if (drawerTheme != null) {
