@@ -141,7 +141,8 @@ class TDialog extends StatelessWidget {
   /// 操作列表；一到两个操作横向排列，更多操作纵向排列。
   ///
   /// 一到两个操作全部显式使用 [TButtonVariant.text] 时，操作区使用带分隔线的
-  /// 贴边文字按钮 Footer；其他情况使用带内边距的普通操作区。
+  /// 贴边文字按钮 Footer，最小高度为 56，文字换行或缩放时随内容增高；
+  /// 其他情况使用带内边距的普通操作区。
   ///
   /// 纵向排列时，[TDialogAction.role] 为 [TDialogActionRole.primary] 或
   /// [TDialogActionRole.destructive] 的强调操作优先展示，同类操作保持声明顺序。
@@ -626,22 +627,32 @@ class _DialogActions extends StatelessWidget {
       );
       return DecoratedBox(
         decoration: BoxDecoration(border: Border(top: divider)),
-        child: SizedBox(
-          height: 56,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              for (var index = 0; index < buttons.length; index++) ...[
-                if (index > 0)
-                  TInternalVerticalDivider(
-                    width: 0.5,
-                    thickness: 0.5,
-                    color: divider.color,
+        // Measure each button at its column width, then stretch to the tallest.
+        // Flex columns also allow custom LayoutBuilder content without intrinsic queries.
+        child: Table(
+          defaultVerticalAlignment: TableCellVerticalAlignment.intrinsicHeight,
+          columnWidths: const {1: FixedColumnWidth(0.5)},
+          children: [
+            TableRow(
+              children: [
+                for (var index = 0; index < buttons.length; index++) ...[
+                  if (index > 0)
+                    TableCell(
+                      verticalAlignment: TableCellVerticalAlignment.fill,
+                      child: TInternalVerticalDivider(
+                        width: 0.5,
+                        thickness: 0.5,
+                        color: divider.color,
+                      ),
+                    ),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 56),
+                    child: buttons[index],
                   ),
-                Expanded(child: buttons[index]),
+                ],
               ],
-            ],
-          ),
+            ),
+          ],
         ),
       );
     }

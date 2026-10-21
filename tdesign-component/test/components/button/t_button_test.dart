@@ -3,12 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/button_navbar_text_slots.dart';
+
 import '../../support/token_consumption_evidence.dart';
 
 /// TButton Widget 测试
 ///
 /// 覆盖所有公开 API 和关键行为路径，目标覆盖率 95%+。
 void main() {
+  registerButtonTextSlotTests();
   _sizeIconComponentTokenTests();
   testWidgets(
     'base size token scales every size and preserves explicit styles',
