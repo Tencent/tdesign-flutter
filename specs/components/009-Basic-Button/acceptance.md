@@ -25,3 +25,22 @@
 未绑定唯一候选的结果不作为当前通过证明；旧命令与流水由Git历史追溯。
 
 当前待办见 [tasks.md](./tasks.md)；实际执行入口见[贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)。清理不关闭未完成项。
+
+<a id="source-082"></a>
+
+## 082 · 文字槽默认值
+
+历史检查点保留范围，详细过程由 Git 历史追溯，不复制截图或命令流水：
+
+- `72c0f13d`，Flutter3.32.0 / 3.47.7：各567项组件、30项 Demo、34项文字契约、17项调度和1项迁移示例；Button覆盖99.27%、NavBar100%；严格分析、57份API、6份文档同步通过。Linux3.32原Button/NavBar视觉入口26项通过，未含后续Dialog修复场景。前后52组原生Text与52组完整显式TText像素一致，52组默认TText按预期变化。
+- `f24f106c` 同步develop后：双版本各577项组件、64项文字/主题/调度、39项Demo、1项迁移示例及上述覆盖/分析/生成检查通过；文档测试9项、Linux共享Theme/NavBar/Dialog与Demo共101项通过。该范围未覆盖本轮补齐的五类消费Demo。
+
+2026-10-22 本轮只修复API说明位置、更新已确认的Golden并精简文档，TText可执行token不变。435份Dart源码指纹为`8768f6674d4993e6bd9a22f928b4556c1efe2256cc46d5e6b48d87ea200bcd08`，与已验证双版本副本相同：各148项CI tooling、318项Button/NavBar、31项消费Demo、严格分析、57份API和示例片段检查通过。
+
+Linux Flutter3.32.0仅更新已审查的30张基线：BackTop2、Drawer4、Indexes2、Popup16、Form6；立即无更新参数复跑全部60场景，60项通过。文字之外无像素变化，槽容器布局保持；图片直接维护在测试Golden目录，迁移影响见[说明](./text-slot-migration.md)。
+
+远端CI以[#1180](https://github.com/Tencent/tdesign-flutter/pull/1180)最终head为准；本轮未新增设备或APK/Web/iOS构建验证，历史待办不自动关闭。
+
+## 受限布局补充验收（2026-10-22）
+
+候选为 `ab62d5bb` 上的独立本地未提交增量，Dart 源码 SHA-256：`12ae01fc2077b7a107aba9472f9c0801cd6df432c18151d19432cdca430b3bf9`。Flutter 3.32.0 / 3.47.7：新增16项受限布局回归通过：普通/渐变、明暗主题、1/2倍缩放、自动增高与固定高度显式省略、图标组合和显式颜色。Button 生产实现未修改。 未执行远端 CI 或设备验收，已有 Golden 未改。

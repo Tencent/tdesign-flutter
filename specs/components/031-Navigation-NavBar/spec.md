@@ -51,7 +51,7 @@ NavBar 需要同时对照新版 Figma 的 H5/Flutter 专属移动画板、小程
 ### Theme 与样式优先级
 
 - 标题字体默认回退 TDesign Title Large（18/26/600），不再回退 Body Large。
-- `titleColor`、`backIconColor`、`backgroundColor`、`padding`、`titleMargin`、`opacity`、`border`、`boxShadow` 仍可由 `TNavBarThemeData` 提供子树默认值；标题字体、字重和显式前景色由传入的 `title` Widget 自身样式控制。`titleColor` 只作为标题未自带颜色时的默认值；`TText` 会解析自身默认正文色，需通过 TText.style 的显式颜色或组件提供的 TD 文字主题接入 NavBar 的目标颜色。
+- `titleColor`、`backIconColor`、`backgroundColor`、`padding`、`titleMargin`、`opacity`、`border`、`boxShadow`由TNavBarThemeData提供默认；Text/TText标题均接收已有标题字体与颜色，实例显式字段优先。
 - 解析优先级为受支持的实例参数 > TNavBarThemeData > TDesign Token/内置默认；外部 AppBarTheme 不反向决定组件外观。
 - `TNavBarBorder` 只定义边框的颜色、宽度、圆角与内边距，不决定是否启用边框模式。
 - `TNavBarThemeData.copyWith` 保持 Flutter 常见的类型安全语义：只替换非空参数，
@@ -66,6 +66,14 @@ NavBar 需要同时对照新版 Figma 的 H5/Flutter 专属移动画板、小程
 - “组件样式”依次展示：标题居中、标题左对齐、普通标题 / 返回文字与 28/36 大标题、自定义颜色。
 - 图片固定 `87 × 24`；搜索与图片示例保留 Figma H5/Flutter 画板中的右侧操作项。
 - 点击关闭、首页、更多与返回均产生可见反馈；搜索框可真实输入。
+
+<a id="source-082"></a>
+
+### 082 · 标题文字默认值
+
+仅title通过既有TTextStyleScope提供标题样式及单行省略默认，不扩展到leading/actions、belowTitleWidget或flexibleSpace。外层TD文字主题重复字段由标题默认覆盖，段落配置和未重复字段保留；内容内部更近的局部TD文字主题与实例显式样式仍优先。
+
+默认TText不再保持正文外观，属于breaking默认行为变化；全局隔离不变，不新增开关。复合标题的副标题可显式设置字体或内部局部主题。共同规则及迁移见[082迁移说明](../009-Basic-Button/text-slot-migration.md)，原结果见[验收](./acceptance.md#source-082)。
 
 ## 关键决策与取舍
 

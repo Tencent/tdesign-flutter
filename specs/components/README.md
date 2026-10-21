@@ -12,7 +12,7 @@
 | [Avatar](034-DataDisplay-Avatar/spec.md) | 数据展示 / DataDisplay | [034 · Avatar 设计对齐](034-DataDisplay-Avatar/spec.md) |
 | [BackTop](028-Navigation-BackTop/spec.md) | 导航 / Navigation | [028 · BackTop 视觉契约与 API 收敛](028-Navigation-BackTop/spec.md) |
 | [Badge](023-DataDisplay-Badge/spec.md) | 数据展示 / DataDisplay | [023 · Badge 设计稿对齐与 API 收敛](023-DataDisplay-Badge/spec.md) |
-| [Button](009-Basic-Button/spec.md) | 基础 / Basic | [009 · Button 尺寸、形状与原生交互契约对齐](009-Basic-Button/spec.md#record-009-contract-alignment)<br>[037 · Button 禁用态与浅色描边对齐](009-Basic-Button/spec.md#record-037-disabled-theme-alignment) |
+| [Button](009-Basic-Button/spec.md) | 基础 / Basic | [009 · Button 尺寸、形状与原生交互契约对齐](009-Basic-Button/spec.md#record-009-contract-alignment)<br>[037 · Button 禁用态与浅色描边对齐](009-Basic-Button/spec.md#record-037-disabled-theme-alignment)<br>[082 · 文案默认值](009-Basic-Button/spec.md#source-082) |
 | [Calendar](023-Input-Calendar/spec.md) | 输入 / Input | [023 · Calendar 平铺面板与 Figma Demo 对齐](023-Input-Calendar/spec.md) |
 | [Cascader](024-Input-Cascader/spec.md) | 输入 / Input | [024 · Cascader 公开 Demo 对齐](024-Input-Cascader/spec.md) |
 | [Checkbox](015-Input-Checkbox/spec.md) | 输入 / Input | [015 · Checkbox Demo 与卡片角标对齐](015-Input-Checkbox/spec.md#record-015-demo-card-alignment)<br>[016 · Checkbox 样式尺寸 token 化](015-Input-Checkbox/spec.md#record-016-theme-token-sizes)<br>[041 · Checkbox 设计细节对齐](015-Input-Checkbox/spec.md#record-041-design-details) |
@@ -33,7 +33,7 @@
 | [Link](012-Basic-Link/spec.md) | 基础 / Basic | [012 · Link 小程序契约对齐](012-Basic-Link/spec.md) |
 | [Loading](007-Feedback-Loading/spec.md) | 反馈 / Feedback | [007 · Loading：默认值、尺寸、Demo 与文档调整](007-Feedback-Loading/spec.md) |
 | [Message](007-Feedback-Message/spec.md) | 反馈 / Feedback | [007 · Message 组件跨端 Demo 契约对齐](007-Feedback-Message/spec.md) |
-| [NavBar](031-Navigation-NavBar/spec.md) | 导航 / Navigation | [031 · NavBar 设计与公开契约收敛](031-Navigation-NavBar/spec.md) |
+| [NavBar](031-Navigation-NavBar/spec.md) | 导航 / Navigation | [031 · NavBar 设计与公开契约收敛](031-Navigation-NavBar/spec.md)<br>[082 · 标题默认值](031-Navigation-NavBar/spec.md#source-082) |
 | [NoticeBar](005-Feedback-NoticeBar/spec.md) | 反馈 / Feedback | [005 · TNoticeBar Review 修复与文档补全](005-Feedback-NoticeBar/spec.md) |
 | [Picker](026-Input-Picker/spec.md) | 输入 / Input | [026 · Picker 平铺滚轮与 Figma Demo 对齐](026-Input-Picker/spec.md#record-026-demo-alignment)<br>[043 · Picker 弹层布局契约](026-Input-Picker/spec.md#record-043-popup-layout) |
 | [Popover](003-Feedback-Popover/spec.md) | 反馈 / Feedback | [003 · TPopover：交互、主题、尺寸与浮层边界契约补强](003-Feedback-Popover/spec.md#record-003-contract-hardening)<br>[015 · Tag 与 Popover 视觉选择器实例所有权收敛](003-Feedback-Popover/spec.md#record-015-color-scheme-instance-ownership)<br>[022 · TPopover 公开 API 收敛](003-Feedback-Popover/spec.md#record-022-public-api-convergence)<br>[027 · TPopover 双层控制模式与主题插值](003-Feedback-Popover/spec.md#record-027-controller-theme-lerp) |

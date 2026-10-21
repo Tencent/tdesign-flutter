@@ -45,7 +45,7 @@ Dialog 的核心弹层能力已存在，但默认顶边距和关闭按钮位置�
 - 默认标题和正文的主字体与 fallback 从 Dialog Theme 和全局 TDesign Token 解析，不隐式继承外部 Material `TextTheme`。
 - 带图片场景在 Example 层通过任意 `content` Widget 组合；垂直两按钮通过 `actionsWidget` 组合；不扩大基础 API。
 - 带图片场景的图片保持 16:9 并横向铺满 311dp 面板；文案或图片与操作按钮之间均为 24dp，图片居中场景的标题区与图片之间为 24dp。输入场景复用 `TInput`，保留灰色输入壳、16dp 顶间距和清除能力，不使用原生透明 `TextField` 近似。
-- “文字按钮”使用 32dp 顶间距、56dp 高的贴边文字操作区和 0.5dp 分隔线；基础按钮继续使用 24dp 操作区内边距。
+- “文字按钮”使用 32dp 顶间距、最小 56dp 高、随文字内容增高的贴边文字操作区和 0.5dp 分隔线；基础按钮继续使用 24dp 操作区内边距。
 - 三个及以上操作按 `TDialogAction.role` 将主要与危险操作优先从上到下展示，同类操作保持声明顺序；未声明强调角色时不改变调用方顺序。确认类无标题和纯标题场景的右侧确认操作均使用品牌填充按钮。
 - 贴边文字 Footer 仅用于 1～2 个文字操作；三个及以上文字操作使用带默认操作区内边距的纵向布局。
 - 普通基础操作由 Dialog 默认解析为 `fill + light`，主要与危险操作继续分别使用 `fill + primary`、`fill + danger`；显式 `text`、`outline`、`ghost` 的普通操作保留 `defaultTheme` 配色。实例 `colorPreset` 和 `style` 仍优先，不联动覆盖其他操作，不新增 API 或 Theme 选择器。颜色由 TButton 的现有 token/主题解析链提供。
@@ -84,7 +84,7 @@ Dialog 的核心弹层能力已存在，但默认顶边距和关闭按钮位置�
 - 修复居中 Popup 240×240 固定尺寸压窄 311dp Dialog、裁切 `TInput` 的根因；带 Popup `centerSize` 主题时仍保持 Dialog 自适应。
 - 三项及以上操作按 `TDialogAction.role` 稳定提升强调操作，全为普通操作时保持调用方声明顺序。
 - 极小视口与放大的 `spacer32` token 组合不会产生负宽高约束。
-- 文字按钮对齐 32dp Footer 顶间距、56dp 操作高度和 0.5dp 分隔线；三个及以上按钮按主要操作优先排列。
+- 文字按钮对齐 32dp Footer 顶间距、最小 56dp 操作高度和 0.5dp 分隔线；三个及以上按钮按主要操作优先排列。
 - 图片 Golden 显式等待仓库资产解码，防止把空白图片槽位误收为基线。
 
 - 根因位于 Dialog 的 normal role 默认解析，并非标准 Demo 缺少颜色参数。普通基础操作改为 `fill + light`；主要/危险操作、普通文字/描边/幽灵操作，以及显式配色与 ButtonStyle 覆盖保持原有语义，不修改共享 TButton，也不新增 API。
@@ -113,3 +113,5 @@ Dialog 的核心弹层能力已存在，但默认顶边距和关闭按钮位置�
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+文字操作区保留默认 56dp 外观；长文案换行或系统文字缩放需要更多高度时随内容增高，避免内部固定高度裁切。实例显式文字样式和省略策略仍优先，不新增配置。

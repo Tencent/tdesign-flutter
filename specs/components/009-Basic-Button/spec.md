@@ -45,6 +45,19 @@ Button 的默认禁用前景色统一落到通用禁用文本色，且浅色描�
 - 渐变与普通分支保持一致的内外框、单一按钮语义、可见背景、命中区、baseline 与 intrinsic/dry layout 行为。渐变边框只绘制一次，不参与额外尺寸叠加。
 - 配色与禁用颜色按 colorPreset、明暗及当前 TDesign Token 解析；不保留“显式 Material ColorScheme 优先”的旧桥接。图标插槽内 Loading 使用已解析图标色，独立 Loading 默认值不变。
 
+<a id="source-082"></a>
+<a id="record-082-text-slot-defaults"></a>
+
+### 082 · Button文案默认值
+
+Button.child通过既有TTextStyleScope向Text/TText提供组件默认文字样式，在内容实际上下文读取最终DefaultTextStyle，复用已有尺寸、配色、状态与动画解析。作用域仅覆盖child，不延伸到icon或背景/前景装饰构建器。
+
+实例style/font显式字段优先；组件槽覆盖外层通用TD文字主题的重复字段，未重复字段与段落配置保留，内容内部更近的TD文字主题可覆盖。复合内容TText共享文案默认，inherit:false保留既有整体替换语义。
+
+文字槽规则同样适用于消费 Button 的其他 Demo，包括 BackTop、Drawer、Indexes、Popup、Form；弹层打开后仍可见的背景按钮也在影响范围。文字布局可变化，不意味着消费组件容器本身必须改变，按实际场景验证。TText 使用说明放在构造方法与参数 dartdoc，API 类入口遵循统一表格结构。
+
+无新增配置或API，全局TText/Resolve/Scope可执行规则不变。本事项改变无样式及部分样式TText的默认字体、颜色和布局，属于breaking；使用显式style/font或内容内部局部主题保留原外观。详见[迁移说明](./text-slot-migration.md)及[原验收](./acceptance.md#source-082)。NavBar标题事项见[NavBar契约](../031-Navigation-NavBar/spec.md#source-082)。
+
 ## 关键决策与取舍
 
 | 决策 | 理由与取舍 |
