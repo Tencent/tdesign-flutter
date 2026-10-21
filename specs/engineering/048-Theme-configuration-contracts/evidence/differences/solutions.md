@@ -22,7 +22,7 @@
 验证：保留旧目标原始比较；新增contract/场景必须enforce=true且匹配，并覆盖浅/暗及自定义全局Token。
 
 - [已有契约](../../../../../tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart#L84)：头像组成员描边颜色；未设置时使用 `bgColorContainer` Token。
-- [已有契约](../../../../components/034-DataDisplay-Avatar/acceptance.md#L33)：明暗 Golden 中本次变更的头像组裁剪、边框与 `+5` 溢出文案符合设计稿
+- [已有契约](../../../../components/034-DataDisplay-Avatar/acceptance.md#已有验证结论)：明暗 Golden 中本次变更的头像组裁剪、边框与 `+5` 溢出文案符合设计稿
 
 ### avatarIconSmallFontSize
 
