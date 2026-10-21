@@ -1,6 +1,6 @@
 # TDesign Flutter 文档站点开发
 
-组件使用方法见[快速开始](./site/docs/getting-started.md)，开发贡献规则见[仓库贡献指南](../CONTRIBUTING.md)。本文件只维护站点运行方式。
+组件使用方法见[快速开始](site/docs/getting-started.md)，开发贡献规则见[仓库贡献指南](../CONTRIBUTING.md)。本文件只维护站点运行方式。
 
 ## 安装
 
@@ -31,7 +31,7 @@ pnpm install --frozen-lockfile
 {{ flutter-api table }}
 ```
 
-`pnpm test:example-code` 验证全部57份组件文档及对应资产；组件页禁止手写代码块、API参数表和迁移正文。迁移摘要的后续接入见[设计方案](../specs/061-migration-documentation-design/plan.md)。
+`pnpm test:example-code` 验证全部57份组件文档及对应资产；组件页禁止手写代码块、API参数表和迁移正文。迁移摘要的后续接入见[设计方案](site/docs/migration-0.2.7-to-1.0.md)。
 
 主题与国际化示例维护在 `tdesign-component/example/lib/documentation_examples.dart`，指南中的标记片段从该源码提取；修改代码后由现有Theme功能测试验证。迁移示例继续来自独立消费夹具。
 

@@ -150,6 +150,7 @@ const componentTestManifests = <ComponentTestManifest>[
     coverageTargets: ['lib/src/components/button/'],
     componentTests: [
       'test/components/button/t_button_test.dart',
+      'test/components/button/t_button_text_layout_test.dart',
       'test/components/button/t_button_theme_priority_test.dart',
       'test/components/button/t_button_theme_test.dart',
       'test/components/button/t_button_widget_test.dart',
@@ -384,7 +385,10 @@ const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(
     name: 'dialog',
     coverageTargets: ['lib/src/components/dialog/'],
-    componentTests: ['test/components/dialog/t_dialog_test.dart'],
+    componentTests: [
+      'test/components/dialog/t_dialog_test.dart',
+      'test/components/dialog/t_dialog_action_layout_test.dart',
+    ],
     exampleTests: ['test/dialog/dialog_page_test.dart'],
     visualTests: [
       VisualTestManifest(
@@ -595,6 +599,7 @@ const componentTestManifests = <ComponentTestManifest>[
     coverageTargets: ['lib/src/components/navbar/'],
     componentTests: [
       'test/components/navbar/t_nav_bar_test.dart',
+      'test/components/navbar/t_nav_bar_text_layout_test.dart',
       'test/components/navbar/t_navbar_test.dart',
     ],
     exampleTests: ['test/navbar/navbar_page_test.dart'],

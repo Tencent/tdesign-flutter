@@ -1,0 +1,401 @@
+{
+  "baseline": "../runtime/runtime-review.json",
+  "scope": "31 runtime differences plus one platform geometry item; no final pixel acceptance implied",
+  "rows": [
+    {
+      "name": "avatarBorderColor",
+      "disposition": "existing-contract-verified-visual-pending",
+      "action": "保留当前Flutter契约，不按旧CSS变量默认或覆盖能力修改生产实现；补当前契约的实际Widget断言。",
+      "contractReferences": [
+        {
+          "file": "tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart",
+          "quote": "头像组成员描边颜色；未设置时使用 `bgColorContainer` Token。"
+        },
+        {
+          "file": "specs/components/034-DataDisplay-Avatar/acceptance.md",
+          "quote": "明暗 Golden 中本次变更的头像组裁剪、边框与 `+5` 溢出文案符合设计稿"
+        }
+      ],
+      "validation": "保留旧目标原始比较；新增contract/场景必须enforce=true且匹配，并覆盖浅/暗及自定义全局Token。"
+    },
+    {
+      "name": "avatarIconSmallFontSize",
+      "disposition": "existing-contract-verified-visual-pending",
+      "action": "保留当前Flutter契约，不按旧CSS变量默认或覆盖能力修改生产实现；补当前契约的实际Widget断言。",
+      "contractReferences": [
+        {
+          "file": "tdesign-component/lib/src/components/avatar/t_avatar_theme_data.dart",
+          "quote": "默认图标大小；未设置时小、中、大尺寸分别为 20、24、32 逻辑像素。"
+        }
+      ],
+      "validation": "保留旧目标原始比较；新增contract/场景必须enforce=true且匹配，并覆盖浅/暗及自定义全局Token。"
+    },
+    {
+      "name": "avatarTextLargeFontSize",
+      "disposition": "existing-contract-verified-visual-pending",
+      "action": "保留当前Flutter契约，不按旧CSS变量默认或覆盖能力修改生产实现；补当前契约的实际Widget断言。",
+      "contractReferences": [
+        {
+          "file": "specs/engineering/048-Theme-configuration-contracts/spec.md",
+          "quote": "字符头像仍按 `size` 使用内置字号与字重"
+        },
+        {
+          "file": "specs/components/034-DataDisplay-Avatar/spec.md",
+          "quote": "字符头像按大、中、小尺寸默认使用 20、16、14 字号和 Semibold 字重。"
+        }
+      ],
+      "validation": "保留旧目标原始比较；新增contract/场景必须enforce=true且匹配，并覆盖浅/暗及自定义全局Token。"
+    },
+    {
+      "name": "avatarTextMediumFontSize",
+      "disposition": "existing-contract-verified-visual-pending",
+      "action": "保留当前Flutter契约，不按旧CSS变量默认或覆盖能力修改生产实现；补当前契约的实际Widget断言。",
+      "contractReferences": [
+        {
+          "file": "specs/engineering/048-Theme-configuration-contracts/spec.md",
+          "quote": "字符头像仍按 `size` 使用内置字号与字重"
+        },
+        {
+          "file": "specs/components/034-DataDisplay-Avatar/spec.md",
+          "quote": "字符头像按大、中、小尺寸默认使用 20、16、14 字号和 Semibold 字重。"
+        }
+      ],
+      "validation": "保留旧目标原始比较；新增contract/场景必须enforce=true且匹配，并覆盖浅/暗及自定义全局Token。"
+    },
+    {
+      "name": "avatarTextSmallFontSize",
+      "disposition": "existing-contract-verified-visual-pending",
+      "action": "保留当前Flutter契约，不按旧CSS变量默认或覆盖能力修改生产实现；补当前契约的实际Widget断言。",
+      "contractReferences": [
+        {
+          "file": "specs/engineering/048-Theme-configuration-contracts/spec.md",
+          "quote": "字符头像仍按 `size` 使用内置字号与字重"
+        },
+        {
+          "file": "specs/components/034-DataDisplay-Avatar/spec.md",
+          "quote": "字符头像按大、中、小尺寸默认使用 20、16、14 字号和 Semibold 字重。"
+        }
+      ],
+      "validation": "保留旧目标原始比较；新增contract/场景必须enforce=true且匹配，并覆盖浅/暗及自定义全局Token。"
+    },
+    {
+      "name": "buttonBorderWidth",
+      "disposition": "platform-geometry-plan-pending",
+      "action": "先在375宽目标小程序宿主记录button及::after的有效width/height、border-width、transform和transform-origin；连同基础库/OS/DPR存档，再裁定Flutter 1dp是否等效。",
+      "risk": "若存在200%伪元素和scale(0.5)，4rpx在375宽下为2dp再缩至1dp；这是条件推导，不是已取得的宿主事实。没有缩放时才应按2dp讨论。",
+      "validation": "DPR2/3及浅/暗outline/ghost实际描边与边框盒；固定viewport和来源版本。不得由源码字面值直接改成2dp。"
+    },
+    {
+      "name": "buttonDangerDisabledBg",
+      "disposition": "implementation-plan-pending",
+      "action": "建议保留语义errorColorDisabled，并明确记录与直接errorColor3覆盖的区别；确认语义优先策略后登记为Flutter契约差异。",
+      "risk": "不改当前默认像素；单独设置调色板errorColor3与语义errorColorDisabled时的结果不同。",
+      "validation": "同时测试只覆盖errorColor3、只覆盖errorColorDisabled、两者同时覆盖；已裁定语义优先后断言后者胜出。",
+      "constraints": [
+        "保留primary深色禁用fontWhite4裁定。",
+        "保留实例ButtonStyle（含WidgetState）的最高优先级与Material样式隔离。",
+        "普通/渐变、浅/暗、启用/按压/禁用及悬浮/焦点必须复验。"
+      ]
+    },
+    {
+      "name": "buttonDangerDisabledColor",
+      "disposition": "implementation-plan-pending",
+      "action": "建议填充危险按钮禁用前景使用fontWhite1，保留危险禁用背景errorColorDisabled；必须先核对危险填充按钮的浅/暗设计节点。",
+      "risk": "当前通用禁用字色会变为白色层级，属于可见默认变化；不能沿用primary深色fontWhite4裁定。",
+      "validation": "核对危险背景上的对比及浅/暗最终颜色；显式实例disabled foreground仍优先，Linux定向Golden先无更新比对。",
+      "constraints": [
+        "保留primary深色禁用fontWhite4裁定。",
+        "保留实例ButtonStyle（含WidgetState）的最高优先级与Material样式隔离。",
+        "普通/渐变、浅/暗、启用/按压/禁用及悬浮/焦点必须复验。"
+      ]
+    },
+    {
+      "name": "buttonDangerOutlineDisabledColor",
+      "disposition": "implementation-plan-pending",
+      "action": "与危险填充禁用背景采用同一语义规则：建议前景和描边使用errorColorDisabled；不为旧CSS调色板引用新增独立入口。",
+      "risk": "默认主题不变；独立Token覆盖的优先级需要文档化。",
+      "validation": "前景与描边必须同源；覆盖errorColor3/errorColorDisabled及实例ButtonStyle时分别断言。",
+      "constraints": [
+        "保留primary深色禁用fontWhite4裁定。",
+        "保留实例ButtonStyle（含WidgetState）的最高优先级与Material样式隔离。",
+        "普通/渐变、浅/暗、启用/按压/禁用及悬浮/焦点必须复验。"
+      ]
+    },
+    {
+      "name": "buttonDangerTextDisabledColor",
+      "disposition": "implementation-plan-pending",
+      "action": "建议文字危险按钮禁用前景使用errorColorDisabled；不机械复制冻结源码fontWhite1，以免浅色容器出现白底白字。取得设计裁定后再实施。",
+      "risk": "当前通用禁用字色会变成危险语义禁用色；需同时核对文字按钮背景和可读性。",
+      "validation": "分别验证填充与文字分支；禁止复用同一disabled helper而把文字分支变成白字；实例状态样式优先。",
+      "constraints": [
+        "保留primary深色禁用fontWhite4裁定。",
+        "保留实例ButtonStyle（含WidgetState）的最高优先级与Material样式隔离。",
+        "普通/渐变、浅/暗、启用/按压/禁用及悬浮/焦点必须复验。"
+      ]
+    },
+    {
+      "name": "buttonDefaultActiveBgColor",
+      "disposition": "implementation-plan-pending",
+      "action": "拟将_resolveFillColors调用的_pressedBackgroundColor默认配色改为bgColorComponentActive；并让既有hasPressedBackground检测关闭重复pressed overlay。",
+      "risk": "普通与渐变/自定义背景必须按实际路径区分；默认填充按压视觉变化。",
+      "validation": "真实指针按下保持、释放、取消、禁用切换；浅/暗下断言背景及overlay，P0 stateful背景不能被二次叠色。",
+      "constraints": [
+        "保留primary深色禁用fontWhite4裁定。",
+        "保留实例ButtonStyle（含WidgetState）的最高优先级与Material样式隔离。",
+        "普通/渐变、浅/暗、启用/按压/禁用及悬浮/焦点必须复验。"
+      ]
+    },
+    {
+      "name": "buttonGhostBorderColor",
+      "disposition": "fixed-runtime-verified-visual-pending",
+      "action": "默认配色启用态前景/描边统一回退textColorAnti；禁用fontWhite4与实例ButtonStyle优先级不变。",
+      "source": "tdesign-component/lib/src/components/button/t_button_resolve.dart",
+      "validation": "检查独立textColorAnti/fontWhite1，实际Text前景与Material边框一致；默认主题两Token相等，默认像素不变。"
+    },
+    {
+      "name": "buttonGhostColor",
+      "disposition": "fixed-runtime-verified-visual-pending",
+      "action": "默认配色启用态前景/描边统一回退textColorAnti；禁用fontWhite4与实例ButtonStyle优先级不变。",
+      "source": "tdesign-component/lib/src/components/button/t_button_resolve.dart",
+      "validation": "检查独立textColorAnti/fontWhite1，实际Text前景与Material边框一致；默认主题两Token相等，默认像素不变。"
+    },
+    {
+      "name": "buttonGhostDangerHoverColor",
+      "disposition": "implementation-plan-pending",
+      "action": "与ghost交互统一裁定；如按目标改变前景/描边，危险色按压取errorColorActive，避免只改文字遗漏边框。",
+      "risk": "须同时评估Ink层和透明容器上的实际视觉；不能把一次getter修正当作像素验收。",
+      "validation": "独立覆盖errorColor/errorColorActive，按下/释放/禁用均检查前景、边框和实例优先级。",
+      "constraints": [
+        "保留primary深色禁用fontWhite4裁定。",
+        "保留实例ButtonStyle（含WidgetState）的最高优先级与Material样式隔离。",
+        "普通/渐变、浅/暗、启用/按压/禁用及悬浮/焦点必须复验。"
+      ]
+    },
+    {
+      "name": "buttonGhostHoverColor",
+      "disposition": "implementation-plan-pending",
+      "action": "建议先沿用Spec009的Flutter Ink状态层契约；取得目标按压设计后记录平台交互例外。若要求前景随按压变化，则默认ghost前景/边框用fontWhite2，并以已产生的前景/边框反馈抑制重复pressed overlay。",
+      "risk": "现有12%前景色状态层与冻结CSS前景变化不能只用字段相等判断视觉等价；必须检查实际合成结果。",
+      "validation": "真实按下/释放/取消、hover/focus、透明背景及P0透明overlay；已产生反馈时不得重复叠加，禁用始终无反馈。",
+      "constraints": [
+        "保留primary深色禁用fontWhite4裁定。",
+        "保留实例ButtonStyle（含WidgetState）的最高优先级与Material样式隔离。",
+        "普通/渐变、浅/暗、启用/按压/禁用及悬浮/焦点必须复验。"
+      ]
+    },
+    {
+      "name": "buttonGhostPrimaryHoverColor",
+      "disposition": "implementation-plan-pending",
+      "action": "与默认ghost采用同一交互裁定；如按目标改变前景/描边，主色按压取brandColorActive，且与overlay反馈统一解析。",
+      "risk": "不新加activeColor入口；保持实例ButtonStyle拥有最终状态样式。",
+      "validation": "独立覆盖brandColor与brandColorActive，检查真实按压的Text与Material边框及overlay组合。",
+      "constraints": [
+        "保留primary深色禁用fontWhite4裁定。",
+        "保留实例ButtonStyle（含WidgetState）的最高优先级与Material样式隔离。",
+        "普通/渐变、浅/暗、启用/按压/禁用及悬浮/焦点必须复验。"
+      ]
+    },
+    {
+      "name": "buttonLightActiveBgColor",
+      "disposition": "implementation-plan-pending",
+      "action": "拟将_pressedBackgroundColor浅色配色改为brandColorLightActive，避免使用brandColorFocus；沿同一resolve路径覆盖普通分支。",
+      "risk": "浅色填充按压色变化；焦点色不应被当作按压默认。",
+      "validation": "独立设置brandColorFocus和brandColorLightActive，确认按压读取后者；复验焦点反馈和实例stateful ButtonStyle。",
+      "constraints": [
+        "保留primary深色禁用fontWhite4裁定。",
+        "保留实例ButtonStyle（含WidgetState）的最高优先级与Material样式隔离。",
+        "普通/渐变、浅/暗、启用/按压/禁用及悬浮/焦点必须复验。"
+      ]
+    },
+    {
+      "name": "emptyActionMarginTop",
+      "disposition": "existing-contract-verified-visual-pending",
+      "action": "保留当前Flutter契约，不按旧CSS变量默认或覆盖能力修改生产实现；补当前契约的实际Widget断言。",
+      "contractReferences": [
+        {
+          "file": "specs/components/031-DataDisplay-Empty/spec.md",
+          "quote": "图片优先于图标，描述始终可选；操作 Widget 非空时以 32 间距展示。"
+        }
+      ],
+      "validation": "保留旧目标原始比较；新增contract/场景必须enforce=true且匹配，并覆盖浅/暗及自定义全局Token。"
+    },
+    {
+      "name": "emptyDescriptionMarginTop",
+      "disposition": "existing-contract-verified-visual-pending",
+      "action": "保留当前Flutter契约，不按旧CSS变量默认或覆盖能力修改生产实现；补当前契约的实际Widget断言。",
+      "contractReferences": [
+        {
+          "file": "specs/components/031-DataDisplay-Empty/spec.md",
+          "quote": "默认图标 96，图标/图片到描述间距分别为 22/16。"
+        }
+      ],
+      "validation": "保留旧目标原始比较；新增contract/场景必须enforce=true且匹配，并覆盖浅/暗及自定义全局Token。"
+    },
+    {
+      "name": "inputBorderColor",
+      "disposition": "implementation-plan-pending",
+      "action": "拟仅将TInput._borderColor中normal分支由componentBorder改为componentStroke；保留focused/status和显式Theme边框策略，先核对Input分隔线设计。",
+      "risk": "浅色与暗色默认分隔线颜色均变化；FormItem外层分隔线与Input自身分隔线需避免双线。",
+      "validation": "独立覆盖componentBorder/componentStroke；正常、聚焦、禁用、success/warning/error及borderless/FormItem组合均需Widget与定向Golden。",
+      "constraints": [
+        "保留TInputThemeData显式borderColor及focus/status语义色。",
+        "FormItem组合的单次内边距和分隔线所有权不得重复。"
+      ]
+    },
+    {
+      "name": "inputVerticalPadding",
+      "disposition": "existing-contract-verified-visual-pending",
+      "action": "保留当前Flutter契约，不按旧CSS变量默认或覆盖能力修改生产实现；补当前契约的实际Widget断言。",
+      "contractReferences": [
+        {
+          "file": "tdesign-component/lib/src/components/input/t_input_theme_data.dart",
+          "quote": "null 时在 TFormItem 作用域内为零，独立输入框为四周 16 逻辑像素"
+        }
+      ],
+      "validation": "保留旧目标原始比较；新增contract/场景必须enforce=true且匹配，并覆盖浅/暗及自定义全局Token。"
+    },
+    {
+      "name": "switchDotLargeSize",
+      "disposition": "implementation-plan-pending",
+      "action": "在Switch内部建立按size解析的私有几何值，直接传到实际RenderBox/Painter以实现大号普通滑块直径26；去除整件FittedBox统一缩放。有图文/加载或开启态按26绘制。",
+      "risk": "这是同一几何修复批次，不逐项打补丁；不将私有几何表暴露为新的公开配置源。",
+      "validation": "三尺寸×filled/text/icon×开/关×禁用/加载；测真实轨道、滑块、图标和字号。保留长文案、1/2/3倍字号、Theme插值、RTL手势；双SDK与Linux受影响Golden。",
+      "constraints": [
+        "不新增尺寸/颜色状态源或defaultSize。",
+        "保留受控值、onChanged-null禁用、loading禁用、RTL拖动与语义。",
+        "按实际RenderBox/Painter尺寸验证，不能只断言外层SizedBox。",
+        "去除整体缩放后，默认大/中/小实际字号仍须16/14/12；Theme显式字号和无size文字自动增长保留，复用t_switch_typography_test的真实渲染尺度断言。"
+      ]
+    },
+    {
+      "name": "switchDotPlainLargeSize",
+      "disposition": "implementation-plan-pending",
+      "action": "在Switch内部建立按size解析的私有几何值，直接传到实际RenderBox/Painter以实现大号无图文未选中滑块直径22；去除整件FittedBox统一缩放。plain条件同冻结WXML，开启态回到普通26。",
+      "risk": "这是同一几何修复批次，不逐项打补丁；不将私有几何表暴露为新的公开配置源。",
+      "validation": "三尺寸×filled/text/icon×开/关×禁用/加载；测真实轨道、滑块、图标和字号。保留长文案、1/2/3倍字号、Theme插值、RTL手势；双SDK与Linux受影响Golden。",
+      "constraints": [
+        "不新增尺寸/颜色状态源或defaultSize。",
+        "保留受控值、onChanged-null禁用、loading禁用、RTL拖动与语义。",
+        "按实际RenderBox/Painter尺寸验证，不能只断言外层SizedBox。",
+        "去除整体缩放后，默认大/中/小实际字号仍须16/14/12；Theme显式字号和无size文字自动增长保留，复用t_switch_typography_test的真实渲染尺度断言。"
+      ]
+    },
+    {
+      "name": "switchDotPlainSize",
+      "disposition": "implementation-plan-pending",
+      "action": "在Switch内部建立按size解析的私有几何值，直接传到实际RenderBox/Painter以实现中号无图文未选中滑块直径18；去除整件FittedBox统一缩放。plain由无两项label、无两项icon且非loading决定，不能误用于图文/加载态。",
+      "risk": "这是同一几何修复批次，不逐项打补丁；不将私有几何表暴露为新的公开配置源。",
+      "validation": "三尺寸×filled/text/icon×开/关×禁用/加载；测真实轨道、滑块、图标和字号。保留长文案、1/2/3倍字号、Theme插值、RTL手势；双SDK与Linux受影响Golden。",
+      "constraints": [
+        "不新增尺寸/颜色状态源或defaultSize。",
+        "保留受控值、onChanged-null禁用、loading禁用、RTL拖动与语义。",
+        "按实际RenderBox/Painter尺寸验证，不能只断言外层SizedBox。",
+        "去除整体缩放后，默认大/中/小实际字号仍须16/14/12；Theme显式字号和无size文字自动增长保留，复用t_switch_typography_test的真实渲染尺度断言。"
+      ]
+    },
+    {
+      "name": "switchDotPlainSmallSize",
+      "disposition": "implementation-plan-pending",
+      "action": "在Switch内部建立按size解析的私有几何值，直接传到实际RenderBox/Painter以实现小号无图文未选中滑块直径14；去除整件FittedBox统一缩放。plain条件同冻结WXML，开启态回到普通18。",
+      "risk": "这是同一几何修复批次，不逐项打补丁；不将私有几何表暴露为新的公开配置源。",
+      "validation": "三尺寸×filled/text/icon×开/关×禁用/加载；测真实轨道、滑块、图标和字号。保留长文案、1/2/3倍字号、Theme插值、RTL手势；双SDK与Linux受影响Golden。",
+      "constraints": [
+        "不新增尺寸/颜色状态源或defaultSize。",
+        "保留受控值、onChanged-null禁用、loading禁用、RTL拖动与语义。",
+        "按实际RenderBox/Painter尺寸验证，不能只断言外层SizedBox。",
+        "去除整体缩放后，默认大/中/小实际字号仍须16/14/12；Theme显式字号和无size文字自动增长保留，复用t_switch_typography_test的真实渲染尺度断言。"
+      ]
+    },
+    {
+      "name": "switchDotSmallSize",
+      "disposition": "implementation-plan-pending",
+      "action": "在Switch内部建立按size解析的私有几何值，直接传到实际RenderBox/Painter以实现小号普通滑块直径18；去除整件FittedBox统一缩放。有图文/加载或开启态按18绘制。",
+      "risk": "这是同一几何修复批次，不逐项打补丁；不将私有几何表暴露为新的公开配置源。",
+      "validation": "三尺寸×filled/text/icon×开/关×禁用/加载；测真实轨道、滑块、图标和字号。保留长文案、1/2/3倍字号、Theme插值、RTL手势；双SDK与Linux受影响Golden。",
+      "constraints": [
+        "不新增尺寸/颜色状态源或defaultSize。",
+        "保留受控值、onChanged-null禁用、loading禁用、RTL拖动与语义。",
+        "按实际RenderBox/Painter尺寸验证，不能只断言外层SizedBox。",
+        "去除整体缩放后，默认大/中/小实际字号仍须16/14/12；Theme显式字号和无size文字自动增长保留，复用t_switch_typography_test的真实渲染尺度断言。"
+      ]
+    },
+    {
+      "name": "switchIconLargeSize",
+      "disposition": "implementation-plan-pending",
+      "action": "在Switch内部建立按size解析的私有几何值，直接传到实际RenderBox/Painter以实现大号图标实际尺寸24；去除整件FittedBox统一缩放。图标和26dp滑块保留各自真实尺寸。",
+      "risk": "这是同一几何修复批次，不逐项打补丁；不将私有几何表暴露为新的公开配置源。",
+      "validation": "三尺寸×filled/text/icon×开/关×禁用/加载；测真实轨道、滑块、图标和字号。保留长文案、1/2/3倍字号、Theme插值、RTL手势；双SDK与Linux受影响Golden。",
+      "constraints": [
+        "不新增尺寸/颜色状态源或defaultSize。",
+        "保留受控值、onChanged-null禁用、loading禁用、RTL拖动与语义。",
+        "按实际RenderBox/Painter尺寸验证，不能只断言外层SizedBox。",
+        "去除整体缩放后，默认大/中/小实际字号仍须16/14/12；Theme显式字号和无size文字自动增长保留，复用t_switch_typography_test的真实渲染尺度断言。"
+      ]
+    },
+    {
+      "name": "switchIconSize",
+      "disposition": "implementation-plan-pending",
+      "action": "在Switch内部建立按size解析的私有几何值，直接传到实际RenderBox/Painter以实现中号图标实际尺寸20；去除整件FittedBox统一缩放。独立图标尺寸不能随22dp滑块槽被缩成16。",
+      "risk": "这是同一几何修复批次，不逐项打补丁；不将私有几何表暴露为新的公开配置源。",
+      "validation": "三尺寸×filled/text/icon×开/关×禁用/加载；测真实轨道、滑块、图标和字号。保留长文案、1/2/3倍字号、Theme插值、RTL手势；双SDK与Linux受影响Golden。",
+      "constraints": [
+        "不新增尺寸/颜色状态源或defaultSize。",
+        "保留受控值、onChanged-null禁用、loading禁用、RTL拖动与语义。",
+        "按实际RenderBox/Painter尺寸验证，不能只断言外层SizedBox。",
+        "去除整体缩放后，默认大/中/小实际字号仍须16/14/12；Theme显式字号和无size文字自动增长保留，复用t_switch_typography_test的真实渲染尺度断言。"
+      ]
+    },
+    {
+      "name": "switchIconSmallSize",
+      "disposition": "implementation-plan-pending",
+      "action": "在Switch内部建立按size解析的私有几何值，直接传到实际RenderBox/Painter以实现小号图标实际尺寸16；去除整件FittedBox统一缩放。图标和18dp滑块保留各自真实尺寸。",
+      "risk": "这是同一几何修复批次，不逐项打补丁；不将私有几何表暴露为新的公开配置源。",
+      "validation": "三尺寸×filled/text/icon×开/关×禁用/加载；测真实轨道、滑块、图标和字号。保留长文案、1/2/3倍字号、Theme插值、RTL手势；双SDK与Linux受影响Golden。",
+      "constraints": [
+        "不新增尺寸/颜色状态源或defaultSize。",
+        "保留受控值、onChanged-null禁用、loading禁用、RTL拖动与语义。",
+        "按实际RenderBox/Painter尺寸验证，不能只断言外层SizedBox。",
+        "去除整体缩放后，默认大/中/小实际字号仍须16/14/12；Theme显式字号和无size文字自动增长保留，复用t_switch_typography_test的真实渲染尺度断言。"
+      ]
+    },
+    {
+      "name": "switchLabelColor",
+      "disposition": "implementation-plan-pending",
+      "action": "拟将TSwitchResolve.thumbContentOffColor默认回退改为bgColorSecondaryContainerActive，同步公开dartdoc；Theme显式值与禁用分支保留。",
+      "risk": "正常未选中文字/图标颜色变化；已记录的禁用/加载分层不变。",
+      "validation": "分别验证text/icon、on/off、enabled/disabled/loading、浅/暗、全局Token与组件Theme独立覆盖；保留用户自定义前景。",
+      "constraints": [
+        "不新增尺寸/颜色状态源或defaultSize。",
+        "保留受控值、onChanged-null禁用、loading禁用、RTL拖动与语义。",
+        "按实际RenderBox/Painter尺寸验证，不能只断言外层SizedBox。",
+        "去除整体缩放后，默认大/中/小实际字号仍须16/14/12；Theme显式字号和无size文字自动增长保留，复用t_switch_typography_test的真实渲染尺度断言。"
+      ]
+    },
+    {
+      "name": "switchLargeWidth",
+      "disposition": "implementation-plan-pending",
+      "action": "在Switch内部建立按size解析的私有几何值，直接传到实际RenderBox/Painter以实现large轨道实际宽度52；去除整件FittedBox统一缩放。大号外框52×32，Painter轨道也应52×32。",
+      "risk": "这是同一几何修复批次，不逐项打补丁；不将私有几何表暴露为新的公开配置源。",
+      "validation": "三尺寸×filled/text/icon×开/关×禁用/加载；测真实轨道、滑块、图标和字号。保留长文案、1/2/3倍字号、Theme插值、RTL手势；双SDK与Linux受影响Golden。",
+      "constraints": [
+        "不新增尺寸/颜色状态源或defaultSize。",
+        "保留受控值、onChanged-null禁用、loading禁用、RTL拖动与语义。",
+        "按实际RenderBox/Painter尺寸验证，不能只断言外层SizedBox。",
+        "去除整体缩放后，默认大/中/小实际字号仍须16/14/12；Theme显式字号和无size文字自动增长保留，复用t_switch_typography_test的真实渲染尺度断言。"
+      ]
+    },
+    {
+      "name": "switchSmallWidth",
+      "disposition": "implementation-plan-pending",
+      "action": "在Switch内部建立按size解析的私有几何值，直接传到实际RenderBox/Painter以实现small轨道实际宽度39；去除整件FittedBox统一缩放。小号外框39×24，Painter轨道也应39×24。",
+      "risk": "这是同一几何修复批次，不逐项打补丁；不将私有几何表暴露为新的公开配置源。",
+      "validation": "三尺寸×filled/text/icon×开/关×禁用/加载；测真实轨道、滑块、图标和字号。保留长文案、1/2/3倍字号、Theme插值、RTL手势；双SDK与Linux受影响Golden。",
+      "constraints": [
+        "不新增尺寸/颜色状态源或defaultSize。",
+        "保留受控值、onChanged-null禁用、loading禁用、RTL拖动与语义。",
+        "按实际RenderBox/Painter尺寸验证，不能只断言外层SizedBox。",
+        "去除整体缩放后，默认大/中/小实际字号仍须16/14/12；Theme显式字号和无size文字自动增长保留，复用t_switch_typography_test的真实渲染尺度断言。"
+      ]
+    }
+  ]
+}
