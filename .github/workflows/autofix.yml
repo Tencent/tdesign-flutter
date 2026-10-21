@@ -1,10 +1,14 @@
-name: autofix.ci
+name: Generated / Sync
 on:
   pull_request:
     branches: [develop]
-    paths-ignore:
-      - "tdesign-site/**"
-      - "*.md"
+    paths:
+      - 'tdesign-component/**'
+      - 'README*.md'
+      - 'tdesign-site/site/docs/**'
+      - 'scripts/documentation.mjs'
+      - 'scripts/sync-readme.mjs'
+      - '.github/workflows/autofix.yml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -25,7 +29,7 @@ jobs:
           flutter-version: 3.32.0
           cache: true
 
-      - name: generate api md
+      - name: Generate API documents
         working-directory: ./tdesign-component
         run: sh ./demo_tool/all_build.sh
 

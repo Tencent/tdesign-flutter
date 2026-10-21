@@ -109,3 +109,25 @@ CI矩阵、原名称汇总门禁及按组failure artifact保持，actionlint通�
 本机各一次前后运行，未控制其他进程负载，不能外推远端 CI 耗时。双 SDK analyze 0 诊断、原有工具回归各 157 项、新增 Node 测试各 3 项、结构/片段检查全部通过；过期片段退出 1 且不写回；真实生成失败不执行后续任务。两版本无 package_config 冷启动通过（沿用对应 SDK 既有锁文件，不代表全部依赖缓存为空）。actionlint、Node 语法、diff 检查通过。3.32.0 本机峰值 RSS 约 876 MiB。
 
 证据：工作区 artifacts/pr1179-api-generator-local-20261020/REPORT.md 及相邻日志。临时编译原 CLI 的候选因 latest 编译开销而放弃，最终代码只使用单进程批处理。生产组件、工具链、平台配置和 Golden 未改，未重跑 APK/Web/iOS 或全量组件/Golden，未触发远端 CI。以上为推送前本地结果，推送后的 CI 与耗时在 PR 描述中绑定最终 head 和运行链接。
+
+## CI 低风险项收敛（2026-10-21，本地未提交、未推送）
+
+基线 2ac20c7a。Loading 两份测试接入，misc 原有 10 个测试用例拆回 Fab、DateTimePicker、Picker，8 份遗漏 Example 测试接入；生成器自测随 test/tool 整目录执行。新增文件登记完整性门禁：根包 160 份、Example 134 份测试文件全部进入功能/视觉登记集合；已知场景过滤不因此核销。
+
+GitHub/CNB 共用固定步骤的 Bash tooling 入口。GitHub 展示 11 步，CNB 整体调用；API、片段、README/指南只读检查均保留。新增轻量文档检查及 README 源变更触发，整理 CI/Generated/Reusable 显示名与步骤，原汇总名称及预览/正式发布/同步文件保留。
+
+| 检查 | Flutter 3.32.0 | Flutter 3.47.7 |
+| --- | --- | --- |
+| 严格 analyze | 0 诊断 | 0 诊断 |
+| 最终完整 tooling | 通过，68.3 秒 | 通过，66.2 秒 |
+| Dart 工具自测 | 170 项通过 | 170 项通过 |
+| css2token / 独立迁移消费 | 30 / 21 项通过 | 30 / 21 项通过 |
+| 公开 Example / 内部开关 | 522 / 1 项通过 | 522 / 1 项通过 |
+
+两个 SDK 的 loading、fab、date_time_picker、picker 独立覆盖率均为 100.00%、99.07%、96.64%、97.53%，超过原 95% 门槛。共享入口和 Node 运行时 7 项测试、API 生成 3 项测试通过；57 份 API、370 份片段、6 份文档副本一致。临时篡改 API/片段/README 均检查失败且不写回；新增未登记根包/Example 文件均触发失败。actionlint、ShellCheck、语法/格式、CNB 引用和文档路径过滤检查通过；功能/视觉汇总的 success/failure/cancelled/skipped 验证通过。
+
+CNB 原镜像无 Node，按本轮授权仅为 tooling 补充固定 Node 22.23.3，官方 SHA-256 校验、冷准备和缓存复用通过。原 Flutter 3.32.0 镜像完整执行全部 tooling 通过；本机旧 CNB latest 镜像实际为 3.47.2，仅验证 Node/入口测试/文档检查，不外推为远端 latest 完整通过。两平台命令集合相同，未在 CNB 服务端提交或执行本轮配置。
+
+Linux Flutter 3.32.0 无更新诊断：Popup actionSheet 与既有基线差异 0.93%（2309 像素），dialog 4.00%（9996 像素），drawer 通过。保留原过滤并标明后续独立归因，不改生产组件、PNG 或容差。未重跑完整 77 个 Golden 套件、所有 57 个组件或 APK/Web/iOS 构建；本轮运行四个受影响组件、完整 Example 和 tooling，平台构建命令、SDK、Gradle、AGP、Kotlin 不变。分支保护和发布流程未改。
+
+本机时间不是远端基准，新增检查可能增加 CI 工作量。证据和最终源码指纹在工作区 artifacts/pr1179-ci-tooling-local-20261021/REPORT.md、source-hashes.json 及同目录日志；未提交或推送，远端结果需后续授权后确认。

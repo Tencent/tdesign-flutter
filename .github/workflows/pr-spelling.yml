@@ -1,4 +1,4 @@
-name: pr-spell-check
+name: CI / Spelling
 on: [pull_request]
 
 jobs:

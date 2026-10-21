@@ -46,3 +46,13 @@ CI 组件分支为两个 SDK 各两组；示例和工具不重复分组。Golden
 在双版本 tooling 任务中对原 checkout 执行一次示例片段 --check；不下载或预先重生成片段，保留结构与片段静态分析。过期片段必须失败，资源准备任务仍生成构建资源。
 
 API 生成继续使用已解析依赖中 tdesign_flutter_tools 的 SmartCreator 与 CommandInfo，不复制解析或 Markdown 规则。Node 保留清单校验及 dry-run；正常执行将任务一次传给 Dart 入口，逐组件新建生成器并 await，遇错中止。--check 继续生成到临时目录并逐字节比较，不写回仓库；dart run 保留冷启动依赖准备。不跨 SDK 共享解析或缓存，不升级工具链。双 SDK 对比原 CLI 与新入口全部 57 份文档字节及端到端耗时。
+
+## CI 低风险收敛（本地，未推送）
+
+补齐组件及 Example 功能漏测，misc 按 Fab、DateTimePicker、Picker 所有权拆分，保留断言和独立覆盖率门槛。工具自测执行 test/tool 整目录；增加磁盘测试文件与功能、视觉登记集合的完整性检查，避免新增文件漏调度。
+
+GitHub 与 CNB 共用 scripts/run-tooling-checks.sh。无参数执行全部检查，单参数选择固定步骤，未知参数失败，首个错误立即中止。共享检查包含 css2token、迁移消费、全部工具自测、API 生成及调度测试、API/片段/README 只读一致性、结构、片段分析和组件文档契约。GitHub 按步骤调用，CNB 整体调用。
+
+README/指南源变更增加轻量只读门禁，autofix 响应这些源文件。整理验证、生成维护和复用任务显示名及步骤；保留原功能/视觉汇总名称、预览 workflow 名称及发布器。正式发布、镜像同步、Issue 自动化、分支保护、Flutter SDK/Dart 依赖声明和固定两组规则不改。Popup 被过滤场景只以 Linux 原基线诊断，若需要生产组件或基线变更则留待独立修复。
+
+本机缓存的 CNB Flutter 镜像没有 Node。仅为 CNB tooling 补充 Node 22，固定为官方 v22.23.3，按 Linux 架构校验发行归档 SHA-256，缓存运行时并仅为子命令设置 PATH，不改 Flutter/Gradle/AGP/Kotlin。GitHub 继续使用现有 Node。CNB 旧 latest 镜像实际为 3.47.2，其本地环境验证与本机 3.47.7 的双版本结果分别记录。

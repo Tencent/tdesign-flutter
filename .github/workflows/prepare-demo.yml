@@ -1,5 +1,5 @@
 # 统一生成 Demo 资源和预览元数据，供同次运行的平台构建复用。
-name: Prepare Demo resources
+name: Reusable / Prepare Demo
 
 on:
   workflow_call:
@@ -14,6 +14,7 @@ permissions:
 
 jobs:
   prepare:
+    name: Prepare Demo resources
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.metadata.outputs.version }}
@@ -29,12 +30,15 @@ jobs:
       - name: Install generator dependencies
         working-directory: tdesign-component
         run: flutter pub get
-      - name: Prepare Demo resources
+      - name: Generate API documents
         working-directory: tdesign-component
-        run: |
-          sh demo_tool/all_build.sh
-          dart run tool/generate_example_code.dart
-          dart tool/write_demo_build_info.dart
+        run: sh demo_tool/all_build.sh
+      - name: Generate example snippets
+        working-directory: tdesign-component
+        run: dart run tool/generate_example_code.dart
+      - name: Write Demo build information
+        working-directory: tdesign-component
+        run: dart tool/write_demo_build_info.dart
       - name: Verify Flutter component contracts
         run: node scripts/check-flutter-component-contracts.mjs
       # 运行编号用于预览元数据和下载文件名，不覆盖包内版本号。

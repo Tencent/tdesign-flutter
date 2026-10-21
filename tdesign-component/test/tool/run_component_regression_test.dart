@@ -9,6 +9,40 @@ import '../../tool/run_component_regression.dart';
 import '../../tool/run_example_regression.dart';
 
 void main() {
+  Set<String> testFiles(String directory) => Directory(directory)
+      .listSync(recursive: true)
+      .whereType<File>()
+      .where((file) => file.path.endsWith('_test.dart'))
+      .map((file) => file.path.replaceAll('\\', '/'))
+      .toSet();
+
+  test('all component and tooling test files have a CI execution path', () {
+    final registered = <String>{
+      for (final component in componentTestManifests)
+        ...component.componentTests,
+      for (final component in componentTestManifests)
+        for (final visual in component.visualTests)
+          if (visual.workingDirectory == '.') ...visual.testFiles,
+      // The shared tooling entry executes the complete directory.
+      ...testFiles('test/tool'),
+    };
+    expect(registered, testFiles('test'));
+  });
+
+  test('all example test files have a functional or visual execution path', () {
+    final registered = <String>{
+      ...sharedExampleTests,
+      for (final component in componentTestManifests) ...component.exampleTests,
+      for (final component in componentTestManifests)
+        for (final visual in component.visualTests)
+          if (visual.workingDirectory == 'example') ...visual.testFiles,
+    };
+    expect(
+      registered.map((file) => 'example/$file').toSet(),
+      testFiles('example/test'),
+    );
+  });
+
   test('fixed component groups do not change with ordering or new entries', () {
     const expected = {'a': 2, 'b': 1, 'avatar': 2, 'theme': 2};
     Map<String, int> groups(Iterable<String> names) => {

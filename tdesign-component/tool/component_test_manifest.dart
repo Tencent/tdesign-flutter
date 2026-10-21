@@ -188,6 +188,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'picker',
     coverageTargets: ['lib/src/components/picker/'],
     componentTests: [
+      'test/components/picker/t_picker_value_types_test.dart',
       'test/components/picker/picker_consumers_theme_test.dart',
       'test/components/picker/t_picker_theme_test.dart',
       'test/components/picker/t_picker_types_test.dart',
@@ -229,6 +230,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'date_time_picker',
     coverageTargets: ['lib/src/components/date_time_picker/'],
     componentTests: [
+      'test/components/date_time_picker/t_date_time_picker_steps_test.dart',
       'test/components/picker/picker_consumers_theme_test.dart',
       'test/components/date_time_picker/t_date_time_picker_test.dart',
       'test/components/date_time_picker/t_date_time_picker_wheel_test.dart',
@@ -258,7 +260,10 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/calendar/t_calendar_test.dart',
       'test/components/calendar/t_calendar_label_height_test.dart',
     ],
-    exampleTests: ['test/calendar/calendar_demo_test.dart'],
+    exampleTests: [
+      'test/calendar/lunar_info_test.dart',
+      'test/calendar/calendar_demo_test.dart',
+    ],
     visualTests: [
       VisualTestManifest(
         name: 'Calendar States',
@@ -347,6 +352,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'divider',
     coverageTargets: ['lib/src/components/divider/'],
     componentTests: ['test/components/divider/t_divider_test.dart'],
+    exampleTests: ['test/divider/divider_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Divider Demo',
@@ -429,6 +435,7 @@ const componentTestManifests = <ComponentTestManifest>[
         workingDirectory: '.',
         testFiles: ['test/components/theme/t_popup_consumers_golden_test.dart'],
         kind: VisualTestKind.component,
+        // actionSheet/dialog differ from existing Linux baselines; see Spec 080.
         arguments: [
           '--plain-name',
           'drawer keeps the shared Popup visual contract',
@@ -440,9 +447,11 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'fab',
     coverageTargets: ['lib/src/components/fab/'],
     componentTests: [
+      'test/components/fab/t_fab_bounds_test.dart',
       'test/components/fab/t_fab_layout_test.dart',
       'test/components/fab/t_fab_test.dart',
     ],
+    exampleTests: ['test/fab/fab_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Demo code viewer',
@@ -682,6 +691,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'icon',
     coverageTargets: ['lib/src/components/icon/'],
     componentTests: ['test/components/icon/t_icon_test.dart'],
+    exampleTests: ['test/icon/icon_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Icon Demo',
@@ -716,7 +726,11 @@ const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(
     name: 'loading',
     coverageTargets: ['lib/src/components/loading/'],
-    componentTests: ['test/components/loading/t_loading_test.dart'],
+    componentTests: [
+      'test/components/loading/t_activity_indicator_test.dart',
+      'test/components/loading/t_circle_indicator_test.dart',
+      'test/components/loading/t_loading_test.dart',
+    ],
     exampleTests: ['test/loading/loading_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
@@ -852,6 +866,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'search',
     coverageTargets: ['lib/src/components/search/'],
     componentTests: ['test/components/search/t_search_test.dart'],
+    exampleTests: ['test/search/search_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Search Demo',
@@ -956,6 +971,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/switch/t_switch_typography_test.dart',
       'test/components/switch/t_cupertino_switch_test.dart',
     ],
+    exampleTests: ['test/switch/switch_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Switch Demo',
@@ -987,6 +1003,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'upload',
     coverageTargets: ['lib/src/components/upload/'],
     componentTests: ['test/components/upload/t_upload_test.dart'],
+    exampleTests: ['test/upload/upload_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Upload Demo',
@@ -1021,6 +1038,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/input/t_input_test.dart',
       'test/components/input/t_input_theme_test.dart',
     ],
+    exampleTests: ['test/input/input_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Input Demo',

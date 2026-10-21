@@ -1,5 +1,5 @@
 # 复用已准备的 Demo 资源，构建指定 Flutter 版本的 release APK 并上传。
-name: Build Demo APK
+name: Reusable / Build APK
 
 on:
   workflow_call:
@@ -19,6 +19,7 @@ permissions:
 
 jobs:
   apk:
+    name: Release APK
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
