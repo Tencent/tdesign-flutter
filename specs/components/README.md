@@ -18,7 +18,7 @@
 | [Checkbox](015-Input-Checkbox/spec.md) | 输入 / Input | [015 · Checkbox Demo 与卡片角标对齐](015-Input-Checkbox/spec.md#record-015-demo-card-alignment)<br>[016 · Checkbox 样式尺寸 token 化](015-Input-Checkbox/spec.md#record-016-theme-token-sizes)<br>[041 · Checkbox 设计细节对齐](015-Input-Checkbox/spec.md#record-041-design-details) |
 | [Collapse](030-DataDisplay-Collapse/spec.md) | 数据展示 / DataDisplay | [030 · Collapse 设计对齐](030-DataDisplay-Collapse/spec.md) |
 | [DateTimePicker](025-Input-DateTimePicker/spec.md) | 输入 / Input | [025 · DateTimePicker 平铺滚轮与 Figma Demo 对齐](025-Input-DateTimePicker/spec.md#record-025-demo-alignment)<br>[056 · DateTimePicker 展示更新与滚动状态](025-Input-DateTimePicker/spec.md#record-056-label-updates) |
-| [Dialog](010-Feedback-Dialog/spec.md) | 反馈 / Feedback | [010 · Dialog 官方基线对齐](010-Feedback-Dialog/spec.md) |
+| [Dialog](010-Feedback-Dialog/spec.md) | 反馈 / Feedback | [010 · Dialog 官方基线对齐](010-Feedback-Dialog/spec.md)<br>[083 · Dialog 文字槽恢复与共享 Theme](010-Feedback-Dialog/spec.md#record-083-text-slot-restoration) |
 | [Divider](013-Basic-Divider/spec.md) | 基础 / Basic | [013 · Divider 小程序视觉契约对齐](013-Basic-Divider/spec.md#record-013-miniprogram-alignment)<br>[038 · Divider 垂直间距对齐](013-Basic-Divider/spec.md#record-038-vertical-spacing) |
 | [Drawer](029-Navigation-Drawer/spec.md) | 导航 / Navigation | [029 · Drawer 设计与交互契约收敛](029-Navigation-Drawer/spec.md) |
 | [DropdownMenu](001-Feedback-DropdownMenu/spec.md) | 反馈 / Feedback | [001 · TDropdownMenu：稳定锚定浮层与菜单切换动画](001-Feedback-DropdownMenu/spec.md#record-001-anchored-overlay)<br>[011 · DropdownMenu Figma、Demo 与组件契约对齐](001-Feedback-DropdownMenu/spec.md#record-011-official-demos) |
