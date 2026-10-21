@@ -67,3 +67,5 @@
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+“页面示例”进入后的独立路由需覆盖明暗 Golden，验证导航标题、结果内容和返回按钮；页面列表截图不能替代打开态覆盖。图片仅维护在测试 Golden 目录。

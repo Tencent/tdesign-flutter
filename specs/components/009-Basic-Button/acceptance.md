@@ -40,3 +40,7 @@
 Linux Flutter3.32.0仅更新已审查的30张基线：BackTop2、Drawer4、Indexes2、Popup16、Form6；立即无更新参数复跑全部60场景，60项通过。文字之外无像素变化，槽容器布局保持；图片直接维护在测试Golden目录，迁移影响见[说明](./text-slot-migration.md)。
 
 远端CI以[#1180](https://github.com/Tencent/tdesign-flutter/pull/1180)最终head为准；本轮未新增设备或APK/Web/iOS构建验证，历史待办不自动关闭。
+
+## 受限布局补充验收（2026-10-22）
+
+候选为 `ab62d5bb` 上的独立本地未提交增量，Dart 源码 SHA-256：`12ae01fc2077b7a107aba9472f9c0801cd6df432c18151d19432cdca430b3bf9`。Flutter 3.32.0 / 3.47.7：新增16项受限布局回归通过：普通/渐变、明暗主题、1/2倍缩放、自动增高与固定高度显式省略、图标组合和显式颜色。Button 生产实现未修改。 未执行远端 CI 或设备验收，已有 Golden 未改。

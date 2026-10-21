@@ -78,3 +78,11 @@ Form 的 small 布局切换按钮仍为14/22，但字重变为600，并接受选
 这五类 Demo 共60个既有场景，其中30张存在预期文案变化：BackTop 2、Drawer 4、Indexes 2、Popup 16、Form 6；另30张不变。图片直接维护在各自测试的 Golden 目录，不在 Spec 复制：
 
 [BackTop](../../../tdesign-component/example/test/backtop/goldens) · [Drawer](../../../tdesign-component/example/test/drawer/goldens) · [Indexes](../../../tdesign-component/example/test/indexes/goldens) · [Popup](../../../tdesign-component/example/test/popup/goldens) · [Form](../../../tdesign-component/example/test/form/goldens)。基线仅接受已确认的文字变化，槽容器布局不变；真实项目的自定义内容仍需检查宽度、换行和省略。
+
+## 受限布局
+
+按钮长文案需要换行时保留自动高度；若固定高度，使用现有 `TText(maxLines: 1, overflow: TextOverflow.ellipsis)`，并给文字缩放预留足够高度。带图标的自定义 Row 用 Expanded/Flexible 约束文字宽度。
+
+NavBar 长标题默认单行省略；复合 Row 的文字需要 Flexible，主副标题需要明确副标题样式并给足 height。固定导航高度不会自动随系统文字缩放增高，应用需按实际内容调整 height。组件不强制缩小字号或忽略文字缩放。
+
+Dialog 标准文字操作区最小高度保持 56；长文案或文字缩放使其需要更多高度时随内容增高，避免内部固定高度裁切。应用显式设置的单行、省略及样式仍优先。
