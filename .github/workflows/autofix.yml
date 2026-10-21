@@ -1,4 +1,4 @@
-name: Generated / Sync
+name: autofix.ci
 on:
   pull_request:
     branches: [develop]
