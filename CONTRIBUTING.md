@@ -149,13 +149,27 @@ dart run tool/generate_example_code.dart --check
 登记后在 `tdesign-component` 目录执行：
 
 ```bash
-flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
+flutter test --no-pub test/tool
 dart run tool/run_component_regression.dart
 dart run tool/run_example_regression.dart
 dart run tool/run_visual_regression.dart
 ```
 
-调度器自测会检查组件名唯一、各类测试能力完整、登记文件存在，以及 GitHub/CNB 使用公共 runner。CI job 成功仅代表数组中已登记的测试通过；测试文件存在、Golden 已提交或本地单独运行通过，均不能替代 CI 回归登记。
+调度器自测会检查组件名唯一、登记文件存在、磁盘测试文件是否全部进入功能或视觉入口，以及 GitHub/CNB 使用公共 runner。新增未登记测试会失败。`test/tool/` 由共享 tooling 入口整体执行，新增工具自测无需修改 workflow。文件登记完整不代表文件内所有被标签或名称过滤的场景都执行；Golden 场景过滤仍需单独说明。
+
+GitHub 和 CNB 的工具与生成产物检查统一维护在 `scripts/run-tooling-checks.sh`。从仓库根目录执行：
+
+```bash
+bash scripts/run-tooling-checks.sh
+# 也可仅执行一个固定步骤，例如只读检查 API 文档：
+bash scripts/run-tooling-checks.sh api-docs
+```
+
+无参数顺序执行全部检查，任一失败即中止；未知步骤返回错误。GitHub 将这些步骤分别展示，CNB 整体调用。API、片段与 README/指南均使用只读一致性检查；生成与修正仍由 autofix 负责。根 README 或指南源单独变更，也会触发轻量文档副本检查。
+
+CNB 的 Flutter 镜像未预装 Node，tooling 阶段用 `scripts/with-tooling-node.sh` 准备固定 Node 22，校验官方归档后复用独立缓存；PATH 仅传给检查子命令。Flutter、Gradle、AGP、Kotlin 及各平台构建流程不因此升级。GitHub 使用 runner 既有 Node。
+
+CI 显示名按验证（`CI / …`）、生成维护（`Generated / …`）和复用实现（`Reusable / …`）分类。现有预览流程名称与发布器存在触发依赖，功能/视觉汇总名称也保留兼容；不能只改显示名而忽略调用者。正式发布与镜像同步按各自独立流程维护。
 
 ## Spec 贡献流程
 

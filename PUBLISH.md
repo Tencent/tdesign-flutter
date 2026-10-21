@@ -34,3 +34,9 @@
 ## 维护边界
 
 通用发布流程维护在本文件，候选尚未关闭的验收事项维护在 Release Spec。该轮门槛关闭后，通用规则归入本文件，再移除临时 Spec；不长期保留旧版号升级、PR 拆分和阶段性准备方案。
+
+## Demo APK 构建
+
+PR 的 Flutter 3.32.0 APK 由 PREVIEW_BUILD 的共享 workflow 构建，同时提供验证与下载；latest APK 由 test-build 验证，develop push 保留两个版本。下载文件名沿用组件版本与工作流运行编号；Android 包内版本逻辑维持原方案，本轮不迁移版本号。
+
+API、示例片段与构建日期集中准备后传给各平台，依赖与编译目录不跨 SDK 共享。APK 构建保留默认依赖解析与原生插件准备，不添加 --no-pub。本轮不提交 Example 锁文件；可复现依赖与同日重复 versionCode 问题后续独立处理。

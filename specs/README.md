@@ -8,7 +8,7 @@ specs/ 用于记录复杂需求、重构、公共 API 变更和跨目录修复�
 
 ## 非组件 Spec
 
-[工程索引](./engineering/README.md)：5 份独立契约，分别为 Theme、ThemeController、Golden、Demo 和临时发布门槛。
+[工程索引](./engineering/README.md)：6 份独立契约，分别为 Theme、ThemeController、Golden、Demo、CI 和临时发布门槛。
 
 Theme 的配置职责与 Material 隔离合为一份；Token 运行验证放在该契约的验收文档和 evidence/ 中。索引只描述职责，不代表实现或验收已通过。
 
@@ -53,7 +53,7 @@ Theme 的配置职责与 Material 隔离合为一份；Token 运行验证放在�
 ### 命名规则
 
 - 组件：`components/<编号>-<组件分类>-<组件名>/`。类别与示例配置一致：`Basic`、`Navigation`、`Input`、`DataDisplay`、`Feedback`。组件名保留规范大小写，不带类名前缀 `T`。组件目录只包含编号、分类、组件名三段，不加事项或 `contracts` 后缀；具体事项写入主文档章节。
-- 工程：`engineering/<编号>-<类别>-<事项描述>/`。当前类别为 `Theme`、`ThemeController`、`Testing`、`Demo`、`Release`。
+- 工程：`engineering/<编号>-<类别>-<事项描述>/`。当前类别为 `Theme`、`ThemeController`、`Testing`、`Demo`、`CI`、`Release`。
 - 编号至少三位，保留历史编号；新增编号取全部 Spec 及正文保留事项编号的最大值加一。历史存在重复编号，引用必须使用完整路径，不按目录展示顺序重编号。
 
 ### 什么时候拆分
