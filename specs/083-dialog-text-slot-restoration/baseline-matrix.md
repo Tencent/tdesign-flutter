@@ -13,3 +13,12 @@
 | 修复前实际图 | 修复后实际图 |
 | --- | --- |
 | ![修复前](evidence/dialog-before.png) | ![修复后](evidence/dialog-after.png) |
+
+## 共享Theme消费者补充
+
+| 场景 | PR原提交 | 显式局部主题补齐后 | PNG更新 |
+| --- | --- | --- | --- |
+| m3_custom_content（M2/M3） | CI差1.96%/6253px | Linux原基线精确通过 | 无 |
+| 完整Theme Component / Theme Demo | 此前未纳入Dialog局部验收 | 27/22项测试通过 | 无 |
+
+仅补齐自定义内容自身主题意图，Dialog直接TText槽仍使用Dialog默认。详见acceptance.md补充记录。
