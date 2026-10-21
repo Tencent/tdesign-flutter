@@ -135,8 +135,8 @@ TForm                 表单生命周期、字段注册和统一操作
 - Textarea 输入文字使用 `fontBodyLarge`，placeholder 使用 `fontBodyMedium + textColorPlaceholder`，indicator 使用 `fontBodySmall + textColorPlaceholder`；横排标题与编辑区的间距读取 `spacer16`，竖排标题与编辑区、编辑区与 indicator 的间距读取 `spacer8`。
 - 独立 Textarea 默认由组件提供 16dp 容器内边距和容器背景；放入 `TFormItem` 时自动去除这层内边距和背景，避免 Demo 或业务手工抵消双重留白。
 - 不公开 Material `InputDecoration` 透传入口；hint、前后置内容、背景、边框、内边距、label 和 help/error 分别由 TInput、TInputThemeData 和 TFormItem 的专属 API 负责，避免两套视觉配置冲突。
-- `TInputThemeData.borderColor` 可覆盖输入壳层在聚焦与非聚焦状态下的边框颜色；`backgroundColor`、`contentPadding`、`borderRadius` 和 `hintStyle` 继续负责对应的视觉 token。独立输入组件的表单错误样式复用 Material `InputDecorationTheme.errorStyle`，`TFormItem` 内的错误仍由 `TFormThemeData.errorStyle` 控制；Textarea 内部标题复用 Flutter `TextTheme.bodyMedium`。
-- 单行 Input 的输入文字和提示词默认使用完整 `fontBodyLarge`；Textarea 按上述多行 token 解析。Theme 或实例只配置颜色时必须保留 token 字号与行高。组件主题文字颜色覆盖所有可用状态的输入文字，状态语义色仅由输入壳层、计数器和错误提示消费；实例 `style.color` 仍具有最高优先级。
+- `TInputThemeData.borderColor` 可覆盖输入壳层在聚焦与非聚焦状态下的边框颜色；`backgroundColor`、`contentPadding`、`borderRadius` 和 `hintStyle` 继续负责对应的视觉 token。输入组件自身展示的表单错误文字使用 TD `fontBodySmall` 与 `errorColor`；`TFormItem` 展示的错误由 `TFormThemeData.errorStyle` 控制。Textarea 内部标题使用 TD `fontBodyMedium`，按启用状态选择主文字色或禁用色；均不从 Material 输入或文字主题隐式取值。
+- 单行 Input 的输入文字和提示词默认使用完整 `fontBodyLarge`；Textarea 按上述多行 token 解析。输入实例 `style` 按字段覆盖 token 排版；可用态文字优先使用实例 `style.color`，禁用态使用 `textColorDisabled`。组件 Theme 的 `hintStyle` 只配置提示词，不提供另一套输入文字 style；输入壳层、计数器和错误提示按自身状态解析语义色。
 
 ### 视觉 Demo 契约
 

@@ -49,15 +49,6 @@ Flutter Steps 的公开 Demo、状态命名及只读/可选择所有权与新版
 ### 设计演变中的关键理由
 
 - 新版 Figma / 小程序 / Flutter 三方差异与跨端取舍已记录。
-- 组件公开契约、Flutter 状态所有权与 Theme Review 已完成首轮收敛。
-- 真机首次安装运行并执行 uppercase `R`；浅色逐段滚动、点击，切换深色主题。
-- 修复垂直可选择与纯展示节点状态后再次 uppercase `R`，重新进入页面并点击复验。
-- Flutter 3.32.0 全包 analyze 为 0 issue；Steps focused tests 通过。
-- 组件测试 23/23、Demo 结构/交互 2/2、生产源码覆盖率 226/233（97.00%）通过。
-- Flutter 3.32.0 与 3.47.0 analyze、组件测试、Demo 测试、Web release 和 Android debug 构建通过。
-- Flutter 3.32 Linux light/dark Golden 2/2 生成后无更新参数严格复跑 2/2；逐张检查无缺字、无裁切。
-- 示例代码片段生成器完成 11 个旧片段清理、10 个新片段生成，`--check` 通过。
-- Android 16 真机 integration 1/1 通过；普通 APK 安装返回 `Success`，强停后冷启动到 TDesign 首页。
 
 ## 兼容性与迁移
 

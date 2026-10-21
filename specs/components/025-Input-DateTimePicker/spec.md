@@ -54,7 +54,7 @@
 
 ### 字重核对修正
 
-Figma 当前分支节点 28591:37823（02 组件样式）为 Title/Large，PingFang SC Semibold，18/26、600；节点 39079:22146（选择时间）为 Body/Large，16/24、400。compact Demo 分组标题由共享页面壳读取 fontTitleLarge，不另写 700；保留调用方显式 TTextThemeData.textStyle.titleLarge 覆盖。普通 Cell 保持 fontBodyLarge，不在 DateTimePicker Demo 强制减重。共享壳改动涉及使用 compactDemo 的其他页面，需验证相应 Golden。
+Figma 当前分支节点 28591:37823（02 组件样式）为 Title/Large，PingFang SC Semibold，18/26、600；节点 39079:22146（选择时间）为 Body/Large，16/24、400。compact Demo 分组标题由共享页面壳读取 fontTitleLarge，不另写 700；共享分组标题直接读取全局 TD `fontTitleLarge` 与主文字色，定制该标题应修改相应 TD Token；不另设组件文字主题的分组标题入口。普通 Cell 保持 fontBodyLarge，不在 DateTimePicker Demo 强制减重。共享壳改动涉及使用 compactDemo 的其他页面，需验证相应 Golden。
 
 ### 主题与受控回滚补充
 
@@ -75,7 +75,7 @@ Picker 与 DateTimePicker 均在全部滚轮停止后恢复父级未接受的候
 
 ## 兼容性与迁移
 
-所有已有 mode、默认值、受控行为保持。新增 `DateMode.monthDay` 是本轮唯一公开能力扩展；依赖枚举穷尽 switch 的调用方需补充该分支，必须在变更说明中提示此源码兼容风险。选择器不新增标题、Popup、确认或取消 API。
+已有 mode 与默认值保持；父级拒绝候选值时滚轮停止后自动回滚，不能表述为全部受控行为不变。依赖旧的候选停留行为的调用方应在 onChanged 中明确接收并回传值。新增 `DateMode.monthDay` 是本轮唯一公开能力扩展；依赖枚举穷尽 switch 的调用方需补充该分支，必须在变更说明中提示此源码兼容风险。选择器不新增标题、Popup、确认或取消 API。
 
 ## 验收标准
 

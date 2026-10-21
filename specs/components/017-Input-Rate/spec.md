@@ -23,7 +23,7 @@ Rate 初版对齐公开 Demo 后，仍存在文案状态由组件与 Theme 双�
 - 整星模式将受控小数值向下归一化，确保绘制、文案与语义值一致。
 - Demo 带文案行对齐小程序 `96rpx` 高度、`32rpx` 水平内边距和 `200rpx` 标题宽度；评分文案保持内容自适应，不设固定宽度。
 - “组件类型”补齐第三方图标评分；“带描述评分”保持一个 Demo 分组，依次展示 `3 + 数字文案`、`3 + 默认情绪文案`和 `0 + 默认情绪文案` 三个独立白色栏，栏间距使用 `spacer16` token。
-- 辅助文本遵循组件 Theme、显式 Material `ColorScheme.onSurface`、TDesign token 的解析顺序；评分星色保持 warning 语义，不机械映射 Material `primary`。
+- 辅助文本由 `TRateThemeData.textStyle` 按字段覆盖 TDesign 字体和状态颜色 Token；不读取外部 Material `ColorScheme.onSurface`。评分星色保持 warning 语义，不机械映射 Material `primary`。
 - 辅助文本使用 `TText` 与完整 `fontBodyLarge` 字体 token；默认 24px 行盒与 24px 星标几何居中，额外行高在上下两侧均匀分配，`TRateThemeData.textStyle` 作为局部覆盖层合并而不丢失未覆盖的字体字段。
 - 同一次指针交互只产生一组开始/结束生命周期；慢速拖拽不会因 tap 与 drag 识别器竞争而重复触发开始回调，指针取消以当前受控值结束。
 - 拖动越过评分区域起始端可将整星或半星评分清零。

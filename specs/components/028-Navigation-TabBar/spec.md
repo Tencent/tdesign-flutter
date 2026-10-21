@@ -153,13 +153,6 @@
 - `onTap` 与 `allowMultipleTaps` dartdoc 明确选中变化、重复点击、禁用和通知边界。
 - 撤回仅供 TabBar 使用的 `ExamplePage.navBarTitle`；页面壳继续使用既有单标题契约，
   不把页面展示差异扩散为共享 API。
-TabBar 生产覆盖率
-  `514/525 = 97.90%`，回归清单登记自测 5/5，示例片段生成检查通过。
-- Flutter 3.32.0 Linux：删除两张误建模的横排基线后，组件明暗 Golden 12/12
-  原基线通过；撤回共享导航标题 API 只改变页面壳标题，四张 Demo 基线核图后更新，
-  随即在无更新参数下严格复跑 4/4，无像素容差。
-- 本轮没有重新进行 Android/iOS 最终版本逐项操作，因此不把代码、Widget 测试或
-  Linux Golden 宣称为移动设备逐像素完全一致；新 head CI 与 CNB Review 仍以推送后为准。
 
 - Figma 固定节点：`28591:35219`。
 - 小程序公开参考：`components/tab-bar?tab=demo` 与

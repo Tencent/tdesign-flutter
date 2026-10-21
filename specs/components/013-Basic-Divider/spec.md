@@ -30,20 +30,20 @@ Flutter `TDivider` 没有承担小程序默认水平外边距、竖线高度与�
 ### 不涉及
 
 - 不新增或删除公开 API。
-- 不删除已有 Material `DividerThemeData` 兼容能力。
+- 不新增 Material `DividerThemeData` 反向配置入口；视觉由 `TDividerThemeData` 和 TD 默认解析。
 - 不改变垂直布局忽略 `dashed`、`align` 和 `child` 的既有规则。
 
 ## 最终方案与行为契约
 
-- 水平分割线默认上下外边距 10dp；线与内容间距为 `spacer12`。
+- 水平分割线默认上下外边距 10dp；线与内容间距为 `spacer1`（默认12dp）。
 - left / right 对齐的短边为 30dp，对应小程序 375dp 设计基准下的 60rpx。
-- 垂直分割线默认高 14dp，左右外边距为 `spacer8`，调用方无需额外定高。
+- 垂直分割线默认高 14dp，左右外边距为 `spacer2`（默认16dp），调用方无需额外定高。
 - 线条颜色默认使用 `bgColorComponent`，线宽默认 0.5dp。
 - 内容默认使用 `fontBodySmall` 与 `textColorPlaceholder`。
 - `TDividerThemeData.margin` 可整体覆盖不同 layout 的默认外边距。
-- 显式 Material `DividerThemeData` 配置继续参与颜色、粗细和间距解析。
+- `TDividerThemeData` 提供颜色、粗细、间距和文字样式默认；外部 Material `DividerThemeData` 不参与解析。
 
-- 垂直分割线未配置 Theme margin 时，使用 `spacer16` 作为左右外边距。
+- 垂直分割线未配置 Theme margin 时，使用 `spacer2`（默认16dp）作为左右外边距。
 - 显式 `TDividerThemeData.margin` 仍拥有更高优先级。
 - 水平分割线行为保持不变。
 

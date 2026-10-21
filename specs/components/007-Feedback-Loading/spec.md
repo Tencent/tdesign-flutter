@@ -15,8 +15,8 @@
 
 - Figma 页面节点 `24386:5280` 的“颜色不一致”标注对应 24×24 的 activity 指示器；设计基准中 activity 使用主文字黑色，而 circle / point 保持品牌色。
 - 当前组件把同一个品牌色默认值传给所有预设指示器，导致纯图标、横向图文、竖向图文中的 3 个 activity 实例全部错误呈现为蓝色。
-- 本轮在组件默认解析链中区分图标类型：activity 默认读取 `textColorPrimary`，circle / point 继续读取 `brandNormalColor`。Demo 不注入黑色覆盖，因此这是**组件问题修复**，不是 Demo 遮盖。
-- `TLoadingThemeData.iconColor`、Flutter `ProgressIndicatorThemeData.color` 和显式 `ColorScheme` 的覆盖能力保持不变；无公开 API 签名变化，不是 breaking change。
+- 本轮在组件默认解析链中区分图标类型：activity 默认读取 `textColorPrimary`，circle / point 继续读取 `brandColor`。Demo 不注入黑色覆盖，因此这是**组件问题修复**，不是 Demo 遮盖。
+- activity 颜色修复本身没有新增公开 API；当前显式颜色由 `TLoadingThemeData.iconColor` 提供，不保留 Material 颜色主题的反向覆盖。尺寸 API 的独立迁移见兼容性章节。
 
 ## 范围与非目标
 
@@ -70,7 +70,7 @@
 ### `axis` 默认方向 vertical → horizontal
 
 - `_effectiveTheme` 中 `theme.axis ?? Axis.vertical` 调整为 `theme.axis ?? Axis.horizontal`。
-- 显式传入 `axis` 或注入 `TLoadingThemeData(axis:)` 时行为不变。
+- 显式注入 `TLoadingThemeData(axis:)` 控制方向；`TLoading` 不另设同义实例参数。
 - 间距语义保持不变（horizontal 用横向间距、vertical 用纵向间距）。
 
 ### 尺寸示例
@@ -101,8 +101,8 @@
 
 ### 指示器默认颜色
 
-- 未显式配置颜色时，circle / point 使用 `brandNormalColor`，activity 使用 `textColorPrimary`（浅色主题为 Gy1 90% 黑色）。
-- 统一覆盖优先级保持 `TLoadingThemeData.iconColor > ProgressIndicatorThemeData.color > 显式 ColorScheme.primary > 图标类型内置 Token`。
+- 未显式配置颜色时，circle / point 使用 `brandColor`，activity 使用 `textColorPrimary`（浅色主题为 Gy1 90% 黑色）。
+- 颜色优先级为 `TLoadingThemeData.iconColor > 图标类型对应的 TDesign Token`；不读取外部 `ProgressIndicatorThemeData.color` 或 Material `ColorScheme.primary`。
 - 同一个 `TLoadingThemeData.iconColor` 仍可统一覆盖所有图标类型，不新增逐图标颜色 API。
 
 ## 关键决策与取舍
@@ -116,17 +116,12 @@
 
 - Figma 当前 Loading 页为 `24386:5280`。“颜色不一致”文字标注位于 `x=-976, y=303, 60×20`，对应红色 20% 标记框 `x=-976, y=323, 24×24`；设计基准中的 activity 为主文字黑色，circle / point 为品牌蓝。
 - 根因是**组件默认值**：`TLoading` 把同一 `brandNormalColor` 传给 circle、point、activity。修复后 activity 使用 `textColorPrimary`，circle / point 不变；公开 Demo 未添加颜色 Theme，避免掩盖组件问题。
-- Flutter 3.32 Linux 首次精确比较：light 704px（0.17%）、dark 698px（0.16%）；差异只覆盖纯图标、横向图文、竖向图文共 3 个 activity 指示器。只更新 Loading light/dark 两张 Golden 后，无更新参数复跑 2/2。
-- 完整修改前、修改后与独立像素差异图保存在 GitHub PR #1126 描述的附件中，不作为 Spec 二进制文件提交。
-- Flutter 3.32：组件与工具回归 63/63（其中 Loading 组件 50/50），公开 Demo 2/2；生产源码 LCOV `265/266 = 99.62%`；组件与 Example 严格 analyze 均 0 issues。
-- Flutter 3.47：Loading 组件 50/50、公开 Demo 2/2；组件与 Example 严格 analyze 均 0 issues。两个 SDK 间执行 clean 并分别恢复依赖，未混用编译缓存。
-- 示例代码生成器 `--check` 通过，无生成片段变化。
-- 没有新增或修改公开 API。默认 activity 视觉由品牌蓝改为主题主文字色，属于用户可感知的组件视觉修复，但不构成 breaking API 变更。
+
+- 单独的 activity 颜色修复没有新增或修改公开 API。默认 activity 视觉由品牌蓝改为主题主文字色，属于用户可感知的组件视觉修复，但不构成 breaking API 变更。
 
 ## 兼容性与迁移
 
 - **`size` 从 `TLoadingSize` 改为 `double` 并移除枚举**：现有调用需改为所需逻辑像素值；由于旧枚举对不同 icon 的映射不同，不提供机械的一对一别名。
-- 用户可感知的接口删除或默认行为变化按仓库 breaking 规范记录，并给出迁移方法。
 - 用户可感知的接口删除或默认行为变化按仓库 breaking 规范记录，并给出迁移方法。
 
 ## 验收标准
@@ -140,9 +135,9 @@
 - 公开 Demo 的三个分组、实例顺序、对齐、文案与小程序一致，custom 指示器显示官方图片且不单独扩展分组，速度滑块常驻显示并更新数值。
 - custom 指示器按默认 800ms 持续旋转，并响应 Theme duration 更新。
 - `customIcon` 在 `icon == null` 时仍按最高优先级显示。
-- 明暗主题整页 Golden 已在 Flutter 3.32.0 Linux CI 复现通过，且已与小程序实际页面截图完成人工比对。
-- 站点 README 链接、API 表、示例代码已修正，`loading_api.md` 与 README 一致。
-- Loading 全部手写生产源码行覆盖率 ≥95% 且不低于修改前基线（86.15%）。
+- 明暗主题整页 Golden 应在 Flutter 3.32.0 Linux 精确比较，并按冻结的公开页面基准进行人工核对；实际执行范围见 acceptance.md。
+- 文档链接、API 表与生成示例必须与源码一致，不能维护另一套过时 API。
+- Loading 全部手写生产源码行覆盖率 ≥95%。
 - `flutter analyze --fatal-infos` 0 error / 0 warning。
 - 双版本（Flutter 3.32.0 / latest）focused tests 通过。
 

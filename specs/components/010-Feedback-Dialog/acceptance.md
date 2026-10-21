@@ -125,3 +125,9 @@ PR #1181 的 28b0cf01 在远端共享 Theme 场景 `custom content retains its t
 | 完整Theme Component / Theme Demo | 此前未纳入Dialog局部验收 | 27/22项测试通过 | 无 |
 
 仅补齐自定义内容自身主题意图，Dialog直接TText槽仍使用Dialog默认。详见上方共享 Theme 场景补充记录。
+
+## 从原 Spec 归档的历史执行记录
+
+文档来源：`987e639087a7146d87d957a2a068765c5394d121` 的同组件 spec.md；该 SHA 仅标识文档来源，不是下列各次测试的统一候选。保留原文 SDK、平台、计数和未覆盖范围；原文未绑定唯一候选的部分仍无法据此确认。下列“本轮”“当前”“未提交”等仅指原阶段，本次未重新执行或外推其结论。
+
+- Flutter 3.32 Linux 亮暗主题 38 个 Golden 在本轮像素修复后无 `--update-goldens` 精确复跑 38/38 通过，未放宽容差。
