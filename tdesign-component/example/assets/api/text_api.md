@@ -2,6 +2,14 @@
 
 ### TText
 
+TDesign 文字：普通位置用正文默认值，组件文字槽用组件默认值，显式样式优先。
+
+未指定字段从最近的 TTextThemeData 获取，仍未配置时回退 TD 正文 Token。
+Button.child、NavBar.title 等已适配文字槽提供各自的默认字体与颜色；
+实例 `style`、`font` 继续优先，内容内部更近的 TD 文字主题也可局部定制。
+外层 DefaultTextStyle.style 或 Material TextTheme 不自动控制字体和颜色；
+MediaQuery 缩放、方向及已有段落环境行为保持。
+
 #### 构造方法
 
 ##### TText
@@ -22,7 +30,7 @@
 | semanticsLabel | String? | - | 透传至 `Text.semanticsLabel`。 | 否 |
 | softWrap | bool? | - | 透传至 `Text.softWrap`。 | 否 |
 | strutStyle | StrutStyle? | - | 透传至 `Text.strutStyle`。 | 否 |
-| style | TextStyle? | - | 当前实例的完整文字样式；仅覆盖显式字段，优先于 `font` 和子树组件 Theme。 | 否 |
+| style | TextStyle? | - | 当前实例的文字样式；通常仅覆盖显式字段，优先于 `font` 和最近 TD 文字默认值。 未指定字段继续使用所在位置的默认；空样式不会切换继承规则。 显式 TextStyle(inherit: false) 沿用 Flutter 的整体替换语义。 | 否 |
 | textAlign | TextAlign? | - | 透传至 `Text.textAlign`。 | 否 |
 | textDirection | TextDirection? | - | 透传至 `Text.textDirection`。 | 否 |
 | textHeightBehavior | ui.TextHeightBehavior? | - | 透传至 `Text.textHeightBehavior`。 | 否 |
@@ -41,7 +49,7 @@
 | --- | --- | --- | --- | --- |
 | textSpan | InlineSpan | - | 富文本内容。 | 是 |
 | font | Font? | - | TDesign 字体 Token 预设，包含字号、行高和字重；`style` 的显式字段优先。 | 否 |
-| style | TextStyle? | - | 当前实例的完整文字样式；仅覆盖显式字段，优先于 `font` 和子树组件 Theme。 | 否 |
+| style | TextStyle? | - | 当前实例的文字样式；通常仅覆盖显式字段，优先于 `font` 和最近 TD 文字默认值。 未指定字段继续使用所在位置的默认；空样式不会切换继承规则。 显式 TextStyle(inherit: false) 沿用 Flutter 的整体替换语义。 | 否 |
 | strutStyle | StrutStyle? | - | 透传至 `Text.strutStyle`。 | 否 |
 | textAlign | TextAlign? | - | 透传至 `Text.textAlign`。 | 否 |
 | textDirection | TextDirection? | - | 透传至 `Text.textDirection`。 | 否 |
@@ -159,10 +167,12 @@ Flutter 动态字体注册工具。
 
 ### TTextThemeData
 
-TText 子树的组件默认值。
+TText 子树的通用默认值，不是强制覆盖所有文字的最终样式。
 
 仅在对应实例参数未指定时生效；实例字体预设和段落参数
-优先于这里的默认值。外部 Flutter `DefaultTextStyle` 不会自动覆盖 TDesign 文字。
+优先于这里的默认值。Button.child、NavBar.title 等已适配文字槽可覆盖外层
+默认值中的同名字段；未覆盖字段保留，内容内部更近的 TD 文字主题可再次定制。
+外部 Flutter `DefaultTextStyle` 不会自动覆盖 TDesign 文字。
 
 <!-- api-theme: fields -->
 
@@ -173,5 +183,5 @@ TText 子树的组件默认值。
 | --- | --- | --- | --- | --- |
 | strutStyle | StrutStyle? | - | 子树的段落支柱样式默认值；实例 `TText.strutStyle` 优先。 | 否 |
 | textHeightBehavior | ui.TextHeightBehavior? | - | 子树的文字高度行为默认值；实例 `TText.textHeightBehavior` 优先。 | 否 |
-| textStyle | TextStyle? | - | 子树的完整文字样式；字号、行高和字重也由本字段统一设置。 TText 实例的显式字体参数仍优先于本默认值。 | 否 |
+| textStyle | TextStyle? | - | 子树的完整文字样式；字号、行高和字重也由本字段统一设置。 TText 实例的显式字体参数仍优先于本默认值。 放在组件外层时是通用默认，不能强制覆盖组件文字槽的同名默认字段。 | 否 |
 | textWidthBasis | TextWidthBasis? | - | 子树的文字宽度计算默认值；实例 `TText.textWidthBasis` 优先。 | 否 |
