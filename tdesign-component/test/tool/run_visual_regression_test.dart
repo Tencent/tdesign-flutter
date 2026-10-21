@@ -10,6 +10,20 @@ import '../../tool/run_component_regression.dart';
 import '../../tool/run_visual_regression.dart';
 
 void main() {
+  test('Dialog Popup consumer is scheduled under its owning component', () {
+    final suite = visualTestSuites.singleWhere(
+      (suite) => suite.name == 'Dialog Popup Consumer',
+    );
+    expect(suite.component, 'dialog');
+    expect(suite.testFiles, [
+      'test/components/theme/t_popup_consumers_golden_test.dart',
+    ]);
+    expect(suite.arguments, [
+      '--plain-name',
+      'dialog keeps the shared Popup visual contract',
+    ]);
+  });
+
   test('every configured visual regression test file exists', () {
     for (final suite in visualTestSuites) {
       for (final testFile in suite.testFiles) {
