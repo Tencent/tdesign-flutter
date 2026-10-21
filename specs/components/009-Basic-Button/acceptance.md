@@ -28,39 +28,15 @@
 
 <a id="source-082"></a>
 
-## 082 · 原联合验收
+## 082 · 文字槽默认值
 
-以下为#1180原72c0f13d检查点，文中的21文件、分支范围和计数仅指该独立阶段，不表示本次同步后的全分支范围或已经重新验证。
+历史检查点保留范围，详细过程由 Git 历史追溯，不复制截图或命令流水：
 
+- `72c0f13d`，Flutter3.32.0 / 3.47.7：各567项组件、30项 Demo、34项文字契约、17项调度和1项迁移示例；Button覆盖99.27%、NavBar100%；严格分析、57份API、6份文档同步通过。Linux3.32原Button/NavBar视觉入口26项通过，未含后续Dialog修复场景。前后52组原生Text与52组完整显式TText像素一致，52组默认TText按预期变化。
+- `f24f106c` 同步develop后：双版本各577项组件、64项文字/主题/调度、39项Demo、1项迁移示例及上述覆盖/分析/生成检查通过；文档测试9项、Linux共享Theme/NavBar/Dialog与Demo共101项通过。该范围未覆盖本轮补齐的五类消费Demo。
 
-2026-10-21。分支 rss1102/breaking/button-navbar-text-defaults，独立副本 button-navbar-text-slots-clean，从原验证基线 d0de29e8 提取。21个变更文件（含4张PR审查证据图）只涉及两组件实现、原登记测试与两份必要测试辅助、文字dartdoc/生成API、站点主题说明及Spec082；无Spec081、其他组件修复、CI或工具链改动。本段记录发布前完成的本地验证；远端CI结果需以PR当前head为准。
+2026-10-22 本轮只修复API说明位置、更新已确认的Golden并精简文档，TText可执行token不变。435份Dart源码指纹为`8768f6674d4993e6bd9a22f928b4556c1efe2256cc46d5e6b48d87ea200bcd08`，与已验证双版本副本相同：各148项CI tooling、318项Button/NavBar、31项消费Demo、严格分析、57份API和示例片段检查通过。
 
-Flutter3.32.0与3.47.7各通过：Button245、NavBar73、Dialog32、DropdownMenu95、Fab72、Upload50，合计567项组件；30项Demo非视觉；34项既有文字契约；17项调度；从[迁移说明](./text-slot-migration.md)直接提取的两段Dart核心片段1项验证（含旧正文外观显式恢复）。严格分析0诊断，57份API检查一致，文档同步6项无陈旧。Button行覆盖99.27%，NavBar100%。
+Linux Flutter3.32.0仅更新已审查的30张基线：BackTop2、Drawer4、Indexes2、Popup16、Form6；立即无更新参数复跑全部60场景，60项通过。文字之外无像素变化，槽容器布局保持；图片直接维护在测试Golden目录，迁移影响见[说明](./text-slot-migration.md)。
 
-两SDK正式生成button/navbar/text/theme一致，实际变更产物为button_api.md、navbar_api.md、text_api.md；TTextThemeData说明也在text_api.md中。源码注释与站点说明解释正文默认、组件默认、显式覆盖、外层/内层主题及inherit:false例外。
-
-Linux3.32原Button视觉入口10项、NavBar组件2项/Demo14项共26项通过（含结构/交互），无更新参数。1052个已跟踪PNG保持不变。此分支未运行依赖此前Dialog修复的视觉场景，不把混合分支的108项结论移用。
-
-Dart解析器token核对确认：全局TText及TTextThemeData仅有注释变化；Button/NavBar可执行代码与已完成前后截图版本相同。原Scope/Resolve、默认主题、字体及Linux包配置不变，复用此前固定环境截图；没有重新生成或更新图片。52组原生Text/52组完整显式TText像素不变、52组默认TText按预期变化，属于已确认默认行为breaking。兼容性及迁移详见[迁移说明](./text-slot-migration.md)。
-
-完整命令、源码指纹、文件白名单与日志在本地 artifacts/button-navbar-clean-split-20261021/REPORT.md、boundary.json、token-comparison.json、source-hashes.json。双版本验证入口 validate.py / validate-consumers.py / verify-migration.py；API正式入口tool/generate_api.mjs；文档入口scripts/sync-readme.mjs --check；Linux入口run-linux.py。不将本地证据视为远端CI或设备验证。
-
-## PR 审查截图
-
-以下为同一 Linux Flutter3.32.0 固定环境的原始单元格截图，左侧前后顺序由表头标识；不是Golden基线，不参与比较器或更新。完整渲染对比沿用上述已核对证据。
-
-| 场景 | 修改前 | 修改后 |
-| --- | --- | --- |
-| 中号primary按钮 | ![修改前](evidence/text-slots/button-before.png) | ![修改后](evidence/text-slots/button-after.png) |
-| 配置紫色标题的NavBar | ![修改前](../031-Navigation-NavBar/evidence/text-slots/navbar-before.png) | ![修改后](../031-Navigation-NavBar/evidence/text-slots/navbar-after.png) |
-
-本次发布只新增这四张审查证据图，不修改任何已有Golden。按钮14/22、w400主文字色变为16/24、w600白色；导航标题14/22、w400变为18/26、w600并接受场景配置的紫色。无样式文字的宽度/省略位置也可能变化；显式样式优先和全局隔离保持。
-
-
-## 同步 develop 后的验证（2026-10-21）
-
-合并 develop `fc099299c1ae11a56b204d260016580862d00e93`（含 #1178 Spec 归并和 #1181 Dialog 修复），无文本冲突。将082契约、计划、任务及证据归入 Button/NavBar 主 Spec；四张审查图片字节不变。相对 develop 的生产代码仍仅为原 Button/NavBar 增量及 TText/主题注释，全局隔离不变。
-
-独立副本 Flutter3.32.0 / 3.47.7 各通过：严格分析；577项组件（Button245、NavBar73、Dialog42、DropdownMenu95、Fab72、Upload50）；64项文字/主题/调度检查；39项 Demo 非视觉；1项迁移示例验证。两版本 Button 覆盖547/551=99.27%，NavBar160/160=100%，六组件覆盖率门槛均通过。57份 API、6份文档同步检查一致；文档测试9项通过。
-
-Linux Flutter3.32.0 通过共享 Theme/NavBar 29项、Dialog Popup 1项、Button/NavBar/Dialog Demo 71项，共101项（含结构/交互）。未更新任何 Golden 基线。435份 lib/test/tool Dart 源文件指纹与三个验证副本一致。日志与指纹保存在本地 artifacts/pr1180-merge-develop-20261021/；仅代表上述本地范围，远端 CI 需检查推送后的当前 head，不代表设备或平台构建验证。
+远端CI以[#1180](https://github.com/Tencent/tdesign-flutter/pull/1180)最终head为准；本轮未新增设备或APK/Web/iOS构建验证，历史待办不自动关闭。

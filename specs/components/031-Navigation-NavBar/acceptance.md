@@ -27,9 +27,3 @@
 ## 082 · 标题文字默认值
 
 与Button共用原72c0f13d独立检查点，完整SDK、功能、覆盖率、视觉与限制见[原联合验收](../009-Basic-Button/acceptance.md#source-082)，不复制为第二份运行结论。NavBar原明暗/组件视觉入口未更新基线；无样式标题从正文14/22、w400改为标题18/26、w600并消费场景标题色，完整显式样式不变。
-
-| 修改前 | 修改后 |
-| --- | --- |
-| ![修改前](evidence/text-slots/navbar-before.png) | ![修改后](evidence/text-slots/navbar-after.png) |
-
-图片是原固定环境审阅证据，不是Golden基线。

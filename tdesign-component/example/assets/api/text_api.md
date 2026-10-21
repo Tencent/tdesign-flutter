@@ -2,6 +2,13 @@
 
 ### TText
 
+#### 构造方法
+
+##### TText
+
+位置参数：`data`
+
+
 TDesign 文字：普通位置用正文默认值，组件文字槽用组件默认值，显式样式优先。
 
 未指定字段从最近的 TTextThemeData 获取，仍未配置时回退 TD 正文 Token。
@@ -9,13 +16,6 @@ Button.child、NavBar.title 等已适配文字槽提供各自的默认字体与�
 实例 `style`、`font` 继续优先，内容内部更近的 TD 文字主题也可局部定制。
 外层 DefaultTextStyle.style 或 Material TextTheme 不自动控制字体和颜色；
 MediaQuery 缩放、方向及已有段落环境行为保持。
-
-#### 构造方法
-
-##### TText
-
-位置参数：`data`
-
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
@@ -43,7 +43,7 @@ MediaQuery 缩放、方向及已有段落环境行为保持。
 位置参数：`textSpan`
 
 
-创建 TDesign 富文本。
+创建 TDesign 富文本，默认样式与 `TText` 构造方法遵循相同规则。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |

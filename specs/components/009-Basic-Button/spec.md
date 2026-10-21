@@ -54,6 +54,8 @@ Button.child通过既有TTextStyleScope向Text/TText提供组件默认文字样�
 
 实例style/font显式字段优先；组件槽覆盖外层通用TD文字主题的重复字段，未重复字段与段落配置保留，内容内部更近的TD文字主题可覆盖。复合内容TText共享文案默认，inherit:false保留既有整体替换语义。
 
+文字槽规则同样适用于消费 Button 的其他 Demo，包括 BackTop、Drawer、Indexes、Popup、Form；弹层打开后仍可见的背景按钮也在影响范围。文字布局可变化，不意味着消费组件容器本身必须改变，按实际场景验证。TText 使用说明放在构造方法与参数 dartdoc，API 类入口遵循统一表格结构。
+
 无新增配置或API，全局TText/Resolve/Scope可执行规则不变。本事项改变无样式及部分样式TText的默认字体、颜色和布局，属于breaking；使用显式style/font或内容内部局部主题保留原外观。详见[迁移说明](./text-slot-migration.md)及[原验收](./acceptance.md#source-082)。NavBar标题事项见[NavBar契约](../031-Navigation-NavBar/spec.md#source-082)。
 
 ## 关键决策与取舍

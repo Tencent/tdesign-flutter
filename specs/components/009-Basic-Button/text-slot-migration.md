@@ -65,3 +65,16 @@ Widget legacyBodyLabel(BuildContext context, String label) {
 Dialog action.child 经Button也接受按钮文字默认；DropdownMenu/Upload内置原生Text预期不变；Fab默认字符串已显式读取按钮样式，TFab.child替代整个按钮、不在本scope范围。Button.icon、背景/前景装饰回调、NavBar leading/actions、belowTitleWidget/flexibleSpace未新增文字默认。
 
 全局 TText/Resolve/Scope 可执行代码、Material隔离、工具链和CI入口不变。不引入兼容开关、自动类型判断或按style有无切换契约。
+
+
+## 消费 Demo 的迁移影响
+
+变化不限于 Button 示例页。BackTop、Drawer、Indexes、Popup 中的 `TButton(child: TText(...))` 触发入口会同步采用按钮字体和前景色；Drawer footer 的操作按钮也受影响。Popup 打开后，遮罩下面仍能看到的按钮文案也会变化，不能把对应整页截图差异误判成弹层样式变化。
+
+Form 的 small 布局切换按钮仍为14/22，但字重变为600，并接受选中/未选中的按钮配色；large 提交/重置按钮从正文14/22、400变为按钮16/24、600及其前景色，提交文字由正文色改为白色。禁用前景色沿用组件已有定义；对比中没有改变这些按钮的容器尺寸和位置，不保证任意自定义布局都不变。
+
+希望接受按钮预设时无需修改调用；确需保留旧正文外观时，按上文为文字显式配置字号、行高、字重和颜色，或在内容内部提供局部 TD 文字主题。只指定颜色不会保留旧字号/字重；不要为了让旧截图通过而给所有 Demo 硬编码旧样式。
+
+这五类 Demo 共60个既有场景，其中30张存在预期文案变化：BackTop 2、Drawer 4、Indexes 2、Popup 16、Form 6；另30张不变。图片直接维护在各自测试的 Golden 目录，不在 Spec 复制：
+
+[BackTop](../../../tdesign-component/example/test/backtop/goldens) · [Drawer](../../../tdesign-component/example/test/drawer/goldens) · [Indexes](../../../tdesign-component/example/test/indexes/goldens) · [Popup](../../../tdesign-component/example/test/popup/goldens) · [Form](../../../tdesign-component/example/test/form/goldens)。基线仅接受已确认的文字变化，槽容器布局不变；真实项目的自定义内容仍需检查宽度、换行和省略。
