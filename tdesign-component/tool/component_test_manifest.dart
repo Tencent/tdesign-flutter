@@ -388,6 +388,17 @@ const componentTestManifests = <ComponentTestManifest>[
     exampleTests: ['test/dialog/dialog_page_test.dart'],
     visualTests: [
       VisualTestManifest(
+        name: 'Dialog Popup Consumer',
+        workingDirectory: '.',
+        testFiles: ['test/components/theme/t_popup_consumers_golden_test.dart'],
+        kind: VisualTestKind.component,
+        // Keep the repaired TD text-slot contract in the visual gate.
+        arguments: [
+          '--plain-name',
+          'dialog keeps the shared Popup visual contract',
+        ],
+      ),
+      VisualTestManifest(
         name: 'Dialog Demo',
         workingDirectory: 'example',
         testFiles: ['test/dialog/dialog_page_golden_test.dart'],
