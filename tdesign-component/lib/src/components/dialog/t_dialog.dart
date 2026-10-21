@@ -15,6 +15,7 @@ import '../../util/context_extension.dart';
 import '../button/t_button.dart';
 import '../button/t_button_types.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_dialog_theme_data.dart';
 
 export 't_confirm_dialog.dart';
@@ -446,12 +447,9 @@ class _DialogScrollableContentState extends State<_DialogScrollableContent> {
               padding.right,
               0,
             ),
-            child: DefaultTextStyle(
-              style: TTextResolve.resolve(
-                context: context,
-                style: widget.titleStyle,
-              ),
-              textAlign: TextAlign.center,
+            child: _textSlot(
+              context,
+              style: widget.titleStyle,
               child: widget.title!,
             ),
           ),
@@ -464,12 +462,9 @@ class _DialogScrollableContentState extends State<_DialogScrollableContent> {
                 padding.right,
                 padding.bottom,
               ),
-              child: DefaultTextStyle(
-                style: TTextResolve.resolve(
-                  context: context,
-                  style: widget.contentStyle,
-                ),
-                textAlign: TextAlign.center,
+              child: _textSlot(
+                context,
+                style: widget.contentStyle,
                 child: widget.content!,
               ),
             ),
@@ -484,27 +479,28 @@ class _DialogScrollableContentState extends State<_DialogScrollableContent> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           if (widget.title != null)
-            DefaultTextStyle(
-              style: TTextResolve.resolve(
-                context: context,
-                style: widget.titleStyle,
-              ),
-              textAlign: TextAlign.center,
-              child: widget.title!,
-            ),
+            _textSlot(context, style: widget.titleStyle, child: widget.title!),
           if (widget.content != null)
-            DefaultTextStyle(
-              style: TTextResolve.resolve(
-                context: context,
-                style: widget.contentStyle,
-              ),
-              textAlign: TextAlign.center,
+            _textSlot(
+              context,
+              style: widget.contentStyle,
               child: widget.content!,
             ),
         ],
       ),
     );
   }
+
+  // Both TD and native text consume the slot style; explicit child styles win.
+  Widget _textSlot(
+    BuildContext context, {
+    required TextStyle style,
+    required Widget child,
+  }) => DefaultTextStyle(
+    style: TTextResolve.resolve(context: context, style: style),
+    textAlign: TextAlign.center,
+    child: TTextStyleScope(style: style, child: child),
+  );
 
   Widget _buildScrollView({
     required EdgeInsetsGeometry padding,
