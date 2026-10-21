@@ -1,7 +1,0 @@
-# 实施方案
-
-指南通过flutterExample元信息选择Flutter路由，plugin-tdoc/component.vue复用既有组件预览分支。普通组件仍展示原有标签和API；指南使用docMd正文及共享手机容器。
-
-统一Flutter指南页面使用ExamplePage、ExampleModule、ExampleItem。按Spec068修订，统一入口只使用一个MaterialApp，三个场景内容继承同一主题；独立场景路由保留应用壳，均复用指南配置与局部样式函数。
-
-回归加入已有Theme测试文件，验证统一路由、三个场景、局部样式隔离与明暗切换；站点检查指南元信息和独立链接。构建后检查实际编译页与预览代理。不新建CI入口，不运行或更新Golden。

@@ -1,3 +1,0 @@
-# 中性色板完整展示
-
-当前Demo遍历colorMap.entries只得到本地显式Token，Web增量主题的默认回退色不会出现。中性色板应展示默认14级灰阶及当前显式新增的grayColor项，每项通过当前主题按键解析，保留bgColorContainer。切换主题后更新。只改Demo，不改TMap契约或组件公共API。
