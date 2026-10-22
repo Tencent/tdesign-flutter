@@ -38,4 +38,6 @@
 
 ## 自定义文字槽统一本地验收（2026-10-22）
 
-内容子树字体默认值与槽内测量，含布局包装、显式/局部样式、段落和支柱。Linux 自定义菜单明暗两张为预期差异，基线未更新。 Flutter 3.32.0 / 3.47.7 相关组件、覆盖率、页面与严格分析通过。最终候选输入摘要、完整范围及已知差异统一见 [Theme 契约本轮验收](../../engineering/048-Theme-configuration-contracts/acceptance.md#自定义文字槽统一验收2026-10-22)。不以本地结果代替远端 CI 或设备验收；本轮未更新 Golden 基线，截图仅在工作区 artifacts。
+内容子树字体默认值、布局包装、显式/局部样式、段落和支柱的既有范围保留。仅更新 `popover_type_custom_content_opened_light.png` / `dark.png`，与已审阅候选渲染像素完全一致；其余 PNG 不变。Flutter 3.32.0 / 3.47.7 各 196 项 Popover/文字契约、15 项页面测试及严格分析通过，Popover 覆盖率两版均≥95%。固定 Linux Flutter 3.32.0 的 19 个受影响登记视觉套件共 217 项无更新比较通过，其中 Popover 50 项。生产 Dart、测试源码、工具链与 CI 配置未改；Spec 不存放截图，PR 保留基线更新前后 diff。远端结果以推送后最终 head 为准。
+
+完整范围和既有整体回归见 [Theme 契约验收](../../engineering/048-Theme-configuration-contracts/acceptance.md#自定义文字槽统一验收2026-10-22)。设备验收未新增。
