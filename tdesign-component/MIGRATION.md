@@ -1324,9 +1324,9 @@ Widget migratedIndexes() {
 
 Avatar、Calendar 副标题、Collapse、Divider、Link、Progress、Table 及内部操作文字槽为 TText 补齐既有组件默认值；Drawer 标题继续保留已有 TD 段落设置。未设置样式的 TText 外观可能随组件字体或状态色修正；显式字段及内容内部更近的主题仍优先。原生 Text 的段落 reset/merge 边界不改变。
 
-Popover 的测量修复不新增组合内容默认样式，也不改变 TText 全局隔离。自定义文字槽统一作为独立行为升级交付，不纳入本 patch。
+Popover 的测量修复不新增组合内容默认样式，也不改变 TText 全局隔离。自定义文字槽统一由独立 #1184 交付，与 #1182 的既有漏接修复分开；本轮均按 patch 策略发布。
 
-### 自定义文字槽默认值统一（minor）
+### 自定义文字槽默认值统一（patch）
 
 Popover 内容、Drawer 菜单 content、Toast customWidget、Picker itemBuilder、Steps customTitle/customContent、TabBar 弹出菜单 itemWidget 开始接入所属组件的默认字体和状态色。Row、Padding、Builder 不会切断文字槽样式。TText 全局仍与外部 Material 默认文字隔离，不增加开关或配置。
 
@@ -1337,4 +1337,8 @@ Popover 内容、Drawer 菜单 content、Toast customWidget、Picker itemBuilder
 - Steps 自定义标题/说明随方向、状态采用内置默认值，需检查字号、状态色、粗体和换行。
 - TabBar 自定义菜单默认文字从正文样式调整为菜单样式，自动行高按真实内容适配；显式 popUpItemHeight 保持原约束。Column/Expanded 等依赖确定高度的内容继续显式给定该现有高度配置。
 
-这是默认外观行为调整，建议在 minor 版本迁移并复核自定义内容。原生 Text 的段落参数保持既有语义，不将组件内置标签的 maxLines/overflow 强加给自定义子树。
+本轮与 Button/NavBar 的默认文字槽调整采用同一 patch 发布策略，但仍包含默认行为变化，升级 1.0.x 时也应复核上述自定义内容，不能理解为无需页面验收。
+
+无样式、空样式、部分样式以及依赖外层通用文字主题的内容都可能变化；部分原生 Text 也会接受新的字体默认值。字号、字重、行高、字距和颜色变化可能进一步影响换行、省略、弹层尺寸与点击范围，自带背景的 Popover/Toast 内容应单独确认对比度。要保留旧外观，在文字实例或内容内部局部主题中明确所需字段；仅指定颜色不能保留旧字号或字重。
+
+原生 Text 的段落参数保持既有语义，不将组件内置标签的 maxLines/overflow 强加给自定义子树。两张 Popover 自定义菜单 Golden 差异仍待确认与另行授权，本轮不更新基线；patch 归类不代表这些差异已消失或完整业务页面已验证。
