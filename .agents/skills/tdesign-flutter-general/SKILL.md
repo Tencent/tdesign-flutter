@@ -46,7 +46,11 @@ Skills 按职责补充规范：本 skill 管通用协作与 CI 登记；[`tdesig
 
 ## 三、Spec 流程
 
-第一节判定需要 Spec 后，按 [`specs/README.md`](../../../specs/README.md) 创建或更新对应 `specs/<编号>-<短名称>/`（spec / plan / tasks / acceptance）；提交代码须与 Spec 行为契约一致，方案变更先更新 Spec 再改代码，并在 PR 附对应目录链接。
+第一节判定需要 Spec 后，按 [`specs/README.md`](../../../specs/README.md) 创建或更新对应记录（spec / plan / tasks / acceptance）。组件目录使用 `specs/components/<编号>-<组件分类>-<组件名>/`，组件名保留规范大小写，目录不附加事项后缀；同组件只维护一套主文档，多事项按章节合并，保留任务状态与文字验收结论，非组件使用 `specs/engineering/<编号>-<类别>-<事项描述>/` 并按长期职责合并；Theme 的配置职责与 Material 隔离合为一份，Token 运行验证归其验收与证据附件，不单设 Spec；控制器与导入归 ThemeController，Testing 仅维护 Golden，文档规则与用户指南不另设 Documentation Spec。类别、编号与归并规则以该规范为准，同步维护索引和全部路径引用。提交代码须与 Spec 行为契约一致，方案变更先更新 Spec 再改代码，并在 PR 附对应目录链接。
+
+### Spec 正文与证据
+
+保留设计背景、最终方案和影响实现的关键决策/取舍；被取代的方案摘要保留否决原因，不继续作为当前要求。plan 只记录实现组织与验证安排，tasks 集中维护真实剩余工作；验收标准不维护勾选状态，acceptance 只保留绑定候选/环境的结论、必要证据和未覆盖范围。清理重复/过时流水不能补造通过、丢失未完成项或把旧结果外推当前 head。遇到设计与源码冲突且缺裁定依据时明确列待核对，详见 [正文规范](../../../specs/README.md#文档边界与正文收敛)。
 
 ## 四、Flutter 双版本兼容
 

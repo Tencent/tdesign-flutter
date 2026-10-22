@@ -11,6 +11,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_collapse_panel.dart';
 import 't_collapse_theme_data.dart';
 import 't_collapse_types.dart';
@@ -266,7 +267,8 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     Duration animationDuration,
     TCollapseThemeData? theme,
   ) {
-    Widget content = DefaultTextStyle(
+    var content = _textSlot(
+      context,
       style: TTextResolve.resolve(
         context: context,
         style: _contentTextStyle(context, theme),
@@ -320,7 +322,8 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
               data: IconThemeData(color: iconColor),
               child: child.leadingBuilder!(context, isExpanded),
             ),
-      title: DefaultTextStyle(
+      title: _textSlot(
+        context,
         style: TTextResolve.resolve(context: context, style: style),
         child: child.headerBuilder(context, isExpanded),
       ),
@@ -341,7 +344,8 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     final color = isDisabled
         ? theme?.disabledIconColor ?? context.tTheme.textColorDisabled
         : theme?.iconColor ?? context.tTheme.textColorPlaceholder;
-    return DefaultTextStyle(
+    return _textSlot(
+      context,
       style: TTextResolve.resolve(
         context: context,
         style: _contentTextStyle(context, theme).copyWith(color: color),
@@ -442,6 +446,18 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     assert(
       !_isAccordion || widget.value.length <= 1,
       'TCollapseMode.accordion allows at most one expanded value.',
+    );
+  }
+
+  Widget _textSlot(
+    BuildContext context, {
+    required TextStyle style,
+    required Widget child,
+  }) {
+    return TTextStyleScope(
+      style: style,
+      // Native text keeps the component's existing paragraph reset boundary.
+      child: DefaultTextStyle(style: style, child: child),
     );
   }
 }

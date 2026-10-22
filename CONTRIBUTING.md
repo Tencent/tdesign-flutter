@@ -2,7 +2,7 @@
 
 感谢参与 TDesign Flutter。本文介绍本地开发、编码规范、问题反馈、Pull Request 提交和验收流程。
 
-涉及公共 API、组件行为或跨目录改动时，请先阅读[设计方案与验收记录规范](./specs/README.md)，并随实现维护相应记录。
+涉及公共 API、组件行为或跨目录改动时，请先阅读[设计方案与验收记录规范](specs/README.md)，并随实现维护相应记录。
 
 ## 目录结构
 
@@ -28,7 +28,7 @@ flutter pub get
 flutter run
 ```
 
-在目标 Android/iOS 设备、模拟器或适用的 Web 环境运行。站点开发与右侧 Flutter Web 预览统一见[站点开发说明](./tdesign-site/README.md)，避免在此重复维护命令和端口配置。
+在目标 Android/iOS 设备、模拟器或适用的 Web 环境运行。站点开发与右侧 Flutter Web 预览统一见[站点开发说明](tdesign-site/README.md)，避免在此重复维护命令和端口配置。
 
 ## 开发规范
 
@@ -39,7 +39,7 @@ flutter run
 - 代码规范遵循腾讯 Dart 代码规范。
 - 对于系统原有组件，如 `Text`、`Image` 等，应兼容系统原组件功能，只能扩展，不能阉割，以免业务需要使用系统功能时，必须放弃 TDesign 控件。
 - 示例页面尽量使用 ExamplePage + ExampleModule + ExampleItem 组合，按照示例稿的布局实现。
-- 组件 API 和演示代码，请参考 [demo_tool/README.md](./tdesign-component/demo_tool/README.md) 文件。
+- 组件 API 和演示代码，请参考 [demo_tool/README.md](tdesign-component/demo_tool/README.md) 文件。
 - 组件内部的固定文案，都应该抽离到 TResourceDelegate 中统一管理，方便业务进行国际化适配。
 - 如果已有 TDesign 组件封装，尽量使用现有 T 组件，而非直接使用系统组件。
 - `tdesign-component/CHANGELOG.md` 由 CLI 自动生成，**无需人工维护**；PR 的变更说明请在 PR 描述「更新日志」小节按条列写即可（格式见下文「PR 更新日志规范」）。
@@ -94,7 +94,7 @@ PR 描述「更新日志」小节是**面向实际使用方的用户**的本次�
 3. **组件 PR 不单列 Demo 配套改动**：组件 PR 的更新日志只描述组件 / 库使用方在实际接入中可感知的行为变化。Demo 页面布局、示例文案、示例代码、Golden 和测试等配套改动，即使在示例中可见，也不单独写入 Changelog；应写在「需求背景和解决方案」中，并按实际情况勾选「演示代码改进」或「测试用例」。同一 PR 同时修改组件与其 Demo 时，更新日志只保留组件行为条目。此规则不影响以文档、站点或示例应用本身为交付目标的独立 PR 按实际受众判断更新日志。
 4. **分别判断 Spec 与更新日志的要求**：两者用途不同，应独立评估。
 
-   **Spec 用于说明设计与验收。** 公共 API 或行为契约变更、复杂需求、组件重构及跨目录改动，应按 [Spec 规范](./specs/README.md)创建或更新设计与验收记录。简单文案、格式调整和单文件局部修改通常不需要完整 Spec，具体由 Review 结合改动范围确认。
+   **Spec 用于说明设计与验收。** 公共 API 或行为契约变更、复杂需求、组件重构及跨目录改动，应按 [Spec 规范](specs/README.md)创建或更新设计与验收记录。简单文案、格式调整和单文件局部修改通常不需要完整 Spec，具体由 Review 结合改动范围确认。
 
    **更新日志用于说明用户可感知的变化。** 公开接口、行为、样式等变化应记录；行为不变的内部重构、CI 配置和文档结构整理无需单列更新日志，在 PR 中说明即可。
 
@@ -149,31 +149,45 @@ dart run tool/generate_example_code.dart --check
 登记后在 `tdesign-component` 目录执行：
 
 ```bash
-flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
+flutter test --no-pub test/tool
 dart run tool/run_component_regression.dart
 dart run tool/run_example_regression.dart
 dart run tool/run_visual_regression.dart
 ```
 
-调度器自测会检查组件名唯一、各类测试能力完整、登记文件存在，以及 GitHub/CNB 使用公共 runner。CI job 成功仅代表数组中已登记的测试通过；测试文件存在、Golden 已提交或本地单独运行通过，均不能替代 CI 回归登记。
+调度器自测会检查组件名唯一、登记文件存在、磁盘测试文件是否全部进入功能或视觉入口，以及 GitHub/CNB 使用公共 runner。新增未登记测试会失败。`test/tool/` 由共享 tooling 入口整体执行，新增工具自测无需修改 workflow。文件登记完整不代表文件内所有被标签或名称过滤的场景都执行；Golden 场景过滤仍需单独说明。
+
+GitHub 和 CNB 的工具与生成产物检查统一维护在 `scripts/run-tooling-checks.sh`。从仓库根目录执行：
+
+```bash
+bash scripts/run-tooling-checks.sh
+# 也可仅执行一个固定步骤，例如只读检查 API 文档：
+bash scripts/run-tooling-checks.sh api-docs
+```
+
+无参数顺序执行全部检查，任一失败即中止；未知步骤返回错误。GitHub 将这些步骤分别展示，CNB 整体调用。API、片段与 README/指南均使用只读一致性检查；生成与修正仍由 autofix 负责。根 README 或指南源单独变更，也会触发轻量文档副本检查。
+
+CNB 的 Flutter 镜像未预装 Node，tooling 阶段用 `scripts/with-tooling-node.sh` 准备固定 Node 22，校验官方归档后复用独立缓存；PATH 仅传给检查子命令。Flutter、Gradle、AGP、Kotlin 及各平台构建流程不因此升级。GitHub 使用 runner 既有 Node。
+
+CI 显示名按验证（`CI / …`）、生成维护（`Generated / …`）和复用实现（`Reusable / …`）分类。现有预览流程名称与发布器存在触发依赖，功能/视觉汇总名称也保留兼容；不能只改显示名而忽略调用者。正式发布与镜像同步按各自独立流程维护。
 
 ## Spec 贡献流程
 
-复杂需求、公共 API 变更、组件重构和跨目录改动，请按 [`specs/README.md`](./specs/README.md) 的完整流程创建并维护 Spec：
+复杂需求、公共 API 变更、组件重构和跨目录改动，请按 [`specs/README.md`](specs/README.md) 的完整流程创建并维护 Spec：
 
-1. 从 `specs/_template/` 复制模板，创建 `specs/<编号>-<短名称>/` 目录；编号按顺序递增，短名称使用小写 kebab-case。
-2. 在 `spec.md`（背景 / 目标 / 范围 / 非目标 / 行为契约 / 验收标准）、`plan.md`（技术方案 / 影响范围 / API 变化 / 风险）、`tasks.md`（任务拆分与状态）、`acceptance.md`（验证记录）中按模板填写。
+1. 组件 Spec 使用 `specs/components/<编号>-<组件分类>-<组件名>/`；类别沿用示例配置的 `Basic`、`Navigation`、`Input`、`DataDisplay`、`Feedback`，组件名保留规范大小写，目录只包含编号、分类、组件名三段，具体事项写入主文档章节。同组件只维护一套主文档，多事项按章节合并，保留任务状态与文字验收结论；非组件 Spec 使用 `specs/engineering/<编号>-<类别>-<事项描述>/`，按 `Theme`、`ThemeController`、`Testing`、`Demo`、`Release` 的独立职责合并；Theme 配置与 Material 隔离共用一份契约，运行证据归其验收附件；Testing 仅维护 Golden，文档规范与用户指南不另设 Documentation Spec。新增记录编号取所有 Spec 最大编号加一，并同步维护索引与全部路径引用，完整规则见 [Spec 标准目录](specs/README.md#标准目录)。
+2. 按模板维护：`spec.md` 记录背景、目标与边界、最终方案、关键决策和取舍、兼容性及验收标准；`plan.md` 记录实现组织、依赖与验证安排；`tasks.md` 集中维护当前工作和未决项；`acceptance.md` 记录绑定候选/环境的执行结果、必要证据和未覆盖范围。标准不维护勾选状态，不把旧运行流水当成当前通过。
 3. 提交代码必须与 Spec 定义的行为契约 / 验收标准一致，Review 时同时核对实现与 Spec 是否相符；方案变更时先更新 Spec 再改代码。
 4. 提交 PR 时，在正文附上 Spec 目录链接；PR 描述「更新日志」须与 Spec 描述一致（格式见上文「PR 更新日志规范」）。
 
-简单文案、格式调整和单文件局部修改不要求创建完整 Spec。Spec 只描述设计和验收，不替代代码、测试或生成文档。
+简单文案、格式调整和单文件局部修改不要求创建完整 Spec。Spec 保留需求与重要设计演变，不替代代码、测试或用户文档。合并旧方案时保留关键取舍和真实未完成项，删除被取代的当前要求、重复阶段过程和验收流水；无法绑定候选的结果明确标注范围，不能据此核销。完整规则见 [正文收敛规范](specs/README.md#文档边界与正文收敛)。
 
 ## 人工验收与合并
 
 - 检查真实操作、布局溢出、明暗主题、英文环境、文字缩放和适用的焦点/键盘/无障碍能力。
 - 在 Example App 检查对应API和代码查看入口；文档有误时修复源码注释、组件清单或示例源码，再重新生成，勿手工修改产物。
 - 测试包或预览构建成功后，根据PR中的构建结果完成适用的Android/iOS验收；构建失败应先检查实际日志。
-- 视觉改动由负责人协调设计走查，并附目标、状态、平台与版本证据。Golden要求见[组件Review规范](./.agents/skills/tdesign-component-align-review/SKILL.md)。
+- 视觉改动由负责人协调设计走查，并附目标、状态、平台与版本证据。Golden要求见[组件Review规范](.agents/skills/tdesign-component-align-review/SKILL.md)。
 - Issue验收完成后由负责人合并PR；更新发布版本标签，正式发布后关闭对应Issue。
 
 ## 文档维护
@@ -183,12 +197,12 @@ dart run tool/run_visual_regression.dart
 | 项目介绍和最短示例 | 根README.md、README_zh_CN.md | 中英文分别维护，包内副本生成 |
 | 安装、主题（含明暗模式）、国际化、FAQ、迁移 | tdesign-site/site/docs/ | 站点直接读取，迁移另生成包内MIGRATION.md |
 | 贡献规范 | 本文件 | 站点直接读取并适配页面元信息与相对链接 |
-| 站点开发方式 | [tdesign-site/README.md](./tdesign-site/README.md) | 其他说明链接到此处 |
+| 站点开发方式 | [tdesign-site/README.md](tdesign-site/README.md) | 其他说明链接到此处 |
 | API | lib中的公开dartdoc注释 | 生成example/assets/api，站点和示例App共用 |
 | 示例 | example/lib中的标注源码 | 生成example/assets/code，站点和示例App共用 |
-| 设计决策与验收 | specs/ | 保留历史证据，现行用户用法写入用户指南 |
+| 设计决策与验收 | specs/ | 按组件或长期职责集中维护，过时方案清理；现行用户用法写入用户指南 |
 | 发布流程与记录 | PUBLISH.md及既有CHANGELOG生成入口 | 发布步骤与历史记录分开维护 |
 
 执行 `node scripts/sync-readme.mjs` 更新迁移、主题及国际化指南中的可运行示例片段和包内副本；执行 `node scripts/sync-readme.mjs --check` 只检查，不改文件。包内副本顶部标注来源，不手工修改。站点普通指南使用小写连字符命名，迁移文件名写清起止版本。
 
-新增指南后在站点导航登记；内部文档链接使用相对路径，站点渲染时转换为既有路由，包内副本转换为可访问的线上入口。完整文档来源和边界见[整理记录](./specs/062-documentation-source-consolidation/spec.md)。
+新增指南后在站点导航登记；内部文档链接使用相对路径，站点渲染时转换为既有路由，包内副本转换为可访问的线上入口。文档来源与维护边界以本节为准，不再另设历史整理 Spec。

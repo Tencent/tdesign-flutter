@@ -67,6 +67,30 @@ Widget documentationLocalTheme(BuildContext context, Widget child) {
 
 传入组件必须处于这个 `Theme` 子树内；需要读取更新后主题时，在子树的 `Builder` 或独立 Widget 中取得 context。
 
+## 文字默认值与组件文字槽
+
+**普通位置用正文默认值，组件文字槽用组件默认值，自己明确设置的样式优先。**
+
+| 使用位置 | 默认样式来源 | 如何定制 |
+| --- | --- | --- |
+| 普通位置的 `TText('说明')` | 最近的 `TTextThemeData`，未配置字段回退 TD 正文 Token | 子树文字主题或实例 `style` / `font` |
+| `TButton` 的 `child` 文字 | 按钮尺寸、配色和当前状态的文案样式 | 按钮已有样式入口，或内容实例的显式文字样式 |
+| `TNavBar` 的 `title` 文字 | 导航标题字体和标题色，默认单行省略 | `TNavBarThemeData`，或标题实例的显式文字样式 |
+
+全局 `TTextThemeData` 仍可配置，但它表达通用默认，不强制所有场景使用相同字体。组件文字槽覆盖外层默认中的同名字段，其余字段继续保留；内容内部更近的 TD 文字主题可重新提供局部默认。文字实例的显式字段优先，`style` 同名字段又优先于 `font`。
+
+未传 `style`、空 `TextStyle()`、只设置颜色，遵循同一规则：未设置字段继续采用所在位置默认。`TextStyle(inherit: false)` 是已有的整体替换行为。富文本的基础样式遵循相同规则，span 保留自己的显式样式。
+
+全站字体族和各类字体规格通过 TD Token 配置；正文、按钮文案和导航标题分别使用各自的语义规格。调整正文默认字号，不等于强制修改所有按钮和标题。TText 的字体与颜色仍不自动读取外部 Material `TextTheme` 或 `DefaultTextStyle.style`；缩放、方向和已有段落环境行为不因此取消。
+
+### Button / NavBar 旧用法迁移
+
+Button、NavBar 的文字槽现在同时向原生 `Text` 和 `TText` 提供组件默认。这是默认行为变化：旧无样式或部分样式 TText 的字号、字重、颜色、自然宽度和省略位置可能改变，不会通过新增兼容配置切换。
+
+希望使用组件默认时，直接传入 `TText('提交')` 或 `TText('首页')`。希望保留旧正文外观时，通过现有 `TText.style` / `font` 明确原来依赖的字段，或者在内容内部提供局部 `TTextThemeData`；不要再依赖组件外层通用文字主题强制统一外观。只显式指定红色时，红色会保留，其余字体字段仍采用组件默认；该红色也优先于按钮禁用前景色。
+
+复合标题的主副文案都会接受标题默认；需要较小副标题时，在副标题上明确字号、行高或颜色。此规则仅描述已适配的文字槽，不代表所有自定义 Widget 区域都由组件接管。Button 图标、NavBar 操作项与整块自定义布局仍保持各自职责。
+
 ## 明暗模式
 
 浅色、深色和跟随系统由 `MaterialApp.themeMode` 决定：
@@ -101,4 +125,42 @@ Widget documentationThemeApp(ThemeMode mode, Widget home) {
 
 [Theme 主题](/flutter/components/theme)展示功能色、文字与图标颜色、中性色板，并提供主题 API 查询。页面中的色板会根据当前上下文重新读取主题。
 
-官网主题工具的 CSS 转换使用仓库内[css2token](https://github.com/Tencent/tdesign-flutter/tree/develop/packages/css2token)和[Web 主题接收适配](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/util/web_theme_message.dart)。它们负责 CSS Token 转换与默认值合并，不是组件包中的公开 CSS 导入 API。业务接入优先使用上面的 JSON 配置；不要把旧颜色转换脚本当作能处理所有字体、间距和阴影的通用转换器。
+从主题工具下载完整的 `theme.css` 后，可以在仓库中离线转换为组件包支持的 JSON。无需手动拆分明暗规则，也无需删除字体配置或将小数字号取整：
+
+```sh
+git clone https://github.com/Tencent/tdesign-flutter.git
+cd tdesign-flutter/tdesign-component/example
+flutter pub get
+dart run tool/convert_theme.dart /path/to/theme.css /path/to/theme.json --name ocean
+```
+
+工具从完整 CSS 读取浅色、深色和共享结构变量，复用 `css2token` 映射，保留字体小数精度；缺失的复合字体字段按对应明暗默认主题补齐（含字重）。模式专属规则优先于共享 `:root`，相同类型规则按源码顺序覆盖。输出主题名称为 `ocean` 和 `oceanDark`，可用 `--dark-name night` 指定深色名称；加载时须传相同的 `darkName`。
+
+将输出文件加入业务应用的 `assets/theme.json`，在业务 `pubspec.yaml` 注册：
+
+```yaml
+flutter:
+  assets:
+    - assets/theme.json
+```
+
+然后加载并传给明暗构建器（需导入 `package:flutter/material.dart`、`package:flutter/services.dart` 和 `package:tdesign_flutter/tdesign_flutter.dart`）：
+
+```dart
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final json = await rootBundle.loadString('assets/theme.json');
+  final tokens = TThemeData.fromJson('ocean', json, darkName: 'oceanDark');
+  if (tokens == null) throw const FormatException('Invalid theme.json');
+  runApp(MaterialApp(
+    theme: TThemeBuilder.light(tokens),
+    darkTheme: TThemeBuilder.dark(tokens),
+    themeMode: ThemeMode.system,
+    home: const Scaffold(body: Center(child: TText('主题已加载'))),
+  ));
+}
+```
+
+业务运行时只依赖组件包和生成后的 JSON，不需要复制转换器、依赖 `css2token` 或站点 Web 消息接收适配。已有整数 JSON 配置继续可用。该字体小数修复需要使用包含 #1173 修复的组件版本；旧 1.0.0 不具备该能力，仅更新转换工具不能修复旧版解析器。
+
+转换工具位于[Example/tool/convert_theme.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/tool/convert_theme.dart)，映射复用仓库内[css2token](https://github.com/Tencent/tdesign-flutter/tree/develop/packages/css2token)。这是构建时的生成器导出接入工具，不是组件包中的运行时 CSS 导入 API。当前支持生成器的根选择器规则；嵌套规则、媒体查询或其他选择器会报错。仅转换已有映射支持的 Token，未知或不支持的 CSS 值沿用转换器的忽略规则；未提供的非字体 Token 继续继承业务组件版本默认值，不承诺浏览器 CSS 与 Flutter 逐像素一致。
